@@ -40,12 +40,19 @@ python3 .farplane/evals/run_evals.py run --harness codex --harness-evals --label
 python3 .farplane/evals/run_evals.py run --harness codex --agents-md --label agents-md
 python3 .farplane/evals/run_evals.py run --harness codex --skills --label skill-baseline
 python3 .farplane/evals/run_evals.py run --harness codex --skill qa --label qa-skill
+python3 .farplane/evals/run_evals.py run --harness codex --skill qa --compare-baseline --agent-profile farplane-eval-skill --baseline-agent-profile farplane-eval-base --label qa-compare
 ```
 
 No-scope `run` executes every known available family: harness tasks,
 AGENTS.md/system-prompt tasks, and skill-local evals. Scope flags narrow the
 run. File location defines the eval family; task JSON stays intentionally
 small and does not carry `surface`, `target`, budget, or isolation fields.
+
+`--compare-baseline` keeps existing skill-local task JSON unchanged. The runner
+uses native skill context, records whether the target skill triggered, and runs
+the baseline profile only after the target skill triggers. For trigger-sensitive
+cases, write natural user requests in `query`; do not name the skill unless the
+case is explicitly testing direct invocation.
 
 Then open `.farplane/evals/viewer.html`, or run the shadcn React viewer:
 

@@ -362,6 +362,54 @@ def extract_json_object(text: str) -> dict[str, Any]:
     return parsed
 
 
+def strings_in_json(value: Any) -> list[str]:
+    strings: list[str] = []
+    if isinstance(value, dict):
+        for key, item in value.items():
+            strings.append(str(key))
+            strings.extend(strings_in_json(item))
+    elif isinstance(value, list):
+        for item in value:
+            strings.extend(strings_in_json(item))
+    elif isinstance(value, str):
+        strings.append(value)
+    return strings
+
+
+def skill_event_match(event: Any, target_skill: str) -> bool:
+    if not isinstance(event, dict):
+        return False
+    target = target_skill.strip().lower()
+    if not target:
+        return False
+    lowered = [text.lower() for text in strings_in_json(event)]
+    has_target = any(text == target or text.endswith(f"/{target}") or f'"{target}"' in text for text in lowered)
+    has_skill_marker = any("skill" in text for text in lowered)
+    return has_target and has_skill_marker
+
+
+def detect_skill_triggered(raw_stdout: str, target_skill: str) -> bool | None:
+    """Return whether Codex JSONL shows the target skill loaded.
+
+    The exact event payload can vary by Codex version, so this parser is
+    intentionally conservative: JSONL with no skill event returns False, while
+    non-JSON output returns None.
+    """
+    saw_json = False
+    for line in raw_stdout.splitlines():
+        stripped = line.strip()
+        if not stripped:
+            continue
+        try:
+            event = json.loads(stripped)
+        except json.JSONDecodeError:
+            continue
+        saw_json = True
+        if skill_event_match(event, target_skill):
+            return True
+    return False if saw_json else None
+
+
 def normalize_judge(raw: dict[str, Any]) -> dict[str, Any]:
     verdict = str(raw.get("verdict", "")).strip().upper()
     legacy_verdicts = {
@@ -475,19 +523,19 @@ def task_detail_path(job_dir: Path, task_id: str) -> Path:
     return job_dir / "tasks" / f"{task_id}.json"
 
 
-def run_task(
+def run_agent_and_judge(
     task: EvalTask,
     args: argparse.Namespace,
-    eval_dir: Path,
-    job_dir: Path,
+    task_dir: Path,
     agent_template: str,
     judge_template: str,
+    agent_profile: str | None,
+    prefix: str = "",
 ) -> dict[str, Any]:
-    task_dir = job_dir / "tasks" / task.id
     task_dir.mkdir(parents=True, exist_ok=True)
     agent_prompt = render_template(agent_template, task)
-    agent_prompt_path = task_dir / "agent_prompt.md"
-    agent_answer_path = task_dir / "agent_answer.txt"
+    agent_prompt_path = task_dir / f"{prefix}agent_prompt.md"
+    agent_answer_path = task_dir / f"{prefix}agent_answer.txt"
     agent_prompt_path.write_text(agent_prompt)
     agent_result = run_harness(
         args.harness,
@@ -496,7 +544,7 @@ def run_task(
         Path(args.target_root).resolve(),
         args.agent_command_template,
         args.agent_extra_arg,
-        args.agent_profile,
+        agent_profile,
     )
     if agent_result.returncode != 0:
         judge = {
@@ -508,8 +556,8 @@ def run_task(
         }
     else:
         judge_prompt = render_template(judge_template, task, answer=agent_result.text)
-        judge_prompt_path = task_dir / "judge_prompt.md"
-        judge_answer_path = task_dir / "judge_answer.txt"
+        judge_prompt_path = task_dir / f"{prefix}judge_prompt.md"
+        judge_answer_path = task_dir / f"{prefix}judge_answer.txt"
         judge_prompt_path.write_text(judge_prompt)
         judge_result = run_harness(
             args.judge_harness or args.harness,
@@ -532,10 +580,113 @@ def run_task(
         else:
             judge = normalize_judge(extract_json_object(judge_result.text))
             judge["raw_response"] = judge_result.text
-            (task_dir / "judge_stdout.log").write_text(judge_result.raw_stdout)
-            (task_dir / "judge_stderr.log").write_text(judge_result.raw_stderr)
-    (task_dir / "agent_stdout.log").write_text(agent_result.raw_stdout)
-    (task_dir / "agent_stderr.log").write_text(agent_result.raw_stderr)
+            (task_dir / f"{prefix}judge_stdout.log").write_text(judge_result.raw_stdout)
+            (task_dir / f"{prefix}judge_stderr.log").write_text(judge_result.raw_stderr)
+    (task_dir / f"{prefix}agent_stdout.log").write_text(agent_result.raw_stdout)
+    (task_dir / f"{prefix}agent_stderr.log").write_text(agent_result.raw_stderr)
+    return {
+        "profile": agent_profile,
+        "agent": {
+            "returncode": agent_result.returncode,
+            "answer_path": str(agent_answer_path),
+        },
+        "judge": judge,
+        "raw_stdout": agent_result.raw_stdout,
+    }
+
+
+def comparison_delta(candidate: dict[str, Any], baseline: dict[str, Any] | None) -> str:
+    if not baseline:
+        return "baseline_skipped"
+    candidate_pass = bool(candidate["judge"].get("pass", False))
+    baseline_pass = bool(baseline["judge"].get("pass", False))
+    if candidate_pass and not baseline_pass:
+        return "candidate_wins"
+    if baseline_pass and not candidate_pass:
+        return "baseline_wins"
+    return "tie"
+
+
+def run_comparison_task(
+    task: EvalTask,
+    args: argparse.Namespace,
+    job_dir: Path,
+    agent_template: str,
+    judge_template: str,
+) -> dict[str, Any]:
+    task_dir = job_dir / "tasks" / task.id
+    target_skill = args.target_skill.strip()
+    candidate = run_agent_and_judge(
+        task,
+        args,
+        task_dir,
+        agent_template,
+        judge_template,
+        args.agent_profile,
+        "candidate_",
+    )
+    skill_triggered = detect_skill_triggered(candidate.pop("raw_stdout"), target_skill)
+    candidate["skill_triggered"] = skill_triggered
+    baseline = None
+    if skill_triggered is True:
+        baseline = run_agent_and_judge(
+            task,
+            args,
+            task_dir,
+            agent_template,
+            judge_template,
+            args.baseline_agent_profile,
+            "baseline_",
+        )
+        baseline.pop("raw_stdout", None)
+    delta = comparison_delta(candidate, baseline)
+    detail = {
+        "task": json.loads(task_to_json(task)),
+        "run_config": {
+            "harness": args.harness,
+            "judge_harness": args.judge_harness or args.harness,
+            "agent_profile": args.agent_profile,
+            "baseline_agent_profile": args.baseline_agent_profile,
+            "target_skill": target_skill,
+            "compare_baseline": True,
+        },
+        "candidate": candidate,
+        "baseline": baseline or {"skipped": True, "reason": "skill did not trigger"},
+        "comparison": {
+            "delta": delta,
+            "skill_value": delta == "candidate_wins",
+        },
+    }
+    write_json(task_detail_path(job_dir, task.id), detail)
+    return {
+        "task_id": task.id,
+        "title": task.title,
+        "verdict": candidate["judge"].get("verdict", "fail"),
+        "pass": bool(candidate["judge"].get("pass", False)),
+        "reason": candidate["judge"].get("reason", ""),
+        "skill_triggered": skill_triggered,
+        "comparison_delta": delta,
+        "detail_path": str(task_detail_path(job_dir, task.id)),
+    }
+
+
+def run_single_task(
+    task: EvalTask,
+    args: argparse.Namespace,
+    job_dir: Path,
+    agent_template: str,
+    judge_template: str,
+) -> dict[str, Any]:
+    task_dir = job_dir / "tasks" / task.id
+    result = run_agent_and_judge(
+        task,
+        args,
+        task_dir,
+        agent_template,
+        judge_template,
+        args.agent_profile,
+    )
+    result.pop("raw_stdout", None)
     detail = {
         "task": json.loads(task_to_json(task)),
         "run_config": {
@@ -544,21 +695,31 @@ def run_task(
             "agent_profile": args.agent_profile,
             "judge_profile": args.judge_profile,
         },
-        "agent": {
-            "returncode": agent_result.returncode,
-            "answer_path": str(agent_answer_path),
-        },
-        "judge": judge,
+        "agent": result["agent"],
+        "judge": result["judge"],
     }
     write_json(task_detail_path(job_dir, task.id), detail)
     return {
         "task_id": task.id,
         "title": task.title,
-        "verdict": judge.get("verdict", "fail"),
-        "pass": judge["pass"],
-        "reason": judge["reason"],
+        "verdict": result["judge"].get("verdict", "fail"),
+        "pass": result["judge"]["pass"],
+        "reason": result["judge"]["reason"],
         "detail_path": str(task_detail_path(job_dir, task.id)),
     }
+
+
+def run_task(
+    task: EvalTask,
+    args: argparse.Namespace,
+    eval_dir: Path,
+    job_dir: Path,
+    agent_template: str,
+    judge_template: str,
+) -> dict[str, Any]:
+    if args.compare_baseline:
+        return run_comparison_task(task, args, job_dir, agent_template, judge_template)
+    return run_single_task(task, args, job_dir, agent_template, judge_template)
 
 
 def update_index(runs_dir: Path, summary: dict[str, Any]) -> None:
@@ -604,7 +765,16 @@ def command_run(args: argparse.Namespace) -> int:
     scopes, explicit_scopes = selected_scopes(args)
     task_paths = resolve_task_paths(eval_dir, args.tasks, scopes, target_root, require_scopes=explicit_scopes)
     task_paths = filter_skill_task_paths(task_paths, target_root, args.skill)
-    native_skill_context = uses_native_skill_context(args.harness, args.agent_profile)
+    if args.compare_baseline:
+        if args.harness != "codex" and not args.agent_command_template:
+            raise EvalError("--compare-baseline requires codex harness or a custom agent command template")
+        if not args.baseline_agent_profile and not args.agent_command_template:
+            raise EvalError("--compare-baseline requires --baseline-agent-profile for codex runs")
+        selected = expand_skill_selectors(args.skill)
+        if len(selected) != 1:
+            raise EvalError("--compare-baseline requires exactly one --skill")
+        args.target_skill = next(iter(selected))
+    native_skill_context = args.compare_baseline or uses_native_skill_context(args.harness, args.agent_profile)
     tasks = load_task_suite(
         task_paths,
         args.limit,
@@ -638,6 +808,15 @@ def command_run(args: argparse.Namespace) -> int:
     for row in rows:
         verdict = str(row["verdict"])
         verdict_counts[verdict] = verdict_counts.get(verdict, 0) + 1
+    comparison_counts: dict[str, int] = {}
+    skill_trigger_counts: dict[str, int] = {}
+    if args.compare_baseline:
+        for row in rows:
+            delta = str(row.get("comparison_delta", "unknown"))
+            comparison_counts[delta] = comparison_counts.get(delta, 0) + 1
+            triggered = row.get("skill_triggered")
+            trigger_key = "unknown" if triggered is None else str(bool(triggered)).lower()
+            skill_trigger_counts[trigger_key] = skill_trigger_counts.get(trigger_key, 0) + 1
     summary = {
         "job_id": job_id,
         "label": args.label,
@@ -647,12 +826,18 @@ def command_run(args: argparse.Namespace) -> int:
         "scopes": ["custom"] if args.tasks else list(scopes),
         "default_context_file": eval_config.default_context_file,
         "skill_context": "native" if native_skill_context else "inline",
+        "compare_baseline": bool(args.compare_baseline),
         "task_files": [str(path) for path in task_paths],
         "task_count": len(rows),
         "pass_rate": pass_rate,
         "verdict_counts": verdict_counts,
         "tasks": rows,
     }
+    if args.compare_baseline:
+        triggered_count = skill_trigger_counts.get("true", 0)
+        summary["comparison_counts"] = comparison_counts
+        summary["skill_trigger_counts"] = skill_trigger_counts
+        summary["skill_trigger_rate"] = round(triggered_count / len(rows), 2) if rows else 0
     write_json(job_dir / "summary.json", summary)
     update_index(runs_dir, summary)
     print(f"Wrote {job_dir}")
@@ -742,6 +927,8 @@ def build_parser() -> argparse.ArgumentParser:
     run_parser.add_argument("--judge-command-template")
     run_parser.add_argument("--agent-profile", help="Codex config profile for agent runs, loaded with codex exec --profile.")
     run_parser.add_argument("--judge-profile", help="Codex config profile for judge runs, loaded with codex exec --profile.")
+    run_parser.add_argument("--compare-baseline", action="store_true", help="Run selected skill evals in native skill mode, record whether the target skill triggered, and run a baseline profile only after a trigger.")
+    run_parser.add_argument("--baseline-agent-profile", help="Codex config profile for baseline agent runs when --compare-baseline is set.")
     run_parser.add_argument("--agent-extra-arg", action="append", default=[])
     run_parser.add_argument("--judge-extra-arg", action="append", default=[])
     run_parser.add_argument(

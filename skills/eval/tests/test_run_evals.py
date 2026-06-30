@@ -35,6 +35,7 @@ def write_fake_cli(path: Path) -> None:
             parser = argparse.ArgumentParser()
             parser.add_argument("--prompt-file", required=True)
             parser.add_argument("--output-file", required=True)
+            parser.add_argument("--skill-event", default="")
             args = parser.parse_args()
             prompt = Path(args.prompt_file).read_text()
             output = Path(args.output_file)
@@ -55,6 +56,11 @@ def write_fake_cli(path: Path) -> None:
                     "reason": "all required points covered"
                 }))
             else:
+                if args.skill_event:
+                    print(json.dumps({
+                        "type": "item.completed",
+                        "item": {"type": "skill", "name": args.skill_event}
+                    }))
                 output.write_text("The answer names proof, evidence, and the next step.")
             """
         )
@@ -527,6 +533,102 @@ class EvalRunnerTests(unittest.TestCase):
             self.assertNotIn("suite", summary)
             self.assertEqual(summary["scopes"], ["skills"])
             self.assertEqual([Path(path).resolve() for path in summary["task_files"]], [qa_eval.resolve()])
+
+    def test_compare_baseline_records_trigger_and_runs_baseline(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            eval_dir = root / "evals"
+            fake_cli = root / "fake_cli.py"
+            qa_eval = root / "skills" / "qa" / "eval_task.json"
+            skill_md = root / "skills" / "qa" / "SKILL.md"
+            (eval_dir / "prompts").mkdir(parents=True)
+            qa_eval.parent.mkdir(parents=True)
+            write_fake_cli(fake_cli)
+            write_tasks(qa_eval)
+            skill_md.write_text("# QA\n\nShould not be inlined in compare mode.\n")
+            (eval_dir / "prompts" / "agent.md").write_text("Task: {query}\n{task_json}\n")
+            (eval_dir / "prompts" / "judge.md").write_text("Task: {task_json}\nAssistant answer:\n{answer}\n")
+
+            template = f"{sys.executable} {fake_cli} --skill-event qa --prompt-file {{prompt_file}} --output-file {{output_file}}"
+            code = runner.main(
+                [
+                    "run",
+                    "--harness",
+                    "custom",
+                    "--eval-dir",
+                    str(eval_dir),
+                    "--target-root",
+                    str(root),
+                    "--skill",
+                    "qa",
+                    "--label",
+                    "compare",
+                    "--compare-baseline",
+                    "--agent-command-template",
+                    template,
+                    "--judge-command-template",
+                    template,
+                ]
+            )
+
+            self.assertEqual(code, 0)
+            run_dir = next((eval_dir / "runs").glob("*-compare"))
+            summary = json.loads((run_dir / "summary.json").read_text())
+            detail = json.loads((run_dir / "tasks" / "proof_01.json").read_text())
+            candidate_prompt = (run_dir / "tasks" / "proof_01" / "candidate_agent_prompt.md").read_text()
+
+            self.assertTrue(summary["compare_baseline"])
+            self.assertEqual(summary["skill_context"], "native")
+            self.assertEqual(summary["skill_trigger_counts"], {"true": 1})
+            self.assertEqual(summary["comparison_counts"], {"tie": 1})
+            self.assertTrue(detail["candidate"]["skill_triggered"])
+            self.assertFalse(detail["baseline"]["skipped"] if "skipped" in detail["baseline"] else False)
+            self.assertNotIn("Should not be inlined", candidate_prompt)
+
+    def test_compare_baseline_skips_baseline_when_skill_does_not_trigger(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            eval_dir = root / "evals"
+            fake_cli = root / "fake_cli.py"
+            qa_eval = root / "skills" / "qa" / "eval_task.json"
+            (eval_dir / "prompts").mkdir(parents=True)
+            qa_eval.parent.mkdir(parents=True)
+            write_fake_cli(fake_cli)
+            write_tasks(qa_eval)
+            (eval_dir / "prompts" / "agent.md").write_text("Task: {query}\n{task_json}\n")
+            (eval_dir / "prompts" / "judge.md").write_text("Task: {task_json}\nAssistant answer:\n{answer}\n")
+
+            template = f"{sys.executable} {fake_cli} --prompt-file {{prompt_file}} --output-file {{output_file}}"
+            code = runner.main(
+                [
+                    "run",
+                    "--harness",
+                    "custom",
+                    "--eval-dir",
+                    str(eval_dir),
+                    "--target-root",
+                    str(root),
+                    "--skill",
+                    "qa",
+                    "--label",
+                    "compare-no-trigger",
+                    "--compare-baseline",
+                    "--agent-command-template",
+                    template,
+                    "--judge-command-template",
+                    template,
+                ]
+            )
+
+            self.assertEqual(code, 0)
+            run_dir = next((eval_dir / "runs").glob("*-compare-no-trigger"))
+            summary = json.loads((run_dir / "summary.json").read_text())
+            detail = json.loads((run_dir / "tasks" / "proof_01.json").read_text())
+
+            self.assertEqual(summary["skill_trigger_counts"], {"unknown": 1})
+            self.assertEqual(summary["comparison_counts"], {"baseline_skipped": 1})
+            self.assertIsNone(detail["candidate"]["skill_triggered"])
+            self.assertTrue(detail["baseline"]["skipped"])
 
     def test_load_task_suite_filters_task_ids(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
