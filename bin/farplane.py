@@ -23,6 +23,7 @@ if str(CORE_DIR) not in sys.path:
     sys.path.insert(0, str(CORE_DIR))
 
 from farplane_adoption import run_scan as run_adoption_scan
+from farplane_metrics import run_snapshot as run_metrics_snapshot
 from farplane_skill_rollout import SkillRolloutError, run_scan as run_skill_rollout_scan
 from runtime_config import load_runtime_env
 
@@ -383,6 +384,14 @@ def build_parser() -> argparse.ArgumentParser:
     skills_rollout_scan.add_argument("--json", action="store_true")
     skills_rollout_scan.set_defaults(func=run_skill_rollout_scan)
 
+    metrics = sub.add_parser("metrics", help="Generate Farplane metric snapshots for interval reports and UI.")
+    metrics_sub = metrics.add_subparsers(dest="metrics_command")
+    metrics_snapshot = metrics_sub.add_parser("snapshot", help="Fetch configured local KPI sources and write UI snapshot JSON.")
+    metrics_snapshot.add_argument("--project-root", default=str(CORE_ROOT))
+    metrics_snapshot.add_argument("--date", help="Snapshot date in YYYY-MM-DD. Defaults to today UTC.")
+    metrics_snapshot.add_argument("--json", action="store_true")
+    metrics_snapshot.set_defaults(func=run_metrics_snapshot)
+
     return parser
 
 
@@ -404,6 +413,8 @@ def main(argv: list[str]) -> int:
         parser.error("skills requires a subcommand: rollout")
     if getattr(args, "skills_command", None) == "rollout" and getattr(args, "skills_rollout_command", None) is None:
         parser.error("skills rollout requires a subcommand: scan")
+    if getattr(args, "command", None) == "metrics" and getattr(args, "metrics_command", None) is None:
+        parser.error("metrics requires a subcommand: snapshot")
     if not hasattr(args, "func"):
         parser.print_help()
         return 0

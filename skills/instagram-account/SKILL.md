@@ -1,0 +1,144 @@
+---
+name: instagram-account
+description: "Turn Instagram account posting or insights requests into validated artifacts, normalized KPI snapshots, or gated API actions."
+tier: 3
+group: content-social
+source: local
+template_uses:
+  skill-template: "0.3.7"
+  skill-qa-checklist: "0.1.0"
+allowed-tools: Read, Grep, Glob, Bash
+qa_checklist: qa_checklist.md
+---
+
+# Instagram Account
+
+## Context
+
+Use this skill for Farplane-owned Instagram account integration: profile/media
+insights, caption/carousel/reel validation, export normalization, and
+explicitly approved publishing. `social-content` owns creative drafting;
+`apify` or `feed-scout` owns broad scraping/listening.
+
+Secrets never live in tracked files. Project aliases and non-secret policy live
+in `farplane/bindings.md`; credentials live under `~/.codex/private/social.env`
+or the runtime environment using the `FARPLANE_INSTAGRAM_` prefix.
+
+## Skill Signature
+
+```text
+instagram_account(action, artifact?, account_binding?, date_window?, source_file?)
+  -> draft_validation | publish_result | metrics_snapshot | blocked_report
+state:
+  reads(farplane/bindings.md, ~/.codex/private/docs/social.md?,
+        ~/.codex/private/social.env?, source_file?)
+  writes(.farplane/metrics/manual/instagram_account.json when normalizing exports)
+gates:
+  professional_account_confirmed; account_binding_resolved;
+  publish_approval_explicit; credential_source_private;
+  no_secret_echo; metric_snapshot_shape_valid
+routes:
+  social-content | apify | feed-scout | metric-advisor | review
+fails:
+  publishing without explicit approval; using personal-account assumptions for
+  Graph API work; copying tokens into tracked files; inventing metrics
+```
+
+## Phase Boundary
+
+Keep validation and normalization inline. Use `social-content` for creative
+drafts, `apify` or `feed-scout` for broad reads, and `review` before first live
+publishing.
+
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
+## Todo List
+
+- [ ] 1. Bind the requested action.
+  - [ ] Allowed actions: `validate_caption`, `validate_carousel`,
+        `validate_reel`, `publish_post`, `publish_reel`,
+        `get_profile_metrics`, `get_media_metrics`,
+        `import_metrics_export`, `normalize_metrics_snapshot`.
+  - [ ] Resolve the account alias from `farplane/bindings.md`.
+- [ ] 2. Check safety gates.
+  - [ ] Confirm the account/API mode supports Instagram professional account
+        insights or content publishing before promising live API behavior.
+  - [ ] For publish actions, require explicit approval naming the exact
+        artifact, account alias, and publish boundary.
+  - [ ] Use `scripts/check_config.py` when credential readiness is unclear.
+  - [ ] If credentials are missing, return `blocked_report` with setup steps.
+- [ ] 3. Choose the execution branch.
+  - [ ] 1. Validation branch: check caption, media, carousel, reel, and publish
+        boundary requirements. Use this before a publish request, before
+        asking for review on an Instagram-specific artifact, or when the caller
+        only wants platform fit feedback.
+  - [ ] 2. Metrics branch: fetch or import profile/media insights and normalize
+        to Farplane KPI observations.
+  - [ ] 3. Publish branch: run only after explicit approval and final artifact
+        validation; record media IDs and evidence.
+  - [ ] 4. Broad-read branch: route to `apify` or `feed-scout`.
+- [ ] 4. Execute the selected branch.
+  - [ ] For validation, return blocking issues, warnings, and suggested fixes;
+        do not mutate account state. Use `scripts/validate_media_payload.py`
+        for JSON post/reel/carousel payloads.
+  - [ ] For metrics, write observations compatible with
+        `.farplane/metrics/ui/latest.json` inputs: `instagram_followers`,
+        `instagram_views`, `instagram_likes`, and optional post counts. Use
+        `scripts/fetch_metrics.py` for live read-only Graph API metrics
+        (`--media-id` for exact media metrics, `--deep` for Reels retention
+        fields) or
+        `scripts/normalize_metrics.py` for local JSON/CSV exports.
+  - [ ] For metrics, use `source_gap` when a metric is unavailable; do not
+        write zero unless the platform actually returned zero.
+  - [ ] For publishing, record media IDs/URLs only after the API confirms the
+        mutation.
+- [ ] 5. Finish with proof.
+  - [ ] Apply `qa_checklist.md`: Universal QA plus only the selected branch QA.
+  - [ ] For live API/posting work, record endpoint, account alias, timestamp,
+        output IDs, and redacted credential source.
+  - [ ] For export normalization, record source file and output snapshot path.
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
+
+## Templates
+
+Normalized metric snapshot:
+
+```json
+{
+  "source_id": "manual_instagram_account",
+  "date": "2026-06-30",
+  "status": "available",
+  "observations": [
+    {"metric_id": "instagram_followers", "date": "2026-06-30", "value": 1234, "status": "available"},
+    {"metric_id": "instagram_views", "date": "2026-06-30", "value": 5600, "status": "available"},
+    {"metric_id": "instagram_likes", "date": "2026-06-30", "value": 430, "status": "available"}
+  ]
+}
+```
+
+## Gotchas
+
+- Instagram Graph/API publishing and insights generally require professional
+  account setup, app permissions, and review-sensitive access.
+- Posting is an external mutation and always needs explicit approval.
+- Broad scraping/listening belongs to `apify` or `feed-scout`, not account API.
+
+## Reference Map
+
+- `references/api.md` - load for Instagram API endpoint/auth grounding before live API work.
+- `references/metrics-snapshot.md` - load when importing or normalizing account metrics.
+- `scripts/check_config.py` - check private env readiness without printing secrets.
+- `scripts/fetch_metrics.py` - fetch read-only profile/media metrics and write KPI observations.
+  Use no media IDs for account snapshot mode; repeat `--media-id` for exact media metrics.
+  Add `--deep --duration-seconds <seconds>` for Reels watch-time observations
+  and normalized `instagram_retention_score` when the API returns watch-time
+  insights.
+- `scripts/validate_media_payload.py` - validate post/reel/carousel JSON without account mutation.
+- `scripts/normalize_metrics.py` - normalize JSON/CSV metric exports to Farplane KPI observations.
+- `eval_task.json` - agent-behavior eval rows for live metrics and missing-credential flows.
+
+## Output
+
+- `draft_validation`: platform-fit verdict, blocking issues, and fixed draft suggestions.
+- `metrics_snapshot`: normalized observations and output path.
+- `publish_result`: media IDs, URLs, timestamp, and redacted credential source.
+- `blocked_report`: missing binding, missing credential, missing approval, or API/source gap.

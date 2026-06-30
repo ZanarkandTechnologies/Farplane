@@ -82,6 +82,7 @@ project_harness_creation_phase(project_idea, state)
   -> grounded_goal
    + values_priorities_goal_kpi_model
    + feedback_loop_skill_model
+   + feedback_primitive_implementation_plan?
    + mode_preset_decisions
    + split_file_deltas
    + product_skill_reuse_map
@@ -162,6 +163,11 @@ skill to root `skills/` only after repeated proof shows cross-project reuse.
      deliver/quality, efficiency/capability, learning/evidence, and risk/trust.
    - [ ] For each axis, fill `strategy_state(axis, weight, current_bet, KPI,
      metric_provider, evidence, anti_metric, heartbeat, update_rule)`.
+   - [ ] For every live or missing KPI source, define
+     `metric_binding(metric_id, source, fetch_skill, auth_status,
+     storage_path, display, proof_command)`. If the binding cannot run yet,
+     record the missing credential, account, export, approval, or API reference
+     as the blocker.
    - [ ] If instrumentation does not exist, mark `missing_instrumentation` and
      define the concrete feedback skill needed plus an unblock/setup ticket
      instead of pretending measurement exists.
@@ -190,6 +196,10 @@ skill to root `skills/` only after repeated proof shows cross-project reuse.
    - [ ] Represent external data, accounts, notifications, and shared team
      systems as `skill` capabilities with required inputs, not as a separate
      external-IO concept.
+   - [ ] For each feedback capability, decide whether an existing skill can
+     fetch or import the signal now. If not, compile a feedback primitive plan
+     before activating the harness: target skill, source docs, scripts,
+     bindings, private setup, storage path, evals, QA, and proof commands.
    - [ ] Put project-specific non-secret coordinates in `farplane/bindings.md`
      rather than inventing provider-specific config files.
    - [ ] For each human access/setup/approval blocker, create or propose a
@@ -261,6 +271,17 @@ skill to root `skills/` only after repeated proof shows cross-project reuse.
      when the gap list is material.
    - [ ] Use [skill-creator](../skill-creator/SKILL.md) only when a missing
      capability has a stable trigger and reusable workflow.
+   - [ ] When the missing capability is a feedback or KPI primitive that the
+     current harness needs, do not stop at a vague unblock ticket. Produce a
+     `feedback_primitive_implementation_plan` with:
+     trigger, input IDs or export shape, official/source grounding, private env
+     keys, non-secret `farplane/bindings.md` rows, `farplane/goals.md` KPI rows,
+     storage path, fetch/import scripts, normalization shape, eval rows,
+     branch-scoped QA checklist, blocked-mode proof, and live-proof command.
+   - [ ] If the primitive is project-specific, keep it under `.agents/skills/`
+     or ticket it for project-local implementation. If repeated use across
+     projects is likely, route through `skill-creator` for a root skill package
+     and include the implementation plan as the handoff.
    - [ ] Otherwise choose reference, ticket, tool connector, eval, validator,
      subagent, `init-advisor`, defer-until-pilot, or no-op.
 - [ ] 10. Compile the current milestone.
@@ -295,6 +316,7 @@ Planning Worksheet:
 Values / Operating Principles / Priorities:
 Strategy Axes / KPI Map:
 Feedback Skill Loops:
+Feedback Primitive Implementation Plan:
 Heartbeat Preview:
 Automation Manifest:
 Skill Gap Map:

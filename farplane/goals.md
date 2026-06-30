@@ -3,7 +3,7 @@ kind: project-goals
 status: active
 project: Farplane
 created_at: 2026-06-15
-updated_at: 2026-06-26
+updated_at: 2026-06-30
 framework_template_version: "0.3.0"
 owner: horizon-advisor
 source: horizon-advisor
@@ -41,6 +41,34 @@ less human intervention.
 | project_control | Can Farplane control dynamic projects with their own completion criteria and intervention budgets? | active projects with goals/proof state, useful interval reports, projects advanced without human unblock |
 | distribution_from_evidence | Can Farplane turn real harness evidence into audience, users, and research authority? | evidence-backed content shipped, qualified attention, serious conversations, pilot users |
 | framework_adoption | Can more project types initialize into Farplane and run a first measured loop? | initialized projects with config, goals, tickets, automations, and first Goal Advisor handoff |
+
+## Tracked KPIs
+
+This table is the project-local KPI registry for interval snapshots and the
+Farplane UI cockpit. `aggregation=point` means the latest observed value is the
+chart value for that day. `aggregation=daily` means the value belongs to that
+day; when `cumulative=true`, the UI snapshot also derives a running total and
+target-hit marker.
+
+| Metric | Label | Axis | Product | Source | Aggregation | Cumulative | Target | Unit | Display |
+| --- | --- | --- | --- | --- | --- | --- | ---: | --- | --- |
+| x_followers | X followers | distribution_from_evidence | distribution | manual_x_account | point | false | 1000 | followers | line |
+| instagram_followers | Instagram followers | distribution_from_evidence | distribution | manual_instagram_account | point | false | 1000 | followers | line |
+| x_views | X views | distribution_from_evidence | distribution | manual_x_account | daily | true | 100000 | views | bar_plus_cumulative |
+| instagram_views | Instagram views | distribution_from_evidence | distribution | manual_instagram_account | daily | true | 100000 | views | bar_plus_cumulative |
+| x_likes | X likes | distribution_from_evidence | distribution | manual_x_account | daily | true | 10000 | likes | bar_plus_cumulative |
+| instagram_likes | Instagram likes | distribution_from_evidence | distribution | manual_instagram_account | daily | true | 10000 | likes | bar_plus_cumulative |
+| x_retention_score | X retention score | distribution_from_evidence | distribution | manual_x_account | point | false | 40 | percent | line |
+| instagram_retention_score | Instagram retention score | distribution_from_evidence | distribution | manual_instagram_account | point | false | 40 | percent | line |
+| posts_published | Posts published | distribution_from_evidence | distribution | manual_social_posts | daily | true | 30 | posts | bar_plus_cumulative |
+| accepted_output_events | Accepted output events | validated_self_improvement | productization | pulse_reward_ledger | daily | true | 50 | events | bar_plus_cumulative |
+| accepted_harness_improvements | Accepted harness improvements | validated_self_improvement | productization | pulse_reward_ledger | daily | true | 20 | events | bar_plus_cumulative |
+| proof_closure_events | Proof closure events | quality_and_proof | productization | pulse_reward_ledger | daily | true | 20 | events | bar_plus_cumulative |
+| latest_eval_pass_rate | Latest eval pass rate | quality_and_proof | experiments | eval_summary_index | point | false | 1.0 | ratio | line |
+| ready_unclaimed_ticket_count | Ready unclaimed tickets | project_control | productization | ticket_board | point | false | 3 | tickets | line |
+| stale_claim_count | Stale claims | project_control | maintenance | ticket_board | point | false |  | tickets | line |
+| pulse_execute_count | Pulse executions | project_control | maintenance | pulse_decision_ledger | daily | true | 10 | beats | bar_plus_cumulative |
+| pulse_request_planning_count | Pulse planning requests | project_control | maintenance | pulse_decision_ledger | daily | true |  | beats | bar_plus_cumulative |
 
 ## Current Bets
 
