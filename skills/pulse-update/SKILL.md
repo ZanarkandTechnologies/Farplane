@@ -8,7 +8,7 @@ template_uses:
   skill-template: "0.2.0"
   skill-eval-task: "0.1.0"
 eval: eval_task.json
-allowed-tools: Read, Glob, Grep, Bash
+allowed-tools: Read, Write, Glob, Grep, Bash
 
 ---
 
@@ -17,11 +17,11 @@ allowed-tools: Read, Glob, Grep, Bash
 ## Context
 
 Use this skill for the Farplane Pulse loop: immediate attention, reward
-reconciliation, ready-ticket execution, planning requests, and worker handoff
-writeback. It does not own drift review, scrum reflection, strategy, product
-lane selection, or scheduled planning. It may read interval guidance as
-constraints, but its job is to execute the board, not decide what the board
-should contain.
+reconciliation, ready-ticket execution, tactical next-wave planning, and worker
+handoff writeback. It does not own drift review, scrum reflection, strategy,
+product-boundary decisions, or scheduled planning. It may read Weekly and Daily
+strategy as constraints. Its job is to execute the board, and when the board is
+empty, instantiate the next safe tactical wave from already-accepted strategy.
 
 This skill should be easy to pilot by changing cadence and extensions, without
 rewriting the action logic. Interval controls when Pulse wakes; policy controls
@@ -32,18 +32,24 @@ what it may do.
 `pulse-update.executor @30m -> reports.pulse`
 
 Pulse resolves the standard Farplane project refs by default: the static
-project charter, local tickets, recent interval guidance, project products,
-local product skill refs under `.agents/skills/`, execution policy, spawned
-threads, outcomes, rewards, reports, and
+project charter, active ops memory, local tickets, recent interval guidance,
+project products, local product skill refs under `.agents/skills/`, execution
+policy, spawned threads, outcomes, rewards, reports, and
 `farplane/pm.json`. The live Codex automation supplies cadence, concurrency cap,
 and true project extensions only. Pulse owns reward reconciliation, proceedable
 ticket admission, execution handoff shape, planning-request reporting, and
 decision/outcome ledger writes.
 
-Empty-board behavior is simple: if no proceedable ticket exists and no
-mechanical admission repair is available, Pulse writes `request_planning` with
-the source gap, idle reason, and board evidence. Daily or Weekly Interval owns
-creating, splitting, or reprioritizing work from `farplane/products.md`.
+Empty-board behavior is bounded. If no proceedable ticket exists and no
+mechanical admission repair is available, Pulse first checks
+`farplane/ops-memory.md` when present, the latest Weekly and Daily strategy
+inputs, and `farplane/products.md` lane weights. Ops memory supplies the active
+focus, active projects, critical paths, next frontier, constraints, and parking
+lot. When those inputs are fresh and safe, Pulse may create a small next wave
+of tactical tickets from the active frontier and immediately admit them through
+the same hard gates. When strategy or ops memory is missing, stale, unsafe, or
+requires product/goal judgment, Pulse writes `request_planning` with the source
+gap, idle reason, and board evidence.
 
 Proceedable ticket selection is a hard gate. Pulse must not select local ticket
 implementation work unless the ticket is `ready: true`,
@@ -59,6 +65,7 @@ pulse_update(project_root, extensions?, pulse_policy?)
   -> reward_update
    + execution_mode
    + child_thread_handoffs?
+   + next_wave_ticket_deltas?
    + planning_request?
    + decision_row
    + ledger_delta
@@ -67,6 +74,7 @@ state:
   reads(farplane/harness.md?,
         farplane/goals.md?,
         farplane/products.md?,
+        farplane/ops-memory.md?,
         .agents/skills/**/SKILL.md?,
         .farplane/reports/interval/**?,
         .farplane/automation/heartbeat-policy.json,
@@ -78,11 +86,15 @@ state:
          .farplane/automation/decisions.jsonl,
          .farplane/automation/spawned-threads.jsonl,
          .farplane/automation/rewards.jsonl,
+         tickets/TASK-*/ticket.md when plan_next_wave_when_empty creates safe tactical tickets,
          farplane/pm.json when persistent PM-owned worker threads are spawned)
 
 gates:
-  default_refs_resolved; extensions_merged; board_loaded; rewards_reconciled;
-  proceedable_ticket_admission_checked; execution_cap_respected;
+  default_refs_resolved; ops_memory_resolved_or_gap_labeled;
+  strategy_inputs_resolved_or_gap_labeled;
+  extensions_merged; board_loaded; rewards_reconciled;
+  proceedable_ticket_admission_checked; lane_weight_bias_checked;
+  next_wave_tickets_rewarded_when_created; execution_cap_respected;
   side_effect_gates_respected; decision_recorded;
   pm_thread_grouping_updated_when_persistent
 
@@ -92,24 +104,30 @@ routes:
 
 fails:
   performing drift review or weekly scrum planning; rediscovering strategy
-  every beat; creating product-shaped refill tickets in Pulse; executing broad
-  work in the parent heartbeat; treating goal-advisor as the default empty-board
-  fallback; treating interval as authority; skipping reward/outcome writeback;
-  using planner-level exploration before reward learning proves value
+  every beat; creating strategy-shaped or unsafe refill tickets in Pulse;
+  executing broad work in the parent heartbeat; treating goal-advisor as the
+  default empty-board fallback; treating interval as authority;
+  skipping reward/outcome writeback; using planner-level exploration before
+  reward learning proves value; generating tickets without Reward: moves /
+  win_signal / guard; planning every possible project instead of the active
+  frontier; duplicating caps or cadence from heartbeat policy into ops memory
 ```
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
 - [ ] 1. Bind policy and context.
-  - [ ] Resolve standard Farplane refs for ticket board, latest interval
-        guidance, static project charter, project products, execution policy,
-        local product skill refs from admitted tickets, spawned thread rows,
-        recent outcomes, report paths, and `farplane/pm.json`.
+  - [ ] Resolve standard Farplane refs for ticket board, `farplane/ops-memory.md`
+        when present, latest interval guidance, latest Weekly and Daily
+        strategy inputs, static project charter, project products and lane
+        weights, execution policy, local product skill refs from admitted
+        tickets, spawned thread rows, recent outcomes, report paths, and
+        `farplane/pm.json`.
   - [ ] Merge caller-supplied extensions for execution caps, budgets, gates, or
         extra context refs.
-  - [ ] Treat interval guidance as constraints only; do not perform drift review
-        or weekly scrum planning inside Pulse.
+  - [ ] Treat Weekly/Daily strategy as constraints and tactical inputs only; do
+        not perform drift review, KPI mutation, product-boundary decisions, or
+        weekly scrum planning inside Pulse.
 - [ ] 2. Reconcile previous outcomes.
   - [ ] Inspect prior spawned thread rows and expected outputs.
   - [ ] Apply immediate rewards for completed, partial, blocked, noisy, or
@@ -131,13 +149,39 @@ fails:
   - [ ] If no ticket is proceedable but a purely mechanical ticket metadata or
         proof-state repair would make an existing ticket executable, choose
         `repair_ticket_admission_state`.
+  - [ ] If no executable work exists and fresh Weekly/Daily strategy can be
+        converted into safe tactical work, choose
+        `plan_next_wave_when_empty`.
   - [ ] If no executable work exists because the queue is empty, vague, stale,
-        blocked by product/goal judgment, or undersupplied, choose
+        blocked by product/goal judgment, unsafe, or undersupplied, choose
         `request_planning` and record the exact planning request for Daily or
         Weekly Interval.
   - [ ] Choose `no_op_blocked` only when execution, mechanical repair, and
         planning request are all blocked or unsafe.
-- [ ] 5. Spawn or record.
+- [ ] 5. Plan, spawn, or record.
+  - [ ] For `plan_next_wave_when_empty`, read the latest Weekly strategy, Daily
+        strategy, `farplane/ops-memory.md` when present,
+        `farplane/products.md` lane weights, and board state.
+  - [ ] Check the active focus, active projects, critical paths, next frontier,
+        constraints, and parking lot before creating tickets. If ops memory is
+        missing, stale, or contradicted by fresh interval strategy, record the
+        gap or override in the Pulse report.
+  - [ ] Create only small tactical tickets that ladder to a current focus, bet,
+        active project, frontier step, lane, bottleneck, or reward signal.
+  - [ ] Use product lane weights as selection bias when several equally safe
+        slices are available; Daily strategy, blockers, freshness, and proof
+        urgency may override the bias when the reason is recorded.
+  - [ ] Every generated ticket must include:
+        `Reward: moves / win_signal / guard`.
+  - [ ] Prefer this priority ladder:
+        execute ready unblocked work; continue the active ops-memory frontier;
+        continue the main daily focus; unblock the main daily focus; improve
+        proof, review, or instrumentation for the focus; prepare downstream
+        work for the weekly bet; support
+        product/marketing only when it ladders to the weekly bet; improve the
+        harness only when it improves future throughput or proof; no-op only
+        when safe support work would be fake progress.
+  - [ ] If maintenance is selected, name the active frontier it unblocks.
   - [ ] For each admitted ticket, create a named child-thread handoff with
         objective, context refs, local product skill ref when present, gates,
         expected outputs, reward horizon, and stop condition.
@@ -168,6 +212,13 @@ fails:
 - `repair_ticket_admission_state`: perform only mechanical repair that can make
   an existing ticket executable, such as stale ready/approval/phase metadata or
   missing proof-state links. Do not make product or strategy decisions here.
+- `plan_next_wave_when_empty`: when the board has no proceedable ticket and
+  current strategy inputs are fresh, create a small wave of tactical tickets
+  from ops-memory active frontier, Weekly/Daily strategy, product lane weights,
+  and board evidence. The mode must not change goals, KPIs, product boundaries,
+  external systems, cadence, caps, spend, publishing, or customer contact.
+  Generated tickets require `Reward: moves / win_signal / guard` and must pass
+  normal admission gates before execution.
 - `request_planning`: write a planning request for Daily or Weekly Interval
   when the board lacks executable work or needs product/goal judgment. Include
   queue evidence, idle reason, and suggested planning scope.

@@ -26,29 +26,118 @@ Farplane autonomous operation uses explicit Codex automation loops:
 
 ```text
 pulse_update(project_root, extensions?, pulse_policy?)
-  -> ready ticket execution + planning request? + decision state
+  -> ready ticket execution + tactical next-wave tickets? + planning request? + decision state
 
 interval_update(project_root, interval_id, review_window, planning_window,
                 context_refs?, report_workflows?, planning_policy?,
                 write_policy?, now?)
-  -> dated interval report + next-window plan + Pulse guidance
+  -> dated interval report + ops-memory delta? + next-window plan + Pulse guidance
 ```
 
-Pulse is the fast executor loop. It reads the static harness charter, current
-goals, dynamic products, recent interval guidance, ticket state, execution
-policy, rewards, and ledgers. It admits ready tickets, executes parallelizable
-work up to policy cap, writes planning requests when no executable work exists,
-writes a dated Pulse report, and updates decision/reward state.
+Pulse is the fast execution bus. It reads the static harness charter, current
+goals, dynamic products, active ops memory, product lane weights, recent
+Weekly/Daily strategy inputs, ticket state, execution policy, rewards, and
+ledgers. It admits ready tickets, executes parallelizable work up to policy
+cap, creates a small tactical next wave when the board is empty and fresh
+strategy is available, writes planning requests when no safe tactical work
+exists, writes a dated Pulse report, and updates decision/reward state.
 
-Daily Interval reviews the last 24 hours and plans the next 24 hours. Weekly
-Interval reviews the last week, checks drift against `farplane/harness.md` and
-`farplane/goals.md`, and plans the next week. Both call `interval-update`,
-write dated reports under `.farplane/reports/interval/`, and give Pulse
-guidance.
+Daily Interval reviews the last 24 hours and recalibrates the next 24 hours.
+Weekly Interval reviews the last week, checks drift against
+`farplane/harness.md` and `farplane/goals.md`, and sets next-week bets. Both
+call `interval-update`, write dated reports under
+`.farplane/reports/interval/`, and give Pulse strategy inputs.
+
+`farplane/ops-memory.md` is the active operating memory between reports and
+tickets. It is the compact, mutable second brain for current focus, active
+projects, critical paths, next frontier, constraints, parking lot, and recent
+operating decisions. It may hold multiple active projects, but those projects
+remain Markdown sections, not a roadmap registry, project schema, database, or
+second scheduler.
 
 The important design choice is that Pulse does not become long-horizon
 strategy, and interval automations do not become fast execution dispatchers.
-They share files, not hidden transcript memory.
+Weekly and Daily alter the inputs to the tactical planner; Pulse owns the
+current board scan, next-wave slicing, execution admission, and outcome
+writeback. They share files, not hidden transcript memory.
+
+## Memory Split
+
+Use the smallest owner for each kind of state:
+
+| State | Owner | Changes when |
+| --- | --- | --- |
+| Stable thesis and guardrails | `farplane/harness.md` | explicit human-approved harness delta |
+| North star, value function, KPI axes, durable bets | `farplane/goals.md` | horizon/goal delta with evidence and approval when material |
+| Product lanes, workflows, lane weights | `farplane/products.md` | product-boundary update with evidence |
+| Active focus, active projects, critical paths, next frontier | `farplane/ops-memory.md` | Daily/Weekly refresh or Pulse frontier writeback |
+| Executable work | `tickets/TASK-*/ticket.md` | ticket creation, execution, review, closeout |
+| Receipts and ledgers | `.farplane/reports/**`, `.farplane/automation/*.jsonl` | Pulse/Interval/worker outcomes |
+| Caps and cadence | `.farplane/automation/heartbeat-policy.json`, `farplane/automations.md` | explicit automation/policy update |
+
+This keeps flexible planning in one place without turning every roadmap idea
+into a new artifact family. Caps such as `maxChildThreadsPerBeat` remain policy
+state; ops memory may mention where caps live, but it must not duplicate them
+as mutable planning state.
+
+## Strategy Inputs And Next-Wave Planning
+
+Weekly and Daily reports expose compact strategy inputs and may refresh
+ops-memory:
+
+```text
+StrategyInput := focus + bets + prefer + avoid + blocked + reward
+OpsMemoryDelta := current_focus + active_projects + next_frontier
+               + constraints + parking_lot + recent_decisions
+```
+
+`farplane/products.md` work-lane weights are the default allocation prior for
+Pulse next-wave planning. They bias selection when several safe slices are
+available; they are not hard quotas. Daily strategy, blockers, source
+freshness, proof urgency, or a Weekly bet may override the weights, but the
+Pulse report should record the reason.
+
+When no ready ticket can advance, Pulse may use:
+
+```text
+plan_next_wave_when_empty(ops_memory, weekly_strategy, daily_strategy,
+                          board_state, product_lane_weights)
+  -> 1..N tactical tickets + admission decision
+```
+
+Generated tactical tickets must be small, local, approval-free, and tied to a
+current focus, active project, frontier step, bet, lane, bottleneck, or reward
+signal. Each generated ticket must include:
+
+```text
+Reward:
+  moves:
+  win_signal:
+  guard:
+```
+
+Pulse still writes `request_planning` when the strategy inputs are stale,
+missing, unsafe, or require material product, KPI, goal, publishing, spend,
+account, customer-contact, or authority decisions.
+
+Before:
+
+```text
+latest interval report -> one safe tactical ticket -> maybe execution
+```
+
+After:
+
+```text
+goals/products + ops-memory + latest interval reports
+  -> active frontier
+  -> bounded tactical tickets
+  -> execution up to heartbeat-policy cap
+```
+
+Maintenance work should compete against the active frontier. It is selected
+only when it unblocks the focus, protects proof, or has a clearer reward signal
+than the current project work.
 
 ## Self-Update Loop
 
@@ -116,7 +205,9 @@ Goals deltas have three outcomes:
   behavior gap itself is the task: diagnose the gap, place the lever, choose
   proof, route the change or experiment, and require review.
 - `pulse-update` executes ready tickets up to policy cap, records immediate
-  outcomes, or writes a planning request when the board lacks executable work.
+  outcomes, creates bounded tactical next-wave tickets from fresh strategy when
+  the board is empty, or writes a planning request when no safe tactical work
+  exists.
 
 Use this matrix when the weekly self-update report routes work:
 
@@ -140,9 +231,11 @@ then selects a small number of bets:
 ```
 
 After approval, a material strategy delta returns to `horizon-advisor`; an
-execution bet goes to `goal-advisor`; small ticket deltas go to the board for
-Pulse execution. The next daily and weekly intervals read the resulting
-reports and reward signals.
+execution bet goes to `goal-advisor`; small ticket deltas may go to the board
+for Pulse execution. When the board is empty, Pulse may also create small
+tactical tickets directly from the latest Weekly/Daily strategy and product
+lane weights. The next daily and weekly intervals read the resulting reports
+and reward signals.
 
 The weekly report should reason over scores rather than pretending scores are
 objective telemetry too early. Each selected bet should name:

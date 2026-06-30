@@ -21,6 +21,18 @@ owns cadence by running explicit automations. This skill owns the shared
 report-then-plan workflow for one configured window. The caller supplies the
 timeframe, cross-interval context refs, and optional report workflows.
 
+The interval phase order is:
+
+```text
+reflect past window -> close or update rewards -> plan next window -> emit guidance
+```
+
+Run reflection workflows first, usually in parallel or as lightweight inline
+passes over the same context bundle. Then close due reward signals and score
+leverage before choosing new bets. `priority_planning` is the final synthesis
+step that turns reflection, reward closure, and leverage findings into the
+next-window plan, Pulse constraints, ticket deltas, and Goal Advisor handoffs.
+
 Do not wrap this skill in a hidden scheduler thread. If a project needs another
 cadence, create another explicit automation that calls this skill with a named
 interval, review window, planning window, context refs, and workflow flags.
@@ -45,6 +57,7 @@ interval_update(project_root, interval_id, review_window, planning_window,
 state:
   reads(farplane/harness.md?,
         farplane/products.md?,
+        farplane/ops-memory.md?,
         .agents/skills/**/SKILL.md?,
         farplane/goals.md?,
         tickets/,
@@ -58,6 +71,7 @@ state:
         worker thread refs when available)
   writes(.farplane/reports/interval/<interval_id>/<YYYY-MM-DDTHHMMSSZ>.md,
          optional .farplane/reports/interval/<interval_id>/context/<YYYY-MM-DDTHHMMSSZ>.md,
+         farplane/ops-memory.md when write_policy allows compact active-focus refresh,
          farplane/goals.md only through explicit goals-delta policy)
 
 gates:
@@ -87,6 +101,7 @@ caller-supplied `context_refs`.
 default_context_refs(project_root, interval_id) = {
   harness_ref: farplane/harness.md,
   products_ref: farplane/products.md,
+  ops_memory_ref: farplane/ops-memory.md,
   goals_ref: farplane/goals.md,
   ticket_refs: tickets/,
   memory_refs: [docs/MEMORY.md, docs/HISTORY.md, docs/LESSONS.md, docs/TROUBLES.md],
@@ -143,6 +158,8 @@ configuration contract, optional workflow definitions, and goals-delta policy.
 Workflow reference index:
 
 ```text
+Reflection workflows:
+
 plan_progress(review_window)
   -> goal_movement + task_drag + plan_realism
   ref: references/workflows/plan-progress.md
@@ -171,9 +188,13 @@ metric_snapshot(review_window)
   -> metric_status + gaps
   ref: references/workflows/metric-snapshot.md
 
+Reward and leverage synthesis:
+
 compounding_leverage_review(review_window, planning_window)
   -> lever_inventory + top_experiment_candidates + reward_signals
   ref: references/workflows/compounding-leverage-review.md
+
+Maintenance/refinement routing:
 
 skill_hardening(review_window, planning_window)
   -> harden_skill_handoffs + eval_candidates + processed_state_delta
@@ -186,6 +207,8 @@ skill_refinement(review_window, planning_window)
 docs_consolidation(review_window, planning_window)
   -> consolidate_docs_handoffs + stale_doc_candidates + source_gaps
   ref: references/workflows/docs-consolidation.md
+
+Final planning synthesis:
 
 priority_planning(review_window, planning_window)
   -> priorities + depriorities + proof_checks
@@ -211,17 +234,17 @@ priority_planning(review_window, planning_window)
   - [ ] Bind workflow-specific source refs from `context_refs.workflow_refs`
         before running source-dependent report workflows.
   - [ ] Label missing or stale sources as source gaps.
-- [ ] 3. Review the past window.
+- [ ] 3. Reflect on the past window.
   - [ ] Summarize tickets, Pulse decisions, worker outcomes, blockers,
         failures, file/doc changes, and human feedback inside `review_window`.
   - [ ] Check drift against the static harness charter, configured parent
         context refs, and goals.
-  - [ ] Run only the report workflows enabled by `report_workflows`, passing
-        the context bundle, `review_window`, and `planning_window` to each
-        workflow.
+  - [ ] Run only the enabled reflection workflows, passing the context bundle,
+        `review_window`, and `planning_window` to each workflow.
   - [ ] Load only the workflow ref files named in the workflow reference index
         for enabled workflows, then run inline or read-only subagent analysis
         lanes as those refs direct.
+- [ ] 4. Close rewards and synthesize leverage.
   - [ ] When `compounding_leverage_review` is enabled, close due reward
         signals from prior interval reports before selecting new leverage bets.
   - [ ] When metric snapshots or reward signals are ambiguous, use a metric
@@ -236,17 +259,21 @@ priority_planning(review_window, planning_window)
         keep/merge/move/delete decisions through `consolidate(..., structure =
         docs_tree | memory)`, broad context refresh through `update-memory`,
         and substantive doc-quality rewrites through `doc-advisor`.
-- [ ] 4. Write the report before durable mutations.
-  - [ ] Write a date-stamped interval report.
-  - [ ] Include source gaps, drift findings, evidence, and the proposed next
-        plan before mutating goals or tickets.
-  - [ ] Use goals-delta promotion before changing `farplane/goals.md`.
-- [ ] 5. Emit next-window guidance.
+- [ ] 5. Plan the next window.
+  - [ ] Run `priority_planning` after reflection and reward/leverage synthesis
+        when enabled; it must check that next-window priorities move a named
+        goal, bottleneck, or leverage signal instead of merely filling time.
   - [ ] Produce a plan sized to `planning_window`.
   - [ ] Convert executable work into ticket deltas or Goal Advisor handoffs,
         including `.agents/skills/<product-skill>/SKILL.md` refs when a
         local product skill owns the workflow.
   - [ ] Return Pulse guidance as constraints for the fast executor loop.
+- [ ] 6. Write the report before durable mutations.
+  - [ ] Write a date-stamped interval report.
+  - [ ] Include source gaps, drift findings, evidence, and the proposed next
+        plan before mutating goals or tickets.
+  - [ ] Use goals-delta promotion before changing `farplane/goals.md`.
+- [ ] 7. Emit next-window guidance.
   - [ ] Summarize report paths, blockers, goals-delta decisions, and handoffs.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 

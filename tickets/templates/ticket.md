@@ -1,6 +1,6 @@
 ---
 template_id: ticket-template
-template_version: "0.1.4"
+template_version: "0.1.5"
 feature_refs:
   - FEAT-0007
   - FEAT-0008
@@ -62,6 +62,17 @@ first_principles_basis:
   proof_or_falsification:
   tradeoff:
   non_goals:
+```
+
+## Reward
+Optional for Pulse-created tactical tickets, experimental tickets, and other
+work where planning should show why the ticket matters. Keep this tiny; use a
+metric card in `program.md` only when the provider or proof route is unclear.
+
+```text
+moves:
+win_signal:
+guard:
 ```
 
 ## Change Plan
@@ -238,6 +249,8 @@ docs_strategy:
 - `Compute hint:` `local_shared` | `local_worktree` | `codex_cloud` |
   `symphony` | `none`
 - `Planning hint:` `none` | `light` | `impl_plan` | `reslice`
+- `Expected beats:` `1` | `2-4` | `5+`
+- `Parallel:` `yes` | `no`
 - `QA source:` `QA Strategy` or linked sidecar when the QA plan is too large
 - `Batchability:` `batchable` | `single-ticket` | `unknown`
 - `Batch reason:` shared module/workflow/setup/proof surface, or no-batch

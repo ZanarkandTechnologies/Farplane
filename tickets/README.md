@@ -222,6 +222,7 @@ Default sections:
 
 Optional sections only when they add signal:
 
+- `Reward`
 - `Gap Analysis`
 - `Agent Contract`
 - `Run Hints`
@@ -244,6 +245,20 @@ Use `Delta` to answer:
 Keep `Delta` brief after ticket creation. When `impl-plan(ticket)` runs, it
 expands the work into `Change Plan` units instead of making readers cross-map
 separate Delta, Program, and Map sections.
+
+Use `Reward` for Pulse-created tactical tickets, experiments, and other work
+whose planning value should be obvious before execution. Keep it small:
+
+```text
+Reward:
+  moves: the goal, KPI axis, bottleneck, lane, or reward signal this advances
+  win_signal: the observable result that says this ticket mattered
+  guard: what must not regress or be gamed while chasing the signal
+```
+
+`Reward` is not a metrics registry and is not mandatory for every legacy
+ticket. If the provider, guard, anti-metric, or proof route needs more detail,
+put the metric card in `program.md` or route through `metric-advisor`.
 
 Use `Change Plan` for the executable task-local program and file map. Split it
 into one heading and one fenced block per coherent change:
@@ -399,6 +414,8 @@ batched, or routed through external compute, add `Run Hints` and name:
 7. decisions the agent may make autonomously
 8. likely size, Goal recommendation, compute hint, proof weight, and
    batchability when those affect `$work`
+9. expected beats and parallel eligibility when Pulse or another heartbeat
+   needs capacity-learning hints
 
 If those answers are missing, keep the ticket gated instead of marking it ready
 for the board-draining loop.

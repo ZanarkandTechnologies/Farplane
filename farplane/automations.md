@@ -47,8 +47,9 @@ interval_minutes = 30
 Use $pulse-update.
 
 Run one bounded Farplane Pulse beat for the project. Reconcile recent outcomes,
-select at most the configured ready work, and write the normal Pulse report or
-blocker through the skill contract.
+select at most the configured ready work, plan a bounded tactical next wave
+when the board is empty and the skill contract allows it, and write the normal
+Pulse report or blocker through the skill contract.
 
 Params:
 project_root = "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane"
