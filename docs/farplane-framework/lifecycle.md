@@ -3,8 +3,8 @@ title: "Farplane Lifecycle"
 status: active
 owner: farplane-framework
 created_at: 2026-06-23
-updated_at: 2026-06-29
-framework_template_version: "0.2.0"
+updated_at: 2026-07-01
+framework_template_version: "0.2.1"
 tags:
   - farplane
   - lifecycle
@@ -34,9 +34,11 @@ mental model is:
 init_project(intent)
   -> visible project files
   -> static human charter, products, goals, and current milestone
+  -> metric providers, active ops memory, and Reward-backed tickets
   -> ticket-backed Goal Packets
   -> Pulse acts and intervals plan
-  -> weekly reports propose goals deltas and leverage bets
+  -> daily snapshots expose KPI/source gaps
+  -> weekly reports review goal drift, runway, and leverage bets
   -> drains compress outcomes back into docs, memory, skills, and tickets
 ```
 
@@ -97,27 +99,128 @@ flowchart TD
   B --> C["Farplane project files"]
   C --> D["horizon-advisor"]
   D --> E["farplane/goals.md"]
+  C --> X["farplane/bindings.md"]
+  C --> Y["farplane/ops-memory.md"]
   E --> F["goal-advisor"]
   F --> G["Goal Packet: ticket.md + program.md + progress.md"]
   G --> H["Native Codex Goal"]
   H --> I["implementation, QA, demo, review evidence"]
   I --> J["ticket closeout and docs writeback"]
   E --> K["interval-update"]
+  X --> K
+  Y --> K
   K --> L["dated interval reports + Pulse guidance"]
-  K --> R["goals delta proposals + leverage bets"]
+  K --> U["daily KPI snapshots + source gaps"]
+  K --> R["goals deltas + runway decisions + leverage bets"]
   R --> S{"approval required?"}
   S -->|strategy/KPI/frontier change| D
   S -->|execution bet selected| F
   S -->|minor evidence-backed update| E
   G --> M["pulse-update"]
   L --> M
-  M --> N["ready ticket execution or planning request"]
+  U --> M
+  M --> N["ready ticket execution, Reward-backed ticket, or planning request"]
   N --> O["Pulse reports and ledgers"]
   O --> K
   J --> P["update-memory / skill-maintenance"]
   P --> Q["compressed memory, lessons, skills, evals"]
   Q --> D
 ```
+
+## Autonomous Operating Loop
+
+Autonomous operation is deliberately small: agents update a handful of visible
+files, write dated receipts, and let each next loop read those receipts. The
+framework does not need a hidden planner, KPI registry, campaign registry, or
+cost database for the first working version.
+
+```text
+farplane/harness.md
+  -> static thesis, authority, proof, and runway guardrails
+
+farplane/goals.md
+  -> goal axes + inline SMART goals + stable KPI keys + update hints
+
+farplane/bindings.md
+  -> non-secret metric providers and source-gap setup hints
+
+farplane/ops-memory.md
+  -> active projects, contribution modes, current frontier, runway notes
+
+tickets/TASK-*/ticket.md
+  -> executable work, Reward(moves, win_signal, guard), proof contract
+
+Pulse
+  -> executes ready tickets or creates small Reward-backed tactical tickets
+
+Daily Interval
+  -> refreshes recent progress, goal drift, ticket drift, and KPI snapshots
+
+Weekly Interval
+  -> reviews goal drift, budget/runway, leverage, source gaps, and next bets
+
+.farplane/reports/** + .farplane/automation/*.jsonl
+  -> dated receipts that feed the next Pulse or Interval
+```
+
+The loop has three clocks:
+
+| Clock | Owner | Purpose | Durable output |
+| --- | --- | --- | --- |
+| Pulse | `pulse-update` | Act on ready work or request planning. | Pulse report and decision/reward ledgers. |
+| Daily | `interval-update` | Refresh near-term progress, blockers, and KPI readings. | Daily interval report and metric snapshots. |
+| Weekly | `interval-update` | Protect or change strategy, review runway, and choose leverage bets. | Weekly report, goals-delta candidates, ops-memory delta, Pulse guidance. |
+
+KPI snapshots start from `farplane/goals.md`: each SMART goal names stable KPI
+keys and an `update_hint`. The interval agent uses those hints, provider
+coordinates in `farplane/bindings.md`, and active context in
+`farplane/ops-memory.md` to call skill snapshots or local ledgers. Providers
+write compact daily readings:
+
+```text
+metrics.<kpi>.value
+metrics.<kpi>.items?  # post IDs, ticket IDs, media IDs, or other breakdowns
+```
+
+The UI derives daily differences and trend lines from dated readings. Missing
+credentials, missing files, unsupported API metrics, and unbuilt feedback
+mechanisms are `source_gap`, not zero.
+
+Budget and runway use existing ticket structure. Ticket `Reward` is the
+spend-justification primitive:
+
+```text
+moves: what goal, active project, frontier step, or bottleneck this advances
+win_signal: what evidence would justify more runway
+guard: where to stop, narrow, or avoid expanding
+```
+
+Weekly Interval turns active projects, ticket Rewards, KPI snapshots, reports,
+and source gaps into runway decisions:
+
+```text
+continue | narrow | pause | instrument | stop | escalate_to_revenue
+```
+
+These decisions constrain planning. They do not authorize publishing, paid
+services, customer contact, deploys, destructive cleanup, or product-boundary
+changes unless a ticket or policy explicitly grants that authority.
+
+### Minimum Autonomous Instruction Set
+
+For a project to run the loop without hidden transcript memory, it needs:
+
+- `farplane/harness.md` with static authority, proof, and runway guardrails.
+- `farplane/products.md` with product lanes and lane weights.
+- `farplane/goals.md` with inline SMART goals, KPI keys, and update hints.
+- `farplane/bindings.md` with non-secret metric provider coordinates.
+- `farplane/ops-memory.md` with active projects and current frontier.
+- `farplane/automations.md` with reviewed Pulse, Daily, and Weekly prompts.
+- Tickets with `Reward`, Done/Proof, and QA strategy for executable work.
+- `.farplane/reports/**` and `.farplane/automation/*.jsonl` as dated receipts.
+
+If one of these is missing, the autonomous loop should write a source gap,
+planning request, or instrumentation ticket instead of guessing.
 
 ## Files First
 

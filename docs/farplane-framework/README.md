@@ -3,8 +3,8 @@ title: Farplane Framework
 status: active
 owner: harness
 created_at: 2026-06-15
-updated_at: 2026-06-29
-framework_template_version: "0.2.0"
+updated_at: 2026-07-01
+framework_template_version: "0.2.1"
 source_of_truth:
   - docs/farplane-framework/lifecycle.md
   - docs/farplane-framework/ticket-execution-loop.md
@@ -38,7 +38,7 @@ tickets, durable docs, reusable skills, proof surfaces, versioned templates,
 and recurring Codex automation loops.
 
 ```text
-project = files + tickets + skills + goals + bindings + Pulse/Interval + runtime reports
+project = files + tickets + skills + goals + bindings + ops memory + Pulse/Interval + runtime reports
 ```
 
 This framework is the bridge between the two main product surfaces:
@@ -52,16 +52,17 @@ This framework is the bridge between the two main product surfaces:
 
 Use [Lifecycle](lifecycle.md) as the friendly end-to-end overview. It explains
 how a project moves from initialization into Horizon, Goal Advisor, ticketed
-Goal execution, Pulse/Interval automations, hooks, drains, and memory
-compression.
+Goal execution, metric snapshots, budget/runway review, Pulse/Interval
+automations, hooks, drains, and memory compression.
 
 Use [Ticket Execution Loop](ticket-execution-loop.md) when the question is how
 human shaping, ticket fields, `impl-plan`, `goal-advisor`, autonomous Goal
 execution, QA/proof, reviewer gates, and closeout work together.
 
 Use [Pulse And Interval Loop](pulse-and-interval-loop.md) when the question is
-how Pulse, Daily Interval, Weekly Interval, advisor routing, reward signals,
-and urgent leverage escalation coordinate higher-level work.
+how Pulse, Daily Interval, Weekly Interval, advisor routing, metric/source-gap
+snapshots, ticket Reward, runway decisions, reward signals, and urgent leverage
+escalation coordinate higher-level work.
 
 Use [Graph Contract](graph-contract.md) when the lifecycle needs to be consumed
 by tools or the Farplane UI. It defines the node, edge, confidence, and finite
@@ -149,7 +150,7 @@ to root `skills/` only after repeated evidence shows cross-project reuse.
 This standard uses:
 
 ```text
-framework_template_version: "0.2.0"
+framework_template_version: "0.2.1"
 ```
 
 When the framework shape changes, bump the manifest `spec_version`, dogfood the
@@ -198,15 +199,17 @@ interval_update(...)  # scheduled report-then-plan loop
 ```
 
 Pulse is the executor loop. It wakes frequently, reads the static harness
-charter and dynamic product/strategy context, reconciles outcomes, executes
-ready tickets up to policy cap, requests planning when no executable work
-exists, and records decision/reward state.
+charter, dynamic product/strategy context, active ops memory, and recent
+strategy inputs; reconciles outcomes; executes ready tickets up to policy cap;
+requests planning when no executable work exists; and records decision/reward
+state.
 
 Daily Interval and Weekly Interval are planning loops. Their live Codex prompts
 are reviewed in `farplane/automations.md`; Codex automation records own their
-cadence. They call `interval-update`, write date-stamped reports, check drift,
-and produce Pulse guidance or Goal Advisor handoffs. They may propose static
-charter deltas in reports, but must not silently apply them.
+cadence. They call `interval-update`, write date-stamped reports, refresh KPI
+snapshots from goal `kpis` and provider bindings, check drift, review weekly
+budget/runway, and produce Pulse guidance or Goal Advisor handoffs. They may
+propose static charter deltas in reports, but must not silently apply them.
 
 The full contract lives in [Pulse and Interval Automation](../features/FEAT-0065-pulse-and-interval-automation.md).
 
