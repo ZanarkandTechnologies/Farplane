@@ -24,17 +24,27 @@ Load this before live Instagram API work.
 - Facebook Page, `/me/accounts`, and Page-linked `instagram_business_account`
   flows are intentionally out of scope for this skill.
 
-## Minimal Env Contract
+## Minimal Config Contract
 
-Use private env only:
+Use local private `~/.farplane/config.toml`:
 
-```bash
-FARPLANE_INSTAGRAM_USERNAME=
-FARPLANE_INSTAGRAM_LOGIN_ACCESS_TOKEN=
-FARPLANE_INSTAGRAM_LOGIN_USER_ID=
-FARPLANE_META_APP_ID=
-FARPLANE_META_APP_SECRET=
+```toml
+[social.instagram]
+username = ""
+api_mode = "instagram_login"
+login_access_token = ""
+login_user_id = ""
+business_account_id = ""
+
+[social.meta]
+app_id = ""
+app_secret = ""
+graph_version = "v21.0"
 ```
+
+Explicit `FARPLANE_INSTAGRAM_*` and `FARPLANE_META_*` environment variables
+remain supported as one-off runtime overrides, not the persisted source of
+truth.
 
 ## Live API Gates
 

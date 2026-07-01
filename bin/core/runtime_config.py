@@ -94,13 +94,6 @@ def _structured_runtime_env(config: Mapping[str, object], secrets: Mapping[str, 
         "NOTION_API_KEY": _first_object_string_at(
             secrets, [["integrations", "notion_api_key"]]
         ),
-        "NOTION_TOKEN": (
-            _first_object_string_at(secrets, [["env", "NOTION_TOKEN"]])
-            or _first_object_string_at(
-                secrets,
-                [["integrations", "notion_token"]],
-            )
-        ),
         "REF_API_KEY": _first_object_string_at(secrets, [["integrations", "ref_api_key"]]),
         "CODEX_APP_SERVER_URL": (
             _first_object_string_at(

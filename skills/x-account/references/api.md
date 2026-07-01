@@ -27,23 +27,27 @@ Load this before live X API work.
   falling back to app-only bearer reads. Private or organic analytics require
   user-context auth and account access level support.
 
-## Minimal Env Contract
+## Minimal Config Contract
 
-Use private env only:
+Use local private `~/.farplane/config.toml`:
 
-```bash
-FARPLANE_X_BEARER_TOKEN=
-FARPLANE_X_OAUTH2_CLIENT_ID=
-FARPLANE_X_OAUTH2_CLIENT_SECRET=
-FARPLANE_X_OAUTH2_ACCESS_TOKEN=
-FARPLANE_X_OAUTH2_REFRESH_TOKEN=
-FARPLANE_X_ACCESS_TOKEN=
-FARPLANE_X_ACCESS_TOKEN_SECRET=
-FARPLANE_X_API_KEY=
-FARPLANE_X_API_KEY_SECRET=
-FARPLANE_X_USER_ID=
-FARPLANE_X_USERNAME=
+```toml
+[social.x]
+bearer_token = ""
+oauth2_client_id = ""
+oauth2_client_secret = ""
+oauth2_access_token = ""
+oauth2_refresh_token = ""
+access_token = ""
+access_token_secret = ""
+api_key = ""
+api_key_secret = ""
+user_id = ""
+username = ""
 ```
+
+Explicit `FARPLANE_X_*` environment variables remain supported as one-off
+runtime overrides, not the persisted source of truth.
 
 ## Live API Gates
 

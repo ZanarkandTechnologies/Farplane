@@ -22,10 +22,11 @@ Broad listening, competitor scraping, and attention-graph reads route through
 `feed-scout` or `apify`, not this skill.
 
 Secrets never live in tracked files. Project aliases and non-secret policy live
-in `farplane/bindings.md`; credentials live under `~/.codex/private/social.env`
-or the runtime environment using the `FARPLANE_X_` prefix. Prefer current X
-OAuth 2.0 user tokens for account timeline/deep reads; OAuth 1.0a credentials
-are kept as fallback/legacy support.
+in `farplane/bindings.md`; credentials live under local private
+`~/.farplane/config.toml` `[social.x]` or explicit runtime environment
+overrides using the `FARPLANE_X_` prefix. Prefer current X OAuth 2.0 user
+tokens for account timeline/deep reads; OAuth 1.0a credentials are kept as
+fallback/legacy support.
 
 ## Skill Signature
 
@@ -34,7 +35,7 @@ x_account(action, artifact?, account_binding?, date_window?, source_file?)
   -> draft_validation | publish_result | metrics_snapshot | blocked_report
 state:
   reads(farplane/bindings.md, ~/.codex/private/docs/social.md?,
-        ~/.codex/private/social.env?, source_file?)
+        ~/.farplane/config.toml [social.x]?, source_file?)
   writes(.farplane/metrics/manual/x_account.json when normalizing exports)
 gates:
   account_binding_resolved; publish_approval_explicit;

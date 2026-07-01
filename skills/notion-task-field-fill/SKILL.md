@@ -22,6 +22,12 @@ query recipes from `/Users/kenjipcx/.codex/private/docs/notion.md`, queries
 Notion only through MCP, writes a local proposal artifact, and only applies live
 Notion property updates from typed high-confidence proposals.
 
+Low-level helper scripts in this skill that need direct Notion credentials must
+load a single key through `scripts/notion_config.py`: `NOTION_API_KEY` from the
+process environment or `[integrations].notion_api_key` in
+`~/.farplane/config.toml`. Do not read `NOTION_TOKEN`, `notion_token`, or Codex
+MCP config from skill scripts.
+
 ## Skill Signature
 
 ```text
@@ -31,7 +37,8 @@ notion_task_field_fill(run_envelope, private_context?, mcp_tools?)
 state:
   reads(/Users/kenjipcx/.codex/private/TOOLS.md,
         /Users/kenjipcx/.codex/private/docs/notion.md,
-        Notion MCP Tasks/Projects/Goals rows?, Telegram config?)
+        Notion MCP Tasks/Projects/Goals rows?, NOTION_API_KEY for helper
+        scripts?, Telegram config?)
   writes(.farplane/state/notion-task-field-fill/runs/<run-id>/*,
          optional high-confidence Notion field updates,
          optional Telegram review request)
@@ -46,8 +53,9 @@ routes:
 
 fails:
   uses a separate Notion wrapper skill; broad Notion page dump; semantic-search task
-  discovery; public Notion API fallback; writes medium/low-confidence fields;
-  stores private URLs, IDs, or tokens in tracked artifacts
+  discovery; public Notion API fallback; reads NOTION_TOKEN/notion_token;
+  writes medium/low-confidence fields; stores private URLs, IDs, or tokens in
+  tracked artifacts
 ```
 
 ## Phase Boundary
@@ -66,7 +74,8 @@ tools are the dependency boundary.
 - [ ] 2. Load private context.
       Read `/Users/kenjipcx/.codex/private/TOOLS.md` and
       `/Users/kenjipcx/.codex/private/docs/notion.md`; use named handles only
-      in tracked artifacts.
+      in tracked artifacts. If a low-level helper script needs a credential,
+      load only `NOTION_API_KEY` via `scripts/notion_config.py`.
 - [ ] 3. Discover candidates.
       Run one compact MCP Tasks query with bounded page size,
       `filter_properties`, no repeated equivalent query, and no raw page dump.

@@ -152,8 +152,8 @@
         "Reference Map",
         "Output"
       ],
-      "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.7-eb8e5d421c73.md",
-      "source_commit": "eb8e5d421c73",
+      "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.7-0271abe87891.md",
+      "source_commit": "0271abe87891",
       "summary": "working tree current template",
       "version": "0.3.7"
     }
@@ -635,7 +635,7 @@
         "trigger catalogs stay out of frontmatter"
       ],
       "missing_signals": [],
-      "source_commit": "eb8e5d421c73",
+      "source_commit": "0271abe87891",
       "template_version": "0.3.7",
       "title": "Routing clarity",
       "verdict": "pass"
@@ -649,7 +649,7 @@
         "policy prose is not treated as a top-level todo"
       ],
       "missing_signals": [],
-      "source_commit": "eb8e5d421c73",
+      "source_commit": "0271abe87891",
       "template_version": "0.3.7",
       "title": "Todo executability",
       "verdict": "pass"
@@ -663,7 +663,7 @@
         "same-scope recursion is forbidden"
       ],
       "missing_signals": [],
-      "source_commit": "eb8e5d421c73",
+      "source_commit": "0271abe87891",
       "template_version": "0.3.7",
       "title": "Phase boundary",
       "verdict": "pass"
@@ -677,7 +677,7 @@
         "output contract is explicit"
       ],
       "missing_signals": [],
-      "source_commit": "eb8e5d421c73",
+      "source_commit": "0271abe87891",
       "template_version": "0.3.7",
       "title": "Proof contract",
       "verdict": "pass"
@@ -691,7 +691,7 @@
         "qa_checklist.md is a repeatable runtime guardrail only when warranted"
       ],
       "missing_signals": [],
-      "source_commit": "eb8e5d421c73",
+      "source_commit": "0271abe87891",
       "template_version": "0.3.7",
       "title": "Eval / QA sync",
       "verdict": "pass"
@@ -861,7 +861,7 @@
       ]
     }
   ],
-  "generated_at": "2026-07-01T05:51:53+00:00",
+  "generated_at": "2026-07-01T06:36:34+00:00",
   "rollout": [
     {
       "eval": "",
@@ -5114,7 +5114,7 @@
     {
       "introduced_at": "2026-06-29",
       "latest_at": "2026-07-01",
-      "latest_commit": "eb8e5d421c73",
+      "latest_commit": "0271abe87891",
       "latest_summary": "working tree current template",
       "release_count": 2,
       "sections": [
@@ -5128,7 +5128,7 @@
         "Reference Map",
         "Output"
       ],
-      "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.7-eb8e5d421c73.md",
+      "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.7-0271abe87891.md",
       "snapshots": [
         {
           "introduced_at": "2026-06-29",
@@ -5138,8 +5138,8 @@
         },
         {
           "introduced_at": "2026-07-01",
-          "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.7-eb8e5d421c73.md",
-          "source_commit": "eb8e5d421c73",
+          "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.7-0271abe87891.md",
+          "source_commit": "0271abe87891",
           "summary": "working tree current template"
         }
       ],

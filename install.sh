@@ -236,7 +236,7 @@ from runtime_config import load_runtime_env
 
 env = load_runtime_env({"CODEX_HOME": target_dir, **os.environ})
 
-required = ["CODEX_HOME", "REF_API_KEY", "NOTION_TOKEN"]
+required = ["CODEX_HOME", "REF_API_KEY", "NOTION_API_KEY"]
 missing = [key for key in required if not env.get(key) or env[key].startswith("YOUR_") or env[key].startswith("__")]
 if missing:
     raise SystemExit(
@@ -248,7 +248,7 @@ text = template_path.read_text()
 replacements = {
     "__CODEX_HOME__": env["CODEX_HOME"],
     "__REF_API_KEY__": env["REF_API_KEY"],
-    "__NOTION_TOKEN__": env["NOTION_TOKEN"],
+    "__NOTION_TOKEN__": env["NOTION_API_KEY"],
     "__FARPLANE_CONVEX_SITE_URL__": env.get("FARPLANE_CONVEX_SITE_URL", ""),
     "__FARPLANE_TELEMETRY_TOKEN__": env.get("FARPLANE_TELEMETRY_TOKEN", ""),
     "__FARPLANE_CONSOLE_KEY__": env.get("FARPLANE_CONSOLE_KEY", ""),

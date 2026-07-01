@@ -21,10 +21,12 @@ explicitly approved publishing. `social-content` owns creative drafting;
 `apify` or `feed-scout` owns broad scraping/listening.
 
 Secrets never live in tracked files. Project aliases and non-secret policy live
-in `farplane/bindings.md`; credentials live under `~/.codex/private/social.env`
-or the runtime environment using the `FARPLANE_INSTAGRAM_` prefix. Metrics use
-Instagram Login credentials against `graph.instagram.com`; Facebook Page
-ownership belongs in a separate future Facebook Pages skill if needed.
+in `farplane/bindings.md`; credentials live under local private
+`~/.farplane/config.toml` `[social.instagram]` and `[social.meta]`, or explicit
+runtime environment overrides using the `FARPLANE_INSTAGRAM_` /
+`FARPLANE_META_` prefixes. Metrics use Instagram Login credentials against
+`graph.instagram.com`; Facebook Page ownership belongs in a separate future
+Facebook Pages skill if needed.
 
 ## Skill Signature
 
@@ -33,7 +35,7 @@ instagram_account(action, artifact?, account_binding?, date_window?, source_file
   -> draft_validation | publish_result | metrics_snapshot | blocked_report
 state:
   reads(farplane/bindings.md, ~/.codex/private/docs/social.md?,
-        ~/.codex/private/social.env?, source_file?)
+        ~/.farplane/config.toml [social.instagram]/[social.meta]?, source_file?)
   writes(.farplane/metrics/manual/instagram_account.json when normalizing exports)
 gates:
   professional_account_confirmed; account_binding_resolved;

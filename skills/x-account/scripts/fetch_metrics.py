@@ -12,36 +12,14 @@ import os
 import secrets
 import time
 from datetime import date, datetime, timedelta, timezone
-from pathlib import Path
 from typing import Any
 from urllib.error import HTTPError, URLError
 from urllib.parse import quote, urlencode
 from urllib.request import Request, urlopen
 
+from social_config import env_value, load_config_values
 
-ENV_PATH = Path.home() / ".codex" / "private" / "social.env"
 BASE_URL = "https://api.x.com/2"
-
-
-def load_env_file(path: Path = ENV_PATH) -> dict[str, str]:
-    values: dict[str, str] = {}
-    if not path.exists():
-        return values
-    for raw in path.read_text(encoding="utf-8").splitlines():
-        line = raw.strip()
-        if not line or line.startswith("#"):
-            continue
-        if line.startswith("export "):
-            line = line[len("export ") :]
-        if "=" not in line:
-            continue
-        key, value = line.split("=", 1)
-        values[key.strip()] = value.strip().strip('"').strip("'")
-    return values
-
-
-def env_value(key: str, file_values: dict[str, str]) -> str | None:
-    return os.environ.get(key) or file_values.get(key) or None
 
 
 def oauth_ready(file_values: dict[str, str]) -> bool:
@@ -382,7 +360,7 @@ def fetch_metrics(
     latest: bool = False,
     yesterday: bool = False,
 ) -> dict[str, Any]:
-    file_values = load_env_file()
+    file_values = load_config_values()
     app_auth = app_bearer_header(file_values)
     user_auth = oauth2_header(file_values)
     if not app_auth and not user_auth:

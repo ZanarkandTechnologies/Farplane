@@ -27,7 +27,6 @@ class RuntimeConfigTests(unittest.TestCase):
                         "[env]",
                         'FARPLANE_CONVEX_SITE_URL = "https://rendered.convex.site"',
                         'FARPLANE_TELEMETRY_TOKEN = "rendered-token"',
-                        'NOTION_TOKEN = "rendered-notion"',
                     ]
                 )
                 + "\n",
@@ -44,7 +43,7 @@ class RuntimeConfigTests(unittest.TestCase):
                         'telemetry_token = "canonical-token"',
                         "",
                         "[integrations]",
-                        'notion_token = "canonical-notion"',
+                        'notion_api_key = "canonical-notion"',
                         "",
                         "[env]",
                         'FARPLANE_STATE_BASE = "http://127.0.0.1:5173"',
@@ -64,7 +63,8 @@ class RuntimeConfigTests(unittest.TestCase):
 
         self.assertEqual(env["FARPLANE_CONVEX_SITE_URL"], "https://canonical.convex.site")
         self.assertEqual(env["FARPLANE_TELEMETRY_TOKEN"], "canonical-token")
-        self.assertEqual(env["NOTION_TOKEN"], "canonical-notion")
+        self.assertEqual(env["NOTION_API_KEY"], "canonical-notion")
+        self.assertNotIn("NOTION_TOKEN", env)
         self.assertEqual(env["CODEX_APP_SERVER_URL"], "ws://127.0.0.1:9999")
         self.assertEqual(env["FARPLANE_STATE_BASE"], "http://127.0.0.1:5173")
 

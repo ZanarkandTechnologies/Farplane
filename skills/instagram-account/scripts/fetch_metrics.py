@@ -7,35 +7,12 @@ import argparse
 import json
 import os
 from datetime import date, datetime, timedelta, timezone
-from pathlib import Path
 from typing import Any
 from urllib.error import HTTPError, URLError
 from urllib.parse import quote, urlencode
 from urllib.request import urlopen
 
-
-ENV_PATH = Path.home() / ".codex" / "private" / "social.env"
-
-
-def load_env_file(path: Path = ENV_PATH) -> dict[str, str]:
-    values: dict[str, str] = {}
-    if not path.exists():
-        return values
-    for raw in path.read_text(encoding="utf-8").splitlines():
-        line = raw.strip()
-        if not line or line.startswith("#"):
-            continue
-        if line.startswith("export "):
-            line = line[len("export ") :]
-        if "=" not in line:
-            continue
-        key, value = line.split("=", 1)
-        values[key.strip()] = value.strip().strip('"').strip("'")
-    return values
-
-
-def env_value(key: str, file_values: dict[str, str]) -> str | None:
-    return os.environ.get(key) or file_values.get(key) or None
+from social_config import env_value, load_config_values
 
 
 def instagram_get(version: str, path: str, token: str, params: dict[str, str] | None = None) -> dict[str, Any]:
@@ -300,7 +277,7 @@ def fetch_metrics(
     latest_reel: bool = False,
     yesterday: bool = False,
 ) -> dict[str, Any]:
-    file_values = load_env_file()
+    file_values = load_config_values()
     token = env_value("FARPLANE_INSTAGRAM_LOGIN_ACCESS_TOKEN", file_values)
     version = env_value("FARPLANE_META_GRAPH_VERSION", file_values) or "v21.0"
 
