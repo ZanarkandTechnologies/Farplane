@@ -12,7 +12,8 @@ Tracked project framework config lives here.
 
 `manifest.json` owns the compact UI identity card. Richer project meaning lives
 in Markdown: `harness.md` is the static human charter, `products.md` is the
-product catalog and work-lane table, and `goals.md` is current strategy.
+product catalog and work-lane table, `goals.md` is current strategy, and
+`ops-memory.md` is active operating memory.
 
 ```text
 farplane/
@@ -21,6 +22,7 @@ farplane/
   harness.md       # static human charter
   goals.md         # north star, KPIs, current milestone, holds
   products.md      # products and work lanes this team creates
+  ops-memory.md    # active focus, projects, runway, and frontier
   automations.md   # exact Codex automation prompt blocks for Pulse and Intervals
   bindings.md      # non-secret project IDs, URLs, labels, aliases
   hooks.json       # declarative Farplane-native hook configuration

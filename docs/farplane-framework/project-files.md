@@ -51,6 +51,7 @@ farplane/
   harness.md
   goals.md
   products.md
+  ops-memory.md
   automations.md
   bindings.md
   hooks.json
@@ -115,6 +116,42 @@ the planning/refill procedure lives in `interval-update`.
 
 Use Markdown with YAML front matter and the standard headings `Team`,
 `Products`, `Work Lanes`, and `Constraints`.
+
+### `farplane/ops-memory.md`
+
+Active operating memory: the compact, mutable place for what the autonomous
+team is doing now. It records current focus, active projects, tracked feedback
+refs, next frontier, constraints, parking lot, recent decisions, and Pulse
+notes. Stable strategy stays in `farplane/goals.md`; product lanes stay in
+`farplane/products.md`; executable work stays in `tickets/`; dated receipts
+stay under `.farplane/reports/`.
+
+Use the template in
+`skills/init-advisor/references/OPS_MEMORY_TEMPLATE.md`. Keep the headings
+stable enough that agents can skim and update them, but do not treat the file as
+a deterministic database. The interval agent may semantically read active
+project fields such as `lane`, `goal_axes`, `contribution_mode`,
+`weekly_runway_decision`, `expected_reward`, `done_signal`, `critical_path`,
+and `next_frontier`; missing or stale fields become source gaps, planning
+requests, or instrumentation tickets.
+
+The recommended sections are:
+
+| Section | Purpose | Update owner |
+| --- | --- | --- |
+| `Current Focus` | One compact statement of the active frontier. | Daily/Weekly Interval, Pulse when reporting stale focus. |
+| `Active Projects` | Flexible project blocks with contribution mode, runway decision, expected reward, done signals, critical path, and next frontier. | Weekly Interval, with Pulse citing relevant blocks for tactical tickets. |
+| `Tracked Feedback` | Content refs, customer/user feedback refs, runtime/product feedback refs, and source gaps that help agents choose provider calls. | Daily/Weekly Interval or explicit feedback-capture tickets. |
+| `Next Frontier` | Primary and secondary next moves that should bias planning. | Daily/Weekly Interval. |
+| `Constraints` | Local reminders that ops-memory cannot authorize goals/products, spend, publishing, accounts, deploys, or customer contact. | Human-approved policy or interval report. |
+| `Parking Lot` | Real ideas that should not consume active budget this week. | Weekly Interval. |
+| `Recent Decisions` | Compact decision notes that affect near-term planning. | Daily/Weekly Interval. |
+| `Pulse Notes` | Instructions for how Pulse should cite, distrust, or use ops-memory. | Pulse/Interval contract updates. |
+
+Do not store raw metric values here when a source snapshot can own them. Use
+`Tracked Feedback` for refs and tracking intent; store daily readings under
+`.farplane/metrics/source-snapshots/` and render UI trends from
+`.farplane/metrics/ui/latest.json`.
 
 ### `farplane/automations.md`
 

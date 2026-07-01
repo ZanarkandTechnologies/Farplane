@@ -214,7 +214,10 @@ For a project to run the loop without hidden transcript memory, it needs:
 - `farplane/products.md` with product lanes and lane weights.
 - `farplane/goals.md` with inline SMART goals, KPI keys, and update hints.
 - `farplane/bindings.md` with non-secret metric provider coordinates.
-- `farplane/ops-memory.md` with active projects and current frontier.
+- `farplane/ops-memory.md` with active projects, tracked feedback, current
+  frontier, and the standard sections: Current Focus, Active Projects, Tracked
+  Feedback, Next Frontier, Constraints, Parking Lot, Recent Decisions, and
+  Pulse Notes.
 - `farplane/automations.md` with reviewed Pulse, Daily, and Weekly prompts.
 - Tickets with `Reward`, Done/Proof, and QA strategy for executable work.
 - `.farplane/reports/**` and `.farplane/automation/*.jsonl` as dated receipts.

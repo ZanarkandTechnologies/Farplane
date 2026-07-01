@@ -3,7 +3,7 @@ title: Farplane Framework Changelog
 owner: init-advisor
 status: active
 kind: framework-changelog
-updated_at: 2026-06-28
+updated_at: 2026-07-01
 ---
 
 # Farplane Framework Changelog
@@ -16,6 +16,39 @@ or project-level documentation guidance.
 ```text
 framework_bump(old_version, new_version, project_root)
   -> manifest_delta + migration_steps + proof_commands
+```
+
+## 1.6.6
+
+Date: 2026-07-01
+
+Primary change: make `farplane/ops-memory.md` a standard generated project
+surface with a reusable template and documented sections.
+
+Changed surfaces:
+
+- `MANIFEST_TEMPLATE.json` bumps `farplane-framework` from `1.6.5` to `1.6.6`.
+- Standard tracked paths now include `farplane/ops-memory.md`.
+- Bootstrap copies `OPS_MEMORY_TEMPLATE.md` to `farplane/ops-memory.md`.
+- Project-file and lifecycle docs describe the standard ops-memory sections:
+  Current Focus, Active Projects, Tracked Feedback, Next Frontier, Constraints,
+  Parking Lot, Recent Decisions, and Pulse Notes.
+
+Migration steps:
+
+1. Bump `farplane/manifest.json` `spec_version` and
+   `template_uses.farplane-framework` to `1.6.6`.
+2. Add `farplane/ops-memory.md` from
+   `skills/init-advisor/references/OPS_MEMORY_TEMPLATE.md` when missing.
+3. Keep raw metric readings in `.farplane/metrics/**`; use ops-memory for
+   active project context, feedback refs, source gaps, and next-frontier notes.
+
+Proof commands:
+
+```bash
+bash -n skills/init-advisor/scripts/bootstrap.sh
+python3 bin/validators/check_farplane_project_files.py --root .
+python3 skills/skill-maintenance/scripts/check_skills.py --write
 ```
 
 ## 1.6.4

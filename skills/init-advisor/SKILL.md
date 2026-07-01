@@ -213,6 +213,9 @@ setup_project_operating_model(bootstrap_brief, project_context,
   when recording the bootstrap route and next lifecycle phase.
 - [references/MANIFEST_TEMPLATE.json](references/MANIFEST_TEMPLATE.json) -
   copied to `farplane/manifest.json` for the Farplane project spec instance.
+- [references/OPS_MEMORY_TEMPLATE.md](references/OPS_MEMORY_TEMPLATE.md) -
+  copied to `farplane/ops-memory.md` for active operating memory when the
+  framework spec includes the ops-memory surface.
 - [references/FRAMEWORK_CHANGELOG.md](references/FRAMEWORK_CHANGELOG.md) -
   load before bumping `farplane-framework` versions or migrating projects
   between framework spec versions.

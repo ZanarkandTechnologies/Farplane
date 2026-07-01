@@ -1,4 +1,4 @@
-{"applies_to":["farplane/manifest.json"],"consumer_scope":"project","feature_refs":["FEAT-0060"],"path":"skills/init-advisor/references/MANIFEST_TEMPLATE.json","template_id":"farplane-framework","template_version":"1.6.5"}
+{"applies_to":["farplane/manifest.json"],"consumer_scope":"project","feature_refs":["FEAT-0060"],"path":"skills/init-advisor/references/MANIFEST_TEMPLATE.json","template_id":"farplane-framework","template_version":"1.6.6"}
 {"feature_refs":["FEAT-0022","FEAT-0042","FEAT-0043"],"path":"templates/global/AGENTS.md","template_id":"global-agents-template","template_version":"0.2.17"}
 {"feature_refs":["FEAT-0029","FEAT-0032"],"kind":"goal-program","path":"tickets/templates/goal-loop/program.md","template_id":"goal-loop-program","template_version":"0.1.1"}
 {"feature_refs":["FEAT-0007"],"kind":"harness-creator-worksheet","path":"skills/harness-creator/templates/project-harness.md","template_id":"project-harness","template_version":"0.3.3"}
