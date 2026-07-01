@@ -3,7 +3,8 @@ kind: project-ops-memory
 status: active
 project: Farplane
 created_at: 2026-06-30
-updated_at: 2026-06-30
+updated_at: 2026-07-01
+framework_template_version: "0.1.0"
 owner: interval-update
 source_of_truth:
   - farplane/harness.md
@@ -31,6 +32,10 @@ maintenance.
 
 - `lane:` productization
 - `goal_axes:` project_control, quality_and_proof, validated_self_improvement
+- `contribution_mode:` reusable_harness_capability + proof_quality
+- `weekly_runway_decision:` continue
+- `expected_reward:` Pulse and Interval stop creating one-ticket crumbs and
+  produce strategy-grounded tactical work with visible proof.
 - `done_signal:`
   - Pulse can name the active focus and next frontier before creating tickets.
   - Daily and Weekly can refresh the active focus without rewriting goals or
@@ -51,6 +56,10 @@ maintenance.
 
 - `lane:` experiments, ablations, trust_distribution
 - `goal_axes:` distribution_from_evidence, validated_self_improvement
+- `contribution_mode:` distribution + validated_learning + proof_reuse
+- `weekly_runway_decision:` continue_after_ops_memory_frontier_lands
+- `expected_reward:` accepted harness evidence becomes content-ready proof,
+  social KPI readings, and missing-feedback instrumentation.
 - `done_signal:`
   - one accepted ablation or experiment proof
   - one findings report
@@ -79,6 +88,10 @@ maintenance.
 
 - Caps and cadence live in `.farplane/automation/heartbeat-policy.json`, not in
   this file.
+- Weekly runway decisions use active project contribution mode, ticket Reward
+  blocks, metric snapshots, and source gaps. They are planning evidence, not
+  permission for spend, publishing, customer contact, or product-boundary
+  changes.
 - Do not mutate `farplane/goals.md`, `farplane/products.md`, publishing,
   accounts, spend, deploys, or customer contact from ops-memory alone.
 - Do not create a roadmap registry, project schema, database, UI, hidden

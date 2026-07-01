@@ -136,31 +136,47 @@ merge shape.
 3. Resolve cross-interval refs from `interval_output_refs`.
 4. Normalize evidence into
    [interval-context-bundle.md](../templates/interval-context-bundle.md).
-5. Run only enabled `report_workflows` against the context bundle,
-   `review_window`, and `planning_window`, loading only the workflow reference
-   files named in `SKILL.md`.
-6. For enabled self-update workflows, close due reward signals from prior
-   interval reports before selecting new bets.
-7. Read product work lanes, local product skill refs, and static allocation
+5. Reflect on the past window by running only enabled reflection workflows
+   against the context bundle, `review_window`, and `planning_window`, loading
+   only the workflow reference files named in `SKILL.md`.
+6. Close or update rewards. For enabled self-update workflows, close due reward
+   signals from prior interval reports before selecting new bets.
+7. Score leverage and reward signals. Treat scores as planning aids with cited
+   evidence, not objective telemetry.
+8. Read product work lanes, local product skill refs, and static allocation
    guardrails when priority planning or ticket refill is enabled.
-8. For enabled `skill_hardening`, route repeated lessons, troubles,
+9. For enabled `skill_hardening`, route repeated lessons, troubles,
    ticket-progress findings, and proof failures to
    `skill-maintenance(mode: harden_skill)`.
-9. For enabled `skill_refinement`, route accumulated older evals, gotchas,
+10. For enabled `skill_refinement`, route accumulated older evals, gotchas,
    usage results, and compaction risks to
    `skill-maintenance(mode: refine_skill)`.
-10. For enabled `docs_consolidation`, route whole-project context refresh to
+11. For enabled `docs_consolidation`, route whole-project context refresh to
    `update-memory` and substantive durable doc cleanup to `doc-advisor`.
-11. Review the past window against the static harness charter, goals, and
-   configured parent contexts.
-12. Write [interval-report.md](../templates/interval-report.md) before any
-   goals mutation.
-13. Plan the next window, sized to `planning_window`.
-14. Classify every goals delta as `auto_apply`, `approval_required`, or
-   `rejected_source_gap`.
-15. Convert executable changes into ticket deltas or Goal Advisor handoffs,
+12. Review the past window against the static harness charter, goals, and
+    configured parent contexts.
+13. Refresh metric readings when provider skills or local ledgers are available:
+    read goal-axis SMART goals from `farplane/goals.md`, use their `kpis` and
+    `update_hint` fields plus `farplane/ops-memory.md` to choose provider
+    calls, write compact daily source snapshots, then run the KPI snapshot
+    command. Do not parse ops memory as a deterministic database.
+14. Review budget and runway for active projects. Use `farplane/harness.md`
+    allocation guardrails, `farplane/ops-memory.md` contribution modes, ticket
+    `Reward` blocks, metric snapshots, interval reports, source gaps, and
+    operator feedback. Assign each active project a decision:
+    `continue`, `narrow`, `pause`, `instrument`, `stop`, or
+    `escalate_to_revenue`. Do not create a second ticket budget field.
+15. Run final next-window planning. `priority_planning` should consume the
+    reflection findings, reward closure, leverage decisions, product lanes, and
+    guardrails; it should verify that each selected priority moves a named goal,
+    bottleneck, or reward signal.
+16. Write [interval-report.md](../templates/interval-report.md) before any
+    goals mutation.
+17. Classify every goals delta as `auto_apply`, `approval_required`, or
+    `rejected_source_gap`.
+18. Convert executable changes into ticket deltas or Goal Advisor handoffs,
     including local product skill refs when they own the workflow.
-16. Return downstream guidance so Pulse gets the next constraints.
+19. Return downstream guidance so Pulse gets the next constraints.
 
 ## Goals Delta Promotion
 
@@ -180,6 +196,47 @@ Promotion decisions:
   stop condition, quarterly goal, yearly goal, or durable milestone changes.
 - `rejected_source_gap`: insufficient evidence; create an instrumentation,
   access, feedback, or research ticket instead.
+
+Metric snapshot guidance:
+
+```text
+daily_source_snapshot := {
+  date,
+  source,
+  status,
+  metrics: {
+    <kpi>: {
+      value,
+      items?
+    }
+  },
+  gaps?
+}
+```
+
+`metrics.<kpi>.value` is the provider reading for that date. The UI or metric
+pipeline derives daily difference from consecutive readings. Content IDs,
+ticket IDs, post IDs, and other entity IDs belong under `items`, not in KPI
+names.
+
+Runway review guidance:
+
+```text
+runway_decision := {
+  active_project,
+  contribution_mode,
+  expected_reward,
+  observed_evidence,
+  rough_spend_or_attention,
+  decision: continue | narrow | pause | instrument | stop | escalate_to_revenue,
+  next_constraint
+}
+```
+
+The decision is a planning constraint, not a spend authorization. Publishing,
+customer contact, paid external services, deploys, destructive cleanup, and
+product-boundary changes still need explicit authorization unless granted by a
+ticket or policy.
 
 Quarterly, yearly, and other intervals greater than one week should normally
 be represented as explicit interval automations only when they produce useful

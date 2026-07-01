@@ -3,8 +3,8 @@ title: "Pulse And Interval Loop"
 status: active
 owner: farplane-framework
 created_at: 2026-06-29
-updated_at: 2026-06-29
-framework_template_version: "0.2.0"
+updated_at: 2026-07-01
+framework_template_version: "0.2.1"
 tags:
   - farplane
   - lifecycle
@@ -44,8 +44,8 @@ exists, writes a dated Pulse report, and updates decision/reward state.
 
 Daily Interval reviews the last 24 hours and recalibrates the next 24 hours.
 Weekly Interval reviews the last week, checks drift against
-`farplane/harness.md` and `farplane/goals.md`, and sets next-week bets. Both
-call `interval-update`, write dated reports under
+`farplane/harness.md` and `farplane/goals.md`, reviews budget/runway for active
+projects, and sets next-week bets. Both call `interval-update`, write dated reports under
 `.farplane/reports/interval/`, and give Pulse strategy inputs.
 
 `farplane/ops-memory.md` is the active operating memory between reports and
@@ -68,10 +68,12 @@ Use the smallest owner for each kind of state:
 | State | Owner | Changes when |
 | --- | --- | --- |
 | Stable thesis and guardrails | `farplane/harness.md` | explicit human-approved harness delta |
-| North star, value function, KPI axes, durable bets | `farplane/goals.md` | horizon/goal delta with evidence and approval when material |
+| North star, value function, goal axes, inline SMART goals, durable bets | `farplane/goals.md` | horizon/goal delta with evidence and approval when material |
 | Product lanes, workflows, lane weights | `farplane/products.md` | product-boundary update with evidence |
 | Active focus, active projects, critical paths, next frontier | `farplane/ops-memory.md` | Daily/Weekly refresh or Pulse frontier writeback |
 | Executable work | `tickets/TASK-*/ticket.md` | ticket creation, execution, review, closeout |
+| Ticket-level spend justification | ticket `Reward` block | ticket creation or planning update |
+| Active project runway decisions | Weekly Interval report and `farplane/ops-memory.md` | weekly review or material evidence change |
 | Receipts and ledgers | `.farplane/reports/**`, `.farplane/automation/*.jsonl` | Pulse/Interval/worker outcomes |
 | Caps and cadence | `.farplane/automation/heartbeat-policy.json`, `farplane/automations.md` | explicit automation/policy update |
 
@@ -116,6 +118,12 @@ Reward:
   guard:
 ```
 
+`Reward` is also the ticket-level budget justification. `moves` names the
+goal, active project, or bottleneck that deserves spend; `win_signal` names the
+evidence that would justify more runway; `guard` names the stop, resize, or
+non-expansion boundary. Do not add another ticket field for budget reason unless
+a future ticket proves `Reward` is insufficient.
+
 Pulse still writes `request_planning` when the strategy inputs are stale,
 missing, unsafe, or require material product, KPI, goal, publishing, spend,
 account, customer-contact, or authority decisions.
@@ -130,14 +138,43 @@ After:
 
 ```text
 goals/products + ops-memory + latest interval reports
-  -> active frontier
+  -> active frontier + needed metric/provider calls
   -> bounded tactical tickets
   -> execution up to heartbeat-policy cap
 ```
 
+Daily and Weekly should read goal-axis SMART goals semantically. For each
+active SMART goal, use its `kpis` and `update_hint` to decide which provider
+skills or local ledgers can produce today's readings. Do not parse
+`farplane/ops-memory.md` as a deterministic database; use it as flexible agent
+memory for active initiatives, tracked content, and next ticket candidates.
+Provider failures, missing credentials, missing API fields, or missing feedback
+mechanisms become source gaps and instrumentation-ticket candidates.
+
 Maintenance work should compete against the active frontier. It is selected
 only when it unblocks the focus, protects proof, or has a clearer reward signal
 than the current project work.
+
+## Budget And Runway
+
+Fast AI-worker loops still need protected runway. Quarterly goals protect
+compounding bets from daily noise; weekly intervals decide whether each active
+project deserves another planning window.
+
+Weekly Interval should write a Budget / Runway Review before the next-window
+plan. It should cite active projects from `farplane/ops-memory.md`, ticket
+`Reward` blocks, metric snapshots, source gaps, interval reports, and visible
+operator feedback. Each active project receives one decision:
+
+```text
+continue | narrow | pause | instrument | stop | escalate_to_revenue
+```
+
+Rough spend or attention notes are enough until exact cost accounting changes
+decisions. Work without weekly evidence should be paused, narrowed, or turned
+into an instrumentation ticket. The runway decision constrains planning; it
+does not authorize paid services, publishing, customer contact, deploys, or
+product-boundary changes.
 
 ## Self-Update Loop
 

@@ -28,8 +28,8 @@ farplane/harness.md  = static human charter: mission, thesis, values,
                        non-tradeoffs, leverage commitments, agent authority,
                        allocation guardrails, and change rule
 farplane/products.md = product catalog and work-lane weights
-farplane/goals.md    = dynamic strategy, KPIs, current bets, milestone, and
-                       holds
+farplane/goals.md    = dynamic strategy, goal axes with inline SMART goals,
+                       KPI hints, current bets, milestone, and holds
 farplane/hooks.json  = declarative project hook config
 .agents/skills/      = local product skills for company-specific production
                        workflows
@@ -149,7 +149,8 @@ skill to root `skills/` only after repeated proof shows cross-project reuse.
      is useful.
    - [ ] Write approved static charter content to `farplane/harness.md`;
      product/team output content to `farplane/products.md`; and strategy,
-     KPIs, current bets, milestone, and holds to `farplane/goals.md`.
+     goal axes, inline SMART goals, KPI hints, current bets, milestone, and
+     holds to `farplane/goals.md`.
    - [ ] Define static charter values in `harness.md`, product pipelines in
      `products.md`, strategy axes in `goals.md`, prompt cadence in
      `automations.md`, safe skill coordinates in `bindings.md`, and operator
@@ -157,12 +158,13 @@ skill to root `skills/` only after repeated proof shows cross-project reuse.
    - [ ] For project-goal-shaped harnesses, keep `project` as the default durable
      planning unit and use `starting_tasks` only as hints unless a child ticket
      has a real boundary reason.
-- [ ] 4. Define strategy axes, KPIs, and metric honesty.
+- [ ] 4. Define strategy axes, inline SMART goals, KPIs, and metric honesty.
    - [ ] Pick axes from the library: reach/acquire, activate/first value,
      retain/loyalty, refer/share, monetize/resources, impact/mission,
      deliver/quality, efficiency/capability, learning/evidence, and risk/trust.
-   - [ ] For each axis, fill `strategy_state(axis, weight, current_bet, KPI,
-     metric_provider, evidence, anti_metric, heartbeat, update_rule)`.
+   - [ ] For each axis, define one compact SMART goal with `id`, `target`,
+     `kpis`, and `update_hint`; record missing providers as feedback gaps or
+     instrumentation tickets instead of omitting important goals.
    - [ ] For every live or missing KPI source, define
      `metric_binding(metric_id, source, fetch_skill, auth_status,
      storage_path, display, proof_command)`. If the binding cannot run yet,
@@ -275,7 +277,8 @@ skill to root `skills/` only after repeated proof shows cross-project reuse.
      current harness needs, do not stop at a vague unblock ticket. Produce a
      `feedback_primitive_implementation_plan` with:
      trigger, input IDs or export shape, official/source grounding, private env
-     keys, non-secret `farplane/bindings.md` rows, `farplane/goals.md` KPI rows,
+     keys, non-secret `farplane/bindings.md` provider entries, `farplane/goals.md`
+     SMART-goal KPI hints,
      storage path, fetch/import scripts, normalization shape, eval rows,
      branch-scoped QA checklist, blocked-mode proof, and live-proof command.
    - [ ] If the primitive is project-specific, keep it under `.agents/skills/`

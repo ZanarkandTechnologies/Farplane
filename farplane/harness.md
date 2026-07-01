@@ -3,8 +3,8 @@ kind: project-harness
 status: active
 project: Farplane
 created_at: 2026-06-15
-updated_at: 2026-06-26
-framework_template_version: "0.3.0"
+updated_at: 2026-07-01
+framework_template_version: "0.3.1"
 owner: harness
 ---
 
@@ -54,6 +54,7 @@ preserve human intent instead of drifting into busywork.
 | Maintenance | Admin work stays bounded unless it unblocks product, proof, or current goals. |
 | Distribution | Trust distribution must be grounded in accepted evidence, user pain, or an adoption gap. |
 | Productization | Productization should follow accepted experiment, ablation, review, or operator-feedback evidence. |
+| Runway | Active work must justify burn through revenue, validated learning, proof quality, distribution, reusable harness leverage, or unblock value. Work without weekly evidence should be paused, narrowed, or converted into instrumentation. |
 | Authority | Publishing, spend, customer contact, deploys, destructive cleanup, and product/domain-boundary changes require explicit authorization unless already granted by ticket or policy. |
 
 ## Agent Authority
@@ -62,6 +63,9 @@ preserve human intent instead of drifting into busywork.
   evidence-backed deltas.
 - Agents may challenge the static thesis with evidence.
 - Agents may propose a charter delta in a dated interval report.
+- Agents may propose runway decisions in dated interval reports, but live spend,
+  publishing, customer contact, and product/domain-boundary changes still
+  require explicit authorization unless granted by ticket or policy.
 - Agents may not silently rewrite the static thesis or durable leverage
   commitments.
 

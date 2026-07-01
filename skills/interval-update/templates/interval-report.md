@@ -65,6 +65,28 @@ plan.
 
 Decisions: `accept`, `continue`, `kill`, `resize`, `source_gap`.
 
+## Budget / Runway Review
+
+Use this section to decide whether active projects deserve another planning
+window. Start rough: cite ticket `Reward` blocks, metric snapshots, reports,
+source gaps, and visible operator feedback before adding cost accounting.
+
+| Active project | Contribution mode | Spend / attention used | Expected reward | Observed evidence | Decision | Next constraint |
+| --- | --- | --- | --- | --- | --- | --- |
+
+Decisions: `continue`, `narrow`, `pause`, `instrument`, `stop`,
+`escalate_to_revenue`.
+
+Rules:
+
+- `Reward.moves`, `Reward.win_signal`, and `Reward.guard` are the ticket-level
+  budget justification. Do not invent a second ticket budget field.
+- Missing exact spend is not a blocker for the first review; record rough
+  attention used and add an instrumentation gap only if the decision needs
+  precision.
+- Work with no weekly evidence should be paused, narrowed, or converted into an
+  instrumentation ticket.
+
 ## Self-Update / Leverage Review
 
 Use this section only when `compounding_leverage_review` is enabled. It is the
@@ -135,6 +157,7 @@ edit existing sections rather than appending a second roadmap.
 ```text
 current_focus:
 active_projects:
+budget_runway:
 next_frontier:
 constraints:
 parking_lot:

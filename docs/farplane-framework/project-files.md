@@ -3,8 +3,8 @@ title: Project Files
 status: active
 owner: harness
 created_at: 2026-06-15
-updated_at: 2026-06-26
-framework_template_version: "0.2.0"
+updated_at: 2026-07-01
+framework_template_version: "0.2.1"
 source_of_truth:
   - docs/farplane-framework/README.md
   - farplane/manifest.json
@@ -85,6 +85,11 @@ evolve from evidence, but agents must not silently rewrite `harness.md`.
 Interval reports may propose harness deltas; applying them requires explicit
 human approval.
 
+Allocation guardrails include the static runway rule: active work must justify
+burn through revenue, validated learning, proof quality, distribution, reusable
+harness leverage, or unblock value. The weekly interval applies that rule to
+active projects; the detailed review procedure lives in `interval-update`.
+
 Use YAML front matter plus Markdown sections and stable tables. Do not put a
 fenced `harness-program` DSL block in canonical project harness files. Product
 pipelines belong in `products.md`, current strategy belongs in `goals.md`, and
@@ -92,8 +97,12 @@ automation prompts belong in `automations.md`.
 
 ### `farplane/goals.md`
 
-Project strategy context: north star, value function, KPI axes, current bets,
-current milestone, and holds. This file may evolve through evidence-backed
+Project strategy context: north star, value function, goal axes, inline SMART
+goals, current bets, current milestone, and holds. Each goal axis may carry a
+compact `smart_goals` list with `id`, `target`, `kpis`, and `update_hint`.
+Agents use those hints plus `farplane/ops-memory.md` and provider bindings to
+decide what data to fetch; deterministic charting starts only after a provider
+writes a daily metric snapshot. This file may evolve through evidence-backed
 goals deltas, but it must stay inside the static charter in
 `farplane/harness.md`. Horizon and Goal Advisor procedures live in their skills,
 not in this file.
@@ -130,8 +139,11 @@ human feedback or review.
 ### `farplane/bindings.md`
 
 Non-secret project coordinates: URLs, handles, safe IDs, labels, aliases,
-database names, dashboard links, and notification channel labels. Do not store
-secrets or credentials here.
+database names, dashboard links, notification channel labels, and metric
+provider catalogs. Metric providers are available coordinates, not a rigid
+enabled/disabled control plane. A missing token, missing file, unavailable API
+field, or unsupported feedback mechanism should surface as a source gap in the
+daily snapshot. Do not store secrets or credentials here.
 
 ### `farplane/hooks.json`
 
@@ -194,6 +206,12 @@ by default. Commit shared ticket scaffolding such as `tickets/README.md` and
 `tickets/templates/`, but keep project-specific active work, reports, logs,
 eval runs, and non-skill agent state out of normal commits unless the repo has
 an explicit reason to version them.
+
+Ticket `Reward` blocks are the spend-justification primitive for tactical work:
+`moves` names what the ticket advances, `win_signal` names evidence that would
+justify more runway, and `guard` names the stop or non-expansion boundary. Do
+not add a separate budget-reason field unless a ticketed migration proves
+`Reward` is insufficient.
 
 ## Ignored Runtime State
 

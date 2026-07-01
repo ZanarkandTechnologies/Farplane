@@ -11,6 +11,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+import yaml
+
 
 @dataclass(frozen=True)
 class MetricDefinition:
@@ -85,7 +87,89 @@ def parse_markdown_table(text: str, heading: str) -> list[dict[str, str]]:
     return rows
 
 
+def parse_fenced_yaml(text: str, heading: str) -> dict[str, Any]:
+    marker = f"## {heading}"
+    start = text.find(marker)
+    if start == -1:
+        return {}
+    section = text[start + len(marker) :]
+    next_heading = section.find("\n## ")
+    if next_heading != -1:
+        section = section[:next_heading]
+    fence_start = section.find("```yaml")
+    if fence_start == -1:
+        return {}
+    yaml_start = section.find("\n", fence_start)
+    if yaml_start == -1:
+        return {}
+    fence_end = section.find("```", yaml_start + 1)
+    if fence_end == -1:
+        return {}
+    raw = section[yaml_start + 1 : fence_end]
+    loaded = yaml.safe_load(raw) or {}
+    return loaded if isinstance(loaded, dict) else {}
+
+
+def label_from_metric(metric_id: str) -> str:
+    return metric_id.replace("_", " ").capitalize()
+
+
+def parse_kpi_item(item: Any) -> tuple[str, dict[str, Any]]:
+    if isinstance(item, str):
+        return item, {}
+    if isinstance(item, dict):
+        if "id" in item:
+            metric_id = str(item["id"])
+            return metric_id, {key: value for key, value in item.items() if key != "id"}
+        if len(item) == 1:
+            metric_id, meta = next(iter(item.items()))
+            return str(metric_id), meta if isinstance(meta, dict) else {}
+    return "", {}
+
+
+def load_metric_definitions_from_yaml(project_root: Path) -> list[MetricDefinition]:
+    goals_payload = parse_fenced_yaml((project_root / "farplane" / "goals.md").read_text(encoding="utf-8"), "Goals")
+    goals = goals_payload.get("goals")
+    if not isinstance(goals, dict):
+        return []
+    provider_by_metric = provider_map_by_metric(project_root)
+    seen: set[str] = set()
+    metrics: list[MetricDefinition] = []
+    for axis, axis_payload in goals.items():
+        if not isinstance(axis_payload, dict):
+            continue
+        smart_goals = axis_payload.get("smart_goals") or []
+        if not isinstance(smart_goals, list):
+            continue
+        for smart_goal in smart_goals:
+            if not isinstance(smart_goal, dict):
+                continue
+            for raw_item in smart_goal.get("kpis") or []:
+                metric_id, meta = parse_kpi_item(raw_item)
+                if not metric_id or metric_id in seen:
+                    continue
+                seen.add(metric_id)
+                metrics.append(
+                    MetricDefinition(
+                        metric_id=metric_id,
+                        label=str(meta.get("label") or label_from_metric(metric_id)),
+                        axis=str(axis),
+                        product=str(meta.get("product") or ""),
+                        source_id=str(meta.get("source") or provider_by_metric.get(metric_id, "")),
+                        aggregation="point",
+                        cumulative=False,
+                        target=parse_target(str(meta.get("target", ""))),
+                        unit=str(meta.get("unit") or ""),
+                        display="reading",
+                    )
+                )
+    return metrics
+
+
 def load_metric_definitions(project_root: Path) -> list[MetricDefinition]:
+    yaml_metrics = load_metric_definitions_from_yaml(project_root)
+    if yaml_metrics:
+        return yaml_metrics
     rows = parse_markdown_table((project_root / "farplane" / "goals.md").read_text(encoding="utf-8"), "Tracked KPIs")
     metrics: list[MetricDefinition] = []
     for row in rows:
@@ -110,7 +194,48 @@ def load_metric_definitions(project_root: Path) -> list[MetricDefinition]:
     return metrics
 
 
+def load_provider_bindings(project_root: Path) -> dict[str, SourceBinding]:
+    payload = parse_fenced_yaml((project_root / "farplane" / "bindings.md").read_text(encoding="utf-8"), "Metric Providers")
+    providers = payload.get("metric_providers")
+    if not isinstance(providers, dict):
+        return {}
+    bindings: dict[str, SourceBinding] = {}
+    for source_id, provider in providers.items():
+        if not isinstance(provider, dict):
+            continue
+        path = str(provider.get("path") or provider.get("writes") or "")
+        source_type = str(provider.get("provider") or ("skill_snapshot" if provider.get("skill") else "local_json"))
+        fetch = str(provider.get("skill") or provider.get("provider") or "farplane_metrics")
+        raw_dir = str(provider.get("raw_snapshot_dir") or f".farplane/metrics/source-snapshots/{source_id}")
+        bindings[str(source_id)] = SourceBinding(
+            source_id=str(source_id),
+            enabled=True,
+            source_type=source_type,
+            fetch=fetch,
+            path_or_account=path,
+            raw_snapshot_dir=raw_dir,
+        )
+    return bindings
+
+
+def provider_map_by_metric(project_root: Path) -> dict[str, str]:
+    payload = parse_fenced_yaml((project_root / "farplane" / "bindings.md").read_text(encoding="utf-8"), "Metric Providers")
+    providers = payload.get("metric_providers")
+    if not isinstance(providers, dict):
+        return {}
+    mapping: dict[str, str] = {}
+    for source_id, provider in providers.items():
+        if not isinstance(provider, dict):
+            continue
+        for metric_id in provider.get("provides") or []:
+            mapping[str(metric_id)] = str(source_id)
+    return mapping
+
+
 def load_source_bindings(project_root: Path) -> dict[str, SourceBinding]:
+    provider_bindings = load_provider_bindings(project_root)
+    if provider_bindings:
+        return provider_bindings
     rows = parse_markdown_table(
         (project_root / "farplane" / "bindings.md").read_text(encoding="utf-8"),
         "Metric Source Bindings",
@@ -162,9 +287,40 @@ def observation(metric_id: str, snapshot_date: str, value: float, evidence: list
     }
 
 
+def metric_reading_to_observation(metric_id: str, reading: Any, snapshot_date: str, evidence: list[str]) -> dict[str, Any] | None:
+    if isinstance(reading, dict):
+        value = reading.get("value")
+        items = reading.get("items")
+        gaps = reading.get("gaps")
+    else:
+        value = reading
+        items = None
+        gaps = None
+    if not isinstance(value, (int, float)):
+        return None
+    payload = observation(metric_id, snapshot_date, float(value), evidence)
+    if isinstance(items, list):
+        payload["items"] = items
+    if isinstance(gaps, list):
+        payload["gaps"] = gaps
+    return payload
+
+
+def observations_from_metrics_map(raw: dict[str, Any], snapshot_date: str, evidence: list[str]) -> list[dict[str, Any]]:
+    metrics = raw.get("metrics")
+    if not isinstance(metrics, dict):
+        return []
+    observations: list[dict[str, Any]] = []
+    for metric_id, reading in metrics.items():
+        obs = metric_reading_to_observation(str(metric_id), reading, snapshot_date, evidence)
+        if obs is not None:
+            observations.append(obs)
+    return observations
+
+
 def fetch_reward_ledger(project_root: Path, binding: SourceBinding, snapshot_date: str) -> dict[str, Any]:
     path = project_root / binding.path_or_account
-    rows = [row for row in read_jsonl(path) if row_date(row) == snapshot_date]
+    rows = [row for row in read_jsonl(path) if row_date(row) and row_date(row) <= snapshot_date]
     accepted = [
         row
         for row in rows
@@ -200,7 +356,7 @@ def fetch_reward_ledger(project_root: Path, binding: SourceBinding, snapshot_dat
 
 def fetch_decision_ledger(project_root: Path, binding: SourceBinding, snapshot_date: str) -> dict[str, Any]:
     path = project_root / binding.path_or_account
-    rows = [row for row in read_jsonl(path) if row_date(row) == snapshot_date]
+    rows = [row for row in read_jsonl(path) if row_date(row) and row_date(row) <= snapshot_date]
     execute_count = len([row for row in rows if row.get("action") == "execute_ready_tickets"])
     planning_count = len([row for row in rows if row.get("action") == "request_planning"])
     evidence = [binding.path_or_account]
@@ -289,23 +445,106 @@ def fetch_eval_summary(project_root: Path, binding: SourceBinding, snapshot_date
     }
 
 
-def fetch_manual_source(project_root: Path, binding: SourceBinding, snapshot_date: str) -> dict[str, Any]:
-    path = project_root / binding.path_or_account
-    if not binding.enabled or not path.exists():
+def section_text(markdown: str, heading: str) -> str:
+    marker = f"## {heading}"
+    start = markdown.find(marker)
+    if start == -1:
+        return ""
+    section = markdown[start + len(marker) :]
+    next_heading = section.find("\n## ")
+    if next_heading != -1:
+        section = section[:next_heading]
+    return section.strip()
+
+
+def count_runway_decision_rows(section: str) -> int:
+    decisions = {"continue", "narrow", "pause", "instrument", "stop", "escalate_to_revenue"}
+    count = 0
+    for raw in section.splitlines():
+        line = raw.strip()
+        if not line.startswith("|") or "---" in line or "Active project" in line:
+            continue
+        cells = [cell.strip(" `") for cell in line.strip("|").split("|")]
+        if any(cell in decisions for cell in cells):
+            count += 1
+    return count
+
+
+def fetch_runway_review_notes(project_root: Path, binding: SourceBinding, snapshot_date: str) -> dict[str, Any]:
+    root = project_root / binding.path_or_account
+    if not root.exists():
+        return {"source_id": binding.source_id, "status": "source_gap", "observations": [], "gaps": [f"missing:{binding.path_or_account}"]}
+    reports = sorted(path for path in root.glob("*.md") if path.name[:10] <= snapshot_date)
+    reports_with_review = 0
+    project_decisions = 0
+    evidence: list[str] = []
+    for report in reports:
+        text = report.read_text(encoding="utf-8")
+        runway = section_text(text, "Budget / Runway Review")
+        if not runway:
+            continue
+        reports_with_review += 1
+        project_decisions += count_runway_decision_rows(runway)
+        evidence.append(str(report.relative_to(project_root)))
+    if not reports_with_review:
         return {
             "source_id": binding.source_id,
             "status": "source_gap",
             "observations": [],
-            "gaps": [f"manual_source_not_configured:{binding.source_id}"],
+            "gaps": ["no_budget_runway_review_in_weekly_reports"],
+        }
+    return {
+        "source_id": binding.source_id,
+        "status": "available",
+        "observations": [
+            observation("weekly_runway_review_count", snapshot_date, float(reports_with_review), evidence),
+            observation("projects_with_runway_decisions", snapshot_date, float(project_decisions), evidence),
+        ],
+        "gaps": [],
+    }
+
+
+def fetch_manual_source(project_root: Path, binding: SourceBinding, snapshot_date: str) -> dict[str, Any]:
+    path = project_root / binding.path_or_account
+    if not path.exists():
+        return {
+            "source_id": binding.source_id,
+            "status": "source_gap",
+            "observations": [],
+            "gaps": [f"source_not_available:{binding.source_id}"],
         }
     try:
         raw = json.loads(path.read_text(encoding="utf-8"))
     except json.JSONDecodeError:
         return {"source_id": binding.source_id, "status": "source_gap", "observations": [], "gaps": [f"invalid_json:{binding.path_or_account}"]}
+    compact_observations = observations_from_metrics_map(raw if isinstance(raw, dict) else {}, snapshot_date, [binding.path_or_account])
+    if compact_observations:
+        return {
+            "source_id": binding.source_id,
+            "source": raw.get("source") or binding.source_id,
+            "status": "available",
+            "observations": compact_observations,
+            "metrics": raw.get("metrics"),
+            "gaps": raw.get("gaps") if isinstance(raw.get("gaps"), list) else [],
+        }
+    if isinstance(raw, dict) and raw.get("status") in {"blocked", "source_gap"}:
+        return {
+            "source_id": binding.source_id,
+            "source": raw.get("source") or binding.source_id,
+            "status": raw.get("status"),
+            "observations": [],
+            "metrics": raw.get("metrics"),
+            "gaps": raw.get("gaps") if isinstance(raw.get("gaps"), list) else [f"source_not_available:{binding.source_id}"],
+        }
     raw_observations = raw.get("observations") if isinstance(raw, dict) else None
     observations = [item for item in raw_observations if isinstance(item, dict)] if isinstance(raw_observations, list) else []
     filtered = [item for item in observations if item.get("date") == snapshot_date]
-    return {"source_id": binding.source_id, "status": "available", "observations": filtered, "gaps": []}
+    return {
+        "source_id": binding.source_id,
+        "status": "available" if filtered else "source_gap",
+        "observations": filtered,
+        "gaps": [] if filtered else [f"no_reading_for_date:{binding.source_id}"],
+    }
 
 
 def fetch_source(project_root: Path, binding: SourceBinding, snapshot_date: str) -> dict[str, Any]:
@@ -317,6 +556,8 @@ def fetch_source(project_root: Path, binding: SourceBinding, snapshot_date: str)
         return fetch_ticket_board(project_root, binding, snapshot_date)
     if binding.source_id == "eval_summary_index":
         return fetch_eval_summary(project_root, binding, snapshot_date)
+    if binding.source_id == "runway_review_notes":
+        return fetch_runway_review_notes(project_root, binding, snapshot_date)
     return fetch_manual_source(project_root, binding, snapshot_date)
 
 
@@ -356,11 +597,19 @@ def build_metric_snapshot(metric: MetricDefinition, observations: list[dict[str,
         except (TypeError, ValueError):
             continue
         point: dict[str, Any] = {"date": obs.get("date"), "value": value}
+        if series:
+            point["daily_diff"] = value - float(series[-1]["value"])
+        else:
+            point["daily_diff"] = None
+        if "items" in obs:
+            point["items"] = obs["items"]
         comparison_value = value
         if metric.aggregation == "daily" and metric.cumulative:
             running += value
             point["cumulative"] = running
             comparison_value = running
+        else:
+            point["current"] = value
         if metric.target is not None and hit_at is None and comparison_value >= metric.target:
             hit_at = str(obs.get("date"))
             hit_value = comparison_value

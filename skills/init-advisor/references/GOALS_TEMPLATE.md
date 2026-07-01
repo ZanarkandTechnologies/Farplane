@@ -4,7 +4,7 @@ status: draft
 project: TODO
 created_at: TODO
 updated_at: TODO
-framework_template_version: "0.3.0"
+framework_template_version: "0.4.0"
 owner: horizon-advisor
 ---
 
@@ -34,12 +34,43 @@ TODO
 | Minimize | TODO |
 | Preserve | TODO |
 
-## KPI Axes
+## Goals
 
-| Axis | Question | Signal |
-| --- | --- | --- |
-| value_delivery | What valuable outcome should compound? | TODO |
-| quality_and_proof | How do we know the project is doing good work? | TODO |
+Goal axes own their SMART goals directly. Start with honest metric candidates
+even when feedback mechanisms are missing; missing mechanisms become setup or
+instrumentation tickets, not reasons to omit the goal.
+
+```yaml
+goals:
+  value_delivery:
+    question: What valuable outcome should compound?
+    evidence_hints:
+      - TODO
+    smart_goals:
+      - id: first_value_goal
+        target: TODO measurable outcome and date
+        kpis:
+          - TODO_metric_name
+        update_hint: >
+          TODO name the skills, ledgers, reports, or manual feedback sources
+          the interval agent should try. Record source gaps when providers are
+          missing.
+
+  quality_and_proof:
+    question: How do we know the project is doing good work?
+    evidence_hints:
+      - proof quality
+      - review results
+      - regression checks
+    smart_goals:
+      - id: first_quality_goal
+        target: TODO quality/proof threshold and date
+        kpis:
+          - TODO_quality_metric
+        update_hint: >
+          TODO name the proof, review, test, or feedback source. Record missing
+          provider gaps rather than inventing metrics.
+```
 
 ## Current Bets
 
