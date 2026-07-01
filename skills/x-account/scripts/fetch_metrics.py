@@ -11,7 +11,7 @@ import json
 import os
 import secrets
 import time
-from datetime import date
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 from urllib.error import HTTPError, URLError
@@ -52,6 +52,24 @@ def oauth_ready(file_values: dict[str, str]) -> bool:
         "FARPLANE_X_API_KEY_SECRET",
     ]
     return all(env_value(key, file_values) for key in required)
+
+
+def oauth2_ready(file_values: dict[str, str]) -> bool:
+    return bool(env_value("FARPLANE_X_OAUTH2_ACCESS_TOKEN", file_values))
+
+
+def bearer_header(token: str) -> str:
+    return f"Bearer {token}"
+
+
+def app_bearer_header(file_values: dict[str, str]) -> str | None:
+    token = env_value("FARPLANE_X_BEARER_TOKEN", file_values)
+    return bearer_header(token) if token else None
+
+
+def oauth2_header(file_values: dict[str, str]) -> str | None:
+    token = env_value("FARPLANE_X_OAUTH2_ACCESS_TOKEN", file_values)
+    return bearer_header(token) if token else None
 
 
 def oauth1_header(method: str, url: str, params: dict[str, str], file_values: dict[str, str]) -> str:
@@ -99,6 +117,97 @@ def observation(metric_id: str, value: float, snapshot_date: str) -> dict[str, A
     return {"metric_id": metric_id, "date": snapshot_date, "value": value, "status": "available"}
 
 
+def parse_date(value: str | None) -> date | None:
+    return date.fromisoformat(value) if value else None
+
+
+def parse_created_at(value: str | None) -> datetime | None:
+    if not value:
+        return None
+    normalized = value.replace("Z", "+00:00")
+    try:
+        return datetime.fromisoformat(normalized)
+    except ValueError:
+        return None
+
+
+def in_date_window(created_at: str | None, since_date: date | None, until_date: date | None) -> bool:
+    parsed = parse_created_at(created_at)
+    if parsed is None:
+        return False
+    created_date = parsed.astimezone(timezone.utc).date()
+    if since_date and created_date < since_date:
+        return False
+    if until_date and created_date >= until_date:
+        return False
+    return True
+
+
+def tweet_url(username: str | None, tweet_id: str) -> str | None:
+    if not username:
+        return None
+    return f"https://x.com/{username.lstrip('@')}/status/{tweet_id}"
+
+
+def content_item_from_tweet(tweet: dict[str, Any], username: str | None) -> dict[str, Any]:
+    metrics = tweet.get("public_metrics") or {}
+    return {
+        "platform": "x",
+        "content_id": str(tweet.get("id") or ""),
+        "url": tweet_url(username, str(tweet.get("id") or "")),
+        "published_at": tweet.get("created_at"),
+        "kind": "post",
+        "content_metrics": {
+            "views": metrics.get("impression_count"),
+            "likes": metrics.get("like_count"),
+            "engagements": None,
+            "comments": metrics.get("reply_count"),
+            "shares": metrics.get("retweet_count"),
+            "saves": None,
+            "profile_clicks": None,
+            "url_clicks": None,
+            "retention_score": None,
+        },
+        "source_metric_ids": ["x_views", "x_likes"],
+        "gaps": [],
+    }
+
+
+def compact_metrics(observations: list[dict[str, Any]], content_items: list[dict[str, Any]]) -> dict[str, Any]:
+    metrics = {
+        str(item["metric_id"]): {"value": item["value"]}
+        for item in observations
+        if isinstance(item.get("metric_id"), str) and isinstance(item.get("value"), (int, float))
+    }
+    item_metric_map = {
+        "x_views": "views",
+        "x_likes": "likes",
+        "x_engagements": "engagements",
+        "x_profile_clicks": "profile_clicks",
+        "x_url_clicks": "url_clicks",
+        "x_retention_score": "retention_score",
+    }
+    for metric_id, content_key in item_metric_map.items():
+        if metric_id not in metrics:
+            continue
+        items: list[dict[str, Any]] = []
+        for content in content_items:
+            value = (content.get("content_metrics") or {}).get(content_key)
+            if value is None:
+                continue
+            items.append(
+                {
+                    "id": f"x:{content.get('content_id')}",
+                    "value": value,
+                    "kind": content.get("kind"),
+                    "url": content.get("url"),
+                }
+            )
+        if items:
+            metrics[metric_id]["items"] = items
+    return metrics
+
+
 def resolve_user(file_values: dict[str, str], auth_header: str) -> tuple[str, dict[str, Any], list[str]]:
     user_id = env_value("FARPLANE_X_USER_ID", file_values)
     username = env_value("FARPLANE_X_USERNAME", file_values)
@@ -107,7 +216,8 @@ def resolve_user(file_values: dict[str, str], auth_header: str) -> tuple[str, di
         payload = api_get(f"/users/{quote(user_id)}", auth_header, params)
         return user_id, payload, ["/2/users/:id"]
     if username:
-        payload = api_get(f"/users/by/username/{quote(username)}", auth_header, params)
+        clean_username = username.lstrip("@")
+        payload = api_get(f"/users/by/username/{quote(clean_username)}", auth_header, params)
         data = payload.get("data") or {}
         resolved_id = str(data.get("id") or "")
         if not resolved_id:
@@ -267,30 +377,50 @@ def fetch_metrics(
     limit: int,
     tweet_ids: list[str] | None = None,
     deep: bool = False,
+    since_date: str | None = None,
+    until_date: str | None = None,
+    latest: bool = False,
+    yesterday: bool = False,
 ) -> dict[str, Any]:
     file_values = load_env_file()
-    token = env_value("FARPLANE_X_BEARER_TOKEN", file_values)
-    if not token:
+    app_auth = app_bearer_header(file_values)
+    user_auth = oauth2_header(file_values)
+    if not app_auth and not user_auth:
         return {
             "source_id": "x_account_api",
             "date": snapshot_date,
             "status": "blocked",
             "observations": [],
-            "gaps": ["missing_FARPLANE_X_BEARER_TOKEN"],
+            "gaps": ["missing_FARPLANE_X_BEARER_TOKEN_or_FARPLANE_X_OAUTH2_ACCESS_TOKEN"],
             "redacted": True,
         }
 
-    bearer_auth = f"Bearer {token}"
-    auth_mode = "bearer"
+    profile_auth = user_auth or app_auth
+    tweet_auth = user_auth or app_auth
+    auth_mode = "oauth2_user_context" if user_auth else "app_bearer"
     deep_oauth_ready = oauth_ready(file_values)
     if deep and deep_oauth_ready:
-        auth_mode = "oauth1_user_context"
+        auth_mode = "oauth2_user_context" if user_auth else "oauth1_user_context"
 
     endpoints: list[str] = []
     gaps: list[str] = []
     observations: list[dict[str, Any]] = []
+    content_items: list[dict[str, Any]] = []
 
-    user_id, user_payload, user_endpoints = resolve_user(file_values, bearer_auth)
+    if profile_auth is None or tweet_auth is None:
+        raise RuntimeError("X auth header unavailable after readiness check")
+
+    try:
+        user_id, user_payload, user_endpoints = resolve_user(file_values, profile_auth)
+    except HTTPError as exc:
+        if exc.code != 401 or not user_auth or not app_auth:
+            raise
+        gaps.append("x_oauth2_user_context_rejected_401_used_app_bearer")
+        profile_auth = app_auth
+        tweet_auth = app_auth
+        auth_mode = "app_bearer_fallback_after_oauth2_401"
+        user_id, user_payload, user_endpoints = resolve_user(file_values, profile_auth)
+    username = env_value("FARPLANE_X_USERNAME", file_values)
     endpoints.extend(user_endpoints)
     public_metrics = (user_payload.get("data") or {}).get("public_metrics") or {}
     followers = public_metrics.get("followers_count")
@@ -301,15 +431,28 @@ def fetch_metrics(
 
     explicit_tweet_ids = tweet_ids or []
     if explicit_tweet_ids:
-        if deep and not deep_oauth_ready:
-            gaps.append("x_deep_metrics_need_user_context_oauth_credentials")
-        tweet_observations, tweet_gaps, tweet_endpoints = fetch_tweet_metrics(
-            bearer_auth,
-            explicit_tweet_ids,
-            snapshot_date,
-            deep,
-            file_values,
-        )
+        if deep and not user_auth and not deep_oauth_ready:
+            gaps.append("x_deep_metrics_need_oauth2_or_oauth1_user_context_credentials")
+        try:
+            tweet_observations, tweet_gaps, tweet_endpoints = fetch_tweet_metrics(
+                tweet_auth,
+                explicit_tweet_ids,
+                snapshot_date,
+                deep,
+                file_values if not user_auth else None,
+            )
+        except HTTPError as exc:
+            if exc.code != 401 or not user_auth or not app_auth:
+                raise
+            gaps.append("x_oauth2_tweet_metrics_rejected_401_used_app_bearer")
+            auth_mode = "app_bearer_fallback_after_oauth2_401"
+            tweet_observations, tweet_gaps, tweet_endpoints = fetch_tweet_metrics(
+                app_auth,
+                explicit_tweet_ids,
+                snapshot_date,
+                deep=False,
+                file_values=None,
+            )
         observations.extend(tweet_observations)
         gaps.extend(tweet_gaps)
         endpoints.extend(tweet_endpoints)
@@ -317,17 +460,28 @@ def fetch_metrics(
         gaps.append("x_deep_metrics_require_tweet_id")
     else:
         try:
+            since = parse_date(since_date)
+            until = parse_date(until_date)
+            if yesterday:
+                anchor = parse_date(snapshot_date) or date.today()
+                since = anchor - timedelta(days=1)
+                until = anchor
             tweets_payload = api_get(
                 f"/users/{quote(user_id)}/tweets",
-                token,
+                tweet_auth,
                 {
-                    "max_results": str(max(5, min(limit, 100))),
+                    "max_results": str(max(5, min(100 if (since or until or latest) else limit, 100))),
                     "tweet.fields": "public_metrics,created_at",
                     "exclude": "retweets,replies",
                 },
             )
             endpoints.append("/2/users/:id/tweets")
             tweets = tweets_payload.get("data") or []
+            if since or until:
+                tweets = [tweet for tweet in tweets if in_date_window(tweet.get("created_at"), since, until)]
+            if latest and tweets:
+                tweets = tweets[:1]
+            content_items = [content_item_from_tweet(tweet, username) for tweet in tweets]
             like_total = 0.0
             view_total = 0.0
             like_seen = False
@@ -354,12 +508,22 @@ def fetch_metrics(
 
     return {
         "source_id": "x_account_api",
+        "source": "x_account_metrics",
         "date": snapshot_date,
         "status": "available" if observations else "source_gap",
+        "metrics": compact_metrics(observations, content_items),
         "observations": observations,
         "gaps": gaps,
         "endpoints": endpoints,
         "post_ids": explicit_tweet_ids,
+        "content_items": content_items,
+        "selection": {
+            "latest": latest,
+            "yesterday": yesterday,
+            "since_date": str(parse_date(since_date)) if since_date else None,
+            "until_date": str(parse_date(until_date)) if until_date else None,
+            "limit": limit,
+        },
         "deep": deep,
         "auth_mode": auth_mode,
         "redacted": True,
@@ -372,11 +536,15 @@ def main() -> int:
     parser.add_argument("--limit", type=int, default=10)
     parser.add_argument("--tweet-id", action="append", default=[], help="Specific X Post ID to fetch metrics for; repeatable.")
     parser.add_argument("--deep", action="store_true", help="Request owned-content analytics fields for retention/click metrics when authorized.")
+    parser.add_argument("--latest", action="store_true", help="Fetch only the most recent timeline post in account snapshot mode.")
+    parser.add_argument("--yesterday", action="store_true", help="Fetch posts published on the day before --date, UTC.")
+    parser.add_argument("--since-date", help="Only include timeline posts on or after this UTC date, YYYY-MM-DD.")
+    parser.add_argument("--until-date", help="Only include timeline posts before this UTC date, YYYY-MM-DD.")
     parser.add_argument("--out", default=".farplane/metrics/manual/x_account.json")
     args = parser.parse_args()
 
     try:
-        payload = fetch_metrics(args.date, args.limit, args.tweet_id, args.deep)
+        payload = fetch_metrics(args.date, args.limit, args.tweet_id, args.deep, args.since_date, args.until_date, args.latest, args.yesterday)
     except (HTTPError, URLError, TimeoutError, RuntimeError) as exc:
         status = getattr(exc, "code", "runtime")
         payload = {

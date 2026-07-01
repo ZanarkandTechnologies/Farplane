@@ -40,8 +40,17 @@ export FARPLANE_X_USER_ID=
 export FARPLANE_X_USERNAME=
 ```
 
-Required for deep owned-content metrics such as clicks, engagement buckets, and
-video playback quartiles:
+Preferred for current user-context account/post metrics and deep owned-content
+metrics such as clicks, engagement buckets, and video playback quartiles:
+
+```bash
+export FARPLANE_X_OAUTH2_CLIENT_ID=
+export FARPLANE_X_OAUTH2_CLIENT_SECRET=
+export FARPLANE_X_OAUTH2_ACCESS_TOKEN=
+export FARPLANE_X_OAUTH2_REFRESH_TOKEN=
+```
+
+Legacy/fallback user-context credentials:
 
 ```bash
 export FARPLANE_X_ACCESS_TOKEN=
@@ -53,6 +62,7 @@ export FARPLANE_X_API_KEY_SECRET=
 Notes:
 
 - Bearer token covers app-auth reads where the access tier allows them.
+- OAuth 2.0 access token is preferred for user-context v2 reads.
 - Deep metrics may require user-context OAuth and an access tier that returns
   non-public / organic metrics.
 - `FARPLANE_X_USER_ID` is preferred; `FARPLANE_X_USERNAME` can resolve the id.
@@ -67,14 +77,16 @@ python3 skills/x-account/scripts/fetch_metrics.py --date 2026-06-30 --tweet-id <
 
 ## Instagram Setup
 
-Create or use a Meta app with Instagram Graph access for the professional
-Farplane Instagram account.
+Create or use a Meta app with Instagram Login / Business Login access for the
+professional Farplane Instagram account. This skill intentionally uses
+`graph.instagram.com` directly; Facebook Page and `/me/accounts` ownership
+belong in a separate Facebook Pages skill if needed.
 
 Required:
 
 ```bash
-export FARPLANE_INSTAGRAM_ACCESS_TOKEN=
-export FARPLANE_INSTAGRAM_BUSINESS_ACCOUNT_ID=
+export FARPLANE_INSTAGRAM_LOGIN_ACCESS_TOKEN=
+export FARPLANE_INSTAGRAM_LOGIN_USER_ID=
 export FARPLANE_INSTAGRAM_USERNAME=
 ```
 
@@ -88,8 +100,8 @@ export FARPLANE_META_GRAPH_VERSION=
 
 Notes:
 
-- The Instagram account must be professional and connected through the Meta app
-  / Facebook page flow supported by Instagram Graph API.
+- The Instagram account must be professional and authorized through Instagram
+  Login / Business Login for the Meta app.
 - Media insights availability depends on permissions, media type, API version,
   and account eligibility.
 - Reels retention score requires a known media duration to normalize average
@@ -102,6 +114,24 @@ python3 skills/instagram-account/scripts/check_config.py
 python3 skills/instagram-account/scripts/fetch_metrics.py --date 2026-06-30 --out tmp/ig-account-live.json
 python3 skills/instagram-account/scripts/fetch_metrics.py --date 2026-06-30 --media-id <media-id> --deep --duration-seconds <seconds> --out tmp/ig-retention-live.json
 ```
+
+Content-review windows:
+
+```bash
+python3 skills/x-account/scripts/fetch_metrics.py --date 2026-06-30 --latest --out tmp/x-latest.json
+python3 skills/x-account/scripts/fetch_metrics.py --date 2026-06-30 --yesterday --out tmp/x-yesterday.json
+python3 skills/x-account/scripts/fetch_metrics.py --date 2026-06-30 --since-date 2026-06-29 --until-date 2026-06-30 --out tmp/x-window.json
+
+python3 skills/instagram-account/scripts/fetch_metrics.py --date 2026-06-30 --latest --deep --out tmp/ig-latest.json
+python3 skills/instagram-account/scripts/fetch_metrics.py --date 2026-06-30 --latest-reel --deep --duration-seconds <seconds> --out tmp/ig-latest-reel.json
+python3 skills/instagram-account/scripts/fetch_metrics.py --date 2026-06-30 --yesterday --deep --out tmp/ig-yesterday.json
+python3 skills/instagram-account/scripts/fetch_metrics.py --date 2026-06-30 --since-date 2026-06-29 --until-date 2026-06-30 --deep --out tmp/ig-window.json
+```
+
+The account skills keep `observations` as aggregate KPI facts and add
+`content_items` for review/UI cards. Instagram retention is attempted only when
+the selected media is a Reel; feed posts and carousels record retention source
+gaps instead of zero.
 
 ## KPI Loop Smoke
 

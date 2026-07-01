@@ -5,64 +5,121 @@ description: "Turn social campaign goals into posts, carousels, threads, calenda
 tier: 3
 group: content-social
 source: local
+template_uses:
+  skill-template: "0.3.6"
+  skill-qa-checklist: "0.1.0"
+  skill-eval-task: "0.1.0"
 methods:
   - social-content:cross-platform
   - social-content:carousel
   - social-content:linkedin
   - social-content:twitter-thread
 allowed-tools: Read, Grep, Glob, Bash
+eval: eval_task.json
+qa_checklist: qa_checklist.md
 ---
 
 # Social Content
 
+## Context
+
+Use this skill for social content planning, copy, and asset handoff across
+platforms. It owns the content artifact decision and draft package, not
+publishing.
+
+Do not reduce a thread, carousel, or campaign to a high-level premise when the
+requested output is a concrete artifact. A thread plan must show the reader
+promise, tweet-by-tweet progression, evidence or examples, and CTA before any
+review request asks for approval.
+
+## Skill Signature
+
+```text
+social_content(brief, platform_set?, artifact_format?, stage?, constraints?)
+  -> content_packet | draft_bundle | blocked_report
+
+state:
+  reads(references/model.md, qa_checklist.md, method reference when needed,
+        user swipe/reference/examples when supplied)
+  writes(workspace draft artifacts when generation or external work is involved)
+
+gates:
+  artifact_matrix_bound
+  method_selected
+  platform_constraints_checked
+  concrete_structure_before_review
+  publish_boundary_explicit
+  external_spend_or_posting_approved
+
+routes:
+  imagegen | image-generation | video-generation | remotion |
+  remotion-render | frontend-craft | research | advise | review
+
+fails:
+  vague_premise_as_thread_plan
+  local_or_private_context_missing_from_review_prompt
+  publish_or_schedule_without_explicit_user_request
+  external_generation_without_spend_or_upload_approval
+```
+
+## Phase Boundary
+
+Perform planning and drafting inline. Use `advise` when the platform, format,
+hook, asset route, CTA, or campaign direction is a real choice. Use `research`
+or current web grounding when examples, platform rules, peer patterns, or
+campaign expectations materially affect the output.
+
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-# Social Content Todos
-
-Use this checklist whenever `social-content` or one of its method addresses is
-active.
-
-- [ ] Read [model](./references/model.md) and build the artifact matrix:
+- [ ] 1. Bind the artifact.
+  - [ ] Read [model](./references/model.md) and build the artifact matrix:
   platform, format, message job, copy payload, asset carrier, publish boundary,
   and proof.
-- [ ] Select one primary method:
+  - [ ] Read `qa_checklist.md` as preflight guardrails.
+- [ ] 2. Select one primary method:
   `social-content:cross-platform`, `social-content:carousel`,
   `social-content:linkedin`, or `social-content:twitter-thread`. Add
   supporting methods only when the artifact genuinely spans formats.
-- [ ] Use [method-selection-smoke](./references/method-selection-smoke.md) when
+  - [ ] Use [method-selection-smoke](./references/method-selection-smoke.md) when
   method routing is unclear or when changing the skill.
-- [ ] Use [research:competitor](../research/SKILL.md#researchcompetitor) or
-  [research:parity](../research/SKILL.md#researchparity) when examples,
-  platform specs, peer posts, swipe patterns, or campaign expectations should
-  guide scope.
-- [ ] Use the native planning phase when platform mix, format, hook, asset
-  route, CTA, or scope boundary needs a real tradeoff decision.
-- [ ] Load upstream method references only when their platform constraints,
+- [ ] 3. Ground the format when needed.
+  - [ ] Use current web grounding, `research:competitor`, or `research:parity`
+  when examples, platform specs, peer posts, swipe patterns, or campaign
+  expectations should guide scope.
+  - [ ] Load upstream method references only when their platform constraints,
   examples, or format rules matter.
-- [ ] Draft copy, hooks, CTAs, thread outline, slide sequence, prompts, or
+- [ ] 4. Draft the concrete structure.
+  - [ ] Draft copy, hooks, CTAs, thread outline, slide sequence, prompts, or
   asset plans before generation or rendering.
-- [ ] For quality-sensitive creative work, load
+  - [ ] For `social-content:twitter-thread`, produce a concrete thread plan:
+  hook tweet, reader value promise, tweet-by-tweet stack, evidence/examples,
+  payoff, CTA, and optional media. Do not send high-level premises as options.
+  - [ ] For quality-sensitive creative work, load
   [examples](references/examples.md) or a user-provided swipe/reference before
   finalizing the first variant.
-- [ ] Route still visuals through `imagegen` or
+- [ ] 5. Route production work.
+  - [ ] Route still visuals through `imagegen` or
   [image-generation](../image-generation/SKILL.md); route video through
   [video-generation](../video-generation/SKILL.md), [remotion](../remotion/SKILL.md),
   or [remotion-render](../remotion-render/SKILL.md); route precise HTML assets
   or campaign pages through [frontend-craft](../frontend-craft/SKILL.md).
-- [ ] Save drafts, outlines, slide copy, prompts, inputs, result JSON,
+  - [ ] Save drafts, outlines, slide copy, prompts, inputs, result JSON,
   generated files, final asset paths, and notes inside the workspace when
   external generation is involved.
-- [ ] Confirm external compute, spend, uploads, or API usage is explicitly
+  - [ ] Confirm external compute, spend, uploads, or API usage is explicitly
   acceptable before running model or `belt` jobs.
-- [ ] Do not publish, post, reply, comment, DM, schedule, or cross-post unless
+- [ ] 6. Finish with proof and boundary checks.
+  - [ ] Do not publish, post, reply, comment, DM, schedule, or cross-post unless
   the user explicitly asks for that action.
-- [ ] Follow the native execution phase proof and writeback loop before
+  - [ ] Apply `qa_checklist.md` again before claiming artifact quality or
+  sending a review request.
+  - [ ] Follow the native execution phase proof and writeback loop before
   claiming platform fit, campaign readiness, professional voice, slide
   hierarchy, thread quality, or final quality.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
-Domain entrypoint for social media content planning and asset production.
+## Templates
 
 Compact model:
 
@@ -71,13 +128,14 @@ SocialContent := Brief + PlatformSet + ArtifactMatrix + MethodSet + AssetPlan + 
 
 Artifact := Platform + Format + Audience + MessageJob + CopyPayload + AssetCarrier + PublishBoundary + QA
 
+ThreadPlan := hook + reader_value + tweet_stack + evidence + payoff + CTA + media?
+
 MethodSelection(artifact, methods, constraints) :=
   candidates = filter(methods, artifact, constraints)
   chosen = advise(top3(candidates))
 ```
 
 Use `references/model.md` for the artifact matrix and execution packet rules.
-Keep the `SKILL.md` Todo List short; upstream references stay method-specific detail.
 
 Use method addresses to choose the smallest relevant workflow:
 
@@ -92,61 +150,57 @@ Use method addresses to choose the smallest relevant workflow:
 - `social-content:twitter-thread` for Twitter/X posts, threads, quote-post
   drafts, reply chains, hook tweets, and media-supported threads.
 
-## Steps
+Twitter/X thread review option shape:
 
-1. Load the shared [image/social production workflow](../image-generation/references/domain-production.md).
-2. Select exactly one primary method from the requested artifact and add
-   supporting methods only when the artifact truly spans formats.
-3. Load the matching upstream reference only when platform specs, content
-   structure, examples, or format constraints matter:
-   - [cross-platform social guide](references/upstream-social.md)
-   - [carousel guide](references/upstream-carousel.md)
-   - [LinkedIn guide](references/upstream-linkedin.md)
-   - [Twitter/X guide](references/upstream-twitter.md)
-4. Decide the platform, audience, artifact, format, output count, tone, asset
-   route, and handoff path before drafting or generating.
-5. Draft copy, slide sequence, prompts, or asset plans before final generation
-   or rendering.
-6. Route execution through `imagegen`, `image-generation`, `video-generation`,
-   `remotion`, `remotion-render`, or `frontend-craft` based on the artifact.
-7. Save drafts, prompts, inputs, result JSON, generated files, and notes inside
-   the workspace when external generation is involved.
-8. Do not publish, post, schedule, comment, DM, or cross-post unless the user
-   explicitly asks for that action.
+```text
+Option A: {specific angle}
+Reader value: {what the reader learns, gets, or can do}
+Stack:
+1/ {hook tweet}
+2/ {context or tension}
+3/ {point with example}
+4/ {point with evidence}
+5/ {turn or payoff}
+6/ {takeaway}
+7/ {CTA}
+Why it might work: {platform-native reason}
+```
 
-Use the shared production workflow for model routing, saved artifacts, async
-jobs, upstream-reference safety, frontend/campaign QA, and publish boundaries.
+## Gotchas
 
-## Method Notes
-
-### `social-content:cross-platform`
-
-Use for general social media content, multi-platform planning, captions,
-hashtags, thumbnails, UGC concepts, content calendars, reels/shorts briefs, and
-campaign bundles.
-
-### `social-content:carousel`
-
-Use for educational, product, announcement, thought-leadership, case-study,
-infographic, campaign, or recap carousels. Decide the platform, aspect ratio,
-slide count, hook, CTA, and slide sequence before producing final slides.
-
-### `social-content:linkedin`
-
-Use for professional voice, founder/B2B thought leadership, hiring posts,
-comments, announcements, and LinkedIn-native carousel outlines. Preserve the
-professional context, audience, point of view, and CTA before drafting.
-
-### `social-content:twitter-thread`
-
-Use for X/Twitter-native hook tweets, single posts, threads, quote-post drafts,
-reply chains, and media-supported threads. Preserve standalone tweet logic,
-thread progression, character limits, and CTA before drafting.
+- Do not ask the user to approve a Twitter/X thread option that lacks the
+  actual tweet stack. "Value-first" is not enough unless the value appears as
+  draftable tweets.
+- Do not claim a platform recommendation came from current norms unless the
+  run loaded a current source, peer examples, or supplied swipe.
+- Do not publish, schedule, comment, reply, DM, or cross-post without explicit
+  user permission.
+- Do not hide artifact context in desktop-only paths when asking for mobile or
+  Telegram feedback; include the reviewable excerpt inline.
 
 ## Reference Map
 
+- `qa_checklist.md` - read at skill start and finish for social artifact QA.
 - `references/model.md` - artifact matrix, method selection, execution packet,
   and proof rules.
-- `references/examples.md` - positive examples for quality-sensitive social
-  content, including a harness-engineering infographic carousel.
-- `references/method-selection-smoke.md` - smoke cases for method routing.
+- `references/examples.md` - load for quality-sensitive voice, taste,
+  explanation, or visual structure.
+- `references/method-selection-smoke.md` - load when method routing is unclear
+  or when changing the skill.
+- `references/upstream-social.md` - load for multi-platform campaign,
+  caption, hashtag, or calendar constraints.
+- `references/upstream-carousel.md` - load for carousel format, slide count,
+  visual sequence, or platform carousel constraints.
+- `references/upstream-linkedin.md` - load for LinkedIn-native professional,
+  founder, B2B, hiring, or thought-leadership copy.
+- `references/upstream-twitter.md` - load for Twitter/X hook tweets, single
+  posts, threads, quote-posts, reply chains, media specs, or thread structure.
+
+## Output
+
+- `content_packet`: bound artifact matrix, selected method, platform
+  constraints, asset route, publish boundary, and proof plan.
+- `draft_bundle`: copy, thread stack, slide sequence, captions, prompts, or
+  saved artifact paths as appropriate.
+- `blocked_report`: missing context, missing approval for external side
+  effects, or proof that cannot run.

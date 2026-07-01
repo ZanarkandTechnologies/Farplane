@@ -18,12 +18,14 @@ Load this before live X API work.
 - X API v2 provides REST endpoints for posts, users, DMs, lists, Spaces, and
   trends, including reading posts, publishing content, and user/profile access.
 - X post/user objects can expose public metrics; non-public or organic metrics
-  require user-context authentication.
+  require user-context authentication. Prefer OAuth 2.0 user access tokens for
+  current v2 read paths; OAuth 1.0a credentials are legacy/fallback for flows
+  that still require them.
 - X API access is pay-per-use/rate-limited. Treat live calls as budgeted
   external operations.
-- The read-only metrics script uses bearer auth for public user metrics and
-  recent post public metrics. Private or organic analytics should be added as
-  a separate user-context branch after the account access level is confirmed.
+- The read-only metrics script uses OAuth 2.0 user access when available,
+  falling back to app-only bearer reads. Private or organic analytics require
+  user-context auth and account access level support.
 
 ## Minimal Env Contract
 
@@ -31,6 +33,10 @@ Use private env only:
 
 ```bash
 FARPLANE_X_BEARER_TOKEN=
+FARPLANE_X_OAUTH2_CLIENT_ID=
+FARPLANE_X_OAUTH2_CLIENT_SECRET=
+FARPLANE_X_OAUTH2_ACCESS_TOKEN=
+FARPLANE_X_OAUTH2_REFRESH_TOKEN=
 FARPLANE_X_ACCESS_TOKEN=
 FARPLANE_X_ACCESS_TOKEN_SECRET=
 FARPLANE_X_API_KEY=

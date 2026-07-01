@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""Fetch read-only Instagram Graph metrics and write Farplane KPI observations."""
+"""Fetch read-only Instagram Login metrics and write Farplane KPI observations."""
 
 from __future__ import annotations
 
 import argparse
 import json
 import os
-from datetime import date
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 from urllib.error import HTTPError, URLError
@@ -38,16 +38,138 @@ def env_value(key: str, file_values: dict[str, str]) -> str | None:
     return os.environ.get(key) or file_values.get(key) or None
 
 
-def graph_get(version: str, path: str, token: str, params: dict[str, str] | None = None) -> dict[str, Any]:
+def instagram_get(version: str, path: str, token: str, params: dict[str, str] | None = None) -> dict[str, Any]:
     query_params = dict(params or {})
     query_params["access_token"] = token
-    url = f"https://graph.facebook.com/{version}{path}?{urlencode(query_params)}"
-    with urlopen(url, timeout=30) as response:
-        return json.loads(response.read().decode("utf-8"))
+    urls = [
+        f"https://graph.instagram.com/{version}{path}?{urlencode(query_params)}",
+        f"https://graph.instagram.com{path}?{urlencode(query_params)}",
+    ]
+    last_error: HTTPError | None = None
+    for url in urls:
+        try:
+            with urlopen(url, timeout=30) as response:
+                return json.loads(response.read().decode("utf-8"))
+        except HTTPError as exc:
+            last_error = exc
+    if last_error:
+        raise last_error
+    raise RuntimeError("Instagram Login request failed without an HTTP error")
 
 
 def observation(metric_id: str, value: float, snapshot_date: str) -> dict[str, Any]:
     return {"metric_id": metric_id, "date": snapshot_date, "value": value, "status": "available"}
+
+
+def parse_date(value: str | None) -> date | None:
+    return date.fromisoformat(value) if value else None
+
+
+def parse_timestamp(value: str | None) -> datetime | None:
+    if not value:
+        return None
+    try:
+        return datetime.fromisoformat(value.replace("Z", "+00:00"))
+    except ValueError:
+        return None
+
+
+def in_date_window(timestamp: str | None, since_date: date | None, until_date: date | None) -> bool:
+    parsed = parse_timestamp(timestamp)
+    if parsed is None:
+        return False
+    media_date = parsed.astimezone(timezone.utc).date()
+    if since_date and media_date < since_date:
+        return False
+    if until_date and media_date >= until_date:
+        return False
+    return True
+
+
+def is_reel(item: dict[str, Any]) -> bool:
+    return str(item.get("media_type") or "").upper() == "REELS"
+
+
+def content_item_from_media(item: dict[str, Any], gaps: list[str] | None = None) -> dict[str, Any]:
+    return {
+        "platform": "instagram",
+        "content_id": str(item.get("id") or ""),
+        "url": item.get("permalink"),
+        "published_at": item.get("timestamp"),
+        "kind": str(item.get("media_type") or "media").lower(),
+        "content_metrics": {
+            "views": None,
+            "likes": item.get("like_count"),
+            "engagements": None,
+            "comments": item.get("comments_count"),
+            "shares": None,
+            "saves": None,
+            "profile_clicks": None,
+            "url_clicks": None,
+            "retention_score": None,
+        },
+        "source_metric_ids": ["instagram_likes", "instagram_comments"],
+        "gaps": gaps or [],
+    }
+
+
+def observation_values(observations: list[dict[str, Any]]) -> dict[str, float]:
+    return {
+        str(item["metric_id"]): float(item["value"])
+        for item in observations
+        if isinstance(item.get("metric_id"), str) and isinstance(item.get("value"), (int, float))
+    }
+
+
+def enrich_single_content_item(content_items: list[dict[str, Any]], observations: list[dict[str, Any]]) -> None:
+    if len(content_items) != 1:
+        return
+    values = observation_values(observations)
+    metrics = content_items[0].setdefault("content_metrics", {})
+    metrics["views"] = values.get("instagram_views")
+    metrics["likes"] = values.get("instagram_likes", metrics.get("likes"))
+    metrics["engagements"] = values.get("instagram_total_interactions")
+    metrics["comments"] = values.get("instagram_comments", metrics.get("comments"))
+    metrics["shares"] = values.get("instagram_shares")
+    metrics["saves"] = values.get("instagram_saves")
+    metrics["retention_score"] = values.get("instagram_retention_score")
+    content_items[0]["source_metric_ids"] = sorted(values.keys())
+
+
+def compact_metrics(observations: list[dict[str, Any]], content_items: list[dict[str, Any]]) -> dict[str, Any]:
+    metrics = {
+        str(item["metric_id"]): {"value": item["value"]}
+        for item in observations
+        if isinstance(item.get("metric_id"), str) and isinstance(item.get("value"), (int, float))
+    }
+    item_metric_map = {
+        "instagram_views": "views",
+        "instagram_likes": "likes",
+        "instagram_total_interactions": "engagements",
+        "instagram_comments": "comments",
+        "instagram_shares": "shares",
+        "instagram_saves": "saves",
+        "instagram_retention_score": "retention_score",
+    }
+    for metric_id, content_key in item_metric_map.items():
+        if metric_id not in metrics:
+            continue
+        items: list[dict[str, Any]] = []
+        for content in content_items:
+            value = (content.get("content_metrics") or {}).get(content_key)
+            if value is None:
+                continue
+            items.append(
+                {
+                    "id": f"instagram:{content.get('content_id')}",
+                    "value": value,
+                    "kind": content.get("kind"),
+                    "url": content.get("url"),
+                }
+            )
+        if items:
+            metrics[metric_id]["items"] = items
+    return metrics
 
 
 def insight_value(payload: dict[str, Any]) -> float | None:
@@ -71,9 +193,9 @@ def insight_values(payload: dict[str, Any]) -> dict[str, float]:
         name = item.get("name")
         if not name:
             continue
-        value_payload = insight_value({"data": [item]})
-        if value_payload is not None:
-            values[str(name)] = value_payload
+        value = insight_value({"data": [item]})
+        if value is not None:
+            values[str(name)] = value
     return values
 
 
@@ -93,6 +215,11 @@ def collect_media_metrics(
     like_seen = False
     insight_totals: dict[str, float] = {}
     insight_seen: set[str] = set()
+    requested_metrics = insight_metrics
+    if deep and not any(is_reel(item) for item in media):
+        gaps.append("instagram_retention_requires_reel_media")
+        requested_metrics = [metric for metric in insight_metrics if not metric.startswith("ig_reels_")]
+
     for item in media:
         if "like_count" in item:
             like_total += float(item["like_count"])
@@ -101,20 +228,15 @@ def collect_media_metrics(
         if not media_id:
             continue
         try:
-            insight = graph_get(
-                version,
-                f"/{quote(str(media_id))}/insights",
-                token,
-                {"metric": ",".join(insight_metrics)},
-            )
+            insight = instagram_get(version, f"/{quote(str(media_id))}/insights", token, {"metric": ",".join(requested_metrics)})
             endpoints.append("/:ig-media-id/insights")
             for metric, value in insight_values(insight).items():
                 insight_totals[metric] = insight_totals.get(metric, 0.0) + value
                 insight_seen.add(metric)
         except (HTTPError, URLError, TimeoutError):
-            for metric in insight_metrics:
+            for metric in requested_metrics:
                 try:
-                    insight = graph_get(version, f"/{quote(str(media_id))}/insights", token, {"metric": metric})
+                    insight = instagram_get(version, f"/{quote(str(media_id))}/insights", token, {"metric": metric})
                     endpoints.append("/:ig-media-id/insights")
                     value = insight_value(insight)
                     if value is not None:
@@ -122,6 +244,7 @@ def collect_media_metrics(
                         insight_seen.add(metric)
                 except (HTTPError, URLError, TimeoutError):
                     continue
+
     if like_seen:
         observations.append(observation("instagram_likes", like_total, snapshot_date))
     else:
@@ -147,7 +270,7 @@ def collect_media_metrics(
 
     if deep:
         for platform_metric, metric_id in metric_map.items():
-            if platform_metric in {"views"}:
+            if platform_metric == "views":
                 continue
             if platform_metric in insight_seen:
                 observations.append(observation(metric_id, insight_totals[platform_metric], snapshot_date))
@@ -160,6 +283,7 @@ def collect_media_metrics(
             gaps.append("instagram_retention_score_requires_duration_seconds")
         else:
             gaps.append("instagram_retention_score_unavailable")
+
     return observations, gaps, endpoints
 
 
@@ -170,32 +294,32 @@ def fetch_metrics(
     media_ids: list[str] | None = None,
     duration_seconds: float | None = None,
     deep: bool = False,
+    since_date: str | None = None,
+    until_date: str | None = None,
+    latest: bool = False,
+    latest_reel: bool = False,
+    yesterday: bool = False,
 ) -> dict[str, Any]:
     file_values = load_env_file()
-    token = env_value("FARPLANE_INSTAGRAM_ACCESS_TOKEN", file_values)
-    ig_user_id = env_value("FARPLANE_INSTAGRAM_BUSINESS_ACCOUNT_ID", file_values)
+    token = env_value("FARPLANE_INSTAGRAM_LOGIN_ACCESS_TOKEN", file_values)
     version = env_value("FARPLANE_META_GRAPH_VERSION", file_values) or "v21.0"
 
-    missing = []
     if not token:
-        missing.append("missing_FARPLANE_INSTAGRAM_ACCESS_TOKEN")
-    if not ig_user_id:
-        missing.append("missing_FARPLANE_INSTAGRAM_BUSINESS_ACCOUNT_ID")
-    if missing:
         return {
             "source_id": "instagram_account_api",
             "date": snapshot_date,
             "status": "blocked",
             "observations": [],
-            "gaps": missing,
+            "gaps": ["missing_FARPLANE_INSTAGRAM_LOGIN_ACCESS_TOKEN"],
             "redacted": True,
         }
 
-    endpoints = ["/:ig-user-id"]
+    endpoints = ["/me"]
     gaps: list[str] = []
     observations: list[dict[str, Any]] = []
+    content_items: list[dict[str, Any]] = []
 
-    profile = graph_get(version, f"/{quote(ig_user_id)}", token, {"fields": "followers_count,media_count,username"})
+    profile = instagram_get(version, "/me", token, {"fields": "id,user_id,followers_count,media_count,username"})
     followers = profile.get("followers_count")
     if followers is not None:
         observations.append(observation("instagram_followers", float(followers), snapshot_date))
@@ -205,9 +329,10 @@ def fetch_metrics(
     explicit_media_ids = media_ids or []
     if explicit_media_ids:
         media = [
-            graph_get(version, f"/{quote(media_id)}", token, {"fields": "id,like_count,comments_count,media_type,timestamp"})
+            instagram_get(version, f"/{quote(media_id)}", token, {"fields": "id,like_count,comments_count,media_type,timestamp,permalink"})
             for media_id in explicit_media_ids
         ]
+        content_items = [content_item_from_media(item) for item in media]
         endpoints.append("/:ig-media-id")
         media_observations, media_gaps, media_endpoints = collect_media_metrics(
             version, token, media, snapshot_date, insight_metrics, duration_seconds, deep
@@ -215,35 +340,67 @@ def fetch_metrics(
         observations.extend(media_observations)
         gaps.extend(media_gaps)
         endpoints.extend(media_endpoints)
+        enrich_single_content_item(content_items, media_observations)
     else:
         try:
-            media_payload = graph_get(
+            since = parse_date(since_date)
+            until = parse_date(until_date)
+            if yesterday:
+                anchor = parse_date(snapshot_date) or date.today()
+                since = anchor - timedelta(days=1)
+                until = anchor
+            media_payload = instagram_get(
                 version,
-                f"/{quote(ig_user_id)}/media",
+                "/me/media",
                 token,
-                {"fields": "id,like_count,comments_count,media_type,timestamp", "limit": str(max(1, min(limit, 100)))},
+                {
+                    "fields": "id,like_count,comments_count,media_type,timestamp,permalink",
+                    "limit": str(max(1, min(100 if (since or until or latest or latest_reel) else limit, 100))),
+                },
             )
-            endpoints.append("/:ig-user-id/media")
+            endpoints.append("/me/media")
             media = media_payload.get("data") or []
+            if since or until:
+                media = [item for item in media if in_date_window(item.get("timestamp"), since, until)]
+            if latest_reel:
+                media = [item for item in media if is_reel(item)][:1]
+                if not media:
+                    gaps.append("instagram_latest_reel_unavailable")
+            elif latest:
+                media = media[:1]
+            content_items = [content_item_from_media(item) for item in media]
             media_observations, media_gaps, media_endpoints = collect_media_metrics(
                 version, token, media, snapshot_date, insight_metrics, duration_seconds, deep
             )
             observations.extend(media_observations)
             gaps.extend(media_gaps)
             endpoints.extend(media_endpoints)
+            enrich_single_content_item(content_items, media_observations)
         except (HTTPError, URLError, TimeoutError) as exc:
             status = getattr(exc, "code", "network")
             gaps.append(f"instagram_media_metrics_fetch_failed:{status}")
 
     return {
         "source_id": "instagram_account_api",
+        "source": "instagram_account_metrics",
         "date": snapshot_date,
         "status": "available" if observations else "source_gap",
+        "metrics": compact_metrics(observations, content_items),
         "observations": observations,
         "gaps": gaps,
         "endpoints": sorted(set(endpoints)),
         "graph_version": version,
+        "api_mode": "instagram_login",
         "media_ids": explicit_media_ids,
+        "content_items": content_items,
+        "selection": {
+            "latest": latest,
+            "latest_reel": latest_reel,
+            "yesterday": yesterday,
+            "since_date": str(parse_date(since_date)) if since_date else None,
+            "until_date": str(parse_date(until_date)) if until_date else None,
+            "limit": limit,
+        },
         "deep": deep,
         "duration_seconds": duration_seconds,
         "redacted": True,
@@ -257,6 +414,11 @@ def main() -> int:
     parser.add_argument("--media-id", action="append", default=[], help="Specific Instagram media ID to fetch metrics for; repeatable.")
     parser.add_argument("--deep", action="store_true", help="Request fuller Reels/media insights for retention and content-judgment metrics.")
     parser.add_argument("--duration-seconds", type=float, help="Optional media duration used to normalize average watch time into retention score.")
+    parser.add_argument("--latest", action="store_true", help="Fetch only the most recent media item in account snapshot mode.")
+    parser.add_argument("--latest-reel", action="store_true", help="Fetch only the most recent Reel in account snapshot mode.")
+    parser.add_argument("--yesterday", action="store_true", help="Fetch media published on the day before --date, UTC.")
+    parser.add_argument("--since-date", help="Only include media on or after this UTC date, YYYY-MM-DD.")
+    parser.add_argument("--until-date", help="Only include media before this UTC date, YYYY-MM-DD.")
     parser.add_argument("--out", default=".farplane/metrics/manual/instagram_account.json")
     parser.add_argument(
         "--insight-metrics",
@@ -275,6 +437,11 @@ def main() -> int:
             args.media_id,
             args.duration_seconds,
             args.deep,
+            args.since_date,
+            args.until_date,
+            args.latest,
+            args.latest_reel,
+            args.yesterday,
         )
     except (HTTPError, URLError, TimeoutError) as exc:
         status = getattr(exc, "code", "network")

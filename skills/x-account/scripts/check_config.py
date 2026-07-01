@@ -8,8 +8,10 @@ import os
 from pathlib import Path
 
 
-REQUIRED_FOR_READ = ["FARPLANE_X_BEARER_TOKEN"]
-OPTIONAL_FOR_PUBLISH = [
+APP_ONLY_READ = ["FARPLANE_X_BEARER_TOKEN"]
+OAUTH2_USER_READ = ["FARPLANE_X_OAUTH2_ACCESS_TOKEN"]
+OAUTH2_REFRESH = ["FARPLANE_X_OAUTH2_CLIENT_ID", "FARPLANE_X_OAUTH2_CLIENT_SECRET", "FARPLANE_X_OAUTH2_REFRESH_TOKEN"]
+OAUTH1_USER_CONTEXT = [
     "FARPLANE_X_ACCESS_TOKEN",
     "FARPLANE_X_ACCESS_TOKEN_SECRET",
     "FARPLANE_X_API_KEY",
@@ -41,16 +43,27 @@ def present(key: str, file_values: dict[str, str]) -> bool:
 def main() -> int:
     env_path = Path.home() / ".codex" / "private" / "social.env"
     file_values = load_env_file(env_path)
-    read_ready = all(present(key, file_values) for key in REQUIRED_FOR_READ)
-    publish_ready = read_ready and all(present(key, file_values) for key in OPTIONAL_FOR_PUBLISH)
+    app_only_ready = all(present(key, file_values) for key in APP_ONLY_READ)
+    oauth2_ready = all(present(key, file_values) for key in OAUTH2_USER_READ)
+    oauth2_refresh_ready = oauth2_ready and all(present(key, file_values) for key in OAUTH2_REFRESH)
+    oauth1_ready = all(present(key, file_values) for key in OAUTH1_USER_CONTEXT)
+    read_ready = app_only_ready or oauth2_ready
+    deep_ready = oauth2_ready or oauth1_ready
     payload = {
         "platform": "x",
         "env_file": str(env_path),
         "env_file_exists": env_path.exists(),
+        "app_only_read_ready": app_only_ready,
+        "oauth2_user_read_ready": oauth2_ready,
+        "oauth2_refresh_ready": oauth2_refresh_ready,
+        "oauth1_user_context_ready": oauth1_ready,
         "read_ready": read_ready,
-        "publish_ready": publish_ready,
-        "missing_read": [key for key in REQUIRED_FOR_READ if not present(key, file_values)],
-        "missing_publish": [key for key in OPTIONAL_FOR_PUBLISH if not present(key, file_values)],
+        "deep_ready": deep_ready,
+        "publish_ready": deep_ready,
+        "missing_app_only_read": [key for key in APP_ONLY_READ if not present(key, file_values)],
+        "missing_oauth2_user_read": [key for key in OAUTH2_USER_READ if not present(key, file_values)],
+        "missing_oauth2_refresh": [key for key in OAUTH2_REFRESH if not present(key, file_values)],
+        "missing_oauth1_user_context": [key for key in OAUTH1_USER_CONTEXT if not present(key, file_values)],
         "redacted": True,
     }
     print(json.dumps(payload, indent=2, sort_keys=True))

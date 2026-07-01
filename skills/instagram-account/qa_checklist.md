@@ -33,8 +33,12 @@ to satisfy publish checks, or a validation-only run to produce KPI snapshots.
 
 - [ ] Input source is recorded: API endpoint, export file, screenshot/report
   artifact, or manual source.
+- [ ] API mode is recorded as `instagram_login`; Facebook Page or `/me/accounts`
+  assumptions are not used by this skill.
 - [ ] Output observations match the Farplane KPI shape used by
   `.farplane/metrics/ui/latest.json`.
+- [ ] `scripts/validate_metrics.py` passes for the produced snapshot, with
+  `--allow-blocked` only for intentional blocked reports.
 - [ ] Missing values use `source_gap`, not fake zero.
 - [ ] JSON parses and can be consumed by `farplane metrics snapshot`.
 - [ ] Raw credential-bearing API/export payload is not persisted in tracked

@@ -33,7 +33,59 @@ belt app run x/post-create --input '{
 | Reply | 280 characters |
 | Display name | 50 characters |
 
+Current grounding:
+
+- X Help says longer posts let Premium subscribers create posts above 280
+  characters up to 25,000 characters; default draft behavior and media/poll
+  behavior can still impose normal constraints.
+- X Help's thread composer adds posts with the plus icon and highlights text
+  that exceeds the character limit before posting.
+- Treat 280 characters as the default final-copy budget unless the caller
+  explicitly says the account can use Premium longer posts.
+
+Sources checked 2026-06-29:
+
+- X Help Center: `https://help.x.com/en/using-x/x-premium`
+- X Help Center: `https://help.x.com/en/using-x/create-a-thread`
+- Buffer: `https://buffer.com/resources/twitter-threads/`
+- Ship30for30: `https://www.ship30for30.com/post/6-tips-to-write-viral-twitter-threads-with-ease`
+
 ## Thread Structure
+
+### Planning Gate
+
+Do not present high-level angles as Twitter/X thread options. A reviewable
+thread option must include:
+
+```text
+ThreadPlan :=
+  hook_tweet
++ reader_value_promise
++ tweet_stack[]
++ evidence_or_examples
++ payoff
++ CTA
++ media_plan?
+```
+
+Minimum viable option for human review:
+
+```text
+Option label: {specific angle}
+Reader value: {what the reader learns, can do, or sees differently}
+Hook: {draft tweet 1}
+Stack:
+2/ {context, tension, or problem}
+3/ {first useful point with example}
+4/ {second useful point, proof, or counterpoint}
+5/ {turn, payoff, demo moment, or checklist}
+6/ {takeaway}
+7/ {CTA}
+Why it might work: {platform-native reason}
+```
+
+Reject options that only say "explain the problem", "tell a story", "announce
+the product", or "value-first thread" without the actual stack.
 
 ### The Anatomy
 
@@ -48,6 +100,10 @@ Tweet 11:           CTA (follow, retweet, bookmark)
 ### Tweet 1: The Hook
 
 This tweet lives or dies alone in the timeline. It must work WITHOUT the thread.
+Buffer's thread guide makes the same point: most users only see the first tweet
+while scrolling, so the first tweet has to grab attention and set expectations.
+Ship30for30's writing process starts from problem, audience, benefit, promise,
+emotion, and next action; use those as a quick sanity check before drafting.
 
 | Hook Type | Template |
 |-----------|----------|
@@ -181,6 +237,9 @@ belt app run infsh/agent-browser --input '{
 11/ CTA
 ```
 
+Use when the thread's value is teaching a reader a mental model, checklist, or
+repeatable method. The stack must move from diagnosis to usable takeaway.
+
 ### Story/Journey
 
 ```
@@ -193,6 +252,9 @@ belt app run infsh/agent-browser --input '{
 11/ CTA
 ```
 
+Use when chronology creates the value. The turning point and lesson must be
+visible before asking for approval.
+
 ### Curation/List
 
 ```
@@ -200,6 +262,9 @@ belt app run infsh/agent-browser --input '{
 2-10/ One item per tweet with brief explanation
 11/ CTA
 ```
+
+Use when each body tweet can stand alone as a useful item. Avoid fake lists
+where every item is just product positioning.
 
 ### Teardown/Analysis
 
@@ -211,6 +276,9 @@ belt app run infsh/agent-browser --input '{
 10/ Takeaways
 11/ CTA
 ```
+
+Use when the thread has evidence: screenshots, examples, data, or a concrete
+object to inspect. The value comes from showing what was observed.
 
 ## Engagement Strategy
 

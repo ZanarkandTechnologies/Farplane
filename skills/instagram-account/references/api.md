@@ -5,10 +5,8 @@ owner: instagram-account
 status: draft
 source_refs:
   - https://developers.facebook.com/docs/instagram-platform/overview/
-  - https://developers.facebook.com/docs/instagram-platform/api-reference/instagram-user/insights/
-  - https://developers.facebook.com/docs/instagram-platform/instagram-graph-api/reference/ig-user/media/
-  - https://developers.facebook.com/docs/instagram-platform/instagram-graph-api/reference/ig-media/insights/
-  - https://developers.facebook.com/docs/instagram-platform/instagram-graph-api/reference/ig-user/media_publish/
+  - https://developers.facebook.com/docs/instagram-platform/instagram-api-with-instagram-login/
+  - https://developers.facebook.com/docs/instagram-platform/reference/instagram-media/insights/
 ---
 
 # Instagram API Reference
@@ -17,24 +15,23 @@ Load this before live Instagram API work.
 
 ## Grounding
 
-- Instagram Platform APIs support professional-account workflows including
-  content publishing and account/media insights when permissions are configured.
-- Content publishing uses container creation and publish steps for eligible
-  Instagram accounts.
+- Instagram Login / Business Login is the metrics path for this skill.
 - Insights are account/media metrics and should be normalized before reaching
   the KPI cockpit.
-- The read-only metrics script uses Instagram Graph API profile/media fields
+- The read-only metrics script uses `graph.instagram.com` profile/media fields
   plus best-effort media insights for view-like metrics. Metric availability
-  depends on account type, permissions, media type, and API version.
+  depends on account type, permissions, media type, token type, and API version.
+- Facebook Page, `/me/accounts`, and Page-linked `instagram_business_account`
+  flows are intentionally out of scope for this skill.
 
 ## Minimal Env Contract
 
 Use private env only:
 
 ```bash
-FARPLANE_INSTAGRAM_ACCESS_TOKEN=
-FARPLANE_INSTAGRAM_BUSINESS_ACCOUNT_ID=
 FARPLANE_INSTAGRAM_USERNAME=
+FARPLANE_INSTAGRAM_LOGIN_ACCESS_TOKEN=
+FARPLANE_INSTAGRAM_LOGIN_USER_ID=
 FARPLANE_META_APP_ID=
 FARPLANE_META_APP_SECRET=
 ```

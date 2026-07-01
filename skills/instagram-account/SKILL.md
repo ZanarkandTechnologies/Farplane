@@ -22,7 +22,9 @@ explicitly approved publishing. `social-content` owns creative drafting;
 
 Secrets never live in tracked files. Project aliases and non-secret policy live
 in `farplane/bindings.md`; credentials live under `~/.codex/private/social.env`
-or the runtime environment using the `FARPLANE_INSTAGRAM_` prefix.
+or the runtime environment using the `FARPLANE_INSTAGRAM_` prefix. Metrics use
+Instagram Login credentials against `graph.instagram.com`; Facebook Page
+ownership belongs in a separate future Facebook Pages skill if needed.
 
 ## Skill Signature
 
@@ -84,9 +86,12 @@ publishing.
         `.farplane/metrics/ui/latest.json` inputs: `instagram_followers`,
         `instagram_views`, `instagram_likes`, and optional post counts. Use
         `scripts/fetch_metrics.py` for live read-only Graph API metrics
-        (`--media-id` for exact media metrics, `--deep` for Reels retention
-        fields) or
+        (`--latest`, `--latest-reel`, `--yesterday`, `--since-date`, and
+        `--until-date` for review windows; `--media-id` for exact media
+        metrics; `--deep` for Reels retention fields) or
         `scripts/normalize_metrics.py` for local JSON/CSV exports.
+  - [ ] For metrics, run `scripts/validate_metrics.py` against the produced
+        snapshot before treating the skill-local contract as proven.
   - [ ] For metrics, use `source_gap` when a metric is unavailable; do not
         write zero unless the platform actually returned zero.
   - [ ] For publishing, record media IDs/URLs only after the API confirms the
@@ -119,6 +124,8 @@ Normalized metric snapshot:
 
 - Instagram Graph/API publishing and insights generally require professional
   account setup, app permissions, and review-sensitive access.
+- Facebook Page ownership, `/me/accounts`, and Page-linked assets are not part
+  of this skill; route that to a future Facebook Pages skill if needed.
 - Posting is an external mutation and always needs explicit approval.
 - Broad scraping/listening belongs to `apify` or `feed-scout`, not account API.
 
@@ -129,9 +136,16 @@ Normalized metric snapshot:
 - `scripts/check_config.py` - check private env readiness without printing secrets.
 - `scripts/fetch_metrics.py` - fetch read-only profile/media metrics and write KPI observations.
   Use no media IDs for account snapshot mode; repeat `--media-id` for exact media metrics.
+  Use `--latest`, `--latest-reel`, `--yesterday`, `--since-date`, or
+  `--until-date` to select media for content review while preserving aggregate
+  KPI observations. When `--deep` is set, Reel-only watch-time metrics are
+  requested only for selected media whose `media_type` is `REELS`; non-Reel
+  media records a retention source gap instead of fake zero.
   Add `--deep --duration-seconds <seconds>` for Reels watch-time observations
   and normalized `instagram_retention_score` when the API returns watch-time
   insights.
+- `scripts/validate_metrics.py` - validate Instagram metric snapshot shape,
+  metric IDs, redaction, and blocked/source-gap semantics without external API calls.
 - `scripts/validate_media_payload.py` - validate post/reel/carousel JSON without account mutation.
 - `scripts/normalize_metrics.py` - normalize JSON/CSV metric exports to Farplane KPI observations.
 - `eval_task.json` - agent-behavior eval rows for live metrics and missing-credential flows.

@@ -23,7 +23,9 @@ Broad listening, competitor scraping, and attention-graph reads route through
 
 Secrets never live in tracked files. Project aliases and non-secret policy live
 in `farplane/bindings.md`; credentials live under `~/.codex/private/social.env`
-or the runtime environment using the `FARPLANE_X_` prefix.
+or the runtime environment using the `FARPLANE_X_` prefix. Prefer current X
+OAuth 2.0 user tokens for account timeline/deep reads; OAuth 1.0a credentials
+are kept as fallback/legacy support.
 
 ## Skill Signature
 
@@ -85,9 +87,12 @@ first live posting branch.
         `.farplane/metrics/ui/latest.json` inputs: `x_followers`, `x_views`,
         `x_likes`, and optional post counts. Use
         `scripts/fetch_metrics.py` for live read-only account API metrics
-        (`--tweet-id` for exact post metrics, `--deep` for retention/click
-        fields when authorized) or
+        (`--latest`, `--yesterday`, `--since-date`, and `--until-date` for
+        review windows; `--tweet-id` for exact post metrics; `--deep` for
+        retention/click fields when authorized) or
         `scripts/normalize_metrics.py` for local JSON/CSV exports.
+  - [ ] For metrics, run `scripts/validate_metrics.py` against the produced
+        snapshot before treating the skill-local contract as proven.
   - [ ] For metrics, use `source_gap` when a metric is unavailable; do not
         write zero unless the platform actually returned zero.
   - [ ] For publishing, record post IDs/URLs only after the API confirms the
@@ -130,9 +135,14 @@ Normalized metric snapshot:
 - `scripts/check_config.py` - check private env readiness without printing secrets.
 - `scripts/fetch_metrics.py` - fetch read-only account/profile/post metrics and write KPI observations.
   Use no post IDs for account snapshot mode; repeat `--tweet-id` for exact post metrics.
+  Use `--latest`, `--yesterday`, `--since-date`, or `--until-date` to select
+  posts for content review while preserving the aggregate KPI observation
+  output.
   Add `--deep` for retention/click observations such as `x_retention_score`,
   `x_video_completions`, `x_profile_clicks`, and `x_url_clicks` when the API
   returns owned-content analytics.
+- `scripts/validate_metrics.py` - validate X metric snapshot shape, metric IDs,
+  redaction, and blocked/source-gap semantics without external API calls.
 - `scripts/validate_post_payload.py` - validate post/thread JSON without account mutation.
 - `scripts/normalize_metrics.py` - normalize JSON/CSV metric exports to Farplane KPI observations.
 - `eval_task.json` - agent-behavior eval rows for live metrics and missing-credential flows.

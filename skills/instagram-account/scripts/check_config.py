@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check private Instagram account env configuration without printing secrets."""
+"""Check private Instagram Login env configuration without printing secrets."""
 
 from __future__ import annotations
 
@@ -8,8 +8,8 @@ import os
 from pathlib import Path
 
 
-REQUIRED_FOR_READ = ["FARPLANE_INSTAGRAM_ACCESS_TOKEN", "FARPLANE_INSTAGRAM_BUSINESS_ACCOUNT_ID"]
-OPTIONAL_FOR_PUBLISH = ["FARPLANE_META_APP_ID", "FARPLANE_META_APP_SECRET"]
+REQUIRED_FOR_READ = ["FARPLANE_INSTAGRAM_LOGIN_ACCESS_TOKEN"]
+OPTIONAL_FOR_REFRESH_OR_APP = ["FARPLANE_META_APP_ID", "FARPLANE_META_APP_SECRET"]
 
 
 def load_env_file(path: Path) -> dict[str, str]:
@@ -37,15 +37,16 @@ def main() -> int:
     env_path = Path.home() / ".codex" / "private" / "social.env"
     file_values = load_env_file(env_path)
     read_ready = all(present(key, file_values) for key in REQUIRED_FOR_READ)
-    publish_ready = read_ready and all(present(key, file_values) for key in OPTIONAL_FOR_PUBLISH)
+    app_ready = all(present(key, file_values) for key in OPTIONAL_FOR_REFRESH_OR_APP)
     payload = {
         "platform": "instagram",
+        "api_mode": "instagram_login",
         "env_file": str(env_path),
         "env_file_exists": env_path.exists(),
         "read_ready": read_ready,
-        "publish_ready": publish_ready,
+        "app_ready": app_ready,
         "missing_read": [key for key in REQUIRED_FOR_READ if not present(key, file_values)],
-        "missing_publish": [key for key in OPTIONAL_FOR_PUBLISH if not present(key, file_values)],
+        "missing_app": [key for key in OPTIONAL_FOR_REFRESH_OR_APP if not present(key, file_values)],
         "redacted": True,
     }
     print(json.dumps(payload, indent=2, sort_keys=True))

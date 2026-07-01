@@ -35,6 +35,8 @@ to satisfy publish checks, or a validation-only run to produce KPI snapshots.
   artifact, or manual source.
 - [ ] Output observations match the Farplane KPI shape used by
   `.farplane/metrics/ui/latest.json`.
+- [ ] `scripts/validate_metrics.py` passes for the produced snapshot, with
+  `--allow-blocked` only for intentional blocked reports.
 - [ ] Missing values use `source_gap`, not fake zero.
 - [ ] JSON parses and can be consumed by `farplane metrics snapshot`.
 - [ ] Raw credential-bearing API/export payload is not persisted in tracked
