@@ -1,15 +1,15 @@
 {
   "_template_metadata": {
     "template_id": "farplane-framework",
-    "template_version": "1.6.6",
+    "template_version": "1.6.12",
     "feature_refs": ["FEAT-0060"],
     "consumer_scope": "project",
     "applies_to": ["farplane/manifest.json"]
   },
   "schema": "farplane_project",
-  "spec_version": "1.6.6",
+  "spec_version": "1.6.12",
   "template_uses": {
-    "farplane-framework": "1.6.6"
+    "farplane-framework": "1.6.12"
   },
   "project": {
     "name": "TODO",
@@ -52,6 +52,9 @@
     "ignored": [
       ".farplane/README.md",
       ".farplane/state/run-ledger.json",
+      ".farplane/content/",
+      ".farplane/metrics/daily/",
+      ".farplane/metrics/ui/",
       ".farplane/reports/",
       ".farplane/evals/runs/",
       ".farplane/logs/"

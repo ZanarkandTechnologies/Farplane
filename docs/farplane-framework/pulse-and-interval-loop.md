@@ -4,7 +4,7 @@ status: active
 owner: farplane-framework
 created_at: 2026-06-29
 updated_at: 2026-07-01
-framework_template_version: "0.2.1"
+framework_template_version: "0.2.2"
 tags:
   - farplane
   - lifecycle
@@ -69,6 +69,7 @@ Use the smallest owner for each kind of state:
 | --- | --- | --- |
 | Stable thesis and guardrails | `farplane/harness.md` | explicit human-approved harness delta |
 | North star, value function, goal axes, inline SMART goals, durable bets | `farplane/goals.md` | horizon/goal delta with evidence and approval when material |
+| Metric labels, units, chart behavior, pinned status, kind, and refresh prompts | `farplane/bindings.md` | metric recipe delta with source-gap proof |
 | Product lanes, workflows, lane weights | `farplane/products.md` | product-boundary update with evidence |
 | Active focus, active projects, critical paths, next frontier | `farplane/ops-memory.md` | Daily/Weekly refresh or Pulse frontier writeback |
 | Executable work | `tickets/TASK-*/ticket.md` | ticket creation, execution, review, closeout |
@@ -111,18 +112,18 @@ Generated tactical tickets must be small, local, approval-free, and tied to a
 current focus, active project, frontier step, bet, lane, bottleneck, or reward
 signal. Each generated ticket must include:
 
-```text
+```yaml
 Reward:
-  moves:
-  win_signal:
-  guard:
+  kpi_rewards:
+    - kpi_id: accepted_harness_improvements
+      expected_reward: "one proof-backed shipped harness improvement"
+  guard: "stop before expanding scope or counting unproved intent"
 ```
 
-`Reward` is also the ticket-level budget justification. `moves` names the
-goal, active project, or bottleneck that deserves spend; `win_signal` names the
-evidence that would justify more runway; `guard` names the stop, resize, or
-non-expansion boundary. Do not add another ticket field for budget reason unless
-a future ticket proves `Reward` is insufficient.
+`Reward` is also the ticket-level budget justification. `kpi_rewards` names the
+KPI IDs the ticket is expected to move and the expected reward text; `guard`
+names the stop, resize, or non-expansion boundary. Do not add another ticket
+field for budget reason unless a future ticket proves `Reward` is insufficient.
 
 Pulse still writes `request_planning` when the strategy inputs are stale,
 missing, unsafe, or require material product, KPI, goal, publishing, spend,
@@ -138,18 +139,21 @@ After:
 
 ```text
 goals/products + ops-memory + latest interval reports
-  -> active frontier + needed metric/provider calls
+  -> active frontier + needed metric readings
   -> bounded tactical tickets
   -> execution up to heartbeat-policy cap
 ```
 
 Daily and Weekly should read goal-axis SMART goals semantically. For each
-active SMART goal, use its `kpis` and `update_hint` to decide which provider
-skills or local ledgers can produce today's readings. Do not parse
+active SMART goal, use its `kpis` to find metric recipes in
+`farplane/bindings.md`; each recipe gives the interval agent a prompt-only
+`refresh` instruction for today's reading. Do not parse
 `farplane/ops-memory.md` as a deterministic database; use it as flexible agent
 memory for active initiatives, tracked content, and next ticket candidates.
-Provider failures, missing credentials, missing API fields, or missing feedback
-mechanisms become source gaps and instrumentation-ticket candidates.
+Missing credentials, missing API fields, missing files, or missing feedback
+mechanisms become source gaps and instrumentation-ticket candidates. After
+writing `.farplane/metrics/daily/<date>.json`, run
+`farplane metrics compile` to refresh `.farplane/metrics/ui/latest.json`.
 
 Maintenance work should compete against the active frontier. It is selected
 only when it unblocks the focus, protects proof, or has a clearer reward signal
@@ -164,7 +168,10 @@ project deserves another planning window.
 Weekly Interval should write a Budget / Runway Review before the next-window
 plan. It should cite active projects from `farplane/ops-memory.md`, ticket
 `Reward` blocks, metric snapshots, source gaps, interval reports, and visible
-operator feedback. Each active project receives one decision:
+operator feedback. For autonomy claims, prefer the daily `autonomy_time_feedback`
+readings over subjective intervention labels: human prompt count, estimated
+human attention minutes, autonomous worker elapsed minutes, auto-time ratio, and
+output per human prompt. Each active project receives one decision:
 
 ```text
 continue | narrow | pause | instrument | stop | escalate_to_revenue
@@ -285,14 +292,15 @@ loss_term -> lever -> evidence -> expected_reward_signal
 For Farplane itself, the main self-evolution metric is:
 
 ```text
-validated meaningful improvement cycles per human intervention hour
+validated meaningful improvement cycles per human attention hour
 ```
 
-Supporting signals are accepted output, accepted agent-hours, false-completion
-incidents, context-isolation failures, source-gap rate, proof-closure rate, and
-skill-backpropagation events. These are not a single blind score; the weekly
-interval summarizes them as evidence and uses the score only to guide the
-reasoned choice of 1-3 bets.
+Supporting signals are accepted output, autonomous worker elapsed minutes,
+human attention minutes, auto-time ratio, ticket intervention turns,
+auto-completion rate, false-completion incidents, context-isolation failures,
+source-gap rate, proof-closure rate, and skill-backpropagation events. These
+are not a single blind score; the weekly interval summarizes them as evidence
+and uses the score only to guide the reasoned choice of 1-3 bets.
 
 Urgent leverage escalation is a narrow bypass, not a second scheduler. It is
 allowed only for high-confidence signals that would lose meaningful value

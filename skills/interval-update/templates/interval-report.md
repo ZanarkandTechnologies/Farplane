@@ -36,6 +36,9 @@ context_bundle: <path>
 | Axis / KPI / feedback surface | State | Trend | Confidence | Gap |
 | --- | --- | --- | --- | --- |
 
+Daily metric readings: `.farplane/metrics/daily/YYYY-MM-DD.json`.
+Compiled KPI projection: `.farplane/metrics/ui/latest.json`.
+
 ## Report Workflows
 
 Run only workflows enabled by the automation config. For disabled workflows,
@@ -79,8 +82,9 @@ Decisions: `continue`, `narrow`, `pause`, `instrument`, `stop`,
 
 Rules:
 
-- `Reward.moves`, `Reward.win_signal`, and `Reward.guard` are the ticket-level
-  budget justification. Do not invent a second ticket budget field.
+- `Reward.kpi_rewards[]` plus `Reward.guard` are the ticket-level budget
+  justification and KPI attribution shape. Do not invent a second ticket budget
+  field.
 - Missing exact spend is not a blocker for the first review; record rough
   attention used and add an instrumentation gap only if the decision needs
   precision.
@@ -100,8 +104,9 @@ not measured yet, write `source_gap` and route the missing proof surface.
 
 | Signal | Direction | Evidence | Confidence | Planning implication |
 | --- | --- | --- | --- | --- |
-| Accepted output / accepted agent-hours |  |  |  |  |
-| Human intervention minutes |  |  |  |  |
+| Accepted output / autonomous worker elapsed minutes |  |  |  |  |
+| Human attention minutes / auto-time ratio |  |  |  |  |
+| Ticket intervention turns / auto-completion rate |  |  |  |  |
 | Proof closure rate |  |  |  |  |
 | False completion / self-approval incidents |  |  |  |  |
 | Context isolation failures |  |  |  |  |

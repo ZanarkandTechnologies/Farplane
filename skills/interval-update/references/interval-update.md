@@ -155,11 +155,14 @@ merge shape.
    `update-memory` and substantive durable doc cleanup to `doc-advisor`.
 12. Review the past window against the static harness charter, goals, and
     configured parent contexts.
-13. Refresh metric readings when provider skills or local ledgers are available:
-    read goal-axis SMART goals from `farplane/goals.md`, use their `kpis` and
-    `update_hint` fields plus `farplane/ops-memory.md` to choose provider
-    calls, write compact daily source snapshots, then run the KPI snapshot
-    command. Do not parse ops memory as a deterministic database.
+13. Refresh metric readings when skills, CLIs, ticket searches, manual notes, or
+    local ledgers are available: read goal-axis SMART goals from
+    `farplane/goals.md` for KPI selection and interpretation, then use each
+    KPI's `farplane/bindings.md` metric recipe `refresh` prompt to choose the
+    work. Write one compact daily metrics file under
+    `.farplane/metrics/daily/<date>.json`, then run
+    `farplane metrics compile`. Do not parse ops memory as a deterministic
+    database.
 14. Review budget and runway for active projects. Use `farplane/harness.md`
     allocation guardrails, `farplane/ops-memory.md` contribution modes, ticket
     `Reward` blocks, metric snapshots, interval reports, source gaps, and
@@ -197,27 +200,63 @@ Promotion decisions:
 - `rejected_source_gap`: insufficient evidence; create an instrumentation,
   access, feedback, or research ticket instead.
 
-Metric snapshot guidance:
+Metric reading guidance:
 
 ```text
-daily_source_snapshot := {
+daily_metric_file := {
   date,
-  source,
-  status,
   metrics: {
-    <kpi>: {
-      value,
-      items?
+    [metric_id]: {
+      value: number | null,
+      status: available | source_gap | blocked,
+      payload?: object
     }
-  },
-  gaps?
+  }
 }
 ```
 
-`metrics.<kpi>.value` is the provider reading for that date. The UI or metric
-pipeline derives daily difference from consecutive readings. Content IDs,
-ticket IDs, post IDs, and other entity IDs belong under `items`, not in KPI
-names.
+Each metric value is the point reading for that date. The compiler derives
+daily difference from consecutive readings, cumulative totals for
+`kind: daily_count` metrics, and best-daily values. Content IDs, ticket IDs,
+post IDs, API responses, and confidence notes belong under freeform `payload`,
+not in KPI names. Ticket-derived KPI counts should be collected during this
+daily refresh by counting tickets whose `Reward.kpi_rewards[].kpi_id` matches
+the KPI, then storing the resulting count like any other metric value.
+
+Reusable interval-owned helper signatures:
+
+```text
+$interval-update.count_ticket_kpi_rewards(ticket_dir, date, kpi_key)
+  -> { value, status, payload? }
+
+$interval-update.calculate_autonomy_time_ratio(runtime_dir, date)
+  -> { value, status, payload? }
+
+$interval-update.calculate_ticket_intervention_metrics(ticket_dir, runtime_dir, date)
+  -> {
+       auto_completion_rate: MetricReading,
+       intervention_free_ticket_count: MetricReading,
+       ticket_intervention_turn_count: MetricReading
+     }
+
+$interval-update.select_content_metric_targets(content_ledger, platform, kpi_key, date, window_days?)
+  -> {
+       status,
+       external_ids,
+       items,
+       payload: { since_date, until_date, fetch_command, gaps }
+     }
+```
+
+The concrete CLI owner is
+`skills/interval-update/scripts/metric_refresh.py`. Refresh prompts may cite the
+helper signature instead of restating the counting algorithm.
+
+For owned-content distribution KPIs, first call
+`select_content_metric_targets` to select posted ledger rows in the lookback
+window. Then call the returned platform fetch command through `$x-account` or
+`$instagram-account`, read the produced compact metrics, and store the selected
+KPI's aggregate value plus per-post `payload.items` in the daily metric file.
 
 Runway review guidance:
 

@@ -3,8 +3,8 @@ title: "Farplane Lifecycle"
 status: active
 owner: farplane-framework
 created_at: 2026-06-23
-updated_at: 2026-07-01
-framework_template_version: "0.2.1"
+updated_at: 2026-07-02
+framework_template_version: "0.2.2"
 tags:
   - farplane
   - lifecycle
@@ -34,10 +34,10 @@ mental model is:
 init_project(intent)
   -> visible project files
   -> static human charter, products, goals, and current milestone
-  -> metric providers, active ops memory, and Reward-backed tickets
+  -> prompt-only metric recipes, active ops memory, and Reward-backed tickets
   -> ticket-backed Goal Packets
   -> Pulse acts and intervals plan
-  -> daily snapshots expose KPI/source gaps
+  -> daily metrics expose KPI/source gaps
   -> weekly reports review goal drift, runway, and leverage bets
   -> drains compress outcomes back into docs, memory, skills, and tickets
 ```
@@ -139,16 +139,16 @@ farplane/harness.md
   -> static thesis, authority, proof, and runway guardrails
 
 farplane/goals.md
-  -> goal axes + inline SMART goals + stable KPI keys + update hints
+  -> goal axes + inline SMART goals + stable KPI keys + interpretation
 
 farplane/bindings.md
-  -> non-secret metric providers and source-gap setup hints
+  -> non-secret project coordinates + inline metric recipes
 
 farplane/ops-memory.md
   -> active projects, contribution modes, current frontier, runway notes
 
 tickets/TASK-*/ticket.md
-  -> executable work, Reward(moves, win_signal, guard), proof contract
+  -> executable work, Reward(kpi_rewards, guard), proof contract
 
 Pulse
   -> executes ready tickets or creates small Reward-backed tactical tickets
@@ -161,6 +161,9 @@ Weekly Interval
 
 .farplane/reports/** + .farplane/automation/*.jsonl
   -> dated receipts that feed the next Pulse or Interval
+
+.farplane/content/ledger.jsonl
+  -> owned content lifecycle rows for draft/approval/post/metric refresh
 ```
 
 The loop has three clocks:
@@ -171,29 +174,64 @@ The loop has three clocks:
 | Daily | `interval-update` | Refresh near-term progress, blockers, and KPI readings. | Daily interval report and metric snapshots. |
 | Weekly | `interval-update` | Protect or change strategy, review runway, and choose leverage bets. | Weekly report, goals-delta candidates, ops-memory delta, Pulse guidance. |
 
-KPI snapshots start from `farplane/goals.md`: each SMART goal names stable KPI
-keys and an `update_hint`. The interval agent uses those hints, provider
-coordinates in `farplane/bindings.md`, and active context in
-`farplane/ops-memory.md` to call skill snapshots or local ledgers. Providers
-write compact daily readings:
+KPI snapshots start from `farplane/bindings.md` metric recipes. `goals.md`
+chooses and interprets stable KPI IDs and SMART targets; `bindings.md` owns
+each metric's label, product, unit, chart behavior, pinned status, kind, and
+prompt-only `refresh` instruction. The interval agent uses recipes plus active
+context in `farplane/ops-memory.md` to call skills, CLIs, local ledgers, ticket
+searches, or manual notes, then writes one compact daily metrics file:
 
 ```text
-metrics.<kpi>.value
-metrics.<kpi>.items?  # post IDs, ticket IDs, media IDs, or other breakdowns
+.farplane/metrics/daily/YYYY-MM-DD.json
+  date
+  metrics.<kpi>.value
+  metrics.<kpi>.status   # available | source_gap | blocked
+  metrics.<kpi>.payload? # post IDs, ticket IDs, media IDs, API notes, etc.
 ```
 
-The UI derives daily differences and trend lines from dated readings. Missing
-credentials, missing files, unsupported API metrics, and unbuilt feedback
-mechanisms are `source_gap`, not zero.
+The UI derives daily differences and cumulative trend lines from dated
+readings. Daily-growth metrics should use `kind: daily_count` in their binding
+recipe. Durable point readings such as followers, open issues, and ratios stay
+`kind: point`; the chart layer can still calculate day-over-day diffs from the
+dated value series.
+Missing credentials, missing files, unsupported API metrics, and unbuilt
+feedback mechanisms are `source_gap`, not zero.
+
+Owned-content distribution metrics use `.farplane/content/ledger.jsonl` as the
+local fetch target list. Publishing/account skills append rows after approved
+posting; interval refresh reads posted rows by platform, campaign, date window,
+and KPI, then stores aggregate values in daily metrics with per-post
+`payload.items` for drilldown.
+
+Farplane's default autonomy proxy is intentionally reliable rather than
+subjective:
+
+```text
+autonomy_time_feedback
+  -> human_prompt_count
+  -> human_attention_minutes_estimated
+  -> autonomous_worker_elapsed_minutes
+  -> auto_time_ratio
+  -> output_per_human_prompt
+```
+
+This avoids vague "intervention" classification. If better token, spend, or
+approval ledgers become available, add them as prompt-only metric recipes and
+daily readings instead of rewriting the autonomy proxy.
 
 Budget and runway use existing ticket structure. Ticket `Reward` is the
-spend-justification primitive:
+spend-justification and KPI-attribution primitive:
 
-```text
-moves: what goal, active project, frontier step, or bottleneck this advances
-win_signal: what evidence would justify more runway
-guard: where to stop, narrow, or avoid expanding
+```yaml
+kpi_rewards:
+  - kpi_id: accepted_harness_improvements
+    expected_reward: "one proof-backed shipped harness improvement"
+guard: "where to stop, narrow, or avoid expanding"
 ```
+
+Only ticket-derived KPI recipes use ticket rewards as metric values. For KPIs
+with another configured source, `kpi_rewards` remains planning attribution and
+the metric value comes from that source.
 
 Weekly Interval turns active projects, ticket Rewards, KPI snapshots, reports,
 and source gaps into runway decisions:
@@ -212,8 +250,8 @@ For a project to run the loop without hidden transcript memory, it needs:
 
 - `farplane/harness.md` with static authority, proof, and runway guardrails.
 - `farplane/products.md` with product lanes and lane weights.
-- `farplane/goals.md` with inline SMART goals, KPI keys, and update hints.
-- `farplane/bindings.md` with non-secret metric provider coordinates.
+- `farplane/goals.md` with inline SMART goals, KPI keys, and interpretation.
+- `farplane/bindings.md` with non-secret inline metric recipes.
 - `farplane/ops-memory.md` with active projects, tracked feedback, current
   frontier, and the standard sections: Current Focus, Active Projects, Tracked
   Feedback, Next Frontier, Constraints, Parking Lot, Recent Decisions, and

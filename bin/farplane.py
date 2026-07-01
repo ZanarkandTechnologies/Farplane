@@ -23,7 +23,8 @@ if str(CORE_DIR) not in sys.path:
     sys.path.insert(0, str(CORE_DIR))
 
 from farplane_adoption import run_scan as run_adoption_scan
-from farplane_metrics import run_snapshot as run_metrics_snapshot
+from farplane_content import run_content_add, run_content_list
+from farplane_metrics import run_compile as run_metrics_compile
 from farplane_skill_rollout import SkillRolloutError, run_scan as run_skill_rollout_scan
 from runtime_config import load_runtime_env
 
@@ -384,13 +385,40 @@ def build_parser() -> argparse.ArgumentParser:
     skills_rollout_scan.add_argument("--json", action="store_true")
     skills_rollout_scan.set_defaults(func=run_skill_rollout_scan)
 
-    metrics = sub.add_parser("metrics", help="Generate Farplane metric snapshots for interval reports and UI.")
+    metrics = sub.add_parser("metrics", help="Compile Farplane metric observations for interval reports and UI.")
     metrics_sub = metrics.add_subparsers(dest="metrics_command")
-    metrics_snapshot = metrics_sub.add_parser("snapshot", help="Fetch configured local KPI sources and write UI snapshot JSON.")
-    metrics_snapshot.add_argument("--project-root", default=str(CORE_ROOT))
-    metrics_snapshot.add_argument("--date", help="Snapshot date in YYYY-MM-DD. Defaults to today UTC.")
-    metrics_snapshot.add_argument("--json", action="store_true")
-    metrics_snapshot.set_defaults(func=run_metrics_snapshot)
+    metrics_compile = metrics_sub.add_parser("compile", help="Compile existing KPI observations into UI snapshot JSON.")
+    metrics_compile.add_argument("--project-root", default=str(CORE_ROOT))
+    metrics_compile.add_argument("--date", help="Snapshot date in YYYY-MM-DD. Defaults to today UTC.")
+    metrics_compile.add_argument("--json", action="store_true")
+    metrics_compile.set_defaults(func=run_metrics_compile)
+
+    content = sub.add_parser("content", help="Append or inspect local Farplane content ledger rows.")
+    content_sub = content.add_subparsers(dest="content_command")
+    content_add = content_sub.add_parser("add", help="Add or update a content ledger row.")
+    content_add.add_argument("--project-root", default=str(CORE_ROOT))
+    content_add.add_argument("--content-id")
+    content_add.add_argument("--platform", required=True)
+    content_add.add_argument("--external-id")
+    content_add.add_argument("--url")
+    content_add.add_argument("--status", default="posted")
+    content_add.add_argument("--approval", default="approved")
+    content_add.add_argument("--published-at")
+    content_add.add_argument("--campaign")
+    content_add.add_argument("--kpis", required=True, help="Comma-separated KPI IDs.")
+    content_add.add_argument("--title")
+    content_add.add_argument("--source-ref")
+    content_add.add_argument("--approval-ref")
+    content_add.add_argument("--notes")
+    content_add.set_defaults(func=run_content_add)
+    content_list = content_sub.add_parser("list", help="List content ledger rows.")
+    content_list.add_argument("--project-root", default=str(CORE_ROOT))
+    content_list.add_argument("--platform")
+    content_list.add_argument("--status")
+    content_list.add_argument("--kpi")
+    content_list.add_argument("--since-date", help="Only include content published on or after this UTC date.")
+    content_list.add_argument("--until-date", help="Only include content published before this UTC date.")
+    content_list.set_defaults(func=run_content_list)
 
     return parser
 
@@ -414,7 +442,9 @@ def main(argv: list[str]) -> int:
     if getattr(args, "skills_command", None) == "rollout" and getattr(args, "skills_rollout_command", None) is None:
         parser.error("skills rollout requires a subcommand: scan")
     if getattr(args, "command", None) == "metrics" and getattr(args, "metrics_command", None) is None:
-        parser.error("metrics requires a subcommand: snapshot")
+        parser.error("metrics requires a subcommand: compile")
+    if getattr(args, "command", None) == "content" and getattr(args, "content_command", None) is None:
+        parser.error("content requires a subcommand: add or list")
     if not hasattr(args, "func"):
         parser.print_help()
         return 0

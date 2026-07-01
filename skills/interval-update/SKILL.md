@@ -188,6 +188,25 @@ metric_snapshot(review_window)
   -> metric_status + gaps
   ref: references/workflows/metric-snapshot.md
 
+Metric refresh helpers:
+
+count_ticket_kpi_rewards(ticket_dir, date, kpi_key)
+  -> { value, status, payload? }
+  script: scripts/metric_refresh.py ticket-reward-count
+
+calculate_autonomy_time_ratio(runtime_dir, date)
+  -> { value, status, payload? }
+  script: scripts/metric_refresh.py autonomy-time-ratio
+
+calculate_ticket_intervention_metrics(ticket_dir, runtime_dir, date)
+  -> { auto_completion_rate, intervention_free_ticket_count,
+       ticket_intervention_turn_count }
+  script: scripts/metric_refresh.py ticket-intervention-metrics
+
+select_content_metric_targets(content_ledger, platform, kpi_key, date, window_days?)
+  -> { status, external_ids, items, payload.fetch_command }
+  script: scripts/metric_refresh.py content-targets
+
 Reward and leverage synthesis:
 
 compounding_leverage_review(review_window, planning_window)

@@ -36,7 +36,8 @@ instagram_account(action, artifact?, account_binding?, date_window?, source_file
 state:
   reads(farplane/bindings.md, ~/.codex/private/docs/social.md?,
         ~/.farplane/config.toml [social.instagram]/[social.meta]?, source_file?)
-  writes(.farplane/metrics/manual/instagram_account.json when normalizing exports)
+  writes(.farplane/metrics/manual/instagram_account.json when normalizing exports,
+         .farplane/content/ledger.jsonl after confirmed publishing)
 gates:
   professional_account_confirmed; account_binding_resolved;
   publish_approval_explicit; credential_source_private;
@@ -97,7 +98,12 @@ publishing.
   - [ ] For metrics, use `source_gap` when a metric is unavailable; do not
         write zero unless the platform actually returned zero.
   - [ ] For publishing, record media IDs/URLs only after the API confirms the
-        mutation.
+        mutation, then append/update the local content ledger with
+        `farplane content add --platform instagram --external-id <media_id>
+        --url <url> --status posted --approval approved
+        --published-at <timestamp> --campaign <campaign>
+        --kpis instagram_views,instagram_likes,evidence_distribution_reach
+        --approval-ref <ticket_or_report_ref>`.
 - [ ] 5. Finish with proof.
   - [ ] Apply `qa_checklist.md`: Universal QA plus only the selected branch QA.
   - [ ] For live API/posting work, record endpoint, account alias, timestamp,
@@ -150,6 +156,8 @@ Normalized metric snapshot:
   metric IDs, redaction, and blocked/source-gap semantics without external API calls.
 - `scripts/validate_media_payload.py` - validate post/reel/carousel JSON without account mutation.
 - `scripts/normalize_metrics.py` - normalize JSON/CSV metric exports to Farplane KPI observations.
+- `farplane content add` - append/update `.farplane/content/ledger.jsonl` after
+  a confirmed publish so interval refresh can fetch owned-content metrics.
 - `eval_task.json` - agent-behavior eval rows for live metrics and missing-credential flows.
 
 ## Output

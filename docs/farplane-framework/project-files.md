@@ -3,8 +3,8 @@ title: Project Files
 status: active
 owner: harness
 created_at: 2026-06-15
-updated_at: 2026-07-01
-framework_template_version: "0.2.1"
+updated_at: 2026-07-02
+framework_template_version: "0.2.2"
 source_of_truth:
   - docs/farplane-framework/README.md
   - farplane/manifest.json
@@ -26,7 +26,7 @@ Farplane projects separate tracked control files from local runtime state.
 ```text
 farplane/        = tracked project framework config
 .agents/skills/ = tracked project-local product skills
-.farplane/       = ignored local runtime state, reports, eval runs, and logs
+.farplane/       = ignored local runtime state, content ledgers, reports, eval runs, and logs
 docs/            = tracked human-readable project memory and durable narrative
 tickets/         = local visible work queue; README/templates are tracked
 skills/          = tracked reusable cross-project or repo skills
@@ -100,13 +100,23 @@ automation prompts belong in `automations.md`.
 
 Project strategy context: north star, value function, goal axes, inline SMART
 goals, current bets, current milestone, and holds. Each goal axis may carry a
-compact `smart_goals` list with `id`, `target`, `kpis`, and `update_hint`.
-Agents use those hints plus `farplane/ops-memory.md` and provider bindings to
-decide what data to fetch; deterministic charting starts only after a provider
-writes a daily metric snapshot. This file may evolve through evidence-backed
-goals deltas, but it must stay inside the static charter in
-`farplane/harness.md`. Horizon and Goal Advisor procedures live in their skills,
-not in this file.
+compact `smart_goals` list with `id`, `target`, `kpis`, and `interpretation`.
+KPI entries are parseable target pairs:
+
+```yaml
+kpis:
+  - id: accepted_harness_improvements
+    target: 20
+    direction: above
+  - id: ready_unclaimed_ticket_count
+    target: 3
+    direction: below
+```
+
+Metric refresh prompts, chart shape, units, and pinned status live in `farplane/bindings.md`
+metric recipes. This file may evolve through evidence-backed goals deltas, but
+it must stay inside the static charter in `farplane/harness.md`. Horizon and
+Goal Advisor procedures live in their skills, not in this file.
 
 ### `farplane/products.md`
 
@@ -132,7 +142,7 @@ stable enough that agents can skim and update them, but do not treat the file as
 a deterministic database. The interval agent may semantically read active
 project fields such as `lane`, `goal_axes`, `contribution_mode`,
 `weekly_runway_decision`, `expected_reward`, `done_signal`, `critical_path`,
-and `next_frontier`; missing or stale fields become source gaps, planning
+and `next_frontier`; missing or stale fields become observation gaps, planning
 requests, or instrumentation tickets.
 
 The recommended sections are:
@@ -141,17 +151,23 @@ The recommended sections are:
 | --- | --- | --- |
 | `Current Focus` | One compact statement of the active frontier. | Daily/Weekly Interval, Pulse when reporting stale focus. |
 | `Active Projects` | Flexible project blocks with contribution mode, runway decision, expected reward, done signals, critical path, and next frontier. | Weekly Interval, with Pulse citing relevant blocks for tactical tickets. |
-| `Tracked Feedback` | Content refs, customer/user feedback refs, runtime/product feedback refs, and source gaps that help agents choose provider calls. | Daily/Weekly Interval or explicit feedback-capture tickets. |
+| `Tracked Feedback` | Content refs, customer/user feedback refs, runtime/product feedback refs, and observation gaps that help agents choose skill, CLI, or ticket searches. | Daily/Weekly Interval or explicit feedback-capture tickets. |
 | `Next Frontier` | Primary and secondary next moves that should bias planning. | Daily/Weekly Interval. |
 | `Constraints` | Local reminders that ops-memory cannot authorize goals/products, spend, publishing, accounts, deploys, or customer contact. | Human-approved policy or interval report. |
 | `Parking Lot` | Real ideas that should not consume active budget this week. | Weekly Interval. |
 | `Recent Decisions` | Compact decision notes that affect near-term planning. | Daily/Weekly Interval. |
 | `Pulse Notes` | Instructions for how Pulse should cite, distrust, or use ops-memory. | Pulse/Interval contract updates. |
 
-Do not store raw metric values here when a source snapshot can own them. Use
-`Tracked Feedback` for refs and tracking intent; store daily readings under
-`.farplane/metrics/source-snapshots/` and render UI trends from
+Do not store raw metric values here when the daily metrics file can own them.
+Use `Tracked Feedback` for refs and tracking intent; store daily readings under
+`.farplane/metrics/daily/` and render UI trends from
 `.farplane/metrics/ui/latest.json`.
+
+For autonomous growth and owned-content distribution, store posted/draft content
+tracking rows in `.farplane/content/ledger.jsonl`, not in ops memory. Ops memory
+may summarize the active campaign or next frontier; the content ledger owns
+repeatable fetch targets for publishing skills, interval metric refresh, and
+future UI distribution views.
 
 ### `farplane/automations.md`
 
@@ -177,16 +193,77 @@ human feedback or review.
 
 Non-secret project coordinates: URLs, handles, safe IDs, labels, aliases,
 database names, dashboard links, notification channel labels, and metric
-provider catalogs. Metric providers are available coordinates, not a rigid
-enabled/disabled control plane. A missing token, missing file, unavailable API
-field, or unsupported feedback mechanism should surface as a source gap in the
-daily snapshot. Do not store secrets or credentials here.
+recipes. The canonical YAML block contains `project`, `integrations`, and
+`metrics`.
+
+Metric recipes are the single owner for label, product, unit, chart display,
+pinned status, metric kind, and one prompt-only refresh instruction:
+
+```yaml
+metrics:
+  accepted_harness_improvements:
+    label: Accepted harness improvements
+    product: productization
+    pinned: true
+    kind: daily_count
+    unit: improvements
+    display: bar_plus_cumulative
+    refresh: Count completed tickets whose Reward.kpi_rewards names this KPI and whose proof shows shipped value.
+```
+
+Metric `refresh` prompts are inline with each KPI recipe so the reader can
+inspect one KPI and see what the interval agent should do. A missing token,
+missing file, unavailable API field, or unsupported feedback mechanism should
+surface as a `source_gap` reading in the daily metrics file. Agents may use
+skills, local ledgers, CLI/API fetches, ticket searches, or manual notes, but
+they should all normalize to one dated file:
+
+```text
+.farplane/metrics/daily/YYYY-MM-DD.json
+  -> { date, metrics: { [metric_id]: { value, status, payload? } } }
+```
+
+Goals own SMART targets. Bindings do not carry targets, provider routes, write
+paths, or fetcher DSL fields. Do not store secrets or credentials here.
 
 ### `farplane/hooks.json`
 
 Declarative Farplane-native hook configuration. It may contain thresholds,
 enabled flags, and hook-specific refs. Hook algorithms and post-action behavior
 belong in hook scripts or skills.
+
+### `.farplane/content/ledger.jsonl`
+
+Ignored local runtime ledger for owned content created, approved, posted, and
+measured by a project. Farplane Core owns the local schema and CLI write path;
+Farplane UI may render it as a distribution tab, but does not own the file
+contract.
+
+Each row is one content item:
+
+```json
+{
+  "content_id": "instagram:reel-123",
+  "platform": "instagram",
+  "external_id": "reel-123",
+  "url": "https://...",
+  "status": "posted",
+  "approval": "approved",
+  "published_at": "2026-07-02T10:00:00Z",
+  "campaign": "evidence_distribution",
+  "kpis": ["instagram_views", "evidence_distribution_reach"],
+  "approval_ref": "tickets/TASK-0001/ticket.md"
+}
+```
+
+Allowed statuses are `idea`, `draft`, `approved`, `posted`, `measured`, and
+`archived`. Allowed approval values are `not_required`, `requested`,
+`approved`, and `rejected`.
+
+Publishing skills must append or update a row after confirmed account mutation
+using `farplane content add`. Metric refresh uses this ledger to select posted
+content for platform metric fetches and writes aggregate values plus
+`payload.items` into `.farplane/metrics/daily/YYYY-MM-DD.json`.
 
 ### `.agents/skills/`
 
@@ -244,11 +321,19 @@ by default. Commit shared ticket scaffolding such as `tickets/README.md` and
 eval runs, and non-skill agent state out of normal commits unless the repo has
 an explicit reason to version them.
 
-Ticket `Reward` blocks are the spend-justification primitive for tactical work:
-`moves` names what the ticket advances, `win_signal` names evidence that would
-justify more runway, and `guard` names the stop or non-expansion boundary. Do
-not add a separate budget-reason field unless a ticketed migration proves
-`Reward` is insufficient.
+Ticket `Reward` blocks are the spend-justification and KPI-attribution
+primitive for tactical work. Use parseable `kpi_rewards` pairs plus a `guard`:
+
+```yaml
+kpi_rewards:
+  - kpi_id: accepted_harness_improvements
+    expected_reward: "one proof-backed shipped harness improvement"
+guard: "count only after completion proof; stop before expanding scope"
+```
+
+Only KPI recipes whose source is `ticket_reward_feedback` become ticket-derived
+metric values. Rewards for externally sourced KPIs are planning attribution
+only; the metric value still comes from its configured source.
 
 ## Ignored Runtime State
 

@@ -4,7 +4,7 @@ status: draft
 project: TODO
 created_at: TODO
 updated_at: TODO
-framework_template_version: "0.4.0"
+framework_template_version: "0.4.3"
 owner: horizon-advisor
 ---
 
@@ -36,9 +36,12 @@ TODO
 
 ## Goals
 
-Goal axes own their SMART goals directly. Start with honest metric candidates
-even when feedback mechanisms are missing; missing mechanisms become setup or
-instrumentation tickets, not reasons to omit the goal.
+Goal axes own strategic targets and interpretation. Start with honest metric
+candidates even when feedback mechanisms are missing; missing mechanisms become
+setup or instrumentation tickets, not reasons to omit the goal. KPI entries are
+parseable target pairs with stable IDs. Metric units, chart shape, pinned
+status, source, skills, commands, and update hints live in
+`farplane/bindings.md` metric recipes.
 
 ```yaml
 goals:
@@ -50,11 +53,12 @@ goals:
       - id: first_value_goal
         target: TODO measurable outcome and date
         kpis:
-          - TODO_metric_name
-        update_hint: >
-          TODO name the skills, ledgers, reports, or manual feedback sources
-          the interval agent should try. Record source gaps when providers are
-          missing.
+          - id: TODO_metric_name
+            target: TODO_number
+            direction: above
+        interpretation: >
+          TODO explain how to read this KPI for the goal. The metric recipe in
+          bindings.md owns how to fetch and render it.
 
   quality_and_proof:
     question: How do we know the project is doing good work?
@@ -66,9 +70,11 @@ goals:
       - id: first_quality_goal
         target: TODO quality/proof threshold and date
         kpis:
-          - TODO_quality_metric
-        update_hint: >
-          TODO name the proof, review, test, or feedback source. Record missing
+          - id: TODO_quality_metric
+            target: TODO_number
+            direction: above
+        interpretation: >
+          TODO explain how this KPI prevents false progress. Record missing
           provider gaps rather than inventing metrics.
 ```
 
