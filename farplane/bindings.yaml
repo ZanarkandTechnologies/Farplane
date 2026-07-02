@@ -44,57 +44,12 @@ feed_scout:
     default_view: daily_feed
     date_param: date
     latest_feed: .farplane/feed-scout/daily/latest.json
-  entities:
-    farplane-ecosystem:
-      name: Farplane ecosystem
-      kind: organization
-      tags:
-        - farplane
-        - harness
-      enabled: true
-      sources:
-        farplane-core:
-          kind: local_project
-          name: Farplane
-          url: /Users/kenjipcx/Zanarkand Technologies/projects/Farplane
-          content_kinds:
-            - repo_change
-            - skill_change
-            - article
-          watch_paths:
-            - skills
-            - docs/features
-            - docs/farplane-framework
-            - tickets
-          fetch_method: local_git
-          min_signal: medium
-          enabled: true
-        farplane-ui:
-          kind: local_project
-          name: Farplane UI
-          url: /Users/kenjipcx/Zanarkand Technologies/projects/Farplane-UI
-          content_kinds:
-            - repo_change
-          watch_paths:
-            - app
-            - src
-            - farplane
-          fetch_method: local_git
-          min_signal: medium
-          enabled: true
-        valefor:
-          kind: local_project
-          name: Valefor
-          url: /Users/kenjipcx/Zanarkand Technologies/projects/Valefor
-          content_kinds:
-            - repo_change
-          watch_paths:
-            - farplane
-            - docs
-            - tickets
-          fetch_method: local_git
-          min_signal: high
-          enabled: true
+  bootstrap:
+    mode: skill_fixture
+    profiles_ref: skills/feed-scout/fixtures/example-profiles.jsonl
+    items_ref: skills/feed-scout/fixtures/example-items.jsonl
+    note: Replace these refs with project-curated profiles once the operator chooses real sources.
+  entities: {}
 metrics:
   accepted_evidence_cycles:
     label: Accepted evidence cycles

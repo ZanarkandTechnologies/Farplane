@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import json
 import subprocess
+import sys
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
@@ -14,6 +15,11 @@ import yaml
 
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
+SCRIPT_DIR = Path(__file__).resolve().parent
+if str(SCRIPT_DIR) not in sys.path:
+    sys.path.insert(0, str(SCRIPT_DIR))
+
+from normalize_items import normalize  # noqa: E402
 
 
 def utc_now() -> datetime:
@@ -41,6 +47,99 @@ def load_config(config_ref: str) -> dict[str, Any]:
 
 def run_git(root: Path, args: list[str]) -> str:
     return subprocess.check_output(["git", *args], cwd=root, text=True, stderr=subprocess.DEVNULL)
+
+
+def read_jsonl(path: Path) -> list[dict[str, Any]]:
+    rows: list[dict[str, Any]] = []
+    if not path.exists():
+        raise FileNotFoundError(path)
+    for line_no, line in enumerate(path.read_text(encoding="utf-8").splitlines(), start=1):
+        stripped = line.strip()
+        if not stripped:
+            continue
+        try:
+            row = json.loads(stripped)
+        except json.JSONDecodeError as exc:
+            raise ValueError(f"{path}:{line_no}: invalid JSONL row: {exc}") from exc
+        if not isinstance(row, dict):
+            raise ValueError(f"{path}:{line_no}: row must be an object")
+        rows.append(row)
+    return rows
+
+
+def profile_group_id(profile: dict[str, Any]) -> str:
+    profile_id = str(profile["id"])
+    return profile_id.removeprefix("x-").removeprefix("yt-").removeprefix("blog-")
+
+
+def fixture_items_for_bootstrap(config: dict[str, Any], generated_at: str) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[str]]:
+    bootstrap = config.get("bootstrap", {})
+    if not isinstance(bootstrap, dict) or bootstrap.get("mode") != "skill_fixture":
+        return [], [], []
+
+    source_gaps: list[str] = []
+    profiles_ref = bootstrap.get("profiles_ref")
+    items_ref = bootstrap.get("items_ref")
+    if not profiles_ref or not items_ref:
+        return [], [], ["bootstrap: skill_fixture requires profiles_ref and items_ref"]
+
+    try:
+        profiles = read_jsonl(resolve_project_path(str(profiles_ref)))
+        raw_items = read_jsonl(resolve_project_path(str(items_ref)))
+    except (FileNotFoundError, ValueError) as exc:
+        return [], [], [f"bootstrap: {exc}"]
+
+    profiles_by_id = {
+        str(profile["id"]): profile
+        for profile in profiles
+        if profile.get("enabled", True) and profile.get("id")
+    }
+
+    grouped_items: dict[str, list[dict[str, Any]]] = {}
+    items: list[dict[str, Any]] = []
+    for raw in raw_items:
+        profile_id = str(raw.get("profile_id", ""))
+        profile = profiles_by_id.get(profile_id)
+        if not profile:
+            source_gaps.append(f"{profile_id or 'unknown'}: missing enabled profile row")
+            continue
+        try:
+            item = normalize(raw, generated_at)
+        except ValueError as exc:
+            source_gaps.append(f"{profile_id}: {exc}")
+            continue
+        group_id = profile_group_id(profile)
+        item.update({
+            "entity_group_id": group_id,
+            "entity_group_name": profile.get("display_name", profile_id),
+            "source_id": profile_id,
+            "source_name": profile.get("display_name", profile_id),
+            "tags": profile.get("tags", []),
+        })
+        items.append(item)
+        grouped_items.setdefault(group_id, []).append(item)
+
+    groups = []
+    for profile_id, profile in profiles_by_id.items():
+        group_id = profile_group_id(profile)
+        group_items = grouped_items.get(group_id, [])
+        groups.append({
+            "id": group_id,
+            "name": profile.get("display_name", profile_id),
+            "kind": "profile",
+            "tags": profile.get("tags", []),
+            "sources": [{
+                "id": profile_id,
+                "name": profile.get("display_name", profile_id),
+                "kind": profile.get("platform"),
+                "fetch_method": profile.get("fetch_method"),
+                "item_count": len(group_items),
+                "enabled": True,
+            }],
+            "item_count": len(group_items),
+        })
+
+    return items, groups, source_gaps
 
 
 def git_items_for_source(group: dict[str, Any], source: dict[str, Any], since: str, generated_at: str) -> tuple[list[dict[str, Any]], list[str]]:
@@ -130,6 +229,11 @@ def write_outputs(config: dict[str, Any], config_ref: str, review_window: str) -
     source_gaps: list[str] = []
     items: list[dict[str, Any]] = []
     groups: list[dict[str, Any]] = []
+
+    bootstrap_items, bootstrap_groups, bootstrap_gaps = fixture_items_for_bootstrap(config, generated_at)
+    items.extend(bootstrap_items)
+    groups.extend(bootstrap_groups)
+    source_gaps.extend(bootstrap_gaps)
 
     entity_rows = config.get("entities", {})
     if isinstance(entity_rows, list):
