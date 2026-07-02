@@ -18,7 +18,41 @@ if str(SCRIPT_DIR) not in sys.path:
 from dedupe_key import dedupe_key  # noqa: E402
 
 
-ALLOWED_KINDS = {"post", "thread", "video", "short", "article"}
+ALLOWED_KINDS = {
+    "post",
+    "thread",
+    "video",
+    "short",
+    "article",
+    "repo_change",
+    "release",
+    "mention",
+    "site_change",
+    "repo",
+    "profile",
+}
+
+PASSTHROUGH_FIELDS = {
+    "actionability",
+    "embed",
+    "entity_group_id",
+    "entity_group_name",
+    "evidence_refs",
+    "interest_rank",
+    "interest_signal",
+    "date_basis",
+    "daily_eligible",
+    "novelty",
+    "relationship",
+    "rank",
+    "signal",
+    "source_id",
+    "source_name",
+    "source_snapshot",
+    "tags",
+    "today_delta",
+    "why_care_today",
+}
 
 
 def _text_for_hash(raw: dict[str, Any]) -> str:
@@ -52,7 +86,10 @@ def normalize(raw: dict[str, Any], discovered_at: str) -> dict[str, Any]:
 
     title = raw.get("title") or raw.get("text") or result.canonical_url
     author = raw.get("author") or raw.get("channel") or raw.get("profile_id") or "unknown"
-    published_at = raw.get("published_at") or raw.get("created_at") or discovered_at
+    published_at = raw.get("published_at") or raw.get("created_at")
+    date_basis = raw.get("date_basis")
+    if not date_basis:
+        date_basis = "source_published_at" if published_at else "unknown"
 
     content_hash = hashlib.sha256(_text_for_hash(raw).encode("utf-8")).hexdigest()
 
@@ -64,8 +101,9 @@ def normalize(raw: dict[str, Any], discovered_at: str) -> dict[str, Any]:
         "canonical_key": result.canonical_key,
         "title": str(title),
         "author": str(author),
-        "published_at": str(published_at),
+        "published_at": str(published_at) if published_at else None,
         "discovered_at": discovered_at,
+        "date_basis": date_basis,
         "content_hash": content_hash,
         "status": raw.get("status", "new"),
     }
@@ -73,6 +111,36 @@ def normalize(raw: dict[str, Any], discovered_at: str) -> dict[str, Any]:
     native_id = raw.get("native_id")
     if isinstance(native_id, str) and native_id:
         normalized["native_id"] = native_id
+
+    summary = raw.get("summary") or raw.get("description")
+    if isinstance(summary, str) and summary:
+        normalized["summary"] = summary
+
+    for field in PASSTHROUGH_FIELDS:
+        value = raw.get(field)
+        if value is not None:
+            normalized[field] = value
+
+    if "today_delta" not in normalized:
+        normalized["today_delta"] = {
+            "kind": "no_material_change",
+            "observed_at": discovered_at,
+            "confidence": "low",
+        }
+    if "novelty" not in normalized:
+        normalized["novelty"] = "context_only"
+    if "actionability" not in normalized:
+        normalized["actionability"] = {
+            "label": "ignore",
+            "reason": "No material today-specific delta was captured.",
+        }
+    if "why_care_today" not in normalized:
+        normalized["why_care_today"] = "No material today-specific delta was captured."
+    if "signal" not in normalized:
+        normalized["signal"] = "low"
+    if "rank" not in normalized:
+        rank = raw.get("interest_rank") or raw.get("rank") or 1
+        normalized["rank"] = rank
 
     return normalized
 

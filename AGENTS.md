@@ -228,6 +228,15 @@ For harness-design research and external patterns:
 - When moving a command to a clearer owner, leave a small compatibility wrapper
   at the old public path until references, installers, and user habits have had
   a safe migration window.
+- For generalized agentic workflows such as Feed Scout, keep source selection,
+  ranking judgment, and cross-platform fetching in the skill prompt, config,
+  and called platform skills or tools rather than one hardcoded project script.
+  Scripts are appropriate only for repeatable, parameterized helpers such as
+  validation, normalization, artifact writing, registry sync, or deterministic
+  adapters. If a script starts encoding one project's example sources,
+  competitors, ranking taste, or platform-specific branching, move that logic
+  back into the skill contract or design a genuinely general engine before
+  expanding it.
 - Keep chat concise and put deep detail into visible repo artifacts such as the active ticket and canonical docs.
 - Keep chat concise, but make planning artifacts detailed and action-oriented.
   A strong ticket plan should say what will be built, in what order, and how

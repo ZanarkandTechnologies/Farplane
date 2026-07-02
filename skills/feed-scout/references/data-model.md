@@ -37,7 +37,10 @@ FeedEntity {
   kind: "person" | "organization" | "project" | string
   tags: string[]
   enabled: boolean
-  sources: map<string, TrackedProfile | TrackedHarnessResource>
+  interest_prompt?: string
+  owned_sources: map<string, TrackedProfile | TrackedHarnessResource | SourceRef>
+  search_entity_on_platform?: ("x" | "web" | "reddit" | "trustpilot" | "github" | string)[]
+  search_queries?: string[]
 }
 ```
 
@@ -48,10 +51,35 @@ Rules:
   track, for example `entities.theo-ping.sources.instagram`, so UI can render
   one creator with all websites, social accounts, repos, channels, and docs
   together.
-- `entities.<entity_id>.sources.<source_id>` may include local project
-  resources when `fetch_method=local_git`.
+- `entities.<entity_id>.owned_sources.<source_id>` is the high-signal source
+  list for posts created by the entity. Keep it to official accounts, docs,
+  repos, feeds, sites, or creator-owned surfaces.
+- `interest_prompt` is a plain operator preference prompt. The entity-level
+  prompt applies to every source under the entity; source-level prompts refine
+  that source. Use it to steer extraction, ranking, `why_care_today`, and the
+  daily report summary without adding a ranking ontology.
+- `entities.<entity_id>.search_entity_on_platform` is the high-signal mention
+  search list for posts about the entity. Keep queries exact enough to avoid
+  broad web drift.
+- Acquisition route choice is skill behavior, not project config. Do not add
+  fields for `acquisition_route`, provider priority, backend names, or scraper
+  selection unless a future ticket proves the operator needs to override the
+  default route order.
 - Live spend and live Notion writes require explicit automation params in
   addition to config.
+
+```text
+SourceRef {
+  kind?: string
+  url?: string
+  handle?: string
+  repo?: string
+  org?: string
+  user?: string
+  fetch_method?: string
+  interest_prompt?: string
+}
+```
 
 ```text
 TrackedEntity {
@@ -126,18 +154,99 @@ ContentItem {
   resource_id?: string
   entity_ids?: string[]
   platform: string
-  kind: "post" | "thread" | "video" | "short" | "article" | "repo_change" | "skill_change" | "release"
+  kind: "post" | "thread" | "video" | "short" | "article" | "repo_change" | "skill_change" | "release" | "mention" | "site_change"
   canonical_url: string
   canonical_key: string
   native_id?: string
   title: string
   author: string
-  published_at: string
+  published_at?: string
   discovered_at: string
+  date_basis: "source_published_at" | "source_updated_at" | "source_metric_delta" | "snapshot_diff" | "observed_at" | "unknown"
+  daily_eligible?: boolean
+  summary: string
+  why_care_today: string
+  today_delta: TodayDelta
+  novelty: "new_today" | "changed_today" | "rediscovered" | "context_only" | "stale"
+  actionability: {
+    label: "watch" | "inspect" | "adapt" | "ignore"
+    reason?: string
+  }
+  rank: number
+  interest_prompt_ref?: {
+    entity_hash?: string
+    source_hash?: string
+    effective_hash: string
+  }
+  signal?: "high" | "medium" | "low"
+  source_snapshot?: object
+  embed?: SourceBookmarkCard
+  evidence_refs: string[]
   content_hash?: string
   status: "new" | "seen" | "changed" | "ignored" | "scout-queued" | "scouted" | "proposed" | "rejected"
 }
 ```
+
+```text
+TodayDelta {
+  kind: "release" | "commit" | "stars_delta" | "new_video" | "new_article" |
+        "new_post" | "mention" | "site_change" | "no_material_change"
+  observed_at: string
+  previous_observed_at?: string
+  before?: object
+  after?: object
+  delta?: object
+  confidence: "high" | "medium" | "low"
+}
+
+SourceBookmarkCard {
+  provider: string
+  card_type: "repo" | "release" | "video" | "article" | "post" | "profile" | "website" | "mention"
+  url: string
+  image_url?: string
+  title?: string
+  byline?: string
+}
+```
+
+Daily feed ranking rules:
+
+- `why_care_today` is required for every card. It should be one crisp sentence
+  explaining the today-specific reason to inspect, watch, adapt, or ignore.
+- Daily feed eligibility is based on source launch/change time, not discovery
+  time. `observed_at` means Feed Scout saw the source today; it is not evidence
+  that the source launched today.
+- Items with `date_basis: "observed_at"` or `"unknown"` should be excluded
+  from the main daily feed unless a later extraction proves a source-published
+  date or snapshot diff inside the review window.
+- The effective operator interest prompt should steer extraction and ranking.
+  Emit `interest_prompt_ref` when configured so debugging can prove which
+  entity/source lens shaped the card without dumping long prompts into the UI.
+- Main daily feed output should include only rows that passed the daily
+  significance gate. Use `rank` to order the few surviving cards; do not add a
+  separate `interesting` boolean or `interesting_item_count`.
+- Eligible daily items require a clear `today_delta` such as a new release,
+  meaningful commit summary, new video/post/article, external mention, site
+  change, or metric delta. Generic repo metadata, homepage presence, or
+  rediscovered old content should stay out of `items[]` and appear only in
+  report/exclusion evidence when useful.
+- GitHub `pushed_at` alone is not high-signal. Promote only when Feed Scout can
+  summarize what changed, detect a release, detect a meaningful star/fork
+  delta, or map recent commits/features.
+- Static websites are `context_only` or `stale` unless content changed today or
+  a new page/news item was found. Homepage rows should normally be excluded
+  from the daily feed unless Feed Scout has stored and compared snapshots and
+  can point to changed fields.
+- Use `embed` only as a source-native bookmark hint. Do not store iframe HTML.
+
+Recommended `source_snapshot` fields:
+
+- GitHub: `repo`, `stars`, `forks`, `pushed_at`, `latest_release`,
+  `release_published_at`, `recent_commits`, and `stars_delta` when known.
+- YouTube: `channel_id`, `video_id`, `latest_video_title`, `published_at`,
+  `thumbnail`, `view_count`, and `duration` when available.
+- Web/RSS: `title`, `published_at`, `changed_fields`, or explicit
+  `no_material_change`.
 
 ## IngestionLedgerRow
 
@@ -167,6 +276,13 @@ IngestionLedgerRow {
 The daily feed is the UI-facing slice of newly found or changed items for one
 date. It should be compact enough to render directly and should point to larger
 reports or scout runs instead of embedding raw transcripts.
+
+Feed Scout compiles and writes this object agentically after acquisition,
+extraction, ranking, and synthesis. The skill-local
+`scripts/validate_daily_feed.py` helper only validates the final artifact; it
+does not fetch sources, rank items, or write files. Keep helper scripts inside
+the skill package so installed projects receive the same deterministic checks
+with the skill.
 
 ```text
 DailyFeedFile {
