@@ -77,6 +77,8 @@ def validate_feed(payload: dict[str, Any]) -> list[str]:
     missing = sorted(REQUIRED_TOP_LEVEL - set(payload))
     if missing:
         errors.append(f"top-level missing fields: {', '.join(missing)}")
+    if "excluded_items" in payload:
+        errors.append("excluded_items must not be returned in the UI-facing daily feed")
 
     items = payload.get("items")
     if not isinstance(items, list):
@@ -140,6 +142,8 @@ def validate_feed(payload: dict[str, Any]) -> list[str]:
             errors.append("summary.item_count does not match len(items)")
         if "interesting_item_count" in summary:
             errors.append("summary.interesting_item_count is redundant; use item_count and item rank")
+        if "excluded_item_count" in summary:
+            errors.append("summary.excluded_item_count must stay in reports/debug evidence, not the daily feed")
     else:
         errors.append("summary: expected object")
 
