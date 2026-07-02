@@ -42,31 +42,29 @@ Hardcoded council preset:
 ```text
 CouncilBudgetPreset = {
   base_skill: "advise",
-  ensemble: {
-    count: 5,
-    perspective_mode: "different",
-    aggregation: "synthesize",
-    independence: "first_pass_before_critique",
-    personas: [
-      OperatorValue,
-      EngineeringRisk,
-      EvidenceSkeptic,
-      SystemsFit,
-      Chair
-    ]
-  },
-  review_depth: 1,
+  mode: "max",
+  persona_count: 5,
+  synthesis: "synthesize",
+  independence: "first_pass_before_critique",
+  personas: [
+    OperatorValue,
+    EngineeringRisk,
+    EvidenceSkeptic,
+    SystemsFit,
+    Chair
+  ],
   require_grounding_check: true,
   preserve_dissent: true,
   require_tradeoff: true,
   require_next_owner: true,
-  max_budget_depth: 0
+  delegate_budget: {}
 }
 ```
 
-`budget_override` may narrow count, evidence depth, or review depth, but it must
-not remove first-pass independence, dissent preservation, or the final `advise`
-output contract.
+`budget_override` may narrow persona count or evidence depth, but it must not
+remove first-pass independence, dissent preservation, the base reviewed path, or
+the final `advise` output contract. Child skills use their own base reviewed
+path unless `delegate_budget` explicitly names them.
 
 ## Phase Boundary
 

@@ -37,24 +37,19 @@ Use `budget-advisor` when `budget` is present:
 
 ```text
 HardeningBudget = {
-  budget_mode?: "none" | "light" | "normal" | "deep" | "max",
+  mode?: "base" | "plus" | "max",
   available_time?: string,
-  review_depth?: 0 | 1 | 2,
-  ensemble?: {
-    count: number,
-    perspective_mode?: "same" | "different",
-    personas?: HardeningPersona[],
-    aggregation?: "synthesize" | "score_then_synthesize" | "hierarchical_synthesis"
-  },
+  persona_count?: 1 | 3 | 5,
+  personas?: HardeningPersona[],
   coverage?: "smoke" | "focused" | "broad",
   evidence_depth?: "light" | "strong",
-  max_budget_depth?: 0 | 1
+  delegate_budget?: Record<skill_name, BudgetRequest>
 }
 ```
 
-Default `max_budget_depth` to `0` for subskill calls and `1` only for the
-top-level hardening invocation. Budgeted lanes must preserve the output
-contract: risk map, mitigations, adversarial tests, proof, and residual risk.
+Child skills use their own base reviewed path unless `delegate_budget`
+explicitly names them. Budgeted persona lanes must preserve the output contract:
+risk map, mitigations, adversarial tests, proof, and residual risk.
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
@@ -70,11 +65,12 @@ contract: risk map, mitigations, adversarial tests, proof, and residual risk.
   - [ ] Read [tooling](references/tooling.md) when selecting static-analysis,
     SAST, dependency, or resilience checks.
 - [ ] 3. Resolve budget when present.
-  - [ ] Call `budget-advisor` with this contract and `HardeningBudget`.
-  - [ ] For different-perspective ensembles, use persona prompts from
+   - [ ] Call `budget-advisor` with this contract and `HardeningBudget`.
+  - [ ] For `plus` or `max`, use persona prompts from
     [budget-personas](references/budget-personas.md) unless the caller supplied
     complete personas.
-  - [ ] Cap recursive budget expansion at the resolved `max_budget_depth`.
+  - [ ] Do not copy the parent budget into proof, testing, or review child
+    calls unless `delegate_budget` explicitly names the child skill.
 - [ ] 4. Build a risk map.
   - [ ] Cover input validation, authn/authz, secrets, data protection,
     dependency/supply chain, availability, concurrency, observability,
@@ -119,8 +115,8 @@ HardeningPersona = {
 - [workflow](references/workflow.md) - read for the ordered hardening loop.
 - [tooling](references/tooling.md) - read when choosing stack-specific
   hardening tools or commands.
-- [budget-personas](references/budget-personas.md) - read for high-budget
-  different-perspective ensembles.
+- [budget-personas](references/budget-personas.md) - read for `plus` or `max`
+  persona councils.
 - [budget-advisor](../budget-advisor/SKILL.md) - read when `budget` is present.
 - [proof-advisor](../proof-advisor/SKILL.md) - route proof-surface uncertainty.
 - [testing](../testing/SKILL.md) - route proof command selection.

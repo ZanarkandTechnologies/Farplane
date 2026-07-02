@@ -1,6 +1,6 @@
 ---
 name: budget-advisor
-description: "Resolve a budget-aware skill call into concrete execution template refs, parameters, and guardrails when effort changes workflow shape."
+description: "Resolve a budget-aware skill call into a base reviewed path plus optional persona-council lanes when effort changes workflow shape."
 tier: 2
 source: local
 template_uses:
@@ -17,13 +17,20 @@ allowed-tools: Read, Glob, Grep
 
 `budget-advisor` is a reusable workflow interface for skills that expose an
 optional `budget` parameter. It does not run subagents, review artifacts, or
-own another skill's domain logic. It turns a budget request into an intuitive
+own another skill's domain logic. It turns a budget request into a concrete
 program that the caller can execute while preserving the original skill's
 output contract.
 
-Use it when a budget-aware skill receives parameters such as `review_depth`,
-`ensemble`, `lanes`, `coverage`, `budget_mode`, or available time/cost, and the
-caller needs to know which execution template to follow.
+Every material skill already has a base reviewed path: the main agent makes or
+uses a plan, a peer reviews the plan to TAS A or no material findings, the
+caller executes, and the work/output receives a peer review to TAS A before a
+material completion claim. Budget does not decide whether review exists. Budget
+decides whether to add independent persona perspectives above that base path.
+
+Use it when a budget-aware skill receives a request such as `base`, `plus`,
+`max`, `persona_count`, `personas`, available time/cost, or an explicit child
+skill budget allocation, and the caller needs to know which execution program
+to follow.
 
 ## Skill Signature
 
@@ -31,9 +38,9 @@ caller needs to know which execution template to follow.
 budget_advisor(skill_contract, skill_input, budget_request, context?)
   -> budget_program + template_refs + resolved_params + guardrails
 state: reads(skill contract, budget request, relevant context packet?); writes(none by default)
-gates: output_contract_preserved; templates_named; recursion_bounded; persona_prompts_specific
+gates: output_contract_preserved; base_reviewed_path_preserved; persona_prompts_specific; child_budget_not_inherited_by_default
 routes: caller-owned skill | review | best-of-worlds | agent-qa-test | goal-advisor
-fails: vague "try harder"; thin perspective labels; recursive budget expansion; hidden subagent orchestration
+fails: vague "try harder"; thin perspective labels; budget-as-no-review; recursive budget fanout; hidden subagent orchestration
 ```
 
 Budget-aware skills should keep their normal signature:
@@ -53,21 +60,28 @@ every budget-aware skill.
 
 ```text
 BudgetRequest = {
-  budget_mode?: "none" | "light" | "normal" | "deep" | "max",
+  mode?: "base" | "plus" | "max",
   available_time?: string,
-  review_depth?: 0 | 1 | 2 | 3,
-  ensemble?: {
-    count: number,
-    perspective_mode?: "same" | "different",
-    personas?: PersonaPrompt[],
-    aggregation?: "synthesize" | "score_then_synthesize" | "select" | "hierarchical_synthesis",
-    tournament?: { group_size: number }
-  },
+  persona_count?: 1 | 3 | 5,
+  personas?: PersonaPrompt[],
   coverage?: "smoke" | "focused" | "broad",
-  evidence_depth?: "none" | "light" | "strong",
-  max_budget_depth?: 0 | 1
+  evidence_depth?: "light" | "strong",
+  delegate_budget?: Record<skill_name, BudgetRequest>
 }
 ```
+
+`base` is the default reviewed skill path, not "no budget". `plus` adds a small
+diverse council when the skill benefits from independent perspectives. `max`
+uses a bounded five-persona council plus synthesis; it is not unbounded fanout,
+large-batch sampling, or repeated clones of the same action.
+
+Do not normalize `base` to an unreviewed route. Budget Programs must use only
+the current public fields: `mode`, `persona_count`, `personas`, `synthesis`,
+and `child budget policy`.
+
+Child skills inherit `base` unless `delegate_budget` explicitly allocates more
+budget to a named child skill. This prevents a high-level council from
+accidentally multiplying every nested skill call.
 
 `PersonaPrompt` must be a complete role/perspective prompt, not a two-word
 label:
@@ -86,33 +100,35 @@ PersonaPrompt = {
 ## Todo List
 
 - [ ] 1. Bind the budget request and caller skill contract.
-   - [ ] Identify the caller skill's output contract, base phases, supported
-     budget fields, and any domain-provided persona prompts.
-   - [ ] Set `max_budget_depth`; default to `0` for subskill calls and `1` only
-     when the caller explicitly allows one budget expansion.
+   - [ ] Identify the caller skill's output contract, base reviewed path,
+     supported budget fields, and any domain-provided persona prompts.
+   - [ ] Treat missing `mode` as `base` unless the user's effort phrase or
+     available time clearly asks for `plus` or `max`.
 - [ ] 2. Choose the budget route.
-   - [ ] 1. `none_or_base`: no template; call the base skill directly.
-   - [ ] 2. `review_depth`: use
-     [review-depth](references/review-depth.md) when review passes are requested.
-   - [ ] 3. `ensemble_lanes`: use
-     [ensemble-lanes](references/ensemble-lanes.md) when `ensemble.count` is set.
-   - [ ] 4. `large_ensemble`: use
-     [tournament-aggregation](references/tournament-aggregation.md) when the
-     ensemble is too large for one flat synthesis.
-   - [ ] 5. `mode_or_time_mapping`: use
-     [budget-modes](references/budget-modes.md) when the caller provided only
-     `budget_mode`, available time, cost, or an effort phrase.
+   - [ ] `base_reviewed`: call the caller skill's normal reviewed path; do not
+     remove plan/work review for material work, and state this explicitly in
+     the Budget Program.
+   - [ ] `persona_council`: use
+     [ensemble-lanes](references/ensemble-lanes.md) when `plus`, `max`, or
+     `persona_count` asks for independent perspectives.
+   - [ ] `mode_or_time_mapping`: use
+     [budget-modes](references/budget-modes.md) when the caller provided
+     available time, cost, or an effort phrase.
+   - [ ] `delegate_budget`: pass extra budget to child skills only when the
+     request explicitly names that child skill.
 - [ ] 3. Resolve missing parameters conservatively.
-   - [ ] If `perspective_mode: different`, require complete persona prompts from
-     the caller skill, user, or context; otherwise return a blocker or a
-     request to use a default persona set owned by the caller skill.
-   - [ ] If aggregation is missing, default to `synthesize` for small ensembles
-     and `hierarchical_synthesis` for large ensembles.
-   - [ ] If a scoring function is missing, do not use pure `select`; use
-     synthesis or ask for a rubric.
+   - [ ] If persona lanes are used, require complete persona prompts from the
+     caller skill, user, or context; otherwise return a blocker and state that
+     the caller can still use the base reviewed path without persona lanes.
+   - [ ] If `persona_count` is missing, default `base -> 1`, `plus -> 3`, and
+     `max -> 5`, capped by the number of complete useful persona prompts.
+   - [ ] Prefer different perspectives over repeated clones unless sampling
+     variance is the explicit reason for extra budget.
 - [ ] 4. Return a concrete budget program.
    - [ ] Include ordered steps, template refs, resolved params, expected
-     artifacts, aggregation method, stop condition, and recursion guard.
+     artifacts, synthesis rule, stop condition, and child-budget inheritance.
+   - [ ] Include an explicit `child budget policy` line for every program:
+     child skills use base unless `delegate_budget` names them.
    - [ ] Include `skills/budget-advisor/SKILL.md` plus every loaded reference
      file in `source_refs`.
    - [ ] When persona lanes are used, copy the complete `PersonaPrompt` objects
@@ -122,39 +138,45 @@ PersonaPrompt = {
 - [ ] 5. Review before completion.
    - [ ] No hidden subagent execution is implied by the advisor result.
    - [ ] Every referenced template is specific enough for the caller to follow.
-   - [ ] Persona prompts are concrete when different-perspective lanes are used.
-   - [ ] Large-N aggregation names scoring and synthesis behavior explicitly.
+   - [ ] Persona prompts are concrete when persona lanes are used.
+   - [ ] Synthesis preserves the strongest ideas, dissent, risks, evidence
+     gaps, and the caller skill's final output contract.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 ## Core Rules
 
 - Budget resolution returns instructions; it does not execute them.
-- The caller skill owns domain-specific persona defaults, output format, and
-  final answer quality.
-- `budget-advisor` owns reusable budget routes, template refs, aggregation
-  defaults, and guardrails against vague effort escalation.
+- The caller skill owns domain-specific persona defaults, output format, proof,
+  and final answer quality.
+- `budget-advisor` owns reusable budget routes, persona-count defaults,
+  synthesis defaults, and guardrails against vague effort escalation.
 - Preserve the caller skill's output contract. A budgeted `advise` still
   returns advice; a budgeted `review` still returns a review verdict.
 - Preserve executable lane prompts. The Budget Program may summarize why a
   persona exists, but `resolved_params` must keep the full `PersonaPrompt`
   object so a later agent can run the lane without rediscovering the prompt.
-- Prefer synthesis over winner-take-all selection unless the caller supplies a
-  clear scoring rubric and selection rule.
-- Large ensembles should use hierarchical aggregation to reduce context load,
-  not pretend that bracket winners are the only valuable outputs.
+- Use one public synthesis concept: `synthesize`. Internally, synthesis may
+  score, group, or choose when the caller's output contract requires it, but
+  those are implementation details rather than user-facing modes.
+- Do not spawn several agents to perform the same action unless variance is the
+  explicit goal. Diverse personas usually buy more value than cloned lanes.
+- A high-level budget does not copy to child skills by default. Child skills run
+  their own base reviewed path unless `delegate_budget` explicitly names them.
+- If `plus` or `max` lacks complete `PersonaPrompt` objects and the caller skill
+  has no defaults, do not fall back to same-prompt clones. Return a blocker for
+  persona lanes and name `base_reviewed` as the executable fallback.
+- Every Budget Program, including `base_reviewed`, must state that
+  `budget-advisor` itself does not spawn agents, execute lanes, review outputs,
+  or edit files; the caller skill owns execution.
 
 ## Reference Map
 
-- [budget-modes](references/budget-modes.md) - map `budget_mode`, available
-  time, and vague effort requests to concrete fields.
-- [review-depth](references/review-depth.md) - repeat a caller skill's review
-  phase or external review step.
-- [ensemble-lanes](references/ensemble-lanes.md) - run same or
-  different-perspective lanes with full persona prompts.
-- [tournament-aggregation](references/tournament-aggregation.md) - aggregate
-  large ensembles through grouped synthesis, scoring, or selection.
+- [budget-modes](references/budget-modes.md) - map available time and vague
+  effort requests to `base`, `plus`, or `max`.
+- [ensemble-lanes](references/ensemble-lanes.md) - run persona council lanes
+  with full persona prompts and a single public synthesis step.
 - [advise-example](references/advise-example.md) - toy example showing how
-  `advise` evolves under review depth, small ensembles, and large ensembles.
+  `advise` evolves under base, plus, max, and child-budget defaults.
 
 ## Output
 
@@ -168,9 +190,17 @@ Budget Program:
 - source refs:
 - resolved params:
 - steps:
-- aggregation:
+- synthesis:
 - output contract:
+- child budget policy:
 - stop condition:
 - guardrails:
 - blockers:
+```
+
+The `guardrails` block must include:
+
+```text
+- Budget Advisor returns this program only; it does not spawn agents, execute
+  lanes, review outputs, or edit files.
 ```

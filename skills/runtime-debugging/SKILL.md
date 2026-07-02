@@ -38,25 +38,20 @@ Use `budget-advisor` when `budget` is present:
 
 ```text
 RuntimeDebuggingBudget = {
-  budget_mode?: "none" | "light" | "normal" | "deep" | "max",
+  mode?: "base" | "plus" | "max",
   available_time?: string,
-  review_depth?: 0 | 1 | 2,
-  ensemble?: {
-    count: number,
-    perspective_mode?: "same" | "different",
-    personas?: RuntimeDebuggingPersona[],
-    aggregation?: "synthesize" | "score_then_synthesize" | "hierarchical_synthesis"
-  },
+  persona_count?: 1 | 3 | 5,
+  personas?: RuntimeDebuggingPersona[],
   coverage?: "smoke" | "focused" | "broad",
   evidence_depth?: "light" | "strong",
-  max_budget_depth?: 0 | 1
+  delegate_budget?: Record<skill_name, BudgetRequest>
 }
 ```
 
-Default `max_budget_depth` to `0` for subskill calls and `1` only for the
-top-level runtime-debugging invocation. Budgeted lanes must preserve the normal
-outcome contract: root cause, smallest fix, exact verification proof, and
-escalation note.
+Child skills use their own base reviewed path unless `delegate_budget`
+explicitly names them. Budgeted persona lanes must preserve the normal outcome
+contract: root cause, smallest fix, exact verification proof, and escalation
+note.
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
@@ -84,11 +79,11 @@ escalation note.
 - [ ] 3. Resolve budget when present.
    - [ ] Call `budget-advisor` with this skill contract, the bound bug input,
      and `RuntimeDebuggingBudget`.
-   - [ ] For different-perspective ensembles, use complete persona prompts from
+   - [ ] For `plus` or `max`, use complete persona prompts from
      [budget-personas](references/budget-personas.md) unless the user supplied
      specific personas.
-   - [ ] Cap budget expansion at the resolved `max_budget_depth`; do not spawn
-     recursive debugging ensembles from lane outputs.
+   - [ ] Do not copy the parent budget into nested debugging or proof calls
+     unless `delegate_budget` explicitly names the child skill.
 - [ ] 4. Map the relevant codepath, callers, side effects, and observability.
 - [ ] 5. State 2-4 falsifiable hypotheses and what evidence would separate them.
 - [ ] 6. Add the minimum instrumentation, logging, timing marker, counter, or
@@ -124,7 +119,7 @@ RuntimeDebuggingPersona = {
   them.
 - Do not add broad noisy logging when one targeted marker, counter, or repro
   test would separate likely causes.
-- Do not let budgeted ensembles replace the core evidence loop; every lane must
+- Do not let budgeted persona councils replace the core evidence loop; every lane must
   feed the same root-cause and verification contract.
 - Do not fix the surface symptom without documenting the root cause, proof, and
   nearby risks.
@@ -145,16 +140,15 @@ RuntimeDebuggingPersona = {
   tickets, account-specific repros, or production context.
 - [understand-first](references/understand-first.md) - read when the codebase or
   ownership boundary is unfamiliar enough that mapping must precede fixes.
-- [budget-personas](references/budget-personas.md) - read when
-  `budget.ensemble.perspective_mode == "different"` and the caller did not
-  supply complete persona prompts.
+- [budget-personas](references/budget-personas.md) - read when `budget.mode`
+  is `plus` or `max` and the caller did not supply complete persona prompts.
 - [root-cause-analysis](references/root-cause-analysis.md) - read after the fix
   when prevention, postmortem, or residual-risk notes matter.
 - [debugging-knowledge-base](references/debugging-knowledge-base.md) - read
   when a recurring learning should be preserved.
 - [budget-advisor](../budget-advisor/SKILL.md) - read when `budget` is present
-  and resolve review depth, ensemble lanes, aggregation, and guardrails before
-  running expanded debugging work.
+  and resolve base/plus/max persona council lanes, synthesis, child-budget
+  policy, and guardrails before running expanded debugging work.
 
 ## Output
 
@@ -162,7 +156,7 @@ Return or update an artifact with:
 
 - bug intake summary and reproduction path
 - budget program summary when budget was used, including template refs,
-  personas, aggregation, recursion guard, and source refs
+  personas, synthesis, child-budget policy, and source refs
 - short hypothesis list with what each hypothesis predicts
 - instrumentation plan or exact evidence source used
 - root cause statement tied to observed runtime behavior

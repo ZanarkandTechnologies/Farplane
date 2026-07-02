@@ -15,8 +15,7 @@ refs:
 # Hardening Budget Personas
 
 Use these complete `HardeningPersona` objects when
-`budget.ensemble.perspective_mode == "different"` and the caller did not supply
-personas.
+`budget.mode` is `plus` or `max` and the caller did not supply personas.
 
 ```text
 [

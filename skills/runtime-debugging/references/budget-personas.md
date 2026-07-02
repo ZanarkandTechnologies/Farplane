@@ -1,8 +1,8 @@
 # Runtime Debugging Budget Personas
 
 Read this reference when `runtime-debugging` receives a budget with
-`ensemble.perspective_mode: "different"` and the caller did not supply complete
-persona prompts.
+`mode: "plus"` or `mode: "max"` and the caller did not supply complete persona
+prompts.
 
 Use these complete `RuntimeDebuggingPersona` objects as defaults. Select the
 smallest set that matches the failure mode; do not run every persona by habit.

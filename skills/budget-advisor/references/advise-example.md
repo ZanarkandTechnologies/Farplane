@@ -6,15 +6,14 @@ This toy example shows how `budget-advisor` resolves budget params for
 Important boundary: `advise` stays the simple base skill. It takes a decision,
 compares exactly three viable options when three exist, recommends one, names
 the accepted tradeoff, and names the next step. Budget fields, persona prompts,
-review depth, ensemble lanes, and tournament aggregation belong to
-`budget-advisor` and the caller's resolved Budget Program, not to
-`advise/SKILL.md`.
+child budget allocation, and synthesis belong to `budget-advisor` and the
+caller's resolved Budget Program, not to `advise/SKILL.md`.
 
 Base `advise` output contract:
 
 ```text
 Decision
-Options: exactly 3 viable options
+Options: exactly 3 viable options when three exist
 Recommendation: one clear recommendation
 Tradeoff accepted
 Next step
@@ -23,54 +22,45 @@ Next step
 ## Base Call
 
 ```text
-advise(decision)
+advise(decision, budget={mode:"base"})
 ```
 
 Program:
 
 ```text
-frame decision
-name criteria
-compare exactly 3 viable options
-recommend 1
-name tradeoff
-name next step
-```
-
-## Review Depth
-
-```text
-advise(decision, budget={review_depth: 2})
-```
-
-Budget advisor returns:
-
-```text
-template_ref: skills/budget-advisor/references/review-depth.md
-review_depth: 2
-review_route: self-check or review protocol depending on stakes
-```
-
-Program:
-
-```text
-result = advise_base(decision)
-review result
-revise result
-review result
-revise result
+run advise base program
+use the caller's normal material review gates when the decision note is material
 return final advice output
 ```
 
-## Same-Perspective Ensemble
+## Plus Persona Council
 
 ```text
 advise(decision, budget={
-  ensemble: {
-    count: 5,
-    perspective_mode: "same",
-    aggregation: "synthesize"
-  }
+  mode: "plus",
+  personas: [
+    {
+      name: "Operator ergonomics",
+      prompt: "You are optimizing for the operator experience. Focus on whether the interface is memorable, easy to invoke, and avoids making simple advice feel bureaucratic.",
+      focus: ["operator memory", "friction", "syntax"],
+      avoid: ["abstract taxonomy"],
+      output_shape: "Best option, tradeoff, operator-facing risk, next step"
+    },
+    {
+      name: "Skill-system maintainer",
+      prompt: "You maintain the Farplane skill system. Focus on source ownership, duplicate logic, eval/proof surface, and avoiding root-prompt bloat.",
+      focus: ["ownership", "duplication", "proof"],
+      avoid: ["new global rules before proof"],
+      output_shape: "Best option, owner-surface risk, proof needed, next step"
+    },
+    {
+      name: "Evidence skeptic",
+      prompt: "You are testing whether the recommendation is actually supported. Focus on missing evidence, false confidence, and the behavior test or eval that would change the decision.",
+      focus: ["evidence gap", "failure mode", "testability"],
+      avoid: ["generic caution"],
+      output_shape: "Best option, weakest assumption, evidence gap, next step"
+    }
+  ]
 })
 ```
 
@@ -81,51 +71,10 @@ source_refs:
   - skills/budget-advisor/SKILL.md
   - skills/budget-advisor/references/ensemble-lanes.md
 template_ref: skills/budget-advisor/references/ensemble-lanes.md
-count: 5
-perspective_mode: same
-aggregation: synthesize
-```
-
-Program:
-
-```text
-run five independent advice passes with the same prompt
-synthesize the best option framing, evidence gaps, dissent, and next step
-return one normal advise output
-```
-
-## Different-Perspective Ensemble
-
-```text
-advise(decision, budget={
-  ensemble: {
-    count: 4,
-    perspective_mode: "different",
-    personas: [
-      {
-        name: "Operator value",
-        prompt: "You are optimizing for the operator's time, taste, leverage,
-        and opportunity cost. Identify which option makes the user's future
-        work easier, where extra ceremony would be annoying, and what next
-        action would create momentum without overbuilding.",
-        focus: ["operator happiness", "speed to useful outcome", "taste"],
-        avoid: ["abstract architecture for its own sake"],
-        output_shape: "Best option, tradeoff, operator-facing risk, next step"
-      },
-      {
-        name: "Engineering risk",
-        prompt: "You are reviewing implementation and maintenance risk. Focus
-        on dependency cost, migration risk, unclear ownership, brittle
-        abstractions, and proof requirements. Prefer the smallest durable
-        surface that can work.",
-        focus: ["maintenance", "ownership", "blast radius", "proof"],
-        avoid: ["generic caution"],
-        output_shape: "Best option, failure mode, proof needed, next step"
-      }
-    ],
-    aggregation: "synthesize"
-  }
-})
+mode: plus
+persona_count: 3
+synthesis: synthesize
+child_budget_policy: child skills use base unless delegate_budget names them
 ```
 
 Program:
@@ -134,49 +83,40 @@ Program:
 require complete persona prompts
 run one advice lane per persona
 synthesize into the normal advise output
-preserve meaningful dissent
+preserve meaningful dissent and evidence gaps
 ```
 
-## Large Ensemble
+## Max Persona Council
 
 ```text
 advise(decision, budget={
-  ensemble: {
-    count: 40,
-    perspective_mode: "different",
-    personas: [...],
-    aggregation: "hierarchical_synthesis",
-    tournament: { group_size: 4 }
-  },
-  review_depth: 1
+  mode: "max",
+  personas: [OperatorValue, EngineeringRisk, EvidenceSkeptic, SystemsFit, Chair]
 })
-```
-
-Budget advisor returns:
-
-```text
-source_refs:
-  - skills/budget-advisor/SKILL.md
-  - skills/budget-advisor/references/tournament-aggregation.md
-  - skills/budget-advisor/references/review-depth.md
-template_ref: skills/budget-advisor/references/tournament-aggregation.md
-count: 40
-group_size: 4
-aggregation: hierarchical_synthesis
-then: skills/budget-advisor/references/review-depth.md
-review_depth: 1
 ```
 
 Program:
 
 ```text
-run 40 advice lanes
-group by 4
-synthesize each group into best ideas, dissent, gaps, and candidate answer
-synthesize group summaries into one normal advise output
-review final once
-return final advice output
+run five independent advice lanes with complete prompts
+synthesize strongest ideas, dissent, risks, and evidence gaps
+return one normal advise output
+use the caller's material review gate on the final note
 ```
+
+## Child Skill Default
+
+```text
+deliberative_advice(decision, budget={mode:"max"})
+  -> budget-advisor resolves the deliberative council
+  -> any child reference-grounding or review call uses base unless:
+
+delegate_budget: {
+  "reference-grounding": { mode: "plus", personas: [...] }
+}
+```
+
+This prevents a high-level budget from multiplying every nested call.
 
 ## Deliberative Advice Preset
 
@@ -186,14 +126,8 @@ remaining useful as a user-facing wrapper:
 ```text
 deliberative_advice(decision, personas?)
   = advise(decision, budget={
-      budget_mode: "deep",
-      ensemble: {
-        count: len(personas or default_personas),
-        perspective_mode: "different",
-        personas: personas or default_personas,
-        aggregation: "synthesize"
-      },
-      review_depth: 1
+      mode: "max",
+      personas: personas or default_personas
     })
 ```
 

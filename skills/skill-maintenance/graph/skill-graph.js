@@ -2,11 +2,11 @@ window.SKILL_GRAPH = {
   "counts": {
     "edge_types": {
       "common-chain": 21,
-      "markdown-ref": 324,
-      "todo-chain": 329
+      "markdown-ref": 321,
+      "todo-chain": 332
     },
     "edges": 674,
-    "nodes": 98,
+    "nodes": 101,
     "skill_heat_config": {
       "default_top_n": 25,
       "event_types": [
@@ -26,12 +26,12 @@ window.SKILL_GRAPH = {
     ],
     "sources": {
       "external": 3,
-      "local": 95
+      "local": 98
     },
     "tiers": {
       "1": 6,
-      "2": 37,
-      "3": 55
+      "2": 38,
+      "3": 57
     }
   },
   "edges": [
@@ -1232,14 +1232,14 @@ window.SKILL_GRAPH = {
     },
     {
       "label": "markdown-ref",
-      "source": "documentation",
+      "source": "doc-advisor",
       "target": "advise",
       "target_ref": "advise",
       "type": "markdown-ref"
     },
     {
       "label": "markdown-ref",
-      "source": "documentation",
+      "source": "doc-advisor",
       "target": "reference-grounding",
       "target_ref": "reference-grounding",
       "type": "markdown-ref"
@@ -1248,14 +1248,14 @@ window.SKILL_GRAPH = {
       "chain_source": "todo_list",
       "label": "todo.1",
       "order": 1,
-      "source": "documentation",
+      "source": "doc-advisor",
       "target": "reference-grounding",
       "target_ref": "reference-grounding",
       "type": "todo-chain"
     },
     {
       "label": "markdown-ref",
-      "source": "documentation",
+      "source": "doc-advisor",
       "target": "review",
       "target_ref": "review",
       "type": "markdown-ref"
@@ -1264,7 +1264,7 @@ window.SKILL_GRAPH = {
       "chain_source": "todo_list",
       "label": "todo.2",
       "order": 2,
-      "source": "documentation",
+      "source": "doc-advisor",
       "target": "review",
       "target_ref": "review",
       "type": "todo-chain"
@@ -1393,40 +1393,8 @@ window.SKILL_GRAPH = {
     {
       "label": "markdown-ref",
       "source": "feed-scout",
-      "target": "apify",
-      "target_ref": "apify",
-      "type": "markdown-ref"
-    },
-    {
-      "chain_source": "todo_list",
-      "label": "todo.1",
-      "order": 1,
-      "source": "feed-scout",
-      "target": "apify",
-      "target_ref": "apify",
-      "type": "todo-chain"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "feed-scout",
       "target": "best-of-worlds",
       "target_ref": "best-of-worlds",
-      "type": "markdown-ref"
-    },
-    {
-      "chain_source": "todo_list",
-      "label": "todo.5",
-      "order": 5,
-      "source": "feed-scout",
-      "target": "best-of-worlds",
-      "target_ref": "best-of-worlds",
-      "type": "todo-chain"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "feed-scout",
-      "target": "harness-scout",
-      "target_ref": "harness-scout",
       "type": "markdown-ref"
     },
     {
@@ -1434,14 +1402,30 @@ window.SKILL_GRAPH = {
       "label": "todo.4",
       "order": 4,
       "source": "feed-scout",
+      "target": "best-of-worlds",
+      "target_ref": "best-of-worlds",
+      "type": "todo-chain"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "feed-scout",
+      "target": "harness-scout",
+      "target_ref": "harness-scout",
+      "type": "markdown-ref"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.3",
+      "order": 3,
+      "source": "feed-scout",
       "target": "harness-scout",
       "target_ref": "harness-scout",
       "type": "todo-chain"
     },
     {
       "chain_source": "todo_list",
-      "label": "todo.6",
-      "order": 6,
+      "label": "todo.5",
+      "order": 5,
       "source": "feed-scout",
       "target": "review",
       "target_ref": "review",
@@ -1456,8 +1440,8 @@ window.SKILL_GRAPH = {
     },
     {
       "chain_source": "todo_list",
-      "label": "todo.3",
-      "order": 3,
+      "label": "todo.2",
+      "order": 2,
       "source": "feed-scout",
       "target": "skill-creator",
       "target_ref": "skill-creator",
@@ -1472,8 +1456,8 @@ window.SKILL_GRAPH = {
     },
     {
       "chain_source": "todo_list",
-      "label": "todo.2",
-      "order": 2,
+      "label": "todo.1",
+      "order": 1,
       "source": "feed-scout",
       "target": "summarize",
       "target_ref": "summarize",
@@ -2347,8 +2331,8 @@ window.SKILL_GRAPH = {
     {
       "label": "markdown-ref",
       "source": "harness-scout",
-      "target": "documentation",
-      "target_ref": "documentation",
+      "target": "doc-advisor",
+      "target_ref": "doc-advisor",
       "type": "markdown-ref"
     },
     {
@@ -2530,8 +2514,8 @@ window.SKILL_GRAPH = {
     },
     {
       "chain_source": "todo_list",
-      "label": "todo.9",
-      "order": 9,
+      "label": "todo.8",
+      "order": 8,
       "source": "impl-plan",
       "target": "agent-qa-test",
       "target_ref": "agent-qa-test",
@@ -2539,8 +2523,8 @@ window.SKILL_GRAPH = {
     },
     {
       "chain_source": "todo_list",
-      "label": "todo.3",
-      "order": 3,
+      "label": "todo.9",
+      "order": 9,
       "source": "impl-plan",
       "target": "close-ticket",
       "target_ref": "close-ticket",
@@ -2565,17 +2549,17 @@ window.SKILL_GRAPH = {
     {
       "label": "markdown-ref",
       "source": "impl-plan",
-      "target": "documentation",
-      "target_ref": "documentation",
+      "target": "doc-advisor",
+      "target_ref": "doc-advisor",
       "type": "markdown-ref"
     },
     {
       "chain_source": "todo_list",
-      "label": "todo.4",
-      "order": 4,
+      "label": "todo.3",
+      "order": 3,
       "source": "impl-plan",
-      "target": "documentation",
-      "target_ref": "documentation",
+      "target": "doc-advisor",
+      "target_ref": "doc-advisor",
       "type": "todo-chain"
     },
     {
@@ -2587,8 +2571,8 @@ window.SKILL_GRAPH = {
     },
     {
       "chain_source": "todo_list",
-      "label": "todo.5",
-      "order": 5,
+      "label": "todo.4",
+      "order": 4,
       "source": "impl-plan",
       "target": "goal-advisor",
       "target_ref": "goal-advisor",
@@ -2603,8 +2587,8 @@ window.SKILL_GRAPH = {
     },
     {
       "chain_source": "todo_list",
-      "label": "todo.7",
-      "order": 7,
+      "label": "todo.6",
+      "order": 6,
       "source": "impl-plan",
       "target": "qa",
       "target_ref": "qa",
@@ -2635,8 +2619,8 @@ window.SKILL_GRAPH = {
     },
     {
       "chain_source": "todo_list",
-      "label": "todo.6",
-      "order": 6,
+      "label": "todo.5",
+      "order": 5,
       "source": "impl-plan",
       "target": "review",
       "target_ref": "review",
@@ -2644,8 +2628,8 @@ window.SKILL_GRAPH = {
     },
     {
       "chain_source": "todo_list",
-      "label": "todo.8",
-      "order": 8,
+      "label": "todo.7",
+      "order": 7,
       "source": "impl-plan",
       "target": "visual-qa",
       "target_ref": "visual-qa",
@@ -2919,11 +2903,29 @@ window.SKILL_GRAPH = {
     },
     {
       "chain_source": "todo_list",
+      "label": "todo.1",
+      "order": 1,
+      "source": "instagram-account",
+      "target": "apify",
+      "target_ref": "apify",
+      "type": "todo-chain"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.2",
+      "order": 2,
+      "source": "instagram-account",
+      "target": "feed-scout",
+      "target_ref": "feed-scout",
+      "type": "todo-chain"
+    },
+    {
+      "chain_source": "todo_list",
       "label": "todo.2",
       "order": 2,
       "source": "interval-update",
-      "target": "documentation",
-      "target_ref": "documentation",
+      "target": "doc-advisor",
+      "target_ref": "doc-advisor",
       "type": "todo-chain"
     },
     {
@@ -2961,8 +2963,8 @@ window.SKILL_GRAPH = {
     {
       "label": "markdown-ref",
       "source": "knowledge-tidier",
-      "target": "documentation",
-      "target_ref": "documentation",
+      "target": "doc-advisor",
+      "target_ref": "doc-advisor",
       "type": "markdown-ref"
     },
     {
@@ -2970,8 +2972,8 @@ window.SKILL_GRAPH = {
       "label": "todo.2",
       "order": 2,
       "source": "knowledge-tidier",
-      "target": "documentation",
-      "target_ref": "documentation",
+      "target": "doc-advisor",
+      "target_ref": "doc-advisor",
       "type": "todo-chain"
     },
     {
@@ -4744,20 +4746,6 @@ window.SKILL_GRAPH = {
       "type": "todo-chain"
     },
     {
-      "label": "research#researchcompetitor",
-      "source": "social-content",
-      "target": "research",
-      "target_ref": "research#researchcompetitor",
-      "type": "markdown-ref"
-    },
-    {
-      "label": "research#researchparity",
-      "source": "social-content",
-      "target": "research",
-      "target_ref": "research#researchparity",
-      "type": "markdown-ref"
-    },
-    {
       "chain_source": "todo_list",
       "label": "todo.1",
       "order": 1,
@@ -5020,8 +5008,8 @@ window.SKILL_GRAPH = {
     {
       "label": "markdown-ref",
       "source": "update-memory",
-      "target": "documentation",
-      "target_ref": "documentation",
+      "target": "doc-advisor",
+      "target_ref": "doc-advisor",
       "type": "markdown-ref"
     },
     {
@@ -5029,8 +5017,8 @@ window.SKILL_GRAPH = {
       "label": "todo.1",
       "order": 1,
       "source": "update-memory",
-      "target": "documentation",
-      "target_ref": "documentation",
+      "target": "doc-advisor",
+      "target_ref": "doc-advisor",
       "type": "todo-chain"
     },
     {
@@ -5410,9 +5398,27 @@ window.SKILL_GRAPH = {
       "target": "review",
       "target_ref": "review",
       "type": "todo-chain"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.1",
+      "order": 1,
+      "source": "x-account",
+      "target": "apify",
+      "target_ref": "apify",
+      "type": "todo-chain"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.2",
+      "order": 2,
+      "source": "x-account",
+      "target": "feed-scout",
+      "target_ref": "feed-scout",
+      "type": "todo-chain"
     }
   ],
-  "generated_at": "2026-06-27T16:31:15+00:00",
+  "generated_at": "2026-07-02T17:26:33+00:00",
   "nodes": [
     {
       "description": "Turn an under-specified decision into three options, tradeoffs, and one recommendation when the user asks for advice.",
@@ -5571,15 +5577,15 @@ window.SKILL_GRAPH = {
         "composition_heat": {
           "hot_referrer_count": 1,
           "incoming_ref_count": 12,
-          "last_referenced_at": "2026-06-06T14:11:49.058337Z",
+          "last_referenced_at": "2026-06-30T22:27:59.195216Z",
           "top_referrers": [
             {
-              "invocation_count_window": 7,
-              "last_invoked_at": "2026-06-06T14:11:49.058337Z",
+              "invocation_count_window": 8,
+              "last_invoked_at": "2026-06-30T22:27:59.195216Z",
               "skill": "impl-plan"
             }
           ],
-          "window_referrer_invocations": 7
+          "window_referrer_invocations": 8
         },
         "direct_heat": {
           "distinct_threads_window": 0,
@@ -5968,15 +5974,15 @@ window.SKILL_GRAPH = {
         "composition_heat": {
           "hot_referrer_count": 1,
           "incoming_ref_count": 3,
-          "last_referenced_at": "2026-06-06T14:11:49.058337Z",
+          "last_referenced_at": "2026-06-30T22:27:59.195216Z",
           "top_referrers": [
             {
-              "invocation_count_window": 7,
-              "last_invoked_at": "2026-06-06T14:11:49.058337Z",
+              "invocation_count_window": 8,
+              "last_invoked_at": "2026-06-30T22:27:59.195216Z",
               "skill": "impl-plan"
             }
           ],
-          "window_referrer_invocations": 7
+          "window_referrer_invocations": 8
         },
         "direct_heat": {
           "distinct_threads_window": 0,
@@ -6040,7 +6046,7 @@ window.SKILL_GRAPH = {
       "signals": {
         "composition_heat": {
           "hot_referrer_count": 0,
-          "incoming_ref_count": 1,
+          "incoming_ref_count": 2,
           "last_referenced_at": "",
           "top_referrers": [],
           "window_referrer_invocations": 0
@@ -6067,7 +6073,7 @@ window.SKILL_GRAPH = {
         "uniqueness": {
           "group": "",
           "has_skill_ui": false,
-          "incoming_ref_count": 1,
+          "incoming_ref_count": 2,
           "method_count": 0,
           "outgoing_ref_count": 3,
           "source": "local",
@@ -6288,7 +6294,7 @@ window.SKILL_GRAPH = {
       ]
     },
     {
-      "description": "Resolve a budget-aware skill call into concrete execution template refs, parameters, and guardrails when effort changes workflow shape.",
+      "description": "Resolve a budget-aware skill call into a base reviewed path plus optional persona-council lanes when effort changes workflow shape.",
       "eval": "eval_task.json",
       "group": "",
       "has_checklist": true,
@@ -6482,6 +6488,69 @@ window.SKILL_GRAPH = {
       ]
     },
     {
+      "description": "Turn local changes or a PR branch into a heavyweight CodeRabbit CLI review result when external review is useful before push.",
+      "eval": "",
+      "group": "",
+      "has_checklist": true,
+      "heat": {
+        "distinct_threads_window": 0,
+        "distinct_tickets_window": 0,
+        "invocation_count_all": 0,
+        "invocation_count_recent": 0,
+        "invocation_count_window": 0,
+        "last_invoked_at": "",
+        "observed_event_count_all": 0,
+        "recent_days": 7,
+        "window_days": 30
+      },
+      "id": "coderabbit-review",
+      "label": "coderabbit-review",
+      "methods": [],
+      "path": "skills/coderabbit-review/SKILL.md",
+      "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 0,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval",
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": false,
+          "status": "high",
+          "template_version": ""
+        },
+        "maintenance_recommendation": "retire_review",
+        "uniqueness": {
+          "group": "",
+          "has_skill_ui": false,
+          "incoming_ref_count": 0,
+          "method_count": 0,
+          "outgoing_ref_count": 0,
+          "source": "local",
+          "tier": 2
+        }
+      },
+      "skill_ui": "",
+      "source": "local",
+      "tier": 2,
+      "todo_skill_refs": []
+    },
+    {
       "description": "Turn staged or recent git diffs into a compact repo-style commit subject when a commit message is needed.",
       "eval": "",
       "group": "",
@@ -6646,15 +6715,15 @@ window.SKILL_GRAPH = {
         "composition_heat": {
           "hot_referrer_count": 1,
           "incoming_ref_count": 1,
-          "last_referenced_at": "2026-06-06T14:11:49.058337Z",
+          "last_referenced_at": "2026-06-30T22:27:59.195216Z",
           "top_referrers": [
             {
-              "invocation_count_window": 7,
-              "last_invoked_at": "2026-06-06T14:11:49.058337Z",
+              "invocation_count_window": 8,
+              "last_invoked_at": "2026-06-30T22:27:59.195216Z",
               "skill": "impl-plan"
             }
           ],
-          "window_referrer_invocations": 7
+          "window_referrer_invocations": 8
         },
         "direct_heat": {
           "distinct_threads_window": 0,
@@ -6898,7 +6967,7 @@ window.SKILL_GRAPH = {
       "todo_skill_refs": []
     },
     {
-      "description": "Turn durable doc-writing or doc-revision work into grounded, metadata-aware, human-usable docs with doc-quality checks.",
+      "description": "Turn ticket, plan, or durable doc changes into a docs strategy or grounded doc update with doc-quality checks.",
       "eval": "eval_task.json",
       "group": "",
       "has_checklist": true,
@@ -6913,29 +6982,30 @@ window.SKILL_GRAPH = {
         "recent_days": 7,
         "window_days": 30
       },
-      "id": "documentation",
-      "label": "documentation",
+      "id": "doc-advisor",
+      "label": "doc-advisor",
       "methods": [
-        "documentation:doc-architecture",
-        "documentation:metadata",
-        "documentation:feature-system-spec",
-        "documentation:finish-gate"
+        "doc-advisor:strategy",
+        "doc-advisor:doc-architecture",
+        "doc-advisor:metadata",
+        "doc-advisor:feature-system-spec",
+        "doc-advisor:finish-gate"
       ],
-      "path": "skills/documentation/SKILL.md",
+      "path": "skills/doc-advisor/SKILL.md",
       "qa_checklist": "qa_checklist.md",
       "signals": {
         "composition_heat": {
           "hot_referrer_count": 1,
           "incoming_ref_count": 5,
-          "last_referenced_at": "2026-06-06T14:11:49.058337Z",
+          "last_referenced_at": "2026-06-30T22:27:59.195216Z",
           "top_referrers": [
             {
-              "invocation_count_window": 7,
-              "last_invoked_at": "2026-06-06T14:11:49.058337Z",
+              "invocation_count_window": 8,
+              "last_invoked_at": "2026-06-30T22:27:59.195216Z",
               "skill": "impl-plan"
             }
           ],
-          "window_referrer_invocations": 7
+          "window_referrer_invocations": 8
         },
         "direct_heat": {
           "distinct_threads_window": 0,
@@ -6957,7 +7027,7 @@ window.SKILL_GRAPH = {
           "group": "",
           "has_skill_ui": false,
           "incoming_ref_count": 5,
-          "method_count": 4,
+          "method_count": 5,
           "outgoing_ref_count": 3,
           "source": "local",
           "tier": 2
@@ -7814,20 +7884,20 @@ window.SKILL_GRAPH = {
         "composition_heat": {
           "hot_referrer_count": 2,
           "incoming_ref_count": 24,
-          "last_referenced_at": "2026-06-06T14:11:49.058419Z",
+          "last_referenced_at": "2026-06-30T22:27:59.195216Z",
           "top_referrers": [
+            {
+              "invocation_count_window": 8,
+              "last_invoked_at": "2026-06-30T22:27:59.195216Z",
+              "skill": "impl-plan"
+            },
             {
               "invocation_count_window": 7,
               "last_invoked_at": "2026-06-06T14:11:49.058419Z",
               "skill": "brainstorm"
-            },
-            {
-              "invocation_count_window": 7,
-              "last_invoked_at": "2026-06-06T14:11:49.058337Z",
-              "skill": "impl-plan"
             }
           ],
-          "window_referrer_invocations": 14
+          "window_referrer_invocations": 15
         },
         "direct_heat": {
           "distinct_threads_window": 0,
@@ -7895,20 +7965,20 @@ window.SKILL_GRAPH = {
         "composition_heat": {
           "hot_referrer_count": 2,
           "incoming_ref_count": 41,
-          "last_referenced_at": "2026-06-06T14:11:49.058419Z",
+          "last_referenced_at": "2026-06-30T22:27:59.195216Z",
           "top_referrers": [
+            {
+              "invocation_count_window": 8,
+              "last_invoked_at": "2026-06-30T22:27:59.195216Z",
+              "skill": "impl-plan"
+            },
             {
               "invocation_count_window": 7,
               "last_invoked_at": "2026-06-06T14:11:49.058419Z",
               "skill": "brainstorm"
-            },
-            {
-              "invocation_count_window": 7,
-              "last_invoked_at": "2026-06-06T14:11:49.058337Z",
-              "skill": "impl-plan"
             }
           ],
-          "window_referrer_invocations": 14
+          "window_referrer_invocations": 15
         },
         "direct_heat": {
           "distinct_threads_window": 0,
@@ -8236,15 +8306,15 @@ window.SKILL_GRAPH = {
         "composition_heat": {
           "hot_referrer_count": 1,
           "incoming_ref_count": 14,
-          "last_referenced_at": "2026-06-06T14:11:49.058337Z",
+          "last_referenced_at": "2026-06-30T22:27:59.195216Z",
           "top_referrers": [
             {
-              "invocation_count_window": 7,
-              "last_invoked_at": "2026-06-06T14:11:49.058337Z",
+              "invocation_count_window": 8,
+              "last_invoked_at": "2026-06-30T22:27:59.195216Z",
               "skill": "impl-plan"
             }
           ],
-          "window_referrer_invocations": 7
+          "window_referrer_invocations": 8
         },
         "direct_heat": {
           "distinct_threads_window": 0,
@@ -8412,7 +8482,7 @@ window.SKILL_GRAPH = {
       ]
     },
     {
-      "description": "Design or revise Farplane Codex automations using reviewable automations.md prompts and generic Pulse/Interval skill calls.",
+      "description": "Design or revise Farplane Codex automations using full project-owned automations.toml configs and generic Pulse/Interval skill calls.",
       "eval": "",
       "group": "harness",
       "has_checklist": true,
@@ -8502,15 +8572,15 @@ window.SKILL_GRAPH = {
         "composition_heat": {
           "hot_referrer_count": 1,
           "incoming_ref_count": 3,
-          "last_referenced_at": "2026-06-06T14:11:49.058337Z",
+          "last_referenced_at": "2026-06-30T22:27:59.195216Z",
           "top_referrers": [
             {
-              "invocation_count_window": 7,
-              "last_invoked_at": "2026-06-06T14:11:49.058337Z",
+              "invocation_count_window": 8,
+              "last_invoked_at": "2026-06-30T22:27:59.195216Z",
               "skill": "impl-plan"
             }
           ],
-          "window_referrer_invocations": 7
+          "window_referrer_invocations": 8
         },
         "direct_heat": {
           "distinct_threads_window": 0,
@@ -9165,7 +9235,7 @@ window.SKILL_GRAPH = {
       "signals": {
         "composition_heat": {
           "hot_referrer_count": 0,
-          "incoming_ref_count": 0,
+          "incoming_ref_count": 2,
           "last_referenced_at": "",
           "top_referrers": [],
           "window_referrer_invocations": 0
@@ -9191,9 +9261,9 @@ window.SKILL_GRAPH = {
         "uniqueness": {
           "group": "harness",
           "has_skill_ui": false,
-          "incoming_ref_count": 0,
+          "incoming_ref_count": 2,
           "method_count": 0,
-          "outgoing_ref_count": 6,
+          "outgoing_ref_count": 5,
           "source": "local",
           "tier": 3
         }
@@ -9202,7 +9272,6 @@ window.SKILL_GRAPH = {
       "source": "local",
       "tier": 3,
       "todo_skill_refs": [
-        "apify",
         "summarize",
         "skill-creator",
         "harness-scout",
@@ -9376,7 +9445,7 @@ window.SKILL_GRAPH = {
       "label": "functional-ui",
       "methods": [],
       "path": "skills/functional-ui/SKILL.md",
-      "qa_checklist": "",
+      "qa_checklist": "qa_checklist.md",
       "signals": {
         "composition_heat": {
           "hot_referrer_count": 0,
@@ -9394,13 +9463,12 @@ window.SKILL_GRAPH = {
         },
         "maintenance_burden": {
           "findings": [
-            "missing_eval",
-            "missing_qa_checklist"
+            "missing_eval"
           ],
           "has_checklist": true,
           "has_eval": false,
-          "has_qa_checklist": false,
-          "status": "high",
+          "has_qa_checklist": true,
+          "status": "moderate",
           "template_version": "1.1.0"
         },
         "maintenance_recommendation": "keep",
@@ -9448,15 +9516,15 @@ window.SKILL_GRAPH = {
         "composition_heat": {
           "hot_referrer_count": 1,
           "incoming_ref_count": 12,
-          "last_referenced_at": "2026-06-06T14:11:49.058337Z",
+          "last_referenced_at": "2026-06-30T22:27:59.195216Z",
           "top_referrers": [
             {
-              "invocation_count_window": 7,
-              "last_invoked_at": "2026-06-06T14:11:49.058337Z",
+              "invocation_count_window": 8,
+              "last_invoked_at": "2026-06-30T22:27:59.195216Z",
               "skill": "impl-plan"
             }
           ],
-          "window_referrer_invocations": 7
+          "window_referrer_invocations": 8
         },
         "direct_heat": {
           "distinct_threads_window": 0,
@@ -9778,13 +9846,13 @@ window.SKILL_GRAPH = {
       "group": "coding",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_window": 7,
+        "distinct_threads_window": 8,
         "distinct_tickets_window": 0,
-        "invocation_count_all": 7,
-        "invocation_count_recent": 0,
-        "invocation_count_window": 7,
-        "last_invoked_at": "2026-06-06T14:11:49.058337Z",
-        "observed_event_count_all": 14,
+        "invocation_count_all": 8,
+        "invocation_count_recent": 1,
+        "invocation_count_window": 8,
+        "last_invoked_at": "2026-06-30T22:27:59.195216Z",
+        "observed_event_count_all": 16,
         "recent_days": 7,
         "window_days": 30
       },
@@ -9802,11 +9870,11 @@ window.SKILL_GRAPH = {
           "window_referrer_invocations": 0
         },
         "direct_heat": {
-          "distinct_threads_window": 7,
+          "distinct_threads_window": 8,
           "distinct_tickets_window": 0,
-          "invocation_count_recent": 0,
-          "invocation_count_window": 7,
-          "last_invoked_at": "2026-06-06T14:11:49.058337Z"
+          "invocation_count_recent": 1,
+          "invocation_count_window": 8,
+          "last_invoked_at": "2026-06-30T22:27:59.195216Z"
         },
         "maintenance_burden": {
           "findings": [],
@@ -9833,13 +9901,13 @@ window.SKILL_GRAPH = {
       "todo_skill_refs": [
         "research",
         "deep-system-design",
-        "close-ticket",
-        "documentation",
+        "doc-advisor",
         "goal-advisor",
         "review",
         "qa",
         "visual-qa",
-        "agent-qa-test"
+        "agent-qa-test",
+        "close-ticket"
       ]
     },
     {
@@ -10045,6 +10113,71 @@ window.SKILL_GRAPH = {
       ]
     },
     {
+      "description": "Turn Instagram account posting or insights requests into validated artifacts, normalized KPI snapshots, or gated API actions.",
+      "eval": "",
+      "group": "content-social",
+      "has_checklist": true,
+      "heat": {
+        "distinct_threads_window": 0,
+        "distinct_tickets_window": 0,
+        "invocation_count_all": 0,
+        "invocation_count_recent": 0,
+        "invocation_count_window": 0,
+        "last_invoked_at": "",
+        "observed_event_count_all": 0,
+        "recent_days": 7,
+        "window_days": 30
+      },
+      "id": "instagram-account",
+      "label": "instagram-account",
+      "methods": [],
+      "path": "skills/instagram-account/SKILL.md",
+      "qa_checklist": "qa_checklist.md",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 0,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": true,
+          "status": "moderate",
+          "template_version": "0.3.7"
+        },
+        "maintenance_recommendation": "retire_review",
+        "uniqueness": {
+          "group": "content-social",
+          "has_skill_ui": false,
+          "incoming_ref_count": 0,
+          "method_count": 0,
+          "outgoing_ref_count": 2,
+          "source": "local",
+          "tier": 3
+        }
+      },
+      "skill_ui": "",
+      "source": "local",
+      "tier": 3,
+      "todo_skill_refs": [
+        "apify",
+        "feed-scout"
+      ]
+    },
+    {
       "description": "Run one Farplane interval automation: review the past window, write a dated report, plan the next window, and emit Pulse or Goal Advisor guidance.",
       "eval": "eval_task.json",
       "group": "harness",
@@ -10106,7 +10239,7 @@ window.SKILL_GRAPH = {
       "tier": 3,
       "todo_skill_refs": [
         "update-memory",
-        "documentation"
+        "doc-advisor"
       ]
     },
     {
@@ -10171,7 +10304,7 @@ window.SKILL_GRAPH = {
       "tier": 3,
       "todo_skill_refs": [
         "consolidate",
-        "documentation",
+        "doc-advisor",
         "skill-maintenance",
         "update-memory",
         "review"
@@ -10355,7 +10488,7 @@ window.SKILL_GRAPH = {
           "has_eval": false,
           "has_qa_checklist": false,
           "status": "high",
-          "template_version": ""
+          "template_version": "0.3.7"
         },
         "maintenance_recommendation": "retire_review",
         "uniqueness": {
@@ -10851,7 +10984,7 @@ window.SKILL_GRAPH = {
       "todo_skill_refs": []
     },
     {
-      "description": "Turn one selected ticket into proof artifacts, reconciled Done / Proof obligations, and a structured QA result for Goal/ticket completion.",
+      "description": "Turn one selected ticket into proof artifacts, reconciled Done and QA Strategy obligations, and a structured QA result for Goal/ticket completion.",
       "eval": "eval_task.json",
       "group": "coding",
       "has_checklist": true,
@@ -10875,15 +11008,15 @@ window.SKILL_GRAPH = {
         "composition_heat": {
           "hot_referrer_count": 1,
           "incoming_ref_count": 8,
-          "last_referenced_at": "2026-06-06T14:11:49.058337Z",
+          "last_referenced_at": "2026-06-30T22:27:59.195216Z",
           "top_referrers": [
             {
-              "invocation_count_window": 7,
-              "last_invoked_at": "2026-06-06T14:11:49.058337Z",
+              "invocation_count_window": 8,
+              "last_invoked_at": "2026-06-30T22:27:59.195216Z",
               "skill": "impl-plan"
             }
           ],
-          "window_referrer_invocations": 7
+          "window_referrer_invocations": 8
         },
         "direct_heat": {
           "distinct_threads_window": 0,
@@ -11457,7 +11590,7 @@ window.SKILL_GRAPH = {
     },
     {
       "description": "Turn social campaign goals into posts, carousels, threads, calendars, hooks, captions, thumbnails, or cross-platform bundles.",
-      "eval": "",
+      "eval": "eval_task.json",
       "group": "content-social",
       "has_checklist": true,
       "heat": {
@@ -11480,7 +11613,7 @@ window.SKILL_GRAPH = {
         "social-content:twitter-thread"
       ],
       "path": "skills/social-content/SKILL.md",
-      "qa_checklist": "",
+      "qa_checklist": "qa_checklist.md",
       "signals": {
         "composition_heat": {
           "hot_referrer_count": 0,
@@ -11497,15 +11630,12 @@ window.SKILL_GRAPH = {
           "last_invoked_at": ""
         },
         "maintenance_burden": {
-          "findings": [
-            "missing_eval",
-            "missing_qa_checklist"
-          ],
+          "findings": [],
           "has_checklist": true,
-          "has_eval": false,
-          "has_qa_checklist": false,
-          "status": "high",
-          "template_version": "1.0.0"
+          "has_eval": true,
+          "has_qa_checklist": true,
+          "status": "low",
+          "template_version": "0.3.6"
         },
         "maintenance_recommendation": "keep",
         "uniqueness": {
@@ -11729,7 +11859,7 @@ window.SKILL_GRAPH = {
       "source": "local",
       "tier": 3,
       "todo_skill_refs": [
-        "documentation",
+        "doc-advisor",
         "review"
       ]
     },
@@ -12070,6 +12200,71 @@ window.SKILL_GRAPH = {
         "best-of-worlds",
         "frontend-design",
         "frontend-craft"
+      ]
+    },
+    {
+      "description": "Turn X account posting or metrics requests into validated drafts, normalized KPI snapshots, or gated API actions.",
+      "eval": "",
+      "group": "content-social",
+      "has_checklist": true,
+      "heat": {
+        "distinct_threads_window": 0,
+        "distinct_tickets_window": 0,
+        "invocation_count_all": 0,
+        "invocation_count_recent": 0,
+        "invocation_count_window": 0,
+        "last_invoked_at": "",
+        "observed_event_count_all": 0,
+        "recent_days": 7,
+        "window_days": 30
+      },
+      "id": "x-account",
+      "label": "x-account",
+      "methods": [],
+      "path": "skills/x-account/SKILL.md",
+      "qa_checklist": "qa_checklist.md",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 0,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": true,
+          "status": "moderate",
+          "template_version": "0.3.7"
+        },
+        "maintenance_recommendation": "retire_review",
+        "uniqueness": {
+          "group": "content-social",
+          "has_skill_ui": false,
+          "incoming_ref_count": 0,
+          "method_count": 0,
+          "outgoing_ref_count": 2,
+          "source": "local",
+          "tier": 3
+        }
+      },
+      "skill_ui": "",
+      "source": "local",
+      "tier": 3,
+      "todo_skill_refs": [
+        "apify",
+        "feed-scout"
       ]
     }
   ],

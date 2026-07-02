@@ -37,24 +37,19 @@ Use `budget-advisor` when `budget` is present:
 
 ```text
 RefactoringBudget = {
-  budget_mode?: "none" | "light" | "normal" | "deep" | "max",
+  mode?: "base" | "plus" | "max",
   available_time?: string,
-  review_depth?: 0 | 1 | 2,
-  ensemble?: {
-    count: number,
-    perspective_mode?: "same" | "different",
-    personas?: RefactoringPersona[],
-    aggregation?: "synthesize" | "score_then_synthesize" | "hierarchical_synthesis"
-  },
+  persona_count?: 1 | 3 | 5,
+  personas?: RefactoringPersona[],
   coverage?: "smoke" | "focused" | "broad",
   evidence_depth?: "light" | "strong",
-  max_budget_depth?: 0 | 1
+  delegate_budget?: Record<skill_name, BudgetRequest>
 }
 ```
 
-Default `max_budget_depth` to `0` for subskill calls and `1` only for the
-top-level refactoring invocation. Budgeted lanes must preserve the output
-contract: behavior proof, smell delta, patch plan or patch, and residual risk.
+Child skills use their own base reviewed path unless `delegate_budget`
+explicitly names them. Budgeted persona lanes must preserve the output contract:
+behavior proof, smell delta, patch plan or patch, and residual risk.
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
@@ -71,10 +66,11 @@ contract: behavior proof, smell delta, patch plan or patch, and residual risk.
     static-analysis or maintainability commands.
 - [ ] 3. Resolve budget when present.
   - [ ] Call `budget-advisor` with this contract and `RefactoringBudget`.
-  - [ ] For different-perspective ensembles, use persona prompts from
+  - [ ] For `plus` or `max`, use persona prompts from
     [budget-personas](references/budget-personas.md) unless the caller supplied
     complete personas.
-  - [ ] Cap recursive budget expansion at the resolved `max_budget_depth`.
+  - [ ] Do not copy the parent budget into testing, proof, review, or debugging
+    child calls unless `delegate_budget` explicitly names the child skill.
 - [ ] 4. Lock behavior before changing structure.
   - [ ] Use existing tests, characterization tests, snapshots, fixtures, or
     manual proof to capture intended behavior.
@@ -123,8 +119,8 @@ RefactoringPersona = {
   smells.
 - [tooling](references/tooling.md) - read when selecting stack-specific tools
   or commands.
-- [budget-personas](references/budget-personas.md) - read for high-budget
-  different-perspective ensembles.
+- [budget-personas](references/budget-personas.md) - read for `plus` or `max`
+  persona councils.
 - [budget-advisor](../budget-advisor/SKILL.md) - read when `budget` is present.
 - [code-review](../code-review/SKILL.md) - route local maintainability findings
   or final diff review.

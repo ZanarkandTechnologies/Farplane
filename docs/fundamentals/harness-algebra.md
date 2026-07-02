@@ -561,7 +561,7 @@ PhaseBudget = {
   search_breadth,
   tool_call_limit,
   subagent_count,
-  review_depth,
+  persona_council_size,
   eval_depth,
   time_limit,
   token_limit
@@ -577,11 +577,11 @@ Budgeted skills include:
 | --- | --- |
 | `plan`, `impl-plan`, `goal-advisor` | planning depth, ambiguity gates, decomposition depth |
 | `research`, `reference-grounding` | source count, search breadth, recency/currentness, citation depth |
-| `advise`, `deliberative-advice` | option count, independent lanes, critique depth |
+| `advise`, `deliberative-advice` | option count, independent persona lanes, synthesis |
 | `review`, `visual-qa`, `agent-qa-test` | rubric depth, evidence depth, reviewer/QA lanes |
 | `eval`, `eval-onboarding` | case count, fixture depth, judge strictness, heldout coverage |
 | `optimize-harness`, `self-improve` | candidate count, iteration count, metric budget, rollback gate |
-| `goal-advisor`, `work`, `batch-work` | execution scope, proof rows, QA/review depth |
+| `goal-advisor` | execution scope, proof rows, QA/review gates |
 
 Budget is not a standalone lever. It modulates the other levers:
 
@@ -591,8 +591,8 @@ budget(task, risk)
    + research_depth
    + execution_depth
    + verification_depth
-   + review_depth
-   + ensemble_depth
+   + base_reviewed_path
+   + persona_council_size
 ```
 
 Example:
