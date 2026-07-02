@@ -99,7 +99,7 @@ flowchart TD
   B --> C["Farplane project files"]
   C --> D["horizon-advisor"]
   D --> E["farplane/goals.md"]
-  C --> X["farplane/bindings.md"]
+  C --> X["farplane/bindings.yaml"]
   C --> Y["farplane/ops-memory.md"]
   E --> F["goal-advisor"]
   F --> G["Goal Packet: ticket.md + program.md + progress.md"]
@@ -141,7 +141,7 @@ farplane/harness.md
 farplane/goals.md
   -> goal axes + inline SMART goals + stable KPI keys + interpretation
 
-farplane/bindings.md
+farplane/bindings.yaml
   -> non-secret project coordinates + inline metric recipes
 
 farplane/ops-memory.md
@@ -164,6 +164,11 @@ Weekly Interval
 
 .farplane/content/ledger.jsonl
   -> owned content lifecycle rows for draft/approval/post/metric refresh
+
+skills/feed-scout/ + optional feed-scout automation prompt
+  -> explicit configure/run/review/status passes over tracked profile/resource
+     JSONL files; no daemon, crawler, live spend, or Notion write without an
+     explicit run boundary
 ```
 
 The loop has three clocks:
@@ -174,8 +179,8 @@ The loop has three clocks:
 | Daily | `interval-update` | Refresh near-term progress, blockers, and KPI readings. | Daily interval report and metric snapshots. |
 | Weekly | `interval-update` | Protect or change strategy, review runway, and choose leverage bets. | Weekly report, goals-delta candidates, ops-memory delta, Pulse guidance. |
 
-KPI snapshots start from `farplane/bindings.md` metric recipes. `goals.md`
-chooses and interprets stable KPI IDs and SMART targets; `bindings.md` owns
+KPI snapshots start from `farplane/bindings.yaml` metric recipes. `goals.md`
+chooses and interprets stable KPI IDs and SMART targets; `bindings.yaml` owns
 each metric's label, product, unit, chart behavior, pinned status, kind, and
 prompt-only `refresh` instruction. The interval agent uses recipes plus active
 context in `farplane/ops-memory.md` to call skills, CLIs, local ledgers, ticket
@@ -201,7 +206,16 @@ Owned-content distribution metrics use `.farplane/content/ledger.jsonl` as the
 local fetch target list. Publishing/account skills append rows after approved
 posting; interval refresh reads posted rows by platform, campaign, date window,
 and KPI, then stores aggregate values in daily metrics with per-post
-`payload.items` for drilldown.
+`payload.items` for drilldown. The compiler emits UI schema version 2:
+`metrics[]` remains KPI-centric, and `contents[]` inverts those `payload.items`
+into content-centric per-KPI series for distribution tabs.
+
+Feed Scout is the adjacent discovery surface for external ideas and harness
+resources, not the owned-content ledger. Its optional automation prompt should
+point at local tracked profile/resource files, an ingestion ledger, and a
+proposal ledger or local inbox, then run one explicit pass. It must not become
+an always-on monitor or write live Notion tasks unless routing and readback
+gates are explicitly configured.
 
 Farplane's default autonomy proxy is intentionally reliable rather than
 subjective:
@@ -251,12 +265,12 @@ For a project to run the loop without hidden transcript memory, it needs:
 - `farplane/harness.md` with static authority, proof, and runway guardrails.
 - `farplane/products.md` with product lanes and lane weights.
 - `farplane/goals.md` with inline SMART goals, KPI keys, and interpretation.
-- `farplane/bindings.md` with non-secret inline metric recipes.
+- `farplane/bindings.yaml` with non-secret inline metric recipes.
 - `farplane/ops-memory.md` with active projects, tracked feedback, current
   frontier, and the standard sections: Current Focus, Active Projects, Tracked
   Feedback, Next Frontier, Constraints, Parking Lot, Recent Decisions, and
   Pulse Notes.
-- `farplane/automations.md` with reviewed Pulse, Daily, and Weekly prompts.
+- `farplane/automations.toml` with reviewed Pulse, Daily, and Weekly prompts.
 - Tickets with `Reward`, Done/Proof, and QA strategy for executable work.
 - `.farplane/reports/**` and `.farplane/automation/*.jsonl` as dated receipts.
 

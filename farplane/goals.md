@@ -10,8 +10,8 @@ source: horizon-advisor
 refs:
   - farplane/harness.md
   - farplane/products.md
-  - farplane/bindings.md
-  - farplane/automations.md
+  - farplane/bindings.yaml
+  - farplane/automations.toml
   - docs/fundamentals/harness-algebra.md
   - skills/horizon-advisor/SKILL.md
   - skills/goal-advisor/SKILL.md
@@ -38,7 +38,7 @@ less human intervention.
 Goal axes own strategic targets and interpretation. Each SMART goal lists KPI
 target pairs so dashboards can parse target-hit status. Metric units, chart
 shape, pinned status, sources, commands, skills, and update hints live in
-`farplane/bindings.md` metric recipes.
+`farplane/bindings.yaml` metric recipes.
 
 ```yaml
 goals:

@@ -21,7 +21,7 @@
       "farplane/goals.md",
       "farplane/products.md",
       "farplane/ops-memory.md",
-      "farplane/automations.md",
+      "farplane/automations.toml",
       "farplane/bindings.yaml",
       "farplane/hooks.json",
       ".agents/skills/README.md",

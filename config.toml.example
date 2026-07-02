@@ -36,8 +36,8 @@ FARPLANE_SKILL_HEAT_TOP_N = "25"
 # Comma-separated event types counted as skill heat.
 FARPLANE_SKILL_HEAT_EVENT_TYPES = "control_surface_detected,hook_result,learning_review_launched,skill_requested"
 # Optional automation settings such as Taste Loop active hours live in
-# `farplane/automations.md` marker-delimited TOML blocks so Farplane UI can
-# render and update them directly before syncing the Codex automation record.
+# `farplane/automations.toml` so Farplane UI can render and update full Codex
+# automation configs before syncing the Codex automation record.
 # Optional explicit force-on for Farplane hook behavior. Live Codex hooks now
 # capture user turns and Stop telemetry only.
 

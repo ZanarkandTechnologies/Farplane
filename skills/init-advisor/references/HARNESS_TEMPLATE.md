@@ -19,7 +19,7 @@ or change rules.
 
 Dynamic product direction belongs in `farplane/products.md`. Current strategy
 belongs in `farplane/goals.md`. Recurring prompt configuration belongs in
-`farplane/automations.md`. Operational logic belongs in skills.
+`farplane/automations.toml`. Operational logic belongs in skills.
 
 ## Mission
 

@@ -20,8 +20,8 @@ source_of_truth:
   - farplane/harness.md
   - farplane/goals.md
   - farplane/products.md
-  - farplane/automations.md
-  - farplane/bindings.md
+  - farplane/automations.toml
+  - farplane/bindings.yaml
   - farplane/hooks.json
   - farplane/pm.json
   - docs/features/FEAT-0065-pulse-and-interval-automation.md
@@ -97,8 +97,8 @@ PROJECT_ROOT/
     harness.md
     goals.md
     products.md
-    automations.md
-    bindings.md
+    automations.toml
+    bindings.yaml
     hooks.json
     skills/
       README.md
@@ -172,8 +172,8 @@ init_advisor(project_root?, project_idea?, repo_shape?, stack_profile?, init_mod
    + farplane/harness.md
    + farplane/goals.md
    + farplane/products.md
-   + farplane/automations.md
-   + farplane/bindings.md
+   + farplane/automations.toml
+   + farplane/bindings.yaml
    + farplane/hooks.json
    + .agents/skills/README.md
    + farplane/pm.json?
@@ -183,8 +183,8 @@ init_advisor(project_root?, project_idea?, repo_shape?, stack_profile?, init_mod
 In `full` init mode, `init-advisor` calls `harness-creator` after the
 substrate exists. `harness-creator` fills or refines the split project files:
 static charter in `harness.md`, product rows and work lanes in `products.md`,
-strategy and KPIs in `goals.md`, automation prompt text in `automations.md`,
-and safe coordinates in `bindings.md`. It owns the smaller advisor calls such
+strategy and KPIs in `goals.md`, full automation configs in `automations.toml`,
+and safe coordinates in `bindings.yaml`. It owns the smaller advisor calls such
 as research, `horizon-advisor`, `harness-advisor`, `skill-creator`, and
 `goal-advisor` when those are needed. Canonical `harness.md` files use YAML
 front matter plus Markdown sections, not a fenced custom program DSL.
@@ -204,9 +204,9 @@ strategy inputs; reconciles outcomes; executes ready tickets up to policy cap;
 requests planning when no executable work exists; and records decision/reward
 state.
 
-Daily Interval and Weekly Interval are planning loops. Their live Codex prompts
-are reviewed in `farplane/automations.md`; Codex automation records own their
-cadence. They call `interval-update`, write date-stamped reports, refresh KPI
+Daily Interval and Weekly Interval are planning loops. Their live Codex
+automation configs are reviewed in `farplane/automations.toml`; Codex
+automation records own their live cadence. They call `interval-update`, write date-stamped reports, refresh KPI
 snapshots from goal `kpis` and provider bindings, check drift, review weekly
 budget/runway, and produce Pulse guidance or Goal Advisor handoffs. They may
 propose static charter deltas in reports, but must not silently apply them.
@@ -220,7 +220,7 @@ advisor owns prompt templates and config guidance; it is not a compiler.
 
 ```text
 automation_advisor(intent, project_refs, current_automation?)
-  -> prompt_delta + proof_checklist
+  -> config_delta + proof_checklist
 ```
 
 Live Codex automations should load their owning skills:

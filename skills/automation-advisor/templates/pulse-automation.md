@@ -3,34 +3,23 @@ title: "Pulse Codex Automation Template"
 status: active
 owner: automation-advisor
 created_at: 2026-06-23
-updated_at: 2026-06-27
-template_version: "0.5.0"
+updated_at: 2026-07-02
+template_version: "1.0.0"
 ---
 
 # Pulse Codex Automation Template
 
-Use these marker-delimited blocks for the project's Pulse automation in
-`farplane/automations.md`. The TOML block is Codex automation metadata; the
-prompt block carries the skill call and skill params copied into the live Codex
-automation.
+Use this `[[automations]]` record in `farplane/automations.toml` for a
+project's Pulse automation. The record is the full desired Codex automation
+config: identity, schedule, target, status, and exact prompt text.
 
-````markdown
-<!-- farplane:automation-config id="<automation-id>" format="toml" -->
 ```toml
-id = "<automation-id>"
-name = "<human name>"
+[[automations]]
+id = "<pulse-automation-id>"
+name = "Project Pulse"
 kind = "heartbeat"
 status = "active"
-target_thread_id = "<thread-id>"
-
-[schedule]
-type = "interval"
-interval_minutes = 30
-```
-<!-- /farplane:automation-config -->
-
-<!-- farplane:automation-prompt id="<automation-id>" -->
-```text
+prompt = '''
 Use $pulse-update.
 
 Run one bounded Farplane Pulse beat for the project. Reconcile recent outcomes,
@@ -41,7 +30,13 @@ Params:
 project_root = "<project-root>"
 
 Config source:
-farplane/automations.md automation-config id="<automation-id>"
+farplane/automations.toml automation id="<pulse-automation-id>"
+'''
+
+[automations.target]
+thread_id = "<pulse-thread-id>"
+
+[automations.schedule]
+type = "interval"
+interval_minutes = 30
 ```
-<!-- /farplane:automation-prompt -->
-````

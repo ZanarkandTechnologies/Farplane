@@ -8,7 +8,10 @@ import json
 import re
 import subprocess
 import sys
+import tomllib
 from pathlib import Path
+
+import yaml
 
 ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
@@ -54,6 +57,17 @@ HARNESS_REQUIRED_HEADINGS = (
     "## Agent Authority",
     "## Change Rule",
 )
+AUTOMATION_RUNTIME_STATE_KEYS = {
+    "last_run",
+    "last_run_at",
+    "last_status",
+    "last_error",
+    "next_run",
+    "run_count",
+    "run_ids",
+    "runs",
+    "memory",
+}
 
 
 def tracked_files(root: Path) -> list[Path]:
@@ -192,8 +206,8 @@ def validate_framework_manifest(root: Path, framework_manifest: Path) -> list[st
         "farplane/harness.md",
         "farplane/goals.md",
         "farplane/products.md",
-        "farplane/automations.md",
-        "farplane/bindings.md",
+        "farplane/automations.toml",
+        "farplane/bindings.yaml",
         "farplane/hooks.json",
         ".agents/skills/README.md",
         "tickets/templates/ticket.md",
@@ -286,6 +300,116 @@ def validate_hooks_file(root: Path, hooks_file: Path) -> list[str]:
     return errors
 
 
+def validate_automations_toml(root: Path, automations_file: Path) -> list[str]:
+    rel_path = automations_file.relative_to(root).as_posix()
+    errors: list[str] = []
+    try:
+        data = tomllib.loads(automations_file.read_text(encoding="utf-8"))
+    except tomllib.TOMLDecodeError as exc:
+        return [f"{rel_path} must be valid TOML: {exc}."]
+
+    if not isinstance(data, dict):
+        return [f"{rel_path} must be a TOML object."]
+    if data.get("schema") != "farplane_project_automations":
+        errors.append(f"{rel_path} schema must be farplane_project_automations.")
+    if data.get("framework_template_version") != "1.0.0":
+        errors.append(f"{rel_path} framework_template_version must be 1.0.0.")
+
+    top_runtime_keys = sorted(AUTOMATION_RUNTIME_STATE_KEYS & set(data))
+    if top_runtime_keys:
+        errors.append(f"{rel_path} must not store runtime state keys: {', '.join(top_runtime_keys)}.")
+
+    automations = data.get("automations")
+    if not isinstance(automations, list) or not automations:
+        errors.append(f"{rel_path} automations must be a non-empty array of tables.")
+        return errors
+
+    seen_ids: set[str] = set()
+    for index, automation in enumerate(automations, start=1):
+        prefix = f"{rel_path} automations[{index}]"
+        if not isinstance(automation, dict):
+            errors.append(f"{prefix} must be a table.")
+            continue
+
+        runtime_keys = sorted(AUTOMATION_RUNTIME_STATE_KEYS & set(automation))
+        if runtime_keys:
+            errors.append(f"{prefix} must not store runtime state keys: {', '.join(runtime_keys)}.")
+
+        for key in ("id", "name", "kind", "status", "prompt"):
+            if not isinstance(automation.get(key), str) or not automation.get(key, "").strip():
+                errors.append(f"{prefix}.{key} must be a non-empty string.")
+
+        automation_id = automation.get("id")
+        if isinstance(automation_id, str) and automation_id.strip():
+            if automation_id in seen_ids:
+                errors.append(f"{rel_path} automation id must be unique: {automation_id}.")
+            seen_ids.add(automation_id)
+
+        if automation.get("kind") not in {"heartbeat", "cron"}:
+            errors.append(f"{prefix}.kind must be heartbeat or cron.")
+        if automation.get("status") not in {"active", "paused"}:
+            errors.append(f"{prefix}.status must be active or paused.")
+
+        target = automation.get("target")
+        if not isinstance(target, dict):
+            errors.append(f"{prefix}.target must be a table with workspace or thread_id.")
+        elif not any(isinstance(target.get(key), str) and target.get(key, "").strip() for key in ("workspace", "thread_id")):
+            errors.append(f"{prefix}.target must include workspace or thread_id.")
+
+        schedule = automation.get("schedule")
+        if not isinstance(schedule, dict):
+            errors.append(f"{prefix}.schedule must be a table.")
+            continue
+
+        schedule_type = schedule.get("type")
+        if schedule_type not in {"interval", "active_hours_interval", "daily", "weekly", "monthly"}:
+            errors.append(f"{prefix}.schedule.type is unsupported.")
+        if schedule_type in {"daily", "weekly", "monthly", "active_hours_interval"}:
+            if not isinstance(schedule.get("timezone"), str) or not schedule.get("timezone", "").strip():
+                errors.append(f"{prefix}.schedule.timezone must be a non-empty string.")
+        if schedule_type in {"daily", "weekly", "monthly"}:
+            if not isinstance(schedule.get("time"), str) or not schedule.get("time", "").strip():
+                errors.append(f"{prefix}.schedule.time must be a non-empty string.")
+        if schedule_type == "weekly":
+            days = schedule.get("days")
+            if not isinstance(days, list) or not days or any(not isinstance(day, str) or not day for day in days):
+                errors.append(f"{prefix}.schedule.days must be a non-empty list of day strings.")
+        if schedule_type == "monthly" and not isinstance(schedule.get("day_of_month"), int):
+            errors.append(f"{prefix}.schedule.day_of_month must be an integer.")
+        if schedule_type in {"interval", "active_hours_interval"} and not isinstance(schedule.get("interval_minutes"), int):
+            errors.append(f"{prefix}.schedule.interval_minutes must be an integer.")
+
+    return errors
+
+
+def validate_bindings_file(root: Path, bindings_file: Path) -> list[str]:
+    rel_path = bindings_file.relative_to(root).as_posix()
+    errors: list[str] = []
+    try:
+        data = yaml.safe_load(bindings_file.read_text(encoding="utf-8")) or {}
+    except yaml.YAMLError as exc:
+        return [f"{rel_path} must be valid YAML: {exc}."]
+
+    if not isinstance(data, dict):
+        return [f"{rel_path} must be a YAML object."]
+    if data.get("kind") != "project-bindings":
+        errors.append(f"{rel_path} must declare kind: project-bindings.")
+    if "framework_template_version" not in data:
+        errors.append(f"{rel_path} must declare framework_template_version.")
+    if not isinstance(data.get("project"), dict):
+        errors.append(f"{rel_path} project must be an object.")
+    if "metrics" in data and not isinstance(data.get("metrics"), dict):
+        errors.append(f"{rel_path} metrics must be an object when present.")
+
+    for line_number, line in enumerate(bindings_file.read_text(encoding="utf-8").splitlines(), start=1):
+        if SECRET_VALUE_RE.search(line):
+            errors.append(
+                f"{rel_path}:{line_number} looks like it stores a secret value; "
+                "bindings are non-secret coordinates only."
+            )
+    return errors
+
+
 def validate_harness_file(root: Path, harness_file: Path) -> list[str]:
     rel_path = harness_file.relative_to(root).as_posix()
     text = harness_file.read_text(encoding="utf-8")
@@ -315,14 +439,15 @@ def validate(root: Path) -> list[str]:
     errors: list[str] = []
     framework_dir = root / "farplane"
     framework_manifest = framework_dir / "manifest.json"
-    automations = framework_dir / "automations.md"
-    bindings = framework_dir / "bindings.md"
+    automations_toml = framework_dir / "automations.toml"
+    bindings = framework_dir / "bindings.yaml"
     harness = framework_dir / "harness.md"
     products = framework_dir / "products.md"
     hooks = framework_dir / "hooks.json"
     retired_file_growth_hook = framework_dir / "file-growth-hook.json"
     duplicate_project_charter = framework_dir / "project.md"
     pm_manifest = framework_dir / "pm.json"
+    retired_bindings_markdown = framework_dir / "bindings.md"
     retired_integrations = framework_dir / "integrations.md"
     retired_steer_config = framework_dir / "steer.config.toml"
     retired_steer_state = root / ".farplane/state/steer-scheduler.json"
@@ -336,9 +461,11 @@ def validate(root: Path) -> list[str]:
         errors.extend(validate_framework_manifest(root, framework_manifest))
 
     if retired_integrations.exists():
-        errors.append(f"{RETIRED_INTEGRATIONS_REF} is retired; use farplane/bindings.md.")
+        errors.append(f"{RETIRED_INTEGRATIONS_REF} is retired; use farplane/bindings.yaml.")
+    if retired_bindings_markdown.exists():
+        errors.append("farplane/bindings.md is retired; use farplane/bindings.yaml.")
     if retired_steer_config.exists():
-        errors.append("farplane/steer.config.toml is retired; use farplane/automations.md.")
+        errors.append("farplane/steer.config.toml is retired; use farplane/automations.toml.")
     if retired_steer_state.exists():
         errors.append(".farplane/state/steer-scheduler.json is retired; Codex automation cadence owns scheduling.")
     if retired_file_growth_hook.exists():
@@ -349,8 +476,10 @@ def validate(root: Path) -> list[str]:
             "unless a versioned framework migration replaces it."
         )
 
-    if not automations.exists():
-        errors.append("farplane/automations.md is required for reviewable Codex automation prompts.")
+    if not automations_toml.exists():
+        errors.append("farplane/automations.toml is required for full Codex automation configs.")
+    else:
+        errors.extend(validate_automations_toml(root, automations_toml))
 
     if not harness.exists():
         errors.append("farplane/harness.md is required for the static human charter.")
@@ -370,16 +499,10 @@ def validate(root: Path) -> list[str]:
     else:
         errors.extend(validate_hooks_file(root, hooks))
 
-    if bindings.exists():
-        text = bindings.read_text(encoding="utf-8")
-        if "kind: project-bindings" not in text[:500]:
-            errors.append("farplane/bindings.md must use front matter kind: project-bindings.")
-        for line_number, line in enumerate(text.splitlines(), start=1):
-            if SECRET_VALUE_RE.search(line):
-                errors.append(
-                    f"farplane/bindings.md:{line_number} looks like it stores a secret value; "
-                    "bindings are non-secret coordinates only."
-                )
+    if not bindings.exists():
+        errors.append("farplane/bindings.yaml is required for project bindings.")
+    else:
+        errors.extend(validate_bindings_file(root, bindings))
 
     for path in sorted(framework_dir.glob("*.md")):
         text = path.read_text(encoding="utf-8")
@@ -400,7 +523,7 @@ def validate(root: Path) -> list[str]:
             continue
         if RETIRED_INTEGRATIONS_REF in text:
             errors.append(
-                f"{rel_path}: references retired {RETIRED_INTEGRATIONS_REF}; use farplane/bindings.md."
+                f"{rel_path}: references retired {RETIRED_INTEGRATIONS_REF}; use farplane/bindings.yaml."
             )
 
     return errors

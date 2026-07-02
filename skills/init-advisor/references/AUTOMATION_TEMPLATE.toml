@@ -1,0 +1,98 @@
+# Canonical desired-state Codex automation config for this Farplane project.
+# Runtime logs, run IDs, last-run status, and automation memory stay outside tracked config.
+schema = "farplane_project_automations"
+framework_template_version = "1.0.0"
+updated_at = "YYYY-MM-DD"
+owner = "automation-advisor"
+
+[[automations]]
+id = "<pulse-automation-id>"
+name = "Project Pulse"
+kind = "heartbeat"
+status = "paused"
+prompt = '''
+Use $pulse-update.
+
+Run one bounded Farplane Pulse beat for the project. Reconcile recent outcomes,
+select at most the configured ready work, and write the normal Pulse report or
+blocker through the skill contract.
+
+Params:
+project_root = "<project-root>"
+
+Config source:
+farplane/automations.toml automation id="<pulse-automation-id>"
+'''
+
+[automations.target]
+thread_id = "<pulse-thread-id>"
+
+[automations.schedule]
+type = "interval"
+interval_minutes = 30
+rrule = "FREQ=MINUTELY;INTERVAL=30"
+
+[[automations]]
+id = "<daily-interval-automation-id>"
+name = "Project Daily Interval"
+kind = "cron"
+status = "paused"
+prompt = '''
+Use $interval-update.
+
+Run the daily Farplane interval. Reflect on the last 24 hours, close or update
+obvious reward signals, then plan the next 24 hours without executing ticket
+work directly.
+
+Params:
+project_root = "<project-root>"
+interval_id = "daily_interval"
+review_window = "last_24h"
+planning_window = "next_24h"
+timezone = "<timezone>"
+
+Config source:
+farplane/automations.toml automation id="<daily-interval-automation-id>"
+'''
+
+[automations.target]
+workspace = "<project-root>"
+
+[automations.schedule]
+type = "daily"
+timezone = "<timezone>"
+time = "05:33"
+rrule = "FREQ=DAILY;BYHOUR=5;BYMINUTE=33;BYSECOND=0"
+
+[[automations]]
+id = "<weekly-interval-automation-id>"
+name = "Project Weekly Interval"
+kind = "cron"
+status = "paused"
+prompt = '''
+Use $interval-update.
+
+Run the weekly Farplane interval. Reflect on the last week, read child daily
+intervals when present, close or update prior reward signals, then plan the
+next week by working backwards from goals and bottlenecks.
+
+Params:
+project_root = "<project-root>"
+interval_id = "weekly_interval"
+review_window = "last_week"
+planning_window = "next_week"
+timezone = "<timezone>"
+
+Config source:
+farplane/automations.toml automation id="<weekly-interval-automation-id>"
+'''
+
+[automations.target]
+workspace = "<project-root>"
+
+[automations.schedule]
+type = "weekly"
+timezone = "<timezone>"
+days = ["Mon"]
+time = "05:45"
+rrule = "FREQ=WEEKLY;BYDAY=MO;BYHOUR=5;BYMINUTE=45;BYSECOND=0"

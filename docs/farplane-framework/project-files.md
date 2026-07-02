@@ -10,9 +10,9 @@ source_of_truth:
   - farplane/manifest.json
   - farplane/harness.md
   - farplane/goals.md
-  - farplane/automations.md
+  - farplane/automations.toml
   - farplane/products.md
-  - farplane/bindings.md
+  - farplane/bindings.yaml
   - farplane/hooks.json
   - .agents/skills/README.md
   - farplane/pm.json
@@ -52,8 +52,8 @@ farplane/
   goals.md
   products.md
   ops-memory.md
-  automations.md
-  bindings.md
+  automations.toml
+  bindings.yaml
   hooks.json
   pm.json
 
@@ -94,7 +94,7 @@ active projects; the detailed review procedure lives in `interval-update`.
 Use YAML front matter plus Markdown sections and stable tables. Do not put a
 fenced `harness-program` DSL block in canonical project harness files. Product
 pipelines belong in `products.md`, current strategy belongs in `goals.md`, and
-automation prompts belong in `automations.md`.
+full Codex automation configs belong in `automations.toml`.
 
 ### `farplane/goals.md`
 
@@ -113,7 +113,7 @@ kpis:
     direction: below
 ```
 
-Metric refresh prompts, chart shape, units, and pinned status live in `farplane/bindings.md`
+Metric refresh prompts, chart shape, units, and pinned status live in `farplane/bindings.yaml`
 metric recipes. This file may evolve through evidence-backed goals deltas, but
 it must stay inside the static charter in `farplane/harness.md`. Horizon and
 Goal Advisor procedures live in their skills, not in this file.
@@ -169,32 +169,33 @@ may summarize the active campaign or next frontier; the content ledger owns
 repeatable fetch targets for publishing skills, interval metric refresh, and
 future UI distribution views.
 
-### `farplane/automations.md`
+### `farplane/automations.toml`
 
-Human-reviewable Codex automation prompt source. It stores the exact Pulse,
-Daily Interval, Weekly Interval, optional Monthly Registry Consolidation, and
-optional Active-Hours Taste Loop prompt blocks copied into the Codex app
-automation records.
+Human-reviewable Codex automation desired-state source. It stores full TOML
+records for Pulse, Daily Interval, Weekly Interval, optional Monthly Registry
+Consolidation, and optional Active-Hours Taste Loop.
 
-Skills stay generic and parameterized. Prompts here should configure cadence,
-project root, thread IDs, active-hours availability, target registry sets, and
-project-specific extensions only. Generic loop behavior belongs in
-`pulse-update`, `interval-update`, `consolidate`, and `taste-loop`.
+Each `[[automations]]` record includes id, name, kind, status, schedule or
+RRULE-equivalent fields, workspace/thread target, and the exact `prompt` copied
+into the Codex app automation record. Skills stay generic and parameterized.
+Prompts here should configure project root, interval windows, source refs,
+side-effect gates, and project-specific extensions only. Generic loop behavior
+belongs in `pulse-update`, `interval-update`, `consolidate`, and `taste-loop`.
 
 The Active-Hours Taste Loop is the official optional framework heartbeat for
-using human taste while the operator is online. It should read
-`FARPLANE_TASTE_LOOP_*` config from the rendered Codex config, rank candidate
-skills with the official Skill Signals, emit a feedback card or Goal
-Advisor handoff, and stop. It must not activate itself, create a local runner,
-edit target skills directly, or invent fake benchmarks when the honest metric is
+using human taste while the operator is online. It should read active-hours and
+project-specific settings from `farplane/automations.toml`, rank candidate
+skills with the official Skill Signals, emit a feedback card or Goal Advisor
+handoff, and stop. It must not activate itself, create a local runner, edit
+target skills directly, or invent fake benchmarks when the honest metric is
 human feedback or review.
 
-### `farplane/bindings.md`
+### `farplane/bindings.yaml`
 
 Non-secret project coordinates: URLs, handles, safe IDs, labels, aliases,
-database names, dashboard links, notification channel labels, and metric
-recipes. The canonical YAML block contains `project`, `integrations`, and
-`metrics`.
+database names, dashboard links, notification channel labels, Feed Scout source
+configuration, and metric recipes. The canonical YAML block contains `project`,
+`integrations`, optional `feed_scout`, and `metrics`.
 
 Metric recipes are the single owner for label, product, unit, chart display,
 pinned status, metric kind, and one prompt-only refresh instruction:
@@ -221,10 +222,22 @@ they should all normalize to one dated file:
 ```text
 .farplane/metrics/daily/YYYY-MM-DD.json
   -> { date, metrics: { [metric_id]: { value, status, payload? } } }
+
+.farplane/metrics/ui/latest.json
+  -> {
+       schema_version: 2,
+       metrics: [...KPI chart series...],
+       contents: [...content-centric metric series...]
+     }
 ```
 
 Goals own SMART targets. Bindings do not carry targets, provider routes, write
 paths, or fetcher DSL fields. Do not store secrets or credentials here.
+
+Feed Scout config in `feed_scout` declares non-secret watched sources, cadence,
+report paths, UI feed paths, and local-first write policy. It must not store raw
+fetched items or summaries; those rows belong under `.farplane/feed-scout/` and
+`.farplane/reports/feed-scout/`.
 
 ### `farplane/hooks.json`
 
@@ -263,7 +276,24 @@ Allowed statuses are `idea`, `draft`, `approved`, `posted`, `measured`, and
 Publishing skills must append or update a row after confirmed account mutation
 using `farplane content add`. Metric refresh uses this ledger to select posted
 content for platform metric fetches and writes aggregate values plus
-`payload.items` into `.farplane/metrics/daily/YYYY-MM-DD.json`.
+`payload.items` into `.farplane/metrics/daily/YYYY-MM-DD.json`. The compiler
+preserves those payloads in KPI series and also derives
+`.farplane/metrics/ui/latest.json.contents[]`, where each content item has its
+own per-KPI time series for distribution-tab drilldown.
+
+Supported local commands:
+
+```bash
+python3 bin/farplane.py content add --platform instagram --external-id <media_id> --status posted --approval approved --published-at <iso> --kpis instagram_views,instagram_likes,evidence_distribution_reach
+python3 bin/farplane.py content validate
+python3 bin/farplane.py content select --platform instagram --kpi instagram_views --date <YYYY-MM-DD> --window-days 7
+```
+
+`content validate` reports malformed JSONL, invalid statuses, invalid approval
+values, missing KPI lists, duplicate `content_id` rows, and invalid timestamps.
+`content select` returns exact external IDs plus a platform-specific fetch
+command hint, or `status=source_gap` when the ledger or matching posted rows are
+missing. It does not call external accounts.
 
 ### `.agents/skills/`
 
@@ -368,6 +398,35 @@ Generated reports. New framework reports should be date-stamped:
 Consumers find newest interval reports by timestamp sorting or explicit links
 from later reports. There is no tracked scheduler config just to store
 `last_report`.
+
+Interval reports expose UI report-card metadata in frontmatter under
+`ui_summary`. Consumers should parse YAML frontmatter, not prose sections. The
+stable card contract is:
+
+```yaml
+ui_summary:
+  schema_version: 1
+  title: Daily Interval Update
+  date: "2026-07-02"
+  report_type: interval
+  interval_id: daily_interval
+  deep_link_path: .farplane/reports/interval/daily_interval/2026-07-01T213611Z.md
+  summary_bullets:
+    - Refresh the active frontier after the KPI/autonomy metric chain completed.
+    - Clear review-gated KPI/content/QA surfaces.
+    - Protect the simplified metric loop.
+  highlights: []
+  metrics: []
+  blockers:
+    - Ops memory primary frontier points at completed TASK-0251.
+  next_actions:
+    - Refresh active ops-memory frontier.
+```
+
+`summary_bullets` should contain 3-5 compact outcomes. `highlights`,
+`metrics`, `blockers`, and `next_actions` are optional arrays; emit an empty
+array when no item applies. `deep_link_path` is the local report path to open for
+the full Markdown report.
 
 ## Validation
 

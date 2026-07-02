@@ -24,7 +24,7 @@ farplane/
   harness.md       # static human charter
   goals.md         # north star, KPIs, current milestone, holds
   products.md      # products and work lanes this team creates
-  automations.md   # exact Codex automation prompt blocks for Pulse, Intervals, and optional consolidation/Taste Loop
+  automations.toml # full Codex automation configs for Pulse, Intervals, and optional consolidation/Taste Loop
   bindings.yaml      # non-secret project IDs, URLs, labels, aliases
   hooks.json       # declarative Farplane-native hook configuration
   pm.json          # optional UI thread manifest for one visual project PM

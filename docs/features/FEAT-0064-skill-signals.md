@@ -12,7 +12,7 @@ refs:
   - docs/features/FEAT-0064-skill-signals.md
   - docs/skills/system.md
   - skills/taste-loop
-  - farplane/automations.md
+  - farplane/automations.toml
   - docs/skills/registry.jsonl
   - docs/farplane-framework/lifecycle.md
   - farplane/products.md
@@ -28,7 +28,7 @@ surfaces:
   - docs/features/FEAT-0064-skill-signals.md
   - docs/skills/system.md
   - skills/taste-loop
-  - farplane/automations.md
+  - farplane/automations.toml
   - docs/skills/registry.jsonl
 source_refs:
   - docs/farplane-framework/lifecycle.md
@@ -138,7 +138,7 @@ Owner surfaces:
 - `docs/features/FEAT-0064-skill-signals.md`
 - `docs/skills/system.md`
 - `skills/taste-loop`
-- `farplane/automations.md`
+- `farplane/automations.toml`
 - `docs/skills/registry.jsonl`
 
 Source context:

@@ -23,8 +23,9 @@ farplane/
   goals.md         # north star, KPIs, current milestone, holds
   products.md      # products and work lanes this team creates
   ops-memory.md    # active focus, projects, runway, and frontier
-  automations.md   # exact Codex automation prompt blocks for Pulse and Intervals
-  bindings.md      # non-secret project IDs, URLs, labels, aliases
+  automations.toml # full Codex automation configs for Pulse and Intervals
+  automations.toml # full Codex automation configs for Pulse and Intervals
+  bindings.yaml      # non-secret project IDs, URLs, labels, aliases
   hooks.json       # declarative Farplane-native hook configuration
   pm.json          # optional UI thread manifest for one visual project PM
 

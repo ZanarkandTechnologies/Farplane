@@ -34,18 +34,24 @@ interval_update(project_root, interval_id, review_window, planning_window,
   -> dated interval report + ops-memory delta? + next-window plan + Pulse guidance
 ```
 
-Pulse is the fast execution bus. It reads the static harness charter, current
-goals, dynamic products, active ops memory, product lane weights, recent
-Weekly/Daily strategy inputs, ticket state, execution policy, rewards, and
-ledgers. It admits ready tickets, executes parallelizable work up to policy
-cap, creates a small tactical next wave when the board is empty and fresh
-strategy is available, writes planning requests when no safe tactical work
-exists, writes a dated Pulse report, and updates decision/reward state.
+Pulse is the fast execution bus with founder-like ambition inside hard gates.
+It reads the static harness charter, current goals, dynamic products, active ops
+memory, product lane weights, recent Weekly/Daily strategy inputs, ticket state,
+execution policy, rewards, and ledgers. It admits ready tickets, executes
+parallelizable work up to policy cap, creates a small tactical next wave when
+the board is empty and fresh strategy is available, writes planning requests
+when no safe tactical work exists, writes a dated Pulse report, and updates
+decision/reward state. Pulse can generate bold bounded tactical ideas, but only
+as tests of the current operating belief, frontier, bottleneck, or reward
+signal.
 
-Daily Interval reviews the last 24 hours and recalibrates the next 24 hours.
-Weekly Interval reviews the last week, checks drift against
+Daily Interval reviews the last 24 hours and recalibrates the next 24 hours. It
+acts as a short-horizon reality check: what worked, what failed, and which
+`ops-memory` belief should be kept, revised, dropped, or doubled down under a
+guard. Weekly Interval reviews the last week, checks drift against
 `farplane/harness.md` and `farplane/goals.md`, reviews budget/runway for active
-projects, and sets next-week bets. Both call `interval-update`, write dated reports under
+projects, and sets next-week bets. It acts like a board review for runway and
+belief quality. Both call `interval-update`, write dated reports under
 `.farplane/reports/interval/`, and give Pulse strategy inputs.
 
 `farplane/ops-memory.md` is the active operating memory between reports and
@@ -59,7 +65,9 @@ The important design choice is that Pulse does not become long-horizon
 strategy, and interval automations do not become fast execution dispatchers.
 Weekly and Daily alter the inputs to the tactical planner; Pulse owns the
 current board scan, next-wave slicing, execution admission, and outcome
-writeback. They share files, not hidden transcript memory.
+writeback. They share files, not hidden transcript memory. Do not add a
+separate idea ledger: Pulse reports, interval reports, tickets, rewards, metrics,
+and `farplane/ops-memory.md` are the existing evidence surfaces.
 
 ## Memory Split
 
@@ -69,14 +77,14 @@ Use the smallest owner for each kind of state:
 | --- | --- | --- |
 | Stable thesis and guardrails | `farplane/harness.md` | explicit human-approved harness delta |
 | North star, value function, goal axes, inline SMART goals, durable bets | `farplane/goals.md` | horizon/goal delta with evidence and approval when material |
-| Metric labels, units, chart behavior, pinned status, kind, and refresh prompts | `farplane/bindings.md` | metric recipe delta with source-gap proof |
+| Metric labels, units, chart behavior, pinned status, kind, and refresh prompts | `farplane/bindings.yaml` | metric recipe delta with source-gap proof |
 | Product lanes, workflows, lane weights | `farplane/products.md` | product-boundary update with evidence |
 | Active focus, active projects, critical paths, next frontier | `farplane/ops-memory.md` | Daily/Weekly refresh or Pulse frontier writeback |
 | Executable work | `tickets/TASK-*/ticket.md` | ticket creation, execution, review, closeout |
 | Ticket-level spend justification | ticket `Reward` block | ticket creation or planning update |
 | Active project runway decisions | Weekly Interval report and `farplane/ops-memory.md` | weekly review or material evidence change |
 | Receipts and ledgers | `.farplane/reports/**`, `.farplane/automation/*.jsonl` | Pulse/Interval/worker outcomes |
-| Caps and cadence | `.farplane/automation/heartbeat-policy.json`, `farplane/automations.md` | explicit automation/policy update |
+| Caps and cadence | `.farplane/automation/heartbeat-policy.json`, `farplane/automations.toml` | explicit automation/policy update |
 
 This keeps flexible planning in one place without turning every roadmap idea
 into a new artifact family. Caps such as `maxChildThreadsPerBeat` remain policy
@@ -90,6 +98,9 @@ ops-memory:
 
 ```text
 StrategyInput := focus + bets + prefer + avoid + blocked + reward
+OpsMemoryChallenge := pulse_belief_reviewed + what_worked + what_failed
+                    + belief_to_keep + belief_to_revise + belief_to_drop
+                    + double_down_guard + source_gap
 OpsMemoryDelta := current_focus + active_projects + next_frontier
                + constraints + parking_lot + recent_decisions
 ```
@@ -110,7 +121,9 @@ plan_next_wave_when_empty(ops_memory, weekly_strategy, daily_strategy,
 
 Generated tactical tickets must be small, local, approval-free, and tied to a
 current focus, active project, frontier step, bet, lane, bottleneck, or reward
-signal. Each generated ticket must include:
+signal. Each next-wave decision should name the active ops-memory belief being
+tested so Daily or Weekly can challenge it later. Each generated ticket must
+include:
 
 ```yaml
 Reward:
@@ -146,7 +159,7 @@ goals/products + ops-memory + latest interval reports
 
 Daily and Weekly should read goal-axis SMART goals semantically. For each
 active SMART goal, use its `kpis` to find metric recipes in
-`farplane/bindings.md`; each recipe gives the interval agent a prompt-only
+`farplane/bindings.yaml`; each recipe gives the interval agent a prompt-only
 `refresh` instruction for today's reading. Do not parse
 `farplane/ops-memory.md` as a deterministic database; use it as flexible agent
 memory for active initiatives, tracked content, and next ticket candidates.
@@ -158,6 +171,15 @@ writing `.farplane/metrics/daily/<date>.json`, run
 Maintenance work should compete against the active frontier. It is selected
 only when it unblocks the focus, protects proof, or has a clearer reward signal
 than the current project work.
+
+Daily and Weekly challenge `farplane/ops-memory.md`; they do not turn every
+interesting idea into a new row somewhere else. Use:
+
+```text
+working evidence -> keep or double down under guard
+failed evidence -> revise, narrow, or drop
+missing evidence -> source_gap or instrumentation ticket
+```
 
 ## Budget And Runway
 

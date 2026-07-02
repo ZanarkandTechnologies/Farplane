@@ -151,8 +151,8 @@ farplane/manifest.json
 farplane/harness.md
 farplane/goals.md
 farplane/products.md
-farplane/automations.md
-farplane/bindings.md
+farplane/automations.toml
+farplane/bindings.yaml
 farplane/hooks.json
 .agents/skills/README.md
 farplane/pm.json
@@ -182,7 +182,7 @@ Key contracts:
 - `farplane/products.md` is the project product catalog: team identity,
   product rows, work-lane weights, and constraints. It informs interval
   planning; Pulse executes ready tickets after planners create them.
-- `farplane/automations.md` is the human-reviewable source for the exact Pulse,
+- `farplane/automations.toml` is the human-reviewable full-TOML source for the exact Pulse,
   Daily Interval, and Weekly Interval prompts copied into Codex automations.
 - `farplane/hooks.json` is declarative project hook config. Hook algorithms,
   eval runners, and post-action procedures belong in skills, runtime hooks,
@@ -217,7 +217,7 @@ Audit:
 - `farplane/harness.md`
 - `farplane/goals.md`
 - `farplane/products.md`
-- `farplane/bindings.md`
+- `farplane/bindings.yaml`
 - `.agents/skills/README.md`
 - `farplane/pm.json`
 - `PROJECT_RULES.md`
@@ -296,8 +296,8 @@ harness_creator(project_idea, values?, priorities?, mode_presets?,
   -> farplane/harness.md delta?
    + farplane/products.md delta?
    + farplane/goals.md delta?
-   + farplane/automations.md delta?
-   + farplane/bindings.md delta?
+   + farplane/automations.toml delta?
+   + farplane/bindings.yaml delta?
    + missing-system or unblock tickets?
    + current_milestone
    + goal_advisor_handoff?
@@ -460,7 +460,7 @@ Activation steps:
 
 Guardrails:
 
-- Create the live loops named in `farplane/automations.md`, commonly Pulse,
+- Create the live loops named in `farplane/automations.toml`, commonly Pulse,
   Daily Interval, and Weekly Interval.
 - Do not create separate ticket-drainer or hidden scheduler threads; Pulse owns
   fast ticket selection and intervals own report-then-plan work.
@@ -486,7 +486,7 @@ Guardrails:
 | `farplane/harness.md` | `init-advisor` / `harness-creator` | harness planning | static human charter: mission, thesis, non-tradeoffs, leverage commitments, authority, change rule |
 | `farplane/goals.md` | `init-advisor` / `harness-creator` / `horizon-advisor` | strategy work | goals, KPIs, milestone |
 | `farplane/products.md` | `init-advisor` / `harness-creator` | product planning / work-lane tuning | product rows and work lanes |
-| `farplane/automations.md` | `init-advisor` / `automation-advisor` | operator / `automation-advisor` | reviewed Pulse and Interval prompt source |
+| `farplane/automations.toml` | `init-advisor` / `automation-advisor` | operator / `automation-advisor` | reviewed Pulse and Interval config source |
 | `.agents/skills/README.md` | `init-advisor` | `harness-creator` / product-skill refinement | local product-skill home |
 | `farplane/pm.json` | `init-advisor` | `automation-advisor` / PM-visible threads | UI grouping for persistent chat and automation threads |
 | `tickets/TASK-0001/ticket.md` | `init-advisor` | planning flow | starter PRD/discovery handoff |
@@ -524,7 +524,7 @@ write dated reports and plans. PM-visible threads are grouped in
 - `loop_duplication:` ticket-drainer, scheduler, or strategy-review jobs become
   extra threads. Keep ticket execution in Pulse and report-then-plan work in
   explicit interval automations.
-- `prompt_bloat:` `farplane/automations.md` starts duplicating skill runbooks.
+- `config_bloat:` `farplane/automations.toml` starts duplicating skill runbooks.
   Keep prompts to skill calls, cadence, and true project-specific extensions.
 - `state_mixup:` runtime timestamps or automation IDs enter tracked project
   config. Keep automation runtime IDs in Codex and `farplane/pm.json` for UI

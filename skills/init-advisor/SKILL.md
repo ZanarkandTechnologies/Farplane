@@ -33,10 +33,11 @@ optional quality tooling. Keep those recipes in this skill or its references;
 do not delete the code-repo scaffolding branch while simplifying project
 initialization.
 
-Reusable project automation prompt templates live in
-[AUTOMATION_TEMPLATE.md](references/AUTOMATION_TEMPLATE.md). Generated project
-config includes `farplane/automations.md` as the reviewable source copied into
-Codex automations; live activation belongs to `automation-advisor`.
+Reusable project automation config templates live in
+[AUTOMATION_TEMPLATE.toml](references/AUTOMATION_TEMPLATE.toml). Generated
+project config includes `farplane/automations.toml` as the reviewable desired
+state copied into Codex automations; live activation belongs to
+`automation-advisor`.
 
 For "what does init create?" answers, load [README.md](README.md) or the
 manifest template rather than duplicating the generated-file inventory here.
@@ -150,9 +151,9 @@ setup_project_operating_model(bootstrap_brief, project_context,
   - [ ] Use [GITIGNORE_TEMPLATE](references/GITIGNORE_TEMPLATE) as the
         canonical generated `.gitignore` block for Farplane local runtime and
         work state.
-  - [ ] Use [AUTOMATION_TEMPLATE.md](references/AUTOMATION_TEMPLATE.md) as the
-        `farplane/automations.md` source; do not duplicate automation prompt
-        rules in this skill.
+  - [ ] Use [AUTOMATION_TEMPLATE.toml](references/AUTOMATION_TEMPLATE.toml) as
+        the `farplane/automations.toml` source; do not duplicate automation
+        config rules in this skill.
   - [ ] Do not create legacy Steer scheduler files such as
         `farplane/steer.config.toml` or
         `.farplane/state/steer-scheduler.json`.
@@ -183,7 +184,7 @@ setup_project_operating_model(bootstrap_brief, project_context,
         live automation activation.
   - [ ] When live activation is requested, call `automation-advisor` after the
         substrate exists so it can create or update the loops named in
-        `farplane/automations.md`.
+        `farplane/automations.toml`.
   - [ ] Write PM-visible thread IDs to `farplane/pm.json`; keep runtime
         automation IDs in the Codex app automation store.
   - [ ] If activation is skipped or unavailable, report
@@ -228,8 +229,9 @@ setup_project_operating_model(bootstrap_brief, project_context,
   - copied to `docs/systems/README.md` for system/product grouping guidance.
 - [references/FARPLANE_PRODUCTS_TEMPLATE.md](references/FARPLANE_PRODUCTS_TEMPLATE.md)
   - copied to `farplane/products.md` for the project product catalog.
-- [references/AUTOMATION_TEMPLATE.md](references/AUTOMATION_TEMPLATE.md) -
-  copied to `farplane/automations.md` for reviewable Codex automation prompts.
+- [references/AUTOMATION_TEMPLATE.toml](references/AUTOMATION_TEMPLATE.toml) -
+  copied to `farplane/automations.toml` for reviewable Codex automation
+  configs.
 - [references/CODE_SCAFFOLD_RECIPES.md](references/CODE_SCAFFOLD_RECIPES.md) -
   load only when `include_code_scaffold == true`, the user asks which stack can
   be scaffolded, or stack setup commands need review.

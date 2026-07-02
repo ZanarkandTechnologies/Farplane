@@ -101,9 +101,9 @@ init_advisor_qa(project_root, init_mode, activation_requested?)
      `goal-advisor` before there is a concrete milestone.
 
 11. `automation_source`
-   - Pass: `farplane/automations.md` contains reviewable Pulse, Daily Interval,
-     and Weekly Interval prompt blocks that call generic skills directly; it
-     does not require `farplane/steer.config.toml`,
+   - Pass: `farplane/automations.toml` contains reviewable Pulse, Daily
+     Interval, and Weekly Interval full Codex automation configs that call
+     generic skills directly; it does not require `farplane/steer.config.toml`,
      `.farplane/state/steer-scheduler.json`, or `latest.md` as canonical
      interval state.
    - Fail: a hidden scheduler, lane compiler, automation JSON manifest, or
@@ -120,7 +120,7 @@ init_advisor_qa(project_root, init_mode, activation_requested?)
 
 13. `live_automation_activation`
    - Pass: when activation was requested, live Codex automation records match
-     `farplane/automations.md` and PM-visible thread IDs are in
+     `farplane/automations.toml` and PM-visible thread IDs are in
      `farplane/pm.json`; runtime automation IDs stay in the Codex app
      automation store.
    - Fail: live prompts drift from the reviewed source, or runtime automation

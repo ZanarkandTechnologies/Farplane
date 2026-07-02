@@ -58,7 +58,7 @@ too noisy for tracked config.
 
 Tracked framework config stays under `farplane/`. The important separation is:
 
-- `farplane/automations.md` stores human-owned Codex prompt text.
+- `farplane/automations.toml` stores human-owned Codex prompt text.
 - Codex automation records store cadence and runtime automation IDs.
 - `farplane/pm.json` groups PM-visible thread IDs for UI display.
 - automation runtime IDs live in the Codex app automation store, not in

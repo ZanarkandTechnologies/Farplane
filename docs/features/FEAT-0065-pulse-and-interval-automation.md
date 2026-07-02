@@ -9,7 +9,7 @@ tags:
   - feature
   - sys-0003
 refs:
-  - farplane/automations.md
+  - farplane/automations.toml
   - skills/pulse-update/SKILL.md
   - skills/interval-update/SKILL.md
   - skills/automation-advisor/SKILL.md
@@ -18,7 +18,7 @@ system_id: SYS-0003
 category: planning
 public: true
 surfaces:
-  - farplane/automations.md
+  - farplane/automations.toml
   - skills/pulse-update/SKILL.md
   - skills/interval-update/SKILL.md
   - skills/automation-advisor/SKILL.md
@@ -29,7 +29,7 @@ evidence_refs:
   - skills/pulse-update/eval_task.json
   - skills/interval-update/eval_task.json
   - skills/automation-advisor/audits/2026-06-24-automation-prompt-qa.md
-known_limits: Automation prompts and previewable loops exist, but Farplane still avoids hidden daemons and requires visible tickets, reports, or automations as state surfaces.
+known_limits: Full TOML automation configs and previewable loops exist, but Farplane still avoids hidden daemons and requires visible tickets, reports, or automations as state surfaces.
 metrics:
   - pulse_action_relevance
   - interval_report_usefulness
@@ -61,8 +61,8 @@ horizon_tick(window, state) -> bounded_action | report | no_op + learning_signal
 A business needs recurring motion, but hidden autonomy can mutate state without visible
 proof or human authority.
 
-Pulse and interval automation keeps recurring work explicit: prompts, reports, tickets,
-artifacts, and no-op decisions all have visible owners.
+Pulse and interval automation keeps recurring work explicit: configs, prompts,
+reports, tickets, artifacts, and no-op decisions all have visible owners.
 
 ## What It Does
 
@@ -82,7 +82,7 @@ artifacts, and no-op decisions all have visible owners.
 
 Longer-horizon autonomy must remain visible, ticket-backed, and proof-aware.
 
-- Each automation has a visible prompt or config owner.
+- Each automation has a visible full TOML config owner.
 - Outputs land in tickets, reports, docs, or another durable owner.
 - Repeated checks widen by backoff and reset on progress.
 - Humans own ambiguous direction, destructive changes, spend, deploys, and hard-to-reverse architecture choices.
@@ -92,7 +92,7 @@ Longer-horizon autonomy must remain visible, ticket-backed, and proof-aware.
 
 Owner surfaces:
 
-- `farplane/automations.md`
+- `farplane/automations.toml`
 - `skills/pulse-update/SKILL.md`
 - `skills/interval-update/SKILL.md`
 - `skills/automation-advisor/SKILL.md`
@@ -132,7 +132,7 @@ Acceptance signals:
 - This feature does not create an invisible background queue.
 - This feature does not require a bespoke sidecar before the basic ticket loop works.
 - This feature does not let automation bypass human authority for risky choices.
-- Known limit: Automation prompts and previewable loops exist, but Farplane still avoids hidden daemons and requires visible tickets, reports, or automations as state surfaces.
+- Known limit: Full TOML automation configs and previewable loops exist, but Farplane still avoids hidden daemons and requires visible tickets, reports, or automations as state surfaces.
 - Delete or merge this feature only when its current truth has moved into a clearer owner and all active refs are removed.
 
 ## Metrics
@@ -154,3 +154,4 @@ Acceptance signals:
 
 - 2026-06-27: Feature spec created.
 - 2026-06-27: Migrated into the reader-first feature-spec shape.
+- 2026-07-02: Standardized project automation source on full TOML records in `farplane/automations.toml`.

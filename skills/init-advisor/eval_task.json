@@ -4,7 +4,7 @@
     "title": "Init advisor emits Pulse and Interval automation prompts",
     "query": "A new Farplane project is being initialized for autonomous operation. What should the generated automation surfaces contain?",
     "reference_points": [
-      "Creates farplane/automations.md as the reviewable prompt source",
+      "Creates farplane/automations.toml as the reviewable full automation config source",
       "Creates farplane/harness.md as the static human charter with human thesis, static leverage commitments, non-tradeoffs, agent authority, and change rule",
       "Creates farplane/products.md as the product catalog for primary and supporting products",
       "Grounds the team archetype against real-world equivalents before finalizing harness, products, or goals",
@@ -38,7 +38,7 @@
       "Bootstrap creates files, tickets, and pm manifest, but not live Codex automations by default",
       "Does not create live Codex threads or automations unless activation is requested",
       "Routes activation to automation-advisor",
-      "Activation creates or reuses the loops named in farplane/automations.md, commonly Pulse, Daily Interval, and Weekly Interval",
+      "Activation creates or reuses the loops named in farplane/automations.toml, commonly Pulse, Daily Interval, and Weekly Interval",
       "Writes PM-visible thread IDs to farplane/pm.json and keeps automation runtime IDs in the Codex app automation store",
       "Reports needs_operating_model_intake or needs_automation_setup when blocked"
     ],
