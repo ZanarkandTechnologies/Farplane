@@ -1,26 +1,26 @@
 {
   "counts": {
     "edge_types": {
-      "directory-contains": 171,
-      "literal-path": 3514,
+      "directory-contains": 174,
+      "literal-path": 3546,
       "markdown-link": 651
     },
-    "edges": 4336,
+    "edges": 4371,
     "node_kinds": {
       "agent": 17,
       "doc": 44,
-      "file": 540,
+      "file": 545,
       "review-rubric": 23,
       "root-doc": 6,
-      "script": 69,
+      "script": 72,
       "skill": 101,
       "skill-doc": 8,
       "spec": 30,
       "template": 5
     },
-    "nodes": 843,
-    "scanned_files": 1275,
-    "unresolved_refs": 1116
+    "nodes": 851,
+    "scanned_files": 1279,
+    "unresolved_refs": 1104
   },
   "edges": [
     {
@@ -62,7 +62,14 @@
       "from_file": "bin/core",
       "raw_ref": "bin/core",
       "source": "dir:bin/core",
-      "target": "file:bin/core/farplane_metrics.py",
+      "target": "file:bin/core/farplane_primitive_metrics.py",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "bin/core",
+      "raw_ref": "bin/core",
+      "source": "dir:bin/core",
+      "target": "file:bin/core/farplane_project_snapshot.py",
       "type": "directory-contains"
     },
     {
@@ -174,7 +181,21 @@
       "from_file": "bin/tests",
       "raw_ref": "bin/tests",
       "source": "dir:bin/tests",
-      "target": "file:bin/tests/test_farplane_metrics.py",
+      "target": "file:bin/tests/test_farplane_primitive_metrics.py",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "bin/tests",
+      "raw_ref": "bin/tests",
+      "source": "dir:bin/tests",
+      "target": "file:bin/tests/test_farplane_project_file_validator.py",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "bin/tests",
+      "raw_ref": "bin/tests",
+      "source": "dir:bin/tests",
+      "target": "file:bin/tests/test_farplane_project_snapshot.py",
       "type": "directory-contains"
     },
     {
@@ -2754,6 +2775,83 @@
       "type": "literal-path"
     },
     {
+      "from_file": "bin/core/farplane_project_snapshot.py",
+      "raw_ref": "docs/HISTORY.md",
+      "source": "file:bin/core/farplane_project_snapshot.py",
+      "target": "file:docs/HISTORY.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "bin/core/farplane_project_snapshot.py",
+      "raw_ref": "docs/LESSONS.md",
+      "source": "file:bin/core/farplane_project_snapshot.py",
+      "target": "file:docs/LESSONS.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "bin/core/farplane_project_snapshot.py",
+      "raw_ref": "docs/MEMORY.md",
+      "source": "file:bin/core/farplane_project_snapshot.py",
+      "target": "file:docs/MEMORY.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "bin/core/farplane_project_snapshot.py",
+      "raw_ref": "docs/TROUBLES.md",
+      "source": "file:bin/core/farplane_project_snapshot.py",
+      "target": "file:docs/TROUBLES.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "bin/core/farplane_project_snapshot.py",
+      "raw_ref": "farplane/automations.toml",
+      "source": "file:bin/core/farplane_project_snapshot.py",
+      "target": "file:farplane/automations.toml",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "bin/core/farplane_project_snapshot.py",
+      "raw_ref": "farplane/bindings.yaml#metrics",
+      "source": "file:bin/core/farplane_project_snapshot.py",
+      "target": "file:farplane/bindings.yaml",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "bin/core/farplane_project_snapshot.py",
+      "raw_ref": "farplane/goals.md",
+      "source": "file:bin/core/farplane_project_snapshot.py",
+      "target": "file:farplane/goals.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "bin/core/farplane_project_snapshot.py",
+      "raw_ref": "farplane/harness.md",
+      "source": "file:bin/core/farplane_project_snapshot.py",
+      "target": "file:farplane/harness.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "bin/core/farplane_project_snapshot.py",
+      "raw_ref": "farplane/manifest.json",
+      "source": "file:bin/core/farplane_project_snapshot.py",
+      "target": "file:farplane/manifest.json",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "bin/core/farplane_project_snapshot.py",
+      "raw_ref": "farplane/ops-memory.md",
+      "source": "file:bin/core/farplane_project_snapshot.py",
+      "target": "file:farplane/ops-memory.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "bin/core/farplane_project_snapshot.py",
+      "raw_ref": "farplane/products.md",
+      "source": "file:bin/core/farplane_project_snapshot.py",
+      "target": "file:farplane/products.md",
+      "type": "literal-path"
+    },
+    {
       "from_file": "bin/runtime/file_growth_hook.py",
       "raw_ref": "docs/MEMORY.md",
       "source": "file:bin/runtime/file_growth_hook.py",
@@ -2765,6 +2863,20 @@
       "raw_ref": "skills/init-advisor/references/MANIFEST_TEMPLATE.json",
       "source": "file:bin/tests/test_farplane_adoption.py",
       "target": "file:skills/init-advisor/references/MANIFEST_TEMPLATE.json",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "bin/tests/test_farplane_project_file_validator.py",
+      "raw_ref": "farplane/bindings.yaml",
+      "source": "file:bin/tests/test_farplane_project_file_validator.py",
+      "target": "file:farplane/bindings.yaml",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "bin/tests/test_farplane_project_file_validator.py",
+      "raw_ref": "farplane/goals.md",
+      "source": "file:bin/tests/test_farplane_project_file_validator.py",
+      "target": "file:farplane/goals.md",
       "type": "literal-path"
     },
     {
@@ -2996,6 +3108,13 @@
       "raw_ref": "farplane/manifest.json",
       "source": "file:bin/validators/check_farplane_project_files.py",
       "target": "file:farplane/manifest.json",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "bin/validators/check_farplane_project_files.py",
+      "raw_ref": "farplane/ops-memory.md",
+      "source": "file:bin/validators/check_farplane_project_files.py",
+      "target": "file:farplane/ops-memory.md",
       "type": "literal-path"
     },
     {
@@ -3276,6 +3395,13 @@
       "raw_ref": "farplane/manifest.json",
       "source": "file:bin/validators/test_check_farplane_project_files.py",
       "target": "file:farplane/manifest.json",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "bin/validators/test_check_farplane_project_files.py",
+      "raw_ref": "farplane/ops-memory.md",
+      "source": "file:bin/validators/test_check_farplane_project_files.py",
+      "target": "file:farplane/ops-memory.md",
       "type": "literal-path"
     },
     {
@@ -4526,6 +4652,20 @@
     },
     {
       "from_file": "docs/farplane-framework/harness-maintenance.md",
+      "raw_ref": "bin/core/farplane_primitive_metrics.py",
+      "source": "file:docs/farplane-framework/harness-maintenance.md",
+      "target": "file:bin/core/farplane_primitive_metrics.py",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/farplane-framework/harness-maintenance.md",
+      "raw_ref": "bin/core/farplane_project_snapshot.py",
+      "source": "file:docs/farplane-framework/harness-maintenance.md",
+      "target": "file:bin/core/farplane_project_snapshot.py",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/farplane-framework/harness-maintenance.md",
       "raw_ref": "bin/core/farplane_skill_rollout.py",
       "source": "file:docs/farplane-framework/harness-maintenance.md",
       "target": "file:bin/core/farplane_skill_rollout.py",
@@ -4676,6 +4816,13 @@
       "raw_ref": "docs/templates/registry.jsonl",
       "source": "file:docs/farplane-framework/harness-maintenance.md",
       "target": "file:docs/templates/registry.jsonl",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/farplane-framework/harness-maintenance.md",
+      "raw_ref": "farplane/bindings.yaml",
+      "source": "file:docs/farplane-framework/harness-maintenance.md",
+      "target": "file:farplane/bindings.yaml",
       "type": "literal-path"
     },
     {
@@ -13415,6 +13562,20 @@
       "type": "markdown-link"
     },
     {
+      "from_file": "skills/budget-advisor/audits/2026-07-03-persona-council-budget.md",
+      "raw_ref": "docs/fundamentals/harness-algebra.md",
+      "source": "skill:budget-advisor",
+      "target": "file:docs/fundamentals/harness-algebra.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/budget-advisor/audits/2026-07-03-persona-council-budget.md",
+      "raw_ref": "docs/skills/README.md",
+      "source": "skill:budget-advisor",
+      "target": "file:docs/skills/README.md",
+      "type": "literal-path"
+    },
+    {
       "from_file": "skills/budget-advisor/SKILL.md",
       "raw_ref": "skills/budget-advisor/SKILL.md",
       "source": "skill:budget-advisor",
@@ -13422,6 +13583,13 @@
       "type": "literal-path"
     },
     {
+      "from_file": "skills/budget-advisor/audits/2026-07-03-persona-council-budget.md",
+      "raw_ref": "skills/budget-advisor/SKILL.md",
+      "source": "skill:budget-advisor",
+      "target": "file:skills/budget-advisor/SKILL.md",
+      "type": "literal-path"
+    },
+    {
       "from_file": "skills/budget-advisor/eval_task.json",
       "raw_ref": "skills/budget-advisor/SKILL.md",
       "source": "skill:budget-advisor",
@@ -13443,6 +13611,34 @@
       "type": "literal-path"
     },
     {
+      "from_file": "skills/budget-advisor/audits/2026-07-03-persona-council-budget.md",
+      "raw_ref": "skills/budget-advisor/eval_task.json",
+      "source": "skill:budget-advisor",
+      "target": "file:skills/budget-advisor/eval_task.json",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/budget-advisor/audits/2026-07-03-persona-council-budget.md",
+      "raw_ref": "skills/budget-advisor/references/advise-example.md",
+      "source": "skill:budget-advisor",
+      "target": "file:skills/budget-advisor/references/advise-example.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/budget-advisor/audits/2026-07-03-persona-council-budget.md",
+      "raw_ref": "skills/budget-advisor/references/budget-modes.md",
+      "source": "skill:budget-advisor",
+      "target": "file:skills/budget-advisor/references/budget-modes.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/budget-advisor/audits/2026-07-03-persona-council-budget.md",
+      "raw_ref": "skills/budget-advisor/references/ensemble-lanes.md",
+      "source": "skill:budget-advisor",
+      "target": "file:skills/budget-advisor/references/ensemble-lanes.md",
+      "type": "literal-path"
+    },
+    {
       "from_file": "skills/budget-advisor/eval_task.json",
       "raw_ref": "skills/budget-advisor/references/ensemble-lanes.md",
       "source": "skill:budget-advisor",
@@ -13461,6 +13657,55 @@
       "raw_ref": "skills/budget-advisor/references/ensemble-lanes.md",
       "source": "skill:budget-advisor",
       "target": "file:skills/budget-advisor/references/ensemble-lanes.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/budget-advisor/audits/2026-07-03-persona-council-budget.md",
+      "raw_ref": "skills/deliberative-advice/SKILL.md",
+      "source": "skill:budget-advisor",
+      "target": "file:skills/deliberative-advice/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/budget-advisor/audits/2026-07-03-persona-council-budget.md",
+      "raw_ref": "skills/hardening/SKILL.md",
+      "source": "skill:budget-advisor",
+      "target": "file:skills/hardening/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/budget-advisor/audits/2026-07-03-persona-council-budget.md",
+      "raw_ref": "skills/hardening/references/budget-personas.md",
+      "source": "skill:budget-advisor",
+      "target": "file:skills/hardening/references/budget-personas.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/budget-advisor/audits/2026-07-03-persona-council-budget.md",
+      "raw_ref": "skills/refactoring/SKILL.md",
+      "source": "skill:budget-advisor",
+      "target": "file:skills/refactoring/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/budget-advisor/audits/2026-07-03-persona-council-budget.md",
+      "raw_ref": "skills/refactoring/references/budget-personas.md",
+      "source": "skill:budget-advisor",
+      "target": "file:skills/refactoring/references/budget-personas.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/budget-advisor/audits/2026-07-03-persona-council-budget.md",
+      "raw_ref": "skills/runtime-debugging/SKILL.md",
+      "source": "skill:budget-advisor",
+      "target": "file:skills/runtime-debugging/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/budget-advisor/audits/2026-07-03-persona-council-budget.md",
+      "raw_ref": "skills/runtime-debugging/references/budget-personas.md",
+      "source": "skill:budget-advisor",
+      "target": "file:skills/runtime-debugging/references/budget-personas.md",
       "type": "literal-path"
     },
     {
@@ -30376,7 +30621,7 @@
       "type": "literal-path"
     }
   ],
-  "generated_at": "2026-07-02T17:26:52+00:00",
+  "generated_at": "2026-07-02T19:53:31+00:00",
   "nodes": [
     {
       "id": "file:agents/asset-generator.toml",
@@ -31273,10 +31518,22 @@
       "path": "skills/budget-advisor/SKILL.md"
     },
     {
+      "id": "file:skills/budget-advisor/eval_task.json",
+      "kind": "file",
+      "label": "skills/budget-advisor/eval_task.json",
+      "path": "skills/budget-advisor/eval_task.json"
+    },
+    {
       "id": "file:skills/budget-advisor/references/advise-example.md",
       "kind": "file",
       "label": "skills/budget-advisor/references/advise-example.md",
       "path": "skills/budget-advisor/references/advise-example.md"
+    },
+    {
+      "id": "file:skills/budget-advisor/references/budget-modes.md",
+      "kind": "file",
+      "label": "skills/budget-advisor/references/budget-modes.md",
+      "path": "skills/budget-advisor/references/budget-modes.md"
     },
     {
       "id": "file:skills/budget-advisor/references/ensemble-lanes.md",
@@ -32275,6 +32532,12 @@
       "path": "skills/hardening/SKILL.md"
     },
     {
+      "id": "file:skills/hardening/references/budget-personas.md",
+      "kind": "file",
+      "label": "skills/hardening/references/budget-personas.md",
+      "path": "skills/hardening/references/budget-personas.md"
+    },
+    {
       "id": "file:skills/harness-advisor/SKILL.md",
       "kind": "file",
       "label": "skills/harness-advisor/SKILL.md",
@@ -33097,6 +33360,12 @@
       "path": "skills/refactoring/SKILL.md"
     },
     {
+      "id": "file:skills/refactoring/references/budget-personas.md",
+      "kind": "file",
+      "label": "skills/refactoring/references/budget-personas.md",
+      "path": "skills/refactoring/references/budget-personas.md"
+    },
+    {
       "id": "file:skills/reference-grounding/README.md",
       "kind": "file",
       "label": "skills/reference-grounding/README.md",
@@ -33263,6 +33532,12 @@
       "kind": "file",
       "label": "skills/runtime-debugging/SKILL.md",
       "path": "skills/runtime-debugging/SKILL.md"
+    },
+    {
+      "id": "file:skills/runtime-debugging/references/budget-personas.md",
+      "kind": "file",
+      "label": "skills/runtime-debugging/references/budget-personas.md",
+      "path": "skills/runtime-debugging/references/budget-personas.md"
     },
     {
       "id": "file:skills/self-improve/SKILL.md",
@@ -34213,10 +34488,16 @@
       "path": "bin/core/farplane_invocation.py"
     },
     {
-      "id": "file:bin/core/farplane_metrics.py",
+      "id": "file:bin/core/farplane_primitive_metrics.py",
       "kind": "script",
-      "label": "bin/core/farplane_metrics.py",
-      "path": "bin/core/farplane_metrics.py"
+      "label": "bin/core/farplane_primitive_metrics.py",
+      "path": "bin/core/farplane_primitive_metrics.py"
+    },
+    {
+      "id": "file:bin/core/farplane_project_snapshot.py",
+      "kind": "script",
+      "label": "bin/core/farplane_project_snapshot.py",
+      "path": "bin/core/farplane_project_snapshot.py"
     },
     {
       "id": "file:bin/core/farplane_skill_rollout.py",
@@ -34351,10 +34632,22 @@
       "path": "bin/tests/test_farplane_invocation.py"
     },
     {
-      "id": "file:bin/tests/test_farplane_metrics.py",
+      "id": "file:bin/tests/test_farplane_primitive_metrics.py",
       "kind": "script",
-      "label": "bin/tests/test_farplane_metrics.py",
-      "path": "bin/tests/test_farplane_metrics.py"
+      "label": "bin/tests/test_farplane_primitive_metrics.py",
+      "path": "bin/tests/test_farplane_primitive_metrics.py"
+    },
+    {
+      "id": "file:bin/tests/test_farplane_project_file_validator.py",
+      "kind": "script",
+      "label": "bin/tests/test_farplane_project_file_validator.py",
+      "path": "bin/tests/test_farplane_project_file_validator.py"
+    },
+    {
+      "id": "file:bin/tests/test_farplane_project_snapshot.py",
+      "kind": "script",
+      "label": "bin/tests/test_farplane_project_snapshot.py",
+      "path": "bin/tests/test_farplane_project_snapshot.py"
     },
     {
       "id": "file:bin/tests/test_farplane_skill_rollout.py",
@@ -35675,74 +35968,14 @@
       "source": "bin/tests/test_farplane_invocation.py"
     },
     {
-      "candidate": "skills/example/SKILL.md",
-      "raw_ref": "skills/example/SKILL.md",
-      "source": "bin/tests/test_farplane_metrics.py"
+      "candidate": "tickets/TASK-0001/ticket.md",
+      "raw_ref": "tickets/TASK-0001/ticket.md",
+      "source": "bin/tests/test_farplane_primitive_metrics.py"
     },
     {
-      "candidate": "tickets/TASK-",
-      "raw_ref": "tickets/TASK-",
-      "source": "bin/tests/test_farplane_metrics.py"
-    },
-    {
-      "candidate": "tickets/TASK-",
-      "raw_ref": "tickets/TASK-",
-      "source": "bin/tests/test_farplane_metrics.py"
-    },
-    {
-      "candidate": "tickets/TASK-",
-      "raw_ref": "tickets/TASK-",
-      "source": "bin/tests/test_farplane_metrics.py"
-    },
-    {
-      "candidate": "tickets/TASK-",
-      "raw_ref": "tickets/TASK-",
-      "source": "bin/tests/test_farplane_metrics.py"
-    },
-    {
-      "candidate": "tickets/TASK-0000/artifacts/proof.md",
-      "raw_ref": "tickets/TASK-0000/artifacts/proof.md",
-      "source": "bin/tests/test_farplane_metrics.py"
-    },
-    {
-      "candidate": "tickets/TASK-0001/artifacts/proof.md",
-      "raw_ref": "tickets/TASK-0001/artifacts/proof.md",
-      "source": "bin/tests/test_farplane_metrics.py"
-    },
-    {
-      "candidate": "tickets/TASK-0001/artifacts/proof.md",
-      "raw_ref": "tickets/TASK-0001/artifacts/proof.md",
-      "source": "bin/tests/test_farplane_metrics.py"
-    },
-    {
-      "candidate": "tickets/TASK-0001/artifacts/proof.md",
-      "raw_ref": "tickets/TASK-0001/artifacts/proof.md",
-      "source": "bin/tests/test_farplane_metrics.py"
-    },
-    {
-      "candidate": "tickets/TASK-0001/artifacts/proof.md",
-      "raw_ref": "tickets/TASK-0001/artifacts/proof.md",
-      "source": "bin/tests/test_farplane_metrics.py"
-    },
-    {
-      "candidate": "tickets/TASK-0001/ticket.md:reward_attribution_not_metric_value:auto_time_ratio:autonomy_time_feedback",
-      "raw_ref": "tickets/TASK-0001/ticket.md:reward_attribution_not_metric_value:auto_time_ratio:autonomy_time_feedback",
-      "source": "bin/tests/test_farplane_metrics.py"
-    },
-    {
-      "candidate": "tickets/TASK-0002/ticket.md:missing_completion_proof",
-      "raw_ref": "tickets/TASK-0002/ticket.md:missing_completion_proof",
-      "source": "bin/tests/test_farplane_metrics.py"
-    },
-    {
-      "candidate": "tickets/archive/TASK-0009/artifacts/proof.md",
-      "raw_ref": "tickets/archive/TASK-0009/artifacts/proof.md",
-      "source": "bin/tests/test_farplane_metrics.py"
-    },
-    {
-      "candidate": "tickets/archive/TASK-0009/ticket.md",
-      "raw_ref": "tickets/archive/TASK-0009/ticket.md",
-      "source": "bin/tests/test_farplane_metrics.py"
+      "candidate": "tickets/TASK-0001/ticket.md:hash",
+      "raw_ref": "tickets/TASK-0001/ticket.md:hash",
+      "source": "bin/tests/test_farplane_primitive_metrics.py"
     },
     {
       "candidate": "skills/alpha/SKILL.md",
@@ -36438,6 +36671,66 @@
       "candidate": "skills/skill-maintenance/templates/archive",
       "raw_ref": "skills/skill-maintenance/templates/archive/",
       "source": "rules/template-version-watch.toml"
+    },
+    {
+      "candidate": "references/codex-exec-runner.md",
+      "raw_ref": "references/codex-exec-runner.md",
+      "source": "skills/agent-behavior-test/SKILL.md"
+    },
+    {
+      "candidate": "experiments/agent-behavior-test/demo",
+      "raw_ref": "experiments/agent-behavior-test/demo",
+      "source": "skills/agent-behavior-test/references/codex-exec-runner.md"
+    },
+    {
+      "candidate": "references/goal-composition.md",
+      "raw_ref": "references/goal-composition.md",
+      "source": "skills/agent-qa-test/SKILL.md"
+    },
+    {
+      "candidate": "docs/features/my-system.md",
+      "raw_ref": "docs/features/my-system.md",
+      "source": "skills/agent-testability-plan/README.md"
+    },
+    {
+      "candidate": "qa/debugging",
+      "raw_ref": "qa/debugging",
+      "source": "skills/agent-testability-plan/SKILL.md"
+    },
+    {
+      "candidate": "references/review.md",
+      "raw_ref": "references/review.md",
+      "source": "skills/agent-testability-plan/SKILL.md"
+    },
+    {
+      "candidate": "references/review.md",
+      "raw_ref": "references/review.md",
+      "source": "skills/agent-testability-plan/SKILL.md"
+    },
+    {
+      "candidate": "references/architecture.md",
+      "raw_ref": "references/architecture.md",
+      "source": "skills/apify/SKILL.md"
+    },
+    {
+      "candidate": "references/architecture.md",
+      "raw_ref": "references/architecture.md",
+      "source": "skills/apify/SKILL.md"
+    },
+    {
+      "candidate": "references/google-places.md",
+      "raw_ref": "references/google-places.md",
+      "source": "skills/apify/SKILL.md"
+    },
+    {
+      "candidate": "references/google-places.md",
+      "raw_ref": "references/google-places.md",
+      "source": "skills/apify/SKILL.md"
+    },
+    {
+      "candidate": "references/gotchas.md",
+      "raw_ref": "references/gotchas.md",
+      "source": "skills/apify/SKILL.md"
     }
   ]
 }

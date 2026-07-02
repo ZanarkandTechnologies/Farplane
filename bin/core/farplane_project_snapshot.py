@@ -1,0 +1,1209 @@
+#!/usr/bin/env python3
+"""Compile a read-only Farplane project snapshot for UI and intervals."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import re
+import tomllib
+from datetime import date as date_type
+from datetime import datetime, timezone
+from pathlib import Path
+from typing import Any
+
+import yaml
+
+
+PROJECT_SNAPSHOT_PATH = Path(".farplane/project/ui/latest.json")
+DAILY_METRICS_DIR = Path(".farplane/metrics/daily")
+CONTENT_LEDGER_PATH = Path(".farplane/content/ledger.jsonl")
+
+
+PRIMITIVE_CATALOG: dict[str, dict[str, Any]] = {
+    "ticket_count_by_kpi": {
+        "primitive_id": "ticket_count_by_kpi",
+        "provider": "mechanical",
+        "owner": "farplane-core",
+        "command": "farplane metrics primitives --project-root <project> --date <YYYY-MM-DD> --json",
+        "store_to": ".farplane/metrics/daily/<YYYY-MM-DD>.json",
+        "required_inputs": ["tickets/**/ticket.md", "Reward.kpi_rewards[]"],
+        "emits": ["value", "status", "payload.tickets", "payload.gaps"],
+        "source_gap_policy": "Emit gaps when tickets lack parseable reward metadata.",
+    },
+    "ticket_count_by_product": {
+        "primitive_id": "ticket_count_by_product",
+        "provider": "mechanical",
+        "owner": "farplane-core",
+        "command": "farplane metrics primitives --project-root <project> --date <YYYY-MM-DD> --json",
+        "store_to": ".farplane/metrics/daily/<YYYY-MM-DD>.json",
+        "required_inputs": ["farplane/bindings.yaml#metrics.*.product", "tickets/**/ticket.md#Reward.kpi_rewards"],
+        "emits": ["value", "status", "payload.kpi_ids", "payload.tickets"],
+        "source_gap_policy": "Emit gaps when metric recipes have unknown product owners.",
+    },
+    "kpi_attributed_ticket_ratio": {
+        "primitive_id": "kpi_attributed_ticket_ratio",
+        "provider": "mechanical",
+        "owner": "farplane-core",
+        "command": "farplane metrics primitives --project-root <project> --date <YYYY-MM-DD> --json",
+        "store_to": ".farplane/metrics/daily/<YYYY-MM-DD>.json",
+        "required_inputs": ["tickets/**/ticket.md", "Reward.kpi_rewards[]"],
+        "emits": ["value", "status", "payload.attributed", "payload.total_touched"],
+        "source_gap_policy": "Emit source_gap when no tickets are touched in the window.",
+    },
+    "codex_thread_usage": {
+        "primitive_id": "codex_thread_usage",
+        "provider": "mechanical",
+        "owner": "farplane-core",
+        "command": "farplane metrics primitives --project-root <project> --date <YYYY-MM-DD> --json",
+        "store_to": ".farplane/metrics/observations/codex_thread_usage/<YYYY-MM-DD>.json",
+        "required_inputs": ["~/.codex/sqlite/state_5.sqlite", "~/.codex/sessions/**/*.jsonl"],
+        "emits": ["thread_count", "turn_count", "tokens", "span_minutes", "source_gaps"],
+        "source_gap_policy": "Emit source_gap when local Codex stores are absent or unreadable.",
+    },
+    "ai_burn_estimate": {
+        "primitive_id": "ai_burn_estimate",
+        "provider": "mechanical",
+        "owner": "farplane-core",
+        "command": "farplane metrics primitives --project-root <project> --date <YYYY-MM-DD> --monthly-spend <amount> --json",
+        "store_to": ".farplane/metrics/daily/<YYYY-MM-DD>.json",
+        "required_inputs": ["codex_thread_usage", "explicit spend model"],
+        "emits": ["value", "status", "payload.mode", "payload.gaps"],
+        "source_gap_policy": "Emit source_gap when no spend model is configured.",
+    },
+    "ticket_thread_association_backfill": {
+        "primitive_id": "ticket_thread_association_backfill",
+        "provider": "mechanical",
+        "owner": "farplane-core",
+        "command": "farplane metrics primitives --project-root <project> --date <YYYY-MM-DD> --json",
+        "store_to": ".farplane/state/ticket-thread-associations.jsonl",
+        "required_inputs": [".farplane/mine/runs/**/input.json"],
+        "emits": ["ticket_id", "thread_id", "source", "observed_at", "confidence"],
+        "source_gap_policy": "Mine backfill emits confidence=completion_only and cannot satisfy post-start intervention metrics.",
+    },
+    "manual_source_gap": {
+        "primitive_id": "manual_source_gap",
+        "provider": "manual_or_external",
+        "owner": "source-owner",
+        "command": "none",
+        "store_to": ".farplane/metrics/daily/<YYYY-MM-DD>.json",
+        "required_inputs": ["provider-specific source"],
+        "emits": ["source_gap"],
+        "source_gap_policy": "Render unsupported external/provider recipes as explicit gaps until their owner writes readings.",
+    },
+}
+
+
+SHARED_SHAPES: dict[str, list[str]] = {
+    "source_ref": ["path", "pointer?", "kind?"],
+    "source_gap": ["id", "severity", "owner", "message", "source_ref"],
+    "metric_ref": ["metric_id", "label?", "product_id?", "primitive_id?", "latest_status?", "source_gap_ids[]"],
+    "metric_series": ["metric_id", "status", "current", "series[]", "target_hit?", "source_gaps[]"],
+    "content_metric": ["content_id", "platform?", "external_id?", "metrics[]"],
+    "metric_primitive": ["primitive_id", "provider", "owner", "command", "store_to", "required_inputs[]", "emits[]", "source_gap_policy"],
+    "ticket_ref": ["ticket_id", "path", "title", "status", "phase", "next_action", "kpi_rewards[]"],
+    "report_card": ["id", "path", "interval_id?", "kind", "created_at", "ui_summary", "source_ref"],
+}
+
+
+def now_utc() -> str:
+    return datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
+
+
+def read_json(path: Path) -> dict[str, Any]:
+    if not path.exists():
+        return {}
+    try:
+        loaded = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return {}
+    return loaded if isinstance(loaded, dict) else {}
+
+
+def read_yaml(path: Path) -> dict[str, Any]:
+    if not path.exists():
+        return {}
+    try:
+        loaded = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    except yaml.YAMLError:
+        return {}
+    return loaded if isinstance(loaded, dict) else {}
+
+
+def parse_target(value: Any) -> float | None:
+    raw = str(value or "").strip()
+    if not raw or raw.lower() in {"none", "null", "source_gap"}:
+        return None
+    try:
+        return float(raw)
+    except ValueError:
+        return None
+
+
+def normalize_target_direction(value: Any) -> str:
+    raw = str(value or "").strip().lower()
+    if raw in {"below", "at_most", "max", "lte", "<=", "under"}:
+        return "below"
+    return "above"
+
+
+def parse_iso_datetime(value: Any) -> datetime | None:
+    if not value:
+        return None
+    raw = str(value).strip()
+    if not raw:
+        return None
+    try:
+        if raw.endswith("Z"):
+            raw = raw[:-1] + "+00:00"
+        parsed = datetime.fromisoformat(raw)
+    except ValueError:
+        try:
+            parsed_date = date_type.fromisoformat(raw[:10])
+        except ValueError:
+            return None
+        return datetime.combine(parsed_date, datetime.min.time(), tzinfo=timezone.utc)
+    if parsed.tzinfo is None:
+        parsed = parsed.replace(tzinfo=timezone.utc)
+    return parsed.astimezone(timezone.utc)
+
+
+def sha256_file(path: Path) -> str | None:
+    if not path.exists() or not path.is_file():
+        return None
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(65536), b""):
+            digest.update(chunk)
+    return "sha256:" + digest.hexdigest()
+
+
+def parse_frontmatter(path: Path) -> dict[str, Any]:
+    if not path.exists():
+        return {}
+    text = path.read_text(encoding="utf-8")
+    if not text.startswith("---\n") or "\n---\n" not in text:
+        return {}
+    raw = text.split("\n---\n", 1)[0][4:]
+    try:
+        loaded = yaml.safe_load(raw) or {}
+    except yaml.YAMLError:
+        return {}
+    return loaded if isinstance(loaded, dict) else {}
+
+
+def source_record(project_root: Path, rel_path: str, kind: str) -> dict[str, Any]:
+    path = project_root / rel_path
+    frontmatter = parse_frontmatter(path)
+    updated_at = frontmatter.get("updated_at")
+    return {
+        "id": rel_path.replace("/", ":"),
+        "path": rel_path,
+        "kind": kind,
+        "status": "loaded" if path.exists() else "missing",
+        "hash": sha256_file(path),
+        "updated_at": str(updated_at) if updated_at is not None else None,
+    }
+
+
+def markdown_heading_section(markdown: str, heading: str) -> str:
+    target = f"## {heading}"
+    lines = markdown.splitlines()
+    start: int | None = None
+    for index, line in enumerate(lines):
+        if line.strip() == target:
+            start = index + 1
+            break
+    if start is None:
+        return ""
+    end = len(lines)
+    for index in range(start, len(lines)):
+        if lines[index].startswith("## "):
+            end = index
+            break
+    return "\n".join(lines[start:end]).strip()
+
+
+def parse_fenced_yaml_from_section(section: str) -> dict[str, Any]:
+    fence_start = section.find("```yaml")
+    if fence_start == -1:
+        return {}
+    yaml_start = section.find("\n", fence_start)
+    if yaml_start == -1:
+        return {}
+    fence_end = section.find("```", yaml_start + 1)
+    if fence_end == -1:
+        return {}
+    try:
+        loaded = yaml.safe_load(section[yaml_start + 1 : fence_end]) or {}
+    except yaml.YAMLError:
+        return {}
+    return loaded if isinstance(loaded, dict) else {}
+
+
+def source_gap(gap_id: str, owner: str, message: str, path: str, severity: str = "source_gap") -> dict[str, Any]:
+    return {
+        "id": gap_id,
+        "severity": severity,
+        "owner": owner,
+        "message": message,
+        "source_ref": {"path": path},
+    }
+
+
+def normalize_gap_id(value: str) -> str:
+    normalized = re.sub(r"[^A-Za-z0-9_.:-]+", "_", value.strip())
+    return normalized.strip("_") or "source_gap"
+
+
+def gap_objects_from_strings(values: list[Any], owner: str, path: str) -> list[dict[str, Any]]:
+    gaps: list[dict[str, Any]] = []
+    for value in values:
+        raw = str(value)
+        gaps.append(source_gap(normalize_gap_id(raw), owner, raw, path))
+    return gaps
+
+
+def read_markdown(path: Path) -> str:
+    return path.read_text(encoding="utf-8") if path.exists() else ""
+
+
+def parse_markdown_table(section: str) -> list[dict[str, str]]:
+    rows: list[list[str]] = []
+    for raw in section.splitlines():
+        line = raw.strip()
+        if not line.startswith("|") or "---" in line:
+            continue
+        rows.append([cell.strip() for cell in line.strip("|").split("|")])
+    if len(rows) < 2:
+        return []
+    headers = [header.lower().replace(" ", "_") for header in rows[0]]
+    output: list[dict[str, str]] = []
+    for cells in rows[1:]:
+        output.append({headers[index]: cells[index] if index < len(cells) else "" for index in range(len(headers))})
+    return output
+
+
+def load_goals(project_root: Path) -> dict[str, Any]:
+    text = read_markdown(project_root / "farplane" / "goals.md")
+    payload = parse_fenced_yaml_from_section(markdown_heading_section(text, "Goals"))
+    return payload.get("goals") if isinstance(payload.get("goals"), dict) else {}
+
+
+def load_products(project_root: Path) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    text = read_markdown(project_root / "farplane" / "products.md")
+    product_rows = parse_markdown_table(markdown_heading_section(text, "Products"))
+    lane_rows = parse_markdown_table(markdown_heading_section(text, "Work Lanes"))
+    products = [
+        {
+            "product_id": row.get("id", ""),
+            "name": row.get("product", ""),
+            "audience": row.get("audience", ""),
+            "output": row.get("output", ""),
+            "reward": row.get("reward", ""),
+            "source_ref": {"path": "farplane/products.md", "row_id": row.get("id", "")},
+        }
+        for row in product_rows
+        if row.get("id")
+    ]
+    lanes = [
+        {
+            "lane_id": row.get("lane", ""),
+            "default_weight": row.get("default_weight", ""),
+            "purpose": row.get("purpose", ""),
+        }
+        for row in lane_rows
+        if row.get("lane")
+    ]
+    return products, lanes
+
+
+def load_bindings(project_root: Path) -> dict[str, Any]:
+    return read_yaml(project_root / "farplane" / "bindings.yaml")
+
+
+def kpi_target_rows(goals: dict[str, Any]) -> dict[str, dict[str, Any]]:
+    targets: dict[str, dict[str, Any]] = {}
+    for axis_id, axis_payload in goals.items():
+        if not isinstance(axis_payload, dict):
+            continue
+        for raw_goal in axis_payload.get("smart_goals") or []:
+            if not isinstance(raw_goal, dict):
+                continue
+            goal_id = str(raw_goal.get("id") or axis_id)
+            for raw_kpi in raw_goal.get("kpis") or []:
+                if isinstance(raw_kpi, str):
+                    targets.setdefault(raw_kpi, {"goal_id": goal_id})
+                    continue
+                if not isinstance(raw_kpi, dict):
+                    continue
+                metric_id = str(raw_kpi.get("id") or "").strip()
+                if not metric_id:
+                    continue
+                targets[metric_id] = {
+                    "goal_id": goal_id,
+                    "target": raw_kpi.get("target"),
+                    "direction": raw_kpi.get("direction") or raw_kpi.get("comparator") or raw_kpi.get("operator"),
+                    "window": raw_kpi.get("window"),
+                }
+    return targets
+
+
+def parse_ticket_kpi_rewards(markdown: str) -> list[str]:
+    reward = markdown_heading_section(markdown, "Reward")
+    payload = parse_fenced_yaml_from_section(reward)
+    raw_rewards = payload.get("kpi_rewards")
+    if not isinstance(raw_rewards, list):
+        return []
+    kpis: list[str] = []
+    for item in raw_rewards:
+        if isinstance(item, dict) and item.get("kpi_id"):
+            kpis.append(str(item["kpi_id"]))
+    return kpis
+
+
+def collect_ticket_refs(project_root: Path) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    refs: list[dict[str, Any]] = []
+    rewards: list[dict[str, Any]] = []
+    for path in sorted((project_root / "tickets").glob("TASK-*/ticket.md")):
+        markdown = read_markdown(path)
+        fm = parse_frontmatter(path)
+        ticket_id = str(fm.get("ticket_id") or path.parent.name)
+        kpi_ids = parse_ticket_kpi_rewards(markdown)
+        ticket_ref = {
+            "ticket_id": ticket_id,
+            "path": str(path.relative_to(project_root)),
+            "title": path.parent.name,
+            "status": str(fm.get("status") or ""),
+            "phase": str(fm.get("phase") or ""),
+            "next_action": str(fm.get("next_action") or ""),
+            "kpi_rewards": kpi_ids,
+            "source_ref": {"path": str(path.relative_to(project_root))},
+        }
+        refs.append(ticket_ref)
+        for kpi_id in kpi_ids:
+            rewards.append({"ticket_id": ticket_id, "kpi_id": kpi_id, "ticket": ticket_ref["path"]})
+    return refs, rewards
+
+
+def load_content_items(project_root: Path) -> tuple[list[dict[str, Any]], list[str]]:
+    path = project_root / ".farplane" / "content" / "ledger.jsonl"
+    if not path.exists():
+        return [], ["missing_content_ledger"]
+    rows: list[dict[str, Any]] = []
+    for line in path.read_text(encoding="utf-8", errors="replace").splitlines():
+        if not line.strip():
+            continue
+        try:
+            loaded = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        if isinstance(loaded, dict):
+            rows.append(loaded)
+    return rows, []
+
+
+def load_automations(project_root: Path) -> tuple[list[dict[str, Any]], list[str]]:
+    path = project_root / "farplane" / "automations.toml"
+    if not path.exists():
+        return [], ["missing_automations_toml"]
+    try:
+        data = tomllib.loads(path.read_text(encoding="utf-8"))
+    except tomllib.TOMLDecodeError:
+        return [], ["invalid_automations_toml"]
+    automations = data.get("automations") if isinstance(data, dict) else []
+    if not isinstance(automations, list):
+        return [], ["invalid_automations_shape"]
+    return [
+        {
+            "id": str(item.get("id") or ""),
+            "name": str(item.get("name") or ""),
+            "kind": str(item.get("kind") or ""),
+            "status": str(item.get("status") or ""),
+            "source_ref": {"path": "farplane/automations.toml"},
+        }
+        for item in automations
+        if isinstance(item, dict)
+    ], []
+
+
+def report_cards(project_root: Path) -> list[dict[str, Any]]:
+    root = project_root / ".farplane" / "reports"
+    cards: list[dict[str, Any]] = []
+    if not root.exists():
+        return cards
+    for path in sorted(root.glob("**/*.md"))[-20:]:
+        fm = parse_frontmatter(path)
+        rel = str(path.relative_to(project_root))
+        cards.append(
+            {
+                "id": path.stem,
+                "path": rel,
+                "interval_id": fm.get("interval_id"),
+                "kind": fm.get("kind") or path.parent.name,
+                "created_at": str(fm.get("created_at") or fm.get("date") or ""),
+                "ui_summary": str(fm.get("summary") or path.stem),
+                "source_ref": {"path": rel},
+            }
+        )
+    return cards
+
+
+def proof_artifacts(project_root: Path) -> list[dict[str, Any]]:
+    artifacts: list[dict[str, Any]] = []
+    for path in sorted((project_root / "tickets").glob("TASK-*/artifacts/*")):
+        if path.is_file():
+            rel = str(path.relative_to(project_root))
+            artifacts.append({"id": path.stem, "path": rel, "source_ref": {"path": rel}})
+    return artifacts
+
+
+def eval_runs(project_root: Path) -> list[dict[str, Any]]:
+    root = project_root / ".farplane" / "evals" / "runs"
+    if not root.exists():
+        return []
+    return [
+        {"id": path.stem, "path": str(path.relative_to(project_root)), "source_ref": {"path": str(path.relative_to(project_root))}}
+        for path in sorted(root.glob("**/*"))
+        if path.is_file()
+    ][-20:]
+
+
+def latest_primitives(project_root: Path, date_value: str | None) -> dict[str, Any]:
+    daily_root = project_root / ".farplane" / "metrics" / "daily"
+    if date_value:
+        return read_json(daily_root / f"{date_value}.json")
+    candidates = sorted(daily_root.glob("*.json")) if daily_root.exists() else []
+    return read_json(candidates[-1]) if candidates else {}
+
+
+def primitive_id_for_metric(metric_id: str, recipe: dict[str, Any]) -> str:
+    refresh = str(recipe.get("refresh") or recipe.get("update_prompt") or "").lower()
+    if "count_ticket_kpi_rewards" in refresh or "kpi_rewards" in refresh:
+        return "ticket_count_by_kpi"
+    if metric_id in {"codex_thread_count", "codex_turn_count", "codex_token_total", "codex_span_minutes"}:
+        return "codex_thread_usage"
+    if metric_id in {"ai_burn_estimate", "burn_per_thread", "burn_per_turn", "burn_per_token"}:
+        return "ai_burn_estimate"
+    if metric_id == "kpi_attributed_ticket_ratio":
+        return "kpi_attributed_ticket_ratio"
+    return "manual_source_gap"
+
+
+def metric_definitions(project_root: Path, goals: dict[str, Any] | None = None) -> tuple[dict[str, Any], list[str]]:
+    bindings = load_bindings(project_root)
+    raw_metrics = bindings.get("metrics")
+    if not isinstance(raw_metrics, dict):
+        return {}, ["missing:farplane/bindings.yaml#metrics"]
+    definitions: dict[str, Any] = {}
+    gaps: list[str] = []
+    targets = kpi_target_rows(goals or {})
+    for metric_id, raw_recipe in raw_metrics.items():
+        recipe = raw_recipe if isinstance(raw_recipe, dict) else {}
+        primitive_id = primitive_id_for_metric(str(metric_id), recipe)
+        kind = str(recipe.get("kind") or recipe.get("aggregation") or "point")
+        if kind == "daily_count":
+            aggregation = "daily"
+            cumulative = True
+        else:
+            aggregation = "daily" if kind == "daily" else "point"
+            cumulative = bool(recipe.get("cumulative", False))
+        goal_target = targets.get(str(metric_id), {})
+        raw_target = goal_target.get("target") if "target" in goal_target else recipe.get("target")
+        definitions[str(metric_id)] = {
+            "metric_id": str(metric_id),
+            "label": str(recipe.get("label") or str(metric_id).replace("_", " ").capitalize()),
+            "product_id": str(recipe.get("product") or ""),
+            "unit": str(recipe.get("unit") or ""),
+            "display": str(recipe.get("display") or "reading"),
+            "pinned": bool(recipe.get("pinned", False)),
+            "kind": kind,
+            "aggregation": aggregation,
+            "cumulative": cumulative,
+            "target": parse_target(raw_target),
+            "target_direction": normalize_target_direction(goal_target.get("direction") or recipe.get("target_direction")),
+            "primitive_id": primitive_id,
+            "refresh": recipe.get("refresh") or recipe.get("update_prompt") or "",
+            "source_ref": {"path": "farplane/bindings.yaml", "pointer": f"/metrics/{metric_id}"},
+        }
+    return definitions, gaps
+
+
+def daily_metric_files(project_root: Path) -> list[Path]:
+    root = project_root / DAILY_METRICS_DIR
+    return sorted(root.glob("*.json")) if root.exists() else []
+
+
+def reading_value(reading: Any) -> tuple[float | None, str, dict[str, Any] | None]:
+    if isinstance(reading, dict):
+        value = reading.get("value")
+        status = str(reading.get("status") or "available")
+        payload = reading.get("payload") if isinstance(reading.get("payload"), dict) else None
+    else:
+        value = reading
+        status = "available"
+        payload = None
+    return (float(value) if isinstance(value, (int, float)) else None, status, payload)
+
+
+def observation(metric_id: str, date_value: str, value: float | None, status: str, payload: dict[str, Any] | None = None) -> dict[str, Any]:
+    output: dict[str, Any] = {
+        "metric_id": metric_id,
+        "date": date_value,
+        "value": value,
+        "status": status,
+    }
+    if payload is not None:
+        output["payload"] = payload
+    return output
+
+
+def daily_metric_reading_observation(metric_id: str, reading: Any, date_value: str) -> dict[str, Any] | None:
+    value, status, payload = reading_value(reading)
+    if status == "available" and value is None:
+        return None
+    return observation(metric_id, date_value, value, status, payload)
+
+
+def nested_number(payload: dict[str, Any], keys: list[str]) -> float | None:
+    current: Any = payload
+    for key in keys:
+        if not isinstance(current, dict):
+            return None
+        current = current.get(key)
+    return float(current) if isinstance(current, (int, float)) else None
+
+
+def primitive_metric_observation(
+    metric_id: str,
+    metric_def: dict[str, Any],
+    primitives: dict[str, Any],
+    date_value: str,
+) -> dict[str, Any] | None:
+    primitive_id = str(metric_def.get("primitive_id") or "")
+    if primitive_id == "ticket_count_by_kpi":
+        reading = primitives.get("ticket_count_by_kpi")
+        if isinstance(reading, dict):
+            return daily_metric_reading_observation(metric_id, reading.get(metric_id), date_value)
+    if primitive_id in {"kpi_attributed_ticket_ratio", "ticket_thread_link_coverage"}:
+        reading = primitives.get(primitive_id)
+        return daily_metric_reading_observation(metric_id, reading, date_value)
+    if primitive_id == "codex_thread_usage":
+        usage = primitives.get("codex_thread_usage") if isinstance(primitives.get("codex_thread_usage"), dict) else {}
+        payload = usage.get("payload") if isinstance(usage.get("payload"), dict) else {}
+        values = {
+            "codex_thread_count": nested_number(payload, ["thread_count"]),
+            "codex_turn_count": nested_number(payload, ["turn_count"]),
+            "codex_token_total": nested_number(payload, ["tokens", "total"]),
+            "codex_span_minutes": nested_number(payload, ["span_minutes"]),
+        }
+        if metric_id in values:
+            status = str(usage.get("status") or ("available" if values[metric_id] is not None else "source_gap"))
+            return observation(metric_id, date_value, values[metric_id], status, payload)
+    if primitive_id == "ai_burn_estimate":
+        burn = primitives.get("ai_burn_estimate") if isinstance(primitives.get("ai_burn_estimate"), dict) else {}
+        burn_value, burn_status, burn_payload = reading_value(burn)
+        usage = primitives.get("codex_thread_usage") if isinstance(primitives.get("codex_thread_usage"), dict) else {}
+        usage_payload = usage.get("payload") if isinstance(usage.get("payload"), dict) else {}
+        divisors = {
+            "burn_per_thread": nested_number(usage_payload, ["thread_count"]),
+            "burn_per_turn": nested_number(usage_payload, ["turn_count"]),
+            "burn_per_token": nested_number(usage_payload, ["tokens", "total"]),
+        }
+        if metric_id == "ai_burn_estimate":
+            return observation(metric_id, date_value, burn_value, burn_status, burn_payload)
+        if metric_id in divisors:
+            divisor = divisors[metric_id]
+            value = round(burn_value / divisor, 6) if burn_value is not None and divisor else None
+            status = burn_status if value is not None else "source_gap"
+            payload = dict(burn_payload or {})
+            payload["divisor"] = divisor
+            return observation(metric_id, date_value, value, status, payload)
+    direct = primitives.get(metric_id)
+    if isinstance(direct, dict):
+        return daily_metric_reading_observation(metric_id, direct, date_value)
+    return None
+
+
+def daily_observations(project_root: Path, metric_defs: dict[str, Any], snapshot_date: str | None) -> list[dict[str, Any]]:
+    observations: list[dict[str, Any]] = []
+    for path in daily_metric_files(project_root):
+        if snapshot_date and path.stem > snapshot_date:
+            continue
+        payload = read_json(path)
+        date_value = str(payload.get("date") or path.stem)
+        metrics = payload.get("metrics")
+        if isinstance(metrics, dict):
+            for metric_id, reading in metrics.items():
+                obs = daily_metric_reading_observation(str(metric_id), reading, date_value)
+                if obs is not None:
+                    observations.append(obs)
+        primitives = payload.get("primitives")
+        if isinstance(primitives, dict):
+            for metric_id, metric_def in metric_defs.items():
+                obs = primitive_metric_observation(metric_id, metric_def, primitives, date_value)
+                if obs is not None:
+                    observations.append(obs)
+    return observations
+
+
+def load_content_ledger_rows(project_root: Path) -> list[dict[str, Any]]:
+    ledger_path = project_root / CONTENT_LEDGER_PATH
+    if not ledger_path.exists():
+        return []
+    rows: list[dict[str, Any]] = []
+    for line in ledger_path.read_text(encoding="utf-8", errors="replace").splitlines():
+        if not line.strip():
+            continue
+        try:
+            item = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        if isinstance(item, dict):
+            rows.append(item)
+    return rows
+
+
+def ledger_content_observations(project_root: Path, snapshot_date: str | None) -> list[dict[str, Any]]:
+    counts_by_date: dict[str, int] = {}
+    for row in load_content_ledger_rows(project_root):
+        if row.get("status") != "posted":
+            continue
+        parsed = parse_iso_datetime(row.get("published_at"))
+        if parsed is None:
+            continue
+        date_value = parsed.date().isoformat()
+        if snapshot_date and date_value > snapshot_date:
+            continue
+        counts_by_date[date_value] = counts_by_date.get(date_value, 0) + 1
+    return [
+        observation("posts_published", date_value, float(count), "available", {"source": str(CONTENT_LEDGER_PATH)})
+        for date_value, count in sorted(counts_by_date.items())
+    ]
+
+
+def ledger_missing_observations(project_root: Path, metric_defs: dict[str, Any], snapshot_date: str | None) -> list[dict[str, Any]]:
+    if (project_root / CONTENT_LEDGER_PATH).exists():
+        return []
+    date_value = snapshot_date or datetime.now(timezone.utc).date().isoformat()
+    output: list[dict[str, Any]] = []
+    for metric_id, metric_def in metric_defs.items():
+        if ".farplane/content/ledger.jsonl" not in str(metric_def.get("refresh") or ""):
+            continue
+        output.append(
+            observation(
+                metric_id,
+                date_value,
+                None,
+                "source_gap",
+                {"gaps": ["missing:.farplane/content/ledger.jsonl"]},
+            )
+        )
+    return output
+
+
+def source_gap_reason(obs: dict[str, Any]) -> str:
+    payload = obs.get("payload")
+    if isinstance(payload, dict):
+        reason = payload.get("reason")
+        if isinstance(reason, str) and reason:
+            return reason
+        gaps = payload.get("gaps")
+        if isinstance(gaps, list) and gaps:
+            return str(gaps[0])
+    return str(obs.get("status") or "source_gap")
+
+
+def build_metric_card(metric_id: str, metric_def: dict[str, Any], observations: list[dict[str, Any]]) -> dict[str, Any]:
+    metric_obs = sorted(
+        [
+            obs
+            for obs in observations
+            if obs.get("metric_id") == metric_id and obs.get("status", "available") == "available"
+        ],
+        key=lambda obs: str(obs.get("date", "")),
+    )
+    metric_gaps = sorted(
+        [
+            obs
+            for obs in observations
+            if obs.get("metric_id") == metric_id and obs.get("status", "available") != "available"
+        ],
+        key=lambda obs: str(obs.get("date", "")),
+    )
+    series: list[dict[str, Any]] = []
+    running = 0.0
+    hit_at: str | None = None
+    hit_value: float | None = None
+    target = metric_def.get("target")
+    target_direction = normalize_target_direction(metric_def.get("target_direction"))
+    for obs in metric_obs:
+        value = obs.get("value")
+        if not isinstance(value, (int, float)):
+            continue
+        point: dict[str, Any] = {"date": obs.get("date"), "value": float(value)}
+        point["daily_diff"] = float(value) - float(series[-1]["value"]) if series else None
+        if isinstance(obs.get("payload"), dict):
+            point["payload"] = obs["payload"]
+        payload = obs.get("payload") if isinstance(obs.get("payload"), dict) else {}
+        if isinstance(payload.get("items"), list):
+            point["items"] = payload["items"]
+        comparison_value = float(value)
+        if metric_def.get("aggregation") == "daily" and metric_def.get("cumulative"):
+            running += float(value)
+            point["cumulative"] = running
+            comparison_value = running
+        else:
+            point["current"] = float(value)
+        target_hit = (
+            comparison_value >= target
+            if target_direction == "above"
+            else comparison_value <= target
+        ) if isinstance(target, (int, float)) else False
+        if target_hit and hit_at is None:
+            hit_at = str(obs.get("date"))
+            hit_value = comparison_value
+        series.append(point)
+    latest_gap = metric_gaps[-1] if metric_gaps else None
+    source_gaps: list[dict[str, Any]] = []
+    if latest_gap:
+        gap: dict[str, Any] = {
+            "date": latest_gap.get("date"),
+            "status": latest_gap.get("status"),
+            "reason": source_gap_reason(latest_gap),
+        }
+        if isinstance(latest_gap.get("payload"), dict):
+            gap["payload"] = latest_gap["payload"]
+        source_gaps.append(gap)
+    elif not series:
+        source_gaps.append({"reason": "no available observation for metric"})
+    return {
+        "metric_id": metric_id,
+        "label": metric_def.get("label") or metric_id,
+        "product_id": metric_def.get("product_id") or "",
+        "primitive_id": metric_def.get("primitive_id"),
+        "aggregation": metric_def.get("aggregation"),
+        "cumulative": bool(metric_def.get("cumulative")),
+        "target": target,
+        "target_direction": target_direction,
+        "unit": metric_def.get("unit") or "",
+        "display": metric_def.get("display") or "reading",
+        "pinned": bool(metric_def.get("pinned")),
+        "status": "available" if series else str(latest_gap.get("status") if latest_gap else "source_gap"),
+        "current": series[-1]["value"] if series else None,
+        "series": series,
+        "best_daily": max((float(point["value"]) for point in series), default=None),
+        "source_gaps": source_gaps,
+        "target_hit": {"hit_at": hit_at, "hit_value": hit_value} if hit_at else None,
+        "source_ref": metric_def.get("source_ref"),
+    }
+
+
+def item_content_key(item: dict[str, Any]) -> str | None:
+    for key in ("content_id", "id"):
+        value = item.get(key)
+        if isinstance(value, str) and value.strip():
+            return value.strip()
+    platform = item.get("platform")
+    external_id = item.get("external_id") or item.get("media_id") or item.get("tweet_id")
+    if isinstance(platform, str) and platform.strip() and isinstance(external_id, str) and external_id.strip():
+        return f"{platform.strip()}:{external_id.strip()}"
+    if isinstance(external_id, str) and external_id.strip():
+        return external_id.strip()
+    url = item.get("url")
+    return url.strip() if isinstance(url, str) and url.strip() else None
+
+
+def merge_content_metadata(target: dict[str, Any], item: dict[str, Any]) -> None:
+    for key in (
+        "content_id",
+        "id",
+        "platform",
+        "external_id",
+        "url",
+        "title",
+        "caption",
+        "kind",
+        "media_type",
+        "media_product_type",
+        "campaign",
+        "status",
+        "published_at",
+        "approval",
+        "approval_ref",
+        "kpis",
+    ):
+        value = item.get(key)
+        if value not in (None, "") and key not in target:
+            target[key] = value
+    content_id = str(target.get("content_id") or "")
+    if ":" in content_id:
+        platform, external_id = content_id.split(":", 1)
+        target.setdefault("platform", platform)
+        target.setdefault("external_id", external_id)
+
+
+def item_metric_value(item: dict[str, Any], fallback: float) -> float:
+    for key in ("value", "metric_value", "count"):
+        value = item.get(key)
+        if isinstance(value, (int, float)):
+            return float(value)
+    metrics = item.get("metrics")
+    if isinstance(metrics, dict):
+        for value in metrics.values():
+            if isinstance(value, (int, float)):
+                return float(value)
+    return fallback
+
+
+def extract_content_items(point: dict[str, Any]) -> list[dict[str, Any]]:
+    raw_items: Any = point.get("items")
+    payload = point.get("payload")
+    if raw_items is None and isinstance(payload, dict):
+        raw_items = payload.get("items")
+    if raw_items is None and isinstance(payload, dict):
+        raw_items = payload.get("posts") or payload.get("content_items")
+    return [item for item in raw_items if isinstance(item, dict)] if isinstance(raw_items, list) else []
+
+
+def build_content_metric_cards(metric_cards: list[dict[str, Any]], ledger_rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    content_by_id: dict[str, dict[str, Any]] = {}
+    for row in ledger_rows:
+        key = item_content_key(row)
+        if not key:
+            continue
+        content = content_by_id.setdefault(key, {"content_id": key, "metrics": {}})
+        merge_content_metadata(content, row)
+    for metric in metric_cards:
+        metric_id = str(metric.get("metric_id") or "")
+        for point in metric.get("series") or []:
+            if not isinstance(point, dict) or not isinstance(point.get("value"), (int, float)):
+                continue
+            for item in extract_content_items(point):
+                key = item_content_key(item)
+                if not key:
+                    continue
+                content = content_by_id.setdefault(key, {"content_id": key, "metrics": {}})
+                merge_content_metadata(content, item)
+                bucket = content["metrics"].setdefault(
+                    metric_id,
+                    {
+                        "metric_id": metric_id,
+                        "label": metric.get("label") or metric_id,
+                        "unit": metric.get("unit") or "",
+                        "product_id": metric.get("product_id") or "",
+                        "series": [],
+                    },
+                )
+                bucket["series"].append(
+                    {
+                        "date": point.get("date"),
+                        "value": item_metric_value(item, float(point["value"])),
+                    }
+                )
+    output: list[dict[str, Any]] = []
+    for content in content_by_id.values():
+        metric_entries = []
+        for metric in content.get("metrics", {}).values():
+            series = sorted(metric["series"], key=lambda point: str(point.get("date") or ""))
+            metric_entries.append({**metric, "current": series[-1]["value"] if series else None, "series": series})
+        content["metrics"] = sorted(metric_entries, key=lambda metric: str(metric.get("metric_id") or ""))
+        output.append(content)
+    return sorted(output, key=lambda item: (str(item.get("published_at") or ""), str(item.get("content_id") or "")))
+
+
+def metric_projection(project_root: Path, metric_defs: dict[str, Any], snapshot_date: str | None) -> dict[str, Any]:
+    observations = daily_observations(project_root, metric_defs, snapshot_date)
+    observations.extend(ledger_content_observations(project_root, snapshot_date))
+    observations.extend(ledger_missing_observations(project_root, metric_defs, snapshot_date))
+    metric_cards = [build_metric_card(metric_id, metric_def, observations) for metric_id, metric_def in sorted(metric_defs.items())]
+    source_gaps = [
+        {
+            "id": f"metric_source_gap:{card['metric_id']}",
+            "severity": "source_gap",
+            "owner": "metrics",
+            "message": card["source_gaps"][0]["reason"],
+            "source_ref": card.get("source_ref") or {"path": "farplane/bindings.yaml"},
+        }
+        for card in metric_cards
+        if card.get("status") != "available" and card.get("source_gaps")
+    ]
+    return {
+        "series": metric_cards,
+        "contents": build_content_metric_cards(metric_cards, load_content_ledger_rows(project_root)),
+        "source_gaps": source_gaps,
+    }
+
+
+def goals_payload(
+    goals: dict[str, Any],
+    metric_defs: dict[str, Any],
+    latest: dict[str, Any],
+    metric_cards_by_id: dict[str, dict[str, Any]],
+) -> list[dict[str, Any]]:
+    axes: list[dict[str, Any]] = []
+    latest_prims = latest.get("primitives") if isinstance(latest.get("primitives"), dict) else {}
+    for axis_id, axis_payload in goals.items():
+        if not isinstance(axis_payload, dict):
+            continue
+        smart_goals = []
+        for raw_goal in axis_payload.get("smart_goals") or []:
+            if not isinstance(raw_goal, dict):
+                continue
+            kpis = []
+            for raw_kpi in raw_goal.get("kpis") or []:
+                if isinstance(raw_kpi, dict):
+                    metric_id = str(raw_kpi.get("id") or "")
+                    target = raw_kpi.get("target")
+                    direction = raw_kpi.get("direction")
+                else:
+                    metric_id = str(raw_kpi)
+                    target = None
+                    direction = None
+                metric_def = metric_defs.get(metric_id, {})
+                metric_card = metric_cards_by_id.get(metric_id, {})
+                primitive_id = metric_def.get("primitive_id")
+                latest_status = str(metric_card.get("status") or "source_gap")
+                if not metric_card and primitive_id in latest_prims:
+                    latest_status = "available"
+                kpis.append(
+                    {
+                        "metric_id": metric_id,
+                        "label": metric_def.get("label") or metric_id,
+                        "target": target,
+                        "direction": direction,
+                        "unit": metric_def.get("unit"),
+                        "primitive_id": primitive_id,
+                        "current": metric_card.get("current"),
+                        "target_hit": metric_card.get("target_hit"),
+                        "latest_status": latest_status,
+                        "source_gap_ids": [] if latest_status == "available" else [f"missing_metric_reading:{metric_id}"],
+                    }
+                )
+            smart_goals.append(
+                {
+                    "id": raw_goal.get("id"),
+                    "label": raw_goal.get("target") or raw_goal.get("id"),
+                    "kpis": kpis,
+                    "interpretation": raw_goal.get("interpretation"),
+                }
+            )
+        axes.append(
+            {
+                "id": axis_id,
+                "label": axis_id.replace("_", " ").capitalize(),
+                "question": axis_payload.get("question"),
+                "smart_goals": smart_goals,
+            }
+        )
+    return axes
+
+
+def products_payload(
+    products: list[dict[str, Any]],
+    metric_defs: dict[str, Any],
+    latest: dict[str, Any],
+) -> list[dict[str, Any]]:
+    product_counts = {}
+    primitives = latest.get("primitives") if isinstance(latest.get("primitives"), dict) else {}
+    if isinstance(primitives.get("ticket_count_by_product"), dict):
+        product_counts = primitives["ticket_count_by_product"]
+    output: list[dict[str, Any]] = []
+    for product in products:
+        product_id = product["product_id"]
+        metric_ids = sorted(metric_id for metric_id, recipe in metric_defs.items() if recipe.get("product_id") == product_id)
+        count_payload = product_counts.get(product_id, {}) if isinstance(product_counts, dict) else {}
+        next_product = dict(product)
+        next_product.update(
+            {
+                "metric_ids": metric_ids,
+                "kpi_ids": metric_ids,
+                "ticket_count": count_payload.get("value"),
+                "proof_state": "has_kpi_and_goal" if metric_ids else "missing_kpi",
+                "source_gap_ids": [] if metric_ids else [f"missing_product_kpis:{product_id}"],
+            }
+        )
+        output.append(next_product)
+    return output
+
+
+def load_project_snapshot(project_root: Path, snapshot_date: str | None = None) -> dict[str, Any]:
+    project_root = project_root.resolve()
+    manifest = read_json(project_root / "farplane" / "manifest.json")
+    goals = load_goals(project_root)
+    products, lanes = load_products(project_root)
+    metric_defs, metric_gaps = metric_definitions(project_root, goals)
+    metric_view = metric_projection(project_root, metric_defs, snapshot_date)
+    metric_cards = metric_view["series"] if isinstance(metric_view.get("series"), list) else []
+    metric_cards_by_id = {str(card.get("metric_id")): card for card in metric_cards if isinstance(card, dict)}
+    latest = latest_primitives(project_root, snapshot_date)
+    readings = latest.get("primitives") if isinstance(latest.get("primitives"), dict) else {}
+    ticket_refs, kpi_rewards = collect_ticket_refs(project_root)
+    content_items, content_gap_ids = load_content_items(project_root)
+    automations, automation_gap_ids = load_automations(project_root)
+    reports = report_cards(project_root)
+    proof_items = proof_artifacts(project_root)
+    eval_items = eval_runs(project_root)
+    sources = [
+        source_record(project_root, "farplane/manifest.json", "project-manifest"),
+        source_record(project_root, "farplane/harness.md", "project-harness"),
+        source_record(project_root, "farplane/products.md", "project-products"),
+        source_record(project_root, "farplane/goals.md", "project-goals"),
+        source_record(project_root, "farplane/bindings.yaml", "project-bindings"),
+        source_record(project_root, "farplane/ops-memory.md", "ops-memory"),
+    ]
+    source_gaps = [
+        {"id": gap, "severity": "source_gap", "owner": "metrics", "message": gap, "source_ref": {"path": "farplane/bindings.yaml"}}
+        for gap in metric_gaps
+    ]
+    source_gaps.extend(gap_objects_from_strings(latest.get("source_gaps", []) if isinstance(latest.get("source_gaps"), list) else [], "metrics", ".farplane/metrics/daily/"))
+    source_gaps.extend(gap for gap in metric_view.get("source_gaps", []) if isinstance(gap, dict))
+    source_gaps.extend(source_gap(gap_id, "distribution", gap_id, ".farplane/content/ledger.jsonl") for gap_id in content_gap_ids)
+    source_gaps.extend(source_gap(gap_id, "cadence", gap_id, "farplane/automations.toml") for gap_id in automation_gap_ids)
+    if not reports:
+        source_gaps.append(source_gap("missing_recent_reports", "cadence", "No recent report cards found under .farplane/reports/.", ".farplane/reports/"))
+    if not ticket_refs:
+        source_gaps.append(source_gap("missing_ticket_refs", "kanban", "No active ticket refs found.", "tickets/"))
+    if not eval_items:
+        source_gaps.append(source_gap("missing_eval_runs", "proof", "No eval runs found under .farplane/evals/runs/.", ".farplane/evals/runs/"))
+    if not proof_items:
+        source_gaps.append(source_gap("missing_qa_artifacts", "proof", "No ticket-scoped proof artifacts found.", "tickets/**/artifacts/"))
+    if not latest:
+        source_gaps.append(
+            {
+                "id": "missing_primitive_metric_snapshot",
+                "severity": "source_gap",
+                "owner": "metrics",
+                "message": "Run `farplane metrics primitives --project-root <project> --date <YYYY-MM-DD>`.",
+                "source_ref": {"path": ".farplane/metrics/daily/"},
+            }
+        )
+    project = manifest.get("project") if isinstance(manifest.get("project"), dict) else {}
+    source_gap_ids = [gap["id"] for gap in source_gaps]
+    distribution_gap_ids = [gap for gap in source_gap_ids if gap.startswith("missing_content")]
+    cadence_gap_ids = [gap for gap in source_gap_ids if gap.startswith("missing_recent") or gap.startswith("missing_automations") or gap.startswith("invalid_automations")]
+    kanban_gap_ids = [gap for gap in source_gap_ids if gap.startswith("missing_ticket")]
+    proof_gap_ids = [gap for gap in source_gap_ids if gap.startswith("missing_eval") or gap.startswith("missing_qa")]
+    memory_refs = [
+        {"id": "history", "path": "docs/HISTORY.md", "source_ref": {"path": "docs/HISTORY.md"}},
+        {"id": "memory", "path": "docs/MEMORY.md", "source_ref": {"path": "docs/MEMORY.md"}},
+        {"id": "troubles", "path": "docs/TROUBLES.md", "source_ref": {"path": "docs/TROUBLES.md"}},
+        {"id": "lessons", "path": "docs/LESSONS.md", "source_ref": {"path": "docs/LESSONS.md"}},
+    ]
+    content_metric_ids = sorted(metric_id for metric_id, metric in metric_defs.items() if metric.get("product_id") == "distribution")
+    pm_manifest = read_json(project_root / "farplane" / "pm.json")
+    pm_threads = pm_manifest.get("threads") if isinstance(pm_manifest.get("threads"), dict) else {}
+    return {
+        "schema_version": 1,
+        "generated_at": now_utc(),
+        "project_root": str(project_root),
+        "shared_shapes": SHARED_SHAPES,
+        "project": {
+            "id": str(load_bindings(project_root).get("project", {}).get("id") or project.get("name") or project_root.name).lower().replace(" ", "-"),
+            "name": project.get("name") or project_root.name,
+            "description": project.get("description") or "",
+            "archetype": project.get("archetype") or "",
+        },
+        "sources": sources,
+        "source_gaps": source_gaps,
+        "metrics": {
+            "definitions": metric_defs,
+            "primitives": PRIMITIVE_CATALOG,
+            "readings": readings,
+            "series": metric_cards,
+            "contents": metric_view.get("contents") if isinstance(metric_view.get("contents"), list) else [],
+            "latest": latest,
+        },
+        "tabs": {
+            "overview": {
+                "team_focus": {
+                    "current_focus": None,
+                    "current_bet": None,
+                    "active_milestone": None,
+                    "top_goal_id": None,
+                    "active_product_ids": [product["product_id"] for product in products],
+                    "blockers": [],
+                },
+                "pinned_metrics": [metric_id for metric_id, metric in metric_defs.items() if metric.get("pinned")],
+                "pinned_metric_cards": [
+                    metric_cards_by_id[metric_id]
+                    for metric_id, metric in metric_defs.items()
+                    if metric.get("pinned") and metric_id in metric_cards_by_id
+                ],
+                "primitive_summary": readings,
+                "source_gap_count": len(source_gaps),
+                "source_gap_ids": source_gap_ids,
+            },
+            "goals": {
+                "axes": goals_payload(goals, metric_defs, latest, metric_cards_by_id),
+                "source_gap_ids": [],
+            },
+            "products": {
+                "products": products_payload(products, metric_defs, latest),
+                "work_lanes": lanes,
+                "missing_proof": [],
+                "source_gap_ids": [],
+            },
+            "distribution": {
+                "content_items": content_items,
+                "content_metric_cards": metric_view.get("contents") if isinstance(metric_view.get("contents"), list) else [],
+                "content_metric_ids": content_metric_ids,
+                "feed_scout": load_bindings(project_root).get("feed_scout") if isinstance(load_bindings(project_root).get("feed_scout"), dict) else {},
+                "source_gap_ids": distribution_gap_ids,
+            },
+            "cadence": {
+                "automations": automations,
+                "pm_threads": pm_threads,
+                "recent_reports": reports,
+                "source_gap_ids": cadence_gap_ids,
+            },
+            "kanban": {
+                "tickets": ticket_refs,
+                "kpi_rewards": kpi_rewards,
+                "blocked_count": len([ticket for ticket in ticket_refs if ticket.get("status") == "blocked"]),
+                "review_count": len([ticket for ticket in ticket_refs if ticket.get("status") == "review"]),
+                "source_gap_ids": kanban_gap_ids,
+            },
+            "proof": {
+                "eval_runs": eval_items,
+                "qa_artifacts": proof_items,
+                "latest_eval_metric_id": "latest_eval_pass_rate",
+                "source_gap_ids": proof_gap_ids,
+            },
+            "memory_reports": {
+                "memory_refs": memory_refs,
+                "ops_memory": source_record(project_root, "farplane/ops-memory.md", "ops-memory"),
+                "report_cards": reports,
+                "source_gap_ids": [],
+            },
+        },
+    }
+
+
+def write_project_ui_snapshot(snapshot: dict[str, Any], output_path: Path) -> Path:
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = output_path.with_suffix(output_path.suffix + ".tmp")
+    tmp.write_text(json.dumps(snapshot, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    tmp.replace(output_path)
+    return output_path
+
+
+def run_snapshot(args: argparse.Namespace) -> int:
+    project_root = Path(args.project_root).expanduser().resolve()
+    snapshot = load_project_snapshot(project_root, args.date)
+    output_path = project_root / PROJECT_SNAPSHOT_PATH
+    if not args.no_write:
+        write_project_ui_snapshot(snapshot, output_path)
+    payload = {
+        "ok": True,
+        "summary": f"wrote {output_path}",
+        "snapshot_path": str(output_path),
+        "source_gap_count": len(snapshot.get("source_gaps", [])),
+        "snapshot": snapshot,
+    }
+    if args.json:
+        print(json.dumps(payload, indent=2, sort_keys=True))
+    else:
+        print(f"project snapshot: {output_path} ({payload['source_gap_count']} source gaps)")
+    return 0

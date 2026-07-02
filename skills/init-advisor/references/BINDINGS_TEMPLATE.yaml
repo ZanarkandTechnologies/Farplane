@@ -1,0 +1,69 @@
+kind: project-bindings
+status: draft
+created_at: TODO
+updated_at: TODO
+framework_template_version: "0.3.3"
+owner: project-pm-automation
+project:
+  id: TODO
+  name: TODO
+  root: TODO
+integrations:
+  github:
+    repo: null
+    remote: null
+    default_branch: main
+  notion:
+    project_name: null
+    project_page_url: null
+    task_database_alias: null
+    write_policy: local_first
+  kanban:
+    provider: filesystem_tickets
+    tickets_dir: tickets
+    archive_dir: tickets/archive
+    write_policy: read_only_ui
+    poll_seconds: 60
+  posthog:
+    project_id: null
+    host: null
+    dashboard_url: null
+  vercel:
+    project_id: null
+    project_url: null
+    production_url: null
+metrics:
+  TODO_metric_name:
+    label: TODO metric label
+    product: TODO_product_id
+    pinned: false
+    kind: daily_count
+    unit: TODO_unit
+    display: bar_plus_cumulative
+    refresh: TODO call $skill-name or $interval-update.helper_name(param="value", date="<YYYY-MM-DD>")
+      to prepare this daily reading. Record source_gap when the reading cannot be collected.
+  ready_unclaimed_ticket_count:
+    label: Ready unclaimed tickets
+    product: project_control
+    kind: point
+    unit: tickets
+    display: reading
+    refresh: Count ready, approval-free, unclaimed tickets under tickets/ that are not complete
+      or human-gated; store value/status/payload in the daily metric file.
+  accepted_output_events:
+    label: Accepted output events
+    product: productization
+    kind: daily_count
+    unit: events
+    display: bar_plus_cumulative
+    refresh: Call $interval-update.count_ticket_kpi_rewards(ticket_dir="tickets", date="<YYYY-MM-DD>",
+      kpi_key="accepted_output_events") when this KPI is ticket-derived, or read the accepted
+      reward ledger when configured.
+  auto_time_ratio:
+    label: Autonomous time ratio
+    product: cross_product_autonomy
+    kind: point
+    unit: ratio
+    display: reading
+    refresh: Call $interval-update.calculate_autonomy_time_ratio(runtime_dir=".farplane",
+      date="<YYYY-MM-DD>") and store the returned value/status/payload.

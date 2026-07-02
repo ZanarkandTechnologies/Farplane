@@ -25,8 +25,9 @@ farplane/
   goals.md         # north star, KPIs, current milestone, holds
   products.md      # products and work lanes this team creates
   automations.toml # full Codex automation configs for Pulse, Intervals, and optional consolidation/Taste Loop
-  bindings.yaml      # non-secret project IDs, URLs, labels, aliases
+  bindings.yaml    # non-secret project IDs, URLs, labels, aliases, metric recipes
   hooks.json       # declarative Farplane-native hook configuration
+  ops-memory.md    # flexible current operating notes and reminders
   pm.json          # optional UI thread manifest for one visual project PM
 
 .agents/
@@ -40,11 +41,29 @@ Runtime state lives under `.farplane/` and is intentionally ignored by git.
 .farplane/
   README.md
   state/run-ledger.json
+  state/ticket-thread-associations.jsonl
   automation/
+  content/ledger.jsonl
+  metrics/daily/
+  metrics/observations/
+  project/ui/latest.json
   reports/
   evals/runs/
   logs/
 ```
+
+Farplane Core is installed once and invoked through the global `farplane` CLI.
+Other projects do not copy metric scripts; they pass a project root:
+
+```bash
+farplane metrics primitives --project-root /path/to/project --date <YYYY-MM-DD> --json
+farplane project snapshot --project-root /path/to/project --date <YYYY-MM-DD> --json
+```
+
+Primitive metrics are Core-owned reducers over tickets, `bindings.yaml`, local
+Codex stores, and ignored Farplane runtime state. Farplane UI should render the
+generated project snapshot and deep-link back to the source files; canonical
+writes still belong to the tracked project files and ignored runtime ledgers.
 
 See [docs/farplane-framework/project-files.md](../docs/farplane-framework/project-files.md).
 

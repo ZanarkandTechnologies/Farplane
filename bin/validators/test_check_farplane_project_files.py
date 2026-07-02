@@ -30,13 +30,14 @@ def write_framework_manifest(farplane: Path) -> None:
                         "farplane/harness.md",
                         "farplane/goals.md",
                         "farplane/products.md",
+                        "farplane/ops-memory.md",
                         "farplane/automations.toml",
                         "farplane/bindings.yaml",
                         "farplane/hooks.json",
                         ".agents/skills/README.md",
                         "tickets/templates/ticket.md",
                     ],
-                    "ignored": [".farplane/state/run-ledger.json"],
+                    "ignored": [".farplane/state/run-ledger.json", ".farplane/project/ui/"],
                 },
                 "optional": {
                     "tracked": ["farplane/pm.json"],
@@ -83,14 +84,14 @@ def write_required_project_files(root: Path) -> None:
     for path in ("AGENTS.md", "PROJECT_RULES.md", "ARCHITECTURE.md"):
         (root / path).write_text(f"# {path}\n", encoding="utf-8")
 
-    for name in ("README.md", "goals.md"):
+    for name in ("README.md", "goals.md", "ops-memory.md"):
         (farplane / name).write_text(
             "---\nframework_template_version: \"0.1.0\"\n---\n\n# Test\n",
             encoding="utf-8",
         )
     (farplane / "hooks.json").write_text('{"version": 1, "hooks": {}}\n', encoding="utf-8")
     skills_dir = root / ".agents" / "skills"
-    skills_dir.mkdir()
+    skills_dir.mkdir(parents=True)
     (skills_dir / "README.md").write_text(
         "---\nkind: local-product-skills-index\nframework_template_version: \"0.1.0\"\n---\n\n# Local Product Skills\n",
         encoding="utf-8",
@@ -185,6 +186,7 @@ framework_template_version: "0.1.0"
     state = root / ".farplane" / "state"
     state.mkdir(parents=True)
     (state / "run-ledger.json").write_text("{\"runs\": []}\n", encoding="utf-8")
+    (root / ".farplane" / "project" / "ui").mkdir(parents=True)
 
 
 def test_missing_automations_file_fails(tmp_path: Path) -> None:
@@ -389,6 +391,84 @@ def test_valid_versioned_files_pass(tmp_path: Path) -> None:
     write_required_project_files(tmp_path)
 
     assert validate(tmp_path) == []
+
+
+def test_goal_kpi_without_metric_recipe_fails(tmp_path: Path) -> None:
+    farplane = tmp_path / "farplane"
+    farplane.mkdir()
+    write_framework_manifest(farplane)
+    write_required_project_files(tmp_path)
+    (farplane / "goals.md").write_text(
+        """---
+kind: project-goals
+framework_template_version: "0.1.0"
+---
+
+# Goals
+
+## Goals
+
+```yaml
+goals:
+  test_axis:
+    smart_goals:
+      - id: missing_recipe
+        kpis:
+          - id: unknown_metric
+```
+""",
+        encoding="utf-8",
+    )
+
+    errors = validate(tmp_path)
+
+    assert "farplane/goals.md KPI ids lack bindings.yaml metric recipes: unknown_metric." in errors
+
+
+def test_metric_product_without_product_row_fails(tmp_path: Path) -> None:
+    farplane = tmp_path / "farplane"
+    farplane.mkdir()
+    write_framework_manifest(farplane)
+    write_required_project_files(tmp_path)
+    (farplane / "bindings.yaml").write_text(
+        """kind: project-bindings
+framework_template_version: "0.1.0"
+project: {}
+metrics:
+  accepted_harness_improvements:
+    product: missing_product
+""",
+        encoding="utf-8",
+    )
+
+    errors = validate(tmp_path)
+
+    assert "farplane/bindings.yaml metric products are not in products.md: missing_product." in errors
+
+
+def test_stale_project_snapshot_fails(tmp_path: Path) -> None:
+    farplane = tmp_path / "farplane"
+    farplane.mkdir()
+    write_framework_manifest(farplane)
+    write_required_project_files(tmp_path)
+    snapshot = tmp_path / ".farplane" / "project" / "ui" / "latest.json"
+    snapshot.write_text(
+        json.dumps(
+            {
+                "sources": [
+                    {
+                        "path": "farplane/goals.md",
+                        "hash": "sha256:not-current",
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    errors = validate(tmp_path)
+
+    assert ".farplane/project/ui/latest.json is stale for farplane/goals.md; regenerate project snapshot." in errors
 
 
 def test_missing_pm_manifest_passes(tmp_path: Path) -> None:

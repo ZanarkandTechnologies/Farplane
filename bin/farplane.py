@@ -24,7 +24,8 @@ if str(CORE_DIR) not in sys.path:
 
 from farplane_adoption import run_scan as run_adoption_scan
 from farplane_content import run_content_add, run_content_list
-from farplane_metrics import run_compile as run_metrics_compile
+from farplane_primitive_metrics import run_primitives as run_metrics_primitives
+from farplane_project_snapshot import run_snapshot as run_project_snapshot
 from farplane_skill_rollout import SkillRolloutError, run_scan as run_skill_rollout_scan
 from runtime_config import load_runtime_env
 
@@ -385,13 +386,25 @@ def build_parser() -> argparse.ArgumentParser:
     skills_rollout_scan.add_argument("--json", action="store_true")
     skills_rollout_scan.set_defaults(func=run_skill_rollout_scan)
 
-    metrics = sub.add_parser("metrics", help="Compile Farplane metric observations for interval reports and UI.")
+    metrics = sub.add_parser("metrics", help="Refresh Farplane primitive metric readings.")
     metrics_sub = metrics.add_subparsers(dest="metrics_command")
-    metrics_compile = metrics_sub.add_parser("compile", help="Compile existing KPI observations into UI snapshot JSON.")
-    metrics_compile.add_argument("--project-root", default=str(CORE_ROOT))
-    metrics_compile.add_argument("--date", help="Snapshot date in YYYY-MM-DD. Defaults to today UTC.")
-    metrics_compile.add_argument("--json", action="store_true")
-    metrics_compile.set_defaults(func=run_metrics_compile)
+    metrics_primitives = metrics_sub.add_parser("primitives", help="Refresh Core primitive metrics for one project/date.")
+    metrics_primitives.add_argument("--project-root", default=os.getcwd())
+    metrics_primitives.add_argument("--date", help="Snapshot date in YYYY-MM-DD. Defaults to today UTC.")
+    metrics_primitives.add_argument("--codex-home", default=str(DEFAULT_CODEX_HOME))
+    metrics_primitives.add_argument("--monthly-spend", type=float, help="Optional monthly AI subscription spend for burn allocation.")
+    metrics_primitives.add_argument("--no-write", action="store_true", help="Print readings without writing .farplane metric files.")
+    metrics_primitives.add_argument("--json", action="store_true")
+    metrics_primitives.set_defaults(func=run_metrics_primitives)
+
+    project = sub.add_parser("project", help="Compile project-level projections for UI and intervals.")
+    project_sub = project.add_subparsers(dest="project_command")
+    project_snapshot = project_sub.add_parser("snapshot", help="Write .farplane/project/ui/latest.json.")
+    project_snapshot.add_argument("--project-root", default=os.getcwd())
+    project_snapshot.add_argument("--date", help="Metric date in YYYY-MM-DD. Defaults to latest daily metrics snapshot.")
+    project_snapshot.add_argument("--no-write", action="store_true")
+    project_snapshot.add_argument("--json", action="store_true")
+    project_snapshot.set_defaults(func=run_project_snapshot)
 
     content = sub.add_parser("content", help="Append or inspect local Farplane content ledger rows.")
     content_sub = content.add_subparsers(dest="content_command")
@@ -442,7 +455,9 @@ def main(argv: list[str]) -> int:
     if getattr(args, "skills_command", None) == "rollout" and getattr(args, "skills_rollout_command", None) is None:
         parser.error("skills rollout requires a subcommand: scan")
     if getattr(args, "command", None) == "metrics" and getattr(args, "metrics_command", None) is None:
-        parser.error("metrics requires a subcommand: compile")
+        parser.error("metrics requires a subcommand: primitives")
+    if getattr(args, "command", None) == "project" and getattr(args, "project_command", None) is None:
+        parser.error("project requires a subcommand: snapshot")
     if getattr(args, "command", None) == "content" and getattr(args, "content_command", None) is None:
         parser.error("content requires a subcommand: add or list")
     if not hasattr(args, "func"):

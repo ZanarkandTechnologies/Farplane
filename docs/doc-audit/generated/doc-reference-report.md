@@ -15,40 +15,40 @@ refs:
 
 # Docs Reference Audit
 
-Generated at `2026-07-02T17:26:52+00:00` from local Markdown links and literal repo-path
+Generated at `2026-07-02T19:53:31+00:00` from local Markdown links and literal repo-path
 references. This is a navigation and cleanup aid, not a deletion authority.
 
 ## Harness Math Doc
 
 The harness math doc is `docs/fundamentals/harness-algebra.md`.
 
-- All inbound refs: `16`
-- Skill-origin refs: `7`
+- All inbound refs: `17`
+- Skill-origin refs: `8`
 - Cleanup rule: keep this as the canonical equation/model surface and point
   workflow docs back to it instead of duplicating the algebra.
 
 ## Counts
 
-- Scanned files: `1275`
-- Nodes: `843`
-- Edges: `4336`
-- Unresolved local-looking refs: `1116`
+- Scanned files: `1279`
+- Nodes: `851`
+- Edges: `4371`
+- Unresolved local-looking refs: `1104`
 
 ## Most Referenced Docs
 
 | Doc | All refs | Skill refs |
 | --- | --- | --- |
 | `docs/features/README.md` | 63 | 28 |
-| `docs/MEMORY.md` | 55 | 26 |
+| `docs/MEMORY.md` | 56 | 26 |
 | `docs/features/validate_features.py` | 51 | 6 |
-| `docs/LESSONS.md` | 47 | 25 |
-| `docs/HISTORY.md` | 46 | 15 |
+| `docs/LESSONS.md` | 48 | 25 |
+| `docs/HISTORY.md` | 47 | 15 |
 | `docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md` | 39 | 18 |
 | `docs/skills/registry.jsonl` | 39 | 26 |
 | `docs/systems/README.md` | 38 | 16 |
-| `docs/TROUBLES.md` | 36 | 20 |
+| `docs/TROUBLES.md` | 37 | 20 |
 | `docs/features/registry.jsonl` | 36 | 11 |
-| `docs/skills/README.md` | 33 | 14 |
+| `docs/skills/README.md` | 34 | 15 |
 | `docs/skills/system.md` | 26 | 15 |
 | `docs/skills/templates/SKILL_TEMPLATE.md` | 25 | 10 |
 | `docs/skills/best-practices.md` | 25 | 16 |

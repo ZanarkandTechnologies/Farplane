@@ -18,6 +18,84 @@ framework_bump(old_version, new_version, project_root)
   -> manifest_delta + migration_steps + proof_commands
 ```
 
+## 1.6.14
+
+Date: 2026-07-03
+
+Primary change: remove the separate metric UI projection and make
+`.farplane/project/ui/latest.json` the only UI read model. Core primitive
+metrics still write daily readings and observations; `farplane project
+snapshot` now owns metric series, content metric cards, source gaps, and tab
+payloads.
+
+Changed surfaces:
+
+- `MANIFEST_TEMPLATE.json` bumps `farplane-framework` from `1.6.13` to
+  `1.6.14`.
+- Project manifests ignore `.farplane/project/ui/` instead of a separate metric
+  UI projection directory.
+- `farplane metrics primitives` remains the collection command.
+- `farplane project snapshot` is the supported UI/read-model command.
+
+Migration steps:
+
+1. Bump `farplane/manifest.json` `spec_version` and
+   `template_uses.farplane-framework` to `1.6.14`.
+2. Stop calling the retired metric compiler command.
+3. Render Overview, Goals, Products, Distribution, Cadence, Kanban, Proof, and
+   Memory/Reports from `.farplane/project/ui/latest.json`.
+4. Read KPI chart cards from `snapshot.metrics.series[]` and content metric
+   cards from `snapshot.metrics.contents[]`.
+
+Proof commands:
+
+```bash
+python3 -m unittest discover -s bin/tests
+python3 bin/farplane.py metrics primitives --project-root . --date <YYYY-MM-DD> --json
+python3 bin/farplane.py project snapshot --project-root . --date <YYYY-MM-DD> --json
+python3 bin/validators/check_farplane_project_files.py --root .
+python3 bin/validators/check_doc_refs.py
+```
+
+## 1.6.13
+
+Date: 2026-07-02
+
+Primary change: migrate project bindings from Markdown-wrapped YAML to a
+canonical YAML file. `farplane/bindings.yaml` now owns non-secret project
+coordinates and prompt-only metric recipes directly; `farplane/bindings.md` is
+retired for current Farplane projects while metric tooling keeps a legacy
+fallback for older projects.
+
+Changed surfaces:
+
+- `MANIFEST_TEMPLATE.json` bumps `farplane-framework` from `1.6.12` to
+  `1.6.13`.
+- `BINDINGS_TEMPLATE.yaml` bumps to `0.3.3` and replaces the retired
+  `BINDINGS_TEMPLATE.md`.
+- Project manifests track `farplane/bindings.yaml`.
+- Project-file validation parses bindings as YAML and rejects leftover
+  `farplane/bindings.md`.
+
+Migration steps:
+
+1. Rename `farplane/bindings.md` to `farplane/bindings.yaml`.
+2. Remove the Markdown title, policy prose, and fenced YAML wrapper; keep
+   `kind`, `framework_template_version`, `project`, `integrations`, and
+   `metrics` as top-level YAML keys.
+3. Bump `framework_template_version` in bindings to `0.3.3`.
+4. Bump `farplane/manifest.json` `spec_version` and
+   `template_uses.farplane-framework` to `1.6.13`.
+
+Proof commands:
+
+```bash
+python3 -m unittest bin.tests.test_farplane_project_snapshot bin.validators.test_check_farplane_project_files
+python3 bin/validators/check_farplane_project_files.py --root .
+python3 bin/validators/check_doc_refs.py
+python3 skills/skill-maintenance/scripts/check_skills.py --write
+```
+
 ## 1.6.12
 
 Date: 2026-07-02
@@ -62,15 +140,15 @@ Date: 2026-07-02
 
 Primary change: make SMART-goal KPI targets parseable. `farplane/goals.md`
 keeps strategic targets, but each KPI under `smart_goals[].kpis` now uses an
-`id`, numeric `target`, and `direction` pair so the dashboard compiler can
-derive target-hit status without putting targets back into `bindings.md`.
+`id`, numeric `target`, and `direction` pair so the project snapshot can
+derive target-hit status without putting targets back into `bindings.yaml`.
 
 Changed surfaces:
 
 - `MANIFEST_TEMPLATE.json` bumps `farplane-framework` from `1.6.10` to
   `1.6.11`.
 - `GOALS_TEMPLATE.md` bumps to `0.4.3` and shows KPI target pairs.
-- `farplane metrics compile` overlays KPI target metadata from `goals.md` onto
+- `farplane project snapshot` overlays KPI target metadata from `goals.md` onto
   metric definitions while preserving legacy binding-target compatibility.
 
 Migration steps:
@@ -82,13 +160,13 @@ Migration steps:
 3. Use `direction: above` for growth targets and `direction: below` for
    guardrail targets.
 4. Keep units, chart display, pinned status, and refresh prompts in
-   `farplane/bindings.md`.
+   `farplane/bindings.yaml`.
 
 Proof commands:
 
 ```bash
-python3 -m unittest bin.tests.test_farplane_metrics
-python3 bin/farplane.py metrics compile --project-root . --date 2026-07-02 --json
+python3 -m unittest bin.tests.test_farplane_project_snapshot
+python3 bin/farplane.py project snapshot --project-root . --date 2026-07-02 --json
 python3 bin/validators/check_farplane_project_files.py --root .
 python3 skills/skill-maintenance/scripts/check_skills.py --write
 ```
@@ -98,7 +176,7 @@ python3 skills/skill-maintenance/scripts/check_skills.py --write
 Date: 2026-07-02
 
 Primary change: simplify KPI collection to prompt-only metric recipes plus one
-daily metrics JSON file. `farplane/bindings.md` metric recipes no longer carry
+daily metrics JSON file. `farplane/bindings.yaml` metric recipes no longer carry
 targets, provider routes, write paths, or observation blocks; interval update
 collects each KPI reading into `.farplane/metrics/daily/YYYY-MM-DD.json`, and
 Core compiles daily readings into UI JSON.
@@ -107,11 +185,11 @@ Changed surfaces:
 
 - `MANIFEST_TEMPLATE.json` bumps `farplane-framework` from `1.6.9` to
   `1.6.10`.
-- `BINDINGS_TEMPLATE.md` bumps to `0.3.2` and uses prompt-only `refresh`
+- `BINDINGS_TEMPLATE.yaml` bumps to `0.3.2` and uses prompt-only `refresh`
   strings for metric recipes.
 - `interval-update` owns the daily metric refresh workflow and daily JSON write
   contract.
-- `farplane metrics compile` reads daily metric files and derives daily diffs,
+- `farplane project snapshot` reads daily metric files and derives daily diffs,
   cumulative totals, best-daily values, source gaps, and pinned KPI cards.
 
 Migration steps:
@@ -127,13 +205,13 @@ Migration steps:
 5. Count ticket-derived KPIs during interval refresh by matching
    `Reward.kpi_rewards[].kpi_id`, then store the count as a normal daily metric
    value.
-6. Run the UI compiler after daily readings exist.
+6. Run the project snapshot after daily readings exist.
 
 Proof commands:
 
 ```bash
-python3 -m unittest bin.tests.test_farplane_metrics
-python3 bin/farplane.py metrics compile --project-root . --date 2026-07-02 --json
+python3 -m unittest bin.tests.test_farplane_project_snapshot
+python3 bin/farplane.py project snapshot --project-root . --date 2026-07-02 --json
 python3 bin/validators/check_farplane_project_files.py --root .
 python3 skills/skill-maintenance/scripts/check_skills.py --write
 ```
@@ -150,9 +228,9 @@ those observations into UI JSON.
 Changed surfaces:
 
 - `MANIFEST_TEMPLATE.json` bumps `farplane-framework` from `1.6.8` to `1.6.9`.
-- `BINDINGS_TEMPLATE.md` bumps to `0.3.1` and uses `observation` blocks instead
+- `BINDINGS_TEMPLATE.yaml` bumps to `0.3.1` and uses `observation` blocks instead
   of `source` blocks for metric recipes.
-- `farplane metrics compile` is the supported KPI UI projection command.
+- `farplane project snapshot` is the supported KPI UI projection command.
 
 Migration steps:
 
@@ -167,8 +245,8 @@ Migration steps:
 Proof commands:
 
 ```bash
-python3 -m unittest bin.tests.test_farplane_metrics
-python3 bin/farplane.py metrics compile --project-root . --date 2026-07-01 --json
+python3 -m unittest bin.tests.test_farplane_project_snapshot
+python3 bin/farplane.py project snapshot --project-root . --date 2026-07-01 --json
 python3 bin/validators/check_farplane_project_files.py --root .
 python3 skills/skill-maintenance/scripts/check_skills.py --write
 ```
@@ -178,14 +256,14 @@ python3 skills/skill-maintenance/scripts/check_skills.py --write
 Date: 2026-07-01
 
 Primary change: move metric source, chart, pinned, unit, and update-hint
-ownership into `farplane/bindings.md` metric recipes while keeping
+ownership into `farplane/bindings.yaml` metric recipes while keeping
 `farplane/goals.md` focused on strategic KPI IDs and interpretation.
 
 Changed surfaces:
 
 - `MANIFEST_TEMPLATE.json` bumps `farplane-framework` from `1.6.7` to `1.6.8`.
 - `GOALS_TEMPLATE.md` bumps to `0.4.2` and uses KPI IDs only under SMART goals.
-- `BINDINGS_TEMPLATE.md` bumps to `0.3.0` and replaces custom
+- `BINDINGS_TEMPLATE.yaml` bumps to `0.3.0` and replaces custom
   `project-bindings` plus provider `provides` lists with one YAML
   `Project Config` block containing `project`, `integrations`, and `metrics`
   whose source/update prompt lives inline under each KPI.
@@ -199,17 +277,17 @@ Migration steps:
 1. Bump `farplane/manifest.json` `spec_version` and
    `template_uses.farplane-framework` to `1.6.8`.
 2. Move metric metadata from `farplane/goals.md` KPI maps into
-   `farplane/bindings.md` `metrics.<metric_id>`.
+   `farplane/bindings.yaml` `metrics.<metric_id>`.
 3. Replace provider `provides` lists with metric recipes that include an
    inline `source` block and `update_prompt`.
 4. Keep goals readable: SMART goals list KPI IDs and interpretation only.
-5. Run the metric snapshot smoke and project-file validators.
+5. Run the project snapshot smoke and project-file validators.
 
 Proof commands:
 
 ```bash
-python3 -m unittest bin.tests.test_farplane_metrics
-python3 bin/farplane.py metrics compile --project-root . --date 2026-07-01 --json
+python3 -m unittest bin.tests.test_farplane_project_snapshot
+python3 bin/farplane.py project snapshot --project-root . --date 2026-07-01 --json
 python3 bin/validators/check_farplane_project_files.py --root .
 python3 skills/skill-maintenance/scripts/check_skills.py --write
 ```
@@ -227,12 +305,12 @@ Changed surfaces:
 - `MANIFEST_TEMPLATE.json` bumps `farplane-framework` from `1.6.6` to `1.6.7`.
 - `GOALS_TEMPLATE.md` bumps to `0.4.1` and shows one-key KPI maps with
   `aggregation`, `cumulative`, `target`, `unit`, and `display`.
-- `BINDINGS_TEMPLATE.md` bumps to `0.2.0` and added an earlier provider-first
+- `BINDINGS_TEMPLATE.yaml` bumps to `0.2.0` and added an earlier provider-first
   feedback-coordinate section. This shape is superseded by `1.6.8` inline
   metric recipes.
 - `OPS_MEMORY_TEMPLATE.md` bumps to `0.1.1` and adds autonomy-time and
   repo-adoption tracked-feedback refs.
-- Framework docs describe the `goals.md` KPI keys plus `bindings.md` provider
+- Framework docs describe the `goals.md` KPI keys plus `bindings.yaml` provider
   loop, daily/cumulative chart semantics, and source-gap behavior.
 
 Migration steps:
@@ -242,7 +320,7 @@ Migration steps:
 2. Keep SMART goal KPI keys beside each goal axis; use one-key KPI maps only
    when chart metadata is needed.
 3. Prefer the `1.6.8` migration instead: author inline metric recipes in
-   `farplane/bindings.md`; missing access becomes a source gap.
+   `farplane/bindings.yaml`; missing access becomes a source gap.
 4. Add `Tracked Feedback` refs for autonomy time and repo adoption in
    `farplane/ops-memory.md` when relevant. Store raw values in metric
    snapshots, not ops memory.
@@ -250,8 +328,8 @@ Migration steps:
 Proof commands:
 
 ```bash
-python3 -m unittest bin.tests.test_farplane_metrics
-python3 bin/farplane.py metrics compile --project-root . --date 2026-07-01 --json
+python3 -m unittest bin.tests.test_farplane_project_snapshot
+python3 bin/farplane.py project snapshot --project-root . --date 2026-07-01 --json
 python3 bin/validators/check_farplane_project_files.py --root .
 python3 skills/skill-maintenance/scripts/check_skills.py --write
 ```

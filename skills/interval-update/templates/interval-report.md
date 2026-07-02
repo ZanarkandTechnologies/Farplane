@@ -9,6 +9,7 @@ created_at: <timestamp>
 review_window: <start>..<end>
 planning_window: <start>..<end>
 context_bundle: <path>
+ui_summary: "<one concise report-card summary under 100 words>"
 ---
 
 # Interval Update Report
@@ -37,7 +38,7 @@ context_bundle: <path>
 | --- | --- | --- | --- | --- |
 
 Daily metric readings: `.farplane/metrics/daily/YYYY-MM-DD.json`.
-Compiled KPI projection: `.farplane/metrics/ui/latest.json`.
+Project/UI projection: `.farplane/project/ui/latest.json`.
 
 ## Report Workflows
 
@@ -133,6 +134,24 @@ Decision states:
 | --- | --- | --- | --- | --- |
 
 Kinds: `keep`, `change`, `pause`, `kill`, `test`.
+
+## Ops Memory Challenge
+
+Use this section to challenge the current Pulse operating belief in
+`farplane/ops-memory.md`. Do not create a separate idea ledger; summarize what
+the last window proved, disproved, or left unmeasured, then route a compact
+ops-memory delta or Pulse constraint.
+
+```text
+pulse_belief_reviewed:
+what_worked:
+what_failed:
+belief_to_keep:
+belief_to_revise:
+belief_to_drop:
+double_down_guard:
+source_gap:
+```
 
 ## Strategy Input For Pulse
 

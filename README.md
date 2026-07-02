@@ -267,6 +267,11 @@ What Core owns:
 - `farplane hooks install`: refreshes the hook install through Core.
 - `farplane hooks doctor`: verifies the Core-owned hook links and rendered
   telemetry config.
+- `farplane metrics primitives --project-root /path/to/project --date YYYY-MM-DD --json`:
+  refreshes Core primitive readings for ticket/KPI/product counts, Codex thread
+  usage, burn source gaps, and ticket/thread association backfill.
+- `farplane project snapshot --project-root /path/to/project --json`: writes a
+  read-only project/company projection for Farplane UI and interval context.
 - `farplane skills rollout scan --json`: emits a read-only skill rollout
   projection for Farplane UI and local status checks.
 - `farplane ui link /path/to/Farplane-UI`: stores the UI checkout in

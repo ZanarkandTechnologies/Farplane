@@ -47,7 +47,7 @@
       ".farplane/state/run-ledger.json",
       ".farplane/content/",
       ".farplane/metrics/daily/",
-      ".farplane/metrics/ui/",
+      ".farplane/project/ui/",
       ".farplane/reports/",
       ".farplane/evals/runs/",
       ".farplane/logs/"

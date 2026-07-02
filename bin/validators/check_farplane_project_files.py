@@ -9,6 +9,7 @@ import re
 import subprocess
 import sys
 import tomllib
+import hashlib
 from pathlib import Path
 
 import yaml
@@ -67,6 +68,11 @@ AUTOMATION_RUNTIME_STATE_KEYS = {
     "run_ids",
     "runs",
     "memory",
+}
+ALLOWED_SUPPORT_PRODUCT_IDS = {
+    "adoption",
+    "cross_product_autonomy",
+    "project_control",
 }
 
 
@@ -206,12 +212,14 @@ def validate_framework_manifest(root: Path, framework_manifest: Path) -> list[st
         "farplane/harness.md",
         "farplane/goals.md",
         "farplane/products.md",
+        "farplane/ops-memory.md",
         "farplane/automations.toml",
         "farplane/bindings.yaml",
         "farplane/hooks.json",
         ".agents/skills/README.md",
         "tickets/templates/ticket.md",
         ".farplane/state/run-ledger.json",
+        ".farplane/project/ui/",
     }
     standard = data.get("standard") if isinstance(data.get("standard"), dict) else {}
     paths = set()
@@ -410,6 +418,160 @@ def validate_bindings_file(root: Path, bindings_file: Path) -> list[str]:
     return errors
 
 
+def markdown_heading_section(markdown: str, heading: str) -> str:
+    target = f"## {heading}"
+    lines = markdown.splitlines()
+    start: int | None = None
+    for index, line in enumerate(lines):
+        if line.strip() == target:
+            start = index + 1
+            break
+    if start is None:
+        return ""
+    end = len(lines)
+    for index in range(start, len(lines)):
+        if lines[index].startswith("## "):
+            end = index
+            break
+    return "\n".join(lines[start:end]).strip()
+
+
+def parse_fenced_yaml_from_section(section: str) -> dict:
+    fence_start = section.find("```yaml")
+    if fence_start == -1:
+        return {}
+    yaml_start = section.find("\n", fence_start)
+    if yaml_start == -1:
+        return {}
+    fence_end = section.find("```", yaml_start + 1)
+    if fence_end == -1:
+        return {}
+    try:
+        loaded = yaml.safe_load(section[yaml_start + 1 : fence_end]) or {}
+    except yaml.YAMLError:
+        return {}
+    return loaded if isinstance(loaded, dict) else {}
+
+
+def parse_markdown_table(section: str) -> list[dict[str, str]]:
+    rows: list[list[str]] = []
+    for raw in section.splitlines():
+        line = raw.strip()
+        if not line.startswith("|") or "---" in line:
+            continue
+        rows.append([cell.strip() for cell in line.strip("|").split("|")])
+    if len(rows) < 2:
+        return []
+    headers = [header.lower().replace(" ", "_") for header in rows[0]]
+    return [
+        {headers[index]: cells[index] if index < len(cells) else "" for index in range(len(headers))}
+        for cells in rows[1:]
+    ]
+
+
+def load_goal_kpi_ids(goals_file: Path) -> set[str]:
+    if not goals_file.exists():
+        return set()
+    text = goals_file.read_text(encoding="utf-8")
+    payload = parse_fenced_yaml_from_section(markdown_heading_section(text, "Goals"))
+    goals = payload.get("goals") if isinstance(payload.get("goals"), dict) else {}
+    kpi_ids: set[str] = set()
+    for axis_payload in goals.values():
+        if not isinstance(axis_payload, dict):
+            continue
+        for smart_goal in axis_payload.get("smart_goals") or []:
+            if not isinstance(smart_goal, dict):
+                continue
+            for raw_kpi in smart_goal.get("kpis") or []:
+                if isinstance(raw_kpi, dict):
+                    kpi_id = str(raw_kpi.get("id") or "").strip()
+                else:
+                    kpi_id = str(raw_kpi).strip()
+                if kpi_id:
+                    kpi_ids.add(kpi_id)
+    return kpi_ids
+
+
+def load_binding_metrics(bindings_file: Path) -> dict[str, dict]:
+    if not bindings_file.exists():
+        return {}
+    try:
+        data = yaml.safe_load(bindings_file.read_text(encoding="utf-8")) or {}
+    except yaml.YAMLError:
+        return {}
+    metrics = data.get("metrics") if isinstance(data, dict) else {}
+    if not isinstance(metrics, dict):
+        return {}
+    return {str(metric_id): recipe if isinstance(recipe, dict) else {} for metric_id, recipe in metrics.items()}
+
+
+def load_product_ids(products_file: Path) -> set[str]:
+    if not products_file.exists():
+        return set()
+    text = products_file.read_text(encoding="utf-8")
+    rows = parse_markdown_table(markdown_heading_section(text, "Products"))
+    return {row.get("id", "").strip() for row in rows if row.get("id", "").strip()}
+
+
+def sha256_file(path: Path) -> str | None:
+    if not path.exists() or not path.is_file():
+        return None
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(65536), b""):
+            digest.update(chunk)
+    return "sha256:" + digest.hexdigest()
+
+
+def validate_snapshot_freshness(root: Path, snapshot_path: Path) -> list[str]:
+    if not snapshot_path.exists():
+        return []
+    try:
+        snapshot = json.loads(snapshot_path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        return [f"{snapshot_path.relative_to(root)} must be valid JSON: {exc.msg}."]
+    sources = snapshot.get("sources") if isinstance(snapshot, dict) else None
+    if not isinstance(sources, list):
+        return [f"{snapshot_path.relative_to(root)} sources must be a list when snapshot exists."]
+    errors: list[str] = []
+    for source in sources:
+        if not isinstance(source, dict) or not source.get("path") or not source.get("hash"):
+            continue
+        path = root / str(source["path"])
+        current_hash = sha256_file(path)
+        if current_hash and current_hash != source.get("hash"):
+            errors.append(f"{snapshot_path.relative_to(root)} is stale for {source['path']}; regenerate project snapshot.")
+    return errors
+
+
+def validate_cross_file_contract(root: Path) -> list[str]:
+    goals_file = root / "farplane" / "goals.md"
+    bindings_file = root / "farplane" / "bindings.yaml"
+    products_file = root / "farplane" / "products.md"
+    metrics = load_binding_metrics(bindings_file)
+    goal_kpis = load_goal_kpi_ids(goals_file)
+    product_ids = load_product_ids(products_file)
+    errors: list[str] = []
+
+    missing_metric_recipes = sorted(kpi_id for kpi_id in goal_kpis if kpi_id not in metrics)
+    if missing_metric_recipes:
+        errors.append(f"farplane/goals.md KPI ids lack bindings.yaml metric recipes: {', '.join(missing_metric_recipes)}.")
+
+    allowed_products = product_ids | ALLOWED_SUPPORT_PRODUCT_IDS
+    unknown_products = sorted(
+        {
+            str(recipe.get("product")).strip()
+            for recipe in metrics.values()
+            if recipe.get("product") and str(recipe.get("product")).strip() not in allowed_products
+        }
+    )
+    if unknown_products:
+        errors.append(f"farplane/bindings.yaml metric products are not in products.md: {', '.join(unknown_products)}.")
+
+    errors.extend(validate_snapshot_freshness(root, root / ".farplane" / "project" / "ui" / "latest.json"))
+    return errors
+
+
 def validate_harness_file(root: Path, harness_file: Path) -> list[str]:
     rel_path = harness_file.relative_to(root).as_posix()
     text = harness_file.read_text(encoding="utf-8")
@@ -503,6 +665,8 @@ def validate(root: Path) -> list[str]:
         errors.append("farplane/bindings.yaml is required for project bindings.")
     else:
         errors.extend(validate_bindings_file(root, bindings))
+
+    errors.extend(validate_cross_file_contract(root))
 
     for path in sorted(framework_dir.glob("*.md")):
         text = path.read_text(encoding="utf-8")

@@ -166,7 +166,7 @@ memory for active initiatives, tracked content, and next ticket candidates.
 Missing credentials, missing API fields, missing files, or missing feedback
 mechanisms become source gaps and instrumentation-ticket candidates. After
 writing `.farplane/metrics/daily/<date>.json`, run
-`farplane metrics compile` to refresh `.farplane/metrics/ui/latest.json`.
+`farplane project snapshot` to refresh `.farplane/project/ui/latest.json`.
 
 Maintenance work should compete against the active frontier. It is selected
 only when it unblocks the focus, protects proof, or has a clearer reward signal

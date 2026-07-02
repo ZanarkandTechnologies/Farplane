@@ -22,7 +22,7 @@ Broad listening, competitor scraping, and attention-graph reads route through
 `feed-scout` or `apify`, not this skill.
 
 Secrets never live in tracked files. Project aliases and non-secret policy live
-in `farplane/bindings.md`; credentials live under local private
+in `farplane/bindings.yaml`; credentials live under local private
 `~/.farplane/config.toml` `[social.x]` or explicit runtime environment
 overrides using the `FARPLANE_X_` prefix. Prefer current X OAuth 2.0 user
 tokens for account timeline/deep reads; OAuth 1.0a credentials are kept as
@@ -34,7 +34,7 @@ fallback/legacy support.
 x_account(action, artifact?, account_binding?, date_window?, source_file?)
   -> draft_validation | publish_result | metrics_snapshot | blocked_report
 state:
-  reads(farplane/bindings.md, ~/.codex/private/docs/social.md?,
+  reads(farplane/bindings.yaml, ~/.codex/private/docs/social.md?,
         ~/.farplane/config.toml [social.x]?, source_file?)
   writes(.farplane/metrics/manual/x_account.json when normalizing exports,
          .farplane/content/ledger.jsonl after confirmed publishing)
@@ -62,7 +62,7 @@ first live posting branch.
         `publish_post`, `publish_thread`, `get_profile_metrics`,
         `get_post_metrics`, `import_metrics_export`,
         `normalize_metrics_snapshot`.
-  - [ ] Resolve the account alias from `farplane/bindings.md`.
+  - [ ] Resolve the account alias from `farplane/bindings.yaml`.
 - [ ] 2. Check safety gates before touching account state.
   - [ ] For publish actions, require explicit user or ticket approval naming
         the exact draft, account alias, and publish boundary.
@@ -85,9 +85,9 @@ first live posting branch.
   - [ ] For validation, return blocking issues, warnings, and suggested fixes;
         do not mutate account state. Use `scripts/validate_post_payload.py`
         for JSON post/thread payloads.
-  - [ ] For metrics, write observations compatible with
-        `.farplane/metrics/ui/latest.json` inputs: `x_followers`, `x_views`,
-        `x_likes`, and optional post counts. Use
+  - [ ] For metrics, write observations compatible with daily Farplane KPI
+        readings consumed by `.farplane/project/ui/latest.json`:
+        `x_followers`, `x_views`, `x_likes`, and optional post counts. Use
         `scripts/fetch_metrics.py` for live read-only account API metrics
         (`--latest`, `--yesterday`, `--since-date`, and `--until-date` for
         review windows; `--tweet-id` for exact post metrics; `--deep` for

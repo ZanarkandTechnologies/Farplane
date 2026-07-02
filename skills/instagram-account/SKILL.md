@@ -21,7 +21,7 @@ explicitly approved publishing. `social-content` owns creative drafting;
 `apify` or `feed-scout` owns broad scraping/listening.
 
 Secrets never live in tracked files. Project aliases and non-secret policy live
-in `farplane/bindings.md`; credentials live under local private
+in `farplane/bindings.yaml`; credentials live under local private
 `~/.farplane/config.toml` `[social.instagram]` and `[social.meta]`, or explicit
 runtime environment overrides using the `FARPLANE_INSTAGRAM_` /
 `FARPLANE_META_` prefixes. Metrics use Instagram Login credentials against
@@ -34,7 +34,7 @@ Facebook Pages skill if needed.
 instagram_account(action, artifact?, account_binding?, date_window?, source_file?)
   -> draft_validation | publish_result | metrics_snapshot | blocked_report
 state:
-  reads(farplane/bindings.md, ~/.codex/private/docs/social.md?,
+  reads(farplane/bindings.yaml, ~/.codex/private/docs/social.md?,
         ~/.farplane/config.toml [social.instagram]/[social.meta]?, source_file?)
   writes(.farplane/metrics/manual/instagram_account.json when normalizing exports,
          .farplane/content/ledger.jsonl after confirmed publishing)
@@ -63,7 +63,7 @@ publishing.
         `validate_reel`, `publish_post`, `publish_reel`,
         `get_profile_metrics`, `get_media_metrics`,
         `import_metrics_export`, `normalize_metrics_snapshot`.
-  - [ ] Resolve the account alias from `farplane/bindings.md`.
+  - [ ] Resolve the account alias from `farplane/bindings.yaml`.
 - [ ] 2. Check safety gates.
   - [ ] Confirm the account/API mode supports Instagram professional account
         insights or content publishing before promising live API behavior.
@@ -85,9 +85,10 @@ publishing.
   - [ ] For validation, return blocking issues, warnings, and suggested fixes;
         do not mutate account state. Use `scripts/validate_media_payload.py`
         for JSON post/reel/carousel payloads.
-  - [ ] For metrics, write observations compatible with
-        `.farplane/metrics/ui/latest.json` inputs: `instagram_followers`,
-        `instagram_views`, `instagram_likes`, and optional post counts. Use
+  - [ ] For metrics, write observations compatible with daily Farplane KPI
+        readings consumed by `.farplane/project/ui/latest.json`:
+        `instagram_followers`, `instagram_views`, `instagram_likes`, and
+        optional post counts. Use
         `scripts/fetch_metrics.py` for live read-only Graph API metrics
         (`--latest`, `--latest-reel`, `--yesterday`, `--since-date`, and
         `--until-date` for review windows; `--media-id` for exact media

@@ -160,8 +160,8 @@ The recommended sections are:
 
 Do not store raw metric values here when the daily metrics file can own them.
 Use `Tracked Feedback` for refs and tracking intent; store daily readings under
-`.farplane/metrics/daily/` and render UI trends from
-`.farplane/metrics/ui/latest.json`.
+`.farplane/metrics/daily/` and render UI trends from the project snapshot at
+`.farplane/project/ui/latest.json`.
 
 For autonomous growth and owned-content distribution, store posted/draft content
 tracking rows in `.farplane/content/ledger.jsonl`, not in ops memory. Ops memory
@@ -221,18 +221,52 @@ they should all normalize to one dated file:
 
 ```text
 .farplane/metrics/daily/YYYY-MM-DD.json
-  -> { date, metrics: { [metric_id]: { value, status, payload? } } }
+  -> primitive readings, KPI readings, source gaps, and payload refs
 
-.farplane/metrics/ui/latest.json
-  -> {
-       schema_version: 2,
-       metrics: [...KPI chart series...],
-       contents: [...content-centric metric series...]
-     }
+.farplane/project/ui/latest.json
+  -> generated project/company snapshot for Overview, Goals, Products,
+     Distribution, Cadence, Kanban, Proof, and Memory/Reports tabs,
+     including KPI chart series and content-centric metric series
 ```
 
 Goals own SMART targets. Bindings do not carry targets, provider routes, write
 paths, or fetcher DSL fields. Do not store secrets or credentials here.
+
+Core primitive reducers live in Farplane Core, not in every initialized
+project and not in a skill package. `install.sh` links the global `farplane`
+CLI; projects select their data root with `--project-root` or by running from
+the project directory:
+
+```bash
+farplane metrics primitives --project-root /path/to/project --date <YYYY-MM-DD> --json
+farplane project snapshot --project-root /path/to/project --date <YYYY-MM-DD> --json
+```
+
+The first-wave primitives are mechanical reducers over Farplane files and local
+Codex stores:
+
+```text
+fetch_tickets(window, kpi_reward?, status?)
+kpis_for_product(product_id, metric_recipes)
+ticket_count_by_kpi(window, kpi_id, status?)
+ticket_count_by_product(window, product_id, status?)
+kpi_attributed_ticket_ratio(window)
+fetch_codex_thread_usage(window, cwd=project_root)
+estimate_ai_burn(window, thread_usage, spend_model)
+backfill_ticket_thread_associations(mine_runs_root, output_path)
+```
+
+Tickets do not carry `product_id` or `created_by`. Product ticket views are
+transitive: product -> KPI IDs in `bindings.yaml` -> tickets whose
+`Reward.kpi_rewards` include those KPI IDs. KPI-attributed ticket ratio means
+rewarded tickets divided by touched tickets; it is not proof of who created or
+executed the ticket.
+
+`.farplane/state/ticket-thread-associations.jsonl` is an ignored support index.
+Mine backfill rows use `confidence=completion_only`; they can support completed
+ticket drilldowns and rough burn attribution, but they must not satisfy
+post-start intervention metrics. A future hook writer can add
+`confidence=execution_start_candidate` rows.
 
 Feed Scout config in `feed_scout` declares non-secret watched sources, cadence,
 report paths, UI feed paths, and local-first write policy. It must not store raw
@@ -276,10 +310,10 @@ Allowed statuses are `idea`, `draft`, `approved`, `posted`, `measured`, and
 Publishing skills must append or update a row after confirmed account mutation
 using `farplane content add`. Metric refresh uses this ledger to select posted
 content for platform metric fetches and writes aggregate values plus
-`payload.items` into `.farplane/metrics/daily/YYYY-MM-DD.json`. The compiler
-preserves those payloads in KPI series and also derives
-`.farplane/metrics/ui/latest.json.contents[]`, where each content item has its
-own per-KPI time series for distribution-tab drilldown.
+`payload.items` into `.farplane/metrics/daily/YYYY-MM-DD.json`. The project
+snapshot preserves those payloads in `metrics.series[]` and also derives
+`metrics.contents[]`, where each content item has its own per-KPI time series
+for distribution-tab drilldown.
 
 Supported local commands:
 
@@ -399,34 +433,17 @@ Consumers find newest interval reports by timestamp sorting or explicit links
 from later reports. There is no tracked scheduler config just to store
 `last_report`.
 
-Interval reports expose UI report-card metadata in frontmatter under
+Interval reports expose one UI report-card summary string in frontmatter under
 `ui_summary`. Consumers should parse YAML frontmatter, not prose sections. The
 stable card contract is:
 
 ```yaml
-ui_summary:
-  schema_version: 1
-  title: Daily Interval Update
-  date: "2026-07-02"
-  report_type: interval
-  interval_id: daily_interval
-  deep_link_path: .farplane/reports/interval/daily_interval/2026-07-01T213611Z.md
-  summary_bullets:
-    - Refresh the active frontier after the KPI/autonomy metric chain completed.
-    - Clear review-gated KPI/content/QA surfaces.
-    - Protect the simplified metric loop.
-  highlights: []
-  metrics: []
-  blockers:
-    - Ops memory primary frontier points at completed TASK-0251.
-  next_actions:
-    - Refresh active ops-memory frontier.
+ui_summary: "Refresh the active frontier after the KPI/autonomy metric chain completed; clear review-gated KPI/content/QA surfaces; protect the simplified metric loop."
 ```
 
-`summary_bullets` should contain 3-5 compact outcomes. `highlights`,
-`metrics`, `blockers`, and `next_actions` are optional arrays; emit an empty
-array when no item applies. `deep_link_path` is the local report path to open for
-the full Markdown report.
+Keep `ui_summary` under 100 words. Use existing frontmatter fields such as
+`kind`, `interval_id`, and `created_at` plus the source file path for title,
+date, type, and deep-link behavior.
 
 ## Validation
 

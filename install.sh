@@ -375,6 +375,7 @@ fi
 for bin_name in "${INSTALL_BIN_FILES[@]}"; do
   link_path "$REPO_DIR/bin/$bin_name" "$TARGET_DIR/bin/$bin_name"
 done
+link_path "$REPO_DIR/bin/core" "$TARGET_DIR/bin/core"
 link_global_cli "$TARGET_DIR/bin/farplane"
 
 for hook_name in "${INSTALL_HOOK_FILES[@]}"; do
