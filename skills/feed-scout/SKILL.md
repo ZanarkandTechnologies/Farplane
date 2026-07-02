@@ -21,6 +21,8 @@ Monitor tracked profiles without turning Farplane into a crawler platform.
 
 - explicit configure/run/review/status passes over tracked profiles and harness
   resources
+- project-local `farplane/bindings.yaml#feed_scout` source configuration for
+  daily UI-ready feed rows
 - dedupe-first extraction and scouting of posts, threads, videos, shorts,
   articles, repos, docs, and summary-source feeds
 - local proposal or Notion writeback only after strong evidence and routing
@@ -33,12 +35,16 @@ when the selected mode needs runbook detail.
 ## Skill Signature
 
 ```text
-feed_scout(mode, profiles?, resources?, ledger?, destination?, budget?)
-  -> normalized_items + scout_runs? + skill_creator_handoffs? + proposals? + evidence
-state: reads(feed-scout config/profile/resource rows, content/proposal ledger,
-             fixtures or fetched source items, private routing handles when needed)
-       writes(ledger/proposal rows, dry-run reports, scout run refs,
-              skill-creator handoff refs, optional Notion task projections)
+feed_scout(mode, config_ref?, profiles?, resources?, ledger?, daily_feed_root?,
+           report_root?, destination?, budget?)
+  -> normalized_items + daily_feed? + scout_runs? + skill_creator_handoffs?
+   + proposals? + report + evidence
+state: reads(project feed_scout config, feed-scout config/profile/resource rows,
+             content/proposal ledger, fixtures or fetched source items,
+             private routing handles when needed)
+       writes(ledger/proposal rows, daily feed JSON, latest feed pointer,
+              dry-run or dated reports, scout run refs, skill-creator handoff refs,
+              optional Notion task projections)
 gates: explicit_run_boundary; profiles_validated; url_keys_deduped;
        summarize_before_scouting; no_unapproved_spend_or_notion_write;
        live_notion_relations_verified
@@ -61,9 +67,10 @@ that is ready to become implementation work.
 ## Todo List
 
 - [ ] 1. Bind mode, configured sources, destination, and run boundary.
-  - [ ] Read existing feed-scout config, profile rows, tracked entities,
-    tracked harness resources, ledger/proposal artifacts, and the requested
-    mode before doing any external discovery.
+  - [ ] Read `config_ref` such as `farplane/bindings.yaml#feed_scout` when
+    supplied, plus existing profile rows, tracked entities, tracked harness
+    resources, ledger/proposal artifacts, and the requested mode before doing
+    any external discovery.
   - [ ] Use the native planning phase when cadence, destination, profile value,
     or live-spend boundaries are unclear.
 - [ ] 2. Validate profiles, resources, and live-run gates before discovery.
@@ -131,7 +138,11 @@ that is ready to become implementation work.
 A completed `feed-scout` pass should leave:
 
 - validated tracked profile rows and entity-linked harness resource rows
+- a UI-ready daily feed file such as `.farplane/feed-scout/daily/feed-YYYY-MM-DD.json`
+  plus a latest pointer when `daily_feed_root` is configured
 - a URL-keyed content/proposal ledger update or dry-run report
+- a dated summary report and latest report pointer when `report_root` is
+  configured
 - normalized content items with canonical URLs/keys and entity/resource refs
 - `harness-scout` run artifacts for eligible content
 - optional `skill-creator` book-summary-to-skill packet or handoff for

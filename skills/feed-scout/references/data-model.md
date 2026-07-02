@@ -6,6 +6,53 @@ Tracked entities identify the people and organizations behind multiple source
 surfaces. They keep provenance stable when one person appears through an X
 account, GitHub org, repo, package, video channel, or blog.
 
+## FeedScoutConfig
+
+Project-local Feed Scout setup normally lives in `farplane/bindings.yaml` under
+`feed_scout`. It is declarative configuration for sources, paths, UI rendering,
+and write policy; it is not the item ledger.
+
+```text
+FeedScoutConfig {
+  enabled: boolean
+  cadence: "daily" | "weekly" | string
+  timezone: string
+  report_root: string
+  latest_report: string
+  daily_feed_root: string
+  ledger: string
+  proposal_ledger: string
+  destination: "local_ledger" | "local_inbox" | "notion_tasks"
+  write_policy: "local_first" | "report_only"
+  ui?: {
+    default_view: "daily_feed" | string
+    date_param: string
+    latest_feed: string
+  }
+  entities: map<string, FeedEntity>
+}
+
+FeedEntity {
+  name: string
+  kind: "person" | "organization" | "project" | string
+  tags: string[]
+  enabled: boolean
+  sources: map<string, TrackedProfile | TrackedHarnessResource>
+}
+```
+
+Rules:
+
+- Config paths are project-relative unless absolute.
+- Key sources by the person, organization, or project the operator wants to
+  track, for example `entities.theo-ping.sources.instagram`, so UI can render
+  one creator with all websites, social accounts, repos, channels, and docs
+  together.
+- `entities.<entity_id>.sources.<source_id>` may include local project
+  resources when `fetch_method=local_git`.
+- Live spend and live Notion writes require explicit automation params in
+  addition to config.
+
 ```text
 TrackedEntity {
   id: string
@@ -112,6 +159,26 @@ IngestionLedgerRow {
   src_id?: string
   proposal_url?: string
   status: string
+}
+```
+
+## DailyFeedFile
+
+The daily feed is the UI-facing slice of newly found or changed items for one
+date. It should be compact enough to render directly and should point to larger
+reports or scout runs instead of embedding raw transcripts.
+
+```text
+DailyFeedFile {
+  date: string
+  generated_at: string
+  config_ref: string
+  window: string
+  groups: FeedEntityGroupSummary[]
+  items: ContentItem[]
+  source_gaps: string[]
+  report_ref?: string
+  latest_report_ref?: string
 }
 ```
 

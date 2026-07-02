@@ -8,6 +8,7 @@ source_of_truth:
   - skills/interval-update/SKILL.md
   - skills/consolidate/SKILL.md
   - skills/taste-loop/SKILL.md
+  - skills/feed-scout/SKILL.md
   - farplane/pm.json
 ---
 
@@ -88,9 +89,11 @@ work directly.
 
 Reads:
 - latest weekly_interval report when present as parent context
+- latest feed-scout daily report when present as opportunity context
 
 Runs:
-- light reflection only: plan progress, goal drift, and ticket board drift
+- light reflection plus daily feed intake: plan progress, goal drift,
+  ticket board drift, and one feed-scout run from bindings config
 
 Gates:
 - write a date-stamped interval report
@@ -114,6 +117,8 @@ read_parent_interval = "latest weekly_interval report when present"
 plan_progress = "light"
 goal_drift = "light"
 ticket_board_drift = "light"
+feed_scout_daily = true
+feed_scout_config_ref = "farplane/bindings.yaml#feed_scout"
 ```
 <!-- /farplane:automation-prompt -->
 
@@ -148,6 +153,7 @@ move the needle.
 
 Reads:
 - all daily_interval reports inside last_week when present
+- feed-scout reports inside last_week when present
 
 Runs:
 - reflection workflows for progress, attention, board state, feedback,
@@ -175,6 +181,7 @@ farplane/automations.md automation-config id="farplane-weekly-interval"
 
 Overrides:
 read_child_intervals = "all daily_interval reports inside last_week"
+read_feed_scout_reports = "feed-scout reports inside last_week when present"
 plan_progress = true
 codex_attention_drift = true
 ticket_board_drift = true
