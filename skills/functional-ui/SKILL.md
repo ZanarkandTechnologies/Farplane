@@ -5,6 +5,9 @@ description: "Turn broken or unclear product workflows into user stories, UI-sta
 tier: 3
 group: frontend
 source: local
+template_uses:
+  skill-qa-checklist: "0.1.0"
+qa_checklist: qa_checklist.md
 common_chains:
   after: ["visual-design"]
 ---
@@ -16,6 +19,8 @@ common_chains:
 
 - [ ] State the UI/workflow decision and the artifact being produced:
   diagnosis, UX plan, redesign recommendation, or implementation handoff.
+- [ ] Read [qa_checklist.md](qa_checklist.md) before execution when the task
+  will shape an app screen, panel, dashboard, form, or control surface.
 - [ ] Use [research:user-grounding](../research/SKILL.md#researchuser-grounding)
   when users, jobs, contexts, friction, or success signals are not already
   settled.
@@ -31,6 +36,8 @@ common_chains:
 - [ ] Hand off to [visual-design](../visual-design/SKILL.md) when look/taste is
   still open, or [frontend-craft](../frontend-craft/SKILL.md) when the workflow
   is ready to build.
+- [ ] Apply [qa_checklist.md](qa_checklist.md) again before completion for
+  material screen, panel, dashboard, form, or control-surface plans.
 - [ ] Use the native execution phase for proof/writeback shape before
   claiming the functional UI plan is ready.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
