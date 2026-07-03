@@ -15,6 +15,11 @@ from typing import Any
 
 import yaml
 
+try:
+    from farplane_metric_schema import MetricObservation, metric_observation, write_metric_batch
+except ImportError:  # pragma: no cover - package import path used by tests
+    from bin.core.farplane_metric_schema import MetricObservation, metric_observation, write_metric_batch
+
 
 OBSERVATION_ROOT = Path(".farplane/metrics/observations")
 DAILY_METRICS_ROOT = Path(".farplane/metrics/daily")
@@ -342,6 +347,31 @@ def metric_recipes(project_root: Path) -> dict[str, dict[str, Any]]:
     return {str(key): value if isinstance(value, dict) else {} for key, value in raw.items()}
 
 
+def configured_monthly_ai_spend(project_root: Path) -> float | None:
+    bindings = load_bindings(project_root)
+    candidates = [
+        bindings.get("spend_model"),
+        bindings.get("operating_expenses"),
+        bindings.get("costs"),
+    ]
+    for candidate in candidates:
+        if not isinstance(candidate, dict):
+            continue
+        raw = (
+            candidate.get("monthly_ai_spend")
+            or candidate.get("monthly_ai_subscription_spend")
+            or candidate.get("ai_monthly_spend")
+        )
+        if isinstance(raw, (int, float)):
+            return float(raw)
+        if isinstance(raw, str):
+            try:
+                return float(raw.replace("$", "").replace(",", "").strip())
+            except ValueError:
+                continue
+    return None
+
+
 def kpis_for_product(metric_recipe_map: dict[str, dict[str, Any]], product_id: str) -> set[str]:
     return {
         metric_id
@@ -357,7 +387,7 @@ def ticket_counts(project_root: Path, window: Window) -> tuple[dict[str, Any], l
     attributed = [ticket for ticket in tickets if ticket_touched_in_window(ticket, window) and ticket.kpi_rewards]
     touched = [ticket for ticket in tickets if ticket_touched_in_window(ticket, window)]
     status = "available" if tickets else "source_gap"
-    ratio = round(len(attributed) / len(touched), 4) if touched else None
+    ratio = round(len(attributed) / len(touched), 4) if touched else 0
     return (
         {
             "tickets_created_count": reading(len(created), status, {"tickets": [ticket_payload(ticket) for ticket in created], "gaps": []}),
@@ -373,8 +403,13 @@ def ticket_counts(project_root: Path, window: Window) -> tuple[dict[str, Any], l
             ),
             "kpi_attributed_ticket_ratio": reading(
                 ratio,
-                "available" if ratio is not None else "source_gap",
-                {"attributed": len(attributed), "total_touched": len(touched), "gaps": [] if touched else ["no_tickets_touched_in_window"]},
+                "available",
+                {
+                    "attributed": len(attributed),
+                    "total_touched": len(touched),
+                    "empty_window": not touched,
+                    "gaps": [],
+                },
             ),
         },
         tickets,
@@ -556,7 +591,7 @@ def fetch_codex_thread_usage(codex_home: Path, project_root: Path, window: Windo
                 spans.append(max((updated - created).total_seconds() / 60.0, 0.0))
         span_minutes = sum(spans)
 
-    status = "available" if thread_rows or event_times else "source_gap"
+    status = "available" if thread_rows or event_times or not gaps else "source_gap"
     return {
         "value": len(thread_rows),
         "status": status,
@@ -664,14 +699,96 @@ def ticket_thread_link_coverage(tickets: list[TicketRecord], window: Window, ass
     completed = [ticket for ticket in tickets if ticket.is_complete and in_window(completion_time(ticket), window)]
     associated_ids = {str(row.get("ticket_id")) for row in association_rows}
     linked = [ticket for ticket in completed if ticket.ticket_id in associated_ids]
-    value = round(len(linked) / len(completed), 4) if completed else None
+    value = round(len(linked) / len(completed), 4) if completed else 0
     return reading(
         value,
-        "available" if value is not None else "source_gap",
+        "available",
         {
             "associated_completed_tickets": len(linked),
             "completed_tickets": len(completed),
-            "gaps": [] if completed else ["no_completed_tickets_in_window"],
+            "empty_window": not completed,
+            "gaps": [],
+        },
+    )
+
+
+def observation_rows_for_date(project_root: Path, date_value: str) -> list[dict[str, Any]]:
+    root = project_root / OBSERVATION_ROOT
+    if not root.exists():
+        return []
+    rows: list[dict[str, Any]] = []
+    for path in sorted(root.glob(f"*/{date_value}.json")):
+        payload = read_json(path)
+        source_id = str(payload.get("source_id") or path.parent.name)
+        raw_rows = payload.get("observations")
+        if isinstance(raw_rows, list):
+            for row in raw_rows:
+                if isinstance(row, dict):
+                    rows.append({**row, "source_id": row.get("source_id") or source_id})
+    return rows
+
+
+def content_views_total(project_root: Path, date_value: str) -> dict[str, Any]:
+    component_ids = ["instagram_views", "x_views", "github_views"]
+    latest_by_metric: dict[str, dict[str, Any]] = {}
+    root = project_root / OBSERVATION_ROOT
+    if not root.exists():
+        rows = []
+    else:
+        rows = []
+        for path in sorted(root.glob("*/*.json")):
+            if path.stem > date_value:
+                continue
+            payload = read_json(path)
+            source_id = str(payload.get("source_id") or path.parent.name)
+            raw_rows = payload.get("observations")
+            if isinstance(raw_rows, list):
+                for row in raw_rows:
+                    if isinstance(row, dict):
+                        rows.append({**row, "source_id": row.get("source_id") or source_id})
+    for row in rows:
+        metric_id = str(row.get("metric_id") or "")
+        if metric_id not in component_ids:
+            continue
+        if str(row.get("status") or "available") != "available":
+            continue
+        value = row.get("value")
+        if not isinstance(value, (int, float)):
+            continue
+        row_date = str(row.get("date") or "")
+        previous = latest_by_metric.get(metric_id)
+        if previous is None or row_date > str(previous.get("date") or ""):
+            latest_by_metric[metric_id] = row
+    components = [
+        {
+            "metric_id": metric_id,
+            "date": str(row.get("date") or ""),
+            "value": float(row.get("value")),
+            "source_id": row.get("source_id"),
+        }
+        for metric_id, row in sorted(latest_by_metric.items())
+    ]
+    if not components:
+        return reading(
+            None,
+            "source_gap",
+            {
+                "components": [],
+                "missing_components": component_ids,
+                "gaps": ["no_component_view_observations"],
+                "as_of_date": date_value,
+            },
+        )
+    seen = {str(component["metric_id"]) for component in components}
+    return reading(
+        sum(float(component["value"]) for component in components),
+        "available",
+        {
+            "components": components,
+            "missing_components": [metric_id for metric_id in component_ids if metric_id not in seen],
+            "as_of_date": date_value,
+            "component_policy": "latest_available_on_or_before_date",
+            "gaps": [],
         },
     )
 
@@ -686,20 +803,24 @@ def primitive_snapshot(
     project_root = project_root.resolve()
     window = window_for_date(date_value)
     metric_recipe_map = metric_recipes(project_root)
+    effective_monthly_spend = monthly_spend if monthly_spend is not None else configured_monthly_ai_spend(project_root)
     ticket_basics, tickets, ticket_gaps = ticket_counts(project_root, window)
     by_kpi = ticket_count_by_kpi(tickets, window)
     by_product = ticket_count_by_product(tickets, window, metric_recipe_map)
     thread_usage = fetch_codex_thread_usage(codex_home.expanduser(), project_root, window)
-    burn = estimate_ai_burn(window, thread_usage, monthly_spend)
+    burn = estimate_ai_burn(window, thread_usage, effective_monthly_spend)
     association_path = project_root / ASSOCIATION_PATH
     association = backfill_ticket_thread_associations(project_root, project_root / ".farplane" / "mine" / "runs", association_path, write=write)
     association_rows = read_jsonl(association_path) if write else []
     coverage = ticket_thread_link_coverage(tickets, window, association_rows)
-    source_gaps = [
+    distribution_reach = content_views_total(project_root, date_value)
+    diagnostic_gaps = [
         *ticket_gaps,
+        *association.get("payload", {}).get("gaps", []),
+    ]
+    source_gaps = [
         *thread_usage.get("payload", {}).get("gaps", []),
         *burn.get("payload", {}).get("gaps", []),
-        *association.get("payload", {}).get("gaps", []),
         *coverage.get("payload", {}).get("gaps", []),
     ]
     payload = {
@@ -715,8 +836,13 @@ def primitive_snapshot(
             "ticket_count_by_product": by_product,
             "codex_thread_usage": thread_usage,
             "ai_burn_estimate": burn,
+            "content_views_total": {"evidence_distribution_reach": distribution_reach},
             "ticket_thread_association_backfill": association,
             "ticket_thread_link_coverage": coverage,
+        },
+        "diagnostics": {
+            "ticket_parse_gaps": sorted(set(str(gap) for gap in ticket_gaps if gap)),
+            "non_warning_gaps": sorted(set(str(gap) for gap in diagnostic_gaps if gap)),
         },
         "source_gaps": sorted(set(str(gap) for gap in source_gaps if gap)),
         "paths": {
@@ -736,6 +862,67 @@ def write_primitive_outputs(project_root: Path, date_value: str, payload: dict[s
     primitives = payload.get("primitives") if isinstance(payload.get("primitives"), dict) else {}
     for primitive_id, primitive_payload in primitives.items():
         write_json(project_root / OBSERVATION_ROOT / primitive_id / f"{date_value}.json", primitive_payload if isinstance(primitive_payload, dict) else {})
+        observations = primitive_observations(primitive_id, primitive_payload, date_value)
+        gaps = primitive_gaps(primitive_payload)
+        write_metric_batch(
+            project_root,
+            primitive_id,
+            date_value,
+            observations,
+            gaps=gaps,
+            status=batch_status(observations, gaps),
+        )
+
+
+def primitive_gaps(payload: Any) -> list[str]:
+    if isinstance(payload, dict):
+        gaps = payload.get("payload", {}).get("gaps") if isinstance(payload.get("payload"), dict) else payload.get("gaps")
+        if isinstance(gaps, list):
+            return [str(gap) for gap in gaps if gap]
+    return []
+
+
+def batch_status(observations: list[MetricObservation], gaps: list[str]) -> str:
+    if any(observation.status == "available" for observation in observations):
+        return "partial" if gaps else "available"
+    if any(observation.status == "blocked" for observation in observations):
+        return "blocked"
+    return "source_gap"
+
+
+def primitive_observations(primitive_id: str, primitive_payload: Any, date_value: str) -> list[MetricObservation]:
+    if not isinstance(primitive_payload, dict):
+        return []
+    if "value" in primitive_payload or "status" in primitive_payload:
+        return [
+            metric_observation(
+                primitive_id,
+                date_value,
+                primitive_payload.get("value"),
+                normalize_status(primitive_payload.get("status")),
+                primitive_payload.get("payload") if isinstance(primitive_payload.get("payload"), dict) else {},
+            )
+        ]
+    observations: list[MetricObservation] = []
+    for key, value in sorted(primitive_payload.items(), key=lambda item: str(item[0])):
+        if not isinstance(value, dict) or ("value" not in value and "status" not in value):
+            continue
+        metric_id = f"{primitive_id}:{key}" if primitive_id == "ticket_count_by_product" else str(key)
+        observations.append(
+            metric_observation(
+                metric_id,
+                date_value,
+                value.get("value"),
+                normalize_status(value.get("status")),
+                value.get("payload") if isinstance(value.get("payload"), dict) else {},
+            )
+        )
+    return observations
+
+
+def normalize_status(value: Any) -> str:
+    raw = str(value or "available")
+    return raw if raw in {"available", "source_gap", "not_applicable", "blocked"} else "source_gap"
 
 
 def run_primitives(args: argparse.Namespace) -> int:

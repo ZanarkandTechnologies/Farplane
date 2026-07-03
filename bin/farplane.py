@@ -23,7 +23,7 @@ if str(CORE_DIR) not in sys.path:
     sys.path.insert(0, str(CORE_DIR))
 
 from farplane_adoption import run_scan as run_adoption_scan
-from farplane_content import run_content_add, run_content_list
+from farplane_content import run_content_add, run_content_list, run_content_select, run_content_validate
 from farplane_primitive_metrics import run_primitives as run_metrics_primitives
 from farplane_project_snapshot import run_snapshot as run_project_snapshot
 from farplane_skill_rollout import SkillRolloutError, run_scan as run_skill_rollout_scan
@@ -432,6 +432,16 @@ def build_parser() -> argparse.ArgumentParser:
     content_list.add_argument("--since-date", help="Only include content published on or after this UTC date.")
     content_list.add_argument("--until-date", help="Only include content published before this UTC date.")
     content_list.set_defaults(func=run_content_list)
+    content_validate = content_sub.add_parser("validate", help="Validate content ledger JSONL rows.")
+    content_validate.add_argument("--project-root", default=str(CORE_ROOT))
+    content_validate.set_defaults(func=run_content_validate)
+    content_select = content_sub.add_parser("select", help="Select posted content rows for metric refresh.")
+    content_select.add_argument("--project-root", default=str(CORE_ROOT))
+    content_select.add_argument("--platform", required=True)
+    content_select.add_argument("--kpi", required=True)
+    content_select.add_argument("--date", required=True, help="Snapshot date in YYYY-MM-DD.")
+    content_select.add_argument("--window-days", type=int, default=7)
+    content_select.set_defaults(func=run_content_select)
 
     return parser
 
@@ -459,7 +469,7 @@ def main(argv: list[str]) -> int:
     if getattr(args, "command", None) == "project" and getattr(args, "project_command", None) is None:
         parser.error("project requires a subcommand: snapshot")
     if getattr(args, "command", None) == "content" and getattr(args, "content_command", None) is None:
-        parser.error("content requires a subcommand: add or list")
+        parser.error("content requires a subcommand: add, list, validate, or select")
     if not hasattr(args, "func"):
         parser.print_help()
         return 0

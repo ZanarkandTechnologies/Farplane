@@ -101,6 +101,21 @@ class FarplaneContentTests(unittest.TestCase):
             )
             self.assertEqual(listed.returncode, 0, listed.stderr + listed.stdout)
             payload = json.loads(listed.stdout)
+            validated = subprocess.run(
+                [
+                    sys.executable,
+                    str(CLI),
+                    "content",
+                    "validate",
+                    "--project-root",
+                    str(root),
+                ],
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+            self.assertEqual(validated.returncode, 0, validated.stderr + validated.stdout)
+            validate_payload = json.loads(validated.stdout)
 
         self.assertEqual(payload["row_count"], 1)
         self.assertEqual(payload["external_ids"], ["reel-1"])
@@ -108,6 +123,8 @@ class FarplaneContentTests(unittest.TestCase):
         self.assertEqual(payload["rows"][0]["status"], "measured")
         self.assertEqual(payload["rows"][0]["notes"], "metrics fetched")
         self.assertEqual(payload["rows"][0]["url"], "https://instagram.example/reel-1")
+        self.assertEqual(validate_payload["row_count"], 1)
+        self.assertEqual(validate_payload["issues"], [])
 
     def test_content_add_requires_valid_status_and_kpis(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -195,6 +212,145 @@ class FarplaneContentTests(unittest.TestCase):
 
         self.assertEqual(payload["external_ids"], ["fresh"])
         self.assertEqual(payload["row_count"], 1)
+
+    def test_content_select_returns_source_gap_when_ledger_missing(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            result = subprocess.run(
+                [
+                    sys.executable,
+                    str(CLI),
+                    "content",
+                    "select",
+                    "--project-root",
+                    tmp,
+                    "--platform",
+                    "x",
+                    "--kpi",
+                    "x_views",
+                    "--date",
+                    "2026-07-02",
+                    "--window-days",
+                    "7",
+                ],
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+
+        self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
+        payload = json.loads(result.stdout)
+        self.assertEqual(payload["status"], "source_gap")
+        self.assertEqual(payload["external_ids"], [])
+        self.assertIn("missing:", payload["payload"]["gaps"][0])
+
+    def test_content_select_returns_posted_metric_targets(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            for external_id, status, kpis, published_at in [
+                ("old", "posted", "x_views", "2026-06-20T10:00:00Z"),
+                ("fresh", "posted", "x_views,evidence_distribution_reach", "2026-07-02T10:00:00Z"),
+                ("draft", "draft", "x_views", "2026-07-02T10:00:00Z"),
+                ("wrong-kpi", "posted", "x_likes", "2026-07-02T10:00:00Z"),
+            ]:
+                result = subprocess.run(
+                    [
+                        sys.executable,
+                        str(CLI),
+                        "content",
+                        "add",
+                        "--project-root",
+                        str(root),
+                        "--platform",
+                        "x",
+                        "--external-id",
+                        external_id,
+                        "--status",
+                        status,
+                        "--published-at",
+                        published_at,
+                        "--kpis",
+                        kpis,
+                    ],
+                    capture_output=True,
+                    text=True,
+                    check=False,
+                )
+                self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
+
+            selected = subprocess.run(
+                [
+                    sys.executable,
+                    str(CLI),
+                    "content",
+                    "select",
+                    "--project-root",
+                    str(root),
+                    "--platform",
+                    "x",
+                    "--kpi",
+                    "x_views",
+                    "--date",
+                    "2026-07-02",
+                    "--window-days",
+                    "7",
+                ],
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+
+        self.assertEqual(selected.returncode, 0, selected.stderr + selected.stdout)
+        payload = json.loads(selected.stdout)
+        self.assertEqual(payload["status"], "available")
+        self.assertEqual(payload["external_ids"], ["fresh"])
+        self.assertIn("--tweet-id fresh", payload["payload"]["fetch_command"])
+
+    def test_content_validate_reports_invalid_persisted_rows(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            ledger = root / ".farplane" / "content" / "ledger.jsonl"
+            ledger.parent.mkdir(parents=True)
+            ledger.write_text(
+                "\n".join(
+                    [
+                        "{not-json}",
+                        json.dumps(
+                            {
+                                "content_id": "x:bad",
+                                "platform": "x",
+                                "status": "published",
+                                "approval": "approved",
+                                "published_at": "not-a-date",
+                                "kpis": [],
+                            }
+                        ),
+                    ]
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+
+            result = subprocess.run(
+                [
+                    sys.executable,
+                    str(CLI),
+                    "content",
+                    "validate",
+                    "--project-root",
+                    str(root),
+                ],
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+
+        self.assertEqual(result.returncode, 1)
+        payload = json.loads(result.stdout)
+        self.assertFalse(payload["ok"])
+        self.assertTrue(any(issue.startswith("line_1:invalid_json") for issue in payload["issues"]))
+        self.assertIn("row_1:invalid_status:published", payload["issues"])
+        self.assertIn("row_1:invalid:kpis", payload["issues"])
+        self.assertIn("row_1:invalid:published_at", payload["issues"])
 
 
 if __name__ == "__main__":

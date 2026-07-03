@@ -10,14 +10,22 @@ import hmac
 import json
 import os
 import secrets
+import sys
 import time
 from datetime import date, datetime, timedelta, timezone
+from pathlib import Path
 from typing import Any
 from urllib.error import HTTPError, URLError
 from urllib.parse import quote, urlencode
 from urllib.request import Request, urlopen
 
 from social_config import env_value, load_config_values
+
+ROOT = Path(__file__).resolve().parents[3]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from bin.core.farplane_metric_schema import MetricObservationBatch
 
 BASE_URL = "https://api.x.com/2"
 
@@ -365,12 +373,13 @@ def fetch_metrics(
     user_auth = oauth2_header(file_values)
     if not app_auth and not user_auth:
         return {
+            "schema_version": 1,
             "source_id": "x_account_api",
             "date": snapshot_date,
             "status": "blocked",
             "observations": [],
             "gaps": ["missing_FARPLANE_X_BEARER_TOKEN_or_FARPLANE_X_OAUTH2_ACCESS_TOKEN"],
-            "redacted": True,
+            "payload": {"redacted": True},
         }
 
     profile_auth = user_auth or app_auth
@@ -485,26 +494,29 @@ def fetch_metrics(
             gaps.append(f"x_tweet_metrics_fetch_failed:{status}")
 
     return {
+        "schema_version": 1,
         "source_id": "x_account_api",
-        "source": "x_account_metrics",
         "date": snapshot_date,
         "status": "available" if observations else "source_gap",
-        "metrics": compact_metrics(observations, content_items),
         "observations": observations,
         "gaps": gaps,
-        "endpoints": endpoints,
-        "post_ids": explicit_tweet_ids,
-        "content_items": content_items,
-        "selection": {
-            "latest": latest,
-            "yesterday": yesterday,
-            "since_date": str(parse_date(since_date)) if since_date else None,
-            "until_date": str(parse_date(until_date)) if until_date else None,
-            "limit": limit,
+        "payload": {
+            "source": "x_account_metrics",
+            "metrics": compact_metrics(observations, content_items),
+            "endpoints": endpoints,
+            "post_ids": explicit_tweet_ids,
+            "content_items": content_items,
+            "selection": {
+                "latest": latest,
+                "yesterday": yesterday,
+                "since_date": str(parse_date(since_date)) if since_date else None,
+                "until_date": str(parse_date(until_date)) if until_date else None,
+                "limit": limit,
+            },
+            "deep": deep,
+            "auth_mode": auth_mode,
+            "redacted": True,
         },
-        "deep": deep,
-        "auth_mode": auth_mode,
-        "redacted": True,
     }
 
 
@@ -518,7 +530,7 @@ def main() -> int:
     parser.add_argument("--yesterday", action="store_true", help="Fetch posts published on the day before --date, UTC.")
     parser.add_argument("--since-date", help="Only include timeline posts on or after this UTC date, YYYY-MM-DD.")
     parser.add_argument("--until-date", help="Only include timeline posts before this UTC date, YYYY-MM-DD.")
-    parser.add_argument("--out", default=".farplane/metrics/manual/x_account.json")
+    parser.add_argument("--out", help="Output path. Defaults to .farplane/metrics/observations/<source_id>/<date>.json.")
     args = parser.parse_args()
 
     try:
@@ -526,16 +538,18 @@ def main() -> int:
     except (HTTPError, URLError, TimeoutError, RuntimeError) as exc:
         status = getattr(exc, "code", "runtime")
         payload = {
+            "schema_version": 1,
             "source_id": "x_account_api",
             "date": args.date,
             "status": "blocked",
             "observations": [],
             "gaps": [f"x_metrics_fetch_blocked:{status}"],
-            "redacted": True,
+            "payload": {"redacted": True},
         }
 
-    out = Path(args.out)
+    out = Path(args.out) if args.out else Path(".farplane") / "metrics" / "observations" / str(payload["source_id"]) / f"{args.date}.json"
     out.parent.mkdir(parents=True, exist_ok=True)
+    MetricObservationBatch.model_validate(payload)
     out.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     print(json.dumps({"ok": payload["status"] == "available", "out": str(out), "status": payload["status"], "observations": len(payload["observations"]), "gaps": payload.get("gaps", [])}, indent=2, sort_keys=True))
     return 0 if payload["status"] == "available" else 1

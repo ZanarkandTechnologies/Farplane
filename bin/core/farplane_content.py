@@ -7,7 +7,7 @@ import argparse
 import json
 from dataclasses import dataclass
 from datetime import date as date_type
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
@@ -23,24 +23,39 @@ class ContentLedgerResult:
     rows: list[dict[str, Any]]
 
 
+@dataclass(frozen=True)
+class LedgerValidationResult:
+    ledger_path: Path
+    rows: list[dict[str, Any]]
+    issues: list[str]
+
+
 def now_iso() -> str:
     return datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
 
 
 def read_jsonl(path: Path) -> list[dict[str, Any]]:
+    return read_jsonl_with_issues(path)[0]
+
+
+def read_jsonl_with_issues(path: Path) -> tuple[list[dict[str, Any]], list[str]]:
     if not path.exists():
-        return []
+        return [], [f"missing:{path}"]
     rows: list[dict[str, Any]] = []
-    for line in path.read_text(encoding="utf-8").splitlines():
+    issues: list[str] = []
+    for line_number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), start=1):
         if not line.strip():
             continue
         try:
             raw = json.loads(line)
-        except json.JSONDecodeError:
+        except json.JSONDecodeError as exc:
+            issues.append(f"line_{line_number}:invalid_json:{exc.msg}")
             continue
-        if isinstance(raw, dict):
-            rows.append(raw)
-    return rows
+        if not isinstance(raw, dict):
+            issues.append(f"line_{line_number}:invalid_row_type")
+            continue
+        rows.append(raw)
+    return rows, issues
 
 
 def write_jsonl(path: Path, rows: list[dict[str, Any]]) -> None:
@@ -100,13 +115,32 @@ def validate_row(row: dict[str, Any]) -> list[str]:
     if row.get("approval") not in VALID_APPROVALS:
         issues.append(f"invalid_approval:{row.get('approval')}")
     kpis = row.get("kpis")
-    if not isinstance(kpis, list) or not all(isinstance(item, str) and item for item in kpis):
+    if not isinstance(kpis, list) or not kpis or not all(isinstance(item, str) and item for item in kpis):
         issues.append("invalid:kpis")
+    if row.get("published_at") and parse_iso_datetime(row.get("published_at")) is None:
+        issues.append("invalid:published_at")
     return issues
 
 
 def ledger_path(project_root: Path) -> Path:
     return project_root.resolve() / CONTENT_LEDGER_PATH
+
+
+def validate_ledger(project_root: Path) -> LedgerValidationResult:
+    path = ledger_path(project_root)
+    rows, issues = read_jsonl_with_issues(path)
+    if not path.exists():
+        return LedgerValidationResult(path, [], issues)
+    seen: set[str] = set()
+    for index, row in enumerate(rows, start=1):
+        for issue in validate_row(row):
+            issues.append(f"row_{index}:{issue}")
+        content_key = row.get("content_id")
+        if isinstance(content_key, str) and content_key:
+            if content_key in seen:
+                issues.append(f"row_{index}:duplicate_content_id:{content_key}")
+            seen.add(content_key)
+    return LedgerValidationResult(path, rows, issues)
 
 
 def add_content_row(project_root: Path, row: dict[str, Any]) -> ContentLedgerResult:
@@ -172,6 +206,56 @@ def external_ids(rows: list[dict[str, Any]]) -> list[str]:
     return ids
 
 
+def fetch_command(platform: str, ids: list[str], date: str) -> str:
+    if not ids:
+        return ""
+    if platform == "instagram":
+        return f"python3 skills/instagram-account/scripts/fetch_metrics.py --date {date} " + " ".join(f"--media-id {content_id}" for content_id in ids)
+    if platform == "x":
+        return f"python3 skills/x-account/scripts/fetch_metrics.py --date {date} " + " ".join(f"--tweet-id {content_id}" for content_id in ids)
+    return ""
+
+
+def select_metric_targets(
+    project_root: Path,
+    platform: str,
+    kpi: str,
+    date: str,
+    window_days: int = 7,
+) -> dict[str, Any]:
+    path = ledger_path(project_root)
+    if not path.exists():
+        return {
+            "status": "source_gap",
+            "external_ids": [],
+            "items": [],
+            "payload": {
+                "platform": platform,
+                "kpi_key": kpi,
+                "window_days": window_days,
+                "gaps": [f"missing:{path}"],
+            },
+        }
+    until = date_type.fromisoformat(date) + timedelta(days=1)
+    since = until - timedelta(days=window_days)
+    rows = filter_rows(read_jsonl(path), platform=platform, status="posted", kpi=kpi, since_date=since.isoformat(), until_date=until.isoformat())
+    ids = external_ids(rows)
+    return {
+        "status": "available" if ids else "source_gap",
+        "external_ids": ids,
+        "items": rows,
+        "payload": {
+            "platform": platform,
+            "kpi_key": kpi,
+            "window_days": window_days,
+            "since_date": since.isoformat(),
+            "until_date": until.isoformat(),
+            "fetch_command": fetch_command(platform, ids, date),
+            "gaps": [] if ids else ["no_posted_content_targets_for_window"],
+        },
+    }
+
+
 def run_content_add(args: argparse.Namespace) -> int:
     row = {
         "content_id": args.content_id or content_id(args.platform, args.external_id, args.url, args.published_at),
@@ -212,6 +296,29 @@ def run_content_list(args: argparse.Namespace) -> int:
         "row_count": len(rows),
         "external_ids": external_ids(rows),
         "rows": rows,
+    }
+    print(json.dumps(payload, indent=2, sort_keys=True))
+    return 0
+
+
+def run_content_validate(args: argparse.Namespace) -> int:
+    result = validate_ledger(Path(args.project_root))
+    payload = {
+        "ok": not result.issues,
+        "ledger": str(result.ledger_path),
+        "row_count": len(result.rows),
+        "issues": result.issues,
+    }
+    print(json.dumps(payload, indent=2, sort_keys=True))
+    return 0 if payload["ok"] else 1
+
+
+def run_content_select(args: argparse.Namespace) -> int:
+    packet = select_metric_targets(Path(args.project_root), args.platform, args.kpi, args.date, args.window_days)
+    payload = {
+        "ok": True,
+        "ledger": str(ledger_path(Path(args.project_root))),
+        **packet,
     }
     print(json.dumps(payload, indent=2, sort_keys=True))
     return 0

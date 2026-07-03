@@ -28,7 +28,7 @@ def write_framework_manifest(farplane: Path) -> None:
                         "farplane/README.md",
                         "farplane/manifest.json",
                         "farplane/harness.md",
-                        "farplane/goals.md",
+                        "farplane/goals.yaml",
                         "farplane/products.md",
                         "farplane/ops-memory.md",
                         "farplane/automations.toml",
@@ -84,11 +84,15 @@ def write_required_project_files(root: Path) -> None:
     for path in ("AGENTS.md", "PROJECT_RULES.md", "ARCHITECTURE.md"):
         (root / path).write_text(f"# {path}\n", encoding="utf-8")
 
-    for name in ("README.md", "goals.md", "ops-memory.md"):
+    for name in ("README.md", "ops-memory.md"):
         (farplane / name).write_text(
             "---\nframework_template_version: \"0.1.0\"\n---\n\n# Test\n",
             encoding="utf-8",
         )
+    (farplane / "goals.yaml").write_text(
+        'kind: project-goals\nframework_template_version: "0.1.0"\ngoals: {}\n',
+        encoding="utf-8",
+    )
     (farplane / "hooks.json").write_text('{"version": 1, "hooks": {}}\n', encoding="utf-8")
     skills_dir = root / ".agents" / "skills"
     skills_dir.mkdir(parents=True)
@@ -398,31 +402,22 @@ def test_goal_kpi_without_metric_recipe_fails(tmp_path: Path) -> None:
     farplane.mkdir()
     write_framework_manifest(farplane)
     write_required_project_files(tmp_path)
-    (farplane / "goals.md").write_text(
-        """---
-kind: project-goals
+    (farplane / "goals.yaml").write_text(
+        """kind: project-goals
 framework_template_version: "0.1.0"
----
-
-# Goals
-
-## Goals
-
-```yaml
 goals:
   test_axis:
     smart_goals:
       - id: missing_recipe
         kpis:
           - id: unknown_metric
-```
 """,
         encoding="utf-8",
     )
 
     errors = validate(tmp_path)
 
-    assert "farplane/goals.md KPI ids lack bindings.yaml metric recipes: unknown_metric." in errors
+    assert "farplane/goals.yaml KPI ids lack bindings.yaml metric recipes: unknown_metric." in errors
 
 
 def test_metric_product_without_product_row_fails(tmp_path: Path) -> None:
@@ -446,6 +441,268 @@ metrics:
     assert "farplane/bindings.yaml metric products are not in products.md: missing_product." in errors
 
 
+def test_goal_kpi_metric_recipe_without_product_fails(tmp_path: Path) -> None:
+    farplane = tmp_path / "farplane"
+    farplane.mkdir()
+    write_framework_manifest(farplane)
+    write_required_project_files(tmp_path)
+    (farplane / "goals.yaml").write_text(
+        """kind: project-goals
+framework_template_version: "0.1.0"
+goals:
+  test_axis:
+    smart_goals:
+      - id: productless_kpi
+        kpis:
+          - id: accepted_harness_improvements
+""",
+        encoding="utf-8",
+    )
+    (farplane / "bindings.yaml").write_text(
+        """kind: project-bindings
+framework_template_version: "0.1.0"
+project: {}
+metrics:
+  accepted_harness_improvements:
+    label: Accepted harness improvements
+""",
+        encoding="utf-8",
+    )
+
+    errors = validate(tmp_path)
+
+    assert (
+        "farplane/goals.yaml KPI ids have bindings.yaml metric recipes without product: accepted_harness_improvements."
+        in errors
+    )
+
+
+def test_metric_recipe_requires_description_and_valid_types(tmp_path: Path) -> None:
+    farplane = tmp_path / "farplane"
+    farplane.mkdir()
+    write_framework_manifest(farplane)
+    write_required_project_files(tmp_path)
+    (farplane / "bindings.yaml").write_text(
+        """kind: project-bindings
+framework_template_version: "0.1.0"
+project: {}
+metrics:
+  accepted_harness_improvements:
+    label: Accepted harness improvements
+    product: test
+    kind: weekly_magic
+    unit: improvements
+    display: sparkles
+    pinned: "true"
+    refresh: Count tickets.
+""",
+        encoding="utf-8",
+    )
+
+    errors = validate(tmp_path)
+
+    assert "farplane/bindings.yaml metrics.accepted_harness_improvements.description must be a non-empty string." in errors
+    assert "farplane/bindings.yaml metrics.accepted_harness_improvements.kind must be one of: daily, daily_count, point." in errors
+    assert "farplane/bindings.yaml metrics.accepted_harness_improvements.display must be one of: bar_plus_cumulative, line, reading." in errors
+    assert "farplane/bindings.yaml metrics.accepted_harness_improvements.pinned must be boolean when present." in errors
+
+
+def write_metric_binding(farplane: Path, metric_id: str = "instagram_views") -> None:
+    (farplane / "bindings.yaml").write_text(
+        f"""kind: project-bindings
+framework_template_version: "0.1.0"
+project: {{}}
+metrics:
+  {metric_id}:
+    label: Instagram views
+    description: Daily aggregate Instagram views.
+    product: test
+    kind: daily_count
+    unit: views
+    display: bar_plus_cumulative
+    refresh: Fetch platform views.
+""",
+        encoding="utf-8",
+    )
+
+
+def test_metric_observation_batch_schema_validates(tmp_path: Path) -> None:
+    farplane = tmp_path / "farplane"
+    farplane.mkdir()
+    write_framework_manifest(farplane)
+    write_required_project_files(tmp_path)
+    write_metric_binding(farplane)
+    path = tmp_path / ".farplane" / "metrics" / "observations" / "instagram_account_metrics" / "2026-07-03.json"
+    path.parent.mkdir(parents=True)
+    path.write_text(
+        json.dumps(
+            {
+                "schema_version": 1,
+                "date": "2026-07-03",
+                "source_id": "instagram_account_metrics",
+                "status": "available",
+                "observations": [
+                    {
+                        "metric_id": "instagram_views",
+                        "date": "2026-07-03",
+                        "value": 12,
+                        "status": "available",
+                        "payload": {"items": []},
+                    }
+                ],
+                "gaps": [],
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    errors = validate(tmp_path)
+
+    assert not [error for error in errors if "instagram_account_metrics" in error]
+
+
+def test_metric_observation_batch_unknown_metric_fails(tmp_path: Path) -> None:
+    farplane = tmp_path / "farplane"
+    farplane.mkdir()
+    write_framework_manifest(farplane)
+    write_required_project_files(tmp_path)
+    write_metric_binding(farplane)
+    path = tmp_path / ".farplane" / "metrics" / "observations" / "instagram_account_metrics" / "2026-07-03.json"
+    path.parent.mkdir(parents=True)
+    path.write_text(
+        json.dumps(
+            {
+                "schema_version": 1,
+                "date": "2026-07-03",
+                "source_id": "instagram_account_metrics",
+                "status": "available",
+                "observations": [
+                    {"metric_id": "unknown_views", "date": "2026-07-03", "value": 12, "status": "available"}
+                ],
+                "gaps": [],
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    errors = validate(tmp_path)
+
+    assert (
+        ".farplane/metrics/observations/instagram_account_metrics/2026-07-03.json observation metric_ids lack bindings.yaml metric recipes: unknown_views."
+        in errors
+    )
+
+
+def test_metric_observation_batch_duplicate_metric_fails(tmp_path: Path) -> None:
+    farplane = tmp_path / "farplane"
+    farplane.mkdir()
+    write_framework_manifest(farplane)
+    write_required_project_files(tmp_path)
+    write_metric_binding(farplane)
+    path = tmp_path / ".farplane" / "metrics" / "observations" / "instagram_account_metrics" / "2026-07-03.json"
+    path.parent.mkdir(parents=True)
+    row = {"metric_id": "instagram_views", "date": "2026-07-03", "value": 12, "status": "available"}
+    path.write_text(
+        json.dumps(
+            {
+                "schema_version": 1,
+                "date": "2026-07-03",
+                "source_id": "instagram_account_metrics",
+                "status": "available",
+                "observations": [row, row],
+                "gaps": [],
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    errors = validate(tmp_path)
+
+    assert (
+        ".farplane/metrics/observations/instagram_account_metrics/2026-07-03.json duplicates metric observations: instagram_views@2026-07-03."
+        in errors
+    )
+
+
+def test_goal_kpi_without_complete_target_fails(tmp_path: Path) -> None:
+    farplane = tmp_path / "farplane"
+    farplane.mkdir()
+    write_framework_manifest(farplane)
+    write_required_project_files(tmp_path)
+    (farplane / "goals.yaml").write_text(
+        """kind: project-goals
+framework_template_version: "0.1.0"
+goals:
+  test_axis:
+    smart_goals:
+      - id: partial_target
+        kpis:
+          - id: accepted_harness_improvements
+            target: 20
+          - id: ready_unclaimed_ticket_count
+            direction: below
+""",
+        encoding="utf-8",
+    )
+    (farplane / "bindings.yaml").write_text(
+        """kind: project-bindings
+framework_template_version: "0.1.0"
+project: {}
+metrics:
+  accepted_harness_improvements:
+    product: test
+    unit: improvements
+  ready_unclaimed_ticket_count:
+    product: test
+    unit: tickets
+""",
+        encoding="utf-8",
+    )
+
+    errors = validate(tmp_path)
+
+    assert "farplane/goals.yaml KPI ids need explicit target values: ready_unclaimed_ticket_count." in errors
+    assert "farplane/goals.yaml KPI ids need explicit target directions: accepted_harness_improvements." in errors
+
+
+def test_goal_kpi_metric_recipe_without_unit_fails(tmp_path: Path) -> None:
+    farplane = tmp_path / "farplane"
+    farplane.mkdir()
+    write_framework_manifest(farplane)
+    write_required_project_files(tmp_path)
+    (farplane / "goals.yaml").write_text(
+        """kind: project-goals
+framework_template_version: "0.1.0"
+goals:
+  test_axis:
+    smart_goals:
+      - id: missing_unit
+        kpis:
+          - id: accepted_harness_improvements
+            target: 20
+            direction: above
+""",
+        encoding="utf-8",
+    )
+    (farplane / "bindings.yaml").write_text(
+        """kind: project-bindings
+framework_template_version: "0.1.0"
+project: {}
+metrics:
+  accepted_harness_improvements:
+    product: test
+""",
+        encoding="utf-8",
+    )
+
+    errors = validate(tmp_path)
+
+    assert (
+        "farplane/goals.yaml KPI ids have bindings.yaml metric recipes without unit: accepted_harness_improvements."
+        in errors
+    )
+
+
 def test_stale_project_snapshot_fails(tmp_path: Path) -> None:
     farplane = tmp_path / "farplane"
     farplane.mkdir()
@@ -457,7 +714,7 @@ def test_stale_project_snapshot_fails(tmp_path: Path) -> None:
             {
                 "sources": [
                     {
-                        "path": "farplane/goals.md",
+                        "path": "farplane/goals.yaml",
                         "hash": "sha256:not-current",
                     }
                 ]
@@ -468,7 +725,7 @@ def test_stale_project_snapshot_fails(tmp_path: Path) -> None:
 
     errors = validate(tmp_path)
 
-    assert ".farplane/project/ui/latest.json is stale for farplane/goals.md; regenerate project snapshot." in errors
+    assert ".farplane/project/ui/latest.json is stale for farplane/goals.yaml; regenerate project snapshot." in errors
 
 
 def test_missing_pm_manifest_passes(tmp_path: Path) -> None:

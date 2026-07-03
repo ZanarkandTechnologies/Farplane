@@ -105,11 +105,11 @@ def select_content_metric_targets(
         if isinstance(row.get("external_id"), str) and row.get("external_id")
     ]
     if platform == "instagram":
-        fetch_command = "python3 skills/instagram-account/scripts/fetch_metrics.py " + " ".join(
+        fetch_command = f"python3 skills/instagram-account/scripts/fetch_metrics.py --date {date} " + " ".join(
             f"--media-id {content_id}" for content_id in external_ids
         )
     elif platform == "x":
-        fetch_command = "python3 skills/x-account/scripts/fetch_metrics.py " + " ".join(
+        fetch_command = f"python3 skills/x-account/scripts/fetch_metrics.py --date {date} " + " ".join(
             f"--tweet-id {content_id}" for content_id in external_ids
         )
     else:
@@ -454,10 +454,11 @@ def calculate_ticket_intervention_metrics(ticket_dir: Path, runtime_dir: Path, d
         items.append({"ticket_id": ticket_id, "ticket": relative_ticket, "intervention_turns": turn_count})
 
     if counted_tickets == 0:
+        empty_payload = {"tickets": [], "gaps": gaps, "empty_window": True}
         return {
-            "auto_completion_rate": {"value": None, "status": "source_gap", "payload": {"gaps": gaps}},
-            "intervention_free_ticket_count": {"value": None, "status": "source_gap", "payload": {"gaps": gaps}},
-            "ticket_intervention_turn_count": {"value": None, "status": "source_gap", "payload": {"gaps": gaps}},
+            "auto_completion_rate": {"value": None, "status": "not_applicable", "payload": empty_payload},
+            "intervention_free_ticket_count": {"value": 0, "status": "available", "payload": empty_payload},
+            "ticket_intervention_turn_count": {"value": 0, "status": "available", "payload": empty_payload},
         }
     payload = {"tickets": items, "gaps": gaps}
     return {

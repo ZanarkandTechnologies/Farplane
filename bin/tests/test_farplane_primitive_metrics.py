@@ -78,6 +78,12 @@ updated_at: 2026-07-03T03:30:00Z
 ---
 
 # TASK-0002
+
+## Reward
+
+```yaml
+owner: human
+```
 """,
             )
 
@@ -87,6 +93,56 @@ updated_at: 2026-07-03T03:30:00Z
         self.assertEqual(payload["primitives"]["ticket_count_by_product"]["productization"]["value"], 1)
         self.assertEqual(payload["primitives"]["tickets_with_kpi_reward_count"]["value"], 1)
         self.assertEqual(payload["primitives"]["kpi_attributed_ticket_ratio"]["value"], 0.5)
+        self.assertNotIn("tickets/TASK-0002/ticket.md:missing_kpi_rewards", payload["source_gaps"])
+        self.assertIn("tickets/TASK-0002/ticket.md:missing_kpi_rewards", payload["diagnostics"]["ticket_parse_gaps"])
+
+    def test_empty_windows_are_zero_readings_not_source_gaps(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "farplane").mkdir()
+            (root / "farplane" / "bindings.yaml").write_text(
+                """kind: project-bindings
+spend_model:
+  monthly_ai_spend: 62
+metrics:
+  accepted_harness_improvements:
+    product: productization
+""",
+                encoding="utf-8",
+            )
+            write_ticket(
+                root,
+                "TASK-0001",
+                """---
+ticket_id: TASK-0001
+phase: complete
+status: done
+created_at: 2026-07-01T01:00:00Z
+updated_at: 2026-07-01T02:00:00Z
+completed_at: 2026-07-01T02:00:00Z
+---
+
+# TASK-0001
+
+## Reward
+
+```yaml
+kpi_rewards:
+  - kpi_id: accepted_harness_improvements
+```
+""",
+            )
+
+            payload = primitive_snapshot(root, "2026-07-03", root / ".codex", monthly_spend=None, write=False)
+
+        self.assertEqual(payload["primitives"]["kpi_attributed_ticket_ratio"]["status"], "available")
+        self.assertEqual(payload["primitives"]["kpi_attributed_ticket_ratio"]["value"], 0)
+        self.assertEqual(payload["primitives"]["ticket_thread_link_coverage"]["status"], "available")
+        self.assertEqual(payload["primitives"]["ticket_thread_link_coverage"]["value"], 0)
+        self.assertEqual(payload["primitives"]["ai_burn_estimate"]["status"], "available")
+        self.assertEqual(payload["primitives"]["ai_burn_estimate"]["payload"]["monthly_spend"], 62.0)
+        self.assertNotIn("no_completed_tickets_in_window", payload["source_gaps"])
+        self.assertNotIn("missing_spend_model", payload["source_gaps"])
 
     def test_mine_backfill_writes_completion_only_association_rows(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

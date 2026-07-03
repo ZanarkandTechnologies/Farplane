@@ -11,14 +11,29 @@ import tomllib
 from datetime import date as date_type
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any
+from typing import Any, TypedDict
 
 import yaml
+
+try:
+    from farplane_metric_schema import batch_path, read_metric_batches
+except ImportError:  # pragma: no cover - package import path used by tests
+    from bin.core.farplane_metric_schema import batch_path, read_metric_batches
 
 
 PROJECT_SNAPSHOT_PATH = Path(".farplane/project/ui/latest.json")
 DAILY_METRICS_DIR = Path(".farplane/metrics/daily")
 CONTENT_LEDGER_PATH = Path(".farplane/content/ledger.jsonl")
+FEED_SCOUT_LATEST_FEED_PATH = Path(".farplane/feed-scout/daily/latest.json")
+FEED_SCOUT_LATEST_REPORT_PATH = Path(".farplane/reports/feed-scout/latest.json")
+
+
+class SourceGap(TypedDict):
+    id: str
+    severity: str
+    owner: str
+    message: str
+    source_ref: dict[str, Any]
 
 
 PRIMITIVE_CATALOG: dict[str, dict[str, Any]] = {
@@ -30,7 +45,7 @@ PRIMITIVE_CATALOG: dict[str, dict[str, Any]] = {
         "store_to": ".farplane/metrics/daily/<YYYY-MM-DD>.json",
         "required_inputs": ["tickets/**/ticket.md", "Reward.kpi_rewards[]"],
         "emits": ["value", "status", "payload.tickets", "payload.gaps"],
-        "source_gap_policy": "Emit gaps when tickets lack parseable reward metadata.",
+        "source_gap_policy": "Human/unattributed tickets are diagnostics, not UI warnings; missing KPI rows produce zero counts.",
     },
     "ticket_count_by_product": {
         "primitive_id": "ticket_count_by_product",
@@ -50,7 +65,7 @@ PRIMITIVE_CATALOG: dict[str, dict[str, Any]] = {
         "store_to": ".farplane/metrics/daily/<YYYY-MM-DD>.json",
         "required_inputs": ["tickets/**/ticket.md", "Reward.kpi_rewards[]"],
         "emits": ["value", "status", "payload.attributed", "payload.total_touched"],
-        "source_gap_policy": "Emit source_gap when no tickets are touched in the window.",
+        "source_gap_policy": "Empty windows produce available zero readings, not source gaps.",
     },
     "codex_thread_usage": {
         "primitive_id": "codex_thread_usage",
@@ -70,7 +85,17 @@ PRIMITIVE_CATALOG: dict[str, dict[str, Any]] = {
         "store_to": ".farplane/metrics/daily/<YYYY-MM-DD>.json",
         "required_inputs": ["codex_thread_usage", "explicit spend model"],
         "emits": ["value", "status", "payload.mode", "payload.gaps"],
-        "source_gap_policy": "Emit source_gap when no spend model is configured.",
+        "source_gap_policy": "Emit source_gap when no CLI or bindings spend model is configured.",
+    },
+    "content_views_total": {
+        "primitive_id": "content_views_total",
+        "provider": "farplane-core",
+        "owner": "farplane-core",
+        "command": "python3 bin/farplane.py metrics primitives --project-root <project> --date <YYYY-MM-DD>",
+        "store_to": ".farplane/metrics/observations/content_views_total/<YYYY-MM-DD>.json",
+        "required_inputs": [".farplane/metrics/observations/*/<YYYY-MM-DD>.json"],
+        "emits": ["evidence_distribution_reach", "payload.components", "payload.missing_components"],
+        "source_gap_policy": "Emit source_gap when no same-day platform view component observations exist.",
     },
     "ticket_thread_association_backfill": {
         "primitive_id": "ticket_thread_association_backfill",
@@ -81,6 +106,26 @@ PRIMITIVE_CATALOG: dict[str, dict[str, Any]] = {
         "required_inputs": [".farplane/mine/runs/**/input.json"],
         "emits": ["ticket_id", "thread_id", "source", "observed_at", "confidence"],
         "source_gap_policy": "Mine backfill emits confidence=completion_only and cannot satisfy post-start intervention metrics.",
+    },
+    "autonomy_time_feedback": {
+        "primitive_id": "autonomy_time_feedback",
+        "provider": "interval-update",
+        "owner": "farplane-core",
+        "command": "python3 skills/interval-update/scripts/metric_refresh.py autonomy-time-ratio --runtime-dir .farplane --date <YYYY-MM-DD>",
+        "store_to": ".farplane/metrics/observations/autonomy_time_feedback/<YYYY-MM-DD>.json",
+        "required_inputs": [".farplane/events/*.jsonl", ".farplane/automation/spawned-threads.jsonl", ".farplane/automation/rewards.jsonl"],
+        "emits": ["auto_time_ratio", "human_attention_minutes_estimated", "autonomous_worker_elapsed_minutes"],
+        "source_gap_policy": "Emit source_gap only when all runtime feedback sources are missing.",
+    },
+    "ticket_intervention_feedback": {
+        "primitive_id": "ticket_intervention_feedback",
+        "provider": "interval-update",
+        "owner": "farplane-core",
+        "command": "python3 skills/interval-update/scripts/metric_refresh.py ticket-intervention-metrics --ticket-dir tickets --runtime-dir .farplane --date <YYYY-MM-DD>",
+        "store_to": ".farplane/metrics/observations/ticket_intervention_feedback/<YYYY-MM-DD>.json",
+        "required_inputs": ["tickets/**/ticket.md", ".farplane/state/ticket-thread-associations.jsonl", ".farplane/events/*.jsonl"],
+        "emits": ["auto_completion_rate", "intervention_free_ticket_count", "ticket_intervention_turn_count"],
+        "source_gap_policy": "Emit source_gap when no completed ticket can be associated with its execution thread.",
     },
     "manual_source_gap": {
         "primitive_id": "manual_source_gap",
@@ -94,6 +139,34 @@ PRIMITIVE_CATALOG: dict[str, dict[str, Any]] = {
     },
 }
 
+DEFAULT_METRIC_DESCRIPTIONS: dict[str, str] = {
+    "accepted_evidence_cycles": "Daily count of completed tickets whose Reward.kpi_rewards includes this KPI and whose Done / Proof shows accepted evidence value.",
+    "accepted_harness_improvements": "Daily count of completed tickets whose Reward.kpi_rewards includes this KPI and whose proof shows a shipped Farplane improvement.",
+    "auto_time_ratio": "Autonomous worker elapsed minutes divided by estimated human attention minutes for the day.",
+    "evidence_distribution_reach": "Daily distribution reach rollup from available X, Instagram, GitHub, and content-ledger view readings.",
+    "latest_eval_pass_rate": "Most recent eval summary pass rate available for the snapshot window.",
+    "github_views": "Daily GitHub traffic views for the Farplane repository when traffic API access is available.",
+    "auto_completion_rate": "Completed associated tickets with zero post-start human intervention turns divided by all completed associated tickets for the day.",
+    "intervention_free_ticket_count": "Daily count of completed associated tickets with zero human turns after execution start.",
+    "ticket_intervention_turn_count": "Daily count of human turns after execution start and before completion across completed associated tickets.",
+    "ready_unclaimed_ticket_count": "Current count of ready, approval-free, unclaimed active tickets that are not complete or human-gated.",
+    "x_followers": "Current follower count for the configured Farplane X account.",
+    "x_views": "Daily aggregate X views for posted content selected from the content ledger.",
+    "x_likes": "Daily aggregate X likes for posted content selected from the content ledger.",
+    "instagram_followers": "Current follower count for the configured Farplane Instagram account.",
+    "instagram_views": "Daily aggregate Instagram views for posted content selected from the content ledger.",
+    "instagram_likes": "Daily aggregate Instagram likes for posted content selected from the content ledger.",
+    "instagram_comments": "Daily aggregate Instagram comments for posted content selected from the content ledger.",
+    "instagram_shares": "Daily aggregate Instagram shares for posted content selected from the content ledger.",
+    "instagram_saves": "Daily aggregate Instagram saves for posted content selected from the content ledger.",
+    "instagram_reach": "Daily aggregate Instagram reached accounts for posted content selected from the content ledger.",
+    "instagram_total_interactions": "Daily aggregate Instagram interactions for posted content selected from the content ledger.",
+    "instagram_avg_watch_time": "Average watch time for selected Instagram Reel content when the account API returns watch-time fields.",
+    "instagram_total_watch_time": "Total watch time for selected Instagram Reel content when the account API returns watch-time fields.",
+    "instagram_retention_score": "Instagram Reel retention score from watch-time and duration data when those fields are available.",
+    "posts_published": "Daily count of content ledger rows posted on the snapshot date.",
+}
+
 
 SHARED_SHAPES: dict[str, list[str]] = {
     "source_ref": ["path", "pointer?", "kind?"],
@@ -101,10 +174,21 @@ SHARED_SHAPES: dict[str, list[str]] = {
     "metric_ref": ["metric_id", "label?", "product_id?", "primitive_id?", "latest_status?", "source_gap_ids[]"],
     "metric_series": ["metric_id", "status", "current", "series[]", "target_hit?", "source_gaps[]"],
     "content_metric": ["content_id", "platform?", "external_id?", "metrics[]"],
+    "feed_scout_item": ["title", "summary", "canonical_url?", "platform?", "entity_group_id?", "rank?", "signal?", "actionability?"],
     "metric_primitive": ["primitive_id", "provider", "owner", "command", "store_to", "required_inputs[]", "emits[]", "source_gap_policy"],
     "ticket_ref": ["ticket_id", "path", "title", "status", "phase", "next_action", "kpi_rewards[]"],
     "report_card": ["id", "path", "interval_id?", "kind", "created_at", "ui_summary", "source_ref"],
 }
+
+
+def metric_description(metric_id: str, recipe: dict[str, Any]) -> str:
+    raw_description = recipe.get("description") or recipe.get("tooltip")
+    if isinstance(raw_description, str) and raw_description.strip():
+        return raw_description.strip()
+    return DEFAULT_METRIC_DESCRIPTIONS.get(
+        metric_id,
+        f"{str(recipe.get('label') or metric_id).strip()} reading collected by the metric refresh recipe.",
+    )
 
 
 def now_utc() -> str:
@@ -131,8 +215,14 @@ def read_yaml(path: Path) -> dict[str, Any]:
     return loaded if isinstance(loaded, dict) else {}
 
 
+def read_goals_yaml(project_root: Path) -> dict[str, Any]:
+    return read_yaml(project_root / "farplane" / "goals.yaml")
+
+
 def parse_target(value: Any) -> float | None:
-    raw = str(value or "").strip()
+    if value is None:
+        return None
+    raw = str(value).strip()
     if not raw or raw.lower() in {"none", "null", "source_gap"}:
         return None
     try:
@@ -242,7 +332,7 @@ def parse_fenced_yaml_from_section(section: str) -> dict[str, Any]:
     return loaded if isinstance(loaded, dict) else {}
 
 
-def source_gap(gap_id: str, owner: str, message: str, path: str, severity: str = "source_gap") -> dict[str, Any]:
+def source_gap(gap_id: str, owner: str, message: str, path: str, severity: str = "source_gap") -> SourceGap:
     return {
         "id": gap_id,
         "severity": severity,
@@ -286,9 +376,46 @@ def parse_markdown_table(section: str) -> list[dict[str, str]]:
 
 
 def load_goals(project_root: Path) -> dict[str, Any]:
-    text = read_markdown(project_root / "farplane" / "goals.md")
-    payload = parse_fenced_yaml_from_section(markdown_heading_section(text, "Goals"))
+    payload = read_goals_yaml(project_root)
     return payload.get("goals") if isinstance(payload.get("goals"), dict) else {}
+
+
+def first_paragraph(section: str) -> str | None:
+    lines = [line.strip() for line in section.splitlines() if line.strip()]
+    return " ".join(lines) if lines else None
+
+
+def compact_current_bet(rows: list[dict[str, str]]) -> str | None:
+    if not rows:
+        return None
+    near_term = [row for row in rows if str(row.get("horizon") or "").strip().lower() in {"1 week", "2 weeks"}]
+    selected = near_term or rows
+    parts: list[str] = []
+    for row in selected[:3]:
+        bet = str(row.get("id") or row.get("bet") or "").strip()
+        output = str(row.get("output") or "").strip()
+        if bet and output:
+            parts.append(f"{bet}: {output}")
+        elif bet:
+            parts.append(bet)
+    return "; ".join(parts) if parts else None
+
+
+def load_strategy_focus(project_root: Path, goals: dict[str, Any]) -> dict[str, Any]:
+    goals_payload = read_goals_yaml(project_root)
+    ops_text = read_markdown(project_root / "farplane" / "ops-memory.md")
+    current_bets = goals_payload.get("current_bets") if isinstance(goals_payload.get("current_bets"), list) else []
+    current_bets = [row for row in current_bets if isinstance(row, dict)]
+    current_milestone = str(goals_payload.get("current_milestone") or "").strip() or None
+    current_focus = first_paragraph(markdown_heading_section(ops_text, "Current Focus"))
+    next_frontier = first_paragraph(markdown_heading_section(ops_text, "Next Frontier"))
+    return {
+        "current_focus": current_focus,
+        "current_bet": compact_current_bet(current_bets),
+        "current_bets": current_bets,
+        "active_milestone": current_milestone or next_frontier,
+        "top_goal_id": next(iter(goals.keys()), None),
+    }
 
 
 def load_products(project_root: Path) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
@@ -428,6 +555,109 @@ def load_automations(project_root: Path) -> tuple[list[dict[str, Any]], list[str
     ], []
 
 
+def path_from_config(value: Any, default: Path) -> Path:
+    raw = str(value or "").strip()
+    return Path(raw) if raw else default
+
+
+def compact_source_ref(path: Path) -> dict[str, str]:
+    return {"path": str(path)}
+
+
+def normalize_feed_scout_items(raw_items: Any) -> list[dict[str, Any]]:
+    return [item for item in raw_items if isinstance(item, dict)] if isinstance(raw_items, list) else []
+
+
+def normalize_feed_scout_groups(raw_groups: Any) -> list[dict[str, Any]]:
+    if isinstance(raw_groups, list):
+        return [group for group in raw_groups if isinstance(group, dict)]
+    if isinstance(raw_groups, dict):
+        groups: list[dict[str, Any]] = []
+        for group_id, group in sorted(raw_groups.items(), key=lambda item: str(item[0])):
+            if isinstance(group, dict):
+                groups.append({"group_id": str(group_id), **group})
+        return groups
+    return []
+
+
+def load_feed_scout_snapshot(project_root: Path, bindings: dict[str, Any]) -> tuple[dict[str, Any], list[SourceGap]]:
+    config = bindings.get("feed_scout") if isinstance(bindings.get("feed_scout"), dict) else {}
+    enabled = bool(config.get("enabled")) if config else False
+    ui_config = config.get("ui") if isinstance(config.get("ui"), dict) else {}
+    latest_feed_path = path_from_config(ui_config.get("latest_feed"), FEED_SCOUT_LATEST_FEED_PATH)
+    latest_report_path = path_from_config(config.get("latest_report"), FEED_SCOUT_LATEST_REPORT_PATH)
+    feed_abs = project_root / latest_feed_path
+    report_abs = project_root / latest_report_path
+    gaps: list[SourceGap] = []
+
+    feed_payload = read_json(feed_abs)
+    report_payload = read_json(report_abs)
+    if enabled and not feed_payload:
+        gaps.append(
+            source_gap(
+                "missing_feed_scout_latest_feed",
+                "news",
+                f"Feed Scout is enabled but {latest_feed_path} is missing or invalid.",
+                str(latest_feed_path),
+            )
+        )
+    if enabled and not report_payload:
+        gaps.append(
+            source_gap(
+                "missing_feed_scout_latest_report",
+                "news",
+                f"Feed Scout is enabled but {latest_report_path} is missing or invalid.",
+                str(latest_report_path),
+            )
+        )
+
+    feed_source_ref = compact_source_ref(latest_feed_path)
+    report_source_ref = compact_source_ref(latest_report_path)
+    summary = feed_payload.get("summary") if isinstance(feed_payload.get("summary"), dict) else {}
+    items = normalize_feed_scout_items(feed_payload.get("items"))
+    groups = normalize_feed_scout_groups(feed_payload.get("groups"))
+    latest_feed = {
+        "date": str(feed_payload.get("date") or ""),
+        "generated_at": str(feed_payload.get("generated_at") or ""),
+        "summary": summary,
+        "items": items,
+        "groups": groups,
+        "source_gaps": normalize_feed_scout_items(feed_payload.get("source_gaps")),
+        "source_ref": feed_source_ref,
+    }
+    latest_report = {
+        "generated_at": str(report_payload.get("generated_at") or ""),
+        "report_path": str(report_payload.get("report_path") or ""),
+        "daily_feed_path": str(report_payload.get("daily_feed_path") or ""),
+        "summary": report_payload.get("summary") if isinstance(report_payload.get("summary"), dict) else {},
+        "source_gaps": normalize_feed_scout_items(report_payload.get("source_gaps")),
+        "source_ref": report_source_ref,
+    }
+    source_gap_ids = [gap["id"] for gap in gaps]
+    return (
+        {
+            "enabled": enabled,
+            "config": {
+                "cadence": str(config.get("cadence") or ""),
+                "timezone": str(config.get("timezone") or ""),
+                "daily_feed_root": str(config.get("daily_feed_root") or ""),
+                "ledger": str(config.get("ledger") or ""),
+                "proposal_ledger": str(config.get("proposal_ledger") or ""),
+                "latest_feed": str(latest_feed_path),
+                "latest_report": str(latest_report_path),
+                "source_ref": {"path": "farplane/bindings.yaml", "pointer": "feed_scout"},
+            },
+            "summary": summary,
+            "items": items,
+            "groups": groups,
+            "latest_feed": latest_feed,
+            "latest_report": latest_report,
+            "source_gap_ids": source_gap_ids,
+        },
+        gaps,
+    )
+
+
 def report_cards(project_root: Path) -> list[dict[str, Any]]:
     root = project_root / ".farplane" / "reports"
     cards: list[dict[str, Any]] = []
@@ -482,10 +712,20 @@ def primitive_id_for_metric(metric_id: str, recipe: dict[str, Any]) -> str:
     refresh = str(recipe.get("refresh") or recipe.get("update_prompt") or "").lower()
     if "count_ticket_kpi_rewards" in refresh or "kpi_rewards" in refresh:
         return "ticket_count_by_kpi"
+    if "calculate_autonomy_time_ratio" in refresh or metric_id == "auto_time_ratio":
+        return "autonomy_time_feedback"
+    if "calculate_ticket_intervention_metrics" in refresh or metric_id in {
+        "auto_completion_rate",
+        "intervention_free_ticket_count",
+        "ticket_intervention_turn_count",
+    }:
+        return "ticket_intervention_feedback"
     if metric_id in {"codex_thread_count", "codex_turn_count", "codex_token_total", "codex_span_minutes"}:
         return "codex_thread_usage"
     if metric_id in {"ai_burn_estimate", "burn_per_thread", "burn_per_turn", "burn_per_token"}:
         return "ai_burn_estimate"
+    if metric_id == "evidence_distribution_reach":
+        return "content_views_total"
     if metric_id == "kpi_attributed_ticket_ratio":
         return "kpi_attributed_ticket_ratio"
     return "manual_source_gap"
@@ -511,18 +751,30 @@ def metric_definitions(project_root: Path, goals: dict[str, Any] | None = None) 
             cumulative = bool(recipe.get("cumulative", False))
         goal_target = targets.get(str(metric_id), {})
         raw_target = goal_target.get("target") if "target" in goal_target else recipe.get("target")
+        target_value = parse_target(raw_target)
+        target_direction = normalize_target_direction(goal_target.get("direction") or recipe.get("target_direction"))
+        target_unit = str(recipe.get("unit") or "")
+        description = metric_description(str(metric_id), recipe)
         definitions[str(metric_id)] = {
             "metric_id": str(metric_id),
             "label": str(recipe.get("label") or str(metric_id).replace("_", " ").capitalize()),
+            "description": description,
+            "tooltip": description,
             "product_id": str(recipe.get("product") or ""),
-            "unit": str(recipe.get("unit") or ""),
+            "unit": target_unit,
             "display": str(recipe.get("display") or "reading"),
             "pinned": bool(recipe.get("pinned", False)),
             "kind": kind,
             "aggregation": aggregation,
             "cumulative": cumulative,
-            "target": parse_target(raw_target),
-            "target_direction": normalize_target_direction(goal_target.get("direction") or recipe.get("target_direction")),
+            "target": target_value,
+            "target_direction": target_direction,
+            "target_unit": target_unit,
+            "target_spec": {
+                "value": target_value,
+                "direction": target_direction,
+                "unit": target_unit,
+            },
             "primitive_id": primitive_id,
             "refresh": recipe.get("refresh") or recipe.get("update_prompt") or "",
             "source_ref": {"path": "farplane/bindings.yaml", "pointer": f"/metrics/{metric_id}"},
@@ -533,6 +785,20 @@ def metric_definitions(project_root: Path, goals: dict[str, Any] | None = None) 
 def daily_metric_files(project_root: Path) -> list[Path]:
     root = project_root / DAILY_METRICS_DIR
     return sorted(root.glob("*.json")) if root.exists() else []
+
+
+def canonical_batch_keys(project_root: Path, snapshot_date: str | None) -> set[tuple[str, str]]:
+    root = project_root / ".farplane" / "metrics" / "observations"
+    if not root.exists():
+        return set()
+    keys: set[tuple[str, str]] = set()
+    for path in sorted(root.glob("*/*.json")):
+        if snapshot_date and path.stem > snapshot_date:
+            continue
+        payload = read_json(path)
+        if payload.get("schema_version") == 1:
+            keys.add((str(payload.get("source_id") or path.parent.name), str(payload.get("date") or path.stem)))
+    return keys
 
 
 def reading_value(reading: Any) -> tuple[float | None, str, dict[str, Any] | None]:
@@ -585,7 +851,18 @@ def primitive_metric_observation(
     if primitive_id == "ticket_count_by_kpi":
         reading = primitives.get("ticket_count_by_kpi")
         if isinstance(reading, dict):
-            return daily_metric_reading_observation(metric_id, reading.get(metric_id), date_value)
+            if metric_id in reading:
+                return daily_metric_reading_observation(metric_id, reading.get(metric_id), date_value)
+            return observation(
+                metric_id,
+                date_value,
+                0.0,
+                "available",
+                {"tickets": [], "gaps": [], "empty_window": True, "primitive_id": primitive_id},
+            )
+    nested_reading = primitives.get(primitive_id)
+    if isinstance(nested_reading, dict) and metric_id in nested_reading:
+        return daily_metric_reading_observation(metric_id, nested_reading.get(metric_id), date_value)
     if primitive_id in {"kpi_attributed_ticket_ratio", "ticket_thread_link_coverage"}:
         reading = primitives.get(primitive_id)
         return daily_metric_reading_observation(metric_id, reading, date_value)
@@ -628,6 +905,7 @@ def primitive_metric_observation(
 
 def daily_observations(project_root: Path, metric_defs: dict[str, Any], snapshot_date: str | None) -> list[dict[str, Any]]:
     observations: list[dict[str, Any]] = []
+    canonical_keys = canonical_batch_keys(project_root, snapshot_date)
     for path in daily_metric_files(project_root):
         if snapshot_date and path.stem > snapshot_date:
             continue
@@ -642,10 +920,29 @@ def daily_observations(project_root: Path, metric_defs: dict[str, Any], snapshot
         primitives = payload.get("primitives")
         if isinstance(primitives, dict):
             for metric_id, metric_def in metric_defs.items():
+                primitive_id = str(metric_def.get("primitive_id") or "")
+                if (primitive_id, date_value) in canonical_keys:
+                    continue
                 obs = primitive_metric_observation(metric_id, metric_def, primitives, date_value)
                 if obs is not None:
                     observations.append(obs)
     return observations
+
+
+def provider_observations(project_root: Path, metric_defs: dict[str, Any], snapshot_date: str | None) -> list[dict[str, Any]]:
+    metric_ids = set(metric_defs)
+    output: list[dict[str, Any]] = []
+    for batch in read_metric_batches(project_root, snapshot_date):
+        source_path = batch_path(project_root, batch.source_id, batch.date)
+        source_ref = str(source_path.relative_to(project_root))
+        for row in batch.observations:
+            if row.metric_id not in metric_ids:
+                continue
+            payload = dict(row.payload)
+            payload.setdefault("source_id", batch.source_id)
+            payload.setdefault("source_path", source_ref)
+            output.append(observation(row.metric_id, row.date, row.value, row.status, payload))
+    return output
 
 
 def load_content_ledger_rows(project_root: Path) -> list[dict[str, Any]]:
@@ -738,6 +1035,7 @@ def build_metric_card(metric_id: str, metric_def: dict[str, Any], observations: 
     hit_value: float | None = None
     target = metric_def.get("target")
     target_direction = normalize_target_direction(metric_def.get("target_direction"))
+    target_unit = str(metric_def.get("target_unit") or metric_def.get("unit") or "")
     for obs in metric_obs:
         value = obs.get("value")
         if not isinstance(value, (int, float)):
@@ -776,21 +1074,28 @@ def build_metric_card(metric_id: str, metric_def: dict[str, Any], observations: 
         if isinstance(latest_gap.get("payload"), dict):
             gap["payload"] = latest_gap["payload"]
         source_gaps.append(gap)
-    elif not series:
-        source_gaps.append({"reason": "no available observation for metric"})
+    status = "available" if series else str(latest_gap.get("status") if latest_gap else "missing")
     return {
         "metric_id": metric_id,
         "label": metric_def.get("label") or metric_id,
+        "description": metric_def.get("description") or "",
+        "tooltip": metric_def.get("tooltip") or metric_def.get("description") or "",
         "product_id": metric_def.get("product_id") or "",
         "primitive_id": metric_def.get("primitive_id"),
         "aggregation": metric_def.get("aggregation"),
         "cumulative": bool(metric_def.get("cumulative")),
         "target": target,
         "target_direction": target_direction,
+        "target_unit": target_unit,
+        "target_spec": {
+            "value": target,
+            "direction": target_direction,
+            "unit": target_unit,
+        },
         "unit": metric_def.get("unit") or "",
         "display": metric_def.get("display") or "reading",
         "pinned": bool(metric_def.get("pinned")),
-        "status": "available" if series else str(latest_gap.get("status") if latest_gap else "source_gap"),
+        "status": status,
         "current": series[-1]["value"] if series else None,
         "series": series,
         "best_daily": max((float(point["value"]) for point in series), default=None),
@@ -915,20 +1220,27 @@ def build_content_metric_cards(metric_cards: list[dict[str, Any]], ledger_rows: 
 
 def metric_projection(project_root: Path, metric_defs: dict[str, Any], snapshot_date: str | None) -> dict[str, Any]:
     observations = daily_observations(project_root, metric_defs, snapshot_date)
+    observations.extend(provider_observations(project_root, metric_defs, snapshot_date))
     observations.extend(ledger_content_observations(project_root, snapshot_date))
     observations.extend(ledger_missing_observations(project_root, metric_defs, snapshot_date))
     metric_cards = [build_metric_card(metric_id, metric_def, observations) for metric_id, metric_def in sorted(metric_defs.items())]
-    source_gaps = [
-        {
-            "id": f"metric_source_gap:{card['metric_id']}",
-            "severity": "source_gap",
-            "owner": "metrics",
-            "message": card["source_gaps"][0]["reason"],
-            "source_ref": card.get("source_ref") or {"path": "farplane/bindings.yaml"},
-        }
-        for card in metric_cards
-        if card.get("status") != "available" and card.get("source_gaps")
-    ]
+    source_gaps = []
+    for card in metric_cards:
+        if not card.get("pinned") or card.get("status") in {"available", "not_applicable"}:
+            continue
+        first_gap = card["source_gaps"][0] if card.get("source_gaps") else {}
+        reason = first_gap.get("reason") if isinstance(first_gap, dict) else None
+        if card.get("primitive_id") == "content_views_total" and reason == "no_component_view_observations":
+            continue
+        source_gaps.append(
+            {
+                "id": f"metric_source_gap:{card['metric_id']}",
+                "severity": "source_gap",
+                "owner": "metrics",
+                "message": str(reason or "no available observation for metric"),
+                "source_ref": card.get("source_ref") or {"path": "farplane/bindings.yaml"},
+            }
+        )
     return {
         "series": metric_cards,
         "contents": build_content_metric_cards(metric_cards, load_content_ledger_rows(project_root)),
@@ -967,18 +1279,39 @@ def goals_payload(
                 latest_status = str(metric_card.get("status") or "source_gap")
                 if not metric_card and primitive_id in latest_prims:
                     latest_status = "available"
+                target_value = metric_def.get("target")
+                target_direction = metric_def.get("target_direction") or normalize_target_direction(direction)
+                target_unit = metric_def.get("target_unit") or metric_def.get("unit")
+                source_gap_ids = []
+                if latest_status not in {"available", "not_applicable"}:
+                    source_gap_ids = [f"metric_source_gap:{metric_id}" if metric_card.get("pinned") else f"missing_metric_reading:{metric_id}"]
                 kpis.append(
                     {
                         "metric_id": metric_id,
                         "label": metric_def.get("label") or metric_id,
-                        "target": target,
-                        "direction": direction,
+                        "description": metric_def.get("description") or "",
+                        "tooltip": metric_def.get("tooltip") or metric_def.get("description") or "",
+                        "product_id": metric_def.get("product_id") or "",
+                        "target": target_value if target_value is not None else target,
+                        "direction": target_direction if target_direction is not None else direction,
+                        "target_direction": target_direction,
+                        "target_unit": target_unit,
+                        "target_spec": {
+                            "value": target_value if target_value is not None else parse_target(target),
+                            "direction": target_direction,
+                            "unit": target_unit,
+                        },
                         "unit": metric_def.get("unit"),
+                        "display": metric_card.get("display") or metric_def.get("display") or "reading",
                         "primitive_id": primitive_id,
                         "current": metric_card.get("current"),
+                        "value": metric_card.get("current"),
+                        "status": latest_status,
+                        "trend": metric_card.get("series") or [],
+                        "source_gaps": metric_card.get("source_gaps") or [],
                         "target_hit": metric_card.get("target_hit"),
                         "latest_status": latest_status,
-                        "source_gap_ids": [] if latest_status == "available" else [f"missing_metric_reading:{metric_id}"],
+                        "source_gap_ids": source_gap_ids,
                     }
                 )
             smart_goals.append(
@@ -1031,7 +1364,9 @@ def products_payload(
 def load_project_snapshot(project_root: Path, snapshot_date: str | None = None) -> dict[str, Any]:
     project_root = project_root.resolve()
     manifest = read_json(project_root / "farplane" / "manifest.json")
+    bindings = load_bindings(project_root)
     goals = load_goals(project_root)
+    strategy_focus = load_strategy_focus(project_root, goals)
     products, lanes = load_products(project_root)
     metric_defs, metric_gaps = metric_definitions(project_root, goals)
     metric_view = metric_projection(project_root, metric_defs, snapshot_date)
@@ -1042,6 +1377,7 @@ def load_project_snapshot(project_root: Path, snapshot_date: str | None = None) 
     ticket_refs, kpi_rewards = collect_ticket_refs(project_root)
     content_items, content_gap_ids = load_content_items(project_root)
     automations, automation_gap_ids = load_automations(project_root)
+    feed_scout, feed_scout_gaps = load_feed_scout_snapshot(project_root, bindings)
     reports = report_cards(project_root)
     proof_items = proof_artifacts(project_root)
     eval_items = eval_runs(project_root)
@@ -1049,7 +1385,7 @@ def load_project_snapshot(project_root: Path, snapshot_date: str | None = None) 
         source_record(project_root, "farplane/manifest.json", "project-manifest"),
         source_record(project_root, "farplane/harness.md", "project-harness"),
         source_record(project_root, "farplane/products.md", "project-products"),
-        source_record(project_root, "farplane/goals.md", "project-goals"),
+        source_record(project_root, "farplane/goals.yaml", "project-goals"),
         source_record(project_root, "farplane/bindings.yaml", "project-bindings"),
         source_record(project_root, "farplane/ops-memory.md", "ops-memory"),
     ]
@@ -1061,6 +1397,7 @@ def load_project_snapshot(project_root: Path, snapshot_date: str | None = None) 
     source_gaps.extend(gap for gap in metric_view.get("source_gaps", []) if isinstance(gap, dict))
     source_gaps.extend(source_gap(gap_id, "distribution", gap_id, ".farplane/content/ledger.jsonl") for gap_id in content_gap_ids)
     source_gaps.extend(source_gap(gap_id, "cadence", gap_id, "farplane/automations.toml") for gap_id in automation_gap_ids)
+    source_gaps.extend(feed_scout_gaps)
     if not reports:
         source_gaps.append(source_gap("missing_recent_reports", "cadence", "No recent report cards found under .farplane/reports/.", ".farplane/reports/"))
     if not ticket_refs:
@@ -1085,6 +1422,8 @@ def load_project_snapshot(project_root: Path, snapshot_date: str | None = None) 
     cadence_gap_ids = [gap for gap in source_gap_ids if gap.startswith("missing_recent") or gap.startswith("missing_automations") or gap.startswith("invalid_automations")]
     kanban_gap_ids = [gap for gap in source_gap_ids if gap.startswith("missing_ticket")]
     proof_gap_ids = [gap for gap in source_gap_ids if gap.startswith("missing_eval") or gap.startswith("missing_qa")]
+    news_gap_ids = [gap["id"] for gap in source_gaps if gap.get("owner") == "news"]
+    feed_scout["source_gap_ids"] = news_gap_ids
     memory_refs = [
         {"id": "history", "path": "docs/HISTORY.md", "source_ref": {"path": "docs/HISTORY.md"}},
         {"id": "memory", "path": "docs/MEMORY.md", "source_ref": {"path": "docs/MEMORY.md"}},
@@ -1094,13 +1433,24 @@ def load_project_snapshot(project_root: Path, snapshot_date: str | None = None) 
     content_metric_ids = sorted(metric_id for metric_id, metric in metric_defs.items() if metric.get("product_id") == "distribution")
     pm_manifest = read_json(project_root / "farplane" / "pm.json")
     pm_threads = pm_manifest.get("threads") if isinstance(pm_manifest.get("threads"), dict) else {}
+    goal_axes = goals_payload(goals, metric_defs, latest, metric_cards_by_id)
+    goal_gap_ids = sorted(
+        {
+            str(gap_id)
+            for axis in goal_axes
+            for smart_goal in axis.get("smart_goals", [])
+            for kpi in smart_goal.get("kpis", [])
+            for gap_id in kpi.get("source_gap_ids", [])
+            if gap_id
+        }
+    )
     return {
         "schema_version": 1,
         "generated_at": now_utc(),
         "project_root": str(project_root),
         "shared_shapes": SHARED_SHAPES,
         "project": {
-            "id": str(load_bindings(project_root).get("project", {}).get("id") or project.get("name") or project_root.name).lower().replace(" ", "-"),
+            "id": str(bindings.get("project", {}).get("id") or project.get("name") or project_root.name).lower().replace(" ", "-"),
             "name": project.get("name") or project_root.name,
             "description": project.get("description") or "",
             "archetype": project.get("archetype") or "",
@@ -1118,10 +1468,11 @@ def load_project_snapshot(project_root: Path, snapshot_date: str | None = None) 
         "tabs": {
             "overview": {
                 "team_focus": {
-                    "current_focus": None,
-                    "current_bet": None,
-                    "active_milestone": None,
-                    "top_goal_id": None,
+                    "current_focus": strategy_focus.get("current_focus"),
+                    "current_bet": strategy_focus.get("current_bet"),
+                    "current_bets": strategy_focus.get("current_bets") or [],
+                    "active_milestone": strategy_focus.get("active_milestone"),
+                    "top_goal_id": strategy_focus.get("top_goal_id"),
                     "active_product_ids": [product["product_id"] for product in products],
                     "blockers": [],
                 },
@@ -1136,8 +1487,8 @@ def load_project_snapshot(project_root: Path, snapshot_date: str | None = None) 
                 "source_gap_ids": source_gap_ids,
             },
             "goals": {
-                "axes": goals_payload(goals, metric_defs, latest, metric_cards_by_id),
-                "source_gap_ids": [],
+                "axes": goal_axes,
+                "source_gap_ids": goal_gap_ids,
             },
             "products": {
                 "products": products_payload(products, metric_defs, latest),
@@ -1149,8 +1500,15 @@ def load_project_snapshot(project_root: Path, snapshot_date: str | None = None) 
                 "content_items": content_items,
                 "content_metric_cards": metric_view.get("contents") if isinstance(metric_view.get("contents"), list) else [],
                 "content_metric_ids": content_metric_ids,
-                "feed_scout": load_bindings(project_root).get("feed_scout") if isinstance(load_bindings(project_root).get("feed_scout"), dict) else {},
                 "source_gap_ids": distribution_gap_ids,
+            },
+            "news": {
+                "summary": feed_scout.get("summary") if isinstance(feed_scout.get("summary"), dict) else {},
+                "items": feed_scout.get("items") if isinstance(feed_scout.get("items"), list) else [],
+                "groups": feed_scout.get("groups") if isinstance(feed_scout.get("groups"), list) else [],
+                "latest_report": feed_scout.get("latest_report") if isinstance(feed_scout.get("latest_report"), dict) else {},
+                "feed_scout": feed_scout,
+                "source_gap_ids": news_gap_ids,
             },
             "cadence": {
                 "automations": automations,

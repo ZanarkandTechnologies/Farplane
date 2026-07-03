@@ -158,6 +158,26 @@ updated_at: 2026-07-02T10:30:00Z
         self.assertEqual(readings["intervention_free_ticket_count"]["value"], 0)
         self.assertEqual(readings["auto_completion_rate"]["value"], 0.0)
 
+    def test_ticket_intervention_empty_window_is_not_source_gap_for_counts(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            ticket_dir = root / "tickets"
+            ticket_dir.mkdir()
+            runtime = root / ".farplane"
+            (runtime / "state").mkdir(parents=True)
+            (runtime / "events").mkdir()
+            (runtime / "state" / "ticket-thread-associations.jsonl").write_text("", encoding="utf-8")
+            (runtime / "events" / "events.jsonl").write_text("", encoding="utf-8")
+
+            readings = metric_refresh.calculate_ticket_intervention_metrics(ticket_dir, runtime, "2026-07-02")
+
+        self.assertEqual(readings["ticket_intervention_turn_count"]["status"], "available")
+        self.assertEqual(readings["ticket_intervention_turn_count"]["value"], 0)
+        self.assertEqual(readings["intervention_free_ticket_count"]["status"], "available")
+        self.assertEqual(readings["intervention_free_ticket_count"]["value"], 0)
+        self.assertEqual(readings["auto_completion_rate"]["status"], "not_applicable")
+        self.assertIsNone(readings["auto_completion_rate"]["value"])
+
     def test_selects_content_metric_targets_for_window(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             ledger = Path(tmp) / ".farplane" / "content" / "ledger.jsonl"
@@ -212,6 +232,20 @@ updated_at: 2026-07-02T10:30:00Z
         self.assertEqual(packet["status"], "available")
         self.assertEqual(packet["external_ids"], ["fresh"])
         self.assertIn("--media-id fresh", packet["payload"]["fetch_command"])
+
+    def test_select_content_metric_targets_reports_missing_ledger_gap(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            packet = metric_refresh.select_content_metric_targets(
+                Path(tmp) / ".farplane" / "content" / "ledger.jsonl",
+                "x",
+                "x_views",
+                "2026-07-02",
+                7,
+            )
+
+        self.assertEqual(packet["status"], "source_gap")
+        self.assertEqual(packet["external_ids"], [])
+        self.assertTrue(packet["payload"]["gaps"][0].startswith("missing:"))
 
 
 if __name__ == "__main__":
