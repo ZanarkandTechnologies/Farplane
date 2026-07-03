@@ -1,6 +1,6 @@
 ---
 template_id: ticket-template
-template_version: "0.1.5"
+template_version: "0.1.6"
 feature_refs:
   - FEAT-0007
   - FEAT-0008
@@ -69,10 +69,11 @@ Optional for Pulse-created tactical tickets, experimental tickets, and other
 work where planning should show why the ticket matters. Keep this tiny; use a
 metric card in `program.md` only when the provider or proof route is unclear.
 
-```text
-moves:
-win_signal:
-guard:
+```yaml
+kpi_rewards:
+  - kpi_id: accepted_harness_improvements
+    expected_reward: "one proof-backed harness improvement"
+guard: "do not count planned intent as KPI movement; count only completed tickets with proof"
 ```
 
 ## Change Plan

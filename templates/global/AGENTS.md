@@ -1,6 +1,6 @@
 <!--
 template_id: global-agents-template
-template_version: 0.2.17
+template_version: 0.2.18
 feature_refs:
   - FEAT-0022
   - FEAT-0042
@@ -51,6 +51,10 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
   materially branching decisions. Explore and recommend a path, but ask for
   explicit confirmation before implementing or locking the direction unless the
   user, active ticket, or controlling spec has already chosen it.
+- Do not add backward compatibility, aliases, shims, fallback parsers, dual
+  paths, or legacy names by default. Preserve compatibility only when the user,
+  ticket, spec, or an existing public contract explicitly requires it; otherwise
+  update callers and remove the old path.
 - Verify before claiming completion.
 - Prefer visible artifacts over transcript memory.
 - Keep global context lean. Put detailed procedures in skills, feature specs, tickets,

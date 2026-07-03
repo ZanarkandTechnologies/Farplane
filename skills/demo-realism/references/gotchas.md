@@ -21,6 +21,11 @@
 - **Data without operations**
   - A data pack that is not tied to operator actions, transitions, and edge
     cases will still feel synthetic.
+- **Bare success completion**
+  - For demo-bearing work, "completed successfully" is not enough. The worker
+    must show what realistic data was exercised, what workflow ran, what
+    happened, where the evidence is, what mismatches remain, and the exact
+    operator question for Kenji Review.
 
 ## Recovery Moves
 
@@ -29,3 +34,5 @@
 - If the data feels fake, trace each entity back to a real operational event.
 - If a source artifact feels fake, search for public or user-provided material,
   record provenance, and only then use a clearly labeled synthetic fallback.
+- If a completed demo-bearing feature lacks an expectation check, create the
+  artifact from `references/workflows.md` before asking for Kenji Review.

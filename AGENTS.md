@@ -12,6 +12,11 @@ install templates, runtime env vars, Python helpers, conceptual envelopes,
 skill IDs, registries, and plugin packages should not retain previous-identity
 compatibility naming. Historical archives and external services can migrate
 separately. See `MEM-0126`.
+Compatibility is opt-in for active Farplane surfaces. Do not keep aliases,
+fallback parsers, dual paths, shims, or old command names unless a ticket,
+spec, installer path, external integration, or existing public contract
+explicitly requires them; otherwise update references and delete the legacy
+surface.
 
 The main surfaces are:
 
@@ -219,15 +224,16 @@ For harness-design research and external patterns:
 - Before adding or moving a top-level `bin/*` file, apply the bin placement
   gate: keep it in `bin/` only when it is a live installed hook/runtime shim,
   global Farplane CLI edge, shared cross-skill command, repo-wide validator
-  wrapper, or compatibility wrapper for a moved public command. Put
+  wrapper, or explicitly required temporary wrapper for a moved public command. Put
   Core helper implementations under `bin/core/`, Codex hook/runtime
   implementations under `bin/runtime/`, Core-owned tests under `bin/tests/`,
   skill-specific implementations and their tests under
   `skills/<owner>/scripts/`, and repo-wide validators and validator tests under
   `bin/validators/`; delete generated `__pycache__` rather than preserving it.
-- When moving a command to a clearer owner, leave a small compatibility wrapper
-  at the old public path until references, installers, and user habits have had
-  a safe migration window.
+- When moving a command to a clearer owner, update references and remove the old
+  path by default. Leave a small compatibility wrapper only for an explicit
+  public-contract, installer, external-integration, or ticketed migration need,
+  and include the intended sunset or follow-up cleanup.
 - For generalized agentic workflows such as Feed Scout, keep source selection,
   ranking judgment, and cross-platform fetching in the skill prompt, config,
   and called platform skills or tools rather than one hardcoded project script.

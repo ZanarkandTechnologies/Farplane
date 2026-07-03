@@ -29,6 +29,41 @@
           }
         ]
       }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash|mcp__filesystem__.*|mcp__.*read.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "sh -lc 'test -n \"$FARPLANE_UI_REPO\" || exit 0; \"$FARPLANE_UI_REPO/node_modules/.bin/tsx\" \"$FARPLANE_UI_REPO/hooks/skill-invocation-listener/run.ts\"'",
+            "statusMessage": "Read skill MD",
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "matcher": "Bash|apply_patch|Edit|Write|MultiEdit|mcp__filesystem__.*|mcp__.*write.*|mcp__.*edit.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "sh -lc 'test -n \"$FARPLANE_UI_REPO\" || exit 0; \"$FARPLANE_UI_REPO/node_modules/.bin/tsx\" \"$FARPLANE_UI_REPO/hooks/file-change-listener/run.ts\"'",
+            "statusMessage": "Summarize tracked file update",
+            "timeout": 60
+          }
+        ]
+      },
+      {
+        "matcher": "create_thread|fork_thread|codex_app.*thread|mcp__.*thread.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "sh -lc 'test -n \"$FARPLANE_UI_REPO\" || exit 0; \"$FARPLANE_UI_REPO/node_modules/.bin/tsx\" \"$FARPLANE_UI_REPO/hooks/thread-lineage-listener/run.ts\"'",
+            "statusMessage": "Track thread lineage",
+            "timeout": 5
+          }
+        ]
+      }
     ]
   }
 }

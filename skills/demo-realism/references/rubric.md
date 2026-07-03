@@ -53,6 +53,25 @@ The realism pack is ready for downstream handoff only when:
 - `source provenance` is at least `4` when the demo depends on concrete
   documents, media, forms, records, blueprints, logs, invoices, regulations, or
   other real-world source artifacts
+- demo-bearing build or review handoffs include an expectation-check contract
+  with realistic data to exercise, workflow to run, expected demo value,
+  evidence to capture, mismatch-note requirement, and operator question
+
+## Expectation-Check Pass Rule
+
+An expectation-check artifact is ready for Kenji Review only when:
+
+- `realistic data exercised` names concrete records, source artifacts, or a
+  representative demo pack
+- `workflow exercised` is a real action sequence tied to operator value
+- `observed result` says what happened after the workflow was exercised
+- `mismatch notes` are present, even when the answer is `none observed`
+- `evidence` points to auditable screenshots, logs, command output, fixture
+  output, generated artifacts, or a blocker report
+- `operator question` asks whether this specific observed result matches the
+  expected demo value
+- provenance labels distinguish `real-public`, `user-provided`,
+  `local-supplied`, and `synthetic-fallback`
 
 ## Reviewer Questions
 
@@ -64,3 +83,6 @@ The realism pack is ready for downstream handoff only when:
 - Are all synthetic artifacts clearly labeled as fallback rather than treated
   as proof?
 - Does the pack show a strong future-state pitch without pretending to be exact current-state truth?
+- If implementation has happened, did the worker exercise the demo with
+  realistic data and ask the concrete expectation question instead of only
+  reporting success?

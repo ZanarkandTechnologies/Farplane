@@ -4,7 +4,7 @@ Reusable browser-QA guidance lives here.
 
 This folder is for durable how-to surfaces that make UI verification fast,
 deterministic, and easy to automate. It is not the place for per-ticket proof
-artifacts. Those still belong under `tickets/artifacts/TASK-XXXX/`.
+artifacts. Those still belong under `tickets/TASK-XXXX/artifacts/`.
 
 ## Recommendation
 
@@ -29,6 +29,35 @@ In practice, that means:
 - **instrumentation over wandering:** if QA has to click through too much UI,
   add a shortcut, deep link, seed/reset path, debug HUD, or test-only toggle
   and record it in the cookbook
+
+## Human-Like Adversarial QA
+
+Use `agent-qa-test` when the proof claim needs a skeptical human-like tester and
+an independent evidence-review lane, not just ordinary artifact capture. The
+tester lane cannot self-approve proof.
+
+A human-like QA pass should define `HumanLikeQACase` entries before or during
+the run:
+
+- `happy-path`: the intended user goal and workflow
+- `confused-user`: the likely wrong path, ambiguous affordance, or first-time
+  hesitation
+- `edge-error`: invalid, empty, interrupted, or degraded state
+- `regression-canary`: a known fragile path when prior evidence names one
+
+Each case should name the user goal, expected workflow, likely confusion or
+wrong path, required proof artifacts, falsifying evidence, reviewer attack
+questions, and the smallest instrumentation request when proof is weak.
+
+The normal ownership split still applies:
+
+- `qa-tester` or `agent-browser` captures screenshots, logs, snapshots,
+  commands, files, traces, and `result.json`
+- `visual-qa` judges user-visible screenshots when UI quality is in scope
+- `agent-qa-test` reconciles tester output with independent evidence review for
+  adversarial claims
+- `reviewer` judges final proof-bundle sufficiency before a material completion
+  claim
 
 ## What Belongs Here
 
@@ -75,5 +104,4 @@ Playwright is still valuable, but mostly for:
 - critical paths that need repeated automated coverage
 - failures in an existing scripted suite
 
-See [cookbook/README.md](/Users/kenjipcx/coding-harness/Farplane/qa/cookbook/README.md)
-for the per-workflow template.
+See [cookbook/README.md](cookbook/README.md) for the per-workflow template.

@@ -33,7 +33,14 @@
    - edge cases
    - failure/empty states
 8. **Score the pack with the realism rubric**
-9. **Recommend the next handoff**
+9. **Define the expectation check for demo-bearing handoffs**
+   - realistic data or representative pack to exercise
+   - workflow action sequence to run
+   - expected demo value or operator-visible outcome
+   - evidence to capture
+   - mismatch notes to fill after the run
+   - operator question for Kenji Review
+10. **Recommend the next handoff**
 
 ## Output Shape
 
@@ -47,6 +54,7 @@ Source provenance
 Realism rubric score
 Assumption ledger
 Recommended handoff
+Expectation-check artifact required, when demo-bearing
 ```
 
 ## Example Prompts
@@ -74,3 +82,38 @@ ad hoc spreadsheets?
 - use `impl-plan` when the realism pack should turn into a scoped build plan
 - use `goal-advisor` only when a ticket already exists and the realism pack is good
   enough to build directly
+- for demo-bearing implementation or review handoffs, require the downstream
+  worker to produce a small expectation-check artifact before Kenji Review
+
+## Expectation-Check Artifact
+
+Use this shape when a downstream worker has built, repaired, or demoed a
+demo-bearing feature:
+
+```text
+Demo expectation check
+Source realism pack:
+Demo-bearing feature:
+Realistic data exercised:
+Workflow exercised:
+Expected demo value:
+Observed result:
+Mismatch notes:
+Evidence:
+Operator question:
+Provenance and limits:
+```
+
+Rules:
+
+- `Realistic data exercised` must point to concrete records, scenarios,
+  source artifacts, or a representative demo pack.
+- `Workflow exercised` must be an action sequence, not a screen list.
+- `Observed result` must say what actually happened.
+- `Mismatch notes` must state `none observed` or name gaps; do not omit it.
+- `Evidence` must link screenshots, logs, command output, fixture output,
+  generated artifacts, or a blocker report.
+- `Operator question` must ask whether the observed demo value matches what
+  Kenji expected, using the specific feature and workflow names.
+- Synthetic data is allowed for local fixtures, but it must be labeled
+  `synthetic-fallback` and cannot be presented as real-world proof.

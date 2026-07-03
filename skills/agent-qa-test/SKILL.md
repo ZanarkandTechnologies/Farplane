@@ -52,6 +52,10 @@ bundles to `review`, but Goal mode remains the continuation owner.
 - [ ] Use [reference-grounding](../reference-grounding/SKILL.md) to inspect the
   smallest relevant ticket, spec, skill, prompt, app files, or prior QA evidence.
 - [ ] Design 2-4 focused test cases with explicit required evidence for each.
+  - [ ] For user-facing or workflow claims, shape each case as a
+    `HumanLikeQACase` with a user goal, expected workflow, likely confusion or
+    wrong path, required proof artifacts, falsifier, reviewer attack questions,
+    and instrumentation request.
 - [ ] Write the claim under test and the evidence that would falsify it.
 - [ ] Decide whether the tester lane needs `agent-behavior-test`-style
   instrumented run capture for child-agent logs, command events, or artifact
@@ -125,6 +129,34 @@ The tester lane owns using the app, skill, prompt, or workflow and collecting
 evidence. The evidence-review lane owns attacking whether the tester's evidence
 actually proves the behavior.
 
+## Human-Like Case Shape
+
+Use this compact shape for user-facing app, workflow, prompt, and skill claims
+where a skeptical human product tester would try the thing rather than inspect
+only implementation details:
+
+```text
+HumanLikeQACase:
+  name: happy-path | confused-user | edge-error | regression-canary
+  user_goal: what a real user is trying to accomplish
+  expected_workflow: the intended path or state sequence
+  likely_confusion_or_wrong_path: where a fresh user may hesitate, misread,
+    click the wrong thing, or reach a misleading state
+  required_proof_artifacts: screenshots, logs, command output, files, traces,
+    snapshots, child-agent logs, or result.json required to prove this case
+  falsifier: evidence that would make the pass claim false or too narrow
+  reviewer_attack_questions: questions the evidence-review lane must ask before
+    accepting the tester result
+  instrumentation_request: the smallest shortcut, log, state mirror, fixture,
+    seed, debug HUD, or selector needed when proof is weak
+```
+
+The confused-user case is not optional decoration when the claim is about a
+workflow a human must understand. Treat confusion, dead ends, misleading states,
+missing hooks, and weak observability as QA findings. A pass claim is valid only
+when the evidence-review lane agrees that the artifacts answer the attack
+questions for the original claim under test.
+
 `goal-advisor` writes high-level native Goals. `agent-behavior-test` owns
 isolated run capture and scoring. `agent-qa-test` composes that lower-level
 capture when tester-lane evidence needs durable child-agent logs, command
@@ -173,34 +205,41 @@ agent-qa-test orchestrates
    - realistic confused-user path
    - edge/error path
    - regression/canary path when relevant
-4. Define required evidence for each case: screenshots, logs, commands, files,
-   traces, browser state, skill todo list ledger, or final JSON report.
-5. Write the **claim under test** before running: one sentence naming what a
+4. Shape user-facing or workflow cases as `HumanLikeQACase` entries. Include
+   the user goal, expected workflow, likely confusion or wrong path, required
+   proof artifacts, falsifier, reviewer attack questions, and instrumentation
+   request for each case.
+5. Define required evidence for each case: screenshots, logs, commands, files,
+   traces, browser state, skill todo list ledger, child-agent logs, or final
+   JSON report. If the evidence cannot show what a human would need to trust,
+   record the instrumentation request instead of hand-waving the gap.
+6. Write the **claim under test** before running: one sentence naming what a
    pass would prove, plus the main evidence that would falsify it. Keep this
    claim stable unless the final verdict explicitly says the test narrowed.
-6. Decide whether the tester lane needs **instrumented run capture**:
+7. Decide whether the tester lane needs **instrumented run capture**:
    - use `agent-behavior-test` shape when testing skill/prompt conformance,
      child-agent behavior, artifact contracts, command logs, or regression
      canaries
    - plain tester-lane evidence is enough when manual screenshots/logs/files
      prove the feature path without needing a full child-agent event stream
-7. Spawn or draft the **tester lane** prompt. The tester must use the product or
-   skill, collect evidence, and avoid broad self-certification.
-8. Spawn or draft the **evidence-review lane** prompt. The reviewer must inspect
-   the tester output adversarially and mark missing, weak, stale, irrelevant, or
-   misleading evidence.
-9. Reconcile both reports:
+8. Spawn or draft the **tester lane** prompt. The tester must use the product or
+   skill, collect evidence, record confusion or wrong-path observations, and
+   avoid broad self-certification.
+9. Spawn or draft the **evidence-review lane** prompt. The reviewer must inspect
+   the tester output adversarially and mark missing, weak, stale, irrelevant,
+   misleading, or too-narrow evidence.
+10. Reconcile both reports:
    - pass only when evidence-review says the proof is strong enough
    - fail when the evidence only proves a narrower behavior than the claim under
      test
    - rerun QA when the tester missed states or evidence
    - fix the app/skill/prompt when behavior is wrong
    - record a blocker only with evidence, attempted paths, and the missing input
-10. For serious readiness claims, reusable fixtures, or completion gates, run a
+11. For serious readiness claims, reusable fixtures, or completion gates, run a
     final proof-bundle check through `review` or a dedicated reviewer lane that
     judges the claim, tester artifacts, captured logs, evidence-review critique,
     and rerun/fix history together.
-11. Write or return the result in the requested surface: chat summary, ticket QA
+12. Write or return the result in the requested surface: chat summary, ticket QA
     artifact, experiment folder, or paste-ready prompt.
 
 ## Claim Under Test
@@ -232,6 +271,13 @@ Required output:
   "test_cases": [
     {
       "name": "<case>",
+      "human_like_case": {
+        "user_goal": "<what the user tried to do>",
+        "expected_workflow": ["<intended step or state>"],
+        "likely_confusion_or_wrong_path": ["<where a fresh user could get lost>"],
+        "falsifier": "<evidence that would disprove this case>",
+        "instrumentation_request": "<smallest hook needed if proof is weak>"
+      },
       "status": "pass|fail|blocked",
       "actions": ["<what was tried>"],
       "evidence": ["<screenshot/log/file/command path>"],
@@ -260,6 +306,7 @@ Required output:
   "scope_mismatch": ["<places where the evidence proves a narrower claim>"],
   "missing_evidence": ["<screenshots/logs/states not captured>"],
   "weak_artifacts": ["<artifact and why it is weak>"],
+  "human_confusion_findings": ["<confusion or wrong-path evidence the tester found>"],
   "rerun_instructions": ["<specific tester rerun instructions>"],
   "fix_candidates": ["<likely app/skill/prompt fixes>"]
 }

@@ -127,6 +127,35 @@ load contract, capture proof, reconcile claims, write back, leave linked human-r
 7. **Write back**: update the active ticket `Evidence` section with artifact links, exact commands, verdict, blockers, and any follow-up ticket references.
 8. **Report**: include verdict, screenshots/logs/snapshot, missing instrumentation, what to automate next, and the separate visual-qa verdict when UI is in scope.
 
+## Human-like adversarial QA
+
+When the delegated ticket, prompt, or `agent-qa-test` handoff asks for
+human-like, adversarial, skeptical, or confused-user QA, shape the run around
+`HumanLikeQACase` entries:
+
+- `happy-path`: prove the intended user goal and workflow.
+- `confused-user`: intentionally try the likely wrong path, ambiguous copy,
+  missing affordance, or first-time-user hesitation.
+- `edge-error`: exercise invalid, empty, interrupted, or degraded states that a
+  real user could hit.
+- `regression-canary`: rerun a known fragile path when the ticket or prior proof
+  names one.
+
+For each case, record:
+
+- user goal and expected workflow
+- confusion observed or wrong path attempted
+- evidence that would falsify the pass claim
+- screenshots, logs, snapshots, command output, files, traces, or `result.json`
+  needed to prove the case
+- the smallest instrumentation request when proof is weak, such as a shortcut,
+  deep link, deterministic seed/reset, debug HUD, DOM state mirror, selector, or
+  event log
+
+The tester lane cannot self-approve proof. You collect artifacts and mark what
+is `PASS`, `FAIL`, or `NOT PROVABLE`; a separate evidence-review, visual-qa, or
+reviewer lane judges whether those artifacts are strong enough for completion.
+
 ## DOM vs canvas decision tree
 
 Run this probe early (after opening the page and setting a stable viewport):
@@ -191,12 +220,16 @@ Each `report.md` should stay compact and include:
 - `Ticket`
 - `Verification basis`
 - `Ticket reconciliation`
+- `Claim under test`
+- `Human-like cases`
 - `Screens covered`
 - `Design intent`
 - `Verdict`
 - `Acceptance criteria status`
 - `Top visual diffs`
 - `Top behavior diffs`
+- `Confusion observed`
+- `Falsifiers checked`
 - `Missing instrumentation`
 - `What to automate next`
 - `Artifacts`

@@ -29,6 +29,9 @@ source: local
 - [ ] Generate realistic entities, records, timelines, statuses, edge cases,
   empty states, and failure states.
 - [ ] Score the pack with `references/rubric.md` and keep assumptions explicit.
+- [ ] When handing off demo-bearing work for build or review, require an
+  expectation-check artifact: realistic data used, workflow exercised, observed
+  result, mismatch notes, evidence, and the concrete operator question.
 - [ ] Hand off to [functional-ui](../functional-ui/SKILL.md),
   [visual-design](../visual-design/SKILL.md),
   [frontend-craft](../frontend-craft/SKILL.md), or
@@ -47,13 +50,18 @@ context?"
 4. Derive realistic entities, records, timelines, edge cases, and empty/error states.
 5. Produce a demo-realism pack the next skill can build from.
 6. Score the result with a realism and presentation-worthiness rubric.
-7. Hand off to `functional-ui`, `visual-design`, `frontend-craft`, `impl-plan`, or `goal-advisor`.
+7. For demo-bearing build/review handoffs, name the expectation-check artifact
+   the worker must produce before Kenji Review.
+8. Hand off to `functional-ui`, `visual-design`, `frontend-craft`, `impl-plan`, or `goal-advisor`.
 
 ## Use When
 
 - the app or prototype feels fake even if the UI is polished
 - the demo data is generic and does not reflect believable day-to-day operations
 - you need realistic examples before final design/build
+- a demo-bearing feature needs a local handoff rule that tells the builder how
+  to exercise realistic data and ask the operator whether the result matches
+  expected demo value before review
 - the user wants to pitch the potential of the product, not reconstruct the client's exact current tooling
 - the workflow should feel like something the client could plausibly already be doing or want to do soon
 
@@ -86,11 +94,12 @@ Ensure an agent can execute the core path after only reading this file.
   - missing operating reality -> stay on operating model inference
   - workflow believable but data weak -> stay on entities/records/timelines
   - realism pack strong enough -> hand off before final design/build
-- Top 3 gotchas:
+- Top gotchas:
   - do not stop at generic mock data labels
   - do not substitute synthetic artifacts when real public or user-provided
     artifacts are acceptable and findable
   - do not claim exact client truth; this is pitch-potential synthesis
+  - do not let demo-bearing build handoffs end with a bare success claim
   - do not own final UI/design or implementation here
 - Outcome contract:
   - one demo-realism pack exists in the current response, ticket, or spec artifact
@@ -110,6 +119,17 @@ Produce one compact realism pack with:
 - `Realism rubric`
 - `Assumption ledger`
 - `Recommended handoff`
+
+For demo-bearing build or review handoffs, append:
+
+- `Expectation-check artifact required`
+- `Realistic data to exercise`
+- `Workflow to exercise`
+- `Expected demo value`
+- `Observed result`
+- `Mismatch notes`
+- `Evidence to capture`
+- `Operator question`
 
 ## Workflow
 
@@ -136,7 +156,15 @@ Produce one compact realism pack with:
    - timelines and statuses
    - edge cases and failure states
 7. Score the result using the realism rubric in [`references/rubric.md`](references/rubric.md).
-8. Hand off:
+8. If the downstream work is demo-bearing, define the expectation-check
+   contract before handoff:
+   - realistic data or representative pack to exercise
+   - workflow action sequence to run
+   - expected demo value or operator-visible outcome
+   - evidence to capture, such as logs, screenshots, fixture outputs, or links
+   - mismatch notes when the observed result does not match the expected value
+   - concrete operator question for Kenji Review
+9. Hand off:
    - `functional-ui` if workflow shape still needs product/UI planning
    - `visual-design` if realism is settled and visual direction should start
    - `frontend-craft` if realism is settled and implementation should start
@@ -166,6 +194,9 @@ Produce one compact realism pack with:
 - do not create synthetic replacements for realism-critical artifacts until the
   source-artifact ladder has been attempted or intentionally waived
 - do not stop at screens; tie every screen back to a workflow and operator need
+- do not let a downstream builder claim demo-bearing completion without naming
+  the realistic data exercised, observed result, mismatch notes, evidence, and
+  operator question
 - hand off before final UI/design/build execution
 
 ## Documentation Index

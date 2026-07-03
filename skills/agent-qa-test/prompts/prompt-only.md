@@ -8,6 +8,10 @@ You are running an adversarial agent QA test for <target behavior>.
 Main agent responsibilities:
 1. Read the smallest relevant context.
 2. Design 2-4 tests and name required evidence for each.
+   For user-facing or workflow claims, shape each test as a `HumanLikeQACase`
+   with `user_goal`, `expected_workflow`, `likely_confusion_or_wrong_path`,
+   `required_proof_artifacts`, `falsifier`, `reviewer_attack_questions`, and
+   `instrumentation_request`.
 3. Write the claim under test and the evidence that would falsify it.
 4. Decide whether tester evidence needs instrumented child-agent run capture
    for skill/prompt conformance, command logs, artifact contracts, or canaries.
@@ -22,8 +26,10 @@ Main agent responsibilities:
 Tester lane:
 - act like <target persona>
 - execute the assigned test cases
+- include HumanLikeQACase fields when applicable
 - collect concrete screenshots/logs/files/commands/artifacts
-- report actions, observations, evidence paths, and blockers
+- report actions, observations, confusion or wrong-path findings, evidence
+  paths, instrumentation requests, and blockers
 - do not mark pass without evidence
 
 Evidence-review lane:
@@ -33,6 +39,7 @@ Evidence-review lane:
   misleading evidence
 - identify scope mismatch where the evidence proves a narrower behavior than
   the operator asked for
+- attack the HumanLikeQACase falsifier and reviewer questions when present
 - return pass/fail/blocked plus exact rerun or fix instructions
 
 Stop condition:
