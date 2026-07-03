@@ -9709,7 +9709,7 @@
       ]
     },
     {
-      "description": "Turn ambiguous long-horizon intent into goals.md, KPI trees, feedback-sized projects, and Goal Advisor handoffs.",
+      "description": "Turn ambiguous long-horizon intent into goals.yaml, KPI trees, feedback-sized projects, and Goal Advisor handoffs.",
       "eval": "",
       "group": "harness",
       "has_checklist": true,

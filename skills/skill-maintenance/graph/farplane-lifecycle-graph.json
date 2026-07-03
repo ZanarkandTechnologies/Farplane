@@ -92,7 +92,7 @@
     {
       "confidence": "curated",
       "evidence_ref": "docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md",
-      "source": "file:farplane/goals.md",
+      "source": "file:farplane/goals.yaml",
       "target": "skill:goal-advisor",
       "type": "triggers"
     },
@@ -353,9 +353,9 @@
     {
       "confidence": "parsed",
       "evidence_ref": "skills/goal-advisor/SKILL.md",
-      "label": "farplane/goals.md?",
+      "label": "farplane/goals.yaml?",
       "source": "skill:goal-advisor",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "reads"
     },
     {
@@ -539,24 +539,24 @@
     {
       "confidence": "parsed",
       "evidence_ref": "skills/horizon-advisor/SKILL.md",
-      "label": "farplane/goals.md",
+      "label": "farplane/goals.yaml",
       "source": "skill:horizon-advisor",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "reads"
     },
     {
       "confidence": "curated",
       "evidence_ref": "docs/farplane-framework/lifecycle.md",
       "source": "skill:horizon-advisor",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "updates"
     },
     {
       "confidence": "parsed",
       "evidence_ref": "skills/horizon-advisor/SKILL.md",
-      "label": "farplane/goals.md delta or strategy artifact when explicitly in scope",
+      "label": "farplane/goals.yaml delta or strategy artifact when explicitly in scope",
       "source": "skill:horizon-advisor",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "writes"
     },
     {
@@ -742,7 +742,7 @@
       "confidence": "curated",
       "evidence_ref": "docs/farplane-framework/project-files.md",
       "source": "skill:init-advisor",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "writes"
     },
     {
@@ -863,17 +863,17 @@
     {
       "confidence": "parsed",
       "evidence_ref": "skills/interval-update/SKILL.md",
-      "label": "farplane/goals.md?",
+      "label": "farplane/goals.yaml?",
       "source": "skill:interval-update",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "reads"
     },
     {
       "confidence": "parsed",
       "evidence_ref": "skills/interval-update/SKILL.md",
-      "label": "farplane/goals.md only through explicit goals-delta policy",
+      "label": "farplane/goals.yaml only through explicit goals-delta policy",
       "source": "skill:interval-update",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "writes"
     },
     {
@@ -1140,9 +1140,9 @@
     {
       "confidence": "parsed",
       "evidence_ref": "skills/optimize-harness/SKILL.md",
-      "label": "farplane/goals.md?",
+      "label": "farplane/goals.yaml?",
       "source": "skill:optimize-harness",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "reads"
     },
     {
@@ -1340,9 +1340,9 @@
     {
       "confidence": "parsed",
       "evidence_ref": "skills/pulse-update/SKILL.md",
-      "label": "farplane/goals.md?",
+      "label": "farplane/goals.yaml?",
       "source": "skill:pulse-update",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "reads"
     },
     {
@@ -2445,20 +2445,20 @@
       ]
     },
     {
-      "id": "file:farplane/bindings.md",
+      "id": "file:farplane/bindings.yaml",
       "kind": "file",
       "label": "Project bindings",
-      "path": "farplane/bindings.md",
+      "path": "farplane/bindings.yaml",
       "tags": [
         "farplane",
         "tracked-config"
       ]
     },
     {
-      "id": "file:farplane/goals.md",
+      "id": "file:farplane/goals.yaml",
       "kind": "file",
       "label": "Project goals",
-      "path": "farplane/goals.md",
+      "path": "farplane/goals.yaml",
       "tags": [
         "farplane",
         "goals",
@@ -2824,7 +2824,7 @@
       "kind": "skill",
       "label": "horizon-advisor",
       "metadata": {
-        "description": "Turn ambiguous long-horizon intent into goals.md, KPI trees, feedback-sized projects, and Goal Advisor handoffs.",
+        "description": "Turn ambiguous long-horizon intent into goals.yaml, KPI trees, feedback-sized projects, and Goal Advisor handoffs.",
         "source": "local",
         "tier": 3
       },

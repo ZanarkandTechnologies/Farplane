@@ -2139,9 +2139,9 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "README.md",
-      "raw_ref": "farplane/goals.md",
+      "raw_ref": "farplane/goals.yaml",
       "source": "file:README.md",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "literal-path"
     },
     {
@@ -2818,9 +2818,9 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "bin/core/farplane_project_snapshot.py",
-      "raw_ref": "farplane/goals.md",
+      "raw_ref": "farplane/goals.yaml",
       "source": "file:bin/core/farplane_project_snapshot.py",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "literal-path"
     },
     {
@@ -2874,9 +2874,9 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "bin/tests/test_farplane_project_file_validator.py",
-      "raw_ref": "farplane/goals.md",
+      "raw_ref": "farplane/goals.yaml",
       "source": "file:bin/tests/test_farplane_project_file_validator.py",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "literal-path"
     },
     {
@@ -3084,9 +3084,9 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "bin/validators/check_farplane_project_files.py",
-      "raw_ref": "farplane/goals.md",
+      "raw_ref": "farplane/goals.yaml",
       "source": "file:bin/validators/check_farplane_project_files.py",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "literal-path"
     },
     {
@@ -3371,9 +3371,9 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "bin/validators/test_check_farplane_project_files.py",
-      "raw_ref": "farplane/goals.md",
+      "raw_ref": "farplane/goals.yaml",
       "source": "file:bin/validators/test_check_farplane_project_files.py",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "literal-path"
     },
     {
@@ -3854,9 +3854,9 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/LESSONS.md",
-      "raw_ref": "farplane/goals.md",
+      "raw_ref": "farplane/goals.yaml",
       "source": "file:docs/LESSONS.md",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "literal-path"
     },
     {
@@ -4022,9 +4022,9 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/LESSONS.md",
-      "raw_ref": "skills/init-advisor/references/GOALS_TEMPLATE.md",
+      "raw_ref": "skills/init-advisor/references/GOALS_TEMPLATE.yaml",
       "source": "file:docs/LESSONS.md",
-      "target": "file:skills/init-advisor/references/GOALS_TEMPLATE.md",
+      "target": "file:skills/init-advisor/references/GOALS_TEMPLATE.yaml",
       "type": "literal-path"
     },
     {
@@ -4267,9 +4267,9 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/TROUBLES.md",
-      "raw_ref": "farplane/goals.md",
+      "raw_ref": "farplane/goals.yaml",
       "source": "file:docs/TROUBLES.md",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "literal-path"
     },
     {
@@ -4337,9 +4337,9 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/bootstrap-brief.md",
-      "raw_ref": "farplane/goals.md",
+      "raw_ref": "farplane/goals.yaml",
       "source": "file:docs/bootstrap-brief.md",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "literal-path"
     },
     {
@@ -4505,9 +4505,9 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/farplane-framework/README.md",
-      "raw_ref": "farplane/goals.md",
+      "raw_ref": "farplane/goals.yaml",
       "source": "file:docs/farplane-framework/README.md",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "literal-path"
     },
     {
@@ -4603,9 +4603,9 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/farplane-framework/graph-contract.md",
-      "raw_ref": "farplane/goals.md",
+      "raw_ref": "farplane/goals.yaml",
       "source": "file:docs/farplane-framework/graph-contract.md",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "literal-path"
     },
     {
@@ -5121,9 +5121,9 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/farplane-framework/init-advisor-critical-path.md",
-      "raw_ref": "farplane/goals.md",
+      "raw_ref": "farplane/goals.yaml",
       "source": "file:docs/farplane-framework/init-advisor-critical-path.md",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "literal-path"
     },
     {
@@ -5345,9 +5345,9 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/farplane-framework/lifecycle.md",
-      "raw_ref": "farplane/goals.md",
+      "raw_ref": "farplane/goals.yaml",
       "source": "file:docs/farplane-framework/lifecycle.md",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "literal-path"
     },
     {
@@ -5443,9 +5443,9 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/farplane-framework/project-files.md",
-      "raw_ref": "farplane/goals.md",
+      "raw_ref": "farplane/goals.yaml",
       "source": "file:docs/farplane-framework/project-files.md",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "literal-path"
     },
     {
@@ -5569,9 +5569,9 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/farplane-framework/pulse-and-interval-loop.md",
-      "raw_ref": "farplane/goals.md",
+      "raw_ref": "farplane/goals.yaml",
       "source": "file:docs/farplane-framework/pulse-and-interval-loop.md",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "literal-path"
     },
     {
@@ -6283,9 +6283,9 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md",
-      "raw_ref": "farplane/goals.md",
+      "raw_ref": "farplane/goals.yaml",
       "source": "file:docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "literal-path"
     },
     {
@@ -8194,9 +8194,9 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/features/registry.jsonl",
-      "raw_ref": "farplane/goals.md",
+      "raw_ref": "farplane/goals.yaml",
       "source": "file:docs/features/registry.jsonl",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "literal-path"
     },
     {
@@ -9153,9 +9153,9 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/fundamentals/harness-algebra.md",
-      "raw_ref": "farplane/goals.md",
+      "raw_ref": "farplane/goals.yaml",
       "source": "file:docs/fundamentals/harness-algebra.md",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "literal-path"
     },
     {
@@ -9258,9 +9258,9 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/fundamentals/harness-engineering-doctrine.md",
-      "raw_ref": "farplane/goals.md",
+      "raw_ref": "farplane/goals.yaml",
       "source": "file:docs/fundamentals/harness-engineering-doctrine.md",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "literal-path"
     },
     {
@@ -12365,51 +12365,51 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
-      "from_file": "farplane/goals.md",
+      "from_file": "farplane/goals.yaml",
       "raw_ref": "docs/fundamentals/harness-algebra.md",
-      "source": "file:farplane/goals.md",
+      "source": "file:farplane/goals.yaml",
       "target": "file:docs/fundamentals/harness-algebra.md",
       "type": "literal-path"
     },
     {
-      "from_file": "farplane/goals.md",
+      "from_file": "farplane/goals.yaml",
       "raw_ref": "farplane/automations.toml",
-      "source": "file:farplane/goals.md",
+      "source": "file:farplane/goals.yaml",
       "target": "file:farplane/automations.toml",
       "type": "literal-path"
     },
     {
-      "from_file": "farplane/goals.md",
+      "from_file": "farplane/goals.yaml",
       "raw_ref": "farplane/bindings.yaml",
-      "source": "file:farplane/goals.md",
+      "source": "file:farplane/goals.yaml",
       "target": "file:farplane/bindings.yaml",
       "type": "literal-path"
     },
     {
-      "from_file": "farplane/goals.md",
+      "from_file": "farplane/goals.yaml",
       "raw_ref": "farplane/harness.md",
-      "source": "file:farplane/goals.md",
+      "source": "file:farplane/goals.yaml",
       "target": "file:farplane/harness.md",
       "type": "literal-path"
     },
     {
-      "from_file": "farplane/goals.md",
+      "from_file": "farplane/goals.yaml",
       "raw_ref": "farplane/products.md",
-      "source": "file:farplane/goals.md",
+      "source": "file:farplane/goals.yaml",
       "target": "file:farplane/products.md",
       "type": "literal-path"
     },
     {
-      "from_file": "farplane/goals.md",
+      "from_file": "farplane/goals.yaml",
       "raw_ref": "skills/goal-advisor/SKILL.md",
-      "source": "file:farplane/goals.md",
+      "source": "file:farplane/goals.yaml",
       "target": "file:skills/goal-advisor/SKILL.md",
       "type": "literal-path"
     },
     {
-      "from_file": "farplane/goals.md",
+      "from_file": "farplane/goals.yaml",
       "raw_ref": "skills/horizon-advisor/SKILL.md",
-      "source": "file:farplane/goals.md",
+      "source": "file:farplane/goals.yaml",
       "target": "file:skills/horizon-advisor/SKILL.md",
       "type": "literal-path"
     },
@@ -12583,9 +12583,9 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "farplane/manifest.json",
-      "raw_ref": "farplane/goals.md",
+      "raw_ref": "farplane/goals.yaml",
       "source": "file:farplane/manifest.json",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "literal-path"
     },
     {
@@ -12702,9 +12702,9 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "farplane/ops-memory.md",
-      "raw_ref": "farplane/goals.md",
+      "raw_ref": "farplane/goals.yaml",
       "source": "file:farplane/ops-memory.md",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "literal-path"
     },
     {
@@ -12730,9 +12730,9 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "farplane/products.md",
-      "raw_ref": "farplane/goals.md",
+      "raw_ref": "farplane/goals.yaml",
       "source": "file:farplane/products.md",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "literal-path"
     },
     {
@@ -17210,23 +17210,23 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "skills/goal-advisor/SKILL.md",
-      "raw_ref": "farplane/goals.md",
+      "raw_ref": "farplane/goals.yaml",
       "source": "skill:goal-advisor",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "literal-path"
     },
     {
       "from_file": "skills/goal-advisor/eval_task.json",
-      "raw_ref": "farplane/goals.md",
+      "raw_ref": "farplane/goals.yaml",
       "source": "skill:goal-advisor",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "literal-path"
     },
     {
       "from_file": "skills/goal-advisor/references/goal-shapes.md",
-      "raw_ref": "farplane/goals.md",
+      "raw_ref": "farplane/goals.yaml",
       "source": "skill:goal-advisor",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "literal-path"
     },
     {
@@ -17693,37 +17693,37 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "skills/harness-creator/SKILL.md",
-      "raw_ref": "farplane/goals.md",
+      "raw_ref": "farplane/goals.yaml",
       "source": "skill:harness-creator",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "literal-path"
     },
     {
       "from_file": "skills/harness-creator/audits/2026-06-14-create-harness-creator.md",
-      "raw_ref": "farplane/goals.md",
+      "raw_ref": "farplane/goals.yaml",
       "source": "skill:harness-creator",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "literal-path"
     },
     {
       "from_file": "skills/harness-creator/examples/faceless-ai-channel.md",
-      "raw_ref": "farplane/goals.md",
+      "raw_ref": "farplane/goals.yaml",
       "source": "skill:harness-creator",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "literal-path"
     },
     {
       "from_file": "skills/harness-creator/references/harness-il.md",
-      "raw_ref": "farplane/goals.md",
+      "raw_ref": "farplane/goals.yaml",
       "source": "skill:harness-creator",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "literal-path"
     },
     {
       "from_file": "skills/harness-creator/templates/project-harness.md",
-      "raw_ref": "farplane/goals.md",
+      "raw_ref": "farplane/goals.yaml",
       "source": "skill:harness-creator",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "literal-path"
     },
     {
@@ -18533,23 +18533,23 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "skills/horizon-advisor/SKILL.md",
-      "raw_ref": "farplane/goals.md",
+      "raw_ref": "farplane/goals.yaml",
       "source": "skill:horizon-advisor",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "literal-path"
     },
     {
       "from_file": "skills/horizon-advisor/examples/agi-toy-shop-goals.md",
-      "raw_ref": "farplane/goals.md",
+      "raw_ref": "farplane/goals.yaml",
       "source": "skill:horizon-advisor",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "literal-path"
     },
     {
       "from_file": "skills/horizon-advisor/references/project-goals.md",
-      "raw_ref": "farplane/goals.md",
+      "raw_ref": "farplane/goals.yaml",
       "source": "skill:horizon-advisor",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "literal-path"
     },
     {
@@ -20212,7 +20212,7 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
-      "from_file": "skills/init-advisor/references/GOALS_TEMPLATE.md",
+      "from_file": "skills/init-advisor/references/GOALS_TEMPLATE.yaml",
       "raw_ref": "farplane/bindings.yaml",
       "source": "skill:init-advisor",
       "target": "file:farplane/bindings.yaml",
@@ -20234,79 +20234,79 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "skills/init-advisor/README.md",
-      "raw_ref": "farplane/goals.md",
+      "raw_ref": "farplane/goals.yaml",
       "source": "skill:init-advisor",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "literal-path"
     },
     {
       "from_file": "skills/init-advisor/SKILL.md",
-      "raw_ref": "farplane/goals.md",
+      "raw_ref": "farplane/goals.yaml",
       "source": "skill:init-advisor",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "literal-path"
     },
     {
       "from_file": "skills/init-advisor/eval_task.json",
-      "raw_ref": "farplane/goals.md",
+      "raw_ref": "farplane/goals.yaml",
       "source": "skill:init-advisor",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "literal-path"
     },
     {
       "from_file": "skills/init-advisor/qa_checklist.md",
-      "raw_ref": "farplane/goals.md",
+      "raw_ref": "farplane/goals.yaml",
       "source": "skill:init-advisor",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "literal-path"
     },
     {
       "from_file": "skills/init-advisor/references/BOOTSTRAP_BRIEF_TEMPLATE.md",
-      "raw_ref": "farplane/goals.md",
+      "raw_ref": "farplane/goals.yaml",
       "source": "skill:init-advisor",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "literal-path"
     },
     {
       "from_file": "skills/init-advisor/references/FARPLANE_PRODUCTS_TEMPLATE.md",
-      "raw_ref": "farplane/goals.md",
+      "raw_ref": "farplane/goals.yaml",
       "source": "skill:init-advisor",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "literal-path"
     },
     {
       "from_file": "skills/init-advisor/references/FRAMEWORK_CHANGELOG.md",
-      "raw_ref": "farplane/goals.md",
+      "raw_ref": "farplane/goals.yaml",
       "source": "skill:init-advisor",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "literal-path"
     },
     {
       "from_file": "skills/init-advisor/references/HARNESS_TEMPLATE.md",
-      "raw_ref": "farplane/goals.md",
+      "raw_ref": "farplane/goals.yaml",
       "source": "skill:init-advisor",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "literal-path"
     },
     {
       "from_file": "skills/init-advisor/references/MANIFEST_TEMPLATE.json",
-      "raw_ref": "farplane/goals.md",
+      "raw_ref": "farplane/goals.yaml",
       "source": "skill:init-advisor",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "literal-path"
     },
     {
       "from_file": "skills/init-advisor/references/OPS_MEMORY_TEMPLATE.md",
-      "raw_ref": "farplane/goals.md",
+      "raw_ref": "farplane/goals.yaml",
       "source": "skill:init-advisor",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "literal-path"
     },
     {
       "from_file": "skills/init-advisor/scripts/bootstrap.sh",
-      "raw_ref": "farplane/goals.md",
+      "raw_ref": "farplane/goals.yaml",
       "source": "skill:init-advisor",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "literal-path"
     },
     {
@@ -20780,9 +20780,9 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "skills/init-advisor/audits/2026-06-22-full-mode-goal-portfolio.md",
-      "raw_ref": "skills/init-advisor/references/GOALS_TEMPLATE.md",
+      "raw_ref": "skills/init-advisor/references/GOALS_TEMPLATE.yaml",
       "source": "skill:init-advisor",
-      "target": "file:skills/init-advisor/references/GOALS_TEMPLATE.md",
+      "target": "file:skills/init-advisor/references/GOALS_TEMPLATE.yaml",
       "type": "literal-path"
     },
     {
@@ -21193,44 +21193,44 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "skills/interval-update/SKILL.md",
-      "raw_ref": "farplane/goals.md",
+      "raw_ref": "farplane/goals.yaml",
       "source": "skill:interval-update",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "literal-path"
     },
     {
       "from_file": "skills/interval-update/eval_task.json",
-      "raw_ref": "farplane/goals.md",
+      "raw_ref": "farplane/goals.yaml",
       "source": "skill:interval-update",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "literal-path"
     },
     {
       "from_file": "skills/interval-update/references/interval-update.md",
-      "raw_ref": "farplane/goals.md",
+      "raw_ref": "farplane/goals.yaml",
       "source": "skill:interval-update",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "literal-path"
     },
     {
       "from_file": "skills/interval-update/references/workflows/compounding-leverage-review.md",
-      "raw_ref": "farplane/goals.md",
+      "raw_ref": "farplane/goals.yaml",
       "source": "skill:interval-update",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "literal-path"
     },
     {
       "from_file": "skills/interval-update/references/workflows/goal-drift.md",
-      "raw_ref": "farplane/goals.md",
+      "raw_ref": "farplane/goals.yaml",
       "source": "skill:interval-update",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "literal-path"
     },
     {
       "from_file": "skills/interval-update/templates/interval-report.md",
-      "raw_ref": "farplane/goals.md",
+      "raw_ref": "farplane/goals.yaml",
       "source": "skill:interval-update",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "literal-path"
     },
     {
@@ -22348,9 +22348,9 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "skills/optimize-harness/SKILL.md",
-      "raw_ref": "farplane/goals.md",
+      "raw_ref": "farplane/goals.yaml",
       "source": "skill:optimize-harness",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "literal-path"
     },
     {
@@ -23069,9 +23069,9 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "skills/proof-advisor/audits/2026-06-24-proof-advisor-rename-workflow-inference.md",
-      "raw_ref": "farplane/goals.md",
+      "raw_ref": "farplane/goals.yaml",
       "source": "skill:proof-advisor",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "literal-path"
     },
     {
@@ -23104,9 +23104,9 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "skills/proof-advisor/audits/2026-06-24-proof-advisor-rename-workflow-inference.md",
-      "raw_ref": "skills/init-advisor/references/GOALS_TEMPLATE.md",
+      "raw_ref": "skills/init-advisor/references/GOALS_TEMPLATE.yaml",
       "source": "skill:proof-advisor",
-      "target": "file:skills/init-advisor/references/GOALS_TEMPLATE.md",
+      "target": "file:skills/init-advisor/references/GOALS_TEMPLATE.yaml",
       "type": "literal-path"
     },
     {
@@ -23230,9 +23230,9 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "skills/pulse-update/SKILL.md",
-      "raw_ref": "farplane/goals.md",
+      "raw_ref": "farplane/goals.yaml",
       "source": "skill:pulse-update",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "literal-path"
     },
     {
@@ -25771,37 +25771,37 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "skills/skill-maintenance/graph/farplane-lifecycle-graph.js",
-      "raw_ref": "farplane/goals.md",
+      "raw_ref": "farplane/goals.yaml",
       "source": "skill:skill-maintenance",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "literal-path"
     },
     {
       "from_file": "skills/skill-maintenance/graph/farplane-lifecycle-graph.json",
-      "raw_ref": "farplane/goals.md",
+      "raw_ref": "farplane/goals.yaml",
       "source": "skill:skill-maintenance",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "literal-path"
     },
     {
       "from_file": "skills/skill-maintenance/scripts/farplane_lifecycle_catalog.py",
-      "raw_ref": "farplane/goals.md",
+      "raw_ref": "farplane/goals.yaml",
       "source": "skill:skill-maintenance",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "literal-path"
     },
     {
       "from_file": "skills/skill-maintenance/scripts/farplane_lifecycle_graph.py",
-      "raw_ref": "farplane/goals.md",
+      "raw_ref": "farplane/goals.yaml",
       "source": "skill:skill-maintenance",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "literal-path"
     },
     {
       "from_file": "skills/skill-maintenance/scripts/test_generate_farplane_lifecycle_graph.py",
-      "raw_ref": "farplane/goals.md",
+      "raw_ref": "farplane/goals.yaml",
       "source": "skill:skill-maintenance",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "literal-path"
     },
     {
@@ -31266,10 +31266,10 @@ window.HARNESS_GRAPH = {
       "path": "farplane/bindings.yaml"
     },
     {
-      "id": "file:farplane/goals.md",
+      "id": "file:farplane/goals.yaml",
       "kind": "file",
-      "label": "farplane/goals.md",
-      "path": "farplane/goals.md"
+      "label": "farplane/goals.yaml",
+      "path": "farplane/goals.yaml"
     },
     {
       "id": "file:farplane/harness.md",
@@ -32760,10 +32760,10 @@ window.HARNESS_GRAPH = {
       "path": "skills/init-advisor/references/GITIGNORE_TEMPLATE"
     },
     {
-      "id": "file:skills/init-advisor/references/GOALS_TEMPLATE.md",
+      "id": "file:skills/init-advisor/references/GOALS_TEMPLATE.yaml",
       "kind": "file",
-      "label": "skills/init-advisor/references/GOALS_TEMPLATE.md",
-      "path": "skills/init-advisor/references/GOALS_TEMPLATE.md"
+      "label": "skills/init-advisor/references/GOALS_TEMPLATE.yaml",
+      "path": "skills/init-advisor/references/GOALS_TEMPLATE.yaml"
     },
     {
       "id": "file:skills/init-advisor/references/MANIFEST_TEMPLATE.json",

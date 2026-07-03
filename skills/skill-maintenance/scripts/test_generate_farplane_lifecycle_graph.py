@@ -40,7 +40,7 @@ source: local
 sample_skill(input) -> output
 
 state:
-  reads(farplane/goals.md?,
+  reads(farplane/goals.yaml?,
         tickets/TASK-*/ticket.md,
         docs/MEMORY.md?)
   writes(.farplane/reports/pulse/<YYYY-MM-DDTHHMMSSZ>.md,
@@ -57,7 +57,7 @@ routes:
             contract = lifecycle_graph.parse_skill_contract(skill, repo)
 
         self.assertEqual(contract.name, "sample-skill")
-        self.assertIn("farplane/goals.md?", contract.reads)
+        self.assertIn("farplane/goals.yaml?", contract.reads)
         self.assertIn("tickets/TASK-*/ticket.md", contract.reads)
         self.assertIn(".farplane/reports/pulse/<YYYY-MM-DDTHHMMSSZ>.md", contract.writes)
         self.assertIn("farplane/pm.json when worker threads are spawned", contract.writes)

@@ -110,17 +110,17 @@
     {
       "from_file": "docs/farplane-framework/README.md",
       "projection": "farplane-framework-core",
-      "raw_ref": "farplane/bindings.md",
+      "raw_ref": "farplane/bindings.yaml",
       "source": "file:docs/farplane-framework/README.md",
-      "target": "file:farplane/bindings.md",
+      "target": "file:farplane/bindings.yaml",
       "type": "literal-path"
     },
     {
       "from_file": "docs/farplane-framework/README.md",
       "projection": "farplane-framework-core",
-      "raw_ref": "farplane/goals.md",
+      "raw_ref": "farplane/goals.yaml",
       "source": "file:docs/farplane-framework/README.md",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "literal-path"
     },
     {
@@ -298,9 +298,9 @@
     {
       "from_file": "docs/farplane-framework/graph-contract.md",
       "projection": "farplane-framework-core",
-      "raw_ref": "farplane/goals.md",
+      "raw_ref": "farplane/goals.yaml",
       "source": "file:docs/farplane-framework/graph-contract.md",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "literal-path"
     },
     {
@@ -499,17 +499,17 @@
     {
       "from_file": "docs/farplane-framework/init-advisor-critical-path.md",
       "projection": "farplane-framework-core",
-      "raw_ref": "farplane/bindings.md",
+      "raw_ref": "farplane/bindings.yaml",
       "source": "file:docs/farplane-framework/init-advisor-critical-path.md",
-      "target": "file:farplane/bindings.md",
+      "target": "file:farplane/bindings.yaml",
       "type": "literal-path"
     },
     {
       "from_file": "docs/farplane-framework/init-advisor-critical-path.md",
       "projection": "farplane-framework-core",
-      "raw_ref": "farplane/goals.md",
+      "raw_ref": "farplane/goals.yaml",
       "source": "file:docs/farplane-framework/init-advisor-critical-path.md",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "literal-path"
     },
     {
@@ -683,9 +683,9 @@
     {
       "from_file": "docs/farplane-framework/lifecycle.md",
       "projection": "farplane-framework-core",
-      "raw_ref": "farplane/goals.md",
+      "raw_ref": "farplane/goals.yaml",
       "source": "file:docs/farplane-framework/lifecycle.md",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "literal-path"
     },
     {
@@ -861,17 +861,17 @@
     {
       "from_file": "docs/farplane-framework/project-files.md",
       "projection": "farplane-framework-core",
-      "raw_ref": "farplane/bindings.md",
+      "raw_ref": "farplane/bindings.yaml",
       "source": "file:docs/farplane-framework/project-files.md",
-      "target": "file:farplane/bindings.md",
+      "target": "file:farplane/bindings.yaml",
       "type": "literal-path"
     },
     {
       "from_file": "docs/farplane-framework/project-files.md",
       "projection": "farplane-framework-core",
-      "raw_ref": "farplane/goals.md",
+      "raw_ref": "farplane/goals.yaml",
       "source": "file:docs/farplane-framework/project-files.md",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "literal-path"
     },
     {
@@ -912,7 +912,7 @@
       "label": "triggers",
       "projection": "farplane-framework-core",
       "raw_ref": "skill:goal-advisor",
-      "source": "file:farplane/goals.md",
+      "source": "file:farplane/goals.yaml",
       "target": "skill:goal-advisor",
       "type": "triggers"
     },
@@ -1018,9 +1018,9 @@
       "from_file": "docs/farplane-framework/lifecycle.md",
       "label": "updates",
       "projection": "farplane-framework-core",
-      "raw_ref": "file:farplane/goals.md",
+      "raw_ref": "file:farplane/goals.yaml",
       "source": "skill:horizon-advisor",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "updates"
     },
     {
@@ -1060,9 +1060,9 @@
       "from_file": "docs/farplane-framework/project-files.md",
       "label": "writes",
       "projection": "farplane-framework-core",
-      "raw_ref": "file:farplane/goals.md",
+      "raw_ref": "file:farplane/goals.yaml",
       "source": "skill:init-advisor",
-      "target": "file:farplane/goals.md",
+      "target": "file:farplane/goals.yaml",
       "type": "writes"
     },
     {
@@ -1659,12 +1659,12 @@
     },
     {
       "framework_role": "linked",
-      "id": "file:farplane/bindings.md",
+      "id": "file:farplane/bindings.yaml",
       "kind": "file",
-      "label": "farplane/bindings.md",
-      "path": "farplane/bindings.md",
+      "label": "farplane/bindings.yaml",
+      "path": "farplane/bindings.yaml",
       "source_match": false,
-      "source_path": "farplane/bindings.md",
+      "source_path": "farplane/bindings.yaml",
       "tags": [
         "framework-core",
         "framework-role:linked"
@@ -1672,12 +1672,12 @@
     },
     {
       "framework_role": "linked",
-      "id": "file:farplane/goals.md",
+      "id": "file:farplane/goals.yaml",
       "kind": "file",
-      "label": "farplane/goals.md",
-      "path": "farplane/goals.md",
+      "label": "farplane/goals.yaml",
+      "path": "farplane/goals.yaml",
       "source_match": false,
-      "source_path": "farplane/goals.md",
+      "source_path": "farplane/goals.yaml",
       "tags": [
         "framework-core",
         "framework-role:linked"
