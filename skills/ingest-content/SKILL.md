@@ -38,7 +38,7 @@ scope.
 ingest_content(source, note?, context?) -> saved_reference + reusable_elements + retrieval_handle + evidence
 state: reads(Resource Bank schema/functions, source content, user note); writes(Convex resourceBankIngestionJobs/resourceBankAssets/resourceBankAnalyses/resourceBankSkillFindings)
 gates: source_read_or_limit_recorded; note_intent_bound; retrieval_facets_extracted; usefulness_extracted; storage_write_verified; retrieval_verified
-routes: summarize | media-ingest | video-understanding | visual-design | image-generation | video-generation | social-content | video-production
+routes: summarize | media-ingest | video-understanding | visual-design | ai-image-advisor | ai-video-advisor | social-content | video-production
 fails: treats all media as text; ignores note-specific segment; saves raw media without retention note; stores vibes without reusable levers; turns hook mechanics into a managed performance-tag taxonomy; skips retrieval verification
 ```
 
@@ -88,8 +88,8 @@ source-reading or downstream interpretation phase:
   transcripts need storyboard-level interpretation.
 - Use [visual-design](../visual-design/SKILL.md) only for visual taste language,
   composition, typography, color, layout, and reusable creative levers.
-- Use [image-generation](../image-generation/SKILL.md) or
-  [video-generation](../video-generation/SKILL.md) only when the operator asks
+- Use [ai-image-advisor](../ai-image-advisor/SKILL.md) or
+  [ai-video-advisor](../ai-video-advisor/SKILL.md) only when the operator asks
   to generate a new derivative asset now; otherwise store generation recipes for
   future reuse.
 

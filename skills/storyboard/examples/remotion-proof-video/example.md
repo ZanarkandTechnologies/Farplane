@@ -1,6 +1,6 @@
 ---
-title: Remotion Proof Video Script Storyboard Example
-owner: script-storyboard
+title: Remotion Proof Video Storyboard Example
+owner: storyboard
 status: active
 kind: skill-example
 created_at: 2026-07-03

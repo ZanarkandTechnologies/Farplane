@@ -1,10 +1,10 @@
 [
   {
-    "id": "script_storyboard_remotion_proof_video_01",
+    "id": "storyboard_remotion_proof_video_01",
     "title": "Turns a fuzzy proof-video idea into a Remotion-ready creative ticket",
     "query": "We need a 20 second vertical video for builders showing that Farplane turns agent work into visible proof. Audience is skeptical AI operators. Make it ready for Remotion, but do not render yet.",
     "reference_points": [
-      "Uses or routes to script-storyboard rather than jumping straight to Remotion code",
+      "Uses or routes to storyboard rather than jumping straight to Remotion code",
       "Binds ICP, viewer promise, core idea, proof or reason to believe, platform, duration, style, CTA, and constraints",
       "Uses a ticket-shaped structure such as Summary, Scope, Delta, Program, Map, Done / Proof, State, Links, and Notes",
       "Includes narrative signatures: hook, tension, turn, proof moment, payoff, and final action",
@@ -19,29 +19,29 @@
     ],
     "tags": [
       "skill",
-      "script-storyboard",
+      "storyboard",
       "remotion",
       "content-video",
       "creative-planning"
     ]
   },
   {
-    "id": "script_storyboard_ticket_artifact_home_01",
+    "id": "storyboard_ticket_artifact_home_01",
     "title": "Chooses a durable artifact home for production-oriented creative plans",
     "query": "For TASK-9999, turn this idea into a production brief: a launch clip that explains our new eval proof loop to founders in under 30 seconds. Keep it ticket-shaped and ready for review.",
     "reference_points": [
-      "Chooses a ticket artifact path such as tickets/TASK-9999/artifacts/script-storyboard.md or states the path in the handoff",
+      "Chooses a ticket artifact path such as tickets/TASK-9999/artifacts/storyboard.md or states the path in the handoff",
       "Uses the ticket-style creative sections rather than a chat-only outline",
       "Names review or proof evidence before the plan can be called approved",
       "Keeps production, render, and publishing as downstream actions unless explicitly requested"
     ],
     "anti_patterns": [
       "Leaves the production plan only in chat despite a task ID",
-      "Uses generic creative-writing advice instead of a reviewable script-storyboard artifact"
+      "Uses generic creative-writing advice instead of a reviewable storyboard artifact"
     ],
     "tags": [
       "skill",
-      "script-storyboard",
+      "storyboard",
       "ticket-artifact",
       "proof"
     ]

@@ -1,23 +1,26 @@
 ---
-name: image-generation
+name: ai-image-advisor
 version: 1.0.0
-description: "Turn image generation or editing requests into inference.sh belt image pipeline outputs when Codex-native imagegen is not enough."
+description: "Turn AI image create/edit/upscale/cutout requests into provider route, prompt/input packet, spend gate, and saved image asset bundle."
 tier: 3
 group: content-image
 source: local
+template_uses:
+  skill-template: "0.3.7"
 allowed-tools: Read, Grep, Glob, Bash
 ---
 
-# Image Generation
+# AI Image Advisor
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-# Image Generation Todos
+# AI Image Advisor Todos
 
-Use this as the ordered checklist whenever `image-generation` is active.
+Use this as the ordered checklist whenever `ai-image-advisor` is active.
 
-- [ ] Classify the request as text-to-image, image-edit, inpainting, multi-reference, text-rendering, style-LoRA, fast-cheap, product-mockup, product-photography, social-visual, carousel, background-removal, upscaling, or frontend-bound asset.
+- [ ] Classify the request as text-to-image, image-edit, inpainting, multi-reference, text-rendering, style-LoRA, fast-cheap, product-mockup, product-photography, social-visual, carousel, background-removal, upscaling, reference-asset creation, or frontend-bound asset.
+- [ ] For idea plus Tasty Pack/reference planning, use `content-impl-plan`; for asset inventory or recreation planning, use `asset-advisor`.
 - [ ] For product photography, packshots, e-commerce images, or commercial product shots, use `product-photography`.
 - [ ] For social media content, captions, thumbnails, UGC concepts, or cross-platform campaign assets, use `social-content:cross-platform`.
 - [ ] For LinkedIn posts or professional social writing, use `social-content:linkedin`.
@@ -50,17 +53,18 @@ Use the `SKILL.md` Todo List at the start of the pass. It is the ordered anti-fo
 
 Use the built-in `imagegen` skill for normal Codex-native still image generation/editing. Use this skill when the user asks for inference.sh, `belt`, a named image model, CLI repeatability, upscaling, background removal, or a multi-step image pipeline.
 
-Use domain image/social guide skills for artifact problems: `product-photography`
-and `social-content` methods such as `social-content:cross-platform`,
-`social-content:linkedin`, `social-content:carousel`, and
-`social-content:twitter-thread`. Use this skill for model/app selection and
-`belt` execution once the domain intent is known.
+Use `content-impl-plan` and `asset-advisor` for parent planning, reference
+decomposition, and recreation strategy. Use domain image/social guide skills
+for artifact problems: `product-photography` and `social-content` methods such
+as `social-content:cross-platform`, `social-content:linkedin`,
+`social-content:carousel`, and `social-content:twitter-thread`. Use this skill
+for model/app selection and `belt` execution once the image intent is known.
 
 Copied upstream references are read-only usage docs. Do not run `npx skills add ...` commands from their Related Skills sections unless the user explicitly asks to install upstream skills.
 
 ## Steps
 
-1. Classify the job: `text-to-image`, `image-edit`, `inpainting`, `multi-reference`, `text-rendering`, `style-lora`, `fast-cheap`, `product-mockup`, `product-photography`, `social-visual`, `carousel`, `background-removal`, `upscaling`, or `frontend-bound`.
+1. Classify the job: `text-to-image`, `image-edit`, `inpainting`, `multi-reference`, `text-rendering`, `style-lora`, `fast-cheap`, `product-mockup`, `product-photography`, `social-visual`, `carousel`, `background-removal`, `upscaling`, `reference-asset`, or `frontend-bound`.
 2. If the request is vague, use the best-current defaults below to pick the app family.
 3. Load the specific reference file only after a family is selected.
 4. Capability-gate the CLI path with `command -v belt`, `belt --help`, `belt app get <app>`, and `belt app sample <app>` before trusting any cached schema.
@@ -126,6 +130,8 @@ belt app list --category image
 - Image upscaling or enhancement: `references/tools/image-upscaling.md`
 - Long-running jobs, batched tasks, timers, or delegated polling: `references/long-running-jobs.md`
 - Product photography, packshots, e-commerce images, or commercial product shots: use `product-photography`
+- Parent content ticket or idea plus Tasty Pack/reference plan: use `content-impl-plan`
+- Asset inventory, recreation, source/reuse/generate decisions, or Remotion asset handoff: use `asset-advisor`
 - Social media content, captions, thumbnails, UGC concepts, or cross-platform campaign assets: use `social-content:cross-platform`
 - LinkedIn posts or professional social writing: use `social-content:linkedin`
 - Instagram/LinkedIn/X carousel or multi-slide post: use `social-content:carousel`
@@ -135,26 +141,26 @@ belt app list --category image
 ## Examples
 
 ```bash
-mkdir -p output/image-generation/sneaker-product
+mkdir -p output/ai-image-advisor/sneaker-product
 belt app run openai/gpt-image-2 --input '{
   "prompt": "professional product photo of sneakers, studio lighting",
   "quality": "high"
-}' --save output/image-generation/sneaker-product/result.json
+}' --save output/ai-image-advisor/sneaker-product/result.json
 
-mkdir -p output/image-generation/synth-editorial
+mkdir -p output/ai-image-advisor/synth-editorial
 belt app run google/gemini-3-1-flash-image-preview --input '{
   "prompt": "photorealistic editorial image of a modular synthesizer on a desk"
-}' --save output/image-generation/synth-editorial/result.json
+}' --save output/ai-image-advisor/synth-editorial/result.json
 
-mkdir -p output/image-generation/signal-lab-poster
+mkdir -p output/ai-image-advisor/signal-lab-poster
 belt app run alibaba/qwen-image-2-pro --input '{
   "prompt": "A clean launch poster that says SIGNAL LAB in bold type"
-}' --save output/image-generation/signal-lab-poster/result.json
+}' --save output/ai-image-advisor/signal-lab-poster/result.json
 
-mkdir -p output/image-generation/upscale
+mkdir -p output/ai-image-advisor/upscale
 belt app run falai/topaz-image-upscaler \
   --input '{"image_url": "https://..."}' \
-  --save output/image-generation/upscale/result.json
+  --save output/ai-image-advisor/upscale/result.json
 ```
 
 ## Async Workflow
@@ -174,7 +180,7 @@ Use async runs when there are many independent images, slow upscales, or a front
 For project assets, create a small artifact bundle:
 
 ```text
-output/image-generation/<slug>/
+output/ai-image-advisor/<slug>/
   input.json
   result.json
   prompt.md

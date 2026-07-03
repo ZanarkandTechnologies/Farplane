@@ -122,8 +122,8 @@ GROUP_DEFINITIONS: tuple[dict[str, object], ...] = (
         "display_name": "Farplane Media and Content",
         "description": "Image, video, Remotion, social, product photography, and content production skills.",
         "skills": (
-            "image-generation",
-            "video-generation",
+            "ai-image-advisor",
+            "ai-video-advisor",
             "remotion",
             "remotion-render",
             "video-production",

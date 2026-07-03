@@ -1,36 +1,36 @@
 ---
-name: video-generation
+name: ai-video-advisor
 version: 1.0.0
-description: "Turn AI video generation or editing requests into inference.sh belt video outputs such as text-to-video, image-to-video, avatars, edits, or upscales."
+description: "Turn model-native video create/edit/upscale requests into provider route, prompt/input packet, spend gate, and saved video asset bundle."
 tier: 3
 group: content-video
 source: local
+template_uses:
+  skill-template: "0.3.7"
 allowed-tools: Read, Grep, Glob, Bash
 ---
 
-# Video Generation
+# AI Video Advisor
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-# Video Generation Todos
+# AI Video Advisor Todos
 
-Use this as the ordered checklist whenever `video-generation` is active.
+Use this as the ordered checklist whenever `ai-video-advisor` is active.
 
-- [ ] Classify the request as text-to-video, image-to-video, reference-to-video, avatar/lipsync, video edit, utility, marketing, explainer, storyboard, ad spec, prompt improvement, or frontend-bound asset.
-- [ ] If the request is React, Remotion, TSX-to-video, deterministic animation, or code-rendered MP4, stop using this skill and route to `remotion` for authoring and `remotion-render` for inference.sh MP4 rendering.
+- [ ] Classify the request as text-to-video, image-to-video, reference-to-video, avatar/lipsync execution, video edit, upscale, utility, prompt improvement, or frontend-bound asset.
+- [ ] If the request is content ticket planning, idea plus Tasty Pack planning, storyboard/action-list compilation, React, Remotion, TSX-to-video, deterministic animation, or code-rendered MP4, stop using this skill and route to `content-impl-plan`, `storyboard`, `asset-advisor`, or `remotion` as appropriate.
 - [ ] For CLI setup, app discovery, schemas, samples, or generic inference.sh help, load `references/tools/infsh-cli.md`.
-- [ ] For vague/general AI video requests, model selection, "what should I use?", broad model-native video generation, video edits, foley, upscaling, or utilities, use the model map in `SKILL.md` first.
+- [ ] For vague/general AI video requests, model selection, "what should I use?", broad model-native video generation, video edits, upscaling, or utilities, use the model map in `SKILL.md` first.
 - [ ] After `SKILL.md` selects a model family, load the matching specific reference instead of staying at the umbrella level.
 - [ ] For Google Veo, load `references/tools/google-veo.md`.
 - [ ] For still image animation, load `references/tools/image-to-video.md`.
 - [ ] For Pruna/P-Video fast or economical generation, load `references/tools/p-video.md`.
-- [ ] For talking head, avatar, portrait animation, or lipsync, use `video-production:talking-head`; load `references/tools/p-video-avatar.md` or `references/tools/ai-avatar-video.md` only for model details.
+- [ ] For talking head, avatar, persistent presenter, portrait animation, or lipsync direction, route to `avatar-advisor`; load `references/tools/p-video-avatar.md` or `references/tools/ai-avatar-video.md` only for model details or execution.
 - [ ] For HappyHorse, physical realism, or video editing, load `references/tools/happyhorse.md`.
 - [ ] For Seedance, reference video, or audio-aware generation, load `references/tools/seedance.md`.
-- [ ] For marketing or promo videos, use `video-production:marketing`.
-- [ ] For explainer, tutorial, or product demo sequences, use `video-production:explainer`.
-- [ ] For storyboard or shot-list work, use `video-production:storyboard`.
+- [ ] For marketing/proof videos, explainers, product demos, storyboard/action-list work, or idea plus Tasty Pack planning, use `content-impl-plan` or `storyboard` before this skill.
 - [ ] For social/video ad specs, use `video-production:ad-spec`.
 - [ ] For prompt improvement, use the owning `video-production` method's prompting reference; if no artifact domain is known, load `references/prompting/video-prompting-guide.md`.
 - [ ] For shared production routing from a domain skill, load `references/domain-production.md`.
@@ -39,7 +39,7 @@ Use this as the ordered checklist whenever `video-generation` is active.
 - [ ] For website or campaign asset sets that combine stills, model-native clips, and Remotion renders, use `frontend-craft/references/media-pipelines.md`.
 - [ ] Use `imagegen` first for still frames, portraits, posters, or reference art unless the user explicitly wants a CLI image app.
 - [ ] Check `command -v belt`, `belt --help`, `belt app get <app>`, and `belt app sample <app>` before relying on an app schema.
-- [ ] For Foley or sound effects, search live with `belt app search foley` and `belt app search sound`; do not assume `infsh/hunyuanvideo-foley` exists.
+- [ ] For voice, music, Foley, sound effects, dubbing, or mix planning, route to `audio-advisor`; search live with `belt app search foley` and `belt app search sound` only for provider execution details.
 - [ ] Confirm external compute/spend is acceptable before any `belt app run`.
 - [ ] Save final videos, prompts, input JSON, result JSON, and notes inside the workspace, not only in a remote URL, temp path, or Codex home path.
 - [ ] If the video is used on a web surface, route implementation/proof through `frontend-craft`, `references/frontend-asset-qa.md`, and `visual-qa` when layout or taste is affected.
@@ -49,22 +49,21 @@ Generate project-ready AI video assets with inference.sh CLI (`belt`) while keep
 
 Use the `SKILL.md` Todo List at the start of the pass. It is the ordered anti-forgetting checklist for model choice, reference loading, spend gates, asset saving, and frontend proof.
 
-Use `video-production` method addresses for artifact/product problems:
-`video-production:marketing`, `video-production:explainer`,
-`video-production:storyboard`, `video-production:talking-head`, and
-`video-production:ad-spec`. Prompting guidance belongs inside that domain
-workflow skill. Use this skill for model/app selection and `belt` execution
-once the domain intent is known.
+Use `content-impl-plan`, `storyboard`, `asset-advisor`, `avatar-advisor`, and
+`audio-advisor` for artifact/product problems. Use this skill for model/app
+selection and `belt` execution once the production intent and inputs are known.
 
 For video prompt quality when no narrower artifact prompt applies, load `references/prompting/video-prompting-guide.md` for shot type, camera movement, lighting, temporal motion, and model-specific phrasing.
 
-Do not use this skill for React/Remotion code authoring or code-to-video. Exit and use `remotion` for authoring, then `remotion-render` for inference.sh MP4 rendering.
+Do not use this skill for parent content planning, React/Remotion code
+authoring, or code-to-video. Exit and use `content-impl-plan` for the parent
+plan or `remotion` for authoring and local render proof.
 
 Copied upstream references are read-only usage docs. Do not run `npx skills add ...` commands from their Related Skills sections unless the user explicitly asks to install upstream skills.
 
 ## Steps
 
-1. Classify the job: `text-to-video`, `image-to-video`, `reference-to-video`, `avatar-lipsync`, `video-edit`, `utility`, `marketing`, `explainer`, `storyboard`, `ad-spec`, `prompt-improvement`, or `frontend-bound`.
+1. Classify the job: `text-to-video`, `image-to-video`, `reference-to-video`, `avatar-lipsync-execution`, `video-edit`, `upscale`, `utility`, `prompt-improvement`, or `frontend-bound`.
 2. If the request is vague, use the model tables in this file to pick the app family.
 3. Load `references/reference-overrides.md` before copying commands from any upstream reference.
 4. Load the specific reference file only after a family is selected.
@@ -145,13 +144,13 @@ belt app list --category video
 - Google Veo: `references/tools/google-veo.md`
 - Still image animation: `references/tools/image-to-video.md`
 - Pruna P-Video or WAN fast/economical generation: `references/tools/p-video.md`
-- Talking head, avatar, portrait animation, or lipsync: use `video-production:talking-head`; model details live in `references/tools/p-video-avatar.md` and `references/tools/ai-avatar-video.md`
+- Talking head, avatar, persistent presenter, portrait animation, or lipsync direction: use `avatar-advisor`; model details live in `references/tools/p-video-avatar.md` and `references/tools/ai-avatar-video.md`
 - HappyHorse or physical realism/editing: `references/tools/happyhorse.md`
 - Seedance, reference video, or audio-aware generation: `references/tools/seedance.md`
-- Marketing or promo video: use `video-production:marketing`
-- Explainer, tutorial, or product demo sequence: use `video-production:explainer`
-- Storyboard or shot list: use `video-production:storyboard`
-- Social/video ad specs: use `video-production:ad-spec`
+- Parent content ticket or idea plus Tasty Pack/reference plan: use `content-impl-plan`
+- Storyboard, script, or shot list: use `storyboard`
+- Asset inventory or recreation plan: use `asset-advisor`
+- Audio direction, Foley, voice, music, SFX, dubbing, or mix plan: use `audio-advisor`
 - Prompt improvement: use the owning `video-production` method's prompting
   reference; if no artifact domain is known, load
   `references/prompting/video-prompting-guide.md`
@@ -160,34 +159,34 @@ belt app list --category video
 - Copied-reference overrides and known stale app IDs: `references/reference-overrides.md`
 - Multi-asset website/video pipelines with image, video, and Remotion: `frontend-craft/references/media-pipelines.md`
 - Frontend implementation proof: `references/frontend-asset-qa.md`
-- React/Remotion/code-rendered MP4: use `remotion` for code and `remotion-render` for inference.sh MP4 rendering
+- React/Remotion/code-rendered MP4: use `remotion` for code and local render proof; use `remotion-render` only for an explicit external inference.sh render path
 
 ## Examples
 
 ```bash
-mkdir -p output/video-generation/flower-timelapse
+mkdir -p output/ai-video-advisor/flower-timelapse
 belt app run google/veo-3-1-fast \
   --input '{"prompt": "A timelapse of a flower blooming in a garden"}' \
-  --save output/video-generation/flower-timelapse/result.json
+  --save output/ai-video-advisor/flower-timelapse/result.json
 
-mkdir -p output/video-generation/jazz-band
+mkdir -p output/ai-video-advisor/jazz-band
 belt app run falai/seedance-2-t2v --input '{
   "prompt": "a jazz band performing in a dimly lit club",
   "generate_audio": true,
   "duration": 10
-}' --save output/video-generation/jazz-band/result.json
+}' --save output/ai-video-advisor/jazz-band/result.json
 
-mkdir -p output/video-generation/snowy-edit
+mkdir -p output/ai-video-advisor/snowy-edit
 belt app run alibaba/happyhorse-1-0-video-edit --input '{
   "video": "https://your-video.mp4",
   "prompt": "change the background to a snowy mountain landscape"
-}' --save output/video-generation/snowy-edit/result.json
+}' --save output/ai-video-advisor/snowy-edit/result.json
 
-mkdir -p output/video-generation/product-avatar
+mkdir -p output/ai-video-advisor/product-avatar
 belt app run pruna/p-video-avatar --input '{
   "image": "https://portrait.jpg",
   "voice_script": "Welcome to the product demo."
-}' --save output/video-generation/product-avatar/result.json
+}' --save output/ai-video-advisor/product-avatar/result.json
 ```
 
 ## Async Workflow
@@ -207,7 +206,7 @@ Use async runs when there are multiple independent clips, expected runtime is lo
 For project assets, create a small artifact bundle:
 
 ```text
-output/video-generation/<slug>/
+output/ai-video-advisor/<slug>/
   input.json
   result.json
   prompt.md

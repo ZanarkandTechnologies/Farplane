@@ -6,7 +6,7 @@ tier: 3
 group: content-video
 source: local
 common_chains:
-  after: ["video-generation", "remotion"]
+  after: ["ai-video-advisor", "remotion"]
 methods:
   - video-production:marketing
   - video-production:explainer
@@ -43,15 +43,15 @@ is active.
 - [ ] Use the native planning phase when campaign angle, structure, visual
   carrier, model family, platform cut, production route, or scope boundary
   needs a real tradeoff decision.
-- [ ] Load the shared [domain video production workflow](../video-generation/references/domain-production.md).
+- [ ] Load the shared [domain video production workflow](../ai-video-advisor/references/domain-production.md).
 - [ ] Load upstream or prompting references only when their platform specs,
   production norms, examples, or prompt patterns matter.
 - [ ] Draft scripts, shot lists, panel sequences, ad specs, caption/safe-zone
   notes, prompt sets, asset lists, and proof plans before generation or
   rendering.
-- [ ] Route model-native clips through [video-generation](../video-generation/SKILL.md).
+- [ ] Route model-native clips through [ai-video-advisor](../ai-video-advisor/SKILL.md).
 - [ ] Route still assets through `imagegen` or
-  [image-generation](../image-generation/SKILL.md); route deterministic motion
+  [ai-image-advisor](../ai-image-advisor/SKILL.md); route deterministic motion
   graphics or assembly through [remotion](../remotion/SKILL.md) and
   [remotion-render](../remotion-render/SKILL.md); route campaign/web
   integration through [frontend-craft](../frontend-craft/SKILL.md).
@@ -107,7 +107,7 @@ Use method addresses to choose the smallest relevant workflow:
 
 ## Steps
 
-1. Load the shared [domain video production workflow](../video-generation/references/domain-production.md).
+1. Load the shared [domain video production workflow](../ai-video-advisor/references/domain-production.md).
 2. Select exactly one primary method from the requested artifact and add
    supporting methods only when the deliverable genuinely spans formats.
 3. Load the matching upstream and prompting references only when platform specs,
@@ -127,9 +127,9 @@ Use method addresses to choose the smallest relevant workflow:
    before drafting or generating.
 5. Draft scripts, shot lists, storyboard panels, ad specs, prompts, or asset
    plans before final generation or rendering.
-6. Route model-native clips through `video-generation`.
+6. Route model-native clips through `ai-video-advisor`.
 7. Route still assets, posters, product frames, portraits, or references
-   through `imagegen` or `image-generation`.
+   through `imagegen` or `ai-image-advisor`.
 8. Route deterministic motion graphics, captions, overlays, or code-rendered
    assembly through `remotion` and `remotion-render`.
 9. Route website, landing-page, campaign-bundle, or frontend integration through

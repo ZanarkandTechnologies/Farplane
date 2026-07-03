@@ -13,7 +13,7 @@ template_uses:
 methods:
   - infographic:handdrawn-saas-wireframe
 common_chains:
-  after: ["image-generation", "visual-qa"]
+  after: ["ai-image-advisor", "visual-qa"]
 eval: eval_task.json
 qa_checklist: qa_checklist.md
 allowed-tools: Read, Grep, Glob, Bash
@@ -32,7 +32,7 @@ This skill owns the artifact contract before production: the message, evidence
 or data claims, copy inventory, layout grammar, style route, generation or
 rendering path, and proof. It composes with [visual-design](../visual-design/SKILL.md),
 [data-viz](../data-viz/SKILL.md), [diagramming](../diagramming/SKILL.md),
-[social-content](../social-content/SKILL.md), [image-generation](../image-generation/SKILL.md),
+[social-content](../social-content/SKILL.md), [ai-image-advisor](../ai-image-advisor/SKILL.md),
 [frontend-craft](../frontend-craft/SKILL.md), and [visual-qa](../visual-qa/SKILL.md)
 when those downstream owners are the right production or proof surface.
 
@@ -48,7 +48,7 @@ create_infographic(brief, source_material?, style_ref?, output_context?)
   -> infographic_packet + asset_plan + evidence
 state: reads(request, source material, optional ticket/spec/data, style references, existing brand or platform constraints); writes(brief/spec/prompt/rendered assets when requested)
 gates: message_claims_named; copy_inventory_complete; layout_legible; style_route_selected; production_path_named; proof_or_blocker_recorded
-routes: visual-design | data-viz | diagramming | social-content | image-generation | frontend-craft | visual-qa
+routes: visual-design | data-viz | diagramming | social-content | ai-image-advisor | frontend-craft | visual-qa
 fails: decorative poster with unclear point; hallucinated data; text-dense bitmap with unreadable labels; copied reference without adaptation; no local artifact path
 ```
 
@@ -113,7 +113,7 @@ asset must be judged against a visual baseline.
      components, annotation zones, and responsive or crop constraints.
    - [ ] Separate facts from illustrative placeholder data.
    - [ ] Choose production route: deterministic render, Mermaid/diagram,
-     HTML/SVG/canvas, Codex-native imagegen, [image-generation](../image-generation/SKILL.md),
+     HTML/SVG/canvas, Codex-native imagegen, [ai-image-advisor](../ai-image-advisor/SKILL.md),
      or mixed deterministic base plus bitmap texture.
 - [ ] 5. Produce or hand off the asset.
    - [ ] For exact-text outputs, render or specify deterministic text layers

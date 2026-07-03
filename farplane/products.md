@@ -50,7 +50,7 @@ source_of_truth:
 | Experiment reports | `farplane-experiment-report` | `metric-advisor`, `proof-advisor`, `eval`, `review`, `update-strategy` | Measures a harness hypothesis, records baseline/variant evidence, and turns the decision into either rejection, iteration, or productization. |
 | Trust ablations | `farplane-ablation-proof` | `proof-advisor`, `agent-qa-test`, `agent-behavior-test`, `eval`, `review` | Proves whether a feature or workflow matters through with/without comparison and evidence review. |
 | Harness improvements | `farplane-productization` | `impl-plan`, `goal-advisor`, `qa`, `demo`, `close-ticket`, `skill-maintenance`, `harness-advisor` | Converts accepted evidence into shipped harness behavior, with ticket proof and reviewer gates. |
-| Evidence content | `farplane-evidence-content` | `social-content`, `landing-page`, `video-production`, `infographic`, `reel-collage`, `product-photography`, `image-generation`, `x-account`, `instagram-account` | Turns accepted evidence into distribution artifacts; content skills own format-specific craft and platform constraints. |
+| Evidence content | `farplane-evidence-content` | `content-impl-plan`, `storyboard`, `asset-advisor`, `avatar-advisor`, `audio-advisor`, `remotion`, `social-content`, `landing-page`, `video-production`, `infographic`, `reel-collage`, `product-photography`, `ai-image-advisor`, `ai-video-advisor`, `x-account`, `instagram-account` | Turns accepted evidence into distribution artifacts; `content-impl-plan` compiles idea plus Tasty Pack/reference into an advisor action list, while child skills own craft, assets, generation routes, composition, and platform constraints. |
 | Market learning | `farplane-market-learning` | `research`, `deep-interview`, `harness-scout`, `best-of-worlds`, `landing-page`, `social-content`, `update-strategy` | Sharpens audience, pain, offer, and distribution bets before product or content execution. |
 
 ## Taste Loop Artifact Workflows
@@ -66,8 +66,8 @@ they let Kenji reject or approve ideas before Farplane spends execution effort.
 | trust_distribution | landing_page_offer | `landing-page` | offer angle, hero premise, or concept card | landing page draft, HTML, screenshot, or preview URL | keep / revise / reject the offer and page direction |
 | trust_distribution | social_thread | `social-content:twitter-thread` | hook and argument concept card | draft thread | keep / revise / reject the hook and argument |
 | trust_distribution | evidence_carousel | `social-content:carousel` | proof story concept card | carousel outline or slides | keep / revise / reject the proof story |
-| trust_distribution | explainer_script | `video-production:explainer` | explanation angle or storyboard premise | short script or storyboard | keep / revise / reject the explanation |
-| trust_distribution | demo_video_brief | `video-production:marketing` | demo angle or shot premise | video concept, shot list, or demo script | keep / revise / reject the demo angle |
+| trust_distribution | explainer_script | `content-impl-plan` | explanation angle, Tasty Pack/reference, or storyboard premise | short script, storyboard, and advisor action list | keep / revise / reject the explanation |
+| trust_distribution | demo_video_brief | `content-impl-plan` | demo angle, proof claim, or Tasty Pack/reference | video concept, storyboard, asset plan, and Remotion route | keep / revise / reject the demo angle |
 | market_learning | offer_test | `landing-page` | offer hypothesis variants | landing page section or offer test draft | pick best / revise / reject the offer |
 | experiments | experiment_report | `farplane-experiment-report` | experiment decision angle | experiment report draft | accept / revise / reject the decision |
 | ablations | ablation_proof | `farplane-ablation-proof` | proof claim and contrast plan | ablation proof report | accept / revise / reject the proof |
@@ -85,6 +85,8 @@ they let Kenji reject or approve ideas before Farplane spends execution effort.
 - Taste Loop execution feedback cards must point to an execution artifact from
   the same workflow after the planning artifact passes, unless the execution
   artifact is explicitly a tiny planning test.
-- Broad router skills such as
+- Broad router/support skills such as
   `frontend-craft`, `functional-ui`, `remotion`, and `remotion-render` can
-  support those workflows but are not direct Taste Loop targets.
+  support those workflows but are not direct Taste Loop targets. `content-impl-plan`
+  is a direct planning target for evidence-content video production because it
+  creates the reviewable ticket/action list before media execution.

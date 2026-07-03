@@ -15,8 +15,8 @@ Shared workflow for video artifact domain skills such as marketing videos, expla
 | Need | Route |
 | --- | --- |
 | Normal still images, posters, portraits, storyboard panels | [imagegen](/Users/kenjipcx/.codex/skills/.system/imagegen/SKILL.md) first |
-| Named inference.sh image model, CLI image batch, cutout, upscale | [image-generation](../../image-generation/SKILL.md) |
-| Model-native video, image-to-video, avatar/lipsync, video edit, upscale | [video-generation](../SKILL.md) |
+| Named inference.sh image model, CLI image batch, cutout, upscale | [ai-image-advisor](../../ai-image-advisor/SKILL.md) |
+| Model-native video, image-to-video, avatar/lipsync, video edit, upscale | [ai-video-advisor](../SKILL.md) |
 | Remotion code authoring, overlays, captions, charts, deterministic timing | [remotion](../../remotion/SKILL.md) |
 | Render Remotion TSX/code through inference.sh | [remotion-render](../../remotion-render/SKILL.md) |
 | Website, landing page, or campaign asset set | [frontend-craft media pipelines](../../frontend-craft/references/media-pipelines.md) |

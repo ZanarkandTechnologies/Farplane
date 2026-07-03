@@ -125,7 +125,7 @@ PrototypeGates :=
 | generated asset consistency | export/platform constraints
 
 PipelineHandoff :=
-  video-production -> video-generation | remotion | remotion-render | frontend-craft
+  video-production -> ai-video-advisor | remotion | remotion-render | frontend-craft
 ```
 
 ## Social Campaign
@@ -152,7 +152,7 @@ PrototypeGates :=
   one representative post/thread/carousel | asset style proof | platform fit proof
 
 PipelineHandoff :=
-  social-content -> image-generation | video-generation | remotion | frontend-craft
+  social-content -> ai-image-advisor | ai-video-advisor | remotion | frontend-craft
 ```
 
 ## Product Photo Shoot
@@ -181,5 +181,5 @@ PrototypeGates :=
 | background removal or upscale quality | marketplace compliance proof
 
 PipelineHandoff :=
-  product-photography -> imagegen | image-generation | frontend-craft
+  product-photography -> imagegen | ai-image-advisor | frontend-craft
 ```

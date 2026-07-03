@@ -1,6 +1,6 @@
 ---
-name: script-storyboard
-description: "Turn a content idea, ICP, proof, or offer into a ticket-shaped script and storyboard plan when production needs an executable creative handoff."
+name: storyboard
+description: "Turn a content implementation plan, idea, ICP, proof, or offer into script, beats, and storyboard scenes for production handoff."
 tier: 3
 group: content-video
 source: local
@@ -12,60 +12,60 @@ template_uses:
 eval: eval_task.json
 qa_checklist: qa_checklist.md
 common_chains:
-  after: ["video-production", "remotion", "social-content"]
+  after: ["asset-advisor", "audio-advisor", "avatar-advisor", "remotion", "social-content"]
 allowed-tools: Read, Grep, Glob, Bash
 ---
 
-# Script Storyboard
+# Storyboard
 
 ## Context
 
-Use this skill when a creative idea, proof point, offer, or campaign goal needs
-to become an executable script and storyboard before production. It is the
-content-production analogue of `impl-plan`: it turns fuzzy intent into a
-ticket-shaped creative plan with narrative signatures, beat structure, shot
-requirements, asset needs, and a proof contract.
+Use this skill when a content implementation plan, creative idea, proof point,
+offer, or campaign goal needs script, beats, and storyboard scenes before
+production. It is a child primitive of `content-impl-plan`: it turns the chosen
+idea and reference pattern into narrative signatures, beat structure, scene
+requirements, and production-facing shot notes.
 
-This skill owns planning and production handoff. It does not render video,
-generate model-native footage, publish social posts, run accounts, or claim
-final creative quality after production. Route production to `remotion`,
-`video-production`, `video-generation`, `remotion-render`, or `social-content`
-after the handoff is concrete enough to execute.
+This skill owns narrative and scene design. It does not own the parent content
+implementation ticket, asset decomposition, media generation, Remotion code,
+publishing, or final creative QA. Route parent planning to `content-impl-plan`
+and production-specific work to the relevant advisor or Remotion skill.
 
 ## Skill Signature
 
 ```text
-script_storyboard(idea_or_brief, icp?, proof?, platform?, duration?, style?, cta?, artifact_owner?)
-  -> creative_ticket + production_handoff | blocked_report
+storyboard(idea_or_brief, icp?, proof?, platform?, duration?, style?, cta?, reference_pattern?, artifact_owner?)
+  -> script_storyboard + scene_handoff | blocked_report
 
 state:
   reads(user brief, supplied proof/examples/swipes, active ticket?,
         qa_checklist.md, examples/remotion-proof-video/example.md when useful)
-  writes(ticket artifact or experiment content artifact when durable output is requested)
+  writes(storyboard artifact or content-ticket section when durable output is requested)
 
 gates:
   viewer_promise_bound; proof_or_reason_to_believe_named;
   narrative_signatures_present; beat_sheet_and_script_aligned;
-  storyboard_executable; asset_plan_named; production_route_selected;
-  proof_contract_observable
+  storyboard_executable; asset_needs_named; scene_handoff_observable
 
 routes:
-  research | video-production | remotion | video-generation |
-  remotion-render | social-content | review
+  content-impl-plan | asset-advisor | audio-advisor | avatar-advisor |
+  remotion | ai-video-advisor | social-content | review
 
 fails:
   vague_video_idea_as_plan; script_without_shots; shots_without_viewer_promise;
-  generic_brand_filler; production_handoff_without_assets_or_proof;
+  generic_brand_filler; parent_action_list_hidden_in_storyboard;
+  production_handoff_without_assets_or_proof;
   publishing_or_rendering_as_default
 ```
 
 ## Phase Boundary
 
-Plan inline by default. Use `research` only when current platform norms, peer
+Plan inline by default. Use `content-impl-plan` when the user needs the parent
+ticket, advisor action list, and execution order. Use `research` only when current platform norms, peer
 examples, official specs, or source material materially affect the script. Use
 `review` when a material creative plan needs independent judgment before
 production. Hand off to production skills only after this skill has named the
-route, assets, proof, and blocker conditions.
+scene handoff, asset needs, proof, and blocker conditions.
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
@@ -76,29 +76,31 @@ route, assets, proof, and blocker conditions.
     artifact owner.
   - [ ] Read `qa_checklist.md` as preflight guardrails.
 - [ ] 2. Choose the artifact home.
-  - [ ] Use `tickets/TASK-XXXX/artifacts/script-storyboard.md` when an active
+  - [ ] Use `tickets/TASK-XXXX/artifacts/storyboard.md` when an active
     ticket owns the work.
-  - [ ] Use `experiments/content/<date>-<slug>/script-storyboard.md` for a fast
+  - [ ] Use `experiments/content/<date>-<slug>/storyboard.md` for a fast
     proof run without an owning ticket.
   - [ ] Keep chat-only output only for tiny sketches where no production or
     review handoff is expected.
-- [ ] 3. Draft the ticket-shaped creative plan.
-  - [ ] Use `Summary`, `Scope`, `Delta`, `Program`, `Map`, `Done / Proof`,
-    `State`, `Links`, and `Notes`.
-  - [ ] In `Delta`, make the before/after explicit: fuzzy idea to executable
-    production plan.
+- [ ] 3. Draft the narrative spine.
   - [ ] Include `Narrative Signatures`: hook, tension, turn, proof moment,
     payoff, and final action.
+  - [ ] If the user needs a full ticket/action list, route back to
+    `content-impl-plan` instead of expanding this skill's scope.
 - [ ] 4. Write the script and storyboard as one connected plan.
   - [ ] Produce beat sheet, voiceover or on-screen copy, scene-by-scene
     storyboard panels, shot list, motion notes, audio notes, captions or
     supers, and asset requirements.
   - [ ] Ensure each beat has a viewer job and each shot has a production job.
 - [ ] 5. Select the production route.
+  - [ ] Route parent ticket/action-list planning to `content-impl-plan`.
+  - [ ] Route asset decomposition and recreation planning to `asset-advisor`.
+  - [ ] Route persistent presenter or character direction to `avatar-advisor`.
+  - [ ] Route voice, music, SFX, Foley, and mix notes to `audio-advisor`.
   - [ ] Route deterministic motion graphics, captions, overlays, and editing to
     `remotion`.
-  - [ ] Route model-native footage, avatars, or generated clips to
-    `video-generation`.
+  - [ ] Route model-native footage or generated clips to
+    `ai-video-advisor`.
   - [ ] Route broader video planning or ad deliverables to `video-production`.
   - [ ] Route captions, launch copy, thread, carousel, or platform copy to
     `social-content`.
@@ -115,26 +117,9 @@ route, assets, proof, and blocker conditions.
 
 ## Templates
 
-Creative ticket core:
+Storyboard core:
 
 ```text
-## Summary
-What will be produced, for whom, and why this artifact should exist now.
-
-## Scope
-- In:
-- Out:
-- Platform:
-- Duration:
-- Style:
-- CTA:
-
-## Delta
-- Before:
-- After:
-- Why now:
-
-## Program
 Narrative Signatures:
 - Hook:
 - Tension:
@@ -152,25 +137,6 @@ Script:
 Storyboard:
 | Scene | Time | Visual | Copy/VO | Motion | Assets | Proof |
 | --- | ---: | --- | --- | --- | --- | --- |
-
-## Map
-- Production route:
-- Asset route:
-- Distribution route:
-
-## Done / Proof
-- done_when:
-- evidence:
-- residual_risk:
-
-## State
-draft | review | approved | in_production | blocked
-
-## Links
-- source proof:
-- examples:
-- production:
-- outputs:
 
 ## Notes
 - Rejected angles:
@@ -197,11 +163,11 @@ of a Remotion-ready creative ticket.
 
 ## Reference Map
 
-- `qa_checklist.md` - read at start and finish for script-storyboard QA.
+- `qa_checklist.md` - read at start and finish for storyboard QA.
 - `examples/remotion-proof-video/example.md` - load when a Remotion-ready
   example would improve the creative ticket or proof handoff.
 - `../video-production/SKILL.md` - route broader video planning, ad specs, or
-  production method selection after the script-storyboard is ready.
+  production method selection after the storyboard is ready.
 - `../remotion/SKILL.md` - route deterministic composition authoring after the
   storyboard names dimensions, duration, assets, scenes, and proof.
 - `../social-content/SKILL.md` - route captions, launch copy, threads,
@@ -209,8 +175,9 @@ of a Remotion-ready creative ticket.
 
 ## Output
 
-- `creative_ticket`: ticket-shaped script-storyboard artifact or inline packet.
-- `production_handoff`: selected route, required assets, scene map, proof
+- `script_storyboard`: narrative signatures, beats, script, scenes, shots, and
+  visual/audio notes.
+- `scene_handoff`: selected route, required assets, scene map, proof
   contract, and next owner.
 - `blocked_report`: missing ICP, proof, platform, asset permission, production
   route, or review/proof condition.

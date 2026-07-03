@@ -13,9 +13,9 @@ Use this skill for:
 - talking-head, avatar, and lipsync workflows
 - platform-specific ad specs and paid-social creative
 
-Use `video-generation` for model-native video execution, `remotion` for
+Use `ai-video-advisor` for model-native video execution, `remotion` for
 deterministic Remotion code authoring, `remotion-render` for MP4 rendering, and
-`image-generation` or `imagegen` for still assets.
+`ai-image-advisor` or `imagegen` for still assets.
 
 ## Entry Point
 
@@ -31,8 +31,8 @@ For a product launch ad:
 1. Select `video-production:marketing`.
 2. Add `video-production:ad-spec` only if paid placement constraints matter.
 3. Draft the brief, shot list, prompt set, and proof plan.
-4. Route clips through `video-generation`, stills through `imagegen` or
-   `image-generation`, and deterministic edits through `remotion` or
+4. Route clips through `ai-video-advisor`, stills through `imagegen` or
+   `ai-image-advisor`, and deterministic edits through `remotion` or
    `remotion-render`.
 
 ## How To Test

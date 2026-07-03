@@ -1,0 +1,36 @@
+[
+  {
+    "id": "asset_advisor_tasty_pack_recreation_plan_01",
+    "title": "Turns Tasty Pack reference material into a routed asset plan",
+    "query": "A Tasty Pack reference shows a 20s vertical product teaser with a fast hook, AI product b-roll, kinetic captions, a presenter voiceover, and three punchy SFX hits. Create the asset plan for Remotion execution.",
+    "reference_points": [
+      "Decomposes footage, stills, captions, voiceover, SFX, and final composition",
+      "Routes stills, video clips, avatar/audio, and Remotion separately",
+      "Names rights or recreation constraints",
+      "Includes acceptance checks for each asset"
+    ],
+    "anti_patterns": [
+      "Creates one generic generation prompt instead of an asset inventory",
+      "Copies the reference without rights or likeness notes",
+      "Hands Remotion a vague mood board without assets, timing, or checks"
+    ],
+    "tags": ["skill", "asset-advisor", "content-production", "tasty-pack"]
+  },
+  {
+    "id": "asset_advisor_storyboard_missing_assets_01",
+    "title": "Builds a missing-asset inventory from a storyboard",
+    "query": "A storyboard has five scenes, but only the logo and product screenshot exist. Build a missing-asset inventory.",
+    "reference_points": [
+      "Marks existing assets for reuse",
+      "Marks missing visuals and audio for generation or sourcing",
+      "States blockers",
+      "Prepares a Remotion-ready handoff"
+    ],
+    "anti_patterns": [
+      "Ignores existing assets",
+      "Skips missing-file blockers",
+      "Fails to name owner routes"
+    ],
+    "tags": ["skill", "asset-advisor", "storyboard", "remotion"]
+  }
+]

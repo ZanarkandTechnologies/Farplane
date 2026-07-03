@@ -1,0 +1,225 @@
+---
+name: content-impl-plan
+description: "Turn a content idea and optional Tasty Pack/reference into a ticket-shaped production plan with storyboard, advisor actions, QA, and Remotion handoff."
+tier: 3
+group: content-production
+source: local
+template_uses:
+  skill-template: "0.3.7"
+  skill-qa-checklist: "0.1.1"
+  skill-eval-task: "0.1.0"
+  skill-surface-budget: "0.1.0"
+eval: eval_task.json
+qa_checklist: qa_checklist.md
+common_chains:
+  after: ["storyboard", "asset-advisor", "avatar-advisor", "audio-advisor", "ai-image-advisor", "ai-video-advisor", "remotion", "review"]
+allowed-tools: Read, Grep, Glob, Bash
+---
+
+# Content Impl Plan
+
+## Context
+
+Use this skill when an idea, proof point, offer, or Tasty Pack/reference needs
+to become an executable content-production ticket. This is the content analogue
+to the coding `impl-plan`: it compiles creative intent into a storyboard, asset
+decomposition, advisor action list, production order, proof contract, and final
+Remotion/review path.
+
+This skill owns the parent plan and action list. It does not generate media,
+write Remotion code, render final video, publish posts, or replace the advisor
+skills. It calls or routes to the primitives when their outputs are needed.
+
+## Skill Signature
+
+```text
+content_impl_plan(idea, tasty_pack?, icp?, platform?, proof?, constraints?, artifact_owner?)
+  -> content_ticket + advisor_action_list + production_program | blocked_report
+
+state:
+  reads(user brief, Tasty Pack/reference assets, proof/examples/swipes,
+        active ticket?, qa_checklist.md)
+  writes(content implementation ticket or ticket-scoped artifact when durable
+        execution is requested)
+
+gates:
+  idea_bound; audience_and_promise_named; reference_pattern_extracted;
+  storyboard_route_selected; asset_graph_planned; advisor_actions_ordered;
+  remotion_terminal_path_named; review_and_qa_contract_observable
+
+routes:
+  storyboard | asset-advisor | avatar-advisor | audio-advisor |
+  ai-image-advisor | ai-video-advisor | remotion | social-content | review | qa
+
+fails:
+  storyboard_as_parent_plan; format_sprawl; vibes_only_action_list;
+  advisor_actions_without_owner; remotion_without_assets; qa_afterthought
+```
+
+## Big Picture
+
+```text
+idea + tasty_pack/reference
+  -> content-impl-plan
+      -> storyboard: narrative, script, beats, scene map
+      -> asset-advisor: asset inventory, recreation plan, owner routes
+      -> avatar-advisor: persistent presenter/character direction when needed
+      -> audio-advisor: voice, music, SFX, Foley, cue sheet when needed
+      -> ai-image-advisor: still image generation/edit/upscale route when needed
+      -> ai-video-advisor: model-native clip/avatar execution route when needed
+      -> remotion: React composition, stitching, captions, audio placement,
+                  local render proof
+      -> review/qa: creative plan, asset readiness, render/output proof
+```
+
+Tasty Pack outputs are treated as evidence and inspiration material: successful
+hooks, story patterns, visual language, audio cues, pacing, and asset examples.
+The plan should extract reusable structure without copying protected assets,
+likenesses, music, or exact creative expression.
+
+## Phase Boundary
+
+Plan inline by default. Use the child skills only when their output is needed
+for the ticket to be executable. Use `review` before execution when the plan
+will guide a public campaign, paid spend, high-visibility proof, or close
+reference recreation. Use `qa` when a produced artifact needs formal proof.
+
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
+## Todo List
+
+- [ ] 1. Bind the implementation brief.
+  - [ ] Resolve idea, ICP, viewer promise, proof, platform, Tasty Pack/reference
+    material, target artifact, constraints, CTA, deadline, and artifact owner.
+  - [ ] Read `qa_checklist.md` as preflight guardrails.
+- [ ] 2. Extract the reference pattern.
+  - [ ] Identify hook, story pattern, pacing, format affordances, visual assets,
+    audio cues, and why the reference likely works.
+  - [ ] Mark what to reuse as structure versus what must be changed for rights,
+    brand, audience, or proof.
+- [ ] 3. Create the content ticket shape.
+  - [ ] Use `Summary`, `Scope`, `Delta`, `Program`, `Map`, `Done / Proof`,
+    `State`, `Links`, and `Notes`.
+  - [ ] Make the before/after explicit: idea plus reference to executable
+    production program.
+- [ ] 4. Route child planning work.
+  - [ ] Route narrative, script, beats, and scene map to `storyboard`.
+  - [ ] Route asset inventory and recreation decisions to `asset-advisor`.
+  - [ ] Route persistent presenter/character needs to `avatar-advisor`.
+  - [ ] Route voice, music, SFX, Foley, and mix notes to `audio-advisor`.
+  - [ ] Route still or model-native generation details to `ai-image-advisor`
+    and `ai-video-advisor` only when generation inputs are needed.
+- [ ] 5. Compile the advisor action list.
+  - [ ] Order actions by dependency: storyboard, assets, generation/capture,
+    audio, Remotion composition, render proof, review/QA.
+  - [ ] Give every action an owner skill, input, output, acceptance check, and
+    blocker condition.
+- [ ] 6. End with production proof.
+  - [ ] Route final stitching, captions, overlays, audio placement, and local
+    render proof to `remotion`.
+  - [ ] Name review and QA checklist gates before claiming the plan ready.
+  - [ ] Apply `qa_checklist.md` again before completion.
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
+
+## Ticket Template
+
+```text
+## Summary
+What content will be produced, for whom, and what proof or marketing job it
+must do.
+
+## Scope
+- In:
+- Out:
+- Platform:
+- Target artifact:
+- Reference / Tasty Pack:
+- CTA:
+
+## Delta
+- Before:
+- After:
+- Why now:
+
+## Program
+Reference Pattern:
+- Hook:
+- Story / format:
+- Visual pattern:
+- Audio pattern:
+- Proof mechanism:
+- Must change:
+
+Advisor Action List:
+| Order | Owner | Input | Output | Acceptance Check | Blocker |
+| ---: | --- | --- | --- | --- | --- |
+
+## Map
+- Storyboard:
+- Assets:
+- Avatar:
+- Audio:
+- Image generation:
+- Video generation:
+- Remotion:
+- Review / QA:
+
+## Done / Proof
+- plan_ready_when:
+- production_ready_when:
+- render_proof:
+- review:
+- residual_risk:
+
+## State
+draft | review | approved | in_production | blocked
+
+## Links
+- source proof:
+- Tasty Pack / reference:
+- child artifacts:
+- outputs:
+
+## Notes
+- Rejected angles:
+- Rights / usage notes:
+- Taste notes:
+```
+
+## Gotchas
+
+- Do not make `storyboard` carry the whole implementation plan. Storyboard owns
+  narrative and scene design; this skill owns the parent ticket and production
+  action list.
+- Do not create format-specific skills for every trend. Use Tasty Pack or
+  references to extract the pattern, then route through stable primitives.
+- Do not let Remotion start before assets, cue timing, dimensions, and proof
+  checks are named.
+
+## Reference Map
+
+- `qa_checklist.md` - read at start and finish for content implementation plan
+  QA.
+- `../storyboard/SKILL.md` - narrative, script, beat sheet, and scene map.
+- `../asset-advisor/SKILL.md` - asset inventory, recreation plan, and owner
+  routes.
+- `../avatar-advisor/SKILL.md` - persistent avatar, presenter, or lipsync
+  direction.
+- `../audio-advisor/SKILL.md` - voice, music, SFX, Foley, cue sheet, and mix
+  direction.
+- `../ai-image-advisor/SKILL.md` - still generation, edits, upscales, and
+  cutouts.
+- `../ai-video-advisor/SKILL.md` - model-native clip, avatar execution, video
+  edit, or upscale provider route.
+- `../remotion/SKILL.md` - React composition, stitching, captions, audio
+  placement, and local render proof.
+
+## Output
+
+- `content_ticket`: executable content-production ticket or ticket-scoped plan
+  artifact.
+- `advisor_action_list`: ordered actions with owner, input, output, acceptance
+  check, and blocker.
+- `production_program`: storyboard, asset, generation, audio, Remotion, review,
+  and QA route map.
+- `blocked_report`: missing idea, reference, proof, rights, production route,
+  owner, or proof gate.

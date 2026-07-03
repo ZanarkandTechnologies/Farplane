@@ -1,18 +1,18 @@
 ---
-title: Create Script Storyboard Skill
-owner: script-storyboard
+title: Create Storyboard Skill
+owner: storyboard
 status: complete
 kind: skill-audit
 created_at: 2026-07-03
 ---
 
-# Create Script Storyboard Skill
+# Create Storyboard Skill
 
 ## Change
 
-Created `script-storyboard` as a content-production planning skill. The skill
-turns a creative idea, ICP, proof, or offer into a ticket-shaped script and
-storyboard handoff before Remotion, video-generation, video-production, or
+Created `storyboard` as a content-production planning skill. The skill
+turns a creative idea, ICP, proof, or offer into script, beats, and storyboard
+handoff before Remotion, `ai-video-advisor`, video-production, or
 social-content execution.
 
 ## Why

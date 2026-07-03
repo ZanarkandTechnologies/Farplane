@@ -29,7 +29,7 @@ Use this as the ordered checklist whenever `remotion-render` is active.
 - [ ] For long renders or multiple compositions, use `--no-wait`, record task IDs in `jobs.md`, and poll with `belt task get <task-id>`.
 - [ ] Save the source TSX, input JSON, result JSON, logs or failure notes, final MP4, and notes inside the workspace.
 - [ ] If the rendered video is used in a frontend, hand off to [frontend-craft](../frontend-craft/SKILL.md) and [visual-qa](../visual-qa/SKILL.md) when layout or taste is affected.
-- [ ] Do not route model-native video requests through this skill; use [video-generation](../video-generation/SKILL.md) for those.
+- [ ] Do not route model-native video requests through this skill; use [ai-video-advisor](../ai-video-advisor/SKILL.md) for those.
 - [ ] Follow the native execution phase proof and writeback loop before claiming render, artifact, or final video quality.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
@@ -41,7 +41,7 @@ Trigger this skill when the user asks for Remotion, React video, TSX-to-video, c
 
 For authoring, debugging, or improving Remotion code, use `remotion` first. Use this skill when the task is specifically to render that code to MP4 through inference.sh.
 
-Do not use this skill for model-native text-to-video, image-to-video, avatar/lipsync, or video editing. Use `video-generation` for those.
+Do not use this skill for model-native text-to-video, image-to-video, avatar/lipsync, or video editing. Use `ai-video-advisor` for those.
 
 Copied upstream references are read-only usage docs. Do not run `npx skills add ...` commands from their Related Skills sections unless the user explicitly asks to install upstream skills.
 

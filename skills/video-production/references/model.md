@@ -74,5 +74,5 @@ ExecutionPacket :=
 ```
 
 `video-production` owns story, deliverable, and method decisions.
-`video-generation`, `remotion`, `remotion-render`, `image-generation`, and
+`ai-video-advisor`, `remotion`, `remotion-render`, `ai-image-advisor`, and
 `frontend-craft` own production routes when the packet needs them.

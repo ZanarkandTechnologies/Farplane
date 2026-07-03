@@ -75,5 +75,5 @@ ExecutionPacket :=
 + upload_boundary
 ```
 
-`product-photography` owns shot selection. `imagegen`, `image-generation`, and
+`product-photography` owns shot selection. `imagegen`, `ai-image-advisor`, and
 `frontend-craft` own production/integration routes when the packet needs them.

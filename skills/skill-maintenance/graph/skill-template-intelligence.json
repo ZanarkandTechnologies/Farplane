@@ -152,8 +152,8 @@
         "Reference Map",
         "Output"
       ],
-      "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.7-861383e90e08.md",
-      "source_commit": "861383e90e08",
+      "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.7-f2eceac0a4be.md",
+      "source_commit": "f2eceac0a4be",
       "summary": "working tree current template",
       "version": "0.3.7"
     }
@@ -635,7 +635,7 @@
         "trigger catalogs stay out of frontmatter"
       ],
       "missing_signals": [],
-      "source_commit": "861383e90e08",
+      "source_commit": "f2eceac0a4be",
       "template_version": "0.3.7",
       "title": "Routing clarity",
       "verdict": "pass"
@@ -649,7 +649,7 @@
         "policy prose is not treated as a top-level todo"
       ],
       "missing_signals": [],
-      "source_commit": "861383e90e08",
+      "source_commit": "f2eceac0a4be",
       "template_version": "0.3.7",
       "title": "Todo executability",
       "verdict": "pass"
@@ -663,7 +663,7 @@
         "same-scope recursion is forbidden"
       ],
       "missing_signals": [],
-      "source_commit": "861383e90e08",
+      "source_commit": "f2eceac0a4be",
       "template_version": "0.3.7",
       "title": "Phase boundary",
       "verdict": "pass"
@@ -677,7 +677,7 @@
         "output contract is explicit"
       ],
       "missing_signals": [],
-      "source_commit": "861383e90e08",
+      "source_commit": "f2eceac0a4be",
       "template_version": "0.3.7",
       "title": "Proof contract",
       "verdict": "pass"
@@ -691,7 +691,7 @@
         "qa_checklist.md is a repeatable runtime guardrail only when warranted"
       ],
       "missing_signals": [],
-      "source_commit": "861383e90e08",
+      "source_commit": "f2eceac0a4be",
       "template_version": "0.3.7",
       "title": "Eval / QA sync",
       "verdict": "pass"
@@ -861,8 +861,80 @@
       ]
     }
   ],
-  "generated_at": "2026-07-03T14:30:00+00:00",
+  "generated_at": "2026-07-03T15:40:17+00:00",
   "rollout": [
+    {
+      "eval": "",
+      "has_checklist": true,
+      "path": "skills/ai-image-advisor/SKILL.md",
+      "qa_checklist": "",
+      "skill_id": "ai-image-advisor",
+      "skill_ui": "",
+      "source": "local",
+      "status": "current",
+      "template_version": "0.3.7",
+      "tier": 3
+    },
+    {
+      "eval": "",
+      "has_checklist": true,
+      "path": "skills/ai-video-advisor/SKILL.md",
+      "qa_checklist": "",
+      "skill_id": "ai-video-advisor",
+      "skill_ui": "",
+      "source": "local",
+      "status": "current",
+      "template_version": "0.3.7",
+      "tier": 3
+    },
+    {
+      "eval": "eval_task.json",
+      "has_checklist": true,
+      "path": "skills/asset-advisor/SKILL.md",
+      "qa_checklist": "qa_checklist.md",
+      "skill_id": "asset-advisor",
+      "skill_ui": "",
+      "source": "local",
+      "status": "current",
+      "template_version": "0.3.7",
+      "tier": 3
+    },
+    {
+      "eval": "eval_task.json",
+      "has_checklist": true,
+      "path": "skills/audio-advisor/SKILL.md",
+      "qa_checklist": "qa_checklist.md",
+      "skill_id": "audio-advisor",
+      "skill_ui": "",
+      "source": "local",
+      "status": "current",
+      "template_version": "0.3.7",
+      "tier": 3
+    },
+    {
+      "eval": "eval_task.json",
+      "has_checklist": true,
+      "path": "skills/avatar-advisor/SKILL.md",
+      "qa_checklist": "qa_checklist.md",
+      "skill_id": "avatar-advisor",
+      "skill_ui": "",
+      "source": "local",
+      "status": "current",
+      "template_version": "0.3.7",
+      "tier": 3
+    },
+    {
+      "eval": "eval_task.json",
+      "has_checklist": true,
+      "path": "skills/content-impl-plan/SKILL.md",
+      "qa_checklist": "qa_checklist.md",
+      "skill_id": "content-impl-plan",
+      "skill_ui": "",
+      "source": "local",
+      "status": "current",
+      "template_version": "0.3.7",
+      "tier": 3
+    },
     {
       "eval": "",
       "has_checklist": true,
@@ -888,11 +960,23 @@
       "tier": 3
     },
     {
+      "eval": "",
+      "has_checklist": true,
+      "path": "skills/remotion/SKILL.md",
+      "qa_checklist": "",
+      "skill_id": "remotion",
+      "skill_ui": "",
+      "source": "local",
+      "status": "current",
+      "template_version": "0.3.7",
+      "tier": 3
+    },
+    {
       "eval": "eval_task.json",
       "has_checklist": true,
-      "path": "skills/script-storyboard/SKILL.md",
+      "path": "skills/storyboard/SKILL.md",
       "qa_checklist": "qa_checklist.md",
-      "skill_id": "script-storyboard",
+      "skill_id": "storyboard",
       "skill_ui": "",
       "source": "local",
       "status": "current",
@@ -1284,18 +1368,6 @@
       "tier": 3
     },
     {
-      "eval": "",
-      "has_checklist": true,
-      "path": "skills/image-generation/SKILL.md",
-      "qa_checklist": "",
-      "skill_id": "image-generation",
-      "skill_ui": "",
-      "source": "local",
-      "status": "missing",
-      "template_version": "missing",
-      "tier": 3
-    },
-    {
       "eval": "eval_task.json",
       "has_checklist": true,
       "path": "skills/init-advisor/SKILL.md",
@@ -1430,18 +1502,6 @@
     {
       "eval": "",
       "has_checklist": true,
-      "path": "skills/remotion/SKILL.md",
-      "qa_checklist": "",
-      "skill_id": "remotion",
-      "skill_ui": "",
-      "source": "local",
-      "status": "missing",
-      "template_version": "missing",
-      "tier": 3
-    },
-    {
-      "eval": "",
-      "has_checklist": true,
       "path": "skills/remotion-render/SKILL.md",
       "qa_checklist": "",
       "skill_id": "remotion-render",
@@ -1510,18 +1570,6 @@
       "status": "missing",
       "template_version": "missing",
       "tier": 2
-    },
-    {
-      "eval": "",
-      "has_checklist": true,
-      "path": "skills/video-generation/SKILL.md",
-      "qa_checklist": "",
-      "skill_id": "video-generation",
-      "skill_ui": "",
-      "source": "local",
-      "status": "missing",
-      "template_version": "missing",
-      "tier": 3
     },
     {
       "eval": "",
@@ -2091,12 +2139,12 @@
   "rollout_summary": {
     "by_source": {
       "external": 3,
-      "local": 99
+      "local": 103
     },
     "by_status": {
-      "current": 4,
+      "current": 11,
       "external": 3,
-      "missing": 53,
+      "missing": 50,
       "stale": 42
     },
     "by_template_version": {
@@ -2106,10 +2154,10 @@
       "0.3.2": 7,
       "0.3.5": 1,
       "0.3.6": 4,
-      "0.3.7": 4,
-      "missing": 56
+      "0.3.7": 11,
+      "missing": 53
     },
-    "total_skills": 102
+    "total_skills": 106
   },
   "schema_version": "1.0.0",
   "source": {
@@ -2168,6 +2216,32 @@
       "template_uses": {}
     },
     {
+      "consumer_id": "ai-image-advisor",
+      "consumer_scope": "skill",
+      "path": "skills/ai-image-advisor/SKILL.md",
+      "surfaces": {
+        "eval": false,
+        "qa_checklist": false,
+        "skill": true
+      },
+      "template_uses": {
+        "skill-template": "0.3.7"
+      }
+    },
+    {
+      "consumer_id": "ai-video-advisor",
+      "consumer_scope": "skill",
+      "path": "skills/ai-video-advisor/SKILL.md",
+      "surfaces": {
+        "eval": false,
+        "qa_checklist": false,
+        "skill": true
+      },
+      "template_uses": {
+        "skill-template": "0.3.7"
+      }
+    },
+    {
       "consumer_id": "apify",
       "consumer_scope": "skill",
       "path": "skills/apify/SKILL.md",
@@ -2177,6 +2251,38 @@
         "skill": false
       },
       "template_uses": {}
+    },
+    {
+      "consumer_id": "asset-advisor",
+      "consumer_scope": "skill",
+      "path": "skills/asset-advisor/SKILL.md",
+      "surfaces": {
+        "eval": true,
+        "qa_checklist": true,
+        "skill": true
+      },
+      "template_uses": {
+        "skill-eval-task": "0.1.0",
+        "skill-qa-checklist": "0.1.1",
+        "skill-surface-budget": "0.1.0",
+        "skill-template": "0.3.7"
+      }
+    },
+    {
+      "consumer_id": "audio-advisor",
+      "consumer_scope": "skill",
+      "path": "skills/audio-advisor/SKILL.md",
+      "surfaces": {
+        "eval": true,
+        "qa_checklist": true,
+        "skill": true
+      },
+      "template_uses": {
+        "skill-eval-task": "0.1.0",
+        "skill-qa-checklist": "0.1.1",
+        "skill-surface-budget": "0.1.0",
+        "skill-template": "0.3.7"
+      }
     },
     {
       "consumer_id": "automation-advisor",
@@ -2189,6 +2295,22 @@
       },
       "template_uses": {
         "skill-template": "0.2.0"
+      }
+    },
+    {
+      "consumer_id": "avatar-advisor",
+      "consumer_scope": "skill",
+      "path": "skills/avatar-advisor/SKILL.md",
+      "surfaces": {
+        "eval": true,
+        "qa_checklist": true,
+        "skill": true
+      },
+      "template_uses": {
+        "skill-eval-task": "0.1.0",
+        "skill-qa-checklist": "0.1.1",
+        "skill-surface-budget": "0.1.0",
+        "skill-template": "0.3.7"
       }
     },
     {
@@ -2307,6 +2429,22 @@
       "template_uses": {
         "skill-eval-task": "0.1.0",
         "skill-template": "0.3.5"
+      }
+    },
+    {
+      "consumer_id": "content-impl-plan",
+      "consumer_scope": "skill",
+      "path": "skills/content-impl-plan/SKILL.md",
+      "surfaces": {
+        "eval": true,
+        "qa_checklist": true,
+        "skill": true
+      },
+      "template_uses": {
+        "skill-eval-task": "0.1.0",
+        "skill-qa-checklist": "0.1.1",
+        "skill-surface-budget": "0.1.0",
+        "skill-template": "0.3.7"
       }
     },
     {
@@ -2652,17 +2790,6 @@
       "template_uses": {
         "skill-template": "0.3.0"
       }
-    },
-    {
-      "consumer_id": "image-generation",
-      "consumer_scope": "skill",
-      "path": "skills/image-generation/SKILL.md",
-      "surfaces": {
-        "eval": false,
-        "qa_checklist": false,
-        "skill": false
-      },
-      "template_uses": {}
     },
     {
       "consumer_id": "impl-plan",
@@ -3045,9 +3172,11 @@
       "surfaces": {
         "eval": false,
         "qa_checklist": false,
-        "skill": false
+        "skill": true
       },
-      "template_uses": {}
+      "template_uses": {
+        "skill-template": "0.3.7"
+      }
     },
     {
       "consumer_id": "remotion-render",
@@ -3096,22 +3225,6 @@
       },
       "template_uses": {
         "skill-template": "0.3.2"
-      }
-    },
-    {
-      "consumer_id": "script-storyboard",
-      "consumer_scope": "skill",
-      "path": "skills/script-storyboard/SKILL.md",
-      "surfaces": {
-        "eval": true,
-        "qa_checklist": true,
-        "skill": true
-      },
-      "template_uses": {
-        "skill-eval-task": "0.1.0",
-        "skill-qa-checklist": "0.1.1",
-        "skill-surface-budget": "0.1.0",
-        "skill-template": "0.3.7"
       }
     },
     {
@@ -3196,6 +3309,22 @@
       "template_uses": {}
     },
     {
+      "consumer_id": "storyboard",
+      "consumer_scope": "skill",
+      "path": "skills/storyboard/SKILL.md",
+      "surfaces": {
+        "eval": true,
+        "qa_checklist": true,
+        "skill": true
+      },
+      "template_uses": {
+        "skill-eval-task": "0.1.0",
+        "skill-qa-checklist": "0.1.1",
+        "skill-surface-budget": "0.1.0",
+        "skill-template": "0.3.7"
+      }
+    },
+    {
       "consumer_id": "summarize",
       "consumer_scope": "skill",
       "path": "skills/summarize/SKILL.md",
@@ -3270,17 +3399,6 @@
       "template_uses": {
         "skill-template": "0.2.0"
       }
-    },
-    {
-      "consumer_id": "video-generation",
-      "consumer_scope": "skill",
-      "path": "skills/video-generation/SKILL.md",
-      "surfaces": {
-        "eval": false,
-        "qa_checklist": false,
-        "skill": false
-      },
-      "template_uses": {}
     },
     {
       "consumer_id": "video-production",
@@ -3378,12 +3496,12 @@
     {
       "consumer_id": "Farplane",
       "consumer_scope": "project",
-      "current_version": "1.6.15",
+      "current_version": "1.6.16",
       "feature_refs": [
         "FEAT-0060"
       ],
       "path": "farplane/manifest.json",
-      "status": "current",
+      "status": "stale",
       "target_basis": "projects with a farplane/manifest.json surface",
       "template_id": "farplane-framework",
       "used_version": "1.6.15"
@@ -3391,7 +3509,7 @@
     {
       "consumer_id": "Farplane-UI",
       "consumer_scope": "project",
-      "current_version": "1.6.15",
+      "current_version": "1.6.16",
       "feature_refs": [
         "FEAT-0060"
       ],
@@ -3400,6 +3518,45 @@
       "target_basis": "projects with a farplane/manifest.json surface",
       "template_id": "farplane-framework",
       "used_version": "1.6.4"
+    },
+    {
+      "consumer_id": "asset-advisor",
+      "consumer_scope": "skill",
+      "current_version": "0.1.0",
+      "feature_refs": [
+        "FEAT-0054"
+      ],
+      "path": "skills/asset-advisor/SKILL.md",
+      "status": "current",
+      "target_basis": "skills with an eval_task.json surface",
+      "template_id": "skill-eval-task",
+      "used_version": "0.1.0"
+    },
+    {
+      "consumer_id": "audio-advisor",
+      "consumer_scope": "skill",
+      "current_version": "0.1.0",
+      "feature_refs": [
+        "FEAT-0054"
+      ],
+      "path": "skills/audio-advisor/SKILL.md",
+      "status": "current",
+      "target_basis": "skills with an eval_task.json surface",
+      "template_id": "skill-eval-task",
+      "used_version": "0.1.0"
+    },
+    {
+      "consumer_id": "avatar-advisor",
+      "consumer_scope": "skill",
+      "current_version": "0.1.0",
+      "feature_refs": [
+        "FEAT-0054"
+      ],
+      "path": "skills/avatar-advisor/SKILL.md",
+      "status": "current",
+      "target_basis": "skills with an eval_task.json surface",
+      "template_id": "skill-eval-task",
+      "used_version": "0.1.0"
     },
     {
       "consumer_id": "budget-advisor",
@@ -3422,6 +3579,19 @@
         "FEAT-0054"
       ],
       "path": "skills/consolidate/SKILL.md",
+      "status": "current",
+      "target_basis": "skills with an eval_task.json surface",
+      "template_id": "skill-eval-task",
+      "used_version": "0.1.0"
+    },
+    {
+      "consumer_id": "content-impl-plan",
+      "consumer_scope": "skill",
+      "current_version": "0.1.0",
+      "feature_refs": [
+        "FEAT-0054"
+      ],
+      "path": "skills/content-impl-plan/SKILL.md",
       "status": "current",
       "target_basis": "skills with an eval_task.json surface",
       "template_id": "skill-eval-task",
@@ -3610,19 +3780,6 @@
       "used_version": "0.1.0"
     },
     {
-      "consumer_id": "script-storyboard",
-      "consumer_scope": "skill",
-      "current_version": "0.1.0",
-      "feature_refs": [
-        "FEAT-0054"
-      ],
-      "path": "skills/script-storyboard/SKILL.md",
-      "status": "current",
-      "target_basis": "skills with an eval_task.json surface",
-      "template_id": "skill-eval-task",
-      "used_version": "0.1.0"
-    },
-    {
       "consumer_id": "self-improve",
       "consumer_scope": "skill",
       "current_version": "0.1.0",
@@ -3656,6 +3813,19 @@
         "FEAT-0054"
       ],
       "path": "skills/social-content/SKILL.md",
+      "status": "current",
+      "target_basis": "skills with an eval_task.json surface",
+      "template_id": "skill-eval-task",
+      "used_version": "0.1.0"
+    },
+    {
+      "consumer_id": "storyboard",
+      "consumer_scope": "skill",
+      "current_version": "0.1.0",
+      "feature_refs": [
+        "FEAT-0054"
+      ],
+      "path": "skills/storyboard/SKILL.md",
       "status": "current",
       "target_basis": "skills with an eval_task.json surface",
       "template_id": "skill-eval-task",
@@ -3831,14 +4001,70 @@
       "used_version": ""
     },
     {
-      "consumer_id": "script-storyboard",
+      "consumer_id": "asset-advisor",
       "consumer_scope": "skill",
       "current_version": "0.1.1",
       "feature_refs": [
         "FEAT-0057",
         "FEAT-0062"
       ],
-      "path": "skills/script-storyboard/SKILL.md",
+      "path": "skills/asset-advisor/SKILL.md",
+      "status": "current",
+      "target_basis": "skills with a qa_checklist.md surface",
+      "template_id": "skill-qa-checklist",
+      "used_version": "0.1.1"
+    },
+    {
+      "consumer_id": "audio-advisor",
+      "consumer_scope": "skill",
+      "current_version": "0.1.1",
+      "feature_refs": [
+        "FEAT-0057",
+        "FEAT-0062"
+      ],
+      "path": "skills/audio-advisor/SKILL.md",
+      "status": "current",
+      "target_basis": "skills with a qa_checklist.md surface",
+      "template_id": "skill-qa-checklist",
+      "used_version": "0.1.1"
+    },
+    {
+      "consumer_id": "avatar-advisor",
+      "consumer_scope": "skill",
+      "current_version": "0.1.1",
+      "feature_refs": [
+        "FEAT-0057",
+        "FEAT-0062"
+      ],
+      "path": "skills/avatar-advisor/SKILL.md",
+      "status": "current",
+      "target_basis": "skills with a qa_checklist.md surface",
+      "template_id": "skill-qa-checklist",
+      "used_version": "0.1.1"
+    },
+    {
+      "consumer_id": "content-impl-plan",
+      "consumer_scope": "skill",
+      "current_version": "0.1.1",
+      "feature_refs": [
+        "FEAT-0057",
+        "FEAT-0062"
+      ],
+      "path": "skills/content-impl-plan/SKILL.md",
+      "status": "current",
+      "target_basis": "skills with a qa_checklist.md surface",
+      "template_id": "skill-qa-checklist",
+      "used_version": "0.1.1"
+    },
+    {
+      "consumer_id": "storyboard",
+      "consumer_scope": "skill",
+      "current_version": "0.1.1",
+      "feature_refs": [
+        "FEAT-0057",
+        "FEAT-0062"
+      ],
+      "path": "skills/storyboard/SKILL.md",
       "status": "current",
       "target_basis": "skills with a qa_checklist.md surface",
       "template_id": "skill-qa-checklist",
@@ -4167,6 +4393,102 @@
       "used_version": "0.1.0"
     },
     {
+      "consumer_id": "ai-image-advisor",
+      "consumer_scope": "skill",
+      "current_version": "0.3.7",
+      "feature_refs": [
+        "FEAT-0022",
+        "FEAT-0054",
+        "FEAT-0057",
+        "FEAT-0062"
+      ],
+      "path": "skills/ai-image-advisor/SKILL.md",
+      "status": "current",
+      "target_basis": "local skills that declare skill-template usage",
+      "template_id": "skill-template",
+      "used_version": "0.3.7"
+    },
+    {
+      "consumer_id": "ai-video-advisor",
+      "consumer_scope": "skill",
+      "current_version": "0.3.7",
+      "feature_refs": [
+        "FEAT-0022",
+        "FEAT-0054",
+        "FEAT-0057",
+        "FEAT-0062"
+      ],
+      "path": "skills/ai-video-advisor/SKILL.md",
+      "status": "current",
+      "target_basis": "local skills that declare skill-template usage",
+      "template_id": "skill-template",
+      "used_version": "0.3.7"
+    },
+    {
+      "consumer_id": "asset-advisor",
+      "consumer_scope": "skill",
+      "current_version": "0.3.7",
+      "feature_refs": [
+        "FEAT-0022",
+        "FEAT-0054",
+        "FEAT-0057",
+        "FEAT-0062"
+      ],
+      "path": "skills/asset-advisor/SKILL.md",
+      "status": "current",
+      "target_basis": "local skills that declare skill-template usage",
+      "template_id": "skill-template",
+      "used_version": "0.3.7"
+    },
+    {
+      "consumer_id": "audio-advisor",
+      "consumer_scope": "skill",
+      "current_version": "0.3.7",
+      "feature_refs": [
+        "FEAT-0022",
+        "FEAT-0054",
+        "FEAT-0057",
+        "FEAT-0062"
+      ],
+      "path": "skills/audio-advisor/SKILL.md",
+      "status": "current",
+      "target_basis": "local skills that declare skill-template usage",
+      "template_id": "skill-template",
+      "used_version": "0.3.7"
+    },
+    {
+      "consumer_id": "avatar-advisor",
+      "consumer_scope": "skill",
+      "current_version": "0.3.7",
+      "feature_refs": [
+        "FEAT-0022",
+        "FEAT-0054",
+        "FEAT-0057",
+        "FEAT-0062"
+      ],
+      "path": "skills/avatar-advisor/SKILL.md",
+      "status": "current",
+      "target_basis": "local skills that declare skill-template usage",
+      "template_id": "skill-template",
+      "used_version": "0.3.7"
+    },
+    {
+      "consumer_id": "content-impl-plan",
+      "consumer_scope": "skill",
+      "current_version": "0.3.7",
+      "feature_refs": [
+        "FEAT-0022",
+        "FEAT-0054",
+        "FEAT-0057",
+        "FEAT-0062"
+      ],
+      "path": "skills/content-impl-plan/SKILL.md",
+      "status": "current",
+      "target_basis": "local skills that declare skill-template usage",
+      "template_id": "skill-template",
+      "used_version": "0.3.7"
+    },
+    {
       "consumer_id": "instagram-account",
       "consumer_scope": "skill",
       "current_version": "0.3.7",
@@ -4199,7 +4521,7 @@
       "used_version": "0.3.7"
     },
     {
-      "consumer_id": "script-storyboard",
+      "consumer_id": "remotion",
       "consumer_scope": "skill",
       "current_version": "0.3.7",
       "feature_refs": [
@@ -4208,7 +4530,23 @@
         "FEAT-0057",
         "FEAT-0062"
       ],
-      "path": "skills/script-storyboard/SKILL.md",
+      "path": "skills/remotion/SKILL.md",
+      "status": "current",
+      "target_basis": "local skills that declare skill-template usage",
+      "template_id": "skill-template",
+      "used_version": "0.3.7"
+    },
+    {
+      "consumer_id": "storyboard",
+      "consumer_scope": "skill",
+      "current_version": "0.3.7",
+      "feature_refs": [
+        "FEAT-0022",
+        "FEAT-0054",
+        "FEAT-0057",
+        "FEAT-0062"
+      ],
+      "path": "skills/storyboard/SKILL.md",
       "status": "current",
       "target_basis": "local skills that declare skill-template usage",
       "template_id": "skill-template",
@@ -4909,10 +5247,9 @@
         "project": 2
       },
       "by_status": {
-        "current": 1,
-        "stale": 1
+        "stale": 2
       },
-      "current_version": "1.6.15",
+      "current_version": "1.6.16",
       "feature_refs": [
         "FEAT-0060"
       ],
@@ -4921,10 +5258,10 @@
     },
     "skill-eval-task": {
       "by_scope": {
-        "skill": 33
+        "skill": 37
       },
       "by_status": {
-        "current": 21,
+        "current": 25,
         "missing": 12
       },
       "current_version": "0.1.0",
@@ -4932,14 +5269,14 @@
         "FEAT-0054"
       ],
       "target_basis": "skills with an eval_task.json surface",
-      "total_consumers": 33
+      "total_consumers": 37
     },
     "skill-qa-checklist": {
       "by_scope": {
-        "skill": 24
+        "skill": 28
       },
       "by_status": {
-        "current": 1,
+        "current": 5,
         "missing": 6,
         "stale": 17
       },
@@ -4949,14 +5286,14 @@
         "FEAT-0062"
       ],
       "target_basis": "skills with a qa_checklist.md surface",
-      "total_consumers": 24
+      "total_consumers": 28
     },
     "skill-template": {
       "by_scope": {
-        "skill": 46
+        "skill": 53
       },
       "by_status": {
-        "current": 4,
+        "current": 11,
         "stale": 42
       },
       "current_version": "0.3.7",
@@ -4967,7 +5304,7 @@
         "FEAT-0062"
       ],
       "target_basis": "local skills that declare skill-template usage",
-      "total_consumers": 46
+      "total_consumers": 53
     }
   },
   "template_versions": [
@@ -5202,7 +5539,7 @@
     {
       "introduced_at": "2026-06-29",
       "latest_at": "2026-07-03",
-      "latest_commit": "861383e90e08",
+      "latest_commit": "f2eceac0a4be",
       "latest_summary": "working tree current template",
       "release_count": 2,
       "sections": [
@@ -5216,7 +5553,7 @@
         "Reference Map",
         "Output"
       ],
-      "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.7-861383e90e08.md",
+      "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.7-f2eceac0a4be.md",
       "snapshots": [
         {
           "introduced_at": "2026-06-29",
@@ -5226,8 +5563,8 @@
         },
         {
           "introduced_at": "2026-07-03",
-          "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.7-861383e90e08.md",
-          "source_commit": "861383e90e08",
+          "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.7-f2eceac0a4be.md",
+          "source_commit": "f2eceac0a4be",
           "summary": "working tree current template"
         }
       ],

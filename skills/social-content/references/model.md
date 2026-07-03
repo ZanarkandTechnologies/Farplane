@@ -68,6 +68,6 @@ ExecutionPacket :=
 + qa_assertions
 ```
 
-`social-content` owns the artifact decision. `image-generation`,
-`video-generation`, `remotion`, `remotion-render`, and `frontend-craft` own
+`social-content` owns the artifact decision. `ai-image-advisor`,
+`ai-video-advisor`, `remotion`, `remotion-render`, and `frontend-craft` own
 production routes when the packet needs them.

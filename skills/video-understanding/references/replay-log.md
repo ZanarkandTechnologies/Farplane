@@ -30,7 +30,7 @@ playing, or natively understanding a video.
   verify against frames
 - `primary_owner`: `frontend-craft`
 - `method`: `frontend-craft:composed-scroll-animation`
-- `supporting_skills`: `imagegen`, `image-generation`, `visual-qa`,
+- `supporting_skills`: `imagegen`, `ai-image-advisor`, `visual-qa`,
   `landing-page`, `web-design-guidelines`
 - `confidence_limit`: spoken narration remains unverified until a transcript is
   attached

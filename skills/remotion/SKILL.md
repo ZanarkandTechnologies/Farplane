@@ -1,11 +1,13 @@
 ---
 name: remotion
-description: "Turn deterministic video requirements into Remotion/React compositions with timing, media, captions, audio, transitions, and render checks."
+description: "Turn storyboarded assets into Remotion/React compositions, stitched timelines, captions, audio placement, and local render proof."
 tier: 3
 group: content-video
 source: local
+template_uses:
+  skill-template: "0.3.7"
 common_chains:
-  after: ["remotion-render"]
+  after: ["review", "qa"]
 metadata:
   tags: remotion, video, react, animation, composition
 ---
@@ -19,31 +21,45 @@ metadata:
 
 Use this as the ordered checklist whenever `remotion` is active.
 
-- [ ] Classify the Remotion job: composition authoring, timing, sequencing, captions, audio, motion graphics, data visualization, UI animation, HTML-in-canvas, or render-readiness check.
+- [ ] Classify the Remotion job: composition authoring, final asset stitching, timing, sequencing, captions, audio placement, motion graphics, data visualization, UI animation, HTML-in-canvas, local render proof, or render-readiness check.
 - [ ] State the composition name, dimensions, fps, duration, assets, props, output intent, and handoff path before authoring code.
 - [ ] Use [research:official-docs](../research/SKILL.md#researchofficial-docs) or [research:code-patterns](../research/SKILL.md#researchcode-patterns) when Remotion API behavior, official docs, local code patterns, or source assets shape the implementation.
 - [ ] Use the native planning phase when choosing authoring route, animation structure, asset route, render route, or scope cut.
 - [ ] Load the relevant Remotion rule file from `rules/` before implementing specialized behavior such as captions, audio, sequencing, timing, transitions, images, videos, fonts, HTML-in-canvas, measurement, or 3D.
 - [ ] Use frame math with `useCurrentFrame()`, `interpolate()`, `Sequence`, and Remotion APIs; do not use CSS transitions, CSS animations, or Tailwind animation utilities for frame-accurate motion.
-- [ ] Route still assets through `imagegen` or [image-generation](../image-generation/SKILL.md).
-- [ ] Route model-native footage or avatar clips through [video-generation](../video-generation/SKILL.md).
-- [ ] Route MP4 rendering through [remotion-render](../remotion-render/SKILL.md) only when a rendered output is requested and external compute is acceptable.
+- [ ] Route parent production planning through [content-impl-plan](../content-impl-plan/SKILL.md) when the storyboard, assets, advisor actions, or QA gates are not yet compiled.
+- [ ] Route asset inventory and recreation planning through [asset-advisor](../asset-advisor/SKILL.md).
+- [ ] Route still assets through `imagegen` or [ai-image-advisor](../ai-image-advisor/SKILL.md).
+- [ ] Route model-native footage through [ai-video-advisor](../ai-video-advisor/SKILL.md), persistent avatar clips through [avatar-advisor](../avatar-advisor/SKILL.md), and audio direction through [audio-advisor](../audio-advisor/SKILL.md).
+- [ ] Render locally with Remotion project commands when a final MP4/still proof is requested and the local project can render.
+- [ ] Route MP4 rendering through [remotion-render](../remotion-render/SKILL.md) only for an explicit external inference.sh render path when local rendering is not the chosen route and external compute is acceptable.
 - [ ] Keep source code, props, local assets, notes, and any render inputs inside the workspace.
 - [ ] Confirm external compute, spend, uploads, or API usage is explicitly acceptable before running render jobs outside local project commands.
 - [ ] If the video is embedded in a frontend, route integration and visual proof through [frontend-craft](../frontend-craft/SKILL.md) and [visual-qa](../visual-qa/SKILL.md) when layout or taste is affected.
 - [ ] Follow the native execution phase proof and writeback loop before claiming animation, composition, render-readiness, or final video quality.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
-Author deterministic video with Remotion and React. This skill contains the official Remotion best-practices skill plus Farplane routing notes.
+Author deterministic video with Remotion and React. This skill owns writing the
+React composition that stitches final assets, captions, overlays, audio, and
+timed scenes into a locally provable video output. It contains the official
+Remotion best-practices skill plus Farplane routing notes.
 
 The imported upstream source and refresh note live in `references/upstream-source.md`.
 
 ## Farplane Routing
 
-- Use this skill for Remotion code authoring, timing, composition structure, media handling, captions, audio, transitions, and render sanity checks.
-- Use `imagegen` or `image-generation` for still assets that will be placed in Remotion `public/`.
-- Use `video-generation` for model-native footage or avatar clips that Remotion will assemble.
-- Use `remotion-render` only when the Remotion code should be rendered to MP4 through inference.sh `belt`.
+- Use this skill for Remotion code authoring, final asset stitching, timing, composition structure, media handling, captions, audio placement, transitions, and local render sanity checks.
+- Use `content-impl-plan` before this skill when the parent content ticket,
+  advisor action list, or proof path is not ready.
+- Use `asset-advisor` when the storyboard/reference still needs an asset
+  inventory, recreation plan, or owner route map.
+- Use `imagegen` or `ai-image-advisor` for still assets that will be placed in Remotion `public/`.
+- Use `ai-video-advisor` for model-native footage, `avatar-advisor` for
+  persistent avatar direction, and `audio-advisor` for voice/music/SFX cue
+  planning before Remotion assembles them.
+- Use local Remotion render commands for final proof when available. Use
+  `remotion-render` only when the Remotion code should be rendered to MP4
+  through inference.sh `belt`.
 - Do not use CSS transitions, CSS animations, or Tailwind animation utilities for frame-accurate motion; animate with Remotion frame math.
 
 ## Reference Routing

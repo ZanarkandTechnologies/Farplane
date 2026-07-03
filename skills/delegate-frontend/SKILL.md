@@ -84,8 +84,8 @@ pi \
   --skill .farplane/external-cli/profiles/frontend-pi-kimi/skills/best-of-worlds \
   --skill .farplane/external-cli/profiles/frontend-pi-kimi/skills/brainstorm \
   --skill .farplane/external-cli/profiles/frontend-pi-kimi/skills/frontend-design \
-  --skill .farplane/external-cli/profiles/frontend-pi-kimi/skills/image-generation \
-  --skill .farplane/external-cli/profiles/frontend-pi-kimi/skills/video-generation \
+  --skill .farplane/external-cli/profiles/frontend-pi-kimi/skills/ai-image-advisor \
+  --skill .farplane/external-cli/profiles/frontend-pi-kimi/skills/ai-video-advisor \
   --skill .farplane/external-cli/profiles/frontend-pi-kimi/skills/product-photography \
   --skill .farplane/external-cli/profiles/frontend-pi-kimi/skills/agent-browser \
   --skill .farplane/external-cli/profiles/frontend-pi-kimi/skills/visual-qa \
@@ -135,10 +135,10 @@ Add other mounted skills only when the phase needs them.
   GSAP, WebGL, Three.js, or HTML beat panels. The handoff must include debug
   evidence for media time, active beat, and effect-layer state.
 - When the phase requests generated video, the delegated run must actually use
-  the mounted `video-generation` skill and a video app/model. `Seedream` or
-  other image-generation output plus local `ffmpeg` assembly is a frame
+  the mounted `ai-video-advisor` skill and a video app/model. `Seedream` or
+  other ai-image-advisor output plus local `ffmpeg` assembly is a frame
   sequence, not generated video. The handoff and manifest must record
-  `skillsActuallyUsed` including `video-generation` plus `videoModel`,
+  `skillsActuallyUsed` including `ai-video-advisor` plus `videoModel`,
   `videoProvider`, `sourceVideo`, or equivalent video provenance; otherwise
   Farplane must reject the handoff or downgrade the result to prototype.
 - Require the handoff to list changed files, skills loaded, skills actually
@@ -224,7 +224,7 @@ Codex lane.
 - `cinematic landing build` -> require a `SPEC.md` or landing brief, then split
   the external run by phase and file ownership.
 - `asset-heavy frontend` -> rely on the mounted inference.sh skills
-  `image-generation`, `video-generation`, `remotion`, and `remotion-render`;
+  `ai-image-advisor`, `ai-video-advisor`, `remotion`, and `remotion-render`;
   do not require Codex-native `imagegen` in the external Pi profile.
 - `Terminal/Terminus-level final build` -> require generated/rendered media or
   frame/video assets in `assets/asset-manifest.json`; treat `code-native-canvas`

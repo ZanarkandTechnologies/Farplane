@@ -1,4 +1,4 @@
-# Video Generation
+# AI Video Advisor
 
 Category-level skill for generating, editing, assembling, and QA-ing project-bound video assets.
 
@@ -41,7 +41,7 @@ Remotion code authoring lives in `skills/remotion/`. Inference.sh MP4 rendering 
 
 ```bash
 belt app get pruna/p-video-avatar
-belt app sample pruna/p-video-avatar --save output/video-generation/avatar/input.json
+belt app sample pruna/p-video-avatar --save output/ai-video-advisor/avatar/input.json
 ```
 
 Then edit `input.json`, run with `belt app run ... --save result.json` only when external compute/spend is acceptable, and copy the final video into the project asset path.
@@ -49,7 +49,7 @@ Then edit `input.json`, run with `belt app run ... --save result.json` only when
 ## How To Test
 
 ```bash
-python3 skills/skill-creator/scripts/quick_validate.py skills/video-generation
+python3 skills/skill-creator/scripts/quick_validate.py skills/ai-video-advisor
 belt --help
 belt app list --category video
 ```

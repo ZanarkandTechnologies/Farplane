@@ -31,7 +31,7 @@ to the finished packet or asset. Record each item as `pass`, `violation`,
 - [ ] `annotation_quality`: Callouts explain behavior, state, evidence, or
   decision points rather than generic praise.
 - [ ] `production_path`: The packet names the next owner/tool: deterministic
-  render, imagegen, image-generation, frontend-craft, social-content, or
+  render, imagegen, ai-image-advisor, frontend-craft, social-content, or
   visual-qa.
 - [ ] `artifact_locality`: Generated images, prompts, source refs, and notes
   are saved inside the workspace when production happens.

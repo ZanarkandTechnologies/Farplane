@@ -71,8 +71,8 @@ class DelegateCliAgentTests(unittest.TestCase):
             self.assertEqual(profile.adapter, "pi")
             self.assertEqual(profile.model, "openrouter/moonshotai/kimi-k2.6")
             self.assertIn("frontend-craft", profile.skill_names)
-            self.assertIn("image-generation", profile.skill_names)
-            self.assertIn("video-generation", profile.skill_names)
+            self.assertIn("ai-image-advisor", profile.skill_names)
+            self.assertIn("ai-video-advisor", profile.skill_names)
             self.assertIn("agent-browser", profile.skill_names)
             self.assertIn("visual-qa", profile.skill_names)
             self.assertIn("review", profile.skill_names)
@@ -86,12 +86,12 @@ class DelegateCliAgentTests(unittest.TestCase):
             write_profile_templates(root)
             write_skill_bundle_manifest(
                 root,
-                ["frontend-craft", "image-generation", "video-generation"],
+                ["frontend-craft", "ai-image-advisor", "ai-video-advisor"],
             )
             profile = delegate_cli_agent.load_profile("frontend-pi-kimi", root)
             self.assertEqual(
                 profile.skill_names,
-                ("frontend-craft", "image-generation", "video-generation"),
+                ("frontend-craft", "ai-image-advisor", "ai-video-advisor"),
             )
 
     def test_read_prompt_arg_supports_prompt_file(self) -> None:
@@ -485,13 +485,13 @@ class DelegateCliAgentTests(unittest.TestCase):
             write_profile_templates(root)
             write_skill_bundle_manifest(
                 root,
-                ["frontend-craft", "image-generation", "video-generation"],
+                ["frontend-craft", "ai-image-advisor", "ai-video-advisor"],
             )
             write_skill_sources(root)
             profile = delegate_cli_agent.load_profile("frontend-pi-kimi", root)
             copied = delegate_cli_agent.copy_skill_bundle(profile, root)
             copied_names = {Path(path).name for path in copied}
-            self.assertEqual(copied_names, {"frontend-craft", "image-generation", "video-generation"})
+            self.assertEqual(copied_names, {"frontend-craft", "ai-image-advisor", "ai-video-advisor"})
             self.assertFalse((root / ".farplane" / "external-cli" / "profiles" / "frontend-pi-kimi" / "skills" / "imagegen").exists())
 
     def test_profile_copy_waits_for_existing_profile_lock(self) -> None:

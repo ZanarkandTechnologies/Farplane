@@ -31,7 +31,7 @@ Constraints.qa = debug phase + screenshot comparison
 ```text
 ChosenMethod = frontend-craft:composed-scroll-animation
 OwnerSkill = frontend-craft
-SupportingSkills = imagegen + image-generation + visual-qa
+SupportingSkills = imagegen + ai-image-advisor + visual-qa
 ```
 
 ## Negative Control

@@ -44,7 +44,7 @@ state:
 
 routes:
   research:user-grounding | functional-ui | visual-design | best-of-worlds |
-  frontend-design | landing-page | image-generation | video-generation |
+  frontend-design | landing-page | ai-image-advisor | ai-video-advisor |
   remotion | remotion-render | web-design-guidelines | visual-qa |
   agent-browser
 
@@ -103,8 +103,8 @@ work. It does not own every niche frontend rule:
   it, and isolate interactive or motion-heavy behavior in client leaf
   components.
 - [ ] 10. Route special assets through the owning Tier 3 media skill:
-  [image-generation](../image-generation/SKILL.md),
-  [video-generation](../video-generation/SKILL.md),
+  [ai-image-advisor](../ai-image-advisor/SKILL.md),
+  [ai-video-advisor](../ai-video-advisor/SKILL.md),
   [remotion](../remotion/SKILL.md), or
   [remotion-render](../remotion-render/SKILL.md). Capability-gate external
   model CLIs and prefer built-in `imagegen` first for ordinary still assets.
@@ -149,8 +149,8 @@ work. It does not own every niche frontend rule:
 | Complex scroll animation | `landing-page` if narrative; otherwise `motion-routing.md`; use official GreenSock skills or docs for GSAP truth |
 | Layered generated-media scroll/timed scene | `composed-scroll-animation.md` when the section needs 6-12 layers, generated/cutout assets, HTML overlays, named phases, debug hooks, and source-frame/checkpoint proof |
 | Generated hero/image/texture/reference asset | `asset-generation.md` and `imagegen` |
-| Inference.sh image model, background removal, upscaling, or model comparison | `asset-generation.md` and `image-generation` |
-| Generated video, image-to-video, avatar/lipsync, foley, or video edit | `asset-generation.md` and `video-generation` |
+| Inference.sh image model, background removal, upscaling, or model comparison | `asset-generation.md` and `ai-image-advisor` |
+| Generated video, image-to-video, avatar/lipsync, foley, or video edit | `asset-generation.md` and `ai-video-advisor` |
 | Deterministic React/Remotion animation or video component | `asset-generation.md`, `remotion` for code, and `remotion-render` for inference.sh MP4 render |
 | Three.js, React Three Fiber, WebGL, shader, or 3D scene | `three-js.md`, progressive enhancement, and explicit fallback |
 | Canvas/WebGPU/futuristic rendering outside Three.js | `experimental-rendering.md`, progressive enhancement, explicit fallback, and browser-support proof |
@@ -164,7 +164,7 @@ work. It does not own every niche frontend rule:
   still feels generic, overbuilt, cinematic in the wrong surface, or visually
   padded after the main routing steps are chosen.
 - `references/motion-routing.md` - CSS, Motion, GSAP, View Transitions, WebGL/WebGPU.
-- `references/asset-generation.md` - native `imagegen`, `image-generation`, `video-generation`, `remotion`, `remotion-render`, project-bound assets, external-tool gates.
+- `references/asset-generation.md` - native `imagegen`, `ai-image-advisor`, `ai-video-advisor`, `remotion`, `remotion-render`, project-bound assets, external-tool gates.
 - `references/media-pipelines.md` - multi-asset website/campaign workflows spanning image, model-native video, Remotion, and frontend QA.
 - `references/composed-scroll-animation.md` - method contract for layered
   generated-media scenes with scroll or timed transitions.

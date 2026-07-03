@@ -47,4 +47,4 @@
   view even if progress, labels, media time, or frame sources continue to
   advance. See `MEM-0083`.
 - Keep generated-video evidence strict enough to reject Seedream/image stills
-  assembled with local `ffmpeg` as video-generation proof. See `MEM-0084`.
+  assembled with local `ffmpeg` as ai-video-advisor proof. See `MEM-0084`.

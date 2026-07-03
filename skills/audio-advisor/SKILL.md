@@ -1,0 +1,144 @@
+---
+name: audio-advisor
+description: "Turn voiceover, music, SFX, Foley, dubbing, or mix needs into an audio direction packet and production route."
+tier: 3
+group: content-audio
+source: local
+template_uses:
+  skill-template: "0.3.7"
+  skill-qa-checklist: "0.1.1"
+  skill-eval-task: "0.1.0"
+  skill-surface-budget: "0.1.0"
+eval: eval_task.json
+qa_checklist: qa_checklist.md
+common_chains:
+  after: ["storyboard", "asset-advisor", "avatar-advisor", "ai-video-advisor", "remotion"]
+allowed-tools: Read, Grep, Glob, Bash
+---
+
+# Audio Advisor
+
+## Context
+
+Use this skill when a content artifact needs voiceover, music, sound effects,
+Foley, dubbing, lipsync audio, sound design, mix notes, or timing cues. It is
+the audio counterpart to asset planning: the output is a production-ready audio
+direction packet, not necessarily generated audio.
+
+This skill owns voice/music/SFX direction, timing, source/generation routes,
+mix notes, rights notes, and Remotion handoff cues. It does not render video,
+publish audio, or run external generation unless explicitly requested.
+
+## Skill Signature
+
+```text
+audio_advisor(script_or_storyboard, voice?, music?, sfx?, platform?, duration?, artifact_owner?)
+  -> audio_direction_packet + production_routes | blocked_report
+
+state:
+  reads(user brief, script/storyboard, source audio refs, qa_checklist.md)
+  writes(audio direction artifact when durable handoff is requested)
+
+gates:
+  audio_roles_named; rights_or_usage_risk_noted; timing_cues_aligned;
+  voice_music_sfx_mix_separated; remotion_handoff_ready
+
+routes:
+  storyboard | asset-advisor | avatar-advisor | ai-video-advisor |
+  remotion | media-ingest | review
+
+fails:
+  vibes_only_audio; copyrighted_track_without_plan; voice_without_consent_note;
+  sfx_without_timing; mix_notes_missing_for_final_stitch
+```
+
+## Phase Boundary
+
+Use `avatar-advisor` when voice or lipsync belongs to a persistent presenter or
+identity. Use `ai-video-advisor` only for provider/app details when model-native
+video tools also create or transform audio. Use `remotion` for deterministic
+audio placement, captions, ducking, waveform visuals, and local render proof.
+
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
+## Todo List
+
+- [ ] 1. Bind the audio job.
+  - [ ] Identify script/storyboard, platform, duration, voice needs, music
+    needs, SFX/Foley needs, rights constraints, and artifact owner.
+  - [ ] Read `qa_checklist.md` as preflight guardrails.
+- [ ] 2. Split audio roles.
+  - [ ] Separate voiceover, dialogue, lipsync, music bed, transition hits,
+    Foley, ambient sound, UI sounds, silence, and mix/ducking needs.
+- [ ] 3. Map timing and intent.
+  - [ ] Align each audio cue to scene, beat, timestamp/frame range, emotional
+    job, and acceptance check.
+- [ ] 4. Choose routes.
+  - [ ] Route persistent presenter or lipsync identity work to
+    `avatar-advisor`.
+  - [ ] Route model-native audio/video generation details to
+    `ai-video-advisor` when a provider owns the audio behavior.
+  - [ ] Route asset inventory gaps to `asset-advisor`.
+  - [ ] Route final placement, ducking, captions, waveform visuals, and local
+    render proof to `remotion`.
+- [ ] 5. Output the audio direction packet.
+  - [ ] Include cue sheet, voice/music/SFX briefs, rights notes, source files or
+    missing blockers, mix notes, and next production owner.
+  - [ ] Apply `qa_checklist.md` again before calling the packet ready.
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
+
+## Output Template
+
+```text
+## Audio Direction
+- Voice:
+- Music:
+- SFX / Foley:
+- Rights / usage:
+- Mix notes:
+
+## Cue Sheet
+| Time / Frames | Scene | Audio Cue | Purpose | Source / Route | Acceptance Check |
+| --- | --- | --- | --- | --- | --- |
+
+## Routes
+- Voice / lipsync:
+- Music:
+- SFX / Foley:
+- Remotion:
+
+## Done / Proof
+- ready_when:
+- evidence:
+- residual_risk:
+```
+
+## Gotchas
+
+- Do not specify only "upbeat music" or "punchy SFX." Tie audio to beats,
+  emotion, duration, and proof checks.
+- Do not assume copyrighted tracks, cloned voices, or real-person voices are
+  usable without an explicit rights/consent plan.
+- Do not let audio planning disappear inside video generation. Remotion needs
+  timing cues and mix notes to stitch the final piece.
+
+## Reference Map
+
+- `qa_checklist.md` - read at start and finish for audio-direction QA.
+- `../storyboard/SKILL.md` - route narrative and scene planning before audio
+  cue design when the script is not ready.
+- `../asset-advisor/SKILL.md` - route source/missing asset inventory.
+- `../avatar-advisor/SKILL.md` - route persistent voice, presenter, or lipsync
+  direction.
+- `../ai-video-advisor/SKILL.md` - route provider-specific model-native
+  audio/video generation details.
+- `../remotion/SKILL.md` - route deterministic placement, ducking, captions,
+  waveforms, and local render proof.
+
+## Output
+
+- `audio_direction_packet`: cue sheet, voice/music/SFX briefs, rights notes,
+  mix notes, and acceptance checks.
+- `production_routes`: next owner for voice, music, SFX/Foley, avatar/lipsync,
+  provider execution, and Remotion placement.
+- `blocked_report`: missing script, unresolved rights/voice permission,
+  missing timing, unavailable source audio, or unclear final composition route.

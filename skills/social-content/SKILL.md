@@ -52,8 +52,9 @@ gates:
   external_spend_or_posting_approved
 
 routes:
-  imagegen | image-generation | video-generation | remotion |
-  remotion-render | frontend-craft | research | advise | review
+  content-impl-plan | storyboard | asset-advisor | imagegen |
+  ai-image-advisor | ai-video-advisor | remotion | frontend-craft |
+  research | advise | review
 
 fails:
   vague_premise_as_thread_plan
@@ -99,10 +100,15 @@ campaign expectations materially affect the output.
   [examples](references/examples.md) or a user-provided swipe/reference before
   finalizing the first variant.
 - [ ] 5. Route production work.
+  - [ ] Route idea plus Tasty Pack/reference video production planning through
+  [content-impl-plan](../content-impl-plan/SKILL.md).
+  - [ ] Route script, beats, and scene maps through
+  [storyboard](../storyboard/SKILL.md); route asset decomposition through
+  [asset-advisor](../asset-advisor/SKILL.md).
   - [ ] Route still visuals through `imagegen` or
-  [image-generation](../image-generation/SKILL.md); route video through
-  [video-generation](../video-generation/SKILL.md), [remotion](../remotion/SKILL.md),
-  or [remotion-render](../remotion-render/SKILL.md); route precise HTML assets
+  [ai-image-advisor](../ai-image-advisor/SKILL.md); route video through
+  [ai-video-advisor](../ai-video-advisor/SKILL.md) or
+  [remotion](../remotion/SKILL.md); route precise HTML assets
   or campaign pages through [frontend-craft](../frontend-craft/SKILL.md).
   - [ ] Save drafts, outlines, slide copy, prompts, inputs, result JSON,
   generated files, final asset paths, and notes inside the workspace when

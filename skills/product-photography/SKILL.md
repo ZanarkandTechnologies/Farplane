@@ -41,11 +41,11 @@ Use this checklist whenever `product-photography` is active.
 - [ ] Use the native planning phase when shot set, background/style, realism
   tradeoff, model family, output route, or marketplace scope needs a real
   decision.
-- [ ] Load the shared [image/social production workflow](../image-generation/references/domain-production.md).
+- [ ] Load the shared [image/social production workflow](../ai-image-advisor/references/domain-production.md).
 - [ ] Load upstream product or AI product photography references only when
   shot conventions, marketplace constraints, or model patterns matter.
 - [ ] Use `imagegen` for normal Codex-native bitmap generation or editing.
-- [ ] Use [image-generation](../image-generation/SKILL.md) for named
+- [ ] Use [ai-image-advisor](../ai-image-advisor/SKILL.md) for named
   inference.sh image models, background removal, upscaling, CLI repeatability,
   or structured result bundles.
 - [ ] Route product-page or frontend integration through
@@ -79,11 +79,11 @@ packet, and proof rules.
 
 ## Steps
 
-1. Load the shared [image/social production workflow](../image-generation/references/domain-production.md).
+1. Load the shared [image/social production workflow](../ai-image-advisor/references/domain-production.md).
 2. Load [upstream product photography](references/upstream-product-photography.md) for shot types, e-commerce requirements, angles, backgrounds, and marketplace constraints.
 3. Load [upstream AI product photography](references/upstream-ai-product-photography.md) for model examples, commercial styles, and generation workflows.
 4. Decide the shot set before generation: hero, packshot, lifestyle, scale, detail, in-use, variation, cutout, or upscale.
-5. Use `imagegen` for normal bitmap generation/editing, or `image-generation` when the user needs inference.sh models, background removal, upscaling, CLI repeatability, or named model control.
+5. Use `imagegen` for normal bitmap generation/editing, or `ai-image-advisor` when the user needs inference.sh models, background removal, upscaling, CLI repeatability, or named model control.
 
 Use the shared production workflow for prompt/input/result bundles, async batches, frontend/product-page QA, and upstream-reference safety.
 

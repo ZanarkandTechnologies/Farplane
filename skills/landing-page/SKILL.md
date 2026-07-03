@@ -255,10 +255,10 @@ builder until the spec passes the planning gates below.
    record the blocker in the artifact and progress surface, and do not send the
    artifact as a `stunning` or `premium` feedback request unless the downgrade
    is itself the reviewed decision.
-   If the spec calls for generated video, use a real video-generation model or
+   If the spec calls for generated video, use a real ai-video-advisor model or
    source video and record video provenance (`videoModel`, `videoProvider`,
    `sourceVideo`, or equivalent) in the asset manifest. Do not count Seedream or
-   other image-generation stills assembled with `ffmpeg` as `generated-video`;
+   other ai-image-advisor stills assembled with `ffmpeg` as `generated-video`;
    declare that as `frame-sequence` or downgrade to prototype.
 4. Implement the page through `frontend-craft` or `delegate-frontend`.
 5. Run asset-evidence QA, scroll/media QA, section-quality QA,

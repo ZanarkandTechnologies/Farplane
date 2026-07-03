@@ -1,4 +1,4 @@
-# Video Generation Skill Instructions
+# AI Video Advisor Skill Instructions
 
 This module is the model/app execution skill for inference.sh video. Keep the first-load `SKILL.md` focused on routing, capability gates, output handling, and proof.
 
@@ -9,7 +9,7 @@ This module remains the model/app execution skill.
 
 Do not create a standalone public `video-prompting-guide` skill. Prompting guidance should live inside the artifact/domain skill that owns the output.
 
-Keep the copied upstream video prompting guide at `references/prompting/video-prompting-guide.md`; load it from `video-generation` or artifact skills when video prompt quality needs shot/camera/lighting/model-specific guidance.
+Keep the copied upstream video prompting guide at `references/prompting/video-prompting-guide.md`; load it from `ai-video-advisor` or artifact skills when video prompt quality needs shot/camera/lighting/model-specific guidance.
 
 Keep shared artifact production workflow in `references/domain-production.md` and link to it from domain skills instead of duplicating routing/save/async/upstream-safety rules.
 

@@ -77,7 +77,7 @@ Useful options:
   or create numbered batches of four when the grouping is obvious.
 - **User wants a specific aesthetic:** select/order sources before running;
   the script only composes, crops, and tones.
-- **User needs generated images first:** use `image-generation` or image search
+- **User needs generated images first:** use `ai-image-advisor` or image search
   first, then pass the resulting files/URLs to this skill.
 
 ## Gotchas

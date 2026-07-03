@@ -34,8 +34,8 @@ clearer single carrier.
   and confidence limits.
 - [ ] Define `LayerManifest` with 6-12 layers, z-order, asset route,
   transform/opacity states, responsive constraints, and fallback.
-- [ ] Route still generation through `imagegen` or `image-generation`; route
-  cutouts/background removal/upscales through `image-generation` when needed.
+- [ ] Route still generation through `imagegen` or `ai-image-advisor`; route
+  cutouts/background removal/upscales through `ai-image-advisor` when needed.
 - [ ] Keep readable text and controls in HTML/UI layers unless the brief
   explicitly requires baked pixels.
 - [ ] Define `Timeline` with driver, named phases, scroll/time ranges,

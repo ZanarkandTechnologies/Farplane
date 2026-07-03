@@ -14,13 +14,13 @@ and `social-content` methods.
 | Need | Route |
 | --- | --- |
 | Normal still image generation or editing | [imagegen](/Users/kenjipcx/.codex/skills/.system/imagegen/SKILL.md) first |
-| Named inference.sh image model, CLI batch, cutout, upscale | [image-generation](../SKILL.md) |
+| Named inference.sh image model, CLI batch, cutout, upscale | [ai-image-advisor](../SKILL.md) |
 | Product hero shot, packshot, e-commerce image, lifestyle product photo | [product-photography](../../product-photography/SKILL.md) |
 | General cross-platform social campaign asset | [social-content:cross-platform](../../social-content/SKILL.md) |
 | LinkedIn post, professional social writing, B2B thought leadership | [social-content:linkedin](../../social-content/SKILL.md) |
 | Instagram/LinkedIn/X carousel or multi-slide post | [social-content:carousel](../../social-content/SKILL.md) |
 | Twitter/X thread or post writing | [social-content:twitter-thread](../../social-content/SKILL.md) |
-| Model-native video, image-to-video, avatar/lipsync, video edit | [video-generation](../../video-generation/SKILL.md) |
+| Model-native video, image-to-video, avatar/lipsync, video edit | [ai-video-advisor](../../ai-video-advisor/SKILL.md) |
 | Website, landing page, product page, or campaign asset set | [frontend-craft media pipelines](../../frontend-craft/references/media-pipelines.md) |
 
 ## Shared Rules
