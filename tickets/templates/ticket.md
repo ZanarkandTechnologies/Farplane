@@ -1,6 +1,6 @@
 ---
 template_id: ticket-template
-template_version: "0.1.6"
+template_version: "0.1.7"
 feature_refs:
   - FEAT-0007
   - FEAT-0008
@@ -18,6 +18,7 @@ ready: false
 approval_required: true
 requires_qa: true
 requires_demo: false
+human_gate: none
 created_at: 2026-04-03T00:00:00Z
 updated_at: 2026-04-03T00:00:00Z
 next_action: define the one current step and keep it in this field
@@ -28,6 +29,7 @@ last_verification: none
 # TASK-XXXX: title
 
 <!-- Optional frontmatter field when needed: compute_target: local_shared | local_worktree | symphony | codex_cloud -->
+<!-- Human gate shape: human_gate: none | [post, "reason the final action needs Kenji"] -->
 
 ## Summary
 2-3 sentences on what changes, why it matters now, and the decisive path being

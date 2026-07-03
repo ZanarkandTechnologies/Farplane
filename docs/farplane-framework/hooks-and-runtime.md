@@ -35,7 +35,7 @@ hook(event, transcript/runtime_state)
 
 | Event | Commands | Purpose |
 | --- | --- | --- |
-| `UserPromptSubmit` | `capture_user_turn.py`, `farplane_console_ping.py` | capture current-turn user intent and send `turn_start` hook telemetry |
+| `UserPromptSubmit` | `capture_user_turn.py`, `farplane_console_ping.py` | classify the current user turn, append lightweight conversation windows, and send `turn_start` hook telemetry |
 | `Stop` | `farplane_console_ping.py` | send `turn_end` hook telemetry |
 
 These are graphable as `hook:*` nodes that `triggers` command nodes.
@@ -54,7 +54,14 @@ too noisy for tracked config.
 .farplane/automation/spawned-threads.jsonl
 .farplane/evals/runs/
 .farplane/logs/
+.farplane/state/message-windows/
+.farplane/state/ticket-thread-associations.jsonl
 ```
+
+`UserPromptSubmit` does not write singleton current-run or per-session
+ownership files. Hook telemetry, conversation windows, explicit run-state files
+owned by managed lanes, tickets, and ticket/thread association logs are the live
+surfaces.
 
 Tracked framework config stays under `farplane/`. The important separation is:
 

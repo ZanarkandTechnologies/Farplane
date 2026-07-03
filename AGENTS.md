@@ -322,7 +322,7 @@ For harness-design research and external patterns:
   Goal-backed ticket execution when working inside Farplane, using the
   `reviewer` lane for material review when native subagents are available. See
   `MEM-0127` and `MEM-0129`.
-- Keep live repo-owned skills and docs Farplane-native. Retired OMX instructions belong only in archive or research material, not active surfaces.
+- Keep live repo-owned skills and docs Farplane-native. Retired pre-Farplane instructions belong only in archive or research material, not active surfaces.
 - Prefer `.farplane/` for live runtime state.
 - Keep root `AGENTS.md` local and navigational. Global install policy belongs in `templates/global/AGENTS.md`.
 - Before changing root `AGENTS.md` or `templates/global/AGENTS.md`, apply

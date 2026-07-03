@@ -109,7 +109,8 @@ MEM-0035, MEM-0036, MEM-0056, MEM-0130, MEM-0151.
 - Runtime state belongs under `.farplane/`. Tickets may mirror human-facing
   claims, but raw runtime transport identity stays in runtime state.
 - Explicit ticket selectors outrank ambient runtime state. Hook `session_id`
-  and singleton current-run pointers are fallback context only.
+  is used for telemetry and association-log correlation; singleton
+  current-run pointers are retired as authority.
 - Stop-hook completion and continuation checks must compare the assistant
   response against the current user request captured at `UserPromptSubmit` when
   available.

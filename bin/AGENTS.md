@@ -46,7 +46,8 @@ For runtime helper scripts:
 - judge decides only from ticket + result + evidence state
 - tickets remain the canonical execution contract
 - explicit ticket selectors outrank ambient run-state when both are present
-- explicit run-state selectors outrank hook `session_id`, which outranks ambient `.farplane/state/current-run.json`
+- explicit run-state selectors outrank hook `session_id`; ambient singleton
+  current-run files are retired as authority
 - run-state files remain runtime-only and lightweight
 - runtime state should group active execution ownership into a lightweight `claim` object instead of scattering claim semantics across multiple ad hoc top-level reads
 - native Goal mode owns implementation persistence. Stop hooks are telemetry
@@ -59,6 +60,10 @@ For runtime helper scripts:
   `Done / Proof`, Goal program, and required delegated reviews are satisfied.
 - delegated workers should keep `worker_name`, `main_artifact_path`, and `grounding_summary` visible in the same runtime contract when available
 - delegated stale-wait reads should stay advisory-first and use explicit checkpoint timing instead of hidden watchdog behavior
-- current-turn user intent should be captured at `UserPromptSubmit` when available
-- canonical current-turn capture belongs only to control sessions whose first owned prompt explicitly invokes a public control skill; internal or non-owning sessions must not overwrite `.farplane/state/current-run.json`. See `MEM-0029`.
+- current-turn user intent should be captured at `UserPromptSubmit` through
+  hook telemetry and conversation windows when available
+- canonical prompt capture must not create or mutate singleton
+  `.farplane/state/current-run.json` or per-session ownership files; use hook
+  telemetry, explicit run-state selectors, tickets, and association logs
+  instead. See `MEM-0029`.
 - native Goal mode owns implementation persistence; stored `session_id` is a recovery hint only. See `MEM-0005`.

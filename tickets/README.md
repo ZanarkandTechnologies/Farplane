@@ -116,6 +116,7 @@ ready: false
 approval_required: true
 requires_qa: true
 requires_demo: false
+human_gate: none
 created_at: 2026-04-03T00:00:00Z
 updated_at: 2026-04-03T00:00:00Z
 next_action: await approval to set status: building
@@ -147,6 +148,11 @@ last_verification: none
 - `approval_required`: explicit approval gate
 - `requires_qa`: whether `$goal-advisor` must produce a passing QA phase before completion
 - `requires_demo`: whether `$goal-advisor` must also produce a passing demo phase after QA
+- `human_gate`: compact final-action gate. Use `none` when the worker may
+  finish the ticket without human approval. Use `[tag, "reason"]` when the
+  worker may prepare artifacts and proof but must stop before that final
+  action, such as `[post, "Public X post needs Kenji approval before it goes live."]`.
+  Allowed tags live in `farplane/bindings.yaml` `human_gates`.
 - `next_action`: the one authoritative next step
 - `last_verification`: the one-line authoritative verification summary; keep
   detailed commands and artifacts in `Links`, `progress.md`, or
@@ -162,6 +168,12 @@ empty, `phase` is not `complete` or `failed`, `status` is not `done` or
 `failed`, the ticket is not parked or waiting on external credentials/feedback,
 and every dependency is complete, archived, or explicitly waived in the ticket
 body. These are hard gates, not ranking preferences.
+
+`human_gate` is not a second ticket-start approval gate. It marks a final
+outside-world action that the worker must not take without Kenji. Pulse should
+leave that worker thread open, record or remind when useful, and continue safe
+local work such as artifacts, research, proof, QA, packaging, or draft content
+instead of treating human review as board-wide blockage.
 
 For Farplane invocation, `bin/farplane_boards.py` is the canonical v1
 BoardAdapter surface for reading filesystem tickets into normalized `WorkItem`

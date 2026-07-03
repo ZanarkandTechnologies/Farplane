@@ -159,10 +159,10 @@ merge shape.
     local ledgers are available: read goal-axis SMART goals from
     `farplane/goals.yaml` for KPI selection and interpretation, then use each
     KPI's `farplane/bindings.yaml` metric recipe `refresh` prompt to choose the
-    work. Write one compact daily metrics file under
-    `.farplane/metrics/daily/<date>.json`, then run
-    `farplane project snapshot`. Do not parse ops memory as a deterministic
-    database.
+    work. Write canonical observation batches under
+    `.farplane/metrics/observations/<source_id>/<date>.json`, run
+    `farplane metrics primitives`, then run `farplane project snapshot`. Do not
+    parse ops memory as a deterministic database.
 14. Review budget and runway for active projects. Use `farplane/harness.md`
     allocation guardrails, `farplane/ops-memory.md` contribution modes, ticket
     `Reward` blocks, metric snapshots, interval reports, source gaps, and
@@ -202,44 +202,143 @@ Promotion decisions:
 - `rejected_source_gap`: insufficient evidence; create an instrumentation,
   access, feedback, or research ticket instead.
 
-Metric reading guidance:
+Metric update lifecycle:
 
 ```text
-daily_metric_file := {
-  date,
-  metrics: {
-    [metric_id]: {
-      value: number | null,
-      status: available | source_gap | blocked,
-      payload?: object
-    }
-  }
+metric_update(project_root, date)
+  -> source observations
+   + primitive observations
+   + project snapshot
+   + interval interpretation
+```
+
+1. Select KPI scope from `farplane/goals.yaml`; join every KPI ID to its metric
+   recipe in `farplane/bindings.yaml`.
+2. Run platform or skill-owned fetches for external sources. Each source writes
+   one canonical batch:
+
+   ```text
+   .farplane/metrics/observations/<source_id>/<YYYY-MM-DD>.json
+   ```
+
+   Each batch has `schema_version: 1`, `date`, `source_id`, `status`,
+   `observations[]`, `gaps[]`, and optional `payload`.
+3. Run Core primitive reducers:
+
+   ```bash
+   farplane metrics primitives --project-root <project> --date <YYYY-MM-DD>
+   ```
+
+   Core owns ticket reward counts, autonomy ratios, intervention metrics, AI
+   burn estimates, and Farplane-native rollups such as total evidence
+   distribution views. `.farplane/metrics/daily/<date>.json` is an optional
+   debug/index snapshot for primitive groups, not the canonical provider
+   contract.
+4. Compile the UI snapshot:
+
+   ```bash
+   farplane project snapshot --project-root <project> --date <YYYY-MM-DD>
+   ```
+
+   The compiler derives daily differences from consecutive readings, cumulative
+   totals for `kind: daily_count` metrics, best-daily values, target status,
+   KPI descriptions, pinned cards, source-gap joins, and tab data.
+5. Interpret the result in the interval report. True source gaps should become
+   instrumentation, access, or provider-fix tickets. Human-created tickets
+   without KPI rewards and old tickets with missing front matter are not metric
+   source gaps.
+
+Each observation value is the point reading for that date. Content IDs, ticket
+IDs, post IDs, API responses, confidence notes, and per-item breakdowns belong
+under freeform `payload`, not in KPI names. Ticket-derived KPI counts should be
+collected by counting tickets whose `Reward.kpi_rewards[].kpi_id` matches the
+KPI, then writing the resulting observation like any other metric value.
+
+Primitive output shapes:
+
+```text
+.farplane/metrics/daily/<date>.json
+  schema_version: 1
+  date: <YYYY-MM-DD>
+  window: { start, end }
+  primitives:
+    <primitive_id>: <raw reading map>
+  diagnostics:
+    ticket_parse_gaps: [...]
+    non_warning_gaps: [...]
+  source_gaps: [...]
+  paths: {...}
+
+.farplane/metrics/observations/<primitive_id>/<date>.json
+  MetricObservationBatch
+```
+
+The daily primitive file is a raw support snapshot. The canonical compiler
+contract is the observation batch:
+
+```text
+MetricObservationBatch := {
+  schema_version: 1,
+  date: YYYY-MM-DD,
+  source_id: primitive_id | platform_source_id,
+  status: available | partial | source_gap | blocked,
+  observations: MetricObservation[],
+  gaps: string[],
+  payload: object
+}
+
+MetricObservation := {
+  metric_id: string,
+  date: YYYY-MM-DD,
+  value: number | null,
+  status: available | source_gap | not_applicable | blocked,
+  payload: object
 }
 ```
 
-Each metric value is the point reading for that date. The compiler derives
-daily difference from consecutive readings, cumulative totals for
-`kind: daily_count` metrics, and best-daily values. Content IDs, ticket IDs,
-post IDs, API responses, and confidence notes belong under freeform `payload`,
-not in KPI names. Ticket-derived KPI counts should be collected during this
-daily refresh by counting tickets whose `Reward.kpi_rewards[].kpi_id` matches
-the KPI, then storing the resulting count like any other metric value.
+Primitive reducers currently used by interval refresh:
+
+| Primitive | Metric observations | Source-gap behavior |
+| --- | --- | --- |
+| `ticket_count_by_kpi` | Per-KPI ticket counts keyed by actual KPI ID. | Missing human ticket rewards are diagnostics; defined KPIs with no tickets compile as available zero. |
+| `ticket_count_by_product` | Product ticket counts keyed as `ticket_count_by_product:<product_id>`. | Unknown product ownership is a recipe/schema problem. |
+| `kpi_attributed_ticket_ratio` | Rewarded touched tickets divided by all touched tickets. | Empty windows are available zero. |
+| `codex_thread_usage` | `codex_thread_count`, `codex_turn_count`, `codex_token_total`, `codex_span_minutes`. | Missing Codex sqlite/session stores are source gaps. |
+| `ai_burn_estimate` | Daily spend allocation plus burn-per-thread, burn-per-turn, burn-per-token. | Missing spend model is a source gap. |
+| `content_views_total` | `evidence_distribution_reach` from component platform view observations. | No component view observations is a source gap; missing individual components stay in payload when at least one component exists. |
+| `ticket_thread_association_backfill` | Support association count and ignored state index. | Missing mine runs are diagnostics unless a dependent metric needs associations. |
+| `ticket_thread_link_coverage` | Completed-ticket association coverage ratio. | Empty completed-ticket windows are available zero. |
+| `autonomy_time_feedback` | `auto_time_ratio` and related human/autonomous time metrics from runtime ledgers. | Source gap only when all runtime feedback sources are missing. |
+| `ticket_intervention_feedback` | `auto_completion_rate`, `intervention_free_ticket_count`, `ticket_intervention_turn_count`. | Source gap when completed tickets cannot be associated with execution threads. |
+
+Compiler order:
+
+1. `provider_observations()` reads canonical
+   `.farplane/metrics/observations/*/*.json` batches through the Pydantic
+   schema.
+2. `daily_observations()` reads `.farplane/metrics/daily/*.json` only as a
+   fallback for older or debug primitive rows when no canonical batch exists for
+   that `(primitive_id, date)`.
+3. Content ledger observations and missing-ledger observations are appended
+   after canonical/provider observations.
+4. `build_metric_card()` joins observations with metric definitions,
+   descriptions, target specs, display options, source-gap IDs, and payload
+   breakdowns.
+5. Goals, Overview, Products, and pinned metric cards all render from the same
+   compiled metric cards; tab-specific UI should not fetch raw primitive files
+   directly.
 
 Reusable interval-owned helper signatures:
 
 ```text
 $interval-update.count_ticket_kpi_rewards(ticket_dir, date, kpi_key)
-  -> { value, status, payload? }
+  -> MetricObservation
 
 $interval-update.calculate_autonomy_time_ratio(runtime_dir, date)
-  -> { value, status, payload? }
+  -> MetricObservation
 
 $interval-update.calculate_ticket_intervention_metrics(ticket_dir, runtime_dir, date)
-  -> {
-       auto_completion_rate: MetricReading,
-       intervention_free_ticket_count: MetricReading,
-       ticket_intervention_turn_count: MetricReading
-     }
+  -> MetricObservationBatch
 
 $interval-update.select_content_metric_targets(content_ledger, platform, kpi_key, date, window_days?)
   -> {
@@ -257,8 +356,9 @@ helper signature instead of restating the counting algorithm.
 For owned-content distribution KPIs, first call
 `select_content_metric_targets` to select posted ledger rows in the lookback
 window. Then call the returned platform fetch command through `$x-account` or
-`$instagram-account`, read the produced compact metrics, and store the selected
-KPI's aggregate value plus per-post `payload.items` in the daily metric file.
+`$instagram-account`; the platform skill writes a `MetricObservationBatch`.
+Core may then derive pinned rollups from those component observations during
+`farplane metrics primitives`.
 
 Runway review guidance:
 

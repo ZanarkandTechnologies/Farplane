@@ -139,7 +139,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     },
     {
       "changed_sections": [],
-      "introduced_at": "2026-07-02",
+      "introduced_at": "2026-07-03",
       "section_count": 9,
       "sections": [
         "Context",
@@ -152,8 +152,8 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "Reference Map",
         "Output"
       ],
-      "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.7-df4d0ba186a0.md",
-      "source_commit": "df4d0ba186a0",
+      "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.7-861383e90e08.md",
+      "source_commit": "861383e90e08",
       "summary": "working tree current template",
       "version": "0.3.7"
     }
@@ -635,7 +635,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "trigger catalogs stay out of frontmatter"
       ],
       "missing_signals": [],
-      "source_commit": "df4d0ba186a0",
+      "source_commit": "861383e90e08",
       "template_version": "0.3.7",
       "title": "Routing clarity",
       "verdict": "pass"
@@ -649,7 +649,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "policy prose is not treated as a top-level todo"
       ],
       "missing_signals": [],
-      "source_commit": "df4d0ba186a0",
+      "source_commit": "861383e90e08",
       "template_version": "0.3.7",
       "title": "Todo executability",
       "verdict": "pass"
@@ -663,7 +663,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "same-scope recursion is forbidden"
       ],
       "missing_signals": [],
-      "source_commit": "df4d0ba186a0",
+      "source_commit": "861383e90e08",
       "template_version": "0.3.7",
       "title": "Phase boundary",
       "verdict": "pass"
@@ -677,7 +677,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "output contract is explicit"
       ],
       "missing_signals": [],
-      "source_commit": "df4d0ba186a0",
+      "source_commit": "861383e90e08",
       "template_version": "0.3.7",
       "title": "Proof contract",
       "verdict": "pass"
@@ -691,7 +691,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "qa_checklist.md is a repeatable runtime guardrail only when warranted"
       ],
       "missing_signals": [],
-      "source_commit": "df4d0ba186a0",
+      "source_commit": "861383e90e08",
       "template_version": "0.3.7",
       "title": "Eval / QA sync",
       "verdict": "pass"
@@ -861,7 +861,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       ]
     }
   ],
-  "generated_at": "2026-07-02T20:41:01+00:00",
+  "generated_at": "2026-07-03T14:30:00+00:00",
   "rollout": [
     {
       "eval": "",
@@ -881,6 +881,18 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "path": "skills/notion-task-field-fill/SKILL.md",
       "qa_checklist": "",
       "skill_id": "notion-task-field-fill",
+      "skill_ui": "",
+      "source": "local",
+      "status": "current",
+      "template_version": "0.3.7",
+      "tier": 3
+    },
+    {
+      "eval": "eval_task.json",
+      "has_checklist": true,
+      "path": "skills/script-storyboard/SKILL.md",
+      "qa_checklist": "qa_checklist.md",
+      "skill_id": "script-storyboard",
       "skill_ui": "",
       "source": "local",
       "status": "current",
@@ -2079,10 +2091,10 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
   "rollout_summary": {
     "by_source": {
       "external": 3,
-      "local": 98
+      "local": 99
     },
     "by_status": {
-      "current": 3,
+      "current": 4,
       "external": 3,
       "missing": 53,
       "stale": 42
@@ -2094,10 +2106,10 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "0.3.2": 7,
       "0.3.5": 1,
       "0.3.6": 4,
-      "0.3.7": 3,
+      "0.3.7": 4,
       "missing": 56
     },
-    "total_skills": 101
+    "total_skills": 102
   },
   "schema_version": "1.0.0",
   "source": {
@@ -3087,6 +3099,22 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       }
     },
     {
+      "consumer_id": "script-storyboard",
+      "consumer_scope": "skill",
+      "path": "skills/script-storyboard/SKILL.md",
+      "surfaces": {
+        "eval": true,
+        "qa_checklist": true,
+        "skill": true
+      },
+      "template_uses": {
+        "skill-eval-task": "0.1.0",
+        "skill-qa-checklist": "0.1.1",
+        "skill-surface-budget": "0.1.0",
+        "skill-template": "0.3.7"
+      }
+    },
+    {
       "consumer_id": "self-improve",
       "consumer_scope": "skill",
       "path": "skills/self-improve/SKILL.md",
@@ -3331,7 +3359,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "project": true
       },
       "template_uses": {
-        "farplane-framework": "1.6.13"
+        "farplane-framework": "1.6.15"
       }
     },
     {
@@ -3350,20 +3378,20 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     {
       "consumer_id": "Farplane",
       "consumer_scope": "project",
-      "current_version": "1.6.14",
+      "current_version": "1.6.15",
       "feature_refs": [
         "FEAT-0060"
       ],
       "path": "farplane/manifest.json",
-      "status": "stale",
+      "status": "current",
       "target_basis": "projects with a farplane/manifest.json surface",
       "template_id": "farplane-framework",
-      "used_version": "1.6.13"
+      "used_version": "1.6.15"
     },
     {
       "consumer_id": "Farplane-UI",
       "consumer_scope": "project",
-      "current_version": "1.6.14",
+      "current_version": "1.6.15",
       "feature_refs": [
         "FEAT-0060"
       ],
@@ -3582,6 +3610,19 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "used_version": "0.1.0"
     },
     {
+      "consumer_id": "script-storyboard",
+      "consumer_scope": "skill",
+      "current_version": "0.1.0",
+      "feature_refs": [
+        "FEAT-0054"
+      ],
+      "path": "skills/script-storyboard/SKILL.md",
+      "status": "current",
+      "target_basis": "skills with an eval_task.json surface",
+      "template_id": "skill-eval-task",
+      "used_version": "0.1.0"
+    },
+    {
       "consumer_id": "self-improve",
       "consumer_scope": "skill",
       "current_version": "0.1.0",
@@ -3788,6 +3829,20 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "target_basis": "skills with an eval_task.json surface",
       "template_id": "skill-eval-task",
       "used_version": ""
+    },
+    {
+      "consumer_id": "script-storyboard",
+      "consumer_scope": "skill",
+      "current_version": "0.1.1",
+      "feature_refs": [
+        "FEAT-0057",
+        "FEAT-0062"
+      ],
+      "path": "skills/script-storyboard/SKILL.md",
+      "status": "current",
+      "target_basis": "skills with a qa_checklist.md surface",
+      "template_id": "skill-qa-checklist",
+      "used_version": "0.1.1"
     },
     {
       "consumer_id": "agent-qa-test",
@@ -4138,6 +4193,22 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "FEAT-0062"
       ],
       "path": "skills/notion-task-field-fill/SKILL.md",
+      "status": "current",
+      "target_basis": "local skills that declare skill-template usage",
+      "template_id": "skill-template",
+      "used_version": "0.3.7"
+    },
+    {
+      "consumer_id": "script-storyboard",
+      "consumer_scope": "skill",
+      "current_version": "0.3.7",
+      "feature_refs": [
+        "FEAT-0022",
+        "FEAT-0054",
+        "FEAT-0057",
+        "FEAT-0062"
+      ],
+      "path": "skills/script-storyboard/SKILL.md",
       "status": "current",
       "target_basis": "local skills that declare skill-template usage",
       "template_id": "skill-template",
@@ -4838,9 +4909,10 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "project": 2
       },
       "by_status": {
-        "stale": 2
+        "current": 1,
+        "stale": 1
       },
-      "current_version": "1.6.14",
+      "current_version": "1.6.15",
       "feature_refs": [
         "FEAT-0060"
       ],
@@ -4849,10 +4921,10 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     },
     "skill-eval-task": {
       "by_scope": {
-        "skill": 32
+        "skill": 33
       },
       "by_status": {
-        "current": 20,
+        "current": 21,
         "missing": 12
       },
       "current_version": "0.1.0",
@@ -4860,13 +4932,14 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "FEAT-0054"
       ],
       "target_basis": "skills with an eval_task.json surface",
-      "total_consumers": 32
+      "total_consumers": 33
     },
     "skill-qa-checklist": {
       "by_scope": {
-        "skill": 23
+        "skill": 24
       },
       "by_status": {
+        "current": 1,
         "missing": 6,
         "stale": 17
       },
@@ -4876,14 +4949,14 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "FEAT-0062"
       ],
       "target_basis": "skills with a qa_checklist.md surface",
-      "total_consumers": 23
+      "total_consumers": 24
     },
     "skill-template": {
       "by_scope": {
-        "skill": 45
+        "skill": 46
       },
       "by_status": {
-        "current": 3,
+        "current": 4,
         "stale": 42
       },
       "current_version": "0.3.7",
@@ -4894,7 +4967,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "FEAT-0062"
       ],
       "target_basis": "local skills that declare skill-template usage",
-      "total_consumers": 45
+      "total_consumers": 46
     }
   },
   "template_versions": [
@@ -5128,8 +5201,8 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     },
     {
       "introduced_at": "2026-06-29",
-      "latest_at": "2026-07-02",
-      "latest_commit": "df4d0ba186a0",
+      "latest_at": "2026-07-03",
+      "latest_commit": "861383e90e08",
       "latest_summary": "working tree current template",
       "release_count": 2,
       "sections": [
@@ -5143,7 +5216,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "Reference Map",
         "Output"
       ],
-      "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.7-df4d0ba186a0.md",
+      "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.7-861383e90e08.md",
       "snapshots": [
         {
           "introduced_at": "2026-06-29",
@@ -5152,9 +5225,9 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
           "summary": "Add opt-in skill surface budget scanner"
         },
         {
-          "introduced_at": "2026-07-02",
-          "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.7-df4d0ba186a0.md",
-          "source_commit": "df4d0ba186a0",
+          "introduced_at": "2026-07-03",
+          "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.7-861383e90e08.md",
+          "source_commit": "861383e90e08",
           "summary": "working tree current template"
         }
       ],

@@ -41,7 +41,8 @@ BIN_README_TEXT = """\
 # Bin
 
 - raw `session_id` should stay runtime-only
-- `.farplane/state/current-run.json`
+- `.farplane/state/ticket-thread-associations.jsonl`
+- `UserPromptSubmit` no longer writes `.farplane/state/current-run.json`
 """
 
 TICKETS_README_TEXT = """\

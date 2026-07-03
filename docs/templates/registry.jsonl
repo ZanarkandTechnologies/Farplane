@@ -1,4 +1,4 @@
-{"applies_to":["farplane/manifest.json"],"consumer_scope":"project","feature_refs":["FEAT-0060"],"path":"skills/init-advisor/references/MANIFEST_TEMPLATE.json","template_id":"farplane-framework","template_version":"1.6.15"}
+{"applies_to":["farplane/manifest.json"],"consumer_scope":"project","feature_refs":["FEAT-0060"],"path":"skills/init-advisor/references/MANIFEST_TEMPLATE.json","template_id":"farplane-framework","template_version":"1.6.16"}
 {"feature_refs":["FEAT-0022","FEAT-0042","FEAT-0043"],"path":"templates/global/AGENTS.md","template_id":"global-agents-template","template_version":"0.2.18"}
 {"feature_refs":["FEAT-0029","FEAT-0032"],"kind":"goal-program","path":"tickets/templates/goal-loop/program.md","template_id":"goal-loop-program","template_version":"0.1.1"}
 {"feature_refs":["FEAT-0007"],"kind":"harness-creator-worksheet","path":"skills/harness-creator/templates/project-harness.md","template_id":"project-harness","template_version":"0.3.4"}
@@ -6,4 +6,4 @@
 {"applies_to":["skills/*/references/*.md"],"consumer_scope":"skill-reference","feature_refs":["FEAT-0057"],"path":"docs/skills/templates/METHOD_REFERENCE_TEMPLATE.md","template_id":"skill-method-reference","template_version":"0.1.0"}
 {"applies_to":["skills/*/qa_checklist.md"],"consumer_scope":"skill","feature_refs":["FEAT-0057","FEAT-0062"],"path":"docs/skills/templates/QA_CHECKLIST_TEMPLATE.md","template_id":"skill-qa-checklist","template_version":"0.1.1"}
 {"applies_to":["skills/*/SKILL.md"],"consumer_scope":"skill","feature_refs":["FEAT-0022","FEAT-0054","FEAT-0057","FEAT-0062"],"path":"docs/skills/templates/SKILL_TEMPLATE.md","template_id":"skill-template","template_version":"0.3.7"}
-{"feature_refs":["FEAT-0007","FEAT-0008"],"path":"tickets/templates/ticket.md","template_id":"ticket-template","template_version":"0.1.6"}
+{"feature_refs":["FEAT-0007","FEAT-0008"],"path":"tickets/templates/ticket.md","template_id":"ticket-template","template_version":"0.1.7"}

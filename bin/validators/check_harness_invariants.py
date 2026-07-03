@@ -51,10 +51,7 @@ RULES: tuple[HarnessRule, ...] = (
             "Public docs should describe `.farplane/` as the canonical live runtime root.",
             "There is no separate public retired execution surface anymore.",
         ),
-        forbidden_substrings=(
-            ".ralph/",
-            ".omx/",
-        ),
+        forbidden_substrings=(".ralph/",),
         remediation=(
             "keep invocation/runtime docs on the live Farplane contract: "
             "`.farplane/` is canonical and retired runtime paths belong only "
@@ -65,7 +62,8 @@ RULES: tuple[HarnessRule, ...] = (
         relative_path="bin/README.md",
         required_substrings=(
             "raw `session_id` should stay runtime-only",
-            ".farplane/state/current-run.json",
+            ".farplane/state/ticket-thread-associations.jsonl",
+            "UserPromptSubmit` no longer writes `.farplane/state/current-run.json`",
         ),
         remediation=(
             "document runtime identity as runtime-only and keep public runtime "

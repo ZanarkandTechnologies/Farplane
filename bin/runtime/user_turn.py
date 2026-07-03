@@ -90,28 +90,16 @@ def runtime_dir(project_root: Path) -> Path:
     return project_root / ".farplane"
 
 
-def current_run_state_path(project_root: Path) -> Path:
-    return runtime_dir(project_root) / "state" / "current-run.json"
-
-
-def session_state_dir(project_root: Path) -> Path:
-    return runtime_dir(project_root) / "state" / "sessions"
-
-
 def normalize_session_id(raw: str | None) -> str:
     if not isinstance(raw, str):
         return ""
     return raw.strip()
 
 
-def session_state_filename(session_id: str) -> str:
+def session_json_filename(session_id: str) -> str:
     sanitized = re.sub(r"[^A-Za-z0-9._-]+", "_", session_id.strip())
     sanitized = sanitized.strip("._") or "session"
     return f"{sanitized}.json"
-
-
-def session_state_path(project_root: Path, session_id: str) -> Path:
-    return session_state_dir(project_root) / session_state_filename(session_id)
 
 
 def self_improvement_state_dir(project_root: Path) -> Path:
@@ -132,7 +120,7 @@ def ensure_self_improvement_state_setup(project_root: Path) -> None:
 
 
 def conversation_window_path(project_root: Path, session_id: str) -> Path:
-    return conversation_window_dir(project_root) / session_state_filename(session_id)
+    return conversation_window_dir(project_root) / session_json_filename(session_id)
 
 
 def load_json_dict(path: Path) -> dict[str, object]:
@@ -502,102 +490,6 @@ def write_ticket_text(path: Path, raw_frontmatter: str, body: str) -> None:
     path.write_text(f"---\n{raw_frontmatter}\n---\n{body}", encoding="utf-8")
 
 
-def resolve_ticket_path(project_root: Path, current_run: Mapping[str, object]) -> Path | None:
-    ticket_path = current_run.get("ticket_path")
-    if isinstance(ticket_path, str) and ticket_path.strip():
-        candidate = Path(ticket_path)
-        if not candidate.is_absolute():
-            candidate = (project_root / ticket_path).resolve()
-        if candidate.is_file():
-            return candidate
-
-    ticket_id = current_run.get("ticket_id")
-    if not isinstance(ticket_id, str) or not ticket_id.strip():
-        return None
-    return resolve_ticket_path_by_id(project_root, ticket_id.strip())
-
-
-def has_runtime_ownership(payload: Mapping[str, object] | None) -> bool:
-    if not isinstance(payload, Mapping):
-        return False
-    run_state = payload.get("run_state")
-    if isinstance(run_state, str) and run_state.strip():
-        return True
-    claim = payload.get("claim")
-    if isinstance(claim, Mapping) and claim:
-        return True
-    ticket_id = payload.get("ticket_id")
-    run_id = payload.get("run_id")
-    return (
-        isinstance(ticket_id, str)
-        and bool(ticket_id.strip())
-        and isinstance(run_id, str)
-        and bool(run_id.strip())
-    )
-
-
-def set_ticket_claim_alias(project_root: Path, current_run: Mapping[str, object], session_name: str) -> None:
-    ticket_path = resolve_ticket_path(project_root, current_run)
-    if ticket_path is None:
-        return
-    text = read_ticket_text(ticket_path)
-    parts = split_frontmatter(text)
-    if parts is None:
-        return
-    raw_frontmatter, body = parts
-    updated_frontmatter = update_frontmatter_field(raw_frontmatter, "claimed_by", session_name, after_key="owner")
-    write_ticket_text(ticket_path, updated_frontmatter, body)
-
-
-def clear_ticket_claim_alias(project_root: Path, ticket_id: str, session_name: str) -> None:
-    ticket_path = resolve_ticket_path_by_id(project_root, ticket_id.strip())
-    if ticket_path is None:
-        return
-    text = read_ticket_text(ticket_path)
-    parts = split_frontmatter(text)
-    if parts is None:
-        return
-    raw_frontmatter, body = parts
-    claimed_prefix = "claimed_by:"
-    claimed_value = ""
-    for line in raw_frontmatter.splitlines():
-        if line.startswith(claimed_prefix):
-            claimed_value = line.split(":", 1)[1].strip()
-            break
-    if claimed_value != session_name:
-        return
-    updated_frontmatter = clear_frontmatter_field(raw_frontmatter, "claimed_by")
-    write_ticket_text(ticket_path, updated_frontmatter, body)
-
-
-def codex_session_alias(session_id: str) -> str:
-    suffix = re.sub(r"[^A-Za-z0-9]+", "", session_id.strip().lower())[:12]
-    return f"codex-{suffix or 'session'}"
-
-
-def allocate_session_name(project_root: Path, session_id: str, existing_payload: Mapping[str, object] | None = None) -> str:
-    if isinstance(existing_payload, Mapping):
-        existing_name = existing_payload.get("session_name")
-        if isinstance(existing_name, str) and existing_name.strip():
-            existing_name = existing_name.strip()
-            if not re.fullmatch(r"agent-\d{2}", existing_name):
-                return existing_name
-
-    used: set[str] = set()
-    for candidate in session_state_dir(project_root).glob("*.json"):
-        payload = load_json_dict(candidate)
-        if candidate == session_state_path(project_root, session_id):
-            continue
-        session_name = payload.get("session_name")
-        if isinstance(session_name, str) and session_name.strip():
-            used.add(session_name.strip())
-    alias = codex_session_alias(session_id)
-    if alias not in used:
-        return alias
-    suffix = re.sub(r"[^A-Za-z0-9]+", "", session_id.strip().lower())[-6:] or "session"
-    return f"{alias}-{suffix}"
-
-
 def resolve_runtime_path(project_root: Path, raw: str) -> Path:
     candidate = Path(raw).expanduser()
     if candidate.is_absolute():
@@ -657,73 +549,6 @@ def extract_control_surfaces(raw_text: str) -> list[str]:
 
 def extract_skill_mentions(raw_text: str) -> list[str]:
     return extract_control_surfaces(raw_text)
-
-
-def _with_runtime_metadata(
-    payload: dict[str, object],
-    *,
-    session_id: str = "",
-    explicit_run_state: str = "",
-) -> dict[str, object]:
-    merged = dict(payload)
-    if explicit_run_state and "run_state" not in merged:
-        merged["run_state"] = explicit_run_state
-    if session_id and "session_id" not in merged:
-        merged["session_id"] = session_id
-    return merged
-
-
-def _matches_session(payload: Mapping[str, object] | None, session_id: str) -> bool:
-    if not session_id:
-        return True
-    return current_session_id(payload) == session_id
-
-
-def load_current_run(
-    project_root: Path,
-    *,
-    session_id: str | None = None,
-    explicit_run_state: str | None = None,
-) -> dict[str, object] | None:
-    normalized_session_id = normalize_session_id(session_id)
-    selected_run_state = explicit_run_state.strip() if isinstance(explicit_run_state, str) else ""
-
-    if selected_run_state:
-        payload = load_json_dict(resolve_runtime_path(project_root, selected_run_state))
-        return (
-            _with_runtime_metadata(
-                payload,
-                session_id=normalized_session_id,
-                explicit_run_state=selected_run_state,
-            )
-            if payload
-            else None
-        )
-
-    if normalized_session_id:
-        payload = load_json_dict(session_state_path(project_root, normalized_session_id))
-        if payload:
-            session_payload = _with_runtime_metadata(payload, session_id=normalized_session_id)
-            if has_runtime_ownership(session_payload):
-                return session_payload
-
-    current_payload = load_json_dict(current_run_state_path(project_root))
-    if not current_payload:
-        return None
-
-    current_with_metadata = _with_runtime_metadata(current_payload, session_id=normalized_session_id)
-    if _matches_session(current_with_metadata, normalized_session_id) and has_runtime_ownership(current_with_metadata):
-        return current_with_metadata
-
-    run_state = current_payload.get("run_state")
-    if isinstance(run_state, str) and run_state.strip():
-        nested = load_json_dict(resolve_runtime_path(project_root, run_state))
-        if nested and _matches_session(nested, normalized_session_id):
-            return _with_runtime_metadata(nested, session_id=normalized_session_id, explicit_run_state=run_state.strip())
-
-    if _matches_session(current_with_metadata, normalized_session_id):
-        return current_with_metadata
-    return None
 
 
 def build_runtime_claim(payload: Mapping[str, object]) -> dict[str, object] | None:
@@ -890,217 +715,6 @@ def resolve_ticket_for_impl_seed(project_root: Path, explicit_ticket_id: str) ->
     ticket_path = candidates[0]
     ticket_id = ticket_id_from_path(ticket_path) or extract_ticket_id(ticket_path.name) or ticket_path.stem
     return ticket_id, str(ticket_path)
-
-
-def seeded_impl_run_id(ticket_id: str, session_id: str) -> str:
-    suffix = re.sub(r"[^A-Za-z0-9]+", "", session_id.strip().lower())[:8] or "session"
-    return f"run-{ticket_id.lower()}-building-seed-{suffix}"
-
-
-def maybe_seed_impl_runtime(
-    *,
-    project_root: Path,
-    current_run: Mapping[str, object] | None,
-    last_user_turn: Mapping[str, object],
-    session_id: str,
-) -> dict[str, object] | None:
-    if has_runtime_ownership(current_run):
-        seeded_existing = dict(current_run) if isinstance(current_run, Mapping) else None
-    else:
-        seeded_existing = dict(current_run) if isinstance(current_run, Mapping) else {}
-    control_surface = str(last_user_turn.get("control_surface") or "").strip().lower()
-    if control_surface not in EXECUTION_PHASES and control_surface != "goal-advisor":
-        return seeded_existing if seeded_existing else None
-    execution_phase = control_surface if control_surface in EXECUTION_PHASES else "build"
-    ticket_id = str((current_run or {}).get("ticket_id") or "").strip()
-    ticket_path = str((current_run or {}).get("ticket_path") or "").strip()
-    if not ticket_id or not ticket_path:
-        explicit_ticket_id = str(last_user_turn.get("explicit_ticket_id") or "").strip()
-        selection = resolve_ticket_for_impl_seed(project_root, explicit_ticket_id)
-        if selection is None:
-            return seeded_existing if seeded_existing else None
-        ticket_id, ticket_path = selection
-    execution_contract = load_ticket_execution_contract(project_root, ticket_path, control_surface=execution_phase)
-    seeded = dict(current_run) if isinstance(current_run, Mapping) else {}
-    seeded["ticket_id"] = ticket_id
-    seeded["current_ticket_id"] = ticket_id
-    seeded["ticket_path"] = ticket_path
-    seeded["run_id"] = str(seeded.get("run_id") or seeded_impl_run_id(ticket_id, session_id))
-    seeded["phase"] = "building"
-    seeded["status"] = "running"
-    seeded["skill_name"] = control_surface
-    seeded["execution_phase"] = execution_phase
-    seeded["requires_qa"] = bool(execution_contract["requires_qa"])
-    seeded["requires_demo"] = bool(execution_contract["requires_demo"])
-    seeded["phase_requirements"] = dict(execution_contract["phase_requirements"])
-    if session_id:
-        seeded["session_id"] = session_id
-    seeded["execution_loop_active"] = True
-    if "next_phase" not in seeded:
-        seeded["next_phase"] = "building"
-    return seeded
-
-
-def persist_runtime_update(
-    project_root: Path,
-    current_run: dict[str, object],
-    updates: dict[str, object],
-) -> dict[str, object]:
-    merged_current = dict(current_run)
-    merged_current.update(updates)
-    merged_current["updated_at"] = str(updates.get("updated_at") or now_iso())
-    claim = build_runtime_claim(merged_current)
-    if claim is not None:
-        merged_current["claim"] = claim
-
-    current_session = current_session_id(merged_current)
-    if current_session:
-        merged_current["session_id"] = current_session
-
-    write_json(current_run_state_path(project_root), merged_current)
-
-    if current_session:
-        write_json(session_state_path(project_root, current_session), merged_current)
-
-    run_state = merged_current.get("run_state")
-    if isinstance(run_state, str) and run_state.strip():
-        run_state_path = resolve_runtime_path(project_root, run_state)
-        existing_run_state = load_json_dict(run_state_path)
-        for key in (
-            "schema_version",
-            "run_id",
-            "ticket_id",
-            "ticket_path",
-            "phase",
-            "status",
-            "attempt",
-            "skill_name",
-            "compute_class",
-            "parallel_slots_reserved",
-            "executor_target",
-            "worker_name",
-            "main_artifact_path",
-            "execution_phase",
-            "requires_qa",
-            "requires_demo",
-            "phase_requirements",
-            "grounding_summary",
-            "worker_started_at",
-            "last_checkpoint_at",
-            "checkpoint_summary",
-            "session_id",
-            "execution_loop_active",
-            "session_origin",
-            "session_origin_source",
-            "session_origin_reason",
-            "next_phase",
-        ):
-            value = merged_current.get(key)
-            if value is not None:
-                existing_run_state[key] = value
-        existing_run_state.update(updates)
-        existing_run_state["updated_at"] = merged_current["updated_at"]
-        claim = build_runtime_claim(existing_run_state) or build_runtime_claim(merged_current)
-        if claim is not None:
-            existing_run_state["claim"] = claim
-        write_json(run_state_path, existing_run_state)
-
-    return merged_current
-
-
-def initialize_session_state(
-    *,
-    project_root: Path,
-    session_id: str,
-    current_run: Mapping[str, object] | None,
-    explicit_run_state: str | None,
-    captured_at: str,
-    session_origin: str = "",
-    session_origin_source: str = "",
-    session_origin_reason: str = "",
-) -> dict[str, object]:
-    normalized_session_id = normalize_session_id(session_id)
-    if not normalized_session_id:
-        return {}
-
-    session_path = session_state_path(project_root, normalized_session_id)
-    existing_session = load_json_dict(session_path)
-    session_name = allocate_session_name(project_root, normalized_session_id, existing_session)
-    previous_ticket_id = ""
-    if isinstance(existing_session.get("current_ticket_id"), str):
-        previous_ticket_id = str(existing_session.get("current_ticket_id") or "").strip()
-    ticket_id = ""
-    ticket_path = ""
-    run_id = ""
-    phase = ""
-    status = ""
-    if isinstance(current_run, Mapping):
-        for key in ("ticket_id", "ticket_path", "run_id", "phase", "status"):
-            value = current_run.get(key)
-            if not isinstance(value, str) or not value.strip():
-                continue
-            if key == "ticket_id":
-                ticket_id = value.strip()
-            elif key == "ticket_path":
-                ticket_path = value.strip()
-            elif key == "run_id":
-                run_id = value.strip()
-            elif key == "phase":
-                phase = value.strip()
-            elif key == "status":
-                status = value.strip()
-
-    session_payload: dict[str, object] = dict(existing_session)
-    session_payload["session_id"] = normalized_session_id
-    session_payload["session_name"] = session_name
-    session_payload["last_seen_at"] = captured_at
-    session_payload["updated_at"] = captured_at
-    if session_origin:
-        session_payload["session_origin"] = session_origin
-    if session_origin_source:
-        session_payload["session_origin_source"] = session_origin_source
-    if session_origin_reason:
-        session_payload["session_origin_reason"] = session_origin_reason
-    if explicit_run_state and "run_state" not in session_payload:
-        session_payload["run_state"] = explicit_run_state
-    elif isinstance(current_run, Mapping):
-        run_state = current_run.get("run_state")
-        if isinstance(run_state, str) and run_state.strip():
-            session_payload["run_state"] = run_state.strip()
-    if ticket_id:
-        session_payload["current_ticket_id"] = ticket_id
-    elif "current_ticket_id" not in session_payload:
-        session_payload["current_ticket_id"] = ""
-    if ticket_path:
-        session_payload["ticket_path"] = ticket_path
-    if run_id:
-        session_payload["run_id"] = run_id
-    if phase:
-        session_payload["phase"] = phase
-    if status:
-        session_payload["status"] = status
-    if isinstance(current_run, Mapping) and isinstance(current_run.get("execution_loop_active"), bool):
-        session_payload["execution_loop_active"] = bool(current_run.get("execution_loop_active"))
-    for key in ("execution_phase",):
-        value = (current_run or {}).get(key) if isinstance(current_run, Mapping) else None
-        if isinstance(value, str) and value.strip():
-            session_payload[key] = value.strip()
-    for key in ("requires_qa", "requires_demo"):
-        value = (current_run or {}).get(key) if isinstance(current_run, Mapping) else None
-        if isinstance(value, bool):
-            session_payload[key] = value
-    phase_requirements = (current_run or {}).get("phase_requirements") if isinstance(current_run, Mapping) else None
-    if isinstance(phase_requirements, Mapping):
-        session_payload["phase_requirements"] = dict(phase_requirements)
-
-    write_json(session_path, session_payload)
-
-    if previous_ticket_id and ticket_id and previous_ticket_id != ticket_id:
-        clear_ticket_claim_alias(project_root, previous_ticket_id, session_name)
-    if ticket_id and isinstance(current_run, Mapping):
-        set_ticket_claim_alias(project_root, current_run, session_name)
-
-    return session_payload
 
 
 def extract_ticket_id(text: str) -> str | None:
@@ -1474,17 +1088,10 @@ def capture_user_turn(
     runtime: Mapping[str, object] | None = None,
 ) -> dict[str, object] | None:
     captured_at_value = captured_at or now_iso()
-    current_run = load_current_run(
-        project_root,
-        session_id=session_id,
-        explicit_run_state=explicit_run_state,
-    )
-    normalized_session_id = normalize_session_id(session_id)
-    existing_session = load_json_dict(session_state_path(project_root, normalized_session_id)) if normalized_session_id else {}
-    session_origin, session_origin_source, session_origin_reason = resolve_session_origin(
+    session_origin, _session_origin_source, _session_origin_reason = resolve_session_origin(
         raw_text,
-        current_run=current_run,
-        existing_session=existing_session,
+        current_run=None,
+        existing_session={},
     )
     if session_origin != "control":
         return None
@@ -1496,130 +1103,4 @@ def capture_user_turn(
         captured_at=captured_at_value,
         runtime=runtime,
     )
-    current_run = maybe_seed_impl_runtime(
-        project_root=project_root,
-        current_run=current_run,
-        last_user_turn=last_user_turn,
-        session_id=normalized_session_id,
-    )
-    execution_loop_requested = bool(last_user_turn.get("requested_execution_phase"))
-    session_state = (
-        initialize_session_state(
-            project_root=project_root,
-            session_id=normalized_session_id,
-            current_run=current_run,
-            explicit_run_state=explicit_run_state,
-            captured_at=captured_at_value,
-            session_origin=session_origin,
-            session_origin_source=session_origin_source,
-            session_origin_reason=session_origin_reason,
-        )
-        if normalized_session_id
-        else {}
-    )
-
-    existing_source = current_run if current_run is not None else session_state
-    existing = existing_source.get("last_user_turn") if isinstance(existing_source, Mapping) else None
-    if only_if_missing and isinstance(existing, dict) and existing:
-        return existing
-
-    if current_run is not None:
-        updates: dict[str, object] = {
-            "last_user_turn": last_user_turn,
-            "execution_loop_active": execution_loop_requested,
-            "session_origin": session_origin,
-            "session_origin_source": session_origin_source,
-            "session_origin_reason": session_origin_reason,
-            "updated_at": str(last_user_turn["captured_at"]),
-        }
-        if isinstance(current_run.get("skill_name"), str) and str(current_run.get("skill_name") or "").strip():
-            updates["skill_name"] = str(current_run.get("skill_name") or "").strip()
-        if isinstance(current_run.get("execution_phase"), str):
-            updates["execution_phase"] = str(current_run.get("execution_phase") or "").strip()
-        for key in ("requires_qa", "requires_demo"):
-            if isinstance(current_run.get(key), bool):
-                updates[key] = bool(current_run.get(key))
-        if isinstance(current_run.get("phase_requirements"), Mapping):
-            updates["phase_requirements"] = dict(current_run.get("phase_requirements") or {})
-        if session_state:
-            session_name = session_state.get("session_name")
-            current_ticket_id = session_state.get("current_ticket_id")
-            if isinstance(session_name, str) and session_name.strip():
-                updates["session_name"] = session_name.strip()
-            if (
-                isinstance(current_ticket_id, str)
-                and current_ticket_id.strip()
-            ):
-                updates["current_ticket_id"] = current_ticket_id.strip()
-        persist_runtime_update(
-            project_root,
-            current_run,
-            updates,
-        )
-    elif normalized_session_id:
-        session_path = session_state_path(project_root, normalized_session_id)
-        payload = dict(session_state)
-        payload["last_user_turn"] = last_user_turn
-        payload["execution_loop_active"] = execution_loop_requested
-        if isinstance(current_run, Mapping):
-            if isinstance(current_run.get("skill_name"), str) and str(current_run.get("skill_name") or "").strip():
-                payload["skill_name"] = str(current_run.get("skill_name") or "").strip()
-            if isinstance(current_run.get("execution_phase"), str):
-                payload["execution_phase"] = str(current_run.get("execution_phase") or "").strip()
-            for key in ("requires_qa", "requires_demo"):
-                if isinstance(current_run.get(key), bool):
-                    payload[key] = bool(current_run.get(key))
-            if isinstance(current_run.get("phase_requirements"), Mapping):
-                payload["phase_requirements"] = dict(current_run.get("phase_requirements") or {})
-        payload["updated_at"] = str(last_user_turn["captured_at"])
-        payload["last_seen_at"] = str(last_user_turn["captured_at"])
-        write_json(session_path, payload)
-        write_json(current_run_state_path(project_root), payload)
     return last_user_turn
-
-
-def load_last_user_turn(
-    project_root: Path,
-    current_run: dict[str, object] | None = None,
-) -> dict[str, object] | None:
-    current_payload = current_run or load_current_run(project_root)
-    if current_payload is None:
-        return None
-
-    last_user_turn = current_payload.get("last_user_turn")
-    if isinstance(last_user_turn, dict) and last_user_turn:
-        return last_user_turn
-
-    run_state = current_payload.get("run_state")
-    if isinstance(run_state, str) and run_state.strip():
-        run_state_payload = load_json_dict(resolve_runtime_path(project_root, run_state))
-        nested = run_state_payload.get("last_user_turn")
-        if isinstance(nested, dict) and nested:
-            return nested
-
-    return None
-
-
-def load_runtime_claim(
-    project_root: Path,
-    current_run: dict[str, object] | None = None,
-) -> dict[str, object] | None:
-    current_payload = current_run or load_current_run(project_root)
-    if current_payload is None:
-        return None
-
-    claim = current_payload.get("claim")
-    if isinstance(claim, dict) and claim:
-        return claim
-
-    run_state = current_payload.get("run_state")
-    if isinstance(run_state, str) and run_state.strip():
-        run_state_payload = load_json_dict(resolve_runtime_path(project_root, run_state))
-        nested = run_state_payload.get("claim")
-        if isinstance(nested, dict) and nested:
-            return nested
-        derived_run_state = build_runtime_claim(run_state_payload)
-        if derived_run_state is not None:
-            return derived_run_state
-
-    return build_runtime_claim(current_payload)

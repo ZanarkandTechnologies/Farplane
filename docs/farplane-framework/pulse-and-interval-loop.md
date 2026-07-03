@@ -3,7 +3,7 @@ title: "Pulse And Interval Loop"
 status: active
 owner: farplane-framework
 created_at: 2026-06-29
-updated_at: 2026-07-01
+updated_at: 2026-07-03
 framework_template_version: "0.2.2"
 tags:
   - farplane
@@ -163,10 +163,145 @@ active SMART goal, use its `kpis` to find metric recipes in
 `refresh` instruction for today's reading. Do not parse
 `farplane/ops-memory.md` as a deterministic database; use it as flexible agent
 memory for active initiatives, tracked content, and next ticket candidates.
-Missing credentials, missing API fields, missing files, or missing feedback
-mechanisms become source gaps and instrumentation-ticket candidates. After
-writing `.farplane/metrics/daily/<date>.json`, run
-`farplane project snapshot` to refresh `.farplane/project/ui/latest.json`.
+
+## Daily Metric Update Lifecycle
+
+Daily Interval owns the normal metric refresh cadence. It should refresh the
+sources first, then compile the UI snapshot; the UI must not invent missing
+metric state from stale bindings or goals.
+
+```text
+goals.yaml SMART goals
+  -> KPI ids and targets
+bindings.yaml metric recipes
+  -> labels, products, units, display, pinned status, refresh prompts
+platform skills and Core primitive reducers
+  -> canonical MetricObservationBatch files
+farplane project snapshot
+  -> .farplane/project/ui/latest.json for Overview, Goals, Products, and tabs
+interval report
+  -> interpretation, source gaps, instrumentation tickets, next-window plan
+```
+
+The update order is:
+
+1. Select KPI scope. Read active goal axes and SMART-goal KPI IDs from
+   `farplane/goals.yaml`, then join each KPI ID to `farplane/bindings.yaml`.
+   Missing KPI definitions are validation failures, not UI warnings.
+2. Refresh external or skill-owned observations. Platform skills such as
+   `instagram-account` and `x-account` fetch their own APIs or ledgers and
+   write `.farplane/metrics/observations/<source_id>/<YYYY-MM-DD>.json`.
+   Each file must validate as `MetricObservationBatch`.
+3. Refresh Core primitive observations. Run:
+
+   ```bash
+   farplane metrics primitives --project-root <project> --date <YYYY-MM-DD>
+   ```
+
+   Core reducers count ticket rewards, autonomy ratios, intervention metrics,
+   AI spend estimates, and rollups such as total evidence-distribution views
+   from Farplane-owned files and existing observation batches. The debug/index
+   snapshot under `.farplane/metrics/daily/<date>.json` is optional support
+   state; it is not the canonical provider contract.
+4. Compile the project snapshot:
+
+   ```bash
+   farplane project snapshot --project-root <project> --date <YYYY-MM-DD>
+   ```
+
+   The compiler validates `goals.yaml`, `bindings.yaml`, and observation
+   batches, joins targets and descriptions into metric definitions, builds
+   series, propagates source-gap IDs, and writes
+   `.farplane/project/ui/latest.json`.
+5. Interpret and plan. The interval report reads the snapshot, names true
+   source gaps, and creates instrumentation or access tickets when a missing
+   provider blocks a real KPI. Human-created tickets without KPI rewards and
+   old tickets with missing front matter are not metric source gaps; they are
+   legacy or manual-work context.
+
+Source-gap rules:
+
+- Missing credentials, missing API fields, missing files, unsupported feedback
+  mechanisms, or malformed observation batches are source gaps.
+- A KPI listed in `goals.yaml` but absent from `bindings.yaml` is a validation
+  failure.
+- A metric with no current observation may show `missing` on its own KPI row,
+  but it should become a global Needs Attention item only when the missing
+  source blocks an accountable KPI or pinned rollup.
+- Composite rollups should use the same observation shape as primitives. When a
+  component has no same-day reading, Core may use the latest available reading
+  on or before the snapshot date if the metric recipe says that is acceptable;
+  otherwise it records a source gap.
+
+Primitive metric contract:
+
+```text
+farplane metrics primitives(project_root, date, codex_home?, monthly_spend?)
+  -> .farplane/metrics/daily/<date>.json
+   + .farplane/metrics/observations/<primitive_id>/<date>.json
+```
+
+`.farplane/metrics/daily/<date>.json` is the raw primitive snapshot. It contains
+the run window, diagnostic parse gaps, source gaps, support paths, and a
+`primitives` map. This is useful for debugging and drilldowns, but the snapshot
+compiler prefers canonical observation batches when they exist.
+
+Each `.farplane/metrics/observations/<primitive_id>/<date>.json` file is a
+`MetricObservationBatch`:
+
+```json
+{
+  "schema_version": 1,
+  "date": "2026-07-03",
+  "source_id": "ticket_count_by_kpi",
+  "status": "available",
+  "observations": [
+    {
+      "metric_id": "accepted_harness_improvements",
+      "date": "2026-07-03",
+      "value": 2,
+      "status": "available",
+      "payload": {
+        "tickets": []
+      }
+    }
+  ],
+  "gaps": [],
+  "payload": {}
+}
+```
+
+Primitive families:
+
+| Primitive | Emits | Inputs | Notes |
+| --- | --- | --- | --- |
+| `ticket_count_by_kpi` | One observation per KPI ID found in `Reward.kpi_rewards[]`. Missing KPI rows compile as available zero for defined KPIs. | `tickets/**/ticket.md` | Human-created tickets without KPI rewards are diagnostics, not source gaps. |
+| `ticket_count_by_product` | `ticket_count_by_product:<product_id>` observations with touched, completed, and proofed ticket counts in payload. | `farplane/bindings.yaml#metrics.*.product`, ticket rewards | Product is transitive: product -> KPI IDs -> tickets. Tickets do not need `product_id`. |
+| `kpi_attributed_ticket_ratio` | One ratio observation for rewarded tickets over touched tickets. | ticket rewards | Empty windows are available zero readings. |
+| `codex_thread_usage` | Thread count, turn count, total token count, and span-minute observations through metric projection. | `~/.codex/sqlite/state_5.sqlite`, `~/.codex/sessions/**/*.jsonl` | Missing local Codex stores are source gaps. |
+| `ai_burn_estimate` | Daily allocated AI spend plus derived burn-per-thread, burn-per-turn, and burn-per-token metrics. | monthly spend model plus thread usage | Missing spend model is a source gap for burn metrics. |
+| `content_views_total` | `evidence_distribution_reach` rollup. | platform observation batches for `instagram_views`, `x_views`, `github_views` | Uses latest available component readings on or before the snapshot date. |
+| `ticket_thread_association_backfill` | Association count plus support index rows. | `.farplane/mine/runs/**/input.json` | Backfill confidence is `completion_only`; it does not prove post-start intervention metrics. |
+| `ticket_thread_link_coverage` | Ratio of completed tickets with association rows. | completed tickets plus association index | Support metric for debugging association coverage. |
+| `autonomy_time_feedback` | `auto_time_ratio` and related human/autonomous time metrics when interval runtime ledgers exist. | `.farplane/events`, spawned-thread, and reward ledgers | Interval-owned provider shape; emits the same observation batch schema. |
+| `ticket_intervention_feedback` | `auto_completion_rate`, `intervention_free_ticket_count`, `ticket_intervention_turn_count`. | tickets, association index, runtime events | Emits source gaps when completed tickets cannot be associated with execution threads. |
+
+Primitive-to-snapshot compilation:
+
+```text
+MetricObservationBatch rows
+  -> provider_observations()
+  -> metric cards, chart series, pinned cards, goal KPI rows, product rollups
+
+.farplane/metrics/daily/<date>.json primitives
+  -> daily_observations() fallback only when no canonical batch exists
+```
+
+The compiler maps metric IDs to primitive IDs from `bindings.yaml` refresh
+recipes and Core's primitive catalog. Canonical batches win over raw daily
+fallbacks to prevent duplicate series. Source gaps propagate by ID into metric
+cards and top-level `source_gaps[]`; the UI renders those gaps instead of
+creating its own warnings.
 
 Maintenance work should compete against the active frontier. It is selected
 only when it unblocks the focus, protects proof, or has a clearer reward signal

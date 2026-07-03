@@ -17,16 +17,12 @@ from user_turn import (
     build_runtime_claim,
     capture_user_turn,
     conversation_window_path,
-    current_run_state_path,
     extract_control_surfaces,
     extract_skill_mentions,
     has_explicit_goal_execution_invocation,
     is_internal_user_prompt,
-    load_current_run,
-    load_runtime_claim,
     normalize_user_turn,
     recent_conversation_windows,
-    session_state_path,
     should_review_skill_opportunities,
     skill_opportunity_application_dir,
 )
@@ -179,220 +175,7 @@ class RuntimeClaimTests(unittest.TestCase):
         self.assertEqual(claim["claimed_at"], "2026-04-08T15:00:00Z")
         self.assertEqual(claim["status"], "waiting_for_judge")
 
-    def test_load_runtime_claim_prefers_nested_run_state_claim(self) -> None:
-        with tempfile.TemporaryDirectory() as tmp:
-            project_root = Path(tmp)
-            state_dir = project_root / ".farplane" / "state"
-            state_dir.mkdir(parents=True, exist_ok=True)
-            run_state = project_root / ".farplane" / "runs" / "task-0035-building.json"
-            run_state.parent.mkdir(parents=True, exist_ok=True)
-            run_state.write_text(
-                json.dumps(
-                    {
-                        "ticket_id": "TASK-0035",
-                        "run_id": "run-task-0035-building-01",
-                        "phase": "building",
-                        "status": "running",
-                        "claim": {
-                            "ticket_id": "TASK-0035",
-                            "run_id": "run-task-0035-building-01",
-                            "claimed_at": "2026-04-08T15:00:00Z",
-                            "phase": "building",
-                            "status": "running",
-                            "session_id": "sess-123",
-                        },
-                    }
-                ),
-                encoding="utf-8",
-            )
-            (state_dir / "current-run.json").write_text(
-                json.dumps(
-                    {
-                        "ticket_id": "TASK-0035",
-                        "run_id": "run-task-0035-building-01",
-                        "phase": "building",
-                        "status": "running",
-                        "run_state": str(run_state.relative_to(project_root)),
-                    }
-                ),
-                encoding="utf-8",
-            )
-
-            claim = load_runtime_claim(project_root)
-
-        self.assertIsNotNone(claim)
-        self.assertEqual(claim["session_id"], "sess-123")
-        self.assertEqual(claim["claimed_at"], "2026-04-08T15:00:00Z")
-
-    def test_load_current_run_prefers_session_state_over_global_pointer(self) -> None:
-        with tempfile.TemporaryDirectory() as tmp:
-            project_root = Path(tmp)
-            state_dir = project_root / ".farplane" / "state"
-            state_dir.mkdir(parents=True, exist_ok=True)
-            session_path = session_state_path(project_root, "sess-123")
-            session_path.parent.mkdir(parents=True, exist_ok=True)
-            session_path.write_text(
-                json.dumps(
-                    {
-                        "ticket_id": "TASK-1234",
-                        "run_id": "run-task-1234-building-01",
-                        "phase": "building",
-                        "status": "running",
-                        "session_id": "sess-123",
-                        "last_user_turn": {"turn_id": "turn-a", "raw_text": "build task 1234"},
-                    }
-                ),
-                encoding="utf-8",
-            )
-            (state_dir / "current-run.json").write_text(
-                json.dumps(
-                    {
-                        "ticket_id": "TASK-9999",
-                        "run_id": "run-task-9999-building-01",
-                        "phase": "building",
-                        "status": "running",
-                        "session_id": "sess-other",
-                    }
-                ),
-                encoding="utf-8",
-            )
-
-            current = load_current_run(project_root, session_id="sess-123")
-
-        self.assertIsNotNone(current)
-        assert current is not None
-        self.assertEqual(current["ticket_id"], "TASK-1234")
-        self.assertEqual(current["session_id"], "sess-123")
-
-    def test_load_current_run_falls_through_session_stub_to_same_session_global_run_state(self) -> None:
-        with tempfile.TemporaryDirectory() as tmp:
-            project_root = Path(tmp)
-            state_dir = project_root / ".farplane" / "state"
-            state_dir.mkdir(parents=True, exist_ok=True)
-            run_state = project_root / ".farplane" / "runs" / "task-0016-building.json"
-            run_state.parent.mkdir(parents=True, exist_ok=True)
-            run_state.write_text(
-                json.dumps(
-                    {
-                        "ticket_id": "TASK-0016",
-                        "ticket_path": str(project_root / "tickets" / "TASK-0016" / "ticket.md"),
-                        "run_id": "run-task-0016-building-01",
-                        "phase": "building",
-                        "status": "running",
-                        "skill_name": "goal-advisor",
-                        "session_id": "sess-123",
-                        "execution_loop_active": True,
-                    }
-                ),
-                encoding="utf-8",
-            )
-            session_path = session_state_path(project_root, "sess-123")
-            session_path.parent.mkdir(parents=True, exist_ok=True)
-            session_path.write_text(
-                json.dumps(
-                    {
-                        "session_id": "sess-123",
-                        "session_origin": "control",
-                        "last_user_turn": {
-                            "turn_id": "turn-a",
-                            "raw_text": "please $goal-advisor this",
-                            "control_surface": "goal-advisor",
-                            "explicit_goal_execution_requested": True,
-                        },
-                        "execution_loop_active": True,
-                    }
-                ),
-                encoding="utf-8",
-            )
-            (state_dir / "current-run.json").write_text(
-                json.dumps(
-                    {
-                        "ticket_id": "TASK-0016",
-                        "ticket_path": str(project_root / "tickets" / "TASK-0016" / "ticket.md"),
-                        "run_id": "run-task-0016-building-01",
-                        "phase": "building",
-                        "status": "running",
-                        "skill_name": "goal-advisor",
-                        "session_id": "sess-123",
-                        "run_state": str(run_state.relative_to(project_root)),
-                        "execution_loop_active": True,
-                    }
-                ),
-                encoding="utf-8",
-            )
-
-            current = load_current_run(project_root, session_id="sess-123")
-
-        self.assertIsNotNone(current)
-        assert current is not None
-        self.assertEqual(current["ticket_id"], "TASK-0016")
-        self.assertEqual(current["run_state"], str(run_state.relative_to(project_root)))
-        self.assertEqual(current["skill_name"], "goal-advisor")
-
-    def test_load_current_run_explicit_run_state_outranks_session_state(self) -> None:
-        with tempfile.TemporaryDirectory() as tmp:
-            project_root = Path(tmp)
-            run_state = project_root / ".farplane" / "runs" / "task-0042-building.json"
-            run_state.parent.mkdir(parents=True, exist_ok=True)
-            run_state.write_text(
-                json.dumps(
-                    {
-                        "ticket_id": "TASK-0042",
-                        "run_id": "run-task-0042-building-01",
-                        "phase": "building",
-                        "status": "running",
-                    }
-                ),
-                encoding="utf-8",
-            )
-            session_path = session_state_path(project_root, "sess-123")
-            session_path.parent.mkdir(parents=True, exist_ok=True)
-            session_path.write_text(
-                json.dumps(
-                    {
-                        "ticket_id": "TASK-9999",
-                        "run_id": "run-task-9999-building-01",
-                        "phase": "building",
-                        "status": "running",
-                        "session_id": "sess-123",
-                    }
-                ),
-                encoding="utf-8",
-            )
-
-            current = load_current_run(
-                project_root,
-                session_id="sess-123",
-                explicit_run_state=str(run_state.relative_to(project_root)),
-            )
-
-        self.assertIsNotNone(current)
-        assert current is not None
-        self.assertEqual(current["ticket_id"], "TASK-0042")
-        self.assertEqual(current["run_state"], str(run_state.relative_to(project_root)))
-
-    def test_load_current_run_ignores_retired_runtime_state(self) -> None:
-        with tempfile.TemporaryDirectory() as tmp:
-            project_root = Path(tmp)
-            state_dir = project_root / ".retired-runtime" / "state"
-            state_dir.mkdir(parents=True, exist_ok=True)
-            (state_dir / "current-run.json").write_text(
-                json.dumps(
-                    {
-                        "ticket_id": "TASK-7777",
-                        "run_id": "run-task-7777-building-01",
-                        "phase": "building",
-                        "status": "running",
-                    }
-                ),
-                encoding="utf-8",
-            )
-
-            current = load_current_run(project_root)
-
-        self.assertIsNone(current)
-
-    def test_capture_user_turn_initializes_control_session_and_current_run_without_existing_state(self) -> None:
+    def test_capture_user_turn_does_not_write_runtime_state_files(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             project_root = Path(tmp)
             (project_root / ".farplane" / "state").mkdir(parents=True, exist_ok=True)
@@ -405,17 +188,12 @@ class RuntimeClaimTests(unittest.TestCase):
                 session_id="sess-init",
             )
 
-            session_payload = json.loads(session_state_path(project_root, "sess-init").read_text(encoding="utf-8"))
-            current_run = json.loads(current_run_state_path(project_root).read_text(encoding="utf-8"))
-
         self.assertIsNotNone(captured)
         assert captured is not None
-        self.assertEqual(session_payload["session_id"], "sess-init")
-        self.assertEqual(session_payload["session_name"], "codex-sessinit")
-        self.assertEqual(session_payload["last_user_turn"]["turn_id"], "turn-init")
-        self.assertEqual(session_payload["session_origin"], "control")
-        self.assertEqual(current_run["session_id"], "sess-init")
-        self.assertEqual(current_run["session_origin"], "control")
+        self.assertEqual(captured["turn_id"], "turn-init")
+        self.assertEqual(captured["control_surface"], "goal-advisor")
+        self.assertFalse((project_root / ".farplane" / "state" / "sessions" / "sess-init.json").exists())
+        self.assertFalse((project_root / ".farplane" / "state" / "current-run.json").exists())
 
     def test_conversation_window_pairs_user_and_assistant_turns(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -535,16 +313,13 @@ class RuntimeClaimTests(unittest.TestCase):
                 session_id="sess-plan",
             )
 
-            session_payload = json.loads(session_state_path(project_root, "sess-plan").read_text(encoding="utf-8"))
-            current_run = json.loads(current_run_state_path(project_root).read_text(encoding="utf-8"))
-
         self.assertIsNotNone(captured)
         assert captured is not None
         self.assertEqual(captured["control_surface"], "impl-plan")
         self.assertFalse(captured["explicit_goal_execution_requested"])
         self.assertEqual(captured["intent_mode"], "planning")
-        self.assertFalse(session_payload["execution_loop_active"])
-        self.assertFalse(current_run["execution_loop_active"])
+        self.assertFalse((project_root / ".farplane" / "state" / "sessions" / "sess-plan.json").exists())
+        self.assertFalse((project_root / ".farplane" / "state" / "current-run.json").exists())
 
     def test_capture_user_turn_explicit_goal_advisor_seeds_unambiguous_active_ticket_runtime(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -585,25 +360,12 @@ linked_docs: []
                 session_id="sess-seed",
             )
 
-            session_payload = json.loads(session_state_path(project_root, "sess-seed").read_text(encoding="utf-8"))
-            current_run = json.loads(current_run_state_path(project_root).read_text(encoding="utf-8"))
-
         self.assertIsNotNone(captured)
         assert captured is not None
         self.assertTrue(captured["explicit_goal_execution_requested"])
-        self.assertEqual(session_payload["ticket_id"], "TASK-0016")
-        self.assertEqual(session_payload["current_ticket_id"], "TASK-0016")
-        self.assertEqual(session_payload["phase"], "building")
-        self.assertEqual(session_payload["status"], "running")
-        self.assertEqual(session_payload["skill_name"], "goal-advisor")
-        self.assertEqual(session_payload["execution_phase"], "build")
-        self.assertTrue(session_payload["requires_qa"])
-        self.assertFalse(session_payload["requires_demo"])
-        self.assertIn("qa", session_payload["phase_requirements"])
-        self.assertTrue(session_payload["execution_loop_active"])
-        self.assertEqual(current_run["ticket_id"], "TASK-0016")
-        self.assertEqual(current_run["claim"]["ticket_id"], "TASK-0016")
-        self.assertEqual(current_run["claim"]["session_id"], "sess-seed")
+        self.assertEqual(captured["explicit_ticket_id"], "")
+        self.assertFalse((project_root / ".farplane" / "state" / "sessions" / "sess-seed.json").exists())
+        self.assertFalse((project_root / ".farplane" / "state" / "current-run.json").exists())
 
     def test_capture_user_turn_ignores_non_control_session_without_existing_origin(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -619,8 +381,8 @@ linked_docs: []
             )
 
         self.assertIsNone(captured)
-        self.assertFalse(session_state_path(project_root, "sess-plain").exists())
-        self.assertFalse(current_run_state_path(project_root).exists())
+        self.assertFalse((project_root / ".farplane" / "state" / "sessions" / "sess-plain.json").exists())
+        self.assertFalse((project_root / ".farplane" / "state" / "current-run.json").exists())
 
     def test_capture_user_turn_requires_dollar_prefixed_control_skill(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -636,8 +398,8 @@ linked_docs: []
             )
 
         self.assertIsNone(captured)
-        self.assertFalse(session_state_path(project_root, "sess-no-dollar").exists())
-        self.assertFalse(current_run_state_path(project_root).exists())
+        self.assertFalse((project_root / ".farplane" / "state" / "sessions" / "sess-no-dollar.json").exists())
+        self.assertFalse((project_root / ".farplane" / "state" / "current-run.json").exists())
 
     def test_capture_user_turn_rejects_hyphen_suffixed_skill_lookalike(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -653,300 +415,8 @@ linked_docs: []
             )
 
         self.assertIsNone(captured)
-        self.assertFalse(session_state_path(project_root, "sess-invalid-skill").exists())
-        self.assertFalse(current_run_state_path(project_root).exists())
-
-    def test_capture_user_turn_writes_claimed_by_to_ticket(self) -> None:
-        with tempfile.TemporaryDirectory() as tmp:
-            project_root = Path(tmp)
-            state_dir = project_root / ".farplane" / "state"
-            state_dir.mkdir(parents=True, exist_ok=True)
-            ticket_path = project_root / "tickets" / "TASK-1234" / "ticket.md"
-            ticket_path.parent.mkdir(parents=True, exist_ok=True)
-            ticket_path.write_text(
-                """---
-ticket_id: TASK-1234
-title: example
-phase: building
-status: building
-owner: codex
-priority: high
-depends_on: []
-blocked_by: []
-ready: true
-approval_required: false
-created_at: 2026-04-10T00:00:00Z
-updated_at: 2026-04-10T00:00:00Z
-next_action: continue implementation
-last_verification: none
-linked_docs: []
----
-
-# TASK-1234: example
-""",
-                encoding="utf-8",
-            )
-            session_path = session_state_path(project_root, "sess-123")
-            session_path.parent.mkdir(parents=True, exist_ok=True)
-            session_path.write_text(
-                json.dumps(
-                    {
-                        "ticket_id": "TASK-1234",
-                        "ticket_path": str(ticket_path),
-                        "run_id": "run-task-1234-building-01",
-                        "phase": "building",
-                        "status": "running",
-                        "session_id": "sess-123",
-                        "session_origin": "control",
-                    }
-                ),
-                encoding="utf-8",
-            )
-            (state_dir / "current-run.json").write_text(
-                json.dumps(
-                    {
-                        "ticket_id": "TASK-1234",
-                        "ticket_path": str(ticket_path),
-                        "run_id": "run-task-1234-building-01",
-                        "phase": "building",
-                        "status": "running",
-                        "session_id": "sess-123",
-                        "session_origin": "control",
-                    }
-                ),
-                encoding="utf-8",
-            )
-
-            capture_user_turn(
-                project_root=project_root,
-                raw_text="continue TASK-1234",
-                turn_id="turn-claim",
-                source="test",
-                session_id="sess-123",
-            )
-
-            ticket_text = ticket_path.read_text(encoding="utf-8")
-            session_payload = json.loads(session_path.read_text(encoding="utf-8"))
-
-        self.assertIn("claimed_by: codex-sess123", ticket_text)
-        self.assertEqual(session_payload["session_name"], "codex-sess123")
-        self.assertEqual(session_payload["current_ticket_id"], "TASK-1234")
-
-    def test_capture_user_turn_updates_only_resolved_session_lane(self) -> None:
-        with tempfile.TemporaryDirectory() as tmp:
-            project_root = Path(tmp)
-            state_dir = project_root / ".farplane" / "state"
-            state_dir.mkdir(parents=True, exist_ok=True)
-
-            run_state_a = project_root / ".farplane" / "runs" / "task-0042-building.json"
-            run_state_b = project_root / ".farplane" / "runs" / "task-0041-planning.json"
-            run_state_a.parent.mkdir(parents=True, exist_ok=True)
-            run_state_a.write_text(
-                json.dumps(
-                    {
-                        "ticket_id": "TASK-0042",
-                        "run_id": "run-task-0042-building-01",
-                        "phase": "building",
-                        "status": "running",
-                        "session_id": "sess-a",
-                        "last_user_turn": {
-                            "turn_id": "turn-a0",
-                            "raw_text": "$goal-advisor TASK-0042",
-                            "control_surface": "goal-advisor",
-                            "explicit_goal_execution_requested": True,
-                        },
-                    }
-                ),
-                encoding="utf-8",
-            )
-            run_state_b.write_text(
-                json.dumps(
-                    {
-                        "ticket_id": "TASK-0041",
-                        "run_id": "run-task-0041-planning-01",
-                        "phase": "planning",
-                        "status": "running",
-                        "session_id": "sess-b",
-                        "last_user_turn": {"turn_id": "turn-b", "raw_text": "plan task 41"},
-                    }
-                ),
-                encoding="utf-8",
-            )
-            session_state_a = session_state_path(project_root, "sess-a")
-            session_state_b = session_state_path(project_root, "sess-b")
-            session_state_a.parent.mkdir(parents=True, exist_ok=True)
-            session_state_a.write_text(
-                json.dumps(
-                    {
-                        "ticket_id": "TASK-0042",
-                        "run_id": "run-task-0042-building-01",
-                        "phase": "building",
-                        "status": "running",
-                        "session_id": "sess-a",
-                        "run_state": str(run_state_a.relative_to(project_root)),
-                        "last_user_turn": {
-                            "turn_id": "turn-a0",
-                            "raw_text": "$goal-advisor TASK-0042",
-                            "control_surface": "goal-advisor",
-                            "explicit_goal_execution_requested": True,
-                        },
-                    }
-                ),
-                encoding="utf-8",
-            )
-            session_state_b.write_text(
-                json.dumps(
-                    {
-                        "ticket_id": "TASK-0041",
-                        "run_id": "run-task-0041-planning-01",
-                        "phase": "planning",
-                        "status": "running",
-                        "session_id": "sess-b",
-                        "run_state": str(run_state_b.relative_to(project_root)),
-                        "last_user_turn": {"turn_id": "turn-b", "raw_text": "plan task 41"},
-                    }
-                ),
-                encoding="utf-8",
-            )
-            (state_dir / "current-run.json").write_text(
-                json.dumps(
-                    {
-                        "ticket_id": "TASK-0041",
-                        "run_id": "run-task-0041-planning-01",
-                        "phase": "planning",
-                        "status": "running",
-                        "session_id": "sess-b",
-                        "run_state": str(run_state_b.relative_to(project_root)),
-                    }
-                ),
-                encoding="utf-8",
-            )
-
-            captured = capture_user_turn(
-                project_root=project_root,
-                raw_text="Implement TASK-0042 in this session only.",
-                turn_id="turn-a",
-                source="test",
-                session_id="sess-a",
-            )
-
-            session_a = json.loads(session_state_a.read_text(encoding="utf-8"))
-            session_b = json.loads(session_state_b.read_text(encoding="utf-8"))
-            persisted_run_state_a = json.loads(run_state_a.read_text(encoding="utf-8"))
-
-        self.assertIsNotNone(captured)
-        assert captured is not None
-        self.assertEqual(captured["turn_id"], "turn-a")
-        self.assertEqual(session_a["last_user_turn"]["turn_id"], "turn-a")
-        self.assertEqual(session_a["last_user_turn"]["raw_text"], "Implement TASK-0042 in this session only.")
-        self.assertEqual(session_a["session_origin"], "control")
-        self.assertFalse(session_a["execution_loop_active"])
-        self.assertEqual(session_a["session_name"], "codex-sessa")
-        self.assertEqual(session_b["last_user_turn"]["turn_id"], "turn-b")
-        self.assertNotIn("execution_loop_active", session_b)
-        self.assertFalse(persisted_run_state_a["execution_loop_active"])
-        self.assertEqual(persisted_run_state_a["last_user_turn"]["turn_id"], "turn-a")
-
-    def test_capture_user_turn_explicit_goal_advisor_activates_only_resolved_session_lane(self) -> None:
-        with tempfile.TemporaryDirectory() as tmp:
-            project_root = Path(tmp)
-            state_dir = project_root / ".farplane" / "state"
-            state_dir.mkdir(parents=True, exist_ok=True)
-
-            run_state_a = project_root / ".farplane" / "runs" / "task-0042-building.json"
-            run_state_b = project_root / ".farplane" / "runs" / "task-0041-planning.json"
-            run_state_a.parent.mkdir(parents=True, exist_ok=True)
-            run_state_a.write_text(
-                json.dumps(
-                    {
-                        "ticket_id": "TASK-0042",
-                        "run_id": "run-task-0042-building-01",
-                        "phase": "building",
-                        "status": "running",
-                        "session_id": "sess-a",
-                        "skill_name": "goal-advisor",
-                    }
-                ),
-                encoding="utf-8",
-            )
-            run_state_b.write_text(
-                json.dumps(
-                    {
-                        "ticket_id": "TASK-0041",
-                        "run_id": "run-task-0041-planning-01",
-                        "phase": "planning",
-                        "status": "running",
-                        "session_id": "sess-b",
-                        "last_user_turn": {"turn_id": "turn-b", "raw_text": "plan task 41"},
-                    }
-                ),
-                encoding="utf-8",
-            )
-            session_state_a = session_state_path(project_root, "sess-a")
-            session_state_b = session_state_path(project_root, "sess-b")
-            session_state_a.parent.mkdir(parents=True, exist_ok=True)
-            session_state_a.write_text(
-                json.dumps(
-                    {
-                        "ticket_id": "TASK-0042",
-                        "run_id": "run-task-0042-building-01",
-                        "phase": "building",
-                        "status": "running",
-                        "skill_name": "goal-advisor",
-                        "session_id": "sess-a",
-                        "run_state": str(run_state_a.relative_to(project_root)),
-                    }
-                ),
-                encoding="utf-8",
-            )
-            session_state_b.write_text(
-                json.dumps(
-                    {
-                        "ticket_id": "TASK-0041",
-                        "run_id": "run-task-0041-planning-01",
-                        "phase": "planning",
-                        "status": "running",
-                        "session_id": "sess-b",
-                        "run_state": str(run_state_b.relative_to(project_root)),
-                        "last_user_turn": {"turn_id": "turn-b", "raw_text": "plan task 41"},
-                    }
-                ),
-                encoding="utf-8",
-            )
-            (state_dir / "current-run.json").write_text(
-                json.dumps(
-                    {
-                        "ticket_id": "TASK-0041",
-                        "run_id": "run-task-0041-planning-01",
-                        "phase": "planning",
-                        "status": "running",
-                        "session_id": "sess-b",
-                        "run_state": str(run_state_b.relative_to(project_root)),
-                    }
-                ),
-                encoding="utf-8",
-            )
-
-            captured = capture_user_turn(
-                project_root=project_root,
-                raw_text="$goal-advisor TASK-0042 in this session only.",
-                turn_id="turn-execution",
-                source="test",
-                session_id="sess-a",
-            )
-
-            session_a = json.loads(session_state_a.read_text(encoding="utf-8"))
-            session_b = json.loads(session_state_b.read_text(encoding="utf-8"))
-            persisted_run_state_a = json.loads(run_state_a.read_text(encoding="utf-8"))
-
-        self.assertIsNotNone(captured)
-        assert captured is not None
-        self.assertTrue(captured["explicit_goal_execution_requested"])
-        self.assertTrue(session_a["execution_loop_active"])
-        self.assertEqual(session_a["last_user_turn"]["turn_id"], "turn-execution")
-        self.assertEqual(session_a["session_origin"], "control")
-        self.assertNotIn("execution_loop_active", session_b)
-        self.assertTrue(persisted_run_state_a["execution_loop_active"])
+        self.assertFalse((project_root / ".farplane" / "state" / "sessions" / "sess-invalid-skill.json").exists())
+        self.assertFalse((project_root / ".farplane" / "state" / "current-run.json").exists())
 
     def test_capture_user_turn_explicit_qa_seeds_execution_phase(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -989,14 +459,11 @@ linked_docs: []
                 session_id="sess-qa",
             )
 
-            session_payload = json.loads(session_state_path(project_root, "sess-qa").read_text(encoding="utf-8"))
-
         self.assertIsNotNone(captured)
         assert captured is not None
-        self.assertEqual(session_payload["skill_name"], "qa")
-        self.assertEqual(session_payload["execution_phase"], "qa")
-        self.assertTrue(session_payload["requires_qa"])
-        self.assertFalse(session_payload["requires_demo"])
+        self.assertEqual(captured["control_surface"], "qa")
+        self.assertEqual(captured["requested_execution_phase"], "qa")
+        self.assertFalse((project_root / ".farplane" / "state" / "sessions" / "sess-qa.json").exists())
 
     def test_capture_user_turn_explicit_demo_forces_demo_requirement(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -1039,14 +506,11 @@ linked_docs: []
                 session_id="sess-demo",
             )
 
-            session_payload = json.loads(session_state_path(project_root, "sess-demo").read_text(encoding="utf-8"))
-
         self.assertIsNotNone(captured)
         assert captured is not None
-        self.assertEqual(session_payload["skill_name"], "demo")
-        self.assertEqual(session_payload["execution_phase"], "demo")
-        self.assertTrue(session_payload["requires_qa"])
-        self.assertTrue(session_payload["requires_demo"])
+        self.assertEqual(captured["control_surface"], "demo")
+        self.assertEqual(captured["requested_execution_phase"], "demo")
+        self.assertFalse((project_root / ".farplane" / "state" / "sessions" / "sess-demo.json").exists())
 
     def test_is_internal_user_prompt_rejects_approval_reviewer_requests(self) -> None:
         prompt = (

@@ -368,8 +368,9 @@ signals, and urgent escalation rule.
 ## Hooks And Runtime
 
 Codex hooks are boundary tools, not orchestration engines. In this repo,
-`UserPromptSubmit` captures current-turn user intent and sends a console
-heartbeat. `Stop` runs mechanical completion checks and sends a stop heartbeat.
+`UserPromptSubmit` classifies the current user turn, appends lightweight
+conversation windows, and sends a console heartbeat. `Stop` sends a stop
+heartbeat.
 
 Hooks may detect, capture, gate, or route. They should not rewrite durable
 memory, optimize documentation, or silently decide project strategy. When a

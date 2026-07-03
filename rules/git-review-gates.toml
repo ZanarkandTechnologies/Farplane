@@ -4,6 +4,7 @@
 mode = "block"
 checks = [
   "staged_diff_check",
+  "ticket_closure_gate",
   "template_version_staged",
   "large_file_guard",
 ]
@@ -66,6 +67,9 @@ argv = ["python3", "bin/validators/sync_skill_registry.py", "--check"]
 
 [checks.ticket_metadata]
 argv = ["python3", "tickets/scripts/check_ticket_metadata.py"]
+
+[checks.ticket_closure_gate]
+argv = ["python3", "bin/validators/check_ticket_closure_gate.py"]
 
 [checks.doc_refs]
 argv = ["python3", "bin/validators/check_doc_refs.py"]

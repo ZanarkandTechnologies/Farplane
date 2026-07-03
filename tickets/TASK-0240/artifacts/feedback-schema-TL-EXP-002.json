@@ -1,9 +1,0 @@
-{
-  "artifact_id": "TL-EXP-002",
-  "score": null,
-  "verdict": "keep | revise | reject | approve",
-  "selected_proposal": "A | B | C | none",
-  "feedback": "Short reason.",
-  "labels": ["idea", "social_thread", "planning", "taste_proposal"],
-  "next_instruction": "What the worker should do next."
-}

@@ -3,7 +3,7 @@ kind: project-products
 status: active
 project: Farplane
 created_at: 2026-06-25
-updated_at: 2026-06-27
+updated_at: 2026-07-03
 framework_template_version: "0.2.0"
 owner: harness
 source_of_truth:
@@ -42,6 +42,16 @@ source_of_truth:
 | trust_distribution | 15 | distribute proven evidence |
 | market_learning | 10 | sharpen user and pain understanding |
 | maintenance | 5 | keep the system operable |
+
+## Product Skill Breakdown
+
+| Product | Primary skill | Supporting skills | Notes |
+| --- | --- | --- | --- |
+| Experiment reports | `farplane-experiment-report` | `metric-advisor`, `proof-advisor`, `eval`, `review`, `update-strategy` | Measures a harness hypothesis, records baseline/variant evidence, and turns the decision into either rejection, iteration, or productization. |
+| Trust ablations | `farplane-ablation-proof` | `proof-advisor`, `agent-qa-test`, `agent-behavior-test`, `eval`, `review` | Proves whether a feature or workflow matters through with/without comparison and evidence review. |
+| Harness improvements | `farplane-productization` | `impl-plan`, `goal-advisor`, `qa`, `demo`, `close-ticket`, `skill-maintenance`, `harness-advisor` | Converts accepted evidence into shipped harness behavior, with ticket proof and reviewer gates. |
+| Evidence content | `farplane-evidence-content` | `social-content`, `landing-page`, `video-production`, `infographic`, `reel-collage`, `product-photography`, `image-generation`, `x-account`, `instagram-account` | Turns accepted evidence into distribution artifacts; content skills own format-specific craft and platform constraints. |
+| Market learning | `farplane-market-learning` | `research`, `deep-interview`, `harness-scout`, `best-of-worlds`, `landing-page`, `social-content`, `update-strategy` | Sharpens audience, pain, offer, and distribution bets before product or content execution. |
 
 ## Taste Loop Artifact Workflows
 

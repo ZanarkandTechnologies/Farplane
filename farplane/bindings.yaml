@@ -8,6 +8,14 @@ project:
   id: farplane
   name: Farplane
   root: /Users/kenjipcx/Zanarkand Technologies/projects/Farplane
+human_gates:
+  - post
+  - publish
+  - spend
+  - deploy
+  - external_contact
+  - account_mutation
+  - destructive_cleanup
 spend_model:
   monthly_ai_spend: 400
 integrations:

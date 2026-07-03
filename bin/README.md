@@ -102,9 +102,14 @@ The live `status` surface now derives a first advisory backpressure signal:
 Runtime routing is session-first for parallel Codex usage:
 
 - explicit run-state selector when a managed lane exports one
-- hook `session_id` for lane-scoped session state
-- `.farplane/state/current-run.json` as the live current-run pointer / last-active selector
-- only `session_origin=control` sessions may persist canonical `last_user_turn` and advance the live current-run pointer
+- hook `session_id` for telemetry and association-log correlation
+- `.farplane/state/ticket-thread-associations.jsonl` for ticket/thread joins
+- conversation windows for lightweight prompt/response cadence
+
+`UserPromptSubmit` no longer writes `.farplane/state/current-run.json` or
+`.farplane/state/sessions/<session_id>.json`. Those Ralph-era singleton and
+per-session files may remain in fixtures or historical local state, but they
+are not authoritative runtime ownership surfaces.
 
 See [the invocation and adapters spec](../docs/features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md) for the canonical runtime and invocation decision table.
 

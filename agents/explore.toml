@@ -155,7 +155,7 @@ This role is tuned for fast/low-latency models.
 
 </model_class_guidance>
 
-## OMX Agent Metadata
+## Agent Metadata
 - role: explore
 - posture: fast-lane
 - model_class: fast
