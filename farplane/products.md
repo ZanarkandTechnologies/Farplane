@@ -8,7 +8,7 @@ framework_template_version: "0.2.0"
 owner: harness
 source_of_truth:
   - farplane/harness.md
-  - farplane/goals.md
+  - farplane/goals.yaml
   - skills/interval-update/SKILL.md
 ---
 

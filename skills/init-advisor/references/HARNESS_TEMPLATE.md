@@ -18,7 +18,7 @@ values, non-tradeoffs, leverage commitments, allocation guardrails, authority,
 or change rules.
 
 Dynamic product direction belongs in `farplane/products.md`. Current strategy
-belongs in `farplane/goals.md`. Recurring prompt configuration belongs in
+belongs in `farplane/goals.yaml`. Recurring prompt configuration belongs in
 `farplane/automations.toml`. Operational logic belongs in skills.
 
 ## Mission

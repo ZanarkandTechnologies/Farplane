@@ -15,14 +15,14 @@ summarize as one autonomous company inside the broader harness cockpit.
 
 `manifest.json` owns the compact UI identity card. Richer project meaning lives
 in Markdown: `harness.md` is the static human charter, `products.md` is the
-product catalog and work-lane table, and `goals.md` is current strategy.
+product catalog and work-lane table, and `goals.yaml` is current strategy.
 
 ```text
 farplane/
   README.md        # this index
   manifest.json    # versioned Farplane project spec for this project
   harness.md       # static human charter
-  goals.md         # north star, KPIs, current milestone, holds
+  goals.yaml       # north star, KPIs, current milestone, holds
   products.md      # products and work lanes this team creates
   automations.toml # full Codex automation configs for Pulse, Intervals, and optional consolidation/Taste Loop
   bindings.yaml    # non-secret project IDs, URLs, labels, aliases, metric recipes
@@ -64,6 +64,12 @@ Primitive metrics are Core-owned reducers over tickets, `bindings.yaml`, local
 Codex stores, and ignored Farplane runtime state. Farplane UI should render the
 generated project snapshot and deep-link back to the source files; canonical
 writes still belong to the tracked project files and ignored runtime ledgers.
+
+Metric producers persist canonical observation batches at
+`.farplane/metrics/observations/<source_id>/<YYYY-MM-DD>.json`. Farplane Core
+owns the Pydantic schema, writer, validator, native reducers, and snapshot
+compiler. Platform skills such as Instagram or X own API fetching, but their
+outputs must validate against the same `MetricObservationBatch` shape.
 
 See [docs/farplane-framework/project-files.md](../docs/farplane-framework/project-files.md).
 

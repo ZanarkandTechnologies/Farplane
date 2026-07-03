@@ -35,6 +35,7 @@ integrations:
 metrics:
   TODO_metric_name:
     label: TODO metric label
+    description: TODO explain how this metric is calculated, including numerator/denominator or source window when relevant.
     product: TODO_product_id
     pinned: false
     kind: daily_count
@@ -44,6 +45,7 @@ metrics:
       to prepare this daily reading. Record source_gap when the reading cannot be collected.
   ready_unclaimed_ticket_count:
     label: Ready unclaimed tickets
+    description: Current count of ready, approval-free, unclaimed active tickets that are not complete or human-gated.
     product: project_control
     kind: point
     unit: tickets
@@ -52,6 +54,7 @@ metrics:
       or human-gated; store value/status/payload in the daily metric file.
   accepted_output_events:
     label: Accepted output events
+    description: Daily count of completed tickets or reward-ledger events accepted for this project output KPI.
     product: productization
     kind: daily_count
     unit: events
@@ -61,6 +64,7 @@ metrics:
       reward ledger when configured.
   auto_time_ratio:
     label: Autonomous time ratio
+    description: Autonomous worker elapsed minutes divided by estimated human attention minutes for the day.
     product: cross_product_autonomy
     kind: point
     unit: ratio

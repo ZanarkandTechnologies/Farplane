@@ -9,7 +9,7 @@ source_of_truth:
   - docs/farplane-framework/README.md
   - farplane/manifest.json
   - farplane/harness.md
-  - farplane/goals.md
+  - farplane/goals.yaml
   - farplane/automations.toml
   - farplane/products.md
   - farplane/bindings.yaml
@@ -49,7 +49,7 @@ farplane/
   manifest.json
   README.md
   harness.md
-  goals.md
+  goals.yaml
   products.md
   ops-memory.md
   automations.toml
@@ -91,12 +91,13 @@ burn through revenue, validated learning, proof quality, distribution, reusable
 harness leverage, or unblock value. The weekly interval applies that rule to
 active projects; the detailed review procedure lives in `interval-update`.
 
-Use YAML front matter plus Markdown sections and stable tables. Do not put a
-fenced `harness-program` DSL block in canonical project harness files. Product
-pipelines belong in `products.md`, current strategy belongs in `goals.md`, and
-full Codex automation configs belong in `automations.toml`.
+Use YAML front matter plus Markdown sections and stable tables for the harness
+charter. Do not put a fenced `harness-program` DSL block in canonical project
+harness files. Product pipelines belong in `products.md`, current strategy
+belongs in structured `goals.yaml`, and full Codex automation configs belong in
+`automations.toml`.
 
-### `farplane/goals.md`
+### `farplane/goals.yaml`
 
 Project strategy context: north star, value function, goal axes, inline SMART
 goals, current bets, current milestone, and holds. Each goal axis may carry a
@@ -132,7 +133,7 @@ Use Markdown with YAML front matter and the standard headings `Team`,
 Active operating memory: the compact, mutable place for what the autonomous
 team is doing now. It records current focus, active projects, tracked feedback
 refs, next frontier, constraints, parking lot, recent decisions, and Pulse
-notes. Stable strategy stays in `farplane/goals.md`; product lanes stay in
+notes. Stable strategy stays in `farplane/goals.yaml`; product lanes stay in
 `farplane/products.md`; executable work stays in `tickets/`; dated receipts
 stay under `.farplane/reports/`.
 
@@ -158,10 +159,10 @@ The recommended sections are:
 | `Recent Decisions` | Compact decision notes that affect near-term planning. | Daily/Weekly Interval. |
 | `Pulse Notes` | Instructions for how Pulse should cite, distrust, or use ops-memory. | Pulse/Interval contract updates. |
 
-Do not store raw metric values here when the daily metrics file can own them.
-Use `Tracked Feedback` for refs and tracking intent; store daily readings under
-`.farplane/metrics/daily/` and render UI trends from the project snapshot at
-`.farplane/project/ui/latest.json`.
+Do not store raw metric values here when metric observation batches can own
+them. Use `Tracked Feedback` for refs and tracking intent; store daily readings
+under `.farplane/metrics/observations/<source_id>/<YYYY-MM-DD>.json` and render
+UI trends from the project snapshot at `.farplane/project/ui/latest.json`.
 
 For autonomous growth and owned-content distribution, store posted/draft content
 tracking rows in `.farplane/content/ledger.jsonl`, not in ops memory. Ops memory
@@ -215,19 +216,51 @@ metrics:
 Metric `refresh` prompts are inline with each KPI recipe so the reader can
 inspect one KPI and see what the interval agent should do. A missing token,
 missing file, unavailable API field, or unsupported feedback mechanism should
-surface as a `source_gap` reading in the daily metrics file. Agents may use
+surface as a `source_gap` observation in the canonical metric observation
+batch. Agents may use
 skills, local ledgers, CLI/API fetches, ticket searches, or manual notes, but
-they should all normalize to one dated file:
+they should all normalize to one dated batch shape:
 
 ```text
+.farplane/metrics/observations/<source_id>/YYYY-MM-DD.json
+  -> canonical MetricObservationBatch rows for one source run
+
 .farplane/metrics/daily/YYYY-MM-DD.json
-  -> primitive readings, KPI readings, source gaps, and payload refs
+  -> optional debug/index snapshot for primitive groups
 
 .farplane/project/ui/latest.json
   -> generated project/company snapshot for Overview, Goals, Products,
-     Distribution, Cadence, Kanban, Proof, and Memory/Reports tabs,
+     Distribution, News, Cadence, Kanban, Proof, and Memory/Reports tabs,
      including KPI chart series and content-centric metric series
 ```
+
+Metric-producing scripts should write one `MetricObservationBatch` per source
+run:
+
+```json
+{
+  "schema_version": 1,
+  "date": "2026-07-03",
+  "source_id": "instagram_account_metrics",
+  "status": "available",
+  "observations": [
+    {
+      "metric_id": "instagram_views",
+      "date": "2026-07-03",
+      "value": 2648,
+      "status": "available",
+      "payload": {}
+    }
+  ],
+  "gaps": [],
+  "payload": {}
+}
+```
+
+Core owns the schema, writer, validator, Farplane-native reducers, and project
+snapshot compiler. Platform skills own their API adapters, credentials, and
+platform-specific metric extraction, but their output must validate against the
+same `MetricObservationBatch` shape before snapshot compilation.
 
 Goals own SMART targets. Bindings do not carry targets, provider routes, write
 paths, or fetcher DSL fields. Do not store secrets or credentials here.
@@ -273,6 +306,11 @@ report paths, UI feed paths, and local-first write policy. It must not store raw
 fetched items or summaries; those rows belong under `.farplane/feed-scout/` and
 `.farplane/reports/feed-scout/`.
 
+The project snapshot joins Feed Scout's daily output into the News tab. Feed
+Scout remains the owner of fetching, ranking, and writing daily feed artifacts;
+`farplane project snapshot` only reads those artifacts and exposes a stable
+`tabs.news` payload for UI rendering.
+
 ### `farplane/hooks.json`
 
 Declarative Farplane-native hook configuration. It may contain thresholds,
@@ -283,7 +321,7 @@ belong in hook scripts or skills.
 
 Ignored local runtime ledger for owned content created, approved, posted, and
 measured by a project. Farplane Core owns the local schema and CLI write path;
-Farplane UI may render it as a distribution tab, but does not own the file
+Farplane UI renders it in the Distribution tab, but does not own the file
 contract.
 
 Each row is one content item:

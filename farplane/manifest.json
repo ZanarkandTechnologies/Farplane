@@ -18,7 +18,7 @@
       "farplane/README.md",
       "farplane/manifest.json",
       "farplane/harness.md",
-      "farplane/goals.md",
+      "farplane/goals.yaml",
       "farplane/products.md",
       "farplane/ops-memory.md",
       "farplane/automations.toml",
