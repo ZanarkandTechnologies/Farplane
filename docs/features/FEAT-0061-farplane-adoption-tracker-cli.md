@@ -9,7 +9,6 @@ tags:
   - feature
   - sys-0009
 refs:
-  - "bin/farplane.py#adoption scan"
   - bin/core/farplane_adoption.py
   - bin/tests/test_farplane_adoption.py
   - docs/features/registry.jsonl
@@ -20,7 +19,6 @@ system_id: SYS-0009
 category: proof
 public: true
 surfaces:
-  - "bin/farplane.py#adoption scan"
   - bin/core/farplane_adoption.py
   - bin/tests/test_farplane_adoption.py
   - docs/features/registry.jsonl
@@ -91,10 +89,13 @@ Adoption scans prove policy rollout across active surfaces.
 
 Owner surfaces:
 
-- `bin/farplane.py#adoption scan`
 - `bin/core/farplane_adoption.py`
 - `bin/tests/test_farplane_adoption.py`
 - `docs/features/registry.jsonl`
+
+CLI entrypoint:
+
+- `python3 bin/farplane.py adoption scan`
 
 Source context:
 

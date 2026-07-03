@@ -1014,7 +1014,7 @@ Long-term goal hierarchy:
 ```text
 goal -> project[] -> task[]
 
-farplane/goals.md = long-horizon goal graph + current_milestone
+farplane/goals.yaml = long-horizon goal graph + current_milestone
 ticket.md = executable leaf contract + Done + QA Strategy
 program.md = loop configuration + metric + stop policy
 progress.md = append-only observed execution
@@ -1024,7 +1024,7 @@ artifacts/ = evidence
 Horizon heartbeat:
 
 ```text
-horizon_heartbeat(farplane/goals.md, program.md, progress.md)
+horizon_heartbeat(farplane/goals.yaml, program.md, progress.md)
   -> no_op | start_child_goal | resume_child_goal | request_feedback | replan
 ```
 
@@ -1050,7 +1050,7 @@ rollout_goal(pattern, sample_results, target_set)
 ```
 
 The project goals layer chooses the next milestone. Native Goal mode executes
-one leaf. Completion updates `farplane/goals.md` or a project report before the
+one leaf. Completion updates `farplane/goals.yaml` or a project report before the
 next heartbeat or replan.
 
 Control improves reliability only when trigger, state, stop condition, and

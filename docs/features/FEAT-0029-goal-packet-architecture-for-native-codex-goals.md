@@ -12,7 +12,7 @@ refs:
   - docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md
   - skills/goal-advisor
   - skills/horizon-advisor
-  - farplane/goals.md
+  - farplane/goals.yaml
   - tickets/templates/goal-loop/program.md
   - tickets/templates/goal-loop/progress.md
   - agents/goal-drift-reviewer.toml
@@ -29,7 +29,7 @@ surfaces:
   - docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md
   - skills/goal-advisor
   - skills/horizon-advisor
-  - farplane/goals.md
+  - farplane/goals.yaml
   - tickets/templates/goal-loop/program.md
   - tickets/templates/goal-loop/progress.md
   - agents/goal-drift-reviewer.toml
@@ -110,7 +110,7 @@ Owner surfaces:
 - `docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md`
 - `skills/goal-advisor`
 - `skills/horizon-advisor`
-- `farplane/goals.md`
+- `farplane/goals.yaml`
 - `tickets/templates/goal-loop/program.md`
 - `tickets/templates/goal-loop/progress.md`
 - `agents/goal-drift-reviewer.toml`

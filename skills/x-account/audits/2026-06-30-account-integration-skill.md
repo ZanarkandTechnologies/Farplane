@@ -15,7 +15,7 @@ normalization, export import, and gated API actions.
 ## Grounding
 
 - Existing `social-content` owns drafting and explicitly does not publish.
-- `farplane/bindings.md` owns non-secret account aliases and policy.
+- `farplane/bindings.yaml` owns non-secret account aliases and policy.
 - Private credentials follow the existing `~/.codex/private/` convention.
 - X API docs are linked in `references/api.md`; broad scraping routes to
   `apify` or `feed-scout`.

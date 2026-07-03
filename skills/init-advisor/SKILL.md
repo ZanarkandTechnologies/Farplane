@@ -105,7 +105,7 @@ shallow or misleading answers. Record the intake choice and missing answers in
 
 Do not treat file existence as readiness. Placeholder or stale split project
 files mean "operating model still missing", not "initialized". Keep
-`farplane/goals.md` as Markdown with a fenced YAML `goals` block containing
+`farplane/goals.yaml` as structured YAML containing
 goal axes and inline SMART goals; use
 `goal-advisor` only after the current milestone is concrete enough for a
 ticket-backed Goal Packet.

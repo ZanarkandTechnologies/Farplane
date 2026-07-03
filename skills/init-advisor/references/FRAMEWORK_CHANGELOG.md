@@ -138,7 +138,7 @@ python3 bin/validators/check_farplane_project_files.py --root .
 
 Date: 2026-07-02
 
-Primary change: make SMART-goal KPI targets parseable. `farplane/goals.md`
+Primary change: make SMART-goal KPI targets parseable. `farplane/goals.yaml`
 keeps strategic targets, but each KPI under `smart_goals[].kpis` now uses an
 `id`, numeric `target`, and `direction` pair so the project snapshot can
 derive target-hit status without putting targets back into `bindings.yaml`.
@@ -147,8 +147,8 @@ Changed surfaces:
 
 - `MANIFEST_TEMPLATE.json` bumps `farplane-framework` from `1.6.10` to
   `1.6.11`.
-- `GOALS_TEMPLATE.md` bumps to `0.4.3` and shows KPI target pairs.
-- `farplane project snapshot` overlays KPI target metadata from `goals.md` onto
+- `GOALS_TEMPLATE.yaml` bumps to `0.4.3` and shows KPI target pairs.
+- `farplane project snapshot` overlays KPI target metadata from `goals.yaml` onto
   metric definitions while preserving legacy binding-target compatibility.
 
 Migration steps:
@@ -199,7 +199,7 @@ Migration steps:
 2. Remove `target`, `observation`, `source`, `route`, `writes`, `paths`,
    `repo`, and `update_prompt` from `bindings.metrics.*`.
 3. Add `refresh` prompt strings to each metric recipe and keep SMART targets in
-   `farplane/goals.md`.
+   `farplane/goals.yaml`.
 4. Write daily readings to `.farplane/metrics/daily/YYYY-MM-DD.json`:
    `{ date, metrics: { [metric_id]: { value, status, payload? } } }`.
 5. Count ticket-derived KPIs during interval refresh by matching
@@ -257,12 +257,12 @@ Date: 2026-07-01
 
 Primary change: move metric source, chart, pinned, unit, and update-hint
 ownership into `farplane/bindings.yaml` metric recipes while keeping
-`farplane/goals.md` focused on strategic KPI IDs and interpretation.
+`farplane/goals.yaml` focused on strategic KPI IDs and interpretation.
 
 Changed surfaces:
 
 - `MANIFEST_TEMPLATE.json` bumps `farplane-framework` from `1.6.7` to `1.6.8`.
-- `GOALS_TEMPLATE.md` bumps to `0.4.2` and uses KPI IDs only under SMART goals.
+- `GOALS_TEMPLATE.yaml` bumps to `0.4.2` and uses KPI IDs only under SMART goals.
 - `BINDINGS_TEMPLATE.yaml` bumps to `0.3.0` and replaces custom
   `project-bindings` plus provider `provides` lists with one YAML
   `Project Config` block containing `project`, `integrations`, and `metrics`
@@ -276,7 +276,7 @@ Migration steps:
 
 1. Bump `farplane/manifest.json` `spec_version` and
    `template_uses.farplane-framework` to `1.6.8`.
-2. Move metric metadata from `farplane/goals.md` KPI maps into
+2. Move metric metadata from `farplane/goals.yaml` KPI maps into
    `farplane/bindings.yaml` `metrics.<metric_id>`.
 3. Replace provider `provides` lists with metric recipes that include an
    inline `source` block and `update_prompt`.
@@ -303,14 +303,14 @@ time and GitHub repo adoption. Projects should migrate directly to `1.6.8`.
 Changed surfaces:
 
 - `MANIFEST_TEMPLATE.json` bumps `farplane-framework` from `1.6.6` to `1.6.7`.
-- `GOALS_TEMPLATE.md` bumps to `0.4.1` and shows one-key KPI maps with
+- `GOALS_TEMPLATE.yaml` bumps to `0.4.1` and shows one-key KPI maps with
   `aggregation`, `cumulative`, `target`, `unit`, and `display`.
 - `BINDINGS_TEMPLATE.yaml` bumps to `0.2.0` and added an earlier provider-first
   feedback-coordinate section. This shape is superseded by `1.6.8` inline
   metric recipes.
 - `OPS_MEMORY_TEMPLATE.md` bumps to `0.1.1` and adds autonomy-time and
   repo-adoption tracked-feedback refs.
-- Framework docs describe the `goals.md` KPI keys plus `bindings.yaml` provider
+- Framework docs describe the `goals.yaml` KPI keys plus `bindings.yaml` provider
   loop, daily/cumulative chart semantics, and source-gap behavior.
 
 Migration steps:

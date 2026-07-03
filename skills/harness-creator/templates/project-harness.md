@@ -4,7 +4,7 @@ status: draft
 created_at: TODO
 updated_at: TODO
 template_id: project-harness
-template_version: "0.3.3"
+template_version: "0.3.4"
 feature_refs:
   - FEAT-0007
 project_id: TODO
@@ -13,9 +13,9 @@ framework_template_version: "0.3.0"
 canonical_targets:
   - farplane/harness.md
   - farplane/products.md
-  - farplane/goals.md
-  - farplane/automations.md
-  - farplane/bindings.md
+  - farplane/goals.yaml
+  - farplane/automations.toml
+  - farplane/bindings.yaml
   - farplane/hooks.json
   - .agents/skills/README.md
 ---
@@ -32,10 +32,10 @@ Farplane files:
   operating principles, non-tradeoffs, static leverage commitments, agent
   authority, allocation guardrails, and change rule.
 - `farplane/products.md` owns the product catalog and work-lane weights.
-- `farplane/goals.md` owns dynamic strategy, KPIs, current bets, milestone, and
+- `farplane/goals.yaml` owns dynamic strategy, KPIs, current bets, milestone, and
   holds.
-- `farplane/automations.md` owns reviewable automation prompt text.
-- `farplane/bindings.md` owns non-secret project coordinates.
+- `farplane/automations.toml` owns reviewable full Codex automation config.
+- `farplane/bindings.yaml` owns non-secret project coordinates.
 - `farplane/hooks.json` owns declarative project hook config.
 - `.agents/skills/` owns project-local product workflow skills.
 
@@ -127,7 +127,7 @@ runs prove the workflow is reusable across projects.
 
 ## Strategy Delta
 
-Target: `farplane/goals.md`
+Target: `farplane/goals.yaml`
 
 Use this section for north star, value function, KPI axes, current bets,
 current milestone, and holds. Strategy must stay inside the static charter but
@@ -145,7 +145,7 @@ is not itself the charter.
 
 ## Automation And Binding Delta
 
-Targets: `farplane/automations.md`, `farplane/bindings.md`
+Targets: `farplane/automations.toml`, `farplane/bindings.yaml`
 
 - `automation_delta:`
 - `safe_binding_delta:`

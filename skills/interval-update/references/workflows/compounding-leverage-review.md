@@ -20,10 +20,10 @@ This workflow scores and routes. It does not implement the selected
 experiments.
 
 For Farplane self-evolution, optimize the harness-algebra objective:
-increase validated meaningful improvement cycles per human intervention hour.
-Accepted agent-hours count only when they produce reviewed artifacts or
-accepted state deltas. Preserve quality, proof, auditability, operator control,
-and context isolation as constraints.
+increase validated meaningful improvement cycles per human attention hour.
+Autonomous worker elapsed minutes count as leverage only when they produce
+reviewed artifacts or accepted state deltas. Preserve quality, proof,
+auditability, operator control, and context isolation as constraints.
 
 ## Workflow Signature
 
@@ -62,7 +62,7 @@ Default sources from the context bundle:
 
 - `farplane/harness.md` for the static human thesis, durable leverage
   commitments, non-tradeoffs, agent authority, and charter change rule.
-- `farplane/goals.md` for value function, goals, holds, and current milestone.
+- `farplane/goals.yaml` for value function, goals, holds, and current milestone.
 - review-window Pulse reports, interval reports, ticket outcomes, blockers, and
   worker evidence.
 - `docs/LESSONS.md` and `docs/TROUBLES.md` for repeated misses and fixed
@@ -82,8 +82,10 @@ Optional sources:
 - Prior interval reports that selected leverage bets or named reward signals.
 - Recent skill, hook, validator, template, automation, feature, or docs changes
   inside `review_window`.
-- Weekly self-evolution signals when available: accepted output, accepted
-  agent-hours with proof, human intervention minutes, proof closure,
+- Weekly self-evolution signals when available: accepted output,
+  autonomous_worker_elapsed_minutes, human_attention_minutes_estimated,
+  auto_time_ratio, ticket_intervention_turn_count,
+  intervention_free_ticket_count, auto_completion_rate, proof closure,
   false-completion/self-approval incidents, context isolation failures, source
   gaps, and skill-backpropagation events.
 
@@ -195,9 +197,11 @@ candidate surfaces or the owner-surface decision is material.
         completion, agent churn, coordination cost, ungrounded claims, brittle
         state loss, quality, or auditability.
   - [ ] For Farplane itself, review self-evolution signals as evidence:
-        accepted output, accepted agent-hours with proof, intervention minutes,
-        proof closure, false completion, context isolation failures, source
-        gaps, and skill-backpropagation events.
+        accepted output, autonomous_worker_elapsed_minutes,
+        human_attention_minutes_estimated, auto_time_ratio,
+        ticket_intervention_turn_count, intervention_free_ticket_count,
+        auto_completion_rate, proof closure, false completion, context
+        isolation failures, source gaps, and skill-backpropagation events.
   - [ ] Mark missing signals as source gaps instead of inventing precision.
 - [ ] 2. Close previous reward signals.
   - [ ] Read prior interval reports for selected bets and reward signals whose

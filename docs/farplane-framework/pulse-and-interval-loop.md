@@ -49,7 +49,7 @@ Daily Interval reviews the last 24 hours and recalibrates the next 24 hours. It
 acts as a short-horizon reality check: what worked, what failed, and which
 `ops-memory` belief should be kept, revised, dropped, or doubled down under a
 guard. Weekly Interval reviews the last week, checks drift against
-`farplane/harness.md` and `farplane/goals.md`, reviews budget/runway for active
+`farplane/harness.md` and `farplane/goals.yaml`, reviews budget/runway for active
 projects, and sets next-week bets. It acts like a board review for runway and
 belief quality. Both call `interval-update`, write dated reports under
 `.farplane/reports/interval/`, and give Pulse strategy inputs.
@@ -76,7 +76,7 @@ Use the smallest owner for each kind of state:
 | State | Owner | Changes when |
 | --- | --- | --- |
 | Stable thesis and guardrails | `farplane/harness.md` | explicit human-approved harness delta |
-| North star, value function, goal axes, inline SMART goals, durable bets | `farplane/goals.md` | horizon/goal delta with evidence and approval when material |
+| North star, value function, goal axes, inline SMART goals, durable bets | `farplane/goals.yaml` | horizon/goal delta with evidence and approval when material |
 | Metric labels, units, chart behavior, pinned status, kind, and refresh prompts | `farplane/bindings.yaml` | metric recipe delta with source-gap proof |
 | Product lanes, workflows, lane weights | `farplane/products.md` | product-boundary update with evidence |
 | Active focus, active projects, critical paths, next frontier | `farplane/ops-memory.md` | Daily/Weekly refresh or Pulse frontier writeback |
@@ -245,7 +245,7 @@ Goals deltas have three outcomes:
 ## Advisor Boundaries
 
 - `horizon-advisor` owns long-horizon strategy: value function, KPI tree,
-  strategy axes, current milestone, and material `farplane/goals.md` deltas.
+  strategy axes, current milestone, and material `farplane/goals.yaml` deltas.
 - `leverage-advisor` scores how an existing feature, workflow, capability, or
   artifact can compound value.
 - `harness-advisor` decides which harness surface should own a selected

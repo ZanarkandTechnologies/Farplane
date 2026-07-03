@@ -9,7 +9,7 @@ updated_at: 2026-06-23
 
 # AGI Toy Shop Goals
 
-This is an example `farplane/goals.md` planning view for one large project. It
+This is an example `farplane/goals.yaml` planning view for one large project. It
 is meant to be readable by a human, editable by an agent, and syncable to Notion
 as a view. The repo file remains the source of truth.
 
@@ -34,7 +34,7 @@ Only expand the first evidence-producing branch deeply. Future branches stay as
 trajectory placeholders until the current timeframe review produces evidence.
 
 ```text
-farplane/goals.md = long-range map
+farplane/goals.yaml = long-range map
 ticket.md = current task contract
 program.md = loop config
 progress.md = observed turn log
@@ -70,7 +70,7 @@ Y1 > Q1 > M1 > W1: launch the first offer test and tracking baseline.
 
 ```text
 goal_advisor(
-  files=[farplane/goals.md, tickets/TASK-0001/ticket.md, tickets/TASK-0001/program.md, tickets/TASK-0001/progress.md],
+  files=[farplane/goals.yaml, tickets/TASK-0001/ticket.md, tickets/TASK-0001/program.md, tickets/TASK-0001/progress.md],
   task="compile TASK-0001 into a native Goal prompt",
   metric_provider=review,
   trigger=active_goal

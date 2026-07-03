@@ -14,14 +14,14 @@ planning a rollout program, or deciding which skill or workflow improvements
 compound through the harness.
 
 Every long-horizon planning surface should be a Farplane project. The canonical
-file for project-level strategy is always `farplane/goals.md`. If a business,
+file for project-level strategy is always `farplane/goals.yaml`. If a business,
 rollout, research program, or autonomous operating loop needs its own horizon,
-make it a project with its own `farplane/goals.md` instead of adding a separate
+make it a project with its own `farplane/goals.yaml` instead of adding a separate
 parent strategy file beside a ticket.
 
 ```text
 project_goals(north_star, horizon, resources, constraints)
-  -> farplane/goals.md
+  -> farplane/goals.yaml
    + goal_graph
    + current_milestone
    + child_goal_packets?
@@ -55,9 +55,9 @@ chooses that external system as the source of truth.
 
 ```text
 ProjectGoals :=
-  farplane/goals.md
+  farplane/goals.yaml
 + farplane/harness.md
-+ farplane/automations.md
++ farplane/automations.toml
 + farplane/hooks.json
 + tickets/
 + memory_docs
@@ -68,41 +68,48 @@ Use Goal Packet `program.md` files to define how a selected leaf runs, and
 under `.farplane/reports/` for PM heartbeat summaries. Do not create standalone
 parent strategy files.
 
-## Markdown Planning UI
+## YAML Strategy Shape
 
-Prefer one compact Markdown map that an agent can edit safely. Do not split the
-same information into separate horizon tree, project tree, active goal graph,
-parallel branch table, amplification table, conflict table, and trigger plan
-unless the single map becomes unreadable.
+Prefer one compact YAML object that an agent can edit safely and the UI can
+parse directly. Do not split the same information into separate horizon tree,
+project tree, active goal graph, parallel branch table, amplification table,
+conflict table, and trigger plan unless the single object becomes unreadable.
 
-```markdown
-## North Star
+```yaml
+north_star:
+  text: Build AGI Toy Shop into a profitable autonomous toy storefront.
 
-Build AGI Toy Shop into a profitable autonomous toy storefront.
+goals:
+  revenue_engine:
+    name: Launch first profitable revenue engine
+    horizon: quarterly
+    objective: Prove offer, funnel, content, and tracking.
+    smart_goals:
+      - id: first_offer_feedback_loop
+        target: Launch first offer test and tracking baseline by the next weekly review.
+        kpis:
+          - id: qualified_market_feedback_count
+            target: 10
+            direction: above
+        interpretation: Feedback volume proves whether to iterate or pivot.
 
-## Goal Map
+current_bets:
+  - id: first_offer_test
+    goal_id: revenue_engine
+    thesis: A small reviewed offer test will produce better next tickets than broad storefront planning.
+    status: active
+    evidence_refs:
+      - tickets/TASK-0001/ticket.md
+    next_decision: Iterate or pivot after the weekly review.
 
-- [ ] 5Y goal: Build a compounding autonomous store
-  - metric: revenue engine + durable capability evidence
-  - [ ] Y1 goal: Launch first profitable revenue engine
-    - metric: first repeatable offer/funnel/content loop
-    - [ ] Q1 goal: Prove offer, funnel, content, and tracking
-      - metric: review + artifact + first market/feedback baseline
-      - [ ] M1 project: Create the first evidence loop
-        - [ ] W1 project slice: Launch first offer test and tracking baseline
-          - [ ] TASK-0001 Define first toy offer
-            - trigger: native_goal
-            - metric: review + artifact
-            - depends_on: none
-            - amplifies: TASK-0002
-        - [ ] W2 project slice: Iterate offer from W1 evidence
-          - hold: until W1 review
+current_milestone:
+  id: launch_first_feedback_loop
+  review_cadence: weekly
+  next_action: Complete TASK-0001 and compare market feedback against the KPI.
 
-## Replan Cadence
-
-- Weekly: update project milestones, proceedable tickets, and holds.
-- Quarterly: compare Q goal against evidence, create the next quarter branch.
-- Yearly: revise annual strategy from market and capability evidence.
+holds:
+  - id: w2_iteration_hold
+    reason: Wait until W1 evidence is reviewed.
 ```
 
 ## Goal Quality
@@ -190,14 +197,14 @@ Suggested boundary:
 
 ## Horizon Advisor To Goal Advisor
 
-`horizon-advisor` writes or proposes `farplane/goals.md` deltas. `goal-advisor`
+`horizon-advisor` writes or proposes `farplane/goals.yaml` deltas. `goal-advisor`
 compiles a selected frontier into executable Goal Packet state.
 
 ```text
 horizon_advisor(project_root, intent, current_goals, evidence)
-  -> farplane/goals.md delta + selected_frontier + goal_advisor_handoff
+  -> farplane/goals.yaml delta + selected_frontier + goal_advisor_handoff
 
-goal_advisor(files=[farplane/goals.md, ticket.md, program.md, progress.md])
+goal_advisor(files=[farplane/goals.yaml, ticket.md, program.md, progress.md])
   -> native_goal_prompt | heartbeat_prompt | direct_route
 ```
 

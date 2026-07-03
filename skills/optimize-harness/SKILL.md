@@ -40,7 +40,7 @@ reusable workflows, `skill-maintenance` backpropagates into existing skills,
 
 ```text
 optimize_harness(observed_behavior, expected_behavior?, metric?, evidence?) -> accepted_change | experiment_plan | blocked_report
-state: reads(gap reports, farplane/goals.md?, interval reports?, harness algebra,
+state: reads(gap reports, farplane/goals.yaml?, interval reports?, harness algebra,
              harness doctrine, feature registry, skill registry, evals,
              tickets, target surfaces);
        writes(ticket?, eval_case?, experiment_artifact?, applied_change?,
@@ -60,7 +60,7 @@ fails: changes without proof; optimizes vague taste; creates new skill before ch
 - [ ] 1. Normalize the request into observed behavior, expected behavior,
   candidate metric when present, and evidence already available.
 - [ ] 2. Bind the optimization target.
-  - [ ] Read `farplane/goals.md` and
+  - [ ] Read `farplane/goals.yaml` and
         `docs/fundamentals/harness-algebra.md` when the task is Farplane's own
         self-evolution or a material harness-optimization pass.
   - [ ] Name the loss term: human intervention, false completion, agent churn,

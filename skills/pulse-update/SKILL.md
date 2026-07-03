@@ -22,6 +22,11 @@ handoff writeback. It does not own drift review, scrum reflection, strategy,
 product-boundary decisions, or scheduled planning. It may read Weekly and Daily
 strategy as constraints. Its job is to execute the board, and when the board is
 empty, instantiate the next safe tactical wave from already-accepted strategy.
+Pulse should have founder-like ambition inside these gates: generate bold,
+bounded tactical ideas from the current `farplane/ops-memory.md` belief state,
+fresh strategy inputs, and board evidence, then let Daily and Weekly intervals
+challenge that belief from observed outcomes. Do not add a separate idea ledger;
+use Pulse reports, interval reports, tickets, rewards, metrics, and ops memory.
 
 This skill should be easy to pilot by changing cadence and extensions, without
 rewriting the action logic. Interval controls when Pulse wakes; policy controls
@@ -47,9 +52,11 @@ inputs, and `farplane/products.md` lane weights. Ops memory supplies the active
 focus, active projects, critical paths, next frontier, constraints, and parking
 lot. When those inputs are fresh and safe, Pulse may create a small next wave
 of tactical tickets from the active frontier and immediately admit them through
-the same hard gates. When strategy or ops memory is missing, stale, unsafe, or
-requires product/goal judgment, Pulse writes `request_planning` with the source
-gap, idle reason, and board evidence.
+the same hard gates. Each next-wave decision should name the active belief,
+frontier, bottleneck, or reward signal being tested so the next Daily or Weekly
+report can keep, revise, or drop that belief. When strategy or ops memory is
+missing, stale, unsafe, or requires product/goal judgment, Pulse writes
+`request_planning` with the source gap, idle reason, and board evidence.
 
 Proceedable ticket selection is a hard gate. Pulse must not select local ticket
 implementation work unless the ticket is `ready: true`,
@@ -72,7 +79,7 @@ pulse_update(project_root, extensions?, pulse_policy?)
 
 state:
   reads(farplane/harness.md?,
-        farplane/goals.md?,
+        farplane/goals.yaml?,
         farplane/products.md?,
         farplane/ops-memory.md?,
         .agents/skills/**/SKILL.md?,
@@ -108,8 +115,8 @@ fails:
   executing broad work in the parent heartbeat; treating goal-advisor as the
   default empty-board fallback; treating interval as authority;
   skipping reward/outcome writeback; using planner-level exploration before
-  reward learning proves value; generating tickets without Reward: moves /
-  win_signal / guard; planning every possible project instead of the active
+  reward learning proves value; generating tickets without parseable
+  Reward.kpi_rewards plus guard; planning every possible project instead of the active
   frontier; duplicating caps or cadence from heartbeat policy into ops memory
 ```
 
@@ -166,13 +173,16 @@ fails:
         constraints, and parking lot before creating tickets. If ops memory is
         missing, stale, or contradicted by fresh interval strategy, record the
         gap or override in the Pulse report.
+  - [ ] Name the current ops-memory belief, frontier, bottleneck, or reward
+        signal being tested. Avoid creating a new idea ledger; the Pulse report
+        and generated ticket `Reward` block are the evidence trail.
   - [ ] Create only small tactical tickets that ladder to a current focus, bet,
         active project, frontier step, lane, bottleneck, or reward signal.
   - [ ] Use product lane weights as selection bias when several equally safe
         slices are available; Daily strategy, blockers, freshness, and proof
         urgency may override the bias when the reason is recorded.
-  - [ ] Every generated ticket must include:
-        `Reward: moves / win_signal / guard`.
+  - [ ] Every generated ticket must include parseable
+        `Reward.kpi_rewards[]` plus `guard`.
   - [ ] Prefer this priority ladder:
         execute ready unblocked work; continue the active ops-memory frontier;
         continue the main daily focus; unblock the main daily focus; improve
@@ -215,10 +225,12 @@ fails:
 - `plan_next_wave_when_empty`: when the board has no proceedable ticket and
   current strategy inputs are fresh, create a small wave of tactical tickets
   from ops-memory active frontier, Weekly/Daily strategy, product lane weights,
-  and board evidence. The mode must not change goals, KPIs, product boundaries,
-  external systems, cadence, caps, spend, publishing, or customer contact.
-  Generated tickets require `Reward: moves / win_signal / guard` and must pass
-  normal admission gates before execution.
+  and board evidence. Treat this as a bounded test of Pulse's current operating
+  belief, not as long-horizon strategy or a separate idea ledger. The mode must
+  not change goals, KPIs, product boundaries, external systems, cadence, caps,
+  spend, publishing, or customer contact. Generated tickets require parseable
+  `Reward.kpi_rewards[]` plus `guard` and must pass normal admission gates
+  before execution.
 - `request_planning`: write a planning request for Daily or Weekly Interval
   when the board lacks executable work or needs product/goal judgment. Include
   queue evidence, idle reason, and suggested planning scope.

@@ -4,11 +4,11 @@ status: draft
 project: TODO
 created_at: TODO
 updated_at: TODO
-framework_template_version: "0.1.0"
+framework_template_version: "0.1.1"
 owner: interval-update
 source_of_truth:
   - farplane/harness.md
-  - farplane/goals.md
+  - farplane/goals.yaml
   - farplane/products.md
   - docs/farplane-framework/pulse-and-interval-loop.md
 ---
@@ -16,7 +16,7 @@ source_of_truth:
 # Project Ops Memory
 
 This file is active operating memory: compact, mutable context for what the
-autonomous team is doing now. Stable strategy stays in `farplane/goals.md`,
+autonomous team is doing now. Stable strategy stays in `farplane/goals.yaml`,
 product lanes stay in `farplane/products.md`, executable work stays in
 `tickets/`, and dated receipts stay under `.farplane/reports/`.
 
@@ -43,9 +43,13 @@ TODO one paragraph or bullet naming the active frontier.
 ## Tracked Feedback
 
 - `content:` TODO content IDs, URLs, or review windows the agent should inspect
-  when relevant; keep raw metrics in source snapshots, not here.
+  when relevant; keep raw metrics in observation snapshots, not here.
 - `customer_or_user_feedback:` TODO source refs or gaps
 - `runtime_or_product_feedback:` TODO dashboards, logs, reports, or gaps
+- `autonomy_time:` TODO local Codex/Farplane event ledgers, spawned-thread
+  ledgers, or gaps for human attention vs autonomous worker time
+- `repo_adoption:` TODO GitHub repo or package/download source refs when this
+  project ships as open source or developer tooling
 - `source_gaps:` TODO missing credentials, APIs, ledgers, or feedback mechanisms
 
 ## Next Frontier
@@ -55,7 +59,7 @@ TODO one paragraph or bullet naming the active frontier.
 
 ## Constraints
 
-- Do not mutate `farplane/goals.md`, `farplane/products.md`, publishing,
+- Do not mutate `farplane/goals.yaml`, `farplane/products.md`, publishing,
   accounts, spend, deploys, customer contact, or product boundaries from
   ops-memory alone.
 - Do not create a roadmap registry, project schema, database, UI, hidden

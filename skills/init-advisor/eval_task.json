@@ -47,14 +47,14 @@
   {
     "id": "init_advisor_full_mode_goal_intake_01",
     "title": "Init advisor full mode routes operating-model setup through harness-creator",
-    "query": "A brownfield repo already has farplane/goals.md, but its harness/products/goals are placeholder, stale, or not grounded in the operator's current intent. The operator asks to initialize the repo as a full Farplane project. What should init-advisor do before claiming the project is initialized?",
+    "query": "A brownfield repo already has farplane/goals.yaml, but its harness/products/goals are placeholder, stale, or not grounded in the operator's current intent. The operator asks to initialize the repo as a full Farplane project. What should init-advisor do before claiming the project is initialized?",
     "reference_points": [
       "Distinguishes substrate_complete from project_initialized instead of treating file existence as enough",
       "Audits farplane/harness.md for missing human thesis, static leverage commitments, non-tradeoffs, agent authority, and change rule",
-      "Audits docs/bootstrap-brief.md, farplane/products.md, and farplane/goals.md for missing team archetype, product outputs, North Star, 3-month outcome, success criteria, non-goals, and decision boundaries",
+      "Audits docs/bootstrap-brief.md, farplane/products.md, and farplane/goals.yaml for missing team archetype, product outputs, North Star, 3-month outcome, success criteria, non-goals, and decision boundaries",
       "In full mode, calls harness-creator after substrate setup for static charter, products, goals, feedback loops, missing systems, current milestone, and any Goal Advisor handoff",
       "Asks the first missing harness-creator parameter instead of running separate product/goals/advisor interviews from init-advisor",
-      "Keeps farplane/goals.md as Markdown with a fenced goal-program block for parseable goals, value function, axes, projects, and milestones",
+      "Keeps farplane/goals.yaml as Markdown with a fenced goal-program block for parseable goals, value function, axes, projects, and milestones",
       "Writes the readiness state or missing answers into docs/bootstrap-brief.md and proposes or applies split-file deltas only after operator intent is known",
       "Uses goal-advisor only after a current milestone is concrete enough to compile into a ticket-backed Goal Packet"
     ],
@@ -63,12 +63,12 @@
   {
     "id": "init_advisor_adaptive_human_intake_01",
     "title": "Init advisor adapts human intake depth for meaning-heavy file migration",
-    "query": "A migrated project now has a current farplane/manifest.json, but farplane/harness.md, farplane/products.md, and farplane/goals.md are new or placeholder. The operator asks init-advisor to finish the migration but is worried that Deep Interview asks too many questions. How should init-advisor decide what to ask before filling those files?",
+    "query": "A migrated project now has a current farplane/manifest.json, but farplane/harness.md, farplane/products.md, and farplane/goals.yaml are new or placeholder. The operator asks init-advisor to finish the migration but is worried that Deep Interview asks too many questions. How should init-advisor decide what to ask before filling those files?",
     "reference_points": [
       "Resolves human_intake as skip, offer, or required and defaults to offer for new or migrated meaning-heavy files",
       "Uses destination skill signatures as the question inventory instead of inventing a generic init interview",
       "Routes harness.md, products.md, feedback loops, missing systems, and milestone-shape params to harness-creator",
-      "Routes goals.md, North Star, value function, KPI tree, holds, and milestone deltas to horizon-advisor",
+      "Routes goals.yaml, North Star, value function, KPI tree, holds, and milestone deltas to horizon-advisor",
       "Asks direct signature questions for factual or narrow missing params",
       "Escalates to deep-interview --quick only when missing params are intent-heavy, contradictory, or risky for canonical file fills",
       "Constrains deep-interview --quick to the missing signature params plus intent, outcome, non-goals, decision boundaries, and success criteria",

@@ -40,7 +40,7 @@ default_context_refs(project_root, interval_id) = {
   harness_ref: project_root/farplane/harness.md,
   products_ref: project_root/farplane/products.md,
   local_product_skill_refs: project_root/.agents/skills/**/SKILL.md,
-  goals_ref: project_root/farplane/goals.md,
+  goals_ref: project_root/farplane/goals.yaml,
   ticket_refs: project_root/tickets/,
   memory_refs: [
     project_root/docs/MEMORY.md,
@@ -157,7 +157,7 @@ merge shape.
     configured parent contexts.
 13. Refresh metric readings when skills, CLIs, ticket searches, manual notes, or
     local ledgers are available: read goal-axis SMART goals from
-    `farplane/goals.md` for KPI selection and interpretation, then use each
+    `farplane/goals.yaml` for KPI selection and interpretation, then use each
     KPI's `farplane/bindings.yaml` metric recipe `refresh` prompt to choose the
     work. Write one compact daily metrics file under
     `.farplane/metrics/daily/<date>.json`, then run
@@ -185,12 +185,12 @@ merge shape.
 
 ## Goals Delta Promotion
 
-The skill may update `farplane/goals.md` only after the interval report
+The skill may update `farplane/goals.yaml` only after the interval report
 contains a `Goals Delta` block with evidence and a promotion decision.
 
 ```text
 apply_goals_delta(proposed_goals_delta, policy)
-  -> goals.md patch | approval_required | rejected_source_gap
+  -> goals.yaml patch | approval_required | rejected_source_gap
 ```
 
 Promotion decisions:

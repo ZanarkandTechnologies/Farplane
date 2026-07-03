@@ -149,7 +149,7 @@ Tracked config:
 farplane/README.md
 farplane/manifest.json
 farplane/harness.md
-farplane/goals.md
+farplane/goals.yaml
 farplane/products.md
 farplane/automations.toml
 farplane/bindings.yaml
@@ -177,7 +177,7 @@ Key contracts:
   operating principles, non-tradeoffs, static leverage commitments, allocation
   guardrails, agent authority, and change rule. It uses YAML front matter plus
   Markdown sections, not a fenced custom program DSL.
-- `farplane/goals.md` is compact dynamic strategy context: north star, value
+- `farplane/goals.yaml` is compact dynamic strategy context: north star, value
   function, KPI axes, current bets, milestone, and holds.
 - `farplane/products.md` is the project product catalog: team identity,
   product rows, work-lane weights, and constraints. It informs interval
@@ -215,7 +215,7 @@ Audit:
 
 - `docs/bootstrap-brief.md`
 - `farplane/harness.md`
-- `farplane/goals.md`
+- `farplane/goals.yaml`
 - `farplane/products.md`
 - `farplane/bindings.yaml`
 - `.agents/skills/README.md`
@@ -250,7 +250,7 @@ Rules:
 - `project_initialized` requires a grounded operating model, current goals, and
   enough runtime/proof context to start useful work.
 - `needs_operating_model_intake` means `farplane/harness.md`,
-  `farplane/products.md`, `farplane/goals.md`, feedback loops, or current
+  `farplane/products.md`, `farplane/goals.yaml`, feedback loops, or current
   milestone state are missing, placeholder, stale, or not grounded in the
   operator's current intent.
 - missing human thesis, static leverage commitments, agent authority, or change
@@ -274,7 +274,7 @@ Guardrails:
 Owner: `harness-creator`
 
 Use this phase in `full` mode, or when the readiness audit finds that
-`farplane/harness.md`, `farplane/products.md`, `farplane/goals.md`, feedback
+`farplane/harness.md`, `farplane/products.md`, `farplane/goals.yaml`, feedback
 loops, missing-system tickets, automation/binding deltas, or the current
 milestone are missing, placeholder, stale, or not grounded.
 
@@ -285,7 +285,7 @@ Inputs:
 - `farplane/manifest.json` project identity
 - `farplane/harness.md`
 - existing `farplane/products.md`
-- existing `farplane/goals.md`
+- existing `farplane/goals.yaml`
 - current tickets, docs, skills, and safe bindings
 
 Output:
@@ -295,7 +295,7 @@ harness_creator(project_idea, values?, priorities?, mode_presets?,
                 context?, constraints?, budget?)
   -> farplane/harness.md delta?
    + farplane/products.md delta?
-   + farplane/goals.md delta?
+   + farplane/goals.yaml delta?
    + farplane/automations.toml delta?
    + farplane/bindings.yaml delta?
    + missing-system or unblock tickets?
@@ -322,7 +322,7 @@ Guardrails:
 
 - Always ground team archetype, product lifecycle, and the first feedback loop
   against real-world equivalents before finalizing `harness.md`, `products.md`,
-  or `goals.md`. Keep the
+  or `goals.yaml`. Keep the
   research compact unless the project is high-risk, unfamiliar, or
   market-facing enough to need a separate `research:*` artifact.
 - Do not stuff the full team story into `manifest.json`.
@@ -346,7 +346,7 @@ enough to execute.
 Output:
 
 ```text
-goal_advisor(files=[farplane/goals.md, ticket.md?, program.md?, progress.md?], ...)
+goal_advisor(files=[farplane/goals.yaml, ticket.md?, program.md?, progress.md?], ...)
   -> ticket.md
    + program.md
    + progress.md
@@ -484,7 +484,7 @@ Guardrails:
 | `docs/bootstrap-brief.md` | `init-advisor` | deep interview / setup | setup decisions and readiness |
 | `farplane/manifest.json` | `init-advisor` | framework migrations | expected tracked/ignored paths |
 | `farplane/harness.md` | `init-advisor` / `harness-creator` | harness planning | static human charter: mission, thesis, non-tradeoffs, leverage commitments, authority, change rule |
-| `farplane/goals.md` | `init-advisor` / `harness-creator` / `horizon-advisor` | strategy work | goals, KPIs, milestone |
+| `farplane/goals.yaml` | `init-advisor` / `harness-creator` / `horizon-advisor` | strategy work | goals, KPIs, milestone |
 | `farplane/products.md` | `init-advisor` / `harness-creator` | product planning / work-lane tuning | product rows and work lanes |
 | `farplane/automations.toml` | `init-advisor` / `automation-advisor` | operator / `automation-advisor` | reviewed Pulse and Interval config source |
 | `.agents/skills/README.md` | `init-advisor` | `harness-creator` / product-skill refinement | local product-skill home |

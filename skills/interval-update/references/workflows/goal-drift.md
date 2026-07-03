@@ -14,7 +14,7 @@ template_uses:
 Use this workflow when an interval update needs to check whether review-window
 work still ladders to configured goals and parent contexts. This workflow
 reports drift and proposes goals-delta candidates. It does not edit
-`farplane/goals.md`.
+`farplane/goals.yaml`.
 
 Material north-star, KPI, strategy-axis, project priority, quarterly/yearly, or
 durable milestone changes are approval-required unless the caller supplies an
@@ -44,7 +44,7 @@ Default sources:
 
 - `harness_ref`: default `farplane/harness.md` for the static human thesis,
   non-tradeoffs, and agent authority.
-- `goals_ref`: default `farplane/goals.md`.
+- `goals_ref`: default `farplane/goals.yaml`.
 - `parent_context_refs`: configured parent plans, strategy docs, or goals.
 - interval outputs, tickets, Pulse reports, worker outcomes, and memory docs
   from the context bundle.

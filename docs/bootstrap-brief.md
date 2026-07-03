@@ -33,15 +33,15 @@ source:
 
 ## Goal Intake Status
 
-- Current state: `farplane/goals.md` exists and captures the latest inferred
+- Current state: `farplane/goals.yaml` exists and captures the latest inferred
   Farplane operating portfolio.
 - Missing setup: the operator has not yet completed a fresh goal-intake pass
   for this project bootstrap.
 - Rule: do not treat the bootstrap as fully initialized until the operator's
   desired outcome, success criteria, non-goals, and decision boundaries have
-  been captured and reconciled into `farplane/goals.md`.
+  been captured and reconciled into `farplane/goals.yaml`.
 - Next route: run `deep-interview --bootstrap` and then update
-  `farplane/goals.md` through an explicit goals delta.
+  `farplane/goals.yaml` through an explicit goals delta.
 
 ## Recommended Shape
 
@@ -94,7 +94,7 @@ source:
 
 - Important states the agent must reach quickly:
   - current project harness in `farplane/harness.md`
-  - dynamic portfolio in `farplane/goals.md`
+  - dynamic portfolio in `farplane/goals.yaml`
   - automation program in `farplane/automations.md`
   - live runtime reports in `.farplane/reports/`
   - active tickets in `tickets/`

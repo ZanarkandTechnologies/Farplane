@@ -174,7 +174,7 @@ lane_weight_overrides:
 ## Ops Memory Delta
 
 Use this block when the interval should refresh `farplane/ops-memory.md`.
-Ops memory is active working context, not a replacement for `goals.md`,
+Ops memory is active working context, not a replacement for `goals.yaml`,
 `products.md`, tickets, or dated interval reports. Keep the delta compact and
 edit existing sections rather than appending a second roadmap.
 
@@ -207,7 +207,7 @@ override.
 
 ## Goals Delta
 
-Use this block as the only bridge from interval evidence into `farplane/goals.md`.
+Use this block as the only bridge from interval evidence into `farplane/goals.yaml`.
 Do not edit the goals portfolio before this block exists.
 
 | Delta | Target | Decision | Evidence | Risk | Next action |

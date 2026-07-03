@@ -20,7 +20,7 @@ The canonical project state is split across standard Farplane files:
 harness_creator(input)
   -> farplane/harness.md static-charter delta
    + farplane/products.md product-catalog delta
-   + farplane/goals.md strategy delta
+   + farplane/goals.yaml strategy delta
    + optional project-harness.md transient worksheet
 ```
 
@@ -92,7 +92,7 @@ project "Name" {
   heartbeat weekly_interval {
     first: update_strategy
     skills: [weekly_strategy_analysis, skill_maintenance, goal_advisor, review]
-    delegate: delegate(ref("farplane/goals.md"), "refresh strategy and skill upkeep", skills=[interval_update, skill_maintenance])
+    delegate: delegate(ref("farplane/goals.yaml"), "refresh strategy and skill upkeep", skills=[interval_update, skill_maintenance])
     output: "artifacts/strategy/interval-update.md"
   }
 
@@ -271,7 +271,7 @@ learning_evidence
 risk_trust
 ```
 
-### Metric Providers
+### Metric Recipes
 
 ```text
 live_metric("signal")
@@ -424,16 +424,16 @@ heartbeat rhythm_update {
 
 heartbeat ticket_drainer {
   first: fetch_local_tickets
-  bindings: "farplane/bindings.md"
+  bindings: "farplane/bindings.yaml"
   optional: fetch_notion_when_enabled_bound_and_local_empty
   then: rank_one_ticket -> impl-plan -> goal-advisor
 }
 
 heartbeat weekly_interval {
   first: grouped_jobs_with_report_cache
-  bindings: "farplane/bindings.md"
+  bindings: "farplane/bindings.yaml"
   skills: [feed_scout, update_memory, update_strategy, skill_maintenance, goal_advisor, review]
-  delegate: delegate(ref("farplane/goals.md"), "refresh strategy and skill upkeep", skills=[interval_update, skill_maintenance])
+  delegate: delegate(ref("farplane/goals.yaml"), "refresh strategy and skill upkeep", skills=[interval_update, skill_maintenance])
 }
 ```
 
@@ -514,7 +514,7 @@ farplane/harness.md :=
 farplane/products.md :=
   product catalog and work-lane weights
 
-farplane/goals.md :=
+farplane/goals.yaml :=
   strategy, KPIs, current bets, milestone, and holds
 
 project-harness.md :=

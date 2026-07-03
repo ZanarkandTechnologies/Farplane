@@ -46,6 +46,7 @@ interval_update(project_root, interval_id, review_window, planning_window,
   -> context_bundle
    + source_gaps
    + interval_report
+   + ui_summary
    + workflow_findings
    + drift_findings
    + next_window_plan
@@ -59,7 +60,7 @@ state:
         farplane/products.md?,
         farplane/ops-memory.md?,
         .agents/skills/**/SKILL.md?,
-        farplane/goals.md?,
+        farplane/goals.yaml?,
         tickets/,
         docs/HISTORY.md?,
         docs/MEMORY.md?,
@@ -72,14 +73,14 @@ state:
   writes(.farplane/reports/interval/<interval_id>/<YYYY-MM-DDTHHMMSSZ>.md,
          optional .farplane/reports/interval/<interval_id>/context/<YYYY-MM-DDTHHMMSSZ>.md,
          farplane/ops-memory.md when write_policy allows compact active-focus refresh,
-         farplane/goals.md only through explicit goals-delta policy)
+         farplane/goals.yaml only through explicit goals-delta policy)
 
 gates:
   default_refs_resolved; configured_refs_merged; review_window_bound;
   cross_interval_refs_resolved_or_gap_labeled;
   context_bundle_written_or_summarized; report_written_before_plan_or_goals_mutation;
   configured_report_workflows_run; drift_checked; next_window_plan_written; side_effect_gates_respected;
-  date_stamped_report_used
+  date_stamped_report_used; ui_summary_frontmatter_written
 
 routes:
   pulse-update | goal-advisor | feed-scout | update-memory |
@@ -102,7 +103,7 @@ default_context_refs(project_root, interval_id) = {
   harness_ref: farplane/harness.md,
   products_ref: farplane/products.md,
   ops_memory_ref: farplane/ops-memory.md,
-  goals_ref: farplane/goals.md,
+  goals_ref: farplane/goals.yaml,
   ticket_refs: tickets/,
   memory_refs: [docs/MEMORY.md, docs/HISTORY.md, docs/LESSONS.md, docs/TROUBLES.md],
   pulse_report_refs: .farplane/reports/pulse/**,
@@ -291,7 +292,7 @@ priority_planning(review_window, planning_window)
   - [ ] Write a date-stamped interval report.
   - [ ] Include source gaps, drift findings, evidence, and the proposed next
         plan before mutating goals or tickets.
-  - [ ] Use goals-delta promotion before changing `farplane/goals.md`.
+  - [ ] Use goals-delta promotion before changing `farplane/goals.yaml`.
 - [ ] 7. Emit next-window guidance.
   - [ ] Summarize report paths, blockers, goals-delta decisions, and handoffs.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
@@ -300,6 +301,7 @@ priority_planning(review_window, planning_window)
 
 - interval id and windows.
 - report paths.
+- UI summary frontmatter contract.
 - source gaps.
 - drift findings.
 - next-window plan.

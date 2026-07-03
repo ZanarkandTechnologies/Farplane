@@ -71,7 +71,7 @@
       "Chooses plan_next_wave_when_empty instead of request_planning when strategy is fresh and safe",
       "Creates only small tactical tickets that ladder to the Weekly/Daily focus, bet, lane, bottleneck, or reward signal",
       "Uses product lane weights as selection bias, while recording Daily strategy overrides such as avoiding social content",
-      "Requires every generated ticket to include Reward: moves, win_signal, and guard",
+      "Requires every generated ticket to include parseable Reward.kpi_rewards entries plus guard",
       "Runs normal ticket admission gates before execution",
       "Does not mutate goals, KPIs, product boundaries, external accounts, spend, publishing, or customer contact"
     ],
@@ -96,7 +96,7 @@
     "query": "Pulse is in plan_next_wave_when_empty mode and proposes a tactical ticket that has a title and scope but no Reward block. Is it admissible?",
     "reference_points": [
       "Rejects or revises the generated ticket before admission",
-      "Requires Reward: moves, win_signal, and guard for Pulse-created tactical tickets",
+      "Requires parseable Reward.kpi_rewards entries plus guard for Pulse-created tactical tickets",
       "Does not execute generated work whose planning value is not explicit",
       "Records the rejection or repair reason in the Pulse report"
     ],

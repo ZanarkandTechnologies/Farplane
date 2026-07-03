@@ -25,7 +25,7 @@ selected project-goal frontier, skill-improvement loop, or feedback loop into a
 native Goal, heartbeat, or direct-route recommendation.
 
 Use `horizon-advisor` before this skill when the work is still about deciding
-the North Star, KPI tree, project goal map, current milestone, or `goals.md`
+the North Star, KPI tree, project goal map, current milestone, or `goals.yaml`
 strategy delta. `goal-advisor` starts once a frontier is selected enough to
 compile into files and execution policy.
 
@@ -42,7 +42,7 @@ new abstraction such as `refs[]` to the operator.
 
 `ticket.md` owns the task contract, `Done`, and `QA Strategy`. `program.md` owns loop config,
 metric, budget, heartbeat, drift, and stop policy. `progress.md` owns compact
-append-only observations. `farplane/goals.md` is project-level strategy context
+append-only observations. `farplane/goals.yaml` is project-level strategy context
 when a selected frontier comes from a long-horizon goal graph.
 
 This skill owns both architecture choice and final native `/goal` or heartbeat
@@ -58,7 +58,7 @@ compute/budget, and blocker handling.
 
 ```text
 advise_goal_use(intent, files?, trigger?, budget?, proof_policy?, approval_policy?) -> goal_architecture + files[] + goal_packet? + heartbeat_prompt? + native_goal_prompt? + next_action
-state: reads(operator intent, listed files, tickets, board files?, farplane/goals.md?, program.md?, progress.md?, goal-loop contract, relevant skills/docs); writes(ticket/program/progress? generated goal prompt? or recommendation)
+state: reads(operator intent, listed files, tickets, board files?, farplane/goals.yaml?, program.md?, progress.md?, goal-loop contract, relevant skills/docs); writes(ticket/program/progress? generated goal prompt? or recommendation)
 gates: missing_execution_inputs_resolved_or_asked; material_goal_has_files; loop_owner_single; progress_surface_named; metric_provider_named; budget_named; drift_policy_named; logging_policy_named; proof_route_named; final_evidence_policy_named; approval_before_goal_run_when_material
 routes: metric-advisor | impl-plan | optimize-with-human | qa | visual-qa | agent-qa-test | review | direct-answer
 fails: creates hidden loop runtime; uses Goal without durable state; treats human feedback/heartbeat/rollout as competing loop owners; emits prompt-only material Goal; hides required files behind transcript memory; routes public work through retired work/ralph/batch-work surfaces; emits long Goal prompt that restates ticket context; allows self-certified QA/review/visual completion; runs material Goal before packet approval
@@ -177,7 +177,7 @@ only after the branch is selected:
 - [ ] 3. Choose the state surfaces.
   - [ ] `Files:` in the generated prompt names every ticket, program,
     progress, board, spec, or artifact file the Goal must read.
-  - [ ] Include `farplane/goals.md` only when the selected frontier needs
+  - [ ] Include `farplane/goals.yaml` only when the selected frontier needs
     project-level strategy context.
 - [ ] 4. Choose the time/budget policy.
    - [ ] Treat the unit as a time/budget window, not ticket size.
@@ -219,7 +219,7 @@ only after the branch is selected:
      each checkpoint, and block or revise when the final path remains unrun
      without an explicit residual-risk note.
    - [ ] For project-goals leaf Goals, list only the selected leaf file set plus
-     `farplane/goals.md` when project strategy context is needed; do not include
+     `farplane/goals.yaml` when project strategy context is needed; do not include
      sibling tickets as executable work files.
    - [ ] Leaf Goal logging must append `progress.md` observations and a
      completion entry for every changed ticket before returning control to the
@@ -383,7 +383,7 @@ Or create/update the Goal Packet files and then report their paths.
 - Do not treat `progress.md` as transcript storage. It is compact observed
   state.
 - Do not make parent tickets mandatory. Use an inline file list for normal
-  multi-file Goals; add `farplane/goals.md` only when project strategy context
+  multi-file Goals; add `farplane/goals.yaml` only when project strategy context
   is needed.
 - Do not hide required files behind transcript memory. If the Goal depends on a
   ticket, program, progress log, board, spec, or artifact, list it in `Files:`.
@@ -421,7 +421,7 @@ Or create/update the Goal Packet files and then report their paths.
   workflow skills compose into one Goal contract or retired-surface migration
   detail matters.
 - [../horizon-advisor/SKILL.md](../horizon-advisor/SKILL.md) - use before this
-  skill when project-level goal graphs or `goals.md` strategy deltas still
+  skill when project-level goal graphs or `goals.yaml` strategy deltas still
   need to be authored.
 - [../metric-advisor/SKILL.md](../metric-advisor/SKILL.md) - derive honest
   metric cards before Goal Packet metric provider compilation.

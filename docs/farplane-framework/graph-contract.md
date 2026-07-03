@@ -63,7 +63,7 @@ LifecycleNode = {
 ```
 
 Node IDs are stable strings. File-like IDs use repo-relative paths, such as
-`file:farplane/goals.md`. Skills use `skill:<name>`. FSA states use
+`file:farplane/goals.yaml`. Skills use `skill:<name>`. FSA states use
 `fsa:<projection-id>:<state-id>`.
 
 ## Edge Contract

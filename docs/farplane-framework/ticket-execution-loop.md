@@ -3,8 +3,8 @@ title: "Ticket Execution Loop"
 status: active
 owner: farplane-framework
 created_at: 2026-06-29
-updated_at: 2026-06-29
-framework_template_version: "0.2.0"
+updated_at: 2026-07-01
+framework_template_version: "0.2.1"
 tags:
   - farplane
   - lifecycle
@@ -104,6 +104,30 @@ Inside a Goal Packet, the executor should try to land the whole selected ticket.
 It should not shrink the ticket into a safer internal slice unless the ticket,
 proof route, safety boundary, external dependency, or reviewer finding creates
 a real split.
+
+## Ticket Thread Association
+
+Ticket-level autonomy metrics need to know which Codex thread owned a ticket
+after execution started. Raw thread or session IDs are runtime state, not ticket
+frontmatter. Store them under the ignored runtime state path:
+
+```text
+.farplane/state/ticket-thread-associations.jsonl
+```
+
+Each row should be a compact JSON object:
+
+```json
+{"ticket_id":"TASK-0000","thread_id":"019f...","execution_started_at":"2026-07-01T10:00:00Z"}
+```
+
+`session_id` may be used instead of `thread_id` when that is the available
+runtime identifier. The reducer counts user turns after
+`execution_started_at` and before the ticket completion time. Missing,
+ambiguous, or polluted association data must become a metric source gap rather
+than a guessed intervention count. Keep stable human-facing ownership in ticket
+frontmatter fields such as `claimed_by`; keep raw transport identifiers in
+`.farplane/state/`.
 
 ## Skill Cooperation
 

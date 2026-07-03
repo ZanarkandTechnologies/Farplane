@@ -60,7 +60,7 @@
     "query": "I want to run AGI Toy Shop as a five-year Farplane project with year, quarter, month, week, and task levels. The parent should keep deciding what to do next after leaf tasks finish. Create the Goal setup.",
     "reference_points": [
       "Classifies the request as project_goals or parent project work",
-      "Uses or requires farplane/goals.md plus ticket.md, program.md, and progress.md",
+      "Uses or requires farplane/goals.yaml plus ticket.md, program.md, and progress.md",
       "Uses heartbeat or manual resume for the parent project controller",
       "Explains that native Goal is for an uninterrupted time/budget window and heartbeat is for paused or recurring parent work",
       "Defines heartbeat actions such as start_goal, resume_goal, request_feedback, replan, or no_op"
@@ -79,7 +79,7 @@
     "query": "Given this project-goals frontier: W1 has TASK-0001 define offer, TASK-0002 landing page, and TASK-0003 tracking. TASK-0001 is the first eligible child. Write the Goal prompt.",
     "reference_points": [
       "Generates or recommends a native /goal prompt with an inline Files list for the selected file set",
-      "Uses farplane/goals.md as context only when it is listed and needed",
+      "Uses farplane/goals.yaml as context only when it is listed and needed",
       "Requires progress.md logging and completion entries for every changed ticket",
       "Says completion should return control to the parent heartbeat",
       "Does not tell the native Goal to expand future project-goal branches"
@@ -97,7 +97,7 @@
     "query": "TASK-0001 finished and wrote its artifact. What should the Farplane project goals layer do now?",
     "reference_points": [
       "Requires appending a child completion entry to progress.md",
-      "Updates the child node in farplane/goals.md or a linked project report to complete or complete_candidate",
+      "Updates the child node in farplane/goals.yaml or a linked project report to complete or complete_candidate",
       "Runs or requests proof/review before treating the child as done",
       "Starts or resumes the next eligible sibling when one exists",
       "Runs parent heartbeat or replan when the current frontier is complete"

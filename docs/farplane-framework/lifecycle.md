@@ -75,12 +75,12 @@ Then inspect the created files:
 2. Open `farplane/harness.md` for the static human charter: mission, thesis,
    static leverage commitments, non-tradeoffs, agent authority, systems, and
    skill bindings.
-3. Open `farplane/goals.md` for strategy, current milestone, KPIs, and holds.
+3. Open `farplane/goals.yaml` for strategy, current milestone, KPIs, and holds.
 4. Open `farplane/products.md` for the primary and supporting products this
    team creates.
 5. Open `tickets/TASK-0001/ticket.md` for the first planning or discovery
    handoff.
-6. Run or ask for `horizon-advisor` only when `farplane/goals.md` is missing,
+6. Run or ask for `horizon-advisor` only when `farplane/goals.yaml` is missing,
    stale, or too broad.
 7. Run or ask for `goal-advisor` only after the current milestone is concrete
    enough to become a ticket-backed Goal Packet.
@@ -98,7 +98,7 @@ flowchart TD
   A["Operator intent"] --> B["init-advisor"]
   B --> C["Farplane project files"]
   C --> D["horizon-advisor"]
-  D --> E["farplane/goals.md"]
+  D --> E["farplane/goals.yaml"]
   C --> X["farplane/bindings.yaml"]
   C --> Y["farplane/ops-memory.md"]
   E --> F["goal-advisor"]
@@ -138,7 +138,7 @@ cost database for the first working version.
 farplane/harness.md
   -> static thesis, authority, proof, and runway guardrails
 
-farplane/goals.md
+farplane/goals.yaml
   -> goal axes + inline SMART goals + stable KPI keys + interpretation
 
 farplane/bindings.yaml
@@ -179,7 +179,7 @@ The loop has three clocks:
 | Daily | `interval-update` | Refresh near-term progress, blockers, and KPI readings. | Daily interval report and metric snapshots. |
 | Weekly | `interval-update` | Protect or change strategy, review runway, and choose leverage bets. | Weekly report, goals-delta candidates, ops-memory delta, Pulse guidance. |
 
-KPI snapshots start from `farplane/bindings.yaml` metric recipes. `goals.md`
+KPI snapshots start from `farplane/bindings.yaml` metric recipes. `goals.yaml`
 chooses and interprets stable KPI IDs and SMART targets; `bindings.yaml` owns
 each metric's label, product, unit, chart behavior, pinned status, kind, and
 prompt-only `refresh` instruction. The interval agent uses recipes plus active
@@ -264,7 +264,7 @@ For a project to run the loop without hidden transcript memory, it needs:
 
 - `farplane/harness.md` with static authority, proof, and runway guardrails.
 - `farplane/products.md` with product lanes and lane weights.
-- `farplane/goals.md` with inline SMART goals, KPI keys, and interpretation.
+- `farplane/goals.yaml` with inline SMART goals, KPI keys, and interpretation.
 - `farplane/bindings.yaml` with non-secret inline metric recipes.
 - `farplane/ops-memory.md` with active projects, tracked feedback, current
   frontier, and the standard sections: Current Focus, Active Projects, Tracked
@@ -306,7 +306,7 @@ understanding. When the human thesis, static leverage commitments, products, or
 goals are not grounded, it reports the specific readiness gap before claiming
 the project is initialized.
 
-`horizon-advisor` shapes `farplane/goals.md`. It names the north star, value
+`horizon-advisor` shapes `farplane/goals.yaml`. It names the north star, value
 function, KPIs, anti-metrics, strategy axes, and current milestone. It expands
 only the first branch that can produce useful evidence now, then hands
 executable work to `goal-advisor`.

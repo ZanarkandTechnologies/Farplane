@@ -18,7 +18,7 @@ source_of_truth:
   - farplane/README.md
   - farplane/manifest.json
   - farplane/harness.md
-  - farplane/goals.md
+  - farplane/goals.yaml
   - farplane/products.md
   - farplane/automations.toml
   - farplane/bindings.yaml
@@ -95,7 +95,7 @@ PROJECT_ROOT/
     README.md
     manifest.json
     harness.md
-    goals.md
+    goals.yaml
     products.md
     automations.toml
     bindings.yaml
@@ -141,7 +141,7 @@ reports, eval runs, and logs.
 description of what the project is lives in Markdown:
 `farplane/harness.md` owns the static human charter,
 `farplane/products.md` owns the product catalog and work lanes, and
-`farplane/goals.md` owns current strategy.
+`farplane/goals.yaml` owns current strategy.
 Project-specific product workflows live under `.agents/skills/`; promote them
 to root `skills/` only after repeated evidence shows cross-project reuse.
 
@@ -170,7 +170,7 @@ init_advisor(project_root?, project_idea?, repo_shape?, stack_profile?, init_mod
    + farplane/README.md
    + farplane/manifest.json
    + farplane/harness.md
-   + farplane/goals.md
+   + farplane/goals.yaml
    + farplane/products.md
    + farplane/automations.toml
    + farplane/bindings.yaml
@@ -183,7 +183,7 @@ init_advisor(project_root?, project_idea?, repo_shape?, stack_profile?, init_mod
 In `full` init mode, `init-advisor` calls `harness-creator` after the
 substrate exists. `harness-creator` fills or refines the split project files:
 static charter in `harness.md`, product rows and work lanes in `products.md`,
-strategy and KPIs in `goals.md`, full automation configs in `automations.toml`,
+strategy and KPIs in `goals.yaml`, full automation configs in `automations.toml`,
 and safe coordinates in `bindings.yaml`. It owns the smaller advisor calls such
 as research, `horizon-advisor`, `harness-advisor`, `skill-creator`, and
 `goal-advisor` when those are needed. Canonical `harness.md` files use YAML

@@ -90,19 +90,19 @@ For a board-drain heartbeat:
 
 ```text
 project_goals(north_star, horizon, resources, constraints)
-  -> farplane/goals.md + current_milestone + child_goal_packets?
+  -> farplane/goals.yaml + current_milestone + child_goal_packets?
 ```
 
 Use when the operator wants to coordinate a business, product line, autonomous
 store, skill-improvement program, or other multi-goal system. Use
 `horizon-advisor` to author or materially change project goals. Goal Advisor
 only compiles a selected frontier into parent heartbeat or leaf Goal execution.
-The live strategy state is `farplane/goals.md`.
+The live strategy state is `farplane/goals.yaml`.
 
 Project orchestration boundary:
 
 ```text
-horizon_heartbeat(farplane/goals.md, automation_or_program, reports_or_progress)
+horizon_heartbeat(farplane/goals.yaml, automation_or_program, reports_or_progress)
   -> start_child_goal | resume_child_goal | request_feedback | replan | no_op
 
 leaf_native_goal(ticket.md, program.md, progress.md)

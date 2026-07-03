@@ -45,7 +45,7 @@ init_advisor_qa(project_root, init_mode, activation_requested?)
      Lot, Recent Decisions, and Pulse Notes sections, and stores refs or
      source gaps rather than raw metric readings.
    - Fail: active projects, feedback refs, or next-frontier notes are mixed
-     into `farplane/goals.md`, hidden in chat, or treated as a deterministic
+     into `farplane/goals.yaml`, hidden in chat, or treated as a deterministic
      database.
 
 6. `products_to_local_skills`
@@ -55,7 +55,7 @@ init_advisor_qa(project_root, init_mode, activation_requested?)
    - Fail: product rows exist but tickets have no callable workflow to invoke.
 
 7. `goals_operating_model`
-   - Pass: `farplane/goals.md` captures North Star, 3-month outcome, success
+   - Pass: `farplane/goals.yaml` captures North Star, 3-month outcome, success
      criteria, non-goals, decision boundaries, current milestone, holds, and a
      fenced `goal-program` block with parseable goals, value function, axes,
      projects, and milestones.
@@ -83,7 +83,7 @@ init_advisor_qa(project_root, init_mode, activation_requested?)
    - Pass: full mode audits `farplane/harness.md` for human thesis, static
      leverage commitments, non-tradeoffs, agent authority, and change rule; it
      audits `docs/bootstrap-brief.md`, `farplane/products.md`, and
-     `farplane/goals.md` for team archetype, product outputs, North Star,
+     `farplane/goals.yaml` for team archetype, product outputs, North Star,
      3-month outcome, success criteria, non-goals, and decision boundaries.
      Readiness state and missing answers are written to
      `docs/bootstrap-brief.md`.
@@ -91,12 +91,12 @@ init_advisor_qa(project_root, init_mode, activation_requested?)
      missing, stale, placeholder, or ungrounded in operator intent.
 
 10. `split_file_delta_boundary`
-   - Pass: `farplane/goals.md` stays Markdown with a fenced `goal-program`
+   - Pass: `farplane/goals.yaml` stays Markdown with a fenced `goal-program`
      block for parseable goals, value function, axes, projects, and milestones;
      split-file deltas are proposed or applied only after operator intent is
      known; `goal-advisor` is used only after the current milestone is concrete
      enough for a ticket-backed Goal Packet.
-   - Fail: InitAdvisor treats `farplane/goals.md` existence as enough,
+   - Fail: InitAdvisor treats `farplane/goals.yaml` existence as enough,
      rewrites split-file strategy without operator intent, or invokes
      `goal-advisor` before there is a concrete milestone.
 

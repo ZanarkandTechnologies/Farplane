@@ -1,6 +1,6 @@
 ---
 name: horizon-advisor
-description: "Turn ambiguous long-horizon intent into goals.md, KPI trees, feedback-sized projects, and Goal Advisor handoffs."
+description: "Turn ambiguous long-horizon intent into goals.yaml, KPI trees, feedback-sized projects, and Goal Advisor handoffs."
 tier: 3
 group: harness
 source: local
@@ -16,7 +16,7 @@ allowed-tools: Read, Write, Glob, Grep
 
 `horizon-advisor` owns long-horizon strategy authoring for Farplane projects:
 North Star, value function, KPI tree, project goal map, current milestone,
-holds, and `farplane/goals.md` deltas. It exists so `goal-advisor` can stay focused on
+holds, and `farplane/goals.yaml` deltas. It exists so `goal-advisor` can stay focused on
 execution compilation: selected frontier -> Goal Packet -> native Goal or
 heartbeat prompt.
 
@@ -35,7 +35,7 @@ horizon_advice(project_root?, intent?, current_goals?, evidence?, constraints?)
    + project_goal_map
    + current_milestone
    + goal_advisor_handoff?
-state: reads(farplane/goals.md, farplane/harness.md, farplane/automations.md?, tickets, progress, metrics, memory, relevant strategy docs); writes(farplane/goals.md delta or strategy artifact when explicitly in scope)
+state: reads(farplane/goals.yaml, farplane/harness.md, farplane/automations.md?, tickets, progress, metrics, memory, relevant strategy docs); writes(farplane/goals.yaml delta or strategy artifact when explicitly in scope)
 gates: north_star_named; value_function_named; metrics_have_proof_surfaces; anti_metrics_named; current_frontier_expanded_only; execution_handoff_goes_to_goal_advisor
 routes: metric-advisor | goal-advisor | update-strategy | deep-interview | review
 fails: vague goals; fake precision; turning all goals into tasks; compiling native Goal prompts; hiding strategy in chat; optimizing proxy metrics without a shared value function
@@ -58,7 +58,7 @@ horizon_phase(task, state)
 
 This skill follows Tier 0 phases inline. Use `deep-interview` only when the
 operator's winning condition, non-goals, or decision boundaries are genuinely
-missing. Use `review` when a material `goals.md` delta or strategy artifact
+missing. Use `review` when a material `goals.yaml` delta or strategy artifact
 will become canonical. Hand execution to `goal-advisor`; do not compile native
 Goal prompts here.
 
@@ -69,7 +69,7 @@ Goal prompts here.
    - [ ] Resolve project root, goal artifact path, current horizon, operator
      intent, available metrics, and whether this run should write files or only
      advise.
-   - [ ] Read current `farplane/goals.md`, `farplane/harness.md`, automation
+   - [ ] Read current `farplane/goals.yaml`, `farplane/harness.md`, automation
      prompts when present, tickets/progress, and relevant memory before asking
      for facts.
 - [ ] 2. Define the value function before goals.
@@ -83,21 +83,26 @@ Goal prompts here.
    - [ ] Pair every metric with a provider and proof surface:
      `artifact_presence`, `mechanical`, `review`, `agent_qa`,
      `human_feedback`, `market`, `learning`, or `hybrid`.
+   - [ ] Put metric mechanics in `farplane/bindings.yaml` recipes with inline
+     source and update prompt. Keep `farplane/goals.yaml` KPI lists to stable IDs
+     plus interpretation.
    - [ ] Derive a metric card for any KPI whose provider, guard metric,
      anti-metric, or proof surface is unclear.
    - [ ] Avoid fake precision when the honest signal is qualitative,
      researcher-led, or early-stage.
 - [ ] 4. Shape the project goals.
-   - [ ] Load [references/project-goals.md](references/project-goals.md) when
+   - [ ] Load [references/project-goals.yaml](references/project-goals.yaml) when
      writing or materially changing a long-horizon project goal map.
    - [ ] Expand only the first evidence-producing branch deeply.
    - [ ] Use feedback-sized projects as the default durable unit.
    - [ ] Create child tickets only for real execution, unblock, approval,
      review, dependency, or proof boundaries.
 - [ ] 5. Write the goal artifact or handoff.
-   - [ ] If file writes are in scope, patch `farplane/goals.md`.
+   - [ ] If file writes are in scope, patch `farplane/goals.yaml`; patch
+     `farplane/bindings.yaml` when metric recipes, inline sources, pinned state,
+     units, or update prompts change.
    - [ ] If the horizon needs a separate parent, make that parent a Farplane
-     project with its own `farplane/goals.md` instead of creating a standalone
+     project with its own `farplane/goals.yaml` instead of creating a standalone
      strategy file.
    - [ ] If execution is ready, produce a `goal_advisor(...)` handoff over the
      selected frontier instead of compiling the Goal prompt here.
@@ -153,7 +158,7 @@ Handoff to execution:
 
 ```text
 goal_advisor(
-  files=[farplane/goals.md, <selected_ticket_or_project>, <program?>, <progress?>],
+  files=[farplane/goals.yaml, <selected_ticket_or_project>, <program?>, <progress?>],
   task="compile the selected horizon frontier into a Goal Packet",
   metric_provider=<provider>,
   trigger=<active_goal | heartbeat | feedback_loop>,
@@ -169,14 +174,14 @@ goal_advisor(
   accepted-improvement criteria, eval/ablation evidence, and anti-metrics.
 - Do not convert every horizon node into a ticket. Goals describe outcomes;
   projects group evidence-producing bets; tickets execute bounded work.
-- Do not bury long-horizon strategy in `progress.md`; use `farplane/goals.md`
+- Do not bury long-horizon strategy in `progress.md`; use `farplane/goals.yaml`
   for project-level strategy.
 - Do not compile native `/goal` prompts here. That boundary belongs to
   `goal-advisor`.
 
 ## Reference Map
 
-- [references/project-goals.md](references/project-goals.md) - load when
+- [references/project-goals.yaml](references/project-goals.yaml) - load when
   writing or materially changing a long-horizon project goal map.
 - [../../docs/fundamentals/harness-algebra.md](../../docs/fundamentals/harness-algebra.md)
   - shared harness objective function and optimization terms.

@@ -17,9 +17,9 @@
     "title": "Configured interval gates material goals deltas",
     "query": "An interval review wants to change the north star after reading configured interval_output_refs from another interval inside the review window. What gates apply?",
     "reference_points": [
-      "Loads farplane/harness.md, farplane/goals.md, and the configured interval_output_refs inside the review window",
+      "Loads farplane/harness.md, farplane/goals.yaml, and the configured interval_output_refs inside the review window",
       "Labels missing or stale evidence as source gaps",
-      "Writes the interval report before mutating farplane/goals.md",
+      "Writes the interval report before mutating farplane/goals.yaml",
       "Requires approval for static charter, north-star, KPI, strategy-axis, quarterly, yearly, or durable milestone changes",
       "Routes executable changes into tickets or Goal Advisor handoffs"
     ],

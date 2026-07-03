@@ -198,7 +198,7 @@ Use this hierarchy for long-running work:
 ```text
 goal -> project[] -> task[]
 
-farplane/goals.md = long-horizon map + current milestone
+farplane/goals.yaml = long-horizon map + current milestone
 ticket.md = executable leaf contract + Done / Proof
 program.md = loop policy + metric + stop condition
 progress.md = observed execution memory

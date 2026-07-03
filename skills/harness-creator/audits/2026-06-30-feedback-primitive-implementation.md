@@ -43,7 +43,7 @@ feedback_primitive_implementation_plan {
   input_ids_or_export_shape: "media_id + duration_seconds"
   official_or_source_grounding: "Instagram media insights docs"
   private_env_keys: FARPLANE_INSTAGRAM_ACCESS_TOKEN, FARPLANE_INSTAGRAM_BUSINESS_ACCOUNT_ID
-  non_secret_bindings: farplane/bindings.md Social Account + Metric Source rows
+  non_secret_bindings: farplane/bindings.yaml Social Account + Metric Source rows
   kpi_rows: instagram_retention_score
   storage_path: .farplane/metrics/manual/instagram_account.json
   scripts: check_config.py, fetch_metrics.py, normalize_metrics.py

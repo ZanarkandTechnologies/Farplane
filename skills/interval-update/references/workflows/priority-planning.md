@@ -23,7 +23,10 @@ need to fully pre-plan ticket inventory when the project enables Pulse
 next-wave planning; instead it can emit focus, bets, prefer/avoid rules,
 blocked items, reward signals, lane distribution, constraints, and an
 ops-memory refresh that Pulse uses to slice tactical tickets when the board is
-empty.
+empty. Treat Pulse as a bold bounded tactical idea engine and the interval as
+the evidence check that challenges Pulse's current operating belief. Do not add
+an idea ledger or second planning database; use the interval report and
+`farplane/ops-memory.md`.
 
 ## Workflow Signature
 
@@ -32,7 +35,7 @@ priority_planning(context_bundle, review_window, planning_window,
                   workflow_findings?, parent_context_refs?, planning_policy?)
   -> strategy_input + lane_distribution + priorities + depriorities
      + proof_checks + downstream_guidance + goals_delta_candidates
-     + ops_memory_delta? + source_gaps
+     + ops_memory_challenge? + ops_memory_delta? + source_gaps
 
 state: reads(context_bundle, workflow_findings?, parent_context_refs?,
              planning_policy?);
@@ -40,6 +43,7 @@ state: reads(context_bundle, workflow_findings?, parent_context_refs?,
 gates: report_evidence_available; planning_window_sized; proof_checks_named;
        selected_priorities_move_named_goal_or_bottleneck;
        strategy_input_named_when_pulse_next_wave_enabled;
+       ops_memory_challenge_named_when_pulse_beliefs_change;
        ops_memory_delta_named_when_active_memory_changes;
        leaf_work_routed_not_executed; material_goal_deltas_approval_gated
 fails: writing a vague plan; mixing reporting and execution; hiding
@@ -99,6 +103,8 @@ that a second read reduces self-confirmation.
   - [ ] Group inputs by goals, completed work, unfinished work, feedback,
         board hygiene, opportunity signals, metrics, and attention drift.
   - [ ] Convert changed insight into implication into action.
+  - [ ] Identify the current Pulse belief from ops memory, recent Pulse reports,
+        generated tickets, or interval strategy inputs when available.
 - [ ] 3. Rank priorities.
   - [ ] Choose a lane distribution for `planning_window`, using product lane
         hints as defaults and recent evidence to adjust them.
@@ -114,6 +120,9 @@ that a second read reduces self-confirmation.
   - [ ] When Pulse next-wave planning is enabled, emit a compact strategy input:
         focus, bets, prefer, avoid, blocked, reward, and any lane-weight
         overrides.
+  - [ ] Challenge the current Pulse belief before refreshing ops memory: name
+        what worked, what failed, which belief to keep, revise, or drop, and
+        the guard for any double-down.
   - [ ] When the project has `farplane/ops-memory.md`, emit a compact
         ops-memory delta: current focus, active projects to keep/update/park,
         next frontier, constraints, parking lot changes, and recent decisions.
@@ -168,6 +177,15 @@ Priority row:
 Strategy input row:
 
 ```text
+ops_memory_challenge:
+  pulse_belief_reviewed:
+  what_worked:
+  what_failed:
+  belief_to_keep:
+  belief_to_revise:
+  belief_to_drop:
+  double_down_guard:
+  source_gap:
 strategy_input:
   focus:
   bets:
@@ -193,6 +211,8 @@ ops_memory_delta:
   decision.
 - Ops memory should be edited in place and kept compact. If a project is stale,
   park or remove it instead of appending a new roadmap.
+- Do not turn promising ideas into a separate ledger. Pulse can generate bold
+  tactical ideas; intervals decide which operating beliefs deserve more runway.
 
 ## Reference Map
 
@@ -209,6 +229,15 @@ priorities:
     owner_or_next_surface:
     expected_output:
     proof_check:
+ops_memory_challenge:
+  pulse_belief_reviewed:
+  what_worked:
+  what_failed:
+  belief_to_keep:
+  belief_to_revise:
+  belief_to_drop:
+  double_down_guard:
+  source_gap:
 strategy_input:
   focus:
   bets:

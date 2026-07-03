@@ -61,7 +61,7 @@ same interpretation in each generator, CLI command, or UI route.
 | `bin/core/farplane_adoption.py` | Project manifest adoption and feature/template drift resolution. | `farplane adoption scan`, Farplane UI project rollout views. |
 | `bin/core/farplane_skill_rollout.py` | Read-only UI-facing normalization over generated skill/template rollout intelligence. | `farplane skills rollout scan`, Farplane UI skill rollout views. |
 | `bin/core/farplane_primitive_metrics.py` | Deterministic primitive reducers over tickets, project bindings, local Codex stores, and ignored Farplane runtime state. | `farplane metrics primitives`, interval-update, project snapshot compiler, Farplane UI metric tabs. |
-| `bin/core/farplane_project_snapshot.py` | Read-only project/company projection joining canonical files, primitive readings, and source gaps. | `farplane project snapshot`, Farplane UI Overview/Goals/Products tabs, interval context. |
+| `bin/core/farplane_project_snapshot.py` | Read-only project/company projection joining canonical files, primitive readings, Feed Scout artifacts, and source gaps. | `farplane project snapshot`, Farplane UI Overview/Goals/Products/Distribution/News tabs, interval context. |
 
 Rule of thumb:
 
