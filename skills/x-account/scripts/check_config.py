@@ -31,6 +31,12 @@ def main() -> int:
     oauth1_ready = all(present(key, config_values) for key in OAUTH1_USER_CONTEXT)
     read_ready = app_only_ready or oauth2_ready
     deep_ready = oauth2_ready or oauth1_ready
+    publish_ready = oauth2_ready or oauth1_ready
+    publish_auth_modes = []
+    if oauth2_ready:
+        publish_auth_modes.append("oauth2_user")
+    if oauth1_ready:
+        publish_auth_modes.append("oauth1_user_context_text_only_fallback")
     payload = {
         "platform": "x",
         "config_file": str(config_path),
@@ -41,7 +47,10 @@ def main() -> int:
         "oauth1_user_context_ready": oauth1_ready,
         "read_ready": read_ready,
         "deep_ready": deep_ready,
-        "publish_ready": deep_ready,
+        "publish_ready": publish_ready,
+        "oauth2_refresh_before_publish_supported": oauth2_refresh_ready,
+        "publish_auth_modes": publish_auth_modes,
+        "media_publish_ready": oauth2_ready,
         "missing_app_only_read": [key for key in APP_ONLY_READ if not present(key, config_values)],
         "missing_oauth2_user_read": [key for key in OAUTH2_USER_READ if not present(key, config_values)],
         "missing_oauth2_refresh": [key for key in OAUTH2_REFRESH if not present(key, config_values)],

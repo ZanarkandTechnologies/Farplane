@@ -58,6 +58,11 @@ truth.
   best-effort `instagram_likes` / `instagram_views` from recent media fields or
   insights. With one or more `--media-id` values, it reads the specified media
   and aggregates returned fields or insights for those IDs.
+- `scripts/publish_media.py` is the live write path. It creates an IG
+  publishing container from public `image_url` / `video_url` inputs, polls
+  `status_code`, publishes through `/{ig-user-id}/media_publish`, and writes
+  the local content ledger after confirmed publish. Dry-run is the default, and
+  account mutation requires `--execute` plus `--approval-ref`.
 - Deep mode (`--deep`) asks for Reels/media judgment metrics including views,
   reach, saved, shares, comments, total interactions, average watch time, and
   total watch time. Pass `--duration-seconds` to normalize average watch time

@@ -147,6 +147,18 @@ Normalized metric snapshot:
   Add `--deep` for retention/click observations such as `x_retention_score`,
   `x_video_completions`, `x_profile_clicks`, and `x_url_clicks` when the API
   returns owned-content analytics.
+- `scripts/publish_post.py` - dry-run or publish an approved X post/thread
+  from JSON using OAuth 2.0 user auth. If the stored OAuth 2.0 access token is
+  unauthorized and refresh credentials exist, the script refreshes OAuth 2.0
+  and saves the refreshed token back to private `~/.farplane/config.toml`
+  before retrying, unless `--no-save-refreshed-token` is set. It falls back to
+  OAuth 1.0a user-context for text-only posts if refresh/retry fails. Defaults
+  to dry-run; live mutation requires `--execute`, `--account-alias`, and
+  `--approval-ref`. Supports local image upload and chunked video/GIF upload
+  before `POST /2/tweets` when OAuth 2.0 user auth is valid or refreshable.
+  Dry-run writes a stable `draft` row to `.farplane/content/ledger.jsonl` by
+  default; confirmed publish updates that row to `posted` with the returned
+  tweet ID and URL.
 - `scripts/validate_metrics.py` - validate X metric snapshot shape, metric IDs,
   redaction, and blocked/source-gap semantics without external API calls.
 - `scripts/validate_post_payload.py` - validate post/thread JSON without account mutation.

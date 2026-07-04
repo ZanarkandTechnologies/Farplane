@@ -61,6 +61,17 @@ runtime overrides, not the persisted source of truth.
   best-effort `x_likes` / `x_views` from recent post public metrics. With one
   or more `--tweet-id` values, it reads the specified posts and aggregates
   returned public metrics for those IDs.
+- `scripts/publish_post.py` is the live write path. It uses OAuth 2.0 user
+  access for X API v2 media upload and `POST /2/tweets`. When the stored OAuth
+  2.0 access token returns unauthorized and refresh credentials exist, it
+  refreshes OAuth 2.0, saves the refreshed token back to private
+  `~/.farplane/config.toml` unless `--no-save-refreshed-token` is set, and
+  retries before using OAuth 1.0a user-context fallback for text-only
+  `POST /2/tweets`. Dry-run is the default, and account mutation requires
+  `--execute` plus `--approval-ref`.
+  Dry-run writes a local `draft` content-ledger row using a stable
+  `x:draft:<hash>` content ID; execute reuses that ID and updates the row to
+  `posted` after the API returns the tweet ID.
 - Deep mode (`--deep`) asks for owned-content metric buckets and emits
   retention/click observations when returned: `x_retention_score`,
   `x_video_starts`, quartile views, completions, engagements, profile clicks,

@@ -153,6 +153,12 @@ Normalized metric snapshot:
   Add `--deep --duration-seconds <seconds>` for Reels watch-time observations
   and normalized `instagram_retention_score` when the API returns watch-time
   insights.
+- `scripts/publish_media.py` - dry-run or publish an approved Instagram image,
+  carousel, video, or Reel payload from public `image_url` / `video_url`
+  sources. Defaults to dry-run; live mutation requires `--execute`,
+  `--account-alias`, and `--approval-ref`. Creates/polls the publishing
+  container, publishes it, fetches the permalink when available, then writes
+  `.farplane/content/ledger.jsonl` after confirmed publish.
 - `scripts/validate_metrics.py` - validate Instagram metric snapshot shape,
   metric IDs, redaction, and blocked/source-gap semantics without external API calls.
 - `scripts/validate_media_payload.py` - validate post/reel/carousel JSON without account mutation.
