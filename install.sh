@@ -252,6 +252,24 @@ replacements = {
     "__FARPLANE_CONVEX_SITE_URL__": env.get("FARPLANE_CONVEX_SITE_URL", ""),
     "__FARPLANE_TELEMETRY_TOKEN__": env.get("FARPLANE_TELEMETRY_TOKEN", ""),
     "__FARPLANE_CONSOLE_KEY__": env.get("FARPLANE_CONSOLE_KEY", ""),
+    "__LIVEKIT_URL__": env.get("LIVEKIT_URL", ""),
+    "__LIVEKIT_API_KEY__": env.get("LIVEKIT_API_KEY", ""),
+    "__LIVEKIT_API_SECRET__": env.get("LIVEKIT_API_SECRET", ""),
+    "__LIVEKIT_PHONE_NUMBER__": env.get("LIVEKIT_PHONE_NUMBER", ""),
+    "__LIVEKIT_PHONE_NUMBER_ID__": env.get("LIVEKIT_PHONE_NUMBER_ID", ""),
+    "__LIVEKIT_SIP_DISPATCH_RULE_ID__": env.get("LIVEKIT_SIP_DISPATCH_RULE_ID", ""),
+    "__LIVEKIT_SIP_TRUNK_ID__": env.get("LIVEKIT_SIP_TRUNK_ID", ""),
+    "__LIVEKIT_SIP_NUMBER__": env.get("LIVEKIT_SIP_NUMBER", ""),
+    "__LIVEKIT_SIP_OUTBOUND_ADDRESS__": env.get("LIVEKIT_SIP_OUTBOUND_ADDRESS", ""),
+    "__LIVEKIT_SIP_AUTH_USERNAME__": env.get("LIVEKIT_SIP_AUTH_USERNAME", ""),
+    "__LIVEKIT_SIP_AUTH_PASSWORD__": env.get("LIVEKIT_SIP_AUTH_PASSWORD", ""),
+    "__TELNYX_API_KEY__": env.get("TELNYX_API_KEY", ""),
+    "__FISH_API_KEY__": env.get("FISH_API_KEY", ""),
+    "__FISH_AUDIO_REFERENCE_ID__": env.get("FISH_AUDIO_REFERENCE_ID", ""),
+    "__FISH_AUDIO_MODEL__": env.get("FISH_AUDIO_MODEL", ""),
+    "__FISH_AUDIO_LATENCY_MODE__": env.get("FISH_AUDIO_LATENCY_MODE", ""),
+    "__FARPLANE_REMINDER_PHONE__": env.get("FARPLANE_REMINDER_PHONE", ""),
+    "__FARPLANE_PHONE_REMINDER_AGENT_NAME__": env.get("FARPLANE_PHONE_REMINDER_AGENT_NAME", ""),
 }
 for needle, value in replacements.items():
     text = text.replace(needle, value)
@@ -361,7 +379,8 @@ if [ "$REPO_DIR" = "$(cd "$TARGET_DIR" && pwd)" ]; then
   link_global_cli "$TARGET_DIR/bin/farplane"
 
   echo "Done."
-  echo "Next: keep secrets in ~/.farplane/config.toml and trust entries or machine-local overrides in $LOCAL_TOML_FILE."
+  echo "Next: prefer runtime env for secrets (for example: doppler run -- farplane install); use ~/.farplane/config.toml only as a private fallback/cache."
+  echo "Run: farplane config doctor"
   exit 0
 fi
 
@@ -398,6 +417,7 @@ done
 render_config
 
 echo "Done."
-echo "Next: keep secrets in ~/.farplane/config.toml and trust entries or machine-local overrides in $LOCAL_TOML_FILE."
+echo "Next: prefer runtime env for secrets (for example: doppler run -- farplane install); use ~/.farplane/config.toml only as a private fallback/cache."
+echo "Run: farplane config doctor"
 echo "Hooks config is linked when hooks.json exists; Stop telemetry remains active. Ticket-local QA/review owns completion."
 echo "Backups (when needed) are stored under $BACKUP_ROOT"

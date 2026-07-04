@@ -1,9 +1,13 @@
 """Farplane runtime config loading.
 
-Inputs: process env, ~/.codex/config.toml, and ~/.farplane/config.toml.
+Inputs: process env, ~/.farplane/config.toml, and ~/.codex/config.toml.
 Outputs: a merged env dict for Farplane Core commands and hooks.
 Side effects: read-only filesystem access, except hydrate_process_env mutates
 os.environ at process boundaries.
+
+Precedence is process env, then private Farplane config, then rendered Codex
+adapter config. `~/.farplane/config.toml` is a local fallback/cache, not the
+canonical source for secrets when a runtime injector such as Doppler is present.
 """
 
 from __future__ import annotations
@@ -124,6 +128,86 @@ def _structured_runtime_env(config: Mapping[str, object], secrets: Mapping[str, 
             _first_object_string_at(config, [["env", "VITE_CONVEX_URL"]])
             or _first_object_string_at(config, [["convex", "client_url"]])
         ),
+        "LIVEKIT_URL": _first_object_string_at(
+            secrets, [["livekit", "url"]]
+        ),
+        "LIVEKIT_API_KEY": _first_object_string_at(
+            secrets, [["livekit", "api_key"]]
+        ),
+        "LIVEKIT_API_SECRET": _first_object_string_at(
+            secrets, [["livekit", "api_secret"]]
+        ),
+        "LIVEKIT_PHONE_NUMBER": _first_object_string_at(
+            config, [["livekit", "phone_number"], ["phone_reminder", "caller_number"]]
+        ),
+        "LIVEKIT_PHONE_NUMBER_ID": _first_object_string_at(
+            config, [["livekit", "phone_number_id"]]
+        ),
+        "LIVEKIT_SIP_DISPATCH_RULE_ID": _first_object_string_at(
+            config, [["livekit", "sip_dispatch_rule_id"]]
+        ),
+        "LIVEKIT_SIP_TRUNK_ID": _first_object_string_at(
+            secrets,
+            [
+                ["livekit", "sip_outbound_trunk_id"],
+                ["livekit", "sip", "outbound_trunk_id"],
+            ],
+        ),
+        "LIVEKIT_SIP_NUMBER": _first_object_string_at(
+            config,
+            [
+                ["livekit", "sip_outbound_number"],
+                ["livekit", "sip", "outbound_number"],
+                ["phone_reminder", "caller_number"],
+                ["livekit", "phone_number"],
+            ],
+        ),
+        "LIVEKIT_SIP_OUTBOUND_ADDRESS": _first_object_string_at(
+            secrets,
+            [
+                ["livekit", "sip_outbound_address"],
+                ["livekit", "sip", "outbound_address"],
+            ],
+        ),
+        "LIVEKIT_SIP_AUTH_USERNAME": _first_object_string_at(
+            secrets,
+            [
+                ["livekit", "sip_auth_username"],
+                ["livekit", "sip", "auth_username"],
+            ],
+        ),
+        "LIVEKIT_SIP_AUTH_PASSWORD": _first_object_string_at(
+            secrets,
+            [
+                ["livekit", "sip_auth_password"],
+                ["livekit", "sip", "auth_password"],
+            ],
+        ),
+        "TELNYX_API_KEY": _first_object_string_at(
+            secrets,
+            [
+                ["livekit", "sip", "telnyx_api_key"],
+                ["integrations", "telnyx_api_key"],
+            ],
+        ),
+        "FISH_API_KEY": _first_object_string_at(
+            secrets, [["fish_audio", "api_key"]]
+        ),
+        "FISH_AUDIO_REFERENCE_ID": _first_object_string_at(
+            config, [["fish_audio", "reference_id"]]
+        ),
+        "FISH_AUDIO_MODEL": _first_object_string_at(
+            config, [["fish_audio", "model"]]
+        ),
+        "FISH_AUDIO_LATENCY_MODE": _first_object_string_at(
+            config, [["fish_audio", "latency_mode"]]
+        ),
+        "FARPLANE_REMINDER_PHONE": _first_object_string_at(
+            config, [["phone_reminder", "recipient_phone"]]
+        ),
+        "FARPLANE_PHONE_REMINDER_AGENT_NAME": _first_object_string_at(
+            config, [["phone_reminder", "agent_name"]]
+        ),
     }
     return {key: value for key, value in aliases.items() if value}
 
@@ -134,13 +218,17 @@ def read_config_value(name: str, env: Mapping[str, str] | None = None) -> str:
 
 
 def load_runtime_env(base_env: Mapping[str, str] | None = None) -> dict[str, str]:
-    merged = dict(base_env if base_env is not None else os.environ)
+    process_env = dict(base_env if base_env is not None else os.environ)
+    if str(process_env.get(DISABLE_ENV) or "").strip() == "1":
+        return process_env
+
+    merged: dict[str, str] = {}
     rendered_toml_env = _iter_env_strings(
-        _read_toml_object(codex_home(merged) / "config.toml")
+        _read_toml_object(codex_home(process_env) / "config.toml")
     )
-    for key, value in rendered_toml_env.items():
-        merged.setdefault(key, value)
-    merged.update(saved_runtime_env(merged))
+    merged.update(rendered_toml_env)
+    merged.update(saved_runtime_env(process_env))
+    merged.update(process_env)
     return merged
 
 

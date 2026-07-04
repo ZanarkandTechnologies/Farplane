@@ -1,6 +1,7 @@
 # Managed template for ~/.codex/config.toml.
 # Do not put machine-local secrets or trust entries here.
 # `install.sh` renders this template using values from:
+#   - process env (preferred; works with `doppler run -- ...`)
 #   - ~/.farplane/config.toml
 #   - ~/.codex/config.local.toml (optional, appended verbatim)
 
@@ -35,6 +36,28 @@ FARPLANE_SKILL_HEAT_RECENT_DAYS = "7"
 FARPLANE_SKILL_HEAT_TOP_N = "25"
 # Comma-separated event types counted as skill heat.
 FARPLANE_SKILL_HEAT_EVENT_TYPES = "control_surface_detected,hook_result,learning_review_launched,skill_requested"
+# Phone reminder / LiveKit voice-agent settings. Store real values in
+# runtime env when possible, optionally injected with Doppler. Private
+# ~/.farplane/config.toml may cache fallback/bootstrap values; install.sh
+# renders them here for Codex subprocesses only when env does not provide them.
+LIVEKIT_URL = "__LIVEKIT_URL__"
+LIVEKIT_API_KEY = "__LIVEKIT_API_KEY__"
+LIVEKIT_API_SECRET = "__LIVEKIT_API_SECRET__"
+LIVEKIT_PHONE_NUMBER = "__LIVEKIT_PHONE_NUMBER__"
+LIVEKIT_PHONE_NUMBER_ID = "__LIVEKIT_PHONE_NUMBER_ID__"
+LIVEKIT_SIP_DISPATCH_RULE_ID = "__LIVEKIT_SIP_DISPATCH_RULE_ID__"
+LIVEKIT_SIP_TRUNK_ID = "__LIVEKIT_SIP_TRUNK_ID__"
+LIVEKIT_SIP_NUMBER = "__LIVEKIT_SIP_NUMBER__"
+LIVEKIT_SIP_OUTBOUND_ADDRESS = "__LIVEKIT_SIP_OUTBOUND_ADDRESS__"
+LIVEKIT_SIP_AUTH_USERNAME = "__LIVEKIT_SIP_AUTH_USERNAME__"
+LIVEKIT_SIP_AUTH_PASSWORD = "__LIVEKIT_SIP_AUTH_PASSWORD__"
+TELNYX_API_KEY = "__TELNYX_API_KEY__"
+FISH_API_KEY = "__FISH_API_KEY__"
+FISH_AUDIO_REFERENCE_ID = "__FISH_AUDIO_REFERENCE_ID__"
+FISH_AUDIO_MODEL = "__FISH_AUDIO_MODEL__"
+FISH_AUDIO_LATENCY_MODE = "__FISH_AUDIO_LATENCY_MODE__"
+FARPLANE_REMINDER_PHONE = "__FARPLANE_REMINDER_PHONE__"
+FARPLANE_PHONE_REMINDER_AGENT_NAME = "__FARPLANE_PHONE_REMINDER_AGENT_NAME__"
 # Optional automation settings such as Taste Loop active hours live in
 # `farplane/automations.toml` so Farplane UI can render and update full Codex
 # automation configs before syncing the Codex automation record.
