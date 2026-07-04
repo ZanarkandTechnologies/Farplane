@@ -191,6 +191,19 @@ handoff, and stop. It must not activate itself, create a local runner, edit
 target skills directly, or invent fake benchmarks when the honest metric is
 human feedback or review.
 
+### Runtime Secrets And `farplane/bindings.yaml`
+
+Secrets are runtime inputs, not tracked project files. Farplane Core resolves
+runtime values in this order:
+
+1. process env, including values injected by tools such as Doppler
+2. private local fallback/cache `~/.farplane/config.toml`
+3. rendered Codex adapter fallback `~/.codex/config.toml`
+
+Use `farplane config doctor` to check required key sources, private config file
+permissions, optional Doppler availability, and obvious tracked secret
+candidates without printing secret values.
+
 ### `farplane/bindings.yaml`
 
 Non-secret project coordinates: URLs, handles, safe IDs, labels, aliases,

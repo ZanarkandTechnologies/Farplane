@@ -11,6 +11,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import shutil
 import subprocess
 import sys
 from dataclasses import dataclass
@@ -22,11 +23,7 @@ CORE_DIR = Path(__file__).resolve().parent / "core"
 if str(CORE_DIR) not in sys.path:
     sys.path.insert(0, str(CORE_DIR))
 
-from farplane_adoption import run_scan as run_adoption_scan
-from farplane_content import run_content_add, run_content_list, run_content_select, run_content_validate
-from farplane_primitive_metrics import run_primitives as run_metrics_primitives
-from farplane_project_snapshot import run_snapshot as run_project_snapshot
-from farplane_skill_rollout import SkillRolloutError, run_scan as run_skill_rollout_scan
+from farplane_config_doctor import config_doctor
 from runtime_config import load_runtime_env
 
 
@@ -172,12 +169,84 @@ def run_process(args: list[str], cwd: Path, dry_run: bool = False) -> int:
     return child.returncode
 
 
+def nearest_doppler_file(start: Path) -> Path | None:
+    current = start.resolve()
+    for candidate_root in [current, *current.parents]:
+        candidate = candidate_root / "doppler.yaml"
+        if candidate.exists():
+            return candidate
+        candidate = candidate_root / "doppler.yml"
+        if candidate.exists():
+            return candidate
+    return None
+
+
+def doppler_setup_hint(doppler_file: Path | None) -> str:
+    if doppler_file is None:
+        return "run `doppler login` and `doppler setup --project <project> --config <config>` from this project"
+    project = ""
+    config = ""
+    for line in doppler_file.read_text(encoding="utf-8", errors="replace").splitlines():
+        stripped = line.strip()
+        if stripped.startswith("project:"):
+            project = stripped.split(":", 1)[1].strip()
+        if stripped.startswith("config:"):
+            config = stripped.split(":", 1)[1].strip()
+    if project and config:
+        return f"run `doppler login` and `doppler setup --project {project} --config {config}` from {doppler_file.parent}"
+    return f"run `doppler login` and `doppler setup` from {doppler_file.parent}"
+
+
+def doppler_configured(cwd: Path) -> bool:
+    checks = [
+        ["doppler", "configure", "get", "project", "--plain"],
+        ["doppler", "configure", "get", "config", "--plain"],
+    ]
+    for command in checks:
+        result = subprocess.run(command, cwd=str(cwd), capture_output=True, text=True)
+        if result.returncode != 0 or not result.stdout.strip():
+            return False
+    return True
+
+
+def run_with_doppler(args: argparse.Namespace) -> int:
+    command = passthrough_args(args.extra)
+    if not command:
+        raise CliError("run_requires_command: use `farplane run -- <command>`")
+    cwd = Path.cwd()
+    doppler_file = nearest_doppler_file(cwd)
+    if shutil.which("doppler") is None:
+        raise CliError(
+            "doppler_not_installed: install Doppler CLI, then " + doppler_setup_hint(doppler_file),
+            127,
+        )
+    if not doppler_configured(cwd):
+        raise CliError("doppler_not_configured: " + doppler_setup_hint(doppler_file), 2)
+    doppler_command = ["doppler", "run", "--", *command]
+    if args.dry_run:
+        print(json.dumps({"cwd": str(cwd), "command": doppler_command}, indent=2))
+        return 0
+    child = subprocess.run(doppler_command, cwd=str(cwd), env=os.environ)
+    return child.returncode
+
+
 def run_install(args: argparse.Namespace) -> int:
     command = ["bash", str(CORE_ROOT / "install.sh")]
     if args.target:
         command.extend(["--target", args.target])
     if args.extra:
         command.extend(passthrough_args(args.extra))
+    if nearest_doppler_file(CORE_ROOT) is not None and not os.environ.get("DOPPLER_PROJECT"):
+        if shutil.which("doppler") is None:
+            raise CliError("doppler_not_installed: " + doppler_setup_hint(nearest_doppler_file(CORE_ROOT)), 127)
+        if not doppler_configured(CORE_ROOT):
+            raise CliError("doppler_not_configured: " + doppler_setup_hint(nearest_doppler_file(CORE_ROOT)), 2)
+        command = ["doppler", "run", "--", *command]
+        if args.dry_run:
+            print(json.dumps({"cwd": str(CORE_ROOT), "command": command}, indent=2))
+            return 0
+        child = subprocess.run(command, cwd=str(CORE_ROOT), env=os.environ)
+        return child.returncode
     return run_process(command, CORE_ROOT, args.dry_run)
 
 
@@ -238,6 +307,20 @@ def run_hooks_doctor(args: argparse.Namespace) -> int:
     return 0 if payload["ok"] else 1
 
 
+def run_config_doctor(args: argparse.Namespace) -> int:
+    codex_home = Path(args.target).expanduser().resolve() if args.target else DEFAULT_CODEX_HOME
+    farplane_home = Path(args.state_dir).expanduser().resolve() if args.state_dir else DEFAULT_FARPLANE_HOME
+    project_root = Path(args.project_root).expanduser().resolve() if args.project_root else CORE_ROOT
+    payload = config_doctor(
+        codex_home=codex_home,
+        farplane_home=farplane_home,
+        project_root=project_root,
+        process_env=dict(os.environ),
+    )
+    print_payload(payload, args.json)
+    return 0 if payload["ok"] else 1
+
+
 def run_ui_link(args: argparse.Namespace) -> int:
     ui_repo = Path(args.path).expanduser().resolve()
     issues = validate_ui_repo(ui_repo)
@@ -292,11 +375,69 @@ def delegate_to_ui(command_name: str, extra: list[str], dry_run: bool = False) -
     return run_process(command, ui_repo, dry_run)
 
 
+def run_adoption_scan_cli(args: argparse.Namespace) -> int:
+    from farplane_adoption import run_scan
+
+    return int(run_scan(args))
+
+
+def run_skill_rollout_scan_cli(args: argparse.Namespace) -> int:
+    from farplane_skill_rollout import SkillRolloutError, run_scan
+
+    try:
+        return int(run_scan(args))
+    except SkillRolloutError as exc:
+        print(f"farplane skill rollout: {exc}", file=sys.stderr)
+        return 1
+
+
+def run_metrics_primitives_cli(args: argparse.Namespace) -> int:
+    from farplane_primitive_metrics import run_primitives
+
+    return int(run_primitives(args))
+
+
+def run_project_snapshot_cli(args: argparse.Namespace) -> int:
+    from farplane_project_snapshot import run_snapshot
+
+    return int(run_snapshot(args))
+
+
+def run_content_add_cli(args: argparse.Namespace) -> int:
+    from farplane_content import run_content_add
+
+    return int(run_content_add(args))
+
+
+def run_content_list_cli(args: argparse.Namespace) -> int:
+    from farplane_content import run_content_list
+
+    return int(run_content_list(args))
+
+
+def run_content_validate_cli(args: argparse.Namespace) -> int:
+    from farplane_content import run_content_validate
+
+    return int(run_content_validate(args))
+
+
+def run_content_select_cli(args: argparse.Namespace) -> int:
+    from farplane_content import run_content_select
+
+    return int(run_content_select(args))
+
+
 def run_doctor(args: argparse.Namespace) -> int:
     config = load_config()
     ui_repo, ui_issues = discover_ui_repo(config)
     hook_report = hooks_doctor(Path(args.target).expanduser() if args.target else config.codex_home)
-    issues = [*hook_report["issues"], *ui_issues]
+    config_report = config_doctor(
+        codex_home=Path(args.target).expanduser().resolve() if args.target else config.codex_home,
+        farplane_home=DEFAULT_FARPLANE_HOME,
+        project_root=CORE_ROOT,
+        process_env=dict(os.environ),
+    )
+    issues = [*hook_report["issues"], *ui_issues, *config_report["issues"]]
     payload = {
         "ok": not issues,
         "summary": "Core install, hooks, and UI link look healthy" if not issues else "Farplane doctor found issues",
@@ -305,9 +446,11 @@ def run_doctor(args: argparse.Namespace) -> int:
         "codexHome": str(config.codex_home),
         "uiRepoPath": str(ui_repo) if ui_repo else None,
         "hooks": hook_report,
+        "config": config_report,
         "issues": issues,
         "hints": [
             *hook_report.get("hints", []),
+            *config_report.get("hints", []),
             *(["run `farplane ui link /path/to/Farplane-UI`"] if ui_issues else []),
         ],
     }
@@ -333,6 +476,11 @@ def build_parser() -> argparse.ArgumentParser:
     doctor.add_argument("--json", action="store_true")
     doctor.set_defaults(func=run_doctor)
 
+    run = sub.add_parser("run", help="Run a command through this project's Doppler secret environment.")
+    run.add_argument("--dry-run", action="store_true", help="Print the Doppler-wrapped command without running it.")
+    run.add_argument("extra", nargs=argparse.REMAINDER, help="Command to run after --.")
+    run.set_defaults(func=run_with_doppler)
+
     hooks = sub.add_parser("hooks", help="Install or check Codex lifecycle hooks.")
     hooks_sub = hooks.add_subparsers(dest="hooks_command")
     hooks_install = hooks_sub.add_parser("install", help="Install/relink Core hooks through install.sh.")
@@ -343,6 +491,15 @@ def build_parser() -> argparse.ArgumentParser:
     hooks_doctor_parser.add_argument("--target", help="Codex home target. Defaults to ~/.codex.")
     hooks_doctor_parser.add_argument("--json", action="store_true")
     hooks_doctor_parser.set_defaults(func=run_hooks_doctor)
+
+    config_parser = sub.add_parser("config", help="Inspect Farplane runtime config and secret sources.")
+    config_sub = config_parser.add_subparsers(dest="config_command")
+    config_doctor_parser = config_sub.add_parser("doctor", help="Check runtime secret source hygiene without printing values.")
+    config_doctor_parser.add_argument("--target", help="Codex home target. Defaults to ~/.codex.")
+    config_doctor_parser.add_argument("--state-dir", help="Farplane state/config dir. Defaults to ~/.farplane.")
+    config_doctor_parser.add_argument("--project-root", help="Tracked project root to scan for obvious secret literals.")
+    config_doctor_parser.add_argument("--json", action="store_true")
+    config_doctor_parser.set_defaults(func=run_config_doctor)
 
     ui = sub.add_parser("ui", help="Link or start the Farplane-UI checkout.")
     ui_sub = ui.add_subparsers(dest="ui_command")
@@ -373,7 +530,7 @@ def build_parser() -> argparse.ArgumentParser:
     adoption_scan.add_argument("--feature-registry", help="Feature registry JSONL path.")
     adoption_scan.add_argument("--template-registry", help="Template registry JSONL path.")
     adoption_scan.add_argument("--json", action="store_true")
-    adoption_scan.set_defaults(func=run_adoption_scan)
+    adoption_scan.set_defaults(func=run_adoption_scan_cli)
 
     skills = sub.add_parser("skills", help="Inspect Farplane skill rollout and registry projections.")
     skills_sub = skills.add_subparsers(dest="skills_command")
@@ -384,7 +541,7 @@ def build_parser() -> argparse.ArgumentParser:
     skills_rollout_scan.add_argument("--registry", help="Skill registry JSONL path.")
     skills_rollout_scan.add_argument("--intelligence", help="Skill template intelligence JSON path.")
     skills_rollout_scan.add_argument("--json", action="store_true")
-    skills_rollout_scan.set_defaults(func=run_skill_rollout_scan)
+    skills_rollout_scan.set_defaults(func=run_skill_rollout_scan_cli)
 
     metrics = sub.add_parser("metrics", help="Refresh Farplane primitive metric readings.")
     metrics_sub = metrics.add_subparsers(dest="metrics_command")
@@ -395,7 +552,7 @@ def build_parser() -> argparse.ArgumentParser:
     metrics_primitives.add_argument("--monthly-spend", type=float, help="Optional monthly AI subscription spend for burn allocation.")
     metrics_primitives.add_argument("--no-write", action="store_true", help="Print readings without writing .farplane metric files.")
     metrics_primitives.add_argument("--json", action="store_true")
-    metrics_primitives.set_defaults(func=run_metrics_primitives)
+    metrics_primitives.set_defaults(func=run_metrics_primitives_cli)
 
     project = sub.add_parser("project", help="Compile project-level projections for UI and intervals.")
     project_sub = project.add_subparsers(dest="project_command")
@@ -404,7 +561,7 @@ def build_parser() -> argparse.ArgumentParser:
     project_snapshot.add_argument("--date", help="Metric date in YYYY-MM-DD. Defaults to latest daily metrics snapshot.")
     project_snapshot.add_argument("--no-write", action="store_true")
     project_snapshot.add_argument("--json", action="store_true")
-    project_snapshot.set_defaults(func=run_project_snapshot)
+    project_snapshot.set_defaults(func=run_project_snapshot_cli)
 
     content = sub.add_parser("content", help="Append or inspect local Farplane content ledger rows.")
     content_sub = content.add_subparsers(dest="content_command")
@@ -423,7 +580,7 @@ def build_parser() -> argparse.ArgumentParser:
     content_add.add_argument("--source-ref")
     content_add.add_argument("--approval-ref")
     content_add.add_argument("--notes")
-    content_add.set_defaults(func=run_content_add)
+    content_add.set_defaults(func=run_content_add_cli)
     content_list = content_sub.add_parser("list", help="List content ledger rows.")
     content_list.add_argument("--project-root", default=str(CORE_ROOT))
     content_list.add_argument("--platform")
@@ -431,17 +588,17 @@ def build_parser() -> argparse.ArgumentParser:
     content_list.add_argument("--kpi")
     content_list.add_argument("--since-date", help="Only include content published on or after this UTC date.")
     content_list.add_argument("--until-date", help="Only include content published before this UTC date.")
-    content_list.set_defaults(func=run_content_list)
+    content_list.set_defaults(func=run_content_list_cli)
     content_validate = content_sub.add_parser("validate", help="Validate content ledger JSONL rows.")
     content_validate.add_argument("--project-root", default=str(CORE_ROOT))
-    content_validate.set_defaults(func=run_content_validate)
+    content_validate.set_defaults(func=run_content_validate_cli)
     content_select = content_sub.add_parser("select", help="Select posted content rows for metric refresh.")
     content_select.add_argument("--project-root", default=str(CORE_ROOT))
     content_select.add_argument("--platform", required=True)
     content_select.add_argument("--kpi", required=True)
     content_select.add_argument("--date", required=True, help="Snapshot date in YYYY-MM-DD.")
     content_select.add_argument("--window-days", type=int, default=7)
-    content_select.set_defaults(func=run_content_select)
+    content_select.set_defaults(func=run_content_select_cli)
 
     return parser
 
@@ -456,6 +613,8 @@ def main(argv: list[str]) -> int:
     args = parser.parse_args(argv[1:])
     if getattr(args, "command", None) == "hooks" and getattr(args, "hooks_command", None) is None:
         parser.error("hooks requires a subcommand: install or doctor")
+    if getattr(args, "command", None) == "config" and getattr(args, "config_command", None) is None:
+        parser.error("config requires a subcommand: doctor")
     if getattr(args, "command", None) == "ui" and getattr(args, "ui_command", None) is None:
         return run_ui_start(argparse.Namespace(extra=[], dry_run=False, json=False))
     if getattr(args, "command", None) == "adoption" and getattr(args, "adoption_command", None) is None:
@@ -478,9 +637,6 @@ def main(argv: list[str]) -> int:
     except CliError as exc:
         print(f"farplane: {exc}", file=sys.stderr)
         return exc.code
-    except SkillRolloutError as exc:
-        print(f"farplane skill rollout: {exc}", file=sys.stderr)
-        return 1
 
 
 if __name__ == "__main__":

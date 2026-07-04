@@ -81,8 +81,26 @@ Codex lifecycle telemetry is defined by the installed Codex hook config.
 this order:
 
 1. process env
-2. UI-managed `~/.farplane/config.toml`
-3. rendered `~/.codex/config.toml`
+2. private local fallback/cache `~/.farplane/config.toml`
+3. rendered adapter fallback `~/.codex/config.toml`
+
+This keeps Farplane compatible with Doppler-style secret injection:
+`doppler run -- farplane install`, `doppler run -- codex`, or any equivalent
+runtime env source can supply API keys without making Doppler a required
+Farplane dependency. `~/.farplane/config.toml` may still hold local bootstrap
+or UI-managed fallback values, but it is not the preferred canonical source for
+rotatable secrets when an injector is available.
+
+In this Farplane checkout, use `farplane run -- <command>` as the standard
+project wrapper for credentialed scripts. It checks the current project's
+Doppler setup and runs `doppler run -- <command>` so skill scripts can live
+under `skills/` while resolving secrets from the project scope.
+
+Readiness and repair stay on the existing verbs: `farplane doctor` reports
+Core, hook, UI, local-config, and Doppler readiness; `farplane install` performs
+safe mechanical render/link/repair work and wraps its installer subprocess with
+Doppler when this checkout declares Doppler and the shell is not already
+Doppler-injected. Do not add a separate setup/sync command for this lifecycle.
 
 Endpoint selection:
 
