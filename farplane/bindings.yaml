@@ -269,6 +269,16 @@ metrics:
     display: reading
     refresh: Call $interval-update.calculate_ticket_intervention_metrics(ticket_dir="tickets",
       runtime_dir=".farplane", date="<YYYY-MM-DD>") and store the auto_completion_rate reading.
+  rejected_ai_ticket_count:
+    label: Rejected AI tickets
+    description: Daily count of AI-planned reward-bearing tickets marked status rejected, used as a guard metric for Pulse ticket quality.
+    product: cross_product_autonomy
+    kind: daily_count
+    unit: tickets
+    display: bar_plus_cumulative
+    refresh: Call `farplane metrics primitives --project-root <project> --date <YYYY-MM-DD>
+      --ticket-status rejected --json`; store `ticket_count_by_kpi_status:rejected._total.value`
+      as this metric, with the per-KPI rejected counts in payload.
   intervention_free_ticket_count:
     label: Intervention-free tickets
     description: Daily count of completed associated tickets with zero human turns after execution start.

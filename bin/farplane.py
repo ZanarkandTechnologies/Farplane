@@ -550,6 +550,7 @@ def build_parser() -> argparse.ArgumentParser:
     metrics_primitives.add_argument("--date", help="Snapshot date in YYYY-MM-DD. Defaults to today UTC.")
     metrics_primitives.add_argument("--codex-home", default=str(DEFAULT_CODEX_HOME))
     metrics_primitives.add_argument("--monthly-spend", type=float, help="Optional monthly AI subscription spend for burn allocation.")
+    metrics_primitives.add_argument("--ticket-status", help="Optional ticket status/phase filter for companion ticket_count_by_kpi_status readings.")
     metrics_primitives.add_argument("--no-write", action="store_true", help="Print readings without writing .farplane metric files.")
     metrics_primitives.add_argument("--json", action="store_true")
     metrics_primitives.set_defaults(func=run_metrics_primitives_cli)

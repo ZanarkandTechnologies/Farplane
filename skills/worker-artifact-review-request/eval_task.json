@@ -1,0 +1,79 @@
+[
+  {
+    "id": "worker_artifact_review_rejects_local_path_only_01",
+    "title": "Rejects a local-path-only artifact review request",
+    "query": "A worker finished TASK-0301 and wants to Telegram Kenji: 'Review tickets/TASK-0301/artifacts/report.md'. Prepare the review request.",
+    "reference_points": [
+      "Does not send a local-path-only Telegram message",
+      "Requires a phone-readable summary, excerpt, options, or phone-openable link",
+      "Labels local filesystem paths as desktop-only when included",
+      "Records fallback if the artifact cannot be summarized honestly",
+      "Keeps the worker thread as the reply route owner"
+    ],
+    "anti_patterns": [
+      "Sends only a desktop path",
+      "Pastes a giant report without a clear decision",
+      "Creates a new approval queue instead of routing replies to the worker"
+    ],
+    "tags": ["worker-artifact-review-request", "telegram", "artifact-review"]
+  },
+  {
+    "id": "worker_artifact_review_records_message_receipt_01",
+    "title": "Records sent message id or fallback receipt",
+    "query": "A worker has produced an ablation proof report with summary and archive-safe artifact refs. Telegram is configured and CODEX_THREAD_ID is available. What should the finish receipt include?",
+    "reference_points": [
+      "Uses telegram-message as the send route",
+      "Includes ticket id, worker thread/session ref, artifact refs, requested reply action, and Telegram message id",
+      "Binds feedback_channel=telegram, feedback_policy=ask_when_artifact_ready, and the worker_thread_ref reply route",
+      "Logs a review-cycle entry with artifact refs, human question, expected signal, Telegram status, and next action after reply",
+      "Applies the worker-artifact-review and telegram-message QA checklists",
+      "Records a blocker instead of silently succeeding if sending fails",
+      "Satisfies the turn exit gate before stopping while waiting for Kenji",
+      "Does not mark publish/post/spend approval as granted"
+    ],
+    "anti_patterns": [
+      "Claims the review was requested without a message id or fallback",
+      "Omits the worker thread reply route",
+      "Stops as waiting for Kenji without a Telegram send receipt or blocker",
+      "Treats message sent as final external-action approval"
+    ],
+    "tags": ["worker-artifact-review-request", "receipt", "telegram"]
+  },
+  {
+    "id": "worker_artifact_review_escalates_unanswered_telegram_to_phone_chaser_01",
+    "title": "Escalates an unanswered Telegram review request through phone-chaser",
+    "query": "A worker sent Kenji a Telegram review request for TASK-0304 yesterday with a message id and archive-safe artifact refs. The worker is still blocked on approve/revise/reject and the caller says ignored Telegram should be chased by phone. What should happen now?",
+    "reference_points": [
+      "Treats phone-chaser as an escalation after the unanswered Telegram, not as the first review request",
+      "Uses a short Kenji-facing phone message with one concrete reply action",
+      "Applies phone-chaser guardrails for allowed recipient, no secrets, and sanitized receipt",
+      "Records Telegram message id, phone-chaser dispatch id or blocker, worker thread ref, artifact refs, and requested reply action",
+      "Preserves the worker thread as the reply route and records the escalation in the review cycle",
+      "Does not treat the phone call as approval to publish, post, spend, deploy, or mutate external accounts"
+    ],
+    "anti_patterns": [
+      "Creates a new approval queue instead of routing the answer to the worker thread",
+      "Calls without a prior unanswered review ping or explicit chase intent",
+      "Leaves no dispatch receipt or blocker"
+    ],
+    "tags": ["worker-artifact-review-request", "phone-chaser", "telegram"]
+  },
+  {
+    "id": "worker_artifact_review_content_packet_phone_ready_01",
+    "title": "Creates a phone-readable review request for content artifacts",
+    "query": "A worker finished a storyboard and two hook variants for a harness-engineering video. Ask Kenji to review it without posting.",
+    "reference_points": [
+      "Summarizes the storyboard/hook options in Telegram-readable form",
+      "Asks one clear reply action such as choose A/B, revise, or reject with reason",
+      "States that posting/publishing remains gated",
+      "Includes archive-safe artifact refs as desktop-only refs after the reviewable content",
+      "Records the request in the caller-owned ticket or progress surface"
+    ],
+    "anti_patterns": [
+      "Asks Kenji to review an unspecified video idea",
+      "Combines review with public posting approval",
+      "Requires desktop access to know what decision is being requested"
+    ],
+    "tags": ["worker-artifact-review-request", "content", "human-review"]
+  }
+]

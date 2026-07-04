@@ -200,7 +200,7 @@ runtime values in this order:
 2. private local fallback/cache `~/.farplane/config.toml`
 3. rendered Codex adapter fallback `~/.codex/config.toml`
 
-Use `farplane config doctor` to check required key sources, private config file
+Use `farplane doctor` to check required key sources, private config file
 permissions, optional Doppler availability, and obvious tracked secret
 candidates without printing secret values.
 
@@ -285,6 +285,7 @@ the project directory:
 
 ```bash
 farplane metrics primitives --project-root /path/to/project --date <YYYY-MM-DD> --json
+farplane metrics primitives --project-root /path/to/project --date <YYYY-MM-DD> --ticket-status rejected --json
 farplane project snapshot --project-root /path/to/project --date <YYYY-MM-DD> --json
 ```
 
@@ -307,6 +308,17 @@ transitive: product -> KPI IDs in `bindings.yaml` -> tickets whose
 `Reward.kpi_rewards` include those KPI IDs. KPI-attributed ticket ratio means
 rewarded tickets divided by touched tickets; it is not proof of who created or
 executed the ticket.
+
+AI-planned ticket identity is frontmatter-owned with `rewards.kpi`.
+`skills/pulse-update/scripts/list_pulse_board.py` accepts active ticket paths or
+a project root, parses that frontmatter marker, and separates
+AI-generated/reward-bearing tickets from manual/operator tickets. The body
+`## Reward` block remains the expected-reward and guard contract. Manual active
+tickets do not block Pulse refill and should not be mechanically repaired by
+Pulse unless they are explicitly opted into AI planning with valid
+`rewards.kpi` frontmatter plus a matching body reward block.
+`.farplane/automation/spawned-threads.jsonl` remains worker/handoff state; it
+is not the source of truth for ticket origin.
 
 `.farplane/state/ticket-thread-associations.jsonl` is an ignored support index.
 Mine backfill rows use `confidence=completion_only`; they can support completed
@@ -436,8 +448,16 @@ by default. Commit shared ticket scaffolding such as `tickets/README.md` and
 eval runs, and non-skill agent state out of normal commits unless the repo has
 an explicit reason to version them.
 
-Ticket `Reward` blocks are the spend-justification and KPI-attribution
-primitive for tactical work. Use parseable `kpi_rewards` pairs plus a `guard`:
+Ticket reward metadata is split between a small frontmatter identity marker and
+the human-readable spend-justification block. AI-planned tickets use
+frontmatter `rewards.kpi`:
+
+```yaml
+rewards.kpi:
+  - accepted_harness_improvements
+```
+
+Then the body `## Reward` block carries expected reward and guard detail:
 
 ```yaml
 kpi_rewards:

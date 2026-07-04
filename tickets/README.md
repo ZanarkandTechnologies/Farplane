@@ -127,7 +127,8 @@ last_verification: none
 ## Field Meanings
 
 - `phase`: `planning`, `building`, `documenting`, `complete`, `failed`
-- `status`: `todo`, `review`, `building`, `blocked`, `done`, `failed`
+- `status`: `todo`, `review`, `building`, `blocked`, `done`, `failed`,
+  `rejected`
 - `owner`: broad work owner, not a live session id
 - `claimed_by`: optional human-facing active claim alias for the current live
   session. Codex agents must use a session-specific alias such as
@@ -159,15 +160,19 @@ last_verification: none
   ticket-scoped artifacts
 - `decision_refs`: optional references to `progress.md` entries or
   `decisions.md` headings; do not put decision bodies in frontmatter
+- `rejection_reason`: required when `status: rejected`; use it when a worker
+  produced enough artifact to review but Kenji rejects the quality, premise,
+  taste, or strategic fit. Rejected tickets use `phase: failed`,
+  `status: rejected`, and `ready: false`.
 
 For Goal Advisor, Pulse, heartbeat, and board-drain, the explicit invocation is
 the operator or automation running the selector. After that, a ticket is
 selectable only when
 `ready: true`, `approval_required: false`, `blocked_by: []`, `claimed_by:` is
-empty, `phase` is not `complete` or `failed`, `status` is not `done` or
-`failed`, the ticket is not parked or waiting on external credentials/feedback,
-and every dependency is complete, archived, or explicitly waived in the ticket
-body. These are hard gates, not ranking preferences.
+empty, `phase` is not `complete` or `failed`, `status` is not `done`, `failed`,
+or `rejected`, the ticket is not parked or waiting on external
+credentials/feedback, and every dependency is complete, archived, or explicitly
+waived in the ticket body. These are hard gates, not ranking preferences.
 
 `human_gate` is not a second ticket-start approval gate. It marks a final
 outside-world action that the worker must not take without Kenji. Pulse should

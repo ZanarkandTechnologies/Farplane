@@ -96,6 +96,86 @@ owner: human
         self.assertNotIn("tickets/TASK-0002/ticket.md:missing_kpi_rewards", payload["source_gaps"])
         self.assertIn("tickets/TASK-0002/ticket.md:missing_kpi_rewards", payload["diagnostics"]["ticket_parse_gaps"])
 
+    def test_rejected_ticket_status_counts_by_kpi_and_rejection_rate(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "farplane").mkdir()
+            (root / "farplane" / "bindings.yaml").write_text(
+                """kind: project-bindings
+metrics:
+  accepted_harness_improvements:
+    product: productization
+""",
+                encoding="utf-8",
+            )
+            write_ticket(
+                root,
+                "TASK-0001",
+                """---
+ticket_id: TASK-0001
+phase: failed
+status: rejected
+created_at: 2026-07-03T01:00:00Z
+updated_at: 2026-07-03T02:00:00Z
+---
+
+# TASK-0001
+
+## Reward
+
+```yaml
+kpi_rewards:
+  - kpi_id: accepted_harness_improvements
+```
+
+## Done / Proof
+- Rejected by Kenji: boring premise.
+""",
+            )
+            write_ticket(
+                root,
+                "TASK-0002",
+                """---
+ticket_id: TASK-0002
+phase: complete
+status: done
+created_at: 2026-07-03T03:00:00Z
+updated_at: 2026-07-03T04:00:00Z
+---
+
+# TASK-0002
+
+## Reward
+
+```yaml
+kpi_rewards:
+  - kpi_id: accepted_harness_improvements
+```
+
+## Done / Proof
+- Evidence: artifacts/proof.md
+""",
+            )
+
+            payload = primitive_snapshot(
+                root,
+                "2026-07-03",
+                root / ".codex",
+                monthly_spend=None,
+                write=False,
+                ticket_status="rejected",
+            )
+
+        rejected_counts = payload["primitives"]["ticket_count_by_kpi_status:rejected"]
+        self.assertEqual(rejected_counts["_total"]["value"], 1)
+        self.assertEqual(rejected_counts["accepted_harness_improvements"]["value"], 1)
+        self.assertEqual(
+            rejected_counts["accepted_harness_improvements"]["payload"]["tickets"][0]["status"],
+            "rejected",
+        )
+        all_rewarded = payload["primitives"]["ticket_count_by_kpi"]["accepted_harness_improvements"]["value"]
+        self.assertEqual(rejected_counts["accepted_harness_improvements"]["value"] / all_rewarded, 0.5)
+
     def test_empty_windows_are_zero_readings_not_source_gaps(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

@@ -281,7 +281,7 @@ def load_workflow(path: str | Path, root: Path | None = None) -> WorkflowPolicy:
             board.get("active_phases"), "board.active_phases", default=("planning", "building")
         ),
         terminal_statuses=string_list(
-            board.get("terminal_statuses"), "board.terminal_statuses", default=("done", "failed")
+            board.get("terminal_statuses"), "board.terminal_statuses", default=("done", "failed", "rejected")
         ),
         compute_default=compute_default,
         compute_allowed=compute_allowed,

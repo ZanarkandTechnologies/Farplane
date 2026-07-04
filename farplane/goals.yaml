@@ -2,7 +2,7 @@ kind: project-goals
 status: active
 project: Farplane
 created_at: 2026-06-15
-updated_at: 2026-07-02
+updated_at: 2026-07-05
 framework_template_version: "0.5.0"
 owner: horizon-advisor
 source: horizon-advisor
@@ -73,15 +73,18 @@ goals:
           - id: ticket_intervention_turn_count
             target: 0
             direction: below
+          - id: rejected_ai_ticket_count
+            target: 0
+            direction: below
           - id: auto_completion_rate
             target: 0.8
             direction: above
         interpretation: >-
           The main autonomy claim is stronger when accepted improvements and
           evidence cycles rise while auto_time_ratio exceeds 1 and post-start
-          ticket intervention turns fall. Treat turn-count intervention metrics
-          as supporting KPIs until ticket/thread association coverage is
-          reliable.
+          ticket intervention turns and rejected AI-planned tickets fall. Treat
+          turn-count intervention metrics as supporting KPIs until ticket/thread
+          association coverage is reliable.
   quality_and_proof:
     question: Do long-running agents preserve quality, proof, and operator control?
     evidence_hints:

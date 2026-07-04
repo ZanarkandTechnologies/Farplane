@@ -106,6 +106,41 @@ class CheckTicketMetadataTest(unittest.TestCase):
             self.assertTrue(errors)
             self.assertIn("compute_target must be one of", "\n".join(errors))
 
+    def test_validator_accepts_rejected_terminal_status(self) -> None:
+        with tempfile.TemporaryDirectory(dir=ROOT) as tmpdir:
+            root = Path(tmpdir)
+            path = root / "TASK-9999" / "ticket.md"
+            write_file(
+                path,
+                VALID_TICKET_TEXT.replace("phase: planning\n", "phase: failed\n")
+                .replace("status: review\n", "status: rejected\n")
+                .replace("ready: false\n", "ready: false\nrejection_reason: boring premise\n"),
+            )
+            errors = self.ticket_metadata.validate_ticket(path)
+            self.assertEqual(errors, [])
+
+    def test_validator_rejected_requires_failed_phase(self) -> None:
+        with tempfile.TemporaryDirectory(dir=ROOT) as tmpdir:
+            root = Path(tmpdir)
+            path = root / "TASK-9999" / "ticket.md"
+            write_file(path, VALID_TICKET_TEXT.replace("status: review\n", "status: rejected\n"))
+            errors = self.ticket_metadata.validate_ticket(path)
+            self.assertTrue(errors)
+            self.assertIn("status=rejected requires phase=failed", "\n".join(errors))
+
+    def test_validator_rejected_requires_reason(self) -> None:
+        with tempfile.TemporaryDirectory(dir=ROOT) as tmpdir:
+            root = Path(tmpdir)
+            path = root / "TASK-9999" / "ticket.md"
+            write_file(
+                path,
+                VALID_TICKET_TEXT.replace("phase: planning\n", "phase: failed\n")
+                .replace("status: review\n", "status: rejected\n"),
+            )
+            errors = self.ticket_metadata.validate_ticket(path)
+            self.assertTrue(errors)
+            self.assertIn("status=rejected requires rejection_reason", "\n".join(errors))
+
 
 if __name__ == "__main__":
     unittest.main()

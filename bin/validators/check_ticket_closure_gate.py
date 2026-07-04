@@ -127,6 +127,23 @@ def ticket_state(ticket_dir: Path) -> str:
     return f"phase={phase} status={status}{suffix}"
 
 
+def active_completed_ticket_errors(root: Path) -> list[str]:
+    errors: list[str] = []
+    for ticket_dir in active_ticket_dirs(root):
+        ticket_path = ticket_dir / "ticket.md"
+        if not ticket_path.is_file():
+            continue
+        frontmatter = parse_frontmatter(ticket_path)
+        phase = frontmatter.get("phase", "")
+        status = frontmatter.get("status", "")
+        if phase == "complete" or status == "done":
+            errors.append(
+                f"active ticket is already complete/done and should be archived: "
+                f"{ticket_path.relative_to(root)} ({ticket_state(ticket_dir)})"
+            )
+    return errors
+
+
 def archive_ticket_exists(root: Path, ticket_id: str) -> bool:
     return (root / "tickets" / ARCHIVE_DIR / ticket_id / "ticket.md").is_file()
 
@@ -141,6 +158,7 @@ def validate_ticket_closure(
     associations = associations_by_ticket(root)
     session_ids = session_ids_from_env(environ)
     current_session_tickets = associated_tickets_for_sessions(root, session_ids)
+    errors.extend(active_completed_ticket_errors(root))
 
     missing_archives = sorted(
         ticket_id

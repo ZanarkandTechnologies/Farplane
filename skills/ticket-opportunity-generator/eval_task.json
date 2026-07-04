@@ -1,0 +1,205 @@
+[
+  {
+    "id": "ticket_opportunity_generator_rejects_generic_ablation_01",
+    "title": "Rejects generic ablation ticket and requires a concrete hypothesis",
+    "query": "The board is empty and products.md has an ablations lane. Create a ticket called 'Create first ablation proof' so a worker can figure out what to test.",
+    "reference_points": [
+      "Rejects the generic ticket title as insufficient",
+      "Requires a named feature or behavior under test",
+      "Requires baseline, variant, measurement surface, evidence refs, expected decision, and output artifact",
+      "Returns or requests lane-scan evidence instead of collapsing a broad products.md frontier into a single generic ticket",
+      "Keeps discovery in the parent Pulse beat or returns a scout request instead of creating a worker ticket",
+      "Grounds any final ticket in a products.md lane and product reward"
+    ],
+    "anti_patterns": [
+      "Approves 'create first ablation proof' because it produces an artifact",
+      "Asks the worker to decide what ablation is worth doing",
+      "Omits evidence refs or baseline/variant"
+    ],
+    "tags": ["skill", "ticket-opportunity-generator", "ablation", "specificity"]
+  },
+  {
+    "id": "ticket_opportunity_generator_frontmatter_experiment_01",
+    "title": "Crystallizes a frontmatter experiment from interval friction",
+    "query": "Daily reports keep complaining about ticket metadata friction and stale human gates. Products.md has experiments and productization lanes. What ticket spec should Pulse create?",
+    "reference_points": [
+      "Creates or proposes an experiment hypothesis around a specific ticket metadata/frontmatter surface",
+      "Shows products.md lane scan and selected/skipped lane reasons before selecting the experiment",
+      "Names the proposed change, baseline, measurement method, evidence refs, output artifact, and expected reward",
+      "Requires local-only execution and validators rather than broad strategy edits",
+      "Includes a products.md contribution such as experiments or productization",
+      "Does not create a planning ticket to investigate whether metadata is worth improving"
+    ],
+    "anti_patterns": [
+      "Creates a vague 'Improve ticket metadata' ticket",
+      "Mutates goals/products as part of the experiment",
+      "Skips measurement and guard metrics"
+    ],
+    "tags": ["skill", "ticket-opportunity-generator", "experiments", "frontmatter"]
+  },
+  {
+    "id": "ticket_opportunity_generator_content_angle_01",
+    "title": "Turns proof evidence into a concrete content ticket spec",
+    "query": "Farplane has TASK-0275 closure-gate proof and products.md has trust_distribution. Generate a content ticket.",
+    "reference_points": [
+      "Names a harness-engineering insight grounded in the evidence, such as ticket structure preventing false completion",
+      "Includes portfolio selection context rather than pretending trust_distribution was the only lane considered",
+      "Names source evidence refs and target audience",
+      "Names hook angle, output format, and local artifact to produce",
+      "Keeps post/publish as a human-gated final action and makes the ticket local prep only",
+      "Rejects generic 'write evidence content' wording"
+    ],
+    "anti_patterns": [
+      "Creates a generic content ticket without audience, hook, or evidence",
+      "Includes public posting or scheduling without a human gate",
+      "Asks the worker to find the content angle"
+    ],
+    "tags": ["skill", "ticket-opportunity-generator", "content", "distribution"]
+  },
+  {
+    "id": "ticket_opportunity_generator_lifecycle_metadata_01",
+    "title": "Requires validator-compatible lifecycle metadata for admitted ticket specs",
+    "query": "Pulse selected a specific local experiment ticket from products.md evidence. Render the executable ticket spec so a worker can start without metadata repair.",
+    "reference_points": [
+      "Includes lifecycle/admission metadata in the executable ticket spec",
+      "Uses phase: planning and status: todo for a new ready ticket",
+      "Sets ready: true and approval_required: false for proceedable local work",
+      "Sets blocked_by: [] and leaves claimed_by empty for an unclaimed worker handoff",
+      "Uses a valid human_gate value, either none or a project gate tag with a reason for a final action",
+      "Names dependency expectations: depends_on is empty or satisfied, and unresolved dependencies prevent ready admission"
+    ],
+    "anti_patterns": [
+      "Returns only the product hypothesis and reward block without lifecycle metadata",
+      "Marks the generated ticket ready while also requiring approval or unresolved blockers",
+      "Uses invalid start states such as status: review, claimed_by: codex, or a vague human_gate"
+    ],
+    "tags": ["skill", "ticket-opportunity-generator", "lifecycle", "metadata"]
+  },
+  {
+    "id": "ticket_opportunity_generator_rejects_primary_metadata_cleanup_01",
+    "title": "Rejects generator metadata cleanup as primary product throughput",
+    "query": "Pulse is empty and recent reports mention that generated ticket specs sometimes need lifecycle metadata repairs. Products.md has productization, experiments, ablations, distribution, and market learning. Generate the next worker ticket.",
+    "reference_points": [
+      "Does not select generator, Pulse, metadata, or maintenance cleanup as the primary next-wave product ticket",
+      "Allows metadata cleanup only as repair work when it directly unblocks a named existing product-backed ticket",
+      "Requires selected ticket specs to include frontmatter rewards.kpi and at least one product-backed KPI from farplane/bindings.yaml metrics",
+      "Requires the ticket scope to produce a products.md output or artifact workflow, not just improve the planner",
+      "Returns request_planning, blocked_report, or a product-output ticket instead of a metadata-cleanup worker ticket"
+    ],
+    "anti_patterns": [
+      "Creates a ticket to harden ticket-opportunity-generator lifecycle metadata as the main productization wave",
+      "Uses accepted_harness_improvements to justify generic planner cleanup without product-output proof",
+      "Treats cross-product autonomy metrics as enough to make maintenance a proceedable worker ticket"
+    ],
+    "tags": ["skill", "ticket-opportunity-generator", "product-reward", "maintenance-boundary"]
+  },
+  {
+    "id": "ticket_opportunity_generator_rejects_current_repair_as_experiment_01",
+    "title": "Rejects turning the current Pulse repair into a product experiment",
+    "query": "Pulse just repaired its active-ticket board classifier so manual tickets no longer block refill. The board is empty and products.md includes experiments with a valid KPI. Generate the next worker ticket.",
+    "reference_points": [
+      "Does not create a ticket to prove the just-repaired Pulse board classifier",
+      "Treats the classifier repair as manager-beat repair evidence, not primary product throughput",
+      "Requires the selected worker ticket to produce a non-self-referential products.md artifact or output",
+      "Allows an experiment only when it studies a user-facing or evidence-facing Farplane workflow rather than the current planner machinery",
+      "May select a ticket-structure closeout experiment, evidence-content draft, market-learning packet, or request_planning if no non-self-referential premise survives"
+    ],
+    "anti_patterns": [
+      "Creates an experiment report comparing the new Pulse classifier against old active-ticket admission",
+      "Uses accepted_evidence_cycles to justify proving the current planner fix as the next worker ticket",
+      "Ignores the distinction between manager-beat repair and worker product throughput"
+    ],
+    "tags": ["skill", "ticket-opportunity-generator", "self-reference", "experiments"]
+  },
+  {
+    "id": "ticket_opportunity_generator_ai_ticket_reward_frontmatter_01",
+    "title": "Renders AI-planned ticket reward frontmatter",
+    "query": "Pulse accepts one concrete experiment ticket spec from products.md evidence. Render the metadata and reward fields so the active-board classifier can recognize it as AI-generated.",
+    "reference_points": [
+      "Includes frontmatter rewards.kpi with the selected KPI ID",
+      "Includes a body ## Reward fenced YAML block with kpi_rewards[], expected_reward, and guard",
+      "Keeps rewards.kpi aligned with the body Reward.kpi_rewards[].kpi_id",
+      "Uses a KPI from farplane/bindings.yaml whose product maps into farplane/products.md",
+      "Keeps lifecycle metadata validator-compatible for an unclaimed ready ticket"
+    ],
+    "anti_patterns": [
+      "Only writes a body Reward block without frontmatter rewards.kpi",
+      "Uses rewards.kpi IDs that differ from the body reward KPI IDs",
+      "Creates a ready ticket without expected_reward text"
+    ],
+    "tags": ["skill", "ticket-opportunity-generator", "reward", "metadata"]
+  },
+  {
+    "id": "ticket_opportunity_generator_rejects_boring_valid_ticket_01",
+    "title": "Rejects specific but boring worker tickets",
+    "query": "The board is empty, a recent worker left a complete artifact, and someone proposes a ticket to prepare an evidence-fidelity feedback capture note so Kenji can review the process later. Products.md includes trust distribution and experiments. Should Pulse create it?",
+    "reference_points": [
+      "Rejects the ticket even if it is specific, local, and low-risk",
+      "Explains that a review/capture/admin note is not product throughput by itself",
+      "Requires a big claim, audience or operator tension, surprise factor, baseline or contrast, artifact level, dedupe status, and likely Kenji review value",
+      "Either strengthens the premise into a concrete proof/content artifact or returns a blocked/revise report",
+      "Keeps worker tickets execution-oriented rather than review-receipt-oriented"
+    ],
+    "anti_patterns": [
+      "Approves the note because it is safe and has metadata",
+      "Treats a review receipt as trust distribution content",
+      "Omits surprise, baseline, and artifact-level judgment"
+    ],
+    "tags": ["skill", "ticket-opportunity-generator", "boring-valid", "quality-gate"]
+  },
+  {
+    "id": "ticket_opportunity_generator_uses_feed_scout_trends_01",
+    "title": "Uses recent Feed Scout attention to shape a distribution ticket",
+    "query": "Recent Feed Scout reports show builders reacting to AI agents that make impressive commits but hide uncertainty and weak proof. Farplane has TASK-0275 closure-gate evidence and products.md includes trust_distribution. Generate the worker ticket spec.",
+    "reference_points": [
+      "Synthesizes a trend tension from the Feed Scout signal instead of copying the feed item",
+      "Names the audience-facing claim and why it matters now",
+      "Grounds the Farplane angle in local TASK-0275 or closure-gate evidence",
+      "Requires a concrete content artifact level such as script, storyboard, visual, demo brief, rendered clip, carousel, or publish-ready thread",
+      "Keeps public posting/publishing behind a human gate while allowing local artifact creation",
+      "Includes product-backed reward metadata and a review surface"
+    ],
+    "anti_patterns": [
+      "Creates generic evidence content with no trend tension",
+      "Asks the worker to browse for a topic",
+      "Treats a note or outline as sufficient distribution throughput"
+    ],
+    "tags": ["skill", "ticket-opportunity-generator", "feed-scout", "distribution"]
+  },
+  {
+    "id": "ticket_opportunity_generator_uses_leverage_advisor_for_ablation_01",
+    "title": "Frames ablations as leverage bets against real baselines",
+    "query": "We want an ablation proof that could become useful content. Farplane has ticket-as-program, Goal Packets, and worker review loops. Products.md includes ablations and experiments. What worker ticket should be created?",
+    "reference_points": [
+      "Uses leverage-advisor style framing: capability, loss term, compounding move, first proof step, and content upside",
+      "Selects a concrete Farplane capability rather than asking the worker to find one",
+      "Names an external/default baseline such as vanilla Codex, no-template work, normie prompt-only flow, or competitor-like workflow",
+      "Includes hypothesis, method, measurement, expected decision, artifact path, product reward, and guard",
+      "Rejects Farplane-vs-Farplane paperwork comparisons when they would be uninteresting"
+    ],
+    "anti_patterns": [
+      "Creates a ticket to brainstorm ablation candidates",
+      "Compares two internal metadata shapes without a bigger claim",
+      "Omits baseline, measurement, or content upside"
+    ],
+    "tags": ["skill", "ticket-opportunity-generator", "leverage", "ablation"]
+  },
+  {
+    "id": "ticket_opportunity_generator_requires_artifact_level_01",
+    "title": "Requires artifact levels that match the product lane",
+    "query": "A content worker can make a short note about why ticket structure matters, or an experiment worker can make a reminder to review old tickets. The board is empty. What should the generator do?",
+    "reference_points": [
+      "Rejects notes, reminders, and review receipts as insufficient product artifacts unless explicitly scoped as a small planning card",
+      "For content, requires script, storyboard, visual, demo/video brief, rendered clip, carousel/slides, or publish-ready thread",
+      "For experiments or ablations, requires hypothesis/method/baseline/result/conclusion or proof report structure",
+      "Returns a stronger executable ticket spec only when the artifact level advances products.md",
+      "Names review surface and final human gate separately from the worker artifact"
+    ],
+    "anti_patterns": [
+      "Accepts a note as distribution content",
+      "Accepts a reminder as an experiment result",
+      "Conflates human review with the product artifact"
+    ],
+    "tags": ["skill", "ticket-opportunity-generator", "artifact-level", "content"]
+  }
+]

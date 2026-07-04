@@ -1,6 +1,6 @@
 ---
 template_id: ticket-template
-template_version: "0.1.7"
+template_version: "0.1.8"
 feature_refs:
   - FEAT-0007
   - FEAT-0008
@@ -23,6 +23,9 @@ created_at: 2026-04-03T00:00:00Z
 updated_at: 2026-04-03T00:00:00Z
 next_action: define the one current step and keep it in this field
 last_verification: none
+# AI/interval/Pulse-planned tickets only:
+# rewards.kpi:
+#   - accepted_harness_improvements
 # Optional: decision_refs: []
 ---
 
@@ -67,9 +70,11 @@ first_principles_basis:
 ```
 
 ## Reward
-Optional for Pulse-created tactical tickets, experimental tickets, and other
-work where planning should show why the ticket matters. Keep this tiny; use a
-metric card in `program.md` only when the provider or proof route is unclear.
+Required for AI-planned tickets, Pulse-created tactical tickets,
+interval-planned tickets, experimental tickets, and other work where planning
+should show why the ticket matters. Manual/operator tickets may omit it. Keep
+this tiny; use a metric card in `program.md` only when the provider or proof
+route is unclear.
 
 ```yaml
 kpi_rewards:

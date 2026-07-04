@@ -25,7 +25,7 @@ board:
   adapter: filesystem
   source: tickets/
   active_phases: ["planning", "building", "documenting"]
-  terminal_statuses: ["done", "failed"]
+  terminal_statuses: ["done", "failed", "rejected"]
 
 compute:
   default: local_shared

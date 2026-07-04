@@ -76,6 +76,24 @@ class TicketClosureGateTest(unittest.TestCase):
 
         self.assertEqual(errors, [])
 
+    def test_active_complete_ticket_blocks_until_archived(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            write_ticket(root, "tickets/TASK-9999", phase="complete", status="done")
+
+            errors = validate_ticket_closure(root)
+
+        self.assertIn("active ticket is already complete/done and should be archived", "\n".join(errors))
+
+    def test_active_done_status_blocks_even_when_phase_not_complete(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            write_ticket(root, "tickets/TASK-9999", phase="documenting", status="done")
+
+            errors = validate_ticket_closure(root)
+
+        self.assertIn("active ticket is already complete/done and should be archived", "\n".join(errors))
+
     def test_missing_associated_ticket_blocks_commit(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

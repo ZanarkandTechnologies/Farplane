@@ -58,7 +58,11 @@ class TicketRecord:
 
     @property
     def is_complete(self) -> bool:
-        return self.phase == "complete" or self.status == "done"
+        return self.phase == "complete" or self.status in {"done", "rejected"}
+
+    @property
+    def is_terminal(self) -> bool:
+        return self.phase in {"complete", "failed"} or self.status in {"done", "failed", "rejected"}
 
 
 def now_utc() -> str:
@@ -434,6 +438,46 @@ def ticket_count_by_kpi(tickets: list[TicketRecord], window: Window) -> dict[str
     }
 
 
+def ticket_count_by_kpi_with_status(
+    tickets: list[TicketRecord],
+    window: Window,
+    status_filter: str,
+) -> dict[str, dict[str, Any]]:
+    by_kpi: dict[str, list[TicketRecord]] = {}
+    total: list[TicketRecord] = []
+    for ticket in tickets:
+        if ticket.status != status_filter and ticket.phase != status_filter:
+            continue
+        if not ticket_touched_in_window(ticket, window):
+            continue
+        if ticket.kpi_rewards:
+            total.append(ticket)
+        for kpi_id in ticket.kpi_rewards:
+            by_kpi.setdefault(kpi_id, []).append(ticket)
+    output = {
+        kpi_id: reading(
+            len(items),
+            "available",
+            {
+                "status_filter": status_filter,
+                "tickets": [ticket_payload(ticket) for ticket in items],
+                "gaps": [],
+            },
+        )
+        for kpi_id, items in sorted(by_kpi.items())
+    }
+    output["_total"] = reading(
+        len(total),
+        "available",
+        {
+            "status_filter": status_filter,
+            "tickets": [ticket_payload(ticket) for ticket in total],
+            "gaps": [],
+        },
+    )
+    return output
+
+
 def ticket_count_by_product(
     tickets: list[TicketRecord],
     window: Window,
@@ -799,6 +843,7 @@ def primitive_snapshot(
     codex_home: Path,
     monthly_spend: float | None,
     write: bool = True,
+    ticket_status: str | None = None,
 ) -> dict[str, Any]:
     project_root = project_root.resolve()
     window = window_for_date(date_value)
@@ -806,6 +851,10 @@ def primitive_snapshot(
     effective_monthly_spend = monthly_spend if monthly_spend is not None else configured_monthly_ai_spend(project_root)
     ticket_basics, tickets, ticket_gaps = ticket_counts(project_root, window)
     by_kpi = ticket_count_by_kpi(tickets, window)
+    if ticket_status:
+        by_kpi_status = ticket_count_by_kpi_with_status(tickets, window, ticket_status)
+    else:
+        by_kpi_status = {}
     by_product = ticket_count_by_product(tickets, window, metric_recipe_map)
     thread_usage = fetch_codex_thread_usage(codex_home.expanduser(), project_root, window)
     burn = estimate_ai_burn(window, thread_usage, effective_monthly_spend)
@@ -851,6 +900,8 @@ def primitive_snapshot(
             "ticket_thread_associations": str(association_path),
         },
     }
+    if ticket_status:
+        payload["primitives"][f"ticket_count_by_kpi_status:{ticket_status}"] = by_kpi_status
     if write:
         write_primitive_outputs(project_root, date_value, payload)
     return payload
@@ -934,6 +985,7 @@ def run_primitives(args: argparse.Namespace) -> int:
         codex_home=Path(args.codex_home).expanduser(),
         monthly_spend=args.monthly_spend,
         write=not args.no_write,
+        ticket_status=getattr(args, "ticket_status", None),
     )
     if args.json:
         print(json.dumps(payload, indent=2, sort_keys=True))

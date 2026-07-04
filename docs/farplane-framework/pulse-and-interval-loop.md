@@ -3,7 +3,7 @@ title: "Pulse And Interval Loop"
 status: active
 owner: farplane-framework
 created_at: 2026-06-29
-updated_at: 2026-07-03
+updated_at: 2026-07-05
 framework_template_version: "0.2.2"
 tags:
   - farplane
@@ -26,7 +26,7 @@ Farplane autonomous operation uses explicit Codex automation loops:
 
 ```text
 pulse_update(project_root, extensions?, pulse_policy?)
-  -> ready ticket execution + tactical next-wave tickets? + planning request? + decision state
+  -> ready ticket delegation + tactical next-wave tickets? + planning request? + decision state
 
 interval_update(project_root, interval_id, review_window, planning_window,
                 context_refs?, report_workflows?, planning_policy?,
@@ -34,15 +34,16 @@ interval_update(project_root, interval_id, review_window, planning_window,
   -> dated interval report + ops-memory delta? + next-window plan + Pulse guidance
 ```
 
-Pulse is the fast execution bus with founder-like ambition inside hard gates.
+Pulse is the fast manager/delegation bus with founder-like ambition inside hard gates.
 It reads the static harness charter, current goals, dynamic products, active ops
 memory, product lane weights, recent Weekly/Daily strategy inputs, ticket state,
-execution policy, rewards, and ledgers. It admits ready tickets, executes
-parallelizable work up to policy cap, creates a small tactical next wave when
-the board is empty and fresh strategy is available, writes planning requests
-when no safe tactical work exists, writes a dated Pulse report, and updates
-decision/reward state. Pulse can generate bold bounded tactical ideas, but only
-as tests of the current operating belief, frontier, bottleneck, or reward
+execution policy, rewards, and ledgers. It admits ready tickets, delegates
+parallelizable work to worker threads up to policy cap, creates a small
+tactical next wave when the board is empty and fresh strategy is available,
+writes planning requests when no safe tactical work exists, writes a dated
+Pulse report, and updates decision/reward state. Pulse can generate bold
+bounded tactical ideas, but only as tests of the current operating belief,
+frontier, bottleneck, or reward
 signal.
 
 Daily Interval reviews the last 24 hours and recalibrates the next 24 hours. It
@@ -111,41 +112,174 @@ available; they are not hard quotas. Daily strategy, blockers, source
 freshness, proof urgency, or a Weekly bet may override the weights, but the
 Pulse report should record the reason.
 
-When no ready ticket can advance, Pulse may use:
+Pulse's executable board is the reward-bearing AI-planned subset, not every
+active ticket directory. Because tickets intentionally do not carry
+`created_by`, Pulse discovers AI-planned work by parsing active ticket
+frontmatter `rewards.kpi`. The body `Reward.kpi_rewards[]` block explains the
+expected reward and guard, but the frontmatter marker is the board-classifier
+input. `.farplane/automation/spawned-threads.jsonl` records worker/handoff
+state, not ticket origin. Active operator/manual tickets without `rewards.kpi`
+are diagnostics; they do not block refill and should not be repaired by Pulse
+unless the operator explicitly opts them into AI planning with a valid
+frontmatter marker plus matching body reward block.
+
+When no reward-bearing AI-planned ready ticket can advance, Pulse may use:
 
 ```text
 plan_next_wave_when_empty(ops_memory, weekly_strategy, daily_strategy,
-                          board_state, product_lane_weights)
-  -> 1..N tactical tickets + admission decision
+                          ai_generated_board, manual_ticket_diagnostics,
+                          product_lane_weights)
+  -> lane scan + 1..N tactical tickets + worker handoffs + admission decision
 ```
 
 Generated tactical tickets must be small, local, approval-free, and tied to a
 current focus, active project, frontier step, bet, lane, bottleneck, or reward
 signal. Each next-wave decision should name the active ops-memory belief being
 tested so Daily or Weekly can challenge it later. Each generated ticket must
-include:
+include frontmatter:
 
 ```yaml
-Reward:
-  kpi_rewards:
-    - kpi_id: accepted_harness_improvements
-      expected_reward: "one proof-backed shipped harness improvement"
-  guard: "stop before expanding scope or counting unproved intent"
+rewards.kpi:
+  - accepted_harness_improvements
+```
+
+and a body `## Reward` block:
+
+```yaml
+kpi_rewards:
+  - kpi_id: accepted_harness_improvements
+    expected_reward: "one proof-backed shipped harness improvement"
+guard: "stop before expanding scope or counting unproved intent"
 ```
 
 `Reward` is also the ticket-level budget justification. `kpi_rewards` names the
 KPI IDs the ticket is expected to move and the expected reward text; `guard`
 names the stop, resize, or non-expansion boundary. Do not add another ticket
 field for budget reason unless a future ticket proves `Reward` is insufficient.
+Pulse autonomous selection is restricted to product-backed work. A ticket is
+not proceedable for Pulse merely because it is ready; it must include
+frontmatter `rewards.kpi` and parseable body `Reward.kpi_rewards[]` with at
+least one KPI from `farplane/bindings.yaml` whose metric product maps into
+`farplane/products.md`, and the ticket scope must produce that product output
+or artifact workflow. Human-created tickets without `rewards.kpi` are
+manual/operator work. Maintenance, Pulse, generator, metadata, or tooling
+cleanup is only a repair arm when it directly unblocks an existing
+product-backed ticket, not a primary next-wave worker ticket.
+
+## Bold Reviewable Bet Pipeline
+
+Pulse next-wave planning should generate executable bets, not planner tickets:
+
+```text
+generate_tickets(products.md, goals.yaml, daily_report, weekly_report,
+                 ops_memory, board_state, recent_evidence)
+  -> lane_scan
+  -> trend_tensions from last-7-day Feed Scout evidence
+  -> leverage_bets from existing Farplane capabilities
+  -> dedupe against recent tickets/artifacts/claims
+  -> executable ticket specs with big claim + artifact level + reward
+  -> worker-thread handoffs with review notification instructions
+```
+
+Distribution and market-facing tickets use Feed Scout as attention evidence:
+what changed, who cares, why people react now, and which Farplane claim can be
+shown locally. Self-improvement, experiment, and ablation tickets use
+leverage-advisor framing: capability, loss term, compounding move, baseline,
+first proof step, and content upside. The final ticket must already contain the
+idea; workers should not be asked to discover whether the idea is worth doing.
+
+Every generated worker ticket needs a visible reviewable bet:
+
+- `big_claim`: the external or operator-facing claim being tested or shown.
+- `audience_tension`: why a real builder or Kenji would care.
+- `surprise_factor`: what could make the result non-obvious.
+- `baseline_or_contrast`: default, vanilla, normie, competitor-like, or current
+  behavior when the result is audience-facing.
+- `artifact_level`: the minimum artifact expected for the lane.
+- `dedupe_status`: why this is not the same claim in the same format again.
+- `review_surface`: what Kenji or a reviewer should inspect at completion.
+
+Artifact levels are lane-specific. Experiments finish with a report containing
+hypothesis, method, baseline/current behavior, result, conclusion, decision,
+and limits. Ablations finish with a proof report comparing baseline and
+variant. Trust distribution finishes with script, storyboard, visual/demo
+brief, rendered clip, carousel, slides, or publish-ready thread; a note or
+outline is only valid when explicitly scoped as a small planning card. Review
+receipts, reminder pings, and approval waits are follow-up lanes, not product
+throughput.
+
+Product workflows live in product skills, not in a separate ticket-template
+matrix. `farplane/products.md` maps each product to a primary skill such as
+`farplane-experiment-report`, `farplane-ablation-proof`,
+`farplane-productization`, `farplane-evidence-content`, or
+`farplane-market-learning`. Generated tickets name the concrete instance:
+product lane, primary skill, claim/hypothesis, evidence refs, artifact level,
+reward, guard, and final human gate. The owning product skill supplies the
+workflow todo list and output contract.
+
+When a worker artifact is ready, the worker must use
+`worker-artifact-review-request`. That wrapper borrows the
+`optimize-with-human` enforcement pattern:
+
+```text
+artifact_ready(ticket, artifact, worker_thread_ref)
+  -> feedback_channel=telegram
+   + feedback_policy=ask_when_artifact_ready
+   + phone-readable teaser
+   + Telegram message id
+   + review-cycle receipt
+   + turn-exit gate satisfied
+```
+
+Fallback is not a normal deliverable. It is valid only when `telegram-message`
+proves the route, credentials, or phone-readable review surface is unavailable
+and records the exact blocker. A worker waiting on Kenji cannot stop silently:
+it must record either a Telegram message id or a blocker. The review request
+must be readable on a phone, include archive-safe artifact refs, ask one reply
+action, and sell why the artifact matters now. Sending the review request does
+not approve posting, publishing, spending, deploying, external contact, account
+mutation, metric mutation, or follow-up ticket creation.
+
+Review teasers are part of the worker artifact contract. A good Telegram
+review request should include a provocative title, why Kenji should care, the
+surprising claim or result, the artifact payoff, the exact reply action, and
+desktop-only refs after the reviewable summary. Content and distribution
+workers should include a thumbnail concept, visual hook, or rendered preview
+when that is the natural review surface.
+
+Pulse is a manager heartbeat, not an implementation worker. When it creates or
+admits a ticket, it should create a named worker-thread handoff in the same
+beat up to policy cap. The parent beat may repair metadata, reconcile closed
+threads, select a portfolio wave, and write state, but it should not implement
+the ticket body inline. If a worker-thread tool is unavailable, Pulse records
+the handoff packet and leaves the ticket ready/unclaimed instead of consuming
+the ticket itself.
+
+Next-wave planning scans the product portfolio before ticket creation. Lane
+weights are a bias, not a quota, but the Pulse report should show selected and
+skipped lanes with compact reasons. A one-ticket wave is valid only when worker
+cap is one or only one specific, evidence-backed, low-gate premise survives the
+specificity and autonomy gates.
 
 Pulse still writes `request_planning` when the strategy inputs are stale,
-missing, unsafe, or require material product, KPI, goal, publishing, spend,
-account, customer-contact, or authority decisions.
+missing, unsafe, require material product, KPI, goal, publishing, spend,
+account, customer-contact, or authority decisions, or when a safe-local-prep
+scan is exhausted. A final human gate alone is not an idle reason: while Kenji
+is unavailable or review backlog is high, Pulse should prefer local proof,
+research, packaging, ranking, draft, experiment, ablation, or review-request
+work that can proceed without irreversible action.
+
+Active complete/done tickets should not remain on the active board. Pulse may
+archive them as mechanical board hygiene before selection when the ticket is
+already complete/done and `ready: false`; otherwise it records the archive
+needed receipt. The pre-commit closure gate blocks the current session's active
+ticket and also rejects active complete/done tickets that should have been
+archived.
 
 Before:
 
 ```text
-latest interval report -> one safe tactical ticket -> maybe execution
+latest interval report -> one safe tactical ticket -> maybe parent execution
 ```
 
 After:
@@ -153,8 +287,8 @@ After:
 ```text
 goals/products + ops-memory + latest interval reports
   -> active frontier + needed metric readings
-  -> bounded tactical tickets
-  -> execution up to heartbeat-policy cap
+  -> product-lane scan + bounded tactical ticket wave
+  -> worker-thread handoffs up to heartbeat-policy cap
 ```
 
 Daily and Weekly should read goal-axis SMART goals semantically. For each
@@ -196,6 +330,7 @@ The update order is:
 
    ```bash
    farplane metrics primitives --project-root <project> --date <YYYY-MM-DD>
+   farplane metrics primitives --project-root <project> --date <YYYY-MM-DD> --ticket-status rejected
    ```
 
    Core reducers count ticket rewards, autonomy ratios, intervention metrics,
@@ -275,7 +410,7 @@ Primitive families:
 
 | Primitive | Emits | Inputs | Notes |
 | --- | --- | --- | --- |
-| `ticket_count_by_kpi` | One observation per KPI ID found in `Reward.kpi_rewards[]`. Missing KPI rows compile as available zero for defined KPIs. | `tickets/**/ticket.md` | Human-created tickets without KPI rewards are diagnostics, not source gaps. |
+| `ticket_count_by_kpi` | One observation per KPI ID found in `Reward.kpi_rewards[]`. Missing KPI rows compile as available zero for defined KPIs. | `tickets/**/ticket.md` | Human-created tickets without KPI rewards are diagnostics, not source gaps. Use `--ticket-status rejected` for a filtered companion reading; `ticket_count_by_kpi_status:rejected._total.value` is the rejected reward-bearing ticket count, and per-KPI rows support rejection-rate diagnosis. |
 | `ticket_count_by_product` | `ticket_count_by_product:<product_id>` observations with touched, completed, and proofed ticket counts in payload. | `farplane/bindings.yaml#metrics.*.product`, ticket rewards | Product is transitive: product -> KPI IDs -> tickets. Tickets do not need `product_id`. |
 | `kpi_attributed_ticket_ratio` | One ratio observation for rewarded tickets over touched tickets. | ticket rewards | Empty windows are available zero readings. |
 | `codex_thread_usage` | Thread count, turn count, total token count, and span-minute observations through metric projection. | `~/.codex/sqlite/state_5.sqlite`, `~/.codex/sessions/**/*.jsonl` | Missing local Codex stores are source gaps. |
@@ -405,10 +540,10 @@ Goals deltas have three outcomes:
 - `optimize-harness` is the umbrella improvement loop when the observed
   behavior gap itself is the task: diagnose the gap, place the lever, choose
   proof, route the change or experiment, and require review.
-- `pulse-update` executes ready tickets up to policy cap, records immediate
-  outcomes, creates bounded tactical next-wave tickets from fresh strategy when
-  the board is empty, or writes a planning request when no safe tactical work
-  exists.
+- `pulse-update` delegates ready tickets to worker threads up to policy cap,
+  records immediate outcomes, creates bounded tactical next-wave ticket waves
+  from fresh strategy when the board is empty, or writes a planning request when
+  no safe tactical work exists.
 
 Use this matrix when the weekly self-update report routes work:
 
@@ -433,9 +568,10 @@ then selects a small number of bets:
 
 After approval, a material strategy delta returns to `horizon-advisor`; an
 execution bet goes to `goal-advisor`; small ticket deltas may go to the board
-for Pulse execution. When the board is empty, Pulse may also create small
-tactical tickets directly from the latest Weekly/Daily strategy and product
-lane weights. The next daily and weekly intervals read the resulting reports
+for Pulse delegation. When the board is empty, Pulse may also create small
+tactical ticket waves directly from the latest Weekly/Daily strategy and
+product lane weights, then hand them to worker threads. The next daily and
+weekly intervals read the resulting reports
 and reward signals.
 
 The weekly report should reason over scores rather than pretending scores are
