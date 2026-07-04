@@ -6,13 +6,13 @@ playing, or natively understanding a video.
 ## Fixture Inputs
 
 - `media-ingest-bundle`:
-  `experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/media-ingest-bundle.md`
+  `.farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/media-ingest-bundle.md`
 - `selected-frame reconstruction`:
-  `experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/video-reconstruction-brief.md`
+  `.farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/video-reconstruction-brief.md`
 - `corrected handoff`:
-  `experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/handoff.md`
+  `.farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/handoff.md`
 - `smoke log`:
-  `experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/video-understanding-smoke-log.md`
+  `.farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/video-understanding-smoke-log.md`
 
 ## Replay Steps
 

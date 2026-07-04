@@ -33,7 +33,7 @@ Each line in `registry.jsonl` is one JSON object:
   "visibility": "private",
   "captured_at": "2026-05-05",
   "local_artifacts": [
-    "experiments/harness-scout/runs/2026-05-05-symphony-compatible-farplane/source-summary.md"
+    ".farplane/harness-scout/runs/2026-05-05-symphony-compatible-farplane/source-summary.md"
   ],
   "feature_refs": ["FEAT-0014"],
   "decision": "adapt",

@@ -41,10 +41,10 @@ A video-to-skill scout run should leave:
 
 Agents can test the route without native video support by reading:
 
-- `experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/media-ingest-bundle.md`
-- `experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/video-reconstruction-brief.md`
-- `experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/handoff.md`
-- `experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/video-understanding-smoke-log.md`
+- `.farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/media-ingest-bundle.md`
+- `.farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/video-reconstruction-brief.md`
+- `.farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/handoff.md`
+- `.farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/video-understanding-smoke-log.md`
 
 Expected result: the copied-skill owner is
 `frontend-craft:composed-scroll-animation`, not a standalone video wrapper.

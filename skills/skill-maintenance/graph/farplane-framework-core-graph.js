@@ -2768,7 +2768,7 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
       "tickets/archive/**",
       ".farplane/reports/**",
       ".farplane/logs/**",
-      "experiments/**"
+      ".farplane/**"
     ],
     "expansion": "framework-doc-direct-refs",
     "include": [

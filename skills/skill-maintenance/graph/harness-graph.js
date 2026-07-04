@@ -605,108 +605,108 @@ window.HARNESS_GRAPH = {
       "type": "directory-contains"
     },
     {
-      "from_file": "experiments/decisions",
-      "raw_ref": "experiments/decisions",
-      "source": "dir:experiments/decisions",
-      "target": "file:experiments/decisions/2026-06-15-deep-init-vs-harness-creator.md",
+      "from_file": ".farplane/automation/decisions",
+      "raw_ref": ".farplane/automation/decisions",
+      "source": "dir:.farplane/automation/decisions",
+      "target": "file:.farplane/automation/decisions/2026-06-15-deep-init-vs-harness-creator.md",
       "type": "directory-contains"
     },
     {
-      "from_file": "experiments/harness-scout/runs/2026-05-04-self-evolving-agents",
-      "raw_ref": "experiments/harness-scout/runs/2026-05-04-self-evolving-agents",
-      "source": "dir:experiments/harness-scout/runs/2026-05-04-self-evolving-agents",
-      "target": "file:experiments/harness-scout/runs/2026-05-04-self-evolving-agents/compact-analysis.md",
+      "from_file": ".farplane/harness-scout/runs/2026-05-04-self-evolving-agents",
+      "raw_ref": ".farplane/harness-scout/runs/2026-05-04-self-evolving-agents",
+      "source": "dir:.farplane/harness-scout/runs/2026-05-04-self-evolving-agents",
+      "target": "file:.farplane/harness-scout/runs/2026-05-04-self-evolving-agents/compact-analysis.md",
       "type": "directory-contains"
     },
     {
-      "from_file": "experiments/harness-scout/runs/2026-05-04-self-evolving-agents",
-      "raw_ref": "experiments/harness-scout/runs/2026-05-04-self-evolving-agents",
-      "source": "dir:experiments/harness-scout/runs/2026-05-04-self-evolving-agents",
-      "target": "file:experiments/harness-scout/runs/2026-05-04-self-evolving-agents/decision-matrix.md",
+      "from_file": ".farplane/harness-scout/runs/2026-05-04-self-evolving-agents",
+      "raw_ref": ".farplane/harness-scout/runs/2026-05-04-self-evolving-agents",
+      "source": "dir:.farplane/harness-scout/runs/2026-05-04-self-evolving-agents",
+      "target": "file:.farplane/harness-scout/runs/2026-05-04-self-evolving-agents/decision-matrix.md",
       "type": "directory-contains"
     },
     {
-      "from_file": "experiments/harness-scout/runs/2026-05-04-self-evolving-agents",
-      "raw_ref": "experiments/harness-scout/runs/2026-05-04-self-evolving-agents",
-      "source": "dir:experiments/harness-scout/runs/2026-05-04-self-evolving-agents",
-      "target": "file:experiments/harness-scout/runs/2026-05-04-self-evolving-agents/feature-ledger.md",
+      "from_file": ".farplane/harness-scout/runs/2026-05-04-self-evolving-agents",
+      "raw_ref": ".farplane/harness-scout/runs/2026-05-04-self-evolving-agents",
+      "source": "dir:.farplane/harness-scout/runs/2026-05-04-self-evolving-agents",
+      "target": "file:.farplane/harness-scout/runs/2026-05-04-self-evolving-agents/feature-ledger.md",
       "type": "directory-contains"
     },
     {
-      "from_file": "experiments/harness-scout/runs/2026-05-04-self-evolving-agents",
-      "raw_ref": "experiments/harness-scout/runs/2026-05-04-self-evolving-agents",
-      "source": "dir:experiments/harness-scout/runs/2026-05-04-self-evolving-agents",
-      "target": "file:experiments/harness-scout/runs/2026-05-04-self-evolving-agents/handoff.md",
+      "from_file": ".farplane/harness-scout/runs/2026-05-04-self-evolving-agents",
+      "raw_ref": ".farplane/harness-scout/runs/2026-05-04-self-evolving-agents",
+      "source": "dir:.farplane/harness-scout/runs/2026-05-04-self-evolving-agents",
+      "target": "file:.farplane/harness-scout/runs/2026-05-04-self-evolving-agents/handoff.md",
       "type": "directory-contains"
     },
     {
-      "from_file": "experiments/harness-scout/runs/2026-05-04-self-evolving-agents",
-      "raw_ref": "experiments/harness-scout/runs/2026-05-04-self-evolving-agents",
-      "source": "dir:experiments/harness-scout/runs/2026-05-04-self-evolving-agents",
-      "target": "file:experiments/harness-scout/runs/2026-05-04-self-evolving-agents/scorecard.md",
+      "from_file": ".farplane/harness-scout/runs/2026-05-04-self-evolving-agents",
+      "raw_ref": ".farplane/harness-scout/runs/2026-05-04-self-evolving-agents",
+      "source": "dir:.farplane/harness-scout/runs/2026-05-04-self-evolving-agents",
+      "target": "file:.farplane/harness-scout/runs/2026-05-04-self-evolving-agents/scorecard.md",
       "type": "directory-contains"
     },
     {
-      "from_file": "experiments/harness-scout/runs/2026-05-04-self-evolving-agents",
-      "raw_ref": "experiments/harness-scout/runs/2026-05-04-self-evolving-agents",
-      "source": "dir:experiments/harness-scout/runs/2026-05-04-self-evolving-agents",
-      "target": "file:experiments/harness-scout/runs/2026-05-04-self-evolving-agents/source-summary.md",
+      "from_file": ".farplane/harness-scout/runs/2026-05-04-self-evolving-agents",
+      "raw_ref": ".farplane/harness-scout/runs/2026-05-04-self-evolving-agents",
+      "source": "dir:.farplane/harness-scout/runs/2026-05-04-self-evolving-agents",
+      "target": "file:.farplane/harness-scout/runs/2026-05-04-self-evolving-agents/source-summary.md",
       "type": "directory-contains"
     },
     {
-      "from_file": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity",
-      "raw_ref": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity",
-      "source": "dir:experiments/harness-scout/runs/2026-05-09-frontend-skill-parity",
-      "target": "file:experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/decision-matrix.md",
+      "from_file": ".farplane/harness-scout/runs/2026-05-09-frontend-skill-parity",
+      "raw_ref": ".farplane/harness-scout/runs/2026-05-09-frontend-skill-parity",
+      "source": "dir:.farplane/harness-scout/runs/2026-05-09-frontend-skill-parity",
+      "target": "file:.farplane/harness-scout/runs/2026-05-09-frontend-skill-parity/decision-matrix.md",
       "type": "directory-contains"
     },
     {
-      "from_file": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity",
-      "raw_ref": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity",
-      "source": "dir:experiments/harness-scout/runs/2026-05-09-frontend-skill-parity",
-      "target": "file:experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/feature-ledger.md",
+      "from_file": ".farplane/harness-scout/runs/2026-05-09-frontend-skill-parity",
+      "raw_ref": ".farplane/harness-scout/runs/2026-05-09-frontend-skill-parity",
+      "source": "dir:.farplane/harness-scout/runs/2026-05-09-frontend-skill-parity",
+      "target": "file:.farplane/harness-scout/runs/2026-05-09-frontend-skill-parity/feature-ledger.md",
       "type": "directory-contains"
     },
     {
-      "from_file": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity",
-      "raw_ref": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity",
-      "source": "dir:experiments/harness-scout/runs/2026-05-09-frontend-skill-parity",
-      "target": "file:experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/handoff.md",
+      "from_file": ".farplane/harness-scout/runs/2026-05-09-frontend-skill-parity",
+      "raw_ref": ".farplane/harness-scout/runs/2026-05-09-frontend-skill-parity",
+      "source": "dir:.farplane/harness-scout/runs/2026-05-09-frontend-skill-parity",
+      "target": "file:.farplane/harness-scout/runs/2026-05-09-frontend-skill-parity/handoff.md",
       "type": "directory-contains"
     },
     {
-      "from_file": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity",
-      "raw_ref": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity",
-      "source": "dir:experiments/harness-scout/runs/2026-05-09-frontend-skill-parity",
-      "target": "file:experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/implementation.md",
+      "from_file": ".farplane/harness-scout/runs/2026-05-09-frontend-skill-parity",
+      "raw_ref": ".farplane/harness-scout/runs/2026-05-09-frontend-skill-parity",
+      "source": "dir:.farplane/harness-scout/runs/2026-05-09-frontend-skill-parity",
+      "target": "file:.farplane/harness-scout/runs/2026-05-09-frontend-skill-parity/implementation.md",
       "type": "directory-contains"
     },
     {
-      "from_file": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity",
-      "raw_ref": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity",
-      "source": "dir:experiments/harness-scout/runs/2026-05-09-frontend-skill-parity",
-      "target": "file:experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/post-implementation-review.md",
+      "from_file": ".farplane/harness-scout/runs/2026-05-09-frontend-skill-parity",
+      "raw_ref": ".farplane/harness-scout/runs/2026-05-09-frontend-skill-parity",
+      "source": "dir:.farplane/harness-scout/runs/2026-05-09-frontend-skill-parity",
+      "target": "file:.farplane/harness-scout/runs/2026-05-09-frontend-skill-parity/post-implementation-review.md",
       "type": "directory-contains"
     },
     {
-      "from_file": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity",
-      "raw_ref": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity",
-      "source": "dir:experiments/harness-scout/runs/2026-05-09-frontend-skill-parity",
-      "target": "file:experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/review.md",
+      "from_file": ".farplane/harness-scout/runs/2026-05-09-frontend-skill-parity",
+      "raw_ref": ".farplane/harness-scout/runs/2026-05-09-frontend-skill-parity",
+      "source": "dir:.farplane/harness-scout/runs/2026-05-09-frontend-skill-parity",
+      "target": "file:.farplane/harness-scout/runs/2026-05-09-frontend-skill-parity/review.md",
       "type": "directory-contains"
     },
     {
-      "from_file": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity",
-      "raw_ref": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity",
-      "source": "dir:experiments/harness-scout/runs/2026-05-09-frontend-skill-parity",
-      "target": "file:experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/scorecard.md",
+      "from_file": ".farplane/harness-scout/runs/2026-05-09-frontend-skill-parity",
+      "raw_ref": ".farplane/harness-scout/runs/2026-05-09-frontend-skill-parity",
+      "source": "dir:.farplane/harness-scout/runs/2026-05-09-frontend-skill-parity",
+      "target": "file:.farplane/harness-scout/runs/2026-05-09-frontend-skill-parity/scorecard.md",
       "type": "directory-contains"
     },
     {
-      "from_file": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity",
-      "raw_ref": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity",
-      "source": "dir:experiments/harness-scout/runs/2026-05-09-frontend-skill-parity",
-      "target": "file:experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/source-summary.md",
+      "from_file": ".farplane/harness-scout/runs/2026-05-09-frontend-skill-parity",
+      "raw_ref": ".farplane/harness-scout/runs/2026-05-09-frontend-skill-parity",
+      "source": "dir:.farplane/harness-scout/runs/2026-05-09-frontend-skill-parity",
+      "target": "file:.farplane/harness-scout/runs/2026-05-09-frontend-skill-parity/source-summary.md",
       "type": "directory-contains"
     },
     {
@@ -1700,7 +1700,7 @@ window.HARNESS_GRAPH = {
       "from_file": "ARCHITECTURE.md",
       "raw_ref": "experiments",
       "source": "file:ARCHITECTURE.md",
-      "target": "file:experiments/README.md",
+      "target": "file:.farplane/README.md",
       "type": "markdown-link"
     },
     {
@@ -2272,9 +2272,9 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "agents/hardcase-curator.toml",
-      "raw_ref": "experiments/hardcases/",
+      "raw_ref": ".farplane/evals/hardcase-seeds/",
       "source": "file:agents/hardcase-curator.toml",
-      "target": "file:experiments/hardcases/README.md",
+      "target": "file:.farplane/evals/hardcase-seeds/README.md",
       "type": "literal-path"
     },
     {
@@ -5828,16 +5828,16 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/features/FEAT-0011-harness-scout-source-ingestion.md",
-      "raw_ref": "experiments/harness-scout",
+      "raw_ref": ".farplane/harness-scout",
       "source": "file:docs/features/FEAT-0011-harness-scout-source-ingestion.md",
-      "target": "dir:experiments/harness-scout",
+      "target": "dir:.farplane/harness-scout",
       "type": "literal-path"
     },
     {
       "from_file": "docs/features/FEAT-0011-harness-scout-source-ingestion.md",
-      "raw_ref": "experiments/harness-scout/runs/2026-05-04-self-evolving-agents",
+      "raw_ref": ".farplane/harness-scout/runs/2026-05-04-self-evolving-agents",
       "source": "file:docs/features/FEAT-0011-harness-scout-source-ingestion.md",
-      "target": "dir:experiments/harness-scout/runs/2026-05-04-self-evolving-agents",
+      "target": "dir:.farplane/harness-scout/runs/2026-05-04-self-evolving-agents",
       "type": "literal-path"
     },
     {
@@ -5884,9 +5884,9 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/features/FEAT-0014-frontend-skill-parity-upgrade.md",
-      "raw_ref": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity",
+      "raw_ref": ".farplane/harness-scout/runs/2026-05-09-frontend-skill-parity",
       "source": "file:docs/features/FEAT-0014-frontend-skill-parity-upgrade.md",
-      "target": "dir:experiments/harness-scout/runs/2026-05-09-frontend-skill-parity",
+      "target": "dir:.farplane/harness-scout/runs/2026-05-09-frontend-skill-parity",
       "type": "literal-path"
     },
     {
@@ -5926,16 +5926,16 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/features/FEAT-0014-frontend-skill-parity-upgrade.md",
-      "raw_ref": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/implementation.md",
+      "raw_ref": ".farplane/harness-scout/runs/2026-05-09-frontend-skill-parity/implementation.md",
       "source": "file:docs/features/FEAT-0014-frontend-skill-parity-upgrade.md",
-      "target": "file:experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/implementation.md",
+      "target": "file:.farplane/harness-scout/runs/2026-05-09-frontend-skill-parity/implementation.md",
       "type": "literal-path"
     },
     {
       "from_file": "docs/features/FEAT-0014-frontend-skill-parity-upgrade.md",
-      "raw_ref": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/post-implementation-review.md",
+      "raw_ref": ".farplane/harness-scout/runs/2026-05-09-frontend-skill-parity/post-implementation-review.md",
       "source": "file:docs/features/FEAT-0014-frontend-skill-parity-upgrade.md",
-      "target": "file:experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/post-implementation-review.md",
+      "target": "file:.farplane/harness-scout/runs/2026-05-09-frontend-skill-parity/post-implementation-review.md",
       "type": "literal-path"
     },
     {
@@ -6185,23 +6185,23 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/features/FEAT-0025-video-to-skill-source-reconstruction.md",
-      "raw_ref": "experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/media-ingest-bundle.md",
+      "raw_ref": ".farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/media-ingest-bundle.md",
       "source": "file:docs/features/FEAT-0025-video-to-skill-source-reconstruction.md",
-      "target": "file:experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/media-ingest-bundle.md",
+      "target": "file:.farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/media-ingest-bundle.md",
       "type": "literal-path"
     },
     {
       "from_file": "docs/features/FEAT-0025-video-to-skill-source-reconstruction.md",
-      "raw_ref": "experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/video-reconstruction-brief.md",
+      "raw_ref": ".farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/video-reconstruction-brief.md",
       "source": "file:docs/features/FEAT-0025-video-to-skill-source-reconstruction.md",
-      "target": "file:experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/video-reconstruction-brief.md",
+      "target": "file:.farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/video-reconstruction-brief.md",
       "type": "literal-path"
     },
     {
       "from_file": "docs/features/FEAT-0025-video-to-skill-source-reconstruction.md",
-      "raw_ref": "experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/video-understanding-smoke-log.md",
+      "raw_ref": ".farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/video-understanding-smoke-log.md",
       "source": "file:docs/features/FEAT-0025-video-to-skill-source-reconstruction.md",
-      "target": "file:experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/video-understanding-smoke-log.md",
+      "target": "file:.farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/video-understanding-smoke-log.md",
       "type": "literal-path"
     },
     {
@@ -6605,16 +6605,16 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md",
-      "raw_ref": "experiments/hardcases/20260607-1917-repent-eval-capture/case.md",
+      "raw_ref": ".farplane/evals/hardcase-seeds/20260607-1917-repent-eval-capture/case.md",
       "source": "file:docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md",
-      "target": "file:experiments/hardcases/20260607-1917-repent-eval-capture/case.md",
+      "target": "file:.farplane/evals/hardcase-seeds/20260607-1917-repent-eval-capture/case.md",
       "type": "literal-path"
     },
     {
       "from_file": "docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md",
-      "raw_ref": "experiments/hardcases",
+      "raw_ref": ".farplane/evals/hardcase-seeds",
       "source": "file:docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md",
-      "target": "file:experiments/hardcases/README.md",
+      "target": "file:.farplane/evals/hardcase-seeds/README.md",
       "type": "literal-path"
     },
     {
@@ -7263,9 +7263,9 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/features/FEAT-0061-farplane-adoption-tracker-cli.md",
-      "raw_ref": "experiments/decisions/2026-06-24-project-harness-rollout-feature/decision.md",
+      "raw_ref": ".farplane/automation/decisions/2026-06-24-project-harness-rollout-feature/decision.md",
       "source": "file:docs/features/FEAT-0061-farplane-adoption-tracker-cli.md",
-      "target": "file:experiments/decisions/2026-06-24-project-harness-rollout-feature/decision.md",
+      "target": "file:.farplane/automation/decisions/2026-06-24-project-harness-rollout-feature/decision.md",
       "type": "literal-path"
     },
     {
@@ -7676,23 +7676,23 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/features/registry.jsonl",
-      "raw_ref": "experiments/harness-scout",
+      "raw_ref": ".farplane/harness-scout",
       "source": "file:docs/features/registry.jsonl",
-      "target": "dir:experiments/harness-scout",
+      "target": "dir:.farplane/harness-scout",
       "type": "literal-path"
     },
     {
       "from_file": "docs/features/registry.jsonl",
-      "raw_ref": "experiments/harness-scout/runs/2026-05-04-self-evolving-agents",
+      "raw_ref": ".farplane/harness-scout/runs/2026-05-04-self-evolving-agents",
       "source": "file:docs/features/registry.jsonl",
-      "target": "dir:experiments/harness-scout/runs/2026-05-04-self-evolving-agents",
+      "target": "dir:.farplane/harness-scout/runs/2026-05-04-self-evolving-agents",
       "type": "literal-path"
     },
     {
       "from_file": "docs/features/registry.jsonl",
-      "raw_ref": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity",
+      "raw_ref": ".farplane/harness-scout/runs/2026-05-09-frontend-skill-parity",
       "source": "file:docs/features/registry.jsonl",
-      "target": "dir:experiments/harness-scout/runs/2026-05-09-frontend-skill-parity",
+      "target": "dir:.farplane/harness-scout/runs/2026-05-09-frontend-skill-parity",
       "type": "literal-path"
     },
     {
@@ -8131,58 +8131,58 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/features/registry.jsonl",
-      "raw_ref": "experiments/decisions/2026-06-24-project-harness-rollout-feature/decision.md",
+      "raw_ref": ".farplane/automation/decisions/2026-06-24-project-harness-rollout-feature/decision.md",
       "source": "file:docs/features/registry.jsonl",
-      "target": "file:experiments/decisions/2026-06-24-project-harness-rollout-feature/decision.md",
+      "target": "file:.farplane/automation/decisions/2026-06-24-project-harness-rollout-feature/decision.md",
       "type": "literal-path"
     },
     {
       "from_file": "docs/features/registry.jsonl",
-      "raw_ref": "experiments/hardcases/20260607-1917-repent-eval-capture/case.md",
+      "raw_ref": ".farplane/evals/hardcase-seeds/20260607-1917-repent-eval-capture/case.md",
       "source": "file:docs/features/registry.jsonl",
-      "target": "file:experiments/hardcases/20260607-1917-repent-eval-capture/case.md",
+      "target": "file:.farplane/evals/hardcase-seeds/20260607-1917-repent-eval-capture/case.md",
       "type": "literal-path"
     },
     {
       "from_file": "docs/features/registry.jsonl",
-      "raw_ref": "experiments/hardcases",
+      "raw_ref": ".farplane/evals/hardcase-seeds",
       "source": "file:docs/features/registry.jsonl",
-      "target": "file:experiments/hardcases/README.md",
+      "target": "file:.farplane/evals/hardcase-seeds/README.md",
       "type": "literal-path"
     },
     {
       "from_file": "docs/features/registry.jsonl",
-      "raw_ref": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/implementation.md",
+      "raw_ref": ".farplane/harness-scout/runs/2026-05-09-frontend-skill-parity/implementation.md",
       "source": "file:docs/features/registry.jsonl",
-      "target": "file:experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/implementation.md",
+      "target": "file:.farplane/harness-scout/runs/2026-05-09-frontend-skill-parity/implementation.md",
       "type": "literal-path"
     },
     {
       "from_file": "docs/features/registry.jsonl",
-      "raw_ref": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/post-implementation-review.md",
+      "raw_ref": ".farplane/harness-scout/runs/2026-05-09-frontend-skill-parity/post-implementation-review.md",
       "source": "file:docs/features/registry.jsonl",
-      "target": "file:experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/post-implementation-review.md",
+      "target": "file:.farplane/harness-scout/runs/2026-05-09-frontend-skill-parity/post-implementation-review.md",
       "type": "literal-path"
     },
     {
       "from_file": "docs/features/registry.jsonl",
-      "raw_ref": "experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/media-ingest-bundle.md",
+      "raw_ref": ".farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/media-ingest-bundle.md",
       "source": "file:docs/features/registry.jsonl",
-      "target": "file:experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/media-ingest-bundle.md",
+      "target": "file:.farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/media-ingest-bundle.md",
       "type": "literal-path"
     },
     {
       "from_file": "docs/features/registry.jsonl",
-      "raw_ref": "experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/video-reconstruction-brief.md",
+      "raw_ref": ".farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/video-reconstruction-brief.md",
       "source": "file:docs/features/registry.jsonl",
-      "target": "file:experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/video-reconstruction-brief.md",
+      "target": "file:.farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/video-reconstruction-brief.md",
       "type": "literal-path"
     },
     {
       "from_file": "docs/features/registry.jsonl",
-      "raw_ref": "experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/video-understanding-smoke-log.md",
+      "raw_ref": ".farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/video-understanding-smoke-log.md",
       "source": "file:docs/features/registry.jsonl",
-      "target": "file:experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/video-understanding-smoke-log.md",
+      "target": "file:.farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/video-understanding-smoke-log.md",
       "type": "literal-path"
     },
     {
@@ -9573,9 +9573,9 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/skills/README.md",
-      "raw_ref": "experiments/hardcases/",
+      "raw_ref": ".farplane/evals/hardcase-seeds/",
       "source": "file:docs/skills/README.md",
-      "target": "file:experiments/hardcases/README.md",
+      "target": "file:.farplane/evals/hardcase-seeds/README.md",
       "type": "literal-path"
     },
     {
@@ -10644,79 +10644,79 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/sources/registry.jsonl",
-      "raw_ref": "experiments/harness-scout/runs/2026-05-04-self-evolving-agents/decision-matrix.md",
+      "raw_ref": ".farplane/harness-scout/runs/2026-05-04-self-evolving-agents/decision-matrix.md",
       "source": "file:docs/sources/registry.jsonl",
-      "target": "file:experiments/harness-scout/runs/2026-05-04-self-evolving-agents/decision-matrix.md",
+      "target": "file:.farplane/harness-scout/runs/2026-05-04-self-evolving-agents/decision-matrix.md",
       "type": "literal-path"
     },
     {
       "from_file": "docs/sources/registry.jsonl",
-      "raw_ref": "experiments/harness-scout/runs/2026-05-04-self-evolving-agents/handoff.md",
+      "raw_ref": ".farplane/harness-scout/runs/2026-05-04-self-evolving-agents/handoff.md",
       "source": "file:docs/sources/registry.jsonl",
-      "target": "file:experiments/harness-scout/runs/2026-05-04-self-evolving-agents/handoff.md",
+      "target": "file:.farplane/harness-scout/runs/2026-05-04-self-evolving-agents/handoff.md",
       "type": "literal-path"
     },
     {
       "from_file": "docs/sources/registry.jsonl",
-      "raw_ref": "experiments/harness-scout/runs/2026-05-04-self-evolving-agents/source-summary.md",
+      "raw_ref": ".farplane/harness-scout/runs/2026-05-04-self-evolving-agents/source-summary.md",
       "source": "file:docs/sources/registry.jsonl",
-      "target": "file:experiments/harness-scout/runs/2026-05-04-self-evolving-agents/source-summary.md",
+      "target": "file:.farplane/harness-scout/runs/2026-05-04-self-evolving-agents/source-summary.md",
       "type": "literal-path"
     },
     {
       "from_file": "docs/sources/registry.jsonl",
-      "raw_ref": "experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/decision-matrix.md",
+      "raw_ref": ".farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/decision-matrix.md",
       "source": "file:docs/sources/registry.jsonl",
-      "target": "file:experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/decision-matrix.md",
+      "target": "file:.farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/decision-matrix.md",
       "type": "literal-path"
     },
     {
       "from_file": "docs/sources/registry.jsonl",
-      "raw_ref": "experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/feature-ledger.md",
+      "raw_ref": ".farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/feature-ledger.md",
       "source": "file:docs/sources/registry.jsonl",
-      "target": "file:experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/feature-ledger.md",
+      "target": "file:.farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/feature-ledger.md",
       "type": "literal-path"
     },
     {
       "from_file": "docs/sources/registry.jsonl",
-      "raw_ref": "experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/handoff.md",
+      "raw_ref": ".farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/handoff.md",
       "source": "file:docs/sources/registry.jsonl",
-      "target": "file:experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/handoff.md",
+      "target": "file:.farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/handoff.md",
       "type": "literal-path"
     },
     {
       "from_file": "docs/sources/registry.jsonl",
-      "raw_ref": "experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/harness-advisor-placement.md",
+      "raw_ref": ".farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/harness-advisor-placement.md",
       "source": "file:docs/sources/registry.jsonl",
-      "target": "file:experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/harness-advisor-placement.md",
+      "target": "file:.farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/harness-advisor-placement.md",
       "type": "literal-path"
     },
     {
       "from_file": "docs/sources/registry.jsonl",
-      "raw_ref": "experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/media-ingest-bundle.md",
+      "raw_ref": ".farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/media-ingest-bundle.md",
       "source": "file:docs/sources/registry.jsonl",
-      "target": "file:experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/media-ingest-bundle.md",
+      "target": "file:.farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/media-ingest-bundle.md",
       "type": "literal-path"
     },
     {
       "from_file": "docs/sources/registry.jsonl",
-      "raw_ref": "experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/source-summary.md",
+      "raw_ref": ".farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/source-summary.md",
       "source": "file:docs/sources/registry.jsonl",
-      "target": "file:experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/source-summary.md",
+      "target": "file:.farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/source-summary.md",
       "type": "literal-path"
     },
     {
       "from_file": "docs/sources/registry.jsonl",
-      "raw_ref": "experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/video-reconstruction-brief.md",
+      "raw_ref": ".farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/video-reconstruction-brief.md",
       "source": "file:docs/sources/registry.jsonl",
-      "target": "file:experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/video-reconstruction-brief.md",
+      "target": "file:.farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/video-reconstruction-brief.md",
       "type": "literal-path"
     },
     {
       "from_file": "docs/sources/registry.jsonl",
-      "raw_ref": "experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/video-understanding-smoke-log.md",
+      "raw_ref": ".farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/video-understanding-smoke-log.md",
       "source": "file:docs/sources/registry.jsonl",
-      "target": "file:experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/video-understanding-smoke-log.md",
+      "target": "file:.farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/video-understanding-smoke-log.md",
       "type": "literal-path"
     },
     {
@@ -13451,16 +13451,16 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "skills/best-of-worlds/SKILL.md",
-      "raw_ref": "experiments/best-of-worlds/",
+      "raw_ref": ".farplane/best-of-worlds/",
       "source": "skill:best-of-worlds",
-      "target": "dir:experiments/best-of-worlds",
+      "target": "dir:.farplane/best-of-worlds",
       "type": "literal-path"
     },
     {
       "from_file": "skills/best-of-worlds/scripts/init_synthesis.py",
-      "raw_ref": "experiments/best-of-worlds",
+      "raw_ref": ".farplane/best-of-worlds",
       "source": "skill:best-of-worlds",
-      "target": "dir:experiments/best-of-worlds",
+      "target": "dir:.farplane/best-of-worlds",
       "type": "literal-path"
     },
     {
@@ -15089,9 +15089,9 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "skills/deliberative-advice/references/llm-council-model.md",
-      "raw_ref": "experiments/decisions/",
+      "raw_ref": ".farplane/automation/decisions/",
       "source": "skill:deliberative-advice",
-      "target": "dir:experiments/decisions",
+      "target": "dir:.farplane/automation/decisions",
       "type": "literal-path"
     },
     {
@@ -16545,9 +16545,9 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "skills/feed-scout/templates/proposal-db.md",
-      "raw_ref": "experiments/harness-scout/runs/",
+      "raw_ref": ".farplane/harness-scout/runs/",
       "source": "skill:feed-scout",
-      "target": "dir:experiments/harness-scout/runs",
+      "target": "dir:.farplane/harness-scout/runs",
       "type": "literal-path"
     },
     {
@@ -17644,9 +17644,9 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "skills/harness-creator/audits/2026-06-14-create-harness-creator.md",
-      "raw_ref": "experiments/decisions/2026-06-13-harness-creator/decision.md",
+      "raw_ref": ".farplane/automation/decisions/2026-06-13-harness-creator/decision.md",
       "source": "skill:harness-creator",
-      "target": "file:experiments/decisions/2026-06-13-harness-creator/decision.md",
+      "target": "file:.farplane/automation/decisions/2026-06-13-harness-creator/decision.md",
       "type": "literal-path"
     },
     {
@@ -18001,23 +18001,23 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "skills/harness-scout/SKILL.md",
-      "raw_ref": "experiments/harness-scout/runs/",
+      "raw_ref": ".farplane/harness-scout/runs/",
       "source": "skill:harness-scout",
-      "target": "dir:experiments/harness-scout/runs",
+      "target": "dir:.farplane/harness-scout/runs",
       "type": "literal-path"
     },
     {
       "from_file": "skills/harness-scout/references/architecture.md",
-      "raw_ref": "experiments/harness-scout/runs/",
+      "raw_ref": ".farplane/harness-scout/runs/",
       "source": "skill:harness-scout",
-      "target": "dir:experiments/harness-scout/runs",
+      "target": "dir:.farplane/harness-scout/runs",
       "type": "literal-path"
     },
     {
       "from_file": "skills/harness-scout/references/workflows.md",
-      "raw_ref": "experiments/harness-scout/runs/",
+      "raw_ref": ".farplane/harness-scout/runs/",
       "source": "skill:harness-scout",
-      "target": "dir:experiments/harness-scout/runs",
+      "target": "dir:.farplane/harness-scout/runs",
       "type": "literal-path"
     },
     {
@@ -18169,30 +18169,30 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "skills/harness-scout/references/video-to-skill.md",
-      "raw_ref": "experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/handoff.md",
+      "raw_ref": ".farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/handoff.md",
       "source": "skill:harness-scout",
-      "target": "file:experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/handoff.md",
+      "target": "file:.farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/handoff.md",
       "type": "literal-path"
     },
     {
       "from_file": "skills/harness-scout/references/video-to-skill.md",
-      "raw_ref": "experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/media-ingest-bundle.md",
+      "raw_ref": ".farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/media-ingest-bundle.md",
       "source": "skill:harness-scout",
-      "target": "file:experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/media-ingest-bundle.md",
+      "target": "file:.farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/media-ingest-bundle.md",
       "type": "literal-path"
     },
     {
       "from_file": "skills/harness-scout/references/video-to-skill.md",
-      "raw_ref": "experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/video-reconstruction-brief.md",
+      "raw_ref": ".farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/video-reconstruction-brief.md",
       "source": "skill:harness-scout",
-      "target": "file:experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/video-reconstruction-brief.md",
+      "target": "file:.farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/video-reconstruction-brief.md",
       "type": "literal-path"
     },
     {
       "from_file": "skills/harness-scout/references/video-to-skill.md",
-      "raw_ref": "experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/video-understanding-smoke-log.md",
+      "raw_ref": ".farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/video-understanding-smoke-log.md",
       "source": "skill:harness-scout",
-      "target": "file:experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/video-understanding-smoke-log.md",
+      "target": "file:.farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/video-understanding-smoke-log.md",
       "type": "literal-path"
     },
     {
@@ -25701,16 +25701,16 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "skills/skill-maintenance/audits/2026-06-13-behavior-delta-compression.md",
-      "raw_ref": "experiments/decisions/2026-06-13-skill-maintenance-rewrite-council/context.md",
+      "raw_ref": ".farplane/automation/decisions/2026-06-13-skill-maintenance-rewrite-council/context.md",
       "source": "skill:skill-maintenance",
-      "target": "file:experiments/decisions/2026-06-13-skill-maintenance-rewrite-council/context.md",
+      "target": "file:.farplane/automation/decisions/2026-06-13-skill-maintenance-rewrite-council/context.md",
       "type": "literal-path"
     },
     {
       "from_file": "skills/skill-maintenance/audits/2026-06-13-behavior-delta-compression.md",
-      "raw_ref": "experiments/decisions/2026-06-13-skill-maintenance-rewrite-council/synthesis.md",
+      "raw_ref": ".farplane/automation/decisions/2026-06-13-skill-maintenance-rewrite-council/synthesis.md",
       "source": "skill:skill-maintenance",
-      "target": "file:experiments/decisions/2026-06-13-skill-maintenance-rewrite-council/synthesis.md",
+      "target": "file:.farplane/automation/decisions/2026-06-13-skill-maintenance-rewrite-council/synthesis.md",
       "type": "literal-path"
     },
     {
@@ -30370,30 +30370,30 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "skills/video-understanding/references/replay-log.md",
-      "raw_ref": "experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/handoff.md",
+      "raw_ref": ".farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/handoff.md",
       "source": "skill:video-understanding",
-      "target": "file:experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/handoff.md",
+      "target": "file:.farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/handoff.md",
       "type": "literal-path"
     },
     {
       "from_file": "skills/video-understanding/references/replay-log.md",
-      "raw_ref": "experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/media-ingest-bundle.md",
+      "raw_ref": ".farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/media-ingest-bundle.md",
       "source": "skill:video-understanding",
-      "target": "file:experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/media-ingest-bundle.md",
+      "target": "file:.farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/media-ingest-bundle.md",
       "type": "literal-path"
     },
     {
       "from_file": "skills/video-understanding/references/replay-log.md",
-      "raw_ref": "experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/video-reconstruction-brief.md",
+      "raw_ref": ".farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/video-reconstruction-brief.md",
       "source": "skill:video-understanding",
-      "target": "file:experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/video-reconstruction-brief.md",
+      "target": "file:.farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/video-reconstruction-brief.md",
       "type": "literal-path"
     },
     {
       "from_file": "skills/video-understanding/references/replay-log.md",
-      "raw_ref": "experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/video-understanding-smoke-log.md",
+      "raw_ref": ".farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/video-understanding-smoke-log.md",
       "source": "skill:video-understanding",
-      "target": "file:experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/video-understanding-smoke-log.md",
+      "target": "file:.farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/video-understanding-smoke-log.md",
       "type": "literal-path"
     },
     {
@@ -31032,220 +31032,220 @@ window.HARNESS_GRAPH = {
       "path": "docs/skills/templates"
     },
     {
-      "id": "file:experiments/README.md",
+      "id": "file:.farplane/README.md",
       "kind": "file",
-      "label": "experiments/README.md",
-      "path": "experiments/README.md"
+      "label": ".farplane/README.md",
+      "path": ".farplane/README.md"
     },
     {
-      "id": "dir:experiments/best-of-worlds",
+      "id": "dir:.farplane/best-of-worlds",
       "kind": "file",
-      "label": "experiments/best-of-worlds/",
-      "path": "experiments/best-of-worlds"
+      "label": ".farplane/best-of-worlds/",
+      "path": ".farplane/best-of-worlds"
     },
     {
-      "id": "dir:experiments/decisions",
+      "id": "dir:.farplane/automation/decisions",
       "kind": "file",
-      "label": "experiments/decisions/",
-      "path": "experiments/decisions"
+      "label": ".farplane/automation/decisions/",
+      "path": ".farplane/automation/decisions"
     },
     {
-      "id": "file:experiments/decisions/2026-06-13-harness-creator/decision.md",
+      "id": "file:.farplane/automation/decisions/2026-06-13-harness-creator/decision.md",
       "kind": "file",
-      "label": "experiments/decisions/2026-06-13-harness-creator/decision.md",
-      "path": "experiments/decisions/2026-06-13-harness-creator/decision.md"
+      "label": ".farplane/automation/decisions/2026-06-13-harness-creator/decision.md",
+      "path": ".farplane/automation/decisions/2026-06-13-harness-creator/decision.md"
     },
     {
-      "id": "file:experiments/decisions/2026-06-13-skill-maintenance-rewrite-council/context.md",
+      "id": "file:.farplane/automation/decisions/2026-06-13-skill-maintenance-rewrite-council/context.md",
       "kind": "file",
-      "label": "experiments/decisions/2026-06-13-skill-maintenance-rewrite-council/context.md",
-      "path": "experiments/decisions/2026-06-13-skill-maintenance-rewrite-council/context.md"
+      "label": ".farplane/automation/decisions/2026-06-13-skill-maintenance-rewrite-council/context.md",
+      "path": ".farplane/automation/decisions/2026-06-13-skill-maintenance-rewrite-council/context.md"
     },
     {
-      "id": "file:experiments/decisions/2026-06-13-skill-maintenance-rewrite-council/synthesis.md",
+      "id": "file:.farplane/automation/decisions/2026-06-13-skill-maintenance-rewrite-council/synthesis.md",
       "kind": "file",
-      "label": "experiments/decisions/2026-06-13-skill-maintenance-rewrite-council/synthesis.md",
-      "path": "experiments/decisions/2026-06-13-skill-maintenance-rewrite-council/synthesis.md"
+      "label": ".farplane/automation/decisions/2026-06-13-skill-maintenance-rewrite-council/synthesis.md",
+      "path": ".farplane/automation/decisions/2026-06-13-skill-maintenance-rewrite-council/synthesis.md"
     },
     {
-      "id": "file:experiments/decisions/2026-06-15-deep-init-vs-harness-creator.md",
+      "id": "file:.farplane/automation/decisions/2026-06-15-deep-init-vs-harness-creator.md",
       "kind": "file",
-      "label": "experiments/decisions/2026-06-15-deep-init-vs-harness-creator.md",
-      "path": "experiments/decisions/2026-06-15-deep-init-vs-harness-creator.md"
+      "label": ".farplane/automation/decisions/2026-06-15-deep-init-vs-harness-creator.md",
+      "path": ".farplane/automation/decisions/2026-06-15-deep-init-vs-harness-creator.md"
     },
     {
-      "id": "file:experiments/decisions/2026-06-24-project-harness-rollout-feature/decision.md",
+      "id": "file:.farplane/automation/decisions/2026-06-24-project-harness-rollout-feature/decision.md",
       "kind": "file",
-      "label": "experiments/decisions/2026-06-24-project-harness-rollout-feature/decision.md",
-      "path": "experiments/decisions/2026-06-24-project-harness-rollout-feature/decision.md"
+      "label": ".farplane/automation/decisions/2026-06-24-project-harness-rollout-feature/decision.md",
+      "path": ".farplane/automation/decisions/2026-06-24-project-harness-rollout-feature/decision.md"
     },
     {
-      "id": "file:experiments/hardcases/20260607-1917-repent-eval-capture/case.md",
+      "id": "file:.farplane/evals/hardcase-seeds/20260607-1917-repent-eval-capture/case.md",
       "kind": "file",
-      "label": "experiments/hardcases/20260607-1917-repent-eval-capture/case.md",
-      "path": "experiments/hardcases/20260607-1917-repent-eval-capture/case.md"
+      "label": ".farplane/evals/hardcase-seeds/20260607-1917-repent-eval-capture/case.md",
+      "path": ".farplane/evals/hardcase-seeds/20260607-1917-repent-eval-capture/case.md"
     },
     {
-      "id": "file:experiments/hardcases/README.md",
+      "id": "file:.farplane/evals/hardcase-seeds/README.md",
       "kind": "file",
-      "label": "experiments/hardcases/README.md",
-      "path": "experiments/hardcases/README.md"
+      "label": ".farplane/evals/hardcase-seeds/README.md",
+      "path": ".farplane/evals/hardcase-seeds/README.md"
     },
     {
-      "id": "dir:experiments/harness-scout",
+      "id": "dir:.farplane/harness-scout",
       "kind": "file",
-      "label": "experiments/harness-scout/",
-      "path": "experiments/harness-scout"
+      "label": ".farplane/harness-scout/",
+      "path": ".farplane/harness-scout"
     },
     {
-      "id": "dir:experiments/harness-scout/runs",
+      "id": "dir:.farplane/harness-scout/runs",
       "kind": "file",
-      "label": "experiments/harness-scout/runs/",
-      "path": "experiments/harness-scout/runs"
+      "label": ".farplane/harness-scout/runs/",
+      "path": ".farplane/harness-scout/runs"
     },
     {
-      "id": "dir:experiments/harness-scout/runs/2026-05-04-self-evolving-agents",
+      "id": "dir:.farplane/harness-scout/runs/2026-05-04-self-evolving-agents",
       "kind": "file",
-      "label": "experiments/harness-scout/runs/2026-05-04-self-evolving-agents/",
-      "path": "experiments/harness-scout/runs/2026-05-04-self-evolving-agents"
+      "label": ".farplane/harness-scout/runs/2026-05-04-self-evolving-agents/",
+      "path": ".farplane/harness-scout/runs/2026-05-04-self-evolving-agents"
     },
     {
-      "id": "file:experiments/harness-scout/runs/2026-05-04-self-evolving-agents/compact-analysis.md",
+      "id": "file:.farplane/harness-scout/runs/2026-05-04-self-evolving-agents/compact-analysis.md",
       "kind": "file",
-      "label": "experiments/harness-scout/runs/2026-05-04-self-evolving-agents/compact-analysis.md",
-      "path": "experiments/harness-scout/runs/2026-05-04-self-evolving-agents/compact-analysis.md"
+      "label": ".farplane/harness-scout/runs/2026-05-04-self-evolving-agents/compact-analysis.md",
+      "path": ".farplane/harness-scout/runs/2026-05-04-self-evolving-agents/compact-analysis.md"
     },
     {
-      "id": "file:experiments/harness-scout/runs/2026-05-04-self-evolving-agents/decision-matrix.md",
+      "id": "file:.farplane/harness-scout/runs/2026-05-04-self-evolving-agents/decision-matrix.md",
       "kind": "file",
-      "label": "experiments/harness-scout/runs/2026-05-04-self-evolving-agents/decision-matrix.md",
-      "path": "experiments/harness-scout/runs/2026-05-04-self-evolving-agents/decision-matrix.md"
+      "label": ".farplane/harness-scout/runs/2026-05-04-self-evolving-agents/decision-matrix.md",
+      "path": ".farplane/harness-scout/runs/2026-05-04-self-evolving-agents/decision-matrix.md"
     },
     {
-      "id": "file:experiments/harness-scout/runs/2026-05-04-self-evolving-agents/feature-ledger.md",
+      "id": "file:.farplane/harness-scout/runs/2026-05-04-self-evolving-agents/feature-ledger.md",
       "kind": "file",
-      "label": "experiments/harness-scout/runs/2026-05-04-self-evolving-agents/feature-ledger.md",
-      "path": "experiments/harness-scout/runs/2026-05-04-self-evolving-agents/feature-ledger.md"
+      "label": ".farplane/harness-scout/runs/2026-05-04-self-evolving-agents/feature-ledger.md",
+      "path": ".farplane/harness-scout/runs/2026-05-04-self-evolving-agents/feature-ledger.md"
     },
     {
-      "id": "file:experiments/harness-scout/runs/2026-05-04-self-evolving-agents/handoff.md",
+      "id": "file:.farplane/harness-scout/runs/2026-05-04-self-evolving-agents/handoff.md",
       "kind": "file",
-      "label": "experiments/harness-scout/runs/2026-05-04-self-evolving-agents/handoff.md",
-      "path": "experiments/harness-scout/runs/2026-05-04-self-evolving-agents/handoff.md"
+      "label": ".farplane/harness-scout/runs/2026-05-04-self-evolving-agents/handoff.md",
+      "path": ".farplane/harness-scout/runs/2026-05-04-self-evolving-agents/handoff.md"
     },
     {
-      "id": "file:experiments/harness-scout/runs/2026-05-04-self-evolving-agents/scorecard.md",
+      "id": "file:.farplane/harness-scout/runs/2026-05-04-self-evolving-agents/scorecard.md",
       "kind": "file",
-      "label": "experiments/harness-scout/runs/2026-05-04-self-evolving-agents/scorecard.md",
-      "path": "experiments/harness-scout/runs/2026-05-04-self-evolving-agents/scorecard.md"
+      "label": ".farplane/harness-scout/runs/2026-05-04-self-evolving-agents/scorecard.md",
+      "path": ".farplane/harness-scout/runs/2026-05-04-self-evolving-agents/scorecard.md"
     },
     {
-      "id": "file:experiments/harness-scout/runs/2026-05-04-self-evolving-agents/source-summary.md",
+      "id": "file:.farplane/harness-scout/runs/2026-05-04-self-evolving-agents/source-summary.md",
       "kind": "file",
-      "label": "experiments/harness-scout/runs/2026-05-04-self-evolving-agents/source-summary.md",
-      "path": "experiments/harness-scout/runs/2026-05-04-self-evolving-agents/source-summary.md"
+      "label": ".farplane/harness-scout/runs/2026-05-04-self-evolving-agents/source-summary.md",
+      "path": ".farplane/harness-scout/runs/2026-05-04-self-evolving-agents/source-summary.md"
     },
     {
-      "id": "dir:experiments/harness-scout/runs/2026-05-09-frontend-skill-parity",
+      "id": "dir:.farplane/harness-scout/runs/2026-05-09-frontend-skill-parity",
       "kind": "file",
-      "label": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/",
-      "path": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity"
+      "label": ".farplane/harness-scout/runs/2026-05-09-frontend-skill-parity/",
+      "path": ".farplane/harness-scout/runs/2026-05-09-frontend-skill-parity"
     },
     {
-      "id": "file:experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/decision-matrix.md",
+      "id": "file:.farplane/harness-scout/runs/2026-05-09-frontend-skill-parity/decision-matrix.md",
       "kind": "file",
-      "label": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/decision-matrix.md",
-      "path": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/decision-matrix.md"
+      "label": ".farplane/harness-scout/runs/2026-05-09-frontend-skill-parity/decision-matrix.md",
+      "path": ".farplane/harness-scout/runs/2026-05-09-frontend-skill-parity/decision-matrix.md"
     },
     {
-      "id": "file:experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/feature-ledger.md",
+      "id": "file:.farplane/harness-scout/runs/2026-05-09-frontend-skill-parity/feature-ledger.md",
       "kind": "file",
-      "label": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/feature-ledger.md",
-      "path": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/feature-ledger.md"
+      "label": ".farplane/harness-scout/runs/2026-05-09-frontend-skill-parity/feature-ledger.md",
+      "path": ".farplane/harness-scout/runs/2026-05-09-frontend-skill-parity/feature-ledger.md"
     },
     {
-      "id": "file:experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/handoff.md",
+      "id": "file:.farplane/harness-scout/runs/2026-05-09-frontend-skill-parity/handoff.md",
       "kind": "file",
-      "label": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/handoff.md",
-      "path": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/handoff.md"
+      "label": ".farplane/harness-scout/runs/2026-05-09-frontend-skill-parity/handoff.md",
+      "path": ".farplane/harness-scout/runs/2026-05-09-frontend-skill-parity/handoff.md"
     },
     {
-      "id": "file:experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/implementation.md",
+      "id": "file:.farplane/harness-scout/runs/2026-05-09-frontend-skill-parity/implementation.md",
       "kind": "file",
-      "label": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/implementation.md",
-      "path": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/implementation.md"
+      "label": ".farplane/harness-scout/runs/2026-05-09-frontend-skill-parity/implementation.md",
+      "path": ".farplane/harness-scout/runs/2026-05-09-frontend-skill-parity/implementation.md"
     },
     {
-      "id": "file:experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/post-implementation-review.md",
+      "id": "file:.farplane/harness-scout/runs/2026-05-09-frontend-skill-parity/post-implementation-review.md",
       "kind": "file",
-      "label": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/post-implementation-review.md",
-      "path": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/post-implementation-review.md"
+      "label": ".farplane/harness-scout/runs/2026-05-09-frontend-skill-parity/post-implementation-review.md",
+      "path": ".farplane/harness-scout/runs/2026-05-09-frontend-skill-parity/post-implementation-review.md"
     },
     {
-      "id": "file:experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/review.md",
+      "id": "file:.farplane/harness-scout/runs/2026-05-09-frontend-skill-parity/review.md",
       "kind": "file",
-      "label": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/review.md",
-      "path": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/review.md"
+      "label": ".farplane/harness-scout/runs/2026-05-09-frontend-skill-parity/review.md",
+      "path": ".farplane/harness-scout/runs/2026-05-09-frontend-skill-parity/review.md"
     },
     {
-      "id": "file:experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/scorecard.md",
+      "id": "file:.farplane/harness-scout/runs/2026-05-09-frontend-skill-parity/scorecard.md",
       "kind": "file",
-      "label": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/scorecard.md",
-      "path": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/scorecard.md"
+      "label": ".farplane/harness-scout/runs/2026-05-09-frontend-skill-parity/scorecard.md",
+      "path": ".farplane/harness-scout/runs/2026-05-09-frontend-skill-parity/scorecard.md"
     },
     {
-      "id": "file:experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/source-summary.md",
+      "id": "file:.farplane/harness-scout/runs/2026-05-09-frontend-skill-parity/source-summary.md",
       "kind": "file",
-      "label": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/source-summary.md",
-      "path": "experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/source-summary.md"
+      "label": ".farplane/harness-scout/runs/2026-05-09-frontend-skill-parity/source-summary.md",
+      "path": ".farplane/harness-scout/runs/2026-05-09-frontend-skill-parity/source-summary.md"
     },
     {
-      "id": "file:experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/decision-matrix.md",
+      "id": "file:.farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/decision-matrix.md",
       "kind": "file",
-      "label": "experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/decision-matrix.md",
-      "path": "experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/decision-matrix.md"
+      "label": ".farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/decision-matrix.md",
+      "path": ".farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/decision-matrix.md"
     },
     {
-      "id": "file:experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/feature-ledger.md",
+      "id": "file:.farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/feature-ledger.md",
       "kind": "file",
-      "label": "experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/feature-ledger.md",
-      "path": "experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/feature-ledger.md"
+      "label": ".farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/feature-ledger.md",
+      "path": ".farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/feature-ledger.md"
     },
     {
-      "id": "file:experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/handoff.md",
+      "id": "file:.farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/handoff.md",
       "kind": "file",
-      "label": "experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/handoff.md",
-      "path": "experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/handoff.md"
+      "label": ".farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/handoff.md",
+      "path": ".farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/handoff.md"
     },
     {
-      "id": "file:experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/harness-advisor-placement.md",
+      "id": "file:.farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/harness-advisor-placement.md",
       "kind": "file",
-      "label": "experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/harness-advisor-placement.md",
-      "path": "experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/harness-advisor-placement.md"
+      "label": ".farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/harness-advisor-placement.md",
+      "path": ".farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/harness-advisor-placement.md"
     },
     {
-      "id": "file:experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/media-ingest-bundle.md",
+      "id": "file:.farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/media-ingest-bundle.md",
       "kind": "file",
-      "label": "experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/media-ingest-bundle.md",
-      "path": "experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/media-ingest-bundle.md"
+      "label": ".farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/media-ingest-bundle.md",
+      "path": ".farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/media-ingest-bundle.md"
     },
     {
-      "id": "file:experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/source-summary.md",
+      "id": "file:.farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/source-summary.md",
       "kind": "file",
-      "label": "experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/source-summary.md",
-      "path": "experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/source-summary.md"
+      "label": ".farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/source-summary.md",
+      "path": ".farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/source-summary.md"
     },
     {
-      "id": "file:experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/video-reconstruction-brief.md",
+      "id": "file:.farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/video-reconstruction-brief.md",
       "kind": "file",
-      "label": "experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/video-reconstruction-brief.md",
-      "path": "experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/video-reconstruction-brief.md"
+      "label": ".farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/video-reconstruction-brief.md",
+      "path": ".farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/video-reconstruction-brief.md"
     },
     {
-      "id": "file:experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/video-understanding-smoke-log.md",
+      "id": "file:.farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/video-understanding-smoke-log.md",
       "kind": "file",
-      "label": "experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/video-understanding-smoke-log.md",
-      "path": "experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/video-understanding-smoke-log.md"
+      "label": ".farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/video-understanding-smoke-log.md",
+      "path": ".farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/video-understanding-smoke-log.md"
     },
     {
       "id": "file:farplane/README.md",
@@ -35773,8 +35773,8 @@ window.HARNESS_GRAPH = {
       "source": "agents/deep-researcher.toml"
     },
     {
-      "candidate": "experiments/research",
-      "raw_ref": "experiments/research/",
+      "candidate": ".farplane/research",
+      "raw_ref": ".farplane/research/",
       "source": "agents/deep-researcher.toml"
     },
     {
@@ -35833,8 +35833,8 @@ window.HARNESS_GRAPH = {
       "source": "agents/documentation-maintainer.toml"
     },
     {
-      "candidate": "experiments/research",
-      "raw_ref": "experiments/research/",
+      "candidate": ".farplane/research",
+      "raw_ref": ".farplane/research/",
       "source": "agents/documentation-searcher.toml"
     },
     {
@@ -35843,13 +35843,13 @@ window.HARNESS_GRAPH = {
       "source": "agents/frontend-designer.toml"
     },
     {
-      "candidate": "experiments/hardcases/.../case.md",
-      "raw_ref": "experiments/hardcases/.../case.md",
+      "candidate": ".farplane/evals/hardcase-seeds/.../case.md",
+      "raw_ref": ".farplane/evals/hardcase-seeds/.../case.md",
       "source": "agents/hardcase-curator.toml"
     },
     {
-      "candidate": "experiments/hardcases/YYYYMMDD-HHMM-",
-      "raw_ref": "experiments/hardcases/YYYYMMDD-HHMM-",
+      "candidate": ".farplane/evals/hardcase-seeds/YYYYMMDD-HHMM-",
+      "raw_ref": ".farplane/evals/hardcase-seeds/YYYYMMDD-HHMM-",
       "source": "agents/hardcase-curator.toml"
     },
     {
@@ -35858,8 +35858,8 @@ window.HARNESS_GRAPH = {
       "source": "agents/librarian.toml"
     },
     {
-      "candidate": "experiments/research",
-      "raw_ref": "experiments/research/",
+      "candidate": ".farplane/research",
+      "raw_ref": ".farplane/research/",
       "source": "agents/librarian.toml"
     },
     {
@@ -35888,13 +35888,13 @@ window.HARNESS_GRAPH = {
       "source": "agents/planner-agent.toml"
     },
     {
-      "candidate": "experiments/research/2025-12-30_express_rate_limit_docs.md",
-      "raw_ref": "experiments/research/2025-12-30_express_rate_limit_docs.md",
+      "candidate": ".farplane/research/2025-12-30_express_rate_limit_docs.md",
+      "raw_ref": ".farplane/research/2025-12-30_express_rate_limit_docs.md",
       "source": "agents/planner-agent.toml"
     },
     {
-      "candidate": "experiments/research/2025-12-30_express_rate_limiting.md",
-      "raw_ref": "experiments/research/2025-12-30_express_rate_limiting.md",
+      "candidate": ".farplane/research/2025-12-30_express_rate_limiting.md",
+      "raw_ref": ".farplane/research/2025-12-30_express_rate_limiting.md",
       "source": "agents/planner-agent.toml"
     },
     {
@@ -36603,8 +36603,8 @@ window.HARNESS_GRAPH = {
       "source": "docs/review/rubrics/ui-quality.md"
     },
     {
-      "candidate": "experiments/harness-scout/runs/2026-05-05-symphony-compatible-farplane/source-summary.md",
-      "raw_ref": "experiments/harness-scout/runs/2026-05-05-symphony-compatible-farplane/source-summary.md",
+      "candidate": ".farplane/harness-scout/runs/2026-05-05-symphony-compatible-farplane/source-summary.md",
+      "raw_ref": ".farplane/harness-scout/runs/2026-05-05-symphony-compatible-farplane/source-summary.md",
       "source": "docs/sources/README.md"
     },
     {
@@ -36678,8 +36678,8 @@ window.HARNESS_GRAPH = {
       "source": "skills/agent-behavior-test/SKILL.md"
     },
     {
-      "candidate": "experiments/agent-behavior-test/demo",
-      "raw_ref": "experiments/agent-behavior-test/demo",
+      "candidate": ".farplane/agent-behavior-test/runs/demo",
+      "raw_ref": ".farplane/agent-behavior-test/runs/demo",
       "source": "skills/agent-behavior-test/references/codex-exec-runner.md"
     },
     {

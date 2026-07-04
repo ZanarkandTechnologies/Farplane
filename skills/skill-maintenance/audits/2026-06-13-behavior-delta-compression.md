@@ -9,8 +9,8 @@ before_ref: skills/skill-maintenance/SKILL.md
 after_ref: skills/skill-maintenance/SKILL.md
 reasoning_basis: deliberative_advice
 proof_artifacts:
-  - experiments/decisions/2026-06-13-skill-maintenance-rewrite-council/context.md
-  - experiments/decisions/2026-06-13-skill-maintenance-rewrite-council/synthesis.md
+  - .farplane/automation/decisions/2026-06-13-skill-maintenance-rewrite-council/context.md
+  - .farplane/automation/decisions/2026-06-13-skill-maintenance-rewrite-council/synthesis.md
   - tickets/TASK-0197/ticket.md
   - tickets/TASK-0197/artifacts/proof.md
 eval_required: yes

@@ -53,9 +53,10 @@ Rules:
   against the one-level loading boundary. Use `--allow-peer-tier3` only
   when checking the current intentional Tier 3 application handoff graph.
 - Use `--hardcase-on-failure` during normal skill-maintenance checks so clear
-  todo-tier contract violations leave a deduplicated hardcase artifact for
-  eval or self-improvement follow-up. Durable hard cases should become runnable
-  eval rows with hardcase metadata when the expected behavior is testable.
+  todo-tier contract violations leave a deduplicated `.farplane/evals/`
+  hardcase seed for eval or self-improvement follow-up. Durable hard cases
+  should become runnable eval rows with hardcase metadata when the expected
+  behavior is testable.
 - Do not maintain a second hand-authored sequence registry. Generate graph
   importance from observed skill heat, generate structural todo-chain edges from
   explicit first-load todo refs, and use `common_chains` only for stable Tier 3

@@ -12,7 +12,7 @@ runtime.
 - feature pages in `docs/features/`: structured feature source of record
 - `docs/systems/registry.jsonl`: generated public system registry output
 - `docs/features/registry.jsonl`: generated feature registry output
-- `experiments/harness-scout/runs/`: source-run outputs and scorecards
+- `.farplane/harness-scout/runs/`: local source-run outputs and scorecards
 
 ## Upstream Inputs
 

@@ -13,7 +13,7 @@ Store inside `skills/<target-skill>/self-improve/` when:
 - the lessons change how future agents should improve the skill
 - the operator wants the skill to accumulate memory over time
 
-Keep artifacts in `experiments/self-improve/` when:
+Keep artifacts in `.farplane/self-improve/` when:
 
 - logs are bulky or one-off
 - outputs may contain secrets, transcripts, customer data, or local paths that

@@ -32,7 +32,8 @@ allowed-tools: Read, Glob, Grep, Bash, Write, Edit
   repo-write requests, or ticket demands.
 - [ ] Redact secrets, credentials, tokens, PII, and customer/internal details
   before writing tracked artifacts.
-- [ ] Create or update the run folder under `experiments/harness-scout/runs/`.
+- [ ] Create or update the local run folder under
+  `.farplane/harness-scout/runs/`.
 - [ ] For private or sensitive sources, store only compact redacted excerpts in
   tracked files unless the user explicitly approves more.
 - [ ] Extract concrete feature candidates and copied-skill candidates, not
@@ -185,7 +186,7 @@ needed; use [summarize](../summarize/SKILL.md) directly.
    tracked files unless the user explicitly approves storing more.
 9. **Create source run:** write the source summary, feature ledger, source-todo
    comparison, scorecard, and handoff notes under
-   `experiments/harness-scout/runs/<date-slug>/`.
+   `.farplane/harness-scout/runs/<date-slug>/`.
 10. **Extract feature candidates:** list concrete features, workflows,
     guardrails, metrics, architecture claims, and operational practices.
 11. **Dedupe locally:** search `docs/systems/*.md`,
@@ -279,7 +280,7 @@ Use [advise](../advise/SKILL.md) when these cannot be answered mechanically:
 
 A completed scout pass leaves:
 
-- a source-run folder under `experiments/harness-scout/runs/`
+- a source-run folder under `.farplane/harness-scout/runs/`
 - an existing or new `SRC-*` source record under `docs/sources/registry.jsonl`
 - `source-summary.md` with source identity, extraction command, and short
   content summary

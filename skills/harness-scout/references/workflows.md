@@ -7,7 +7,7 @@
    and linked local artifacts. Reuse the matching `SRC-*` record when present.
 3. Classify source visibility and apply the untrusted-input boundary.
 4. Redact private or sensitive extracts before writing tracked files.
-5. Create or update a run folder under `experiments/harness-scout/runs/`.
+5. Create or update a run folder under `.farplane/harness-scout/runs/`.
 6. Extract concrete feature candidates.
 7. Search `docs/systems/*.md`, generated `docs/systems/registry.jsonl`,
    generated `docs/features/registry.jsonl`, and nearby local docs/skills; use

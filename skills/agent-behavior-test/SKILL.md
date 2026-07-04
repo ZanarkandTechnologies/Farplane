@@ -21,8 +21,8 @@ allowed-tools: Read, Glob, Grep, Bash
   the proof target.
 - [ ] Write the child prompt with visible checkpoints, forbidden shortcuts, and
   the final report shape.
-- [ ] Save child-agent artifacts under the ticket, experiment, or declared run
-  directory.
+- [ ] Save child-agent artifacts under the ticket, `.farplane/agent-behavior-test/runs/`,
+  or another declared local run directory.
 - [ ] Score only visible behavior: events, commands, file/artifact evidence,
   checkpoint ledger, and final output.
 - [ ] Use [advise](../advise/SKILL.md) when runner choice, schema strictness, or
@@ -65,8 +65,8 @@ This is broader than skill creation. It covers:
    - use both only when native role behavior must be compared with CLI behavior
 3. Write a compact test prompt that tells the child agent to produce visible
    checkpoints and a final JSON behavior report.
-4. Create an artifact folder under the relevant ticket, experiment, or
-   `experiments/agent-behavior-test/`.
+4. Create an artifact folder under the relevant ticket or
+   `.farplane/agent-behavior-test/runs/`.
 5. Run the child agent and save at least:
    - `prompt.md`
    - `events.jsonl` or `subagent-report.md`
@@ -110,7 +110,7 @@ Use `advise` when these choices materially affect confidence or cost:
 - CLI event log vs native subagent role
 - one exploratory agent run vs repeated fixture regression
 - free-form report vs JSON schema
-- ticket artifact vs experiment artifact
+- ticket artifact vs local `.farplane` run artifact
 - whether failure belongs to the feature, the skill, the test prompt, or weak
   instrumentation
 

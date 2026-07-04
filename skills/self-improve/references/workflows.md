@@ -30,7 +30,7 @@ Use this path when the operator wants the skill itself to remember experiments:
 4. Create one run directory per candidate-comparison session under
    `self-improve/runs/<YYYYMMDD-HHMM-slug>/`.
 5. After each run, copy the short lesson into `program.md` and leave bulky raw
-   logs in `experiments/` unless they are safe and useful.
+   logs in `.farplane/` unless they are safe and useful.
 
 ## Prompt-Profile Optimization
 

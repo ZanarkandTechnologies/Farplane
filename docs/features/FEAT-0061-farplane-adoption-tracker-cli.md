@@ -3,7 +3,7 @@ title: Farplane adoption tracker CLI
 status: implemented
 owner: feature-registry
 created_at: 2026-06-26
-updated_at: 2026-06-27
+updated_at: 2026-07-05
 tags:
   - farplane
   - feature
@@ -12,8 +12,7 @@ refs:
   - bin/core/farplane_adoption.py
   - bin/tests/test_farplane_adoption.py
   - docs/features/registry.jsonl
-  - experiments/decisions/2026-06-24-project-harness-rollout-feature/decision.md
-  - tickets/TASK-0216/ticket.md
+  - tickets/archive/TASK-0216/ticket.md
 feature_id: FEAT-0061
 system_id: SYS-0009
 category: proof
@@ -23,8 +22,7 @@ surfaces:
   - bin/tests/test_farplane_adoption.py
   - docs/features/registry.jsonl
 source_refs:
-  - experiments/decisions/2026-06-24-project-harness-rollout-feature/decision.md
-  - tickets/TASK-0216/ticket.md
+  - tickets/archive/TASK-0216/ticket.md
 external_refs: []
 evidence_refs:
   - bin/tests/test_farplane_adoption.py
@@ -99,8 +97,7 @@ CLI entrypoint:
 
 Source context:
 
-- `experiments/decisions/2026-06-24-project-harness-rollout-feature/decision.md`
-- `tickets/TASK-0216/ticket.md`
+- `tickets/archive/TASK-0216/ticket.md`
 
 Evidence:
 

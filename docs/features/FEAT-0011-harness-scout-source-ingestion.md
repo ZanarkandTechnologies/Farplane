@@ -3,7 +3,7 @@ title: Harness scout source ingestion
 status: implemented
 owner: feature-registry
 created_at: 2026-06-26
-updated_at: 2026-06-27
+updated_at: 2026-07-05
 tags:
   - farplane
   - feature
@@ -11,9 +11,7 @@ tags:
 refs:
   - skills/harness-scout
   - docs/features/registry.jsonl
-  - experiments/harness-scout
   - docs/HISTORY.md
-  - experiments/harness-scout/runs/2026-05-04-self-evolving-agents
 feature_id: FEAT-0011
 system_id: SYS-0008
 category: source-ingestion
@@ -21,13 +19,13 @@ public: true
 surfaces:
   - skills/harness-scout
   - docs/features/registry.jsonl
-  - experiments/harness-scout
 source_refs:
   - docs/HISTORY.md
 external_refs:
   - https://www.youtube.com/watch?v=2zhchG0r6iI
 evidence_refs:
-  - experiments/harness-scout/runs/2026-05-04-self-evolving-agents
+  - skills/harness-scout/SKILL.md
+  - docs/sources/registry.jsonl
   - docs/HISTORY.md
 known_limits: Manual scorecard and dedupe workflow only; no cron polling, OpenClaw integration, or async Codex benchmark runner.
 metrics:
@@ -67,11 +65,11 @@ candidate, ticket, or rejection note.
 
 ## What It Does
 
-- Ingests high-signal external sources into a harness-scout run directory.
+- Ingests high-signal external sources into a local harness-scout run directory.
 - Scores variants with a manual decision matrix instead of treating every source as automatically useful.
 - Classifies findings as adopt, adapt, reject, or defer.
 - Dedupes candidates against existing features, docs, skills, and tickets.
-- Links accepted patterns to feature specs, experiments, or ticket work rather than leaving them as loose research.
+- Links accepted patterns to feature specs, source records, or ticket work rather than leaving them as loose research.
 
 ## User Stories
 
@@ -86,7 +84,7 @@ Source ingestion is evidence intake, not automatic product direction.
 - Every run names the source, extraction question, score basis, and recommendation.
 - Accepted patterns must identify the Farplane owner surface they would change.
 - Rejected or deferred patterns must say why so the same source is not re-litigated blindly.
-- Research artifacts stay in experiments or source records until distilled into a feature, skill, ticket, or doc owner.
+- Research artifacts stay in local `.farplane` state or source records until distilled into a feature, skill, ticket, or doc owner.
 
 ## Surfaces
 
@@ -94,7 +92,6 @@ Owner surfaces:
 
 - `skills/harness-scout`
 - `docs/features/registry.jsonl`
-- `experiments/harness-scout`
 
 Source context:
 
@@ -106,7 +103,8 @@ External context:
 
 Evidence:
 
-- `experiments/harness-scout/runs/2026-05-04-self-evolving-agents`
+- `skills/harness-scout/SKILL.md`
+- `docs/sources/registry.jsonl`
 - `docs/HISTORY.md`
 
 ## Proof And Quality

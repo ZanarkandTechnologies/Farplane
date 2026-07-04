@@ -213,7 +213,6 @@ flowchart LR
 | `docs/systems/` | Authored public system docs plus generated system registry. |
 | `docs/features/` | Authored first-class feature specs plus generated feature registry output. |
 | `docs/fundamentals/` | Harness theory, doctrine, and cross-surface best practices. |
-| `experiments/` | Smoke runs, eval artifacts, prototypes, and temporary proof. |
 | `.farplane/` | Ignored project-local runtime, generated, event, and product state. |
 | `qa/` | QA cookbook, browser proof paths, and reusable test-entry guidance. |
 | `rules/` | Machine-readable local rule files. Durable best-practice docs live under `docs/features/`. |
@@ -260,13 +259,17 @@ farplane ui start
 
 What Core owns:
 
-- `farplane install`: reruns this repo's install flow, renders Codex config,
-  links hooks, and refreshes the global CLI link.
-- `farplane doctor`: checks Core install, hook links, rendered config, and the
-  linked UI repo.
+- `farplane doctor`: reports readiness for Core install, hooks, linked UI repo,
+  local config hygiene, and this checkout's Doppler secret source.
+- `farplane install`: performs safe mechanical install/reinstall work: renders
+  Codex config, links hooks, and refreshes the global CLI link. In this
+  checkout it automatically runs the installer subprocess through Doppler when
+  Doppler is configured and the current shell is not already Doppler-injected.
 - `farplane hooks install`: refreshes the hook install through Core.
 - `farplane hooks doctor`: verifies the Core-owned hook links and rendered
   telemetry config.
+- `farplane run -- <command>`: runs a command through the current project's
+  Doppler secret environment.
 - `farplane metrics primitives --project-root /path/to/project --date YYYY-MM-DD --json`:
   refreshes Core primitive readings for ticket/KPI/product counts, Codex thread
   usage, burn source gaps, and ticket/thread association backfill.
@@ -277,16 +280,30 @@ What Core owns:
 - `farplane ui link /path/to/Farplane-UI`: stores the UI checkout in
   `~/.farplane/farplane-cli.json`.
 - `farplane ui start`: starts the linked UI checkout.
+- `farplane config doctor --json`: checks runtime secret source hygiene without
+  printing secret values.
 - `farplane office ...`, `farplane team ...`, `farplane agent ...`,
   `farplane onboarding`, `farplane status`, and `farplane whoami`: delegate to
   the linked Farplane-UI module CLI while that implementation still lives there.
 
-Farplane runtime configuration is owned by `~/.farplane/config.toml` when
-Farplane UI is linked. The UI writes local settings and API keys there, and
-Farplane Core reads it for delegated commands, Codex lifecycle hooks, and
-`install.sh` rendering. `config.toml.example` still renders the installed
-`~/.codex/config.toml`, but that file is a Codex adapter output rather than the
+Farplane consumes runtime secrets as environment variables first. This checkout
+uses Doppler for local secret injection, so credentialed scripts should run
+through `farplane run -- <command>` or `doppler run -- <command>`. `farplane
+run` uses the current working directory's Doppler setup, which lets scripts live
+under `skills/` while secrets come from the project scope. Farplane does not
+store Doppler tokens in the repo. Private `~/.farplane/config.toml` remains a
+local fallback/cache for UI-managed settings and bootstrap values.
+`config.toml.example` still renders the installed `~/.codex/config.toml`, but
+that file is a Codex adapter output and the lowest-priority fallback, not the
 Farplane source of truth.
+
+The command grammar is intentionally small: `doctor` reports readiness,
+`install` applies safe mechanical repair/render/link behavior, and
+`run -- <command>` executes arbitrary credentialed commands.
+
+Keep tracked project coordinates such as URLs, aliases, safe IDs, and metric
+recipes in `farplane/bindings.yaml`. Keep API keys, tokens, passwords, OAuth
+credentials, and webhook secrets in runtime env or private local config only.
 
 Override the linked UI checkout for one shell with `FARPLANE_UI_REPO=/path/to/Farplane-UI`.
 Use `FARPLANE_CLI_LINK_DIR=/custom/bin bash install.sh` if your preferred

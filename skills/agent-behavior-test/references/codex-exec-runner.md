@@ -63,7 +63,7 @@ Ask the child agent to emit a visible behavior report:
 python3 skills/agent-behavior-test/scripts/run_codex_exec_behavior_test.py \
   --cwd . \
   --prompt-file prompt.md \
-  --out experiments/agent-behavior-test/demo
+  --out .farplane/agent-behavior-test/runs/demo
 ```
 
 Use `--schema-file` when the final answer must match a JSON schema. Use

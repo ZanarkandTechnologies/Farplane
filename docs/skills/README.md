@@ -262,10 +262,11 @@ scores.
 - `bin/validators/check_skill_todo_tiers.py` audits every first-load todo edge against the
   one-level loading boundary. Use `--allow-peer-tier3` while Tier 3 application
   handoffs such as content skill -> media execution skill remain intentional.
-- `bin/validators/check_skill_todo_tiers.py --hardcase-on-failure` writes a deduplicated
-  sanitized hardcase under `experiments/hardcases/` when the validator catches
-  a clear skill todo tier violation. Treat those files as eval follow-up seeds:
-  durable hard cases should become runnable eval rows with hardcase metadata.
+- `bin/validators/check_skill_todo_tiers.py --hardcase-on-failure` should capture
+  a deduplicated sanitized eval case, or a `.farplane/evals/` follow-up seed,
+  when the validator catches a clear skill todo tier violation. Durable hard
+  cases should be runnable eval rows with hardcase metadata, not standalone
+  legacy experiment backlog files.
 
 ## Tier 3 Pipeline Shape
 

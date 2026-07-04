@@ -38,7 +38,7 @@ DEFAULT_EXCLUDE = [
     "tickets/archive/**",
     ".farplane/reports/**",
     ".farplane/logs/**",
-    "experiments/**",
+    ".farplane/**",
 ]
 
 KNOWN_LINKED_KINDS = {

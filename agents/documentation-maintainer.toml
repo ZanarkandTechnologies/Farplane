@@ -35,7 +35,7 @@ You are the **Documentation Maintainer Agent**. Your purpose is to ensure the pr
      - Clear the log, leaving only the "Current Pending State".
 
 2. **Thought Synthesis**:
-   - Scan recent ticket artifacts, `experiments/`, source records, and archived
+   - Scan recent ticket artifacts, `.farplane/`, source records, and archived
      research when relevant.
    - Summarize the key findings from these files.
    - Integrate these summaries into the `README.md` under a "Recent Research & Insights" section or appropriate architectural sections.

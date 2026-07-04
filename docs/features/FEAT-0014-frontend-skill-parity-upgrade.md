@@ -3,7 +3,7 @@ title: Frontend skill parity upgrade
 status: implemented
 owner: feature-registry
 created_at: 2026-06-26
-updated_at: 2026-06-27
+updated_at: 2026-07-05
 tags:
   - farplane
   - feature
@@ -15,10 +15,7 @@ refs:
   - skills/delegate-frontend
   - skills/visual-qa
   - skills/landing-page
-  - experiments/harness-scout/runs/2026-05-09-frontend-skill-parity
   - "docs/MEMORY.md#MEM-0085"
-  - experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/implementation.md
-  - experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/post-implementation-review.md
   - docs/HISTORY.md
 feature_id: FEAT-0014
 system_id: SYS-0010
@@ -32,7 +29,6 @@ surfaces:
   - skills/visual-qa
   - skills/landing-page
 source_refs:
-  - experiments/harness-scout/runs/2026-05-09-frontend-skill-parity
   - "docs/MEMORY.md#MEM-0085"
 external_refs:
   - https://github.com/nextlevelbuilder/ui-ux-pro-max-skill/tree/main/.claude/skills
@@ -42,8 +38,10 @@ external_refs:
   - https://ui.shadcn.com/docs/components-json
   - https://ui.shadcn.com/r/registries.json
 evidence_refs:
-  - experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/implementation.md
-  - experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/post-implementation-review.md
+  - skills/frontend-craft/SKILL.md
+  - skills/frontend-design/SKILL.md
+  - skills/visual-design/SKILL.md
+  - skills/visual-qa/SKILL.md
   - docs/HISTORY.md
 known_limits: Docs/skill-contract upgrade only; no automated eval suite or searchable frontend rule corpus yet.
 metrics:
@@ -117,7 +115,6 @@ Owner surfaces:
 
 Source context:
 
-- `experiments/harness-scout/runs/2026-05-09-frontend-skill-parity`
 - `docs/MEMORY.md#MEM-0085`
 
 External context:
@@ -131,8 +128,10 @@ External context:
 
 Evidence:
 
-- `experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/implementation.md`
-- `experiments/harness-scout/runs/2026-05-09-frontend-skill-parity/post-implementation-review.md`
+- `skills/frontend-craft/SKILL.md`
+- `skills/frontend-design/SKILL.md`
+- `skills/visual-design/SKILL.md`
+- `skills/visual-qa/SKILL.md`
 - `docs/HISTORY.md`
 
 ## Proof And Quality

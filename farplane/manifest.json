@@ -83,8 +83,7 @@
         "farplane/products.md",
         "tickets/archive/**",
         ".farplane/reports/**",
-        ".farplane/logs/**",
-        "experiments/**"
+        ".farplane/logs/**"
       ]
     }
   }

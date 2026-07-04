@@ -300,9 +300,9 @@ The review scoring model is canonical in `skills/review/*`, not in this file.
   and design-polish work through the Pi plus Kimi K2.6 profile
 - [bin](bin)
   Purpose: hooks, validators, runtime helpers
-- [experiments](experiments)
-  Purpose: smoke runs, source-ingestion fixtures, eval outputs, and proof
-  artifacts
+- `.farplane/` local state
+  Purpose: ignored project-local runtime, generated, event, scout, eval, and
+  product state
 
 ## Ownership Boundaries
 

@@ -9,7 +9,7 @@ before_ref: skills/business-harness/SKILL.md
 after_ref: skills/harness-creator/SKILL.md
 reasoning_basis: deliberative_advice
 proof_artifacts:
-  - experiments/decisions/2026-06-13-harness-creator/decision.md
+  - .farplane/automation/decisions/2026-06-13-harness-creator/decision.md
   - tickets/TASK-0201/ticket.md
   - skills/harness-creator/SKILL.md
   - skills/harness-creator/references/harness-il.md

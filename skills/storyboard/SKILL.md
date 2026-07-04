@@ -78,7 +78,7 @@ scene handoff, asset needs, proof, and blocker conditions.
 - [ ] 2. Choose the artifact home.
   - [ ] Use `tickets/TASK-XXXX/artifacts/storyboard.md` when an active
     ticket owns the work.
-  - [ ] Use `experiments/content/<date>-<slug>/storyboard.md` for a fast
+  - [ ] Use `.farplane/content/<date>-<slug>/storyboard.md` for a fast
     proof run without an owning ticket.
   - [ ] Keep chat-only output only for tiny sketches where no production or
     review handoff is expected.

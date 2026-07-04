@@ -3,7 +3,7 @@ title: Video-to-skill source reconstruction
 status: implemented
 owner: feature-registry
 created_at: 2026-06-26
-updated_at: 2026-06-27
+updated_at: 2026-07-05
 tags:
   - farplane
   - feature
@@ -14,9 +14,6 @@ refs:
   - skills/video-understanding
   - SRC-0008
   - tickets/archive/TASK-0158/ticket.md
-  - experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/media-ingest-bundle.md
-  - experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/video-reconstruction-brief.md
-  - experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/video-understanding-smoke-log.md
   - docs/HISTORY.md
 feature_id: FEAT-0025
 system_id: SYS-0008
@@ -32,9 +29,9 @@ source_refs:
 external_refs:
   - https://www.instagram.com/p/DYijhcetmBP/
 evidence_refs:
-  - experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/media-ingest-bundle.md
-  - experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/video-reconstruction-brief.md
-  - experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/video-understanding-smoke-log.md
+  - skills/media-ingest/SKILL.md
+  - skills/video-understanding/SKILL.md
+  - tickets/archive/TASK-0158/ticket.md
   - docs/HISTORY.md
 known_limits: Support-skill and artifact contract only; platform fetching still depends on available local tools, public access, or user-provided exports, and transcript gaps must be recorded rather than hidden.
 metrics:
@@ -112,9 +109,9 @@ External context:
 
 Evidence:
 
-- `experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/media-ingest-bundle.md`
-- `experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/video-reconstruction-brief.md`
-- `experiments/harness-scout/runs/2026-05-20-instagram-claude-portal-video/video-understanding-smoke-log.md`
+- `skills/media-ingest/SKILL.md`
+- `skills/video-understanding/SKILL.md`
+- `tickets/archive/TASK-0158/ticket.md`
 - `docs/HISTORY.md`
 
 ## Proof And Quality

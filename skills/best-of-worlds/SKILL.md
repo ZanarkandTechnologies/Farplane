@@ -105,7 +105,7 @@ python3 skills/best-of-worlds/scripts/init_synthesis.py \
 This creates:
 
 ```text
-experiments/best-of-worlds/<name>/
+.farplane/best-of-worlds/<name>/
   sources.jsonl
   feature-ledger.md
   decision-matrix.md

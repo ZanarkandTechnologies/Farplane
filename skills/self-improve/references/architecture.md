@@ -24,6 +24,6 @@ The target skill is not mutated until the eval baseline exists.
 
 ## Storage Boundary
 
-Use `experiments/self-improve/` for scratch runs and bulky logs. Use
+Use `.farplane/self-improve/` for scratch runs and bulky logs. Use
 `skills/<target-skill>/self-improve/` only for durable evals, run summaries, and
 lessons that future improvement passes should read before editing.

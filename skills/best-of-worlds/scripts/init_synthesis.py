@@ -15,7 +15,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--name", required=True, help="Workspace slug")
     parser.add_argument("--target", required=True, help="Synthesis target")
     parser.add_argument("--source", action="append", default=[], help="Source URL, repo, or project path")
-    parser.add_argument("--directory", default="experiments/best-of-worlds")
+    parser.add_argument("--directory", default=".farplane/best-of-worlds")
     parser.add_argument("--force", action="store_true")
     return parser.parse_args()
 

@@ -11,7 +11,7 @@ and a compact LLM response policy.
 ## Run Locally
 
 ```bash
-cd experiments/livekit-phone-chaser
+cd farplane/phone-chaser
 uv sync
 uv run src/agent.py dev
 ```
@@ -46,3 +46,9 @@ These are rendered into `~/.codex/config.toml` from `~/.farplane/config.toml`.
 - `LIVEKIT_STT_MODEL` defaults to `deepgram/nova-3:en`
 - `LIVEKIT_LLM_MODEL` defaults to `google/gemma-4-31b-it`
 - `FARPLANE_PHONE_CHASER_CONVERSATION_SECONDS` defaults to `45`
+
+## Skill Entry
+
+Use `skills/phone-chaser/` to dispatch reminder calls through this deployed
+agent. Keep deployment code here; keep operator workflow, safety gates, and
+call dispatch helpers in the skill package.

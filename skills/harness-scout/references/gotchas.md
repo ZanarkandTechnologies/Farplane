@@ -20,7 +20,7 @@
   help analysis, but it is not a dependency unless it becomes a local skill
   package.
 - Do not store bulky transcripts in `docs/`, `skills/`, or tickets. Keep public
-  source extraction artifacts in `experiments/`.
+  source extraction artifacts in `.farplane/`.
 - Do not store private source extracts, secrets, tokens, cookies, credentials,
   PII, or customer/internal data in tracked files. Record a redacted summary and
   the retention decision instead.

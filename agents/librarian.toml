@@ -50,7 +50,7 @@ by the caller.
 ## Output requirements (even when nothing is found)
 
 When a durable artifact is requested, write it to the active ticket,
-`experiments/research/`, or the caller-provided artifact path. Include:
+`.farplane/research/`, or the caller-provided artifact path. Include:
 
 - **Queries attempted** (literal patterns used)
 - **Top repos considered** (or “none”) + why rejected

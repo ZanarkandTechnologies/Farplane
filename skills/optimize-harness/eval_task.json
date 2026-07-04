@@ -52,6 +52,10 @@
       "optimize-harness",
       "hardcase"
     ],
+    "hardcase": true,
+    "difficulty": "high",
+    "benchmark_value": "Tests whether optimize-harness turns hard corrections into runnable eval coverage instead of a raw backlog.",
+    "sanitization_notes": "Use clean-room AGI Toy Shop details; do not include raw private transcript text.",
     "notes": "Tests the TASK-0190 direction that hardcase is eval metadata, not a separate capture backlog."
   },
   {

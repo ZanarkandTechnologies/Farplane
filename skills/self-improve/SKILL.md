@@ -150,7 +150,7 @@ Use an experiment directory for scratch or early eval work when native Goal
 context files are not yet durable enough:
 
 ```text
-experiments/self-improve/<skill-name>/<date-slug>/
+.farplane/self-improve/<skill-name>/<date-slug>/
   evals/cases.jsonl
   evals/assertions.md
   results/scores.jsonl
@@ -201,7 +201,7 @@ self-improve/results/failure_analysis.md
 ```
 
 Only promote evals and run summaries into the target skill package after they
-prove reusable. Keep raw scratch logs in `experiments/` when they are bulky,
+prove reusable. Keep raw scratch logs in `.farplane/` when they are bulky,
 secret-bearing, one-off, or too noisy for durable skill memory. For accepted
 changes to first-load instructions, use `skill-maintenance` so mandatory logic
 lands in the source `SKILL.md` rather than being buried in references or

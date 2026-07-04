@@ -13,7 +13,7 @@ refs:
   - docs/skills/README.md
   - docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md
   - docs/features/FEAT-0008-artifact-first-qa-and-completion-proof.md
-  - tickets/TASK-0228/ticket.md
+  - tickets/archive/TASK-0228/ticket.md
   - skills/best-of-worlds/references/metric-discovery.md
   - skills/metric-advisor/SKILL.md
   - skills/metric-advisor/eval_task.json
@@ -27,14 +27,14 @@ surfaces:
   - docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md
   - docs/features/FEAT-0008-artifact-first-qa-and-completion-proof.md
 source_refs:
-  - tickets/TASK-0228/ticket.md
+  - tickets/archive/TASK-0228/ticket.md
   - skills/best-of-worlds/references/metric-discovery.md
   - docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md
 external_refs: []
 evidence_refs:
   - skills/metric-advisor/SKILL.md
   - skills/metric-advisor/eval_task.json
-  - tickets/TASK-0228/ticket.md
+  - tickets/archive/TASK-0228/ticket.md
 known_limits: Advisory metric-card contract only; callers still own execution, proof, review, and writeback. It must preserve qualitative `none mechanical` cases instead of forcing fake scores.
 metrics:
   - metric_card_traceability_pass
@@ -104,7 +104,7 @@ Owner surfaces:
 
 Source context:
 
-- `tickets/TASK-0228/ticket.md`
+- `tickets/archive/TASK-0228/ticket.md`
 - `skills/best-of-worlds/references/metric-discovery.md`
 - `docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md`
 
@@ -112,7 +112,7 @@ Evidence:
 
 - `skills/metric-advisor/SKILL.md`
 - `skills/metric-advisor/eval_task.json`
-- `tickets/TASK-0228/ticket.md`
+- `tickets/archive/TASK-0228/ticket.md`
 
 ## Proof And Quality
 

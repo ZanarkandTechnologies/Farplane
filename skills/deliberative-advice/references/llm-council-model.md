@@ -73,7 +73,7 @@ non-ticket ephemeral decision:
   .farplane/context/<YYYYMMDD-HHMM>-<slug>-council-context.md
 
 repo-worthy reusable decision:
-  experiments/decisions/<YYYY-MM-DD>-<slug>/context.md
+  .farplane/automation/decisions/<YYYY-MM-DD>-<slug>/context.md
 ```
 
 Default packet fields:

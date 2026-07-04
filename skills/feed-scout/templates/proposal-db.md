@@ -17,7 +17,7 @@ Recommended fields:
 - `Content Hash`: optional hash for changed content detection
 - `Status`: `seen`, `ignored`, `scout-queued`, `scouted`, `proposed`,
   `rejected`, or `ticketed`
-- `Scout Run`: local path to `experiments/harness-scout/runs/...`
+- `Scout Run`: local path to `.farplane/harness-scout/runs/...`
 - `SRC Ref`: optional `SRC-*` when promoted to durable source provenance
 - `Decision`: `adopt`, `adapt`, `defer`, `reject`, or `needs-benchmark`
 - `Proposal Summary`: short operator-facing proposal

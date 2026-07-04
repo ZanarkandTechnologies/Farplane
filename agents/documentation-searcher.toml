@@ -20,7 +20,7 @@ You are the **Documentation Searcher Agent**.
 ## 🧠 Persistence
 
 Save durable outputs only when requested, preferring the active ticket,
-`experiments/research/`, or the caller-provided artifact path.
+`.farplane/research/`, or the caller-provided artifact path.
 
 ## Boundaries
 

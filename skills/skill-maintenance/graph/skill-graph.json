@@ -1,12 +1,12 @@
 {
   "counts": {
     "edge_types": {
-      "common-chain": 21,
-      "markdown-ref": 321,
-      "todo-chain": 332
+      "common-chain": 51,
+      "markdown-ref": 328,
+      "todo-chain": 375
     },
-    "edges": 674,
-    "nodes": 101,
+    "edges": 754,
+    "nodes": 107,
     "skill_heat_config": {
       "default_top_n": 25,
       "event_types": [
@@ -26,12 +26,12 @@
     ],
     "sources": {
       "external": 3,
-      "local": 98
+      "local": 104
     },
     "tiers": {
       "1": 6,
       "2": 38,
-      "3": 57
+      "3": 63
     }
   },
   "edges": [
@@ -216,6 +216,132 @@
       "type": "todo-chain"
     },
     {
+      "chain_source": "todo_list",
+      "label": "todo.2",
+      "order": 2,
+      "source": "ai-image-advisor",
+      "target": "asset-advisor",
+      "target_ref": "asset-advisor",
+      "type": "todo-chain"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.1",
+      "order": 1,
+      "source": "ai-image-advisor",
+      "target": "content-impl-plan",
+      "target_ref": "content-impl-plan",
+      "type": "todo-chain"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.5",
+      "order": 5,
+      "source": "ai-image-advisor",
+      "target": "frontend-craft",
+      "target_ref": "frontend-craft",
+      "type": "todo-chain"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.3",
+      "order": 3,
+      "source": "ai-image-advisor",
+      "target": "product-photography",
+      "target_ref": "product-photography",
+      "type": "todo-chain"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.4",
+      "order": 4,
+      "source": "ai-image-advisor",
+      "target": "social-content",
+      "target_ref": "social-content",
+      "type": "todo-chain"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.3",
+      "order": 3,
+      "source": "ai-video-advisor",
+      "target": "asset-advisor",
+      "target_ref": "asset-advisor",
+      "type": "todo-chain"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.7",
+      "order": 7,
+      "source": "ai-video-advisor",
+      "target": "audio-advisor",
+      "target_ref": "audio-advisor",
+      "type": "todo-chain"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.5",
+      "order": 5,
+      "source": "ai-video-advisor",
+      "target": "avatar-advisor",
+      "target_ref": "avatar-advisor",
+      "type": "todo-chain"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.1",
+      "order": 1,
+      "source": "ai-video-advisor",
+      "target": "content-impl-plan",
+      "target_ref": "content-impl-plan",
+      "type": "todo-chain"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.8",
+      "order": 8,
+      "source": "ai-video-advisor",
+      "target": "frontend-craft",
+      "target_ref": "frontend-craft",
+      "type": "todo-chain"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.4",
+      "order": 4,
+      "source": "ai-video-advisor",
+      "target": "remotion",
+      "target_ref": "remotion",
+      "type": "todo-chain"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.2",
+      "order": 2,
+      "source": "ai-video-advisor",
+      "target": "storyboard",
+      "target_ref": "storyboard",
+      "type": "todo-chain"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.6",
+      "order": 6,
+      "source": "ai-video-advisor",
+      "target": "video-production",
+      "target_ref": "video-production",
+      "type": "todo-chain"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.9",
+      "order": 9,
+      "source": "ai-video-advisor",
+      "target": "visual-qa",
+      "target_ref": "visual-qa",
+      "type": "todo-chain"
+    },
+    {
       "label": "markdown-ref",
       "source": "apify",
       "target": "advise",
@@ -264,6 +390,164 @@
       "type": "todo-chain"
     },
     {
+      "label": "common_chains.after",
+      "source": "asset-advisor",
+      "target": "ai-image-advisor",
+      "target_ref": "ai-image-advisor",
+      "type": "common-chain"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.1",
+      "order": 1,
+      "source": "asset-advisor",
+      "target": "ai-image-advisor",
+      "target_ref": "ai-image-advisor",
+      "type": "todo-chain"
+    },
+    {
+      "label": "common_chains.after",
+      "source": "asset-advisor",
+      "target": "ai-video-advisor",
+      "target_ref": "ai-video-advisor",
+      "type": "common-chain"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.2",
+      "order": 2,
+      "source": "asset-advisor",
+      "target": "ai-video-advisor",
+      "target_ref": "ai-video-advisor",
+      "type": "todo-chain"
+    },
+    {
+      "label": "common_chains.after",
+      "source": "asset-advisor",
+      "target": "audio-advisor",
+      "target_ref": "audio-advisor",
+      "type": "common-chain"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.4",
+      "order": 4,
+      "source": "asset-advisor",
+      "target": "audio-advisor",
+      "target_ref": "audio-advisor",
+      "type": "todo-chain"
+    },
+    {
+      "label": "common_chains.after",
+      "source": "asset-advisor",
+      "target": "avatar-advisor",
+      "target_ref": "avatar-advisor",
+      "type": "common-chain"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.3",
+      "order": 3,
+      "source": "asset-advisor",
+      "target": "avatar-advisor",
+      "target_ref": "avatar-advisor",
+      "type": "todo-chain"
+    },
+    {
+      "label": "common_chains.after",
+      "source": "asset-advisor",
+      "target": "remotion",
+      "target_ref": "remotion",
+      "type": "common-chain"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.5",
+      "order": 5,
+      "source": "asset-advisor",
+      "target": "remotion",
+      "target_ref": "remotion",
+      "type": "todo-chain"
+    },
+    {
+      "label": "common_chains.after",
+      "source": "asset-advisor",
+      "target": "storyboard",
+      "target_ref": "storyboard",
+      "type": "common-chain"
+    },
+    {
+      "label": "common_chains.after",
+      "source": "audio-advisor",
+      "target": "ai-video-advisor",
+      "target_ref": "ai-video-advisor",
+      "type": "common-chain"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.2",
+      "order": 2,
+      "source": "audio-advisor",
+      "target": "ai-video-advisor",
+      "target_ref": "ai-video-advisor",
+      "type": "todo-chain"
+    },
+    {
+      "label": "common_chains.after",
+      "source": "audio-advisor",
+      "target": "asset-advisor",
+      "target_ref": "asset-advisor",
+      "type": "common-chain"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.3",
+      "order": 3,
+      "source": "audio-advisor",
+      "target": "asset-advisor",
+      "target_ref": "asset-advisor",
+      "type": "todo-chain"
+    },
+    {
+      "label": "common_chains.after",
+      "source": "audio-advisor",
+      "target": "avatar-advisor",
+      "target_ref": "avatar-advisor",
+      "type": "common-chain"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.1",
+      "order": 1,
+      "source": "audio-advisor",
+      "target": "avatar-advisor",
+      "target_ref": "avatar-advisor",
+      "type": "todo-chain"
+    },
+    {
+      "label": "common_chains.after",
+      "source": "audio-advisor",
+      "target": "remotion",
+      "target_ref": "remotion",
+      "type": "common-chain"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.4",
+      "order": 4,
+      "source": "audio-advisor",
+      "target": "remotion",
+      "target_ref": "remotion",
+      "type": "todo-chain"
+    },
+    {
+      "label": "common_chains.after",
+      "source": "audio-advisor",
+      "target": "storyboard",
+      "target_ref": "storyboard",
+      "type": "common-chain"
+    },
+    {
       "chain_source": "todo_list",
       "label": "todo.2",
       "order": 2,
@@ -279,6 +563,77 @@
       "source": "automation-advisor",
       "target": "pulse-update",
       "target_ref": "pulse-update",
+      "type": "todo-chain"
+    },
+    {
+      "label": "common_chains.after",
+      "source": "avatar-advisor",
+      "target": "ai-image-advisor",
+      "target_ref": "ai-image-advisor",
+      "type": "common-chain"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.1",
+      "order": 1,
+      "source": "avatar-advisor",
+      "target": "ai-image-advisor",
+      "target_ref": "ai-image-advisor",
+      "type": "todo-chain"
+    },
+    {
+      "label": "common_chains.after",
+      "source": "avatar-advisor",
+      "target": "ai-video-advisor",
+      "target_ref": "ai-video-advisor",
+      "type": "common-chain"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.3",
+      "order": 3,
+      "source": "avatar-advisor",
+      "target": "ai-video-advisor",
+      "target_ref": "ai-video-advisor",
+      "type": "todo-chain"
+    },
+    {
+      "label": "common_chains.after",
+      "source": "avatar-advisor",
+      "target": "asset-advisor",
+      "target_ref": "asset-advisor",
+      "type": "common-chain"
+    },
+    {
+      "label": "common_chains.after",
+      "source": "avatar-advisor",
+      "target": "audio-advisor",
+      "target_ref": "audio-advisor",
+      "type": "common-chain"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.2",
+      "order": 2,
+      "source": "avatar-advisor",
+      "target": "audio-advisor",
+      "target_ref": "audio-advisor",
+      "type": "todo-chain"
+    },
+    {
+      "label": "common_chains.after",
+      "source": "avatar-advisor",
+      "target": "remotion",
+      "target_ref": "remotion",
+      "type": "common-chain"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.4",
+      "order": 4,
+      "source": "avatar-advisor",
+      "target": "remotion",
+      "target_ref": "remotion",
       "type": "todo-chain"
     },
     {
@@ -622,6 +977,125 @@
       "source": "commit-message",
       "target": "review",
       "target_ref": "review",
+      "type": "todo-chain"
+    },
+    {
+      "label": "common_chains.after",
+      "source": "content-impl-plan",
+      "target": "ai-image-advisor",
+      "target_ref": "ai-image-advisor",
+      "type": "common-chain"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.5",
+      "order": 5,
+      "source": "content-impl-plan",
+      "target": "ai-image-advisor",
+      "target_ref": "ai-image-advisor",
+      "type": "todo-chain"
+    },
+    {
+      "label": "common_chains.after",
+      "source": "content-impl-plan",
+      "target": "ai-video-advisor",
+      "target_ref": "ai-video-advisor",
+      "type": "common-chain"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.6",
+      "order": 6,
+      "source": "content-impl-plan",
+      "target": "ai-video-advisor",
+      "target_ref": "ai-video-advisor",
+      "type": "todo-chain"
+    },
+    {
+      "label": "common_chains.after",
+      "source": "content-impl-plan",
+      "target": "asset-advisor",
+      "target_ref": "asset-advisor",
+      "type": "common-chain"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.2",
+      "order": 2,
+      "source": "content-impl-plan",
+      "target": "asset-advisor",
+      "target_ref": "asset-advisor",
+      "type": "todo-chain"
+    },
+    {
+      "label": "common_chains.after",
+      "source": "content-impl-plan",
+      "target": "audio-advisor",
+      "target_ref": "audio-advisor",
+      "type": "common-chain"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.4",
+      "order": 4,
+      "source": "content-impl-plan",
+      "target": "audio-advisor",
+      "target_ref": "audio-advisor",
+      "type": "todo-chain"
+    },
+    {
+      "label": "common_chains.after",
+      "source": "content-impl-plan",
+      "target": "avatar-advisor",
+      "target_ref": "avatar-advisor",
+      "type": "common-chain"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.3",
+      "order": 3,
+      "source": "content-impl-plan",
+      "target": "avatar-advisor",
+      "target_ref": "avatar-advisor",
+      "type": "todo-chain"
+    },
+    {
+      "label": "common_chains.after",
+      "source": "content-impl-plan",
+      "target": "remotion",
+      "target_ref": "remotion",
+      "type": "common-chain"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.7",
+      "order": 7,
+      "source": "content-impl-plan",
+      "target": "remotion",
+      "target_ref": "remotion",
+      "type": "todo-chain"
+    },
+    {
+      "label": "common_chains.after",
+      "source": "content-impl-plan",
+      "target": "review",
+      "target_ref": "review",
+      "type": "common-chain"
+    },
+    {
+      "label": "common_chains.after",
+      "source": "content-impl-plan",
+      "target": "storyboard",
+      "target_ref": "storyboard",
+      "type": "common-chain"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.1",
+      "order": 1,
+      "source": "content-impl-plan",
+      "target": "storyboard",
+      "target_ref": "storyboard",
       "type": "todo-chain"
     },
     {
@@ -1530,6 +2004,38 @@
     {
       "label": "markdown-ref",
       "source": "frontend-craft",
+      "target": "ai-image-advisor",
+      "target_ref": "ai-image-advisor",
+      "type": "markdown-ref"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.7",
+      "order": 7,
+      "source": "frontend-craft",
+      "target": "ai-image-advisor",
+      "target_ref": "ai-image-advisor",
+      "type": "todo-chain"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "frontend-craft",
+      "target": "ai-video-advisor",
+      "target_ref": "ai-video-advisor",
+      "type": "markdown-ref"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.8",
+      "order": 8,
+      "source": "frontend-craft",
+      "target": "ai-video-advisor",
+      "target_ref": "ai-video-advisor",
+      "type": "todo-chain"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "frontend-craft",
       "target": "best-of-worlds",
       "target_ref": "best-of-worlds",
       "type": "markdown-ref"
@@ -1573,22 +2079,6 @@
       "source": "frontend-craft",
       "target": "functional-ui",
       "target_ref": "functional-ui",
-      "type": "todo-chain"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "frontend-craft",
-      "target": "image-generation",
-      "target_ref": "image-generation",
-      "type": "markdown-ref"
-    },
-    {
-      "chain_source": "todo_list",
-      "label": "todo.7",
-      "order": 7,
-      "source": "frontend-craft",
-      "target": "image-generation",
-      "target_ref": "image-generation",
       "type": "todo-chain"
     },
     {
@@ -1653,22 +2143,6 @@
       "source": "frontend-craft",
       "target": "research",
       "target_ref": "research",
-      "type": "todo-chain"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "frontend-craft",
-      "target": "video-generation",
-      "target_ref": "video-generation",
-      "type": "markdown-ref"
-    },
-    {
-      "chain_source": "todo_list",
-      "label": "todo.8",
-      "order": 8,
-      "source": "frontend-craft",
-      "target": "video-generation",
-      "target_ref": "video-generation",
       "type": "todo-chain"
     },
     {
@@ -2487,33 +2961,6 @@
     },
     {
       "chain_source": "todo_list",
-      "label": "todo.3",
-      "order": 3,
-      "source": "image-generation",
-      "target": "frontend-craft",
-      "target_ref": "frontend-craft",
-      "type": "todo-chain"
-    },
-    {
-      "chain_source": "todo_list",
-      "label": "todo.1",
-      "order": 1,
-      "source": "image-generation",
-      "target": "product-photography",
-      "target_ref": "product-photography",
-      "type": "todo-chain"
-    },
-    {
-      "chain_source": "todo_list",
-      "label": "todo.2",
-      "order": 2,
-      "source": "image-generation",
-      "target": "social-content",
-      "target_ref": "social-content",
-      "type": "todo-chain"
-    },
-    {
-      "chain_source": "todo_list",
       "label": "todo.8",
       "order": 8,
       "source": "impl-plan",
@@ -2636,6 +3083,29 @@
       "type": "todo-chain"
     },
     {
+      "label": "common_chains.after",
+      "source": "infographic",
+      "target": "ai-image-advisor",
+      "target_ref": "ai-image-advisor",
+      "type": "common-chain"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "infographic",
+      "target": "ai-image-advisor",
+      "target_ref": "ai-image-advisor",
+      "type": "markdown-ref"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.5",
+      "order": 5,
+      "source": "infographic",
+      "target": "ai-image-advisor",
+      "target_ref": "ai-image-advisor",
+      "type": "todo-chain"
+    },
+    {
       "label": "markdown-ref",
       "source": "infographic",
       "target": "data-viz",
@@ -2681,29 +3151,6 @@
       "source": "infographic",
       "target": "frontend-craft",
       "target_ref": "frontend-craft",
-      "type": "todo-chain"
-    },
-    {
-      "label": "common_chains.after",
-      "source": "infographic",
-      "target": "image-generation",
-      "target_ref": "image-generation",
-      "type": "common-chain"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "infographic",
-      "target": "image-generation",
-      "target_ref": "image-generation",
-      "type": "markdown-ref"
-    },
-    {
-      "chain_source": "todo_list",
-      "label": "todo.5",
-      "order": 5,
-      "source": "infographic",
-      "target": "image-generation",
-      "target_ref": "image-generation",
       "type": "todo-chain"
     },
     {
@@ -2755,8 +3202,15 @@
     {
       "label": "markdown-ref",
       "source": "ingest-content",
-      "target": "image-generation",
-      "target_ref": "image-generation",
+      "target": "ai-image-advisor",
+      "target_ref": "ai-image-advisor",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "ingest-content",
+      "target": "ai-video-advisor",
+      "target_ref": "ai-video-advisor",
       "type": "markdown-ref"
     },
     {
@@ -2783,6 +3237,15 @@
       "type": "todo-chain"
     },
     {
+      "chain_source": "todo_list",
+      "label": "todo.3",
+      "order": 3,
+      "source": "ingest-content",
+      "target": "storyboard",
+      "target_ref": "storyboard",
+      "type": "todo-chain"
+    },
+    {
       "label": "common_chains.after",
       "source": "ingest-content",
       "target": "summarize",
@@ -2804,13 +3267,6 @@
       "target": "summarize",
       "target_ref": "summarize",
       "type": "todo-chain"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "ingest-content",
-      "target": "video-generation",
-      "target_ref": "video-generation",
-      "type": "markdown-ref"
     },
     {
       "label": "common_chains.after",
@@ -3771,6 +4227,22 @@
     {
       "label": "markdown-ref",
       "source": "product-photography",
+      "target": "ai-image-advisor",
+      "target_ref": "ai-image-advisor",
+      "type": "markdown-ref"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.2",
+      "order": 2,
+      "source": "product-photography",
+      "target": "ai-image-advisor",
+      "target_ref": "ai-image-advisor",
+      "type": "todo-chain"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "product-photography",
       "target": "frontend-craft",
       "target_ref": "frontend-craft",
       "type": "markdown-ref"
@@ -3782,22 +4254,6 @@
       "source": "product-photography",
       "target": "frontend-craft",
       "target_ref": "frontend-craft",
-      "type": "todo-chain"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "product-photography",
-      "target": "image-generation",
-      "target_ref": "image-generation",
-      "type": "markdown-ref"
-    },
-    {
-      "chain_source": "todo_list",
-      "label": "todo.2",
-      "order": 2,
-      "source": "product-photography",
-      "target": "image-generation",
-      "target_ref": "image-generation",
       "type": "todo-chain"
     },
     {
@@ -3922,6 +4378,22 @@
       "target": "advise",
       "target_ref": "advise",
       "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "pulse-update",
+      "target": "ticket-opportunity-generator",
+      "target_ref": "ticket-opportunity-generator",
+      "type": "markdown-ref"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.1",
+      "order": 1,
+      "source": "pulse-update",
+      "target": "ticket-opportunity-generator",
+      "target_ref": "ticket-opportunity-generator",
+      "type": "todo-chain"
     },
     {
       "label": "markdown-ref",
@@ -4148,8 +4620,24 @@
     {
       "label": "markdown-ref",
       "source": "remotion",
-      "target": "frontend-craft",
-      "target_ref": "frontend-craft",
+      "target": "ai-image-advisor",
+      "target_ref": "ai-image-advisor",
+      "type": "markdown-ref"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.4",
+      "order": 4,
+      "source": "remotion",
+      "target": "ai-image-advisor",
+      "target_ref": "ai-image-advisor",
+      "type": "todo-chain"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "remotion",
+      "target": "ai-video-advisor",
+      "target_ref": "ai-video-advisor",
       "type": "markdown-ref"
     },
     {
@@ -4157,15 +4645,63 @@
       "label": "todo.5",
       "order": 5,
       "source": "remotion",
-      "target": "frontend-craft",
-      "target_ref": "frontend-craft",
+      "target": "ai-video-advisor",
+      "target_ref": "ai-video-advisor",
       "type": "todo-chain"
     },
     {
       "label": "markdown-ref",
       "source": "remotion",
-      "target": "image-generation",
-      "target_ref": "image-generation",
+      "target": "asset-advisor",
+      "target_ref": "asset-advisor",
+      "type": "markdown-ref"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.3",
+      "order": 3,
+      "source": "remotion",
+      "target": "asset-advisor",
+      "target_ref": "asset-advisor",
+      "type": "todo-chain"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "remotion",
+      "target": "audio-advisor",
+      "target_ref": "audio-advisor",
+      "type": "markdown-ref"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.7",
+      "order": 7,
+      "source": "remotion",
+      "target": "audio-advisor",
+      "target_ref": "audio-advisor",
+      "type": "todo-chain"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "remotion",
+      "target": "avatar-advisor",
+      "target_ref": "avatar-advisor",
+      "type": "markdown-ref"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.6",
+      "order": 6,
+      "source": "remotion",
+      "target": "avatar-advisor",
+      "target_ref": "avatar-advisor",
+      "type": "todo-chain"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "remotion",
+      "target": "content-impl-plan",
+      "target_ref": "content-impl-plan",
       "type": "markdown-ref"
     },
     {
@@ -4173,15 +4709,31 @@
       "label": "todo.2",
       "order": 2,
       "source": "remotion",
-      "target": "image-generation",
-      "target_ref": "image-generation",
+      "target": "content-impl-plan",
+      "target_ref": "content-impl-plan",
+      "type": "todo-chain"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "remotion",
+      "target": "frontend-craft",
+      "target_ref": "frontend-craft",
+      "type": "markdown-ref"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.9",
+      "order": 9,
+      "source": "remotion",
+      "target": "frontend-craft",
+      "target_ref": "frontend-craft",
       "type": "todo-chain"
     },
     {
       "label": "common_chains.after",
       "source": "remotion",
-      "target": "remotion-render",
-      "target_ref": "remotion-render",
+      "target": "qa",
+      "target_ref": "qa",
       "type": "common-chain"
     },
     {
@@ -4193,8 +4745,8 @@
     },
     {
       "chain_source": "todo_list",
-      "label": "todo.4",
-      "order": 4,
+      "label": "todo.8",
+      "order": 8,
       "source": "remotion",
       "target": "remotion-render",
       "target_ref": "remotion-render",
@@ -4224,35 +4776,42 @@
       "type": "todo-chain"
     },
     {
+      "label": "common_chains.after",
+      "source": "remotion",
+      "target": "review",
+      "target_ref": "review",
+      "type": "common-chain"
+    },
+    {
       "label": "markdown-ref",
       "source": "remotion",
-      "target": "video-generation",
-      "target_ref": "video-generation",
+      "target": "visual-qa",
+      "target_ref": "visual-qa",
       "type": "markdown-ref"
     },
     {
       "chain_source": "todo_list",
-      "label": "todo.3",
-      "order": 3,
+      "label": "todo.10",
+      "order": 10,
       "source": "remotion",
-      "target": "video-generation",
-      "target_ref": "video-generation",
+      "target": "visual-qa",
+      "target_ref": "visual-qa",
       "type": "todo-chain"
     },
     {
       "label": "markdown-ref",
-      "source": "remotion",
-      "target": "visual-qa",
-      "target_ref": "visual-qa",
+      "source": "remotion-render",
+      "target": "ai-video-advisor",
+      "target_ref": "ai-video-advisor",
       "type": "markdown-ref"
     },
     {
       "chain_source": "todo_list",
-      "label": "todo.6",
-      "order": 6,
-      "source": "remotion",
-      "target": "visual-qa",
-      "target_ref": "visual-qa",
+      "label": "todo.5",
+      "order": 5,
+      "source": "remotion-render",
+      "target": "ai-video-advisor",
+      "target_ref": "ai-video-advisor",
       "type": "todo-chain"
     },
     {
@@ -4308,22 +4867,6 @@
       "source": "remotion-render",
       "target": "research",
       "target_ref": "research",
-      "type": "todo-chain"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "remotion-render",
-      "target": "video-generation",
-      "target_ref": "video-generation",
-      "type": "markdown-ref"
-    },
-    {
-      "chain_source": "todo_list",
-      "label": "todo.5",
-      "order": 5,
-      "source": "remotion-render",
-      "target": "video-generation",
-      "target_ref": "video-generation",
       "type": "todo-chain"
     },
     {
@@ -4684,56 +5227,8 @@
     {
       "label": "markdown-ref",
       "source": "social-content",
-      "target": "frontend-craft",
-      "target_ref": "frontend-craft",
-      "type": "markdown-ref"
-    },
-    {
-      "chain_source": "todo_list",
-      "label": "todo.6",
-      "order": 6,
-      "source": "social-content",
-      "target": "frontend-craft",
-      "target_ref": "frontend-craft",
-      "type": "todo-chain"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "social-content",
-      "target": "image-generation",
-      "target_ref": "image-generation",
-      "type": "markdown-ref"
-    },
-    {
-      "chain_source": "todo_list",
-      "label": "todo.2",
-      "order": 2,
-      "source": "social-content",
-      "target": "image-generation",
-      "target_ref": "image-generation",
-      "type": "todo-chain"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "social-content",
-      "target": "remotion",
-      "target_ref": "remotion",
-      "type": "markdown-ref"
-    },
-    {
-      "chain_source": "todo_list",
-      "label": "todo.4",
-      "order": 4,
-      "source": "social-content",
-      "target": "remotion",
-      "target_ref": "remotion",
-      "type": "todo-chain"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "social-content",
-      "target": "remotion-render",
-      "target_ref": "remotion-render",
+      "target": "ai-image-advisor",
+      "target_ref": "ai-image-advisor",
       "type": "markdown-ref"
     },
     {
@@ -4741,8 +5236,88 @@
       "label": "todo.5",
       "order": 5,
       "source": "social-content",
-      "target": "remotion-render",
-      "target_ref": "remotion-render",
+      "target": "ai-image-advisor",
+      "target_ref": "ai-image-advisor",
+      "type": "todo-chain"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "social-content",
+      "target": "ai-video-advisor",
+      "target_ref": "ai-video-advisor",
+      "type": "markdown-ref"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.6",
+      "order": 6,
+      "source": "social-content",
+      "target": "ai-video-advisor",
+      "target_ref": "ai-video-advisor",
+      "type": "todo-chain"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "social-content",
+      "target": "asset-advisor",
+      "target_ref": "asset-advisor",
+      "type": "markdown-ref"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.4",
+      "order": 4,
+      "source": "social-content",
+      "target": "asset-advisor",
+      "target_ref": "asset-advisor",
+      "type": "todo-chain"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "social-content",
+      "target": "content-impl-plan",
+      "target_ref": "content-impl-plan",
+      "type": "markdown-ref"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.2",
+      "order": 2,
+      "source": "social-content",
+      "target": "content-impl-plan",
+      "target_ref": "content-impl-plan",
+      "type": "todo-chain"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "social-content",
+      "target": "frontend-craft",
+      "target_ref": "frontend-craft",
+      "type": "markdown-ref"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.8",
+      "order": 8,
+      "source": "social-content",
+      "target": "frontend-craft",
+      "target_ref": "frontend-craft",
+      "type": "todo-chain"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "social-content",
+      "target": "remotion",
+      "target_ref": "remotion",
+      "type": "markdown-ref"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.7",
+      "order": 7,
+      "source": "social-content",
+      "target": "remotion",
+      "target_ref": "remotion",
       "type": "todo-chain"
     },
     {
@@ -4757,8 +5332,8 @@
     {
       "label": "markdown-ref",
       "source": "social-content",
-      "target": "video-generation",
-      "target_ref": "video-generation",
+      "target": "storyboard",
+      "target_ref": "storyboard",
       "type": "markdown-ref"
     },
     {
@@ -4766,8 +5341,8 @@
       "label": "todo.3",
       "order": 3,
       "source": "social-content",
-      "target": "video-generation",
-      "target_ref": "video-generation",
+      "target": "storyboard",
+      "target_ref": "storyboard",
       "type": "todo-chain"
     },
     {
@@ -4791,6 +5366,122 @@
       "source": "spec-to-ticket",
       "target": "research",
       "target_ref": "research",
+      "type": "todo-chain"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.6",
+      "order": 6,
+      "source": "storyboard",
+      "target": "ai-video-advisor",
+      "target_ref": "ai-video-advisor",
+      "type": "todo-chain"
+    },
+    {
+      "label": "common_chains.after",
+      "source": "storyboard",
+      "target": "asset-advisor",
+      "target_ref": "asset-advisor",
+      "type": "common-chain"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.2",
+      "order": 2,
+      "source": "storyboard",
+      "target": "asset-advisor",
+      "target_ref": "asset-advisor",
+      "type": "todo-chain"
+    },
+    {
+      "label": "common_chains.after",
+      "source": "storyboard",
+      "target": "audio-advisor",
+      "target_ref": "audio-advisor",
+      "type": "common-chain"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.4",
+      "order": 4,
+      "source": "storyboard",
+      "target": "audio-advisor",
+      "target_ref": "audio-advisor",
+      "type": "todo-chain"
+    },
+    {
+      "label": "common_chains.after",
+      "source": "storyboard",
+      "target": "avatar-advisor",
+      "target_ref": "avatar-advisor",
+      "type": "common-chain"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.3",
+      "order": 3,
+      "source": "storyboard",
+      "target": "avatar-advisor",
+      "target_ref": "avatar-advisor",
+      "type": "todo-chain"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.1",
+      "order": 1,
+      "source": "storyboard",
+      "target": "content-impl-plan",
+      "target_ref": "content-impl-plan",
+      "type": "todo-chain"
+    },
+    {
+      "label": "common_chains.after",
+      "source": "storyboard",
+      "target": "remotion",
+      "target_ref": "remotion",
+      "type": "common-chain"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.5",
+      "order": 5,
+      "source": "storyboard",
+      "target": "remotion",
+      "target_ref": "remotion",
+      "type": "todo-chain"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.9",
+      "order": 9,
+      "source": "storyboard",
+      "target": "review",
+      "target_ref": "review",
+      "type": "todo-chain"
+    },
+    {
+      "label": "common_chains.after",
+      "source": "storyboard",
+      "target": "social-content",
+      "target_ref": "social-content",
+      "type": "common-chain"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.8",
+      "order": 8,
+      "source": "storyboard",
+      "target": "social-content",
+      "target_ref": "social-content",
+      "type": "todo-chain"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.7",
+      "order": 7,
+      "source": "storyboard",
+      "target": "video-production",
+      "target_ref": "video-production",
       "type": "todo-chain"
     },
     {
@@ -5068,48 +5759,42 @@
       "type": "todo-chain"
     },
     {
-      "chain_source": "todo_list",
-      "label": "todo.4",
-      "order": 4,
-      "source": "video-generation",
-      "target": "frontend-craft",
-      "target_ref": "frontend-craft",
-      "type": "todo-chain"
-    },
-    {
-      "chain_source": "todo_list",
-      "label": "todo.1",
-      "order": 1,
-      "source": "video-generation",
-      "target": "remotion",
-      "target_ref": "remotion",
-      "type": "todo-chain"
-    },
-    {
-      "chain_source": "todo_list",
-      "label": "todo.2",
-      "order": 2,
-      "source": "video-generation",
-      "target": "remotion-render",
-      "target_ref": "remotion-render",
-      "type": "todo-chain"
+      "label": "markdown-ref",
+      "source": "video-production",
+      "target": "ai-image-advisor",
+      "target_ref": "ai-image-advisor",
+      "type": "markdown-ref"
     },
     {
       "chain_source": "todo_list",
       "label": "todo.3",
       "order": 3,
-      "source": "video-generation",
-      "target": "video-production",
-      "target_ref": "video-production",
+      "source": "video-production",
+      "target": "ai-image-advisor",
+      "target_ref": "ai-image-advisor",
       "type": "todo-chain"
     },
     {
+      "label": "common_chains.after",
+      "source": "video-production",
+      "target": "ai-video-advisor",
+      "target_ref": "ai-video-advisor",
+      "type": "common-chain"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "video-production",
+      "target": "ai-video-advisor",
+      "target_ref": "ai-video-advisor",
+      "type": "markdown-ref"
+    },
+    {
       "chain_source": "todo_list",
-      "label": "todo.5",
-      "order": 5,
-      "source": "video-generation",
-      "target": "visual-qa",
-      "target_ref": "visual-qa",
+      "label": "todo.2",
+      "order": 2,
+      "source": "video-production",
+      "target": "ai-video-advisor",
+      "target_ref": "ai-video-advisor",
       "type": "todo-chain"
     },
     {
@@ -5126,22 +5811,6 @@
       "source": "video-production",
       "target": "frontend-craft",
       "target_ref": "frontend-craft",
-      "type": "todo-chain"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "video-production",
-      "target": "image-generation",
-      "target_ref": "image-generation",
-      "type": "markdown-ref"
-    },
-    {
-      "chain_source": "todo_list",
-      "label": "todo.3",
-      "order": 3,
-      "source": "video-production",
-      "target": "image-generation",
-      "target_ref": "image-generation",
       "type": "todo-chain"
     },
     {
@@ -5204,29 +5873,6 @@
       "source": "video-production",
       "target": "research",
       "target_ref": "research",
-      "type": "todo-chain"
-    },
-    {
-      "label": "common_chains.after",
-      "source": "video-production",
-      "target": "video-generation",
-      "target_ref": "video-generation",
-      "type": "common-chain"
-    },
-    {
-      "label": "markdown-ref",
-      "source": "video-production",
-      "target": "video-generation",
-      "target_ref": "video-generation",
-      "type": "markdown-ref"
-    },
-    {
-      "chain_source": "todo_list",
-      "label": "todo.2",
-      "order": 2,
-      "source": "video-production",
-      "target": "video-generation",
-      "target_ref": "video-generation",
       "type": "todo-chain"
     },
     {
@@ -5418,7 +6064,7 @@
       "type": "todo-chain"
     }
   ],
-  "generated_at": "2026-07-02T19:53:31+00:00",
+  "generated_at": "2026-07-04T14:25:05+00:00",
   "nodes": [
     {
       "description": "Turn an under-specified decision into three options, tradeoffs, and one recommendation when the user asks for advice.",
@@ -5577,15 +6223,15 @@
         "composition_heat": {
           "hot_referrer_count": 1,
           "incoming_ref_count": 12,
-          "last_referenced_at": "2026-06-30T22:27:59.195216Z",
+          "last_referenced_at": "2026-07-03T14:48:12.159970Z",
           "top_referrers": [
             {
-              "invocation_count_window": 8,
-              "last_invoked_at": "2026-06-30T22:27:59.195216Z",
+              "invocation_count_window": 9,
+              "last_invoked_at": "2026-07-03T14:48:12.159970Z",
               "skill": "impl-plan"
             }
           ],
-          "window_referrer_invocations": 8
+          "window_referrer_invocations": 9
         },
         "direct_heat": {
           "distinct_threads_window": 0,
@@ -5974,15 +6620,15 @@
         "composition_heat": {
           "hot_referrer_count": 1,
           "incoming_ref_count": 3,
-          "last_referenced_at": "2026-06-30T22:27:59.195216Z",
+          "last_referenced_at": "2026-07-03T14:48:12.159970Z",
           "top_referrers": [
             {
-              "invocation_count_window": 8,
-              "last_invoked_at": "2026-06-30T22:27:59.195216Z",
+              "invocation_count_window": 9,
+              "last_invoked_at": "2026-07-03T14:48:12.159970Z",
               "skill": "impl-plan"
             }
           ],
-          "window_referrer_invocations": 8
+          "window_referrer_invocations": 9
         },
         "direct_heat": {
           "distinct_threads_window": 0,
@@ -6715,15 +7361,15 @@
         "composition_heat": {
           "hot_referrer_count": 1,
           "incoming_ref_count": 1,
-          "last_referenced_at": "2026-06-30T22:27:59.195216Z",
+          "last_referenced_at": "2026-07-03T14:48:12.159970Z",
           "top_referrers": [
             {
-              "invocation_count_window": 8,
-              "last_invoked_at": "2026-06-30T22:27:59.195216Z",
+              "invocation_count_window": 9,
+              "last_invoked_at": "2026-07-03T14:48:12.159970Z",
               "skill": "impl-plan"
             }
           ],
-          "window_referrer_invocations": 8
+          "window_referrer_invocations": 9
         },
         "direct_heat": {
           "distinct_threads_window": 0,
@@ -6997,15 +7643,15 @@
         "composition_heat": {
           "hot_referrer_count": 1,
           "incoming_ref_count": 5,
-          "last_referenced_at": "2026-06-30T22:27:59.195216Z",
+          "last_referenced_at": "2026-07-03T14:48:12.159970Z",
           "top_referrers": [
             {
-              "invocation_count_window": 8,
-              "last_invoked_at": "2026-06-30T22:27:59.195216Z",
+              "invocation_count_window": 9,
+              "last_invoked_at": "2026-07-03T14:48:12.159970Z",
               "skill": "impl-plan"
             }
           ],
-          "window_referrer_invocations": 8
+          "window_referrer_invocations": 9
         },
         "direct_heat": {
           "distinct_threads_window": 0,
@@ -7884,11 +8530,11 @@
         "composition_heat": {
           "hot_referrer_count": 2,
           "incoming_ref_count": 24,
-          "last_referenced_at": "2026-06-30T22:27:59.195216Z",
+          "last_referenced_at": "2026-07-03T14:48:12.159970Z",
           "top_referrers": [
             {
-              "invocation_count_window": 8,
-              "last_invoked_at": "2026-06-30T22:27:59.195216Z",
+              "invocation_count_window": 9,
+              "last_invoked_at": "2026-07-03T14:48:12.159970Z",
               "skill": "impl-plan"
             },
             {
@@ -7897,7 +8543,7 @@
               "skill": "brainstorm"
             }
           ],
-          "window_referrer_invocations": 15
+          "window_referrer_invocations": 16
         },
         "direct_heat": {
           "distinct_threads_window": 0,
@@ -7964,12 +8610,12 @@
       "signals": {
         "composition_heat": {
           "hot_referrer_count": 2,
-          "incoming_ref_count": 41,
-          "last_referenced_at": "2026-06-30T22:27:59.195216Z",
+          "incoming_ref_count": 44,
+          "last_referenced_at": "2026-07-03T14:48:12.159970Z",
           "top_referrers": [
             {
-              "invocation_count_window": 8,
-              "last_invoked_at": "2026-06-30T22:27:59.195216Z",
+              "invocation_count_window": 9,
+              "last_invoked_at": "2026-07-03T14:48:12.159970Z",
               "skill": "impl-plan"
             },
             {
@@ -7978,7 +8624,7 @@
               "skill": "brainstorm"
             }
           ],
-          "window_referrer_invocations": 15
+          "window_referrer_invocations": 16
         },
         "direct_heat": {
           "distinct_threads_window": 0,
@@ -8002,7 +8648,7 @@
         "uniqueness": {
           "group": "",
           "has_skill_ui": false,
-          "incoming_ref_count": 41,
+          "incoming_ref_count": 44,
           "method_count": 0,
           "outgoing_ref_count": 1,
           "source": "local",
@@ -8306,15 +8952,15 @@
         "composition_heat": {
           "hot_referrer_count": 1,
           "incoming_ref_count": 14,
-          "last_referenced_at": "2026-06-30T22:27:59.195216Z",
+          "last_referenced_at": "2026-07-03T14:48:12.159970Z",
           "top_referrers": [
             {
-              "invocation_count_window": 8,
-              "last_invoked_at": "2026-06-30T22:27:59.195216Z",
+              "invocation_count_window": 9,
+              "last_invoked_at": "2026-07-03T14:48:12.159970Z",
               "skill": "impl-plan"
             }
           ],
-          "window_referrer_invocations": 8
+          "window_referrer_invocations": 9
         },
         "direct_heat": {
           "distinct_threads_window": 0,
@@ -8482,6 +9128,279 @@
       ]
     },
     {
+      "description": "Turn AI image create/edit/upscale/cutout requests into provider route, prompt/input packet, spend gate, and saved image asset bundle.",
+      "eval": "",
+      "group": "content-image",
+      "has_checklist": true,
+      "heat": {
+        "distinct_threads_window": 0,
+        "distinct_tickets_window": 0,
+        "invocation_count_all": 0,
+        "invocation_count_recent": 0,
+        "invocation_count_window": 0,
+        "last_invoked_at": "",
+        "observed_event_count_all": 0,
+        "recent_days": 7,
+        "window_days": 30
+      },
+      "id": "ai-image-advisor",
+      "label": "ai-image-advisor",
+      "methods": [],
+      "path": "skills/ai-image-advisor/SKILL.md",
+      "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 10,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval",
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": false,
+          "status": "high",
+          "template_version": "0.3.7"
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "content-image",
+          "has_skill_ui": false,
+          "incoming_ref_count": 10,
+          "method_count": 0,
+          "outgoing_ref_count": 5,
+          "source": "local",
+          "tier": 3
+        }
+      },
+      "skill_ui": "",
+      "source": "local",
+      "tier": 3,
+      "todo_skill_refs": [
+        "content-impl-plan",
+        "asset-advisor",
+        "product-photography",
+        "social-content",
+        "frontend-craft"
+      ]
+    },
+    {
+      "description": "Turn model-native video create/edit/upscale requests into provider route, prompt/input packet, spend gate, and saved video asset bundle.",
+      "eval": "",
+      "group": "content-video",
+      "has_checklist": true,
+      "heat": {
+        "distinct_threads_window": 0,
+        "distinct_tickets_window": 0,
+        "invocation_count_all": 0,
+        "invocation_count_recent": 0,
+        "invocation_count_window": 0,
+        "last_invoked_at": "",
+        "observed_event_count_all": 0,
+        "recent_days": 7,
+        "window_days": 30
+      },
+      "id": "ai-video-advisor",
+      "label": "ai-video-advisor",
+      "methods": [],
+      "path": "skills/ai-video-advisor/SKILL.md",
+      "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 11,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval",
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": false,
+          "status": "high",
+          "template_version": "0.3.7"
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "content-video",
+          "has_skill_ui": false,
+          "incoming_ref_count": 11,
+          "method_count": 0,
+          "outgoing_ref_count": 9,
+          "source": "local",
+          "tier": 3
+        }
+      },
+      "skill_ui": "",
+      "source": "local",
+      "tier": 3,
+      "todo_skill_refs": [
+        "content-impl-plan",
+        "storyboard",
+        "asset-advisor",
+        "remotion",
+        "avatar-advisor",
+        "video-production",
+        "audio-advisor",
+        "frontend-craft",
+        "visual-qa"
+      ]
+    },
+    {
+      "description": "Turn a storyboard, reference video, Tasty Pack, or source material into a production-ready asset inventory and recreation plan.",
+      "eval": "eval_task.json",
+      "group": "content-production",
+      "has_checklist": true,
+      "heat": {
+        "distinct_threads_window": 0,
+        "distinct_tickets_window": 0,
+        "invocation_count_all": 0,
+        "invocation_count_recent": 0,
+        "invocation_count_window": 0,
+        "last_invoked_at": "",
+        "observed_event_count_all": 0,
+        "recent_days": 7,
+        "window_days": 30
+      },
+      "id": "asset-advisor",
+      "label": "asset-advisor",
+      "methods": [],
+      "path": "skills/asset-advisor/SKILL.md",
+      "qa_checklist": "qa_checklist.md",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 8,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [],
+          "has_checklist": true,
+          "has_eval": true,
+          "has_qa_checklist": true,
+          "status": "low",
+          "template_version": "0.3.7"
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "content-production",
+          "has_skill_ui": false,
+          "incoming_ref_count": 8,
+          "method_count": 0,
+          "outgoing_ref_count": 6,
+          "source": "local",
+          "tier": 3
+        }
+      },
+      "skill_ui": "",
+      "source": "local",
+      "tier": 3,
+      "todo_skill_refs": [
+        "ai-image-advisor",
+        "ai-video-advisor",
+        "avatar-advisor",
+        "audio-advisor",
+        "remotion"
+      ]
+    },
+    {
+      "description": "Turn voiceover, music, SFX, Foley, dubbing, or mix needs into an audio direction packet and production route.",
+      "eval": "eval_task.json",
+      "group": "content-audio",
+      "has_checklist": true,
+      "heat": {
+        "distinct_threads_window": 0,
+        "distinct_tickets_window": 0,
+        "invocation_count_all": 0,
+        "invocation_count_recent": 0,
+        "invocation_count_window": 0,
+        "last_invoked_at": "",
+        "observed_event_count_all": 0,
+        "recent_days": 7,
+        "window_days": 30
+      },
+      "id": "audio-advisor",
+      "label": "audio-advisor",
+      "methods": [],
+      "path": "skills/audio-advisor/SKILL.md",
+      "qa_checklist": "qa_checklist.md",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 6,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [],
+          "has_checklist": true,
+          "has_eval": true,
+          "has_qa_checklist": true,
+          "status": "low",
+          "template_version": "0.3.7"
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "content-audio",
+          "has_skill_ui": false,
+          "incoming_ref_count": 6,
+          "method_count": 0,
+          "outgoing_ref_count": 5,
+          "source": "local",
+          "tier": 3
+        }
+      },
+      "skill_ui": "",
+      "source": "local",
+      "tier": 3,
+      "todo_skill_refs": [
+        "avatar-advisor",
+        "ai-video-advisor",
+        "asset-advisor",
+        "remotion"
+      ]
+    },
+    {
       "description": "Design or revise Farplane Codex automations using full project-owned automations.toml configs and generic Pulse/Interval skill calls.",
       "eval": "",
       "group": "harness",
@@ -8548,6 +9467,71 @@
       ]
     },
     {
+      "description": "Turn persistent presenter, character, likeness, or lipsync needs into an avatar direction packet and generation route.",
+      "eval": "eval_task.json",
+      "group": "content-video",
+      "has_checklist": true,
+      "heat": {
+        "distinct_threads_window": 0,
+        "distinct_tickets_window": 0,
+        "invocation_count_all": 0,
+        "invocation_count_recent": 0,
+        "invocation_count_window": 0,
+        "last_invoked_at": "",
+        "observed_event_count_all": 0,
+        "recent_days": 7,
+        "window_days": 30
+      },
+      "id": "avatar-advisor",
+      "label": "avatar-advisor",
+      "methods": [],
+      "path": "skills/avatar-advisor/SKILL.md",
+      "qa_checklist": "qa_checklist.md",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 6,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [],
+          "has_checklist": true,
+          "has_eval": true,
+          "has_qa_checklist": true,
+          "status": "low",
+          "template_version": "0.3.7"
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "content-video",
+          "has_skill_ui": false,
+          "incoming_ref_count": 6,
+          "method_count": 0,
+          "outgoing_ref_count": 5,
+          "source": "local",
+          "tier": 3
+        }
+      },
+      "skill_ui": "",
+      "source": "local",
+      "tier": 3,
+      "todo_skill_refs": [
+        "ai-image-advisor",
+        "audio-advisor",
+        "ai-video-advisor",
+        "remotion"
+      ]
+    },
+    {
       "description": "Turn a completed ticket into durable closeout, docs writeback, final checks, commit prep, and optional publish steps.",
       "eval": "",
       "group": "coding",
@@ -8572,15 +9556,15 @@
         "composition_heat": {
           "hot_referrer_count": 1,
           "incoming_ref_count": 3,
-          "last_referenced_at": "2026-06-30T22:27:59.195216Z",
+          "last_referenced_at": "2026-07-03T14:48:12.159970Z",
           "top_referrers": [
             {
-              "invocation_count_window": 8,
-              "last_invoked_at": "2026-06-30T22:27:59.195216Z",
+              "invocation_count_window": 9,
+              "last_invoked_at": "2026-07-03T14:48:12.159970Z",
               "skill": "impl-plan"
             }
           ],
-          "window_referrer_invocations": 8
+          "window_referrer_invocations": 9
         },
         "direct_heat": {
           "distinct_threads_window": 0,
@@ -8617,6 +9601,74 @@
       "todo_skill_refs": [
         "commit-message",
         "review"
+      ]
+    },
+    {
+      "description": "Turn a content idea and optional Tasty Pack/reference into a ticket-shaped production plan with storyboard, advisor actions, QA, and Remotion handoff.",
+      "eval": "eval_task.json",
+      "group": "content-production",
+      "has_checklist": true,
+      "heat": {
+        "distinct_threads_window": 0,
+        "distinct_tickets_window": 0,
+        "invocation_count_all": 0,
+        "invocation_count_recent": 0,
+        "invocation_count_window": 0,
+        "last_invoked_at": "",
+        "observed_event_count_all": 0,
+        "recent_days": 7,
+        "window_days": 30
+      },
+      "id": "content-impl-plan",
+      "label": "content-impl-plan",
+      "methods": [],
+      "path": "skills/content-impl-plan/SKILL.md",
+      "qa_checklist": "qa_checklist.md",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 5,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [],
+          "has_checklist": true,
+          "has_eval": true,
+          "has_qa_checklist": true,
+          "status": "low",
+          "template_version": "0.3.7"
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "content-production",
+          "has_skill_ui": false,
+          "incoming_ref_count": 5,
+          "method_count": 0,
+          "outgoing_ref_count": 8,
+          "source": "local",
+          "tier": 3
+        }
+      },
+      "skill_ui": "",
+      "source": "local",
+      "tier": 3,
+      "todo_skill_refs": [
+        "storyboard",
+        "asset-advisor",
+        "avatar-advisor",
+        "audio-advisor",
+        "ai-image-advisor",
+        "ai-video-advisor",
+        "remotion"
       ]
     },
     {
@@ -9348,8 +10400,8 @@
         "visual-design",
         "best-of-worlds",
         "frontend-design",
-        "image-generation",
-        "video-generation",
+        "ai-image-advisor",
+        "ai-video-advisor",
         "remotion",
         "remotion-render",
         "web-design-guidelines",
@@ -9516,15 +10568,15 @@
         "composition_heat": {
           "hot_referrer_count": 1,
           "incoming_ref_count": 12,
-          "last_referenced_at": "2026-06-30T22:27:59.195216Z",
+          "last_referenced_at": "2026-07-03T14:48:12.159970Z",
           "top_referrers": [
             {
-              "invocation_count_window": 8,
-              "last_invoked_at": "2026-06-30T22:27:59.195216Z",
+              "invocation_count_window": 9,
+              "last_invoked_at": "2026-07-03T14:48:12.159970Z",
               "skill": "impl-plan"
             }
           ],
-          "window_referrer_invocations": 8
+          "window_referrer_invocations": 9
         },
         "direct_heat": {
           "distinct_threads_window": 0,
@@ -9774,85 +10826,18 @@
       ]
     },
     {
-      "description": "Turn image generation or editing requests into inference.sh belt image pipeline outputs when Codex-native imagegen is not enough.",
-      "eval": "",
-      "group": "content-image",
-      "has_checklist": true,
-      "heat": {
-        "distinct_threads_window": 0,
-        "distinct_tickets_window": 0,
-        "invocation_count_all": 0,
-        "invocation_count_recent": 0,
-        "invocation_count_window": 0,
-        "last_invoked_at": "",
-        "observed_event_count_all": 0,
-        "recent_days": 7,
-        "window_days": 30
-      },
-      "id": "image-generation",
-      "label": "image-generation",
-      "methods": [],
-      "path": "skills/image-generation/SKILL.md",
-      "qa_checklist": "",
-      "signals": {
-        "composition_heat": {
-          "hot_referrer_count": 0,
-          "incoming_ref_count": 7,
-          "last_referenced_at": "",
-          "top_referrers": [],
-          "window_referrer_invocations": 0
-        },
-        "direct_heat": {
-          "distinct_threads_window": 0,
-          "distinct_tickets_window": 0,
-          "invocation_count_recent": 0,
-          "invocation_count_window": 0,
-          "last_invoked_at": ""
-        },
-        "maintenance_burden": {
-          "findings": [
-            "missing_eval",
-            "missing_qa_checklist"
-          ],
-          "has_checklist": true,
-          "has_eval": false,
-          "has_qa_checklist": false,
-          "status": "high",
-          "template_version": "1.0.0"
-        },
-        "maintenance_recommendation": "keep",
-        "uniqueness": {
-          "group": "content-image",
-          "has_skill_ui": false,
-          "incoming_ref_count": 7,
-          "method_count": 0,
-          "outgoing_ref_count": 3,
-          "source": "local",
-          "tier": 3
-        }
-      },
-      "skill_ui": "",
-      "source": "local",
-      "tier": 3,
-      "todo_skill_refs": [
-        "product-photography",
-        "social-content",
-        "frontend-craft"
-      ]
-    },
-    {
       "description": "Turn one selected coding ticket or material implementation request into an approval-ready ticket plan, test strategy, and proof contract.",
       "eval": "eval_task.json",
       "group": "coding",
       "has_checklist": true,
       "heat": {
-        "distinct_threads_window": 8,
+        "distinct_threads_window": 9,
         "distinct_tickets_window": 0,
-        "invocation_count_all": 8,
-        "invocation_count_recent": 1,
-        "invocation_count_window": 8,
-        "last_invoked_at": "2026-06-30T22:27:59.195216Z",
-        "observed_event_count_all": 16,
+        "invocation_count_all": 9,
+        "invocation_count_recent": 2,
+        "invocation_count_window": 9,
+        "last_invoked_at": "2026-07-03T14:48:12.159970Z",
+        "observed_event_count_all": 20,
         "recent_days": 7,
         "window_days": 30
       },
@@ -9870,11 +10855,11 @@
           "window_referrer_invocations": 0
         },
         "direct_heat": {
-          "distinct_threads_window": 8,
+          "distinct_threads_window": 9,
           "distinct_tickets_window": 0,
-          "invocation_count_recent": 1,
-          "invocation_count_window": 8,
-          "last_invoked_at": "2026-06-30T22:27:59.195216Z"
+          "invocation_count_recent": 2,
+          "invocation_count_window": 9,
+          "last_invoked_at": "2026-07-03T14:48:12.159970Z"
         },
         "maintenance_burden": {
           "findings": [],
@@ -9975,7 +10960,7 @@
         "frontend-craft",
         "data-viz",
         "diagramming",
-        "image-generation",
+        "ai-image-advisor",
         "visual-qa"
       ]
     },
@@ -10032,7 +11017,7 @@
           "has_skill_ui": false,
           "incoming_ref_count": 0,
           "method_count": 0,
-          "outgoing_ref_count": 6,
+          "outgoing_ref_count": 7,
           "source": "local",
           "tier": 3
         }
@@ -10042,7 +11027,8 @@
       "tier": 3,
       "todo_skill_refs": [
         "summarize",
-        "media-ingest"
+        "media-ingest",
+        "storyboard"
       ]
     },
     {
@@ -10917,12 +11903,12 @@
       "tier": 3,
       "todo_skill_refs": [
         "research",
-        "image-generation",
+        "ai-image-advisor",
         "frontend-craft"
       ]
     },
     {
-      "description": "Run the Farplane fast executor loop: reconcile outcomes, execute ready tickets up to policy cap, request planning when blocked, and update ledgers.",
+      "description": "Run the Farplane fast executor loop: reconcile outcomes, delegate ready tickets up to policy cap, request planning when blocked, and update ledgers.",
       "eval": "eval_task.json",
       "group": "harness",
       "has_checklist": true,
@@ -10973,7 +11959,7 @@
           "has_skill_ui": false,
           "incoming_ref_count": 2,
           "method_count": 0,
-          "outgoing_ref_count": 0,
+          "outgoing_ref_count": 1,
           "source": "local",
           "tier": 3
         }
@@ -10981,7 +11967,9 @@
       "skill_ui": "",
       "source": "local",
       "tier": 3,
-      "todo_skill_refs": []
+      "todo_skill_refs": [
+        "ticket-opportunity-generator"
+      ]
     },
     {
       "description": "Turn one selected ticket into proof artifacts, reconciled Done and QA Strategy obligations, and a structured QA result for Goal/ticket completion.",
@@ -11007,16 +11995,16 @@
       "signals": {
         "composition_heat": {
           "hot_referrer_count": 1,
-          "incoming_ref_count": 8,
-          "last_referenced_at": "2026-06-30T22:27:59.195216Z",
+          "incoming_ref_count": 9,
+          "last_referenced_at": "2026-07-03T14:48:12.159970Z",
           "top_referrers": [
             {
-              "invocation_count_window": 8,
-              "last_invoked_at": "2026-06-30T22:27:59.195216Z",
+              "invocation_count_window": 9,
+              "last_invoked_at": "2026-07-03T14:48:12.159970Z",
               "skill": "impl-plan"
             }
           ],
-          "window_referrer_invocations": 8
+          "window_referrer_invocations": 9
         },
         "direct_heat": {
           "distinct_threads_window": 0,
@@ -11037,7 +12025,7 @@
         "uniqueness": {
           "group": "coding",
           "has_skill_ui": false,
-          "incoming_ref_count": 8,
+          "incoming_ref_count": 9,
           "method_count": 0,
           "outgoing_ref_count": 5,
           "source": "local",
@@ -11186,7 +12174,7 @@
       "todo_skill_refs": []
     },
     {
-      "description": "Turn deterministic video requirements into Remotion/React compositions with timing, media, captions, audio, transitions, and render checks.",
+      "description": "Turn storyboarded assets into Remotion/React compositions, stitched timelines, captions, audio placement, and local render proof.",
       "eval": "",
       "group": "content-video",
       "has_checklist": true,
@@ -11209,7 +12197,7 @@
       "signals": {
         "composition_heat": {
           "hot_referrer_count": 0,
-          "incoming_ref_count": 6,
+          "incoming_ref_count": 11,
           "last_referenced_at": "",
           "top_referrers": [],
           "window_referrer_invocations": 0
@@ -11230,15 +12218,15 @@
           "has_eval": false,
           "has_qa_checklist": false,
           "status": "high",
-          "template_version": ""
+          "template_version": "0.3.7"
         },
         "maintenance_recommendation": "keep",
         "uniqueness": {
           "group": "content-video",
           "has_skill_ui": false,
-          "incoming_ref_count": 6,
+          "incoming_ref_count": 11,
           "method_count": 0,
-          "outgoing_ref_count": 6,
+          "outgoing_ref_count": 12,
           "source": "local",
           "tier": 3
         }
@@ -11248,8 +12236,12 @@
       "tier": 3,
       "todo_skill_refs": [
         "research",
-        "image-generation",
-        "video-generation",
+        "content-impl-plan",
+        "asset-advisor",
+        "ai-image-advisor",
+        "ai-video-advisor",
+        "avatar-advisor",
+        "audio-advisor",
         "remotion-render",
         "frontend-craft",
         "visual-qa"
@@ -11279,7 +12271,7 @@
       "signals": {
         "composition_heat": {
           "hot_referrer_count": 0,
-          "incoming_ref_count": 6,
+          "incoming_ref_count": 4,
           "last_referenced_at": "",
           "top_referrers": [],
           "window_referrer_invocations": 0
@@ -11306,7 +12298,7 @@
         "uniqueness": {
           "group": "content-video",
           "has_skill_ui": false,
-          "incoming_ref_count": 6,
+          "incoming_ref_count": 4,
           "method_count": 0,
           "outgoing_ref_count": 5,
           "source": "local",
@@ -11321,7 +12313,7 @@
         "research",
         "frontend-craft",
         "visual-qa",
-        "video-generation"
+        "ai-video-advisor"
       ]
     },
     {
@@ -11617,7 +12609,7 @@
       "signals": {
         "composition_heat": {
           "hot_referrer_count": 0,
-          "incoming_ref_count": 2,
+          "incoming_ref_count": 3,
           "last_referenced_at": "",
           "top_referrers": [],
           "window_referrer_invocations": 0
@@ -11641,9 +12633,9 @@
         "uniqueness": {
           "group": "content-social",
           "has_skill_ui": false,
-          "incoming_ref_count": 2,
+          "incoming_ref_count": 3,
           "method_count": 4,
-          "outgoing_ref_count": 6,
+          "outgoing_ref_count": 8,
           "source": "local",
           "tier": 3
         }
@@ -11653,10 +12645,12 @@
       "tier": 3,
       "todo_skill_refs": [
         "research",
-        "image-generation",
-        "video-generation",
+        "content-impl-plan",
+        "storyboard",
+        "asset-advisor",
+        "ai-image-advisor",
+        "ai-video-advisor",
         "remotion",
-        "remotion-render",
         "frontend-craft"
       ]
     },
@@ -11723,6 +12717,76 @@
       "tier": 3,
       "todo_skill_refs": [
         "research"
+      ]
+    },
+    {
+      "description": "Turn a content implementation plan, idea, ICP, proof, or offer into script, beats, and storyboard scenes for production handoff.",
+      "eval": "eval_task.json",
+      "group": "content-video",
+      "has_checklist": true,
+      "heat": {
+        "distinct_threads_window": 0,
+        "distinct_tickets_window": 0,
+        "invocation_count_all": 0,
+        "invocation_count_recent": 0,
+        "invocation_count_window": 0,
+        "last_invoked_at": "",
+        "observed_event_count_all": 0,
+        "recent_days": 7,
+        "window_days": 30
+      },
+      "id": "storyboard",
+      "label": "storyboard",
+      "methods": [],
+      "path": "skills/storyboard/SKILL.md",
+      "qa_checklist": "qa_checklist.md",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 6,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [],
+          "has_checklist": true,
+          "has_eval": true,
+          "has_qa_checklist": true,
+          "status": "low",
+          "template_version": "0.3.7"
+        },
+        "maintenance_recommendation": "keep",
+        "uniqueness": {
+          "group": "content-video",
+          "has_skill_ui": false,
+          "incoming_ref_count": 6,
+          "method_count": 0,
+          "outgoing_ref_count": 9,
+          "source": "local",
+          "tier": 3
+        }
+      },
+      "skill_ui": "",
+      "source": "local",
+      "tier": 3,
+      "todo_skill_refs": [
+        "content-impl-plan",
+        "asset-advisor",
+        "avatar-advisor",
+        "audio-advisor",
+        "remotion",
+        "ai-video-advisor",
+        "video-production",
+        "social-content",
+        "review"
       ]
     },
     {
@@ -11796,6 +12860,68 @@
         "metric-advisor",
         "optimize-with-human"
       ]
+    },
+    {
+      "description": "Turn Farplane products, goals, interval reports, ops memory, board state, and recent evidence into concrete execution-ticket specs.",
+      "eval": "eval_task.json",
+      "group": "harness",
+      "has_checklist": true,
+      "heat": {
+        "distinct_threads_window": 0,
+        "distinct_tickets_window": 0,
+        "invocation_count_all": 0,
+        "invocation_count_recent": 0,
+        "invocation_count_window": 0,
+        "last_invoked_at": "",
+        "observed_event_count_all": 0,
+        "recent_days": 7,
+        "window_days": 30
+      },
+      "id": "ticket-opportunity-generator",
+      "label": "ticket-opportunity-generator",
+      "methods": [],
+      "path": "skills/ticket-opportunity-generator/SKILL.md",
+      "qa_checklist": "",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 1,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_qa_checklist"
+          ],
+          "has_checklist": true,
+          "has_eval": true,
+          "has_qa_checklist": false,
+          "status": "moderate",
+          "template_version": "0.3.7"
+        },
+        "maintenance_recommendation": "watch",
+        "uniqueness": {
+          "group": "harness",
+          "has_skill_ui": false,
+          "incoming_ref_count": 1,
+          "method_count": 0,
+          "outgoing_ref_count": 0,
+          "source": "local",
+          "tier": 3
+        }
+      },
+      "skill_ui": "",
+      "source": "local",
+      "tier": 3,
+      "todo_skill_refs": []
     },
     {
       "description": "Turn project history, memory, README, docs, lessons, troubles, and recent progress into consolidated project context and doc deltas.",
@@ -11989,75 +13115,6 @@
       "todo_skill_refs": []
     },
     {
-      "description": "Turn AI video generation or editing requests into inference.sh belt video outputs such as text-to-video, image-to-video, avatars, edits, or upscales.",
-      "eval": "",
-      "group": "content-video",
-      "has_checklist": true,
-      "heat": {
-        "distinct_threads_window": 0,
-        "distinct_tickets_window": 0,
-        "invocation_count_all": 0,
-        "invocation_count_recent": 0,
-        "invocation_count_window": 0,
-        "last_invoked_at": "",
-        "observed_event_count_all": 0,
-        "recent_days": 7,
-        "window_days": 30
-      },
-      "id": "video-generation",
-      "label": "video-generation",
-      "methods": [],
-      "path": "skills/video-generation/SKILL.md",
-      "qa_checklist": "",
-      "signals": {
-        "composition_heat": {
-          "hot_referrer_count": 0,
-          "incoming_ref_count": 6,
-          "last_referenced_at": "",
-          "top_referrers": [],
-          "window_referrer_invocations": 0
-        },
-        "direct_heat": {
-          "distinct_threads_window": 0,
-          "distinct_tickets_window": 0,
-          "invocation_count_recent": 0,
-          "invocation_count_window": 0,
-          "last_invoked_at": ""
-        },
-        "maintenance_burden": {
-          "findings": [
-            "missing_eval",
-            "missing_qa_checklist"
-          ],
-          "has_checklist": true,
-          "has_eval": false,
-          "has_qa_checklist": false,
-          "status": "high",
-          "template_version": "1.0.0"
-        },
-        "maintenance_recommendation": "keep",
-        "uniqueness": {
-          "group": "content-video",
-          "has_skill_ui": false,
-          "incoming_ref_count": 6,
-          "method_count": 0,
-          "outgoing_ref_count": 5,
-          "source": "local",
-          "tier": 3
-        }
-      },
-      "skill_ui": "",
-      "source": "local",
-      "tier": 3,
-      "todo_skill_refs": [
-        "remotion",
-        "remotion-render",
-        "video-production",
-        "frontend-craft",
-        "visual-qa"
-      ]
-    },
-    {
       "description": "Turn video deliverable goals into marketing clips, explainers, storyboards, talking-head pieces, demos, or platform ad specs.",
       "eval": "",
       "group": "content-video",
@@ -12087,7 +13144,7 @@
       "signals": {
         "composition_heat": {
           "hot_referrer_count": 0,
-          "incoming_ref_count": 1,
+          "incoming_ref_count": 2,
           "last_referenced_at": "",
           "top_referrers": [],
           "window_referrer_invocations": 0
@@ -12114,7 +13171,7 @@
         "uniqueness": {
           "group": "content-video",
           "has_skill_ui": false,
-          "incoming_ref_count": 1,
+          "incoming_ref_count": 2,
           "method_count": 5,
           "outgoing_ref_count": 6,
           "source": "local",
@@ -12126,8 +13183,8 @@
       "tier": 3,
       "todo_skill_refs": [
         "research",
-        "video-generation",
-        "image-generation",
+        "ai-video-advisor",
+        "ai-image-advisor",
         "remotion",
         "remotion-render",
         "frontend-craft"

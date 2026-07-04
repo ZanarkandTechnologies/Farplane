@@ -3,7 +3,7 @@ title: Behavior correction, hardcase metadata, and narrow eval capture
 status: implemented
 owner: feature-registry
 created_at: 2026-06-26
-updated_at: 2026-06-27
+updated_at: 2026-07-05
 tags:
   - farplane
   - feature
@@ -15,7 +15,6 @@ refs:
   - skills/optimize-harness
   - skills/eval
   - docs/LESSONS.md
-  - experiments/hardcases
   - docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md
   - docs/HISTORY.md
   - "docs/features/registry.jsonl#FEAT-0031"
@@ -31,7 +30,6 @@ surfaces:
   - skills/optimize-harness
   - skills/eval
   - docs/LESSONS.md
-  - experiments/hardcases
   - docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md
 source_refs:
   - docs/HISTORY.md
@@ -46,8 +44,7 @@ evidence_refs:
   - skills/optimize-harness/SKILL.md
   - skills/eval/SKILL.md
   - docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md
-  - experiments/hardcases/20260607-1917-repent-eval-capture/case.md
-  - tickets/TASK-0228/ticket.md
+  - tickets/archive/TASK-0228/ticket.md
   - docs/HISTORY.md
 known_limits: Correction is skill-and-artifact driven. Hardcase is eval metadata and legacy standalone hardcase artifacts should become runnable eval rows when the expected behavior is testable. Metric selection routes through metric-advisor before self-improve. The loop does not train models, sell data, inspect full Codex histories without a seed anchor, or auto-apply broad harness migrations without proof.
 metrics:
@@ -91,7 +88,7 @@ owner, patch the smallest durable surface, and prove it with a representative ca
 
 - Uses gap-analysis to describe expected versus observed behavior.
 - Uses harness-advisor to choose the owner surface for a fix.
-- Captures hardcases with input, expected behavior, observed failure, owner, tags, proof artifacts, and promotion status.
+- Captures hardcases as eval metadata with input, expected behavior, observed failure, owner, tags, proof artifacts, and promotion status.
 - Routes metric selection through metric-advisor before self-improvement claims.
 - Promotes repeated failures into skills, evals, lessons, docs, hooks, validators, or tickets.
 
@@ -120,7 +117,6 @@ Owner surfaces:
 - `skills/optimize-harness`
 - `skills/eval`
 - `docs/LESSONS.md`
-- `experiments/hardcases`
 - `docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md`
 
 Source context:
@@ -138,8 +134,7 @@ Evidence:
 - `skills/optimize-harness/SKILL.md`
 - `skills/eval/SKILL.md`
 - `docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md`
-- `experiments/hardcases/20260607-1917-repent-eval-capture/case.md`
-- `tickets/TASK-0228/ticket.md`
+- `tickets/archive/TASK-0228/ticket.md`
 - `docs/HISTORY.md`
 
 ## Proof And Quality

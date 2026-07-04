@@ -167,7 +167,8 @@ See `MEM-0077`, `MEM-0081`, and `MEM-0082`.
 - `bin/validators/`: repo-wide validation and generated-registry checks
 - `docs/`: durable feature specs, history, memory, troubles, lessons, and research
 - `docs/fundamentals/`: harness theory, doctrine, and cross-surface best practices
-- `experiments/`: smoke runs, eval outputs, and prototype evidence
+- `.farplane/`: ignored local runtime, generated, event, scout, eval, and
+  product state
 - `qa/`: reusable browser-QA runbooks, shortcuts, and deterministic test-entry guides
 - `rules/`: machine-readable local rule files, not reusable best-practice docs
 - `skills/`: operational playbooks, references, scripts, and templates
@@ -214,6 +215,14 @@ For harness-design research and external patterns:
 
 - No blind edits. Read the relevant feature spec, ticket, and nearby module docs first.
 - Tickets and docs are the source of truth; do not hide state in chat.
+- This Farplane checkout uses Doppler for runtime secrets. For credentialed
+  scripts, skill helpers, API checks, installs, or local commands, use
+  `farplane run -- <command>` or `doppler run -- <command>` from the project
+  checkout. `farplane doctor` owns readiness reporting, and `farplane install`
+  owns safe mechanical render/link/repair work. Do not add a separate setup or
+  sync command for readiness unless a ticket proves a new lifecycle surface is
+  needed. Do not assume `~/.farplane/config.toml` contains secrets; it is a
+  private fallback/cache only.
 - Prefer modular ownership over artifact-type scattering. A high-level package
   such as `skills/<name>/` should own its skill-local docs, scripts, templates,
   tests, and examples when those files only matter to that package. Use
@@ -352,7 +361,7 @@ For harness-design research and external patterns:
 - `docs/MEMORY.md`: curated invariants and constraints that future work must obey
 - `docs/TROUBLES.md`: raw repeated misses, blockers, and correction pain points
 - `docs/LESSONS.md`: distilled lessons from correction, review, and trouble-drain passes
-- `experiments/`: proof artifacts and smoke outputs
+- `.farplane/`: ignored local runtime and generated state
 
 Transient execution state stays outside this file. Keep this file short enough that an agent can use it as a map.
 
