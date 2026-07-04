@@ -1,0 +1,30 @@
+[
+  {
+    "id": "ingest_content_minimal_capture_01",
+    "title": "Ingests social inspiration into compact Resource Bank capture",
+    "query": "Ingest this Instagram Reel into the Resource Bank. Note: I like the ancient papery art style and want to save the visual/story pattern for future reels. Public metadata and the operator note are available; do not run a deep media extraction unless needed.",
+    "reference_points": [
+      "Reads `skills/ingest-content/SKILL.md` and applies the minimal capture contract.",
+      "Stores or returns source/ref, operator note/focus, compact analysis, tags/facets, and creative elements.",
+      "Creative elements use compact kinds such as visual, hook, storyboard, editing, copy, format, or constraint.",
+      "Uses optional anchors such as opening frame, 0-3s, caption, or operator note when useful.",
+      "States source limitations honestly instead of inventing unseen frames, transcript, audio, or exact timing.",
+      "Does not require frame/clip/transcript/evidence records by default.",
+      "Verifies Tasty Pack/Inspiration Pack retrieval returns request, captures, and meta; production consumers use capture source, analysis, and elements without depending on a notes array."
+    ],
+    "anti_patterns": [
+      "Requires a contact sheet or frame asset before saving a useful capture.",
+      "Expands the capture into lane taxonomy, provenance enums, or evidence objects without a direct reuse/audit need.",
+      "Returns moodboard prose without creative elements.",
+      "Claims full-video pacing, recurring visuals, audio, or later beats when only source metadata and the operator note are available."
+    ],
+    "tags": [
+      "skill",
+      "ingest-content",
+      "minimal-capture",
+      "resource-bank",
+      "creative-elements"
+    ],
+    "notes": "Regression for the accepted Resource Bank simplification: useful captures should not be blocked by missing first-class evidence records."
+  }
+]

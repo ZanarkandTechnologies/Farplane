@@ -33,18 +33,19 @@ skills. It calls or routes to the primitives when their outputs are needed.
 ## Skill Signature
 
 ```text
-content_impl_plan(idea, tasty_pack?, icp?, platform?, proof?, constraints?, artifact_owner?)
+content_impl_plan(idea, inspiration_pack?, icp?, platform?, proof?, constraints?, artifact_owner?)
   -> content_ticket + advisor_action_list + production_program | blocked_report
 
 state:
-  reads(user brief, Tasty Pack/reference assets, proof/examples/swipes,
+  reads(user brief, Inspiration Pack/Tasty Pack captures, proof/examples/swipes,
         active ticket?, qa_checklist.md)
   writes(content implementation ticket or ticket-scoped artifact when durable
         execution is requested)
 
 gates:
   idea_bound; audience_and_promise_named; reference_pattern_extracted;
-  storyboard_route_selected; asset_graph_planned; advisor_actions_ordered;
+  reference_leverage_map_present; storyboard_route_selected;
+  asset_graph_planned; advisor_actions_ordered; creative_lock_passed;
   remotion_terminal_path_named; review_and_qa_contract_observable
 
 routes:
@@ -53,7 +54,8 @@ routes:
 
 fails:
   storyboard_as_parent_plan; format_sprawl; vibes_only_action_list;
-  advisor_actions_without_owner; remotion_without_assets; qa_afterthought
+  advisor_actions_without_owner; remotion_without_assets; qa_afterthought;
+  inspiration_pack_as_moodboard; creative_lock_skipped
 ```
 
 ## Big Picture
@@ -72,10 +74,48 @@ idea + tasty_pack/reference
       -> review/qa: creative plan, asset readiness, render/output proof
 ```
 
-Tasty Pack outputs are treated as evidence and inspiration material: successful
-hooks, story patterns, visual language, audio cues, pacing, and asset examples.
-The plan should extract reusable structure without copying protected assets,
-likenesses, music, or exact creative expression.
+Inspiration Pack/Tasty Pack outputs are treated as production references, not a
+moodboard. The active Resource Bank shape is:
+
+```text
+{
+  request: { idea?, timeframe, startAtMs?, endAtMs?, filters },
+  captures: [{ captureId, source, analysis, elements }],
+  meta: { captureCount: number, timeframe: string }
+}
+```
+
+Core consumer fields are only `captures[].source`, `captures[].analysis`, and
+`captures[].elements`; retrieval notes are non-core metadata and must not be
+required by production skills. Tags/facets live on `capture.source`. Build
+`reference_leverage_map` from `captures[].elements`. Extract reusable structure
+without copying protected assets, likenesses, music, or exact creative
+expression. Do not require separate evidence objects, lane taxonomy, or
+frame/clip records unless the specific production task needs direct media reuse
+or audit proof.
+
+Before routing to Remotion, run the creative lock:
+
+```text
+creative_lock(idea, inspiration_pack, storyboard, asset_plan, audio_plan)
+  -> locked_brief | blocked_report
+
+requires:
+  - reference_leverage_map: each used capture element maps to a
+    concrete shot, asset, edit rhythm, audio cue, motion cue, or narrative move
+  - narrative_spine: hook -> tension -> turn -> proof -> payoff with exact
+    script/caption beats and viewer job
+  - asset_manifest: source/generated/linked assets or explicit missing-asset
+    blockers before composition
+  - cue_sheet: frame/time-coded audio events and required motion bindings
+  - qa_gates: user-intent, video-quality, source-honesty, inspiration-use,
+    narrative clarity, asset use, and audio-motion sync
+
+blocks_if:
+  - the visual plan is only generic CSS/text/cards for an inspiration-led video
+  - the audio plan is only a bed with no motion/edit obligations
+  - proof checks only renderability
+```
 
 ## Phase Boundary
 
@@ -88,14 +128,18 @@ reference recreation. Use `qa` when a produced artifact needs formal proof.
 ## Todo List
 
 - [ ] 1. Bind the implementation brief.
-  - [ ] Resolve idea, ICP, viewer promise, proof, platform, Tasty Pack/reference
-    material, target artifact, constraints, CTA, deadline, and artifact owner.
+  - [ ] Resolve idea, ICP, viewer promise, proof, platform, Inspiration
+    Pack/Tasty Pack/reference material, target artifact, constraints, CTA,
+    deadline, and artifact owner.
   - [ ] Read `qa_checklist.md` as preflight guardrails.
 - [ ] 2. Extract the reference pattern.
-  - [ ] Identify hook, story pattern, pacing, format affordances, visual assets,
-    audio cues, and why the reference likely works.
+  - [ ] Identify hook stack, timeline beats, story pattern, pacing, format
+    affordances, visual/audio/editing/copy/format/constraint elements, and why
+    the reference likely works.
   - [ ] Mark what to reuse as structure versus what must be changed for rights,
     brand, audience, or proof.
+  - [ ] Build a `reference_leverage_map` from `captures[].elements` to
+    specific planned shots, assets, audio cues, motion cues, or narrative beats.
 - [ ] 3. Create the content ticket shape.
   - [ ] Use `Summary`, `Scope`, `Delta`, `Program`, `Map`, `Done / Proof`,
     `State`, `Links`, and `Notes`.
@@ -114,8 +158,10 @@ reference recreation. Use `qa` when a produced artifact needs formal proof.
   - [ ] Give every action an owner skill, input, output, acceptance check, and
     blocker condition.
 - [ ] 6. End with production proof.
+  - [ ] Run `creative_lock` and stop with a blocked report when narrative,
+    assets, cue timing, inspiration-use evidence, or QA gates are missing.
   - [ ] Route final stitching, captions, overlays, audio placement, and local
-    render proof to `remotion`.
+    render proof to `remotion` only after `creative_lock` passes.
   - [ ] Name review and QA checklist gates before claiming the plan ready.
   - [ ] Apply `qa_checklist.md` again before completion.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
@@ -143,11 +189,18 @@ must do.
 ## Program
 Reference Pattern:
 - Hook:
+- Hook stack:
+- Timeline beats:
 - Story / format:
 - Visual pattern:
 - Audio pattern:
+- Motion / edit pattern:
 - Proof mechanism:
 - Must change:
+
+Reference Leverage Map:
+| Capture / Element | Anchor | Reused As | Planned Output | Acceptance Check |
+| --- | --- | --- | --- | --- |
 
 Advisor Action List:
 | Order | Owner | Input | Output | Acceptance Check | Blocker |
@@ -194,6 +247,9 @@ draft | review | approved | in_production | blocked
   references to extract the pattern, then route through stable primitives.
 - Do not let Remotion start before assets, cue timing, dimensions, and proof
   checks are named.
+- Do not treat a Tasty Pack or Inspiration Pack as a vibe source. If the pack
+  has no captures or no creative elements, block or request reingestion before
+  production.
 
 ## Reference Map
 
@@ -219,7 +275,7 @@ draft | review | approved | in_production | blocked
   artifact.
 - `advisor_action_list`: ordered actions with owner, input, output, acceptance
   check, and blocker.
-- `production_program`: storyboard, asset, generation, audio, Remotion, review,
-  and QA route map.
+- `production_program`: reference leverage map, storyboard, asset, generation,
+  audio, creative lock, Remotion, review, and QA route map.
 - `blocked_report`: missing idea, reference, proof, rights, production route,
   owner, or proof gate.

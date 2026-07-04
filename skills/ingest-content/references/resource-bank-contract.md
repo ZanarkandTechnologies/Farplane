@@ -8,24 +8,47 @@ operator supplies another vault:
 - `/Users/kenjipcx/Zanarkand Technologies/projects/Farplane-UI/convex/modules/resourceBank/AGENTS.md`
 - `/Users/kenjipcx/Zanarkand Technologies/projects/Farplane-UI/convex/modules/resourceBank/schema.ts`
 - `/Users/kenjipcx/Zanarkand Technologies/projects/Farplane-UI/convex/modules/resourceBank/validators.ts`
-- `/Users/kenjipcx/Zanarkand Technologies/projects/Farplane-UI/docs/features/FP03-taste-bank-and-tasty-packs.md`
 
-## Current Tables
+## Active Contract
 
-- `resourceBankIngestionJobs`: one explicit capture request, source, note,
-  scope, tags, status, and project/task links.
-- `resourceBankAssets`: retained source references and derived evidence assets.
-  Primary assets carry retrieval facets for Tasty Packs.
-- `resourceBankAnalyses`: source-backed and inferred breakdowns, including
-  why-it-works, hook/retention notes, takeaways, prompt guesses, remix
-  constraints, confidence, and embedding text.
-- `resourceBankSkillFindings`: reusable techniques, existing-skill matches,
-  skill updates, and skill candidates extracted from a source.
+Resource Bank v2 is a compact capture store, not an evidence vault.
+
+```text
+ResourceBankCapture {
+  source: string
+  note?: string
+  focus?: string
+  analysis: string
+  elements: CreativeElement[]
+  tags?: string[]
+  facets?: {
+    outputTypes?: string[]
+    audiences?: string[]
+    ageRanges?: string[]
+    industries?: string[]
+    customerRoles?: string[]
+    projectId?: string
+    taskId?: string
+    tastinessScore?: number
+  }
+}
+
+CreativeElement {
+  kind: visual | audio | hook | storyboard | editing | copy | format | constraint
+  title: string
+  description: string
+  anchor?: string
+}
+```
+
+Store first-class frame, clip, transcript, contact-sheet, or evidence records
+only when a future workflow actually needs direct media reuse or audit proof.
+Do not make evidence objects, lane taxonomies, provenance enums, or
+frame-accurate fields part of the default v2 capture contract.
 
 ## Retrieval Fields
 
-Use first-class asset fields only for things the operator will filter, group, or
-pack by:
+Use facets only for things the operator will filter, group, or pack by:
 
 - `outputTypes`: examples `reel`, `short-video`, `landing-page`, `thumbnail`.
 - `audiences`: examples `founders`, `operators`, `students`, `creators`.
@@ -41,147 +64,77 @@ later UI or query path proves the need.
 
 ## Analysis Shape
 
-For video/social content, write the attention game into analysis text:
+Keep analysis compact and source-useful:
 
 ```text
-First 0-3s hook:
-- What happens immediately?
-- Why would the target viewer keep watching for three seconds?
-- What reusable move can be remixed?
-
-Retention beats:
-- What changes after the hook?
-- What curiosity, visual change, story beat, proof, or escalation earns the
-  next few seconds?
-- What should a future creator borrow at the pattern level?
+analysis:
+  summary: what the source is
+  why_it_works: why it caught attention or matters
+  hook: what earns attention in the first 0-3 seconds when relevant
+  continuation: what keeps people watching/reading when relevant
+  reuse_notes: what to borrow at the pattern level
+  constraints: what not to copy literally
 ```
 
-Store these details in `whyItWorks`, `takeaways`, `frameNotes`, `promptGuess`,
-`remixConstraints`, and `embeddingText`.
+The analysis explains the source; `elements[]` are the production-use pieces.
+
+## Creative Element Guidance
+
+Use compact elements. Prefer several precise elements over one large summary.
+
+- `hook`: opening attention move.
+- `storyboard`: beat, scene, narrative move, or structure.
+- `visual`: art direction, object, setting, layout, frame idea, or asset style.
+- `audio`: voice, music, SFX, silence, or sonic pattern.
+- `editing`: pacing, transition, caption rhythm, motion, or cut pattern.
+- `copy`: caption, headline, phrase structure, or script move.
+- `format`: platform/content format or repeatable wrapper.
+- `constraint`: rights, likeness, brand, source-quality, or remix boundary.
+
+Use `anchor` for lightweight grounding such as `0-3s`, `opening frame`,
+`voiceover`, `caption`, `cutaway`, `end card`, or `operator note`. If the
+source could not be inspected deeply, state that in analysis and keep element
+anchors honest.
+
+## Tasty Pack Shape
+
+Tasty Pack / Inspiration Pack retrieval should return clean captures:
+
+```text
+createTastyPack(request) -> {
+  request: { idea?, timeframe, startAtMs?, endAtMs?, filters },
+  captures: [
+    {
+      captureId,
+      source,
+      analysis,
+      elements
+    }
+  ],
+  meta: { captureCount: number, timeframe: string }
+}
+```
+
+Core consumer fields are only `captures[].source`, `captures[].analysis`, and
+`captures[].elements`. Retrieval notes may exist as non-core metadata, but
+Farplane ingest, content-production skills, and CLI automation must not depend
+on a `notes` array. `source` owns source metadata plus tags/facets such as
+output types, audiences, industries, customer roles, platform, source handle,
+and attribution. CLI text may render count/timeframe from `meta`; production
+skills should consume captures/elements. The retrieval result should be
+high-signal and production-usable, not moodboard prose and not separate
+evidence objects.
 
 ## Write Sequence
 
-1. Create the capture job:
-   `modules/resourceBank/jobs:createIngestionJob`.
-2. Add the primary retained asset:
-   `modules/resourceBank/assets:addResourceAsset`.
-3. Add one or more analyses:
-   `modules/resourceBank/analyses:addResourceAnalysis`.
-4. Add optional skill findings:
-   `modules/resourceBank/skillFindings:addSkillFinding`.
-5. Query `modules/resourceBank/assets:getResourceAsset` to verify the asset and
-   attached records.
-6. Query `modules/resourceBank/retrieval:createTastyPack` with the likely
-   timeframe and facets to verify future pack retrieval.
-
-## Convex Function Map
-
-```text
-createIngestionJob({
-  sourceKind,
-  sourceRef,
-  originalInstruction?,
-  note?,
-  requestedFocus?,
-  sourceScope?,
-  tags?,
-  projectId?,
-  taskId?,
-  externalTaskRef?,
-  requestedBy?,
-  sourcePrivacy?
-}) -> jobId
-
-addResourceAsset({
-  jobId,
-  parentAssetId?,
-  assetRole,
-  assetKind,
-  title,
-  sourceUrl?,
-  canonicalUrl?,
-  storageId?,
-  localPath?,
-  mimeType?,
-  width?,
-  height?,
-  durationMs?,
-  startMs?,
-  endMs?,
-  platform?,
-  author?,
-  attributionStatus?,
-  outputTypes?,
-  audiences?,
-  ageRanges?,
-  industries?,
-  customerRoles?,
-  tastinessScore?,
-  tags?,
-  searchableText?,
-  retentionNote?
-}) -> assetId
-
-addResourceAnalysis({
-  jobId,
-  assetId,
-  analysisType,
-  sourceSkill: "ingest-content",
-  facts?,
-  interpretation?,
-  userIntent?,
-  whyItWorks?,
-  takeaways?,
-  transcriptText?,
-  frameNotes?,
-  promptGuess?,
-  remixConstraints?,
-  confidence?,
-  embeddingText?,
-  embeddingModel?,
-  embedding?,
-  tags?
-}) -> analysisId
-
-addSkillFinding({
-  jobId,
-  assetId,
-  analysisId,
-  findingKind,
-  skillId?,
-  skillPath?,
-  label,
-  capability,
-  evidenceAnchor,
-  howToReuse,
-  suggestedSkillChange?,
-  tags?,
-  confidence?,
-  embeddingText?,
-  embeddingModel?,
-  embedding?
-}) -> findingId
-
-createTastyPack({
-  idea?,
-  timeframe?,
-  startAtMs?,
-  endAtMs?,
-  tags?,
-  outputType?,
-  outputTypes?,
-  audience?,
-  audiences?,
-  ageRanges?,
-  industry?,
-  industries?,
-  customerRole?,
-  customerRoles?,
-  projectId?,
-  taskId?,
-  limit?
-}) -> TastyPack
-```
+1. Create or update one capture for the source.
+2. Store source URL/ref, operator note/focus, analysis summary, tags/facets,
+   and creative elements.
+3. Add optional skill findings only when the source clearly suggests a reusable
+   technique, skill update, or skill candidate.
+4. Query Tasty Pack retrieval with the likely timeframe/facets to verify the
+   capture returns as `{ captureId, source, analysis, elements }`, with tags and
+   facets on `source`.
 
 ## Source Kind Mapping
 
@@ -194,44 +147,36 @@ createTastyPack({
 - `screenshot`: screenshot supplied as the source.
 - `clip`: selected segment from a longer video/audio source.
 
-## Asset Kind Mapping
-
-- `url`: retained source URL.
-- `image`: uploaded image or image URL.
-- `video`: retained video source or upload.
-- `audio`: retained audio source or upload.
-- `file`: generic retained file.
-- `note`: note-only asset.
-- `screenshot`: screenshot evidence.
-- `clip`: selected video/audio range.
-- `frame`: selected video frame.
-- `transcript`: transcript text or transcript file.
-
 ## Segment And Element Mapping
 
 For notes like "the first few seconds are nice" or "I like the image used at
 the start," save:
 
-- the whole source as the primary asset;
-- the highlighted range through `sourceScope`, asset `startMs`/`endMs`, or a
-  derived `clip`/`frame`/`screenshot` asset when available;
-- the reusable idea as analysis `takeaways`;
-- the hook/retention logic in `whyItWorks`, `frameNotes`, and `embeddingText`;
-- the generation recipe as `promptGuess`;
-- attribution and remix boundaries as `remixConstraints`;
-- retrieval facets for audience/output/industry/customer filters.
+- the whole source URL/ref as `source`;
+- the operator note/focus;
+- a compact analysis naming what is known and what is inferred;
+- elements such as `hook`, `visual`, `storyboard`, `editing`, `audio`, `copy`,
+  `format`, and `constraint`;
+- lightweight anchors such as `0-3s`, `opening frame`, or `caption`;
+- retrieval facets for audience/output/industry/customer filters when useful.
+
+## Snapshot And Reset
+
+The active Resource Bank contract is minimal v2. When changing a small old
+vault, do not preserve a long-lived legacy fallback. Snapshot old rows to a
+ticket artifact, clear active Resource Bank rows, and reingest keep-worthy
+sources through the current capture contract.
 
 ## Verification Standard
 
-Storage is not done until Resource Bank returns:
+Storage is not done until Resource Bank retrieval returns:
 
-- the job and primary asset with expected source, title, status, tags, and
-  retrieval facets;
-- at least one retained asset or an explicit note-only reason;
-- at least one analysis from `ingest-content`;
-- optional skill findings only when evidence supports them;
-- a Tasty Pack query that can find the asset by timeframe and supplied facets.
+- the source URL/ref and operator note/focus;
+- compact analysis;
+- at least one creative element for video/social inspiration sources;
+- tags/facets when supplied;
+- no dependency on a legacy analysis-only fallback or default evidence objects.
 
-If the Convex deployment cannot be found, a function is missing, upload fails,
-or the query does not return the expected row, report the exact blocker and
+If the backing store cannot be reached, a function is missing, upload fails, or
+the query does not return the expected capture, report the exact blocker and
 keep the analysis packet in chat or a ticket-scoped artifact.

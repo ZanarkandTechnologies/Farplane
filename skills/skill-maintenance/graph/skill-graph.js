@@ -2,11 +2,11 @@ window.SKILL_GRAPH = {
   "counts": {
     "edge_types": {
       "common-chain": 51,
-      "markdown-ref": 328,
-      "todo-chain": 375
+      "markdown-ref": 331,
+      "todo-chain": 378
     },
-    "edges": 754,
-    "nodes": 107,
+    "edges": 760,
+    "nodes": 109,
     "skill_heat_config": {
       "default_top_n": 25,
       "event_types": [
@@ -26,12 +26,12 @@ window.SKILL_GRAPH = {
     ],
     "sources": {
       "external": 3,
-      "local": 104
+      "local": 106
     },
     "tiers": {
       "1": 6,
-      "2": 38,
-      "3": 63
+      "2": 39,
+      "3": 64
     }
   },
   "edges": [
@@ -4382,8 +4382,31 @@ window.SKILL_GRAPH = {
     {
       "label": "markdown-ref",
       "source": "pulse-update",
+      "target": "telegram-message",
+      "target_ref": "telegram-message",
+      "type": "markdown-ref"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "pulse-update",
       "target": "ticket-opportunity-generator",
       "target_ref": "ticket-opportunity-generator",
+      "type": "markdown-ref"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.2",
+      "order": 2,
+      "source": "pulse-update",
+      "target": "ticket-opportunity-generator",
+      "target_ref": "ticket-opportunity-generator",
+      "type": "todo-chain"
+    },
+    {
+      "label": "markdown-ref",
+      "source": "pulse-update",
+      "target": "worker-artifact-review-request",
+      "target_ref": "worker-artifact-review-request",
       "type": "markdown-ref"
     },
     {
@@ -4391,8 +4414,8 @@ window.SKILL_GRAPH = {
       "label": "todo.1",
       "order": 1,
       "source": "pulse-update",
-      "target": "ticket-opportunity-generator",
-      "target_ref": "ticket-opportunity-generator",
+      "target": "worker-artifact-review-request",
+      "target_ref": "worker-artifact-review-request",
       "type": "todo-chain"
     },
     {
@@ -5690,6 +5713,15 @@ window.SKILL_GRAPH = {
       "type": "todo-chain"
     },
     {
+      "chain_source": "todo_list",
+      "label": "todo.1",
+      "order": 1,
+      "source": "ticket-opportunity-generator",
+      "target": "leverage-advisor",
+      "target_ref": "leverage-advisor",
+      "type": "todo-chain"
+    },
+    {
       "label": "markdown-ref",
       "source": "update-memory",
       "target": "consolidate",
@@ -6046,6 +6078,22 @@ window.SKILL_GRAPH = {
       "type": "todo-chain"
     },
     {
+      "label": "markdown-ref",
+      "source": "worker-artifact-review-request",
+      "target": "telegram-message",
+      "target_ref": "telegram-message",
+      "type": "markdown-ref"
+    },
+    {
+      "chain_source": "todo_list",
+      "label": "todo.1",
+      "order": 1,
+      "source": "worker-artifact-review-request",
+      "target": "telegram-message",
+      "target_ref": "telegram-message",
+      "type": "todo-chain"
+    },
+    {
       "chain_source": "todo_list",
       "label": "todo.1",
       "order": 1,
@@ -6064,7 +6112,7 @@ window.SKILL_GRAPH = {
       "type": "todo-chain"
     }
   ],
-  "generated_at": "2026-07-04T14:25:05+00:00",
+  "generated_at": "2026-07-04T17:03:32+00:00",
   "nodes": [
     {
       "description": "Turn an under-specified decision into three options, tradeoffs, and one recommendation when the user asks for advice.",
@@ -6426,7 +6474,7 @@ window.SKILL_GRAPH = {
       "signals": {
         "composition_heat": {
           "hot_referrer_count": 0,
-          "incoming_ref_count": 2,
+          "incoming_ref_count": 4,
           "last_referenced_at": "",
           "top_referrers": [],
           "window_referrer_invocations": 0
@@ -6450,7 +6498,7 @@ window.SKILL_GRAPH = {
         "uniqueness": {
           "group": "",
           "has_skill_ui": false,
-          "incoming_ref_count": 2,
+          "incoming_ref_count": 4,
           "method_count": 0,
           "outgoing_ref_count": 0,
           "source": "local",
@@ -8116,7 +8164,7 @@ window.SKILL_GRAPH = {
       "signals": {
         "composition_heat": {
           "hot_referrer_count": 0,
-          "incoming_ref_count": 2,
+          "incoming_ref_count": 3,
           "last_referenced_at": "",
           "top_referrers": [],
           "window_referrer_invocations": 0
@@ -8143,7 +8191,7 @@ window.SKILL_GRAPH = {
         "uniqueness": {
           "group": "",
           "has_skill_ui": false,
-          "incoming_ref_count": 2,
+          "incoming_ref_count": 3,
           "method_count": 0,
           "outgoing_ref_count": 8,
           "source": "local",
@@ -9059,6 +9107,68 @@ window.SKILL_GRAPH = {
       "todo_skill_refs": [
         "reference-grounding",
         "review"
+      ]
+    },
+    {
+      "description": "Turn completed worker artifacts into Telegram-ready Kenji review requests with archive-safe refs, reply routing, and a durable receipt.",
+      "eval": "eval_task.json",
+      "group": "",
+      "has_checklist": true,
+      "heat": {
+        "distinct_threads_window": 0,
+        "distinct_tickets_window": 0,
+        "invocation_count_all": 0,
+        "invocation_count_recent": 0,
+        "invocation_count_window": 0,
+        "last_invoked_at": "",
+        "observed_event_count_all": 0,
+        "recent_days": 7,
+        "window_days": 30
+      },
+      "id": "worker-artifact-review-request",
+      "label": "worker-artifact-review-request",
+      "methods": [],
+      "path": "skills/worker-artifact-review-request/SKILL.md",
+      "qa_checklist": "qa_checklist.md",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 1,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [],
+          "has_checklist": true,
+          "has_eval": true,
+          "has_qa_checklist": true,
+          "status": "low",
+          "template_version": "0.3.7"
+        },
+        "maintenance_recommendation": "watch",
+        "uniqueness": {
+          "group": "",
+          "has_skill_ui": false,
+          "incoming_ref_count": 1,
+          "method_count": 0,
+          "outgoing_ref_count": 1,
+          "source": "local",
+          "tier": 2
+        }
+      },
+      "skill_ui": "",
+      "source": "local",
+      "tier": 2,
+      "todo_skill_refs": [
+        "telegram-message"
       ]
     },
     {
@@ -11567,6 +11677,68 @@ window.SKILL_GRAPH = {
       ]
     },
     {
+      "description": "Turn an explicit reminder or escalation request into a bounded LiveKit phone call when Kenji should be chased by voice.",
+      "eval": "",
+      "group": "notifications",
+      "has_checklist": true,
+      "heat": {
+        "distinct_threads_window": 0,
+        "distinct_tickets_window": 0,
+        "invocation_count_all": 0,
+        "invocation_count_recent": 0,
+        "invocation_count_window": 0,
+        "last_invoked_at": "",
+        "observed_event_count_all": 0,
+        "recent_days": 7,
+        "window_days": 30
+      },
+      "id": "phone-chaser",
+      "label": "phone-chaser",
+      "methods": [],
+      "path": "skills/phone-chaser/SKILL.md",
+      "qa_checklist": "qa_checklist.md",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 0,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [
+            "missing_eval"
+          ],
+          "has_checklist": true,
+          "has_eval": false,
+          "has_qa_checklist": true,
+          "status": "moderate",
+          "template_version": "0.3.7"
+        },
+        "maintenance_recommendation": "retire_review",
+        "uniqueness": {
+          "group": "notifications",
+          "has_skill_ui": false,
+          "incoming_ref_count": 0,
+          "method_count": 0,
+          "outgoing_ref_count": 0,
+          "source": "local",
+          "tier": 3
+        }
+      },
+      "skill_ui": "",
+      "source": "local",
+      "tier": 3,
+      "todo_skill_refs": []
+    },
+    {
       "description": "Turn an explicit GitHub PR into bounded polling, review-memory checks, fix loops, and notification-ready status until checks pass.",
       "eval": "",
       "group": "coding",
@@ -11953,13 +12125,13 @@ window.SKILL_GRAPH = {
           "status": "moderate",
           "template_version": "0.2.0"
         },
-        "maintenance_recommendation": "watch",
+        "maintenance_recommendation": "keep",
         "uniqueness": {
           "group": "harness",
           "has_skill_ui": false,
           "incoming_ref_count": 2,
           "method_count": 0,
-          "outgoing_ref_count": 1,
+          "outgoing_ref_count": 3,
           "source": "local",
           "tier": 3
         }
@@ -11968,6 +12140,7 @@ window.SKILL_GRAPH = {
       "source": "local",
       "tier": 3,
       "todo_skill_refs": [
+        "worker-artifact-review-request",
         "ticket-opportunity-generator"
       ]
     },
@@ -12913,7 +13086,7 @@ window.SKILL_GRAPH = {
           "has_skill_ui": false,
           "incoming_ref_count": 1,
           "method_count": 0,
-          "outgoing_ref_count": 0,
+          "outgoing_ref_count": 1,
           "source": "local",
           "tier": 3
         }
@@ -12921,7 +13094,9 @@ window.SKILL_GRAPH = {
       "skill_ui": "",
       "source": "local",
       "tier": 3,
-      "todo_skill_refs": []
+      "todo_skill_refs": [
+        "leverage-advisor"
+      ]
     },
     {
       "description": "Turn project history, memory, README, docs, lessons, troubles, and recent progress into consolidated project context and doc deltas.",

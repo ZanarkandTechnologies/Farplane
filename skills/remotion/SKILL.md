@@ -25,12 +25,20 @@ Use this as the ordered checklist whenever `remotion` is active.
 - [ ] State the composition name, dimensions, fps, duration, assets, props, output intent, and handoff path before authoring code.
 - [ ] Use [research:official-docs](../research/SKILL.md#researchofficial-docs) or [research:code-patterns](../research/SKILL.md#researchcode-patterns) when Remotion API behavior, official docs, local code patterns, or source assets shape the implementation.
 - [ ] Use the native planning phase when choosing authoring route, animation structure, asset route, render route, or scope cut.
-- [ ] Load the relevant Remotion rule file from `rules/` before implementing specialized behavior such as captions, audio, sequencing, timing, transitions, images, videos, fonts, HTML-in-canvas, measurement, or 3D.
-- [ ] Use frame math with `useCurrentFrame()`, `interpolate()`, `Sequence`, and Remotion APIs; do not use CSS transitions, CSS animations, or Tailwind animation utilities for frame-accurate motion.
+- [ ] Before designing visual scenes, layouts, promos, motion graphics, or text-heavy videos, load [video-layout](rules/video-layout.md).
+- [ ] Load the relevant Remotion rule file from `rules/` before implementing specialized behavior such as captions, audio, sequencing, timing, transitions, images, videos, visual effects, fonts, HTML-in-canvas, measurement, maps, or 3D.
+- [ ] Use frame math with `useCurrentFrame()`, `interpolate()`, `Sequence`, and Remotion APIs; prefer `interpolate()` over `spring()` unless physics-based motion is explicitly needed; do not use CSS transitions, CSS animations, or Tailwind animation utilities for frame-accurate motion.
+- [ ] For animations that should be editable in Remotion Studio, keep `interpolate()` inline in the `style` prop and use individual transform properties such as `scale`, `translate`, and `rotate` rather than building a `transform` string.
+- [ ] If the user asks for Remocn or the task benefits from copy-paste motion primitives, transitions, backgrounds, UI scenes, or demo-video blocks, load [remocn](references/remocn.md) before adding registry components.
 - [ ] Route parent production planning through [content-impl-plan](../content-impl-plan/SKILL.md) when the storyboard, assets, advisor actions, or QA gates are not yet compiled.
 - [ ] Route asset inventory and recreation planning through [asset-advisor](../asset-advisor/SKILL.md).
 - [ ] Route still assets through `imagegen` or [ai-image-advisor](../ai-image-advisor/SKILL.md).
 - [ ] Route model-native footage through [ai-video-advisor](../ai-video-advisor/SKILL.md), persistent avatar clips through [avatar-advisor](../avatar-advisor/SKILL.md), and audio direction through [audio-advisor](../audio-advisor/SKILL.md).
+- [ ] For content-production videos using a Tasty Pack or Inspiration Pack,
+  require a locked storyboard, asset manifest, cue sheet, and
+  `reference_leverage_map` from `content-impl-plan` built from
+  `captures[].elements`; block or label the run `technical_smoke` when those
+  are missing.
 - [ ] Render locally with Remotion project commands when a final MP4/still proof is requested and the local project can render.
 - [ ] Route MP4 rendering through [remotion-render](../remotion-render/SKILL.md) only for an explicit external inference.sh render path when local rendering is not the chosen route and external compute is acceptable.
 - [ ] Keep source code, props, local assets, notes, and any render inputs inside the workspace.
@@ -48,7 +56,7 @@ The imported upstream source and refresh note live in `references/upstream-sourc
 
 ## Farplane Routing
 
-- Use this skill for Remotion code authoring, final asset stitching, timing, composition structure, media handling, captions, audio placement, transitions, and local render sanity checks.
+- Use this skill for Remotion code authoring, final asset stitching, timing, composition structure, media handling, captions, audio placement, transitions, effects, Remocn component integration, and local render sanity checks.
 - Use `content-impl-plan` before this skill when the parent content ticket,
   advisor action list, or proof path is not ready.
 - Use `asset-advisor` when the storyboard/reference still needs an asset
@@ -60,16 +68,29 @@ The imported upstream source and refresh note live in `references/upstream-sourc
 - Use local Remotion render commands for final proof when available. Use
   `remotion-render` only when the Remotion code should be rendered to MP4
   through inference.sh `belt`.
+- Use Remocn only as a copied-code component source inside a Remotion project.
+  It is not a replacement for Remotion timing, composition ownership, or final
+  render proof.
 - Do not use CSS transitions, CSS animations, or Tailwind animation utilities for frame-accurate motion; animate with Remotion frame math.
+- For inspiration-led content, do not accept generic CSS/text/cards as a final
+  creative output unless the caller explicitly downgrades the run to
+  `technical_smoke` or `text_only_format`. Production rendering requires a
+  passed `creative_lock`, concrete asset files or source handles, and timed
+  audio or motion obligations from the plan. Do not require separate Resource
+  Bank evidence records unless the production task needs direct media reuse or
+  audit proof.
 
 ## Reference Routing
 
+- Video-first layout, text sizing, safe spacing, promos, motion graphics, or text-heavy scenes: `rules/video-layout.md`
 - Captions or subtitles: `rules/subtitles.md`, `rules/display-captions.md`, `rules/import-srt-captions.md`, or `rules/transcribe-captions.md`
 - Audio, SFX, voiceover, visualization, or silence trimming: `rules/audio.md`, `rules/sfx.md`, `rules/voiceover.md`, `rules/audio-visualization.md`, `rules/silence-detection.md`
 - Sequencing, timing, transitions, trimming, or transparent videos: `rules/sequencing.md`, `rules/timing.md`, `rules/transitions.md`, `rules/trimming.md`, `rules/transparent-videos.md`
+- Visual or pixel effects, light leaks, filters, distortion, glitch, blur, gradients, or shader-like treatments: `rules/effects.md` or `rules/light-leaks.md`
 - Images, videos, GIFs, Lottie, fonts, Tailwind, or HTML-in-canvas: `rules/images.md`, `rules/videos.md`, `rules/gifs.md`, `rules/lottie.md`, `rules/google-fonts.md`, `rules/local-fonts.md`, `rules/tailwind.md`, `rules/html-in-canvas.md`
 - Dynamic props, dimensions, metadata, or DOM/text measurement: `rules/parameters.md`, `rules/calculate-metadata.md`, `rules/get-video-dimensions.md`, `rules/get-video-duration.md`, `rules/get-audio-duration.md`, `rules/measuring-dom-nodes.md`, `rules/measuring-text.md`
-- 3D or Mapbox: `rules/3d.md`, `rules/mapbox.md`
+- 3D or maps: `rules/3d.md`, `rules/maplibre.md`
+- Remocn copy-paste motion components, transitions, backgrounds, UI scenes, or demo-video blocks: `references/remocn.md`
 
 ## When to use
 
@@ -87,7 +108,19 @@ Replace `my-video` with a suitable project name.
 
 ## Designing a video
 
-Animate properties using `useCurrentFrame()` and `interpolate()`. Use Easing to customize the timing of the animation.
+Before designing visual scenes, layouts, promos, motion graphics, or text-heavy
+videos, load `rules/video-layout.md` for video-first layout and text sizing
+guidance.
+
+Animate properties using `useCurrentFrame()` and `interpolate()`. Prefer
+`interpolate()` over `spring()` unless physics-based motion is explicitly
+needed. Use `Easing.bezier()` to customize timing, including jumpy or
+overshooting motion.
+
+For animations that should be editable in Remotion Studio, keep the
+`interpolate()` call inline in the `style` prop and use individual CSS transform
+properties such as `scale`, `translate`, and `rotate` instead of composing a
+`transform` string.
 
 ```tsx
 import { Easing, interpolate, useCurrentFrame, useVideoConfig } from "remotion";
@@ -344,6 +377,10 @@ See [rules/images.md](rules/images.md) for sizing and positioning images, dynami
 
 See [rules/light-leaks.md](rules/light-leaks.md) for light leak overlay effects using `@remotion/light-leaks`.
 
+## Visual and pixel effects
+
+When creating a visual effect, prefer: 1. normal Remotion/HTML/CSS/SVG/filter/blend/mask animation, 2. a listed effect via [rules/effects.md](rules/effects.md), including on HTML rendered through `<HtmlInCanvas>`, 3. a custom `createEffect()` via [rules/effects.md](rules/effects.md) when the user asks for a reusable/project-specific effect, 4. custom `<HtmlInCanvas onPaint>` via [rules/html-in-canvas.md](rules/html-in-canvas.md) only if no effect fits.
+
 ## Lottie animations
 
 See [rules/lottie.md](rules/lottie.md) for embedding Lottie animations in Remotion.
@@ -398,8 +435,8 @@ See [rules/parameters.md](rules/parameters.md) for making a composition parametr
 
 ## Maps
 
-For simple maps with little flyovers, consider just using a static images for maps.
-For complex maps with many flyovers, consider using Mapbox and animating it. Instructions: [rules/mapbox.md](rules/mapbox.md)
+For simple maps with little flyovers, consider using static map images.
+For complex maps with animated routes or flyovers, load [rules/maplibre.md](rules/maplibre.md).
 
 ## Voiceover
 

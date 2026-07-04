@@ -1,20 +1,22 @@
 # Phase Router
 
-Use this reference when deciding which subskill or storage shape owns each
-phase of `ingest_content(source, note?)`.
+Use this reference when deciding which subskill owns each phase of
+`ingest_content(source, note?)`.
 
 ## Core Function
 
 ```text
 ingest_content(source, note?)
   -> read_content(source, note?)
-  -> breakdown_content(evidence, note?)
-  -> extract_usefulness(breakdown, note?)
-  -> store_content(source, evidence, usefulness, note?)
+  -> breakdown_content(source_context, note?)
+  -> extract_elements(breakdown, note?)
+  -> store_capture(source, note, analysis, elements)
 ```
 
-Each phase may choose a different specialist. The skill should behave like a
-router with a shared output contract, not a single monolithic analyzer.
+The skill should behave like a router with one compact output contract:
+Resource Bank captures store source/ref, operator note/focus, analysis summary,
+creative elements, and tags/facets. They do not require separate evidence
+objects by default.
 
 ## Note Intent
 
@@ -32,83 +34,67 @@ Parse the note before extraction:
 The note should influence:
 
 - what part of the source is inspected;
-- which elements are extracted;
+- which creative elements are extracted;
 - which retrieval facets and tags are added;
 - whether generation recipes are stored or generation skills are called now.
 
 ## Read Phase
 
 ```text
-read_content(source, note?) -> evidence_bundle
+read_content(source, note?) -> source_context
 ```
 
 Routes:
 
 - URL/article/webpage/PDF/transcript: `summarize` or direct local read.
-- Social/video/audio: `media-ingest` for source identity, transcript status,
-  representative frames, and retention note.
-- Video segment requested by note: `media-ingest` first, then
-  `video-understanding` over selected frames/transcript section.
-- Image/screenshot: direct visual inspection; optionally store original or
-  screenshot as an asset.
-- Plain idea: create note-only evidence with source kind `note`.
+- Social/video/audio: use public context, operator note, visible metadata, and
+  lightweight inspection when that is enough for a useful capture.
+- Media requiring exact timing, direct reuse, transcript, frames, or audit
+  proof: route to `media-ingest` and then `video-understanding` when needed.
+- Image/screenshot: direct visual inspection.
+- Plain idea: create a note-only capture.
 
-Evidence must mark confidence:
-
-- `source-backed`
-- `frame-backed`
-- `transcript-backed`
-- `visual-only`
-- `note-backed`
-- `inferred`
+If a source cannot be inspected deeply, say so in the analysis. Do not invent
+timeline, audio, or visual claims. Use creative element anchors such as
+`operator note`, `public metadata`, `opening frame`, or `0-3s` to show what the
+element is grounded in.
 
 ## Breakdown Phase
 
 ```text
-breakdown_content(evidence, note?) -> source_facts + taste_analysis
+breakdown_content(source_context, note?) -> analysis
 ```
 
 Breakdown variants:
 
-- `summary`: what the source is and what is visible.
+- `summary`: what the source is and what is visible/known.
+- `hook`: what earns attention first.
+- `storyboard`: beat, scene, format, or narrative structure.
 - `visual`: composition, typography, color, layout, asset choices, focal point.
-- `video`: first 0-3s hook, retention beats, pacing, shot structure, segment
-  timing, editing pattern.
+- `audio`: voice, music, sound design, silence, or SFX pattern.
+- `editing`: pacing, caption rhythm, transitions, motion, cuts.
 - `copy`: caption, headline, claim, CTA, on-screen text, meme wording.
-- `style`: mood, texture, genre, cultural pattern, audience signal.
-- `prompt`: likely generation/editing prompt or recreation instructions.
+- `constraint`: rights, likeness, attribution, source-quality, or do-not-copy
+  boundary.
 
-Do not flatten everything into one summary. If the note highlights one part,
-analyze that part first, then add a one-line whole-source context summary.
+Do not flatten everything into one adjective-heavy summary. If the note
+highlights one part, analyze that part first, then add a one-line whole-source
+context summary.
 
-## Usefulness Phase
+## Element Phase
 
 ```text
-extract_usefulness(breakdown, note?) -> reusable_elements[]
+extract_elements(analysis, note?) -> CreativeElement[]
 ```
 
-Reusable element candidates:
-
-- `style`: visual style, lighting, texture, design language, editing style.
-- `layout`: grid, overlay, composition, hierarchy, caption placement.
-- `segment`: time range, selected frame set, scene, quote, or audio moment.
-- `asset`: background image, cutout, thumbnail, frame, transcript, prompt.
-- `pattern`: hook, meme structure, before/after, contrast, pacing.
-- `recipe`: steps to regenerate something similar.
-- `constraint`: attribution, avoid-copying note, remix boundary.
-
-Element record shape:
+Element shape:
 
 ```text
-ReusableElement = {
-  kind,
-  label,
-  why_useful,
-  evidence_anchor,
-  generation_recipe?,
-  tags,
-  confidence,
-  remix_constraints
+CreativeElement = {
+  kind: "visual" | "audio" | "hook" | "storyboard" | "editing" | "copy" | "format" | "constraint",
+  title: string,
+  description: string,
+  anchor?: string
 }
 ```
 
@@ -118,31 +104,18 @@ or save the extracted recipe first so the vault remains the durable memory.
 ## Store Phase
 
 ```text
-store_content(source, evidence, usefulness, note?) -> jobId + assetId + retrieval_proof
+store_capture(source, note, analysis, elements) -> capture_handle + retrieval_proof
 ```
 
-Current Resource Bank storage can represent elements through:
+Current Resource Bank storage should present this active contract:
 
-- `resourceBankIngestionJobs`: one source/request with note, source scope,
-  status, tags, and project/task links.
-- `resourceBankAssets`: source URL, original file, screenshot, frame,
-  transcript, clip, and retrieval facets for Tasty Packs.
-- `resourceBankAnalyses`: facts, interpretation, why-it-works,
-  hook/retention notes, takeaways, prompt guess, remix constraints, confidence,
-  and embedding text.
-- `resourceBankSkillFindings`: reusable techniques, skill updates, existing
-  skill matches, and skill candidates.
+- source URL/ref;
+- operator note/focus;
+- compact analysis summary;
+- creative elements;
+- tags/facets for retrieval;
+- optional skill findings when the source suggests a reusable technique or
+  skill update.
 
-Future richer storage should add first-class records for:
-
-- segments: time ranges, selected frames, clip labels, transcript spans.
-- reusable elements: style/layout/asset/pattern/recipe records.
-- richer timeline records: only when segment-level rendering or editing needs
-  first-class retention beats.
-- `@convex-dev/rag` or chunk tables: only when large transcripts/documents need
-  chunked retrieval, namespaces, importance weighting, or surrounding context.
-
-Until those tables exist, write element records into `analyses.takeaways`,
-`frameNotes`, `promptGuess`, `remixConstraints`, skill findings, and lightweight
-tags in a structured way. Keep customer/audience/output retrieval in asset
-facets rather than tags.
+Do not require frame, clip, transcript, or contact-sheet records unless the
+current workflow needs direct media reuse or audit proof.

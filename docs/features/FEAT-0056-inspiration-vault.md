@@ -41,7 +41,8 @@ capability handle because the behavior has an owner, proof path, and maintenance
 boundary.
 
 ```text
-capture_inspiration(source, use_case) -> vault_record + reuse_route
+capture_inspiration(source, use_case)
+  -> capture(source, note, analysis, elements, tags/facets) + reuse_route
 ```
 
 ## At A Glance
@@ -63,9 +64,17 @@ they are already canonical specs.
 
 ## What It Does
 
-- Captures high-signal references with source, context, observed pattern, and possible reuse route.
+- Captures high-signal references with source/ref, operator note/focus, compact
+  analysis, creative elements, tags/facets, and possible reuse route.
 - Separates inspiration from accepted doctrine or shipped behavior.
 - Feeds harness-scout, market-learning, content, design, or skill work when a concrete question appears.
+- Feeds content-production through clean Inspiration Pack/Tasty Pack captures:
+  `{ request: { idea?, timeframe, startAtMs?, endAtMs?, filters },
+  captures: [{ captureId, source, analysis, elements }],
+  meta: { captureCount, timeframe } }`, with tags/facets on `source`.
+  Production consumers bind only to `captures[].source`,
+  `captures[].analysis`, and `captures[].elements`; retrieval notes are
+  non-core metadata.
 - Allows proposed status until the pattern earns a feature, skill, ticket, or experiment owner.
 - Keeps raw inspiration out of long-term docs unless distilled.
 
@@ -80,9 +89,17 @@ they are already canonical specs.
 The vault is a waiting room for reusable signal, not canonical truth.
 
 - Records identify source, why it matters, candidate use, and current status.
+- For video/social inspiration, records should preserve compact creative
+  elements rather than only prose summaries. Element kinds are `visual`,
+  `audio`, `hook`, `storyboard`, `editing`, `copy`, `format`, and
+  `constraint`, with optional lightweight anchors such as `0-3s` or `caption`.
 - Accepted inspiration must move into a feature, skill, ticket, experiment, or source decision.
 - Stale inspiration is pruned or moved to temporary research.
 - Vault records do not override specs or skill instructions.
+- When the active Resource Bank schema changes materially and the vault is
+  small, prefer snapshot/reset/reingest over long-lived compatibility fallback.
+  Snapshot old records as rollback/debug evidence, then reingest keep-worthy
+  sources through the current contract.
 
 ## Surfaces
 
@@ -122,7 +139,9 @@ Acceptance signals:
 - This feature is not a permanent archive.
 - This feature does not make raw references public docs.
 - This feature does not skip source scoring when the idea becomes product work.
-- Known limit: Proposed product surface. It needs a dedicated implementation ticket and proof path before it can be marked implemented.
+- Known limit: Proposed product surface. `TASK-0283` is implementing the
+  first production-ready Inspiration Pack v2 slice with minimal Resource Bank
+  captures and content-production `creative_lock` gates.
 - Delete or merge this feature only when its current truth has moved into a clearer owner and all active refs are removed.
 
 ## Metrics
@@ -143,3 +162,7 @@ Acceptance signals:
 
 - 2026-06-27: Feature spec created.
 - 2026-06-27: Migrated into the reader-first feature-spec shape.
+- 2026-07-04: Corrected Inspiration Pack v2 direction to a minimal capture
+  contract: source/ref, operator note/focus, compact analysis, creative
+  elements, tags/facets, and snapshot/reset/reingest for small old vaults
+  instead of long-lived legacy fallback.

@@ -32,18 +32,18 @@ videos, compose Remotion timelines, record audio, or publish content.
 ## Skill Signature
 
 ```text
-asset_advisor(storyboard_or_reference, tasty_pack?, source_assets?, platform?, constraints?, artifact_owner?)
+asset_advisor(storyboard_or_reference, inspiration_pack?, source_assets?, platform?, constraints?, artifact_owner?)
   -> asset_inventory + recreation_plan + generation_routes | blocked_report
 
 state:
-  reads(user brief, storyboard/reference material, source asset paths or URLs,
-        qa_checklist.md)
+  reads(user brief, storyboard/reference material, Inspiration Pack captures
+        and elements, source asset paths or URLs, qa_checklist.md)
   writes(asset plan artifact when durable handoff is requested)
 
 gates:
   source_material_named; rights_or_usage_risk_noted; asset_units_decomposed;
-  recreate_reuse_generate_decisions_made; route_owner_selected;
-  remotion_handoff_ready_when_stitching_needed
+  reference_elements_mapped; recreate_reuse_generate_decisions_made;
+  route_owner_selected; remotion_handoff_ready_when_stitching_needed
 
 routes:
   storyboard | ai-image-advisor | ai-video-advisor | avatar-advisor |
@@ -52,7 +52,8 @@ routes:
 fails:
   vague_asset_bucket; reference_copy_without_rights_note;
   generation_prompt_without_asset_inventory; remotion_handoff_without_files;
-  one_tool_for_every_asset
+  one_tool_for_every_asset; css_text_only_for_inspiration_led_video;
+  inspiration_elements_unmapped
 ```
 
 ## Phase Boundary
@@ -62,19 +63,30 @@ needs metadata, transcripts, or representative frames before decomposition. Use
 `review` when a recreation plan copies a specific reference closely or will
 drive a high-visibility campaign.
 
+For Inspiration Pack inputs, treat `captures[].elements` as the source of
+truth. Every relevant `visual`, `storyboard`, `editing`, `format`, or
+`constraint` element must either map to a concrete asset decision or appear in
+`Missing inputs`. For inspiration-led videos, return a
+`blocked_report` when the plan only offers generic CSS/text/cards without
+source, generated, linked, captured, or explicitly composed assets justified by
+the reference leverage map.
+
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
 - [ ] 1. Bind the source and target.
-  - [ ] Identify the storyboard, reference/Tasty Pack item, source assets,
-    target platform, dimensions, duration, style constraints, and artifact
-    owner.
+  - [ ] Identify the storyboard, reference/Inspiration Pack capture, creative
+    elements, source handles/assets, target platform, dimensions, duration, style
+    constraints, and artifact owner.
   - [ ] Read `qa_checklist.md` as preflight guardrails.
 - [ ] 2. Decompose the asset graph.
-  - [ ] List footage, stills, avatars, voiceover, music, SFX, captions,
-    overlays, fonts, logos, data, product shots, and final render needs.
+  - [ ] List footage, stills, frames, clips, avatars, voiceover, music, SFX,
+    captions, overlays, fonts, logos, data, product shots, motion/edit
+    references, and final render needs.
   - [ ] Mark each asset as `reuse`, `source`, `regenerate`, `capture`,
     `compose`, or `unknown`.
+  - [ ] Map each relevant Inspiration Pack element to an asset row,
+    generation route, or missing-input blocker.
 - [ ] 3. Add recreation constraints.
   - [ ] Note rights, likeness, brand, source quality, duration, aspect ratio,
     visual continuity, audio continuity, and platform-specific constraints.
@@ -98,6 +110,10 @@ drive a high-visibility campaign.
 ## Asset Inventory
 | Asset | Role | Source | Decision | Owner | Acceptance Check |
 | --- | --- | --- | --- | --- | --- |
+
+## Inspiration Element Map
+| Element | Anchor | Asset Decision | Output / Blocker |
+| --- | --- | --- | --- |
 
 ## Recreation Plan
 - Reference pattern:
@@ -126,6 +142,9 @@ drive a high-visibility campaign.
   underlying pattern.
 - Do not hand Remotion a vague mood board. It needs files, durations, scene
   roles, dimensions, captions, and acceptance checks.
+- Do not hand Remotion an inspiration-led asset plan where every visual is
+  generic CSS/text/cards unless the run is explicitly labeled `technical_smoke`
+  or `text_only_format` and the content claim is downgraded.
 - Do not collapse avatar, audio, stills, and model-native clips into one generic
   prompt. Each asset class has different continuity and proof needs.
 
@@ -150,4 +169,5 @@ drive a high-visibility campaign.
 - `recreation_plan`: what to preserve, change, regenerate, source, or compose.
 - `generation_routes`: concrete next-owner handoffs for each asset class.
 - `blocked_report`: missing source material, rights uncertainty, missing
-  storyboard, unsupported asset class, or absent render route.
+  storyboard, unsupported asset class, absent render route, or unmapped
+  Inspiration Pack elements.

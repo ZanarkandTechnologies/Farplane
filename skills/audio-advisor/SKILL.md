@@ -32,16 +32,17 @@ publish audio, or run external generation unless explicitly requested.
 ## Skill Signature
 
 ```text
-audio_advisor(script_or_storyboard, voice?, music?, sfx?, platform?, duration?, artifact_owner?)
+audio_advisor(script_or_storyboard, inspiration_pack?, voice?, music?, sfx?, platform?, duration?, artifact_owner?)
   -> audio_direction_packet + production_routes | blocked_report
 
 state:
-  reads(user brief, script/storyboard, source audio refs, qa_checklist.md)
+  reads(user brief, script/storyboard, Inspiration Pack captures/elements,
+        source audio refs, qa_checklist.md)
   writes(audio direction artifact when durable handoff is requested)
 
 gates:
   audio_roles_named; rights_or_usage_risk_noted; timing_cues_aligned;
-  voice_music_sfx_mix_separated; remotion_handoff_ready
+  voice_music_sfx_mix_separated; motion_bindings_named; remotion_handoff_ready
 
 routes:
   storyboard | asset-advisor | avatar-advisor | ai-video-advisor |
@@ -49,7 +50,8 @@ routes:
 
 fails:
   vibes_only_audio; copyrighted_track_without_plan; voice_without_consent_note;
-  sfx_without_timing; mix_notes_missing_for_final_stitch
+  sfx_without_timing; mix_notes_missing_for_final_stitch;
+  audio_bed_without_motion_bindings
 ```
 
 ## Phase Boundary
@@ -59,19 +61,28 @@ identity. Use `ai-video-advisor` only for provider/app details when model-native
 video tools also create or transform audio. Use `remotion` for deterministic
 audio placement, captions, ducking, waveform visuals, and local render proof.
 
+For Inspiration Pack inputs, consume `audio`, `editing`, `storyboard`, and
+`hook` elements from `captures[].elements`. A generic bed is not enough for an
+inspiration-led video: output time-coded cues and name the required motion/edit
+binding for each important hit, transition, riser, silence, or voice/caption
+beat. Return a `blocked_report` when the capture has no usable audio/editing
+element and the storyboard depends on sound design that cannot be specified
+honestly.
+
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
 - [ ] 1. Bind the audio job.
-  - [ ] Identify script/storyboard, platform, duration, voice needs, music
-    needs, SFX/Foley needs, rights constraints, and artifact owner.
+  - [ ] Identify script/storyboard, Inspiration Pack audio/editing elements,
+    platform, duration, voice needs, music needs, SFX/Foley needs, rights
+    constraints, and artifact owner.
   - [ ] Read `qa_checklist.md` as preflight guardrails.
 - [ ] 2. Split audio roles.
   - [ ] Separate voiceover, dialogue, lipsync, music bed, transition hits,
     Foley, ambient sound, UI sounds, silence, and mix/ducking needs.
 - [ ] 3. Map timing and intent.
   - [ ] Align each audio cue to scene, beat, timestamp/frame range, emotional
-    job, and acceptance check.
+    job, required motion/edit binding, and acceptance check.
 - [ ] 4. Choose routes.
   - [ ] Route persistent presenter or lipsync identity work to
     `avatar-advisor`.
@@ -97,8 +108,8 @@ audio placement, captions, ducking, waveform visuals, and local render proof.
 - Mix notes:
 
 ## Cue Sheet
-| Time / Frames | Scene | Audio Cue | Purpose | Source / Route | Acceptance Check |
-| --- | --- | --- | --- | --- | --- |
+| Time / Frames | Scene | Audio Cue | Motion / Edit Binding | Purpose | Source / Route | Acceptance Check |
+| --- | --- | --- | --- | --- | --- | --- |
 
 ## Routes
 - Voice / lipsync:
@@ -108,14 +119,14 @@ audio placement, captions, ducking, waveform visuals, and local render proof.
 
 ## Done / Proof
 - ready_when:
-- evidence:
+- evidence / source note:
 - residual_risk:
 ```
 
 ## Gotchas
 
 - Do not specify only "upbeat music" or "punchy SFX." Tie audio to beats,
-  emotion, duration, and proof checks.
+  emotion, duration, motion/edit bindings, and proof checks.
 - Do not assume copyrighted tracks, cloned voices, or real-person voices are
   usable without an explicit rights/consent plan.
 - Do not let audio planning disappear inside video generation. Remotion needs
@@ -141,4 +152,5 @@ audio placement, captions, ducking, waveform visuals, and local render proof.
 - `production_routes`: next owner for voice, music, SFX/Foley, avatar/lipsync,
   provider execution, and Remotion placement.
 - `blocked_report`: missing script, unresolved rights/voice permission,
-  missing timing, unavailable source audio, or unclear final composition route.
+  missing timing, unavailable source audio, absent motion bindings, or unclear
+  final composition route.

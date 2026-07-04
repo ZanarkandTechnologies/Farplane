@@ -7,17 +7,14 @@ skills. Prefer concrete tags and reusable levers over generic taste words.
 
 Each saved reference should answer:
 
-- `what_it_is`: the source format and visible subject.
-- `why_it_works`: the first 0-3s hook, contrast, novelty, emotional promise,
-  craft move, or audience fit.
-- `retention_beats`: what makes the viewer stay after the first few seconds.
+- `what_it_is`: the source format and visible/known subject.
+- `why_it_works`: hook, contrast, novelty, emotional promise, craft move, or
+  audience fit.
+- `continuation`: what makes the viewer keep watching/reading when relevant.
 - `reusable_levers`: the repeatable parts that can inspire new work.
-- `reusable_elements`: first-class candidates such as style, layout, segment,
-  asset, pattern, recipe, or remix constraint.
-- `asset_recipe`: what assets a future agent would need to recreate the
-  pattern.
+- `elements`: production-use components using the compact element kinds.
 - `prompt_guess`: a compact generation or editing prompt when useful.
-- `remix_constraints`: what to avoid copying literally.
+- `constraints`: what to avoid copying literally.
 - `best_for`: future project, content type, campaign, product surface, or vibe.
 
 ## Retrieval Facets
@@ -40,9 +37,9 @@ idea?" quickly.
 
 Use tags for lightweight recall and creative language. Do not maintain a large
 taxonomy for hook/open-loop/pacing/retention mechanics; those belong in
-analysis text for the AI to synthesize.
+analysis and creative elements.
 
-Use a mix of these buckets when evidence supports them:
+Use a mix of these buckets when source context supports them:
 
 - Intent: `future-video`, `reuse-bg`, `thumbnail-idea`, `landing-page-inspo`,
   `visual-reference`, `copy-reference`, `editing-reference`.
@@ -55,27 +52,27 @@ Use a mix of these buckets when evidence supports them:
 - Retrieval: project name, campaign name, client/product, output type, or
   platform.
 
-## Reusable Lever Shape
-
-Write reusable levers as action-ready phrases:
+## Creative Element Kinds
 
 ```text
-- Build a 2x2 collage from four thematically related chaos/study images.
-- Put a centered vertical face cutout over the grid to create a human anchor.
-- Use black caption bars with white/yellow text for instant mobile legibility.
-- Keep the copied idea at the composition/pacing level, not creator identity.
+CreativeElement {
+  kind: visual | audio | hook | storyboard | editing | copy | format | constraint
+  title
+  description
+  anchor?
+}
 ```
 
-## Reusable Element Kinds
+Examples:
 
-- `style`: "high-contrast lo-fi academic chaos with handheld phone energy."
-- `layout`: "2x2 background grid with centered vertical talking-head overlay."
-- `segment`: "first 3 seconds, before the talking-head zoom."
-- `asset`: "messy desk background, black caption bar, yellow subtitle strip."
-- `pattern`: "contrarian claim over visual proof collage."
-- `recipe`: "generate four study-chaos panels, crop to 9:16 grid, overlay face."
-- `constraint`: "do not copy the creator identity, exact caption, or source
-  frames; reuse the composition pattern."
+- `hook`: "fake AI-news headline buys attention in 0-3s."
+- `storyboard`: "wellness ritual escalates into product reveal."
+- `visual`: "ancient papery fresco texture with central mythic figure."
+- `audio`: "guided-meditation voiceover cadence remixed with devtool terms."
+- `editing`: "headline wrapper -> ritual beat -> product reveal -> end card."
+- `copy`: "spiritualized coding slogan used as affirmation."
+- `format`: "social-news wrapper around parody campaign clip."
+- `constraint`: "do not copy actor likeness, source frames, captions, or brand."
 
 ## Future Retrieval Query Shape
 
@@ -83,8 +80,15 @@ Future creation skills should query by:
 
 ```text
 create_tasty_pack(idea?, timeframe?, audience?, industry?, outputType?, tags?, count?)
-  -> top_matches + why_relevant + reusable_levers + attribution
+  -> {
+       request: { idea?, timeframe, startAtMs?, endAtMs?, filters },
+       captures: [{ captureId, source, analysis, elements }],
+       meta: { captureCount: number, timeframe: string }
+     }
 ```
+
+Creation skills consume only `captures[].source`, `captures[].analysis`, and
+`captures[].elements`. Retrieval notes are non-core metadata.
 
 Example retrieval requests:
 
