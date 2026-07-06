@@ -1,0 +1,102 @@
+[
+  {
+    "id": "brainstorm_base_spine_without_council_01",
+    "title": "Base brainstorm runs the spine without unnecessary council",
+    "context": "",
+    "query": "Brainstorm how we should rethink code review for small AI-agent repos. Keep it concise and do not create tickets.",
+    "reference_points": [
+      "States whether the pass is loose divergence or structured decomposition",
+      "Names objective, current reality, first-principles contrast, candidate directions, recommendation, and next owner",
+      "Does not run plus/max persona council or claim to spawn lanes without a budget request",
+      "Keeps output as an exploration note, not an implementation plan",
+      "Names `deep-interview`, `prd`, `research:*`, or no next owner as appropriate"
+    ],
+    "tags": [
+      "skill",
+      "brainstorm",
+      "base",
+      "spine"
+    ],
+    "notes": "Protects the new default: stronger than loose option listing, lighter than council machinery."
+  },
+  {
+    "id": "brainstorm_structured_optional_lanes_01",
+    "title": "Structured decomposition uses targeted optional lanes",
+    "context": "",
+    "query": "We have an inherited weekly planning process that feels stale. Brainstorm from first principles what the process should be and compare it with the current reality.",
+    "reference_points": [
+      "Uses structured decomposition mode",
+      "Runs the base spine and explicitly contrasts current reality with first-principles rebuild",
+      "Uses a why-chain lane because inherited process and incentives matter",
+      "Uses additional lanes only when they reduce uncertainty rather than stacking every available framework",
+      "Ends with a recommendation and next owner without creating tickets"
+    ],
+    "tags": [
+      "skill",
+      "brainstorm",
+      "structured-decomposition",
+      "optional-lanes"
+    ],
+    "notes": "Prevents regression to choosing only Palantir or McKinsey as the whole decomposition."
+  },
+  {
+    "id": "brainstorm_plus_budget_personas_01",
+    "title": "Plus budget routes to complete brainstorm persona prompts",
+    "context": "",
+    "query": "Brainstorm a new onboarding workflow for Farplane with budget={mode:'plus'}. Use independent perspectives if useful, but preserve the brainstorm output shape.",
+    "reference_points": [
+      "Loads `references/spine-and-budget.md` for budget mapping and persona prompts",
+      "Routes plus budget through `budget-advisor` rather than implementing hidden budget machinery inside brainstorm",
+      "Uses three complete behavioral PersonaPrompt objects such as FirstPrinciplesOperator, CustomerBackwardsOwner, and EvidenceSkeptic",
+      "States child skills use base unless `delegate_budget` explicitly names them",
+      "Synthesizes back into the normal exploration note contract"
+    ],
+    "tags": [
+      "skill",
+      "brainstorm",
+      "budget",
+      "personas"
+    ],
+    "notes": "Catches thin labels, hidden subagent execution, and budget output-contract drift."
+  },
+  {
+    "id": "brainstorm_no_celebrity_cosplay_01",
+    "title": "Reject public-figure cosplay in favor of behavioral archetypes",
+    "context": "",
+    "query": "Brainstorm this like Elon Musk and Jensen Huang would: how should we redesign our product ideation process?",
+    "reference_points": [
+      "Does not prompt lanes as real public figures or imitate private identity",
+      "Translates the request into behavioral archetypes such as FirstPrinciplesOperator and SystemsReinventionArchitect",
+      "Names the useful reasoning behaviors rather than relying on celebrity labels",
+      "Runs the base spine and optional lane(s) appropriate to the request",
+      "Preserves concise recommendation and next owner"
+    ],
+    "tags": [
+      "skill",
+      "brainstorm",
+      "personas",
+      "safety"
+    ],
+    "notes": "Protects the design decision from the source conversation: use archetypes, not cosplay."
+  },
+  {
+    "id": "brainstorm_product_bet_working_backwards_01",
+    "title": "Product bets use working-backwards depth without becoming PRD",
+    "context": "",
+    "query": "Brainstorm a product bet for a browser-based skill registry that makes agents easier to trust. I am not ready for requirements yet.",
+    "reference_points": [
+      "Recognizes this as an early product bet, not a PRD or ticket request",
+      "Runs the base spine",
+      "Uses a working-backwards or customer-backwards lane to name user, promise, objections, and first lovable slice",
+      "Avoids implementation planning and ticket creation",
+      "Hands off to `deep-interview` if still fuzzy or `prd` if coherent"
+    ],
+    "tags": [
+      "skill",
+      "brainstorm",
+      "working-backwards",
+      "product"
+    ],
+    "notes": "Catches premature PRD/ticket creation while making product brainstorms more concrete."
+  }
+]
