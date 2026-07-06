@@ -17,8 +17,10 @@ phone_chaser_check(request, payload, env_state) -> pass | block | dry_run_only
 
 - [ ] The user explicitly asked for a phone call, chaser, reminder call, or
   test call in this turn or the active task context.
-- [ ] The recipient is Kenji or an explicitly approved test number; do not call
-  third parties, customers, public numbers, or guessed contacts.
+- [ ] The recipient is Kenji, a named internal organization recipient, or an
+  explicitly approved test number with a legitimate reminder/escalation purpose;
+  do not call prospects, customers, public numbers, unknown recipients, or
+  guessed contacts.
 - [ ] The message is short, non-sensitive, and asks for one concrete action.
 - [ ] The payload and response shown in chat omit secrets, SIP credentials, API
   keys, and live phone numbers unless the user already wrote the same number in

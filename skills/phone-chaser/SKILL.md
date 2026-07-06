@@ -1,6 +1,6 @@
 ---
 name: phone-chaser
-description: "Turn an explicit reminder or escalation request into a bounded LiveKit phone call when Kenji should be chased by voice."
+description: "Turn an explicit reminder or escalation request into a bounded LiveKit phone call for Kenji or an approved internal/test recipient."
 tier: 3
 group: notifications
 source: local
@@ -21,10 +21,13 @@ This skill owns the harness workflow and dispatch guardrails. The deployable
 LiveKit worker lives at `../../farplane/phone-chaser/` and should stay there
 unless the runtime is being changed.
 
-Phone calls are external side effects. Do not place calls to third parties,
-customers, public numbers, or unknown recipients. Default recipient and caller
-values must come from runtime env or private config; never write live phone
-numbers, keys, or SIP credentials into tracked files.
+Phone calls are external side effects. The default recipient is Kenji's
+configured reminder number, but the operator may provide a recipient override
+for a named internal organization recipient or explicit test number. Do not
+place calls to prospects, customers, public numbers, unknown recipients, or any
+recipient where the legitimate reminder relationship is unclear. Default
+recipient and caller values must come from runtime env or private config; never
+write live phone numbers, keys, or SIP credentials into tracked files.
 
 ## Skill Signature
 
@@ -38,7 +41,7 @@ gates: explicit_user_call_intent; allowed_recipient; no_secrets; message_bound;
        livekit_cli_available; dispatch_created_or_blocker_recorded
 routes: phone-chaser -> telegram-message only when phone call is blocked and a
         Telegram fallback was explicitly useful
-fails: accidental repeated calls; unapproved third-party call; secret exposure;
+fails: accidental repeated calls; unapproved external call; secret exposure;
        local-only path masquerading as phone proof
 ```
 
@@ -56,6 +59,8 @@ ticketed before editing the deployable agent.
     call, or test call.
   - [ ] Resolve `phone_number`, `message`, `urgency`, and `agent_name` from
     user input, runtime env, or private config.
+  - [ ] Confirm any `phone_number` override targets a named internal recipient
+    or explicit test number with a legitimate reminder/escalation purpose.
   - [ ] Keep the reminder short enough for a phone call.
 - [ ] 2. Read guardrails.
   - [ ] Read `qa_checklist.md` before dispatch.
@@ -86,8 +91,9 @@ ticketed before editing the deployable agent.
 Short reminder shape:
 
 ```text
-Kenji. {one concrete reason}. Your one action is {approve/revise/reject/open
-Codex/reply received}. Say it now or reply in Codex.
+{Recipient}. This is Farplane for Kenji. {one concrete reason}. Your one action
+is {approve/revise/reject/open Codex/reply received}. Say it now or reply in
+Codex.
 ```
 
 Dispatch command:
@@ -110,8 +116,9 @@ python3 skills/phone-chaser/scripts/dispatch_call.py \
 
 - The LiveKit-rented phone number can be inbound-only; outbound calls require
   the configured SIP trunk and allowed caller number.
-- Do not use this skill as a general robocall tool. Its scope is Kenji-facing
-  reminders and explicit test calls.
+- Do not use this skill as a general robocall or cold outreach tool. Its scope
+  is bounded reminder/escalation calls to Kenji, named internal recipients, and
+  explicit test numbers.
 - Fish Audio is only the voice. Talkback also depends on LiveKit STT/LLM
   configuration inside the deployed runtime.
 - Repeated dispatch tests can ring the phone multiple times. Space tests out

@@ -7,10 +7,19 @@ from dataclasses import dataclass
 
 from dotenv import load_dotenv
 from livekit import agents, api
-from livekit.agents import Agent, AgentServer, AgentSession
+from livekit.agents import Agent, AgentServer, AgentSession, TurnHandlingOptions
 from livekit.plugins.fishaudio import TTS
 
 load_dotenv(".env.local")
+
+DEFAULT_STT_MODEL = "deepgram/flux-general:en"
+DEFAULT_LLM_MODEL = "google/gemma-4-31b-it"
+DEFAULT_FISH_AUDIO_MODEL = "s1"
+DEFAULT_FISH_AUDIO_LATENCY_MODE = "low"
+DEFAULT_TURN_DETECTION = "stt"
+DEFAULT_MIN_ENDPOINTING_DELAY = 0.3
+DEFAULT_MAX_ENDPOINTING_DELAY = 2.0
+DEFAULT_MIN_INTERRUPTION_DURATION = 0.5
 
 DEFAULT_MESSAGE = (
     "Kenji. This is Farplane. There is a decision waiting. "
@@ -46,6 +55,14 @@ def _env(name: str, default: str = "") -> str:
     return os.getenv(name, default).strip()
 
 
+def _float_env(name: str, default: float) -> float:
+    raw_value = _env(name, str(default))
+    try:
+        return float(raw_value)
+    except ValueError:
+        return default
+
+
 def _dispatch_from_metadata(metadata: str) -> ReminderDispatch:
     try:
         raw = json.loads(metadata or "{}")
@@ -66,9 +83,9 @@ def _tts() -> TTS:
     return TTS(
         api_key=_env("FISH_API_KEY") or None,
         voice_id=_env("FISH_AUDIO_REFERENCE_ID") or None,
-        model=_env("FISH_AUDIO_MODEL", "s1"),
+        model=_env("FISH_AUDIO_MODEL", DEFAULT_FISH_AUDIO_MODEL),
         sample_rate=24000,
-        latency_mode=_env("FISH_AUDIO_LATENCY_MODE", "balanced"),
+        latency_mode=_env("FISH_AUDIO_LATENCY_MODE", DEFAULT_FISH_AUDIO_LATENCY_MODE),
     )
 
 
@@ -97,7 +114,7 @@ async def _dial_phone(ctx: agents.JobContext, reminder: ReminderDispatch) -> str
                 sip_call_to=reminder.phone_number,
                 sip_number=_env("LIVEKIT_SIP_NUMBER") or None,
                 participant_identity=participant_identity,
-                participant_name="Kenji phone",
+                participant_name="Reminder recipient",
                 wait_until_answered=True,
             )
         )
@@ -118,22 +135,47 @@ server = AgentServer()
 async def phone_chaser(ctx: agents.JobContext) -> None:
     reminder = _dispatch_from_metadata(ctx.job.metadata)
     await ctx.connect()
-    participant_identity = await _dial_phone(ctx, reminder)
-    await ctx.wait_for_participant(identity=participant_identity)
 
     session = AgentSession(
-        stt=_env("LIVEKIT_STT_MODEL", "deepgram/nova-3:en"),
-        llm=_env("LIVEKIT_LLM_MODEL", "google/gemma-4-31b-it"),
+        stt=_env("LIVEKIT_STT_MODEL", DEFAULT_STT_MODEL),
+        llm=_env("LIVEKIT_LLM_MODEL", DEFAULT_LLM_MODEL),
         tts=_tts(),
-        allow_interruptions=True,
+        turn_handling=TurnHandlingOptions(
+            turn_detection=_env("LIVEKIT_TURN_DETECTION", DEFAULT_TURN_DETECTION),
+            endpointing={
+                "mode": "fixed",
+                "min_delay": _float_env(
+                    "LIVEKIT_MIN_ENDPOINTING_DELAY",
+                    DEFAULT_MIN_ENDPOINTING_DELAY,
+                ),
+                "max_delay": _float_env(
+                    "LIVEKIT_MAX_ENDPOINTING_DELAY",
+                    DEFAULT_MAX_ENDPOINTING_DELAY,
+                ),
+            },
+            interruption={
+                "mode": "adaptive",
+                "min_duration": _float_env(
+                    "LIVEKIT_MIN_INTERRUPTION_DURATION",
+                    DEFAULT_MIN_INTERRUPTION_DURATION,
+                ),
+                "min_words": 0,
+            },
+            preemptive_generation={"preemptive_tts": True},
+        ),
         user_away_timeout=15.0,
     )
     await session.start(room=ctx.room, agent=PhoneChaser(reminder))
-    speech = session.say(reminder.message, allow_interruptions=True)
-    await speech.wait_for_playout()
-    await asyncio.sleep(_conversation_seconds())
-    session.shutdown(drain=True)
-    ctx.shutdown()
+
+    try:
+        participant_identity = await _dial_phone(ctx, reminder)
+        await ctx.wait_for_participant(identity=participant_identity)
+        speech = session.say(reminder.message, allow_interruptions=True)
+        await speech.wait_for_playout()
+        await asyncio.sleep(_conversation_seconds())
+    finally:
+        session.shutdown(drain=True)
+        ctx.shutdown()
 
 
 if __name__ == "__main__":

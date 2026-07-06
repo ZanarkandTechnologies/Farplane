@@ -51,13 +51,25 @@ Optional model/runtime knobs:
 ```text
 LIVEKIT_STT_MODEL
 LIVEKIT_LLM_MODEL
+LIVEKIT_TURN_DETECTION
+LIVEKIT_MIN_ENDPOINTING_DELAY
+LIVEKIT_MAX_ENDPOINTING_DELAY
+LIVEKIT_MIN_INTERRUPTION_DURATION
 FARPLANE_PHONE_CHASER_CONVERSATION_SECONDS
 ```
 
-Current default LLM is `google/gemma-4-31b-it` because LiveKit lists Gemma 4
-31B as its recommended default for voice agents and serves it on LiveKit
-infrastructure. Do not switch models during a dispatch-only task; make model
-changes in the runtime module with a deployment proof.
+Current defaults favor low-latency reminder calls:
+
+- STT: `deepgram/flux-general:en`
+- LLM: `google/gemma-4-31b-it`
+- TTS: Fish Audio `latency_mode=low`
+- Turn detection: `stt`
+- Endpointing: `0.3` minimum delay and `2.0` maximum delay
+- Interruption: adaptive mode with `0.5` second minimum interruption duration
+- Preemptive generation: enabled with preemptive TTS
+
+Do not switch models during a dispatch-only task; make model changes in the
+runtime module with deployment proof.
 
 ## Common Commands
 

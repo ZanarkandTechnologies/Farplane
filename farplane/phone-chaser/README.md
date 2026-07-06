@@ -43,9 +43,22 @@ These are rendered into `~/.codex/config.toml` from `~/.farplane/config.toml`.
 
 ## Optional Env
 
-- `LIVEKIT_STT_MODEL` defaults to `deepgram/nova-3:en`
+- `LIVEKIT_STT_MODEL` defaults to `deepgram/flux-general:en`
 - `LIVEKIT_LLM_MODEL` defaults to `google/gemma-4-31b-it`
+- `LIVEKIT_TURN_DETECTION` defaults to `stt`
+- `LIVEKIT_MIN_ENDPOINTING_DELAY` defaults to `0.3`
+- `LIVEKIT_MAX_ENDPOINTING_DELAY` defaults to `2.0`
+- `LIVEKIT_MIN_INTERRUPTION_DURATION` defaults to `0.5`
 - `FARPLANE_PHONE_CHASER_CONVERSATION_SECONDS` defaults to `45`
+
+## Latency Notes
+
+The first reminder is scripted with `session.say(...)`, so delay after pickup is
+primarily SIP answer handling, worker/session startup, and TTS startup rather
+than LLM generation. The runtime defaults Fish Audio to low-latency mode, uses
+Deepgram Flux STT for faster turn endpointing after the reminder, and enables
+LiveKit preemptive generation with preemptive TTS for replies. The session is
+started before dialing so pickup does not wait for agent-session initialization.
 
 ## Skill Entry
 
