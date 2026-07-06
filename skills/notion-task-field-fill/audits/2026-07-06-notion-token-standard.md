@@ -4,6 +4,7 @@ owner: notion-task-field-fill
 status: complete
 kind: skill-audit
 created_at: 2026-07-06
+superseded_by: 2026-07-06-ntn-migration.md
 ---
 
 # Notion Token Standard
@@ -11,14 +12,15 @@ created_at: 2026-07-06
 ## Delta
 
 Farplane now treats `NOTION_TOKEN` as the canonical Notion credential for
-`notion-task-field-fill` and the Notion MCP adapter. `NOTION_API_KEY` is no
-longer accepted by the skill helper as a fallback.
+`notion-task-field-fill`. `NOTION_API_KEY` is no longer accepted by the skill
+helper as a fallback.
 
 ## Reason
 
-The live Notion MCP adapter expects `NOTION_TOKEN`. Keeping `NOTION_API_KEY` as
-Farplane's internal canonical name created a hidden mapping step and made
-Doppler, install, MCP, and skill helper behavior harder to debug.
+The Notion task field-fill path expects `NOTION_TOKEN`; after TASK-0303 the
+skill bridges that value to `NOTION_API_TOKEN` only for the official `ntn` CLI
+subprocess. Keeping `NOTION_API_KEY` as Farplane's internal canonical name
+created hidden mapping and stale-runtime confusion.
 
 ## Proof
 

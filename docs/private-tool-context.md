@@ -77,8 +77,9 @@ Put in tracked repo docs:
   is the correct owner.
 - If a private handle is required but missing, fail closed with a clear
   `private_context_missing` or `configured: false` state.
-- For Notion planning automation, keep access MCP-only. Do not add public
-  Notion API script fallbacks.
+- For Notion planning automation, keep access through the official `ntn` CLI
+  launched from the local Farplane credential environment. Do not add raw
+  public API script fallbacks or Notion MCP as the normal task-planning path.
 
 ## Example Pattern
 
@@ -86,7 +87,7 @@ Shared skill text:
 
 ```md
 Load `~/.codex/private/docs/notion.md` and resolve `notion.tasks.source`.
-Query rows through the Notion MCP. If the private handle is missing, report
+Query rows through `ntn` using the private handle. If the private handle is missing, report
 `private_context_missing`; do not guess with semantic search.
 ```
 
@@ -103,8 +104,8 @@ Tracked test text:
 
 ```md
 Weekly Tasks source: private handle `notion.tasks.source`
-Expected fallback: connector unavailable or local filesystem board
-Forbidden actions: mutate Notion status, public API fallback
+Expected fallback: ntn unavailable or local filesystem board
+Forbidden actions: mutate Notion status, raw public API fallback, Notion MCP as normal path
 ```
 
 ## Verification

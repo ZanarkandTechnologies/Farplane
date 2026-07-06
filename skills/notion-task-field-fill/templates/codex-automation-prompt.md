@@ -19,17 +19,19 @@ Steps:
    `scripts/notion_config.py` to load `NOTION_TOKEN` from the runtime env
    supplied by `farplane run -- <command>` or Doppler. Private
    `~/.farplane/config.toml` is fallback/cache only; do not read
-   `NOTION_API_KEY` or Codex MCP config.
-4. Enforce compact-query mode before any Notion MCP call:
+   `NOTION_API_KEY` or Codex MCP config. When invoking `ntn`, bridge
+   `NOTION_TOKEN` to `NOTION_API_TOKEN` only for that subprocess.
+4. Enforce compact-query mode before any `ntn` Notion call:
    - At most 1 Tasks candidate query, `page_size <= 25`.
-   - Always pass `filter_properties`; never query Tasks, Projects, or Goals
-     broadly in this automation.
+   - Always pass `filter_properties==<property-id>` query parameters; never
+     query Tasks, Projects, or Goals broadly in this automation.
    - Do not use a separate Notion wrapper skill or search for initial Task
      candidates in this scheduled mode; wrappers may hide broad queries.
    - Do not repeat an equivalent data-source query. If compact querying fails,
      record `context_gap: compact_query_failed` and stop instead of retrying
      broadly.
-5. Fetch recent candidate Tasks through Notion MCP with incomplete-status,
+5. Fetch recent candidate Tasks through `ntn api /v1/data_sources/{id}/query`
+   with incomplete-status,
    missing-target-field, and narrow time-window filters. Normalize immediately,
    dedupe by page ID, then discard raw rows.
 6. Before reading row contents, inspect the first returned row's property names.
@@ -63,9 +65,10 @@ Hard gates:
   connector-fallback mode.
 - Do not write medium/low-confidence fields.
 - Do not mutate task `Status`.
-- Do not use raw public Notion API scripts or `NOTION_API_KEY` credential fallbacks.
+- Do not use raw public Notion API scripts, Notion MCP, or `NOTION_API_KEY`
+  credential fallbacks.
 - Do not create another recurring runner from inside this run.
 - Do not paginate automatically or fetch full Notion page objects in scheduled
   mode.
-- Do not continue after repeated `API_query_data_source` calls or unexpected
+- Do not continue after repeated equivalent `ntn` data-source query calls or unexpected
   Tasks properties; write a blocked summary instead.

@@ -19,7 +19,7 @@ strategy `Task Hygiene` preflight.
 
 This is a proposal-first workflow. It reads private Notion handles and compact
 query recipes from `/Users/kenjipcx/.codex/private/docs/notion.md`, queries
-Notion only through MCP, writes a local proposal artifact, and only applies live
+Notion through the official `ntn` CLI, writes a local proposal artifact, and only applies live
 Notion property updates from typed high-confidence proposals.
 
 Low-level helper scripts in this skill that need direct Notion credentials must
@@ -28,17 +28,19 @@ process environment, preferably via `farplane run -- <command>` or
 `doppler run -- <command>`. Private `[integrations].notion_token` in
 `~/.farplane/config.toml` is fallback/cache only. Do not read
 `NOTION_API_KEY`, `notion_api_key`, or Codex MCP config from skill scripts.
+When launching `ntn`, bridge `NOTION_TOKEN` to `NOTION_API_TOKEN` only at the
+subprocess boundary.
 
 ## Skill Signature
 
 ```text
-notion_task_field_fill(run_envelope, private_context?, mcp_tools?)
+notion_task_field_fill(run_envelope, private_context?, ntn_cli?)
   -> proposal_artifacts + optional_typed_writes + readback_receipts
 
 state:
   reads(/Users/kenjipcx/.codex/private/TOOLS.md,
         /Users/kenjipcx/.codex/private/docs/notion.md,
-        Notion MCP Tasks/Projects/Goals rows?, NOTION_TOKEN for helper
+        ntn Tasks/Projects/Goals rows?, NOTION_TOKEN for helper
         scripts?, Telegram config?)
   writes(.farplane/state/notion-task-field-fill/runs/<run-id>/*,
          optional high-confidence Notion field updates,
@@ -53,18 +55,19 @@ routes:
   telegram-message | interval-update | review
 
 fails:
-  uses a separate Notion wrapper skill; broad Notion page dump; semantic-search task
-  discovery; public Notion API fallback; reads NOTION_API_KEY/notion_api_key;
-  writes medium/low-confidence fields; stores private URLs, IDs, or tokens in
-  tracked artifacts
+  uses Notion MCP as the normal path; uses a separate Notion wrapper skill;
+  broad Notion page dump; semantic-search task discovery; raw public API helper
+  fallback outside `ntn`; reads NOTION_API_KEY/notion_api_key; writes
+  medium/low-confidence fields; stores private URLs, IDs, or tokens in tracked
+  artifacts
 ```
 
 ## Phase Boundary
 
 This skill follows Tier 0 phases inline. Call `review` only when changing this
 skill, adding a live-write path, or judging a material proof bundle. Do not call
-a separate Notion wrapper skill at runtime; the private Notion doc plus MCP
-tools are the dependency boundary.
+a separate Notion wrapper skill at runtime; the private Notion doc plus `ntn`
+are the dependency boundary.
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
@@ -78,7 +81,7 @@ tools are the dependency boundary.
       in tracked artifacts. If a low-level helper script needs a credential,
       load only `NOTION_TOKEN` via `scripts/notion_config.py`.
 - [ ] 3. Discover candidates.
-      Run one compact MCP Tasks query with bounded page size,
+      Run one compact `ntn` Tasks query with bounded page size,
       `filter_properties`, no repeated equivalent query, and no raw page dump.
 - [ ] 4. Normalize or stop.
       Normalize and filter candidate rows before reasoning; record
@@ -87,7 +90,7 @@ tools are the dependency boundary.
       is unsafe.
 - [ ] 5. Enrich only as needed.
       Fetch Plan Week, pinned pages, Projects, Goals, and area mappings through
-      compact MCP queries only when candidates need that context.
+      compact `ntn` queries only when candidates need that context.
 - [ ] 6. Decide fields independently.
       Produce per-field decisions for `Act Time`, `Project`, `Areas`,
       `Attention Required`, and `Tags`; abstain on conflicting evidence.
@@ -147,7 +150,7 @@ Asia/Kuala_Lumpur.
 Load private handles, schema notes, compact property IDs, project/area mappings,
 and task-creation defaults from
 `/Users/kenjipcx/.codex/private/docs/notion.md`. Query the live workspace
-through Notion MCP only. Scheduled `notify` mode has a strict order: candidate
+through `ntn` only. Scheduled `notify` mode has a strict order: candidate
 Tasks must come from the explicit compact Tasks query in the next section, not
 from a broad wrapper or search result.
 
@@ -184,12 +187,13 @@ Default call budget for `notify` mode:
 - Search: disabled for scheduled runs unless the candidate title contains an
   exact active-project alias already documented in private context.
 
-For every `API_query_data_source` call:
+For every `ntn api /v1/data_sources/{data_source_id}/query` call:
 
 - Set `page_size` to the smallest honest limit: `25` for task candidates,
   `20` for projects, `10` for goals, and `5` for pinned planning pages.
-- Pass `filter_properties` for only the fields needed by the run. Never query a
-  Tasks, Projects, or Goals data source without `filter_properties`.
+- Pass `filter_properties==<property-id>` query parameters for only the fields
+  needed by the run. Never query a Tasks, Projects, or Goals data source
+  without `filter_properties`.
 - Sort by the narrow date/status signal needed for the call. Do not paginate
   automatically in scheduled runs; record `context_gap: "candidate_page_limit"`
   if the page limit is hit.
@@ -216,7 +220,7 @@ IDs or URLs in this ledger.
 
 For the scheduled six-hour run, the Tasks query should filter to incomplete
 rows with at least one missing target field and a current-window signal. Prefer
-`created_time` when the MCP surface supports it. If only property filters are
+`created_time` when the `ntn`/API surface supports it. If only property filters are
 available, use `Act Time` inside the local day/week window, then post-filter
 top-level `created_time` during normalization. If no candidates remain after
 post-filtering, write empty artifacts and skip all context calls.
@@ -293,7 +297,7 @@ shape. The Markdown report should include:
 - Never mutate task `Status`, delete pages, archive pages, publish, spend money,
   or create a hidden recurring runner from this skill.
 - Never use raw Notion public API scripts as a fallback. Notion access must flow
-  through MCP or fail closed.
+  through `ntn` or fail closed.
 - Never copy private Notion IDs, saved view URLs, page IDs, Telegram tokens, or
   credentials into tracked artifacts.
 - Never run broad Notion data-source queries in scheduled automation. Missing

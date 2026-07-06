@@ -107,13 +107,13 @@ views. Use this order:
 1. Resolve source handles and compact property IDs from private local context.
 2. Run exactly one Tasks candidate query with:
    - `page_size <= 25`
-   - `filter_properties` limited to `Name`, `Status`, `Act Time`,
+   - `filter_properties` query parameters limited to `Name`, `Status`, `Act Time`,
      `Task Due Date`, `Project`, `Areas`, `Attention Required`, `Tags`,
      `Description`, `Pinned`, and `Goals`
    - filters for incomplete status, missing target field, and the narrowest
      available time signal
 3. Normalize immediately, dedupe by page ID, and post-filter to the requested
-   `created_time` window when the MCP filter cannot express created time.
+   `created_time` window when the `ntn`/API filter cannot express created time.
 4. If the normalized candidate list is empty, write empty run artifacts and stop
    without fetching Plan Week, Projects, Goals, or page bodies.
 5. Fetch Projects only when at least one candidate has missing `Project` or
@@ -138,9 +138,10 @@ If the response includes unrelated properties such as `Display`, `Days Left`,
 fields, the query did not honor compact mode. Stop the run, write
 `context_gap: "unexpected_task_properties"`, and do not make more Notion calls.
 
-Repeated `API_query_data_source` calls against Tasks before normalization are
-also a wrong-query signal. Stop after the first compact candidate query unless
-the run mode is an explicit weekly audit, not the scheduled six-hour automation.
+Repeated equivalent `ntn` data-source query calls against Tasks before
+normalization are also a wrong-query signal. Stop after the first compact
+candidate query unless the run mode is an explicit weekly audit, not the
+scheduled six-hour automation.
 
 ## Proposal Shape
 
