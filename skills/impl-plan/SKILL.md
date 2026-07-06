@@ -35,29 +35,33 @@ or checking a material plan. Material plan readiness is reviewed by the native
 ## Skill Signature
 
 ```text
-impl_plan(ticket_or_request, proof_weight?) -> ticket_plan + architecture_signatures + qa_strategy + reviewer_receipt + goal_advisor_readiness
+impl_plan(ticket_or_request, proof_weight?) -> ticket_plan + architecture_signatures + qa_strategy + visual_companion_handoff + reviewer_receipt + goal_advisor_readiness
 
 state:
   reads(active ticket, linked PRD/specs/docs, relevant code,
         docs/MEMORY.md?, docs/TROUBLES.md?, docs/LESSONS.md?,
         optional design.md or Agent Testability Brief)
-  writes(ticket.md updates, optional design.md recommendation,
+  writes(ticket.md updates, optional diagrams.md companion handoff,
+         optional design.md recommendation,
          QA strategy, approval handoff)
 
 gates:
   missing_inputs_resolved_or_asked; ticket_surface_exists; code_context_read;
   architecture_signatures_present_or_not_applicable; done_conditions_concrete;
   qa_strategy_concrete; change_plan_units_local; proof_route_named;
+  visual_companion_linked_or_not_applicable;
   material_reviewer_gate_passed_or_reconciled;
   goal_advisor_ready_after_approval
 
 routes:
   research:gap | research:parity | deep-system-design |
-  metric-advisor | goal-advisor | qa | visual-qa | agent-qa-test | review
+  metric-advisor | diagramming | goal-advisor | qa | visual-qa |
+  agent-qa-test | review
 
 fails:
   chat-only material plan; hidden architecture invention; vague "run tests";
   over-scoped new files/functions/parameters without reuse proof;
+  inline ticket diagrams treated as canonical plan state;
   missing material architecture signatures; self-certified QA/review for
   material work; transcript-dependent Goal setup; implementation before approval
 ```
@@ -69,6 +73,14 @@ This skill owns approval planning only. It may shape `Summary`, `Scope`,
 `Notes`, `Agent Contract`, and `Run Hints`, but implementation, QA, visual judgment,
 adversarial testing, demo, final review, and Goal Packet sidecars are delegated
 to owner surfaces.
+
+Keep `ticket.md` canonical and textual by default. For material tickets, hand
+off a separate visual companion after the ticket plan exists:
+`diagramming(ticket.md, references/visual-companion-template.md) ->
+tickets/TASK-XXXX/diagrams.md`. Link the companion from `Links`, label it
+non-blocking, and do not make it part of the reviewer gate unless the operator
+explicitly asks for diagram review. Tiny localized fixes may mark the visual
+companion `not_applicable` with a concrete reason.
 
 Call `goal-advisor` after the ticket plan is approved and ready to become a
 Goal Packet. `goal-advisor(ticket)` creates or updates `program.md`,
@@ -174,7 +186,26 @@ its own artifact, independent judgment, or proof surface.
   - [ ] Tighten any failed checklist or review item before presenting the plan;
     record explicit `revise` or `block` only when the issue cannot be resolved
     inside planning.
-- [ ] 9. Handoff for one-shot approval, not implementation.
+- [ ] 9. Hand off the visual companion without polluting the ticket.
+  - [ ] After the canonical ticket plan and material reviewer gate are resolved,
+    add a `Links` entry for `tickets/TASK-XXXX/diagrams.md` and use
+    [references/visual-companion-template.md](references/visual-companion-template.md)
+    as the output template.
+  - [ ] Spawn or delegate a bounded background `diagramming` lane when available
+    as the final post-plan companion step:
+    `diagramming(ticket.md, visual_companion_template) -> diagrams.md`. The
+    lane writes `diagrams.md` and does not edit `ticket.md`; if no subagent
+    primitive is available, render inline and record that fallback in the
+    handoff.
+  - [ ] Mark the companion as `blocks_approval: false` and
+    `canonical_contract: ticket.md`; reviewer lanes judge `ticket.md` unless
+    diagram review is explicitly requested.
+  - [ ] Keep Mermaid diagrams out of `ticket.md` by default. If a pre-existing
+    ticket has inline diagrams, move them into the companion instead of
+    expanding the ticket body.
+  - [ ] Use `visual_companion: not_applicable - <reason>` only for tiny,
+    localized, direct-fix tickets where a diagram would add no reader value.
+- [ ] 10. Handoff for one-shot approval, not implementation.
   - [ ] Present the ticket plan as the approval contract that
     `goal-advisor(ticket)` will compile after approval.
   - [ ] Leave material tickets in `review` until the ticket plan is approved.
@@ -200,6 +231,7 @@ GroundingEvidence(source_class, sources_checked, local_only_reason?)
 PlanQA(minimality, reuse, parameters, files_functions, proof_route)
 ReviewerGate(task_path, rubric_families, required_tas, hard_gates, receipt)
 DocsStrategy(outcome, doc_targets, no_docs_reason, validation)
+VisualCompanion(path, template, blocks_approval=false, canonical_contract=ticket.md)
 ```
 
 For UI/user-visible proof, include this line in the plan:
@@ -225,6 +257,9 @@ proof reason.
 - Do not add optional ticket sections as decoration. `Gap Analysis`, `Run
   Hints`, `Agent Contract`, sidecar `plan.md`, and citations appear only when
   they reduce ambiguity or prove a decision.
+- Do not put Mermaid diagrams in `ticket.md` by default. Use the linked
+  `diagrams.md` companion for visual readability and keep the ticket as the
+  canonical implementation/proof contract.
 - Do not treat tests alone as UI/user-visible proof when screenshots, logs,
   browser state, or visual judgment are required.
 - Do not let material feature plans prove only nearby pieces when the claim is
@@ -235,8 +270,12 @@ proof reason.
 
 - [references/template.md](references/template.md) - load when drafting or
   rewriting the ticket body.
+- [references/visual-companion-template.md](references/visual-companion-template.md)
+  - use when handing off the post-plan `diagrams.md` companion.
 - [qa_checklist.md](qa_checklist.md) - run against material plans and against
   changes to this skill's planning behavior.
+- [../diagramming/SKILL.md](../diagramming/SKILL.md) - render the linked
+  visual companion from `ticket.md` and the companion template.
 - [../metric-advisor/SKILL.md](../metric-advisor/SKILL.md) - metric cards for
   proof providers, guard metrics, anti-metrics, and no-mechanical-metric
   rationale.
@@ -250,6 +289,10 @@ proof reason.
 - Updated or proposed `tickets/TASK-XXXX/ticket.md` in canonical ticket-body
   shape, ready for approval and later `goal-advisor(ticket)` compilation when
   the work is Goal-backed.
+- Linked `tickets/TASK-XXXX/diagrams.md` visual companion for material tickets,
+  generated through `diagramming` from
+  `references/visual-companion-template.md`, or a concrete
+  `visual_companion: not_applicable` reason for tiny localized fixes.
 - Compact `architecture_signatures` for material work, or a concrete
   `not_applicable` reason for tiny localized fixes.
 - Concrete `Done` conditions and `QA Strategy` with proof weight, delegated

@@ -24,9 +24,10 @@
 - Put compact `architecture_signatures` before material Change Plan units so
   top-level module seams, main flow signatures, and relevant typed movement are
   reviewable without reading every unit.
-- Use an optional visual map inside `Change Plan` only when it makes ownership,
-  before/after flow, changed seams, or typed data path easier to understand.
-  See `MEM-0030`.
+- Keep diagrams out of `ticket.md` by default. Use the post-plan
+  `diagrams.md` visual companion for ownership, before/after flow, changed
+  seams, or typed data paths that are easier to understand visually. See
+  `MEM-0030`.
 - Keep `impl-plan` aligned with the canonical ticket template instead of
   inventing a parallel `Human` / `Agent` contract. See `MEM-0031`.
 - When an `Agent Testability Brief` exists, preserve its proof/testability
@@ -51,8 +52,9 @@
   independently valuable.
 - Keep the recommendation above the fold and phrased as a decisive action, not
   a tentative suggestion.
-- When diagrams are needed, reference `skills/diagramming/SKILL.md` and
-  `skills/diagramming/SKILL.md` for compactness, color/legend
+- When diagrams are needed, keep the template in
+  `skills/impl-plan/references/visual-companion-template.md` and reference
+  `skills/diagramming/SKILL.md` for rendering compactness, color/legend
   practice, and inline-signature patterns.
 - Reference `MEM-0007` for the original compact plan contract.
 - Reference `MEM-0008` for the root-AGENTS compression boundary.
@@ -70,8 +72,8 @@
 - The output matches the canonical ticket-body shape.
 - `Change Plan` is present and locally executable when sequencing is
   non-trivial.
-- Optional visual maps appear only when material or cross-module work is easier
-  to understand visually.
+- Material tickets link a `diagrams.md` companion or record a concrete
+  not-applicable reason; inline ticket diagrams do not expand the main ticket.
 - Changed callable seams are visible in `signature_or_type_impact` or the
   optional visual map when interface shape matters locally.
 - Material top-level seams are visible in `architecture_signatures`.

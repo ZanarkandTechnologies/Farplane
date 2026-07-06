@@ -35,5 +35,25 @@
       "design-baseline"
     ],
     "notes": "Protects against UI plans with vague 'test manually' proof."
+  },
+  {
+    "id": "impl_plan_visual_companion_file_01",
+    "title": "Impl plan creates a structured visual companion file",
+    "query": "Plan a material cross-skill change where the ticket has multiple change units and the operator wants to read diagrams first.",
+    "reference_points": [
+      "Creates or links tickets/TASK-XXXX/diagrams.md as a non-blocking visual companion",
+      "Keeps Mermaid diagrams out of ticket.md by default",
+      "diagrams.md has frontmatter or metadata with canonical_contract: ticket.md and blocks_approval: false",
+      "diagrams.md includes a Target Flow or equivalent after-state workflow diagram",
+      "diagrams.md includes an explicit Before / After Delta with visible before and after labels",
+      "Does not make diagram review part of the reviewer gate unless explicitly requested"
+    ],
+    "tags": [
+      "skill",
+      "impl-plan",
+      "visual-companion",
+      "diagramming"
+    ],
+    "notes": "Guards the TASK-0308/TASK-0309 convention that visual companions are structured before/after reader aids, not random supplemental diagrams."
   }
 ]

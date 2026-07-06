@@ -1,6 +1,6 @@
 ---
 template_id: ticket-template
-template_version: "0.1.8"
+template_version: "0.1.9"
 feature_refs:
   - FEAT-0007
   - FEAT-0008
@@ -145,12 +145,15 @@ failure_modes:
 Use `signature_or_type_impact` for local deltas inside the change unit; do not
 duplicate the full `architecture_signatures` map in every unit.
 
-Optional visual system map only when topology, ownership boundaries, or typed
-flow are easier to understand as a diagram:
+Keep diagrams out of `ticket.md` by default. For material impl-plan tickets,
+link the visual companion generated after the plan exists:
 
-```mermaid
-flowchart LR
-  %% Optional. Omit for localized tickets.
+```text
+visual_companion:
+  path: tickets/TASK-XXXX/diagrams.md
+  generated_by: background diagramming lane when available, otherwise inline diagramming(ticket.md, skills/impl-plan/references/visual-companion-template.md)
+  blocks_approval: false
+  canonical_contract: ticket.md
 ```
 
 ## Gap Analysis
@@ -274,6 +277,7 @@ docs_strategy:
 ## Links
 - `program:` `tickets/TASK-XXXX/program.md` or `none`
 - `progress:` `tickets/TASK-XXXX/progress.md` or `none`
+- `visual companion:` `tickets/TASK-XXXX/diagrams.md` or `not_applicable - <reason>`
 - `artifacts:`
 - `review:`
 - `refs:`
