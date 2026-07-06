@@ -44,8 +44,10 @@
       "Creates or links tickets/TASK-XXXX/diagrams.md as a non-blocking visual companion",
       "Keeps Mermaid diagrams out of ticket.md by default",
       "diagrams.md has frontmatter or metadata with canonical_contract: ticket.md and blocks_approval: false",
-      "diagrams.md includes a Target Flow or equivalent after-state workflow diagram",
-      "diagrams.md includes an explicit Before / After Delta with visible before and after labels",
+      "diagrams.md includes explicit Before and After sections or headings",
+      "diagrams.md includes Mermaid classDef color styling for semantic differences",
+      "diagrams.md applies colored classes to before/problem and after/added/changed boxes",
+      "diagrams.md includes a What Changed or equivalent old-to-new delta when useful",
       "Does not make diagram review part of the reviewer gate unless explicitly requested"
     ],
     "tags": [

@@ -2,39 +2,65 @@
 
 Use these patterns when `SKILL.md` says a diagram is warranted.
 
-## 1. Target Flow
+## 1. Before Map
 
 Use when:
 
-- the question is "what will the workflow look like after this lands?"
+- the question is "what is confusing, coupled, duplicated, or missing now?"
 - the ticket spans multiple components
 - the reader needs a fast approval surface
 
 Pattern:
 
 ```mermaid
-flowchart LR
+flowchart TD
   classDef keep fill:#f3f4f6,stroke:#6b7280,color:#111827
-  classDef change fill:#fef3c7,stroke:#b45309,color:#111827
-  classDef add fill:#dcfce7,stroke:#15803d,color:#111827
-  classDef remove fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d,stroke-dasharray: 5 3
+  classDef problem fill:#fff5f5,stroke:#dc2626,color:#991b1b
 
-  trigger["trigger / input"]:::keep
-  owner["changed workflow owner<br/>runThing(input): Output"]:::change
-  artifact[(new or updated artifact)]:::add
-  proof["proof / feedback point"]:::keep
+  input["input / request"]:::keep
+  oldOwner["before: old owner or path"]:::problem
+  oldState["before: confusing state"]:::problem
+  proof["proof/review infers intent"]:::keep
 
-  trigger --> owner --> artifact --> proof
+  input --> oldOwner --> oldState --> proof
 ```
 
 Legend:
 
-- `gray = keep`
-- `amber = change`
-- `green = add`
-- `red dashed = remove`
+- `gray = kept context`
+- `red = problem / removed default / confusing ownership`
 
-## 2. Before / After Delta
+## 2. After Map
+
+Use when:
+
+- the question is "what will the workflow look like after this lands?"
+- the ticket adds or changes an owner, artifact, or proof path
+- the reader needs to compare against the `Before` map
+
+Pattern:
+
+```mermaid
+flowchart TD
+  classDef keep fill:#f3f4f6,stroke:#6b7280,color:#111827
+  classDef changed fill:#fef3c7,stroke:#b45309,color:#111827
+  classDef added fill:#dcfce7,stroke:#15803d,color:#111827
+
+  input["input / request"]:::keep
+  newOwner["after: new owner or path"]:::changed
+  newArtifact["after: new/updated artifact"]:::added
+  feedback["operator feedback / proof"]:::keep
+
+  input --> newOwner --> newArtifact --> feedback
+```
+
+Legend:
+
+- `gray = kept context`
+- `amber = changed owner / behavior`
+- `green = added artifact / capability`
+
+## 3. What Changed Delta
 
 Use when:
 
@@ -59,7 +85,7 @@ Rules:
 - show replacements, moves, or ownership changes directly
 - do not create disconnected context diagrams unless they clarify the delta
 
-## 3. Numbered Data-Flow Trace
+## 4. Numbered Data-Flow Trace
 
 Use when:
 
@@ -82,7 +108,7 @@ Rules:
 - number the edges
 - avoid side branches unless the branch is the point
 
-## 4. Zoom-In
+## 5. Zoom-In
 
 Use when:
 
@@ -95,7 +121,7 @@ Rules:
 - keep the zoom-in scoped to one subsystem
 - do not redraw the whole system again
 
-## 5. Inline Signatures
+## 6. Inline Signatures
 
 Use when:
 
@@ -114,7 +140,7 @@ Bad:
 - three-method classes stuffed into one node
 - signatures that wrap across many lines
 
-## 6. Impl-Plan Visual Companion
+## 7. Impl-Plan Visual Companion
 
 Use when:
 
@@ -143,10 +169,10 @@ Shape:
 ```text
 VisualPlan(
   reading_order,
-  target_flow,
-  before_after_delta,
+  before,
+  after,
+  what_changed?,
   change_unit_maps[]?,
-  proof_map?,
   feedback_guide
 )
 ```
@@ -155,13 +181,13 @@ Rules:
 
 - use `ticket.md` as the only source of scope
 - keep `ticket.md` free of Mermaid by default
-- create one target-flow diagram and one before/after delta diagram
+- create one `Before` diagram and one `After` diagram
+- use colored Mermaid boxes with `classDef` and node classes
+- include a `What Changed` delta when a small old-to-new summary helps
 - create one compact map per material `Change Plan` unit only when the ticket
   has multiple units that are hard to compare from the top-level diagrams
 - keep each unit map to 2-5 nodes plus short `writes`, `proof`, and `risk`
   notes
-- include the `Proof Map` from `Done` and `QA Strategy` only when proof flow is
-  not obvious
 - do not make the companion a reviewer gate unless the caller explicitly asks
   for diagram review
 
@@ -170,7 +196,8 @@ Rules:
 Fail the diagram if:
 
 - it has more diagrams than decisions
-- it lacks an explicit before/after delta for an `impl-plan` companion
+- it lacks explicit `Before` and `After` diagrams for an `impl-plan` companion
+- it lacks colored Mermaid classes for semantic differences
 - the labels are paragraphs
 - the legend is missing
 - the diagram repeats the prose instead of compressing it

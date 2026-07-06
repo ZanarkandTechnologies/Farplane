@@ -11,8 +11,8 @@ source: local
 ## Todo List
 
 - [ ] Read the active request, ticket, or spec and identify the exact approval question.
-- [ ] Draw the target flow and before/after delta before considering any
-  supplementary diagram.
+- [ ] Draw explicit `Before` and `After` diagrams with colored Mermaid boxes
+  before considering any supplementary diagram.
 - [ ] Add a numbered data-flow trace only if the flow is the actual question.
 - [ ] When called by `impl-plan`, render the visual companion template from the
   ticket and write `diagrams.md` without editing `ticket.md`.
@@ -26,14 +26,15 @@ source: local
 Use this when the missing thing is not more prose, but a compact visual system
 story.
 
-The default target is not "more diagrams." The target is one useful flow map
-plus one explicit before/after delta, then one optional zoom-in or data-flow
-view if those two pictures are not enough.
+The default target is not "more diagrams." The target is one useful `Before`
+diagram, one useful `After` diagram, and one optional `What Changed` delta.
+Use colored Mermaid classes so the reader can scan problems, additions, and
+changed ownership quickly.
 
 ## Job
 
 1. Infer the smallest diagram set that makes the change legible.
-2. Start with the target flow and before/after delta.
+2. Start with `Before` and `After` diagrams with colored boxes.
 3. Add one zoom-in, numbered data-flow diagram, or `impl-plan` change-unit map
    set only when needed.
 4. Embed short signatures in nodes when the interface shape matters.
@@ -66,13 +67,13 @@ Ensure an agent can execute the core path after only reading this file.
   - need for inline signatures or ownership clarity
 - Workflow:
   1. identify the approval question
-  2. draw the target flow and before/after delta
+  2. draw `Before` and `After` diagrams with colored boxes
   3. decide whether a zoom-in or data-flow trace is needed
   4. add short legend + inline signatures
   5. keep prose below the diagram short
   6. hand back a compact diagram pack
 - Core decision branches:
-  - architecture/delta question -> target flow plus before/after delta first
+  - architecture/delta question -> before and after maps first
   - flow question -> add numbered data-flow second
   - one subsystem still unclear -> add one zoom-in
 - Top gotchas:
@@ -89,8 +90,9 @@ Ensure an agent can execute the core path after only reading this file.
 Produce one compact diagram pack with:
 
 - `Diagram intent`
-- `Target Flow`
-- `Before / After Delta`
+- `Before`
+- `After`
+- `What Changed` only when useful
 - `Tier 2` only if needed
 - `Change Unit Maps` when rendering an `impl-plan` visual companion
 - `Legend`
@@ -108,16 +110,15 @@ If the diagram pack still needs long prose to make sense, it is not ready.
    and write `tickets/TASK-XXXX/diagrams.md` as a companion with
    `blocks_approval: false` and `canonical_contract: ticket.md`.
 4. In Farplane, use this skill as the owner of diagram-first convention.
-5. Draw the target flow:
-   - system boundary
-   - trigger or input
-   - changed workflow owner
-   - new or updated artifact/state
-   - proof or feedback point when it matters
-6. Draw the before/after delta:
-   - old path, owner, or behavior
-   - new path, owner, or behavior
-   - replacement, move, or upgrade edge
+5. Draw the `Before` map:
+   - current owner, path, or behavior
+   - confusing/removed/problem nodes colored red
+   - kept context colored gray
+6. Draw the `After` map:
+   - target owner, path, or behavior
+   - added nodes colored green
+   - changed nodes colored amber
+   - kept context colored gray
 7. Add inline signatures only where they improve understanding:
    - short function or interface names
    - key file/state fields
@@ -133,7 +134,7 @@ If the diagram pack still needs long prose to make sense, it is not ready.
 ## Decision Branches
 
 - **Branch A: system delta is the question**
-  - produce target flow plus before/after delta
+  - produce `Before` and `After` maps first
   - avoid supplementary diagrams unless one boundary remains unclear
 - **Branch B: flow is the question**
   - produce the top-level map
@@ -146,13 +147,15 @@ If the diagram pack still needs long prose to make sense, it is not ready.
 - **Branch E: impl-plan visual companion**
   - use `ticket.md` as the only source of scope
   - write or return `diagrams.md` from the impl-plan companion template
-  - include target flow, before/after delta, optional compact change-unit maps,
-    optional proof map, and a feedback guide
+  - include `Before`, `After`, optional `What Changed`, optional compact
+    change-unit maps, and a feedback guide
   - do not edit `ticket.md`; scope corrections must go back to `impl-plan`
 
 ## Guardrails
 
-- prefer target flow plus a before/after delta over random supplementary maps
+- prefer explicit `Before` and `After` maps over random supplementary maps
+- use colored classes for semantic differences: red/problem, green/added,
+  amber/changed, gray/kept
 - color is helpful, but never rely on color alone; include a legend
 - keep node labels short
 - if the diagram starts looking like a wall of text, split or simplify it
@@ -172,9 +175,9 @@ If the diagram pack still needs long prose to make sense, it is not ready.
 
 Use diagram-first approval surfaces for material, cross-module, workflow,
 tooling, or architecture-facing changes when visual structure is easier to
-approve than prose. Prefer one target-flow diagram plus one before/after delta
-and short notes. Add one zoom-in or numbered data-flow diagram only when those
-diagrams cannot carry the decision.
+approve than prose. Prefer a `Before` diagram, an `After` diagram, colored
+semantic boxes, and short notes. Add one zoom-in or numbered data-flow diagram
+only when those diagrams cannot carry the decision.
 
 When called after `impl-plan`, produce a separate `diagrams.md` companion from
 the impl-plan template. Keep `ticket.md` canonical, mark the companion

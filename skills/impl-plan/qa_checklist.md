@@ -191,6 +191,14 @@ accept_plan(plan)
      companion for material work, or makes diagram review part of the reviewer
      gate without an explicit operator request.
 
+24. `visual-companion-colored-delta`
+   - Question: Does `diagrams.md` use explicit `Before` and `After` sections
+     with Mermaid `classDef` colors applied to problem/before,
+     added/after, changed, and kept boxes?
+   - Violation: The companion contains uncolored Mermaid, generic supplemental
+     diagrams, or diagrams that do not make the old-to-new difference visible
+     from the boxes themselves.
+
 ## Finish Gate
 
 For material plans, include a compact readiness note in the ticket handoff or
@@ -213,6 +221,7 @@ plan_qa:
   docs_strategy: pass | revise | block
   independent_plan_review: pass | revise | block
   visual_companion_boundary: pass | revise | block | not_applicable
+  visual_companion_colored_delta: pass | revise | block | not_applicable
   grounding_evidence: pass | revise | block | local_only
   highest_risk:
   fix_or_deferral:
