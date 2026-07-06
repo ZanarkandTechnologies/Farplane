@@ -35,6 +35,12 @@ metrics:
   - interval_report_usefulness
   - ticket_supply_learning
 last_verified: 2026-06-27
+track: >-
+  Review whether Pulse and interval automation is producing useful,
+  reward-backed ticket supply without flooding review capacity. Focus on
+  tickets and Pulse reports from the review window, duplicate or vague specs,
+  product-backed reward fit, review burden, and whether to continue, cap,
+  adjust, pause, or rollback the current behavior.
 ---
 # Pulse and interval automation
 

@@ -29,6 +29,11 @@ Use this directory when deciding what Farplane is made of. Use
 [`docs/features/`](../features/README.md) when a capability deserves its own
 `FEAT-*` feature doc, registry row, proof path, and template/source refs.
 
+System records may include optional `"track": false` or `"track": "<review prompt>"`
+inside `system_record_json`. Tracking prompts are compact review briefs for
+workflows such as `dogfood-review`; detailed review logic belongs in the
+owning skill.
+
 ## Current Systems
 
 | System | Primary feature | Owner file |

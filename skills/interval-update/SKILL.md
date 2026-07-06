@@ -68,6 +68,9 @@ state:
         docs/TROUBLES.md?,
         .farplane/reports/pulse/?,
         .farplane/reports/interval/?,
+        .farplane/reports/dogfood-review/?,
+        docs/features/registry.jsonl?,
+        docs/systems/registry.jsonl?,
         farplane/pm.json?,
         worker thread refs when available)
   writes(.farplane/reports/interval/<interval_id>/<YYYY-MM-DDTHHMMSSZ>.md,
@@ -83,7 +86,7 @@ gates:
   date_stamped_report_used; ui_summary_frontmatter_written
 
 routes:
-  pulse-update | goal-advisor | feed-scout | update-memory |
+  pulse-update | goal-advisor | feed-scout | dogfood-review | update-memory |
   update-strategy | skill-maintenance | metric-advisor | review
 
 fails:
@@ -147,6 +150,7 @@ report_workflows:
   skill_hardening?: bool | "when_sources_exist"
   skill_refinement?: bool | "when_sources_exist"
   docs_consolidation?: bool | "when_sources_exist"
+  tracked_feature_review?: bool | "when_sources_exist"
   priority_planning?: bool | "light"
 ```
 
@@ -228,6 +232,10 @@ docs_consolidation(review_window, planning_window)
   -> consolidate_docs_handoffs + stale_doc_candidates + source_gaps
   ref: references/workflows/docs-consolidation.md
 
+tracked_feature_review(review_window, planning_window)
+  -> dogfood_report + tracked_item_findings + interval_summary
+  skill: dogfood-review
+
 Final planning synthesis:
 
 priority_planning(review_window, planning_window)
@@ -279,10 +287,15 @@ priority_planning(review_window, planning_window)
         keep/merge/move/delete decisions through `consolidate(..., structure =
         docs_tree | memory)`, broad context refresh through `update-memory`,
         and substantive doc-quality rewrites through `doc-advisor`.
+  - [ ] When `tracked_feature_review` is enabled, call `dogfood-review` for
+        generated feature or system registry rows whose `track` value is a
+        non-empty string, then link or summarize the dogfood report in the
+        interval report.
 - [ ] 5. Plan the next window.
   - [ ] Run `priority_planning` after reflection and reward/leverage synthesis
-        when enabled; it must check that next-window priorities move a named
-        goal, bottleneck, or leverage signal instead of merely filling time.
+        when enabled; it must consume dogfood review findings when present and
+        check that next-window priorities move a named goal, bottleneck, or
+        leverage signal instead of merely filling time.
   - [ ] Produce a plan sized to `planning_window`.
   - [ ] Convert executable work into ticket deltas or Goal Advisor handoffs,
         including `.agents/skills/<product-skill>/SKILL.md` refs when a

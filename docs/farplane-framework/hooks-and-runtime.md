@@ -48,6 +48,7 @@ too noisy for tracked config.
 ```text
 .farplane/reports/pulse/<timestamp>.md
 .farplane/reports/interval/<interval_id>/<timestamp>.md
+.farplane/reports/dogfood-review/<timestamp>.md
 .farplane/automation/decisions.jsonl
 .farplane/automation/rewards.jsonl
 .farplane/automation/action-outcomes.jsonl

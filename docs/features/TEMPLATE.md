@@ -20,6 +20,7 @@ evidence_refs: []
 known_limits: "What this feature deliberately does not claim yet."
 metrics: []
 last_verified: YYYY-MM-DD
+track: false
 ---
 
 # Feature Name

@@ -498,15 +498,16 @@ Generated reports. New framework reports should be date-stamped:
 ```text
 .farplane/reports/pulse/<YYYY-MM-DDTHHMMSSZ>.md
 .farplane/reports/interval/<interval_id>/<YYYY-MM-DDTHHMMSSZ>.md
+.farplane/reports/dogfood-review/<YYYY-MM-DDTHHMMSSZ>.md
 ```
 
 Consumers find newest interval reports by timestamp sorting or explicit links
 from later reports. There is no tracked scheduler config just to store
 `last_report`.
 
-Interval reports expose one UI report-card summary string in frontmatter under
-`ui_summary`. Consumers should parse YAML frontmatter, not prose sections. The
-stable card contract is:
+Interval and dogfood reports expose one UI report-card summary string in
+frontmatter under `ui_summary`. Consumers should parse YAML frontmatter, not
+prose sections. The stable card contract is:
 
 ```yaml
 ui_summary: "Refresh the active frontier after the KPI/autonomy metric chain completed; clear review-gated KPI/content/QA surfaces; protect the simplified metric loop."

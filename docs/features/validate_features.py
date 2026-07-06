@@ -37,7 +37,8 @@ FEATURE_FIELDS = {
     "metrics",
     "last_verified",
 }
-GENERATED_FEATURE_FIELDS = FEATURE_FIELDS | {"system_name", "owner_spec"}
+OPTIONAL_TRACK_FIELD = "track"
+GENERATED_FEATURE_FIELDS = FEATURE_FIELDS | {OPTIONAL_TRACK_FIELD, "system_name", "owner_spec"}
 FEATURE_FRONTMATTER_FIELDS = {
     "feature_id",
     "title",
@@ -64,6 +65,7 @@ SYSTEM_FIELDS = {
     "refs",
     "last_verified",
 }
+OPTIONAL_SYSTEM_FIELDS = {OPTIONAL_TRACK_FIELD}
 ALLOWED_STATUSES = {
     "implemented",
     "partial",
@@ -94,7 +96,7 @@ ACTIVE_SPEC_REF_SCAN_PATHS = [
     ROOT / "docs" / "farplane-framework",
     ROOT / "farplane",
 ]
-ACTIVE_SCAN_SKIP_PARTS = {"archive", "audits", "graph", "__pycache__"}
+ACTIVE_SCAN_SKIP_PARTS = {"archive", "audits", "graph", "__pycache__", ".venv", "venv"}
 
 
 def is_url(value: str) -> bool:
@@ -247,6 +249,7 @@ def load_features(root: Path = ROOT) -> tuple[list[dict[str, Any]], list[str]]:
             "known_limits": data.get("known_limits"),
             "metrics": data.get("metrics"),
             "last_verified": data.get("last_verified"),
+            "track": data.get("track", False),
         }
         row["_owner_spec"] = str(path.relative_to(root))
         row["_source_path"] = str(path.relative_to(root))
@@ -338,6 +341,15 @@ def validate_local_refs(
             errors.append(f"{record_id}: {field} local ref does not exist: {ref}")
 
 
+def validate_track_field(record: dict[str, Any], record_id: str, errors: list[str]) -> None:
+    value = record.get(OPTIONAL_TRACK_FIELD, False)
+    if value is False:
+        return
+    if isinstance(value, str) and value.strip():
+        return
+    errors.append(f"{record_id}: track must be false or a non-empty string")
+
+
 def validate_system(
     system: dict[str, Any],
     feature_by_id: dict[str, dict[str, Any]],
@@ -345,7 +357,7 @@ def validate_system(
     errors: list[str],
 ) -> None:
     missing = SYSTEM_FIELDS - system.keys()
-    extra = system.keys() - SYSTEM_FIELDS - {"_source_path"}
+    extra = system.keys() - SYSTEM_FIELDS - OPTIONAL_SYSTEM_FIELDS - {"_source_path"}
     source_path = system.get("_source_path", "unknown")
     system_id = system.get("id")
 
@@ -363,6 +375,7 @@ def validate_system(
         errors.append(f"{system_id}: invalid status {system.get('status')!r}")
     if isinstance(system.get("last_verified"), str) and not DATE_RE.match(system["last_verified"]):
         errors.append(f"{system_id}: last_verified must use YYYY-MM-DD")
+    validate_track_field(system, system_id, errors)
 
     feature_refs = require_string_list(system, "feature_refs", system_id, errors)
     refs = require_string_list(system, "refs", system_id, errors)
@@ -400,7 +413,7 @@ def validate_feature_source(
     errors: list[str],
 ) -> None:
     missing = FEATURE_FIELDS - record.keys()
-    extra = record.keys() - FEATURE_FIELDS - {"_owner_spec", "_source_path"}
+    extra = record.keys() - FEATURE_FIELDS - {OPTIONAL_TRACK_FIELD, "_owner_spec", "_source_path"}
     feature_id = record.get("id")
     if not isinstance(feature_id, str) or not FEATURE_ID_RE.match(feature_id):
         errors.append(f"{record.get('_source_path', 'unknown')}: feature id must match FEAT-####")
@@ -424,6 +437,7 @@ def validate_feature_source(
         errors.append(f"{feature_id}: unknown system_id {record['system_id']}")
     if isinstance(record.get("last_verified"), str) and not DATE_RE.match(record["last_verified"]):
         errors.append(f"{feature_id}: last_verified must use YYYY-MM-DD")
+    validate_track_field(record, feature_id, errors)
 
     surfaces = require_string_list(record, "surfaces", feature_id, errors)
     source_refs = require_string_list(record, "source_refs", feature_id, errors)
@@ -461,6 +475,7 @@ def generated_feature_row(record: dict[str, Any], system_by_id: dict[str, dict[s
         "metrics": record["metrics"],
         "owner_spec": record["_owner_spec"],
         "last_verified": record["last_verified"],
+        "track": record.get("track", False),
     }
 
 
@@ -475,6 +490,7 @@ def generated_system_row(system: dict[str, Any]) -> dict[str, Any]:
         "feature_refs": system["feature_refs"],
         "refs": system["refs"],
         "last_verified": system["last_verified"],
+        "track": system.get("track", False),
     }
 
 

@@ -56,6 +56,7 @@ write `not_configured`; for source-dependent workflows with no source, write
 | Goal drift |  |  |  |
 | Metric snapshot |  |  |  |
 | Compounding leverage review |  |  |  |
+| Tracked feature review |  |  |  |
 | Priority planning |  |  |  |
 
 ## Reward Closure

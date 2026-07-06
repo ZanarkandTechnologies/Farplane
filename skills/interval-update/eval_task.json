@@ -1,5 +1,19 @@
 [
   {
+    "id": "interval_tracked_feature_review_calls_dogfood",
+    "title": "Daily interval delegates tracked feature review",
+    "query": "A daily interval has tracked_feature_review enabled and the generated feature registry contains a feature with a non-empty track prompt. What should interval-update do before final planning?",
+    "reference_points": [
+      "Reads docs/features/registry.jsonl and docs/systems/registry.jsonl when available",
+      "Finds registry rows whose track value is a non-empty string",
+      "Calls dogfood-review for the review window instead of embedding all dogfood logic in interval-update",
+      "Requires the dogfood report to be written under .farplane/reports/dogfood-review/",
+      "Links or summarizes the dogfood report in the interval report before final next-window planning",
+      "Does not mutate Pulse, tickets, goals, or automation config directly from the dogfood review"
+    ],
+    "tags": ["interval-update", "dogfood-review", "track", "reports"]
+  },
+  {
     "id": "interval_daily_report_before_plan",
     "title": "Configured short interval writes report before planning",
     "query": "A project automation calls interval-update for a short review window and next-window plan, with context_refs asking for the latest report from a longer planning interval. What should it load, write, and avoid?",

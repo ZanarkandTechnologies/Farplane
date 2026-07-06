@@ -235,6 +235,7 @@ Reports are date-stamped records:
 ```text
 .farplane/reports/pulse/<YYYY-MM-DDTHHMMSSZ>.md
 .farplane/reports/interval/<interval_id>/<YYYY-MM-DDTHHMMSSZ>.md
+.farplane/reports/dogfood-review/<YYYY-MM-DDTHHMMSSZ>.md
 ```
 
 State files may store `last_report` pointers. Do not make `latest.md` the

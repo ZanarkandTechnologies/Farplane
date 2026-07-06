@@ -119,6 +119,7 @@ report_workflows = {
   skill_hardening?: bool | "when_sources_exist",
   skill_refinement?: bool | "when_sources_exist",
   docs_consolidation?: bool | "when_sources_exist",
+  tracked_feature_review?: bool | "when_sources_exist",
   priority_planning?: bool | "light"
 }
 ```
@@ -153,9 +154,13 @@ merge shape.
    `skill-maintenance(mode: refine_skill)`.
 11. For enabled `docs_consolidation`, route whole-project context refresh to
    `update-memory` and substantive durable doc cleanup to `doc-advisor`.
-12. Review the past window against the static harness charter, goals, and
+12. For enabled `tracked_feature_review`, call `dogfood-review` for generated
+    feature or system registry rows whose `track` value is a non-empty string.
+    The dogfood report must be written under `.farplane/reports/dogfood-review/`
+    and then linked or summarized from the interval report.
+13. Review the past window against the static harness charter, goals, and
     configured parent contexts.
-13. Refresh metric readings when skills, CLIs, ticket searches, manual notes, or
+14. Refresh metric readings when skills, CLIs, ticket searches, manual notes, or
     local ledgers are available: read goal-axis SMART goals from
     `farplane/goals.yaml` for KPI selection and interpretation, then use each
     KPI's `farplane/bindings.yaml` metric recipe `refresh` prompt to choose the
@@ -163,25 +168,25 @@ merge shape.
     `.farplane/metrics/observations/<source_id>/<date>.json`, run
     `farplane metrics primitives`, then run `farplane project snapshot`. Do not
     parse ops memory as a deterministic database.
-14. Review budget and runway for active projects. Use `farplane/harness.md`
+15. Review budget and runway for active projects. Use `farplane/harness.md`
     allocation guardrails, `farplane/ops-memory.md` contribution modes, ticket
     `Reward` blocks, metric snapshots, interval reports, source gaps, and
     operator feedback. Assign each active project a decision:
     `continue`, `narrow`, `pause`, `instrument`, `stop`, or
     `escalate_to_revenue`. Do not create a second ticket budget field.
-15. Run final next-window planning. `priority_planning` should consume the
+16. Run final next-window planning. `priority_planning` should consume the
     reflection findings, reward closure, leverage decisions, product lanes, and
     guardrails; it should verify that each selected priority moves a named goal,
     bottleneck, or reward signal.
-16. Write [interval-report.md](../templates/interval-report.md) before any
+17. Write [interval-report.md](../templates/interval-report.md) before any
     goals mutation. Fill `ui_summary` in YAML frontmatter with one concise
     under-100-word string so UI consumers can render report cards without
     scraping prose.
-17. Classify every goals delta as `auto_apply`, `approval_required`, or
+18. Classify every goals delta as `auto_apply`, `approval_required`, or
     `rejected_source_gap`.
-18. Convert executable changes into ticket deltas or Goal Advisor handoffs,
+19. Convert executable changes into ticket deltas or Goal Advisor handoffs,
     including local product skill refs when they own the workflow.
-19. Return downstream guidance so Pulse gets the next constraints.
+20. Return downstream guidance so Pulse gets the next constraints.
 
 ## Goals Delta Promotion
 

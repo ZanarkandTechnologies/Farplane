@@ -52,7 +52,8 @@ Reads:
 
 Runs:
 - light reflection plus daily feed intake: plan progress, goal drift,
-  ticket board drift, and one feed-scout run from bindings config
+  ticket board drift, tracked feature review, and one feed-scout run from
+  bindings config
 
 Gates:
 - write a date-stamped interval report
@@ -78,6 +79,7 @@ read_parent_interval = "latest weekly_interval report when present"
 plan_progress = "light"
 goal_drift = "light"
 ticket_board_drift = "light"
+tracked_feature_review = true
 feed_scout_daily = true
 feed_scout_config_ref = "farplane/bindings.yaml#feed_scout"
 '''

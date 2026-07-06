@@ -673,7 +673,7 @@ def report_cards(project_root: Path) -> list[dict[str, Any]]:
                 "interval_id": fm.get("interval_id"),
                 "kind": fm.get("kind") or path.parent.name,
                 "created_at": str(fm.get("created_at") or fm.get("date") or ""),
-                "ui_summary": str(fm.get("summary") or path.stem),
+                "ui_summary": str(fm.get("ui_summary") or fm.get("summary") or path.stem),
                 "source_ref": {"path": rel},
             }
         )

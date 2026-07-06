@@ -74,6 +74,7 @@ known_limits: "Compiles visible execution prompts; it is not a hidden scheduler.
 metrics:
   - goal_prompt_contract_pass
 last_verified: 2026-06-26
+track: false
 ---
 ```
 
@@ -114,6 +115,9 @@ history.
 - `known_limits`: one concise caveat future agents should preserve.
 - `metrics`: metric names or scorecards associated with the feature.
 - `last_verified`: date when the record was checked against live surfaces.
+- `track`: optional `false` or a short review prompt consumed by tracking
+  workflows such as `dogfood-review`; keep detailed review logic in the owning
+  skill, not in feature frontmatter.
 
 Generated rows add `system_name` and `owner_spec`.
 
