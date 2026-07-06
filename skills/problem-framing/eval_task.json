@@ -1,0 +1,92 @@
+[
+  {
+    "id": "problem_framing_requested_artifact_trap_01",
+    "title": "Requested artifact is treated as evidence, not solution",
+    "query": "A custom manufacturing client keeps saying, \"we just need a simple pricing calculator so sales can quote faster.\" They want us to start building this week.",
+    "reference_points": [
+      "Captures the calculator request literally without accepting it as the build target",
+      "Separates quote speed or reliability as the likely problem from calculator as the requested artifact",
+      "Names the actor, job, stakes, current workflow unknowns, and quote-decision constraints",
+      "Compares at least two plausible product boundaries such as calculator, quote workflow, and ERP-like system",
+      "Routes to evidence gathering, MVP synthesis, system design, or implementation planning based on boundary confidence"
+    ],
+    "tags": [
+      "skill",
+      "problem-framing",
+      "artifact-trap"
+    ],
+    "notes": "Source: real thread failure mode. Failure should route to the problem-framing skill contract if the answer jumps to building the requested artifact."
+  },
+  {
+    "id": "problem_framing_sparse_operational_complaint_01",
+    "title": "Sparse operational complaint preserves uncertainty",
+    "query": "A hospital operations manager says bed allocation is broken and patient flow is getting worse. That's all we have so far.",
+    "reference_points": [
+      "Does not invent a single definitive root cause",
+      "Names candidate frames such as visibility, prioritization, turnover, staffing, transport, discharge timing, or permissions",
+      "Labels missing actor, workflow, data, permission, urgency, and success-signal evidence",
+      "Identifies the next human or research input needed before product boundary selection",
+      "Avoids producing implementation tickets from sparse complaint text"
+    ],
+    "tags": [
+      "skill",
+      "problem-framing",
+      "sparse-input"
+    ],
+    "notes": "Source: synthetic gap for unknown user reality. Failure should route to problem-framing unknown-handling or deep-interview/research routing."
+  },
+  {
+    "id": "problem_framing_continuous_improvement_reset_01",
+    "title": "Continuous-improvement proposal is reset to first principles",
+    "query": "The current onboarding process takes 74 days. The team found a few tweaks that might bring it down to 72. Can we frame what problem we should actually solve?",
+    "reference_points": [
+      "Identifies 74-to-72 optimization as a current-process improvement frame rather than the only valid goal",
+      "Asks why the current process takes 74 days and what constraints are hard, soft, inherited, obsolete, or unknown",
+      "States the irreducible outcome or job if the process were rebuilt from zero",
+      "Compares current workflow against the simplest plausible correct workflow before selecting product boundaries",
+      "Preserves legitimate compromises instead of assuming the first-principles version is automatically feasible"
+    ],
+    "tags": [
+      "skill",
+      "problem-framing",
+      "first-principles"
+    ],
+    "notes": "Source: Jensen transcript/source ingest. Failure should route to first-principles and why-chain gates."
+  },
+  {
+    "id": "problem_framing_platform_overbuild_negative_01",
+    "title": "Platform overbuild is rejected when evidence is missing",
+    "query": "A disaster-response nonprofit has messy coordination during emergencies. I think we should pitch a full operations platform with maps, roles, chat, inventory, and AI triage.",
+    "reference_points": [
+      "Treats the proposed platform as one possible boundary rather than the default answer",
+      "Frames the coordination complaint in terms of stakeholders, decisions, current workflow, and emergency constraints",
+      "Compares smaller boundaries such as manual service, checklist/workflow aid, dashboard, integration, or system of record",
+      "Names evidence that would justify or reject a full platform",
+      "Recommends restraint or an evidence gate when platform scope is not yet proven"
+    ],
+    "tags": [
+      "skill",
+      "problem-framing",
+      "anti-overbuild"
+    ],
+    "notes": "Source: known overbuild risk. Anti-cheat control: user wording pushes a large platform, but reference points require boundary restraint."
+  },
+  {
+    "id": "problem_framing_already_framed_handoff_01",
+    "title": "Already framed problem routes forward instead of redoing work",
+    "query": "We already know the problem: dispatchers need a shared view of open service calls, technician availability, and exceptions so they can reassign work before SLAs slip. What should happen next?",
+    "reference_points": [
+      "Recognizes that a coherent problem frame is already present",
+      "Briefly validates actor, job, stakes, and product-boundary assumptions without restarting broad discovery",
+      "Names remaining unknowns such as data ownership, integrations, permissions, or review proof",
+      "Routes to deep-system-design, functional-ui, PRD, MVP synthesis, or implementation planning based on the requested next step",
+      "Does not overuse problem framing when the correct behavior is downstream handoff"
+    ],
+    "tags": [
+      "skill",
+      "problem-framing",
+      "handoff-boundary"
+    ],
+    "notes": "Source: boundary case. Failure should route to skill trigger/Do Not Overuse behavior."
+  }
+]
