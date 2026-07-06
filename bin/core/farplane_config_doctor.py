@@ -10,10 +10,10 @@ import tomllib
 from pathlib import Path
 from typing import Any, Callable
 
-CONFIG_DOCTOR_REQUIRED_KEYS = ("REF_API_KEY", "NOTION_API_KEY")
+CONFIG_DOCTOR_REQUIRED_KEYS = ("REF_API_KEY", "NOTION_TOKEN")
 CONFIG_DOCTOR_SECRET_KEYS = (
     "REF_API_KEY",
-    "NOTION_API_KEY",
+    "NOTION_TOKEN",
     "FARPLANE_TELEMETRY_TOKEN",
     "FARPLANE_CONSOLE_KEY",
     "LIVEKIT_API_KEY",
@@ -90,7 +90,7 @@ def structured_config_value(key: str, config: dict[str, Any]) -> str:
         "FARPLANE_TELEMETRY_TOKEN": [["convex", "telemetry_token"]],
         "FARPLANE_MESHY_API_KEY": [["integrations", "meshy_api_key"]],
         "MESHY_API_KEY": [["integrations", "meshy_api_key"]],
-        "NOTION_API_KEY": [["integrations", "notion_api_key"]],
+        "NOTION_TOKEN": [["integrations", "notion_token"]],
         "REF_API_KEY": [["integrations", "ref_api_key"]],
         "FARPLANE_CONSOLE_KEY": [["env", "FARPLANE_CONSOLE_KEY"]],
         "LIVEKIT_API_KEY": [["livekit", "api_key"]],

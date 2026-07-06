@@ -16,8 +16,10 @@ Steps:
 2. Resolve named handles such as `notion.tasks.source`; do not print or persist
    resolved private IDs in tracked artifacts.
 3. If a local helper script needs Notion credentials, use
-   `scripts/notion_config.py` to load `NOTION_API_KEY` from
-   `~/.farplane/config.toml`; do not read `NOTION_TOKEN` or Codex MCP config.
+   `scripts/notion_config.py` to load `NOTION_TOKEN` from the runtime env
+   supplied by `farplane run -- <command>` or Doppler. Private
+   `~/.farplane/config.toml` is fallback/cache only; do not read
+   `NOTION_API_KEY` or Codex MCP config.
 4. Enforce compact-query mode before any Notion MCP call:
    - At most 1 Tasks candidate query, `page_size <= 25`.
    - Always pass `filter_properties`; never query Tasks, Projects, or Goals
@@ -61,7 +63,7 @@ Hard gates:
   connector-fallback mode.
 - Do not write medium/low-confidence fields.
 - Do not mutate task `Status`.
-- Do not use raw public Notion API scripts or `NOTION_TOKEN` credential fallbacks.
+- Do not use raw public Notion API scripts or `NOTION_API_KEY` credential fallbacks.
 - Do not create another recurring runner from inside this run.
 - Do not paginate automatically or fetch full Notion page objects in scheduled
   mode.

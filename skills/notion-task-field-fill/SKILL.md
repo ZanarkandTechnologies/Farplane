@@ -23,10 +23,11 @@ Notion only through MCP, writes a local proposal artifact, and only applies live
 Notion property updates from typed high-confidence proposals.
 
 Low-level helper scripts in this skill that need direct Notion credentials must
-load a single key through `scripts/notion_config.py`: `NOTION_API_KEY` from the
-process environment or `[integrations].notion_api_key` in
-`~/.farplane/config.toml`. Do not read `NOTION_TOKEN`, `notion_token`, or Codex
-MCP config from skill scripts.
+load a single key through `scripts/notion_config.py`: `NOTION_TOKEN` from the
+process environment, preferably via `farplane run -- <command>` or
+`doppler run -- <command>`. Private `[integrations].notion_token` in
+`~/.farplane/config.toml` is fallback/cache only. Do not read
+`NOTION_API_KEY`, `notion_api_key`, or Codex MCP config from skill scripts.
 
 ## Skill Signature
 
@@ -37,7 +38,7 @@ notion_task_field_fill(run_envelope, private_context?, mcp_tools?)
 state:
   reads(/Users/kenjipcx/.codex/private/TOOLS.md,
         /Users/kenjipcx/.codex/private/docs/notion.md,
-        Notion MCP Tasks/Projects/Goals rows?, NOTION_API_KEY for helper
+        Notion MCP Tasks/Projects/Goals rows?, NOTION_TOKEN for helper
         scripts?, Telegram config?)
   writes(.farplane/state/notion-task-field-fill/runs/<run-id>/*,
          optional high-confidence Notion field updates,
@@ -53,7 +54,7 @@ routes:
 
 fails:
   uses a separate Notion wrapper skill; broad Notion page dump; semantic-search task
-  discovery; public Notion API fallback; reads NOTION_TOKEN/notion_token;
+  discovery; public Notion API fallback; reads NOTION_API_KEY/notion_api_key;
   writes medium/low-confidence fields; stores private URLs, IDs, or tokens in
   tracked artifacts
 ```
@@ -75,7 +76,7 @@ tools are the dependency boundary.
       Read `/Users/kenjipcx/.codex/private/TOOLS.md` and
       `/Users/kenjipcx/.codex/private/docs/notion.md`; use named handles only
       in tracked artifacts. If a low-level helper script needs a credential,
-      load only `NOTION_API_KEY` via `scripts/notion_config.py`.
+      load only `NOTION_TOKEN` via `scripts/notion_config.py`.
 - [ ] 3. Discover candidates.
       Run one compact MCP Tasks query with bounded page size,
       `filter_properties`, no repeated equivalent query, and no raw page dump.

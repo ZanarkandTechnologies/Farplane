@@ -23,14 +23,14 @@ class FarplaneConfigDoctorTests(unittest.TestCase):
                 "│ NAME         │",
                 "├──────────────┤",
                 "│ REF_API_KEY  │",
-                "│ NOTION_API_KEY │",
+                "│ NOTION_TOKEN │",
                 "└──────────────┘",
             ]
         )
 
         self.assertEqual(
             farplane_config_doctor.parse_doppler_names(output),
-            {"REF_API_KEY", "NOTION_API_KEY"},
+            {"REF_API_KEY", "NOTION_TOKEN"},
         )
 
     def test_reports_doppler_as_effective_source_without_values(self) -> None:
@@ -49,7 +49,7 @@ class FarplaneConfigDoctorTests(unittest.TestCase):
                             "│ NAME           │",
                             "├────────────────┤",
                             "│ REF_API_KEY    │",
-                            "│ NOTION_API_KEY │",
+                            "│ NOTION_TOKEN │",
                             "└────────────────┘",
                         ]
                     ),
@@ -79,7 +79,7 @@ class FarplaneConfigDoctorTests(unittest.TestCase):
             )
 
         ref_row = next(row for row in payload["keys"] if row["key"] == "REF_API_KEY")
-        notion_row = next(row for row in payload["keys"] if row["key"] == "NOTION_API_KEY")
+        notion_row = next(row for row in payload["keys"] if row["key"] == "NOTION_TOKEN")
         self.assertEqual(ref_row["effectiveSource"], "doppler")
         self.assertEqual(notion_row["effectiveSource"], "doppler")
         self.assertEqual(payload["doppler"]["project"], "farplane")
@@ -98,7 +98,7 @@ class FarplaneConfigDoctorTests(unittest.TestCase):
             codex_home.mkdir()
             project_root.mkdir()
             (farplane_home / "config.toml").write_text(
-                "[integrations]\nref_api_key = \"local-ref-secret\"\nnotion_api_key = \"local-notion-secret\"\n",
+                "[integrations]\nref_api_key = \"local-ref-secret\"\nnotion_token = \"local-notion-secret\"\n",
                 encoding="utf-8",
             )
             (codex_home / "config.toml").write_text(
@@ -114,7 +114,7 @@ class FarplaneConfigDoctorTests(unittest.TestCase):
             )
 
         ref_row = next(row for row in payload["keys"] if row["key"] == "REF_API_KEY")
-        notion_row = next(row for row in payload["keys"] if row["key"] == "NOTION_API_KEY")
+        notion_row = next(row for row in payload["keys"] if row["key"] == "NOTION_TOKEN")
         self.assertEqual(ref_row["effectiveSource"], "process_env")
         self.assertEqual(
             ref_row["sources"],
@@ -138,7 +138,7 @@ class FarplaneConfigDoctorTests(unittest.TestCase):
             project_root.mkdir()
             config_path = farplane_home / "config.toml"
             config_path.write_text(
-                "[integrations]\nref_api_key = \"local-ref-secret\"\nnotion_api_key = \"local-notion-secret\"\n",
+                "[integrations]\nref_api_key = \"local-ref-secret\"\nnotion_token = \"local-notion-secret\"\n",
                 encoding="utf-8",
             )
             config_path.chmod(0o644)

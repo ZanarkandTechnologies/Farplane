@@ -43,7 +43,7 @@ class RuntimeConfigTests(unittest.TestCase):
                         'telemetry_token = "canonical-token"',
                         "",
                         "[integrations]",
-                        'notion_api_key = "canonical-notion"',
+                        'notion_token = "canonical-notion"',
                         "",
                         "[livekit]",
                         'url = "wss://example.livekit.cloud"',
@@ -89,8 +89,8 @@ class RuntimeConfigTests(unittest.TestCase):
 
         self.assertEqual(env["FARPLANE_CONVEX_SITE_URL"], "https://process.convex.site")
         self.assertEqual(env["FARPLANE_TELEMETRY_TOKEN"], "canonical-token")
-        self.assertEqual(env["NOTION_API_KEY"], "canonical-notion")
-        self.assertNotIn("NOTION_TOKEN", env)
+        self.assertEqual(env["NOTION_TOKEN"], "canonical-notion")
+        self.assertNotIn("NOTION_API_KEY", env)
         self.assertEqual(env["CODEX_APP_SERVER_URL"], "ws://127.0.0.1:9999")
         self.assertEqual(env["FARPLANE_STATE_BASE"], "http://127.0.0.1:5173")
         self.assertEqual(env["LIVEKIT_URL"], "wss://example.livekit.cloud")

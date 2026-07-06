@@ -236,11 +236,13 @@ from runtime_config import load_runtime_env
 
 env = load_runtime_env({"CODEX_HOME": target_dir, **os.environ})
 
-required = ["CODEX_HOME", "REF_API_KEY", "NOTION_API_KEY"]
+required = ["CODEX_HOME", "REF_API_KEY", "NOTION_TOKEN"]
 missing = [key for key in required if not env.get(key) or env[key].startswith("YOUR_") or env[key].startswith("__")]
 if missing:
     raise SystemExit(
-        "Missing required values in process env or ~/.farplane/config.toml: "
+        "Missing required runtime values. Run through a secret injector such as "
+        "`doppler run -- farplane install`, export env vars for this run, or "
+        "use private ~/.farplane/config.toml as a fallback/cache: "
         + ", ".join(missing)
     )
 
@@ -248,7 +250,7 @@ text = template_path.read_text()
 replacements = {
     "__CODEX_HOME__": env["CODEX_HOME"],
     "__REF_API_KEY__": env["REF_API_KEY"],
-    "__NOTION_TOKEN__": env["NOTION_API_KEY"],
+    "__NOTION_TOKEN__": env["NOTION_TOKEN"],
     "__FARPLANE_CONVEX_SITE_URL__": env.get("FARPLANE_CONVEX_SITE_URL", ""),
     "__FARPLANE_TELEMETRY_TOKEN__": env.get("FARPLANE_TELEMETRY_TOKEN", ""),
     "__FARPLANE_CONSOLE_KEY__": env.get("FARPLANE_CONSOLE_KEY", ""),
@@ -380,7 +382,7 @@ if [ "$REPO_DIR" = "$(cd "$TARGET_DIR" && pwd)" ]; then
 
   echo "Done."
   echo "Next: prefer runtime env for secrets (for example: doppler run -- farplane install); use ~/.farplane/config.toml only as a private fallback/cache."
-  echo "Run: farplane config doctor"
+  echo "Run: farplane doctor"
   exit 0
 fi
 
@@ -418,6 +420,6 @@ render_config
 
 echo "Done."
 echo "Next: prefer runtime env for secrets (for example: doppler run -- farplane install); use ~/.farplane/config.toml only as a private fallback/cache."
-echo "Run: farplane config doctor"
+echo "Run: farplane doctor"
 echo "Hooks config is linked when hooks.json exists; Stop telemetry remains active. Ticket-local QA/review owns completion."
 echo "Backups (when needed) are stored under $BACKUP_ROOT"

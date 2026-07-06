@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Load the canonical Notion API key for notion-task-field-fill scripts."""
+"""Load the canonical Notion token for notion-task-field-fill scripts."""
 
 from __future__ import annotations
 
@@ -37,24 +37,25 @@ def _read_toml(path: Path) -> dict[str, object]:
     return parsed if isinstance(parsed, dict) else {}
 
 
-def notion_api_key(env: Mapping[str, str] | None = None) -> str:
+def notion_token(env: Mapping[str, str] | None = None) -> str:
     source = env if env is not None else os.environ
-    explicit = str(source.get("NOTION_API_KEY") or "").strip()
+    explicit = str(source.get("NOTION_TOKEN") or "").strip()
     if explicit:
         return explicit
     config = _read_toml(farplane_config_path(source))
-    return _object_string_at(config, ["integrations", "notion_api_key"])
+    return _object_string_at(config, ["integrations", "notion_token"])
 
 
-def require_notion_api_key(env: Mapping[str, str] | None = None) -> str:
-    value = notion_api_key(env)
+def require_notion_token(env: Mapping[str, str] | None = None) -> str:
+    value = notion_token(env)
     if not value:
         raise RuntimeError(
-            "Missing Notion API key. Set [integrations].notion_api_key in "
-            "~/.farplane/config.toml or export NOTION_API_KEY for this run."
+            "Missing Notion token. Run through `farplane run -- <command>` "
+            "or Doppler, export NOTION_TOKEN for this run, or use private "
+            "[integrations].notion_token in ~/.farplane/config.toml as a fallback/cache."
         )
     return value
 
 
 def notion_api_env(env: Mapping[str, str] | None = None) -> dict[str, str]:
-    return {"NOTION_API_KEY": require_notion_api_key(env)}
+    return {"NOTION_TOKEN": require_notion_token(env)}
