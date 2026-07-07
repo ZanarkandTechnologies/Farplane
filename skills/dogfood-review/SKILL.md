@@ -16,9 +16,14 @@ allowed-tools: Read, Glob, Grep, Bash
 ## Context
 
 Use this skill to bulk-review Farplane features or systems that carry a
-generated registry `track` prompt. The prompt is a review brief, not executable
-instructions. The skill owns evidence gathering, judgment, and report shape;
-feature and system docs only opt into review and state what to inspect.
+generated registry `track` prompt, plus experimental features when the caller
+asks for the experimental review feed. The prompt is a review brief, not
+executable instructions. `experimental: true` is a maturity signal: review
+whether the capability should continue, adjust, cap, pause, split, graduate, or
+roll back. The harness feature policy in `farplane/harness.md` defines what
+counts as a Farplane feature. The skill owns evidence gathering, judgment, and
+report shape; feature and system docs only opt into review and state what to
+inspect.
 
 This is the review layer for cases like Pulse creating many tickets in one day:
 the operator should not have to visit every worker thread to see whether the
@@ -32,12 +37,15 @@ dogfood_review(project_root, window, registry_refs?, track_filter?, report_polic
 
 state:
   reads(docs/features/registry.jsonl, docs/systems/registry.jsonl?,
+        farplane/harness.md?,
         .farplane/reports/pulse/**, .farplane/reports/interval/**,
         tickets/TASK-*/ticket.md, tracked item owner specs and evidence refs)
   writes(.farplane/reports/dogfood-review/<YYYY-MM-DDTHHMMSSZ>.md)
 
 gates:
-  track_prompts_resolved; window_bound; evidence_refs_checked_or_gap_labeled;
+  harness_feature_policy_checked_or_gap_labeled;
+  track_prompts_or_experimental_rows_resolved; window_bound;
+  evidence_refs_checked_or_gap_labeled;
   report_written_to_report_dir; ui_summary_frontmatter_written;
   no ticket/thread implementation; prompt_not_treated_as_command
 
@@ -63,8 +71,15 @@ policy, or automation changes.
   - [ ] Read `qa_checklist.md` before gathering evidence.
   - [ ] Resolve `project_root`, `window`, feature/system registry paths, and
         optional `track_filter`.
-  - [ ] Select only registry rows whose `track` value is a non-empty string,
-        unless the caller supplies explicit tracked rows.
+  - [ ] Read `farplane/harness.md` for the Feature Policy section; if it is
+        missing, label `harness_feature_policy` as a source gap instead of
+        inventing a local feature definition.
+  - [ ] Select registry rows whose `track` value is a non-empty string.
+  - [ ] When the caller asks for the experimental feature feed, also select
+        feature rows with `experimental: true`; use their `track` prompt when
+        present, otherwise apply the default experimental review question:
+        should this capability continue, adjust, cap, pause, split, graduate,
+        roll back, or be merged into a parent?
 - [ ] 2. Build the evidence bundle.
   - [ ] For each tracked row, read its owner spec, surfaces, evidence refs,
         recent Pulse reports, interval reports, and tickets touched inside the
@@ -77,7 +92,8 @@ policy, or automation changes.
   - [ ] Classify output volume, duplicate/spec quality, reward fit, review
         burden, blocker rate, and produced artifacts when those signals exist.
   - [ ] Return one decision per tracked row:
-        `continue`, `adjust`, `cap`, `pause`, `rollback`, or `source_gap`.
+        `continue`, `adjust`, `cap`, `pause`, `rollback`, `graduate`,
+        `split_feature`, `merge`, or `source_gap`.
 - [ ] 4. Write the dogfood report.
   - [ ] Use `templates/dogfood-report.md`.
   - [ ] Write the report under
@@ -114,9 +130,12 @@ policy, or automation changes.
 - [../interval-update/SKILL.md](../interval-update/SKILL.md) - caller when a
   scheduled interval should run tracked review.
 - [../../docs/features/README.md](../../docs/features/README.md) - generated
-  feature registry and optional `track` field contract.
+  feature registry, `experimental`, `superseded_by`, and optional `track` field
+  contract.
 - [../../docs/systems/README.md](../../docs/systems/README.md) - generated
   system registry and optional `track` field contract.
+- [../../farplane/harness.md](../../farplane/harness.md) - project mission and
+  Feature Policy that defines Farplane-relevant capabilities.
 
 ## Output
 

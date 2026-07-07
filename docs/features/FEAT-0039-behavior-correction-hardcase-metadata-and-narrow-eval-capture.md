@@ -1,13 +1,13 @@
 ---
-title: Behavior correction, hardcase metadata, and narrow eval capture
+title: Farplane evals
 status: implemented
 owner: feature-registry
 created_at: 2026-06-26
-updated_at: 2026-07-05
+updated_at: 2026-07-07
 tags:
   - farplane
   - feature
-  - sys-0007
+  - sys-0005
 refs:
   - skills/gap-analysis
   - skills/harness-advisor
@@ -20,8 +20,8 @@ refs:
   - "docs/features/registry.jsonl#FEAT-0031"
   - "docs/features/registry.jsonl#FEAT-0063"
 feature_id: FEAT-0039
-system_id: SYS-0007
-category: improvement-loop
+system_id: SYS-0005
+category: proof
 public: true
 surfaces:
   - skills/gap-analysis
@@ -46,35 +46,33 @@ evidence_refs:
   - docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md
   - tickets/archive/TASK-0228/ticket.md
   - docs/HISTORY.md
-known_limits: Correction is skill-and-artifact driven. Hardcase is eval metadata and legacy standalone hardcase artifacts should become runnable eval rows when the expected behavior is testable. Metric selection routes through metric-advisor before self-improve. The loop does not train models, sell data, inspect full Codex histories without a seed anchor, or auto-apply broad harness migrations without proof.
+known_limits: Owns Farplane eval capture and runnable eval surfaces; broader correction strategy still belongs to Self-Improvement And Learning.
 metrics:
   - gap_packet_quality_pass
   - harness_placement_quality_pass
   - metric_card_traceability_pass
   - hardcase_eval_metadata_pass
   - narrow_regression_eval_pass
-last_verified: 2026-06-26
+last_verified: 2026-07-07
+experimental: false
+superseded_by: false
 ---
-# Behavior correction, hardcase metadata, and narrow eval capture
+# Farplane evals
 
-Behavior correction, hardcase metadata, and narrow eval capture exists to turn repeated
-misses into routed corrections, hardcases, evals, lessons, or skill changes. It belongs
-to [Self-Improvement And Learning](../systems/self-improvement-learning.md) and keeps
-`FEAT-0039` as a stable capability handle because the behavior has an owner, proof path,
-and maintenance boundary.
+Farplane evals exist to turn repeated misses, hardcases, prompt risks, and skill behavior claims into runnable eval cases and regression evidence. It belongs to [Proof And Review](../systems/proof-review.md) and keeps `FEAT-0039` as the consolidated eval capability handle.
 
 ```text
-behavior_fix(gap, evidence, owner_surface) -> hardcase? + patch? + eval? + lesson?
+farplane_eval(claim, evidence, owner_surface) -> eval_case + run_result + repair_signal
 ```
 
 ## At A Glance
 
 - Feature ID: `FEAT-0039`
-- System: [Self-Improvement And Learning](../systems/self-improvement-learning.md)
+- System: [Proof And Review](../systems/proof-review.md)
 - Status: `implemented`
 - Category: `improvement-loop`
 - Primary user: maintainer and self-improvement agent
-- Job: turn repeated misses into routed corrections, hardcases, evals, lessons, or skill changes.
+- Job: turn behavior claims, hardcases, prompt risks, and skill-local checks into runnable eval evidence.
 
 ## Problem
 
@@ -106,6 +104,33 @@ Self-improvement must land in an owner, not a memory dump.
 - Hardcases are narrow enough to rerun or reason about.
 - Local Farplane wrappers, fixtures, registries, and evals are patched before external installed skills.
 - Broad migrations require proof before rollout.
+
+## Feature Flow
+
+```mermaid
+flowchart TD
+  classDef keep fill:#f3f4f6,stroke:#6b7280,color:#111827
+  classDef changed fill:#fef3c7,stroke:#b45309,color:#111827
+  classDef added fill:#dcfce7,stroke:#15803d,color:#111827
+  classDef retired fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d,stroke-dasharray: 5 3
+
+  trigger["Trigger<br/>miss, correction, or behavior gap"]:::keep
+  owner["Owner surface<br/>gap-analysis, harness-advisor<br/>metric-advisor, optimize-harness, eval"]:::changed
+  readers["Files and fields read<br/>gap evidence, owner surface<br/>metric card, eval query<br/>LESSONS and ticket context"]:::keep
+  capture["Narrow capture<br/>hardcase metadata<br/>testable expectation and proof path"]:::changed
+  artifact["Created artifact/evidence<br/>hardcase, eval task, lesson<br/>or repair ticket"]:::added
+  old["Retired<br/>broad memory dump"]:::retired
+
+  trigger --> owner --> readers --> capture --> artifact
+  old -. narrowed into .-> capture
+```
+
+Legend:
+
+- `gray = existing input, fields, or evidence read`
+- `amber = owning or changed live surface`
+- `green = created artifact or proof`
+- `red dashed = retired or superseded path`
 
 ## Surfaces
 

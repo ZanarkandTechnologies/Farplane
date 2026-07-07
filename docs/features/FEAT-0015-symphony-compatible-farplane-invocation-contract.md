@@ -1,9 +1,9 @@
 ---
-title: Symphony-compatible Farplane invocation contract
-status: implemented
+title: Retired Symphony-compatible invocation contract
+status: retired
 owner: feature-registry
 created_at: 2026-06-26
-updated_at: 2026-06-27
+updated_at: 2026-07-07
 tags:
   - farplane
   - feature
@@ -35,16 +35,17 @@ evidence_refs:
   - tickets/archive/TASK-0107/ticket.md
   - tickets/archive/TASK-0107/artifacts/qa/prepare-planning.json
   - tickets/archive/TASK-0107/artifacts/qa/sample-proof-packet.json
-known_limits: Filesystem ticket adapter and local compute only; no daemon, polling, Linear/Notion adapter, cloud execution, or Codex-launching wrapper.
+known_limits: Retired as dead pre-Farplane invocation framing. Preserve only until active references are removed or moved to Invocation Runtime history.
 metrics:
   - runner_contract_conformance
   - proof_packet_parse_rate
-last_verified: 2026-05-05
+last_verified: 2026-07-07
+experimental: false
+superseded_by: false
 ---
-# Symphony-compatible Farplane invocation contract
+# Retired Symphony-compatible invocation contract
 
-Symphony-compatible Farplane invocation contract exists to make every run start from a
-visible invocation envelope and end with an inspectable proof packet. It belongs to
+This Symphony-compatible invocation contract is retired. Any remaining useful invocation boundary belongs in Invocation Runtime history, not in this pre-Farplane feature handle. It belongs to
 [Invocation Runtime](../systems/invocation-runtime.md) and keeps `FEAT-0015` as a stable
 capability handle because the behavior has an owner, proof path, and maintenance
 boundary.
@@ -57,7 +58,7 @@ invoke_farplane(trigger, board?, compute_policy?) -> run_envelope + proof_packet
 
 - Feature ID: `FEAT-0015`
 - System: [Invocation Runtime](../systems/invocation-runtime.md)
-- Status: `implemented`
+- Status: `retired`
 - Category: `execution`
 - Primary user: operator, board adapter, local Codex session, and future external runner
 - Job: make every run start from a visible invocation envelope and end with an inspectable proof packet.
@@ -96,6 +97,26 @@ There is no separate public retired execution surface anymore.
 - `WorkItem` binds scope, owner surface, proof obligations, and status.
 - `ComputeDecision` records whether the run is admitted, redirected, or blocked.
 - `ProofPacket` carries result status, evidence, and handoff data.
+
+## Feature Flow
+
+```mermaid
+flowchart LR
+  classDef keep fill:#f3f4f6,stroke:#6b7280,color:#111827
+  classDef changed fill:#fef3c7,stroke:#b45309,color:#111827
+  classDef added fill:#dcfce7,stroke:#15803d,color:#111827
+  classDef retired fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d,stroke-dasharray: 5 3
+
+  symphony["Symphony draft + TASK-0107 proof<br/>prepare-planning.json<br/>sample-proof-packet.json"]:::keep
+  retired["FEAT-0015<br/>status: retired<br/>system_id: SYS-0004"]:::retired
+  owner["SYS-0004 Invocation Runtime<br/>docs/systems/invocation-runtime.md"]:::changed
+  skill["active invocation owner<br/>skills/farplane-invocation<br/>bin/farplane_invocation.py"]:::added
+  proof["contract surfaces<br/>FarplaneRunEnvelope<br/>ProofPacket artifacts"]:::added
+
+  symphony --> retired --> owner --> skill --> proof
+```
+
+The pre-Farplane Symphony framing is retired; invocation truth now lives in `SYS-0004`, `skills/farplane-invocation`, and proof packet surfaces.
 
 ## Surfaces
 

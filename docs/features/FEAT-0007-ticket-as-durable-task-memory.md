@@ -38,6 +38,8 @@ evidence_refs:
 known_limits: Only works when agents keep the compact ticket-as-program body, ticket Links, progress logs, and artifact pointers current instead of hiding state in chat.
 metrics: []
 last_verified: 2026-06-12
+experimental: false
+superseded_by: false
 ---
 # Ticket as durable task memory
 
@@ -97,6 +99,33 @@ A durable ticket is a small program for the next agent, not a generic task note.
   evidence, goal-advisor inputs, final checkpoint, and residual risk.
 - Frontmatter carries queue state, next action, and last verification.
 - `Links` points to evidence, artifacts, related specs, sidecars, and handoffs.
+
+## Feature Flow
+
+```mermaid
+flowchart TD
+  classDef keep fill:#f3f4f6,stroke:#6b7280,color:#111827
+  classDef changed fill:#fef3c7,stroke:#b45309,color:#111827
+  classDef added fill:#dcfce7,stroke:#15803d,color:#111827
+  classDef retired fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d,stroke-dasharray: 5 3
+
+  trigger["Trigger<br/>accepted task or planning handoff"]:::keep
+  owner["Owner surface<br/>tickets/README.md<br/>tickets/templates/ticket.md"]:::changed
+  readers["Files and fields read<br/>Summary, Scope, Delta<br/>Change Plan, Done, QA Strategy<br/>frontmatter state, Links"]:::keep
+  routes["Execution routes<br/>skills/impl-plan<br/>skills/spec-to-ticket"]:::changed
+  artifact["Created artifact/evidence<br/>tickets/TASK-XXXX/ticket.md<br/>with proof scoreboard"]:::added
+  old["Retired<br/>chat-only task memory"]:::retired
+
+  trigger --> owner --> readers --> routes --> artifact
+  old -. replaced by .-> artifact
+```
+
+Legend:
+
+- `gray = existing input, fields, or evidence read`
+- `amber = owning or changed live surface`
+- `green = created artifact or proof`
+- `red dashed = retired or superseded path`
 
 ## Surfaces
 

@@ -1,9 +1,9 @@
 ---
-title: Video-to-skill source reconstruction
-status: implemented
+title: Retired video-to-skill source reconstruction
+status: retired
 owner: feature-registry
 created_at: 2026-06-26
-updated_at: 2026-07-05
+updated_at: 2026-07-07
 tags:
   - farplane
   - feature
@@ -33,15 +33,16 @@ evidence_refs:
   - skills/video-understanding/SKILL.md
   - tickets/archive/TASK-0158/ticket.md
   - docs/HISTORY.md
-known_limits: Support-skill and artifact contract only; platform fetching still depends on available local tools, public access, or user-provided exports, and transcript gaps must be recorded rather than hidden.
+known_limits: Retired as a generic skill/source workflow rather than a Farplane product feature. Keep current behavior in source-ingestion and media skills.
 metrics:
   - video_to_skill_pipeline_validation_passed
-last_verified: 2026-05-21
+last_verified: 2026-07-07
+experimental: false
+superseded_by: false
 ---
-# Video-to-skill source reconstruction
+# Retired video-to-skill source reconstruction
 
-Video-to-skill source reconstruction exists to turn useful videos or media sources into
-grounded skill improvements without copying noise. It belongs to [Source And Sidecar
+Video-to-skill source reconstruction is retired as a feature handle. The active capability is a generic source-ingestion workflow implemented by skills, not a distinct Farplane product UX. It belongs to [Source And Sidecar
 Systems](../systems/source-sidecar-systems.md) and keeps `FEAT-0025` as a stable
 capability handle because the behavior has an owner, proof path, and maintenance
 boundary.
@@ -54,7 +55,7 @@ reconstruct_skill_source(media, target_capability) -> source_notes + skill_delta
 
 - Feature ID: `FEAT-0025`
 - System: [Source And Sidecar Systems](../systems/source-sidecar-systems.md)
-- Status: `implemented`
+- Status: `retired`
 - Category: `source-ingestion`
 - Primary user: researching agent and skill maintainer
 - Job: turn useful videos or media sources into grounded skill improvements without copying noise.
@@ -89,6 +90,26 @@ Video reconstruction must end in a local owner and proof path.
 - Findings are deduped against existing skills and feature specs.
 - Accepted changes include an owner surface and validation plan.
 - Rejected findings preserve the reason to avoid repeated rework.
+
+## Feature Flow
+
+```mermaid
+flowchart LR
+  classDef keep fill:#f3f4f6,stroke:#6b7280,color:#111827
+  classDef changed fill:#fef3c7,stroke:#b45309,color:#111827
+  classDef added fill:#dcfce7,stroke:#15803d,color:#111827
+  classDef retired fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d,stroke-dasharray: 5 3
+
+  source["media source evidence<br/>SRC-0008<br/>TASK-0158"]:::keep
+  retired["FEAT-0025<br/>status: retired<br/>system_id: SYS-0008"]:::retired
+  owner["SYS-0008 Sources<br/>docs/systems/source-sidecar-systems.md"]:::changed
+  skills["media/source skills<br/>skills/media-ingest<br/>skills/video-understanding<br/>skills/harness-scout"]:::added
+  registry["source registry + decisions<br/>docs/sources/registry.jsonl<br/>adopt/adapt/reject/defer"]:::added
+
+  source --> retired --> owner --> skills --> registry
+```
+
+The retired video-specific feature now routes source reconstruction through `SYS-0008`, media skills, and source registry evidence.
 
 ## Surfaces
 

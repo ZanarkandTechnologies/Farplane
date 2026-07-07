@@ -24,7 +24,6 @@ system_record_json: |
     "feature_refs": [
       "FEAT-0022",
       "FEAT-0030",
-      "FEAT-0054",
       "FEAT-0057",
       "FEAT-0062",
       "FEAT-0064"
@@ -55,7 +54,7 @@ skill_system(change, repo_state?) -> owned_feature_set + boundary_decision + mai
 - Status: `implemented`
 - Primary feature: `FEAT-0022`
 - Owner spec: `docs/systems/skill-system.md`
-- Feature count: `6`
+- Feature count: `5`
 
 ## Role
 
@@ -67,16 +66,14 @@ capability without bloating the agent kernel.
 
 - [FEAT-0022 Skill tier leverage classes](../features/FEAT-0022-skill-tier-leverage-classes.md)
 - [FEAT-0030 On-demand skill plugin packaging](../features/FEAT-0030-on-demand-skill-plugin-packaging.md)
-- [FEAT-0054 Modular skill-local eval tasks](../features/FEAT-0054-modular-skill-local-eval-tasks.md)
 - [FEAT-0057 Skill-local QA checklist artifacts](../features/FEAT-0057-skill-local-qa-checklist-artifacts.md)
 - [FEAT-0062 Capped skill surface budget](../features/FEAT-0062-capped-skill-surface-budget.md)
 - [FEAT-0064 Skill signals](../features/FEAT-0064-skill-signals.md)
 
 ## What Belongs Here
 
-Skill authoring, tier/leverage classification, plugin packaging, skill-local
-eval tasks, QA checklists, capped skill-surface budgets, skill signals, and
-skill registry maintenance.
+Skill authoring, tier/leverage classification, plugin packaging, QA checklists,
+capped skill-surface budgets, skill signals, and skill registry maintenance.
 
 ## What Belongs Elsewhere
 
@@ -112,3 +109,5 @@ domain-specific product workflows may live in Domain Skill Families.
 
 - 2026-06-28: Added capped skill surface budget as a Skill System feature.
 - 2026-06-27: Migrated into the reader-first system-spec shape.
+- 2026-07-07: Moved skill-local eval task feature ownership into consolidated
+  Farplane evals under Proof And Review.

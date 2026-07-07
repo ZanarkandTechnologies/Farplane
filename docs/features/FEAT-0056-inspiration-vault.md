@@ -1,9 +1,9 @@
 ---
-title: Inspiration Vault
-status: proposed
+title: Tasty Pack inspiration vault
+status: implemented
 owner: feature-registry
 created_at: 2026-06-27
-updated_at: 2026-06-27
+updated_at: 2026-07-07
 tags:
   - farplane
   - feature
@@ -25,17 +25,22 @@ surfaces:
 source_refs:
   - docs/systems/source-sidecar-systems.md
 external_refs: []
-evidence_refs: []
-known_limits: Proposed product surface. It needs a dedicated implementation ticket and proof path before it can be marked implemented.
+evidence_refs:
+  - skills/ingest-content/SKILL.md
+  - skills/media-ingest/SKILL.md
+  - skills/harness-scout/SKILL.md
+known_limits: Implemented as the Tasty Pack inspiration/source memory path; retrieval quality still depends on captured source elements, pinned notes, and downstream product usage.
 metrics:
   - inspiration_recall_quality
   - creative_grounding_reuse
-last_verified: 2026-06-27
+last_verified: 2026-07-07
+experimental: false
+superseded_by: false
 ---
-# Inspiration Vault
+# Tasty Pack inspiration vault
 
-Inspiration Vault exists to hold reusable inspiration sources until they can be routed
-into products, skills, or experiments. It belongs to [Source And Sidecar
+Tasty Pack inspiration vault exists to hold reusable inspiration sources until they can be routed
+into Tasty Packs, products, skills, or experiments. It belongs to [Source And Sidecar
 Systems](../systems/source-sidecar-systems.md) and keeps `FEAT-0056` as a stable
 capability handle because the behavior has an owner, proof path, and maintenance
 boundary.
@@ -49,10 +54,10 @@ capture_inspiration(source, use_case)
 
 - Feature ID: `FEAT-0056`
 - System: [Source And Sidecar Systems](../systems/source-sidecar-systems.md)
-- Status: `proposed`
+- Status: `implemented`
 - Category: `source-ingestion`
 - Primary user: researching agent, creator, and product maintainer
-- Job: hold reusable inspiration sources until they can be routed into products, skills, or experiments.
+- Job: hold reusable source elements, pinned notes, and creative grounding until they can be routed into Tasty Packs, products, skills, or experiments.
 
 ## Problem
 
@@ -73,8 +78,10 @@ they are already canonical specs.
   captures: [{ captureId, source, analysis, elements }],
   meta: { captureCount, timeframe } }`, with tags/facets on `source`.
   Production consumers bind only to `captures[].source`,
-  `captures[].analysis`, and `captures[].elements`; retrieval notes are
-  non-core metadata.
+  `captures[].analysis`, `captures[].elements`, and direct `meta` counts or
+  warnings such as `pinnedElementCount`, `operatorNoteCount`, and `warnings`;
+  elements may carry note-backed `pinned` taste priority, and retrieval notes
+  are non-core metadata.
 - Allows proposed status until the pattern earns a feature, skill, ticket, or experiment owner.
 - Keeps raw inspiration out of long-term docs unless distilled.
 
@@ -93,6 +100,9 @@ The vault is a waiting room for reusable signal, not canonical truth.
   elements rather than only prose summaries. Element kinds are `visual`,
   `audio`, `hook`, `storyboard`, `editing`, `copy`, `format`, and
   `constraint`, with optional lightweight anchors such as `0-3s` or `caption`.
+  Operator-selected sub-elements use element-level `pinned`; Tasty Pack
+  retrieval reports pinned counts, operator-note counts, and direct warnings.
+  Do not create a separate serialized production-pattern object.
 - Accepted inspiration must move into a feature, skill, ticket, experiment, or source decision.
 - Stale inspiration is pruned or moved to temporary research.
 - Vault records do not override specs or skill instructions.
@@ -100,6 +110,33 @@ The vault is a waiting room for reusable signal, not canonical truth.
   small, prefer snapshot/reset/reingest over long-lived compatibility fallback.
   Snapshot old records as rollback/debug evidence, then reingest keep-worthy
   sources through the current contract.
+
+## Feature Flow
+
+```mermaid
+flowchart TD
+  classDef keep fill:#f3f4f6,stroke:#6b7280,color:#111827
+  classDef changed fill:#fef3c7,stroke:#b45309,color:#111827
+  classDef added fill:#dcfce7,stroke:#15803d,color:#111827
+  classDef retired fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d,stroke-dasharray: 5 3
+
+  trigger["Trigger<br/>liked source, media, or creative reference"]:::keep
+  owner["Owner surface<br/>source-sidecar system<br/>ingest-content and media-ingest"]:::changed
+  readers["Files and fields read<br/>source, why it matters<br/>candidate use, status<br/>elements and pinned notes"]:::keep
+  vault["Vault record<br/>visual, audio, hook, storyboard<br/>editing, copy, format, constraint"]:::added
+  artifact["Created artifact/evidence<br/>Resource Bank record<br/>Tasty Pack retrieval signal"]:::added
+  old["Retired<br/>serialized production-pattern object"]:::retired
+
+  trigger --> owner --> readers --> vault --> artifact
+  old -. replaced by .-> vault
+```
+
+Legend:
+
+- `gray = existing input, fields, or evidence read`
+- `amber = owning or changed live surface`
+- `green = created artifact or proof`
+- `red dashed = retired or superseded path`
 
 ## Surfaces
 

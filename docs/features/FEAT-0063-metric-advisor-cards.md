@@ -40,6 +40,8 @@ metrics:
   - metric_card_traceability_pass
   - skill_eval_query_lint_pass
 last_verified: 2026-06-26
+experimental: false
+superseded_by: false
 ---
 # Metric advisor cards
 
@@ -92,6 +94,33 @@ A metric card makes the measurement choice explicit and falsifiable.
 - The card states what would make the metric misleading.
 - Judgment rubrics are allowed when they are more honest than pseudo-precision.
 - Metric changes update the downstream workflow that consumes them.
+
+## Feature Flow
+
+```mermaid
+flowchart TD
+  classDef keep fill:#f3f4f6,stroke:#6b7280,color:#111827
+  classDef changed fill:#fef3c7,stroke:#b45309,color:#111827
+  classDef added fill:#dcfce7,stroke:#15803d,color:#111827
+  classDef retired fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d,stroke-dasharray: 5 3
+
+  trigger["Trigger<br/>objective needs an honest measure"]:::keep
+  owner["Owner surface<br/>skills/metric-advisor<br/>self-improvement docs"]:::changed
+  readers["Files and fields read<br/>objective, evidence source<br/>primary metric, guard metrics<br/>anti-metrics and failure modes"]:::keep
+  card["Metric card<br/>falsifiable measurement choice<br/>consumer workflow update"]:::added
+  artifact["Created artifact/evidence<br/>metric card + traceability proof<br/>or eval-task update"]:::added
+  old["Retired<br/>fake precision metric"]:::retired
+
+  trigger --> owner --> readers --> card --> artifact
+  old -. replaced by .-> card
+```
+
+Legend:
+
+- `gray = existing input, fields, or evidence read`
+- `amber = owning or changed live surface`
+- `green = created artifact or proof`
+- `red dashed = retired or superseded path`
 
 ## Surfaces
 

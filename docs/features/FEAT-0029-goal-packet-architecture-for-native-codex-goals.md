@@ -1,9 +1,9 @@
 ---
-title: Goal Packet architecture for native Codex goals
-status: implemented
+title: Retired Goal Packet architecture
+status: retired
 owner: feature-registry
 created_at: 2026-06-26
-updated_at: 2026-06-27
+updated_at: 2026-07-07
 tags:
   - farplane
   - feature
@@ -43,17 +43,18 @@ external_refs:
 evidence_refs:
   - docs/HISTORY.md
   - tickets/archive/TASK-0193/ticket.md
-known_limits: Contract, template, skill, and agent prompt surfaces only. Native Codex Goal mode owns leaf continuation; parent project-goals orchestration is heartbeat/manual-resume state selection. Farplane does not ship a hidden loop runtime, scheduler, automatic Goal manager, or Notion sync. End-to-end live project-goals heartbeat still needs a post-contract pilot.
+known_limits: Superseded by the clearer Goal Advisor feature handle. Goal Packet files remain implementation surfaces, but the feature UX is Goal Advisor execution.
 metrics:
   - goal_packet_reconstructability
   - drift_review_alignment_pass
   - project_goals_parent_leaf_boundary_pass
-last_verified: 2026-06-12
+last_verified: 2026-07-07
+experimental: false
+superseded_by: FEAT-0032
 ---
-# Goal Packet architecture for native Codex goals
+# Retired Goal Packet architecture
 
-Goal Packet architecture for native Codex goals exists to wrap native Codex Goal mode
-with visible ticket, program, and progress state. It belongs to [Horizon
+Goal Packet architecture is retired as a standalone feature handle. Goal Packet files remain implementation surfaces for the Goal Advisor execution loop. It belongs to [Horizon
 Loop](../systems/horizon-loop.md) and keeps `FEAT-0029` as a stable capability handle
 because the behavior has an owner, proof path, and maintenance boundary.
 
@@ -65,7 +66,7 @@ goal_packet(ticket, program, progress) -> native_goal_prompt + resume_contract
 
 - Feature ID: `FEAT-0029`
 - System: [Horizon Loop](../systems/horizon-loop.md)
-- Status: `implemented`
+- Status: `retired`
 - Category: `planning`
 - Primary user: operator and long-running coding agent
 - Job: wrap native Codex Goal mode with visible ticket, program, and progress state.
@@ -102,6 +103,28 @@ around it.
 - `progress.md` records append-only turn updates.
 - The native Goal prompt is regenerated from packet state when needed.
 - Completion still requires ticket proof gates and review when required.
+
+## Feature Flow
+
+```mermaid
+flowchart TD
+  classDef keep fill:#f3f4f6,stroke:#6b7280,color:#111827
+  classDef changed fill:#fef3c7,stroke:#b45309,color:#111827
+  classDef added fill:#dcfce7,stroke:#15803d,color:#111827
+  classDef retired fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d,stroke-dasharray: 5 3
+
+  native["native Codex Goal docs<br/>goal continuation model"]:::keep
+  retired["FEAT-0029<br/>status: retired<br/>superseded_by: FEAT-0032"]:::retired
+  successor["FEAT-0032 Goal Advisor<br/>skills/goal-advisor"]:::changed
+  horizon["SYS-0003 Horizon Loop<br/>farplane/goals.yaml<br/>skills/horizon-advisor"]:::changed
+  packet["Goal Packet files<br/>ticket.md<br/>program.md<br/>progress.md"]:::added
+  review["proof and drift review<br/>agents/goal-drift-reviewer.toml<br/>ticket artifacts"]:::added
+
+  native --> retired --> successor --> horizon
+  successor --> packet --> review
+```
+
+Goal Packet files remain active implementation surfaces, but the feature owner is `FEAT-0032` under the Horizon Loop.
 
 ## Surfaces
 

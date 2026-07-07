@@ -38,6 +38,8 @@ evidence_refs:
 known_limits: Depends on compact `Done` conditions, `QA Strategy`, linked artifacts, progress logs, and reviewer gates, not ticket-body proof theater.
 metrics: []
 last_verified: 2026-06-12
+experimental: false
+superseded_by: false
 ---
 # Artifact-first QA and completion proof
 
@@ -97,6 +99,33 @@ Proof scales with risk, blast radius, and user-facing impact.
 - QA owns user-visible and runtime evidence capture.
 - Reviewer owns material judgment of plans, implementations, prompts, evidence, and completion claims.
 - Completion claims must name the checks and evidence used.
+
+## Feature Flow
+
+```mermaid
+flowchart TD
+  classDef keep fill:#f3f4f6,stroke:#6b7280,color:#111827
+  classDef changed fill:#fef3c7,stroke:#b45309,color:#111827
+  classDef added fill:#dcfce7,stroke:#15803d,color:#111827
+  classDef retired fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d,stroke-dasharray: 5 3
+
+  trigger["Trigger<br/>completion claim or material QA need"]:::keep
+  owner["Owner surface<br/>ticket Done + QA Strategy<br/>skills/qa and skills/review"]:::changed
+  readers["Files and fields read<br/>ticket critical path<br/>expected checks, artifacts<br/>review gates, residual risk"]:::keep
+  evidence["Evidence capture<br/>logs, screenshots, reports<br/>ticket-scoped artifacts"]:::added
+  artifact["Created artifact/evidence<br/>QA result + reviewer receipt<br/>linked from ticket"]:::added
+  old["Retired<br/>unsupported done claim"]:::retired
+
+  trigger --> owner --> readers --> evidence --> artifact
+  old -. blocked by .-> owner
+```
+
+Legend:
+
+- `gray = existing input, fields, or evidence read`
+- `amber = owning or changed live surface`
+- `green = created artifact or proof`
+- `red dashed = retired or superseded path`
 
 ## Surfaces
 

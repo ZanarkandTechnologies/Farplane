@@ -1,9 +1,9 @@
 ---
-title: Project-level system prompt eval suite
-status: implemented
+title: Retired project-level system prompt eval suite
+status: retired
 owner: feature-registry
 created_at: 2026-06-26
-updated_at: 2026-06-27
+updated_at: 2026-07-07
 tags:
   - farplane
   - feature
@@ -31,15 +31,16 @@ evidence_refs:
   - skills/eval/examples/farplane-global-harness/tasks.json
   - skills/eval/tests/test_run_evals.py
   - docs/HISTORY.md
-known_limits: The current runner judges final answers and task artifacts, not full hidden reasoning or complete live tool-event traces. Behavior claims that need child-agent command logs should use agent-behavior-test or agent-qa-test.
+known_limits: Superseded by the consolidated Farplane evals feature. Keep prompt eval files as eval surfaces, not a separate feature identity.
 metrics:
   - system_prompt_eval_pass_rate
-last_verified: 2026-06-07
+last_verified: 2026-07-07
+experimental: false
+superseded_by: FEAT-0039
 ---
-# Project-level system prompt eval suite
+# Retired project-level system prompt eval suite
 
-Project-level system prompt eval suite exists to test project-level agent prompts
-against known behavior risks before and after policy changes. It belongs to [Proof And
+Project-level system prompt eval suite is retired as a standalone feature handle. Its current behavior is part of [FEAT-0039 Farplane evals](FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md). It belongs to [Proof And
 Review](../systems/proof-review.md) and keeps `FEAT-0043` as a stable capability handle
 because the behavior has an owner, proof path, and maintenance boundary.
 
@@ -51,7 +52,7 @@ prompt_eval(prompt_surface, cases) -> regression_signal + repair_route
 
 - Feature ID: `FEAT-0043`
 - System: [Proof And Review](../systems/proof-review.md)
-- Status: `implemented`
+- Status: `retired`
 - Category: `proof`
 - Primary user: prompt maintainer and reviewer
 - Job: test project-level agent prompts against known behavior risks before and after policy changes.
@@ -86,6 +87,26 @@ Prompt policy changes need representative behavior checks.
 - Prompt changes run the narrowest relevant eval or validator before completion.
 - Failures route to a durable owner rather than a one-off apology.
 - Prompt evals stay small enough to maintain.
+
+## Feature Flow
+
+```mermaid
+flowchart LR
+  classDef keep fill:#f3f4f6,stroke:#6b7280,color:#111827
+  classDef changed fill:#fef3c7,stroke:#b45309,color:#111827
+  classDef added fill:#dcfce7,stroke:#15803d,color:#111827
+  classDef retired fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d,stroke-dasharray: 5 3
+
+  prompt["prompt surfaces<br/>templates/global/AGENTS.md<br/>project AGENTS.md"]:::keep
+  retired["FEAT-0043<br/>status: retired<br/>superseded_by: FEAT-0039"]:::retired
+  evals["FEAT-0039 Farplane evals<br/>skills/eval"]:::changed
+  proof["SYS-0005 Proof And Review<br/>docs/systems/proof-review.md"]:::changed
+  cases["prompt eval files/tests<br/>skills/eval/examples/farplane-global-harness/tasks.json<br/>skills/eval/tests/test_run_evals.py"]:::added
+
+  prompt --> retired --> evals --> proof --> cases
+```
+
+Prompt eval behavior is no longer a standalone feature; `FEAT-0039` and `SYS-0005` own the active eval files and proof tests.
 
 ## Surfaces
 

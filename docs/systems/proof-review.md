@@ -10,6 +10,7 @@ tags:
   - proof-and-review
 refs:
   - docs/features/FEAT-0008-artifact-first-qa-and-completion-proof.md
+  - docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md
   - skills/qa/SKILL.md
   - skills/review/SKILL.md
   - docs/review/rubrics
@@ -25,15 +26,18 @@ system_record_json: |
       "FEAT-0008",
       "FEAT-0031",
       "FEAT-0034",
-      "FEAT-0043"
+      "FEAT-0039",
+      "FEAT-0043",
+      "FEAT-0054"
     ],
     "refs": [
       "docs/features/FEAT-0008-artifact-first-qa-and-completion-proof.md",
+      "docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md",
       "skills/qa/SKILL.md",
       "skills/review/SKILL.md",
       "docs/review/rubrics"
     ],
-    "last_verified": "2026-06-26"
+    "last_verified": "2026-07-07"
   }
 ---
 # Proof And Review
@@ -53,7 +57,7 @@ proof_and_review(change, repo_state?) -> owned_feature_set + boundary_decision +
 - Status: `implemented`
 - Primary feature: `FEAT-0008`
 - Owner spec: `docs/systems/proof-review.md`
-- Feature count: `4`
+- Feature count: `6`
 
 ## Role
 
@@ -66,12 +70,15 @@ the system from self-certification.
 - [FEAT-0008 Artifact-first QA and completion proof](../features/FEAT-0008-artifact-first-qa-and-completion-proof.md)
 - [FEAT-0031 Agent behavior test workflow](../features/FEAT-0031-agent-behavior-test-workflow.md)
 - [FEAT-0034 Adversarial agent QA test skill](../features/FEAT-0034-adversarial-agent-qa-test-skill.md)
-- [FEAT-0043 Project-level system prompt eval suite](../features/FEAT-0043-project-level-system-prompt-eval-suite.md)
+- [FEAT-0039 Farplane evals](../features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md)
+- [FEAT-0043 Retired project-level system prompt eval suite](../features/FEAT-0043-project-level-system-prompt-eval-suite.md)
+- [FEAT-0054 Retired modular skill-local eval tasks](../features/FEAT-0054-modular-skill-local-eval-tasks.md)
 
 ## What Belongs Here
 
-Artifact-first QA, reviewer lanes, evidence bundles, adversarial agent QA, behavior-test
-capture, prompt evals, and completion verdicts.
+Artifact-first QA, reviewer lanes, evidence bundles, adversarial agent QA,
+behavior-test capture, Farplane evals, prompt eval cases, skill-local eval
+cases, and completion verdicts.
 
 ## What Belongs Elsewhere
 
@@ -94,6 +101,7 @@ belongs in Self-Improvement And Learning.
 ## Surfaces
 
 - `docs/features/FEAT-0008-artifact-first-qa-and-completion-proof.md`
+- `docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md`
 - `skills/qa/SKILL.md`
 - `skills/review/SKILL.md`
 - `docs/review/rubrics`
@@ -109,3 +117,4 @@ belongs in Self-Improvement And Learning.
 ## Change History
 
 - 2026-06-27: Migrated into the reader-first system-spec shape.
+- 2026-07-07: Consolidated eval feature ownership under `FEAT-0039`.

@@ -31,6 +31,8 @@ metrics:
   - farplane_adoption_scan_pass
   - feature_adoption_drift_count
 last_verified: 2026-06-24
+experimental: false
+superseded_by: false
 ---
 # Farplane adoption tracker CLI
 
@@ -82,6 +84,31 @@ Adoption scans prove policy rollout across active surfaces.
 - Findings classify missing, stale, conflicting, or accepted transitional states.
 - Mechanical fixes may be applied directly; ambiguous findings become tickets.
 - The scan output is evidence for maintenance release decisions.
+
+## Feature Flow
+
+```mermaid
+flowchart LR
+  classDef keep fill:#f3f4f6,stroke:#6b7280,color:#111827
+  classDef changed fill:#fef3c7,stroke:#b45309,color:#111827
+  classDef added fill:#dcfce7,stroke:#15803d,color:#111827
+  classDef retired fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d,stroke-dasharray: 5 3
+
+  scan["Adoption scan<br/>repo roots / roots files"]:::keep
+  featureReg["docs/features/registry.jsonl"]:::keep
+  systemReg["docs/systems<br/>feature_refs"]:::keep
+  cli["bin/core/farplane_adoption.py"]:::changed
+  gaps["adoption gaps<br/>missing / stale / conflicting"]:::added
+  tickets["follow-up tickets<br/>when not mechanical"]:::added
+
+  scan --> cli
+  featureReg --> cli
+  systemReg --> cli
+  cli --> gaps
+  gaps --> tickets
+```
+
+Gray is registry input, amber is CLI behavior, and green is the adoption evidence or ticket output.
 
 ## Surfaces
 

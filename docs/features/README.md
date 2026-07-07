@@ -18,9 +18,17 @@ refs:
 
 # Feature Docs
 
-Farplane feature docs are the spec files for first-class capabilities. Each feature has one Markdown owner file. If a `FEAT-*` handle is too small, stale, or implementation-detail-shaped
-to deserve a page here, delete the handle and remove its template, source, and
-ticket references.
+Farplane feature docs are the spec files for first-class capabilities. Each
+feature has one Markdown owner file. Experimental features are allowed here when
+they describe a real capability or UX contract being dogfooded, not a minor
+patch. If a `FEAT-*` handle is too small, stale, or
+implementation-detail-shaped to deserve a page here, delete the handle and
+remove its template, source, and ticket references.
+
+The project-level feature policy lives in [`farplane/harness.md`](../../farplane/harness.md).
+In short: a Farplane feature must be relevant to Farplane as an agentic
+maintenance tool for harnesses. It should help an operator or agent maintain,
+evaluate, steer, prove, report on, or productize harness behavior.
 
 This folder is the authored source for feature specs and generated feature records:
 
@@ -74,6 +82,8 @@ known_limits: "Compiles visible execution prompts; it is not a hidden scheduler.
 metrics:
   - goal_prompt_contract_pass
 last_verified: 2026-06-26
+experimental: false
+superseded_by: false
 track: false
 ---
 ```
@@ -115,11 +125,28 @@ history.
 - `known_limits`: one concise caveat future agents should preserve.
 - `metrics`: metric names or scorecards associated with the feature.
 - `last_verified`: date when the record was checked against live surfaces.
+- `experimental`: `true` when the feature is real enough to dogfood but not yet
+  globally stable; `false` when accepted as a normal Farplane capability.
+- `superseded_by`: `false`, one `FEAT-*`, or a list of successor feature IDs
+  when this feature's active contract has moved to a clearer capability.
 - `track`: optional `false` or a short review prompt consumed by tracking
   workflows such as `dogfood-review`; keep detailed review logic in the owning
   skill, not in feature frontmatter.
 
 Generated rows add `system_name` and `owner_spec`.
+
+`experimental` and `superseded_by` are separate from `status`:
+
+```text
+implemented + experimental=true
+  = working enough to dogfood, not globally stable
+
+implemented + experimental=false
+  = accepted normal Farplane capability
+
+superseded_by=FEAT-#### | [FEAT-####]
+  = the active contract is moving to clearer successor feature docs
+```
 
 ## Update Rules
 

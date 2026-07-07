@@ -20,6 +20,8 @@ evidence_refs: []
 known_limits: "What this feature deliberately does not claim yet."
 metrics: []
 last_verified: YYYY-MM-DD
+experimental: false
+superseded_by: false
 track: false
 ---
 
@@ -66,6 +68,34 @@ outcomes over internal labels.
 Explain how the feature works when it is already part of Farplane. Include
 named concepts, state transitions, input/output shape, and ownership boundaries
 only as far as a future maintainer needs to preserve behavior.
+
+## Feature Flow
+
+```mermaid
+flowchart TD
+  classDef keep fill:#f3f4f6,stroke:#6b7280,color:#111827
+  classDef changed fill:#fef3c7,stroke:#b45309,color:#111827
+  classDef added fill:#dcfce7,stroke:#15803d,color:#111827
+  classDef retired fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d,stroke-dasharray: 5 3
+
+  trigger["trigger or caller"]:::keep
+  feature["docs/features/FEAT-####.md<br/>feature_id, status, experimental, track"]:::changed
+  policy["farplane/harness.md<br/>Feature Policy"]:::keep
+  surface["owner surface<br/>key variables"]:::changed
+  output["created/updated artifact<br/>evidence, report, state_delta"]:::added
+
+  trigger --> feature
+  policy --> feature
+  feature --> surface
+  surface --> output
+```
+
+Legend:
+
+- `gray = existing input or policy`
+- `amber = feature owner or changed behavior`
+- `green = created or updated artifact`
+- `red dashed = retired or superseded handle`
 
 ## Surfaces
 

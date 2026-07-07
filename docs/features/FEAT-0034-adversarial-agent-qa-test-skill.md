@@ -33,6 +33,8 @@ known_limits: Skill and prompt-template surface only; actual native subagent exe
 metrics:
   - agent_qa_test_skill_validation_pass
 last_verified: 2026-05-26
+experimental: false
+superseded_by: false
 ---
 # Adversarial agent QA test skill
 
@@ -84,6 +86,33 @@ Agent QA is a proof orchestrator around behavior tests and reviewer judgment.
 - Evidence is stored as artifacts, logs, screenshots, or reports as appropriate.
 - The verdict includes blockers, residual risk, and follow-up route.
 - Passing QA does not delete underlying evidence.
+
+## Feature Flow
+
+```mermaid
+flowchart TD
+  classDef keep fill:#f3f4f6,stroke:#6b7280,color:#111827
+  classDef changed fill:#fef3c7,stroke:#b45309,color:#111827
+  classDef added fill:#dcfce7,stroke:#15803d,color:#111827
+  classDef retired fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d,stroke-dasharray: 5 3
+
+  trigger["Trigger<br/>agent workflow readiness claim"]:::keep
+  owner["Owner surface<br/>skills/agent-qa-test<br/>docs/skills/registry.jsonl"]:::changed
+  readers["Files and fields read<br/>claim under test<br/>adversarial case set<br/>behavior-test evidence"]:::keep
+  review["Judgment route<br/>tester evidence critique<br/>residual risk and blockers"]:::changed
+  artifact["Created artifact/evidence<br/>QA verdict and proof bundle<br/>with follow-up route"]:::added
+  old["Retired<br/>single happy-path proof"]:::retired
+
+  trigger --> owner --> readers --> review --> artifact
+  old -. challenged by .-> readers
+```
+
+Legend:
+
+- `gray = existing input, fields, or evidence read`
+- `amber = owning or changed live surface`
+- `green = created artifact or proof`
+- `red dashed = retired or superseded path`
 
 ## Surfaces
 

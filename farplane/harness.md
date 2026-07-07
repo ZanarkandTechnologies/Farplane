@@ -3,7 +3,7 @@ kind: project-harness
 status: active
 project: Farplane
 created_at: 2026-06-15
-updated_at: 2026-07-01
+updated_at: 2026-07-07
 framework_template_version: "0.3.1"
 owner: harness
 ---
@@ -14,6 +14,10 @@ owner: harness
 
 Make autonomous Codex work visible, reviewable, repeatable, and useful through
 files, tickets, skills, goals, and proof.
+
+Farplane is an agentic maintenance tool for harnesses. Product features must
+serve that identity: they should improve how humans and agents maintain,
+evaluate, steer, prove, or productize autonomous harness behavior.
 
 ## Human Thesis
 
@@ -36,6 +40,44 @@ preserve human intent instead of drifting into busywork.
 | Evals and proof systems | Accepted proof patterns raise trust and reduce supervision. | Accepted agent-hours per human intervention rises while false completion falls. | Proof artifacts add friction but do not change decisions or trust. |
 | Skill systems | Lessons become callable workflows instead of transcript residue. | Repeated misses decrease after skill updates. | Skills become stale docs that agents ignore or over-call. |
 | Template tracking | Framework fixes become defaults instead of one-off repairs. | New projects reach first measured loop faster with fewer missing surfaces. | Templates drift faster than they help or become too hard to configure. |
+
+## Feature Policy
+
+Use this policy when creating, reviewing, or dogfooding `FEAT-*` docs:
+
+```text
+farplane_feature(candidate)
+  -> stable_or_experimental_feature | system_policy | skill_workflow |
+     ticket_artifact | report_evidence | retire
+```
+
+A Farplane feature is a durable capability or UX contract for an agentic
+harness-maintenance product. It must help an operator or agent maintain,
+evaluate, steer, prove, report on, or productize harness behavior.
+
+Feature docs are allowed to be experimental when the capability is real enough
+to dogfood but not globally stable. Experiments, automation runs, tickets, and
+reports are evidence for a feature; they are not automatically features.
+
+| Candidate | Classification |
+| --- | --- |
+| A recurring report that lets the operator evaluate harness behavior | feature |
+| A scheduled automation row that invokes an existing skill | automation evidence |
+| A generic reusable skill unrelated to Farplane's harness-maintenance UX | skill workflow |
+| A broad product layer with multiple capabilities | system |
+| A one-off hypothesis, ticket, or implementation patch | experiment or ticket artifact |
+| A dead or superseded implementation shape | retired feature handle or folded history |
+
+Feature docs should answer:
+
+- What harness-maintenance UX or capability does this create?
+- Which system owns it?
+- Which surfaces implement it?
+- What reports, tickets, evals, or artifacts prove it works?
+- Is it stable, experimental, or superseded?
+
+Dogfood and interval review should read this policy before judging whether an
+experimental feature should continue, adjust, graduate, split, merge, or retire.
 
 ## Non-Tradeoffs
 

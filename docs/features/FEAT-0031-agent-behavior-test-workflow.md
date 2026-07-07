@@ -36,6 +36,8 @@ known_limits: CLI JSONL runs capture visible messages, command events, final out
 metrics:
   - agent_behavior_test_runner_smoke_pass
 last_verified: 2026-05-25
+experimental: false
+superseded_by: false
 ---
 # Agent behavior test workflow
 
@@ -86,6 +88,33 @@ Behavior tests need isolated evidence, not anecdotal judgment.
 - Evidence includes enough context to explain pass, fail, or inconclusive.
 - Scores are tied to observed behavior, not intent.
 - Failures route to hardcase or eval capture when reusable.
+
+## Feature Flow
+
+```mermaid
+flowchart TD
+  classDef keep fill:#f3f4f6,stroke:#6b7280,color:#111827
+  classDef changed fill:#fef3c7,stroke:#b45309,color:#111827
+  classDef added fill:#dcfce7,stroke:#15803d,color:#111827
+  classDef retired fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d,stroke-dasharray: 5 3
+
+  trigger["Trigger<br/>isolated behavior claim to test"]:::keep
+  owner["Owner surface<br/>skills/agent-behavior-test<br/>run_codex_exec_behavior_test.py"]:::changed
+  readers["Files and fields read<br/>target behavior, prompt<br/>expected output shape<br/>runner reference"]:::keep
+  run["Captured run<br/>Codex exec logs<br/>transcript and exit state"]:::added
+  artifact["Created artifact/evidence<br/>scored behavior report<br/>pass, fail, or inconclusive"]:::added
+  old["Retired<br/>anecdotal behavior judgment"]:::retired
+
+  trigger --> owner --> readers --> run --> artifact
+  old -. replaced by .-> artifact
+```
+
+Legend:
+
+- `gray = existing input, fields, or evidence read`
+- `amber = owning or changed live surface`
+- `green = created artifact or proof`
+- `red dashed = retired or superseded path`
 
 ## Surfaces
 

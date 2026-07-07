@@ -68,6 +68,8 @@ metrics:
   - template_feature_registry_validation_pass
   - doc_reference_validation_pass
 last_verified: 2026-06-27
+experimental: false
+superseded_by: false
 ---
 # Registry-backed documentation OS
 
@@ -122,6 +124,33 @@ Docs are human contracts first; registries are generated views.
 - Stale feature rows are deleted unless they earn a clear feature spec.
 - Template, feature, and system refs must validate together.
 - No compatibility feature rows for capabilities that do not earn their own feature spec.
+
+## Feature Flow
+
+```mermaid
+flowchart TD
+  classDef keep fill:#f3f4f6,stroke:#6b7280,color:#111827
+  classDef changed fill:#fef3c7,stroke:#b45309,color:#111827
+  classDef added fill:#dcfce7,stroke:#15803d,color:#111827
+  classDef retired fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d,stroke-dasharray: 5 3
+
+  trigger["Trigger<br/>feature, system, or template doc change"]:::keep
+  owner["Owner surface<br/>canonical Markdown spec<br/>doc-advisor workflow"]:::changed
+  readers["Files and fields read<br/>frontmatter refs/status<br/>feature_refs/system_refs<br/>owner indexes and templates"]:::keep
+  generate["Generated views<br/>registry.jsonl and registry.md<br/>validator outputs"]:::added
+  artifact["Created artifact/evidence<br/>updated registry views<br/>doc-ref validation proof"]:::added
+  old["Retired<br/>registry row as source of truth"]:::retired
+
+  trigger --> owner --> readers --> generate --> artifact
+  old -. replaced by .-> owner
+```
+
+Legend:
+
+- `gray = existing input, fields, or evidence read`
+- `amber = owning or changed live surface`
+- `green = created artifact or proof`
+- `red dashed = retired or superseded path`
 
 ## Surfaces
 

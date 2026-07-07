@@ -1,9 +1,9 @@
 ---
-title: Goal Advisor execution compilation
+title: Goal Advisor execution loop
 status: implemented
 owner: feature-registry
 created_at: 2026-06-26
-updated_at: 2026-06-27
+updated_at: 2026-07-07
 tags:
   - farplane
   - feature
@@ -38,13 +38,15 @@ evidence_refs:
   - skills/goal-advisor/SKILL.md
   - docs/HISTORY.md
   - tickets/archive/TASK-0196/ticket.md
-known_limits: Skill and docs contract only; it does not implement a daemon, hidden scheduler, Codex Cloud launcher, Symphony runner, or automatic Goal manager. Former work, Ralph, and batch-work public skill surfaces are retired into Goal standards.
+known_limits: Goal Advisor compiles and routes visible execution loops; it does not implement a daemon, hidden scheduler, Codex Cloud launcher, Symphony runner, or automatic Goal manager.
 metrics: []
-last_verified: 2026-06-13
+last_verified: 2026-07-07
+experimental: false
+superseded_by: false
 ---
-# Goal Advisor execution compilation
+# Goal Advisor execution loop
 
-Goal Advisor execution compilation exists to choose the right execution mode and compile
+Goal Advisor execution loop exists to choose the right execution mode, prepare Goal Packet state when needed, and compile
 the concrete prompt for material Farplane work. It belongs to [Horizon
 Loop](../systems/horizon-loop.md) and keeps `FEAT-0032` as a stable capability handle
 because the behavior has an owner, proof path, and maintenance boundary.
@@ -60,7 +62,7 @@ compile_execution_route(ticket, trigger, budget?) -> goal | heartbeat | rollout 
 - Status: `implemented`
 - Category: `execution`
 - Primary user: operator and Goal-backed execution agent
-- Job: choose the right execution mode and compile the concrete prompt for material Farplane work.
+- Job: choose the right execution mode, bind Goal Packet state when needed, and compile the concrete prompt for material Farplane work.
 
 ## Problem
 
@@ -92,6 +94,32 @@ Goal Advisor is an execution compiler, not a replacement for the ticket.
 - Route choice names trigger mode, budget, files, and proof expectations.
 - The compiled prompt shrinks the task rather than expanding global policy.
 - Completion still uses the ticket's proof and review gates.
+
+## Feature Flow
+
+```mermaid
+flowchart LR
+  classDef keep fill:#f3f4f6,stroke:#6b7280,color:#111827
+  classDef changed fill:#fef3c7,stroke:#b45309,color:#111827
+  classDef added fill:#dcfce7,stroke:#15803d,color:#111827
+  classDef retired fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d,stroke-dasharray: 5 3
+
+  request["Goal / ticket request<br/>trigger + budget"]:::keep
+  advisor["skills/goal-advisor<br/>compile_execution_route"]:::changed
+  packet["Goal Packet files<br/>ticket.md<br/>program.md<br/>progress.md"]:::added
+  route["native Goal<br/>or direct route"]:::changed
+  proof["QA + reviewer completion<br/>ticket Done / Proof"]:::added
+  hidden["hidden scheduler / daemon"]:::retired
+
+  request --> advisor
+  advisor --> packet
+  advisor --> route
+  packet --> route
+  route --> proof
+  advisor -. does not create .-> hidden
+```
+
+Gray is the incoming work request, amber is route-selection behavior, green is durable state or completion proof, and red dashed is the non-shipped hidden executor path.
 
 ## Surfaces
 

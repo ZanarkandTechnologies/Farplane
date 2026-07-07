@@ -47,6 +47,8 @@ evidence_refs:
 known_limits: Depends on skill maintainers keeping Markdown links accurate; numeric tiers describe compound upgrade priority while first-load todo links enforce loading boundaries; Tier 0 is a universal phase protocol rather than a skill tier, plan is a planning prompt-template rather than the phase itself, execute remains a deprecated compatibility wrapper, and concrete coding skills such as spec-to-ticket, impl-plan, goal-advisor, and close-ticket must not be treated as universal generic workflows.
 metrics: []
 last_verified: 2026-06-23
+experimental: false
+superseded_by: false
 ---
 # Skill tier leverage classes
 
@@ -100,6 +102,31 @@ phases.
 - Tier 2 workflow skills may link to Tier 1 primitives but should not duplicate their full rules.
 - Tier 3 skills own concrete domains and may hand off to peers intentionally.
 - Deprecated wrappers such as `execute` are not promoted into normal dependencies.
+
+## Feature Flow
+
+```mermaid
+flowchart LR
+  classDef keep fill:#f3f4f6,stroke:#6b7280,color:#111827
+  classDef changed fill:#fef3c7,stroke:#b45309,color:#111827
+  classDef added fill:#dcfce7,stroke:#15803d,color:#111827
+  classDef retired fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d,stroke-dasharray: 5 3
+
+  edit["Skill edit<br/>skills/*/SKILL.md"]:::keep
+  system["Skill System<br/>tier + loading decision"]:::changed
+  contract["docs/skills/system.md<br/>Tier 0, Tier 1/2/3<br/>loading_contract"]:::added
+  validators["validators<br/>check_skill_todo_tiers.py<br/>check_tier0_phase_protocol.py"]:::changed
+  registry["docs/skills/README.md<br/>registry sync"]:::added
+  history["docs/HISTORY.md<br/>tier doctrine evidence"]:::added
+
+  edit --> system
+  system --> contract
+  contract --> validators
+  validators --> registry
+  registry --> history
+```
+
+Gray is existing input, amber is changed tier behavior, and green is the owned documentation or evidence output.
 
 ## Surfaces
 

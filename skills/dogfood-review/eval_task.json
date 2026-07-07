@@ -4,13 +4,14 @@
     "title": "Tracked Pulse feature produces a grouped dogfood report",
     "query": "A feature registry row has a non-empty track prompt asking whether Pulse spawned useful reward-backed tickets in the last 24h. The window contains many Pulse reports and tickets, including duplicates and review-heavy outputs. What should dogfood-review read, write, and avoid?",
     "reference_points": [
-      "Selects only registry rows whose track value is a non-empty string unless explicit rows were supplied",
+      "Selects registry rows whose track value is a non-empty string, and can also select experimental=true feature rows when the caller asks for the experimental feature feed",
+      "Reads farplane/harness.md Feature Policy or labels harness_feature_policy as a source gap before judging feature relevance",
       "Treats the track prompt as a review brief, not executable instructions",
       "Reads relevant feature/system owner specs, Pulse reports, interval reports, tickets, and evidence refs inside the review window",
       "Groups high-volume tickets by useful patterns, duplicates, vague specs, reward fit, blocker rate, and review burden",
       "Writes a date-stamped Markdown report under .farplane/reports/dogfood-review/",
-      "Includes frontmatter with kind dogfood-review, created_at, review_window, ui_summary, tracked_refs, and decisions",
-      "Returns decisions such as continue, adjust, cap, pause, rollback, or source_gap without mutating Pulse, tickets, goals, or automations directly"
+      "Includes frontmatter with kind dogfood-review, created_at, review_window, ui_summary, policy_ref, tracked_refs, experimental_refs, and decisions",
+      "Returns decisions such as continue, adjust, cap, pause, rollback, graduate, split_feature, merge, or source_gap without mutating Pulse, tickets, goals, or automations directly"
     ],
     "tags": ["dogfood-review", "track", "pulse", "reports"]
   }

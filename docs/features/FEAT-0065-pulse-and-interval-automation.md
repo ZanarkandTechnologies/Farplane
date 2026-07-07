@@ -1,9 +1,9 @@
 ---
 title: Pulse and interval automation
-status: implemented
+status: retired
 owner: feature-registry
 created_at: 2026-06-27
-updated_at: 2026-06-27
+updated_at: 2026-07-07
 tags:
   - farplane
   - feature
@@ -29,12 +29,16 @@ evidence_refs:
   - skills/pulse-update/eval_task.json
   - skills/interval-update/eval_task.json
   - skills/automation-advisor/audits/2026-06-24-automation-prompt-qa.md
-known_limits: Full TOML automation configs and previewable loops exist, but Farplane still avoids hidden daemons and requires visible tickets, reports, or automations as state surfaces.
+known_limits: Retired as the older umbrella feature. Product-scoped Pulse loops and daily interval review reports now carry the active feature contracts.
 metrics:
   - pulse_action_relevance
   - interval_report_usefulness
   - ticket_supply_learning
-last_verified: 2026-06-27
+last_verified: 2026-07-07
+experimental: false
+superseded_by:
+  - FEAT-0066
+  - FEAT-0067
 track: >-
   Review whether Pulse and interval automation is producing useful,
   reward-backed ticket supply without flooding review capacity. Focus on
@@ -44,10 +48,7 @@ track: >-
 ---
 # Pulse and interval automation
 
-Pulse and interval automation exists to run visible pulse and interval loops that select
-bounded work, report progress, and learn from ticket supply. It belongs to [Horizon
-Loop](../systems/horizon-loop.md) and keeps `FEAT-0065` as a stable capability handle
-because the behavior has an owner, proof path, and maintenance boundary.
+Pulse and interval automation is retired as the older umbrella feature for recurring Pulse and interval behavior. Product-scoped Pulse loops and daily interval review reports now carry the active contracts under `FEAT-0066` and `FEAT-0067`.
 
 ```text
 horizon_tick(window, state) -> bounded_action | report | no_op + learning_signal
@@ -57,10 +58,10 @@ horizon_tick(window, state) -> bounded_action | report | no_op + learning_signal
 
 - Feature ID: `FEAT-0065`
 - System: [Horizon Loop](../systems/horizon-loop.md)
-- Status: `implemented`
+- Status: `retired`
 - Category: `planning`
 - Primary user: operator and horizon-loop agent
-- Job: run visible pulse and interval loops that select bounded work, report progress, and learn from ticket supply.
+- Job: preserve the old umbrella handle while successor features own active Pulse and daily interval UX.
 
 ## Problem
 
@@ -93,6 +94,30 @@ Longer-horizon autonomy must remain visible, ticket-backed, and proof-aware.
 - Repeated checks widen by backoff and reset on progress.
 - Humans own ambiguous direction, destructive changes, spend, deploys, and hard-to-reverse architecture choices.
 - Learning signals create ticket supply, skill maintenance, feature specs, or explicit no-op decisions.
+
+## Feature Flow
+
+```mermaid
+flowchart TD
+  classDef keep fill:#f3f4f6,stroke:#6b7280,color:#111827
+  classDef changed fill:#fef3c7,stroke:#b45309,color:#111827
+  classDef added fill:#dcfce7,stroke:#15803d,color:#111827
+  classDef retired fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d,stroke-dasharray: 5 3
+
+  config["automation inputs<br/>farplane/automations.toml<br/>track frontmatter"]:::keep
+  retired["FEAT-0065<br/>status: retired<br/>superseded_by: FEAT-0066 + FEAT-0067"]:::retired
+  pulse["FEAT-0066 Pulse<br/>skills/pulse-update/SKILL.md"]:::changed
+  interval["FEAT-0067 Interval<br/>skills/interval-update/SKILL.md"]:::changed
+  horizon["SYS-0003 Horizon Loop<br/>automation-advisor<br/>goals and ticket supply"]:::changed
+  outputs["reports and proof<br/>pulse reports<br/>interval reports<br/>eval_task.json evidence"]:::added
+
+  config --> retired
+  retired --> pulse --> horizon
+  retired --> interval --> horizon
+  horizon --> outputs
+```
+
+The umbrella automation handle is retired; Pulse and Interval now split active ownership under the Horizon Loop and write visible reports.
 
 ## Surfaces
 
@@ -161,3 +186,6 @@ Acceptance signals:
 - 2026-06-27: Feature spec created.
 - 2026-06-27: Migrated into the reader-first feature-spec shape.
 - 2026-07-02: Standardized project automation source on full TOML records in `farplane/automations.toml`.
+- 2026-07-07: Retired the older umbrella behavior and linked
+  product-scoped Pulse loops plus daily interval reports as successor feature
+  handles for dogfood tracking.

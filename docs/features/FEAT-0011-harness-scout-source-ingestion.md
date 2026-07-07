@@ -32,6 +32,8 @@ metrics:
   - decision_matrix_quality
   - manual_variant_score_1_to_10
 last_verified: 2026-05-04
+experimental: false
+superseded_by: false
 ---
 # Harness scout source ingestion
 
@@ -85,6 +87,33 @@ Source ingestion is evidence intake, not automatic product direction.
 - Accepted patterns must identify the Farplane owner surface they would change.
 - Rejected or deferred patterns must say why so the same source is not re-litigated blindly.
 - Research artifacts stay in local `.farplane` state or source records until distilled into a feature, skill, ticket, or doc owner.
+
+## Feature Flow
+
+```mermaid
+flowchart TD
+  classDef keep fill:#f3f4f6,stroke:#6b7280,color:#111827
+  classDef changed fill:#fef3c7,stroke:#b45309,color:#111827
+  classDef added fill:#dcfce7,stroke:#15803d,color:#111827
+  classDef retired fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d,stroke-dasharray: 5 3
+
+  trigger["Trigger<br/>external source or inspiration target"]:::keep
+  owner["Owner surface<br/>skills/harness-scout<br/>docs/sources/registry.jsonl"]:::changed
+  readers["Files and fields read<br/>source URL, extraction question<br/>score basis, owner-surface candidates"]:::keep
+  decision["Decision record<br/>adopt, adapt, reject, or defer<br/>with rationale"]:::changed
+  artifact["Created artifact/evidence<br/>source record, scout report<br/>or ticket handoff"]:::added
+  old["Retired<br/>blind source copying"]:::retired
+
+  trigger --> owner --> readers --> decision --> artifact
+  old -. replaced by .-> decision
+```
+
+Legend:
+
+- `gray = existing input, fields, or evidence read`
+- `amber = owning or changed live surface`
+- `green = created artifact or proof`
+- `red dashed = retired or superseded path`
 
 ## Surfaces
 

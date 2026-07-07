@@ -10,6 +10,8 @@ tags:
   - self-improvement-and-learning
 refs:
   - docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md
+  - docs/features/FEAT-0069-taste-loop-human-feedback-optimization.md
+  - docs/features/FEAT-0070-experimental-feature-evaluation-reports.md
   - docs/LESSONS.md
   - docs/TROUBLES.md
   - skills/metric-advisor/SKILL.md
@@ -20,18 +22,20 @@ system_record_json: |
     "status": "implemented",
     "summary": "The learning loop that observes behavior gaps, captures hardcases, chooses metrics, routes correction, and turns repeated failures into skills, evals, or docs.",
     "owner_spec": "docs/systems/self-improvement-learning.md",
-    "primary_feature_ref": "FEAT-0039",
+    "primary_feature_ref": "FEAT-0063",
     "feature_refs": [
-      "FEAT-0039",
-      "FEAT-0063"
+      "FEAT-0063",
+      "FEAT-0069",
+      "FEAT-0070"
     ],
     "refs": [
-      "docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md",
+      "docs/features/FEAT-0069-taste-loop-human-feedback-optimization.md",
+      "docs/features/FEAT-0070-experimental-feature-evaluation-reports.md",
       "docs/LESSONS.md",
       "docs/TROUBLES.md",
       "skills/metric-advisor/SKILL.md"
     ],
-    "last_verified": "2026-06-26"
+    "last_verified": "2026-07-07"
   }
 ---
 # Self-Improvement And Learning
@@ -49,9 +53,9 @@ self_improvement_and_learning(change, repo_state?) -> owned_feature_set + bounda
 
 - System ID: `SYS-0007`
 - Status: `implemented`
-- Primary feature: `FEAT-0039`
+- Primary feature: `FEAT-0063`
 - Owner spec: `docs/systems/self-improvement-learning.md`
-- Feature count: `2`
+- Feature count: `3`
 
 ## Role
 
@@ -61,13 +65,14 @@ evals, docs, tickets, or lessons.
 
 ## Feature Docs
 
-- [FEAT-0039 Behavior correction, hardcase metadata, and narrow eval capture](../features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md)
 - [FEAT-0063 Metric advisor cards](../features/FEAT-0063-metric-advisor-cards.md)
+- [FEAT-0069 Taste Loop human-feedback optimization](../features/FEAT-0069-taste-loop-human-feedback-optimization.md)
+- [FEAT-0070 Experimental feature evaluation reports](../features/FEAT-0070-experimental-feature-evaluation-reports.md)
 
 ## What Belongs Here
 
-Gap analysis, metric cards, hardcase capture, lesson promotion, narrow eval promotion,
-and correction-route decisions.
+Gap analysis, metric cards, hardcase capture, lesson promotion, experimental feature
+evaluation, human-feedback optimization, and correction-route decisions.
 
 ## What Belongs Elsewhere
 
@@ -86,7 +91,8 @@ Skill System; source discovery remains in Source And Sidecar Systems.
 
 ## Surfaces
 
-- `docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md`
+- `docs/features/FEAT-0069-taste-loop-human-feedback-optimization.md`
+- `docs/features/FEAT-0070-experimental-feature-evaluation-reports.md`
 - `docs/LESSONS.md`
 - `docs/TROUBLES.md`
 - `skills/metric-advisor/SKILL.md`
@@ -102,3 +108,8 @@ Skill System; source discovery remains in Source And Sidecar Systems.
 ## Change History
 
 - 2026-06-27: Migrated into the reader-first system-spec shape.
+- 2026-07-07: Added experimental Taste Loop human-feedback optimization as a
+  self-improvement feature.
+- 2026-07-07: Moved consolidated eval feature ownership to Proof And Review.
+- 2026-07-07: Added experimental feature evaluation reports as a
+  self-improvement feature.

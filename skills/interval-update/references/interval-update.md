@@ -155,7 +155,8 @@ merge shape.
 11. For enabled `docs_consolidation`, route whole-project context refresh to
    `update-memory` and substantive durable doc cleanup to `doc-advisor`.
 12. For enabled `tracked_feature_review`, call `dogfood-review` for generated
-    feature or system registry rows whose `track` value is a non-empty string.
+    feature or system registry rows whose `track` value is a non-empty string
+    and for feature rows with `experimental: true`.
     The dogfood report must be written under `.farplane/reports/dogfood-review/`
     and then linked or summarized from the interval report.
 13. Review the past window against the static harness charter, goals, and

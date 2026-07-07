@@ -41,6 +41,8 @@ metrics:
   - skill_surface_budget_pass
   - capped_skill_subscription_count
 last_verified: 2026-06-28
+experimental: false
+superseded_by: false
 ---
 # Capped skill surface budget
 
@@ -105,6 +107,33 @@ rows. It does not judge item quality or rewrite files.
 When a subscribed skill is over budget, the maintainer runs the minimizer
 worksheet and then applies `skill-maintenance.refine_skill` before keeping the
 subscription.
+
+## Feature Flow
+
+```mermaid
+flowchart LR
+  classDef keep fill:#f3f4f6,stroke:#6b7280,color:#111827
+  classDef changed fill:#fef3c7,stroke:#b45309,color:#111827
+  classDef added fill:#dcfce7,stroke:#15803d,color:#111827
+  classDef retired fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d,stroke-dasharray: 5 3
+
+  scan["Skill/template surface scan<br/>SKILL.md + qa_checklist.md + eval_task.json"]:::keep
+  optin["template_uses<br/>skill-surface-budget: 0.1.0"]:::keep
+  caps["budget caps<br/>10 todos / 5 QA / 5 evals"]:::changed
+  validator["bin/validators/check_skill_surface_budget.py"]:::changed
+  pass["pass / skipped"]:::added
+  violation["violation + exact counts"]:::added
+  minimize["minimize_skill_surface.py<br/>command suggestion"]:::added
+
+  scan --> validator
+  optin --> validator
+  caps --> validator
+  validator --> pass
+  validator --> violation
+  violation --> minimize
+```
+
+Gray is scanned skill input, amber is budget policy and validator behavior, and green is the pass, violation, or minimizer output.
 
 ## Surfaces
 

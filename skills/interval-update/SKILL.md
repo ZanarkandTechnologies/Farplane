@@ -37,6 +37,16 @@ Do not wrap this skill in a hidden scheduler thread. If a project needs another
 cadence, create another explicit automation that calls this skill with a named
 interval, review window, planning window, context refs, and workflow flags.
 
+Every interval-planned ticket must carry expected reward at planning time.
+Ticket deltas emitted by Daily, Weekly, or other interval reports are part of
+the planning algorithm, so they must include frontmatter `rewards.kpi` plus a
+parseable `## Reward` fenced YAML block with `kpi_rewards[]` entries,
+`expected_reward` text, and a `guard`. At least one `kpi_id` must come from
+`farplane/bindings.yaml` metrics and map to a product, lane, or artifact
+workflow in `farplane/products.md`. If the interval cannot name the expected
+reward, it should emit Pulse guidance or a planning blocker instead of creating
+a ticket.
+
 ## Skill Signature
 
 ```text
@@ -235,6 +245,8 @@ docs_consolidation(review_window, planning_window)
 tracked_feature_review(review_window, planning_window)
   -> dogfood_report + tracked_item_findings + interval_summary
   skill: dogfood-review
+  scope: generated feature/system registry rows with non-empty `track`, plus
+    feature rows with `experimental: true`
 
 Final planning synthesis:
 
@@ -289,8 +301,8 @@ priority_planning(review_window, planning_window)
         and substantive doc-quality rewrites through `doc-advisor`.
   - [ ] When `tracked_feature_review` is enabled, call `dogfood-review` for
         generated feature or system registry rows whose `track` value is a
-        non-empty string, then link or summarize the dogfood report in the
-        interval report.
+        non-empty string and for feature rows with `experimental: true`, then
+        link or summarize the dogfood report in the interval report.
 - [ ] 5. Plan the next window.
   - [ ] Run `priority_planning` after reflection and reward/leverage synthesis
         when enabled; it must consume dogfood review findings when present and
@@ -300,6 +312,12 @@ priority_planning(review_window, planning_window)
   - [ ] Convert executable work into ticket deltas or Goal Advisor handoffs,
         including `.agents/skills/<product-skill>/SKILL.md` refs when a
         local product skill owns the workflow.
+  - [ ] For every ticket delta or planned worker ticket, include frontmatter
+        `rewards.kpi` and a parseable `## Reward` block with `kpi_rewards[]`,
+        `expected_reward`, and `guard`; the KPI ID must exist in
+        `farplane/bindings.yaml`, map to `farplane/products.md`, and match
+        between frontmatter and body. Do not create rewardless tickets from
+        interval planning.
   - [ ] Return Pulse guidance as constraints for the fast executor loop.
 - [ ] 6. Write the report before durable mutations.
   - [ ] Write a date-stamped interval report.
@@ -320,7 +338,8 @@ priority_planning(review_window, planning_window)
 - next-window plan.
 - goals delta decisions or approval-required blockers.
 - Pulse guidance.
-- Goal Advisor handoffs or ticket deltas.
+- Goal Advisor handoffs or ticket deltas, with expected reward blocks for every
+  planned ticket.
 
 ## Reference Map
 

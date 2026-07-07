@@ -21,11 +21,15 @@ dogfood_review_check(report, evidence, track_prompts)
 ## Checklist
 
 - [ ] Every reviewed item came from a registry row with non-empty `track` text,
-      or from an explicit caller-provided tracked row.
+      an `experimental: true` feature row selected by the caller's experimental
+      feed, or an explicit caller-provided tracked row.
+- [ ] The report cites or applies `farplane/harness.md#Feature Policy`, or names
+      `harness_feature_policy` as a source gap when the policy cannot be read.
 - [ ] The `track` text was treated as a review brief, not as tool instructions
       or permission to mutate files.
-- [ ] Every `continue`, `adjust`, `cap`, `pause`, or `rollback` decision cites
-      concrete tickets, reports, artifacts, or a named source gap.
+- [ ] Every `continue`, `adjust`, `cap`, `pause`, `rollback`, `graduate`,
+      `split_feature`, or `merge` decision cites concrete tickets, reports,
+      artifacts, or a named source gap.
 - [ ] The report is written under `.farplane/reports/dogfood-review/` with
       `kind`, `created_at`, `review_window`, `ui_summary`, `tracked_refs`, and
       `decisions` frontmatter.

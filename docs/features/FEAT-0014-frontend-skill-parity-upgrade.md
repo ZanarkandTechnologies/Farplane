@@ -1,9 +1,9 @@
 ---
 title: Frontend skill parity upgrade
-status: implemented
+status: retired
 owner: feature-registry
 created_at: 2026-06-26
-updated_at: 2026-07-05
+updated_at: 2026-07-07
 tags:
   - farplane
   - feature
@@ -43,16 +43,17 @@ evidence_refs:
   - skills/visual-design/SKILL.md
   - skills/visual-qa/SKILL.md
   - docs/HISTORY.md
-known_limits: Docs/skill-contract upgrade only; no automated eval suite or searchable frontend rule corpus yet.
+known_limits: Retired as a feature because frontend parity is a domain skill-family concern, not a Farplane product capability. Keep current truth in Domain Skill Families and the owner skills.
 metrics:
   - frontend_skill_prebuild_completeness_rate
   - generic_ui_regression_rate
-last_verified: 2026-05-11
+last_verified: 2026-07-07
+experimental: false
+superseded_by: false
 ---
 # Frontend skill parity upgrade
 
-Frontend skill parity upgrade exists to keep Farplane frontend skills aligned with
-modern UI craft, QA, and delegation patterns. It belongs to [Domain Skill
+Frontend skill parity upgrade is retired as a feature handle. The current truth is a domain skill-family concern: keep frontend craft, QA, and delegation patterns in the owning frontend skills. It belongs to [Domain Skill
 Families](../systems/domain-skill-families.md) and keeps `FEAT-0014` as a stable
 capability handle because the behavior has an owner, proof path, and maintenance
 boundary.
@@ -65,7 +66,7 @@ frontend_skill_upgrade(skill, parity_evidence) -> guidance_delta + proof_gate
 
 - Feature ID: `FEAT-0014`
 - System: [Domain Skill Families](../systems/domain-skill-families.md)
-- Status: `implemented`
+- Status: `retired`
 - Category: `frontend-skills`
 - Primary user: frontend builder, reviewer, and skill maintainer
 - Job: keep Farplane frontend skills aligned with modern UI craft, QA, and delegation patterns.
@@ -101,6 +102,26 @@ Frontend parity upgrades must improve the reusable skill family, not just one pa
 - User-visible changes need screenshot, browser, or visual QA evidence proportional to risk.
 - Skill boundaries stay explicit: design, build, functional QA, visual QA, review, and delegation each keep their owner.
 - The registry points to the skills that currently implement the family.
+
+## Feature Flow
+
+```mermaid
+flowchart LR
+  classDef keep fill:#f3f4f6,stroke:#6b7280,color:#111827
+  classDef changed fill:#fef3c7,stroke:#b45309,color:#111827
+  classDef added fill:#dcfce7,stroke:#15803d,color:#111827
+  classDef retired fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d,stroke-dasharray: 5 3
+
+  sources["external parity refs<br/>shadcn + UI skill examples<br/>MEM-0085"]:::keep
+  retired["FEAT-0014<br/>status: retired<br/>system_id: SYS-0010"]:::retired
+  owner["SYS-0010 Domain Skills<br/>docs/systems/domain-skill-families.md"]:::changed
+  skills["frontend skill family<br/>skills/frontend-craft<br/>skills/frontend-design<br/>skills/visual-qa"]:::added
+  record["durable memory<br/>docs/MEMORY.md<br/>docs/HISTORY.md"]:::keep
+
+  sources --> retired --> owner --> skills --> record
+```
+
+The retired feature handle now points at `SYS-0010` and the active frontend skill-family surfaces instead of owning parity work directly.
 
 ## Surfaces
 

@@ -28,6 +28,9 @@ docs/systems/*.md
 Use this directory when deciding what Farplane is made of. Use
 [`docs/features/`](../features/README.md) when a capability deserves its own
 `FEAT-*` feature doc, registry row, proof path, and template/source refs.
+Feature docs may be experimental when they represent a dogfooded capability,
+but experiments themselves remain evidence in tickets, product-loop progress,
+or reports until they graduate into a feature contract.
 
 System records may include optional `"track": false` or `"track": "<review prompt>"`
 inside `system_record_json`. Tracking prompts are compact review briefs for

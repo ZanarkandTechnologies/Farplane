@@ -26,6 +26,8 @@ FEATURE_FIELDS = {
     "id",
     "name",
     "status",
+    "experimental",
+    "superseded_by",
     "system_id",
     "category",
     "public",
@@ -43,6 +45,8 @@ FEATURE_FRONTMATTER_FIELDS = {
     "feature_id",
     "title",
     "status",
+    "experimental",
+    "superseded_by",
     "system_id",
     "category",
     "public",
@@ -239,6 +243,8 @@ def load_features(root: Path = ROOT) -> tuple[list[dict[str, Any]], list[str]]:
             "id": data.get("feature_id"),
             "name": data.get("title"),
             "status": data.get("status"),
+            "experimental": data.get("experimental"),
+            "superseded_by": data.get("superseded_by"),
             "system_id": data.get("system_id"),
             "category": data.get("category"),
             "public": data.get("public"),
@@ -350,6 +356,29 @@ def validate_track_field(record: dict[str, Any], record_id: str, errors: list[st
     errors.append(f"{record_id}: track must be false or a non-empty string")
 
 
+def validate_superseded_by(
+    record: dict[str, Any], known_feature_ids: set[str], record_id: str, errors: list[str]
+) -> None:
+    value = record.get("superseded_by", False)
+    if value is False:
+        return
+    if isinstance(value, str):
+        values = [value]
+    elif isinstance(value, list) and all(isinstance(item, str) for item in value):
+        values = value
+    else:
+        errors.append(f"{record_id}: superseded_by must be false, FEAT-####, or a list of FEAT-#### refs")
+        return
+
+    for feature_ref in values:
+        if not FEATURE_ID_RE.match(feature_ref):
+            errors.append(f"{record_id}: superseded_by ref must match FEAT-####: {feature_ref}")
+        elif feature_ref == record_id:
+            errors.append(f"{record_id}: superseded_by cannot point to itself")
+        elif feature_ref not in known_feature_ids:
+            errors.append(f"{record_id}: unknown superseded_by ref {feature_ref}")
+
+
 def validate_system(
     system: dict[str, Any],
     feature_by_id: dict[str, dict[str, Any]],
@@ -409,6 +438,7 @@ def validate_system(
 def validate_feature_source(
     record: dict[str, Any],
     system_by_id: dict[str, dict[str, Any]],
+    known_feature_ids: set[str],
     source_ids: set[str],
     errors: list[str],
 ) -> None:
@@ -431,6 +461,7 @@ def validate_feature_source(
     if record.get("status") not in ALLOWED_STATUSES:
         errors.append(f"{feature_id}: invalid status {record.get('status')!r}")
     require_bool(record, "public", feature_id, errors)
+    require_bool(record, "experimental", feature_id, errors)
     for field in ("name", "category", "known_limits", "last_verified", "system_id"):
         require_string(record, field, feature_id, errors)
     if isinstance(record.get("system_id"), str) and record["system_id"] not in system_by_id:
@@ -438,6 +469,7 @@ def validate_feature_source(
     if isinstance(record.get("last_verified"), str) and not DATE_RE.match(record["last_verified"]):
         errors.append(f"{feature_id}: last_verified must use YYYY-MM-DD")
     validate_track_field(record, feature_id, errors)
+    validate_superseded_by(record, known_feature_ids, feature_id, errors)
 
     surfaces = require_string_list(record, "surfaces", feature_id, errors)
     source_refs = require_string_list(record, "source_refs", feature_id, errors)
@@ -463,6 +495,8 @@ def generated_feature_row(record: dict[str, Any], system_by_id: dict[str, dict[s
         "id": record["id"],
         "name": record["name"],
         "status": record["status"],
+        "experimental": record["experimental"],
+        "superseded_by": record["superseded_by"],
         "system_id": record["system_id"],
         "system_name": system.get("name", ""),
         "public": record["public"],
@@ -530,8 +564,9 @@ def validate() -> list[str]:
                 errors.append(f"duplicate system id {system_id}")
             system_by_id[system_id] = system
 
+    known_feature_ids = set(feature_by_id)
     for feature in features:
-        validate_feature_source(feature, system_by_id, source_ids, errors)
+        validate_feature_source(feature, system_by_id, known_feature_ids, source_ids, errors)
     for system in systems:
         validate_system(system, feature_by_id, source_ids, errors)
 
@@ -668,15 +703,24 @@ def render_feature_registry_doc(
         "",
         "This file is generated. Edit the feature specs in `docs/features/` instead.",
         "",
-        "| Feature | System | Status | Category |",
-        "| --- | --- | --- | --- |",
+        "| Feature | System | Status | Experimental | Superseded By | Category |",
+        "| --- | --- | --- | --- | --- | --- |",
     ]
     for feature in rows:
         system = system_by_id.get(str(feature["system_id"]), {})
         feature_link = md_link(str(feature["_owner_spec"]), f"{feature['id']} {feature['name']}")
         system_link = md_link(str(system.get("owner_spec", "")), str(system.get("name", feature["system_id"])))
+        superseded_by = feature.get("superseded_by", False)
+        if isinstance(superseded_by, list):
+            superseded_text = ", ".join(f"`{item}`" for item in superseded_by)
+        elif isinstance(superseded_by, str):
+            superseded_text = f"`{superseded_by}`"
+        else:
+            superseded_text = "`false`"
         lines.append(
-            f"| {feature_link} | {system_link} | `{feature['status']}` | `{feature['category']}` |"
+            f"| {feature_link} | {system_link} | `{feature['status']}` | "
+            f"`{str(feature['experimental']).lower()}` | {superseded_text} | "
+            f"`{feature['category']}` |"
         )
     return "\n".join(lines) + "\n"
 

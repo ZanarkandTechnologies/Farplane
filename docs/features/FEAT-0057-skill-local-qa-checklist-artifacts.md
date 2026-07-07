@@ -40,6 +40,8 @@ known_limits: Markdown artifact standard only; no dedicated qacheck runner, rend
 metrics:
   - skill_qa_checklist_application_pass
 last_verified: 2026-06-23
+experimental: false
+superseded_by: false
 ---
 # Skill-local QA checklist artifacts
 
@@ -73,13 +75,16 @@ agents, and reviewers apply the same gates.
 - Adds or maintains `qa_checklist.md` for skills that need durable QA gates.
 - Names preflight checks, completion checks, blockers, and scoring rules.
 - Lets material skill work apply the checklist before and after edits.
+- Gives the typed `reviewer` lane concrete ammunition for harsh checklist
+  judgment on material changes.
 - Keeps checklist content skill-local instead of stuffing every rule into global prompt.
 - Feeds skill-maintenance and review workflows with explicit quality criteria.
 
 ## User Stories
 
 - As a skill author, I know what must stay true when I edit the skill.
-- As a reviewer, I can apply the same checklist the implementer used.
+- As a reviewer, I can apply the same checklist adversarially and reject
+  technically valid but weak work.
 - As an operator, I get more predictable skill quality across maintenance passes.
 
 ## Operating Contract
@@ -90,6 +95,32 @@ A QA checklist is the skill's local quality contract.
 - Material skill changes read and apply the checklist.
 - Scores expose residual risk without pretending subjective checks are exact metrics.
 - External skills may omit local checklists when wrapper logic belongs in callers.
+
+## Feature Flow
+
+```mermaid
+flowchart LR
+  classDef keep fill:#f3f4f6,stroke:#6b7280,color:#111827
+  classDef changed fill:#fef3c7,stroke:#b45309,color:#111827
+  classDef added fill:#dcfce7,stroke:#15803d,color:#111827
+  classDef retired fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d,stroke-dasharray: 5 3
+
+  change["Skill change<br/>skills/*"]:::keep
+  checklist["skill-local<br/>qa_checklist.md"]:::added
+  preflight["self preflight<br/>before + after edits"]:::changed
+  reviewer["reviewer lane<br/>material checklist gate"]:::changed
+  proof["audit / proof notes<br/>skills/*/audits<br/>ticket artifacts"]:::added
+  vague["one-off review standard"]:::retired
+
+  change --> checklist
+  checklist --> preflight
+  checklist --> reviewer
+  preflight --> proof
+  reviewer --> proof
+  checklist -. replaces .-> vague
+```
+
+Gray is the skill edit input, amber is checklist application behavior, green is the local QA/proof artifact, and red dashed is the retired ad hoc review path.
 
 ## Surfaces
 
@@ -137,7 +168,12 @@ Acceptance signals:
 - This feature does not require every tiny skill to have a large checklist.
 - This feature does not replace evals when repeatable behavior tests are needed.
 - This feature does not duplicate global operating policy.
-- Known limit: Markdown artifact standard only; no dedicated qacheck runner, renderer, or subagent fanout script exists yet. Agents now read skill-local checklists as preflight guardrails, apply them again at finish, and route independent reviewer lanes for material checklist conformance through skill-maintenance, skill-creator, and recorded audit/proof notes.
+- Known limit: Markdown artifact standard only; no dedicated qacheck runner,
+  renderer, or subagent fanout script exists yet. Agents now read skill-local
+  checklists as preflight guardrails, apply them again at finish, and route
+  independent typed `reviewer` lanes for material checklist conformance through
+  skill-maintenance, skill-creator, and recorded audit/proof notes. Use
+  `qa-tester` for runtime proof capture, not checklist acceptance judgment.
 - Delete or merge this feature only when its current truth has moved into a clearer owner and all active refs are removed.
 
 ## Metrics

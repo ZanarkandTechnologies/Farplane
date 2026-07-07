@@ -5,10 +5,13 @@ created_at: <timestamp>
 review_window: <start>..<end>
 status: draft
 ui_summary: "<one concise CEO-readable summary under 100 words>"
+policy_ref: farplane/harness.md#Feature-Policy
 tracked_refs:
   - <FEAT-#### or SYS-####>
+experimental_refs:
+  - <FEAT-####>
 decisions:
-  <FEAT-#### or SYS-####>: continue | adjust | cap | pause | rollback | source_gap
+  <FEAT-#### or SYS-####>: continue | adjust | cap | pause | rollback | graduate | split_feature | merge | source_gap
 source_gaps: []
 ---
 
@@ -17,13 +20,21 @@ source_gaps: []
 ## Summary
 
 - `decision:`
+- `policy_basis:`
 - `why_now:`
 - `accepted_tradeoff:`
 
 ## Tracked Items
 
-| Ref | Track prompt | Decision | Evidence | Source gaps |
-| --- | --- | --- | --- | --- |
+| Ref | Experimental | Track prompt / review question | Decision | Evidence | Source gaps |
+| --- | --- | --- | --- | --- | --- |
+
+## Feature Policy Check
+
+- `policy_ref:` `farplane/harness.md#Feature-Policy`
+- `feature_relevance:` how the reviewed behavior helps maintain, evaluate,
+  steer, prove, report on, or productize autonomous harness behavior
+- `policy_source_gap:` none | gap
 
 ## Output Volume
 
@@ -49,7 +60,7 @@ unless a specific ticket is the strongest evidence.
 | --- | --- | --- | --- | --- |
 
 Allowed decisions: `continue`, `adjust`, `cap`, `pause`, `rollback`,
-`source_gap`.
+`graduate`, `split_feature`, `merge`, `source_gap`.
 
 ## Interval Summary
 

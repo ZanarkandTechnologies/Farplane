@@ -11,6 +11,8 @@ tags:
 refs:
   - docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md
   - docs/features/FEAT-0065-pulse-and-interval-automation.md
+  - docs/features/FEAT-0066-product-scoped-pulse-loops.md
+  - docs/features/FEAT-0067-daily-interval-review-reports.md
 system_record_json: |
   {
     "id": "SYS-0003",
@@ -18,17 +20,21 @@ system_record_json: |
     "status": "implemented",
     "summary": "The longer-running project loop that coordinates goals, Goal Packets, Pulse, Interval, backoff, PR watching, feedback, and horizon-level ticket supply.",
     "owner_spec": "docs/systems/horizon-loop.md",
-    "primary_feature_ref": "FEAT-0029",
+    "primary_feature_ref": "FEAT-0032",
     "feature_refs": [
       "FEAT-0029",
       "FEAT-0032",
-      "FEAT-0065"
+      "FEAT-0065",
+      "FEAT-0066",
+      "FEAT-0067"
     ],
     "refs": [
       "docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md",
-      "docs/features/FEAT-0065-pulse-and-interval-automation.md"
+      "docs/features/FEAT-0065-pulse-and-interval-automation.md",
+      "docs/features/FEAT-0066-product-scoped-pulse-loops.md",
+      "docs/features/FEAT-0067-daily-interval-review-reports.md"
     ],
-    "last_verified": "2026-06-27"
+    "last_verified": "2026-07-07"
   }
 ---
 # Horizon Loop
@@ -46,9 +52,9 @@ horizon_loop(change, repo_state?) -> owned_feature_set + boundary_decision + mai
 
 - System ID: `SYS-0003`
 - Status: `implemented`
-- Primary feature: `FEAT-0029`
+- Primary feature: `FEAT-0032`
 - Owner spec: `docs/systems/horizon-loop.md`
-- Feature count: `3`
+- Feature count: `5`
 
 ## Role
 
@@ -58,9 +64,11 @@ bounded move without turning Farplane into a hidden daemon.
 
 ## Feature Docs
 
-- [FEAT-0029 Goal Packet architecture for native Codex goals](../features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md)
-- [FEAT-0032 Goal Advisor execution compilation](../features/FEAT-0032-goal-advisor-execution-compilation.md)
+- [FEAT-0029 Retired Goal Packet architecture](../features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md)
+- [FEAT-0032 Goal Advisor execution loop](../features/FEAT-0032-goal-advisor-execution-compilation.md)
 - [FEAT-0065 Pulse and interval automation](../features/FEAT-0065-pulse-and-interval-automation.md)
+- [FEAT-0066 Product-scoped Pulse loops](../features/FEAT-0066-product-scoped-pulse-loops.md)
+- [FEAT-0067 Daily interval review reports](../features/FEAT-0067-daily-interval-review-reports.md)
 
 ## What Belongs Here
 
@@ -87,6 +95,8 @@ Invocation Runtime; proof standards belong in Proof And Review.
 
 - `docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md`
 - `docs/features/FEAT-0065-pulse-and-interval-automation.md`
+- `docs/features/FEAT-0066-product-scoped-pulse-loops.md`
+- `docs/features/FEAT-0067-daily-interval-review-reports.md`
 
 ## Proof And Maintenance
 
@@ -99,3 +109,5 @@ Invocation Runtime; proof standards belong in Proof And Review.
 ## Change History
 
 - 2026-06-27: Migrated into the reader-first system-spec shape.
+- 2026-07-07: Made Goal Advisor the primary Horizon feature and added
+  experimental product-scoped Pulse plus daily interval report handles.

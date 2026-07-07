@@ -46,6 +46,8 @@ metrics:
   - taste_loop_signal_breakdown_pass
   - skill_registry_validation_pass
 last_verified: 2026-06-26
+experimental: false
+superseded_by: false
 ---
 # Skill signals
 
@@ -130,6 +132,34 @@ watch = heat is low but evidence is incomplete
 retire_review = heat is low, composition_heat is low, uniqueness is low,
                 and the same finding survives at least two reviewed reports
 ```
+
+## Feature Flow
+
+```mermaid
+flowchart LR
+  classDef keep fill:#f3f4f6,stroke:#6b7280,color:#111827
+  classDef changed fill:#fef3c7,stroke:#b45309,color:#111827
+  classDef added fill:#dcfce7,stroke:#15803d,color:#111827
+  classDef retired fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d,stroke-dasharray: 5 3
+
+  usage["Skill usage / signal evidence"]:::keep
+  registry["docs/skills/registry.jsonl<br/>graph refs"]:::keep
+  heat["graph heat<br/>direct + composition"]:::changed
+  burden["maintenance burden<br/>bloat, stale QA, missing evals"]:::changed
+  taste["taste-loop input decisions<br/>farplane/products.md"]:::changed
+  decision["keep / harden / refine<br/>merge / watch / retire_review"]:::added
+  retire["retire_review candidate"]:::retired
+
+  usage --> heat
+  registry --> heat
+  registry --> burden
+  heat --> taste
+  burden --> taste
+  taste --> decision
+  decision -. may flag .-> retire
+```
+
+Gray is evidence input, amber is signal interpretation, green is the maintenance recommendation, and red dashed is a retirement-review candidate.
 
 ## Surfaces
 

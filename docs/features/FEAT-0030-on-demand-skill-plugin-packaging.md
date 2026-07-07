@@ -42,6 +42,8 @@ metrics:
   - selected_skill_installer_tests_pass
   - skill_plugin_generation_pass
 last_verified: 2026-06-24
+experimental: false
+superseded_by: false
 ---
 # On-demand skill plugin packaging
 
@@ -93,6 +95,33 @@ Packaging follows proven reuse, not speculative distribution.
 - The repo-owned skill remains the source of truth until an explicit release process says otherwise.
 - Plugin metadata references stable skill behavior rather than duplicating full instructions.
 - Package changes are validated with the owning skill and registry checks.
+
+## Feature Flow
+
+```mermaid
+flowchart LR
+  classDef keep fill:#f3f4f6,stroke:#6b7280,color:#111827
+  classDef changed fill:#fef3c7,stroke:#b45309,color:#111827
+  classDef added fill:#dcfce7,stroke:#15803d,color:#111827
+  classDef retired fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d,stroke-dasharray: 5 3
+
+  request["Package request<br/>skill_dir + audience"]:::keep
+  maint["skill-maintenance<br/>sync_skill_plugins.py"]:::changed
+  source["skills/*<br/>SKILL.md + metadata"]:::keep
+  install["install_selected_skills.py<br/>install.sh"]:::changed
+  plugin["generated plugin artifact<br/>selected skill package"]:::added
+  tests["tests pass<br/>test_sync_skill_plugins.py<br/>test_install_selected_skills.py"]:::added
+  stale["speculative tracked plugin shells"]:::retired
+
+  request --> maint
+  source --> maint
+  maint --> install
+  install --> plugin
+  plugin --> tests
+  maint -. avoids .-> stale
+```
+
+Gray is source input, amber is packaging behavior, green is the generated installable proof, and red dashed is the retired speculative packaging path.
 
 ## Surfaces
 

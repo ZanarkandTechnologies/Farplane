@@ -1,9 +1,9 @@
 ---
-title: Lean global agent operating kernel
-status: implemented
+title: Retired lean global agent operating kernel
+status: retired
 owner: feature-registry
 created_at: 2026-06-26
-updated_at: 2026-06-27
+updated_at: 2026-07-07
 tags:
   - farplane
   - feature
@@ -30,14 +30,15 @@ evidence_refs:
   - templates/global/AGENTS.md
   - skills/init-advisor/references/AGENTS_TEMPLATE.md
   - docs/HISTORY.md
-known_limits: The global template now owns only every-turn behavior; project-specific coding defaults and detailed workflows must keep living in project AGENTS files, skills, tickets, docs, validators, or subagent prompts.
+known_limits: Retired as a feature because this is Agent Kernel system policy, not a distinct feature UX. Keep active truth in the Agent Kernel system and templates.
 metrics: []
-last_verified: 2026-06-07
+last_verified: 2026-07-07
+experimental: false
+superseded_by: false
 ---
-# Lean global agent operating kernel
+# Retired lean global agent operating kernel
 
-Lean global agent operating kernel exists to keep always-loaded agent policy small,
-actionable, and routed to durable owner surfaces. It belongs to [Agent
+Lean global agent operating kernel is retired as a feature handle. Its active truth is system-level Agent Kernel policy, not a standalone Farplane capability. It belongs to [Agent
 Kernel](../systems/agent-kernel.md) and keeps `FEAT-0042` as a stable capability handle
 because the behavior has an owner, proof path, and maintenance boundary.
 
@@ -49,7 +50,7 @@ load_agent_context(repo, task) -> lean_kernel + routed_skill_context + proof_rul
 
 - Feature ID: `FEAT-0042`
 - System: [Agent Kernel](../systems/agent-kernel.md)
-- Status: `implemented`
+- Status: `retired`
 - Category: `context-routing`
 - Primary user: every Farplane coding agent
 - Job: keep always-loaded agent policy small, actionable, and routed to durable owner surfaces.
@@ -84,6 +85,26 @@ The agent kernel is a router and behavioral floor, not the full operating manual
 - Detailed procedures live in skills, specs, tickets, docs, hooks, or validators.
 - Material design choices remain feedback-first unless a ticket, spec, or explicit request owns the scope.
 - Implementation work verifies before claiming completion.
+
+## Feature Flow
+
+```mermaid
+flowchart LR
+  classDef keep fill:#f3f4f6,stroke:#6b7280,color:#111827
+  classDef changed fill:#fef3c7,stroke:#b45309,color:#111827
+  classDef added fill:#dcfce7,stroke:#15803d,color:#111827
+  classDef retired fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d,stroke-dasharray: 5 3
+
+  doctrine["harness doctrine<br/>docs/fundamentals/harness-engineering-doctrine.md"]:::keep
+  retired["FEAT-0042<br/>status: retired<br/>system_id: SYS-0001"]:::retired
+  owner["SYS-0001 Agent Kernel<br/>docs/systems/agent-kernel.md"]:::changed
+  template["active prompt surfaces<br/>templates/global/AGENTS.md<br/>skills/init-advisor/references/AGENTS_TEMPLATE.md"]:::added
+  record["architecture + history<br/>ARCHITECTURE.md<br/>docs/HISTORY.md"]:::keep
+
+  doctrine --> retired --> owner --> template --> record
+```
+
+The retired feature handle now records that lean agent-kernel behavior is owned by `SYS-0001` and the active AGENTS templates.
 
 ## Surfaces
 

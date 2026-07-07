@@ -11,6 +11,7 @@ tags:
 refs:
   - tickets/README.md
   - docs/features/FEAT-0007-ticket-as-durable-task-memory.md
+  - docs/features/FEAT-0068-goal-backed-ticket-execution.md
   - docs/features/FEAT-0042-lean-global-agent-operating-kernel.md
 system_record_json: |
   {
@@ -21,14 +22,16 @@ system_record_json: |
     "owner_spec": "docs/systems/work-loop.md",
     "primary_feature_ref": "FEAT-0007",
     "feature_refs": [
-      "FEAT-0007"
+      "FEAT-0007",
+      "FEAT-0068"
     ],
     "refs": [
       "tickets/README.md",
       "docs/features/FEAT-0007-ticket-as-durable-task-memory.md",
+      "docs/features/FEAT-0068-goal-backed-ticket-execution.md",
       "docs/features/FEAT-0042-lean-global-agent-operating-kernel.md"
     ],
-    "last_verified": "2026-06-26"
+    "last_verified": "2026-07-07"
   }
 ---
 # Work Loop
@@ -48,7 +51,7 @@ work_loop(change, repo_state?) -> owned_feature_set + boundary_decision + mainte
 - Status: `implemented`
 - Primary feature: `FEAT-0007`
 - Owner spec: `docs/systems/work-loop.md`
-- Feature count: `1`
+- Feature count: `2`
 
 ## Role
 
@@ -59,6 +62,7 @@ visible artifacts.
 ## Feature Docs
 
 - [FEAT-0007 Ticket as durable task memory](../features/FEAT-0007-ticket-as-durable-task-memory.md)
+- [FEAT-0068 Goal-backed ticket execution](../features/FEAT-0068-goal-backed-ticket-execution.md)
 
 ## What Belongs Here
 
@@ -84,6 +88,7 @@ Review; reusable workflow definitions belong in Skill System.
 
 - `tickets/README.md`
 - `docs/features/FEAT-0007-ticket-as-durable-task-memory.md`
+- `docs/features/FEAT-0068-goal-backed-ticket-execution.md`
 - `docs/features/FEAT-0042-lean-global-agent-operating-kernel.md`
 
 ## Proof And Maintenance
@@ -97,3 +102,5 @@ Review; reusable workflow definitions belong in Skill System.
 ## Change History
 
 - 2026-06-27: Migrated into the reader-first system-spec shape.
+- 2026-07-07: Added experimental goal-backed ticket execution as the
+  ticket-executor dogfood handle.
