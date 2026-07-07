@@ -74,6 +74,8 @@ Breakdown variants:
 - `audio`: voice, music, sound design, silence, or SFX pattern.
 - `editing`: pacing, caption rhythm, transitions, motion, cuts.
 - `copy`: caption, headline, claim, CTA, on-screen text, meme wording.
+- `character`: distinctive persona, archetype, guide, host, mascot, or
+  recurring character system.
 - `constraint`: rights, likeness, attribution, source-quality, or do-not-copy
   boundary.
 
@@ -91,12 +93,26 @@ Element shape:
 
 ```text
 CreativeElement = {
-  kind: "visual" | "audio" | "hook" | "storyboard" | "editing" | "copy" | "format" | "constraint",
+  kind: "visual" | "audio" | "hook" | "storyboard" | "editing" | "copy" | "format" | "constraint" | "character",
   title: string,
   description: string,
-  anchor?: string
+  anchor?: string,
+  pinned?: boolean
 }
 ```
+
+Extract all useful creative elements needed to understand the source, but pin
+only the sub-elements the operator liked, selected, or wants reused in the
+ingest note. Retrieval derives planning priority from pins instead of storing
+numeric weights or creating a separate production-pattern object.
+
+When the source works because of a distinctive persona, guide, host, mascot, or
+archetype, extract it as `kind: "character"` instead of hiding it inside visual
+or storyboard text. Pin that character only when the note explicitly says the
+operator likes it or wants that persona reused. If direct reuse would risk
+likeness, brand, actor-performance, or protected-character copying, add a
+rights-safe `constraint` element that tells future production to remix the role
+and function rather than the exact expression.
 
 If the operator asks to generate now, route the generation step after storage
 or save the extracted recipe first so the vault remains the durable memory.
@@ -116,6 +132,11 @@ Current Resource Bank storage should present this active contract:
 - tags/facets for retrieval;
 - optional skill findings when the source suggests a reusable technique or
   skill update.
+
+Storage and retrieval must preserve `CreativeElement.pinned` as an element
+field. Retrieval should report pinned counts, operator-note counts, and direct
+warnings in `meta`; do not flatten priority into tags, facets, or source-level
+`tastinessScore`.
 
 Do not require frame, clip, transcript, or contact-sheet records unless the
 current workflow needs direct media reuse or audit proof.

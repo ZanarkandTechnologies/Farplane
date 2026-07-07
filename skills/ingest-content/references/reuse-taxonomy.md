@@ -30,6 +30,11 @@ facet:
 - `tastinessScore`: optional relative value signal when the operator or agent
   can rank how useful the source is.
 
+Use `tastinessScore` for whole-reference priority. Use `CreativeElement.pinned`
+for priority among sub-elements inside that reference. Tasty Pack retrieval
+reports pinned/operator-note counts and direct warnings; operators should not be
+asked for numeric weights.
+
 These fields exist to answer "what did I save recently for this audience or
 idea?" quickly.
 
@@ -56,10 +61,11 @@ Use a mix of these buckets when source context supports them:
 
 ```text
 CreativeElement {
-  kind: visual | audio | hook | storyboard | editing | copy | format | constraint
+  kind: visual | audio | hook | storyboard | editing | copy | format | constraint | character
   title
   description
   anchor?
+  pinned?
 }
 ```
 
@@ -72,7 +78,20 @@ Examples:
 - `editing`: "headline wrapper -> ritual beat -> product reveal -> end card."
 - `copy`: "spiritualized coding slogan used as affirmation."
 - `format`: "social-news wrapper around parody campaign clip."
+- `character`: "deadpan infrastructure guide whose dry office persona makes
+  the abstract product feel specific and rewatchable."
 - `constraint`: "do not copy actor likeness, source frames, captions, or brand."
+
+Use `pinned` for the exact sub-elements the operator liked or selected in the
+ingest note. Do not store numeric creative-element weights or duplicate this
+signal with a separate production-pattern record. A reel, post, landing page,
+or screenshot becomes a list of creative elements with selected taste pins.
+Use `character` when a distinctive persona, archetype, guide, host, mascot, or
+recurring character system is one of the reasons the reference is useful. If
+the character is based on a real person, actor performance, brand mascot, or
+protected fictional character, add a `constraint` element for a rights-safe
+remix: borrow the role, contrast, and narrative function, not the likeness,
+name, exact styling, voice, catchphrase, or source frames.
 
 ## Future Retrieval Query Shape
 
@@ -87,8 +106,10 @@ create_tasty_pack(idea?, timeframe?, audience?, industry?, outputType?, tags?, c
      }
 ```
 
-Creation skills consume only `captures[].source`, `captures[].analysis`, and
-`captures[].elements`. Retrieval notes are non-core metadata.
+Creation skills consume `captures[].source`, `captures[].analysis`,
+`captures[].elements`, and `meta` counts/warnings. They should treat pinned
+elements as the primary taste signal and unpinned elements as context.
+Retrieval notes are non-core metadata.
 
 Example retrieval requests:
 
