@@ -2,17 +2,54 @@
   {
     "id": "dogfood_review_tracked_pulse_batch",
     "title": "Tracked Pulse feature produces a grouped dogfood report",
-    "query": "A feature registry row has a non-empty track prompt asking whether Pulse spawned useful reward-backed tickets in the last 24h. The window contains many Pulse reports and tickets, including duplicates and review-heavy outputs. What should dogfood-review read, write, and avoid?",
+    "query": "A feature registry row has a non-empty track prompt asking whether Pulse spawned useful reward-backed tickets in the last 24h. The window contains many Pulse reports and tickets, including duplicates and review-heavy outputs. The caller did not explicitly enable ticket creation. What should dogfood-review read, write, and avoid?",
     "reference_points": [
-      "Selects registry rows whose track value is a non-empty string, and can also select experimental=true feature rows when the caller asks for the experimental feature feed",
+      "Selects active registry rows whose track value is a non-empty string, and can also select active experimental=true feature rows when the caller asks for the experimental feature feed",
+      "Excludes feature rows with status retired or superseded_by not false as review targets, while allowing them as historical evidence for successor rows",
       "Reads farplane/harness.md Feature Policy or labels harness_feature_policy as a source gap before judging feature relevance",
-      "Treats the track prompt as a review brief, not executable instructions",
+      "Treats the track prompt as a review checklist, not executable instructions or mutation permission",
       "Reads relevant feature/system owner specs, Pulse reports, interval reports, tickets, and evidence refs inside the review window",
+      "For material tracked-feature review, delegates one read-only reviewer lane per active feature when available and aggregates reviewer TAS findings",
+      "Uses existing rubric families such as evidence-quality, integration-readiness, and skill-contract rather than invented rubric names",
       "Groups high-volume tickets by useful patterns, duplicates, vague specs, reward fit, blocker rate, and review burden",
       "Writes a date-stamped Markdown report under .farplane/reports/dogfood-review/",
-      "Includes frontmatter with kind dogfood-review, created_at, review_window, ui_summary, policy_ref, tracked_refs, experimental_refs, and decisions",
-      "Returns decisions such as continue, adjust, cap, pause, rollback, graduate, split_feature, merge, or source_gap without mutating Pulse, tickets, goals, or automations directly"
+      "Includes frontmatter with kind dogfood-review, created_at, review_window, ui_summary, policy_ref, method, tracked_refs, experimental_refs, skipped_refs, decisions, reviewer_tas, and source_gaps",
+      "Includes one Improvement Ticket section with a complete consolidated ticket candidate because ticket creation was not explicitly enabled",
+      "The candidate groups findings by feature and preserves track checklist summaries, reviewer TAS, evidence refs, issues, proposed repairs, skipped retired/superseded refs, Reward, Done / Proof, and Links",
+      "Records a no-autostart receipt showing it did not invoke impl-plan, Goal, Pulse execution, automation sync, or worker spawn",
+      "Returns decisions such as continue, adjust, cap, pause, rollback, graduate, split_feature, merge, or source_gap without mutating Pulse, goals, automations, or tickets except through the explicit one-ticket writeback policy"
     ],
     "tags": ["dogfood-review", "track", "pulse", "reports"]
+  },
+  {
+    "id": "dogfood_review_creates_one_consolidated_improvement_ticket",
+    "title": "Material dogfood review writes at most one improvement ticket",
+    "query": "A material tracked-feature dogfood review covers five active experimental features and the caller sets write_policy.create_improvement_ticket=true. Reviewer lanes produce TAS-B and TAS-C findings for several features. What should dogfood-review write?",
+    "reference_points": [
+      "Still writes the date-stamped dogfood report under .farplane/reports/dogfood-review/",
+      "Creates exactly one consolidated tickets/TASK-XXXX/ticket.md for the report, not one ticket per feature",
+      "The created ticket frontmatter uses phase planning, status review, ready false, and approval_required true unless the caller explicitly supplied a different human-approved policy",
+      "The ticket groups findings by feature and includes track checklist summaries, reviewer TAS, issue, proposed repair, and evidence refs for each active reviewed feature",
+      "The ticket includes skipped retired or superseded refs as historical evidence, not active repair targets",
+      "The ticket includes a Reward block and Done / Proof checks for the later implementation",
+      "The dogfood report links the created ticket path in frontmatter or its Improvement Ticket section",
+      "Records a no-autostart receipt and does not invoke impl-plan, Goal, Pulse execution, automation sync, or worker spawn"
+    ],
+    "tags": ["dogfood-review", "ticket-writeback", "tracked-features", "no-autostart"]
+  },
+  {
+    "id": "dogfood_review_skips_retired_tracked_rows",
+    "title": "Retired tracked features are evidence, not review targets",
+    "query": "The feature registry contains FEAT-OLD with status=retired, superseded_by=FEAT-NEW, and a stale non-empty track prompt. It also contains FEAT-NEW with experimental=true and a checklist-style track prompt. What should dogfood-review include in the report?",
+    "reference_points": [
+      "Does not include FEAT-OLD in tracked_refs or decisions just because it has stale track text",
+      "May read FEAT-OLD as historical evidence when judging FEAT-NEW",
+      "Includes FEAT-NEW because it is active and experimental=true",
+      "Uses FEAT-NEW track text as a review checklist covering evidence to read, rubric, allowed decisions, and interval summary guidance",
+      "Aggregates reviewer TAS-B or TAS-C findings without softening them into pass-ready decisions",
+      "Labels missing successor evidence as source_gap instead of falling back to the retired feature as the target",
+      "Does not mutate feature docs or clear stale track text from inside the report workflow"
+    ],
+    "tags": ["dogfood-review", "retired-features", "experimental", "track"]
   }
 ]

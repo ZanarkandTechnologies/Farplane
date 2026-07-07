@@ -38,11 +38,16 @@ last_verified: 2026-07-07
 experimental: true
 superseded_by: false
 track: >-
-  Review whether Taste Loop plus optimize-with-human turns Kenji's feedback into
-  better product artifacts without spamming review. Focus on planning artifacts,
-  worker-thread visibility, feedback request quality, hypothesis-cycle logging,
-  execution follow-through, and whether to continue, cap, adjust, pause, or
-  graduate the loop.
+  Review Taste Loop and optimize-with-human for the current window. Read
+  farplane/products.md, farplane/products/*/progress.md for feedback cycles,
+  active tickets waiting on Kenji feedback, worker thread refs when available,
+  Telegram review receipts or blockers, and any planning/execution artifacts
+  created from feedback. Judge against feedback-request quality, open-feedback
+  budget, hypothesis-cycle logging, worker-thread visibility, execution
+  follow-through, artifact improvement, and review-spam risk. Return continue,
+  adjust, cap, pause, graduate, or source_gap. In the interval summary, name the
+  active feedback wait, whether more requests are allowed, and the next safe
+  feedback action.
 ---
 # Taste Loop human-feedback optimization
 

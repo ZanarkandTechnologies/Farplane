@@ -154,11 +154,18 @@ merge shape.
    `skill-maintenance(mode: refine_skill)`.
 11. For enabled `docs_consolidation`, route whole-project context refresh to
    `update-memory` and substantive durable doc cleanup to `doc-advisor`.
-12. For enabled `tracked_feature_review`, call `dogfood-review` for generated
-    feature or system registry rows whose `track` value is a non-empty string
-    and for feature rows with `experimental: true`.
+12. For enabled `tracked_feature_review`, call `dogfood-review` for active
+    generated feature or system registry rows whose `track` value is a
+    non-empty string and for active feature rows with `experimental: true`.
+    Exclude rows with `status: retired` or `superseded_by` other than `false`
+    as active review targets; use them only as historical evidence for
+    successor rows.
     The dogfood report must be written under `.farplane/reports/dogfood-review/`
-    and then linked or summarized from the interval report.
+    and then linked or summarized from the interval report. If dogfood-review
+    returns an improvement ticket path or candidate, surface it in the interval
+    report before final planning; do not split it into per-feature tickets or
+    autostart `impl-plan`, Goal, Pulse execution, automation sync, or worker
+    spawn.
 13. Review the past window against the static harness charter, goals, and
     configured parent contexts.
 14. Refresh metric readings when skills, CLIs, ticket searches, manual notes, or

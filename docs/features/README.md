@@ -129,9 +129,12 @@ history.
   globally stable; `false` when accepted as a normal Farplane capability.
 - `superseded_by`: `false`, one `FEAT-*`, or a list of successor feature IDs
   when this feature's active contract has moved to a clearer capability.
-- `track`: optional `false` or a short review prompt consumed by tracking
-  workflows such as `dogfood-review`; keep detailed review logic in the owning
-  skill, not in feature frontmatter.
+- `track`: optional `false` or a compact review checklist consumed by tracking
+  workflows such as `dogfood-review`. Use it to name what to read, the rubric
+  to apply, allowed decisions, and the interval-summary output. Keep procedural
+  logic, tool branching, and broad workflow instructions in the owning skill,
+  not in feature frontmatter. Retired or superseded features must use
+  `track: false`; successor features own active dogfood review.
 
 Generated rows add `system_name` and `owner_spec`.
 

@@ -38,10 +38,15 @@ last_verified: 2026-07-07
 experimental: true
 superseded_by: false
 track: >-
-  Review whether product-scoped Pulse loops are producing useful, product-backed
-  ticket supply instead of flooding the board. Focus on generated tickets,
-  product lane fit, duplicate bets, review capacity, worker handoff quality, and
-  whether each product loop should continue, cap, adjust, pause, or graduate.
+  Review product-scoped Pulse loops for the current window. Read
+  .farplane/reports/pulse/** inside the window, farplane/products/*/progress.md,
+  active and archived ticket.md files referenced by Pulse reports, and
+  .farplane/automation/{decisions,rewards,spawned-threads}.jsonl when present.
+  Judge against product-backed reward fit, duplicate-ticket avoidance,
+  review-capacity fit, worker handoff quality, no inline implementation, and
+  useful skip or blocker reasons. Return continue, adjust, cap, pause,
+  graduate, or source_gap. In the interval summary, name the strongest evidence,
+  biggest review burden, and next Pulse constraint.
 ---
 # Product-scoped Pulse loops
 

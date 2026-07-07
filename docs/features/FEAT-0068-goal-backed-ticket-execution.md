@@ -36,10 +36,14 @@ last_verified: 2026-07-07
 experimental: true
 superseded_by: false
 track: >-
-  Review whether goal-backed ticket execution is producing resumable, reviewable
-  completions without relying on hidden chat memory. Focus on ticket contract
-  quality, Goal Packet handoff, proof artifacts, reviewer receipts, and whether
-  execution should continue, adjust, or require stronger gates.
+  Review goal-backed ticket execution for the current window. Read active and
+  recently archived ticket.md, program.md, progress.md, artifacts/review/*, and
+  any native Goal prompt or Goal Advisor handoff referenced by the ticket.
+  Judge against ticket contract quality, Goal Packet resumability, proof
+  artifact integrity, reviewer-lane receipt, progress writeback, and absence of
+  hidden chat-memory dependencies. Return continue, adjust, cap, pause,
+  graduate, or source_gap. In the interval summary, name the best completed
+  execution sample, missing proof surface, and next gate.
 ---
 # Goal-backed ticket execution
 

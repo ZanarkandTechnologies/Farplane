@@ -244,9 +244,14 @@ docs_consolidation(review_window, planning_window)
 
 tracked_feature_review(review_window, planning_window)
   -> dogfood_report + tracked_item_findings + interval_summary
+   + improvement_ticket_path_or_candidate?
   skill: dogfood-review
-  scope: generated feature/system registry rows with non-empty `track`, plus
-    feature rows with `experimental: true`
+  scope: active generated feature/system registry rows with non-empty `track`,
+    plus active feature rows with `experimental: true`; retired or superseded
+    feature rows are historical evidence for successor rows, not review targets
+  writeback: when write_policy enables dogfood improvement ticket creation,
+    dogfood-review may create exactly one planning/review ticket for the run;
+    otherwise it must emit one complete candidate in the report
 
 Final planning synthesis:
 
@@ -300,9 +305,14 @@ priority_planning(review_window, planning_window)
         docs_tree | memory)`, broad context refresh through `update-memory`,
         and substantive doc-quality rewrites through `doc-advisor`.
   - [ ] When `tracked_feature_review` is enabled, call `dogfood-review` for
-        generated feature or system registry rows whose `track` value is a
-        non-empty string and for feature rows with `experimental: true`, then
-        link or summarize the dogfood report in the interval report.
+        active generated feature or system registry rows whose `track` value is
+        a non-empty string and for active feature rows with `experimental:
+        true`, excluding retired or superseded feature rows, then link or
+        summarize the dogfood report in the interval report.
+  - [ ] If dogfood-review returns an improvement ticket path or candidate,
+        surface it in the interval report before final planning. Do not expand
+        it into additional feature-by-feature tickets, and do not autostart
+        `impl-plan`, Goal, Pulse execution, automation sync, or worker spawn.
 - [ ] 5. Plan the next window.
   - [ ] Run `priority_planning` after reflection and reward/leverage synthesis
         when enabled; it must consume dogfood review findings when present and
@@ -340,6 +350,7 @@ priority_planning(review_window, planning_window)
 - Pulse guidance.
 - Goal Advisor handoffs or ticket deltas, with expected reward blocks for every
   planned ticket.
+- Dogfood improvement ticket path or candidate when tracked feature review ran.
 
 ## Reference Map
 

@@ -39,12 +39,7 @@ experimental: false
 superseded_by:
   - FEAT-0066
   - FEAT-0067
-track: >-
-  Review whether Pulse and interval automation is producing useful,
-  reward-backed ticket supply without flooding review capacity. Focus on
-  tickets and Pulse reports from the review window, duplicate or vague specs,
-  product-backed reward fit, review burden, and whether to continue, cap,
-  adjust, pause, or rollback the current behavior.
+track: false
 ---
 # Pulse and interval automation
 

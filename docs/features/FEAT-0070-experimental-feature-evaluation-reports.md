@@ -38,11 +38,16 @@ last_verified: 2026-07-07
 experimental: true
 superseded_by: false
 track: >-
-  Review whether experimental feature evaluation reports help Farplane decide
-  which dogfooded harness capabilities should continue, adjust, cap, graduate,
-  split, merge, or retire. Focus on policy grounding from farplane/harness.md,
-  evidence quality, report clarity, decision usefulness, source gaps, and
-  whether the report reduces operator review burden.
+  Review experimental feature evaluation reports for the current window. Read
+  farplane/harness.md#Feature-Policy, docs/features/registry.jsonl,
+  docs/systems/registry.jsonl, the dogfood-review report, linked interval
+  report, and evidence refs cited by reviewed feature rows. Judge against
+  policy grounding, exclusion of retired or superseded features, evidence
+  quality, decision usefulness, source-gap labeling, report clarity, and whether
+  the interval summary reduces operator review burden. Return continue, adjust,
+  cap, pause, graduate, split_feature, merge, rollback, or source_gap. In the
+  interval summary, name top feature decisions, skipped retired rows, and the
+  next registry or report-shape cleanup.
 ---
 # Experimental feature evaluation reports
 

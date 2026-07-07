@@ -36,10 +36,15 @@ last_verified: 2026-07-07
 experimental: true
 superseded_by: false
 track: >-
-  Review whether the daily interval report gives a useful executive summary of
-  recent Farplane behavior. Focus on whether tracked feature findings, Pulse
-  output, tickets, source gaps, and next-window guidance are easy to review and
-  whether the report should continue, shrink, split, or change emphasis.
+  Review daily interval reports for the current window. Read the latest
+  .farplane/reports/interval/daily_interval/*.md, its context bundle, linked
+  weekly interval report when present, linked dogfood-review report, and the
+  Pulse reports or tickets it cites. Judge against executive readability,
+  tracked-feature coverage, source-gap honesty, next-window specificity,
+  reward-backed priorities, and whether it avoids doing ticket implementation.
+  Return continue, adjust, cap, pause, graduate, split_feature, or source_gap.
+  In the interval summary, name the clearest decision, missing evidence, and the
+  report-shape change needed next.
 ---
 # Daily interval review reports
 
