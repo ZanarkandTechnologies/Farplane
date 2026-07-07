@@ -60,12 +60,14 @@ use for ordinary app work versus QA. It also creates
 
 The script also creates ignored `.farplane/` runtime folders:
 `.farplane/state/run-ledger.json`, `.farplane/reports/`,
-`.farplane/evals/runs/`, and `.farplane/logs/`. Keep canonical framework
-config in tracked `farplane/`; use `.farplane/` for generated local state only.
-It also appends [GITIGNORE_TEMPLATE](references/GITIGNORE_TEMPLATE) to
-`.gitignore` so active `tickets/TASK-*` work stays local by default while
-`tickets/README.md` and `tickets/templates/` remain available as tracked
-scaffold.
+`.farplane/evals/runs/`, `.farplane/logs/`, and `.farplane/crm/reports/`.
+The CRM directory includes a local [CRM README template](references/CRM_README_TEMPLATE.md);
+customer research reports are the source of truth, while `.farplane/crm/index.jsonl`
+is derived from minimal report frontmatter. Keep canonical framework config in
+tracked `farplane/`; use `.farplane/` for generated local state only. It also
+appends [GITIGNORE_TEMPLATE](references/GITIGNORE_TEMPLATE) to `.gitignore` so
+active `tickets/TASK-*` work stays local by default while `tickets/README.md`
+and `tickets/templates/` remain available as tracked scaffold.
 
 Bootstrap does not create live Codex automations by itself. After the substrate
 exists, use `harness-creator` in full mode to shape the static charter,

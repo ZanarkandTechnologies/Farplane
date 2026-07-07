@@ -145,9 +145,10 @@ setup_project_operating_model(bootstrap_brief, project_context,
         may be stale.
 - [ ] 3. Initialize the Farplane project substrate.
   - [ ] Run or mirror `scripts/bootstrap.sh` to create tracked `farplane/`
-    config, ignored `.farplane/` runtime state, ignored active ticket work
-    with tracked ticket templates, docs, QA, optional hooks, validation scripts,
-    and review helper surfaces.
+    config, ignored `.farplane/` runtime state, ignored `.farplane/crm/`
+    customer research state, ignored active ticket work with tracked ticket
+    templates, docs, QA, optional hooks, validation scripts, and review helper
+    surfaces.
   - [ ] Use [GITIGNORE_TEMPLATE](references/GITIGNORE_TEMPLATE) as the
         canonical generated `.gitignore` block for Farplane local runtime and
         work state.
