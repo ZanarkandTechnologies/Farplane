@@ -98,6 +98,29 @@ belongs in Self-Improvement And Learning.
 - Registry data is generated from system and feature docs, not edited by hand.
 - When a capability no longer deserves a feature page, fold its current truth into the best owner and remove active refs.
 
+## System Flow
+
+```mermaid
+flowchart LR
+  classDef keep fill:#f3f4f6,stroke:#6b7280,color:#111827
+  classDef changed fill:#fef3c7,stroke:#b45309,color:#111827
+  classDef added fill:#dcfce7,stroke:#15803d,color:#111827
+  classDef retired fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d,stroke-dasharray: 5 3
+
+  claim["completion or behavior claim<br/>ticket / skill / agent"]:::keep
+  qa["qa + agent-qa-test<br/>evidence capture"]:::changed
+  evals["FEAT-0039 Farplane evals<br/>hardcases and rubrics"]:::changed
+  retired["FEAT-0043 + FEAT-0054<br/>retired eval surfaces"]:::retired
+  review["reviewer lane<br/>TAS verdict + residual risk"]:::changed
+  proof["artifacts/<br/>screenshots, logs, reports"]:::added
+
+  claim --> qa --> proof --> review
+  claim --> evals --> review
+  retired -. "merged into" .-> evals
+```
+
+Proof And Review turns claims into evidence, evals, independent judgment, and durable proof references.
+
 ## Surfaces
 
 - `docs/features/FEAT-0008-artifact-first-qa-and-completion-proof.md`

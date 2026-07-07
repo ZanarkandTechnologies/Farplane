@@ -80,6 +80,27 @@ artifact review belongs in Proof And Review.
 - Registry data is generated from system and feature docs, not edited by hand.
 - When a capability no longer deserves a feature page, fold its current truth into the best owner and remove active refs.
 
+## System Flow
+
+```mermaid
+flowchart LR
+  classDef keep fill:#f3f4f6,stroke:#6b7280,color:#111827
+  classDef changed fill:#fef3c7,stroke:#b45309,color:#111827
+  classDef added fill:#dcfce7,stroke:#15803d,color:#111827
+  classDef retired fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d,stroke-dasharray: 5 3
+
+  request["external run request<br/>board or CLI"]:::keep
+  contract["FEAT-0015<br/>retired invocation contract"]:::retired
+  skill["farplane-invocation skill<br/>run envelope + policy validation"]:::changed
+  runtime["bin/farplane_invocation.py<br/>compute / adapter boundary"]:::changed
+  proof["ProofPacket<br/>explicit artifacts and status"]:::added
+
+  request --> skill --> runtime --> proof
+  contract -. "historical contract" .-> skill
+```
+
+The Invocation Runtime keeps external execution explicit: validate an envelope, choose the boundary, and return proof rather than background state.
+
 ## Surfaces
 
 - `docs/features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md`

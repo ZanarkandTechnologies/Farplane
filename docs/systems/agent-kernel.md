@@ -81,6 +81,31 @@ specs; task-local state belongs in tickets; generated checks belong in validator
 - Registry data is generated from system and feature docs, not edited by hand.
 - When a capability no longer deserves a feature page, fold its current truth into the best owner and remove active refs.
 
+## System Flow
+
+```mermaid
+flowchart LR
+  classDef keep fill:#f3f4f6,stroke:#6b7280,color:#111827
+  classDef changed fill:#fef3c7,stroke:#b45309,color:#111827
+  classDef added fill:#dcfce7,stroke:#15803d,color:#111827
+  classDef retired fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d,stroke-dasharray: 5 3
+
+  repo["repo-local policy<br/>AGENTS.md"]:::keep
+  global["install template<br/>templates/global/AGENTS.md"]:::keep
+  doctrine["harness doctrine<br/>docs/fundamentals/*"]:::keep
+  kernel["SYS-0001 Agent Kernel<br/>entry rules and response shape"]:::changed
+  retired["FEAT-0042<br/>retired kernel lean-down feature"]:::retired
+  session["Codex session behavior<br/>autonomy, review, artifact-first state"]:::added
+
+  repo --> kernel
+  global --> kernel
+  doctrine --> kernel
+  retired -. "preserved as history" .-> kernel
+  kernel --> session
+```
+
+The Agent Kernel turns local and install-time policy into the operating shape every Farplane Codex starts from.
+
 ## Surfaces
 
 - `AGENTS.md`

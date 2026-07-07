@@ -86,6 +86,29 @@ skills; raw scratch research belongs in `tmp/` or bounded experiment artifacts.
 - Registry data is generated from system and feature docs, not edited by hand.
 - When a capability no longer deserves a feature page, fold its current truth into the best owner and remove active refs.
 
+## System Flow
+
+```mermaid
+flowchart LR
+  classDef keep fill:#f3f4f6,stroke:#6b7280,color:#111827
+  classDef changed fill:#fef3c7,stroke:#b45309,color:#111827
+  classDef added fill:#dcfce7,stroke:#15803d,color:#111827
+  classDef retired fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d,stroke-dasharray: 5 3
+
+  sources["external sources<br/>repos, videos, feeds, inspiration"]:::keep
+  scout["FEAT-0011<br/>harness-scout ingestion"]:::changed
+  vault["FEAT-0056<br/>Tasty Pack inspiration vault"]:::changed
+  retired["FEAT-0025<br/>retired video-to-skill reconstruction"]:::retired
+  registry["docs/sources/registry.jsonl<br/>source decisions"]:::added
+  handoff["adopt / adapt / reject / defer<br/>ticket or skill handoff"]:::added
+
+  sources --> scout --> registry --> handoff
+  sources --> vault --> handoff
+  retired -. "absorbed by media/source skills" .-> scout
+```
+
+Source And Sidecar Systems let Farplane learn from outside material while keeping imported patterns visible and reviewed.
+
 ## Surfaces
 
 - `docs/sources/registry.jsonl`

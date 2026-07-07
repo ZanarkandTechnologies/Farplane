@@ -84,6 +84,28 @@ Review; reusable workflow definitions belong in Skill System.
 - Registry data is generated from system and feature docs, not edited by hand.
 - When a capability no longer deserves a feature page, fold its current truth into the best owner and remove active refs.
 
+## System Flow
+
+```mermaid
+flowchart LR
+  classDef keep fill:#f3f4f6,stroke:#6b7280,color:#111827
+  classDef changed fill:#fef3c7,stroke:#b45309,color:#111827
+  classDef added fill:#dcfce7,stroke:#15803d,color:#111827
+  classDef retired fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d,stroke-dasharray: 5 3
+
+  intent["operator intent<br/>chat, ticket, goal"]:::keep
+  ticket["ticket.md<br/>Summary / Scope / Done-Proof"]:::changed
+  program["program.md + progress.md<br/>route + resume state"]:::changed
+  goal["FEAT-0068<br/>goal-advisor execution"]:::changed
+  proof["artifacts/<br/>QA, review, closeout proof"]:::added
+  registry["feature docs<br/>FEAT-0007 + FEAT-0068"]:::keep
+
+  intent --> ticket --> program --> goal --> proof
+  registry --> ticket
+```
+
+The Work Loop owns the bounded unit of work: intent becomes a durable ticket, executable program state, and proof-backed completion.
+
 ## Surfaces
 
 - `tickets/README.md`

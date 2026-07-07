@@ -89,6 +89,30 @@ Skill System; source discovery remains in Source And Sidecar Systems.
 - Registry data is generated from system and feature docs, not edited by hand.
 - When a capability no longer deserves a feature page, fold its current truth into the best owner and remove active refs.
 
+## System Flow
+
+```mermaid
+flowchart LR
+  classDef keep fill:#f3f4f6,stroke:#6b7280,color:#111827
+  classDef changed fill:#fef3c7,stroke:#b45309,color:#111827
+  classDef added fill:#dcfce7,stroke:#15803d,color:#111827
+  classDef retired fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d,stroke-dasharray: 5 3
+
+  signals["behavior gaps + taste feedback<br/>reports, tickets, chat"]:::keep
+  metrics["FEAT-0063<br/>metric advisor cards"]:::changed
+  taste["FEAT-0069<br/>taste-loop optimization"]:::changed
+  dogfood["FEAT-0070<br/>experimental feature reports"]:::changed
+  memory["docs/TROUBLES.md<br/>docs/LESSONS.md"]:::added
+  action["skill / eval / feature change<br/>next experiment"]:::added
+
+  signals --> metrics --> action
+  signals --> taste --> action
+  dogfood --> metrics
+  action --> memory
+```
+
+Self-Improvement And Learning converts failures, feedback, and dogfood reports into metrics, lessons, evals, and next feature experiments.
+
 ## Surfaces
 
 - `docs/features/FEAT-0069-taste-loop-human-feedback-optimization.md`

@@ -91,6 +91,32 @@ Invocation Runtime; proof standards belong in Proof And Review.
 - Registry data is generated from system and feature docs, not edited by hand.
 - When a capability no longer deserves a feature page, fold its current truth into the best owner and remove active refs.
 
+## System Flow
+
+```mermaid
+flowchart LR
+  classDef keep fill:#f3f4f6,stroke:#6b7280,color:#111827
+  classDef changed fill:#fef3c7,stroke:#b45309,color:#111827
+  classDef added fill:#dcfce7,stroke:#15803d,color:#111827
+  classDef retired fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d,stroke-dasharray: 5 3
+
+  goals["goals / products<br/>farplane/products.md"]:::keep
+  automations["automations<br/>farplane/automations.toml"]:::keep
+  advisor["FEAT-0032<br/>goal-advisor"]:::changed
+  pulse["FEAT-0066<br/>product-scoped Pulse"]:::changed
+  interval["FEAT-0067<br/>daily interval reports"]:::changed
+  old["FEAT-0065<br/>retired umbrella automation"]:::retired
+  outputs["tickets + reports<br/>bounded next work"]:::added
+
+  goals --> advisor --> outputs
+  automations --> pulse --> outputs
+  automations --> interval --> outputs
+  old -. "superseded_by" .-> pulse
+  old -. "superseded_by" .-> interval
+```
+
+The Horizon Loop coordinates longer-running goals, Pulse, Interval, and report-backed ticket supply without becoming a hidden daemon.
+
 ## Surfaces
 
 - `docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md`

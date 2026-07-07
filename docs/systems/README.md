@@ -32,10 +32,48 @@ Feature docs may be experimental when they represent a dogfooded capability,
 but experiments themselves remain evidence in tickets, product-loop progress,
 or reports until they graduate into a feature contract.
 
+Each system owner doc should include a compact `## System Flow` diagram. The
+diagram should show inputs, owner surfaces, feature-doc groupings, and created
+reports/proof/registries without duplicating feature-level file detail.
+
 System records may include optional `"track": false` or `"track": "<review prompt>"`
 inside `system_record_json`. Tracking prompts are compact review briefs for
 workflows such as `dogfood-review`; detailed review logic belongs in the
 owning skill.
+
+## System Map
+
+```mermaid
+flowchart TD
+  classDef keep fill:#f3f4f6,stroke:#6b7280,color:#111827
+  classDef changed fill:#fef3c7,stroke:#b45309,color:#111827
+  classDef added fill:#dcfce7,stroke:#15803d,color:#111827
+
+  operator["operator intent<br/>goals, tickets, feedback"]:::keep
+  kernel["Agent Kernel<br/>entry rules"]:::changed
+  work["Work Loop<br/>tickets + proof"]:::changed
+  horizon["Horizon Loop<br/>Pulse + Interval + Goal"]:::changed
+  skills["Skill System<br/>reusable workflows"]:::changed
+  proof["Proof And Review<br/>QA, evals, TAS"]:::changed
+  learn["Self-Improvement<br/>metrics + dogfood reports"]:::changed
+  docs["Documentation OS<br/>features + systems + registries"]:::added
+  release["Maintenance And Release OS<br/>adoption + validators"]:::added
+  sources["Source And Sidecar Systems<br/>external patterns"]:::changed
+  domain["Domain Skill Families<br/>frontend, media, content"]:::changed
+  invoke["Invocation Runtime<br/>explicit run boundary"]:::changed
+
+  operator --> kernel --> work --> proof
+  operator --> horizon --> work
+  work --> skills --> domain
+  sources --> skills
+  proof --> learn --> docs
+  docs --> release --> kernel
+  invoke --> work
+```
+
+Each owner doc also includes a `## System Flow` diagram that shows that
+system's inputs, coordinating surfaces, feature docs, and created outputs at a
+higher level than individual feature flows.
 
 ## Current Systems
 

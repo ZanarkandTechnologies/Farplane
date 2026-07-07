@@ -81,6 +81,27 @@ off app implementation details belong in project tickets or app docs.
 - Registry data is generated from system and feature docs, not edited by hand.
 - When a capability no longer deserves a feature page, fold its current truth into the best owner and remove active refs.
 
+## System Flow
+
+```mermaid
+flowchart LR
+  classDef keep fill:#f3f4f6,stroke:#6b7280,color:#111827
+  classDef changed fill:#fef3c7,stroke:#b45309,color:#111827
+  classDef added fill:#dcfce7,stroke:#15803d,color:#111827
+  classDef retired fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d,stroke-dasharray: 5 3
+
+  request["domain work<br/>frontend, media, content"]:::keep
+  families["domain skill families<br/>frontend-craft, media, social"]:::changed
+  retired["FEAT-0014<br/>retired frontend parity feature"]:::retired
+  core["core Work Loop + Skill System<br/>tickets, proof, registries"]:::keep
+  artifact["domain artifact<br/>UI, video, content, QA evidence"]:::added
+
+  request --> families --> core --> artifact
+  retired -. "covered by family skills" .-> families
+```
+
+Domain Skill Families package specialized workflows on top of the same ticket, skill, and proof substrate.
+
 ## Surfaces
 
 - `skills/frontend-craft/SKILL.md`

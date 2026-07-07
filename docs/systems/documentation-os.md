@@ -111,6 +111,28 @@ doc_scope_decision(change)
 - Delete or fold content when it duplicates a stronger owner, preserves stale lore,
   or only exists because a registry row once existed.
 
+## System Flow
+
+```mermaid
+flowchart LR
+  classDef keep fill:#f3f4f6,stroke:#6b7280,color:#111827
+  classDef changed fill:#fef3c7,stroke:#b45309,color:#111827
+  classDef added fill:#dcfce7,stroke:#15803d,color:#111827
+  classDef retired fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d,stroke-dasharray: 5 3
+
+  docs["docs/features + docs/systems<br/>frontmatter + records"]:::keep
+  policy["feature/system policy<br/>docs/features/README.md"]:::changed
+  docadvisor["doc-advisor<br/>metadata and finish gates"]:::changed
+  validators["validate_features.py<br/>check_doc_refs.py"]:::changed
+  registries["registry.jsonl + registry.md<br/>machine-readable docs"]:::added
+
+  docs --> policy --> docadvisor
+  docs --> validators --> registries
+  docadvisor --> registries
+```
+
+Documentation OS keeps Farplane's durable written truth machine-indexable, human-readable, and tied to feature/system ownership.
+
 ## Surfaces
 
 - `docs/features/FEAT-0060-registry-backed-documentation-os.md`

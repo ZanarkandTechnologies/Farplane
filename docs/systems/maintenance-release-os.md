@@ -78,6 +78,27 @@ tickets and experiments.
 - Registry data is generated from system and feature docs, not edited by hand.
 - When a capability no longer deserves a feature page, fold its current truth into the best owner and remove active refs.
 
+## System Flow
+
+```mermaid
+flowchart LR
+  classDef keep fill:#f3f4f6,stroke:#6b7280,color:#111827
+  classDef changed fill:#fef3c7,stroke:#b45309,color:#111827
+  classDef added fill:#dcfce7,stroke:#15803d,color:#111827
+  classDef retired fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d,stroke-dasharray: 5 3
+
+  repo["repo state<br/>templates, docs, skills"]:::keep
+  adoption["FEAT-0061<br/>Farplane adoption tracker"]:::changed
+  validators["validators<br/>feature, skill, doc refs"]:::changed
+  release["maintenance and release checks<br/>install readiness"]:::changed
+  report["adoption gaps<br/>tickets and audit notes"]:::added
+
+  repo --> adoption --> report
+  repo --> validators --> release --> report
+```
+
+Maintenance And Release OS checks whether Farplane's shipped surfaces remain coherent, adopted, and release-ready.
+
 ## Surfaces
 
 - `docs/features/FEAT-0061-farplane-adoption-tracker-cli.md`
