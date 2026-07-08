@@ -403,6 +403,12 @@ def run_project_snapshot_cli(args: argparse.Namespace) -> int:
     return int(run_snapshot(args))
 
 
+def run_reports_index_cli(args: argparse.Namespace) -> int:
+    from farplane_reports import run_index
+
+    return int(run_index(args))
+
+
 def run_content_add_cli(args: argparse.Namespace) -> int:
     from farplane_content import run_content_add
 
@@ -564,6 +570,14 @@ def build_parser() -> argparse.ArgumentParser:
     project_snapshot.add_argument("--json", action="store_true")
     project_snapshot.set_defaults(func=run_project_snapshot_cli)
 
+    reports = sub.add_parser("reports", help="Build Core-owned report registries.")
+    reports_sub = reports.add_subparsers(dest="reports_command")
+    reports_index = reports_sub.add_parser("index", help="Write .farplane/reports/index.json from report Markdown frontmatter.")
+    reports_index.add_argument("--project-root", default=os.getcwd())
+    reports_index.add_argument("--no-write", action="store_true")
+    reports_index.add_argument("--json", action="store_true")
+    reports_index.set_defaults(func=run_reports_index_cli)
+
     content = sub.add_parser("content", help="Append or inspect local Farplane content ledger rows.")
     content_sub = content.add_subparsers(dest="content_command")
     content_add = content_sub.add_parser("add", help="Add or update a content ledger row.")
@@ -628,6 +642,8 @@ def main(argv: list[str]) -> int:
         parser.error("metrics requires a subcommand: primitives")
     if getattr(args, "command", None) == "project" and getattr(args, "project_command", None) is None:
         parser.error("project requires a subcommand: snapshot")
+    if getattr(args, "command", None) == "reports" and getattr(args, "reports_command", None) is None:
+        parser.error("reports requires a subcommand: index")
     if getattr(args, "command", None) == "content" and getattr(args, "content_command", None) is None:
         parser.error("content requires a subcommand: add, list, validate, or select")
     if not hasattr(args, "func"):

@@ -3,7 +3,7 @@ title: Project Files
 status: active
 owner: harness
 created_at: 2026-06-15
-updated_at: 2026-07-02
+updated_at: 2026-07-08
 framework_template_version: "0.2.2"
 source_of_truth:
   - docs/farplane-framework/README.md
@@ -12,6 +12,7 @@ source_of_truth:
   - farplane/goals.yaml
   - farplane/automations.toml
   - farplane/products.md
+  - docs/farplane-framework/reporting.md
   - farplane/bindings.yaml
   - farplane/hooks.json
   - .agents/skills/README.md
@@ -491,6 +492,23 @@ Mutable Pulse automation state:
 - spawned worker thread rows
 - normalized action outcomes
 
+### Report Standard
+
+The Core-owned report standard lives in [Reporting](reporting.md). It defines
+the minimal Markdown frontmatter required for UI indexing:
+
+```yaml
+ref: reports/interval/daily_interval/2026-07-08T053300+0800
+kind: interval-report
+created_at: "2026-07-08T05:33:00+08:00"
+ui_summary: "One concise report-card summary under 100 words."
+```
+
+`ref` is the only hierarchy field. Consumers derive parent/child/group
+relationships from slash-separated `ref` prefixes. The standard is not a
+project primitive file; it is framework documentation plus the Core registry
+builder.
+
 ### `.farplane/reports/`
 
 Generated reports. New framework reports should be date-stamped:
@@ -499,23 +517,36 @@ Generated reports. New framework reports should be date-stamped:
 .farplane/reports/pulse/<YYYY-MM-DDTHHMMSSZ>.md
 .farplane/reports/interval/<interval_id>/<YYYY-MM-DDTHHMMSSZ>.md
 .farplane/reports/dogfood-review/<YYYY-MM-DDTHHMMSSZ>.md
+.farplane/reports/index.json
 ```
 
 Consumers find newest interval reports by timestamp sorting or explicit links
 from later reports. There is no tracked scheduler config just to store
 `last_report`.
 
-Interval and dogfood reports expose one UI report-card summary string in
-frontmatter under `ui_summary`. Consumers should parse YAML frontmatter, not
-prose sections. The stable card contract is:
+Reports expose UI report-card fields in YAML frontmatter. Consumers should read
+`.farplane/reports/index.json` when present, or parse Markdown frontmatter with
+the same minimal contract:
 
 ```yaml
+ref: reports/interval/daily_interval/2026-07-08T053300+0800
+kind: interval-report
+created_at: "2026-07-08T05:33:00+08:00"
 ui_summary: "Refresh the active frontier after the KPI/autonomy metric chain completed; clear review-gated KPI/content/QA surfaces; protect the simplified metric loop."
 ```
 
-Keep `ui_summary` under 100 words. Use existing frontmatter fields such as
-`kind`, `interval_id`, and `created_at` plus the source file path for title,
-date, type, and deep-link behavior.
+Run `farplane reports index --project-root <project>` to rebuild the registry.
+The index scans `<project>/.farplane/reports/**/*.md`, includes only reports
+with non-empty `ref`, `kind`, `created_at`, and `ui_summary`, derives
+`parent_ref` and `children_refs` from `ref`, and preserves pass-through
+frontmatter such as `project`, `automation_id`, `interval_id`,
+`report_workflows`, `status`, `review_window`, `planning_window`, and
+`context_bundle`.
+
+Keep `ui_summary` under 100 words. CRM/customer research reports under
+`.farplane/crm/reports/*`, ticket QA/review artifacts, `.farplane/reviews/*`,
+mining runs, backfill jobs, and event-miner runs are not part of the main
+reports registry unless explicitly opted in by a future ticket.
 
 ## Validation
 

@@ -1,5 +1,6 @@
 ---
 kind: interval-report
+ref: reports/interval/<interval_id>/<timestamp>
 project: <project>
 automation_id: <automation_id>
 interval_id: <interval_id>

@@ -56,7 +56,7 @@ gates:
   harness_feature_policy_checked_or_gap_labeled;
   track_prompts_or_experimental_rows_resolved; window_bound;
   evidence_refs_checked_or_gap_labeled;
-  report_written_to_report_dir; ui_summary_frontmatter_written;
+  report_written_to_report_dir; report_ref_frontmatter_written; ui_summary_frontmatter_written;
   no ticket/thread implementation; prompt_not_treated_as_command;
   reviewer_receipts_aggregated_or_unavailable_labeled;
   max_one_improvement_ticket_per_report; no_impl_plan_or_goal_autostart
@@ -131,8 +131,12 @@ policy, or automation changes.
   - [ ] Use `templates/dogfood-report.md`.
   - [ ] Write the report under
         `.farplane/reports/dogfood-review/<YYYY-MM-DDTHHMMSSZ>.md`.
-  - [ ] Include `kind: dogfood-review`, `created_at`, `review_window`,
-        `ui_summary`, `tracked_refs`, and `decisions` in frontmatter.
+  - [ ] Include minimal Core report frontmatter: `ref:
+        reports/dogfood-review/<YYYY-MM-DDTHHMMSSZ>`, `kind:
+        dogfood-review`, `created_at`, and `ui_summary`, plus
+        `review_window`, `tracked_refs`, and `decisions`.
+  - [ ] Run `farplane reports index --project-root <project_root>` after
+        writing the report when the CLI is available.
 - [ ] 6. Emit one consolidated improvement ticket path or candidate.
   - [ ] For material tracked-feature reviews, include an `Improvement Ticket`
         section in the report even when no ticket is written.

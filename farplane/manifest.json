@@ -1,8 +1,8 @@
 {
   "schema": "farplane_project",
-  "spec_version": "1.6.15",
+  "spec_version": "1.6.16",
   "template_uses": {
-    "farplane-framework": "1.6.15"
+    "farplane-framework": "1.6.16"
   },
   "project": {
     "name": "Farplane",
@@ -77,7 +77,8 @@
         "docs/farplane-framework/project-files.md",
         "docs/farplane-framework/graph-contract.md",
         "docs/farplane-framework/hooks-and-runtime.md",
-        "docs/farplane-framework/harness-maintenance.md"
+        "docs/farplane-framework/harness-maintenance.md",
+        "docs/farplane-framework/reporting.md"
       ],
       "exclude": [
         "farplane/products.md",

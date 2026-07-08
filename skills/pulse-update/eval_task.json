@@ -86,6 +86,7 @@
     "query": "Pulse finishes a beat. Where should its report go?",
     "reference_points": [
       "Writes a date-stamped report",
+      "Includes ref, kind pulse, created_at, and ui_summary frontmatter for the Core reports index",
       "Does not use latest.md as canonical report",
       "Stores newest report pointers in state only when needed"
     ],

@@ -45,6 +45,7 @@
       "Uses metric-advisor before creating benchmarks, harder tasks, or Goal handoffs",
       "Uses a Codex automation prompt as the runtime surface, not a local runner",
       "Emits a visible worker ticket/thread report, generated artifact plus feedback card, Goal handoff, or blocked report instead of a hidden daemon",
+      "When it writes a Markdown report under .farplane/reports/taste-loop/, includes ref, kind taste-loop, created_at, and ui_summary frontmatter",
       "Routes human judgment through optimize-with-human inside the worker thread and bounded measured improvement through goal-advisor plus self-improve",
       "Does not edit target skills from a first rejection; it logs the phase failure and perturbs the local experiment until repeated evidence supports hardening",
       "Does not send parent-heartbeat Telegram feedback when Kenji's reply needs to route to a worker thread",

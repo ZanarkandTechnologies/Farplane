@@ -215,6 +215,9 @@ fails: creates a local runner as the primary surface; runs hidden loops;
   - [ ] Write a Markdown report under `.farplane/reports/taste-loop/` only for
     emitted actions, blockers, diagnostics, or when
     `FARPLANE_TASTE_LOOP_LOG_NOOP=1`.
+  - [ ] Include minimal Core report frontmatter: `ref:
+        reports/taste-loop/<YYYY-MM-DDTHHMMSS>/<workflow-or-ticket>`, `kind:
+        taste-loop`, `created_at`, and `ui_summary`.
   - [ ] For `artifact_worker_thread`, write or update `ticket.md`, `program.md`,
     and `progress.md` under `tickets/TASK-*`, and record the worker thread id
     in the ticket links, progress log, and Taste Loop report.
@@ -245,6 +248,8 @@ fails: creates a local runner as the primary surface; runs hidden loops;
     "please reply" or a local path.
   - [ ] When duplicate open feedback exists, report the canonical card and
     duplicate rows; do not create another duplicate for that target/question.
+  - [ ] Run `farplane reports index --project-root <project_root>` after
+        writing a report when the CLI is available.
 - [ ] 7. Stop cleanly.
   - [ ] Report the action, skipped targets, report path, and next trigger.
   - [ ] Do not edit target skills directly from this heartbeat.

@@ -20,6 +20,11 @@ try:
 except ImportError:  # pragma: no cover - package import path used by tests
     from bin.core.farplane_metric_schema import batch_path, read_metric_batches
 
+try:
+    from farplane_reports import build_report_registry
+except ImportError:  # pragma: no cover - package import path used by tests
+    from bin.core.farplane_reports import build_report_registry
+
 
 PROJECT_SNAPSHOT_PATH = Path(".farplane/project/ui/latest.json")
 DAILY_METRICS_DIR = Path(".farplane/metrics/daily")
@@ -177,7 +182,17 @@ SHARED_SHAPES: dict[str, list[str]] = {
     "feed_scout_item": ["title", "summary", "canonical_url?", "platform?", "entity_group_id?", "rank?", "signal?", "actionability?"],
     "metric_primitive": ["primitive_id", "provider", "owner", "command", "store_to", "required_inputs[]", "emits[]", "source_gap_policy"],
     "ticket_ref": ["ticket_id", "path", "title", "status", "phase", "next_action", "kpi_rewards[]"],
-    "report_card": ["id", "path", "interval_id?", "kind", "created_at", "ui_summary", "source_ref"],
+    "report_card": [
+        "id",
+        "ref",
+        "path",
+        "kind",
+        "created_at",
+        "ui_summary",
+        "parent_ref?",
+        "children_refs[]",
+        "source_ref",
+    ],
 }
 
 
@@ -659,22 +674,25 @@ def load_feed_scout_snapshot(project_root: Path, bindings: dict[str, Any]) -> tu
 
 
 def report_cards(project_root: Path) -> list[dict[str, Any]]:
-    root = project_root / ".farplane" / "reports"
+    registry = build_report_registry(project_root)
     cards: list[dict[str, Any]] = []
-    if not root.exists():
-        return cards
-    for path in sorted(root.glob("**/*.md"))[-20:]:
-        fm = parse_frontmatter(path)
-        rel = str(path.relative_to(project_root))
+    for report in registry.get("reports", [])[:20]:
+        if not isinstance(report, dict):
+            continue
+        frontmatter = report.get("frontmatter") if isinstance(report.get("frontmatter"), dict) else {}
+        path = str(report.get("path") or "")
         cards.append(
             {
-                "id": path.stem,
-                "path": rel,
-                "interval_id": fm.get("interval_id"),
-                "kind": fm.get("kind") or path.parent.name,
-                "created_at": str(fm.get("created_at") or fm.get("date") or ""),
-                "ui_summary": str(fm.get("ui_summary") or fm.get("summary") or path.stem),
-                "source_ref": {"path": rel},
+                "id": str(report.get("ref") or Path(path).stem),
+                "ref": str(report.get("ref") or ""),
+                "path": path,
+                "interval_id": frontmatter.get("interval_id"),
+                "kind": str(report.get("kind") or ""),
+                "created_at": str(report.get("created_at") or ""),
+                "ui_summary": str(report.get("ui_summary") or ""),
+                "parent_ref": report.get("parent_ref"),
+                "children_refs": report.get("children_refs") if isinstance(report.get("children_refs"), list) else [],
+                "source_ref": {"path": path},
             }
         )
     return cards

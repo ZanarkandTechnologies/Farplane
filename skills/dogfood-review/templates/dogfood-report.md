@@ -1,5 +1,6 @@
 ---
 kind: dogfood-review
+ref: reports/dogfood-review/<timestamp>
 project: <project>
 created_at: <timestamp>
 review_window: <start>..<end>

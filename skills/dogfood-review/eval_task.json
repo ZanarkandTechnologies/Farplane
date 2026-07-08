@@ -13,7 +13,7 @@
       "Uses existing rubric families such as evidence-quality, integration-readiness, and skill-contract rather than invented rubric names",
       "Groups high-volume tickets by useful patterns, duplicates, vague specs, reward fit, blocker rate, and review burden",
       "Writes a date-stamped Markdown report under .farplane/reports/dogfood-review/",
-      "Includes frontmatter with kind dogfood-review, created_at, review_window, ui_summary, policy_ref, method, tracked_refs, experimental_refs, skipped_refs, decisions, reviewer_tas, and source_gaps",
+      "Includes frontmatter with ref, kind dogfood-review, created_at, review_window, ui_summary, policy_ref, method, tracked_refs, experimental_refs, skipped_refs, decisions, reviewer_tas, and source_gaps",
       "Includes one Improvement Ticket section with a complete consolidated ticket candidate because ticket creation was not explicitly enabled",
       "The candidate groups findings by feature and preserves track checklist summaries, reviewer TAS, evidence refs, issues, proposed repairs, skipped retired/superseded refs, Reward, Done / Proof, and Links",
       "Records a no-autostart receipt showing it did not invoke impl-plan, Goal, Pulse execution, automation sync, or worker spawn",

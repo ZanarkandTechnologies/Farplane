@@ -257,8 +257,11 @@ Write a Markdown report under:
 ```
 
 Write this report only when an action, blocker, diagnostic, or configured
-no-op log is emitted. When an action is emitted, also write a small artifact
-under:
+no-op log is emitted. Report frontmatter must include `ref:
+reports/taste-loop/<YYYY-MM-DDTHHMMSS>/<workflow-or-ticket>`, `kind:
+taste-loop`, `created_at`, and `ui_summary`. After writing the report, run
+`farplane reports index --project-root <project_root>` when the CLI is
+available. When an action is emitted, also write a small artifact under:
 
 ```text
 tickets/TASK-*/ticket.md

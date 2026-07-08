@@ -3,7 +3,7 @@ title: Farplane Framework
 status: active
 owner: harness
 created_at: 2026-06-15
-updated_at: 2026-07-01
+updated_at: 2026-07-08
 framework_template_version: "0.2.1"
 source_of_truth:
   - docs/farplane-framework/lifecycle.md
@@ -12,6 +12,7 @@ source_of_truth:
   - docs/farplane-framework/graph-contract.md
   - docs/farplane-framework/harness-maintenance.md
   - docs/farplane-framework/hooks-and-runtime.md
+  - docs/farplane-framework/reporting.md
   - docs/systems/README.md
   - docs/systems/registry.jsonl
   - docs/features/registry.jsonl
@@ -82,6 +83,10 @@ Use [Hooks and Runtime](hooks-and-runtime.md) when you need the concrete hook
 and runtime-state boundaries. Hooks observe and gate; skills and tickets own
 judgment-heavy work.
 
+Use [Reporting](reporting.md) when UI or report producers need the current
+Core-owned Markdown frontmatter and `.farplane/reports/index.json` registry
+contract.
+
 ## Project Tree
 
 ```text
@@ -141,7 +146,8 @@ reports, eval runs, and logs.
 description of what the project is lives in Markdown:
 `farplane/harness.md` owns the static human charter,
 `farplane/products.md` owns the product catalog and work lanes, and
-`farplane/goals.yaml` owns current strategy.
+`farplane/goals.yaml` owns current strategy. The reporting standard is a
+framework doc, not a project primitive; see [Reporting](reporting.md).
 Project-specific product workflows live under `.agents/skills/`; promote them
 to root `skills/` only after repeated evidence shows cross-project reuse.
 
@@ -236,10 +242,14 @@ Reports are date-stamped records:
 .farplane/reports/pulse/<YYYY-MM-DDTHHMMSSZ>.md
 .farplane/reports/interval/<interval_id>/<YYYY-MM-DDTHHMMSSZ>.md
 .farplane/reports/dogfood-review/<YYYY-MM-DDTHHMMSSZ>.md
+.farplane/reports/index.json
 ```
 
-State files may store `last_report` pointers. Do not make `latest.md` the
-canonical report contract for new framework surfaces.
+UI-indexed report Markdown must include `ref`, `kind`, `created_at`, and
+`ui_summary` frontmatter. Core builds `.farplane/reports/index.json` with
+prefix-derived hierarchy from `ref`; see [Reporting](reporting.md). State files
+may store `last_report` pointers. Do not make `latest.md` the canonical report
+contract for new framework surfaces.
 
 ## File Specs
 

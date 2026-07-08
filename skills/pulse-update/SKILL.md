@@ -257,7 +257,7 @@ gates:
   worker_review_notification_recorded_for_completed_artifacts;
   done_active_tickets_archived_or_recorded; lane_weight_bias_checked;
   next_wave_tickets_rewarded_when_created; delegation_cap_respected;
-  side_effect_gates_respected; decision_recorded;
+  side_effect_gates_respected; decision_recorded; report_ref_frontmatter_written;
   pm_thread_grouping_updated_when_persistent
 
 routes:
@@ -497,6 +497,11 @@ fails:
   - [ ] Append decision, spawned-thread, reward, and report rows.
   - [ ] Write a date-stamped Pulse report and keep newest-report pointers in
         state when needed.
+  - [ ] Include minimal Core report frontmatter: `ref:
+        reports/pulse/<YYYY-MM-DDTHHMMSSZ>`, `kind: pulse`, `created_at`, and
+        `ui_summary`.
+  - [ ] Run `farplane reports index --project-root <project_root>` after
+        writing the report when the CLI is available.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 ## Output

@@ -2,7 +2,7 @@
 kind: farplane-config-index
 status: active
 created_at: 2026-06-15
-updated_at: 2026-06-26
+updated_at: 2026-07-08
 framework_template_version: "0.1.0"
 ---
 
@@ -58,6 +58,7 @@ Other projects do not copy metric scripts; they pass a project root:
 ```bash
 farplane metrics primitives --project-root /path/to/project --date <YYYY-MM-DD> --json
 farplane project snapshot --project-root /path/to/project --date <YYYY-MM-DD> --json
+farplane reports index --project-root /path/to/project --json
 ```
 
 Primitive metrics are Core-owned reducers over tickets, `bindings.yaml`, local
@@ -70,6 +71,12 @@ Metric producers persist canonical observation batches at
 owns the Pydantic schema, writer, validator, native reducers, and snapshot
 compiler. Platform skills such as Instagram or X own API fetching, but their
 outputs must validate against the same `MetricObservationBatch` shape.
+
+Report producers persist Markdown under `.farplane/reports/` with `ref`,
+`kind`, `created_at`, and `ui_summary` frontmatter. Farplane Core owns
+`.farplane/reports/index.json`; UI clients should read that registry instead of
+defining report hierarchy locally. The standard lives in
+[docs/farplane-framework/reporting.md](../docs/farplane-framework/reporting.md).
 
 See [docs/farplane-framework/project-files.md](../docs/farplane-framework/project-files.md).
 

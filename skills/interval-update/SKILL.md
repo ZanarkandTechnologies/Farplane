@@ -93,7 +93,7 @@ gates:
   cross_interval_refs_resolved_or_gap_labeled;
   context_bundle_written_or_summarized; report_written_before_plan_or_goals_mutation;
   configured_report_workflows_run; drift_checked; next_window_plan_written; side_effect_gates_respected;
-  date_stamped_report_used; ui_summary_frontmatter_written
+  date_stamped_report_used; report_ref_frontmatter_written; ui_summary_frontmatter_written
 
 routes:
   pulse-update | goal-advisor | feed-scout | dogfood-review | update-memory |
@@ -331,9 +331,17 @@ priority_planning(review_window, planning_window)
   - [ ] Return Pulse guidance as constraints for the fast executor loop.
 - [ ] 6. Write the report before durable mutations.
   - [ ] Write a date-stamped interval report.
+  - [ ] Include minimal Core report frontmatter: `ref:
+        reports/interval/<interval_id>/<YYYY-MM-DDTHHMMSSZ>`, `kind:
+        interval-report`, `created_at`, and `ui_summary`, preserving existing
+        interval frontmatter such as `project`, `automation_id`,
+        `interval_id`, `report_workflows`, `status`, `review_window`,
+        `planning_window`, and `context_bundle`.
   - [ ] Include source gaps, drift findings, evidence, and the proposed next
         plan before mutating goals or tickets.
   - [ ] Use goals-delta promotion before changing `farplane/goals.yaml`.
+  - [ ] Run `farplane reports index --project-root <project_root>` after
+        writing the report when the CLI is available.
 - [ ] 7. Emit next-window guidance.
   - [ ] Summarize report paths, blockers, goals-delta decisions, and handoffs.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->

@@ -24,6 +24,7 @@
       "Loads default harness charter, goals, tickets, memory, Pulse reports, interval reports, and PM thread refs",
       "Resolves the configured latest longer-interval report as parent context when present and labels it as a source gap when missing",
       "Writes a date-stamped .farplane/reports/interval/<interval_id>/<timestamp>.md report before durable goals or ticket mutation",
+      "Includes Core report frontmatter with ref, kind interval-report, created_at, and ui_summary",
       "Plans only the configured planning_window",
       "Does not select due jobs, update scheduler state, or perform broad strategy replanning"
     ],
@@ -77,6 +78,7 @@
     "query": "A configured interval run succeeds. Where should the report go and how should consumers find the newest one?",
     "reference_points": [
       "Writes a date-stamped report under .farplane/reports/interval/<interval_id>/",
+      "Includes ref, kind, created_at, and ui_summary frontmatter for the Core reports index",
       "Does not use latest.md as the canonical report",
       "Consumers find the newest report by timestamp sorting or explicit links in subsequent reports",
       "No tracked config or scheduler state is mutated just to store last_report"

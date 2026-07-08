@@ -49,7 +49,8 @@ state: reads(project feed_scout config, feed-scout config/profile/resource rows,
              content/proposal ledger, fixtures or fetched source items,
              private routing handles when needed)
        writes(ledger/proposal rows, daily feed JSON, latest feed pointer,
-              dry-run or dated reports, scout run refs, skill-creator handoff refs,
+              dry-run or dated reports with Core report frontmatter,
+              scout run refs, skill-creator handoff refs,
               optional Notion task projections)
 gates: explicit_run_boundary; profiles_validated; url_keys_deduped;
        summarize_before_scouting; no_unapproved_spend_or_notion_write;
@@ -170,7 +171,8 @@ A completed `feed-scout` pass should leave:
   plus a latest pointer when `daily_feed_root` is configured
 - a URL-keyed content/proposal ledger update or dry-run report
 - a dated summary report and latest report pointer when `report_root` is
-  configured
+  configured; report frontmatter must include `ref`, `kind: feed-scout`,
+  `created_at`, and `ui_summary`
 - normalized content items with canonical URLs/keys and entity/resource refs
 - daily feed items that answer `why_care_today`, carry a structured
   `today_delta`, `novelty`, `actionability`, `source_snapshot`, and source-native

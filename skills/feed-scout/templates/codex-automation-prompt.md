@@ -35,6 +35,14 @@ Steps:
     `.farplane/reports/feed-scout/<timestamp>.md`, and
     `.farplane/reports/feed-scout/latest.json` directly from the Feed Scout
     agent when those paths are configured.
+    - The Markdown report frontmatter must include `ref`, `kind: feed-scout`,
+      `created_at`, and `ui_summary`.
+    - Use `ref: reports/feed-scout/<timestamp>` for a standalone Feed Scout
+      report, or `ref:
+      reports/interval/<interval_id>/<timestamp>/feed-scout` when the report is
+      an interval child report.
+    - Run `farplane reports index --project-root <project_root>` after writing
+      the Markdown report when the CLI is available.
 12. Validate the feed artifact with
     `skills/feed-scout/scripts/validate_daily_feed.py`.
 13. Record evidence paths and blockers in the run summary.

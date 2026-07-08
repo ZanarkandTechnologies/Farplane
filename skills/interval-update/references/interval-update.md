@@ -187,9 +187,10 @@ merge shape.
     guardrails; it should verify that each selected priority moves a named goal,
     bottleneck, or reward signal.
 17. Write [interval-report.md](../templates/interval-report.md) before any
-    goals mutation. Fill `ui_summary` in YAML frontmatter with one concise
-    under-100-word string so UI consumers can render report cards without
-    scraping prose.
+    goals mutation. Fill the minimal Core report frontmatter: `ref`, `kind:
+    interval-report`, `created_at`, and one concise under-100-word
+    `ui_summary`, so UI consumers can render report cards from the Core
+    registry without scraping prose.
 18. Classify every goals delta as `auto_apply`, `approval_required`, or
     `rejected_source_gap`.
 19. Convert executable changes into ticket deltas or Goal Advisor handoffs,
@@ -413,10 +414,10 @@ horizon review.
 - The dated interval report is the state store for self-update decisions:
   reward closure, selected bets, rejected/deferred/expired candidates, advisor
   routes, and next reward signals.
-- UI cards parse only the report frontmatter `ui_summary` string for compact
-  card copy. Keep it under 100 words for every daily or weekly interval report.
-  Use existing frontmatter fields and the report file path for title, date,
-  type, and deep-link behavior.
+- UI cards read `.farplane/reports/index.json` when present. The registry
+  includes reports with `ref`, `kind`, `created_at`, and `ui_summary`
+  frontmatter, then derives hierarchy from `ref` prefixes. Keep `ui_summary`
+  under 100 words for every daily or weekly interval report.
 - Skill hardening is not a separate compatibility automation. Weekly Interval
   routes learning sources to `skill-maintenance(mode: harden_skill)` and records
   processed or deferred learning in the dated report.

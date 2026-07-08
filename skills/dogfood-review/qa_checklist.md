@@ -39,8 +39,8 @@ dogfood_review_check(report, evidence, track_prompts)
       names, and their `TAS-B` / `TAS-C` findings were not softened into
       pass-ready aggregate decisions.
 - [ ] The report is written under `.farplane/reports/dogfood-review/` with
-      `kind`, `created_at`, `review_window`, `ui_summary`, `tracked_refs`, and
-      `decisions` frontmatter.
+      `ref`, `kind`, `created_at`, `review_window`, `ui_summary`,
+      `tracked_refs`, and `decisions` frontmatter.
 - [ ] High-volume ticket batches are grouped into useful findings instead of
       dumping one verbose section per ticket.
 - [ ] Material tracked-feature reports include exactly one consolidated
