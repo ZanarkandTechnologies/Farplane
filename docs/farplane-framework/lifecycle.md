@@ -3,7 +3,7 @@ title: "Farplane Lifecycle"
 status: active
 owner: farplane-framework
 created_at: 2026-06-23
-updated_at: 2026-07-02
+updated_at: 2026-07-08
 framework_template_version: "0.2.2"
 tags:
   - farplane
@@ -19,6 +19,8 @@ refs:
   - docs/farplane-framework/pulse-and-interval-loop.md
   - docs/farplane-framework/graph-contract.md
   - docs/farplane-framework/hooks-and-runtime.md
+  - farplane/products/*/product.md
+  - farplane/products.json
   - docs/features/FEAT-0065-pulse-and-interval-automation.md
   - docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md
   - docs/features/FEAT-0060-registry-backed-documentation-os.md
@@ -33,12 +35,12 @@ mental model is:
 ```text
 init_project(intent)
   -> visible project files
-  -> static human charter, products, goals, and current milestone
-  -> prompt-only metric recipes, active ops memory, and Reward-backed tickets
+  -> static human charter, product definitions, goals, and current milestone
+  -> prompt-only metric recipes, product strategy, and Reward-backed tickets
   -> ticket-backed Goal Packets
   -> Pulse acts and intervals plan
   -> daily metrics expose KPI/source gaps
-  -> weekly reports review goal drift, runway, and leverage bets
+  -> weekly reports review goal drift, runway, and product strategy
   -> drains compress outcomes back into docs, memory, skills, and tickets
 ```
 
@@ -76,8 +78,9 @@ Then inspect the created files:
    static leverage commitments, non-tradeoffs, agent authority, systems, and
    skill bindings.
 3. Open `farplane/goals.yaml` for strategy, current milestone, KPIs, and holds.
-4. Open `farplane/products.md` for the primary and supporting products this
-   team creates.
+4. Open `farplane/products/<product>/product.md` for canonical product-loop
+   definitions. Use generated `farplane/products.json` for UI/tooling; do not
+   hand-edit the generated JSON.
 5. Open `tickets/TASK-0001/ticket.md` for the first planning or discovery
    handoff.
 6. Run or ask for `horizon-advisor` only when `farplane/goals.yaml` is missing,
@@ -100,7 +103,7 @@ flowchart TD
   C --> D["horizon-advisor"]
   D --> E["farplane/goals.yaml"]
   C --> X["farplane/bindings.yaml"]
-  C --> Y["farplane/ops-memory.md"]
+  C --> Y["farplane/products/<product>/product.md"]
   E --> F["goal-advisor"]
   F --> G["Goal Packet: ticket.md + program.md + progress.md"]
   G --> H["Native Codex Goal"]
@@ -111,10 +114,10 @@ flowchart TD
   Y --> K
   K --> L["dated interval reports + Pulse guidance"]
   K --> U["daily KPI snapshots + source gaps"]
-  K --> R["goals deltas + runway decisions + leverage bets"]
+  K --> R["goals deltas + product strategy updates + runway decisions"]
   R --> S{"approval required?"}
   S -->|strategy/KPI/frontier change| D
-  S -->|execution bet selected| F
+  S -->|execution hypothesis selected| F
   S -->|minor evidence-backed update| E
   G --> M["pulse-update"]
   L --> M
@@ -141,11 +144,15 @@ farplane/harness.md
 farplane/goals.yaml
   -> goal axes + inline SMART goals + stable KPI keys + interpretation
 
+farplane/products/<product>/product.md
+  -> product identity, lane, KPI refs, gates, workflows, goals, strategy, and loop program
+
+farplane/products.json
+  -> generated machine/UI registry over product definitions
+     (regenerate from product.md files, do not treat as editable strategy)
+
 farplane/bindings.yaml
   -> non-secret project coordinates + inline metric recipes
-
-farplane/ops-memory.md
-  -> active projects, contribution modes, current frontier, runway notes
 
 tickets/TASK-*/ticket.md
   -> executable work, Reward(kpi_rewards, guard), proof contract
@@ -157,7 +164,7 @@ Daily Interval
   -> refreshes recent progress, goal drift, ticket drift, and KPI snapshots
 
 Weekly Interval
-  -> reviews goal drift, budget/runway, leverage, source gaps, and next bets
+  -> reviews goal drift, budget/runway, leverage, source gaps, and product strategy
 
 .farplane/reports/** + .farplane/automation/*.jsonl
   -> dated receipts that feed the next Pulse or Interval
@@ -177,13 +184,15 @@ The loop has three clocks:
 | --- | --- | --- | --- |
 | Pulse | `pulse-update` | Act on ready work or request planning. | Pulse report and decision/reward ledgers. |
 | Daily | `interval-update` | Refresh near-term progress, blockers, and KPI readings. | Daily interval report and metric snapshots. |
-| Weekly | `interval-update` | Protect or change strategy, review runway, and choose leverage bets. | Weekly report, goals-delta candidates, ops-memory delta, Pulse guidance. |
+| Weekly | `interval-update` | Protect or change strategy, review runway, and update product strategy. | Weekly report, product strategy deltas, goals-delta candidates, Pulse guidance. |
 
-KPI snapshots start from `farplane/bindings.yaml` metric recipes. `goals.yaml`
-chooses and interprets stable KPI IDs and SMART targets; `bindings.yaml` owns
-each metric's label, product, unit, chart behavior, pinned status, kind, and
-prompt-only `refresh` instruction. The interval agent uses recipes plus active
-context in `farplane/ops-memory.md` to call skills, CLIs, local ledgers, ticket
+KPI snapshots start from `farplane/bindings.yaml` metric recipes and
+product-owned KPI membership in `farplane/products/<product>/product.md`.
+`goals.yaml` chooses and interprets stable KPI IDs and SMART targets;
+`bindings.yaml` owns each metric's label, unit, chart behavior, pinned status,
+kind, and prompt-only `refresh` instruction. Product files say which KPIs a
+product loop is accountable for. The interval agent uses recipes plus product
+strategy sections to call skills, CLIs, local ledgers, ticket
 searches, or manual notes, then writes one compact daily metrics file:
 
 ```text
@@ -263,13 +272,12 @@ changes unless a ticket or policy explicitly grants that authority.
 For a project to run the loop without hidden transcript memory, it needs:
 
 - `farplane/harness.md` with static authority, proof, and runway guardrails.
-- `farplane/products.md` with product lanes and lane weights.
+- `farplane/products/<product>/product.md` with product identity, lanes, KPI
+  refs, gates, goals, artifact workflows, current strategy, loop contract, and
+  progress-entry shape.
+- generated `farplane/products.json` registry.
 - `farplane/goals.yaml` with inline SMART goals, KPI keys, and interpretation.
 - `farplane/bindings.yaml` with non-secret inline metric recipes.
-- `farplane/ops-memory.md` with active projects, tracked feedback, current
-  frontier, and the standard sections: Current Focus, Active Projects, Tracked
-  Feedback, Next Frontier, Constraints, Parking Lot, Recent Decisions, and
-  Pulse Notes.
 - `farplane/automations.toml` with reviewed Pulse, Daily, and Weekly prompts.
 - Tickets with `Reward`, Done/Proof, and QA strategy for executable work.
 - `.farplane/reports/**` and `.farplane/automation/*.jsonl` as dated receipts.

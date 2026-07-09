@@ -45,7 +45,9 @@ any port or environment-variable assumptions. When the user wants app code
 created during init, select the stack scaffold before running commands.
 
 That also writes `farplane/README.md`, `farplane/manifest.json`, `farplane/harness.md`,
-`farplane/goals.yaml`, `farplane/products.md`, `farplane/ops-memory.md`, `farplane/automations.toml`, `farplane/bindings.yaml`,
+`farplane/goals.yaml`, `farplane/products/core/product.md`,
+`farplane/products/core/skill.md`, generated `farplane/products.json`,
+`farplane/automations.toml`, `farplane/bindings.yaml`,
 `farplane/hooks.json`, `.agents/skills/README.md`, `farplane/pm.json`, `docs/bootstrap-brief.md`, `qa/README.md`,
 `qa/cookbook/TEMPLATE.md`, `.githooks/README.md`,
 `.githooks/pre-commit`, `.githooks/pre-push`, `scripts/pre_commit_check.sh`,
@@ -110,8 +112,9 @@ Then copy in:
 - `farplane/manifest.json`
 - `farplane/harness.md`
 - `farplane/goals.yaml`
-- `farplane/products.md`
-- `farplane/ops-memory.md`
+- `farplane/products/core/product.md`
+- `farplane/products/core/skill.md`
+- `farplane/products.json`
 - `farplane/automations.toml`
 - `farplane/bindings.yaml`
 - `farplane/hooks.json`
@@ -225,8 +228,9 @@ Those can come after one clean ticket run.
 - [ ] `farplane/manifest.json` records the Farplane project spec version and standard tracked/ignored paths
 - [ ] `farplane/harness.md` exists or `init_mode=substrate` has a recorded readiness gap
 - [ ] `farplane/goals.yaml` exists or `init_mode=substrate` has a recorded readiness gap
-- [ ] `farplane/products.md` exists or `init_mode=substrate` has a recorded readiness gap
-- [ ] `farplane/ops-memory.md` exists with Current Focus, Active Projects, Tracked Feedback, Next Frontier, Constraints, Parking Lot, Recent Decisions, and Pulse Notes sections
+- [ ] `farplane/products/core/product.md` and `farplane/products.json` exist
+      or `init_mode=substrate` has a recorded readiness gap
+- [ ] product `product.md` files include Current Strategy, Loop Contract, Product Loop, and Progress Entry Shape sections
 - [ ] `farplane/automations.toml` exists and contains the full Pulse, Daily Interval, and Weekly Interval configs to copy into Codex automations
 - [ ] `farplane/bindings.yaml` exists and names non-secret project IDs, URLs, labels, and aliases needed by reusable skills
 - [ ] `farplane/hooks.json` exists or `init_mode=substrate` has a recorded readiness gap

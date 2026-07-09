@@ -3,14 +3,16 @@ title: Product-scoped Pulse loops
 status: partial
 owner: feature-registry
 created_at: 2026-07-07
-updated_at: 2026-07-07
+updated_at: 2026-07-08
 tags:
   - farplane
   - feature
   - sys-0003
 refs:
   - docs/farplane-framework/pulse-and-interval-loop.md
-  - farplane/products.md
+  - farplane/products.json
+  - farplane/products.json
+  - farplane/products/
   - skills/pulse-update/SKILL.md
   - skills/ticket-opportunity-generator/SKILL.md
 feature_id: FEAT-0066
@@ -19,7 +21,9 @@ category: planning
 public: true
 surfaces:
   - docs/farplane-framework/pulse-and-interval-loop.md
-  - farplane/products.md
+  - farplane/products.json
+  - farplane/products.json
+  - farplane/products/
   - skills/pulse-update/SKILL.md
   - skills/ticket-opportunity-generator/SKILL.md
 source_refs:
@@ -28,18 +32,19 @@ source_refs:
 external_refs: []
 evidence_refs:
   - skills/pulse-update/eval_task.json
-  - farplane/products/experiments/program.md
+  - farplane/products/experiments/product.md
 known_limits: "Experimental ticket-supply behavior; product loops may still overproduce, duplicate bets, or exceed review capacity until dogfood reports prove the caps."
 metrics:
   - product_loop_ticket_relevance
   - review_capacity_fit
   - ticket_supply_learning
-last_verified: 2026-07-07
+last_verified: 2026-07-08
 experimental: true
 superseded_by: false
 track: >-
   Review product-scoped Pulse loops for the current window. Read
-  .farplane/reports/pulse/** inside the window, farplane/products/*/progress.md,
+  .farplane/reports/pulse/** inside the window,
+  farplane/products/*/{product.md,progress.md},
   active and archived ticket.md files referenced by Pulse reports, and
   .farplane/automation/{decisions,rewards,spawned-threads}.jsonl when present.
   Judge against product-backed reward fit, duplicate-ticket avoidance,
@@ -57,7 +62,7 @@ on whether product loops create reviewable, reward-backed tickets without floodi
 operator.
 
 ```text
-product_scoped_pulse(board_state, product_programs, strategy_inputs)
+product_scoped_pulse(board_state, product_strategies, strategy_inputs)
   -> product_loop_invocations + ticket_specs + handoffs + report_decision
 ```
 
@@ -78,11 +83,12 @@ makes the board look active while hiding whether tickets are tied to a real prod
 lane, reward, or review capacity.
 
 Product-scoped Pulse loops move the next-wave decision closer to each product's
-program, progress, worker budget, and artifact contract.
+strategy, progress, worker budget, and artifact contract.
 
 ## What It Does
 
-- Reads `farplane/products.md` and product-local `program.md` / `progress.md`.
+- Reads product-local `product.md` and `progress.md`, plus
+  generated `farplane/products.json` / `farplane/products.json` indexes.
 - Chooses eligible product loops when the reward-bearing board has capacity.
 - Asks ticket generation to produce executable, product-backed ticket specs.
 - Records invoked, skipped, capped, or blocked product loops in Pulse reports.
@@ -98,7 +104,11 @@ program, progress, worker budget, and artifact contract.
 
 Product-scoped Pulse is a planning and admission feature, not a background executor.
 
-- Product-loop policy lives in `farplane/products/<product>/program.md`.
+- Product-loop identity, KPI refs, gates, workflows, and product goals live in
+  `farplane/products/<product>/product.md`.
+- Product-loop current strategy, execution policy, worker budget,
+  review-capacity settings, loop contract, and progress-entry shape also live
+  in `farplane/products/<product>/product.md`.
 - Runtime learning lives in product-local `progress.md` and Pulse reports.
 - Generated tickets must name product lane, workflow ID, reward, guard, artifact level,
   review surface, and learning writeback target.
@@ -116,7 +126,7 @@ flowchart TD
 
   window["Pulse window<br/>board + review capacity"]:::keep
   pulse["skills/pulse-update<br/>product loop admission"]:::changed
-  products["farplane/products.md<br/>products/*/program.md<br/>progress.md"]:::keep
+  products["products/*/product.md<br/>progress.md<br/>products.json indexes"]:::keep
   generator["ticket-opportunity-generator<br/>product-backed specs"]:::changed
   tickets["new tickets<br/>lane, reward, guard, review surface"]:::added
   report[".farplane/reports/pulse/<br/>invoked / skipped / capped"]:::added
@@ -136,11 +146,12 @@ Gray is product and window input, amber is Pulse admission behavior, green is ge
 
 - Owner surfaces:
   - `docs/farplane-framework/pulse-and-interval-loop.md`
-  - `farplane/products.md`
+  - `farplane/products.json`
+  - `farplane/products.json`
+  - `farplane/products/*/product.md`
   - `skills/pulse-update/SKILL.md`
   - `skills/ticket-opportunity-generator/SKILL.md`
 - Supporting surfaces:
-  - `farplane/products/*/program.md`
   - `farplane/products/*/progress.md`
 - Generated surfaces:
   - `.farplane/reports/pulse/`
@@ -150,7 +161,7 @@ Gray is product and window input, amber is Pulse admission behavior, green is ge
 
 - Evidence:
   - `skills/pulse-update/eval_task.json`
-  - `farplane/products/experiments/program.md`
+  - `farplane/products/experiments/product.md`
 - Required checks:
   - `python3 docs/features/validate_features.py`
   - `python3 bin/validators/check_doc_refs.py`
@@ -161,7 +172,7 @@ Gray is product and window input, amber is Pulse admission behavior, green is ge
 
 ## Rollout And Maintenance
 
-- Update path: refine product-loop policy, Pulse admission gates, and ticket generator
+- Update path: refine product.md product-loop policy, Pulse admission gates, and ticket generator
   evidence requirements before changing global agent policy.
 - Rollback path: cap or pause product-loop refill and keep direct ticket execution working.
 - Compatibility notes: legacy global Pulse planning is superseded by product-scoped

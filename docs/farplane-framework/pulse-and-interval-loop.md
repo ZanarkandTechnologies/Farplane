@@ -3,7 +3,7 @@ title: "Pulse And Interval Loop"
 status: active
 owner: farplane-framework
 created_at: 2026-06-29
-updated_at: 2026-07-05
+updated_at: 2026-07-08
 framework_template_version: "0.2.2"
 tags:
   - farplane
@@ -26,49 +26,47 @@ Farplane autonomous operation uses explicit Codex automation loops:
 
 ```text
 pulse_update(project_root, extensions?, pulse_policy?)
-  -> ready ticket delegation + tactical next-wave tickets? + planning request? + decision state
+  -> ready ticket delegation + product-loop invocations? + planning request? + decision state
+
+product_pulse(product_md, product_loop_progress?, products, tickets,
+              metrics?, reviews?, strategy_inputs?)
+  -> ranked moves + executable ticket specs? + worker handoffs? + learning writeback
 
 interval_update(project_root, interval_id, review_window, planning_window,
                 context_refs?, report_workflows?, planning_policy?,
                 write_policy?, now?)
-  -> dated interval report + ops-memory delta? + next-window plan + Pulse guidance
+  -> dated interval report + product.md strategy deltas? + next-window plan + Pulse guidance
 ```
 
 Pulse is the fast manager/delegation bus with founder-like ambition inside hard gates.
-It reads the static harness charter, current goals, dynamic products, active ops
-memory, product lane weights, recent Weekly/Daily strategy inputs, ticket state,
-execution policy, rewards, and ledgers. It admits ready tickets, delegates
-parallelizable work to worker threads up to policy cap, creates a small
-tactical next wave when the board is empty and fresh strategy is available,
+It reads the static harness charter, current goals, dynamic product strategies,
+product lane weights, recent Weekly/Daily reports, ticket state,
+execution policy, rewards, and ledgers. It admits ready
+tickets, delegates parallelizable work under product-loop worker policy, invokes
+eligible product loops when the board is empty and fresh strategy is available,
 writes planning requests when no safe tactical work exists, writes a dated
-Pulse report, and updates decision/reward state. Pulse can generate bold
-bounded tactical ideas, but only as tests of the current operating belief,
-frontier, bottleneck, or reward
-signal.
+Pulse report, and updates decision/reward state. Product loops generate bold
+bounded tactical ideas as tests of their current product belief, frontier,
+bottleneck, or reward signal.
 
 Daily Interval reviews the last 24 hours and recalibrates the next 24 hours. It
 acts as a short-horizon reality check: what worked, what failed, and which
-`ops-memory` belief should be kept, revised, dropped, or doubled down under a
+product strategy should be kept, revised, dropped, or doubled down under a
 guard. Weekly Interval reviews the last week, checks drift against
 `farplane/harness.md` and `farplane/goals.yaml`, reviews budget/runway for active
-projects, and sets next-week bets. It acts like a board review for runway and
+products/projects, and sets next-week product strategy. It acts like a board review for runway and
 belief quality. Both call `interval-update`, write dated reports under
-`.farplane/reports/interval/`, and give Pulse strategy inputs.
+`.farplane/reports/interval/`, and give Pulse strategy inputs by updating the
+`## Current Strategy` sections in product `product.md` files when policy allows.
 
-`farplane/ops-memory.md` is the active operating memory between reports and
-tickets. It is the compact, mutable second brain for current focus, active
-projects, critical paths, next frontier, constraints, parking lot, and recent
-operating decisions. It may hold multiple active projects, but those projects
-remain Markdown sections, not a roadmap registry, project schema, database, or
-second scheduler.
-
-The important design choice is that Pulse does not become long-horizon
-strategy, and interval automations do not become fast execution dispatchers.
-Weekly and Daily alter the inputs to the tactical planner; Pulse owns the
-current board scan, next-wave slicing, execution admission, and outcome
-writeback. They share files, not hidden transcript memory. Do not add a
-separate idea ledger: Pulse reports, interval reports, tickets, rewards, metrics,
-and `farplane/ops-memory.md` are the existing evidence surfaces.
+The important design choice is that Pulse does not become long-horizon strategy
+or the all-product idea brain, and interval automations do not become fast
+execution dispatchers. Weekly and Daily alter the inputs to product loops;
+Pulse owns current board reconciliation, product-loop invocation, execution
+admission, and outcome writeback. They share files, not hidden transcript
+memory. Do not add a separate generic idea ledger in this slice: product-loop
+`progress.md`, Pulse reports, interval reports, tickets, rewards, metrics, and
+product `product.md` strategy sections are the existing evidence surfaces.
 
 ## Memory Split
 
@@ -77,40 +75,57 @@ Use the smallest owner for each kind of state:
 | State | Owner | Changes when |
 | --- | --- | --- |
 | Stable thesis and guardrails | `farplane/harness.md` | explicit human-approved harness delta |
-| North star, value function, goal axes, inline SMART goals, durable bets | `farplane/goals.yaml` | horizon/goal delta with evidence and approval when material |
+| North star, value function, goal axes, inline SMART goals, and durable goals | `farplane/goals.yaml` | horizon/goal delta with evidence and approval when material |
 | Metric labels, units, chart behavior, pinned status, kind, and refresh prompts | `farplane/bindings.yaml` | metric recipe delta with source-gap proof |
-| Product lanes, workflows, lane weights | `farplane/products.md` | product-boundary update with evidence |
-| Active focus, active projects, critical paths, next frontier | `farplane/ops-memory.md` | Daily/Weekly refresh or Pulse frontier writeback |
+| Product identity, lanes, workflows, KPI refs, goals, lane weights, current strategy, and loop contract | `farplane/products/<product>/product.md` | product-boundary or product-strategy update with evidence |
+| Generated product registry | `farplane/products.json` | regenerated from product files |
+| Product-loop learning | `farplane/products/<product>/progress.md` | local runtime hypothesis cycles, selected moves, feedback, learning, and next lever |
 | Executable work | `tickets/TASK-*/ticket.md` | ticket creation, execution, review, closeout |
 | Ticket-level spend justification | ticket `Reward` block | ticket creation or planning update |
-| Active project runway decisions | Weekly Interval report and `farplane/ops-memory.md` | weekly review or material evidence change |
+| Active product/project runway decisions | Weekly Interval report and product `## Current Strategy` sections | weekly review or material evidence change |
 | Receipts and ledgers | `.farplane/reports/**`, `.farplane/automation/*.jsonl` | Pulse/Interval/worker outcomes |
-| Caps and cadence | `.farplane/automation/heartbeat-policy.json`, `farplane/automations.toml` | explicit automation/policy update |
+| Cadence and shared side-effect gates | `.farplane/automation/heartbeat-policy.json`, `farplane/automations.toml` | explicit automation/policy update |
 
-This keeps flexible planning in one place without turning every roadmap idea
-into a new artifact family. Caps such as `maxChildThreadsPerBeat` remain policy
-state; ops memory may mention where caps live, but it must not duplicate them
-as mutable planning state.
+This keeps flexible planning close to the product that learns from it without
+turning every roadmap idea into a new global artifact family. Product worker
+budgets, `max_tickets_in_review`, current strategy, loop contract, and
+progress-entry shape live in `product.md`.
+
+Products are goal-owned lanes, not independent mini-businesses. A product loop
+deserves recurring Pulse attention only when it can name the global SMART goal,
+product-local goal, KPI, guardrail, or interval strategy signal it is moving.
+The generated product registry includes a goal-product matrix so Interval and
+Pulse can cite the named goal instead of treating product existence as enough
+reason to run.
+
+Product `progress.md` is not an event stream. Do not write every Pulse skip,
+worker reconciliation, reminder, archive receipt, no-op, or stale-strategy
+finding into product progress. Those are Pulse report or automation-ledger
+events. Product progress receives only product-loop learning: ranked candidate
+moves, selected move, why, ticket and artifact refs, feedback result, learning,
+next lever, blocker, and compact strategy-delta receipts when the learning
+changes what the product should try next.
 
 ## Strategy Inputs And Next-Wave Planning
 
-Weekly and Daily reports expose compact strategy inputs and may refresh
-ops-memory:
+Weekly and Daily reports expose compact strategy inputs and may update
+product strategy:
 
 ```text
-StrategyInput := focus + bets + prefer + avoid + blocked + reward
-OpsMemoryChallenge := pulse_belief_reviewed + what_worked + what_failed
-                    + belief_to_keep + belief_to_revise + belief_to_drop
-                    + double_down_guard + source_gap
-OpsMemoryDelta := current_focus + active_projects + next_frontier
-               + constraints + parking_lot + recent_decisions
+ProductStrategyInput := product + focus + current_hypothesis + prefer + avoid
+                      + blocked + expected_reward + allocation_hint
+ProductStrategyChallenge := product_belief_reviewed + what_worked
+                         + what_failed + keep + revise + drop
+                         + double_down_guard + source_gap
+ProductStrategyDelta := product + current_strategy_patch + source_report_ref
 ```
 
-`farplane/products.md` work-lane weights are the default allocation prior for
-Pulse next-wave planning. They bias selection when several safe slices are
-available; they are not hard quotas. Daily strategy, blockers, source
-freshness, proof urgency, or a Weekly bet may override the weights, but the
-Pulse report should record the reason.
+`farplane/products/<product>/product.md` `default_weight` values, rendered into
+`farplane/products.json`, are the default allocation prior for product-loop
+worker budgets. They bias how many workers each product loop gets; they are not
+hard quotas. Daily strategy, blockers, source freshness, proof urgency, or a
+Weekly strategy may override which product loop runs first, but the Pulse report
+should record the reason.
 
 Pulse's executable board is the reward-bearing AI-planned subset, not every
 active ticket directory. Because tickets intentionally do not carry
@@ -126,17 +141,18 @@ frontmatter marker plus matching body reward block.
 When no reward-bearing AI-planned ready ticket can advance, Pulse may use:
 
 ```text
-plan_next_wave_when_empty(ops_memory, weekly_strategy, daily_strategy,
+plan_next_wave_when_empty(product_strategies, weekly_strategy, daily_strategy,
                           ai_generated_board, manual_ticket_diagnostics,
-                          product_lane_weights)
-  -> lane scan + 1..N tactical tickets + worker handoffs + admission decision
+                          product_md_files)
+  -> eligible product-loop invocations + 0..N tactical tickets
+   + worker handoffs + admission decision
 ```
 
 Generated tactical tickets must be small, local, approval-free, and tied to a
-current focus, active project, frontier step, bet, lane, bottleneck, or reward
-signal. Each next-wave decision should name the active ops-memory belief being
-tested so Daily or Weekly can challenge it later. Each generated ticket must
-include frontmatter:
+current product-loop belief, active project, frontier step, strategy move, lane,
+bottleneck, or reward signal. Each next-wave decision should name the product
+loop and active belief being tested so Daily or Weekly can challenge it later.
+Each generated ticket must include frontmatter:
 
 ```yaml
 rewards.kpi:
@@ -149,18 +165,28 @@ and a body `## Reward` block:
 kpi_rewards:
   - kpi_id: accepted_harness_improvements
     expected_reward: "one proof-backed shipped harness improvement"
+    check_in_at: "2026-07-15T09:00:00+08:00"
+    actual_result:
+    reward_score:
+    reward_score_reason:
 guard: "stop before expanding scope or counting unproved intent"
 ```
 
 `Reward` is also the ticket-level budget justification. `kpi_rewards` names the
-KPI IDs the ticket is expected to move and the expected reward text; `guard`
-names the stop, resize, or non-expansion boundary. Do not add another ticket
-field for budget reason unless a future ticket proves `Reward` is insufficient.
+KPI IDs the ticket is expected to move, the expected reward text, and the
+check-in time when expected reward should be compared with observed reality.
+`actual_result`, `reward_score`, and `reward_score_reason` are filled by the
+interval reward-checkin analyzer. `reward_score` is a scalar from `-1` to `1`,
+where `1` means the actual result strongly matched or exceeded the expectation,
+`0` means unclear or weakly related, and `-1` means the actual contradicted the
+expectation or created negative value. `guard` names the stop, resize, or
+non-expansion boundary. Do not add another ticket field for budget reason unless
+a future ticket proves `Reward` is insufficient.
 Pulse autonomous selection is restricted to product-backed work. A ticket is
 not proceedable for Pulse merely because it is ready; it must include
 frontmatter `rewards.kpi` and parseable body `Reward.kpi_rewards[]` with at
-least one KPI from `farplane/bindings.yaml` whose metric product maps into
-`farplane/products.md`, and the ticket scope must produce that product output
+least one KPI listed by a product `product.md` file and present in
+`farplane/bindings.yaml`, and the ticket scope must produce that product output
 or artifact workflow. Human-created tickets without `rewards.kpi` are
 manual/operator work. Maintenance, Pulse, generator, metadata, or tooling
 cleanup is only a repair arm when it directly unblocks an existing
@@ -168,18 +194,37 @@ product-backed ticket, not a primary next-wave worker ticket.
 
 ## Bold Reviewable Bet Pipeline
 
-Pulse next-wave planning should generate executable bets, not planner tickets:
+Product-loop next-wave planning should generate executable moves, not planner
+tickets:
 
 ```text
-generate_tickets(products.md, goals.yaml, daily_report, weekly_report,
-                 ops_memory, board_state, recent_evidence)
-  -> lane_scan
+generate_tickets(product_md, products_index, product_loop_progress,
+                 goals.yaml, daily_report, weekly_report,
+                 board_state, recent_evidence)
+  -> product_loop_scan
   -> trend_tensions from last-7-day Feed Scout evidence
-  -> leverage_bets from existing Farplane capabilities
+  -> leverage_moves from existing Farplane capabilities
   -> dedupe against recent tickets/artifacts/claims
-  -> executable ticket specs with big claim + artifact level + reward
+  -> opportunity QA / reviewer requirements
+  -> executable ticket specs with big claim + artifact level + reward + learning_writeback
   -> worker-thread handoffs with review notification instructions
 ```
+
+The lean owner graph is:
+
+```text
+Pulse -> manager heartbeat, board admission, product-loop invocation, handoffs, receipts
+product loops -> product-local next-move selection, worker budget, max_tickets_in_review, learning progress
+ticket-opportunity-generator -> detailed executable ticket spec + opportunity QA contract
+product skills -> workflow-specific artifact contracts and collocated product-loop files
+goal-advisor -> approved ticket execution compilation
+worker-artifact-review-request -> Telegram-first review exit gate
+```
+
+Pulse may summarize downstream gates, but should not duplicate the full
+workflow doctrine for each owner. Its proof is operational: invoked/skipped
+product loops, accepted/rejected specs, handoff rows, review receipts or
+blockers, and decision/reward/report writeback.
 
 Distribution and market-facing tickets use Feed Scout as attention evidence:
 what changed, who cares, why people react now, and which Farplane claim can be
@@ -208,14 +253,45 @@ outline is only valid when explicitly scoped as a small planning card. Review
 receipts, reminder pings, and approval waits are follow-up lanes, not product
 throughput.
 
-Product workflows live in product skills, not in a separate ticket-template
-matrix. `farplane/products.md` maps each product to a primary skill such as
+Product workflows live in product files and product skills, not in a separate
+ticket-template matrix. `farplane/products/<product>/product.md` maps each
+product to a primary skill such as
 `farplane-experiment-report`, `farplane-ablation-proof`,
 `farplane-productization`, `farplane-evidence-content`, or
 `farplane-market-learning`. Generated tickets name the concrete instance:
-product lane, primary skill, claim/hypothesis, evidence refs, artifact level,
-reward, guard, and final human gate. The owning product skill supplies the
-workflow todo list and output contract.
+product lane, primary skill, workflow id, claim/hypothesis, evidence refs,
+artifact level, reward, guard, review surface, learning writeback target, and
+final human gate. The owning product skill supplies the workflow todo list,
+output contract, and collocated product-loop state.
+
+Pulse-generated product work should never be a ticket whose main deliverable is
+"call the product skill with this idea." The ticket is the concrete execution
+sample. It names the artifact to produce, the product skill to use as the
+process contract, the stop condition, the review surface, the reward check-in,
+and the product progress writeback. If the next useful move is strategy,
+prioritization, or idea selection, Pulse handles the bounded manager writeback
+or requests Daily/Weekly planning instead of delegating a planning ticket.
+
+## Product Loop File Equivalents
+
+The product loop is the Farplane file equivalent of the Karpathy loop:
+
+| Karpathy loop | Farplane file surface |
+| --- | --- |
+| Read code/state | product `product.md`, generated `farplane/products.json`, product-local `skill.md`, ignored `progress.md`, recent tickets/artifacts/metrics |
+| Propose change | product-loop cycle entry with ranked candidate moves |
+| Train/run small experiment | one concrete `tickets/TASK-*/ticket.md` worker attempt |
+| Improved? | ticket proof, reviewer/Kenji verdict, metrics, review receipt |
+| Commit | close/productize/update docs or skill behavior, then record learning |
+| Roll back | reject/kill/revise ticket and record the failed move reason |
+| Repeat | next product loop reads the progress tail and picks the next lever |
+
+Tracked `product.md` files live beside product-local `skill.md` files under
+`farplane/products/<product>/`. Runtime `progress.md` files at the same
+location are ignored local learning state. Product identity, KPI refs, gates,
+workflows, product-level goals, current strategy, loop contract, and progress
+entry shape live in `product.md`. Product promotion and installation must not
+treat live `progress.md` as reusable doctrine.
 
 When a worker artifact is ready, the worker must use
 `worker-artifact-review-request`. That wrapper borrows the
@@ -247,19 +323,34 @@ desktop-only refs after the reviewable summary. Content and distribution
 workers should include a thumbnail concept, visual hook, or rendered preview
 when that is the natural review surface.
 
-Pulse is a manager heartbeat, not an implementation worker. When it creates or
-admits a ticket, it should create a named worker-thread handoff in the same
-beat up to policy cap. The parent beat may repair metadata, reconcile closed
-threads, select a portfolio wave, and write state, but it should not implement
-the ticket body inline. If a worker-thread tool is unavailable, Pulse records
-the handoff packet and leaves the ticket ready/unclaimed instead of consuming
-the ticket itself.
+Human-review chasing is shared project policy from the freeform
+`farplane/bindings.yaml#operator.review_chase_policy` prompt, not
+per-automation config sprawl. Product Pulse, Taste Loop, and
+`worker-artifact-review-request` read that prompt plus Kenji's active hours.
+Skills own the timing defaults and receipt mechanics. A pending review remains
+chaseable even after the worker ticket is archived if its review-cycle receipt
+still expects Kenji's judgment. During active hours, due unanswered review
+waits send worker-owned Telegram reminders first; if the stale Telegram
+reminder remains unanswered, the loop routes one `phone-chaser` call for that
+feedback item or records the blocker. There is no global daily phone cap; the
+repeat guard is one phone escalation per feedback item unless a new
+artifact/review cycle is created. Outside active hours, the loop records the
+queued chase rather than silently returning `DONT_NOTIFY`.
 
-Next-wave planning scans the product portfolio before ticket creation. Lane
-weights are a bias, not a quota, but the Pulse report should show selected and
-skipped lanes with compact reasons. A one-ticket wave is valid only when worker
-cap is one or only one specific, evidence-backed, low-gate premise survives the
-specificity and autonomy gates.
+Pulse is a manager heartbeat, not an implementation worker or all-product
+planner. When it creates or admits a ticket, it should create a named
+worker-thread handoff in the same beat under product-loop worker policy. The
+parent beat may repair metadata, reconcile closed threads, invoke product
+loops, and write state, but it should not implement the ticket body inline. If
+a worker-thread tool is unavailable, Pulse records the handoff packet and
+leaves the ticket ready/unclaimed instead of consuming the ticket itself.
+
+Next-wave planning invokes product loops before ticket creation. Lane weights
+derive product-loop worker budgets, not a global quota, and the Pulse report
+should show invoked/skipped product loops with compact reasons. A one-ticket
+wave is valid when one product loop has capacity and one specific,
+evidence-backed, low-gate premise survives the specificity, review, learning
+writeback, and autonomy gates.
 
 Pulse still writes `request_planning` when the strategy inputs are stale,
 missing, unsafe, require material product, KPI, goal, publishing, spend,
@@ -285,18 +376,20 @@ latest interval report -> one safe tactical ticket -> maybe parent execution
 After:
 
 ```text
-goals/products + ops-memory + latest interval reports
-  -> active frontier + needed metric readings
-  -> product-lane scan + bounded tactical ticket wave
-  -> worker-thread handoffs up to heartbeat-policy cap
+goals/products + product strategies + latest interval reports
+  -> active product frontier + needed metric readings
+  -> eligible product-loop invocations
+  -> product-local move + bounded artifact ticket
+  -> worker-thread handoffs under product-loop worker policy
+  -> product-loop progress learning writeback
 ```
 
 Daily and Weekly should read goal-axis SMART goals semantically. For each
 active SMART goal, use its `kpis` to find metric recipes in
 `farplane/bindings.yaml`; each recipe gives the interval agent a prompt-only
-`refresh` instruction for today's reading. Do not parse
-`farplane/ops-memory.md` as a deterministic database; use it as flexible agent
-memory for active initiatives, tracked content, and next ticket candidates.
+`refresh` instruction for today's reading. Do not parse interval reports as a
+deterministic strategy database; use them as receipts that justify product
+`## Current Strategy` updates and next ticket candidates.
 
 ## Daily Metric Update Lifecycle
 
@@ -411,7 +504,7 @@ Primitive families:
 | Primitive | Emits | Inputs | Notes |
 | --- | --- | --- | --- |
 | `ticket_count_by_kpi` | One observation per KPI ID found in `Reward.kpi_rewards[]`. Missing KPI rows compile as available zero for defined KPIs. | `tickets/**/ticket.md` | Human-created tickets without KPI rewards are diagnostics, not source gaps. Use `--ticket-status rejected` for a filtered companion reading; `ticket_count_by_kpi_status:rejected._total.value` is the rejected reward-bearing ticket count, and per-KPI rows support rejection-rate diagnosis. |
-| `ticket_count_by_product` | `ticket_count_by_product:<product_id>` observations with touched, completed, and proofed ticket counts in payload. | `farplane/bindings.yaml#metrics.*.product`, ticket rewards | Product is transitive: product -> KPI IDs -> tickets. Tickets do not need `product_id`. |
+| `ticket_count_by_product` | `ticket_count_by_product:<product_id>` observations with touched, completed, and proofed ticket counts in payload. | product `product.md` KPI refs, `farplane/bindings.yaml#metrics`, ticket rewards | Product is transitive: product -> KPI IDs -> tickets. Tickets do not need `product_id`; metric recipe `product` fields remain a support-bucket mirror for groups without product files. |
 | `kpi_attributed_ticket_ratio` | One ratio observation for rewarded tickets over touched tickets. | ticket rewards | Empty windows are available zero readings. |
 | `codex_thread_usage` | Thread count, turn count, total token count, and span-minute observations through metric projection. | `~/.codex/sqlite/state_5.sqlite`, `~/.codex/sessions/**/*.jsonl` | Missing local Codex stores are source gaps. |
 | `ai_burn_estimate` | Daily allocated AI spend plus derived burn-per-thread, burn-per-turn, and burn-per-token metrics. | monthly spend model plus thread usage | Missing spend model is a source gap for burn metrics. |
@@ -438,11 +531,41 @@ fallbacks to prevent duplicate series. Source gaps propagate by ID into metric
 cards and top-level `source_gaps[]`; the UI renders those gaps instead of
 creating its own warnings.
 
+## Reward Check-In Lifecycle
+
+Expected reward is a planning claim with a time horizon. Generated and
+interval-planned tickets should include `check_in_at` on each
+`Reward.kpi_rewards[]` item. Daily and Weekly may enable the same
+`reward_checkins` interval workflow:
+
+```text
+reward_checkins(ticket_dir, now, lookback_days, bad_threshold)
+  -> due reward items missing actual_result or reward_score
+   + already-scored low predictions
+   + source gaps
+   + retro ticket candidates only when follow-up is useful
+```
+
+At check-in, an analyzer fills:
+
+```yaml
+actual_result: "what really happened"
+reward_score: 0.35
+reward_score_reason: "actual partially matched expected reward"
+```
+
+`reward_score` is `-1..1`: `1` means actual strongly matched or exceeded
+expected reward, `0` means unclear or weakly related, and `-1` means actual
+contradicted expected reward or created negative value. The scalar is planning
+calibration, not a KPI value. Low-scoring predictions should influence product
+strategy or spawn a retro ticket only when they reveal a real investigation,
+instrumentation, or strategy task.
+
 Maintenance work should compete against the active frontier. It is selected
 only when it unblocks the focus, protects proof, or has a clearer reward signal
 than the current project work.
 
-Daily and Weekly challenge `farplane/ops-memory.md`; they do not turn every
+Daily and Weekly challenge product strategies; they do not turn every
 interesting idea into a new row somewhere else. Use:
 
 ```text
@@ -458,7 +581,7 @@ compounding bets from daily noise; weekly intervals decide whether each active
 project deserves another planning window.
 
 Weekly Interval should write a Budget / Runway Review before the next-window
-plan. It should cite active projects from `farplane/ops-memory.md`, ticket
+plan. It should cite active products/projects from product `## Current Strategy` sections, ticket
 `Reward` blocks, metric snapshots, source gaps, interval reports, and visible
 operator feedback. For autonomy claims, prefer the daily `autonomy_time_feedback`
 readings over subjective intervention labels: human prompt count, estimated

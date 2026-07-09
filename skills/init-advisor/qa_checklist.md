@@ -35,26 +35,19 @@ init_advisor_qa(project_root, init_mode, activation_requested?)
    - Fail: the project can drift its thesis or commitments silently.
 
 4. `product_catalog`
-   - Pass: `farplane/products.md` names the team archetype, primary/supporting
-     products, expected outputs, work lanes, and constraints.
+   - Pass: `farplane/products/<product>/product.md` names canonical product
+     loop identity, lane, KPI refs, gates, workflows, product-level goals,
+     current strategy, loop contract, product loop, and progress-entry shape,
+     while generated `farplane/products.json` exposes the machine/UI index.
    - Fail: product direction is implicit or mixed into dynamic planning files.
 
-5. `ops_memory_surface`
-   - Pass: `farplane/ops-memory.md` exists with the standard Current Focus,
-     Active Projects, Tracked Feedback, Next Frontier, Constraints, Parking
-     Lot, Recent Decisions, and Pulse Notes sections, and stores refs or
-     source gaps rather than raw metric readings.
-   - Fail: active projects, feedback refs, or next-frontier notes are mixed
-     into `farplane/goals.yaml`, hidden in chat, or treated as a deterministic
-     database.
+5. `products_to_local_skills`
+   - Pass: every active product definition either has a local
+     `farplane/products/<product>/skill.md` owner or an explicit refinement
+     ticket.
+   - Fail: product definitions exist but tickets have no callable workflow to invoke.
 
-6. `products_to_local_skills`
-   - Pass: every active product row in `farplane/products.md` either has a
-     local `.agents/skills/<product-skill>/SKILL.md` owner or an explicit
-     refinement ticket.
-   - Fail: product rows exist but tickets have no callable workflow to invoke.
-
-7. `goals_operating_model`
+6. `goals_operating_model`
    - Pass: `farplane/goals.yaml` captures North Star, 3-month outcome, success
      criteria, non-goals, decision boundaries, current milestone, holds, and a
      fenced `goal-program` block with parseable goals, value function, axes,
@@ -62,7 +55,7 @@ init_advisor_qa(project_root, init_mode, activation_requested?)
    - Fail: file existence is treated as enough when the operating model is
      stale, placeholder, or not grounded in the operator's current intent.
 
-8. `human_intake_gate`
+7. `human_intake_gate`
    - Pass: for new or migrated meaning-heavy files, `init-advisor` records
      `human_intake=skip|offer|required`; uses destination skill signatures as
      the question inventory; asks direct signature questions for factual or
@@ -82,8 +75,8 @@ init_advisor_qa(project_root, init_mode, activation_requested?)
 9. `full_mode_readiness`
    - Pass: full mode audits `farplane/harness.md` for human thesis, static
      leverage commitments, non-tradeoffs, agent authority, and change rule; it
-     audits `docs/bootstrap-brief.md`, `farplane/products.md`, and
-     `farplane/goals.yaml` for team archetype, product outputs, North Star,
+     audits `docs/bootstrap-brief.md`, product definitions, generated product
+     indexes, and `farplane/goals.yaml` for team archetype, product outputs, North Star,
      3-month outcome, success criteria, non-goals, and decision boundaries.
      Readiness state and missing answers are written to
      `docs/bootstrap-brief.md`.
@@ -111,8 +104,8 @@ init_advisor_qa(project_root, init_mode, activation_requested?)
 
 12. `pulse_selection`
    - Pass: Pulse selects at most one bounded action per beat, prefers local
-     ready/unblocked tickets, reads `farplane/harness.md` and
-     `farplane/products.md` for product refill work, defines refill tickets with
+     ready/unblocked tickets, reads `farplane/harness.md`, product definitions,
+     and generated product indexes for product refill work, defines refill tickets with
      project type, baseline/comparison, expected artifact, and proof signal, and
      avoids a separate ticket-drainer automation.
    - Fail: ticket selection is split into another automation or refill work has

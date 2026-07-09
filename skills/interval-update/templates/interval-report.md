@@ -56,20 +56,51 @@ write `not_configured`; for source-dependent workflows with no source, write
 | Opportunity signals |  |  |  |
 | Goal drift |  |  |  |
 | Metric snapshot |  |  |  |
+| Reward check-ins |  |  |  |
 | Compounding leverage review |  |  |  |
 | Tracked feature review |  |  |  |
 | Priority planning |  |  |  |
 
 ## Reward Closure
 
-Use this section when prior interval reports selected leverage bets or reward
-signals. Close the loop before selecting new bets or writing the next-window
+Use this section when prior interval reports selected leverage moves or reward
+signals. Close the loop before selecting new moves or writing the next-window
 plan.
 
-| Previous bet | Expected reward | Observed result | Evidence | Decision |
+| Previous move | Expected reward | Observed result | Evidence | Decision |
 | --- | --- | --- | --- | --- |
 
 Decisions: `accept`, `continue`, `kill`, `resize`, `source_gap`.
+
+## Reward Check-ins
+
+Use this section when `reward_checkins` is enabled. It compares ticket
+`expected_reward` against observed reality after `check_in_at`. The helper only
+finds due or already-scored items; the analyzer fills `actual_result`,
+`reward_score`, and `reward_score_reason` in the ticket `## Reward` block.
+
+```text
+helper:
+  command: python3 skills/interval-update/scripts/reward_checkins.py --ticket-dir tickets --now <now> --lookback-days 14
+  due_count:
+  scored_count:
+  bad_prediction_count:
+  legacy_missing_check_in_count:
+  source_gap_count:
+```
+
+| Ticket | KPI | Expected | Actual | Score (-1..1) | Evidence | Next action |
+| --- | --- | --- | --- | ---: | --- | --- |
+
+Rules:
+
+- `check_in_at <= now` plus missing `actual_result` or `reward_score` is due.
+- `check_in_at > now` is not due.
+- `reward_score` measures similarity between expected reward and actual result:
+  `1` strongly matched or exceeded, `0` unclear or weakly related, `-1`
+  contradicted expected reward or created negative value.
+- Create a retro ticket only when a low score reveals an investigation,
+  instrumentation, strategy, or product-learning task.
 
 ## Budget / Runway Review
 
@@ -86,8 +117,9 @@ Decisions: `continue`, `narrow`, `pause`, `instrument`, `stop`,
 Rules:
 
 - `Reward.kpi_rewards[]` plus `Reward.guard` are the ticket-level budget
-  justification and KPI attribution shape. Do not invent a second ticket budget
-  field.
+  justification and KPI attribution shape. Each planned reward item should
+  include `check_in_at` so future intervals can compare expectation to actual
+  result. Do not invent a second ticket budget field.
 - Missing exact spend is not a blocker for the first review; record rough
   attention used and add an instrumentation gap only if the decision needs
   precision.
@@ -124,9 +156,9 @@ Score format:
 
 Decision states:
 
-- `selected`: one of the 1-3 bets for the next planning window.
+- `selected`: one of the 1-3 moves for the next planning window.
 - `rejected`: evidence says the lever should not be pursued now.
-- `deferred`: plausible but not worth displacing the selected bets.
+- `deferred`: plausible but not worth displacing the selected moves.
 - `expired`: old candidate with no fresh evidence.
 - `escalated`: high-confidence urgent signal routed before the next interval.
 
@@ -137,15 +169,16 @@ Decision states:
 
 Kinds: `keep`, `change`, `pause`, `kill`, `test`.
 
-## Ops Memory Challenge
+## Product Strategy Review
 
-Use this section to challenge the current Pulse operating belief in
-`farplane/ops-memory.md`. Do not create a separate idea ledger; summarize what
-the last window proved, disproved, or left unmeasured, then route a compact
-ops-memory delta or Pulse constraint.
+Use this section to challenge each product's current strategy from
+`farplane/products/<product>/product.md`. Do not create a separate idea ledger;
+summarize what the last window proved, disproved, or left unmeasured, then
+route compact product strategy deltas or Pulse constraints.
 
 ```text
-pulse_belief_reviewed:
+product:
+product_belief_reviewed:
 what_worked:
 what_failed:
 belief_to_keep:
@@ -158,36 +191,38 @@ source_gap:
 ## Strategy Input For Pulse
 
 Use this compact block as the strategy input consumed by Pulse. Weekly reports
-usually set the broader bets; Daily reports usually recalibrate focus,
+usually set the broader strategy; Daily reports usually recalibrate focus,
 blockers, prefer/avoid rules, and temporary lane-weight overrides. Pulse may
-slice tactical tickets from this block plus `farplane/ops-memory.md` only when
-the board has no safe proceedable work.
+slice tactical tickets from this block plus product `## Current Strategy`
+sections only when the board has no safe proceedable work.
 
 ```text
+product:
 focus:
-bets:
+current_hypothesis:
 prefer:
 avoid:
 blocked:
 reward:
-lane_weight_overrides:
+allocation_hint:
 ```
 
-## Ops Memory Delta
+## Product Strategy Delta
 
-Use this block when the interval should refresh `farplane/ops-memory.md`.
-Ops memory is active working context, not a replacement for `goals.yaml`,
-`products.md`, tickets, or dated interval reports. Keep the delta compact and
-edit existing sections rather than appending a second roadmap.
+Use this block when the interval should refresh product `product.md`
+`## Current Strategy` sections. Product strategy is active working context, not
+a replacement for `goals.yaml`, generated product indexes, tickets, or dated
+interval reports. Keep the delta compact and edit existing sections rather
+than appending a second roadmap.
 
 ```text
-current_focus:
-active_projects:
+product:
+strategy_patch:
 budget_runway:
-next_frontier:
+next_moves:
 constraints:
-parking_lot:
-recent_decisions:
+last_interval_ref:
+next_review:
 ```
 
 ## Next Window Plan
@@ -197,7 +232,7 @@ recent_decisions:
 | Lane | Planned weight | Ticket budget | Why now | Expected reward | Guardrail check |
 | --- | ---: | ---: | --- | --- | --- |
 
-Use `farplane/products.md` for plannable lanes and `farplane/harness.md`
+Use `farplane/products.json` for plannable lanes and `farplane/harness.md`
 allocation guardrails for static safety rails. Planned weights are next-window
 decisions, not permanent product strategy. Each selected lane must name the
 goal, bottleneck, or reward signal it is expected to move. Product lane weights
@@ -233,7 +268,8 @@ Decisions:
 
 - `top_lanes:`
 - `strategy_input_for_pulse:`
-- `ops_memory_delta:`
+- `product_strategy_delta:`
+- `reward_checkins:`
 - `constraints:`
 - `blocked_or_human_gated:`
 - `allowed_pulse_actions:`
@@ -261,5 +297,6 @@ separate persistent lane adds value.
 - `goals_delta_applied:`
 - `goals_delta_requires_approval:`
 - `ticket_deltas:`
-- `ops_memory_delta:`
+- `product_strategy_delta:`
+- `reward_checkins:`
 - `ledger_update:`

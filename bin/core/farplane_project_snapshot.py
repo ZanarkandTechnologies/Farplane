@@ -58,7 +58,7 @@ PRIMITIVE_CATALOG: dict[str, dict[str, Any]] = {
         "owner": "farplane-core",
         "command": "farplane metrics primitives --project-root <project> --date <YYYY-MM-DD> --json",
         "store_to": ".farplane/metrics/daily/<YYYY-MM-DD>.json",
-        "required_inputs": ["farplane/bindings.yaml#metrics.*.product", "tickets/**/ticket.md#Reward.kpi_rewards"],
+        "required_inputs": ["farplane/products/*/product.md#kpis", "farplane/bindings.yaml#metrics", "tickets/**/ticket.md#Reward.kpi_rewards"],
         "emits": ["value", "status", "payload.kpi_ids", "payload.tickets"],
         "source_gap_policy": "Emit gaps when metric recipes have unknown product owners.",
     },
@@ -416,49 +416,89 @@ def compact_current_bet(rows: list[dict[str, str]]) -> str | None:
     return "; ".join(parts) if parts else None
 
 
+def load_product_strategy_summaries(project_root: Path) -> list[dict[str, str]]:
+    summaries: list[dict[str, str]] = []
+    for path in sorted((project_root / "farplane" / "products").glob("*/product.md")):
+        product_id = path.parent.name
+        text = read_markdown(path)
+        strategy_section = markdown_heading_section(text, "Current Strategy")
+        strategy_payload = parse_fenced_yaml_from_section(strategy_section)
+        strategy = strategy_payload.get("strategy") if isinstance(strategy_payload.get("strategy"), dict) else {}
+        focus = str(strategy.get("focus") or "").strip()
+        hypothesis = str(strategy.get("current_hypothesis") or "").strip()
+        status = str(strategy.get("status") or "").strip()
+        if focus or hypothesis or status:
+            summaries.append(
+                {
+                    "product_id": product_id,
+                    "focus": focus,
+                    "current_hypothesis": hypothesis,
+                    "status": status,
+                    "source_path": path.relative_to(project_root).as_posix(),
+                }
+            )
+    return summaries
+
+
 def load_strategy_focus(project_root: Path, goals: dict[str, Any]) -> dict[str, Any]:
     goals_payload = read_goals_yaml(project_root)
-    ops_text = read_markdown(project_root / "farplane" / "ops-memory.md")
     current_bets = goals_payload.get("current_bets") if isinstance(goals_payload.get("current_bets"), list) else []
     current_bets = [row for row in current_bets if isinstance(row, dict)]
     current_milestone = str(goals_payload.get("current_milestone") or "").strip() or None
-    current_focus = first_paragraph(markdown_heading_section(ops_text, "Current Focus"))
-    next_frontier = first_paragraph(markdown_heading_section(ops_text, "Next Frontier"))
+    product_strategies = load_product_strategy_summaries(project_root)
+    current_focus = "; ".join(
+        f"{row['product_id']}: {row['focus']}" for row in product_strategies[:3] if row.get("focus")
+    )
     return {
-        "current_focus": current_focus,
+        "current_focus": current_focus or current_milestone,
         "current_bet": compact_current_bet(current_bets),
         "current_bets": current_bets,
-        "active_milestone": current_milestone or next_frontier,
+        "active_milestone": current_milestone,
+        "product_strategies": product_strategies,
         "top_goal_id": next(iter(goals.keys()), None),
     }
 
 
 def load_products(project_root: Path) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
-    text = read_markdown(project_root / "farplane" / "products.md")
-    product_rows = parse_markdown_table(markdown_heading_section(text, "Products"))
-    lane_rows = parse_markdown_table(markdown_heading_section(text, "Work Lanes"))
-    products = [
-        {
-            "product_id": row.get("id", ""),
-            "name": row.get("product", ""),
-            "audience": row.get("audience", ""),
-            "output": row.get("output", ""),
-            "reward": row.get("reward", ""),
-            "source_ref": {"path": "farplane/products.md", "row_id": row.get("id", "")},
-        }
-        for row in product_rows
-        if row.get("id")
-    ]
-    lanes = [
-        {
-            "lane_id": row.get("lane", ""),
-            "default_weight": row.get("default_weight", ""),
-            "purpose": row.get("purpose", ""),
-        }
-        for row in lane_rows
-        if row.get("lane")
-    ]
-    return products, lanes
+    products_payload = read_json(project_root / "farplane" / "products.json")
+    product_records = products_payload.get("products")
+    lane_records = products_payload.get("lanes")
+    if isinstance(product_records, list):
+        products = []
+        for row in product_records:
+            if not isinstance(row, dict) or not row.get("id"):
+                continue
+            refs = row.get("refs") if isinstance(row.get("refs"), dict) else {}
+            products.append(
+                {
+                    "product_id": row.get("id", ""),
+                    "name": row.get("label", ""),
+                    "audience": row.get("audience", ""),
+                    "output": row.get("output", ""),
+                    "reward": row.get("reward", ""),
+                    "lane": row.get("lane", ""),
+                    "owner_skill": row.get("owner_skill", ""),
+                    "kpis": row.get("kpis", {}),
+                    "goals": row.get("goals", []),
+                    "artifact_workflows": row.get("artifact_workflows", []),
+                    "source_ref": {"path": refs.get("product") or f"farplane/products/{row.get('id')}/product.md", "row_id": row.get("id", "")},
+                }
+            )
+        lanes = []
+        if isinstance(lane_records, list):
+            for row in lane_records:
+                if not isinstance(row, dict) or not row.get("id"):
+                    continue
+                lanes.append(
+                    {
+                        "lane_id": row.get("id", ""),
+                        "default_weight": row.get("default_weight", ""),
+                        "purpose": row.get("purpose", ""),
+                    }
+                )
+        return products, lanes
+
+    return [], []
 
 
 def load_bindings(project_root: Path) -> dict[str, Any]:
@@ -1402,11 +1442,14 @@ def load_project_snapshot(project_root: Path, snapshot_date: str | None = None) 
     sources = [
         source_record(project_root, "farplane/manifest.json", "project-manifest"),
         source_record(project_root, "farplane/harness.md", "project-harness"),
-        source_record(project_root, "farplane/products.md", "project-products"),
+        source_record(project_root, "farplane/products.json", "project-products-index"),
         source_record(project_root, "farplane/goals.yaml", "project-goals"),
         source_record(project_root, "farplane/bindings.yaml", "project-bindings"),
-        source_record(project_root, "farplane/ops-memory.md", "ops-memory"),
     ]
+    sources.extend(
+        source_record(project_root, product_file.relative_to(project_root).as_posix(), "product-loop")
+        for product_file in sorted((project_root / "farplane" / "products").glob("*/product.md"))
+    )
     source_gaps = [
         {"id": gap, "severity": "source_gap", "owner": "metrics", "message": gap, "source_ref": {"path": "farplane/bindings.yaml"}}
         for gap in metric_gaps
@@ -1549,7 +1592,6 @@ def load_project_snapshot(project_root: Path, snapshot_date: str | None = None) 
             },
             "memory_reports": {
                 "memory_refs": memory_refs,
-                "ops_memory": source_record(project_root, "farplane/ops-memory.md", "ops-memory"),
                 "report_cards": reports,
                 "source_gap_ids": [],
             },

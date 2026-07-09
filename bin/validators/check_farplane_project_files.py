@@ -22,6 +22,12 @@ if str(ROOT) not in sys.path:
 
 from bin.validators.template_usage import TemplateUsageError, normalize_template_uses
 from bin.core.farplane_metric_schema import MetricObservationBatch
+from bin.validators.render_product_index import (
+    PRODUCT_ROOT,
+    load_products as load_product_definitions,
+    render_json_payload,
+    validate_products as validate_product_definitions,
+)
 
 
 TEXT_SUFFIXES = {
@@ -45,12 +51,6 @@ SECRET_VALUE_RE = re.compile(
     r"(?i)\b(api[_-]?key|access[_-]?token|secret|password)\b\s*[:=]\s*[\"']?[A-Za-z0-9_./+=-]{8,}"
 )
 RETIRED_INTEGRATIONS_REF = "farplane/" + "integrations.md"
-PRODUCTS_REQUIRED_HEADINGS = (
-    "## Team",
-    "## Products",
-    "## Work Lanes",
-    "## Constraints",
-)
 HARNESS_REQUIRED_HEADINGS = (
     "## Mission",
     "## Human Thesis",
@@ -297,8 +297,8 @@ def validate_framework_manifest(root: Path, framework_manifest: Path) -> list[st
         "farplane/manifest.json",
         "farplane/harness.md",
         "farplane/goals.yaml",
-        "farplane/products.md",
-        "farplane/ops-memory.md",
+        "farplane/products.json",
+        "farplane/products/",
         "farplane/automations.toml",
         "farplane/bindings.yaml",
         "farplane/hooks.json",
@@ -338,30 +338,6 @@ def validate_framework_manifest(root: Path, framework_manifest: Path) -> list[st
                 errors.append(f"{rel_path} standard.ignored path is missing or not a directory: {path_ref}.")
         elif not path.exists():
             errors.append(f"{rel_path} standard.ignored path is missing: {path_ref}.")
-
-    return errors
-
-
-def validate_products_file(root: Path, products_file: Path) -> list[str]:
-    rel_path = products_file.relative_to(root).as_posix()
-    text = products_file.read_text(encoding="utf-8")
-    errors: list[str] = []
-
-    if "kind: project-products" not in text[:700]:
-        errors.append(f"{rel_path} must use front matter kind: project-products.")
-    if "framework_template_version:" not in text[:700]:
-        errors.append(f"{rel_path} must declare framework_template_version in front matter.")
-
-    missing_headings = [heading for heading in PRODUCTS_REQUIRED_HEADINGS if heading not in text]
-    if missing_headings:
-        errors.append(f"{rel_path} missing required headings: {', '.join(missing_headings)}.")
-
-    if "## Team" in text and "| Field | Value |" not in text:
-        errors.append(f"{rel_path} Team must use the standard field/value table columns.")
-    if "## Products" in text and "| ID | Product | Audience | Output | Reward |" not in text:
-        errors.append(f"{rel_path} Products must use the standard product table columns.")
-    if "## Work Lanes" in text and "| Lane | Default Weight | Purpose |" not in text:
-        errors.append(f"{rel_path} Work Lanes must use the standard lane table columns.")
 
     return errors
 
@@ -559,15 +535,18 @@ def load_goal_kpi_ids(goals_file: Path) -> set[str]:
     return {entry["id"] for entry in load_goal_kpi_entries(goals_file)}
 
 
-def load_goal_kpi_entries(goals_file: Path) -> list[dict[str, str]]:
+def load_goals_payload(goals_file: Path) -> dict[str, Any]:
     if not goals_file.exists():
-        return []
+        return {}
     try:
         payload = yaml.safe_load(goals_file.read_text(encoding="utf-8")) or {}
     except yaml.YAMLError:
-        return []
-    if not isinstance(payload, dict):
-        return []
+        return {}
+    return payload if isinstance(payload, dict) else {}
+
+
+def load_goal_kpi_entries(goals_file: Path) -> list[dict[str, str]]:
+    payload = load_goals_payload(goals_file)
     goals = payload.get("goals") if isinstance(payload.get("goals"), dict) else {}
     entries: list[dict[str, str]] = []
     for axis_payload in goals.values():
@@ -587,6 +566,24 @@ def load_goal_kpi_entries(goals_file: Path) -> list[dict[str, str]]:
                     direction = ""
                 if kpi_id:
                     entries.append({"id": kpi_id, "target": target, "direction": direction})
+    return entries
+
+
+def load_goal_product_refs(goals_file: Path) -> list[dict[str, str]]:
+    payload = load_goals_payload(goals_file)
+    goals = payload.get("goals") if isinstance(payload.get("goals"), dict) else {}
+    entries: list[dict[str, str]] = []
+    for axis_id, axis_payload in goals.items():
+        if not isinstance(axis_payload, dict):
+            continue
+        for smart_goal in axis_payload.get("smart_goals") or []:
+            if not isinstance(smart_goal, dict):
+                continue
+            goal_id = str(smart_goal.get("id") or "").strip()
+            for product_ref in smart_goal.get("product_refs") or []:
+                product_id = str(product_ref or "").strip()
+                if product_id:
+                    entries.append({"axis_id": str(axis_id), "goal_id": goal_id, "product_id": product_id})
     return entries
 
 
@@ -704,14 +701,6 @@ def validate_metric_observation_files(root: Path, metrics: dict[str, dict]) -> l
     return errors
 
 
-def load_product_ids(products_file: Path) -> set[str]:
-    if not products_file.exists():
-        return set()
-    text = products_file.read_text(encoding="utf-8")
-    rows = parse_markdown_table(markdown_heading_section(text, "Products"))
-    return {row.get("id", "").strip() for row in rows if row.get("id", "").strip()}
-
-
 def sha256_file(path: Path) -> str | None:
     if not path.exists() or not path.is_file():
         return None
@@ -746,19 +735,50 @@ def validate_snapshot_freshness(root: Path, snapshot_path: Path) -> list[str]:
 def validate_cross_file_contract(root: Path) -> list[str]:
     goals_file = root / "farplane" / "goals.yaml"
     bindings_file = root / "farplane" / "bindings.yaml"
-    products_file = root / "farplane" / "products.md"
+    products_json_file = root / "farplane" / "products.json"
+    goals_payload = load_goals_payload(goals_file)
     metrics = load_binding_metrics(bindings_file)
     goal_kpi_entries = load_goal_kpi_entries(goals_file)
     goal_kpis = {entry["id"] for entry in goal_kpi_entries}
-    product_ids = load_product_ids(products_file)
+    goal_product_refs = load_goal_product_refs(goals_file)
+    product_ids: set[str] = set()
     errors: list[str] = []
     errors.extend(validate_goals_yaml_schema(goals_file))
     errors.extend(validate_metric_recipe_schema(metrics))
     errors.extend(validate_metric_observation_files(root, metrics))
+    if (root / PRODUCT_ROOT).exists():
+        product_definitions, product_definition_issues = load_product_definitions(root)
+        errors.extend(product_definition_issues)
+        errors.extend(validate_product_definitions(root, product_definitions))
+        product_ids = {
+            str(product.get("id") or "").strip()
+            for product in product_definitions
+            if str(product.get("id") or "").strip()
+        }
+        if product_definitions and products_json_file.exists():
+            expected_products_json = render_json_payload(product_definitions, goals_payload)
+            actual_products_json = products_json_file.read_text(encoding="utf-8")
+            if actual_products_json != expected_products_json:
+                errors.append(
+                    "farplane/products.json is stale; run python3 bin/validators/render_product_index.py --project-root . --write."
+                )
 
     missing_metric_recipes = sorted(kpi_id for kpi_id in goal_kpis if kpi_id not in metrics)
     if missing_metric_recipes:
         errors.append(f"farplane/goals.yaml KPI ids lack bindings.yaml metric recipes: {', '.join(missing_metric_recipes)}.")
+
+    missing_goal_product_refs = sorted(
+        {
+            entry["product_id"]
+            for entry in goal_product_refs
+            if entry["product_id"] not in product_ids
+        }
+    )
+    if missing_goal_product_refs:
+        errors.append(
+            "farplane/goals.yaml product_refs lack farplane/products/<product>/product.md entries: "
+            f"{', '.join(missing_goal_product_refs)}."
+        )
 
     allowed_products = product_ids | ALLOWED_SUPPORT_PRODUCT_IDS
     goal_kpis_without_product = sorted(
@@ -805,7 +825,7 @@ def validate_cross_file_contract(root: Path) -> list[str]:
         }
     )
     if unknown_products:
-        errors.append(f"farplane/bindings.yaml metric products are not in products.md: {', '.join(unknown_products)}.")
+        errors.append(f"farplane/bindings.yaml metric products are not in product registry: {', '.join(unknown_products)}.")
 
     errors.extend(validate_snapshot_freshness(root, root / ".farplane" / "project" / "ui" / "latest.json"))
     return errors
@@ -843,7 +863,6 @@ def validate(root: Path) -> list[str]:
     automations_toml = framework_dir / "automations.toml"
     bindings = framework_dir / "bindings.yaml"
     harness = framework_dir / "harness.md"
-    products = framework_dir / "products.md"
     hooks = framework_dir / "hooks.json"
     retired_file_growth_hook = framework_dir / "file-growth-hook.json"
     duplicate_project_charter = framework_dir / "project.md"
@@ -887,10 +906,9 @@ def validate(root: Path) -> list[str]:
     else:
         errors.extend(validate_harness_file(root, harness))
 
-    if not products.exists():
-        errors.append("farplane/products.md is required for project product catalogs.")
-    else:
-        errors.extend(validate_products_file(root, products))
+    products_json = root / "farplane" / "products.json"
+    if (root / PRODUCT_ROOT).exists() and not products_json.exists():
+        errors.append("farplane/products.json is required when product.md files exist.")
 
     if pm_manifest.exists():
         errors.extend(validate_pm_manifest(root, pm_manifest))

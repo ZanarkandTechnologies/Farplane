@@ -11,7 +11,8 @@ source_of_truth:
   - farplane/harness.md
   - farplane/goals.yaml
   - farplane/automations.toml
-  - farplane/products.md
+  - farplane/products/*/product.md
+  - farplane/products.json
   - docs/farplane-framework/reporting.md
   - farplane/bindings.yaml
   - farplane/hooks.json
@@ -36,7 +37,7 @@ skills/          = tracked reusable cross-project or repo skills
 ## Project File Minimality Rule
 
 Project files are declarative state. They may contain identity, goals, product
-rows, thresholds, constraints, refs, and human-approved boundaries.
+definitions, thresholds, constraints, refs, and human-approved boundaries.
 
 Project files must not contain algorithms, ordered workflow steps, fallback
 procedures, review procedures, learning procedures, or repeated agent
@@ -51,8 +52,10 @@ farplane/
   README.md
   harness.md
   goals.yaml
-  products.md
-  ops-memory.md
+  products/
+    <product>/product.md
+    <product>/skill.md
+  products.json
   automations.toml
   bindings.yaml
   hooks.json
@@ -94,15 +97,20 @@ active projects; the detailed review procedure lives in `interval-update`.
 
 Use YAML front matter plus Markdown sections and stable tables for the harness
 charter. Do not put a fenced `harness-program` DSL block in canonical project
-harness files. Product pipelines belong in `products.md`, current strategy
-belongs in structured `goals.yaml`, and full Codex automation configs belong in
-`automations.toml`.
+harness files. Product pipelines and current product strategy belong in
+`farplane/products/<product>/product.md`, the generated product registry lives
+at `products.json`, cross-product strategy belongs in structured `goals.yaml`,
+and full Codex automation configs belong in `automations.toml`.
 
 ### `farplane/goals.yaml`
 
 Project strategy context: north star, value function, goal axes, inline SMART
-goals, current bets, current milestone, and holds. Each goal axis may carry a
+goals, current milestone, and holds. Each goal axis may carry a
 compact `smart_goals` list with `id`, `target`, `kpis`, and `interpretation`.
+SMART goals may name `product_refs`; those refs declare which product loops are
+allowed to spend recurring attention on the goal. A product ref must resolve to
+`farplane/products/<product>/product.md`. Products are subordinate execution
+lanes for goals, not peers of the north star.
 KPI entries are parseable target pairs:
 
 ```yaml
@@ -115,61 +123,53 @@ kpis:
     direction: below
 ```
 
-Metric refresh prompts, chart shape, units, and pinned status live in `farplane/bindings.yaml`
-metric recipes. This file may evolve through evidence-backed goals deltas, but
-it must stay inside the static charter in `farplane/harness.md`. Horizon and
-Goal Advisor procedures live in their skills, not in this file.
+Metric refresh prompts, chart shape, units, and pinned status live in
+`farplane/bindings.yaml` metric recipes. Product KPI membership lives from the
+product side in `farplane/products/<product>/product.md` and must validate
+against `bindings.yaml#metrics`. This file may evolve through evidence-backed
+goals deltas, but it must stay inside the static charter in
+`farplane/harness.md`. Horizon and Goal Advisor procedures live in their
+skills, not in this file.
 
-### `farplane/products.md`
+### `farplane/products.json`
 
-Project product catalog: team identity, product rows, work-lane weights, and
-constraints. Products are not chores. Interval planners consume this data;
-the planning/refill procedure lives in `interval-update`.
+Generated machine product index for UI, snapshots, validators, and automation
+context. It is generated from product-local `product.md` files and carries
+product refs, lane weights, KPI membership, product goals, artifact workflows,
+human gates, worker policy, and the goal-product matrix in JSON. Do not
+hand-edit it.
 
-Use Markdown with YAML front matter and the standard headings `Team`,
-`Products`, `Work Lanes`, and `Constraints`.
+```text
+farplane/products/*/product.md
+  -> farplane/products.json
+```
 
-### `farplane/ops-memory.md`
+Use the JSON when a tool, UI, automation, or validator needs structured product
+data. Humans and agents should inspect the owning product-local `product.md`
+files when they need prose strategy or loop context.
 
-Active operating memory: the compact, mutable place for what the autonomous
-team is doing now. It records current focus, active projects, tracked feedback
-refs, next frontier, constraints, parking lot, recent decisions, and Pulse
-notes. Stable strategy stays in `farplane/goals.yaml`; product lanes stay in
-`farplane/products.md`; executable work stays in `tickets/`; dated receipts
-stay under `.farplane/reports/`.
+### `farplane/products/<product>/product.md`
 
-Use the template in
-`skills/init-advisor/references/OPS_MEMORY_TEMPLATE.md`. Keep the headings
-stable enough that agents can skim and update them, but do not treat the file as
-a deterministic database. The interval agent may semantically read active
-project fields such as `lane`, `goal_axes`, `contribution_mode`,
-`weekly_runway_decision`, `expected_reward`, `done_signal`, `critical_path`,
-and `next_frontier`; missing or stale fields become observation gaps, planning
-requests, or instrumentation tickets.
+Canonical product-loop definition and product loop program: product identity,
+lane, default allocation, owner skill, local loop refs, human gates, KPI refs,
+artifact workflows, product-level goals, current strategy, loop contract,
+product loop, and progress-entry shape. The frontmatter is indexed into
+`products.json`; the Markdown body is the interval-editable strategy/program
+surface. Product goals are stable desired outcomes for the loop. Current
+strategy and current hypothesis live in the `Current Strategy` section. Runtime
+attempts and learning live in ignored product `progress.md`. Metric refresh
+prompts stay in `farplane/bindings.yaml`.
 
-The recommended sections are:
-
-| Section | Purpose | Update owner |
-| --- | --- | --- |
-| `Current Focus` | One compact statement of the active frontier. | Daily/Weekly Interval, Pulse when reporting stale focus. |
-| `Active Projects` | Flexible project blocks with contribution mode, runway decision, expected reward, done signals, critical path, and next frontier. | Weekly Interval, with Pulse citing relevant blocks for tactical tickets. |
-| `Tracked Feedback` | Content refs, customer/user feedback refs, runtime/product feedback refs, and observation gaps that help agents choose skill, CLI, or ticket searches. | Daily/Weekly Interval or explicit feedback-capture tickets. |
-| `Next Frontier` | Primary and secondary next moves that should bias planning. | Daily/Weekly Interval. |
-| `Constraints` | Local reminders that ops-memory cannot authorize goals/products, spend, publishing, accounts, deploys, or customer contact. | Human-approved policy or interval report. |
-| `Parking Lot` | Real ideas that should not consume active budget this week. | Weekly Interval. |
-| `Recent Decisions` | Compact decision notes that affect near-term planning. | Daily/Weekly Interval. |
-| `Pulse Notes` | Instructions for how Pulse should cite, distrust, or use ops-memory. | Pulse/Interval contract updates. |
-
-Do not store raw metric values here when metric observation batches can own
-them. Use `Tracked Feedback` for refs and tracking intent; store daily readings
-under `.farplane/metrics/observations/<source_id>/<YYYY-MM-DD>.json` and render
-UI trends from the project snapshot at `.farplane/project/ui/latest.json`.
-
-For autonomous growth and owned-content distribution, store posted/draft content
-tracking rows in `.farplane/content/ledger.jsonl`, not in ops memory. Ops memory
-may summarize the active campaign or next frontier; the content ledger owns
-repeatable fetch targets for publishing skills, interval metric refresh, and
-future UI distribution views.
+`product.md` is the PM/team surface: what the product exists to move, which
+goal and KPI evidence matters, what strategy is currently active, what gates
+constrain the loop, and what learning shape the product should write.
+`skill.md` is the repeatable execution process for the product's artifacts.
+`progress.md` is a product learning notebook, not a Pulse event stream. Write
+only entries that change what the product should try next: candidate moves,
+selected moves, ticket/artifact refs, feedback results, learned rules, next
+levers, blockers, or compact strategy-delta receipts. Beat-level accounting
+belongs in Pulse reports and ledgers; strategy rationale belongs in interval
+reports; current active strategy belongs in `product.md`.
 
 ### `farplane/automations.toml`
 
@@ -295,7 +295,7 @@ Codex stores:
 
 ```text
 fetch_tickets(window, kpi_reward?, status?)
-kpis_for_product(product_id, metric_recipes)
+kpis_for_product(product_id, product_md, metric_recipes)
 ticket_count_by_kpi(window, kpi_id, status?)
 ticket_count_by_product(window, product_id, status?)
 kpi_attributed_ticket_ratio(window)
@@ -305,10 +305,11 @@ backfill_ticket_thread_associations(mine_runs_root, output_path)
 ```
 
 Tickets do not carry `product_id` or `created_by`. Product ticket views are
-transitive: product -> KPI IDs in `bindings.yaml` -> tickets whose
-`Reward.kpi_rewards` include those KPI IDs. KPI-attributed ticket ratio means
-rewarded tickets divided by touched tickets; it is not proof of who created or
-executed the ticket.
+transitive: product -> KPI IDs in `farplane/products/<product>/product.md` ->
+tickets whose `Reward.kpi_rewards` include those KPI IDs. Metric mechanics and
+source-gap prompts still live in `bindings.yaml`. KPI-attributed ticket ratio
+means rewarded tickets divided by touched tickets; it is not proof of who
+created or executed the ticket.
 
 AI-planned ticket identity is frontmatter-owned with `rewards.kpi`.
 `skills/pulse-update/scripts/list_pulse_board.py` accepts active ticket paths or
@@ -396,7 +397,8 @@ missing. It does not call external accounts.
 ### `.agents/skills/`
 
 Project-local product skills. Use this for monetizable or company-specific
-workflows derived from `farplane/products.md`, such as
+workflows derived from `farplane/products/<product>/product.md` and the
+generated `farplane/products.json` registry, such as
 `.agents/skills/<product-skill>/SKILL.md`.
 
 These local skills are referenced by tickets, interval reports, or automation
@@ -464,12 +466,22 @@ Then the body `## Reward` block carries expected reward and guard detail:
 kpi_rewards:
   - kpi_id: accepted_harness_improvements
     expected_reward: "one proof-backed shipped harness improvement"
+    check_in_at: "2026-07-15T09:00:00+08:00"
+    actual_result:
+    reward_score:
+    reward_score_reason:
 guard: "count only after completion proof; stop before expanding scope"
 ```
 
 Only KPI recipes whose source is `ticket_reward_feedback` become ticket-derived
 metric values. Rewards for externally sourced KPIs are planning attribution
-only; the metric value still comes from its configured source.
+only; the metric value still comes from its configured source. `check_in_at`
+marks when interval update should compare the expected reward against observed
+reality. `actual_result`, `reward_score`, and `reward_score_reason` are filled
+by the reward-checkin analyzer. `reward_score` is a scalar from `-1` to `1`,
+where `1` means the actual result strongly matched or exceeded the expectation,
+`0` means unclear or weakly related, and `-1` means the actual contradicted the
+expectation or created negative value.
 
 ## Ignored Runtime State
 
@@ -516,6 +528,7 @@ Generated reports. New framework reports should be date-stamped:
 ```text
 .farplane/reports/pulse/<YYYY-MM-DDTHHMMSSZ>.md
 .farplane/reports/interval/<interval_id>/<YYYY-MM-DDTHHMMSSZ>.md
+.farplane/reports/interval/<interval_id>/context/<YYYY-MM-DDTHHMMSSZ>.md
 .farplane/reports/dogfood-review/<YYYY-MM-DDTHHMMSSZ>.md
 .farplane/reports/index.json
 ```
@@ -536,6 +549,9 @@ ui_summary: "Refresh the active frontier after the KPI/autonomy metric chain com
 ```
 
 Run `farplane reports index --project-root <project>` to rebuild the registry.
+Run `farplane reports repair-refs --project-root <project>` when existing
+report Markdown has valid frontmatter but lacks the canonical path-derived
+`ref`.
 The index scans `<project>/.farplane/reports/**/*.md`, includes only reports
 with non-empty `ref`, `kind`, `created_at`, and `ui_summary`, derives
 `parent_ref` and `children_refs` from `ref`, and preserves pass-through

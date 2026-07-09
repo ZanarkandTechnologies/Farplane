@@ -2,6 +2,7 @@ import json
 from pathlib import Path
 
 from bin.validators.check_farplane_project_files import validate
+from bin.validators.render_product_index import load_products, render_json_payload
 
 RETIRED_INTEGRATIONS_REF = "farplane/" + "integrations.md"
 
@@ -29,8 +30,8 @@ def write_framework_manifest(farplane: Path) -> None:
                         "farplane/manifest.json",
                         "farplane/harness.md",
                         "farplane/goals.yaml",
-                        "farplane/products.md",
-                        "farplane/ops-memory.md",
+                        "farplane/products.json",
+                        "farplane/products/",
                         "farplane/automations.toml",
                         "farplane/bindings.yaml",
                         "farplane/hooks.json",
@@ -84,7 +85,7 @@ def write_required_project_files(root: Path) -> None:
     for path in ("AGENTS.md", "PROJECT_RULES.md", "ARCHITECTURE.md"):
         (root / path).write_text(f"# {path}\n", encoding="utf-8")
 
-    for name in ("README.md", "ops-memory.md"):
+    for name in ("README.md",):
         (farplane / name).write_text(
             "---\nframework_template_version: \"0.1.0\"\n---\n\n# Test\n",
             encoding="utf-8",
@@ -146,38 +147,50 @@ Static charter changes require approval.
 """,
         encoding="utf-8",
     )
-    (farplane / "products.md").write_text(
+    product_dir = farplane / "products" / "test"
+    product_dir.mkdir(parents=True)
+    (product_dir / "skill.md").write_text(
+        "---\nname: test-product-skill\n---\n\n# Test Product Skill\n",
+        encoding="utf-8",
+    )
+    (product_dir / "product.md").write_text(
         """---
-kind: project-products
-framework_template_version: "0.1.0"
+kind: product-loop
+id: test
+label: Test product
+status: active
+created_at: 2026-07-01
+updated_at: 2026-07-01
+sort_order: 10
+lane: experiment
+lane_purpose: Test a product hypothesis.
+default_weight: 50
+audience: users
+output: artifact
+reward: signal
+owner_skill: test-product-skill
+skill_ref: farplane/products/test/skill.md
+progress_ref: farplane/products/test/progress.md
+kpis:
+  primary: []
+  supporting: []
+  guardrail: []
+artifact_workflows:
+  - id: test_artifact
+    lane: experiment
+    owner: test-product-skill
+    planning_artifact: test plan
+    execution_artifact: test artifact
+    feedback_question: accept / revise / reject
 ---
 
-# Products
-
-## Team
-
-| Field | Value |
-| --- | --- |
-| Archetype | test_project |
-
-## Products
-
-| ID | Product | Audience | Output | Reward |
-| --- | --- | --- | --- | --- |
-| test | Test product | users | artifact | signal |
-
-## Work Lanes
-
-| Lane | Default Weight | Purpose |
-| --- | ---: | --- |
-| experiment | 50 | Test a product hypothesis. |
-
-## Constraints
-
-- Products are not chores.
+# Test Product
 """,
         encoding="utf-8",
     )
+    products, issues = load_products(root)
+    assert not issues
+    (farplane / "products.json").write_text(render_json_payload(products, {}), encoding="utf-8")
 
     (farplane / "bindings.yaml").write_text(
         'kind: project-bindings\nframework_template_version: "0.1.0"\nproject: {}\n',
@@ -232,33 +245,16 @@ type = "interval"
     assert "farplane/automations.toml automations[1] must not store runtime state keys: last_run_at." in errors
 
 
-def test_missing_products_file_fails(tmp_path: Path) -> None:
+def test_missing_products_json_file_fails(tmp_path: Path) -> None:
     farplane = tmp_path / "farplane"
     farplane.mkdir()
     write_framework_manifest(farplane)
     write_required_project_files(tmp_path)
-    (farplane / "products.md").unlink()
+    (farplane / "products.json").unlink()
 
     errors = validate(tmp_path)
 
-    assert "farplane/products.md is required for project product catalogs." in errors
-
-
-def test_malformed_products_file_fails(tmp_path: Path) -> None:
-    farplane = tmp_path / "farplane"
-    farplane.mkdir()
-    write_framework_manifest(farplane)
-    write_required_project_files(tmp_path)
-    (farplane / "products.md").write_text(
-        "---\nframework_template_version: \"0.1.0\"\n---\n\n# Products\n\n## Products\n",
-        encoding="utf-8",
-    )
-
-    errors = validate(tmp_path)
-
-    assert "farplane/products.md must use front matter kind: project-products." in errors
-    assert any(error.startswith("farplane/products.md missing required headings:") for error in errors)
-    assert "farplane/products.md Products must use the standard product table columns." in errors
+    assert "farplane/products.json is required when product.md files exist." in errors
 
 
 def test_missing_harness_file_fails(tmp_path: Path) -> None:
@@ -420,6 +416,32 @@ goals:
     assert "farplane/goals.yaml KPI ids lack bindings.yaml metric recipes: unknown_metric." in errors
 
 
+def test_goal_product_ref_without_product_fails(tmp_path: Path) -> None:
+    farplane = tmp_path / "farplane"
+    farplane.mkdir()
+    write_framework_manifest(farplane)
+    write_required_project_files(tmp_path)
+    (farplane / "goals.yaml").write_text(
+        """kind: project-goals
+framework_template_version: "0.1.0"
+goals:
+  test_axis:
+    smart_goals:
+      - id: missing_product_ref
+        product_refs:
+          - missing_product
+""",
+        encoding="utf-8",
+    )
+
+    errors = validate(tmp_path)
+
+    assert (
+        "farplane/goals.yaml product_refs lack farplane/products/<product>/product.md entries: missing_product."
+        in errors
+    )
+
+
 def test_metric_product_without_product_row_fails(tmp_path: Path) -> None:
     farplane = tmp_path / "farplane"
     farplane.mkdir()
@@ -438,7 +460,7 @@ metrics:
 
     errors = validate(tmp_path)
 
-    assert "farplane/bindings.yaml metric products are not in products.md: missing_product." in errors
+    assert "farplane/bindings.yaml metric products are not in product registry: missing_product." in errors
 
 
 def test_goal_kpi_metric_recipe_without_product_fails(tmp_path: Path) -> None:
@@ -786,7 +808,7 @@ def test_framework_manifest_shape_is_validated(tmp_path: Path) -> None:
         "PROJECT_RULES.md",
         "ARCHITECTURE.md",
         "farplane/README.md",
-        "farplane/products.md",
+        "farplane/products.json",
         "tickets/templates/ticket.md",
     ]:
         assert path in missing_surface_error

@@ -20,13 +20,13 @@ embedding one project’s context into the skill.
 
 This workflow plans and routes. It does not execute leaf work. It also does not
 need to fully pre-plan ticket inventory when the project enables Pulse
-next-wave planning; instead it can emit focus, bets, prefer/avoid rules,
+next-wave planning; instead it can emit product focus, current hypothesis, prefer/avoid rules,
 blocked items, reward signals, lane distribution, constraints, and an
-ops-memory refresh that Pulse uses to slice tactical tickets when the board is
-empty. Treat Pulse as a bold bounded tactical idea engine and the interval as
-the evidence check that challenges Pulse's current operating belief. Do not add
-an idea ledger or second planning database; use the interval report and
-`farplane/ops-memory.md`.
+product strategy refresh that Pulse uses to slice tactical tickets when the
+board is empty. Treat Pulse as a bold bounded tactical idea engine and the
+interval as the evidence check that challenges product-local operating beliefs.
+Do not add an idea ledger or second planning database; use the interval report
+and product `product.md` strategy sections.
 
 ## Workflow Signature
 
@@ -35,7 +35,7 @@ priority_planning(context_bundle, review_window, planning_window,
                   workflow_findings?, parent_context_refs?, planning_policy?)
   -> strategy_input + lane_distribution + priorities + depriorities
      + proof_checks + downstream_guidance + goals_delta_candidates
-     + ops_memory_challenge? + ops_memory_delta? + source_gaps
+     + product_strategy_review? + product_strategy_delta? + source_gaps
 
 state: reads(context_bundle, workflow_findings?, parent_context_refs?,
              planning_policy?);
@@ -43,8 +43,8 @@ state: reads(context_bundle, workflow_findings?, parent_context_refs?,
 gates: report_evidence_available; planning_window_sized; proof_checks_named;
        selected_priorities_move_named_goal_or_bottleneck;
        strategy_input_named_when_pulse_next_wave_enabled;
-       ops_memory_challenge_named_when_pulse_beliefs_change;
-       ops_memory_delta_named_when_active_memory_changes;
+       product_strategy_review_named_when_product_beliefs_change;
+       product_strategy_delta_named_when_active_strategy_changes;
        leaf_work_routed_not_executed; material_goal_deltas_approval_gated
 fails: writing a vague plan; mixing reporting and execution; hiding
        depriorities; filling time without a needle-moving rationale;
@@ -57,19 +57,20 @@ Default sources:
 
 - the static human thesis, durable leverage commitments, non-tradeoffs, and
   allocation guardrails from the context bundle.
-- product work lanes, default weight hints, product boundaries, reward signals,
-  and local product skill refs from `farplane/products.md` and
+- product work lanes, default weight hints, product boundaries, current
+  strategies, reward signals,
+  and local product skill refs from `farplane/products.json` and
   `.agents/skills/` in the context bundle.
 - parent context refs and goals from the context bundle.
 - enabled workflow findings such as plan progress, goal drift, ticket board
   drift, feedback obligations, opportunity signals, attention drift, and
   metric snapshots.
 - tickets, Pulse reports, interval reports, worker outcomes, and memory docs.
-- active operating memory from `farplane/ops-memory.md` when present. This
-  captures current focus, active projects, critical paths, next frontier,
-  constraints, parking lot, and recent operating decisions. It is mutable
-  working memory, not a replacement for goals, products, tickets, or dated
-  interval reports.
+- product `## Current Strategy` sections from
+  `farplane/products/<product>/product.md`. These capture product-local focus,
+  current hypothesis, allocation hints, next moves, constraints, and review
+  cadence. They are mutable working context, not a replacement for goals,
+  generated product indexes, tickets, or dated interval reports.
 
 Optional sources:
 
@@ -103,8 +104,9 @@ that a second read reduces self-confirmation.
   - [ ] Group inputs by goals, completed work, unfinished work, feedback,
         board hygiene, opportunity signals, metrics, and attention drift.
   - [ ] Convert changed insight into implication into action.
-  - [ ] Identify the current Pulse belief from ops memory, recent Pulse reports,
-        generated tickets, or interval strategy inputs when available.
+  - [ ] Identify current product beliefs from product strategy sections, recent
+        Pulse reports, generated tickets, or interval strategy inputs when
+        available.
 - [ ] 3. Rank priorities.
   - [ ] Choose a lane distribution for `planning_window`, using product lane
         hints as defaults and recent evidence to adjust them.
@@ -117,17 +119,17 @@ that a second read reduces self-confirmation.
   - [ ] For each selected lane or priority, name the goal, bottleneck, or
         reward signal it is expected to move; reject priorities that only fill
         capacity or sound useful without moving the plan.
-  - [ ] When Pulse next-wave planning is enabled, emit a compact strategy input:
-        focus, bets, prefer, avoid, blocked, reward, and any lane-weight
-        overrides.
-  - [ ] Challenge the current Pulse belief before refreshing ops memory: name
-        what worked, what failed, which belief to keep, revise, or drop, and
-        the guard for any double-down.
-  - [ ] When the project has `farplane/ops-memory.md`, emit a compact
-        ops-memory delta: current focus, active projects to keep/update/park,
-        next frontier, constraints, parking lot changes, and recent decisions.
-        Keep material goals, KPI, product-boundary, publishing, spend, account,
-        or customer-contact changes in their owning files or approval gates.
+  - [ ] When Pulse next-wave planning is enabled, emit compact per-product
+        strategy input: product, focus, current hypothesis, prefer, avoid,
+        blocked, reward, and any allocation hint.
+  - [ ] Challenge current product beliefs before refreshing product strategy:
+        name what worked, what failed, which belief to keep, revise, or drop,
+        and the guard for any double-down.
+  - [ ] When write policy allows product strategy edits, emit compact product
+        strategy deltas: focus, current hypothesis, allocation hint, next
+        moves, constraints, last interval ref, and next review. Keep material
+        goals, KPI, product-boundary, publishing, spend, account, or
+        customer-contact changes in their owning files or approval gates.
 - [ ] 4. Name depriorities.
   - [ ] Identify drag, stale assumptions, weak fit, and opportunity cost.
   - [ ] Decide revisit, park, kill, or split.
@@ -142,7 +144,7 @@ that a second read reduces self-confirmation.
         execute ready tickets, create bounded tactical next-wave tickets from
         fresh strategy when empty, or request more planning. Pulse must not
         create strategy.
-  - [ ] Route ops-memory refreshes as active-context writeback only. Do not
+  - [ ] Route product strategy refreshes as active-context writeback only. Do not
         create a roadmap registry, project schema, database, or second report
         archive from this workflow.
 - [ ] 6. Gate strategy changes.
@@ -177,8 +179,9 @@ Priority row:
 Strategy input row:
 
 ```text
-ops_memory_challenge:
-  pulse_belief_reviewed:
+product_strategy_review:
+  product:
+  product_belief_reviewed:
   what_worked:
   what_failed:
   belief_to_keep:
@@ -187,20 +190,22 @@ ops_memory_challenge:
   double_down_guard:
   source_gap:
 strategy_input:
+  product:
   focus:
-  bets:
+  current_hypothesis:
   prefer:
   avoid:
   blocked:
   reward:
-  lane_weight_overrides:
-ops_memory_delta:
-  current_focus:
-  active_projects:
-  next_frontier:
+  allocation_hint:
+product_strategy_delta:
+  product:
+  focus:
+  current_hypothesis:
+  next_moves:
   constraints:
-  parking_lot:
-  recent_decisions:
+  last_interval_ref:
+  next_review:
 ```
 
 ## Gotchas
@@ -209,8 +214,8 @@ ops_memory_delta:
 - Larger planning windows need stronger proof checks, not more vague bullets.
 - Goal Advisor is for durable goal/ticket architecture, not every tiny Pulse
   decision.
-- Ops memory should be edited in place and kept compact. If a project is stale,
-  park or remove it instead of appending a new roadmap.
+- Product strategy should be edited in place and kept compact. If a product
+  strategy is stale, narrow or park it instead of appending a new roadmap.
 - Do not turn promising ideas into a separate ledger. Pulse can generate bold
   tactical ideas; intervals decide which operating beliefs deserve more runway.
 
@@ -229,8 +234,9 @@ priorities:
     owner_or_next_surface:
     expected_output:
     proof_check:
-ops_memory_challenge:
-  pulse_belief_reviewed:
+product_strategy_review:
+  product:
+  product_belief_reviewed:
   what_worked:
   what_failed:
   belief_to_keep:
@@ -239,13 +245,14 @@ ops_memory_challenge:
   double_down_guard:
   source_gap:
 strategy_input:
+  product:
   focus:
-  bets:
+  current_hypothesis:
   prefer:
   avoid:
   blocked:
   reward:
-  lane_weight_overrides:
+  allocation_hint:
 lane_distribution:
   - lane:
     planned_weight:
@@ -263,7 +270,7 @@ downstream_guidance:
   pulse_constraints:
   ticket_deltas:
   goal_advisor_handoffs:
-ops_memory_delta:
+product_strategy_delta:
 goals_delta_candidates:
   - delta:
     decision: auto_apply | approval_required | rejected_source_gap

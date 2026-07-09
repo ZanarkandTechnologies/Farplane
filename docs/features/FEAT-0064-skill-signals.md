@@ -15,7 +15,7 @@ refs:
   - farplane/automations.toml
   - docs/skills/registry.jsonl
   - docs/farplane-framework/lifecycle.md
-  - farplane/products.md
+  - farplane/products.json
   - skills/skill-maintenance/graph/README.md
   - skills/taste-loop/SKILL.md
   - skills/taste-loop/templates/heartbeat-prompt.md
@@ -33,7 +33,7 @@ surfaces:
 source_refs:
   - docs/farplane-framework/lifecycle.md
   - docs/skills/system.md
-  - farplane/products.md
+  - farplane/products.json
   - skills/skill-maintenance/graph/README.md
 external_refs: []
 evidence_refs:
@@ -146,7 +146,7 @@ flowchart LR
   registry["docs/skills/registry.jsonl<br/>graph refs"]:::keep
   heat["graph heat<br/>direct + composition"]:::changed
   burden["maintenance burden<br/>bloat, stale QA, missing evals"]:::changed
-  taste["taste-loop input decisions<br/>farplane/products.md"]:::changed
+  taste["taste-loop input decisions<br/>farplane/products.json"]:::changed
   decision["keep / harden / refine<br/>merge / watch / retire_review"]:::added
   retire["retire_review candidate"]:::retired
 
@@ -175,7 +175,7 @@ Source context:
 
 - `docs/farplane-framework/lifecycle.md`
 - `docs/skills/system.md`
-- `farplane/products.md`
+- `farplane/products.json`
 - `skills/skill-maintenance/graph/README.md`
 
 Evidence:

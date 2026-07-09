@@ -20,7 +20,8 @@ source_of_truth:
   - farplane/manifest.json
   - farplane/harness.md
   - farplane/goals.yaml
-  - farplane/products.md
+  - farplane/products/*/product.md
+  - farplane/products.json
   - farplane/automations.toml
   - farplane/bindings.yaml
   - farplane/hooks.json
@@ -39,7 +40,7 @@ tickets, durable docs, reusable skills, proof surfaces, versioned templates,
 and recurring Codex automation loops.
 
 ```text
-project = files + tickets + skills + goals + bindings + ops memory + Pulse/Interval + runtime reports
+project = files + tickets + skills + goals + bindings + product strategy + Pulse/Interval + runtime reports
 ```
 
 This framework is the bridge between the two main product surfaces:
@@ -101,7 +102,11 @@ PROJECT_ROOT/
     manifest.json
     harness.md
     goals.yaml
-    products.md
+    products/
+      <product>/product.md
+      <product>/skill.md
+      <product>/progress.md
+    products.json
     automations.toml
     bindings.yaml
     hooks.json
@@ -145,8 +150,9 @@ reports, eval runs, and logs.
 `project.name`, `project.description`, and `project.archetype`. The richer
 description of what the project is lives in Markdown:
 `farplane/harness.md` owns the static human charter,
-`farplane/products.md` owns the product catalog and work lanes, and
-`farplane/goals.yaml` owns current strategy. The reporting standard is a
+`farplane/products/<product>/product.md` owns product-loop identity and config,
+generated `farplane/products.json` exposes the machine/UI product registry,
+and `farplane/goals.yaml` owns current strategy. The reporting standard is a
 framework doc, not a project primitive; see [Reporting](reporting.md).
 Project-specific product workflows live under `.agents/skills/`; promote them
 to root `skills/` only after repeated evidence shows cross-project reuse.
@@ -177,7 +183,8 @@ init_advisor(project_root?, project_idea?, repo_shape?, stack_profile?, init_mod
    + farplane/manifest.json
    + farplane/harness.md
    + farplane/goals.yaml
-   + farplane/products.md
+   + farplane/products/<product>/product.md
+   + farplane/products.json
    + farplane/automations.toml
    + farplane/bindings.yaml
    + farplane/hooks.json
@@ -188,9 +195,10 @@ init_advisor(project_root?, project_idea?, repo_shape?, stack_profile?, init_mod
 
 In `full` init mode, `init-advisor` calls `harness-creator` after the
 substrate exists. `harness-creator` fills or refines the split project files:
-static charter in `harness.md`, product rows and work lanes in `products.md`,
-strategy and KPIs in `goals.yaml`, full automation configs in `automations.toml`,
-and safe coordinates in `bindings.yaml`. It owns the smaller advisor calls such
+static charter in `harness.md`, product definitions in
+`products/<product>/product.md`, generated product registry in
+`products.json`, strategy and KPIs in `goals.yaml`, full automation configs in
+`automations.toml`, and safe coordinates in `bindings.yaml`. It owns the smaller advisor calls such
 as research, `horizon-advisor`, `harness-advisor`, `skill-creator`, and
 `goal-advisor` when those are needed. Canonical `harness.md` files use YAML
 front matter plus Markdown sections, not a fenced custom program DSL.
@@ -205,7 +213,7 @@ interval_update(...)  # scheduled report-then-plan loop
 ```
 
 Pulse is the executor loop. It wakes frequently, reads the static harness
-charter, dynamic product/strategy context, active ops memory, and recent
+charter, dynamic product strategy, generated product indexes, and recent
 strategy inputs; reconciles outcomes; executes ready tickets up to policy cap;
 requests planning when no executable work exists; and records decision/reward
 state.

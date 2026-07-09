@@ -29,9 +29,10 @@ reflect past window -> close or update rewards -> plan next window -> emit guida
 
 Run reflection workflows first, usually in parallel or as lightweight inline
 passes over the same context bundle. Then close due reward signals and score
-leverage before choosing new bets. `priority_planning` is the final synthesis
-step that turns reflection, reward closure, and leverage findings into the
-next-window plan, Pulse constraints, ticket deltas, and Goal Advisor handoffs.
+leverage before choosing new strategy moves. `priority_planning` is the final
+synthesis step that turns reflection, reward closure, and leverage findings
+into the next-window plan, product strategy updates, Pulse constraints, ticket
+deltas, and Goal Advisor handoffs.
 
 Do not wrap this skill in a hidden scheduler thread. If a project needs another
 cadence, create another explicit automation that calls this skill with a named
@@ -41,9 +42,9 @@ Every interval-planned ticket must carry expected reward at planning time.
 Ticket deltas emitted by Daily, Weekly, or other interval reports are part of
 the planning algorithm, so they must include frontmatter `rewards.kpi` plus a
 parseable `## Reward` fenced YAML block with `kpi_rewards[]` entries,
-`expected_reward` text, and a `guard`. At least one `kpi_id` must come from
-`farplane/bindings.yaml` metrics and map to a product, lane, or artifact
-workflow in `farplane/products.md`. If the interval cannot name the expected
+`expected_reward` text, `check_in_at`, and a `guard`. At least one `kpi_id`
+must come from `farplane/products/<product>/product.md` KPI refs and resolve to
+`farplane/bindings.yaml#metrics`. If the interval cannot name the expected
 reward, it should emit Pulse guidance or a planning blocker instead of creating
 a ticket.
 
@@ -67,8 +68,8 @@ interval_update(project_root, interval_id, review_window, planning_window,
 
 state:
   reads(farplane/harness.md?,
-        farplane/products.md?,
-        farplane/ops-memory.md?,
+        farplane/products/*/product.md?,
+        farplane/products.json?,
         .agents/skills/**/SKILL.md?,
         farplane/goals.yaml?,
         tickets/,
@@ -85,7 +86,7 @@ state:
         worker thread refs when available)
   writes(.farplane/reports/interval/<interval_id>/<YYYY-MM-DDTHHMMSSZ>.md,
          optional .farplane/reports/interval/<interval_id>/context/<YYYY-MM-DDTHHMMSSZ>.md,
-         farplane/ops-memory.md when write_policy allows compact active-focus refresh,
+         farplane/products/*/product.md when write_policy allows compact product-strategy refresh,
          farplane/goals.yaml only through explicit goals-delta policy)
 
 gates:
@@ -114,8 +115,8 @@ caller-supplied `context_refs`.
 ```text
 default_context_refs(project_root, interval_id) = {
   harness_ref: farplane/harness.md,
-  products_ref: farplane/products.md,
-  ops_memory_ref: farplane/ops-memory.md,
+  products_ref: farplane/products.json,
+  product_defs_ref: farplane/products/*/product.md,
   goals_ref: farplane/goals.yaml,
   ticket_refs: tickets/,
   memory_refs: [docs/MEMORY.md, docs/HISTORY.md, docs/LESSONS.md, docs/TROUBLES.md],
@@ -156,6 +157,7 @@ report_workflows:
   opportunity_signals?: bool | "when_sources_exist"
   goal_drift?: bool | "light"
   metric_snapshot?: bool | "when_sources_exist"
+  reward_checkins?: bool | "light"
   compounding_leverage_review?: bool | "light"
   skill_hardening?: bool | "when_sources_exist"
   skill_refinement?: bool | "when_sources_exist"
@@ -202,6 +204,11 @@ goal_drift(review_window)
 metric_snapshot(review_window)
   -> metric_status + gaps
   ref: references/workflows/metric-snapshot.md
+
+reward_checkins(review_window, planning_window)
+  -> due_reward_checkins + bad_predictions + retro_ticket_candidates
+  ref: references/workflows/reward-checkins.md
+  script: scripts/reward_checkins.py
 
 Metric refresh helpers:
 
@@ -290,8 +297,14 @@ priority_planning(review_window, planning_window)
         for enabled workflows, then run inline or read-only subagent analysis
         lanes as those refs direct.
 - [ ] 4. Close rewards and synthesize leverage.
+  - [ ] When `reward_checkins` is enabled, run the due-check helper, then use a
+        read-only analyzer to fill `actual_result`, `reward_score`, and
+        `reward_score_reason` for due reward items. `reward_score` is `-1..1`
+        similarity between expected reward and actual result. Route
+        low-scoring or source-gap items into the interval report and create a
+        retro ticket only when the miss needs follow-up work.
   - [ ] When `compounding_leverage_review` is enabled, close due reward
-        signals from prior interval reports before selecting new leverage bets.
+        signals from prior interval reports before selecting new leverage moves.
   - [ ] When metric snapshots or reward signals are ambiguous, use a metric
         card before allowing them to drive planning.
   - [ ] When `skill_hardening` is enabled, route repeated troubles, lessons,
@@ -324,8 +337,8 @@ priority_planning(review_window, planning_window)
         local product skill owns the workflow.
   - [ ] For every ticket delta or planned worker ticket, include frontmatter
         `rewards.kpi` and a parseable `## Reward` block with `kpi_rewards[]`,
-        `expected_reward`, and `guard`; the KPI ID must exist in
-        `farplane/bindings.yaml`, map to `farplane/products.md`, and match
+        `expected_reward`, `check_in_at`, and `guard`; the KPI ID must exist in
+        product `product.md`, resolve to `farplane/bindings.yaml`, and match
         between frontmatter and body. Do not create rewardless tickets from
         interval planning.
   - [ ] Return Pulse guidance as constraints for the fast executor loop.
@@ -337,8 +350,13 @@ priority_planning(review_window, planning_window)
         interval frontmatter such as `project`, `automation_id`,
         `interval_id`, `report_workflows`, `status`, `review_window`,
         `planning_window`, and `context_bundle`.
-  - [ ] Include source gaps, drift findings, evidence, and the proposed next
-        plan before mutating goals or tickets.
+  - [ ] When writing an interval context bundle under `.farplane/reports/**`,
+        include Core report frontmatter too: `ref:
+        reports/interval/<interval_id>/context/<YYYY-MM-DDTHHMMSSZ>`, `kind:
+        interval-context`, `created_at`, and `ui_summary`.
+  - [ ] Include source gaps, drift findings, evidence, product strategy
+        proposals, and the proposed next plan before mutating goals, product
+        files, or tickets.
   - [ ] Use goals-delta promotion before changing `farplane/goals.yaml`.
   - [ ] Run `farplane reports index --project-root <project_root>` after
         writing the report when the CLI is available.
@@ -354,6 +372,8 @@ priority_planning(review_window, planning_window)
 - source gaps.
 - drift findings.
 - next-window plan.
+- reward check-in summary, due queue, and low-score follow-ups when enabled.
+- product strategy deltas written or proposed.
 - goals delta decisions or approval-required blockers.
 - Pulse guidance.
 - Goal Advisor handoffs or ticket deltas, with expected reward blocks for every
@@ -368,6 +388,8 @@ priority_planning(review_window, planning_window)
   - default interval context bundle.
 - [templates/interval-report.md](templates/interval-report.md) - default
   interval report.
+- [references/workflows/reward-checkins.md](references/workflows/reward-checkins.md)
+  - expected-vs-actual reward check-in workflow.
 - [../metric-advisor/SKILL.md](../metric-advisor/SKILL.md) - honest metric
   cards for interval snapshots and compounding reward signals.
 - [../../docs/features/FEAT-0065-pulse-and-interval-automation.md](../../docs/features/FEAT-0065-pulse-and-interval-automation.md)

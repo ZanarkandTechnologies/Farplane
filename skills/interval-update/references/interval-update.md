@@ -38,7 +38,7 @@ adds or replaces a source:
 ```text
 default_context_refs(project_root, interval_id) = {
   harness_ref: project_root/farplane/harness.md,
-  products_ref: project_root/farplane/products.md,
+  products_ref: project_root/farplane/products.json,
   local_product_skill_refs: project_root/.agents/skills/**/SKILL.md,
   goals_ref: project_root/farplane/goals.yaml,
   ticket_refs: project_root/tickets/,
@@ -140,21 +140,24 @@ merge shape.
 5. Reflect on the past window by running only enabled reflection workflows
    against the context bundle, `review_window`, and `planning_window`, loading
    only the workflow reference files named in `SKILL.md`.
-6. Close or update rewards. For enabled self-update workflows, close due reward
-   signals from prior interval reports before selecting new bets.
-7. Score leverage and reward signals. Treat scores as planning aids with cited
+6. Close or update rewards. For enabled `reward_checkins`, run the due queue,
+   fill actual reward results and `reward_score` for due ticket rewards, and
+   report low-scoring predictions before planning the next window.
+7. For enabled self-update workflows, close due reward signals from prior
+   interval reports before selecting new strategy moves.
+8. Score leverage and reward signals. Treat scores as planning aids with cited
    evidence, not objective telemetry.
-8. Read product work lanes, local product skill refs, and static allocation
+9. Read product work lanes, local product skill refs, and static allocation
    guardrails when priority planning or ticket refill is enabled.
-9. For enabled `skill_hardening`, route repeated lessons, troubles,
+10. For enabled `skill_hardening`, route repeated lessons, troubles,
    ticket-progress findings, and proof failures to
    `skill-maintenance(mode: harden_skill)`.
-10. For enabled `skill_refinement`, route accumulated older evals, gotchas,
+11. For enabled `skill_refinement`, route accumulated older evals, gotchas,
    usage results, and compaction risks to
    `skill-maintenance(mode: refine_skill)`.
-11. For enabled `docs_consolidation`, route whole-project context refresh to
+12. For enabled `docs_consolidation`, route whole-project context refresh to
    `update-memory` and substantive durable doc cleanup to `doc-advisor`.
-12. For enabled `tracked_feature_review`, call `dogfood-review` for active
+13. For enabled `tracked_feature_review`, call `dogfood-review` for active
     generated feature or system registry rows whose `track` value is a
     non-empty string and for active feature rows with `experimental: true`.
     Exclude rows with `status: retired` or `superseded_by` other than `false`
@@ -166,31 +169,35 @@ merge shape.
     report before final planning; do not split it into per-feature tickets or
     autostart `impl-plan`, Goal, Pulse execution, automation sync, or worker
     spawn.
-13. Review the past window against the static harness charter, goals, and
+14. Review the past window against the static harness charter, goals, and
     configured parent contexts.
-14. Refresh metric readings when skills, CLIs, ticket searches, manual notes, or
+15. Refresh metric readings when skills, CLIs, ticket searches, manual notes, or
     local ledgers are available: read goal-axis SMART goals from
     `farplane/goals.yaml` for KPI selection and interpretation, then use each
     KPI's `farplane/bindings.yaml` metric recipe `refresh` prompt to choose the
     work. Write canonical observation batches under
     `.farplane/metrics/observations/<source_id>/<date>.json`, run
     `farplane metrics primitives`, then run `farplane project snapshot`. Do not
-    parse ops memory as a deterministic database.
-15. Review budget and runway for active projects. Use `farplane/harness.md`
-    allocation guardrails, `farplane/ops-memory.md` contribution modes, ticket
-    `Reward` blocks, metric snapshots, interval reports, source gaps, and
-    operator feedback. Assign each active project a decision:
+    parse interval reports as a deterministic strategy database.
+16. Review budget and runway for active products/projects. Use
+    `farplane/harness.md` allocation guardrails, product `## Current Strategy`
+    sections, ticket `Reward` blocks, metric snapshots, interval reports,
+    source gaps, and operator feedback. Assign each active product/project a decision:
     `continue`, `narrow`, `pause`, `instrument`, `stop`, or
     `escalate_to_revenue`. Do not create a second ticket budget field.
-16. Run final next-window planning. `priority_planning` should consume the
+17. Run final next-window planning. `priority_planning` should consume the
     reflection findings, reward closure, leverage decisions, product lanes, and
     guardrails; it should verify that each selected priority moves a named goal,
     bottleneck, or reward signal.
-17. Write [interval-report.md](../templates/interval-report.md) before any
-    goals mutation. Fill the minimal Core report frontmatter: `ref`, `kind:
+18. Write [interval-report.md](../templates/interval-report.md) before any
+    goals, product strategy, or ticket mutation. Fill the minimal Core report frontmatter: `ref`, `kind:
     interval-report`, `created_at`, and one concise under-100-word
     `ui_summary`, so UI consumers can render report cards from the Core
     registry without scraping prose.
+    If a context bundle is written under `.farplane/reports/**`, fill
+    [interval-context-bundle.md](../templates/interval-context-bundle.md)
+    frontmatter with path-derived `ref`, `kind: interval-context`,
+    `created_at`, and `ui_summary` too.
 18. Classify every goals delta as `auto_apply`, `approval_required`, or
     `rejected_source_gap`.
 19. Convert executable changes into ticket deltas or Goal Advisor handoffs,
@@ -361,11 +368,15 @@ $interval-update.select_content_metric_targets(content_ledger, platform, kpi_key
        items,
        payload: { since_date, until_date, fetch_command, gaps }
      }
+
+$interval-update.reward_checkins(ticket_dir, now, lookback_days?, bad_threshold?)
+  -> due + bad_predictions + scored + not_due + gaps
 ```
 
-The concrete CLI owner is
-`skills/interval-update/scripts/metric_refresh.py`. Refresh prompts may cite the
-helper signature instead of restating the counting algorithm.
+The concrete CLI owners are `skills/interval-update/scripts/metric_refresh.py`
+for metric readings and `skills/interval-update/scripts/reward_checkins.py` for
+ticket expected-vs-actual due queues. Refresh prompts may cite helper
+signatures instead of restating the counting algorithm.
 
 For owned-content distribution KPIs, first call
 `select_content_metric_targets` to select posted ledger rows in the lookback
@@ -411,13 +422,15 @@ horizon review.
 - Static charter changes belong to `farplane/harness.md` and require explicit
   human approval. Intervals may propose charter deltas in the dated report but
   must not apply them silently.
-- The dated interval report is the state store for self-update decisions:
-  reward closure, selected bets, rejected/deferred/expired candidates, advisor
+- The dated interval report is the receipt store for self-update decisions:
+  reward closure, selected moves, rejected/deferred/expired candidates, advisor
   routes, and next reward signals.
 - UI cards read `.farplane/reports/index.json` when present. The registry
   includes reports with `ref`, `kind`, `created_at`, and `ui_summary`
   frontmatter, then derives hierarchy from `ref` prefixes. Keep `ui_summary`
-  under 100 words for every daily or weekly interval report.
+  under 100 words for every daily or weekly interval report. Use
+  `farplane reports repair-refs --project-root <project>` to add missing
+  path-derived refs to existing report Markdown before rebuilding the index.
 - Skill hardening is not a separate compatibility automation. Weekly Interval
   routes learning sources to `skill-maintenance(mode: harden_skill)` and records
   processed or deferred learning in the dated report.

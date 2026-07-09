@@ -6,7 +6,7 @@
     "reference_points": [
       "Creates farplane/automations.toml as the reviewable full automation config source",
       "Creates farplane/harness.md as the static human charter with human thesis, static leverage commitments, non-tradeoffs, agent authority, and change rule",
-      "Creates farplane/products.md as the product catalog for primary and supporting products",
+      "Creates farplane/products/<product>/product.md as the canonical product-loop definition and generated farplane/products.json as the machine/UI index",
       "Grounds the team archetype against real-world equivalents before finalizing harness, products, or goals",
       "Uses Pulse for fast bounded action selection",
       "Uses Daily Interval for last-24h reporting and next-24h planning",
@@ -22,7 +22,7 @@
     "query": "The initialized project has local tickets and a Pulse automation. What should the template say about selecting work?",
     "reference_points": [
       "Pulse selects at most one bounded action per beat",
-      "Pulse reads farplane/harness.md to preserve the static human thesis and farplane/products.md when shaping product refill tickets",
+      "Pulse reads farplane/harness.md to preserve the static human thesis plus product definitions/generated product indexes when shaping product refill tickets",
       "Product refill tickets name the project type, baseline or comparison point, expected artifact, and proof signal",
       "Local ready and unblocked tickets are preferred over blocked or approval-required work",
       "Substantial implementation routes through harness-creator first when the operating model is missing, then goal-advisor only after a concrete milestone exists",
@@ -51,7 +51,7 @@
     "reference_points": [
       "Distinguishes substrate_complete from project_initialized instead of treating file existence as enough",
       "Audits farplane/harness.md for missing human thesis, static leverage commitments, non-tradeoffs, agent authority, and change rule",
-      "Audits docs/bootstrap-brief.md, farplane/products.md, and farplane/goals.yaml for missing team archetype, product outputs, North Star, 3-month outcome, success criteria, non-goals, and decision boundaries",
+      "Audits docs/bootstrap-brief.md, product definitions, generated product indexes, and farplane/goals.yaml for missing team archetype, product outputs, North Star, 3-month outcome, success criteria, non-goals, and decision boundaries",
       "In full mode, calls harness-creator after substrate setup for static charter, products, goals, feedback loops, missing systems, current milestone, and any Goal Advisor handoff",
       "Asks the first missing harness-creator parameter instead of running separate product/goals/advisor interviews from init-advisor",
       "Keeps farplane/goals.yaml as Markdown with a fenced goal-program block for parseable goals, value function, axes, projects, and milestones",
@@ -63,11 +63,11 @@
   {
     "id": "init_advisor_adaptive_human_intake_01",
     "title": "Init advisor adapts human intake depth for meaning-heavy file migration",
-    "query": "A migrated project now has a current farplane/manifest.json, but farplane/harness.md, farplane/products.md, and farplane/goals.yaml are new or placeholder. The operator asks init-advisor to finish the migration but is worried that Deep Interview asks too many questions. How should init-advisor decide what to ask before filling those files?",
+    "query": "A migrated project now has a current farplane/manifest.json, but farplane/harness.md, product definitions/indexes, and farplane/goals.yaml are new or placeholder. The operator asks init-advisor to finish the migration but is worried that Deep Interview asks too many questions. How should init-advisor decide what to ask before filling those files?",
     "reference_points": [
       "Resolves human_intake as skip, offer, or required and defaults to offer for new or migrated meaning-heavy files",
       "Uses destination skill signatures as the question inventory instead of inventing a generic init interview",
-      "Routes harness.md, products.md, feedback loops, missing systems, and milestone-shape params to harness-creator",
+      "Routes harness.md, product definitions/indexes, feedback loops, missing systems, and milestone-shape params to harness-creator",
       "Routes goals.yaml, North Star, value function, KPI tree, holds, and milestone deltas to horizon-advisor",
       "Asks direct signature questions for factual or narrow missing params",
       "Escalates to deep-interview --quick only when missing params are intent-heavy, contradictory, or risky for canonical file fills",

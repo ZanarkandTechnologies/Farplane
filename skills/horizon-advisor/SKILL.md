@@ -16,7 +16,9 @@ allowed-tools: Read, Write, Glob, Grep
 
 `horizon-advisor` owns long-horizon strategy authoring for Farplane projects:
 North Star, value function, KPI tree, project goal map, current milestone,
-holds, and `farplane/goals.yaml` deltas. It exists so `goal-advisor` can stay focused on
+holds, and `farplane/goals.yaml` deltas. Product-level goals and KPI membership
+live in `farplane/products/<product>/product.md` and must stay aligned with the
+global goal tree. It exists so `goal-advisor` can stay focused on
 execution compilation: selected frontier -> Goal Packet -> native Goal or
 heartbeat prompt.
 
@@ -35,7 +37,7 @@ horizon_advice(project_root?, intent?, current_goals?, evidence?, constraints?)
    + project_goal_map
    + current_milestone
    + goal_advisor_handoff?
-state: reads(farplane/goals.yaml, farplane/harness.md, farplane/automations.md?, tickets, progress, metrics, memory, relevant strategy docs); writes(farplane/goals.yaml delta or strategy artifact when explicitly in scope)
+state: reads(farplane/goals.yaml, farplane/harness.md, farplane/products/*/product.md, farplane/products.json?, farplane/automations.md?, tickets, progress, metrics, memory, relevant strategy docs); writes(farplane/goals.yaml delta, product.md goal/KPI delta, or strategy artifact when explicitly in scope)
 gates: north_star_named; value_function_named; metrics_have_proof_surfaces; anti_metrics_named; current_frontier_expanded_only; execution_handoff_goes_to_goal_advisor
 routes: metric-advisor | goal-advisor | update-strategy | deep-interview | review
 fails: vague goals; fake precision; turning all goals into tasks; compiling native Goal prompts; hiding strategy in chat; optimizing proxy metrics without a shared value function
@@ -67,9 +69,10 @@ Goal prompts here.
 
 - [ ] 1. Bind the horizon target.
    - [ ] Resolve project root, goal artifact path, current horizon, operator
-     intent, available metrics, and whether this run should write files or only
-     advise.
-   - [ ] Read current `farplane/goals.yaml`, `farplane/harness.md`, automation
+     intent, available metrics, product definitions, and whether this run
+     should write files or only advise.
+   - [ ] Read current `farplane/goals.yaml`, `farplane/harness.md`,
+     `farplane/products/*/product.md`, generated product indexes, automation
      prompts when present, tickets/progress, and relevant memory before asking
      for facts.
 - [ ] 2. Define the value function before goals.
@@ -84,8 +87,9 @@ Goal prompts here.
      `artifact_presence`, `mechanical`, `review`, `agent_qa`,
      `human_feedback`, `market`, `learning`, or `hybrid`.
    - [ ] Put metric mechanics in `farplane/bindings.yaml` recipes with inline
-     source and update prompt. Keep `farplane/goals.yaml` KPI lists to stable IDs
-     plus interpretation.
+     source and update prompt. Put product KPI membership in the owning
+     `farplane/products/<product>/product.md`. Keep `farplane/goals.yaml` KPI
+     lists to stable IDs plus interpretation.
    - [ ] Derive a metric card for any KPI whose provider, guard metric,
      anti-metric, or proof surface is unclear.
    - [ ] Avoid fake precision when the honest signal is qualitative,
@@ -99,8 +103,10 @@ Goal prompts here.
      review, dependency, or proof boundaries.
 - [ ] 5. Write the goal artifact or handoff.
    - [ ] If file writes are in scope, patch `farplane/goals.yaml`; patch
-     `farplane/bindings.yaml` when metric recipes, inline sources, pinned state,
-     units, or update prompts change.
+     product `product.md` files when product-level goals or KPI membership
+     change; patch `farplane/bindings.yaml` when metric recipes, inline
+     sources, pinned state, units, or update prompts change; regenerate
+     `farplane/products.json` after product-file changes.
    - [ ] If the horizon needs a separate parent, make that parent a Farplane
      project with its own `farplane/goals.yaml` instead of creating a standalone
      strategy file.
@@ -175,7 +181,8 @@ goal_advisor(
 - Do not convert every horizon node into a ticket. Goals describe outcomes;
   projects group evidence-producing bets; tickets execute bounded work.
 - Do not bury long-horizon strategy in `progress.md`; use `farplane/goals.yaml`
-  for project-level strategy.
+  for project-level strategy and product `product.md` files for stable
+  product-level goals.
 - Do not compile native `/goal` prompts here. That boundary belongs to
   `goal-advisor`.
 

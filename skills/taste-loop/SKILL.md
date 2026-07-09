@@ -20,7 +20,7 @@ structured feedback on product artifacts through the official optional Codex
 automation heartbeat. The loop's reward is to earn Kenji's founder conviction
 that a product/artifact bet is worth making, selling, or testing, while spending
 as few execution steps as possible. The
-heartbeat prompt reads `farplane/products.md`, selects one high-compounding
+heartbeat prompt reads `farplane/products.json`, selects one high-compounding
 artifact workflow, creates or reuses a dedicated worker Goal Packet and Codex
 thread, and instructs that worker to run a phase-aware
 `optimize-with-human` loop.
@@ -40,10 +40,11 @@ taste_loop(project_root, config?, now?)
   -> no_op | artifact_worker_thread_report | artifact_feedback_report |
      idea_feedback_report | feedback_reminder_report |
      artifact_goal_handoff_report | blocked_report
-state: reads(farplane/automations.md automation-config TOML?,
+state: reads(farplane/automations.toml desired-state automation config?,
+             farplane/bindings.yaml#operator.review_chase_policy?,
              Codex automation memory.md?,
-             farplane/products.md,
-             farplane/products.md#taste-loop-artifact-workflows,
+             farplane/products.json,
+             farplane/products.json#taste-loop-artifact-workflows,
              docs/skills/registry.jsonl,
              docs/features/FEAT-0064-skill-signals.md,
              tickets/TASK-*/artifacts/agi-toy-shop-scenario.md?,
@@ -66,6 +67,8 @@ gates: automation_schedule_loaded; feedback_budget_checked; product_lane_selecte
        goal_packet_created_or_reused; planning_hypothesis_logged;
        worker_thread_created_or_reused; optimize_with_human_bound_in_worker;
        worker_thread_visible_or_blocked; stale_feedback_reminded_or_deferred;
+       waiting_feedback_classified_each_beat; reminder_escalated_or_visible;
+       phone_escalation_configured_or_blocked; phone_chaser_receipt_or_blocker;
        progress_hypothesis_cycle_validated;
        taste_proposal_or_artifact_ref_visible; artifact_generated_or_goal_handoff;
        preview_ref_visible_for_visual_artifacts; open_feedback_deduped;
@@ -78,7 +81,7 @@ routes: landing-page | social-content | video-production |
 fails: creates a local runner as the primary surface; runs hidden loops;
   asks for feedback on a skill summary; selects broad router skills as direct
   targets; creates a feedback card without an artifact; optimizes generic skill
-  quality instead of a products.md output; routes to retired autoresearch by
+  quality instead of a product-lane output; routes to retired autoresearch by
   default; sends Telegram feedback from the parent heartbeat thread when a
   dedicated worker thread is needed; spams more feedback than budget allows;
   creates a separate workers.jsonl ledger instead of reusing automation memory;
@@ -88,6 +91,12 @@ fails: creates a local runner as the primary surface; runs hidden loops;
   records a worker id that cannot be found in the Codex thread list;
   claims Telegram was sent without a phone-viewable message artifact and send
   proof; lets stale open feedback sit silently past the reminder interval;
+  treats waiting_for_feedback as a quiet no-op without classifying whether the
+  beat is fresh, due, capped, stale-escalation, phone-escalation,
+  missing-worker, or blocked; dispatches a phone call before worker-owned
+  Telegram escalation or outside active hours without explicit operator intent;
+  repeats phone calls for the same feedback item;
+  suppresses reminders without writing the visible reason;
   writes repo/runtime files for a simple no-op beat; executes full artifacts
   before an idea passes when the artifact is not itself the tiny planning test;
   edits target skills after one rejection instead of logging and rerunning a
@@ -103,11 +112,15 @@ fails: creates a local runner as the primary surface; runs hidden loops;
 ## Todo List
 
 - [ ] 1. Load automation config and controller memory.
-  - [ ] Read the `farplane/automations.md` marker-delimited TOML config block
-    and prompt block for `farplane-active-hours-taste-loop` when available.
+  - [ ] Read the `farplane/automations.toml` desired-state record for
+    `farplane-active-hours-taste-loop` when available.
+  - [ ] Read the freeform
+    `farplane/bindings.yaml#operator.review_chase_policy` prompt for Kenji's
+    chase preference, including active-hour language. Taste Loop owns the
+    timing defaults.
   - [ ] Treat the Codex automation schedule as cadence metadata owned by the
     Codex automation record; do not re-check active hours inside the skill.
-  - [ ] Use the prompt block `Params` section for Taste Loop knobs such as
+  - [ ] Use the automation prompt's `Params` section for Taste Loop knobs such as
     `top_n`, `max_open_feedback`, target groups, output channels, cooldown,
     convergence, and `log_noop`.
   - [ ] Read the Codex automation `memory.md` when the automation runtime
@@ -117,7 +130,7 @@ fails: creates a local runner as the primary surface; runs hidden loops;
 - [ ] 2. Collect candidate targets.
   - [ ] Read `docs/features/FEAT-0064-skill-signals.md`.
   - [ ] Read `docs/skills/registry.jsonl`.
-  - [ ] Read `farplane/products.md` Work Lanes and Taste Loop Artifact
+  - [ ] Read `farplane/products.json` Work Lanes and Taste Loop Artifact
     Workflows.
   - [ ] Use existing skill heat generated from `.farplane/events/` and
     `FARPLANE_SKILL_HEAT_*` controls when available.
@@ -136,8 +149,13 @@ fails: creates a local runner as the primary surface; runs hidden loops;
     app-visible when thread tools are available; if not, block instead of
     claiming the worker is waiting.
   - [ ] Check stale feedback reminders using `last_request_at`,
-    `last_reminder_at`, `reminder_count`, `reminder_after_hours`, and
-    `max_reminders_per_feedback`.
+    `last_reminder_at`, `reminder_count`, and Taste Loop's reminder defaults,
+    while respecting operator active hours and the chase policy prompt from
+    `farplane/bindings.yaml`.
+  - [ ] Classify every visible waiting feedback item as `fresh`,
+    `remind_now`, `stale_escalation`, `phone_escalation`, `reminder_capped`,
+    `missing_worker`, or `blocked`; do not let waiting feedback become a no-op
+    without a visible classification.
   - [ ] Normalize open feedback by `target_id + feedback_question` before
     applying the budget gate; duplicate open rows are hygiene findings, not
     extra budget usage.
@@ -152,7 +170,7 @@ fails: creates a local runner as the primary surface; runs hidden loops;
   - [ ] Keep skill signals distinct from eval score, review TAS, and human
     preference labels.
   - [ ] Require `artifact_workflow_fit`: the candidate can create or hand off a
-    reviewable artifact end-to-end from `products.md`.
+    reviewable artifact end-to-end from `products.json`.
   - [ ] Penalize unique open feedback, cooldown, ambiguous targets, and fake
     metric risk.
 - [ ] 4. Bind the impress loop.
@@ -194,6 +212,19 @@ fails: creates a local runner as the primary surface; runs hidden loops;
     has elapsed, route exactly one phone-viewable reminder through that same
     worker thread, then update `progress.md` and automation memory. Prefer
     simple Telegram Markdown for Taste Loop feedback/reminder bodies.
+  - [ ] If a feedback request has no reply for 24 hours, send an escalation
+    reminder asking Kenji to `approve`, `revise`, `reject`, or `drop this loop`
+    before parking the item. This one escalation may exceed the ordinary
+    per-feedback reminder cap when no prior escalation reminder was sent.
+  - [ ] If feedback remains stale after worker-owned Telegram escalation, follow
+        `operator.review_chase_policy`: route one bounded reminder through
+        `phone-chaser` during active hours. Require a visible worker, a
+        phone-readable summary, one clear action, and no prior phone escalation
+        for the feedback item. Do not enforce a global daily call cap. Record
+        dispatch receipt or blocker in `progress.md` and automation memory.
+  - [ ] When a reminder is skipped because it is fresh, capped, noisy, blocked,
+    or missing a visible worker, record the reason in the report and, for the
+    active ticket, in `progress.md`.
   - [ ] If the recorded worker thread is missing or unfindable, write a blocker
     in the ticket/progress/report instead of creating another replacement
     worker with an unverified id.
@@ -209,6 +240,35 @@ fails: creates a local runner as the primary surface; runs hidden loops;
   - [ ] Use `blocked_report` when the target lacks product-lane ownership,
     artifact workflow ownership, proof, config, or generation feasibility.
   - [ ] Do not route to legacy autoresearch unless explicitly configured later.
+
+## Escalation Policy
+
+Taste Loop follows the product-loop human-review escalation shape:
+
+```text
+waiting_feedback(item)
+  -> classify fresh | remind_now | stale_escalation | phone_escalation | capped | blocked
+  -> worker-owned Telegram reminder first
+  -> optional phone-chaser only after stale Telegram escalation and explicit config
+  -> progress.md + automation memory receipt
+```
+
+Phone escalation is never a normal first reminder and never fires from the
+parent heartbeat without visible worker context. It requires:
+
+- `farplane/bindings.yaml#operator.review_chase_policy` says to phone-chase
+  stale unanswered Telegram reminders.
+- the review chase policy says Kenji is inside active hours; outside active
+  hours, queue the chase until the next active window and record that state.
+- a visible worker thread that owns the reply route.
+- a prior Telegram reminder or stale escalation for the same feedback item.
+- no prior phone escalation for that feedback item.
+- a short phone-readable message asking Kenji to `approve`, `revise`,
+  `reject`, or `drop this loop`.
+
+Use `phone-chaser` for dispatch and preserve its safety gates. If
+`phone-chaser` blocks because route, credentials, recipient, or safety policy
+is unavailable, record a blocked report instead of silently no-oping.
 - [ ] 6. Write visible state, not hidden runtime output.
   - [ ] Update Codex automation memory with the active worker ledger when
     available; do not create a separate `workers.jsonl`.
@@ -257,10 +317,10 @@ fails: creates a local runner as the primary surface; runs hidden loops;
 
 ## Automation Config
 
-Project-specific automation metadata lives in `farplane/automations.md` as a
-marker-delimited TOML block. Skill invocation params live in the adjacent
-prompt block because they are part of the Codex instruction, not scheduler
-metadata.
+Project-specific automation desired state lives in `farplane/automations.toml`
+as full TOML automation records. Scheduler metadata lives in the record's
+schedule fields. Skill invocation params live inside the automation prompt
+because they are part of the Codex instruction, not scheduler metadata.
 
 ```toml
 [schedule]
@@ -272,17 +332,17 @@ end = "18:00"
 interval_minutes = 60
 ```
 
-The schedule block compiles to the Codex automation cadence. Taste Loop should
-not duplicate that cadence as environment variables. The prompt block should
-carry the normal Markdown/text `Params` and `Overrides` sections. Once invoked,
-the skill runs one bounded beat; it does not perform an additional active-hours
+The schedule fields compile to the Codex automation cadence. Taste Loop should
+not duplicate that cadence as environment variables. The prompt should carry
+the normal Markdown/text `Params` and `Overrides` sections. Once invoked, the
+skill runs one bounded beat; it does not perform an additional active-hours
 check.
 
 ## Heartbeat Prompt
 
 The automation prompt is the runtime surface. Use
 [templates/heartbeat-prompt.md](templates/heartbeat-prompt.md) as the reusable
-prompt body, and keep `farplane/automations.md` as the project-specific copied
+prompt body, and keep `farplane/automations.toml` as the project-specific copied
 automation record.
 
 ## Scoring Contract
@@ -306,9 +366,9 @@ Signal ownership:
   lifecycle graph data when available
 - heat: generated skill graph heat from `.farplane/events/` and
   `FARPLANE_SKILL_HEAT_*`
-- product lane: `farplane/products.md`
-- artifact workflow fit: `farplane/products.md` Taste Loop Artifact Workflows
-- schedule and params: `farplane/automations.md` TOML automation config
+- product lane: `farplane/products.json`
+- artifact workflow fit: `farplane/products.json` Taste Loop Artifact Workflows
+- schedule and params: `farplane/automations.toml` TOML automation config
 - feedback budget and cooldown: automation config plus controller memory
 - active worker state: Codex automation `memory.md`
 - metric route: `metric-advisor`
@@ -489,6 +549,7 @@ active_worker:
   ticket_ref:
   worker_thread_ref:
   status: active | waiting_for_feedback | revising | blocked | complete
+  waiting_feedback_classification: fresh | remind_now | stale_escalation | phone_escalation | reminder_capped | missing_worker | blocked
   artifact_ref:
   preview_ref:
   last_request_at:
@@ -524,6 +585,60 @@ Waiting-for-feedback is an active state, not a silent terminal state. On each
 heartbeat, if a visible worker is waiting for planning or execution feedback,
 compare the current time to `last_request_at` and `last_reminder_at`.
 
+Every waiting-feedback beat must first classify the item:
+
+```text
+waiting_feedback_status(worker, now)
+  -> fresh | remind_now | stale_escalation | phone_escalation | reminder_capped | missing_worker | blocked
+```
+
+- `fresh`: the latest request or reminder is still inside the reminder window.
+- `remind_now`: the reminder interval has elapsed and the item is below cap.
+- `stale_escalation`: no reply has arrived after the stale-escalation window
+  and no prior escalation reminder was sent; send one cap-override reminder
+  asking Kenji to `approve`, `revise`, `reject`, or `drop this loop`.
+- `phone_escalation`: no reply has arrived after worker-owned Telegram stale
+  escalation, the review chase policy calls for phone-chaser, the
+  current time is inside active hours, the worker is visible, and no prior
+  phone escalation exists for this feedback item; route one bounded call
+  through `phone-chaser` or record the blocker.
+- `reminder_capped`: Telegram reminders reached the per-feedback cap, phone
+  escalation is disabled, already used for this feedback item, queued outside
+  active hours, or blocked with a recorded reason.
+- `missing_worker`: the recorded worker is not visible by id or searchable
+  title, so Telegram replies cannot be trusted to route.
+- `blocked`: the request lacks a phone-viewable artifact summary, reply route,
+  ticket/progress refs, or send/fallback proof.
+
+A `fresh`, `reminder_capped`, `missing_worker`, or `blocked` classification is
+not a silent no-op and must not return `status: no_op`. Return
+`status: feedback_reminder` when a Telegram reminder or escalation is sent,
+`status: phone_escalation` when `phone-chaser` is dispatched or blocked, and
+`status: blocked` when the worker, packet, progress path, or send route cannot
+be updated. For a visible but capped item, return a diagnostic action status
+with `reminder_status: reminder_capped` and write a report or progress row that
+names the cap and reset/drop choices. If the ticket packet is archived and
+there is no active `progress.md` to update, treat that as a visible lifecycle
+blocker rather than a no-op.
+
+Default reminder cadence for Taste Loop feedback: first Telegram reminder after
+3 hours, repeat Telegram reminders no more often than every 4 hours, stale
+Telegram escalation after 24 hours with no reply, and phone-chaser 2 hours
+after an unanswered stale Telegram escalation.
+
+Use these defaults from the skill; use
+`farplane/bindings.yaml#operator.review_chase_policy` only for Kenji's
+plain-language preference, including active-hour guidance. After 24 hours with
+no human reply, the next due
+reminder should escalate the decision to: `approve`, `revise`, `reject`, or
+`drop this loop`, plus one short reason. After that stale Telegram escalation
+has been sent, classify `phone_escalation` before `reminder_capped` when the
+policy calls for phone-chaser, the current time is inside active hours, the
+worker is visible, no prior phone escalation exists for the item, and
+`phone-chaser` can satisfy its safety gates. Only classify `reminder_capped`
+after the phone path is already used for this feedback item, queued outside
+active hours, or blocked with a recorded reason.
+
 ```text
 reminder_due(worker, now, reminder_after_hours, max_reminders_per_feedback)
   -> true when worker.status in [waiting_for_feedback,
@@ -531,6 +646,15 @@ reminder_due(worker, now, reminder_after_hours, max_reminders_per_feedback)
                                 waiting_for_execution_feedback]
    and reminder_count < max_reminders_per_feedback
    and hours_since(max(last_request_at, last_reminder_at)) >= reminder_after_hours
+```
+
+```text
+stale_escalation_due(worker, now, stale_escalation_after_hours)
+  -> true when worker.status in [waiting_for_feedback,
+                                waiting_for_idea_feedback,
+                                waiting_for_execution_feedback]
+   and no prior escalation reminder is recorded
+   and hours_since(last_request_at) >= stale_escalation_after_hours
 ```
 
 When due, send exactly one reminder from the visible worker thread using
@@ -718,7 +842,7 @@ Return and write:
 - Do not ask Kenji to review a skill summary, skill README, or generic skill
   quality target. Ask for feedback on an artifact created by a product workflow.
 - Do not use broad router skills as direct targets. Pick an artifact workflow
-  from `farplane/products.md`; use router skills only as supporting routes.
+  from `farplane/products.json`; use router skills only as supporting routes.
 - Do not create execution `feedback_card` without `artifact_ref`.
 - Do not create an idea feedback card without `concept_ref` or `proposal_ref`.
 - Do not skip the Goal Packet for optimize-with-human workers. Worker state
@@ -747,7 +871,7 @@ Return and write:
 - Do not optimize by fake numeric taste scores. Use labels, rankings, and
   accept/revise/reject when that is the honest signal.
 - Do not invent a second heat, product, or benchmark system. Reuse the skill
-  graph, `products.md`, `metric-advisor`, and target skill evals first.
+  graph, `products.json`, `metric-advisor`, and target skill evals first.
 - Do not create a new worker when automation memory shows an active or waiting
   worker. Resume, steer, or block that worker first.
 - Do not record phantom worker ids. If the worker is not app-visible by id or a
@@ -761,7 +885,7 @@ Return and write:
   report unless diagnostic logging is explicitly enabled.
 - Do not restore `FARPLANE_TASTE_LOOP_*` as the normal active-hours settings.
   Active-hours belong in the Codex automation schedule and the
-  `farplane/automations.md` TOML config block.
+  `farplane/automations.toml` automation record.
 
 ## Reference Map
 
@@ -775,6 +899,6 @@ Return and write:
   heartbeat prompt compilation.
 - `docs/features/FEAT-0064-skill-signals.md` - official signal contract and
   component source ownership.
-- `farplane/automations.md` - reviewed automation prompt source.
+- `farplane/automations.toml` - reviewed automation prompt source.
 - [templates/taste-proposal.md](templates/taste-proposal.md) - planning
   proposal template and phone-friendly digest shape.

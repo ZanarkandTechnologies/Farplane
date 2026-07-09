@@ -10,10 +10,11 @@ framework_template_version: "0.2.0"
 
 Tracked project framework config lives here.
 
-`manifest.json` owns the compact UI identity card. Richer project meaning lives
-in Markdown: `harness.md` is the static human charter, `products.md` is the
-product catalog and work-lane table, `goals.yaml` is current strategy, and
-`ops-memory.md` is active operating memory.
+`manifest.json` owns the compact UI identity card. Richer project meaning
+lives in files: `harness.md` is the static human charter,
+`products/<product>/product.md` files are canonical product-loop definitions,
+generated `products.json` is the machine/UI product index, and `goals.yaml` is
+current cross-product strategy.
 
 ```text
 farplane/
@@ -21,9 +22,10 @@ farplane/
   manifest.json    # versioned Farplane project spec for this project
   harness.md       # static human charter
   goals.yaml       # north star, KPIs, current milestone, holds
-  products.md      # products and work lanes this team creates
-  ops-memory.md    # active focus, projects, runway, and frontier
-  automations.toml # full Codex automation configs for Pulse and Intervals
+  products/
+    core/product.md # canonical starter product-loop definition
+    core/skill.md   # project-local product workflow
+  products.json    # generated machine/UI product index
   automations.toml # full Codex automation configs for Pulse and Intervals
   bindings.yaml      # non-secret project IDs, URLs, labels, aliases
   hooks.json       # declarative Farplane-native hook configuration

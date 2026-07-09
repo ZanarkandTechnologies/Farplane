@@ -4,14 +4,14 @@
     "title": "Taste loop gates on active hours and feedback budget",
     "query": "Set up an active-hours heartbeat that improves top money-making skills without spamming me outside work hours.",
     "reference_points": [
-      "Loads active-hours schedule and budget params from the farplane/automations.md marker-delimited TOML block",
+      "Loads active-hours schedule and budget params from the farplane/automations.toml desired-state automation record",
       "Treats the Codex automation schedule as cadence metadata owned by the automation record instead of re-checking active hours inside the skill",
       "Runs one bounded beat when manually invoked because manual invocation is explicit operator intent",
       "No-ops when valid unique open feedback exceeds the cap",
       "Counts only valid product-workflow feedback toward max_open_feedback; broad skill/router legacy cards are legacy_invalid_feedback hygiene findings",
       "Keeps ordinary no-op beats side-effect-free: no worker, ticket, artifact, feedback, Telegram, or runtime report unless diagnostic logging is enabled",
       "Dedupes open feedback by target_id plus feedback_question before applying the budget gate and reports duplicate open rows as hygiene",
-      "Reads farplane/products.md Taste Loop Artifact Workflows and docs/features/FEAT-0064-skill-signals.md",
+      "Reads farplane/products.json Taste Loop Artifact Workflows and docs/features/FEAT-0064-skill-signals.md",
       "Reads Codex automation memory as the active worker ledger and does not create a separate workers.jsonl",
       "Does not restore FARPLANE_TASTE_LOOP_* env vars as the normal active-hours settings",
       "Selects top N product-lane artifact workflows, not broad router skills or skill summaries",
@@ -38,6 +38,13 @@
       "Sets worker thread titles with the ticket id and workflow id so Kenji can find them in open threads without tying the thread identity to a transient experiment label",
       "Instructs the worker thread to log planning and execution hypothesis cycles in progress.md and use optimize-with-human with phases=planning,execution",
       "Sends bounded phone-viewable reminders for stale waiting feedback from the visible worker thread and records last_reminder_at and reminder_count",
+      "Classifies every waiting-feedback beat as fresh, remind_now, stale_escalation, phone_escalation, reminder_capped, missing_worker, or blocked before deciding whether to stop, remind, call, or block",
+      "When a visible waiting worker is past the reminder interval and below cap, sends a self-contained Telegram reminder, records classification=remind_now, last_reminder_at, reminder_count, and send/fallback proof, and does not create a new TL-EXP item or ticket",
+      "When a feedback request has no reply after 24 hours and no prior escalation was sent, uses classification=stale_escalation and sends one cap-override Telegram reminder asking Kenji to approve, revise, reject, or drop this loop plus one short reason",
+      "Uses phone_escalation only when farplane/bindings.yaml#operator.review_chase_policy calls for phone-chaser, a prior worker-owned Telegram stale escalation is recorded, the current time is inside active hours, the worker is visible, no prior phone escalation exists for the feedback item, and phone-chaser safety gates pass",
+      "Records phone-chaser dispatch receipt or blocked reason in progress.md and automation memory, and never treats missing phone setup as a silent no-op",
+      "When a reminder is fresh, capped, missing a visible worker, archived from the active ticket path, or blocked, records the visible reason instead of performing a quiet no-op",
+      "Does not return status=no_op for a visible waiting-feedback item; capped waiting feedback returns a visible diagnostic status with reminder_status=reminder_capped and reset/drop choices",
       "After revise or reject feedback, the worker acknowledges the feedback, restates the corrected review object, and asks for the next instruction or sends the revised review request instead of going quiet",
       "Requires a proposal_ref or concept_ref for idea feedback or a generated artifact ref, preview/screenshot, or Goal handoff artifact before execution feedback",
       "Executes full artifacts only after planning feedback approves the concept, unless the artifact is an explicitly tiny planning test",
@@ -58,5 +65,30 @@
       "heartbeat"
     ],
     "notes": "Covers the intended active-hours human-feedback loop behavior."
+  },
+  {
+    "id": "taste_loop_phone_escalation_requires_telegram_first_01",
+    "title": "Taste Loop phone escalation is gated behind worker-owned Telegram escalation",
+    "query": "Taste Loop has a visible worker waiting for feedback during Kenji's configured active hours. A Telegram stale escalation was already sent for this feedback item 2 hours ago. farplane/bindings.yaml#operator.review_chase_policy says to chase unanswered stale Telegram reminders with phone-chaser, no prior phone escalation is recorded for this feedback item, and Kenji still has not replied. What should the beat do?",
+    "reference_points": [
+      "Classifies the waiting item as phone_escalation rather than no_op or another ordinary Telegram reminder",
+      "Requires the visible worker thread and prior worker-owned Telegram stale escalation before any call",
+      "Routes the call through phone-chaser rather than custom call logic",
+      "Uses a short phone-readable message asking Kenji to approve, revise, reject, or drop this loop",
+      "Records dispatch receipt or blocked reason in progress.md and automation memory",
+      "Does not call when the chase policy does not call for phone-chaser, the worker is missing, the current time is outside active hours without explicit manual operator intent, prior phone escalation exists for the feedback item, or phone-chaser safety gates block",
+      "Does not enforce a global daily phone cap"
+    ],
+    "anti_patterns": [
+      "Calls before Telegram escalation",
+      "Dispatches a custom phone call outside phone-chaser",
+      "Silently no-ops when phone-chaser is blocked",
+      "Creates a new worker or ticket instead of handling the waiting feedback"
+    ],
+    "tags": [
+      "skill",
+      "taste-loop",
+      "phone-escalation"
+    ]
   }
 ]

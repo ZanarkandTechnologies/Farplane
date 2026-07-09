@@ -1,15 +1,15 @@
 {
   "_template_metadata": {
     "template_id": "farplane-framework",
-    "template_version": "1.6.16",
+    "template_version": "1.6.17",
     "feature_refs": ["FEAT-0060"],
     "consumer_scope": "project",
     "applies_to": ["farplane/manifest.json"]
   },
   "schema": "farplane_project",
-  "spec_version": "1.6.16",
+  "spec_version": "1.6.17",
   "template_uses": {
-    "farplane-framework": "1.6.16"
+    "farplane-framework": "1.6.17"
   },
   "project": {
     "name": "TODO",
@@ -26,8 +26,8 @@
       "farplane/manifest.json",
       "farplane/harness.md",
       "farplane/goals.yaml",
-      "farplane/products.md",
-      "farplane/ops-memory.md",
+      "farplane/products.json",
+      "farplane/products/",
       "farplane/automations.toml",
       "farplane/bindings.yaml",
       "farplane/hooks.json",

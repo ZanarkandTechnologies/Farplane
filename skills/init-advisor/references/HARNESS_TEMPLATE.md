@@ -17,9 +17,11 @@ human-approved harness delta when the project needs richer mission, thesis,
 values, non-tradeoffs, leverage commitments, allocation guardrails, authority,
 or change rules.
 
-Dynamic product direction belongs in `farplane/products.md`. Current strategy
-belongs in `farplane/goals.yaml`. Recurring prompt configuration belongs in
-`farplane/automations.toml`. Operational logic belongs in skills.
+Dynamic product-loop direction belongs in
+`farplane/products/<product>/product.md`; generated `farplane/products.json`
+is the machine/UI index. Current strategy belongs in `farplane/goals.yaml`.
+Recurring prompt configuration belongs in `farplane/automations.toml`.
+Operational logic belongs in skills.
 
 ## Mission
 

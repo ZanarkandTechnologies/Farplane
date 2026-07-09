@@ -54,7 +54,7 @@ metrics:
 
             errors = validate(root)
 
-        self.assertIn("farplane/bindings.yaml metric products are not in products.md: missing_product.", errors)
+        self.assertIn("farplane/bindings.yaml metric products are not in product registry: missing_product.", errors)
 
     def test_goal_kpi_metric_recipe_without_product_fails(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

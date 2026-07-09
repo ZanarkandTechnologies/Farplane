@@ -3,7 +3,7 @@ title: Taste Loop human-feedback optimization
 status: partial
 owner: feature-registry
 created_at: 2026-07-07
-updated_at: 2026-07-07
+updated_at: 2026-07-08
 tags:
   - farplane
   - feature
@@ -12,7 +12,9 @@ refs:
   - skills/taste-loop/SKILL.md
   - skills/optimize-with-human/SKILL.md
   - farplane/automations.toml
-  - farplane/products.md
+  - farplane/products.json
+  - farplane/products.json
+  - farplane/products/
 feature_id: FEAT-0069
 system_id: SYS-0007
 category: improvement-loop
@@ -21,7 +23,9 @@ surfaces:
   - skills/taste-loop/SKILL.md
   - skills/optimize-with-human/SKILL.md
   - farplane/automations.toml
-  - farplane/products.md
+  - farplane/products.json
+  - farplane/products.json
+  - farplane/products/
 source_refs:
   - docs/features/FEAT-0064-skill-signals.md
   - docs/systems/self-improvement-learning.md
@@ -34,12 +38,13 @@ metrics:
   - idea_pass_rate
   - execution_pass_rate
   - feedback_turn_quality
-last_verified: 2026-07-07
+last_verified: 2026-07-08
 experimental: true
 superseded_by: false
 track: >-
   Review Taste Loop and optimize-with-human for the current window. Read
-  farplane/products.md, farplane/products/*/progress.md for feedback cycles,
+  farplane/products.json,
+  farplane/products/*/{product.md,progress.md} for feedback cycles,
   active tickets waiting on Kenji feedback, worker thread refs when available,
   Telegram review receipts or blockers, and any planning/execution artifacts
   created from feedback. Judge against feedback-request quality, open-feedback
@@ -81,7 +86,9 @@ approval request.
 
 ## What It Does
 
-- Selects a product-lane artifact workflow from `farplane/products.md`.
+- Selects a product-lane artifact workflow from product-local `product.md`
+  definitions or the generated `farplane/products.json` / `farplane/products.json`
+  indexes.
 - Creates or reuses a worker ticket, Goal Packet, and Codex thread.
 - Uses `optimize-with-human` for phase-aware planning and execution feedback.
 - Logs hypothesis cycles in worker progress.
@@ -115,7 +122,7 @@ flowchart LR
 
   heartbeat["Heartbeat<br/>farplane/automations.toml"]:::keep
   taste["skills/taste-loop<br/>select product workflow"]:::changed
-  product["farplane/products.md<br/>workflow + artifact"]:::keep
+  product["product.md<br/>products.json<br/>workflow + artifact"]:::keep
   optimize["optimize-with-human<br/>planning / execution feedback"]:::changed
   pass["idea_pass_rate<br/>execution_pass_rate"]:::added
   next["next hypothesis<br/>continue / cap / adjust / pause"]:::added
@@ -137,7 +144,9 @@ Gray is heartbeat/product input, amber is feedback-loop behavior, green is measu
   - `skills/taste-loop/SKILL.md`
   - `skills/optimize-with-human/SKILL.md`
   - `farplane/automations.toml`
-  - `farplane/products.md`
+  - `farplane/products.json`
+  - `farplane/products.json`
+  - `farplane/products/*/product.md`
 - Generated surfaces:
   - `.farplane/reports/taste-loop/`
   - `.farplane/automation/taste-loop/`

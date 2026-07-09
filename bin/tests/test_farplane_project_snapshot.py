@@ -31,26 +31,31 @@ def write_minimal_project(root: Path) -> None:
         encoding="utf-8",
     )
     (farplane / "harness.md").write_text("---\nupdated_at: 2026-07-03\n---\n\n# Harness\n", encoding="utf-8")
-    (farplane / "ops-memory.md").write_text("---\nupdated_at: 2026-07-03\n---\n\n# Ops\n", encoding="utf-8")
-    (farplane / "products.md").write_text(
-        """---
-updated_at: 2026-07-03
----
-
-# Products
-
-## Products
-
-| ID | Product | Audience | Output | Reward |
-| --- | --- | --- | --- | --- |
-| productization | Harness improvements | operators | shipped behavior | accepted improvement |
-
-## Work Lanes
-
-| Lane | Default Weight | Purpose |
-| --- | ---: | --- |
-| productization | 20 | Ship improvements |
-""",
+    (farplane / "products.json").write_text(
+        json.dumps(
+            {
+                "schema_version": 1,
+                "kind": "project-products-index",
+                "products": [
+                    {
+                        "id": "productization",
+                        "label": "Harness improvements",
+                        "audience": "operators",
+                        "output": "shipped behavior",
+                        "reward": "accepted improvement",
+                        "lane": "productization",
+                        "owner_skill": "farplane-productization",
+                        "kpis": {"primary": ["accepted_harness_improvements"], "supporting": [], "guardrail": []},
+                        "goals": [],
+                        "artifact_workflows": [],
+                        "refs": {"product": "farplane/products/productization/product.md"},
+                    }
+                ],
+                "lanes": [
+                    {"id": "productization", "default_weight": 20, "purpose": "Ship improvements"}
+                ],
+            }
+        ),
         encoding="utf-8",
     )
     (farplane / "goals.yaml").write_text(

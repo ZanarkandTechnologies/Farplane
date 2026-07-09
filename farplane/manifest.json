@@ -19,8 +19,8 @@
       "farplane/manifest.json",
       "farplane/harness.md",
       "farplane/goals.yaml",
-      "farplane/products.md",
-      "farplane/ops-memory.md",
+      "farplane/products.json",
+      "farplane/products/",
       "farplane/automations.toml",
       "farplane/bindings.yaml",
       "farplane/hooks.json",
@@ -81,7 +81,7 @@
         "docs/farplane-framework/reporting.md"
       ],
       "exclude": [
-        "farplane/products.md",
+        "farplane/products.json",
         "tickets/archive/**",
         ".farplane/reports/**",
         ".farplane/logs/**"

@@ -14,8 +14,10 @@ This folder is the project-local declaration that Farplane UI should be able to
 summarize as one autonomous company inside the broader harness cockpit.
 
 `manifest.json` owns the compact UI identity card. Richer project meaning lives
-in Markdown: `harness.md` is the static human charter, `products.md` is the
-product catalog and work-lane table, and `goals.yaml` is current strategy.
+in tracked project files: `harness.md` is the static human charter,
+`products/<product>/product.md` files are canonical product-loop definitions,
+`products.json` is the generated machine/UI index, and `goals.yaml` is current
+strategy.
 
 ```text
 farplane/
@@ -23,11 +25,11 @@ farplane/
   manifest.json    # versioned Farplane project spec for this project
   harness.md       # static human charter
   goals.yaml       # north star, KPIs, current milestone, holds
-  products.md      # products and work lanes this team creates
+  products/        # canonical product-loop definitions and local loop contracts
+  products.json    # generated machine product index for UI/tools
   automations.toml # full Codex automation configs for Pulse, Intervals, and optional consolidation/Taste Loop
   bindings.yaml    # non-secret project IDs, URLs, labels, aliases, metric recipes
   hooks.json       # declarative Farplane-native hook configuration
-  ops-memory.md    # flexible current operating notes and reminders
   pm.json          # optional UI thread manifest for one visual project PM
 
 .agents/
@@ -59,6 +61,7 @@ Other projects do not copy metric scripts; they pass a project root:
 farplane metrics primitives --project-root /path/to/project --date <YYYY-MM-DD> --json
 farplane project snapshot --project-root /path/to/project --date <YYYY-MM-DD> --json
 farplane reports index --project-root /path/to/project --json
+farplane reports repair-refs --project-root /path/to/project --json
 ```
 
 Primitive metrics are Core-owned reducers over tickets, `bindings.yaml`, local
@@ -75,7 +78,9 @@ outputs must validate against the same `MetricObservationBatch` shape.
 Report producers persist Markdown under `.farplane/reports/` with `ref`,
 `kind`, `created_at`, and `ui_summary` frontmatter. Farplane Core owns
 `.farplane/reports/index.json`; UI clients should read that registry instead of
-defining report hierarchy locally. The standard lives in
+defining report hierarchy locally. Use `farplane reports repair-refs` to add
+path-derived `ref` frontmatter to existing report Markdown before rebuilding
+the index. The standard lives in
 [docs/farplane-framework/reporting.md](../docs/farplane-framework/reporting.md).
 
 See [docs/farplane-framework/project-files.md](../docs/farplane-framework/project-files.md).

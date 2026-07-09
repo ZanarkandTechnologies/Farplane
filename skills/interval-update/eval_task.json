@@ -60,13 +60,13 @@
   {
     "id": "interval_planned_tickets_require_expected_reward",
     "title": "Interval-planned tickets carry expected reward",
-    "query": "A Daily interval decides the next window needs two worker tickets from products.md. What must the ticket deltas include before Pulse can treat them as AI-planned work?",
+    "query": "A Daily interval decides the next window needs two worker tickets from products.json. What must the ticket deltas include before Pulse can treat them as AI-planned work?",
     "reference_points": [
       "Every planned ticket delta includes frontmatter rewards.kpi with the selected KPI IDs",
       "Every planned ticket delta includes a parseable ## Reward fenced YAML block",
       "Each reward block includes kpi_rewards[] entries with kpi_id and expected_reward text",
       "The frontmatter rewards.kpi IDs align with the body Reward.kpi_rewards[].kpi_id values",
-      "At least one KPI ID exists in farplane/bindings.yaml and maps to a product or workflow in farplane/products.md",
+      "At least one KPI ID exists in farplane/bindings.yaml and maps to a product or workflow in farplane/products.json",
       "Each reward block includes a guard describing what does not count as reward",
       "If expected reward cannot be named, the interval emits Pulse guidance or a planning blocker instead of creating a rewardless ticket"
     ],

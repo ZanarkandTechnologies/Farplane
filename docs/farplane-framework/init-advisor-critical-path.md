@@ -36,7 +36,7 @@ init_advisor(...)
    + static human charter
    + ticket system
    + QA/proof surfaces
-   + product catalog
+   + product-loop definitions and generated product indexes
    + automation prompt source
    + PM UI thread grouping manifest
    + starter planning ticket
@@ -46,7 +46,7 @@ init_advisor(...)
 
 Bootstrap creates the filesystem substrate. `harness-creator` owns the
 project-specific operating-model pass after substrate setup: static charter,
-product catalog, goals/KPIs, feedback loops, missing systems, automation or
+product-loop definitions, goals/KPIs, feedback loops, missing systems, automation or
 binding deltas, and first executable frontier. It may call `horizon-advisor`,
 `harness-advisor`, `skill-creator`, `goal-advisor`, or research skills as
 smaller internal advisor moves. Live Codex automation activation remains a
@@ -150,7 +150,8 @@ farplane/README.md
 farplane/manifest.json
 farplane/harness.md
 farplane/goals.yaml
-farplane/products.md
+farplane/products/
+farplane/products.json
 farplane/automations.toml
 farplane/bindings.yaml
 farplane/hooks.json
@@ -179,9 +180,12 @@ Key contracts:
   Markdown sections, not a fenced custom program DSL.
 - `farplane/goals.yaml` is compact dynamic strategy context: north star, value
   function, KPI axes, current bets, milestone, and holds.
-- `farplane/products.md` is the project product catalog: team identity,
-  product rows, work-lane weights, and constraints. It informs interval
-  planning; Pulse executes ready tickets after planners create them.
+- `farplane/products/<product>/product.md` files are the canonical product-loop
+  definitions: product identity, lane, KPI refs, gates, workflows, worker
+  policy, and product-level goals.
+- `farplane/products.json` is the generated machine/UI product index. It
+  informs interval planning and UI renderers; Pulse executes ready tickets
+  after planners create them.
 - `farplane/automations.toml` is the human-reviewable full-TOML source for the exact Pulse,
   Daily Interval, and Weekly Interval prompts copied into Codex automations.
 - `farplane/hooks.json` is declarative project hook config. Hook algorithms,
@@ -216,7 +220,8 @@ Audit:
 - `docs/bootstrap-brief.md`
 - `farplane/harness.md`
 - `farplane/goals.yaml`
-- `farplane/products.md`
+- `farplane/products/<product>/product.md`
+- `farplane/products.json`
 - `farplane/bindings.yaml`
 - `.agents/skills/README.md`
 - `farplane/pm.json`
@@ -250,7 +255,7 @@ Rules:
 - `project_initialized` requires a grounded operating model, current goals, and
   enough runtime/proof context to start useful work.
 - `needs_operating_model_intake` means `farplane/harness.md`,
-  `farplane/products.md`, `farplane/goals.yaml`, feedback loops, or current
+  product definitions, `farplane/goals.yaml`, feedback loops, or current
   milestone state are missing, placeholder, stale, or not grounded in the
   operator's current intent.
 - missing human thesis, static leverage commitments, agent authority, or change
@@ -274,7 +279,7 @@ Guardrails:
 Owner: `harness-creator`
 
 Use this phase in `full` mode, or when the readiness audit finds that
-`farplane/harness.md`, `farplane/products.md`, `farplane/goals.yaml`, feedback
+`farplane/harness.md`, product definitions, `farplane/goals.yaml`, feedback
 loops, missing-system tickets, automation/binding deltas, or the current
 milestone are missing, placeholder, stale, or not grounded.
 
@@ -284,7 +289,8 @@ Inputs:
 - real-world-equivalent research for the requested team type
 - `farplane/manifest.json` project identity
 - `farplane/harness.md`
-- existing `farplane/products.md`
+- existing `farplane/products/<product>/product.md` files and generated
+  `farplane/products.json`
 - existing `farplane/goals.yaml`
 - current tickets, docs, skills, and safe bindings
 
@@ -294,7 +300,8 @@ Output:
 harness_creator(project_idea, values?, priorities?, mode_presets?,
                 context?, constraints?, budget?)
   -> farplane/harness.md delta?
-   + farplane/products.md delta?
+   + farplane/products/<product>/product.md delta?
+   + regenerated farplane/products.json?
    + farplane/goals.yaml delta?
    + farplane/automations.toml delta?
    + farplane/bindings.yaml delta?
@@ -310,9 +317,9 @@ What this means:
 - The project can answer "what human thesis must not drift?" in one sentence.
 - Products are value outputs, not chores.
 - Work lanes explain how interval planners should distribute planned work
-  without rediscovering the product catalog.
-- The manifest has a short UI card; `products.md` has the richer operating
-  model.
+  without rediscovering the product-loop definitions.
+- The manifest has a short UI card; product-local `product.md` files have the
+  richer operating model; `products.json` is the generated machine/UI index.
 - The goals file has a value function, KPI axes, current bets, and
   handoff-ready milestone when enough operator intent exists.
 - Human access, missing metrics, missing skills, or unavailable integrations
@@ -321,8 +328,8 @@ What this means:
 Guardrails:
 
 - Always ground team archetype, product lifecycle, and the first feedback loop
-  against real-world equivalents before finalizing `harness.md`, `products.md`,
-  or `goals.yaml`. Keep the
+  against real-world equivalents before finalizing `harness.md`, product
+  definitions, or `goals.yaml`. Keep the
   research compact unless the project is high-risk, unfamiliar, or
   market-facing enough to need a separate `research:*` artifact.
 - Do not stuff the full team story into `manifest.json`.
@@ -485,7 +492,8 @@ Guardrails:
 | `farplane/manifest.json` | `init-advisor` | framework migrations | expected tracked/ignored paths |
 | `farplane/harness.md` | `init-advisor` / `harness-creator` | harness planning | static human charter: mission, thesis, non-tradeoffs, leverage commitments, authority, change rule |
 | `farplane/goals.yaml` | `init-advisor` / `harness-creator` / `horizon-advisor` | strategy work | goals, KPIs, milestone |
-| `farplane/products.md` | `init-advisor` / `harness-creator` | product planning / work-lane tuning | product rows and work lanes |
+| `farplane/products/<product>/product.md` | `init-advisor` / `harness-creator` | product planning / work-lane tuning | canonical product-loop definitions, KPI refs, goals, gates, workflows |
+| `farplane/products.json` | generated | UI / tools | generated machine product index |
 | `farplane/automations.toml` | `init-advisor` / `automation-advisor` | operator / `automation-advisor` | reviewed Pulse and Interval config source |
 | `.agents/skills/README.md` | `init-advisor` | `harness-creator` / product-skill refinement | local product-skill home |
 | `farplane/pm.json` | `init-advisor` | `automation-advisor` / PM-visible threads | UI grouping for persistent chat and automation threads |

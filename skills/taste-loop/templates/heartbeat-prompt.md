@@ -15,15 +15,20 @@ project_root = "{{PROJECT_ROOT}}"
 ## Load
 
 Read the project-local `AGENTS.md`, then load `skills/taste-loop/SKILL.md`,
-`farplane/automations.md`, `farplane/products.md`, and
+`farplane/automations.toml`, `farplane/bindings.yaml`,
+`farplane/products.json`, and
 `docs/features/FEAT-0064-skill-signals.md`.
 
-Extract the marker-delimited TOML config block and prompt block for
-`farplane-active-hours-taste-loop` from `farplane/automations.md`. Use the
-TOML `[schedule]` block as the desired Codex automation schedule. Use the
-prompt block's `Params` section as the Taste Loop runtime knobs. The live Codex
-automation record owns cadence. Once this prompt is invoked, run one bounded
-beat; do not perform a second active-hours check inside the skill.
+Read the full TOML desired-state record for `farplane-active-hours-taste-loop`
+from `farplane/automations.toml`. Use the record's schedule fields as the
+desired Codex automation schedule. Use the prompt's `Params` section as the
+Taste Loop runtime knobs. The live Codex automation record owns cadence. Once
+this prompt is invoked, run one bounded beat; do not perform a second
+active-hours check inside the skill.
+
+Read the freeform `farplane/bindings.yaml#operator.review_chase_policy` prompt.
+The binding stores Kenji's preference, including active-hour language, in plain
+language; the Taste Loop skill owns the timing defaults.
 
 Read the Codex automation memory when available. Treat that memory as the
 controller ledger for active Taste Loop workers. Do not create or consult a
@@ -42,7 +47,7 @@ Stop with a side-effect-free no-op when any hard gate fails:
 
 - disabled
 - valid unique open feedback count is at or above the cap
-- Taste Loop Artifact Workflows are missing from `farplane/products.md`
+- Taste Loop Artifact Workflows are missing from `farplane/products.json`
 - no candidate workflow can create or hand off a reviewable artifact
 - no candidate workflow can create or hand off a reviewable planning artifact
   such as a TasteProposal
@@ -62,16 +67,58 @@ searchable title. If the worker cannot be found, write a blocked report and
 update the ticket/progress; do not claim it is waiting and do not create another
 replacement worker with an unverified id.
 
-If the visible worker is waiting for feedback and the configured reminder
-interval has elapsed, send exactly one phone-viewable reminder from that worker
-thread using `telegram-message`. The reminder must first label the review
-object with `Review artifact`, `Skill/workflow`, `Product`, `Stage`, and
-`Not judging`, then include the proposal or artifact summary and the one reply
-action inside Telegram itself. Prefer simple Telegram Markdown for controlled
-Taste Loop feedback/reminder bodies; use raw text only when the body contains
-arbitrary code, JSON, dense paths, or generated text that could break Markdown
-parsing. Record `last_reminder_at`, `reminder_count`, and send/fallback status
-in `progress.md` and automation memory, then stop the beat.
+If the visible worker is waiting for feedback, classify the beat before doing
+anything else:
+
+```text
+fresh | remind_now | stale_escalation | phone_escalation | reminder_capped | missing_worker | blocked
+```
+
+Use Taste Loop defaults for reminder cadence: first reminder after 3 hours,
+repeat reminders every 4 hours, stale Telegram escalation after 24 hours, and
+phone escalation 2 hours after the stale Telegram escalation. Use
+`operator.review_chase_policy` to decide whether the due chase may fire now.
+Do not treat missing params as permission to go quiet.
+
+When classification is `remind_now`, send exactly one phone-viewable reminder
+from that worker thread using `telegram-message`. The reminder must first label
+the review object with `Review artifact`, `Skill/workflow`, `Product`,
+`Stage`, and `Not judging`, then include the proposal or artifact summary and
+the one reply action inside Telegram itself. If no human reply has arrived for
+24 hours, ask Kenji to `approve`, `revise`, `reject`, or `drop this loop` plus
+one short reason. Prefer simple Telegram Markdown for controlled Taste Loop
+feedback/reminder bodies; use raw text only when the body contains arbitrary
+code, JSON, dense paths, or generated text that could break Markdown parsing.
+Record `last_reminder_at`, `reminder_count`, classification, and send/fallback
+status in `progress.md` and automation memory, then stop the beat.
+
+When no human reply has arrived for 24 hours and no prior escalation reminder
+is recorded, use classification `stale_escalation` and send one cap-override
+Telegram reminder even if the ordinary reminder cap has been reached. Ask Kenji
+to `approve`, `revise`, `reject`, or `drop this loop` plus one short reason.
+Record the escalation status in `progress.md` and automation memory, then stop
+the beat.
+
+When no human reply has arrived 2 hours after Telegram stale escalation,
+the stale escalation is recorded, and the review chase policy calls for
+phone-chaser,
+use classification `phone_escalation`. Route the call through `$phone-chaser`
+with a short Taste Loop message asking Kenji to `approve`, `revise`, `reject`,
+or `drop this loop`. Call only during the configured human active-hours window;
+outside active hours, queue the chase until the next active window and record
+that queued state. Do not call if the worker thread is not visible, the
+feedback item already had a phone escalation, or `phone-chaser` cannot satisfy
+its safety gates. Record dispatch id/room when available or the blocked reason
+from `phone-chaser`. There is no global daily phone cap; the repeat guard is
+one phone escalation per feedback item unless a new review cycle is created.
+
+When classification is `fresh`, `reminder_capped`, `missing_worker`, or
+`blocked`, do not silently no-op and do not return `status: no_op`. Record the
+classification and reason in `progress.md` when the active ticket exists. Write
+a blocked report for `missing_worker`, `blocked`, or an archived packet that
+cannot be updated. For `reminder_capped`, return a visible diagnostic status
+with `reminder_status: reminder_capped`, the cap values, and the reset/drop
+choices.
 
 When no active worker is present, reuse an existing active ticket and Goal
 Packet for the same `product_lane + workflow_id` before creating a new ticket.
@@ -91,7 +138,7 @@ Read:
 
 - `docs/features/FEAT-0064-skill-signals.md`
 - `docs/skills/registry.jsonl`
-- `farplane/products.md`
+- `farplane/products.json`
 - `docs/farplane-framework/lifecycle.md`
 - generated skill graph heat when available, using `FARPLANE_SKILL_HEAT_*`
   config as the heat-window owner
@@ -100,7 +147,7 @@ Read:
 - recent `.farplane/reports/taste-loop/` reports when present
 - existing `.farplane/automation/taste-loop/` feedback or handoff artifacts
 
-Build candidates from `farplane/products.md` Taste Loop Artifact Workflows.
+Build candidates from `farplane/products.json` Taste Loop Artifact Workflows.
 Each candidate must include:
 
 ```text
@@ -155,7 +202,7 @@ Use only these durable skill signals:
 Then apply the Taste-specific artifact gate:
 
 - `product_lane_fit`: the workflow belongs to a product lane in
-  `farplane/products.md`.
+  `farplane/products.json`.
 - `artifact_workflow_fit`: the workflow can produce or hand off a reviewable
   artifact end-to-end.
 - `planning_artifact_fit`: the planning artifact is concrete enough to request

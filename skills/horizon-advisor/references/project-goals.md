@@ -3,7 +3,7 @@ title: Project Goals Reference
 owner: horizon-advisor
 status: draft
 created_at: 2026-06-12
-updated_at: 2026-06-23
+updated_at: 2026-07-08
 ---
 
 # Project Goals Reference
@@ -18,6 +18,12 @@ file for project-level strategy is always `farplane/goals.yaml`. If a business,
 rollout, research program, or autonomous operating loop needs its own horizon,
 make it a project with its own `farplane/goals.yaml` instead of adding a separate
 parent strategy file beside a ticket.
+
+Product-level strategy is split deliberately: stable product goals and product
+KPI membership live in `farplane/products/<product>/product.md`; generated
+`farplane/products.json` is the machine/UI index. Weekly or daily
+bets are time-bounded hypotheses in interval reports or product `progress.md`,
+not durable product goals.
 
 ```text
 project_goals(north_star, horizon, resources, constraints)
@@ -57,6 +63,8 @@ chooses that external system as the source of truth.
 ProjectGoals :=
   farplane/goals.yaml
 + farplane/harness.md
++ farplane/products/<product>/product.md
++ farplane/products.json
 + farplane/automations.toml
 + farplane/hooks.json
 + tickets/
