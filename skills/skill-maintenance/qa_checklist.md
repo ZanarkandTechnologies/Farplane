@@ -112,8 +112,10 @@ they are needed on every invocation:
 
 2. `reference_load_precision`
    - Question: Does every reference have an explicit read condition in the todo
-     list or Reference Map?
-   - Violation: A reference is listed without saying when to load it.
+     list or Reference Map, and does the link label identify the target surface
+     rather than rendering as a generic basename such as `SKILL.md`?
+   - Violation: A reference is listed without saying when to load it, or the
+     label makes adjacent skills look like self-links.
 
 3. `missing_context_rate`
    - Question: Are required gates, routing, proof, and output contracts still in

@@ -139,7 +139,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     },
     {
       "changed_sections": [],
-      "introduced_at": "2026-07-04",
+      "introduced_at": "2026-07-09",
       "section_count": 9,
       "sections": [
         "Context",
@@ -152,8 +152,8 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "Reference Map",
         "Output"
       ],
-      "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.7-f7e6aad05fd7.md",
-      "source_commit": "f7e6aad05fd7",
+      "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.7-e6cf961af369.md",
+      "source_commit": "e6cf961af369",
       "summary": "working tree current template",
       "version": "0.3.7"
     }
@@ -635,7 +635,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "trigger catalogs stay out of frontmatter"
       ],
       "missing_signals": [],
-      "source_commit": "f7e6aad05fd7",
+      "source_commit": "e6cf961af369",
       "template_version": "0.3.7",
       "title": "Routing clarity",
       "verdict": "pass"
@@ -649,7 +649,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "policy prose is not treated as a top-level todo"
       ],
       "missing_signals": [],
-      "source_commit": "f7e6aad05fd7",
+      "source_commit": "e6cf961af369",
       "template_version": "0.3.7",
       "title": "Todo executability",
       "verdict": "pass"
@@ -663,7 +663,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "same-scope recursion is forbidden"
       ],
       "missing_signals": [],
-      "source_commit": "f7e6aad05fd7",
+      "source_commit": "e6cf961af369",
       "template_version": "0.3.7",
       "title": "Phase boundary",
       "verdict": "pass"
@@ -677,7 +677,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "output contract is explicit"
       ],
       "missing_signals": [],
-      "source_commit": "f7e6aad05fd7",
+      "source_commit": "e6cf961af369",
       "template_version": "0.3.7",
       "title": "Proof contract",
       "verdict": "pass"
@@ -691,7 +691,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "qa_checklist.md is a repeatable runtime guardrail only when warranted"
       ],
       "missing_signals": [],
-      "source_commit": "f7e6aad05fd7",
+      "source_commit": "e6cf961af369",
       "template_version": "0.3.7",
       "title": "Eval / QA sync",
       "verdict": "pass"
@@ -743,29 +743,6 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "skills/skill-maintenance/scripts/install_selected_skills.py",
         "install.sh",
         "README.md"
-      ]
-    },
-    {
-      "evidence_refs": [
-        "skills/eval/eval_task.json",
-        "skills/eval/tests/test_run_evals.py",
-        "docs/HISTORY.md"
-      ],
-      "id": "FEAT-0054",
-      "known_limits": "The runner discovers `skills/*/eval_task.json` as a modular suite, but it does not yet enforce every skill having one or validate skill-local eval coverage quality beyond the existing task JSON schema and judge prompts.",
-      "last_verified": "2026-06-11",
-      "metrics": [
-        "skill_local_eval_discovery_pass"
-      ],
-      "name": "Modular skill-local eval tasks",
-      "status": "implemented",
-      "surfaces": [
-        "skills/eval/scripts/run_evals.py",
-        "skills/eval/SKILL.md",
-        "skills/eval/eval_task.json",
-        "docs/skills/templates/SKILL_TEMPLATE.md",
-        "docs/skills/system.md",
-        "docs/skills/best-practices.md"
       ]
     },
     {
@@ -861,8 +838,20 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       ]
     }
   ],
-  "generated_at": "2026-07-04T18:41:35+00:00",
+  "generated_at": "2026-07-09T03:35:37+00:00",
   "rollout": [
+    {
+      "eval": "eval_task.json",
+      "has_checklist": true,
+      "path": "skills/ad-advisor/SKILL.md",
+      "qa_checklist": "qa_checklist.md",
+      "skill_id": "ad-advisor",
+      "skill_ui": "",
+      "source": "local",
+      "status": "current",
+      "template_version": "0.3.7",
+      "tier": 3
+    },
     {
       "eval": "",
       "has_checklist": true,
@@ -876,7 +865,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "tier": 3
     },
     {
-      "eval": "",
+      "eval": "eval_task.json",
       "has_checklist": true,
       "path": "skills/ai-video-advisor/SKILL.md",
       "qa_checklist": "",
@@ -936,11 +925,59 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "tier": 3
     },
     {
+      "eval": "eval_task.json",
+      "has_checklist": true,
+      "path": "skills/copywriting-advisor/SKILL.md",
+      "qa_checklist": "qa_checklist.md",
+      "skill_id": "copywriting-advisor",
+      "skill_ui": "",
+      "source": "local",
+      "status": "current",
+      "template_version": "0.3.7",
+      "tier": 3
+    },
+    {
+      "eval": "eval_task.json",
+      "has_checklist": true,
+      "path": "skills/customer-research/SKILL.md",
+      "qa_checklist": "",
+      "skill_id": "customer-research",
+      "skill_ui": "",
+      "source": "local",
+      "status": "current",
+      "template_version": "0.3.7",
+      "tier": 3
+    },
+    {
+      "eval": "eval_task.json",
+      "has_checklist": true,
+      "path": "skills/dogfood-review/SKILL.md",
+      "qa_checklist": "qa_checklist.md",
+      "skill_id": "dogfood-review",
+      "skill_ui": "",
+      "source": "local",
+      "status": "current",
+      "template_version": "0.3.7",
+      "tier": 3
+    },
+    {
       "eval": "",
       "has_checklist": true,
       "path": "skills/instagram-account/SKILL.md",
       "qa_checklist": "qa_checklist.md",
       "skill_id": "instagram-account",
+      "skill_ui": "",
+      "source": "local",
+      "status": "current",
+      "template_version": "0.3.7",
+      "tier": 3
+    },
+    {
+      "eval": "eval_task.json",
+      "has_checklist": true,
+      "path": "skills/lead-scout/SKILL.md",
+      "qa_checklist": "qa_checklist.md",
+      "skill_id": "lead-scout",
       "skill_ui": "",
       "source": "local",
       "status": "current",
@@ -972,11 +1009,47 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "tier": 3
     },
     {
-      "eval": "",
+      "eval": "eval_task.json",
+      "has_checklist": true,
+      "path": "skills/problem-framing/SKILL.md",
+      "qa_checklist": "",
+      "skill_id": "problem-framing",
+      "skill_ui": "",
+      "source": "local",
+      "status": "current",
+      "template_version": "0.3.7",
+      "tier": 2
+    },
+    {
+      "eval": "eval_task.json",
       "has_checklist": true,
       "path": "skills/remotion/SKILL.md",
       "qa_checklist": "",
       "skill_id": "remotion",
+      "skill_ui": "",
+      "source": "local",
+      "status": "current",
+      "template_version": "0.3.7",
+      "tier": 3
+    },
+    {
+      "eval": "eval_task.json",
+      "has_checklist": true,
+      "path": "skills/seo-content-advisor/SKILL.md",
+      "qa_checklist": "qa_checklist.md",
+      "skill_id": "seo-content-advisor",
+      "skill_ui": "",
+      "source": "local",
+      "status": "current",
+      "template_version": "0.3.7",
+      "tier": 3
+    },
+    {
+      "eval": "eval_task.json",
+      "has_checklist": true,
+      "path": "skills/solution-shaping/SKILL.md",
+      "qa_checklist": "",
+      "skill_id": "solution-shaping",
       "skill_ui": "",
       "source": "local",
       "status": "current",
@@ -999,7 +1072,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "eval": "eval_task.json",
       "has_checklist": true,
       "path": "skills/ticket-opportunity-generator/SKILL.md",
-      "qa_checklist": "",
+      "qa_checklist": "qa_checklist.md",
       "skill_id": "ticket-opportunity-generator",
       "skill_ui": "",
       "source": "local",
@@ -1140,7 +1213,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "tier": 2
     },
     {
-      "eval": "",
+      "eval": "eval_task.json",
       "has_checklist": true,
       "path": "skills/brainstorm/SKILL.md",
       "qa_checklist": "",
@@ -2175,10 +2248,10 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
   "rollout_summary": {
     "by_source": {
       "external": 3,
-      "local": 106
+      "local": 114
     },
     "by_status": {
-      "current": 14,
+      "current": 22,
       "external": 3,
       "missing": 50,
       "stale": 42
@@ -2190,10 +2263,10 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "0.3.2": 7,
       "0.3.5": 1,
       "0.3.6": 4,
-      "0.3.7": 14,
+      "0.3.7": 22,
       "missing": 53
     },
-    "total_skills": 109
+    "total_skills": 117
   },
   "schema_version": "1.0.0",
   "source": {
@@ -2203,6 +2276,20 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     "template_path": "docs/skills/templates/SKILL_TEMPLATE.md"
   },
   "template_consumers": [
+    {
+      "consumer_id": "ad-advisor",
+      "consumer_scope": "skill",
+      "path": "skills/ad-advisor/SKILL.md",
+      "surfaces": {
+        "eval": true,
+        "qa_checklist": true,
+        "skill": true
+      },
+      "template_uses": {
+        "skill-surface-budget": "0.1.0",
+        "skill-template": "0.3.7"
+      }
+    },
     {
       "consumer_id": "advise",
       "consumer_scope": "skill",
@@ -2269,7 +2356,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "consumer_scope": "skill",
       "path": "skills/ai-video-advisor/SKILL.md",
       "surfaces": {
-        "eval": false,
+        "eval": true,
         "qa_checklist": false,
         "skill": true
       },
@@ -2376,7 +2463,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "consumer_scope": "skill",
       "path": "skills/brainstorm/SKILL.md",
       "surfaces": {
-        "eval": false,
+        "eval": true,
         "qa_checklist": false,
         "skill": false
       },
@@ -2480,6 +2567,33 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "skill-eval-task": "0.1.0",
         "skill-qa-checklist": "0.1.1",
         "skill-surface-budget": "0.1.0",
+        "skill-template": "0.3.7"
+      }
+    },
+    {
+      "consumer_id": "copywriting-advisor",
+      "consumer_scope": "skill",
+      "path": "skills/copywriting-advisor/SKILL.md",
+      "surfaces": {
+        "eval": true,
+        "qa_checklist": true,
+        "skill": true
+      },
+      "template_uses": {
+        "skill-surface-budget": "0.1.0",
+        "skill-template": "0.3.7"
+      }
+    },
+    {
+      "consumer_id": "customer-research",
+      "consumer_scope": "skill",
+      "path": "skills/customer-research/SKILL.md",
+      "surfaces": {
+        "eval": true,
+        "qa_checklist": false,
+        "skill": true
+      },
+      "template_uses": {
         "skill-template": "0.3.7"
       }
     },
@@ -2620,6 +2734,19 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "skill-eval-task": "0.1.0",
         "skill-qa-checklist": "0.1.0",
         "skill-template": "0.3.6"
+      }
+    },
+    {
+      "consumer_id": "dogfood-review",
+      "consumer_scope": "skill",
+      "path": "skills/dogfood-review/SKILL.md",
+      "surfaces": {
+        "eval": true,
+        "qa_checklist": true,
+        "skill": true
+      },
+      "template_uses": {
+        "skill-template": "0.3.7"
       }
     },
     {
@@ -2935,6 +3062,20 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "template_uses": {}
     },
     {
+      "consumer_id": "lead-scout",
+      "consumer_scope": "skill",
+      "path": "skills/lead-scout/SKILL.md",
+      "surfaces": {
+        "eval": true,
+        "qa_checklist": true,
+        "skill": true
+      },
+      "template_uses": {
+        "skill-surface-budget": "0.1.0",
+        "skill-template": "0.3.7"
+      }
+    },
+    {
       "consumer_id": "leverage-advisor",
       "consumer_scope": "skill",
       "path": "skills/leverage-advisor/SKILL.md",
@@ -3097,6 +3238,19 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "template_uses": {}
     },
     {
+      "consumer_id": "problem-framing",
+      "consumer_scope": "skill",
+      "path": "skills/problem-framing/SKILL.md",
+      "surfaces": {
+        "eval": true,
+        "qa_checklist": false,
+        "skill": true
+      },
+      "template_uses": {
+        "skill-template": "0.3.7"
+      }
+    },
+    {
       "consumer_id": "product-photography",
       "consumer_scope": "skill",
       "path": "skills/product-photography/SKILL.md",
@@ -3219,7 +3373,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "consumer_scope": "skill",
       "path": "skills/remotion/SKILL.md",
       "surfaces": {
-        "eval": false,
+        "eval": true,
         "qa_checklist": false,
         "skill": true
       },
@@ -3291,6 +3445,20 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       }
     },
     {
+      "consumer_id": "seo-content-advisor",
+      "consumer_scope": "skill",
+      "path": "skills/seo-content-advisor/SKILL.md",
+      "surfaces": {
+        "eval": true,
+        "qa_checklist": true,
+        "skill": true
+      },
+      "template_uses": {
+        "skill-surface-budget": "0.1.0",
+        "skill-template": "0.3.7"
+      }
+    },
+    {
       "consumer_id": "skill-creator",
       "consumer_scope": "skill",
       "path": "skills/skill-creator/SKILL.md",
@@ -3344,6 +3512,19 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "skill-eval-task": "0.1.0",
         "skill-qa-checklist": "0.1.0",
         "skill-template": "0.3.6"
+      }
+    },
+    {
+      "consumer_id": "solution-shaping",
+      "consumer_scope": "skill",
+      "path": "skills/solution-shaping/SKILL.md",
+      "surfaces": {
+        "eval": true,
+        "qa_checklist": false,
+        "skill": true
+      },
+      "template_uses": {
+        "skill-template": "0.3.7"
       }
     },
     {
@@ -3429,7 +3610,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "path": "skills/ticket-opportunity-generator/SKILL.md",
       "surfaces": {
         "eval": true,
-        "qa_checklist": false,
+        "qa_checklist": true,
         "skill": true
       },
       "template_uses": {
@@ -3555,7 +3736,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "project": true
       },
       "template_uses": {
-        "farplane-framework": "1.6.15"
+        "farplane-framework": "1.6.16"
       }
     },
     {
@@ -3574,7 +3755,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     {
       "consumer_id": "Farplane",
       "consumer_scope": "project",
-      "current_version": "1.6.16",
+      "current_version": "1.6.17",
       "feature_refs": [
         "FEAT-0060"
       ],
@@ -3582,12 +3763,12 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "status": "stale",
       "target_basis": "projects with a farplane/manifest.json surface",
       "template_id": "farplane-framework",
-      "used_version": "1.6.15"
+      "used_version": "1.6.16"
     },
     {
       "consumer_id": "Farplane-UI",
       "consumer_scope": "project",
-      "current_version": "1.6.16",
+      "current_version": "1.6.17",
       "feature_refs": [
         "FEAT-0060"
       ],
@@ -3949,6 +4130,19 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "used_version": "0.1.0"
     },
     {
+      "consumer_id": "ad-advisor",
+      "consumer_scope": "skill",
+      "current_version": "0.1.0",
+      "feature_refs": [
+        "FEAT-0054"
+      ],
+      "path": "skills/ad-advisor/SKILL.md",
+      "status": "missing",
+      "target_basis": "skills with an eval_task.json surface",
+      "template_id": "skill-eval-task",
+      "used_version": ""
+    },
+    {
       "consumer_id": "agent-qa-test",
       "consumer_scope": "skill",
       "current_version": "0.1.0",
@@ -3956,6 +4150,71 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "FEAT-0054"
       ],
       "path": "skills/agent-qa-test/SKILL.md",
+      "status": "missing",
+      "target_basis": "skills with an eval_task.json surface",
+      "template_id": "skill-eval-task",
+      "used_version": ""
+    },
+    {
+      "consumer_id": "ai-video-advisor",
+      "consumer_scope": "skill",
+      "current_version": "0.1.0",
+      "feature_refs": [
+        "FEAT-0054"
+      ],
+      "path": "skills/ai-video-advisor/SKILL.md",
+      "status": "missing",
+      "target_basis": "skills with an eval_task.json surface",
+      "template_id": "skill-eval-task",
+      "used_version": ""
+    },
+    {
+      "consumer_id": "brainstorm",
+      "consumer_scope": "skill",
+      "current_version": "0.1.0",
+      "feature_refs": [
+        "FEAT-0054"
+      ],
+      "path": "skills/brainstorm/SKILL.md",
+      "status": "missing",
+      "target_basis": "skills with an eval_task.json surface",
+      "template_id": "skill-eval-task",
+      "used_version": ""
+    },
+    {
+      "consumer_id": "copywriting-advisor",
+      "consumer_scope": "skill",
+      "current_version": "0.1.0",
+      "feature_refs": [
+        "FEAT-0054"
+      ],
+      "path": "skills/copywriting-advisor/SKILL.md",
+      "status": "missing",
+      "target_basis": "skills with an eval_task.json surface",
+      "template_id": "skill-eval-task",
+      "used_version": ""
+    },
+    {
+      "consumer_id": "customer-research",
+      "consumer_scope": "skill",
+      "current_version": "0.1.0",
+      "feature_refs": [
+        "FEAT-0054"
+      ],
+      "path": "skills/customer-research/SKILL.md",
+      "status": "missing",
+      "target_basis": "skills with an eval_task.json surface",
+      "template_id": "skill-eval-task",
+      "used_version": ""
+    },
+    {
+      "consumer_id": "dogfood-review",
+      "consumer_scope": "skill",
+      "current_version": "0.1.0",
+      "feature_refs": [
+        "FEAT-0054"
+      ],
+      "path": "skills/dogfood-review/SKILL.md",
       "status": "missing",
       "target_basis": "skills with an eval_task.json surface",
       "template_id": "skill-eval-task",
@@ -4027,6 +4286,19 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "used_version": ""
     },
     {
+      "consumer_id": "lead-scout",
+      "consumer_scope": "skill",
+      "current_version": "0.1.0",
+      "feature_refs": [
+        "FEAT-0054"
+      ],
+      "path": "skills/lead-scout/SKILL.md",
+      "status": "missing",
+      "target_basis": "skills with an eval_task.json surface",
+      "template_id": "skill-eval-task",
+      "used_version": ""
+    },
+    {
       "consumer_id": "metric-advisor",
       "consumer_scope": "skill",
       "current_version": "0.1.0",
@@ -4034,6 +4306,19 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "FEAT-0054"
       ],
       "path": "skills/metric-advisor/SKILL.md",
+      "status": "missing",
+      "target_basis": "skills with an eval_task.json surface",
+      "template_id": "skill-eval-task",
+      "used_version": ""
+    },
+    {
+      "consumer_id": "problem-framing",
+      "consumer_scope": "skill",
+      "current_version": "0.1.0",
+      "feature_refs": [
+        "FEAT-0054"
+      ],
+      "path": "skills/problem-framing/SKILL.md",
       "status": "missing",
       "target_basis": "skills with an eval_task.json surface",
       "template_id": "skill-eval-task",
@@ -4066,6 +4351,32 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "used_version": ""
     },
     {
+      "consumer_id": "remotion",
+      "consumer_scope": "skill",
+      "current_version": "0.1.0",
+      "feature_refs": [
+        "FEAT-0054"
+      ],
+      "path": "skills/remotion/SKILL.md",
+      "status": "missing",
+      "target_basis": "skills with an eval_task.json surface",
+      "template_id": "skill-eval-task",
+      "used_version": ""
+    },
+    {
+      "consumer_id": "seo-content-advisor",
+      "consumer_scope": "skill",
+      "current_version": "0.1.0",
+      "feature_refs": [
+        "FEAT-0054"
+      ],
+      "path": "skills/seo-content-advisor/SKILL.md",
+      "status": "missing",
+      "target_basis": "skills with an eval_task.json surface",
+      "template_id": "skill-eval-task",
+      "used_version": ""
+    },
+    {
       "consumer_id": "skill-creator",
       "consumer_scope": "skill",
       "current_version": "0.1.0",
@@ -4073,6 +4384,19 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "FEAT-0054"
       ],
       "path": "skills/skill-creator/SKILL.md",
+      "status": "missing",
+      "target_basis": "skills with an eval_task.json surface",
+      "template_id": "skill-eval-task",
+      "used_version": ""
+    },
+    {
+      "consumer_id": "solution-shaping",
+      "consumer_scope": "skill",
+      "current_version": "0.1.0",
+      "feature_refs": [
+        "FEAT-0054"
+      ],
+      "path": "skills/solution-shaping/SKILL.md",
       "status": "missing",
       "target_basis": "skills with an eval_task.json surface",
       "template_id": "skill-eval-task",
@@ -4175,6 +4499,20 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "used_version": "0.1.1"
     },
     {
+      "consumer_id": "ad-advisor",
+      "consumer_scope": "skill",
+      "current_version": "0.1.1",
+      "feature_refs": [
+        "FEAT-0057",
+        "FEAT-0062"
+      ],
+      "path": "skills/ad-advisor/SKILL.md",
+      "status": "missing",
+      "target_basis": "skills with a qa_checklist.md surface",
+      "template_id": "skill-qa-checklist",
+      "used_version": ""
+    },
+    {
       "consumer_id": "agent-qa-test",
       "consumer_scope": "skill",
       "current_version": "0.1.1",
@@ -4183,6 +4521,34 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "FEAT-0062"
       ],
       "path": "skills/agent-qa-test/SKILL.md",
+      "status": "missing",
+      "target_basis": "skills with a qa_checklist.md surface",
+      "template_id": "skill-qa-checklist",
+      "used_version": ""
+    },
+    {
+      "consumer_id": "copywriting-advisor",
+      "consumer_scope": "skill",
+      "current_version": "0.1.1",
+      "feature_refs": [
+        "FEAT-0057",
+        "FEAT-0062"
+      ],
+      "path": "skills/copywriting-advisor/SKILL.md",
+      "status": "missing",
+      "target_basis": "skills with a qa_checklist.md surface",
+      "template_id": "skill-qa-checklist",
+      "used_version": ""
+    },
+    {
+      "consumer_id": "dogfood-review",
+      "consumer_scope": "skill",
+      "current_version": "0.1.1",
+      "feature_refs": [
+        "FEAT-0057",
+        "FEAT-0062"
+      ],
+      "path": "skills/dogfood-review/SKILL.md",
       "status": "missing",
       "target_basis": "skills with a qa_checklist.md surface",
       "template_id": "skill-qa-checklist",
@@ -4211,6 +4577,20 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "FEAT-0062"
       ],
       "path": "skills/landing-page/SKILL.md",
+      "status": "missing",
+      "target_basis": "skills with a qa_checklist.md surface",
+      "template_id": "skill-qa-checklist",
+      "used_version": ""
+    },
+    {
+      "consumer_id": "lead-scout",
+      "consumer_scope": "skill",
+      "current_version": "0.1.1",
+      "feature_refs": [
+        "FEAT-0057",
+        "FEAT-0062"
+      ],
+      "path": "skills/lead-scout/SKILL.md",
       "status": "missing",
       "target_basis": "skills with a qa_checklist.md surface",
       "template_id": "skill-qa-checklist",
@@ -4253,6 +4633,34 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "FEAT-0062"
       ],
       "path": "skills/qa/SKILL.md",
+      "status": "missing",
+      "target_basis": "skills with a qa_checklist.md surface",
+      "template_id": "skill-qa-checklist",
+      "used_version": ""
+    },
+    {
+      "consumer_id": "seo-content-advisor",
+      "consumer_scope": "skill",
+      "current_version": "0.1.1",
+      "feature_refs": [
+        "FEAT-0057",
+        "FEAT-0062"
+      ],
+      "path": "skills/seo-content-advisor/SKILL.md",
+      "status": "missing",
+      "target_basis": "skills with a qa_checklist.md surface",
+      "template_id": "skill-qa-checklist",
+      "used_version": ""
+    },
+    {
+      "consumer_id": "ticket-opportunity-generator",
+      "consumer_scope": "skill",
+      "current_version": "0.1.1",
+      "feature_refs": [
+        "FEAT-0057",
+        "FEAT-0062"
+      ],
+      "path": "skills/ticket-opportunity-generator/SKILL.md",
       "status": "missing",
       "target_basis": "skills with a qa_checklist.md surface",
       "template_id": "skill-qa-checklist",
@@ -4525,6 +4933,22 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "used_version": "0.1.0"
     },
     {
+      "consumer_id": "ad-advisor",
+      "consumer_scope": "skill",
+      "current_version": "0.3.7",
+      "feature_refs": [
+        "FEAT-0022",
+        "FEAT-0054",
+        "FEAT-0057",
+        "FEAT-0062"
+      ],
+      "path": "skills/ad-advisor/SKILL.md",
+      "status": "current",
+      "target_basis": "local skills that declare skill-template usage",
+      "template_id": "skill-template",
+      "used_version": "0.3.7"
+    },
+    {
       "consumer_id": "ai-image-advisor",
       "consumer_scope": "skill",
       "current_version": "0.3.7",
@@ -4621,6 +5045,54 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "used_version": "0.3.7"
     },
     {
+      "consumer_id": "copywriting-advisor",
+      "consumer_scope": "skill",
+      "current_version": "0.3.7",
+      "feature_refs": [
+        "FEAT-0022",
+        "FEAT-0054",
+        "FEAT-0057",
+        "FEAT-0062"
+      ],
+      "path": "skills/copywriting-advisor/SKILL.md",
+      "status": "current",
+      "target_basis": "local skills that declare skill-template usage",
+      "template_id": "skill-template",
+      "used_version": "0.3.7"
+    },
+    {
+      "consumer_id": "customer-research",
+      "consumer_scope": "skill",
+      "current_version": "0.3.7",
+      "feature_refs": [
+        "FEAT-0022",
+        "FEAT-0054",
+        "FEAT-0057",
+        "FEAT-0062"
+      ],
+      "path": "skills/customer-research/SKILL.md",
+      "status": "current",
+      "target_basis": "local skills that declare skill-template usage",
+      "template_id": "skill-template",
+      "used_version": "0.3.7"
+    },
+    {
+      "consumer_id": "dogfood-review",
+      "consumer_scope": "skill",
+      "current_version": "0.3.7",
+      "feature_refs": [
+        "FEAT-0022",
+        "FEAT-0054",
+        "FEAT-0057",
+        "FEAT-0062"
+      ],
+      "path": "skills/dogfood-review/SKILL.md",
+      "status": "current",
+      "target_basis": "local skills that declare skill-template usage",
+      "template_id": "skill-template",
+      "used_version": "0.3.7"
+    },
+    {
       "consumer_id": "instagram-account",
       "consumer_scope": "skill",
       "current_version": "0.3.7",
@@ -4631,6 +5103,22 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "FEAT-0062"
       ],
       "path": "skills/instagram-account/SKILL.md",
+      "status": "current",
+      "target_basis": "local skills that declare skill-template usage",
+      "template_id": "skill-template",
+      "used_version": "0.3.7"
+    },
+    {
+      "consumer_id": "lead-scout",
+      "consumer_scope": "skill",
+      "current_version": "0.3.7",
+      "feature_refs": [
+        "FEAT-0022",
+        "FEAT-0054",
+        "FEAT-0057",
+        "FEAT-0062"
+      ],
+      "path": "skills/lead-scout/SKILL.md",
       "status": "current",
       "target_basis": "local skills that declare skill-template usage",
       "template_id": "skill-template",
@@ -4669,6 +5157,22 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "used_version": "0.3.7"
     },
     {
+      "consumer_id": "problem-framing",
+      "consumer_scope": "skill",
+      "current_version": "0.3.7",
+      "feature_refs": [
+        "FEAT-0022",
+        "FEAT-0054",
+        "FEAT-0057",
+        "FEAT-0062"
+      ],
+      "path": "skills/problem-framing/SKILL.md",
+      "status": "current",
+      "target_basis": "local skills that declare skill-template usage",
+      "template_id": "skill-template",
+      "used_version": "0.3.7"
+    },
+    {
       "consumer_id": "remotion",
       "consumer_scope": "skill",
       "current_version": "0.3.7",
@@ -4679,6 +5183,38 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "FEAT-0062"
       ],
       "path": "skills/remotion/SKILL.md",
+      "status": "current",
+      "target_basis": "local skills that declare skill-template usage",
+      "template_id": "skill-template",
+      "used_version": "0.3.7"
+    },
+    {
+      "consumer_id": "seo-content-advisor",
+      "consumer_scope": "skill",
+      "current_version": "0.3.7",
+      "feature_refs": [
+        "FEAT-0022",
+        "FEAT-0054",
+        "FEAT-0057",
+        "FEAT-0062"
+      ],
+      "path": "skills/seo-content-advisor/SKILL.md",
+      "status": "current",
+      "target_basis": "local skills that declare skill-template usage",
+      "template_id": "skill-template",
+      "used_version": "0.3.7"
+    },
+    {
+      "consumer_id": "solution-shaping",
+      "consumer_scope": "skill",
+      "current_version": "0.3.7",
+      "feature_refs": [
+        "FEAT-0022",
+        "FEAT-0054",
+        "FEAT-0057",
+        "FEAT-0062"
+      ],
+      "path": "skills/solution-shaping/SKILL.md",
       "status": "current",
       "target_basis": "local skills that declare skill-template usage",
       "template_id": "skill-template",
@@ -5429,7 +5965,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "by_status": {
         "stale": 2
       },
-      "current_version": "1.6.16",
+      "current_version": "1.6.17",
       "feature_refs": [
         "FEAT-0060"
       ],
@@ -5438,26 +5974,26 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     },
     "skill-eval-task": {
       "by_scope": {
-        "skill": 39
+        "skill": 50
       },
       "by_status": {
         "current": 27,
-        "missing": 12
+        "missing": 23
       },
       "current_version": "0.1.0",
       "feature_refs": [
         "FEAT-0054"
       ],
       "target_basis": "skills with an eval_task.json surface",
-      "total_consumers": 39
+      "total_consumers": 50
     },
     "skill-qa-checklist": {
       "by_scope": {
-        "skill": 30
+        "skill": 36
       },
       "by_status": {
         "current": 5,
-        "missing": 7,
+        "missing": 13,
         "stale": 18
       },
       "current_version": "0.1.1",
@@ -5466,14 +6002,14 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "FEAT-0062"
       ],
       "target_basis": "skills with a qa_checklist.md surface",
-      "total_consumers": 30
+      "total_consumers": 36
     },
     "skill-template": {
       "by_scope": {
-        "skill": 56
+        "skill": 64
       },
       "by_status": {
-        "current": 14,
+        "current": 22,
         "stale": 42
       },
       "current_version": "0.3.7",
@@ -5484,7 +6020,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "FEAT-0062"
       ],
       "target_basis": "local skills that declare skill-template usage",
-      "total_consumers": 56
+      "total_consumers": 64
     }
   },
   "template_versions": [
@@ -5718,8 +6254,8 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     },
     {
       "introduced_at": "2026-06-29",
-      "latest_at": "2026-07-04",
-      "latest_commit": "f7e6aad05fd7",
+      "latest_at": "2026-07-09",
+      "latest_commit": "e6cf961af369",
       "latest_summary": "working tree current template",
       "release_count": 2,
       "sections": [
@@ -5733,7 +6269,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "Reference Map",
         "Output"
       ],
-      "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.7-f7e6aad05fd7.md",
+      "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.7-e6cf961af369.md",
       "snapshots": [
         {
           "introduced_at": "2026-06-29",
@@ -5742,9 +6278,9 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
           "summary": "Add opt-in skill surface budget scanner"
         },
         {
-          "introduced_at": "2026-07-04",
-          "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.7-f7e6aad05fd7.md",
-          "source_commit": "f7e6aad05fd7",
+          "introduced_at": "2026-07-09",
+          "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.7-e6cf961af369.md",
+          "source_commit": "e6cf961af369",
           "summary": "working tree current template"
         }
       ],

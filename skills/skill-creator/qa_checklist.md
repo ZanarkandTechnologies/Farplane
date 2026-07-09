@@ -17,10 +17,33 @@ for material skill work.
 - [ ] The target `SKILL.md` first load is executable without hidden chat context:
   trigger, contract, todo path, gates, proof, and output are visible.
 - [ ] Template metadata is truthful, conditional references have precise load
-  conditions, and reusable method references declare `skill-method-reference`.
+  conditions, reference-map link labels name the target surface instead of
+  generic basenames such as `SKILL.md`, and reusable method references declare
+  `skill-method-reference`.
 - [ ] Scaffolding is conservative: no default-path behavior is hidden only in
   references, scripts, examples, audits, or chat, and no placeholders are added
   unless needed.
-- [ ] Proof and QA match the behavior risk, including skill-local and
-  skill-maintenance checklists for material structure or runtime guardrail
-  changes.
+- [ ] Proof and QA match the behavior risk, including domain-specific todo/QA
+  review, skill-local examples, skill-local QA, and skill-maintenance checks
+  for material structure or runtime guardrail changes.
+
+## Domain-Specificity Rubric
+
+Use this compact rubric when a new or revised skill could become generic
+assistant scaffolding:
+
+```text
+todo_specificity_check(skill_domain, todo_list, qa_checklist?)
+  -> pass | weak | violation
+```
+
+- `pass`: the todo path names the domain's real inputs, transformations,
+  artifacts, quality bars, and failure modes.
+- `weak`: the todo path has a few domain words, but most actions could be
+  pasted into unrelated skills with minor edits.
+- `violation`: the todo path mostly says to gather context, draft, review, and
+  finalize without teaching the agent the domain's distinctive strategy.
+
+Repair `weak` or `violation` by adding at least one domain-specific workflow
+move, one judgment gate, and one positive example or fixture before polishing
+checklist prose.

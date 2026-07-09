@@ -152,8 +152,8 @@
         "Reference Map",
         "Output"
       ],
-      "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.7-73414112a47a.md",
-      "source_commit": "73414112a47a",
+      "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.7-e6cf961af369.md",
+      "source_commit": "e6cf961af369",
       "summary": "working tree current template",
       "version": "0.3.7"
     }
@@ -635,7 +635,7 @@
         "trigger catalogs stay out of frontmatter"
       ],
       "missing_signals": [],
-      "source_commit": "73414112a47a",
+      "source_commit": "e6cf961af369",
       "template_version": "0.3.7",
       "title": "Routing clarity",
       "verdict": "pass"
@@ -649,7 +649,7 @@
         "policy prose is not treated as a top-level todo"
       ],
       "missing_signals": [],
-      "source_commit": "73414112a47a",
+      "source_commit": "e6cf961af369",
       "template_version": "0.3.7",
       "title": "Todo executability",
       "verdict": "pass"
@@ -663,7 +663,7 @@
         "same-scope recursion is forbidden"
       ],
       "missing_signals": [],
-      "source_commit": "73414112a47a",
+      "source_commit": "e6cf961af369",
       "template_version": "0.3.7",
       "title": "Phase boundary",
       "verdict": "pass"
@@ -677,7 +677,7 @@
         "output contract is explicit"
       ],
       "missing_signals": [],
-      "source_commit": "73414112a47a",
+      "source_commit": "e6cf961af369",
       "template_version": "0.3.7",
       "title": "Proof contract",
       "verdict": "pass"
@@ -691,7 +691,7 @@
         "qa_checklist.md is a repeatable runtime guardrail only when warranted"
       ],
       "missing_signals": [],
-      "source_commit": "73414112a47a",
+      "source_commit": "e6cf961af369",
       "template_version": "0.3.7",
       "title": "Eval / QA sync",
       "verdict": "pass"
@@ -838,13 +838,13 @@
       ]
     }
   ],
-  "generated_at": "2026-07-09T02:40:05+00:00",
+  "generated_at": "2026-07-09T03:35:37+00:00",
   "rollout": [
     {
       "eval": "eval_task.json",
       "has_checklist": true,
       "path": "skills/ad-advisor/SKILL.md",
-      "qa_checklist": "",
+      "qa_checklist": "qa_checklist.md",
       "skill_id": "ad-advisor",
       "skill_ui": "",
       "source": "local",
@@ -976,7 +976,7 @@
       "eval": "eval_task.json",
       "has_checklist": true,
       "path": "skills/lead-scout/SKILL.md",
-      "qa_checklist": "",
+      "qa_checklist": "qa_checklist.md",
       "skill_id": "lead-scout",
       "skill_ui": "",
       "source": "local",
@@ -2282,7 +2282,7 @@
       "path": "skills/ad-advisor/SKILL.md",
       "surfaces": {
         "eval": true,
-        "qa_checklist": false,
+        "qa_checklist": true,
         "skill": true
       },
       "template_uses": {
@@ -3067,7 +3067,7 @@
       "path": "skills/lead-scout/SKILL.md",
       "surfaces": {
         "eval": true,
-        "qa_checklist": false,
+        "qa_checklist": true,
         "skill": true
       },
       "template_uses": {
@@ -3755,12 +3755,12 @@
     {
       "consumer_id": "Farplane",
       "consumer_scope": "project",
-      "current_version": "1.6.16",
+      "current_version": "1.6.17",
       "feature_refs": [
         "FEAT-0060"
       ],
       "path": "farplane/manifest.json",
-      "status": "current",
+      "status": "stale",
       "target_basis": "projects with a farplane/manifest.json surface",
       "template_id": "farplane-framework",
       "used_version": "1.6.16"
@@ -3768,7 +3768,7 @@
     {
       "consumer_id": "Farplane-UI",
       "consumer_scope": "project",
-      "current_version": "1.6.16",
+      "current_version": "1.6.17",
       "feature_refs": [
         "FEAT-0060"
       ],
@@ -4499,6 +4499,20 @@
       "used_version": "0.1.1"
     },
     {
+      "consumer_id": "ad-advisor",
+      "consumer_scope": "skill",
+      "current_version": "0.1.1",
+      "feature_refs": [
+        "FEAT-0057",
+        "FEAT-0062"
+      ],
+      "path": "skills/ad-advisor/SKILL.md",
+      "status": "missing",
+      "target_basis": "skills with a qa_checklist.md surface",
+      "template_id": "skill-qa-checklist",
+      "used_version": ""
+    },
+    {
       "consumer_id": "agent-qa-test",
       "consumer_scope": "skill",
       "current_version": "0.1.1",
@@ -4563,6 +4577,20 @@
         "FEAT-0062"
       ],
       "path": "skills/landing-page/SKILL.md",
+      "status": "missing",
+      "target_basis": "skills with a qa_checklist.md surface",
+      "template_id": "skill-qa-checklist",
+      "used_version": ""
+    },
+    {
+      "consumer_id": "lead-scout",
+      "consumer_scope": "skill",
+      "current_version": "0.1.1",
+      "feature_refs": [
+        "FEAT-0057",
+        "FEAT-0062"
+      ],
+      "path": "skills/lead-scout/SKILL.md",
       "status": "missing",
       "target_basis": "skills with a qa_checklist.md surface",
       "template_id": "skill-qa-checklist",
@@ -5935,10 +5963,9 @@
         "project": 2
       },
       "by_status": {
-        "current": 1,
-        "stale": 1
+        "stale": 2
       },
-      "current_version": "1.6.16",
+      "current_version": "1.6.17",
       "feature_refs": [
         "FEAT-0060"
       ],
@@ -5962,11 +5989,11 @@
     },
     "skill-qa-checklist": {
       "by_scope": {
-        "skill": 34
+        "skill": 36
       },
       "by_status": {
         "current": 5,
-        "missing": 11,
+        "missing": 13,
         "stale": 18
       },
       "current_version": "0.1.1",
@@ -5975,7 +6002,7 @@
         "FEAT-0062"
       ],
       "target_basis": "skills with a qa_checklist.md surface",
-      "total_consumers": 34
+      "total_consumers": 36
     },
     "skill-template": {
       "by_scope": {
@@ -6228,7 +6255,7 @@
     {
       "introduced_at": "2026-06-29",
       "latest_at": "2026-07-09",
-      "latest_commit": "73414112a47a",
+      "latest_commit": "e6cf961af369",
       "latest_summary": "working tree current template",
       "release_count": 2,
       "sections": [
@@ -6242,7 +6269,7 @@
         "Reference Map",
         "Output"
       ],
-      "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.7-73414112a47a.md",
+      "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.7-e6cf961af369.md",
       "snapshots": [
         {
           "introduced_at": "2026-06-29",
@@ -6252,8 +6279,8 @@
         },
         {
           "introduced_at": "2026-07-09",
-          "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.7-73414112a47a.md",
-          "source_commit": "73414112a47a",
+          "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.7-e6cf961af369.md",
+          "source_commit": "e6cf961af369",
           "summary": "working tree current template"
         }
       ],

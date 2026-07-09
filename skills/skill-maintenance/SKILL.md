@@ -88,6 +88,7 @@ state:
 
 modes:
   harden_skill | refine_skill |
+  upgrade_skill_from_sources |
   structure_update | metadata_update | qa_checklist_design |
   eval_to_qa_sync | low_value_prose_scan | audit | bulk_rollout |
   registry_validation | installed_copy_import
@@ -100,8 +101,9 @@ gates:
   check_skills_passed; reviewer_routed_when_material
 
 routes:
-  skill-creator | eval | self-improve | advise | deliberative-advice |
-  review | gap-analysis | harness-advisor
+  research:source-synthesis | skill-creator | best-of-worlds | summarize |
+  eval | self-improve | advise | deliberative-advice | review |
+  gap-analysis | harness-advisor
 
 fails:
   vague update; hidden installed-copy edit; bulk edit without prototype;
@@ -141,6 +143,15 @@ Use `self-improve` only when `harden_skill` or `refine_skill` finds a measured
 search problem: multiple candidate variants, a metric, an experiment program,
 or a Goal-backed experiment loop.
 
+Use `upgrade_skill_from_sources` when an existing skill needs a stronger
+domain workflow from external practice. This mode researches a bounded source
+set, uses
+[book-to-skill extraction](../skill-creator/references/book-to-skill.md) for
+book or book-summary inputs, synthesizes with `best-of-worlds`, then applies
+only the adopted or adapted behavior to the owner-local skill package. Load
+[upgrade-skill-from-sources](references/upgrade-skill-from-sources.md) before
+running this mode.
+
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
@@ -169,6 +180,11 @@ or a Goal-backed experiment loop.
   - [ ] If `mode == refine_skill`, read target `SKILL.md`, references,
     `eval_task.json`, `qa_checklist.md`, skill-local audits, and recent usage
     or eval results.
+  - [ ] If `mode == upgrade_skill_from_sources`, read
+    [upgrade-skill-from-sources](references/upgrade-skill-from-sources.md),
+    target `SKILL.md`, target `qa_checklist.md`, target `eval_task.json`,
+    recent audits, [book-to-skill extraction](../skill-creator/references/book-to-skill.md),
+    and [best-of-worlds](../best-of-worlds/SKILL.md).
   - [ ] If `mode == low_value_prose_scan` or first-load prose feels bloated,
     read [low-value-prose-scan](references/low-value-prose-scan.md).
   - [ ] If `mode == installed_copy_import`, preview the import path with
@@ -202,6 +218,11 @@ or a Goal-backed experiment loop.
   - [ ] `if mode == refine_skill: call consolidate(..., structure = skill) for
     duplicate evals/gotchas and first-load text, then apply only decisions that
     preserve behavioral guardrails`.
+  - [ ] `if mode == upgrade_skill_from_sources: build a source packet with
+    practitioner articles and book-summary/public-note sources, run
+    book-to-skill extraction for book inputs, use best-of-worlds decisions, and
+    apply only adopted/adapted workflow moves, gates, examples, evals, or QA
+    checks that improve the target skill without copying source prose`.
   - [ ] `if mode == qa_checklist_design: create or update
     edited_skill/qa_checklist.md as a preflight plus final-review contract;
     add only a compact first-load pointer in SKILL.md unless a gotcha must be
@@ -324,6 +345,25 @@ unit_decisions:
 proof_required:
 ```
 
+Source-upgrade handoff:
+
+```text
+mode: upgrade_skill_from_sources
+edited_skill:
+improvement_goal:
+source_budget:
+  practitioner_articles: 3
+  books_or_frameworks: 3
+source_packet_ref:
+best_of_worlds_decisions:
+  adopt:
+  adapt:
+  reject:
+  defer:
+skill_delta:
+proof_required:
+```
+
 Audit skip reason:
 
 ```text
@@ -381,6 +421,9 @@ Return TAS verdicts, blockers, and smallest required fixes.
 - [low-value-prose-scan](references/low-value-prose-scan.md) - sentence-level
   candidate scan for rationale, generic quality claims, duplicated workflow
   prose, and other non-operational first-load text.
+- [upgrade-skill-from-sources](references/upgrade-skill-from-sources.md) -
+  bounded external-source upgrade workflow for turning articles, books, public
+  summaries, and transcripts into owner-local skill deltas.
 - [docs/skills/templates/SKILL_TEMPLATE.md](../../docs/skills/templates/SKILL_TEMPLATE.md)
   - current baseline skill template.
 - [../consolidate/SKILL.md](../consolidate/SKILL.md) - shared
@@ -409,6 +452,9 @@ Return TAS verdicts, blockers, and smallest required fixes.
   regression cases, improvement tickets, and processed-state notes.
 - Refinement outputs when `mode == refine_skill`: `consolidate` unit decisions,
   shortened skill text, moved reference detail, and review notes.
+- Source-upgrade outputs when `mode == upgrade_skill_from_sources`: source
+  packet, best-of-worlds adopt/adapt/reject/defer decisions, skill delta, audit
+  receipt, and proof plan.
 - Low-value prose outputs when `mode == low_value_prose_scan`: candidate
   sentences plus `keep | rewrite | move | delete` decisions and resulting
   owner-local edits when requested.

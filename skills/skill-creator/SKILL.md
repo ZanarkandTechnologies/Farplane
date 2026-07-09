@@ -88,6 +88,10 @@ fails: creates duplicate skills; hides required logic in references; omits proof
      [docs/skills/best-practices.md](../../docs/skills/best-practices.md#structure-optimization)
      to decide what belongs in first-load `SKILL.md` versus references,
      templates, evals, or review checks.
+   - [ ] Apply the target skill's domain-specificity check before finalizing
+     the todo list: name the domain objects, niche workflow moves, judgment
+     gates, examples, and failure modes that would not transfer unchanged to a
+     generic assistant skill.
    - [ ] Load and run the
      [Skill Structure QA Checklist](../skill-maintenance/qa_checklist.md) for
      every skill create/update invocation; use a compact pass for tiny
