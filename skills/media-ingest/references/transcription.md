@@ -2,6 +2,10 @@
 
 Use the smallest reliable transcription path available for the source.
 
+Transcription is separate from music recognition. If the operator says the
+music, song, beat, or audio bed is the liked element, also read
+`music-recognition.md` and treat track lookup as optional enrichment.
+
 ## Preferred Order
 
 1. `summarize <source> --extract-only` when the source or platform already

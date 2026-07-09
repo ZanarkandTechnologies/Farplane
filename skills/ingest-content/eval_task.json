@@ -92,5 +92,33 @@
       "resource-bank"
     ],
     "notes": "Regression for Resource Bank character elements: distinctive personas should be reusable taste signals, while protected expression stays behind remix constraints."
+  },
+  {
+    "id": "ingest_content_selected_music_recognition_01",
+    "title": "Optionally recognizes selected music and stores rights-safe audio context",
+    "query": "Ingest this TikTok reference. Note: the music is really nice; find out what it is if you can, and save the audio direction for future product reels.",
+    "reference_points": [
+      "Routes audio/video reading through `media-ingest` because the operator selected the music as a liked element.",
+      "Attempts optional music recognition when source access and local dependencies allow it, or records a clear no-match, missing-dependency, network, or source-access limit.",
+      "Stores a `kind: audio` creative element with artist/title/link when recognition matches, or an honest sonic-pattern description when it does not.",
+      "Marks the audio element with `pinned: true` because the operator note explicitly likes the music.",
+      "Adds a `constraint` element explaining that recognized music is attribution/research and future work should use licensed, original, or generated audio rather than copying the protected track.",
+      "Keeps the Resource Bank capture compact and does not add a separate music evidence object to the active Tasty Pack contract."
+    ],
+    "anti_patterns": [
+      "Ignores the note-selected music and only summarizes visuals.",
+      "Claims a track match without recognition evidence.",
+      "Blocks ingestion entirely when recognition is unavailable.",
+      "Suggests copying or reusing the source track without licensing.",
+      "Stores raw audio or a bulky recognition evidence object in the active pack contract."
+    ],
+    "tags": [
+      "skill",
+      "ingest-content",
+      "music-recognition",
+      "audio-element",
+      "rights-safe-remix"
+    ],
+    "notes": "Regression for Shazam-style optional enrichment: when the operator says the music is nice, try to identify it, but keep ingestion honest and rights-safe."
   }
 ]

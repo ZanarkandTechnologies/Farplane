@@ -22,6 +22,10 @@ allowed-tools: Read, Glob, Grep, Bash
   bundle.
 - [ ] For audio/video, extract transcript evidence through `summarize`,
   platform transcript support, or local Whisper.
+- [ ] When the operator note selects the music/song/audio bed itself, extract a
+  short audio snippet and optionally run music recognition with
+  `scripts/recognize_music.py`; record match, confidence, command, and failure
+  status without blocking the ingest.
 - [ ] If transcription fails or is unavailable, record `transcript_status` as
   failed, partial, or visual-only; do not infer spoken content as fact.
 - [ ] For video, extract representative frames and a contact sheet.
@@ -69,13 +73,18 @@ already include the needed evidence.
 4. **Extract transcript evidence:** use `summarize`, platform transcript
    support, or local Whisper. If transcription is missing or low quality,
    record that as a confidence limit rather than inventing content.
-5. **Extract frame evidence for video:** produce a contact sheet and select the
+5. **Optionally recognize selected music:** if the operator note says the music,
+   song, beat, or audio bed is the liked element, extract a 10-20 second snippet
+   and run `scripts/recognize_music.py` when `shazamio` is available. Treat
+   recognition as enrichment, not a gate: unknown/no-match/network failure
+   should become a recorded limit, not a failed media ingest.
+6. **Extract frame evidence for video:** produce a contact sheet and select the
    smallest set of frames that proves the workflow, UI states, prompts,
    timeline, final artifact, and visible acceptance criteria.
-6. **Apply retention guard:** keep raw MP4/audio, cookies, API keys, and full
+7. **Apply retention guard:** keep raw MP4/audio, cookies, API keys, and full
    raw transcripts out of tracked files unless the operator explicitly approved
    storage. Prefer compact summaries and selected frames.
-7. **Write the bundle manifest:** leave downstream skills a manifest with
+8. **Write the bundle manifest:** leave downstream skills a manifest with
    source identity, commands, transcript status, selected frames, retention
    note, and known gaps.
 
@@ -89,6 +98,8 @@ owning run folder:
 - `commands`: exact extraction/transcription/frame commands that were run
 - `transcript_status`: available, partial, failed, visual-only, or provided
 - `transcript_summary_path`: compact summary path when available
+- `music_recognition`: optional match/no-match/skipped/failed result when the
+  operator selected the music or audio bed
 - `contact_sheet_path`: contact sheet path for video
 - `selected_frames`: frame paths with short labels
 - `retention_note`: what was stored, what was intentionally omitted, and why
@@ -132,3 +143,4 @@ Use [advise](../advise/SKILL.md) when the answer is not mechanical:
 - [video-understanding](../video-understanding/SKILL.md) for storyboard,
   visible workflow, and source-todo reconstruction after ingest
 - `references/transcription.md` for local/API transcription setup notes
+- `references/music-recognition.md` for optional Shazam-style track lookup

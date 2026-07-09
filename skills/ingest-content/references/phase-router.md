@@ -25,6 +25,8 @@ Parse the note before extraction:
 - `save_reference`: "save this", "I like this", "for future reference".
 - `segment_focus`: "first few seconds", "this background", "this shot",
   "the image used here", "the caption style".
+- `music_identification`: "the music is nice", "what song is this", "I like
+  the beat", "save this soundtrack", "find out more about the audio".
 - `future_creation`: "make a video like this later", "use this for a landing
   page", "make my own version".
 - `generate_now`: "make me my own", "create a similar image", "turn this into
@@ -51,6 +53,9 @@ Routes:
   lightweight inspection when that is enough for a useful capture.
 - Media requiring exact timing, direct reuse, transcript, frames, or audit
   proof: route to `media-ingest` and then `video-understanding` when needed.
+- Media where the note selects the music/song/beat/audio bed: route to
+  `media-ingest` for optional music recognition and carry matched
+  artist/title/link or no-match status into the source context.
 - Image/screenshot: direct visual inspection.
 - Plain idea: create a note-only capture.
 
@@ -72,6 +77,9 @@ Breakdown variants:
 - `storyboard`: beat, scene, format, or narrative structure.
 - `visual`: composition, typography, color, layout, asset choices, focal point.
 - `audio`: voice, music, sound design, silence, or SFX pattern.
+- `audio-recognition`: optional artist/title/link evidence when a selected
+  track is recognized; store it as attribution/research, not as permission to
+  reuse the protected song.
 - `editing`: pacing, caption rhythm, transitions, motion, cuts.
 - `copy`: caption, headline, claim, CTA, on-screen text, meme wording.
 - `character`: distinctive persona, archetype, guide, host, mascot, or
@@ -116,6 +124,13 @@ and function rather than the exact expression.
 
 If the operator asks to generate now, route the generation step after storage
 or save the extracted recipe first so the vault remains the durable memory.
+
+When music recognition matches a track, create an `audio` element named with the
+artist/title and add a `constraint` element that future work should recreate the
+energy, tempo, instrumentation, edit function, or mood with licensed,
+original, or generated audio rather than copying the source track. If the
+operator note selected the music, pin the audio element; otherwise leave it as
+context.
 
 ## Store Phase
 

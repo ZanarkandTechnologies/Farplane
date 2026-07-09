@@ -100,7 +100,7 @@ Use compact elements. Prefer several precise elements over one large summary.
 - `hook`: opening attention move.
 - `storyboard`: beat, scene, narrative move, or structure.
 - `visual`: art direction, object, setting, layout, frame idea, or asset style.
-- `audio`: voice, music, SFX, silence, or sonic pattern.
+- `audio`: voice, recognized music, SFX, silence, or sonic pattern.
 - `editing`: pacing, transition, caption rhythm, motion, or cut pattern.
 - `copy`: caption, headline, phrase structure, or script move.
 - `format`: platform/content format or repeatable wrapper.
@@ -127,6 +127,13 @@ character, pair it with a `constraint` element that keeps the remix
 rights-safe: preserve archetype, function, contrast, and emotional job; avoid
 copying likeness, name, exact wardrobe, voice, catchphrases, source frames,
 logos, or branded presentation.
+
+For recognized music, use the artist/title/link as attribution and research
+context. The reusable element is the sonic role: tempo, energy, instrument
+palette, mood, edit function, or contrast with the visuals. Pair it with a
+`constraint` element for future creation: do not reuse protected source music
+unless licensed; recreate the function with cleared, original, or generated
+audio.
 
 ## Tasty Pack Shape
 

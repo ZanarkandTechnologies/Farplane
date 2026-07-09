@@ -33,9 +33,15 @@ the skill contract.
   voice, catchphrases, source frames, logos, or branded expression.
 - [ ] `source-honesty`: The analysis states what is known from the source or
   note and does not invent unseen frames, audio, transcripts, or timing.
+- [ ] `selected-music-recognition`: When the note explicitly likes or asks to
+  identify the music/song/beat/audio bed, the result includes a recognition
+  match or an honest no-match/missing-dependency/source-access limit.
 - [ ] `usefulness-extracted`: The saved record contains reusable creative
   elements, remix constraints, or generation/recreation notes, not only a
   summary.
+- [ ] `music-rights-safe`: Recognized music is stored as attribution/research
+  and reusable sonic direction, with a constraint against copying protected
+  music unless licensed.
 - [ ] `storage-verified`: The final proof includes a Resource Bank capture
   handle or precise blocker.
 - [ ] `derived-preview-real`: If a thumbnail/contact sheet/frame image exists,
