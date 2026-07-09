@@ -18,6 +18,45 @@ framework_bump(old_version, new_version, project_root)
   -> manifest_delta + migration_steps + proof_commands
 ```
 
+## 1.6.17
+
+Date: 2026-07-09
+
+Primary change: make product-local `product.md` files and generated
+`farplane/products.json` the active product-loop substrate. The retired
+top-level `farplane/products.md` and `farplane/ops-memory.md` surfaces are no
+longer required by new project manifests. Customer/person research uses ignored
+`.farplane/crm/reports/` Markdown reports with a derived index instead of a
+tracked CRM pipeline file.
+
+Changed surfaces:
+
+- `MANIFEST_TEMPLATE.json` bumps `farplane-framework` to `1.6.17`.
+- Project manifests track `farplane/products/` and generated
+  `farplane/products.json`.
+- `init-advisor` scaffolds `farplane/products/core/product.md`,
+  `farplane/products/core/skill.md`, `farplane/products.json`, and
+  `.farplane/crm/`.
+- `farplane/automations.toml` remains the automation config surface.
+
+Migration steps:
+
+1. Bump `farplane/manifest.json` `spec_version` and
+   `template_uses.farplane-framework` to `1.6.17`.
+2. Move active product-loop strategy into
+   `farplane/products/<product>/product.md`.
+3. Regenerate or check `farplane/products.json` from product-local
+   `product.md` files.
+4. Keep experiments and learning in product-local `progress.md`; keep customer
+   research in `.farplane/crm/reports/`.
+
+Proof commands:
+
+```bash
+python3 bin/validators/check_farplane_project_files.py
+python3 bin/validators/render_product_index.py --check
+```
+
 ## 1.6.14
 
 Date: 2026-07-03
@@ -308,8 +347,8 @@ Changed surfaces:
 - `BINDINGS_TEMPLATE.yaml` bumps to `0.2.0` and added an earlier provider-first
   feedback-coordinate section. This shape is superseded by `1.6.8` inline
   metric recipes.
-- `OPS_MEMORY_TEMPLATE.md` bumps to `0.1.1` and adds autonomy-time and
-  repo-adoption tracked-feedback refs.
+- The retired operating-memory template had added autonomy-time and
+  repo-adoption tracked-feedback refs before the product-strategy migration.
 - Framework docs describe the `goals.yaml` KPI keys plus `bindings.yaml` provider
   loop, daily/cumulative chart semantics, and source-gap behavior.
 
@@ -321,9 +360,9 @@ Migration steps:
    when chart metadata is needed.
 3. Prefer the `1.6.8` migration instead: author inline metric recipes in
    `farplane/bindings.yaml`; missing access becomes a source gap.
-4. Add `Tracked Feedback` refs for autonomy time and repo adoption in
-   `farplane/ops-memory.md` when relevant. Store raw values in metric
-   snapshots, not ops memory.
+4. Superseded by the product-strategy migration: add autonomy-time and repo
+   adoption refs to the owning product strategy when relevant. Store raw
+   values in metric snapshots, not product strategy.
 
 Proof commands:
 
@@ -338,26 +377,27 @@ python3 skills/skill-maintenance/scripts/check_skills.py --write
 
 Date: 2026-07-01
 
-Primary change: make `farplane/ops-memory.md` a standard generated project
-surface with a reusable template and documented sections.
+Primary change: historically made the now-retired operating-memory surface a
+standard generated project file with a reusable template and documented
+sections. This was later superseded by product-local strategy in `product.md`.
 
 Changed surfaces:
 
 - `MANIFEST_TEMPLATE.json` bumps `farplane-framework` from `1.6.5` to `1.6.6`.
-- Standard tracked paths now include `farplane/ops-memory.md`.
-- Bootstrap copies `OPS_MEMORY_TEMPLATE.md` to `farplane/ops-memory.md`.
-- Project-file and lifecycle docs describe the standard ops-memory sections:
-  Current Focus, Active Projects, Tracked Feedback, Next Frontier, Constraints,
-  Parking Lot, Recent Decisions, and Pulse Notes.
+- Standard tracked paths temporarily included the operating-memory file.
+- Bootstrap temporarily copied the retired operating-memory template.
+- Project-file and lifecycle docs temporarily described operating-memory
+  sections such as focus, active projects, tracked feedback, frontier,
+  constraints, parking, recent decisions, and Pulse notes.
 
 Migration steps:
 
 1. Bump `farplane/manifest.json` `spec_version` and
    `template_uses.farplane-framework` to `1.6.6`.
-2. Add `farplane/ops-memory.md` from
-   `skills/init-advisor/references/OPS_MEMORY_TEMPLATE.md` when missing.
-3. Keep raw metric readings in `.farplane/metrics/**`; use ops-memory for
-   active project context, feedback refs, source gaps, and next-frontier notes.
+2. Superseded: do not add the retired operating-memory file.
+3. Keep raw metric readings in `.farplane/metrics/**`; use product strategies
+   for active project context, feedback refs, source gaps, and next-frontier
+   notes.
 
 Proof commands:
 

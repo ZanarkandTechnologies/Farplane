@@ -24,8 +24,8 @@ Reports use minimal frontmatter for indexing only. Put judgment, confidence,
 pain hypotheses, questions, and next actions in the report body. `skill` names
 the report-producing skill so shared report indexes can filter by source.
 `industry` and `farplane_product_id` are allowed when they improve search or
-connect the report to a product lane in `farplane/products.md`; omit them when
-unknown.
+connect the report to a product lane in `farplane/products/<product>/product.md`
+or the generated `farplane/products.json`; omit them when unknown.
 
 Default storage:
 
@@ -66,8 +66,9 @@ authoring inline unless a separate research artifact is needed.
         and whether the report belongs to a project `.farplane/crm/` directory
         or the global `~/.farplane/crm/` directory.
   - [ ] When project context exists, resolve whether the report maps to a
-        `farplane/products.md` product ID such as `market_learning`,
-        `productization`, or `distribution`.
+        product ID from `farplane/products/<product>/product.md` or generated
+        `farplane/products.json`, such as `market_learning`, `productization`,
+        or `distribution`.
   - [ ] If the target cannot be identified from the request, ask one narrow
         blocking question instead of researching the wrong person.
 - [ ] 2. Gather the smallest useful source set.

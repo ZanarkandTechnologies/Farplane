@@ -88,8 +88,8 @@ routes:
         self.assertEqual(method["kind"], "skill")
 
     def test_known_file_refs_ignore_prose_suffixes(self) -> None:
-        node_id, kind, label, _tags = lifecycle_graph.canonical_ref("farplane/automations.md prompt updates")
-        self.assertEqual(node_id, "file:farplane/automations.md")
+        node_id, kind, label, _tags = lifecycle_graph.canonical_ref("farplane/automations.toml prompt updates")
+        self.assertEqual(node_id, "file:farplane/automations.toml")
         self.assertEqual(kind, "file")
         self.assertEqual(label, "Reviewed automation prompts")
 

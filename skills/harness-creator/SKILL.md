@@ -27,7 +27,10 @@ The default durable outputs are the standard Farplane project files:
 farplane/harness.md  = static human charter: mission, thesis, values,
                        non-tradeoffs, leverage commitments, agent authority,
                        allocation guardrails, and change rule
-farplane/products.md = product catalog and work-lane weights
+farplane/products/<product>/product.md = product-loop identity, current
+                       strategy, KPI refs, artifact workflows, and work-lane
+                       policy
+farplane/products.json = generated machine/UI product index
 farplane/goals.yaml    = dynamic strategy, goal axes with inline SMART goals,
                        KPI IDs, interpretation, current bets, milestone, and
                        holds
@@ -71,7 +74,7 @@ project_harness_creator(project_idea, values?, priorities?, mode_presets?, conte
    + proposed_tickets
    + current_milestone
    + goal_advisor_handoff
-state: reads(operator idea, values, constraints, local assets/docs/tickets/skills, docs/skills/registry.jsonl, .agents/skills/**?, harness doctrine, farplane/harness.md, farplane/products.md, farplane/goals.yaml, farplane/automations.toml, and farplane/bindings.yaml when present, current external research only when domain truth matters); writes(farplane/harness.md static-charter deltas only with explicit approval, farplane/products.md product-catalog deltas, farplane/goals.yaml strategy deltas through goals policy, proposed tickets, farplane/automations.toml, farplane/bindings.yaml when configuring recurring work, .agents/skills/<product-skill>/SKILL.md stubs or refinement-ticket handoffs, optional capability/gap/handoff sidecars, optional Goal Packet drafts)
+state: reads(operator idea, values, constraints, local assets/docs/tickets/skills, docs/skills/registry.jsonl, .agents/skills/**?, harness doctrine, farplane/harness.md, farplane/products/*/product.md, farplane/products.json, farplane/goals.yaml, farplane/automations.toml, and farplane/bindings.yaml when present, current external research only when domain truth matters); writes(farplane/harness.md static-charter deltas only with explicit approval, farplane/products/<product>/product.md product-loop deltas, regenerated farplane/products.json, farplane/goals.yaml strategy deltas through goals policy, proposed tickets, farplane/automations.toml, farplane/bindings.yaml when configuring recurring work, .agents/skills/<product-skill>/SKILL.md stubs or refinement-ticket handoffs, optional capability/gap/handoff sidecars, optional Goal Packet drafts)
 gates: values_or_default_values_named; priorities_named; feedback_loop_defined_or_ticketed; metric_recipes_honest; existing_tickets_checked_first; existing_skills_checked_before_product_skill_stubs; product_skill_reuse_map_written; missing_systems_named; blockers_ticketed; side_effect_gates_named; current_milestone_named; pm_activation_gate_named; goal_advisor_handoff_ready
 routes: init-advisor | research:* | ingest-content | horizon-advisor | harness-advisor | skill-creator | goal-advisor | automation-advisor | optimize-with-human | interval-update | review | relevant domain skill
 fails: runs Goal before designing harness; treats parent harness as an indefinite native Goal; schedules hidden runtime; analyzes metrics that do not exist; creates local product skills before checking existing reusable skills and systems; promotes project-local product skills to root skills before repeated proof; activates PM loops before core product skills or refinement tickets exist; performs R&D when a standard system template is enough; triggers publishing/spend/account/customer side effects without approval
@@ -150,11 +153,12 @@ skill to root `skills/` only after repeated proof shows cross-project reuse.
      as a transient split-surface planning worksheet when one review artifact
      is useful.
    - [ ] Write approved static charter content to `farplane/harness.md`;
-     product/team output content to `farplane/products.md`; and strategy,
+     product/team output content to `farplane/products/<product>/product.md`;
+     regenerated product index content to `farplane/products.json`; and strategy,
      goal axes, inline SMART goals, KPI IDs, interpretation, current bets,
      milestone, and holds to `farplane/goals.yaml`.
    - [ ] Define static charter values in `harness.md`, product pipelines in
-     `products.md`, strategy axes in `goals.yaml`, prompt cadence in
+     product-local `product.md` files, strategy axes in `goals.yaml`, prompt cadence in
      `automations.toml`, safe skill coordinates in `bindings.yaml`, and operator
      tickets for missing systems or gates.
    - [ ] For project-goal-shaped harnesses, keep `project` as the default durable
@@ -210,7 +214,7 @@ skill to root `skills/` only after repeated proof shows cross-project reuse.
      `ticket` node with `type: unblock` instead of expanding the harness
      Markdown.
 - [ ] 6. Derive local product skills after the inventory.
-   - [ ] For each `farplane/products.md` product row, write
+   - [ ] For each `farplane/products/<product>/product.md` product loop, write
      `derive_local_product_skill(product, existing_skills, goals, constraints)
      -> reuse_map + local_skill_stub? + refinement_ticket?`.
    - [ ] Prefer reusing existing root `skills/*` and existing
@@ -312,7 +316,8 @@ Return or write:
 
 ```text
 Static Charter Delta (`farplane/harness.md`):
-Product Catalog Delta (`farplane/products.md`):
+Product Loop Delta (`farplane/products/<product>/product.md`):
+Generated Product Index (`farplane/products.json`):
 Product Skill Reuse Map:
 Local Product Skill Stubs (`.agents/skills/<product-skill>/SKILL.md`):
 Product Skill Refinement Ticket:
@@ -354,7 +359,8 @@ tickets/TASK-YYYY-unblock-*.md      # preferred for human access/setup blockers
 ## Gotchas
 
 - Split files first: `farplane/harness.md` owns static human charter content,
-  `farplane/products.md` owns product catalog and work lanes, and
+  `farplane/products/<product>/product.md` owns product-loop strategy and work
+  lanes, `farplane/products.json` is generated for UI/tools, and
   `farplane/goals.yaml` owns dynamic strategy. A `project-harness.md` worksheet is evidence, not the
   canonical source of truth.
 - Evidence first: no refinement, validation, or "business is working" claim

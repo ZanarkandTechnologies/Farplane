@@ -35,7 +35,7 @@ Default local surfaces for project automations:
 - proposal ledger or inbox: `.farplane/feed-scout/proposals.jsonl`
 
 These files stay ignored local state unless a project deliberately promotes
-fixture examples into tracked docs. Use `farplane/automations.md` to store the
+fixture examples into tracked docs. Use `farplane/automations.toml` to store the
 reviewable prompt for an explicit run; do not add a hidden daemon or live
 scraping loop.
 

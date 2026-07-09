@@ -95,7 +95,7 @@ source:
 - Important states the agent must reach quickly:
   - current project harness in `farplane/harness.md`
   - dynamic portfolio in `farplane/goals.yaml`
-  - automation program in `farplane/automations.md`
+  - automation program in `farplane/automations.toml`
   - live runtime reports in `.farplane/reports/`
   - active tickets in `tickets/`
 - Fast-entry surfaces to create or preserve: ticket `Done / Proof`, Goal

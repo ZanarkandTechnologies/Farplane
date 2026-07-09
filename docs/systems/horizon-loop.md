@@ -100,7 +100,7 @@ flowchart LR
   classDef added fill:#dcfce7,stroke:#15803d,color:#111827
   classDef retired fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d,stroke-dasharray: 5 3
 
-  goals["goals / products<br/>farplane/products.md"]:::keep
+  goals["goals / products<br/>farplane/goals.yaml + products.json"]:::keep
   automations["automations<br/>farplane/automations.toml"]:::keep
   advisor["FEAT-0032<br/>goal-advisor"]:::changed
   pulse["FEAT-0066<br/>product-scoped Pulse"]:::changed

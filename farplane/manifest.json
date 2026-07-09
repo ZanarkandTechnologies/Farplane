@@ -1,8 +1,8 @@
 {
   "schema": "farplane_project",
-  "spec_version": "1.6.16",
+  "spec_version": "1.6.17",
   "template_uses": {
-    "farplane-framework": "1.6.16"
+    "farplane-framework": "1.6.17"
   },
   "project": {
     "name": "Farplane",

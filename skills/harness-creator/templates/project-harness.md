@@ -4,7 +4,7 @@ status: draft
 created_at: TODO
 updated_at: TODO
 template_id: project-harness
-template_version: "0.3.4"
+template_version: "0.3.5"
 feature_refs:
   - FEAT-0007
 project_id: TODO
@@ -12,7 +12,8 @@ automation_status: preview
 framework_template_version: "0.3.0"
 canonical_targets:
   - farplane/harness.md
-  - farplane/products.md
+  - farplane/products/<product>/product.md
+  - farplane/products.json
   - farplane/goals.yaml
   - farplane/automations.toml
   - farplane/bindings.yaml
@@ -31,7 +32,9 @@ Farplane files:
 - `farplane/harness.md` owns the static human charter: mission, human thesis,
   operating principles, non-tradeoffs, static leverage commitments, agent
   authority, allocation guardrails, and change rule.
-- `farplane/products.md` owns the product catalog and work-lane weights.
+- `farplane/products/<product>/product.md` owns product-loop strategy,
+  work-lane policy, KPI refs, and artifact workflows.
+- `farplane/products.json` is the generated machine/UI product index.
 - `farplane/goals.yaml` owns dynamic strategy, KPIs, current bets, milestone, and
   holds.
 - `farplane/automations.toml` owns reviewable full Codex automation config.
@@ -90,11 +93,13 @@ Interval reports may propose the delta, but cannot apply it silently.
 
 ## Product Catalog Delta
 
-Target: `farplane/products.md`
+Target: `farplane/products/<product>/product.md` and regenerated
+`farplane/products.json`
 
-Use this section for team identity, product rows, work-lane weights, and
-constraints. Do not put planning algorithms or operational workflow steps in
-`farplane/products.md`; those belong in skills and automation prompts.
+Use this section for product identity, current strategy, work-lane policy,
+artifact workflows, and constraints. Do not put planning algorithms or
+operational workflow steps in product `product.md`; those belong in skills and
+automation prompts.
 
 | ID | Product | Audience | Output | Reward |
 | --- | --- | --- | --- | --- |
