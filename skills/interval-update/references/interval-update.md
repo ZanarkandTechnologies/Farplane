@@ -104,7 +104,9 @@ Rules:
 ## Optional Report Workflows
 
 Report workflows are generic functions over a context bundle and timeframe. The
-caller enables them with booleans or lightweight modes.
+caller enables them with booleans or lightweight modes. `SKILL.md` owns the
+non-optional parent run contract; this reference provides extended config and
+workflow detail.
 
 ```text
 report_workflows = {
@@ -115,6 +117,7 @@ report_workflows = {
   opportunity_signals?: bool | "when_sources_exist",
   goal_drift?: bool | "light",
   metric_snapshot?: bool | "when_sources_exist",
+  reward_checkins?: bool | "light",
   compounding_leverage_review?: bool | "light",
   skill_hardening?: bool | "when_sources_exist",
   skill_refinement?: bool | "when_sources_exist",
@@ -125,9 +128,21 @@ report_workflows = {
 ```
 
 Missing workflow flags mean do not run that workflow. `SKILL.md` owns the
-workflow reference index. Load only the workflow ref files for enabled flags;
-those files own detailed todos, inline-vs-subagent routing, evidence rules, and
-merge shape.
+non-optional parent run contract. Load
+[workflow-index.md](workflow-index.md) only when workflow flags are enabled,
+then load only the workflow ref files for enabled flags. Those files own
+detailed todos, inline-vs-subagent routing, evidence rules, and merge shape.
+
+## Caller Ownership
+
+Daily and Weekly interval presets are automation-owned configuration wrappers.
+They provide `interval_id`, windows, parent refs, workflow flags, and policy
+overrides. They are not separate skill packages and should not restate default
+Farplane refs when `interval-update` can resolve them.
+
+Pulse is owned by `pulse-update`. Interval reports may become Pulse strategy
+constraints, but `interval-update` does not reconcile boards, admit tickets,
+spawn workers, chase reviews, or write Pulse ledgers.
 
 ## Workflow
 
@@ -137,12 +152,15 @@ merge shape.
 3. Resolve cross-interval refs from `interval_output_refs`.
 4. Normalize evidence into
    [interval-context-bundle.md](../templates/interval-context-bundle.md).
-5. Reflect on the past window by running only enabled reflection workflows
-   against the context bundle, `review_window`, and `planning_window`, loading
-   only the workflow reference files named in `SKILL.md`.
+5. Reflect on the past window by spawning only enabled reflection workflows as
+   read-only subagent lanes against the context bundle, `review_window`, and
+   `planning_window`, loading only the workflow reference files named in
+   [workflow-index.md](workflow-index.md).
 6. Close or update rewards. For enabled `reward_checkins`, run the due queue,
-   fill actual reward results and `reward_score` for due ticket rewards, and
-   report low-scoring predictions before planning the next window.
+   propose `ticket_reward_patches` for actual reward results and `reward_score`
+   on due ticket rewards, and report low-scoring predictions before planning
+   the next window. Apply those patches only after the interval report records
+   them as allowed post-report deltas.
 7. For enabled self-update workflows, close due reward signals from prior
    interval reports before selecting new strategy moves.
 8. Score leverage and reward signals. Treat scores as planning aids with cited
@@ -414,8 +432,18 @@ horizon review.
 
 - Every enabled workflow output must cite context-bundle evidence or raw source
   pointers. Reject generic strategy prose.
+- Every enabled report workflow runs as an isolated read-only subagent lane by
+  default. The parent interval agent owns context resolution, final synthesis,
+  report writing, and explicitly allowed post-report deltas.
+- Workflow lanes consume `summary_context` first and open
+  `raw_evidence_pointers` only for cited proof, source-gap classification, or a
+  named workflow exception.
 - Analysis subagents are read-only. They must not mutate tickets, goals,
   external tools, or automation state.
+- `reward_checkins` is the gated write exception: its helper may discover due
+  rewards, and its analyzer may propose only ticket Reward actual and score
+  patches named by the workflow contract. The parent applies those patches only
+  after the dated report records them as allowed post-report deltas.
 - Leverage signals should come from existing reports, tickets, skills,
   registries, lessons, troubles, feedback, metrics, or explicitly supplied
   external source refs. Do not create a separate leverage backlog by default.

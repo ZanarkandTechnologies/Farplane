@@ -53,8 +53,12 @@ or when the decision requires fresh public evidence.
 
 ## Phase Boundary
 
-Run inline for a small opportunity packet. Use a read-only subagent when source
-refs are numerous or current web research is explicitly enabled.
+Enabled `opportunity_signals` runs as a read-only subagent lane by default. The
+parent interval agent may handle only mechanical source binding inline; the
+lane reads the context bundle, consumes summary context first, opens raw
+evidence pointers only for cited proof or source gaps, and returns opportunity
+decisions for the parent report. Current web remains allowed only when policy
+enables it.
 
 ## Todo List
 

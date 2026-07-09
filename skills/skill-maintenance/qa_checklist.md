@@ -53,6 +53,8 @@ prove the normal path:
 - reference map with precise load conditions
 - final result/proof contract, usually in the signature or todo list
 - short command examples that are normally run
+- executable first-load instructions reflected in the todo list, gates, fails,
+  or signature instead of only in prose
 
 ## Checklist Placement
 
@@ -165,24 +167,32 @@ they are needed on every invocation:
     - Violation: The skill explains the same workflow twice instead of keeping
       the executable path in one place.
 
-12. `reference_escape_hatch`
+12. `instruction_todo_alignment`
+    - Question: Are executable first-load instructions such as `load`, `run`,
+      `apply`, `reject`, `do not`, `must`, and branch-specific `when/if`
+      actions represented in the todo list, gates, fails, or signature?
+    - Violation: A standalone paragraph contains runtime instructions that an
+      agent must obey, but the numbered todo path does not carry or point to
+      that action.
+
+13. `reference_escape_hatch`
     - Question: When detail moves out of first load, does `SKILL.md` say when to
       load the new reference?
     - Violation: Detail is hidden in a reference with no branch condition.
 
-13. `line_budget_review`
+14. `line_budget_review`
     - Question: Did the maintainer actively inspect length after the edit?
     - Violation: If `SKILL.md` exceeds roughly 250 lines, the audit lacks the top
       removable sections. If it exceeds roughly 400 lines, treat it as a failure
       unless mandatory first-load contracts justify the size.
 
-14. `question_list_to_signature`
+15. `question_list_to_signature`
     - Question: Can a long list of intake questions become a compact function
       signature, parameter list, or schema?
     - Violation: The skill lists many fixed questions even though normal agent
       behavior can infer and ask only for missing parameters.
 
-15. `extra_section_value`
+16. `extra_section_value`
     - Question: For each top-level section not present in the current skill
       template, can it fold into a core section without losing behavior?
     - Violation: An extra section exists for organization, explanation, or a
@@ -192,7 +202,7 @@ they are needed on every invocation:
       insufficient, what behavior would be lost by folding it, and why a
       reference file would create too much defer-loading risk.
 
-16. `proof_surface_fit`
+17. `proof_surface_fit`
     - Question: Does the skill choose the right proof surface for its behavior:
       deterministic test or validator for mechanically checkable behavior,
       eval for variable AI behavior, agent QA or behavior capture for multi-turn
@@ -201,7 +211,7 @@ they are needed on every invocation:
       outputs to an LLM judge, skips evals for prompt-like behavior, or treats
       reviewer prose as behavior proof without a case, artifact, or command.
 
-17. `quality_signal_layer_fit`
+18. `quality_signal_layer_fit`
    - Question: Does the change keep QA checklists, metrics, review rubrics, and
      reward signals in the right layers?
    - Violation: The skill turns checklist items into default metrics, creates a
@@ -209,7 +219,7 @@ they are needed on every invocation:
      scalar score, or uses goal/project metrics where checklist/review feedback
      would preserve better repair context.
 
-18. `task_case_quality`
+19. `task_case_quality`
     - Question: When a skill adds tests, evals, examples, or QA scenarios, are
       the cases realistic, distinct, traceable to a risk/source, judgeable, and
       small enough to maintain?
@@ -217,7 +227,7 @@ they are needed on every invocation:
       rows, synthetic cases with no stated coverage gap, or cases whose failure
       would not identify what to fix.
 
-19. `anti_cheat_case_design`
+20. `anti_cheat_case_design`
     - Question: For skill evals and agent behavior cases, does the user-facing
       query avoid leaking the skill name, expected routing, checklist, reference
       points, or desired answer?
@@ -225,26 +235,26 @@ they are needed on every invocation:
       making the case a memory test of the eval author's wording instead of a
       behavior test of the skill.
 
-20. `qa_preflight_loaded`
+21. `qa_preflight_loaded`
    - Question: When a skill has `qa_checklist.md`, does `SKILL.md` tell the
      invoking agent to read it before execution as preflight guardrails?
    - Violation: The checklist is only mentioned as a final cleanup step, so the
      agent may discover the gotchas after making the mistake.
 
-20. `qa_finish_independence`
+22. `qa_finish_independence`
    - Question: For material work, does the finish path apply the checklist
      again and route independent reviewer/subagent verification when useful?
    - Violation: The author self-certifies material checklist conformance without
      a reviewer lane or a recorded reason to keep review inline.
 
-21. `qa_gotcha_deduplication`
+23. `qa_gotcha_deduplication`
    - Question: Are `## Gotchas` and `qa_checklist.md` separated by job rather
      than mirrored?
    - Violation: `SKILL.md` repeats the full checklist as gotchas, or
      `qa_checklist.md` merely copies gotchas without structured evidence,
      violation, fix, or deferral checks.
 
-22. `project_specific_context_isolation`
+24. `project_specific_context_isolation`
    - Question: If the skill is reusable, does it avoid embedding a specific
      project, person, private path, customer, automation profile, or local
      workflow in `SKILL.md`, first-load refs, evals, templates, or generated
@@ -256,7 +266,7 @@ they are needed on every invocation:
      may keep specific context only when that specificity is the skill's stated
      purpose.
 
-23. `low_value_prose_scan`
+25. `low_value_prose_scan`
    - Question: Does each first-load sentence change execution, routing,
      proof, safety, ownership, or maintenance decisions?
    - Violation: A sentence is generic aspiration, reassurance, rationale,

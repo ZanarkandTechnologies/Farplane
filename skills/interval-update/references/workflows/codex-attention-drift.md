@@ -58,9 +58,11 @@ Last-resort refs:
 
 ## Phase Boundary
 
-Run inline for small pulse/report windows. Use a read-only subagent when
-telemetry, thread rows, or Pulse reports are large enough that independent
-clustering will improve the evidence trail.
+Enabled `codex_attention_drift` runs as a read-only subagent lane by default.
+The parent interval agent may handle only mechanical source binding inline; the
+lane reads the context bundle, consumes summary context first, opens raw
+evidence pointers only for cited proof or source gaps, and returns attention
+findings for the parent report.
 
 ## Todo List
 

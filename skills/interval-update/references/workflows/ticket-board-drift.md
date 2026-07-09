@@ -49,8 +49,11 @@ Optional sources:
 
 ## Phase Boundary
 
-Run inline for small ticket sets. Use a read-only subagent when many tickets,
-worker reports, or external status rows need reconciliation.
+Enabled `ticket_board_drift` runs as a read-only subagent lane by default. The
+parent interval agent may handle only mechanical source binding inline; the
+lane reads the context bundle, consumes summary context first, opens raw
+evidence pointers only for cited proof or source gaps, and returns proposed
+deltas for the parent report.
 
 ## Todo List
 

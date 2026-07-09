@@ -152,8 +152,8 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "Reference Map",
         "Output"
       ],
-      "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.7-e6cf961af369.md",
-      "source_commit": "e6cf961af369",
+      "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.7-71bb3bd7dab4.md",
+      "source_commit": "71bb3bd7dab4",
       "summary": "working tree current template",
       "version": "0.3.7"
     }
@@ -635,7 +635,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "trigger catalogs stay out of frontmatter"
       ],
       "missing_signals": [],
-      "source_commit": "e6cf961af369",
+      "source_commit": "71bb3bd7dab4",
       "template_version": "0.3.7",
       "title": "Routing clarity",
       "verdict": "pass"
@@ -649,7 +649,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "policy prose is not treated as a top-level todo"
       ],
       "missing_signals": [],
-      "source_commit": "e6cf961af369",
+      "source_commit": "71bb3bd7dab4",
       "template_version": "0.3.7",
       "title": "Todo executability",
       "verdict": "pass"
@@ -663,7 +663,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "same-scope recursion is forbidden"
       ],
       "missing_signals": [],
-      "source_commit": "e6cf961af369",
+      "source_commit": "71bb3bd7dab4",
       "template_version": "0.3.7",
       "title": "Phase boundary",
       "verdict": "pass"
@@ -677,7 +677,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "output contract is explicit"
       ],
       "missing_signals": [],
-      "source_commit": "e6cf961af369",
+      "source_commit": "71bb3bd7dab4",
       "template_version": "0.3.7",
       "title": "Proof contract",
       "verdict": "pass"
@@ -691,7 +691,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "qa_checklist.md is a repeatable runtime guardrail only when warranted"
       ],
       "missing_signals": [],
-      "source_commit": "e6cf961af369",
+      "source_commit": "71bb3bd7dab4",
       "template_version": "0.3.7",
       "title": "Eval / QA sync",
       "verdict": "pass"
@@ -838,7 +838,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       ]
     }
   ],
-  "generated_at": "2026-07-09T03:35:37+00:00",
+  "generated_at": "2026-07-09T04:30:35+00:00",
   "rollout": [
     {
       "eval": "eval_task.json",
@@ -3736,7 +3736,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "project": true
       },
       "template_uses": {
-        "farplane-framework": "1.6.16"
+        "farplane-framework": "1.6.17"
       }
     },
     {
@@ -3760,10 +3760,10 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "FEAT-0060"
       ],
       "path": "farplane/manifest.json",
-      "status": "stale",
+      "status": "current",
       "target_basis": "projects with a farplane/manifest.json surface",
       "template_id": "farplane-framework",
-      "used_version": "1.6.16"
+      "used_version": "1.6.17"
     },
     {
       "consumer_id": "Farplane-UI",
@@ -5963,7 +5963,8 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "project": 2
       },
       "by_status": {
-        "stale": 2
+        "current": 1,
+        "stale": 1
       },
       "current_version": "1.6.17",
       "feature_refs": [
@@ -6255,7 +6256,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     {
       "introduced_at": "2026-06-29",
       "latest_at": "2026-07-09",
-      "latest_commit": "e6cf961af369",
+      "latest_commit": "71bb3bd7dab4",
       "latest_summary": "working tree current template",
       "release_count": 2,
       "sections": [
@@ -6269,7 +6270,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "Reference Map",
         "Output"
       ],
-      "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.7-e6cf961af369.md",
+      "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.7-71bb3bd7dab4.md",
       "snapshots": [
         {
           "introduced_at": "2026-06-29",
@@ -6279,8 +6280,8 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         },
         {
           "introduced_at": "2026-07-09",
-          "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.7-e6cf961af369.md",
-          "source_commit": "e6cf961af369",
+          "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.7-71bb3bd7dab4.md",
+          "source_commit": "71bb3bd7dab4",
           "summary": "working tree current template"
         }
       ],

@@ -21,32 +21,42 @@ owns cadence by running explicit automations. This skill owns the shared
 report-then-plan workflow for one configured window. The caller supplies the
 timeframe, cross-interval context refs, and optional report workflows.
 
-The interval phase order is:
+The parent interval run is:
 
 ```text
-reflect past window -> close or update rewards -> plan next window -> emit guidance
+interval_parent_run(config, context_refs, workflow_flags)
+  -> context_bundle(summary_context, raw_evidence_pointers)
+   + workflow_findings
+   + dated_interval_report
+   + next_window_guidance
+   + allowed_post_report_deltas
 ```
 
-Run reflection workflows first, usually in parallel or as lightweight inline
-passes over the same context bundle. Then close due reward signals and score
-leverage before choosing new strategy moves. `priority_planning` is the final
-synthesis step that turns reflection, reward closure, and leverage findings
-into the next-window plan, product strategy updates, Pulse constraints, ticket
-deltas, and Goal Advisor handoffs.
+Callers own cadence, presets, and invocation profile. `interval-update` owns
+one configured report-then-plan run. It must not select scheduler jobs, manage
+heartbeat state, reconcile worker boards, or execute ticket work.
 
-Do not wrap this skill in a hidden scheduler thread. If a project needs another
-cadence, create another explicit automation that calls this skill with a named
-interval, review window, planning window, context refs, and workflow flags.
+Parent responsibilities:
+- Resolve defaults and configured refs.
+- Build `summary_context` plus `raw_evidence_pointers`.
+- Spawn one isolated read-only subagent lane for each enabled report workflow.
+- Run deterministic helper scripts inline only for mechanical discovery.
+- Collect workflow findings and run final synthesis.
+- Write the dated report before any durable ticket, product, or goals mutation.
+- Apply only explicitly allowed post-report deltas.
 
-Every interval-planned ticket must carry expected reward at planning time.
-Ticket deltas emitted by Daily, Weekly, or other interval reports are part of
-the planning algorithm, so they must include frontmatter `rewards.kpi` plus a
-parseable `## Reward` fenced YAML block with `kpi_rewards[]` entries,
-`expected_reward` text, `check_in_at`, and a `guard`. At least one `kpi_id`
-must come from `farplane/products/<product>/product.md` KPI refs and resolve to
-`farplane/bindings.yaml#metrics`. If the interval cannot name the expected
-reward, it should emit Pulse guidance or a planning blocker instead of creating
-a ticket.
+Workflow lanes consume `summary_context` first and open
+`raw_evidence_pointers` only when they need cited source proof, source-gap
+classification, or an explicit workflow exception. The default lane is
+read-only: it must not edit tickets, goals, product files, automation state, or
+external systems. `reward_checkins` is the gated exception: its helper may find
+due ticket reward items, and the analyzer may propose ticket reward patches for
+`Reward.kpi_rewards[].actual_result`, `reward_score`, and
+`reward_score_reason`. The parent applies those patches only after the dated
+report records them as allowed post-report deltas.
+Detailed workflow catalogs, helper signatures, ticket reward contracts, and
+caller preset boundaries live in references. Load only the refs required by the
+enabled flags and branch conditions.
 
 ## Skill Signature
 
@@ -55,6 +65,8 @@ interval_update(project_root, interval_id, review_window, planning_window,
                 context_refs?, report_workflows?, planning_policy?,
                 write_policy?, now?)
   -> context_bundle
+   + summary_context
+   + raw_evidence_pointers
    + source_gaps
    + interval_report
    + ui_summary
@@ -63,36 +75,26 @@ interval_update(project_root, interval_id, review_window, planning_window,
    + next_window_plan
    + pulse_guidance
    + ticket_deltas
+   + allowed_post_report_deltas
    + goals_delta?
    + goal_advisor_handoffs?
 
 state:
-  reads(farplane/harness.md?,
-        farplane/products/*/product.md?,
-        farplane/products.json?,
-        .agents/skills/**/SKILL.md?,
-        farplane/goals.yaml?,
-        tickets/,
-        docs/HISTORY.md?,
-        docs/MEMORY.md?,
-        docs/LESSONS.md?,
-        docs/TROUBLES.md?,
-        .farplane/reports/pulse/?,
-        .farplane/reports/interval/?,
-        .farplane/reports/dogfood-review/?,
-        docs/features/registry.jsonl?,
-        docs/systems/registry.jsonl?,
-        farplane/pm.json?,
-        worker thread refs when available)
+  reads(default Farplane refs, configured context_refs, tickets/,
+        product refs, goals, memory/history/lessons/troubles,
+        Pulse/interval/dogfood reports, registries, PM/worker refs)
   writes(.farplane/reports/interval/<interval_id>/<YYYY-MM-DDTHHMMSSZ>.md,
          optional .farplane/reports/interval/<interval_id>/context/<YYYY-MM-DDTHHMMSSZ>.md,
-         farplane/products/*/product.md when write_policy allows compact product-strategy refresh,
+         ticket Reward actual/score patches only as recorded post-report deltas,
+         farplane/products/*/product.md only when write_policy allows,
          farplane/goals.yaml only through explicit goals-delta policy)
 
 gates:
   default_refs_resolved; configured_refs_merged; review_window_bound;
   cross_interval_refs_resolved_or_gap_labeled;
-  context_bundle_written_or_summarized; report_written_before_plan_or_goals_mutation;
+  context_bundle_written_or_summarized; summary_context_built;
+  raw_evidence_pointers_preserved; enabled_workflows_spawned_read_only;
+  reward_checkins_exception_gated; report_written_before_plan_or_goals_mutation;
   configured_report_workflows_run; drift_checked; next_window_plan_written; side_effect_gates_respected;
   date_stamped_report_used; report_ref_frontmatter_written; ui_summary_frontmatter_written
 
@@ -103,169 +105,13 @@ routes:
 fails:
   selecting due jobs; writing scheduler state; mutating tracked cadence config;
   making automations restate default Farplane paths; using latest.md as
-  canonical report; spawning broad leaf work; changing goals without
-  report-first goals-delta evidence
+  canonical report; spawning broad leaf work; running enabled workflows inline
+  as the default; letting workflow lanes mutate state; changing goals without
+  report-first goals-delta evidence; treating Pulse as an interval workflow
 ```
 
-## Default Resolution
-
-Resolve this standard context for every Farplane project, then merge
-caller-supplied `context_refs`.
-
-```text
-default_context_refs(project_root, interval_id) = {
-  harness_ref: farplane/harness.md,
-  products_ref: farplane/products.json,
-  product_defs_ref: farplane/products/*/product.md,
-  goals_ref: farplane/goals.yaml,
-  ticket_refs: tickets/,
-  memory_refs: [docs/MEMORY.md, docs/HISTORY.md, docs/LESSONS.md, docs/TROUBLES.md],
-  pulse_report_refs: .farplane/reports/pulse/**,
-  interval_report_refs: .farplane/reports/interval/**,
-  report_root: .farplane/reports/interval/<interval_id>,
-  context_bundle_root: .farplane/reports/interval/<interval_id>/context
-}
-```
-
-Configurable inputs:
-
-```text
-context_refs:
-  extra_refs?: [ref]
-  parent_context_refs?: [ref]
-  workflow_refs?: {
-    telemetry_refs?: [ref]
-    feedback_refs?: [ref]
-    opportunity_refs?: [ref]
-    metric_refs?: [ref]
-    status_refs?: [ref]
-  }
-  interval_output_refs?: [
-    {
-      interval_id: string,
-      selector: latest | inside_review_window | explicit_paths,
-      as: string
-    }
-  ]
-  replace_refs?: { <default_ref_name>: ref | [ref] }
-
-report_workflows:
-  plan_progress?: bool | "light"
-  codex_attention_drift?: bool | "light"
-  ticket_board_drift?: bool | "light"
-  feedback_obligations?: bool | "when_sources_exist"
-  opportunity_signals?: bool | "when_sources_exist"
-  goal_drift?: bool | "light"
-  metric_snapshot?: bool | "when_sources_exist"
-  reward_checkins?: bool | "light"
-  compounding_leverage_review?: bool | "light"
-  skill_hardening?: bool | "when_sources_exist"
-  skill_refinement?: bool | "when_sources_exist"
-  docs_consolidation?: bool | "when_sources_exist"
-  tracked_feature_review?: bool | "when_sources_exist"
-  priority_planning?: bool | "light"
-```
-
-`planning_policy` and `write_policy` may add phase instructions, side-effect
-gates, goals-delta policy, or report shape. Missing optional configs mean use
-the generic report-then-plan path only.
-Use [references/interval-update.md](references/interval-update.md) for the
-configuration contract, optional workflow definitions, and goals-delta policy.
-
-Workflow reference index:
-
-```text
-Reflection workflows:
-
-plan_progress(review_window)
-  -> goal_movement + task_drag + plan_realism
-  ref: references/workflows/plan-progress.md
-
-codex_attention_drift(review_window)
-  -> attention_map + drift_causes
-  ref: references/workflows/codex-attention-drift.md
-
-ticket_board_drift(review_window)
-  -> stale_work + board_hygiene_deltas
-  ref: references/workflows/ticket-board-drift.md
-
-feedback_obligations(review_window, planning_window)
-  -> commitments + followups
-  ref: references/workflows/feedback-obligations.md
-
-opportunity_signals(review_window, planning_window)
-  -> candidates + defer_or_displace_decisions
-  ref: references/workflows/opportunity-signals.md
-
-goal_drift(review_window)
-  -> goal_findings + goals_delta_candidates
-  ref: references/workflows/goal-drift.md
-
-metric_snapshot(review_window)
-  -> metric_status + gaps
-  ref: references/workflows/metric-snapshot.md
-
-reward_checkins(review_window, planning_window)
-  -> due_reward_checkins + bad_predictions + retro_ticket_candidates
-  ref: references/workflows/reward-checkins.md
-  script: scripts/reward_checkins.py
-
-Metric refresh helpers:
-
-count_ticket_kpi_rewards(ticket_dir, date, kpi_key)
-  -> { value, status, payload? }
-  script: scripts/metric_refresh.py ticket-reward-count
-
-calculate_autonomy_time_ratio(runtime_dir, date)
-  -> { value, status, payload? }
-  script: scripts/metric_refresh.py autonomy-time-ratio
-
-calculate_ticket_intervention_metrics(ticket_dir, runtime_dir, date)
-  -> { auto_completion_rate, intervention_free_ticket_count,
-       ticket_intervention_turn_count }
-  script: scripts/metric_refresh.py ticket-intervention-metrics
-
-select_content_metric_targets(content_ledger, platform, kpi_key, date, window_days?)
-  -> { status, external_ids, items, payload.fetch_command }
-  script: scripts/metric_refresh.py content-targets
-
-Reward and leverage synthesis:
-
-compounding_leverage_review(review_window, planning_window)
-  -> lever_inventory + top_experiment_candidates + reward_signals
-  ref: references/workflows/compounding-leverage-review.md
-
-Maintenance/refinement routing:
-
-skill_hardening(review_window, planning_window)
-  -> harden_skill_handoffs + eval_candidates + processed_state_delta
-  ref: references/workflows/skill-hardening.md
-
-skill_refinement(review_window, planning_window)
-  -> consolidate_skill_handoffs + compaction_candidates + coverage_risks
-  ref: references/workflows/skill-refinement.md
-
-docs_consolidation(review_window, planning_window)
-  -> consolidate_docs_handoffs + stale_doc_candidates + source_gaps
-  ref: references/workflows/docs-consolidation.md
-
-tracked_feature_review(review_window, planning_window)
-  -> dogfood_report + tracked_item_findings + interval_summary
-   + improvement_ticket_path_or_candidate?
-  skill: dogfood-review
-  scope: active generated feature/system registry rows with non-empty `track`,
-    plus active feature rows with `experimental: true`; retired or superseded
-    feature rows are historical evidence for successor rows, not review targets
-  writeback: when write_policy enables dogfood improvement ticket creation,
-    dogfood-review may create exactly one planning/review ticket for the run;
-    otherwise it must emit one complete candidate in the report
-
-Final planning synthesis:
-
-priority_planning(review_window, planning_window)
-  -> priorities + depriorities + proof_checks
-  ref: references/workflows/priority-planning.md
-```
+Extended schema and branch detail live in references; the todo list owns when
+to load them.
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
@@ -275,6 +121,9 @@ priority_planning(review_window, planning_window)
   - [ ] Bind `interval_id`, `review_window`, and `planning_window`.
   - [ ] Load `context_refs`, `report_workflows`, `planning_policy`, and
         `write_policy` only when the automation supplies them.
+  - [ ] Load [references/interval-update.md](references/interval-update.md)
+        when the run needs full context schema, default path details, metric
+        lifecycle, goals-delta policy, or caller ownership boundaries.
 - [ ] 2. Resolve default context.
   - [ ] Build default refs for the static harness charter, goals, tickets,
         memory, Pulse reports, interval reports, PM thread grouping, and worker
@@ -292,19 +141,24 @@ priority_planning(review_window, planning_window)
   - [ ] Check drift against the static harness charter, configured parent
         context refs, and goals.
   - [ ] Run only the enabled reflection workflows, passing the context bundle,
-        `review_window`, and `planning_window` to each workflow.
-  - [ ] Load only the workflow ref files named in the workflow reference index
-        for enabled workflows, then run inline or read-only subagent analysis
-        lanes as those refs direct.
+        `review_window`, and `planning_window` to each workflow lane.
+  - [ ] Load [references/workflow-index.md](references/workflow-index.md) and
+        only the workflow ref files for enabled workflows, then spawn read-only
+        subagent analysis lanes by default.
+  - [ ] Each workflow lane consumes `summary_context` first and opens
+        `raw_evidence_pointers` only for cited proof, source gaps, or an
+        explicit exception.
 - [ ] 4. Close rewards and synthesize leverage.
-  - [ ] When `reward_checkins` is enabled, run the due-check helper, then use a
-        read-only analyzer to fill `actual_result`, `reward_score`, and
-        `reward_score_reason` for due reward items. `reward_score` is `-1..1`
-        similarity between expected reward and actual result. Route
-        low-scoring or source-gap items into the interval report and create a
-        retro ticket only when the miss needs follow-up work.
-  - [ ] When `compounding_leverage_review` is enabled, close due reward
-        signals from prior interval reports before selecting new leverage moves.
+  - [ ] For each enabled workflow in this phase, load its workflow ref and spawn
+        a separate isolated lane; default lanes are read-only and return
+        findings or handoffs to the parent.
+  - [ ] When `reward_checkins` is enabled, run the due-check helper, then spawn
+        one bounded analyzer lane to propose `ticket_reward_patches` for due
+        item `actual_result`, `reward_score`, and `reward_score_reason`; route
+        low scores or source gaps into the report, and apply patches only later
+        as recorded post-report deltas.
+  - [ ] When `compounding_leverage_review` is enabled, run its isolated lane
+        before selecting new leverage moves.
   - [ ] When metric snapshots or reward signals are ambiguous, use a metric
         card before allowing them to drive planning.
   - [ ] When `skill_hardening` is enabled, route repeated troubles, lessons,
@@ -335,12 +189,9 @@ priority_planning(review_window, planning_window)
   - [ ] Convert executable work into ticket deltas or Goal Advisor handoffs,
         including `.agents/skills/<product-skill>/SKILL.md` refs when a
         local product skill owns the workflow.
-  - [ ] For every ticket delta or planned worker ticket, include frontmatter
-        `rewards.kpi` and a parseable `## Reward` block with `kpi_rewards[]`,
-        `expected_reward`, `check_in_at`, and `guard`; the KPI ID must exist in
-        product `product.md`, resolve to `farplane/bindings.yaml`, and match
-        between frontmatter and body. Do not create rewardless tickets from
-        interval planning.
+  - [ ] Before creating ticket deltas, load
+        [references/ticket-reward-contract.md](references/ticket-reward-contract.md)
+        and reject rewardless interval-planned tickets.
   - [ ] Return Pulse guidance as constraints for the fast executor loop.
 - [ ] 6. Write the report before durable mutations.
   - [ ] Write a date-stamped interval report.
@@ -357,6 +208,8 @@ priority_planning(review_window, planning_window)
   - [ ] Include source gaps, drift findings, evidence, product strategy
         proposals, and the proposed next plan before mutating goals, product
         files, or tickets.
+  - [ ] Apply only recorded `allowed_post_report_deltas`, including
+        `ticket_reward_patches` for Reward actual/score fields.
   - [ ] Use goals-delta promotion before changing `farplane/goals.yaml`.
   - [ ] Run `farplane reports index --project-root <project_root>` after
         writing the report when the CLI is available.
@@ -364,26 +217,17 @@ priority_planning(review_window, planning_window)
   - [ ] Summarize report paths, blockers, goals-delta decisions, and handoffs.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
-## Output
-
-- interval id and windows.
-- report paths.
-- UI summary frontmatter contract.
-- source gaps.
-- drift findings.
-- next-window plan.
-- reward check-in summary, due queue, and low-score follow-ups when enabled.
-- product strategy deltas written or proposed.
-- goals delta decisions or approval-required blockers.
-- Pulse guidance.
-- Goal Advisor handoffs or ticket deltas, with expected reward blocks for every
-  planned ticket.
-- Dogfood improvement ticket path or candidate when tracked feature review ran.
-
 ## Reference Map
-
 - [references/interval-update.md](references/interval-update.md) - interval
-  planning, context refs, optional report workflows, and goals-delta promotion.
+  planning, context refs, caller ownership, metric lifecycle, and goals-delta
+  promotion.
+- [references/workflow-index.md](references/workflow-index.md) - load when
+  `report_workflows` enables optional workflows; maps flags to workflow refs,
+  helper scripts, and output shapes.
+- [references/ticket-reward-contract.md](references/ticket-reward-contract.md)
+  - load before creating ticket deltas from interval planning.
+- [references/parent-run-contract.md](references/parent-run-contract.md) - load
+  for audits or compaction only; `SKILL.md` is the runtime authority.
 - [templates/interval-context-bundle.md](templates/interval-context-bundle.md)
   - default interval context bundle.
 - [templates/interval-report.md](templates/interval-report.md) - default

@@ -85,9 +85,13 @@ Do not fetch private planning systems by convention. They must be configured.
 
 ## Phase Boundary
 
-Run inline for small intervals. Use a read-only subagent when multiple workflow
-findings need independent synthesis or when the planning window is large enough
-that a second read reduces self-confirmation.
+Enabled `priority_planning` runs as a read-only subagent lane by default after
+reflection, reward closure, and leverage findings are available. The parent
+interval agent may handle only mechanical source binding and final allowed
+writeback inline; the lane reads the context bundle plus enabled workflow
+findings, consumes summary context first, opens raw evidence pointers only for
+cited proof or source gaps, and returns ranked planning guidance for the parent
+report.
 
 ## Todo List
 

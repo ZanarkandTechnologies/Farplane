@@ -84,5 +84,50 @@
       "No tracked config or scheduler state is mutated just to store last_report"
     ],
     "tags": ["interval-update", "reports"]
+  },
+  {
+    "id": "interval_first_load_owns_parent_contract",
+    "title": "Interval first-load contract owns orchestration",
+    "query": "An agent loads only interval-update/SKILL.md for a Daily interval with plan_progress, goal_drift, reward_checkins, and priority_planning enabled. What core execution contract must it follow before opening workflow references?",
+    "reference_points": [
+      "Treats Daily and Weekly as configuration wrappers that supply interval_id, windows, context refs, and workflow flags",
+      "Builds or summarizes one context bundle with summary_context and raw_evidence_pointers",
+      "Spawns one read-only subagent lane for each enabled report workflow by default",
+      "Uses summary_context first and opens raw_evidence_pointers only for cited proof, source gaps, or explicit exceptions",
+      "Keeps parent ownership of context resolution, final synthesis, report writing, and allowed post-report deltas",
+      "Writes the dated interval report before durable ticket, product, or goals mutation",
+      "Does not treat Pulse as an interval workflow or move Pulse board admission, worker handoffs, or reward ledgers into interval-update"
+    ],
+    "tags": ["interval-update", "first-load", "subagents", "context-bundle", "pulse-boundary"]
+  },
+  {
+    "id": "interval_workflow_lanes_are_read_only_by_default",
+    "title": "Enabled workflows run as read-only lanes",
+    "query": "A Weekly interval enables plan_progress, ticket_board_drift, feedback_obligations, docs_consolidation, skill_hardening, and priority_planning. Which agent owns each workflow and what may those lanes mutate?",
+    "reference_points": [
+      "The parent interval agent spawns isolated read-only subagent lanes for enabled workflows by default",
+      "Workflow lanes read the context bundle and consume summary_context before opening raw evidence pointers",
+      "Workflow lanes cite evidence or source gaps when opening raw pointers",
+      "Workflow lanes return findings or handoffs for the parent interval report",
+      "Workflow lanes must not mutate tickets, goals, product files, docs, skills, automation state, external systems, or ledgers",
+      "The parent interval agent owns final synthesis, report writing, and any explicitly allowed post-report mutations",
+      "Skill hardening or docs consolidation lanes may return handoffs but must not perform skill-maintenance or docs edits inline"
+    ],
+    "tags": ["interval-update", "workflow-lanes", "subagents", "read-only"]
+  },
+  {
+    "id": "interval_reward_checkins_gated_exception",
+    "title": "Reward check-ins are the gated write exception",
+    "query": "A Daily interval has reward_checkins enabled and finds a due ticket reward item with missing actual_result and reward_score. How should interval-update handle this without weakening the read-only lane rule?",
+    "reference_points": [
+      "Runs the reward_checkins due-item helper inline only as mechanical discovery",
+      "Uses a bounded analyzer lane over due items and cited evidence to ground actual_result and score",
+      "Allows patching only ticket Reward.kpi_rewards[].actual_result, reward_score, and reward_score_reason",
+      "Does not edit expected_reward, goals, products, automation state, or unrelated ticket fields",
+      "Reports due, scored, low-score, source-gap, and legacy-missing-check-in counts in the interval report",
+      "Creates retro ticket candidates only when a low score reveals real follow-up work",
+      "Preserves report-first and evidence-citation gates for any follow-up planning"
+    ],
+    "tags": ["interval-update", "reward-checkins", "write-exception", "tickets"]
   }
 ]

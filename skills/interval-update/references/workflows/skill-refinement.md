@@ -54,6 +54,15 @@ Default sources from the context bundle:
 - usage results, review notes, or validation output that show which behavior
   guardrails are still needed.
 
+## Phase Boundary
+
+Enabled `skill_refinement` runs as a read-only subagent lane by default. The
+parent interval agent may handle only mechanical source binding inline; the
+lane reads the context bundle, consumes summary context first, opens raw
+evidence pointers only for cited proof or source gaps, and returns refinement
+handoffs for the parent report. It must not edit skills unless the parent
+explicitly invokes `skill-maintenance` as a separate follow-up.
+
 ## Todo List
 
 - [ ] 1. Bind refinement candidates.

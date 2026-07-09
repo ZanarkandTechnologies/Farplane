@@ -1,3 +1,16 @@
+---
+kind: interval-context
+ref: reports/interval/<interval_id>/context/<timestamp>
+project: <project>
+automation_id: <automation_id>
+interval_id: <interval_id>
+status: draft
+created_at: <timestamp>
+review_window: <start>..<end>
+planning_window: <start>..<end>
+ui_summary: "<one concise context-bundle summary under 100 words>"
+---
+
 # Interval Context Bundle
 
 Generated: <timestamp>
@@ -6,6 +19,33 @@ Review window: <start> to <end> <timezone>
 Planning window: <start> to <end> <timezone>
 Interval id: <interval_id>
 Report workflows: <enabled workflow list>
+
+## Context Contract
+
+Workflow lanes read `summary_context` first. They open
+`raw_evidence_pointers` only when a finding needs cited source proof,
+source-gap classification, or an explicit workflow exception such as
+`reward_checkins`.
+
+```text
+summary_context:
+  purpose: bounded tables and planning signals sufficient for first-pass
+    workflow analysis
+raw_evidence_pointers:
+  purpose: paths, selectors, report refs, ticket refs, metric refs, or artifact
+    refs that lanes may inspect for cited proof
+lane_policy:
+  default: read_only_subagent
+  parent_only: context resolution, final synthesis, report writing, allowed
+    post-report mutations
+  exception: reward_checkins may patch ticket Reward actuals and score fields
+    under its workflow contract
+```
+
+## Summary Context
+
+Use these sections as the default bounded input for workflow lanes. Keep rows
+compact and cite evidence instead of copying raw reports or ticket bodies.
 
 ## Source Status
 
@@ -88,5 +128,8 @@ Report workflows: <enabled workflow list>
 -
 
 ## Raw Evidence Pointers
+
+Use this section for evidence that a workflow lane may open only when it needs
+source-level proof, source-gap classification, or an explicit exception.
 
 -

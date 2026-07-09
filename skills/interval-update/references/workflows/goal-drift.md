@@ -59,8 +59,11 @@ Do not load project-specific planning systems unless configured.
 
 ## Phase Boundary
 
-Run inline for small goal sets. Use a read-only subagent when many goals,
-reports, or outcomes need mapping.
+Enabled `goal_drift` runs as a read-only subagent lane by default. The parent
+interval agent may handle only mechanical source binding inline; the lane reads
+the context bundle, consumes summary context first, opens raw evidence pointers
+only for cited proof or source gaps, and returns goals-delta candidates for the
+parent report. The lane never edits `farplane/goals.yaml`.
 
 ## Todo List
 

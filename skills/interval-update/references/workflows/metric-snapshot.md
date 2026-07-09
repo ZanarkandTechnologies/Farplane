@@ -49,8 +49,11 @@ Supporting refs:
 
 ## Phase Boundary
 
-Run inline for a small metric packet. Use a read-only subagent when metric
-sources are numerous, inconsistent, or need normalization.
+Enabled `metric_snapshot` runs as a read-only subagent lane by default. The
+parent interval agent may handle only mechanical source binding inline; the
+lane reads the context bundle, consumes summary context first, opens raw
+evidence pointers only for cited proof or source gaps, and returns metric
+findings for the parent report.
 
 ## Todo List
 

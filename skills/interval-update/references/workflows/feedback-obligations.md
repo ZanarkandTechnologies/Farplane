@@ -50,8 +50,11 @@ identity is not necessary for the plan.
 
 ## Phase Boundary
 
-Run inline for a small feedback packet. Use a read-only subagent when feedback
-refs contain many meeting notes, reviews, or stakeholder rows.
+Enabled `feedback_obligations` runs as a read-only subagent lane by default.
+The parent interval agent may handle only mechanical source binding inline; the
+lane reads the context bundle, consumes summary context first, opens raw
+evidence pointers only for cited proof or source gaps, and returns obligations
+for the parent report.
 
 ## Todo List
 

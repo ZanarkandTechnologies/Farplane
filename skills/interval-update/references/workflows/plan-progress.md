@@ -53,9 +53,11 @@ Optional source refs:
 
 ## Phase Boundary
 
-Run inline for small boards. Use a read-only subagent only when there are many
-tickets, reports, or status rows and the parent interval update would otherwise
-lose the evidence trail.
+Enabled `plan_progress` runs as a read-only subagent lane by default. The
+parent interval agent may handle only mechanical source binding inline; the
+lane reads the context bundle, consumes summary context first, opens raw
+evidence pointers only for cited proof or source gaps, and returns findings for
+the parent report.
 
 ## Todo List
 

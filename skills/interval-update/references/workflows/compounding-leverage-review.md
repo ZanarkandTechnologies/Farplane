@@ -181,9 +181,13 @@ Urgent escalation may bypass weekly selection only when:
 
 ## Phase Boundary
 
-Run inline when there are only a few obvious candidate levers. Use read-only
-subagents for `leverage-advisor` or `harness-advisor` when the report has many
-candidate surfaces or the owner-surface decision is material.
+Enabled `compounding_leverage_review` runs as a read-only subagent lane by
+default. The parent interval agent may handle only mechanical source binding
+inline; the lane reads the context bundle, consumes summary context first,
+opens raw evidence pointers only for cited proof or source gaps, and returns
+leverage decisions for the parent report. Use separate read-only advisor lanes
+for `leverage-advisor` or `harness-advisor` when candidate scoring or owner
+surface decisions are material.
 
 ## Todo List
 
