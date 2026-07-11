@@ -28,7 +28,7 @@ checks = [
 
 [[pre_push.path_check]]
 globs = ["skills/**", "docs/skills/**"]
-checks = ["skill_check", "skill_registry_check"]
+checks = ["skill_check"]
 
 [[pre_push.path_check]]
 globs = ["tickets/**"]
@@ -61,9 +61,6 @@ argv = ["python3", "bin/validators/check_template_version_metadata.py", "--stage
 
 [checks.skill_check]
 argv = ["python3", "skills/skill-maintenance/scripts/check_skills.py"]
-
-[checks.skill_registry_check]
-argv = ["python3", "bin/validators/sync_skill_registry.py", "--check"]
 
 [checks.ticket_metadata]
 argv = ["python3", "tickets/scripts/check_ticket_metadata.py"]

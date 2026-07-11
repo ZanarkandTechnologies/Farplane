@@ -1,0 +1,37 @@
+schema_version = 1
+
+[phase.planning]
+checks = ["ticket.metadata"]
+
+[phase.complete]
+checks = ["ticket.metadata", "ticket.completion-evidence"]
+
+# Selection is implemented through allowlisted path families. This file is the
+# durable policy surface; ticket Markdown never supplies raw commands.
+[[path_check]]
+globs = ["skills/**", "docs/skills/**"]
+checks = ["skills.check"]
+
+[[path_check]]
+globs = ["README.md", "ARCHITECTURE.md", "docs/**"]
+checks = ["docs.refs", "docs.contracts"]
+
+[[path_check]]
+globs = ["docs/features/**", "docs/systems/**"]
+checks = ["docs.features"]
+
+[[path_check]]
+globs = ["docs/sources/**"]
+checks = ["docs.sources"]
+
+[[path_check]]
+globs = ["templates/**", "docs/templates/**"]
+checks = ["templates.check"]
+
+[[path_check]]
+globs = ["farplane/**", "config.toml.example", "PROJECT_RULES.md"]
+checks = ["project.check"]
+
+[[path_check]]
+globs = ["AGENTS.md", "agents/**", "rules/**", "bin/**"]
+checks = ["harness.check"]

@@ -25,6 +25,9 @@ if str(CORE_DIR) not in sys.path:
 
 from farplane_config_doctor import config_doctor
 from runtime_config import load_runtime_env
+from validation.boundary import base_boundary, explicit_boundary, unavailable_boundary
+from validation.run import validate_ticket
+from validators.farplane_checks import build_registry
 
 
 CORE_ROOT = Path(__file__).resolve().parents[1]
@@ -464,6 +467,46 @@ def run_doctor(args: argparse.Namespace) -> int:
     return 0 if payload["ok"] else 1
 
 
+def run_validate_ticket(args: argparse.Namespace) -> int:
+    root = Path(args.root).expanduser().resolve()
+    ticket = Path(args.ticket).expanduser()
+    if not ticket.is_absolute():
+        ticket = root / ticket
+    if args.path and args.base:
+        raise CliError("validation_boundary_conflict: use --path or --base, not both")
+    try:
+        if args.path:
+            boundary = explicit_boundary(args.path)
+        elif args.base:
+            boundary = base_boundary(root, args.base)
+        else:
+            boundary = unavailable_boundary()
+        receipt = validate_ticket(
+            root=root,
+            ticket=ticket,
+            phase=args.phase,
+            boundary=boundary,
+            registry=build_registry(),
+            write=not args.no_write,
+        )
+    except ValueError as exc:
+        raise CliError(f"validation_error:{exc}") from exc
+
+    payload = receipt.as_dict()
+    if args.json:
+        print(json.dumps(payload, indent=2, sort_keys=True))
+    else:
+        print(
+            f"ticket validation {'passed' if receipt.ok else 'failed'}: "
+            f"{receipt.ticket} phase={receipt.phase} checks={len(receipt.results)}"
+        )
+        for result in receipt.results:
+            print(f"[{result.status}:{result.mode}] {result.check_id} ({result.duration_ms} ms)")
+            if result.status == "fail" and result.output:
+                print(result.output)
+    return 0 if receipt.ok else 1
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="farplane",
@@ -486,6 +529,18 @@ def build_parser() -> argparse.ArgumentParser:
     run.add_argument("--dry-run", action="store_true", help="Print the Doppler-wrapped command without running it.")
     run.add_argument("extra", nargs=argparse.REMAINDER, help="Command to run after --.")
     run.set_defaults(func=run_with_doppler)
+
+    validate = sub.add_parser("validate", help="Run phase-aware Farplane validation.")
+    validate_sub = validate.add_subparsers(dest="validate_command")
+    validate_ticket_parser = validate_sub.add_parser("ticket", help="Validate one ticket at a lifecycle phase.")
+    validate_ticket_parser.add_argument("ticket")
+    validate_ticket_parser.add_argument("--phase", choices=("planning", "complete"), required=True)
+    validate_ticket_parser.add_argument("--root", default=str(CORE_ROOT))
+    validate_ticket_parser.add_argument("--path", action="append", default=[], help="Explicit changed path; may be repeated.")
+    validate_ticket_parser.add_argument("--base", help="Explicit Git base ref used to derive committed changed paths.")
+    validate_ticket_parser.add_argument("--no-write", action="store_true", help="Do not write the ticket validation receipt.")
+    validate_ticket_parser.add_argument("--json", action="store_true")
+    validate_ticket_parser.set_defaults(func=run_validate_ticket)
 
     hooks = sub.add_parser("hooks", help="Install or check Codex lifecycle hooks.")
     hooks_sub = hooks.add_subparsers(dest="hooks_command")
@@ -628,6 +683,8 @@ def main(argv: list[str]) -> int:
     args = parser.parse_args(argv[1:])
     if getattr(args, "command", None) == "hooks" and getattr(args, "hooks_command", None) is None:
         parser.error("hooks requires a subcommand: install or doctor")
+    if getattr(args, "command", None) == "validate" and getattr(args, "validate_command", None) is None:
+        parser.error("validate requires a subcommand: ticket")
     if getattr(args, "command", None) == "config" and getattr(args, "config_command", None) is None:
         parser.error("config requires a subcommand: doctor")
     if getattr(args, "command", None) == "ui" and getattr(args, "ui_command", None) is None:
