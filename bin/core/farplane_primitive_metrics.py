@@ -47,7 +47,6 @@ class TicketRecord:
     ticket_id: str
     path: Path
     relative_path: str
-    phase: str
     status: str
     created_at: datetime | None
     updated_at: datetime | None
@@ -58,11 +57,11 @@ class TicketRecord:
 
     @property
     def is_complete(self) -> bool:
-        return self.phase == "complete" or self.status in {"done", "rejected"}
+        return self.status in {"done", "rejected"}
 
     @property
     def is_terminal(self) -> bool:
-        return self.phase in {"complete", "failed"} or self.status in {"done", "failed", "rejected"}
+        return self.status in {"done", "failed", "rejected"}
 
 
 def now_utc() -> str:
@@ -260,7 +259,6 @@ def load_tickets(project_root: Path) -> tuple[list[TicketRecord], list[str]]:
                 ticket_id=ticket_id,
                 path=path,
                 relative_path=rel_path,
-                phase=str(fm.get("phase") or ""),
                 status=str(fm.get("status") or ""),
                 created_at=parse_iso_datetime(fm.get("created_at")),
                 updated_at=parse_iso_datetime(fm.get("updated_at")),
@@ -293,7 +291,7 @@ def fetch_tickets(
     tickets, gaps = load_tickets(project_root)
     selected: list[TicketRecord] = []
     for ticket in tickets:
-        if filters.status and ticket.status != filters.status and ticket.phase != filters.status:
+        if filters.status and ticket.status != filters.status:
             continue
         if filters.kpi_reward == "exists" and not ticket.kpi_rewards:
             continue
@@ -315,7 +313,6 @@ def ticket_payload(ticket: TicketRecord) -> dict[str, Any]:
     return {
         "ticket_id": ticket.ticket_id,
         "path": ticket.relative_path,
-        "phase": ticket.phase,
         "status": ticket.status,
         "created_at": ticket.created_at.isoformat() if ticket.created_at else None,
         "updated_at": ticket.updated_at.isoformat() if ticket.updated_at else None,
@@ -344,13 +341,6 @@ def load_bindings(project_root: Path) -> dict[str, Any]:
     return loaded if isinstance(loaded, dict) else {}
 
 
-def metric_recipes(project_root: Path) -> dict[str, dict[str, Any]]:
-    raw = load_bindings(project_root).get("metrics")
-    if not isinstance(raw, dict):
-        return {}
-    return {str(key): value if isinstance(value, dict) else {} for key, value in raw.items()}
-
-
 def configured_monthly_ai_spend(project_root: Path) -> float | None:
     bindings = load_bindings(project_root)
     candidates = [
@@ -374,14 +364,6 @@ def configured_monthly_ai_spend(project_root: Path) -> float | None:
             except ValueError:
                 continue
     return None
-
-
-def kpis_for_product(metric_recipe_map: dict[str, dict[str, Any]], product_id: str) -> set[str]:
-    return {
-        metric_id
-        for metric_id, recipe in metric_recipe_map.items()
-        if str(recipe.get("product") or "").strip() == product_id
-    }
 
 
 def ticket_counts(project_root: Path, window: Window) -> tuple[dict[str, Any], list[TicketRecord], list[str]]:
@@ -446,7 +428,7 @@ def ticket_count_by_kpi_with_status(
     by_kpi: dict[str, list[TicketRecord]] = {}
     total: list[TicketRecord] = []
     for ticket in tickets:
-        if ticket.status != status_filter and ticket.phase != status_filter:
+        if ticket.status != status_filter:
             continue
         if not ticket_touched_in_window(ticket, window):
             continue
@@ -475,36 +457,6 @@ def ticket_count_by_kpi_with_status(
             "gaps": [],
         },
     )
-    return output
-
-
-def ticket_count_by_product(
-    tickets: list[TicketRecord],
-    window: Window,
-    metric_recipe_map: dict[str, dict[str, Any]],
-) -> dict[str, dict[str, Any]]:
-    product_ids = sorted({str(recipe.get("product") or "").strip() for recipe in metric_recipe_map.values() if recipe.get("product")})
-    output: dict[str, dict[str, Any]] = {}
-    for product_id in product_ids:
-        kpi_ids = kpis_for_product(metric_recipe_map, product_id)
-        items = [
-            ticket
-            for ticket in tickets
-            if ticket_touched_in_window(ticket, window) and set(ticket.kpi_rewards) & kpi_ids
-        ]
-        completed = [ticket for ticket in items if ticket.is_complete]
-        proofed = [ticket for ticket in completed if ticket.has_completion_proof]
-        output[product_id] = reading(
-            len(items),
-            "available",
-            {
-                "kpi_ids": sorted(kpi_ids),
-                "tickets": [ticket_payload(ticket) for ticket in items],
-                "completed_ticket_count": len(completed),
-                "proofed_ticket_count": len(proofed),
-                "gaps": [],
-            },
-        )
     return output
 
 
@@ -847,7 +799,6 @@ def primitive_snapshot(
 ) -> dict[str, Any]:
     project_root = project_root.resolve()
     window = window_for_date(date_value)
-    metric_recipe_map = metric_recipes(project_root)
     effective_monthly_spend = monthly_spend if monthly_spend is not None else configured_monthly_ai_spend(project_root)
     ticket_basics, tickets, ticket_gaps = ticket_counts(project_root, window)
     by_kpi = ticket_count_by_kpi(tickets, window)
@@ -855,7 +806,6 @@ def primitive_snapshot(
         by_kpi_status = ticket_count_by_kpi_with_status(tickets, window, ticket_status)
     else:
         by_kpi_status = {}
-    by_product = ticket_count_by_product(tickets, window, metric_recipe_map)
     thread_usage = fetch_codex_thread_usage(codex_home.expanduser(), project_root, window)
     burn = estimate_ai_burn(window, thread_usage, effective_monthly_spend)
     association_path = project_root / ASSOCIATION_PATH
@@ -882,7 +832,6 @@ def primitive_snapshot(
         "primitives": {
             **ticket_basics,
             "ticket_count_by_kpi": by_kpi,
-            "ticket_count_by_product": by_product,
             "codex_thread_usage": thread_usage,
             "ai_burn_estimate": burn,
             "content_views_total": {"evidence_distribution_reach": distribution_reach},
@@ -958,10 +907,9 @@ def primitive_observations(primitive_id: str, primitive_payload: Any, date_value
     for key, value in sorted(primitive_payload.items(), key=lambda item: str(item[0])):
         if not isinstance(value, dict) or ("value" not in value and "status" not in value):
             continue
-        metric_id = f"{primitive_id}:{key}" if primitive_id == "ticket_count_by_product" else str(key)
         observations.append(
             metric_observation(
-                metric_id,
+                str(key),
                 date_value,
                 value.get("value"),
                 normalize_status(value.get("status")),

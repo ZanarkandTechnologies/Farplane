@@ -52,16 +52,6 @@ PRIMITIVE_CATALOG: dict[str, dict[str, Any]] = {
         "emits": ["value", "status", "payload.tickets", "payload.gaps"],
         "source_gap_policy": "Human/unattributed tickets are diagnostics, not UI warnings; missing KPI rows produce zero counts.",
     },
-    "ticket_count_by_product": {
-        "primitive_id": "ticket_count_by_product",
-        "provider": "mechanical",
-        "owner": "farplane-core",
-        "command": "farplane metrics primitives --project-root <project> --date <YYYY-MM-DD> --json",
-        "store_to": ".farplane/metrics/daily/<YYYY-MM-DD>.json",
-        "required_inputs": ["farplane/products/*/product.md#kpis", "farplane/bindings.yaml#metrics", "tickets/**/ticket.md#Reward.kpi_rewards"],
-        "emits": ["value", "status", "payload.kpi_ids", "payload.tickets"],
-        "source_gap_policy": "Emit gaps when metric recipes have unknown product owners.",
-    },
     "kpi_attributed_ticket_ratio": {
         "primitive_id": "kpi_attributed_ticket_ratio",
         "provider": "mechanical",
@@ -154,7 +144,7 @@ DEFAULT_METRIC_DESCRIPTIONS: dict[str, str] = {
     "auto_completion_rate": "Completed associated tickets with zero post-start human intervention turns divided by all completed associated tickets for the day.",
     "intervention_free_ticket_count": "Daily count of completed associated tickets with zero human turns after execution start.",
     "ticket_intervention_turn_count": "Daily count of human turns after execution start and before completion across completed associated tickets.",
-    "ready_unclaimed_ticket_count": "Current count of ready, approval-free, unclaimed active tickets that are not complete or human-gated.",
+    "todo_unclaimed_ticket_count": "Current count of unclaimed status=todo tickets with satisfied dependencies.",
     "x_followers": "Current follower count for the configured Farplane X account.",
     "x_views": "Daily aggregate X views for posted content selected from the content ledger.",
     "x_likes": "Daily aggregate X likes for posted content selected from the content ledger.",
@@ -176,12 +166,12 @@ DEFAULT_METRIC_DESCRIPTIONS: dict[str, str] = {
 SHARED_SHAPES: dict[str, list[str]] = {
     "source_ref": ["path", "pointer?", "kind?"],
     "source_gap": ["id", "severity", "owner", "message", "source_ref"],
-    "metric_ref": ["metric_id", "label?", "product_id?", "primitive_id?", "latest_status?", "source_gap_ids[]"],
+    "metric_ref": ["metric_id", "label?", "primitive_id?", "latest_status?", "source_gap_ids[]"],
     "metric_series": ["metric_id", "status", "current", "series[]", "target_hit?", "source_gaps[]"],
     "content_metric": ["content_id", "platform?", "external_id?", "metrics[]"],
     "feed_scout_item": ["title", "summary", "canonical_url?", "platform?", "entity_group_id?", "rank?", "signal?", "actionability?"],
     "metric_primitive": ["primitive_id", "provider", "owner", "command", "store_to", "required_inputs[]", "emits[]", "source_gap_policy"],
-    "ticket_ref": ["ticket_id", "path", "title", "status", "phase", "next_action", "kpi_rewards[]"],
+    "ticket_ref": ["ticket_id", "path", "title", "status", "priority", "kpi_rewards[]"],
     "report_card": [
         "id",
         "ref",
@@ -416,93 +406,34 @@ def compact_current_bet(rows: list[dict[str, str]]) -> str | None:
     return "; ".join(parts) if parts else None
 
 
-def load_product_strategy_summaries(project_root: Path) -> list[dict[str, str]]:
-    summaries: list[dict[str, str]] = []
-    for path in sorted((project_root / "farplane" / "products").glob("*/product.md")):
-        product_id = path.parent.name
-        text = read_markdown(path)
-        strategy_section = markdown_heading_section(text, "Current Strategy")
-        strategy_payload = parse_fenced_yaml_from_section(strategy_section)
-        strategy = strategy_payload.get("strategy") if isinstance(strategy_payload.get("strategy"), dict) else {}
-        focus = str(strategy.get("focus") or "").strip()
-        hypothesis = str(strategy.get("current_hypothesis") or "").strip()
-        status = str(strategy.get("status") or "").strip()
-        if focus or hypothesis or status:
-            summaries.append(
-                {
-                    "product_id": product_id,
-                    "focus": focus,
-                    "current_hypothesis": hypothesis,
-                    "status": status,
-                    "source_path": path.relative_to(project_root).as_posix(),
-                }
-            )
-    return summaries
-
-
 def load_strategy_focus(project_root: Path, goals: dict[str, Any]) -> dict[str, Any]:
     goals_payload = read_goals_yaml(project_root)
     current_bets = goals_payload.get("current_bets") if isinstance(goals_payload.get("current_bets"), list) else []
     current_bets = [row for row in current_bets if isinstance(row, dict)]
     current_milestone = str(goals_payload.get("current_milestone") or "").strip() or None
-    product_strategies = load_product_strategy_summaries(project_root)
-    current_focus = "; ".join(
-        f"{row['product_id']}: {row['focus']}" for row in product_strategies[:3] if row.get("focus")
-    )
     return {
-        "current_focus": current_focus or current_milestone,
+        "current_focus": current_milestone,
         "current_bet": compact_current_bet(current_bets),
         "current_bets": current_bets,
         "active_milestone": current_milestone,
-        "product_strategies": product_strategies,
         "top_goal_id": next(iter(goals.keys()), None),
     }
 
 
-def load_products(project_root: Path) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
-    products_payload = read_json(project_root / "farplane" / "products.json")
-    product_records = products_payload.get("products")
-    lane_records = products_payload.get("lanes")
-    if isinstance(product_records, list):
-        products = []
-        for row in product_records:
-            if not isinstance(row, dict) or not row.get("id"):
-                continue
-            refs = row.get("refs") if isinstance(row.get("refs"), dict) else {}
-            products.append(
-                {
-                    "product_id": row.get("id", ""),
-                    "name": row.get("label", ""),
-                    "audience": row.get("audience", ""),
-                    "output": row.get("output", ""),
-                    "reward": row.get("reward", ""),
-                    "lane": row.get("lane", ""),
-                    "owner_skill": row.get("owner_skill", ""),
-                    "kpis": row.get("kpis", {}),
-                    "goals": row.get("goals", []),
-                    "artifact_workflows": row.get("artifact_workflows", []),
-                    "source_ref": {"path": refs.get("product") or f"farplane/products/{row.get('id')}/product.md", "row_id": row.get("id", "")},
-                }
-            )
-        lanes = []
-        if isinstance(lane_records, list):
-            for row in lane_records:
-                if not isinstance(row, dict) or not row.get("id"):
-                    continue
-                lanes.append(
-                    {
-                        "lane_id": row.get("id", ""),
-                        "default_weight": row.get("default_weight", ""),
-                        "purpose": row.get("purpose", ""),
-                    }
-                )
-        return products, lanes
-
-    return [], []
-
-
 def load_bindings(project_root: Path) -> dict[str, Any]:
     return read_yaml(project_root / "farplane" / "bindings.yaml")
+
+
+def load_metric_definitions(project_root: Path) -> dict[str, Any]:
+    payload = read_yaml(project_root / "farplane" / "metrics.yaml")
+    metrics = payload.get("metrics") if isinstance(payload, dict) else None
+    return metrics if isinstance(metrics, dict) else {}
+
+
+def load_metric_bindings(project_root: Path) -> dict[str, Any]:
+    payload = load_bindings(project_root)
+    bindings = payload.get("metric_bindings") if isinstance(payload, dict) else None
+    return bindings if isinstance(bindings, dict) else {}
 
 
 def kpi_target_rows(goals: dict[str, Any]) -> dict[str, dict[str, Any]]:
@@ -556,10 +487,9 @@ def collect_ticket_refs(project_root: Path) -> tuple[list[dict[str, Any]], list[
         ticket_ref = {
             "ticket_id": ticket_id,
             "path": str(path.relative_to(project_root)),
-            "title": path.parent.name,
+            "title": str(fm.get("title") or path.parent.name),
             "status": str(fm.get("status") or ""),
-            "phase": str(fm.get("phase") or ""),
-            "next_action": str(fm.get("next_action") or ""),
+            "priority": str(fm.get("priority") or "medium"),
             "kpi_rewards": kpi_ids,
             "source_ref": {"path": str(path.relative_to(project_root))},
         }
@@ -740,10 +670,19 @@ def report_cards(project_root: Path) -> list[dict[str, Any]]:
 
 def proof_artifacts(project_root: Path) -> list[dict[str, Any]]:
     artifacts: list[dict[str, Any]] = []
-    for path in sorted((project_root / "tickets").glob("TASK-*/artifacts/*")):
-        if path.is_file():
-            rel = str(path.relative_to(project_root))
-            artifacts.append({"id": path.stem, "path": rel, "source_ref": {"path": rel}})
+    tickets_root = project_root / "tickets"
+    ticket_roots = [
+        *sorted(tickets_root.glob("TASK-*")),
+        *sorted((tickets_root / "archive").glob("TASK-*")),
+    ]
+    for ticket_root in ticket_roots:
+        artifact_root = ticket_root / "artifacts"
+        if not artifact_root.is_dir():
+            continue
+        for path in sorted(artifact_root.rglob("*")):
+            if path.is_file():
+                rel = str(path.relative_to(project_root))
+                artifacts.append({"id": path.stem, "path": rel, "source_ref": {"path": rel}})
     return artifacts
 
 
@@ -790,15 +729,21 @@ def primitive_id_for_metric(metric_id: str, recipe: dict[str, Any]) -> str:
 
 
 def metric_definitions(project_root: Path, goals: dict[str, Any] | None = None) -> tuple[dict[str, Any], list[str]]:
-    bindings = load_bindings(project_root)
-    raw_metrics = bindings.get("metrics")
-    if not isinstance(raw_metrics, dict):
-        return {}, ["missing:farplane/bindings.yaml#metrics"]
+    raw_metrics = load_metric_definitions(project_root)
+    metric_bindings = load_metric_bindings(project_root)
+    if not raw_metrics:
+        return {}, ["missing:farplane/metrics.yaml#metrics"]
     definitions: dict[str, Any] = {}
-    gaps: list[str] = []
+    gaps = [
+        f"missing:farplane/bindings.yaml#metric_bindings/{metric_id}"
+        for metric_id in sorted(set(raw_metrics) - set(metric_bindings))
+    ]
     targets = kpi_target_rows(goals or {})
-    for metric_id, raw_recipe in raw_metrics.items():
-        recipe = raw_recipe if isinstance(raw_recipe, dict) else {}
+    for metric_id, raw_definition in raw_metrics.items():
+        definition = raw_definition if isinstance(raw_definition, dict) else {}
+        raw_binding = metric_bindings.get(metric_id)
+        binding = raw_binding if isinstance(raw_binding, dict) else {}
+        recipe = {**definition, **binding}
         primitive_id = primitive_id_for_metric(str(metric_id), recipe)
         kind = str(recipe.get("kind") or recipe.get("aggregation") or "point")
         if kind == "daily_count":
@@ -818,7 +763,6 @@ def metric_definitions(project_root: Path, goals: dict[str, Any] | None = None) 
             "label": str(recipe.get("label") or str(metric_id).replace("_", " ").capitalize()),
             "description": description,
             "tooltip": description,
-            "product_id": str(recipe.get("product") or ""),
             "unit": target_unit,
             "display": str(recipe.get("display") or "reading"),
             "pinned": bool(recipe.get("pinned", False)),
@@ -835,7 +779,11 @@ def metric_definitions(project_root: Path, goals: dict[str, Any] | None = None) 
             },
             "primitive_id": primitive_id,
             "refresh": recipe.get("refresh") or recipe.get("update_prompt") or "",
-            "source_ref": {"path": "farplane/bindings.yaml", "pointer": f"/metrics/{metric_id}"},
+            "source_ref": {"path": "farplane/metrics.yaml", "pointer": f"/metrics/{metric_id}"},
+            "binding_source_ref": {
+                "path": "farplane/bindings.yaml",
+                "pointer": f"/metric_bindings/{metric_id}",
+            },
         }
     return definitions, gaps
 
@@ -1138,7 +1086,6 @@ def build_metric_card(metric_id: str, metric_def: dict[str, Any], observations: 
         "label": metric_def.get("label") or metric_id,
         "description": metric_def.get("description") or "",
         "tooltip": metric_def.get("tooltip") or metric_def.get("description") or "",
-        "product_id": metric_def.get("product_id") or "",
         "primitive_id": metric_def.get("primitive_id"),
         "aggregation": metric_def.get("aggregation"),
         "cumulative": bool(metric_def.get("cumulative")),
@@ -1255,7 +1202,6 @@ def build_content_metric_cards(metric_cards: list[dict[str, Any]], ledger_rows: 
                         "metric_id": metric_id,
                         "label": metric.get("label") or metric_id,
                         "unit": metric.get("unit") or "",
-                        "product_id": metric.get("product_id") or "",
                         "series": [],
                     },
                 )
@@ -1296,7 +1242,7 @@ def metric_projection(project_root: Path, metric_defs: dict[str, Any], snapshot_
                 "severity": "source_gap",
                 "owner": "metrics",
                 "message": str(reason or "no available observation for metric"),
-                "source_ref": card.get("source_ref") or {"path": "farplane/bindings.yaml"},
+                "source_ref": card.get("source_ref") or {"path": "farplane/metrics.yaml"},
             }
         )
     return {
@@ -1349,7 +1295,6 @@ def goals_payload(
                         "label": metric_def.get("label") or metric_id,
                         "description": metric_def.get("description") or "",
                         "tooltip": metric_def.get("tooltip") or metric_def.get("description") or "",
-                        "product_id": metric_def.get("product_id") or "",
                         "target": target_value if target_value is not None else target,
                         "direction": target_direction if target_direction is not None else direction,
                         "target_direction": target_direction,
@@ -1391,41 +1336,12 @@ def goals_payload(
     return axes
 
 
-def products_payload(
-    products: list[dict[str, Any]],
-    metric_defs: dict[str, Any],
-    latest: dict[str, Any],
-) -> list[dict[str, Any]]:
-    product_counts = {}
-    primitives = latest.get("primitives") if isinstance(latest.get("primitives"), dict) else {}
-    if isinstance(primitives.get("ticket_count_by_product"), dict):
-        product_counts = primitives["ticket_count_by_product"]
-    output: list[dict[str, Any]] = []
-    for product in products:
-        product_id = product["product_id"]
-        metric_ids = sorted(metric_id for metric_id, recipe in metric_defs.items() if recipe.get("product_id") == product_id)
-        count_payload = product_counts.get(product_id, {}) if isinstance(product_counts, dict) else {}
-        next_product = dict(product)
-        next_product.update(
-            {
-                "metric_ids": metric_ids,
-                "kpi_ids": metric_ids,
-                "ticket_count": count_payload.get("value"),
-                "proof_state": "has_kpi_and_goal" if metric_ids else "missing_kpi",
-                "source_gap_ids": [] if metric_ids else [f"missing_product_kpis:{product_id}"],
-            }
-        )
-        output.append(next_product)
-    return output
-
-
 def load_project_snapshot(project_root: Path, snapshot_date: str | None = None) -> dict[str, Any]:
     project_root = project_root.resolve()
     manifest = read_json(project_root / "farplane" / "manifest.json")
     bindings = load_bindings(project_root)
     goals = load_goals(project_root)
     strategy_focus = load_strategy_focus(project_root, goals)
-    products, lanes = load_products(project_root)
     metric_defs, metric_gaps = metric_definitions(project_root, goals)
     metric_view = metric_projection(project_root, metric_defs, snapshot_date)
     metric_cards = metric_view["series"] if isinstance(metric_view.get("series"), list) else []
@@ -1442,16 +1358,20 @@ def load_project_snapshot(project_root: Path, snapshot_date: str | None = None) 
     sources = [
         source_record(project_root, "farplane/manifest.json", "project-manifest"),
         source_record(project_root, "farplane/harness.md", "project-harness"),
-        source_record(project_root, "farplane/products.json", "project-products-index"),
         source_record(project_root, "farplane/goals.yaml", "project-goals"),
+        source_record(project_root, "farplane/metrics.yaml", "project-metrics"),
         source_record(project_root, "farplane/bindings.yaml", "project-bindings"),
     ]
-    sources.extend(
-        source_record(project_root, product_file.relative_to(project_root).as_posix(), "product-loop")
-        for product_file in sorted((project_root / "farplane" / "products").glob("*/product.md"))
-    )
     source_gaps = [
-        {"id": gap, "severity": "source_gap", "owner": "metrics", "message": gap, "source_ref": {"path": "farplane/bindings.yaml"}}
+        {
+            "id": gap,
+            "severity": "source_gap",
+            "owner": "metrics",
+            "message": gap,
+            "source_ref": {
+                "path": "farplane/metrics.yaml" if "metrics.yaml" in gap else "farplane/bindings.yaml"
+            },
+        }
         for gap in metric_gaps
     ]
     source_gaps.extend(gap_objects_from_strings(latest.get("source_gaps", []) if isinstance(latest.get("source_gaps"), list) else [], "metrics", ".farplane/metrics/daily/"))
@@ -1491,7 +1411,15 @@ def load_project_snapshot(project_root: Path, snapshot_date: str | None = None) 
         {"id": "troubles", "path": "docs/TROUBLES.md", "source_ref": {"path": "docs/TROUBLES.md"}},
         {"id": "lessons", "path": "docs/LESSONS.md", "source_ref": {"path": "docs/LESSONS.md"}},
     ]
-    content_metric_ids = sorted(metric_id for metric_id, metric in metric_defs.items() if metric.get("product_id") == "distribution")
+    content_metric_ids = sorted(
+        {
+            str(metric.get("metric_id"))
+            for content in metric_view.get("contents", [])
+            if isinstance(content, dict)
+            for metric in content.get("metrics", [])
+            if isinstance(metric, dict) and metric.get("metric_id")
+        }
+    )
     pm_manifest = read_json(project_root / "farplane" / "pm.json")
     pm_threads = pm_manifest.get("threads") if isinstance(pm_manifest.get("threads"), dict) else {}
     goal_axes = goals_payload(goals, metric_defs, latest, metric_cards_by_id)
@@ -1534,7 +1462,6 @@ def load_project_snapshot(project_root: Path, snapshot_date: str | None = None) 
                     "current_bets": strategy_focus.get("current_bets") or [],
                     "active_milestone": strategy_focus.get("active_milestone"),
                     "top_goal_id": strategy_focus.get("top_goal_id"),
-                    "active_product_ids": [product["product_id"] for product in products],
                     "blockers": [],
                 },
                 "pinned_metrics": [metric_id for metric_id, metric in metric_defs.items() if metric.get("pinned")],
@@ -1550,12 +1477,6 @@ def load_project_snapshot(project_root: Path, snapshot_date: str | None = None) 
             "goals": {
                 "axes": goal_axes,
                 "source_gap_ids": goal_gap_ids,
-            },
-            "products": {
-                "products": products_payload(products, metric_defs, latest),
-                "work_lanes": lanes,
-                "missing_proof": [],
-                "source_gap_ids": [],
             },
             "distribution": {
                 "content_items": content_items,

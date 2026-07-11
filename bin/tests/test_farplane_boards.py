@@ -18,30 +18,28 @@ TICKET_TEXT = """\
 ---
 ticket_id: TASK-1234
 title: normalize filesystem tickets
-phase: planning
-status: review
-owner: codex
-claimed_by:
+status: awaiting_review
 priority: high
 depends_on:
   - TASK-0001
-blocked_by:
-  - TASK-0002
-ready: false
-approval_required: true
-requires_qa: true
-requires_demo: false
 compute_target: local_worktree
 created_at: 2026-05-05T00:00:00Z
 updated_at: 2026-05-05T00:00:00Z
-next_action: approve the adapter
-last_verification: none
 ---
 
 # TASK-1234: normalize filesystem tickets
 
 ## Summary
 Fixture ticket.
+
+## QA Strategy
+
+```text
+qa_strategy:
+  proof_weight: qa
+  delegated_lanes:
+    - qa-tester
+```
 """
 
 
@@ -78,9 +76,9 @@ class FileTicketAdapterTests(unittest.TestCase):
             self.assertEqual(item.identifier, "TASK-1234")
             self.assertEqual(item.title, "normalize filesystem tickets")
             self.assertEqual(item.phase, "planning")
-            self.assertEqual(item.status, "review")
+            self.assertEqual(item.status, "awaiting_review")
             self.assertEqual(item.depends_on, ("TASK-0001",))
-            self.assertEqual(item.blocked_by, ("TASK-0002",))
+            self.assertEqual(item.blocked_by, ())
             self.assertFalse(item.ready)
             self.assertTrue(item.approval_required)
             self.assertTrue(item.requires_qa)
@@ -101,7 +99,7 @@ class FileTicketAdapterTests(unittest.TestCase):
             )
 
             assert_work_item_contract(self, item)
-            self.assertEqual(item.blocked_by, ("TASK-0002",))
+            self.assertEqual(item.blocked_by, ())
             self.assertEqual(item.depends_on, ("TASK-0001",))
             self.assertEqual(item.compute_target, "local_worktree")
             self.assertFalse(writeback.ok)
@@ -118,6 +116,17 @@ class FileTicketAdapterTests(unittest.TestCase):
             item = adapter.read_work_item(WorkItemSelector(work_item_path=str(ticket)))
 
             self.assertEqual(item.id, "TASK-1234")
+
+    def test_omitted_priority_defaults_to_medium(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            ticket = root / "tickets" / "TASK-1234" / "ticket.md"
+            write(ticket, TICKET_TEXT.replace("priority: high\n", ""))
+            adapter = FileTicketAdapter(root)
+
+            item = adapter.read_work_item(WorkItemSelector(work_item_path=str(ticket)))
+
+            self.assertEqual(item.priority, "medium")
 
     def test_rejects_path_outside_board_source(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -154,7 +163,7 @@ class FileTicketAdapterTests(unittest.TestCase):
             write(
                 root / "tickets" / "TASK-1235" / "ticket.md",
                 TICKET_TEXT.replace("TASK-1234", "TASK-1235").replace(
-                    "phase: planning", "phase: complete"
+                    "status: awaiting_review", "status: done"
                 ),
             )
             adapter = FileTicketAdapter(root)

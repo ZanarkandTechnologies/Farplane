@@ -20,7 +20,7 @@ class Item:
     approval_required: bool = False
     blocked_by: tuple[str, ...] = ()
     depends_on: tuple[str, ...] = ()
-    status: str = "review"
+    status: str = "todo"
     compute_target: str | None = None
 
 
@@ -110,14 +110,13 @@ class ComputeSelectorTests(unittest.TestCase):
             self.assertIn("future external adapter", decision.reason)
             self.assertIn("normal Codex with Farplane installed", decision.handoff)
 
-    def test_build_phase_blocks_on_approval_blockers_and_dependencies(self) -> None:
+    def test_build_phase_blocks_on_review_status_and_dependencies(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             decision = self.decide(
                 item=Item(
                     approval_required=True,
-                    blocked_by=("TASK-0001",),
                     depends_on=("TASK-0002",),
-                    status="blocked",
+                    status="awaiting_review",
                 ),
                 phase="building",
                 root=Path(tmp),

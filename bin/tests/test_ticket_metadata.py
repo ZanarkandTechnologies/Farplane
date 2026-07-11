@@ -17,19 +17,10 @@ VALID_TICKET_TEXT = """\
 ---
 ticket_id: TASK-9999
 title: valid ticket
-phase: planning
-status: review
-owner: codex
-claimed_by:
+status: awaiting_review
 priority: medium
-depends_on: []
-blocked_by: []
-ready: false
-approval_required: true
 created_at: 2026-04-10T00:00:00Z
 updated_at: 2026-04-10T00:00:00Z
-next_action: wait for approval
-last_verification: none
 ---
 
 # TASK-9999: valid ticket
@@ -71,7 +62,7 @@ class CheckTicketMetadataTest(unittest.TestCase):
             path = root / "TASK-9999" / "ticket.md"
             write_file(
                 path,
-                VALID_TICKET_TEXT.replace("claimed_by:\n", "claimed_by:\nsession_id: sess-123\n"),
+                VALID_TICKET_TEXT.replace("status: awaiting_review\n", "status: awaiting_review\nsession_id: sess-123\n"),
             )
             errors = self.ticket_metadata.validate_ticket(path)
             self.assertTrue(errors)
@@ -90,6 +81,28 @@ class CheckTicketMetadataTest(unittest.TestCase):
             )
             errors = self.ticket_metadata.validate_ticket(path)
             self.assertEqual(errors, [])
+
+    def test_validator_rejects_retired_duplicate_state_fields(self) -> None:
+        with tempfile.TemporaryDirectory(dir=ROOT) as tmpdir:
+            root = Path(tmpdir)
+            path = root / "TASK-9999" / "ticket.md"
+            write_file(
+                path,
+                VALID_TICKET_TEXT.replace("status: awaiting_review\n", "status: awaiting_review\nready: false\nphase: planning\n"),
+            )
+            errors = self.ticket_metadata.validate_ticket(path)
+            self.assertIn("retired metadata fields", "\n".join(errors))
+
+    def test_validator_rejects_ticket_specific_metadata(self) -> None:
+        with tempfile.TemporaryDirectory(dir=ROOT) as tmpdir:
+            root = Path(tmpdir)
+            path = root / "TASK-9999" / "ticket.md"
+            write_file(
+                path,
+                VALID_TICKET_TEXT.replace("status: awaiting_review\n", "status: awaiting_review\nworkflow_id: social_thread\n"),
+            )
+            errors = self.ticket_metadata.validate_ticket(path)
+            self.assertIn("unsupported metadata fields", "\n".join(errors))
 
     def test_validator_rejects_unknown_compute_target(self) -> None:
         with tempfile.TemporaryDirectory(dir=ROOT) as tmpdir:
@@ -112,21 +125,19 @@ class CheckTicketMetadataTest(unittest.TestCase):
             path = root / "TASK-9999" / "ticket.md"
             write_file(
                 path,
-                VALID_TICKET_TEXT.replace("phase: planning\n", "phase: failed\n")
-                .replace("status: review\n", "status: rejected\n")
-                .replace("ready: false\n", "ready: false\nrejection_reason: boring premise\n"),
+                VALID_TICKET_TEXT.replace("status: awaiting_review\n", "status: rejected\nrejection_reason: boring premise\n"),
             )
             errors = self.ticket_metadata.validate_ticket(path)
             self.assertEqual(errors, [])
 
-    def test_validator_rejected_requires_failed_phase(self) -> None:
+    def test_validator_active_requires_claim(self) -> None:
         with tempfile.TemporaryDirectory(dir=ROOT) as tmpdir:
             root = Path(tmpdir)
             path = root / "TASK-9999" / "ticket.md"
-            write_file(path, VALID_TICKET_TEXT.replace("status: review\n", "status: rejected\n"))
+            write_file(path, VALID_TICKET_TEXT.replace("status: awaiting_review\n", "status: active\n"))
             errors = self.ticket_metadata.validate_ticket(path)
             self.assertTrue(errors)
-            self.assertIn("status=rejected requires phase=failed", "\n".join(errors))
+            self.assertIn("status=active requires claimed_by", "\n".join(errors))
 
     def test_validator_rejected_requires_reason(self) -> None:
         with tempfile.TemporaryDirectory(dir=ROOT) as tmpdir:
@@ -134,12 +145,11 @@ class CheckTicketMetadataTest(unittest.TestCase):
             path = root / "TASK-9999" / "ticket.md"
             write_file(
                 path,
-                VALID_TICKET_TEXT.replace("phase: planning\n", "phase: failed\n")
-                .replace("status: review\n", "status: rejected\n"),
+                VALID_TICKET_TEXT.replace("status: awaiting_review\n", "status: rejected\n"),
             )
             errors = self.ticket_metadata.validate_ticket(path)
             self.assertTrue(errors)
-            self.assertIn("status=rejected requires rejection_reason", "\n".join(errors))
+            self.assertIn("status=rejected requires rejection_reason or a rejection entry", "\n".join(errors))
 
 
 if __name__ == "__main__":

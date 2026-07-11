@@ -8,8 +8,7 @@ owner: horizon-advisor
 source: horizon-advisor
 refs:
   - farplane/harness.md
-  - farplane/products.json
-  - farplane/products/*/product.md
+  - farplane/metrics.yaml
   - farplane/bindings.yaml
   - farplane/automations.toml
   - docs/fundamentals/harness-algebra.md
@@ -58,12 +57,7 @@ goals:
       - skill backpropagation events
     smart_goals:
       - id: autonomous_improvement_q3
-        scope: cross_product
-        product_refs:
-          - experiments
-          - productization
-          - distribution
-          - market_learning
+        scope: project
         target: >-
           20 accepted harness improvements and more autonomous worker time than
           human thread attention by 2026-09-30
@@ -105,11 +99,7 @@ goals:
       - proof closure rate
     smart_goals:
       - id: proof_quality_q3
-        scope: cross_product
-        product_refs:
-          - experiments
-          - ablations
-          - productization
+        scope: project
         target: 90% of completed material tickets have sufficient proof and review evidence by 2026-09-30
         kpis:
           - id: latest_eval_pass_rate
@@ -128,10 +118,9 @@ goals:
     smart_goals:
       - id: project_control_q3
         scope: global
-        product_refs: []
-        target: Keep ready unclaimed tickets under 3 while completing 10 Pulse execution cycles by 2026-09-30
+        target: Keep unclaimed todo tickets under 3 while completing 10 Pulse execution cycles by 2026-09-30
         kpis:
-          - id: ready_unclaimed_ticket_count
+          - id: todo_unclaimed_ticket_count
             target: 3
             direction: below
         interpretation: >-
@@ -147,9 +136,7 @@ goals:
       - pilot users
     smart_goals:
       - id: evidence_distribution_q3
-        scope: product
-        product_refs:
-          - distribution
+        scope: project
         target: 100000 evidence-backed content views by 2026-09-30
         kpis:
           - id: instagram_views
@@ -166,7 +153,7 @@ goals:
 current_bets:
   - id: framework_standardization
     horizon: 1 week
-    output: clear tracked config split for harness, products, goals, bindings, tickets, and reports
+    output: clear tracked config split for harness, goals, metrics, bindings, tickets, and reports
     proof_signal: project-file validators and docs make ownership obvious
     owner: harness-creator
   - id: goal_advisor_program_grammar

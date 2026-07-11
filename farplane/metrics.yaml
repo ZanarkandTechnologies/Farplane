@@ -1,0 +1,210 @@
+kind: project-metrics
+status: active
+created_at: 2026-07-11
+updated_at: 2026-07-11
+framework_template_version: "0.1.0"
+owner: metric-advisor
+metrics:
+  accepted_evidence_cycles:
+    label: Accepted evidence cycles
+    description: Daily count of completed tickets whose Reward.kpi_rewards includes this KPI and whose Done / Proof shows accepted evidence value.
+    pinned: true
+    kind: daily_count
+    unit: cycles
+    display: bar_plus_cumulative
+  accepted_trust_ablations:
+    label: Accepted trust ablations
+    description: Daily count of completed tickets whose Reward.kpi_rewards includes this KPI and whose proof shows a with/without trust decision.
+    pinned: true
+    kind: daily_count
+    unit: ablations
+    display: bar_plus_cumulative
+  accepted_harness_improvements:
+    label: Accepted harness improvements
+    description: Daily count of completed tickets whose Reward.kpi_rewards includes this KPI and whose proof shows a shipped Farplane improvement.
+    pinned: true
+    kind: daily_count
+    unit: improvements
+    display: bar_plus_cumulative
+  interesting_autonomy_results:
+    label: Interesting autonomy results
+    description: Daily count of distinct interesting results found in ticket proof from the review window.
+    pinned: true
+    kind: daily_count
+    unit: results
+    display: bar_plus_cumulative
+  auto_time_ratio:
+    label: Autonomous time ratio
+    description: Autonomous worker elapsed minutes divided by estimated human attention minutes for the day.
+    pinned: true
+    kind: point
+    unit: ratio
+    display: reading
+  evidence_distribution_reach:
+    label: Evidence distribution reach
+    description: Pinned overview rollup of same-window platform view readings; goals should track platform KPIs directly.
+    pinned: true
+    kind: daily_count
+    unit: views
+    display: bar_plus_cumulative
+  latest_eval_pass_rate:
+    label: Latest eval pass rate
+    description: Most recent eval summary pass rate available for the snapshot window.
+    pinned: false
+    kind: point
+    unit: ratio
+    display: reading
+  decision_changing_learning_briefs:
+    label: Decision-changing learning briefs
+    description: Daily count of learning briefs whose implication changes positioning, audience, distribution, workflow, or no-action decisions.
+    pinned: true
+    kind: daily_count
+    unit: briefs
+    display: bar_plus_cumulative
+  github_views:
+    label: GitHub views
+    description: Daily GitHub traffic views for the Farplane repository when traffic API access is available.
+    pinned: false
+    kind: daily_count
+    unit: views
+    display: bar_plus_cumulative
+  auto_completion_rate:
+    label: Auto completion rate
+    description: Completed associated tickets with zero post-start human intervention turns divided by all completed associated tickets for the day.
+    pinned: false
+    kind: point
+    unit: ratio
+    display: reading
+  rejected_ai_ticket_count:
+    label: Rejected AI tickets
+    description: Daily count of AI-planned reward-bearing tickets marked status rejected, used as a guard metric for Pulse ticket quality.
+    pinned: false
+    kind: daily_count
+    unit: tickets
+    display: bar_plus_cumulative
+  intervention_free_ticket_count:
+    label: Intervention-free tickets
+    description: Daily count of completed associated tickets with zero human turns after execution start.
+    pinned: false
+    kind: daily_count
+    unit: tickets
+    display: bar_plus_cumulative
+  ticket_intervention_turn_count:
+    label: Ticket intervention turns
+    description: Daily count of human turns after execution start and before completion across completed associated tickets.
+    pinned: false
+    kind: daily_count
+    unit: turns
+    display: bar_plus_cumulative
+  todo_unclaimed_ticket_count:
+    label: Todo unclaimed tickets
+    description: Current count of unclaimed status=todo tickets with satisfied dependencies.
+    pinned: false
+    kind: point
+    unit: tickets
+    display: reading
+  x_followers:
+    label: X followers
+    description: Current follower count for the configured Farplane X account.
+    pinned: false
+    kind: point
+    unit: followers
+    display: line
+  x_views:
+    label: X views
+    description: Daily aggregate X views for posted content selected from the content ledger.
+    pinned: false
+    kind: daily_count
+    unit: views
+    display: bar_plus_cumulative
+  x_likes:
+    label: X likes
+    description: Daily aggregate X likes for posted content selected from the content ledger.
+    pinned: false
+    kind: daily_count
+    unit: likes
+    display: bar_plus_cumulative
+  instagram_followers:
+    label: Instagram followers
+    description: Current follower count for the configured Farplane Instagram account.
+    pinned: false
+    kind: point
+    unit: followers
+    display: line
+  instagram_views:
+    label: Instagram views
+    description: Daily aggregate Instagram views for posted content selected from the content ledger.
+    pinned: false
+    kind: daily_count
+    unit: views
+    display: bar_plus_cumulative
+  instagram_likes:
+    label: Instagram likes
+    description: Daily aggregate Instagram likes for posted content selected from the content ledger.
+    pinned: false
+    kind: daily_count
+    unit: likes
+    display: bar_plus_cumulative
+  instagram_comments:
+    label: Instagram comments
+    description: Daily aggregate Instagram comments for posted content selected from the content ledger.
+    pinned: false
+    kind: daily_count
+    unit: comments
+    display: bar_plus_cumulative
+  instagram_shares:
+    label: Instagram shares
+    description: Daily aggregate Instagram shares for posted content selected from the content ledger.
+    pinned: false
+    kind: daily_count
+    unit: shares
+    display: bar_plus_cumulative
+  instagram_saves:
+    label: Instagram saves
+    description: Daily aggregate Instagram saves for posted content selected from the content ledger.
+    pinned: false
+    kind: daily_count
+    unit: saves
+    display: bar_plus_cumulative
+  instagram_reach:
+    label: Instagram reach
+    description: Daily aggregate Instagram reached accounts for posted content selected from the content ledger.
+    pinned: false
+    kind: daily_count
+    unit: accounts
+    display: bar_plus_cumulative
+  instagram_total_interactions:
+    label: Instagram total interactions
+    description: Daily aggregate Instagram interactions for posted content selected from the content ledger.
+    pinned: false
+    kind: daily_count
+    unit: interactions
+    display: bar_plus_cumulative
+  instagram_avg_watch_time:
+    label: Instagram average watch time
+    description: Average watch time for selected Instagram Reel content when the account API returns watch-time fields.
+    pinned: false
+    kind: point
+    unit: milliseconds
+    display: line
+  instagram_total_watch_time:
+    label: Instagram total watch time
+    description: Total watch time for selected Instagram Reel content when the account API returns watch-time fields.
+    pinned: false
+    kind: daily_count
+    unit: milliseconds
+    display: bar_plus_cumulative
+  instagram_retention_score:
+    label: Instagram retention score
+    description: Instagram Reel retention score from watch-time and duration data when those fields are available.
+    pinned: false
+    kind: point
+    unit: percent
+    display: line
+  posts_published:
+    label: Posts published
+    description: Daily count of content ledger rows posted on the snapshot date.
+    pinned: false
+    kind: daily_count
+    unit: posts
+    display: bar_plus_cumulative

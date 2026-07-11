@@ -8,7 +8,7 @@ from pathlib import Path
 from bin.validators.check_ticket_closure_gate import validate_ticket_closure
 
 
-def write_ticket(root: Path, relative: str, *, phase: str = "complete", status: str = "done") -> None:
+def write_ticket(root: Path, relative: str, *, status: str = "done") -> None:
     path = root / relative / "ticket.md"
     path.parent.mkdir(parents=True, exist_ok=True)
     ticket_id = path.parent.name
@@ -18,19 +18,9 @@ def write_ticket(root: Path, relative: str, *, phase: str = "complete", status: 
                 "---",
                 f"ticket_id: {ticket_id}",
                 "title: fixture ticket",
-                f"phase: {phase}",
                 f"status: {status}",
-                "owner: codex",
-                "claimed_by:",
-                "priority: medium",
-                "depends_on: []",
-                "blocked_by: []",
-                "ready: false",
-                "approval_required: false",
                 "created_at: 2026-07-03T00:00:00Z",
                 "updated_at: 2026-07-03T00:00:00Z",
-                "next_action: fixture",
-                "last_verification: fixture",
                 "---",
                 "",
                 f"# {ticket_id}: fixture",
@@ -59,7 +49,7 @@ class TicketClosureGateTest(unittest.TestCase):
     def test_unrelated_active_ticket_does_not_block_commit(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
-            write_ticket(root, "tickets/TASK-9999", phase="building", status="building")
+            write_ticket(root, "tickets/TASK-9999", status="active")
             append_association(root, "TASK-9999")
 
             errors = validate_ticket_closure(root)
@@ -79,20 +69,20 @@ class TicketClosureGateTest(unittest.TestCase):
     def test_active_complete_ticket_blocks_until_archived(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
-            write_ticket(root, "tickets/TASK-9999", phase="complete", status="done")
+            write_ticket(root, "tickets/TASK-9999", status="done")
 
             errors = validate_ticket_closure(root)
 
-        self.assertIn("active ticket is already complete/done and should be archived", "\n".join(errors))
+        self.assertIn("active ticket is terminal and should be archived", "\n".join(errors))
 
     def test_active_done_status_blocks_even_when_phase_not_complete(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
-            write_ticket(root, "tickets/TASK-9999", phase="documenting", status="done")
+            write_ticket(root, "tickets/TASK-9999", status="done")
 
             errors = validate_ticket_closure(root)
 
-        self.assertIn("active ticket is already complete/done and should be archived", "\n".join(errors))
+        self.assertIn("active ticket is terminal and should be archived", "\n".join(errors))
 
     def test_missing_associated_ticket_blocks_commit(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -106,7 +96,7 @@ class TicketClosureGateTest(unittest.TestCase):
     def test_ambient_current_run_active_ticket_does_not_block_commit(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
-            write_ticket(root, "tickets/TASK-9999", phase="building", status="building")
+            write_ticket(root, "tickets/TASK-9999", status="active")
             path = root / ".farplane" / "state" / "current-run.json"
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_text(
@@ -121,7 +111,7 @@ class TicketClosureGateTest(unittest.TestCase):
     def test_env_associated_active_ticket_blocks_commit(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
-            write_ticket(root, "tickets/TASK-9999", phase="building", status="building")
+            write_ticket(root, "tickets/TASK-9999", status="active")
             append_association(root, "TASK-9999", thread_id="session-abc")
 
             errors = validate_ticket_closure(
@@ -147,7 +137,7 @@ class TicketClosureGateTest(unittest.TestCase):
     def test_legacy_session_state_active_ticket_does_not_block_commit(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
-            write_ticket(root, "tickets/TASK-9999", phase="building", status="building")
+            write_ticket(root, "tickets/TASK-9999", status="active")
             path = root / ".farplane" / "state" / "sessions" / "session-abc.json"
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_text(

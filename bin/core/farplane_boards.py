@@ -210,7 +210,20 @@ def normalize_ticket(frontmatter: dict[str, Any], body: str, path: Path) -> Work
             raise BoardAdapterError(f"unknown compute_target: {compute_target}")
     title = str(frontmatter.get("title") or h1_title(body) or ticket_id).strip()
     status = str(frontmatter.get("status") or "").strip()
-    phase = str(frontmatter.get("phase") or "").strip()
+    # Invocation phases are an execution route, not persisted ticket state.
+    # Preserve the v1 WorkItem projection by deriving it from the sole ticket
+    # lifecycle field instead of requiring a second frontmatter state machine.
+    phase = {
+        "todo": "planning",
+        "awaiting_review": "planning",
+        "waiting_signal": "planning",
+        "blocked": "planning",
+        "active": "building",
+        "done": "complete",
+        "failed": "failed",
+        "rejected": "failed",
+    }.get(status, "")
+    qa_strategy = body.lower().split("## qa strategy", 1)[-1] if "## qa strategy" in body.lower() else ""
     return WorkItem(
         source="filesystem",
         id=ticket_id,
@@ -220,14 +233,14 @@ def normalize_ticket(frontmatter: dict[str, Any], body: str, path: Path) -> Work
         state=status,
         phase=phase,
         status=status,
-        priority=str(frontmatter.get("priority") or "").strip(),
+        priority=str(frontmatter.get("priority") or "medium").strip(),
         labels=normalize_string_list(frontmatter.get("labels")),
-        blocked_by=normalize_string_list(frontmatter.get("blocked_by")),
+        blocked_by=(),
         depends_on=normalize_string_list(frontmatter.get("depends_on")),
-        ready=normalize_bool(frontmatter.get("ready")),
-        approval_required=normalize_bool(frontmatter.get("approval_required")),
-        requires_qa=normalize_bool(frontmatter.get("requires_qa")),
-        requires_demo=normalize_bool(frontmatter.get("requires_demo")),
+        ready=status == "todo",
+        approval_required=status == "awaiting_review",
+        requires_qa="qa-tester" in qa_strategy or "proof_weight: qa" in qa_strategy,
+        requires_demo="proof_weight: demo" in qa_strategy or "- demo" in qa_strategy,
         compute_target=compute_target,
         local_ticket_path=str(path),
         artifacts_path=str(path.parent / "artifacts"),

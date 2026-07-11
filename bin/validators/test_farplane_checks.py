@@ -39,7 +39,7 @@ class FarplaneChecksTest(unittest.TestCase):
             ticket_dir = root / "tickets" / "TASK-0001"
             ticket_dir.mkdir(parents=True)
             ticket = ticket_dir / "ticket.md"
-            ticket.write_text("requires_qa: true\nrequires_demo: true\nreviewer\n")
+            ticket.write_text("## QA Strategy\n\nproof_weight: demo\ndelegated_lanes: [qa-tester, reviewer, demo]\n")
             context = ValidationContext(root, ticket, "complete", PathBoundary("explicit", ("a.py",)))
             result = completion_evidence_check(context, "block")
             self.assertEqual(result.status, "fail")
@@ -62,7 +62,7 @@ class FarplaneChecksTest(unittest.TestCase):
             ticket_dir = root / "tickets" / "TASK-0001"
             ticket_dir.mkdir(parents=True)
             ticket = ticket_dir / "ticket.md"
-            ticket.write_text("requires_qa: true\nrequires_demo: false\nreviewer\n")
+            ticket.write_text("## QA Strategy\n\nproof_weight: qa\ndelegated_lanes: [qa-tester, reviewer]\n")
             context = ValidationContext(root, ticket, "complete", PathBoundary("explicit", ("a.py",)))
             qa = ticket_dir / "artifacts" / "qa"
             old = qa / "20260101-old"

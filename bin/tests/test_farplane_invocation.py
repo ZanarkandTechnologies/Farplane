@@ -51,21 +51,10 @@ TICKET_TEXT = """\
 ---
 ticket_id: TASK-1234
 title: add invocation contract
-phase: planning
-status: review
-owner: codex
-claimed_by:
+status: awaiting_review
 priority: high
-depends_on: []
-blocked_by: []
-ready: false
-approval_required: true
-requires_qa: false
-requires_demo: false
 created_at: 2026-05-05T00:00:00Z
 updated_at: 2026-05-05T00:00:00Z
-next_action: approve the plan
-last_verification: none
 ---
 
 # TASK-1234: add invocation contract

@@ -6,12 +6,26 @@ import tempfile
 import unittest
 from pathlib import Path
 
+import yaml
+
 ROOT = Path(__file__).resolve().parents[2]
 CORE_DIR = ROOT / "bin" / "core"
 if str(CORE_DIR) not in sys.path:
     sys.path.insert(0, str(CORE_DIR))
 
 from farplane_project_snapshot import load_project_snapshot, write_project_ui_snapshot
+
+
+def add_metric(root: Path, metric_id: str, definition: dict, refresh: str) -> None:
+    metrics_path = root / "farplane" / "metrics.yaml"
+    metrics_payload = yaml.safe_load(metrics_path.read_text(encoding="utf-8"))
+    metrics_payload["metrics"][metric_id] = definition
+    metrics_path.write_text(yaml.safe_dump(metrics_payload, sort_keys=False), encoding="utf-8")
+
+    bindings_path = root / "farplane" / "bindings.yaml"
+    bindings_payload = yaml.safe_load(bindings_path.read_text(encoding="utf-8"))
+    bindings_payload["metric_bindings"][metric_id] = {"refresh": refresh}
+    bindings_path.write_text(yaml.safe_dump(bindings_payload, sort_keys=False), encoding="utf-8")
 
 
 def write_minimal_project(root: Path) -> None:
@@ -31,33 +45,6 @@ def write_minimal_project(root: Path) -> None:
         encoding="utf-8",
     )
     (farplane / "harness.md").write_text("---\nupdated_at: 2026-07-03\n---\n\n# Harness\n", encoding="utf-8")
-    (farplane / "products.json").write_text(
-        json.dumps(
-            {
-                "schema_version": 1,
-                "kind": "project-products-index",
-                "products": [
-                    {
-                        "id": "productization",
-                        "label": "Harness improvements",
-                        "audience": "operators",
-                        "output": "shipped behavior",
-                        "reward": "accepted improvement",
-                        "lane": "productization",
-                        "owner_skill": "farplane-productization",
-                        "kpis": {"primary": ["accepted_harness_improvements"], "supporting": [], "guardrail": []},
-                        "goals": [],
-                        "artifact_workflows": [],
-                        "refs": {"product": "farplane/products/productization/product.md"},
-                    }
-                ],
-                "lanes": [
-                    {"id": "productization", "default_weight": 20, "purpose": "Ship improvements"}
-                ],
-            }
-        ),
-        encoding="utf-8",
-    )
     (farplane / "goals.yaml").write_text(
         """
 kind: project-goals
@@ -80,18 +67,26 @@ current_milestone: Make strategy visible in the project snapshot.
 """,
         encoding="utf-8",
     )
-    (farplane / "bindings.yaml").write_text(
-        """kind: project-bindings
-project:
-  id: test_project
+    (farplane / "metrics.yaml").write_text(
+        """kind: project-metrics
+framework_template_version: "0.1.0"
 metrics:
   accepted_harness_improvements:
     label: Accepted harness improvements
-    product: productization
     pinned: true
     kind: daily_count
     unit: improvements
     display: bar_plus_cumulative
+""",
+        encoding="utf-8",
+    )
+    (farplane / "bindings.yaml").write_text(
+        """kind: project-bindings
+framework_template_version: "0.1.0"
+project:
+  id: test_project
+metric_bindings:
+  accepted_harness_improvements:
     refresh: Call count_ticket_kpi_rewards for accepted_harness_improvements.
 """,
         encoding="utf-8",
@@ -117,9 +112,6 @@ metrics:
             {
                 "date": "2026-07-03",
                 "primitives": {
-                    "ticket_count_by_product": {
-                        "productization": {"value": 2, "status": "available", "payload": {"kpi_ids": ["accepted_harness_improvements"]}}
-                    },
                     "ticket_count_by_kpi": {
                         "accepted_harness_improvements": {"value": 2, "status": "available", "payload": {}}
                     },
@@ -132,7 +124,7 @@ metrics:
 
 
 class FarplaneProjectSnapshotTests(unittest.TestCase):
-    def test_snapshot_joins_goals_products_metrics_and_primitives(self) -> None:
+    def test_snapshot_joins_goals_metrics_and_primitives_without_products(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             write_minimal_project(root)
@@ -147,6 +139,9 @@ class FarplaneProjectSnapshotTests(unittest.TestCase):
         metric_card = {card["metric_id"]: card for card in snapshot["metrics"]["series"]}["accepted_harness_improvements"]
         metric_def = snapshot["metrics"]["definitions"]["accepted_harness_improvements"]
         self.assertIn("description", metric_def)
+        self.assertEqual(metric_def["source_ref"]["path"], "farplane/metrics.yaml")
+        self.assertEqual(metric_def["binding_source_ref"]["path"], "farplane/bindings.yaml")
+        self.assertIn("farplane/metrics.yaml", {source["path"] for source in snapshot["sources"]})
         self.assertEqual(metric_def["tooltip"], metric_def["description"])
         self.assertEqual(metric_def["target_spec"], {"value": 20.0, "direction": "above", "unit": "improvements"})
         self.assertEqual(metric_card["description"], metric_def["description"])
@@ -162,7 +157,7 @@ class FarplaneProjectSnapshotTests(unittest.TestCase):
         self.assertEqual(snapshot["tabs"]["overview"]["team_focus"]["active_milestone"], "Make strategy visible in the project snapshot.")
         self.assertEqual(snapshot["tabs"]["overview"]["team_focus"]["top_goal_id"], "validated_self_improvement")
         self.assertIn("ticket_ref", snapshot["shared_shapes"])
-        self.assertEqual(snapshot["tabs"]["products"]["products"][0]["ticket_count"], 2)
+        self.assertNotIn("products", snapshot["tabs"])
         goal_kpi = snapshot["tabs"]["goals"]["axes"][0]["smart_goals"][0]["kpis"][0]
         self.assertEqual(goal_kpi["latest_status"], "available")
         self.assertEqual(goal_kpi["status"], "available")
@@ -179,23 +174,58 @@ class FarplaneProjectSnapshotTests(unittest.TestCase):
         self.assertEqual(snapshot["tabs"]["news"]["items"], [])
         self.assertIn("source_gap_ids", snapshot["tabs"]["kanban"])
 
+    def test_snapshot_does_not_fall_back_to_legacy_bindings_metrics(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            write_minimal_project(root)
+            (root / "farplane" / "metrics.yaml").unlink()
+            bindings_path = root / "farplane" / "bindings.yaml"
+            bindings = yaml.safe_load(bindings_path.read_text(encoding="utf-8"))
+            bindings["metrics"] = {
+                "legacy_metric": {
+                    "label": "Legacy metric",
+                    "kind": "point",
+                    "unit": "score",
+                    "display": "reading",
+                }
+            }
+            bindings_path.write_text(yaml.safe_dump(bindings, sort_keys=False), encoding="utf-8")
+
+            snapshot = load_project_snapshot(root, "2026-07-03")
+
+        self.assertEqual(snapshot["metrics"]["definitions"], {})
+        metric_gap = next(gap for gap in snapshot["source_gaps"] if "metrics.yaml#metrics" in gap["id"])
+        self.assertEqual(metric_gap["source_ref"]["path"], "farplane/metrics.yaml")
+
+    def test_snapshot_reports_missing_metric_binding_from_bindings_source(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            write_minimal_project(root)
+            bindings_path = root / "farplane" / "bindings.yaml"
+            bindings = yaml.safe_load(bindings_path.read_text(encoding="utf-8"))
+            bindings["metric_bindings"] = {}
+            bindings_path.write_text(yaml.safe_dump(bindings, sort_keys=False), encoding="utf-8")
+
+            snapshot = load_project_snapshot(root, "2026-07-03")
+
+        metric_gap = next(gap for gap in snapshot["source_gaps"] if "metric_bindings" in gap["id"])
+        self.assertEqual(metric_gap["source_ref"]["path"], "farplane/bindings.yaml")
+
     def test_snapshot_builds_content_metric_cards_from_daily_readings(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             write_minimal_project(root)
-            bindings = root / "farplane" / "bindings.yaml"
-            bindings.write_text(
-                bindings.read_text(encoding="utf-8")
-                + """
-  x_views:
-    label: X views
-    product: distribution
-    unit: views
-    display: bar_plus_cumulative
-    kind: daily_count
-    refresh: x-account writes a daily metric reading.
-""",
-                encoding="utf-8",
+            add_metric(
+                root,
+                "x_views",
+                {
+                    "label": "X views",
+                    "description": "Daily X views.",
+                    "unit": "views",
+                    "display": "bar_plus_cumulative",
+                    "kind": "daily_count",
+                },
+                "x-account writes a daily metric reading.",
             )
             ledger = root / ".farplane" / "content" / "ledger.jsonl"
             ledger.parent.mkdir(parents=True)
@@ -388,41 +418,11 @@ feed_scout:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             write_minimal_project(root)
-            bindings = root / "farplane" / "bindings.yaml"
-            bindings.write_text(
-                bindings.read_text(encoding="utf-8")
-                + """
-  auto_time_ratio:
-    label: Autonomous time ratio
-    product: productization
-    kind: point
-    unit: ratio
-    display: reading
-    refresh: Call $interval-update.calculate_autonomy_time_ratio(runtime_dir=".farplane", date="<YYYY-MM-DD>").
-  ticket_intervention_turn_count:
-    label: Ticket intervention turns
-    product: productization
-    kind: daily_count
-    unit: turns
-    display: bar_plus_cumulative
-    refresh: Call $interval-update.calculate_ticket_intervention_metrics(ticket_dir="tickets", runtime_dir=".farplane", date="<YYYY-MM-DD>").
-  intervention_free_ticket_count:
-    label: Intervention-free tickets
-    product: productization
-    kind: daily_count
-    unit: tickets
-    display: bar_plus_cumulative
-    refresh: Call $interval-update.calculate_ticket_intervention_metrics(ticket_dir="tickets", runtime_dir=".farplane", date="<YYYY-MM-DD>").
-  auto_completion_rate:
-    label: Auto completion rate
-    product: productization
-    kind: point
-    unit: ratio
-    display: reading
-    refresh: Call $interval-update.calculate_ticket_intervention_metrics(ticket_dir="tickets", runtime_dir=".farplane", date="<YYYY-MM-DD>").
-""",
-                encoding="utf-8",
-            )
+            provider_refresh = 'Call $interval-update.calculate_ticket_intervention_metrics(ticket_dir="tickets", runtime_dir=".farplane", date="<YYYY-MM-DD>").'
+            add_metric(root, "auto_time_ratio", {"label": "Autonomous time ratio", "description": "Autonomous time ratio.", "kind": "point", "unit": "ratio", "display": "reading"}, 'Call $interval-update.calculate_autonomy_time_ratio(runtime_dir=".farplane", date="<YYYY-MM-DD>").')
+            add_metric(root, "ticket_intervention_turn_count", {"label": "Ticket intervention turns", "description": "Ticket intervention turns.", "kind": "daily_count", "unit": "turns", "display": "bar_plus_cumulative"}, provider_refresh)
+            add_metric(root, "intervention_free_ticket_count", {"label": "Intervention-free tickets", "description": "Intervention-free tickets.", "kind": "daily_count", "unit": "tickets", "display": "bar_plus_cumulative"}, provider_refresh)
+            add_metric(root, "auto_completion_rate", {"label": "Auto completion rate", "description": "Auto completion rate.", "kind": "point", "unit": "ratio", "display": "reading"}, provider_refresh)
             observations = root / ".farplane" / "metrics" / "observations"
             (observations / "autonomy_time_feedback").mkdir(parents=True)
             (observations / "autonomy_time_feedback" / "2026-07-01.json").write_text(
@@ -484,19 +484,11 @@ feed_scout:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             write_minimal_project(root)
-            bindings = root / "farplane" / "bindings.yaml"
-            bindings.write_text(
-                bindings.read_text(encoding="utf-8")
-                + """
-  external_metric:
-    label: External metric
-    product: experiments
-    kind: point
-    unit: score
-    display: reading
-    refresh: External owner writes this later.
-""",
-                encoding="utf-8",
+            add_metric(
+                root,
+                "external_metric",
+                {"label": "External metric", "description": "External metric.", "kind": "point", "unit": "score", "display": "reading"},
+                "External owner writes this later.",
             )
 
             snapshot = load_project_snapshot(root, "2026-07-03")
@@ -507,23 +499,38 @@ feed_scout:
         self.assertEqual(metric_card["status"], "missing")
         self.assertEqual(metric_card["source_gaps"], [])
 
+    def test_snapshot_discovers_nested_active_and_archived_ticket_proof(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            write_minimal_project(root)
+            active_report = root / "tickets" / "TASK-0001" / "artifacts" / "qa" / "run-1" / "report.md"
+            active_report.parent.mkdir(parents=True)
+            active_report.write_text("# QA report\n", encoding="utf-8")
+            archived_receipt = root / "tickets" / "archive" / "TASK-0002" / "artifacts" / "review" / "completion.json"
+            archived_receipt.parent.mkdir(parents=True)
+            archived_receipt.write_text("{}\n", encoding="utf-8")
+
+            snapshot = load_project_snapshot(root, "2026-07-03")
+
+        proof_paths = {item["path"] for item in snapshot["tabs"]["proof"]["qa_artifacts"]}
+        self.assertEqual(
+            proof_paths,
+            {
+                "tickets/TASK-0001/artifacts/qa/run-1/report.md",
+                "tickets/archive/TASK-0002/artifacts/review/completion.json",
+            },
+        )
+        self.assertNotIn("missing_qa_artifacts", snapshot["tabs"]["proof"]["source_gap_ids"])
+
     def test_unpinned_metric_source_gap_stays_on_metric_card_only(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             write_minimal_project(root)
-            bindings = root / "farplane" / "bindings.yaml"
-            bindings.write_text(
-                bindings.read_text(encoding="utf-8")
-                + """
-  instagram_retention_score:
-    label: Instagram retention score
-    product: distribution
-    kind: point
-    unit: ratio
-    display: reading
-    refresh: Instagram account writes this when duration is available.
-""",
-                encoding="utf-8",
+            add_metric(
+                root,
+                "instagram_retention_score",
+                {"label": "Instagram retention score", "description": "Instagram retention score.", "kind": "point", "unit": "ratio", "display": "reading"},
+                "Instagram account writes this when duration is available.",
             )
             daily = root / ".farplane" / "metrics" / "daily"
             (daily / "2026-07-03.json").write_text(

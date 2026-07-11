@@ -635,6 +635,25 @@ def ticket_frontmatter_bool(text: str, key: str, *, default: bool = False) -> bo
     return default
 
 
+def ticket_qa_requirements(text: str) -> tuple[bool, bool]:
+    lines = text.splitlines()
+    try:
+        start = next(index for index, line in enumerate(lines) if line.strip() == "## QA Strategy") + 1
+    except StopIteration:
+        return False, False
+    end = next(
+        (index for index in range(start, len(lines)) if lines[index].startswith("## ")),
+        len(lines),
+    )
+    strategy = "\n".join(lines[start:end]).lower()
+    requires_demo = "proof_weight: demo" in strategy or "- demo" in strategy
+    requires_qa = requires_demo or any(
+        token in strategy
+        for token in ("proof_weight: qa", "proof_weight: visual_qa", "proof_weight: agent_qa", "qa-tester")
+    )
+    return requires_qa, requires_demo
+
+
 def build_phase_requirements(project_root: Path, ticket_id: str, *, requires_qa: bool, requires_demo: bool) -> dict[str, object]:
     artifact_root = canonical_active_ticket_path(project_root, ticket_id).parent / "artifacts"
     requirements: dict[str, object] = {
@@ -663,8 +682,7 @@ def load_ticket_execution_contract(project_root: Path, ticket_path: str, *, cont
     if not ticket_candidate.is_absolute():
         ticket_candidate = (project_root / ticket_path).resolve()
     text = read_ticket_text(ticket_candidate)
-    requires_qa = ticket_frontmatter_bool(text, "requires_qa", default=True)
-    requires_demo = ticket_frontmatter_bool(text, "requires_demo", default=False)
+    requires_qa, requires_demo = ticket_qa_requirements(text)
     if control_surface == "qa":
         requires_qa = True
     if control_surface == "demo":

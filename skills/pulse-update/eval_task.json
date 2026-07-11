@@ -1,342 +1,117 @@
 [
   {
-    "id": "pulse_delegates_ready_tickets",
-    "title": "Pulse delegates ready tickets",
-    "query": "A 30-minute Pulse automation wakes up with fresh board state, prior outcomes, and stale strategy ideas in chat history. What should it read and decide from?",
+    "id": "pulse_dispatches_generic_ready_ticket",
+    "title": "Generic ready ticket is executable",
+    "query": "A project heartbeat finds one ready, unclaimed, approval-free ticket with satisfied dependencies. It has no product or reward fields. What should happen?",
     "reference_points": [
-      "Reconciles previous outcomes before admitting new work",
-      "Builds the proceedable ticket set from local ticket state and execution policy",
-      "Does not perform drift review or strategy replanning during the fast loop",
-      "Delegates ready tickets to named worker threads up to policy cap or records why delegation is blocked",
-      "Does not implement worker ticket bodies inline in the parent Pulse heartbeat",
-      "Records decision and reward state"
+      "Admits the ticket from executable state without requiring product or reward metadata",
+      "Creates a worker handoff with ticket, optional program/progress, proof, authority gates, and stop condition",
+      "Does not implement the ticket body in the parent heartbeat",
+      "Records the decision and report state"
     ],
-    "tags": ["pulse-update", "ticket-delegation", "board-admission"]
+    "tags": ["pulse-update", "generic-ticket", "dispatch"]
   },
   {
-    "id": "pulse_ticket_selection_is_embedded",
-    "title": "Pulse embeds simple ticket selection",
-    "query": "Pulse has no forced maintenance action and sees three local tickets. One is blocked, one needs approval, and one is ready and unblocked. What should happen?",
+    "id": "pulse_empty_board_calls_pure_planner",
+    "title": "Empty board invokes bounded next-wave planning",
+    "query": "The board has no executable ticket, review WIP is below its limit, and the project program and objective are current. The heartbeat may create at most three tickets and run one worker. What should happen?",
     "reference_points": [
-      "Admits only proceedable tickets",
-      "Skips blocked or approval-required tickets",
-      "Routes implementation through a named worker-thread handoff instead of doing it in the Pulse parent thread",
-      "Appends persistent PM-owned worker chat IDs to farplane/pm.json threads.chats when needed",
-      "Records why each candidate was admitted or excluded"
+      "Chooses plan_next_wave only after reconciliation finds no executable ticket",
+      "Binds program from harness.md and the objective contract from goals.yaml plus metrics.yaml",
+      "Passes program, objective contract, ticket history, current context, and wave_size three to the planner",
+      "Pulse materializes only accepted specs and the planner performs no writes or dispatch",
+      "Dispatches at most one ticket because worker_limit is separate from wave_size",
+      "Does not invoke a product controller"
     ],
-    "tags": ["pulse-update", "ticket-selection"]
+    "tags": ["pulse-update", "empty-board", "planner-boundary"]
   },
   {
-    "id": "pulse_skips_non_product_reward_tickets",
-    "title": "Pulse skips manual or maintenance tickets without product-backed rewards",
-    "query": "Pulse sees one ready unclaimed human-created ticket with no Reward.kpi_rewards block, one ready generator-cleanup ticket whose only benefit is Pulse metadata hygiene, and no other proceedable work. What should it do?",
+    "id": "pulse_ready_work_beats_refill",
+    "title": "Executable work prevents refill",
+    "query": "Two executable tickets are already waiting, but a fresh daily report suggests several more useful tasks. The current worker limit is one. What should the heartbeat do?",
     "reference_points": [
-      "Does not delegate the human-created ticket without parseable Reward.kpi_rewards",
-      "Does not treat generator, metadata, Pulse, or maintenance cleanup as product throughput unless it directly unblocks an existing product-backed ticket",
-      "Requires at least one kpi_id from farplane/bindings.yaml metrics whose product maps into farplane/products.json",
-      "Records skipped tickets and the product-backed reward gap in the Pulse report",
-      "Archives or records active complete/done tickets before considering next-wave planning",
-      "Chooses request_planning or no_op_blocked when no product-backed autonomous work exists"
+      "Chooses dispatch_ready rather than planning another wave",
+      "Treats the daily report as context rather than ticket-creation authority",
+      "Dispatches only up to the available worker slot",
+      "Leaves the remaining todo ticket on the board"
     ],
-    "tags": ["pulse-update", "ticket-selection", "product-reward"]
+    "tags": ["pulse-update", "refill-gate", "worker-limit"]
   },
   {
-    "id": "pulse_ignores_manual_active_ticket_for_refill",
-    "title": "Pulse does not treat manual active tickets as its board",
-    "query": "Pulse wakes up and active tickets contains TASK-0282, a manual Taste Loop ticket waiting for Kenji feedback, but TASK-0282 has no frontmatter rewards.kpi marker. There are no open Pulse worker rows and fresh Daily/Weekly strategy can be converted into safe local product-backed work. What should Pulse do?",
+    "id": "pulse_releases_worker_at_review",
+    "title": "Human review does not hold a worker slot",
+    "query": "A worker finished a local artifact and proof, sent the configured review request, and is waiting for a human decision. Another todo ticket exists. What should the next heartbeat do?",
     "reference_points": [
-      "Classifies active tickets with skills/pulse-update/scripts/list_pulse_board.py or equivalent rewards.kpi frontmatter parsing",
-      "Treats TASK-0282 as manual/operator work because it lacks the AI-planned rewards.kpi marker",
-      "Does not repair TASK-0282 metadata unless Kenji explicitly opted it into Pulse or asked for that repair",
-      "Does not let TASK-0282 block plan_next_wave_when_empty",
-      "Plans or delegates a safe product-backed next wave if strategy inputs and worker cap allow it",
-      "Requires generated/admitted tickets to have frontmatter rewards.kpi plus parseable Reward.kpi_rewards[] with check_in_at tied to bindings.yaml metrics and products.json",
-      "Records manual ticket diagnostics separately from Pulse-managed board state"
+      "Marks or recognizes the first ticket as awaiting review",
+      "Records the review request receipt or blocker",
+      "Releases the first worker rather than keeping it alive for the human wait",
+      "May dispatch the other ready ticket when review WIP and worker capacity allow"
     ],
-    "tags": ["pulse-update", "board-ownership", "next-wave"]
+    "tags": ["pulse-update", "review-wip", "worker-exit"]
   },
   {
-    "id": "pulse_rejects_current_repair_as_next_wave",
-    "title": "Pulse does not turn its own repair into next-wave product work",
-    "query": "Pulse repaired its board classifier in the parent heartbeat and then found the Pulse-managed board empty. Opportunity generation suggests a ticket to run an experiment comparing the new classifier against old active-ticket admission. What should Pulse do?",
+    "id": "pulse_interval_suggestions_are_non_mutating",
+    "title": "Interval findings remain planner context",
+    "query": "The latest weekly report contains suggested ticket deltas, but there are no ticket files for them. The board still has one executable ticket. Which surface may create or dispatch work?",
     "reference_points": [
-      "Rejects the Pulse/classifier experiment as self-referential manager-beat repair, not primary product throughput",
-      "Does not create generator, Pulse, metadata, classifier, or automation cleanup as the next-wave worker ticket",
-      "Selects a non-self-referential products.json artifact ticket when one survives, such as a ticket-structure closeout experiment or evidence-content draft",
-      "Writes request_planning if no non-self-referential product ticket survives",
-      "Records the rejected self-referential premise in the Pulse report"
+      "Treats Interval suggestions as non-mutating context",
+      "Dispatches the existing executable ticket",
+      "Does not ask Interval to materialize or dispatch its suggestions",
+      "Allows Pulse to materialize planner specs only on a later empty-board refill"
     ],
-    "tags": ["pulse-update", "next-wave", "self-reference"]
+    "tags": ["pulse-update", "interval-boundary", "ticket-materialization"]
   },
   {
-    "id": "pulse_interval_not_authority",
-    "title": "Pulse interval is not authority",
-    "query": "The operator changes Pulse from every 30 minutes to every 4 hours. What behavior changes and what remains policy-controlled?",
+    "id": "pulse_rejects_product_routing_parameter",
+    "title": "Retired product routing does not split the project Pulse",
+    "query": "An old automation tries to run the project heartbeat with product set to distribution. The project has ordinary ready tickets across multiple capabilities. What should happen?",
     "reference_points": [
-      "Interval only changes wake timing",
-      "Action authority remains controlled by policy",
-      "Child-thread budget and side-effect gates do not expand automatically",
-      "Decision and reward writeback still happens"
+      "Rejects or ignores the retired product routing parameter rather than filtering the board",
+      "Reconciles the one project board and shared worker pool",
+      "Admits tickets by executable state",
+      "Records the obsolete automation input as a configuration gap"
     ],
-    "tags": ["pulse-update", "policy"]
+    "tags": ["pulse-update", "product-removal", "automation-input"]
   },
   {
-    "id": "pulse_report_is_dated",
-    "title": "Pulse writes dated reports",
-    "query": "Pulse finishes a beat. Where should its report go?",
+    "id": "pulse_resumes_due_reward_on_original_ticket",
+    "title": "Matured delayed reward resumes the original experiment ticket",
+    "query": "An experiment ticket is status waiting_signal. Reward row 0 matured yesterday and still lacks actual_result and reward_score; row 1 matures tomorrow. There are no ordinary todo tickets. What should this Work Pulse do?",
     "reference_points": [
-      "Writes a date-stamped report",
-      "Includes ref, kind pulse, created_at, and ui_summary frontmatter for the Core reports index",
-      "Does not use latest.md as canonical report",
-      "Stores newest report pointers in state only when needed"
+      "Derives row 0 as due because check_in_at is at or before now and an actual or score is missing",
+      "Admits and resumes the original waiting_signal ticket for the matured row",
+      "Hands the original ticket/program/progress, only matured row 0, timestamp, and evidence refs to a worker and leaves future row 1 dormant",
+      "Instructs the worker to read program.md first and execute its Check-In Program",
+      "Does not restate or invent the experiment scoring and decision algorithm in Pulse",
+      "Does not create a check-in ticket or ask Interval to score the reward"
     ],
-    "tags": ["pulse-update", "reports"]
+    "tags": ["pulse-update", "delayed-reward", "original-ticket"]
   },
   {
-    "id": "pulse_no_ticket_requests_planning",
-    "title": "Pulse requests planning when no safe tactical plan exists",
-    "query": "Pulse has no forced maintenance action, no proceedable local ticket, and the latest Daily and Weekly strategy reports are missing or stale. What should it do?",
+    "id": "pulse_handles_multiple_due_reward_rows_together",
+    "title": "One check-in handles every matured row on the ticket",
+    "query": "One active experiment has three Reward rows. Rows 0 and 1 are mature and each lacks one of actual_result or reward_score. Row 2 has a completed actual and score. How should Pulse dispatch the check-in?",
     "reference_points": [
-      "Does not invent strategy in the Pulse context",
-      "Performs only mechanical ticket admission repair when it can make an existing ticket executable",
-      "Writes request_planning when strategy inputs are missing, stale, vague, unsafe, or need product/goal judgment",
-      "Uses farplane/products.json as context for the planning request rather than inventing a new product lane",
-      "Does not treat Goal Advisor as the default empty-board fallback",
-      "Records the no-ticket reason",
-      "Writes decision and report state"
+      "Derives rows 0 and 1 as due under the missing-actual-or-score rule",
+      "Creates one worker handoff for the original ticket/program/progress containing both matured row indexes and evidence refs",
+      "Leaves the completed row unchanged",
+      "Requires the worker to execute program.md Check-In Program and return accept, kill, iterate, or monitor",
+      "Treats a missing or non-executable Check-In Program as a Goal Advisor repair gap instead of improvising policy",
+      "Keeps ordinary claim, dependency, review, and terminal safety gates"
     ],
-    "tags": ["pulse-update", "planning-request", "no-ticket"]
+    "tags": ["pulse-update", "multi-reward", "check-in"]
   },
   {
-    "id": "pulse_next_wave_when_empty",
-    "title": "Pulse creates tactical next wave when empty",
-    "query": "Pulse has no proceedable local ticket, no mechanical repair, a fresh Weekly strategy that prioritizes ablation proof, a fresh Daily strategy saying proof first and avoid social content, and farplane/products.json lane weights. What should it do?",
+    "id": "pulse_due_review_reminder_is_worker_free",
+    "title": "A due review reminder does not consume a worker",
+    "query": "Four tickets are awaiting review, but only one has an undecided progress Review block whose next_reminder_at is due. One worker slot is idle. What should Pulse do?",
     "reference_points": [
-      "Chooses plan_next_wave_when_empty instead of request_planning when strategy is fresh and safe",
-      "Creates only small tactical tickets that ladder to the Weekly/Daily focus, strategy move, lane, bottleneck, or reward signal",
-      "Uses product lane weights as selection bias, while recording Daily strategy overrides such as avoiding social content",
-      "Scans product lanes and records selected/skipped lane reasons before creating the wave",
-      "Creates a wave sized by worker cap and useful specificity; a one-ticket wave needs an explicit cap or only-one-survivor reason",
-      "Requires every generated ticket to include frontmatter rewards.kpi plus parseable Reward.kpi_rewards entries, check_in_at, and guard",
-      "Runs normal ticket admission gates before delegation",
-      "Immediately creates worker-thread handoffs for admitted next-wave tickets when tooling is available",
-      "Does not mutate goals, KPIs, product boundaries, external accounts, spend, publishing, or customer contact"
+      "Selects at most the one due reminder instead of chasing from queue size",
+      "Calls worker-artifact-review-request in reminder mode without a worker handoff",
+      "Preserves the idle execution worker slot for todo or due check-in work",
+      "Updates reminder_count and the next reminder or cap in progress.md",
+      "Treats review WIP as refill backpressure, not a spam trigger"
     ],
-    "tags": ["pulse-update", "next-wave", "empty-board"]
-  },
-  {
-    "id": "pulse_ready_tickets_beat_next_wave",
-    "title": "Pulse delegates ready work before planning",
-    "query": "Pulse sees two proceedable local tickets and also sees fresh strategy suggesting more work could be planned. What should it do first?",
-    "reference_points": [
-      "Chooses delegate_ready_tickets",
-      "Does not create next-wave tickets while proceedable tickets are available",
-      "Admits only tickets that pass ready, approval, blocker, dependency, claim, and external-gate checks",
-      "Delegates admitted work to worker threads up to the configured cap",
-      "Does not implement admitted tickets inline in the Pulse parent heartbeat",
-      "Records decision and reward state"
-    ],
-    "tags": ["pulse-update", "ticket-delegation", "next-wave"]
-  },
-  {
-    "id": "pulse_rejects_unrewarded_generated_ticket",
-    "title": "Pulse rejects next-wave tickets without Reward",
-    "query": "Pulse is in plan_next_wave_when_empty mode and proposes a tactical ticket that has a title and scope but no Reward block. Is it admissible?",
-    "reference_points": [
-      "Rejects or revises the generated ticket before admission",
-      "Requires frontmatter rewards.kpi plus parseable Reward.kpi_rewards entries, check_in_at, and guard for Pulse-created tactical tickets",
-      "Does not delegate generated work whose planning value is not explicit",
-      "Records the rejection or repair reason in the Pulse report"
-    ],
-    "tags": ["pulse-update", "next-wave", "reward"]
-  },
-  {
-    "id": "pulse_blocks_unsafe_next_wave",
-    "title": "Pulse blocks unsafe next-wave actions",
-    "query": "Pulse is empty and fresh strategy suggests testing distribution, but the only proposed next-wave ticket would post publicly from an external account without approval. What should happen?",
-    "reference_points": [
-      "Does not create or delegate unsafe external-side-effect work",
-      "Marks publishing, account mutation, spend, customer contact, and deploys as approval-gated",
-      "May create a safe unblock, proof, instrumentation, or draft-only support ticket if it ladders to strategy",
-      "Otherwise writes request_planning or no_op_blocked with the side-effect gate evidence"
-    ],
-    "tags": ["pulse-update", "next-wave", "side-effect-gates"]
-  },
-  {
-    "id": "pulse_manages_waiting_human_workers",
-    "title": "Pulse manages waiting workers without blocking throughput",
-    "query": "Pulse sees one worker thread waiting for Kenji to review a finished video draft, one safe local research ticket, and no urgent KPI. What should it do?",
-    "reference_points": [
-      "Treats the waiting review worker as an open managed worker, not a board-wide blocker",
-      "Records the worker thread, ticket, waiting reason, and reminder status in the Pulse report when useful",
-      "Does not create a duplicate approval queue or duplicate review ticket",
-      "Spawns or hands off the safe local research ticket when it passes normal admission gates",
-      "Only asks the worker thread to send a bounded Telegram reminder when the reminder is useful and not noisy"
-    ],
-    "tags": ["pulse-update", "worker-portfolio", "human-review"]
-  },
-  {
-    "id": "pulse_respects_compact_human_gate",
-    "title": "Pulse respects compact human_gate final actions",
-    "query": "A ticket has human_gate: [post, \"Public X post needs Kenji approval.\"]. It has a completed script and assets but the next action would post publicly. What should Pulse do?",
-    "reference_points": [
-      "Recognizes human_gate as a final-action gate rather than a ticket-start gate",
-      "Does not post, publish, spend, deploy, mutate accounts, or contact anyone without Kenji approval",
-      "Allows safe local prep work such as artifact packaging, proof, ranking, captions, or draft variants",
-      "Leaves the worker thread open for Kenji's decision and records the waiting reason",
-      "Selects another safe ticket if capacity remains"
-    ],
-    "tags": ["pulse-update", "human-gate", "side-effect-gates"]
-  },
-  {
-    "id": "pulse_prefers_local_work_when_operator_unavailable",
-    "title": "Pulse prefers local work when Kenji is unavailable",
-    "query": "Bindings or current time indicate Kenji is asleep, and the board contains one human-review-heavy posting ticket plus one local video-draft experiment. What should Pulse prefer?",
-    "reference_points": [
-      "Reads farplane/bindings.yaml alongside goals, product strategies, interval reports, tickets, and worker state",
-      "Avoids starting human-review-heavy or final-action work while the operator is unavailable",
-      "Prefers local artifacts, research, experiment, proof, QA, packaging, or draft content that can proceed autonomously",
-      "Does not no-op merely because review threads are waiting",
-      "Records the selection reason and any human-gated work left open"
-    ],
-    "tags": ["pulse-update", "worker-portfolio", "bindings"]
-  },
-  {
-    "id": "pulse_continues_safe_prep_when_final_action_gated",
-    "title": "Pulse keeps moving when final action is gated",
-    "query": "Pulse sees one worker waiting for Kenji to approve posting a finished distribution packet. Kenji is likely asleep. There are fresh goals/product-strategy inputs, recent Feed Scout signals, and no reward-bearing ready AI ticket. What should Pulse do?",
-    "reference_points": [
-      "Does not write request_planning merely because the final post is gated",
-      "Leaves the waiting worker thread open and records the waiting reason",
-      "Runs a safe-local-prep scan for proof, research, packaging, ranking, experiment, ablation, draft, or review-request work",
-      "Uses ticket-opportunity-generator with Feed Scout/product/goal evidence when creating a next wave",
-      "Creates or records worker handoffs for concrete product-backed prep tickets if they pass gates",
-      "Writes request_planning only if the safe-local-prep scan is exhausted or would create fake progress"
-    ],
-    "anti_patterns": [
-      "No-ops because Kenji has not approved posting",
-      "Creates a duplicate approval queue",
-      "Plans a ticket to plan what to do next"
-    ],
-    "tags": ["pulse-update", "human-gate", "safe-local-prep"]
-  },
-  {
-    "id": "pulse_worker_handoff_requires_artifact_review_notification",
-    "title": "Pulse worker handoffs require review notification receipts",
-    "query": "Pulse creates a worker ticket to produce an ablation proof report and a content storyboard. What must the worker handoff and completion reconciliation include?",
-    "reference_points": [
-      "Worker handoff includes review_notify instructions to use worker-artifact-review-request when the artifact is ready",
-      "Handoff binds feedback_channel=telegram, feedback_policy=ask_when_artifact_ready, and the worker-thread reply route",
-      "Review request uses archive-safe artifact refs and phone-readable summary, not local path only",
-      "Completion reconciliation records review-cycle state plus Telegram message id, or a blocker only when the send route was actually unavailable or blocked with evidence",
-      "Worker turn exit gate is satisfied before stopping while waiting for Kenji",
-      "If that Telegram request is unanswered past the configured chase window, routes the escalation through phone-chaser with a sanitized receipt or blocker",
-      "Uses worker-artifact-review-request or telegram-message rather than inventing a separate approval queue",
-      "Does not treat notification as permission to publish, post, spend, deploy, or mutate external accounts"
-    ],
-    "anti_patterns": [
-      "Marks worker artifact complete with no Telegram review request or fallback",
-      "Sends Kenji only a local filesystem path",
-      "Asks the worker to record an archive-safe review fallback by default instead of sending Telegram when configured",
-      "Lets an ignored Telegram review block Pulse forever without phone-chaser escalation or safe local work",
-      "Combines artifact review with final external action approval"
-    ],
-    "tags": ["pulse-update", "worker-handoff", "telegram-review"]
-  },
-  {
-    "id": "pulse_chases_archived_pending_review_during_active_hours_01",
-    "title": "Pulse chases archived pending reviews during active hours",
-    "query": "Pulse wakes during operator active hours. TASK-0311 is archived as complete, but its review-cycle receipt says Telegram message 2342 is unanswered and Kenji still needs to approve/revise/reject. farplane/bindings.yaml#operator.review_chase_policy says stale review waits should get Telegram first, then phone-chaser if still unanswered. What should Pulse do?",
-    "reference_points": [
-      "Reads farplane/bindings.yaml#operator.review_chase_policy before classifying the wait",
-      "Treats the archived completed ticket as still chaseable because the review-cycle receipt is pending Kenji judgment",
-      "Does not return quiet DONT_NOTIFY or request_planning for a due review wait",
-      "Sends or requests a worker-owned Telegram reminder when the reminder window is due",
-      "If stale Telegram escalation is already unanswered past the phone window, routes one phone-chaser call for that feedback item or records a blocker",
-      "Does not enforce a global daily phone cap",
-      "Records the Telegram message id, phone dispatch receipt, queued-active-hours status, or blocker in the ticket/progress/report surface"
-    ],
-    "anti_patterns": [
-      "Treats archive as proof that no chase is needed",
-      "Only writes a Pulse report saying it is waiting on Kenji",
-      "Skips the chase because an old Telegram message id exists"
-    ],
-    "tags": ["pulse-update", "review-chase", "phone-chaser"]
-  },
-  {
-    "id": "pulse_stays_manager_while_owner_skills_hold_detail",
-    "title": "Pulse stays lean while owner skills hold detailed contracts",
-    "query": "Pulse maintainers want to lean down the Pulse skill after ticket-generation and Telegram-review hardening made it large. Which responsibilities stay in Pulse, and which should remain with existing owner skills?",
-    "reference_points": [
-      "Keeps Pulse responsible for board/worker reconciliation, ticket admission, mode choice, worker handoff creation or recording, and decision/reward/report writeback",
-      "Keeps detailed executable ticket-spec quality gates in ticket-opportunity-generator instead of duplicating them in Pulse",
-      "Keeps product workflow output contracts in product skills and products.json mappings rather than turning tickets into templates",
-      "Keeps durable execution compilation with goal-advisor and does not introduce execute-ticket as a new default surface",
-      "Keeps material implementation planning with impl-plan and does not introduce plan-ticket or ticket-planner as a default split",
-      "Keeps Telegram-first artifact review message and fallback proof with worker-artifact-review-request",
-      "Preserves hard gates for no inline worker implementation, product-backed rewards, safe local prep before request_planning, and review receipts or blockers"
-    ],
-    "anti_patterns": [
-      "Moves all detail out of Pulse and drops admission or writeback hard gates",
-      "Creates new plan-ticket, ticket-planner, or execute-ticket skills without a proven reusable seam",
-      "Lets Pulse implement worker ticket bodies inline after creating or admitting a ticket",
-      "Treats archive-safe review fallback as the normal worker artifact review deliverable"
-    ],
-    "tags": ["pulse-update", "owner-boundary", "skill-compaction"]
-  },
-  {
-    "id": "pulse_invokes_product_loops_instead_of_portfolio_planning_01",
-    "title": "Pulse invokes product-local loops instead of owning all-product idea planning",
-    "query": "Pulse wakes up with no proceedable AI-planned tickets. Product strategy files exist for distribution and experiments. Distribution has one ticket in review below its max_tickets_in_review and experiments has no active worker. What should Pulse do?",
-    "reference_points": [
-      "Reconciles workers and board state first",
-      "Loads product product.md/progress.md as context",
-      "Invokes eligible product loops rather than doing all-product next-move selection inline",
-      "Lets each product loop apply its worker_budget and max_tickets_in_review",
-      "Calls ticket-opportunity-generator with one product-loop context when a product loop needs a ticket",
-      "Records invoked/skipped product loops and handoff or blocker receipts"
-    ],
-    "anti_patterns": [
-      "Uses one global maxChildThreadsPerBeat as the main product-throughput model",
-      "Runs a portfolio lane scan inside Pulse and picks all next moves itself",
-      "Adds a global review cap or .farplane/bets ledger"
-    ],
-    "tags": ["pulse-update", "product-loop", "next-wave"]
-  },
-  {
-    "id": "pulse_product_review_cap_is_local_01",
-    "title": "Pulse treats max_tickets_in_review as product-local",
-    "query": "The evidence-content product loop has three tickets in review and max_tickets_in_review is three, while experiments has capacity. What should Pulse do?",
-    "reference_points": [
-      "Does not stop all products because distribution is at review cap",
-      "Skips new review-producing distribution work and records the product-local cap reason",
-      "Allows experiments or another eligible product loop to continue safe local work",
-      "Routes distribution toward review packaging or Kenji chase through existing review channels when useful",
-      "Does not introduce a global review debt cap"
-    ],
-    "anti_patterns": [
-      "No-ops the whole Pulse because one product is full of review tickets",
-      "Creates more distribution tickets despite the product review cap",
-      "Adds waiting or burst slot policy not present in the product product.md"
-    ],
-    "tags": ["pulse-update", "product-loop", "review-cap"]
-  },
-  {
-    "id": "pulse_product_scoped_automation_params_are_minimal_01",
-    "title": "Pulse accepts product-scoped automation with product-only routing",
-    "query": "A heartbeat automation calls pulse-update with project_root and product = \"distribution\". What should Pulse read and what product loops may it invoke for new work?",
-    "reference_points": [
-      "Validates product against farplane/products.json",
-      "Resolves product config, skill, and progress from farplane/products/distribution/",
-      "Reconciles board and workers globally before product-loop invocation",
-      "Invokes only the distribution product loop for new work",
-      "Keeps review channel, phone chaser behavior, schedule, and worker policy inside pulse-update/product.md contracts rather than automation params"
-    ],
-    "anti_patterns": [
-      "Requires product_lane, skill path, review_channel, schedule policy, or progress path as automation params",
-      "Invokes all product loops despite a product filter",
-      "Falls back to the removed evidence-content product-loop sidecar path"
-    ],
-    "tags": ["pulse-update", "product-loop", "automation"]
+    "tags": ["pulse-update", "review-reminder", "worker-capacity"]
   }
 ]

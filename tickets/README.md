@@ -33,12 +33,15 @@ No lane folders. No hand-maintained board file. The ticket itself is the board c
 
 ## Lifecycle
 
-1. create the ticket in `tickets/`
-2. set `status: todo` or `status: review`
-3. after approval, set `status: building`
-4. when implementation and verification pass, set `phase: documenting`
-5. write durable docs
-6. move the ticket into `tickets/archive/` when it is no longer active, or set `status: done` briefly if you intentionally want a short-lived visible completion state before archiving
+1. create the ticket as `status: awaiting_review` when approval is still needed,
+   or `status: todo` when it is admitted
+2. the executing session sets `status: active` and adds `claimed_by`
+3. on human review or delayed signal, clear `claimed_by` and use
+   `awaiting_review` or `waiting_signal`
+4. on a non-ticket blocker, clear the claim, set `blocked`, and record details
+   in `progress.md`
+5. after implementation, proof, review, and durable docs, set `done`, clear the
+   claim, and move the ticket to `tickets/archive/`
 
 ## Progress Surface Policy
 
@@ -51,8 +54,8 @@ No lane folders. No hand-maintained board file. The ticket itself is the board c
   scratch or explicit adapter output, not the preferred durable evidence home
 - `.farplane/state/` is runtime-only and may track active claim/lane/session/verdict state
 - transcripts are useful evidence but are not the canonical resume surface
-- deliberate reset/resume requires the ticket to carry a clear `next_action`,
-  `last_verification`, blockers, and evidence references
+- deliberate reset/resume requires `progress.md` to carry the current action,
+  latest verification, blockers, and evidence references
 
 ## Goal Packets
 
@@ -81,9 +84,8 @@ for the full contract.
 
 ## Invocation Policy
 
-A ticket is a work card, not a trigger. Creating a ticket, setting
-`ready: true`, moving `status`, or adding `compute_target` does not start an
-agent by itself.
+A ticket is a work card, not a trigger. Creating a ticket, moving `status`, or
+adding `compute_target` does not start an agent by itself.
 
 Farplane work starts from an explicit invocation:
 
@@ -94,8 +96,9 @@ Farplane work starts from an explicit invocation:
   converts it into a `FarplaneRunEnvelope`
 - a future Codex Cloud, Symphony, or other runner payload
 
-`ready` means the ticket is eligible once invoked. It does not mean Farplane
-should watch the board and begin work automatically.
+`status: todo` means the ticket is eligible once invoked and its dependencies
+are satisfied. It does not mean Farplane should watch the board and begin work
+without an explicit Pulse, Goal, operator, or external-runner invocation.
 
 ## Canonical Frontmatter
 
@@ -103,37 +106,33 @@ should watch the board and begin work automatically.
 ---
 ticket_id: TASK-0002
 title: short title
-phase: planning
-status: review
-owner: codex
-claimed_by: codex-019ef784  # optional active session claim alias; empty when unclaimed
-priority: medium
-# optional compute override: local_shared, local_worktree, symphony, or codex_cloud
-# compute_target: local_shared
-depends_on: []
-blocked_by: []
-ready: false
-approval_required: true
-requires_qa: true
-requires_demo: false
-human_gate: none
+status: todo
 created_at: 2026-04-03T00:00:00Z
 updated_at: 2026-04-03T00:00:00Z
-next_action: await approval to set status: building
-last_verification: none
 ---
+```
+
+Sparse routing overrides are added only when they differ from defaults:
+
+```yaml
+priority: high
+claimed_by: codex-019ef784
+depends_on: [TASK-0001]
+human_gate: [post, "Public X post needs Kenji approval."]
+compute_target: local_worktree
 ```
 
 ## Field Meanings
 
-- `phase`: `planning`, `building`, `documenting`, `complete`, `failed`
-- `status`: `todo`, `review`, `building`, `blocked`, `done`, `failed`,
-  `rejected`
-- `owner`: broad work owner, not a live session id
-- `claimed_by`: optional human-facing active claim alias for the current live
-  session. Codex agents must use a session-specific alias such as
-  `codex-019ef784`, not plain `codex`; clear this field when the live session
-  blocks, parks, completes, or archives the ticket.
+- `status`: the sole lifecycle state: `todo`, `active`, `awaiting_review`,
+  `waiting_signal`, `blocked`, `done`, `failed`, or `rejected`.
+- `priority`: optional `urgent`, `high`, `medium`, or `low`; omission means
+  `medium`.
+- `claimed_by`: optional human-facing alias for the current active execution
+  turn. It is present only with `status: active` and cleared when execution
+  parks, waits, completes, or releases the worker.
+- `depends_on`: optional structural ticket prerequisites. Non-ticket blocker
+  detail belongs in `progress.md`, not a second blocker list.
 - `compute_target`: optional ticket-level compute override. Supported values
   are `local_shared`, `local_worktree`, `symphony`, and `codex_cloud`; future
   targets may be recorded but remain blocked unless the active workflow and
@@ -143,40 +142,29 @@ last_verification: none
     `.farplane/state/tickets/TASK-XXXX.runtime.json`.
   - `symphony` and `codex_cloud` are future external-adapter targets and must
     stay blocked in local Farplane until those adapters exist.
-- `depends_on`: structural prerequisites
-- `blocked_by`: concrete ticket-ID blockers only
-- `ready`: whether `next_action` can be executed now
-- `approval_required`: explicit approval gate
-- `requires_qa`: whether `$goal-advisor` must produce a passing QA phase before completion
-- `requires_demo`: whether `$goal-advisor` must also produce a passing demo phase after QA
-- `human_gate`: compact final-action gate. Use `none` when the worker may
-  finish the ticket without human approval. Use `[tag, "reason"]` when the
+- `human_gate`: optional final-action gate. Omit it when the worker may finish
+  without human approval. Use `[tag, "reason"]` when the
   worker may prepare artifacts and proof but must stop before that final
   action, such as `[post, "Public X post needs Kenji approval before it goes live."]`.
   Allowed tags live in `farplane/bindings.yaml` `human_gates`.
-- `next_action`: the one authoritative next step
-- `last_verification`: the one-line authoritative verification summary; keep
-  detailed commands and artifacts in `Links`, `progress.md`, or
-  ticket-scoped artifacts
-- `decision_refs`: optional references to `progress.md` entries or
-  `decisions.md` headings; do not put decision bodies in frontmatter
-- `rejection_reason`: required when `status: rejected`; use it when a worker
-  produced enough artifact to review but Kenji rejects the quality, premise,
-  taste, or strategic fit. Rejected tickets use `phase: failed`,
-  `status: rejected`, and `ready: false`.
+- `rejection_reason`: optional compact rejection summary; a durable rejection
+  entry in `progress.md` is also valid.
+
+`phase`, `owner`, `blocked_by`, `ready`, `approval_required`, `requires_qa`,
+`requires_demo`, `next_action`, and `last_verification` are not ticket metadata.
+Their former information is owned by `status`, `claimed_by`, `depends_on`, the
+ticket `Program`/`Change Plan`, `QA Strategy`, `Done`, and `progress.md`.
 
 For Goal Advisor, Pulse, heartbeat, and board-drain, the explicit invocation is
 the operator or automation running the selector. After that, a ticket is
-selectable only when
-`ready: true`, `approval_required: false`, `blocked_by: []`, `claimed_by:` is
-empty, `phase` is not `complete` or `failed`, `status` is not `done`, `failed`,
-or `rejected`, the ticket is not parked or waiting on external
-credentials/feedback, and every dependency is complete, archived, or explicitly
-waived in the ticket body. These are hard gates, not ranking preferences.
+selectable only when `status: todo`, `claimed_by` is absent, and every
+dependency is complete or archived. A `waiting_signal` ticket is temporarily
+selectable only when a ticket Reward row matures. These are hard gates, not
+ranking preferences.
 
 `human_gate` is not a second ticket-start approval gate. It marks a final
-outside-world action that the worker must not take without Kenji. Pulse should
-leave that worker thread open, record or remind when useful, and continue safe
+outside-world action that the worker must not take without Kenji. Pulse records
+the review wait, releases the worker, reminds only when due, and continues safe
 local work such as artifacts, research, proof, QA, packaging, or draft content
 instead of treating human review as board-wide blockage.
 
@@ -191,12 +179,15 @@ before they become live ticket sources.
 ## Invariants
 
 - no `lane` field
+- no `phase`, `owner`, `blocked_by`, `ready`, `approval_required`,
+  `requires_qa`, `requires_demo`, `next_action`, or `last_verification` fields
 - no `## Status` body block
 - the H1 matches `ticket_id` and `title`
 - do not store raw transport-level runtime ids such as `session_id` in ticket frontmatter
-- do not set `status: building` while `approval_required: true`
-- do not set `status: building` while `blocked_by` is non-empty
-- `requires_demo: true` implies `requires_qa: true`
+- `status: active` requires a session-specific `claimed_by`; every other
+  status clears it
+- review/check-in mutable state lives in `progress.md`
+- QA, demo, and reviewer gates live in `QA Strategy`
 - do not invent a second machine-readable state block in the body
 
 ## Sizing Doctrine
@@ -263,19 +254,30 @@ Keep `Delta` brief after ticket creation. When `impl-plan(ticket)` runs, it
 expands the work into `Change Plan` units instead of making readers cross-map
 separate Delta, Program, and Map sections.
 
-Use `Reward` for Pulse-created tactical tickets, experiments, and other work
-whose planning value should be obvious before execution. Keep it small:
+Use `Reward` for Pulse-created tactical tickets, interval-planned tickets,
+experiments, and other work whose planning value should be obvious before
+execution. Keep it small:
 
-```text
-Reward:
-  moves: the goal, KPI axis, bottleneck, lane, or reward signal this advances
-  win_signal: the observable result that says this ticket mattered
-  guard: what must not regress or be gamed while chasing the signal
+```yaml
+kpi_rewards:
+  - kpi_id: accepted_harness_improvements
+    expected_reward: "one proof-backed harness improvement"
+    check_in_at: "2026-04-10T00:00:00Z"
+    actual_result:
+    reward_score:
+    reward_score_reason:
+guard: "do not count planned intent as KPI movement; count only completed tickets with proof"
 ```
 
 `Reward` is not a metrics registry and is not mandatory for every legacy
-ticket. If the provider, guard, anti-metric, or proof route needs more detail,
-put the metric card in `program.md` or route through `metric-advisor`.
+ticket. `check_in_at` is when the interval should compare expected reward
+against reality. `actual_result`, `reward_score`, and `reward_score_reason`
+are filled at or after check-in by the interval reward-checkin analyzer.
+`reward_score` is a scalar from `-1` to `1`, where `1` means the actual result
+strongly matched or exceeded the expected reward, `0` means unclear or weakly
+related, and `-1` means the actual contradicted the expected reward or created
+negative value. If the provider, guard, anti-metric, or proof route needs more
+detail, put the metric card in `program.md` or route through `metric-advisor`.
 
 Use `Change Plan` for the executable task-local program and file map. Split it
 into one heading and one fenced block per coherent change:

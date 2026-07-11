@@ -1,8 +1,8 @@
 kind: project-bindings
 status: active
 created_at: 2026-06-15
-updated_at: 2026-07-02
-framework_template_version: "0.3.3"
+updated_at: 2026-07-11
+framework_template_version: "0.4.0"
 owner: project-pm-automation
 project:
   id: farplane
@@ -16,6 +16,16 @@ human_gates:
   - external_contact
   - account_mutation
   - destructive_cleanup
+operator:
+  review_chase_policy: >-
+    Kenji is generally chaseable during his active hours, roughly 10:00 to
+    01:00 Asia/Kuala_Lumpur unless he says otherwise. Review reminders are due
+    only from an undecided ticket progress Review block whose next_reminder_at
+    has matured. Work Pulse may select at most one due reminder per beat and
+    sends it without assigning a worker; review queue size is backpressure, not
+    a chase trigger. Record the Telegram message id, next reminder or cap, and
+    blocker in progress.md. Phone-chaser requires an explicit operator or
+    automation decision and is never inferred from queue size alone.
 spend_model:
   monthly_ai_spend: 400
 integrations:
@@ -198,293 +208,62 @@ feed_scout:
         - '"Luke The Dev"'
         - iamlukethedev
         - Claw3D
-metrics:
+metric_bindings:
   accepted_evidence_cycles:
-    label: Accepted evidence cycles
-    description: Daily count of completed tickets whose Reward.kpi_rewards includes this KPI and whose Done / Proof shows accepted evidence value.
-    product: experiments
-    pinned: true
-    kind: daily_count
-    unit: cycles
-    display: bar_plus_cumulative
-    refresh: Call $interval-update.count_ticket_kpi_rewards(ticket_dir="tickets", date="<YYYY-MM-DD>",
-      kpi_key="accepted_evidence_cycles") and store the returned value/status/payload in the
-      daily metric file.
+    refresh: Call $interval-update.count_ticket_kpi_rewards(ticket_dir="tickets", date="<YYYY-MM-DD>", kpi_key="accepted_evidence_cycles") and store the returned value/status/payload in the daily metric file.
+  accepted_trust_ablations:
+    refresh: Call $interval-update.count_ticket_kpi_rewards(ticket_dir="tickets", date="<YYYY-MM-DD>", kpi_key="accepted_trust_ablations") and store the returned value/status/payload in the daily metric file.
   accepted_harness_improvements:
-    label: Accepted harness improvements
-    description: Daily count of completed tickets whose Reward.kpi_rewards includes this KPI and whose proof shows a shipped Farplane improvement.
-    product: productization
-    pinned: true
-    kind: daily_count
-    unit: improvements
-    display: bar_plus_cumulative
-    refresh: Call $interval-update.count_ticket_kpi_rewards(ticket_dir="tickets", date="<YYYY-MM-DD>",
-      kpi_key="accepted_harness_improvements") and store the returned value/status/payload
-      in the daily metric file.
+    refresh: Call $interval-update.count_ticket_kpi_rewards(ticket_dir="tickets", date="<YYYY-MM-DD>", kpi_key="accepted_harness_improvements") and store the returned value/status/payload in the daily metric file.
   interesting_autonomy_results:
-    label: Interesting autonomy results
-    description: Daily count of distinct interesting results found in ticket proof from the review window.
-    product: cross_product_autonomy
-    pinned: true
-    kind: daily_count
-    unit: results
-    display: bar_plus_cumulative
-    refresh: >-
-      Read tickets touched, completed, or archived in the review window. Inspect
-      each ticket's Done / Proof, progress log, and linked artifacts. Count each
-      distinct result that scores 4 or higher on this rubric: specific evidence
-      or output, non-obvious learning, actionable follow-up or reusable pattern,
-      relevance to Farplane's autonomy goal, and proof that the result actually
-      happened. Do not count routine status updates, duplicate observations,
-      vague plans, or unproved claims. Store the numeric count as the metric
-      value and include ticket refs, artifact refs, per-item scores, count/skip
-      verdicts, short reasons, threshold, and gaps in the observation payload.
+    refresh: 'Read tickets touched, completed, or archived in the review window. Inspect each ticket''s Done / Proof, progress log, and linked artifacts. Count each distinct result that scores 4 or higher on this rubric: specific evidence or output, non-obvious learning, actionable follow-up or reusable pattern, relevance to Farplane''s autonomy goal, and proof that the result actually happened. Do not count routine status updates, duplicate observations, vague plans, or unproved claims. Store the numeric count as the metric value and include ticket refs, artifact refs, per-item scores, count/skip verdicts, short reasons, threshold, and gaps in the observation payload.'
   auto_time_ratio:
-    label: Autonomous time ratio
-    description: Autonomous worker elapsed minutes divided by estimated human attention minutes for the day.
-    product: cross_product_autonomy
-    pinned: true
-    kind: point
-    unit: ratio
-    display: reading
-    refresh: Call $interval-update.calculate_autonomy_time_ratio(runtime_dir=".farplane",
-      date="<YYYY-MM-DD>") and store the returned value/status/payload for this metric.
+    refresh: Call $interval-update.calculate_autonomy_time_ratio(runtime_dir=".farplane", date="<YYYY-MM-DD>") and store the returned value/status/payload for this metric.
   evidence_distribution_reach:
-    label: Evidence distribution reach
-    description: Pinned overview rollup of same-window platform view readings; goals should track platform KPIs directly.
-    product: distribution
-    pinned: true
-    kind: daily_count
-    unit: views
-    display: bar_plus_cumulative
-    refresh: Sum available same-window daily readings from x_views, instagram_views,
-      and github_views for overview display; use source_gap when no component reading
-      exists.
+    refresh: Sum available same-window daily readings from x_views, instagram_views, and github_views for overview display; use source_gap when no component reading exists.
   latest_eval_pass_rate:
-    label: Latest eval pass rate
-    description: Most recent eval summary pass rate available for the snapshot window.
-    product: productization
-    kind: point
-    unit: ratio
-    display: reading
-    refresh: Read the latest eval summary pass_rate for the snapshot window and store value/status/payload
-      in the daily metric file.
+    refresh: Read the latest eval summary pass_rate for the snapshot window and store value/status/payload in the daily metric file.
+  decision_changing_learning_briefs:
+    refresh: Count completed tickets or learning artifacts in the review window whose Reward.kpi_rewards includes decision_changing_learning_briefs and whose proof names the decision changed, the evidence refs, and the next workflow, distribution, or no-action move.
   github_views:
-    label: GitHub views
-    description: Daily GitHub traffic views for the Farplane repository when traffic API access is available.
-    product: adoption
-    kind: daily_count
-    unit: views
-    display: bar_plus_cumulative
-    refresh: Use gh api for ZanarkandTechnologies/Farplane traffic views on <YYYY-MM-DD>;
-      store source_gap when traffic permissions are unavailable.
+    refresh: Use gh api for ZanarkandTechnologies/Farplane traffic views on <YYYY-MM-DD>; store source_gap when traffic permissions are unavailable.
   auto_completion_rate:
-    label: Auto completion rate
-    description: Completed associated tickets with zero post-start human intervention turns divided by all completed associated tickets for the day.
-    product: cross_product_autonomy
-    kind: point
-    unit: ratio
-    display: reading
-    refresh: Call $interval-update.calculate_ticket_intervention_metrics(ticket_dir="tickets",
-      runtime_dir=".farplane", date="<YYYY-MM-DD>") and store the auto_completion_rate reading.
+    refresh: Call $interval-update.calculate_ticket_intervention_metrics(ticket_dir="tickets", runtime_dir=".farplane", date="<YYYY-MM-DD>") and store the auto_completion_rate reading.
   rejected_ai_ticket_count:
-    label: Rejected AI tickets
-    description: Daily count of AI-planned reward-bearing tickets marked status rejected, used as a guard metric for Pulse ticket quality.
-    product: cross_product_autonomy
-    kind: daily_count
-    unit: tickets
-    display: bar_plus_cumulative
-    refresh: Call `farplane metrics primitives --project-root <project> --date <YYYY-MM-DD>
-      --ticket-status rejected --json`; store `ticket_count_by_kpi_status:rejected._total.value`
-      as this metric, with the per-KPI rejected counts in payload.
+    refresh: Call `farplane metrics primitives --project-root <project> --date <YYYY-MM-DD> --ticket-status rejected --json`; store `ticket_count_by_kpi_status:rejected._total.value` as this metric, with the per-KPI rejected counts in payload.
   intervention_free_ticket_count:
-    label: Intervention-free tickets
-    description: Daily count of completed associated tickets with zero human turns after execution start.
-    product: cross_product_autonomy
-    kind: daily_count
-    unit: tickets
-    display: bar_plus_cumulative
-    refresh: Call $interval-update.calculate_ticket_intervention_metrics(ticket_dir="tickets",
-      runtime_dir=".farplane", date="<YYYY-MM-DD>") and store the intervention_free_ticket_count
-      reading.
+    refresh: Call $interval-update.calculate_ticket_intervention_metrics(ticket_dir="tickets", runtime_dir=".farplane", date="<YYYY-MM-DD>") and store the intervention_free_ticket_count reading.
   ticket_intervention_turn_count:
-    label: Ticket intervention turns
-    description: Daily count of human turns after execution start and before completion across completed associated tickets.
-    product: cross_product_autonomy
-    kind: daily_count
-    unit: turns
-    display: bar_plus_cumulative
-    refresh: Call $interval-update.calculate_ticket_intervention_metrics(ticket_dir="tickets",
-      runtime_dir=".farplane", date="<YYYY-MM-DD>") and store the ticket_intervention_turn_count
-      reading.
-  ready_unclaimed_ticket_count:
-    label: Ready unclaimed tickets
-    description: Current count of ready, approval-free, unclaimed active tickets that are not complete or human-gated.
-    product: project_control
-    kind: point
-    unit: tickets
-    display: reading
-    refresh: Count ready, approval-free, unclaimed tickets under tickets/ that are not complete
-      or human-gated; store value/status/payload in the daily metric file.
+    refresh: Call $interval-update.calculate_ticket_intervention_metrics(ticket_dir="tickets", runtime_dir=".farplane", date="<YYYY-MM-DD>") and store the ticket_intervention_turn_count reading.
+  todo_unclaimed_ticket_count:
+    refresh: Count unclaimed status=todo tickets under tickets/ whose dependencies are satisfied; store value/status/payload in the daily metric file.
   x_followers:
-    label: X followers
-    description: Current follower count for the configured Farplane X account.
-    product: distribution
-    kind: point
-    unit: followers
-    display: line
-    refresh: Call $x-account for the Farplane X account and record the current follower count;
-      store source_gap if credentials or API access are unavailable.
+    refresh: Call $x-account for the Farplane X account and record the current follower count; store source_gap if credentials or API access are unavailable.
   x_views:
-    label: X views
-    description: Daily aggregate X views for posted content selected from the content ledger.
-    product: distribution
-    kind: daily_count
-    unit: views
-    display: bar_plus_cumulative
-    refresh: Call $interval-update.select_content_metric_targets(content_ledger=".farplane/content/ledger.jsonl",
-      platform="x", kpi_key="x_views", date="<YYYY-MM-DD>", window_days=7), then call $x-account
-      with the returned tweet IDs and store the aggregate x_views value plus per-post payload.items.
+    refresh: Call $interval-update.select_content_metric_targets(content_ledger=".farplane/content/ledger.jsonl", platform="x", kpi_key="x_views", date="<YYYY-MM-DD>", window_days=7), then call $x-account with the returned tweet IDs and store the aggregate x_views value plus per-post payload.items.
   x_likes:
-    label: X likes
-    description: Daily aggregate X likes for posted content selected from the content ledger.
-    product: distribution
-    kind: daily_count
-    unit: likes
-    display: bar_plus_cumulative
-    refresh: Call $interval-update.select_content_metric_targets(content_ledger=".farplane/content/ledger.jsonl",
-      platform="x", kpi_key="x_likes", date="<YYYY-MM-DD>", window_days=7), then call $x-account
-      with the returned tweet IDs and store the aggregate x_likes value plus per-post payload.items.
+    refresh: Call $interval-update.select_content_metric_targets(content_ledger=".farplane/content/ledger.jsonl", platform="x", kpi_key="x_likes", date="<YYYY-MM-DD>", window_days=7), then call $x-account with the returned tweet IDs and store the aggregate x_likes value plus per-post payload.items.
   instagram_followers:
-    label: Instagram followers
-    description: Current follower count for the configured Farplane Instagram account.
-    product: distribution
-    kind: point
-    unit: followers
-    display: line
-    refresh: Call $instagram-account for the Farplane Instagram account and record the current
-      follower count; store source_gap if unavailable.
+    refresh: Call $instagram-account for the Farplane Instagram account and record the current follower count; store source_gap if unavailable.
   instagram_views:
-    label: Instagram views
-    description: Daily aggregate Instagram views for posted content selected from the content ledger.
-    product: distribution
-    kind: daily_count
-    unit: views
-    display: bar_plus_cumulative
-    refresh: Call $interval-update.select_content_metric_targets(content_ledger=".farplane/content/ledger.jsonl",
-      platform="instagram", kpi_key="instagram_views", date="<YYYY-MM-DD>", window_days=7),
-      then call $instagram-account with the returned media IDs and store the aggregate instagram_views
-      value plus per-post payload.items.
+    refresh: Call $interval-update.select_content_metric_targets(content_ledger=".farplane/content/ledger.jsonl", platform="instagram", kpi_key="instagram_views", date="<YYYY-MM-DD>", window_days=7), then call $instagram-account with the returned media IDs and store the aggregate instagram_views value plus per-post payload.items.
   instagram_likes:
-    label: Instagram likes
-    description: Daily aggregate Instagram likes for posted content selected from the content ledger.
-    product: distribution
-    kind: daily_count
-    unit: likes
-    display: bar_plus_cumulative
-    refresh: Call $interval-update.select_content_metric_targets(content_ledger=".farplane/content/ledger.jsonl",
-      platform="instagram", kpi_key="instagram_likes", date="<YYYY-MM-DD>", window_days=7),
-      then call $instagram-account with the returned media IDs and store the aggregate instagram_likes
-      value plus per-post payload.items.
+    refresh: Call $interval-update.select_content_metric_targets(content_ledger=".farplane/content/ledger.jsonl", platform="instagram", kpi_key="instagram_likes", date="<YYYY-MM-DD>", window_days=7), then call $instagram-account with the returned media IDs and store the aggregate instagram_likes value plus per-post payload.items.
   instagram_comments:
-    label: Instagram comments
-    description: Daily aggregate Instagram comments for posted content selected from the content ledger.
-    product: distribution
-    kind: daily_count
-    unit: comments
-    display: bar_plus_cumulative
-    refresh: Call $interval-update.select_content_metric_targets(content_ledger=".farplane/content/ledger.jsonl",
-      platform="instagram", kpi_key="instagram_comments", date="<YYYY-MM-DD>",
-      window_days=7), then call $instagram-account with the returned media IDs using
-      --deep and store the aggregate instagram_comments value plus per-post payload.items.
+    refresh: Call $interval-update.select_content_metric_targets(content_ledger=".farplane/content/ledger.jsonl", platform="instagram", kpi_key="instagram_comments", date="<YYYY-MM-DD>", window_days=7), then call $instagram-account with the returned media IDs using --deep and store the aggregate instagram_comments value plus per-post payload.items.
   instagram_shares:
-    label: Instagram shares
-    description: Daily aggregate Instagram shares for posted content selected from the content ledger.
-    product: distribution
-    kind: daily_count
-    unit: shares
-    display: bar_plus_cumulative
-    refresh: Call $interval-update.select_content_metric_targets(content_ledger=".farplane/content/ledger.jsonl",
-      platform="instagram", kpi_key="instagram_shares", date="<YYYY-MM-DD>",
-      window_days=7), then call $instagram-account with the returned media IDs using
-      --deep and store the aggregate instagram_shares value plus per-post payload.items.
+    refresh: Call $interval-update.select_content_metric_targets(content_ledger=".farplane/content/ledger.jsonl", platform="instagram", kpi_key="instagram_shares", date="<YYYY-MM-DD>", window_days=7), then call $instagram-account with the returned media IDs using --deep and store the aggregate instagram_shares value plus per-post payload.items.
   instagram_saves:
-    label: Instagram saves
-    description: Daily aggregate Instagram saves for posted content selected from the content ledger.
-    product: distribution
-    kind: daily_count
-    unit: saves
-    display: bar_plus_cumulative
-    refresh: Call $interval-update.select_content_metric_targets(content_ledger=".farplane/content/ledger.jsonl",
-      platform="instagram", kpi_key="instagram_saves", date="<YYYY-MM-DD>",
-      window_days=7), then call $instagram-account with the returned media IDs using
-      --deep and store the aggregate instagram_saves value plus per-post payload.items.
+    refresh: Call $interval-update.select_content_metric_targets(content_ledger=".farplane/content/ledger.jsonl", platform="instagram", kpi_key="instagram_saves", date="<YYYY-MM-DD>", window_days=7), then call $instagram-account with the returned media IDs using --deep and store the aggregate instagram_saves value plus per-post payload.items.
   instagram_reach:
-    label: Instagram reach
-    description: Daily aggregate Instagram reached accounts for posted content selected from the content ledger.
-    product: distribution
-    kind: daily_count
-    unit: accounts
-    display: bar_plus_cumulative
-    refresh: Call $interval-update.select_content_metric_targets(content_ledger=".farplane/content/ledger.jsonl",
-      platform="instagram", kpi_key="instagram_reach", date="<YYYY-MM-DD>",
-      window_days=7), then call $instagram-account with the returned media IDs using
-      --deep and store the aggregate instagram_reach value plus per-post payload.items.
+    refresh: Call $interval-update.select_content_metric_targets(content_ledger=".farplane/content/ledger.jsonl", platform="instagram", kpi_key="instagram_reach", date="<YYYY-MM-DD>", window_days=7), then call $instagram-account with the returned media IDs using --deep and store the aggregate instagram_reach value plus per-post payload.items.
   instagram_total_interactions:
-    label: Instagram total interactions
-    description: Daily aggregate Instagram interactions for posted content selected from the content ledger.
-    product: distribution
-    kind: daily_count
-    unit: interactions
-    display: bar_plus_cumulative
-    refresh: Call $interval-update.select_content_metric_targets(content_ledger=".farplane/content/ledger.jsonl",
-      platform="instagram", kpi_key="instagram_total_interactions", date="<YYYY-MM-DD>",
-      window_days=7), then call $instagram-account with the returned media IDs using
-      --deep and store the aggregate instagram_total_interactions value plus per-post
-      payload.items.
+    refresh: Call $interval-update.select_content_metric_targets(content_ledger=".farplane/content/ledger.jsonl", platform="instagram", kpi_key="instagram_total_interactions", date="<YYYY-MM-DD>", window_days=7), then call $instagram-account with the returned media IDs using --deep and store the aggregate instagram_total_interactions value plus per-post payload.items.
   instagram_avg_watch_time:
-    label: Instagram average watch time
-    description: Average watch time for selected Instagram Reel content when the account API returns watch-time fields.
-    product: distribution
-    kind: point
-    unit: milliseconds
-    display: line
-    refresh: Call $interval-update.select_content_metric_targets(content_ledger=".farplane/content/ledger.jsonl",
-      platform="instagram", kpi_key="instagram_avg_watch_time", date="<YYYY-MM-DD>",
-      window_days=30), then call $instagram-account with the returned media IDs using
-      --deep and store the aggregate instagram_avg_watch_time value plus per-reel
-      payload.items when the API returns watch-time fields.
+    refresh: Call $interval-update.select_content_metric_targets(content_ledger=".farplane/content/ledger.jsonl", platform="instagram", kpi_key="instagram_avg_watch_time", date="<YYYY-MM-DD>", window_days=30), then call $instagram-account with the returned media IDs using --deep and store the aggregate instagram_avg_watch_time value plus per-reel payload.items when the API returns watch-time fields.
   instagram_total_watch_time:
-    label: Instagram total watch time
-    description: Total watch time for selected Instagram Reel content when the account API returns watch-time fields.
-    product: distribution
-    kind: daily_count
-    unit: milliseconds
-    display: bar_plus_cumulative
-    refresh: Call $interval-update.select_content_metric_targets(content_ledger=".farplane/content/ledger.jsonl",
-      platform="instagram", kpi_key="instagram_total_watch_time", date="<YYYY-MM-DD>",
-      window_days=30), then call $instagram-account with the returned media IDs using
-      --deep and store the aggregate instagram_total_watch_time value plus per-reel
-      payload.items when the API returns watch-time fields.
+    refresh: Call $interval-update.select_content_metric_targets(content_ledger=".farplane/content/ledger.jsonl", platform="instagram", kpi_key="instagram_total_watch_time", date="<YYYY-MM-DD>", window_days=30), then call $instagram-account with the returned media IDs using --deep and store the aggregate instagram_total_watch_time value plus per-reel payload.items when the API returns watch-time fields.
   instagram_retention_score:
-    label: Instagram retention score
-    description: Instagram Reel retention score from watch-time and duration data when those fields are available.
-    product: distribution
-    kind: point
-    unit: percent
-    display: line
-    refresh: Call $interval-update.select_content_metric_targets(content_ledger=".farplane/content/ledger.jsonl",
-      platform="instagram", kpi_key="instagram_retention_score", date="<YYYY-MM-DD>",
-      window_days=30), then call $instagram-account with the returned Reel media IDs
-      using --deep and duration metadata when known. Store instagram_retention_score
-      plus per-reel payload.items when the API returns watch-time fields; otherwise
-      store source_gap with API/permission/duration gaps.
+    refresh: Call $interval-update.select_content_metric_targets(content_ledger=".farplane/content/ledger.jsonl", platform="instagram", kpi_key="instagram_retention_score", date="<YYYY-MM-DD>", window_days=30), then call $instagram-account with the returned Reel media IDs using --deep and duration metadata when known. Store instagram_retention_score plus per-reel payload.items when the API returns watch-time fields; otherwise store source_gap with API/permission/duration gaps.
   posts_published:
-    label: Posts published
-    description: Daily count of content ledger rows posted on the snapshot date.
-    product: distribution
-    kind: daily_count
-    unit: posts
-    display: bar_plus_cumulative
-    refresh: Count rows in `.farplane/content/ledger.jsonl` with status=posted and published_at
-      on <YYYY-MM-DD>; store source_gap if the ledger is missing.
+    refresh: Count rows in `.farplane/content/ledger.jsonl` with status=posted and published_at on <YYYY-MM-DD>; store source_gap if the ledger is missing.

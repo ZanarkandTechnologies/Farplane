@@ -120,11 +120,10 @@ def ticket_state(ticket_dir: Path) -> str:
     if not ticket_path.is_file():
         return "missing ticket.md"
     frontmatter = parse_frontmatter(ticket_path)
-    phase = frontmatter.get("phase", "?")
     status = frontmatter.get("status", "?")
     title = frontmatter.get("title", "").strip()
     suffix = f" - {title}" if title else ""
-    return f"phase={phase} status={status}{suffix}"
+    return f"status={status}{suffix}"
 
 
 def active_completed_ticket_errors(root: Path) -> list[str]:
@@ -134,11 +133,10 @@ def active_completed_ticket_errors(root: Path) -> list[str]:
         if not ticket_path.is_file():
             continue
         frontmatter = parse_frontmatter(ticket_path)
-        phase = frontmatter.get("phase", "")
         status = frontmatter.get("status", "")
-        if phase == "complete" or status == "done":
+        if status in {"done", "failed", "rejected"}:
             errors.append(
-                f"active ticket is already complete/done and should be archived: "
+                f"active ticket is terminal and should be archived: "
                 f"{ticket_path.relative_to(root)} ({ticket_state(ticket_dir)})"
             )
     return errors

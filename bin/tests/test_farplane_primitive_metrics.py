@@ -28,20 +28,10 @@ def write_ticket(root: Path, ticket_id: str, body: str) -> None:
 
 
 class FarplanePrimitiveMetricsTests(unittest.TestCase):
-    def test_product_counts_are_transitive_through_kpi_rewards(self) -> None:
+    def test_kpi_counts_are_derived_directly_from_ticket_rewards(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             (root / "farplane").mkdir()
-            (root / "farplane" / "bindings.yaml").write_text(
-                """kind: project-bindings
-metrics:
-  accepted_harness_improvements:
-    product: productization
-  accepted_evidence_cycles:
-    product: experiments
-""",
-                encoding="utf-8",
-            )
             write_ticket(
                 root,
                 "TASK-0001",
@@ -90,7 +80,7 @@ owner: human
             payload = primitive_snapshot(root, "2026-07-03", root / ".codex", monthly_spend=None, write=False)
 
         self.assertEqual(payload["primitives"]["ticket_count_by_kpi"]["accepted_harness_improvements"]["value"], 1)
-        self.assertEqual(payload["primitives"]["ticket_count_by_product"]["productization"]["value"], 1)
+        self.assertNotIn("ticket_count_by_product", payload["primitives"])
         self.assertEqual(payload["primitives"]["tickets_with_kpi_reward_count"]["value"], 1)
         self.assertEqual(payload["primitives"]["kpi_attributed_ticket_ratio"]["value"], 0.5)
         self.assertNotIn("tickets/TASK-0002/ticket.md:missing_kpi_rewards", payload["source_gaps"])
@@ -100,14 +90,6 @@ owner: human
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             (root / "farplane").mkdir()
-            (root / "farplane" / "bindings.yaml").write_text(
-                """kind: project-bindings
-metrics:
-  accepted_harness_improvements:
-    product: productization
-""",
-                encoding="utf-8",
-            )
             write_ticket(
                 root,
                 "TASK-0001",
@@ -184,9 +166,6 @@ kpi_rewards:
                 """kind: project-bindings
 spend_model:
   monthly_ai_spend: 62
-metrics:
-  accepted_harness_improvements:
-    product: productization
 """,
                 encoding="utf-8",
             )

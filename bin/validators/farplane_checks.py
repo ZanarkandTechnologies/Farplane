@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import importlib.util
 import json
-import re
 import subprocess
 import time
 from pathlib import Path
@@ -100,16 +99,36 @@ def _review_passes(path: Path) -> bool:
     return fields.get("verdict", "").lower() == "pass" and fields.get("overall_tas", "").upper() == "TAS-A"
 
 
+def _markdown_section(markdown: str, heading: str) -> str:
+    target = f"## {heading}"
+    lines = markdown.splitlines()
+    try:
+        start = next(index for index, line in enumerate(lines) if line.strip() == target) + 1
+    except StopIteration:
+        return ""
+    end = next(
+        (index for index in range(start, len(lines)) if lines[index].startswith("## ")),
+        len(lines),
+    )
+    return "\n".join(lines[start:end])
+
+
 def completion_evidence_check(context: ValidationContext, mode: CheckMode) -> CheckResult:
     started = time.monotonic()
     text = context.ticket.read_text(encoding="utf-8")
+    qa_strategy = _markdown_section(text, "QA Strategy").lower()
     artifacts = context.ticket.parent / "artifacts"
     errors: list[str] = []
-    if re.search(r"^requires_qa:\s*true\s*$", text, re.M) and not _latest_result_passes(artifacts / "qa"):
-        errors.append("requires_qa=true but no passing QA result.json exists")
-    if re.search(r"^requires_demo:\s*true\s*$", text, re.M) and not _latest_result_passes(artifacts / "demo"):
-        errors.append("requires_demo=true but no passing demo result.json exists")
-    if "reviewer" in text.lower():
+    qa_required = any(
+        token in qa_strategy
+        for token in ("proof_weight: qa", "proof_weight: visual_qa", "proof_weight: agent_qa", "proof_weight: demo", "qa-tester")
+    )
+    demo_required = "proof_weight: demo" in qa_strategy or "- demo" in qa_strategy
+    if qa_required and not _latest_result_passes(artifacts / "qa"):
+        errors.append("QA Strategy requires QA but no passing QA result.json exists")
+    if demo_required and not _latest_result_passes(artifacts / "demo"):
+        errors.append("QA Strategy requires demo but no passing demo result.json exists")
+    if "reviewer" in qa_strategy:
         review_path = artifacts / "review" / "completion-review.md"
         if not _review_passes(review_path):
             errors.append("reviewer completion is required but completion-review.md is missing or not pass/TAS-A")

@@ -178,11 +178,8 @@ def select_compute(
         if item.approval_required:
             blockers.append("ticket requires approval before non-planning execution")
             blocker_codes.append("approval_required")
-        if item.blocked_by:
-            blockers.append(f"ticket has blockers: {', '.join(item.blocked_by)}")
-            blocker_codes.append("blocked_ticket")
-        if item.status == "blocked":
-            blockers.append("ticket status is blocked")
+        if item.status not in {"todo", "active"}:
+            blockers.append(f"ticket status {item.status or '<missing>'} is not executable")
             blocker_codes.append("blocked_ticket")
         unresolved = tuple(dep for dep in item.depends_on if dep not in resolved_dependencies)
         if unresolved:

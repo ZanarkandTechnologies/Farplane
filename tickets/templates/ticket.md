@@ -1,38 +1,21 @@
 ---
 template_id: ticket-template
-template_version: "0.1.9"
+template_version: "0.2.0"
 feature_refs:
   - FEAT-0007
   - FEAT-0008
 ticket_id: TASK-XXXX
 title: short title
-phase: planning
-status: review
-owner: unassigned
-# Active session alias such as codex-019ef784; empty when unclaimed.
-claimed_by:
-priority: medium
-depends_on: []
-blocked_by: []
-ready: false
-approval_required: true
-requires_qa: true
-requires_demo: false
-human_gate: none
+status: awaiting_review
 created_at: 2026-04-03T00:00:00Z
 updated_at: 2026-04-03T00:00:00Z
-next_action: define the one current step and keep it in this field
-last_verification: none
-# AI/interval/Pulse-planned tickets only:
-# rewards.kpi:
-#   - accepted_harness_improvements
-# Optional: decision_refs: []
 ---
 
 # TASK-XXXX: title
 
-<!-- Optional frontmatter field when needed: compute_target: local_shared | local_worktree | symphony | codex_cloud -->
-<!-- Human gate shape: human_gate: none | [post, "reason the final action needs Kenji"] -->
+<!-- Sparse optional routing fields: priority, claimed_by, depends_on, human_gate, compute_target. -->
+<!-- `claimed_by` is present only while status=active. Absent priority means medium. -->
+<!-- Human gate shape: human_gate: [post, "reason the final action needs Kenji"] -->
 
 ## Summary
 2-3 sentences on what changes, why it matters now, and the decisive path being
@@ -80,6 +63,10 @@ route is unclear.
 kpi_rewards:
   - kpi_id: accepted_harness_improvements
     expected_reward: "one proof-backed harness improvement"
+    check_in_at: "2026-04-10T00:00:00Z"
+    actual_result:
+    reward_score:
+    reward_score_reason:
 guard: "do not count planned intent as KPI movement; count only completed tickets with proof"
 ```
 

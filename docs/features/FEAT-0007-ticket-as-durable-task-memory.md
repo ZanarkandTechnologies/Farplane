@@ -3,7 +3,7 @@ title: Ticket as durable task memory
 status: implemented
 owner: feature-registry
 created_at: 2026-06-26
-updated_at: 2026-06-28
+updated_at: 2026-07-11
 tags:
   - farplane
   - feature
@@ -37,7 +37,7 @@ evidence_refs:
   - docs/HISTORY.md
 known_limits: Only works when agents keep the compact ticket-as-program body, ticket Links, progress logs, and artifact pointers current instead of hiding state in chat.
 metrics: []
-last_verified: 2026-06-12
+last_verified: 2026-07-11
 experimental: false
 superseded_by: false
 ---
@@ -50,6 +50,7 @@ because the behavior has an owner, proof path, and maintenance boundary.
 
 ```text
 ticket_memory(intent, repo_state?) -> ticket_contract + proof_scoreboard + resume_state
+ticket_status(ticket, dependencies, reward_rows, claim?) -> executable | waiting | terminal
 ```
 
 ## At A Glance
@@ -97,8 +98,17 @@ A durable ticket is a small program for the next agent, not a generic task note.
 - `Done` is the completion scoreboard.
 - `QA Strategy` carries proof weight, checks, delegated lanes, review gates,
   evidence, goal-advisor inputs, final checkpoint, and residual risk.
-- Frontmatter carries queue state, next action, and last verification.
+- Frontmatter carries one lifecycle status plus identity/freshness and only the
+  sparse routing overrides that differ from defaults.
+- `progress.md` carries current action, blockers, verification, review state,
+  and delayed check-in observations.
 - `Links` points to evidence, artifacts, related specs, sidecars, and handoffs.
+
+The required frontmatter is only `ticket_id`, `title`, `status`, `created_at`,
+and `updated_at`. Optional `priority`, `claimed_by`, `depends_on`, `human_gate`,
+and `compute_target` exist only when they change routing. There is
+no parallel `phase`, hand-maintained `ready`, approval boolean, blocker list,
+QA/demo flags, next action, or verification field.
 
 ## Feature Flow
 
@@ -194,3 +204,6 @@ Acceptance signals:
 - 2026-06-27: Migrated into the reader-first feature-spec shape.
 - 2026-06-28: Merged Program and Map into `Change Plan` and moved body state
   duties to frontmatter, Links, and Goal progress logs.
+- 2026-07-11: Collapsed ticket metadata to one status-owned lifecycle and
+  moved mutable review/check-in/next-action/proof state into the ticket body,
+  `progress.md`, and ticket artifacts.
