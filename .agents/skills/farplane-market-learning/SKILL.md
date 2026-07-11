@@ -22,7 +22,7 @@ learning brief, not generic research.
 ```text
 farplane_market_learning(question, audience?, source_refs?, ticket?)
   -> learning_brief + implication + next_action
-state: reads(farplane/harness.md, farplane/goals.yaml, farplane/metrics.yaml, source refs, ticket context); writes(ticket artifact)
+state: reads(farplane/harness.yaml, farplane/metrics.yaml, source refs, ticket context); writes(ticket artifact)
 gates: decision_named; source_quality_named; implication_not_generic; outreach_requires_approval
 routes: root skill `research` | root skill `best-of-worlds` | root skill `harness-scout` | ../farplane-evidence-content/SKILL.md
 fails: produces broad notes with no decision; changes direction without evidence; contacts users without approval

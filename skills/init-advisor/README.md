@@ -103,7 +103,7 @@ Read the project's current `farplane/manifest.json` and compare
 migration entry in order. The changelog is the canonical version-to-version
 migration guide; this section is the operational checklist.
 
-For the V1 `1.9.0` contract, the important boundary is:
+For the V1 `1.9.1` contract, the important boundary is:
 
 ```text
 tracked owners:

@@ -152,8 +152,8 @@
         "Reference Map",
         "Output"
       ],
-      "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.8-0dbcd1ace262.md",
-      "source_commit": "0dbcd1ace262",
+      "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.8-f04143bd9cd6.md",
+      "source_commit": "f04143bd9cd6",
       "summary": "working tree current template",
       "version": "0.3.8"
     },
@@ -667,7 +667,7 @@
         "trigger catalogs stay out of frontmatter"
       ],
       "missing_signals": [],
-      "source_commit": "0dbcd1ace262",
+      "source_commit": "f04143bd9cd6",
       "template_version": "0.3.8",
       "title": "Routing clarity",
       "verdict": "pass"
@@ -681,7 +681,7 @@
         "policy prose is not treated as a top-level todo"
       ],
       "missing_signals": [],
-      "source_commit": "0dbcd1ace262",
+      "source_commit": "f04143bd9cd6",
       "template_version": "0.3.8",
       "title": "Todo executability",
       "verdict": "pass"
@@ -695,7 +695,7 @@
         "same-scope recursion is forbidden"
       ],
       "missing_signals": [],
-      "source_commit": "0dbcd1ace262",
+      "source_commit": "f04143bd9cd6",
       "template_version": "0.3.8",
       "title": "Phase boundary",
       "verdict": "pass"
@@ -709,7 +709,7 @@
         "output contract is explicit"
       ],
       "missing_signals": [],
-      "source_commit": "0dbcd1ace262",
+      "source_commit": "f04143bd9cd6",
       "template_version": "0.3.8",
       "title": "Proof contract",
       "verdict": "pass"
@@ -723,7 +723,7 @@
         "qa_checklist.md is a repeatable runtime guardrail only when warranted"
       ],
       "missing_signals": [],
-      "source_commit": "0dbcd1ace262",
+      "source_commit": "f04143bd9cd6",
       "template_version": "0.3.8",
       "title": "Eval / QA sync",
       "verdict": "pass"
@@ -939,7 +939,7 @@
       ]
     }
   ],
-  "generated_at": "2026-07-11T21:00:36+00:00",
+  "generated_at": "2026-07-11T21:17:10+00:00",
   "rollout": [
     {
       "eval": "",
@@ -3826,7 +3826,7 @@
         "project": true
       },
       "template_uses": {
-        "farplane-framework": "1.9.0"
+        "farplane-framework": "1.9.1"
       }
     },
     {
@@ -3845,7 +3845,7 @@
     {
       "consumer_id": "Farplane",
       "consumer_scope": "project",
-      "current_version": "1.9.0",
+      "current_version": "1.9.1",
       "feature_refs": [
         "FEAT-0060"
       ],
@@ -3853,12 +3853,12 @@
       "status": "current",
       "target_basis": "projects with a farplane/manifest.json surface",
       "template_id": "farplane-framework",
-      "used_version": "1.9.0"
+      "used_version": "1.9.1"
     },
     {
       "consumer_id": "Farplane-UI",
       "consumer_scope": "project",
-      "current_version": "1.9.0",
+      "current_version": "1.9.1",
       "feature_refs": [
         "FEAT-0060"
       ],
@@ -6202,7 +6202,7 @@
         "current": 1,
         "stale": 1
       },
-      "current_version": "1.9.0",
+      "current_version": "1.9.1",
       "feature_refs": [
         "FEAT-0060"
       ],
@@ -6555,8 +6555,8 @@
       "snapshots": [
         {
           "introduced_at": "2026-07-11",
-          "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.8-0dbcd1ace262.md",
-          "source_commit": "0dbcd1ace262",
+          "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.8-f04143bd9cd6.md",
+          "source_commit": "f04143bd9cd6",
           "summary": "working tree current template"
         },
         {
@@ -6566,7 +6566,7 @@
           "summary": "chore(project): synchronize eval format and harness updates"
         }
       ],
-      "source_commit": "0dbcd1ace262",
+      "source_commit": "f04143bd9cd6",
       "summary": "working tree current template",
       "template_metadata": {
         "feature_refs": [

@@ -22,7 +22,7 @@ rollout. Accepted results may route to `farplane-productization`.
 ```text
 farplane_experiment_report(hypothesis, target_surface, metric, baseline?, variant?, ticket?)
   -> experiment_report + keep_reject_decision + follow_up_ticket_or_handoff
-state: reads(farplane/harness.md, farplane/goals.yaml, farplane/metrics.yaml, ticket/program/progress/proof refs, target surface); writes(ticket artifact)
+state: reads(farplane/harness.yaml, farplane/metrics.yaml, ticket/program/progress/proof refs, target surface); writes(ticket artifact)
 gates: baseline_named; metric_direction_named; evidence_not_vibes; rollout_not_implicit
 routes: root skill `prototyping` | root skill `eval` | root skill `agent-behavior-test` | ../farplane-productization/SKILL.md
 fails: changes strategy without evidence; claims improvement without baseline; rolls out before deciding keep/reject

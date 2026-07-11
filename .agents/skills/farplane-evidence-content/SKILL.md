@@ -22,7 +22,7 @@ must not market unproven claims.
 ```text
 farplane_evidence_content(evidence_refs, audience, channel?, content_goal?, ticket?)
   -> content_brief + draft_or_handoff + proof_refs
-state: reads(farplane/harness.md, farplane/goals.yaml, evidence refs, ticket context); writes(content brief, draft, or ticket artifact)
+state: reads(farplane/harness.yaml, farplane/metrics.yaml, evidence refs, ticket context); writes(content brief, draft, or ticket artifact)
 gates: evidence_refs_present; audience_named; claim_strength_matches_proof; publish_requires_approval
 routes: root skill `social-content` | root skill `video-production` | root skill `doc-advisor` | root skill `research`
 fails: invents metrics; markets unproven claims; publishes without authorization

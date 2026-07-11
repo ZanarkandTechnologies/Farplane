@@ -18,6 +18,49 @@ framework_bump(old_version, new_version, project_root)
   -> manifest_delta + migration_steps + proof_commands
 ```
 
+## 1.9.1
+
+Date: 2026-07-12
+
+Primary change: make the V1 contract safe to propagate into existing Farplane
+projects without adding another orchestration layer. This is a patch release
+over `1.9.0`; the project-file schema is unchanged.
+
+Changed surfaces:
+
+- downstream migrations must remove retired project files and active readers,
+  not merely add `harness.yaml` beside them;
+- every project uses exactly one Work Pulse heartbeat, while Feed Scout,
+  Daily/Weekly BAU review, Dogfood, and consolidation remain separate cron
+  sources when relevant;
+- automation activation is gated on a project-specific typed charter,
+  selected measurable objectives, honest metric providers, and stable
+  capability-skill ownership;
+- installed source skills and hooks must match the repo-owned release before a
+  live Pulse is judged.
+
+Migration steps:
+
+1. Apply the `1.9.0` typed charter, metric, Reward, and Core mining migration.
+2. Delete retired charter, goals, product-controller, bindings Markdown, and
+   compatibility-reader surfaces after their content is migrated.
+3. Replace legacy strategy/planning heartbeats with one Pulse plus only the
+   project-relevant report, source, and Dogfood cron records.
+4. Define the project's descriptive products, capability refs, selected
+   objective priorities, metric providers, and side-effect gates before live
+   activation.
+5. Reinstall from the canonical Farplane repo, validate the clean project, and
+   observe one post-install Pulse before calling the migration complete.
+
+Proof commands:
+
+```bash
+farplane install
+farplane doctor --json
+farplane project snapshot --project-root . --json
+python3 bin/validators/check_farplane_project_files.py --root .
+```
+
 ## 1.9.0
 
 Date: 2026-07-12

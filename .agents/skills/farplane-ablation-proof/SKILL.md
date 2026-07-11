@@ -25,7 +25,7 @@ versus absent, and whether the claim should remain part of the harness.
 ```text
 farplane_ablation_proof(claim, surface, task_case, with_surface?, without_surface?, ticket?)
   -> ablation_report + trust_decision + follow_up
-state: reads(farplane/harness.md, farplane/goals.yaml, farplane/metrics.yaml, target surface, task/eval evidence); writes(ticket artifact)
+state: reads(farplane/harness.yaml, farplane/metrics.yaml, target surface, task/eval evidence); writes(ticket artifact)
 gates: claim_is_specific; comparison_is_fair; evidence_cites_both_conditions; no_proof_theater
 routes: root skill `prototyping` | root skill `eval` | root skill `agent-qa-test` | ../farplane-productization/SKILL.md
 fails: uses only intuition; compares different tasks; keeps a surface because it sounds good
