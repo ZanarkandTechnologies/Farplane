@@ -6,7 +6,7 @@ updated_at = "2026-07-11"
 owner = "automation-advisor"
 
 [[automations]]
-id = "farplane-work-pulse"
+id = "farplane-ticket-update"
 name = "Farplane Work Pulse"
 kind = "heartbeat"
 status = "active"
@@ -15,9 +15,11 @@ Use $pulse-update.
 
 Run one bounded Work Pulse. Reconcile the board, make due ticket check-ins
 eligible, dispatch executable tickets up to the worker limit, and refill an
-empty BAU board through the next-wave planner. Pulse owns the shared admission,
-dispatch, review, and check-in route; workers execute ticket programs and
-produce proof. Do not implement ticket bodies inside the heartbeat.
+empty BAU board through the next-wave planner. Pulse owns admission, dispatch,
+worker-free review routing and reminders, and check-in routing; workers execute ticket
+programs and produce proof. Do not implement ticket bodies inside the
+heartbeat, and use Farplane V1 terminology rather than retired product or
+v-next language.
 
 Params:
 project_root = "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane"
@@ -26,7 +28,7 @@ worker_limit = 1
 review_wip = 3
 
 Config source:
-farplane/automations.toml automation id="farplane-work-pulse"
+farplane/automations.toml automation id="farplane-ticket-update"
 '''
 [automations.target]
 thread_id = "019ed47a-3182-73f3-879f-a53797759b2a"

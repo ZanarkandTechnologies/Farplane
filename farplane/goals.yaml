@@ -2,7 +2,7 @@ kind: project-goals
 status: active
 project: Farplane
 created_at: 2026-06-15
-updated_at: 2026-07-08
+updated_at: 2026-07-11
 framework_template_version: "0.5.0"
 owner: horizon-advisor
 source: horizon-advisor
@@ -151,40 +151,43 @@ goals:
           reach rollup is a pinned overview summary, not the accountability
           surface for the SMART goal.
 current_bets:
-  - id: framework_standardization
+  - id: v1_operational_proof
     horizon: 1 week
-    output: clear tracked config split for harness, goals, metrics, bindings, tickets, and reports
-    proof_signal: project-file validators and docs make ownership obvious
-    owner: harness-creator
-  - id: goal_advisor_program_grammar
+    output: >-
+      ten representative Work Pulse beats covering existing-ticket dispatch,
+      empty-board refill, worker-free review, matured check-in, and honest no-op
+    proof_signal: >-
+      dated Pulse receipts show no invalid dispatch, duplicate refill,
+      worker-held review wait, or retired product-controller route
+    owner: pulse-update
+  - id: core_lifecycle_eval_coverage
     horizon: 1 week
-    output: clear Horizon Advisor to Goal Advisor boundary
-    proof_signal: agents do not duplicate strategy and execution roles
-    owner: horizon-advisor
-  - id: low_intervention_experiment_engine
-    horizon: quarter
-    output: experiment and ablation reports that improve Farplane with explicit intervention/proof accounting
-    proof_signal: accepted improvements with baseline, metric, proof, and accept/reject decision
-    owner: optimize-harness
-  - id: evidence_distribution_engine
-    horizon: quarter
-    output: evidence-backed content and demos from accepted experiments
-    proof_signal: qualified attention, serious conversations, pilot users
-    owner: social-content
-  - id: pulse_interval_framework_standard
+    output: >-
+      every core lifecycle skill has representative eval cases for its V1
+      authority boundary, primary happy path, and highest-risk failure mode
+    proof_signal: >-
+      eval registry/lint passes and a representative lifecycle suite reports
+      results without relying on retired product or v-next assumptions
+    owner: eval
+  - id: self_improvement_closed_loops
     horizon: 2 weeks
-    output: reusable Pulse plus Daily/Weekly Interval automation standard
-    proof_signal: a project initializes the preset without custom files
-    owner: automation-advisor
-  - id: skill_memory_hierarchy
-    horizon: 2 weeks
-    output: local lessons and skill findings roll up without losing project context
-    proof_signal: parent reports summarize child state without reading every child report
-    owner: skill-maintenance
+    output: >-
+      one immediate and one delayed self-improvement ticket complete through
+      the shared Work Pulse, including reward decision and doctrine disposition
+    proof_signal: >-
+      ticket-local baseline, intervention, check-in, evidence, review, and
+      accept, kill, monitor, or rollout decision are independently reconstructable
+    owner: dogfood-review
+  - id: evidence_to_adoption
+    horizon: quarter
+    output: approved evidence-backed content and pilot conversations from accepted Farplane proof
+    proof_signal: platform observations and serious-user feedback cite the underlying ticket evidence
+    owner: farplane-evidence-content
 current_milestone: >-
-  Make Farplane's horizon layer explicit enough to optimize meaningful
-  long-running autonomous improvement per human intervention hour, while
-  preserving quality, proof, operator control, and context isolation.
+  Prove Farplane V1 in operation: run ten representative bounded Pulse beats,
+  close the missing core-lifecycle eval coverage, and complete one immediate
+  plus one delayed self-improvement loop while preserving quality, proof,
+  operator control, and low intervention.
 holds:
   - do_not_add_hidden_daemon_behavior
   - do_not_store_secrets_in_tracked_config
