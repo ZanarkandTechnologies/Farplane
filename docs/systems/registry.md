@@ -2,7 +2,7 @@
 title: "Generated System Registry"
 status: generated
 owner: system-registry
-updated_at: 2026-07-07
+updated_at: 2026-07-11
 refs:
   - docs/systems/registry.jsonl
   - docs/features/registry.jsonl
@@ -17,7 +17,7 @@ This file is generated. Edit system pages in `docs/systems/` and feature specs i
 | --- | --- | --- |
 | [SYS-0001 Agent Kernel](../systems/agent-kernel.md) | [FEAT-0042 Retired lean global agent operating kernel](../features/FEAT-0042-lean-global-agent-operating-kernel.md) | [FEAT-0042](../features/FEAT-0042-lean-global-agent-operating-kernel.md) |
 | [SYS-0002 Work Loop](../systems/work-loop.md) | [FEAT-0007 Ticket as durable task memory](../features/FEAT-0007-ticket-as-durable-task-memory.md) | [FEAT-0007](../features/FEAT-0007-ticket-as-durable-task-memory.md), [FEAT-0068](../features/FEAT-0068-goal-backed-ticket-execution.md) |
-| [SYS-0003 Horizon Loop](../systems/horizon-loop.md) | [FEAT-0032 Goal Advisor execution loop](../features/FEAT-0032-goal-advisor-execution-compilation.md) | [FEAT-0029](../features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md), [FEAT-0032](../features/FEAT-0032-goal-advisor-execution-compilation.md), [FEAT-0065](../features/FEAT-0065-pulse-and-interval-automation.md), [FEAT-0066](../features/FEAT-0066-product-scoped-pulse-loops.md), [FEAT-0067](../features/FEAT-0067-daily-interval-review-reports.md) |
+| [SYS-0003 Horizon Loop](../systems/horizon-loop.md) | [FEAT-0032 Goal Advisor execution loop](../features/FEAT-0032-goal-advisor-execution-compilation.md) | [FEAT-0029](../features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md), [FEAT-0032](../features/FEAT-0032-goal-advisor-execution-compilation.md), [FEAT-0065](../features/FEAT-0065-pulse-and-interval-automation.md), [FEAT-0066](../features/FEAT-0066-product-scoped-pulse-loops.md), [FEAT-0067](../features/FEAT-0067-daily-interval-review-reports.md), [FEAT-0071](../features/FEAT-0071-project-work-pulse.md) |
 | [SYS-0004 Invocation Runtime](../systems/invocation-runtime.md) | [FEAT-0015 Retired Symphony-compatible invocation contract](../features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md) | [FEAT-0015](../features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md) |
 | [SYS-0005 Proof And Review](../systems/proof-review.md) | [FEAT-0008 Artifact-first QA and completion proof](../features/FEAT-0008-artifact-first-qa-and-completion-proof.md) | [FEAT-0008](../features/FEAT-0008-artifact-first-qa-and-completion-proof.md), [FEAT-0031](../features/FEAT-0031-agent-behavior-test-workflow.md), [FEAT-0034](../features/FEAT-0034-adversarial-agent-qa-test-skill.md), [FEAT-0039](../features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md), [FEAT-0043](../features/FEAT-0043-project-level-system-prompt-eval-suite.md), [FEAT-0054](../features/FEAT-0054-modular-skill-local-eval-tasks.md) |
 | [SYS-0006 Skill System](../systems/skill-system.md) | [FEAT-0022 Skill tier leverage classes](../features/FEAT-0022-skill-tier-leverage-classes.md) | [FEAT-0022](../features/FEAT-0022-skill-tier-leverage-classes.md), [FEAT-0030](../features/FEAT-0030-on-demand-skill-plugin-packaging.md), [FEAT-0057](../features/FEAT-0057-skill-local-qa-checklist-artifacts.md), [FEAT-0062](../features/FEAT-0062-capped-skill-surface-budget.md), [FEAT-0064](../features/FEAT-0064-skill-signals.md) |

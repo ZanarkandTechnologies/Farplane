@@ -3,35 +3,34 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
     "edge_types": {
       "defines-workflow": 7,
       "lifecycle-workflow": 6,
-      "literal-path": 59,
-      "markdown-link": 1,
-      "mentions-skill": 29,
+      "literal-path": 75,
+      "mentions-skill": 23,
       "routes_to": 7,
       "triggers": 1,
       "updates": 1,
       "workflow-next": 20,
       "workflow-skill": 26,
       "workflow-stage": 6,
-      "writes": 6
+      "writes": 7
     },
-    "edges": 169,
+    "edges": 179,
     "framework_roles": {
-      "linked": 42,
-      "source": 7,
+      "linked": 46,
+      "source": 8,
       "workflow": 7
     },
     "isolated_nodes": 0,
-    "linked_nodes": 49,
+    "linked_nodes": 54,
     "node_kinds": {
-      "doc": 7,
-      "file": 8,
-      "skill": 29,
-      "spec": 5,
+      "doc": 10,
+      "file": 9,
+      "skill": 28,
+      "spec": 7,
       "workflow": 7
     },
-    "nodes": 56,
+    "nodes": 61,
     "other_nodes": 0,
-    "source_nodes": 7,
+    "source_nodes": 8,
     "workflow_nodes": 7
   },
   "edges": [
@@ -70,26 +69,50 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
     {
       "from_file": "docs/farplane-framework/README.md",
       "projection": "farplane-framework-core",
-      "raw_ref": "docs/specs/program-notation.md",
+      "raw_ref": "docs/farplane-framework/pulse-and-interval-loop.md",
       "source": "file:docs/farplane-framework/README.md",
-      "target": "file:docs/specs/program-notation.md",
+      "target": "file:docs/farplane-framework/pulse-and-interval-loop.md",
       "type": "literal-path"
     },
     {
       "from_file": "docs/farplane-framework/README.md",
       "projection": "farplane-framework-core",
-      "raw_ref": "docs/specs/steer-pulse-automation.md",
+      "raw_ref": "docs/farplane-framework/reporting.md",
       "source": "file:docs/farplane-framework/README.md",
-      "target": "file:docs/specs/steer-pulse-automation.md",
+      "target": "file:docs/farplane-framework/reporting.md",
       "type": "literal-path"
     },
     {
       "from_file": "docs/farplane-framework/README.md",
       "projection": "farplane-framework-core",
-      "raw_ref": "../specs/steer-pulse-automation.md",
+      "raw_ref": "docs/farplane-framework/ticket-execution-loop.md",
       "source": "file:docs/farplane-framework/README.md",
-      "target": "file:docs/specs/steer-pulse-automation.md",
-      "type": "markdown-link"
+      "target": "file:docs/farplane-framework/ticket-execution-loop.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/farplane-framework/README.md",
+      "projection": "farplane-framework-core",
+      "raw_ref": "docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md",
+      "source": "file:docs/farplane-framework/README.md",
+      "target": "file:docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/farplane-framework/README.md",
+      "projection": "farplane-framework-core",
+      "raw_ref": "docs/features/FEAT-0065-pulse-and-interval-automation.md",
+      "source": "file:docs/farplane-framework/README.md",
+      "target": "file:docs/features/FEAT-0065-pulse-and-interval-automation.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/farplane-framework/README.md",
+      "projection": "farplane-framework-core",
+      "raw_ref": "docs/features/registry.jsonl",
+      "source": "file:docs/farplane-framework/README.md",
+      "target": "file:docs/features/registry.jsonl",
+      "type": "literal-path"
     },
     {
       "from_file": "docs/farplane-framework/README.md",
@@ -102,9 +125,9 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
     {
       "from_file": "docs/farplane-framework/README.md",
       "projection": "farplane-framework-core",
-      "raw_ref": "farplane/automations.md",
+      "raw_ref": "farplane/automations.toml",
       "source": "file:docs/farplane-framework/README.md",
-      "target": "file:farplane/automations.md",
+      "target": "file:farplane/automations.toml",
       "type": "literal-path"
     },
     {
@@ -150,6 +173,14 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
     {
       "from_file": "docs/farplane-framework/README.md",
       "projection": "farplane-framework-core",
+      "raw_ref": "farplane/metrics.yaml",
+      "source": "file:docs/farplane-framework/README.md",
+      "target": "file:farplane/metrics.yaml",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/farplane-framework/README.md",
+      "projection": "farplane-framework-core",
       "raw_ref": "farplane/pm.json",
       "source": "file:docs/farplane-framework/README.md",
       "target": "file:farplane/pm.json",
@@ -168,9 +199,27 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
       "confidence": "parsed",
       "from_file": "docs/farplane-framework/README.md",
       "projection": "farplane-framework-core",
+      "raw_ref": "dogfood-review",
+      "source": "file:docs/farplane-framework/README.md",
+      "target": "skill:dogfood-review",
+      "type": "mentions-skill"
+    },
+    {
+      "confidence": "parsed",
+      "from_file": "docs/farplane-framework/README.md",
+      "projection": "farplane-framework-core",
       "raw_ref": "eval",
       "source": "file:docs/farplane-framework/README.md",
       "target": "skill:eval",
+      "type": "mentions-skill"
+    },
+    {
+      "confidence": "parsed",
+      "from_file": "docs/farplane-framework/README.md",
+      "projection": "farplane-framework-core",
+      "raw_ref": "execute",
+      "source": "file:docs/farplane-framework/README.md",
+      "target": "skill:execute",
       "type": "mentions-skill"
     },
     {
@@ -207,6 +256,15 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
       "raw_ref": "horizon-advisor",
       "source": "file:docs/farplane-framework/README.md",
       "target": "skill:horizon-advisor",
+      "type": "mentions-skill"
+    },
+    {
+      "confidence": "parsed",
+      "from_file": "docs/farplane-framework/README.md",
+      "projection": "farplane-framework-core",
+      "raw_ref": "impl-plan",
+      "source": "file:docs/farplane-framework/README.md",
+      "target": "skill:impl-plan",
       "type": "mentions-skill"
     },
     {
@@ -258,6 +316,15 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
       "confidence": "parsed",
       "from_file": "docs/farplane-framework/README.md",
       "projection": "farplane-framework-core",
+      "raw_ref": "review",
+      "source": "file:docs/farplane-framework/README.md",
+      "target": "skill:review",
+      "type": "mentions-skill"
+    },
+    {
+      "confidence": "parsed",
+      "from_file": "docs/farplane-framework/README.md",
+      "projection": "farplane-framework-core",
       "raw_ref": "skill-creator",
       "source": "file:docs/farplane-framework/README.md",
       "target": "skill:skill-creator",
@@ -282,17 +349,17 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
     {
       "from_file": "docs/farplane-framework/graph-contract.md",
       "projection": "farplane-framework-core",
-      "raw_ref": "docs/specs/goal-loop-contract.md",
+      "raw_ref": "docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md",
       "source": "file:docs/farplane-framework/graph-contract.md",
-      "target": "file:docs/specs/goal-loop-contract.md",
+      "target": "file:docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md",
       "type": "literal-path"
     },
     {
       "from_file": "docs/farplane-framework/graph-contract.md",
       "projection": "farplane-framework-core",
-      "raw_ref": "docs/specs/steer-pulse-automation.md",
+      "raw_ref": "docs/features/FEAT-0065-pulse-and-interval-automation.md",
       "source": "file:docs/farplane-framework/graph-contract.md",
-      "target": "file:docs/specs/steer-pulse-automation.md",
+      "target": "file:docs/features/FEAT-0065-pulse-and-interval-automation.md",
       "type": "literal-path"
     },
     {
@@ -319,15 +386,6 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
       "raw_ref": "plan",
       "source": "file:docs/farplane-framework/graph-contract.md",
       "target": "skill:plan",
-      "type": "mentions-skill"
-    },
-    {
-      "confidence": "parsed",
-      "from_file": "docs/farplane-framework/graph-contract.md",
-      "projection": "farplane-framework-core",
-      "raw_ref": "review",
-      "source": "file:docs/farplane-framework/graph-contract.md",
-      "target": "skill:review",
       "type": "mentions-skill"
     },
     {
@@ -367,6 +425,38 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
     {
       "from_file": "docs/farplane-framework/harness-maintenance.md",
       "projection": "farplane-framework-core",
+      "raw_ref": "docs/features/",
+      "source": "file:docs/farplane-framework/harness-maintenance.md",
+      "target": "file:docs/features/README.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/farplane-framework/harness-maintenance.md",
+      "projection": "farplane-framework-core",
+      "raw_ref": "docs/features/registry.jsonl",
+      "source": "file:docs/farplane-framework/harness-maintenance.md",
+      "target": "file:docs/features/registry.jsonl",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/farplane-framework/harness-maintenance.md",
+      "projection": "farplane-framework-core",
+      "raw_ref": "docs/features/validate_features.py",
+      "source": "file:docs/farplane-framework/harness-maintenance.md",
+      "target": "file:docs/features/validate_features.py",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/farplane-framework/harness-maintenance.md",
+      "projection": "farplane-framework-core",
+      "raw_ref": "farplane/bindings.yaml",
+      "source": "file:docs/farplane-framework/harness-maintenance.md",
+      "target": "file:farplane/bindings.yaml",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/farplane-framework/harness-maintenance.md",
+      "projection": "farplane-framework-core",
       "raw_ref": "farplane/manifest.json",
       "source": "file:docs/farplane-framework/harness-maintenance.md",
       "target": "file:farplane/manifest.json",
@@ -391,25 +481,25 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
     {
       "from_file": "docs/farplane-framework/hooks-and-runtime.md",
       "projection": "farplane-framework-core",
-      "raw_ref": "docs/specs/filesystem-lifecycle.md",
+      "raw_ref": "docs/features/FEAT-0060-registry-backed-documentation-os.md",
       "source": "file:docs/farplane-framework/hooks-and-runtime.md",
-      "target": "file:docs/specs/filesystem-lifecycle.md",
+      "target": "file:docs/features/FEAT-0060-registry-backed-documentation-os.md",
       "type": "literal-path"
     },
     {
       "from_file": "docs/farplane-framework/hooks-and-runtime.md",
       "projection": "farplane-framework-core",
-      "raw_ref": "docs/specs/steer-pulse-automation.md",
+      "raw_ref": "docs/features/FEAT-0065-pulse-and-interval-automation.md",
       "source": "file:docs/farplane-framework/hooks-and-runtime.md",
-      "target": "file:docs/specs/steer-pulse-automation.md",
+      "target": "file:docs/features/FEAT-0065-pulse-and-interval-automation.md",
       "type": "literal-path"
     },
     {
       "from_file": "docs/farplane-framework/hooks-and-runtime.md",
       "projection": "farplane-framework-core",
-      "raw_ref": "farplane/automations.md",
+      "raw_ref": "farplane/automations.toml",
       "source": "file:docs/farplane-framework/hooks-and-runtime.md",
-      "target": "file:farplane/automations.md",
+      "target": "file:farplane/automations.toml",
       "type": "literal-path"
     },
     {
@@ -419,15 +509,6 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
       "source": "file:docs/farplane-framework/hooks-and-runtime.md",
       "target": "file:farplane/pm.json",
       "type": "literal-path"
-    },
-    {
-      "confidence": "parsed",
-      "from_file": "docs/farplane-framework/hooks-and-runtime.md",
-      "projection": "farplane-framework-core",
-      "raw_ref": "documentation",
-      "source": "file:docs/farplane-framework/hooks-and-runtime.md",
-      "target": "skill:documentation",
-      "type": "mentions-skill"
     },
     {
       "confidence": "parsed",
@@ -467,17 +548,17 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
     {
       "from_file": "docs/farplane-framework/init-advisor-critical-path.md",
       "projection": "farplane-framework-core",
-      "raw_ref": "docs/specs/README.md",
+      "raw_ref": "docs/features/FEAT-0071-project-work-pulse.md",
       "source": "file:docs/farplane-framework/init-advisor-critical-path.md",
-      "target": "file:docs/specs/README.md",
+      "target": "file:docs/features/FEAT-0071-project-work-pulse.md",
       "type": "literal-path"
     },
     {
       "from_file": "docs/farplane-framework/init-advisor-critical-path.md",
       "projection": "farplane-framework-core",
-      "raw_ref": "docs/specs/steer-pulse-automation.md",
+      "raw_ref": "docs/features/README.md",
       "source": "file:docs/farplane-framework/init-advisor-critical-path.md",
-      "target": "file:docs/specs/steer-pulse-automation.md",
+      "target": "file:docs/features/README.md",
       "type": "literal-path"
     },
     {
@@ -491,9 +572,9 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
     {
       "from_file": "docs/farplane-framework/init-advisor-critical-path.md",
       "projection": "farplane-framework-core",
-      "raw_ref": "farplane/automations.md",
+      "raw_ref": "farplane/automations.toml",
       "source": "file:docs/farplane-framework/init-advisor-critical-path.md",
-      "target": "file:farplane/automations.md",
+      "target": "file:farplane/automations.toml",
       "type": "literal-path"
     },
     {
@@ -539,6 +620,14 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
     {
       "from_file": "docs/farplane-framework/init-advisor-critical-path.md",
       "projection": "farplane-framework-core",
+      "raw_ref": "farplane/metrics.yaml",
+      "source": "file:docs/farplane-framework/init-advisor-critical-path.md",
+      "target": "file:farplane/metrics.yaml",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/farplane-framework/init-advisor-critical-path.md",
+      "projection": "farplane-framework-core",
       "raw_ref": "farplane/pm.json",
       "source": "file:docs/farplane-framework/init-advisor-critical-path.md",
       "target": "file:farplane/pm.json",
@@ -548,54 +637,9 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
       "confidence": "parsed",
       "from_file": "docs/farplane-framework/init-advisor-critical-path.md",
       "projection": "farplane-framework-core",
-      "raw_ref": "brainstorm",
-      "source": "file:docs/farplane-framework/init-advisor-critical-path.md",
-      "target": "skill:brainstorm",
-      "type": "mentions-skill"
-    },
-    {
-      "confidence": "parsed",
-      "from_file": "docs/farplane-framework/init-advisor-critical-path.md",
-      "projection": "farplane-framework-core",
-      "raw_ref": "deep-interview",
-      "source": "file:docs/farplane-framework/init-advisor-critical-path.md",
-      "target": "skill:deep-interview",
-      "type": "mentions-skill"
-    },
-    {
-      "confidence": "parsed",
-      "from_file": "docs/farplane-framework/init-advisor-critical-path.md",
-      "projection": "farplane-framework-core",
-      "raw_ref": "execute",
-      "source": "file:docs/farplane-framework/init-advisor-critical-path.md",
-      "target": "skill:execute",
-      "type": "mentions-skill"
-    },
-    {
-      "confidence": "parsed",
-      "from_file": "docs/farplane-framework/init-advisor-critical-path.md",
-      "projection": "farplane-framework-core",
-      "raw_ref": "impl-plan",
-      "source": "file:docs/farplane-framework/init-advisor-critical-path.md",
-      "target": "skill:impl-plan",
-      "type": "mentions-skill"
-    },
-    {
-      "confidence": "parsed",
-      "from_file": "docs/farplane-framework/init-advisor-critical-path.md",
-      "projection": "farplane-framework-core",
       "raw_ref": "prd",
       "source": "file:docs/farplane-framework/init-advisor-critical-path.md",
       "target": "skill:prd",
-      "type": "mentions-skill"
-    },
-    {
-      "confidence": "parsed",
-      "from_file": "docs/farplane-framework/init-advisor-critical-path.md",
-      "projection": "farplane-framework-core",
-      "raw_ref": "spec-to-ticket",
-      "source": "file:docs/farplane-framework/init-advisor-critical-path.md",
-      "target": "skill:spec-to-ticket",
       "type": "mentions-skill"
     },
     {
@@ -651,33 +695,57 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
     {
       "from_file": "docs/farplane-framework/lifecycle.md",
       "projection": "farplane-framework-core",
-      "raw_ref": "docs/specs/filesystem-lifecycle.md",
+      "raw_ref": "docs/farplane-framework/pulse-and-interval-loop.md",
       "source": "file:docs/farplane-framework/lifecycle.md",
-      "target": "file:docs/specs/filesystem-lifecycle.md",
+      "target": "file:docs/farplane-framework/pulse-and-interval-loop.md",
       "type": "literal-path"
     },
     {
       "from_file": "docs/farplane-framework/lifecycle.md",
       "projection": "farplane-framework-core",
-      "raw_ref": "docs/specs/goal-loop-contract.md",
+      "raw_ref": "docs/farplane-framework/ticket-execution-loop.md",
       "source": "file:docs/farplane-framework/lifecycle.md",
-      "target": "file:docs/specs/goal-loop-contract.md",
+      "target": "file:docs/farplane-framework/ticket-execution-loop.md",
       "type": "literal-path"
     },
     {
       "from_file": "docs/farplane-framework/lifecycle.md",
       "projection": "farplane-framework-core",
-      "raw_ref": "docs/specs/steer-pulse-automation.md",
+      "raw_ref": "docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md",
       "source": "file:docs/farplane-framework/lifecycle.md",
-      "target": "file:docs/specs/steer-pulse-automation.md",
+      "target": "file:docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md",
       "type": "literal-path"
     },
     {
       "from_file": "docs/farplane-framework/lifecycle.md",
       "projection": "farplane-framework-core",
-      "raw_ref": "farplane/README.md",
+      "raw_ref": "docs/features/FEAT-0060-registry-backed-documentation-os.md",
       "source": "file:docs/farplane-framework/lifecycle.md",
-      "target": "file:farplane/README.md",
+      "target": "file:docs/features/FEAT-0060-registry-backed-documentation-os.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/farplane-framework/lifecycle.md",
+      "projection": "farplane-framework-core",
+      "raw_ref": "docs/features/FEAT-0071-project-work-pulse.md",
+      "source": "file:docs/farplane-framework/lifecycle.md",
+      "target": "file:docs/features/FEAT-0071-project-work-pulse.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/farplane-framework/lifecycle.md",
+      "projection": "farplane-framework-core",
+      "raw_ref": "farplane/automations.toml",
+      "source": "file:docs/farplane-framework/lifecycle.md",
+      "target": "file:farplane/automations.toml",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/farplane-framework/lifecycle.md",
+      "projection": "farplane-framework-core",
+      "raw_ref": "farplane/bindings.yaml",
+      "source": "file:docs/farplane-framework/lifecycle.md",
+      "target": "file:farplane/bindings.yaml",
       "type": "literal-path"
     },
     {
@@ -697,40 +765,12 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
       "type": "literal-path"
     },
     {
-      "confidence": "parsed",
       "from_file": "docs/farplane-framework/lifecycle.md",
       "projection": "farplane-framework-core",
-      "raw_ref": "hardening",
+      "raw_ref": "farplane/metrics.yaml",
       "source": "file:docs/farplane-framework/lifecycle.md",
-      "target": "skill:hardening",
-      "type": "mentions-skill"
-    },
-    {
-      "confidence": "parsed",
-      "from_file": "docs/farplane-framework/lifecycle.md",
-      "projection": "farplane-framework-core",
-      "raw_ref": "leverage-advisor",
-      "source": "file:docs/farplane-framework/lifecycle.md",
-      "target": "skill:leverage-advisor",
-      "type": "mentions-skill"
-    },
-    {
-      "confidence": "parsed",
-      "from_file": "docs/farplane-framework/lifecycle.md",
-      "projection": "farplane-framework-core",
-      "raw_ref": "optimize-harness",
-      "source": "file:docs/farplane-framework/lifecycle.md",
-      "target": "skill:optimize-harness",
-      "type": "mentions-skill"
-    },
-    {
-      "confidence": "parsed",
-      "from_file": "docs/farplane-framework/lifecycle.md",
-      "projection": "farplane-framework-core",
-      "raw_ref": "proof-advisor",
-      "source": "file:docs/farplane-framework/lifecycle.md",
-      "target": "skill:proof-advisor",
-      "type": "mentions-skill"
+      "target": "file:farplane/metrics.yaml",
+      "type": "literal-path"
     },
     {
       "confidence": "curated",
@@ -853,9 +893,17 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
     {
       "from_file": "docs/farplane-framework/project-files.md",
       "projection": "farplane-framework-core",
-      "raw_ref": "farplane/automations.md",
+      "raw_ref": "docs/farplane-framework/reporting.md",
       "source": "file:docs/farplane-framework/project-files.md",
-      "target": "file:farplane/automations.md",
+      "target": "file:docs/farplane-framework/reporting.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/farplane-framework/project-files.md",
+      "projection": "farplane-framework-core",
+      "raw_ref": "farplane/automations.toml",
+      "source": "file:docs/farplane-framework/project-files.md",
+      "target": "file:farplane/automations.toml",
       "type": "literal-path"
     },
     {
@@ -901,14 +949,31 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
     {
       "from_file": "docs/farplane-framework/project-files.md",
       "projection": "farplane-framework-core",
+      "raw_ref": "farplane/metrics.yaml",
+      "source": "file:docs/farplane-framework/project-files.md",
+      "target": "file:farplane/metrics.yaml",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/farplane-framework/project-files.md",
+      "projection": "farplane-framework-core",
       "raw_ref": "farplane/pm.json",
       "source": "file:docs/farplane-framework/project-files.md",
       "target": "file:farplane/pm.json",
       "type": "literal-path"
     },
     {
+      "confidence": "parsed",
+      "from_file": "docs/farplane-framework/reporting.md",
+      "projection": "farplane-framework-core",
+      "raw_ref": "feed-scout",
+      "source": "file:docs/farplane-framework/reporting.md",
+      "target": "skill:feed-scout",
+      "type": "mentions-skill"
+    },
+    {
       "confidence": "curated",
-      "from_file": "docs/specs/goal-loop-contract.md",
+      "from_file": "docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md",
       "label": "triggers",
       "projection": "farplane-framework-core",
       "raw_ref": "skill:goal-advisor",
@@ -1050,9 +1115,9 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
       "from_file": "docs/farplane-framework/project-files.md",
       "label": "writes",
       "projection": "farplane-framework-core",
-      "raw_ref": "file:farplane/automations.md",
+      "raw_ref": "file:farplane/automations.toml",
       "source": "skill:init-advisor",
-      "target": "file:farplane/automations.md",
+      "target": "file:farplane/automations.toml",
       "type": "writes"
     },
     {
@@ -1093,6 +1158,16 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
       "raw_ref": "file:farplane/manifest.json",
       "source": "skill:init-advisor",
       "target": "file:farplane/manifest.json",
+      "type": "writes"
+    },
+    {
+      "confidence": "curated",
+      "from_file": "docs/farplane-framework/project-files.md",
+      "label": "writes",
+      "projection": "farplane-framework-core",
+      "raw_ref": "file:farplane/metrics.yaml",
+      "source": "skill:init-advisor",
+      "target": "file:farplane/metrics.yaml",
       "type": "writes"
     },
     {
@@ -1629,8 +1704,34 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
       "type": "workflow-skill"
     }
   ],
-  "generated_at": "2026-06-25T18:00:49+00:00",
+  "generated_at": "2026-07-11T15:06:26+00:00",
   "nodes": [
+    {
+      "framework_role": "linked",
+      "id": "file:docs/farplane-framework/pulse-and-interval-loop.md",
+      "kind": "doc",
+      "label": "docs/farplane-framework/pulse-and-interval-loop.md",
+      "path": "docs/farplane-framework/pulse-and-interval-loop.md",
+      "source_match": false,
+      "source_path": "docs/farplane-framework/pulse-and-interval-loop.md",
+      "tags": [
+        "framework-core",
+        "framework-role:linked"
+      ]
+    },
+    {
+      "framework_role": "linked",
+      "id": "file:docs/farplane-framework/ticket-execution-loop.md",
+      "kind": "doc",
+      "label": "docs/farplane-framework/ticket-execution-loop.md",
+      "path": "docs/farplane-framework/ticket-execution-loop.md",
+      "source_match": false,
+      "source_path": "docs/farplane-framework/ticket-execution-loop.md",
+      "tags": [
+        "framework-core",
+        "framework-role:linked"
+      ]
+    },
     {
       "framework_role": "linked",
       "id": "file:farplane/README.md",
@@ -1646,12 +1747,12 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
     },
     {
       "framework_role": "linked",
-      "id": "file:farplane/automations.md",
+      "id": "file:farplane/automations.toml",
       "kind": "file",
-      "label": "farplane/automations.md",
-      "path": "farplane/automations.md",
+      "label": "farplane/automations.toml",
+      "path": "farplane/automations.toml",
       "source_match": false,
-      "source_path": "farplane/automations.md",
+      "source_path": "farplane/automations.toml",
       "tags": [
         "framework-core",
         "framework-role:linked"
@@ -1724,6 +1825,19 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
     },
     {
       "framework_role": "linked",
+      "id": "file:farplane/metrics.yaml",
+      "kind": "file",
+      "label": "farplane/metrics.yaml",
+      "path": "farplane/metrics.yaml",
+      "source_match": false,
+      "source_path": "farplane/metrics.yaml",
+      "tags": [
+        "framework-core",
+        "framework-role:linked"
+      ]
+    },
+    {
+      "framework_role": "linked",
       "id": "file:farplane/pm.json",
       "kind": "file",
       "label": "farplane/pm.json",
@@ -1754,30 +1868,6 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
       "path": "skills/automation-advisor/SKILL.md",
       "source_match": false,
       "source_path": "skills/automation-advisor/SKILL.md",
-      "tags": [
-        "framework-core",
-        "framework-role:linked"
-      ]
-    },
-    {
-      "framework_role": "linked",
-      "heat": {
-        "distinct_threads_window": 0,
-        "distinct_tickets_window": 0,
-        "invocation_count_all": 0,
-        "invocation_count_recent": 0,
-        "invocation_count_window": 0,
-        "last_invoked_at": "",
-        "observed_event_count_all": 0,
-        "recent_days": 7,
-        "window_days": 30
-      },
-      "id": "skill:brainstorm",
-      "kind": "skill",
-      "label": "brainstorm",
-      "path": "skills/brainstorm/SKILL.md",
-      "source_match": false,
-      "source_path": "skills/brainstorm/SKILL.md",
       "tags": [
         "framework-core",
         "framework-role:linked"
@@ -1844,12 +1934,12 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
         "recent_days": 7,
         "window_days": 30
       },
-      "id": "skill:documentation",
+      "id": "skill:dogfood-review",
       "kind": "skill",
-      "label": "documentation",
-      "path": "skills/documentation/SKILL.md",
+      "label": "dogfood-review",
+      "path": "skills/dogfood-review/SKILL.md",
       "source_match": false,
-      "source_path": "skills/documentation/SKILL.md",
+      "source_path": "skills/dogfood-review/SKILL.md",
       "tags": [
         "framework-core",
         "framework-role:linked"
@@ -1916,12 +2006,12 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
         "recent_days": 7,
         "window_days": 30
       },
-      "id": "skill:goal-advisor",
+      "id": "skill:feed-scout",
       "kind": "skill",
-      "label": "goal-advisor",
-      "path": "skills/goal-advisor/SKILL.md",
+      "label": "feed-scout",
+      "path": "skills/feed-scout/SKILL.md",
       "source_match": false,
-      "source_path": "skills/goal-advisor/SKILL.md",
+      "source_path": "skills/feed-scout/SKILL.md",
       "tags": [
         "framework-core",
         "framework-role:linked"
@@ -1940,12 +2030,12 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
         "recent_days": 7,
         "window_days": 30
       },
-      "id": "skill:hardening",
+      "id": "skill:goal-advisor",
       "kind": "skill",
-      "label": "hardening",
-      "path": "skills/hardening/SKILL.md",
+      "label": "goal-advisor",
+      "path": "skills/goal-advisor/SKILL.md",
       "source_match": false,
-      "source_path": "skills/hardening/SKILL.md",
+      "source_path": "skills/goal-advisor/SKILL.md",
       "tags": [
         "framework-core",
         "framework-role:linked"
@@ -2026,13 +2116,13 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
     {
       "framework_role": "linked",
       "heat": {
-        "distinct_threads_window": 0,
+        "distinct_threads_window": 2,
         "distinct_tickets_window": 0,
-        "invocation_count_all": 0,
+        "invocation_count_all": 9,
         "invocation_count_recent": 0,
-        "invocation_count_window": 0,
-        "last_invoked_at": "",
-        "observed_event_count_all": 0,
+        "invocation_count_window": 2,
+        "last_invoked_at": "2026-07-03T14:48:12.159970Z",
+        "observed_event_count_all": 20,
         "recent_days": 7,
         "window_days": 30
       },
@@ -2433,12 +2523,12 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
     },
     {
       "framework_role": "linked",
-      "id": "file:docs/specs/README.md",
+      "id": "file:docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md",
       "kind": "spec",
-      "label": "docs/specs/README.md",
-      "path": "docs/specs/README.md",
+      "label": "docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md",
+      "path": "docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md",
       "source_match": false,
-      "source_path": "docs/specs/README.md",
+      "source_path": "docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md",
       "tags": [
         "framework-core",
         "framework-role:linked"
@@ -2446,12 +2536,12 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
     },
     {
       "framework_role": "linked",
-      "id": "file:docs/specs/filesystem-lifecycle.md",
+      "id": "file:docs/features/FEAT-0060-registry-backed-documentation-os.md",
       "kind": "spec",
-      "label": "docs/specs/filesystem-lifecycle.md",
-      "path": "docs/specs/filesystem-lifecycle.md",
+      "label": "docs/features/FEAT-0060-registry-backed-documentation-os.md",
+      "path": "docs/features/FEAT-0060-registry-backed-documentation-os.md",
       "source_match": false,
-      "source_path": "docs/specs/filesystem-lifecycle.md",
+      "source_path": "docs/features/FEAT-0060-registry-backed-documentation-os.md",
       "tags": [
         "framework-core",
         "framework-role:linked"
@@ -2459,12 +2549,12 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
     },
     {
       "framework_role": "linked",
-      "id": "file:docs/specs/goal-loop-contract.md",
+      "id": "file:docs/features/FEAT-0065-pulse-and-interval-automation.md",
       "kind": "spec",
-      "label": "docs/specs/goal-loop-contract.md",
-      "path": "docs/specs/goal-loop-contract.md",
+      "label": "docs/features/FEAT-0065-pulse-and-interval-automation.md",
+      "path": "docs/features/FEAT-0065-pulse-and-interval-automation.md",
       "source_match": false,
-      "source_path": "docs/specs/goal-loop-contract.md",
+      "source_path": "docs/features/FEAT-0065-pulse-and-interval-automation.md",
       "tags": [
         "framework-core",
         "framework-role:linked"
@@ -2472,12 +2562,12 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
     },
     {
       "framework_role": "linked",
-      "id": "file:docs/specs/program-notation.md",
+      "id": "file:docs/features/FEAT-0071-project-work-pulse.md",
       "kind": "spec",
-      "label": "docs/specs/program-notation.md",
-      "path": "docs/specs/program-notation.md",
+      "label": "docs/features/FEAT-0071-project-work-pulse.md",
+      "path": "docs/features/FEAT-0071-project-work-pulse.md",
       "source_match": false,
-      "source_path": "docs/specs/program-notation.md",
+      "source_path": "docs/features/FEAT-0071-project-work-pulse.md",
       "tags": [
         "framework-core",
         "framework-role:linked"
@@ -2485,12 +2575,38 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
     },
     {
       "framework_role": "linked",
-      "id": "file:docs/specs/steer-pulse-automation.md",
+      "id": "file:docs/features/README.md",
       "kind": "spec",
-      "label": "docs/specs/steer-pulse-automation.md",
-      "path": "docs/specs/steer-pulse-automation.md",
+      "label": "docs/features/README.md",
+      "path": "docs/features/README.md",
       "source_match": false,
-      "source_path": "docs/specs/steer-pulse-automation.md",
+      "source_path": "docs/features/README.md",
+      "tags": [
+        "framework-core",
+        "framework-role:linked"
+      ]
+    },
+    {
+      "framework_role": "linked",
+      "id": "file:docs/features/registry.jsonl",
+      "kind": "spec",
+      "label": "docs/features/registry.jsonl",
+      "path": "docs/features/registry.jsonl",
+      "source_match": false,
+      "source_path": "docs/features/registry.jsonl",
+      "tags": [
+        "framework-core",
+        "framework-role:linked"
+      ]
+    },
+    {
+      "framework_role": "linked",
+      "id": "file:docs/features/validate_features.py",
+      "kind": "spec",
+      "label": "docs/features/validate_features.py",
+      "path": "docs/features/validate_features.py",
+      "source_match": false,
+      "source_path": "docs/features/validate_features.py",
       "tags": [
         "framework-core",
         "framework-role:linked"
@@ -2603,6 +2719,22 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
       "path": "docs/farplane-framework/project-files.md",
       "source_match": true,
       "source_path": "docs/farplane-framework/project-files.md",
+      "tags": [
+        "framework-core",
+        "framework-role:source"
+      ]
+    },
+    {
+      "framework_role": "source",
+      "id": "file:docs/farplane-framework/reporting.md",
+      "kind": "doc",
+      "label": "docs/farplane-framework/reporting.md",
+      "matched_patterns": [
+        "docs/farplane-framework/reporting.md"
+      ],
+      "path": "docs/farplane-framework/reporting.md",
+      "source_match": true,
+      "source_path": "docs/farplane-framework/reporting.md",
       "tags": [
         "framework-core",
         "framework-role:source"
@@ -2764,11 +2896,9 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
   "schema_version": "1.0.0",
   "source": {
     "exclude": [
-      "farplane/products.md",
       "tickets/archive/**",
       ".farplane/reports/**",
-      ".farplane/logs/**",
-      ".farplane/**"
+      ".farplane/logs/**"
     ],
     "expansion": "framework-doc-direct-refs",
     "include": [
@@ -2778,7 +2908,8 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
       "docs/farplane-framework/project-files.md",
       "docs/farplane-framework/graph-contract.md",
       "docs/farplane-framework/hooks-and-runtime.md",
-      "docs/farplane-framework/harness-maintenance.md"
+      "docs/farplane-framework/harness-maintenance.md",
+      "docs/farplane-framework/reporting.md"
     ],
     "manifest": "farplane/manifest.json"
   }

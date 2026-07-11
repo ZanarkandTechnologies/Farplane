@@ -2,7 +2,7 @@
 title: "Generated Feature Registry"
 status: generated
 owner: feature-registry
-updated_at: 2026-07-07
+updated_at: 2026-07-11
 refs:
   - docs/features/registry.jsonl
   - docs/features/validate_features.py
@@ -37,9 +37,10 @@ This file is generated. Edit the feature specs in `docs/features/` instead.
 | [FEAT-0062 Capped skill surface budget](../features/FEAT-0062-capped-skill-surface-budget.md) | [Skill System](../systems/skill-system.md) | `implemented` | `false` | `false` | `skills` |
 | [FEAT-0063 Metric advisor cards](../features/FEAT-0063-metric-advisor-cards.md) | [Self-Improvement And Learning](../systems/self-improvement-learning.md) | `implemented` | `false` | `false` | `skills` |
 | [FEAT-0064 Skill signals](../features/FEAT-0064-skill-signals.md) | [Skill System](../systems/skill-system.md) | `implemented` | `false` | `false` | `skills` |
-| [FEAT-0065 Pulse and interval automation](../features/FEAT-0065-pulse-and-interval-automation.md) | [Horizon Loop](../systems/horizon-loop.md) | `retired` | `false` | `FEAT-0066`, `FEAT-0067` | `planning` |
-| [FEAT-0066 Product-scoped Pulse loops](../features/FEAT-0066-product-scoped-pulse-loops.md) | [Horizon Loop](../systems/horizon-loop.md) | `partial` | `true` | `false` | `planning` |
-| [FEAT-0067 Daily interval review reports](../features/FEAT-0067-daily-interval-review-reports.md) | [Horizon Loop](../systems/horizon-loop.md) | `partial` | `true` | `false` | `planning` |
+| [FEAT-0065 Pulse and interval automation](../features/FEAT-0065-pulse-and-interval-automation.md) | [Horizon Loop](../systems/horizon-loop.md) | `retired` | `false` | `FEAT-0067`, `FEAT-0071` | `planning` |
+| [FEAT-0066 Product-scoped Pulse loops](../features/FEAT-0066-product-scoped-pulse-loops.md) | [Horizon Loop](../systems/horizon-loop.md) | `retired` | `false` | `FEAT-0071` | `planning` |
+| [FEAT-0067 Daily and weekly BAU problem reports](../features/FEAT-0067-daily-interval-review-reports.md) | [Horizon Loop](../systems/horizon-loop.md) | `implemented` | `true` | `false` | `planning` |
 | [FEAT-0068 Goal-backed ticket execution](../features/FEAT-0068-goal-backed-ticket-execution.md) | [Work Loop](../systems/work-loop.md) | `implemented` | `true` | `false` | `execution` |
-| [FEAT-0069 Taste Loop human-feedback optimization](../features/FEAT-0069-taste-loop-human-feedback-optimization.md) | [Self-Improvement And Learning](../systems/self-improvement-learning.md) | `partial` | `true` | `false` | `improvement-loop` |
-| [FEAT-0070 Experimental feature evaluation reports](../features/FEAT-0070-experimental-feature-evaluation-reports.md) | [Self-Improvement And Learning](../systems/self-improvement-learning.md) | `partial` | `true` | `false` | `improvement-loop` |
+| [FEAT-0069 Retired Taste Loop human-feedback optimization](../features/FEAT-0069-taste-loop-human-feedback-optimization.md) | [Self-Improvement And Learning](../systems/self-improvement-learning.md) | `retired` | `false` | `FEAT-0070`, `FEAT-0071` | `improvement-loop` |
+| [FEAT-0070 Dogfood experiment review and ticket supply](../features/FEAT-0070-experimental-feature-evaluation-reports.md) | [Self-Improvement And Learning](../systems/self-improvement-learning.md) | `implemented` | `true` | `false` | `improvement-loop` |
+| [FEAT-0071 Project Work Pulse](../features/FEAT-0071-project-work-pulse.md) | [Horizon Loop](../systems/horizon-loop.md) | `implemented` | `true` | `false` | `planning` |

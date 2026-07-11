@@ -67,9 +67,9 @@ coordinate higher-level work.
 
 Use [Farplane Framework V-Next](v-next.md) for the migration theory built from
 `program + progress`, one Work Pulse, ticket-backed check-ins, capability
-skills, and immediate or delayed self-improvement. Workstreams 1 and 2 own the
-active loop; the project-file migration is tracked by `TASK-0321` and
-`TASK-0322`.
+skills, and immediate or delayed self-improvement. The structural migration is
+implemented through `TASK-0318` to `TASK-0322` and `TASK-0326`; current work is
+operational proof and evidence-driven refinement.
 
 Use [Graph Contract](graph-contract.md) when the lifecycle needs to be consumed
 by tools or the Farplane UI. It defines the node, edge, confidence, and finite
