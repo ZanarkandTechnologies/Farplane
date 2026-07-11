@@ -6,8 +6,8 @@ feature_refs:
   - FEAT-0008
 ticket_id: TASK-0323
 title: consolidate ticket validation behind one phase-aware API
-phase: documenting
-status: review
+phase: complete
+status: done
 owner: codex
 claimed_by:
 priority: high
@@ -19,8 +19,8 @@ requires_qa: true
 requires_demo: false
 human_gate: none
 created_at: 2026-07-11T21:00:00+08:00
-updated_at: 2026-07-11T21:42:00+08:00
-next_action: archive after modular commits are recorded
+updated_at: 2026-07-11T21:50:00+08:00
+next_action: none
 last_verification: phase-aware completion selected eight check families and passed; QA pass and reviewer TAS-A
 ---
 
@@ -134,13 +134,14 @@ validation: doc reference check
 ## Links
 
 - Audit: `docs/features/audits/2026-07-11-validation-system-consolidation.md`
-- Visual companion: `tickets/TASK-0323/diagrams.md`
-- QA: `tickets/TASK-0323/artifacts/qa/20260711T132041Z-ticket-validation-authority-final/result.json`
-- Completion review: `tickets/TASK-0323/artifacts/review/completion-review.md`
-- Validation receipt: `tickets/TASK-0323/artifacts/validation/complete.json`
+- Visual companion: `tickets/archive/TASK-0323/diagrams.md`
+- QA: `tickets/archive/TASK-0323/artifacts/qa/20260711T132041Z-ticket-validation-authority-final/result.json`
+- Completion review: `tickets/archive/TASK-0323/artifacts/review/completion-review.md`
+- Validation receipt: `tickets/archive/TASK-0323/artifacts/validation/complete.json`
 
 ## Notes
 
 - Accepted plan: one public API, modular owner-local validators, no schema expansion.
 - Commit 1: `bf99ef1c feat(validation): add phase-aware ticket validation`.
 - Commit 2: `1fae2f45 fix(impl-plan): require separate validated diagrams`.
+- Commit 3: `d74d0cda refactor(validation): route lifecycle through ticket API`.
