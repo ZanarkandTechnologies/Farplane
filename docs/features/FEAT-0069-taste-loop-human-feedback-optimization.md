@@ -26,7 +26,7 @@ surfaces:
   - skills/worker-artifact-review-request/SKILL.md
 source_refs:
   - docs/systems/self-improvement-learning.md
-  - docs/farplane-framework/v-next.md
+  - docs/farplane-framework/v1.md
 external_refs: []
 evidence_refs:
   - tickets/archive/TASK-0326/artifacts/metadata-field-audit.md

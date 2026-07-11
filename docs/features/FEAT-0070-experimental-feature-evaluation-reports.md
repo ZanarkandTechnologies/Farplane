@@ -25,7 +25,7 @@ surfaces:
 source_refs:
   - farplane/harness.md
   - docs/features/README.md
-  - docs/farplane-framework/v-next.md
+  - docs/farplane-framework/v1.md
 external_refs: []
 evidence_refs:
   - skills/dogfood-review/eval_task.json

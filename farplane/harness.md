@@ -3,7 +3,7 @@ kind: project-harness
 status: active
 project: Farplane
 created_at: 2026-06-15
-updated_at: 2026-07-07
+updated_at: 2026-07-11
 framework_template_version: "0.3.1"
 owner: harness
 ---
@@ -101,7 +101,7 @@ experimental feature should continue, adjust, graduate, split, merge, or retire.
 
 ## Agent Authority
 
-- Agents may evolve products, audiences, tickets, and goals through
+- Agents may evolve capabilities, audiences, tickets, and goals through
   evidence-backed deltas.
 - Agents may challenge the static thesis with evidence.
 - Agents may propose a charter delta in a dated interval report.

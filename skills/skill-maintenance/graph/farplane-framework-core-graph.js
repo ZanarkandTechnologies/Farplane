@@ -1704,7 +1704,7 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
       "type": "workflow-skill"
     }
   ],
-  "generated_at": "2026-07-11T15:06:26+00:00",
+  "generated_at": "2026-07-11T15:19:52+00:00",
   "nodes": [
     {
       "framework_role": "linked",
@@ -2903,6 +2903,7 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
     "expansion": "framework-doc-direct-refs",
     "include": [
       "docs/farplane-framework/README.md",
+      "docs/farplane-framework/v1.md",
       "docs/farplane-framework/lifecycle.md",
       "docs/farplane-framework/init-advisor-critical-path.md",
       "docs/farplane-framework/project-files.md",

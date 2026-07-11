@@ -13,7 +13,7 @@ tags:
   - intervals
 refs:
   - docs/farplane-framework/README.md
-  - docs/farplane-framework/v-next.md
+  - docs/farplane-framework/v1.md
   - docs/farplane-framework/ticket-execution-loop.md
   - docs/features/FEAT-0071-project-work-pulse.md
   - docs/features/FEAT-0067-daily-interval-review-reports.md

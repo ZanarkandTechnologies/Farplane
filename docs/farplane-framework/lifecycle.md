@@ -13,6 +13,7 @@ tags:
   - graph
 refs:
   - docs/farplane-framework/README.md
+  - docs/farplane-framework/v1.md
   - docs/farplane-framework/init-advisor-critical-path.md
   - docs/farplane-framework/project-files.md
   - docs/farplane-framework/ticket-execution-loop.md
@@ -27,8 +28,8 @@ refs:
 
 # Farplane Lifecycle
 
-Farplane is a file-backed operating system for agent-run projects. Its center
-is deliberately small:
+Farplane V1 is a file-backed operating system for agent-run projects. Its
+center is deliberately small:
 
 ```text
 project(program, progress)

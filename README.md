@@ -4,6 +4,10 @@
 
 Farplane is the cloneable AI harness substrate.
 
+The current product contract is [Farplane V1](docs/prd.md), implemented by the
+[V1 framework](docs/farplane-framework/v1.md) and summarized in the
+[lifecycle](docs/farplane-framework/lifecycle.md).
+
 Clone this repo when you want to build and maintain your own operating harness
 for AI work: standards, skills, evals, templates, tickets, automations, runtime
 adapters, goals, guardrails, graph projections, review loops, and
@@ -32,7 +36,7 @@ their repo into a haze of prompts, chat memory, and unverifiable claims.
    runtime state, memories, feature specs, and proof in files that developers can diff,
    review, and repair.
 2. **Goal loops that do not drift.** Project goals live in
-   `farplane/goals.md`; Goal Packets give selected long-running work a
+   `farplane/goals.yaml`; Goal Packets give selected long-running work a
    `ticket.md`, `program.md`, and `progress.md` so a business, product, or
    multi-agent loop can keep a longer horizon without becoming one giant
    prompt.

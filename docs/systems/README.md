@@ -9,6 +9,8 @@ tags:
   - systems
   - features
 refs:
+  - docs/prd.md
+  - docs/farplane-framework/v1.md
   - docs/features/README.md
   - docs/features/registry.jsonl
   - docs/systems/registry.jsonl
@@ -29,7 +31,7 @@ Use this directory when deciding what Farplane is made of. Use
 [`docs/features/`](../features/README.md) when a capability deserves its own
 `FEAT-*` feature doc, registry row, proof path, and template/source refs.
 Feature docs may be experimental when they represent a dogfooded capability,
-but experiments themselves remain evidence in tickets, product-loop progress,
+but experiments themselves remain evidence in tickets, Goal Packet progress,
 or reports until they graduate into a feature contract.
 
 Each system owner doc should include a compact `## System Flow` diagram. The

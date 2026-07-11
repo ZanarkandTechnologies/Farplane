@@ -6,6 +6,7 @@ created_at: 2026-06-15
 updated_at: 2026-07-11
 framework_template_version: "0.3.0"
 source_of_truth:
+  - docs/farplane-framework/v1.md
   - docs/farplane-framework/lifecycle.md
   - docs/farplane-framework/ticket-execution-loop.md
   - docs/farplane-framework/pulse-and-interval-loop.md
@@ -65,11 +66,11 @@ how the one Work Pulse, Daily/Weekly BAU reports, Feed Scout, Dogfood
 self-improvement, ticket Reward check-ins, and their bounded ticket sources
 coordinate higher-level work.
 
-Use [Farplane Framework V-Next](v-next.md) for the migration theory built from
-`program + progress`, one Work Pulse, ticket-backed check-ins, capability
-skills, and immediate or delayed self-improvement. The structural migration is
-implemented through `TASK-0318` to `TASK-0322` and `TASK-0326`; current work is
-operational proof and evidence-driven refinement.
+Use [Farplane Framework V1](v1.md) for the canonical operating model and its
+derivation from `program + progress`: one Work Pulse, ticket-backed check-ins,
+capability skills, and immediate or delayed self-improvement. The structural
+migration is complete; current work is operational proof and evidence-driven
+refinement.
 
 Use [Graph Contract](graph-contract.md) when the lifecycle needs to be consumed
 by tools or the Farplane UI. It defines the node, edge, confidence, and finite

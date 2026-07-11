@@ -11,6 +11,10 @@ Documentation routing starts in
 and README in sync whenever the public workflow, shipped capability list, or
 whole-system diagram changes.
 
+The canonical product and framework contracts are [Farplane V1](docs/prd.md),
+the [V1 operating model](docs/farplane-framework/v1.md), and the
+[framework lifecycle](docs/farplane-framework/lifecycle.md).
+
 ## Purpose
 
 Farplane is the cloneable harness substrate for running long-form AI work

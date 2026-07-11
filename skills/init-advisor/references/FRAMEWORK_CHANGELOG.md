@@ -22,7 +22,7 @@ framework_bump(old_version, new_version, project_root)
 
 Date: 2026-07-11
 
-Primary change: adopt the v-next one-board project contract. Product files and
+Primary change: adopt the Farplane V1 one-board project contract. Product files and
 product-scoped controllers are retired; reusable artifact workflows remain
 project-local capability skills. `farplane/metrics.yaml` owns metric meaning,
 while `farplane/bindings.yaml.metric_bindings` owns refresh mechanics with

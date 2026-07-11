@@ -52,5 +52,35 @@
       "routing"
     ],
     "notes": "Keeps self-improve from becoming a generic implementation wrapper."
+  },
+  {
+    "id": "self_improve_immediate_reward_01",
+    "title": "Immediate feedback completes inside the current Goal",
+    "query": "Improve a ticket-writing prompt. We can run its fixed eval suite before and after each candidate and get the score immediately. Set up the right self-improvement route.",
+    "reference_points": [
+      "Classifies the feedback as immediate because baseline, candidate result, and promotion decision fit in the current execution window",
+      "Uses native Goal for the bounded candidate loop",
+      "Records baseline, comparable candidate evidence, and the promotion decision",
+      "Does not manufacture a future check_in_at or a separate check-in ticket",
+      "Keeps Check-In Program as compact not_applicable rather than filling delayed procedure fields",
+      "Promotes only a candidate that meets the metric and guard rules"
+    ],
+    "tags": ["skill", "self-improve", "immediate-reward"],
+    "notes": "Proves that immediate feedback does not inherit delayed-check-in machinery."
+  },
+  {
+    "id": "self_improve_delayed_reward_01",
+    "title": "Delayed feedback stays in the original Goal Packet",
+    "query": "A workflow improvement can only be judged after one week of real use. Its experiment ticket already has ticket.md, program.md, and progress.md. Define the waiting and check-in route without adding experiment metadata.",
+    "reference_points": [
+      "Classifies the feedback as delayed because elapsed exposure is required",
+      "Uses the existing ticket Reward.kpi_rewards rows with kpi_id, expected_reward, check_in_at, actual_result, reward_score, and reward_score_reason",
+      "Uses Goal Advisor to compile an executable program.md Check-In Program with inputs, evidence, ordered procedure, matured-row writeback, decisions, idempotency, and source-gap behavior",
+      "Records baseline, exposure, and observations append-only in progress.md",
+      "Explains that Work Pulse supplies matured indexes and evidence refs while the worker reads program.md first and executes it",
+      "Leaves future and completed Reward rows unchanged while handling every matured row and never creates a check-in ticket"
+    ],
+    "tags": ["skill", "self-improve", "delayed-reward", "goal-packet"],
+    "notes": "Protects the Farplane V1 delayed-reward state ownership contract."
   }
 ]
