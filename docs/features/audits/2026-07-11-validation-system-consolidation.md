@@ -98,15 +98,15 @@ not simply file count.
 
 1. `skills.check` is already a large suite. It invokes checklist, both registry,
    tier, phase-protocol, surface-budget, capability, eval-query, and doc-ref
-   checks (`skills/skill-maintenance/scripts/check_skills.py:443`). The pre-push
+   checks (`skills/skill-maintenance/scripts/check_skills.py`, line 443). The pre-push
    config then invokes `skill_registry_check` again
-   (`rules/git-review-gates.toml:30`), so the registry is checked twice.
+   (`rules/git-review-gates.toml`, line 30), so the registry is checked twice.
 2. `check_harness_invariants.py` calls the complete project-file validator
-   internally (`bin/validators/check_harness_invariants.py:125`). This hides a
+   internally (`bin/validators/check_harness_invariants.py`, line 125). This hides a
    large second suite behind one check ID and prevents path-aware selection.
 3. Doc parity and harness invariants both implement the same required/forbidden
-   substring rule engine (`bin/validators/check_doc_parity.py:88` and
-   `bin/validators/check_harness_invariants.py:102`). Their rule data differs;
+   substring rule engine (`bin/validators/check_doc_parity.py`, line 88, and
+   `bin/validators/check_harness_invariants.py`, line 102). Their rule data differs;
    the engine should not.
 4. Ticket frontmatter, ticket closure, skill metadata, skill budgets, template
    versions, and template registries contain several independent parsers.
@@ -114,8 +114,8 @@ not simply file count.
    universal metadata parser.
 5. Instagram and X metric snapshot validation is nearly identical. Constants
    and warnings vary, while traversal and error logic are duplicated
-   (`skills/instagram-account/scripts/validate_metrics.py:31` and
-   `skills/x-account/scripts/validate_metrics.py:31`).
+   (`skills/instagram-account/scripts/validate_metrics.py`, line 31, and
+   `skills/x-account/scripts/validate_metrics.py`, line 31).
 6. `quick_validate.py` and `check_skills.py` overlap functionally. Preserve the
    former as a fast creation/package preflight, but make `skills.check` the only
    ticket-level skill suite.
@@ -124,7 +124,7 @@ not simply file count.
    Reclassification and naming will reduce cognitive load without deleting
    useful behavior.
 8. `check_skills.py` currently calls the tier checker with
-   `--hardcase-on-failure` (`skills/skill-maintenance/scripts/check_skills.py:461`),
+   `--hardcase-on-failure` (`skills/skill-maintenance/scripts/check_skills.py`, line 461),
    which writes an eval artifact on failure. A ticket validator must use a pure
    mode and leave hardcase capture to the repair workflow.
 
@@ -280,7 +280,7 @@ post-close Git gate:
 - Skill-specific validators remain in their skills.
 - Generator, sync, install, credential, repair, and hardcase workflows remain
   outside validation.
-- Old `bin/validators/check_*.py` scripts are removed after all callers and
+- Old `bin/validators/` check-script wrappers are removed after all callers and
   tests move to the new Python API.
 
 ## Migration Shape

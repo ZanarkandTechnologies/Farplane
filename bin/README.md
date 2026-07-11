@@ -26,6 +26,13 @@ runtime helpers instead of symlinking every script, validator, and test.
 
 ## Entrypoints
 
+- `farplane validate ticket <ticket.md> --phase planning|complete` - canonical
+  ticket-facing validation API. Completion also requires an explicit `--base`
+  or repeated `--path`; receipts are written under the ticket's
+  `artifacts/validation/` directory.
+- `core/validation/*` - shared selection, execution, and receipt machinery.
+- `validators/farplane_checks.py` - allowlisted Farplane-wide leaf checks;
+  skill-specific validators remain under `skills/<owner>/scripts/`.
 - `validators/check_harness_invariants.py` - narrow validator for high-value root/runtime/ticket-boundary invariants
 - `farplane` / `farplane.py` - Core-owned global CLI for install, hooks,
   doctor checks, UI linking/start, skill rollout projections, and delegation

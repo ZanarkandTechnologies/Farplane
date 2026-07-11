@@ -249,7 +249,9 @@ only after the branch is selected:
      lives, and which full-path check remains blocked if the real workflow was
      not exercised.
    - [ ] Include a final completion checkpoint for material ticket work:
-     before `stop_complete`, run or request the ticket's QA evidence review and
+     before `stop_complete`, run `farplane validate ticket <ticket.md> --phase
+     complete` with the Goal's explicit changed-path/base boundary, then run or
+     request the ticket's QA evidence review and
      completion review when required by `QA Strategy` or `program.md`, update
      `ticket.md` plus `progress.md` with the review/evidence links, and block
      or revise when those reviews are missing or below the ticket gate.

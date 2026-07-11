@@ -1,0 +1,11 @@
+{
+  "ticket_id": "TASK-0323",
+  "phase": "qa",
+  "verdict": "pass",
+  "summary": "Completion evidence now uses the lexically latest result as authoritative, fails closed on malformed or failing latest evidence, and requires reviewer frontmatter verdict=pass together with overall_tas=TAS-A.",
+  "best_evidence": "tickets/TASK-0323/artifacts/qa/20260711T132041Z-ticket-validation-authority-final/report.md",
+  "artifacts": [
+    "tickets/TASK-0323/artifacts/qa/20260711T132041Z-ticket-validation-authority-final/report.md",
+    "tickets/TASK-0323/artifacts/qa/20260711T132041Z-ticket-validation-authority-final/result.json"
+  ]
+}

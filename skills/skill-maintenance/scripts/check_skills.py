@@ -423,6 +423,11 @@ def main() -> int:
         help="disallow peer Tier 3 todo links; default allows intentional Tier 3 handoffs",
     )
     parser.add_argument(
+        "--capture-hardcase",
+        action="store_true",
+        help="write a deduplicated hardcase seed on tier violations; validation stays pure by default",
+    )
+    parser.add_argument(
         "--template-version",
         help="report skills missing or differing from this current skill template version",
     )
@@ -458,7 +463,8 @@ def main() -> int:
         tier_command = ["python3", "bin/validators/check_skill_todo_tiers.py"]
         if not args.strict_tier3:
             tier_command.append("--allow-peer-tier3")
-        tier_command.append("--hardcase-on-failure")
+        if args.capture_hardcase:
+            tier_command.append("--hardcase-on-failure")
         run(tier_command)
         run(["python3", "bin/validators/check_tier0_phase_protocol.py"])
         run(["python3", "bin/validators/check_skill_surface_budget.py"])

@@ -28,8 +28,9 @@ source: local
 - [ ] If the final proof or linked review artifact is stale, re-enter the
   the native execution phase proof/review closeout shape before closing
   the ticket.
-- [ ] Run the repo-local validators and final checks that actually match the
-  touched surfaces.
+- [ ] Run `farplane validate ticket <ticket.md> --phase complete` with an
+  explicit `--base` or repeated `--path` boundary; use its consolidated receipt
+  instead of manually selecting repo validators.
 - [ ] Use the [Commit Message](../commit-message/SKILL.md) skill for the commit
   subject.
 - [ ] If heavy final review is needed, route it through [review](../review/SKILL.md)
@@ -73,7 +74,7 @@ Ensure an agent can execute the core path after only reading this file.
   1. resolve one ticket and confirm it is really in closeout, not missing
      implementation or review
   2. update the ticket writeback fields and any durable docs that changed
-  3. run the repo-local checks appropriate to the touched files
+  3. run the phase-aware ticket validator with an explicit changed-path boundary
   4. rerun [review](../review/SKILL.md) only if the review packet or proof is
      stale or missing for the final state
   5. use [commit-message](../commit-message/SKILL.md) to pick the commit
@@ -139,13 +140,16 @@ Run a feature closeout consistency sweep before commit:
 
 ## Checks
 
-Run the smallest truthful final checks for the touched surfaces.
+Run the smallest truthful final checks through one entrypoint:
 
-Prefer repo-local validator scripts or ticket-specific commands first:
+```text
+farplane validate ticket <ticket.md> --phase complete --base <ref>
+# or repeat --path for an explicitly bounded file set
+```
 
-- ticket metadata validator when ticket fields changed
-- doc parity or harness invariants when canonical docs/runtime contracts changed
-- tests, lint, typecheck, or pre-push checks when the underlying code changed
+The receipt records the selected checks and exact path provenance. Ticket-
+specific runtime tests and judgment-heavy QA/review remain separate evidence;
+the validator must not shell-evaluate arbitrary ticket prose.
 
 Do not claim closeout is done if the final ticket state and final verification
 summary are stale.
