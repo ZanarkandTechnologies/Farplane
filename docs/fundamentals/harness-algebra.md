@@ -843,7 +843,7 @@ Ownership:
 
 ```text
 eval owns:
-  eval_task.json, example cases, reference_points, run artifacts
+  evals/evals.json, example cases, reference_points, run artifacts
 
 skill-maintenance owns:
   skill-local checklist references, first-load todo shape, skill audit writeback
@@ -861,7 +861,7 @@ benchmark owns:
 Sync rule:
 
 ```text
-after_update(eval_task.json):
+after_update(evals/evals.json):
   for each new_or_changed reference_point:
     if reusable_runtime_guardrail(reference_point):
       update owning skill checklist/reference through skill-maintenance

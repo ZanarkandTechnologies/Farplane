@@ -16,7 +16,7 @@ refs:
   - tickets/archive/TASK-0228/ticket.md
   - skills/best-of-worlds/references/metric-discovery.md
   - skills/metric-advisor/SKILL.md
-  - skills/metric-advisor/eval_task.json
+  - skills/metric-advisor/evals/evals.json
 feature_id: FEAT-0063
 system_id: SYS-0007
 category: skills
@@ -33,7 +33,7 @@ source_refs:
 external_refs: []
 evidence_refs:
   - skills/metric-advisor/SKILL.md
-  - skills/metric-advisor/eval_task.json
+  - skills/metric-advisor/evals/evals.json
   - tickets/archive/TASK-0228/ticket.md
 known_limits: Advisory metric-card contract only; callers still own execution, proof, review, and writeback. It must preserve qualitative `none mechanical` cases instead of forcing fake scores.
 metrics:
@@ -140,7 +140,7 @@ Source context:
 Evidence:
 
 - `skills/metric-advisor/SKILL.md`
-- `skills/metric-advisor/eval_task.json`
+- `skills/metric-advisor/evals/evals.json`
 - `tickets/archive/TASK-0228/ticket.md`
 
 ## Proof And Quality

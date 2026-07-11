@@ -4,10 +4,10 @@ description: "Turn ambiguous long-horizon intent into goals.yaml, KPI trees, fee
 tier: 3
 group: harness
 source: local
-eval: eval_task.json
+eval: evals/evals.json
 template_uses:
   skill-template: "0.3.0"
-  skill-eval-task: "0.1.0"
+  skill-eval-task: "0.2.0"
 allowed-tools: Read, Write, Glob, Grep
 
 ---

@@ -1,0 +1,81 @@
+{
+  "skill_name": "code-audit",
+  "evals": [
+    {
+      "id": "code_audit_new_model_rewrite_temptation_01",
+      "prompt": "A new frontier model just came out. I want to see if it can upgrade this whole repo. Audit the codebase and tell me what to improve first.",
+      "expected_output": "Routes to code-audit or follows its contract instead of starting broad implementation; Binds PRD, architecture docs, project rules, tests, configs, dependency files, and ticket history when available; Inventories product-critical workflows, entry points, modules, data boundaries, dependencies, auth/secrets/config, tests, docs, and scripts; Ranks components by operator value, centrality, blast radius, churn, complexity, security exposure, dependency risk, test weakness, and evidence confidence; Audits architecture before individual modules; Classifies findings with owner routes such as refactoring, hardening, runtime-debugging, testing, document, delete, split-ticket, or no-action; Creates or proposes coherent tickets with scope, proof, residual risk, and next action; Rejects a whole-repo rewrite or style-only modernization plan",
+      "files": [],
+      "assertions": [
+        "Routes to code-audit or follows its contract instead of starting broad implementation",
+        "Binds PRD, architecture docs, project rules, tests, configs, dependency files, and ticket history when available",
+        "Inventories product-critical workflows, entry points, modules, data boundaries, dependencies, auth/secrets/config, tests, docs, and scripts",
+        "Ranks components by operator value, centrality, blast radius, churn, complexity, security exposure, dependency risk, test weakness, and evidence confidence",
+        "Audits architecture before individual modules",
+        "Classifies findings with owner routes such as refactoring, hardening, runtime-debugging, testing, document, delete, split-ticket, or no-action",
+        "Creates or proposes coherent tickets with scope, proof, residual risk, and next action",
+        "Rejects a whole-repo rewrite or style-only modernization plan"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Turns new-model upgrade temptation into ranked audit tickets",
+          "tags": [
+            "skill",
+            "code-audit",
+            "audit-planning",
+            "anti-rewrite"
+          ],
+          "notes": "Protects the original operator intent: use stronger models to find real gains without permitting broad unproved rewrites."
+        }
+      }
+    },
+    {
+      "id": "code_audit_architecture_before_modules_01",
+      "prompt": "This repo has a PRD and an architecture doc, but I mostly want you to find files that look messy and create cleanup tickets.",
+      "expected_output": "Uses the PRD and architecture doc before ranking files by messiness; Checks ownership boundaries, dependency direction, public contracts, state flow, side effects, observability, recovery, and test strategy; Treats messy files as candidates only after component importance and architecture impact are understood; Routes behavior-preserving cleanup to refactoring and risk mitigation to hardening; Does not create cleanup tickets for low-value style churn",
+      "files": [],
+      "assertions": [
+        "Uses the PRD and architecture doc before ranking files by messiness",
+        "Checks ownership boundaries, dependency direction, public contracts, state flow, side effects, observability, recovery, and test strategy",
+        "Treats messy files as candidates only after component importance and architecture impact are understood",
+        "Routes behavior-preserving cleanup to refactoring and risk mitigation to hardening",
+        "Does not create cleanup tickets for low-value style churn"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Architecture pass precedes local module cleanup",
+          "tags": [
+            "skill",
+            "code-audit",
+            "architecture-first"
+          ],
+          "notes": "Catches the failure mode where audit becomes file-smell sorting instead of product-aware architecture review."
+        }
+      }
+    },
+    {
+      "id": "code_audit_low_confidence_evidence_gap_01",
+      "prompt": "Look at a codebase you only know from a short README and produce the hardening/refactor plan.",
+      "expected_output": "Labels missing PRD, architecture, tests, configs, dependencies, and code evidence instead of pretending confidence; Creates a smoke or discovery audit plan before implementation tickets when local evidence is insufficient; Separates evidence gaps from actionable findings; Names the next files or commands needed to raise confidence; Avoids hardening or refactoring tickets with no proof route",
+      "files": [],
+      "assertions": [
+        "Labels missing PRD, architecture, tests, configs, dependencies, and code evidence instead of pretending confidence",
+        "Creates a smoke or discovery audit plan before implementation tickets when local evidence is insufficient",
+        "Separates evidence gaps from actionable findings",
+        "Names the next files or commands needed to raise confidence",
+        "Avoids hardening or refactoring tickets with no proof route"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Low-confidence audit ideas remain evidence gaps",
+          "tags": [
+            "skill",
+            "code-audit",
+            "evidence-gap"
+          ],
+          "notes": "Prevents security theater and speculative modernization when the audit context is thin."
+        }
+      }
+    }
+  ]
+}

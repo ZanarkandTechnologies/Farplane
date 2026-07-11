@@ -1,0 +1,93 @@
+{
+  "skill_name": "asset-advisor",
+  "evals": [
+    {
+      "id": "asset_advisor_tasty_pack_recreation_plan_01",
+      "prompt": "A Tasty Pack reference shows a 20s vertical product teaser with a fast hook, AI product b-roll, kinetic captions, a presenter voiceover, and three punchy SFX hits. Create the asset plan for Remotion execution.",
+      "expected_output": "Decomposes footage, stills, captions, voiceover, SFX, and final composition; Routes stills, video clips, avatar/audio, and Remotion separately; Names rights or recreation constraints; Includes acceptance checks for each asset",
+      "files": [],
+      "assertions": [
+        "Decomposes footage, stills, captions, voiceover, SFX, and final composition",
+        "Routes stills, video clips, avatar/audio, and Remotion separately",
+        "Names rights or recreation constraints",
+        "Includes acceptance checks for each asset"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Turns Tasty Pack reference material into a routed asset plan",
+          "tags": [
+            "skill",
+            "asset-advisor",
+            "content-production",
+            "tasty-pack"
+          ],
+          "anti_patterns": [
+            "Creates one generic generation prompt instead of an asset inventory",
+            "Copies the reference without rights or likeness notes",
+            "Hands Remotion a vague mood board without assets, timing, or checks"
+          ]
+        }
+      }
+    },
+    {
+      "id": "asset_advisor_storyboard_missing_assets_01",
+      "prompt": "A storyboard has five scenes, but only the logo and product screenshot exist. Build a missing-asset inventory.",
+      "expected_output": "Marks existing assets for reuse; Marks missing visuals and audio for generation or sourcing; States blockers; Prepares a Remotion-ready handoff",
+      "files": [],
+      "assertions": [
+        "Marks existing assets for reuse",
+        "Marks missing visuals and audio for generation or sourcing",
+        "States blockers",
+        "Prepares a Remotion-ready handoff"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Builds a missing-asset inventory from a storyboard",
+          "tags": [
+            "skill",
+            "asset-advisor",
+            "storyboard",
+            "remotion"
+          ],
+          "anti_patterns": [
+            "Ignores existing assets",
+            "Skips missing-file blockers",
+            "Fails to name owner routes"
+          ]
+        }
+      }
+    },
+    {
+      "id": "asset_advisor_continuity_asset_graph_01",
+      "prompt": "A storyboard has six beats for a vertical reel with one recurring guide, one proof talisman, and Seedance clips that must connect from one beat to the next. Build the asset plan.",
+      "expected_output": "Creates a character bible or explicit no-character rationale; Creates a recurring prop/object bible; Names location, lighting, wardrobe/style, and product anchors that must persist; Lists start and end frame assets for each model-native clip handoff; Routes still frame generation/editing, model-native clips, audio, and Remotion separately; Includes acceptance checks for continuity and source/reference use",
+      "files": [],
+      "assertions": [
+        "Creates a character bible or explicit no-character rationale",
+        "Creates a recurring prop/object bible",
+        "Names location, lighting, wardrobe/style, and product anchors that must persist",
+        "Lists start and end frame assets for each model-native clip handoff",
+        "Routes still frame generation/editing, model-native clips, audio, and Remotion separately",
+        "Includes acceptance checks for continuity and source/reference use"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Creates continuity assets for a chained AI-video reel",
+          "tags": [
+            "skill",
+            "asset-advisor",
+            "continuity",
+            "ai-video",
+            "tasty-pack"
+          ],
+          "anti_patterns": [
+            "Provides one generic prompt for all generated visuals",
+            "Treats concept art as enough without start/end frame assets",
+            "Ignores recurring character or prop consistency",
+            "Hands Remotion only a mood board with no file/source map"
+          ]
+        }
+      }
+    }
+  ]
+}

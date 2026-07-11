@@ -57,7 +57,6 @@ def build_index(crm_root: Path) -> list[dict[str, object]]:
                 "name": frontmatter.get("name", ""),
                 "links": frontmatter.get("links", []),
                 "industry": frontmatter.get("industry", ""),
-                "farplane_product_id": frontmatter.get("farplane_product_id", ""),
                 "relevance": frontmatter.get("relevance", ""),
                 "created_at": frontmatter.get("created_at", ""),
                 "report_path": str(report_path),

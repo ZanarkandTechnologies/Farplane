@@ -27,7 +27,7 @@ with `--harness codex` or `--harness claude`.
 Skill-specific eval tasks can also live beside the owning skill:
 
 ```text
-skills/<skill-name>/eval_task.json
+skills/<skill-name>/evals/evals.json
 ```
 
 ## Example
@@ -48,10 +48,10 @@ AGENTS.md/system-prompt tasks, and skill-local evals. Scope flags narrow the
 run. File location defines the eval family; task JSON stays intentionally
 small and does not carry `surface`, `target`, budget, or isolation fields.
 
-`--compare-baseline` keeps existing skill-local task JSON unchanged. The runner
+`--compare-baseline` keeps existing skill-local eval JSON unchanged. The runner
 uses native skill context, records whether the target skill triggered, and runs
 the baseline profile only after the target skill triggers. For trigger-sensitive
-cases, write natural user requests in `query`; do not name the skill unless the
+cases, write natural user requests in `prompt`; do not name the skill unless the
 case is explicitly testing direct invocation.
 
 Then open `.farplane/evals/viewer.html`, or run the shadcn React viewer:

@@ -25,7 +25,7 @@ refs:
   - docs/systems/documentation-os.md
   - docs/review/rubrics/documentation-quality.md
   - skills/doc-advisor/SKILL.md
-  - skills/doc-advisor/eval_task.json
+  - skills/doc-advisor/evals/evals.json
 feature_id: FEAT-0060
 system_id: SYS-0011
 category: context-routing
@@ -47,7 +47,7 @@ surfaces:
   - docs/systems/documentation-os.md
   - docs/review/rubrics/documentation-quality.md
   - skills/doc-advisor/SKILL.md
-  - skills/doc-advisor/eval_task.json
+  - skills/doc-advisor/evals/evals.json
 source_refs:
   - docs/features/README.md
   - docs/systems/README.md
@@ -61,7 +61,7 @@ evidence_refs:
   - bin/validators/test_check_doc_refs.py
   - bin/validators/test_doc_parity.py
   - bin/validators/test_sync_template_registry.py
-  - skills/doc-advisor/eval_task.json
+  - skills/doc-advisor/evals/evals.json
 known_limits: Owns documentation, system, feature, and template registry coherence. It does not preserve retired feature IDs or permanent tracked archive docs just to keep historical noise searchable.
 metrics:
   - feature_registry_validation_pass
@@ -191,7 +191,7 @@ Evidence:
 - `bin/validators/test_check_doc_refs.py`
 - `bin/validators/test_doc_parity.py`
 - `bin/validators/test_sync_template_registry.py`
-- `skills/doc-advisor/eval_task.json`
+- `skills/doc-advisor/evals/evals.json`
 
 ## Proof And Quality
 

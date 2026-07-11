@@ -1,0 +1,77 @@
+{
+  "skill_name": "plan",
+  "evals": [
+    {
+      "id": "plan_phase_recursion_boundary_01",
+      "prompt": "Plan a high-risk rewrite of AGI Toy Shop's agent skill system. The plan should be reviewed before implementation because the change affects planning, review, and eval workflows.",
+      "expected_output": "Returns an executable plan packet with composed todos and proof target; Emits a review request for the plan artifact instead of performing the review itself; Keeps the review request smaller or more specialized than the parent planning task; Does not create a same-scope loop such as plan -> review -> plan -> review; Names the stop condition or max phase depth for any externalized phase",
+      "files": [],
+      "assertions": [
+        "Returns an executable plan packet with composed todos and proof target",
+        "Emits a review request for the plan artifact instead of performing the review itself",
+        "Keeps the review request smaller or more specialized than the parent planning task",
+        "Does not create a same-scope loop such as plan -> review -> plan -> review",
+        "Names the stop condition or max phase depth for any externalized phase"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Plan emits a review request without same-scope recursion",
+          "tags": [
+            "skill",
+            "plan",
+            "phase-recursion"
+          ],
+          "notes": "Protects the phase ownership rule: plan can request review, but review owns judgment and externalized phase calls must shrink scope."
+        }
+      }
+    },
+    {
+      "id": "plan_inline_review_for_small_scope_01",
+      "prompt": "Make a tiny plan for renaming one AGI Toy Shop support doc heading and checking the link still works. No need for a full ticket.",
+      "expected_output": "Uses a tiny or direct-binding planning mode; Keeps review as self-check or inline verification rather than invoking the review protocol; Avoids council, broad research, or delegated review for the small scope; Defines one concrete proof step such as checking the edited link or diff; Does not introduce budget schema ceremony beyond what the task needs",
+      "files": [],
+      "assertions": [
+        "Uses a tiny or direct-binding planning mode",
+        "Keeps review as self-check or inline verification rather than invoking the review protocol",
+        "Avoids council, broad research, or delegated review for the small scope",
+        "Defines one concrete proof step such as checking the edited link or diff",
+        "Does not introduce budget schema ceremony beyond what the task needs"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Plan keeps small review inline",
+          "tags": [
+            "skill",
+            "plan",
+            "inline-phase"
+          ],
+          "notes": "Catches over-externalization where every phase becomes a separate skill call even for tiny work."
+        }
+      }
+    },
+    {
+      "id": "plan_large_review_scope_externalizes_smaller_plan_01",
+      "prompt": "Plan how to review a large AGI Toy Shop release evidence bundle with code changes, browser QA, eval runs, and customer-support workflow docs. The goal is only the review plan, not the review verdict.",
+      "expected_output": "Recognizes the target artifact is a review plan rather than an implementation plan; Breaks the broad evidence review into smaller inspection lanes or rubric families; Uses review-planning language without claiming a TAS verdict; Externalizes only smaller or specialized review-planning work if needed; Names the evidence inputs, rubric families, sampling strategy, and stop condition",
+      "files": [],
+      "assertions": [
+        "Recognizes the target artifact is a review plan rather than an implementation plan",
+        "Breaks the broad evidence review into smaller inspection lanes or rubric families",
+        "Uses review-planning language without claiming a TAS verdict",
+        "Externalizes only smaller or specialized review-planning work if needed",
+        "Names the evidence inputs, rubric families, sampling strategy, and stop condition"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Plan allows smaller review planning for broad evidence review",
+          "tags": [
+            "skill",
+            "plan",
+            "review-plan"
+          ],
+          "notes": "Tests the allowed case where planning a review is valid because the review scope is broad and the child plan is more specialized."
+        }
+      }
+    }
+  ]
+}

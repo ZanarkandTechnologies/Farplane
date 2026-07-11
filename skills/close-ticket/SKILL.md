@@ -4,9 +4,9 @@ description: "Turn a completed ticket into durable closeout, docs writeback, fin
 tier: 3
 group: coding
 source: local
-eval: eval_task.json
+eval: evals/evals.json
 template_uses:
-  skill-eval-task: "0.1.0"
+  skill-eval-task: "0.2.0"
 ---
 
 # Close Ticket

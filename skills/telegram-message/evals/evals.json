@@ -1,0 +1,35 @@
+{
+  "skill_name": "telegram-message",
+  "evals": [
+    {
+      "id": "telegram_message_mobile_artifact_review_01",
+      "prompt": "Send Kenji a Telegram feedback request for three concept cards stored at tickets/TASK-0240/artifacts/concept-cards-TL-EXP-001.md. He will read it from his phone.",
+      "expected_output": "Reads or applies telegram-message QA before sending; Recognizes that a local filesystem path alone is not phone-viewable; Includes enough concept-card content, choices, or a compact summary in the Telegram body for Kenji to decide from Telegram; Allows the local path only as a desktop reference after the self-contained content; Asks for one simple reply action such as pick A/B/C, revise, or reject with one reason; When acknowledging revise or reject feedback, restates the corrected artifact/workflow/product/stage and asks for the next instruction or sends the revised review request instead of stopping; Does not send a giant artifact dump when a compact decision prompt is enough; Does not expose Telegram secrets, tokens, credentials, or unrelated private data; Uses scripts/send_message.py with a thread/session route target so the Farplane UI Telegram gateway persists reply routing, or records a clear fallback/blocker if not configured; Does not imply permission to publish, contact customers, spend money, or deploy",
+      "files": [],
+      "assertions": [
+        "Reads or applies telegram-message QA before sending",
+        "Recognizes that a local filesystem path alone is not phone-viewable",
+        "Includes enough concept-card content, choices, or a compact summary in the Telegram body for Kenji to decide from Telegram",
+        "Allows the local path only as a desktop reference after the self-contained content",
+        "Asks for one simple reply action such as pick A/B/C, revise, or reject with one reason",
+        "When acknowledging revise or reject feedback, restates the corrected artifact/workflow/product/stage and asks for the next instruction or sends the revised review request instead of stopping",
+        "Does not send a giant artifact dump when a compact decision prompt is enough",
+        "Does not expose Telegram secrets, tokens, credentials, or unrelated private data",
+        "Uses scripts/send_message.py with a thread/session route target so the Farplane UI Telegram gateway persists reply routing, or records a clear fallback/blocker if not configured",
+        "Does not imply permission to publish, contact customers, spend money, or deploy"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Artifact review Telegram is self-contained for phone feedback",
+          "tags": [
+            "skill",
+            "telegram-message",
+            "mobile-review",
+            "human-feedback"
+          ],
+          "notes": "Regression for local-path-only feedback requests that are unreadable from Telegram on a phone."
+        }
+      }
+    }
+  ]
+}

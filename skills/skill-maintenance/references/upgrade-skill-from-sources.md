@@ -17,7 +17,7 @@ state: reads(target skill package, practitioner sources, public book summaries,
              video transcripts when available, book-to-skill extraction,
              best-of-worlds, skill-system docs)
        writes(target skill SKILL.md?, qa_checklist.md?, references?,
-              examples?, eval_task.json?, skill-local audit?)
+              examples?, evals/evals.json?, skill-local audit?)
 gates: target_baseline_named; source_budget_bounded; source_confidence_labeled;
        book_inputs_use_book_to_skill; adopt_adapt_reject_recorded;
        owner_local_delta_applied; validation_run
@@ -68,7 +68,7 @@ better source.
 ## Workflow
 
 1. **Capture the local baseline.** Read the target `SKILL.md`,
-   `qa_checklist.md`, `eval_task.json`, examples, and recent audits. Name the
+   `qa_checklist.md`, `evals/evals.json`, examples, and recent audits. Name the
    generic behavior or missing domain strategy.
 2. **Discover sources.** Search for `how to do <skill>`, current practitioner
    guides, and `best books on <domain>`. For platform-dependent skills, include
@@ -87,7 +87,7 @@ better source.
    - `SKILL.md` for every-invocation workflow moves, gates, routing, and output
      contract.
    - `qa_checklist.md` for reusable preflight/final review checks.
-   - `eval_task.json` for behavior regression cases.
+   - `evals/evals.json` for behavior regression cases.
    - `examples/*` for quality-dependent positive examples.
    - `references/*` for deeper formulas, source methods, or rare branches.
 7. **Write the audit receipt.** Include source packet, decisions, skill delta,
@@ -125,7 +125,7 @@ skill_source_upgrade_packet:
   skill_delta:
     SKILL.md:
     qa_checklist.md:
-    eval_task.json:
+    evals/evals.json:
     examples:
   proof_plan:
   residual_risk:

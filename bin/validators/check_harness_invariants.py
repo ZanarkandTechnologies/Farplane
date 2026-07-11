@@ -74,7 +74,7 @@ RULES: tuple[HarnessRule, ...] = (
         relative_path="tickets/README.md",
         required_substrings=(
             "do not store raw transport-level runtime ids such as `session_id` in ticket frontmatter",
-            "claimed_by: codex-019ef784  # optional active session claim alias; empty when unclaimed",
+            "`status: active` requires a session-specific `claimed_by`",
         ),
         remediation=(
             "keep tickets human-facing only: `claimed_by` is allowed, raw "
@@ -84,7 +84,7 @@ RULES: tuple[HarnessRule, ...] = (
     HarnessRule(
         relative_path="tickets/templates/ticket.md",
         required_substrings=(
-            "claimed_by:",
+            "`claimed_by` is present only while status=active",
             "## Summary",
             "## Change Plan",
             "## Done",

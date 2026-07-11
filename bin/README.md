@@ -40,7 +40,7 @@ runtime helpers instead of symlinking every script, validator, and test.
 - `core/*` - implementation modules for global CLI, invocation, board, compute,
   ticket-runtime, telemetry-status, and adoption helpers
 - `runtime/*` - implementation modules for Codex hooks, user-turn capture,
-  notification, runtime telemetry, and file-growth compaction
+  notification, and runtime telemetry
 - `tests/*` - Core-owned tests for `bin/core`, `bin/runtime`, and public
   command wrappers
 - `validators/check_doc_parity.py` - narrow canonical-doc parity validator for README/spec/ticket surfaces
@@ -56,6 +56,9 @@ runtime helpers instead of symlinking every script, validator, and test.
 - `validators/check_template_version_metadata.py` - staged metadata and
   version-bump guard for template files listed in
   `rules/template-version-watch.toml`
+- `validators/check_changed_file_line_count.py` - staged-only warning for
+  files enrolled in explicit line-count limits; it never rewrites files or
+  calls a model
 - `capture_user_turn.py` - turn-start user-intent writer for the hook surface
 - `farplane_boards.py` - board adapter contract plus the filesystem
   `FileTicketAdapter` that normalizes `tickets/TASK-*/ticket.md` into a

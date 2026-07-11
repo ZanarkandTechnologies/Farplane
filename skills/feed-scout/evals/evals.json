@@ -1,0 +1,77 @@
+{
+  "skill_name": "feed-scout",
+  "evals": [
+    {
+      "id": "feed_scout_report_only_when_candidates_fail",
+      "prompt": "A bounded Feed Scout run finds five new articles, but two duplicate active tickets and the others lack executable scope or proof. ticket_limit is two. What happens?",
+      "expected_output": "Normalizes, canonical-key dedupes, extracts, and evaluates the configured sources; Writes the dated Feed Scout report with Core report frontmatter before ticket projection; Records duplicate, scope-missing, and proof-missing candidates in the report; Creates no tickets merely to fill the cap; Does not invoke Interval, Goal, Pulse, workers, implementation, publication, or outreach",
+      "files": [],
+      "assertions": [
+        "Normalizes, canonical-key dedupes, extracts, and evaluates the configured sources",
+        "Writes the dated Feed Scout report with Core report frontmatter before ticket projection",
+        "Records duplicate, scope-missing, and proof-missing candidates in the report",
+        "Creates no tickets merely to fill the cap",
+        "Does not invoke Interval, Goal, Pulse, workers, implementation, publication, or outreach"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Feed Scout finishes with a report when ticket gates fail",
+          "tags": [
+            "feed-scout",
+            "report-first",
+            "ticket-gates",
+            "no-op"
+          ]
+        }
+      }
+    },
+    {
+      "id": "feed_scout_projects_bounded_source_backed_ticket",
+      "prompt": "After writing its report, Feed Scout has one high-signal source delta with canonical evidence, no active duplicate, executable scope, expected Reward, proof, stop condition, and local write authority. ticket_limit is one. What may it do?",
+      "expected_output": "Writes at most one local ticket after the dated report exists; Links the source evidence, ticket path, and admission decision back into the report; Defaults the ticket to review-required unless explicit write policy grants automatic local admission and no human or external gate remains; Does not start Goal, Pulse, a worker, implementation, spend, publication, or outreach; Returns the report path before ticket paths and a no-execution receipt",
+      "files": [],
+      "assertions": [
+        "Writes at most one local ticket after the dated report exists",
+        "Links the source evidence, ticket path, and admission decision back into the report",
+        "Defaults the ticket to review-required unless explicit write policy grants automatic local admission and no human or external gate remains",
+        "Does not start Goal, Pulse, a worker, implementation, spend, publication, or outreach",
+        "Returns the report path before ticket paths and a no-execution receipt"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Feed Scout creates a bounded source-backed opportunity ticket",
+          "tags": [
+            "feed-scout",
+            "tickets",
+            "source-evidence",
+            "bounded"
+          ]
+        }
+      }
+    },
+    {
+      "id": "feed_scout_book_summary_workflow_route_01",
+      "prompt": "Run a dry pass over configured book-summary sources. Several new items contain exercises and reusable workflows. What happens before any ticket projection?",
+      "expected_output": "Keeps the run explicit and bounded with no daemon, unapproved spend, or external write; Normalizes and dedupes items before extraction; Uses summarize and extracts triggers, inputs, steps, decisions, exercises, outputs, and proof ideas rather than generic recaps; Routes reusable skill behavior to skill-creator, broader techniques to harness-scout, converged patterns to best-of-worlds, and weak recaps to ledger-only status; Writes the dated report before applying source, dedupe, proof, authority, ticket-quality, and cap gates",
+      "files": [],
+      "assertions": [
+        "Keeps the run explicit and bounded with no daemon, unapproved spend, or external write",
+        "Normalizes and dedupes items before extraction",
+        "Uses summarize and extracts triggers, inputs, steps, decisions, exercises, outputs, and proof ideas rather than generic recaps",
+        "Routes reusable skill behavior to skill-creator, broader techniques to harness-scout, converged patterns to best-of-worlds, and weak recaps to ledger-only status",
+        "Writes the dated report before applying source, dedupe, proof, authority, ticket-quality, and cap gates"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Feed Scout routes book-summary sources into skill workflow extraction",
+          "tags": [
+            "feed-scout",
+            "book-summary",
+            "workflow-extraction",
+            "report-first"
+          ]
+        }
+      }
+    }
+  ]
+}

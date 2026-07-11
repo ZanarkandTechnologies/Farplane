@@ -26,17 +26,17 @@ Mission:
 - remove secrets, credentials, raw private transcript bulk, proprietary payloads,
   and unrelated user data
 - write one candidate under `.farplane/evals/hardcase-seeds/YYYYMMDD-HHMM-<slug>/case.md`
-  unless the prompt names a specific skill-local `eval_task.json` owner to edit
+  unless the prompt names a specific skill-local `evals/evals.json` owner to edit
 - mark whether the sample is `local_only`, `redacted_shareable`, or
   `training_candidate`
 - include a concrete eval shape and hardcase metadata; edit runnable
-  `eval_task.json` only when a separate `repent:eval` or eval workflow
+  `evals/evals.json` only when a separate `repent:eval` or eval workflow
   explicitly owns that promotion
 - return a compact final report naming the artifact path and privacy level
 
 Allowed writes:
 - `.farplane/evals/hardcase-seeds/**/case.md`
-- skill-local `eval_task.json` only when the prompt explicitly names that owner
+- skill-local `evals/evals.json` only when the prompt explicitly names that owner
 - the configured final report path, when one is provided
 
 Forbidden actions:
@@ -72,7 +72,7 @@ Forbidden actions:
 Return JSON only:
 {
   "status": "captured|blocked|no_change",
-  "artifact_path": ".farplane/evals/hardcase-seeds/.../case.md, eval_task.json path, or empty string",
+  "artifact_path": ".farplane/evals/hardcase-seeds/.../case.md, evals/evals.json path, or empty string",
   "privacy_level": "local_only|redacted_shareable|training_candidate",
   "evidence_refs": ["paths or short refs checked"],
   "redactions": ["what was removed or empty"],

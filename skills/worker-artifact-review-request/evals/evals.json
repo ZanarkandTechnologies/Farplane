@@ -1,0 +1,121 @@
+{
+  "skill_name": "worker-artifact-review-request",
+  "evals": [
+    {
+      "id": "worker_artifact_review_rejects_local_path_only_01",
+      "prompt": "A worker finished TASK-0301 and wants to Telegram Kenji: 'Review tickets/TASK-0301/artifacts/report.md'. Prepare the review request.",
+      "expected_output": "Does not send a local-path-only Telegram message; Requires a phone-readable summary, excerpt, options, or phone-openable link; Labels local filesystem paths as desktop-only when included; Records fallback if the artifact cannot be summarized honestly; Keeps the bound persistent thread as the reply route while releasing the execution worker",
+      "files": [],
+      "assertions": [
+        "Does not send a local-path-only Telegram message",
+        "Requires a phone-readable summary, excerpt, options, or phone-openable link",
+        "Labels local filesystem paths as desktop-only when included",
+        "Records fallback if the artifact cannot be summarized honestly",
+        "Keeps the bound persistent thread as the reply route while releasing the execution worker"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Rejects a local-path-only artifact review request",
+          "tags": [
+            "worker-artifact-review-request",
+            "telegram",
+            "artifact-review"
+          ],
+          "anti_patterns": [
+            "Sends only a desktop path",
+            "Pastes a giant report without a clear decision",
+            "Creates a new approval queue instead of routing replies to the worker"
+          ]
+        }
+      }
+    },
+    {
+      "id": "worker_artifact_review_records_message_receipt_01",
+      "prompt": "A worker has produced an ablation proof report with summary and archive-safe artifact refs. Telegram is configured and CODEX_THREAD_ID is available. What should the finish receipt include?",
+      "expected_output": "Uses telegram-message as the send route; Includes ticket id, worker thread/session ref, artifact refs, requested reply action, and Telegram message id; Logs a progress.md Review block with artifact refs, thread ref, request time, next reminder time, reminder count, and empty decision; Applies the worker-artifact-review and telegram-message QA checklists; Records a blocker instead of silently succeeding if sending fails; Sets status awaiting_review, clears claimed_by, and releases the execution worker; Does not mark publish/post/spend approval as granted",
+      "files": [],
+      "assertions": [
+        "Uses telegram-message as the send route",
+        "Includes ticket id, worker thread/session ref, artifact refs, requested reply action, and Telegram message id",
+        "Logs a progress.md Review block with artifact refs, thread ref, request time, next reminder time, reminder count, and empty decision",
+        "Applies the worker-artifact-review and telegram-message QA checklists",
+        "Records a blocker instead of silently succeeding if sending fails",
+        "Sets status awaiting_review, clears claimed_by, and releases the execution worker",
+        "Does not mark publish/post/spend approval as granted"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Records sent message id or fallback receipt",
+          "tags": [
+            "worker-artifact-review-request",
+            "receipt",
+            "telegram"
+          ],
+          "anti_patterns": [
+            "Claims the review was requested without a message id or fallback",
+            "Omits the worker thread reply route",
+            "Stops as waiting for Kenji without a Telegram send receipt or blocker",
+            "Treats message sent as final external-action approval"
+          ]
+        }
+      }
+    },
+    {
+      "id": "worker_artifact_review_sends_due_reminder_without_worker_01",
+      "prompt": "TASK-0304 is awaiting_review. Its progress Review block has no decision and next_reminder_at matured yesterday. Work Pulse selected it as the single due reminder. What should happen now?",
+      "expected_output": "Sends one Telegram reminder using the existing artifact summary and reply route; Increments reminder_count and records the send receipt in progress.md; Sets the next configured reminder time or clears it when capped; Does not assign or reserve an execution worker; Does not use review queue size as a chase trigger; Does not infer phone escalation or final-action approval",
+      "files": [],
+      "assertions": [
+        "Sends one Telegram reminder using the existing artifact summary and reply route",
+        "Increments reminder_count and records the send receipt in progress.md",
+        "Sets the next configured reminder time or clears it when capped",
+        "Does not assign or reserve an execution worker",
+        "Does not use review queue size as a chase trigger",
+        "Does not infer phone escalation or final-action approval"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Sends only a due reminder without reserving a worker",
+          "tags": [
+            "worker-artifact-review-request",
+            "pulse-update",
+            "telegram"
+          ],
+          "anti_patterns": [
+            "Creates a new approval queue instead of routing the answer to the worker thread",
+            "Sends a reminder before next_reminder_at",
+            "Counts the awaiting ticket or persistent thread as an active worker"
+          ]
+        }
+      }
+    },
+    {
+      "id": "worker_artifact_review_content_packet_phone_ready_01",
+      "prompt": "A worker finished a storyboard and two hook variants for a harness-engineering video. Ask Kenji to review it without posting.",
+      "expected_output": "Summarizes the storyboard/hook options in Telegram-readable form; Asks one clear reply action such as choose A/B, revise, or reject with reason; States that posting/publishing remains gated; Includes archive-safe artifact refs as desktop-only refs after the reviewable content; Records the request in the caller-owned ticket or progress surface",
+      "files": [],
+      "assertions": [
+        "Summarizes the storyboard/hook options in Telegram-readable form",
+        "Asks one clear reply action such as choose A/B, revise, or reject with reason",
+        "States that posting/publishing remains gated",
+        "Includes archive-safe artifact refs as desktop-only refs after the reviewable content",
+        "Records the request in the caller-owned ticket or progress surface"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Creates a phone-readable review request for content artifacts",
+          "tags": [
+            "worker-artifact-review-request",
+            "content",
+            "human-review"
+          ],
+          "anti_patterns": [
+            "Asks Kenji to review an unspecified video idea",
+            "Combines review with public posting approval",
+            "Requires desktop access to know what decision is being requested"
+          ]
+        }
+      }
+    }
+  ]
+}

@@ -23,7 +23,7 @@ claiming behavior success.
 
 ```text
 core_lifecycle_eval_readiness(skill_set)
-  -> every_skill_has(eval_task.json)
+  -> every_skill_has(evals/evals.json)
    + every_skill_has(happy_path, authority_boundary, highest_risk_failure)
    + query_lint_passes
 

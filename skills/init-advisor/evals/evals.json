@@ -1,0 +1,164 @@
+{
+  "skill_name": "init-advisor",
+  "evals": [
+    {
+      "id": "init_advisor_pulse_interval_01",
+      "prompt": "A new Farplane project is being initialized for autonomous operation. What should the generated automation surfaces contain?",
+      "expected_output": "Creates farplane/automations.toml as the reviewable full automation config source; Creates farplane/harness.md as the static human charter with human thesis, static leverage commitments, non-tradeoffs, agent authority, and change rule; Creates farplane/metrics.yaml for provider-independent metric definitions and keeps provider refresh coordinates in farplane/bindings.yaml; Keeps recurring artifact production in reusable or project-local capability skills rather than product controller files; Grounds the team archetype against real-world equivalents before finalizing harness, capability workflows, or goals; Uses Work Pulse as the only heartbeat and shared ticket executor; Uses a separate Feed Scout cron for report-first source intake and bounded ticket projection; Uses Daily and Weekly BAU cron records for Problems-ledger reporting and bounded prior-evidenced maintenance; Uses a separate weekly Dogfood cron for portfolio review and a bounded experiment Goal Packet wave under configured capacity; Keeps consolidation as cron and routes human-feedback improvement through Dogfood tickets rather than another controller; Does not create farplane/steer.config.toml or .farplane/state/steer-scheduler.json; Uses date-stamped interval reports rather than latest.md as the canonical report path",
+      "files": [],
+      "assertions": [
+        "Creates farplane/automations.toml as the reviewable full automation config source",
+        "Creates farplane/harness.md as the static human charter with human thesis, static leverage commitments, non-tradeoffs, agent authority, and change rule",
+        "Creates farplane/metrics.yaml for provider-independent metric definitions and keeps provider refresh coordinates in farplane/bindings.yaml",
+        "Keeps recurring artifact production in reusable or project-local capability skills rather than product controller files",
+        "Grounds the team archetype against real-world equivalents before finalizing harness, capability workflows, or goals",
+        "Uses Work Pulse as the only heartbeat and shared ticket executor",
+        "Uses a separate Feed Scout cron for report-first source intake and bounded ticket projection",
+        "Uses Daily and Weekly BAU cron records for Problems-ledger reporting and bounded prior-evidenced maintenance",
+        "Uses a separate weekly Dogfood cron for portfolio review and a bounded experiment Goal Packet wave under configured capacity",
+        "Keeps consolidation as cron and routes human-feedback improvement through Dogfood tickets rather than another controller",
+        "Does not create farplane/steer.config.toml or .farplane/state/steer-scheduler.json",
+        "Uses date-stamped interval reports rather than latest.md as the canonical report path"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Init advisor emits one Pulse heartbeat and separate scheduled jobs",
+          "tags": [
+            "init-advisor",
+            "pulse",
+            "interval-update"
+          ]
+        }
+      }
+    },
+    {
+      "id": "init_advisor_ticket_selection_inside_pulse_01",
+      "prompt": "The initialized project has local tickets and a Pulse automation. What should the template say about selecting work?",
+      "expected_output": "Pulse dispatches executable tickets up to the configured worker limit and makes due original-ticket check-ins eligible; Pulse reads farplane/harness.md, goals, metrics, ticket history, and current reports when shaping an empty-board BAU refill; The next-wave planner creates only bounded BAU ticket specs; Feed Scout, Interval maintenance, and Dogfood own their separate ticket sources; Local ready and unblocked tickets are preferred over blocked or approval-required work; Substantial implementation routes through harness-creator first when the operating model is missing, then goal-advisor only after a concrete milestone exists; No separate ticket-drainer or check-in automation is required because Pulse owns selection, execution, and due check-in dispatch",
+      "files": [],
+      "assertions": [
+        "Pulse dispatches executable tickets up to the configured worker limit and makes due original-ticket check-ins eligible",
+        "Pulse reads farplane/harness.md, goals, metrics, ticket history, and current reports when shaping an empty-board BAU refill",
+        "The next-wave planner creates only bounded BAU ticket specs; Feed Scout, Interval maintenance, and Dogfood own their separate ticket sources",
+        "Local ready and unblocked tickets are preferred over blocked or approval-required work",
+        "Substantial implementation routes through harness-creator first when the operating model is missing, then goal-advisor only after a concrete milestone exists",
+        "No separate ticket-drainer or check-in automation is required because Pulse owns selection, execution, and due check-in dispatch"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Init advisor keeps ticket selection inside Pulse",
+          "tags": [
+            "init-advisor",
+            "pulse",
+            "ticket-selection"
+          ]
+        }
+      }
+    },
+    {
+      "id": "init_advisor_automation_activation_path_01",
+      "prompt": "A user initializes a new Farplane project and asks whether it creates threads and automations. What should init-advisor do end-to-end?",
+      "expected_output": "Bootstrap creates files, tickets, and pm manifest, but not live Codex automations by default; Does not create live Codex threads or automations unless activation is requested; Routes activation to automation-advisor; Activation creates or reuses the records named in farplane/automations.toml, with one Work Pulse heartbeat and separate Feed Scout, BAU review, self-improvement, and optional cron threads; Writes PM-visible thread IDs to farplane/pm.json and keeps automation runtime IDs in the Codex app automation store; Reports needs_operating_model_intake or needs_automation_setup when blocked",
+      "files": [],
+      "assertions": [
+        "Bootstrap creates files, tickets, and pm manifest, but not live Codex automations by default",
+        "Does not create live Codex threads or automations unless activation is requested",
+        "Routes activation to automation-advisor",
+        "Activation creates or reuses the records named in farplane/automations.toml, with one Work Pulse heartbeat and separate Feed Scout, BAU review, self-improvement, and optional cron threads",
+        "Writes PM-visible thread IDs to farplane/pm.json and keeps automation runtime IDs in the Codex app automation store",
+        "Reports needs_operating_model_intake or needs_automation_setup when blocked"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Init advisor routes live automation activation to automation-advisor",
+          "tags": [
+            "init-advisor",
+            "automation-advisor",
+            "activation"
+          ]
+        }
+      }
+    },
+    {
+      "id": "init_advisor_full_mode_goal_intake_01",
+      "prompt": "A brownfield repo already has farplane/goals.yaml, but its charter, capability ownership, and goals are placeholder, stale, or not grounded in the operator's current intent. The operator asks to initialize the repo as a full Farplane project. What should init-advisor do before claiming the project is initialized?",
+      "expected_output": "Distinguishes substrate_complete from project_initialized instead of treating file existence as enough; Audits farplane/harness.md for missing human thesis, static leverage commitments, non-tradeoffs, agent authority, and change rule; Audits docs/bootstrap-brief.md, capability workflow ownership, and farplane/goals.yaml for missing team archetype, recurring outputs, North Star, 3-month outcome, success criteria, non-goals, and decision boundaries; In full mode, calls harness-creator after substrate setup for static charter, capability workflows, goals, feedback loops, missing systems, current milestone, and any Goal Advisor handoff; Asks the first missing harness-creator parameter instead of running separate capability/goals/advisor interviews from init-advisor; Keeps farplane/goals.yaml as structured YAML for parseable goals, value function, axes, projects, and milestones; Writes the readiness state or missing answers into docs/bootstrap-brief.md and proposes or applies split-file deltas only after operator intent is known; Uses goal-advisor only after a current milestone is concrete enough to compile into a ticket-backed Goal Packet",
+      "files": [],
+      "assertions": [
+        "Distinguishes substrate_complete from project_initialized instead of treating file existence as enough",
+        "Audits farplane/harness.md for missing human thesis, static leverage commitments, non-tradeoffs, agent authority, and change rule",
+        "Audits docs/bootstrap-brief.md, capability workflow ownership, and farplane/goals.yaml for missing team archetype, recurring outputs, North Star, 3-month outcome, success criteria, non-goals, and decision boundaries",
+        "In full mode, calls harness-creator after substrate setup for static charter, capability workflows, goals, feedback loops, missing systems, current milestone, and any Goal Advisor handoff",
+        "Asks the first missing harness-creator parameter instead of running separate capability/goals/advisor interviews from init-advisor",
+        "Keeps farplane/goals.yaml as structured YAML for parseable goals, value function, axes, projects, and milestones",
+        "Writes the readiness state or missing answers into docs/bootstrap-brief.md and proposes or applies split-file deltas only after operator intent is known",
+        "Uses goal-advisor only after a current milestone is concrete enough to compile into a ticket-backed Goal Packet"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Init advisor full mode routes operating-model setup through harness-creator",
+          "tags": [
+            "init-advisor",
+            "full-mode",
+            "harness-creator",
+            "readiness-gate"
+          ]
+        }
+      }
+    },
+    {
+      "id": "init_advisor_adaptive_human_intake_01",
+      "prompt": "A migrated project now has a current farplane/manifest.json, but farplane/harness.md, capability workflow ownership, and farplane/goals.yaml are new or placeholder. The operator asks init-advisor to finish the migration but is worried that Deep Interview asks too many questions. How should init-advisor decide what to ask before filling those files?",
+      "expected_output": "Resolves human_intake as skip, offer, or required and defaults to offer for new or migrated meaning-heavy files; Uses destination skill signatures as the question inventory instead of inventing a generic init interview; Routes harness.md, capability workflow refs, feedback loops, missing systems, and milestone-shape params to harness-creator; Routes goals.yaml, North Star, value function, KPI tree, holds, and milestone deltas to horizon-advisor; Asks direct signature questions for factual or narrow missing params; Escalates to deep-interview --quick only when missing params are intent-heavy, contradictory, or risky for canonical file fills; Constrains deep-interview --quick to the missing signature params plus intent, outcome, non-goals, decision boundaries, and success criteria; Writes the human intake decision, missing answers, and any deep-interview summary into docs/bootstrap-brief.md; Does not embed or duplicate the Deep Interview loop inside init-advisor, harness-creator, or horizon-advisor; Does not claim project_initialized until required operator-owned params are answered or recorded as blocked",
+      "files": [],
+      "assertions": [
+        "Resolves human_intake as skip, offer, or required and defaults to offer for new or migrated meaning-heavy files",
+        "Uses destination skill signatures as the question inventory instead of inventing a generic init interview",
+        "Routes harness.md, capability workflow refs, feedback loops, missing systems, and milestone-shape params to harness-creator",
+        "Routes goals.yaml, North Star, value function, KPI tree, holds, and milestone deltas to horizon-advisor",
+        "Asks direct signature questions for factual or narrow missing params",
+        "Escalates to deep-interview --quick only when missing params are intent-heavy, contradictory, or risky for canonical file fills",
+        "Constrains deep-interview --quick to the missing signature params plus intent, outcome, non-goals, decision boundaries, and success criteria",
+        "Writes the human intake decision, missing answers, and any deep-interview summary into docs/bootstrap-brief.md",
+        "Does not embed or duplicate the Deep Interview loop inside init-advisor, harness-creator, or horizon-advisor",
+        "Does not claim project_initialized until required operator-owned params are answered or recorded as blocked"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Init advisor adapts human intake depth for meaning-heavy file migration",
+          "tags": [
+            "init-advisor",
+            "human-intake",
+            "deep-interview",
+            "harness-creator",
+            "horizon-advisor"
+          ]
+        }
+      }
+    },
+    {
+      "id": "init_advisor_quality_tooling_slots_01",
+      "prompt": "A TypeScript/Python mixed project is being initialized and the operator is open to quality tooling. What should the project rules template record without forcing installation?",
+      "expected_output": "Records maintainability/refactoring command slots such as lint, complexity, duplication, dependency boundaries, dead code, static analysis dashboard, and mutation testing; Records hardening command slots such as SAST, dependency audit, secret scan, config validation, and resilience/failure tests; Keeps tools optional and stack-specific instead of mandating one universal linter stack; Does not install tools automatically unless code scaffold/tooling installation is explicitly in scope; Routes behavior-preserving cleanup to the refactoring skill and risk-reduction work to the hardening skill",
+      "files": [],
+      "assertions": [
+        "Records maintainability/refactoring command slots such as lint, complexity, duplication, dependency boundaries, dead code, static analysis dashboard, and mutation testing",
+        "Records hardening command slots such as SAST, dependency audit, secret scan, config validation, and resilience/failure tests",
+        "Keeps tools optional and stack-specific instead of mandating one universal linter stack",
+        "Does not install tools automatically unless code scaffold/tooling installation is explicitly in scope",
+        "Routes behavior-preserving cleanup to the refactoring skill and risk-reduction work to the hardening skill"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Init advisor records optional maintainability and hardening command slots",
+          "tags": [
+            "init-advisor",
+            "quality-tooling",
+            "refactoring",
+            "hardening"
+          ]
+        }
+      }
+    }
+  ]
+}

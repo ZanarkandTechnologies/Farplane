@@ -24,8 +24,8 @@ bounded, and inspectable from the shell.
 
 ## Proof
 
-- `./bin/farplane run -- sh -lc 'NOTION_API_TOKEN="$NOTION_TOKEN" ntn doctor'`
-- `./bin/farplane run -- sh -lc 'NOTION_API_TOKEN="$NOTION_TOKEN" ntn api v1/users/me'`
+- `./bin/farplane run -- sh -lc 'NOTION_API_TOKEN="placeholder" ntn doctor'`
+- `./bin/farplane run -- sh -lc 'NOTION_API_TOKEN="placeholder" ntn api v1/users/me'`
 - `./bin/farplane run -- python3 skills/notion-task-field-fill/scripts/ntn_task_field_fill.py --mode dry-run --this-week --artifact-dir tickets/TASK-0303/artifacts/read-only-run`
 - `./bin/farplane run -- python3 skills/notion-task-field-fill/scripts/ntn_task_field_fill.py --mode live-high-confidence --this-week --live-field Attention\ Required --max-live-writes 1 --artifact-dir tickets/TASK-0303/artifacts/live-high-confidence-run`
 

@@ -6,9 +6,9 @@ source: local
 template_uses:
   skill-template: "0.3.6"
   skill-qa-checklist: "0.1.0"
-  skill-eval-task: "0.1.0"
+  skill-eval-task: "0.2.0"
 allowed-tools: Bash, Read
-eval: eval_task.json
+eval: evals/evals.json
 qa_checklist: qa_checklist.md
 ---
 

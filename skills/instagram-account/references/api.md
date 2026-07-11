@@ -26,7 +26,9 @@ Load this before live Instagram API work.
 
 ## Minimal Config Contract
 
-Use local private `~/.farplane/config.toml`:
+Use runtime env first, normally through `farplane run -- <command>` / Doppler.
+Private `~/.farplane/config.toml` remains a fallback/cache with the same field
+shape:
 
 ```toml
 [social.instagram]
@@ -42,9 +44,9 @@ app_secret = ""
 graph_version = "v21.0"
 ```
 
-Explicit `FARPLANE_INSTAGRAM_*` and `FARPLANE_META_*` environment variables
-remain supported as one-off runtime overrides, not the persisted source of
-truth.
+Use explicit `FARPLANE_INSTAGRAM_*` and `FARPLANE_META_*` environment variables
+as the normal runtime contract. Do not commit credentials or generated env
+files.
 
 ## Live API Gates
 

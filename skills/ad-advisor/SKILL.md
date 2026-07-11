@@ -8,7 +8,7 @@ template_uses:
   skill-template: "0.3.7"
   skill-surface-budget: "0.1.0"
 allowed-tools: Read, Glob, Grep, web_search
-eval: eval_task.json
+eval: evals/evals.json
 qa_checklist: qa_checklist.md
 ---
 

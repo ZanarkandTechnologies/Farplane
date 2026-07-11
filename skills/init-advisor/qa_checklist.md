@@ -93,11 +93,11 @@ init_advisor_qa(project_root, init_mode, activation_requested?)
      missing, stale, placeholder, or ungrounded in operator intent.
 
 10. `split_file_delta_boundary`
-   - Pass: `farplane/goals.yaml` stays Markdown with a fenced `goal-program`
-     block for parseable goals, value function, axes, projects, and milestones;
-     split-file deltas are proposed or applied only after operator intent is
-     known; `goal-advisor` is used only after the current milestone is concrete
-     enough for a ticket-backed Goal Packet.
+   - Pass: `farplane/goals.yaml` stays structured YAML for the North Star,
+     value function, goal axes, outcome targets, KPI refs, current bets,
+     milestone, and holds; split-file deltas are proposed or applied only after
+     operator intent is known; `goal-advisor` is used only after the current
+     milestone is concrete enough for a ticket-backed Goal Packet.
    - Fail: InitAdvisor treats `farplane/goals.yaml` existence as enough,
      rewrites split-file strategy without operator intent, or invokes
      `goal-advisor` before there is a concrete milestone.

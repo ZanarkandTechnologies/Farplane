@@ -27,9 +27,9 @@ source_refs:
   - tickets/archive/TASK-0318/ticket.md
 external_refs: []
 evidence_refs:
-  - skills/pulse-update/eval_task.json
+  - skills/pulse-update/evals/evals.json
   - skills/pulse-update/scripts/test_list_pulse_board.py
-  - skills/ticket-opportunity-generator/eval_task.json
+  - skills/ticket-opportunity-generator/evals/evals.json
   - tickets/archive/TASK-0318/artifacts/qa/work-pulse-proof.md
   - tickets/archive/TASK-0319/artifacts/qa/integrated-qa.md
 known_limits: "The empty-board prototype is proven locally; low-watermark refill and longer real scheduled-run monitoring remain future evidence."

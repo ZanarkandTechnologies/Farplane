@@ -24,8 +24,8 @@ Judges decide whether the observed answer met the reference points.
 | --- | --- | --- |
 | Model, reasoning, sandbox, approvals, web/search, MCP, skill enable/disable | Codex profile | Eval task query |
 | Shared fictional company state, role assumptions, toy tickets, product facts, safety boundaries | AGI Toy Shop fixture context | Codex profile |
-| One user ask and expected behavior | `eval_task.json` row | Profile or shared fixture |
-| Skill-specific regression coverage | `skills/<skill>/eval_task.json` | Global harness task file |
+| One user ask and expected behavior | `evals/evals.json` row | Profile or shared fixture |
+| Skill-specific regression coverage | `skills/<skill>/evals/evals.json` | Global harness task file |
 | Cross-skill or workflow behavior coverage | `.farplane/evals/tasks/harness_tasks.json` or reusable examples | One skill package |
 | AGENTS.md or system-prompt behavior coverage | `.farplane/evals/tasks/agents_md_tasks.json` | Skill-local task file |
 | Judge strictness, tier rules, required output shape | Judge prompt or eval quality rubric | Task query |
@@ -81,7 +81,7 @@ File location is the canonical family signal:
 
 - `.farplane/evals/tasks/harness_tasks.json` for harness and workflow evals.
 - `.farplane/evals/tasks/agents_md_tasks.json` for AGENTS.md/system-prompt evals.
-- `skills/<skill>/eval_task.json` for skill-local evals.
+- `skills/<skill>/evals/evals.json` for skill-local evals.
 
 No-scope `run` executes every known available family. Use `--harness-evals`,
 `--agents-md`, `--skills`, or `--skill <name>` to narrow the run. `--harness`
@@ -93,30 +93,34 @@ Keep eval tasks small and natural:
 
 ```json
 {
-  "id": "qa_ui_evidence_01",
-  "title": "QA requires image evidence for UI work",
-  "query": "Please verify the checkout UI change is actually working.",
-  "reference_points": [
-    "Uses the QA skill or equivalent QA workflow",
-    "Requires browser or visual evidence for the UI claim",
-    "Does not self-certify without captured proof",
-    "Returns or points to image evidence in the final verdict"
-  ],
-  "tags": ["qa", "ui", "proof"],
-  "notes": "Uses AGI Toy Shop checkout context from the shared fixture."
+  "skill_name": "qa",
+  "evals": [
+    {
+      "id": "qa_ui_evidence_01",
+      "prompt": "Please verify the checkout UI change is actually working.",
+      "expected_output": "A QA verdict supported by captured UI evidence.",
+      "files": [],
+      "assertions": [
+        "Uses the QA skill or equivalent QA workflow",
+        "Requires browser or visual evidence for the UI claim",
+        "Does not self-certify without captured proof",
+        "Returns or points to image evidence in the final verdict"
+      ]
+    }
+  ]
 }
 ```
 
 Do not put skill instructions, routing policy, or expected answers in the
-`query`. Put shared setup in the fixture, expected behavior in
-`reference_points`, and harness mechanics in the profile or runner.
+`prompt`. Put shared setup in the fixture, expected behavior in `assertions`,
+and harness mechanics in the profile or runner.
 
 ## Placement Checklist
 
 - If the change affects how Codex is launched, update the profile or runner.
 - If the change affects what world the task takes place in, update AGI Toy
   Shop fixture context.
-- If the change affects what one task asks or proves, update `eval_task.json`.
+- If the change affects what one task asks or proves, update `evals/evals.json`.
 - If the change affects how results are judged, update judge prompt or rubric.
 - If the change is structural and deterministic, add a validator or unit test.
 - If the change is about which surface owns the fix, route through

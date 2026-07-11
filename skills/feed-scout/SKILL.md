@@ -5,7 +5,7 @@ description: "Turn curated feeds into a dated source report, then optionally pro
 tier: 3
 group: harness
 source: local
-eval: eval_task.json
+eval: evals/evals.json
 qa_checklist: qa_checklist.md
 template_uses:
   skill-template: "0.3.2"

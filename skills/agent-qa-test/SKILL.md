@@ -3,7 +3,7 @@ name: agent-qa-test
 description: "Turn an app, skill, prompt, or workflow claim into adversarial QA cases, tester evidence, critique, and rerun guidance."
 tier: 2
 source: local
-eval: eval_task.json
+eval: evals/evals.json
 qa_checklist: qa_checklist.md
 methods:
   - agent-qa-test:prompt

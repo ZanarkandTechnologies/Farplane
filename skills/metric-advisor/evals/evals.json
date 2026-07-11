@@ -1,0 +1,81 @@
+{
+  "skill_name": "metric-advisor",
+  "evals": [
+    {
+      "id": "metric_advisor_eval_recovery_01",
+      "prompt": "The Farplane core lifecycle eval summary shows 39 tasks with 9 C, 15 B, and 15 A verdicts. I want to improve it without running a hundred unrelated tasks. What metric should we use and where should this route next?",
+      "expected_output": "Names the objective as recovering the core lifecycle eval quality; Chooses an eval provider rather than inventing a generic numeric score; Uses C-count reduction or failing-case count reduction as the primary metric with direction lower; Adds guard metrics such as A-count not regressing, query lint passing, and registry or skill validation passing; Names anti-metrics such as hiding expected behavior in queries, inflating reference points, or broad prompt bloat; Routes through optimize-harness or direct repair before self-improve unless candidate search is actually needed; Does not route to retired autoresearch skills for ordinary eval recovery",
+      "files": [],
+      "assertions": [
+        "Names the objective as recovering the core lifecycle eval quality",
+        "Chooses an eval provider rather than inventing a generic numeric score",
+        "Uses C-count reduction or failing-case count reduction as the primary metric with direction lower",
+        "Adds guard metrics such as A-count not regressing, query lint passing, and registry or skill validation passing",
+        "Names anti-metrics such as hiding expected behavior in queries, inflating reference points, or broad prompt bloat",
+        "Routes through optimize-harness or direct repair before self-improve unless candidate search is actually needed",
+        "Does not route to retired autoresearch skills for ordinary eval recovery"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Metric advisor derives lifecycle eval recovery card",
+          "tags": [
+            "skill",
+            "metric-advisor",
+            "eval-recovery"
+          ],
+          "notes": "Catches the desired lifecycle recovery behavior: derive a MetricCard from eval results and avoid defaulting to old autoresearch."
+        }
+      }
+    },
+    {
+      "id": "metric_advisor_no_fake_metric_01",
+      "prompt": "We need to make our ticket plans feel easier to approve, but there is no command or benchmark for it yet. Can metric-advisor give us the metric?",
+      "expected_output": "States that no honest mechanical metric exists yet or uses none mechanical; Chooses review, human_feedback, or hybrid as the provider instead of fake precision; Defines pass/fail or accept/revise criteria with judgment questions; Adds guard metrics around concrete proof, scope creep, and operator control; Names anti-metrics such as long prose, approval theater, or numeric confidence theater; Routes to review, goal-advisor, or impl-plan proof wording rather than retired autoresearch skills",
+      "files": [],
+      "assertions": [
+        "States that no honest mechanical metric exists yet or uses none mechanical",
+        "Chooses review, human_feedback, or hybrid as the provider instead of fake precision",
+        "Defines pass/fail or accept/revise criteria with judgment questions",
+        "Adds guard metrics around concrete proof, scope creep, and operator control",
+        "Names anti-metrics such as long prose, approval theater, or numeric confidence theater",
+        "Routes to review, goal-advisor, or impl-plan proof wording rather than retired autoresearch skills"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Metric advisor rejects fake numeric quality scores",
+          "tags": [
+            "skill",
+            "metric-advisor",
+            "no-fake-precision"
+          ],
+          "notes": "Protects the primitive from pretending qualitative approval can become a reliable number without a real provider."
+        }
+      }
+    },
+    {
+      "id": "metric_advisor_retired_autoresearch_01",
+      "prompt": "I have a local script that repeatedly prints `METRIC type_errors=42`, and I want to lower it over a few iterations. Should metric-advisor send this to autoresearch-plan or autoresearch-exec?",
+      "expected_output": "Chooses mechanical as the provider and type_errors as the primary metric; Sets direction lower and requires the command to remain parseable and safe to run repeatedly; Adds guard metrics such as tests or validators passing; Names anti-metrics such as editing the metric parser, weakening tests, or narrowing scope dishonestly; Explicitly refuses autoresearch-plan, autoresearch-exec, or legacy_autoresearch because those skill routes are retired; Routes to goal-advisor, self-improve, eval, or the owning ticket/program proof path instead",
+      "files": [],
+      "assertions": [
+        "Chooses mechanical as the provider and type_errors as the primary metric",
+        "Sets direction lower and requires the command to remain parseable and safe to run repeatedly",
+        "Adds guard metrics such as tests or validators passing",
+        "Names anti-metrics such as editing the metric parser, weakening tests, or narrowing scope dishonestly",
+        "Explicitly refuses autoresearch-plan, autoresearch-exec, or legacy_autoresearch because those skill routes are retired",
+        "Routes to goal-advisor, self-improve, eval, or the owning ticket/program proof path instead"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Metric advisor refuses retired autoresearch routes",
+          "tags": [
+            "skill",
+            "metric-advisor",
+            "retired-autoresearch"
+          ],
+          "notes": "Prevents metric-advisor from resurrecting deleted autoresearch skill routes when a mechanical metric exists."
+        }
+      }
+    }
+  ]
+}

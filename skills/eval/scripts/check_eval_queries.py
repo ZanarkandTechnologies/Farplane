@@ -14,7 +14,7 @@ from pathlib import Path
 from typing import Any
 
 
-SKILL_EVAL_TASK_FILE = "eval_task.json"
+SKILL_EVAL_TASK_FILE = Path("evals/evals.json")
 
 
 def read_json(path: Path) -> Any:
@@ -49,17 +49,17 @@ def check_file(path: Path, root: Path) -> list[str]:
     except ValueError:
         relative = path
     parts = relative.parts
-    if len(parts) != 3 or parts[0] != "skills" or parts[2] != SKILL_EVAL_TASK_FILE:
+    if len(parts) != 4 or parts[0] != "skills" or parts[2:] != SKILL_EVAL_TASK_FILE.parts:
         return []
     skill_name = parts[1]
     raw = read_json(path)
-    if not isinstance(raw, list):
-        return [f"{relative}: task file must contain a JSON list"]
+    if not isinstance(raw, dict) or not isinstance(raw.get("evals"), list):
+        return [f"{relative}: task file must contain an Agent Skills evals object"]
     errors: list[str] = []
-    for index, item in enumerate(raw):
+    for index, item in enumerate(raw["evals"]):
         if not isinstance(item, dict):
             continue
-        query = str(item.get("query", ""))
+        query = str(item.get("prompt", ""))
         spoilers = query_spoilers(skill_name, query)
         if spoilers:
             task_id = item.get("id", f"index-{index}")
@@ -76,7 +76,7 @@ def main() -> int:
     args = parser.parse_args()
     root = Path(args.root).resolve()
     errors: list[str] = []
-    for path in sorted((root / "skills").glob(f"*/{SKILL_EVAL_TASK_FILE}")):
+    for path in sorted((root / "skills").glob(f"*/{SKILL_EVAL_TASK_FILE.as_posix()}")):
         errors.extend(check_file(path, root))
     if errors:
         for error in errors:

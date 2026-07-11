@@ -48,15 +48,13 @@ BIN_README_TEXT = """\
 TICKETS_README_TEXT = """\
 # Tickets
 
-claimed_by: codex-019ef784  # optional active session claim alias; empty when unclaimed
+`status: active` requires a session-specific `claimed_by`
 
 - do not store raw transport-level runtime ids such as `session_id` in ticket frontmatter
 """
 
 TICKET_TEMPLATE_TEXT = """\
----
-claimed_by:
----
+`claimed_by` is present only while status=active
 
 ## Summary
 

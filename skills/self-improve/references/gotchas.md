@@ -15,3 +15,6 @@
   durable optimization needs a diverse suite closer to 20-100 cases.
 - Do not promote a prompt candidate just because it passed one category. Check
   boundary, negative, and out-of-original-story cases.
+- Do not schedule a future check-in for feedback measurable in the current Goal.
+- Do not create a second ticket, finding, or reward registry for delayed
+  feedback; reuse the original ticket Reward and Goal Packet.

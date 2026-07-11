@@ -1,0 +1,74 @@
+{
+  "skill_name": "automation-advisor",
+  "evals": [
+    {
+      "id": "automation_advisor_one_heartbeat_01",
+      "prompt": "Configure Farplane V1 automations for Pulse, Feed Scout, Daily, Weekly, and self-improvement.",
+      "expected_output": "Creates exactly one heartbeat and it invokes pulse-update; Keeps Feed Scout, Daily/Weekly BAU, and Dogfood as cron jobs; Keeps exact reviewable prompts in farplane/automations.toml; Does not add a hidden scheduler, separate check-in loop, or Taste Loop controller; Makes Work Pulse the shared ticket and matured-check-in executor",
+      "files": [],
+      "assertions": [
+        "Creates exactly one heartbeat and it invokes pulse-update",
+        "Keeps Feed Scout, Daily/Weekly BAU, and Dogfood as cron jobs",
+        "Keeps exact reviewable prompts in farplane/automations.toml",
+        "Does not add a hidden scheduler, separate check-in loop, or Taste Loop controller",
+        "Makes Work Pulse the shared ticket and matured-check-in executor"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Configure one Work Pulse and bounded scheduled sources",
+          "tags": [
+            "automation-advisor",
+            "v1",
+            "heartbeat"
+          ]
+        }
+      }
+    },
+    {
+      "id": "automation_advisor_reuses_live_pulse_01",
+      "prompt": "The desired config calls the heartbeat farplane-work-pulse, but the live task already uses farplane-ticket-update on the correct thread. Activate the new config.",
+      "expected_output": "Inspects the existing live automation before mutation; Updates or deliberately renames the existing heartbeat rather than creating a duplicate; Keeps exactly one active Pulse heartbeat; Aligns tracked config source identity and live prompt; Preserves the existing target thread unless a migration is explicitly required",
+      "files": [],
+      "assertions": [
+        "Inspects the existing live automation before mutation",
+        "Updates or deliberately renames the existing heartbeat rather than creating a duplicate",
+        "Keeps exactly one active Pulse heartbeat",
+        "Aligns tracked config source identity and live prompt",
+        "Preserves the existing target thread unless a migration is explicitly required"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Update the existing live Pulse instead of duplicating it",
+          "tags": [
+            "automation-advisor",
+            "live-activation",
+            "dedupe"
+          ]
+        }
+      }
+    },
+    {
+      "id": "automation_advisor_model_boundary_01",
+      "prompt": "Use Sol with medium reasoning for this existing heartbeat task.",
+      "expected_output": "Checks whether model selection belongs to the heartbeat automation or its target thread; Uses the supported model identifier and medium reasoning setting; Does not invent unsupported automations.toml fields; Updates the live task or sends a model-overridden continuation when that is the supported boundary; Verifies the next beat rather than claiming the setting changed from tracked config alone",
+      "files": [],
+      "assertions": [
+        "Checks whether model selection belongs to the heartbeat automation or its target thread",
+        "Uses the supported model identifier and medium reasoning setting",
+        "Does not invent unsupported automations.toml fields",
+        "Updates the live task or sends a model-overridden continuation when that is the supported boundary",
+        "Verifies the next beat rather than claiming the setting changed from tracked config alone"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Apply a heartbeat model at the correct live boundary",
+          "tags": [
+            "automation-advisor",
+            "model",
+            "thread"
+          ]
+        }
+      }
+    }
+  ]
+}

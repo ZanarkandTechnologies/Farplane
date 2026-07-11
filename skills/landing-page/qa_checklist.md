@@ -8,7 +8,7 @@ applies_to:
   - landing-pages
   - premium-landing-pages
   - cinematic-scrolltelling
-  - taste-loop-artifacts
+  - human-feedback-artifacts
 ---
 
 # Landing Page Runtime QA Checklist

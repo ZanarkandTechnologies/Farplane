@@ -69,6 +69,10 @@ def write_skill(
         .replace("\n\n\n---", "\n---"),
         encoding="utf-8",
     )
+    if eval_surface:
+        eval_path = skill_dir / eval_surface
+        eval_path.parent.mkdir(parents=True, exist_ok=True)
+        eval_path.write_text('{"skill_name":"' + name + '","evals":[]}\n', encoding="utf-8")
 
 
 class SyncSkillRegistryTests(unittest.TestCase):
@@ -104,16 +108,27 @@ class SyncSkillRegistryTests(unittest.TestCase):
             write_skill(
                 repo,
                 "example",
-                eval_surface="eval_task.json",
+                eval_surface="evals/evals.json",
                 qa_checklist="qa_checklist.md",
                 skill_ui="skills/example/ui/index.html",
             )
 
             rows = sync_skill_registry.build_registry(repo)
 
-            self.assertEqual(rows[0]["eval"], "eval_task.json")
+            self.assertEqual(rows[0]["eval"], "evals/evals.json")
             self.assertEqual(rows[0]["qa_checklist"], "qa_checklist.md")
             self.assertEqual(rows[0]["skill_ui"], "skills/example/ui/index.html")
+
+    def test_rejects_undeclared_canonical_eval_surface(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp)
+            write_skill(repo, "example")
+            eval_path = repo / "skills" / "example" / "evals" / "evals.json"
+            eval_path.parent.mkdir(parents=True)
+            eval_path.write_text('{"skill_name":"example","evals":[]}\n')
+
+            with self.assertRaisesRegex(sync_skill_registry.RegistryError, "frontmatter must declare"):
+                sync_skill_registry.build_registry(repo)
 
     def test_extracts_ordered_todo_skill_refs_without_manual_workflow_flag(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

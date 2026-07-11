@@ -6,14 +6,14 @@ source: local
 template_uses:
   skill-template: "0.3.6"
   skill-qa-checklist: "0.1.0"
-  skill-eval-task: "0.1.0"
+  skill-eval-task: "0.2.0"
 methods:
   - doc-advisor:strategy
   - doc-advisor:doc-architecture
   - doc-advisor:metadata
   - doc-advisor:feature-system-spec
   - doc-advisor:finish-gate
-eval: eval_task.json
+eval: evals/evals.json
 qa_checklist: qa_checklist.md
 ---
 

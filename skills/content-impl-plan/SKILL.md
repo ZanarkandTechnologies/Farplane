@@ -7,9 +7,9 @@ source: local
 template_uses:
   skill-template: "0.3.7"
   skill-qa-checklist: "0.1.1"
-  skill-eval-task: "0.1.0"
+  skill-eval-task: "0.2.0"
   skill-surface-budget: "0.1.0"
-eval: eval_task.json
+eval: evals/evals.json
 qa_checklist: qa_checklist.md
 common_chains:
   after: ["storyboard", "asset-advisor", "avatar-advisor", "audio-advisor", "ai-image-advisor", "ai-video-advisor", "remotion", "review"]
@@ -88,11 +88,36 @@ moodboard. The active Resource Bank shape is:
 Core consumer fields are only `captures[].source`, `captures[].analysis`, and
 `captures[].elements`; retrieval notes are non-core metadata and must not be
 required by production skills. Tags/facets live on `capture.source`. Build
-`reference_leverage_map` from `captures[].elements`. Extract reusable structure
-without copying protected assets, likenesses, music, or exact creative
-expression. Do not require separate evidence objects, lane taxonomy, or
-frame/clip records unless the specific production task needs direct media reuse
-or audit proof.
+`reference_leverage_map` from `captures[].elements`, focusing more on pinned
+elements as the operator taste signal while keeping unpinned elements as
+context. Use `analysis.operatorNote` to understand the explicit taste source and
+check `meta.warnings`; when an operator note exists but nothing was pinned from
+it, state the gap before treating the pack as production guidance. Extract
+reusable structure without copying protected assets, likenesses, music, or
+exact creative expression. Do not require separate evidence objects, lane
+taxonomy, serialized `production_pattern`, or frame/clip records unless the
+specific production task needs direct media reuse or audit proof.
+
+For inspiration-led video, classify the pack before production:
+
+```text
+reference_readiness(pack)
+  -> media_ready | regen_ready | semantic_only | blocked
+
+media_ready:
+  pinned visual/audio/editing elements have resolved media refs such as
+  frame/contact-sheet/thumbnail/clip/audio/transcript paths or URLs.
+
+regen_ready:
+  pinned elements have enough anchors/descriptions to route concrete
+  regeneration packets through ai-image-advisor, ai-video-advisor, audio-advisor,
+  or avatar-advisor before Remotion.
+
+semantic_only:
+  pinned elements describe taste but no media refs, generation prompts, or
+  source assets exist yet. Use only for storyboard/plan output, not final
+  production claims.
+```
 
 Before routing to Remotion, run the creative lock:
 
@@ -103,17 +128,34 @@ creative_lock(idea, inspiration_pack, storyboard, asset_plan, audio_plan)
 requires:
   - reference_leverage_map: each used capture element maps to a
     concrete shot, asset, edit rhythm, audio cue, motion cue, or narrative move
+  - reference_classification: the chosen reference type, such as product-ad
+    parody, myth explainer, process reveal, corporate training, montage, or
+    proof demo, plus the rejected nearby formats
   - narrative_spine: hook -> tension -> turn -> proof -> payoff with exact
     script/caption beats and viewer job
+  - continuity_spine: recurring character or explicit no-character rationale,
+    recurring object/motif when the reference relies on one, scene-to-scene
+    visual continuity, and the viewer question -> answer
   - asset_manifest: source/generated/linked assets or explicit missing-asset
     blockers before composition
+  - media_or_regen_plan: each pinned visual/audio/editing element either has a
+    resolved media ref, a regeneration packet, or an explicit nonuse reason
   - cue_sheet: frame/time-coded audio events and required motion bindings
+  - generation_topology: `continuous_chain`, `deliberate_scene_breaks`, or
+    `montage`, with start/end frame pairs for chained model-native video clips
+    and transition obligations for scene breaks
   - qa_gates: user-intent, video-quality, source-honesty, inspiration-use,
     narrative clarity, asset use, and audio-motion sync
 
 blocks_if:
   - the visual plan is only generic CSS/text/cards for an inspiration-led video
   - the audio plan is only a bed with no motion/edit obligations
+  - a narrative reel plans isolated model-native clip generations without
+    start/end frame continuity or explicit montage rationale
+  - the plan copies reference art direction while dropping the reference's core
+    story engine, standout character, recurring prop, or audio/edit structure
+  - an inspiration-led video has pinned visual/audio anchors but no resolved
+    media refs and no regeneration route before Remotion
   - proof checks only renderability
 ```
 
@@ -136,10 +178,19 @@ reference recreation. Use `qa` when a produced artifact needs formal proof.
   - [ ] Identify hook stack, timeline beats, story pattern, pacing, format
     affordances, visual/audio/editing/copy/format/constraint elements, and why
     the reference likely works.
+  - [ ] Classify the reference/reel type and choose one production pattern;
+    explicitly reject nearby patterns that would change the story engine.
   - [ ] Mark what to reuse as structure versus what must be changed for rights,
     brand, audience, or proof.
   - [ ] Build a `reference_leverage_map` from `captures[].elements` to
-    specific planned shots, assets, audio cues, motion cues, or narrative beats.
+    specific planned shots, assets, audio cues, motion cues, or narrative beats;
+    map pinned elements first and explain any pinned element not reused. If
+    `meta.warnings` says an operator note exists but no element was pinned from
+    it, state the gap before treating the pack as production guidance.
+  - [ ] Classify `reference_readiness` as `media_ready`, `regen_ready`,
+    `semantic_only`, or `blocked`; for inspiration-led video, do not route to
+    Remotion as production until pinned visual/audio/editing elements have
+    resolved media refs or concrete regeneration packets.
 - [ ] 3. Create the content ticket shape.
   - [ ] Use `Summary`, `Scope`, `Delta`, `Program`, `Map`, `Done / Proof`,
     `State`, `Links`, and `Notes`.
@@ -155,6 +206,9 @@ reference recreation. Use `qa` when a produced artifact needs formal proof.
 - [ ] 5. Compile the advisor action list.
   - [ ] Order actions by dependency: storyboard, assets, generation/capture,
     audio, Remotion composition, render proof, review/QA.
+  - [ ] For narrative video, declare generation topology before spend:
+    `continuous_chain`, `deliberate_scene_breaks`, or `montage`; block isolated
+    clip batches unless the chosen format is intentionally montage.
   - [ ] Give every action an owner skill, input, output, acceptance check, and
     blocker condition.
 - [ ] 6. End with production proof.
@@ -250,6 +304,10 @@ draft | review | approved | in_production | blocked
 - Do not treat a Tasty Pack or Inspiration Pack as a vibe source. If the pack
   has no captures or no creative elements, block or request reingestion before
   production.
+- Do not let a final video consume only the text of pinned elements when the
+  user's expectation is Tasty Pack reuse. Resolve `assetId + anchor` into media
+  refs or route regeneration first; otherwise label the output
+  `semantic_storyboard_only`.
 
 ## Reference Map
 

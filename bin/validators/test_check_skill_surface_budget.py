@@ -44,8 +44,15 @@ def write_skill(root: Path, name: str, *, subscribed: bool, todos: int = 0, qa: 
             encoding="utf-8",
         )
     if evals:
-        (skill_dir / "eval_task.json").write_text(
-            json.dumps([{"id": str(index)} for index in range(1, evals + 1)]),
+        eval_path = skill_dir / "evals" / "evals.json"
+        eval_path.parent.mkdir(parents=True)
+        eval_path.write_text(
+            json.dumps(
+                {
+                    "skill_name": name,
+                    "evals": [{"id": str(index)} for index in range(1, evals + 1)],
+                }
+            ),
             encoding="utf-8",
         )
 

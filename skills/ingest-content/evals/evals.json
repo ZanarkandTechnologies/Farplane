@@ -1,0 +1,151 @@
+{
+  "skill_name": "ingest-content",
+  "evals": [
+    {
+      "id": "ingest_content_minimal_capture_01",
+      "prompt": "Ingest this Instagram Reel into the Resource Bank. Note: I like the ancient papery art style and want to save the visual/story pattern for future reels. Public metadata and the operator note are available; do not run a deep media extraction unless needed.",
+      "expected_output": "Reads `skills/ingest-content/SKILL.md` and applies the minimal capture contract.; Stores or returns source/ref, operator note/focus, compact analysis, tags/facets, and creative elements.; Creative elements use compact kinds such as visual, hook, storyboard, editing, copy, format, character, or constraint.; Uses optional anchors such as opening frame, 0-3s, caption, or operator note when useful.; States source limitations honestly instead of inventing unseen frames, transcript, audio, or exact timing.; Does not require frame/clip/transcript/evidence records by default.; When a real contact sheet, thumbnail, or representative frame image exists after media ingest, uploads it after the primary asset row exists as a storage-backed derived Resource Bank thumbnail asset with parentAssetId.; If no real visual preview was extracted, explicitly skips preview upload instead of creating a fake placeholder.; Keeps Tasty Pack/Inspiration Pack retrieval minimal: source, analysis, elements, and tags/facets on source, without evidence assets, storageId, or previewAsset.storageUrl in the active pack contract.; Verifies Tasty Pack/Inspiration Pack retrieval returns request, captures, and meta; production consumers use capture source, analysis, and elements without depending on a notes array.",
+      "files": [],
+      "assertions": [
+        "Reads `skills/ingest-content/SKILL.md` and applies the minimal capture contract.",
+        "Stores or returns source/ref, operator note/focus, compact analysis, tags/facets, and creative elements.",
+        "Creative elements use compact kinds such as visual, hook, storyboard, editing, copy, format, character, or constraint.",
+        "Uses optional anchors such as opening frame, 0-3s, caption, or operator note when useful.",
+        "States source limitations honestly instead of inventing unseen frames, transcript, audio, or exact timing.",
+        "Does not require frame/clip/transcript/evidence records by default.",
+        "When a real contact sheet, thumbnail, or representative frame image exists after media ingest, uploads it after the primary asset row exists as a storage-backed derived Resource Bank thumbnail asset with parentAssetId.",
+        "If no real visual preview was extracted, explicitly skips preview upload instead of creating a fake placeholder.",
+        "Keeps Tasty Pack/Inspiration Pack retrieval minimal: source, analysis, elements, and tags/facets on source, without evidence assets, storageId, or previewAsset.storageUrl in the active pack contract.",
+        "Verifies Tasty Pack/Inspiration Pack retrieval returns request, captures, and meta; production consumers use capture source, analysis, and elements without depending on a notes array."
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Ingests social inspiration into compact Resource Bank capture",
+          "tags": [
+            "skill",
+            "ingest-content",
+            "minimal-capture",
+            "resource-bank",
+            "creative-elements"
+          ],
+          "notes": "Regression for the accepted Resource Bank simplification: useful captures should not be blocked by missing first-class evidence records.",
+          "anti_patterns": [
+            "Requires a contact sheet or frame asset before saving a useful capture.",
+            "Creates or uploads a placeholder thumbnail when media ingest did not extract a real visual asset.",
+            "Adds contact sheets, storage IDs, or previewAsset URLs to the Tasty Pack payload instead of treating them as Resource Bank UI enrichment.",
+            "Expands the capture into lane taxonomy, provenance enums, or evidence objects without a direct reuse/audit need.",
+            "Returns moodboard prose without creative elements.",
+            "Claims full-video pacing, recurring visuals, audio, or later beats when only source metadata and the operator note are available."
+          ]
+        }
+      }
+    },
+    {
+      "id": "ingest_content_note_backed_pinned_elements_01",
+      "prompt": "Ingest this founder launch reel reference. Note: I specifically like the deadpan guide, the proof talisman prop, and the guided-meditation audio cadence. Keep the rest only as context for future remixes.",
+      "expected_output": "Represents the reel as source, analysis, and creative_elements rather than adding a separate production_pattern object.; Extracts useful context elements across kinds such as format, hook, storyboard, visual, audio, editing, copy, character, and constraint when supported by the source.; Represents the operator-liked deadpan guide as a `character` element with `pinned: true` instead of burying it in visual/storyboard prose.; Marks the operator-liked talisman prop and audio cadence elements with `pinned: true`.; Does not ask for or store numeric creative-element weights.; Expects the operator note to be available as `analysis.operatorNote`.; Expects Tasty Pack `meta` to expose direct pinned/operator-note counts and warnings.; Preserves remix constraints such as not copying actor likeness, exact captions, brand wrapper, source music, or protected expression.; Explains that future Tasty Packs should retrieve all elements but focus more on pinned elements when composing a new artifact.",
+      "files": [],
+      "assertions": [
+        "Represents the reel as source, analysis, and creative_elements rather than adding a separate production_pattern object.",
+        "Extracts useful context elements across kinds such as format, hook, storyboard, visual, audio, editing, copy, character, and constraint when supported by the source.",
+        "Represents the operator-liked deadpan guide as a `character` element with `pinned: true` instead of burying it in visual/storyboard prose.",
+        "Marks the operator-liked talisman prop and audio cadence elements with `pinned: true`.",
+        "Does not ask for or store numeric creative-element weights.",
+        "Expects the operator note to be available as `analysis.operatorNote`.",
+        "Expects Tasty Pack `meta` to expose direct pinned/operator-note counts and warnings.",
+        "Preserves remix constraints such as not copying actor likeness, exact captions, brand wrapper, source music, or protected expression.",
+        "Explains that future Tasty Packs should retrieve all elements but focus more on pinned elements when composing a new artifact."
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Stores operator taste as note-backed pinned creative elements",
+          "tags": [
+            "skill",
+            "ingest-content",
+            "pinned-elements",
+            "tasty-pack",
+            "resource-bank"
+          ],
+          "notes": "Regression for taste-first Resource Bank ingestion: store broad context, but make the operator's selected sub-elements first-class priority signals.",
+          "anti_patterns": [
+            "Stores only the pinned elements and drops the context needed to understand how they work.",
+            "Treats every extracted element as equally important despite the operator note.",
+            "Adds durable numeric weights or asks the operator to score elements.",
+            "Creates a competing production_pattern object that duplicates format/storyboard/audio/editing/character elements.",
+            "Returns a generic summary with no note-backed pinned creative elements."
+          ]
+        }
+      }
+    },
+    {
+      "id": "ingest_content_character_persona_01",
+      "prompt": "Ingest this Railway/Gilfoyle-style advert reference. Note: the Gilfoyle-like deadpan technical character is the part I love; save it so future infrastructure/product videos can remix that persona safely without copying the original character.",
+      "expected_output": "Keeps the Resource Bank shape as source, analysis, and creative_elements without adding a production_pattern object.; Extracts a `character` creative element for the deadpan technical guide/persona and marks it `pinned: true` because the operator note explicitly likes it.; Separates source facts from interpretation and states any inspection limits instead of inventing exact scenes, dialogue, or timing.; Adds supporting context elements only when grounded, such as hook, storyboard, copy, visual, format, or audio.; Adds a `constraint` element for rights-safe remix: do not copy the protected character, actor likeness, exact wardrobe, voice, name, catchphrases, source frames, brand wrapper, or copyrighted expression.; Does not ask for or store weights, planningWeight, or other numeric element priority.; Explains that downstream creation should focus more on pinned elements while preserving unpinned context for understanding.",
+      "files": [],
+      "assertions": [
+        "Keeps the Resource Bank shape as source, analysis, and creative_elements without adding a production_pattern object.",
+        "Extracts a `character` creative element for the deadpan technical guide/persona and marks it `pinned: true` because the operator note explicitly likes it.",
+        "Separates source facts from interpretation and states any inspection limits instead of inventing exact scenes, dialogue, or timing.",
+        "Adds supporting context elements only when grounded, such as hook, storyboard, copy, visual, format, or audio.",
+        "Adds a `constraint` element for rights-safe remix: do not copy the protected character, actor likeness, exact wardrobe, voice, name, catchphrases, source frames, brand wrapper, or copyrighted expression.",
+        "Does not ask for or store weights, planningWeight, or other numeric element priority.",
+        "Explains that downstream creation should focus more on pinned elements while preserving unpinned context for understanding."
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Extracts distinctive character/persona as a first-class creative element",
+          "tags": [
+            "skill",
+            "ingest-content",
+            "character",
+            "persona",
+            "rights-safe-remix",
+            "resource-bank"
+          ],
+          "notes": "Regression for Resource Bank character elements: distinctive personas should be reusable taste signals, while protected expression stays behind remix constraints.",
+          "anti_patterns": [
+            "Stores the character/persona only as generic visual style or vibe text.",
+            "Pins the character without grounding it in the operator note.",
+            "Suggests directly reusing Gilfoyle, the actor likeness, exact lines, wardrobe, or source frames.",
+            "Adds durable weights or planningWeight to make the character more important.",
+            "Creates a separate production_pattern object for the advert structure."
+          ]
+        }
+      }
+    },
+    {
+      "id": "ingest_content_selected_music_recognition_01",
+      "prompt": "Ingest this TikTok reference. Note: the music is really nice; find out what it is if you can, and save the audio direction for future product reels.",
+      "expected_output": "Routes audio/video reading through `media-ingest` because the operator selected the music as a liked element.; Attempts optional music recognition when source access and local dependencies allow it, or records a clear no-match, missing-dependency, network, or source-access limit.; Stores a `kind: audio` creative element with artist/title/link when recognition matches, or an honest sonic-pattern description when it does not.; Marks the audio element with `pinned: true` because the operator note explicitly likes the music.; Adds a `constraint` element explaining that recognized music is attribution/research and future work should use licensed, original, or generated audio rather than copying the protected track.; Keeps the Resource Bank capture compact and does not add a separate music evidence object to the active Tasty Pack contract.",
+      "files": [],
+      "assertions": [
+        "Routes audio/video reading through `media-ingest` because the operator selected the music as a liked element.",
+        "Attempts optional music recognition when source access and local dependencies allow it, or records a clear no-match, missing-dependency, network, or source-access limit.",
+        "Stores a `kind: audio` creative element with artist/title/link when recognition matches, or an honest sonic-pattern description when it does not.",
+        "Marks the audio element with `pinned: true` because the operator note explicitly likes the music.",
+        "Adds a `constraint` element explaining that recognized music is attribution/research and future work should use licensed, original, or generated audio rather than copying the protected track.",
+        "Keeps the Resource Bank capture compact and does not add a separate music evidence object to the active Tasty Pack contract."
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Optionally recognizes selected music and stores rights-safe audio context",
+          "tags": [
+            "skill",
+            "ingest-content",
+            "music-recognition",
+            "audio-element",
+            "rights-safe-remix"
+          ],
+          "notes": "Regression for Shazam-style optional enrichment: when the operator says the music is nice, try to identify it, but keep ingestion honest and rights-safe.",
+          "anti_patterns": [
+            "Ignores the note-selected music and only summarizes visuals.",
+            "Claims a track match without recognition evidence.",
+            "Blocks ingestion entirely when recognition is unavailable.",
+            "Suggests copying or reusing the source track without licensing.",
+            "Stores raw audio or a bulky recognition evidence object in the active pack contract."
+          ]
+        }
+      }
+    }
+  ]
+}

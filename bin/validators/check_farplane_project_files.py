@@ -22,14 +22,6 @@ if str(ROOT) not in sys.path:
 
 from bin.validators.template_usage import TemplateUsageError, normalize_template_uses
 from bin.core.farplane_metric_schema import MetricObservationBatch
-from bin.validators.render_product_index import (
-    PRODUCT_ROOT,
-    load_products as load_product_definitions,
-    render_json_payload,
-    validate_products as validate_product_definitions,
-)
-
-
 TEXT_SUFFIXES = {
     ".json",
     ".jsonl",
@@ -72,11 +64,6 @@ AUTOMATION_RUNTIME_STATE_KEYS = {
     "runs",
     "memory",
 }
-ALLOWED_SUPPORT_PRODUCT_IDS = {
-    "adoption",
-    "cross_product_autonomy",
-    "project_control",
-}
 ALLOWED_DIAGNOSTIC_METRIC_IDS = {
     "ai_burn_estimate",
     "codex_thread_usage",
@@ -100,17 +87,15 @@ class StrictYamlModel(BaseModel):
     model_config = ConfigDict(extra="allow")
 
 
-class MetricRecipeModel(StrictYamlModel):
+class MetricDefinitionModel(StrictYamlModel):
     label: str
     description: str
-    product: str
     kind: Literal["daily_count", "daily", "point"]
     unit: str
     display: Literal["bar_plus_cumulative", "line", "reading"]
-    refresh: str
     pinned: StrictBool | None = None
 
-    @field_validator("label", "description", "product", "unit", "refresh")
+    @field_validator("label", "description", "unit")
     @classmethod
     def non_empty_string(cls, value: str) -> str:
         if not isinstance(value, str) or not value.strip():
@@ -118,8 +103,15 @@ class MetricRecipeModel(StrictYamlModel):
         return value.strip()
 
 
-class BindingsModel(StrictYamlModel):
-    metrics: dict[str, MetricRecipeModel] = {}
+class MetricBindingModel(StrictYamlModel):
+    refresh: str
+
+    @field_validator("refresh")
+    @classmethod
+    def non_empty_refresh(cls, value: str) -> str:
+        if not isinstance(value, str) or not value.strip():
+            raise ValueError("must be a non-empty string")
+        return value.strip()
 
 
 class GoalKpiModel(StrictYamlModel):
@@ -297,14 +289,11 @@ def validate_framework_manifest(root: Path, framework_manifest: Path) -> list[st
         "farplane/manifest.json",
         "farplane/harness.md",
         "farplane/goals.yaml",
-        "farplane/products.json",
-        "farplane/products/",
+        "farplane/metrics.yaml",
         "farplane/automations.toml",
         "farplane/bindings.yaml",
-        "farplane/hooks.json",
         ".agents/skills/README.md",
         "tickets/templates/ticket.md",
-        ".farplane/state/run-ledger.json",
         ".farplane/project/ui/",
     }
     standard = data.get("standard") if isinstance(data.get("standard"), dict) else {}
@@ -322,6 +311,19 @@ def validate_framework_manifest(root: Path, framework_manifest: Path) -> list[st
     overlap = sorted(tracked & ignored)
     if overlap:
         errors.append(f"{rel_path} paths cannot be both tracked and ignored: {', '.join(overlap)}.")
+
+    declared_paths = set(paths)
+    optional = data.get("optional") if isinstance(data.get("optional"), dict) else {}
+    for list_key in ("tracked", "ignored"):
+        values = optional.get(list_key)
+        if isinstance(values, list):
+            declared_paths.update(value for value in values if isinstance(value, str))
+    retired_paths = sorted(path for path in declared_paths if path.startswith(".farplane/reviews"))
+    if retired_paths:
+        errors.append(
+            f"{rel_path} must not declare retired generic review paths: {', '.join(retired_paths)}; "
+            "review evidence belongs in tickets/<ticket>/artifacts/."
+        )
 
     for path_ref in sorted(tracked):
         path = root / path_ref
@@ -360,13 +362,6 @@ def validate_hooks_file(root: Path, hooks_file: Path) -> list[str]:
         errors.append(f"{rel_path} hooks must be an object.")
         return errors
 
-    file_growth = hooks.get("file_growth")
-    if file_growth is not None:
-        if not isinstance(file_growth, dict):
-            errors.append(f"{rel_path} hooks.file_growth must be an object when present.")
-        elif "rules" in file_growth and not isinstance(file_growth.get("rules"), list):
-            errors.append(f"{rel_path} hooks.file_growth.rules must be a list when present.")
-
     return errors
 
 
@@ -395,6 +390,7 @@ def validate_automations_toml(root: Path, automations_file: Path) -> list[str]:
         return errors
 
     seen_ids: set[str] = set()
+    heartbeat_records: list[tuple[str, str]] = []
     for index, automation in enumerate(automations, start=1):
         prefix = f"{rel_path} automations[{index}]"
         if not isinstance(automation, dict):
@@ -417,6 +413,13 @@ def validate_automations_toml(root: Path, automations_file: Path) -> list[str]:
 
         if automation.get("kind") not in {"heartbeat", "cron"}:
             errors.append(f"{prefix}.kind must be heartbeat or cron.")
+        elif automation.get("kind") == "heartbeat":
+            heartbeat_records.append(
+                (
+                    str(automation.get("id") or f"record-{index}"),
+                    str(automation.get("prompt") or ""),
+                )
+            )
         if automation.get("status") not in {"active", "paused"}:
             errors.append(f"{prefix}.status must be active or paused.")
 
@@ -449,6 +452,16 @@ def validate_automations_toml(root: Path, automations_file: Path) -> list[str]:
         if schedule_type in {"interval", "active_hours_interval"} and not isinstance(schedule.get("interval_minutes"), int):
             errors.append(f"{prefix}.schedule.interval_minutes must be an integer.")
 
+    if len(heartbeat_records) != 1:
+        errors.append(
+            f"{rel_path} must define exactly one heartbeat record for Work Pulse; "
+            f"found {len(heartbeat_records)}."
+        )
+    elif "$pulse-update" not in heartbeat_records[0][1]:
+        errors.append(
+            f"{rel_path} heartbeat {heartbeat_records[0][0]} must invoke $pulse-update."
+        )
+
     return errors
 
 
@@ -468,8 +481,10 @@ def validate_bindings_file(root: Path, bindings_file: Path) -> list[str]:
         errors.append(f"{rel_path} must declare framework_template_version.")
     if not isinstance(data.get("project"), dict):
         errors.append(f"{rel_path} project must be an object.")
-    if "metrics" in data and not isinstance(data.get("metrics"), dict):
-        errors.append(f"{rel_path} metrics must be an object when present.")
+    if "metrics" in data:
+        errors.append(f"{rel_path} metrics is retired; semantic definitions belong in farplane/metrics.yaml.")
+    if not isinstance(data.get("metric_bindings"), dict):
+        errors.append(f"{rel_path} metric_bindings must be an object.")
 
     for line_number, line in enumerate(bindings_file.read_text(encoding="utf-8").splitlines(), start=1):
         if SECRET_VALUE_RE.search(line):
@@ -569,35 +584,33 @@ def load_goal_kpi_entries(goals_file: Path) -> list[dict[str, str]]:
     return entries
 
 
-def load_goal_product_refs(goals_file: Path) -> list[dict[str, str]]:
-    payload = load_goals_payload(goals_file)
-    goals = payload.get("goals") if isinstance(payload.get("goals"), dict) else {}
-    entries: list[dict[str, str]] = []
-    for axis_id, axis_payload in goals.items():
-        if not isinstance(axis_payload, dict):
-            continue
-        for smart_goal in axis_payload.get("smart_goals") or []:
-            if not isinstance(smart_goal, dict):
-                continue
-            goal_id = str(smart_goal.get("id") or "").strip()
-            for product_ref in smart_goal.get("product_refs") or []:
-                product_id = str(product_ref or "").strip()
-                if product_id:
-                    entries.append({"axis_id": str(axis_id), "goal_id": goal_id, "product_id": product_id})
-    return entries
-
-
-def load_binding_metrics(bindings_file: Path) -> dict[str, dict]:
-    if not bindings_file.exists():
+def load_metrics(metrics_file: Path) -> dict[str, dict]:
+    if not metrics_file.exists():
         return {}
     try:
-        data = yaml.safe_load(bindings_file.read_text(encoding="utf-8")) or {}
+        data = yaml.safe_load(metrics_file.read_text(encoding="utf-8")) or {}
     except yaml.YAMLError:
         return {}
     metrics = data.get("metrics") if isinstance(data, dict) else {}
     if not isinstance(metrics, dict):
         return {}
     return {str(metric_id): recipe if isinstance(recipe, dict) else {} for metric_id, recipe in metrics.items()}
+
+
+def load_metric_bindings(bindings_file: Path) -> dict[str, dict]:
+    if not bindings_file.exists():
+        return {}
+    try:
+        data = yaml.safe_load(bindings_file.read_text(encoding="utf-8")) or {}
+    except yaml.YAMLError:
+        return {}
+    bindings = data.get("metric_bindings") if isinstance(data, dict) else {}
+    if not isinstance(bindings, dict):
+        return {}
+    return {
+        str(metric_id): binding if isinstance(binding, dict) else {}
+        for metric_id, binding in bindings.items()
+    }
 
 
 def pydantic_path(error: dict) -> str:
@@ -611,30 +624,62 @@ def validate_goals_yaml_schema(goals_file: Path) -> list[str]:
         payload = yaml.safe_load(goals_file.read_text(encoding="utf-8")) or {}
     except yaml.YAMLError:
         return []
+    errors: list[str] = []
     try:
         GoalsModel.model_validate(payload)
     except ValidationError as exc:
-        errors = []
         for error in exc.errors():
             path = pydantic_path(error)
             errors.append(f"farplane/goals.yaml {path}: {error.get('msg')}.")
-        return errors
-    return []
+    goals = payload.get("goals") if isinstance(payload, dict) else {}
+    if isinstance(goals, dict):
+        for axis_id, axis_payload in goals.items():
+            if not isinstance(axis_payload, dict):
+                continue
+            for index, smart_goal in enumerate(axis_payload.get("smart_goals") or []):
+                if isinstance(smart_goal, dict) and "product_refs" in smart_goal:
+                    errors.append(
+                        f"farplane/goals.yaml goals.{axis_id}.smart_goals.{index}.product_refs is retired; "
+                        "goals point directly to KPI ids."
+                    )
+    return errors
 
 
-def validate_metric_recipe_schema(metrics: dict[str, dict]) -> list[str]:
+def validate_metrics_file(root: Path, metrics_file: Path) -> list[str]:
+    rel_path = metrics_file.relative_to(root).as_posix()
+    try:
+        payload = yaml.safe_load(metrics_file.read_text(encoding="utf-8")) or {}
+    except yaml.YAMLError as exc:
+        return [f"{rel_path} must be valid YAML: {exc}."]
+    if not isinstance(payload, dict):
+        return [f"{rel_path} must be a YAML object."]
+    errors: list[str] = []
+    if payload.get("kind") != "project-metrics":
+        errors.append(f"{rel_path} must declare kind: project-metrics.")
+    if "framework_template_version" not in payload:
+        errors.append(f"{rel_path} must declare framework_template_version.")
+    if not isinstance(payload.get("metrics"), dict):
+        errors.append(f"{rel_path} metrics must be an object.")
+    return errors
+
+
+def validate_metric_definition_schema(metrics: dict[str, dict]) -> list[str]:
     errors: list[str] = []
     allowed_kinds = {"daily_count", "daily", "point"}
     allowed_displays = {"bar_plus_cumulative", "reading", "line"}
-    for metric_id, recipe in sorted(metrics.items()):
-        prefix = f"farplane/bindings.yaml metrics.{metric_id}"
+    for metric_id, definition in sorted(metrics.items()):
+        prefix = f"farplane/metrics.yaml metrics.{metric_id}"
+        if "refresh" in definition:
+            errors.append(f"{prefix}.refresh belongs in farplane/bindings.yaml metric_bindings.{metric_id}.")
+        if "product" in definition:
+            errors.append(f"{prefix}.product is retired; metrics are project-level definitions.")
         try:
-            MetricRecipeModel.model_validate(recipe)
+            MetricDefinitionModel.model_validate(definition)
         except ValidationError as exc:
             for error in exc.errors():
                 field = pydantic_path(error)
                 error_type = str(error.get("type") or "")
-                if field in {"label", "description", "product", "kind", "unit", "display", "refresh"} and error_type in {
+                if field in {"label", "description", "kind", "unit", "display"} and error_type in {
                     "missing",
                     "value_error",
                     "string_type",
@@ -648,6 +693,25 @@ def validate_metric_recipe_schema(metrics: dict[str, dict]) -> list[str]:
                     errors.append(f"{prefix}.pinned must be boolean when present.")
                 else:
                     errors.append(f"{prefix}.{field}: {error.get('msg')}.")
+    return errors
+
+
+def validate_metric_binding_schema(metric_bindings: dict[str, dict]) -> list[str]:
+    errors: list[str] = []
+    semantic_fields = {"label", "description", "kind", "unit", "display", "pinned", "product"}
+    for metric_id, binding in sorted(metric_bindings.items()):
+        prefix = f"farplane/bindings.yaml metric_bindings.{metric_id}"
+        leaked_fields = sorted(semantic_fields & set(binding))
+        if leaked_fields:
+            errors.append(
+                f"{prefix} contains semantic fields owned by farplane/metrics.yaml: {', '.join(leaked_fields)}."
+            )
+        try:
+            MetricBindingModel.model_validate(binding)
+        except ValidationError as exc:
+            for error in exc.errors():
+                field = pydantic_path(error)
+                errors.append(f"{prefix}.{field} must be a non-empty string.")
     return errors
 
 
@@ -695,7 +759,7 @@ def validate_metric_observation_files(root: Path, metrics: dict[str, dict]) -> l
             )
         if unknown_metric_ids:
             errors.append(
-                f"{path.relative_to(root)} observation metric_ids lack bindings.yaml metric recipes: "
+                f"{path.relative_to(root)} observation metric_ids lack metrics.yaml definitions: "
                 f"{', '.join(sorted(unknown_metric_ids))}."
             )
     return errors
@@ -734,62 +798,32 @@ def validate_snapshot_freshness(root: Path, snapshot_path: Path) -> list[str]:
 
 def validate_cross_file_contract(root: Path) -> list[str]:
     goals_file = root / "farplane" / "goals.yaml"
+    metrics_file = root / "farplane" / "metrics.yaml"
     bindings_file = root / "farplane" / "bindings.yaml"
-    products_json_file = root / "farplane" / "products.json"
-    goals_payload = load_goals_payload(goals_file)
-    metrics = load_binding_metrics(bindings_file)
+    metrics = load_metrics(metrics_file)
+    metric_bindings = load_metric_bindings(bindings_file)
     goal_kpi_entries = load_goal_kpi_entries(goals_file)
     goal_kpis = {entry["id"] for entry in goal_kpi_entries}
-    goal_product_refs = load_goal_product_refs(goals_file)
-    product_ids: set[str] = set()
     errors: list[str] = []
     errors.extend(validate_goals_yaml_schema(goals_file))
-    errors.extend(validate_metric_recipe_schema(metrics))
+    if metrics_file.exists():
+        errors.extend(validate_metrics_file(root, metrics_file))
+    errors.extend(validate_metric_definition_schema(metrics))
+    errors.extend(validate_metric_binding_schema(metric_bindings))
     errors.extend(validate_metric_observation_files(root, metrics))
-    if (root / PRODUCT_ROOT).exists():
-        product_definitions, product_definition_issues = load_product_definitions(root)
-        errors.extend(product_definition_issues)
-        errors.extend(validate_product_definitions(root, product_definitions))
-        product_ids = {
-            str(product.get("id") or "").strip()
-            for product in product_definitions
-            if str(product.get("id") or "").strip()
-        }
-        if product_definitions and products_json_file.exists():
-            expected_products_json = render_json_payload(product_definitions, goals_payload)
-            actual_products_json = products_json_file.read_text(encoding="utf-8")
-            if actual_products_json != expected_products_json:
-                errors.append(
-                    "farplane/products.json is stale; run python3 bin/validators/render_product_index.py --project-root . --write."
-                )
+    missing_metric_definitions = sorted(kpi_id for kpi_id in goal_kpis if kpi_id not in metrics)
+    if missing_metric_definitions:
+        errors.append(f"farplane/goals.yaml KPI ids lack metrics.yaml definitions: {', '.join(missing_metric_definitions)}.")
 
-    missing_metric_recipes = sorted(kpi_id for kpi_id in goal_kpis if kpi_id not in metrics)
-    if missing_metric_recipes:
-        errors.append(f"farplane/goals.yaml KPI ids lack bindings.yaml metric recipes: {', '.join(missing_metric_recipes)}.")
-
-    missing_goal_product_refs = sorted(
-        {
-            entry["product_id"]
-            for entry in goal_product_refs
-            if entry["product_id"] not in product_ids
-        }
-    )
-    if missing_goal_product_refs:
+    missing_bindings = sorted(set(metrics) - set(metric_bindings))
+    unknown_bindings = sorted(set(metric_bindings) - set(metrics))
+    if missing_bindings:
         errors.append(
-            "farplane/goals.yaml product_refs lack farplane/products/<product>/product.md entries: "
-            f"{', '.join(missing_goal_product_refs)}."
+            f"farplane/metrics.yaml definitions lack bindings.yaml metric_bindings rows: {', '.join(missing_bindings)}."
         )
-
-    allowed_products = product_ids | ALLOWED_SUPPORT_PRODUCT_IDS
-    goal_kpis_without_product = sorted(
-        kpi_id
-        for kpi_id in goal_kpis
-        if kpi_id in metrics and not str(metrics[kpi_id].get("product") or "").strip()
-    )
-    if goal_kpis_without_product:
+    if unknown_bindings:
         errors.append(
-            "farplane/goals.yaml KPI ids have bindings.yaml metric recipes without product: "
-            f"{', '.join(goal_kpis_without_product)}."
+            f"farplane/bindings.yaml metric_bindings lack metrics.yaml definitions: {', '.join(unknown_bindings)}."
         )
 
     goal_kpis_without_target = sorted({entry["id"] for entry in goal_kpi_entries if not entry.get("target")})
@@ -813,19 +847,9 @@ def validate_cross_file_contract(root: Path) -> list[str]:
     )
     if goal_kpis_without_unit:
         errors.append(
-            "farplane/goals.yaml KPI ids have bindings.yaml metric recipes without unit: "
+            "farplane/goals.yaml KPI ids have metrics.yaml definitions without unit: "
             f"{', '.join(goal_kpis_without_unit)}."
         )
-
-    unknown_products = sorted(
-        {
-            str(recipe.get("product")).strip()
-            for recipe in metrics.values()
-            if recipe.get("product") and str(recipe.get("product")).strip() not in allowed_products
-        }
-    )
-    if unknown_products:
-        errors.append(f"farplane/bindings.yaml metric products are not in product registry: {', '.join(unknown_products)}.")
 
     errors.extend(validate_snapshot_freshness(root, root / ".farplane" / "project" / "ui" / "latest.json"))
     return errors
@@ -862,6 +886,7 @@ def validate(root: Path) -> list[str]:
     framework_manifest = framework_dir / "manifest.json"
     automations_toml = framework_dir / "automations.toml"
     bindings = framework_dir / "bindings.yaml"
+    metrics = framework_dir / "metrics.yaml"
     harness = framework_dir / "harness.md"
     hooks = framework_dir / "hooks.json"
     retired_file_growth_hook = framework_dir / "file-growth-hook.json"
@@ -889,7 +914,10 @@ def validate(root: Path) -> list[str]:
     if retired_steer_state.exists():
         errors.append(".farplane/state/steer-scheduler.json is retired; Codex automation cadence owns scheduling.")
     if retired_file_growth_hook.exists():
-        errors.append("farplane/file-growth-hook.json is retired; use farplane/hooks.json.")
+        errors.append(
+            "farplane/file-growth-hook.json is retired; use the deterministic "
+            "changed-file gate in rules/git-review-gates.toml."
+        )
     if duplicate_project_charter.exists():
         errors.append(
             "farplane/project.md would duplicate the active static charter; use farplane/harness.md "
@@ -907,21 +935,25 @@ def validate(root: Path) -> list[str]:
         errors.extend(validate_harness_file(root, harness))
 
     products_json = root / "farplane" / "products.json"
-    if (root / PRODUCT_ROOT).exists() and not products_json.exists():
-        errors.append("farplane/products.json is required when product.md files exist.")
+    products_dir = root / "farplane" / "products"
+    if products_json.exists():
+        errors.append("farplane/products.json is retired; metrics, goals, and tickets are the project primitives.")
+    if products_dir.exists():
+        errors.append("farplane/products/ is retired; keep reusable artifact workflows as skills.")
 
     if pm_manifest.exists():
         errors.extend(validate_pm_manifest(root, pm_manifest))
 
-    if not hooks.exists():
-        errors.append("farplane/hooks.json is required for declarative Farplane hook config.")
-    else:
+    if hooks.exists():
         errors.extend(validate_hooks_file(root, hooks))
 
     if not bindings.exists():
         errors.append("farplane/bindings.yaml is required for project bindings.")
     else:
         errors.extend(validate_bindings_file(root, bindings))
+
+    if not metrics.exists():
+        errors.append("farplane/metrics.yaml is required for project metric definitions.")
 
     errors.extend(validate_cross_file_contract(root))
 

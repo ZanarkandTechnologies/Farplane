@@ -6,7 +6,9 @@ group: content-social
 source: local
 template_uses:
   skill-template: "0.3.7"
+  skill-eval-task: "0.2.0"
   skill-qa-checklist: "0.1.0"
+eval: evals/evals.json
 allowed-tools: Read, Grep, Glob, Bash
 qa_checklist: qa_checklist.md
 ---
@@ -22,11 +24,11 @@ Broad listening, competitor scraping, and attention-graph reads route through
 `feed-scout` or `apify`, not this skill.
 
 Secrets never live in tracked files. Project aliases and non-secret policy live
-in `farplane/bindings.yaml`; credentials live under local private
-`~/.farplane/config.toml` `[social.x]` or explicit runtime environment
-overrides using the `FARPLANE_X_` prefix. Prefer current X OAuth 2.0 user
-tokens for account timeline/deep reads; OAuth 1.0a credentials are kept as
-fallback/legacy support.
+in `farplane/bindings.yaml`; credentials come from runtime env first, normally
+via `farplane run -- <command>` / Doppler using the `FARPLANE_X_` prefix.
+Private `~/.farplane/config.toml` `[social.x]` is fallback/cache only. Prefer
+current X OAuth 2.0 user tokens for account timeline/deep reads; OAuth 1.0a
+credentials are kept as fallback/legacy support.
 
 ## Skill Signature
 
@@ -35,7 +37,8 @@ x_account(action, artifact?, account_binding?, date_window?, source_file?)
   -> draft_validation | publish_result | metrics_snapshot | blocked_report
 state:
   reads(farplane/bindings.yaml, ~/.codex/private/docs/social.md?,
-        ~/.farplane/config.toml [social.x]?, source_file?)
+        runtime env / private fallback ~/.farplane/config.toml [social.x]?,
+        source_file?)
   writes(.farplane/metrics/manual/x_account.json when normalizing exports,
          .farplane/content/ledger.jsonl after confirmed publishing)
 gates:
@@ -165,7 +168,7 @@ Normalized metric snapshot:
 - `scripts/normalize_metrics.py` - normalize JSON/CSV metric exports to Farplane KPI observations.
 - `farplane content add` - append/update `.farplane/content/ledger.jsonl` after
   a confirmed publish so interval refresh can fetch owned-content metrics.
-- `eval_task.json` - agent-behavior eval rows for live metrics and missing-credential flows.
+- `evals/evals.json` - agent-behavior eval rows for live metrics and missing-credential flows.
 
 ## Output
 

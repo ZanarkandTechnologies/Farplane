@@ -148,7 +148,7 @@ Documentation OS keeps Farplane's durable written truth machine-indexable, human
 - Registry proof: `python3 docs/features/validate_features.py`.
 - Link proof: `python3 bin/validators/check_doc_refs.py`.
 - Skill proof: `python3 skills/skill-maintenance/scripts/check_skills.py --write`.
-- Eval proof: `doc-advisor` eval rows under `skills/doc-advisor/eval_task.json`.
+- Eval proof: `doc-advisor` eval rows under `skills/doc-advisor/evals/evals.json`.
 - Update this system page when documentation architecture or feature/system boundaries
   change.
 

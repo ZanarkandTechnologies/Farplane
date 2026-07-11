@@ -4,7 +4,7 @@ description: "Turn a reusable workflow or capability idea into a Farplane skill 
 tier: 3
 group: skills
 source: local
-eval: eval_task.json
+eval: evals/evals.json
 template_uses:
   skill-template: "0.3.2"
   skill-qa-checklist: "0.1.0"
@@ -128,7 +128,7 @@ fails: creates duplicate skills; hides required logic in references; omits proof
      completion.
    - [ ] For new skills, prompt/program skills, budget-bearing skills,
      multi-agent/router skills, eval-facing skills, or any change where agent
-     comprehension is the claim, create or update `skills/<skill-name>/eval_task.json`
+     comprehension is the claim, create or update `skills/<skill-name>/evals/evals.json`
      or record the stronger owner of behavior proof.
    - [ ] Run at least one behavior proof for behavior-sensitive skill work:
      an `eval` smoke case, `agent-behavior-test`, or a target skill-local QA

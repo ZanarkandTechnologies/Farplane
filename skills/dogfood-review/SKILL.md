@@ -6,7 +6,7 @@ group: harness
 source: local
 template_uses:
   skill-template: "0.3.7"
-eval: eval_task.json
+eval: evals/evals.json
 qa_checklist: qa_checklist.md
 allowed-tools: Read, Glob, Grep, Bash
 ---

@@ -4,7 +4,7 @@ description: "Turn a FarplaneRunEnvelope into policy validation, compute selecti
 tier: 3
 group: harness
 source: local
-eval: eval_task.json
+eval: evals/evals.json
 ---
 
 # Farplane Invocation
@@ -32,7 +32,7 @@ file, or a future external caller such as Symphony.
 Farplane is not a separate CLI. Farplane is normal Codex after this repository's
 skills, templates, hooks, and rules have been installed.
 
-A ticket existing in `tickets/`, a ticket becoming `ready: true`, or a board
+A ticket existing in `tickets/`, a ticket becoming `status: todo`, or a board
 card moving state is context only. It is not a run trigger. Start this skill
 only after an explicit invocation, such as a local operator asking Codex to run
 one ticket, an operator-invoked `$ralph` pass, a recognized ticket comment that
@@ -51,7 +51,7 @@ Use these trigger kinds when explaining or templating a run:
 | `codex_cloud_task` | Codex Cloud task prompt includes the envelope | `external_runner` |
 | `symphony_worker` | Symphony writes the envelope in a worker workspace | `symphony_worker` |
 
-Never infer a trigger from ticket creation, `ready`, status movement, or
+Never infer a trigger from ticket creation, status movement, or
 `compute_target`. For shared boards, a comment/action is only a convention until
 an external caller converts it into a `FarplaneRunEnvelope`.
 

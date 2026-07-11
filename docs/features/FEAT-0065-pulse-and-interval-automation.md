@@ -26,8 +26,8 @@ source_refs:
   - docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md
 external_refs: []
 evidence_refs:
-  - skills/pulse-update/eval_task.json
-  - skills/interval-update/eval_task.json
+  - skills/pulse-update/evals/evals.json
+  - skills/interval-update/evals/evals.json
   - skills/automation-advisor/audits/2026-06-24-automation-prompt-qa.md
 known_limits: Retired as the older umbrella feature. Project Work Pulse and BAU problem reports now carry the active feature contracts.
 metrics:
@@ -106,7 +106,7 @@ flowchart TD
   pulse["FEAT-0071 Work Pulse<br/>skills/pulse-update/SKILL.md"]:::changed
   interval["FEAT-0067 Interval<br/>skills/interval-update/SKILL.md"]:::changed
   horizon["SYS-0003 Horizon Loop<br/>automation-advisor<br/>goals and ticket supply"]:::changed
-  outputs["reports and proof<br/>pulse reports<br/>interval reports<br/>eval_task.json evidence"]:::added
+  outputs["reports and proof<br/>pulse reports<br/>interval reports<br/>evals/evals.json evidence"]:::added
 
   config --> retired
   retired --> pulse --> horizon
@@ -132,8 +132,8 @@ Source context:
 
 Evidence:
 
-- `skills/pulse-update/eval_task.json`
-- `skills/interval-update/eval_task.json`
+- `skills/pulse-update/evals/evals.json`
+- `skills/interval-update/evals/evals.json`
 - `skills/automation-advisor/audits/2026-06-24-automation-prompt-qa.md`
 
 ## Proof And Quality

@@ -2,7 +2,6 @@ import json
 from pathlib import Path
 
 from bin.validators.check_farplane_project_files import validate
-from bin.validators.render_product_index import load_products, render_json_payload
 
 RETIRED_INTEGRATIONS_REF = "farplane/" + "integrations.md"
 
@@ -30,19 +29,17 @@ def write_framework_manifest(farplane: Path) -> None:
                         "farplane/manifest.json",
                         "farplane/harness.md",
                         "farplane/goals.yaml",
-                        "farplane/products.json",
-                        "farplane/products/",
+                        "farplane/metrics.yaml",
                         "farplane/automations.toml",
                         "farplane/bindings.yaml",
-                        "farplane/hooks.json",
                         ".agents/skills/README.md",
                         "tickets/templates/ticket.md",
                     ],
-                    "ignored": [".farplane/state/run-ledger.json", ".farplane/project/ui/"],
+                    "ignored": [".farplane/project/ui/"],
                 },
                 "optional": {
-                    "tracked": ["farplane/pm.json"],
-                    "ignored": [".farplane/reviews/"],
+                    "tracked": ["farplane/hooks.json", "farplane/pm.json"],
+                    "ignored": [],
                 },
             }
         ),
@@ -94,11 +91,15 @@ def write_required_project_files(root: Path) -> None:
         'kind: project-goals\nframework_template_version: "0.1.0"\ngoals: {}\n',
         encoding="utf-8",
     )
+    (farplane / "metrics.yaml").write_text(
+        'kind: project-metrics\nframework_template_version: "0.1.0"\nmetrics: {}\n',
+        encoding="utf-8",
+    )
     (farplane / "hooks.json").write_text('{"version": 1, "hooks": {}}\n', encoding="utf-8")
     skills_dir = root / ".agents" / "skills"
     skills_dir.mkdir(parents=True)
     (skills_dir / "README.md").write_text(
-        "---\nkind: local-product-skills-index\nframework_template_version: \"0.1.0\"\n---\n\n# Local Product Skills\n",
+        "---\nkind: local-capability-skills-index\nframework_template_version: \"0.1.0\"\n---\n\n# Local Capability Skills\n",
         encoding="utf-8",
     )
     (farplane / "harness.md").write_text(
@@ -147,53 +148,8 @@ Static charter changes require approval.
 """,
         encoding="utf-8",
     )
-    product_dir = farplane / "products" / "test"
-    product_dir.mkdir(parents=True)
-    (product_dir / "skill.md").write_text(
-        "---\nname: test-product-skill\n---\n\n# Test Product Skill\n",
-        encoding="utf-8",
-    )
-    (product_dir / "product.md").write_text(
-        """---
-kind: product-loop
-id: test
-label: Test product
-status: active
-created_at: 2026-07-01
-updated_at: 2026-07-01
-sort_order: 10
-lane: experiment
-lane_purpose: Test a product hypothesis.
-default_weight: 50
-audience: users
-output: artifact
-reward: signal
-owner_skill: test-product-skill
-skill_ref: farplane/products/test/skill.md
-progress_ref: farplane/products/test/progress.md
-kpis:
-  primary: []
-  supporting: []
-  guardrail: []
-artifact_workflows:
-  - id: test_artifact
-    lane: experiment
-    owner: test-product-skill
-    planning_artifact: test plan
-    execution_artifact: test artifact
-    feedback_question: accept / revise / reject
----
-
-# Test Product
-""",
-        encoding="utf-8",
-    )
-    products, issues = load_products(root)
-    assert not issues
-    (farplane / "products.json").write_text(render_json_payload(products, {}), encoding="utf-8")
-
     (farplane / "bindings.yaml").write_text(
-        'kind: project-bindings\nframework_template_version: "0.1.0"\nproject: {}\n',
+        'kind: project-bindings\nframework_template_version: "0.1.0"\nproject: {}\nmetric_bindings: {}\n',
         encoding="utf-8",
     )
     write_automations_toml(farplane)
@@ -214,6 +170,18 @@ def test_missing_automations_file_fails(tmp_path: Path) -> None:
     errors = validate(tmp_path)
 
     assert "farplane/automations.toml is required for full Codex automation configs." in errors
+
+
+def test_missing_metrics_file_fails(tmp_path: Path) -> None:
+    farplane = tmp_path / "farplane"
+    farplane.mkdir()
+    write_framework_manifest(farplane)
+    write_required_project_files(tmp_path)
+    (farplane / "metrics.yaml").unlink()
+
+    errors = validate(tmp_path)
+
+    assert "farplane/metrics.yaml is required for project metric definitions." in errors
 
 
 def test_malformed_automations_toml_fails(tmp_path: Path) -> None:
@@ -245,16 +213,18 @@ type = "interval"
     assert "farplane/automations.toml automations[1] must not store runtime state keys: last_run_at." in errors
 
 
-def test_missing_products_json_file_fails(tmp_path: Path) -> None:
+def test_retired_product_files_fail(tmp_path: Path) -> None:
     farplane = tmp_path / "farplane"
     farplane.mkdir()
     write_framework_manifest(farplane)
     write_required_project_files(tmp_path)
-    (farplane / "products.json").unlink()
+    (farplane / "products.json").write_text("{}\n", encoding="utf-8")
+    (farplane / "products").mkdir()
 
     errors = validate(tmp_path)
 
-    assert "farplane/products.json is required when product.md files exist." in errors
+    assert "farplane/products.json is retired; metrics, goals, and tickets are the project primitives." in errors
+    assert "farplane/products/ is retired; keep reusable artifact workflows as skills." in errors
 
 
 def test_missing_harness_file_fails(tmp_path: Path) -> None:
@@ -360,16 +330,32 @@ def test_retired_steer_files_fail(tmp_path: Path) -> None:
     assert ".farplane/state/steer-scheduler.json is retired; Codex automation cadence owns scheduling." in errors
 
 
-def test_hooks_file_shape_is_validated(tmp_path: Path) -> None:
+def test_automations_require_exactly_one_pulse_heartbeat(tmp_path: Path) -> None:
     farplane = tmp_path / "farplane"
     farplane.mkdir()
     write_framework_manifest(farplane)
     write_required_project_files(tmp_path)
-    (farplane / "hooks.json").write_text('{"version": 1, "hooks": {"file_growth": {"rules": {}}}}\n', encoding="utf-8")
+    with (farplane / "automations.toml").open("a", encoding="utf-8") as handle:
+        handle.write(
+            '''
+
+[[automations]]
+id = "second-heartbeat"
+name = "Second Heartbeat"
+kind = "heartbeat"
+status = "active"
+prompt = "Use $dogfood-review."
+[automations.target]
+workspace = "/tmp/project"
+[automations.schedule]
+type = "interval"
+interval_minutes = 60
+'''
+        )
 
     errors = validate(tmp_path)
 
-    assert "farplane/hooks.json hooks.file_growth.rules must be a list when present." in errors
+    assert "farplane/automations.toml must define exactly one heartbeat record for Work Pulse; found 2." in errors
 
 
 def test_retired_file_growth_hook_config_fails(tmp_path: Path) -> None:
@@ -381,7 +367,10 @@ def test_retired_file_growth_hook_config_fails(tmp_path: Path) -> None:
 
     errors = validate(tmp_path)
 
-    assert "farplane/file-growth-hook.json is retired; use farplane/hooks.json." in errors
+    assert (
+        "farplane/file-growth-hook.json is retired; use the deterministic changed-file gate in "
+        "rules/git-review-gates.toml."
+    ) in errors
 
 
 def test_valid_versioned_files_pass(tmp_path: Path) -> None:
@@ -413,10 +402,10 @@ goals:
 
     errors = validate(tmp_path)
 
-    assert "farplane/goals.yaml KPI ids lack bindings.yaml metric recipes: unknown_metric." in errors
+    assert "farplane/goals.yaml KPI ids lack metrics.yaml definitions: unknown_metric." in errors
 
 
-def test_goal_product_ref_without_product_fails(tmp_path: Path) -> None:
+def test_goal_product_refs_are_retired(tmp_path: Path) -> None:
     farplane = tmp_path / "farplane"
     farplane.mkdir()
     write_framework_manifest(farplane)
@@ -427,9 +416,8 @@ framework_template_version: "0.1.0"
 goals:
   test_axis:
     smart_goals:
-      - id: missing_product_ref
-        product_refs:
-          - missing_product
+      - id: direct_kpi_goal
+        product_refs: [old_product]
 """,
         encoding="utf-8",
     )
@@ -437,56 +425,37 @@ goals:
     errors = validate(tmp_path)
 
     assert (
-        "farplane/goals.yaml product_refs lack farplane/products/<product>/product.md entries: missing_product."
+        "farplane/goals.yaml goals.test_axis.smart_goals.0.product_refs is retired; goals point directly to KPI ids."
         in errors
     )
 
 
-def test_metric_product_without_product_row_fails(tmp_path: Path) -> None:
+def test_metric_product_owner_is_retired(tmp_path: Path) -> None:
     farplane = tmp_path / "farplane"
     farplane.mkdir()
     write_framework_manifest(farplane)
     write_required_project_files(tmp_path)
-    (farplane / "bindings.yaml").write_text(
-        """kind: project-bindings
+    (farplane / "metrics.yaml").write_text(
+        """kind: project-metrics
 framework_template_version: "0.1.0"
-project: {}
-metrics:
-  accepted_harness_improvements:
-    product: missing_product
-""",
-        encoding="utf-8",
-    )
-
-    errors = validate(tmp_path)
-
-    assert "farplane/bindings.yaml metric products are not in product registry: missing_product." in errors
-
-
-def test_goal_kpi_metric_recipe_without_product_fails(tmp_path: Path) -> None:
-    farplane = tmp_path / "farplane"
-    farplane.mkdir()
-    write_framework_manifest(farplane)
-    write_required_project_files(tmp_path)
-    (farplane / "goals.yaml").write_text(
-        """kind: project-goals
-framework_template_version: "0.1.0"
-goals:
-  test_axis:
-    smart_goals:
-      - id: productless_kpi
-        kpis:
-          - id: accepted_harness_improvements
-""",
-        encoding="utf-8",
-    )
-    (farplane / "bindings.yaml").write_text(
-        """kind: project-bindings
-framework_template_version: "0.1.0"
-project: {}
 metrics:
   accepted_harness_improvements:
     label: Accepted harness improvements
+    description: Accepted improvements with ticket proof.
+    product: old_product
+    kind: daily_count
+    unit: improvements
+    display: bar_plus_cumulative
+""",
+        encoding="utf-8",
+    )
+    (farplane / "bindings.yaml").write_text(
+        """kind: project-bindings
+framework_template_version: "0.1.0"
+project: {}
+metric_bindings:
+  accepted_harness_improvements:
+    refresh: Count ticket Reward rows.
 """,
         encoding="utf-8",
     )
@@ -494,9 +463,58 @@ metrics:
     errors = validate(tmp_path)
 
     assert (
-        "farplane/goals.yaml KPI ids have bindings.yaml metric recipes without product: accepted_harness_improvements."
+        "farplane/metrics.yaml metrics.accepted_harness_improvements.product is retired; "
+        "metrics are project-level definitions."
         in errors
     )
+
+
+def test_goal_kpi_metric_recipe_does_not_require_product_owner(tmp_path: Path) -> None:
+    farplane = tmp_path / "farplane"
+    farplane.mkdir()
+    write_framework_manifest(farplane)
+    write_required_project_files(tmp_path)
+    (farplane / "goals.yaml").write_text(
+        """kind: project-goals
+framework_template_version: "0.1.0"
+goals:
+  test_axis:
+    smart_goals:
+      - id: project_kpi
+        kpis:
+          - id: accepted_harness_improvements
+            target: 20
+            direction: above
+""",
+        encoding="utf-8",
+    )
+    (farplane / "metrics.yaml").write_text(
+        """kind: project-metrics
+framework_template_version: "0.1.0"
+metrics:
+  accepted_harness_improvements:
+    label: Accepted harness improvements
+    description: Accepted improvements with ticket proof.
+    kind: daily_count
+    unit: improvements
+    display: bar_plus_cumulative
+""",
+        encoding="utf-8",
+    )
+    (farplane / "bindings.yaml").write_text(
+        """kind: project-bindings
+framework_template_version: "0.1.0"
+project: {}
+metric_bindings:
+  accepted_harness_improvements:
+    refresh: Count ticket Reward rows.
+""",
+        encoding="utf-8",
+    )
+
+    errors = validate(tmp_path)
+
+    assert errors == []
 
 
 def test_metric_recipe_requires_description_and_valid_types(tmp_path: Path) -> None:
@@ -504,18 +522,25 @@ def test_metric_recipe_requires_description_and_valid_types(tmp_path: Path) -> N
     farplane.mkdir()
     write_framework_manifest(farplane)
     write_required_project_files(tmp_path)
-    (farplane / "bindings.yaml").write_text(
-        """kind: project-bindings
+    (farplane / "metrics.yaml").write_text(
+        """kind: project-metrics
 framework_template_version: "0.1.0"
-project: {}
 metrics:
   accepted_harness_improvements:
     label: Accepted harness improvements
-    product: test
     kind: weekly_magic
     unit: improvements
     display: sparkles
     pinned: "true"
+""",
+        encoding="utf-8",
+    )
+    (farplane / "bindings.yaml").write_text(
+        """kind: project-bindings
+framework_template_version: "0.1.0"
+project: {}
+metric_bindings:
+  accepted_harness_improvements:
     refresh: Count tickets.
 """,
         encoding="utf-8",
@@ -523,25 +548,95 @@ metrics:
 
     errors = validate(tmp_path)
 
-    assert "farplane/bindings.yaml metrics.accepted_harness_improvements.description must be a non-empty string." in errors
-    assert "farplane/bindings.yaml metrics.accepted_harness_improvements.kind must be one of: daily, daily_count, point." in errors
-    assert "farplane/bindings.yaml metrics.accepted_harness_improvements.display must be one of: bar_plus_cumulative, line, reading." in errors
-    assert "farplane/bindings.yaml metrics.accepted_harness_improvements.pinned must be boolean when present." in errors
+    assert "farplane/metrics.yaml metrics.accepted_harness_improvements.description must be a non-empty string." in errors
+    assert "farplane/metrics.yaml metrics.accepted_harness_improvements.kind must be one of: daily, daily_count, point." in errors
+    assert "farplane/metrics.yaml metrics.accepted_harness_improvements.display must be one of: bar_plus_cumulative, line, reading." in errors
+    assert "farplane/metrics.yaml metrics.accepted_harness_improvements.pinned must be boolean when present." in errors
+
+
+def test_metric_definitions_and_bindings_require_exact_id_parity(tmp_path: Path) -> None:
+    farplane = tmp_path / "farplane"
+    farplane.mkdir()
+    write_framework_manifest(farplane)
+    write_required_project_files(tmp_path)
+    (farplane / "metrics.yaml").write_text(
+        """kind: project-metrics
+framework_template_version: "0.1.0"
+metrics:
+  defined_only:
+    label: Defined only
+    description: Missing its refresh binding.
+    kind: point
+    unit: score
+    display: reading
+""",
+        encoding="utf-8",
+    )
+    (farplane / "bindings.yaml").write_text(
+        """kind: project-bindings
+framework_template_version: "0.1.0"
+project: {}
+metric_bindings:
+  bound_only:
+    refresh: Refresh an undefined metric.
+""",
+        encoding="utf-8",
+    )
+
+    errors = validate(tmp_path)
+
+    assert "farplane/metrics.yaml definitions lack bindings.yaml metric_bindings rows: defined_only." in errors
+    assert "farplane/bindings.yaml metric_bindings lack metrics.yaml definitions: bound_only." in errors
+
+
+def test_old_bindings_metrics_and_semantic_binding_fields_are_rejected(tmp_path: Path) -> None:
+    farplane = tmp_path / "farplane"
+    farplane.mkdir()
+    write_framework_manifest(farplane)
+    write_required_project_files(tmp_path)
+    (farplane / "bindings.yaml").write_text(
+        """kind: project-bindings
+framework_template_version: "0.1.0"
+project: {}
+metrics: {}
+metric_bindings:
+  semantic_leak:
+    label: This belongs in metrics.yaml
+    refresh: Refresh it.
+""",
+        encoding="utf-8",
+    )
+
+    errors = validate(tmp_path)
+
+    assert "farplane/bindings.yaml metrics is retired; semantic definitions belong in farplane/metrics.yaml." in errors
+    assert (
+        "farplane/bindings.yaml metric_bindings.semantic_leak contains semantic fields owned by "
+        "farplane/metrics.yaml: label."
+        in errors
+    )
 
 
 def write_metric_binding(farplane: Path, metric_id: str = "instagram_views") -> None:
-    (farplane / "bindings.yaml").write_text(
-        f"""kind: project-bindings
+    (farplane / "metrics.yaml").write_text(
+        f"""kind: project-metrics
 framework_template_version: "0.1.0"
-project: {{}}
 metrics:
   {metric_id}:
     label: Instagram views
     description: Daily aggregate Instagram views.
-    product: test
     kind: daily_count
     unit: views
     display: bar_plus_cumulative
+""",
+        encoding="utf-8",
+    )
+    (farplane / "bindings.yaml").write_text(
+        f"""kind: project-bindings
+framework_template_version: "0.1.0"
+project: {{}}
+metric_bindings:
+  {metric_id}:
     refresh: Fetch platform views.
 """,
         encoding="utf-8",
@@ -610,7 +705,7 @@ def test_metric_observation_batch_unknown_metric_fails(tmp_path: Path) -> None:
     errors = validate(tmp_path)
 
     assert (
-        ".farplane/metrics/observations/instagram_account_metrics/2026-07-03.json observation metric_ids lack bindings.yaml metric recipes: unknown_views."
+        ".farplane/metrics/observations/instagram_account_metrics/2026-07-03.json observation metric_ids lack metrics.yaml definitions: unknown_views."
         in errors
     )
 
@@ -661,8 +756,27 @@ goals:
         kpis:
           - id: accepted_harness_improvements
             target: 20
-          - id: ready_unclaimed_ticket_count
+          - id: todo_unclaimed_ticket_count
             direction: below
+""",
+        encoding="utf-8",
+    )
+    (farplane / "metrics.yaml").write_text(
+        """kind: project-metrics
+framework_template_version: "0.1.0"
+metrics:
+  accepted_harness_improvements:
+    label: Accepted harness improvements
+    description: Accepted improvements.
+    kind: daily_count
+    unit: improvements
+    display: bar_plus_cumulative
+  todo_unclaimed_ticket_count:
+    label: Ready unclaimed tickets
+    description: Ready unclaimed tickets.
+    kind: point
+    unit: tickets
+    display: reading
 """,
         encoding="utf-8",
     )
@@ -670,20 +784,18 @@ goals:
         """kind: project-bindings
 framework_template_version: "0.1.0"
 project: {}
-metrics:
+metric_bindings:
   accepted_harness_improvements:
-    product: test
-    unit: improvements
-  ready_unclaimed_ticket_count:
-    product: test
-    unit: tickets
+    refresh: Count accepted improvements.
+  todo_unclaimed_ticket_count:
+    refresh: Count ready unclaimed tickets.
 """,
         encoding="utf-8",
     )
 
     errors = validate(tmp_path)
 
-    assert "farplane/goals.yaml KPI ids need explicit target values: ready_unclaimed_ticket_count." in errors
+    assert "farplane/goals.yaml KPI ids need explicit target values: todo_unclaimed_ticket_count." in errors
     assert "farplane/goals.yaml KPI ids need explicit target directions: accepted_harness_improvements." in errors
 
 
@@ -706,13 +818,25 @@ goals:
 """,
         encoding="utf-8",
     )
+    (farplane / "metrics.yaml").write_text(
+        """kind: project-metrics
+framework_template_version: "0.1.0"
+metrics:
+  accepted_harness_improvements:
+    label: Accepted harness improvements
+    description: Accepted improvements.
+    kind: daily_count
+    display: bar_plus_cumulative
+""",
+        encoding="utf-8",
+    )
     (farplane / "bindings.yaml").write_text(
         """kind: project-bindings
 framework_template_version: "0.1.0"
 project: {}
-metrics:
+metric_bindings:
   accepted_harness_improvements:
-    product: test
+    refresh: Count accepted improvements.
 """,
         encoding="utf-8",
     )
@@ -720,7 +844,7 @@ metrics:
     errors = validate(tmp_path)
 
     assert (
-        "farplane/goals.yaml KPI ids have bindings.yaml metric recipes without unit: accepted_harness_improvements."
+        "farplane/goals.yaml KPI ids have metrics.yaml definitions without unit: accepted_harness_improvements."
         in errors
     )
 
@@ -808,10 +932,29 @@ def test_framework_manifest_shape_is_validated(tmp_path: Path) -> None:
         "PROJECT_RULES.md",
         "ARCHITECTURE.md",
         "farplane/README.md",
-        "farplane/products.json",
+        "farplane/metrics.yaml",
         "tickets/templates/ticket.md",
     ]:
         assert path in missing_surface_error
+
+
+def test_framework_manifest_rejects_generic_review_state(tmp_path: Path) -> None:
+    farplane = tmp_path / "farplane"
+    farplane.mkdir()
+    write_framework_manifest(farplane)
+    write_required_project_files(tmp_path)
+    manifest_path = farplane / "manifest.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    manifest["optional"]["ignored"] = [".farplane/reviews/"]
+    manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+
+    errors = validate(tmp_path)
+
+    assert (
+        "farplane/manifest.json must not declare retired generic review paths: .farplane/reviews/; "
+        "review evidence belongs in tickets/<ticket>/artifacts/."
+        in errors
+    )
 
 
 def test_valid_pm_manifest_passes(tmp_path: Path) -> None:

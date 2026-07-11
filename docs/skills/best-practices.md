@@ -425,7 +425,7 @@ Use this routing:
 | --- | --- | --- |
 | Human judgment, sufficiency, taste, readiness, or evidence quality. | `review` / reviewer lane | Review rubric or reviewer handoff. |
 | User-visible workflow, browser operation, UI state, generated media playback, or demo realism. | QA checklist or `qa` / `visual-qa` / `agent-qa-test` | Skill-local `references/*-qa-checklist.md` or QA artifact contract. |
-| Repeatable agent, prompt, or skill behavior. | `eval` | `eval_task.json` or eval suite artifact. |
+| Repeatable agent, prompt, or skill behavior. | `eval` | `evals/evals.json` or eval suite artifact. |
 | Deterministic file, schema, registry, link, generated state, or syntax invariant. | validator or command | Script, validator, or proof command in `SKILL.md`. |
 | Documentation quality, terminology, stale sections, examples, or reader fit. | doc-quality checklist | Skill-local `qa_checklist.md`. |
 | Skill structure, first-load size, progressive disclosure, reference routing, or compaction risk. | structure checklist | `skills/skill-maintenance/qa_checklist.md`, plus a skill-local audit for material changes. |
@@ -496,15 +496,15 @@ first-load pointers:
 
 Then link the reference from `## Reference Map`.
 
-When a skill has both `eval_task.json` and `qa_checklist.md`, treat them as
+When a skill has both `evals/evals.json` and `qa_checklist.md`, treat them as
 competing representations that should converge:
 
 ```text
-eval_task.json -> finds expected behavior and hard cases
+evals/evals.json -> finds expected behavior and hard cases
 qa_checklist.md -> applies the settled checks in real time
 ```
 
-After editing an eval, check whether changed `reference_points` should promote
+After editing an eval, check whether changed `assertions` should promote
 into `qa_checklist.md`, `SKILL.md`, a reference, or a validator. Do not
 promote rare hard cases, benchmark-only examples, or judgment-heavy examples
 unless they become reusable runtime guardrails.
@@ -615,7 +615,7 @@ proof.
 - References own conditional detail: onboarding, examples, templates, long
   rubrics, model maps, and rare-path recipes.
 - Skill-local evals own focused behavioral regression tasks for that skill.
-  Use `eval_task.json` at the skill package root when the task proves the
+  Use `evals/evals.json` at the skill package root when the task proves the
   skill's own contract; use cross-skill examples or `.farplane/evals` when the
   behavior belongs to the broader harness.
 - If a reference must be read on every invocation, promote the needed rule into

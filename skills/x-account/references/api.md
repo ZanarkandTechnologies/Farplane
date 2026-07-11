@@ -29,7 +29,9 @@ Load this before live X API work.
 
 ## Minimal Config Contract
 
-Use local private `~/.farplane/config.toml`:
+Use runtime env first, normally through `farplane run -- <command>` / Doppler.
+Private `~/.farplane/config.toml` remains a fallback/cache with the same field
+shape:
 
 ```toml
 [social.x]
@@ -46,8 +48,8 @@ user_id = ""
 username = ""
 ```
 
-Explicit `FARPLANE_X_*` environment variables remain supported as one-off
-runtime overrides, not the persisted source of truth.
+Use explicit `FARPLANE_X_*` environment variables as the normal runtime
+contract. Do not commit credentials or generated env files.
 
 ## Live API Gates
 

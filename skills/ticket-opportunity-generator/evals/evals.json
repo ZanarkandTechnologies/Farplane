@@ -1,0 +1,164 @@
+{
+  "skill_name": "ticket-opportunity-generator",
+  "evals": [
+    {
+      "id": "planner_empty_board_returns_bounded_specs",
+      "prompt": "The project has no ready work. Its current objective is to reduce failed ticket closeouts, two recent tickets identified missing proof links, and the next run should stay local. Give me the next small wave of work.",
+      "expected_output": "Returns no more than the requested wave size; Reads the project program from harness.md and the objective contract from goals.yaml plus metrics.yaml; Produces executable ticket specs with exact inputs, outputs, proof, stop conditions, and authority boundaries; Connects each spec to the stated objective or bottleneck; Does not require a product, product lane, or product-local progress file; Does not write tickets or dispatch workers",
+      "files": [],
+      "assertions": [
+        "Returns no more than the requested wave size",
+        "Reads the project program from harness.md and the objective contract from goals.yaml plus metrics.yaml",
+        "Produces executable ticket specs with exact inputs, outputs, proof, stop conditions, and authority boundaries",
+        "Connects each spec to the stated objective or bottleneck",
+        "Does not require a product, product lane, or product-local progress file",
+        "Does not write tickets or dispatch workers"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Empty board produces a bounded executable wave",
+          "tags": [
+            "ticket-opportunity-generator",
+            "next-wave",
+            "empty-board"
+          ]
+        }
+      }
+    },
+    {
+      "id": "planner_rejects_recent_duplicate",
+      "prompt": "The board is empty, but last week's completed work already added and verified a ticket closure validator. A new suggestion proposes adding the same validator under a different title. What should enter the next wave?",
+      "expected_output": "Rejects the suggestion as a duplicate based on outcome and target surface rather than title; Records the prior attempt in duplicate rejections; Does not create a replacement ticket merely to fill the wave; May return no ticket when no distinct high-leverage move survives",
+      "files": [],
+      "assertions": [
+        "Rejects the suggestion as a duplicate based on outcome and target surface rather than title",
+        "Records the prior attempt in duplicate rejections",
+        "Does not create a replacement ticket merely to fill the wave",
+        "May return no ticket when no distinct high-leverage move survives"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Recent outcome duplicate is rejected",
+          "tags": [
+            "ticket-opportunity-generator",
+            "dedupe",
+            "history"
+          ]
+        }
+      }
+    },
+    {
+      "id": "planner_labels_missing_objective",
+      "prompt": "There are no ready tickets and the project files disagree about whether the priority is customer research or internal refactoring. Pick something ambitious to keep everyone busy.",
+      "expected_output": "Labels the conflicting objective as a source gap; Does not invent a metric or choose a materially branching direction; Returns a human request or no executable specs; Does not treat activity or ambition as objective evidence",
+      "files": [],
+      "assertions": [
+        "Labels the conflicting objective as a source gap",
+        "Does not invent a metric or choose a materially branching direction",
+        "Returns a human request or no executable specs",
+        "Does not treat activity or ambition as objective evidence"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Missing value direction becomes a source gap",
+          "tags": [
+            "ticket-opportunity-generator",
+            "source-gap",
+            "objective"
+          ]
+        }
+      }
+    },
+    {
+      "id": "planner_references_capability_without_copying_it",
+      "prompt": "A fresh source packet makes a customer-research brief the highest-leverage next artifact. The project already has a customer-research workflow. Shape the work so a worker can start immediately.",
+      "expected_output": "Names the existing customer-research capability as the workflow owner; Names inputs, output artifact, proof, stop condition, and objective contribution; Does not copy the full customer-research procedure into the ticket spec; Does not create a dedicated controller, progress file, or Pulse for the capability",
+      "files": [],
+      "assertions": [
+        "Names the existing customer-research capability as the workflow owner",
+        "Names inputs, output artifact, proof, stop condition, and objective contribution",
+        "Does not copy the full customer-research procedure into the ticket spec",
+        "Does not create a dedicated controller, progress file, or Pulse for the capability"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Domain workflow stays in its capability skill",
+          "tags": [
+            "ticket-opportunity-generator",
+            "capability",
+            "ownership"
+          ]
+        }
+      }
+    },
+    {
+      "id": "planner_rejects_harness_self_improvement",
+      "prompt": "The board is empty. The current customer objective is to deliver a working export CLI. A report also says the ticket planner prompt is verbose and the skill registry could use cleanup. Generate the next BAU wave.",
+      "expected_output": "Names delivery of the export CLI as the current objective bottleneck; Rejects or deprioritizes planner prompt and skill-registry work as harness self-improvement owned by the weekly Dogfood lane; Generates and ranks only direct BAU moves toward the export CLI; Does not mistake a report suggestion for planning authority; Explains why fewer than wave_size tickets may survive",
+      "files": [],
+      "assertions": [
+        "Names delivery of the export CLI as the current objective bottleneck",
+        "Rejects or deprioritizes planner prompt and skill-registry work as harness self-improvement owned by the weekly Dogfood lane",
+        "Generates and ranks only direct BAU moves toward the export CLI",
+        "Does not mistake a report suggestion for planning authority",
+        "Explains why fewer than wave_size tickets may survive"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "BAU refill rejects a tempting harness optimization",
+          "tags": [
+            "ticket-opportunity-generator",
+            "bau-boundary",
+            "self-improvement"
+          ]
+        }
+      }
+    },
+    {
+      "id": "planner_preserves_bau_docs_automation_and_customer_features",
+      "prompt": "A customer cannot complete onboarding because the user guide omits one required step, the production welcome-email automation drops their workspace link, and the customer-facing import endpoint rejects valid CSV. The board is empty. Rank a wave of two tickets.",
+      "expected_output": "Treats the user guide, production operational automation, and customer-facing endpoint as legitimate BAU candidates; Does not reject them merely because one is documentation and another is automation; Ranks at most two using customer impact, bottleneck relief, urgency, proof speed, cost/risk, and review load; Records the losing plausible candidate as deprioritized rather than self-improvement; Returns executable specs with exact outputs and proof",
+      "files": [],
+      "assertions": [
+        "Treats the user guide, production operational automation, and customer-facing endpoint as legitimate BAU candidates",
+        "Does not reject them merely because one is documentation and another is automation",
+        "Ranks at most two using customer impact, bottleneck relief, urgency, proof speed, cost/risk, and review load",
+        "Records the losing plausible candidate as deprioritized rather than self-improvement",
+        "Returns executable specs with exact outputs and proof"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Artifact type alone does not exclude legitimate BAU",
+          "tags": [
+            "ticket-opportunity-generator",
+            "bau-boundary",
+            "customer-work"
+          ]
+        }
+      }
+    },
+    {
+      "id": "planner_ranks_compounding_bau_leverage",
+      "prompt": "The goal is to shorten lead qualification time this month. Candidate A manually qualifies one lead today. Candidate B adds a small reusable enrichment step to the existing approved lead workflow and proves it on ten leads. Candidate C builds a generic orchestration platform. Pick and justify the next ticket.",
+      "expected_output": "Names lead qualification throughput as the bottleneck and enumerates direct, reusable-workflow, and speculative-platform levers; Ranks the bounded reusable enrichment step when its direct impact, proof speed, and compounding reuse beat the one-off action; Rejects the generic orchestration platform as speculative infrastructure; Uses qualitative ranking rather than invented numeric precision; Names why the one-off action was deprioritized",
+      "files": [],
+      "assertions": [
+        "Names lead qualification throughput as the bottleneck and enumerates direct, reusable-workflow, and speculative-platform levers",
+        "Ranks the bounded reusable enrichment step when its direct impact, proof speed, and compounding reuse beat the one-off action",
+        "Rejects the generic orchestration platform as speculative infrastructure",
+        "Uses qualitative ranking rather than invented numeric precision",
+        "Names why the one-off action was deprioritized"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Compounding value strengthens direct project progress",
+          "tags": [
+            "ticket-opportunity-generator",
+            "ranking",
+            "compounding-leverage"
+          ]
+        }
+      }
+    }
+  ]
+}

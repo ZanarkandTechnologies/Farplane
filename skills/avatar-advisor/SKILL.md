@@ -7,9 +7,9 @@ source: local
 template_uses:
   skill-template: "0.3.7"
   skill-qa-checklist: "0.1.1"
-  skill-eval-task: "0.1.0"
+  skill-eval-task: "0.2.0"
   skill-surface-budget: "0.1.0"
-eval: eval_task.json
+eval: evals/evals.json
 qa_checklist: qa_checklist.md
 common_chains:
   after: ["ai-video-advisor", "ai-image-advisor", "audio-advisor", "asset-advisor", "remotion"]

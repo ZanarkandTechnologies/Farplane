@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 """Private social account config loader for the Instagram account skill.
 
-Reads Farplane's canonical local config at ~/.farplane/config.toml and exposes
-the historical FARPLANE_INSTAGRAM_* / FARPLANE_META_* names to skill scripts
-without requiring social.env.
+Reads runtime FARPLANE_INSTAGRAM_* / FARPLANE_META_* values first and uses
+private ~/.farplane/config.toml as a fallback/cache without requiring social.env.
 """
 
 from __future__ import annotations

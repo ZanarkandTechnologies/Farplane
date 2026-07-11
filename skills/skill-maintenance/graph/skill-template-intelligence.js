@@ -5,7 +5,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     "Skill-applicable features are owned by feature pages under docs/features/ and linked from docs/systems/skill-system.md; generated system and feature registries are output.",
     "Template-level features are declared by the versioned skill template; skill rows expose local eval, QA checklist, and UI surfaces."
   ],
-  "current_template_version": "0.3.7",
+  "current_template_version": "0.3.8",
   "epochs": [
     {
       "changed_sections": [
@@ -139,7 +139,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     },
     {
       "changed_sections": [],
-      "introduced_at": "2026-07-09",
+      "introduced_at": "2026-07-11",
       "section_count": 9,
       "sections": [
         "Context",
@@ -152,10 +152,10 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "Reference Map",
         "Output"
       ],
-      "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.7-71bb3bd7dab4.md",
-      "source_commit": "71bb3bd7dab4",
+      "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.8-3f35e5bb01e1.md",
+      "source_commit": "3f35e5bb01e1",
       "summary": "working tree current template",
-      "version": "0.3.7"
+      "version": "0.3.8"
     }
   ],
   "eval_definitions": [
@@ -198,7 +198,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     {
       "behavior": "eval_qa_sync",
       "expected_signals": [
-        "eval_task.json is a first-class special file",
+        "evals/evals.json is a first-class special file",
         "qa_checklist.md is a repeatable runtime guardrail only when warranted"
       ],
       "id": "eval_qa_sync",
@@ -267,14 +267,16 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "caveat": "Heuristic template-structure signal; not a universal skill quality score.",
       "eval_id": "eval_qa_sync",
       "expected_signals": [
-        "eval_task.json is a first-class special file",
+        "evals/evals.json is a first-class special file",
         "qa_checklist.md is a repeatable runtime guardrail only when warranted"
       ],
-      "missing_signals": [],
+      "missing_signals": [
+        "evals/evals\\.json"
+      ],
       "source_commit": "a55523040aca",
       "template_version": "0.3.2",
       "title": "Eval / QA sync",
-      "verdict": "pass"
+      "verdict": "fail"
     },
     {
       "behavior": "routing",
@@ -337,14 +339,16 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "caveat": "Heuristic template-structure signal; not a universal skill quality score.",
       "eval_id": "eval_qa_sync",
       "expected_signals": [
-        "eval_task.json is a first-class special file",
+        "evals/evals.json is a first-class special file",
         "qa_checklist.md is a repeatable runtime guardrail only when warranted"
       ],
-      "missing_signals": [],
+      "missing_signals": [
+        "evals/evals\\.json"
+      ],
       "source_commit": "b8f67d0311ce",
       "template_version": "0.3.3",
       "title": "Eval / QA sync",
-      "verdict": "pass"
+      "verdict": "fail"
     },
     {
       "behavior": "routing",
@@ -407,14 +411,16 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "caveat": "Heuristic template-structure signal; not a universal skill quality score.",
       "eval_id": "eval_qa_sync",
       "expected_signals": [
-        "eval_task.json is a first-class special file",
+        "evals/evals.json is a first-class special file",
         "qa_checklist.md is a repeatable runtime guardrail only when warranted"
       ],
-      "missing_signals": [],
+      "missing_signals": [
+        "evals/evals\\.json"
+      ],
       "source_commit": "60be77718277",
       "template_version": "0.3.4",
       "title": "Eval / QA sync",
-      "verdict": "pass"
+      "verdict": "fail"
     },
     {
       "behavior": "routing",
@@ -477,14 +483,16 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "caveat": "Heuristic template-structure signal; not a universal skill quality score.",
       "eval_id": "eval_qa_sync",
       "expected_signals": [
-        "eval_task.json is a first-class special file",
+        "evals/evals.json is a first-class special file",
         "qa_checklist.md is a repeatable runtime guardrail only when warranted"
       ],
-      "missing_signals": [],
+      "missing_signals": [
+        "evals/evals\\.json"
+      ],
       "source_commit": "6462bf356fad",
       "template_version": "0.3.5",
       "title": "Eval / QA sync",
-      "verdict": "pass"
+      "verdict": "fail"
     },
     {
       "behavior": "routing",
@@ -547,14 +555,16 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "caveat": "Heuristic template-structure signal; not a universal skill quality score.",
       "eval_id": "eval_qa_sync",
       "expected_signals": [
-        "eval_task.json is a first-class special file",
+        "evals/evals.json is a first-class special file",
         "qa_checklist.md is a repeatable runtime guardrail only when warranted"
       ],
-      "missing_signals": [],
+      "missing_signals": [
+        "evals/evals\\.json"
+      ],
       "source_commit": "79a4641842e9",
       "template_version": "0.3.6",
       "title": "Eval / QA sync",
-      "verdict": "pass"
+      "verdict": "fail"
     },
     {
       "behavior": "routing",
@@ -617,14 +627,16 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "caveat": "Heuristic template-structure signal; not a universal skill quality score.",
       "eval_id": "eval_qa_sync",
       "expected_signals": [
-        "eval_task.json is a first-class special file",
+        "evals/evals.json is a first-class special file",
         "qa_checklist.md is a repeatable runtime guardrail only when warranted"
       ],
-      "missing_signals": [],
+      "missing_signals": [
+        "evals/evals\\.json"
+      ],
       "source_commit": "a4724e232c9e",
       "template_version": "0.3.7",
       "title": "Eval / QA sync",
-      "verdict": "pass"
+      "verdict": "fail"
     },
     {
       "behavior": "routing",
@@ -635,8 +647,8 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "trigger catalogs stay out of frontmatter"
       ],
       "missing_signals": [],
-      "source_commit": "71bb3bd7dab4",
-      "template_version": "0.3.7",
+      "source_commit": "3f35e5bb01e1",
+      "template_version": "0.3.8",
       "title": "Routing clarity",
       "verdict": "pass"
     },
@@ -649,8 +661,8 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "policy prose is not treated as a top-level todo"
       ],
       "missing_signals": [],
-      "source_commit": "71bb3bd7dab4",
-      "template_version": "0.3.7",
+      "source_commit": "3f35e5bb01e1",
+      "template_version": "0.3.8",
       "title": "Todo executability",
       "verdict": "pass"
     },
@@ -663,8 +675,8 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "same-scope recursion is forbidden"
       ],
       "missing_signals": [],
-      "source_commit": "71bb3bd7dab4",
-      "template_version": "0.3.7",
+      "source_commit": "3f35e5bb01e1",
+      "template_version": "0.3.8",
       "title": "Phase boundary",
       "verdict": "pass"
     },
@@ -677,8 +689,8 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "output contract is explicit"
       ],
       "missing_signals": [],
-      "source_commit": "71bb3bd7dab4",
-      "template_version": "0.3.7",
+      "source_commit": "3f35e5bb01e1",
+      "template_version": "0.3.8",
       "title": "Proof contract",
       "verdict": "pass"
     },
@@ -687,12 +699,12 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "caveat": "Heuristic template-structure signal; not a universal skill quality score.",
       "eval_id": "eval_qa_sync",
       "expected_signals": [
-        "eval_task.json is a first-class special file",
+        "evals/evals.json is a first-class special file",
         "qa_checklist.md is a repeatable runtime guardrail only when warranted"
       ],
       "missing_signals": [],
-      "source_commit": "71bb3bd7dab4",
-      "template_version": "0.3.7",
+      "source_commit": "3f35e5bb01e1",
+      "template_version": "0.3.8",
       "title": "Eval / QA sync",
       "verdict": "pass"
     }
@@ -794,7 +806,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     {
       "evidence_refs": [
         "skills/metric-advisor/SKILL.md",
-        "skills/metric-advisor/eval_task.json",
+        "skills/metric-advisor/evals/evals.json",
         "tickets/archive/TASK-0228/ticket.md"
       ],
       "id": "FEAT-0063",
@@ -815,16 +827,15 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     },
     {
       "evidence_refs": [
-        "skills/taste-loop/SKILL.md",
-        "skills/taste-loop/templates/heartbeat-prompt.md",
-        "skills/taste-loop/eval_task.json"
+        "skills/dogfood-review/SKILL.md",
+        "skills/skill-maintenance/SKILL.md"
       ],
       "id": "FEAT-0064",
-      "known_limits": "Official signal contract only; the current implementation is prompt-consumed by Taste Loop and generated graph data. No standalone scorer, UI renderer, hidden scheduler, or automatic skill mutation is shipped.",
-      "last_verified": "2026-06-26",
+      "known_limits": "Official signal contract only; the current implementation is consumed by Dogfood/skill maintenance and generated graph data. No standalone scorer, UI renderer, hidden scheduler, or automatic skill mutation is shipped.",
+      "last_verified": "2026-07-11",
       "metrics": [
         "skill_signal_contract_traceability_pass",
-        "taste_loop_signal_breakdown_pass",
+        "dogfood_signal_breakdown_pass",
         "skill_registry_validation_pass"
       ],
       "name": "Skill signals",
@@ -832,278 +843,14 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "surfaces": [
         "docs/features/FEAT-0064-skill-signals.md",
         "docs/skills/system.md",
-        "skills/taste-loop",
+        "skills/dogfood-review",
         "farplane/automations.toml",
         "docs/skills/registry.jsonl"
       ]
     }
   ],
-  "generated_at": "2026-07-09T04:30:35+00:00",
+  "generated_at": "2026-07-11T16:10:37+00:00",
   "rollout": [
-    {
-      "eval": "eval_task.json",
-      "has_checklist": true,
-      "path": "skills/ad-advisor/SKILL.md",
-      "qa_checklist": "qa_checklist.md",
-      "skill_id": "ad-advisor",
-      "skill_ui": "",
-      "source": "local",
-      "status": "current",
-      "template_version": "0.3.7",
-      "tier": 3
-    },
-    {
-      "eval": "",
-      "has_checklist": true,
-      "path": "skills/ai-image-advisor/SKILL.md",
-      "qa_checklist": "",
-      "skill_id": "ai-image-advisor",
-      "skill_ui": "",
-      "source": "local",
-      "status": "current",
-      "template_version": "0.3.7",
-      "tier": 3
-    },
-    {
-      "eval": "eval_task.json",
-      "has_checklist": true,
-      "path": "skills/ai-video-advisor/SKILL.md",
-      "qa_checklist": "",
-      "skill_id": "ai-video-advisor",
-      "skill_ui": "",
-      "source": "local",
-      "status": "current",
-      "template_version": "0.3.7",
-      "tier": 3
-    },
-    {
-      "eval": "eval_task.json",
-      "has_checklist": true,
-      "path": "skills/asset-advisor/SKILL.md",
-      "qa_checklist": "qa_checklist.md",
-      "skill_id": "asset-advisor",
-      "skill_ui": "",
-      "source": "local",
-      "status": "current",
-      "template_version": "0.3.7",
-      "tier": 3
-    },
-    {
-      "eval": "eval_task.json",
-      "has_checklist": true,
-      "path": "skills/audio-advisor/SKILL.md",
-      "qa_checklist": "qa_checklist.md",
-      "skill_id": "audio-advisor",
-      "skill_ui": "",
-      "source": "local",
-      "status": "current",
-      "template_version": "0.3.7",
-      "tier": 3
-    },
-    {
-      "eval": "eval_task.json",
-      "has_checklist": true,
-      "path": "skills/avatar-advisor/SKILL.md",
-      "qa_checklist": "qa_checklist.md",
-      "skill_id": "avatar-advisor",
-      "skill_ui": "",
-      "source": "local",
-      "status": "current",
-      "template_version": "0.3.7",
-      "tier": 3
-    },
-    {
-      "eval": "eval_task.json",
-      "has_checklist": true,
-      "path": "skills/content-impl-plan/SKILL.md",
-      "qa_checklist": "qa_checklist.md",
-      "skill_id": "content-impl-plan",
-      "skill_ui": "",
-      "source": "local",
-      "status": "current",
-      "template_version": "0.3.7",
-      "tier": 3
-    },
-    {
-      "eval": "eval_task.json",
-      "has_checklist": true,
-      "path": "skills/copywriting-advisor/SKILL.md",
-      "qa_checklist": "qa_checklist.md",
-      "skill_id": "copywriting-advisor",
-      "skill_ui": "",
-      "source": "local",
-      "status": "current",
-      "template_version": "0.3.7",
-      "tier": 3
-    },
-    {
-      "eval": "eval_task.json",
-      "has_checklist": true,
-      "path": "skills/customer-research/SKILL.md",
-      "qa_checklist": "",
-      "skill_id": "customer-research",
-      "skill_ui": "",
-      "source": "local",
-      "status": "current",
-      "template_version": "0.3.7",
-      "tier": 3
-    },
-    {
-      "eval": "eval_task.json",
-      "has_checklist": true,
-      "path": "skills/dogfood-review/SKILL.md",
-      "qa_checklist": "qa_checklist.md",
-      "skill_id": "dogfood-review",
-      "skill_ui": "",
-      "source": "local",
-      "status": "current",
-      "template_version": "0.3.7",
-      "tier": 3
-    },
-    {
-      "eval": "",
-      "has_checklist": true,
-      "path": "skills/instagram-account/SKILL.md",
-      "qa_checklist": "qa_checklist.md",
-      "skill_id": "instagram-account",
-      "skill_ui": "",
-      "source": "local",
-      "status": "current",
-      "template_version": "0.3.7",
-      "tier": 3
-    },
-    {
-      "eval": "eval_task.json",
-      "has_checklist": true,
-      "path": "skills/lead-scout/SKILL.md",
-      "qa_checklist": "qa_checklist.md",
-      "skill_id": "lead-scout",
-      "skill_ui": "",
-      "source": "local",
-      "status": "current",
-      "template_version": "0.3.7",
-      "tier": 3
-    },
-    {
-      "eval": "",
-      "has_checklist": true,
-      "path": "skills/notion-task-field-fill/SKILL.md",
-      "qa_checklist": "",
-      "skill_id": "notion-task-field-fill",
-      "skill_ui": "",
-      "source": "local",
-      "status": "current",
-      "template_version": "0.3.7",
-      "tier": 3
-    },
-    {
-      "eval": "",
-      "has_checklist": true,
-      "path": "skills/phone-chaser/SKILL.md",
-      "qa_checklist": "qa_checklist.md",
-      "skill_id": "phone-chaser",
-      "skill_ui": "",
-      "source": "local",
-      "status": "current",
-      "template_version": "0.3.7",
-      "tier": 3
-    },
-    {
-      "eval": "eval_task.json",
-      "has_checklist": true,
-      "path": "skills/problem-framing/SKILL.md",
-      "qa_checklist": "",
-      "skill_id": "problem-framing",
-      "skill_ui": "",
-      "source": "local",
-      "status": "current",
-      "template_version": "0.3.7",
-      "tier": 2
-    },
-    {
-      "eval": "eval_task.json",
-      "has_checklist": true,
-      "path": "skills/remotion/SKILL.md",
-      "qa_checklist": "",
-      "skill_id": "remotion",
-      "skill_ui": "",
-      "source": "local",
-      "status": "current",
-      "template_version": "0.3.7",
-      "tier": 3
-    },
-    {
-      "eval": "eval_task.json",
-      "has_checklist": true,
-      "path": "skills/seo-content-advisor/SKILL.md",
-      "qa_checklist": "qa_checklist.md",
-      "skill_id": "seo-content-advisor",
-      "skill_ui": "",
-      "source": "local",
-      "status": "current",
-      "template_version": "0.3.7",
-      "tier": 3
-    },
-    {
-      "eval": "eval_task.json",
-      "has_checklist": true,
-      "path": "skills/solution-shaping/SKILL.md",
-      "qa_checklist": "",
-      "skill_id": "solution-shaping",
-      "skill_ui": "",
-      "source": "local",
-      "status": "current",
-      "template_version": "0.3.7",
-      "tier": 3
-    },
-    {
-      "eval": "eval_task.json",
-      "has_checklist": true,
-      "path": "skills/storyboard/SKILL.md",
-      "qa_checklist": "qa_checklist.md",
-      "skill_id": "storyboard",
-      "skill_ui": "",
-      "source": "local",
-      "status": "current",
-      "template_version": "0.3.7",
-      "tier": 3
-    },
-    {
-      "eval": "eval_task.json",
-      "has_checklist": true,
-      "path": "skills/ticket-opportunity-generator/SKILL.md",
-      "qa_checklist": "qa_checklist.md",
-      "skill_id": "ticket-opportunity-generator",
-      "skill_ui": "",
-      "source": "local",
-      "status": "current",
-      "template_version": "0.3.7",
-      "tier": 3
-    },
-    {
-      "eval": "eval_task.json",
-      "has_checklist": true,
-      "path": "skills/worker-artifact-review-request/SKILL.md",
-      "qa_checklist": "qa_checklist.md",
-      "skill_id": "worker-artifact-review-request",
-      "skill_ui": "",
-      "source": "local",
-      "status": "current",
-      "template_version": "0.3.7",
-      "tier": 2
-    },
-    {
-      "eval": "",
-      "has_checklist": true,
-      "path": "skills/x-account/SKILL.md",
-      "qa_checklist": "qa_checklist.md",
-      "skill_id": "x-account",
-      "skill_ui": "",
-      "source": "local",
-      "status": "current",
-      "template_version": "0.3.7",
-      "tier": 3
-    },
     {
       "eval": "",
       "has_checklist": false,
@@ -1153,7 +900,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "tier": 2
     },
     {
-      "eval": "eval_task.json",
+      "eval": "evals/evals.json",
       "has_checklist": true,
       "path": "skills/agent-qa-test/SKILL.md",
       "qa_checklist": "qa_checklist.md",
@@ -1213,7 +960,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "tier": 2
     },
     {
-      "eval": "eval_task.json",
+      "eval": "evals/evals.json",
       "has_checklist": true,
       "path": "skills/brainstorm/SKILL.md",
       "qa_checklist": "",
@@ -1225,7 +972,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "tier": 2
     },
     {
-      "eval": "",
+      "eval": "evals/evals.json",
       "has_checklist": true,
       "path": "skills/close-ticket/SKILL.md",
       "qa_checklist": "",
@@ -1417,7 +1164,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "tier": 2
     },
     {
-      "eval": "eval_task.json",
+      "eval": "evals/evals.json",
       "has_checklist": true,
       "path": "skills/farplane-invocation/SKILL.md",
       "qa_checklist": "",
@@ -1477,7 +1224,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "tier": 3
     },
     {
-      "eval": "eval_task.json",
+      "eval": "evals/evals.json",
       "has_checklist": true,
       "path": "skills/init-advisor/SKILL.md",
       "qa_checklist": "qa_checklist.md",
@@ -1499,18 +1246,6 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "status": "missing",
       "template_version": "missing",
       "tier": 3
-    },
-    {
-      "eval": "",
-      "has_checklist": true,
-      "path": "skills/media-ingest/SKILL.md",
-      "qa_checklist": "",
-      "skill_id": "media-ingest",
-      "skill_ui": "",
-      "source": "local",
-      "status": "missing",
-      "template_version": "missing",
-      "tier": 2
     },
     {
       "eval": "",
@@ -1573,7 +1308,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "tier": 3
     },
     {
-      "eval": "eval_task.json",
+      "eval": "evals/evals.json",
       "has_checklist": true,
       "path": "skills/qa/SKILL.md",
       "qa_checklist": "qa_checklist.md",
@@ -1717,7 +1452,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "tier": 3
     },
     {
-      "eval": "eval_task.json",
+      "eval": "evals/evals.json",
       "has_checklist": true,
       "path": "skills/visual-qa/SKILL.md",
       "qa_checklist": "qa_checklist.md",
@@ -1741,6 +1476,18 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "tier": 2
     },
     {
+      "eval": "evals/evals.json",
+      "has_checklist": true,
+      "path": "skills/ad-advisor/SKILL.md",
+      "qa_checklist": "qa_checklist.md",
+      "skill_id": "ad-advisor",
+      "skill_ui": "",
+      "source": "local",
+      "status": "stale",
+      "template_version": "0.3.7",
+      "tier": 3
+    },
+    {
       "eval": "",
       "has_checklist": true,
       "path": "skills/advise/SKILL.md",
@@ -1755,6 +1502,54 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     {
       "eval": "",
       "has_checklist": true,
+      "path": "skills/ai-image-advisor/SKILL.md",
+      "qa_checklist": "",
+      "skill_id": "ai-image-advisor",
+      "skill_ui": "",
+      "source": "local",
+      "status": "stale",
+      "template_version": "0.3.7",
+      "tier": 3
+    },
+    {
+      "eval": "evals/evals.json",
+      "has_checklist": true,
+      "path": "skills/ai-video-advisor/SKILL.md",
+      "qa_checklist": "",
+      "skill_id": "ai-video-advisor",
+      "skill_ui": "",
+      "source": "local",
+      "status": "stale",
+      "template_version": "0.3.7",
+      "tier": 3
+    },
+    {
+      "eval": "evals/evals.json",
+      "has_checklist": true,
+      "path": "skills/asset-advisor/SKILL.md",
+      "qa_checklist": "qa_checklist.md",
+      "skill_id": "asset-advisor",
+      "skill_ui": "",
+      "source": "local",
+      "status": "stale",
+      "template_version": "0.3.7",
+      "tier": 3
+    },
+    {
+      "eval": "evals/evals.json",
+      "has_checklist": true,
+      "path": "skills/audio-advisor/SKILL.md",
+      "qa_checklist": "qa_checklist.md",
+      "skill_id": "audio-advisor",
+      "skill_ui": "",
+      "source": "local",
+      "status": "stale",
+      "template_version": "0.3.7",
+      "tier": 3
+    },
+    {
+      "eval": "evals/evals.json",
+      "has_checklist": true,
       "path": "skills/automation-advisor/SKILL.md",
       "qa_checklist": "",
       "skill_id": "automation-advisor",
@@ -1765,7 +1560,19 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "tier": 3
     },
     {
-      "eval": "eval_task.json",
+      "eval": "evals/evals.json",
+      "has_checklist": true,
+      "path": "skills/avatar-advisor/SKILL.md",
+      "qa_checklist": "qa_checklist.md",
+      "skill_id": "avatar-advisor",
+      "skill_ui": "",
+      "source": "local",
+      "status": "stale",
+      "template_version": "0.3.7",
+      "tier": 3
+    },
+    {
+      "eval": "evals/evals.json",
       "has_checklist": true,
       "path": "skills/budget-advisor/SKILL.md",
       "qa_checklist": "",
@@ -1775,6 +1582,18 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "status": "stale",
       "template_version": "0.3.0",
       "tier": 2
+    },
+    {
+      "eval": "evals/evals.json",
+      "has_checklist": true,
+      "path": "skills/code-audit/SKILL.md",
+      "qa_checklist": "qa_checklist.md",
+      "skill_id": "code-audit",
+      "skill_ui": "",
+      "source": "local",
+      "status": "stale",
+      "template_version": "0.3.7",
+      "tier": 3
     },
     {
       "eval": "",
@@ -1789,7 +1608,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "tier": 2
     },
     {
-      "eval": "eval_task.json",
+      "eval": "evals/evals.json",
       "has_checklist": true,
       "path": "skills/consolidate/SKILL.md",
       "qa_checklist": "",
@@ -1801,7 +1620,43 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "tier": 1
     },
     {
-      "eval": "eval_task.json",
+      "eval": "evals/evals.json",
+      "has_checklist": true,
+      "path": "skills/content-impl-plan/SKILL.md",
+      "qa_checklist": "qa_checklist.md",
+      "skill_id": "content-impl-plan",
+      "skill_ui": "",
+      "source": "local",
+      "status": "stale",
+      "template_version": "0.3.7",
+      "tier": 3
+    },
+    {
+      "eval": "evals/evals.json",
+      "has_checklist": true,
+      "path": "skills/copywriting-advisor/SKILL.md",
+      "qa_checklist": "qa_checklist.md",
+      "skill_id": "copywriting-advisor",
+      "skill_ui": "",
+      "source": "local",
+      "status": "stale",
+      "template_version": "0.3.7",
+      "tier": 3
+    },
+    {
+      "eval": "evals/evals.json",
+      "has_checklist": true,
+      "path": "skills/customer-research/SKILL.md",
+      "qa_checklist": "",
+      "skill_id": "customer-research",
+      "skill_ui": "",
+      "source": "local",
+      "status": "stale",
+      "template_version": "0.3.7",
+      "tier": 3
+    },
+    {
+      "eval": "evals/evals.json",
       "has_checklist": true,
       "path": "skills/deliberative-advice/SKILL.md",
       "qa_checklist": "",
@@ -1813,7 +1668,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "tier": 2
     },
     {
-      "eval": "eval_task.json",
+      "eval": "evals/evals.json",
       "has_checklist": true,
       "path": "skills/doc-advisor/SKILL.md",
       "qa_checklist": "qa_checklist.md",
@@ -1825,7 +1680,19 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "tier": 2
     },
     {
-      "eval": "eval_task.json",
+      "eval": "evals/evals.json",
+      "has_checklist": true,
+      "path": "skills/dogfood-review/SKILL.md",
+      "qa_checklist": "qa_checklist.md",
+      "skill_id": "dogfood-review",
+      "skill_ui": "",
+      "source": "local",
+      "status": "stale",
+      "template_version": "0.3.7",
+      "tier": 3
+    },
+    {
+      "eval": "evals/evals.json",
       "has_checklist": true,
       "path": "skills/eval/SKILL.md",
       "qa_checklist": "qa_checklist.md",
@@ -1837,10 +1704,10 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "tier": 3
     },
     {
-      "eval": "eval_task.json",
+      "eval": "evals/evals.json",
       "has_checklist": true,
       "path": "skills/feed-scout/SKILL.md",
-      "qa_checklist": "",
+      "qa_checklist": "qa_checklist.md",
       "skill_id": "feed-scout",
       "skill_ui": "",
       "source": "local",
@@ -1861,7 +1728,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "tier": 3
     },
     {
-      "eval": "eval_task.json",
+      "eval": "evals/evals.json",
       "has_checklist": true,
       "path": "skills/gap-analysis/SKILL.md",
       "qa_checklist": "",
@@ -1873,7 +1740,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "tier": 2
     },
     {
-      "eval": "eval_task.json",
+      "eval": "evals/evals.json",
       "has_checklist": true,
       "path": "skills/goal-advisor/SKILL.md",
       "qa_checklist": "qa_checklist.md",
@@ -1885,7 +1752,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "tier": 3
     },
     {
-      "eval": "eval_task.json",
+      "eval": "evals/evals.json",
       "has_checklist": true,
       "path": "skills/hardening/SKILL.md",
       "qa_checklist": "",
@@ -1897,7 +1764,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "tier": 2
     },
     {
-      "eval": "eval_task.json",
+      "eval": "evals/evals.json",
       "has_checklist": true,
       "path": "skills/harness-advisor/SKILL.md",
       "qa_checklist": "",
@@ -1909,7 +1776,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "tier": 2
     },
     {
-      "eval": "",
+      "eval": "evals/evals.json",
       "has_checklist": true,
       "path": "skills/harness-creator/SKILL.md",
       "qa_checklist": "",
@@ -1921,7 +1788,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "tier": 3
     },
     {
-      "eval": "",
+      "eval": "evals/evals.json",
       "has_checklist": true,
       "path": "skills/horizon-advisor/SKILL.md",
       "qa_checklist": "",
@@ -1933,7 +1800,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "tier": 3
     },
     {
-      "eval": "eval_task.json",
+      "eval": "evals/evals.json",
       "has_checklist": true,
       "path": "skills/impl-plan/SKILL.md",
       "qa_checklist": "qa_checklist.md",
@@ -1945,7 +1812,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "tier": 3
     },
     {
-      "eval": "eval_task.json",
+      "eval": "evals/evals.json",
       "has_checklist": true,
       "path": "skills/infographic/SKILL.md",
       "qa_checklist": "qa_checklist.md",
@@ -1957,7 +1824,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "tier": 3
     },
     {
-      "eval": "",
+      "eval": "evals/evals.json",
       "has_checklist": true,
       "path": "skills/ingest-content/SKILL.md",
       "qa_checklist": "",
@@ -1969,10 +1836,22 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "tier": 3
     },
     {
-      "eval": "eval_task.json",
+      "eval": "evals/evals.json",
+      "has_checklist": true,
+      "path": "skills/instagram-account/SKILL.md",
+      "qa_checklist": "qa_checklist.md",
+      "skill_id": "instagram-account",
+      "skill_ui": "",
+      "source": "local",
+      "status": "stale",
+      "template_version": "0.3.7",
+      "tier": 3
+    },
+    {
+      "eval": "evals/evals.json",
       "has_checklist": true,
       "path": "skills/interval-update/SKILL.md",
-      "qa_checklist": "",
+      "qa_checklist": "qa_checklist.md",
       "skill_id": "interval-update",
       "skill_ui": "",
       "source": "local",
@@ -1981,7 +1860,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "tier": 3
     },
     {
-      "eval": "eval_task.json",
+      "eval": "evals/evals.json",
       "has_checklist": true,
       "path": "skills/knowledge-tidier/SKILL.md",
       "qa_checklist": "",
@@ -1990,6 +1869,18 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "source": "local",
       "status": "stale",
       "template_version": "0.3.0",
+      "tier": 3
+    },
+    {
+      "eval": "evals/evals.json",
+      "has_checklist": true,
+      "path": "skills/lead-scout/SKILL.md",
+      "qa_checklist": "qa_checklist.md",
+      "skill_id": "lead-scout",
+      "skill_ui": "",
+      "source": "local",
+      "status": "stale",
+      "template_version": "0.3.7",
       "tier": 3
     },
     {
@@ -2017,7 +1908,19 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "tier": 3
     },
     {
-      "eval": "eval_task.json",
+      "eval": "",
+      "has_checklist": true,
+      "path": "skills/media-ingest/SKILL.md",
+      "qa_checklist": "",
+      "skill_id": "media-ingest",
+      "skill_ui": "",
+      "source": "local",
+      "status": "stale",
+      "template_version": "0.3.7",
+      "tier": 2
+    },
+    {
+      "eval": "evals/evals.json",
       "has_checklist": true,
       "path": "skills/metric-advisor/SKILL.md",
       "qa_checklist": "",
@@ -2029,7 +1932,19 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "tier": 1
     },
     {
-      "eval": "eval_task.json",
+      "eval": "",
+      "has_checklist": true,
+      "path": "skills/notion-task-field-fill/SKILL.md",
+      "qa_checklist": "",
+      "skill_id": "notion-task-field-fill",
+      "skill_ui": "",
+      "source": "local",
+      "status": "stale",
+      "template_version": "0.3.7",
+      "tier": 3
+    },
+    {
+      "eval": "evals/evals.json",
       "has_checklist": true,
       "path": "skills/optimize-harness/SKILL.md",
       "qa_checklist": "",
@@ -2041,7 +1956,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "tier": 3
     },
     {
-      "eval": "eval_task.json",
+      "eval": "evals/evals.json",
       "has_checklist": true,
       "path": "skills/optimize-with-human/SKILL.md",
       "qa_checklist": "qa_checklist.md",
@@ -2053,7 +1968,19 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "tier": 2
     },
     {
-      "eval": "eval_task.json",
+      "eval": "",
+      "has_checklist": true,
+      "path": "skills/phone-chaser/SKILL.md",
+      "qa_checklist": "qa_checklist.md",
+      "skill_id": "phone-chaser",
+      "skill_ui": "",
+      "source": "local",
+      "status": "stale",
+      "template_version": "0.3.7",
+      "tier": 3
+    },
+    {
+      "eval": "evals/evals.json",
       "has_checklist": true,
       "path": "skills/plan/SKILL.md",
       "qa_checklist": "",
@@ -2065,7 +1992,19 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "tier": 2
     },
     {
-      "eval": "eval_task.json",
+      "eval": "evals/evals.json",
+      "has_checklist": true,
+      "path": "skills/problem-framing/SKILL.md",
+      "qa_checklist": "",
+      "skill_id": "problem-framing",
+      "skill_ui": "",
+      "source": "local",
+      "status": "stale",
+      "template_version": "0.3.7",
+      "tier": 2
+    },
+    {
+      "eval": "evals/evals.json",
       "has_checklist": true,
       "path": "skills/proof-advisor/SKILL.md",
       "qa_checklist": "qa_checklist.md",
@@ -2089,7 +2028,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "tier": 1
     },
     {
-      "eval": "eval_task.json",
+      "eval": "evals/evals.json",
       "has_checklist": true,
       "path": "skills/pulse-update/SKILL.md",
       "qa_checklist": "",
@@ -2101,7 +2040,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "tier": 3
     },
     {
-      "eval": "eval_task.json",
+      "eval": "evals/evals.json",
       "has_checklist": true,
       "path": "skills/refactoring/SKILL.md",
       "qa_checklist": "",
@@ -2113,7 +2052,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "tier": 2
     },
     {
-      "eval": "",
+      "eval": "evals/evals.json",
       "has_checklist": true,
       "path": "skills/reference-grounding/SKILL.md",
       "qa_checklist": "qa_checklist.md",
@@ -2125,7 +2064,19 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "tier": 1
     },
     {
-      "eval": "",
+      "eval": "evals/evals.json",
+      "has_checklist": true,
+      "path": "skills/remotion/SKILL.md",
+      "qa_checklist": "",
+      "skill_id": "remotion",
+      "skill_ui": "",
+      "source": "local",
+      "status": "stale",
+      "template_version": "0.3.7",
+      "tier": 3
+    },
+    {
+      "eval": "evals/evals.json",
       "has_checklist": true,
       "path": "skills/review/SKILL.md",
       "qa_checklist": "",
@@ -2149,7 +2100,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "tier": 2
     },
     {
-      "eval": "eval_task.json",
+      "eval": "evals/evals.json",
       "has_checklist": true,
       "path": "skills/self-improve/SKILL.md",
       "qa_checklist": "",
@@ -2161,7 +2112,19 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "tier": 3
     },
     {
-      "eval": "eval_task.json",
+      "eval": "evals/evals.json",
+      "has_checklist": true,
+      "path": "skills/seo-content-advisor/SKILL.md",
+      "qa_checklist": "qa_checklist.md",
+      "skill_id": "seo-content-advisor",
+      "skill_ui": "",
+      "source": "local",
+      "status": "stale",
+      "template_version": "0.3.7",
+      "tier": 3
+    },
+    {
+      "eval": "evals/evals.json",
       "has_checklist": true,
       "path": "skills/skill-creator/SKILL.md",
       "qa_checklist": "qa_checklist.md",
@@ -2173,7 +2136,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "tier": 3
     },
     {
-      "eval": "eval_task.json",
+      "eval": "evals/evals.json",
       "has_checklist": true,
       "path": "skills/skill-maintenance/SKILL.md",
       "qa_checklist": "qa_checklist.md",
@@ -2185,7 +2148,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "tier": 3
     },
     {
-      "eval": "eval_task.json",
+      "eval": "evals/evals.json",
       "has_checklist": true,
       "path": "skills/social-content/SKILL.md",
       "qa_checklist": "qa_checklist.md",
@@ -2197,19 +2160,31 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "tier": 3
     },
     {
-      "eval": "eval_task.json",
+      "eval": "evals/evals.json",
       "has_checklist": true,
-      "path": "skills/taste-loop/SKILL.md",
+      "path": "skills/solution-shaping/SKILL.md",
       "qa_checklist": "",
-      "skill_id": "taste-loop",
+      "skill_id": "solution-shaping",
       "skill_ui": "",
       "source": "local",
       "status": "stale",
-      "template_version": "0.2.0",
+      "template_version": "0.3.7",
       "tier": 3
     },
     {
-      "eval": "eval_task.json",
+      "eval": "evals/evals.json",
+      "has_checklist": true,
+      "path": "skills/storyboard/SKILL.md",
+      "qa_checklist": "qa_checklist.md",
+      "skill_id": "storyboard",
+      "skill_ui": "",
+      "source": "local",
+      "status": "stale",
+      "template_version": "0.3.7",
+      "tier": 3
+    },
+    {
+      "eval": "evals/evals.json",
       "has_checklist": true,
       "path": "skills/telegram-message/SKILL.md",
       "qa_checklist": "qa_checklist.md",
@@ -2219,6 +2194,18 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "status": "stale",
       "template_version": "0.3.6",
       "tier": 1
+    },
+    {
+      "eval": "evals/evals.json",
+      "has_checklist": true,
+      "path": "skills/ticket-opportunity-generator/SKILL.md",
+      "qa_checklist": "qa_checklist.md",
+      "skill_id": "ticket-opportunity-generator",
+      "skill_ui": "",
+      "source": "local",
+      "status": "stale",
+      "template_version": "0.3.7",
+      "tier": 3
     },
     {
       "eval": "",
@@ -2243,6 +2230,30 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "status": "stale",
       "template_version": "0.2.0",
       "tier": 3
+    },
+    {
+      "eval": "evals/evals.json",
+      "has_checklist": true,
+      "path": "skills/worker-artifact-review-request/SKILL.md",
+      "qa_checklist": "qa_checklist.md",
+      "skill_id": "worker-artifact-review-request",
+      "skill_ui": "",
+      "source": "local",
+      "status": "stale",
+      "template_version": "0.3.7",
+      "tier": 2
+    },
+    {
+      "eval": "evals/evals.json",
+      "has_checklist": true,
+      "path": "skills/x-account/SKILL.md",
+      "qa_checklist": "qa_checklist.md",
+      "skill_id": "x-account",
+      "skill_ui": "",
+      "source": "local",
+      "status": "stale",
+      "template_version": "0.3.7",
+      "tier": 3
     }
   ],
   "rollout_summary": {
@@ -2251,20 +2262,19 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "local": 114
     },
     "by_status": {
-      "current": 22,
       "external": 3,
-      "missing": 50,
-      "stale": 42
+      "missing": 49,
+      "stale": 65
     },
     "by_template_version": {
       "0.1.0": 3,
-      "0.2.0": 21,
+      "0.2.0": 20,
       "0.3.0": 6,
       "0.3.2": 7,
       "0.3.5": 1,
       "0.3.6": 4,
-      "0.3.7": 22,
-      "missing": 53
+      "0.3.7": 24,
+      "missing": 52
     },
     "total_skills": 117
   },
@@ -2385,7 +2395,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "skill": true
       },
       "template_uses": {
-        "skill-eval-task": "0.1.0",
+        "skill-eval-task": "0.2.0",
         "skill-qa-checklist": "0.1.1",
         "skill-surface-budget": "0.1.0",
         "skill-template": "0.3.7"
@@ -2401,7 +2411,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "skill": true
       },
       "template_uses": {
-        "skill-eval-task": "0.1.0",
+        "skill-eval-task": "0.2.0",
         "skill-qa-checklist": "0.1.1",
         "skill-surface-budget": "0.1.0",
         "skill-template": "0.3.7"
@@ -2412,11 +2422,12 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "consumer_scope": "skill",
       "path": "skills/automation-advisor/SKILL.md",
       "surfaces": {
-        "eval": false,
+        "eval": true,
         "qa_checklist": false,
         "skill": true
       },
       "template_uses": {
+        "skill-eval-task": "0.2.0",
         "skill-template": "0.2.0"
       }
     },
@@ -2430,7 +2441,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "skill": true
       },
       "template_uses": {
-        "skill-eval-task": "0.1.0",
+        "skill-eval-task": "0.2.0",
         "skill-qa-checklist": "0.1.1",
         "skill-surface-budget": "0.1.0",
         "skill-template": "0.3.7"
@@ -2479,7 +2490,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "skill": true
       },
       "template_uses": {
-        "skill-eval-task": "0.1.0",
+        "skill-eval-task": "0.2.0",
         "skill-template": "0.3.0"
       }
     },
@@ -2488,11 +2499,29 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "consumer_scope": "skill",
       "path": "skills/close-ticket/SKILL.md",
       "surfaces": {
-        "eval": false,
+        "eval": true,
         "qa_checklist": false,
         "skill": false
       },
-      "template_uses": {}
+      "template_uses": {
+        "skill-eval-task": "0.2.0"
+      }
+    },
+    {
+      "consumer_id": "code-audit",
+      "consumer_scope": "skill",
+      "path": "skills/code-audit/SKILL.md",
+      "surfaces": {
+        "eval": true,
+        "qa_checklist": true,
+        "skill": true
+      },
+      "template_uses": {
+        "skill-eval-task": "0.2.0",
+        "skill-qa-checklist": "0.1.0",
+        "skill-surface-budget": "0.1.0",
+        "skill-template": "0.3.7"
+      }
     },
     {
       "consumer_id": "code-review",
@@ -2550,7 +2579,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "skill": true
       },
       "template_uses": {
-        "skill-eval-task": "0.1.0",
+        "skill-eval-task": "0.2.0",
         "skill-template": "0.3.5"
       }
     },
@@ -2564,7 +2593,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "skill": true
       },
       "template_uses": {
-        "skill-eval-task": "0.1.0",
+        "skill-eval-task": "0.2.0",
         "skill-qa-checklist": "0.1.1",
         "skill-surface-budget": "0.1.0",
         "skill-template": "0.3.7"
@@ -2673,7 +2702,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "skill": true
       },
       "template_uses": {
-        "skill-eval-task": "0.1.0",
+        "skill-eval-task": "0.2.0",
         "skill-template": "0.3.2"
       }
     },
@@ -2731,7 +2760,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "skill": true
       },
       "template_uses": {
-        "skill-eval-task": "0.1.0",
+        "skill-eval-task": "0.2.0",
         "skill-qa-checklist": "0.1.0",
         "skill-template": "0.3.6"
       }
@@ -2759,7 +2788,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "skill": true
       },
       "template_uses": {
-        "skill-eval-task": "0.1.0",
+        "skill-eval-task": "0.2.0",
         "skill-qa-checklist": "0.1.0",
         "skill-template": "0.3.0"
       }
@@ -2803,7 +2832,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "path": "skills/feed-scout/SKILL.md",
       "surfaces": {
         "eval": true,
-        "qa_checklist": false,
+        "qa_checklist": true,
         "skill": true
       },
       "template_uses": {
@@ -2869,7 +2898,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "skill": true
       },
       "template_uses": {
-        "skill-eval-task": "0.1.0",
+        "skill-eval-task": "0.2.0",
         "skill-surface-budget": "0.1.0",
         "skill-template": "0.2.0"
       }
@@ -2884,7 +2913,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "skill": true
       },
       "template_uses": {
-        "skill-eval-task": "0.1.0",
+        "skill-eval-task": "0.2.0",
         "skill-qa-checklist": "0.1.0",
         "skill-template": "0.2.0"
       }
@@ -2912,7 +2941,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "skill": true
       },
       "template_uses": {
-        "skill-eval-task": "0.1.0",
+        "skill-eval-task": "0.2.0",
         "skill-surface-budget": "0.1.0",
         "skill-template": "0.2.0"
       }
@@ -2922,11 +2951,12 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "consumer_scope": "skill",
       "path": "skills/harness-creator/SKILL.md",
       "surfaces": {
-        "eval": false,
+        "eval": true,
         "qa_checklist": false,
         "skill": true
       },
       "template_uses": {
+        "skill-eval-task": "0.2.0",
         "skill-template": "0.2.0"
       }
     },
@@ -2946,11 +2976,12 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "consumer_scope": "skill",
       "path": "skills/horizon-advisor/SKILL.md",
       "surfaces": {
-        "eval": false,
+        "eval": true,
         "qa_checklist": false,
         "skill": true
       },
       "template_uses": {
+        "skill-eval-task": "0.2.0",
         "skill-template": "0.3.0"
       }
     },
@@ -2964,7 +2995,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "skill": true
       },
       "template_uses": {
-        "skill-eval-task": "0.1.0",
+        "skill-eval-task": "0.2.0",
         "skill-qa-checklist": "0.1.0",
         "skill-template": "0.3.0"
       }
@@ -2989,11 +3020,12 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "consumer_scope": "skill",
       "path": "skills/ingest-content/SKILL.md",
       "surfaces": {
-        "eval": false,
+        "eval": true,
         "qa_checklist": false,
         "skill": true
       },
       "template_uses": {
+        "skill-eval-task": "0.2.0",
         "skill-template": "0.2.0"
       }
     },
@@ -3013,11 +3045,12 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "consumer_scope": "skill",
       "path": "skills/instagram-account/SKILL.md",
       "surfaces": {
-        "eval": false,
+        "eval": true,
         "qa_checklist": true,
         "skill": true
       },
       "template_uses": {
+        "skill-eval-task": "0.2.0",
         "skill-qa-checklist": "0.1.0",
         "skill-template": "0.3.7"
       }
@@ -3028,11 +3061,11 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "path": "skills/interval-update/SKILL.md",
       "surfaces": {
         "eval": true,
-        "qa_checklist": false,
+        "qa_checklist": true,
         "skill": true
       },
       "template_uses": {
-        "skill-eval-task": "0.1.0",
+        "skill-eval-task": "0.2.0",
         "skill-template": "0.2.0"
       }
     },
@@ -3046,7 +3079,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "skill": true
       },
       "template_uses": {
-        "skill-eval-task": "0.1.0",
+        "skill-eval-task": "0.2.0",
         "skill-template": "0.3.0"
       }
     },
@@ -3108,9 +3141,11 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "surfaces": {
         "eval": false,
         "qa_checklist": false,
-        "skill": false
+        "skill": true
       },
-      "template_uses": {}
+      "template_uses": {
+        "skill-template": "0.3.7"
+      }
     },
     {
       "consumer_id": "metric-advisor",
@@ -3148,7 +3183,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "skill": true
       },
       "template_uses": {
-        "skill-eval-task": "0.1.0",
+        "skill-eval-task": "0.2.0",
         "skill-template": "0.2.0"
       }
     },
@@ -3162,7 +3197,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "skill": true
       },
       "template_uses": {
-        "skill-eval-task": "0.1.0",
+        "skill-eval-task": "0.2.0",
         "skill-template": "0.2.0"
       }
     },
@@ -3189,7 +3224,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "skill": true
       },
       "template_uses": {
-        "skill-eval-task": "0.1.0",
+        "skill-eval-task": "0.2.0",
         "skill-template": "0.2.0"
       }
     },
@@ -3271,7 +3306,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "skill": true
       },
       "template_uses": {
-        "skill-eval-task": "0.1.0",
+        "skill-eval-task": "0.2.0",
         "skill-qa-checklist": "0.1.0",
         "skill-template": "0.3.0"
       }
@@ -3301,7 +3336,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "skill": true
       },
       "template_uses": {
-        "skill-eval-task": "0.1.0",
+        "skill-eval-task": "0.2.0",
         "skill-template": "0.2.0"
       }
     },
@@ -3315,6 +3350,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "skill": false
       },
       "template_uses": {
+        "skill-eval-task": "0.2.0",
         "skill-surface-budget": "0.1.0"
       }
     },
@@ -3358,11 +3394,12 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "consumer_scope": "skill",
       "path": "skills/reference-grounding/SKILL.md",
       "surfaces": {
-        "eval": false,
+        "eval": true,
         "qa_checklist": true,
         "skill": true
       },
       "template_uses": {
+        "skill-eval-task": "0.2.0",
         "skill-qa-checklist": "0.1.0",
         "skill-surface-budget": "0.1.0",
         "skill-template": "0.1.0"
@@ -3408,11 +3445,12 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "consumer_scope": "skill",
       "path": "skills/review/SKILL.md",
       "surfaces": {
-        "eval": false,
+        "eval": true,
         "qa_checklist": false,
         "skill": true
       },
       "template_uses": {
+        "skill-eval-task": "0.2.0",
         "skill-surface-budget": "0.1.0",
         "skill-template": "0.2.0"
       }
@@ -3440,7 +3478,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "skill": true
       },
       "template_uses": {
-        "skill-eval-task": "0.1.0",
+        "skill-eval-task": "0.2.0",
         "skill-template": "0.2.0"
       }
     },
@@ -3483,7 +3521,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "skill": true
       },
       "template_uses": {
-        "skill-eval-task": "0.1.0",
+        "skill-eval-task": "0.2.0",
         "skill-qa-checklist": "0.1.0",
         "skill-template": "0.2.0"
       }
@@ -3509,7 +3547,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "skill": true
       },
       "template_uses": {
-        "skill-eval-task": "0.1.0",
+        "skill-eval-task": "0.2.0",
         "skill-qa-checklist": "0.1.0",
         "skill-template": "0.3.6"
       }
@@ -3548,7 +3586,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "skill": true
       },
       "template_uses": {
-        "skill-eval-task": "0.1.0",
+        "skill-eval-task": "0.2.0",
         "skill-qa-checklist": "0.1.1",
         "skill-surface-budget": "0.1.0",
         "skill-template": "0.3.7"
@@ -3566,19 +3604,6 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "template_uses": {}
     },
     {
-      "consumer_id": "taste-loop",
-      "consumer_scope": "skill",
-      "path": "skills/taste-loop/SKILL.md",
-      "surfaces": {
-        "eval": true,
-        "qa_checklist": false,
-        "skill": true
-      },
-      "template_uses": {
-        "skill-template": "0.2.0"
-      }
-    },
-    {
       "consumer_id": "telegram-message",
       "consumer_scope": "skill",
       "path": "skills/telegram-message/SKILL.md",
@@ -3588,7 +3613,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "skill": true
       },
       "template_uses": {
-        "skill-eval-task": "0.1.0",
+        "skill-eval-task": "0.2.0",
         "skill-qa-checklist": "0.1.0",
         "skill-template": "0.3.6"
       }
@@ -3614,7 +3639,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "skill": true
       },
       "template_uses": {
-        "skill-eval-task": "0.1.0",
+        "skill-eval-task": "0.2.0",
         "skill-template": "0.3.7"
       }
     },
@@ -3709,7 +3734,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "skill": true
       },
       "template_uses": {
-        "skill-eval-task": "0.1.0",
+        "skill-eval-task": "0.2.0",
         "skill-qa-checklist": "0.1.0",
         "skill-template": "0.3.7"
       }
@@ -3719,11 +3744,12 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "consumer_scope": "skill",
       "path": "skills/x-account/SKILL.md",
       "surfaces": {
-        "eval": false,
+        "eval": true,
         "qa_checklist": true,
         "skill": true
       },
       "template_uses": {
+        "skill-eval-task": "0.2.0",
         "skill-qa-checklist": "0.1.0",
         "skill-template": "0.3.7"
       }
@@ -3736,7 +3762,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "project": true
       },
       "template_uses": {
-        "farplane-framework": "1.6.17"
+        "farplane-framework": "1.7.0"
       }
     },
     {
@@ -3755,7 +3781,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     {
       "consumer_id": "Farplane",
       "consumer_scope": "project",
-      "current_version": "1.6.17",
+      "current_version": "1.7.0",
       "feature_refs": [
         "FEAT-0060"
       ],
@@ -3763,12 +3789,12 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "status": "current",
       "target_basis": "projects with a farplane/manifest.json surface",
       "template_id": "farplane-framework",
-      "used_version": "1.6.17"
+      "used_version": "1.7.0"
     },
     {
       "consumer_id": "Farplane-UI",
       "consumer_scope": "project",
-      "current_version": "1.6.17",
+      "current_version": "1.7.0",
       "feature_refs": [
         "FEAT-0060"
       ],
@@ -3781,650 +3807,767 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     {
       "consumer_id": "asset-advisor",
       "consumer_scope": "skill",
-      "current_version": "0.1.0",
+      "current_version": "0.2.0",
       "feature_refs": [
         "FEAT-0054"
       ],
       "path": "skills/asset-advisor/SKILL.md",
       "status": "current",
-      "target_basis": "skills with an eval_task.json surface",
+      "target_basis": "skills with an evals/evals.json surface",
       "template_id": "skill-eval-task",
-      "used_version": "0.1.0"
+      "used_version": "0.2.0"
     },
     {
       "consumer_id": "audio-advisor",
       "consumer_scope": "skill",
-      "current_version": "0.1.0",
+      "current_version": "0.2.0",
       "feature_refs": [
         "FEAT-0054"
       ],
       "path": "skills/audio-advisor/SKILL.md",
       "status": "current",
-      "target_basis": "skills with an eval_task.json surface",
+      "target_basis": "skills with an evals/evals.json surface",
       "template_id": "skill-eval-task",
-      "used_version": "0.1.0"
+      "used_version": "0.2.0"
+    },
+    {
+      "consumer_id": "automation-advisor",
+      "consumer_scope": "skill",
+      "current_version": "0.2.0",
+      "feature_refs": [
+        "FEAT-0054"
+      ],
+      "path": "skills/automation-advisor/SKILL.md",
+      "status": "current",
+      "target_basis": "skills with an evals/evals.json surface",
+      "template_id": "skill-eval-task",
+      "used_version": "0.2.0"
     },
     {
       "consumer_id": "avatar-advisor",
       "consumer_scope": "skill",
-      "current_version": "0.1.0",
+      "current_version": "0.2.0",
       "feature_refs": [
         "FEAT-0054"
       ],
       "path": "skills/avatar-advisor/SKILL.md",
       "status": "current",
-      "target_basis": "skills with an eval_task.json surface",
+      "target_basis": "skills with an evals/evals.json surface",
       "template_id": "skill-eval-task",
-      "used_version": "0.1.0"
+      "used_version": "0.2.0"
     },
     {
       "consumer_id": "budget-advisor",
       "consumer_scope": "skill",
-      "current_version": "0.1.0",
+      "current_version": "0.2.0",
       "feature_refs": [
         "FEAT-0054"
       ],
       "path": "skills/budget-advisor/SKILL.md",
       "status": "current",
-      "target_basis": "skills with an eval_task.json surface",
+      "target_basis": "skills with an evals/evals.json surface",
       "template_id": "skill-eval-task",
-      "used_version": "0.1.0"
+      "used_version": "0.2.0"
+    },
+    {
+      "consumer_id": "close-ticket",
+      "consumer_scope": "skill",
+      "current_version": "0.2.0",
+      "feature_refs": [
+        "FEAT-0054"
+      ],
+      "path": "skills/close-ticket/SKILL.md",
+      "status": "current",
+      "target_basis": "skills with an evals/evals.json surface",
+      "template_id": "skill-eval-task",
+      "used_version": "0.2.0"
+    },
+    {
+      "consumer_id": "code-audit",
+      "consumer_scope": "skill",
+      "current_version": "0.2.0",
+      "feature_refs": [
+        "FEAT-0054"
+      ],
+      "path": "skills/code-audit/SKILL.md",
+      "status": "current",
+      "target_basis": "skills with an evals/evals.json surface",
+      "template_id": "skill-eval-task",
+      "used_version": "0.2.0"
     },
     {
       "consumer_id": "consolidate",
       "consumer_scope": "skill",
-      "current_version": "0.1.0",
+      "current_version": "0.2.0",
       "feature_refs": [
         "FEAT-0054"
       ],
       "path": "skills/consolidate/SKILL.md",
       "status": "current",
-      "target_basis": "skills with an eval_task.json surface",
+      "target_basis": "skills with an evals/evals.json surface",
       "template_id": "skill-eval-task",
-      "used_version": "0.1.0"
+      "used_version": "0.2.0"
     },
     {
       "consumer_id": "content-impl-plan",
       "consumer_scope": "skill",
-      "current_version": "0.1.0",
+      "current_version": "0.2.0",
       "feature_refs": [
         "FEAT-0054"
       ],
       "path": "skills/content-impl-plan/SKILL.md",
       "status": "current",
-      "target_basis": "skills with an eval_task.json surface",
+      "target_basis": "skills with an evals/evals.json surface",
       "template_id": "skill-eval-task",
-      "used_version": "0.1.0"
+      "used_version": "0.2.0"
     },
     {
       "consumer_id": "deliberative-advice",
       "consumer_scope": "skill",
-      "current_version": "0.1.0",
+      "current_version": "0.2.0",
       "feature_refs": [
         "FEAT-0054"
       ],
       "path": "skills/deliberative-advice/SKILL.md",
       "status": "current",
-      "target_basis": "skills with an eval_task.json surface",
+      "target_basis": "skills with an evals/evals.json surface",
       "template_id": "skill-eval-task",
-      "used_version": "0.1.0"
+      "used_version": "0.2.0"
     },
     {
       "consumer_id": "doc-advisor",
       "consumer_scope": "skill",
-      "current_version": "0.1.0",
+      "current_version": "0.2.0",
       "feature_refs": [
         "FEAT-0054"
       ],
       "path": "skills/doc-advisor/SKILL.md",
       "status": "current",
-      "target_basis": "skills with an eval_task.json surface",
+      "target_basis": "skills with an evals/evals.json surface",
       "template_id": "skill-eval-task",
-      "used_version": "0.1.0"
+      "used_version": "0.2.0"
     },
     {
       "consumer_id": "eval",
       "consumer_scope": "skill",
-      "current_version": "0.1.0",
+      "current_version": "0.2.0",
       "feature_refs": [
         "FEAT-0054"
       ],
       "path": "skills/eval/SKILL.md",
       "status": "current",
-      "target_basis": "skills with an eval_task.json surface",
+      "target_basis": "skills with an evals/evals.json surface",
       "template_id": "skill-eval-task",
-      "used_version": "0.1.0"
+      "used_version": "0.2.0"
     },
     {
       "consumer_id": "gap-analysis",
       "consumer_scope": "skill",
-      "current_version": "0.1.0",
+      "current_version": "0.2.0",
       "feature_refs": [
         "FEAT-0054"
       ],
       "path": "skills/gap-analysis/SKILL.md",
       "status": "current",
-      "target_basis": "skills with an eval_task.json surface",
+      "target_basis": "skills with an evals/evals.json surface",
       "template_id": "skill-eval-task",
-      "used_version": "0.1.0"
+      "used_version": "0.2.0"
     },
     {
       "consumer_id": "goal-advisor",
       "consumer_scope": "skill",
-      "current_version": "0.1.0",
+      "current_version": "0.2.0",
       "feature_refs": [
         "FEAT-0054"
       ],
       "path": "skills/goal-advisor/SKILL.md",
       "status": "current",
-      "target_basis": "skills with an eval_task.json surface",
+      "target_basis": "skills with an evals/evals.json surface",
       "template_id": "skill-eval-task",
-      "used_version": "0.1.0"
+      "used_version": "0.2.0"
     },
     {
       "consumer_id": "harness-advisor",
       "consumer_scope": "skill",
-      "current_version": "0.1.0",
+      "current_version": "0.2.0",
       "feature_refs": [
         "FEAT-0054"
       ],
       "path": "skills/harness-advisor/SKILL.md",
       "status": "current",
-      "target_basis": "skills with an eval_task.json surface",
+      "target_basis": "skills with an evals/evals.json surface",
       "template_id": "skill-eval-task",
-      "used_version": "0.1.0"
+      "used_version": "0.2.0"
+    },
+    {
+      "consumer_id": "harness-creator",
+      "consumer_scope": "skill",
+      "current_version": "0.2.0",
+      "feature_refs": [
+        "FEAT-0054"
+      ],
+      "path": "skills/harness-creator/SKILL.md",
+      "status": "current",
+      "target_basis": "skills with an evals/evals.json surface",
+      "template_id": "skill-eval-task",
+      "used_version": "0.2.0"
+    },
+    {
+      "consumer_id": "horizon-advisor",
+      "consumer_scope": "skill",
+      "current_version": "0.2.0",
+      "feature_refs": [
+        "FEAT-0054"
+      ],
+      "path": "skills/horizon-advisor/SKILL.md",
+      "status": "current",
+      "target_basis": "skills with an evals/evals.json surface",
+      "template_id": "skill-eval-task",
+      "used_version": "0.2.0"
     },
     {
       "consumer_id": "impl-plan",
       "consumer_scope": "skill",
-      "current_version": "0.1.0",
+      "current_version": "0.2.0",
       "feature_refs": [
         "FEAT-0054"
       ],
       "path": "skills/impl-plan/SKILL.md",
       "status": "current",
-      "target_basis": "skills with an eval_task.json surface",
+      "target_basis": "skills with an evals/evals.json surface",
       "template_id": "skill-eval-task",
-      "used_version": "0.1.0"
+      "used_version": "0.2.0"
+    },
+    {
+      "consumer_id": "ingest-content",
+      "consumer_scope": "skill",
+      "current_version": "0.2.0",
+      "feature_refs": [
+        "FEAT-0054"
+      ],
+      "path": "skills/ingest-content/SKILL.md",
+      "status": "current",
+      "target_basis": "skills with an evals/evals.json surface",
+      "template_id": "skill-eval-task",
+      "used_version": "0.2.0"
+    },
+    {
+      "consumer_id": "instagram-account",
+      "consumer_scope": "skill",
+      "current_version": "0.2.0",
+      "feature_refs": [
+        "FEAT-0054"
+      ],
+      "path": "skills/instagram-account/SKILL.md",
+      "status": "current",
+      "target_basis": "skills with an evals/evals.json surface",
+      "template_id": "skill-eval-task",
+      "used_version": "0.2.0"
     },
     {
       "consumer_id": "interval-update",
       "consumer_scope": "skill",
-      "current_version": "0.1.0",
+      "current_version": "0.2.0",
       "feature_refs": [
         "FEAT-0054"
       ],
       "path": "skills/interval-update/SKILL.md",
       "status": "current",
-      "target_basis": "skills with an eval_task.json surface",
+      "target_basis": "skills with an evals/evals.json surface",
       "template_id": "skill-eval-task",
-      "used_version": "0.1.0"
+      "used_version": "0.2.0"
     },
     {
       "consumer_id": "knowledge-tidier",
       "consumer_scope": "skill",
-      "current_version": "0.1.0",
+      "current_version": "0.2.0",
       "feature_refs": [
         "FEAT-0054"
       ],
       "path": "skills/knowledge-tidier/SKILL.md",
       "status": "current",
-      "target_basis": "skills with an eval_task.json surface",
+      "target_basis": "skills with an evals/evals.json surface",
       "template_id": "skill-eval-task",
-      "used_version": "0.1.0"
+      "used_version": "0.2.0"
     },
     {
       "consumer_id": "optimize-harness",
       "consumer_scope": "skill",
-      "current_version": "0.1.0",
+      "current_version": "0.2.0",
       "feature_refs": [
         "FEAT-0054"
       ],
       "path": "skills/optimize-harness/SKILL.md",
       "status": "current",
-      "target_basis": "skills with an eval_task.json surface",
+      "target_basis": "skills with an evals/evals.json surface",
       "template_id": "skill-eval-task",
-      "used_version": "0.1.0"
+      "used_version": "0.2.0"
     },
     {
       "consumer_id": "optimize-with-human",
       "consumer_scope": "skill",
-      "current_version": "0.1.0",
+      "current_version": "0.2.0",
       "feature_refs": [
         "FEAT-0054"
       ],
       "path": "skills/optimize-with-human/SKILL.md",
       "status": "current",
-      "target_basis": "skills with an eval_task.json surface",
+      "target_basis": "skills with an evals/evals.json surface",
       "template_id": "skill-eval-task",
-      "used_version": "0.1.0"
+      "used_version": "0.2.0"
     },
     {
       "consumer_id": "plan",
       "consumer_scope": "skill",
-      "current_version": "0.1.0",
+      "current_version": "0.2.0",
       "feature_refs": [
         "FEAT-0054"
       ],
       "path": "skills/plan/SKILL.md",
       "status": "current",
-      "target_basis": "skills with an eval_task.json surface",
+      "target_basis": "skills with an evals/evals.json surface",
       "template_id": "skill-eval-task",
-      "used_version": "0.1.0"
+      "used_version": "0.2.0"
     },
     {
       "consumer_id": "proof-advisor",
       "consumer_scope": "skill",
-      "current_version": "0.1.0",
+      "current_version": "0.2.0",
       "feature_refs": [
         "FEAT-0054"
       ],
       "path": "skills/proof-advisor/SKILL.md",
       "status": "current",
-      "target_basis": "skills with an eval_task.json surface",
+      "target_basis": "skills with an evals/evals.json surface",
       "template_id": "skill-eval-task",
-      "used_version": "0.1.0"
+      "used_version": "0.2.0"
     },
     {
       "consumer_id": "pulse-update",
       "consumer_scope": "skill",
-      "current_version": "0.1.0",
+      "current_version": "0.2.0",
       "feature_refs": [
         "FEAT-0054"
       ],
       "path": "skills/pulse-update/SKILL.md",
       "status": "current",
-      "target_basis": "skills with an eval_task.json surface",
+      "target_basis": "skills with an evals/evals.json surface",
       "template_id": "skill-eval-task",
-      "used_version": "0.1.0"
+      "used_version": "0.2.0"
+    },
+    {
+      "consumer_id": "qa",
+      "consumer_scope": "skill",
+      "current_version": "0.2.0",
+      "feature_refs": [
+        "FEAT-0054"
+      ],
+      "path": "skills/qa/SKILL.md",
+      "status": "current",
+      "target_basis": "skills with an evals/evals.json surface",
+      "template_id": "skill-eval-task",
+      "used_version": "0.2.0"
+    },
+    {
+      "consumer_id": "reference-grounding",
+      "consumer_scope": "skill",
+      "current_version": "0.2.0",
+      "feature_refs": [
+        "FEAT-0054"
+      ],
+      "path": "skills/reference-grounding/SKILL.md",
+      "status": "current",
+      "target_basis": "skills with an evals/evals.json surface",
+      "template_id": "skill-eval-task",
+      "used_version": "0.2.0"
+    },
+    {
+      "consumer_id": "review",
+      "consumer_scope": "skill",
+      "current_version": "0.2.0",
+      "feature_refs": [
+        "FEAT-0054"
+      ],
+      "path": "skills/review/SKILL.md",
+      "status": "current",
+      "target_basis": "skills with an evals/evals.json surface",
+      "template_id": "skill-eval-task",
+      "used_version": "0.2.0"
     },
     {
       "consumer_id": "self-improve",
       "consumer_scope": "skill",
-      "current_version": "0.1.0",
+      "current_version": "0.2.0",
       "feature_refs": [
         "FEAT-0054"
       ],
       "path": "skills/self-improve/SKILL.md",
       "status": "current",
-      "target_basis": "skills with an eval_task.json surface",
+      "target_basis": "skills with an evals/evals.json surface",
       "template_id": "skill-eval-task",
-      "used_version": "0.1.0"
+      "used_version": "0.2.0"
     },
     {
       "consumer_id": "skill-maintenance",
       "consumer_scope": "skill",
-      "current_version": "0.1.0",
+      "current_version": "0.2.0",
       "feature_refs": [
         "FEAT-0054"
       ],
       "path": "skills/skill-maintenance/SKILL.md",
       "status": "current",
-      "target_basis": "skills with an eval_task.json surface",
+      "target_basis": "skills with an evals/evals.json surface",
       "template_id": "skill-eval-task",
-      "used_version": "0.1.0"
+      "used_version": "0.2.0"
     },
     {
       "consumer_id": "social-content",
       "consumer_scope": "skill",
-      "current_version": "0.1.0",
+      "current_version": "0.2.0",
       "feature_refs": [
         "FEAT-0054"
       ],
       "path": "skills/social-content/SKILL.md",
       "status": "current",
-      "target_basis": "skills with an eval_task.json surface",
+      "target_basis": "skills with an evals/evals.json surface",
       "template_id": "skill-eval-task",
-      "used_version": "0.1.0"
+      "used_version": "0.2.0"
     },
     {
       "consumer_id": "storyboard",
       "consumer_scope": "skill",
-      "current_version": "0.1.0",
+      "current_version": "0.2.0",
       "feature_refs": [
         "FEAT-0054"
       ],
       "path": "skills/storyboard/SKILL.md",
       "status": "current",
-      "target_basis": "skills with an eval_task.json surface",
+      "target_basis": "skills with an evals/evals.json surface",
       "template_id": "skill-eval-task",
-      "used_version": "0.1.0"
+      "used_version": "0.2.0"
     },
     {
       "consumer_id": "telegram-message",
       "consumer_scope": "skill",
-      "current_version": "0.1.0",
+      "current_version": "0.2.0",
       "feature_refs": [
         "FEAT-0054"
       ],
       "path": "skills/telegram-message/SKILL.md",
       "status": "current",
-      "target_basis": "skills with an eval_task.json surface",
+      "target_basis": "skills with an evals/evals.json surface",
       "template_id": "skill-eval-task",
-      "used_version": "0.1.0"
+      "used_version": "0.2.0"
     },
     {
       "consumer_id": "ticket-opportunity-generator",
       "consumer_scope": "skill",
-      "current_version": "0.1.0",
+      "current_version": "0.2.0",
       "feature_refs": [
         "FEAT-0054"
       ],
       "path": "skills/ticket-opportunity-generator/SKILL.md",
       "status": "current",
-      "target_basis": "skills with an eval_task.json surface",
+      "target_basis": "skills with an evals/evals.json surface",
       "template_id": "skill-eval-task",
-      "used_version": "0.1.0"
+      "used_version": "0.2.0"
     },
     {
       "consumer_id": "worker-artifact-review-request",
       "consumer_scope": "skill",
-      "current_version": "0.1.0",
+      "current_version": "0.2.0",
       "feature_refs": [
         "FEAT-0054"
       ],
       "path": "skills/worker-artifact-review-request/SKILL.md",
       "status": "current",
-      "target_basis": "skills with an eval_task.json surface",
+      "target_basis": "skills with an evals/evals.json surface",
       "template_id": "skill-eval-task",
-      "used_version": "0.1.0"
+      "used_version": "0.2.0"
+    },
+    {
+      "consumer_id": "x-account",
+      "consumer_scope": "skill",
+      "current_version": "0.2.0",
+      "feature_refs": [
+        "FEAT-0054"
+      ],
+      "path": "skills/x-account/SKILL.md",
+      "status": "current",
+      "target_basis": "skills with an evals/evals.json surface",
+      "template_id": "skill-eval-task",
+      "used_version": "0.2.0"
     },
     {
       "consumer_id": "ad-advisor",
       "consumer_scope": "skill",
-      "current_version": "0.1.0",
+      "current_version": "0.2.0",
       "feature_refs": [
         "FEAT-0054"
       ],
       "path": "skills/ad-advisor/SKILL.md",
       "status": "missing",
-      "target_basis": "skills with an eval_task.json surface",
+      "target_basis": "skills with an evals/evals.json surface",
       "template_id": "skill-eval-task",
       "used_version": ""
     },
     {
       "consumer_id": "agent-qa-test",
       "consumer_scope": "skill",
-      "current_version": "0.1.0",
+      "current_version": "0.2.0",
       "feature_refs": [
         "FEAT-0054"
       ],
       "path": "skills/agent-qa-test/SKILL.md",
       "status": "missing",
-      "target_basis": "skills with an eval_task.json surface",
+      "target_basis": "skills with an evals/evals.json surface",
       "template_id": "skill-eval-task",
       "used_version": ""
     },
     {
       "consumer_id": "ai-video-advisor",
       "consumer_scope": "skill",
-      "current_version": "0.1.0",
+      "current_version": "0.2.0",
       "feature_refs": [
         "FEAT-0054"
       ],
       "path": "skills/ai-video-advisor/SKILL.md",
       "status": "missing",
-      "target_basis": "skills with an eval_task.json surface",
+      "target_basis": "skills with an evals/evals.json surface",
       "template_id": "skill-eval-task",
       "used_version": ""
     },
     {
       "consumer_id": "brainstorm",
       "consumer_scope": "skill",
-      "current_version": "0.1.0",
+      "current_version": "0.2.0",
       "feature_refs": [
         "FEAT-0054"
       ],
       "path": "skills/brainstorm/SKILL.md",
       "status": "missing",
-      "target_basis": "skills with an eval_task.json surface",
+      "target_basis": "skills with an evals/evals.json surface",
       "template_id": "skill-eval-task",
       "used_version": ""
     },
     {
       "consumer_id": "copywriting-advisor",
       "consumer_scope": "skill",
-      "current_version": "0.1.0",
+      "current_version": "0.2.0",
       "feature_refs": [
         "FEAT-0054"
       ],
       "path": "skills/copywriting-advisor/SKILL.md",
       "status": "missing",
-      "target_basis": "skills with an eval_task.json surface",
+      "target_basis": "skills with an evals/evals.json surface",
       "template_id": "skill-eval-task",
       "used_version": ""
     },
     {
       "consumer_id": "customer-research",
       "consumer_scope": "skill",
-      "current_version": "0.1.0",
+      "current_version": "0.2.0",
       "feature_refs": [
         "FEAT-0054"
       ],
       "path": "skills/customer-research/SKILL.md",
       "status": "missing",
-      "target_basis": "skills with an eval_task.json surface",
+      "target_basis": "skills with an evals/evals.json surface",
       "template_id": "skill-eval-task",
       "used_version": ""
     },
     {
       "consumer_id": "dogfood-review",
       "consumer_scope": "skill",
-      "current_version": "0.1.0",
+      "current_version": "0.2.0",
       "feature_refs": [
         "FEAT-0054"
       ],
       "path": "skills/dogfood-review/SKILL.md",
       "status": "missing",
-      "target_basis": "skills with an eval_task.json surface",
+      "target_basis": "skills with an evals/evals.json surface",
       "template_id": "skill-eval-task",
       "used_version": ""
     },
     {
       "consumer_id": "farplane-invocation",
       "consumer_scope": "skill",
-      "current_version": "0.1.0",
+      "current_version": "0.2.0",
       "feature_refs": [
         "FEAT-0054"
       ],
       "path": "skills/farplane-invocation/SKILL.md",
       "status": "missing",
-      "target_basis": "skills with an eval_task.json surface",
+      "target_basis": "skills with an evals/evals.json surface",
       "template_id": "skill-eval-task",
       "used_version": ""
     },
     {
       "consumer_id": "feed-scout",
       "consumer_scope": "skill",
-      "current_version": "0.1.0",
+      "current_version": "0.2.0",
       "feature_refs": [
         "FEAT-0054"
       ],
       "path": "skills/feed-scout/SKILL.md",
       "status": "missing",
-      "target_basis": "skills with an eval_task.json surface",
+      "target_basis": "skills with an evals/evals.json surface",
       "template_id": "skill-eval-task",
       "used_version": ""
     },
     {
       "consumer_id": "hardening",
       "consumer_scope": "skill",
-      "current_version": "0.1.0",
+      "current_version": "0.2.0",
       "feature_refs": [
         "FEAT-0054"
       ],
       "path": "skills/hardening/SKILL.md",
       "status": "missing",
-      "target_basis": "skills with an eval_task.json surface",
+      "target_basis": "skills with an evals/evals.json surface",
       "template_id": "skill-eval-task",
       "used_version": ""
     },
     {
       "consumer_id": "infographic",
       "consumer_scope": "skill",
-      "current_version": "0.1.0",
+      "current_version": "0.2.0",
       "feature_refs": [
         "FEAT-0054"
       ],
       "path": "skills/infographic/SKILL.md",
       "status": "missing",
-      "target_basis": "skills with an eval_task.json surface",
+      "target_basis": "skills with an evals/evals.json surface",
       "template_id": "skill-eval-task",
       "used_version": ""
     },
     {
       "consumer_id": "init-advisor",
       "consumer_scope": "skill",
-      "current_version": "0.1.0",
+      "current_version": "0.2.0",
       "feature_refs": [
         "FEAT-0054"
       ],
       "path": "skills/init-advisor/SKILL.md",
       "status": "missing",
-      "target_basis": "skills with an eval_task.json surface",
+      "target_basis": "skills with an evals/evals.json surface",
       "template_id": "skill-eval-task",
       "used_version": ""
     },
     {
       "consumer_id": "lead-scout",
       "consumer_scope": "skill",
-      "current_version": "0.1.0",
+      "current_version": "0.2.0",
       "feature_refs": [
         "FEAT-0054"
       ],
       "path": "skills/lead-scout/SKILL.md",
       "status": "missing",
-      "target_basis": "skills with an eval_task.json surface",
+      "target_basis": "skills with an evals/evals.json surface",
       "template_id": "skill-eval-task",
       "used_version": ""
     },
     {
       "consumer_id": "metric-advisor",
       "consumer_scope": "skill",
-      "current_version": "0.1.0",
+      "current_version": "0.2.0",
       "feature_refs": [
         "FEAT-0054"
       ],
       "path": "skills/metric-advisor/SKILL.md",
       "status": "missing",
-      "target_basis": "skills with an eval_task.json surface",
+      "target_basis": "skills with an evals/evals.json surface",
       "template_id": "skill-eval-task",
       "used_version": ""
     },
     {
       "consumer_id": "problem-framing",
       "consumer_scope": "skill",
-      "current_version": "0.1.0",
+      "current_version": "0.2.0",
       "feature_refs": [
         "FEAT-0054"
       ],
       "path": "skills/problem-framing/SKILL.md",
       "status": "missing",
-      "target_basis": "skills with an eval_task.json surface",
-      "template_id": "skill-eval-task",
-      "used_version": ""
-    },
-    {
-      "consumer_id": "qa",
-      "consumer_scope": "skill",
-      "current_version": "0.1.0",
-      "feature_refs": [
-        "FEAT-0054"
-      ],
-      "path": "skills/qa/SKILL.md",
-      "status": "missing",
-      "target_basis": "skills with an eval_task.json surface",
+      "target_basis": "skills with an evals/evals.json surface",
       "template_id": "skill-eval-task",
       "used_version": ""
     },
     {
       "consumer_id": "refactoring",
       "consumer_scope": "skill",
-      "current_version": "0.1.0",
+      "current_version": "0.2.0",
       "feature_refs": [
         "FEAT-0054"
       ],
       "path": "skills/refactoring/SKILL.md",
       "status": "missing",
-      "target_basis": "skills with an eval_task.json surface",
+      "target_basis": "skills with an evals/evals.json surface",
       "template_id": "skill-eval-task",
       "used_version": ""
     },
     {
       "consumer_id": "remotion",
       "consumer_scope": "skill",
-      "current_version": "0.1.0",
+      "current_version": "0.2.0",
       "feature_refs": [
         "FEAT-0054"
       ],
       "path": "skills/remotion/SKILL.md",
       "status": "missing",
-      "target_basis": "skills with an eval_task.json surface",
+      "target_basis": "skills with an evals/evals.json surface",
       "template_id": "skill-eval-task",
       "used_version": ""
     },
     {
       "consumer_id": "seo-content-advisor",
       "consumer_scope": "skill",
-      "current_version": "0.1.0",
+      "current_version": "0.2.0",
       "feature_refs": [
         "FEAT-0054"
       ],
       "path": "skills/seo-content-advisor/SKILL.md",
       "status": "missing",
-      "target_basis": "skills with an eval_task.json surface",
+      "target_basis": "skills with an evals/evals.json surface",
       "template_id": "skill-eval-task",
       "used_version": ""
     },
     {
       "consumer_id": "skill-creator",
       "consumer_scope": "skill",
-      "current_version": "0.1.0",
+      "current_version": "0.2.0",
       "feature_refs": [
         "FEAT-0054"
       ],
       "path": "skills/skill-creator/SKILL.md",
       "status": "missing",
-      "target_basis": "skills with an eval_task.json surface",
+      "target_basis": "skills with an evals/evals.json surface",
       "template_id": "skill-eval-task",
       "used_version": ""
     },
     {
       "consumer_id": "solution-shaping",
       "consumer_scope": "skill",
-      "current_version": "0.1.0",
+      "current_version": "0.2.0",
       "feature_refs": [
         "FEAT-0054"
       ],
       "path": "skills/solution-shaping/SKILL.md",
       "status": "missing",
-      "target_basis": "skills with an eval_task.json surface",
-      "template_id": "skill-eval-task",
-      "used_version": ""
-    },
-    {
-      "consumer_id": "taste-loop",
-      "consumer_scope": "skill",
-      "current_version": "0.1.0",
-      "feature_refs": [
-        "FEAT-0054"
-      ],
-      "path": "skills/taste-loop/SKILL.md",
-      "status": "missing",
-      "target_basis": "skills with an eval_task.json surface",
+      "target_basis": "skills with an evals/evals.json surface",
       "template_id": "skill-eval-task",
       "used_version": ""
     },
     {
       "consumer_id": "visual-qa",
       "consumer_scope": "skill",
-      "current_version": "0.1.0",
+      "current_version": "0.2.0",
       "feature_refs": [
         "FEAT-0054"
       ],
       "path": "skills/visual-qa/SKILL.md",
       "status": "missing",
-      "target_basis": "skills with an eval_task.json surface",
+      "target_basis": "skills with an evals/evals.json surface",
       "template_id": "skill-eval-task",
       "used_version": ""
     },
@@ -4555,6 +4698,20 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "used_version": ""
     },
     {
+      "consumer_id": "feed-scout",
+      "consumer_scope": "skill",
+      "current_version": "0.1.1",
+      "feature_refs": [
+        "FEAT-0057",
+        "FEAT-0062"
+      ],
+      "path": "skills/feed-scout/SKILL.md",
+      "status": "missing",
+      "target_basis": "skills with a qa_checklist.md surface",
+      "template_id": "skill-qa-checklist",
+      "used_version": ""
+    },
+    {
       "consumer_id": "init-advisor",
       "consumer_scope": "skill",
       "current_version": "0.1.1",
@@ -4563,6 +4720,20 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "FEAT-0062"
       ],
       "path": "skills/init-advisor/SKILL.md",
+      "status": "missing",
+      "target_basis": "skills with a qa_checklist.md surface",
+      "template_id": "skill-qa-checklist",
+      "used_version": ""
+    },
+    {
+      "consumer_id": "interval-update",
+      "consumer_scope": "skill",
+      "current_version": "0.1.1",
+      "feature_refs": [
+        "FEAT-0057",
+        "FEAT-0062"
+      ],
+      "path": "skills/interval-update/SKILL.md",
       "status": "missing",
       "target_basis": "skills with a qa_checklist.md surface",
       "template_id": "skill-qa-checklist",
@@ -4689,6 +4860,20 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "FEAT-0062"
       ],
       "path": "skills/advise/SKILL.md",
+      "status": "stale",
+      "target_basis": "skills with a qa_checklist.md surface",
+      "template_id": "skill-qa-checklist",
+      "used_version": "0.1.0"
+    },
+    {
+      "consumer_id": "code-audit",
+      "consumer_scope": "skill",
+      "current_version": "0.1.1",
+      "feature_refs": [
+        "FEAT-0057",
+        "FEAT-0062"
+      ],
+      "path": "skills/code-audit/SKILL.md",
       "status": "stale",
       "target_basis": "skills with a qa_checklist.md surface",
       "template_id": "skill-qa-checklist",
@@ -4935,7 +5120,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     {
       "consumer_id": "ad-advisor",
       "consumer_scope": "skill",
-      "current_version": "0.3.7",
+      "current_version": "0.3.8",
       "feature_refs": [
         "FEAT-0022",
         "FEAT-0054",
@@ -4943,343 +5128,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "FEAT-0062"
       ],
       "path": "skills/ad-advisor/SKILL.md",
-      "status": "current",
-      "target_basis": "local skills that declare skill-template usage",
-      "template_id": "skill-template",
-      "used_version": "0.3.7"
-    },
-    {
-      "consumer_id": "ai-image-advisor",
-      "consumer_scope": "skill",
-      "current_version": "0.3.7",
-      "feature_refs": [
-        "FEAT-0022",
-        "FEAT-0054",
-        "FEAT-0057",
-        "FEAT-0062"
-      ],
-      "path": "skills/ai-image-advisor/SKILL.md",
-      "status": "current",
-      "target_basis": "local skills that declare skill-template usage",
-      "template_id": "skill-template",
-      "used_version": "0.3.7"
-    },
-    {
-      "consumer_id": "ai-video-advisor",
-      "consumer_scope": "skill",
-      "current_version": "0.3.7",
-      "feature_refs": [
-        "FEAT-0022",
-        "FEAT-0054",
-        "FEAT-0057",
-        "FEAT-0062"
-      ],
-      "path": "skills/ai-video-advisor/SKILL.md",
-      "status": "current",
-      "target_basis": "local skills that declare skill-template usage",
-      "template_id": "skill-template",
-      "used_version": "0.3.7"
-    },
-    {
-      "consumer_id": "asset-advisor",
-      "consumer_scope": "skill",
-      "current_version": "0.3.7",
-      "feature_refs": [
-        "FEAT-0022",
-        "FEAT-0054",
-        "FEAT-0057",
-        "FEAT-0062"
-      ],
-      "path": "skills/asset-advisor/SKILL.md",
-      "status": "current",
-      "target_basis": "local skills that declare skill-template usage",
-      "template_id": "skill-template",
-      "used_version": "0.3.7"
-    },
-    {
-      "consumer_id": "audio-advisor",
-      "consumer_scope": "skill",
-      "current_version": "0.3.7",
-      "feature_refs": [
-        "FEAT-0022",
-        "FEAT-0054",
-        "FEAT-0057",
-        "FEAT-0062"
-      ],
-      "path": "skills/audio-advisor/SKILL.md",
-      "status": "current",
-      "target_basis": "local skills that declare skill-template usage",
-      "template_id": "skill-template",
-      "used_version": "0.3.7"
-    },
-    {
-      "consumer_id": "avatar-advisor",
-      "consumer_scope": "skill",
-      "current_version": "0.3.7",
-      "feature_refs": [
-        "FEAT-0022",
-        "FEAT-0054",
-        "FEAT-0057",
-        "FEAT-0062"
-      ],
-      "path": "skills/avatar-advisor/SKILL.md",
-      "status": "current",
-      "target_basis": "local skills that declare skill-template usage",
-      "template_id": "skill-template",
-      "used_version": "0.3.7"
-    },
-    {
-      "consumer_id": "content-impl-plan",
-      "consumer_scope": "skill",
-      "current_version": "0.3.7",
-      "feature_refs": [
-        "FEAT-0022",
-        "FEAT-0054",
-        "FEAT-0057",
-        "FEAT-0062"
-      ],
-      "path": "skills/content-impl-plan/SKILL.md",
-      "status": "current",
-      "target_basis": "local skills that declare skill-template usage",
-      "template_id": "skill-template",
-      "used_version": "0.3.7"
-    },
-    {
-      "consumer_id": "copywriting-advisor",
-      "consumer_scope": "skill",
-      "current_version": "0.3.7",
-      "feature_refs": [
-        "FEAT-0022",
-        "FEAT-0054",
-        "FEAT-0057",
-        "FEAT-0062"
-      ],
-      "path": "skills/copywriting-advisor/SKILL.md",
-      "status": "current",
-      "target_basis": "local skills that declare skill-template usage",
-      "template_id": "skill-template",
-      "used_version": "0.3.7"
-    },
-    {
-      "consumer_id": "customer-research",
-      "consumer_scope": "skill",
-      "current_version": "0.3.7",
-      "feature_refs": [
-        "FEAT-0022",
-        "FEAT-0054",
-        "FEAT-0057",
-        "FEAT-0062"
-      ],
-      "path": "skills/customer-research/SKILL.md",
-      "status": "current",
-      "target_basis": "local skills that declare skill-template usage",
-      "template_id": "skill-template",
-      "used_version": "0.3.7"
-    },
-    {
-      "consumer_id": "dogfood-review",
-      "consumer_scope": "skill",
-      "current_version": "0.3.7",
-      "feature_refs": [
-        "FEAT-0022",
-        "FEAT-0054",
-        "FEAT-0057",
-        "FEAT-0062"
-      ],
-      "path": "skills/dogfood-review/SKILL.md",
-      "status": "current",
-      "target_basis": "local skills that declare skill-template usage",
-      "template_id": "skill-template",
-      "used_version": "0.3.7"
-    },
-    {
-      "consumer_id": "instagram-account",
-      "consumer_scope": "skill",
-      "current_version": "0.3.7",
-      "feature_refs": [
-        "FEAT-0022",
-        "FEAT-0054",
-        "FEAT-0057",
-        "FEAT-0062"
-      ],
-      "path": "skills/instagram-account/SKILL.md",
-      "status": "current",
-      "target_basis": "local skills that declare skill-template usage",
-      "template_id": "skill-template",
-      "used_version": "0.3.7"
-    },
-    {
-      "consumer_id": "lead-scout",
-      "consumer_scope": "skill",
-      "current_version": "0.3.7",
-      "feature_refs": [
-        "FEAT-0022",
-        "FEAT-0054",
-        "FEAT-0057",
-        "FEAT-0062"
-      ],
-      "path": "skills/lead-scout/SKILL.md",
-      "status": "current",
-      "target_basis": "local skills that declare skill-template usage",
-      "template_id": "skill-template",
-      "used_version": "0.3.7"
-    },
-    {
-      "consumer_id": "notion-task-field-fill",
-      "consumer_scope": "skill",
-      "current_version": "0.3.7",
-      "feature_refs": [
-        "FEAT-0022",
-        "FEAT-0054",
-        "FEAT-0057",
-        "FEAT-0062"
-      ],
-      "path": "skills/notion-task-field-fill/SKILL.md",
-      "status": "current",
-      "target_basis": "local skills that declare skill-template usage",
-      "template_id": "skill-template",
-      "used_version": "0.3.7"
-    },
-    {
-      "consumer_id": "phone-chaser",
-      "consumer_scope": "skill",
-      "current_version": "0.3.7",
-      "feature_refs": [
-        "FEAT-0022",
-        "FEAT-0054",
-        "FEAT-0057",
-        "FEAT-0062"
-      ],
-      "path": "skills/phone-chaser/SKILL.md",
-      "status": "current",
-      "target_basis": "local skills that declare skill-template usage",
-      "template_id": "skill-template",
-      "used_version": "0.3.7"
-    },
-    {
-      "consumer_id": "problem-framing",
-      "consumer_scope": "skill",
-      "current_version": "0.3.7",
-      "feature_refs": [
-        "FEAT-0022",
-        "FEAT-0054",
-        "FEAT-0057",
-        "FEAT-0062"
-      ],
-      "path": "skills/problem-framing/SKILL.md",
-      "status": "current",
-      "target_basis": "local skills that declare skill-template usage",
-      "template_id": "skill-template",
-      "used_version": "0.3.7"
-    },
-    {
-      "consumer_id": "remotion",
-      "consumer_scope": "skill",
-      "current_version": "0.3.7",
-      "feature_refs": [
-        "FEAT-0022",
-        "FEAT-0054",
-        "FEAT-0057",
-        "FEAT-0062"
-      ],
-      "path": "skills/remotion/SKILL.md",
-      "status": "current",
-      "target_basis": "local skills that declare skill-template usage",
-      "template_id": "skill-template",
-      "used_version": "0.3.7"
-    },
-    {
-      "consumer_id": "seo-content-advisor",
-      "consumer_scope": "skill",
-      "current_version": "0.3.7",
-      "feature_refs": [
-        "FEAT-0022",
-        "FEAT-0054",
-        "FEAT-0057",
-        "FEAT-0062"
-      ],
-      "path": "skills/seo-content-advisor/SKILL.md",
-      "status": "current",
-      "target_basis": "local skills that declare skill-template usage",
-      "template_id": "skill-template",
-      "used_version": "0.3.7"
-    },
-    {
-      "consumer_id": "solution-shaping",
-      "consumer_scope": "skill",
-      "current_version": "0.3.7",
-      "feature_refs": [
-        "FEAT-0022",
-        "FEAT-0054",
-        "FEAT-0057",
-        "FEAT-0062"
-      ],
-      "path": "skills/solution-shaping/SKILL.md",
-      "status": "current",
-      "target_basis": "local skills that declare skill-template usage",
-      "template_id": "skill-template",
-      "used_version": "0.3.7"
-    },
-    {
-      "consumer_id": "storyboard",
-      "consumer_scope": "skill",
-      "current_version": "0.3.7",
-      "feature_refs": [
-        "FEAT-0022",
-        "FEAT-0054",
-        "FEAT-0057",
-        "FEAT-0062"
-      ],
-      "path": "skills/storyboard/SKILL.md",
-      "status": "current",
-      "target_basis": "local skills that declare skill-template usage",
-      "template_id": "skill-template",
-      "used_version": "0.3.7"
-    },
-    {
-      "consumer_id": "ticket-opportunity-generator",
-      "consumer_scope": "skill",
-      "current_version": "0.3.7",
-      "feature_refs": [
-        "FEAT-0022",
-        "FEAT-0054",
-        "FEAT-0057",
-        "FEAT-0062"
-      ],
-      "path": "skills/ticket-opportunity-generator/SKILL.md",
-      "status": "current",
-      "target_basis": "local skills that declare skill-template usage",
-      "template_id": "skill-template",
-      "used_version": "0.3.7"
-    },
-    {
-      "consumer_id": "worker-artifact-review-request",
-      "consumer_scope": "skill",
-      "current_version": "0.3.7",
-      "feature_refs": [
-        "FEAT-0022",
-        "FEAT-0054",
-        "FEAT-0057",
-        "FEAT-0062"
-      ],
-      "path": "skills/worker-artifact-review-request/SKILL.md",
-      "status": "current",
-      "target_basis": "local skills that declare skill-template usage",
-      "template_id": "skill-template",
-      "used_version": "0.3.7"
-    },
-    {
-      "consumer_id": "x-account",
-      "consumer_scope": "skill",
-      "current_version": "0.3.7",
-      "feature_refs": [
-        "FEAT-0022",
-        "FEAT-0054",
-        "FEAT-0057",
-        "FEAT-0062"
-      ],
-      "path": "skills/x-account/SKILL.md",
-      "status": "current",
+      "status": "stale",
       "target_basis": "local skills that declare skill-template usage",
       "template_id": "skill-template",
       "used_version": "0.3.7"
@@ -5287,7 +5136,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     {
       "consumer_id": "advise",
       "consumer_scope": "skill",
-      "current_version": "0.3.7",
+      "current_version": "0.3.8",
       "feature_refs": [
         "FEAT-0022",
         "FEAT-0054",
@@ -5301,9 +5150,73 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "used_version": "0.1.0"
     },
     {
+      "consumer_id": "ai-image-advisor",
+      "consumer_scope": "skill",
+      "current_version": "0.3.8",
+      "feature_refs": [
+        "FEAT-0022",
+        "FEAT-0054",
+        "FEAT-0057",
+        "FEAT-0062"
+      ],
+      "path": "skills/ai-image-advisor/SKILL.md",
+      "status": "stale",
+      "target_basis": "local skills that declare skill-template usage",
+      "template_id": "skill-template",
+      "used_version": "0.3.7"
+    },
+    {
+      "consumer_id": "ai-video-advisor",
+      "consumer_scope": "skill",
+      "current_version": "0.3.8",
+      "feature_refs": [
+        "FEAT-0022",
+        "FEAT-0054",
+        "FEAT-0057",
+        "FEAT-0062"
+      ],
+      "path": "skills/ai-video-advisor/SKILL.md",
+      "status": "stale",
+      "target_basis": "local skills that declare skill-template usage",
+      "template_id": "skill-template",
+      "used_version": "0.3.7"
+    },
+    {
+      "consumer_id": "asset-advisor",
+      "consumer_scope": "skill",
+      "current_version": "0.3.8",
+      "feature_refs": [
+        "FEAT-0022",
+        "FEAT-0054",
+        "FEAT-0057",
+        "FEAT-0062"
+      ],
+      "path": "skills/asset-advisor/SKILL.md",
+      "status": "stale",
+      "target_basis": "local skills that declare skill-template usage",
+      "template_id": "skill-template",
+      "used_version": "0.3.7"
+    },
+    {
+      "consumer_id": "audio-advisor",
+      "consumer_scope": "skill",
+      "current_version": "0.3.8",
+      "feature_refs": [
+        "FEAT-0022",
+        "FEAT-0054",
+        "FEAT-0057",
+        "FEAT-0062"
+      ],
+      "path": "skills/audio-advisor/SKILL.md",
+      "status": "stale",
+      "target_basis": "local skills that declare skill-template usage",
+      "template_id": "skill-template",
+      "used_version": "0.3.7"
+    },
+    {
       "consumer_id": "automation-advisor",
       "consumer_scope": "skill",
-      "current_version": "0.3.7",
+      "current_version": "0.3.8",
       "feature_refs": [
         "FEAT-0022",
         "FEAT-0054",
@@ -5317,9 +5230,25 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "used_version": "0.2.0"
     },
     {
+      "consumer_id": "avatar-advisor",
+      "consumer_scope": "skill",
+      "current_version": "0.3.8",
+      "feature_refs": [
+        "FEAT-0022",
+        "FEAT-0054",
+        "FEAT-0057",
+        "FEAT-0062"
+      ],
+      "path": "skills/avatar-advisor/SKILL.md",
+      "status": "stale",
+      "target_basis": "local skills that declare skill-template usage",
+      "template_id": "skill-template",
+      "used_version": "0.3.7"
+    },
+    {
       "consumer_id": "budget-advisor",
       "consumer_scope": "skill",
-      "current_version": "0.3.7",
+      "current_version": "0.3.8",
       "feature_refs": [
         "FEAT-0022",
         "FEAT-0054",
@@ -5333,9 +5262,25 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "used_version": "0.3.0"
     },
     {
+      "consumer_id": "code-audit",
+      "consumer_scope": "skill",
+      "current_version": "0.3.8",
+      "feature_refs": [
+        "FEAT-0022",
+        "FEAT-0054",
+        "FEAT-0057",
+        "FEAT-0062"
+      ],
+      "path": "skills/code-audit/SKILL.md",
+      "status": "stale",
+      "target_basis": "local skills that declare skill-template usage",
+      "template_id": "skill-template",
+      "used_version": "0.3.7"
+    },
+    {
       "consumer_id": "code-review",
       "consumer_scope": "skill",
-      "current_version": "0.3.7",
+      "current_version": "0.3.8",
       "feature_refs": [
         "FEAT-0022",
         "FEAT-0054",
@@ -5351,7 +5296,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     {
       "consumer_id": "consolidate",
       "consumer_scope": "skill",
-      "current_version": "0.3.7",
+      "current_version": "0.3.8",
       "feature_refs": [
         "FEAT-0022",
         "FEAT-0054",
@@ -5365,9 +5310,57 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "used_version": "0.3.5"
     },
     {
+      "consumer_id": "content-impl-plan",
+      "consumer_scope": "skill",
+      "current_version": "0.3.8",
+      "feature_refs": [
+        "FEAT-0022",
+        "FEAT-0054",
+        "FEAT-0057",
+        "FEAT-0062"
+      ],
+      "path": "skills/content-impl-plan/SKILL.md",
+      "status": "stale",
+      "target_basis": "local skills that declare skill-template usage",
+      "template_id": "skill-template",
+      "used_version": "0.3.7"
+    },
+    {
+      "consumer_id": "copywriting-advisor",
+      "consumer_scope": "skill",
+      "current_version": "0.3.8",
+      "feature_refs": [
+        "FEAT-0022",
+        "FEAT-0054",
+        "FEAT-0057",
+        "FEAT-0062"
+      ],
+      "path": "skills/copywriting-advisor/SKILL.md",
+      "status": "stale",
+      "target_basis": "local skills that declare skill-template usage",
+      "template_id": "skill-template",
+      "used_version": "0.3.7"
+    },
+    {
+      "consumer_id": "customer-research",
+      "consumer_scope": "skill",
+      "current_version": "0.3.8",
+      "feature_refs": [
+        "FEAT-0022",
+        "FEAT-0054",
+        "FEAT-0057",
+        "FEAT-0062"
+      ],
+      "path": "skills/customer-research/SKILL.md",
+      "status": "stale",
+      "target_basis": "local skills that declare skill-template usage",
+      "template_id": "skill-template",
+      "used_version": "0.3.7"
+    },
+    {
       "consumer_id": "deliberative-advice",
       "consumer_scope": "skill",
-      "current_version": "0.3.7",
+      "current_version": "0.3.8",
       "feature_refs": [
         "FEAT-0022",
         "FEAT-0054",
@@ -5383,7 +5376,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     {
       "consumer_id": "doc-advisor",
       "consumer_scope": "skill",
-      "current_version": "0.3.7",
+      "current_version": "0.3.8",
       "feature_refs": [
         "FEAT-0022",
         "FEAT-0054",
@@ -5397,9 +5390,25 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "used_version": "0.3.6"
     },
     {
+      "consumer_id": "dogfood-review",
+      "consumer_scope": "skill",
+      "current_version": "0.3.8",
+      "feature_refs": [
+        "FEAT-0022",
+        "FEAT-0054",
+        "FEAT-0057",
+        "FEAT-0062"
+      ],
+      "path": "skills/dogfood-review/SKILL.md",
+      "status": "stale",
+      "target_basis": "local skills that declare skill-template usage",
+      "template_id": "skill-template",
+      "used_version": "0.3.7"
+    },
+    {
       "consumer_id": "eval",
       "consumer_scope": "skill",
-      "current_version": "0.3.7",
+      "current_version": "0.3.8",
       "feature_refs": [
         "FEAT-0022",
         "FEAT-0054",
@@ -5415,7 +5424,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     {
       "consumer_id": "feed-scout",
       "consumer_scope": "skill",
-      "current_version": "0.3.7",
+      "current_version": "0.3.8",
       "feature_refs": [
         "FEAT-0022",
         "FEAT-0054",
@@ -5431,7 +5440,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     {
       "consumer_id": "frontend-craft",
       "consumer_scope": "skill",
-      "current_version": "0.3.7",
+      "current_version": "0.3.8",
       "feature_refs": [
         "FEAT-0022",
         "FEAT-0054",
@@ -5447,7 +5456,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     {
       "consumer_id": "gap-analysis",
       "consumer_scope": "skill",
-      "current_version": "0.3.7",
+      "current_version": "0.3.8",
       "feature_refs": [
         "FEAT-0022",
         "FEAT-0054",
@@ -5463,7 +5472,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     {
       "consumer_id": "goal-advisor",
       "consumer_scope": "skill",
-      "current_version": "0.3.7",
+      "current_version": "0.3.8",
       "feature_refs": [
         "FEAT-0022",
         "FEAT-0054",
@@ -5479,7 +5488,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     {
       "consumer_id": "hardening",
       "consumer_scope": "skill",
-      "current_version": "0.3.7",
+      "current_version": "0.3.8",
       "feature_refs": [
         "FEAT-0022",
         "FEAT-0054",
@@ -5495,7 +5504,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     {
       "consumer_id": "harness-advisor",
       "consumer_scope": "skill",
-      "current_version": "0.3.7",
+      "current_version": "0.3.8",
       "feature_refs": [
         "FEAT-0022",
         "FEAT-0054",
@@ -5511,7 +5520,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     {
       "consumer_id": "harness-creator",
       "consumer_scope": "skill",
-      "current_version": "0.3.7",
+      "current_version": "0.3.8",
       "feature_refs": [
         "FEAT-0022",
         "FEAT-0054",
@@ -5527,7 +5536,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     {
       "consumer_id": "horizon-advisor",
       "consumer_scope": "skill",
-      "current_version": "0.3.7",
+      "current_version": "0.3.8",
       "feature_refs": [
         "FEAT-0022",
         "FEAT-0054",
@@ -5543,7 +5552,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     {
       "consumer_id": "impl-plan",
       "consumer_scope": "skill",
-      "current_version": "0.3.7",
+      "current_version": "0.3.8",
       "feature_refs": [
         "FEAT-0022",
         "FEAT-0054",
@@ -5559,7 +5568,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     {
       "consumer_id": "infographic",
       "consumer_scope": "skill",
-      "current_version": "0.3.7",
+      "current_version": "0.3.8",
       "feature_refs": [
         "FEAT-0022",
         "FEAT-0054",
@@ -5575,7 +5584,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     {
       "consumer_id": "ingest-content",
       "consumer_scope": "skill",
-      "current_version": "0.3.7",
+      "current_version": "0.3.8",
       "feature_refs": [
         "FEAT-0022",
         "FEAT-0054",
@@ -5589,9 +5598,25 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "used_version": "0.2.0"
     },
     {
+      "consumer_id": "instagram-account",
+      "consumer_scope": "skill",
+      "current_version": "0.3.8",
+      "feature_refs": [
+        "FEAT-0022",
+        "FEAT-0054",
+        "FEAT-0057",
+        "FEAT-0062"
+      ],
+      "path": "skills/instagram-account/SKILL.md",
+      "status": "stale",
+      "target_basis": "local skills that declare skill-template usage",
+      "template_id": "skill-template",
+      "used_version": "0.3.7"
+    },
+    {
       "consumer_id": "interval-update",
       "consumer_scope": "skill",
-      "current_version": "0.3.7",
+      "current_version": "0.3.8",
       "feature_refs": [
         "FEAT-0022",
         "FEAT-0054",
@@ -5607,7 +5632,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     {
       "consumer_id": "knowledge-tidier",
       "consumer_scope": "skill",
-      "current_version": "0.3.7",
+      "current_version": "0.3.8",
       "feature_refs": [
         "FEAT-0022",
         "FEAT-0054",
@@ -5621,9 +5646,25 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "used_version": "0.3.0"
     },
     {
+      "consumer_id": "lead-scout",
+      "consumer_scope": "skill",
+      "current_version": "0.3.8",
+      "feature_refs": [
+        "FEAT-0022",
+        "FEAT-0054",
+        "FEAT-0057",
+        "FEAT-0062"
+      ],
+      "path": "skills/lead-scout/SKILL.md",
+      "status": "stale",
+      "target_basis": "local skills that declare skill-template usage",
+      "template_id": "skill-template",
+      "used_version": "0.3.7"
+    },
+    {
       "consumer_id": "leverage-advisor",
       "consumer_scope": "skill",
-      "current_version": "0.3.7",
+      "current_version": "0.3.8",
       "feature_refs": [
         "FEAT-0022",
         "FEAT-0054",
@@ -5639,7 +5680,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     {
       "consumer_id": "leverage-rollout",
       "consumer_scope": "skill",
-      "current_version": "0.3.7",
+      "current_version": "0.3.8",
       "feature_refs": [
         "FEAT-0022",
         "FEAT-0054",
@@ -5653,9 +5694,25 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "used_version": "0.2.0"
     },
     {
+      "consumer_id": "media-ingest",
+      "consumer_scope": "skill",
+      "current_version": "0.3.8",
+      "feature_refs": [
+        "FEAT-0022",
+        "FEAT-0054",
+        "FEAT-0057",
+        "FEAT-0062"
+      ],
+      "path": "skills/media-ingest/SKILL.md",
+      "status": "stale",
+      "target_basis": "local skills that declare skill-template usage",
+      "template_id": "skill-template",
+      "used_version": "0.3.7"
+    },
+    {
       "consumer_id": "metric-advisor",
       "consumer_scope": "skill",
-      "current_version": "0.3.7",
+      "current_version": "0.3.8",
       "feature_refs": [
         "FEAT-0022",
         "FEAT-0054",
@@ -5669,9 +5726,25 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "used_version": "0.3.2"
     },
     {
+      "consumer_id": "notion-task-field-fill",
+      "consumer_scope": "skill",
+      "current_version": "0.3.8",
+      "feature_refs": [
+        "FEAT-0022",
+        "FEAT-0054",
+        "FEAT-0057",
+        "FEAT-0062"
+      ],
+      "path": "skills/notion-task-field-fill/SKILL.md",
+      "status": "stale",
+      "target_basis": "local skills that declare skill-template usage",
+      "template_id": "skill-template",
+      "used_version": "0.3.7"
+    },
+    {
       "consumer_id": "optimize-harness",
       "consumer_scope": "skill",
-      "current_version": "0.3.7",
+      "current_version": "0.3.8",
       "feature_refs": [
         "FEAT-0022",
         "FEAT-0054",
@@ -5687,7 +5760,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     {
       "consumer_id": "optimize-with-human",
       "consumer_scope": "skill",
-      "current_version": "0.3.7",
+      "current_version": "0.3.8",
       "feature_refs": [
         "FEAT-0022",
         "FEAT-0054",
@@ -5701,9 +5774,25 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "used_version": "0.2.0"
     },
     {
+      "consumer_id": "phone-chaser",
+      "consumer_scope": "skill",
+      "current_version": "0.3.8",
+      "feature_refs": [
+        "FEAT-0022",
+        "FEAT-0054",
+        "FEAT-0057",
+        "FEAT-0062"
+      ],
+      "path": "skills/phone-chaser/SKILL.md",
+      "status": "stale",
+      "target_basis": "local skills that declare skill-template usage",
+      "template_id": "skill-template",
+      "used_version": "0.3.7"
+    },
+    {
       "consumer_id": "plan",
       "consumer_scope": "skill",
-      "current_version": "0.3.7",
+      "current_version": "0.3.8",
       "feature_refs": [
         "FEAT-0022",
         "FEAT-0054",
@@ -5717,9 +5806,25 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "used_version": "0.2.0"
     },
     {
+      "consumer_id": "problem-framing",
+      "consumer_scope": "skill",
+      "current_version": "0.3.8",
+      "feature_refs": [
+        "FEAT-0022",
+        "FEAT-0054",
+        "FEAT-0057",
+        "FEAT-0062"
+      ],
+      "path": "skills/problem-framing/SKILL.md",
+      "status": "stale",
+      "target_basis": "local skills that declare skill-template usage",
+      "template_id": "skill-template",
+      "used_version": "0.3.7"
+    },
+    {
       "consumer_id": "proof-advisor",
       "consumer_scope": "skill",
-      "current_version": "0.3.7",
+      "current_version": "0.3.8",
       "feature_refs": [
         "FEAT-0022",
         "FEAT-0054",
@@ -5735,7 +5840,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     {
       "consumer_id": "prototyping",
       "consumer_scope": "skill",
-      "current_version": "0.3.7",
+      "current_version": "0.3.8",
       "feature_refs": [
         "FEAT-0022",
         "FEAT-0054",
@@ -5751,7 +5856,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     {
       "consumer_id": "pulse-update",
       "consumer_scope": "skill",
-      "current_version": "0.3.7",
+      "current_version": "0.3.8",
       "feature_refs": [
         "FEAT-0022",
         "FEAT-0054",
@@ -5767,7 +5872,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     {
       "consumer_id": "refactoring",
       "consumer_scope": "skill",
-      "current_version": "0.3.7",
+      "current_version": "0.3.8",
       "feature_refs": [
         "FEAT-0022",
         "FEAT-0054",
@@ -5783,7 +5888,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     {
       "consumer_id": "reference-grounding",
       "consumer_scope": "skill",
-      "current_version": "0.3.7",
+      "current_version": "0.3.8",
       "feature_refs": [
         "FEAT-0022",
         "FEAT-0054",
@@ -5797,9 +5902,25 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "used_version": "0.1.0"
     },
     {
+      "consumer_id": "remotion",
+      "consumer_scope": "skill",
+      "current_version": "0.3.8",
+      "feature_refs": [
+        "FEAT-0022",
+        "FEAT-0054",
+        "FEAT-0057",
+        "FEAT-0062"
+      ],
+      "path": "skills/remotion/SKILL.md",
+      "status": "stale",
+      "target_basis": "local skills that declare skill-template usage",
+      "template_id": "skill-template",
+      "used_version": "0.3.7"
+    },
+    {
       "consumer_id": "review",
       "consumer_scope": "skill",
-      "current_version": "0.3.7",
+      "current_version": "0.3.8",
       "feature_refs": [
         "FEAT-0022",
         "FEAT-0054",
@@ -5815,7 +5936,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     {
       "consumer_id": "runtime-debugging",
       "consumer_scope": "skill",
-      "current_version": "0.3.7",
+      "current_version": "0.3.8",
       "feature_refs": [
         "FEAT-0022",
         "FEAT-0054",
@@ -5831,7 +5952,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     {
       "consumer_id": "self-improve",
       "consumer_scope": "skill",
-      "current_version": "0.3.7",
+      "current_version": "0.3.8",
       "feature_refs": [
         "FEAT-0022",
         "FEAT-0054",
@@ -5845,9 +5966,25 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "used_version": "0.2.0"
     },
     {
+      "consumer_id": "seo-content-advisor",
+      "consumer_scope": "skill",
+      "current_version": "0.3.8",
+      "feature_refs": [
+        "FEAT-0022",
+        "FEAT-0054",
+        "FEAT-0057",
+        "FEAT-0062"
+      ],
+      "path": "skills/seo-content-advisor/SKILL.md",
+      "status": "stale",
+      "target_basis": "local skills that declare skill-template usage",
+      "template_id": "skill-template",
+      "used_version": "0.3.7"
+    },
+    {
       "consumer_id": "skill-creator",
       "consumer_scope": "skill",
-      "current_version": "0.3.7",
+      "current_version": "0.3.8",
       "feature_refs": [
         "FEAT-0022",
         "FEAT-0054",
@@ -5863,7 +6000,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     {
       "consumer_id": "skill-maintenance",
       "consumer_scope": "skill",
-      "current_version": "0.3.7",
+      "current_version": "0.3.8",
       "feature_refs": [
         "FEAT-0022",
         "FEAT-0054",
@@ -5879,7 +6016,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     {
       "consumer_id": "social-content",
       "consumer_scope": "skill",
-      "current_version": "0.3.7",
+      "current_version": "0.3.8",
       "feature_refs": [
         "FEAT-0022",
         "FEAT-0054",
@@ -5893,25 +6030,41 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "used_version": "0.3.6"
     },
     {
-      "consumer_id": "taste-loop",
+      "consumer_id": "solution-shaping",
       "consumer_scope": "skill",
-      "current_version": "0.3.7",
+      "current_version": "0.3.8",
       "feature_refs": [
         "FEAT-0022",
         "FEAT-0054",
         "FEAT-0057",
         "FEAT-0062"
       ],
-      "path": "skills/taste-loop/SKILL.md",
+      "path": "skills/solution-shaping/SKILL.md",
       "status": "stale",
       "target_basis": "local skills that declare skill-template usage",
       "template_id": "skill-template",
-      "used_version": "0.2.0"
+      "used_version": "0.3.7"
+    },
+    {
+      "consumer_id": "storyboard",
+      "consumer_scope": "skill",
+      "current_version": "0.3.8",
+      "feature_refs": [
+        "FEAT-0022",
+        "FEAT-0054",
+        "FEAT-0057",
+        "FEAT-0062"
+      ],
+      "path": "skills/storyboard/SKILL.md",
+      "status": "stale",
+      "target_basis": "local skills that declare skill-template usage",
+      "template_id": "skill-template",
+      "used_version": "0.3.7"
     },
     {
       "consumer_id": "telegram-message",
       "consumer_scope": "skill",
-      "current_version": "0.3.7",
+      "current_version": "0.3.8",
       "feature_refs": [
         "FEAT-0022",
         "FEAT-0054",
@@ -5925,9 +6078,25 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "used_version": "0.3.6"
     },
     {
+      "consumer_id": "ticket-opportunity-generator",
+      "consumer_scope": "skill",
+      "current_version": "0.3.8",
+      "feature_refs": [
+        "FEAT-0022",
+        "FEAT-0054",
+        "FEAT-0057",
+        "FEAT-0062"
+      ],
+      "path": "skills/ticket-opportunity-generator/SKILL.md",
+      "status": "stale",
+      "target_basis": "local skills that declare skill-template usage",
+      "template_id": "skill-template",
+      "used_version": "0.3.7"
+    },
+    {
       "consumer_id": "update-memory",
       "consumer_scope": "skill",
-      "current_version": "0.3.7",
+      "current_version": "0.3.8",
       "feature_refs": [
         "FEAT-0022",
         "FEAT-0054",
@@ -5943,7 +6112,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     {
       "consumer_id": "update-strategy",
       "consumer_scope": "skill",
-      "current_version": "0.3.7",
+      "current_version": "0.3.8",
       "feature_refs": [
         "FEAT-0022",
         "FEAT-0054",
@@ -5955,6 +6124,38 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
       "target_basis": "local skills that declare skill-template usage",
       "template_id": "skill-template",
       "used_version": "0.2.0"
+    },
+    {
+      "consumer_id": "worker-artifact-review-request",
+      "consumer_scope": "skill",
+      "current_version": "0.3.8",
+      "feature_refs": [
+        "FEAT-0022",
+        "FEAT-0054",
+        "FEAT-0057",
+        "FEAT-0062"
+      ],
+      "path": "skills/worker-artifact-review-request/SKILL.md",
+      "status": "stale",
+      "target_basis": "local skills that declare skill-template usage",
+      "template_id": "skill-template",
+      "used_version": "0.3.7"
+    },
+    {
+      "consumer_id": "x-account",
+      "consumer_scope": "skill",
+      "current_version": "0.3.8",
+      "feature_refs": [
+        "FEAT-0022",
+        "FEAT-0054",
+        "FEAT-0057",
+        "FEAT-0062"
+      ],
+      "path": "skills/x-account/SKILL.md",
+      "status": "stale",
+      "target_basis": "local skills that declare skill-template usage",
+      "template_id": "skill-template",
+      "used_version": "0.3.7"
     }
   ],
   "template_rollout_summary": {
@@ -5966,7 +6167,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "current": 1,
         "stale": 1
       },
-      "current_version": "1.6.17",
+      "current_version": "1.7.0",
       "feature_refs": [
         "FEAT-0060"
       ],
@@ -5975,27 +6176,27 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     },
     "skill-eval-task": {
       "by_scope": {
-        "skill": 50
+        "skill": 59
       },
       "by_status": {
-        "current": 27,
-        "missing": 23
+        "current": 38,
+        "missing": 21
       },
-      "current_version": "0.1.0",
+      "current_version": "0.2.0",
       "feature_refs": [
         "FEAT-0054"
       ],
-      "target_basis": "skills with an eval_task.json surface",
-      "total_consumers": 50
+      "target_basis": "skills with an evals/evals.json surface",
+      "total_consumers": 59
     },
     "skill-qa-checklist": {
       "by_scope": {
-        "skill": 36
+        "skill": 39
       },
       "by_status": {
         "current": 5,
-        "missing": 13,
-        "stale": 18
+        "missing": 15,
+        "stale": 19
       },
       "current_version": "0.1.1",
       "feature_refs": [
@@ -6003,17 +6204,16 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "FEAT-0062"
       ],
       "target_basis": "skills with a qa_checklist.md surface",
-      "total_consumers": 36
+      "total_consumers": 39
     },
     "skill-template": {
       "by_scope": {
-        "skill": 64
+        "skill": 65
       },
       "by_status": {
-        "current": 22,
-        "stale": 42
+        "stale": 65
       },
-      "current_version": "0.3.7",
+      "current_version": "0.3.8",
       "feature_refs": [
         "FEAT-0022",
         "FEAT-0054",
@@ -6021,7 +6221,7 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "FEAT-0062"
       ],
       "target_basis": "local skills that declare skill-template usage",
-      "total_consumers": 64
+      "total_consumers": 65
     }
   },
   "template_versions": [
@@ -6255,10 +6455,10 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
     },
     {
       "introduced_at": "2026-06-29",
-      "latest_at": "2026-07-09",
-      "latest_commit": "71bb3bd7dab4",
-      "latest_summary": "working tree current template",
-      "release_count": 2,
+      "latest_at": "2026-06-29",
+      "latest_commit": "a4724e232c9e",
+      "latest_summary": "Add opt-in skill surface budget scanner",
+      "release_count": 1,
       "sections": [
         "Context",
         "Skill Signature",
@@ -6270,19 +6470,13 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "Reference Map",
         "Output"
       ],
-      "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.7-71bb3bd7dab4.md",
+      "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.7-a4724e232c9e.md",
       "snapshots": [
         {
           "introduced_at": "2026-06-29",
           "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.7-a4724e232c9e.md",
           "source_commit": "a4724e232c9e",
           "summary": "Add opt-in skill surface budget scanner"
-        },
-        {
-          "introduced_at": "2026-07-09",
-          "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.7-71bb3bd7dab4.md",
-          "source_commit": "71bb3bd7dab4",
-          "summary": "working tree current template"
         }
       ],
       "source_commit": "a4724e232c9e",
@@ -6304,6 +6498,52 @@ window.SKILL_TEMPLATE_INTELLIGENCE = {
         "template_version": "0.3.7"
       },
       "version": "0.3.7"
+    },
+    {
+      "introduced_at": "2026-07-11",
+      "latest_at": "2026-07-11",
+      "latest_commit": "3f35e5bb01e1",
+      "latest_summary": "working tree current template",
+      "release_count": 1,
+      "sections": [
+        "Context",
+        "Skill Signature",
+        "Phase Contract",
+        "Phase Boundary",
+        "Todo List",
+        "Templates",
+        "Gotchas",
+        "Reference Map",
+        "Output"
+      ],
+      "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.8-3f35e5bb01e1.md",
+      "snapshots": [
+        {
+          "introduced_at": "2026-07-11",
+          "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.8-3f35e5bb01e1.md",
+          "source_commit": "3f35e5bb01e1",
+          "summary": "working tree current template"
+        }
+      ],
+      "source_commit": "3f35e5bb01e1",
+      "summary": "working tree current template",
+      "template_metadata": {
+        "feature_refs": [
+          "FEAT-0022",
+          "FEAT-0054",
+          "FEAT-0057",
+          "FEAT-0062"
+        ],
+        "surface_fields": {
+          "eval": "supported",
+          "qa_checklist": "supported",
+          "skill_ui": "supported",
+          "workflow": "optional"
+        },
+        "template_id": "skill-template",
+        "template_version": "0.3.8"
+      },
+      "version": "0.3.8"
     }
   ]
 };

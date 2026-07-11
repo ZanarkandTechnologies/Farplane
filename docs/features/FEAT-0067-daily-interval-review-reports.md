@@ -27,7 +27,7 @@ source_refs:
   - docs/prd.md
 external_refs: []
 evidence_refs:
-  - skills/interval-update/eval_task.json
+  - skills/interval-update/evals/evals.json
   - tickets/archive/TASK-0319/ticket.md
   - tickets/archive/TASK-0319/artifacts/qa/integrated-qa.md
 known_limits: "Reports may resurface only prior-evidenced BAU maintenance; same-run discoveries remain ledger-only, and the first proof uses representative ticket-local fixtures rather than wall-clock cron runs."

@@ -58,7 +58,7 @@ class FarplaneSkillRolloutTests(unittest.TestCase):
                             "tier": 1,
                             "template_version": "0.3.2",
                             "status": "current",
-                            "eval": "eval_task.json",
+                            "eval": "evals/evals.json",
                             "qa_checklist": "",
                             "skill_ui": "",
                             "has_checklist": True,

@@ -24,7 +24,7 @@ automation
 Inputs:
 - Read skills/eval/SKILL.md.
 - Read skills/eval/references/eval-consolidation.md.
-- Run fetch_evals_edited_since_last_run against skills/*/eval_task.json.
+- Run fetch_evals_edited_since_last_run against skills/*/evals/evals.json.
 - Read .farplane/state/eval-drain/processed.jsonl if present.
 
 Policy:

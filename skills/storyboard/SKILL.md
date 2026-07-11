@@ -7,9 +7,9 @@ source: local
 template_uses:
   skill-template: "0.3.7"
   skill-qa-checklist: "0.1.1"
-  skill-eval-task: "0.1.0"
+  skill-eval-task: "0.2.0"
   skill-surface-budget: "0.1.0"
-eval: eval_task.json
+eval: evals/evals.json
 qa_checklist: qa_checklist.md
 common_chains:
   after: ["asset-advisor", "audio-advisor", "avatar-advisor", "remotion", "social-content"]
@@ -92,6 +92,12 @@ scene handoff, asset needs, proof, and blocker conditions.
     storyboard panels, shot list, motion notes, audio notes, captions or
     supers, and asset requirements.
   - [ ] Ensure each beat has a viewer job and each shot has a production job.
+  - [ ] For narrative video, make the storyboard connected: recurring character
+    or explicit no-character rationale, recurring object/motif when useful,
+    viewer question -> answer, and scene-to-scene cause/effect.
+  - [ ] For model-native clip generation, include start/end frame handoff pairs
+    for each generated clip, plus transition notes for any intentional scene
+    break; do not output isolated pretty panels unless the format is montage.
 - [ ] 5. Select the production route.
   - [ ] Route parent ticket/action-list planning to `content-impl-plan`.
   - [ ] Route asset decomposition and recreation planning to `asset-advisor`.
@@ -137,6 +143,16 @@ Script:
 Storyboard:
 | Scene | Time | Visual | Copy/VO | Motion | Assets | Proof |
 | --- | ---: | --- | --- | --- | --- | --- |
+
+Continuity Handoff:
+- Reel / reference type:
+- Viewer question -> answer:
+- Recurring character / no-character rationale:
+- Recurring object or motif:
+- Generation topology: continuous_chain | deliberate_scene_breaks | montage
+- Frame pairs:
+  - Clip 1 start frame -> end frame:
+- Scene breaks / transitions:
 
 ## Notes
 - Rejected angles:

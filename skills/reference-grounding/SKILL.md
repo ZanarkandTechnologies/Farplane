@@ -6,8 +6,10 @@ tier: 1
 source: local
 template_uses:
   skill-template: "0.1.0"
+  skill-eval-task: "0.2.0"
   skill-qa-checklist: "0.1.0"
   skill-surface-budget: "0.1.0"
+eval: evals/evals.json
 allowed-tools: Read, Glob, Grep, web_search, documentation-searcher
 qa_checklist: qa_checklist.md
 

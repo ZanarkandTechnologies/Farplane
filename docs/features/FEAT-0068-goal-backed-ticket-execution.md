@@ -27,7 +27,7 @@ source_refs:
 external_refs: []
 evidence_refs:
   - docs/farplane-framework/ticket-execution-loop.md
-  - skills/goal-advisor/eval_task.json
+  - skills/goal-advisor/evals/evals.json
 known_limits: "Execution is governed by tickets, Goal Packets, proof, and review; Farplane still does not ship a central ticket-executor daemon."
 metrics:
   - ticket_execution_resumeability
@@ -141,7 +141,7 @@ Gray is the accepted ticket input, amber is execution/review behavior, green is 
 
 - Evidence:
   - `docs/farplane-framework/ticket-execution-loop.md`
-  - `skills/goal-advisor/eval_task.json`
+  - `skills/goal-advisor/evals/evals.json`
 - Required checks:
   - `python3 docs/features/validate_features.py`
   - `python3 bin/validators/check_doc_refs.py`

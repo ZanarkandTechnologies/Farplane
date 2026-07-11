@@ -12,9 +12,14 @@
 6. Convert rubric into binary assertions.
 7. Build at least 3 eval cases.
 8. Baseline pass rate or baseline reviewer/human judgment.
-9. Iterate one skill change at a time through native Goal mode or a bounded
-   candidate-comparison pass.
-10. Debrief before/after behavior and update durable skill memory with lessons.
+9. Classify feedback as immediate or delayed.
+10. For immediate feedback, iterate one skill change at a time through native
+    Goal mode or a bounded candidate-comparison pass and decide in-window.
+11. For delayed feedback, record baseline/exposure and exact Reward rows, then
+    use Goal Advisor to compile the experiment-specific evidence, scoring,
+    decision, writeback, idempotency, and source-gap procedure into the
+    original `program.md` `Check-In Program` before entering `waiting_signal`.
+12. Debrief before/after behavior and update durable skill memory with lessons.
 
 Use 3-5 cases for smoke validation. Use 20-100 diverse cases before trusting an
 overnight or unattended optimization run.
@@ -55,3 +60,78 @@ Use this path when the skill lacks:
 - concrete validation behavior
 
 Rewrite the skill first, then add evals.
+
+## Delayed Check-In
+
+Use this only when the real signal cannot mature inside the current execution
+window:
+
+1. Keep the intervention and expected result in the original experiment
+   ticket.
+2. Add one or more `Reward.kpi_rewards[]` rows with `check_in_at`; do not add
+   experiment metadata.
+3. Use Goal Advisor to fill `program.md` `Check-In Program` with its packet
+   inputs, exact evidence sources, ordered procedure, writeback, decision
+   thresholds, idempotency, and missing-source behavior.
+4. Append baseline and exposure observations to `progress.md`.
+5. Let Work Pulse derive matured rows and hand the same ticket/program/progress
+   plus row indexes and evidence refs to one worker.
+6. Have that worker read `program.md` first, execute `Check-In Program`, update
+   only matured rows, append progress, and return `accept`, `kill`, `iterate`,
+   or `monitor`.
+
+### Exact Goal Packet Contract
+
+```text
+ticket.md / Reward.kpi_rewards[]:
+  kpi_id
+  expected_reward
+  check_in_at
+  actual_result
+  reward_score
+  reward_score_reason
+
+program.md:
+  Metric Provider.signal + minimum
+  Heartbeat Policy.wake_condition
+  Check-In Program:
+    mode: delayed_reward
+    inputs: original ticket/program/progress + matured row indexes + evidence
+    procedure: ordered evidence collection, attribution, comparison, scoring
+    writeback: matured Reward rows + append-only progress entry
+    decisions: accept_when + kill_when + iterate_when + monitor_when
+    idempotency: preserve future/completed rows; correction note on rescore
+    source_gap: record gap + monitor/next check-in unless explicitly overridden
+  Stop Conditions.complete_when + pause_when
+  Rollout Policy.promotion_rule + rollback_or_hold_rule
+
+progress.md:
+  append-only baseline, exposure, observations, and decisions
+```
+
+A row is due when `check_in_at <= now` and either `actual_result` or
+`reward_score` is empty. Work Pulse resumes the original non-terminal ticket,
+hands every matured row to one worker, and leaves future/completed rows alone.
+It does not reproduce the decision rules stored in `program.md`.
+
+Decisions:
+
+- `accept`: keep/promote and close;
+- `kill`: prune/rollback and close;
+- `iterate`: update the hypothesis and resume work now;
+- `monitor`: remain dormant and update the same ticket's next check-in.
+
+For immediate feedback, keep `Check-In Program` to
+`mode: not_applicable` plus a reason. Do not fill any delayed procedure fields.
+
+## Decision Branches
+
+- Rewrite a target missing its first-load contract before optimizing it.
+- If no honest metric exists, use metric-advisor, eval/review, or human
+  feedback instead of a fake score.
+- Read existing target-local memory before proposing another hypothesis.
+- Include scripts in evals when they carry fragile behavior.
+- Use the prompt profile for prompt-like targets.
+- Add cases before trusting a narrow suite; use simplicity guards when scores
+  improve by adding bloat.
+- Keep Goal as the loop runner and this skill as measured context/evidence.

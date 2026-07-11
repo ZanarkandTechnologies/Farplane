@@ -14,6 +14,7 @@ import os
 import shutil
 import subprocess
 import sys
+import tomllib
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
@@ -35,8 +36,19 @@ DEFAULT_CODEX_HOME = Path.home() / ".codex"
 DEFAULT_FARPLANE_HOME = Path.home() / ".farplane"
 CONFIG_PATH = DEFAULT_FARPLANE_HOME / "farplane-cli.json"
 UI_ENV = "FARPLANE_UI_REPO"
-DELEGATED_COMMANDS = {"agent", "gateway", "onboarding", "office", "status", "team", "whoami"}
+DELEGATED_COMMANDS = {
+    "agent",
+    "bank",
+    "gateway",
+    "onboarding",
+    "office",
+    "resource-bank",
+    "status",
+    "team",
+    "whoami",
+}
 OLD_CONVEX_SITE_URL = "https://agreeable-finch-230.convex.site"
+PREVIOUS_NOTIFY_FLAG = "--previous-notify"
 
 
 @dataclass(frozen=True)
@@ -68,6 +80,206 @@ def print_payload(payload: dict[str, Any], as_json: bool) -> None:
         print(f"- {issue}")
     for hint in payload.get("hints", []):
         print(f"- next: {hint}")
+
+
+def toml_array(value: list[str]) -> str:
+    return json.dumps(value, separators=(", ", ": "))
+
+
+def farplane_notify_command(codex_home: Path) -> list[str]:
+    return ["python3", str(codex_home / "bin" / "notify.py")]
+
+
+def is_farplane_notify_command(command: object, codex_home: Path) -> bool:
+    if not isinstance(command, list) or len(command) < 2:
+        return False
+    if not all(isinstance(item, str) for item in command):
+        return False
+    try:
+        script_path = Path(command[1]).expanduser().resolve()
+    except OSError:
+        return False
+    return script_path == (codex_home / "bin" / "notify.py").expanduser().resolve()
+
+
+def parse_notify_command(config_text: str, config_path: Path) -> list[str] | None:
+    try:
+        parsed = tomllib.loads(config_text)
+    except tomllib.TOMLDecodeError as exc:
+        raise CliError(f"invalid_toml:{config_path}:{exc}") from exc
+    notify = parsed.get("notify")
+    if notify is None:
+        return None
+    if not isinstance(notify, list) or not all(isinstance(item, str) for item in notify):
+        raise CliError(f"invalid_notify:{config_path}:expected_string_array")
+    return notify
+
+
+def previous_notify_command(command: list[str]) -> list[str] | None:
+    if PREVIOUS_NOTIFY_FLAG not in command:
+        return None
+    index = command.index(PREVIOUS_NOTIFY_FLAG)
+    if index + 1 >= len(command):
+        return None
+    try:
+        value = json.loads(command[index + 1])
+    except json.JSONDecodeError:
+        return None
+    if not isinstance(value, list) or not all(isinstance(item, str) for item in value):
+        return None
+    return value
+
+
+def is_notify_wrapper(command: object) -> bool:
+    return isinstance(command, list) and all(isinstance(item, str) for item in command) and "turn-ended" in command
+
+
+def replace_notify_line(config_text: str, next_command: list[str] | None) -> str:
+    lines = config_text.splitlines(keepends=True)
+    replacement = None if next_command is None else f"notify = {toml_array(next_command)}\n"
+
+    for index, line in enumerate(lines):
+        if line.startswith("notify") and line.split("=", 1)[0].strip() == "notify":
+            if replacement is None:
+                del lines[index]
+            else:
+                lines[index] = replacement
+            return "".join(lines)
+
+    if replacement is None:
+        return config_text
+
+    for index, line in enumerate(lines):
+        if line.lstrip().startswith("["):
+            lines.insert(index, replacement)
+            if index > 0 and lines[index - 1].strip():
+                lines.insert(index, "\n")
+            return "".join(lines)
+
+    if config_text and not config_text.endswith("\n"):
+        config_text += "\n"
+    return config_text + replacement
+
+
+def notify_status_payload(codex_home: Path) -> dict[str, Any]:
+    config_path = codex_home / "config.toml"
+    issues: list[str] = []
+    hints: list[str] = []
+    command: list[str] | None = None
+    previous_command: list[str] | None = None
+
+    if not config_path.exists():
+        issues.append(f"config_missing:{config_path}")
+        hints.append("run `farplane install`")
+    else:
+        command = parse_notify_command(config_path.read_text(encoding="utf-8"), config_path)
+        if command is not None:
+            previous_command = previous_notify_command(command)
+
+    farplane_direct = is_farplane_notify_command(command, codex_home)
+    farplane_previous = is_farplane_notify_command(previous_command, codex_home)
+    wrapped = is_notify_wrapper(command)
+
+    if farplane_direct:
+        status = "enabled"
+        mode = "direct"
+    elif farplane_previous:
+        status = "enabled"
+        mode = "wrapped"
+    elif wrapped:
+        status = "disabled"
+        mode = "wrapped"
+    elif command is None:
+        status = "disabled"
+        mode = "none"
+    else:
+        status = "custom"
+        mode = "custom"
+        hints.append("notify is custom; `farplane notify disable` only removes Farplane notify commands")
+
+    return {
+        "ok": not issues,
+        "summary": f"Farplane notify is {status}",
+        "codexHome": str(codex_home),
+        "configToml": str(config_path),
+        "status": status,
+        "mode": mode,
+        "notify": command,
+        "previousNotify": previous_command,
+        "issues": issues,
+        "hints": hints,
+    }
+
+
+def write_codex_notify(
+    *,
+    codex_home: Path,
+    next_command: list[str] | None,
+    dry_run: bool,
+) -> Path | None:
+    config_path = codex_home / "config.toml"
+    if not config_path.exists():
+        raise CliError(f"config_missing:{config_path}: run `farplane install` first")
+    current_text = config_path.read_text(encoding="utf-8")
+    next_text = replace_notify_line(current_text, next_command)
+    if next_text == current_text:
+        return None
+    if dry_run:
+        return None
+    backup_path = config_path.with_name(f"config.toml.bak.farplane-notify-{datetime.now().strftime('%Y%m%d-%H%M%S')}")
+    shutil.copy2(config_path, backup_path)
+    config_path.write_text(next_text, encoding="utf-8")
+    return backup_path
+
+
+def set_notify_enabled(codex_home: Path, enabled: bool, dry_run: bool) -> dict[str, Any]:
+    config_path = codex_home / "config.toml"
+    if not config_path.exists():
+        raise CliError(f"config_missing:{config_path}: run `farplane install` first")
+    current_text = config_path.read_text(encoding="utf-8")
+    command = parse_notify_command(current_text, config_path)
+    default_command = farplane_notify_command(codex_home)
+    next_command: list[str] | None
+
+    if enabled:
+        if command and PREVIOUS_NOTIFY_FLAG in command:
+            next_command = list(command)
+            previous_json = json.dumps(default_command, separators=(",", ":"))
+            index = next_command.index(PREVIOUS_NOTIFY_FLAG)
+            if index + 1 < len(next_command):
+                next_command[index + 1] = previous_json
+            else:
+                next_command.append(previous_json)
+        elif is_notify_wrapper(command):
+            previous_json = json.dumps(default_command, separators=(",", ":"))
+            next_command = list(command) + [PREVIOUS_NOTIFY_FLAG, previous_json]
+        elif command and not is_farplane_notify_command(command, codex_home):
+            raise CliError("notify_custom: refusing to overwrite custom notify command")
+        else:
+            next_command = default_command
+    else:
+        if command and PREVIOUS_NOTIFY_FLAG in command:
+            next_command = list(command)
+            index = next_command.index(PREVIOUS_NOTIFY_FLAG)
+            del next_command[index : index + 2]
+        elif is_farplane_notify_command(command, codex_home):
+            next_command = None
+        else:
+            next_command = command
+
+    backup_path = write_codex_notify(codex_home=codex_home, next_command=next_command, dry_run=dry_run)
+    payload = notify_status_payload(codex_home)
+    payload["ok"] = True
+    payload["dryRun"] = dry_run
+    payload["backup"] = str(backup_path) if backup_path else None
+    if dry_run:
+        payload["summary"] = f"Farplane notify would be {'enabled' if enabled else 'disabled'}"
+        payload["wouldWrite"] = str(config_path)
+        payload["nextNotify"] = next_command
+        payload["nextStatus"] = "enabled" if enabled else "disabled"
+    else:
+        payload["summary"] = f"Farplane notify {'enabled' if enabled else 'disabled'}"
+    return payload
 
 
 def passthrough_args(args: list[str]) -> list[str]:
@@ -310,18 +522,25 @@ def run_hooks_doctor(args: argparse.Namespace) -> int:
     return 0 if payload["ok"] else 1
 
 
-def run_config_doctor(args: argparse.Namespace) -> int:
-    codex_home = Path(args.target).expanduser().resolve() if args.target else DEFAULT_CODEX_HOME
-    farplane_home = Path(args.state_dir).expanduser().resolve() if args.state_dir else DEFAULT_FARPLANE_HOME
-    project_root = Path(args.project_root).expanduser().resolve() if args.project_root else CORE_ROOT
-    payload = config_doctor(
-        codex_home=codex_home,
-        farplane_home=farplane_home,
-        project_root=project_root,
-        process_env=dict(os.environ),
-    )
+def run_notify_status(args: argparse.Namespace) -> int:
+    codex_home = Path(args.target).expanduser().resolve() if args.target else load_config().codex_home
+    payload = notify_status_payload(codex_home)
     print_payload(payload, args.json)
     return 0 if payload["ok"] else 1
+
+
+def run_notify_enable(args: argparse.Namespace) -> int:
+    codex_home = Path(args.target).expanduser().resolve() if args.target else load_config().codex_home
+    payload = set_notify_enabled(codex_home, True, args.dry_run)
+    print_payload(payload, args.json)
+    return 0
+
+
+def run_notify_disable(args: argparse.Namespace) -> int:
+    codex_home = Path(args.target).expanduser().resolve() if args.target else load_config().codex_home
+    payload = set_notify_enabled(codex_home, False, args.dry_run)
+    print_payload(payload, args.json)
+    return 0
 
 
 def run_ui_link(args: argparse.Namespace) -> int:
@@ -410,6 +629,12 @@ def run_reports_index_cli(args: argparse.Namespace) -> int:
     from farplane_reports import run_index
 
     return int(run_index(args))
+
+
+def run_reports_repair_refs_cli(args: argparse.Namespace) -> int:
+    from farplane_reports import run_repair_refs
+
+    return int(run_repair_refs(args))
 
 
 def run_content_add_cli(args: argparse.Namespace) -> int:
@@ -553,14 +778,22 @@ def build_parser() -> argparse.ArgumentParser:
     hooks_doctor_parser.add_argument("--json", action="store_true")
     hooks_doctor_parser.set_defaults(func=run_hooks_doctor)
 
-    config_parser = sub.add_parser("config", help="Inspect Farplane runtime config and secret sources.")
-    config_sub = config_parser.add_subparsers(dest="config_command")
-    config_doctor_parser = config_sub.add_parser("doctor", help="Check runtime secret source hygiene without printing values.")
-    config_doctor_parser.add_argument("--target", help="Codex home target. Defaults to ~/.codex.")
-    config_doctor_parser.add_argument("--state-dir", help="Farplane state/config dir. Defaults to ~/.farplane.")
-    config_doctor_parser.add_argument("--project-root", help="Tracked project root to scan for obvious secret literals.")
-    config_doctor_parser.add_argument("--json", action="store_true")
-    config_doctor_parser.set_defaults(func=run_config_doctor)
+    notify = sub.add_parser("notify", help="Enable, disable, or inspect the Farplane turn-complete notify script.")
+    notify_sub = notify.add_subparsers(dest="notify_command")
+    notify_status = notify_sub.add_parser("status", help="Show whether the Farplane notify script is enabled.")
+    notify_status.add_argument("--target", help="Codex home target. Defaults to stored codexHome or ~/.codex.")
+    notify_status.add_argument("--json", action="store_true")
+    notify_status.set_defaults(func=run_notify_status)
+    notify_enable = notify_sub.add_parser("enable", help="Enable the Farplane notify script.")
+    notify_enable.add_argument("--target", help="Codex home target. Defaults to stored codexHome or ~/.codex.")
+    notify_enable.add_argument("--dry-run", action="store_true")
+    notify_enable.add_argument("--json", action="store_true")
+    notify_enable.set_defaults(func=run_notify_enable)
+    notify_disable = notify_sub.add_parser("disable", help="Disable the Farplane notify script.")
+    notify_disable.add_argument("--target", help="Codex home target. Defaults to stored codexHome or ~/.codex.")
+    notify_disable.add_argument("--dry-run", action="store_true")
+    notify_disable.add_argument("--json", action="store_true")
+    notify_disable.set_defaults(func=run_notify_disable)
 
     ui = sub.add_parser("ui", help="Link or start the Farplane-UI checkout.")
     ui_sub = ui.add_subparsers(dest="ui_command")
@@ -573,6 +806,17 @@ def build_parser() -> argparse.ArgumentParser:
     ui_start.add_argument("--json", action="store_true")
     ui_start.add_argument("extra", nargs=argparse.REMAINDER)
     ui_start.set_defaults(func=run_ui_start)
+
+    resource_bank = sub.add_parser(
+        "resource-bank",
+        help="Delegate Resource Bank creative reference commands to Farplane-UI.",
+    )
+    resource_bank.add_argument("extra", nargs=argparse.REMAINDER)
+    resource_bank.set_defaults(func=lambda args: delegate_to_ui("resource-bank", args.extra))
+
+    bank = sub.add_parser("bank", help="Alias for `resource-bank`.")
+    bank.add_argument("extra", nargs=argparse.REMAINDER)
+    bank.set_defaults(func=lambda args: delegate_to_ui("bank", args.extra))
 
     delegate = sub.add_parser("delegate", help="Delegate a command to the linked Farplane-UI CLI.")
     delegate.add_argument("--dry-run", action="store_true")
@@ -632,6 +876,15 @@ def build_parser() -> argparse.ArgumentParser:
     reports_index.add_argument("--no-write", action="store_true")
     reports_index.add_argument("--json", action="store_true")
     reports_index.set_defaults(func=run_reports_index_cli)
+    reports_repair_refs = reports_sub.add_parser(
+        "repair-refs",
+        help="Add missing path-derived report refs, then rebuild .farplane/reports/index.json.",
+    )
+    reports_repair_refs.add_argument("--project-root", default=os.getcwd())
+    reports_repair_refs.add_argument("--no-write", action="store_true")
+    reports_repair_refs.add_argument("--no-index", action="store_true")
+    reports_repair_refs.add_argument("--json", action="store_true")
+    reports_repair_refs.set_defaults(func=run_reports_repair_refs_cli)
 
     content = sub.add_parser("content", help="Append or inspect local Farplane content ledger rows.")
     content_sub = content.add_subparsers(dest="content_command")
@@ -685,8 +938,8 @@ def main(argv: list[str]) -> int:
         parser.error("hooks requires a subcommand: install or doctor")
     if getattr(args, "command", None) == "validate" and getattr(args, "validate_command", None) is None:
         parser.error("validate requires a subcommand: ticket")
-    if getattr(args, "command", None) == "config" and getattr(args, "config_command", None) is None:
-        parser.error("config requires a subcommand: doctor")
+    if getattr(args, "command", None) == "notify" and getattr(args, "notify_command", None) is None:
+        return run_notify_status(argparse.Namespace(target=None, json=False))
     if getattr(args, "command", None) == "ui" and getattr(args, "ui_command", None) is None:
         return run_ui_start(argparse.Namespace(extra=[], dry_run=False, json=False))
     if getattr(args, "command", None) == "adoption" and getattr(args, "adoption_command", None) is None:

@@ -25,7 +25,7 @@ TASK_FILES = {
     "agents-md": "agents_md_tasks.json",
 }
 ALL_SCOPES = ("harness", "agents-md", "skills")
-SKILL_EVAL_TASK_FILE = "eval_task.json"
+SKILL_EVAL_TASK_FILE = Path("evals/evals.json")
 REQUIRED_EVAL_FILES = (
     "run_evals.py",
     "config.json",
@@ -132,10 +132,44 @@ def task_context(raw: dict[str, Any], default_context: str) -> str:
     return str(raw.get("context", "")).strip()
 
 
+def normalize_task_rows(raw: Any, path: Path) -> list[dict[str, Any]]:
+    if isinstance(raw, list):
+        return raw
+    if isinstance(raw, dict) and isinstance(raw.get("evals"), list):
+        rows: list[dict[str, Any]] = []
+        for item in raw["evals"]:
+            if not isinstance(item, dict):
+                raise EvalError(f"{path}: each eval must be an object")
+            metadata = item.get("metadata", {})
+            farplane = metadata.get("farplane", {}) if isinstance(metadata, dict) else {}
+            if not isinstance(farplane, dict):
+                farplane = {}
+            files = item.get("files", [])
+            if files:
+                raise EvalError(
+                    f"{path}: eval {item.get('id', '<unknown>')} uses files, which this runner does not stage yet"
+                )
+            assertions = item.get("assertions")
+            if not assertions and isinstance(item.get("expected_output"), str):
+                assertions = [item["expected_output"]]
+            row = {
+                "id": str(item.get("id", "")),
+                "title": farplane.get("title") or item.get("expected_output") or str(item.get("id", "")),
+                "query": item.get("prompt"),
+                "reference_points": assertions,
+                "tags": farplane.get("tags", []),
+                "notes": farplane.get("notes", ""),
+            }
+            if "context" in farplane:
+                row["context"] = farplane["context"]
+            rows.append(row)
+        return rows
+    raise EvalError(f"{path}: task file must contain a JSON list or an Agent Skills evals object")
+
+
 def load_tasks(path: Path, limit: int | None = None, default_context: str = "") -> list[EvalTask]:
     raw = read_json(path)
-    if not isinstance(raw, list):
-        raise EvalError(f"{path}: task file must contain a JSON list")
+    raw = normalize_task_rows(raw, path)
     tasks: list[EvalTask] = []
     for item in raw:
         if not isinstance(item, dict):
@@ -164,7 +198,12 @@ def resolve_skill_task_paths(target_root: Path) -> list[Path]:
     skills_dir = target_root / "skills"
     if not skills_dir.exists():
         return []
-    return sorted(path for path in skills_dir.glob(f"*/{SKILL_EVAL_TASK_FILE}") if path.is_file())
+    paths: list[Path] = []
+    for skill_dir in sorted(path for path in skills_dir.iterdir() if path.is_dir()):
+        eval_file = skill_dir / SKILL_EVAL_TASK_FILE
+        if eval_file.is_file():
+            paths.append(eval_file)
+    return paths
 
 
 def normalize_skill_selector(selector: str) -> str:
@@ -172,8 +211,8 @@ def normalize_skill_selector(selector: str) -> str:
     if not value:
         raise EvalError("--skill values must be non-empty")
     parts = Path(value).parts
-    if len(parts) >= 3 and parts[-1] == SKILL_EVAL_TASK_FILE and parts[-3] == "skills":
-        return parts[-2]
+    if len(parts) >= 4 and parts[-2:] == SKILL_EVAL_TASK_FILE.parts and parts[-4] == "skills":
+        return parts[-3]
     if len(parts) >= 2 and parts[-2] == "skills":
         return parts[-1]
     return value
@@ -192,7 +231,7 @@ def skill_name_for_task_path(path: Path, target_root: Path) -> str | None:
     except ValueError:
         return None
     parts = relative.parts
-    if len(parts) == 3 and parts[0] == "skills" and parts[2] == SKILL_EVAL_TASK_FILE:
+    if len(parts) == 4 and parts[0] == "skills" and parts[2:] == SKILL_EVAL_TASK_FILE.parts:
         return parts[1]
     return None
 
@@ -242,7 +281,7 @@ def resolve_task_paths(
             if skill_paths:
                 paths.extend(skill_paths)
             elif require_scopes:
-                raise EvalError(f"no skill eval task files found under {target_root / 'skills'}/*/{SKILL_EVAL_TASK_FILE}")
+                raise EvalError(f"no skill eval task files found under {target_root / 'skills'}/*/{SKILL_EVAL_TASK_FILE.as_posix()}")
             continue
         if scope not in TASK_FILES:
             raise EvalError(f"unknown eval scope: {scope}")
@@ -258,21 +297,21 @@ def resolve_task_paths(
 
 
 def skill_context_for_task_file(path: Path, target_root: Path) -> str:
-    """Return the owning SKILL.md context for skills/<name>/eval_task.json."""
+    """Return the owning SKILL.md context for a skill-local eval file."""
     resolved_path = path.resolve()
     resolved_root = target_root.resolve()
     try:
         relative = resolved_path.relative_to(resolved_root)
     except ValueError:
         return ""
-    parts = relative.parts
-    if len(parts) != 3 or parts[0] != "skills" or parts[2] != SKILL_EVAL_TASK_FILE:
+    skill_name = skill_name_for_task_path(resolved_path, resolved_root)
+    if not skill_name:
         return ""
-    skill_path = resolved_root / "skills" / parts[1] / "SKILL.md"
+    skill_path = resolved_root / "skills" / skill_name / "SKILL.md"
     if not skill_path.exists():
         return ""
     return (
-        f"Skill under evaluation: {parts[1]}\n"
+        f"Skill under evaluation: {skill_name}\n"
         f"Source file: {skill_path.relative_to(resolved_root)}\n\n"
         "Skill context:\n\n"
         f"{read_text(skill_path).strip()}"
@@ -917,12 +956,12 @@ def build_parser() -> argparse.ArgumentParser:
     run_parser.add_argument("--tasks")
     run_parser.add_argument("--harness-evals", action="store_true", help="Run only .farplane/evals/tasks/harness_tasks.json.")
     run_parser.add_argument("--agents-md", action="store_true", help="Run only .farplane/evals/tasks/agents_md_tasks.json.")
-    run_parser.add_argument("--skills", action="store_true", help="Run all skills/*/eval_task.json files.")
+    run_parser.add_argument("--skills", action="store_true", help="Run all skills/*/evals/evals.json files.")
     run_parser.add_argument(
         "--skill",
         action="append",
         default=[],
-        help="Run selected skill-local eval files. Implies --skills unless --tasks is provided; accepts a skill name, skills/name, or skills/name/eval_task.json. May be passed multiple times or comma-separated.",
+        help="Run selected skill-local eval files. Implies --skills unless --tasks is provided; accepts a skill name, skills/name, or skills/name/evals/evals.json. May be passed multiple times or comma-separated.",
     )
     run_parser.add_argument("--agent-prompt")
     run_parser.add_argument("--judge-prompt")

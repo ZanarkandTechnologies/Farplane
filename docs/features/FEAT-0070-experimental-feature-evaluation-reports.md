@@ -28,7 +28,7 @@ source_refs:
   - docs/prd.md
 external_refs: []
 evidence_refs:
-  - skills/dogfood-review/eval_task.json
+  - skills/dogfood-review/evals/evals.json
   - tickets/archive/TASK-0319/ticket.md
   - tickets/archive/TASK-0319/artifacts/qa/integrated-qa.md
   - tickets/archive/TASK-0320/ticket.md

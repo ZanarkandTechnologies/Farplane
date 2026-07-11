@@ -67,7 +67,7 @@ def qa_units(skill_dir: Path) -> list[str]:
 
 
 def eval_units(skill_dir: Path) -> list[str]:
-    path = skill_dir / "eval_task.json"
+    path = skill_dir / "evals/evals.json"
     if not path.exists():
         return []
     payload = json.loads(path.read_text(encoding="utf-8"))

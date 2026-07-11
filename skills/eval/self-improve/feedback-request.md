@@ -15,7 +15,7 @@ Please review the first eval-for-eval seed batch.
 - Program memory:
   `skills/eval/self-improve/program.md`
 - Candidate eval tasks:
-  `skills/eval/eval_task.json`
+  `skills/eval/evals/evals.json`
 - Internal review:
   `skills/eval/audits/2026-06-11-eval-for-eval-batch-01.md`
 - Smoke proof:
@@ -31,7 +31,7 @@ Please judge:
 - Are the queries realistic enough?
 - Are the reference points visible enough to grade?
 - Is the batch too broad for the first eval-for-eval pass?
-- Should the skill-structure placement case stay in `skills/eval/eval_task.json`
+- Should the skill-structure placement case stay in `skills/eval/evals/evals.json`
   or move later to a cross-skill suite?
 
 ## Feedback Shape

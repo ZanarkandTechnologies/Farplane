@@ -1,23 +1,30 @@
 {
   "_template_metadata": {
     "template_id": "skill-eval-task",
-    "template_version": "0.1.0",
+    "template_version": "0.2.0",
     "feature_refs": ["FEAT-0054"],
     "consumer_scope": "skill",
-    "applies_to": ["skills/*/eval_task.json"]
+    "applies_to": ["skills/*/evals/evals.json"]
   },
-  "tasks": [
+  "skill_name": "skill-name",
+  "evals": [
     {
       "id": "skill_behavior_01",
-      "title": "Skill performs one observable behavior",
-      "query": "Ask a realistic operator question for the target skill without naming hidden implementation details.",
-      "reference_points": [
+      "prompt": "Ask a realistic operator question for the target skill without naming hidden implementation details.",
+      "expected_output": "The skill performs the observable behavior protected by this eval.",
+      "files": [],
+      "assertions": [
         "Uses the target skill's loaded SKILL.md context",
         "Produces the observable behavior this eval protects",
         "Avoids live side effects unless the runner provides a sandbox"
       ],
-      "tags": ["skill"],
-      "notes": "Keep skill-local eval rows realistic; use reference_points for pass/fail expectations."
+      "metadata": {
+        "farplane": {
+          "title": "Skill performs one observable behavior",
+          "tags": ["skill"],
+          "notes": "Keep prompts realistic; use assertions for pass/fail expectations."
+        }
+      }
     }
   ]
 }

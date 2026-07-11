@@ -6,8 +6,8 @@ source: local
 version: 0.1.0
 template_uses:
   skill-template: "0.2.0"
-  skill-eval-task: "0.1.0"
-eval: eval_task.json
+  skill-eval-task: "0.2.0"
+eval: evals/evals.json
 qa_checklist: qa_checklist.md
 allowed-tools: Read, Write, Glob, Grep, Bash
 

@@ -10,6 +10,7 @@ common_chains:
   after: ["review", "qa"]
 metadata:
   tags: remotion, video, react, animation, composition
+eval: evals/evals.json
 ---
 
 # Remotion
@@ -37,8 +38,18 @@ Use this as the ordered checklist whenever `remotion` is active.
 - [ ] For content-production videos using a Tasty Pack or Inspiration Pack,
   require a locked storyboard, asset manifest, cue sheet, and
   `reference_leverage_map` from `content-impl-plan` built from
-  `captures[].elements`; block or label the run `technical_smoke` when those
-  are missing.
+  `captures[].elements`; the locked plan must honor pinned elements
+  when present. Block or label the run `technical_smoke` when those are missing.
+- [ ] For inspiration-led production, require `media_ready` or `regen_ready`
+  handoff: pinned visual/audio/editing elements must arrive as resolved media
+  refs or generated asset files with acceptance checks. If Remotion only has
+  semantic element descriptions, label the render `semantic_storyboard_only`
+  and do not claim Tasty Pack asset reuse.
+- [ ] For stitched model-native clips, probe every source clip duration,
+  framerate, dimensions, and frame count before sequencing; set Remotion
+  `Sequence` durations from observed frame counts, not assumed seconds.
+- [ ] Require one final audio placement plan for narrative reels: VO/music/SFX
+  bed, captions, ducking, transitions, and any deliberate muted source clips.
 - [ ] Render locally with Remotion project commands when a final MP4/still proof is requested and the local project can render.
 - [ ] Route MP4 rendering through [remotion-render](../remotion-render/SKILL.md) only for an explicit external inference.sh render path when local rendering is not the chosen route and external compute is acceptable.
 - [ ] Keep source code, props, local assets, notes, and any render inputs inside the workspace.
@@ -75,10 +86,15 @@ The imported upstream source and refresh note live in `references/upstream-sourc
 - For inspiration-led content, do not accept generic CSS/text/cards as a final
   creative output unless the caller explicitly downgrades the run to
   `technical_smoke` or `text_only_format`. Production rendering requires a
-  passed `creative_lock`, concrete asset files or source handles, and timed
-  audio or motion obligations from the plan. Do not require separate Resource
-  Bank evidence records unless the production task needs direct media reuse or
-  audit proof.
+  passed `creative_lock`, concrete asset files or source handles, resolved
+  media refs or generated asset files for pinned visual/audio/editing elements,
+  and timed audio or motion obligations from the plan. Do not require separate
+  Resource Bank evidence records unless the production task needs direct media
+  reuse or audit proof.
+- For model-native clip stitching, use media components and exact frame math.
+  Verify source clip counts with `ffprobe`/Remotion metadata, prefer
+  `OffthreadVideo` for stitched external clips, avoid repeated boundary frames,
+  and add transition frames only when the storyboard names a scene break.
 
 ## Reference Routing
 

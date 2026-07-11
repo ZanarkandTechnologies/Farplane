@@ -2,7 +2,7 @@
 # Do not put machine-local secrets or trust entries here.
 # `install.sh` renders this template using values from:
 #   - process env (preferred; works with `doppler run -- ...`)
-#   - ~/.farplane/config.toml
+#   - ~/.farplane/config.toml (private fallback/cache)
 #   - ~/.codex/config.local.toml (optional, appended verbatim)
 
 model = "gpt-5.5"
@@ -25,8 +25,8 @@ FARPLANE_TELEMETRY_TOKEN = "__FARPLANE_TELEMETRY_TOKEN__"
 FARPLANE_CONSOLE_KEY = "__FARPLANE_CONSOLE_KEY__"
 # Optional explicit Codex hook telemetry endpoint. Normally leave this unset:
 # hooks/farplane_console_ping.py posts to FARPLANE_CONVEX_SITE_URL/telemetry/hooks.
-# Prefer the Farplane UI-managed ~/.farplane/config.toml values; install.sh
-# renders them here as Codex adapter config.
+# Optional hook telemetry endpoint. Prefer runtime env or Farplane UI-managed
+# fallback/cache values; install.sh renders them here as Codex adapter config.
 # FARPLANE_TELEMETRY_HOOKS_URL = "https://your-backend.example.com/telemetry/hooks"
 # Skill graph heat controls. The generated skill graph reads local
 # `.farplane/events/*.jsonl` and uses these values to decide its default hot
@@ -58,9 +58,9 @@ FISH_AUDIO_MODEL = "__FISH_AUDIO_MODEL__"
 FISH_AUDIO_LATENCY_MODE = "__FISH_AUDIO_LATENCY_MODE__"
 FARPLANE_REMINDER_PHONE = "__FARPLANE_REMINDER_PHONE__"
 FARPLANE_PHONE_REMINDER_AGENT_NAME = "__FARPLANE_PHONE_REMINDER_AGENT_NAME__"
-# Optional automation settings such as Taste Loop active hours live in
-# `farplane/automations.toml` so Farplane UI can render and update full Codex
-# automation configs before syncing the Codex automation record.
+# Automation cadence lives in `farplane/automations.toml` so Farplane UI can
+# render and update full Codex automation configs before syncing the Codex
+# automation record.
 # Optional explicit force-on for Farplane hook behavior. Live Codex hooks now
 # capture user turns and Stop telemetry only.
 

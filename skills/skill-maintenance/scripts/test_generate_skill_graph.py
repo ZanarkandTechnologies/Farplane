@@ -187,7 +187,7 @@ class GenerateSkillGraphTests(unittest.TestCase):
                 "path": "skills/hot-caller/SKILL.md",
                 "description": "Calls target skill.",
                 "has_checklist": True,
-                "eval": "eval_task.json",
+                "eval": "evals/evals.json",
                 "qa_checklist": "qa_checklist.md",
                 "skill_links": ["target-skill"],
                 "todo_skill_refs": ["target-skill"],

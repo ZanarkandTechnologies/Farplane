@@ -26,11 +26,11 @@ these checks to `docs/review/rubrics/skill-contract.md`:
 
 ## Eval Skill Eval Backlog
 
-Write these as `skills/eval/eval_task.json` rows first:
+Write these as `skills/eval/evals/evals.json` rows first:
 
 1. `eval_skill_first_load_sufficiency_01`
    - Query: asks the agent to write one eval for `advise`.
-   - Expected: chooses `skills/advise/eval_task.json`, uses AGI Toy Shop shared
+   - Expected: chooses `skills/advise/evals/evals.json`, uses AGI Toy Shop shared
      context, writes realistic query and observable reference points, avoids
      live side effects.
 

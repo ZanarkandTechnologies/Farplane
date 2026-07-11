@@ -1,0 +1,177 @@
+{
+  "skill_name": "eval",
+  "evals": [
+    {
+      "id": "eval_skill_modular_task_authoring_01",
+      "prompt": "The advise workflow keeps giving one recommendation without showing the other viable options first. Add coverage so that behavior does not regress.",
+      "expected_output": "Chooses a skill-local file such as skills/advise/evals/evals.json for advise-specific behavior; Keeps AGI Toy Shop setup in shared context instead of repeating it inside the query; Writes a realistic user request as the task query; Uses visible string reference_points that can pass or fail; Avoids live config mutation, deploys, pushes, or private user paths",
+      "files": [],
+      "assertions": [
+        "Chooses a skill-local file such as skills/advise/evals/evals.json for advise-specific behavior",
+        "Keeps AGI Toy Shop setup in shared context instead of repeating it inside the query",
+        "Writes a realistic user request as the task query",
+        "Uses visible string reference_points that can pass or fail",
+        "Avoids live config mutation, deploys, pushes, or private user paths"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Eval skill writes a modular skill-local task",
+          "tags": [
+            "skill",
+            "eval",
+            "modular-evals"
+          ],
+          "notes": "Reinforces the standard that skill-specific evals live beside the owning skill as evals/evals.json."
+        }
+      }
+    },
+    {
+      "id": "eval_skill_bad_task_rejection_01",
+      "prompt": "I want an eval for our agent-run toy storefront. The task can just be: \"Make the company better.\" The only reference point can be: \"Gives a good answer.\" Please add that quickly.",
+      "expected_output": "Rejects or rewrites the vague eval instead of accepting it as-is; Narrows the task to one observable behavior with a realistic user request; Replaces subjective reference points with visible pass/fail reference_points; Keeps AGI Toy Shop context in shared fixture setup instead of stuffing it into the query; Adds narrow tags and notes that name the layer or failure mode",
+      "files": [],
+      "assertions": [
+        "Rejects or rewrites the vague eval instead of accepting it as-is",
+        "Narrows the task to one observable behavior with a realistic user request",
+        "Replaces subjective reference points with visible pass/fail reference_points",
+        "Keeps AGI Toy Shop context in shared fixture setup instead of stuffing it into the query",
+        "Adds narrow tags and notes that name the layer or failure mode"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Eval skill rejects vague task design",
+          "tags": [
+            "skill",
+            "eval",
+            "task-quality"
+          ],
+          "notes": "Catches the common failure where evals optimize for vague usefulness instead of a behavior that can visibly pass or fail."
+        }
+      }
+    },
+    {
+      "id": "eval_skill_best_practices_branching_01",
+      "prompt": "Can you run the existing eval suite and tell me the latest verdicts? I only need a status report unless something is clearly broken.",
+      "expected_output": "Treats this as a run-only eval job rather than an authoring task; Does not require loading the full eval best-practices reference before running; Uses the installed .farplane/evals runner or reports the missing setup clearly; Inspects summary and task detail artifacts before making behavior claims; Defers task-authoring guidance until a concrete failure or revision need exists",
+      "files": [],
+      "assertions": [
+        "Treats this as a run-only eval job rather than an authoring task",
+        "Does not require loading the full eval best-practices reference before running",
+        "Uses the installed .farplane/evals runner or reports the missing setup clearly",
+        "Inspects summary and task detail artifacts before making behavior claims",
+        "Defers task-authoring guidance until a concrete failure or revision need exists"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Eval skill loads best practices only for authoring branches",
+          "tags": [
+            "skill",
+            "eval",
+            "reference-load-precision"
+          ],
+          "notes": "Tests that optional references stay branch-specific instead of becoming noisy first-load context."
+        }
+      }
+    },
+    {
+      "id": "eval_skill_structure_metric_01",
+      "prompt": "For the eval skill, let's move all of eval-best-practices.md directly into SKILL.md so every agent sees everything on first load. Is that the right structure? If not, propose the better placement before editing.",
+      "expected_output": "Starts from first-load sufficiency, task success, prompt size, duplication, and noisy context tradeoffs; Keeps always-needed runtime rules in SKILL.md and branch-specific authoring detail in references; Names when an anchored section or full reference should be loaded; Avoids both extremes: hiding required behavior in deep references and overloading SKILL.md with rare detail; Recommends a concrete placement decision with the owner surface and proof path",
+      "files": [],
+      "assertions": [
+        "Starts from first-load sufficiency, task success, prompt size, duplication, and noisy context tradeoffs",
+        "Keeps always-needed runtime rules in SKILL.md and branch-specific authoring detail in references",
+        "Names when an anchored section or full reference should be loaded",
+        "Avoids both extremes: hiding required behavior in deep references and overloading SKILL.md with rare detail",
+        "Recommends a concrete placement decision with the owner surface and proof path"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Eval skill reasons about SKILL.md versus reference placement",
+          "tags": [
+            "skill",
+            "eval",
+            "skill-structure"
+          ],
+          "notes": "Tests whether eval-skill maintenance follows the skill-structure metrics instead of treating modularity or first-load as a single absolute rule."
+        }
+      }
+    },
+    {
+      "id": "eval_hardcase_metadata_01",
+      "prompt": "This AGI Toy Shop agent failure was unusually hard and benchmark-worthy: it created a duplicate skill instead of extending the existing proof workflow. Save it as a hardcase so it does not regress.",
+      "expected_output": "Creates or proposes a normal runnable eval task instead of a separate raw hardcase backlog; Adds hardcase metadata such as hardcase, difficulty, benchmark value, and sanitization notes; Keeps the expected behavior visible through reference_points; Removes or avoids private transcript details and live user paths; Chooses skill-local or project-level placement based on the behavior owner",
+      "files": [],
+      "assertions": [
+        "Creates or proposes a normal runnable eval task instead of a separate raw hardcase backlog",
+        "Adds hardcase metadata such as hardcase, difficulty, benchmark value, and sanitization notes",
+        "Keeps the expected behavior visible through reference_points",
+        "Removes or avoids private transcript details and live user paths",
+        "Chooses skill-local or project-level placement based on the behavior owner"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Eval skill captures hardcases as runnable evals",
+          "tags": [
+            "skill",
+            "eval",
+            "hardcase"
+          ],
+          "notes": "Protects the TASK-0190 direction that hardcase is eval metadata on a runnable case.",
+          "hardcase": true,
+          "difficulty": "high",
+          "benchmark_value": "Tests whether eval hardcases remain runnable proof cases with sanitization and owner placement.",
+          "sanitization_notes": "Use clean-room AGI Toy Shop details; do not include raw private transcript text."
+        }
+      }
+    },
+    {
+      "id": "eval_no_delayed_backlog_01",
+      "prompt": "The AGI Toy Shop harness keeps forgetting to ask for proof before changing skills. Can you capture this so the same miss does not keep coming back?",
+      "expected_output": "Recognizes the behavior is testable now and should become a proof case rather than only a lesson; Creates or proposes the smallest relevant eval task before or alongside any lesson capture; Names the expected behavior and visible reference_points; Keeps the task clean-room and avoids raw private context; Explains when a lesson or trouble note would still be useful as secondary memory",
+      "files": [],
+      "assertions": [
+        "Recognizes the behavior is testable now and should become a proof case rather than only a lesson",
+        "Creates or proposes the smallest relevant eval task before or alongside any lesson capture",
+        "Names the expected behavior and visible reference_points",
+        "Keeps the task clean-room and avoids raw private context",
+        "Explains when a lesson or trouble note would still be useful as secondary memory"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Eval skill does not delay obvious regression coverage",
+          "tags": [
+            "skill",
+            "eval",
+            "regression"
+          ],
+          "notes": "Catches delayed-proof drift where known behavior regressions are stored as prose memory instead of runnable evals."
+        }
+      }
+    },
+    {
+      "id": "eval_consolidation_preserves_immediate_coverage_01",
+      "prompt": "The AGI Toy Shop weekly learning backpropagation pass is producing a bunch of overlapping regression cases after recent harness misses. How should we keep the immediate protection without letting the suite turn noisy?",
+      "expected_output": "Rejects delaying testable lesson/trouble-derived evals until the weekly backpropagation pass; Keeps fresh regression coverage in the owning skills/<skill>/evals/evals.json file first; Defines weekly backpropagation as a later consolidation pass over already-landed evals; Uses fetch_evals_edited_since_last_run or equivalent content-hash discovery for changed eval files; Routes each changed eval file to consolidate(..., structure = eval_suite) or an isolated review lane using the same frame",
+      "files": [],
+      "assertions": [
+        "Rejects delaying testable lesson/trouble-derived evals until the weekly backpropagation pass",
+        "Keeps fresh regression coverage in the owning skills/<skill>/evals/evals.json file first",
+        "Defines weekly backpropagation as a later consolidation pass over already-landed evals",
+        "Uses fetch_evals_edited_since_last_run or equivalent content-hash discovery for changed eval files",
+        "Routes each changed eval file to consolidate(..., structure = eval_suite) or an isolated review lane using the same frame"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Eval consolidation preserves immediate regression coverage",
+          "tags": [
+            "skill",
+            "eval",
+            "consolidation"
+          ],
+          "notes": "Protects the TASK-0200 lifecycle: immediate eval rows are the safety net; weekly eval drain reduces noise afterward."
+        }
+      }
+    }
+  ]
+}

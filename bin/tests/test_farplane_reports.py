@@ -15,6 +15,8 @@ if str(CORE_DIR) not in sys.path:
     sys.path.insert(0, str(CORE_DIR))
 
 from farplane_reports import build_report_registry
+from farplane_reports import path_derived_ref
+from farplane_reports import repair_missing_refs
 
 
 def write_report(path: Path, frontmatter: str, body: str = "# Report\n") -> None:
@@ -149,6 +151,67 @@ ui_summary: Pulse summary.
             written = json.loads(index_path.read_text(encoding="utf-8"))
 
         self.assertEqual(payload["counts"]["included"], 1)
+        self.assertEqual(written["reports"][0]["ref"], "reports/pulse/2026-07-08T030000Z")
+
+    def test_repair_missing_refs_adds_path_derived_ref(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            report = root / ".farplane" / "reports" / "interval" / "daily_interval" / "2026-07-08T053300Z.md"
+            write_report(
+                report,
+                """
+kind: interval-report
+created_at: "2026-07-08T05:33:00Z"
+ui_summary: Interval summary.
+""",
+            )
+
+            repairs = repair_missing_refs(root)
+            registry = build_report_registry(root)
+            text = report.read_text(encoding="utf-8")
+
+        expected_ref = "reports/interval/daily_interval/2026-07-08T053300Z"
+        self.assertEqual(len(repairs), 1)
+        self.assertEqual(repairs[0].ref, expected_ref)
+        self.assertEqual(path_derived_ref(report, root), expected_ref)
+        self.assertIn(f"ref: {expected_ref}\nkind: interval-report", text)
+        self.assertEqual(registry["counts"], {"included": 1, "excluded": 0})
+
+    def test_cli_repair_refs_repairs_and_indexes(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            report = root / ".farplane" / "reports" / "pulse" / "2026-07-08T030000Z.md"
+            write_report(
+                report,
+                """
+kind: pulse
+created_at: "2026-07-08T03:00:00Z"
+ui_summary: Pulse summary.
+""",
+            )
+
+            result = subprocess.run(
+                [
+                    sys.executable,
+                    str(CLI),
+                    "reports",
+                    "repair-refs",
+                    "--project-root",
+                    str(root),
+                    "--json",
+                ],
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+
+            self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
+            payload = json.loads(result.stdout)
+            index_path = root / ".farplane" / "reports" / "index.json"
+            written = json.loads(index_path.read_text(encoding="utf-8"))
+
+        self.assertEqual(payload["counts"], {"included": 1, "excluded": 0})
+        self.assertEqual(len(payload["repaired"]), 1)
         self.assertEqual(written["reports"][0]["ref"], "reports/pulse/2026-07-08T030000Z")
 
 

@@ -5,9 +5,9 @@ tier: 2
 source: local
 template_uses:
   skill-template: "0.2.0"
-  skill-eval-task: "0.1.0"
+  skill-eval-task: "0.2.0"
   skill-surface-budget: "0.1.0"
-eval: eval_task.json
+eval: evals/evals.json
 skill_ui: skills/harness-advisor
 
 ---

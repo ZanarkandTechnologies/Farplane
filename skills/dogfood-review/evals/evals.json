@@ -1,0 +1,149 @@
+{
+  "skill_name": "dogfood-review",
+  "evals": [
+    {
+      "id": "weekly_portfolio_uses_cutoff_and_archived_history",
+      "prompt": "It is Monday morning. One experiment was archived before Sunday evening, another settled just after Sunday evening, and last week's report contains an untested rollout idea. Produce the self-improvement review and decide what history informs this wave.",
+      "expected_output": "Binds an explicit portfolio cutoff and treats it as a snapshot rather than an experiment deadline; Reads the active packet, recent archived packet, previous report cursor, Reward rows, program, progress, and cited evidence before generating candidates; Includes the result archived before cutoff in the current outcome ledger and defers the later settlement to the next report; Treats the prior report as carryover/dedupe context while canonical ticket evidence wins; Writes the dated report before selecting any new packet and performs no check-in",
+      "files": [],
+      "assertions": [
+        "Binds an explicit portfolio cutoff and treats it as a snapshot rather than an experiment deadline",
+        "Reads the active packet, recent archived packet, previous report cursor, Reward rows, program, progress, and cited evidence before generating candidates",
+        "Includes the result archived before cutoff in the current outcome ledger and defers the later settlement to the next report",
+        "Treats the prior report as carryover/dedupe context while canonical ticket evidence wins",
+        "Writes the dated report before selecting any new packet and performs no check-in"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Weekly portfolio snapshot carries settled history",
+          "tags": [
+            "dogfood-review",
+            "portfolio-cutoff",
+            "archive-history",
+            "report-first"
+          ]
+        }
+      }
+    },
+    {
+      "id": "weekly_portfolio_surfaces_due_unscored_gap",
+      "prompt": "A delayed policy experiment's check-in date passed yesterday, but its Reward row still has no actual result or score. A proposed experiment would touch the same policy surface. What should the weekly review report and admit?",
+      "expected_output": "Classifies the existing experiment as due_but_unscored rather than accepting, killing, or checking it in; Records the missing result/evidence in the due-but-unscored and source-gap views; Counts the experiment as active WIP and blocks the conflicting same-surface proposal; Does not block unrelated candidates solely because this row is due; Leaves scoring and next-check-in mutation to Pulse and the original ticket worker",
+      "files": [],
+      "assertions": [
+        "Classifies the existing experiment as due_but_unscored rather than accepting, killing, or checking it in",
+        "Records the missing result/evidence in the due-but-unscored and source-gap views",
+        "Counts the experiment as active WIP and blocks the conflicting same-surface proposal",
+        "Does not block unrelated candidates solely because this row is due",
+        "Leaves scoring and next-check-in mutation to Pulse and the original ticket worker"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "A due but unscored experiment remains visible",
+          "tags": [
+            "dogfood-review",
+            "due-but-unscored",
+            "ownership",
+            "interference"
+          ]
+        }
+      }
+    },
+    {
+      "id": "monitoring_delayed_allows_unrelated_immediate_toys",
+      "prompt": "The portfolio has one legitimate long-running market pilot in monitoring state. Total WIP is 1. Two cheap toy eval candidates touch different skills and return signals immediately. Review capacity and select the next wave.",
+      "expected_output": "Counts the monitoring pilot toward total WIP and the delayed-live cap; Computes two available total slots from WIP limit 3 and wave size 2; Rejects another live delayed pilot while the delayed-live cap is occupied; May select both non-interfering immediate toy evals because they touch unoccupied surfaces; Creates at most two complete Goal Packets and executes none",
+      "files": [],
+      "assertions": [
+        "Counts the monitoring pilot toward total WIP and the delayed-live cap",
+        "Computes two available total slots from WIP limit 3 and wave size 2",
+        "Rejects another live delayed pilot while the delayed-live cap is occupied",
+        "May select both non-interfering immediate toy evals because they touch unoccupied surfaces",
+        "Creates at most two complete Goal Packets and executes none"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Delayed monitoring does not serialize immediate proof",
+          "tags": [
+            "dogfood-review",
+            "capacity",
+            "delayed-reward",
+            "toy-eval"
+          ]
+        }
+      }
+    },
+    {
+      "id": "accepted_toy_becomes_bounded_transfer_candidate",
+      "prompt": "A completed local replay shows that one planner instruction improves a scored behavior on its source skill. The previous report proposed copying it broadly. What should this week's portfolio review do?",
+      "expected_output": "Records the accepted source experiment and attribution evidence in the outcome ledger; Creates a transfer-candidate row rather than treating the result as automatic doctrine-wide rollout; Checks guards, target-surface differences, duplicates, and occupied surfaces before selection; When justified, proposes a bounded transfer or real-pilot Goal Packet with its own proof contract; Carries rejected or deferred rollout reasoning into the report for later dedupe",
+      "files": [],
+      "assertions": [
+        "Records the accepted source experiment and attribution evidence in the outcome ledger",
+        "Creates a transfer-candidate row rather than treating the result as automatic doctrine-wide rollout",
+        "Checks guards, target-surface differences, duplicates, and occupied surfaces before selection",
+        "When justified, proposes a bounded transfer or real-pilot Goal Packet with its own proof contract",
+        "Carries rejected or deferred rollout reasoning into the report for later dedupe"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Accepted toy evidence is transferred cautiously",
+          "tags": [
+            "dogfood-review",
+            "transfer",
+            "rollout",
+            "learning-ledger"
+          ]
+        }
+      }
+    },
+    {
+      "id": "immediate_packet_has_no_future_checkin_debt",
+      "prompt": "A ranked candidate can be falsified by a deterministic replay whose metric is available as soon as the run finishes. Capacity and authority permit ticket creation. What packet should be written?",
+      "expected_output": "Creates one canonical folder with ticket.md, program.md, and progress.md after the report exists; Names the attributable surface, hypothesis, baseline, Reward expectation/guard, immediate signal, proof, budget, and rollout/rollback policy; Uses native Goal execution and does not invent a future check_in_at, event wake, or delayed Check-In Program debt; Defaults admission to review-required unless the write policy explicitly grants safe local automatic admission; Stops after initialization and does not invoke Goal, Pulse, a worker, or implementation",
+      "files": [],
+      "assertions": [
+        "Creates one canonical folder with ticket.md, program.md, and progress.md after the report exists",
+        "Names the attributable surface, hypothesis, baseline, Reward expectation/guard, immediate signal, proof, budget, and rollout/rollback policy",
+        "Uses native Goal execution and does not invent a future check_in_at, event wake, or delayed Check-In Program debt",
+        "Defaults admission to review-required unless the write policy explicitly grants safe local automatic admission",
+        "Stops after initialization and does not invoke Goal, Pulse, a worker, or implementation"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Immediate proof packet ends without delayed debt",
+          "tags": [
+            "dogfood-review",
+            "goal-packet",
+            "immediate-reward",
+            "no-execution"
+          ]
+        }
+      }
+    },
+    {
+      "id": "delayed_packet_has_executable_checkin_program",
+      "prompt": "A selected AGENTS policy pilot needs seven days of behavior evidence before a decision. The weekly planner is authorized to create its packet. Describe the delayed packet and handoff.",
+      "expected_output": "Creates a complete Goal Packet only after report, capacity, surface, dedupe, and delayed-live gates pass; Sets the Reward check_in_at or event wake plus Metric Provider signal and minimum; Fills program.md Check-In Program inputs and ordered procedure so a resumed worker can inspect evidence and choose accept, kill, iterate, or monitor; Defines idempotent writeback that updates only handed-off matured Reward rows, appends progress, preserves future/completed rows, and handles source gaps and next wake; Leaves execution and check-in dispatch to Work Pulse and does not score or promote the experiment",
+      "files": [],
+      "assertions": [
+        "Creates a complete Goal Packet only after report, capacity, surface, dedupe, and delayed-live gates pass",
+        "Sets the Reward check_in_at or event wake plus Metric Provider signal and minimum",
+        "Fills program.md Check-In Program inputs and ordered procedure so a resumed worker can inspect evidence and choose accept, kill, iterate, or monitor",
+        "Defines idempotent writeback that updates only handed-off matured Reward rows, appends progress, preserves future/completed rows, and handles source gaps and next wake",
+        "Leaves execution and check-in dispatch to Work Pulse and does not score or promote the experiment"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Delayed packet owns its future check-in instructions",
+          "tags": [
+            "dogfood-review",
+            "goal-packet",
+            "delayed-reward",
+            "checkin-program"
+          ]
+        }
+      }
+    }
+  ]
+}

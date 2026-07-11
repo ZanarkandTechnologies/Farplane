@@ -5,9 +5,9 @@ tier: 2
 source: local
 template_uses:
   skill-template: "0.3.0"
-  skill-eval-task: "0.1.0"
+  skill-eval-task: "0.2.0"
   skill-qa-checklist: "0.1.0"
-eval: eval_task.json
+eval: evals/evals.json
 qa_checklist: qa_checklist.md
 allowed-tools: Read, Glob, Grep, Bash
 
@@ -41,7 +41,7 @@ proof_advice(claim_or_behavior, risk_context?, source_material?, proof_goal?)
 
 state:
   reads(local contracts, tickets/specs, logs/traces/failures, existing tests,
-        eval_task.json files, QA checklists, external source notes when needed)
+        evals/evals.json files, QA checklists, external source notes when needed)
   writes(proof plan, case matrix, eval rows, test-case drafts, QA findings,
          or handoff notes)
 
@@ -67,7 +67,7 @@ Run grounding and proof-case design inline by default. Route to:
 - `eval` when selected cases should become runnable eval rows or judge prompts.
 - `agent-qa-test` when the claim needs tester evidence plus evidence review.
 - `skill-maintenance` when case findings should harden a skill checklist,
-  `eval_task.json`, or gotcha.
+  `evals/evals.json`, or gotcha.
 - `review` when a material case suite or reusable rubric needs independent
   judgment.
 
@@ -116,7 +116,7 @@ Run grounding and proof-case design inline by default. Route to:
   - [ ] Use agent QA or behavior capture when the behavior depends on tool use,
     multi-turn state, screenshots, artifacts, or evidence review.
 - [ ] 7. Produce the case artifact or handoff.
-  - [ ] For skill-local evals, write or hand off `skills/<skill>/eval_task.json`
+  - [ ] For skill-local evals, write or hand off `skills/<skill>/evals/evals.json`
     rows with realistic `query`, visible `reference_points`, tags, and notes.
   - [ ] For deterministic tests, hand off concrete fixtures, assertions, and
     command paths.

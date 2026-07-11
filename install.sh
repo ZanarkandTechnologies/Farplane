@@ -126,7 +126,6 @@ INSTALL_BIN_FILES=(
   farplane_compute.py
   farplane_invocation.py
   farplane.py
-  file_growth_hook.py
   notify.py
   runtime_telemetry.py
   ticket-runtime
@@ -135,6 +134,9 @@ INSTALL_BIN_FILES=(
 )
 INSTALL_HOOK_FILES=(
   farplane_console_ping.py
+)
+RETIRED_INSTALL_PATHS=(
+  bin/file_growth_hook.py
 )
 
 if [ "$SKILLS_ONLY" -eq 1 ]; then
@@ -374,6 +376,16 @@ link_global_cli() {
 echo "Installing Codex harness from $REPO_DIR to $TARGET_DIR"
 
 mkdir -p "$TARGET_DIR" "$TARGET_DIR/agents" "$TARGET_DIR/skills" "$TARGET_DIR/rules" "$TARGET_DIR/bin" "$TARGET_DIR/hooks" "$TARGET_DIR/docs/review"
+
+for relative in "${RETIRED_INSTALL_PATHS[@]}"; do
+  retired_path="$TARGET_DIR/$relative"
+  if [ -e "$retired_path" ] || [ -L "$retired_path" ]; then
+    backup_dest="$BACKUP_ROOT/$relative"
+    mkdir -p "$(dirname "$backup_dest")"
+    mv "$retired_path" "$backup_dest"
+    echo "Retired $retired_path (backup: $backup_dest)"
+  fi
+done
 
 if [ "$REPO_DIR" = "$(cd "$TARGET_DIR" && pwd)" ]; then
   echo "Repo is already the live Codex home. Skipping symlink install."

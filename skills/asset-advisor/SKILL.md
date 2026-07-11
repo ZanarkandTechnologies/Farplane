@@ -7,9 +7,9 @@ source: local
 template_uses:
   skill-template: "0.3.7"
   skill-qa-checklist: "0.1.1"
-  skill-eval-task: "0.1.0"
+  skill-eval-task: "0.2.0"
   skill-surface-budget: "0.1.0"
-eval: eval_task.json
+eval: evals/evals.json
 qa_checklist: qa_checklist.md
 common_chains:
   after: ["storyboard", "ai-image-advisor", "ai-video-advisor", "avatar-advisor", "audio-advisor", "remotion"]
@@ -66,10 +66,20 @@ drive a high-visibility campaign.
 For Inspiration Pack inputs, treat `captures[].elements` as the source of
 truth. Every relevant `visual`, `storyboard`, `editing`, `format`, or
 `constraint` element must either map to a concrete asset decision or appear in
-`Missing inputs`. For inspiration-led videos, return a
+`Missing inputs`. Map pinned elements first because they are the operator's
+taste signal; preserve unpinned elements as context decisions or
+blockers rather than treating every element equally. For inspiration-led videos, return a
 `blocked_report` when the plan only offers generic CSS/text/cards without
 source, generated, linked, captured, or explicitly composed assets justified by
 the reference leverage map.
+
+When a Tasty Pack element includes an `anchor` such as `contact_sheet`,
+`frame_08_28.58s`, `frames 1-4`, or `OG thumbnail`, first try to resolve
+`source.assetId + anchor` into a concrete media ref. If no media ref is
+available, emit a regeneration packet with the pinned element, anchor,
+reference source, rights notes, and acceptance check. Do not let anchored
+visual/audio/editing elements collapse into generic Remotion drawings unless
+the output is explicitly downgraded to `semantic_storyboard_only`.
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
@@ -86,7 +96,14 @@ the reference leverage map.
   - [ ] Mark each asset as `reuse`, `source`, `regenerate`, `capture`,
     `compose`, or `unknown`.
   - [ ] Map each relevant Inspiration Pack element to an asset row,
-    generation route, or missing-input blocker.
+    generation route, or missing-input blocker, prioritizing pinned elements
+    before ordinary context elements.
+  - [ ] Resolve `assetId + anchor` into media refs when possible; otherwise
+    create regeneration packets for pinned visual/audio/editing elements before
+    Remotion.
+  - [ ] For narrative video, create continuity assets: character bible or
+    no-character rationale, recurring prop/object bible, location/lighting
+    anchors, and start/end frame assets for each model-native clip handoff.
 - [ ] 3. Add recreation constraints.
   - [ ] Note rights, likeness, brand, source quality, duration, aspect ratio,
     visual continuity, audio continuity, and platform-specific constraints.
@@ -115,10 +132,16 @@ the reference leverage map.
 | Element | Anchor | Asset Decision | Output / Blocker |
 | --- | --- | --- | --- |
 
+## Regeneration Packets
+| Packet | Source Element | Anchor | Owner | Prompt / Direction | Acceptance Check |
+| --- | --- | --- | --- | --- | --- |
+
 ## Recreation Plan
 - Reference pattern:
 - What to preserve:
 - What to change:
+- Continuity anchors:
+- Start/end frame plan:
 - Rights / likeness notes:
 - Missing inputs:
 
@@ -145,6 +168,9 @@ the reference leverage map.
 - Do not hand Remotion an inspiration-led asset plan where every visual is
   generic CSS/text/cards unless the run is explicitly labeled `technical_smoke`
   or `text_only_format` and the content claim is downgraded.
+- Do not discard Tasty Pack anchors. If the pack says `frame_03_8.42s` or
+  `contact_sheet`, the asset plan must either resolve that media or regenerate
+  from it; a verbal paraphrase is not enough for production.
 - Do not collapse avatar, audio, stills, and model-native clips into one generic
   prompt. Each asset class has different continuity and proof needs.
 

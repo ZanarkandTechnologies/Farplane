@@ -1,0 +1,85 @@
+{
+  "skill_name": "x-account",
+  "evals": [
+    {
+      "id": "x_account_live_metrics_read_01",
+      "prompt": "Pull today's feedback numbers for the Farplane X account so the KPI cockpit can update. Just read the account metrics; don't post anything.",
+      "expected_output": "Chooses the X account metrics branch rather than drafting or publishing content; Checks private credential readiness using the configured env source without printing token values; Runs or plans the read-only live metrics fetch before normalization when credentials are present; Writes or names a Farplane-compatible metrics snapshot containing x_followers plus available x_views and x_likes observations; Uses source_gap or blocked status for unavailable metrics instead of inventing zero values; Records redacted endpoint/source evidence and the output path; Does not attempt posting, broad scraping, or competitor discovery",
+      "files": [],
+      "assertions": [
+        "Chooses the X account metrics branch rather than drafting or publishing content",
+        "Checks private credential readiness using the configured env source without printing token values",
+        "Runs or plans the read-only live metrics fetch before normalization when credentials are present",
+        "Writes or names a Farplane-compatible metrics snapshot containing x_followers plus available x_views and x_likes observations",
+        "Uses source_gap or blocked status for unavailable metrics instead of inventing zero values",
+        "Records redacted endpoint/source evidence and the output path",
+        "Does not attempt posting, broad scraping, or competitor discovery"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "X account reads feedback metrics without posting",
+          "tags": [
+            "skill",
+            "x-account",
+            "metrics",
+            "live-read"
+          ],
+          "notes": "Proves the main feedback-data workflow chooses read-only API metrics and produces KPI observations when credentials exist."
+        }
+      }
+    },
+    {
+      "id": "x_account_missing_credentials_01",
+      "prompt": "Can you update the X follower and engagement chart for today from our account?",
+      "expected_output": "Checks the private env/runtime credential source before claiming live API access; Returns a blocked report if FARPLANE_X_BEARER_TOKEN or account identity is unavailable; Names the missing credential keys but does not echo secret values; Does not fabricate x_followers, x_views, or x_likes values; Offers the next setup step for the private env file or runtime environment; Keeps the request in the metrics branch and does not route to publishing",
+      "files": [],
+      "assertions": [
+        "Checks the private env/runtime credential source before claiming live API access",
+        "Returns a blocked report if FARPLANE_X_BEARER_TOKEN or account identity is unavailable",
+        "Names the missing credential keys but does not echo secret values",
+        "Does not fabricate x_followers, x_views, or x_likes values",
+        "Offers the next setup step for the private env file or runtime environment",
+        "Keeps the request in the metrics branch and does not route to publishing"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "X account blocks cleanly when metrics credentials are absent",
+          "tags": [
+            "skill",
+            "x-account",
+            "metrics",
+            "blocked-report"
+          ],
+          "notes": "Catches the likely first-run failure mode before credentials are configured."
+        }
+      }
+    },
+    {
+      "id": "x_account_retention_score_01",
+      "prompt": "I have an X video post ID and want to know whether people actually watched through it, not just whether it got likes. Pull the retention-style metrics for the KPI snapshot.",
+      "expected_output": "Chooses the metrics branch and treats the supplied post ID as an exact content metrics request; Uses the live fetch script with specific post ID mode and deep metrics enabled when credentials permit it; Looks for playback-depth or owned-content analytics fields rather than only public likes/views; Writes or names Farplane-compatible observations such as x_retention_score, x_video_starts, quartile views, completions, clicks, or explicit source gaps; Does not fabricate retention from ordinary view count when playback-depth metrics are unavailable; Records redacted endpoint/source evidence and the output path; Does not publish, scrape broadly, or expose credential values",
+      "files": [],
+      "assertions": [
+        "Chooses the metrics branch and treats the supplied post ID as an exact content metrics request",
+        "Uses the live fetch script with specific post ID mode and deep metrics enabled when credentials permit it",
+        "Looks for playback-depth or owned-content analytics fields rather than only public likes/views",
+        "Writes or names Farplane-compatible observations such as x_retention_score, x_video_starts, quartile views, completions, clicks, or explicit source gaps",
+        "Does not fabricate retention from ordinary view count when playback-depth metrics are unavailable",
+        "Records redacted endpoint/source evidence and the output path",
+        "Does not publish, scrape broadly, or expose credential values"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "X account fetches owned post retention metrics",
+          "tags": [
+            "skill",
+            "x-account",
+            "metrics",
+            "retention"
+          ],
+          "notes": "Protects the retention-score branch from collapsing into shallow likes/views reporting."
+        }
+      }
+    }
+  ]
+}

@@ -95,6 +95,32 @@ prd -> spec-to-ticket -> impl-plan -> goal-advisor
 
 If the repo already exists, do the smallest migration first.
 
+### Choose the versioned migration
+
+Read the project's current `farplane/manifest.json` and compare
+`spec_version` plus `template_uses.farplane-framework` with
+[FRAMEWORK_CHANGELOG.md](references/FRAMEWORK_CHANGELOG.md). Apply each newer
+migration entry in order. The changelog is the canonical version-to-version
+migration guide; this section is the operational checklist.
+
+For the V1 `1.7.0` contract, the important boundary is:
+
+```text
+tracked owners:
+  harness.md + goals.yaml + metrics.yaml + bindings.yaml + automations.toml
+
+ignored projections:
+  .farplane/metrics/** + .farplane/project/ui/latest.json + reports/evals/logs
+
+execution and proof:
+  tickets/TASK-XXXX/{ticket.md,program.md,progress.md,artifacts/**}
+```
+
+Remove product registries/controllers and detached review/evidence stores only
+after their active readers have been migrated. Preserve reusable artifact
+workflows as skills. Do not keep compatibility aliases unless an explicit
+external contract requires them.
+
 ### 1. Add the harness structure
 
 ```bash
@@ -128,6 +154,21 @@ bash ~/.codex/skills/init-advisor/scripts/bootstrap.sh .
 ```
 
 Use `--force` only if you want to overwrite files that already exist.
+
+After merging human-owned charter and strategy content, regenerate the runtime
+read models and validate the project:
+
+```bash
+farplane metrics primitives --project-root . --date <YYYY-MM-DD> --json
+farplane project snapshot --project-root . --date <YYYY-MM-DD> --json
+python3 bin/validators/check_farplane_project_files.py --root .
+```
+
+The primitive command writes Core-owned daily readings under
+`.farplane/metrics/daily/`. Provider skills and interval workflows write
+validated observation batches under `.farplane/metrics/observations/`. The
+project snapshot then joins those readings with the tracked project files for
+Farplane UI; it is a projection, not a source of truth.
 
 If you want optional local hooks after bootstrap:
 
@@ -210,6 +251,8 @@ Those can come after one clean ticket run.
 
 ## Migration Checklist
 
+- [ ] `farplane/manifest.json` was compared with the versioned migration entries in `references/FRAMEWORK_CHANGELOG.md`
+- [ ] V1 migrations removed product controllers/registries and detached review/evidence stores after migrating active readers
 - [ ] `docs/bootstrap-brief.md` exists and captures stack/topology/gate decisions
 - [ ] `docs/bootstrap-brief.md` captures local-hook, heavy-check, and CI/deploy-gate decisions
 - [ ] `docs/bootstrap-brief.md` captures Codex SDK diff-review policy and code-review skill linkage
@@ -226,6 +269,7 @@ Those can come after one clean ticket run.
 - [ ] `farplane/harness.md` exists or `init_mode=substrate` has a recorded readiness gap
 - [ ] `farplane/goals.yaml` exists or `init_mode=substrate` has a recorded readiness gap
 - [ ] `farplane/metrics.yaml` defines every KPI ID used by `farplane/goals.yaml`
+- [ ] every metric definition has a matching `farplane/bindings.yaml.metric_bindings` refresh recipe or an explicit source-gap route
 - [ ] `farplane/automations.toml` contains exactly one Work Pulse heartbeat plus separate cron records for Feed Scout, Daily BAU, Weekly BAU, self-improvement, and optional scheduled workflows
 - [ ] `farplane/bindings.yaml` exists and names non-secret project IDs, URLs, labels, and aliases needed by reusable skills
 - [ ] `farplane/hooks.json` exists or `init_mode=substrate` has a recorded readiness gap
@@ -234,6 +278,7 @@ Those can come after one clean ticket run.
 - [ ] Live automation activation, when requested, is handled by
       `automation-advisor` and appends PM-visible thread IDs to `farplane/pm.json`
 - [ ] owner-named `.farplane/reports/`, `.farplane/metrics/daily/`, `.farplane/evals/runs/`, and `.farplane/logs/` exist as ignored generated state
+- [ ] primitive metrics and `.farplane/project/ui/latest.json` were regenerated after canonical project-file migration
 - [ ] `python3 bin/validators/check_farplane_project_files.py` passes when the repo has Farplane validators
 - [ ] `docs/prd.md`, `docs/features/`, `docs/TROUBLES.md`, `docs/LESSONS.md` exist
 - [ ] `qa/README.md` and `qa/cookbook/TEMPLATE.md` exist

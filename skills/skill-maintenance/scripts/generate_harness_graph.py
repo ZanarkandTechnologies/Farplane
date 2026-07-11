@@ -67,7 +67,10 @@ LOCAL_PATH_RE = re.compile(
 
 
 def rel(path: Path, repo_root: Path) -> str:
-    return path.resolve().relative_to(repo_root.resolve()).as_posix()
+    # Keep the repository path lexical. Resolving a tracked symlink here can
+    # move the candidate outside the checkout (for example a local `.venv`
+    # interpreter) and make graph generation fail before ignore rules run.
+    return path.absolute().relative_to(repo_root.absolute()).as_posix()
 
 
 def ignored_prefix(path: str) -> bool:
@@ -75,12 +78,15 @@ def ignored_prefix(path: str) -> bool:
 
 
 def should_scan(path: Path, repo_root: Path) -> bool:
-    rel_path = rel(path, repo_root)
+    if path.is_symlink() or any(part in IGNORE_PARTS for part in path.parts):
+        return False
+    try:
+        rel_path = rel(path, repo_root)
+    except ValueError:
+        return False
     if rel_path in GENERATED_PATHS:
         return False
     if ignored_prefix(rel_path):
-        return False
-    if any(part in IGNORE_PARTS for part in path.parts):
         return False
     if path.name.startswith("."):
         return False

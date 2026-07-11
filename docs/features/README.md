@@ -78,7 +78,7 @@ source_refs:
   - docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md
 external_refs: []
 evidence_refs:
-  - skills/goal-advisor/eval_task.json
+  - skills/goal-advisor/evals/evals.json
 known_limits: "Compiles visible execution prompts; it is not a hidden scheduler."
 metrics:
   - goal_prompt_contract_pass

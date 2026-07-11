@@ -1,6 +1,6 @@
 ---
 template_id: skill-template
-template_version: "0.3.7"
+template_version: "0.3.8"
 feature_refs:
   - FEAT-0022
   - FEAT-0054
@@ -22,7 +22,7 @@ description: "[TODO: Verb input/context into output/artifact when call-condition
 tier: [TODO: 1 | 2 | 3]
 source: local
 template_uses:
-  skill-template: "0.3.7"
+  skill-template: "0.3.8"
   # Add only after the skill fits 10 top-level todos, 5 QA checklist items,
   # and 5 eval tasks.
   # skill-surface-budget: "0.1.0"
@@ -179,7 +179,7 @@ Do not call phase-like skills recursively at the same scope.
   Use `templates/*` or `prompts/*` when the reusable asset is a prompt,
   packet, or generated artifact shape.]
 - [TODO: If this skill needs a focused behavioral eval, add
-  `eval_task.json` at the skill package root using the eval task JSON-list
+  `evals/evals.json` in the skill package using the Agent Skills eval object
   schema.]
 - [TODO: For material creation or structure changes, add a skill-local audit
   record under `audits/YYYY-MM-DD-<short-change>.md` using

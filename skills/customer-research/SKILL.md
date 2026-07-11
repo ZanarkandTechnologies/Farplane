@@ -6,7 +6,7 @@ group: research
 source: local
 template_uses:
   skill-template: "0.3.7"
-eval: eval_task.json
+eval: evals/evals.json
 allowed-tools: Read, Glob, Grep, web_search
 common_chains:
   after: ["research", "solution-shaping"]
@@ -23,9 +23,8 @@ The normal output is a Markdown report, not a CRM pipeline record.
 Reports use minimal frontmatter for indexing only. Put judgment, confidence,
 pain hypotheses, questions, and next actions in the report body. `skill` names
 the report-producing skill so shared report indexes can filter by source.
-`industry` and `farplane_product_id` are allowed when they improve search or
-connect the report to a product lane in `farplane/products/<product>/product.md`
-or the generated `farplane/products.json`; omit them when unknown.
+`industry` is optional when it improves search; omit it when unknown. Do not
+add project-controller or pipeline fields to the report schema.
 
 Default storage:
 
@@ -45,7 +44,7 @@ customer_research(target, call_context?, project_context?, output_root?)
 state: reads(public/supplied sources, local project context when provided);
        writes(report markdown, optional derived crm index)
 gates: target_bound; sources_labeled; inference_labeled; minimal_frontmatter;
-       product_id_valid_or_omitted; conversation_plan_present; no_private_dossiering
+       conversation_plan_present; no_private_dossiering
 routes: research:user-grounding | research:source-synthesis | solution-shaping
 fails: bloated frontmatter; fake certainty; generic pitch; creepy personal dossier;
        uncited claims; CRM pipeline modeling
@@ -65,10 +64,6 @@ authoring inline unless a separate research artifact is needed.
   - [ ] Resolve the person's name, supplied links, company or field, call reason,
         and whether the report belongs to a project `.farplane/crm/` directory
         or the global `~/.farplane/crm/` directory.
-  - [ ] When project context exists, resolve whether the report maps to a
-        product ID from `farplane/products/<product>/product.md` or generated
-        `farplane/products.json`, such as `market_learning`, `productization`,
-        or `distribution`.
   - [ ] If the target cannot be identified from the request, ask one narrow
         blocking question instead of researching the wrong person.
 - [ ] 2. Gather the smallest useful source set.
@@ -80,8 +75,7 @@ authoring inline unless a separate research artifact is needed.
         when several sources must be normalized before writing.
 - [ ] 3. Draft the customer research report from `templates/report.md`.
   - [ ] Keep frontmatter minimal: `skill`, `name`, `links`, optional
-        `industry`, optional `farplane_product_id`, `relevance`, and
-        `created_at`.
+        `industry`, `relevance`, and `created_at`.
   - [ ] Include who they are, their meaningful story, field overview, company or
         context, sourced facts, labeled inferences, unknowns, and source notes.
 - [ ] 4. Shape the conversation.
@@ -121,8 +115,8 @@ authoring inline unless a separate research artifact is needed.
   project fields in frontmatter.
 - Do not invent report IDs when the report path and created date already
   identify the artifact. Use `skill` to name the producer.
-- Do not invent an industry or product lane for indexing. Omit optional fields
-  when the mapping is not clear.
+- Do not invent an industry or a replacement project-controller field for
+  indexing. Omit optional fields when the mapping is not clear.
 - Do not write a generic pitch. Start from the person's likely world, then offer
   hypotheses they can correct.
 - Do not imply hidden access to private data. Public/supplied/sourced/inferred
@@ -146,7 +140,6 @@ name: "Person Name"
 links:
   - "https://example.com/profile"
 industry: "Industry or field, when useful for search."
-farplane_product_id: "market_learning"
 relevance: "Why this person is relevant to the call or project."
 created_at: "YYYY-MM-DD"
 ---

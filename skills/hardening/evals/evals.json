@@ -1,0 +1,53 @@
+{
+  "skill_name": "hardening",
+  "evals": [
+    {
+      "id": "hardening_post_feature_budget_01",
+      "prompt": "We shipped a new upload endpoint and want a max-budget hardening pass before release. It accepts user files, writes metadata, and calls a background worker. What should the hardening workflow do?",
+      "expected_output": "Routes to hardening as the primary owner rather than refactoring.; Uses budget-advisor for the max budget and preserves the hardening output contract.; Maps trust boundaries, input abuse, authz, data/secrets, dependency, availability, concurrency, observability, and recovery risks as relevant.; Requires adversarial tests or static checks for mitigations.; Reports residual risk and follow-up owner instead of claiming hardening from a checklist alone.",
+      "files": [],
+      "assertions": [
+        "Routes to hardening as the primary owner rather than refactoring.",
+        "Uses budget-advisor for the max budget and preserves the hardening output contract.",
+        "Maps trust boundaries, input abuse, authz, data/secrets, dependency, availability, concurrency, observability, and recovery risks as relevant.",
+        "Requires adversarial tests or static checks for mitigations.",
+        "Reports residual risk and follow-up owner instead of claiming hardening from a checklist alone."
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Hardening maps risks and routes max budget through budget-advisor",
+          "context": "",
+          "tags": [
+            "hardening",
+            "budget",
+            "security",
+            "reliability"
+          ]
+        }
+      }
+    },
+    {
+      "id": "hardening_blocks_untested_mitigation_01",
+      "prompt": "An agent added a rate limiter and says the feature is hardened, but there is no test, config check, or failure probe. Is that enough?",
+      "expected_output": "Says no: hardening requires proof or an explicit residual-risk note.; Asks for an adversarial test, static check, integration test, or review evidence appropriate to the mitigation.; Checks that the rate limiter does not break intended behavior.; Reports residual risk if proof cannot be run.",
+      "files": [],
+      "assertions": [
+        "Says no: hardening requires proof or an explicit residual-risk note.",
+        "Asks for an adversarial test, static check, integration test, or review evidence appropriate to the mitigation.",
+        "Checks that the rate limiter does not break intended behavior.",
+        "Reports residual risk if proof cannot be run."
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Hardening rejects untested mitigation claims",
+          "context": "",
+          "tags": [
+            "hardening",
+            "proof",
+            "residual-risk"
+          ]
+        }
+      }
+    }
+  ]
+}

@@ -381,6 +381,12 @@ def build_registry(repo_root: Path) -> list[dict[str, Any]]:
                 f"{skill_path}: feature_refs moved to versioned skill template metadata; "
                 "use eval, qa_checklist, or skill_ui for skill-local surfaces"
             )
+        canonical_eval = skill_dir / "evals" / "evals.json"
+        if canonical_eval.exists() and metadata.get("eval") != "evals/evals.json":
+            raise RegistryError(
+                f"{skill_path}: {canonical_eval.relative_to(repo_root)} exists but frontmatter must declare "
+                "eval: evals/evals.json"
+            )
 
         has_checklist = bool(checklist_source_text(skill_dir))
         row: dict[str, Any] = {

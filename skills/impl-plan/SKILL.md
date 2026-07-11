@@ -5,10 +5,10 @@ tier: 3
 source: local
 template_uses:
   skill-template: "0.3.0"
-  skill-eval-task: "0.1.0"
+  skill-eval-task: "0.2.0"
   skill-qa-checklist: "0.1.0"
 group: coding
-eval: eval_task.json
+eval: evals/evals.json
 qa_checklist: qa_checklist.md
 common_chains:
   after: ["goal-advisor"]

@@ -109,6 +109,9 @@ Default required family verdicts:
 - `prompt-quality`: `TAS-A` when subagent, delegated CLI, eval, structured
   output, or AI-app prompts changed
 - `eval-quality`: `TAS-A` when eval tasks, judges, fixtures, or runners changed
+- `ticket-opportunity-quality`: `TAS-A` when AI-generated ticket specs,
+  product-loop bets, or Pulse refill candidates are reviewed before worker
+  admission
 
 Hard gates:
 
@@ -170,6 +173,11 @@ Choose rubric families from the ticket context:
   - `eval-quality`
   - `evidence-quality`
   - `integration-readiness`
+- generated-ticket / product-loop opportunity review:
+  - `ticket-opportunity-quality`
+  - `skill-contract` when generator or product skill contracts changed
+  - `evidence-quality`
+  - `integration-readiness`
 
 If the reviewer wants to make stronger "worth it", willingness-to-pay, or competitive-market claims, the ticket/spec must already carry explicit user, alternative, and price-point evidence. Otherwise keep the judgment at the `user-intent-satisfaction` level and call the stronger market question underspecified.
 
@@ -223,6 +231,15 @@ When unsure, prefer adding `evidence-quality` and `integration-readiness`.
   - API
   - backend
   - types
+
+### Ticket Opportunity Quality
+- File: `ticket-opportunity-quality.md`
+- Focus:
+  - generated ticket worthiness before worker admission
+  - product-backed reward trace
+  - ICP resonance and state-of-art pushback
+  - artifact ambition and execution clarity
+  - product-loop learning writeback
 
 ### 4. Documentation Quality
 - File: `documentation-quality.md`

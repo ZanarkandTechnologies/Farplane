@@ -7,6 +7,7 @@ group: content-video
 source: local
 template_uses:
   skill-template: "0.3.7"
+eval: evals/evals.json
 allowed-tools: Read, Grep, Glob, Bash
 ---
 
@@ -40,6 +41,12 @@ Use this as the ordered checklist whenever `ai-video-advisor` is active.
 - [ ] Use `imagegen` first for still frames, portraits, posters, or reference art unless the user explicitly wants a CLI image app.
 - [ ] Check `command -v belt`, `belt --help`, `belt app get <app>`, and `belt app sample <app>` before relying on an app schema.
 - [ ] For voice, music, Foley, sound effects, dubbing, or mix planning, route to `audio-advisor`; search live with `belt app search foley` and `belt app search sound` only for provider execution details.
+- [ ] For narrative multi-clip video, require the caller's generation topology
+  before spend. Use start/end frame chaining for `continuous_chain`, require
+  transition notes for `deliberate_scene_breaks`, and block isolated I2V
+  batches unless the chosen format is explicitly `montage`.
+- [ ] When the caller has a master audio plan, set provider audio generation
+  off where the live schema supports it, and record any exception by beat.
 - [ ] Confirm external compute/spend is acceptable before any `belt app run`.
 - [ ] Save final videos, prompts, input JSON, result JSON, and notes inside the workspace, not only in a remote URL, temp path, or Codex home path.
 - [ ] If the video is used on a web surface, route implementation/proof through `frontend-craft`, `references/frontend-asset-qa.md`, and `visual-qa` when layout or taste is affected.
@@ -73,6 +80,25 @@ Copied upstream references are read-only usage docs. Do not run `npx skills add 
 8. Save project assets, prompt/input JSON, result JSON, and notes inside the workspace.
 9. For long-running or batched jobs, use the async workflow below instead of blocking the whole pass.
 10. If the asset is used in a web surface, hand it to `frontend-craft` and keep browser playback/visual QA as separate proof.
+
+## Continuity Video Gate
+
+Before running model-native clips for a storyboarded narrative, bind:
+
+- `generation_topology`: `continuous_chain`, `deliberate_scene_breaks`, or
+  `montage`.
+- `frame_handoffs`: start image and end image for each chained clip, where clip
+  N+1 starts from clip N's intended end frame.
+- `identity_anchors`: character, prop, location, lighting, and style details
+  that must survive across clips.
+- `audio_policy`: `master_audio_in_remotion`, `provider_audio_per_clip`, or
+  `silent_asset`; use `generate_audio:false` when the master mix owns the reel
+  and the live provider schema supports it.
+
+Block and route back to `content-impl-plan`, `storyboard`, `asset-advisor`, or
+`audio-advisor` when a narrative reel asks for isolated pretty clips, mismatched
+per-clip audio, or no continuity assets. Independent async batches are only
+appropriate for montage, parallel asset exploration, or non-sequential b-roll.
 
 ## Best Current Defaults
 

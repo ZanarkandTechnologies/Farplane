@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import sys
 from dataclasses import dataclass
 from datetime import date as date_type
 from datetime import datetime, timezone
@@ -23,6 +24,13 @@ REQUIRED_FIELDS = ("ref", "kind", "created_at", "ui_summary")
 class ReportIssue:
     path: str
     reason: str
+
+
+@dataclass(frozen=True)
+class ReportRepair:
+    path: str
+    ref: str
+    action: str
 
 
 def now_utc() -> str:
@@ -59,6 +67,16 @@ def read_frontmatter(path: Path) -> tuple[dict[str, Any] | None, str | None]:
     return {str(key): json_value(value) for key, value in loaded.items()}, None
 
 
+def frontmatter_bounds(text: str) -> tuple[int, int] | None:
+    if not text.startswith("---\n"):
+        return None
+    marker = "\n---\n"
+    end = text.find(marker, 4)
+    if end == -1:
+        return None
+    return 4, end
+
+
 def field_text(frontmatter: dict[str, Any], field: str) -> str:
     value = frontmatter.get(field)
     if value is None:
@@ -79,6 +97,44 @@ def validate_ref(ref: str) -> str | None:
     if any(part in {".", ".."} for part in parts):
         return "invalid_ref_path"
     return None
+
+
+def path_derived_ref(path: Path, project_root: Path) -> str:
+    rel_path = path.relative_to(project_root / ".farplane").with_suffix("")
+    return rel_path.as_posix()
+
+
+def add_missing_ref(path: Path, project_root: Path, *, dry_run: bool = False) -> ReportRepair | None:
+    text = path.read_text(encoding="utf-8", errors="replace")
+    bounds = frontmatter_bounds(text)
+    if bounds is None:
+        return None
+
+    frontmatter, issue = read_frontmatter(path)
+    if issue or frontmatter is None or field_text(frontmatter, "ref"):
+        return None
+
+    ref = path_derived_ref(path, project_root)
+    if validate_ref(ref):
+        return None
+
+    if not dry_run:
+        start, _end = bounds
+        updated = text[:start] + f"ref: {ref}\n" + text[start:]
+        path.write_text(updated, encoding="utf-8")
+    return ReportRepair(path.relative_to(project_root).as_posix(), ref, "added_ref")
+
+
+def repair_missing_refs(project_root: Path, *, dry_run: bool = False) -> list[ReportRepair]:
+    root = project_root / REPORTS_ROOT
+    repairs: list[ReportRepair] = []
+    if not root.exists():
+        return repairs
+    for path in sorted(root.glob("**/*.md")):
+        repair = add_missing_ref(path, project_root, dry_run=dry_run)
+        if repair is not None:
+            repairs.append(repair)
+    return repairs
 
 
 def ancestor_refs(ref: str) -> list[str]:
@@ -200,17 +256,60 @@ def run_index(args: argparse.Namespace) -> int:
     return 0
 
 
+def run_repair_refs(args: argparse.Namespace) -> int:
+    project_root = Path(args.project_root).expanduser().resolve()
+    repairs = repair_missing_refs(project_root, dry_run=bool(args.no_write))
+    registry = build_report_registry(project_root)
+    if not args.no_index and not args.no_write:
+        write_report_registry(project_root, registry)
+
+    payload = {
+        "project_root": str(project_root),
+        "dry_run": bool(args.no_write),
+        "repaired": [repair.__dict__ for repair in repairs],
+        "counts": registry["counts"],
+        "index_path": REPORT_INDEX_PATH.as_posix(),
+    }
+    if args.json:
+        print(json.dumps(payload, indent=2, sort_keys=True))
+    else:
+        action = "would repair" if args.no_write else "repaired"
+        index_action = " without indexing" if args.no_index or args.no_write else " and indexed"
+        print(
+            f"farplane reports {action}: {len(repairs)} refs{index_action}; "
+            f"{registry['counts']['included']} included, "
+            f"{registry['counts']['excluded']} excluded"
+        )
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--project-root", default=".")
-    parser.add_argument("--no-write", action="store_true")
-    parser.add_argument("--json", action="store_true")
+    sub = parser.add_subparsers(dest="command")
+
+    index = sub.add_parser("index", help="Write .farplane/reports/index.json from report Markdown frontmatter.")
+    index.add_argument("--project-root", default=".")
+    index.add_argument("--no-write", action="store_true")
+    index.add_argument("--json", action="store_true")
+    index.set_defaults(func=run_index)
+
+    repair = sub.add_parser("repair-refs", help="Add missing path-derived ref frontmatter, then rebuild the report index.")
+    repair.add_argument("--project-root", default=".")
+    repair.add_argument("--no-write", action="store_true")
+    repair.add_argument("--no-index", action="store_true")
+    repair.add_argument("--json", action="store_true")
+    repair.set_defaults(func=run_repair_refs)
     return parser
 
 
 def main(argv: list[str] | None = None) -> int:
+    if argv is None:
+        argv = sys.argv[1:]
+    if not argv or argv[0].startswith("-"):
+        argv = ["index", *argv]
     parser = build_parser()
-    return run_index(parser.parse_args(argv))
+    args = parser.parse_args(argv)
+    return int(args.func(args))
 
 
 if __name__ == "__main__":

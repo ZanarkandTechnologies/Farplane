@@ -8,14 +8,14 @@ source: local
 template_uses:
   skill-template: "0.3.6"
   skill-qa-checklist: "0.1.0"
-  skill-eval-task: "0.1.0"
+  skill-eval-task: "0.2.0"
 methods:
   - social-content:cross-platform
   - social-content:carousel
   - social-content:linkedin
   - social-content:twitter-thread
 allowed-tools: Read, Grep, Glob, Bash
-eval: eval_task.json
+eval: evals/evals.json
 qa_checklist: qa_checklist.md
 ---
 

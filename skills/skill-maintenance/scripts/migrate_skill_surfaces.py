@@ -61,8 +61,8 @@ def migrate_skill(skill_dir: Path) -> bool:
     lines = remove_block(lines, "feature_refs")
 
     surface_lines: list[str] = []
-    if (skill_dir / "eval_task.json").exists() and not has_key(lines, "eval"):
-        surface_lines.append("eval: eval_task.json")
+    if (skill_dir / "evals/evals.json").exists() and not has_key(lines, "eval"):
+        surface_lines.append("eval: evals/evals.json")
     if (skill_dir / "qa_checklist.md").exists() and not has_key(lines, "qa_checklist"):
         surface_lines.append("qa_checklist: qa_checklist.md")
     ui_path = UI_SKILLS.get(skill_dir.name)

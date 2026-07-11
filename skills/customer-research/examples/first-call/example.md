@@ -5,7 +5,6 @@ links:
   - "https://example.com/maya-tan"
   - "https://example.com/helios-ops"
 industry: "Logistics operations"
-farplane_product_id: "market_learning"
 relevance: "Potential call about AI-assisted planning workflows for mid-market logistics operators."
 created_at: "2026-07-07"
 ---

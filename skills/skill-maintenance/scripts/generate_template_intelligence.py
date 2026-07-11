@@ -561,10 +561,10 @@ COMMON_EVALS = [
         "behavior": "eval_qa_sync",
         "title": "Eval / QA sync",
         "expected_signals": [
-            "eval_task.json is a first-class special file",
+            "evals/evals.json is a first-class special file",
             "qa_checklist.md is a repeatable runtime guardrail only when warranted",
         ],
-        "required_patterns": [r"eval_task\.json", r"qa_checklist\.md"],
+        "required_patterns": [r"evals/evals\.json", r"qa_checklist\.md"],
     },
 ]
 

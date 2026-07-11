@@ -17,7 +17,7 @@ Immediate eval creation is the safety net. Do not delay a testable
 lesson/trouble-derived regression until the weekly drain.
 
 ```text
-lesson_or_trouble -> optimize_harness -> immediate eval_task.json row
+lesson_or_trouble -> optimize_harness -> immediate evals/evals.json row
 weekly_eval_drain -> fetch changed eval files -> consolidate(..., structure = eval_suite) per file
 ```
 
@@ -54,17 +54,17 @@ python3 skills/eval/scripts/fetch_evals_edited_since_last_run.py \
 
 ## Consolidate Binding
 
-For each changed `skills/<skill>/eval_task.json`, use the shared
+For each changed `skills/<skill>/evals/evals.json`, use the shared
 `consolidate` frame with eval-specific bindings:
 
 ```text
-target = skills/<skill>/eval_task.json
+target = skills/<skill>/evals/evals.json
 structure = eval_suite
 unit = eval_case
 constraints = {
   preserve_evidence: true,
   preserve_ids: true,
-  owner_boundary: "owning skill eval_task.json"
+  owner_boundary: "owning skill evals/evals.json"
 }
 value_function = default consolidate value
                + distinct_failure_mode
@@ -95,7 +95,7 @@ Use this prompt shape for each changed eval file:
 ```text
 Context:
 - Ticket: tickets/TASK-0200/ticket.md
-- Eval file: <skills/name/eval_task.json>
+- Eval file: <skills/name/evals/evals.json>
 - Guide: skills/eval/references/eval-consolidation.md
 - Rubric: skills/eval/references/eval-writing-rubric.md
 
@@ -122,7 +122,7 @@ Rules:
 ```json
 {
   "schema_version": 1,
-  "eval_file": "skills/eval/eval_task.json",
+  "eval_file": "skills/eval/evals/evals.json",
   "keep_ids": ["eval_hardcase_metadata_01"],
   "merge_groups": [
     {
@@ -153,7 +153,7 @@ After accepted consolidation, append one JSONL row per processed eval file:
 ```json
 {
   "schema_version": 1,
-  "eval_ref": "skills/eval/eval_task.json",
+  "eval_ref": "skills/eval/evals/evals.json",
   "content_hash": "sha256:...",
   "drained_at": "2026-06-13T00:00:00Z",
   "disposition": "consolidated|kept|deferred|no-op",

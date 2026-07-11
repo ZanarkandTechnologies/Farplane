@@ -1,0 +1,52 @@
+{
+  "skill_name": "refactoring",
+  "evals": [
+    {
+      "id": "refactoring_budget_smell_score_01",
+      "prompt": "We just shipped a feature and I want a max-budget cleanup pass. The changed files include one 220-line TypeScript handler with nested branching, weak tests, and duplicated validation. What should the refactoring workflow do?",
+      "expected_output": "Routes to the refactoring skill rather than runtime-debugging or hardening as the primary owner.; Uses budget-advisor for the max budget and preserves the refactoring output contract.; Prioritizes changed/high-churn code with complexity, nesting, duplication, and coverage risk.; Requires behavior proof before and after structural changes.; Rejects raw line-count gaming and reports residual risk.",
+      "files": [],
+      "assertions": [
+        "Routes to the refactoring skill rather than runtime-debugging or hardening as the primary owner.",
+        "Uses budget-advisor for the max budget and preserves the refactoring output contract.",
+        "Prioritizes changed/high-churn code with complexity, nesting, duplication, and coverage risk.",
+        "Requires behavior proof before and after structural changes.",
+        "Rejects raw line-count gaming and reports residual risk."
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Budgeted refactoring optimizes changed-code smell score without metric gaming",
+          "context": "",
+          "tags": [
+            "refactoring",
+            "budget",
+            "maintainability"
+          ]
+        }
+      }
+    },
+    {
+      "id": "refactoring_rejects_feature_mix_01",
+      "prompt": "While refactoring a messy API module, the agent notices the API response shape is annoying. Should it change the response while it is cleaning up?",
+      "expected_output": "States that refactoring preserves behavior unless an API migration is explicitly in scope.; Requires public contract and caller proof before changing response shape.; Treats the behavior change as a separate feature/API decision or ticket.; Keeps the refactor focused on structure, tests, duplication, and maintainability.",
+      "files": [],
+      "assertions": [
+        "States that refactoring preserves behavior unless an API migration is explicitly in scope.",
+        "Requires public contract and caller proof before changing response shape.",
+        "Treats the behavior change as a separate feature/API decision or ticket.",
+        "Keeps the refactor focused on structure, tests, duplication, and maintainability."
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Refactoring rejects unapproved behavior changes",
+          "context": "",
+          "tags": [
+            "refactoring",
+            "behavior-preservation",
+            "api"
+          ]
+        }
+      }
+    }
+  ]
+}

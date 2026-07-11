@@ -6,19 +6,21 @@ Use this when writing or revising task files and judge prompts.
 
 - Start with 3-5 behaviors the harness must keep doing.
 - Write one task per behavior; do not start with broad benchmark coverage.
-- Keep task JSON simple: `id`, `title`, optional `context`, `query`,
-  `reference_points`, `tags`, and `notes`.
+- Keep skill-local JSON portable: `skill_name` plus `evals` rows containing
+  `id`, `prompt`, `expected_output`, optional `files`, and `assertions`.
+  Keep Farplane-only title, context, tags, notes, and hardcase fields under
+  `metadata.farplane`.
 - For skill-specific behavior, store the task next to the owning skill as
-  `skills/<skill-name>/eval_task.json`. Use `.farplane/evals/tasks/*` for
+  `skills/<skill-name>/evals/evals.json`. Use `.farplane/evals/tasks/*` for
   active project work and `skills/eval/examples/*` for reusable cross-skill
   examples.
-- Keep `query` as the realistic user request. Put suite-wide fixture setup,
+- Keep `prompt` as the realistic user request. Put suite-wide fixture setup,
   company background, role assumptions, and safety boundaries in `config.json`
   plus `contexts/*`, rendered by the agent prompt with `{context_block}`.
 - Use task `context` only when a task needs to override the suite default. Use
   explicit `"context": ""` for real-repo tasks that should receive no toy
   fixture context.
-- Use string `reference_points`; make each point visible in the answer or
+- Use string `assertions`; make each point visible in the answer or
   artifact.
 - Use `tags` and `notes` to mark layer: `skill`, `workflow`, or
   `system-prompt`.
@@ -40,7 +42,7 @@ Use this when writing or revising task files and judge prompts.
 - Make toy scenarios concrete enough to grade: include shared company context,
   role assumptions, known limitations, and safety boundaries in the context
   file; keep realistic pressure such as urgency, stakeholder confusion, or an
-  over-broad ask in `query` when that is what the user would actually say.
+  over-broad ask in `prompt` when that is what the user would actually say.
 - Use private or external eval suites only as clean-room pattern inspiration:
   borrow task shape, realism, and rubric style; do not copy restricted content,
   proprietary fixtures, exact examples, private repo names, prompts, or data.
@@ -61,7 +63,7 @@ Use this when writing or revising task files and judge prompts.
 - If a broad canary fails twice or hides the cause of failure, split the missed
   behavior into its own focused eval or deterministic check.
 - Prefer modular skill-local evals when the behavior belongs to one skill. A
-  skill-local `eval_task.json` should be runnable without chat context and
+  skill-local `evals/evals.json` should be runnable without chat context and
   should not depend on another skill's private fixture unless the task says so.
 
 ## Judge Design

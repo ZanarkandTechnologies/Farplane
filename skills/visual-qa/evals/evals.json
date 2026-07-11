@@ -1,0 +1,29 @@
+{
+  "skill_name": "visual-qa",
+  "evals": [
+    {
+      "id": "visual_qa_requires_screenshot_and_design_01",
+      "prompt": "Judge a UI change where the ticket names a dashboard state, but the evidence bundle only has text logs and no screenshot.",
+      "expected_output": "Reads the ticket and design.md or Agent Contract as expected UI state; Refuses to pass without screenshot/image evidence for the declared state; Requires geometry/layout assertions or marks them missing; Names the missing best evidence image; Does not reward route completion or logs as visual proof",
+      "files": [],
+      "assertions": [
+        "Reads the ticket and design.md or Agent Contract as expected UI state",
+        "Refuses to pass without screenshot/image evidence for the declared state",
+        "Requires geometry/layout assertions or marks them missing",
+        "Names the missing best evidence image",
+        "Does not reward route completion or logs as visual proof"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Visual QA refuses to pass without screenshot evidence and expected state",
+          "tags": [
+            "skill",
+            "visual-qa",
+            "screenshots"
+          ],
+          "notes": "Guards visual QA from becoming prose-only UI approval."
+        }
+      }
+    }
+  ]
+}

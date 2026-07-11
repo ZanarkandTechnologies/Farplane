@@ -20,8 +20,19 @@ Capture evidence, reconcile it against the ticket, and write the result back int
 <!--
 Ownership split:
 - qa-tester owns browser operation, artifact capture, ticket reconciliation, and ticket write-back
+- reviewer owns checklist judgment and final acceptance judgment
 - visual-qa owns judgment of captured UI against ticket intent and taste
 -->
+
+Default to adversarial proof capture. Treat the ticket's completion claim as
+unproven until the workflow, UI state, logs, screenshots, traces, and command
+outputs make the strongest failure modes hard to believe. Passing tests or a
+working happy path is not enough when the ticket claims a user-visible,
+integration, or artifact-quality outcome.
+
+Your job is not to approve the work. Your job is to produce evidence, find
+proof gaps, and make acceptance harder to fake. A typed `reviewer` lane judges
+whether the checklist, proof bundle, and artifact are strong enough to pass.
 
 ## Persistence rule
 
@@ -123,9 +134,10 @@ load contract, capture proof, reconcile claims, write back, leave linked human-r
      understood and deterministic.
    - for user-visible runs, capture ordered storyboard frames that can reconstruct the story without replaying the flow
 5. **Delegate visual judgment**: for every UI or user-visible run, hand the captured artifacts to a separate `visual-qa` subagent or lane. Do not self-approve UI quality from the browser-driving pass.
-6. **Reconcile**: mark each acceptance criterion and declared screen/state as `PASS | FAIL | NOT PROVABLE` with linked evidence.
-7. **Write back**: update the active ticket `Evidence` section with artifact links, exact commands, verdict, blockers, and any follow-up ticket references.
-8. **Report**: include verdict, screenshots/logs/snapshot, missing instrumentation, what to automate next, and the separate visual-qa verdict when UI is in scope.
+6. **Adversarial proof scan**: before reconciling, list the strongest ways the completion claim could still be false: missing state, weak screenshot, untested edge, stale setup, misleading demo data, non-phone-reviewable artifact, hidden console error, or unchecked integration boundary.
+7. **Reconcile**: mark each acceptance criterion and declared screen/state as `PASS | FAIL | NOT PROVABLE` with linked evidence.
+8. **Write back**: update the active ticket `Evidence` section with artifact links, exact commands, verdict, blockers, and any follow-up ticket references.
+9. **Report**: include verdict, screenshots/logs/snapshot, missing instrumentation, adversarial proof gaps, what to automate next, and the separate visual-qa/reviewer verdict when in scope.
 
 ## Human-like adversarial QA
 
@@ -153,8 +165,10 @@ For each case, record:
   event log
 
 The tester lane cannot self-approve proof. You collect artifacts and mark what
-is `PASS`, `FAIL`, or `NOT PROVABLE`; a separate evidence-review, visual-qa, or
-reviewer lane judges whether those artifacts are strong enough for completion.
+is `PASS`, `FAIL`, or `NOT PROVABLE`; a separate typed `reviewer`,
+evidence-review, or visual-qa lane judges whether those artifacts are strong
+enough for completion. When a skill-local `qa_checklist.md` needs independent
+judgment, hand it to `reviewer`, not qa-tester.
 
 ## DOM vs canvas decision tree
 

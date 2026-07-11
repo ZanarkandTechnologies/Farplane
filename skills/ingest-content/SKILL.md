@@ -6,6 +6,8 @@ group: content-social
 source: local
 template_uses:
   skill-template: "0.2.0"
+  skill-eval-task: "0.2.0"
+eval: evals/evals.json
 common_chains:
   after: ["media-ingest", "video-understanding", "summarize", "visual-design"]
 allowed-tools: Read, Glob, Grep, Bash, mcp__convex__status, mcp__convex__functionSpec, mcp__convex__run

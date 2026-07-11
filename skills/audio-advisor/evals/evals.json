@@ -1,0 +1,92 @@
+{
+  "skill_name": "audio-advisor",
+  "evals": [
+    {
+      "id": "audio_advisor_short_video_sound_design_01",
+      "prompt": "Plan audio for a 30s proof short with voiceover, kinetic captions, two transition hits, and a subtle music bed.",
+      "expected_output": "Separates voice, music, SFX, and mix notes; Aligns cues to scenes or timing; Routes final placement to Remotion; Includes acceptance checks",
+      "files": [],
+      "assertions": [
+        "Separates voice, music, SFX, and mix notes",
+        "Aligns cues to scenes or timing",
+        "Routes final placement to Remotion",
+        "Includes acceptance checks"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Plans sound design for a short video",
+          "tags": [
+            "skill",
+            "audio-advisor",
+            "sound-design",
+            "remotion"
+          ],
+          "anti_patterns": [
+            "Only says to use upbeat music",
+            "Leaves SFX timing unspecified",
+            "Does not provide Remotion-ready cue notes"
+          ]
+        }
+      }
+    },
+    {
+      "id": "audio_advisor_avatar_lipsync_route_01",
+      "prompt": "Make an avatar deliver this launch script with a consistent voice and background music.",
+      "expected_output": "Routes persistent presenter voice/lipsync to avatar-advisor; Plans music separately; Flags voice or rights constraints; Does not treat all audio as generic video generation",
+      "files": [],
+      "assertions": [
+        "Routes persistent presenter voice/lipsync to avatar-advisor",
+        "Plans music separately",
+        "Flags voice or rights constraints",
+        "Does not treat all audio as generic video generation"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Routes avatar lipsync audio through the right owners",
+          "tags": [
+            "skill",
+            "audio-advisor",
+            "avatar-advisor",
+            "lipsync"
+          ],
+          "anti_patterns": [
+            "Treats lipsync, voice, and music as one prompt",
+            "Ignores voice consent or usage constraints",
+            "Skips final mix or placement route"
+          ]
+        }
+      }
+    },
+    {
+      "id": "audio_advisor_master_spine_for_multiclip_reel_01",
+      "prompt": "Plan audio for a 24 second AI-video launch reel made from six generated clips. It should feel like one guided-meditation parody with a recurring guide, captions, soft music, and a few proof-receipt SFX hits.",
+      "expected_output": "Defines a master VO or dialogue plan across the full timeline; Defines a continuous music bed, transition hits, Foley/SFX, silence, ducking, and mix notes; Aligns audio cues to scene, timestamp/frame range, motion/edit binding, and acceptance checks; Routes final placement and proof to Remotion; Instructs AI video generation to disable per-clip generated audio unless a beat explicitly needs provider audio",
+      "files": [],
+      "assertions": [
+        "Defines a master VO or dialogue plan across the full timeline",
+        "Defines a continuous music bed, transition hits, Foley/SFX, silence, ducking, and mix notes",
+        "Aligns audio cues to scene, timestamp/frame range, motion/edit binding, and acceptance checks",
+        "Routes final placement and proof to Remotion",
+        "Instructs AI video generation to disable per-clip generated audio unless a beat explicitly needs provider audio"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Requires one audio spine for a multi-clip narrative reel",
+          "tags": [
+            "skill",
+            "audio-advisor",
+            "continuity",
+            "sound-design",
+            "remotion"
+          ],
+          "anti_patterns": [
+            "Allows every AI-generated clip to keep unrelated audio",
+            "Only says to use calm or punchy music",
+            "Leaves VO/SFX timing unspecified",
+            "Does not tell Remotion how to place, duck, or verify the mix"
+          ]
+        }
+      }
+    }
+  ]
+}

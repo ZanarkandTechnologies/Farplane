@@ -21,7 +21,7 @@ Use this shape when a repo has no eval harness yet:
 Skill-specific evals can live outside the sidecar beside the owning skill:
 
 ```text
-skills/<skill-name>/eval_task.json
+skills/<skill-name>/evals/evals.json
 ```
 
 ## Smoke Command
@@ -39,14 +39,15 @@ python3 .farplane/evals/run_evals.py run --harness codex --skills --label skill-
 File location defines the eval family. Keep harness and workflow tasks in
 `tasks/harness_tasks.json`, AGENTS.md/system-prompt tasks in
 `tasks/agents_md_tasks.json`, and skill-specific tasks in
-`skills/<skill-name>/eval_task.json`.
+`skills/<skill-name>/evals/evals.json`.
 
 If no runner exists yet, use this manual smoke checklist:
 
 ```text
 1. JSON parses without errors.
 2. Shared eval context lives in config.json plus contexts/*. Every task has id,
-   title, query, reference_points, optional context override, and optional
+   id, prompt, expected_output, files, assertions, and optional Farplane
+   metadata
    tags/notes.
 3. Rubric rules live in the judge prompt, not in task JSON.
 4. The run report contains one result per executed task.

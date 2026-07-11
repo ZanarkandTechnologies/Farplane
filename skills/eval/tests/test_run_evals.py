@@ -69,23 +69,39 @@ def write_fake_cli(path: Path) -> None:
 
 
 def write_tasks(path: Path) -> None:
-    path.write_text(
-        json.dumps(
-            [
+    path.parent.mkdir(parents=True, exist_ok=True)
+    if path.parts[-2:] == ("evals", "evals.json"):
+        payload = {
+            "skill_name": path.parents[1].name,
+            "evals": [
                 {
                     "id": "proof_01",
-                    "title": "Proof task",
-                    "query": "Explain proof discipline.",
-                    "reference_points": [
-                        "Names proof",
-                        "Names evidence",
-                    ],
-                    "tags": ["proof"],
-                    "notes": "synthetic task",
+                    "prompt": "Explain proof discipline.",
+                    "expected_output": "An explanation that names proof and evidence.",
+                    "files": [],
+                    "assertions": ["Names proof", "Names evidence"],
+                    "metadata": {
+                        "farplane": {
+                            "title": "Proof task",
+                            "tags": ["proof"],
+                            "notes": "synthetic task",
+                        }
+                    },
                 }
-            ]
-        )
-    )
+            ],
+        }
+    else:
+        payload = [
+            {
+                "id": "proof_01",
+                "title": "Proof task",
+                "query": "Explain proof discipline.",
+                "reference_points": ["Names proof", "Names evidence"],
+                "tags": ["proof"],
+                "notes": "synthetic task",
+            }
+        ]
+    path.write_text(json.dumps(payload))
 
 
 class EvalRunnerTests(unittest.TestCase):
@@ -122,6 +138,90 @@ class EvalRunnerTests(unittest.TestCase):
                 )
             )
             with self.assertRaises(runner.EvalError):
+                runner.load_tasks(path)
+
+    def test_load_tasks_accepts_agent_skills_eval_format(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "skills" / "qa" / "evals" / "evals.json"
+            path.parent.mkdir(parents=True)
+            path.write_text(
+                json.dumps(
+                    {
+                        "skill_name": "qa",
+                        "evals": [
+                            {
+                                "id": 1,
+                                "prompt": "Check the UI.",
+                                "expected_output": "A proof-backed verdict.",
+                                "files": [],
+                                "assertions": ["Captures evidence", "Returns a verdict"],
+                                "metadata": {
+                                    "farplane": {
+                                        "title": "Capture proof",
+                                        "context": "Toy context",
+                                        "tags": ["qa"],
+                                        "notes": "Representative row",
+                                    }
+                                },
+                            }
+                        ],
+                    }
+                )
+            )
+
+            task = runner.load_tasks(path)[0]
+
+            self.assertEqual(task.id, "1")
+            self.assertEqual(task.title, "Capture proof")
+            self.assertEqual(task.query, "Check the UI.")
+            self.assertEqual(task.reference_points, ("Captures evidence", "Returns a verdict"))
+            self.assertEqual(task.context, "Toy context")
+
+    def test_resolve_skill_task_paths_prefers_agent_skills_format(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            skill_dir = root / "skills" / "qa"
+            standard = skill_dir / "evals" / "evals.json"
+            standard.parent.mkdir(parents=True)
+            standard.write_text("{}")
+            (skill_dir / "evals/evals.json").write_text("[]")
+
+            self.assertEqual(runner.resolve_skill_task_paths(root), [standard])
+            self.assertEqual(runner.normalize_skill_selector("skills/qa/evals/evals.json"), "qa")
+
+    def test_standard_skill_eval_receives_owner_skill_context(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            eval_path = root / "skills" / "qa" / "evals" / "evals.json"
+            eval_path.parent.mkdir(parents=True)
+            eval_path.write_text("{}")
+            (root / "skills" / "qa" / "SKILL.md").write_text("# QA\n\nCapture evidence.\n")
+
+            context = runner.skill_context_for_task_file(eval_path, root)
+
+            self.assertIn("Skill under evaluation: qa", context)
+            self.assertIn("Capture evidence.", context)
+
+    def test_standard_skill_eval_rejects_unstaged_files(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "evals.json"
+            path.write_text(
+                json.dumps(
+                    {
+                        "skill_name": "qa",
+                        "evals": [
+                            {
+                                "id": 1,
+                                "prompt": "Check this file.",
+                                "expected_output": "A result.",
+                                "files": ["evals/files/input.txt"],
+                            }
+                        ],
+                    }
+                )
+            )
+
+            with self.assertRaisesRegex(runner.EvalError, "does not stage yet"):
                 runner.load_tasks(path)
 
     def test_only_a_verdict_passes(self) -> None:
@@ -275,7 +375,7 @@ class EvalRunnerTests(unittest.TestCase):
             root = Path(tmp)
             eval_dir = root / "evals"
             fake_cli = root / "fake_cli.py"
-            skill_eval = root / "skills" / "qa" / "eval_task.json"
+            skill_eval = root / "skills" / "qa" / "evals/evals.json"
             (eval_dir / "prompts").mkdir(parents=True)
             (eval_dir / "tasks").mkdir(parents=True)
             skill_eval.parent.mkdir(parents=True)
@@ -357,7 +457,7 @@ class EvalRunnerTests(unittest.TestCase):
             root = Path(tmp)
             eval_dir = root / "evals"
             fake_cli = root / "fake_cli.py"
-            skill_eval = root / "skills" / "advise" / "eval_task.json"
+            skill_eval = root / "skills" / "advise" / "evals/evals.json"
             (eval_dir / "prompts").mkdir(parents=True)
             skill_eval.parent.mkdir(parents=True)
             write_fake_cli(fake_cli)
@@ -398,7 +498,7 @@ class EvalRunnerTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             skill_dir = root / "skills" / "qa"
-            skill_eval = skill_dir / "eval_task.json"
+            skill_eval = skill_dir / "evals/evals.json"
             skill_dir.mkdir(parents=True)
             (skill_dir / "SKILL.md").write_text("# QA\n\nThe QA skill requires best_evidence for UI proof.\n")
             write_tasks(skill_eval)
@@ -419,7 +519,7 @@ class EvalRunnerTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             skill_dir = root / "skills" / "qa"
-            skill_eval = skill_dir / "eval_task.json"
+            skill_eval = skill_dir / "evals/evals.json"
             skill_dir.mkdir(parents=True)
             (skill_dir / "SKILL.md").write_text("# QA\n\nThe QA skill requires best_evidence for UI proof.\n")
             write_tasks(skill_eval)
@@ -441,8 +541,8 @@ class EvalRunnerTests(unittest.TestCase):
             root = Path(tmp)
             eval_dir = root / "evals"
             fake_cli = root / "fake_cli.py"
-            qa_eval = root / "skills" / "qa" / "eval_task.json"
-            advise_eval = root / "skills" / "advise" / "eval_task.json"
+            qa_eval = root / "skills" / "qa" / "evals/evals.json"
+            advise_eval = root / "skills" / "advise" / "evals/evals.json"
             (eval_dir / "prompts").mkdir(parents=True)
             qa_eval.parent.mkdir(parents=True)
             advise_eval.parent.mkdir(parents=True)
@@ -498,7 +598,7 @@ class EvalRunnerTests(unittest.TestCase):
             root = Path(tmp)
             eval_dir = root / "evals"
             fake_cli = root / "fake_cli.py"
-            qa_eval = root / "skills" / "qa" / "eval_task.json"
+            qa_eval = root / "skills" / "qa" / "evals/evals.json"
             (eval_dir / "prompts").mkdir(parents=True)
             qa_eval.parent.mkdir(parents=True)
             write_fake_cli(fake_cli)
@@ -539,7 +639,7 @@ class EvalRunnerTests(unittest.TestCase):
             root = Path(tmp)
             eval_dir = root / "evals"
             fake_cli = root / "fake_cli.py"
-            qa_eval = root / "skills" / "qa" / "eval_task.json"
+            qa_eval = root / "skills" / "qa" / "evals/evals.json"
             skill_md = root / "skills" / "qa" / "SKILL.md"
             (eval_dir / "prompts").mkdir(parents=True)
             qa_eval.parent.mkdir(parents=True)
@@ -617,7 +717,7 @@ class EvalRunnerTests(unittest.TestCase):
             root = Path(tmp)
             eval_dir = root / "evals"
             fake_cli = root / "fake_cli.py"
-            qa_eval = root / "skills" / "qa" / "eval_task.json"
+            qa_eval = root / "skills" / "qa" / "evals/evals.json"
             (eval_dir / "prompts").mkdir(parents=True)
             qa_eval.parent.mkdir(parents=True)
             write_fake_cli(fake_cli)

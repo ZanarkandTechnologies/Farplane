@@ -1,13 +1,13 @@
 ---
 name: self-improve
-description: "Turn an existing skill improvement goal into evals, variant comparison, prompt context, memory, or Goal-backed improvement artifacts."
+description: "Turn an existing improvement goal into immediate or delayed measured experiments, evals, Goal context, memory, and promotion evidence."
 tier: 3
 group: self-improvement
 source: local
 template_uses:
   skill-template: "0.2.0"
-  skill-eval-task: "0.1.0"
-eval: eval_task.json
+  skill-eval-task: "0.2.0"
+eval: evals/evals.json
 
 ---
 
@@ -33,11 +33,31 @@ skill-maintenance = accepted writeback into SKILL.md/references/source copies
 ## Skill Signature
 
 ```text
-self_improve_experiment(target_skill_or_surface, metric, search_space?, eval_suite?) -> best_candidate + experiment_log + promotion_recommendation
-state: reads(target package, evals, metric, prior runs, candidate constraints); writes(program.md?, evals?, results?, promoted_change?)
-gates: metric_named; baseline_recorded; candidates_compared; promotion_rule_met
-routes: metric-advisor | eval | goal-advisor | skill-maintenance | review
-fails: optimizes by taste; mutates before baseline; promotes unmeasured changes; bloats the target skill
+self_improve(target, metric, feedback_class, ticket,
+             program?, progress?, search_space?, eval_suite?)
+  -> immediate_result | waiting_signal
+   + evidence
+   + promotion_decision?
+
+state:
+  reads(target package, evals, metric, prior runs, candidate constraints,
+        ticket Reward.kpi_rewards[], Goal Packet program/progress)
+  writes(evals?, results?, target-local memory?, accepted change?,
+         original ticket Reward rows?, original progress log?)
+
+gates:
+  feedback_classified; metric_named; baseline_recorded;
+  candidate_or_intervention_bounded; promotion_rule_named;
+  immediate_result_measured_in_window_or_delayed_checkin_program_executable
+
+routes: metric-advisor | eval | goal-advisor | skill-maintenance | review |
+        pulse-update
+
+fails:
+  optimizes_by_taste; mutates_before_baseline; promotes_unmeasured_change;
+  creates_checkin_ticket; invents_experiment_metadata;
+  leaves_delayed_checkin_implicit; adds_delayed_checkin_debt_to_immediate_work;
+  bloats_target_skill
 ```
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
@@ -54,177 +74,41 @@ fails: optimizes by taste; mutates before baseline; promotes unmeasured changes;
   optimizing.
 - [ ] 5. If the metric is unclear, derive a metric card first; then establish a
   baseline score or baseline judgment before mutating the target skill.
-- [ ] 6. For durable iterative work, prefer native Goal mode as the loop runner;
+- [ ] 6. Classify feedback timing before choosing the execution route.
+  - [ ] Use `immediate` only when baseline, intervention, result, and keep/kill
+        decision can be observed inside the current execution window. Run it
+        through native Goal without manufacturing a future check-in; keep the
+        Goal Program `Check-In Program` as compact `mode: not_applicable`.
+  - [ ] Use `delayed` when elapsed time, exposure, external action, or later
+        human feedback is required. Encode the wait in the original ticket's
+        `Reward.kpi_rewards[]` and compile an executable `Check-In Program` in
+        its `program.md` through Goal Advisor.
+- [ ] 7. For durable iterative work, prefer native Goal mode as the loop runner;
   use this skill as the eval, prompt-profile, and skill-memory context surface.
-- [ ] 7. Promote only durable lessons, evals, and accepted changes into the target
+- [ ] 8. Promote only durable lessons, evals, and accepted changes into the target
   skill package, normally through [skill-maintenance](../skill-maintenance/SKILL.md).
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
-Improve a target by giving native Goal mode the context it needs to run a
-measured search. It does not need to own the durable loop when a native `/goal`
-can do that directly.
+## Execution Routes
 
-## Trigger Conditions
+Give native Goal mode the smallest measured-search context it needs; do not
+build a parallel loop runner. Use `goal-advisor` when a durable Goal must be
+compiled and `metric-advisor` when the metric provider or guards are unclear.
 
-Use when the user asks to:
+- `immediate`: baseline, intervention, result, and keep/kill decision are
+  observable inside the current Goal window. Measure and decide in-window; do
+  not manufacture a future check-in or fill delayed check-in procedure fields.
+- `delayed`: the real signal requires elapsed time, exposure, an external
+  event, or later human feedback. Persist the wait in the original ticket's
+  Reward rows, and use Goal Advisor to fill the experiment-specific
+  `program.md` `Check-In Program`. Work Pulse resumes the same packet and its
+  worker executes that program when a row matures.
 
-- improve a skill
-- make a skill self-improving
-- add evals for a skill
-- compare skill variants
-- create or update a skill-local `program.md`
-- add a prompt candidate/history workspace for prompt-like skills
-- scaffold deterministic skill eval runners and result files
-- preserve skill experiment memory inside the target skill package
-- optimize `SKILL.md`, references, prompts, or bundled scripts with measured
-  behavior
-- prepare context files that a native Goal should read while optimizing a skill
-
-Use `goal-advisor` first when the user wants a durable native Goal. Use
-`metric-advisor` first when the metric provider or guard metrics are unclear.
-
-## Workflow
-
-1. **Read target skill:** inspect `SKILL.md`, its direct todo list, references, and
-   scripts. Do not edit yet.
-2. **Load skill memory:** read `self-improve/program.md` when present. If the
-   user wants durable skill memory, create it before experiments.
-3. **Classify maturity:** rewrite if the skill is broken or missing core
-   workflow; optimize only when it is already roughly usable.
-4. **Define rubric:** capture 3-6 human quality dimensions that matter.
-5. **Bind metric card:** use metric-advisor when the primary metric, provider,
-   guard metrics, or anti-metrics are missing.
-6. **Build binary evals:** convert rubric dimensions into `pass/fail`
-   assertions over realistic prompts and expected artifacts.
-7. **Baseline:** run the eval suite against the current skill and record pass
-   rate when deterministic evals exist. For subjective artifacts, record the
-   current human-review rubric and latest feedback instead.
-8. **Prepare Goal context:** make sure `program.md`, evals, latest results, and
-   failure analysis tell Goal mode what to optimize, how to verify, and what
-   not to regress.
-9. **Iterate through native Goal mode:** change one bounded part of the skill
-   at a time, rerun evals or present the review artifact, keep only
-   improvements that do not break skill validation, and record the lesson.
-10. **Debrief and write back:** summarize before/after behavior in rubric
-   terms, update `program.md` with reusable lessons, preserve evals only when
-   durable, and use `skill-maintenance` for accepted edits to
-   `SKILL.md`/references/source copies.
-
-Load `references/skill-evals.md` before designing eval cases. Load
-`references/skill-memory.md` before writing skill-local memory.
-
-Reference split:
-
-- `references/architecture.md` for the self-improvement boundary
-- `references/workflows.md` for eval and optimization phases
-- `references/gotchas.md` for eval leakage and overfitting risks
-- `references/skill-evals.md` for case/assertion design
-- `references/skill-memory.md` for target-skill `program.md` and run history
-
-## Goal Mode Integration
-
-A native Goal improving a skill should dynamically read these target-skill
-files when they exist:
-
-```text
-<target-skill>/SKILL.md
-<target-skill>/references/*
-<target-skill>/scripts/*
-<target-skill>/self-improve/program.md
-<target-skill>/self-improve/evals/*
-<target-skill>/self-improve/results/latest_run.json
-<target-skill>/self-improve/results/failure_analysis.md
-<target-skill>/self-improve/prompts/current.txt
-<target-skill>/self-improve/prompts/candidates/*
-<target-skill>/self-improve/runs/*/notes.md
-```
-
-`program.md` should define the optimization target: desired behavior, rubric,
-metric or human feedback schema, known failure modes, constraints, accepted
-lessons, and promotion rules. When `program.md` is missing or stale, update it
-before asking Goal mode to optimize.
-
-## Artifact Layout
-
-Use an experiment directory for scratch or early eval work when native Goal
-context files are not yet durable enough:
-
-```text
-.farplane/self-improve/<skill-name>/<date-slug>/
-  evals/cases.jsonl
-  evals/assertions.md
-  results/scores.jsonl
-  metric-card.md
-  notes.md
-```
-
-For durable skill self-improvement, store memory inside the target skill package:
-
-```text
-skills/<target-skill>/self-improve/
-  program.md
-  evals/cases.jsonl
-  evals/assertions.md
-  runs/<YYYYMMDD-HHMM-slug>/
-    metric-card.md
-    scores.jsonl
-    notes.md
-```
-
-Use `scripts/init_skill_memory.py` to scaffold the target-skill memory surface:
-
-```bash
-python3 skills/self-improve/scripts/init_skill_memory.py skills/prd \
-  --goal "make PRD authoring more decisive and easier to resume"
-```
-
-For prompt-like skills, add the prompt/profile eval harness:
-
-```bash
-python3 skills/self-improve/scripts/init_skill_memory.py skills/prd \
-  --goal "make PRD authoring more decisive and easier to resume" \
-  --prompt-profile
-```
-
-That also creates:
-
-```text
-self-improve/prompts/current.txt
-self-improve/prompts/candidates/
-self-improve/prompts/history/
-self-improve/evals/test_cases.jsonl
-self-improve/evals/assertions.py
-self-improve/evals/runner.py
-self-improve/results/scores.jsonl
-self-improve/results/latest_run.json
-self-improve/results/failure_analysis.md
-```
-
-Only promote evals and run summaries into the target skill package after they
-prove reusable. Keep raw scratch logs in `.farplane/` when they are bulky,
-secret-bearing, one-off, or too noisy for durable skill memory. For accepted
-changes to first-load instructions, use `skill-maintenance` so mandatory logic
-lands in the source `SKILL.md` rather than being buried in references or
-installed copies.
-
-## Core Decision Branches
-
-- **Skill is missing the first-load contract:** rewrite the skill before
-  optimizing.
-- **No binary metric exists:** ask metric-advisor for the honest provider and
-  no-metric rationale, then build evals or use review/human feedback before
-  optimizing.
-- **Target skill has `self-improve/program.md`:** read it as durable memory
-  before proposing a new hypothesis.
-- **Target skill has scripts:** include script behavior in evals when scripts
-  carry the fragile logic.
-- **Target skill is prompt-like:** use `--prompt-profile` and compare
-  `current`, `candidates`, and score-bearing `history`.
-- **Eval pass rate improves but skill becomes bloated:** use a simplicity guard,
-  usually line count or duplicated-rule count.
-- **Eval suite is too narrow:** add cases before trusting the optimization.
-- **Native Goal can carry the loop:** keep this skill focused on context,
-  memory, evals, and evidence; do not create parallel loop machinery.
+Load [workflows](references/workflows.md) for the full eval sequence, exact
+Reward/Goal fields, due-row rule, and `accept | kill | iterate | monitor`
+decisions. Load [skill evals](references/skill-evals.md) before designing cases
+and [skill memory](references/skill-memory.md) before creating a target-local
+`program.md`, run folders, or prompt-profile harness.
 
 ## Gotchas
 

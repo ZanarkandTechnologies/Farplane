@@ -1,0 +1,54 @@
+{
+  "skill_name": "customer-research",
+  "evals": [
+    {
+      "id": "customer_research_minimal_frontmatter_01",
+      "prompt": "I have a call with Jane Doe from Acme Logistics. Her LinkedIn is https://example.com/jane and I want to talk about whether AI workflow automation could help their operations team. Prep me.",
+      "expected_output": "Produces or describes a customer research report rather than a CRM pipeline record; Uses minimal frontmatter with skill, name, links, optional industry, relevance, and created_at; Uses skill to identify the report-producing skill instead of inventing a report_id; Keeps role, confidence, pain hypotheses, next actions, and relationship stage in the body or omits them; Does not add pipeline or replacement project-controller metadata; Labels sourced facts, inferences, and unknowns separately; Includes conversation topics, questions to ask, and a correction-seeking help angle",
+      "files": [],
+      "assertions": [
+        "Produces or describes a customer research report rather than a CRM pipeline record",
+        "Uses minimal frontmatter with skill, name, links, optional industry, relevance, and created_at",
+        "Uses skill to identify the report-producing skill instead of inventing a report_id",
+        "Keeps role, confidence, pain hypotheses, next actions, and relationship stage in the body or omits them",
+        "Does not add pipeline or replacement project-controller metadata",
+        "Labels sourced facts, inferences, and unknowns separately",
+        "Includes conversation topics, questions to ask, and a correction-seeking help angle"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Minimal frontmatter and report-body reasoning",
+          "tags": [
+            "skill",
+            "customer-research",
+            "frontmatter"
+          ],
+          "notes": "Anti-cheat control: user asks for call prep, but the skill must not overbuild CRM metadata."
+        }
+      }
+    },
+    {
+      "id": "customer_research_sparse_target_01",
+      "prompt": "Research Alex before my customer call tomorrow.",
+      "expected_output": "Does not research an arbitrary Alex; Asks for one narrow identifier such as full name, company, LinkedIn URL, or call context; Explains that correct target identity is required before writing the report; Does not invent private or personal details",
+      "files": [],
+      "assertions": [
+        "Does not research an arbitrary Alex",
+        "Asks for one narrow identifier such as full name, company, LinkedIn URL, or call context",
+        "Explains that correct target identity is required before writing the report",
+        "Does not invent private or personal details"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Sparse target asks narrow blocking question",
+          "tags": [
+            "skill",
+            "customer-research",
+            "sparse-input"
+          ],
+          "notes": "Failure should route to target binding and no-private-dossiering gates."
+        }
+      }
+    }
+  ]
+}

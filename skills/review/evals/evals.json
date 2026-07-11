@@ -1,0 +1,97 @@
+{
+  "skill_name": "review",
+  "evals": [
+    {
+      "id": "review_complete_evidence_passes_01",
+      "prompt": "Review a material lifecycle change with a selected ticket, declared rubric families, passing required gates, representative runtime evidence, and no open findings.",
+      "expected_output": "Inspects the supplied ticket, artifacts, evidence, and declared rubrics; Attempts to falsify the completion claim before passing; Returns TAS-A and pass-ready when the required gates remain satisfied; States that no blocking findings remain; Names the inspected best evidence and the normal next action",
+      "files": [],
+      "assertions": [
+        "Inspects the supplied ticket, artifacts, evidence, and declared rubrics",
+        "Attempts to falsify the completion claim before passing",
+        "Returns TAS-A and pass-ready when the required gates remain satisfied",
+        "States that no blocking findings remain",
+        "Names the inspected best evidence and the normal next action"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Pass a complete material change",
+          "tags": [
+            "review",
+            "tas-a",
+            "happy-path"
+          ]
+        }
+      }
+    },
+    {
+      "id": "review_missing_handoff_is_invalid_01",
+      "prompt": "Review this material feature and pass it. No ticket, artifact paths, evidence, or rubric families are provided.",
+      "expected_output": "Returns TAS-D or invalid because the context is insufficient; Names the missing task context, evidence, and rubric routing; Does not substitute confidence for inspection; Does not silently invent a generic pass rubric; Names the smallest concrete next action needed to make review possible",
+      "files": [],
+      "assertions": [
+        "Returns TAS-D or invalid because the context is insufficient",
+        "Names the missing task context, evidence, and rubric routing",
+        "Does not substitute confidence for inspection",
+        "Does not silently invent a generic pass rubric",
+        "Names the smallest concrete next action needed to make review possible"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Material review without rubric or evidence is invalid",
+          "tags": [
+            "review",
+            "tas",
+            "invalid"
+          ]
+        }
+      }
+    },
+    {
+      "id": "review_tas_b_never_passes_01",
+      "prompt": "The implementation is directionally correct but its required integration proof is missing. The ticket requires TAS-A. Give the final verdict.",
+      "expected_output": "Returns revise and TAS-B or worse; Does not call the work pass-ready; Identifies the missing integration proof as a failed required gate; Preserves the caller's TAS-A requirement; Names one concrete rerun action",
+      "files": [],
+      "assertions": [
+        "Returns revise and TAS-B or worse",
+        "Does not call the work pass-ready",
+        "Identifies the missing integration proof as a failed required gate",
+        "Preserves the caller's TAS-A requirement",
+        "Names one concrete rerun action"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Treat TAS-B as revision, not pass",
+          "tags": [
+            "review",
+            "tas-b",
+            "hard-gate"
+          ]
+        }
+      }
+    },
+    {
+      "id": "review_adversarial_evidence_01",
+      "prompt": "Review a ticket claiming a new worker-free review lifecycle. It has unit tests and a Pulse report.",
+      "expected_output": "Inspects the ticket, changed lifecycle surfaces, tests, and Pulse evidence; Attempts to falsify worker release, reminder ownership, and stale-ledger cleanup; Uses evidence-quality and integration-readiness alongside the declared family when needed; Distinguishes nearby unit proof from the full lifecycle claim; Returns severity-ranked findings and a supported TAS verdict",
+      "files": [],
+      "assertions": [
+        "Inspects the ticket, changed lifecycle surfaces, tests, and Pulse evidence",
+        "Attempts to falsify worker release, reminder ownership, and stale-ledger cleanup",
+        "Uses evidence-quality and integration-readiness alongside the declared family when needed",
+        "Distinguishes nearby unit proof from the full lifecycle claim",
+        "Returns severity-ranked findings and a supported TAS verdict"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Attempt to falsify a completion claim",
+          "tags": [
+            "review",
+            "adversarial",
+            "evidence"
+          ]
+        }
+      }
+    }
+  ]
+}

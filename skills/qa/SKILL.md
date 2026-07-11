@@ -4,11 +4,11 @@ description: "Turn one selected ticket into proof artifacts, reconciled Done and
 tier: 3
 group: coding
 source: local
-eval: eval_task.json
+eval: evals/evals.json
 qa_checklist: qa_checklist.md
 template_uses:
   skill-surface-budget: "0.1.0"
-  skill-eval-task: "0.1.0"
+  skill-eval-task: "0.2.0"
 common_chains:
   after: ["demo", "close-ticket"]
 ---

@@ -26,7 +26,7 @@ Externalized phase calls must shrink or specialize the current scope.
 
 ## Templates
 
-- Add eval_task.json and qa_checklist.md when warranted.
+- Add evals/evals.json and qa_checklist.md when warranted.
 
 ## Output
 """,

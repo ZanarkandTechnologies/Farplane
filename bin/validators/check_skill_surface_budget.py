@@ -159,7 +159,7 @@ def count_skill_surfaces(skill_dir: Path) -> SurfaceCounts:
     return SurfaceCounts(
         skill_todos=count_skill_todos(skill_dir / "SKILL.md"),
         qa_checklist=count_qa_checklist(skill_dir / "qa_checklist.md"),
-        eval_tasks=count_eval_tasks(skill_dir / "eval_task.json"),
+        eval_tasks=count_eval_tasks(skill_dir / "evals/evals.json"),
     )
 
 
@@ -193,7 +193,7 @@ def collect_budget_results(
         surfaces = [
             ("skill_todos", skill_path, counts.skill_todos, limits.skill_todos),
             ("qa_checklist", skill_dir / "qa_checklist.md", counts.qa_checklist, limits.qa_checklist),
-            ("eval_tasks", skill_dir / "eval_task.json", counts.eval_tasks, limits.eval_tasks),
+            ("eval_tasks", skill_dir / "evals/evals.json", counts.eval_tasks, limits.eval_tasks),
         ]
         for surface, path, count, limit in surfaces:
             if count > limit:

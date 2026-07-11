@@ -6,9 +6,9 @@ group: skills
 source: local
 template_uses:
   skill-template: "0.2.0"
-  skill-eval-task: "0.1.0"
+  skill-eval-task: "0.2.0"
   skill-qa-checklist: "0.1.0"
-eval: eval_task.json
+eval: evals/evals.json
 qa_checklist: qa_checklist.md
 skill_ui: skills/skill-maintenance/graph/index.html
 
@@ -68,7 +68,7 @@ Checks skill/source/feature registries against the current repo state. This
 skill owns registry validation, generated-file sync, ambiguous-gap reporting,
 and follow-up ticket suggestions.
 
-Eval surface: `eval_task.json`, `qa_checklist.md`, fixture skill repos under
+Eval surface: `evals/evals.json`, `qa_checklist.md`, fixture skill repos under
 `tests/fixtures/`, and `scripts/check_skills.py --write`.
 
 ## Skill Signature
@@ -170,19 +170,19 @@ running this mode.
   - [ ] If `mode in [structure_update, refine_skill, audit]`, read
     [Skill Structure QA Checklist](qa_checklist.md).
   - [ ] If `mode == qa_checklist_design`, read target `SKILL.md`, existing
-    target `qa_checklist.md` when present, `eval_task.json` when present,
+    target `qa_checklist.md` when present, `evals/evals.json` when present,
     `## Gotchas`, recent audits, and [Skill Structure QA Checklist](qa_checklist.md).
-  - [ ] If `mode == eval_to_qa_sync` or `edited_skill/eval_task.json` changed,
-    read `edited_skill/eval_task.json` and `edited_skill/qa_checklist.md` when
+  - [ ] If `mode == eval_to_qa_sync` or `edited_skill/evals/evals.json` changed,
+    read `edited_skill/evals/evals.json` and `edited_skill/qa_checklist.md` when
     it exists.
   - [ ] If `mode == harden_skill`, read the relevant `docs/TROUBLES.md`,
-    `docs/LESSONS.md`, processed-state refs, and target `eval_task.json`.
+    `docs/LESSONS.md`, processed-state refs, and target `evals/evals.json`.
   - [ ] If `mode == refine_skill`, read target `SKILL.md`, references,
-    `eval_task.json`, `qa_checklist.md`, skill-local audits, and recent usage
+    `evals/evals.json`, `qa_checklist.md`, skill-local audits, and recent usage
     or eval results.
   - [ ] If `mode == upgrade_skill_from_sources`, read
     [upgrade-skill-from-sources](references/upgrade-skill-from-sources.md),
-    target `SKILL.md`, target `qa_checklist.md`, target `eval_task.json`,
+    target `SKILL.md`, target `qa_checklist.md`, target `evals/evals.json`,
     recent audits, [book-to-skill extraction](../skill-creator/references/book-to-skill.md),
     and [best-of-worlds](../best-of-worlds/SKILL.md).
   - [ ] If `mode == low_value_prose_scan` or first-load prose feels bloated,
@@ -198,7 +198,7 @@ running this mode.
 - [ ] 4. Choose the owner surface with explicit branch routing.
   - [ ] `if first_load_behavior_changed: edit edited_skill/SKILL.md`.
   - [ ] `else if conditional_detail_or_template_changed: edit edited_skill/references/*`.
-  - [ ] `else if repeatable_behavior_proof_changed: edit edited_skill/eval_task.json`.
+  - [ ] `else if repeatable_behavior_proof_changed: edit edited_skill/evals/evals.json`.
   - [ ] `else if runtime_guardrail_changed: edit edited_skill/qa_checklist.md, a reference, or a validator candidate`.
   - [ ] `if measurement_or_reward_language_changed: keep skill-local QA as
     executable checks; route goal/project measurement to metric-advisor; route
@@ -250,7 +250,7 @@ running this mode.
   - [ ] Reject skill-local `todos.md`; first-load todo truth lives only in the
     marker-delimited `## Todo List` inside `SKILL.md`.
 - [ ] 6. Sync eval reference points into runtime guardrails when warranted.
-  - [ ] `if edited_skill/eval_task.json changed: compare changed reference_points against edited_skill/qa_checklist.md when present, otherwise decide whether to create one`.
+  - [ ] `if edited_skill/evals/evals.json changed: compare changed reference_points against edited_skill/qa_checklist.md when present, otherwise decide whether to create one`.
   - [ ] `if reference_point is reusable_runtime_guardrail: promote it into checklist, QA wording, validator candidate, or SKILL.md hard gate`.
   - [ ] `else: record skipped rare, hardcase, benchmark-only, or judgment-heavy points in the audit`.
   - [ ] For `harden_skill`, call [eval](../eval/SKILL.md) when the lesson or

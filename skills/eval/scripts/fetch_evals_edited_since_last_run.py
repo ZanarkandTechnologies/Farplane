@@ -14,7 +14,7 @@ from typing import Any
 
 
 DEFAULT_STATE_PATH = ".farplane/state/eval-drain/processed.jsonl"
-SKILL_EVAL_GLOB = "skills/*/eval_task.json"
+SKILL_EVAL_GLOB = "skills/*/evals/evals.json"
 
 
 class FetchError(ValueError):
@@ -41,9 +41,9 @@ def read_json(path: Path) -> Any:
 
 
 def normalize_task_count(data: Any, path: Path) -> int:
-    if not isinstance(data, list):
-        raise FetchError(f"{path}: expected a JSON list of eval tasks")
-    return len(data)
+    if not isinstance(data, dict) or not isinstance(data.get("evals"), list):
+        raise FetchError(f"{path}: expected an Agent Skills evals object")
+    return len(data["evals"])
 
 
 def discover_eval_files(project_root: Path) -> list[EvalFile]:

@@ -5,8 +5,8 @@ tier: 1
 source: local
 template_uses:
   skill-template: "0.3.5"
-  skill-eval-task: "0.1.0"
-eval: eval_task.json
+  skill-eval-task: "0.2.0"
+eval: evals/evals.json
 allowed-tools: Read, Glob, Grep, Bash
 ---
 
@@ -177,7 +177,7 @@ Skill gotchas:
 
 ```text
 consolidate(target = skills/*/references/gotchas.md, structure = gotchas)
-  -> repeated runtime failures promoted to qa_checklist.md or eval_task.json
+  -> repeated runtime failures promoted to qa_checklist.md or evals/evals.json
    + stale one-off warnings deleted
    + examples moved to references only when branch-specific
 ```

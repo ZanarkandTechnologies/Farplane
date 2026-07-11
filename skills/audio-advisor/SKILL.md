@@ -7,9 +7,9 @@ source: local
 template_uses:
   skill-template: "0.3.7"
   skill-qa-checklist: "0.1.1"
-  skill-eval-task: "0.1.0"
+  skill-eval-task: "0.2.0"
   skill-surface-budget: "0.1.0"
-eval: eval_task.json
+eval: evals/evals.json
 qa_checklist: qa_checklist.md
 common_chains:
   after: ["storyboard", "asset-advisor", "avatar-advisor", "ai-video-advisor", "remotion"]
@@ -83,11 +83,17 @@ honestly.
 - [ ] 3. Map timing and intent.
   - [ ] Align each audio cue to scene, beat, timestamp/frame range, emotional
     job, required motion/edit binding, and acceptance check.
+  - [ ] For multi-clip narrative reels, design one master audio spine: VO or
+    dialogue continuity, music bed, SFX/Foley accents, silence, ducking, and
+    transitions across the full timeline.
 - [ ] 4. Choose routes.
   - [ ] Route persistent presenter or lipsync identity work to
     `avatar-advisor`.
   - [ ] Route model-native audio/video generation details to
     `ai-video-advisor` when a provider owns the audio behavior.
+  - [ ] When a master audio spine owns the piece, instruct model-native video
+    generation to disable per-clip generated audio unless the plan explicitly
+    needs diegetic source sound for a named beat.
   - [ ] Route asset inventory gaps to `asset-advisor`.
   - [ ] Route final placement, ducking, captions, waveform visuals, and local
     render proof to `remotion`.
@@ -131,6 +137,8 @@ honestly.
   usable without an explicit rights/consent plan.
 - Do not let audio planning disappear inside video generation. Remotion needs
   timing cues and mix notes to stitch the final piece.
+- Do not accept inconsistent per-clip generated audio for a coherent narrative
+  reel. Use one master VO/music/SFX plan and let Remotion place the final mix.
 
 ## Reference Map
 

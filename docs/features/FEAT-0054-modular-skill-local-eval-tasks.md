@@ -11,7 +11,7 @@ tags:
 refs:
   - skills/eval/scripts/run_evals.py
   - skills/eval/SKILL.md
-  - skills/eval/eval_task.json
+  - skills/eval/evals/evals.json
   - docs/skills/templates/SKILL_TEMPLATE.md
   - docs/skills/system.md
   - docs/skills/best-practices.md
@@ -25,7 +25,7 @@ public: true
 surfaces:
   - skills/eval/scripts/run_evals.py
   - skills/eval/SKILL.md
-  - skills/eval/eval_task.json
+  - skills/eval/evals/evals.json
   - docs/skills/templates/SKILL_TEMPLATE.md
   - docs/skills/system.md
   - docs/skills/best-practices.md
@@ -34,7 +34,7 @@ source_refs:
   - docs/HISTORY.md
 external_refs: []
 evidence_refs:
-  - skills/eval/eval_task.json
+  - skills/eval/evals/evals.json
   - skills/eval/tests/test_run_evals.py
   - docs/HISTORY.md
 known_limits: Superseded by the consolidated Farplane evals feature. Skill-local eval files remain eval surfaces, not a separate feature identity.
@@ -107,7 +107,7 @@ flowchart LR
   retired["FEAT-0054<br/>status: retired<br/>superseded_by: FEAT-0039"]:::retired
   evals["FEAT-0039 Farplane evals<br/>skills/eval"]:::changed
   proof["SYS-0005 Proof And Review<br/>skill-local eval contract"]:::changed
-  files["skill eval files/tests<br/>skills/eval/eval_task.json<br/>skills/eval/scripts/run_evals.py<br/>skills/eval/tests/test_run_evals.py"]:::added
+  files["skill eval files/tests<br/>skills/eval/evals/evals.json<br/>skills/eval/scripts/run_evals.py<br/>skills/eval/tests/test_run_evals.py"]:::added
 
   skill_docs --> retired --> evals --> proof --> files
 ```
@@ -120,7 +120,7 @@ Owner surfaces:
 
 - `skills/eval/scripts/run_evals.py`
 - `skills/eval/SKILL.md`
-- `skills/eval/eval_task.json`
+- `skills/eval/evals/evals.json`
 - `docs/skills/templates/SKILL_TEMPLATE.md`
 - `docs/skills/system.md`
 - `docs/skills/best-practices.md`
@@ -132,7 +132,7 @@ Source context:
 
 Evidence:
 
-- `skills/eval/eval_task.json`
+- `skills/eval/evals/evals.json`
 - `skills/eval/tests/test_run_evals.py`
 - `docs/HISTORY.md`
 
@@ -161,7 +161,7 @@ Acceptance signals:
 - This feature is not a centralized benchmark catalog.
 - This feature does not require evals for every skill sentence.
 - This feature does not hide eval expectations in chat.
-- Known limit: The runner discovers `skills/*/eval_task.json` as a modular suite, but it does not yet enforce every skill having one or validate skill-local eval coverage quality beyond the existing task JSON schema and judge prompts.
+- Known limit: The runner discovers `skills/*/evals/evals.json` as a modular suite, but it does not yet enforce every skill having one or validate skill-local eval coverage quality beyond the existing task JSON schema and judge prompts.
 - Delete or merge this feature only when its current truth has moved into a clearer owner and all active refs are removed.
 
 ## Metrics

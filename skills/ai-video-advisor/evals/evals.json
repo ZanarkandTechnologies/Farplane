@@ -1,0 +1,36 @@
+{
+  "skill_name": "ai-video-advisor",
+  "evals": [
+    {
+      "id": "ai_video_advisor_blocks_isolated_i2v_for_narrative_01",
+      "prompt": "We have six storyboard keyframes for a 24s founder launch reel with one recurring guide and one proof talisman. Use Seedance to make six clips, then stitch them. The audio will be a single VO/music/SFX mix in Remotion.",
+      "expected_output": "Requires generation_topology before spend; Chooses continuous_chain or deliberate_scene_breaks instead of independent isolated clips; Requires start/end frame handoffs for each sequential clip; Sets or recommends provider audio off because a master Remotion audio plan owns the reel; Routes missing continuity assets back to storyboard or asset-advisor before belt app run",
+      "files": [],
+      "assertions": [
+        "Requires generation_topology before spend",
+        "Chooses continuous_chain or deliberate_scene_breaks instead of independent isolated clips",
+        "Requires start/end frame handoffs for each sequential clip",
+        "Sets or recommends provider audio off because a master Remotion audio plan owns the reel",
+        "Routes missing continuity assets back to storyboard or asset-advisor before belt app run"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Blocks isolated image-to-video batches for a continuous narrative reel",
+          "tags": [
+            "skill",
+            "ai-video-advisor",
+            "seedance",
+            "continuity",
+            "content-video"
+          ],
+          "anti_patterns": [
+            "Starts six independent image-to-video jobs from unrelated stills",
+            "Leaves generate_audio enabled for each clip despite a master audio plan",
+            "Treats async batch convenience as more important than story continuity",
+            "Does not check the live provider schema before forming input JSON"
+          ]
+        }
+      }
+    }
+  ]
+}

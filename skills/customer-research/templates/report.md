@@ -4,7 +4,6 @@ name: "{{ person_name }}"
 links:
   - "{{ primary_link }}"
 industry: "{{ industry_or_field }}"
-farplane_product_id: "{{ optional_farplane_product_id }}"
 relevance: "{{ one_sentence_reason_this_person_matters }}"
 created_at: "{{ YYYY-MM-DD }}"
 ---

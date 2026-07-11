@@ -1,0 +1,36 @@
+{
+  "skill_name": "remotion",
+  "evals": [
+    {
+      "id": "remotion_stitched_clips_frame_audio_qa_01",
+      "prompt": "Six local Seedance clips should become a 24s vertical reel with captions, transitions, and a single VO/music/SFX track. The clips are around 4s each but may not be exactly 120 frames.",
+      "expected_output": "Probes or reads each clip's duration, fps, dimensions, and frame count before sequencing; Uses observed frame counts for Sequence duration rather than assuming exact seconds; Avoids repeated boundary frames or accidental holds at cuts; Uses a single final audio placement plan for the full reel; Renders or names local render proof plus visual/audio QA evidence before claiming final quality",
+      "files": [],
+      "assertions": [
+        "Probes or reads each clip's duration, fps, dimensions, and frame count before sequencing",
+        "Uses observed frame counts for Sequence duration rather than assuming exact seconds",
+        "Avoids repeated boundary frames or accidental holds at cuts",
+        "Uses a single final audio placement plan for the full reel",
+        "Renders or names local render proof plus visual/audio QA evidence before claiming final quality"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Stitches model-native clips with exact frame timing and one audio plan",
+          "tags": [
+            "skill",
+            "remotion",
+            "stitched-video",
+            "frame-math",
+            "audio"
+          ],
+          "anti_patterns": [
+            "Assumes every 4s clip has the same exact frame count",
+            "Creates a one-frame stutter by overextending Sequence duration",
+            "Accepts inconsistent source clip audio without a master mix decision",
+            "Claims completion based only on Remotion render success"
+          ]
+        }
+      }
+    }
+  ]
+}

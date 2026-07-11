@@ -64,6 +64,12 @@ skills/feed-scout/config/
 plugins/feed-scout/skills/feed-scout/config/
 plugins/farplane-research/skills/feed-scout/config/
 
-# Local ticket working set
-tickets/
+# Local ticket working set. Keep the executable Goal Program template
+# source-controlled while other local ticket packets stay ignored.
+tickets/*
+!tickets/templates/
+tickets/templates/*
+!tickets/templates/goal-loop/
+tickets/templates/goal-loop/*
+!tickets/templates/goal-loop/program.md
 artifacts/

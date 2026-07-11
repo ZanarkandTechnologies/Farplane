@@ -21,7 +21,7 @@ LEGACY_TEMPLATE_FIELDS = {
 
 TEMPLATE_TARGET_BASIS = {
     "skill-template": "local skills that declare skill-template usage",
-    "skill-eval-task": "skills with an eval_task.json surface",
+    "skill-eval-task": "skills with an evals/evals.json surface",
     "skill-qa-checklist": "skills with a qa_checklist.md surface",
     "skill-method-reference": "skill reference files that declare method-reference usage",
     "skill-surface-budget": "skills opted into capped todo, QA checklist, and eval surfaces",

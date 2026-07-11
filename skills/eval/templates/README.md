@@ -21,7 +21,7 @@ system-prompt tasks live in `tasks/agents_md_tasks.json`. Use `tags` and
 after the first run shows a useful failure.
 
 Skill-specific tasks may instead live in the owning skill package as
-`skills/<skill-name>/eval_task.json`. Use that modular file when a task proves
+`skills/<skill-name>/evals/evals.json`. Use that modular file when a task proves
 one skill's behavior rather than the whole harness.
 
 ## Edit These First

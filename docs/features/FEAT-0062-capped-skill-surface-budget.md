@@ -78,7 +78,7 @@ agents apply every item.
 - Treats `template_uses.skill-surface-budget: "0.1.0"` as the opt-in
   subscription.
 - Checks subscribed skills against `10 / 5 / 5` budgets for top-level
-  `SKILL.md` todos, `qa_checklist.md` items, and `eval_task.json` rows.
+  `SKILL.md` todos, `qa_checklist.md` items, and `evals/evals.json` rows.
 - Skips unsubscribed skills without warnings so rollout can happen gradually.
 - Reports exact minimizer commands for over-budget subscribed skills.
 - Uses `skill-maintenance.refine_skill` and `consolidate(..., structure =
@@ -117,7 +117,7 @@ flowchart LR
   classDef added fill:#dcfce7,stroke:#15803d,color:#111827
   classDef retired fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d,stroke-dasharray: 5 3
 
-  scan["Skill/template surface scan<br/>SKILL.md + qa_checklist.md + eval_task.json"]:::keep
+  scan["Skill/template surface scan<br/>SKILL.md + qa_checklist.md + evals/evals.json"]:::keep
   optin["template_uses<br/>skill-surface-budget: 0.1.0"]:::keep
   caps["budget caps<br/>10 todos / 5 QA / 5 evals"]:::changed
   validator["bin/validators/check_skill_surface_budget.py"]:::changed

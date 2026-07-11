@@ -10,7 +10,7 @@ updated_at: 2026-06-23
 
 This is the first-class skill-local QA checklist for eval task quality. Use it
 after creating or materially revising eval rows, especially skill-local rows in
-`skills/<skill-name>/eval_task.json`.
+`skills/<skill-name>/evals/evals.json`.
 
 Run each check against the actual changed eval files. Do not treat this as a
 passive reminder; record violations, then fix or explicitly defer them in the

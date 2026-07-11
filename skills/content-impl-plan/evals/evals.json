@@ -1,0 +1,94 @@
+{
+  "skill_name": "content-impl-plan",
+  "evals": [
+    {
+      "id": "content_impl_plan_tasty_pack_to_production_plan_01",
+      "prompt": "Idea: prove agents can create and edit a full marketing short. Tasty Pack: vertical proof videos with fast hooks, kinetic captions, AI b-roll, punchy SFX, and a final CTA. Build the implementation plan.",
+      "expected_output": "Extracts hook, story, visual, and audio patterns from the reference; Creates a ticket-shaped plan; Routes storyboard, asset, avatar/audio/image/video advisors, Remotion, review, and QA separately; Orders actions by dependency with acceptance checks",
+      "files": [],
+      "assertions": [
+        "Extracts hook, story, visual, and audio patterns from the reference",
+        "Creates a ticket-shaped plan",
+        "Routes storyboard, asset, avatar/audio/image/video advisors, Remotion, review, and QA separately",
+        "Orders actions by dependency with acceptance checks"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Compiles idea plus Tasty Pack into a content production plan",
+          "tags": [
+            "skill",
+            "content-impl-plan",
+            "tasty-pack",
+            "autonomous-marketing"
+          ],
+          "anti_patterns": [
+            "Uses storyboard as the whole implementation plan",
+            "Creates trend-specific skills instead of routing through primitives",
+            "Omits Remotion or QA/review proof"
+          ]
+        }
+      }
+    },
+    {
+      "id": "content_impl_plan_reject_storyboard_as_parent_01",
+      "prompt": "Make storyboard the whole implementation plan for this content workflow.",
+      "expected_output": "Keeps storyboard as narrative and scene design; Uses content-impl-plan as the parent action-list owner; Ends with Remotion and QA/review proof; Does not create format-specific trend skills",
+      "files": [],
+      "assertions": [
+        "Keeps storyboard as narrative and scene design",
+        "Uses content-impl-plan as the parent action-list owner",
+        "Ends with Remotion and QA/review proof",
+        "Does not create format-specific trend skills"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Keeps storyboard as a child primitive",
+          "tags": [
+            "skill",
+            "content-impl-plan",
+            "storyboard",
+            "skill-taxonomy"
+          ],
+          "anti_patterns": [
+            "Expands storyboard into a parent ticket compiler",
+            "Hides advisor actions inside prose",
+            "Skips owner routes and blocker conditions"
+          ]
+        }
+      }
+    },
+    {
+      "id": "content_impl_plan_continuity_video_gate_01",
+      "prompt": "Idea: make a Farplane founder launch reel from a Tasty Pack with a standout deadpan guide, ritual object, guided-meditation parody pacing, AI video clips, and a final product reveal. Create the content implementation plan.",
+      "expected_output": "Classifies the reference/reel type and names rejected nearby formats; Builds a reference_leverage_map from Tasty Pack elements to concrete shots, assets, edit rhythm, audio cues, motion cues, or narrative beats; Defines narrative_spine plus viewer question -> answer; Defines continuity_spine with recurring character and recurring object or explicit rationale; Declares generation_topology before AI video spend and requires start/end frame handoffs for continuous clips; Requires one audio plan with VO/music/SFX timing before Remotion; Blocks isolated model-native clip batches for a narrative reel unless the chosen format is montage",
+      "files": [],
+      "assertions": [
+        "Classifies the reference/reel type and names rejected nearby formats",
+        "Builds a reference_leverage_map from Tasty Pack elements to concrete shots, assets, edit rhythm, audio cues, motion cues, or narrative beats",
+        "Defines narrative_spine plus viewer question -> answer",
+        "Defines continuity_spine with recurring character and recurring object or explicit rationale",
+        "Declares generation_topology before AI video spend and requires start/end frame handoffs for continuous clips",
+        "Requires one audio plan with VO/music/SFX timing before Remotion",
+        "Blocks isolated model-native clip batches for a narrative reel unless the chosen format is montage"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Requires reference classification and generation topology before narrative video spend",
+          "tags": [
+            "skill",
+            "content-impl-plan",
+            "tasty-pack",
+            "continuity",
+            "ai-video"
+          ],
+          "anti_patterns": [
+            "Copies only the art style from the reference",
+            "Plans six independent video generations without connected start/end frames",
+            "Lets each generated clip have unrelated audio",
+            "Routes directly to Remotion before creative_lock"
+          ]
+        }
+      }
+    }
+  ]
+}

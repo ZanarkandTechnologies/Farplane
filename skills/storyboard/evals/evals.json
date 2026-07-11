@@ -1,0 +1,97 @@
+{
+  "skill_name": "storyboard",
+  "evals": [
+    {
+      "id": "storyboard_remotion_proof_video_01",
+      "prompt": "We need a 20 second vertical video for builders showing that Farplane turns agent work into visible proof. Audience is skeptical AI operators. Make it ready for Remotion, but do not render yet.",
+      "expected_output": "Uses or routes to storyboard rather than jumping straight to Remotion code; Binds ICP, viewer promise, core idea, proof or reason to believe, platform, duration, style, CTA, and constraints; Uses a ticket-shaped structure such as Summary, Scope, Delta, Program, Map, Done / Proof, State, Links, and Notes; Includes narrative signatures: hook, tension, turn, proof moment, payoff, and final action; Produces beat sheet, script, storyboard panels, shot list, motion notes, captions or supers, audio notes, and asset requirements; Selects Remotion as the production route and names the dimensions, duration, scene map, asset requirements, and proof needed before render; Does not publish, render, spend external compute, or claim final video quality by default",
+      "files": [],
+      "assertions": [
+        "Uses or routes to storyboard rather than jumping straight to Remotion code",
+        "Binds ICP, viewer promise, core idea, proof or reason to believe, platform, duration, style, CTA, and constraints",
+        "Uses a ticket-shaped structure such as Summary, Scope, Delta, Program, Map, Done / Proof, State, Links, and Notes",
+        "Includes narrative signatures: hook, tension, turn, proof moment, payoff, and final action",
+        "Produces beat sheet, script, storyboard panels, shot list, motion notes, captions or supers, audio notes, and asset requirements",
+        "Selects Remotion as the production route and names the dimensions, duration, scene map, asset requirements, and proof needed before render",
+        "Does not publish, render, spend external compute, or claim final video quality by default"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Turns a fuzzy proof-video idea into a Remotion-ready creative ticket",
+          "tags": [
+            "skill",
+            "storyboard",
+            "remotion",
+            "content-video",
+            "creative-planning"
+          ],
+          "anti_patterns": [
+            "Gives only a high-level video concept or list of angles",
+            "Writes a script without storyboard panels or asset requirements",
+            "Starts implementing Remotion before the creative plan is production-ready"
+          ]
+        }
+      }
+    },
+    {
+      "id": "storyboard_ticket_artifact_home_01",
+      "prompt": "For TASK-9999, turn this idea into a production brief: a launch clip that explains our new eval proof loop to founders in under 30 seconds. Keep it ticket-shaped and ready for review.",
+      "expected_output": "Chooses a ticket artifact path such as tickets/TASK-9999/artifacts/storyboard.md or states the path in the handoff; Uses the ticket-style creative sections rather than a chat-only outline; Names review or proof evidence before the plan can be called approved; Keeps production, render, and publishing as downstream actions unless explicitly requested",
+      "files": [],
+      "assertions": [
+        "Chooses a ticket artifact path such as tickets/TASK-9999/artifacts/storyboard.md or states the path in the handoff",
+        "Uses the ticket-style creative sections rather than a chat-only outline",
+        "Names review or proof evidence before the plan can be called approved",
+        "Keeps production, render, and publishing as downstream actions unless explicitly requested"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Chooses a durable artifact home for production-oriented creative plans",
+          "tags": [
+            "skill",
+            "storyboard",
+            "ticket-artifact",
+            "proof"
+          ],
+          "anti_patterns": [
+            "Leaves the production plan only in chat despite a task ID",
+            "Uses generic creative-writing advice instead of a reviewable storyboard artifact"
+          ]
+        }
+      }
+    },
+    {
+      "id": "storyboard_connected_frames_for_ai_video_01",
+      "prompt": "Storyboard a 24 second vertical reel based on a Tasty Pack where a deadpan guide teaches founders that agents need receipts before they can say done. We plan to use AI video clips and Remotion.",
+      "expected_output": "Names the reel/reference type and core story engine; Defines viewer question -> answer, hook, tension, turn, proof moment, payoff, and final action; Keeps a recurring guide or explicitly states why no recurring character is needed; Keeps a recurring proof object or motif across beats; Produces scene panels plus shot list, script/VO, captions, motion, audio notes, and asset requirements; Includes a continuity handoff with generation_topology and start/end frame pairs for each AI video clip; Names transitions for deliberate scene breaks",
+      "files": [],
+      "assertions": [
+        "Names the reel/reference type and core story engine",
+        "Defines viewer question -> answer, hook, tension, turn, proof moment, payoff, and final action",
+        "Keeps a recurring guide or explicitly states why no recurring character is needed",
+        "Keeps a recurring proof object or motif across beats",
+        "Produces scene panels plus shot list, script/VO, captions, motion, audio notes, and asset requirements",
+        "Includes a continuity handoff with generation_topology and start/end frame pairs for each AI video clip",
+        "Names transitions for deliberate scene breaks"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Outputs connected storyboard frames for model-native video generation",
+          "tags": [
+            "skill",
+            "storyboard",
+            "continuity",
+            "ai-video",
+            "content-video"
+          ],
+          "anti_patterns": [
+            "Outputs unrelated pretty panels with no cause/effect between scenes",
+            "Drops the standout character from the reference without rationale",
+            "Omits audio/story timing and leaves Remotion to invent the narrative",
+            "Says to generate clips from each still independently"
+          ]
+        }
+      }
+    }
+  ]
+}

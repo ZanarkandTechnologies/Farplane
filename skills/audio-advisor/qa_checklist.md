@@ -5,7 +5,10 @@ template_uses:
 
 # Audio Advisor QA Checklist
 
-- [ ] Voice, music, SFX/Foley, silence, and mix/ducking needs are separated.
+- [ ] Voice, music, SFX/Foley, silence, and mix/ducking needs are separated;
+  multi-clip narrative reels use one master audio spine unless explicitly
+  scoped as montage or diegetic clip audio, and provider-generated per-clip
+  audio is disabled or justified by beat.
 - [ ] Each audio cue is tied to a scene, timestamp/frame range, purpose, route,
   motion/edit binding, and acceptance check.
 - [ ] Copyright, source, voice, likeness, or consent risks are named when

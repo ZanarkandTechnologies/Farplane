@@ -27,7 +27,10 @@ storyboard_check(creative_ticket, production_handoff?)
   payoff, and final action; every beat advances that shape.
 - [ ] `storyboard_alignment`: Script lines, storyboard panels, shot
   list, motion notes, captions/supers, audio notes, and asset needs describe
-  one executable production path.
+  one executable production path. Narrative video storyboards name recurring
+  character/object continuity or explicit rationale, viewer question -> answer,
+  generation topology, start/end frame pairs for AI-video clips, and transition
+  notes for deliberate scene breaks.
 - [ ] `production_route`: The handoff names the next owner, such as `remotion`,
   `video-production`, `ai-video-advisor`, `remotion-render`, or
   `social-content`, with required inputs and blocker conditions.

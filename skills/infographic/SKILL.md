@@ -14,7 +14,7 @@ methods:
   - infographic:handdrawn-saas-wireframe
 common_chains:
   after: ["ai-image-advisor", "visual-qa"]
-eval: eval_task.json
+eval: evals/evals.json
 qa_checklist: qa_checklist.md
 allowed-tools: Read, Grep, Glob, Bash
 ---

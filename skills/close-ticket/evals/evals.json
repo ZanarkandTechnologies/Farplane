@@ -1,0 +1,74 @@
+{
+  "skill_name": "close-ticket",
+  "evals": [
+    {
+      "id": "close_ticket_rejects_unfinished_work_01",
+      "prompt": "Close TASK-0042. Its implementation checklist has two unchecked required items and no completion review.",
+      "expected_output": "Returns continue_impl or blocked rather than close_ticket_complete; Does not hide unfinished implementation inside closeout prose; Names the missing required work and review gate; Keeps the ticket active or honestly blocked; Does not commit or archive a false completion",
+      "files": [],
+      "assertions": [
+        "Returns continue_impl or blocked rather than close_ticket_complete",
+        "Does not hide unfinished implementation inside closeout prose",
+        "Names the missing required work and review gate",
+        "Keeps the ticket active or honestly blocked",
+        "Does not commit or archive a false completion"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Do not close unfinished implementation",
+          "tags": [
+            "close-ticket",
+            "unfinished",
+            "completion"
+          ]
+        }
+      }
+    },
+    {
+      "id": "close_ticket_validates_and_commits_01",
+      "prompt": "Implementation, QA, and TAS-A completion review are done. Close and commit the ticket, but do not push.",
+      "expected_output": "Updates ticket/progress evidence, docs writeback, handoff, and final state; Runs phase-aware ticket validation with an explicit changed-path boundary; Uses a scoped commit message and commits only intended files; Leaves the ticket archive-ready or archives it according to repo policy; Does not push because publishing was not requested",
+      "files": [],
+      "assertions": [
+        "Updates ticket/progress evidence, docs writeback, handoff, and final state",
+        "Runs phase-aware ticket validation with an explicit changed-path boundary",
+        "Uses a scoped commit message and commits only intended files",
+        "Leaves the ticket archive-ready or archives it according to repo policy",
+        "Does not push because publishing was not requested"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Close a proven ticket without unauthorized push",
+          "tags": [
+            "close-ticket",
+            "commit",
+            "no-push"
+          ]
+        }
+      }
+    },
+    {
+      "id": "close_ticket_refreshes_stale_review_01",
+      "prompt": "The ticket previously passed review, but the closeout pass materially changed its canonical docs and automation prompt.",
+      "expected_output": "Recognizes that the previous completion review is stale; Re-enters the proof/review path before completion; Validates the changed docs and automation surfaces; Writes the new review receipt and strongest evidence back to the ticket; Does not claim completion until the refreshed gate passes",
+      "files": [],
+      "assertions": [
+        "Recognizes that the previous completion review is stale",
+        "Re-enters the proof/review path before completion",
+        "Validates the changed docs and automation surfaces",
+        "Writes the new review receipt and strongest evidence back to the ticket",
+        "Does not claim completion until the refreshed gate passes"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Refresh proof invalidated by closeout changes",
+          "tags": [
+            "close-ticket",
+            "stale-review",
+            "revalidation"
+          ]
+        }
+      }
+    }
+  ]
+}

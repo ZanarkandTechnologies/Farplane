@@ -22,7 +22,7 @@ Only `accept` is pass. `revise` is useful signal but not ready to roll out.
 Before judging quality, classify the eval's owner:
 
 - `skill`: tests whether one skill behaves or writes artifacts correctly. Store
-  in `skills/<skill-name>/eval_task.json`.
+  in `skills/<skill-name>/evals/evals.json`.
 - `workflow`: tests cross-skill process behavior, such as whether a skill change
   triggers proof-surface selection. Store in `.farplane/evals/tasks/*`.
 - `system-prompt`: tests always-on harness behavior. Store in project-level

@@ -1,0 +1,128 @@
+{
+  "skill_name": "self-improve",
+  "evals": [
+    {
+      "id": "self_improve_requires_metric_01",
+      "prompt": "Make the AGI Toy Shop eval skill better. You can just tweak the instructions until it feels smarter.",
+      "expected_output": "Rejects taste-only optimization as insufficient; Defines a metric, rubric, eval boundary, or human feedback schema before mutating the target; Names the target skill package and self-improvement memory to inspect; Distinguishes direct skill-maintenance edits from measured self-improvement; Returns a concrete next step to create or run the proof surface",
+      "files": [],
+      "assertions": [
+        "Rejects taste-only optimization as insufficient",
+        "Defines a metric, rubric, eval boundary, or human feedback schema before mutating the target",
+        "Names the target skill package and self-improvement memory to inspect",
+        "Distinguishes direct skill-maintenance edits from measured self-improvement",
+        "Returns a concrete next step to create or run the proof surface"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Self-improve defines metric before mutation",
+          "tags": [
+            "skill",
+            "self-improve",
+            "metric"
+          ],
+          "notes": "Tests the most important self-improve gate: no optimization loop without a metric or review signal."
+        }
+      }
+    },
+    {
+      "id": "self_improve_baseline_before_mutation_01",
+      "prompt": "AGI Toy Shop's skill for writing toy-safety launch plans is almost good. Improve it by trying prompt variants and keep the best one.",
+      "expected_output": "Reads the target skill package and existing self-improve memory before editing; Defines the current baseline behavior or score before proposing variants; Compares candidates against the same metric or rubric; Promotes only changes that improve the measured result without breaking constraints; Records lessons or run notes in the target skill's self-improve memory",
+      "files": [],
+      "assertions": [
+        "Reads the target skill package and existing self-improve memory before editing",
+        "Defines the current baseline behavior or score before proposing variants",
+        "Compares candidates against the same metric or rubric",
+        "Promotes only changes that improve the measured result without breaking constraints",
+        "Records lessons or run notes in the target skill's self-improve memory"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Self-improve baselines before candidate changes",
+          "tags": [
+            "skill",
+            "self-improve",
+            "baseline"
+          ],
+          "notes": "Protects against mutation-first optimization that cannot prove improvement."
+        }
+      }
+    },
+    {
+      "id": "self_improve_not_generic_impl_01",
+      "prompt": "The AGI Toy Shop eval skill has a broken Markdown link to its rubric. Please self-improve it.",
+      "expected_output": "Recognizes the request as an obvious direct maintenance fix rather than a metric-driven experiment; Routes to direct edit or skill-maintenance instead of setting up a full self-improve loop; Names the minimal verification such as link check, JSON parse, or skill validation; Avoids creating unnecessary variants, metrics, or experiment scaffolding; Preserves self-improve for cases with search space, baseline, and comparison",
+      "files": [],
+      "assertions": [
+        "Recognizes the request as an obvious direct maintenance fix rather than a metric-driven experiment",
+        "Routes to direct edit or skill-maintenance instead of setting up a full self-improve loop",
+        "Names the minimal verification such as link check, JSON parse, or skill validation",
+        "Avoids creating unnecessary variants, metrics, or experiment scaffolding",
+        "Preserves self-improve for cases with search space, baseline, and comparison"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Self-improve routes obvious fixes away from experiments",
+          "tags": [
+            "skill",
+            "self-improve",
+            "routing"
+          ],
+          "notes": "Keeps self-improve from becoming a generic implementation wrapper."
+        }
+      }
+    },
+    {
+      "id": "self_improve_immediate_reward_01",
+      "prompt": "Improve a ticket-writing prompt. We can run its fixed eval suite before and after each candidate and get the score immediately. Set up the right self-improvement route.",
+      "expected_output": "Classifies the feedback as immediate because baseline, candidate result, and promotion decision fit in the current execution window; Uses native Goal for the bounded candidate loop; Records baseline, comparable candidate evidence, and the promotion decision; Does not manufacture a future check_in_at or a separate check-in ticket; Keeps Check-In Program as compact not_applicable rather than filling delayed procedure fields; Promotes only a candidate that meets the metric and guard rules",
+      "files": [],
+      "assertions": [
+        "Classifies the feedback as immediate because baseline, candidate result, and promotion decision fit in the current execution window",
+        "Uses native Goal for the bounded candidate loop",
+        "Records baseline, comparable candidate evidence, and the promotion decision",
+        "Does not manufacture a future check_in_at or a separate check-in ticket",
+        "Keeps Check-In Program as compact not_applicable rather than filling delayed procedure fields",
+        "Promotes only a candidate that meets the metric and guard rules"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Immediate feedback completes inside the current Goal",
+          "tags": [
+            "skill",
+            "self-improve",
+            "immediate-reward"
+          ],
+          "notes": "Proves that immediate feedback does not inherit delayed-check-in machinery."
+        }
+      }
+    },
+    {
+      "id": "self_improve_delayed_reward_01",
+      "prompt": "A workflow improvement can only be judged after one week of real use. Its experiment ticket already has ticket.md, program.md, and progress.md. Define the waiting and check-in route without adding experiment metadata.",
+      "expected_output": "Classifies the feedback as delayed because elapsed exposure is required; Uses the existing ticket Reward.kpi_rewards rows with kpi_id, expected_reward, check_in_at, actual_result, reward_score, and reward_score_reason; Uses Goal Advisor to compile an executable program.md Check-In Program with inputs, evidence, ordered procedure, matured-row writeback, decisions, idempotency, and source-gap behavior; Records baseline, exposure, and observations append-only in progress.md; Explains that Work Pulse supplies matured indexes and evidence refs while the worker reads program.md first and executes it; Leaves future and completed Reward rows unchanged while handling every matured row and never creates a check-in ticket",
+      "files": [],
+      "assertions": [
+        "Classifies the feedback as delayed because elapsed exposure is required",
+        "Uses the existing ticket Reward.kpi_rewards rows with kpi_id, expected_reward, check_in_at, actual_result, reward_score, and reward_score_reason",
+        "Uses Goal Advisor to compile an executable program.md Check-In Program with inputs, evidence, ordered procedure, matured-row writeback, decisions, idempotency, and source-gap behavior",
+        "Records baseline, exposure, and observations append-only in progress.md",
+        "Explains that Work Pulse supplies matured indexes and evidence refs while the worker reads program.md first and executes it",
+        "Leaves future and completed Reward rows unchanged while handling every matured row and never creates a check-in ticket"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Delayed feedback stays in the original Goal Packet",
+          "tags": [
+            "skill",
+            "self-improve",
+            "delayed-reward",
+            "goal-packet"
+          ],
+          "notes": "Protects the Farplane V1 delayed-reward state ownership contract."
+        }
+      }
+    }
+  ]
+}

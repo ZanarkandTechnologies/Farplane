@@ -6,7 +6,9 @@ group: content-social
 source: local
 template_uses:
   skill-template: "0.3.7"
+  skill-eval-task: "0.2.0"
   skill-qa-checklist: "0.1.0"
+eval: evals/evals.json
 allowed-tools: Read, Grep, Glob, Bash
 qa_checklist: qa_checklist.md
 ---
@@ -21,12 +23,12 @@ explicitly approved publishing. `social-content` owns creative drafting;
 `apify` or `feed-scout` owns broad scraping/listening.
 
 Secrets never live in tracked files. Project aliases and non-secret policy live
-in `farplane/bindings.yaml`; credentials live under local private
-`~/.farplane/config.toml` `[social.instagram]` and `[social.meta]`, or explicit
-runtime environment overrides using the `FARPLANE_INSTAGRAM_` /
-`FARPLANE_META_` prefixes. Metrics use Instagram Login credentials against
-`graph.instagram.com`; Facebook Page ownership belongs in a separate future
-Facebook Pages skill if needed.
+in `farplane/bindings.yaml`; credentials come from runtime env first, normally
+via `farplane run -- <command>` / Doppler using the `FARPLANE_INSTAGRAM_` and
+`FARPLANE_META_` prefixes. Private `~/.farplane/config.toml`
+`[social.instagram]` and `[social.meta]` are fallback/cache only. Metrics use
+Instagram Login credentials against `graph.instagram.com`; Facebook Page
+ownership belongs in a separate future Facebook Pages skill if needed.
 
 ## Skill Signature
 
@@ -35,7 +37,8 @@ instagram_account(action, artifact?, account_binding?, date_window?, source_file
   -> draft_validation | publish_result | metrics_snapshot | blocked_report
 state:
   reads(farplane/bindings.yaml, ~/.codex/private/docs/social.md?,
-        ~/.farplane/config.toml [social.instagram]/[social.meta]?, source_file?)
+        runtime env / private fallback ~/.farplane/config.toml
+        [social.instagram]/[social.meta]?, source_file?)
   writes(.farplane/metrics/manual/instagram_account.json when normalizing exports,
          .farplane/content/ledger.jsonl after confirmed publishing)
 gates:
@@ -165,7 +168,7 @@ Normalized metric snapshot:
 - `scripts/normalize_metrics.py` - normalize JSON/CSV metric exports to Farplane KPI observations.
 - `farplane content add` - append/update `.farplane/content/ledger.jsonl` after
   a confirmed publish so interval refresh can fetch owned-content metrics.
-- `eval_task.json` - agent-behavior eval rows for live metrics and missing-credential flows.
+- `evals/evals.json` - agent-behavior eval rows for live metrics and missing-credential flows.
 
 ## Output
 

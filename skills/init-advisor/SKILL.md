@@ -5,7 +5,7 @@ description: "Turn a new-project intake into a Farplane substrate, readiness aud
 tier: 3
 group: coding
 source: local
-eval: eval_task.json
+eval: evals/evals.json
 qa_checklist: qa_checklist.md
 ---
 

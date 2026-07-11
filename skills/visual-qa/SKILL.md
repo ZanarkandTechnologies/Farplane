@@ -4,7 +4,7 @@ version: 0.2.0
 description: "Turn expected UI specs and screenshots into observed reports, layout assertions, diffs, fix plans, and evidence artifacts."
 tier: 2
 source: local
-eval: eval_task.json
+eval: evals/evals.json
 qa_checklist: qa_checklist.md
 ---
 

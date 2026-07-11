@@ -1,146 +1,179 @@
 ---
 name: media-ingest
-version: 0.1.0
 description: "Turn URLs or local audio, video, or social media into metadata, transcript status, representative frames, retention notes, and handoff paths."
 tier: 2
 source: local
+template_uses:
+  skill-template: "0.3.7"
 allowed-tools: Read, Glob, Grep, Bash
 ---
 
 # Media Ingest
 
-<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
-## Todo List
+## Context
 
-- [ ] Classify source type, platform, visibility, and whether authenticated
-  access or a local export is required.
-- [ ] Run `summarize --extract-only` for URL or local-file text/transcript
-  extraction, unless the user already provided the needed transcript/content.
-- [ ] If `summarize` returns only thin page text and the source contains media,
-  fetch or locate the media through the least invasive available route.
-- [ ] Record every extraction, transcription, and frame command in the ingest
-  bundle.
-- [ ] For audio/video, extract transcript evidence through `summarize`,
-  platform transcript support, or local Whisper.
-- [ ] When the operator note selects the music/song/audio bed itself, extract a
-  short audio snippet and optionally run music recognition with
-  `scripts/recognize_music.py`; record match, confidence, command, and failure
-  status without blocking the ingest.
-- [ ] If transcription fails or is unavailable, record `transcript_status` as
-  failed, partial, or visual-only; do not infer spoken content as fact.
-- [ ] For video, extract representative frames and a contact sheet.
-- [ ] Select only the minimum frames needed to prove source, workflow, prompts,
-  timeline, final state, and acceptance criteria.
-- [ ] Keep raw media, cookies, API keys, secrets, and bulky raw transcripts out
-  of tracked files unless explicitly approved.
-- [ ] Write a compact manifest with source identity, command provenance,
-  transcript status, selected frames, retention note, and downstream skill
-  recommendation.
-- [ ] For video sources that need interpretation, hand the bundle to the video
-  understanding workflow.
-<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
+Use this skill when a URL or local file may contain audio or video evidence and
+a downstream workflow needs more than page text. It turns media sources into a
+small, auditable evidence bundle before `harness-scout`, `ingest-content`,
+`video-understanding`, `video-production`, or `frontend-craft` makes claims
+from the source.
 
-Turn media inputs into a small, auditable evidence bundle before another skill
-tries to understand or rebuild what the media shows.
-
-This is a support workflow, not a scraping product. It should prefer compact
-metadata, transcript summaries, selected frames, and command provenance over raw
-media retention.
-
-## Trigger Conditions
-
-Use this skill when:
-
-- a source URL may contain video or audio
-- a user provides a local MP4, MOV, MP3, WAV, screen recording, or social link
-- `harness-scout`, `video-understanding`, `video-production`, or
-  `frontend-craft` needs transcript-plus-frame evidence before making claims
-- `summarize` alone returns only a page label or thin extraction
+This is a support workflow, not a scraping product. Prefer compact metadata,
+transcript summaries, selected frames, contact sheets, command provenance, and
+retention notes over raw media retention.
 
 Do not use this skill for text-only articles, repos, PDFs, or transcripts that
 already include the needed evidence.
 
-## Workflow
+## Skill Signature
 
-1. **Classify the source:** record URL or local path, source type, platform,
-   visibility, privacy risk, and whether authenticated access is required.
-2. **Run summarize first:** for URL and local-file inputs, run
-   `summarize <source> --extract-only` or document why `summarize` is not
-   available or insufficient.
-3. **Fetch media only when needed:** if text extraction is too thin and the
-   source is public or locally provided, use the least invasive available
-   fetcher. Record the exact command and destination outside tracked docs.
-4. **Extract transcript evidence:** use `summarize`, platform transcript
-   support, or local Whisper. If transcription is missing or low quality,
-   record that as a confidence limit rather than inventing content.
-5. **Optionally recognize selected music:** if the operator note says the music,
-   song, beat, or audio bed is the liked element, extract a 10-20 second snippet
-   and run `scripts/recognize_music.py` when `shazamio` is available. Treat
-   recognition as enrichment, not a gate: unknown/no-match/network failure
-   should become a recorded limit, not a failed media ingest.
-6. **Extract frame evidence for video:** produce a contact sheet and select the
-   smallest set of frames that proves the workflow, UI states, prompts,
-   timeline, final artifact, and visible acceptance criteria.
-7. **Apply retention guard:** keep raw MP4/audio, cookies, API keys, and full
-   raw transcripts out of tracked files unless the operator explicitly approved
-   storage. Prefer compact summaries and selected frames.
-8. **Write the bundle manifest:** leave downstream skills a manifest with
-   source identity, commands, transcript status, selected frames, retention
-   note, and known gaps.
+```text
+media_ingest(source, operator_note?, bundle_owner?)
+  -> MediaIngestBundle + selected_evidence + downstream_route
 
-## Output Contract
+state:
+  reads(source URL or local media, optional operator note,
+        summarize output, platform metadata, local media tools,
+        references/transcription.md when transcription is needed,
+        references/music-recognition.md when music is selected)
+  writes(bundle manifest, transcript summary path?, contact sheet?,
+         selected frames?, optional music recognition result?,
+         command provenance, retention note)
 
-A completed ingest pass leaves a `MediaIngestBundle`-style artifact in the
-owning run folder:
+gates:
+  summarize_attempted_or_skipped_with_reason;
+  media_fetch_only_when_text_is_thin_or_frames_audio_are_required;
+  cookie_fetch_attempts_recorded_without_storing_cookie_jars;
+  transcript_status_explicit;
+  raw_media_kept_out_of_tracked_files_unless_approved
 
-- `source`: canonical URL or local path plus creator/title/date when visible
-- `visibility`: public, private, customer/internal, or unknown
-- `commands`: exact extraction/transcription/frame commands that were run
-- `transcript_status`: available, partial, failed, visual-only, or provided
-- `transcript_summary_path`: compact summary path when available
-- `music_recognition`: optional match/no-match/skipped/failed result when the
-  operator selected the music or audio bed
-- `contact_sheet_path`: contact sheet path for video
-- `selected_frames`: frame paths with short labels
-- `retention_note`: what was stored, what was intentionally omitted, and why
-- `downstream`: recommended next skill, usually
-  [video-understanding](../video-understanding/SKILL.md) for video
+routes:
+  summarize -> media-ingest -> video-understanding
+  media-ingest -> ingest-content
+  media-ingest -> audio-advisor
 
-## Core Decision Branches
+fails:
+  claims transcript coverage from frames only;
+  commits raw video, cookies, API keys, or full private transcripts;
+  stops after one missing browser cookie store;
+  invents spoken content, music matches, creator metadata, or permissions
+```
 
-- **Text extraction is enough:** do not download media; hand the compact extract
-  to the caller.
-- **Public video/audio needs more evidence:** fetch media to temporary or
-  experiment-local storage, then extract transcript and frames.
-- **Authenticated/private source:** ask for a local export or approved
-  authenticated path; do not invent credential handling.
-- **Transcription fails:** continue with visual-only confidence labels only if
-  frames are enough for the downstream task.
-- **Raw media is required for proof:** keep it outside tracked docs and record a
-  retention note.
+## Phase Contract
 
-## Judgement Questions
+```text
+phase_contract(source, operator_note?, bundle_owner?)
+  -> grounded_source_classification
+   + direct_ingest_plan
+   + extraction_or_fetch_commands
+   + transcript_frame_music_evidence
+   + retention_guard
+   + bundle_manifest
+   + downstream_handoff
+```
 
-Use [advise](../advise/SKILL.md) when the answer is not mechanical:
+## Phase Boundary
 
-- Is this source public enough to fetch, or should the user provide a local
-  export?
-- Is visual-only evidence enough for the downstream task?
-- Should bulky media be retained temporarily, redacted, or discarded?
+Run Tier 0 phases inline for ordinary ingests. Use `advise` only when the
+source privacy, retention choice, or visual-only sufficiency is a real judgment
+call. Hand video interpretation to `video-understanding`; do not make
+storyboard or reimplementation claims inside media-ingest.
 
-## Top Gotchas
+<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
+## Todo List
 
-1. Do not claim transcript coverage when only frames were inspected.
-2. Do not commit raw videos, cookies, secrets, API keys, or full private
-   transcripts.
-3. Do not overfit to one platform; Instagram, YouTube, TikTok, direct URLs, and
-   local files are fetch routes into the same bundle contract.
+- [ ] 1. Classify the source and evidence need.
+  - [ ] Record URL or local path, source type, platform, visibility, privacy
+    risk, downstream job, and whether authenticated access or local export may
+    be required.
+- [ ] 2. Run `summarize --extract-only` first, unless the caller already
+  provided the needed transcript or content.
+  - [ ] Treat thin page text as insufficient when the source clearly contains
+    video/audio and the downstream task needs frames, audio, or timeline proof.
+- [ ] 3. Fetch or locate media only when needed.
+  - [ ] For blocked public social video, use local `yt-dlp` with
+    `--cookies-from-browser <browser>` before degrading to metadata or
+    thumbnail. Try the operator's active browser profile first, then installed
+    profiles such as Brave, Chrome, Chromium, Edge, Firefox, Safari, Vivaldi,
+    Opera, or Whale. Example:
+    `yt-dlp --cookies-from-browser brave -o "$workdir/source.%(ext)s" "$url"`.
+  - [ ] Record each attempted browser, absence, blocker, command, result, and
+    destination; do not export or store cookie jars in tracked files.
+- [ ] 4. Extract transcript evidence when audio or speech matters.
+  - [ ] Use `summarize`, platform transcript support, or local Whisper. If
+    transcription fails or is unavailable, set `transcript_status` to
+    `failed`, `partial`, or `visual-only`.
+- [ ] 5. Extract music evidence only when the operator selected the music,
+  song, beat, or audio bed.
+  - [ ] Read `references/music-recognition.md`, extract the smallest useful
+    snippet, optionally run `scripts/recognize_music.py`, and record
+    match/no-match/skipped/failed without blocking the ingest.
+- [ ] 6. Extract visual evidence for video.
+  - [ ] Produce a contact sheet and select only the frames needed to prove
+    source, workflow, prompts, timeline, final state, and acceptance criteria.
+- [ ] 7. Apply retention and privacy guardrails.
+  - [ ] Keep raw media, cookies, API keys, secrets, and bulky raw transcripts
+    out of tracked files unless the operator explicitly approved storage.
+- [ ] 8. Write the `MediaIngestBundle` manifest and route the handoff.
+  - [ ] Include source identity, commands, transcript status, selected frames,
+    contact sheet, optional music recognition, retention note, known gaps, and
+    downstream recommendation, usually `video-understanding` for video.
+<!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
-## References
+## Templates
 
-- [summarize](../summarize/SKILL.md) for URL, local-file, and transcript
-  extraction
-- [video-understanding](../video-understanding/SKILL.md) for storyboard,
-  visible workflow, and source-todo reconstruction after ingest
-- `references/transcription.md` for local/API transcription setup notes
-- `references/music-recognition.md` for optional Shazam-style track lookup
+`MediaIngestBundle`:
+
+```yaml
+source: canonical URL or local path plus creator/title/date when visible
+visibility: public | private | customer/internal | unknown
+commands:
+  - exact extraction/transcription/frame command
+transcript_status: available | partial | failed | visual-only | provided
+transcript_summary_path: optional compact summary path
+music_recognition: optional match | no-match | skipped | failed
+contact_sheet_path: optional contact sheet path
+selected_frames:
+  - path: /path/to/frame.jpg
+    label: short evidence label
+retention_note: stored and intentionally omitted material
+known_gaps:
+  - missing transcript, blocked profile, or unverified source detail
+downstream: video-understanding | ingest-content | audio-advisor | other
+```
+
+Positive command pattern:
+
+```bash
+summarize "$url" --extract-only
+yt-dlp --cookies-from-browser brave -o "$workdir/source.%(ext)s" "$url"
+ffmpeg -i "$workdir/source.mp4" -vf "fps=1/2,scale=270:-1,tile=4x2" "$workdir/contact_sheet.jpg"
+```
+
+## Gotchas
+
+- Do not claim transcript coverage when only frames were inspected.
+- Do not treat one missing browser cookie store as proof that browser-cookie
+  fetch is unavailable.
+- Do not claim a music match unless the recognition tool returned one; store
+  no-match, missing dependency, or network failure as a limit.
+- Do not overfit to one platform; Instagram, YouTube, TikTok, direct URLs, and
+  local files are fetch routes into the same bundle contract.
+
+## Reference Map
+
+- [summarize](../summarize/SKILL.md) - run first for URL, local-file, and
+  transcript extraction.
+- [video-understanding](../video-understanding/SKILL.md) - use after ingest
+  when video content needs storyboard, workflow, or source-todo reconstruction.
+- [transcription notes](references/transcription.md) - read when speech or
+  narration needs local/API transcription beyond `summarize`.
+- [music recognition notes](references/music-recognition.md) - read only when
+  the operator selected the music, song, beat, or audio bed.
+
+## Output
+
+- A compact `MediaIngestBundle` in the owning run folder.
+- Selected evidence paths for transcript, contact sheet, frames, and optional
+  music recognition.
+- A clear retention note and downstream skill recommendation.

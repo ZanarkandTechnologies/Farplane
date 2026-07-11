@@ -1,0 +1,210 @@
+{
+  "skill_name": "pulse-update",
+  "evals": [
+    {
+      "id": "pulse_dispatches_generic_ready_ticket",
+      "prompt": "A project heartbeat finds one ready, unclaimed, approval-free ticket with satisfied dependencies. It has no product or reward fields. What should happen?",
+      "expected_output": "Admits the ticket from executable state without requiring product or reward metadata; Creates a worker handoff with ticket, optional program/progress, proof, authority gates, and stop condition; Does not implement the ticket body in the parent heartbeat; Records the decision and report state",
+      "files": [],
+      "assertions": [
+        "Admits the ticket from executable state without requiring product or reward metadata",
+        "Creates a worker handoff with ticket, optional program/progress, proof, authority gates, and stop condition",
+        "Does not implement the ticket body in the parent heartbeat",
+        "Records the decision and report state"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Generic ready ticket is executable",
+          "tags": [
+            "pulse-update",
+            "generic-ticket",
+            "dispatch"
+          ]
+        }
+      }
+    },
+    {
+      "id": "pulse_empty_board_calls_pure_planner",
+      "prompt": "The board has no executable ticket, review WIP is below its limit, and the project program and objective are current. The heartbeat may create at most three tickets and run one worker. What should happen?",
+      "expected_output": "Chooses plan_next_wave only after reconciliation finds no executable ticket; Binds program from harness.md and the objective contract from goals.yaml plus metrics.yaml; Passes program, objective contract, ticket history, current context, and wave_size three to the planner; Pulse materializes only accepted specs and the planner performs no writes or dispatch; Dispatches at most one ticket because worker_limit is separate from wave_size; Does not invoke a product controller",
+      "files": [],
+      "assertions": [
+        "Chooses plan_next_wave only after reconciliation finds no executable ticket",
+        "Binds program from harness.md and the objective contract from goals.yaml plus metrics.yaml",
+        "Passes program, objective contract, ticket history, current context, and wave_size three to the planner",
+        "Pulse materializes only accepted specs and the planner performs no writes or dispatch",
+        "Dispatches at most one ticket because worker_limit is separate from wave_size",
+        "Does not invoke a product controller"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Empty board invokes bounded next-wave planning",
+          "tags": [
+            "pulse-update",
+            "empty-board",
+            "planner-boundary"
+          ]
+        }
+      }
+    },
+    {
+      "id": "pulse_ready_work_beats_refill",
+      "prompt": "Two executable tickets are already waiting, but a fresh daily report suggests several more useful tasks. The current worker limit is one. What should the heartbeat do?",
+      "expected_output": "Chooses dispatch_ready rather than planning another wave; Treats the daily report as context rather than ticket-creation authority; Dispatches only up to the available worker slot; Leaves the remaining todo ticket on the board",
+      "files": [],
+      "assertions": [
+        "Chooses dispatch_ready rather than planning another wave",
+        "Treats the daily report as context rather than ticket-creation authority",
+        "Dispatches only up to the available worker slot",
+        "Leaves the remaining todo ticket on the board"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Executable work prevents refill",
+          "tags": [
+            "pulse-update",
+            "refill-gate",
+            "worker-limit"
+          ]
+        }
+      }
+    },
+    {
+      "id": "pulse_releases_worker_at_review",
+      "prompt": "A worker finished a local artifact and proof, sent the configured review request, and is waiting for a human decision. Another todo ticket exists. What should the next heartbeat do?",
+      "expected_output": "Marks or recognizes the first ticket as awaiting review; Records the review request receipt or blocker; Releases the first worker rather than keeping it alive for the human wait; May dispatch the other ready ticket when review WIP and worker capacity allow",
+      "files": [],
+      "assertions": [
+        "Marks or recognizes the first ticket as awaiting review",
+        "Records the review request receipt or blocker",
+        "Releases the first worker rather than keeping it alive for the human wait",
+        "May dispatch the other ready ticket when review WIP and worker capacity allow"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Human review does not hold a worker slot",
+          "tags": [
+            "pulse-update",
+            "review-wip",
+            "worker-exit"
+          ]
+        }
+      }
+    },
+    {
+      "id": "pulse_interval_suggestions_are_non_mutating",
+      "prompt": "The latest weekly report contains suggested ticket deltas, but there are no ticket files for them. The board still has one executable ticket. Which surface may create or dispatch work?",
+      "expected_output": "Treats Interval suggestions as non-mutating context; Dispatches the existing executable ticket; Does not ask Interval to materialize or dispatch its suggestions; Allows Pulse to materialize planner specs only on a later empty-board refill",
+      "files": [],
+      "assertions": [
+        "Treats Interval suggestions as non-mutating context",
+        "Dispatches the existing executable ticket",
+        "Does not ask Interval to materialize or dispatch its suggestions",
+        "Allows Pulse to materialize planner specs only on a later empty-board refill"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Interval findings remain planner context",
+          "tags": [
+            "pulse-update",
+            "interval-boundary",
+            "ticket-materialization"
+          ]
+        }
+      }
+    },
+    {
+      "id": "pulse_rejects_product_routing_parameter",
+      "prompt": "An old automation tries to run the project heartbeat with product set to distribution. The project has ordinary ready tickets across multiple capabilities. What should happen?",
+      "expected_output": "Rejects or ignores the retired product routing parameter rather than filtering the board; Reconciles the one project board and shared worker pool; Admits tickets by executable state; Records the obsolete automation input as a configuration gap",
+      "files": [],
+      "assertions": [
+        "Rejects or ignores the retired product routing parameter rather than filtering the board",
+        "Reconciles the one project board and shared worker pool",
+        "Admits tickets by executable state",
+        "Records the obsolete automation input as a configuration gap"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Retired product routing does not split the project Pulse",
+          "tags": [
+            "pulse-update",
+            "product-removal",
+            "automation-input"
+          ]
+        }
+      }
+    },
+    {
+      "id": "pulse_resumes_due_reward_on_original_ticket",
+      "prompt": "An experiment ticket is status waiting_signal. Reward row 0 matured yesterday and still lacks actual_result and reward_score; row 1 matures tomorrow. There are no ordinary todo tickets. What should this Work Pulse do?",
+      "expected_output": "Derives row 0 as due because check_in_at is at or before now and an actual or score is missing; Admits and resumes the original waiting_signal ticket for the matured row; Hands the original ticket/program/progress, only matured row 0, timestamp, and evidence refs to a worker and leaves future row 1 dormant; Instructs the worker to read program.md first and execute its Check-In Program; Does not restate or invent the experiment scoring and decision algorithm in Pulse; Does not create a check-in ticket or ask Interval to score the reward",
+      "files": [],
+      "assertions": [
+        "Derives row 0 as due because check_in_at is at or before now and an actual or score is missing",
+        "Admits and resumes the original waiting_signal ticket for the matured row",
+        "Hands the original ticket/program/progress, only matured row 0, timestamp, and evidence refs to a worker and leaves future row 1 dormant",
+        "Instructs the worker to read program.md first and execute its Check-In Program",
+        "Does not restate or invent the experiment scoring and decision algorithm in Pulse",
+        "Does not create a check-in ticket or ask Interval to score the reward"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Matured delayed reward resumes the original experiment ticket",
+          "tags": [
+            "pulse-update",
+            "delayed-reward",
+            "original-ticket"
+          ]
+        }
+      }
+    },
+    {
+      "id": "pulse_handles_multiple_due_reward_rows_together",
+      "prompt": "One active experiment has three Reward rows. Rows 0 and 1 are mature and each lacks one of actual_result or reward_score. Row 2 has a completed actual and score. How should Pulse dispatch the check-in?",
+      "expected_output": "Derives rows 0 and 1 as due under the missing-actual-or-score rule; Creates one worker handoff for the original ticket/program/progress containing both matured row indexes and evidence refs; Leaves the completed row unchanged; Requires the worker to execute program.md Check-In Program and return accept, kill, iterate, or monitor; Treats a missing or non-executable Check-In Program as a Goal Advisor repair gap instead of improvising policy; Keeps ordinary claim, dependency, review, and terminal safety gates",
+      "files": [],
+      "assertions": [
+        "Derives rows 0 and 1 as due under the missing-actual-or-score rule",
+        "Creates one worker handoff for the original ticket/program/progress containing both matured row indexes and evidence refs",
+        "Leaves the completed row unchanged",
+        "Requires the worker to execute program.md Check-In Program and return accept, kill, iterate, or monitor",
+        "Treats a missing or non-executable Check-In Program as a Goal Advisor repair gap instead of improvising policy",
+        "Keeps ordinary claim, dependency, review, and terminal safety gates"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "One check-in handles every matured row on the ticket",
+          "tags": [
+            "pulse-update",
+            "multi-reward",
+            "check-in"
+          ]
+        }
+      }
+    },
+    {
+      "id": "pulse_due_review_reminder_is_worker_free",
+      "prompt": "Four tickets are awaiting review, but only one has an undecided progress Review block whose next_reminder_at is due. One worker slot is idle. What should Pulse do?",
+      "expected_output": "Selects at most the one due reminder instead of chasing from queue size; Calls worker-artifact-review-request in reminder mode without a worker handoff; Preserves the idle execution worker slot for todo or due check-in work; Updates reminder_count and the next reminder or cap in progress.md; Treats review WIP as refill backpressure, not a spam trigger",
+      "files": [],
+      "assertions": [
+        "Selects at most the one due reminder instead of chasing from queue size",
+        "Calls worker-artifact-review-request in reminder mode without a worker handoff",
+        "Preserves the idle execution worker slot for todo or due check-in work",
+        "Updates reminder_count and the next reminder or cap in progress.md",
+        "Treats review WIP as refill backpressure, not a spam trigger"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "A due review reminder does not consume a worker",
+          "tags": [
+            "pulse-update",
+            "review-reminder",
+            "worker-capacity"
+          ]
+        }
+      }
+    }
+  ]
+}

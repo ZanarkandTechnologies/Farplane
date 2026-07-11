@@ -19,7 +19,7 @@ fields, and todo-link rules stay in one place.
 - `docs/features/registry.jsonl` is generated feature output, not hand-authored
   truth.
 - `docs/skills/registry.jsonl` is generated inventory, not hand-authored truth.
-- `skills/<skill-name>/eval_task.json` owns focused modular eval tasks for one
+- `skills/<skill-name>/evals/evals.json` owns focused modular eval tasks for one
   skill's behavior when a runnable eval is the right proof surface.
 - `skills/<skill-name>/qa_checklist.md` owns first-class skill-local QA checks
   for settled runtime guardrails when a Markdown checklist is the right
@@ -181,7 +181,7 @@ Use these surfaces to make a chain visible:
 - `routes:` in `## Skill Signature` for normal downstream owners.
 - workflow reference files under `skills/<owner>/references/` when one
   orchestrator owns a conditional multi-skill procedure.
-- `eval_task.json` rows when the composed behavior should be tested end to end.
+- `evals/evals.json` rows when the composed behavior should be tested end to end.
 - lifecycle graph curated edges only for framework-critical paths that need UI
   rendering.
 
@@ -244,7 +244,7 @@ Manual fields:
 - `skill_template_version`: optional structural baseline for skills onboarded
   to a known Farplane skill template version; absence means not onboarded yet.
 - `eval`: optional path to a skill-local eval task file, usually
-  `eval_task.json`.
+  `evals/evals.json`.
 - `qa_checklist`: optional path to a skill-local runtime checklist, usually
   `qa_checklist.md`.
 - `skill_ui`: optional path or route for a skill-owned UI, viewer, dashboard,
@@ -290,7 +290,7 @@ or delete units by value rather than appending by default.
   then rerun without `--dry-run` after reviewing the package boundary. Existing
   repo packages require explicit `--overwrite` and are backed up under
   `.farplane/import-backups/`.
-- Put skill-specific eval tasks beside the source skill as `eval_task.json`.
+- Put skill-specific eval tasks beside the source skill as `evals/evals.json`.
   Keep broad working suites under `.farplane/evals` and reusable cross-skill
   examples under `skills/eval/examples`.
 - Put skill-specific runtime QA guardrails beside the source skill as
@@ -327,7 +327,7 @@ failure modes to prevent while executing and how a finished or changed artifact
 is checked. The eval file and QA checklist should converge over time:
 
 ```text
-eval_task.json discovers and pressures expected behavior
+evals/evals.json discovers and pressures expected behavior
 qa_checklist.md applies settled reusable guardrails before and after real work
 ```
 
@@ -341,8 +341,8 @@ apply qa_checklist.md again before completion
 delegate final checklist review for material changes
 ```
 
-When `eval_task.json` changes, `skill-maintenance` should decide whether any
-new `reference_points` deserve promotion into `qa_checklist.md`, `SKILL.md`, a
+When `evals/evals.json` changes, `skill-maintenance` should decide whether any
+new `assertions` deserve promotion into `qa_checklist.md`, `SKILL.md`, a
 reference, or a validator. Rare hard cases and benchmark-only examples can stay
 in evals with an audit note.
 
