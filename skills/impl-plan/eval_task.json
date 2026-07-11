@@ -41,8 +41,9 @@
     "title": "Impl plan creates a structured visual companion file",
     "query": "Plan a material cross-skill change where the ticket has multiple change units and the operator wants to read diagrams first.",
     "reference_points": [
-      "Creates or links tickets/TASK-XXXX/diagrams.md as a non-blocking visual companion",
-      "Keeps Mermaid diagrams out of ticket.md by default",
+      "Creates and links an existing, validator-passing tickets/TASK-XXXX/diagrams.md companion",
+      "Keeps all Mermaid diagrams out of ticket.md without exception",
+      "Does not use a visual_companion not-applicable exemption, including for tiny fixes",
       "diagrams.md has frontmatter or metadata with canonical_contract: ticket.md and blocks_approval: false",
       "diagrams.md includes explicit Before and After sections or headings",
       "diagrams.md includes Mermaid classDef color styling for semantic differences",
@@ -57,5 +58,23 @@
       "diagramming"
     ],
     "notes": "Guards the TASK-0308/TASK-0309 convention that visual companions are structured before/after reader aids, not random supplemental diagrams."
+  },
+  {
+    "id": "impl_plan_tiny_ticket_separate_diagram_01",
+    "title": "Impl plan still creates a separate diagram for a tiny fix",
+    "query": "Use impl-plan for a tiny localized one-file fix where a diagram would normally be considered unnecessary.",
+    "reference_points": [
+      "Creates and links tickets/TASK-XXXX/diagrams.md",
+      "Uses a compact Before and After diagram suitable for the small scope",
+      "Does not put Mermaid in ticket.md",
+      "Does not mark the visual companion not applicable"
+    ],
+    "tags": [
+      "skill",
+      "impl-plan",
+      "visual-companion",
+      "tiny-fix"
+    ],
+    "notes": "Guards the universal separate-companion contract."
   }
 ]

@@ -40,7 +40,7 @@ For standalone diagram work or deeper diagram taste/pattern guidance, use
 7. Run `qa_checklist.md` before accepting a material plan.
 8. Request a native reviewer lane for material plan readiness and reconcile its
    verdict before calling the plan approval-ready.
-9. Add an optional visual map only when topology or ownership is clearer that
+9. Add the required separate visual companion, scaling its depth when topology or ownership is clearer than
    way.
 
 ## How to Test

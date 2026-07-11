@@ -82,23 +82,19 @@ Include `Recommendation:` only when it changes the build path. Include
 Use `signature_or_type_impact` for local deltas inside the change unit; do not
 duplicate the full `architecture_signatures` map in every unit.
 
-Keep diagrams out of `ticket.md` by default. For material tickets, add a linked
-visual companion generated after the plan is written:
+Keep diagrams out of `ticket.md` without exception. For every impl-plan ticket,
+add a linked visual companion generated after the plan is written:
 
 ```text
 visual_companion:
   path: tickets/TASK-XXXX/diagrams.md
   template: skills/impl-plan/references/visual-companion-template.md
-  generated_by: background diagramming lane when available, otherwise inline diagramming(ticket.md, visual_companion_template)
+  generated_by: delegated diagramming lane when available, otherwise inline diagramming(ticket.md, visual_companion_template); impl-plan waits for validation
   blocks_approval: false
   canonical_contract: ticket.md
 ```
 
-For tiny localized fixes, use:
-
-```text
-visual_companion: not_applicable - localized same-surface fix because <reason>
-```
+For tiny localized fixes, keep the companion compact; do not omit it.
 
 ## Done
 
@@ -153,7 +149,7 @@ proof that no public/canonical/workflow-facing surface changed.
 
 - `program:`
 - `progress:`
-- `visual companion:` `tickets/TASK-XXXX/diagrams.md` or `not_applicable - <reason>`
+- `visual companion:` `tickets/TASK-XXXX/diagrams.md`
 - `artifacts:`
 - `review:`
 - `refs:`

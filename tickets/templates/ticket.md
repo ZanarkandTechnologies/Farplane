@@ -145,13 +145,13 @@ failure_modes:
 Use `signature_or_type_impact` for local deltas inside the change unit; do not
 duplicate the full `architecture_signatures` map in every unit.
 
-Keep diagrams out of `ticket.md` by default. For material impl-plan tickets,
-link the visual companion generated after the plan exists:
+Keep diagrams out of `ticket.md` without exception. For every impl-plan ticket,
+link the required visual companion generated after the plan exists:
 
 ```text
 visual_companion:
   path: tickets/TASK-XXXX/diagrams.md
-  generated_by: background diagramming lane when available, otherwise inline diagramming(ticket.md, skills/impl-plan/references/visual-companion-template.md)
+  generated_by: delegated diagramming lane when available, otherwise inline diagramming(ticket.md, skills/impl-plan/references/visual-companion-template.md); impl-plan waits for validation
   blocks_approval: false
   canonical_contract: ticket.md
 ```
@@ -277,7 +277,7 @@ docs_strategy:
 ## Links
 - `program:` `tickets/TASK-XXXX/program.md` or `none`
 - `progress:` `tickets/TASK-XXXX/progress.md` or `none`
-- `visual companion:` `tickets/TASK-XXXX/diagrams.md` or `not_applicable - <reason>`
+- `visual companion:` `tickets/TASK-XXXX/diagrams.md` (required for every impl-plan)
 - `artifacts:`
 - `review:`
 - `refs:`

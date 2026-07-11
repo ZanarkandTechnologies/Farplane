@@ -41,7 +41,7 @@ state:
   reads(active ticket, linked PRD/specs/docs, relevant code,
         docs/MEMORY.md?, docs/TROUBLES.md?, docs/LESSONS.md?,
         optional design.md or Agent Testability Brief)
-  writes(ticket.md updates, optional diagrams.md companion handoff,
+  writes(ticket.md updates, required diagrams.md companion handoff,
          optional design.md recommendation,
          QA strategy, approval handoff)
 
@@ -49,7 +49,7 @@ gates:
   missing_inputs_resolved_or_asked; ticket_surface_exists; code_context_read;
   architecture_signatures_present_or_not_applicable; done_conditions_concrete;
   qa_strategy_concrete; change_plan_units_local; proof_route_named;
-  visual_companion_linked_or_not_applicable;
+  visual_companion_exists_and_valid;
   material_reviewer_gate_passed_or_reconciled;
   goal_advisor_ready_after_approval
 
@@ -61,7 +61,7 @@ routes:
 fails:
   chat-only material plan; hidden architecture invention; vague "run tests";
   over-scoped new files/functions/parameters without reuse proof;
-  inline ticket diagrams treated as canonical plan state;
+  missing_or_invalid diagrams.md companion; inline ticket diagrams;
   missing material architecture signatures; self-certified QA/review for
   material work; transcript-dependent Goal setup; implementation before approval
 ```
@@ -74,13 +74,13 @@ This skill owns approval planning only. It may shape `Summary`, `Scope`,
 adversarial testing, demo, final review, and Goal Packet sidecars are delegated
 to owner surfaces.
 
-Keep `ticket.md` canonical and textual by default. For material tickets, hand
+Keep `ticket.md` canonical and textual without exception. For every impl-plan, hand
 off a separate visual companion after the ticket plan exists:
 `diagramming(ticket.md, references/visual-companion-template.md) ->
 tickets/TASK-XXXX/diagrams.md`. Link the companion from `Links`, label it
 non-blocking, and do not make it part of the reviewer gate unless the operator
-explicitly asks for diagram review. Tiny localized fixes may mark the visual
-companion `not_applicable` with a concrete reason.
+explicitly asks for diagram review. Tiny localized fixes still receive a
+compact separate companion; there is no not-applicable exemption.
 
 Call `goal-advisor` after the ticket plan is approved and ready to become a
 Goal Packet. `goal-advisor(ticket)` creates or updates `program.md`,
@@ -191,20 +191,26 @@ its own artifact, independent judgment, or proof surface.
     add a `Links` entry for `tickets/TASK-XXXX/diagrams.md` and use
     [references/visual-companion-template.md](references/visual-companion-template.md)
     as the output template.
-  - [ ] Spawn or delegate a bounded background `diagramming` lane when available
-    as the final post-plan companion step:
+  - [ ] Spawn or delegate a bounded `diagramming` lane when available as the
+    final post-plan companion step:
     `diagramming(ticket.md, visual_companion_template) -> diagrams.md`. The
-    lane writes `diagrams.md` and does not edit `ticket.md`; if no subagent
+    lane writes `diagrams.md` and does not edit `ticket.md`; wait for this file
+    and validate it before impl-plan completion. If no subagent
     primitive is available, render inline and record that fallback in the
     handoff.
   - [ ] Mark the companion as `blocks_approval: false` and
     `canonical_contract: ticket.md`; reviewer lanes judge `ticket.md` unless
-    diagram review is explicitly requested.
-  - [ ] Keep Mermaid diagrams out of `ticket.md` by default. If a pre-existing
-    ticket has inline diagrams, move them into the companion instead of
-    expanding the ticket body.
-  - [ ] Use `visual_companion: not_applicable - <reason>` only for tiny,
-    localized, direct-fix tickets where a diagram would add no reader value.
+    diagram review is explicitly requested. `blocks_approval: false` means it
+    is not a human-review gate; generation and validation still block impl-plan
+    completion.
+  - [ ] Run `farplane validate ticket tickets/TASK-XXXX/ticket.md --phase
+    planning`; the phase API owns visual-companion and ticket-contract checks.
+    Do not complete on a link alone.
+  - [ ] Keep all diagram syntax and embedded diagram assets out of `ticket.md`
+    without exception. Move pre-existing diagrams into the companion.
+  - [ ] Require the separate companion for every `impl-plan` invocation,
+    including tiny localized fixes; scale diagram depth down instead of
+    marking it not applicable.
 - [ ] 10. Handoff for one-shot approval, not implementation.
   - [ ] Present the ticket plan as the approval contract that
     `goal-advisor(ticket)` will compile after approval.
@@ -257,7 +263,7 @@ proof reason.
 - Do not add optional ticket sections as decoration. `Gap Analysis`, `Run
   Hints`, `Agent Contract`, sidecar `plan.md`, and citations appear only when
   they reduce ambiguity or prove a decision.
-- Do not put Mermaid diagrams in `ticket.md` by default. Use the linked
+- Do not put Mermaid diagrams in `ticket.md`. Use the linked
   `diagrams.md` companion for visual readability and keep the ticket as the
   canonical implementation/proof contract.
 - Do not treat tests alone as UI/user-visible proof when screenshots, logs,
@@ -289,10 +295,9 @@ proof reason.
 - Updated or proposed `tickets/TASK-XXXX/ticket.md` in canonical ticket-body
   shape, ready for approval and later `goal-advisor(ticket)` compilation when
   the work is Goal-backed.
-- Linked `tickets/TASK-XXXX/diagrams.md` visual companion for material tickets,
+- Linked `tickets/TASK-XXXX/diagrams.md` visual companion for every impl-plan,
   generated through `diagramming` from
-  `references/visual-companion-template.md`, or a concrete
-  `visual_companion: not_applicable` reason for tiny localized fixes.
+  `references/visual-companion-template.md`.
 - Compact `architecture_signatures` for material work, or a concrete
   `not_applicable` reason for tiny localized fixes.
 - Concrete `Done` conditions and `QA Strategy` with proof weight, delegated

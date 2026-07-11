@@ -1,7 +1,8 @@
 # Impl Plan Visual Companion Template
 
-Use this template for the non-canonical visual companion generated after a
-material `impl-plan` ticket exists.
+Use this template for the required non-canonical visual companion generated
+after every `impl-plan` ticket exists. Tiny fixes use the same file with fewer
+nodes; they do not receive an exemption.
 
 The companion helps the operator read and give feedback. It does not replace
 `ticket.md`, does not change scope, and does not block approval or review
@@ -14,7 +15,7 @@ source: ticket.md
 blocks_approval: false
 canonical_contract: ticket.md
 generated_by: diagramming
-generation_lane: background subagent when available; inline fallback allowed
+generation_lane: delegated subagent when available; inline fallback allowed; impl-plan waits for validation
 ---
 
 # Visual Plan

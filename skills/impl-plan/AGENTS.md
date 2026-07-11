@@ -24,7 +24,7 @@
 - Put compact `architecture_signatures` before material Change Plan units so
   top-level module seams, main flow signatures, and relevant typed movement are
   reviewable without reading every unit.
-- Keep diagrams out of `ticket.md` by default. Use the post-plan
+- Keep diagrams out of `ticket.md` without exception. Always use the post-plan
   `diagrams.md` visual companion for ownership, before/after flow, changed
   seams, or typed data paths that are easier to understand visually. See
   `MEM-0030`.
@@ -46,13 +46,13 @@
 - Put compact top-level callable seams in `architecture_signatures`; use
   `signature_or_type_impact` only for local deltas inside a change unit.
 - Put typed flow in `architecture_signatures`, local `signature_or_type_impact`,
-  or the optional visual map when trust depends on seeing structs, objects,
+  and the required visual companion when trust depends on seeing structs, objects,
   payloads, or typed state evolve across boundaries.
 - Add a linked `plan.md` only when `Change Plan` would become crowded or
   independently valuable.
 - Keep the recommendation above the fold and phrased as a decisive action, not
   a tentative suggestion.
-- When diagrams are needed, keep the template in
+- For every impl-plan's required diagrams, keep the template in
   `skills/impl-plan/references/visual-companion-template.md` and reference
   `skills/diagramming/SKILL.md` for rendering compactness, color/legend
   practice, and inline-signature patterns.
@@ -72,13 +72,14 @@
 - The output matches the canonical ticket-body shape.
 - `Change Plan` is present and locally executable when sequencing is
   non-trivial.
-- Material tickets link a `diagrams.md` companion or record a concrete
-  not-applicable reason; inline ticket diagrams do not expand the main ticket.
-- Changed callable seams are visible in `signature_or_type_impact` or the
-  optional visual map when interface shape matters locally.
+- Every impl-plan ticket has an existing, validator-passing `diagrams.md`
+  companion; a link alone is insufficient, there is no not-applicable
+  exemption, and inline ticket diagrams are forbidden.
+- Changed callable seams are visible in `signature_or_type_impact` and mirrored
+  in the visual companion when interface shape matters locally.
 - Material top-level seams are visible in `architecture_signatures`.
 - Typed flow is visible in `architecture_signatures`, local
-  `signature_or_type_impact`, or the optional visual map when data movement
+  `signature_or_type_impact`, and the visual companion when data movement
   matters.
 - The recommendation is decisive and action-oriented when the ticket involves a
   material choice.

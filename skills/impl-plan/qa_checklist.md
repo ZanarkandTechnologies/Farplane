@@ -183,12 +183,11 @@ accept_plan(plan)
      or explicit revise/block status.
 
 23. `visual-companion-boundary`
-   - Question: For material impl-plan tickets, does the plan link a
-     non-blocking `diagrams.md` companion or record a concrete
-     `visual_companion: not_applicable` reason, while keeping Mermaid diagrams
-     out of `ticket.md` by default?
-   - Violation: The ticket embeds diagrams as canonical plan state, omits the
-     companion for material work, or makes diagram review part of the reviewer
+   - Question: Does every impl-plan ticket have an existing, structurally valid,
+     non-blocking `diagrams.md` companion while keeping every diagram format
+     and embedded diagram asset out of `ticket.md`?
+   - Violation: The ticket embeds a diagram, links a missing or invalid
+     companion, uses a not-applicable exemption, or makes diagram review part of the reviewer
      gate without an explicit operator request.
 
 24. `visual-companion-colored-delta`
@@ -220,8 +219,8 @@ plan_qa:
   qa_strategy_explicit: pass | revise | block
   docs_strategy: pass | revise | block
   independent_plan_review: pass | revise | block
-  visual_companion_boundary: pass | revise | block | not_applicable
-  visual_companion_colored_delta: pass | revise | block | not_applicable
+  visual_companion_boundary: pass | revise | block
+  visual_companion_colored_delta: pass | revise | block
   grounding_evidence: pass | revise | block | local_only
   highest_risk:
   fix_or_deferral:

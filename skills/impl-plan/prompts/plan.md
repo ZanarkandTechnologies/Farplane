@@ -58,9 +58,11 @@ Rules:
     `Change Plan`: module-level seams, main-flow signatures, relevant typed
     data movement, and the builder-owned freeform boundary. Use
     `not_applicable` only for tiny localized fixes with a concrete reason.
-14. Add one optional Mermaid system map inside `Change Plan` only when
-    topology, ownership boundaries, changed seams, or typed data path are
-    easier to understand visually.
+14. Never put Mermaid diagrams inside `ticket.md`. After writing the canonical
+    ticket plan, always create and link `tickets/TASK-XXXX/diagrams.md` using
+    `skills/impl-plan/references/visual-companion-template.md`. Keep it
+    non-blocking with `canonical_contract: ticket.md`; tiny fixes still receive
+    a compact separate companion.
 15. Put explicit local callable seams inside `signature_or_type_impact` when
     one change unit modifies interface shape, ownership boundaries, or changed
     handlers/files. Use `module / symbol(input): output`.
@@ -70,8 +72,11 @@ Rules:
 17. Require a compact `Change Plan` whenever the implementation has more than
     one non-trivial step.
 18. Use decisive action language. Do not hedge core execution steps or the recommendation with "maybe", "might", or "could".
-19. When diagrams are used, follow `skills/diagramming/SKILL.md` for
+19. For the required separate diagrams, follow `skills/diagramming/SKILL.md` for
     compactness, delta coloring, inline signatures, and anti-bloat rules.
+19a. Do not finish impl-plan until `farplane validate ticket
+     tickets/TASK-XXXX/ticket.md --phase planning` passes. The phase API checks
+     the ticket and required `diagrams.md`; a link alone is not completion.
 20. If an `Agent Testability Brief` exists, preserve its proof/testability surfaces instead of re-deriving them ad hoc.
 21. For material tickets, write compact `Done` conditions plus a `QA Strategy`
     that separates proof weight, mechanical checks, manual checks, delegated
@@ -111,7 +116,6 @@ Output shape:
   - `routes`
   - `qa`
   - `failure_modes`
-  - optional Mermaid system map when visually useful
 - `Done`
   - `done_when`
 - `QA Strategy`
@@ -129,6 +133,7 @@ Output shape:
   - `no_docs_reason`
   - `validation`
 - `Links`
+  - `visual companion: tickets/TASK-XXXX/diagrams.md`
 - `Notes`
   - risks, blast radius, rollback, follow-ups, citations, blockers only when real
 - optional `Gap Analysis`
@@ -157,10 +162,10 @@ Requirements:
   exists.
 - The recommendation and build steps should use strong action language, not
   timid caveats.
-- Optional system maps are expected only when they make flow, ownership,
-  changed seams, or typed data path easier to understand than the change units.
-- Use one legend-backed delta map instead of separate before/after diagrams
-  unless the split is clearly simpler.
+- Every impl-plan output includes a separate, linked `diagrams.md`; diagrams
+  never appear inside `ticket.md`.
+- Use explicit legend-backed Before and After diagrams in the companion, with
+  compact depth for small tickets.
 - Follow `diagramming` for compact node labels, color/legend use, and
   inline-signature practice.
 - Callable seams should appear in `signature_or_type_impact`, usually 3-7 real

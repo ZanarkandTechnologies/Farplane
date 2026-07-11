@@ -52,7 +52,8 @@ changed ownership quickly.
 
 ## Do Not Use When
 
-- the change is a trivial one-symbol fix that 3 lines of prose can explain
+- the change is a trivial one-symbol fix that 3 lines of prose can explain,
+  unless called by `impl-plan`, which always requires a compact companion
 - the request is pure visual design or illustration rather than system design
 - the diagram would duplicate an already-clear existing map without adding delta
 - the node labels would need paragraphs to make sense
@@ -78,7 +79,8 @@ Ensure an agent can execute the core path after only reading this file.
   - one subsystem still unclear -> add one zoom-in
 - Top gotchas:
   - do not create decorative Mermaid
-  - do not split into before/after diagrams by default
+  - use explicit Before and After diagrams; do not collapse their distinct
+    states into an ambiguous single map
   - do not move important interfaces back into detached prose lists
 - Outcome contract:
   - the reader can understand the change from the first diagram
@@ -142,8 +144,9 @@ If the diagram pack still needs long prose to make sense, it is not ready.
 - **Branch C: interfaces are the question**
   - embed short signatures in nodes
   - keep the labels compact and move extra detail into short notes
-- **Branch D: the change is too small**
-  - say a diagram is unnecessary and fall back to brief prose
+- **Branch D: the change is small**
+  - outside impl-plan, say a diagram is unnecessary and fall back to brief prose
+  - inside impl-plan, write a compact separate Before/After companion
 - **Branch E: impl-plan visual companion**
   - use `ticket.md` as the only source of scope
   - write or return `diagrams.md` from the impl-plan companion template
