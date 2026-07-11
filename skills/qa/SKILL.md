@@ -8,6 +8,7 @@ eval: eval_task.json
 qa_checklist: qa_checklist.md
 template_uses:
   skill-surface-budget: "0.1.0"
+  skill-eval-task: "0.1.0"
 common_chains:
   after: ["demo", "close-ticket"]
 ---
@@ -87,7 +88,7 @@ claim proof to `agent-qa-test`, and final sufficiency to `review`.
 Use it when:
 
 - implementation is ready for proof
-- a ticket in `status: building` needs evidence before completion
+- a ticket in `status: active` needs evidence before completion
 - `goal-advisor` or the operator needs to rerun QA without redoing implementation
 
 Do not use it when:

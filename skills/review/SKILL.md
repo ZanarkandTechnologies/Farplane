@@ -3,9 +3,11 @@ name: review
 description: "Turn task context, artifacts, and evidence into a TAS review verdict: pass-ready, needs revision, blocked, or invalid."
 tier: 2
 source: local
+eval: eval_task.json
 template_uses:
   skill-template: "0.2.0"
   skill-surface-budget: "0.1.0"
+  skill-eval-task: "0.1.0"
 
 ---
 
@@ -20,6 +22,12 @@ skill owns the TAS output contract and points to the review rubric docs.
 Use as the canonical review rubric contract before a plan, implementation,
 evidence bundle, skill, prompt, eval, doc, or completion claim is treated as
 ready.
+
+Default review posture is adversarial and reject-first. A reviewer should try
+to disprove the pass claim, find reasons the artifact is weak, boring, under
+proved, low-value, or below the current/default/state-of-art bar, and pass only
+when those rejection attempts fail against inspected evidence. This is the
+normal review path, not an optional mode.
 
 This skill is not an actor prompt and no longer owns rubric bodies. It does not
 decide whether to spawn a reviewer, how to route subagents, or how to write back
@@ -45,6 +53,15 @@ ReviewBudget = {
   max_phase_depth?: 0 | 1
 }
 ```
+
+For material checklist conformance, use a typed `reviewer` subagent to apply
+the relevant `qa_checklist.md` as a hostile acceptance review. The checklist is
+ammunition for rejection, not a box-check form. Use `qa-tester` when evidence
+must be captured or browser/UI/runtime proof must be produced; use `reviewer`
+to judge whether that proof and checklist application are good enough. When a
+material ticket needs both proof capture and acceptance judgment, run
+`qa-tester` and `reviewer` in parallel when possible, then reconcile both
+receipts before pass.
 
 ## Contract
 
@@ -180,6 +197,7 @@ Return or write:
 - `work_type`
 - `search_scope`
 - `rubrics_used`
+- `adversarial_rejection_attempts`
 - `overall_tas`
 - `verdict`: `pass`, `revise`, `block`, or `invalid`
 - `rerun_required`

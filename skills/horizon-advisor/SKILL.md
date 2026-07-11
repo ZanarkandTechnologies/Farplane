@@ -4,8 +4,10 @@ description: "Turn ambiguous long-horizon intent into goals.yaml, KPI trees, fee
 tier: 3
 group: harness
 source: local
+eval: eval_task.json
 template_uses:
   skill-template: "0.3.0"
+  skill-eval-task: "0.1.0"
 allowed-tools: Read, Write, Glob, Grep
 
 ---
@@ -95,7 +97,7 @@ Goal prompts here.
    - [ ] Avoid fake precision when the honest signal is qualitative,
      researcher-led, or early-stage.
 - [ ] 4. Shape the project goals.
-   - [ ] Load [references/project-goals.yaml](references/project-goals.yaml) when
+   - [ ] Load [references/project-goals.md](references/project-goals.md) when
      writing or materially changing a long-horizon project goal map.
    - [ ] Expand only the first evidence-producing branch deeply.
    - [ ] Use feedback-sized projects as the default durable unit.
@@ -185,7 +187,7 @@ goal_advisor(
 
 ## Reference Map
 
-- [references/project-goals.yaml](references/project-goals.yaml) - load when
+- [references/project-goals.md](references/project-goals.md) - load when
   writing or materially changing a long-horizon project goal map.
 - [../../docs/fundamentals/harness-algebra.md](../../docs/fundamentals/harness-algebra.md)
   - shared harness objective function and optimization terms.

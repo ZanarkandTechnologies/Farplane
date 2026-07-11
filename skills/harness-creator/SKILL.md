@@ -4,8 +4,10 @@ description: "Turn a high-level project or business idea into split Farplane pro
 tier: 3
 group: harness
 source: local
+eval: eval_task.json
 template_uses:
   skill-template: "0.2.0"
+  skill-eval-task: "0.1.0"
 allowed-tools: Read, Write, Glob, Grep, Bash, web_search
 
 ---

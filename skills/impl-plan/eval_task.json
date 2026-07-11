@@ -1,5 +1,18 @@
 [
   {
+    "id": "impl_plan_rejects_unprovable_scope_01",
+    "title": "Reject an implementation plan with no faithful proof path",
+    "query": "Prepare an implementation plan for a production integration, but the target environment, acceptance contract, and representative test surface are all unavailable.",
+    "reference_points": [
+      "Does not mark the implementation plan approval-ready",
+      "Names the missing environment, acceptance contract, and proof surface as blockers",
+      "Separates safe discovery or prototyping work from unauthorized implementation",
+      "Requires a smallest faithful proof path in Done / Proof or QA Strategy",
+      "Returns a concrete unblock action rather than inventing evidence"
+    ],
+    "tags": ["skill", "impl-plan", "failure-boundary"]
+  },
+  {
     "id": "impl_plan_material_ticket_first_01",
     "title": "Impl plan creates or selects a ticket before material planning",
     "query": "Plan a material UI change for AGI Toy Shop's checkout flow. No ticket is selected yet.",

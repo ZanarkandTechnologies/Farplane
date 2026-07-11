@@ -4,6 +4,9 @@ description: "Turn a completed ticket into durable closeout, docs writeback, fin
 tier: 3
 group: coding
 source: local
+eval: eval_task.json
+template_uses:
+  skill-eval-task: "0.1.0"
 ---
 
 # Close Ticket
@@ -17,8 +20,8 @@ source: local
   [project-lifecycle](../init-advisor/references/project-lifecycle.md).
 - [ ] Close through the native execution phase proof and writeback shape, but
   keep `close-ticket` coding-ticket closeout specific.
-- [ ] Update the ticket writeback: evidence, linked docs, handoff, next action,
-  and `last_verification`.
+- [ ] Update ticket/progress writeback: evidence, linked docs, handoff, current
+  action, and latest verification.
 - [ ] Update durable docs that changed in the final pass: `docs/HISTORY.md`,
   `docs/MEMORY.md`, `docs/LESSONS.md`, README, or the nearest `AGENTS.md`.
 - [ ] Run the feature closeout consistency sweep for relevant surfaces:
@@ -37,8 +40,8 @@ source: local
   or the configured reviewer lane.
 - [ ] Commit only the intended closeout slice.
 - [ ] Push only when the user or workflow explicitly calls for publishing.
-- [ ] Leave the ticket clearly archive-ready, committed, blocked, or still in
-  documenting with one concrete next action.
+- [ ] Leave the ticket archive-ready (`status: done`), blocked, or active with
+  one concrete next action in `progress.md`.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 Use this skill when one ticket is functionally done and the remaining work is
@@ -65,7 +68,7 @@ retired; live prompts should use `$close-ticket`.
 Ensure an agent can execute the core path after only reading this file.
 
 - Trigger conditions:
-  - the ticket is in `phase: documenting` or otherwise in final closeout
+  - implementation is in final closeout and the ticket is still `active`
   - implementation and verification are already done enough that the remaining
     work is docs, proof cleanup, commit, and publication
   - the user asks to close out, archive, document, commit, or push a finished

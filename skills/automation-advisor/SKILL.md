@@ -4,8 +4,10 @@ description: "Design or revise Farplane Codex automations using full project-own
 tier: 3
 group: harness
 source: local
+eval: eval_task.json
 template_uses:
   skill-template: "0.2.0"
+  skill-eval-task: "0.1.0"
 allowed-tools: Read, Glob, Grep, Bash
 
 ---

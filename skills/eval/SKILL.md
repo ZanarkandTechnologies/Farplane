@@ -204,6 +204,8 @@ regression coverage.
 
 ## Reference Map
 
+- [references/core-lifecycle.md](references/core-lifecycle.md) - load when
+  defining or claiming coverage for Farplane's bounded core lifecycle suite.
 - [references/onboarding.md](references/onboarding.md) - first eval setup,
   clean-room constraints, and starter workflow.
 - [references/eval-skill-structure-cases.md](references/eval-skill-structure-cases.md) -
