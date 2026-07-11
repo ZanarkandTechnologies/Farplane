@@ -45,9 +45,7 @@ any port or environment-variable assumptions. When the user wants app code
 created during init, select the stack scaffold before running commands.
 
 That also writes `farplane/README.md`, `farplane/manifest.json`, `farplane/harness.md`,
-`farplane/goals.yaml`, `farplane/products/core/product.md`,
-`farplane/products/core/skill.md`, generated `farplane/products.json`,
-`farplane/automations.toml`, `farplane/bindings.yaml`,
+`farplane/goals.yaml`, `farplane/metrics.yaml`, `farplane/automations.toml`, `farplane/bindings.yaml`,
 `farplane/hooks.json`, `.agents/skills/README.md`, `farplane/pm.json`, `docs/bootstrap-brief.md`, `qa/README.md`,
 `qa/cookbook/TEMPLATE.md`, `.githooks/README.md`,
 `.githooks/pre-commit`, `.githooks/pre-push`, `scripts/pre_commit_check.sh`,
@@ -60,8 +58,8 @@ pre-commit gate. The other required follow-through is to fill
 use for ordinary app work versus QA. It also creates
 `tickets/TASK-0001/ticket.md` as the starter PRD handoff.
 
-The script also creates ignored `.farplane/` runtime folders:
-`.farplane/state/run-ledger.json`, `.farplane/reports/`,
+The script also creates ignored, owner-named `.farplane/` folders:
+`.farplane/reports/`, `.farplane/metrics/daily/`,
 `.farplane/evals/runs/`, `.farplane/logs/`, and `.farplane/crm/reports/`.
 The CRM directory includes a local [CRM README template](references/CRM_README_TEMPLATE.md);
 customer research reports are the source of truth, while `.farplane/crm/index.jsonl`
@@ -73,10 +71,11 @@ and `tickets/templates/` remain available as tracked scaffold.
 
 Bootstrap does not create live Codex automations by itself. After the substrate
 exists, use `harness-creator` in full mode to shape the static charter,
-products, goals, feedback loops, and current milestone. `harness-creator`
+capability workflows, goals, feedback loops, and current milestone. `harness-creator`
 routes to `horizon-advisor` or `goal-advisor` only when those narrower advisor
 calls are needed. When live loops are explicitly requested, use
-`automation-advisor` to activate Pulse, Daily Interval, and Weekly Interval.
+`automation-advisor` to activate the single Work Pulse heartbeat plus separate
+Feed Scout, Daily BAU, Weekly BAU, self-improvement, and optional cron records.
 Activation creates or reuses the dedicated loop threads, creates or updates the
 Codex automations, and appends PM-visible thread IDs to `farplane/pm.json`.
 
@@ -112,9 +111,7 @@ Then copy in:
 - `farplane/manifest.json`
 - `farplane/harness.md`
 - `farplane/goals.yaml`
-- `farplane/products/core/product.md`
-- `farplane/products/core/skill.md`
-- `farplane/products.json`
+- `farplane/metrics.yaml`
 - `farplane/automations.toml`
 - `farplane/bindings.yaml`
 - `farplane/hooks.json`
@@ -185,9 +182,9 @@ For an existing repo:
 Then:
 
 - use `spec-to-ticket`
-- set the chosen ticket to `status: review`
+- set the chosen ticket to `status: awaiting_review`
 - run `impl-plan`
-- set it to `status: building`
+- after approval set it to `status: todo`; the executing session claims it as `active`
 - run `goal-advisor`
 
 ### 4. Keep migration scope small
@@ -223,22 +220,20 @@ Those can come after one clean ticket run.
 - [ ] `AGENTS.md` exists
 - [ ] `ARCHITECTURE.md` exists
 - [ ] `docs/features/README.md` exists as the feature-spec home
-- [ ] `docs/systems/README.md` exists as the system/product grouping home
+- [ ] `docs/systems/README.md` exists as the cross-feature system grouping home
 - [ ] `farplane/README.md` exists
 - [ ] `farplane/manifest.json` records the Farplane project spec version and standard tracked/ignored paths
 - [ ] `farplane/harness.md` exists or `init_mode=substrate` has a recorded readiness gap
 - [ ] `farplane/goals.yaml` exists or `init_mode=substrate` has a recorded readiness gap
-- [ ] `farplane/products/core/product.md` and `farplane/products.json` exist
-      or `init_mode=substrate` has a recorded readiness gap
-- [ ] product `product.md` files include Current Strategy, Loop Contract, Product Loop, and Progress Entry Shape sections
-- [ ] `farplane/automations.toml` exists and contains the full Pulse, Daily Interval, and Weekly Interval configs to copy into Codex automations
+- [ ] `farplane/metrics.yaml` defines every KPI ID used by `farplane/goals.yaml`
+- [ ] `farplane/automations.toml` contains exactly one Work Pulse heartbeat plus separate cron records for Feed Scout, Daily BAU, Weekly BAU, self-improvement, and optional scheduled workflows
 - [ ] `farplane/bindings.yaml` exists and names non-secret project IDs, URLs, labels, and aliases needed by reusable skills
 - [ ] `farplane/hooks.json` exists or `init_mode=substrate` has a recorded readiness gap
-- [ ] `.agents/skills/README.md` exists as the local product-skill home
+- [ ] `.agents/skills/README.md` exists as the local capability-skill home
 - [ ] `farplane/pm.json` exists when the UI should fold chat and automation thread IDs into one visual project PM
 - [ ] Live automation activation, when requested, is handled by
       `automation-advisor` and appends PM-visible thread IDs to `farplane/pm.json`
-- [ ] `.farplane/state/run-ledger.json`, `.farplane/reports/`, `.farplane/evals/runs/`, and `.farplane/logs/` exist as ignored local runtime state
+- [ ] owner-named `.farplane/reports/`, `.farplane/metrics/daily/`, `.farplane/evals/runs/`, and `.farplane/logs/` exist as ignored generated state
 - [ ] `python3 bin/validators/check_farplane_project_files.py` passes when the repo has Farplane validators
 - [ ] `docs/prd.md`, `docs/features/`, `docs/TROUBLES.md`, `docs/LESSONS.md` exist
 - [ ] `qa/README.md` and `qa/cookbook/TEMPLATE.md` exist

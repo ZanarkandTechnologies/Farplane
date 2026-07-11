@@ -11,10 +11,9 @@ framework_template_version: "0.2.0"
 Tracked project framework config lives here.
 
 `manifest.json` owns the compact UI identity card. Richer project meaning
-lives in files: `harness.md` is the static human charter,
-`products/<product>/product.md` files are canonical product-loop definitions,
-generated `products.json` is the machine/UI product index, and `goals.yaml` is
-current cross-product strategy.
+lives in files: `harness.md` is the static human charter and capability map,
+while `goals.yaml` owns current value direction, goals, KPI IDs, milestone, and
+holds. Reusable and project-local skills own recurring workflows.
 
 ```text
 farplane/
@@ -22,17 +21,14 @@ farplane/
   manifest.json    # versioned Farplane project spec for this project
   harness.md       # static human charter
   goals.yaml       # north star, KPIs, current milestone, holds
-  products/
-    core/product.md # canonical starter product-loop definition
-    core/skill.md   # project-local product workflow
-  products.json    # generated machine/UI product index
-  automations.toml # full Codex automation configs for Pulse and Intervals
+  metrics.yaml     # provider-independent metric definitions
+  automations.toml # one Work Pulse heartbeat plus separate scheduled jobs
   bindings.yaml      # non-secret project IDs, URLs, labels, aliases
   hooks.json       # declarative Farplane-native hook configuration
   pm.json          # optional UI thread manifest for one visual project PM
 
 .agents/
-  skills/          # project-local product skills
+  skills/          # project-local capability skills
     README.md
 ```
 
@@ -41,12 +37,14 @@ Runtime state lives under `.farplane/` and is intentionally ignored by git.
 ```text
 .farplane/
   README.md
-  state/run-ledger.json
   automation/
+  metrics/daily/
   reports/
   evals/runs/
   logs/
 ```
 
-Keep canonical project config in `farplane/`. Use `.farplane/` only for local
-runtime state, generated evidence, reports, logs, and continuation ledgers.
+Keep canonical project config in `farplane/`. Use `.farplane/` only for
+owner-named local state, generated reports, metric observations, evals, logs,
+and continuation ledgers. Store QA and review evidence under the owning ticket;
+do not add generic runtime, evidence, or review buckets.

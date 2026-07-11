@@ -30,17 +30,15 @@ name: "Person Name"
 links:
   - "https://example.com/profile"
 industry: "Industry or field, when useful for search."
-farplane_product_id: "market_learning"
 relevance: "Why this person is relevant to the call or project."
 created_at: "YYYY-MM-DD"
 ---
 ```
 
 `skill` names the report-producing skill so other report workflows can share
-the same index and still be filtered by source. `industry` and
-`farplane_product_id` are optional index fields. Use `farplane_product_id` only
-when the report clearly maps to a product lane in `farplane/products.md`; omit
-it otherwise.
+the same index and still be filtered by source. `industry` is optional. Link a
+report to its owning ticket or capability skill when additional provenance is
+needed; do not introduce a product-catalog foreign key.
 
 Put role, story, field overview, pain hypotheses, conversation questions,
 confidence, unknowns, and next actions in the report body.

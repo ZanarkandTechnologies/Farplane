@@ -1,8 +1,8 @@
 {
   "schema": "farplane_project",
-  "spec_version": "1.6.17",
+  "spec_version": "1.7.0",
   "template_uses": {
-    "farplane-framework": "1.6.17"
+    "farplane-framework": "1.7.0"
   },
   "project": {
     "name": "Farplane",
@@ -19,11 +19,9 @@
       "farplane/manifest.json",
       "farplane/harness.md",
       "farplane/goals.yaml",
-      "farplane/products.json",
-      "farplane/products/",
+      "farplane/metrics.yaml",
       "farplane/automations.toml",
       "farplane/bindings.yaml",
-      "farplane/hooks.json",
       ".agents/skills/README.md",
       "docs/bootstrap-brief.md",
       "docs/prd.md",
@@ -44,7 +42,6 @@
     ],
     "ignored": [
       ".farplane/README.md",
-      ".farplane/state/run-ledger.json",
       ".farplane/content/",
       ".farplane/metrics/daily/",
       ".farplane/project/ui/",
@@ -55,6 +52,7 @@
   },
   "optional": {
     "tracked": [
+      "farplane/hooks.json",
       "farplane/pm.json",
       ".githooks/README.md",
       ".githooks/pre-commit",
@@ -64,9 +62,7 @@
       "skills/code-review/SKILL.md",
       "skills/review/SKILL.md"
     ],
-    "ignored": [
-      ".farplane/reviews/"
-    ]
+    "ignored": []
   },
   "farplane_graph": {
     "framework_core": {
@@ -81,7 +77,6 @@
         "docs/farplane-framework/reporting.md"
       ],
       "exclude": [
-        "farplane/products.json",
         "tickets/archive/**",
         ".farplane/reports/**",
         ".farplane/logs/**"

@@ -29,8 +29,8 @@ local pre-push by default as an advisory check.
 
 - `bash scripts/pre_push_check.sh`: runs deterministic gates, then advisory
   Codex agent review.
-- `bash scripts/collect_review_context.sh .farplane/reviews/latest/context.md`:
-  writes a review packet.
+- `bash scripts/collect_review_context.sh tickets/TASK-XXXX/artifacts/review/pre-push-latest/context.md`:
+  writes a ticket-owned review packet.
 - `bash scripts/run_pre_push_review.sh`: runs the pre-push reviewer directly.
 
 If this project uses `package.json`, add these scripts:
@@ -68,12 +68,15 @@ project-native wrapper.
 - `FARPLANE_REVIEW_INCLUDE_UNTRACKED=1`: include untracked text file contents in
   the review prompt. Leave this off unless those files are intentional review
   inputs.
-- `FARPLANE_PRE_PUSH_REVIEW_DIR=<path>`: write pre-push artifacts under a custom
-  path. The path must resolve under `.farplane/reviews/`.
+- `FARPLANE_REVIEW_TICKET_ID=TASK-XXXX`: required owner for pre-push review
+  evidence. Advisory review skips when it is unset; strict review fails.
+- `FARPLANE_PRE_PUSH_REVIEW_DIR=<path>`: optionally override the output path;
+  it must remain under that ticket's `artifacts/review/` directory.
 
 ## Output
 
-Pre-push writes artifacts to `.farplane/reviews/pre-push-latest/`:
+Pre-push writes artifacts to
+`tickets/TASK-XXXX/artifacts/review/pre-push-latest/`:
 
 - `context.md`: deterministic checks, changed files, commits, and truncated diffs.
 - `context.md` also includes project maintainability standards and nearby
@@ -82,9 +85,10 @@ Pre-push writes artifacts to `.farplane/reviews/pre-push-latest/`:
 - `review.json`: structured review output.
 - `review.md`: human-readable summary.
 
-`.farplane/reviews/` is ignored because it can contain local diffs, private
-paths, and check logs. Untracked file names are listed, but untracked file
-contents are omitted unless explicitly enabled.
+Review artifacts stay with the ticket contract and can contain local diffs,
+private paths, and check logs; sanitize or omit sensitive material before
+committing. Untracked file names are listed, but untracked file contents are
+omitted unless explicitly enabled.
 
 The reviewer process uses an allowlisted environment instead of inheriting the
 full shell environment.

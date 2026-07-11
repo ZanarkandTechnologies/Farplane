@@ -1,15 +1,15 @@
 {
   "_template_metadata": {
     "template_id": "farplane-framework",
-    "template_version": "1.6.17",
+    "template_version": "1.7.0",
     "feature_refs": ["FEAT-0060"],
     "consumer_scope": "project",
     "applies_to": ["farplane/manifest.json"]
   },
   "schema": "farplane_project",
-  "spec_version": "1.6.17",
+  "spec_version": "1.7.0",
   "template_uses": {
-    "farplane-framework": "1.6.17"
+    "farplane-framework": "1.7.0"
   },
   "project": {
     "name": "TODO",
@@ -26,11 +26,9 @@
       "farplane/manifest.json",
       "farplane/harness.md",
       "farplane/goals.yaml",
-      "farplane/products.json",
-      "farplane/products/",
+      "farplane/metrics.yaml",
       "farplane/automations.toml",
       "farplane/bindings.yaml",
-      "farplane/hooks.json",
       ".agents/skills/README.md",
       "docs/bootstrap-brief.md",
       "docs/prd.md",
@@ -51,7 +49,6 @@
     ],
     "ignored": [
       ".farplane/README.md",
-      ".farplane/state/run-ledger.json",
       ".farplane/content/",
       ".farplane/metrics/daily/",
       ".farplane/project/ui/",
@@ -62,6 +59,7 @@
   },
   "optional": {
     "tracked": [
+      "farplane/hooks.json",
       "farplane/pm.json",
       ".githooks/README.md",
       ".githooks/pre-commit",
@@ -74,8 +72,6 @@
       "scripts/codex_review_agent.ts",
       "scripts/run_pre_push_review.sh"
     ],
-    "ignored": [
-      ".farplane/reviews/"
-    ]
+    "ignored": []
   }
 }

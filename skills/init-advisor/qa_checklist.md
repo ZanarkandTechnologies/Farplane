@@ -34,24 +34,33 @@ init_advisor_qa(project_root, init_mode, activation_requested?)
      commitments, non-tradeoffs, agent authority, and change rule.
    - Fail: the project can drift its thesis or commitments silently.
 
-4. `product_catalog`
-   - Pass: `farplane/products/<product>/product.md` names canonical product
-     loop identity, lane, KPI refs, gates, workflows, product-level goals,
-     current strategy, loop contract, product loop, and progress-entry shape,
-     while generated `farplane/products.json` exposes the machine/UI index.
-   - Fail: product direction is implicit or mixed into dynamic planning files.
+4. `capability_workflow_ownership`
+   - Pass: recurring artifact production is owned by an existing reusable
+     skill, a project-local `.agents/skills/<capability>/SKILL.md`, or an
+     explicit refinement ticket; `farplane/harness.md` references only the
+     stable capabilities the project depends on.
+   - Fail: project outputs depend on an undocumented workflow or a product
+     catalog/controller file.
 
-5. `products_to_local_skills`
-   - Pass: every active product definition either has a local
-     `farplane/products/<product>/skill.md` owner or an explicit refinement
-     ticket.
-   - Fail: product definitions exist but tickets have no callable workflow to invoke.
+5. `goals_and_capabilities_split`
+   - Pass: value direction, goal axes, and KPI IDs live in
+     `farplane/goals.yaml`; stable policy and capability refs live in
+     `farplane/harness.md`; executable work and proof live in tickets.
+   - Fail: a capability skill becomes a planning controller or duplicates
+     goals, ticket state, or worker policy.
+
+5a. `metric_contract_split`
+   - Pass: `farplane/metrics.yaml` owns provider-independent metric meaning,
+     every goal KPI ID resolves there, and `farplane/bindings.yaml` owns only
+     connector/provider refresh coordinates.
+   - Fail: metric meaning remains embedded in bindings or is duplicated across
+     goal, capability, and provider files.
 
 6. `goals_operating_model`
    - Pass: `farplane/goals.yaml` captures North Star, 3-month outcome, success
-     criteria, non-goals, decision boundaries, current milestone, holds, and a
-     fenced `goal-program` block with parseable goals, value function, axes,
-     projects, and milestones.
+     criteria, non-goals, decision boundaries, current milestone, holds, and
+     structured YAML for parseable goals, value function, axes, projects, and
+     milestones.
    - Fail: file existence is treated as enough when the operating model is
      stale, placeholder, or not grounded in the operator's current intent.
 
@@ -75,8 +84,8 @@ init_advisor_qa(project_root, init_mode, activation_requested?)
 9. `full_mode_readiness`
    - Pass: full mode audits `farplane/harness.md` for human thesis, static
      leverage commitments, non-tradeoffs, agent authority, and change rule; it
-     audits `docs/bootstrap-brief.md`, product definitions, generated product
-     indexes, and `farplane/goals.yaml` for team archetype, product outputs, North Star,
+     audits `docs/bootstrap-brief.md`, capability workflow ownership, and
+     `farplane/goals.yaml` for team archetype, recurring outputs, North Star,
      3-month outcome, success criteria, non-goals, and decision boundaries.
      Readiness state and missing answers are written to
      `docs/bootstrap-brief.md`.
@@ -94,8 +103,9 @@ init_advisor_qa(project_root, init_mode, activation_requested?)
      `goal-advisor` before there is a concrete milestone.
 
 11. `automation_source`
-   - Pass: `farplane/automations.toml` contains reviewable Pulse, Daily
-     Interval, and Weekly Interval full Codex automation configs that call
+   - Pass: `farplane/automations.toml` contains one reviewable Work Pulse
+     heartbeat plus separate Feed Scout, Daily BAU, Weekly BAU,
+     self-improvement, and optional cron configs that call
      generic skills directly; it does not require `farplane/steer.config.toml`,
      `.farplane/state/steer-scheduler.json`, or `latest.md` as canonical
      interval state.
@@ -103,13 +113,12 @@ init_advisor_qa(project_root, init_mode, activation_requested?)
      retired Steer thread is required.
 
 12. `pulse_selection`
-   - Pass: Pulse selects at most one bounded action per beat, prefers local
-     ready/unblocked tickets, reads `farplane/harness.md`, product definitions,
-     and generated product indexes for product refill work, defines refill tickets with
-     project type, baseline/comparison, expected artifact, and proof signal, and
-     avoids a separate ticket-drainer automation.
-   - Fail: ticket selection is split into another automation or refill work has
-     no product/proof shape.
+   - Pass: Pulse dispatches executable tickets up to the worker limit, makes
+     due original-ticket check-ins eligible, and calls the BAU-only next-wave
+     planner when refill is allowed; Feed Scout, Interval maintenance, and
+     Dogfood remain separate ticket sources.
+   - Fail: selection, execution, or check-in dispatch is split into another
+     automation, or Pulse refill invents self-improvement work.
 
 13. `live_automation_activation`
    - Pass: when activation was requested, live Codex automation records match

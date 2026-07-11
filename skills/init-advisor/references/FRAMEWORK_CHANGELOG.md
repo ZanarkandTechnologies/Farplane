@@ -3,7 +3,7 @@ title: Farplane Framework Changelog
 owner: init-advisor
 status: active
 kind: framework-changelog
-updated_at: 2026-07-02
+updated_at: 2026-07-11
 ---
 
 # Farplane Framework Changelog
@@ -16,6 +16,50 @@ or project-level documentation guidance.
 ```text
 framework_bump(old_version, new_version, project_root)
   -> manifest_delta + migration_steps + proof_commands
+```
+
+## 1.7.0
+
+Date: 2026-07-11
+
+Primary change: adopt the v-next one-board project contract. Product files and
+product-scoped controllers are retired; reusable artifact workflows remain
+project-local capability skills. `farplane/metrics.yaml` owns metric meaning,
+while `farplane/bindings.yaml.metric_bindings` owns refresh mechanics with
+exact metric-ID parity. QA and review evidence is ticket-local, and clean
+projects no longer create a generic run ledger or review directory.
+
+Changed surfaces:
+
+- `MANIFEST_TEMPLATE.json` requires `farplane/metrics.yaml`, keeps
+  `farplane/hooks.json` optional, and removes product and generic review paths.
+- `bootstrap.sh` creates one Work Pulse automation contract plus separate cron
+  sources and no product tree, product registry, run ledger, or review bucket.
+- Core snapshots and validators load definitions from `metrics.yaml` and
+  refresh recipes from `bindings.metric_bindings`; no legacy fallback remains.
+- Ticket QA and completion review write to
+  `tickets/TASK-XXXX/artifacts/{qa,review}/`.
+
+Migration steps:
+
+1. Remove active readers of `farplane/products/` and `farplane/products.json`,
+   then delete those files; keep useful workflows as capability skills.
+2. Create `farplane/metrics.yaml`, move semantic metric fields there, and keep
+   only `refresh` under matching `bindings.metric_bindings` IDs.
+3. Remove `.farplane/reviews/` and `.farplane/state/run-ledger.json`; move any
+   durable QA/review receipts to their owning tickets.
+4. Bump `farplane/manifest.json` to `1.7.0`, regenerate the project snapshot
+   and graph/registry projections, and validate a clean bootstrap fixture.
+
+Proof commands:
+
+```bash
+python3 bin/validators/check_farplane_project_files.py --root .
+python3 -m unittest bin.tests.test_farplane_project_snapshot bin.tests.test_farplane_primitive_metrics
+python3 skills/pulse-update/scripts/test_list_pulse_board.py
+python3 docs/features/validate_features.py
+python3 skills/skill-maintenance/scripts/check_skills.py
+python3 bin/validators/check_doc_refs.py
 ```
 
 ## 1.6.17

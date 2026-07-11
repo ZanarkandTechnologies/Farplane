@@ -31,8 +31,8 @@ goals:
             target: 1
             direction: above
         interpretation: >-
-          TODO explain how to read this KPI for the goal. The metric recipe in
-          bindings.yaml owns how to fetch and render it.
+          TODO explain how to read this KPI for the goal. metrics.yaml owns
+          its meaning and display; bindings.yaml owns only its refresh recipe.
   quality_and_proof:
     question: How do we know the project is doing good work?
     evidence_hints:

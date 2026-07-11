@@ -4,7 +4,7 @@ status: draft
 created_at: TODO
 updated_at: TODO
 template_id: project-harness
-template_version: "0.3.5"
+template_version: "0.3.6"
 feature_refs:
   - FEAT-0007
 project_id: TODO
@@ -12,9 +12,8 @@ automation_status: preview
 framework_template_version: "0.3.0"
 canonical_targets:
   - farplane/harness.md
-  - farplane/products/<product>/product.md
-  - farplane/products.json
   - farplane/goals.yaml
+  - farplane/metrics.yaml
   - farplane/automations.toml
   - farplane/bindings.yaml
   - farplane/hooks.json
@@ -32,15 +31,14 @@ Farplane files:
 - `farplane/harness.md` owns the static human charter: mission, human thesis,
   operating principles, non-tradeoffs, static leverage commitments, agent
   authority, allocation guardrails, and change rule.
-- `farplane/products/<product>/product.md` owns product-loop strategy,
-  work-lane policy, KPI refs, and artifact workflows.
-- `farplane/products.json` is the generated machine/UI product index.
 - `farplane/goals.yaml` owns dynamic strategy, KPIs, current bets, milestone, and
   holds.
+- `farplane/metrics.yaml` owns provider-independent metric meaning.
 - `farplane/automations.toml` owns reviewable full Codex automation config.
-- `farplane/bindings.yaml` owns non-secret project coordinates.
+- `farplane/bindings.yaml` owns non-secret project/provider coordinates and
+  refresh bindings.
 - `farplane/hooks.json` owns declarative project hook config.
-- `.agents/skills/` owns project-local product workflow skills.
+- `.agents/skills/` owns project-local capability workflows.
 
 ## Static Charter Delta
 
@@ -73,7 +71,7 @@ TODO: durable human thesis the agents must preserve.
 
 ## Agent Authority
 
-- Agents may evolve products, audiences, tickets, and goals through
+- Agents may evolve capabilities, audiences, tickets, and goals through
   evidence-backed deltas.
 - Agents may challenge the static thesis with evidence.
 - Agents may propose a charter delta in a dated interval report.
@@ -91,43 +89,26 @@ Interval reports may propose the delta, but cannot apply it silently.
 | --- | ---: | ---: | --- |
 | TODO | TODO | TODO | TODO |
 
-## Product Catalog Delta
+## Capability Skill Plan
 
-Target: `farplane/products/<product>/product.md` and regenerated
-`farplane/products.json`
+Targets: stable capability refs in `farplane/harness.md`, reusable `skills/*`,
+project-local `.agents/skills/<capability>/SKILL.md`, or a refinement ticket.
 
-Use this section for product identity, current strategy, work-lane policy,
-artifact workflows, and constraints. Do not put planning algorithms or
-operational workflow steps in product `product.md`; those belong in skills and
-automation prompts.
-
-| ID | Product | Audience | Output | Reward |
-| --- | --- | --- | --- | --- |
-| TODO | TODO | TODO | TODO | TODO |
-
-| Lane | Default Weight | Purpose |
-| --- | ---: | --- |
-| TODO | TODO | TODO |
-
-## Product Skill Plan
-
-Target: `.agents/skills/<product-skill>/SKILL.md` or a refinement ticket.
-
-Map existing reusable skills before creating local product skill stubs.
+Map existing reusable skills before creating local capability skill stubs.
 
 ```text
-derive_local_product_skills(products, existing_skills, goals, constraints)
-  -> product_skill_reuse_map
-   + local_product_skill_stubs?
-   + product_skill_refinement_ticket?
+derive_local_capability_skills(recurring_outputs, existing_skills, goals, constraints)
+  -> capability_skill_reuse_map
+   + local_capability_skill_stubs?
+   + capability_skill_refinement_ticket?
    + pm_activation_gate
 ```
 
-| Product | Existing Skill Route | Local Skill Path | Status | Next Ticket |
+| Recurring Output | Existing Skill Route | Local Skill Path | Status | Next Ticket |
 | --- | --- | --- | --- | --- |
 | TODO | TODO | `.agents/skills/TODO/SKILL.md` | reuse / stub / refine_ticket / defer | TODO |
 
-Promotion rule: keep product skills under `.agents/skills/` until repeated
+Promotion rule: keep project-specific capability skills under `.agents/skills/` until repeated
 runs prove the workflow is reusable across projects.
 
 ## Strategy Delta
@@ -148,10 +129,12 @@ is not itself the charter.
 | --- | --- | --- | --- |
 | TODO | TODO | TODO | TODO |
 
-## Automation And Binding Delta
+## Metric, Automation, And Binding Delta
 
-Targets: `farplane/automations.toml`, `farplane/bindings.yaml`
+Targets: `farplane/metrics.yaml`, `farplane/automations.toml`,
+`farplane/bindings.yaml`
 
+- `metric_definition_delta:`
 - `automation_delta:`
 - `safe_binding_delta:`
 - `activation_status:` preview / needs_operator_setup / ready_for_automation_advisor
@@ -168,7 +151,7 @@ Targets: `farplane/automations.toml`, `farplane/bindings.yaml`
 ## Assumptions
 
 - `inferred_values:`
-- `inferred_products:`
+- `inferred_capabilities:`
 - `inferred_goals:`
 - `unverified_domain_claims:`
 - `why_research_was_or_was_not_needed:`

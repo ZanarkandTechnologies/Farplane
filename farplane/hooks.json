@@ -1,22 +1,4 @@
 {
   "version": 1,
-  "hooks": {
-    "file_growth": {
-      "enabled": false,
-      "model": "gpt-5.4-mini",
-      "timeout_seconds": 90,
-      "rules": [
-        {
-          "name": "project-memory",
-          "patterns": [
-            "memory.mb",
-            "docs/MEMORY.md"
-          ],
-          "max_lines": 500,
-          "target_lines": 180,
-          "action": "summarize_in_place"
-        }
-      ]
-    }
-  }
+  "hooks": {}
 }

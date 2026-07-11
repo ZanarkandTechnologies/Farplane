@@ -22,8 +22,13 @@ type ReviewResult = {
 };
 
 const root = resolve(process.cwd());
-const contextPath = resolve(process.argv[2] ?? ".farplane/reviews/latest/context.md");
-const outputPath = resolve(process.argv[3] ?? ".farplane/reviews/latest/review.json");
+const contextArg = process.argv[2];
+const outputArg = process.argv[3];
+if (!contextArg || !outputArg) {
+  throw new Error("Usage: codex_review_agent.ts <ticket-review-context.md> <ticket-review-output.json>");
+}
+const contextPath = resolve(contextArg);
+const outputPath = resolve(outputArg);
 const markdownPath = outputPath.replace(/\.json$/u, ".md");
 const strict = process.env.STRICT_AGENT_REVIEW === "1";
 const model = process.env.CODEX_REVIEW_MODEL;

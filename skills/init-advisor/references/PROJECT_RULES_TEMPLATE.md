@@ -117,7 +117,8 @@ This file defines the project-specific technical rules, tech stack, and conventi
 - **Required setup for Node projects**:
   - dev dependencies: `@openai/codex-sdk`, `tsx`
   - scripts: `review:agent`, `review:prepush`
-- **Review artifacts**: `.farplane/reviews/` (gitignored)
+- **Review artifacts**: `tickets/TASK-XXXX/artifacts/review/` under the ticket
+  whose change and proof are being judged
 - **When to route to canonical reviewer**: material ticket completion,
   TAS-gated review, evidence-bundle review, prompt/skill/eval changes, or
   completion receipts.

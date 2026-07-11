@@ -1,5 +1,5 @@
 ---
-kind: local-product-skills-index
+kind: local-capability-skills-index
 project: TODO
 created_at: TODO
 updated_at: TODO
@@ -7,14 +7,14 @@ framework_template_version: "0.1.0"
 owner: harness
 ---
 
-# Local Product Skills
+# Local Capability Skills
 
-Project-local product skills live here.
+Project-local capability skills live here.
 
-Use `.agents/skills/<product-skill>/SKILL.md` for workflows that are specific
-to this project or company. Promote a local product skill to root `skills/`
+Use `.agents/skills/<capability>/SKILL.md` for workflows that are specific to
+this project or company. Promote a local capability skill to root `skills/`
 only after repeated runs show that the workflow is reusable across projects.
 
-Local product skills should be referenced from tickets, interval reports, or
+Local capability skills should be referenced from tickets, reports, or
 automation prompts by path until they are promoted into the reusable skill
 registry.

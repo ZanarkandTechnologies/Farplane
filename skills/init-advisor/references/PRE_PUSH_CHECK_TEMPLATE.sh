@@ -17,33 +17,36 @@ STRICT_ADVISORY="${PRE_PUSH_STRICT_ADVISORY:-0}"
 warn_tmp="$(mktemp)"
 block_tmp="$(mktemp)"
 utility_tmp="$(mktemp)"
-reviews_root="$ROOT/.farplane/reviews"
-review_dir="${FARPLANE_PRE_PUSH_REVIEW_DIR:-$reviews_root/pre-push-latest}"
-case "$review_dir" in
-  /*) ;;
-  *) review_dir="$ROOT/$review_dir" ;;
-esac
-mkdir -p "$reviews_root" "$(dirname "$review_dir")"
-reviews_root="$(cd "$reviews_root" && pwd -P)"
-review_dir="$(cd "$(dirname "$review_dir")" && pwd -P)/$(basename "$review_dir")"
-case "$review_dir/" in
-  "$reviews_root"/*) ;;
-  *)
-    echo "Refuse unsafe FARPLANE_PRE_PUSH_REVIEW_DIR outside $reviews_root: $review_dir" >&2
-    exit 2
-    ;;
-esac
-if [ "$review_dir" = "$reviews_root" ]; then
-  echo "Refuse unsafe FARPLANE_PRE_PUSH_REVIEW_DIR equal to reviews root: $review_dir" >&2
-  exit 2
+ticket_id="${FARPLANE_REVIEW_TICKET_ID:-}"
+review_dir=""
+log_dir="$(mktemp -d)"
+if [ -n "$ticket_id" ]; then
+  case "$ticket_id" in
+    TASK-[0-9][0-9][0-9][0-9]) ;;
+    *) echo "Invalid FARPLANE_REVIEW_TICKET_ID: $ticket_id" >&2; exit 2 ;;
+  esac
+  review_root="$ROOT/tickets/$ticket_id/artifacts/review"
+  review_dir="${FARPLANE_PRE_PUSH_REVIEW_DIR:-$review_root/pre-push-latest}"
+  case "$review_dir" in
+    /*) ;;
+    *) review_dir="$ROOT/$review_dir" ;;
+  esac
+  mkdir -p "$review_root" "$(dirname "$review_dir")"
+  review_root="$(cd "$review_root" && pwd -P)"
+  review_dir="$(cd "$(dirname "$review_dir")" && pwd -P)/$(basename "$review_dir")"
+  case "$review_dir/" in
+    "$review_root"/*) ;;
+    *) echo "Refuse review artifacts outside $review_root: $review_dir" >&2; exit 2 ;;
+  esac
+  log_dir="$review_dir/checks"
 fi
-log_dir="$review_dir/checks"
 cleanup() {
   rm -f "$warn_tmp" "$block_tmp" "$utility_tmp"
+  if [ -z "$review_dir" ]; then rm -rf "$log_dir"; fi
 }
 trap cleanup EXIT
 
-rm -rf "$review_dir"
+if [ -n "$review_dir" ]; then rm -rf "$review_dir"; fi
 mkdir -p "$log_dir"
 
 is_excluded_path() {
@@ -168,10 +171,16 @@ run_check "tests" "$TEST_CMD"
 run_check "build" "$BUILD_CMD"
 run_check "desloppify" "$DESLOPPIFY_CMD"
 
-if [ "${STRICT_AGENT_REVIEW:-0}" = "1" ]; then
-  (cd "$ROOT" && env FARPLANE_PRE_PUSH_REVIEW_DIR="$review_dir" bash scripts/run_pre_push_review.sh)
-elif [ "${FARPLANE_SKIP_AGENT_REVIEW:-0}" = "1" ]; then
+if [ "${FARPLANE_SKIP_AGENT_REVIEW:-0}" = "1" ]; then
   echo "Skip Codex agent review because FARPLANE_SKIP_AGENT_REVIEW=1."
+elif [ -z "$ticket_id" ]; then
+  if [ "${STRICT_AGENT_REVIEW:-0}" = "1" ]; then
+    echo "FARPLANE_REVIEW_TICKET_ID is required for strict review so evidence has a ticket owner." >&2
+    exit 2
+  fi
+  echo "Skip advisory Codex review: set FARPLANE_REVIEW_TICKET_ID=TASK-XXXX to store ticket-local evidence."
+elif [ "${STRICT_AGENT_REVIEW:-0}" = "1" ]; then
+  (cd "$ROOT" && env FARPLANE_PRE_PUSH_REVIEW_DIR="$review_dir" bash scripts/run_pre_push_review.sh)
 else
   run_advisory "codex agent review" env FARPLANE_PRE_PUSH_REVIEW_DIR="$review_dir" bash scripts/run_pre_push_review.sh
 fi

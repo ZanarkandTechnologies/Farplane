@@ -9,7 +9,7 @@ High-frequency build actions stay here; rationale and policy stay in AGENTS.md a
 
 ---
 
-0a. Read the active ticket in `@tickets/*.md`, preferring `status: building`.
+0a. Read the active ticket in `@tickets/*.md`, preferring `status: active`.
 0b. Read `@docs/MEMORY.md`, `@docs/TROUBLES.md`, and `@docs/LESSONS.md` if present.
 0c. If UI is in scope, read `@docs/TASTE.md`.
 0d. Search the code before assuming missing work.
@@ -35,6 +35,6 @@ finish implementation, validate it, write back into the ticket, then move board 
   - `docs/TROUBLES.md`
   - `docs/LESSONS.md`
 - if new scope is discovered, create a linked follow-up ticket in `tickets/`
-- if blocked by execution, keep `status: building` and record blockers
-- if blocked by planning ambiguity, set `status: review`
-- when implementation, QA, evidence, and human confirmation are complete, set `phase: documenting`, finish durable writeback, then archive/delete the ticket or set `status: done`
+- if blocked by execution, set `status: blocked`, clear `claimed_by`, and record the blocker in `progress.md`
+- if blocked by planning ambiguity, set `status: awaiting_review` and clear `claimed_by`
+- when implementation, QA, evidence, and human confirmation are complete, finish durable writeback, set `status: done`, clear `claimed_by`, and archive the ticket

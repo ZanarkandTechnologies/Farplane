@@ -19,8 +19,7 @@ The canonical project state is split across standard Farplane files:
 ```text
 harness_creator(input)
   -> farplane/harness.md static-charter delta
-   + farplane/products/<product>/product.md product-loop delta
-   + regenerated farplane/products.json
+   + farplane/harness.md stable capability-ref delta
    + farplane/goals.yaml strategy delta
    + optional project-harness.md transient worksheet
 ```
@@ -510,13 +509,7 @@ proof before those deltas are accepted:
 
 ```text
 farplane/harness.md :=
-  static human charter sections
-
-farplane/products/<product>/product.md :=
-  product-loop strategy, KPI refs, artifact workflows, and work-lane policy
-
-farplane/products.json :=
-  generated machine/UI product index
+  static human charter sections + stable capability refs
 
 farplane/goals.yaml :=
   strategy, KPIs, current bets, milestone, and holds

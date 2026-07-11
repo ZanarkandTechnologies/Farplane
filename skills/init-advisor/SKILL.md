@@ -18,13 +18,12 @@ Farplane project by default: it gets tracked `farplane/` config, ignored
 `.farplane/` runtime state, ignored active ticket work with tracked ticket
 templates, docs, QA guidance, and optional app-stack scaffolding.
 
-The skill's completion point is initialization, not full product discovery. It
-scaffolds `farplane/harness.md` as the static human charter,
-`farplane/products/<product>/product.md` as the canonical product-loop
-definition surface, and generated `farplane/products.json` as the machine/UI
-product index. In `full` mode,
-route the operating-model setup through `harness-creator` after the substrate
-exists. `harness-creator` owns the real-world-equivalent
+The skill's completion point is initialization, not full operating-model
+discovery. It scaffolds `farplane/harness.md` as the static human charter and
+capability-reference surface, and `farplane/goals.yaml` as the value-direction
+and KPI contract. In `full` mode, route the operating-model setup through
+`harness-creator` after the substrate exists. `harness-creator` owns the
+real-world-equivalent
 grounding and composes downstream advisors such as `horizon-advisor`,
 `harness-advisor`, `skill-creator`, and `goal-advisor` when they are needed.
 Init advisor should not separately orchestrate those advisor calls.
@@ -57,8 +56,8 @@ init_advisor(project_root?, project_idea?, repo_shape?, stack_profile?, init_mod
    + static_harness_charter
    + operating_model_handoff_or_result?
    + goals_delta?
-   + product_loop_definition_stub
-   + generated_products_index
+   + metric_contract
+   + capability_workflow_handoff?
    + optional_code_scaffold?
    + ticket_system
    + qa_surface
@@ -75,7 +74,7 @@ fails: creates only code scaffolding with no Farplane project config; treats PRD
 ## Phase Boundary
 
 This skill follows Tier 0 phases inline. Use compact grounding before
-finalizing project archetype, static charter, product definitions, or goals; use deeper
+finalizing project archetype, static charter, capability workflows, or goals; use deeper
 research only when stack commands, framework conventions, or market assumptions
 may be stale. PRD authoring is a downstream ticketed handoff, not init
 completion.
@@ -86,7 +85,7 @@ completion.
   readiness gaps into `docs/bootstrap-brief.md`, and report
   `substrate_complete`.
 - `full`: after substrate setup, call `harness-creator` for the operating-model
-  pass. It owns the static charter, products, goals, feedback loops, missing
+  pass. It owns the static charter, capability workflows, goals, feedback loops, missing
   systems, current milestone, and any later Goal Advisor handoff.
 
 `human_intake` controls how init/migration fills human-meaning files:
@@ -99,7 +98,7 @@ completion.
   operator-owned params have been answered or recorded as blocked.
 
 Use destination skill signatures as the question inventory. Route static
-charter, product-loop definitions, feedback loops, missing systems, and current
+charter, capability workflow references, feedback loops, missing systems, and current
 milestone shape to `harness-creator`; route North Star, value function, KPIs,
 holds, and milestone deltas to `horizon-advisor`. Escalate to
 `deep-interview --quick` only when direct signature questions would produce
@@ -115,14 +114,14 @@ ticket-backed Goal Packet.
 
 ```text
 setup_project_operating_model(bootstrap_brief, project_context,
-                              existing_harness?, existing_products?,
+                              existing_harness?, existing_capability_skills?,
                               existing_goals?, human_intake?)
   -> readiness_status
    + human_intake_decision
    + first_missing_question?
    + deep_interview_quick_handoff?
    + harness_delta?
-   + products_delta?
+   + capability_skill_delta?
    + goals_delta?
    + current_milestone_candidate?
    + goal_advisor_handoff?
@@ -158,6 +157,9 @@ setup_project_operating_model(bootstrap_brief, project_context,
   - [ ] Use [AUTOMATION_TEMPLATE.toml](references/AUTOMATION_TEMPLATE.toml) as
         the `farplane/automations.toml` source; do not duplicate automation
         config rules in this skill.
+  - [ ] Create or preserve `farplane/metrics.yaml` as the provider-independent
+        metric-definition contract; keep connector/provider refresh mechanics
+        in `farplane/bindings.yaml`.
   - [ ] Do not create legacy Steer scheduler files such as
         `farplane/steer.config.toml` or
         `.farplane/state/steer-scheduler.json`.
@@ -170,7 +172,7 @@ setup_project_operating_model(bootstrap_brief, project_context,
   - [ ] In `substrate` mode, record missing operating-model answers in
         `docs/bootstrap-brief.md` and report them as the next handoff.
   - [ ] In `full` mode, call `harness-creator` after substrate setup when the
-        static charter, product definitions, generated product indexes, goals,
+        static charter, capability workflows, goals,
         feedback loops, missing systems, or current milestone need
         project-specific setup.
   - [ ] Let `harness-creator` decide whether to route to `horizon-advisor`,
@@ -229,15 +231,6 @@ setup_project_operating_model(bootstrap_brief, project_context,
   - copied to `docs/features/README.md` for feature-spec guidance.
 - [references/SYSTEMS_README_TEMPLATE.md](references/SYSTEMS_README_TEMPLATE.md)
   - copied to `docs/systems/README.md` for system/product grouping guidance.
-- [references/FARPLANE_PRODUCT_TEMPLATE.md](references/FARPLANE_PRODUCT_TEMPLATE.md)
-  - copied to `farplane/products/core/product.md` as the starter canonical
-    product-loop definition.
-- [references/FARPLANE_PRODUCT_SKILL_TEMPLATE.md](references/FARPLANE_PRODUCT_SKILL_TEMPLATE.md)
-  - copied to `farplane/products/core/skill.md` as the starter project-local
-    product workflow.
-- [references/FARPLANE_PRODUCTS_JSON_TEMPLATE.json](references/FARPLANE_PRODUCTS_JSON_TEMPLATE.json)
-  - copied to `farplane/products.json` as the generated machine/UI product
-    index.
 - [references/AUTOMATION_TEMPLATE.toml](references/AUTOMATION_TEMPLATE.toml) -
   copied to `farplane/automations.toml` for reviewable Codex automation
   configs.
@@ -251,7 +244,7 @@ setup_project_operating_model(bootstrap_brief, project_context,
 - [references/qa/](references/qa/) - copied when creating the QA cookbook
   surface.
 - [../harness-creator/SKILL.md](../harness-creator/SKILL.md) - call in full
-  mode after substrate setup when static charter, products, goals, feedback
+  mode after substrate setup when static charter, capability workflows, goals, feedback
   loops, missing systems, automation/binding deltas, or the current milestone
   need project-specific setup.
 - [../../docs/farplane-framework/project-files.md](../../docs/farplane-framework/project-files.md)

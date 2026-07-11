@@ -268,6 +268,9 @@ What Core owns:
 - `farplane hooks install`: refreshes the hook install through Core.
 - `farplane hooks doctor`: verifies the Core-owned hook links and rendered
   telemetry config.
+- `farplane notify status|enable|disable`: inspects or toggles the Farplane
+  turn-complete notify script in the rendered Codex config, preserving desktop
+  notify wrappers when present.
 - `farplane run -- <command>`: runs a command through the current project's
   Doppler secret environment.
 - `farplane metrics primitives --project-root /path/to/project --date YYYY-MM-DD --json`:
@@ -280,8 +283,6 @@ What Core owns:
 - `farplane ui link /path/to/Farplane-UI`: stores the UI checkout in
   `~/.farplane/farplane-cli.json`.
 - `farplane ui start`: starts the linked UI checkout.
-- `farplane config doctor --json`: checks runtime secret source hygiene without
-  printing secret values.
 - `farplane office ...`, `farplane team ...`, `farplane agent ...`,
   `farplane onboarding`, `farplane status`, and `farplane whoami`: delegate to
   the linked Farplane-UI module CLI while that implementation still lives there.

@@ -112,19 +112,22 @@ copy_file "${REF_DIR}/FARPLANE_README_TEMPLATE.md" "${TARGET_DIR}/farplane/READM
 copy_file "${REF_DIR}/MANIFEST_TEMPLATE.json" "${TARGET_DIR}/farplane/manifest.json"
 copy_file "${REF_DIR}/HARNESS_TEMPLATE.md" "${TARGET_DIR}/farplane/harness.md"
 copy_file "${REF_DIR}/GOALS_TEMPLATE.yaml" "${TARGET_DIR}/farplane/goals.yaml"
-mkdir -p "${TARGET_DIR}/farplane/products/core"
-copy_file "${REF_DIR}/FARPLANE_PRODUCT_TEMPLATE.md" "${TARGET_DIR}/farplane/products/core/product.md"
-copy_file "${REF_DIR}/FARPLANE_PRODUCT_SKILL_TEMPLATE.md" "${TARGET_DIR}/farplane/products/core/skill.md"
-copy_file "${REF_DIR}/FARPLANE_PRODUCTS_JSON_TEMPLATE.json" "${TARGET_DIR}/farplane/products.json"
+copy_file "${REF_DIR}/METRICS_TEMPLATE.yaml" "${TARGET_DIR}/farplane/metrics.yaml"
 copy_file "${REF_DIR}/AUTOMATION_TEMPLATE.toml" "${TARGET_DIR}/farplane/automations.toml"
 copy_file "${REF_DIR}/BINDINGS_TEMPLATE.yaml" "${TARGET_DIR}/farplane/bindings.yaml"
 copy_file "${REF_DIR}/HOOKS_TEMPLATE.json" "${TARGET_DIR}/farplane/hooks.json"
 copy_file "${REF_DIR}/LOCAL_SKILLS_README_TEMPLATE.md" "${TARGET_DIR}/.agents/skills/README.md"
 copy_file "${REF_DIR}/PM_TEMPLATE.json" "${TARGET_DIR}/farplane/pm.json"
 
-mkdir -p "${TARGET_DIR}/.farplane/state" "${TARGET_DIR}/.farplane/reports" "${TARGET_DIR}/.farplane/evals/runs" "${TARGET_DIR}/.farplane/logs" "${TARGET_DIR}/.farplane/crm/reports"
-write_file_if_missing "${TARGET_DIR}/.farplane/README.md" "# .farplane\n\nIgnored local runtime state for this project.\n\nUse this folder for generated reports, run ledgers, eval outputs, logs, and other continuation state that should not become tracked project config.\n\nTracked framework config belongs in farplane/.\n"
-write_file_if_missing "${TARGET_DIR}/.farplane/state/run-ledger.json" "{\n  \"runs\": []\n}\n"
+mkdir -p \
+  "${TARGET_DIR}/.farplane/content" \
+  "${TARGET_DIR}/.farplane/metrics/daily" \
+  "${TARGET_DIR}/.farplane/project/ui" \
+  "${TARGET_DIR}/.farplane/reports" \
+  "${TARGET_DIR}/.farplane/evals/runs" \
+  "${TARGET_DIR}/.farplane/logs" \
+  "${TARGET_DIR}/.farplane/crm/reports"
+write_file_if_missing "${TARGET_DIR}/.farplane/README.md" "# .farplane\n\nIgnored generated and tool-owned state for this project.\n\nUse owner-named paths for reports, metric observations, eval outputs, content, logs, and tool-specific continuation state. Do not add a generic runtime, evidence, or review bucket.\n\nTracked framework config belongs in farplane/.\n"
 copy_file "${REF_DIR}/CRM_README_TEMPLATE.md" "${TARGET_DIR}/.farplane/crm/README.md"
 write_file_if_missing "${TARGET_DIR}/.farplane/crm/index.jsonl" ""
 
@@ -174,17 +177,17 @@ echo "  - In PROJECT_RULES.md, document one canonical app-only run path and one 
 echo "  - Fill in ARCHITECTURE.md so the repo has one top-level system map."
 echo "  - Review farplane/manifest.json for the current Farplane project spec version and expected surfaces."
 echo "  - Fill in farplane/harness.md and farplane/goals.yaml, or run harness-creator as the internal operating-program phase."
-echo "  - Fill in farplane/products/core/product.md with product strategy, loop contract, and progress-entry shape."
-echo "  - Fill in farplane/bindings.yaml with non-secret project IDs, URLs, labels, and aliases for skills."
-echo "  - Fill in farplane/automations.toml with the full Pulse and Interval Codex automation configs."
+echo "  - Fill in farplane/metrics.yaml with canonical metric meaning and display fields."
+echo "  - Fill in farplane/bindings.yaml with non-secret project IDs, connector coordinates, and metric refresh recipes."
+echo "  - Fill in farplane/automations.toml with one Work Pulse heartbeat plus separate Feed Scout, BAU review, self-improvement, and optional cron records."
 echo "  - Keep skills generic and parameterized; configure project paths, cadence, schedule, thread IDs, and exact prompts in farplane/automations.toml."
-echo "  - Use .agents/skills/ for project-local product skills; promote only stable cross-project workflows to root skills/."
+echo "  - Use .agents/skills/ for project-local capability skills; promote only stable cross-project workflows to root skills/."
 echo "  - Use horizon-advisor to shape project goals when goals are missing or weak."
 echo "  - Use goal-advisor to compile the first executable frontier after goals are concrete."
-echo "  - Run automation-advisor when you want to activate live Codex Pulse and Interval automations; bootstrap only creates the files."
-echo "  - Fill in farplane/hooks.json only with declarative hook thresholds and enabled flags."
+echo "  - Run automation-advisor when you want to activate the live Work Pulse and scheduled automations; bootstrap only creates the files."
+echo "  - Add farplane/hooks.json entries only for installed deterministic hooks; file-length warnings belong in rules/git-review-gates.toml."
 echo "  - Fill in farplane/pm.json with PM-visible chat and automation thread IDs so the UI groups them under one employee."
-echo "  - Use .farplane/ only for ignored local runtime state such as reports, run ledgers, eval outputs, and logs."
+echo "  - Use owner-named .farplane/ paths for ignored reports, metric observations, eval outputs, content, logs, and tool-specific state; do not add generic runtime, evidence, or review buckets."
 echo "  - Use .farplane/crm/reports/ for local customer research reports and rebuild .farplane/crm/index.jsonl from report frontmatter."
 echo "  - Start by refining docs/bootstrap-brief.md with a deep-interview-quality intake before locking stack or topology decisions."
 echo "  - Fill the bootstrap brief's agent-experience section so the repo knows how agents should reach, inspect, and verify important app states."

@@ -2,29 +2,30 @@
 set -euo pipefail
 
 ROOT="$(git rev-parse --show-toplevel)"
-reviews_root="$ROOT/.farplane/reviews"
-review_dir="${FARPLANE_PRE_PUSH_REVIEW_DIR:-$reviews_root/pre-push-latest}"
+ticket_id="${FARPLANE_REVIEW_TICKET_ID:-}"
+case "$ticket_id" in
+  TASK-[0-9][0-9][0-9][0-9]) ;;
+  *) echo "Set FARPLANE_REVIEW_TICKET_ID=TASK-XXXX so review evidence has a ticket owner." >&2; exit 2 ;;
+esac
+review_root="$ROOT/tickets/$ticket_id/artifacts/review"
+review_dir="${FARPLANE_PRE_PUSH_REVIEW_DIR:-$review_root/pre-push-latest}"
 
 case "$review_dir" in
   /*) ;;
   *) review_dir="$ROOT/$review_dir" ;;
 esac
 
-mkdir -p "$reviews_root" "$(dirname "$review_dir")"
-reviews_root="$(cd "$reviews_root" && pwd -P)"
+mkdir -p "$review_root" "$(dirname "$review_dir")"
+review_root="$(cd "$review_root" && pwd -P)"
 review_dir="$(cd "$(dirname "$review_dir")" && pwd -P)/$(basename "$review_dir")"
 
 case "$review_dir/" in
-  "$reviews_root"/*) ;;
+  "$review_root"/*) ;;
   *)
-    echo "Refuse unsafe FARPLANE_PRE_PUSH_REVIEW_DIR outside $reviews_root: $review_dir" >&2
+    echo "Refuse review artifacts outside $review_root: $review_dir" >&2
     exit 2
     ;;
 esac
-if [ "$review_dir" = "$reviews_root" ]; then
-  echo "Refuse unsafe FARPLANE_PRE_PUSH_REVIEW_DIR equal to reviews root: $review_dir" >&2
-  exit 2
-fi
 
 mkdir -p "$review_dir/checks"
 

@@ -17,11 +17,11 @@ human-approved harness delta when the project needs richer mission, thesis,
 values, non-tradeoffs, leverage commitments, allocation guardrails, authority,
 or change rules.
 
-Dynamic product-loop direction belongs in
-`farplane/products/<product>/product.md`; generated `farplane/products.json`
-is the machine/UI index. Current strategy belongs in `farplane/goals.yaml`.
-Recurring prompt configuration belongs in `farplane/automations.toml`.
-Operational logic belongs in skills.
+Current value direction and KPI IDs belong in `farplane/goals.yaml`. Stable
+capability references may live here, but recurring workflow logic belongs in
+reusable or project-local skills. Recurring prompt configuration belongs in
+`farplane/automations.toml`; executable commitments and proof belong in
+tickets.
 
 ## Mission
 
@@ -30,7 +30,7 @@ TODO: one sentence naming why this project exists.
 ## Human Thesis
 
 TODO: one durable sentence or paragraph that names the human idea the agents
-must preserve while products and goals evolve.
+must preserve while capabilities and goals evolve.
 
 ## Operating Principles
 
@@ -54,7 +54,7 @@ must preserve while products and goals evolve.
 
 ## Agent Authority
 
-- Agents may evolve products, audiences, tickets, and goals through
+- Agents may evolve capabilities, audiences, tickets, and goals through
   evidence-backed deltas.
 - Agents may challenge the static thesis with evidence.
 - Agents may propose a charter delta in a dated interval report.

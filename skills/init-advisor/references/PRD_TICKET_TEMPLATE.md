@@ -1,21 +1,10 @@
 ---
 ticket_id: TASK-0001
 title: Draft initial PRD
-phase: planning
-status: review
-owner: human
-claimed_by:
+status: awaiting_review
 priority: high
-depends_on: []
-blocked_by: []
-ready: false
-approval_required: true
-requires_qa: false
-requires_demo: false
 created_at: TODO
 updated_at: TODO
-next_action: run deep-interview for the project idea, then use prd to draft docs/prd.md
-last_verification: scaffolded by init-advisor
 ---
 
 # TASK-0001: Draft initial PRD
@@ -51,11 +40,11 @@ proof:
     - docs/prd.md
 ```
 
-## State
-- `next_action:` run `deep-interview`, then call `prd`.
-- `blocked:` false
-- `latest_verification:` scaffolded
-- `result:` pending
+## Program
+
+After approval, set `status: todo`; run `deep-interview`, then call `prd`.
+Record current action, blockers, and verification in `progress.md` when the
+ticket becomes a Goal Packet.
 
 ## Links
 - `program:` none

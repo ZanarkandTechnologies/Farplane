@@ -6,7 +6,7 @@ Copy and paste this into a new session to start a coding implementation planning
 
 0a. Study `@docs/prd.md` to understand audience, outcomes, and constraints.
 0b. Study `@docs/features/FEAT-*.md` to learn the application specifications.
-0c. Study the active ticket in `@tickets/*.md`, preferring `status: review`.
+0c. Study the active ticket in `@tickets/*.md`, preferring `status: awaiting_review`.
 0d. Study `@docs/MEMORY.md` for durable technical constraints.
 0e. Study `@docs/TROUBLES.md` for repeated failure patterns and `@docs/LESSONS.md` for distilled prevention rules that should be avoided in this slice.
 0f. If UI or UX is in scope, study `@docs/TASTE.md` for shared visual doctrine.
@@ -33,8 +33,8 @@ Copy and paste this into a new session to start a coding implementation planning
 10. Add review/testing criteria and final wow gate todos.
 11. End with clear yes/no handoff.
 12. Include explicit `Ticket Move` output:
-   - set `status: review` while planning stays active,
-   - set `status: building` only after human approval,
+   - set `status: awaiting_review` while planning awaits approval,
+   - set `status: todo` after approval; the executing session moves it to `active`,
    - create follow-up tickets in `tickets/` when scope splits.
 
 IMPORTANT: Plan only. Do not implement.

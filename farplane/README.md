@@ -2,8 +2,8 @@
 kind: farplane-config-index
 status: active
 created_at: 2026-06-15
-updated_at: 2026-07-08
-framework_template_version: "0.1.0"
+updated_at: 2026-07-11
+framework_template_version: "0.3.0"
 ---
 
 # Farplane Config
@@ -14,10 +14,10 @@ This folder is the project-local declaration that Farplane UI should be able to
 summarize as one autonomous company inside the broader harness cockpit.
 
 `manifest.json` owns the compact UI identity card. Richer project meaning lives
-in tracked project files: `harness.md` is the static human charter,
-`products/<product>/product.md` files are canonical product-loop definitions,
-`products.json` is the generated machine/UI index, and `goals.yaml` is current
-strategy.
+in tracked project files: `harness.md` is the static human charter and stable
+capability-reference surface, while `goals.yaml` owns current value direction,
+KPI IDs, milestone, and holds. Skills own recurring workflows; tickets own
+execution and proof.
 
 ```text
 farplane/
@@ -25,15 +25,14 @@ farplane/
   manifest.json    # versioned Farplane project spec for this project
   harness.md       # static human charter
   goals.yaml       # north star, KPIs, current milestone, holds
-  products/        # canonical product-loop definitions and local loop contracts
-  products.json    # generated machine product index for UI/tools
-  automations.toml # full Codex automation configs for Pulse, Intervals, and optional consolidation/Taste Loop
-  bindings.yaml    # non-secret project IDs, URLs, labels, aliases, metric recipes
+  metrics.yaml     # provider-independent metric definitions
+  automations.toml # one Work Pulse heartbeat plus separate scheduled sources
+  bindings.yaml    # non-secret project IDs, provider coordinates, refresh bindings
   hooks.json       # declarative Farplane-native hook configuration
   pm.json          # optional UI thread manifest for one visual project PM
 
 .agents/
-  skills/          # project-local product skills
+  skills/          # project-local capability skills
     README.md
 ```
 
@@ -42,7 +41,6 @@ Runtime state lives under `.farplane/` and is intentionally ignored by git.
 ```text
 .farplane/
   README.md
-  state/run-ledger.json
   state/ticket-thread-associations.jsonl
   automation/
   content/ledger.jsonl
@@ -53,6 +51,10 @@ Runtime state lives under `.farplane/` and is intentionally ignored by git.
   evals/runs/
   logs/
 ```
+
+The manifest names only stable owner paths; it does not require a generic run
+ledger, evidence bucket, or review directory. QA and review receipts belong to
+the ticket they judge.
 
 Farplane Core is installed once and invoked through the global `farplane` CLI.
 Other projects do not copy metric scripts; they pass a project root:
@@ -87,11 +89,14 @@ See [docs/farplane-framework/project-files.md](../docs/farplane-framework/projec
 
 ## Official Automation Presets
 
-- `Pulse`: drains ready tickets and records execution/reward state.
-- `Daily/Weekly Interval`: reviews recent state and plans the next window.
+- `Work Pulse`: the only heartbeat; reconciles, dispatches, handles due
+  check-ins, and refills an empty BAU board.
+- `Feed Scout`: separate source report and bounded opportunity-ticket job.
+- `Daily/Weekly BAU`: problem reports and bounded already-evidenced
+  maintenance, not new-direction planning.
+- `Dogfood Improvement`: portfolio learning and bounded experiment packets;
+  Work Pulse executes the selected tickets.
 - `Monthly Registry Consolidation`: optional report-only pass over registry
   truth, duplicate rows, owner drift, and generated-output freshness.
-- `Active-Hours Taste Loop`: optional human-feedback heartbeat that runs only
-  during configured active hours, ranks candidate skills with the official
-  Skill Signals, and emits a feedback card or Goal Advisor
-  handoff without activating hidden workers or editing target skills directly.
+- Human-feedback improvements are ordinary Dogfood-created Goal Packets;
+  Work Pulse executes them and ticket review state waits without a worker.
