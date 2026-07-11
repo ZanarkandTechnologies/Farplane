@@ -1,6 +1,6 @@
 ---
 template_id: ticket-template
-template_version: "0.2.0"
+template_version: "0.2.1"
 feature_refs:
   - FEAT-0007
   - FEAT-0008
@@ -61,12 +61,16 @@ route is unclear.
 
 ```yaml
 kpi_rewards:
-  - kpi_id: accepted_harness_improvements
+  - reward_id: accepted-harness-improvements-7d
+    kpi_id: accepted_harness_improvements
     expected_reward: "one proof-backed harness improvement"
     check_in_at: "2026-04-10T00:00:00Z"
     actual_result:
-    reward_score:
-    reward_score_reason:
+    decision:
+    evaluated_at:
+    evaluation_key:
+    supersedes_evaluation_key:
+    evidence_refs: []
 guard: "do not count planned intent as KPI movement; count only completed tickets with proof"
 ```
 

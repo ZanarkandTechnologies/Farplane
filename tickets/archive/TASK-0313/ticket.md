@@ -139,9 +139,19 @@ first_principles_basis:
 
 ```yaml
 kpi_rewards:
-  - kpi_id: accepted_harness_improvements
-    expected_reward: "one reviewed harness-loop improvement that turns dogfood evidence into durable board work without premature execution"
-guard: "count only after the dogfood-review contract, template, and eval prove exactly-one-ticket behavior and no autostart"
+- reward_id: accepted-harness-improvements-unscheduled
+  kpi_id: accepted_harness_improvements
+  expected_reward: one reviewed harness-loop improvement that turns dogfood evidence
+    into durable board work without premature execution
+  check_in_at: null
+  actual_result: null
+  decision: null
+  evaluated_at: null
+  evaluation_key: null
+  supersedes_evaluation_key: null
+  evidence_refs: []
+guard: count only after the dogfood-review contract, template, and eval prove exactly-one-ticket
+  behavior and no autostart
 ```
 
 ## Key Proposal

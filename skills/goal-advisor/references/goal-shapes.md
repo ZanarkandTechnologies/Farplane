@@ -86,29 +86,29 @@ For a board-drain heartbeat:
 - output or resume a native Goal prompt for that file set;
 - log no-op when nothing useful can advance.
 
-## Project Goals
+## Project Ticket Portfolio
 
 ```text
-project_goals(north_star, horizon, resources, constraints)
-  -> farplane/goals.yaml + current_milestone + child_goal_packets?
+project_portfolio(harness, metric_objectives, metric_state, ticket_history)
+  -> ranked_proposals + admitted_ticket_packets?
 ```
 
-Use when the operator wants to coordinate a business, product line, autonomous
-store, skill-improvement program, or other multi-goal system. Use
-`horizon-advisor` to author or materially change project goals. Goal Advisor
-only compiles a selected frontier into parent heartbeat or leaf Goal execution.
-The live strategy state is `farplane/goals.yaml`.
+Use when the operator wants to coordinate a business, autonomous store,
+skill-improvement program, or other long-running system. The next-wave planner
+compares proposal trajectories from the charter, metric objectives, readings,
+history, and reports. Goal Advisor only compiles an admitted ticket into leaf
+Goal execution. There is no separate durable parent goal graph.
 
 Project orchestration boundary:
 
 ```text
-horizon_heartbeat(farplane/goals.yaml, automation_or_program, reports_or_progress)
-  -> start_child_goal | resume_child_goal | request_feedback | replan | no_op
+work_pulse(tickets, harness, metric_state, reports)
+  -> start_ticket_goal | resume_ticket_goal | request_feedback | replan | no_op
 
 leaf_native_goal(ticket.md, program.md, progress.md)
   -> artifact + evidence + completion_entry
 ```
 
-Do not generate a native `/goal` prompt that tries to run the whole goal graph
-indefinitely. Generate a heartbeat prompt for the parent and a native Goal
-prompt only for the current executable leaf.
+Do not generate a native `/goal` prompt that tries to run the proposal
+portfolio indefinitely. Work Pulse owns replanning; generate a native Goal
+prompt only for the admitted executable ticket.

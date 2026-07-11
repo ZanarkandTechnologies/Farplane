@@ -13,6 +13,6 @@ It does not run the loop. Callers keep their jobs:
 - `optimize-harness` coordinates recovery and accept/hold/rollback.
 - `goal-advisor` compiles Goal Packet metric providers.
 - `self-improve` compares variants after a baseline exists.
-- `horizon-advisor` owns KPI trees.
+- `metric-advisor` owns measurable project objectives, directions, guards, and providers.
 - `impl-plan` owns ticket Done / Proof wording.
 - `review` judges evidence when metric traceability is qualitative.

@@ -1,55 +1,61 @@
 kind: project-metrics
 status: active
 created_at: 2026-07-11
-updated_at: 2026-07-11
-framework_template_version: "0.1.0"
+updated_at: 2026-07-12
+framework_template_version: "0.3.0"
 owner: metric-advisor
 metrics:
   accepted_evidence_cycles:
     label: Accepted evidence cycles
-    description: Daily count of completed tickets whose Reward.kpi_rewards includes this KPI and whose Done / Proof shows accepted evidence value.
+    description: Daily count of completed tickets whose Reward names this metric and whose ticket-scoped review evidence records verdict pass at TAS-A.
     pinned: true
     kind: daily_count
     unit: cycles
     display: bar_plus_cumulative
+    direction: maximize
+    max_age_days: 7
   accepted_trust_ablations:
     label: Accepted trust ablations
     description: Daily count of completed tickets whose Reward.kpi_rewards includes this KPI and whose proof shows a with/without trust decision.
-    pinned: true
+    pinned: false
     kind: daily_count
     unit: ablations
     display: bar_plus_cumulative
   accepted_harness_improvements:
     label: Accepted harness improvements
     description: Daily count of completed tickets whose Reward.kpi_rewards includes this KPI and whose proof shows a shipped Farplane improvement.
-    pinned: true
+    pinned: false
     kind: daily_count
     unit: improvements
     display: bar_plus_cumulative
+    direction: maximize
+    max_age_days: 7
   interesting_autonomy_results:
     label: Interesting autonomy results
     description: Daily count of distinct interesting results found in ticket proof from the review window.
-    pinned: true
+    pinned: false
     kind: daily_count
     unit: results
     display: bar_plus_cumulative
   auto_time_ratio:
     label: Autonomous time ratio
     description: Autonomous worker elapsed minutes divided by estimated human attention minutes for the day.
-    pinned: true
+    pinned: false
     kind: point
     unit: ratio
     display: reading
   evidence_distribution_reach:
     label: Evidence distribution reach
-    description: Pinned overview rollup of same-window platform view readings; goals should track platform KPIs directly.
+    description: Same-window reach across available evidence-backed distribution channels, with per-platform components retained in the observation payload.
     pinned: true
     kind: daily_count
     unit: views
     display: bar_plus_cumulative
+    direction: maximize
+    max_age_days: 7
   latest_eval_pass_rate:
     label: Latest eval pass rate
-    description: Most recent eval summary pass rate available for the snapshot window.
+    description: Diagnostic pass rate from the most recent local eval summary; not a project-wide admission guard because eval runs cover different scopes and difficulties.
     pinned: false
     kind: point
     unit: ratio
@@ -57,10 +63,12 @@ metrics:
   decision_changing_learning_briefs:
     label: Decision-changing learning briefs
     description: Daily count of learning briefs whose implication changes positioning, audience, distribution, workflow, or no-action decisions.
-    pinned: true
+    pinned: false
     kind: daily_count
     unit: briefs
     display: bar_plus_cumulative
+    direction: maximize
+    max_age_days: 14
   github_views:
     label: GitHub views
     description: Daily GitHub traffic views for the Farplane repository when traffic API access is available.
@@ -77,7 +85,7 @@ metrics:
     display: reading
   rejected_ai_ticket_count:
     label: Rejected AI tickets
-    description: Daily count of AI-planned reward-bearing tickets marked status rejected, used as a guard metric for Pulse ticket quality.
+    description: Daily diagnostic count of AI-planned reward-bearing tickets marked status rejected; Dogfood may use the history to evaluate planner variants.
     pinned: false
     kind: daily_count
     unit: tickets
@@ -92,10 +100,12 @@ metrics:
   ticket_intervention_turn_count:
     label: Ticket intervention turns
     description: Daily count of human turns after execution start and before completion across completed associated tickets.
-    pinned: false
+    pinned: true
     kind: daily_count
     unit: turns
     display: bar_plus_cumulative
+    direction: minimize
+    max_age_days: 1
   todo_unclaimed_ticket_count:
     label: Todo unclaimed tickets
     description: Current count of unclaimed status=todo tickets with satisfied dependencies.
@@ -117,6 +127,8 @@ metrics:
     kind: daily_count
     unit: views
     display: bar_plus_cumulative
+    direction: maximize
+    max_age_days: 7
   x_likes:
     label: X likes
     description: Daily aggregate X likes for posted content selected from the content ledger.
@@ -138,6 +150,8 @@ metrics:
     kind: daily_count
     unit: views
     display: bar_plus_cumulative
+    direction: maximize
+    max_age_days: 7
   instagram_likes:
     label: Instagram likes
     description: Daily aggregate Instagram likes for posted content selected from the content ledger.

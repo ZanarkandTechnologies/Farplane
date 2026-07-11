@@ -39,7 +39,7 @@ interval_update(project_root, interval_id, review_window, context_refs?,
    + source_gaps
 
 state:
-  reads(farplane/harness.md?, farplane/goals.yaml?, farplane/metrics.yaml?,
+  reads(farplane/harness.yaml?, farplane/metrics.yaml?, .farplane/metrics/**?,
         tickets/**, .farplane/reports/pulse/**,
         .farplane/reports/interval/**,
         latest completed provider reports supplied through context_refs,

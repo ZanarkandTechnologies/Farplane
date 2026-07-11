@@ -2,7 +2,7 @@ kind: project-metrics
 status: draft
 created_at: TODO
 updated_at: TODO
-framework_template_version: "0.1.0"
+framework_template_version: "0.3.0"
 owner: metric-advisor
 metrics:
   TODO_metric_name:
@@ -12,6 +12,8 @@ metrics:
     kind: daily_count
     unit: TODO_unit
     display: bar_plus_cumulative
+    direction: maximize
+    max_age_days: 7
   TODO_quality_metric:
     label: TODO quality metric label
     description: TODO explain the quality or proof threshold this metric measures.
@@ -19,6 +21,10 @@ metrics:
     kind: point
     unit: TODO_unit
     display: reading
+    max_age_days: 7
+    guard:
+      operator: greater_than_or_equal
+      threshold: 0
   todo_unclaimed_ticket_count:
     label: Todo unclaimed tickets
     description: Current count of unclaimed status=todo tickets with satisfied dependencies.
@@ -33,6 +39,8 @@ metrics:
     kind: daily_count
     unit: events
     display: bar_plus_cumulative
+    direction: maximize
+    max_age_days: 7
   auto_time_ratio:
     label: Autonomous time ratio
     description: Autonomous worker elapsed minutes divided by estimated human attention minutes for the day.

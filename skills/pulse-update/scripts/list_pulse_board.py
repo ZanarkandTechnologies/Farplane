@@ -100,42 +100,76 @@ def parse_fenced_yaml(section: str) -> dict[str, Any]:
     return loaded if isinstance(loaded, dict) else {}
 
 
-def missing(value: Any) -> bool:
-    return value is None or str(value).strip() == ""
-
-
 def classify_reward_checkins(markdown: str, now: datetime) -> dict[str, list[dict[str, Any]]]:
-    """Project ticket Reward rows into due, future, and invalid Pulse state."""
+    """Project canonical Reward rows into due, future, terminal, and invalid state.
+
+    ``reward_id`` is the durable identity handed to a check-in worker. Array
+    position is intentionally diagnostic-only so reordering rows cannot change
+    which reward is evaluated.
+    """
 
     reward = parse_fenced_yaml(markdown_heading_section(markdown, "Reward"))
     raw_rewards = reward.get("kpi_rewards")
     if not isinstance(raw_rewards, list):
-        return {"due": [], "future": [], "invalid": []}
+        return {"due": [], "future": [], "terminal": [], "invalid": []}
 
-    result: dict[str, list[dict[str, Any]]] = {"due": [], "future": [], "invalid": []}
+    result: dict[str, list[dict[str, Any]]] = {
+        "due": [],
+        "future": [],
+        "terminal": [],
+        "invalid": [],
+    }
+    seen_reward_ids: set[str] = set()
     for index, raw_item in enumerate(raw_rewards):
         if not isinstance(raw_item, dict):
             result["invalid"].append({"index": index, "gap": "invalid_reward_item"})
             continue
+        reward_id = str(raw_item.get("reward_id") or "").strip()
+        if not reward_id:
+            result["invalid"].append({"index": index, "gap": "missing_reward_id"})
+            continue
+        if reward_id in seen_reward_ids:
+            result["invalid"].append(
+                {"index": index, "reward_id": reward_id, "gap": "duplicate_reward_id"}
+            )
+            continue
+        seen_reward_ids.add(reward_id)
+        decision = str(raw_item.get("decision") or "").strip().lower()
+        if decision not in {"", "accept", "kill", "monitor"}:
+            result["invalid"].append(
+                {
+                    "index": index,
+                    "reward_id": reward_id,
+                    "gap": "invalid_decision",
+                    "decision": decision,
+                }
+            )
+            continue
         check_in_at = parse_iso_datetime(raw_item.get("check_in_at"))
         item = {
-            "index": index,
+            "reward_id": reward_id,
             "kpi_id": str(raw_item.get("kpi_id") or ""),
             "expected_reward": str(raw_item.get("expected_reward") or ""),
             "check_in_at": str(raw_item.get("check_in_at") or ""),
-            "actual_result_missing": missing(raw_item.get("actual_result")),
-            "reward_score_missing": missing(raw_item.get("reward_score")),
+            "decision": decision,
+            "evaluation_key": str(raw_item.get("evaluation_key") or ""),
         }
-        if check_in_at is None:
-            if item["check_in_at"]:
-                result["invalid"].append({**item, "gap": "invalid_check_in_at"})
+        if decision in {"accept", "kill"}:
+            result["terminal"].append(
+                {**item, "state": f"terminal_{decision}"}
+            )
             continue
-        if not (item["actual_result_missing"] or item["reward_score_missing"]):
+        if check_in_at is None:
+            result["invalid"].append(
+                {**item, "index": index, "gap": "invalid_check_in_at"}
+            )
             continue
         if check_in_at <= now:
-            result["due"].append(item)
+            state = "monitor_due" if decision == "monitor" else "due"
+            result["due"].append({**item, "state": state})
         else:
-            result["future"].append(item)
+            state = "monitor_pending" if decision == "monitor" else "pending"
+            result["future"].append({**item, "state": state})
     return result
 
 
@@ -325,6 +359,7 @@ def build_board(
                 "terminal": terminal,
                 "due_reward_checkins": reward_checkins["due"],
                 "future_reward_checkins": reward_checkins["future"],
+                "terminal_reward_outcomes": reward_checkins["terminal"],
                 "reward_checkin_gaps": reward_checkins["invalid"],
             }
         )

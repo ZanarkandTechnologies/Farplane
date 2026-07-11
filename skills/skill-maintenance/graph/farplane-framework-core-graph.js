@@ -2,33 +2,33 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
   "counts": {
     "edge_types": {
       "defines-workflow": 7,
+      "informs": 1,
       "lifecycle-workflow": 6,
-      "literal-path": 67,
+      "literal-path": 63,
       "mentions-skill": 19,
       "routes_to": 7,
-      "triggers": 1,
       "updates": 1,
       "workflow-next": 20,
       "workflow-skill": 26,
       "workflow-stage": 6,
-      "writes": 7
+      "writes": 5
     },
-    "edges": 167,
+    "edges": 161,
     "framework_roles": {
-      "linked": 46,
+      "linked": 44,
       "source": 8,
       "workflow": 7
     },
     "isolated_nodes": 0,
-    "linked_nodes": 54,
+    "linked_nodes": 52,
     "node_kinds": {
       "doc": 10,
-      "file": 9,
+      "file": 7,
       "skill": 28,
       "spec": 7,
       "workflow": 7
     },
-    "nodes": 61,
+    "nodes": 59,
     "other_nodes": 0,
     "source_nodes": 8,
     "workflow_nodes": 7
@@ -175,9 +175,9 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
     {
       "from_file": "docs/farplane-framework/graph-contract.md",
       "projection": "farplane-framework-core",
-      "raw_ref": "farplane/goals.yaml",
+      "raw_ref": "farplane/metrics.yaml",
       "source": "file:docs/farplane-framework/graph-contract.md",
-      "target": "file:farplane/goals.yaml",
+      "target": "file:farplane/metrics.yaml",
       "type": "literal-path"
     },
     {
@@ -342,6 +342,22 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
     {
       "from_file": "docs/farplane-framework/hooks-and-runtime.md",
       "projection": "farplane-framework-core",
+      "raw_ref": "farplane/bindings.yaml#event_routes",
+      "source": "file:docs/farplane-framework/hooks-and-runtime.md",
+      "target": "file:farplane/bindings.yaml",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/farplane-framework/hooks-and-runtime.md",
+      "projection": "farplane-framework-core",
+      "raw_ref": "farplane/hooks.json",
+      "source": "file:docs/farplane-framework/hooks-and-runtime.md",
+      "target": "file:farplane/hooks.json",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/farplane-framework/hooks-and-runtime.md",
+      "projection": "farplane-framework-core",
       "raw_ref": "farplane/pm.json",
       "source": "file:docs/farplane-framework/hooks-and-runtime.md",
       "target": "file:farplane/pm.json",
@@ -434,22 +450,6 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
     {
       "from_file": "docs/farplane-framework/init-advisor-critical-path.md",
       "projection": "farplane-framework-core",
-      "raw_ref": "farplane/goals.yaml",
-      "source": "file:docs/farplane-framework/init-advisor-critical-path.md",
-      "target": "file:farplane/goals.yaml",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/farplane-framework/init-advisor-critical-path.md",
-      "projection": "farplane-framework-core",
-      "raw_ref": "farplane/harness.md",
-      "source": "file:docs/farplane-framework/init-advisor-critical-path.md",
-      "target": "file:farplane/harness.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/farplane-framework/init-advisor-critical-path.md",
-      "projection": "farplane-framework-core",
       "raw_ref": "farplane/hooks.json",
       "source": "file:docs/farplane-framework/init-advisor-critical-path.md",
       "target": "file:farplane/hooks.json",
@@ -519,18 +519,18 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
       "confidence": "parsed",
       "from_file": "docs/farplane-framework/init-advisor-critical-path.md",
       "projection": "farplane-framework-core",
-      "raw_ref": "horizon-advisor",
+      "raw_ref": "init-advisor",
       "source": "file:docs/farplane-framework/init-advisor-critical-path.md",
-      "target": "skill:horizon-advisor",
+      "target": "skill:init-advisor",
       "type": "mentions-skill"
     },
     {
       "confidence": "parsed",
       "from_file": "docs/farplane-framework/init-advisor-critical-path.md",
       "projection": "farplane-framework-core",
-      "raw_ref": "init-advisor",
+      "raw_ref": "metric-advisor",
       "source": "file:docs/farplane-framework/init-advisor-critical-path.md",
-      "target": "skill:init-advisor",
+      "target": "skill:metric-advisor",
       "type": "mentions-skill"
     },
     {
@@ -646,22 +646,6 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
       "raw_ref": "farplane/bindings.yaml",
       "source": "file:docs/farplane-framework/lifecycle.md",
       "target": "file:farplane/bindings.yaml",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/farplane-framework/lifecycle.md",
-      "projection": "farplane-framework-core",
-      "raw_ref": "farplane/goals.yaml",
-      "source": "file:docs/farplane-framework/lifecycle.md",
-      "target": "file:farplane/goals.yaml",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/farplane-framework/lifecycle.md",
-      "projection": "farplane-framework-core",
-      "raw_ref": "farplane/harness.md",
-      "source": "file:docs/farplane-framework/lifecycle.md",
-      "target": "file:farplane/harness.md",
       "type": "literal-path"
     },
     {
@@ -817,22 +801,6 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
     {
       "from_file": "docs/farplane-framework/project-files.md",
       "projection": "farplane-framework-core",
-      "raw_ref": "farplane/goals.yaml",
-      "source": "file:docs/farplane-framework/project-files.md",
-      "target": "file:farplane/goals.yaml",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/farplane-framework/project-files.md",
-      "projection": "farplane-framework-core",
-      "raw_ref": "farplane/harness.md",
-      "source": "file:docs/farplane-framework/project-files.md",
-      "target": "file:farplane/harness.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/farplane-framework/project-files.md",
-      "projection": "farplane-framework-core",
       "raw_ref": "farplane/hooks.json",
       "source": "file:docs/farplane-framework/project-files.md",
       "target": "file:farplane/hooks.json",
@@ -873,13 +841,13 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
     },
     {
       "confidence": "curated",
-      "from_file": "docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md",
-      "label": "triggers",
+      "from_file": "docs/farplane-framework/lifecycle.md",
+      "label": "informs",
       "projection": "farplane-framework-core",
       "raw_ref": "skill:goal-advisor",
-      "source": "file:farplane/goals.yaml",
+      "source": "file:farplane/metrics.yaml",
       "target": "skill:goal-advisor",
-      "type": "triggers"
+      "type": "informs"
     },
     {
       "confidence": "curated",
@@ -981,27 +949,6 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
     {
       "confidence": "curated",
       "from_file": "docs/farplane-framework/lifecycle.md",
-      "label": "updates",
-      "projection": "farplane-framework-core",
-      "raw_ref": "file:farplane/goals.yaml",
-      "source": "skill:horizon-advisor",
-      "target": "file:farplane/goals.yaml",
-      "type": "updates"
-    },
-    {
-      "confidence": "curated",
-      "from_file": "docs/farplane-framework/lifecycle.md",
-      "label": "next.1",
-      "order": 1,
-      "projection": "farplane-framework-core",
-      "raw_ref": "workflow:strategy",
-      "source": "skill:horizon-advisor",
-      "target": "skill:leverage-advisor",
-      "type": "workflow-next"
-    },
-    {
-      "confidence": "curated",
-      "from_file": "docs/farplane-framework/lifecycle.md",
       "label": "next.2",
       "order": 2,
       "projection": "farplane-framework-core",
@@ -1018,26 +965,6 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
       "raw_ref": "file:farplane/automations.toml",
       "source": "skill:init-advisor",
       "target": "file:farplane/automations.toml",
-      "type": "writes"
-    },
-    {
-      "confidence": "curated",
-      "from_file": "docs/farplane-framework/project-files.md",
-      "label": "writes",
-      "projection": "farplane-framework-core",
-      "raw_ref": "file:farplane/goals.yaml",
-      "source": "skill:init-advisor",
-      "target": "file:farplane/goals.yaml",
-      "type": "writes"
-    },
-    {
-      "confidence": "curated",
-      "from_file": "docs/farplane-framework/project-files.md",
-      "label": "writes",
-      "projection": "farplane-framework-core",
-      "raw_ref": "file:farplane/harness.md",
-      "source": "skill:init-advisor",
-      "target": "file:farplane/harness.md",
       "type": "writes"
     },
     {
@@ -1110,6 +1037,27 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
       "raw_ref": "workflow:strategy",
       "source": "skill:leverage-advisor",
       "target": "skill:harness-advisor",
+      "type": "workflow-next"
+    },
+    {
+      "confidence": "curated",
+      "from_file": "docs/farplane-framework/lifecycle.md",
+      "label": "updates",
+      "projection": "farplane-framework-core",
+      "raw_ref": "file:farplane/metrics.yaml",
+      "source": "skill:metric-advisor",
+      "target": "file:farplane/metrics.yaml",
+      "type": "updates"
+    },
+    {
+      "confidence": "curated",
+      "from_file": "docs/farplane-framework/lifecycle.md",
+      "label": "next.1",
+      "order": 1,
+      "projection": "farplane-framework-core",
+      "raw_ref": "workflow:strategy",
+      "source": "skill:metric-advisor",
+      "target": "skill:leverage-advisor",
       "type": "workflow-next"
     },
     {
@@ -1584,17 +1532,6 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
     {
       "confidence": "curated",
       "from_file": "docs/farplane-framework/lifecycle.md",
-      "label": "1. horizon-advisor",
-      "order": 1,
-      "projection": "farplane-framework-core",
-      "raw_ref": "horizon-advisor",
-      "source": "workflow:strategy",
-      "target": "skill:horizon-advisor",
-      "type": "workflow-skill"
-    },
-    {
-      "confidence": "curated",
-      "from_file": "docs/farplane-framework/lifecycle.md",
       "label": "2. leverage-advisor",
       "order": 2,
       "projection": "farplane-framework-core",
@@ -1602,9 +1539,20 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
       "source": "workflow:strategy",
       "target": "skill:leverage-advisor",
       "type": "workflow-skill"
+    },
+    {
+      "confidence": "curated",
+      "from_file": "docs/farplane-framework/lifecycle.md",
+      "label": "1. metric-advisor",
+      "order": 1,
+      "projection": "farplane-framework-core",
+      "raw_ref": "metric-advisor",
+      "source": "workflow:strategy",
+      "target": "skill:metric-advisor",
+      "type": "workflow-skill"
     }
   ],
-  "generated_at": "2026-07-11T15:34:21+00:00",
+  "generated_at": "2026-07-11T20:48:58+00:00",
   "nodes": [
     {
       "framework_role": "linked",
@@ -1666,32 +1614,6 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
       "path": "farplane/bindings.yaml",
       "source_match": false,
       "source_path": "farplane/bindings.yaml",
-      "tags": [
-        "framework-core",
-        "framework-role:linked"
-      ]
-    },
-    {
-      "framework_role": "linked",
-      "id": "file:farplane/goals.yaml",
-      "kind": "file",
-      "label": "farplane/goals.yaml",
-      "path": "farplane/goals.yaml",
-      "source_match": false,
-      "source_path": "farplane/goals.yaml",
-      "tags": [
-        "framework-core",
-        "framework-role:linked"
-      ]
-    },
-    {
-      "framework_role": "linked",
-      "id": "file:farplane/harness.md",
-      "kind": "file",
-      "label": "farplane/harness.md",
-      "path": "farplane/harness.md",
-      "source_match": false,
-      "source_path": "farplane/harness.md",
       "tags": [
         "framework-core",
         "framework-role:linked"
@@ -1992,30 +1914,6 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
     {
       "framework_role": "linked",
       "heat": {
-        "distinct_threads_window": 0,
-        "distinct_tickets_window": 0,
-        "invocation_count_all": 0,
-        "invocation_count_recent": 0,
-        "invocation_count_window": 0,
-        "last_invoked_at": "",
-        "observed_event_count_all": 0,
-        "recent_days": 7,
-        "window_days": 30
-      },
-      "id": "skill:horizon-advisor",
-      "kind": "skill",
-      "label": "horizon-advisor",
-      "path": "skills/horizon-advisor/SKILL.md",
-      "source_match": false,
-      "source_path": "skills/horizon-advisor/SKILL.md",
-      "tags": [
-        "framework-core",
-        "framework-role:linked"
-      ]
-    },
-    {
-      "framework_role": "linked",
-      "heat": {
         "distinct_threads_window": 2,
         "distinct_tickets_window": 0,
         "invocation_count_all": 9,
@@ -2128,6 +2026,30 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
       "path": "skills/leverage-advisor/SKILL.md",
       "source_match": false,
       "source_path": "skills/leverage-advisor/SKILL.md",
+      "tags": [
+        "framework-core",
+        "framework-role:linked"
+      ]
+    },
+    {
+      "framework_role": "linked",
+      "heat": {
+        "distinct_threads_window": 0,
+        "distinct_tickets_window": 0,
+        "invocation_count_all": 0,
+        "invocation_count_recent": 0,
+        "invocation_count_window": 0,
+        "last_invoked_at": "",
+        "observed_event_count_all": 0,
+        "recent_days": 7,
+        "window_days": 30
+      },
+      "id": "skill:metric-advisor",
+      "kind": "skill",
+      "label": "metric-advisor",
+      "path": "skills/metric-advisor/SKILL.md",
+      "source_match": false,
+      "source_path": "skills/metric-advisor/SKILL.md",
       "tags": [
         "framework-core",
         "framework-role:linked"
@@ -2685,7 +2607,7 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
       ]
     },
     {
-      "description": "Top-level lifecycle spine from init through goals, proof, autonomy loops, and improvement.",
+      "description": "Top-level lifecycle spine from init through metric objectives, proof, autonomy loops, and improvement.",
       "framework_role": "workflow",
       "id": "workflow:lifecycle",
       "kind": "workflow",
@@ -2770,7 +2692,7 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
       ]
     },
     {
-      "description": "Shape goals, horizons, leverage bets, and executable frontier choices.",
+      "description": "Shape measurable objectives, guards, proposal trajectories, and executable frontier choices.",
       "framework_role": "workflow",
       "id": "workflow:strategy",
       "kind": "workflow",
@@ -2785,7 +2707,7 @@ window.FARPLANE_FRAMEWORK_CORE_GRAPH = {
       ],
       "workflow_order": 2,
       "workflow_skills": [
-        "horizon-advisor",
+        "metric-advisor",
         "leverage-advisor",
         "harness-advisor",
         "goal-advisor"

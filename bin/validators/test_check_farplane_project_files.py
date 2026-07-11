@@ -1,9 +1,21 @@
 import json
 from pathlib import Path
 
+import yaml
+
 from bin.validators.check_farplane_project_files import validate
 
 RETIRED_INTEGRATIONS_REF = "farplane/" + "integrations.md"
+
+
+def select_project_objective(farplane: Path, metric_id: str, *, guards: list[str] | None = None) -> None:
+    harness_path = farplane / "harness.yaml"
+    harness = yaml.safe_load(harness_path.read_text(encoding="utf-8"))
+    harness["metric_refs"] = {
+        "objectives": [{"metric_id": metric_id, "priority": 1}],
+        "guards": guards or [],
+    }
+    harness_path.write_text(yaml.safe_dump(harness, sort_keys=False), encoding="utf-8")
 
 
 def write_framework_manifest(farplane: Path) -> None:
@@ -27,8 +39,7 @@ def write_framework_manifest(farplane: Path) -> None:
                         "ARCHITECTURE.md",
                         "farplane/README.md",
                         "farplane/manifest.json",
-                        "farplane/harness.md",
-                        "farplane/goals.yaml",
+                        "farplane/harness.yaml",
                         "farplane/metrics.yaml",
                         "farplane/automations.toml",
                         "farplane/bindings.yaml",
@@ -87,69 +98,75 @@ def write_required_project_files(root: Path) -> None:
             "---\nframework_template_version: \"0.1.0\"\n---\n\n# Test\n",
             encoding="utf-8",
         )
-    (farplane / "goals.yaml").write_text(
-        'kind: project-goals\nframework_template_version: "0.1.0"\ngoals: {}\n',
-        encoding="utf-8",
-    )
     (farplane / "metrics.yaml").write_text(
-        'kind: project-metrics\nframework_template_version: "0.1.0"\nmetrics: {}\n',
+        '''kind: project-metrics
+framework_template_version: "0.2.0"
+metrics:
+  accepted_output_events:
+    label: Accepted output events
+    description: Accepted output events.
+    kind: daily_count
+    unit: events
+    display: bar_plus_cumulative
+    direction: maximize
+    max_age_days: 7
+  accepted_product_output:
+    label: Accepted product output
+    description: Accepted product output.
+    kind: daily_count
+    unit: artifacts
+    display: bar_plus_cumulative
+    direction: maximize
+    max_age_days: 7
+''',
         encoding="utf-8",
     )
-    (farplane / "hooks.json").write_text('{"version": 1, "hooks": {}}\n', encoding="utf-8")
+    (farplane / "hooks.json").write_text(
+        '{"version": 1, "file_events": {"enabled": true, "events": ["farplane.ticket.completed"], '
+        '"patterns": ["tickets/TASK-*/ticket.md"]}}\n',
+        encoding="utf-8",
+    )
     skills_dir = root / ".agents" / "skills"
     skills_dir.mkdir(parents=True)
     (skills_dir / "README.md").write_text(
         "---\nkind: local-capability-skills-index\nframework_template_version: \"0.1.0\"\n---\n\n# Local Capability Skills\n",
         encoding="utf-8",
     )
-    (farplane / "harness.md").write_text(
-        """---
-kind: project-harness
-framework_template_version: "0.2.0"
----
-
-# Test Harness
-
-## Mission
-
-Test mission.
-
-## Human Thesis
-
-Test thesis.
-
-## Operating Principles
-
-- Prefer visible artifacts.
-
-## Static Leverage Commitments
-
-| Commitment | Why It Compounds | Evidence To Seek | Pivot Signal |
-| --- | --- | --- | --- |
-| Test | compounds | evidence | pivot |
-
-## Non-Tradeoffs
-
-- Do not silently rewrite the thesis.
-
-## Agent Authority
-
-- Agents may propose charter deltas.
-
-## Change Rule
-
-Static charter changes require approval.
-
-## Allocation Guardrails
-
-| Guardrail | Rule |
-| --- | --- |
-| Proof | Keep proof work nonzero. |
+    capability = skills_dir / "test-output"
+    capability.mkdir()
+    (capability / "SKILL.md").write_text("---\nname: test-output\ndescription: Produce test output.\n---\n", encoding="utf-8")
+    (farplane / "harness.yaml").write_text(
+        """kind: project-harness
+framework_template_version: "0.4.0"
+identity:
+  mission: Test mission.
+  human_thesis: Test thesis.
+  north_star: Test north star.
+metric_refs:
+  objectives:
+    - metric_id: accepted_output_events
+      priority: 1
+  guards: []
+products:
+  test_output:
+    description: A recurring test output.
+    output: A reviewed test artifact.
+    skill_refs: [test-output]
+    metric_refs:
+      - metric_id: accepted_product_output
+        priority: 2
+feature_definition: {}
+operating_principles: [Prefer visible artifacts.]
+stable_capabilities: []
+leverage_commitments: []
+constraints: {non_tradeoffs: []}
+authority: {agents_may: [], human_approval_required: []}
+change_rule: Static charter changes require approval.
 """,
         encoding="utf-8",
     )
     (farplane / "bindings.yaml").write_text(
-        'kind: project-bindings\nframework_template_version: "0.1.0"\nproject: {}\nmetric_bindings: {}\n',
+        'kind: project-bindings\nframework_template_version: "0.1.0"\nproject: {}\nmetric_bindings:\n  accepted_output_events:\n    refresh: Count accepted ticket outputs.\n  accepted_product_output:\n    refresh: Count accepted product outputs.\n',
         encoding="utf-8",
     )
     write_automations_toml(farplane)
@@ -232,11 +249,11 @@ def test_missing_harness_file_fails(tmp_path: Path) -> None:
     farplane.mkdir()
     write_framework_manifest(farplane)
     write_required_project_files(tmp_path)
-    (farplane / "harness.md").unlink()
+    (farplane / "harness.yaml").unlink()
 
     errors = validate(tmp_path)
 
-    assert "farplane/harness.md is required for the static human charter." in errors
+    assert "farplane/harness.yaml is required for the typed project charter." in errors
 
 
 def test_malformed_harness_file_fails(tmp_path: Path) -> None:
@@ -244,31 +261,24 @@ def test_malformed_harness_file_fails(tmp_path: Path) -> None:
     farplane.mkdir()
     write_framework_manifest(farplane)
     write_required_project_files(tmp_path)
-    (farplane / "harness.md").write_text(
-        "---\nframework_template_version: \"0.1.0\"\n---\n\n# Harness\n\n## Human Thesis\n",
-        encoding="utf-8",
-    )
+    (farplane / "harness.yaml").write_text("kind: wrong-harness\n", encoding="utf-8")
 
     errors = validate(tmp_path)
 
-    assert "farplane/harness.md must use front matter kind: project-harness." in errors
-    assert any(error.startswith("farplane/harness.md missing required static-charter headings:") for error in errors)
+    assert "farplane/harness.yaml must declare kind: project-harness." in errors
+    assert "farplane/harness.yaml identity.mission must be a non-empty string." in errors
 
 
-def test_harness_program_dsl_fails(tmp_path: Path) -> None:
+def test_retired_harness_markdown_fails(tmp_path: Path) -> None:
     farplane = tmp_path / "farplane"
     farplane.mkdir()
     write_framework_manifest(farplane)
     write_required_project_files(tmp_path)
-    with (farplane / "harness.md").open("a", encoding="utf-8") as handle:
-        handle.write("\n```harness-program\nproject \"Legacy\" {}\n```\n")
+    (farplane / "harness.md").write_text("# Retired harness\n", encoding="utf-8")
 
     errors = validate(tmp_path)
 
-    assert (
-        "farplane/harness.md must not use fenced harness-program DSL; "
-        "use YAML front matter plus Markdown charter sections."
-    ) in errors
+    assert "farplane/harness.md is retired; use farplane/harness.yaml." in errors
 
 
 def test_duplicate_project_charter_fails(tmp_path: Path) -> None:
@@ -281,7 +291,7 @@ def test_duplicate_project_charter_fails(tmp_path: Path) -> None:
     errors = validate(tmp_path)
 
     assert (
-        "farplane/project.md would duplicate the active static charter; use farplane/harness.md "
+        "farplane/project.md would duplicate the active typed charter; use farplane/harness.yaml "
         "unless a versioned framework migration replaces it."
     ) in errors
 
@@ -382,30 +392,19 @@ def test_valid_versioned_files_pass(tmp_path: Path) -> None:
     assert validate(tmp_path) == []
 
 
-def test_goal_kpi_without_metric_recipe_fails(tmp_path: Path) -> None:
+def test_selected_metric_without_definition_fails(tmp_path: Path) -> None:
     farplane = tmp_path / "farplane"
     farplane.mkdir()
     write_framework_manifest(farplane)
     write_required_project_files(tmp_path)
-    (farplane / "goals.yaml").write_text(
-        """kind: project-goals
-framework_template_version: "0.1.0"
-goals:
-  test_axis:
-    smart_goals:
-      - id: missing_recipe
-        kpis:
-          - id: unknown_metric
-""",
-        encoding="utf-8",
-    )
+    select_project_objective(farplane, "unknown_metric")
 
     errors = validate(tmp_path)
 
-    assert "farplane/goals.yaml KPI ids lack metrics.yaml definitions: unknown_metric." in errors
+    assert "farplane/harness.yaml metric refs lack metrics.yaml definitions: unknown_metric." in errors
 
 
-def test_goal_product_refs_are_retired(tmp_path: Path) -> None:
+def test_goals_file_is_retired(tmp_path: Path) -> None:
     farplane = tmp_path / "farplane"
     farplane.mkdir()
     write_framework_manifest(farplane)
@@ -424,10 +423,7 @@ goals:
 
     errors = validate(tmp_path)
 
-    assert (
-        "farplane/goals.yaml goals.test_axis.smart_goals.0.product_refs is retired; goals point directly to KPI ids."
-        in errors
-    )
+    assert "farplane/goals.yaml is retired" in "\n".join(errors)
 
 
 def test_metric_product_owner_is_retired(tmp_path: Path) -> None:
@@ -469,28 +465,15 @@ metric_bindings:
     )
 
 
-def test_goal_kpi_metric_recipe_does_not_require_product_owner(tmp_path: Path) -> None:
+def test_objective_metric_does_not_require_product_owner(tmp_path: Path) -> None:
     farplane = tmp_path / "farplane"
     farplane.mkdir()
     write_framework_manifest(farplane)
     write_required_project_files(tmp_path)
-    (farplane / "goals.yaml").write_text(
-        """kind: project-goals
-framework_template_version: "0.1.0"
-goals:
-  test_axis:
-    smart_goals:
-      - id: project_kpi
-        kpis:
-          - id: accepted_harness_improvements
-            target: 20
-            direction: above
-""",
-        encoding="utf-8",
-    )
+    select_project_objective(farplane, "accepted_harness_improvements")
     (farplane / "metrics.yaml").write_text(
         """kind: project-metrics
-framework_template_version: "0.1.0"
+framework_template_version: "0.2.0"
 metrics:
   accepted_harness_improvements:
     label: Accepted harness improvements
@@ -498,6 +481,16 @@ metrics:
     kind: daily_count
     unit: improvements
     display: bar_plus_cumulative
+    direction: maximize
+    max_age_days: 7
+  accepted_product_output:
+    label: Accepted product output
+    description: Accepted product output.
+    kind: daily_count
+    unit: artifacts
+    display: bar_plus_cumulative
+    direction: maximize
+    max_age_days: 7
 """,
         encoding="utf-8",
     )
@@ -508,6 +501,8 @@ project: {}
 metric_bindings:
   accepted_harness_improvements:
     refresh: Count ticket Reward rows.
+  accepted_product_output:
+    refresh: Count accepted product outputs.
 """,
         encoding="utf-8",
     )
@@ -741,29 +736,15 @@ def test_metric_observation_batch_duplicate_metric_fails(tmp_path: Path) -> None
     )
 
 
-def test_goal_kpi_without_complete_target_fails(tmp_path: Path) -> None:
+def test_selected_rows_require_direction_freshness_and_guard_rule(tmp_path: Path) -> None:
     farplane = tmp_path / "farplane"
     farplane.mkdir()
     write_framework_manifest(farplane)
     write_required_project_files(tmp_path)
-    (farplane / "goals.yaml").write_text(
-        """kind: project-goals
-framework_template_version: "0.1.0"
-goals:
-  test_axis:
-    smart_goals:
-      - id: partial_target
-        kpis:
-          - id: accepted_harness_improvements
-            target: 20
-          - id: todo_unclaimed_ticket_count
-            direction: below
-""",
-        encoding="utf-8",
-    )
+    select_project_objective(farplane, "accepted_harness_improvements", guards=["todo_unclaimed_ticket_count"])
     (farplane / "metrics.yaml").write_text(
         """kind: project-metrics
-framework_template_version: "0.1.0"
+framework_template_version: "0.2.0"
 metrics:
   accepted_harness_improvements:
     label: Accepted harness improvements
@@ -777,6 +758,14 @@ metrics:
     kind: point
     unit: tickets
     display: reading
+  accepted_product_output:
+    label: Accepted product output
+    description: Accepted product output.
+    kind: daily_count
+    unit: artifacts
+    display: bar_plus_cumulative
+    direction: maximize
+    max_age_days: 7
 """,
         encoding="utf-8",
     )
@@ -789,44 +778,52 @@ metric_bindings:
     refresh: Count accepted improvements.
   todo_unclaimed_ticket_count:
     refresh: Count ready unclaimed tickets.
+  accepted_product_output:
+    refresh: Count accepted product outputs.
 """,
         encoding="utf-8",
     )
 
     errors = validate(tmp_path)
 
-    assert "farplane/goals.yaml KPI ids need explicit target values: todo_unclaimed_ticket_count." in errors
-    assert "farplane/goals.yaml KPI ids need explicit target directions: accepted_harness_improvements." in errors
+    assert (
+        "farplane/metrics.yaml selected objective definitions must declare direction: "
+        "accepted_harness_improvements."
+    ) in errors
+    assert (
+        "farplane/harness.yaml guard refs lack metrics.yaml guard rules: todo_unclaimed_ticket_count."
+    ) in errors
+    assert (
+        "farplane/metrics.yaml selected definitions must declare positive max_age_days: "
+        "accepted_harness_improvements, todo_unclaimed_ticket_count."
+    ) in errors
 
 
-def test_goal_kpi_metric_recipe_without_unit_fails(tmp_path: Path) -> None:
+def test_objective_metric_without_unit_fails(tmp_path: Path) -> None:
     farplane = tmp_path / "farplane"
     farplane.mkdir()
     write_framework_manifest(farplane)
     write_required_project_files(tmp_path)
-    (farplane / "goals.yaml").write_text(
-        """kind: project-goals
-framework_template_version: "0.1.0"
-goals:
-  test_axis:
-    smart_goals:
-      - id: missing_unit
-        kpis:
-          - id: accepted_harness_improvements
-            target: 20
-            direction: above
-""",
-        encoding="utf-8",
-    )
+    select_project_objective(farplane, "accepted_harness_improvements")
     (farplane / "metrics.yaml").write_text(
         """kind: project-metrics
-framework_template_version: "0.1.0"
+framework_template_version: "0.2.0"
 metrics:
   accepted_harness_improvements:
     label: Accepted harness improvements
     description: Accepted improvements.
     kind: daily_count
     display: bar_plus_cumulative
+    direction: maximize
+    max_age_days: 7
+  accepted_product_output:
+    label: Accepted product output
+    description: Accepted product output.
+    kind: daily_count
+    unit: artifacts
+    display: bar_plus_cumulative
+    direction: maximize
+    max_age_days: 7
 """,
         encoding="utf-8",
     )
@@ -837,6 +834,8 @@ project: {}
 metric_bindings:
   accepted_harness_improvements:
     refresh: Count accepted improvements.
+  accepted_product_output:
+    refresh: Count accepted product outputs.
 """,
         encoding="utf-8",
     )
@@ -844,7 +843,7 @@ metric_bindings:
     errors = validate(tmp_path)
 
     assert (
-        "farplane/goals.yaml KPI ids have metrics.yaml definitions without unit: accepted_harness_improvements."
+        "farplane/metrics.yaml selected metric definitions lack unit: accepted_harness_improvements."
         in errors
     )
 
@@ -860,7 +859,7 @@ def test_stale_project_snapshot_fails(tmp_path: Path) -> None:
             {
                 "sources": [
                     {
-                        "path": "farplane/goals.yaml",
+                        "path": "farplane/metrics.yaml",
                         "hash": "sha256:not-current",
                     }
                 ]
@@ -871,7 +870,7 @@ def test_stale_project_snapshot_fails(tmp_path: Path) -> None:
 
     errors = validate(tmp_path)
 
-    assert ".farplane/project/ui/latest.json is stale for farplane/goals.yaml; regenerate project snapshot." in errors
+    assert ".farplane/project/ui/latest.json is stale for farplane/metrics.yaml; regenerate project snapshot." in errors
 
 
 def test_missing_pm_manifest_passes(tmp_path: Path) -> None:

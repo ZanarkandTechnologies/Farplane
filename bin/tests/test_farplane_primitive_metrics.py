@@ -28,7 +28,7 @@ def write_ticket(root: Path, ticket_id: str, body: str) -> None:
 
 
 class FarplanePrimitiveMetricsTests(unittest.TestCase):
-    def test_kpi_counts_are_derived_directly_from_ticket_rewards(self) -> None:
+    def test_kpi_counts_require_realized_accepted_ticket_rewards(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             (root / "farplane").mkdir()
@@ -49,11 +49,19 @@ updated_at: 2026-07-03T02:00:00Z
 
 ```yaml
 kpi_rewards:
-  - kpi_id: accepted_harness_improvements
+  - reward_id: accepted-harness-7d
+    kpi_id: accepted_harness_improvements
+    expected_reward: one accepted improvement
+    actual_result: improvement retained after review
+    decision: accept
+    evaluated_at: 2026-07-03T02:00:00Z
+    evaluation_key: eval-accepted-harness-7d
+    evidence_refs: [artifacts/proof.md]
 ```
 
 ## Done / Proof
 - Evidence: artifacts/proof.md
+- TAS-A verdict: pass
 """,
             )
             write_ticket(
@@ -80,6 +88,10 @@ owner: human
             payload = primitive_snapshot(root, "2026-07-03", root / ".codex", monthly_spend=None, write=False)
 
         self.assertEqual(payload["primitives"]["ticket_count_by_kpi"]["accepted_harness_improvements"]["value"], 1)
+        self.assertEqual(
+            payload["primitives"]["ticket_count_by_kpi"]["accepted_harness_improvements"]["payload"]["reward_contract"],
+            "terminal_evidence_v1",
+        )
         self.assertNotIn("ticket_count_by_product", payload["primitives"])
         self.assertEqual(payload["primitives"]["tickets_with_kpi_reward_count"]["value"], 1)
         self.assertEqual(payload["primitives"]["kpi_attributed_ticket_ratio"]["value"], 0.5)
@@ -107,7 +119,14 @@ updated_at: 2026-07-03T02:00:00Z
 
 ```yaml
 kpi_rewards:
-  - kpi_id: accepted_harness_improvements
+  - reward_id: rejected-harness-7d
+    kpi_id: accepted_harness_improvements
+    expected_reward: one accepted improvement
+    actual_result: rejected by operator
+    decision: kill
+    evaluated_at: 2026-07-03T02:00:00Z
+    evaluation_key: eval-rejected-harness-7d
+    evidence_refs: [artifacts/rejection.md]
 ```
 
 ## Done / Proof
@@ -131,11 +150,19 @@ updated_at: 2026-07-03T04:00:00Z
 
 ```yaml
 kpi_rewards:
-  - kpi_id: accepted_harness_improvements
+  - reward_id: accepted-harness-7d
+    kpi_id: accepted_harness_improvements
+    expected_reward: one accepted improvement
+    actual_result: improvement retained after review
+    decision: accept
+    evaluated_at: 2026-07-03T04:00:00Z
+    evaluation_key: eval-accepted-harness-7d
+    evidence_refs: [artifacts/proof.md]
 ```
 
 ## Done / Proof
 - Evidence: artifacts/proof.md
+- TAS-A verdict: pass
 """,
             )
 
@@ -155,8 +182,8 @@ kpi_rewards:
             rejected_counts["accepted_harness_improvements"]["payload"]["tickets"][0]["status"],
             "rejected",
         )
-        all_rewarded = payload["primitives"]["ticket_count_by_kpi"]["accepted_harness_improvements"]["value"]
-        self.assertEqual(rejected_counts["accepted_harness_improvements"]["value"] / all_rewarded, 0.5)
+        realized = payload["primitives"]["ticket_count_by_kpi"]["accepted_harness_improvements"]["value"]
+        self.assertEqual(realized, 1)
 
     def test_empty_windows_are_zero_readings_not_source_gaps(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -187,7 +214,14 @@ completed_at: 2026-07-01T02:00:00Z
 
 ```yaml
 kpi_rewards:
-  - kpi_id: accepted_harness_improvements
+  - reward_id: accepted-harness-old
+    kpi_id: accepted_harness_improvements
+    expected_reward: one accepted improvement
+    actual_result: improvement retained
+    decision: accept
+    evaluated_at: 2026-07-01T02:00:00Z
+    evaluation_key: eval-accepted-harness-old
+    evidence_refs: [artifacts/proof.md]
 ```
 """,
             )
@@ -202,6 +236,76 @@ kpi_rewards:
         self.assertEqual(payload["primitives"]["ai_burn_estimate"]["payload"]["monthly_spend"], 62.0)
         self.assertNotIn("no_completed_tickets_in_window", payload["source_gaps"])
         self.assertNotIn("missing_spend_model", payload["source_gaps"])
+
+    def test_score_only_and_inconsistent_lifecycle_rows_are_not_realized(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "farplane").mkdir()
+            write_ticket(
+                root,
+                "TASK-SCORE-ONLY",
+                """---
+ticket_id: TASK-SCORE-ONLY
+status: done
+created_at: 2026-07-03T01:00:00Z
+updated_at: 2026-07-03T02:00:00Z
+---
+
+## Reward
+
+```yaml
+kpi_rewards:
+  - reward_id: score-only
+    kpi_id: accepted_harness_improvements
+    expected_reward: declared only
+    reward_score: 1
+    reward_score_reason: legacy positive
+```
+
+## Done / Proof
+- TAS-A verdict: pass
+""",
+            )
+            write_ticket(
+                root,
+                "TASK-PHASE-MISMATCH",
+                """---
+ticket_id: TASK-PHASE-MISMATCH
+status: done
+phase: planning
+created_at: 2026-07-03T01:00:00Z
+updated_at: 2026-07-03T02:00:00Z
+---
+
+## Reward
+
+```yaml
+kpi_rewards:
+  - reward_id: phase-mismatch
+    kpi_id: accepted_harness_improvements
+    expected_reward: should not aggregate
+    actual_result: result
+    decision: accept
+    evaluated_at: 2026-07-03T02:00:00Z
+    evaluation_key: eval-phase-mismatch
+    evidence_refs: [artifacts/proof.md]
+```
+
+## Done / Proof
+- TAS-A verdict: pass
+""",
+            )
+
+            payload = primitive_snapshot(
+                root, "2026-07-03", root / ".codex", monthly_spend=None, write=False
+            )
+
+        unrealized = payload["primitives"]["ticket_count_by_kpi"][
+            "accepted_harness_improvements"
+        ]
+        self.assertEqual(unrealized["value"], 0)
+        self.assertEqual(unrealized["status"], "source_gap")
+        self.assertEqual(len(unrealized["payload"]["gaps"]), 2)
 
     def test_mine_backfill_writes_completion_only_association_rows(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

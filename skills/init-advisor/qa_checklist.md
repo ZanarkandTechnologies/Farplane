@@ -30,37 +30,38 @@ init_advisor_qa(project_root, init_mode, activation_requested?)
    - Fail: required project files are absent or replaced by legacy filenames.
 
 3. `static_charter`
-   - Pass: `farplane/harness.md` names mission, human thesis, static leverage
+   - Pass: `farplane/harness.yaml` names mission, human thesis, static leverage
      commitments, non-tradeoffs, agent authority, and change rule.
    - Fail: the project can drift its thesis or commitments silently.
 
 4. `capability_workflow_ownership`
    - Pass: recurring artifact production is owned by an existing reusable
      skill, a project-local `.agents/skills/<capability>/SKILL.md`, or an
-     explicit refinement ticket; `farplane/harness.md` references only the
+     explicit refinement ticket; `farplane/harness.yaml` references only the
      stable capabilities the project depends on.
    - Fail: project outputs depend on an undocumented workflow or a product
      catalog/controller file.
 
-5. `goals_and_capabilities_split`
-   - Pass: value direction, goal axes, and KPI IDs live in
-     `farplane/goals.yaml`; stable policy and capability refs live in
-     `farplane/harness.md`; executable work and proof live in tickets.
+5. `objectives_and_capabilities_split`
+   - Pass: selected objective/guard refs, stable human policy, descriptive
+     products, and capability refs live in `farplane/harness.yaml`; reusable
+     metric meaning, direction, freshness, and guard rules live in
+     `farplane/metrics.yaml`; executable work and proof live in tickets.
    - Fail: a capability skill becomes a planning controller or duplicates
      goals, ticket state, or worker policy.
 
 5a. `metric_contract_split`
    - Pass: `farplane/metrics.yaml` owns provider-independent metric meaning,
-     every goal KPI ID resolves there, and `farplane/bindings.yaml` owns only
+     every selected metric ref resolves there, and `farplane/bindings.yaml` owns only
      connector/provider refresh coordinates.
    - Fail: metric meaning remains embedded in bindings or is duplicated across
      goal, capability, and provider files.
 
-6. `goals_operating_model`
-   - Pass: `farplane/goals.yaml` captures North Star, 3-month outcome, success
-     criteria, non-goals, decision boundaries, current milestone, holds, and
-     structured YAML for parseable goals, value function, axes, projects, and
-     milestones.
+6. `objective_operating_model`
+   - Pass: `farplane/harness.yaml` captures mission, human thesis, non-tradeoffs,
+     decision boundaries, authority, products, and selected metric refs;
+     `farplane/metrics.yaml` captures metric definitions, directions,
+     freshness, and guard rules.
    - Fail: file existence is treated as enough when the operating model is
      stale, placeholder, or not grounded in the operator's current intent.
 
@@ -77,30 +78,30 @@ init_advisor_qa(project_root, init_mode, activation_requested?)
    - Fail: it always runs a generic long interview, invents file content from
      placeholders, or bypasses `deep-interview` when mission, non-goals,
      decision boundaries, success criteria, North Star, value function, or
-     milestone intent are unclear. It also fails if the Deep Interview loop is
-     duplicated inside `init-advisor`, `harness-creator`, or
-     `horizon-advisor`.
+     metric-objective intent is unclear. It also fails if the Deep Interview loop is
+     duplicated inside `init-advisor`, `harness-creator`, or `metric-advisor`.
 
 9. `full_mode_readiness`
-   - Pass: full mode audits `farplane/harness.md` for human thesis, static
+   - Pass: full mode audits `farplane/harness.yaml` for human thesis, static
      leverage commitments, non-tradeoffs, agent authority, and change rule; it
-     audits `docs/bootstrap-brief.md`, capability workflow ownership, and
-     `farplane/goals.yaml` for team archetype, recurring outputs, North Star,
-     3-month outcome, success criteria, non-goals, and decision boundaries.
+     audits `docs/bootstrap-brief.md`, capability workflow ownership,
+     `farplane/harness.yaml` for human meaning and boundaries, and
+     `farplane/metrics.yaml` for honest metric meaning, directions, freshness,
+     and guard rules.
      Readiness state and missing answers are written to
      `docs/bootstrap-brief.md`.
    - Fail: full mode claims the project is initialized while these fields are
      missing, stale, placeholder, or ungrounded in operator intent.
 
 10. `split_file_delta_boundary`
-   - Pass: `farplane/goals.yaml` stays structured YAML for the North Star,
-     value function, goal axes, outcome targets, KPI refs, current bets,
-     milestone, and holds; split-file deltas are proposed or applied only after
-     operator intent is known; `goal-advisor` is used only after the current
-     milestone is concrete enough for a ticket-backed Goal Packet.
-   - Fail: InitAdvisor treats `farplane/goals.yaml` existence as enough,
-     rewrites split-file strategy without operator intent, or invokes
-     `goal-advisor` before there is a concrete milestone.
+   - Pass: `farplane/harness.yaml` keeps human meaning, products, hard
+     constraints, and selected metric refs while `farplane/metrics.yaml` keeps
+     reusable metric meaning, direction, freshness, and guard rules; split-file
+     deltas are applied only after operator intent is known; `goal-advisor` is
+     used only after a ticket is concrete enough for a Goal Packet.
+   - Fail: InitAdvisor treats file existence as enough, invents metric
+     objectives without operator intent or evidence, or invokes
+     `goal-advisor` before there is a concrete executable ticket.
 
 11. `automation_source`
    - Pass: `farplane/automations.toml` contains one reviewable Work Pulse

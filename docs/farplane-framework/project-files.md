@@ -3,13 +3,12 @@ title: Project Files
 status: active
 owner: harness
 created_at: 2026-06-15
-updated_at: 2026-07-11
+updated_at: 2026-07-12
 framework_template_version: "0.3.0"
 source_of_truth:
   - docs/farplane-framework/README.md
   - farplane/manifest.json
-  - farplane/harness.md
-  - farplane/goals.yaml
+  - farplane/harness.yaml
   - farplane/metrics.yaml
   - farplane/automations.toml
   - docs/farplane-framework/reporting.md
@@ -36,7 +35,7 @@ skills/         reusable cross-project workflows
 ## Minimality Rule
 
 Project files are declarative state. They may contain identity, value
-direction, goals, thresholds, constraints, refs, provider coordinates, and
+direction, selected metrics, thresholds, constraints, refs, provider coordinates, and
 human-approved boundaries.
 
 They must not contain orchestration algorithms, worker pools, ordered artifact
@@ -50,8 +49,7 @@ instructions. Put those in skills, small hooks/validators, or the owning ticket
 farplane/
   README.md
   manifest.json
-  harness.md
-  goals.yaml
+  harness.yaml
   metrics.yaml
   automations.toml
   bindings.yaml
@@ -70,44 +68,20 @@ Versioned project spec and compact UI identity. It names standard tracked and
 ignored paths and carries `project.name`, `project.description`, and
 `project.archetype`. It is not a strategy document or workflow catalog.
 
-### `farplane/harness.md`
+### `farplane/harness.yaml`
 
-Static human charter: mission, thesis, operating principles, non-tradeoffs,
-durable leverage commitments, allocation guardrails, agent authority, change
-rule, and stable capability references.
+Typed human charter: identity, descriptive products, feature meaning,
+operating principles, non-tradeoffs, durable leverage commitments, allocation
+guardrails, authority, stable capability references, and selected metric refs.
 
 This is the owner for the human idea the system must preserve. Agents may
-propose changes with evidence, but material charter changes require explicit
-human approval. Capability references identify important recurring workflows;
-the referenced skills own their procedures.
+propose changes with evidence, but protected charter changes require explicit
+human approval. Products describe recurring valuable outputs; they do not own
+workers, controllers, budgets, progress, or strategy. Capability references
+identify workflows; the referenced skills own their procedures.
 
-Use YAML front matter plus Markdown sections. Do not add a custom harness DSL,
-live backlog, worker allocation table, or changing goal state here.
-
-### `farplane/goals.yaml`
-
-Project-level value direction and strategy: north star, value function, goal
-axes, SMART goals, stable KPI IDs, current bets, current milestone, and holds.
-Goals do not need execution-lane foreign keys. Capability skills consume goals
-as inputs but do not own parallel goal trees.
-
-```yaml
-goals:
-  improve_harness:
-    name: Improve autonomous usefulness
-    smart_goals:
-      - id: accepted_improvement_rate
-        target: Ship and verify two meaningful improvements this month.
-        kpis:
-          - id: accepted_harness_improvements
-            target: 2
-            direction: above
-        interpretation: Count only ticket-backed improvements with proof.
-```
-
-`horizon-advisor` owns material long-horizon deltas. Ticket planners read this
-file when ranking work; they do not rewrite it merely because the board is
-empty.
+Use typed YAML. Do not add a custom harness DSL, live backlog, worker
+allocation table, changing goal state, or product controller state here.
 
 ### `farplane/automations.toml`
 
@@ -122,9 +96,11 @@ the tickets they create.
 
 ### `farplane/metrics.yaml`
 
-Canonical metric semantics: stable ID, label, description, unit, kind, display
-behavior, and pinned state. Goal KPI refs must resolve to this catalog; target
-and direction remain goal-specific in `goals.yaml`.
+Canonical reusable metric semantics. Each definition owns its stable ID,
+label, description, unit, display behavior, direction, freshness, pinned state,
+and optional hard-guard operator/threshold. `harness.yaml` selects active
+objectives/guards and owns objective priority. Unselected non-guard metrics are
+tracked observations, not ordinary planner context.
 
 Metric observations remain generated runtime evidence under `.farplane/`; this
 tracked file defines what the observations mean, not their current values.
@@ -139,9 +115,11 @@ this file explains how a provider can obtain or refresh a reading.
 
 ### `farplane/hooks.json`
 
-Declarative hook configuration. Hook algorithms belong in installed runtime
-shims, skills, scripts, or validators. Hooks observe and gate; they do not own
-continuation or ticket planning.
+Declarative typed file-event capture configuration. Core owns event identity,
+durable outbox/snapshots, route validation, mining runs, and lean reports;
+`bindings.yaml` maps local event names to immutable Core programs. Hooks observe
+and route; they do not own continuation or ticket planning, and no daemon is
+required.
 
 ### `.agents/skills/`
 
@@ -153,7 +131,7 @@ skill already owns it:
 .agents/skills/<capability>/SKILL.md
 ```
 
-Reference these skills from `harness.md`, tickets, or automation prompts as
+Reference these skills from `harness.yaml`, tickets, or automation prompts as
 needed. Promote one into root `skills/` only after repeated cross-project proof.
 Do not create a local skill merely to preserve a retired category or planning
 controller.
@@ -195,6 +173,9 @@ owner:
   metrics/
   project/ui/
   automation/
+  events/
+  file-events/
+  mine/
   state/
   evals/runs/
   logs/
@@ -216,15 +197,16 @@ labels.
 
 `init-advisor` creates or preserves the minimal tracked config, ignored runtime
 folders, ticket/QA surfaces, and optional project-local skill home. In `full`
-mode, `harness-creator` grounds the charter, goals, required capabilities,
-feedback loops, missing-system tickets, and current milestone.
+mode, `harness-creator` grounds the typed charter, descriptive products,
+required capabilities, feedback loops, missing-system tickets, and selected
+metric objectives.
 
 A clean project is not considered ready merely because files exist. Readiness
 requires:
 
 - a grounded charter and authority boundary;
-- a usable project goal contract;
-- metric IDs in goals resolve to `farplane/metrics.yaml`;
+- at least one honest selected objective in `farplane/harness.yaml`;
+- selected objective and guard IDs resolve to metric definitions and bindings;
 - an owned capability route for required recurring outputs, or a refinement
   ticket;
 - an executable board and proof surface;

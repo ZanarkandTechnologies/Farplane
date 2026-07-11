@@ -62,7 +62,7 @@ project "Faceless AI Engineering Channel" {
   axis retain_loyalty {
     bet: "A coherent episode ladder gives viewers a reason to return"
     kpi: review_metric("series promise and next-video pull")
-    evidence: ref("farplane/goals.yaml")
+    evidence: ref("farplane/metrics.yaml")
     heartbeat: weekly_interval
   }
 

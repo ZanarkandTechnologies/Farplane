@@ -489,7 +489,7 @@ def validate_graph(graph: dict[str, Any]) -> list[str]:
             errors.append(f"explicit edge lacks evidence_ref: {edge}")
     required_nodes = [
         "skill:init-advisor",
-        "skill:horizon-advisor",
+        "skill:metric-advisor",
         "skill:goal-advisor",
         "skill:proof-advisor",
         "skill:pulse-update",
@@ -498,7 +498,7 @@ def validate_graph(graph: dict[str, Any]) -> list[str]:
         "skill:skill-maintenance",
         "skill:eval",
         "skill:knowledge-tidier",
-        "file:farplane/goals.yaml",
+        "file:farplane/metrics.yaml",
         "file:farplane/pm.json",
         "hook:UserPromptSubmit",
         "hook:Stop",

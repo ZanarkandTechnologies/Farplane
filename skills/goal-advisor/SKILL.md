@@ -24,9 +24,9 @@ Use it when the operator wants to turn an intent, ticket, board, batch, rollout,
 selected project-goal frontier, skill-improvement loop, or feedback loop into a
 native Goal, heartbeat, or direct-route recommendation.
 
-Use `horizon-advisor` before this skill when the work is still about deciding
-the North Star, KPI tree, project goal map, current milestone, or `goals.yaml`
-strategy delta. `goal-advisor` starts once a frontier is selected enough to
+Use `metric-advisor` before this skill when the measurable objective, guard,
+or proof provider is still unclear. `goal-advisor` starts once a ticket or
+proposal frontier is selected enough to
 compile into files and execution policy.
 
 Native Goal mode is the only formal continuation loop. Farplane adds visible
@@ -45,8 +45,9 @@ the executable loop policy: trigger mode, metric, budget, heartbeat, drift,
 after-turn routine, check-in program, and stop policy. For delayed rewards,
 Goal Advisor compiles the experiment-specific check-in procedure into
 `program.md`; Work Pulse only supplies due rows and resumes it. `progress.md`
-owns compact append-only observations. `farplane/goals.yaml` is project-level
-strategy context when a selected frontier comes from a long-horizon goal graph.
+owns compact append-only observations. `farplane/harness.yaml` and
+`farplane/metrics.yaml` are optional project context when execution needs the
+human charter or metric objective contract.
 
 This skill owns both architecture choice and final native `/goal` or heartbeat
 prompt compilation. The native Goal prompt is a compact launcher over the Goal
@@ -64,7 +65,7 @@ compute/budget, and blocker handling.
 
 ```text
 advise_goal_use(intent, files?, trigger?, budget?, proof_policy?, approval_policy?) -> goal_architecture + files[] + goal_packet? + heartbeat_prompt? + native_goal_prompt? + next_action
-state: reads(operator intent, listed files, tickets, board files?, farplane/goals.yaml?, program.md?, progress.md?, Reward.kpi_rewards[]?, goal-loop contract, relevant skills/docs); writes(ticket/program/progress? generated goal prompt? or recommendation)
+state: reads(operator intent, listed files, tickets, board files?, farplane/harness.yaml?, farplane/metrics.yaml?, program.md?, progress.md?, Reward.kpi_rewards[]?, goal-loop contract, relevant skills/docs); writes(ticket/program/progress? generated goal prompt? or recommendation)
 gates: missing_execution_inputs_resolved_or_asked; material_goal_has_files; loop_owner_single; progress_surface_named; metric_provider_named; delayed_checkin_program_compiled_or_not_applicable; budget_named; drift_policy_named; logging_policy_named; proof_route_named; final_evidence_policy_named; approval_before_goal_run_when_material
 routes: metric-advisor | impl-plan | optimize-with-human | qa | visual-qa | agent-qa-test | review | direct-answer
 fails: creates hidden loop runtime; uses Goal without durable state; treats human feedback/heartbeat/rollout as competing loop owners; emits prompt-only material Goal; hides required files behind transcript memory; leaves delayed_checkin_policy_scattered_or_implicit; adds_delayed_checkin_debt_to_immediate_goal; routes public work through retired work/ralph/batch-work surfaces; emits long Goal prompt that restates ticket context; allows self-certified QA/review/visual completion; runs material Goal before packet approval
@@ -124,7 +125,7 @@ only after the branch is selected:
   `references/goal-shapes.md`
 - workflow-skill composition or retired-surface migration detail ->
   `references/goal-algebra.md`
-- project-goals authoring or strategy design -> `../horizon-advisor/SKILL.md`
+- project metric objective design -> `../metric-advisor/SKILL.md`
 - worked examples -> `examples/`
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
@@ -183,8 +184,8 @@ only after the branch is selected:
 - [ ] 3. Choose the state surfaces.
   - [ ] `Files:` in the generated prompt names every ticket, program,
     progress, board, spec, or artifact file the Goal must read.
-  - [ ] Include `farplane/goals.yaml` only when the selected frontier needs
-    project-level strategy context.
+  - [ ] Include `farplane/harness.yaml` and `farplane/metrics.yaml` only when the
+    selected ticket needs project charter or objective context.
 - [ ] 4. Choose the time/budget policy.
    - [ ] Treat the unit as a time/budget window, not ticket size.
    - [ ] Name time, token/model/compute, subagent, review, QA, feedback, and
@@ -210,7 +211,8 @@ only after the branch is selected:
    - [ ] If the metric is delayed, fill `program.md` `Check-In Program` with
      the original packet inputs, exact evidence sources, ordered scoring and
      attribution procedure, matured-row-only writeback, experiment-specific
-     `accept | kill | iterate | monitor` conditions, idempotency, and
+     `accept | kill | monitor` conditions, stable Reward IDs, evaluation-key
+     idempotency, and
      source-gap behavior. If feedback is immediate, keep the section
      `mode: not_applicable` with only a reason; do not compile future check-in
      machinery.
@@ -231,8 +233,8 @@ only after the branch is selected:
      in order before claiming a long workflow or lifecycle, record evidence for
      each checkpoint, and block or revise when the final path remains unrun
      without an explicit residual-risk note.
-   - [ ] For project-goals leaf Goals, list only the selected leaf file set plus
-     `farplane/goals.yaml` when project strategy context is needed; do not include
+   - [ ] For project leaf Goals, list only the selected leaf file set plus
+     `farplane/harness.yaml` and `farplane/metrics.yaml` when project context is needed; do not include
      sibling tickets as executable work files.
    - [ ] Leaf Goal logging must append `progress.md` observations and a
      completion entry for every changed ticket before returning control to the
@@ -254,7 +256,7 @@ only after the branch is selected:
    - [ ] Instruct the executor to read `program.md` before execution and treat
      it as the Goal Packet's executable loop policy, not optional context.
    - [ ] For a resumed delayed check-in, list the original ticket, program, and
-     progress files plus matured Reward row indexes and evidence refs; instruct
+     progress files plus matured Reward IDs and evidence refs; instruct
      the worker to execute `program.md` `Check-In Program` without rebuilding
      its decision algorithm in the launcher prompt.
    - [ ] Bind the prompt to the listed files, honest metric provider, logging
@@ -412,8 +414,7 @@ Or create/update the Goal Packet files and then report their paths.
 - Do not treat `progress.md` as transcript storage. It is compact observed
   state.
 - Do not make parent tickets mandatory. Use an inline file list for normal
-  multi-file Goals; add `farplane/goals.yaml` only when project strategy context
-  is needed.
+  multi-file Goals; add the charter and metric contract only when needed.
 - Do not hide required files behind transcript memory. If the Goal depends on a
   ticket, program, progress log, board, spec, or artifact, list it in `Files:`.
 - Do not make heartbeat automations into hidden autonomy. They are delayed
@@ -449,9 +450,9 @@ Or create/update the Goal Packet files and then report their paths.
 - [references/goal-algebra.md](references/goal-algebra.md) - load when several
   workflow skills compose into one Goal contract or retired-surface migration
   detail matters.
-- [../horizon-advisor/SKILL.md](../horizon-advisor/SKILL.md) - use before this
-  skill when project-level goal graphs or `goals.yaml` strategy deltas still
-  need to be authored.
+- [../metric-advisor/SKILL.md](../metric-advisor/SKILL.md) - use before this
+  skill when the metric objective, guard, or proof provider still needs to be
+  authored.
 - [../metric-advisor/SKILL.md](../metric-advisor/SKILL.md) - derive honest
   metric cards before Goal Packet metric provider compilation.
 - [optimize-with-human](../optimize-with-human/SKILL.md) - route optimization

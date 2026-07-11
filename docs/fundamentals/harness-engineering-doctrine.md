@@ -82,7 +82,7 @@ recover later.
 | Ticket contract | Task boundary, Done / Proof, current state, and handoff. | Work size or proof target is unclear. | Ticket bureaucracy or fragmented work. | Ticket metadata/checks plus reviewer or QA proof. |
 | `program.md` | Loop config, metric, drift policy, heartbeat, and stop conditions. | A ticket is Goal-backed, heartbeat-based, rollout-like, or long-running. | Second-ticket confusion. | Goal Packet drift review. |
 | `progress.md` | Append-only observed execution memory. | Future turns must reconstruct state without transcript memory. | Transcript dumping, noisy logs. | Resume from files alone. |
-| Portfolio | Long-horizon goal graph and current milestone. | Work spans multiple tickets, goals, and projects. | Overplanning future branches. | Parent heartbeat selects one executable leaf. |
+| Proposal portfolio | Candidate trajectories over metric objectives and guards. | An empty board needs long-horizon comparison before admitting work. | Greedy selection or overplanning future branches. | Work Pulse admits only bounded non-interfering tickets. |
 | File/memory policy | What state is durable, searchable, drained, or archived. | Lessons are lost or context is stale/noisy. | Artifact graveyard, stale retrieval. | Drain/retrieval test. |
 | Subagent | Independent context and owned output. | Self-approval, role separation, or parallel evidence matters. | Coordination cost, duplicated work. | Subagent artifact plus integration review. |
 | Tool/MCP | External capability or source of truth. | The agent cannot inspect, operate, or verify ground truth. | Latency, side effects, unused tools. | Tool-backed evidence artifact. |
@@ -187,29 +187,28 @@ current external truth needed
 delayed external state or feedback needed
   -> heartbeat or automation
 
-long-horizon goal drifting
-  -> portfolio + child Goal Packets + drift review
+long-horizon planning becoming greedy
+  -> proposal trajectory comparison + metric guards + ticket Goal Packets
 ```
 
 ## Ticket And Goal Memory
 
-Use this hierarchy for long-running work:
+Use this ownership split for long-running work:
 
 ```text
-goal -> project[] -> task[]
-
-farplane/goals.yaml = long-horizon map + current milestone
+harness.yaml = human meaning + descriptive products + selected metric refs + hard constraints
+metrics.yaml = metric meaning + direction + freshness + optional guard rules
 ticket.md = executable leaf contract + Done / Proof
 program.md = loop policy + metric + stop condition
 progress.md = observed execution memory
 artifacts/ = evidence
 ```
 
-Parent portfolio control:
+Portfolio control:
 
 ```text
-portfolio_heartbeat(portfolio, parent_program, progress)
-  -> no_op | start_child_goal | resume_child_goal | request_feedback | replan
+plan_next_wave(harness, metric_state, ticket_history, reports)
+  -> ranked_proposals -> admitted_ticket[] | no_op | request_feedback
 ```
 
 Leaf execution:
@@ -222,13 +221,13 @@ leaf_native_goal(ticket, program, progress)
 Completion:
 
 ```text
-complete_child_goal(child_packet, portfolio, parent_program)
-  -> progress_entry + portfolio_state_delta + next_trigger
+complete_ticket(ticket, metric_observations)
+  -> progress_entry + evidence + next_pulse_trigger
 ```
 
-Use native Goal for the selected executable leaf. Use heartbeat/manual resume
-for the parent portfolio. Do not run a whole portfolio as one indefinite native
-Goal.
+Use native Goal for the selected executable ticket. Work Pulse replans from
+observed state when the board empties; do not persist a second portfolio ledger
+or run the whole proposal set as one indefinite native Goal.
 
 ## Small-Eval Loop
 

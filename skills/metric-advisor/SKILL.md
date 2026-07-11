@@ -20,23 +20,25 @@ a metric card: provider, primary signal, direction, guard metrics,
 anti-metrics, minimum meaningful delta, measurement method, and route hint.
 
 This skill does not run evals, reviews, Goals, QA, or experiments. It gives the
-caller the smallest trustworthy measurement contract. The caller keeps domain
+caller the smallest trustworthy measurement contract and may write the
+project-level `metrics.yaml` definition delta and `harness.yaml` selection
+delta when explicitly requested. The caller keeps domain
 ownership: `optimize-harness` coordinates recovery, `goal-advisor` compiles
-Goal Packets, `self-improve` compares variants, `horizon-advisor` owns KPI
-trees, `impl-plan` owns ticket proof, and `review` judges evidence.
+Goal Packets, `self-improve` compares variants, `impl-plan` owns ticket proof,
+and `review` judges evidence.
 
 ## Skill Signature
 
 ```text
 metric_advice(objective, evidence?, proof_surface?, constraints?)
   -> metric_card + route_hint + no_metric_reason?
-state: reads(objective, ticket/progress/eval/review artifacts, constraints);
-       writes(none by default; caller writes ticket/program/progress/proof)
+state: reads(objective, farplane/harness.yaml?, farplane/metrics.yaml?, ticket/progress/eval/review artifacts, constraints);
+       writes(none by default; optional farplane/metrics.yaml definition/direction/freshness/guard delta plus farplane/harness.yaml selection delta; caller writes ticket/program/progress/proof)
 gates: objective_named; provider_truthful; metric_matches_objective;
        guard_metric_named; anti_metric_named; measurement_method_named;
        no_fake_precision
 routes: optimize-harness | goal-advisor | self-improve | impl-plan |
-  horizon-advisor | proof-advisor | review
+  proof-advisor | review
 fails: fake numeric score; proxy gaming; missing guard metric; hidden
   subjective judgment; resurrecting retired autoresearch skill routes
 ```

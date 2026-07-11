@@ -59,12 +59,16 @@ def write_ticket(
         for row in reward_rows:
             lines.extend(
                 [
-                    f"  - kpi_id: {row.get('kpi_id', 'metric')}",
+                    f"  - reward_id: {row.get('reward_id', '')}",
+                    f"    kpi_id: {row.get('kpi_id', 'metric')}",
                     f"    expected_reward: {json.dumps(row.get('expected_reward', 'improve metric'))}",
                     f"    check_in_at: {json.dumps(row.get('check_in_at', ''))}",
                     f"    actual_result: {json.dumps(row.get('actual_result')) if row.get('actual_result') is not None else ''}",
-                    f"    reward_score: {json.dumps(row.get('reward_score')) if row.get('reward_score') is not None else ''}",
-                    f"    reward_score_reason: {json.dumps(row.get('reward_score_reason')) if row.get('reward_score_reason') is not None else ''}",
+                    f"    decision: {row.get('decision', '')}",
+                    f"    evaluated_at: {json.dumps(row.get('evaluated_at')) if row.get('evaluated_at') is not None else ''}",
+                    f"    evaluation_key: {row.get('evaluation_key', '')}",
+                    f"    supersedes_evaluation_key: {row.get('supersedes_evaluation_key', '')}",
+                    f"    evidence_refs: {json.dumps(row.get('evidence_refs', []))}",
                 ]
             )
         lines.extend(["guard: preserve attribution", "```", ""])
@@ -107,7 +111,7 @@ def run_minimal_pulse_fixture(
         mode = "plan_next_wave"
         project_context = {
             name: (root / "farplane" / name).read_text(encoding="utf-8")
-            for name in ("harness.md", "goals.yaml", "metrics.yaml")
+            for name in ("harness.yaml", "metrics.yaml")
         }
         ticket_history = [*board["executable_tickets"], *board["excluded_tickets"]]
         specs = planner(project_context, ticket_history, wave_size)
@@ -158,8 +162,7 @@ class WorkPulseBoardTests(unittest.TestCase):
             root = Path(tmp)
             farplane = root / "farplane"
             farplane.mkdir()
-            (farplane / "harness.md").write_text("# Harness\n", encoding="utf-8")
-            (farplane / "goals.yaml").write_text("goals: {}\n", encoding="utf-8")
+            (farplane / "harness.yaml").write_text("kind: project-harness\n", encoding="utf-8")
             (farplane / "metrics.yaml").write_text("metrics: {}\n", encoding="utf-8")
             observed: dict[str, object] = {}
 
@@ -191,7 +194,7 @@ class WorkPulseBoardTests(unittest.TestCase):
             self.assertEqual(result["planner_calls"], 1)
             self.assertEqual(
                 observed["context_files"],
-                ["goals.yaml", "harness.md", "metrics.yaml"],
+                ["harness.yaml", "metrics.yaml"],
             )
             self.assertEqual(observed["ticket_history"], [])
             self.assertEqual(observed["wave_size"], 3)
@@ -287,17 +290,28 @@ class WorkPulseBoardTests(unittest.TestCase):
                 status="waiting_signal",
                 reward_rows=[
                     {
+                        "reward_id": "conversion-7d",
                         "kpi_id": "conversion",
                         "check_in_at": "2026-07-10T00:00:00Z",
                     },
                     {
+                        "reward_id": "retention-monitor",
                         "kpi_id": "retention",
                         "check_in_at": "2026-07-11T00:00:00Z",
                         "actual_result": "observed",
+                        "decision": "monitor",
+                        "evaluation_key": "eval-retention-1",
                     },
                     {
+                        "reward_id": "quality-14d",
                         "kpi_id": "quality",
                         "check_in_at": "2026-07-12T00:00:00Z",
+                    },
+                    {
+                        "reward_id": "accepted-now",
+                        "kpi_id": "quality",
+                        "check_in_at": "2026-07-10T00:00:00Z",
+                        "decision": "accept",
                     },
                 ],
             )
@@ -314,15 +328,20 @@ class WorkPulseBoardTests(unittest.TestCase):
             ticket = result["executable_tickets"][0]
             self.assertEqual(ticket["execution_reason"], "due_reward_checkin")
             self.assertEqual(
-                [row["index"] for row in ticket["due_reward_checkins"]], [0, 1]
+                [row["reward_id"] for row in ticket["due_reward_checkins"]],
+                ["conversion-7d", "retention-monitor"],
             )
             self.assertEqual(
-                [row["index"] for row in ticket["future_reward_checkins"]], [2]
+                [row["reward_id"] for row in ticket["future_reward_checkins"]],
+                ["quality-14d"],
+            )
+            self.assertEqual(
+                ticket["terminal_reward_outcomes"][0]["state"], "terminal_accept"
             )
             self.assertEqual(result["due_checkin_tickets"][0]["path"], "tickets/TASK-EXPERIMENT/ticket.md")
             self.assertFalse(result["empty_executable_board"])
 
-    def test_due_projection_requires_actual_and_score_and_keeps_safety_gates(self) -> None:
+    def test_due_projection_uses_decision_state_and_keeps_safety_gates(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             now = datetime(2026, 7, 11, tzinfo=timezone.utc)
@@ -332,6 +351,7 @@ class WorkPulseBoardTests(unittest.TestCase):
                 status="waiting_signal",
                 reward_rows=[
                     {
+                        "reward_id": "partial",
                         "check_in_at": "2026-07-10T00:00:00Z",
                         "actual_result": "observed",
                     }
@@ -343,9 +363,10 @@ class WorkPulseBoardTests(unittest.TestCase):
                 status="waiting_signal",
                 reward_rows=[
                     {
+                        "reward_id": "accepted",
                         "check_in_at": "2026-07-10T00:00:00Z",
                         "actual_result": "observed",
-                        "reward_score": 0.8,
+                        "decision": "accept",
                     }
                 ],
             )
@@ -353,7 +374,9 @@ class WorkPulseBoardTests(unittest.TestCase):
                 root,
                 "TASK-BLOCKED-CHECKIN",
                 status="blocked",
-                reward_rows=[{"check_in_at": "2026-07-10T00:00:00Z"}],
+                reward_rows=[
+                    {"reward_id": "blocked", "check_in_at": "2026-07-10T00:00:00Z"}
+                ],
             )
 
             result = BOARD.build_board(root, now=now)
@@ -368,6 +391,46 @@ class WorkPulseBoardTests(unittest.TestCase):
             }
             self.assertIn("status_not_executable", exclusions["TASK-SCORED"])
             self.assertIn("status_not_executable", exclusions["TASK-BLOCKED-CHECKIN"])
+
+    def test_reward_identity_survives_row_reordering_and_missing_ids_are_invalid(self) -> None:
+        rows = [
+            {
+                "reward_id": "second-horizon",
+                "kpi_id": "retention",
+                "check_in_at": "2026-07-10T00:00:00Z",
+            },
+            {
+                "reward_id": "first-horizon",
+                "kpi_id": "activation",
+                "check_in_at": "2026-07-09T00:00:00Z",
+            },
+        ]
+        now = datetime(2026, 7, 11, tzinfo=timezone.utc)
+        first = BOARD.classify_reward_checkins(
+            "## Reward\n\n```yaml\n" + "kpi_rewards:\n" + "\n".join(
+                f"  - reward_id: {row['reward_id']}\n    kpi_id: {row['kpi_id']}\n    check_in_at: {row['check_in_at']}"
+                for row in rows
+            ) + "\n```\n",
+            now,
+        )
+        second = BOARD.classify_reward_checkins(
+            "## Reward\n\n```yaml\n" + "kpi_rewards:\n" + "\n".join(
+                f"  - reward_id: {row['reward_id']}\n    kpi_id: {row['kpi_id']}\n    check_in_at: {row['check_in_at']}"
+                for row in reversed(rows)
+            )
+            + "\n  - kpi_id: missing\n    check_in_at: 2026-07-10T00:00:00Z"
+            + "\n  - reward_id: first-horizon\n    kpi_id: duplicate\n    check_in_at: 2026-07-10T00:00:00Z\n```\n",
+            now,
+        )
+
+        self.assertEqual(
+            {row["reward_id"] for row in first["due"]},
+            {row["reward_id"] for row in second["due"]},
+        )
+        self.assertEqual(
+            [row["gap"] for row in second["invalid"]],
+            ["missing_reward_id", "duplicate_reward_id"],
+        )
 
     def test_priority_orders_executable_tickets(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

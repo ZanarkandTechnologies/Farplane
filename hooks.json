@@ -47,8 +47,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "sh -lc 'test -n \"$FARPLANE_UI_REPO\" || exit 0; \"$FARPLANE_UI_REPO/node_modules/.bin/tsx\" \"$FARPLANE_UI_REPO/hooks/file-change-listener/run.ts\"'",
-            "statusMessage": "Summarize tracked file update",
+            "command": "python3 \"$HOME/.codex/hooks/farplane_file_change.py\"",
+            "statusMessage": "Capture Farplane file event",
             "timeout": 60
           }
         ]

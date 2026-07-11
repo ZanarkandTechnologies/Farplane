@@ -210,7 +210,7 @@ feed_scout:
         - Claw3D
 metric_bindings:
   accepted_evidence_cycles:
-    refresh: Call $interval-update.count_ticket_kpi_rewards(ticket_dir="tickets", date="<YYYY-MM-DD>", kpi_key="accepted_evidence_cycles") and store the returned value/status/payload in the daily metric file.
+    refresh: Call $interval-update.count_ticket_kpi_rewards(ticket_dir="tickets", date="<YYYY-MM-DD>", kpi_key="accepted_evidence_cycles"); count only ticket-scoped review evidence with verdict pass at TAS-A, and store gaps when acceptance evidence is missing.
   accepted_trust_ablations:
     refresh: Call $interval-update.count_ticket_kpi_rewards(ticket_dir="tickets", date="<YYYY-MM-DD>", kpi_key="accepted_trust_ablations") and store the returned value/status/payload in the daily metric file.
   accepted_harness_improvements:
@@ -267,3 +267,7 @@ metric_bindings:
     refresh: Call $interval-update.select_content_metric_targets(content_ledger=".farplane/content/ledger.jsonl", platform="instagram", kpi_key="instagram_retention_score", date="<YYYY-MM-DD>", window_days=30), then call $instagram-account with the returned Reel media IDs using --deep and duration metadata when known. Store instagram_retention_score plus per-reel payload.items when the API returns watch-time fields; otherwise store source_gap with API/permission/duration gaps.
   posts_published:
     refresh: Count rows in `.farplane/content/ledger.jsonl` with status=posted and published_at on <YYYY-MM-DD>; store source_gap if the ledger is missing.
+event_routes:
+  - route_id: ticket-completion-lean-v1
+    event_name: farplane.ticket.completed
+    program_ref: core:ticket-completion-lean@1.0.0

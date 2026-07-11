@@ -28,6 +28,7 @@ except ImportError:  # pragma: no cover - package import path used by tests
 
 PROJECT_SNAPSHOT_PATH = Path(".farplane/project/ui/latest.json")
 DAILY_METRICS_DIR = Path(".farplane/metrics/daily")
+REWARD_CONTRACT = "terminal_evidence_v1"
 CONTENT_LEDGER_PATH = Path(".farplane/content/ledger.jsonl")
 FEED_SCOUT_LATEST_FEED_PATH = Path(".farplane/feed-scout/daily/latest.json")
 FEED_SCOUT_LATEST_REPORT_PATH = Path(".farplane/reports/feed-scout/latest.json")
@@ -50,7 +51,7 @@ PRIMITIVE_CATALOG: dict[str, dict[str, Any]] = {
         "store_to": ".farplane/metrics/daily/<YYYY-MM-DD>.json",
         "required_inputs": ["tickets/**/ticket.md", "Reward.kpi_rewards[]"],
         "emits": ["value", "status", "payload.tickets", "payload.gaps"],
-        "source_gap_policy": "Human/unattributed tickets are diagnostics, not UI warnings; missing KPI rows produce zero counts.",
+        "source_gap_policy": "Unrealized or evidence-incomplete Reward rows remain source gaps; terminal kills are known zero and declarations never count as accepted value.",
     },
     "kpi_attributed_ticket_ratio": {
         "primitive_id": "kpi_attributed_ticket_ratio",
@@ -135,8 +136,8 @@ PRIMITIVE_CATALOG: dict[str, dict[str, Any]] = {
 }
 
 DEFAULT_METRIC_DESCRIPTIONS: dict[str, str] = {
-    "accepted_evidence_cycles": "Daily count of completed tickets whose Reward.kpi_rewards includes this KPI and whose Done / Proof shows accepted evidence value.",
-    "accepted_harness_improvements": "Daily count of completed tickets whose Reward.kpi_rewards includes this KPI and whose proof shows a shipped Farplane improvement.",
+    "accepted_evidence_cycles": "Daily count of done tickets with an evidence-backed terminal accept Reward decision for this KPI and TAS-A/pass review evidence.",
+    "accepted_harness_improvements": "Daily count of done tickets with an evidence-backed terminal accept Reward decision for this KPI and TAS-A/pass review evidence.",
     "auto_time_ratio": "Autonomous worker elapsed minutes divided by estimated human attention minutes for the day.",
     "evidence_distribution_reach": "Daily distribution reach rollup from available X, Instagram, GitHub, and content-ledger view readings.",
     "latest_eval_pass_rate": "Most recent eval summary pass rate available for the snapshot window.",
@@ -171,7 +172,15 @@ SHARED_SHAPES: dict[str, list[str]] = {
     "content_metric": ["content_id", "platform?", "external_id?", "metrics[]"],
     "feed_scout_item": ["title", "summary", "canonical_url?", "platform?", "entity_group_id?", "rank?", "signal?", "actionability?"],
     "metric_primitive": ["primitive_id", "provider", "owner", "command", "store_to", "required_inputs[]", "emits[]", "source_gap_policy"],
-    "ticket_ref": ["ticket_id", "path", "title", "status", "priority", "kpi_rewards[]"],
+    "ticket_ref": [
+        "ticket_id",
+        "path",
+        "title",
+        "status",
+        "priority",
+        "kpi_rewards[]",
+        "reward_rows[]",
+    ],
     "report_card": [
         "id",
         "ref",
@@ -220,10 +229,6 @@ def read_yaml(path: Path) -> dict[str, Any]:
     return loaded if isinstance(loaded, dict) else {}
 
 
-def read_goals_yaml(project_root: Path) -> dict[str, Any]:
-    return read_yaml(project_root / "farplane" / "goals.yaml")
-
-
 def parse_target(value: Any) -> float | None:
     if value is None:
         return None
@@ -238,7 +243,7 @@ def parse_target(value: Any) -> float | None:
 
 def normalize_target_direction(value: Any) -> str:
     raw = str(value or "").strip().lower()
-    if raw in {"below", "at_most", "max", "lte", "<=", "under"}:
+    if raw in {"below", "at_most", "max", "lte", "<=", "under", "minimize", "less_than_or_equal"}:
         return "below"
     return "above"
 
@@ -380,44 +385,28 @@ def parse_markdown_table(section: str) -> list[dict[str, str]]:
     return output
 
 
-def load_goals(project_root: Path) -> dict[str, Any]:
-    payload = read_goals_yaml(project_root)
-    return payload.get("goals") if isinstance(payload.get("goals"), dict) else {}
-
-
 def first_paragraph(section: str) -> str | None:
     lines = [line.strip() for line in section.splitlines() if line.strip()]
     return " ".join(lines) if lines else None
 
 
-def compact_current_bet(rows: list[dict[str, str]]) -> str | None:
-    if not rows:
-        return None
-    near_term = [row for row in rows if str(row.get("horizon") or "").strip().lower() in {"1 week", "2 weeks"}]
-    selected = near_term or rows
-    parts: list[str] = []
-    for row in selected[:3]:
-        bet = str(row.get("id") or row.get("bet") or "").strip()
-        output = str(row.get("output") or "").strip()
-        if bet and output:
-            parts.append(f"{bet}: {output}")
-        elif bet:
-            parts.append(bet)
-    return "; ".join(parts) if parts else None
-
-
-def load_strategy_focus(project_root: Path, goals: dict[str, Any]) -> dict[str, Any]:
-    goals_payload = read_goals_yaml(project_root)
-    current_bets = goals_payload.get("current_bets") if isinstance(goals_payload.get("current_bets"), list) else []
-    current_bets = [row for row in current_bets if isinstance(row, dict)]
-    current_milestone = str(goals_payload.get("current_milestone") or "").strip() or None
-    return {
-        "current_focus": current_milestone,
-        "current_bet": compact_current_bet(current_bets),
-        "current_bets": current_bets,
-        "active_milestone": current_milestone,
-        "top_goal_id": next(iter(goals.keys()), None),
-    }
+def markdown_bullets(section: str) -> list[str]:
+    bullets: list[str] = []
+    current: list[str] = []
+    for raw in section.splitlines():
+        line = raw.strip()
+        if line.startswith("- "):
+            if current:
+                bullets.append(" ".join(current))
+            current = [line[2:].strip()]
+        elif current and line:
+            current.append(line)
+        elif current:
+            bullets.append(" ".join(current))
+            current = []
+    if current:
+        bullets.append(" ".join(current))
+    return bullets
 
 
 def load_bindings(project_root: Path) -> dict[str, Any]:
@@ -430,50 +419,85 @@ def load_metric_definitions(project_root: Path) -> dict[str, Any]:
     return metrics if isinstance(metrics, dict) else {}
 
 
+def load_harness_config(project_root: Path) -> dict[str, Any]:
+    return read_yaml(project_root / "farplane" / "harness.yaml")
+
+
+def load_metric_selection(project_root: Path) -> dict[str, Any]:
+    harness = load_harness_config(project_root)
+    refs = harness.get("metric_refs") if isinstance(harness.get("metric_refs"), dict) else {}
+    raw_project_rows = refs.get("objectives") if isinstance(refs.get("objectives"), list) else []
+    objective_rows = [
+        {**row, "scope": "project"}
+        for row in raw_project_rows
+        if isinstance(row, dict) and row.get("metric_id")
+    ]
+    products = harness.get("products") if isinstance(harness.get("products"), dict) else {}
+    for product_id, product in products.items():
+        if not isinstance(product, dict):
+            continue
+        rows = product.get("metric_refs") if isinstance(product.get("metric_refs"), list) else []
+        objective_rows.extend(
+            {**row, "scope": "product", "product_id": str(product_id)}
+            for row in rows
+            if isinstance(row, dict) and row.get("metric_id")
+        )
+    objective_rows.sort(key=lambda row: int(row.get("priority") or 999999))
+    guard_ids = refs.get("guards") if isinstance(refs.get("guards"), list) else []
+    return {
+        "objectives": objective_rows,
+        "guards": [
+            {"metric_id": str(metric_id), "scope": "project"}
+            for metric_id in guard_ids
+            if isinstance(metric_id, str) and metric_id.strip()
+        ],
+    }
+
+
 def load_metric_bindings(project_root: Path) -> dict[str, Any]:
     payload = load_bindings(project_root)
     bindings = payload.get("metric_bindings") if isinstance(payload, dict) else None
     return bindings if isinstance(bindings, dict) else {}
 
 
-def kpi_target_rows(goals: dict[str, Any]) -> dict[str, dict[str, Any]]:
-    targets: dict[str, dict[str, Any]] = {}
-    for axis_id, axis_payload in goals.items():
-        if not isinstance(axis_payload, dict):
-            continue
-        for raw_goal in axis_payload.get("smart_goals") or []:
-            if not isinstance(raw_goal, dict):
-                continue
-            goal_id = str(raw_goal.get("id") or axis_id)
-            for raw_kpi in raw_goal.get("kpis") or []:
-                if isinstance(raw_kpi, str):
-                    targets.setdefault(raw_kpi, {"goal_id": goal_id})
-                    continue
-                if not isinstance(raw_kpi, dict):
-                    continue
-                metric_id = str(raw_kpi.get("id") or "").strip()
-                if not metric_id:
-                    continue
-                targets[metric_id] = {
-                    "goal_id": goal_id,
-                    "target": raw_kpi.get("target"),
-                    "direction": raw_kpi.get("direction") or raw_kpi.get("comparator") or raw_kpi.get("operator"),
-                    "window": raw_kpi.get("window"),
-                }
-    return targets
-
-
-def parse_ticket_kpi_rewards(markdown: str) -> list[str]:
+def parse_ticket_kpi_rewards(markdown: str) -> list[dict[str, Any]]:
     reward = markdown_heading_section(markdown, "Reward")
     payload = parse_fenced_yaml_from_section(reward)
     raw_rewards = payload.get("kpi_rewards")
     if not isinstance(raw_rewards, list):
         return []
-    kpis: list[str] = []
+    rewards: list[dict[str, Any]] = []
+    seen_reward_ids: set[str] = set()
     for item in raw_rewards:
-        if isinstance(item, dict) and item.get("kpi_id"):
-            kpis.append(str(item["kpi_id"]))
-    return kpis
+        if not isinstance(item, dict):
+            continue
+        reward_id = str(item.get("reward_id") or "").strip()
+        kpi_id = str(item.get("kpi_id") or "").strip()
+        if not reward_id or reward_id in seen_reward_ids or not kpi_id:
+            continue
+        seen_reward_ids.add(reward_id)
+        evidence_refs = item.get("evidence_refs")
+        rewards.append(
+            {
+                "reward_id": reward_id,
+                "kpi_id": kpi_id,
+                "expected_reward": str(item.get("expected_reward") or ""),
+                "check_in_at": str(item.get("check_in_at") or ""),
+                "actual_result": str(item.get("actual_result") or ""),
+                "decision": str(item.get("decision") or "").strip().lower(),
+                "evaluated_at": str(item.get("evaluated_at") or ""),
+                "evaluation_key": str(item.get("evaluation_key") or ""),
+                "supersedes_evaluation_key": str(
+                    item.get("supersedes_evaluation_key") or ""
+                ),
+                "evidence_refs": [
+                    str(ref) for ref in evidence_refs if str(ref).strip()
+                ]
+                if isinstance(evidence_refs, list)
+                else [],
+            }
+        )
+    return rewards
 
 
 def collect_ticket_refs(project_root: Path) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
@@ -483,19 +507,32 @@ def collect_ticket_refs(project_root: Path) -> tuple[list[dict[str, Any]], list[
         markdown = read_markdown(path)
         fm = parse_frontmatter(path)
         ticket_id = str(fm.get("ticket_id") or path.parent.name)
-        kpi_ids = parse_ticket_kpi_rewards(markdown)
+        reward_rows = parse_ticket_kpi_rewards(markdown)
+        kpi_ids = sorted({row["kpi_id"] for row in reward_rows})
+        status = str(fm.get("status") or "").strip().lower()
+        phase = str(fm.get("phase") or "").strip().lower()
         ticket_ref = {
             "ticket_id": ticket_id,
             "path": str(path.relative_to(project_root)),
             "title": str(fm.get("title") or path.parent.name),
-            "status": str(fm.get("status") or ""),
+            "status": status,
+            "phase": phase,
             "priority": str(fm.get("priority") or "medium"),
             "kpi_rewards": kpi_ids,
+            "reward_rows": reward_rows,
             "source_ref": {"path": str(path.relative_to(project_root))},
         }
         refs.append(ticket_ref)
-        for kpi_id in kpi_ids:
-            rewards.append({"ticket_id": ticket_id, "kpi_id": kpi_id, "ticket": ticket_ref["path"]})
+        for reward in reward_rows:
+            rewards.append(
+                {
+                    "ticket_id": ticket_id,
+                    "ticket_status": status,
+                    "ticket_phase": phase,
+                    "ticket": ticket_ref["path"],
+                    **reward,
+                }
+            )
     return refs, rewards
 
 
@@ -728,8 +765,9 @@ def primitive_id_for_metric(metric_id: str, recipe: dict[str, Any]) -> str:
     return "manual_source_gap"
 
 
-def metric_definitions(project_root: Path, goals: dict[str, Any] | None = None) -> tuple[dict[str, Any], list[str]]:
+def metric_definitions(project_root: Path) -> tuple[dict[str, Any], list[str]]:
     raw_metrics = load_metric_definitions(project_root)
+    selection = load_metric_selection(project_root)
     metric_bindings = load_metric_bindings(project_root)
     if not raw_metrics:
         return {}, ["missing:farplane/metrics.yaml#metrics"]
@@ -738,7 +776,18 @@ def metric_definitions(project_root: Path, goals: dict[str, Any] | None = None) 
         f"missing:farplane/bindings.yaml#metric_bindings/{metric_id}"
         for metric_id in sorted(set(raw_metrics) - set(metric_bindings))
     ]
-    targets = kpi_target_rows(goals or {})
+    objective_rows = selection.get("objectives") if isinstance(selection.get("objectives"), list) else []
+    guard_rows = selection.get("guards") if isinstance(selection.get("guards"), list) else []
+    objective_by_id = {
+        str(row.get("metric_id")): row
+        for row in objective_rows
+        if isinstance(row, dict) and row.get("metric_id")
+    }
+    guard_by_id = {
+        str(row.get("metric_id")): row
+        for row in guard_rows
+        if isinstance(row, dict) and row.get("metric_id")
+    }
     for metric_id, raw_definition in raw_metrics.items():
         definition = raw_definition if isinstance(raw_definition, dict) else {}
         raw_binding = metric_bindings.get(metric_id)
@@ -752,10 +801,13 @@ def metric_definitions(project_root: Path, goals: dict[str, Any] | None = None) 
         else:
             aggregation = "daily" if kind == "daily" else "point"
             cumulative = bool(recipe.get("cumulative", False))
-        goal_target = targets.get(str(metric_id), {})
-        raw_target = goal_target.get("target") if "target" in goal_target else recipe.get("target")
+        objective = objective_by_id.get(str(metric_id), {})
+        guard_ref = guard_by_id.get(str(metric_id), {})
+        guard = definition.get("guard") if isinstance(definition.get("guard"), dict) and guard_ref else {}
+        raw_target = guard.get("threshold") if "threshold" in guard else recipe.get("target")
         target_value = parse_target(raw_target)
-        target_direction = normalize_target_direction(goal_target.get("direction") or recipe.get("target_direction"))
+        raw_direction = definition.get("direction") or guard.get("operator") or recipe.get("target_direction")
+        target_direction = normalize_target_direction(raw_direction)
         target_unit = str(recipe.get("unit") or "")
         description = metric_description(str(metric_id), recipe)
         definitions[str(metric_id)] = {
@@ -763,6 +815,11 @@ def metric_definitions(project_root: Path, goals: dict[str, Any] | None = None) 
             "label": str(recipe.get("label") or str(metric_id).replace("_", " ").capitalize()),
             "description": description,
             "tooltip": description,
+            "selection_role": "objective" if objective else "guard" if guard else "observation",
+            "selection": objective or guard_ref or None,
+            "direction": definition.get("direction"),
+            "max_age_days": definition.get("max_age_days"),
+            "guard": guard or None,
             "unit": target_unit,
             "display": str(recipe.get("display") or "reading"),
             "pinned": bool(recipe.get("pinned", False)),
@@ -864,7 +921,13 @@ def primitive_metric_observation(
                 date_value,
                 0.0,
                 "available",
-                {"tickets": [], "gaps": [], "empty_window": True, "primitive_id": primitive_id},
+                {
+                    "tickets": [],
+                    "gaps": [],
+                    "empty_window": True,
+                    "primitive_id": primitive_id,
+                    "reward_contract": REWARD_CONTRACT,
+                },
             )
     nested_reading = primitives.get(primitive_id)
     if isinstance(nested_reading, dict) and metric_id in nested_reading:
@@ -909,6 +972,15 @@ def primitive_metric_observation(
     return None
 
 
+def compatible_metric_observation(metric_def: dict[str, Any], obs: dict[str, Any]) -> bool:
+    """Reject pre-v1 accepted-reward readings that counted declared intent."""
+
+    if metric_def.get("primitive_id") != "ticket_count_by_kpi":
+        return True
+    payload = obs.get("payload") if isinstance(obs.get("payload"), dict) else {}
+    return payload.get("reward_contract") == REWARD_CONTRACT
+
+
 def daily_observations(project_root: Path, metric_defs: dict[str, Any], snapshot_date: str | None) -> list[dict[str, Any]]:
     observations: list[dict[str, Any]] = []
     canonical_keys = canonical_batch_keys(project_root, snapshot_date)
@@ -921,7 +993,8 @@ def daily_observations(project_root: Path, metric_defs: dict[str, Any], snapshot
         if isinstance(metrics, dict):
             for metric_id, reading in metrics.items():
                 obs = daily_metric_reading_observation(str(metric_id), reading, date_value)
-                if obs is not None:
+                metric_def = metric_defs.get(str(metric_id), {})
+                if obs is not None and compatible_metric_observation(metric_def, obs):
                     observations.append(obs)
         primitives = payload.get("primitives")
         if isinstance(primitives, dict):
@@ -930,7 +1003,7 @@ def daily_observations(project_root: Path, metric_defs: dict[str, Any], snapshot
                 if (primitive_id, date_value) in canonical_keys:
                     continue
                 obs = primitive_metric_observation(metric_id, metric_def, primitives, date_value)
-                if obs is not None:
+                if obs is not None and compatible_metric_observation(metric_def, obs):
                     observations.append(obs)
     return observations
 
@@ -947,7 +1020,9 @@ def provider_observations(project_root: Path, metric_defs: dict[str, Any], snaps
             payload = dict(row.payload)
             payload.setdefault("source_id", batch.source_id)
             payload.setdefault("source_path", source_ref)
-            output.append(observation(row.metric_id, row.date, row.value, row.status, payload))
+            obs = observation(row.metric_id, row.date, row.value, row.status, payload)
+            if compatible_metric_observation(metric_defs[row.metric_id], obs):
+                output.append(obs)
     return output
 
 
@@ -1018,7 +1093,12 @@ def source_gap_reason(obs: dict[str, Any]) -> str:
     return str(obs.get("status") or "source_gap")
 
 
-def build_metric_card(metric_id: str, metric_def: dict[str, Any], observations: list[dict[str, Any]]) -> dict[str, Any]:
+def build_metric_card(
+    metric_id: str,
+    metric_def: dict[str, Any],
+    observations: list[dict[str, Any]],
+    snapshot_date: str | None = None,
+) -> dict[str, Any]:
     metric_obs = sorted(
         [
             obs
@@ -1081,6 +1161,16 @@ def build_metric_card(metric_id: str, metric_def: dict[str, Any], observations: 
             gap["payload"] = latest_gap["payload"]
         source_gaps.append(gap)
     status = "available" if series else str(latest_gap.get("status") if latest_gap else "missing")
+    max_age_days = metric_def.get("max_age_days") if isinstance(metric_def.get("max_age_days"), int) else None
+    stale_reason: str | None = None
+    if series and max_age_days:
+        as_of = date_type.fromisoformat(snapshot_date) if snapshot_date else datetime.now(timezone.utc).date()
+        observed_at = date_type.fromisoformat(str(series[-1].get("date"))[:10])
+        age_days = (as_of - observed_at).days
+        if age_days > max_age_days:
+            status = "stale"
+            stale_reason = f"latest observation is {age_days} days old; max_age_days={max_age_days}"
+            source_gaps.append({"date": series[-1].get("date"), "status": "stale", "reason": stale_reason})
     return {
         "metric_id": metric_id,
         "label": metric_def.get("label") or metric_id,
@@ -1101,7 +1191,7 @@ def build_metric_card(metric_id: str, metric_def: dict[str, Any], observations: 
         "display": metric_def.get("display") or "reading",
         "pinned": bool(metric_def.get("pinned")),
         "status": status,
-        "current": series[-1]["value"] if series else None,
+        "current": series[-1]["value"] if series and status == "available" else None,
         "series": series,
         "best_daily": max((float(point["value"]) for point in series), default=None),
         "source_gaps": source_gaps,
@@ -1227,7 +1317,10 @@ def metric_projection(project_root: Path, metric_defs: dict[str, Any], snapshot_
     observations.extend(provider_observations(project_root, metric_defs, snapshot_date))
     observations.extend(ledger_content_observations(project_root, snapshot_date))
     observations.extend(ledger_missing_observations(project_root, metric_defs, snapshot_date))
-    metric_cards = [build_metric_card(metric_id, metric_def, observations) for metric_id, metric_def in sorted(metric_defs.items())]
+    metric_cards = [
+        build_metric_card(metric_id, metric_def, observations, snapshot_date)
+        for metric_id, metric_def in sorted(metric_defs.items())
+    ]
     source_gaps = []
     for card in metric_cards:
         if not card.get("pinned") or card.get("status") in {"available", "not_applicable"}:
@@ -1252,97 +1345,13 @@ def metric_projection(project_root: Path, metric_defs: dict[str, Any], snapshot_
     }
 
 
-def goals_payload(
-    goals: dict[str, Any],
-    metric_defs: dict[str, Any],
-    latest: dict[str, Any],
-    metric_cards_by_id: dict[str, dict[str, Any]],
-) -> list[dict[str, Any]]:
-    axes: list[dict[str, Any]] = []
-    latest_prims = latest.get("primitives") if isinstance(latest.get("primitives"), dict) else {}
-    for axis_id, axis_payload in goals.items():
-        if not isinstance(axis_payload, dict):
-            continue
-        smart_goals = []
-        for raw_goal in axis_payload.get("smart_goals") or []:
-            if not isinstance(raw_goal, dict):
-                continue
-            kpis = []
-            for raw_kpi in raw_goal.get("kpis") or []:
-                if isinstance(raw_kpi, dict):
-                    metric_id = str(raw_kpi.get("id") or "")
-                    target = raw_kpi.get("target")
-                    direction = raw_kpi.get("direction")
-                else:
-                    metric_id = str(raw_kpi)
-                    target = None
-                    direction = None
-                metric_def = metric_defs.get(metric_id, {})
-                metric_card = metric_cards_by_id.get(metric_id, {})
-                primitive_id = metric_def.get("primitive_id")
-                latest_status = str(metric_card.get("status") or "source_gap")
-                if not metric_card and primitive_id in latest_prims:
-                    latest_status = "available"
-                target_value = metric_def.get("target")
-                target_direction = metric_def.get("target_direction") or normalize_target_direction(direction)
-                target_unit = metric_def.get("target_unit") or metric_def.get("unit")
-                source_gap_ids = []
-                if latest_status not in {"available", "not_applicable"}:
-                    source_gap_ids = [f"metric_source_gap:{metric_id}" if metric_card.get("pinned") else f"missing_metric_reading:{metric_id}"]
-                kpis.append(
-                    {
-                        "metric_id": metric_id,
-                        "label": metric_def.get("label") or metric_id,
-                        "description": metric_def.get("description") or "",
-                        "tooltip": metric_def.get("tooltip") or metric_def.get("description") or "",
-                        "target": target_value if target_value is not None else target,
-                        "direction": target_direction if target_direction is not None else direction,
-                        "target_direction": target_direction,
-                        "target_unit": target_unit,
-                        "target_spec": {
-                            "value": target_value if target_value is not None else parse_target(target),
-                            "direction": target_direction,
-                            "unit": target_unit,
-                        },
-                        "unit": metric_def.get("unit"),
-                        "display": metric_card.get("display") or metric_def.get("display") or "reading",
-                        "primitive_id": primitive_id,
-                        "current": metric_card.get("current"),
-                        "value": metric_card.get("current"),
-                        "status": latest_status,
-                        "trend": metric_card.get("series") or [],
-                        "source_gaps": metric_card.get("source_gaps") or [],
-                        "target_hit": metric_card.get("target_hit"),
-                        "latest_status": latest_status,
-                        "source_gap_ids": source_gap_ids,
-                    }
-                )
-            smart_goals.append(
-                {
-                    "id": raw_goal.get("id"),
-                    "label": raw_goal.get("target") or raw_goal.get("id"),
-                    "kpis": kpis,
-                    "interpretation": raw_goal.get("interpretation"),
-                }
-            )
-        axes.append(
-            {
-                "id": axis_id,
-                "label": axis_id.replace("_", " ").capitalize(),
-                "question": axis_payload.get("question"),
-                "smart_goals": smart_goals,
-            }
-        )
-    return axes
-
-
 def load_project_snapshot(project_root: Path, snapshot_date: str | None = None) -> dict[str, Any]:
     project_root = project_root.resolve()
     manifest = read_json(project_root / "farplane" / "manifest.json")
     bindings = load_bindings(project_root)
-    goals = load_goals(project_root)
-    strategy_focus = load_strategy_focus(project_root, goals)
-    metric_defs, metric_gaps = metric_definitions(project_root, goals)
+    harness = load_harness_config(project_root)
+    selection = load_metric_selection(project_root)
+    metric_defs, metric_gaps = metric_definitions(project_root)
     metric_view = metric_projection(project_root, metric_defs, snapshot_date)
     metric_cards = metric_view["series"] if isinstance(metric_view.get("series"), list) else []
     metric_cards_by_id = {str(card.get("metric_id")): card for card in metric_cards if isinstance(card, dict)}
@@ -1357,8 +1366,7 @@ def load_project_snapshot(project_root: Path, snapshot_date: str | None = None) 
     eval_items = eval_runs(project_root)
     sources = [
         source_record(project_root, "farplane/manifest.json", "project-manifest"),
-        source_record(project_root, "farplane/harness.md", "project-harness"),
-        source_record(project_root, "farplane/goals.yaml", "project-goals"),
+        source_record(project_root, "farplane/harness.yaml", "project-harness"),
         source_record(project_root, "farplane/metrics.yaml", "project-metrics"),
         source_record(project_root, "farplane/bindings.yaml", "project-bindings"),
     ]
@@ -1422,19 +1430,21 @@ def load_project_snapshot(project_root: Path, snapshot_date: str | None = None) 
     )
     pm_manifest = read_json(project_root / "farplane" / "pm.json")
     pm_threads = pm_manifest.get("threads") if isinstance(pm_manifest.get("threads"), dict) else {}
-    goal_axes = goals_payload(goals, metric_defs, latest, metric_cards_by_id)
-    goal_gap_ids = sorted(
-        {
-            str(gap_id)
-            for axis in goal_axes
-            for smart_goal in axis.get("smart_goals", [])
-            for kpi in smart_goal.get("kpis", [])
-            for gap_id in kpi.get("source_gap_ids", [])
-            if gap_id
-        }
-    )
+    identity = harness.get("identity") if isinstance(harness.get("identity"), dict) else {}
+    constraints = harness.get("constraints") if isinstance(harness.get("constraints"), dict) else {}
+    charter = {
+        "mission": str(identity.get("mission") or ""),
+        "human_thesis": str(identity.get("human_thesis") or ""),
+        "north_star": str(identity.get("north_star") or ""),
+        "operating_principles": harness.get("operating_principles") if isinstance(harness.get("operating_principles"), list) else [],
+        "stable_capabilities": harness.get("stable_capabilities") if isinstance(harness.get("stable_capabilities"), list) else [],
+        "non_tradeoffs": constraints.get("non_tradeoffs") if isinstance(constraints.get("non_tradeoffs"), list) else [],
+        "products": harness.get("products") if isinstance(harness.get("products"), dict) else {},
+        "feature_definition": harness.get("feature_definition") if isinstance(harness.get("feature_definition"), dict) else {},
+        "leverage_commitments": harness.get("leverage_commitments") if isinstance(harness.get("leverage_commitments"), list) else [],
+    }
     return {
-        "schema_version": 1,
+        "schema_version": 2,
         "generated_at": now_utc(),
         "project_root": str(project_root),
         "shared_shapes": SHARED_SHAPES,
@@ -1447,6 +1457,7 @@ def load_project_snapshot(project_root: Path, snapshot_date: str | None = None) 
         "sources": sources,
         "source_gaps": source_gaps,
         "metrics": {
+            "selection": selection,
             "definitions": metric_defs,
             "primitives": PRIMITIVE_CATALOG,
             "readings": readings,
@@ -1456,14 +1467,8 @@ def load_project_snapshot(project_root: Path, snapshot_date: str | None = None) 
         },
         "tabs": {
             "overview": {
-                "team_focus": {
-                    "current_focus": strategy_focus.get("current_focus"),
-                    "current_bet": strategy_focus.get("current_bet"),
-                    "current_bets": strategy_focus.get("current_bets") or [],
-                    "active_milestone": strategy_focus.get("active_milestone"),
-                    "top_goal_id": strategy_focus.get("top_goal_id"),
-                    "blockers": [],
-                },
+                "charter": charter,
+                "selection": selection,
                 "pinned_metrics": [metric_id for metric_id, metric in metric_defs.items() if metric.get("pinned")],
                 "pinned_metric_cards": [
                     metric_cards_by_id[metric_id]
@@ -1474,9 +1479,26 @@ def load_project_snapshot(project_root: Path, snapshot_date: str | None = None) 
                 "source_gap_count": len(source_gaps),
                 "source_gap_ids": source_gap_ids,
             },
-            "goals": {
-                "axes": goal_axes,
-                "source_gap_ids": goal_gap_ids,
+            "objectives": {
+                "selection": selection,
+                "metric_cards": [
+                    metric_cards_by_id[metric_id]
+                    for metric_id in [
+                        str(row.get("metric_id"))
+                        for row in (selection.get("objectives") or []) + (selection.get("guards") or [])
+                        if isinstance(row, dict) and row.get("metric_id")
+                    ]
+                    if metric_id in metric_cards_by_id
+                ],
+                "source_gap_ids": [
+                    f"metric_source_gap:{metric_id}"
+                    for metric_id in [
+                        str(row.get("metric_id"))
+                        for row in (selection.get("objectives") or []) + (selection.get("guards") or [])
+                        if isinstance(row, dict) and row.get("metric_id")
+                    ]
+                    if metric_cards_by_id.get(metric_id, {}).get("status") not in {"available", "not_applicable"}
+                ],
             },
             "distribution": {
                 "content_items": content_items,

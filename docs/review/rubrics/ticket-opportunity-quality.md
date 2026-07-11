@@ -57,7 +57,7 @@ not worth Kenji's review attention before admitting it.
 
 ## Evidence Cues
 
-- `farplane/goals.yaml`
+- `farplane/metrics.yaml` optimization contract and current readings
 - `farplane/metrics.yaml`
 - owning capability skill and workflow references
 - ticket-local `program.md`, `progress.md`, or explicit source gap

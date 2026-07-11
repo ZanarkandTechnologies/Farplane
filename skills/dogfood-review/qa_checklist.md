@@ -27,9 +27,9 @@ dogfood_check(report, active_packets, recent_archive, prior_report?, created_pac
       were read before candidates were generated; omissions are source gaps.
 - [ ] The cutoff is applied as a snapshot, not a forced terminal decision. The
       outcome ledger separates settled, pending, monitoring,
-      due-but-unscored, inconclusive, accepted, killed, and iterating state
-      without Dogfood scoring or mutating a Reward row.
-- [ ] The report carries an active/pending view, due-but-unscored gaps, transfer
+      due-check-in-pending, inconclusive, accepted, killed, and iterating state
+      without Dogfood deciding or mutating a Reward row.
+- [ ] The report carries an active/pending view, due-check-in-pending gaps, transfer
       candidates, rejected patterns, attribution/proof findings, and prior
       report cursor state, while canonical ticket evidence wins on conflict.
 - [ ] Capacity evidence proves

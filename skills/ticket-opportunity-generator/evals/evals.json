@@ -2,16 +2,35 @@
   "skill_name": "ticket-opportunity-generator",
   "evals": [
     {
+      "id": "planner_blocks_on_unknown_hard_guard",
+      "prompt": "The board is empty. The primary output metric is current, but the required quality guard has no reading and its freshness deadline passed yesterday. A normal delivery ticket and a one-hour local instrumentation ticket are both available. What enters the wave?",
+      "expected_output": "Treats the unknown or stale hard guard as admission-blocking; Does not admit the ordinary delivery ticket; May admit only the bounded local instrumentation ticket when it can restore the guard safely; Otherwise returns no specs or a human request; Names the guard source gap and required fresh observation",
+      "files": [],
+      "assertions": [
+        "Treats the unknown or stale hard guard as admission-blocking",
+        "Does not admit the ordinary delivery ticket",
+        "May admit only the bounded local instrumentation ticket when it can restore the guard safely",
+        "Otherwise returns no specs or a human request",
+        "Names the guard source gap and required fresh observation"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Unknown hard guard blocks ordinary admission",
+          "tags": ["ticket-opportunity-generator", "hard-guard", "source-gap"]
+        }
+      }
+    },
+    {
       "id": "planner_empty_board_returns_bounded_specs",
       "prompt": "The project has no ready work. Its current objective is to reduce failed ticket closeouts, two recent tickets identified missing proof links, and the next run should stay local. Give me the next small wave of work.",
-      "expected_output": "Returns no more than the requested wave size; Reads the project program from harness.md and the objective contract from goals.yaml plus metrics.yaml; Produces executable ticket specs with exact inputs, outputs, proof, stop conditions, and authority boundaries; Connects each spec to the stated objective or bottleneck; Does not require a product, product lane, or product-local progress file; Does not write tickets or dispatch workers",
+      "expected_output": "Returns no more than the requested wave size; Reads the typed charter and selected metric refs from harness.yaml plus metric definitions and current readings from metrics state; Produces executable ticket specs with exact inputs, outputs, proof, stop conditions, and authority boundaries; Connects each spec to the stated objective or bottleneck; Does not require a goal tree, bet registry, product lane, or product-local progress file; Does not write tickets or dispatch workers",
       "files": [],
       "assertions": [
         "Returns no more than the requested wave size",
-        "Reads the project program from harness.md and the objective contract from goals.yaml plus metrics.yaml",
+        "Reads the typed charter and selected metric refs from harness.yaml plus metric definitions and current readings",
         "Produces executable ticket specs with exact inputs, outputs, proof, stop conditions, and authority boundaries",
         "Connects each spec to the stated objective or bottleneck",
-        "Does not require a product, product lane, or product-local progress file",
+        "Does not require a goal tree, bet registry, product lane, or product-local progress file",
         "Does not write tickets or dispatch workers"
       ],
       "metadata": {
@@ -22,6 +41,25 @@
             "next-wave",
             "empty-board"
           ]
+        }
+      }
+    },
+    {
+      "id": "planner_avoids_greedy_immediate_delta",
+      "prompt": "The objective is to maximize accepted customer resolutions while keeping review failures below the guard threshold. Candidate A closes one easy case today. Candidate B takes three days to repair a shared diagnostic step expected to improve the next fifty cases. Candidate C is a reversible one-day probe that would tell us whether B addresses the real bottleneck. Compare the next wave.",
+      "expected_output": "Compares expected metric delta, confidence, duration, time to signal, cost, risk, reversibility, information gain, compounding value, interference, and prerequisites; Does not automatically choose the easiest immediate delta; May admit the probe before the shared repair when uncertainty is material; Preserves the review-failure guard; Returns only non-interfering executable specs within the wave limit",
+      "files": [],
+      "assertions": [
+        "Compares expected metric delta, confidence, duration, time to signal, cost, risk, reversibility, information gain, compounding value, interference, and prerequisites",
+        "Does not automatically choose the easiest immediate delta",
+        "May admit the probe before the shared repair when uncertainty is material",
+        "Preserves the review-failure guard",
+        "Returns only non-interfering executable specs within the wave limit"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Portfolio ranking avoids greedy immediate optimization",
+          "tags": ["ticket-opportunity-generator", "portfolio", "delayed-reward"]
         }
       }
     },

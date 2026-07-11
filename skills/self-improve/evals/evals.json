@@ -101,15 +101,15 @@
     {
       "id": "self_improve_delayed_reward_01",
       "prompt": "A workflow improvement can only be judged after one week of real use. Its experiment ticket already has ticket.md, program.md, and progress.md. Define the waiting and check-in route without adding experiment metadata.",
-      "expected_output": "Classifies the feedback as delayed because elapsed exposure is required; Uses the existing ticket Reward.kpi_rewards rows with kpi_id, expected_reward, check_in_at, actual_result, reward_score, and reward_score_reason; Uses Goal Advisor to compile an executable program.md Check-In Program with inputs, evidence, ordered procedure, matured-row writeback, decisions, idempotency, and source-gap behavior; Records baseline, exposure, and observations append-only in progress.md; Explains that Work Pulse supplies matured indexes and evidence refs while the worker reads program.md first and executes it; Leaves future and completed Reward rows unchanged while handling every matured row and never creates a check-in ticket",
+      "expected_output": "Classifies the feedback as delayed because elapsed exposure is required; Uses the existing ticket Reward.kpi_rewards rows with stable reward_id, kpi_id, expected_reward, check_in_at, actual_result, accept|kill|monitor decision, evaluated_at, evaluation keys, and evidence_refs; Uses Goal Advisor to compile an executable program.md Check-In Program with inputs, evidence, ordered procedure, reward_id-based matured-row writeback, decisions, idempotency, and source-gap behavior; Records baseline, exposure, and observations append-only in progress.md; Explains that Work Pulse supplies matured reward_ids and evidence refs while the worker reads program.md first and executes it; Leaves future and terminal Reward rows unchanged while handling every matured row and never creates a check-in ticket",
       "files": [],
       "assertions": [
         "Classifies the feedback as delayed because elapsed exposure is required",
-        "Uses the existing ticket Reward.kpi_rewards rows with kpi_id, expected_reward, check_in_at, actual_result, reward_score, and reward_score_reason",
+        "Uses the existing ticket Reward.kpi_rewards rows with stable reward_id, kpi_id, expected_reward, check_in_at, actual_result, accept|kill|monitor decision, evaluated_at, evaluation keys, and evidence_refs",
         "Uses Goal Advisor to compile an executable program.md Check-In Program with inputs, evidence, ordered procedure, matured-row writeback, decisions, idempotency, and source-gap behavior",
         "Records baseline, exposure, and observations append-only in progress.md",
-        "Explains that Work Pulse supplies matured indexes and evidence refs while the worker reads program.md first and executes it",
-        "Leaves future and completed Reward rows unchanged while handling every matured row and never creates a check-in ticket"
+        "Explains that Work Pulse supplies matured reward_ids and evidence refs while the worker reads program.md first and executes it",
+        "Leaves future and terminal Reward rows unchanged while handling every matured row and never creates a check-in ticket"
       ],
       "metadata": {
         "farplane": {

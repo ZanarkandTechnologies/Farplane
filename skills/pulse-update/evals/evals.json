@@ -26,11 +26,11 @@
     {
       "id": "pulse_empty_board_calls_pure_planner",
       "prompt": "The board has no executable ticket, review WIP is below its limit, and the project program and objective are current. The heartbeat may create at most three tickets and run one worker. What should happen?",
-      "expected_output": "Chooses plan_next_wave only after reconciliation finds no executable ticket; Binds program from harness.md and the objective contract from goals.yaml plus metrics.yaml; Passes program, objective contract, ticket history, current context, and wave_size three to the planner; Pulse materializes only accepted specs and the planner performs no writes or dispatch; Dispatches at most one ticket because worker_limit is separate from wave_size; Does not invoke a product controller",
+      "expected_output": "Chooses plan_next_wave only after reconciliation finds no executable ticket; Binds identity, product boundaries, selected metric refs, and guards from harness.yaml plus metric direction and freshness from metrics.yaml; Passes program, objective contract, ticket history, current context, and wave_size three to the planner; Pulse materializes only accepted specs and the planner performs no writes or dispatch; Dispatches at most one ticket because worker_limit is separate from wave_size; Does not invoke a product controller",
       "files": [],
       "assertions": [
         "Chooses plan_next_wave only after reconciliation finds no executable ticket",
-        "Binds program from harness.md and the objective contract from goals.yaml plus metrics.yaml",
+        "Binds identity, product boundaries, selected metric refs, and guards from harness.yaml plus metric direction and freshness from metrics.yaml",
         "Passes program, objective contract, ticket history, current context, and wave_size three to the planner",
         "Pulse materializes only accepted specs and the planner performs no writes or dispatch",
         "Dispatches at most one ticket because worker_limit is separate from wave_size",
@@ -137,16 +137,16 @@
     },
     {
       "id": "pulse_resumes_due_reward_on_original_ticket",
-      "prompt": "An experiment ticket is status waiting_signal. Reward row 0 matured yesterday and still lacks actual_result and reward_score; row 1 matures tomorrow. There are no ordinary todo tickets. What should this Work Pulse do?",
-      "expected_output": "Derives row 0 as due because check_in_at is at or before now and an actual or score is missing; Admits and resumes the original waiting_signal ticket for the matured row; Hands the original ticket/program/progress, only matured row 0, timestamp, and evidence refs to a worker and leaves future row 1 dormant; Instructs the worker to read program.md first and execute its Check-In Program; Does not restate or invent the experiment scoring and decision algorithm in Pulse; Does not create a check-in ticket or ask Interval to score the reward",
+      "prompt": "An experiment ticket is status waiting_signal. Reward row 0 matured yesterday and still has a blank decision; row 1 matures tomorrow. There are no ordinary todo tickets. What should this Work Pulse do?",
+      "expected_output": "Derives row 0 as due because check_in_at is at or before now and decision is blank or monitor; Admits and resumes the original waiting_signal ticket for the matured row; Hands the original ticket/program/progress, only matured row 0, timestamp, and evidence refs to a worker and leaves future row 1 dormant; Instructs the worker to read program.md first and execute its Check-In Program; Does not restate or invent the experiment evaluation and decision algorithm in Pulse; Does not create a check-in ticket or ask Interval to evaluate the reward",
       "files": [],
       "assertions": [
-        "Derives row 0 as due because check_in_at is at or before now and an actual or score is missing",
+        "Derives row 0 as due because check_in_at is at or before now and decision is blank or monitor",
         "Admits and resumes the original waiting_signal ticket for the matured row",
         "Hands the original ticket/program/progress, only matured row 0, timestamp, and evidence refs to a worker and leaves future row 1 dormant",
         "Instructs the worker to read program.md first and execute its Check-In Program",
         "Does not restate or invent the experiment scoring and decision algorithm in Pulse",
-        "Does not create a check-in ticket or ask Interval to score the reward"
+        "Does not create a check-in ticket or ask Interval to evaluate the reward"
       ],
       "metadata": {
         "farplane": {
@@ -161,14 +161,14 @@
     },
     {
       "id": "pulse_handles_multiple_due_reward_rows_together",
-      "prompt": "One active experiment has three Reward rows. Rows 0 and 1 are mature and each lacks one of actual_result or reward_score. Row 2 has a completed actual and score. How should Pulse dispatch the check-in?",
-      "expected_output": "Derives rows 0 and 1 as due under the missing-actual-or-score rule; Creates one worker handoff for the original ticket/program/progress containing both matured row indexes and evidence refs; Leaves the completed row unchanged; Requires the worker to execute program.md Check-In Program and return accept, kill, iterate, or monitor; Treats a missing or non-executable Check-In Program as a Goal Advisor repair gap instead of improvising policy; Keeps ordinary claim, dependency, review, and terminal safety gates",
+      "prompt": "One active experiment has three Reward rows. Rows 0 and 1 are mature and each has a blank or monitor decision. Row 2 has a terminal accept decision. How should Pulse dispatch the check-in?",
+      "expected_output": "Derives rows 0 and 1 as due because their stable Reward IDs have blank or monitor decisions; Creates one worker handoff for the original ticket/program/progress containing both matured Reward IDs and evidence refs; Leaves the terminal row unchanged; Requires the worker to execute program.md Check-In Program and return accept, kill, or monitor; Treats a missing or non-executable Check-In Program as a Goal Advisor repair gap instead of improvising policy; Keeps ordinary claim, dependency, review, and terminal safety gates",
       "files": [],
       "assertions": [
-        "Derives rows 0 and 1 as due under the missing-actual-or-score rule",
-        "Creates one worker handoff for the original ticket/program/progress containing both matured row indexes and evidence refs",
+        "Derives rows 0 and 1 as due under the unresolved blank-or-monitor decision rule",
+        "Creates one worker handoff for the original ticket/program/progress containing both matured Reward IDs and evidence refs",
         "Leaves the completed row unchanged",
-        "Requires the worker to execute program.md Check-In Program and return accept, kill, iterate, or monitor",
+        "Requires the worker to execute program.md Check-In Program and return accept, kill, or monitor",
         "Treats a missing or non-executable Check-In Program as a Goal Advisor repair gap instead of improvising policy",
         "Keeps ordinary claim, dependency, review, and terminal safety gates"
       ],

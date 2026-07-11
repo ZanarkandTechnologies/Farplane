@@ -80,7 +80,7 @@ flowchart TD
 
   trigger["trigger or caller"]:::keep
   feature["docs/features/FEAT-####.md<br/>feature_id, status, experimental, track"]:::changed
-  policy["farplane/harness.md<br/>Feature Policy"]:::keep
+  policy["farplane/harness.yaml<br/>Feature Policy"]:::keep
   surface["owner surface<br/>key variables"]:::changed
   output["created/updated artifact<br/>evidence, report, state_delta"]:::added
 

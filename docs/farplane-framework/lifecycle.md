@@ -3,7 +3,7 @@ title: "Farplane Lifecycle"
 status: active
 owner: farplane-framework
 created_at: 2026-06-23
-updated_at: 2026-07-11
+updated_at: 2026-07-12
 framework_template_version: "0.3.0"
 tags:
   - farplane
@@ -33,12 +33,12 @@ center is deliberately small:
 
 ```text
 project(program, progress)
-  -> goals + stable policy + reusable capability skills
+  -> typed charter + selected metrics + reusable capability skills
   -> one ticket board
   -> one Work Pulse executes tickets or plans a bounded BAU wave
   -> scheduled sources add reports and bounded ticket classes
   -> ticket programs, progress, QA, and review preserve proof
-  -> durable outcomes flow back to docs, goals, and skills
+  -> durable outcomes flow back to docs, metric objectives, and skills
 ```
 
 Files carry durable state, skills carry reusable workflows, tickets carry work
@@ -49,11 +49,12 @@ own planner, worker pool, strategy file, or heartbeat.
 ## Quick Start
 
 1. Run `init-advisor` to create or migrate the project substrate.
-2. Read `farplane/harness.md` for stable policy and capability references.
-3. Read `farplane/goals.yaml` for value direction, KPI IDs, current milestone,
-   and holds.
+2. Read `farplane/harness.yaml` for identity, products, policy, capabilities,
+   and selected objectives/guards.
+3. Read `farplane/metrics.yaml` for metric meaning, direction, freshness, and
+   guard rules; read generated observations for current values.
 4. Read the ticket board for executable commitments and proof.
-5. Use `horizon-advisor` only when the goal contract needs a material change.
+5. Use `metric-advisor` when the objective, guard, or proof provider needs a material change.
 6. Use `goal-advisor` when a selected material ticket needs a Goal Packet.
 7. Activate exactly one Work Pulse heartbeat after the board and proof surfaces
    are ready. Feed Scout, BAU reports, Dogfood, and maintenance are
@@ -72,7 +73,7 @@ flowchart TD
   classDef proof fill:#f3e8ff,stroke:#7e22ce,color:#581c87
 
   A["Operator intent"]:::program --> B["init-advisor"]:::program
-  B --> C["harness.md + goals.yaml + capability skills"]:::program
+  B --> C["harness.yaml + metrics.yaml + capability skills"]:::program
   C --> D["one ticket board"]:::work
   D --> E["one Work Pulse"]:::work
   E --> F{"executable ticket?"}:::work
@@ -98,7 +99,8 @@ flowchart TD
 ```text
 pulse(tickets, worker_limit, review_wip, wave_size)
   -> do(admitted_ticket)
-   | plan_next_wave(harness, goals, ticket_history, current_context, wave_size)
+   | plan_next_wave(harness, metric_definitions, metric_state,
+                    ticket_history, current_context, wave_size)
 ```
 
 Work Pulse is the only execution heartbeat. On each beat it:
@@ -145,7 +147,7 @@ tickets/TASK-XXXX/
 
 For delayed Reward rows, Work Pulse derives readiness and resumes the original
 ticket. The worker reads `program.md` first and executes its `Check-In Program`.
-It updates only matured rows and decides `accept | kill | iterate | monitor` as
+It updates only matured rows and decides `accept | kill | monitor` as
 the program permits. Future rows remain dormant. Pulse dispatches this work; it
 does not reconstruct or independently score the experiment policy.
 
@@ -153,9 +155,8 @@ does not reconstruct or independently score the experiment policy.
 
 | State | Durable owner |
 | --- | --- |
-| Human thesis, non-tradeoffs, authority, stable capability refs | `farplane/harness.md` |
-| North star, value function, goals, KPI IDs, milestone, holds | `farplane/goals.yaml` |
-| Provider-independent metric meaning | `farplane/metrics.yaml` |
+| Identity, products, constraints, authority, capabilities, selected metric refs | `farplane/harness.yaml` |
+| Metric meaning, direction, freshness, and guard rules | `farplane/metrics.yaml` |
 | Recurring workflow | reusable `skills/*` or project-local `.agents/skills/*` |
 | Executable commitment and all QA/review evidence | owning ticket and `artifacts/` |
 | Goal/check-in loop policy | ticket `program.md` |
@@ -173,23 +174,24 @@ strategy ledgers.
 Important recurring outputs should have callable skills:
 
 ```text
-capability_skill(ticket, goals, current_context)
+capability_skill(ticket, metric_objectives, current_context)
   -> artifact + evidence + ticket_state_delta
 ```
 
 Use a root `skills/<name>/` package when the workflow is reusable across
 projects. Use `.agents/skills/<name>/` when it is company- or project-specific.
 Promote only after repeated evidence. A skill owns how to produce the artifact;
-`goals.yaml` owns why it matters; the ticket owns the current commitment and
+`harness.yaml` selects the measurable contribution; the ticket owns the current commitment and
 proof.
 
 ## Minimum Autonomous Instruction Set
 
 A project needs:
 
-- `farplane/harness.md` with stable policy, authority, and capability refs;
-- `farplane/goals.yaml` with value direction, KPI IDs, and current milestone;
-- `farplane/metrics.yaml` with definitions for those KPI IDs;
+- `farplane/harness.yaml` with identity, products, stable policy, authority,
+  capability refs, and selected metric refs;
+- `farplane/metrics.yaml` with definitions, direction, freshness, and guard
+  rules for every referenced metric;
 - `farplane/automations.toml` with exactly one Work Pulse heartbeat and bounded
   scheduled sources;
 - `farplane/bindings.yaml` for non-secret provider coordinates;
@@ -206,8 +208,9 @@ layer.
 Closeout and scheduled maintenance compress useful outcomes back to the
 smallest owner:
 
-- strategy evidence can propose a `goals.yaml` delta;
-- stable policy evidence can propose a human-reviewed `harness.md` delta;
+- measurement evidence can propose a `metrics.yaml` definition or
+  `harness.yaml` selection delta;
+- stable policy evidence can propose a human-reviewed `harness.yaml` delta;
 - repeated workflow evidence can harden or refine the owning skill;
 - unresolved executable work remains a ticket;
 - raw run detail stays in ticket artifacts or dated reports.

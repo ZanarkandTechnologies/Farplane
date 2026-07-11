@@ -15,46 +15,46 @@ refs:
 
 # Docs Reference Audit
 
-Generated at `2026-07-11T16:09:12+00:00` from local Markdown links and literal repo-path
+Generated at `2026-07-11T21:01:36+00:00` from local Markdown links and literal repo-path
 references. This is a navigation and cleanup aid, not a deletion authority.
 
 ## Harness Math Doc
 
 The harness math doc is `docs/fundamentals/harness-algebra.md`.
 
-- All inbound refs: `16`
-- Skill-origin refs: `8`
+- All inbound refs: `15`
+- Skill-origin refs: `7`
 - Cleanup rule: keep this as the canonical equation/model surface and point
   workflow docs back to it instead of duplicating the algebra.
 
 ## Counts
 
-- Scanned files: `1363`
-- Nodes: `859`
-- Edges: `4471`
-- Unresolved local-looking refs: `1347`
+- Scanned files: `1439`
+- Nodes: `873`
+- Edges: `4482`
+- Unresolved local-looking refs: `1401`
 
 ## Most Referenced Docs
 
 | Doc | All refs | Skill refs |
 | --- | --- | --- |
-| `docs/features/README.md` | 67 | 29 |
+| `docs/features/README.md` | 68 | 30 |
 | `docs/features/validate_features.py` | 55 | 7 |
-| `docs/MEMORY.md` | 50 | 23 |
-| `docs/HISTORY.md` | 45 | 13 |
-| `docs/LESSONS.md` | 43 | 21 |
+| `docs/MEMORY.md` | 53 | 24 |
+| `docs/HISTORY.md` | 47 | 14 |
+| `docs/LESSONS.md` | 45 | 22 |
 | `docs/systems/README.md` | 39 | 15 |
 | `docs/prd.md` | 38 | 19 |
-| `docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md` | 37 | 18 |
-| `docs/skills/README.md` | 35 | 15 |
-| `docs/skills/registry.jsonl` | 34 | 22 |
-| `docs/TROUBLES.md` | 32 | 16 |
+| `docs/skills/README.md` | 36 | 16 |
+| `docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md` | 36 | 17 |
+| `docs/skills/registry.jsonl` | 35 | 23 |
+| `docs/TROUBLES.md` | 34 | 17 |
 | `docs/features/registry.jsonl` | 32 | 9 |
-| `docs/skills/system.md` | 26 | 15 |
+| `docs/skills/system.md` | 27 | 16 |
+| `docs/skills/best-practices.md` | 26 | 17 |
 | `docs/skills/templates/SKILL_TEMPLATE.md` | 25 | 10 |
-| `docs/skills/best-practices.md` | 25 | 16 |
 | `docs/features/FEAT-0060-registry-backed-documentation-os.md` | 24 | 7 |
-| `docs/bootstrap-brief.md` | 23 | 18 |
+| `docs/bootstrap-brief.md` | 24 | 19 |
 | `docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md` | 23 | 8 |
 | `docs/features/FEAT-0065-pulse-and-interval-automation.md` | 20 | 11 |
 | `docs/features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md` | 19 | 2 |
@@ -71,7 +71,7 @@ The harness math doc is `docs/fundamentals/harness-algebra.md`.
 | `docs/features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md` | 19 | 2 | keep active |
 | `docs/features/FEAT-0022-skill-tier-leverage-classes.md` | 4 | 0 | keep active |
 | `docs/features/FEAT-0025-video-to-skill-source-reconstruction.md` | 4 | 0 | keep active |
-| `docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md` | 37 | 18 | keep active |
+| `docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md` | 36 | 17 | keep active |
 | `docs/features/FEAT-0030-on-demand-skill-plugin-packaging.md` | 4 | 0 | keep active |
 | `docs/features/FEAT-0031-agent-behavior-test-workflow.md` | 7 | 3 | keep active |
 | `docs/features/FEAT-0032-goal-advisor-execution-compilation.md` | 5 | 0 | keep active |
@@ -94,7 +94,7 @@ The harness math doc is `docs/fundamentals/harness-algebra.md`.
 | `docs/features/FEAT-0069-taste-loop-human-feedback-optimization.md` | 6 | 0 | keep active |
 | `docs/features/FEAT-0070-experimental-feature-evaluation-reports.md` | 8 | 0 | keep active |
 | `docs/features/FEAT-0071-project-work-pulse.md` | 12 | 1 | keep active |
-| `docs/features/README.md` | 67 | 29 | keep active |
+| `docs/features/README.md` | 68 | 30 | keep active |
 | `docs/features/TEMPLATE.md` | 6 | 1 | keep active |
 | `docs/features/registry.md` | 3 | 0 | keep active |
 
@@ -126,7 +126,6 @@ can still be worth keeping.
 | --- | --- |
 | `docs/AGENTS.md` | keep if loaded by directory convention |
 | `docs/features/AGENTS.md` | keep if loaded by directory convention |
-| `docs/review/rubrics/ticket-opportunity-quality.md` | review before archive or merge |
 | `docs/sources/AGENTS.md` | keep if loaded by directory convention |
 
 ## Next Cleanup Pass

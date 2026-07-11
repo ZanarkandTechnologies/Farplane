@@ -26,23 +26,23 @@
       }
     },
     {
-      "id": "weekly_portfolio_surfaces_due_unscored_gap",
-      "prompt": "A delayed policy experiment's check-in date passed yesterday, but its Reward row still has no actual result or score. A proposed experiment would touch the same policy surface. What should the weekly review report and admit?",
-      "expected_output": "Classifies the existing experiment as due_but_unscored rather than accepting, killing, or checking it in; Records the missing result/evidence in the due-but-unscored and source-gap views; Counts the experiment as active WIP and blocks the conflicting same-surface proposal; Does not block unrelated candidates solely because this row is due; Leaves scoring and next-check-in mutation to Pulse and the original ticket worker",
+      "id": "weekly_portfolio_surfaces_due_checkin_gap",
+      "prompt": "A delayed policy experiment's check-in date passed yesterday, but its Reward decision remains blank and evidence is unresolved. A proposed experiment would touch the same policy surface. What should the weekly review report and admit?",
+      "expected_output": "Classifies the existing experiment as due_checkin_pending rather than accepting, killing, or checking it in; Records the unresolved decision/evidence in the due-check-in-pending and source-gap views; Counts the experiment as active WIP and blocks the conflicting same-surface proposal; Does not block unrelated candidates solely because this row is due; Leaves evaluation, decision, and next-check-in mutation to Pulse and the original ticket worker",
       "files": [],
       "assertions": [
-        "Classifies the existing experiment as due_but_unscored rather than accepting, killing, or checking it in",
-        "Records the missing result/evidence in the due-but-unscored and source-gap views",
+        "Classifies the existing experiment as due_checkin_pending rather than accepting, killing, or checking it in",
+        "Records the unresolved decision/evidence in the due-check-in-pending and source-gap views",
         "Counts the experiment as active WIP and blocks the conflicting same-surface proposal",
         "Does not block unrelated candidates solely because this row is due",
-        "Leaves scoring and next-check-in mutation to Pulse and the original ticket worker"
+        "Leaves evaluation, decision, and next-check-in mutation to Pulse and the original ticket worker"
       ],
       "metadata": {
         "farplane": {
-          "title": "A due but unscored experiment remains visible",
+          "title": "A due check-in pending experiment remains visible",
           "tags": [
             "dogfood-review",
-            "due-but-unscored",
+            "due-check-in-pending",
             "ownership",
             "interference"
           ]
@@ -124,12 +124,12 @@
     {
       "id": "delayed_packet_has_executable_checkin_program",
       "prompt": "A selected AGENTS policy pilot needs seven days of behavior evidence before a decision. The weekly planner is authorized to create its packet. Describe the delayed packet and handoff.",
-      "expected_output": "Creates a complete Goal Packet only after report, capacity, surface, dedupe, and delayed-live gates pass; Sets the Reward check_in_at or event wake plus Metric Provider signal and minimum; Fills program.md Check-In Program inputs and ordered procedure so a resumed worker can inspect evidence and choose accept, kill, iterate, or monitor; Defines idempotent writeback that updates only handed-off matured Reward rows, appends progress, preserves future/completed rows, and handles source gaps and next wake; Leaves execution and check-in dispatch to Work Pulse and does not score or promote the experiment",
+      "expected_output": "Creates a complete Goal Packet only after report, capacity, surface, dedupe, and delayed-live gates pass; Sets the Reward check_in_at or event wake plus Metric Provider signal and minimum; Fills program.md Check-In Program inputs and ordered procedure so a resumed worker can inspect evidence and choose accept, kill, or monitor; Defines idempotent writeback by stable Reward ID and evaluation key, appends progress, preserves future/terminal rows, and handles source gaps and next wake; Leaves execution and check-in dispatch to Work Pulse and does not score or promote the experiment",
       "files": [],
       "assertions": [
         "Creates a complete Goal Packet only after report, capacity, surface, dedupe, and delayed-live gates pass",
         "Sets the Reward check_in_at or event wake plus Metric Provider signal and minimum",
-        "Fills program.md Check-In Program inputs and ordered procedure so a resumed worker can inspect evidence and choose accept, kill, iterate, or monitor",
+        "Fills program.md Check-In Program inputs and ordered procedure so a resumed worker can inspect evidence and choose accept, kill, or monitor",
         "Defines idempotent writeback that updates only handed-off matured Reward rows, appends progress, preserves future/completed rows, and handles source gaps and next wake",
         "Leaves execution and check-in dispatch to Work Pulse and does not score or promote the experiment"
       ],

@@ -3,7 +3,7 @@ title: "Work Pulse And Scheduled Ticket Sources"
 status: active
 owner: farplane-framework
 created_at: 2026-06-29
-updated_at: 2026-07-11
+updated_at: 2026-07-12
 framework_template_version: "0.3.0"
 tags:
   - farplane
@@ -107,7 +107,7 @@ Work Pulse performs five state-changing jobs:
 ```text
 due_reward_rows(ticket, now)
   = Reward.kpi_rewards[] where check_in_at <= now
-    and (actual_result is empty or reward_score is empty)
+    and decision in [empty, monitor]
 
 eligible = ordinary_executable_tickets + tickets_with_due_reward_rows
 ```
@@ -200,7 +200,7 @@ immediate toy/eval proof when capacity remains.
 
 Dogfood does not execute or check in experiments. Work Pulse derives due rows,
 resumes the original Goal Packet, and gives the worker `ticket.md`,
-`program.md`, `progress.md`, matured row indexes, and evidence. The worker reads
+`program.md`, `progress.md`, matured Reward IDs, and evidence. The worker reads
 `program.md` first and executes its `Check-In Program`; Pulse does not restate
 or independently score the experiment policy.
 
@@ -217,8 +217,8 @@ bounded ticket creation.
 
 | State | Owner |
 | --- | --- |
-| Stable policy and capability refs | `farplane/harness.md` |
-| Value direction and guards | current objective contract |
+| Identity, products, policy, capabilities, selected metric refs | `farplane/harness.yaml` |
+| Metric direction, freshness, and guard rules | `farplane/metrics.yaml` |
 | Executable commitment, Reward, QA, review | `tickets/TASK-*/ticket.md` and `artifacts/` |
 | Experiment-local policy and history | ticket `program.md`, `progress.md`, Reward, and artifacts |
 | Fast reconciliation/dispatch/check-in receipt | dated Pulse report |

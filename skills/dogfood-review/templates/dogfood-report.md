@@ -35,7 +35,7 @@ after the cutoff belongs to the next report.
 | Experiment | Surface | Feedback | State at cutoff | Expected reward | Actual / score | Attribution | Decision | Evidence |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 
-Allowed state: `pending`, `monitoring`, `due_but_unscored`, `inconclusive`,
+Allowed state: `pending`, `monitoring`, `due_checkin_pending`, `inconclusive`,
 `accepted`, `killed`, `iterating`, `source_gap`. Decisions are observations of
 canonical ticket state; this report never performs the check-in.
 
@@ -44,11 +44,11 @@ canonical ticket state; this report never performs the check-in.
 | Experiment | Surface | State | Next check-in / wake | Evidence minimum | Conflict set | Blocks new supply? |
 | --- | --- | --- | --- | --- | --- | --- |
 
-Every nonterminal row counts toward total WIP. Monitoring or due-but-unscored
+Every nonterminal row counts toward total WIP. Monitoring or due-check-in-pending
 work blocks only dependent or conflicting supply, subject to the per-surface
 and delayed-live caps.
 
-## Due-But-Unscored Gaps
+## Due Check-In Pending Gaps
 
 | Experiment / Reward row | Due at | Missing score/evidence | Effect | Safe action |
 | --- | --- | --- | --- | --- |

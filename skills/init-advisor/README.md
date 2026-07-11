@@ -44,8 +44,8 @@ evidence-capture path, required services such as DB or orchestration tools, and
 any port or environment-variable assumptions. When the user wants app code
 created during init, select the stack scaffold before running commands.
 
-That also writes `farplane/README.md`, `farplane/manifest.json`, `farplane/harness.md`,
-`farplane/goals.yaml`, `farplane/metrics.yaml`, `farplane/automations.toml`, `farplane/bindings.yaml`,
+That also writes `farplane/README.md`, `farplane/manifest.json`, `farplane/harness.yaml`,
+`farplane/metrics.yaml`, `farplane/automations.toml`, `farplane/bindings.yaml`,
 `farplane/hooks.json`, `.agents/skills/README.md`, `farplane/pm.json`, `docs/bootstrap-brief.md`, `qa/README.md`,
 `qa/cookbook/TEMPLATE.md`, `.githooks/README.md`,
 `.githooks/pre-commit`, `.githooks/pre-push`, `scripts/pre_commit_check.sh`,
@@ -71,8 +71,8 @@ and `tickets/templates/` remain available as tracked scaffold.
 
 Bootstrap does not create live Codex automations by itself. After the substrate
 exists, use `harness-creator` in full mode to shape the static charter,
-capability workflows, goals, feedback loops, and current milestone. `harness-creator`
-routes to `horizon-advisor` or `goal-advisor` only when those narrower advisor
+capability workflows, metric objectives, guards, and feedback loops. `harness-creator`
+routes to `metric-advisor` or `goal-advisor` only when those narrower advisor
 calls are needed. When live loops are explicitly requested, use
 `automation-advisor` to activate the single Work Pulse heartbeat plus separate
 Feed Scout, Daily BAU, Weekly BAU, self-improvement, and optional cron records.
@@ -87,7 +87,7 @@ setup, credentials, billing, deploys, and destructive actions.
 After init, follow the planning funnel:
 
 ```text
-brainstorm -> deep-interview -> horizon-advisor -> goal-advisor
+brainstorm -> deep-interview -> metric-advisor -> goal-advisor
 prd -> spec-to-ticket -> impl-plan -> goal-advisor
 ```
 
@@ -103,11 +103,11 @@ Read the project's current `farplane/manifest.json` and compare
 migration entry in order. The changelog is the canonical version-to-version
 migration guide; this section is the operational checklist.
 
-For the V1 `1.7.0` contract, the important boundary is:
+For the V1 `1.9.0` contract, the important boundary is:
 
 ```text
 tracked owners:
-  harness.md + goals.yaml + metrics.yaml + bindings.yaml + automations.toml
+  harness.yaml + metrics.yaml + bindings.yaml + automations.toml
 
 ignored projections:
   .farplane/metrics/** + .farplane/project/ui/latest.json + reports/evals/logs
@@ -135,8 +135,7 @@ Then copy in:
 - `ARCHITECTURE.md`
 - `farplane/README.md`
 - `farplane/manifest.json`
-- `farplane/harness.md`
-- `farplane/goals.yaml`
+- `farplane/harness.yaml`
 - `farplane/metrics.yaml`
 - `farplane/automations.toml`
 - `farplane/bindings.yaml`
@@ -266,9 +265,8 @@ Those can come after one clean ticket run.
 - [ ] `docs/systems/README.md` exists as the cross-feature system grouping home
 - [ ] `farplane/README.md` exists
 - [ ] `farplane/manifest.json` records the Farplane project spec version and standard tracked/ignored paths
-- [ ] `farplane/harness.md` exists or `init_mode=substrate` has a recorded readiness gap
-- [ ] `farplane/goals.yaml` exists or `init_mode=substrate` has a recorded readiness gap
-- [ ] `farplane/metrics.yaml` defines every KPI ID used by `farplane/goals.yaml`
+- [ ] `farplane/harness.yaml` exists or `init_mode=substrate` has a recorded readiness gap
+- [ ] `farplane/metrics.yaml` declares at least one measurable objective and defines every objective/guard metric ID
 - [ ] every metric definition has a matching `farplane/bindings.yaml.metric_bindings` refresh recipe or an explicit source-gap route
 - [ ] `farplane/automations.toml` contains exactly one Work Pulse heartbeat plus separate cron records for Feed Scout, Daily BAU, Weekly BAU, self-improvement, and optional scheduled workflows
 - [ ] `farplane/bindings.yaml` exists and names non-secret project IDs, URLs, labels, and aliases needed by reusable skills

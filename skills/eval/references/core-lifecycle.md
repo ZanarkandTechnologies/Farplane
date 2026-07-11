@@ -15,7 +15,7 @@ claiming behavior success.
 
 | Lifecycle stage | Skill owners |
 | --- | --- |
-| Bootstrap and strategy | `init-advisor`, `harness-creator`, `horizon-advisor` |
+| Bootstrap and objectives | `init-advisor`, `harness-creator`, `metric-advisor` |
 | Execution compilation and recurring work | `goal-advisor`, `automation-advisor`, `pulse-update` |
 | Work supply and interval learning | `ticket-opportunity-generator`, `interval-update`, `feed-scout` |
 | Self-improvement | `dogfood-review`, `self-improve` |

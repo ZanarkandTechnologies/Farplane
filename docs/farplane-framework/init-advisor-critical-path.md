@@ -14,7 +14,7 @@ refs:
   - skills/init-advisor/SKILL.md
   - skills/init-advisor/scripts/bootstrap.sh
   - skills/harness-creator/SKILL.md
-  - skills/horizon-advisor/SKILL.md
+  - skills/metric-advisor/SKILL.md
   - skills/goal-advisor/SKILL.md
   - skills/automation-advisor/SKILL.md
   - docs/features/FEAT-0071-project-work-pulse.md
@@ -80,8 +80,7 @@ Tracked project config:
 ```text
 farplane/README.md
 farplane/manifest.json
-farplane/harness.md
-farplane/goals.yaml
+farplane/harness.yaml
 farplane/metrics.yaml
 farplane/automations.toml
 farplane/bindings.yaml
@@ -105,9 +104,10 @@ Ignored runtime state:
 Key ownership:
 
 - `manifest.json`: versioned paths and compact project identity;
-- `harness.md`: stable human charter, authority, and capability refs;
-- `goals.yaml`: north star, value function, goals, KPI IDs, milestone, holds;
-- `metrics.yaml`: provider-independent metric definitions for those KPI IDs;
+- `harness.yaml`: typed human charter, descriptive products, authority,
+  capability refs, and selected metric refs;
+- `metrics.yaml`: provider-independent metric definitions with direction,
+  freshness, and optional guard rules;
 - `.agents/skills/`: project-local recurring capability workflows;
 - `automations.toml`: one Work Pulse heartbeat plus separate scheduled sources;
 - `bindings.yaml`: non-secret connector/provider and refresh coordinates;
@@ -116,12 +116,12 @@ Key ownership:
 
 Do not scaffold a product catalog, per-category strategy files, per-category
 worker policy, or a generated controller index. A recurring output should map
-to a callable capability skill; the project goal explains why it matters and a
+to a callable capability skill; the metric objective explains its measurable contribution and a
 ticket owns the current execution.
 
 ## 4. Run Readiness Audit
 
-Audit the bootstrap brief, charter, goals, bindings, capability ownership,
+Audit the bootstrap brief, charter, metric selection, bindings, capability ownership,
 automation desired state, local skill home, PM grouping config, project rules,
 ticket templates, and QA surfaces.
 
@@ -149,13 +149,13 @@ harness_creator(idea, values, priorities, current_files, capabilities)
    + capability reuse map
    + local capability stubs or refinement tickets
    + feedback and missing-system tickets
-   + current milestone
+   + initial metric objectives
    + goal_advisor handoff?
 ```
 
 It checks existing reusable and project-local skills before creating a new
-workflow. `horizon-advisor` handles material goal/KPI depth. `goal-advisor`
-compiles a selected material ticket only after the milestone is concrete.
+workflow. `metric-advisor` handles material objective/guard depth. `goal-advisor`
+compiles a selected material ticket only after the ticket contract is concrete.
 
 ## 6. Prepare Automation
 

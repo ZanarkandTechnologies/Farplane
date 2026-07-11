@@ -35,8 +35,8 @@ their repo into a haze of prompts, chat memory, and unverifiable claims.
 1. **A local control plane for agent work.** Farplane keeps plans, tickets,
    runtime state, memories, feature specs, and proof in files that developers can diff,
    review, and repair.
-2. **Goal loops that do not drift.** Project goals live in
-   `farplane/goals.yaml`; Goal Packets give selected long-running work a
+2. **Objective loops that do not drift.** Project metric objectives live in
+   `farplane/metrics.yaml`; Goal Packets give selected long-running work a
    `ticket.md`, `program.md`, and `progress.md` so a business, product, or
    multi-agent loop can keep a longer horizon without becoming one giant
    prompt.

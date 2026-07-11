@@ -14,18 +14,17 @@ This folder is the project-local declaration that Farplane UI should be able to
 summarize as one autonomous company inside the broader harness cockpit.
 
 `manifest.json` owns the compact UI identity card. Richer project meaning lives
-in tracked project files: `harness.md` is the static human charter and stable
-capability-reference surface, while `goals.yaml` owns current value direction,
-KPI IDs, milestone, and holds. Skills own recurring workflows; tickets own
-execution and proof.
+in tracked project files: `harness.yaml` is the typed human charter,
+descriptive-product/capability map, and active metric selection;
+`metrics.yaml` owns reusable metric meaning, direction, freshness, and guard
+rules. Skills own recurring workflows; tickets own execution and proof.
 
 ```text
 farplane/
   README.md        # this index
   manifest.json    # versioned Farplane project spec for this project
-  harness.md       # static human charter
-  goals.yaml       # north star, KPIs, current milestone, holds
-  metrics.yaml     # provider-independent metric definitions
+  harness.yaml     # typed charter, products, capability refs, metric selection
+  metrics.yaml     # metric definitions, direction, freshness, guard rules
   automations.toml # one Work Pulse heartbeat plus separate scheduled sources
   bindings.yaml    # non-secret project IDs, provider coordinates, refresh bindings
   hooks.json       # declarative Farplane-native hook configuration
@@ -64,6 +63,9 @@ farplane metrics primitives --project-root /path/to/project --date <YYYY-MM-DD> 
 farplane project snapshot --project-root /path/to/project --date <YYYY-MM-DD> --json
 farplane reports index --project-root /path/to/project --json
 farplane reports repair-refs --project-root /path/to/project --json
+farplane mining routes validate --project-root /path/to/project --json
+farplane mining runs list --project-root /path/to/project --json
+farplane mining drain --project-root /path/to/project --json
 ```
 
 Primitive metrics are Core-owned reducers over tickets, `bindings.yaml`, local
@@ -84,6 +86,12 @@ defining report hierarchy locally. Use `farplane reports repair-refs` to add
 path-derived `ref` frontmatter to existing report Markdown before rebuilding
 the index. The standard lives in
 [docs/farplane-framework/reporting.md](../docs/farplane-framework/reporting.md).
+
+Core file events use `farplane/hooks.json` for capture patterns and
+`farplane/bindings.yaml#event_routes` for event-to-program routing. Events,
+outbox state, frozen run inputs, lean reports, and verdicts remain ignored
+under `.farplane/`; Farplane UI may edit routes and render runs through the
+Core CLI but does not own mining semantics.
 
 See [docs/farplane-framework/project-files.md](../docs/farplane-framework/project-files.md).
 

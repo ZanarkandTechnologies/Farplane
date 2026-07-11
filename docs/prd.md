@@ -3,15 +3,14 @@ title: "PRD: Farplane V1"
 status: active
 owner: farplane
 created_at: 2026-05-26
-updated_at: 2026-07-11
+updated_at: 2026-07-12
 version: "1.0"
 refs:
   - docs/farplane-framework/lifecycle.md
   - docs/farplane-framework/project-files.md
   - docs/farplane-framework/pulse-and-interval-loop.md
   - docs/farplane-framework/ticket-execution-loop.md
-  - farplane/harness.md
-  - farplane/goals.yaml
+  - farplane/harness.yaml
   - farplane/metrics.yaml
   - farplane/automations.toml
   - tickets/README.md
@@ -68,7 +67,7 @@ metadata, and operator distrust.
 3. When an agent needs review or waits for reality, I want execution capacity
    released while the obligation remains visible.
 4. When the board runs out of useful work, I want a bounded, ranked next wave
-   grounded in goals, metrics, ticket history, and current context.
+   grounded in the charter, metric objectives, ticket history, and current context.
 5. When the harness changes itself, I want the cheapest honest proof route and
    a reversible promotion decision.
 6. When I inspect the system, I want every important claim to lead back to an
@@ -86,16 +85,15 @@ project program
    -> plan bounded BAU wave when executable board is empty
 -> bounded scheduled ticket/report sources
 -> ticket-local QA, review, reward, and closeout
--> durable learning back into goals, policy, skills, docs, or features
+-> durable learning back into metric objectives, policy, skills, docs, or features
 ```
 
 ### Canonical State
 
 | Surface | Responsibility |
 | --- | --- |
-| `farplane/harness.md` | stable thesis, authority, guardrails, capability refs |
-| `farplane/goals.yaml` | current value direction, KPIs, milestone, bets, holds |
-| `farplane/metrics.yaml` | provider-independent metric meaning |
+| `farplane/harness.yaml` | identity, products, authority, capability refs, selected metrics |
+| `farplane/metrics.yaml` | metric meaning, direction, freshness, and guard rules |
 | `farplane/bindings.yaml` | safe provider coordinates and refresh recipes |
 | `farplane/automations.toml` | one Work Pulse plus bounded scheduled jobs |
 | `tickets/TASK-*/` | work, program, progress, reward, evidence, QA, review |
@@ -130,7 +128,7 @@ Only Work Pulse executes tickets and matured check-ins.
 
 ### FR-1: Project Program
 
-- A project can express stable policy, current goals, metrics, provider
+- A project can express stable policy, descriptive products, selected metrics, provider
   bindings, capability routes, and automation topology in tracked files.
 - Generated observations never silently replace those source owners.
 
@@ -190,6 +188,17 @@ Only Work Pulse executes tickets and matured check-ins.
   state.
 - Missing or ambiguous evidence becomes a source gap, not an inferred pass.
 
+### FR-9: Portable Event Mining
+
+- Core captures typed project file events, persists them before advancing the
+  file snapshot, and retries failed routes through a durable local outbox.
+- `hooks.json` selects capture patterns; `bindings.yaml` maps event names to
+  immutable mining programs.
+- Default completion mining emits coverage, observations, material findings,
+  source gaps, and escalation without a scalar quality score.
+- Farplane UI edits routes and renders Core runs; it does not own event,
+  program, run, replay, rerun, or report semantics.
+
 ## Success Metrics
 
 | Metric | Direction | Meaning |
@@ -197,10 +206,10 @@ Only Work Pulse executes tickets and matured check-ins.
 | `auto_completion_rate` | maximize | completed associated tickets required no post-start human intervention |
 | `intervention_free_ticket_count` | maximize | autonomous completion produces useful throughput |
 | `ticket_intervention_turn_count` | minimize within quality floor | supervision falls without false completion or drift |
-| `rejected_ai_ticket_count` | minimize | Pulse planning produces fewer low-value tickets |
+| `rejected_ai_ticket_count` | diagnostic | Dogfood can compare planner variants without globally blocking BAU |
 | `todo_unclaimed_ticket_count` | bounded operating signal | executable supply is visible without uncontrolled backlog growth |
 | `accepted_harness_improvements` | increase selectively | self-improvement produces reviewed durable value |
-| `latest_eval_pass_rate` | preserve or improve | refinement does not silently lower tested behavior quality |
+| `latest_eval_pass_rate` | diagnostic | latest local eval result is visible without treating unrelated suites as one global guard |
 
 Metric semantics live in `farplane/metrics.yaml`; provider refresh mechanics
 live in `farplane/bindings.yaml`. Dispatch correctness, review-worker release,
@@ -211,12 +220,14 @@ cards.
 ## V1 Acceptance
 
 - [x] Product-scoped Pulse controllers and product state are retired.
+- [x] `harness.yaml` owns typed identity, products, capabilities, and metric selection.
 - [x] One project Work Pulse handles ordinary tickets and matured check-ins.
 - [x] Ticket metadata is reduced to lifecycle and sparse routing.
 - [x] Human review and signal waits release workers.
 - [x] Feed Scout, Daily/Weekly BAU, and Dogfood are bounded independent jobs.
 - [x] Immediate and delayed self-improvement use ticket Goal Packets.
 - [x] `metrics.yaml` owns metric definitions; bindings own provider mechanics.
+- [x] Core owns typed file events and mining; UI is an adapter over Core artifacts.
 - [x] QA and review evidence are ticket-scoped.
 - [x] Current Farplane project files and init templates validate.
 - [ ] Representative scheduled operation proves the loop over longer real

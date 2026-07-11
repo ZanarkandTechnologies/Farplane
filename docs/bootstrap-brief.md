@@ -18,35 +18,35 @@ source:
 
 - Project: Farplane
 - Goal: Make autonomous Codex work visible, reviewable, repeatable, and useful
-  through files, tickets, skills, goals, automations, and proof.
+  through files, tickets, skills, selected metrics, automations, and proof.
 - Audience: Kenji, Farplane operators, and agents working inside this repo.
 
 ## Intent
 
 - Why now: Farplane is dogfooding the project substrate created by
   `init-advisor`.
-- What good looks like: A new agent can find the project harness, current
-  goals, automation manifest, runtime state, tickets, proof commands, and
+- What good looks like: A new agent can find the project harness, metric
+  objectives, automation manifest, runtime state, tickets, proof commands, and
   stop conditions without relying on transcript memory.
 - Optimize for first: visible state, safe autonomous execution, focused review,
   and low-friction continuation.
 
-## Goal Intake Status
+## Objective Intake Status
 
-- Current state: `farplane/goals.yaml` exists and captures the latest inferred
-  Farplane operating portfolio.
-- Missing setup: the operator has not yet completed a fresh goal-intake pass
-  for this project bootstrap.
+- Current state: `farplane/harness.yaml` selects the current measurable
+  objectives and guards; `farplane/metrics.yaml` defines their meaning.
+- Missing setup: serious-user adoption and proof-closure observations still
+  need honest providers before they can become objective or guard metrics.
 - Rule: do not treat the bootstrap as fully initialized until the operator's
   desired outcome, success criteria, non-goals, and decision boundaries have
-  been captured and reconciled into `farplane/goals.yaml`.
-- Next route: run `deep-interview --bootstrap` and then update
-  `farplane/goals.yaml` through an explicit goals delta.
+  been captured in `harness.yaml` and selected objectives have honest providers.
+- Next route: use `metric-advisor` for any new objective or guard, then create
+  a bounded instrumentation ticket for missing providers.
 
 ## Recommended Shape
 
 - Project profile: harness repo / project operating system.
-- Lifecycle route: bootstrap substrate -> goals portfolio -> ticket-backed
+- Lifecycle route: bootstrap substrate -> metric-guided proposal portfolio -> ticket-backed
   Goal Packets -> review and proof.
 - App type: no app scaffold; repo is an orchestration and documentation system.
 - Topology recommendation: tracked `farplane/` config plus ignored
@@ -93,8 +93,8 @@ source:
 ## Agent Experience / Testability
 
 - Important states the agent must reach quickly:
-  - current project harness in `farplane/harness.md`
-  - dynamic portfolio in `farplane/goals.yaml`
+  - current project charter and selected metric refs in `farplane/harness.yaml`
+  - metric meaning, direction, freshness, and guard rules in `farplane/metrics.yaml`
   - automation program in `farplane/automations.toml`
   - live runtime reports in `.farplane/reports/`
   - active tickets in `tickets/`

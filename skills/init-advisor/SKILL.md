@@ -19,12 +19,13 @@ Farplane project by default: it gets tracked `farplane/` config, ignored
 templates, docs, QA guidance, and optional app-stack scaffolding.
 
 The skill's completion point is initialization, not full operating-model
-discovery. It scaffolds `farplane/harness.md` as the static human charter and
-capability-reference surface, and `farplane/goals.yaml` as the value-direction
-and KPI contract. In `full` mode, route the operating-model setup through
+discovery. It scaffolds `farplane/harness.yaml` as the typed human charter,
+descriptive-product, capability-reference, and metric-selection surface, and
+`farplane/metrics.yaml` as the measurable
+objective, guard, and metric-definition contract. In `full` mode, route the operating-model setup through
 `harness-creator` after the substrate exists. `harness-creator` owns the
 real-world-equivalent
-grounding and composes downstream advisors such as `horizon-advisor`,
+grounding and composes downstream advisors such as `metric-advisor`,
 `harness-advisor`, `skill-creator`, and `goal-advisor` when they are needed.
 Init advisor should not separately orchestrate those advisor calls.
 
@@ -55,7 +56,7 @@ init_advisor(project_root?, project_idea?, repo_shape?, stack_profile?, init_mod
    + project_identity
    + static_harness_charter
    + operating_model_handoff_or_result?
-   + goals_delta?
+  + metric_objective_delta?
    + metric_contract
    + capability_workflow_handoff?
    + optional_code_scaffold?
@@ -68,13 +69,13 @@ init_advisor(project_root?, project_idea?, repo_shape?, stack_profile?, init_mod
 state: reads(existing repo files, README/AGENTS/docs/tickets when present, bootstrap brief, project profile, operator context); writes AGENTS/PROJECT_RULES/ARCHITECTURE/docs/tickets/qa/farplane scaffolds, optional stack scaffold, and starter PRD ticket
 gates: existing_files_preserved; spec_version_recorded; human_gates_named; human_intake_decision_recorded; secrets_not_written; no_hidden_automation; interactive_stack_steps_stop_for_human
 routes: harness-creator | automation-advisor | deep-interview | prd | spec-to-ticket | research:official-docs | research:code-patterns
-fails: creates only code scaffolding with no Farplane project config; treats PRD authoring as required init completion; claims full project initialization when the operating model, goals, success criteria, non-goals, or decision boundaries are still missing; deletes stack setup recipes; overwrites existing project state silently
+fails: creates only code scaffolding with no Farplane project config; treats PRD authoring as required init completion; claims full project initialization when human intent, measurable objectives, success criteria, non-goals, or decision boundaries are still missing; deletes stack setup recipes; overwrites existing project state silently
 ```
 
 ## Phase Boundary
 
 This skill follows Tier 0 phases inline. Use compact grounding before
-finalizing project archetype, static charter, capability workflows, or goals; use deeper
+finalizing project archetype, static charter, capability workflows, or metric objectives; use deeper
 research only when stack commands, framework conventions, or market assumptions
 may be stale. PRD authoring is a downstream ticketed handoff, not init
 completion.
@@ -85,8 +86,8 @@ completion.
   readiness gaps into `docs/bootstrap-brief.md`, and report
   `substrate_complete`.
 - `full`: after substrate setup, call `harness-creator` for the operating-model
-  pass. It owns the static charter, capability workflows, goals, feedback loops, missing
-  systems, current milestone, and any later Goal Advisor handoff.
+  pass. It owns the static charter, capability workflows, metric objectives, feedback loops, missing
+  systems, metric objectives, and any later Goal Advisor handoff.
 
 `human_intake` controls how init/migration fills human-meaning files:
 
@@ -98,32 +99,32 @@ completion.
   operator-owned params have been answered or recorded as blocked.
 
 Use destination skill signatures as the question inventory. Route static
-charter, capability workflow references, feedback loops, missing systems, and current
-milestone shape to `harness-creator`; route North Star, value function, KPIs,
-holds, and milestone deltas to `horizon-advisor`. Escalate to
+charter, capability workflow references, feedback loops, missing systems, and
+objective shape to `harness-creator`; route metric meaning, directions, guards,
+and proof providers to `metric-advisor`. Escalate to
 `deep-interview --quick` only when direct signature questions would produce
 shallow or misleading answers. Record the intake choice and missing answers in
 `docs/bootstrap-brief.md`; do not embed the Deep Interview loop here.
 
 Do not treat file existence as readiness. Placeholder or stale split project
-files mean "operating model still missing", not "initialized". Keep
-`farplane/goals.yaml` as structured YAML containing
-goal axes and inline SMART goals; use
-`goal-advisor` only after the current milestone is concrete enough for a
-ticket-backed Goal Packet.
+files mean "operating model still missing", not "initialized". Keep human
+meaning, hard constraints, products, and selected metric refs in
+`farplane/harness.yaml`; keep reusable metric direction, freshness, and guard
+rules in `farplane/metrics.yaml`; use
+`goal-advisor` only after a ticket is concrete enough for a Goal Packet.
 
 ```text
 setup_project_operating_model(bootstrap_brief, project_context,
                               existing_harness?, existing_capability_skills?,
-                              existing_goals?, human_intake?)
+                              existing_metrics?, human_intake?)
   -> readiness_status
    + human_intake_decision
    + first_missing_question?
    + deep_interview_quick_handoff?
    + harness_delta?
    + capability_skill_delta?
-   + goals_delta?
-   + current_milestone_candidate?
+   + metric_objective_delta?
+  + initial_metric_objectives?
    + goal_advisor_handoff?
 ```
 
@@ -172,10 +173,10 @@ setup_project_operating_model(bootstrap_brief, project_context,
   - [ ] In `substrate` mode, record missing operating-model answers in
         `docs/bootstrap-brief.md` and report them as the next handoff.
   - [ ] In `full` mode, call `harness-creator` after substrate setup when the
-        static charter, capability workflows, goals,
-        feedback loops, missing systems, or current milestone need
+        static charter, capability workflows, metric objectives,
+        feedback loops, or missing systems need
         project-specific setup.
-  - [ ] Let `harness-creator` decide whether to route to `horizon-advisor`,
+  - [ ] Let `harness-creator` decide whether to route to `metric-advisor`,
         `harness-advisor`, `skill-creator`, or `goal-advisor`.
 - [ ] 5. Create the starter planning handoff.
   - [ ] Create or preserve `tickets/TASK-0001/ticket.md` for drafting the
@@ -244,8 +245,8 @@ setup_project_operating_model(bootstrap_brief, project_context,
 - [references/qa/](references/qa/) - copied when creating the QA cookbook
   surface.
 - [../harness-creator/SKILL.md](../harness-creator/SKILL.md) - call in full
-  mode after substrate setup when static charter, capability workflows, goals, feedback
-  loops, missing systems, automation/binding deltas, or the current milestone
+  mode after substrate setup when static charter, capability workflows, metric objectives, feedback
+  loops, missing systems, automation/binding deltas, or metric objectives
   need project-specific setup.
 - [../../docs/farplane-framework/project-files.md](../../docs/farplane-framework/project-files.md)
   - load when the user asks why a Farplane project has these files or how the

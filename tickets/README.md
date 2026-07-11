@@ -260,24 +260,63 @@ execution. Keep it small:
 
 ```yaml
 kpi_rewards:
-  - kpi_id: accepted_harness_improvements
+  - reward_id: accepted-harness-improvements-7d
+    kpi_id: accepted_harness_improvements
     expected_reward: "one proof-backed harness improvement"
     check_in_at: "2026-04-10T00:00:00Z"
     actual_result:
-    reward_score:
-    reward_score_reason:
+    decision:
+    evaluated_at:
+    evaluation_key:
+    supersedes_evaluation_key:
+    evidence_refs: []
 guard: "do not count planned intent as KPI movement; count only completed tickets with proof"
 ```
 
-`Reward` is not a metrics registry and is not mandatory for every legacy
-ticket. `check_in_at` is when the interval should compare expected reward
-against reality. `actual_result`, `reward_score`, and `reward_score_reason`
-are filled at or after check-in by the interval reward-checkin analyzer.
-`reward_score` is a scalar from `-1` to `1`, where `1` means the actual result
-strongly matched or exceeded the expected reward, `0` means unclear or weakly
-related, and `-1` means the actual contradicted the expected reward or created
-negative value. If the provider, guard, anti-metric, or proof route needs more
-detail, put the metric card in `program.md` or route through `metric-advisor`.
+`Reward` is not a metrics registry. Manual/operator tickets may omit it; every
+AI-planned or experimental Reward row uses the canonical fields below.
+`reward_id` is unique and stable inside the ticket and remains the identity when
+rows are reordered. `check_in_at` is when Work Pulse may resume the original
+ticket to compare the expectation with evidence. The check-in worker writes the
+latest `actual_result`, `decision`, `evaluated_at`, `evaluation_key`, and
+`evidence_refs`; score-only rows are not realized value.
+
+Canonical state is derived without another lifecycle field:
+
+```text
+pending          = decision empty  AND check_in_at > now
+due              = decision empty  AND check_in_at <= now
+monitor_pending  = decision monitor AND check_in_at > now
+monitor_due      = decision monitor AND check_in_at <= now
+terminal_accept  = decision accept
+terminal_kill    = decision kill
+```
+
+`monitor` updates the same row's `check_in_at` to a later instant after storing
+the completed evaluation. `accept` and `kill` are terminal. Re-applying the
+same `evaluation_key` is a no-op. A correction replaces the latest row fields,
+sets `supersedes_evaluation_key`, and appends a progress entry naming the
+replaced evaluation.
+
+```text
+evaluation_key
+  = sha256(ticket_id, reward_id, check_in_at, evidence_digest, program_digest)
+
+accepted_reward(ticket, reward)
+  iff reward.decision == accept
+      AND reward.actual_result is non-empty
+      AND reward.evaluated_at is valid
+      AND reward.evidence_refs is non-empty
+      AND ticket-scoped review evidence is pass/TAS-A
+```
+
+There are exactly two learning horizons. Work Pulse derives matured rows and
+resumes the original ticket for ticket-local evaluation. Weekly Dogfood reads
+the recorded terminal outcomes for portfolio learning without rescoring them.
+Pulse admission receipts may be joined to eventual Reward decisions for plan
+outcome analysis, but Farplane has no independent plan score or plan-wave loop.
+If the provider, guard, anti-metric, or proof route needs more detail, put the
+metric card in `program.md` or route through `metric-advisor`.
 
 Use `Change Plan` for the executable task-local program and file map. Split it
 into one heading and one fenced block per coherent change:

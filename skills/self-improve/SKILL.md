@@ -83,6 +83,8 @@ fails:
         human feedback is required. Encode the wait in the original ticket's
         `Reward.kpi_rewards[]` and compile an executable `Check-In Program` in
         its `program.md` through Goal Advisor.
+  - [ ] Give every delayed row a stable `reward_id`. Treat only evidence-backed
+        `accept` or `kill` as terminal; `monitor` updates the same row and wait.
 - [ ] 7. For durable iterative work, prefer native Goal mode as the loop runner;
   use this skill as the eval, prompt-profile, and skill-memory context surface.
 - [ ] 8. Promote only durable lessons, evals, and accepted changes into the target
@@ -104,9 +106,16 @@ compiled and `metric-advisor` when the metric provider or guards are unclear.
   `program.md` `Check-In Program`. Work Pulse resumes the same packet and its
   worker executes that program when a row matures.
 
+Immediate execution and ticket-local delayed check-in are execution timing
+routes, not extra portfolio learners. Weekly Dogfood is the only aggregation
+horizon and reads terminal Reward decisions without rescoring them. Do not add
+an independent plan-quality loop; join Pulse admission receipts to eventual
+Reward decisions when portfolio attribution is needed.
+
 Load [workflows](references/workflows.md) for the full eval sequence, exact
-Reward/Goal fields, due-row rule, and `accept | kill | iterate | monitor`
-decisions. Load [skill evals](references/skill-evals.md) before designing cases
+Reward/Goal fields, due-row rule, and `accept | kill | monitor` decisions.
+Iteration remains same-packet work, not another Reward state. Load [skill
+evals](references/skill-evals.md) before designing cases
 and [skill memory](references/skill-memory.md) before creating a target-local
 `program.md`, run folders, or prompt-profile harness.
 

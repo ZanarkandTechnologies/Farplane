@@ -21,7 +21,7 @@ finalizing the scaffold.
 - Success criteria captured:
 - Non-goals captured:
 - Decision boundaries captured:
-- Ready to update `farplane/goals.yaml`:
+- Ready to define `farplane/metrics.yaml` objectives and guards:
 - First missing question:
 
 ## Recommended Shape

@@ -197,7 +197,9 @@ def ticket_completion_date(fm: dict[str, str], fallback_date: str) -> str:
 
 
 def ticket_is_complete(fm: dict[str, str]) -> bool:
-    return fm.get("phase") == "complete" or fm.get("status") == "done"
+    status = str(fm.get("status") or "").strip().lower()
+    phase = str(fm.get("phase") or "").strip().lower()
+    return status == "done" and phase in {"", "complete"}
 
 
 def ticket_has_completion_proof(markdown: str) -> bool:
@@ -209,7 +211,31 @@ def ticket_has_completion_proof(markdown: str) -> bool:
     )
 
 
-def parse_ticket_kpi_rewards(markdown: str) -> tuple[list[dict[str, str]], list[str]]:
+def ticket_has_acceptance_evidence(ticket: Path, markdown: str) -> bool:
+    review_root = ticket.parent / "artifacts" / "review"
+    for path in sorted(review_root.rglob("*")) if review_root.exists() else []:
+        if not path.is_file() or path.suffix.lower() not in {".md", ".json"}:
+            continue
+        lowered = path.read_text(encoding="utf-8", errors="ignore").lower()
+        if ("verdict: pass" in lowered or '"verdict": "pass"' in lowered) and (
+            "tas-a" in lowered or '"overall_tas": "tas-a"' in lowered
+        ):
+            return True
+    done = (markdown_heading_section(markdown, "Done / Proof") or "").lower()
+    return "tas-a" in done and "verdict" in done and "pass" in done and "pending" not in done
+
+
+def nonempty(value: Any) -> bool:
+    return value is not None and str(value).strip() != ""
+
+
+def string_list(value: Any) -> list[str]:
+    if not isinstance(value, list):
+        return []
+    return [str(item).strip() for item in value if str(item).strip()]
+
+
+def parse_ticket_kpi_rewards(markdown: str) -> tuple[list[dict[str, Any]], list[str]]:
     reward = markdown_heading_section(markdown, "Reward")
     if not reward:
         return [], ["missing_reward_section"]
@@ -217,19 +243,54 @@ def parse_ticket_kpi_rewards(markdown: str) -> tuple[list[dict[str, str]], list[
     raw_rewards = payload.get("kpi_rewards")
     if not isinstance(raw_rewards, list):
         return [], ["missing_kpi_rewards"]
-    rewards: list[dict[str, str]] = []
+    rewards: list[dict[str, Any]] = []
     gaps: list[str] = []
+    seen_reward_ids: set[str] = set()
     for index, raw_reward in enumerate(raw_rewards):
         if not isinstance(raw_reward, dict):
             gaps.append(f"invalid_kpi_reward:{index}")
             continue
         kpi_id = str(raw_reward.get("kpi_id") or "").strip()
+        reward_id = str(raw_reward.get("reward_id") or "").strip()
         expected_reward = str(raw_reward.get("expected_reward") or "").strip()
+        if not reward_id:
+            gaps.append(f"missing_reward_id:{index}")
+            continue
+        if reward_id in seen_reward_ids:
+            gaps.append(f"duplicate_reward_id:{index}:{reward_id}")
+            continue
+        seen_reward_ids.add(reward_id)
         if not kpi_id:
             gaps.append(f"missing_kpi_id:{index}")
             continue
-        rewards.append({"kpi_id": kpi_id, "expected_reward": expected_reward})
+        rewards.append(
+            {
+                "reward_id": reward_id,
+                "kpi_id": kpi_id,
+                "expected_reward": expected_reward,
+                "actual_result": raw_reward.get("actual_result"),
+                "decision": str(raw_reward.get("decision") or "").strip().lower(),
+                "evaluated_at": str(raw_reward.get("evaluated_at") or "").strip(),
+                "evaluation_key": str(raw_reward.get("evaluation_key") or "").strip(),
+                "supersedes_evaluation_key": str(
+                    raw_reward.get("supersedes_evaluation_key") or ""
+                ).strip(),
+                "evidence_refs": string_list(raw_reward.get("evidence_refs")),
+            }
+        )
     return rewards, gaps
+
+
+def accepted_reward(reward: dict[str, Any], *, has_acceptance_evidence: bool) -> bool:
+    """Return whether one canonical Reward row is realized accepted value."""
+
+    return (
+        reward.get("decision") == "accept"
+        and nonempty(reward.get("actual_result"))
+        and parse_iso_datetime(reward.get("evaluated_at")) is not None
+        and bool(reward.get("evidence_refs"))
+        and has_acceptance_evidence
+    )
 
 
 def count_ticket_kpi_rewards(ticket_dir: Path, date: str, kpi_key: str) -> dict[str, Any]:
@@ -253,20 +314,49 @@ def count_ticket_kpi_rewards(ticket_dir: Path, date: str, kpi_key: str) -> dict[
         if not ticket_has_completion_proof(markdown):
             gaps.append(f"{relative_ticket}:missing_completion_proof")
             continue
+        has_acceptance_evidence = ticket_has_acceptance_evidence(ticket, markdown)
         for reward in rewards:
             if reward["kpi_id"] != kpi_key:
+                continue
+            decision = reward.get("decision")
+            if decision == "kill":
+                continue
+            if not accepted_reward(
+                reward,
+                has_acceptance_evidence=has_acceptance_evidence,
+            ):
+                if decision in {"", "monitor"}:
+                    gaps.append(
+                        f"{relative_ticket}:unresolved_reward:{reward['reward_id']}"
+                    )
+                elif decision == "accept" and not has_acceptance_evidence:
+                    gaps.append(
+                        f"{relative_ticket}:missing_acceptance_evidence:{reward['reward_id']}"
+                    )
+                else:
+                    gaps.append(
+                        f"{relative_ticket}:invalid_accept_evidence:{reward['reward_id']}"
+                    )
                 continue
             count += 1
             tickets.append(
                 {
                     "ticket_id": fm.get("ticket_id") or ticket.parent.name,
                     "ticket": relative_ticket,
+                    "reward_id": reward["reward_id"],
                     "expected_reward": reward.get("expected_reward", ""),
+                    "actual_result": str(reward.get("actual_result") or ""),
+                    "evaluated_at": reward.get("evaluated_at", ""),
+                    "evidence_refs": reward.get("evidence_refs", []),
                 }
             )
+            # This primitive is a completed-ticket count by KPI. Multiple
+            # accepted horizons for the same ticket/KPI remain evidence on the
+            # ticket and do not inflate the daily ticket count.
+            break
     return {
         "value": count,
-        "status": "available",
+        "status": "available" if count or not gaps else "source_gap",
         "payload": {"tickets": tickets, "gaps": gaps},
     }
 

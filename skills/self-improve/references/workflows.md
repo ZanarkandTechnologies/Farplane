@@ -75,32 +75,37 @@ window:
    thresholds, idempotency, and missing-source behavior.
 4. Append baseline and exposure observations to `progress.md`.
 5. Let Work Pulse derive matured rows and hand the same ticket/program/progress
-   plus row indexes and evidence refs to one worker.
+   plus stable `reward_id` values and evidence refs to one worker.
 6. Have that worker read `program.md` first, execute `Check-In Program`, update
-   only matured rows, append progress, and return `accept`, `kill`, `iterate`,
-   or `monitor`.
+   only matured rows by stable Reward ID, append progress, and return `accept`,
+   `kill`, or `monitor`.
 
 ### Exact Goal Packet Contract
 
 ```text
 ticket.md / Reward.kpi_rewards[]:
+  reward_id
   kpi_id
   expected_reward
   check_in_at
   actual_result
-  reward_score
-  reward_score_reason
+  decision: accept | kill | monitor | empty
+  evaluated_at
+  evaluation_key
+  supersedes_evaluation_key
+  evidence_refs
 
 program.md:
   Metric Provider.signal + minimum
   Heartbeat Policy.wake_condition
   Check-In Program:
     mode: delayed_reward
-    inputs: original ticket/program/progress + matured row indexes + evidence
-    procedure: ordered evidence collection, attribution, comparison, scoring
+    inputs: original ticket/program/progress + matured reward_ids + evidence
+    procedure: ordered evidence collection, attribution, comparison, decision
     writeback: matured Reward rows + append-only progress entry
-    decisions: accept_when + kill_when + iterate_when + monitor_when
-    idempotency: preserve future/completed rows; correction note on rescore
+    decisions: accept_when + kill_when + monitor_when
+    idempotency: preserve future/terminal rows; duplicate evaluation_key is a
+      no-op; correction names supersedes_evaluation_key in progress
     source_gap: record gap + monitor/next check-in unless explicitly overridden
   Stop Conditions.complete_when + pause_when
   Rollout Policy.promotion_rule + rollback_or_hold_rule
@@ -109,17 +114,21 @@ progress.md:
   append-only baseline, exposure, observations, and decisions
 ```
 
-A row is due when `check_in_at <= now` and either `actual_result` or
-`reward_score` is empty. Work Pulse resumes the original non-terminal ticket,
-hands every matured row to one worker, and leaves future/completed rows alone.
-It does not reproduce the decision rules stored in `program.md`.
+A row is due when `decision` is empty and `check_in_at <= now`, or when
+`decision: monitor` and its updated `check_in_at <= now`. Work Pulse resumes
+the original non-terminal ticket, hands every matured `reward_id` to one
+worker, and leaves future plus terminal `accept`/`kill` rows alone. It does not
+reproduce the decision rules stored in `program.md`.
 
 Decisions:
 
 - `accept`: keep/promote and close;
 - `kill`: prune/rollback and close;
-- `iterate`: update the hypothesis and resume work now;
 - `monitor`: remain dormant and update the same ticket's next check-in.
+
+An iteration is ordinary work on the same experiment packet before another
+terminal decision; it is not a fourth Reward decision or another feedback
+horizon.
 
 For immediate feedback, keep `Check-In Program` to
 `mode: not_applicable` plus a reason. Do not fill any delayed procedure fields.

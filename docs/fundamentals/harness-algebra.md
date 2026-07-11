@@ -1009,23 +1009,22 @@ drift_check(ticket, program, progress_tail, current_claim)
    + recovery_action
 ```
 
-Long-term goal hierarchy:
+Long-term project control:
 
 ```text
-goal -> project[] -> task[]
-
-farplane/goals.yaml = long-horizon goal graph + current_milestone
+harness.yaml = human meaning + descriptive products + selected metric refs + hard constraints
+metrics.yaml = metric meaning + direction + freshness + optional guard rules
 ticket.md = executable leaf contract + Done + QA Strategy
 program.md = loop configuration + metric + stop policy
 progress.md = append-only observed execution
 artifacts/ = evidence
 ```
 
-Horizon heartbeat:
+Portfolio planning:
 
 ```text
-horizon_heartbeat(farplane/goals.yaml, program.md, progress.md)
-  -> no_op | start_child_goal | resume_child_goal | request_feedback | replan
+plan_next_wave(harness, metric_objectives, metric_state, ticket_history, reports)
+  -> ranked_proposals -> admitted_ticket[] | no_op | request_feedback
 ```
 
 Leaf execution:
@@ -1038,8 +1037,8 @@ leaf_native_goal(ticket.md, program.md, progress.md)
 Completion transition:
 
 ```text
-complete_child_goal(child_packet, project_goals, parent_program)
-  -> progress_entry + project_goals_delta + next_trigger
+complete_ticket(ticket, metric_observations, reports)
+  -> progress_entry + evidence + next_pulse_trigger
 ```
 
 Rollout:
@@ -1049,9 +1048,9 @@ rollout_goal(pattern, sample_results, target_set)
   -> child_ticket[] | staged_checkpoints + rollout_progress
 ```
 
-The project goals layer chooses the next milestone. Native Goal mode executes
-one leaf. Completion updates `farplane/goals.yaml` or a project report before the
-next heartbeat or replan.
+The proposal portfolio compares longer trajectories before selecting bounded
+tickets. Native Goal mode executes one admitted leaf. Completion updates ticket
+evidence and metric observations before the next Pulse replans.
 
 Control improves reliability only when trigger, state, stop condition, and
 proof are explicit:

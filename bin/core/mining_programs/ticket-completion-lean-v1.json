@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "program_ref": "core:ticket-completion-lean@1.0.0",
+  "program_id": "ticket-completion-lean",
+  "version": "1.0.0",
+  "kind": "ticket_completion",
+  "objective": "Produce a compact evidence inventory and material source gaps for one completed ticket without assigning an aggregate quality score.",
+  "required_inputs": [
+    "event_source"
+  ],
+  "optional_inputs": [
+    "program",
+    "progress",
+    "artifact"
+  ],
+  "report_schema_version": 1,
+  "privacy": {
+    "raw_transcript": "forbidden",
+    "file_bodies": "not_copied",
+    "bounded_metadata_only": true
+  },
+  "escalation_reason_codes": [
+    "required_source_gap"
+  ]
+}

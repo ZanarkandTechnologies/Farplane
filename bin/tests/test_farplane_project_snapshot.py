@@ -13,7 +13,11 @@ CORE_DIR = ROOT / "bin" / "core"
 if str(CORE_DIR) not in sys.path:
     sys.path.insert(0, str(CORE_DIR))
 
-from farplane_project_snapshot import load_project_snapshot, write_project_ui_snapshot
+from farplane_project_snapshot import (
+    collect_ticket_refs,
+    load_project_snapshot,
+    write_project_ui_snapshot,
+)
 
 
 def add_metric(root: Path, metric_id: str, definition: dict, refresh: str) -> None:
@@ -44,26 +48,26 @@ def write_minimal_project(root: Path) -> None:
         ),
         encoding="utf-8",
     )
-    (farplane / "harness.md").write_text("---\nupdated_at: 2026-07-03\n---\n\n# Harness\n", encoding="utf-8")
-    (farplane / "goals.yaml").write_text(
-        """
-kind: project-goals
-updated_at: 2026-07-03
-goals:
-  validated_self_improvement:
-    smart_goals:
-      - id: improvement_q3
-        kpis:
-          - id: accepted_harness_improvements
-            target: 20
-            direction: above
-current_bets:
-  - id: framework_standardization
-    horizon: 1 week
-    output: clear tracked config split
-    proof_signal: validators pass
-    owner: harness-creator
-current_milestone: Make strategy visible in the project snapshot.
+    (farplane / "harness.yaml").write_text(
+        """kind: project-harness
+framework_template_version: "0.4.0"
+identity:
+  mission: Make useful work.
+  human_thesis: Preserve intent.
+  north_star: Make reliable work normal.
+metric_refs:
+  objectives:
+    - metric_id: accepted_harness_improvements
+      priority: 1
+  guards: []
+products: {}
+feature_definition: {}
+operating_principles: [Prefer visible artifacts.]
+stable_capabilities: []
+leverage_commitments: []
+constraints: {non_tradeoffs: []}
+authority: {agents_may: [], human_approval_required: []}
+change_rule: Protected changes require approval.
 """,
         encoding="utf-8",
     )
@@ -73,10 +77,13 @@ framework_template_version: "0.1.0"
 metrics:
   accepted_harness_improvements:
     label: Accepted harness improvements
+    description: Accepted harness improvements.
     pinned: true
     kind: daily_count
     unit: improvements
     display: bar_plus_cumulative
+    direction: maximize
+    max_age_days: 7
 """,
         encoding="utf-8",
     )
@@ -99,7 +106,11 @@ metric_bindings:
                 "date": "2026-07-02",
                 "primitives": {
                     "ticket_count_by_kpi": {
-                        "accepted_harness_improvements": {"value": 1, "status": "available", "payload": {}}
+                        "accepted_harness_improvements": {
+                            "value": 1,
+                            "status": "available",
+                            "payload": {"reward_contract": "terminal_evidence_v1"},
+                        }
                     },
                 },
                 "source_gaps": [],
@@ -113,7 +124,11 @@ metric_bindings:
                 "date": "2026-07-03",
                 "primitives": {
                     "ticket_count_by_kpi": {
-                        "accepted_harness_improvements": {"value": 2, "status": "available", "payload": {}}
+                        "accepted_harness_improvements": {
+                            "value": 2,
+                            "status": "available",
+                            "payload": {"reward_contract": "terminal_evidence_v1"},
+                        }
                     },
                 },
                 "source_gaps": [],
@@ -124,7 +139,47 @@ metric_bindings:
 
 
 class FarplaneProjectSnapshotTests(unittest.TestCase):
-    def test_snapshot_joins_goals_metrics_and_primitives_without_products(self) -> None:
+    def test_ticket_reward_projection_uses_canonical_reward_identity_and_state(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            ticket = root / "tickets" / "TASK-0001" / "ticket.md"
+            ticket.parent.mkdir(parents=True)
+            ticket.write_text(
+                """---
+ticket_id: TASK-0001
+title: Reward projection
+status: done
+phase: complete
+---
+
+## Reward
+
+```yaml
+kpi_rewards:
+  - reward_id: accepted-7d
+    kpi_id: accepted_harness_improvements
+    expected_reward: one accepted improvement
+    check_in_at: 2026-07-12T00:00:00Z
+    actual_result: improvement retained
+    decision: accept
+    evaluated_at: 2026-07-12T01:00:00Z
+    evaluation_key: eval-accepted-7d
+    evidence_refs: [artifacts/proof.md]
+  - kpi_id: legacy_missing_identity
+```
+""",
+                encoding="utf-8",
+            )
+
+            refs, rewards = collect_ticket_refs(root)
+
+        self.assertEqual(refs[0]["kpi_rewards"], ["accepted_harness_improvements"])
+        self.assertEqual(refs[0]["reward_rows"][0]["reward_id"], "accepted-7d")
+        self.assertEqual(rewards[0]["decision"], "accept")
+        self.assertEqual(rewards[0]["ticket_status"], "done")
+        self.assertEqual(rewards[0]["ticket_phase"], "complete")
+
+    def test_snapshot_joins_objectives_metrics_and_primitives_without_products(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             write_minimal_project(root)
@@ -143,29 +198,21 @@ class FarplaneProjectSnapshotTests(unittest.TestCase):
         self.assertEqual(metric_def["binding_source_ref"]["path"], "farplane/bindings.yaml")
         self.assertIn("farplane/metrics.yaml", {source["path"] for source in snapshot["sources"]})
         self.assertEqual(metric_def["tooltip"], metric_def["description"])
-        self.assertEqual(metric_def["target_spec"], {"value": 20.0, "direction": "above", "unit": "improvements"})
+        self.assertEqual(metric_def["selection_role"], "objective")
+        self.assertEqual(metric_def["target_spec"], {"value": None, "direction": "above", "unit": "improvements"})
         self.assertEqual(metric_card["description"], metric_def["description"])
         self.assertEqual(metric_card["target_spec"], metric_def["target_spec"])
         self.assertEqual(metric_card["current"], 2)
         self.assertEqual(metric_card["series"][-1]["daily_diff"], 1)
         self.assertEqual(metric_card["series"][-1]["cumulative"], 3)
         self.assertEqual(snapshot["tabs"]["overview"]["pinned_metric_cards"][0]["metric_id"], "accepted_harness_improvements")
-        self.assertEqual(
-            snapshot["tabs"]["overview"]["team_focus"]["current_bet"],
-            "framework_standardization: clear tracked config split",
-        )
-        self.assertEqual(snapshot["tabs"]["overview"]["team_focus"]["active_milestone"], "Make strategy visible in the project snapshot.")
-        self.assertEqual(snapshot["tabs"]["overview"]["team_focus"]["top_goal_id"], "validated_self_improvement")
+        self.assertEqual(snapshot["tabs"]["overview"]["charter"]["mission"], "Make useful work.")
+        self.assertEqual(snapshot["tabs"]["overview"]["charter"]["north_star"], "Make reliable work normal.")
+        self.assertEqual(snapshot["metrics"]["selection"]["objectives"][0]["scope"], "project")
         self.assertIn("ticket_ref", snapshot["shared_shapes"])
         self.assertNotIn("products", snapshot["tabs"])
-        goal_kpi = snapshot["tabs"]["goals"]["axes"][0]["smart_goals"][0]["kpis"][0]
-        self.assertEqual(goal_kpi["latest_status"], "available")
-        self.assertEqual(goal_kpi["status"], "available")
-        self.assertEqual(goal_kpi["current"], 2)
-        self.assertEqual(goal_kpi["value"], 2)
-        self.assertEqual(goal_kpi["trend"][-1]["value"], 2)
-        self.assertEqual(goal_kpi["description"], metric_def["description"])
-        self.assertEqual(goal_kpi["target_spec"], metric_def["target_spec"])
+        self.assertNotIn("goals", snapshot["tabs"])
+        self.assertEqual(snapshot["tabs"]["objectives"]["metric_cards"][0]["current"], 2)
         self.assertIn("source_gap_ids", snapshot["tabs"]["distribution"])
         self.assertNotIn("feed_scout", snapshot["tabs"]["distribution"])
         self.assertIn("missing_content_ledger", snapshot["tabs"]["distribution"]["source_gap_ids"])
@@ -173,6 +220,67 @@ class FarplaneProjectSnapshotTests(unittest.TestCase):
         self.assertFalse(snapshot["tabs"]["news"]["feed_scout"]["enabled"])
         self.assertEqual(snapshot["tabs"]["news"]["items"], [])
         self.assertIn("source_gap_ids", snapshot["tabs"]["kanban"])
+
+    def test_snapshot_ignores_intent_era_reward_observations(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            write_minimal_project(root)
+            add_metric(
+                root,
+                "accepted_evidence_cycles",
+                {
+                    "label": "Accepted evidence cycles",
+                    "kind": "daily_count",
+                    "unit": "cycles",
+                    "display": "bar_plus_cumulative",
+                    "direction": "maximize",
+                    "max_age_days": 7,
+                },
+                "Call count_ticket_kpi_rewards for accepted_evidence_cycles.",
+            )
+            legacy_root = root / ".farplane" / "metrics" / "observations" / "ticket_reward_feedback"
+            legacy_root.mkdir(parents=True)
+            (legacy_root / "2026-07-01.json").write_text(
+                json.dumps(
+                    {
+                        "schema_version": 1,
+                        "source_id": "ticket_reward_feedback",
+                        "date": "2026-07-01",
+                        "status": "available",
+                        "observations": [
+                            {
+                                "metric_id": "accepted_evidence_cycles",
+                                "date": "2026-07-01",
+                                "value": 2,
+                                "status": "available",
+                                "payload": {"items": [{"expected_reward": "declared intent"}]},
+                            },
+                            {
+                                "metric_id": "accepted_harness_improvements",
+                                "date": "2026-07-01",
+                                "value": 30,
+                                "status": "available",
+                                "payload": {"items": [{"expected_reward": "declared intent"}]},
+                            }
+                        ],
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            snapshot = load_project_snapshot(root, "2026-07-03")
+
+        metric = {card["metric_id"]: card for card in snapshot["metrics"]["series"]}[
+            "accepted_harness_improvements"
+        ]
+        self.assertEqual(metric["current"], 2)
+        self.assertEqual(metric["series"][-1]["cumulative"], 3)
+        self.assertNotIn(30, [point["value"] for point in metric["series"]])
+        evidence_cycles = {card["metric_id"]: card for card in snapshot["metrics"]["series"]}[
+            "accepted_evidence_cycles"
+        ]
+        self.assertEqual(evidence_cycles["current"], 0)
+        self.assertNotIn(2, [point["value"] for point in evidence_cycles["series"]])
 
     def test_snapshot_does_not_fall_back_to_legacy_bindings_metrics(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -408,11 +516,9 @@ feed_scout:
         self.assertEqual(metric_card["status"], "available")
         self.assertEqual(metric_card["current"], 0)
         self.assertEqual(metric_card["source_gaps"], [])
-        goal_kpi = snapshot["tabs"]["goals"]["axes"][0]["smart_goals"][0]["kpis"][0]
-        self.assertEqual(goal_kpi["latest_status"], "available")
-        self.assertEqual(goal_kpi["status"], "available")
-        self.assertEqual(goal_kpi["current"], 0)
-        self.assertEqual(goal_kpi["value"], 0)
+        objective_card = snapshot["tabs"]["objectives"]["metric_cards"][0]
+        self.assertEqual(objective_card["status"], "available")
+        self.assertEqual(objective_card["current"], 0)
 
     def test_interval_provider_observations_back_goal_metrics(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -566,6 +672,22 @@ feed_scout:
             written = json.loads(output.read_text(encoding="utf-8"))
 
         self.assertEqual(written["schema_version"], 1)
+
+    def test_selected_metric_becomes_stale_after_max_age(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            write_minimal_project(root)
+            metrics_path = root / "farplane" / "metrics.yaml"
+            metrics = yaml.safe_load(metrics_path.read_text(encoding="utf-8"))
+            metrics["metrics"]["accepted_harness_improvements"]["max_age_days"] = 2
+            metrics_path.write_text(yaml.safe_dump(metrics, sort_keys=False), encoding="utf-8")
+
+            snapshot = load_project_snapshot(root, "2026-07-10")
+
+        card = snapshot["tabs"]["objectives"]["metric_cards"][0]
+        self.assertEqual(card["status"], "stale")
+        self.assertIsNone(card["current"])
+        self.assertIn("max_age_days=2", card["source_gaps"][-1]["reason"])
 
 
 if __name__ == "__main__":

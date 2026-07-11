@@ -15,7 +15,7 @@ Apply this before returning any `plan_next_wave` spec. Every accepted spec must
 pass all hard gates; `wave_size` never forces a weak ticket.
 
 ```text
-next_wave_qa(candidate, program, objective_contract, ticket_history)
+next_wave_qa(candidate, harness, metric_objectives, metric_state, ticket_history)
   -> pass | reject + failed_gates
 ```
 
@@ -24,6 +24,8 @@ next_wave_qa(candidate, program, objective_contract, ticket_history)
 1. `objective_contribution`
    - Names the objective or bottleneck and the expected contribution.
    - Uses an existing metric/review signal or states `none mechanical`.
+   - Rejects ordinary admission when a hard guard reading is missing or stale;
+     only bounded observation-restoration work may pass that condition.
 
 2. `bau_boundary`
    - The primary outcome advances the project's product, customer, operations,
@@ -68,6 +70,10 @@ next_wave_qa(candidate, program, objective_contract, ticket_history)
    - Compounding value reinforces direct BAU progress and does not smuggle in
      speculative infrastructure.
    - Plausible losing candidates have a deprioritization reason.
+   - Ranking compares expected metric delta, confidence, duration,
+     time-to-signal, cost, risk, reversibility, information gain, compounding
+     value, interference, and prerequisites instead of greedily selecting the
+     easiest immediate delta.
 
 10. `minimal_scope`
    - Contains one coherent result and the smallest work that can prove it.

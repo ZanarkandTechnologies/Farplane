@@ -64,7 +64,7 @@ WORKFLOWS = [
     {
         "id": "workflow:lifecycle",
         "label": "Farplane lifecycle",
-        "description": "Top-level lifecycle spine from init through goals, proof, autonomy loops, and improvement.",
+        "description": "Top-level lifecycle spine from init through metric objectives, proof, autonomy loops, and improvement.",
         "doc": "docs/farplane-framework/lifecycle.md",
         "skills": [],
     },
@@ -78,9 +78,9 @@ WORKFLOWS = [
     {
         "id": "workflow:strategy",
         "label": "Strategy",
-        "description": "Shape goals, horizons, leverage bets, and executable frontier choices.",
+        "description": "Shape measurable objectives, guards, proposal trajectories, and executable frontier choices.",
         "doc": "docs/farplane-framework/lifecycle.md",
-        "skills": ["horizon-advisor", "leverage-advisor", "harness-advisor", "goal-advisor"],
+        "skills": ["metric-advisor", "leverage-advisor", "harness-advisor", "goal-advisor"],
     },
     {
         "id": "workflow:goal-execution",

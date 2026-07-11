@@ -35,13 +35,20 @@ updated_at: 2026-07-02T09:00:00Z
 
 ```yaml
 kpi_rewards:
-  - kpi_id: accepted_harness_improvements
+  - reward_id: accepted-harness-7d
+    kpi_id: accepted_harness_improvements
     expected_reward: "one shipped harness fix"
+    actual_result: "shipped fix remained after review"
+    decision: accept
+    evaluated_at: 2026-07-02T09:00:00Z
+    evaluation_key: eval-accepted-harness-7d
+    evidence_refs: [artifacts/proof.md]
 guard: "proof required"
 ```
 
 ## Done / Proof
 - Evidence: artifacts/proof.md
+- TAS-A verdict: pass
 """,
                 encoding="utf-8",
             )

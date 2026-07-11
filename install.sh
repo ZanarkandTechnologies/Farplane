@@ -134,6 +134,7 @@ INSTALL_BIN_FILES=(
 )
 INSTALL_HOOK_FILES=(
   farplane_console_ping.py
+  farplane_file_change.py
 )
 RETIRED_INSTALL_PATHS=(
   bin/file_growth_hook.py

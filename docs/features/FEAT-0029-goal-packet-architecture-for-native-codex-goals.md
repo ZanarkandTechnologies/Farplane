@@ -3,7 +3,7 @@ title: Retired Goal Packet architecture
 status: retired
 owner: feature-registry
 created_at: 2026-06-26
-updated_at: 2026-07-07
+updated_at: 2026-07-12
 tags:
   - farplane
   - feature
@@ -11,8 +11,6 @@ tags:
 refs:
   - docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md
   - skills/goal-advisor
-  - skills/horizon-advisor
-  - farplane/goals.yaml
   - tickets/templates/goal-loop/program.md
   - tickets/templates/goal-loop/progress.md
   - agents/goal-drift-reviewer.toml
@@ -28,8 +26,6 @@ public: true
 surfaces:
   - docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md
   - skills/goal-advisor
-  - skills/horizon-advisor
-  - farplane/goals.yaml
   - tickets/templates/goal-loop/program.md
   - tickets/templates/goal-loop/progress.md
   - agents/goal-drift-reviewer.toml
@@ -116,7 +112,7 @@ flowchart TD
   native["native Codex Goal docs<br/>goal continuation model"]:::keep
   retired["FEAT-0029<br/>status: retired<br/>superseded_by: FEAT-0032"]:::retired
   successor["FEAT-0032 Goal Advisor<br/>skills/goal-advisor"]:::changed
-  horizon["SYS-0003 Horizon Loop<br/>farplane/goals.yaml<br/>skills/horizon-advisor"]:::changed
+  horizon["SYS-0003 Horizon Loop<br/>ticket Goal Packets"]:::changed
   packet["Goal Packet files<br/>ticket.md<br/>program.md<br/>progress.md"]:::added
   review["proof and drift review<br/>agents/goal-drift-reviewer.toml<br/>ticket artifacts"]:::added
 
@@ -132,8 +128,6 @@ Owner surfaces:
 
 - `docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md`
 - `skills/goal-advisor`
-- `skills/horizon-advisor`
-- `farplane/goals.yaml`
 - `tickets/templates/goal-loop/program.md`
 - `tickets/templates/goal-loop/progress.md`
 - `agents/goal-drift-reviewer.toml`

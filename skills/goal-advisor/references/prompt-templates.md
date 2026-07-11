@@ -152,14 +152,14 @@ Files:
 - <original progress.md>
 - <named evidence artifacts, when any>
 
-Matured Reward row indexes: <indexes derived by Work Pulse>
+Matured Reward IDs: <stable reward_id values derived by Work Pulse>
 Evidence refs: <refs supplied by Work Pulse or named in program.md>
 Current time: <pulse timestamp>
 
 First read `program.md`, then execute its `Check-In Program` exactly. Update
 only the supplied matured rows, preserve future and already-complete rows,
 append the required observation and decision to `progress.md`, and return one
-of `accept`, `kill`, `iterate`, or `monitor`. The ticket's scope and QA
+of `accept`, `kill`, or `monitor`. The ticket's scope and QA
 Strategy win on conflict. If the program is missing, stale, not in
 `delayed_reward` mode, or lacks a required evidence/decision rule, record the
 source gap and return blocked for Goal Advisor repair; do not invent a check-in

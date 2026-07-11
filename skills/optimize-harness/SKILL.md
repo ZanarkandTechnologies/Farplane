@@ -27,7 +27,7 @@ harness behavior gap that needs diagnosis, placement, proof, change, and
 review.
 
 This skill orchestrates existing surfaces. It should not absorb their jobs:
-`gap-analysis` diagnoses, `horizon-advisor` owns strategy deltas,
+`gap-analysis` diagnoses, `metric-advisor` owns measurable objective deltas,
 `leverage-advisor` scores compounding plays, `harness-advisor` places the fix,
 `metric-advisor` chooses honest metric cards, `proof-advisor` chooses the proof
 surface and proof cases, `eval` executes runnable eval proof after eval is
@@ -40,15 +40,15 @@ reusable workflows, `skill-maintenance` backpropagates into existing skills,
 
 ```text
 optimize_harness(observed_behavior, expected_behavior?, metric?, evidence?) -> accepted_change | experiment_plan | blocked_report
-state: reads(gap reports, farplane/goals.yaml?, interval reports?, harness algebra,
+state: reads(gap reports, farplane/harness.yaml?, farplane/metrics.yaml?, interval reports?, harness algebra,
              harness doctrine, feature registry, skill registry, evals,
              tickets, target surfaces);
        writes(ticket?, eval_case?, experiment_artifact?, applied_change?,
-              goals_delta_candidate?, review_receipt?)
+              harness_or_metric_delta_candidate?, review_receipt?)
 gates: gap_named; loss_term_named; metric_or_reward_signal_named;
        owner_surface_named; proof_route_named; accept_hold_or_rollback_named;
        review_passes_or_blocked
-routes: gap-analysis | horizon-advisor | leverage-advisor | harness-advisor |
+routes: gap-analysis | metric-advisor | leverage-advisor | harness-advisor |
   metric-advisor | proof-advisor | eval | skill-creator | skill-maintenance |
   impl-plan | goal-advisor | self-improve | review
 fails: changes without proof; optimizes vague taste; creates new skill before checking registry; hides blocked state
@@ -60,7 +60,7 @@ fails: changes without proof; optimizes vague taste; creates new skill before ch
 - [ ] 1. Normalize the request into observed behavior, expected behavior,
   candidate metric when present, and evidence already available.
 - [ ] 2. Bind the optimization target.
-  - [ ] Read `farplane/goals.yaml` and
+  - [ ] Read `farplane/harness.yaml`, `farplane/metrics.yaml`, and
         `docs/fundamentals/harness-algebra.md` when the task is Farplane's own
         self-evolution or a material harness-optimization pass.
   - [ ] Name the loss term: human intervention, false completion, agent churn,
@@ -82,8 +82,8 @@ fails: changes without proof; optimizes vague taste; creates new skill before ch
   - [ ] If expected behavior is underspecified, mark the uncertainty instead of
     inventing a target.
 - [ ] 4. Choose whether this is a full harness optimization or a smaller route.
-  - [ ] Route strategy/value/KPI/frontier changes to
-        [horizon-advisor](../horizon-advisor/SKILL.md).
+  - [ ] Route measurable objective, direction, guard, and provider changes
+        through `harness-advisor`, which may compose `metric-advisor`.
   - [ ] Route pure leverage scoring to
         [leverage-advisor](../leverage-advisor/SKILL.md).
   - [ ] Continue here only when the improvement needs coordinated gap,
@@ -186,7 +186,7 @@ Review route: review before claiming the harness behavior changed.
 Self-evolution routing:
 
 ```text
-strategy gap -> horizon-advisor
+metric objective gap -> metric-advisor
 unclear compounding value -> leverage-advisor
 unclear owner surface -> harness-advisor
 unclear metric or reward signal -> metric-advisor
@@ -231,8 +231,8 @@ material harness behavior gap -> optimize-harness
 
 - [gap-analysis](../gap-analysis/SKILL.md) - diagnose current versus expected
   behavior and name the next owner.
-- [horizon-advisor](../horizon-advisor/SKILL.md) - rewrite value function,
-  KPI tree, project goals, or current frontier when the strategy is wrong.
+- [metric-advisor](../metric-advisor/SKILL.md) - revise measurable objectives,
+  directions, guards, or providers when the optimization contract is wrong.
 - [leverage-advisor](../leverage-advisor/SKILL.md) - score compounding value
   for an existing feature, workflow, capability, or artifact.
 - [harness-advisor](../harness-advisor/SKILL.md) - choose the primary harness

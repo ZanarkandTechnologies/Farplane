@@ -9,7 +9,7 @@ tags:
   - feature
   - sys-0007
 refs:
-  - farplane/harness.md
+  - farplane/harness.yaml
   - skills/dogfood-review/SKILL.md
   - farplane/automations.toml
   - docs/features/README.md
@@ -18,12 +18,12 @@ system_id: SYS-0007
 category: improvement-loop
 public: true
 surfaces:
-  - farplane/harness.md
+  - farplane/harness.yaml
   - skills/dogfood-review/SKILL.md
   - skills/dogfood-review/templates/dogfood-report.md
   - farplane/automations.toml
 source_refs:
-  - farplane/harness.md
+  - farplane/harness.yaml
   - docs/features/README.md
   - docs/prd.md
 external_refs: []

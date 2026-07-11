@@ -1,6 +1,6 @@
 ---
 name: ticket-opportunity-generator
-description: "Turn a project program, objective contract, ticket history, and current context into a ranked bounded wave of executable BAU ticket specs."
+description: "Turn a project charter, metric objective contract, ticket history, and current context into a ranked portfolio of executable BAU ticket specs."
 tier: 3
 group: harness
 source: local
@@ -18,7 +18,7 @@ allowed-tools: Read, Glob, Grep, Bash
 
 This skill is Farplane's pure BAU next-wave planner. Work Pulse calls it when
 no executable ticket or due check-in exists. It converts the stable project
-program, objective contract, ticket history, and current context into at most
+charter, metric objective contract, ticket history, and current context into at most
 `wave_size` executable ticket specs that directly advance the project's work.
 
 The package keeps its existing name to reuse the current owner surface. Its
@@ -36,7 +36,7 @@ skill's procedure into the ticket.
 ## Skill Signature
 
 ```text
-plan_next_wave(program, objective_contract, ticket_history,
+plan_next_wave(harness, metric_objectives, metric_state, ticket_history,
                current_context?, wave_size = 1)
   -> ranked_bau_specs[0..wave_size]
    + duplicate_rejections[]
@@ -45,17 +45,17 @@ plan_next_wave(program, objective_contract, ticket_history,
    + human_request?
 
 state:
-  reads(program or farplane/harness.md, objective contract or
-        farplane/goals.yaml + farplane/metrics.yaml,
+  reads(harness or farplane/harness.yaml, selected metric refs plus metric definitions from
+        farplane/metrics.yaml, current readings from .farplane/metrics/,
         active and archived ticket summaries,
         ticket outcomes/progress/proof, latest dated interval suggestions?,
         current provider context such as Feed Scout?, capability skill refs?)
   writes(none)
 
 gates:
-  objective_boundary_present; history_loaded; current_context_labeled;
+  objective_boundary_present; metric_state_loaded; history_loaded; current_context_labeled;
   bau_boundary_passed; bottleneck_named; levers_enumerated;
-  compounding_value_considered; candidates_ranked; depriorities_explained;
+  compounding_value_considered; proposal_trajectories_compared; candidates_ranked; depriorities_explained;
   candidate_moves_deduped; wave_size_respected; executable_now;
   exact_output_named; proof_and_stop_named; authority_safe;
   capability_ref_valid_or_omitted; honest_objective_contribution_named;
@@ -90,16 +90,23 @@ review-load proof.
 ## Todo List
 
 - [ ] 1. Bind the planning frame.
-  - [ ] Resolve `program`, `objective_contract`, `ticket_history`, optional
+  - [ ] Resolve `harness`, `metric_objectives`, `metric_state`, `ticket_history`, optional
         current context, and `wave_size`.
-  - [ ] When loading project files directly, bind `program` from
-        `farplane/harness.md` and the objective contract from
-        `farplane/goals.yaml` plus `farplane/metrics.yaml`. Do not require
+  - [ ] When loading project files directly, bind identity, products, objective
+        priorities, and guard refs from `farplane/harness.yaml`; resolve each
+        selected metric's direction, freshness, and guard rule from
+        `farplane/metrics.yaml`. Load current readings from ignored metric
+        observations or the project snapshot. Do not require
         provider bindings to rank BAU work unless a candidate's executability
         depends on them.
   - [ ] Read [qa_checklist.md](qa_checklist.md) before accepting specs.
   - [ ] Label missing, stale, or contradictory inputs as source gaps; do not
         fill them with assumptions that change value direction or authority.
+  - [ ] Treat an unknown or stale hard guard as admission-blocking. Return only
+        a bounded observation-restoration ticket when it can safely restore the
+        guard; otherwise return a human request or no specs.
+  - [ ] Omit unselected non-guard observations from ordinary planner context
+        unless current evidence makes one necessary for a specific candidate.
 - [ ] 2. Build one compact context snapshot.
   - [ ] Summarize active commitments, recent outcomes, failed or abandoned
         attempts, review backlog, current bottleneck, objective signals, and
@@ -126,6 +133,13 @@ review-load proof.
         compounding reuse, cost, risk, and human-review load. Compounding value
         strengthens a real BAU move; it does not justify speculative platform
         work by itself.
+  - [ ] Compare each plausible move as a trajectory with expected metric
+        delta, confidence, duration, time to signal, cost, risk, reversibility,
+        information gain, compounding value, interference, and prerequisites.
+  - [ ] Prefer a portfolio that preserves hard guards and contains
+        non-interfering moves; do not select the easiest immediate metric delta
+        when a slower prerequisite, probe, or compounding move has higher
+        discounted expected value.
   - [ ] Compare against active and recent tickets by intended outcome,
         artifact, target surface, and evidence—not title alone.
   - [ ] Reject duplicates, already-completed work, and tickets whose only
@@ -191,6 +205,18 @@ executable_ticket_spec:
     compounding_value:
     cost_risk_review_load:
     why_now:
+  trajectory:
+    expected_metric_delta:
+    confidence:
+    duration:
+    time_to_signal:
+    cost:
+    risk:
+    reversibility:
+    information_gain:
+    compounding_value:
+    interference:
+    prerequisites: []
 ```
 
 Use the current ticket template when Pulse materializes the spec. The spec may

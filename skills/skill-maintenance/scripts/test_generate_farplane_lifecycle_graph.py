@@ -111,7 +111,9 @@ routes:
         edges = {(edge["source"], edge["target"], edge["type"]) for edge in graph["edges"]}
 
         self.assertIn("skill:init-advisor", nodes)
-        self.assertIn("skill:horizon-advisor", nodes)
+        self.assertIn("skill:metric-advisor", nodes)
+        self.assertIn("file:farplane/metrics.yaml", nodes)
+        self.assertNotIn("file:farplane/goals.yaml", nodes)
         self.assertIn("skill:goal-advisor", nodes)
         self.assertIn("skill:proof-advisor", nodes)
         self.assertIn("hook:Stop", nodes)

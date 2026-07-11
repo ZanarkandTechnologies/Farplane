@@ -11,17 +11,17 @@ framework_template_version: "0.2.0"
 Tracked project framework config lives here.
 
 `manifest.json` owns the compact UI identity card. Richer project meaning
-lives in files: `harness.md` is the static human charter and capability map,
-while `goals.yaml` owns current value direction, goals, KPI IDs, milestone, and
-holds. Reusable and project-local skills own recurring workflows.
+lives in files: `harness.yaml` is the typed charter, descriptive-product and
+capability map, and active metric selection. `metrics.yaml` owns reusable
+metric meaning, direction, freshness, and guard rules. Reusable and
+project-local skills own recurring workflows.
 
 ```text
 farplane/
   README.md        # this index
   manifest.json    # versioned Farplane project spec for this project
-  harness.md       # static human charter
-  goals.yaml       # north star, KPIs, current milestone, holds
-  metrics.yaml     # provider-independent metric definitions
+  harness.yaml     # typed charter, products, capability refs, metric selection
+  metrics.yaml     # metric definitions, direction, freshness, guard rules
   automations.toml # one Work Pulse heartbeat plus separate scheduled jobs
   bindings.yaml      # non-secret project IDs, URLs, labels, aliases
   hooks.json       # declarative Farplane-native hook configuration

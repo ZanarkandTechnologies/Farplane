@@ -50,7 +50,7 @@ work_pulse(project_root, wave_size = 1, worker_limit = 1,
    + next_wake?
 
 state:
-  reads(farplane/harness.md?, farplane/goals.yaml?, farplane/metrics.yaml?,
+  reads(farplane/harness.yaml?, farplane/metrics.yaml?, .farplane/metrics/**?,
         farplane/bindings.yaml?,
         farplane/automations.toml?, tickets/TASK-*/ticket.md,
         tickets/TASK-*/program.md?, tickets/TASK-*/progress.md?,
@@ -86,7 +86,7 @@ routes:
 fails:
   requires_or_invokes_product_controller; filters_tickets_by_product_origin;
   asks_interval_to_create_or_dispatch_work; plans_with_ready_work_available;
-  creates_checkin_ticket; delegates_future_reward_row; asks_interval_to_score_reward;
+  creates_checkin_ticket; delegates_future_reward_row; asks_interval_to_evaluate_reward;
   duplicates_or_invents_checkin_decision_policy;
   conflates_wave_size_with_worker_limit; exceeds_review_wip;
   implements_ticket_in_parent_pulse; keeps_worker_alive_only_for_human_review;
@@ -99,7 +99,7 @@ fails:
 ```text
 pulse-update @30m
   project_root = <project>
-  wave_size = 3
+  wave_size = 1
   worker_limit = 1
   review_wip = 3
 ```
@@ -112,7 +112,7 @@ capacity, ticket scope, or external side-effect permission.
 
 - [ ] 1. Bind project policy and reconcile state.
   - [ ] Resolve `project_root`, `wave_size`, `worker_limit`, `review_wip`,
-        `farplane/harness.md`, `farplane/goals.yaml`, `farplane/metrics.yaml`,
+        `farplane/harness.yaml`, `farplane/metrics.yaml`, current metric readings,
         ticket paths, worker ledger, latest outcomes, current dated context,
         and project side-effect gates. Read bindings only when provider or
         authority mechanics affect the current decision.
@@ -127,16 +127,16 @@ capacity, ticket scope, or external side-effect permission.
 - [ ] 2. Handle completed, waiting, or matured work.
   - [ ] Reconcile ticket/program/progress/proof and outcome state before
         selecting new work.
-  - [ ] Treat every `Reward.kpi_rewards[]` row with `check_in_at <= now` and
-        missing `actual_result` or `reward_score` as due. Resume the original
+  - [ ] Treat every `Reward.kpi_rewards[]` row with `check_in_at <= now` and a
+        blank or `monitor` decision as due. Resume the original
         `status: waiting_signal` ticket; do not create a check-in
         ticket or findings row.
   - [ ] When one ticket has several matured rows, hand all of them to the same
         worker. Leave future and already-complete rows unchanged.
   - [ ] Hand the worker the original `ticket.md`, `program.md`, `progress.md`,
-        exact matured row indexes, current timestamp, and evidence refs. Tell
+        exact matured Reward IDs, current timestamp, and evidence refs. Tell
         it to read `program.md` first and execute its `Check-In Program`, then
-        return `accept`, `kill`, `iterate`, or `monitor`; do not restate the
+        return `accept`, `kill`, or `monitor`; do not restate the
         scoring or decision algorithm in Pulse.
   - [ ] If the original program is missing, stale, not in `delayed_reward`
         mode, or lacks executable evidence/decision rules, record the source
@@ -176,8 +176,9 @@ capacity, ticket scope, or external side-effect permission.
   - [ ] For refill, call
         `plan_next_wave(program, objective_contract, ticket_history,
         current_context, wave_size)` and accept only QA-passing executable
-        specs. Bind `program` from `harness.md` and the objective contract from
-        `goals.yaml` plus `metrics.yaml`; reports remain optional current
+        specs. Bind identity, product boundaries, selected objective refs, and
+        guard refs from `harness.yaml`; resolve metric direction, freshness,
+        and guard rules from `metrics.yaml`. Reports remain optional current
         context rather than a second planning owner.
   - [ ] Pulse alone materializes accepted specs as ticket files, then reruns
         admission before dispatch.
@@ -186,7 +187,7 @@ capacity, ticket scope, or external side-effect permission.
         review route. Use Goal Advisor when the ticket requires Goal-backed
         continuation.
   - [ ] For a check-in handoff, require `program.md` and `progress.md`; list the
-        exact matured Reward row indexes, timestamp, and evidence refs, and set
+        exact matured Reward IDs, timestamp, and evidence refs, and set
         the instruction to execute `program.md` `Check-In Program` first.
   - [ ] Never implement the ticket body in the parent Pulse beat.
 - [ ] 6. Write visible state.
@@ -211,7 +212,7 @@ worker_handoff:
   authority_gates: []
   stop_condition:
   review_notify: worker-artifact-review-request | none_with_reason
-  due_reward_rows: [] # indexes on the original ticket; empty for ordinary work
+  due_reward_ids: [] # stable reward_id values on the original ticket; empty for ordinary work
   checkin_evidence_refs: [] # delayed check-in sources; empty for ordinary work
   instruction: execute_ticket | execute_program_checkin
 ```

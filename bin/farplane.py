@@ -468,8 +468,10 @@ def run_install(args: argparse.Namespace) -> int:
 def hooks_doctor(target: Path | None = None) -> dict[str, Any]:
     codex_home = (target or DEFAULT_CODEX_HOME).expanduser().resolve()
     hook_src = CORE_ROOT / "hooks" / "farplane_console_ping.py"
+    file_event_hook_src = CORE_ROOT / "hooks" / "farplane_file_change.py"
     hooks_json_src = CORE_ROOT / "hooks.json"
     hook_dest = codex_home / "hooks" / "farplane_console_ping.py"
+    file_event_hook_dest = codex_home / "hooks" / "farplane_file_change.py"
     hooks_json_dest = codex_home / "hooks.json"
     config_toml = codex_home / "config.toml"
     issues: list[str] = []
@@ -477,6 +479,9 @@ def hooks_doctor(target: Path | None = None) -> dict[str, Any]:
 
     if not path_points_to(hook_dest, hook_src):
         issues.append(f"hook_not_linked:{hook_dest}")
+        hints.append("run `farplane hooks install`")
+    if not path_points_to(file_event_hook_dest, file_event_hook_src):
+        issues.append(f"hook_not_linked:{file_event_hook_dest}")
         hints.append("run `farplane hooks install`")
     if hooks_json_src.exists() and not path_points_to(hooks_json_dest, hooks_json_src):
         issues.append(f"hooks_json_not_linked:{hooks_json_dest}")
@@ -497,6 +502,11 @@ def hooks_doctor(target: Path | None = None) -> dict[str, Any]:
         "summary": "hooks linked and config rendered" if not issues else "hooks/config need attention",
         "codexHome": str(codex_home),
         "hook": {"path": str(hook_dest), "expected": str(hook_src), "linked": path_points_to(hook_dest, hook_src)},
+        "fileEventHook": {
+            "path": str(file_event_hook_dest),
+            "expected": str(file_event_hook_src),
+            "linked": path_points_to(file_event_hook_dest, file_event_hook_src),
+        },
         "hooksJson": {
             "path": str(hooks_json_dest),
             "expected": str(hooks_json_src),
@@ -635,6 +645,91 @@ def run_reports_repair_refs_cli(args: argparse.Namespace) -> int:
     from farplane_reports import run_repair_refs
 
     return int(run_repair_refs(args))
+
+
+def run_mining_cli(args: argparse.Namespace) -> int:
+    from farplane_file_events import FileEventError
+    from farplane_mining import (
+        MiningError,
+        drain_pending,
+        handle_file_change,
+        list_programs,
+        list_routes,
+        list_runs,
+        remove_route,
+        replay_run,
+        rerun_run,
+        set_output_verdict,
+        set_route,
+        show_run,
+        validate_routes,
+    )
+
+    project_root = Path(args.project_root).expanduser().resolve()
+    try:
+        group = args.mining_group
+        action = args.mining_action
+        if group == "programs" and action == "list":
+            payload: Any = {"ok": True, "programs": list_programs()}
+        elif group == "routes" and action == "list":
+            payload = {"ok": True, "routes": list_routes(project_root)}
+        elif group == "routes" and action == "validate":
+            payload = validate_routes(project_root)
+        elif group == "routes" and action == "set":
+            payload = {
+                "ok": True,
+                "routes": set_route(
+                    project_root,
+                    route_id=args.route_id,
+                    event_name=args.event_name,
+                    program_ref=args.program_ref,
+                ),
+            }
+        elif group == "routes" and action == "remove":
+            payload = {"ok": True, "routes": remove_route(project_root, args.route_id)}
+        elif group == "runs" and action == "list":
+            payload = {"ok": True, "runs": list_runs(project_root)}
+        elif group == "runs" and action == "show":
+            payload = {"ok": True, **show_run(project_root, args.run_id)}
+        elif group == "runs" and action == "replay":
+            payload = {"ok": True, "run": replay_run(project_root, args.run_id)}
+        elif group == "runs" and action == "rerun":
+            payload = {"ok": True, "run": rerun_run(project_root, args.run_id)}
+        elif group == "outputs" and action == "verdict":
+            payload = {
+                "ok": True,
+                "output": set_output_verdict(
+                    project_root,
+                    args.run_id,
+                    args.output_id,
+                    args.verdict,
+                ),
+            }
+        elif group == "drain":
+            payload = drain_pending(project_root)
+        elif group == "handle-file-change":
+            raw = sys.stdin.read() if args.payload == "-" else Path(args.payload).read_text(encoding="utf-8")
+            parsed = json.loads(raw)
+            if not isinstance(parsed, dict):
+                raise MiningError("file_change_payload_must_be_object")
+            payload = handle_file_change(parsed, project_root)
+        else:
+            raise MiningError(f"unsupported_mining_command:{group}:{action}")
+    except (FileEventError, MiningError, OSError, json.JSONDecodeError) as exc:
+        raise CliError(f"mining_error:{exc}") from exc
+
+    if args.json:
+        print(json.dumps(payload, indent=2, sort_keys=True))
+    else:
+        count = len(payload.get("programs", payload.get("routes", payload.get("runs", [])))) if isinstance(payload, dict) else 0
+        status = "ok" if isinstance(payload, dict) and payload.get("ok", True) else "failed"
+        print(f"farplane mining {status}: {group} {action or ''}".rstrip() + (f" ({count})" if count else ""))
+        if isinstance(payload, dict):
+            for issue in payload.get("issues", []):
+                print(f"- {issue}")
+            for failure in payload.get("failed", []):
+                print(f"- {failure}")
+    return 0 if not isinstance(payload, dict) or payload.get("ok", True) else 1
 
 
 def run_content_add_cli(args: argparse.Namespace) -> int:
@@ -886,6 +981,70 @@ def build_parser() -> argparse.ArgumentParser:
     reports_repair_refs.add_argument("--json", action="store_true")
     reports_repair_refs.set_defaults(func=run_reports_repair_refs_cli)
 
+    mining = sub.add_parser("mining", help="Capture, route, replay, and inspect Core mining runs.")
+    mining_sub = mining.add_subparsers(dest="mining_group")
+
+    mining_programs = mining_sub.add_parser("programs", help="Inspect immutable Core mining programs.")
+    mining_programs_sub = mining_programs.add_subparsers(dest="mining_action")
+    mining_programs_list = mining_programs_sub.add_parser("list")
+    mining_programs_list.add_argument("--project-root", default=os.getcwd())
+    mining_programs_list.add_argument("--json", action="store_true")
+    mining_programs_list.set_defaults(func=run_mining_cli)
+
+    mining_routes = mining_sub.add_parser("routes", help="Inspect or edit project event routes.")
+    mining_routes_sub = mining_routes.add_subparsers(dest="mining_action")
+    for route_action in ("list", "validate"):
+        route_parser = mining_routes_sub.add_parser(route_action)
+        route_parser.add_argument("--project-root", default=os.getcwd())
+        route_parser.add_argument("--json", action="store_true")
+        route_parser.set_defaults(func=run_mining_cli)
+    mining_routes_set = mining_routes_sub.add_parser("set")
+    mining_routes_set.add_argument("route_id")
+    mining_routes_set.add_argument("event_name")
+    mining_routes_set.add_argument("program_ref")
+    mining_routes_set.add_argument("--project-root", default=os.getcwd())
+    mining_routes_set.add_argument("--json", action="store_true")
+    mining_routes_set.set_defaults(func=run_mining_cli)
+    mining_routes_remove = mining_routes_sub.add_parser("remove")
+    mining_routes_remove.add_argument("route_id")
+    mining_routes_remove.add_argument("--project-root", default=os.getcwd())
+    mining_routes_remove.add_argument("--json", action="store_true")
+    mining_routes_remove.set_defaults(func=run_mining_cli)
+
+    mining_runs = mining_sub.add_parser("runs", help="Inspect or replay deterministic mining runs.")
+    mining_runs_sub = mining_runs.add_subparsers(dest="mining_action")
+    mining_runs_list = mining_runs_sub.add_parser("list")
+    mining_runs_list.add_argument("--project-root", default=os.getcwd())
+    mining_runs_list.add_argument("--json", action="store_true")
+    mining_runs_list.set_defaults(func=run_mining_cli)
+    for run_action in ("show", "replay", "rerun"):
+        run_parser = mining_runs_sub.add_parser(run_action)
+        run_parser.add_argument("run_id")
+        run_parser.add_argument("--project-root", default=os.getcwd())
+        run_parser.add_argument("--json", action="store_true")
+        run_parser.set_defaults(func=run_mining_cli)
+
+    mining_outputs = mining_sub.add_parser("outputs", help="Record reviewer verdicts for run outputs.")
+    mining_outputs_sub = mining_outputs.add_subparsers(dest="mining_action")
+    mining_outputs_verdict = mining_outputs_sub.add_parser("verdict")
+    mining_outputs_verdict.add_argument("run_id")
+    mining_outputs_verdict.add_argument("output_id")
+    mining_outputs_verdict.add_argument("verdict", choices=("unreviewed", "promoted", "rejected"))
+    mining_outputs_verdict.add_argument("--project-root", default=os.getcwd())
+    mining_outputs_verdict.add_argument("--json", action="store_true")
+    mining_outputs_verdict.set_defaults(func=run_mining_cli)
+
+    mining_drain = mining_sub.add_parser("drain", help="Retry all pending local event routes.")
+    mining_drain.add_argument("--project-root", default=os.getcwd())
+    mining_drain.add_argument("--json", action="store_true")
+    mining_drain.set_defaults(func=run_mining_cli, mining_action=None)
+
+    mining_handle = mining_sub.add_parser("handle-file-change", help="Handle one Codex PostToolUse JSON payload.")
+    mining_handle.add_argument("--payload", required=True, help="JSON payload path or - for stdin.")
+    mining_handle.add_argument("--project-root", default=os.getcwd())
+    mining_handle.add_argument("--json", action="store_true")
+    mining_handle.set_defaults(func=run_mining_cli, mining_action=None)
+
     content = sub.add_parser("content", help="Append or inspect local Farplane content ledger rows.")
     content_sub = content.add_subparsers(dest="content_command")
     content_add = content_sub.add_parser("add", help="Add or update a content ledger row.")
@@ -954,6 +1113,10 @@ def main(argv: list[str]) -> int:
         parser.error("project requires a subcommand: snapshot")
     if getattr(args, "command", None) == "reports" and getattr(args, "reports_command", None) is None:
         parser.error("reports requires a subcommand: index")
+    if getattr(args, "command", None) == "mining" and getattr(args, "mining_group", None) is None:
+        parser.error("mining requires a subcommand")
+    if getattr(args, "mining_group", None) in {"programs", "routes", "runs", "outputs"} and getattr(args, "mining_action", None) is None:
+        parser.error(f"mining {args.mining_group} requires a subcommand")
     if getattr(args, "command", None) == "content" and getattr(args, "content_command", None) is None:
         parser.error("content requires a subcommand: add, list, validate, or select")
     if not hasattr(args, "func"):

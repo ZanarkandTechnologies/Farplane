@@ -21,6 +21,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from bin.validators.template_usage import TemplateUsageError, normalize_template_uses
+from bin.core.farplane_file_events import DEFAULT_EVENTS
 from bin.core.farplane_metric_schema import MetricObservationBatch
 TEXT_SUFFIXES = {
     ".json",
@@ -43,16 +44,26 @@ SECRET_VALUE_RE = re.compile(
     r"(?i)\b(api[_-]?key|access[_-]?token|secret|password)\b\s*[:=]\s*[\"']?[A-Za-z0-9_./+=-]{8,}"
 )
 RETIRED_INTEGRATIONS_REF = "farplane/" + "integrations.md"
-HARNESS_REQUIRED_HEADINGS = (
-    "## Mission",
-    "## Human Thesis",
-    "## Operating Principles",
-    "## Static Leverage Commitments",
-    "## Non-Tradeoffs",
-    "## Allocation Guardrails",
-    "## Agent Authority",
-    "## Change Rule",
-)
+HARNESS_ALLOWED_TOP_LEVEL = {
+    "kind",
+    "status",
+    "project",
+    "created_at",
+    "updated_at",
+    "framework_template_version",
+    "owner",
+    "identity",
+    "metric_refs",
+    "products",
+    "feature_definition",
+    "operating_principles",
+    "stable_capabilities",
+    "leverage_commitments",
+    "constraints",
+    "authority",
+    "change_rule",
+}
+PRODUCT_ALLOWED_FIELDS = {"description", "output", "skill_refs", "metric_refs"}
 AUTOMATION_RUNTIME_STATE_KEYS = {
     "last_run",
     "last_run_at",
@@ -81,6 +92,7 @@ ALLOWED_DIAGNOSTIC_SOURCE_IDS = {
     "pulse_reward_ledger",
     "ticket_board",
 }
+ALLOWED_FILE_EVENT_NAMES = set(DEFAULT_EVENTS)
 
 
 class StrictYamlModel(BaseModel):
@@ -94,6 +106,9 @@ class MetricDefinitionModel(StrictYamlModel):
     unit: str
     display: Literal["bar_plus_cumulative", "line", "reading"]
     pinned: StrictBool | None = None
+    direction: Literal["maximize", "minimize"] | None = None
+    max_age_days: int | None = None
+    guard: dict[str, Any] | None = None
 
     @field_validator("label", "description", "unit")
     @classmethod
@@ -112,46 +127,6 @@ class MetricBindingModel(StrictYamlModel):
         if not isinstance(value, str) or not value.strip():
             raise ValueError("must be a non-empty string")
         return value.strip()
-
-
-class GoalKpiModel(StrictYamlModel):
-    id: str
-    target: Any
-    direction: Literal["above", "below"]
-
-    @field_validator("id")
-    @classmethod
-    def non_empty_id(cls, value: str) -> str:
-        if not isinstance(value, str) or not value.strip():
-            raise ValueError("must be a non-empty string")
-        return value.strip()
-
-    @field_validator("target")
-    @classmethod
-    def target_present(cls, value: Any) -> Any:
-        if value is None or str(value).strip() == "":
-            raise ValueError("must be present")
-        return value
-
-
-class SmartGoalModel(StrictYamlModel):
-    id: str
-    kpis: list[GoalKpiModel] = []
-
-    @field_validator("id")
-    @classmethod
-    def non_empty_id(cls, value: str) -> str:
-        if not isinstance(value, str) or not value.strip():
-            raise ValueError("must be a non-empty string")
-        return value.strip()
-
-
-class GoalAxisModel(StrictYamlModel):
-    smart_goals: list[SmartGoalModel] = []
-
-
-class GoalsModel(StrictYamlModel):
-    goals: dict[str, GoalAxisModel] = {}
 
 
 def tracked_files(root: Path) -> list[Path]:
@@ -287,8 +262,7 @@ def validate_framework_manifest(root: Path, framework_manifest: Path) -> list[st
         "ARCHITECTURE.md",
         "farplane/README.md",
         "farplane/manifest.json",
-        "farplane/harness.md",
-        "farplane/goals.yaml",
+        "farplane/harness.yaml",
         "farplane/metrics.yaml",
         "farplane/automations.toml",
         "farplane/bindings.yaml",
@@ -357,10 +331,36 @@ def validate_hooks_file(root: Path, hooks_file: Path) -> list[str]:
         return [f"{rel_path} must be a JSON object."]
     if data.get("version") != 1:
         errors.append(f"{rel_path} version must be 1.")
-    hooks = data.get("hooks")
-    if not isinstance(hooks, dict):
-        errors.append(f"{rel_path} hooks must be an object.")
+    unsupported = sorted(set(data) - {"version", "file_events"})
+    if unsupported:
+        errors.append(f"{rel_path} has unsupported top-level keys: {', '.join(unsupported)}.")
+    file_events = data.get("file_events")
+    if not isinstance(file_events, dict):
+        errors.append(f"{rel_path} file_events must be an object.")
         return errors
+
+    if not isinstance(file_events.get("enabled"), bool):
+        errors.append(f"{rel_path} file_events.enabled must be a boolean.")
+    events = file_events.get("events")
+    if not isinstance(events, list) or not events or any(not isinstance(row, str) or not row for row in events):
+        errors.append(f"{rel_path} file_events.events must be a non-empty string list.")
+    else:
+        duplicates = sorted({row for row in events if events.count(row) > 1})
+        unknown = sorted(set(events) - ALLOWED_FILE_EVENT_NAMES)
+        if duplicates:
+            errors.append(f"{rel_path} file_events.events has duplicates: {', '.join(duplicates)}.")
+        if unknown:
+            errors.append(f"{rel_path} file_events.events has unsupported values: {', '.join(unknown)}.")
+    patterns = file_events.get("patterns")
+    if not isinstance(patterns, list) or not patterns or any(not isinstance(row, str) or not row for row in patterns):
+        errors.append(f"{rel_path} file_events.patterns must be a non-empty string list.")
+    else:
+        duplicates = sorted({row for row in patterns if patterns.count(row) > 1})
+        unsafe = sorted(row for row in patterns if Path(row).is_absolute() or ".." in Path(row).parts)
+        if duplicates:
+            errors.append(f"{rel_path} file_events.patterns has duplicates: {', '.join(duplicates)}.")
+        if unsafe:
+            errors.append(f"{rel_path} file_events.patterns has unsafe values: {', '.join(unsafe)}.")
 
     return errors
 
@@ -546,44 +546,6 @@ def parse_markdown_table(section: str) -> list[dict[str, str]]:
     ]
 
 
-def load_goal_kpi_ids(goals_file: Path) -> set[str]:
-    return {entry["id"] for entry in load_goal_kpi_entries(goals_file)}
-
-
-def load_goals_payload(goals_file: Path) -> dict[str, Any]:
-    if not goals_file.exists():
-        return {}
-    try:
-        payload = yaml.safe_load(goals_file.read_text(encoding="utf-8")) or {}
-    except yaml.YAMLError:
-        return {}
-    return payload if isinstance(payload, dict) else {}
-
-
-def load_goal_kpi_entries(goals_file: Path) -> list[dict[str, str]]:
-    payload = load_goals_payload(goals_file)
-    goals = payload.get("goals") if isinstance(payload.get("goals"), dict) else {}
-    entries: list[dict[str, str]] = []
-    for axis_payload in goals.values():
-        if not isinstance(axis_payload, dict):
-            continue
-        for smart_goal in axis_payload.get("smart_goals") or []:
-            if not isinstance(smart_goal, dict):
-                continue
-            for raw_kpi in smart_goal.get("kpis") or []:
-                if isinstance(raw_kpi, dict):
-                    kpi_id = str(raw_kpi.get("id") or "").strip()
-                    target = "" if raw_kpi.get("target") is None else str(raw_kpi.get("target")).strip()
-                    direction = str(raw_kpi.get("direction") or raw_kpi.get("comparator") or raw_kpi.get("operator") or "").strip()
-                else:
-                    kpi_id = str(raw_kpi).strip()
-                    target = ""
-                    direction = ""
-                if kpi_id:
-                    entries.append({"id": kpi_id, "target": target, "direction": direction})
-    return entries
-
-
 def load_metrics(metrics_file: Path) -> dict[str, dict]:
     if not metrics_file.exists():
         return {}
@@ -595,6 +557,16 @@ def load_metrics(metrics_file: Path) -> dict[str, dict]:
     if not isinstance(metrics, dict):
         return {}
     return {str(metric_id): recipe if isinstance(recipe, dict) else {} for metric_id, recipe in metrics.items()}
+
+
+def read_yaml_file(path: Path) -> dict[str, Any]:
+    if not path.exists():
+        return {}
+    try:
+        payload = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    except yaml.YAMLError:
+        return {}
+    return payload if isinstance(payload, dict) else {}
 
 
 def load_metric_bindings(bindings_file: Path) -> dict[str, dict]:
@@ -615,34 +587,6 @@ def load_metric_bindings(bindings_file: Path) -> dict[str, dict]:
 
 def pydantic_path(error: dict) -> str:
     return ".".join(str(part) for part in error.get("loc", ()))
-
-
-def validate_goals_yaml_schema(goals_file: Path) -> list[str]:
-    if not goals_file.exists():
-        return []
-    try:
-        payload = yaml.safe_load(goals_file.read_text(encoding="utf-8")) or {}
-    except yaml.YAMLError:
-        return []
-    errors: list[str] = []
-    try:
-        GoalsModel.model_validate(payload)
-    except ValidationError as exc:
-        for error in exc.errors():
-            path = pydantic_path(error)
-            errors.append(f"farplane/goals.yaml {path}: {error.get('msg')}.")
-    goals = payload.get("goals") if isinstance(payload, dict) else {}
-    if isinstance(goals, dict):
-        for axis_id, axis_payload in goals.items():
-            if not isinstance(axis_payload, dict):
-                continue
-            for index, smart_goal in enumerate(axis_payload.get("smart_goals") or []):
-                if isinstance(smart_goal, dict) and "product_refs" in smart_goal:
-                    errors.append(
-                        f"farplane/goals.yaml goals.{axis_id}.smart_goals.{index}.product_refs is retired; "
-                        "goals point directly to KPI ids."
-                    )
-    return errors
 
 
 def validate_metrics_file(root: Path, metrics_file: Path) -> list[str]:
@@ -673,6 +617,21 @@ def validate_metric_definition_schema(metrics: dict[str, dict]) -> list[str]:
             errors.append(f"{prefix}.refresh belongs in farplane/bindings.yaml metric_bindings.{metric_id}.")
         if "product" in definition:
             errors.append(f"{prefix}.product is retired; metrics are project-level definitions.")
+        if "max_age_days" in definition and (
+            not isinstance(definition.get("max_age_days"), int) or definition.get("max_age_days", 0) < 1
+        ):
+            errors.append(f"{prefix}.max_age_days must be a positive integer.")
+        guard = definition.get("guard")
+        if guard is not None:
+            if not isinstance(guard, dict):
+                errors.append(f"{prefix}.guard must be an object.")
+            else:
+                if guard.get("operator") not in {"greater_than_or_equal", "less_than_or_equal"}:
+                    errors.append(
+                        f"{prefix}.guard.operator must be greater_than_or_equal or less_than_or_equal."
+                    )
+                if not isinstance(guard.get("threshold"), (int, float)):
+                    errors.append(f"{prefix}.guard.threshold must be numeric.")
         try:
             MetricDefinitionModel.model_validate(definition)
         except ValidationError as exc:
@@ -798,22 +757,81 @@ def validate_snapshot_freshness(root: Path, snapshot_path: Path) -> list[str]:
 
 def validate_cross_file_contract(root: Path) -> list[str]:
     goals_file = root / "farplane" / "goals.yaml"
+    harness_file = root / "farplane" / "harness.yaml"
     metrics_file = root / "farplane" / "metrics.yaml"
     bindings_file = root / "farplane" / "bindings.yaml"
     metrics = load_metrics(metrics_file)
     metric_bindings = load_metric_bindings(bindings_file)
-    goal_kpi_entries = load_goal_kpi_entries(goals_file)
-    goal_kpis = {entry["id"] for entry in goal_kpi_entries}
     errors: list[str] = []
-    errors.extend(validate_goals_yaml_schema(goals_file))
+    if goals_file.exists():
+        errors.append(
+            "farplane/goals.yaml is retired; move the human charter and selected metric refs to harness.yaml, "
+            "metric definitions to metrics.yaml, and temporary commitments to tickets."
+        )
     if metrics_file.exists():
         errors.extend(validate_metrics_file(root, metrics_file))
     errors.extend(validate_metric_definition_schema(metrics))
     errors.extend(validate_metric_binding_schema(metric_bindings))
     errors.extend(validate_metric_observation_files(root, metrics))
-    missing_metric_definitions = sorted(kpi_id for kpi_id in goal_kpis if kpi_id not in metrics)
-    if missing_metric_definitions:
-        errors.append(f"farplane/goals.yaml KPI ids lack metrics.yaml definitions: {', '.join(missing_metric_definitions)}.")
+    metrics_payload = read_yaml_file(metrics_file)
+    if "optimization" in metrics_payload:
+        errors.append(
+            "farplane/metrics.yaml optimization is retired; definitions own direction, freshness, and guard rules, "
+            "while farplane/harness.yaml selects active objectives and guards."
+        )
+    harness = load_harness(harness_file)
+    objective_rows, guard_ids = selected_metric_rows(harness)
+    objective_ids = {
+        str(row.get("metric_id") or "").strip()
+        for row in objective_rows
+        if str(row.get("metric_id") or "").strip()
+    }
+    selected_ids = objective_ids | set(guard_ids)
+    unknown_selected_ids = sorted(selected_ids - set(metrics))
+    if unknown_selected_ids:
+        errors.append(
+            "farplane/harness.yaml metric refs lack metrics.yaml definitions: "
+            f"{', '.join(unknown_selected_ids)}."
+        )
+    objective_definitions_without_direction = sorted(
+        metric_id
+        for metric_id in objective_ids
+        if metric_id in metrics and metrics[metric_id].get("direction") not in {"maximize", "minimize"}
+    )
+    selected_definitions_without_freshness = sorted(
+        metric_id
+        for metric_id in selected_ids
+        if metric_id in metrics
+        and (not isinstance(metrics[metric_id].get("max_age_days"), int) or metrics[metric_id]["max_age_days"] < 1)
+    )
+    if objective_definitions_without_direction:
+        errors.append(
+            "farplane/metrics.yaml selected objective definitions must declare direction: "
+            f"{', '.join(objective_definitions_without_direction)}."
+        )
+    if selected_definitions_without_freshness:
+        errors.append(
+            "farplane/metrics.yaml selected definitions must declare positive max_age_days: "
+            f"{', '.join(selected_definitions_without_freshness)}."
+        )
+    selected_guard_ids = set(guard_ids)
+    defined_guard_ids = {
+        metric_id
+        for metric_id, definition in metrics.items()
+        if isinstance(definition.get("guard"), dict)
+    }
+    missing_guard_rules = sorted(selected_guard_ids - defined_guard_ids)
+    unselected_guard_rules = sorted(defined_guard_ids - selected_guard_ids)
+    if missing_guard_rules:
+        errors.append(
+            "farplane/harness.yaml guard refs lack metrics.yaml guard rules: "
+            f"{', '.join(missing_guard_rules)}."
+        )
+    if unselected_guard_rules:
+        errors.append(
+            "farplane/metrics.yaml guard definitions must be selected by harness.yaml metric_refs.guards: "
+            f"{', '.join(unselected_guard_rules)}."
+        )
 
     missing_bindings = sorted(set(metrics) - set(metric_bindings))
     unknown_bindings = sorted(set(metric_bindings) - set(metrics))
@@ -826,57 +844,135 @@ def validate_cross_file_contract(root: Path) -> list[str]:
             f"farplane/bindings.yaml metric_bindings lack metrics.yaml definitions: {', '.join(unknown_bindings)}."
         )
 
-    goal_kpis_without_target = sorted({entry["id"] for entry in goal_kpi_entries if not entry.get("target")})
-    if goal_kpis_without_target:
-        errors.append(
-            "farplane/goals.yaml KPI ids need explicit target values: "
-            f"{', '.join(goal_kpis_without_target)}."
-        )
-
-    goal_kpis_without_direction = sorted({entry["id"] for entry in goal_kpi_entries if not entry.get("direction")})
-    if goal_kpis_without_direction:
-        errors.append(
-            "farplane/goals.yaml KPI ids need explicit target directions: "
-            f"{', '.join(goal_kpis_without_direction)}."
-        )
-
-    goal_kpis_without_unit = sorted(
+    selected_metrics_without_unit = sorted(
         kpi_id
-        for kpi_id in goal_kpis
+        for kpi_id in selected_ids
         if kpi_id in metrics and not str(metrics[kpi_id].get("unit") or "").strip()
     )
-    if goal_kpis_without_unit:
+    if selected_metrics_without_unit:
         errors.append(
-            "farplane/goals.yaml KPI ids have metrics.yaml definitions without unit: "
-            f"{', '.join(goal_kpis_without_unit)}."
+            "farplane/metrics.yaml selected metric definitions lack unit: "
+            f"{', '.join(selected_metrics_without_unit)}."
         )
 
     errors.extend(validate_snapshot_freshness(root, root / ".farplane" / "project" / "ui" / "latest.json"))
     return errors
 
 
+def load_harness(harness_file: Path) -> dict[str, Any]:
+    return read_yaml_file(harness_file)
+
+
+def selected_metric_rows(harness: dict[str, Any]) -> tuple[list[dict[str, Any]], list[str]]:
+    refs = harness.get("metric_refs") if isinstance(harness.get("metric_refs"), dict) else {}
+    project_rows = refs.get("objectives") if isinstance(refs.get("objectives"), list) else []
+    rows = [row for row in project_rows if isinstance(row, dict)]
+    products = harness.get("products") if isinstance(harness.get("products"), dict) else {}
+    for product in products.values():
+        if not isinstance(product, dict):
+            continue
+        product_rows = product.get("metric_refs") if isinstance(product.get("metric_refs"), list) else []
+        rows.extend(row for row in product_rows if isinstance(row, dict))
+    guards = refs.get("guards") if isinstance(refs.get("guards"), list) else []
+    return rows, [str(metric_id).strip() for metric_id in guards if isinstance(metric_id, str) and metric_id.strip()]
+
+
+def project_skill_ids(root: Path) -> set[str]:
+    ids: set[str] = set()
+    registry = root / "docs" / "skills" / "registry.jsonl"
+    if registry.exists():
+        for line in registry.read_text(encoding="utf-8").splitlines():
+            try:
+                row = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+            if isinstance(row, dict) and isinstance(row.get("name"), str):
+                ids.add(row["name"])
+    for skill_path in (root / ".agents" / "skills").glob("*/SKILL.md"):
+        ids.add(skill_path.parent.name)
+    return ids
+
+
 def validate_harness_file(root: Path, harness_file: Path) -> list[str]:
     rel_path = harness_file.relative_to(root).as_posix()
-    text = harness_file.read_text(encoding="utf-8")
+    payload = load_harness(harness_file)
+    if not payload:
+        return [f"{rel_path} must be a non-empty YAML object."]
     errors: list[str] = []
+    is_draft = payload.get("status") == "draft"
+    extra = sorted(set(payload) - HARNESS_ALLOWED_TOP_LEVEL)
+    if extra:
+        errors.append(f"{rel_path} has unsupported keys: {', '.join(extra)}.")
+    if payload.get("kind") != "project-harness":
+        errors.append(f"{rel_path} must declare kind: project-harness.")
+    if not isinstance(payload.get("framework_template_version"), str):
+        errors.append(f"{rel_path} must declare framework_template_version.")
 
-    if "kind: project-harness" not in text[:700]:
-        errors.append(f"{rel_path} must use front matter kind: project-harness.")
-    if "framework_template_version:" not in text[:700]:
-        errors.append(f"{rel_path} must declare framework_template_version in front matter.")
+    identity = payload.get("identity") if isinstance(payload.get("identity"), dict) else {}
+    for field in ("mission", "human_thesis", "north_star"):
+        if not isinstance(identity.get(field), str) or not identity.get(field, "").strip():
+            errors.append(f"{rel_path} identity.{field} must be a non-empty string.")
 
-    if "```harness-program" in text:
-        errors.append(
-            f"{rel_path} must not use fenced harness-program DSL; use YAML front matter plus Markdown charter sections."
-        )
+    refs = payload.get("metric_refs") if isinstance(payload.get("metric_refs"), dict) else {}
+    if not isinstance(refs.get("objectives"), list) or not refs.get("objectives"):
+        errors.append(f"{rel_path} metric_refs.objectives must be a non-empty list.")
+    if not isinstance(refs.get("guards"), list):
+        errors.append(f"{rel_path} metric_refs.guards must be a list.")
 
-    missing_headings = [heading for heading in HARNESS_REQUIRED_HEADINGS if heading not in text]
-    if missing_headings:
-        errors.append(f"{rel_path} missing required static-charter headings: {', '.join(missing_headings)}.")
+    objective_rows, guard_ids = selected_metric_rows(payload)
+    priorities: list[int] = []
+    objective_ids: list[str] = []
+    for index, row in enumerate(objective_rows):
+        metric_id = str(row.get("metric_id") or "").strip()
+        priority = row.get("priority")
+        if not metric_id:
+            errors.append(f"{rel_path} objective metric ref {index} must declare metric_id.")
+        else:
+            objective_ids.append(metric_id)
+        if not isinstance(priority, int) or priority < 1:
+            errors.append(f"{rel_path} objective metric ref {index}.priority must be a positive integer.")
+        else:
+            priorities.append(priority)
+    duplicates = sorted({metric_id for metric_id in objective_ids if objective_ids.count(metric_id) > 1})
+    if duplicates:
+        errors.append(f"{rel_path} objective metric refs must be unique: {', '.join(duplicates)}.")
+    if len(priorities) != len(set(priorities)):
+        errors.append(f"{rel_path} objective priorities must be unique across project and products.")
+    if len(guard_ids) != len(set(guard_ids)):
+        errors.append(f"{rel_path} metric_refs.guards must not contain duplicates.")
 
-    if "## Static Leverage Commitments" in text and "| Commitment | Why It Compounds | Evidence To Seek | Pivot Signal |" not in text:
-        errors.append(f"{rel_path} Static Leverage Commitments must use the standard commitment table columns.")
+    products = payload.get("products") if isinstance(payload.get("products"), dict) else {}
+    if not products:
+        errors.append(f"{rel_path} products must declare at least one recurring deliverable.")
+    known_skills = project_skill_ids(root)
+    for product_id, product in products.items():
+        prefix = f"{rel_path} products.{product_id}"
+        if not isinstance(product, dict):
+            errors.append(f"{prefix} must be an object.")
+            continue
+        unsupported = sorted(set(product) - PRODUCT_ALLOWED_FIELDS)
+        if unsupported:
+            errors.append(f"{prefix} has controller or unsupported fields: {', '.join(unsupported)}.")
+        for field in ("description", "output"):
+            if not isinstance(product.get(field), str) or not product.get(field, "").strip():
+                errors.append(f"{prefix}.{field} must be a non-empty string.")
+        skill_refs = product.get("skill_refs") if isinstance(product.get("skill_refs"), list) else []
+        if not skill_refs and not is_draft:
+            errors.append(f"{prefix}.skill_refs must be a non-empty list.")
+        dangling = sorted(str(skill_id) for skill_id in skill_refs if str(skill_id) not in known_skills)
+        if dangling:
+            errors.append(f"{prefix}.skill_refs are unresolved: {', '.join(dangling)}.")
+        if not isinstance(product.get("metric_refs"), list) or not product.get("metric_refs"):
+            errors.append(f"{prefix}.metric_refs must be a non-empty list.")
 
+    if not isinstance(payload.get("feature_definition"), dict):
+        errors.append(f"{rel_path} feature_definition must be an object.")
+    if not isinstance(payload.get("constraints"), dict):
+        errors.append(f"{rel_path} constraints must be an object.")
+    if not isinstance(payload.get("authority"), dict):
+        errors.append(f"{rel_path} authority must be an object.")
+    if not isinstance(payload.get("change_rule"), str) or not payload.get("change_rule", "").strip():
+        errors.append(f"{rel_path} change_rule must be a non-empty string.")
     return errors
 
 
@@ -887,7 +983,8 @@ def validate(root: Path) -> list[str]:
     automations_toml = framework_dir / "automations.toml"
     bindings = framework_dir / "bindings.yaml"
     metrics = framework_dir / "metrics.yaml"
-    harness = framework_dir / "harness.md"
+    harness = framework_dir / "harness.yaml"
+    retired_harness_markdown = framework_dir / "harness.md"
     hooks = framework_dir / "hooks.json"
     retired_file_growth_hook = framework_dir / "file-growth-hook.json"
     duplicate_project_charter = framework_dir / "project.md"
@@ -920,9 +1017,11 @@ def validate(root: Path) -> list[str]:
         )
     if duplicate_project_charter.exists():
         errors.append(
-            "farplane/project.md would duplicate the active static charter; use farplane/harness.md "
+            "farplane/project.md would duplicate the active typed charter; use farplane/harness.yaml "
             "unless a versioned framework migration replaces it."
         )
+    if retired_harness_markdown.exists():
+        errors.append("farplane/harness.md is retired; use farplane/harness.yaml.")
 
     if not automations_toml.exists():
         errors.append("farplane/automations.toml is required for full Codex automation configs.")
@@ -930,7 +1029,7 @@ def validate(root: Path) -> list[str]:
         errors.extend(validate_automations_toml(root, automations_toml))
 
     if not harness.exists():
-        errors.append("farplane/harness.md is required for the static human charter.")
+        errors.append("farplane/harness.yaml is required for the typed project charter.")
     else:
         errors.extend(validate_harness_file(root, harness))
 

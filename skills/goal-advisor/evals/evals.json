@@ -77,14 +77,14 @@
     {
       "id": "goal_advisor_project_goals_parent_heartbeat_01",
       "prompt": "I want to run AGI Toy Shop as a five-year Farplane project with year, quarter, month, week, and task levels. The parent should keep deciding what to do next after leaf tasks finish. Create the Goal setup.",
-      "expected_output": "Classifies the request as project_goals or parent project work; Uses or requires farplane/goals.yaml plus ticket.md, program.md, and progress.md; Uses heartbeat or manual resume for the parent project controller; Explains that native Goal is for an uninterrupted time/budget window and heartbeat is for paused or recurring parent work; Defines heartbeat actions such as start_goal, resume_goal, request_feedback, replan, or no_op",
+      "expected_output": "Rejects a separate five-level durable goal graph; Keeps human direction and selected metric refs in harness.yaml plus reusable metric meaning in metrics.yaml; Uses Work Pulse to replan from tickets, metric state, history, and reports; Uses ticket.md, program.md, and progress.md only for admitted executable work; Explains that native Goal is for an uninterrupted ticket time/budget window",
       "files": [],
       "assertions": [
-        "Classifies the request as project_goals or parent project work",
-        "Uses or requires farplane/goals.yaml plus ticket.md, program.md, and progress.md",
-        "Uses heartbeat or manual resume for the parent project controller",
-        "Explains that native Goal is for an uninterrupted time/budget window and heartbeat is for paused or recurring parent work",
-        "Defines heartbeat actions such as start_goal, resume_goal, request_feedback, replan, or no_op"
+        "Rejects a separate five-level durable goal graph",
+        "Keeps human direction and selected metric refs in harness.yaml plus reusable metric meaning in metrics.yaml",
+        "Uses Work Pulse to replan from tickets, metric state, history, and reports",
+        "Uses ticket.md, program.md, and progress.md only for admitted executable work",
+        "Explains that native Goal is for an uninterrupted ticket time/budget window"
       ],
       "metadata": {
         "farplane": {
@@ -102,14 +102,14 @@
     {
       "id": "goal_advisor_project_goals_leaf_native_goal_01",
       "prompt": "Given this project-goals frontier: W1 has TASK-0001 define offer, TASK-0002 landing page, and TASK-0003 tracking. TASK-0001 is the first eligible child. Write the Goal prompt.",
-      "expected_output": "Generates or recommends a native /goal prompt with an inline Files list for the selected file set; Uses farplane/goals.yaml as context only when it is listed and needed; Requires progress.md logging and completion entries for every changed ticket; Says completion should return control to the parent heartbeat; Does not tell the native Goal to expand future project-goal branches",
+      "expected_output": "Generates or recommends a native /goal prompt with an inline Files list for the admitted ticket; Uses harness.yaml and metrics.yaml only when the ticket needs charter or objective context; Requires progress.md logging and completion evidence; Returns control to Work Pulse after completion; Does not expand unadmitted future proposals",
       "files": [],
       "assertions": [
         "Generates or recommends a native /goal prompt with an inline Files list for the selected file set",
-        "Uses farplane/goals.yaml as context only when it is listed and needed",
+        "Uses harness.yaml and metrics.yaml only when the ticket needs charter or objective context",
         "Requires progress.md logging and completion entries for every changed ticket",
-        "Says completion should return control to the parent heartbeat",
-        "Does not tell the native Goal to expand future project-goal branches"
+        "Says completion should return control to Work Pulse",
+        "Does not tell the native Goal to expand unadmitted future proposals"
       ],
       "metadata": {
         "farplane": {
@@ -126,14 +126,14 @@
     {
       "id": "goal_advisor_project_goals_completion_handoff_01",
       "prompt": "TASK-0001 finished and wrote its artifact. What should the Farplane project goals layer do now?",
-      "expected_output": "Requires appending a child completion entry to progress.md; Updates the child node in farplane/goals.yaml or a linked project report to complete or complete_candidate; Runs or requests proof/review before treating the child as done; Starts or resumes the next eligible sibling when one exists; Runs parent heartbeat or replan when the current frontier is complete",
+      "expected_output": "Requires appending a completion entry to progress.md; Updates ticket status and ticket-local proof rather than a goal graph; Runs or requests proof/review before treating the ticket as done; Returns control to Work Pulse, which dispatches another admitted ticket or replans from observed state",
       "files": [],
       "assertions": [
-        "Requires appending a child completion entry to progress.md",
-        "Updates the child node in farplane/goals.yaml or a linked project report to complete or complete_candidate",
+        "Requires appending a completion entry to progress.md",
+        "Updates ticket status and ticket-local proof rather than a goal graph",
         "Runs or requests proof/review before treating the child as done",
-        "Starts or resumes the next eligible sibling when one exists",
-        "Runs parent heartbeat or replan when the current frontier is complete"
+        "Returns control to Work Pulse after completion",
+        "Lets Work Pulse dispatch another admitted ticket or replan from observed state"
       ],
       "metadata": {
         "farplane": {
@@ -225,12 +225,12 @@
     {
       "id": "goal_advisor_delayed_checkin_program_01",
       "prompt": "A workflow change needs one week of usage before we can judge it. Its ticket has two future Reward rows, a baseline, and named analytics evidence. Compile the Goal Packet so a later worker can evaluate it safely.",
-      "expected_output": "Fills program.md Check-In Program in delayed_reward mode rather than leaving scoring across launcher prose; Names the original ticket/program/progress, matured row indexes, timestamp, and exact evidence sources as check-in inputs; Defines an ordered evidence, attribution, comparison, scoring, writeback, and accept/kill/iterate/monitor procedure; Defines idempotency and missing/stale/below-minimum evidence behavior while preserving future and completed rows; Keeps ticket scope and QA Strategy winning and does not create a check-in ticket",
+      "expected_output": "Fills program.md Check-In Program in delayed_reward mode rather than leaving scoring across launcher prose; Names the original ticket/program/progress, matured Reward IDs, timestamp, and exact evidence sources as check-in inputs; Defines an ordered evidence, attribution, comparison, scoring, writeback, and accept/kill/monitor procedure; Defines idempotency and missing/stale/below-minimum evidence behavior while preserving future and completed rows; Keeps ticket scope and QA Strategy winning and does not create a check-in ticket",
       "files": [],
       "assertions": [
         "Fills program.md Check-In Program in delayed_reward mode rather than leaving scoring across launcher prose",
-        "Names the original ticket/program/progress, matured row indexes, timestamp, and exact evidence sources as check-in inputs",
-        "Defines an ordered evidence, attribution, comparison, scoring, writeback, and accept/kill/iterate/monitor procedure",
+        "Names the original ticket/program/progress, matured Reward IDs, timestamp, and exact evidence sources as check-in inputs",
+        "Defines an ordered evidence, attribution, comparison, scoring, writeback, and accept/kill/monitor procedure",
         "Defines idempotency and missing/stale/below-minimum evidence behavior while preserving future and completed rows",
         "Keeps ticket scope and QA Strategy winning and does not create a check-in ticket"
       ],

@@ -3,7 +3,7 @@ title: Farplane Framework Changelog
 owner: init-advisor
 status: active
 kind: framework-changelog
-updated_at: 2026-07-11
+updated_at: 2026-07-12
 ---
 
 # Farplane Framework Changelog
@@ -16,6 +16,91 @@ or project-level documentation guidance.
 ```text
 framework_bump(old_version, new_version, project_root)
   -> manifest_delta + migration_steps + proof_commands
+```
+
+## 1.9.0
+
+Date: 2026-07-12
+
+Primary change: replace the Markdown charter and duplicated optimization block
+with one typed project contract. `farplane/harness.yaml` owns identity,
+descriptive products, capability references, selected objectives/guards, and
+protected policy. `farplane/metrics.yaml` owns reusable metric meaning,
+direction, freshness, and guard rules.
+
+Changed surfaces:
+
+- `farplane/harness.md` and `metrics.yaml#optimization` are retired with no
+  compatibility readers.
+- project and product metric refs select active objectives with globally unique
+  priorities; hard guards are selected at project scope.
+- the project snapshot exposes `metrics.selection` and typed charter/product
+  fields.
+- Reward rows use stable IDs and terminal `accept|kill` decisions; `monitor`
+  remains live for its next check-in.
+- Core owns portable file events, routes, mining runs, and lean reports; UI is
+  an editor/renderer adapter.
+
+Migration steps:
+
+1. Convert charter headings into `harness.yaml.identity`, constraints,
+   authority, products, feature definition, and capability refs.
+2. Move objective IDs/priorities and guard IDs to `harness.yaml`; move
+   direction, `max_age_days`, and guard operator/threshold into each metric
+   definition.
+3. Migrate every Reward row to the stable V1 schema and remove legacy score
+   fields after terminal outcomes have explicit evidence.
+4. Configure file-event routes through Core-owned `hooks.json` and
+   `bindings.yaml`, regenerate the project snapshot, and update UI consumers.
+
+Proof commands:
+
+```bash
+farplane project snapshot --project-root . --json
+farplane mining routes validate --project-root . --json
+python3 bin/validators/check_farplane_project_files.py --root .
+python3 -m unittest bin.tests.test_farplane_project_snapshot bin.tests.test_farplane_project_file_validator
+```
+
+## 1.8.0
+
+Date: 2026-07-12
+
+Primary change: remove the intermediary project-goal portfolio. Human meaning
+and hard constraints stay in `farplane/harness.md`; measurable objectives,
+directions, guards, and metric definitions live in
+`farplane/metrics.yaml`; selected commitments live only in tickets.
+
+Changed surfaces:
+
+- `farplane/goals.yaml`, SMART goals, current bets, and current milestones are
+  removed from active projects and bootstrap templates.
+- `ticket-opportunity-generator` compares proposal trajectories by expected
+  metric delta, confidence, duration, signal delay, cost, risk, reversibility,
+  information gain, compounding value, interference, and prerequisites.
+- the generated project snapshot exposes `tabs.objectives`, charter fields,
+  and metric optimization state; it no longer exposes `tabs.goals`.
+
+Migration steps:
+
+1. Move mission, thesis, non-tradeoffs, authority, and stable capability refs
+   from `goals.yaml` into `harness.md` when they are not already present.
+2. Move only measurable objective metric IDs, directions, priorities, and hard
+   guard thresholds into `metrics.yaml#optimization`; keep unmeasured values as
+   charter principles instead of fake metrics.
+3. Convert any still-active selected bet into an ordinary ticket with
+   `program.md`/`progress.md` when it needs long-running state, then delete
+   `farplane/goals.yaml`.
+4. Bump the manifest to `1.8.0`, regenerate primitive/project snapshots, and
+   update UI consumers from Goals to Objectives.
+
+Proof commands:
+
+```bash
+farplane metrics primitives --project-root . --date <YYYY-MM-DD> --json
+farplane project snapshot --project-root . --date <YYYY-MM-DD> --json
+python3 bin/validators/check_farplane_project_files.py --root .
+python3 -m unittest bin.tests.test_farplane_project_snapshot bin.tests.test_farplane_project_file_validator
 ```
 
 ## 1.7.0

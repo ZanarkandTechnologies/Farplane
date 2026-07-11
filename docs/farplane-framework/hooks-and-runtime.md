@@ -3,8 +3,8 @@ title: "Farplane Hooks and Runtime"
 status: active
 owner: farplane-framework
 created_at: 2026-06-23
-updated_at: 2026-06-27
-framework_template_version: "0.2.0"
+updated_at: 2026-07-12
+framework_template_version: "0.3.0"
 tags:
   - farplane
   - hooks
@@ -20,18 +20,22 @@ refs:
 
 # Farplane Hooks and Runtime
 
-Farplane hooks are small Codex boundary actions. They capture intent and send
-heartbeats. They do not own project strategy, documentation judgment, skill
+Farplane has two explicit hook surfaces. Root `hooks.json` contains installed
+Codex lifecycle commands. Project `farplane/hooks.json` selects typed file
+events for portable Core mining. Neither owns project strategy, skill
 optimization, memory rewriting, or native Goal continuation.
 
 ```text
-hook(event, transcript/runtime_state)
-  -> capture | heartbeat | mechanical_gate | handoff_ref
+codex_hook(event, transcript/runtime_state)
+  -> telemetry | mechanical_gate
+
+file_change(project_root, path)
+  -> drain_pending -> durable FileEvent -> snapshot -> routes -> drain_pending
 ```
 
-## Active Hook Events
+## Codex Lifecycle Hooks
 
-`hooks.json` currently defines:
+Root `hooks.json` currently defines:
 
 | Event | Commands | Purpose |
 | --- | --- | --- |
@@ -39,6 +43,27 @@ hook(event, transcript/runtime_state)
 | `Stop` | `farplane_console_ping.py` | send `turn_end` hook telemetry |
 
 These are graphable as `hook:*` nodes that `triggers` command nodes.
+
+## Project File Events And Mining
+
+Project `farplane/hooks.json` declares allowed file patterns and event names.
+`farplane/bindings.yaml#event_routes` maps an event to a versioned immutable
+Core program. Core owns deterministic event/run IDs, privacy-safe snapshots,
+the durable outbox, frozen replay, current-source rerun, lean reports, and
+verdict records.
+
+```text
+event_id = sha256(project_id, event_name, entity_ref, previous_hash, content_hash)
+run_id   = sha256(event_id, route_id, program_digest, input_digest)
+```
+
+Session and task IDs are provenance only. Failed routes remain retryable; each
+later hook call drains pending work before and after capture, and operators or
+UI can call `farplane mining drain`. There is no daemon or extra heartbeat.
+
+The default completion report contains `source`, `program`, `coverage`,
+`observations`, `material_findings`, `source_gaps`, and `escalation`. It does
+not emit a false-precision scalar quality score.
 
 ## Runtime State Boundaries
 
@@ -54,6 +79,9 @@ too noisy for tracked config.
 .farplane/automation/action-outcomes.jsonl
 .farplane/automation/spawned-threads.jsonl
 .farplane/evals/runs/
+.farplane/events/
+.farplane/file-events/
+.farplane/mine/
 .farplane/logs/
 .farplane/state/message-windows/
 .farplane/state/ticket-thread-associations.jsonl
@@ -120,6 +148,8 @@ Codex install path owns symlinking `hooks.json` and
 - Write only small, bounded runtime records unless a ticket or skill owns the
   durable write.
 - Route judgment-heavy work to skills, tickets, reviewers, or drains.
+- Persist file events before advancing snapshots; retry route failure from the
+  outbox rather than dropping or duplicating work.
 - Never auto-rewrite durable memory/context files from a hook.
 - Do not use Stop hooks for completion review. Put QA evidence review and
   reviewer-lane completion review in the ticket `Done / Proof` block or Goal

@@ -24,6 +24,7 @@ except ImportError:  # pragma: no cover - package import path used by tests
 OBSERVATION_ROOT = Path(".farplane/metrics/observations")
 DAILY_METRICS_ROOT = Path(".farplane/metrics/daily")
 ASSOCIATION_PATH = Path(".farplane/state/ticket-thread-associations.jsonl")
+REWARD_CONTRACT = "terminal_evidence_v1"
 
 
 @dataclass(frozen=True)
@@ -43,25 +44,56 @@ class TicketFilters:
 
 
 @dataclass(frozen=True)
+class RewardRecord:
+    reward_id: str
+    kpi_id: str
+    expected_reward: str
+    actual_result: str
+    decision: str
+    evaluated_at: datetime | None
+    evaluation_key: str
+    evidence_refs: tuple[str, ...]
+
+
+@dataclass(frozen=True)
 class TicketRecord:
     ticket_id: str
     path: Path
     relative_path: str
     status: str
+    phase: str
     created_at: datetime | None
     updated_at: datetime | None
     completed_at: datetime | None
     closed_at: datetime | None
-    kpi_rewards: tuple[str, ...]
+    kpi_rewards: tuple[RewardRecord, ...]
     has_completion_proof: bool
+    has_acceptance_evidence: bool
 
     @property
     def is_complete(self) -> bool:
-        return self.status in {"done", "rejected"}
+        return self.status == "done" and self.phase in {"", "complete"}
 
     @property
     def is_terminal(self) -> bool:
         return self.status in {"done", "failed", "rejected"}
+
+    @property
+    def kpi_ids(self) -> tuple[str, ...]:
+        return tuple(reward.kpi_id for reward in self.kpi_rewards)
+
+    @property
+    def accepted_rewards(self) -> tuple[RewardRecord, ...]:
+        if not self.is_complete or not self.has_acceptance_evidence:
+            return ()
+        return tuple(
+            reward
+            for reward in self.kpi_rewards
+            if reward.decision == "accept"
+            and bool(reward.actual_result.strip())
+            and reward.evaluated_at is not None
+            and bool(reward.evidence_refs)
+        )
 
 
 def now_utc() -> str:
@@ -201,7 +233,7 @@ def parse_frontmatter(path: Path) -> dict[str, Any]:
     return loaded if isinstance(loaded, dict) else {}
 
 
-def parse_ticket_kpi_rewards(markdown: str) -> tuple[list[str], list[str]]:
+def parse_ticket_kpi_rewards(markdown: str) -> tuple[list[RewardRecord], list[str]]:
     reward = markdown_heading_section(markdown, "Reward")
     if not reward:
         return [], ["missing_reward_section"]
@@ -209,18 +241,43 @@ def parse_ticket_kpi_rewards(markdown: str) -> tuple[list[str], list[str]]:
     raw_rewards = payload.get("kpi_rewards")
     if not isinstance(raw_rewards, list):
         return [], ["missing_kpi_rewards"]
-    kpi_ids: list[str] = []
+    rewards: list[RewardRecord] = []
     gaps: list[str] = []
+    seen_reward_ids: set[str] = set()
     for index, raw_reward in enumerate(raw_rewards):
         if not isinstance(raw_reward, dict):
             gaps.append(f"invalid_kpi_reward:{index}")
             continue
+        reward_id = str(raw_reward.get("reward_id") or "").strip()
         kpi_id = str(raw_reward.get("kpi_id") or "").strip()
+        if not reward_id:
+            gaps.append(f"missing_reward_id:{index}")
+            continue
+        if reward_id in seen_reward_ids:
+            gaps.append(f"duplicate_reward_id:{index}:{reward_id}")
+            continue
+        seen_reward_ids.add(reward_id)
         if not kpi_id:
             gaps.append(f"missing_kpi_id:{index}")
             continue
-        kpi_ids.append(kpi_id)
-    return kpi_ids, gaps
+        evidence_refs = raw_reward.get("evidence_refs")
+        if not isinstance(evidence_refs, list):
+            evidence_refs = []
+        rewards.append(
+            RewardRecord(
+                reward_id=reward_id,
+                kpi_id=kpi_id,
+                expected_reward=str(raw_reward.get("expected_reward") or "").strip(),
+                actual_result=str(raw_reward.get("actual_result") or "").strip(),
+                decision=str(raw_reward.get("decision") or "").strip().lower(),
+                evaluated_at=parse_iso_datetime(raw_reward.get("evaluated_at")),
+                evaluation_key=str(raw_reward.get("evaluation_key") or "").strip(),
+                evidence_refs=tuple(
+                    str(item).strip() for item in evidence_refs if str(item).strip()
+                ),
+            )
+        )
+    return rewards, gaps
 
 
 def ticket_has_completion_proof(markdown: str) -> bool:
@@ -230,6 +287,20 @@ def ticket_has_completion_proof(markdown: str) -> bool:
         token in lowered
         for token in ("passed", "proof", "evidence", "artifact", "artifacts/", "review", "receipt", "verification")
     )
+
+
+def ticket_has_acceptance_evidence(path: Path, markdown: str) -> bool:
+    review_root = path.parent / "artifacts" / "review"
+    for review_path in sorted(review_root.rglob("*")) if review_root.exists() else []:
+        if not review_path.is_file() or review_path.suffix.lower() not in {".md", ".json"}:
+            continue
+        lowered = review_path.read_text(encoding="utf-8", errors="ignore").lower()
+        if ("verdict: pass" in lowered or '"verdict": "pass"' in lowered) and (
+            "tas-a" in lowered or '"overall_tas": "tas-a"' in lowered
+        ):
+            return True
+    done = (markdown_heading_section(markdown, "Done / Proof") or "").lower()
+    return "tas-a" in done and "verdict" in done and "pass" in done and "pending" not in done
 
 
 def iter_ticket_files(project_root: Path) -> list[Path]:
@@ -259,13 +330,15 @@ def load_tickets(project_root: Path) -> tuple[list[TicketRecord], list[str]]:
                 ticket_id=ticket_id,
                 path=path,
                 relative_path=rel_path,
-                status=str(fm.get("status") or ""),
+                status=str(fm.get("status") or "").strip().lower(),
+                phase=str(fm.get("phase") or "").strip().lower(),
                 created_at=parse_iso_datetime(fm.get("created_at")),
                 updated_at=parse_iso_datetime(fm.get("updated_at")),
                 completed_at=parse_iso_datetime(fm.get("completed_at")),
                 closed_at=parse_iso_datetime(fm.get("closed_at")),
                 kpi_rewards=tuple(rewards),
                 has_completion_proof=ticket_has_completion_proof(markdown),
+                has_acceptance_evidence=ticket_has_acceptance_evidence(path, markdown),
             )
         )
     return tickets, gaps
@@ -296,9 +369,9 @@ def fetch_tickets(
         if filters.kpi_reward == "exists" and not ticket.kpi_rewards:
             continue
         if isinstance(filters.kpi_reward, str) and filters.kpi_reward not in {"exists", ""}:
-            if filters.kpi_reward not in ticket.kpi_rewards:
+            if filters.kpi_reward not in ticket.kpi_ids:
                 continue
-        if isinstance(filters.kpi_reward, set) and not (set(ticket.kpi_rewards) & filters.kpi_reward):
+        if isinstance(filters.kpi_reward, set) and not (set(ticket.kpi_ids) & filters.kpi_reward):
             continue
         if not ticket_touched_in_window(ticket, window):
             continue
@@ -317,7 +390,8 @@ def ticket_payload(ticket: TicketRecord) -> dict[str, Any]:
         "created_at": ticket.created_at.isoformat() if ticket.created_at else None,
         "updated_at": ticket.updated_at.isoformat() if ticket.updated_at else None,
         "completed_at": completion_time(ticket).isoformat() if completion_time(ticket) else None,
-        "kpi_rewards": list(ticket.kpi_rewards),
+        "kpi_rewards": list(ticket.kpi_ids),
+        "accepted_reward_ids": [reward.reward_id for reward in ticket.accepted_rewards],
         "has_completion_proof": ticket.has_completion_proof,
     }
 
@@ -404,20 +478,38 @@ def ticket_counts(project_root: Path, window: Window) -> tuple[dict[str, Any], l
 
 
 def ticket_count_by_kpi(tickets: list[TicketRecord], window: Window) -> dict[str, dict[str, Any]]:
-    by_kpi: dict[str, list[TicketRecord]] = {}
+    candidates: dict[str, list[tuple[TicketRecord, RewardRecord]]] = {}
     for ticket in tickets:
         if not ticket_touched_in_window(ticket, window):
             continue
-        for kpi_id in ticket.kpi_rewards:
-            by_kpi.setdefault(kpi_id, []).append(ticket)
-    return {
-        kpi_id: reading(
-            len(items),
-            "available",
-            {"tickets": [ticket_payload(ticket) for ticket in items], "gaps": []},
+        for reward in ticket.kpi_rewards:
+            candidates.setdefault(reward.kpi_id, []).append((ticket, reward))
+
+    output: dict[str, dict[str, Any]] = {}
+    for kpi_id, rows in sorted(candidates.items()):
+        accepted_by_ticket = {
+            ticket.ticket_id: ticket
+            for ticket, reward in rows
+            if reward in ticket.accepted_rewards
+        }
+        gaps: list[str] = []
+        for ticket, reward in rows:
+            if reward in ticket.accepted_rewards or reward.decision == "kill":
+                continue
+            gaps.append(
+                f"{ticket.relative_path}:unrealized_reward:{reward.reward_id}"
+            )
+        accepted = [accepted_by_ticket[key] for key in sorted(accepted_by_ticket)]
+        output[kpi_id] = reading(
+            len(accepted),
+            "available" if accepted or not gaps else "source_gap",
+            {
+                "tickets": [ticket_payload(ticket) for ticket in accepted],
+                "gaps": sorted(set(gaps)),
+                "reward_contract": REWARD_CONTRACT,
+            },
         )
-        for kpi_id, items in sorted(by_kpi.items())
-    }
+    return output
 
 
 def ticket_count_by_kpi_with_status(
@@ -434,7 +526,7 @@ def ticket_count_by_kpi_with_status(
             continue
         if ticket.kpi_rewards:
             total.append(ticket)
-        for kpi_id in ticket.kpi_rewards:
+        for kpi_id in sorted(set(ticket.kpi_ids)):
             by_kpi.setdefault(kpi_id, []).append(ticket)
     output = {
         kpi_id: reading(
@@ -859,10 +951,19 @@ def primitive_snapshot(
 def write_primitive_outputs(project_root: Path, date_value: str, payload: dict[str, Any]) -> None:
     daily_path = project_root / DAILY_METRICS_ROOT / f"{date_value}.json"
     write_json(daily_path, payload)
+    metrics_path = project_root / "farplane" / "metrics.yaml"
+    try:
+        metric_config = yaml.safe_load(metrics_path.read_text(encoding="utf-8")) if metrics_path.exists() else {}
+    except yaml.YAMLError:
+        metric_config = {}
+    configured_metrics = metric_config.get("metrics") if isinstance(metric_config, dict) else {}
+    allowed_metric_ids = set(configured_metrics) if isinstance(configured_metrics, dict) else set()
     primitives = payload.get("primitives") if isinstance(payload.get("primitives"), dict) else {}
     for primitive_id, primitive_payload in primitives.items():
         write_json(project_root / OBSERVATION_ROOT / primitive_id / f"{date_value}.json", primitive_payload if isinstance(primitive_payload, dict) else {})
         observations = primitive_observations(primitive_id, primitive_payload, date_value)
+        if allowed_metric_ids:
+            observations = [row for row in observations if row.metric_id in allowed_metric_ids]
         gaps = primitive_gaps(primitive_payload)
         write_metric_batch(
             project_root,

@@ -1,35 +1,36 @@
 window.FARPLANE_LIFECYCLE_GRAPH = {
   "counts": {
     "edge_confidence": {
-      "curated": 41,
-      "explicit": 7,
-      "parsed": 184
+      "curated": 40,
+      "explicit": 8,
+      "parsed": 180
     },
     "edge_types": {
       "consumes": 2,
       "contains": 3,
-      "reads": 51,
+      "informs": 1,
+      "reads": 49,
       "routes_to": 125,
       "triggers": 15,
       "updates": 4,
-      "writes": 32
+      "writes": 29
     },
-    "edges": 232,
+    "edges": 228,
     "fsa_projections": 5,
     "node_kinds": {
       "automation": 3,
-      "command": 3,
+      "command": 4,
       "doc": 11,
-      "file": 19,
+      "file": 18,
       "hook": 3,
       "report": 2,
       "route": 5,
       "runtime": 1,
-      "skill": 47,
-      "state": 4,
+      "skill": 45,
+      "state": 5,
       "ticket": 8
     },
-    "nodes": 106,
+    "nodes": 105,
     "parsed_skills": 18
   },
   "edges": [
@@ -91,10 +92,10 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
     },
     {
       "confidence": "curated",
-      "evidence_ref": "docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md",
-      "source": "file:farplane/goals.yaml",
+      "evidence_ref": "docs/farplane-framework/lifecycle.md",
+      "source": "file:farplane/metrics.yaml",
       "target": "skill:goal-advisor",
-      "type": "triggers"
+      "type": "informs"
     },
     {
       "confidence": "explicit",
@@ -116,6 +117,14 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
       "source": "file:hooks.json",
       "target": "hook:UserPromptSubmit",
       "type": "contains"
+    },
+    {
+      "confidence": "explicit",
+      "evidence_ref": "hooks.json",
+      "label": "Capture Farplane file event",
+      "source": "hook:PostToolUse",
+      "target": "command:python3-home/.codex/hooks/farplane_file_change.py",
+      "type": "triggers"
     },
     {
       "confidence": "explicit",
@@ -151,16 +160,16 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
     },
     {
       "confidence": "curated",
-      "evidence_ref": "docs/features/FEAT-0065-pulse-and-interval-automation.md",
+      "evidence_ref": "docs/farplane-framework/lifecycle.md",
       "source": "report:.farplane/reports/interval/<interval_id>/<timestamp>.md",
-      "target": "skill:horizon-advisor",
+      "target": "skill:leverage-advisor",
       "type": "routes_to"
     },
     {
       "confidence": "curated",
-      "evidence_ref": "docs/farplane-framework/lifecycle.md",
+      "evidence_ref": "docs/features/FEAT-0065-pulse-and-interval-automation.md",
       "source": "report:.farplane/reports/interval/<interval_id>/<timestamp>.md",
-      "target": "skill:leverage-advisor",
+      "target": "skill:metric-advisor",
       "type": "routes_to"
     },
     {
@@ -370,9 +379,17 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
     {
       "confidence": "parsed",
       "evidence_ref": "skills/goal-advisor/SKILL.md",
-      "label": "farplane/goals.yaml?",
+      "label": "farplane/harness.yaml?",
       "source": "skill:goal-advisor",
-      "target": "file:farplane/goals.yaml",
+      "target": "file:farplane/harness.yaml",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/goal-advisor/SKILL.md",
+      "label": "farplane/metrics.yaml?",
+      "source": "skill:goal-advisor",
+      "target": "file:farplane/metrics.yaml",
       "type": "reads"
     },
     {
@@ -547,117 +564,6 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
     },
     {
       "confidence": "parsed",
-      "evidence_ref": "skills/horizon-advisor/SKILL.md",
-      "label": "farplane/automations.toml?",
-      "source": "skill:horizon-advisor",
-      "target": "file:farplane/automations.toml",
-      "type": "reads"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/horizon-advisor/SKILL.md",
-      "label": "farplane/bindings.yaml?",
-      "source": "skill:horizon-advisor",
-      "target": "file:farplane/bindings.yaml",
-      "type": "reads"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/horizon-advisor/SKILL.md",
-      "label": "farplane/goals.yaml",
-      "source": "skill:horizon-advisor",
-      "target": "file:farplane/goals.yaml",
-      "type": "reads"
-    },
-    {
-      "confidence": "curated",
-      "evidence_ref": "docs/farplane-framework/lifecycle.md",
-      "source": "skill:horizon-advisor",
-      "target": "file:farplane/goals.yaml",
-      "type": "updates"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/horizon-advisor/SKILL.md",
-      "label": "farplane/goals.yaml delta",
-      "source": "skill:horizon-advisor",
-      "target": "file:farplane/goals.yaml",
-      "type": "writes"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/horizon-advisor/SKILL.md",
-      "label": "farplane/harness.md",
-      "source": "skill:horizon-advisor",
-      "target": "file:farplane/harness.md",
-      "type": "reads"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/horizon-advisor/SKILL.md",
-      "label": "farplane/metrics.yaml",
-      "source": "skill:horizon-advisor",
-      "target": "file:farplane/metrics.yaml",
-      "type": "reads"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/horizon-advisor/SKILL.md",
-      "label": "farplane/metrics.yaml delta",
-      "source": "skill:horizon-advisor",
-      "target": "file:farplane/metrics.yaml",
-      "type": "writes"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/horizon-advisor/SKILL.md",
-      "label": "deep-interview",
-      "source": "skill:horizon-advisor",
-      "target": "skill:deep-interview",
-      "type": "routes_to"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/horizon-advisor/SKILL.md",
-      "label": "goal-advisor",
-      "source": "skill:horizon-advisor",
-      "target": "skill:goal-advisor",
-      "type": "routes_to"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/horizon-advisor/SKILL.md",
-      "label": "metric-advisor",
-      "source": "skill:horizon-advisor",
-      "target": "skill:metric-advisor",
-      "type": "routes_to"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/horizon-advisor/SKILL.md",
-      "label": "review",
-      "source": "skill:horizon-advisor",
-      "target": "skill:review",
-      "type": "routes_to"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/horizon-advisor/SKILL.md",
-      "label": "update-strategy",
-      "source": "skill:horizon-advisor",
-      "target": "skill:update-strategy",
-      "type": "routes_to"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/horizon-advisor/SKILL.md",
-      "label": "tickets",
-      "source": "skill:horizon-advisor",
-      "target": "ticket:tickets/TASK-*/ticket.md",
-      "type": "reads"
-    },
-    {
-      "confidence": "parsed",
       "evidence_ref": "skills/impl-plan/SKILL.md",
       "label": "docs/LESSONS.md?",
       "source": "skill:impl-plan",
@@ -791,14 +697,7 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
       "confidence": "curated",
       "evidence_ref": "docs/farplane-framework/project-files.md",
       "source": "skill:init-advisor",
-      "target": "file:farplane/goals.yaml",
-      "type": "writes"
-    },
-    {
-      "confidence": "curated",
-      "evidence_ref": "docs/farplane-framework/project-files.md",
-      "source": "skill:init-advisor",
-      "target": "file:farplane/harness.md",
+      "target": "file:farplane/harness.yaml",
       "type": "writes"
     },
     {
@@ -880,17 +779,9 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
     {
       "confidence": "parsed",
       "evidence_ref": "skills/interval-update/SKILL.md",
-      "label": "farplane/goals.yaml?",
+      "label": "farplane/harness.yaml?",
       "source": "skill:interval-update",
-      "target": "file:farplane/goals.yaml",
-      "type": "reads"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/interval-update/SKILL.md",
-      "label": "farplane/harness.md?",
-      "source": "skill:interval-update",
-      "target": "file:farplane/harness.md",
+      "target": "file:farplane/harness.yaml",
       "type": "reads"
     },
     {
@@ -963,6 +854,14 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
       "source": "skill:interval-update",
       "target": "skill:ticket-opportunity-generator",
       "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/interval-update/SKILL.md",
+      "label": ".farplane/metrics/**?",
+      "source": "skill:interval-update",
+      "target": "state:.farplane/metrics/**",
+      "type": "reads"
     },
     {
       "confidence": "parsed",
@@ -1108,10 +1007,89 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
     },
     {
       "confidence": "parsed",
+      "evidence_ref": "skills/metric-advisor/SKILL.md",
+      "label": "farplane/harness.yaml?",
+      "source": "skill:metric-advisor",
+      "target": "file:farplane/harness.yaml",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/metric-advisor/SKILL.md",
+      "label": "farplane/metrics.yaml?",
+      "source": "skill:metric-advisor",
+      "target": "file:farplane/metrics.yaml",
+      "type": "reads"
+    },
+    {
+      "confidence": "curated",
+      "evidence_ref": "docs/farplane-framework/lifecycle.md",
+      "source": "skill:metric-advisor",
+      "target": "file:farplane/metrics.yaml",
+      "type": "updates"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/metric-advisor/SKILL.md",
+      "label": "goal-advisor",
+      "source": "skill:metric-advisor",
+      "target": "skill:goal-advisor",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/metric-advisor/SKILL.md",
+      "label": "impl-plan",
+      "source": "skill:metric-advisor",
+      "target": "skill:impl-plan",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/metric-advisor/SKILL.md",
+      "label": "optimize-harness",
+      "source": "skill:metric-advisor",
+      "target": "skill:optimize-harness",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/metric-advisor/SKILL.md",
+      "label": "proof-advisor",
+      "source": "skill:metric-advisor",
+      "target": "skill:proof-advisor",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/metric-advisor/SKILL.md",
+      "label": "review",
+      "source": "skill:metric-advisor",
+      "target": "skill:review",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/metric-advisor/SKILL.md",
+      "label": "self-improve",
+      "source": "skill:metric-advisor",
+      "target": "skill:self-improve",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
       "evidence_ref": "skills/optimize-harness/SKILL.md",
-      "label": "farplane/goals.yaml?",
+      "label": "farplane/harness.yaml?",
       "source": "skill:optimize-harness",
-      "target": "file:farplane/goals.yaml",
+      "target": "file:farplane/harness.yaml",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/optimize-harness/SKILL.md",
+      "label": "farplane/metrics.yaml?",
+      "source": "skill:optimize-harness",
+      "target": "file:farplane/metrics.yaml",
       "type": "reads"
     },
     {
@@ -1144,14 +1122,6 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
       "label": "harness-advisor",
       "source": "skill:optimize-harness",
       "target": "skill:harness-advisor",
-      "type": "routes_to"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/optimize-harness/SKILL.md",
-      "label": "horizon-advisor",
-      "source": "skill:optimize-harness",
-      "target": "skill:horizon-advisor",
       "type": "routes_to"
     },
     {
@@ -1325,17 +1295,9 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
     {
       "confidence": "parsed",
       "evidence_ref": "skills/pulse-update/SKILL.md",
-      "label": "farplane/goals.yaml?",
+      "label": "farplane/harness.yaml?",
       "source": "skill:pulse-update",
-      "target": "file:farplane/goals.yaml",
-      "type": "reads"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/pulse-update/SKILL.md",
-      "label": "farplane/harness.md?",
-      "source": "skill:pulse-update",
-      "target": "file:farplane/harness.md",
+      "target": "file:farplane/harness.yaml",
       "type": "reads"
     },
     {
@@ -1471,6 +1433,14 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
       "source": "skill:pulse-update",
       "target": "state:.farplane/automation/spawned-threads.jsonl",
       "type": "writes"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/pulse-update/SKILL.md",
+      "label": ".farplane/metrics/**?",
+      "source": "skill:pulse-update",
+      "target": "state:.farplane/metrics/**",
+      "type": "reads"
     },
     {
       "confidence": "parsed",
@@ -1857,7 +1827,7 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
         "fsa:project_initialization:project-substrate-written",
         "fsa:project_initialization:framework-config-written",
         "fsa:project_initialization:readiness-audited",
-        "fsa:project_initialization:horizon-goals-shaped",
+        "fsa:project_initialization:metric-objectives-shaped",
         "fsa:project_initialization:goal-advisor-handoff-ready"
       ],
       "terminal": [
@@ -1899,16 +1869,16 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
         {
           "confidence": "curated",
           "evidence_ref": "docs/farplane-framework/graph-contract.md",
-          "label": "readiness audited -> horizon goals shaped",
+          "label": "readiness audited -> metric objectives shaped",
           "source": "fsa:project_initialization:readiness-audited",
-          "target": "fsa:project_initialization:horizon-goals-shaped",
+          "target": "fsa:project_initialization:metric-objectives-shaped",
           "type": "transition"
         },
         {
           "confidence": "curated",
           "evidence_ref": "docs/farplane-framework/graph-contract.md",
-          "label": "horizon goals shaped -> goal advisor handoff ready",
-          "source": "fsa:project_initialization:horizon-goals-shaped",
+          "label": "metric objectives shaped -> goal advisor handoff ready",
+          "source": "fsa:project_initialization:metric-objectives-shaped",
           "target": "fsa:project_initialization:goal-advisor-handoff-ready",
           "type": "transition"
         }
@@ -2228,7 +2198,7 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
       ]
     }
   ],
-  "generated_at": "2026-07-11T15:34:22+00:00",
+  "generated_at": "2026-07-11T20:48:57+00:00",
   "nodes": [
     {
       "id": "automation:daily-interval",
@@ -2275,6 +2245,20 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
       "metadata": {
         "statusMessage": "Sending Farplane Console start heartbeat",
         "timeout": 5
+      },
+      "path": "hooks.json",
+      "tags": [
+        "command",
+        "hook"
+      ]
+    },
+    {
+      "id": "command:python3-home/.codex/hooks/farplane_file_change.py",
+      "kind": "command",
+      "label": "python3 \"$HOME/.codex/hooks/farplane_file_change.py\"",
+      "metadata": {
+        "statusMessage": "Capture Farplane file event",
+        "timeout": 60
       },
       "path": "hooks.json",
       "tags": [
@@ -2486,21 +2470,10 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
       ]
     },
     {
-      "id": "file:farplane/goals.yaml",
-      "kind": "file",
-      "label": "Project goals",
-      "path": "farplane/goals.yaml",
-      "tags": [
-        "farplane",
-        "goals",
-        "tracked-config"
-      ]
-    },
-    {
-      "id": "file:farplane/harness.md",
+      "id": "file:farplane/harness.yaml",
       "kind": "file",
       "label": "Project harness",
-      "path": "farplane/harness.md",
+      "path": "farplane/harness.yaml",
       "tags": [
         "farplane",
         "tracked-config"
@@ -2530,11 +2503,12 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
     {
       "id": "file:farplane/metrics.yaml",
       "kind": "file",
-      "label": "Project metric contracts",
+      "label": "Project objective and metric contract",
       "path": "farplane/metrics.yaml",
       "tags": [
         "farplane",
         "metrics",
+        "objectives",
         "tracked-config"
       ]
     },
@@ -2889,22 +2863,6 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
       ]
     },
     {
-      "id": "skill:horizon-advisor",
-      "kind": "skill",
-      "label": "horizon-advisor",
-      "metadata": {
-        "description": "Turn ambiguous long-horizon intent into goals.yaml, KPI trees, feedback-sized projects, and Goal Advisor handoffs.",
-        "source": "local",
-        "tier": 3
-      },
-      "path": "skills/horizon-advisor/SKILL.md",
-      "tags": [
-        "harness",
-        "route-target",
-        "skill"
-      ]
-    },
-    {
       "id": "skill:impl-plan",
       "kind": "skill",
       "label": "impl-plan",
@@ -2995,6 +2953,11 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
       "id": "skill:metric-advisor",
       "kind": "skill",
       "label": "metric-advisor",
+      "metadata": {
+        "description": "Turn objectives and evidence into honest metric cards, guard metrics, anti-metrics, and route hints.",
+        "source": "local",
+        "tier": 1
+      },
       "path": "skills/metric-advisor/SKILL.md",
       "tags": [
         "route-target",
@@ -3238,16 +3201,6 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
       ]
     },
     {
-      "id": "skill:update-strategy",
-      "kind": "skill",
-      "label": "update-strategy",
-      "path": "skills/update-strategy/SKILL.md",
-      "tags": [
-        "route-target",
-        "skill"
-      ]
-    },
-    {
       "id": "skill:visual-qa",
       "kind": "skill",
       "label": "visual-qa",
@@ -3305,6 +3258,15 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
       "tags": [
         "pulse",
         "runtime"
+      ]
+    },
+    {
+      "id": "state:.farplane/metrics/**",
+      "kind": "state",
+      "label": ".farplane/metrics/**",
+      "path": ".farplane/metrics/**",
+      "tags": [
+        "parsed"
       ]
     },
     {
@@ -3396,7 +3358,7 @@ window.FARPLANE_LIFECYCLE_GRAPH = {
     "mode": "core",
     "target_skills": [
       "init-advisor",
-      "horizon-advisor",
+      "metric-advisor",
       "goal-advisor",
       "harness-advisor",
       "proof-advisor",

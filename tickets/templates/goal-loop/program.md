@@ -4,7 +4,7 @@ ticket_id: TASK-XXXX
 status: draft
 created_at: 2026-06-12
 template_id: goal-loop-program
-template_version: "0.1.2"
+template_version: "0.1.3"
 feature_refs:
   - FEAT-0029
   - FEAT-0032
@@ -129,23 +129,25 @@ feature_refs:
 
 - `mode:` `not_applicable` | `delayed_reward`
 - `inputs:` for `delayed_reward`, name the original `ticket.md`, this
-  `program.md`, `progress.md`, matured Reward row indexes supplied by Work
+  `program.md`, `progress.md`, matured Reward IDs supplied by Work
   Pulse, the current timestamp, and the exact evidence sources or artifacts
   needed to score them
 - `procedure:` for `delayed_reward`, write an ordered, experiment-specific
-  procedure that reads this program first, validates the supplied row indexes,
+  procedure that reads this program first, validates the supplied Reward IDs,
   collects the named evidence, compares actuals with the baseline and expected
-  result, accounts for declared guards or confounders, scores only the matured
+  result, accounts for declared guards or confounders, evaluates only the matured
   rows, and chooses one declared decision
-- `writeback:` define the exact `actual_result`, `reward_score`, and
-  `reward_score_reason` writeback for matured Reward rows plus the append-only
-  `progress.md` observation and decision entry
-- `decisions:` define experiment-specific `accept_when`, `kill_when`,
-  `iterate_when`, and `monitor_when`; define how `monitor` schedules the next
-  check-in on the same ticket and what `iterate` may change before resuming
+- `writeback:` define the exact `actual_result`, `decision`, `evaluated_at`,
+  `evaluation_key`, `supersedes_evaluation_key`, and `evidence_refs` writeback
+  for matured Reward rows plus the append-only `progress.md` observation and
+  decision entry
+- `decisions:` define experiment-specific `accept_when`, `kill_when`, and
+  `monitor_when`; define how `monitor` schedules the next check-in on the same
+  row. A materially changed hypothesis becomes a new experiment ticket rather
+  than an `iterate` decision hidden in the old outcome.
 - `idempotency:` preserve future and already-complete Reward rows; on retry,
-  do not rewrite a completed matured row without new named evidence and an
-  explicit correction note in `progress.md`
+  treat the same `evaluation_key` as a no-op. A correction requires a new key,
+  `supersedes_evaluation_key`, new named evidence, and an explicit progress note.
 - `source_gap:` when required evidence is missing, stale, or below the Metric
   Provider minimum, record the gap, choose `monitor` unless this program
   explicitly defines another safe outcome, and set the next check-in condition

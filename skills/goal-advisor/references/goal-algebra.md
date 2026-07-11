@@ -46,14 +46,14 @@ Progress :=
 + drift_verdicts
 + next_action
 
-ProjectGoals :=
-  north_star
-+ goal_map
-  + current_milestone
-  + metric_discovery
-  + child_goal_packets
-+ parent_heartbeat_policy
-+ sync_targets
+ProjectPortfolio :=
+  harness_constraints
++ metric_objectives
++ metric_state
++ ticket_history
++ current_reports
+-> ranked_proposals
+-> admitted_ticket_packets
 ```
 
 ## Composition Rules

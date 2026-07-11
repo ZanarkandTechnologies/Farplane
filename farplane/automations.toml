@@ -23,7 +23,7 @@ v-next language.
 
 Params:
 project_root = "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane"
-wave_size = 3
+wave_size = 1
 worker_limit = 1
 review_wip = 3
 
@@ -45,15 +45,15 @@ prompt = '''
 Use $feed-scout.
 
 Run the bounded daily Feed Scout from the configured sources. Write its dated
-report first, then create at most three deduped, source-backed opportunity
-tickets when the skill's evidence, authority, and ticket-quality gates pass.
-Do not execute those tickets; Work Pulse owns execution.
+report first, then create at most one deduped, source-backed opportunity
+ticket when the skill's evidence, authority, and ticket-quality gates pass.
+Do not execute that ticket; Work Pulse owns execution.
 
 Params:
 project_root = "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane"
 config_ref = "farplane/bindings.yaml#feed_scout"
 window = "last_24h"
-ticket_limit = 3
+ticket_limit = 1
 write_policy = "local ticket creation allowed; default review-required unless no human or external gate remains"
 
 Config source:
@@ -75,8 +75,8 @@ prompt = '''
 Use $interval-update.
 
 Run the daily BAU review for the last 24 hours. Write a dated report with the
-incremental Problems ledger. You may create or update at most two maintenance
-tickets only for unresolved, deduped problems evidenced before this run.
+incremental Problems ledger. You may create or update at most one maintenance
+ticket only for an unresolved, deduped problem evidenced before this run.
 Same-run discoveries stay in the report. Do not plan new direction, review
 harness experiments, mutate rewards, or execute tickets.
 
@@ -84,7 +84,7 @@ Params:
 project_root = "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane"
 interval_id = "daily"
 review_window = "last_24h"
-maintenance_ticket_limit = 2
+maintenance_ticket_limit = 1
 write_policy = "local maintenance ticket creation allowed; default review-required unless no human or external gate remains"
 timezone = "Asia/Kuala_Lumpur"
 
@@ -112,7 +112,7 @@ Use $interval-update.
 
 Run the weekly BAU review. Summarize the completed daily reports and ticket
 evidence into a dated report with the incremental Problems ledger. You may
-create or update at most three maintenance tickets only for unresolved,
+create or update at most two maintenance tickets only for unresolved,
 deduped problems evidenced before this run. Do not plan new direction, review
 harness experiments, mutate rewards, or execute tickets.
 
@@ -120,7 +120,7 @@ Params:
 project_root = "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane"
 interval_id = "weekly"
 review_window = "last_week"
-maintenance_ticket_limit = 3
+maintenance_ticket_limit = 2
 write_policy = "local maintenance ticket creation allowed; default review-required unless no human or external gate remains"
 timezone = "Asia/Kuala_Lumpur"
 
@@ -158,8 +158,8 @@ the original ticket's program.md.
 Params:
 project_root = "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane"
 window = "last_week"
-experiment_wave_size = 2
-experiment_wip_limit = 3
+experiment_wave_size = 1
+experiment_wip_limit = 2
 max_concurrent_live_delayed = 1
 one_active_per_attributable_surface = true
 write_policy = "local experiment Goal Packet creation allowed; default review-required unless no human or external gate remains"

@@ -1,0 +1,54 @@
+kind: project-harness
+status: draft
+project: TODO
+created_at: TODO
+updated_at: TODO
+framework_template_version: "0.4.0"
+owner: harness
+
+identity:
+  mission: TODO
+  human_thesis: TODO
+  north_star: TODO
+
+metric_refs:
+  objectives:
+    - metric_id: TODO_metric_name
+      priority: 1
+  guards:
+    - TODO_quality_metric
+
+products:
+  primary_product:
+    description: TODO describe the recurring valuable deliverable.
+    output: TODO name the reviewable artifact or state change.
+    skill_refs: []
+    metric_refs:
+      - metric_id: accepted_output_events
+        priority: 2
+
+feature_definition:
+  definition: TODO define what counts as a durable project feature.
+  statuses: [stable, experimental]
+  evidence_may_include: [tickets, experiments, automation_runs, reports, evals]
+  not_automatically_features: [individual_tickets, hypotheses, reports, one_off_patches]
+
+operating_principles:
+  - Prefer visible artifacts over hidden runtime state.
+  - Count realized evidence, not planned intent, as metric movement.
+
+stable_capabilities: []
+leverage_commitments: []
+
+constraints:
+  non_tradeoffs:
+    - Do not store secrets in tracked project config.
+  allocation_guardrails: {}
+
+authority:
+  agents_may:
+    - Propose evidence-backed project and metric deltas.
+  human_approval_required:
+    - protected_charter_change
+
+change_rule: Protected charter changes require explicit human approval.

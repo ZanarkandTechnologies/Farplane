@@ -43,7 +43,7 @@ weekly_self_improvement(project_root, window, cutoff,
   -> dogfood_report
    + outcome_ledger
    + active_and_pending_portfolio
-   + due_but_unscored_gaps
+   + due_checkin_pending_gaps
    + transfer_candidates
    + rejected_patterns
    + capacity_receipt
@@ -53,7 +53,7 @@ weekly_self_improvement(project_root, window, cutoff,
    + no_op_reason?
 
 state:
-  reads(farplane/harness.md, farplane/goals.yaml?, farplane/metrics.yaml?,
+  reads(farplane/harness.yaml, farplane/metrics.yaml?, .farplane/metrics/**?,
         tickets/TASK-*/{ticket,program,progress}.md,
         tickets/archive/TASK-*/{ticket,program,progress}.md,
         ticket-owned artifacts, previous Dogfood report, current Pulse/Interval/
@@ -74,8 +74,8 @@ routes:
   doc-advisor | eval | optimize-with-human | review | pulse-update
 
 fails:
-  treating cutoff as an experiment deadline; scoring a matured Reward row;
-  hiding due-but-unscored work; losing archived outcomes; duplicating a prior
+  treating cutoff as an experiment deadline; deciding a matured Reward row;
+  hiding due-check-in-pending work; losing archived outcomes; duplicating a prior
   rejected pattern without new evidence; blocking unrelated immediate proof
   merely because delayed work is monitoring; creating conflicting experiments;
   creating a bare ticket or delayed packet without executable Check-In Program;
@@ -103,25 +103,29 @@ the packets; the worker executes the original `program.md`.
 - [ ] 2. Derive the portfolio snapshot without checking anything in.
   - [ ] For each experiment, read Reward rows, Metric Provider, Check-In
         Program, wake/stop/rollout policy, progress tail, and cited evidence.
-  - [ ] Classify state at `cutoff` as settled, pending, monitoring,
-        due-but-unscored, inconclusive, accepted, killed, iterating, or source
-        gap; results settled after cutoff belong to the next report.
+  - [ ] Classify canonical Reward state at `cutoff`: blank decisions are
+        pending or due, `monitor` decisions are monitoring or monitor-due, and
+        only `accept` or `kill` are settled. Results settled after cutoff belong
+        to the next report.
+  - [ ] Treat `reward_id` as row identity. Aggregate terminal decisions and
+        their recorded evidence without changing `actual_result`, `decision`,
+        evaluation keys, or check-in time.
   - [ ] Build the outcome ledger, active/pending view, transfer candidates, and
         rejected patterns. Do not infer a terminal result that the ticket has
         not recorded.
 - [ ] 3. Write the dated report before proposing new work.
   - [ ] Use `templates/dogfood-report.md`; carry prior-report transfer/rejection
         status forward only when confirmed by canonical tickets and evidence.
-  - [ ] Record due-but-unscored gaps, attribution/proof quality, feature/system
+  - [ ] Record due-check-in-pending gaps, attribution/proof quality, feature/system
         findings, and a no-execution receipt; index the report when available.
 - [ ] 4. Compute capacity and rank candidates.
   - [ ] Count every nonterminal experiment toward total WIP, including
-        monitoring and due-but-unscored work. Compute
+        monitoring and due-check-in-pending work. Compute
         `available_slots = min(wave_size, max(0, wip_limit - active_wip))`.
   - [ ] Compute `available_delayed_slots = max(0,
         max_live_delayed - active_live_delayed)`; enforce it across the selected
         wave plus one active experiment per attributable surface. A
-        due-but-unscored experiment blocks dependent/conflicting supply only;
+        due-check-in-pending experiment blocks dependent/conflicting supply only;
         delayed monitoring does not block unrelated immediate toy/replay/eval
         work while total capacity remains.
   - [ ] Rank attributable hardening, refinement, docs, feature, policy,
@@ -171,6 +175,14 @@ the packets; the worker executes the original `program.md`.
 
 - `check_in_at <= cutoff` means Pulse can resume the original packet; it does
   not authorize Dogfood to score it.
+- `accept` and `kill` are the only settled Reward decisions. `monitor` remains
+  live and consumes experiment capacity until its updated check-in matures.
+- Dogfood aggregates canonical terminal outcomes; it never converts legacy
+  score fields, expected-reward declarations, or missing evidence into realized
+  value and never rescales a worker's decision.
+- Planner quality is derived by joining Pulse-admitted ticket IDs to eventual
+  Reward decisions in this weekly portfolio view. Do not create an independent
+  plan score, plan-wave registry, or real-time planner mutation loop.
 - An accepted toy result is evidence for a bounded transfer/pilot candidate,
   not permission for doctrine-wide rollout.
 

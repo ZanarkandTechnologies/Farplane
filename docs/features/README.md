@@ -26,7 +26,7 @@ patch. If a `FEAT-*` handle is too small, stale, or
 implementation-detail-shaped to deserve a page here, delete the handle and
 remove its template, source, and ticket references.
 
-The project-level feature policy lives in [`farplane/harness.md`](../../farplane/harness.md).
+The project-level feature policy lives in [`farplane/harness.yaml`](../../farplane/harness.yaml).
 In short: a Farplane feature must be relevant to Farplane as an agentic
 maintenance tool for harnesses. It should help an operator or agent maintain,
 evaluate, steer, prove, report on, or productize harness behavior.
