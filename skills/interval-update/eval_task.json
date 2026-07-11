@@ -1,133 +1,40 @@
 [
   {
-    "id": "interval_tracked_feature_review_calls_dogfood",
-    "title": "Daily interval delegates tracked feature review",
-    "query": "A daily interval has tracked_feature_review enabled and the generated feature registry contains a feature with a non-empty track prompt plus experimental=true feature rows. What should interval-update do before final planning?",
+    "id": "interval_daily_bau_report_only",
+    "title": "Daily compresses BAU evidence without planning direction",
+    "query": "Run Daily Interval over tickets, Pulse reports, and the latest completed Feed Scout report. The Feed report contains three exciting new opportunities. What may Interval write?",
     "reference_points": [
-      "Reads docs/features/registry.jsonl and docs/systems/registry.jsonl when available",
-      "Finds active registry rows whose track value is a non-empty string and active feature rows with experimental=true",
-      "Excludes retired or superseded feature rows from dogfood-review targets even if they still have stale track text",
-      "Calls dogfood-review for the review window instead of embedding all dogfood or experimental feature logic in interval-update",
-      "Requires the dogfood report to be written under .farplane/reports/dogfood-review/",
-      "Links or summarizes the dogfood report in the interval report before final next-window planning",
-      "Surfaces the dogfood improvement ticket path or candidate in the interval report when dogfood-review returns one",
-      "Does not split dogfood findings into per-feature tickets from interval-update",
-      "Does not autostart impl-plan, Goal, Pulse execution, automation sync, or worker spawn from the dogfood improvement ticket path or candidate"
+      "Writes one dated Daily BAU report with Core report frontmatter and a Markdown Problems ledger",
+      "Reads the completed Feed Scout report as context but does not run Feed Scout",
+      "May report opportunity signals as observations but does not create new-direction tickets from them",
+      "Does not run priority planning, leverage planning, Dogfood Review, reward check-ins, Goal, Pulse, or workers",
+      "Returns source gaps when a configured completed provider report is missing"
     ],
-    "tags": ["interval-update", "dogfood-review", "track", "reports"]
+    "tags": ["interval-update", "daily", "bau", "ownership"]
   },
   {
-    "id": "interval_daily_report_before_plan",
-    "title": "Configured short interval writes report before planning",
-    "query": "A project automation calls interval-update for a short review window and next-window plan, with context_refs asking for the latest report from a longer planning interval. What should it load, write, and avoid?",
+    "id": "interval_same_run_problem_stays_ledger_only",
+    "title": "Same-run problem cannot become an Interval ticket",
+    "query": "A Weekly run discovers a serious documentation drift problem for the first time. It is concrete and no ticket exists. maintenance_ticket_limit is 2. What happens?",
     "reference_points": [
-      "Loads default harness charter, goals, tickets, memory, Pulse reports, interval reports, and PM thread refs",
-      "Resolves the configured latest longer-interval report as parent context when present and labels it as a source gap when missing",
-      "Writes a date-stamped .farplane/reports/interval/<interval_id>/<timestamp>.md report before durable goals or ticket mutation",
-      "Includes Core report frontmatter with ref, kind interval-report, created_at, and ui_summary",
-      "Plans only the configured planning_window",
-      "Does not select due jobs, update scheduler state, or perform broad strategy replanning"
+      "Records the problem as a new unchecked Markdown Problems row with current evidence",
+      "Does not create a ticket because no prior finalized report, ticket, review, or run artifact recorded the problem",
+      "Leaves the finalized report as an immutable snapshot after completion",
+      "Allows a later Interval to carry the unresolved row forward and reconsider it"
     ],
-    "tags": ["interval-update", "configured-interval", "reports"]
+    "tags": ["interval-update", "maintenance", "same-run", "ledger"]
   },
   {
-    "id": "interval_configured_goals_delta_gates",
-    "title": "Configured interval gates material goals deltas",
-    "query": "An interval review wants to change the north star after reading configured interval_output_refs from another interval inside the review window. What gates apply?",
+    "id": "interval_resurfaces_prior_evidenced_maintenance",
+    "title": "Weekly resurfaces bounded known maintenance",
+    "query": "A prior finalized Daily report and a failed review both record the same unresolved validator defect. No active ticket owns it and the Weekly cap is one. What gates apply?",
     "reference_points": [
-      "Loads farplane/harness.md, farplane/goals.yaml, and the configured interval_output_refs inside the review window",
-      "Labels missing or stale evidence as source gaps",
-      "Writes the interval report before mutating farplane/goals.yaml",
-      "Requires approval for static charter, north-star, KPI, strategy-axis, quarterly, yearly, or durable milestone changes",
-      "Routes executable changes into tickets or Goal Advisor handoffs"
+      "Writes the Weekly report before any ticket delta",
+      "Confirms the defect is corrective maintenance rather than new direction or a harness experiment",
+      "Dedupes against active tickets and requires executable scope, proof, stop condition, and local authority",
+      "Creates or updates at most one maintenance ticket and links it from the Problems ledger",
+      "Does not execute the ticket or start Goal or Pulse"
     ],
-    "tags": ["interval-update", "goals-delta", "configured-context"]
-  },
-  {
-    "id": "interval_context_refs_do_not_duplicate_defaults",
-    "title": "Interval context refs stay additive",
-    "query": "A project automation calls interval-update with project_root, interval_id, windows, one extra customer-doc ref, and codex_attention_drift enabled. What should the automation include, and what should the skill resolve itself?",
-    "reference_points": [
-      "Automation passes project_root, interval_id, review_window, planning_window, additive context_refs, and report_workflows only",
-      "interval-update resolves default harness charter, goals, tickets, memory, Pulse reports, interval reports, PM manifest, and report roots",
-      "context_refs may add parent context, interval outputs, extra refs, or true replacements",
-      "report_workflows controls optional workflows such as codex_attention_drift instead of the skill assuming daily or weekly behavior",
-      "The automation should not restate every default Farplane path or gate",
-      "Project-specific profiles stay in automation prompts or project docs, not generic skill first-load refs"
-    ],
-    "tags": ["interval-update", "context-refs", "defaults"]
-  },
-  {
-    "id": "interval_planned_tickets_require_expected_reward",
-    "title": "Interval-planned tickets carry expected reward",
-    "query": "A Daily interval decides the next window needs two worker tickets from products.json. What must the ticket deltas include before Pulse can treat them as AI-planned work?",
-    "reference_points": [
-      "Every planned ticket delta includes frontmatter rewards.kpi with the selected KPI IDs",
-      "Every planned ticket delta includes a parseable ## Reward fenced YAML block",
-      "Each reward block includes kpi_rewards[] entries with kpi_id and expected_reward text",
-      "The frontmatter rewards.kpi IDs align with the body Reward.kpi_rewards[].kpi_id values",
-      "At least one KPI ID exists in farplane/bindings.yaml and maps to a product or workflow in farplane/products.json",
-      "Each reward block includes a guard describing what does not count as reward",
-      "If expected reward cannot be named, the interval emits Pulse guidance or a planning blocker instead of creating a rewardless ticket"
-    ],
-    "tags": ["interval-update", "ticket-planning", "reward"]
-  },
-  {
-    "id": "interval_reports_are_dated_not_latest",
-    "title": "Interval reports are date-stamped",
-    "query": "A configured interval run succeeds. Where should the report go and how should consumers find the newest one?",
-    "reference_points": [
-      "Writes a date-stamped report under .farplane/reports/interval/<interval_id>/",
-      "Includes ref, kind, created_at, and ui_summary frontmatter for the Core reports index",
-      "Does not use latest.md as the canonical report",
-      "Consumers find the newest report by timestamp sorting or explicit links in subsequent reports",
-      "No tracked config or scheduler state is mutated just to store last_report"
-    ],
-    "tags": ["interval-update", "reports"]
-  },
-  {
-    "id": "interval_first_load_owns_parent_contract",
-    "title": "Interval first-load contract owns orchestration",
-    "query": "An agent loads only interval-update/SKILL.md for a Daily interval with plan_progress, goal_drift, reward_checkins, and priority_planning enabled. What core execution contract must it follow before opening workflow references?",
-    "reference_points": [
-      "Treats Daily and Weekly as configuration wrappers that supply interval_id, windows, context refs, and workflow flags",
-      "Builds or summarizes one context bundle with summary_context and raw_evidence_pointers",
-      "Spawns one read-only subagent lane for each enabled report workflow by default",
-      "Uses summary_context first and opens raw_evidence_pointers only for cited proof, source gaps, or explicit exceptions",
-      "Keeps parent ownership of context resolution, final synthesis, report writing, and allowed post-report deltas",
-      "Writes the dated interval report before durable ticket, product, or goals mutation",
-      "Does not treat Pulse as an interval workflow or move Pulse board admission, worker handoffs, or reward ledgers into interval-update"
-    ],
-    "tags": ["interval-update", "first-load", "subagents", "context-bundle", "pulse-boundary"]
-  },
-  {
-    "id": "interval_workflow_lanes_are_read_only_by_default",
-    "title": "Enabled workflows run as read-only lanes",
-    "query": "A Weekly interval enables plan_progress, ticket_board_drift, feedback_obligations, docs_consolidation, skill_hardening, and priority_planning. Which agent owns each workflow and what may those lanes mutate?",
-    "reference_points": [
-      "The parent interval agent spawns isolated read-only subagent lanes for enabled workflows by default",
-      "Workflow lanes read the context bundle and consume summary_context before opening raw evidence pointers",
-      "Workflow lanes cite evidence or source gaps when opening raw pointers",
-      "Workflow lanes return findings or handoffs for the parent interval report",
-      "Workflow lanes must not mutate tickets, goals, product files, docs, skills, automation state, external systems, or ledgers",
-      "The parent interval agent owns final synthesis, report writing, and any explicitly allowed post-report mutations",
-      "Skill hardening or docs consolidation lanes may return handoffs but must not perform skill-maintenance or docs edits inline"
-    ],
-    "tags": ["interval-update", "workflow-lanes", "subagents", "read-only"]
-  },
-  {
-    "id": "interval_reward_checkins_gated_exception",
-    "title": "Reward check-ins are the gated write exception",
-    "query": "A Daily interval has reward_checkins enabled and finds a due ticket reward item with missing actual_result and reward_score. How should interval-update handle this without weakening the read-only lane rule?",
-    "reference_points": [
-      "Runs the reward_checkins due-item helper inline only as mechanical discovery",
-      "Uses a bounded analyzer lane over due items and cited evidence to ground actual_result and score",
-      "Allows patching only ticket Reward.kpi_rewards[].actual_result, reward_score, and reward_score_reason",
-      "Does not edit expected_reward, goals, products, automation state, or unrelated ticket fields",
-      "Reports due, scored, low-score, source-gap, and legacy-missing-check-in counts in the interval report",
-      "Creates retro ticket candidates only when a low score reveals real follow-up work",
-      "Preserves report-first and evidence-citation gates for any follow-up planning"
-    ],
-    "tags": ["interval-update", "reward-checkins", "write-exception", "tickets"]
+    "tags": ["interval-update", "weekly", "maintenance", "report-first"]
   }
 ]

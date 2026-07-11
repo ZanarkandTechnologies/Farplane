@@ -1,7 +1,7 @@
 # Feed Scout Codex Automation Prompt
 
-Call the `feed-scout` skill for the configured tracked profiles and harness
-resources.
+Call the `feed-scout` skill as one separate bounded automation. Do not call
+Interval Update from this run.
 
 Configured local surfaces:
 
@@ -10,43 +10,29 @@ Configured local surfaces:
 - ingestion ledger: `.farplane/feed-scout/ledger.jsonl`
 - proposal ledger or local inbox: `.farplane/feed-scout/proposals.jsonl`
 - report root: `.farplane/reports/feed-scout`
+- local ticket cap and write policy: supplied by this automation
 
 Steps:
 
-1. Load the `feed_scout` config named by the automation.
-2. Validate configured profile/resource rows before discovery.
-3. Validate that every harness resource references existing tracked entities and
-   that child resources reference an existing parent resource.
-4. Discover new content for enabled profiles and enabled harness resources
-   using the configured fetch method.
-5. Normalize discovered content and compute canonical keys. Use
-   `skills/feed-scout/scripts/normalize_items.py` or
-   `skills/feed-scout/scripts/dedupe_key.py` only for deterministic helper
-   work when useful.
-6. Skip seen URLs and queue new or changed content items.
-7. Extract content with `summarize`, repo inspection, or existing thread text.
-8. Run `harness-scout` on eligible content items and cite `entity_ids` when
-   several resources come from the same person or organization.
-9. Use `best-of-worlds` when several scout runs point at the same pattern.
-10. Write proposal rows to Notion or a local review inbox only when the
-    destination is explicitly configured.
-11. Compile and write `.farplane/feed-scout/daily/feed-YYYY-MM-DD.json`,
-    `.farplane/feed-scout/daily/latest.json`,
-    `.farplane/reports/feed-scout/<timestamp>.md`, and
-    `.farplane/reports/feed-scout/latest.json` directly from the Feed Scout
-    agent when those paths are configured.
-    - The Markdown report frontmatter must include `ref`, `kind: feed-scout`,
-      `created_at`, and `ui_summary`.
-    - Use `ref: reports/feed-scout/<timestamp>` for a standalone Feed Scout
-      report, or `ref:
-      reports/interval/<interval_id>/<timestamp>/feed-scout` when the report is
-      an interval child report.
-    - Run `farplane reports index --project-root <project_root>` after writing
-      the Markdown report when the CLI is available.
-12. Validate the feed artifact with
-    `skills/feed-scout/scripts/validate_daily_feed.py`.
-13. Record evidence paths and blockers in the run summary.
+1. Load and validate configured profile/resource rows and the bounded window.
+2. Discover only configured sources using Feed Scout's acquisition order.
+3. Normalize items, compute canonical keys, dedupe, extract, and scout eligible
+   items. Use helper scripts only for deterministic normalization/validation.
+4. Compile the UI-ready daily feed and the dated Feed Scout report. The report
+   frontmatter must include `ref: reports/feed-scout/<timestamp>`, `kind:
+   feed-scout`, `created_at`, and `ui_summary`.
+5. Write and validate the feed/report artifacts, then index reports when the
+   Farplane CLI is available.
+6. Only after the report exists, project up to the configured ticket cap.
+   Require canonical source evidence, strong signal, active-ticket dedupe,
+   executable scope, Reward, proof, stop condition, authority, and ticket
+   quality. Link created and rejected candidates back into the report.
+7. Default tickets to `status: awaiting_review`. Use `status: todo` only when this
+   automation's explicit write policy grants automatic local admission and no
+   human or external-action gate remains.
+8. Return report path, feed path, ticket paths, rejections, source gaps, cap,
+   and a no-execution receipt.
 
-Do not poll forever, launch Codex, push code, spend API budget, or create live
-Notion databases unless the automation configuration explicitly authorizes that
-action.
+Do not poll forever, run Interval, launch Goal/Pulse/workers, implement created
+tickets, publish, perform outreach, spend API budget, or create/write live
+Notion surfaces unless the automation explicitly authorizes that action.

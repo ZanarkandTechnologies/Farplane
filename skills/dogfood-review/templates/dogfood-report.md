@@ -4,128 +4,143 @@ ref: reports/dogfood-review/<timestamp>
 project: <project>
 created_at: <timestamp>
 review_window: <start>..<end>
+portfolio_cutoff: <timestamp>
+previous_report_ref: <path or null>
 status: draft
-ui_summary: "<one concise CEO-readable summary under 100 words>"
-policy_ref: farplane/harness.md#Feature-Policy
-method: inline_review | per_feature_reviewer_lanes | reviewer_unavailable
+ui_summary: "<one concise self-improvement summary under 100 words>"
 context_ref: <path or null>
-tracked_refs:
-  - <FEAT-#### or SYS-####>
-experimental_refs:
-  - <FEAT-####>
-skipped_refs:
-  <FEAT-#### or SYS-####>: retired | superseded | out_of_scope | explicit_filter
-decisions:
-  <FEAT-#### or SYS-####>: continue | adjust | cap | pause | rollback | graduate | split_feature | merge | source_gap
-reviewer_tas:
-  <FEAT-#### or SYS-####>: TAS-A | TAS-B | TAS-C | TAS-D | not_run
+active_experiment_refs: []
+recent_archived_experiment_refs: []
+tracked_refs: []
 source_gaps: []
-improvement_ticket:
-  mode: created | candidate | not_applicable | blocked
-  path: <tickets/TASK-XXXX/ticket.md or null>
-  candidate_ref: <section heading or null>
-  no_autostart_receipt: "no impl-plan, Goal, Pulse execution, automation sync, or worker spawn invoked"
+experiment_goal_packets: []
+no_execution_receipt: "no implementation, Goal, Pulse, worker, check-in, promotion, rollback, or external action invoked"
 ---
 
-# Dogfood Review Report
+# Weekly Self-Improvement Portfolio Report
 
 ## Summary
 
-- `decision:`
-- `policy_basis:`
-- `why_now:`
-- `accepted_tradeoff:`
+- `portfolio_result:`
+- `most_material_learning:`
+- `portfolio_cutoff:`
+- `prior_report_cursor:`
+- `next_wave:`
 
-## Tracked Items
+The cutoff is a snapshot boundary, not an experiment deadline. State recorded
+after the cutoff belongs to the next report.
 
-| Ref | Experimental | Method | Decision | TAS | Track checklist | Evidence | Source gaps |
-| --- | --- | --- | --- | --- | --- | --- | --- |
+## Experiment Outcome Ledger
 
-## Skipped Items
+| Experiment | Surface | Feedback | State at cutoff | Expected reward | Actual / score | Attribution | Decision | Evidence |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
 
-| Ref | Reason | Evidence | Use as historical evidence for |
-| --- | --- | --- | --- |
+Allowed state: `pending`, `monitoring`, `due_but_unscored`, `inconclusive`,
+`accepted`, `killed`, `iterating`, `source_gap`. Decisions are observations of
+canonical ticket state; this report never performs the check-in.
 
-## Feature Policy Check
+## Active And Pending Portfolio
 
-- `policy_ref:` `farplane/harness.md#Feature-Policy`
-- `feature_relevance:` how the reviewed behavior helps maintain, evaluate,
-  steer, prove, report on, or productize autonomous harness behavior
-- `policy_source_gap:` none | gap
+| Experiment | Surface | State | Next check-in / wake | Evidence minimum | Conflict set | Blocks new supply? |
+| --- | --- | --- | --- | --- | --- | --- |
 
-## Output Volume
+Every nonterminal row counts toward total WIP. Monitoring or due-but-unscored
+work blocks only dependent or conflicting supply, subject to the per-surface
+and delayed-live caps.
 
-| Ref | Produced in window | Useful | Duplicate / vague | Review burden | Notes |
-| --- | --- | --- | --- | --- | --- |
+## Due-But-Unscored Gaps
 
-## Ticket Batch Review
-
-Group high-volume tickets by pattern. Do not create one long section per ticket
-unless a specific ticket is the strongest evidence.
-
-| Pattern | Tickets | Verdict | Evidence |
-| --- | --- | --- | --- |
-
-## Evidence Reviewed
-
-| Source | Status | Key signal | Evidence |
-| --- | --- | --- | --- |
-
-## Decisions And Guidance
-
-| Ref | Decision | Guidance | Owner | Follow-up |
+| Experiment / Reward row | Due at | Missing score/evidence | Effect | Safe action |
 | --- | --- | --- | --- | --- |
 
-Allowed decisions: `continue`, `adjust`, `cap`, `pause`, `rollback`,
-`graduate`, `split_feature`, `merge`, `source_gap`.
+## Transfer Candidates
 
-## Improvement Ticket
+| Source experiment | Proven pattern | Target surface | Attribution / guards | Required bounded proof | Verdict |
+| --- | --- | --- | --- | --- | --- |
 
-Use this section for material tracked-feature reviews. Produce exactly one
-consolidated improvement ticket path or one complete candidate for the report;
-do not create one ticket per feature.
+An accepted toy/eval is normally evidence for a bounded transfer or live pilot,
+not permission for automatic global rollout.
 
-- `mode:` created | candidate | not_applicable | blocked
-- `ticket_path:` `tickets/TASK-XXXX/ticket.md` | null
-- `candidate_ref:` section-local candidate below | null
-- `no_autostart_receipt:` no `impl-plan`, Goal, Pulse execution, automation
-  sync, or worker spawn was invoked by this report
+## Rejected Patterns
 
-### Candidate Or Created Ticket Summary
+| Pattern | Source experiment / report | Rejection evidence | Reconsider only if |
+| --- | --- | --- | --- |
 
-```text
-title:
-phase: planning
-status: review
-ready: false
-approval_required: true
-reward:
-  kpi_rewards:
-    - kpi_id:
-      expected_reward:
-  guard:
-source_report:
-context_ref:
-skipped_refs:
-findings_by_feature:
-  - feature_ref:
-    track_prompt_summary:
-    reviewer_tas:
-    issue:
-    proposed_repair:
-    evidence_refs:
-cross_cutting_repairs:
-done_proof:
-links:
-```
+## Reward, Proof, And Feature Review
 
-## Interval Summary
+| Ticket / tracked ref | Expected | Actual | Proof quality | Regression / review | Finding or gap |
+| --- | --- | --- | --- | --- | --- |
 
-Use this section as the snippet that Daily or Weekly Interval can copy or link.
+Tracked feature/system decisions may be `continue`, `adjust`, `cap`, `pause`,
+`rollback`, `graduate`, `split_feature`, `merge`, or `source_gap`.
 
-- `report_path:`
-- `top_decisions:`
-- `reviewer_tas:`
-- `improvement_ticket:`
-- `pulse_guidance:`
-- `source_gaps:`
+## Capacity Receipt
+
+- `experiment_wave_size:` 2
+- `experiment_wip_limit:` 3
+- `max_concurrent_live_delayed:` 1
+- `one_active_per_attributable_surface:` true
+- `active_nonterminal_wip:`
+- `active_live_delayed_wip:`
+- `raw_total_capacity:` `max(0, experiment_wip_limit - active_nonterminal_wip)`
+- `available_packet_slots:` `min(experiment_wave_size, raw_total_capacity)`
+- `available_delayed_slots:` `max(0, max_concurrent_live_delayed - active_live_delayed_wip)`
+- `occupied_surfaces:`
+- `review_or_operator_capacity_constraint:`
+- `capacity_verdict:`
+
+The delayed-live cap limits new delayed pilots only. An unrelated immediate toy,
+replay, or eval may use remaining total capacity.
+
+## Ranked Improvement Candidates
+
+| Rank | Candidate | Surface | Feedback / proof route | Objective impact | Compounding value | Cost / risk / review load | Interference / dedupe | Verdict |
+| ---: | --- | --- | --- | --- | --- | --- | --- | --- |
+
+Verdicts: `selected`, `rejected`, `deferred`, `duplicate`, `interferes`,
+`source_gap`.
+
+## Experiment Goal Packet Wave
+
+| Packet | Feedback | Surface | Admission | Reward signal | Check-in / wake | Execution route | Selection evidence |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+
+- `goal_packets_created:` 0..<available_packet_slots>
+- `packet_paths:`
+- `no_op_reason:` none | <reason>
+
+### Packet Requirements
+
+Each packet is one canonical folder containing `ticket.md`, `program.md`, and
+`progress.md`; it is not a parent/child ticket tree.
+
+- Every ticket declares an attributable surface, hypothesis, baseline, Reward
+  expectation/guard, metric provider, proof route, budget, stop conditions, and
+  promotion/rollback policy.
+- Immediate packets use an immediately available signal and have no future
+  `check_in_at`, event wake, or delayed Check-In Program debt.
+- Delayed packets set `check_in_at` or an event wake and fill `program.md`
+  Check-In Program `inputs`, ordered `procedure`, matured-row-only `writeback`,
+  `decisions`, `idempotency`, and `source_gap`, backed by the packet's Metric
+  Provider, Heartbeat Policy, Stop Conditions, and Rollout Policy.
+- Packets default to `status: awaiting_review` unless explicit local write policy grants
+  Pulse admission with no remaining human/external gate.
+
+## Source Gaps
+
+| Gap | Effect | Safe decision |
+| --- | --- | --- |
+
+## Receipts
+
+- `active_and_recent_archive_reviewed_before_candidates:` yes | no
+- `previous_report_used_as_cursor_only:` yes | no | not_available
+- `report_written_before_selection:` yes | no
+- `cutoff_applied_without_forcing_terminal_decisions:` yes | no
+- `total_wip_cap_respected:` yes | no
+- `delayed_live_cap_respected:` yes | no
+- `one_active_per_surface_respected:` yes | no
+- `non_interfering_immediate_capacity_preserved:` yes | no | not_applicable
+- `goal_packets_created:` 0..<available_packet_slots>
+- `all_delayed_packets_have_executable_checkin_program:` yes | no | not_applicable
+- `experiment_executed_or_checked_in:` no

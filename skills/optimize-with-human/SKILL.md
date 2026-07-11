@@ -248,9 +248,10 @@ hypothesis_cycle:
   promotion_decision: keep_local | rerun | harden_skill | discard
 ```
 
-For Taste Loop, planning experiments usually present one to three TasteProposal
-artifacts and execution hypothesis cycles present the approved proposal's generated
-artifact. Use the fixed AGI Toy Shop scenario when no live scenario is supplied.
+For a self-improvement human-feedback ticket, planning experiments usually
+present one to three concrete proposals and execution cycles present the
+approved proposal's generated artifact. Use the fixed AGI Toy Shop scenario
+when no live scenario is supplied.
 
 Minimum TasteProposal shape for non-trivial planning feedback:
 

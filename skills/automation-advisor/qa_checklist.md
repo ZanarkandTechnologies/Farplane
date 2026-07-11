@@ -124,7 +124,14 @@ automation_prompt_qa(automation_prompt, called_skill, project_context)
    - Fail: material automation behavior self-approves without evidence or a
      review handoff.
 
-17. `workflow_source_routing`
+17. `single_heartbeat`
+   - Pass: exactly one desired-state record uses `kind = "heartbeat"`, it
+     invokes `$pulse-update`, and Feed Scout, Interval, Dogfood, and
+     maintenance records use `kind = "cron"`.
+   - Fail: another workflow becomes a heartbeat or ticket execution is split
+     across scheduled jobs.
+
+18. `workflow_source_routing`
    - Pass: optional workflows that need telemetry, feedback, opportunity,
      metric, or status inputs receive explicit source refs in the `Reads` block
      or record source gaps.

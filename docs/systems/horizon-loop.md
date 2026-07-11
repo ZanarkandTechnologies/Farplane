@@ -3,7 +3,7 @@ title: "Horizon Loop"
 status: active
 owner: farplane-framework
 created_at: 2026-06-26
-updated_at: 2026-06-27
+updated_at: 2026-07-11
 tags:
   - farplane
   - systems
@@ -12,13 +12,14 @@ refs:
   - docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md
   - docs/features/FEAT-0065-pulse-and-interval-automation.md
   - docs/features/FEAT-0066-product-scoped-pulse-loops.md
+  - docs/features/FEAT-0071-project-work-pulse.md
   - docs/features/FEAT-0067-daily-interval-review-reports.md
 system_record_json: |
   {
     "id": "SYS-0003",
     "name": "Horizon Loop",
     "status": "implemented",
-    "summary": "The longer-running project loop that coordinates goals, Goal Packets, Pulse, Interval, backoff, PR watching, feedback, and horizon-level ticket supply.",
+    "summary": "The project control loop with one Work Pulse heartbeat plus bounded scheduled ticket sources for BAU reports, source scouting, feedback, and self-improvement.",
     "owner_spec": "docs/systems/horizon-loop.md",
     "primary_feature_ref": "FEAT-0032",
     "feature_refs": [
@@ -26,23 +27,24 @@ system_record_json: |
       "FEAT-0032",
       "FEAT-0065",
       "FEAT-0066",
-      "FEAT-0067"
+      "FEAT-0067",
+      "FEAT-0071"
     ],
     "refs": [
       "docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md",
       "docs/features/FEAT-0065-pulse-and-interval-automation.md",
       "docs/features/FEAT-0066-product-scoped-pulse-loops.md",
-      "docs/features/FEAT-0067-daily-interval-review-reports.md"
+      "docs/features/FEAT-0067-daily-interval-review-reports.md",
+      "docs/features/FEAT-0071-project-work-pulse.md"
     ],
-    "last_verified": "2026-07-07"
+    "last_verified": "2026-07-11"
   }
 ---
 # Horizon Loop
 
-The longer-running project loop that coordinates goals, Goal Packets, Pulse, Interval,
-backoff, PR watching, feedback, and horizon-level ticket supply. This page is the
-product-layer owner for that subsystem: it explains what belongs here, which feature
-specs make up the stack, and where adjacent responsibilities should move.
+The project control loop that coordinates Goal Packets, one Work Pulse
+heartbeat, and bounded scheduled ticket sources without becoming a hidden
+daemon.
 
 ```text
 horizon_loop(change, repo_state?) -> owned_feature_set + boundary_decision + maintenance_signal
@@ -54,13 +56,13 @@ horizon_loop(change, repo_state?) -> owned_feature_set + boundary_decision + mai
 - Status: `implemented`
 - Primary feature: `FEAT-0032`
 - Owner spec: `docs/systems/horizon-loop.md`
-- Feature count: `5`
+- Feature count: `6`
 
 ## Role
 
-Horizon Loop owns recurring and longer-running autonomy: Goal Packets, Pulse, Interval,
-Rhythm, Horizon, backoff, PR watching, and ticket-supply learning. It decides the next
-bounded move without turning Farplane into a hidden daemon.
+Horizon Loop owns recurring and longer-running autonomy: Goal Packets, one Work
+Pulse, scheduled BAU reports, backoff, PR watching, and the shared ticket-board
+handoff from Feed Scout, Dogfood, and operator sources.
 
 ## Feature Docs
 
@@ -69,22 +71,27 @@ bounded move without turning Farplane into a hidden daemon.
 - [FEAT-0065 Pulse and interval automation](../features/FEAT-0065-pulse-and-interval-automation.md)
 - [FEAT-0066 Product-scoped Pulse loops](../features/FEAT-0066-product-scoped-pulse-loops.md)
 - [FEAT-0067 Daily interval review reports](../features/FEAT-0067-daily-interval-review-reports.md)
+- [FEAT-0071 Project Work Pulse](../features/FEAT-0071-project-work-pulse.md)
 
 ## What Belongs Here
 
-Goal-backed continuation, pulse actions, interval reports, horizon recalibration,
-adaptive waits, reward closure, and learning signals that create or reshape ticket
-supply.
+Goal-backed continuation, Pulse admission/dispatch/check-ins, BAU interval
+reports, horizon recalibration, adaptive waits, and visible automation cadence.
 
 ## What Belongs Elsewhere
 
-Single-ticket execution belongs in Work Loop; external invocation boundaries belong in
-Invocation Runtime; proof standards belong in Proof And Review.
+Single-ticket execution belongs in Work Loop; external source discovery belongs
+in Source And Sidecar Systems; experiment selection belongs in Self-Improvement
+And Learning; proof standards belong in Proof And Review.
 
 ## Operating Contract
 
 - Recurring loops must have visible prompts, reports, tickets, or automations as state owners.
 - Automations may no-op when no safe valuable action exists.
+- Exactly one base project automation is a heartbeat: Work Pulse. Other
+  recurring jobs are bounded cron/manual automations.
+- Scheduled sources may create bounded tickets only through their own evidence,
+  dedupe, proof, authority, and cap contracts; Work Pulse executes them.
 - Backoff and polling stay tracked and bounded.
 - Human authority remains required for ambiguous or high-risk direction.
 - Feature-level behavior belongs in `docs/features/FEAT-*.md`; this page owns the system boundary and feature grouping.
@@ -100,22 +107,27 @@ flowchart LR
   classDef added fill:#dcfce7,stroke:#15803d,color:#111827
   classDef retired fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d,stroke-dasharray: 5 3
 
-  goals["goals / products<br/>farplane/goals.yaml + products.json"]:::keep
+  goals["program / goals / tickets"]:::keep
   automations["automations<br/>farplane/automations.toml"]:::keep
   advisor["FEAT-0032<br/>goal-advisor"]:::changed
-  pulse["FEAT-0066<br/>product-scoped Pulse"]:::changed
-  interval["FEAT-0067<br/>daily interval reports"]:::changed
+  pulse["FEAT-0071<br/>project Work Pulse"]:::added
+  interval["FEAT-0067<br/>Daily / Weekly BAU reports"]:::changed
+  sources["Feed Scout + Dogfood + operator<br/>bounded ticket sources"]:::keep
   old["FEAT-0065<br/>retired umbrella automation"]:::retired
+  productPulse["FEAT-0066<br/>retired product-scoped Pulse"]:::retired
   outputs["tickets + reports<br/>bounded next work"]:::added
 
   goals --> advisor --> outputs
   automations --> pulse --> outputs
   automations --> interval --> outputs
+  sources --> outputs --> pulse
   old -. "superseded_by" .-> pulse
   old -. "superseded_by" .-> interval
+  productPulse -. "superseded_by" .-> pulse
 ```
 
-The Horizon Loop coordinates longer-running goals, Pulse, Interval, and report-backed ticket supply without becoming a hidden daemon.
+The Horizon Loop coordinates one execution heartbeat and several report-backed
+ticket sources without giving each source its own executor.
 
 ## Surfaces
 
@@ -123,6 +135,7 @@ The Horizon Loop coordinates longer-running goals, Pulse, Interval, and report-b
 - `docs/features/FEAT-0065-pulse-and-interval-automation.md`
 - `docs/features/FEAT-0066-product-scoped-pulse-loops.md`
 - `docs/features/FEAT-0067-daily-interval-review-reports.md`
+- `docs/features/FEAT-0071-project-work-pulse.md`
 
 ## Proof And Maintenance
 
@@ -137,3 +150,6 @@ The Horizon Loop coordinates longer-running goals, Pulse, Interval, and report-b
 - 2026-06-27: Migrated into the reader-first system-spec shape.
 - 2026-07-07: Made Goal Advisor the primary Horizon feature and added
   experimental product-scoped Pulse plus daily interval report handles.
+- 2026-07-10: Retired product-scoped Pulse and added one project Work Pulse.
+- 2026-07-11: Limited heartbeat ownership to Work Pulse and added bounded
+  scheduled BAU/source/experiment ticket sources.

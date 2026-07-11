@@ -2,30 +2,31 @@
 # Runtime logs, run IDs, last-run status, and automation memory stay outside tracked config.
 schema = "farplane_project_automations"
 framework_template_version = "1.0.0"
-updated_at = "2026-07-02"
+updated_at = "2026-07-11"
 owner = "automation-advisor"
 
 [[automations]]
-id = "farplane-ticket-update"
-name = "Farplane Pulse"
+id = "farplane-work-pulse"
+name = "Farplane Work Pulse"
 kind = "heartbeat"
 status = "active"
 prompt = '''
 Use $pulse-update.
 
-Run one bounded Farplane Pulse beat for the project. Reconcile recent outcomes,
-select at most the configured ready work, plan a bounded tactical next wave
-when the board is empty and the skill contract allows it, and write the normal
-Pulse report or blocker through the skill contract.
-When planning a next wave, name the current ops-memory belief, frontier,
-bottleneck, or reward signal being tested. Do not create a separate idea
-ledger.
+Run one bounded Work Pulse. Reconcile the board, make due ticket check-ins
+eligible, dispatch executable tickets up to the worker limit, and refill an
+empty BAU board through the next-wave planner. Pulse owns the shared admission,
+dispatch, review, and check-in route; workers execute ticket programs and
+produce proof. Do not implement ticket bodies inside the heartbeat.
 
 Params:
 project_root = "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane"
+wave_size = 3
+worker_limit = 1
+review_wip = 3
 
 Config source:
-farplane/automations.toml automation id="farplane-ticket-update"
+farplane/automations.toml automation id="farplane-work-pulse"
 '''
 [automations.target]
 thread_id = "019ed47a-3182-73f3-879f-a53797759b2a"
@@ -34,54 +35,63 @@ type = "interval"
 interval_minutes = 30
 
 [[automations]]
+id = "farplane-feed-scout"
+name = "Farplane Feed Scout"
+kind = "cron"
+status = "active"
+prompt = '''
+Use $feed-scout.
+
+Run the bounded daily Feed Scout from the configured sources. Write its dated
+report first, then create at most three deduped, source-backed opportunity
+tickets when the skill's evidence, authority, and ticket-quality gates pass.
+Do not execute those tickets; Work Pulse owns execution.
+
+Params:
+project_root = "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane"
+config_ref = "farplane/bindings.yaml#feed_scout"
+window = "last_24h"
+ticket_limit = 3
+write_policy = "local ticket creation allowed; default review-required unless no human or external gate remains"
+
+Config source:
+farplane/automations.toml automation id="farplane-feed-scout"
+'''
+[automations.target]
+workspace = "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane"
+[automations.schedule]
+type = "daily"
+timezone = "Asia/Kuala_Lumpur"
+time = "05:15"
+
+[[automations]]
 id = "farplane-daily-interval"
-name = "Farplane Daily Interval"
+name = "Farplane Daily BAU Review"
 kind = "cron"
 status = "active"
 prompt = '''
 Use $interval-update.
 
-Call:
-Run the daily Farplane interval. Reflect on the last 24 hours, close or update
-obvious reward signals, then plan the next 24 hours without executing ticket
-work directly.
-
-Reads:
-- latest weekly_interval report when present as parent context
-- latest feed-scout daily report when present as opportunity context
-
-Runs:
-- light reflection plus daily feed intake: plan progress, goal drift,
-  ticket board drift, tracked feature review, and one feed-scout run from
-  bindings config
-
-Gates:
-- write a date-stamped interval report
-- challenge the current Pulse/ops-memory belief: what worked, what failed, what
-  to keep, revise, drop, or double down under guard
-- keep the next-window plan small and executable
-- each selected priority must name the goal, bottleneck, or reward signal it
-  moves
-- emit Pulse constraints rather than doing ticket implementation
+Run the daily BAU review for the last 24 hours. Write a dated report with the
+incremental Problems ledger. You may create or update at most two maintenance
+tickets only for unresolved, deduped problems evidenced before this run.
+Same-run discoveries stay in the report. Do not plan new direction, review
+harness experiments, mutate rewards, or execute tickets.
 
 Params:
 project_root = "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane"
-interval_id = "daily_interval"
+interval_id = "daily"
 review_window = "last_24h"
-planning_window = "next_24h"
+maintenance_ticket_limit = 2
+write_policy = "local maintenance ticket creation allowed; default review-required unless no human or external gate remains"
 timezone = "Asia/Kuala_Lumpur"
+
+Reads:
+- latest completed Feed Scout report when present
+- latest completed weekly BAU report when present
 
 Config source:
 farplane/automations.toml automation id="farplane-daily-interval"
-
-Overrides:
-read_parent_interval = "latest weekly_interval report when present"
-plan_progress = "light"
-goal_drift = "light"
-ticket_board_drift = "light"
-tracked_feature_review = true
-feed_scout_daily = true
-feed_scout_config_ref = "farplane/bindings.yaml#feed_scout"
 '''
 [automations.target]
 workspace = "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane"
@@ -92,63 +102,32 @@ time = "05:33"
 
 [[automations]]
 id = "farplane-weekly-interval"
-name = "Farplane Weekly Interval"
+name = "Farplane Weekly BAU Review"
 kind = "cron"
 status = "active"
 prompt = '''
 Use $interval-update.
 
-Call:
-Run the weekly Farplane interval. Reflect on the last week, read child daily
-intervals when present, close or update prior reward signals, then plan the
-next week by working backwards from the goals and the bottlenecks that actually
-move the needle.
-
-Reads:
-- all daily_interval reports inside last_week when present
-- feed-scout reports inside last_week when present
-
-Runs:
-- reflection workflows for progress, attention, board state, feedback,
-  opportunities, goal drift, and metrics when sources exist
-- reward closure and compounding leverage review before final planning
-- final priority planning only after reflection and reward/leverage synthesis
-
-Gates:
-- write a date-stamped interval report
-- do not execute ticket implementation directly
-- challenge Pulse's operating belief from the last week of evidence before
-  setting next-week bets
-- select only 1-3 leverage bets when compounding leverage review is enabled
-- each selected lane or priority must name the goal, bottleneck, or reward
-  signal it is expected to move
-- emit Pulse constraints, ticket deltas, or Goal Advisor handoffs
+Run the weekly BAU review. Summarize the completed daily reports and ticket
+evidence into a dated report with the incremental Problems ledger. You may
+create or update at most three maintenance tickets only for unresolved,
+deduped problems evidenced before this run. Do not plan new direction, review
+harness experiments, mutate rewards, or execute tickets.
 
 Params:
 project_root = "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane"
-interval_id = "weekly_interval"
+interval_id = "weekly"
 review_window = "last_week"
-planning_window = "next_week"
+maintenance_ticket_limit = 3
+write_policy = "local maintenance ticket creation allowed; default review-required unless no human or external gate remains"
 timezone = "Asia/Kuala_Lumpur"
+
+Reads:
+- completed daily BAU reports inside the review window
+- completed Feed Scout reports inside the review window
 
 Config source:
 farplane/automations.toml automation id="farplane-weekly-interval"
-
-Overrides:
-read_child_intervals = "all daily_interval reports inside last_week"
-read_feed_scout_reports = "feed-scout reports inside last_week when present"
-plan_progress = true
-codex_attention_drift = true
-ticket_board_drift = true
-feedback_obligations = "when sources exist"
-opportunity_signals = "when sources exist"
-goal_drift = true
-metric_snapshot = "when sources exist"
-compounding_leverage_review = true
-skill_hardening = true
-skill_refinement = "when sources exist"
-docs_consolidation = "when sources exist"
-priority_planning = true
 '''
 [automations.target]
 workspace = "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane"
@@ -159,6 +138,47 @@ days = ["Mon"]
 time = "05:45"
 
 [[automations]]
+id = "farplane-weekly-self-improvement"
+name = "Farplane Weekly Self-Improvement"
+kind = "cron"
+status = "active"
+prompt = '''
+Use $dogfood-review.
+
+Run the weekly self-improvement review. Review active and completed experiment
+Goal Packets, recent archived experiment Goal Packets, the previous Dogfood
+report, reward outcomes, pending check-ins, and tracked feature/system
+evidence. Write the dated portfolio report first, then create a bounded,
+non-interfering next wave from available capacity. Do not start or check in an
+experiment; Work Pulse owns implementation and later check-ins by executing
+the original ticket's program.md.
+
+Params:
+project_root = "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane"
+window = "last_week"
+experiment_wave_size = 2
+experiment_wip_limit = 3
+max_concurrent_live_delayed = 1
+one_active_per_attributable_surface = true
+write_policy = "local experiment Goal Packet creation allowed; default review-required unless no human or external gate remains"
+
+Reads:
+- active experiment Goal Packets
+- recent archived experiment Goal Packets
+- previous dated Dogfood report when present
+
+Config source:
+farplane/automations.toml automation id="farplane-weekly-self-improvement"
+'''
+[automations.target]
+workspace = "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane"
+[automations.schedule]
+type = "weekly"
+timezone = "Asia/Kuala_Lumpur"
+days = ["Mon"]
+time = "06:00"
+
+[[automations]]
 id = "farplane-monthly-registry-consolidation"
 name = "Farplane Monthly Registry Consolidation"
 kind = "cron"
@@ -166,49 +186,14 @@ status = "active"
 prompt = '''
 Use $consolidate.
 
-Run the monthly Farplane registry consolidation review. This is a registry
-truth and ownership compression pass, not the weekly self-learning loop and not
-a direct skill/docs rewrite.
-
-Scope:
-target = [
-  "docs/skills/registry.jsonl",
-  "docs/features/registry.jsonl",
-  "docs/systems/registry.jsonl",
-  "docs/templates/registry.jsonl",
-  "docs/sources/registry.jsonl"
-]
-structure = "registry"
-
-Constraints:
-preserve_ids = true
-preserve_evidence = true
-no_delete = true
-owner_boundary = "registry rows only; route underlying artifact edits to their owning skill, doc, generator, or validator"
-
-Output:
-Write a dated report under:
-.farplane/reports/consolidation/registry/<YYYY-MM-DDTHHMMSSZ>.md
-
-The report should include:
-- registry inventory and source freshness
-- duplicate or overlapping row clusters
-- stale, orphaned, generated-output-drift, or wrong-owner rows
-- keep, merge, refactor, retire, or watch recommendations
-- owner-specific handoffs for skill-maintenance, documentation, eval,
-  generated registry validators, or tickets
-- loss check showing IDs, evidence, generated outputs, and owner boundaries were preserved
-
-Do not edit registries or underlying artifacts during this automation run.
-Do not create a metrics registry. Metrics were intentionally removed from this
-monthly workflow until repeated reports prove which measurements deserve a
-separate owner.
+Review the Farplane skill, feature, system, template, and source registries for
+duplication, staleness, and wrong ownership. Write a dated consolidation report
+without editing registries or creating tickets during this run.
 
 Params:
 project_root = "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane"
 review_window = "last_month"
-planning_window = "next_month"
-timezone = "Asia/Kuala_Lumpur"
+structure = "registry"
 
 Config source:
 farplane/automations.toml automation id="farplane-monthly-registry-consolidation"
@@ -220,90 +205,3 @@ type = "monthly"
 timezone = "Asia/Kuala_Lumpur"
 day_of_month = 1
 time = "06:15"
-
-[[automations]]
-id = "farplane-active-hours-taste-loop"
-name = "Farplane Active-Hours Taste Loop"
-kind = "heartbeat"
-status = "active"
-prompt = '''
-Use $taste-loop.
-
-Run one Taste Loop beat for Farplane when invoked by the scheduled active-hours
-automation or by explicit manual operator request. Read the UI-editable config
-from farplane/automations.toml, use Codex automation memory as the active worker
-ledger, and reuse or resume an active worker before creating any new worker.
-Select product-lane artifact workflows, not broad skill summaries. Run the
-Goal-backed founder loop: reuse the active ticket for the same
-`product_lane + workflow_id`, log a planning hypothesis cycle, create one to three
-TasteProposal planning artifacts, route idea feedback through the worker
-thread with optimize-with-human using `founder_lens=true`, then execute only
-approved proposals and request execution feedback from that same worker thread.
-TasteProposals must include customer/buyer, problem, wedge, offer/artifact,
-distribution angle, validation question, next bet if approved, pivot trigger if
-rejected, taste insight, artifact shape, core angle, execution beats, why it
-could win, cringe risks, references or taste pack, feedback question, and next
-step; hook-only cards are valid only when the artifact itself is just a hook.
-
-Do not create repo/runtime artifacts, worker threads, feedback cards, or
-Telegram messages for ordinary no-op beats.
-
-If an active worker is waiting for feedback, verify the worker thread is visible
-in the Codex app before trusting the ledger. If the worker id is missing or
-unfindable, update the ticket/progress with a blocker instead of claiming the
-thread is waiting. If the worker is visible and feedback is stale, send one
-phone-viewable Telegram reminder from that worker thread: include the proposal
-or artifact summary and one clear reply action in Telegram itself, prefer simple
-Telegram Markdown for Taste Loop feedback/reminder bodies, then record
-`last_reminder_at`, `reminder_count`, and send/fallback status.
-
-When a ticket declares `progress_unit = hypothesis_cycle`, run
-`python3 skills/taste-loop/scripts/check_progress_hypothesis_cycles.py
-<program.md> <progress.md>` before recording a waiting or terminal state. If it
-fails, update ticket/progress with a blocker instead of sending another
-feedback request.
-
-Params:
-project_root = "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane"
-top_n = 3
-max_actions_per_beat = 1
-max_open_feedback = 3
-impress_mode = true
-founder_lens = true
-max_planning_rollouts = 3
-default_scenario = "tickets/TASK-0237/artifacts/agi-toy-shop-scenario.md"
-target_groups = ["content-social", "content-video", "frontend", "harness", "self-improvement"]
-output_channels = ["local_report", "telegram_ready", "farplane_ui_ready"]
-cooldown_hours = 24
-reminder_after_hours = 3
-max_reminders_per_feedback = 2
-convergence_window = 5
-minimum_delta = "qualitative_threshold"
-log_noop = false
-
-Config source:
-farplane/automations.toml automation id="farplane-active-hours-taste-loop"
-
-Overrides:
-controller_memory = "Codex automation memory.md"
-worker_state = "reuse active_worker before creating any new worker"
-ticket_reuse = "reuse one active ticket/Goal Packet per product_lane + workflow_id until terminal completion, blocker, budget exhaustion, discard, closeout, or explicit operator request"
-worker_visibility = "verify worker_thread_ref is app-visible before recording waiting_for_feedback; otherwise block"
-reminder_policy = "for stale waiting feedback, send one phone-viewable Telegram Markdown reminder from the visible worker thread, then update progress and memory"
-worker_goal_packet = "ticket.md + program.md + progress.md before worker action"
-phase_policy = "TasteProposal planning artifacts before execution artifacts; use founder_lens=true; track idea_pass_rate and execution_pass_rate separately"
-progress_log = "worker progress.md records planning/execution hypothesis cycles: current hypothesis, attempt, artifact refs, human question, feedback result, learning, and next hypothesis"
-progress_validator = "run skills/taste-loop/scripts/check_progress_hypothesis_cycles.py before waiting or terminal state when progress_unit = hypothesis_cycle"
-feedback_budget = "count valid product-workflow feedback only; report legacy broad-skill/router feedback as hygiene"
-skill_promotion = "no target-skill hardening from one rejection; harden only repeated same-phase failure or reusable approved pattern"
-noop_policy = "no repo/runtime/thread/artifact/feedback/Telegram side effects unless diagnostic logging is enabled"
-'''
-[automations.target]
-thread_id = "019f0774-76d7-77d3-b7e5-0e9bb48e232f"
-[automations.schedule]
-type = "active_hours_interval"
-timezone = "Asia/Kuala_Lumpur"
-days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
-start = "10:00"
-end = "01:00"
-interval_minutes = 60

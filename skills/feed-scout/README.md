@@ -3,9 +3,9 @@
 `feed-scout` monitors tracked profiles and turns newly discovered content into
 Farplane proposal candidates.
 
-Start with [SKILL.md](SKILL.md). The interval path calls the Feed Scout skill
-itself; setup, review, and status are conversational workflows handled by the
-same skill when the operator asks for them.
+Start with [SKILL.md](SKILL.md). A separate bounded Feed Scout automation calls
+the skill directly; Interval only reads completed Feed Scout reports as BAU
+context. Setup, review, and status remain conversational workflows.
 
 Validation helpers:
 
@@ -21,6 +21,11 @@ project config, acquiring source evidence, calling other skills/tools, and
 judging significance. Scripts in this package are deterministic helpers for
 validation, dedupe, and normalization; they are not fetchers, rankers, or daily
 feed writers.
+
+The dated report is written before any ticket projection. Afterward Feed Scout
+may create up to the configured cap of source-backed, deduped, executable
+tickets that pass Reward, proof, stop, authority, and ticket-quality gates. It
+never starts the created work.
 
 Daily feed items should answer `why_care_today` and include `today_delta`,
 `novelty`, `actionability`, `source_snapshot`, optional bookmark-card `embed`,

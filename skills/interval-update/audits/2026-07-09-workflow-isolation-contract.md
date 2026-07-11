@@ -30,7 +30,7 @@ kind: skill-audit
 - `skills/interval-update/SKILL.md`
 - `skills/interval-update/references/interval-update.md`
 - `skills/interval-update/templates/interval-context-bundle.md`
-- `skills/interval-update/references/workflows/*.md`
+- the former Interval workflow catalog, deleted during TASK-0319 refinement
 - `skills/interval-update/eval_task.json`
 
 ## Skill-Maintenance Checks
@@ -65,8 +65,9 @@ verdict:
 ## Validation
 
 - `python3 -m json.tool skills/interval-update/eval_task.json` passed.
-- `python3 skills/interval-update/scripts/test_reward_checkins.py` passed.
-- `python3 -m py_compile skills/interval-update/scripts/reward_checkins.py skills/interval-update/scripts/test_reward_checkins.py` passed.
+- The former Interval reward-helper test and compile checks passed at the time
+  of this historical audit. TASK-0319 later deleted that runtime path after
+  moving derived check-in eligibility to Work Pulse.
 - `python3 skills/skill-maintenance/scripts/check_skills.py --write` passed.
 - `python3 tickets/scripts/check_ticket_metadata.py` passed.
 

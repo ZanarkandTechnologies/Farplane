@@ -29,7 +29,7 @@ evidence_refs:
   - skills/pulse-update/eval_task.json
   - skills/interval-update/eval_task.json
   - skills/automation-advisor/audits/2026-06-24-automation-prompt-qa.md
-known_limits: Retired as the older umbrella feature. Product-scoped Pulse loops and daily interval review reports now carry the active feature contracts.
+known_limits: Retired as the older umbrella feature. Project Work Pulse and BAU problem reports now carry the active feature contracts.
 metrics:
   - pulse_action_relevance
   - interval_report_usefulness
@@ -37,13 +37,15 @@ metrics:
 last_verified: 2026-07-07
 experimental: false
 superseded_by:
-  - FEAT-0066
   - FEAT-0067
+  - FEAT-0071
 track: false
 ---
 # Pulse and interval automation
 
-Pulse and interval automation is retired as the older umbrella feature for recurring Pulse and interval behavior. Product-scoped Pulse loops and daily interval review reports now carry the active contracts under `FEAT-0066` and `FEAT-0067`.
+Pulse and interval automation is retired as the older umbrella feature for
+recurring behavior. Project Work Pulse and Daily/Weekly BAU problem reports
+carry the active contracts under `FEAT-0071` and `FEAT-0067`.
 
 ```text
 horizon_tick(window, state) -> bounded_action | report | no_op + learning_signal
@@ -100,8 +102,8 @@ flowchart TD
   classDef retired fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d,stroke-dasharray: 5 3
 
   config["automation inputs<br/>farplane/automations.toml<br/>track frontmatter"]:::keep
-  retired["FEAT-0065<br/>status: retired<br/>superseded_by: FEAT-0066 + FEAT-0067"]:::retired
-  pulse["FEAT-0066 Pulse<br/>skills/pulse-update/SKILL.md"]:::changed
+  retired["FEAT-0065<br/>status: retired<br/>superseded_by: FEAT-0071 + FEAT-0067"]:::retired
+  pulse["FEAT-0071 Work Pulse<br/>skills/pulse-update/SKILL.md"]:::changed
   interval["FEAT-0067 Interval<br/>skills/interval-update/SKILL.md"]:::changed
   horizon["SYS-0003 Horizon Loop<br/>automation-advisor<br/>goals and ticket supply"]:::changed
   outputs["reports and proof<br/>pulse reports<br/>interval reports<br/>eval_task.json evidence"]:::added
@@ -112,7 +114,8 @@ flowchart TD
   horizon --> outputs
 ```
 
-The umbrella automation handle is retired; Pulse and Interval now split active ownership under the Horizon Loop and write visible reports.
+The umbrella automation handle is retired; one Work Pulse and bounded
+scheduled report/ticket sources split active ownership under the Horizon Loop.
 
 ## Surfaces
 

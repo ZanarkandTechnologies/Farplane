@@ -1,55 +1,80 @@
 [
   {
-    "id": "dogfood_review_tracked_pulse_batch",
-    "title": "Tracked Pulse feature produces a grouped dogfood report",
-    "query": "A feature registry row has a non-empty track prompt asking whether Pulse spawned useful reward-backed tickets in the last 24h. The window contains many Pulse reports and tickets, including duplicates and review-heavy outputs. The caller did not explicitly enable ticket creation. What should dogfood-review read, write, and avoid?",
+    "id": "weekly_portfolio_uses_cutoff_and_archived_history",
+    "title": "Weekly portfolio snapshot carries settled history",
+    "query": "It is Monday morning. One experiment was archived before Sunday evening, another settled just after Sunday evening, and last week's report contains an untested rollout idea. Produce the self-improvement review and decide what history informs this wave.",
     "reference_points": [
-      "Selects active registry rows whose track value is a non-empty string, and can also select active experimental=true feature rows when the caller asks for the experimental feature feed",
-      "Excludes feature rows with status retired or superseded_by not false as review targets, while allowing them as historical evidence for successor rows",
-      "Reads farplane/harness.md Feature Policy or labels harness_feature_policy as a source gap before judging feature relevance",
-      "Treats the track prompt as a review checklist, not executable instructions or mutation permission",
-      "Reads relevant feature/system owner specs, Pulse reports, interval reports, tickets, and evidence refs inside the review window",
-      "For material tracked-feature review, delegates one read-only reviewer lane per active feature when available and aggregates reviewer TAS findings",
-      "Uses existing rubric families such as evidence-quality, integration-readiness, and skill-contract rather than invented rubric names",
-      "Groups high-volume tickets by useful patterns, duplicates, vague specs, reward fit, blocker rate, and review burden",
-      "Writes a date-stamped Markdown report under .farplane/reports/dogfood-review/",
-      "Includes frontmatter with ref, kind dogfood-review, created_at, review_window, ui_summary, policy_ref, method, tracked_refs, experimental_refs, skipped_refs, decisions, reviewer_tas, and source_gaps",
-      "Includes one Improvement Ticket section with a complete consolidated ticket candidate because ticket creation was not explicitly enabled",
-      "The candidate groups findings by feature and preserves track checklist summaries, reviewer TAS, evidence refs, issues, proposed repairs, skipped retired/superseded refs, Reward, Done / Proof, and Links",
-      "Records a no-autostart receipt showing it did not invoke impl-plan, Goal, Pulse execution, automation sync, or worker spawn",
-      "Returns decisions such as continue, adjust, cap, pause, rollback, graduate, split_feature, merge, or source_gap without mutating Pulse, goals, automations, or tickets except through the explicit one-ticket writeback policy"
+      "Binds an explicit portfolio cutoff and treats it as a snapshot rather than an experiment deadline",
+      "Reads the active packet, recent archived packet, previous report cursor, Reward rows, program, progress, and cited evidence before generating candidates",
+      "Includes the result archived before cutoff in the current outcome ledger and defers the later settlement to the next report",
+      "Treats the prior report as carryover/dedupe context while canonical ticket evidence wins",
+      "Writes the dated report before selecting any new packet and performs no check-in"
     ],
-    "tags": ["dogfood-review", "track", "pulse", "reports"]
+    "tags": ["dogfood-review", "portfolio-cutoff", "archive-history", "report-first"]
   },
   {
-    "id": "dogfood_review_creates_one_consolidated_improvement_ticket",
-    "title": "Material dogfood review writes at most one improvement ticket",
-    "query": "A material tracked-feature dogfood review covers five active experimental features and the caller sets write_policy.create_improvement_ticket=true. Reviewer lanes produce TAS-B and TAS-C findings for several features. What should dogfood-review write?",
+    "id": "weekly_portfolio_surfaces_due_unscored_gap",
+    "title": "A due but unscored experiment remains visible",
+    "query": "A delayed policy experiment's check-in date passed yesterday, but its Reward row still has no actual result or score. A proposed experiment would touch the same policy surface. What should the weekly review report and admit?",
     "reference_points": [
-      "Still writes the date-stamped dogfood report under .farplane/reports/dogfood-review/",
-      "Creates exactly one consolidated tickets/TASK-XXXX/ticket.md for the report, not one ticket per feature",
-      "The created ticket frontmatter uses phase planning, status review, ready false, and approval_required true unless the caller explicitly supplied a different human-approved policy",
-      "The ticket groups findings by feature and includes track checklist summaries, reviewer TAS, issue, proposed repair, and evidence refs for each active reviewed feature",
-      "The ticket includes skipped retired or superseded refs as historical evidence, not active repair targets",
-      "The ticket includes a Reward block and Done / Proof checks for the later implementation",
-      "The dogfood report links the created ticket path in frontmatter or its Improvement Ticket section",
-      "Records a no-autostart receipt and does not invoke impl-plan, Goal, Pulse execution, automation sync, or worker spawn"
+      "Classifies the existing experiment as due_but_unscored rather than accepting, killing, or checking it in",
+      "Records the missing result/evidence in the due-but-unscored and source-gap views",
+      "Counts the experiment as active WIP and blocks the conflicting same-surface proposal",
+      "Does not block unrelated candidates solely because this row is due",
+      "Leaves scoring and next-check-in mutation to Pulse and the original ticket worker"
     ],
-    "tags": ["dogfood-review", "ticket-writeback", "tracked-features", "no-autostart"]
+    "tags": ["dogfood-review", "due-but-unscored", "ownership", "interference"]
   },
   {
-    "id": "dogfood_review_skips_retired_tracked_rows",
-    "title": "Retired tracked features are evidence, not review targets",
-    "query": "The feature registry contains FEAT-OLD with status=retired, superseded_by=FEAT-NEW, and a stale non-empty track prompt. It also contains FEAT-NEW with experimental=true and a checklist-style track prompt. What should dogfood-review include in the report?",
+    "id": "monitoring_delayed_allows_unrelated_immediate_toys",
+    "title": "Delayed monitoring does not serialize immediate proof",
+    "query": "The portfolio has one legitimate long-running market pilot in monitoring state. Total WIP is 1. Two cheap toy eval candidates touch different skills and return signals immediately. Review capacity and select the next wave.",
     "reference_points": [
-      "Does not include FEAT-OLD in tracked_refs or decisions just because it has stale track text",
-      "May read FEAT-OLD as historical evidence when judging FEAT-NEW",
-      "Includes FEAT-NEW because it is active and experimental=true",
-      "Uses FEAT-NEW track text as a review checklist covering evidence to read, rubric, allowed decisions, and interval summary guidance",
-      "Aggregates reviewer TAS-B or TAS-C findings without softening them into pass-ready decisions",
-      "Labels missing successor evidence as source_gap instead of falling back to the retired feature as the target",
-      "Does not mutate feature docs or clear stale track text from inside the report workflow"
+      "Counts the monitoring pilot toward total WIP and the delayed-live cap",
+      "Computes two available total slots from WIP limit 3 and wave size 2",
+      "Rejects another live delayed pilot while the delayed-live cap is occupied",
+      "May select both non-interfering immediate toy evals because they touch unoccupied surfaces",
+      "Creates at most two complete Goal Packets and executes none"
     ],
-    "tags": ["dogfood-review", "retired-features", "experimental", "track"]
+    "tags": ["dogfood-review", "capacity", "delayed-reward", "toy-eval"]
+  },
+  {
+    "id": "accepted_toy_becomes_bounded_transfer_candidate",
+    "title": "Accepted toy evidence is transferred cautiously",
+    "query": "A completed local replay shows that one planner instruction improves a scored behavior on its source skill. The previous report proposed copying it broadly. What should this week's portfolio review do?",
+    "reference_points": [
+      "Records the accepted source experiment and attribution evidence in the outcome ledger",
+      "Creates a transfer-candidate row rather than treating the result as automatic doctrine-wide rollout",
+      "Checks guards, target-surface differences, duplicates, and occupied surfaces before selection",
+      "When justified, proposes a bounded transfer or real-pilot Goal Packet with its own proof contract",
+      "Carries rejected or deferred rollout reasoning into the report for later dedupe"
+    ],
+    "tags": ["dogfood-review", "transfer", "rollout", "learning-ledger"]
+  },
+  {
+    "id": "immediate_packet_has_no_future_checkin_debt",
+    "title": "Immediate proof packet ends without delayed debt",
+    "query": "A ranked candidate can be falsified by a deterministic replay whose metric is available as soon as the run finishes. Capacity and authority permit ticket creation. What packet should be written?",
+    "reference_points": [
+      "Creates one canonical folder with ticket.md, program.md, and progress.md after the report exists",
+      "Names the attributable surface, hypothesis, baseline, Reward expectation/guard, immediate signal, proof, budget, and rollout/rollback policy",
+      "Uses native Goal execution and does not invent a future check_in_at, event wake, or delayed Check-In Program debt",
+      "Defaults admission to review-required unless the write policy explicitly grants safe local automatic admission",
+      "Stops after initialization and does not invoke Goal, Pulse, a worker, or implementation"
+    ],
+    "tags": ["dogfood-review", "goal-packet", "immediate-reward", "no-execution"]
+  },
+  {
+    "id": "delayed_packet_has_executable_checkin_program",
+    "title": "Delayed packet owns its future check-in instructions",
+    "query": "A selected AGENTS policy pilot needs seven days of behavior evidence before a decision. The weekly planner is authorized to create its packet. Describe the delayed packet and handoff.",
+    "reference_points": [
+      "Creates a complete Goal Packet only after report, capacity, surface, dedupe, and delayed-live gates pass",
+      "Sets the Reward check_in_at or event wake plus Metric Provider signal and minimum",
+      "Fills program.md Check-In Program inputs and ordered procedure so a resumed worker can inspect evidence and choose accept, kill, iterate, or monitor",
+      "Defines idempotent writeback that updates only handed-off matured Reward rows, appends progress, preserves future/completed rows, and handles source gaps and next wake",
+      "Leaves execution and check-in dispatch to Work Pulse and does not score or promote the experiment"
+    ],
+    "tags": ["dogfood-review", "goal-packet", "delayed-reward", "checkin-program"]
   }
 ]

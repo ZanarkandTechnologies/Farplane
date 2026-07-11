@@ -151,11 +151,24 @@ boundary:
 - `doc-advisor`, `update-memory`, and `close-ticket` handle durable writeback
   after proof exists.
 
-`qa_checklist.md` files are self/preflight/repair guardrails. Reviewer or QA
-lanes are independent readiness gates for material claims. Tiny local checks
-can stay inline, but material plans, skill changes, prompts, evidence bundles,
-and completion claims should not self-approve when a reviewer lane is
-available.
+`qa_checklist.md` files are self/preflight/repair guardrails and reviewer
+ammunition, not acceptance forms. The typed `reviewer` lane owns checklist
+judgment and harsh pass/revise/block decisions. The typed `qa-tester` lane owns
+runtime, browser, UI, and proof capture. Tiny local checks can stay inline, but
+material plans, skill changes, prompts, evidence bundles, and completion claims
+should not self-approve when a reviewer lane is available.
+
+When material completion needs both proof and judgment, spawn `qa-tester` and
+`reviewer` in parallel when possible:
+
+```text
+material_completion(ticket)
+  -> qa-tester(ticket, proof_targets) -> evidence_bundle
+  -> reviewer(ticket, checklist?, evidence_bundle?, rubrics) -> TAS verdict
+  -> coordinator reconciles both receipts before pass/revise/block
+```
+
+Do not use generic subagents for these roles when typed agents are available.
 
 ## Hardening
 

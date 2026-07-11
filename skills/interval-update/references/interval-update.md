@@ -1,472 +1,88 @@
 ---
-title: "Interval Update Workflow"
+title: "BAU Interval Reporting Contract"
 status: active
 owner: interval-update
 kind: reference
 ---
 
-# Interval Update Workflow
+# BAU Interval Reporting Contract
 
-`interval_update` is the generic Farplane report-then-plan primitive. Use it
-when one explicit Codex automation needs to review a configured bounded window,
-check drift against configured context, write a report, plan the next bounded
-window, and give guidance to Pulse, Goal Advisor, or ticket creation.
+Daily and Weekly are profiles over the same report primitive:
 
 ```text
-interval_update(project_root, interval_id, review_window, planning_window,
-                context_refs?, report_workflows?, planning_policy?,
-                write_policy?)
-  -> context_bundle
-   + source_gaps
-   + interval_report
-   + workflow_findings
-   + drift_findings
-   + next_window_plan
-   + downstream_guidance
-   + ticket_deltas
-   + proposed_goals_delta?
-   + applied_goals_delta?
-   + approval_required_goals_delta?
-   + goal_advisor_handoffs?
+report_bau_window(interval_id, review_window, evidence)
+  -> dated_report + problems + source_gaps
 ```
 
-## Default Context Refs
+## Daily Profile
 
-The skill resolves these for every Farplane project unless `context_refs`
-adds or replaces a source:
+Summarize recent BAU execution:
+
+- completed, blocked, abandoned, and review-waiting tickets;
+- repeated execution failures, ticket/attention drift, and feedback obligations;
+- objective or metric movement backed by current artifacts;
+- signals from the latest completed provider report passed as context;
+- maintenance/documentation problems observed during BAU work.
+
+Daily does not call the provider whose report it reads and does not turn
+provider suggestions into Interval-owned direction.
+
+## Weekly Profile
+
+Compress Daily reports and the wider ticket window into:
+
+- completed and abandoned work;
+- repeated or unresolved BAU problems;
+- review/intervention load and proof obligations;
+- resource consumption and policy-defined budget state;
+- maintenance problems worth resurfacing.
+
+Weekly may report planning-frontier suggestions as observations, but it cannot
+create new-direction tickets. It does not run the weekly self-improvement job.
+
+## Problems Ledger
+
+Use ordinary Markdown, not a finding schema:
+
+```markdown
+## Problems
+
+- [ ] Repeated render failure. Evidence: `reports/...`. Ticket: none
+- [x] Stale review request. Evidence: `tickets/TASK-0100/...`. Ticket: `TASK-0110`
+```
+
+The current report may update the ledger while it is a draft. After
+finalization it is immutable history. A later report carries unresolved rows
+forward with the prior report link.
+
+## Maintenance Admission
 
 ```text
-default_context_refs(project_root, interval_id) = {
-  harness_ref: project_root/farplane/harness.md,
-  products_ref: project_root/farplane/products.json,
-  local_product_skill_refs: project_root/.agents/skills/**/SKILL.md,
-  goals_ref: project_root/farplane/goals.yaml,
-  ticket_refs: project_root/tickets/,
-  memory_refs: [
-    project_root/docs/MEMORY.md,
-    project_root/docs/HISTORY.md,
-    project_root/docs/LESSONS.md,
-    project_root/docs/TROUBLES.md
-  ],
-  pulse_report_refs: project_root/.farplane/reports/pulse/**,
-  interval_report_refs: project_root/.farplane/reports/interval/**,
-  report_root: project_root/.farplane/reports/interval/<interval_id>,
-  context_bundle_root: project_root/.farplane/reports/interval/<interval_id>/context,
-  pm_manifest_ref: project_root/farplane/pm.json
-}
+resurface_problem(problem, prior_finalized_evidence, active_tickets, limit)
+  -> 0..limit maintenance_ticket_deltas
 ```
 
-## Configurable Context Refs
+A candidate passes only when all are true:
 
-Callers use `context_refs` to wire interval-to-interval dependencies. This is
-where one interval can say "read the latest report from another interval" or
-"read another interval's reports inside this review window." The skill only
-knows how to resolve the selectors.
+1. A finalized artifact from before this report already records the problem.
+2. The problem remains unresolved and is material enough to act on.
+3. The scope is corrective maintenance, not a new direction or experiment.
+4. No active ticket already owns substantially the same problem.
+5. The ticket can name executable scope, proof, and a stop condition.
+6. Local ticket creation is authorized and the run cap remains available.
 
-```text
-context_refs = {
-  extra_refs?: [ref],
-  parent_context_refs?: [ref],
-  workflow_refs?: {
-    telemetry_refs?: [ref],
-    feedback_refs?: [ref],
-    opportunity_refs?: [ref],
-    metric_refs?: [ref],
-    status_refs?: [ref]
-  },
-  interval_output_refs?: [
-    {
-      interval_id: string,
-      selector: latest | inside_review_window | explicit_paths,
-      as: string,
-      required?: bool
-    }
-  ],
-  replace_refs?: { <default_ref_name>: ref | [ref] }
-}
-```
+Same-run discoveries stay ledger-only even when urgent. The operator may create
+an explicit ticket immediately; Interval itself waits for prior evidence.
 
-Rules:
+## Ownership Boundaries
 
-- `extra_refs` and `parent_context_refs` are additive.
-- `workflow_refs` binds source refs to optional report workflows. Use it when
-  telemetry, feedback, opportunity, metric, or status sources should feed a
-  specific workflow.
-- `interval_output_refs.selector = latest` selects the newest dated report under
-  `.farplane/reports/interval/<interval_id>/`.
-- `interval_output_refs.selector = inside_review_window` selects dated reports
-  from that interval whose timestamps fall inside `review_window`.
-- `interval_output_refs.selector = explicit_paths` reads only supplied paths.
-- Missing optional refs become source gaps. Missing required refs block durable
-  goals or ticket mutation but still allow a report.
-- Use `replace_refs` only when a project has a non-standard source of truth.
+| Decision | Owner |
+| --- | --- |
+| New BAU direction | `ticket-opportunity-generator.plan_next_wave` |
+| Feed/provider discovery and source-backed ticket | provider skill |
+| Harness experiment selection | weekly `dogfood-review` automation |
+| Ticket execution and matured reward check-in | Work Pulse |
+| BAU evidence compression and known maintenance resurfacing | Interval |
 
-## Optional Report Workflows
-
-Report workflows are generic functions over a context bundle and timeframe. The
-caller enables them with booleans or lightweight modes. `SKILL.md` owns the
-non-optional parent run contract; this reference provides extended config and
-workflow detail.
-
-```text
-report_workflows = {
-  plan_progress?: bool | "light",
-  codex_attention_drift?: bool | "light",
-  ticket_board_drift?: bool | "light",
-  feedback_obligations?: bool | "when_sources_exist",
-  opportunity_signals?: bool | "when_sources_exist",
-  goal_drift?: bool | "light",
-  metric_snapshot?: bool | "when_sources_exist",
-  reward_checkins?: bool | "light",
-  compounding_leverage_review?: bool | "light",
-  skill_hardening?: bool | "when_sources_exist",
-  skill_refinement?: bool | "when_sources_exist",
-  docs_consolidation?: bool | "when_sources_exist",
-  tracked_feature_review?: bool | "when_sources_exist",
-  priority_planning?: bool | "light"
-}
-```
-
-Missing workflow flags mean do not run that workflow. `SKILL.md` owns the
-non-optional parent run contract. Load
-[workflow-index.md](workflow-index.md) only when workflow flags are enabled,
-then load only the workflow ref files for enabled flags. Those files own
-detailed todos, inline-vs-subagent routing, evidence rules, and merge shape.
-
-## Caller Ownership
-
-Daily and Weekly interval presets are automation-owned configuration wrappers.
-They provide `interval_id`, windows, parent refs, workflow flags, and policy
-overrides. They are not separate skill packages and should not restate default
-Farplane refs when `interval-update` can resolve them.
-
-Pulse is owned by `pulse-update`. Interval reports may become Pulse strategy
-constraints, but `interval-update` does not reconcile boards, admit tickets,
-spawn workers, chase reviews, or write Pulse ledgers.
-
-## Workflow
-
-1. Bind `interval_id`, `review_window`, `planning_window`, and configured
-   context refs.
-2. Read default refs plus configured refs; label missing or stale sources.
-3. Resolve cross-interval refs from `interval_output_refs`.
-4. Normalize evidence into
-   [interval-context-bundle.md](../templates/interval-context-bundle.md).
-5. Reflect on the past window by spawning only enabled reflection workflows as
-   read-only subagent lanes against the context bundle, `review_window`, and
-   `planning_window`, loading only the workflow reference files named in
-   [workflow-index.md](workflow-index.md).
-6. Close or update rewards. For enabled `reward_checkins`, run the due queue,
-   propose `ticket_reward_patches` for actual reward results and `reward_score`
-   on due ticket rewards, and report low-scoring predictions before planning
-   the next window. Apply those patches only after the interval report records
-   them as allowed post-report deltas.
-7. For enabled self-update workflows, close due reward signals from prior
-   interval reports before selecting new strategy moves.
-8. Score leverage and reward signals. Treat scores as planning aids with cited
-   evidence, not objective telemetry.
-9. Read product work lanes, local product skill refs, and static allocation
-   guardrails when priority planning or ticket refill is enabled.
-10. For enabled `skill_hardening`, route repeated lessons, troubles,
-   ticket-progress findings, and proof failures to
-   `skill-maintenance(mode: harden_skill)`.
-11. For enabled `skill_refinement`, route accumulated older evals, gotchas,
-   usage results, and compaction risks to
-   `skill-maintenance(mode: refine_skill)`.
-12. For enabled `docs_consolidation`, route whole-project context refresh to
-   `update-memory` and substantive durable doc cleanup to `doc-advisor`.
-13. For enabled `tracked_feature_review`, call `dogfood-review` for active
-    generated feature or system registry rows whose `track` value is a
-    non-empty string and for active feature rows with `experimental: true`.
-    Exclude rows with `status: retired` or `superseded_by` other than `false`
-    as active review targets; use them only as historical evidence for
-    successor rows.
-    The dogfood report must be written under `.farplane/reports/dogfood-review/`
-    and then linked or summarized from the interval report. If dogfood-review
-    returns an improvement ticket path or candidate, surface it in the interval
-    report before final planning; do not split it into per-feature tickets or
-    autostart `impl-plan`, Goal, Pulse execution, automation sync, or worker
-    spawn.
-14. Review the past window against the static harness charter, goals, and
-    configured parent contexts.
-15. Refresh metric readings when skills, CLIs, ticket searches, manual notes, or
-    local ledgers are available: read goal-axis SMART goals from
-    `farplane/goals.yaml` for KPI selection and interpretation, then use each
-    KPI's `farplane/bindings.yaml` metric recipe `refresh` prompt to choose the
-    work. Write canonical observation batches under
-    `.farplane/metrics/observations/<source_id>/<date>.json`, run
-    `farplane metrics primitives`, then run `farplane project snapshot`. Do not
-    parse interval reports as a deterministic strategy database.
-16. Review budget and runway for active products/projects. Use
-    `farplane/harness.md` allocation guardrails, product `## Current Strategy`
-    sections, ticket `Reward` blocks, metric snapshots, interval reports,
-    source gaps, and operator feedback. Assign each active product/project a decision:
-    `continue`, `narrow`, `pause`, `instrument`, `stop`, or
-    `escalate_to_revenue`. Do not create a second ticket budget field.
-17. Run final next-window planning. `priority_planning` should consume the
-    reflection findings, reward closure, leverage decisions, product lanes, and
-    guardrails; it should verify that each selected priority moves a named goal,
-    bottleneck, or reward signal.
-18. Write [interval-report.md](../templates/interval-report.md) before any
-    goals, product strategy, or ticket mutation. Fill the minimal Core report frontmatter: `ref`, `kind:
-    interval-report`, `created_at`, and one concise under-100-word
-    `ui_summary`, so UI consumers can render report cards from the Core
-    registry without scraping prose.
-    If a context bundle is written under `.farplane/reports/**`, fill
-    [interval-context-bundle.md](../templates/interval-context-bundle.md)
-    frontmatter with path-derived `ref`, `kind: interval-context`,
-    `created_at`, and `ui_summary` too.
-18. Classify every goals delta as `auto_apply`, `approval_required`, or
-    `rejected_source_gap`.
-19. Convert executable changes into ticket deltas or Goal Advisor handoffs,
-    including local product skill refs when they own the workflow.
-20. Return downstream guidance so Pulse gets the next constraints.
-
-## Goals Delta Promotion
-
-The skill may update `farplane/goals.yaml` only after the interval report
-contains a `Goals Delta` block with evidence and a promotion decision.
-
-```text
-apply_goals_delta(proposed_goals_delta, policy)
-  -> goals.yaml patch | approval_required | rejected_source_gap
-```
-
-Promotion decisions:
-
-- `auto_apply`: source refs, current-signal notes, stale labels, or minor
-  milestone wording backed by clear evidence.
-- `approval_required`: north star, KPI, strategy axis, project priority, hold,
-  stop condition, quarterly goal, yearly goal, or durable milestone changes.
-- `rejected_source_gap`: insufficient evidence; create an instrumentation,
-  access, feedback, or research ticket instead.
-
-Metric update lifecycle:
-
-```text
-metric_update(project_root, date)
-  -> source observations
-   + primitive observations
-   + project snapshot
-   + interval interpretation
-```
-
-1. Select KPI scope from `farplane/goals.yaml`; join every KPI ID to its metric
-   recipe in `farplane/bindings.yaml`.
-2. Run platform or skill-owned fetches for external sources. Each source writes
-   one canonical batch:
-
-   ```text
-   .farplane/metrics/observations/<source_id>/<YYYY-MM-DD>.json
-   ```
-
-   Each batch has `schema_version: 1`, `date`, `source_id`, `status`,
-   `observations[]`, `gaps[]`, and optional `payload`.
-3. Run Core primitive reducers:
-
-   ```bash
-   farplane metrics primitives --project-root <project> --date <YYYY-MM-DD>
-   ```
-
-   Core owns ticket reward counts, autonomy ratios, intervention metrics, AI
-   burn estimates, and Farplane-native rollups such as total evidence
-   distribution views. `.farplane/metrics/daily/<date>.json` is an optional
-   debug/index snapshot for primitive groups, not the canonical provider
-   contract.
-4. Compile the UI snapshot:
-
-   ```bash
-   farplane project snapshot --project-root <project> --date <YYYY-MM-DD>
-   ```
-
-   The compiler derives daily differences from consecutive readings, cumulative
-   totals for `kind: daily_count` metrics, best-daily values, target status,
-   KPI descriptions, pinned cards, source-gap joins, and tab data.
-5. Interpret the result in the interval report. True source gaps should become
-   instrumentation, access, or provider-fix tickets. Human-created tickets
-   without KPI rewards and old tickets with missing front matter are not metric
-   source gaps.
-
-Each observation value is the point reading for that date. Content IDs, ticket
-IDs, post IDs, API responses, confidence notes, and per-item breakdowns belong
-under freeform `payload`, not in KPI names. Ticket-derived KPI counts should be
-collected by counting tickets whose `Reward.kpi_rewards[].kpi_id` matches the
-KPI, then writing the resulting observation like any other metric value.
-
-Primitive output shapes:
-
-```text
-.farplane/metrics/daily/<date>.json
-  schema_version: 1
-  date: <YYYY-MM-DD>
-  window: { start, end }
-  primitives:
-    <primitive_id>: <raw reading map>
-  diagnostics:
-    ticket_parse_gaps: [...]
-    non_warning_gaps: [...]
-  source_gaps: [...]
-  paths: {...}
-
-.farplane/metrics/observations/<primitive_id>/<date>.json
-  MetricObservationBatch
-```
-
-The daily primitive file is a raw support snapshot. The canonical compiler
-contract is the observation batch:
-
-```text
-MetricObservationBatch := {
-  schema_version: 1,
-  date: YYYY-MM-DD,
-  source_id: primitive_id | platform_source_id,
-  status: available | partial | source_gap | blocked,
-  observations: MetricObservation[],
-  gaps: string[],
-  payload: object
-}
-
-MetricObservation := {
-  metric_id: string,
-  date: YYYY-MM-DD,
-  value: number | null,
-  status: available | source_gap | not_applicable | blocked,
-  payload: object
-}
-```
-
-Primitive reducers currently used by interval refresh:
-
-| Primitive | Metric observations | Source-gap behavior |
-| --- | --- | --- |
-| `ticket_count_by_kpi` | Per-KPI ticket counts keyed by actual KPI ID. | Missing human ticket rewards are diagnostics; defined KPIs with no tickets compile as available zero. |
-| `ticket_count_by_product` | Product ticket counts keyed as `ticket_count_by_product:<product_id>`. | Unknown product ownership is a recipe/schema problem. |
-| `kpi_attributed_ticket_ratio` | Rewarded touched tickets divided by all touched tickets. | Empty windows are available zero. |
-| `codex_thread_usage` | `codex_thread_count`, `codex_turn_count`, `codex_token_total`, `codex_span_minutes`. | Missing Codex sqlite/session stores are source gaps. |
-| `ai_burn_estimate` | Daily spend allocation plus burn-per-thread, burn-per-turn, burn-per-token. | Missing spend model is a source gap. |
-| `content_views_total` | `evidence_distribution_reach` from component platform view observations. | No component view observations is a source gap; missing individual components stay in payload when at least one component exists. |
-| `ticket_thread_association_backfill` | Support association count and ignored state index. | Missing mine runs are diagnostics unless a dependent metric needs associations. |
-| `ticket_thread_link_coverage` | Completed-ticket association coverage ratio. | Empty completed-ticket windows are available zero. |
-| `autonomy_time_feedback` | `auto_time_ratio` and related human/autonomous time metrics from runtime ledgers. | Source gap only when all runtime feedback sources are missing. |
-| `ticket_intervention_feedback` | `auto_completion_rate`, `intervention_free_ticket_count`, `ticket_intervention_turn_count`. | Source gap when completed tickets cannot be associated with execution threads. |
-
-Compiler order:
-
-1. `provider_observations()` reads canonical
-   `.farplane/metrics/observations/*/*.json` batches through the Pydantic
-   schema.
-2. `daily_observations()` reads `.farplane/metrics/daily/*.json` only as a
-   fallback for older or debug primitive rows when no canonical batch exists for
-   that `(primitive_id, date)`.
-3. Content ledger observations and missing-ledger observations are appended
-   after canonical/provider observations.
-4. `build_metric_card()` joins observations with metric definitions,
-   descriptions, target specs, display options, source-gap IDs, and payload
-   breakdowns.
-5. Goals, Overview, Products, and pinned metric cards all render from the same
-   compiled metric cards; tab-specific UI should not fetch raw primitive files
-   directly.
-
-Reusable interval-owned helper signatures:
-
-```text
-$interval-update.count_ticket_kpi_rewards(ticket_dir, date, kpi_key)
-  -> MetricObservation
-
-$interval-update.calculate_autonomy_time_ratio(runtime_dir, date)
-  -> MetricObservation
-
-$interval-update.calculate_ticket_intervention_metrics(ticket_dir, runtime_dir, date)
-  -> MetricObservationBatch
-
-$interval-update.select_content_metric_targets(content_ledger, platform, kpi_key, date, window_days?)
-  -> {
-       status,
-       external_ids,
-       items,
-       payload: { since_date, until_date, fetch_command, gaps }
-     }
-
-$interval-update.reward_checkins(ticket_dir, now, lookback_days?, bad_threshold?)
-  -> due + bad_predictions + scored + not_due + gaps
-```
-
-The concrete CLI owners are `skills/interval-update/scripts/metric_refresh.py`
-for metric readings and `skills/interval-update/scripts/reward_checkins.py` for
-ticket expected-vs-actual due queues. Refresh prompts may cite helper
-signatures instead of restating the counting algorithm.
-
-For owned-content distribution KPIs, first call
-`select_content_metric_targets` to select posted ledger rows in the lookback
-window. Then call the returned platform fetch command through `$x-account` or
-`$instagram-account`; the platform skill writes a `MetricObservationBatch`.
-Core may then derive pinned rollups from those component observations during
-`farplane metrics primitives`.
-
-Runway review guidance:
-
-```text
-runway_decision := {
-  active_project,
-  contribution_mode,
-  expected_reward,
-  observed_evidence,
-  rough_spend_or_attention,
-  decision: continue | narrow | pause | instrument | stop | escalate_to_revenue,
-  next_constraint
-}
-```
-
-The decision is a planning constraint, not a spend authorization. Publishing,
-customer contact, paid external services, deploys, destructive cleanup, and
-product-boundary changes still need explicit authorization unless granted by a
-ticket or policy.
-
-Quarterly, yearly, and other intervals greater than one week should normally
-be represented as explicit interval automations only when they produce useful
-decisions often enough to deserve their own thread and cadence. Otherwise, the
-weekly interval can create a ticket or Goal Advisor handoff for the longer
-horizon review.
-
-## Workflow Rules
-
-- Every enabled workflow output must cite context-bundle evidence or raw source
-  pointers. Reject generic strategy prose.
-- Every enabled report workflow runs as an isolated read-only subagent lane by
-  default. The parent interval agent owns context resolution, final synthesis,
-  report writing, and explicitly allowed post-report deltas.
-- Workflow lanes consume `summary_context` first and open
-  `raw_evidence_pointers` only for cited proof, source-gap classification, or a
-  named workflow exception.
-- Analysis subagents are read-only. They must not mutate tickets, goals,
-  external tools, or automation state.
-- `reward_checkins` is the gated write exception: its helper may discover due
-  rewards, and its analyzer may propose only ticket Reward actual and score
-  patches named by the workflow contract. The parent applies those patches only
-  after the dated report records them as allowed post-report deltas.
-- Leverage signals should come from existing reports, tickets, skills,
-  registries, lessons, troubles, feedback, metrics, or explicitly supplied
-  external source refs. Do not create a separate leverage backlog by default.
-- Static charter changes belong to `farplane/harness.md` and require explicit
-  human approval. Intervals may propose charter deltas in the dated report but
-  must not apply them silently.
-- The dated interval report is the receipt store for self-update decisions:
-  reward closure, selected moves, rejected/deferred/expired candidates, advisor
-  routes, and next reward signals.
-- UI cards read `.farplane/reports/index.json` when present. The registry
-  includes reports with `ref`, `kind`, `created_at`, and `ui_summary`
-  frontmatter, then derives hierarchy from `ref` prefixes. Keep `ui_summary`
-  under 100 words for every daily or weekly interval report. Use
-  `farplane reports repair-refs --project-root <project>` to add missing
-  path-derived refs to existing report Markdown before rebuilding the index.
-- Skill hardening is not a separate compatibility automation. Weekly Interval
-  routes learning sources to `skill-maintenance(mode: harden_skill)` and records
-  processed or deferred learning in the dated report.
-- Skill refinement is a separate optional workflow from hardening. Use it only
-  after immediate guardrails exist, so compaction does not delay fresh
-  prevention work.
-- Docs consolidation is a separate optional workflow from memory refresh.
-  Intervals should produce handoffs or compact deltas first, then let
-  `update-memory` or `doc-advisor` own the actual doc edits when warranted.
-- Urgent leverage escalation is allowed only for high-confidence evidence with
-  a source ref, explicit loss term, review-by date, and next owner route.
+Missing sources never cause Interval to invoke another job. Record the gap and
+finish the report with the evidence available.

@@ -40,14 +40,20 @@ GoalFiles := [ticket.md | program.md | progress.md | spec.md | board.md | artifa
 Generated prompts must name source files inline under `Files:`. Do not expose a
 new abstraction such as `refs[]` to the operator.
 
-`ticket.md` owns the task contract, `Done`, and `QA Strategy`. `program.md` owns loop config,
-metric, budget, heartbeat, drift, and stop policy. `progress.md` owns compact
-append-only observations. `farplane/goals.yaml` is project-level strategy context
-when a selected frontier comes from a long-horizon goal graph.
+`ticket.md` owns the task contract, `Done`, and `QA Strategy`. `program.md` owns
+the executable loop policy: trigger mode, metric, budget, heartbeat, drift,
+after-turn routine, check-in program, and stop policy. For delayed rewards,
+Goal Advisor compiles the experiment-specific check-in procedure into
+`program.md`; Work Pulse only supplies due rows and resumes it. `progress.md`
+owns compact append-only observations. `farplane/goals.yaml` is project-level
+strategy context when a selected frontier comes from a long-horizon goal graph.
 
 This skill owns both architecture choice and final native `/goal` or heartbeat
-prompt compilation. Keep templates with this skill, but load full template
-references only after the branch requires prompt emission.
+prompt compilation. The native Goal prompt is a compact launcher over the Goal
+Packet: it must list `program.md` under `Files:`, instruct the executor to read
+it before execution, and bind completion to the ticket's scope and proof
+contract. Keep templates with this skill, but load full template references
+only after the branch requires prompt emission.
 
 `$work`, `$ralph`, `batch-work`, and the legacy impl skill are retired public
 orchestration surfaces. Their useful policies live here as admission/profile,
@@ -58,10 +64,10 @@ compute/budget, and blocker handling.
 
 ```text
 advise_goal_use(intent, files?, trigger?, budget?, proof_policy?, approval_policy?) -> goal_architecture + files[] + goal_packet? + heartbeat_prompt? + native_goal_prompt? + next_action
-state: reads(operator intent, listed files, tickets, board files?, farplane/goals.yaml?, program.md?, progress.md?, goal-loop contract, relevant skills/docs); writes(ticket/program/progress? generated goal prompt? or recommendation)
-gates: missing_execution_inputs_resolved_or_asked; material_goal_has_files; loop_owner_single; progress_surface_named; metric_provider_named; budget_named; drift_policy_named; logging_policy_named; proof_route_named; final_evidence_policy_named; approval_before_goal_run_when_material
+state: reads(operator intent, listed files, tickets, board files?, farplane/goals.yaml?, program.md?, progress.md?, Reward.kpi_rewards[]?, goal-loop contract, relevant skills/docs); writes(ticket/program/progress? generated goal prompt? or recommendation)
+gates: missing_execution_inputs_resolved_or_asked; material_goal_has_files; loop_owner_single; progress_surface_named; metric_provider_named; delayed_checkin_program_compiled_or_not_applicable; budget_named; drift_policy_named; logging_policy_named; proof_route_named; final_evidence_policy_named; approval_before_goal_run_when_material
 routes: metric-advisor | impl-plan | optimize-with-human | qa | visual-qa | agent-qa-test | review | direct-answer
-fails: creates hidden loop runtime; uses Goal without durable state; treats human feedback/heartbeat/rollout as competing loop owners; emits prompt-only material Goal; hides required files behind transcript memory; routes public work through retired work/ralph/batch-work surfaces; emits long Goal prompt that restates ticket context; allows self-certified QA/review/visual completion; runs material Goal before packet approval
+fails: creates hidden loop runtime; uses Goal without durable state; treats human feedback/heartbeat/rollout as competing loop owners; emits prompt-only material Goal; hides required files behind transcript memory; leaves delayed_checkin_policy_scattered_or_implicit; adds_delayed_checkin_debt_to_immediate_goal; routes public work through retired work/ralph/batch-work surfaces; emits long Goal prompt that restates ticket context; allows self-certified QA/review/visual completion; runs material Goal before packet approval
 ```
 
 ## Phase Contract
@@ -201,6 +207,13 @@ only after the branch is selected:
    - [ ] If proof weight includes `qa`, `visual_qa`, `agent_qa`, `review`, or
      `demo`, require delegated proof and reject self-certification as the
      metric.
+   - [ ] If the metric is delayed, fill `program.md` `Check-In Program` with
+     the original packet inputs, exact evidence sources, ordered scoring and
+     attribution procedure, matured-row-only writeback, experiment-specific
+     `accept | kill | iterate | monitor` conditions, idempotency, and
+     source-gap behavior. If feedback is immediate, keep the section
+     `mode: not_applicable` with only a reason; do not compile future check-in
+     machinery.
 - [ ] 6. Define batch, board-drain, or leaf execution policy when relevant.
    - [ ] For multi-ticket file lists, preserve one proof row per ticket plus
      any batch/integration proof.
@@ -238,6 +251,12 @@ only after the branch is selected:
    - [ ] Load `references/prompt-templates.md` before emitting prompt text.
    - [ ] Include an inline `Files:` list before `Task`, `Logging`, `Metric`, and
      `After each turn`.
+   - [ ] Instruct the executor to read `program.md` before execution and treat
+     it as the Goal Packet's executable loop policy, not optional context.
+   - [ ] For a resumed delayed check-in, list the original ticket, program, and
+     progress files plus matured Reward row indexes and evidence refs; instruct
+     the worker to execute `program.md` `Check-In Program` without rebuilding
+     its decision algorithm in the launcher prompt.
    - [ ] Bind the prompt to the listed files, honest metric provider, logging
      files, drift policy, budget, and completion/blocked policy.
    - [ ] Keep the Goal prompt compact: cite ticket/program/design/progress files
@@ -291,6 +310,10 @@ A strong Goal contract includes:
 
 - `Files`: inline list of every source file the Goal must read
 - `Task`: what must be true, from `ticket.md`
+- `Program`: explicit instruction that `program.md` is the executable loop
+  policy for trigger mode, budget, metric or feedback provider, proof route,
+  drift policy, after-turn routine, heartbeat or batch rules, and stop
+  conditions
 - `Logging`: how to update `progress.md`
 - `Metric`: how progress is judged, from `program.md`
 - `After each turn`: how to drift-check, continue, wait, complete, or block
@@ -380,8 +403,12 @@ Or create/update the Goal Packet files and then report their paths.
 
 ## Gotchas
 
-- Do not treat `program.md` as a second ticket. The ticket says what must be
-  true; the program says how the loop runs.
+- Do not treat `program.md` as a second ticket or as optional background
+  context. The ticket says what must be true; the program is the executable loop
+  policy for how the Goal runs.
+- Do not emit a native Goal prompt that only says to work on a ticket. It must
+  list the Goal Packet files and explicitly require reading and obeying
+  `program.md` before execution.
 - Do not treat `progress.md` as transcript storage. It is compact observed
   state.
 - Do not make parent tickets mandatory. Use an inline file list for normal

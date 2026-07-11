@@ -133,7 +133,7 @@ If no flag is provided, use **Standard**.
 
 4. Announce kickoff with profile, threshold, and current ambiguity.
 
-## Phase 2: Socratic Taste Loop
+## Phase 2: Socratic Taste Interview
 
 Repeat until ambiguity `<= threshold`, the pressure pass is complete, the readiness gates are explicit, the user exits with warning, or max rounds are reached.
 

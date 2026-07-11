@@ -90,7 +90,7 @@ material, automated, sensitive, or repeated notification failures.
   - [ ] If only a local path exists, include the essential excerpt or do not
     send; report a fallback/blocker instead.
   - [ ] Ask one concrete reply action Kenji can answer in one Telegram reply.
-  - [ ] For Taste Loop feedback requests and reminders, prefer simple Telegram
+  - [ ] For ticket feedback requests and reminders, prefer simple Telegram
     Markdown headings and emphasis so the decision is easier to scan on a
     phone.
   - [ ] Keep secrets, tokens, credentials, and sensitive private data out.
@@ -104,7 +104,7 @@ material, automated, sensitive, or repeated notification failures.
   - [ ] Use `TELEGRAM_CHAT_ID` from environment or `~/.farplane/config.json`,
     and `TELEGRAM_BOT_TOKEN` from environment, Keychain, or gateway config.
   - [ ] Use `--parse-mode Markdown` for simple, controlled Markdown such as
-    Taste Loop feedback requests; use `--parse-mode none` for raw text or
+    ticket feedback requests; use `--parse-mode none` for raw text or
     unsafe artifact excerpts.
   - [ ] If Telegram is not configured, report the fallback artifact path instead
     of blocking unrelated workflow progress.
@@ -134,14 +134,14 @@ C. {self-contained option}
 _Desktop ref:_ {local desktop path marked "desktop-only"}
 ```
 
-Taste Loop feedback/reminder shape:
+Ticket feedback/reminder shape:
 
 ```text
-*Taste Loop {ticket}: {short decision title}*
+*{ticket}: {short decision title}*
 
 *Review artifact:* {artifact type, e.g. social-thread premise / customer-facing idea}
 *Skill/workflow:* {owner skill -> concrete workflow, e.g. social-content -> Twitter/X thread planning}
-*Product:* {product or lane, e.g. AGI Toy Shop / Pocket Intern}
+*Target:* {artifact, skill, customer action, or experiment surface}
 *Stage:* {planning | execution | revision}; {publish/build boundary}
 *Not judging:* {common confusions, e.g. video, product build, final copy, external posting}
 

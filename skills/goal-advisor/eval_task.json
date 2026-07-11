@@ -165,5 +165,24 @@
       "proof"
     ],
     "notes": "Regression guard for material Goals that trusted Stop-hook orchestration or executor self-certification to catch missing QA."
+  },
+  {
+    "id": "goal_advisor_delayed_checkin_program_01",
+    "title": "Goal advisor compiles delayed scoring into the original program",
+    "query": "A workflow change needs one week of usage before we can judge it. Its ticket has two future Reward rows, a baseline, and named analytics evidence. Compile the Goal Packet so a later worker can evaluate it safely.",
+    "reference_points": [
+      "Fills program.md Check-In Program in delayed_reward mode rather than leaving scoring across launcher prose",
+      "Names the original ticket/program/progress, matured row indexes, timestamp, and exact evidence sources as check-in inputs",
+      "Defines an ordered evidence, attribution, comparison, scoring, writeback, and accept/kill/iterate/monitor procedure",
+      "Defines idempotency and missing/stale/below-minimum evidence behavior while preserving future and completed rows",
+      "Keeps ticket scope and QA Strategy winning and does not create a check-in ticket"
+    ],
+    "tags": [
+      "skill",
+      "goal-advisor",
+      "delayed-reward",
+      "check-in-program"
+    ],
+    "notes": "Guards program-owned delayed check-ins so Pulse remains a dispatcher."
   }
 ]

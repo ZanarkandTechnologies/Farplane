@@ -10,8 +10,8 @@ after_ref: skills/interval-update/SKILL.md@239-lines-after-followup-correction
 reasoning_basis: advise
 proof_artifacts:
   - skills/interval-update/SKILL.md
-  - skills/interval-update/references/workflow-index.md
-  - skills/interval-update/references/ticket-reward-contract.md
+  - the former workflow index and ticket-reward reference, deleted during
+    TASK-0319 refinement
   - skills/interval-update/references/parent-run-contract.md
   - reviewer:019f44fc-d055-72b0-b60b-c527f8b484ac
   - reviewer-final:019f44fc-d055-72b0-b60b-c527f8b484ac TAS pass-ready
@@ -62,7 +62,7 @@ eval_required: no
 | Check | Verdict | Evidence |
 | --- | --- | --- |
 | `first_load_sufficiency` | pass | `SKILL.md` keeps parent contract, signature, gates, todo path, and output sentence. |
-| `reference_load_precision` | pass | `SKILL.md` says when to load `interval-update.md`, `workflow-index.md`, `ticket-reward-contract.md`, and audit-only `parent-run-contract.md`. |
+| `reference_load_precision` | superseded | TASK-0319 removed the old workflow index and Interval reward contract; the compact skill now loads only the BAU reporting reference and audit-only parent contract. |
 | `missing_context_rate` | pass | Mandatory lane isolation, summary/raw evidence, reward exception, and report-before-mutation gates remain first-load. |
 | `noisy_context_rate` | pass | Optional catalog, metric helpers, and caller-boundary prose moved out of first-load. |
 | `duplicated_instruction_count` | pass | Workflow catalog now has one owner reference. Parent contract has a short first-load authority and an audit/shareable ref. |

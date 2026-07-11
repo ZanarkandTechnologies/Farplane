@@ -1,198 +1,76 @@
 ---
-title: Taste Loop human-feedback optimization
-status: partial
+title: Retired Taste Loop human-feedback optimization
+status: retired
 owner: feature-registry
 created_at: 2026-07-07
-updated_at: 2026-07-08
+updated_at: 2026-07-11
 tags:
   - farplane
   - feature
   - sys-0007
 refs:
-  - skills/taste-loop/SKILL.md
+  - skills/dogfood-review/SKILL.md
   - skills/optimize-with-human/SKILL.md
-  - farplane/automations.toml
-  - farplane/products.json
-  - farplane/products.json
-  - farplane/products/
+  - skills/pulse-update/SKILL.md
+  - skills/worker-artifact-review-request/SKILL.md
+  - docs/features/FEAT-0070-experimental-feature-evaluation-reports.md
+  - docs/features/FEAT-0071-project-work-pulse.md
 feature_id: FEAT-0069
 system_id: SYS-0007
 category: improvement-loop
 public: true
 surfaces:
-  - skills/taste-loop/SKILL.md
+  - skills/dogfood-review/SKILL.md
   - skills/optimize-with-human/SKILL.md
-  - farplane/automations.toml
-  - farplane/products.json
-  - farplane/products.json
-  - farplane/products/
+  - skills/pulse-update/SKILL.md
+  - skills/worker-artifact-review-request/SKILL.md
 source_refs:
-  - docs/features/FEAT-0064-skill-signals.md
   - docs/systems/self-improvement-learning.md
+  - docs/farplane-framework/v-next.md
 external_refs: []
 evidence_refs:
-  - skills/taste-loop/eval_task.json
-  - skills/optimize-with-human/eval_task.json
-known_limits: "Experimental feedback loop; it depends on visible worker threads, bounded feedback budget, and human replies before claiming improvement."
-metrics:
-  - idea_pass_rate
-  - execution_pass_rate
-  - feedback_turn_quality
-last_verified: 2026-07-08
-experimental: true
-superseded_by: false
-track: >-
-  Review Taste Loop and optimize-with-human for the current window. Read
-  farplane/products.json,
-  farplane/products/*/{product.md,progress.md} for feedback cycles,
-  active tickets waiting on Kenji feedback, worker thread refs when available,
-  Telegram review receipts or blockers, and any planning/execution artifacts
-  created from feedback. Judge against feedback-request quality, open-feedback
-  budget, hypothesis-cycle logging, worker-thread visibility, execution
-  follow-through, artifact improvement, and review-spam risk. Return continue,
-  adjust, cap, pause, graduate, or source_gap. In the interval summary, name the
-  active feedback wait, whether more requests are allowed, and the next safe
-  feedback action.
+  - tickets/archive/TASK-0326/artifacts/metadata-field-audit.md
+known_limits: "Retired as a standalone controller; human-feedback experiments now use normal ticket Goal Packets and the shared Work Pulse."
+metrics: []
+last_verified: 2026-07-11
+experimental: false
+superseded_by:
+  - FEAT-0070
+  - FEAT-0071
+track: false
 ---
-# Taste Loop human-feedback optimization
 
-Taste Loop human-feedback optimization turns active human attention into structured
-feedback cycles for product artifacts. It belongs to [Self-Improvement And
-Learning](../systems/self-improvement-learning.md) and is experimental because it is a
-recurring operator-facing UX whose quality depends on the feedback loop feeling worth
-the interruption.
+# Retired Taste Loop human-feedback optimization
+
+Taste Loop is retired as a standalone skill and scheduled controller. Its
+useful primitives were smaller than the controller:
 
 ```text
-taste_feedback_optimization(product_lane, workflow, worker_thread, artifacts)
-  -> planning_signal + execution_signal + next_hypothesis
+Dogfood/self-improvement -> feedback experiment Goal Packet
+Work Pulse               -> execute ticket and due check-ins
+optimize-with-human       -> human feedback as the metric when appropriate
+worker review request     -> initial or due Telegram request
+progress.md Review block  -> mutable wait/reminder/reply state
 ```
 
-## At A Glance
+Human review waits release the execution worker. The bound persistent thread
+may wake on a direct reply, but an inactive thread is not worker occupancy.
+Review WIP limits new supply; it does not itself trigger reminders. Pulse may
+reconcile at most one review whose ticket-owned `next_reminder_at` is due.
 
-- Feature ID: `FEAT-0069`
-- System: [Self-Improvement And Learning](../systems/self-improvement-learning.md)
-- Status: `partial`
-- Experimental: `true`
-- Category: `improvement-loop`
-- Primary user: operator, Taste Loop controller, and worker thread
-- Job: use human taste as the honest metric for improving product artifacts.
+This decomposition also prevents human-taste work from becoming a second
+project heartbeat. The only heartbeat is Work Pulse; weekly Dogfood creates a
+bounded improvement wave and all execution stays on the shared board.
 
-## Problem
+## CRM Boundary
 
-Many Farplane artifacts are not ready for benchmark-style metrics. The fastest honest
-signal is often Kenji deciding whether an idea, artifact, or direction is worth keeping,
-revising, or rejecting. Without structure, that feedback becomes chat noise or a vague
-approval request.
-
-## What It Does
-
-- Selects a product-lane artifact workflow from product-local `product.md`
-  definitions or the generated `farplane/products.json` / `farplane/products.json`
-  indexes.
-- Creates or reuses a worker ticket, Goal Packet, and Codex thread.
-- Uses `optimize-with-human` for phase-aware planning and execution feedback.
-- Logs hypothesis cycles in worker progress.
-- Treats human feedback as a metric signal, not as automatic completion.
-
-## User Stories
-
-- As an operator, I can review compact artifacts instead of broad internal summaries.
-- As a Taste Loop controller, I can route feedback to the worker that can act on it.
-- As a maintainer, I can see whether repeated feedback should harden a skill, change a
-  product workflow, or stop the experiment.
-
-## Operating Contract
-
-Taste Loop owns the heartbeat and worker selection. `optimize-with-human` owns the
-feedback protocol inside a worker loop.
-
-- Feedback requests must name the artifact and decision.
-- Planning and execution phases are logged separately.
-- Dedicated worker threads own reply routing when feedback should resume work.
-- Repeated same-phase failures may become skill hardening or productization evidence.
-
-## Feature Flow
-
-```mermaid
-flowchart LR
-  classDef keep fill:#f3f4f6,stroke:#6b7280,color:#111827
-  classDef changed fill:#fef3c7,stroke:#b45309,color:#111827
-  classDef added fill:#dcfce7,stroke:#15803d,color:#111827
-  classDef retired fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d,stroke-dasharray: 5 3
-
-  heartbeat["Heartbeat<br/>farplane/automations.toml"]:::keep
-  taste["skills/taste-loop<br/>select product workflow"]:::changed
-  product["product.md<br/>products.json<br/>workflow + artifact"]:::keep
-  optimize["optimize-with-human<br/>planning / execution feedback"]:::changed
-  pass["idea_pass_rate<br/>execution_pass_rate"]:::added
-  next["next hypothesis<br/>continue / cap / adjust / pause"]:::added
-  spam["unbounded review spam"]:::retired
-
-  heartbeat --> taste
-  product --> taste
-  taste --> optimize
-  optimize --> pass
-  pass --> next
-  next -. caps .-> spam
-```
-
-Gray is heartbeat/product input, amber is feedback-loop behavior, green is measured human-feedback output, and red dashed is the capped spam path.
-
-## Surfaces
-
-- Owner surfaces:
-  - `skills/taste-loop/SKILL.md`
-  - `skills/optimize-with-human/SKILL.md`
-  - `farplane/automations.toml`
-  - `farplane/products.json`
-  - `farplane/products.json`
-  - `farplane/products/*/product.md`
-- Generated surfaces:
-  - `.farplane/reports/taste-loop/`
-  - `.farplane/automation/taste-loop/`
-
-## Proof And Quality
-
-- Evidence:
-  - `skills/taste-loop/eval_task.json`
-  - `skills/optimize-with-human/eval_task.json`
-- Required checks:
-  - `python3 docs/features/validate_features.py`
-  - `python3 bin/validators/check_doc_refs.py`
-- Acceptance signals:
-  - Feedback requests point at reviewable artifacts.
-  - Worker progress logs hypothesis cycles before and after feedback.
-  - Review burden stays within budget and produces actionable next hypotheses.
-
-## Rollout And Maintenance
-
-- Update path: adjust Taste Loop workflow selection, feedback budget, and
-  optimize-with-human request contract.
-- Rollback path: pause the automation or route feedback manually through chat/review.
-- Compatibility notes: this feature does not replace `FEAT-0064`; skill signals can
-  inform candidate selection, while this feature owns the human-feedback loop UX.
-- Maintenance owner: Self-Improvement And Learning.
-
-## Limits And Non-Goals
-
-- This feature does not treat human approval as completion proof.
-- This feature does not edit target skills after one rejection.
-- This feature does not send broad feedback requests without an artifact.
-- Known weak spot: the loop can become annoying if the artifact is too thin or the
-  feedback question is vague.
-- Delete or merge this feature if the loop is rejected or fully absorbed into stable
-  Taste Loop doctrine.
-
-## Alternatives Considered
-
-- Option: Track Taste Loop only through `FEAT-0064`.
-  Decision: adapt.
-  Reason: skill signals are input evidence; the feedback optimization UX deserves its
-  own experimental feature handle.
-- Option: Make `optimize-with-human` a standalone runtime feature.
-  Decision: reject.
-  Reason: it is a preset/protocol inside Goal-backed worker loops, not its own runtime.
+Prospects and customers are durable CRM records, not long-lived BAU tickets.
+A CRM record may create a bounded action or experiment ticket that references
+the record; the ticket returns the result and closes. Waiting CRM relationships
+do not consume Work Pulse worker or review WIP capacity.
 
 ## Change History
 
-- 2026-07-07: Created as the experimental feature handle for Taste Loop feedback optimization.
+- 2026-07-07: Created as an experimental Taste Loop handle.
+- 2026-07-11: Retired by TASK-0326; behavior decomposed into self-improvement
+  ticket supply, Work Pulse execution/check-ins, and ticket-owned review state.

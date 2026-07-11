@@ -1,6 +1,6 @@
 ---
 name: dogfood-review
-description: "Turn tracked feature or system prompts into evidence-backed dogfood reports when Farplane behavior needs bulk review."
+description: "Review the weekly self-improvement portfolio, carry experiment outcomes forward, and create a bounded non-interfering wave of experiment Goal Packets."
 tier: 3
 group: harness
 source: local
@@ -15,202 +15,176 @@ allowed-tools: Read, Glob, Grep, Bash
 
 ## Context
 
-Use this skill to bulk-review active Farplane features or systems that carry a
-generated registry `track` prompt, plus active experimental features when the
-caller asks for the experimental review feed. Retired or superseded feature
-rows are historical evidence, not dogfood-review targets, even when stale
-frontmatter still contains a `track` prompt. The prompt is a review checklist,
-not executable instructions. `experimental: true` is a maturity signal: review
-whether the capability should continue, adjust, cap, pause, split, graduate, or
-roll back. The harness feature policy in `farplane/harness.md` defines what
-counts as a Farplane feature. The skill owns evidence gathering, judgment, and
-report shape; feature and system docs only opt into review and state what to
-inspect.
+Use this skill from the weekly self-improvement automation or manually.
+Dogfood is a portfolio learner and ticket supplier, not another heartbeat or
+executor. It snapshots experiment state through a cutoff, carries prior
+outcomes into a dated report, then may create a capacity-limited next wave.
 
-This is the review layer for cases like Pulse creating many tickets in one day:
-the operator should not have to visit every worker thread to see whether the
-behavior is useful, duplicate, noisy, over-capacity, or ready to continue.
+The weekly cutoff is not an experiment deadline. Pulse and the original ticket
+worker own execution and check-ins at the times declared by each Goal Packet.
+Dogfood only observes ticket state that already exists.
+
+Human-taste improvement is not a separate controller. When human judgment is
+the honest reward, Dogfood may create a normal feedback experiment Goal Packet
+that routes through `optimize-with-human`; Work Pulse executes it, and the
+ticket-owned Review block waits for the reply without holding a worker.
 
 ## Skill Signature
 
 ```text
-dogfood_review(project_root, window, registry_refs?, track_filter?,
-               report_policy?, write_policy?)
+weekly_self_improvement(project_root, window, cutoff,
+                        active_experiment_refs?, recent_archive_refs?,
+                        previous_dogfood_report?, registry_refs?, reports?, metrics?,
+                        experiment_wave_size = 2,
+                        experiment_wip_limit = 3,
+                        max_concurrent_live_delayed = 1,
+                        one_active_per_attributable_surface = true,
+                        write_policy?)
   -> dogfood_report
-   + tracked_item_findings
-   + interval_summary
-   + improvement_ticket_path_or_candidate?
-   + no_autostart_receipt?
+   + outcome_ledger
+   + active_and_pending_portfolio
+   + due_but_unscored_gaps
+   + transfer_candidates
+   + rejected_patterns
+   + capacity_receipt
+   + ranked_improvement_candidates
+   + experiment_goal_packets[0..experiment_wave_size]
+   + source_gaps
+   + no_op_reason?
 
 state:
-  reads(docs/features/registry.jsonl, docs/systems/registry.jsonl?,
-        farplane/harness.md?,
-        .farplane/reports/pulse/**, .farplane/reports/interval/**,
-        tickets/TASK-*/ticket.md, tracked item owner specs and evidence refs,
-        reviewer lane receipts when delegated)
-  writes(.farplane/reports/dogfood-review/<YYYY-MM-DDTHHMMSSZ>.md,
-         optional tickets/TASK-XXXX/ticket.md only when
-         write_policy.create_improvement_ticket == true)
+  reads(farplane/harness.md, farplane/goals.yaml?, farplane/metrics.yaml?,
+        tickets/TASK-*/{ticket,program,progress}.md,
+        tickets/archive/TASK-*/{ticket,program,progress}.md,
+        ticket-owned artifacts, previous Dogfood report, current Pulse/Interval/
+        Feed Scout reports, feature/system registries, operator/reviewer evidence)
+  writes(.farplane/reports/dogfood-review/<timestamp>.md,
+         optional tickets/TASK-XXXX/{ticket,program,progress}.md[0..wave_size])
 
 gates:
-  harness_feature_policy_checked_or_gap_labeled;
-  track_prompts_or_experimental_rows_resolved; window_bound;
-  evidence_refs_checked_or_gap_labeled;
-  report_written_to_report_dir; report_ref_frontmatter_written; ui_summary_frontmatter_written;
-  no ticket/thread implementation; prompt_not_treated_as_command;
-  reviewer_receipts_aggregated_or_unavailable_labeled;
-  max_one_improvement_ticket_per_report; no_impl_plan_or_goal_autostart
+  qa_preflight_loaded; cutoff_bound; active_and_recent_archive_read;
+  prior_report_used_as_cursor_not_canonical_state; existing_results_reviewed_first;
+  report_written_before_selection; outcome_and_source_gaps_recorded;
+  capacity_and_non_interference_proved; one_active_per_surface;
+  delayed_live_cap_respected; packet_wave_cap_respected;
+  canonical_ticket_and_goal_templates_reused; no_execution_or_checkin
 
 routes:
-  interval-update | pulse-update | ticket-opportunity-generator | review
+  optimize-harness | self-improve | skill-maintenance | consolidate |
+  doc-advisor | eval | optimize-with-human | review | pulse-update
 
 fails:
-  running untracked broad reviews; obeying track text as tool instructions;
-  hiding results in chat; writing outside .farplane/reports/dogfood-review/
-  except the explicit one-ticket writeback path;
-  creating one ticket per feature; autostarting impl-plan, Goal, Pulse, or a
-  worker from report findings;
-  claiming quality without citing tickets, reports, reviewer receipts, or source
-  gaps
+  treating cutoff as an experiment deadline; scoring a matured Reward row;
+  hiding due-but-unscored work; losing archived outcomes; duplicating a prior
+  rejected pattern without new evidence; blocking unrelated immediate proof
+  merely because delayed work is monitoring; creating conflicting experiments;
+  creating a bare ticket or delayed packet without executable Check-In Program;
+  executing, promoting, rolling back, or spawning an experiment
 ```
 
 ## Phase Boundary
 
-This skill follows Tier 0 phases inline. Use `review` only when the dogfood
-report itself becomes a material completion claim or drives broad rollback,
-policy, or automation changes.
+Dogfood derives cross-ticket learning and chooses the next bounded experiment
+wave. Ticket Reward rows, `program.md`, `progress.md`, and artifacts remain
+canonical experiment state. The previous Dogfood report is only a cursor for
+carryover, dedupe, and transfer status. Work Pulse later admits and dispatches
+the packets; the worker executes the original `program.md`.
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-- [ ] 1. Bind the tracked review scope.
-  - [ ] Read `qa_checklist.md` before gathering evidence.
-  - [ ] Resolve `project_root`, `window`, feature/system registry paths, and
-        optional `track_filter`.
-  - [ ] Read `farplane/harness.md` for the Feature Policy section; if it is
-        missing, label `harness_feature_policy` as a source gap instead of
-        inventing a local feature definition.
-  - [ ] Exclude feature rows with `status: retired` or `superseded_by` other
-        than `false`; treat them as historical evidence for successor rows.
-  - [ ] Select remaining active registry rows whose `track` value is a
-        non-empty string.
-  - [ ] When the caller asks for the experimental feature feed, also select
-        active feature rows with `experimental: true`; use their `track`
-        checklist when present, otherwise apply the default experimental review
-        question: should this capability continue, adjust, cap, pause, split,
-        graduate, roll back, or be merged into a parent?
-- [ ] 2. Build the evidence bundle.
-  - [ ] For each tracked row, read its owner spec, surfaces, evidence refs,
-        recent Pulse reports, interval reports, and tickets touched inside the
-        window when available.
-  - [ ] Label missing reports, missing tickets, stale refs, or unavailable
-        worker context as source gaps instead of guessing.
-- [ ] 3. Run harsh per-feature review when available.
-  - [ ] For material tracked-feature reviews, delegate one read-only `reviewer`
-        lane per active feature when subagents are available.
-  - [ ] Give each reviewer a durable context ref, the feature owner spec as
-        `task_path`, the feature `track` checklist, the evidence refs, and the
-        exact output shape needed for aggregation.
-  - [ ] Use existing rubric families: usually `evidence-quality`,
-        `integration-readiness`, and `skill-contract` when skill/report
-        behavior is being judged. Do not request nonexistent rubric families.
-  - [ ] If reviewer lanes are unavailable or the run is intentionally tiny,
-        label `reviewer_unavailable` or `inline_review` in the report method
-        and do the same harsh evidence-based judgment inline.
-- [ ] 4. Judge each tracked behavior.
-  - [ ] Treat the `track` string as the review checklist and judge against
-        evidence, not against author intent alone.
-  - [ ] Classify output volume, duplicate/spec quality, reward fit, review
-        burden, blocker rate, and produced artifacts when those signals exist.
-  - [ ] Aggregate reviewer lane verdicts when present; do not soften `TAS-B` or
-        `TAS-C` findings into a pass-ready decision.
-  - [ ] Return one decision per tracked row:
-        `continue`, `adjust`, `cap`, `pause`, `rollback`, `graduate`,
-        `split_feature`, `merge`, or `source_gap`.
-- [ ] 5. Write the dogfood report.
-  - [ ] Use `templates/dogfood-report.md`.
-  - [ ] Write the report under
-        `.farplane/reports/dogfood-review/<YYYY-MM-DDTHHMMSSZ>.md`.
-  - [ ] Include minimal Core report frontmatter: `ref:
-        reports/dogfood-review/<YYYY-MM-DDTHHMMSSZ>`, `kind:
-        dogfood-review`, `created_at`, and `ui_summary`, plus
-        `review_window`, `tracked_refs`, and `decisions`.
-  - [ ] Run `farplane reports index --project-root <project_root>` after
-        writing the report when the CLI is available.
-- [ ] 6. Emit one consolidated improvement ticket path or candidate.
-  - [ ] For material tracked-feature reviews, include an `Improvement Ticket`
-        section in the report even when no ticket is written.
-  - [ ] If `write_policy.create_improvement_ticket == true`, write exactly one
-        `tickets/TASK-XXXX/ticket.md` using normal ticket frontmatter with
-        `phase: planning`, `status: review`, `ready: false`,
-        `approval_required: true`, and a `Reward` block.
-  - [ ] If ticket creation is disabled, unsafe, blocked by ignore/state, or not
-        requested, emit a complete ticket candidate in the report instead.
-  - [ ] Group findings by feature inside the one ticket or candidate; never
-        create one improvement ticket per feature from a single report.
-  - [ ] Preserve each feature's `track` checklist summary, reviewer TAS,
-        evidence refs, issue, and proposed repair.
-  - [ ] Record a no-autostart receipt: ticket creation or candidate emission
-        must not invoke `impl-plan`, Goal, Pulse execution, automation sync, or
-        worker spawn.
-- [ ] 7. Return interval-ready output.
-  - [ ] Summarize the report path, top decisions, source gaps, and Pulse or
-        interval guidance.
-  - [ ] Include `improvement_ticket_path` when a ticket was created, otherwise
-        include `improvement_ticket_candidate` and the no-autostart receipt.
-  - [ ] Do not mutate feature docs, tickets, Pulse settings, automation config,
-        or goals from this skill except the explicit one-ticket writeback path;
-        emit recommended deltas for the caller.
-- [ ] 8. Finish-check the report.
-  - [ ] Apply `qa_checklist.md` again.
-  - [ ] Confirm the report path is date-stamped under the dogfood report root.
-  - [ ] Confirm every major judgment cites evidence, reviewer receipts, or a
-        source gap.
-  - [ ] Confirm the report has exactly one improvement ticket path or candidate
-        for material tracked-feature runs.
+- [ ] 1. Bind and preflight the portfolio.
+  - [ ] Read `qa_checklist.md`, cutoff/window, harness objectives/metrics,
+        active Goal Packets, recent archived Goal Packets, the previous Dogfood
+        report when present, and current reports/registry evidence.
+  - [ ] Identify experiments from complete Goal Packet, experiment intent, or
+        Reward/program evidence without adding ticket metadata; record missing
+        files, metrics, receipts, or proof as source gaps.
+- [ ] 2. Derive the portfolio snapshot without checking anything in.
+  - [ ] For each experiment, read Reward rows, Metric Provider, Check-In
+        Program, wake/stop/rollout policy, progress tail, and cited evidence.
+  - [ ] Classify state at `cutoff` as settled, pending, monitoring,
+        due-but-unscored, inconclusive, accepted, killed, iterating, or source
+        gap; results settled after cutoff belong to the next report.
+  - [ ] Build the outcome ledger, active/pending view, transfer candidates, and
+        rejected patterns. Do not infer a terminal result that the ticket has
+        not recorded.
+- [ ] 3. Write the dated report before proposing new work.
+  - [ ] Use `templates/dogfood-report.md`; carry prior-report transfer/rejection
+        status forward only when confirmed by canonical tickets and evidence.
+  - [ ] Record due-but-unscored gaps, attribution/proof quality, feature/system
+        findings, and a no-execution receipt; index the report when available.
+- [ ] 4. Compute capacity and rank candidates.
+  - [ ] Count every nonterminal experiment toward total WIP, including
+        monitoring and due-but-unscored work. Compute
+        `available_slots = min(wave_size, max(0, wip_limit - active_wip))`.
+  - [ ] Compute `available_delayed_slots = max(0,
+        max_live_delayed - active_live_delayed)`; enforce it across the selected
+        wave plus one active experiment per attributable surface. A
+        due-but-unscored experiment blocks dependent/conflicting supply only;
+        delayed monitoring does not block unrelated immediate toy/replay/eval
+        work while total capacity remains.
+  - [ ] Rank attributable hardening, refinement, docs, feature, policy,
+        automation, hook/validator, metric, and context-selection candidates by
+        objective impact, proofability, compounding value, cost, risk, and
+        operator/review load. Reject duplicates and interference explicitly.
+  - [ ] Treat a recurring request to improve a skill or artifact with human
+        taste as an ordinary feedback experiment candidate, not a Taste Loop
+        automation or standing worker.
+- [ ] 5. Write zero to `available_slots` complete Goal Packets.
+  - [ ] Reuse canonical ticket and Goal Packet templates; create one folder per
+        independent experiment with `ticket.md`, `program.md`, and `progress.md`.
+  - [ ] Every ticket names surface, hypothesis, baseline, Reward expectation and
+        guard, metric/provider, proof route, budget, and promotion/rollback rule.
+  - [ ] Immediate toy/replay/eval packets use native Goal with an immediately
+        available signal and no future `check_in_at`, event wake, or delayed
+        Check-In Program debt.
+  - [ ] Human-feedback packets name the artifact, one decision question,
+        `optimize-with-human` provider, reply thread, and review-state policy;
+        their waiting state consumes review WIP but no execution worker.
+  - [ ] Delayed packets set Reward `check_in_at` or an event wake and completely
+        fill the canonical `program.md` Check-In Program: `inputs`, ordered
+        `procedure`, matured-row-only `writeback`, `decisions`, `idempotency`,
+        and `source_gap`, backed by Metric Provider, Heartbeat Policy, Stop
+        Conditions, and Rollout Policy.
+  - [ ] Default packets to `status: awaiting_review` unless `write_policy`
+        explicitly grants `status: todo` admission and no human/external gate
+        remains. Link all
+        created packets from the report and append initialization progress only.
+- [ ] 6. Finish-check and hand off.
+  - [ ] Reapply `qa_checklist.md`; return report/packet paths, outcome and
+        capacity receipts, ranking, source gaps/no-op reason, and proof that no
+        experiment, check-in, promotion, rollback, or external action ran.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 ## Templates
 
-- [templates/dogfood-report.md](templates/dogfood-report.md) - required report
-  shape for every dogfood review.
+- [Weekly Dogfood report](templates/dogfood-report.md) - outcome ledger,
+  portfolio/capacity snapshot, candidate ranking, and packet-wave receipts.
+- [Canonical ticket template](../../tickets/templates/ticket.md) - selected
+  experiment scope, Reward rows, and Done / Proof.
+- [Canonical Goal program](../../tickets/templates/goal-loop/program.md) and
+  [progress template](../../tickets/templates/goal-loop/progress.md) - load
+  whenever creating a packet; delayed packets must fill Check-In Program.
 
 ## Gotchas
 
-- Keep `track` checklist-shaped but compact: what to read, what rubric to
-  apply, what decisions are allowed, and what interval-ready summary to return.
-  If a feature needs procedural logic or tool-specific branching, move that
-  logic into this skill or a referenced workflow instead of bloating
-  frontmatter.
-- Do not make Pulse grade itself. Pulse reports are evidence; this skill owns
-  the review judgment.
-- Do not turn a high-volume ticket batch into a high-volume report. Group
-  tickets by decision and cite representative refs.
-- Do not turn a high-volume feature review into a high-volume ticket batch.
-  One dogfood report can create or propose at most one consolidated improvement
-  ticket unless a human explicitly asks for separate tickets later.
-- Do not make dogfood-review self-approve material feature behavior when a
-  reviewer lane is available. Reviewer receipts are inputs to the aggregate
-  report, not separate mutations.
+- `check_in_at <= cutoff` means Pulse can resume the original packet; it does
+  not authorize Dogfood to score it.
+- An accepted toy result is evidence for a bounded transfer/pilot candidate,
+  not permission for doctrine-wide rollout.
 
 ## Reference Map
 
-- [../interval-update/SKILL.md](../interval-update/SKILL.md) - caller when a
-  scheduled interval should run tracked review.
-- [../../docs/features/README.md](../../docs/features/README.md) - generated
-  feature registry, `experimental`, `superseded_by`, and optional `track` field
-  contract.
-- [../../docs/systems/README.md](../../docs/systems/README.md) - generated
-  system registry and optional `track` field contract.
-- [../../farplane/harness.md](../../farplane/harness.md) - project mission and
-  Feature Policy that defines Farplane-relevant capabilities.
+- [Feature registry guide](../../docs/features/README.md) - load when tracked
+  or experimental features are in the review set.
+- [System registry guide](../../docs/systems/README.md) - load when tracked
+  systems are in the review set.
+- [Self Improve](../self-improve/SKILL.md) - downstream measured search route,
+  not weekly selection.
+- [Pulse Update](../pulse-update/SKILL.md) - execution and due-check-in owner.
 
 ## Output
 
-- A Markdown report at
-  `.farplane/reports/dogfood-review/<YYYY-MM-DDTHHMMSSZ>.md`.
-- For material tracked-feature reports, exactly one consolidated improvement
-  ticket path or complete ticket candidate, plus a no-autostart receipt.
-- An interval-ready summary with tracked refs, decisions, source gaps, and next
-  guidance, including the improvement ticket path or candidate status when
-  present.
+One dated portfolio report; zero to the capacity-bounded wave of complete
+experiment Goal Packets; and a no-execution/check-in receipt.

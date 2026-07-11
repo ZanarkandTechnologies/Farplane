@@ -90,6 +90,14 @@ goal_advisor_qa(goal_prompt, ticket?, program?) -> checklist_verdicts + fixes_or
    - Violation: The Goal prompt assumes a Stop hook, transcript memory, or the
      executor's own final summary will catch missing proof.
 
+12. `delayed-checkin-program-ownership`
+   - Question: Does every delayed Reward packet contain an executable
+     `Check-In Program` with inputs, ordered procedure, writeback, decisions,
+     idempotency, and source-gap handling, while immediate packets keep only a
+     compact `not_applicable` reason?
+   - Violation: Pulse or a launcher prompt must reconstruct the experiment's
+     scoring policy, or immediate work inherits unused delayed-check-in debt.
+
 ## Evidence Note Template
 
 ```text

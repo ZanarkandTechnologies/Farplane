@@ -3,8 +3,8 @@ title: Farplane Framework
 status: active
 owner: harness
 created_at: 2026-06-15
-updated_at: 2026-07-08
-framework_template_version: "0.2.1"
+updated_at: 2026-07-11
+framework_template_version: "0.3.0"
 source_of_truth:
   - docs/farplane-framework/lifecycle.md
   - docs/farplane-framework/ticket-execution-loop.md
@@ -20,8 +20,7 @@ source_of_truth:
   - farplane/manifest.json
   - farplane/harness.md
   - farplane/goals.yaml
-  - farplane/products/*/product.md
-  - farplane/products.json
+  - farplane/metrics.yaml
   - farplane/automations.toml
   - farplane/bindings.yaml
   - farplane/hooks.json
@@ -40,7 +39,7 @@ tickets, durable docs, reusable skills, proof surfaces, versioned templates,
 and recurring Codex automation loops.
 
 ```text
-project = files + tickets + skills + goals + bindings + product strategy + Pulse/Interval + runtime reports
+project = program files + tickets + skills + one Work Pulse + scheduled report/ticket sources
 ```
 
 This framework is the bridge between the two main product surfaces:
@@ -62,9 +61,15 @@ human shaping, ticket fields, `impl-plan`, `goal-advisor`, autonomous Goal
 execution, QA/proof, reviewer gates, and closeout work together.
 
 Use [Pulse And Interval Loop](pulse-and-interval-loop.md) when the question is
-how Pulse, Daily Interval, Weekly Interval, advisor routing, metric/source-gap
-snapshots, ticket Reward, runway decisions, reward signals, and urgent leverage
-escalation coordinate higher-level work.
+how the one Work Pulse, Daily/Weekly BAU reports, Feed Scout, Dogfood
+self-improvement, ticket Reward check-ins, and their bounded ticket sources
+coordinate higher-level work.
+
+Use [Farplane Framework V-Next](v-next.md) for the migration theory built from
+`program + progress`, one Work Pulse, ticket-backed check-ins, capability
+skills, and immediate or delayed self-improvement. Workstreams 1 and 2 own the
+active loop; the project-file migration is tracked by `TASK-0321` and
+`TASK-0322`.
 
 Use [Graph Contract](graph-contract.md) when the lifecycle needs to be consumed
 by tools or the Farplane UI. It defines the node, edge, confidence, and finite
@@ -102,17 +107,16 @@ PROJECT_ROOT/
     manifest.json
     harness.md
     goals.yaml
-    products/
-      <product>/product.md
-      <product>/skill.md
-      <product>/progress.md
-    products.json
+    metrics.yaml
     automations.toml
     bindings.yaml
     hooks.json
+    pm.json
+
+  .agents/
     skills/
       README.md
-    pm.json
+      <capability>/SKILL.md
 
   tickets/
     README.md
@@ -136,25 +140,28 @@ PROJECT_ROOT/
   skills/
 
   .farplane/
-    state/run-ledger.json
     automation/
+      decisions.jsonl
+      spawned-threads.jsonl
     reports/
+    metrics/daily/
     evals/runs/
     logs/
 ```
 
-Use `farplane/` for tracked config. Use `.farplane/` for generated state,
-reports, eval runs, and logs.
+Use `farplane/` for tracked config. Use `.farplane/` for owner-named generated
+state, reports, metric observations, eval runs, and logs; ticket QA and review
+evidence stays under the owning ticket.
 
 `farplane/manifest.json` carries the small UI card identity:
 `project.name`, `project.description`, and `project.archetype`. The richer
-description of what the project is lives in Markdown:
-`farplane/harness.md` owns the static human charter,
-`farplane/products/<product>/product.md` owns product-loop identity and config,
-generated `farplane/products.json` exposes the machine/UI product registry,
-and `farplane/goals.yaml` owns current strategy. The reporting standard is a
-framework doc, not a project primitive; see [Reporting](reporting.md).
-Project-specific product workflows live under `.agents/skills/`; promote them
+description of what the project is lives in Markdown: `farplane/harness.md`
+owns the static human charter and stable capability refs, while
+`farplane/goals.yaml` owns current strategy and KPI IDs, and
+`farplane/metrics.yaml` defines those metrics independently from provider
+bindings. The reporting standard is a framework doc, not a project primitive;
+see [Reporting](reporting.md).
+Project-specific capability workflows live under `.agents/skills/`; promote them
 to root `skills/` only after repeated evidence shows cross-project reuse.
 
 ## Template Version
@@ -162,7 +169,7 @@ to root `skills/` only after repeated evidence shows cross-project reuse.
 This standard uses:
 
 ```text
-framework_template_version: "0.2.1"
+framework_template_version: "0.3.0"
 ```
 
 When the framework shape changes, bump the manifest `spec_version`, dogfood the
@@ -183,8 +190,7 @@ init_advisor(project_root?, project_idea?, repo_shape?, stack_profile?, init_mod
    + farplane/manifest.json
    + farplane/harness.md
    + farplane/goals.yaml
-   + farplane/products/<product>/product.md
-   + farplane/products.json
+   + farplane/metrics.yaml
    + farplane/automations.toml
    + farplane/bindings.yaml
    + farplane/hooks.json
@@ -195,37 +201,36 @@ init_advisor(project_root?, project_idea?, repo_shape?, stack_profile?, init_mod
 
 In `full` init mode, `init-advisor` calls `harness-creator` after the
 substrate exists. `harness-creator` fills or refines the split project files:
-static charter in `harness.md`, product definitions in
-`products/<product>/product.md`, generated product registry in
-`products.json`, strategy and KPIs in `goals.yaml`, full automation configs in
-`automations.toml`, and safe coordinates in `bindings.yaml`. It owns the smaller advisor calls such
+static charter and capability refs in `harness.md`, strategy and KPI IDs in
+`goals.yaml`, metric semantics in `metrics.yaml`, full automation configs in
+`automations.toml`, and safe provider coordinates in `bindings.yaml`. It owns the smaller advisor calls such
 as research, `horizon-advisor`, `harness-advisor`, `skill-creator`, and
 `goal-advisor` when those are needed. Canonical `harness.md` files use YAML
 front matter plus Markdown sections, not a fenced custom program DSL.
 
 ## Automation Model
 
-Farplane projects use explicit recurring automation loops:
+Farplane projects use one execution heartbeat plus bounded scheduled sources:
 
 ```text
-pulse_update(...)  # fast ticket executor loop
-interval_update(...)  # scheduled report-then-plan loop
+pulse_update(...)     # fast board execution and due check-ins
+feed_scout(...)       # source report + bounded opportunity tickets
+interval_update(...)  # BAU problem report + known maintenance tickets
+dogfood_review(...)   # portfolio learning + 0..experiment_wave_size Goal Packets
 ```
 
-Pulse is the executor loop. It wakes frequently, reads the static harness
-charter, dynamic product strategy, generated product indexes, and recent
-strategy inputs; reconciles outcomes; executes ready tickets up to policy cap;
-requests planning when no executable work exists; and records decision/reward
-state.
+Work Pulse is the only heartbeat. It reconciles outcomes, derives matured
+Reward rows from original tickets, dispatches admitted tickets up to policy
+caps, and asks the BAU planner for a bounded wave only when no executable work
+exists.
 
-Daily Interval and Weekly Interval are planning loops. Their live Codex
-automation configs are reviewed in `farplane/automations.toml`; Codex
-automation records own their live cadence. They call `interval-update`, write date-stamped reports, refresh KPI
-snapshots from goal `kpis` and provider bindings, check drift, review weekly
-budget/runway, and produce Pulse guidance or Goal Advisor handoffs. They may
-propose static charter deltas in reports, but must not silently apply them.
+Daily and Weekly Interval are cron/manual BAU reporting jobs. They write dated
+Problems ledgers and may resurface only bounded maintenance already supported
+by prior finalized evidence. Feed Scout and Dogfood Review run separately and
+may create only their own bounded ticket class. None of these jobs execute
+tickets or perform matured check-ins; Work Pulse owns that shared path.
 
-The full contract lives in [Pulse and Interval Automation](../features/FEAT-0065-pulse-and-interval-automation.md).
+The active contract lives in [Work Pulse And Scheduled Ticket Sources](pulse-and-interval-loop.md).
 
 ## Automation Authoring
 

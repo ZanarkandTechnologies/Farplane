@@ -38,10 +38,17 @@ Create or update:
 
 Then generate the native `/goal` prompt from the same packet.
 Record the ticket `updated_at` used for compilation in `program.md` or the
-prompt artifact, plus the approval state and generated prompt path when a
-prompt artifact exists.
+prompt artifact, plus the approval state and generated prompt path. For
+material native Goal packets, `generated_prompt:` should point to the compiled
+prompt artifact or inline prompt location; use `none` only when the route is
+explicitly direct execution rather than native Goal execution.
 Set `approval: pending` for material packets unless the operator explicitly
 pre-approved auto-run. Do not run the native Goal until the packet is approved.
+
+For delayed Reward packets, replace the `Check-In Program` placeholders with
+the experiment's executable evidence, scoring, decision, writeback,
+idempotency, and source-gap procedure. For immediate feedback or packets with
+no delayed Reward row, keep only `mode: not_applicable` plus a reason.
 ```
 
 ## Native Goal Prompt
@@ -54,15 +61,22 @@ Files:
 - <progress.md>
 - <optional additional ticket/program/progress/spec/board/artifact files>
 
+First read `program.md`; it is the executable loop policy for this Goal
+Packet. Then read `ticket.md`; it is the scope, acceptance, and proof contract.
+Use `progress.md` as the append-only state log. If `program.md` is missing,
+stale, not listed here, or conflicts with the ticket's scope/proof policy, stop
+blocked or return to `goal-advisor` to regenerate the packet.
+
 Task: Complete only the primary ticket's `Scope: In` and `Done` conditions.
-Use `program.md`, `progress.md`, specs, designs, boards, and artifacts as loop
-settings, constraints, evidence, and context; they do not expand executable
-scope unless `ticket.md` says so. Preserve each ticket's Scope, Delta, Change
-Plan, Done, QA Strategy, Docs Strategy, Agent Contract, Run Hints, budget,
-blocker policy, and stop conditions. `Scope: Out` wins unless the ticket is
-updated and this packet is regenerated. Do not flatten or rewrite requirements;
-keep this Goal prompt compact and treat the listed files as the source of
-truth.
+Obey `program.md` for trigger mode, budget, metric or feedback provider, proof
+route, drift policy, after-turn routine, heartbeat or batch rules, and stop
+conditions. Use specs, designs, boards, and artifacts as constraints, evidence,
+and context; they do not expand executable scope unless `ticket.md` says so.
+Preserve each ticket's Scope, Delta, Change Plan, Done, QA Strategy, Docs
+Strategy, Agent Contract, Run Hints, budget, blocker policy, and stop
+conditions. `Scope: Out` wins unless the ticket is updated and this packet is
+regenerated. Do not flatten or rewrite requirements; keep this Goal prompt
+compact and treat the listed files as the source of truth.
 
 Logging: Before ending each turn, append a compact structured entry to every
 listed `progress.md` whose ticket state changed. If the work coordinates
@@ -86,18 +100,20 @@ completion review, docs validation, or packet freshness is missing, stale, or
 below the required gate, stop blocked or revise instead of claiming completion.
 
 After each turn: Compare progress against the listed files, request <drift
-reviewer> or the delegated QA/review lane when required, continue within the
-current time/budget window if useful, otherwise stop complete, stop blocked, or
-emit the next heartbeat action with attempted paths and one missing input. For
-UI or user-visible changes, stop complete only after the final response can
-include the strongest screenshot/image evidence as a Markdown image link plus
-artifact links, or after recording a clear blocker for missing visual proof.
-The final response must include `Ticket:`, `Verification:`, `Artifacts:`,
-`Grounding:`, and `Residual risk:` lines for material feature work.
+reviewer> or the delegated QA/review lane when required by `program.md`,
+continue within the current time/budget window if useful, otherwise stop
+complete, stop blocked, or emit the next heartbeat action with attempted paths
+and one missing input. For UI or user-visible changes, stop complete only after
+the final response can include the strongest screenshot/image evidence as a
+Markdown image link plus artifact links, or after recording a clear blocker for
+missing visual proof. The final response must include `Ticket:`,
+`Verification:`, `Artifacts:`, `Grounding:`, and `Residual risk:` lines for
+material feature work.
 
 Approval: This prompt may be run only after the human has approved the current
 Goal Packet. If the ticket plan changed after this packet was compiled, return
-to `goal-advisor`, regenerate the packet, and ask for approval again.
+to `goal-advisor`, regenerate `program.md` and this prompt, and ask for
+approval again.
 ```
 
 ## Parent Heartbeat Prompt
@@ -124,6 +140,30 @@ After each turn: If an executable file set is selected, output its native Goal
 prompt with an inline `Files:` list. Use `blocked` when required inputs,
 approval, evidence, or tools are missing. Do not create hidden automation or a
 competing scheduler.
+```
+
+## Delayed Check-In Resume Prompt
+
+```text
+Resume the original experiment Goal Packet for one due check-in.
+Files:
+- <original ticket.md>
+- <original program.md>
+- <original progress.md>
+- <named evidence artifacts, when any>
+
+Matured Reward row indexes: <indexes derived by Work Pulse>
+Evidence refs: <refs supplied by Work Pulse or named in program.md>
+Current time: <pulse timestamp>
+
+First read `program.md`, then execute its `Check-In Program` exactly. Update
+only the supplied matured rows, preserve future and already-complete rows,
+append the required observation and decision to `progress.md`, and return one
+of `accept`, `kill`, `iterate`, or `monitor`. The ticket's scope and QA
+Strategy win on conflict. If the program is missing, stale, not in
+`delayed_reward` mode, or lacks a required evidence/decision rule, record the
+source gap and return blocked for Goal Advisor repair; do not invent a check-in
+algorithm in this prompt.
 ```
 
 ## Skill Improvement Goal

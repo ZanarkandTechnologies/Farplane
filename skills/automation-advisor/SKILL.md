@@ -16,9 +16,11 @@ allowed-tools: Read, Glob, Grep, Bash
 
 Use this skill when creating, revising, or auditing Farplane Codex automations.
 It is Farplane-specific authoring guidance for live Codex automation configs.
-Pulse belongs to the fast executor loop; interval automations belong to
-reporting, reflection, drift checks, work-lane allocation, and bounded
-replanning.
+Work Pulse is the only base heartbeat and owns frequent reconciliation,
+dispatch, due ticket check-ins, and empty-board BAU refill. Feed Scout, Daily
+and Weekly BAU review, weekly Dogfood self-improvement, and low-frequency
+consolidation are separate `cron` records. They may produce
+reports or bounded ticket supply, but Work Pulse remains the shared executor.
 
 Do not reintroduce a project-local automation compiler or a hidden scheduler
 thread. Keep the full desired Codex automation records in
@@ -66,7 +68,7 @@ farplane/automations.toml automation id="<automation-id>"
 
 [automations.target]
 workspace = "<project-root>"
-thread_id = "<optional-thread-id>"
+# Heartbeat records use thread_id instead of workspace.
 
 [automations.schedule]
 type = "interval | active_hours_interval | daily | weekly | monthly"
@@ -86,7 +88,7 @@ in tracked TOML.
 automation_advisor(intent, project_refs, current_automation?, activate?)
   -> automation_template_choice
    + config_delta
-   + thread_delta?
+   + persistent_thread_delta?
    + automation_delta?
    + state_contract_check
    + proof_checklist
@@ -100,7 +102,7 @@ state:
         skills/interval-update/SKILL.md,
         skills/pulse-update/SKILL.md)
   writes(farplane/automations.toml config updates,
-         farplane/pm.json thread grouping when live activation succeeds)
+         farplane/pm.json only for an explicitly persistent thread)
 
 gates:
   loop_choice_made; cadence_named; prompt_calls_skill_plainly;
@@ -110,7 +112,8 @@ gates:
   no_hidden_scheduler_config
 
 routes:
-  pulse-update | interval-update | goal-advisor | review
+  pulse-update | interval-update | feed-scout | dogfood-review |
+  goal-advisor | review
 
 fails:
   creating another automation manifest compiler; mixing logs into tracked
@@ -122,11 +125,14 @@ fails:
 ## Todo List
 
 - [ ] 1. Classify the automation request.
-  - [ ] Choose `pulse-update`, `interval-update`, one-off ticket work, or no
-        automation.
+  - [ ] Choose `pulse-update`, `interval-update`, `feed-scout`,
+        `dogfood-review`, optional scheduled skill work, one-off ticket work,
+        or no automation.
   - [ ] Use Pulse for frequent bounded action selection.
-  - [ ] Use interval automations for scheduled reporting, drift checks, and
-        replanning windows such as daily and weekly.
+  - [ ] Keep Pulse as the only base `heartbeat`; use `cron` records for
+        scheduled reports, feed intake, self-improvement, and optional loops.
+  - [ ] Use Daily and Weekly Interval only for BAU reporting and bounded
+        resurfacing of previously evidenced maintenance problems.
   - [ ] Use monthly consolidation automations for low-churn registry or
         artifact-compression reviews that should not run inside weekly
         self-learning.
@@ -174,11 +180,12 @@ fails:
         available, create or update the project loops named in
         `farplane/automations.toml`, commonly Pulse, Daily Interval, Weekly
         Interval, and any explicitly requested monthly consolidation loop.
-  - [ ] Create dedicated project threads for loops that need context isolation.
-  - [ ] Attach each Codex automation to the matching thread at the named
-        cadence.
-  - [ ] Append persistent loop and PM-owned worker thread IDs to
-        `farplane/pm.json` so the UI renders them under the same employee.
+  - [ ] Reuse the existing Pulse thread for the one heartbeat. Create cron
+        jobs as project/workspace-targeted automations by default.
+  - [ ] Create a dedicated persistent thread only when the operator explicitly
+        requests one or the workflow proves a real context-isolation need.
+  - [ ] Update `farplane/pm.json` only when activation actually creates or
+        reuses a persistent thread that the UI must group.
   - [ ] If tools are unavailable, write the prompts and report
         `needs_automation_setup`.
 - [ ] 6. Check the proof surface.
@@ -187,6 +194,8 @@ fails:
   - [ ] Confirm `farplane/automations.toml` parses.
   - [ ] Confirm every record has id, name, kind, status, schedule, target, and
         prompt fields needed to sync to live Codex automation records.
+  - [ ] Confirm exactly one record has `kind = "heartbeat"`, that it invokes
+        `$pulse-update`, and that every other recurring workflow is `cron`.
   - [ ] Confirm interval report paths are date-stamped.
   - [ ] Confirm `farplane/automations.toml` is the reviewable config source and
         no `farplane/automations.json`, `farplane/steer.config.toml`, or
@@ -199,8 +208,8 @@ fails:
 
 - recommended automation type.
 - `farplane/automations.toml` config text or concise config delta.
-- created/reused thread and automation IDs when activation succeeds, plus the
-  `farplane/pm.json` UI grouping delta.
+- created/reused automation IDs when activation succeeds; include thread IDs
+  and a `farplane/pm.json` grouping delta only when persistent threads exist.
 - state contract check.
 - proof checklist and review route.
 
@@ -210,25 +219,26 @@ Use this only when the operator explicitly asks to activate live automations for
 a project.
 
 ```text
-activate_farplane_automations(project_root, project_id?, pm_manifest, automation_prompts)
-  -> loop_thread_ids
-   + loop_automation_ids
-   + pm_json_thread_group_delta
+activate_farplane_automations(project_root, project_id?, automation_prompts,
+                              pulse_thread_id?, persistent_thread_policy?)
+  -> automation_ids
+   + pulse_thread_id?
+   + optional_persistent_thread_ids
+   + optional_pm_json_delta
 ```
 
 1. Inspect existing Codex automations first and update matching project
    automations rather than creating duplicates.
-2. Create or reuse the dedicated project threads named by
-   `farplane/automations.toml`, commonly:
-   - `Project Pulse`
-   - `Project Daily Interval`
-   - `Project Weekly Interval`
-   - explicitly requested monthly consolidation loops
+2. Reuse the existing Project Pulse thread for the heartbeat. Target Feed
+   Scout, Daily BAU, Weekly BAU, weekly self-improvement, consolidation, and
+   other cron records at the project/workspace by default.
 3. Create or update `farplane/automations.toml` with the exact desired records.
 4. Create or update each Codex automation by copying the matching record's
-   `prompt` exactly, attached to the matching thread at the named cadence.
-5. Append visible loop thread IDs to `farplane/pm.json` so they render under
-   the persistent PM employee:
+   `prompt` exactly, using one heartbeat thread target and project/workspace
+   targets for cron jobs.
+5. Only when an explicit persistent-thread exception is used, append that
+   visible thread ID to `farplane/pm.json` so it renders under the persistent
+   PM employee:
 
 ```json
 {
@@ -242,12 +252,12 @@ activate_farplane_automations(project_root, project_id?, pm_manifest, automation
 Risk guards:
 
 - Do not create an extra Steer scheduler thread by default. Pulse owns fast
-  ticket selection; interval automations own scheduled reports and plans.
+  ticket selection; scheduled jobs own reports and bounded ticket sources.
 - Do not activate live automations if project goals are placeholder or if the
   operator asked only for substrate setup.
-- Do not store automation runtime IDs in `farplane/pm.json`; it is UI grouping
-  glue for thread IDs.
-- Do not hide PM-visible thread grouping in chat; write `farplane/pm.json`.
+- Do not store automation runtime IDs in `farplane/pm.json`; it is optional UI
+  grouping glue for persistent thread IDs, not required cron state.
+- Do not create thread rows merely to make cron jobs look persistent.
 - If app automation tools are unavailable, stop at `needs_automation_setup`
   with the prepared configs in `farplane/automations.toml`.
 

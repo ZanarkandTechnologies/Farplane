@@ -15,6 +15,7 @@ files so UI clients do not define their own report standard.
 
 ```text
 farplane reports index --project-root <project> -> .farplane/reports/index.json
+farplane reports repair-refs --project-root <project> -> add missing path refs + rebuild index
 ```
 
 ## Current System Status
@@ -25,10 +26,13 @@ The reporting system is in place at the Core registry layer:
   `.farplane/reports/index.json`.
 - Implemented: the project snapshot report cards consume the same Core registry
   builder.
-- Implemented: Interval, Pulse, Feed Scout, Taste Loop, and Dogfood report
+- Implemented: Interval, Pulse, Feed Scout, and Dogfood report
   producer contracts require `ref`, `kind`, `created_at`, and `ui_summary`.
-- Not backfilled: historical ignored reports that lack `ref` are excluded until
-  a future migration or new report production supplies the minimal frontmatter.
+- Implemented: `farplane reports repair-refs` adds path-derived `ref`
+  frontmatter to existing report Markdown when frontmatter is present, then
+  rebuilds the registry.
+- Historical reports missing other required card fields stay excluded until a
+  producer or human supplies truthful `kind`, `created_at`, and `ui_summary`.
 - Not included by default: CRM/customer research reports, ticket QA/review
   artifacts, review runs, mining runs, backfill jobs, and event-miner runs.
 
@@ -60,8 +64,8 @@ reports/interval/daily_interval/<timestamp>
 reports/interval/daily_interval/<timestamp>/feed-scout
 reports/pulse/<timestamp>
 reports/feed-scout/<timestamp>
-reports/taste-loop/<timestamp>/<workflow-or-ticket>
 reports/dogfood-review/<timestamp>
+reports/interval/<interval_id>/context/<timestamp>
 ```
 
 The physical Markdown path usually mirrors the `ref`, but `kind` and `ref` are
@@ -101,3 +105,19 @@ Use `.farplane/crm/reports/*` and its own index for CRM/customer research unless
 a future ticket explicitly opts those reports into the main project registry.
 Ticket QA/review/mining/backfill artifacts stay outside this registry by
 default.
+
+## Repair
+
+Use the explicit repair command when existing report Markdown has valid
+frontmatter but lacks only the canonical path ref:
+
+```text
+farplane reports repair-refs --project-root <project>
+```
+
+The repair derives `ref` from the Markdown path under `.farplane/` without the
+`.md` extension. For example,
+`.farplane/reports/interval/daily_interval/2026-07-07T213501Z.md` becomes
+`reports/interval/daily_interval/2026-07-07T213501Z`. The command does not
+invent missing `kind`, `created_at`, or `ui_summary`; those files remain
+reported as excluded issues after the index is rebuilt.

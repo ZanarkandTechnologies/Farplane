@@ -3,7 +3,7 @@ title: Skill signals
 status: implemented
 owner: feature-registry
 created_at: 2026-06-26
-updated_at: 2026-06-27
+updated_at: 2026-07-11
 tags:
   - farplane
   - feature
@@ -11,15 +11,13 @@ tags:
 refs:
   - docs/features/FEAT-0064-skill-signals.md
   - docs/skills/system.md
-  - skills/taste-loop
+  - skills/dogfood-review
   - farplane/automations.toml
   - docs/skills/registry.jsonl
   - docs/farplane-framework/lifecycle.md
-  - farplane/products.json
   - skills/skill-maintenance/graph/README.md
-  - skills/taste-loop/SKILL.md
-  - skills/taste-loop/templates/heartbeat-prompt.md
-  - skills/taste-loop/eval_task.json
+  - skills/dogfood-review/SKILL.md
+  - skills/skill-maintenance/SKILL.md
 feature_id: FEAT-0064
 system_id: SYS-0006
 category: skills
@@ -27,25 +25,23 @@ public: true
 surfaces:
   - docs/features/FEAT-0064-skill-signals.md
   - docs/skills/system.md
-  - skills/taste-loop
+  - skills/dogfood-review
   - farplane/automations.toml
   - docs/skills/registry.jsonl
 source_refs:
   - docs/farplane-framework/lifecycle.md
   - docs/skills/system.md
-  - farplane/products.json
   - skills/skill-maintenance/graph/README.md
 external_refs: []
 evidence_refs:
-  - skills/taste-loop/SKILL.md
-  - skills/taste-loop/templates/heartbeat-prompt.md
-  - skills/taste-loop/eval_task.json
-known_limits: Official signal contract only; the current implementation is prompt-consumed by Taste Loop and generated graph data. No standalone scorer, UI renderer, hidden scheduler, or automatic skill mutation is shipped.
+  - skills/dogfood-review/SKILL.md
+  - skills/skill-maintenance/SKILL.md
+known_limits: Official signal contract only; the current implementation is consumed by Dogfood/skill maintenance and generated graph data. No standalone scorer, UI renderer, hidden scheduler, or automatic skill mutation is shipped.
 metrics:
   - skill_signal_contract_traceability_pass
-  - taste_loop_signal_breakdown_pass
+  - dogfood_signal_breakdown_pass
   - skill_registry_validation_pass
-last_verified: 2026-06-26
+last_verified: 2026-07-11
 experimental: false
 superseded_by: false
 ---
@@ -90,9 +86,8 @@ deserve hardening, refinement, merging, watching, or retirement review first.
   source gaps without pretending they are direct usage.
 - Feeds skill-maintenance planning and consolidation decisions.
 - Helps decide when a skill should be split, merged, promoted, or retired.
-- Feeds Taste Loop candidate selection while keeping human taste feedback
-  separate as phase outcomes: `idea_pass_rate` for planning artifacts and
-  `execution_pass_rate` for generated artifacts.
+- Feeds Dogfood candidate selection while keeping human feedback in the
+  experiment ticket that produced it.
 
 ## User Stories
 
@@ -115,11 +110,10 @@ grade.
   surface, or user-facing capability.
 - Recommendations use `keep`, `harden`, `refine`, `merge`, `watch`, or
   `retire_review`; destructive edits still require owner-specific review.
-- Taste Loop uses these signals to choose which product-lane workflow to try
-  next. It does not treat idea or execution pass rates as eval score.
-  Those rates are human-feedback outcomes that can become evidence for future
-  maintenance priority only when recorded with a comparable scenario and
-  artifact refs.
+- Dogfood and skill maintenance use these signals to choose which capability
+  skill or workflow deserves a bounded experiment. Human-feedback outcomes
+  become maintenance evidence only when recorded with a comparable scenario
+  and artifact refs.
 
 Default recommendation rules:
 
@@ -146,7 +140,7 @@ flowchart LR
   registry["docs/skills/registry.jsonl<br/>graph refs"]:::keep
   heat["graph heat<br/>direct + composition"]:::changed
   burden["maintenance burden<br/>bloat, stale QA, missing evals"]:::changed
-  taste["taste-loop input decisions<br/>farplane/products.json"]:::changed
+  taste["Dogfood input decisions<br/>skill + ticket context"]:::changed
   decision["keep / harden / refine<br/>merge / watch / retire_review"]:::added
   retire["retire_review candidate"]:::retired
 
@@ -167,7 +161,7 @@ Owner surfaces:
 
 - `docs/features/FEAT-0064-skill-signals.md`
 - `docs/skills/system.md`
-- `skills/taste-loop`
+- `skills/dogfood-review`
 - `farplane/automations.toml`
 - `docs/skills/registry.jsonl`
 
@@ -175,14 +169,12 @@ Source context:
 
 - `docs/farplane-framework/lifecycle.md`
 - `docs/skills/system.md`
-- `farplane/products.json`
 - `skills/skill-maintenance/graph/README.md`
 
 Evidence:
 
-- `skills/taste-loop/SKILL.md`
-- `skills/taste-loop/templates/heartbeat-prompt.md`
-- `skills/taste-loop/eval_task.json`
+- `skills/dogfood-review/SKILL.md`
+- `skills/skill-maintenance/SKILL.md`
 
 ## Proof And Quality
 
@@ -210,7 +202,7 @@ Acceptance signals:
 - This feature does not make every skill high priority because it is useful once.
 - This feature does not replace skill-maintenance review.
 - Known limit: Official signal and recommendation contract only; the current
-  implementation is prompt-consumed by Taste Loop and generated graph data. No
+  implementation is consumed by Dogfood/skill maintenance and generated graph data. No
   standalone scorer, UI renderer, hidden scheduler, or automatic skill mutation
   is shipped.
 - Delete or merge this feature only when its current truth has moved into a clearer owner and all active refs are removed.
@@ -218,7 +210,7 @@ Acceptance signals:
 ## Metrics
 
 - `skill_signal_contract_traceability_pass`
-- `taste_loop_signal_breakdown_pass`
+- `dogfood_signal_breakdown_pass`
 - `skill_registry_validation_pass`
 
 ## Alternatives Considered
@@ -236,3 +228,5 @@ Acceptance signals:
 - 2026-06-27: Migrated into the reader-first feature-spec shape.
 - 2026-06-27: Simplified from a broad weighted score into direct heat,
   composition heat, maintenance burden, uniqueness, and recommendations.
+- 2026-07-11: Removed the retired product-registry input; skill signals now
+  feed capability-skill selection and upkeep directly.
