@@ -24,7 +24,7 @@ surfaces:
 source_refs:
   - docs/features/FEAT-0065-pulse-and-interval-automation.md
   - docs/farplane-framework/pulse-and-interval-loop.md
-  - docs/farplane-framework/v1.md
+  - docs/prd.md
 external_refs: []
 evidence_refs:
   - skills/interval-update/eval_task.json

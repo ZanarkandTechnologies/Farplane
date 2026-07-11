@@ -2,6 +2,7 @@
 title: Validation System Consolidation Audit
 status: pass
 owner: harness-advisor
+ticket_id: TASK-0323
 created_at: 2026-07-11
 updated_at: 2026-07-11
 kind: audit

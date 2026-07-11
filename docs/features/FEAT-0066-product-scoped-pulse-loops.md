@@ -9,7 +9,7 @@ tags:
   - feature
   - sys-0003
 refs:
-  - docs/farplane-framework/v1.md
+  - docs/prd.md
   - docs/features/FEAT-0071-project-work-pulse.md
   - tickets/archive/TASK-0318/ticket.md
 feature_id: FEAT-0066
@@ -20,7 +20,7 @@ surfaces:
   - docs/features/FEAT-0066-product-scoped-pulse-loops.md
   - docs/features/FEAT-0071-project-work-pulse.md
 source_refs:
-  - docs/farplane-framework/v1.md
+  - docs/prd.md
   - tickets/archive/TASK-0318/ticket.md
 external_refs: []
 evidence_refs:
@@ -68,7 +68,8 @@ The retired feature:
 
 ## Evidence
 
-- Current standard and migration rationale: `docs/farplane-framework/v1.md`
+- Current standard: `docs/prd.md`
+- Migration rationale: `tickets/archive/TASK-0318/ticket.md`
 - Implementation ticket: `tickets/archive/TASK-0318/ticket.md`
 - Successor: `docs/features/FEAT-0071-project-work-pulse.md`
 

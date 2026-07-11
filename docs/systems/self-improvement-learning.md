@@ -99,6 +99,25 @@ problem reports remain in Horizon Loop.
 - Registry data is generated from system and feature docs, not edited by hand.
 - When a capability no longer deserves a feature page, fold its current truth into the best owner and remove active refs.
 
+### Doctrine Promotion
+
+One successful bounded experiment changes its tested surface; it does not
+automatically become general policy.
+
+```text
+accepted experiment
+-> pattern candidate
+-> transfer test on a similar problem
+-> scoped doctrine
+-> bounded rollout tickets
+```
+
+The promotion record names scope, preconditions, evidence, known
+counterexamples, transfer tests, rollback, and the next review point. A failed
+transfer is counterevidence: narrow or reject the doctrine instead of hiding
+the result. Dogfood may propose promotion and rollout work, but ticket-local
+evidence and review justify the durable change.
+
 ## System Flow
 
 ```mermaid

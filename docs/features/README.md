@@ -10,7 +10,6 @@ tags:
   - generated-registry-source
 refs:
   - docs/prd.md
-  - docs/farplane-framework/v1.md
   - docs/systems/README.md
   - docs/features/TEMPLATE.md
   - docs/features/registry.md

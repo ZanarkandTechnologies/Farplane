@@ -6,7 +6,6 @@ created_at: 2026-05-26
 updated_at: 2026-07-11
 version: "1.0"
 refs:
-  - docs/farplane-framework/v1.md
   - docs/farplane-framework/lifecycle.md
   - docs/farplane-framework/project-files.md
   - docs/farplane-framework/pulse-and-interval-loop.md

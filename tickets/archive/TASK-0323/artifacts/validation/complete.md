@@ -30,7 +30,7 @@ status: pass
 - `bin/core/validation/run.py`
 - `bin/farplane.py`
 - `bin/validators/farplane_checks.py`
-- `docs/features/audits/2026-07-11-validation-system-consolidation.md`
+- `tickets/archive/TASK-0323/artifacts/design/validation-system-consolidation.md`
 - `rules/validation.toml`
 - `skills/close-ticket/SKILL.md`
 - `skills/goal-advisor/SKILL.md`

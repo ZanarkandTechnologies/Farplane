@@ -5,8 +5,8 @@
 Farplane is the cloneable AI harness substrate.
 
 The current product contract is [Farplane V1](docs/prd.md), implemented by the
-[V1 framework](docs/farplane-framework/v1.md) and summarized in the
-[lifecycle](docs/farplane-framework/lifecycle.md).
+[framework lifecycle](docs/farplane-framework/lifecycle.md) and its linked
+technical contracts.
 
 Clone this repo when you want to build and maintain your own operating harness
 for AI work: standards, skills, evals, templates, tickets, automations, runtime

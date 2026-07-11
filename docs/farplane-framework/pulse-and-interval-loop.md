@@ -13,7 +13,7 @@ tags:
   - intervals
 refs:
   - docs/farplane-framework/README.md
-  - docs/farplane-framework/v1.md
+  - docs/prd.md
   - docs/farplane-framework/ticket-execution-loop.md
   - docs/features/FEAT-0071-project-work-pulse.md
   - docs/features/FEAT-0067-daily-interval-review-reports.md
@@ -24,8 +24,8 @@ refs:
 # Work Pulse And Scheduled Ticket Sources
 
 Farplane uses one project Work Pulse heartbeat for fast admission, execution,
-and due check-ins. Feed Scout, Daily, Weekly, Dogfood self-improvement, Taste
-Loop, and low-frequency maintenance run as separate bounded automations.
+and due check-ins. Feed Scout, Daily, Weekly, Dogfood self-improvement, and
+low-frequency maintenance run as separate bounded automations.
 
 ```text
 work_pulse(project_root, wave_size, worker_limit, review_wip)

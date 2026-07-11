@@ -2,6 +2,7 @@
 title: "Pushed Range Reviewer Receipt"
 status: revise
 owner: reviewer
+ticket_id: TASK-0240
 created_at: 2026-06-28
 range: b1a36355..801e1cc0
 reviewer_agent: Dalton

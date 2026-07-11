@@ -10,7 +10,7 @@ tags:
   - sys-0003
 refs:
   - docs/farplane-framework/pulse-and-interval-loop.md
-  - docs/farplane-framework/v1.md
+  - docs/prd.md
   - skills/pulse-update/SKILL.md
   - skills/ticket-opportunity-generator/SKILL.md
 feature_id: FEAT-0071
@@ -23,7 +23,7 @@ surfaces:
   - skills/pulse-update/scripts/list_pulse_board.py
   - skills/ticket-opportunity-generator/SKILL.md
 source_refs:
-  - docs/farplane-framework/v1.md
+  - docs/prd.md
   - tickets/archive/TASK-0318/ticket.md
 external_refs: []
 evidence_refs:

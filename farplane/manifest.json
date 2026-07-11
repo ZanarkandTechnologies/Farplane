@@ -68,7 +68,6 @@
     "framework_core": {
       "include": [
         "docs/farplane-framework/README.md",
-        "docs/farplane-framework/v1.md",
         "docs/farplane-framework/lifecycle.md",
         "docs/farplane-framework/init-advisor-critical-path.md",
         "docs/farplane-framework/project-files.md",

@@ -10,7 +10,6 @@ tags:
   - features
 refs:
   - docs/prd.md
-  - docs/farplane-framework/v1.md
   - docs/features/README.md
   - docs/features/registry.jsonl
   - docs/systems/registry.jsonl

@@ -11,9 +11,10 @@ Documentation routing starts in
 and README in sync whenever the public workflow, shipped capability list, or
 whole-system diagram changes.
 
-The canonical product and framework contracts are [Farplane V1](docs/prd.md),
-the [V1 operating model](docs/farplane-framework/v1.md), and the
-[framework lifecycle](docs/farplane-framework/lifecycle.md).
+The canonical product and framework contracts are [Farplane V1](docs/prd.md)
+and the [framework lifecycle](docs/farplane-framework/lifecycle.md). The
+lifecycle routes to the technical contracts for project files, Pulse,
+ticket execution, hooks, reporting, and graphs.
 
 ## Purpose
 

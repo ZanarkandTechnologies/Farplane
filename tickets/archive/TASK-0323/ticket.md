@@ -127,13 +127,13 @@ residual_risk: legacy wrapper deletion deferred where concurrent modifications o
 outcome: update_docs
 targets:
   - bin/README.md
-  - docs/features/audits/2026-07-11-validation-system-consolidation.md
+  - tickets/archive/TASK-0323/artifacts/design/validation-system-consolidation.md
 validation: doc reference check
 ```
 
 ## Links
 
-- Audit: `docs/features/audits/2026-07-11-validation-system-consolidation.md`
+- Audit: `tickets/archive/TASK-0323/artifacts/design/validation-system-consolidation.md`
 - Visual companion: `tickets/archive/TASK-0323/diagrams.md`
 - QA: `tickets/archive/TASK-0323/artifacts/qa/20260711T132041Z-ticket-validation-authority-final/result.json`
 - Completion review: `tickets/archive/TASK-0323/artifacts/review/completion-review.md`

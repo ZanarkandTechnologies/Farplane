@@ -13,7 +13,7 @@ tags:
   - graph
 refs:
   - docs/farplane-framework/README.md
-  - docs/farplane-framework/v1.md
+  - docs/prd.md
   - docs/farplane-framework/init-advisor-critical-path.md
   - docs/farplane-framework/project-files.md
   - docs/farplane-framework/ticket-execution-loop.md
