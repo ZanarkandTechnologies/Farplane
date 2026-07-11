@@ -272,7 +272,7 @@ running this mode.
   - [ ] If a change adds scores, metrics, reward language, or ranking, verify
     the layer is correct: skills learn from checklist/review/eval feedback,
     goals and projects use `metric-advisor` for measurement contracts, and
-    interval/taste-loop reports synthesize reward signals without collapsing
+    interval/Dogfood reports synthesize reward signals without collapsing
     repair context into a scalar.
   - [ ] Reinstall touched local skills and inspect the live copy only when the
     user is judging installed behavior.

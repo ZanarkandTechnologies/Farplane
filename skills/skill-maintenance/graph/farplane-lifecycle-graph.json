@@ -1,35 +1,35 @@
 {
   "counts": {
     "edge_confidence": {
-      "curated": 43,
-      "explicit": 5,
-      "parsed": 182
+      "curated": 41,
+      "explicit": 7,
+      "parsed": 184
     },
     "edge_types": {
-      "consumes": 4,
-      "contains": 2,
+      "consumes": 2,
+      "contains": 3,
       "reads": 51,
-      "routes_to": 124,
-      "triggers": 14,
+      "routes_to": 125,
+      "triggers": 15,
       "updates": 4,
-      "writes": 31
+      "writes": 32
     },
-    "edges": 230,
+    "edges": 232,
     "fsa_projections": 5,
     "node_kinds": {
       "automation": 3,
-      "command": 2,
+      "command": 3,
       "doc": 11,
       "file": 19,
-      "hook": 2,
+      "hook": 3,
       "report": 2,
-      "route": 4,
+      "route": 5,
       "runtime": 1,
-      "skill": 41,
-      "state": 6,
-      "ticket": 6
+      "skill": 47,
+      "state": 4,
+      "ticket": 8
     },
-    "nodes": 97,
+    "nodes": 106,
     "parsed_skills": 18
   },
   "edges": [
@@ -71,21 +71,21 @@
     {
       "confidence": "curated",
       "evidence_ref": "docs/features/FEAT-0065-pulse-and-interval-automation.md",
-      "source": "file:farplane/automations.md",
+      "source": "file:farplane/automations.toml",
       "target": "automation:daily-interval",
       "type": "triggers"
     },
     {
       "confidence": "curated",
       "evidence_ref": "docs/features/FEAT-0065-pulse-and-interval-automation.md",
-      "source": "file:farplane/automations.md",
+      "source": "file:farplane/automations.toml",
       "target": "automation:pulse",
       "type": "triggers"
     },
     {
       "confidence": "curated",
       "evidence_ref": "docs/features/FEAT-0065-pulse-and-interval-automation.md",
-      "source": "file:farplane/automations.md",
+      "source": "file:farplane/automations.toml",
       "target": "automation:weekly-interval",
       "type": "triggers"
     },
@@ -97,18 +97,11 @@
       "type": "triggers"
     },
     {
-      "confidence": "curated",
-      "evidence_ref": "docs/features/FEAT-0065-pulse-and-interval-automation.md",
-      "source": "file:farplane/products.md",
-      "target": "skill:interval-update",
-      "type": "consumes"
-    },
-    {
-      "confidence": "curated",
-      "evidence_ref": "docs/features/FEAT-0065-pulse-and-interval-automation.md",
-      "source": "file:farplane/products.md",
-      "target": "skill:pulse-update",
-      "type": "consumes"
+      "confidence": "explicit",
+      "evidence_ref": "hooks.json",
+      "source": "file:hooks.json",
+      "target": "hook:PostToolUse",
+      "type": "contains"
     },
     {
       "confidence": "explicit",
@@ -123,6 +116,14 @@
       "source": "file:hooks.json",
       "target": "hook:UserPromptSubmit",
       "type": "contains"
+    },
+    {
+      "confidence": "explicit",
+      "evidence_ref": "hooks.json",
+      "label": "Read skill MD",
+      "source": "hook:PostToolUse",
+      "target": "command:sh--lc-test--n-farplane_ui_repo-exit-0-farplane_ui_repo/node_modules/.bin/tsx-fa",
+      "type": "triggers"
     },
     {
       "confidence": "explicit",
@@ -201,17 +202,17 @@
     {
       "confidence": "parsed",
       "evidence_ref": "skills/automation-advisor/SKILL.md",
-      "label": "farplane/automations.md?",
+      "label": "farplane/automations.toml?",
       "source": "skill:automation-advisor",
-      "target": "file:farplane/automations.md",
+      "target": "file:farplane/automations.toml",
       "type": "reads"
     },
     {
       "confidence": "parsed",
       "evidence_ref": "skills/automation-advisor/SKILL.md",
-      "label": "farplane/automations.md prompt updates",
+      "label": "farplane/automations.toml config updates",
       "source": "skill:automation-advisor",
-      "target": "file:farplane/automations.md",
+      "target": "file:farplane/automations.toml",
       "type": "writes"
     },
     {
@@ -225,7 +226,7 @@
     {
       "confidence": "parsed",
       "evidence_ref": "skills/automation-advisor/SKILL.md",
-      "label": "farplane/pm.json thread grouping when live activation succeeds",
+      "label": "farplane/pm.json only for an explicitly persistent thread",
       "source": "skill:automation-advisor",
       "target": "file:farplane/pm.json",
       "type": "writes"
@@ -261,6 +262,22 @@
       "source": "skill:automation-advisor",
       "target": "file:skills/pulse-update/SKILL.md",
       "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/automation-advisor/SKILL.md",
+      "label": "dogfood-review",
+      "source": "skill:automation-advisor",
+      "target": "skill:dogfood-review",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/automation-advisor/SKILL.md",
+      "label": "feed-scout",
+      "source": "skill:automation-advisor",
+      "target": "skill:feed-scout",
+      "type": "routes_to"
     },
     {
       "confidence": "parsed",
@@ -531,9 +548,17 @@
     {
       "confidence": "parsed",
       "evidence_ref": "skills/horizon-advisor/SKILL.md",
-      "label": "farplane/automations.md?",
+      "label": "farplane/automations.toml?",
       "source": "skill:horizon-advisor",
-      "target": "file:farplane/automations.md",
+      "target": "file:farplane/automations.toml",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/horizon-advisor/SKILL.md",
+      "label": "farplane/bindings.yaml?",
+      "source": "skill:horizon-advisor",
+      "target": "file:farplane/bindings.yaml",
       "type": "reads"
     },
     {
@@ -554,7 +579,7 @@
     {
       "confidence": "parsed",
       "evidence_ref": "skills/horizon-advisor/SKILL.md",
-      "label": "farplane/goals.yaml delta or strategy artifact when explicitly in scope",
+      "label": "farplane/goals.yaml delta",
       "source": "skill:horizon-advisor",
       "target": "file:farplane/goals.yaml",
       "type": "writes"
@@ -566,6 +591,22 @@
       "source": "skill:horizon-advisor",
       "target": "file:farplane/harness.md",
       "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/horizon-advisor/SKILL.md",
+      "label": "farplane/metrics.yaml",
+      "source": "skill:horizon-advisor",
+      "target": "file:farplane/metrics.yaml",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/horizon-advisor/SKILL.md",
+      "label": "farplane/metrics.yaml delta",
+      "source": "skill:horizon-advisor",
+      "target": "file:farplane/metrics.yaml",
+      "type": "writes"
     },
     {
       "confidence": "parsed",
@@ -658,6 +699,14 @@
     {
       "confidence": "parsed",
       "evidence_ref": "skills/impl-plan/SKILL.md",
+      "label": "diagramming",
+      "source": "skill:impl-plan",
+      "target": "skill:diagramming",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/impl-plan/SKILL.md",
       "label": "goal-advisor",
       "source": "skill:impl-plan",
       "target": "skill:goal-advisor",
@@ -735,7 +784,7 @@
       "confidence": "curated",
       "evidence_ref": "docs/farplane-framework/project-files.md",
       "source": "skill:init-advisor",
-      "target": "file:farplane/automations.md",
+      "target": "file:farplane/automations.toml",
       "type": "writes"
     },
     {
@@ -770,14 +819,14 @@
       "confidence": "curated",
       "evidence_ref": "docs/farplane-framework/project-files.md",
       "source": "skill:init-advisor",
-      "target": "file:farplane/pm.json",
+      "target": "file:farplane/metrics.yaml",
       "type": "writes"
     },
     {
       "confidence": "curated",
       "evidence_ref": "docs/farplane-framework/project-files.md",
       "source": "skill:init-advisor",
-      "target": "file:farplane/products.md",
+      "target": "file:farplane/pm.json",
       "type": "writes"
     },
     {
@@ -831,50 +880,10 @@
     {
       "confidence": "parsed",
       "evidence_ref": "skills/interval-update/SKILL.md",
-      "label": "docs/HISTORY.md?",
-      "source": "skill:interval-update",
-      "target": "doc:docs/HISTORY.md",
-      "type": "reads"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/interval-update/SKILL.md",
-      "label": "docs/LESSONS.md?",
-      "source": "skill:interval-update",
-      "target": "doc:docs/LESSONS.md",
-      "type": "reads"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/interval-update/SKILL.md",
-      "label": "docs/MEMORY.md?",
-      "source": "skill:interval-update",
-      "target": "doc:docs/MEMORY.md",
-      "type": "reads"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/interval-update/SKILL.md",
-      "label": "docs/TROUBLES.md?",
-      "source": "skill:interval-update",
-      "target": "doc:docs/TROUBLES.md",
-      "type": "reads"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/interval-update/SKILL.md",
       "label": "farplane/goals.yaml?",
       "source": "skill:interval-update",
       "target": "file:farplane/goals.yaml",
       "type": "reads"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/interval-update/SKILL.md",
-      "label": "farplane/goals.yaml only through explicit goals-delta policy",
-      "source": "skill:interval-update",
-      "target": "file:farplane/goals.yaml",
-      "type": "writes"
     },
     {
       "confidence": "parsed",
@@ -887,23 +896,15 @@
     {
       "confidence": "parsed",
       "evidence_ref": "skills/interval-update/SKILL.md",
-      "label": "farplane/pm.json?",
+      "label": "farplane/metrics.yaml?",
       "source": "skill:interval-update",
-      "target": "file:farplane/pm.json",
+      "target": "file:farplane/metrics.yaml",
       "type": "reads"
     },
     {
       "confidence": "parsed",
       "evidence_ref": "skills/interval-update/SKILL.md",
-      "label": "farplane/products.md?",
-      "source": "skill:interval-update",
-      "target": "file:farplane/products.md",
-      "type": "reads"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/interval-update/SKILL.md",
-      "label": ".farplane/reports/interval/?",
+      "label": ".farplane/reports/interval/**",
       "source": "skill:interval-update",
       "target": "report:.farplane/reports/interval/<interval_id>/<timestamp>.md",
       "type": "reads"
@@ -918,7 +919,7 @@
     {
       "confidence": "parsed",
       "evidence_ref": "skills/interval-update/SKILL.md",
-      "label": ".farplane/reports/interval/<interval_id>/<YYYY-MM-DDTHHMMSSZ>.md",
+      "label": ".farplane/reports/interval/<interval_id>/<timestamp>.md",
       "source": "skill:interval-update",
       "target": "report:.farplane/reports/interval/<interval_id>/<timestamp>.md",
       "type": "writes"
@@ -926,7 +927,7 @@
     {
       "confidence": "parsed",
       "evidence_ref": "skills/interval-update/SKILL.md",
-      "label": ".farplane/reports/pulse/?",
+      "label": ".farplane/reports/pulse/**",
       "source": "skill:interval-update",
       "target": "report:.farplane/reports/pulse/<timestamp>.md",
       "type": "reads"
@@ -937,22 +938,6 @@
       "label": "feed-scout",
       "source": "skill:interval-update",
       "target": "skill:feed-scout",
-      "type": "routes_to"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/interval-update/SKILL.md",
-      "label": "goal-advisor",
-      "source": "skill:interval-update",
-      "target": "skill:goal-advisor",
-      "type": "routes_to"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/interval-update/SKILL.md",
-      "label": "metric-advisor",
-      "source": "skill:interval-update",
-      "target": "skill:metric-advisor",
       "type": "routes_to"
     },
     {
@@ -974,33 +959,17 @@
     {
       "confidence": "parsed",
       "evidence_ref": "skills/interval-update/SKILL.md",
-      "label": "skill-maintenance",
+      "label": "ticket-opportunity-generator",
       "source": "skill:interval-update",
-      "target": "skill:skill-maintenance",
+      "target": "skill:ticket-opportunity-generator",
       "type": "routes_to"
     },
     {
       "confidence": "parsed",
       "evidence_ref": "skills/interval-update/SKILL.md",
-      "label": "update-memory",
+      "label": "tickets/**",
       "source": "skill:interval-update",
-      "target": "skill:update-memory",
-      "type": "routes_to"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/interval-update/SKILL.md",
-      "label": "update-strategy",
-      "source": "skill:interval-update",
-      "target": "skill:update-strategy",
-      "type": "routes_to"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/interval-update/SKILL.md",
-      "label": "tickets/",
-      "source": "skill:interval-update",
-      "target": "ticket:tickets/TASK-*/ticket.md",
+      "target": "ticket:tickets/**",
       "type": "reads"
     },
     {
@@ -1021,17 +990,17 @@
     {
       "confidence": "parsed",
       "evidence_ref": "skills/knowledge-tidier/SKILL.md",
-      "label": "consolidate",
+      "label": "documentation",
       "source": "skill:knowledge-tidier",
-      "target": "skill:consolidate",
+      "target": "route:documentation",
       "type": "routes_to"
     },
     {
       "confidence": "parsed",
       "evidence_ref": "skills/knowledge-tidier/SKILL.md",
-      "label": "documentation",
+      "label": "consolidate",
       "source": "skill:knowledge-tidier",
-      "target": "skill:documentation",
+      "target": "skill:consolidate",
       "type": "routes_to"
     },
     {
@@ -1340,6 +1309,22 @@
     {
       "confidence": "parsed",
       "evidence_ref": "skills/pulse-update/SKILL.md",
+      "label": "farplane/automations.toml?",
+      "source": "skill:pulse-update",
+      "target": "file:farplane/automations.toml",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/pulse-update/SKILL.md",
+      "label": "farplane/bindings.yaml?",
+      "source": "skill:pulse-update",
+      "target": "file:farplane/bindings.yaml",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/pulse-update/SKILL.md",
       "label": "farplane/goals.yaml?",
       "source": "skill:pulse-update",
       "target": "file:farplane/goals.yaml",
@@ -1356,6 +1341,14 @@
     {
       "confidence": "parsed",
       "evidence_ref": "skills/pulse-update/SKILL.md",
+      "label": "farplane/metrics.yaml?",
+      "source": "skill:pulse-update",
+      "target": "file:farplane/metrics.yaml",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/pulse-update/SKILL.md",
       "label": "farplane/pm.json?",
       "source": "skill:pulse-update",
       "target": "file:farplane/pm.json",
@@ -1364,26 +1357,10 @@
     {
       "confidence": "parsed",
       "evidence_ref": "skills/pulse-update/SKILL.md",
-      "label": "farplane/pm.json when persistent PM-owned worker threads are spawned",
+      "label": "farplane/pm.json when a persistent project worker thread is created",
       "source": "skill:pulse-update",
       "target": "file:farplane/pm.json",
       "type": "writes"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/pulse-update/SKILL.md",
-      "label": "farplane/products.md?",
-      "source": "skill:pulse-update",
-      "target": "file:farplane/products.md",
-      "type": "reads"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/pulse-update/SKILL.md",
-      "label": ".farplane/reports/interval/**?",
-      "source": "skill:pulse-update",
-      "target": "report:.farplane/reports/interval/<interval_id>/<timestamp>.md",
-      "type": "reads"
     },
     {
       "confidence": "curated",
@@ -1395,7 +1372,7 @@
     {
       "confidence": "parsed",
       "evidence_ref": "skills/pulse-update/SKILL.md",
-      "label": ".farplane/reports/pulse/<YYYY-MM-DDTHHMMSSZ>.md",
+      "label": ".farplane/reports/pulse/<timestamp>.md",
       "source": "skill:pulse-update",
       "target": "report:.farplane/reports/pulse/<timestamp>.md",
       "type": "writes"
@@ -1403,33 +1380,9 @@
     {
       "confidence": "parsed",
       "evidence_ref": "skills/pulse-update/SKILL.md",
-      "label": "eval",
-      "source": "skill:pulse-update",
-      "target": "skill:eval",
-      "type": "routes_to"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/pulse-update/SKILL.md",
-      "label": "feed-scout",
-      "source": "skill:pulse-update",
-      "target": "skill:feed-scout",
-      "type": "routes_to"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/pulse-update/SKILL.md",
       "label": "goal-advisor",
       "source": "skill:pulse-update",
       "target": "skill:goal-advisor",
-      "type": "routes_to"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/pulse-update/SKILL.md",
-      "label": "impl-plan",
-      "source": "skill:pulse-update",
-      "target": "skill:impl-plan",
       "type": "routes_to"
     },
     {
@@ -1451,18 +1404,42 @@
     {
       "confidence": "parsed",
       "evidence_ref": "skills/pulse-update/SKILL.md",
-      "label": "skill-maintenance",
+      "label": "telegram-message",
       "source": "skill:pulse-update",
-      "target": "skill:skill-maintenance",
+      "target": "skill:telegram-message",
       "type": "routes_to"
     },
     {
       "confidence": "parsed",
       "evidence_ref": "skills/pulse-update/SKILL.md",
-      "label": ".farplane/automation/action-outcomes.jsonl",
+      "label": "ticket-opportunity-generator",
+      "source": "skill:pulse-update",
+      "target": "skill:ticket-opportunity-generator",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/pulse-update/SKILL.md",
+      "label": "worker-artifact-review-request",
+      "source": "skill:pulse-update",
+      "target": "skill:worker-artifact-review-request",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/pulse-update/SKILL.md",
+      "label": ".farplane/automation/action-outcomes.jsonl?",
       "source": "skill:pulse-update",
       "target": "state:.farplane/automation/action-outcomes.jsonl",
       "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/pulse-update/SKILL.md",
+      "label": ".farplane/automation/action-outcomes.jsonl?",
+      "source": "skill:pulse-update",
+      "target": "state:.farplane/automation/action-outcomes.jsonl",
+      "type": "writes"
     },
     {
       "confidence": "curated",
@@ -1474,7 +1451,7 @@
     {
       "confidence": "parsed",
       "evidence_ref": "skills/pulse-update/SKILL.md",
-      "label": ".farplane/automation/decisions.jsonl",
+      "label": ".farplane/automation/decisions.jsonl?",
       "source": "skill:pulse-update",
       "target": "state:.farplane/automation/decisions.jsonl",
       "type": "writes"
@@ -1482,23 +1459,7 @@
     {
       "confidence": "parsed",
       "evidence_ref": "skills/pulse-update/SKILL.md",
-      "label": ".farplane/automation/heartbeat-policy.json",
-      "source": "skill:pulse-update",
-      "target": "state:.farplane/automation/heartbeat-policy.json",
-      "type": "reads"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/pulse-update/SKILL.md",
-      "label": ".farplane/automation/rewards.jsonl",
-      "source": "skill:pulse-update",
-      "target": "state:.farplane/automation/rewards.jsonl",
-      "type": "writes"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/pulse-update/SKILL.md",
-      "label": ".farplane/automation/spawned-threads.jsonl",
+      "label": ".farplane/automation/spawned-threads.jsonl?",
       "source": "skill:pulse-update",
       "target": "state:.farplane/automation/spawned-threads.jsonl",
       "type": "reads"
@@ -1506,10 +1467,26 @@
     {
       "confidence": "parsed",
       "evidence_ref": "skills/pulse-update/SKILL.md",
-      "label": ".farplane/automation/spawned-threads.jsonl",
+      "label": ".farplane/automation/spawned-threads.jsonl?",
       "source": "skill:pulse-update",
       "target": "state:.farplane/automation/spawned-threads.jsonl",
       "type": "writes"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/pulse-update/SKILL.md",
+      "label": "tickets/TASK-*/program.md?",
+      "source": "skill:pulse-update",
+      "target": "ticket:tickets/TASK-*/program.md",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/pulse-update/SKILL.md",
+      "label": "tickets/TASK-*/progress.md?",
+      "source": "skill:pulse-update",
+      "target": "ticket:tickets/TASK-*/progress.md",
+      "type": "reads"
     },
     {
       "confidence": "parsed",
@@ -1517,6 +1494,22 @@
       "label": "tickets/TASK-*/ticket.md",
       "source": "skill:pulse-update",
       "target": "ticket:tickets/TASK-*/ticket.md",
+      "type": "reads"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/pulse-update/SKILL.md",
+      "label": "tickets/TASK-*/ticket.md when accepted planner specs are materialized",
+      "source": "skill:pulse-update",
+      "target": "ticket:tickets/TASK-*/ticket.md",
+      "type": "writes"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/pulse-update/SKILL.md",
+      "label": "tickets/archive/**",
+      "source": "skill:pulse-update",
+      "target": "ticket:tickets/archive/**",
       "type": "reads"
     },
     {
@@ -1666,6 +1659,14 @@
     {
       "confidence": "parsed",
       "evidence_ref": "skills/skill-maintenance/SKILL.md",
+      "label": "best-of-worlds",
+      "source": "skill:skill-maintenance",
+      "target": "skill:best-of-worlds",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/skill-maintenance/SKILL.md",
       "label": "deliberative-advice",
       "source": "skill:skill-maintenance",
       "target": "skill:deliberative-advice",
@@ -1698,6 +1699,14 @@
     {
       "confidence": "parsed",
       "evidence_ref": "skills/skill-maintenance/SKILL.md",
+      "label": "research:source-synthesis",
+      "source": "skill:skill-maintenance",
+      "target": "skill:research",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/skill-maintenance/SKILL.md",
       "label": "review",
       "source": "skill:skill-maintenance",
       "target": "skill:review",
@@ -1717,6 +1726,14 @@
       "label": "skill-creator",
       "source": "skill:skill-maintenance",
       "target": "skill:skill-creator",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/skill-maintenance/SKILL.md",
+      "label": "summarize",
+      "source": "skill:skill-maintenance",
+      "target": "skill:summarize",
       "type": "routes_to"
     },
     {
@@ -1777,6 +1794,14 @@
     {
       "confidence": "parsed",
       "evidence_ref": "skills/update-memory/SKILL.md",
+      "label": "documentation",
+      "source": "skill:update-memory",
+      "target": "route:documentation",
+      "type": "routes_to"
+    },
+    {
+      "confidence": "parsed",
+      "evidence_ref": "skills/update-memory/SKILL.md",
       "label": "ticket/spec owner",
       "source": "skill:update-memory",
       "target": "route:ticket/spec-owner",
@@ -1788,14 +1813,6 @@
       "label": "consolidate",
       "source": "skill:update-memory",
       "target": "skill:consolidate",
-      "type": "routes_to"
-    },
-    {
-      "confidence": "parsed",
-      "evidence_ref": "skills/update-memory/SKILL.md",
-      "label": "documentation",
-      "source": "skill:update-memory",
-      "target": "skill:documentation",
       "type": "routes_to"
     },
     {
@@ -2211,7 +2228,7 @@
       ]
     }
   ],
-  "generated_at": "2026-06-27T16:32:58+00:00",
+  "generated_at": "2026-07-11T14:55:40+00:00",
   "nodes": [
     {
       "id": "automation:daily-interval",
@@ -2257,6 +2274,20 @@
       "label": "python3 \"$HOME/.codex/hooks/farplane_console_ping.py\"",
       "metadata": {
         "statusMessage": "Sending Farplane Console start heartbeat",
+        "timeout": 5
+      },
+      "path": "hooks.json",
+      "tags": [
+        "command",
+        "hook"
+      ]
+    },
+    {
+      "id": "command:sh--lc-test--n-farplane_ui_repo-exit-0-farplane_ui_repo/node_modules/.bin/tsx-fa",
+      "kind": "command",
+      "label": "sh -lc 'test -n \"$FARPLANE_UI_REPO\" || exit 0; \"$FARPLANE_UI_REPO/node_modules/.bin/tsx\" \"$FARPLANE_UI_REPO/hooks/skill-invocation-listener/run.ts\"'",
+      "metadata": {
+        "statusMessage": "Read skill MD",
         "timeout": 5
       },
       "path": "hooks.json",
@@ -2376,7 +2407,7 @@
     {
       "id": "file:.agents/skills/README.md",
       "kind": "file",
-      "label": "Local product skill home",
+      "label": "Local project skill home",
       "path": ".agents/skills/README.md",
       "tags": [
         "agents",
@@ -2435,10 +2466,10 @@
       ]
     },
     {
-      "id": "file:farplane/automations.md",
+      "id": "file:farplane/automations.toml",
       "kind": "file",
       "label": "Reviewed automation prompts",
-      "path": "farplane/automations.md",
+      "path": "farplane/automations.toml",
       "tags": [
         "automation",
         "farplane"
@@ -2497,6 +2528,17 @@
       ]
     },
     {
+      "id": "file:farplane/metrics.yaml",
+      "kind": "file",
+      "label": "Project metric contracts",
+      "path": "farplane/metrics.yaml",
+      "tags": [
+        "farplane",
+        "metrics",
+        "tracked-config"
+      ]
+    },
+    {
       "id": "file:farplane/pm.json",
       "kind": "file",
       "label": "PM UI thread grouping",
@@ -2504,17 +2546,6 @@
       "tags": [
         "farplane",
         "pm-ui"
-      ]
-    },
-    {
-      "id": "file:farplane/products.md",
-      "kind": "file",
-      "label": "Project products and work lanes",
-      "path": "farplane/products.md",
-      "tags": [
-        "farplane",
-        "products",
-        "tracked-config"
       ]
     },
     {
@@ -2561,6 +2592,15 @@
       "path": "skills/pulse-update/SKILL.md",
       "tags": [
         "parsed"
+      ]
+    },
+    {
+      "id": "hook:PostToolUse",
+      "kind": "hook",
+      "label": "PostToolUse",
+      "path": "hooks.json",
+      "tags": [
+        "hook"
       ]
     },
     {
@@ -2614,6 +2654,15 @@
       "id": "route:direct-answer",
       "kind": "route",
       "label": "direct-answer",
+      "tags": [
+        "abstract-route",
+        "route"
+      ]
+    },
+    {
+      "id": "route:documentation",
+      "kind": "route",
+      "label": "documentation",
       "tags": [
         "abstract-route",
         "route"
@@ -2681,13 +2730,23 @@
       "kind": "skill",
       "label": "automation-advisor",
       "metadata": {
-        "description": "Design or revise Farplane Codex automations using reviewable automations.md prompts and generic Pulse/Interval skill calls.",
+        "description": "Design or revise Farplane Codex automations using full project-owned automations.toml configs and generic Pulse/Interval skill calls.",
         "source": "local",
         "tier": 3
       },
       "path": "skills/automation-advisor/SKILL.md",
       "tags": [
         "harness",
+        "route-target",
+        "skill"
+      ]
+    },
+    {
+      "id": "skill:best-of-worlds",
+      "kind": "skill",
+      "label": "best-of-worlds",
+      "path": "skills/best-of-worlds/SKILL.md",
+      "tags": [
         "route-target",
         "skill"
       ]
@@ -2733,10 +2792,20 @@
       ]
     },
     {
-      "id": "skill:documentation",
+      "id": "skill:diagramming",
       "kind": "skill",
-      "label": "documentation",
-      "path": "skills/documentation/SKILL.md",
+      "label": "diagramming",
+      "path": "skills/diagramming/SKILL.md",
+      "tags": [
+        "route-target",
+        "skill"
+      ]
+    },
+    {
+      "id": "skill:dogfood-review",
+      "kind": "skill",
+      "label": "dogfood-review",
+      "path": "skills/dogfood-review/SKILL.md",
       "tags": [
         "route-target",
         "skill"
@@ -2871,7 +2940,7 @@
       "kind": "skill",
       "label": "interval-update",
       "metadata": {
-        "description": "Run one Farplane interval automation: review the past window, write a dated report, plan the next window, and emit Pulse or Goal Advisor guidance.",
+        "description": "Turn one Daily or Weekly BAU review window into a dated problem report and bounded resurfacing of already-evidenced maintenance.",
         "source": "local",
         "tier": 3
       },
@@ -2998,7 +3067,7 @@
       "kind": "skill",
       "label": "pulse-update",
       "metadata": {
-        "description": "Run the Farplane fast executor loop: reconcile outcomes, execute ready tickets up to policy cap, request planning when blocked, and update ledgers.",
+        "description": "Run one project Work Pulse: reconcile ordinary and due-check-in work, dispatch executable tickets, refill an empty board, request review, and write receipts.",
         "source": "local",
         "tier": 3
       },
@@ -3014,7 +3083,7 @@
       "kind": "skill",
       "label": "qa",
       "metadata": {
-        "description": "Turn one selected ticket into proof artifacts, reconciled Done / Proof obligations, and a structured QA result for Goal/ticket completion.",
+        "description": "Turn one selected ticket into proof artifacts, reconciled Done and QA Strategy obligations, and a structured QA result for Goal/ticket completion.",
         "source": "local",
         "tier": 3
       },
@@ -3113,10 +3182,40 @@
       ]
     },
     {
+      "id": "skill:summarize",
+      "kind": "skill",
+      "label": "summarize",
+      "path": "skills/summarize/SKILL.md",
+      "tags": [
+        "route-target",
+        "skill"
+      ]
+    },
+    {
+      "id": "skill:telegram-message",
+      "kind": "skill",
+      "label": "telegram-message",
+      "path": "skills/telegram-message/SKILL.md",
+      "tags": [
+        "route-target",
+        "skill"
+      ]
+    },
+    {
       "id": "skill:testing",
       "kind": "skill",
       "label": "testing",
       "path": "skills/testing/SKILL.md",
+      "tags": [
+        "route-target",
+        "skill"
+      ]
+    },
+    {
+      "id": "skill:ticket-opportunity-generator",
+      "kind": "skill",
+      "label": "ticket-opportunity-generator",
+      "path": "skills/ticket-opportunity-generator/SKILL.md",
       "tags": [
         "route-target",
         "skill"
@@ -3159,6 +3258,16 @@
       ]
     },
     {
+      "id": "skill:worker-artifact-review-request",
+      "kind": "skill",
+      "label": "worker-artifact-review-request",
+      "path": "skills/worker-artifact-review-request/SKILL.md",
+      "tags": [
+        "route-target",
+        "skill"
+      ]
+    },
+    {
       "id": "state:.farplane/automation/action-outcomes.jsonl",
       "kind": "state",
       "label": "Pulse action outcomes",
@@ -3176,15 +3285,6 @@
       "tags": [
         "pulse",
         "runtime"
-      ]
-    },
-    {
-      "id": "state:.farplane/automation/heartbeat-policy.json",
-      "kind": "state",
-      "label": ".farplane/automation/heartbeat-policy.json",
-      "path": ".farplane/automation/heartbeat-policy.json",
-      "tags": [
-        "parsed"
       ]
     },
     {
@@ -3208,12 +3308,12 @@
       ]
     },
     {
-      "id": "state:.farplane/state/run-ledger.json",
-      "kind": "state",
-      "label": "Run ledger",
-      "path": ".farplane/state/run-ledger.json",
+      "id": "ticket:tickets/**",
+      "kind": "ticket",
+      "label": "tickets/**",
+      "path": "tickets/**",
       "tags": [
-        "runtime"
+        "parsed"
       ]
     },
     {
@@ -3263,6 +3363,15 @@
       "tags": [
         "goal-packet",
         "ticket"
+      ]
+    },
+    {
+      "id": "ticket:tickets/archive/**",
+      "kind": "ticket",
+      "label": "tickets/archive/**",
+      "path": "tickets/archive/**",
+      "tags": [
+        "parsed"
       ]
     },
     {

@@ -1,9 +1,9 @@
 ---
 name: farplane-productization
-description: "Turn an accepted Farplane experiment or proof into shipped harness behavior when a result should become product."
+description: "Turn an accepted Farplane experiment or proof into durable harness behavior."
 tier: 3
 source: local
-group: product
+group: capability
 template_uses:
   skill-template: "0.3.2"
 ---
@@ -12,20 +12,21 @@ template_uses:
 
 ## Context
 
-Use this project-local skill when a Farplane experiment, ablation, operator
-request, review finding, or interval report has enough evidence to become
-shipped harness behavior.
+Use this project-local capability when an accepted experiment, ablation,
+operator request, review finding, or interval report has enough evidence to
+become durable harness behavior. The historical skill name describes rollout;
+it is not a product controller, planning lane, or independent Pulse.
 
-Productization can update skills, specs, validators, hooks, templates,
-automations, UI handoffs, or docs. It must preserve the static charter in
-`farplane/harness.md` and route material execution through tickets.
+The capability may update skills, specs, validators, hooks, templates,
+automations, UI handoffs, or docs. It preserves the static charter in
+`farplane/harness.md` and routes material execution through tickets.
 
 ## Skill Signature
 
 ```text
 farplane_productization(accepted_result, owner_surface, ticket?, proof_refs?)
-  -> productization_plan + shipped_delta_or_goal_handoff + proof
-state: reads(accepted report, farplane/harness.md, farplane/goals.md, owner surface, tickets); writes(ticket, skill/spec/validator/template/docs delta, proof artifact)
+  -> rollout_plan + shipped_delta_or_goal_handoff + proof
+state: reads(accepted report, farplane/harness.md, farplane/goals.yaml, owner surface, tickets); writes(ticket, bounded owner-surface delta, ticket proof)
 gates: owner_surface_named; evidence_refs_present; scoped_ticket_or_goal; proof_before_done
 routes: root skill `harness-advisor` | root skill `impl-plan` | root skill `goal-advisor` | root skill `review`
 fails: ships broad refactor without accepted evidence; changes charter silently; completes without proof
@@ -34,26 +35,15 @@ fails: ships broad refactor without accepted evidence; changes charter silently;
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-- [ ] 1. Bind the accepted result.
-  - [ ] Read the accepted experiment, ablation, review, or operator request.
-  - [ ] Name the intended owner surface and proof refs.
-- [ ] 2. Confirm placement.
-  - [ ] Use `harness-advisor` when ownership across skill, spec, validator,
-    hook, template, automation, UI, or docs is unclear.
-- [ ] 3. Create or bind the ticket.
-  - [ ] Use an existing ticket when present.
-  - [ ] Create a compact follow-up ticket when execution is material.
-- [ ] 4. Implement the product delta.
-  - [ ] Keep scope to the accepted result.
-  - [ ] Preserve static charter boundaries unless a human-approved harness
-    delta exists.
-- [ ] 5. Prove and review.
-  - [ ] Run the narrowest validator, eval, QA, or review that proves the
-    shipped behavior.
+- [ ] 1. Read the accepted result and name its proof refs.
+- [ ] 2. Confirm the smallest durable owner surface; use `harness-advisor` when unclear.
+- [ ] 3. Bind an existing ticket or create one only for material execution.
+- [ ] 4. Implement only the accepted bounded delta.
+- [ ] 5. Run the narrowest validator, eval, QA, and review that proves rollout.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 ## Output
 
-- Productization plan or ticket handoff.
+- Ticket-local rollout plan or handoff.
 - Shipped delta summary.
-- Proof command or artifact path.
+- Proof command and artifact path.
