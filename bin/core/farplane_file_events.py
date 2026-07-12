@@ -365,6 +365,37 @@ def outbox_path(project_root: Path, event_id: str) -> Path:
     return project_root / ".farplane" / "events" / "outbox" / f"{event_id}.json"
 
 
+def hook_error_path(project_root: Path, error_id: str) -> Path:
+    return project_root / ".farplane" / "hooks" / "errors" / f"{error_id}.json"
+
+
+def record_hook_error(
+    project_root: Path,
+    *,
+    hook_name: str,
+    error: object,
+    payload: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Write a bounded local hook error receipt without failing the hook."""
+
+    root = project_root.resolve()
+    occurred_at = now_iso()
+    payload_keys = sorted(str(key) for key in payload.keys())[:40] if isinstance(payload, dict) else []
+    receipt = {
+        "schema_version": SCHEMA_VERSION,
+        "hook_name": str(hook_name or "unknown")[:120],
+        "error": str(error)[:500],
+        "payload_keys": payload_keys,
+        "occurred_at": occurred_at,
+    }
+    error_id = sha256_value(receipt)
+    receipt["error_id"] = error_id
+    path = hook_error_path(root, error_id)
+    create_json_exclusive(path, receipt)
+    receipt["path"] = str(path)
+    return receipt
+
+
 def capture_file(project_root: Path, relative_path: str, *, payload: dict[str, Any], event_at: str | None = None) -> dict[str, Any] | None:
     """Capture one tracked file, durably enqueueing its event before snapshot advancement."""
 

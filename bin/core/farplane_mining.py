@@ -13,6 +13,8 @@ import hashlib
 import json
 import os
 import re
+import subprocess
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -50,6 +52,10 @@ def bindings_path(project_root: Path) -> Path:
 
 def mine_root(project_root: Path) -> Path:
     return project_root / ".farplane" / "mine"
+
+
+def drain_launch_root(project_root: Path) -> Path:
+    return project_root / ".farplane" / "hooks" / "drain-launches"
 
 
 def run_root(project_root: Path, run_id: str) -> Path:
@@ -482,23 +488,117 @@ def drain_pending(project_root: Path, *, program_root: Path = DEFAULT_PROGRAM_RO
     return {"ok": not failed, "processed": processed, "failed": failed, "pending": len(pending_events(project_root))}
 
 
+def _farplane_cli_path() -> Path:
+    return CORE_DIR.parent / "farplane.py"
+
+
+def launch_drain_process(
+    project_root: Path,
+    *,
+    captured_event_ids: list[str],
+    wait: bool = False,
+    command: list[str] | None = None,
+) -> dict[str, Any]:
+    """Launch a fixed local drain process and write an inspectable receipt."""
+
+    project_root = project_root.resolve()
+    launch_id = sha256_value(
+        {
+            "project_root": str(project_root),
+            "captured_event_ids": captured_event_ids,
+            "launched_at": now_iso(),
+            "parent_pid": os.getpid(),
+        }
+    )
+    root = drain_launch_root(project_root)
+    receipt_path = root / f"{launch_id}.json"
+    log_path = root / f"{launch_id}.log"
+    drain_command = command or [
+        sys.executable,
+        str(_farplane_cli_path()),
+        "mining",
+        "drain",
+        "--project-root",
+        str(project_root),
+        "--json",
+    ]
+    receipt = {
+        "schema_version": SCHEMA_VERSION,
+        "launch_id": launch_id,
+        "project_root": str(project_root),
+        "captured_event_ids": captured_event_ids,
+        "parent_pid": os.getpid(),
+        "command": drain_command,
+        "status": "launching",
+        "launched_at": now_iso(),
+        "waited": wait,
+        "log_path": str(log_path),
+    }
+    atomic_write_json(receipt_path, receipt)
+    try:
+        root.mkdir(parents=True, exist_ok=True)
+        log_handle = log_path.open("ab")
+        try:
+            child = subprocess.Popen(
+                drain_command,
+                cwd=str(project_root),
+                stdout=log_handle,
+                stderr=subprocess.STDOUT,
+                start_new_session=True,
+            )
+        finally:
+            log_handle.close()
+        receipt.update(status="launched", child_pid=child.pid)
+        if wait:
+            returncode = child.wait(timeout=30)
+            receipt.update(status="complete" if returncode == 0 else "failed", returncode=returncode, completed_at=now_iso())
+        atomic_write_json(receipt_path, receipt)
+        return {**receipt, "receipt_path": str(receipt_path)}
+    except Exception as exc:
+        receipt.update(status="failed_to_launch", error=str(exc)[:500], completed_at=now_iso())
+        atomic_write_json(receipt_path, receipt)
+        return {**receipt, "receipt_path": str(receipt_path)}
+
+
 def handle_file_change(
     payload: dict[str, Any],
     project_root: Path,
     *,
     program_root: Path = DEFAULT_PROGRAM_ROOT,
+    launch_drain: bool = True,
+    wait_for_drain: bool = False,
+    drain_command: list[str] | None = None,
 ) -> dict[str, Any]:
-    """Run the required retry/capture/retry boundary for one hook payload."""
+    """Capture one hook payload and launch local drain outside the hook process."""
 
-    before = drain_pending(project_root, program_root=program_root)
     events = capture_payload(payload, project_root=project_root)
-    after = drain_pending(project_root, program_root=program_root)
+    captured_event_ids = [event["event_id"] for event in events]
+    record_paths = [project_root / ".farplane" / "events" / "records" / f"{event_id}.json" for event_id in captured_event_ids]
+    outbox_paths = [project_root / ".farplane" / "events" / "outbox" / f"{event_id}.json" for event_id in captured_event_ids]
+    persisted_before_launch = {
+        "event_records": [str(path) for path in record_paths],
+        "outbox_rows": [str(path) for path in outbox_paths],
+        "event_records_exist": all(path.exists() for path in record_paths),
+        "outbox_rows_exist": all(path.exists() for path in outbox_paths),
+    }
+    launch = (
+        launch_drain_process(
+            project_root,
+            captured_event_ids=captured_event_ids,
+            wait=wait_for_drain,
+            command=drain_command,
+        )
+        if launch_drain
+        else None
+    )
     return {
-        "ok": before["ok"] and after["ok"],
+        "ok": not launch or launch.get("status") in {"launched", "complete"},
         "project_root": str(project_root.resolve()),
-        "captured_event_ids": [event["event_id"] for event in events],
-        "drain_before": before,
-        "drain_after": after,
+        "captured_event_ids": captured_event_ids,
+        "captured_event_record_paths": [str(path) for path in record_paths],
+        "outbox_paths": [str(path) for path in outbox_paths],
+        "persisted_before_launch": persisted_before_launch,
+        "drain_launch": launch,
     }
 
 

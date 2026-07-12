@@ -110,17 +110,42 @@ class FarplaneMiningTests(unittest.TestCase):
                 "session_id": "hook-test",
                 "tool_input": {"patch": "*** Update File: tickets/TASK-0001/ticket.md"},
             }
-            baseline = handle_payload(hook_payload, root)
+            baseline = handle_payload(hook_payload, root, wait_for_drain=True)
             self.assertEqual(len(baseline["captured_event_ids"]), 1)
-            self.assertEqual(baseline["drain_after"]["pending"], 0)
+            self.assertNotEqual(baseline["drain_launch"]["parent_pid"], baseline["drain_launch"]["child_pid"])
+            self.assertEqual(baseline["drain_launch"]["status"], "complete")
             self.assertEqual(list_runs(root), [])
 
             ticket.write_text(ticket_text("completed"), encoding="utf-8")
-            completed = handle_payload(hook_payload, root)
+            completed = handle_payload(hook_payload, root, wait_for_drain=True)
 
             self.assertTrue(completed["ok"])
-            self.assertEqual(completed["drain_before"]["pending"], 0)
-            self.assertEqual(completed["drain_after"]["pending"], 0)
+            self.assertEqual(completed["drain_launch"]["status"], "complete")
+            self.assertEqual(len(list_runs(root)), 1)
+
+    def test_failed_hook_drain_launch_leaves_pending_event_for_later_drain(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            ticket = write_project(root)
+            ticket.write_text(ticket_text("todo"), encoding="utf-8")
+            payload = {
+                "hook_event_name": "PostToolUse",
+                "tool_name": "apply_patch",
+                "cwd": str(root),
+                "session_id": "hook-test",
+                "tool_input": {"patch": "*** Update File: tickets/TASK-0001/ticket.md"},
+            }
+            handle_payload(payload, root, wait_for_drain=True)
+            ticket.write_text(ticket_text("completed"), encoding="utf-8")
+
+            failed = handle_payload(payload, root, drain_command=["/definitely/missing/farplane-miner"])
+
+            self.assertFalse(failed["ok"])
+            self.assertEqual(failed["drain_launch"]["status"], "failed_to_launch")
+            self.assertEqual(len(pending_events(root)), 1)
+            recovered = drain_pending(root)
+            self.assertTrue(recovered["ok"])
+            self.assertEqual(len(pending_events(root)), 0)
             self.assertEqual(len(list_runs(root)), 1)
 
     def test_route_fanout_is_deterministic_atomic_and_lean(self) -> None:

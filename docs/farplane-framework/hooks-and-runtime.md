@@ -30,7 +30,7 @@ codex_hook(event, transcript/runtime_state)
   -> telemetry | mechanical_gate
 
 file_change(project_root, path)
-  -> drain_pending -> durable FileEvent -> snapshot -> routes -> drain_pending
+  -> durable FileEvent/outbox -> fixed local drain subprocess -> routes
 ```
 
 ## Codex Lifecycle Hooks
@@ -41,6 +41,8 @@ Root `hooks.json` currently defines:
 | --- | --- | --- |
 | `UserPromptSubmit` | `capture_user_turn.py`, `farplane_console_ping.py` | classify the current user turn, append lightweight conversation windows, and send `turn_start` hook telemetry |
 | `Stop` | `farplane_console_ping.py` | send `turn_end` hook telemetry |
+| `PostToolUse` read/thread matchers | `farplane_local_event.py` | record small sanitized local skill/thread observations without Farplane UI |
+| `PostToolUse` write matchers | `farplane_file_change.py` | capture typed file events into the local outbox and launch the Core local drain process |
 
 These are graphable as `hook:*` nodes that `triggers` command nodes.
 
@@ -57,9 +59,14 @@ event_id = sha256(project_id, event_name, entity_ref, previous_hash, content_has
 run_id   = sha256(event_id, route_id, program_digest, input_digest)
 ```
 
-Session and task IDs are provenance only. Failed routes remain retryable; each
-later hook call drains pending work before and after capture, and operators or
-UI can call `farplane mining drain`. There is no daemon or extra heartbeat.
+Session and task IDs are provenance only. The hook process does not run mining
+itself and does not call a cloud dispatcher. It writes the typed event and
+outbox row first, then launches the fixed Core local drain entrypoint in a
+separate process. That child reads the local outbox, applies every matching
+`event_routes` row, and writes immutable local runs/reports. Failed launches
+write `.farplane/hooks/drain-launches/*.json` receipts and leave outbox rows
+retryable; operators or UI can still call `farplane mining drain`. There is no
+daemon, shell-tail workflow engine, or extra heartbeat.
 
 The default completion report contains `source`, `program`, `coverage`,
 `observations`, `material_findings`, `source_gaps`, and `escalation`. It does
@@ -137,8 +144,12 @@ Endpoint selection:
 2. `FARPLANE_CONVEX_SITE_URL` plus `/telemetry/hooks`
 
 The Farplane UI or its setup flow may own the `~/.farplane/*` values; the
-Codex install path owns symlinking `hooks.json` and
-`hooks/farplane_console_ping.py` into `~/.codex`.
+Codex install path owns symlinking `hooks.json`, `hooks/*.py`, and required
+Core Python command targets into `~/.codex`. `farplane hooks list` inventories
+every managed command, `farplane hooks doctor --json` validates each target and
+interpreter, and `farplane hooks test --project-root <fixture> --json` runs the
+deterministic Core hook runtime smoke from
+`qa/cookbook/core-hooks-runtime.md`.
 
 ## Hook Rules
 
@@ -150,6 +161,9 @@ Codex install path owns symlinking `hooks.json` and
 - Route judgment-heavy work to skills, tickets, reviewers, or drains.
 - Persist file events before advancing snapshots; retry route failure from the
   outbox rather than dropping or duplicating work.
+- Keep file-change mining out of the hook process. Launch only the fixed
+  Core-owned local drain entrypoint, and keep launch failures inspectable while
+  leaving pending events retryable.
 - Never auto-rewrite durable memory/context files from a hook.
 - Do not use Stop hooks for completion review. Put QA evidence review and
   reviewer-lane completion review in the ticket `Done / Proof` block or Goal

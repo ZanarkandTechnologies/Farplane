@@ -11,9 +11,11 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import shlex
 import shutil
 import subprocess
 import sys
+import tempfile
 import tomllib
 from dataclasses import dataclass
 from datetime import datetime, timezone
@@ -23,6 +25,9 @@ from typing import Any, Iterable
 CORE_DIR = Path(__file__).resolve().parent / "core"
 if str(CORE_DIR) not in sys.path:
     sys.path.insert(0, str(CORE_DIR))
+CORE_ROOT = Path(__file__).resolve().parents[1]
+if str(CORE_ROOT) not in sys.path:
+    sys.path.insert(0, str(CORE_ROOT))
 
 from farplane_config_doctor import config_doctor
 from runtime_config import load_runtime_env
@@ -31,7 +36,6 @@ from validation.run import validate_ticket
 from validators.farplane_checks import build_registry
 
 
-CORE_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_CODEX_HOME = Path.home() / ".codex"
 DEFAULT_FARPLANE_HOME = Path.home() / ".farplane"
 CONFIG_PATH = DEFAULT_FARPLANE_HOME / "farplane-cli.json"
@@ -49,6 +53,11 @@ DELEGATED_COMMANDS = {
 }
 OLD_CONVEX_SITE_URL = "https://agreeable-finch-230.convex.site"
 PREVIOUS_NOTIFY_FLAG = "--previous-notify"
+MANAGED_HOOK_FILES = (
+    "farplane_console_ping.py",
+    "farplane_file_change.py",
+    "farplane_local_event.py",
+)
 
 
 @dataclass(frozen=True)
@@ -331,6 +340,239 @@ def path_points_to(path: Path, expected: Path) -> bool:
     return path.is_symlink() and os.readlink(path) == str(expected)
 
 
+def _read_json_file(path: Path) -> dict[str, Any]:
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except FileNotFoundError:
+        return {}
+    except json.JSONDecodeError as exc:
+        raise CliError(f"invalid_json:{path}:{exc}") from exc
+    if not isinstance(payload, dict):
+        raise CliError(f"invalid_json_shape:{path}:expected_object")
+    return payload
+
+
+def _hooks_entries(hooks_json: Path) -> list[dict[str, Any]]:
+    payload = _read_json_file(hooks_json)
+    hooks = payload.get("hooks")
+    if not isinstance(hooks, dict):
+        return []
+    entries: list[dict[str, Any]] = []
+    for event_name, groups in hooks.items():
+        if not isinstance(groups, list):
+            continue
+        for group_index, group in enumerate(groups):
+            if not isinstance(group, dict):
+                continue
+            matcher = group.get("matcher")
+            commands = group.get("hooks")
+            if not isinstance(commands, list):
+                continue
+            for hook_index, hook in enumerate(commands):
+                if not isinstance(hook, dict):
+                    continue
+                command = hook.get("command")
+                entries.append(
+                    {
+                        "event": str(event_name),
+                        "matcher": str(matcher or ""),
+                        "group_index": group_index,
+                        "hook_index": hook_index,
+                        "type": hook.get("type"),
+                        "command": command if isinstance(command, str) else "",
+                        "statusMessage": hook.get("statusMessage"),
+                        "timeout": hook.get("timeout"),
+                    }
+                )
+    return entries
+
+
+def _target_hook_path(token: str, codex_home: Path) -> Path | None:
+    text = token.strip().strip("'\"")
+    if not text:
+        return None
+    replacements = {
+        "$HOME/.codex": str(codex_home),
+        "${HOME}/.codex": str(codex_home),
+        "~/.codex": str(codex_home),
+    }
+    for prefix, replacement in replacements.items():
+        if text.startswith(prefix):
+            text = replacement + text[len(prefix) :]
+            break
+    if text.startswith("$HOME/"):
+        text = str(Path.home()) + text[len("$HOME") :]
+    if text.startswith("${HOME}/"):
+        text = str(Path.home()) + text[len("${HOME}") :]
+    if text.startswith("~/"):
+        text = str(Path.home()) + text[1:]
+    if (
+        ".codex/hooks/" not in text
+        and ".codex/bin/" not in text
+        and str(codex_home / "hooks") not in text
+        and str(codex_home / "bin") not in text
+    ):
+        return None
+    return Path(text).expanduser()
+
+
+def _command_tokens(command: str) -> list[str]:
+    try:
+        return shlex.split(command)
+    except ValueError:
+        return command.split()
+
+
+def hook_command_inventory(codex_home: Path, hooks_json: Path | None = None) -> list[dict[str, Any]]:
+    source = hooks_json or (codex_home / "hooks.json")
+    entries = _hooks_entries(source)
+    inventory = []
+    for entry in entries:
+        command = str(entry.get("command") or "")
+        tokens = _command_tokens(command)
+        interpreter = tokens[0] if tokens else ""
+        target = None
+        if interpreter in {"python", "python3"} and len(tokens) >= 2:
+            target = _target_hook_path(tokens[1], codex_home)
+        elif interpreter in {"sh", "bash"}:
+            for token in tokens[1:]:
+                target = target or _target_hook_path(token, codex_home)
+        else:
+            for token in tokens:
+                target = target or _target_hook_path(token, codex_home)
+        target_expected = None
+        if target and target.name in MANAGED_HOOK_FILES:
+            target_expected = CORE_ROOT / "hooks" / target.name
+        elif target and target.parent.name == "bin":
+            target_expected = CORE_ROOT / "bin" / target.name
+        inventory.append(
+            {
+                **entry,
+                "interpreter": interpreter,
+                "interpreterPath": shutil.which(interpreter) if interpreter else None,
+                "target": str(target) if target else None,
+                "expected": str(target_expected) if target_expected else None,
+                "targetExists": bool(target and target.exists()),
+                "targetLinked": bool(target and target_expected and path_points_to(target, target_expected)),
+                "source": str(source),
+            }
+        )
+    return inventory
+
+
+def hook_inventory_issues(commands: list[dict[str, Any]]) -> tuple[list[str], list[str]]:
+    issues: list[str] = []
+    hints: list[str] = []
+    for index, row in enumerate(commands):
+        prefix = f"managed_command.{index}:{row.get('event')}:{row.get('matcher') or '*'}"
+        command = str(row.get("command") or "")
+        interpreter = str(row.get("interpreter") or "")
+        if not command:
+            issues.append(f"{prefix}:command_missing")
+            hints.append("run `farplane hooks install`")
+        if "FARPLANE_UI_REPO" in command or "node_modules/.bin/tsx" in command or "/hooks/skill-invocation-listener/" in command or "/hooks/thread-lineage-listener/" in command:
+            issues.append(f"{prefix}:ui_dependent_command")
+            hints.append("replace UI listener with Core hook command and rerun `farplane hooks install`")
+        if interpreter and shutil.which(interpreter) is None:
+            issues.append(f"{prefix}:interpreter_missing:{interpreter}")
+            hints.append(f"install `{interpreter}` or update the managed hook command")
+        target = row.get("target")
+        if target is None:
+            issues.append(f"{prefix}:managed_target_unresolved")
+            hints.append("run `farplane hooks install`")
+        elif not row.get("targetExists"):
+            issues.append(f"{prefix}:target_missing:{target}")
+            hints.append("run `farplane hooks install`")
+        elif row.get("expected") and not row.get("targetLinked"):
+            issues.append(f"{prefix}:target_not_core_link:{target}")
+            hints.append("run `farplane hooks install`")
+    return issues, sorted(set(hints))
+
+
+def hooks_list_payload(target: Path | None = None) -> dict[str, Any]:
+    codex_home = (target or DEFAULT_CODEX_HOME).expanduser().resolve()
+    hooks_json_dest = codex_home / "hooks.json"
+    hooks_json_src = CORE_ROOT / "hooks.json"
+    source = hooks_json_dest if hooks_json_dest.exists() else hooks_json_src
+    commands = hook_command_inventory(codex_home, source)
+    issues, hints = hook_inventory_issues(commands)
+    return {
+        "ok": not issues,
+        "summary": "managed hook commands inspected" if not issues else "managed hook commands need attention",
+        "codexHome": str(codex_home),
+        "hooksJson": str(source),
+        "commands": commands,
+        "issues": issues,
+        "hints": hints,
+    }
+
+
+def _replace_symlink(src: Path, dest: Path, *, backup_root: Path | None, dry_run: bool) -> dict[str, Any]:
+    linked = path_points_to(dest, src)
+    row = {"src": str(src), "dest": str(dest), "changed": False, "linked": linked}
+    if linked:
+        return row
+    if dry_run:
+        row["changed"] = True
+        return row
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    if dest.exists() or dest.is_symlink():
+        if backup_root:
+            backup = backup_root / dest.name
+            backup.parent.mkdir(parents=True, exist_ok=True)
+            shutil.move(str(dest), str(backup))
+            row["backup"] = str(backup)
+        else:
+            dest.unlink()
+    os.symlink(src, dest)
+    row["changed"] = True
+    row["linked"] = True
+    return row
+
+
+def install_hooks(codex_home: Path, *, dry_run: bool = False) -> dict[str, Any]:
+    codex_home = codex_home.expanduser().resolve()
+    stamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+    backup_root = codex_home / ".install-backups" / f"hooks-{stamp}"
+    operations = [
+        _replace_symlink(CORE_ROOT / "hooks.json", codex_home / "hooks.json", backup_root=backup_root, dry_run=dry_run),
+        _replace_symlink(CORE_ROOT / "bin" / "_compat.py", codex_home / "bin" / "_compat.py", backup_root=backup_root / "bin", dry_run=dry_run),
+        _replace_symlink(
+            CORE_ROOT / "bin" / "capture_user_turn.py",
+            codex_home / "bin" / "capture_user_turn.py",
+            backup_root=backup_root / "bin",
+            dry_run=dry_run,
+        ),
+        _replace_symlink(CORE_ROOT / "bin" / "core", codex_home / "bin" / "core", backup_root=backup_root / "bin", dry_run=dry_run),
+        _replace_symlink(
+            CORE_ROOT / "bin" / "runtime",
+            codex_home / "bin" / "runtime",
+            backup_root=backup_root / "bin",
+            dry_run=dry_run,
+        ),
+    ]
+    for hook_name in MANAGED_HOOK_FILES:
+        operations.append(
+            _replace_symlink(
+                CORE_ROOT / "hooks" / hook_name,
+                codex_home / "hooks" / hook_name,
+                backup_root=backup_root / "hooks",
+                dry_run=dry_run,
+            )
+        )
+    doctor = hooks_doctor(codex_home) if not dry_run else {"ok": True, "issues": [], "hints": []}
+    return {
+        "ok": bool(doctor["ok"]),
+        "summary": "Core hooks installed" if doctor["ok"] else "Core hooks installed with remaining issues",
+        "codexHome": str(codex_home),
+        "dryRun": dry_run,
+        "operations": operations,
+        "doctor": doctor,
+        "issues": doctor.get("issues", []),
+        "hints": doctor.get("hints", []),
+    }
+
+
 def validate_ui_repo(path: Path) -> list[str]:
     issues: list[str] = []
     package_json = path / "package.json"
@@ -467,67 +709,238 @@ def run_install(args: argparse.Namespace) -> int:
 
 def hooks_doctor(target: Path | None = None) -> dict[str, Any]:
     codex_home = (target or DEFAULT_CODEX_HOME).expanduser().resolve()
-    hook_src = CORE_ROOT / "hooks" / "farplane_console_ping.py"
-    file_event_hook_src = CORE_ROOT / "hooks" / "farplane_file_change.py"
     hooks_json_src = CORE_ROOT / "hooks.json"
-    hook_dest = codex_home / "hooks" / "farplane_console_ping.py"
-    file_event_hook_dest = codex_home / "hooks" / "farplane_file_change.py"
     hooks_json_dest = codex_home / "hooks.json"
-    config_toml = codex_home / "config.toml"
     issues: list[str] = []
     hints: list[str] = []
+    hook_links = []
 
-    if not path_points_to(hook_dest, hook_src):
-        issues.append(f"hook_not_linked:{hook_dest}")
-        hints.append("run `farplane hooks install`")
-    if not path_points_to(file_event_hook_dest, file_event_hook_src):
-        issues.append(f"hook_not_linked:{file_event_hook_dest}")
-        hints.append("run `farplane hooks install`")
+    for hook_name in MANAGED_HOOK_FILES:
+        source = CORE_ROOT / "hooks" / hook_name
+        dest = codex_home / "hooks" / hook_name
+        linked = path_points_to(dest, source)
+        hook_links.append({"path": str(dest), "expected": str(source), "linked": linked})
+        if not linked:
+            issues.append(f"hook_not_linked:{dest}")
+            hints.append("run `farplane hooks install`")
     if hooks_json_src.exists() and not path_points_to(hooks_json_dest, hooks_json_src):
         issues.append(f"hooks_json_not_linked:{hooks_json_dest}")
         hints.append("run `farplane hooks install`")
-    if not config_toml.exists():
-        issues.append(f"config_missing:{config_toml}")
-        hints.append("run `farplane install`")
-    else:
-        config_text = config_toml.read_text(errors="replace")
-        if "FARPLANE_CONVEX_SITE_URL" not in config_text:
-            issues.append("config_missing_farplane_convex_site_url")
-        if OLD_CONVEX_SITE_URL in config_text:
-            issues.append("config_uses_old_convex_site_url")
-            hints.append("update ~/.farplane/config.toml and rerun `farplane install`")
+
+    try:
+        commands = hook_command_inventory(codex_home, hooks_json_dest if hooks_json_dest.exists() else hooks_json_src)
+        command_issues, command_hints = hook_inventory_issues(commands)
+        issues.extend(command_issues)
+        hints.extend(command_hints)
+    except CliError as exc:
+        commands = []
+        issues.append(str(exc))
+        hints.append("run `farplane hooks install`")
 
     return {
         "ok": not issues,
-        "summary": "hooks linked and config rendered" if not issues else "hooks/config need attention",
+        "summary": "Core hooks linked and commands executable" if not issues else "Core hook install needs attention",
         "codexHome": str(codex_home),
-        "hook": {"path": str(hook_dest), "expected": str(hook_src), "linked": path_points_to(hook_dest, hook_src)},
-        "fileEventHook": {
-            "path": str(file_event_hook_dest),
-            "expected": str(file_event_hook_src),
-            "linked": path_points_to(file_event_hook_dest, file_event_hook_src),
-        },
+        "hooks": hook_links,
         "hooksJson": {
             "path": str(hooks_json_dest),
             "expected": str(hooks_json_src),
             "linked": (not hooks_json_src.exists()) or path_points_to(hooks_json_dest, hooks_json_src),
         },
-        "configToml": str(config_toml),
+        "commands": commands,
+        "optionalTelemetry": {
+            "configToml": str(codex_home / "config.toml"),
+            "requiredForLocalHealth": False,
+        },
         "issues": issues,
-        "hints": hints,
+        "hints": sorted(set(hints)),
     }
 
 
 def run_hooks_install(args: argparse.Namespace) -> int:
-    command = ["bash", str(CORE_ROOT / "install.sh")]
-    if args.target:
-        command.extend(["--target", args.target])
-    return run_process(command, CORE_ROOT, args.dry_run)
+    target = Path(args.target).expanduser() if args.target else DEFAULT_CODEX_HOME
+    payload = install_hooks(target, dry_run=args.dry_run)
+    print_payload(payload, args.json)
+    return 0 if payload["ok"] else 1
+
+
+def run_hooks_list(args: argparse.Namespace) -> int:
+    target = Path(args.target).expanduser() if args.target else None
+    payload = hooks_list_payload(target)
+    print_payload(payload, args.json)
+    return 0 if payload["ok"] else 1
 
 
 def run_hooks_doctor(args: argparse.Namespace) -> int:
     target = Path(args.target).expanduser() if args.target else None
     payload = hooks_doctor(target)
+    print_payload(payload, args.json)
+    return 0 if payload["ok"] else 1
+
+
+def _link_temp_codex_home(codex_home: Path) -> None:
+    (codex_home / "hooks").mkdir(parents=True, exist_ok=True)
+    (codex_home / "bin").mkdir(parents=True, exist_ok=True)
+    os.symlink(CORE_ROOT / "bin" / "capture_user_turn.py", codex_home / "bin" / "capture_user_turn.py")
+    for hook_name in MANAGED_HOOK_FILES:
+        os.symlink(CORE_ROOT / "hooks" / hook_name, codex_home / "hooks" / hook_name)
+    os.symlink(CORE_ROOT / "hooks.json", codex_home / "hooks.json")
+
+
+def _write_hooks_test_project(project_root: Path) -> Path:
+    program_ref = "core:ticket-completion-lean@1.0.0"
+    farplane = project_root / "farplane"
+    farplane.mkdir(parents=True, exist_ok=True)
+    (farplane / "hooks.json").write_text(
+        json.dumps(
+            {
+                "version": 1,
+                "file_events": {
+                    "enabled": True,
+                    "events": ["farplane.ticket.completed", "farplane.ticket.changed"],
+                    "patterns": ["tickets/TASK-*/ticket.md"],
+                },
+            },
+            indent=2,
+            sort_keys=True,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    (farplane / "bindings.yaml").write_text(
+        "kind: project-bindings\n"
+        "project:\n"
+        "  id: hooks-test\n"
+        "metric_bindings: {}\n"
+        "event_routes:\n"
+        "  - route_id: completion-a\n"
+        "    event_name: farplane.ticket.completed\n"
+        f"    program_ref: {program_ref}\n"
+        "  - route_id: completion-b\n"
+        "    event_name: farplane.ticket.completed\n"
+        f"    program_ref: {program_ref}\n",
+        encoding="utf-8",
+    )
+    ticket = project_root / "tickets" / "TASK-9001" / "ticket.md"
+    ticket.parent.mkdir(parents=True, exist_ok=True)
+    ticket.write_text("---\nstatus: todo\n---\n\n# Fixture\n\nLocal smoke only.\n", encoding="utf-8")
+    return ticket
+
+
+def hooks_smoke(project_root: Path, receipt_dir: Path | None = None) -> dict[str, Any]:
+    from farplane_file_events import record_hook_error
+    from farplane_mining import drain_pending, list_runs, pending_events, show_run
+    from hooks.farplane_file_change import handle_payload
+
+    project_root.mkdir(parents=True, exist_ok=True)
+    ticket = _write_hooks_test_project(project_root)
+    payload = {
+        "hook_event_name": "PostToolUse",
+        "tool_name": "apply_patch",
+        "cwd": str(project_root),
+        "session_id": "hooks-smoke",
+        "tool_input": {"patch": "*** Update File: tickets/TASK-9001/ticket.md"},
+    }
+    baseline = handle_payload(payload, project_root, wait_for_drain=True)
+    ticket.write_text("---\nstatus: completed\n---\n\n# Fixture\n\nLocal smoke only.\n", encoding="utf-8")
+    completed = handle_payload(payload, project_root, wait_for_drain=True)
+    retry = handle_payload(payload, project_root, wait_for_drain=True)
+    runs = list_runs(project_root)
+    run_details = [show_run(project_root, row["run_id"]) for row in runs]
+
+    failure_root = project_root.parent / f"{project_root.name}-failed-launch"
+    failure_ticket = _write_hooks_test_project(failure_root)
+    failure_payload = {**payload, "cwd": str(failure_root)}
+    failure_ticket.write_text("---\nstatus: todo\n---\n\n# Fixture\n\nLocal smoke only.\n", encoding="utf-8")
+    handle_payload(failure_payload, failure_root, wait_for_drain=True)
+    failure_ticket.write_text("---\nstatus: completed\n---\n\n# Fixture\n\nLocal smoke only.\n", encoding="utf-8")
+    failed_launch = handle_payload(failure_payload, failure_root, drain_command=["/definitely/missing/farplane-miner"])
+    pending_after_failed_launch = len(pending_events(failure_root))
+    recovered = drain_pending(failure_root)
+    failure_runs = list_runs(failure_root)
+
+    error_receipt = record_hook_error(
+        project_root,
+        hook_name="farplane_hooks_test_deliberate_failure",
+        error="deliberate processor failure for fail-open receipt proof",
+        payload=payload,
+    )
+
+    with tempfile.TemporaryDirectory() as tmp:
+        codex_home = Path(tmp) / "codex-home"
+        _link_temp_codex_home(codex_home)
+        healthy = hooks_doctor(codex_home)
+        (codex_home / "hooks" / "farplane_local_event.py").unlink()
+        broken = hooks_doctor(codex_home)
+
+    receipt = {
+        "ok": (
+            healthy["ok"]
+            and not broken["ok"]
+            and completed["ok"]
+            and completed.get("persisted_before_launch", {}).get("event_records_exist") is True
+            and completed.get("persisted_before_launch", {}).get("outbox_rows_exist") is True
+            and retry["ok"]
+            and len(runs) == 2
+            and pending_after_failed_launch == 1
+            and recovered["ok"]
+            and len(failure_runs) == 2
+        ),
+        "summary": "Core hook smoke exercised Doctor and event_routes fanout",
+        "projectRoot": str(project_root),
+        "baseline": baseline,
+        "completed": completed,
+        "retry": retry,
+        "runIds": sorted(row["run_id"] for row in runs),
+        "runDetails": [
+            {
+                "run": detail["run"],
+                "report": detail["report"],
+            }
+            for detail in run_details
+        ],
+        "processSeparation": {
+            "parentPid": completed.get("drain_launch", {}).get("parent_pid"),
+            "childPid": completed.get("drain_launch", {}).get("child_pid"),
+            "distinct": completed.get("drain_launch", {}).get("parent_pid")
+            != completed.get("drain_launch", {}).get("child_pid"),
+            "launchReceipt": completed.get("drain_launch", {}).get("receipt_path"),
+            "capturedBeforeLaunch": completed.get("persisted_before_launch", {}),
+        },
+        "failedLaunchRecovery": {
+            "failedLaunch": failed_launch,
+            "pendingAfterFailedLaunch": pending_after_failed_launch,
+            "recovered": recovered,
+            "runIds": sorted(row["run_id"] for row in failure_runs),
+        },
+        "healthyDoctor": healthy,
+        "brokenDoctor": broken,
+        "errorReceipt": error_receipt,
+        "issues": []
+        if (
+            healthy["ok"]
+            and not broken["ok"]
+            and len(runs) == 2
+            and pending_after_failed_launch == 1
+            and recovered["ok"]
+            and completed.get("persisted_before_launch", {}).get("event_records_exist") is True
+            and completed.get("persisted_before_launch", {}).get("outbox_rows_exist") is True
+        )
+        else ["hooks_smoke_failed"],
+        "hints": [],
+    }
+    if receipt_dir:
+        receipt_dir.mkdir(parents=True, exist_ok=True)
+        path = receipt_dir / "core-hooks-runtime-smoke.json"
+        path.write_text(json.dumps(receipt, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+        receipt["receiptPath"] = str(path)
+    return receipt
+
+
+def run_hooks_test(args: argparse.Namespace) -> int:
+    project_root = Path(args.project_root).expanduser().resolve()
+    receipt_dir = Path(args.receipt_dir).expanduser().resolve() if args.receipt_dir else None
+    payload = hooks_smoke(project_root, receipt_dir)
     print_payload(payload, args.json)
     return 0 if payload["ok"] else 1
 
@@ -864,14 +1277,24 @@ def build_parser() -> argparse.ArgumentParser:
 
     hooks = sub.add_parser("hooks", help="Install or check Codex lifecycle hooks.")
     hooks_sub = hooks.add_subparsers(dest="hooks_command")
+    hooks_list = hooks_sub.add_parser("list", help="List managed Core hook commands.")
+    hooks_list.add_argument("--target", help="Codex home target. Defaults to ~/.codex.")
+    hooks_list.add_argument("--json", action="store_true")
+    hooks_list.set_defaults(func=run_hooks_list)
     hooks_install = hooks_sub.add_parser("install", help="Install/relink Core hooks through install.sh.")
     hooks_install.add_argument("--target", help="Codex home target. Defaults to ~/.codex.")
     hooks_install.add_argument("--dry-run", action="store_true")
+    hooks_install.add_argument("--json", action="store_true")
     hooks_install.set_defaults(func=run_hooks_install)
     hooks_doctor_parser = hooks_sub.add_parser("doctor", help="Check hook links and rendered config.")
     hooks_doctor_parser.add_argument("--target", help="Codex home target. Defaults to ~/.codex.")
     hooks_doctor_parser.add_argument("--json", action="store_true")
     hooks_doctor_parser.set_defaults(func=run_hooks_doctor)
+    hooks_test = hooks_sub.add_parser("test", help="Run deterministic Core hook runtime smoke.")
+    hooks_test.add_argument("--project-root", required=True, help="Temporary project fixture root to create/use.")
+    hooks_test.add_argument("--receipt-dir", help="Directory for the smoke receipt JSON.")
+    hooks_test.add_argument("--json", action="store_true")
+    hooks_test.set_defaults(func=run_hooks_test)
 
     notify = sub.add_parser("notify", help="Enable, disable, or inspect the Farplane turn-complete notify script.")
     notify_sub = notify.add_subparsers(dest="notify_command")

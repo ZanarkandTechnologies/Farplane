@@ -256,7 +256,9 @@ attach the optional Farplane-UI office checkout.
 cd /path/to/Farplane
 bash install.sh
 farplane doctor
+farplane hooks list --json
 farplane hooks doctor
+farplane hooks test --project-root /tmp/farplane-hooks-smoke --json
 farplane ui link /path/to/Farplane-UI
 farplane ui start
 ```
@@ -270,8 +272,13 @@ What Core owns:
   checkout it automatically runs the installer subprocess through Doppler when
   Doppler is configured and the current shell is not already Doppler-injected.
 - `farplane hooks install`: refreshes the hook install through Core.
-- `farplane hooks doctor`: verifies the Core-owned hook links and rendered
-  telemetry config.
+- `farplane hooks list`: inventories every managed Codex hook command.
+- `farplane hooks doctor`: verifies Core-owned hook links, command targets,
+  interpreters, and known silent-skip regressions without requiring optional
+  Farplane UI/Node telemetry.
+- `farplane hooks test`: runs the deterministic local hook smoke: capture typed
+  event, launch Core drain subprocess, apply two matching `event_routes`, prove
+  idempotent runs, and prove failed-launch retry.
 - `farplane notify status|enable|disable`: inspects or toggles the Farplane
   turn-complete notify script in the rendered Codex config, preserving desktop
   notify wrappers when present.

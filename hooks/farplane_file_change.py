@@ -14,15 +14,21 @@ CORE_DIR = Path(__file__).resolve().parents[1] / "bin" / "core"
 if str(CORE_DIR) not in sys.path:
     sys.path.insert(0, str(CORE_DIR))
 
-from farplane_file_events import find_project_root
+from farplane_file_events import find_project_root, record_hook_error
 from farplane_mining import handle_file_change
 
 
-def handle_payload(payload: dict[str, Any], project_root: Path | None = None) -> dict[str, Any]:
+def handle_payload(
+    payload: dict[str, Any],
+    project_root: Path | None = None,
+    *,
+    wait_for_drain: bool = False,
+    drain_command: list[str] | None = None,
+) -> dict[str, Any]:
     root = project_root or find_project_root(
         str(payload.get("cwd") or payload.get("project_path") or payload.get("projectPath") or os.getcwd())
     )
-    return handle_file_change(payload, root)
+    return handle_file_change(payload, root, wait_for_drain=wait_for_drain, drain_command=drain_command)
 
 
 def main() -> int:
@@ -36,7 +42,9 @@ def main() -> int:
     except Exception as exc:
         # Hooks must not block the operator. Durable events already appended to
         # the outbox remain retryable by the next invocation or manual drain.
-        print(f"farplane file event: {exc}", file=sys.stderr)
+        root = find_project_root(str(payload.get("cwd") or os.getcwd())) if isinstance(payload, dict) else Path.cwd()
+        receipt = record_hook_error(root, hook_name="farplane_file_change.py", error=exc, payload=payload)
+        print(f"farplane file event: {receipt['path']}", file=sys.stderr)
     return 0
 
 

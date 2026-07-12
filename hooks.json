@@ -36,7 +36,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "sh -lc 'test -n \"$FARPLANE_UI_REPO\" || exit 0; \"$FARPLANE_UI_REPO/node_modules/.bin/tsx\" \"$FARPLANE_UI_REPO/hooks/skill-invocation-listener/run.ts\"'",
+            "command": "python3 \"$HOME/.codex/hooks/farplane_local_event.py\"",
             "statusMessage": "Read skill MD",
             "timeout": 5
           }
@@ -58,7 +58,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "sh -lc 'test -n \"$FARPLANE_UI_REPO\" || exit 0; \"$FARPLANE_UI_REPO/node_modules/.bin/tsx\" \"$FARPLANE_UI_REPO/hooks/thread-lineage-listener/run.ts\"'",
+            "command": "python3 \"$HOME/.codex/hooks/farplane_local_event.py\"",
             "statusMessage": "Track thread lineage",
             "timeout": 5
           }

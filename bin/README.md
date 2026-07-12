@@ -60,6 +60,10 @@ runtime helpers instead of symlinking every script, validator, and test.
   files enrolled in explicit line-count limits; it never rewrites files or
   calls a model
 - `capture_user_turn.py` - turn-start user-intent writer for the hook surface
+- `hooks/farplane_file_change.py` - PostToolUse file-change boundary; captures
+  typed events to the local outbox and launches the fixed Core drain subprocess
+- `hooks/farplane_local_event.py` - PostToolUse local skill/thread telemetry
+  capture without Farplane UI, Node, or `tsx`
 - `farplane_boards.py` - board adapter contract plus the filesystem
   `FileTicketAdapter` that normalizes `tickets/TASK-*/ticket.md` into a
   `WorkItem`

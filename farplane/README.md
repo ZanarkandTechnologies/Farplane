@@ -23,7 +23,7 @@ rules. Skills own recurring workflows; tickets own execution and proof.
 farplane/
   README.md        # this index
   manifest.json    # versioned Farplane project spec for this project
-  harness.yaml     # typed charter, products, capability refs, metric selection
+  harness.yaml     # typed charter, planning areas, capability refs, metric selection
   metrics.yaml     # metric definitions, direction, freshness, guard rules
   automations.toml # one Work Pulse heartbeat plus separate scheduled sources
   bindings.yaml    # non-secret project IDs, provider coordinates, refresh bindings
@@ -90,8 +90,10 @@ the index. The standard lives in
 Core file events use `farplane/hooks.json` for capture patterns and
 `farplane/bindings.yaml#event_routes` for event-to-program routing. Events,
 outbox state, frozen run inputs, lean reports, and verdicts remain ignored
-under `.farplane/`; Farplane UI may edit routes and render runs through the
-Core CLI but does not own mining semantics.
+under `.farplane/`. The Codex hook process captures the event/outbox row first,
+then launches the fixed local Core drain subprocess; the child applies all
+matching routes and writes immutable runs. Farplane UI may edit routes and
+render runs through the Core CLI but does not own mining semantics.
 
 See [docs/farplane-framework/project-files.md](../docs/farplane-framework/project-files.md).
 
