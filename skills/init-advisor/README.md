@@ -103,7 +103,7 @@ Read the project's current `farplane/manifest.json` and compare
 migration entry in order. The changelog is the canonical version-to-version
 migration guide; this section is the operational checklist.
 
-For the V1 `1.9.1` contract, the important boundary is:
+For the V1 `2.0.2` contract, the important boundary is:
 
 ```text
 tracked owners:
@@ -117,9 +117,16 @@ execution and proof:
 ```
 
 Remove product registries/controllers and detached review/evidence stores only
-after their active readers have been migrated. Preserve reusable artifact
-workflows as skills. Do not keep compatibility aliases unless an explicit
-external contract requires them.
+after their active readers have been migrated. Define planning `areas` in
+`harness.yaml`; scheduled jobs supply reports/candidates while one Work Pulse
+planner owns proactive admission. Preserve reusable artifact workflows as
+skills. Do not keep compatibility aliases unless an explicit external contract
+requires them.
+
+Ticket completion is the bounded event exception: the read-only learning
+program writes a report, then deterministic Core may project one deduped
+KPI-linked direct-fix or prove-or-reject ticket. Dogfood consumes the receipt
+and does not recreate that ticket.
 
 ### 1. Add the harness structure
 

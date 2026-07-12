@@ -20,7 +20,7 @@ project-local skills own recurring workflows.
 farplane/
   README.md        # this index
   manifest.json    # versioned Farplane project spec for this project
-  harness.yaml     # typed charter, products, capability refs, metric selection
+  harness.yaml     # typed charter, planning areas, capability refs, metric selection
   metrics.yaml     # metric definitions, direction, freshness, guard rules
   automations.toml # one Work Pulse heartbeat plus separate scheduled jobs
   bindings.yaml      # non-secret project IDs, URLs, labels, aliases

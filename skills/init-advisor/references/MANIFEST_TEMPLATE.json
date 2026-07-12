@@ -1,15 +1,15 @@
 {
   "_template_metadata": {
     "template_id": "farplane-framework",
-    "template_version": "1.9.1",
+    "template_version": "2.0.2",
     "feature_refs": ["FEAT-0060"],
     "consumer_scope": "project",
     "applies_to": ["farplane/manifest.json"]
   },
   "schema": "farplane_project",
-  "spec_version": "1.9.1",
+  "spec_version": "2.0.2",
   "template_uses": {
-    "farplane-framework": "1.9.1"
+    "farplane-framework": "2.0.2"
   },
   "project": {
     "name": "TODO",
@@ -53,7 +53,10 @@
       ".farplane/project/ui/",
       ".farplane/reports/",
       ".farplane/evals/runs/",
-      ".farplane/logs/"
+      ".farplane/events/",
+      ".farplane/logs/",
+      ".farplane/mine/",
+      ".farplane/state/"
     ]
   },
   "optional": {
@@ -63,13 +66,10 @@
       ".githooks/README.md",
       ".githooks/pre-commit",
       ".githooks/pre-push",
-      "scripts/pre_commit_check.sh",
-      "scripts/pre_push_check.sh",
-      "docs/code_review.md",
-      "docs/review-agent.md",
-      "scripts/collect_review_context.sh",
-      "scripts/codex_review_agent.ts",
-      "scripts/run_pre_push_review.sh"
+      "bin/validators/run_git_gate.py",
+      "rules/git-review-gates.toml",
+      "skills/code-review/SKILL.md",
+      "skills/review/SKILL.md"
     ],
     "ignored": []
   }

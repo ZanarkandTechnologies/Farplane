@@ -18,6 +18,131 @@ framework_bump(old_version, new_version, project_root)
   -> manifest_delta + migration_steps + proof_commands
 ```
 
+## 2.0.2
+
+Date: 2026-07-12
+
+Primary change: turn accepted ticket-completion learning into immediate local
+ticket supply instead of waiting for the weekly Dogfood review.
+
+Changed surfaces:
+
+- `core:ticket-completion-learning@1.1.0` still produces a privacy-validated,
+  read-only semantic report;
+- after report acceptance, deterministic Core projects at most the strongest
+  high/medium-confidence finding into one deduped ticket, using a source or
+  self-improvement KPI for `todo` and falling back to `awaiting_review` when no
+  declared KPI exists;
+- report schema 2 requires a locally validated semantic dedupe key, Core ranks
+  confidence/direct-fix strength independently of model order, and generated
+  learning-ticket completions are report-only to prevent recursive supply;
+- known corrections receive a direct-fix program and uncertain improvements
+  receive a prove-or-reject program;
+- no-signal, source-gap, low-confidence, replay, and duplicate paths create no
+  additional ticket;
+- Dogfood consumes the report plus created/existing/no-ticket receipt and never
+  recreates the projected ticket.
+
+Migration steps:
+
+1. Update the completion-learning route to
+   `core:ticket-completion-learning@1.1.0`.
+2. Keep the semantic executor read-only; ticket writes belong only to the Core
+   projector after validation.
+3. Count projected tickets in Pulse/Dogfood through the normal ticket board.
+4. Prove one accepted finding creates one ticket and delivery, replay,
+   paraphrase, unrelated-KPI, and generated-ticket recursion cannot admit
+   another.
+
+## 2.0.1
+
+Date: 2026-07-12
+
+Primary change: replace every-N-turn learning review with one bounded,
+event-driven ticket-completion learning program.
+
+Changed surfaces:
+
+- `farplane.ticket.completed` fans out to lean coverage and structured learning
+  programs through the existing local Core drain;
+- learning freezes only the completed ticket packet and bounded operator-turn
+  window named by event provenance; assistant replies are excluded because the
+  ticket packet owns completion truth;
+- Core ignores user config/rules for the read-only executor and validates the
+  report schema, evidence refs, sensitive patterns, and raw-source overlap;
+- missing thread/window or local Codex execution becomes a replayable source
+  gap rather than a broad thread scan;
+- completion learning emits compact evidence reports and never edits docs,
+  skills, tickets, or external systems;
+- Weekly Dogfood consumes accepted findings as recovery or experiment evidence.
+
+Migration steps:
+
+1. Add `ticket-completion-learning-v1` beside the lean completion route in
+   `farplane/bindings.yaml`.
+2. Remove any N-turn/Stop-hook learning reviewer and obsolete
+   `.farplane/state/learning-reviews` consumer.
+3. Preserve bounded operator-turn capture in
+   `.farplane/state/message-windows/`; remove obsolete assistant-response and
+   turn-cadence state.
+4. Reinstall, validate routes, and prove one completion produces two immutable
+   runs while a missing window produces a visible source gap.
+
+Proof commands:
+
+```bash
+farplane install
+farplane mining routes validate --project-root . --json
+python3 bin/tests/test_farplane_mining.py
+python3 bin/tests/test_runtime_state.py
+```
+
+## 2.0.0
+
+Date: 2026-07-12
+
+Primary change: replace descriptive `products` with planning `areas` and make
+one adaptive Work Pulse planner the only proactive ticket-admission point.
+
+Changed surfaces:
+
+- `farplane/harness.yaml#areas` names recurring investment areas, planner
+  instructions, capability skills, and local metric refs;
+- `plan_next_wave` reads a recent global ticket-history sample first, then may
+  progressively filter by AI origin, area, KPI, Reward, or wider time range;
+- human-active tickets remain unselectable but consume no Pulse worker capacity
+  and do not block empty-board refill;
+- Feed Scout, Daily/Weekly Interval, and Dogfood write reports and bounded
+  candidates; they may create capped direct recovery tickets for evidenced
+  known failures but cannot admit uncertain fixes, new direction, or experiments;
+- self-improvement competes as an evidence-gated area rather than operating as
+  a second ticket-admission controller;
+- project objectives, area diagnostics, and guards are separate snapshot roles.
+
+Migration steps:
+
+1. Replace `harness.yaml#products` with `areas`; give every area a description,
+   planner instruction, capability refs, and metric refs.
+2. Choose a small project-level objective set and hard guards. Keep local area
+   diagnostics out of the global objective priority list.
+3. Set Feed Scout, Interval, and Dogfood automation write policy to bounded
+   direct recovery only; route opportunities, uncertain fixes, and experiments
+   through the global planner.
+4. Install the latest skills/hooks, regenerate primitive and project snapshots,
+   and verify a human-active ticket does not block Pulse refill.
+5. Observe planner admissions and use terminal Reward evidence plus rejected
+   AI-ticket counts to refine area instructions.
+
+Proof commands:
+
+```bash
+farplane install
+farplane doctor --json
+farplane project snapshot --project-root . --json
+python3 bin/validators/check_farplane_project_files.py --root .
+python3 -m unittest skills.pulse-update.scripts.test_list_pulse_board
+```
+
 ## 1.9.1
 
 Date: 2026-07-12

@@ -3,16 +3,15 @@ window.SKILL_GRAPH = {
     "edge_types": {
       "common-chain": 60,
       "markdown-ref": 357,
-      "todo-chain": 405
+      "todo-chain": 404
     },
-    "edges": 822,
+    "edges": 821,
     "nodes": 116,
     "skill_heat_config": {
       "default_top_n": 25,
       "event_types": [
         "control_surface_detected",
         "hook_result",
-        "learning_review_launched",
         "skill_requested"
       ],
       "recent_days": 7,
@@ -21,7 +20,6 @@ window.SKILL_GRAPH = {
     "skill_heat_event_types": [
       "control_surface_detected",
       "hook_result",
-      "learning_review_launched",
       "skill_requested"
     ],
     "sources": {
@@ -2056,15 +2054,6 @@ window.SKILL_GRAPH = {
       "source": "doc-advisor",
       "target": "review",
       "target_ref": "review",
-      "type": "todo-chain"
-    },
-    {
-      "chain_source": "todo_list",
-      "label": "todo.1",
-      "order": 1,
-      "source": "dogfood-review",
-      "target": "optimize-with-human",
-      "target_ref": "optimize-with-human",
       "type": "todo-chain"
     },
     {
@@ -6600,7 +6589,7 @@ window.SKILL_GRAPH = {
       "type": "todo-chain"
     }
   ],
-  "generated_at": "2026-07-11T21:01:35+00:00",
+  "generated_at": "2026-07-12T10:36:22+00:00",
   "nodes": [
     {
       "description": "Turn an under-specified decision into three options, tradeoffs, and one recommendation when the user asks for advice.",
@@ -8777,7 +8766,7 @@ window.SKILL_GRAPH = {
       "signals": {
         "composition_heat": {
           "hot_referrer_count": 0,
-          "incoming_ref_count": 3,
+          "incoming_ref_count": 2,
           "last_referenced_at": "",
           "top_referrers": [],
           "window_referrer_invocations": 0
@@ -8801,7 +8790,7 @@ window.SKILL_GRAPH = {
         "uniqueness": {
           "group": "",
           "has_skill_ui": false,
-          "incoming_ref_count": 3,
+          "incoming_ref_count": 2,
           "method_count": 0,
           "outgoing_ref_count": 2,
           "source": "local",
@@ -11036,7 +11025,7 @@ window.SKILL_GRAPH = {
       "todo_skill_refs": []
     },
     {
-      "description": "Review the weekly self-improvement portfolio, carry experiment outcomes forward, and create a bounded non-interfering wave of experiment Goal Packets.",
+      "description": "Review the weekly self-improvement portfolio, supply experiment candidates, and admit bounded evidence-backed recovery tickets.",
       "eval": "evals/evals.json",
       "group": "harness",
       "has_checklist": true,
@@ -11079,13 +11068,13 @@ window.SKILL_GRAPH = {
           "status": "low",
           "template_version": "0.3.7"
         },
-        "maintenance_recommendation": "keep",
+        "maintenance_recommendation": "watch",
         "uniqueness": {
           "group": "harness",
           "has_skill_ui": false,
           "incoming_ref_count": 2,
           "method_count": 0,
-          "outgoing_ref_count": 3,
+          "outgoing_ref_count": 2,
           "source": "local",
           "tier": 3
         }
@@ -11093,9 +11082,7 @@ window.SKILL_GRAPH = {
       "skill_ui": "",
       "source": "local",
       "tier": 3,
-      "todo_skill_refs": [
-        "optimize-with-human"
-      ]
+      "todo_skill_refs": []
     },
     {
       "description": "Turn agent, prompt, or skill behavior into local eval tasks, boolean or tier judges, run artifacts, and verdicts.",
@@ -11226,7 +11213,7 @@ window.SKILL_GRAPH = {
       "todo_skill_refs": []
     },
     {
-      "description": "Turn curated feeds into a dated source report, then optionally project bounded source-backed opportunity tickets.",
+      "description": "Turn curated feeds into a dated source report, planner candidates, and bounded evidence-backed recovery tickets.",
       "eval": "evals/evals.json",
       "group": "harness",
       "has_checklist": true,
@@ -12057,7 +12044,7 @@ window.SKILL_GRAPH = {
       ]
     },
     {
-      "description": "Turn one Daily or Weekly BAU review window into a dated problem report and bounded resurfacing of already-evidenced maintenance.",
+      "description": "Turn one Daily or Weekly BAU review window into a dated problem report, bounded recovery tickets, and planner candidates.",
       "eval": "evals/evals.json",
       "group": "harness",
       "has_checklist": true,
@@ -13935,7 +13922,7 @@ window.SKILL_GRAPH = {
       ]
     },
     {
-      "description": "Turn a project charter, metric objective contract, ticket history, and current context into a ranked portfolio of executable BAU ticket specs.",
+      "description": "Plan the next ticket wave when Work Pulse finds no unclaimed executable work, using areas, KPI/guard state, adaptive history, dedupe, and global ranking to return complete specs or an explicit empty wave.",
       "eval": "evals/evals.json",
       "group": "harness",
       "has_checklist": true,

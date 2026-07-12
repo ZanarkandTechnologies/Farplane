@@ -4,7 +4,7 @@ status: draft
 created_at: TODO
 updated_at: TODO
 template_id: project-harness
-template_version: "0.3.7"
+template_version: "0.3.8"
 feature_refs:
   - FEAT-0007
 project_id: TODO
@@ -27,8 +27,8 @@ and must not replace `farplane/harness.yaml`.
 Use it to review proposed split-surface deltas before writing the standard
 Farplane files:
 
-- `farplane/harness.yaml` owns identity, descriptive products, feature
-  meaning, selected metric refs, capability refs, constraints, authority, and
+- `farplane/harness.yaml` owns identity, planning areas and instructions,
+  feature meaning, selected metric refs, capability refs, constraints, authority, and
   change rule.
 - `farplane/metrics.yaml` owns provider-independent metric meaning, direction,
   freshness, and optional guard rules. The planner owns trajectory comparison.
@@ -83,7 +83,7 @@ Interval reports may propose the delta, but cannot apply it silently.
 
 ## Allocation Guardrails
 
-| Lane | Min | Max | Why |
+| Area | Min | Max | Why |
 | --- | ---: | ---: | --- |
 | TODO | TODO | TODO | TODO |
 

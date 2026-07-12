@@ -4,14 +4,14 @@
     {
       "id": "harness_creator_v1_split_01",
       "prompt": "Set up the operating model for a new Farplane project with recurring research and content capabilities.",
-      "expected_output": "Writes stable thesis, hard constraints, and capability refs to farplane/harness.yaml; Writes descriptive products and selected metric refs to farplane/harness.yaml, and reusable metric meaning, direction, freshness, and guard rules to farplane/metrics.yaml with provider mechanics in bindings; Represents recurring research and content work as reusable or project-local capability skills; Does not create goal/bet registries, product controllers, product-local planners, or additional heartbeats; Leaves only executable selected commitments as tickets",
+      "expected_output": "Writes stable thesis, hard constraints, capability refs, and descriptive planning areas to farplane/harness.yaml; Binds each area to planner instructions and metric refs, and writes reusable metric meaning, direction, freshness, and guard rules to farplane/metrics.yaml with provider mechanics in bindings; Represents recurring research and content work as reusable or project-local capability skills; Does not create goal/bet registries, area controllers, area-local planners, or additional heartbeats; Leaves only executable selected commitments as tickets",
       "files": [],
       "assertions": [
-        "Writes stable thesis, descriptive products, capability refs, and metric selection to farplane/harness.yaml",
+        "Writes stable thesis, descriptive planning areas, capability refs, and metric selection to farplane/harness.yaml",
         "Writes reusable metric definitions, directions, freshness, and guard rules to farplane/metrics.yaml",
         "Writes metric meaning to farplane/metrics.yaml and provider mechanics to bindings",
         "Represents recurring research and content work as reusable or project-local capability skills",
-        "Does not create product controller files, product-local planners, or additional heartbeats",
+        "Does not create area controller files, area-local planners, or additional heartbeats",
         "Leaves one concrete ticket suitable for Goal Advisor"
       ],
       "metadata": {

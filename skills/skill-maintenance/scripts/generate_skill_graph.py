@@ -17,7 +17,6 @@ from graph_projection_config import get_projection_config
 SKILL_HEAT_EVENT_TYPES = {
     "control_surface_detected",
     "hook_result",
-    "learning_review_launched",
     "skill_requested",
 }
 DEFAULT_SKILL_HEAT_WINDOW_DAYS = 30

@@ -3,7 +3,7 @@ status: draft
 project: TODO
 created_at: TODO
 updated_at: TODO
-framework_template_version: "0.4.0"
+framework_template_version: "0.5.0"
 owner: harness
 
 identity:
@@ -18,14 +18,13 @@ metric_refs:
   guards:
     - TODO_quality_metric
 
-products:
-  primary_product:
-    description: TODO describe the recurring valuable deliverable.
-    output: TODO name the reviewable artifact or state change.
+areas:
+  primary_area:
+    description: TODO describe the recurring area of project investment.
+    planner_instruction: TODO explain which executable ideas belong here and what is not ticketable.
     skill_refs: []
     metric_refs:
       - metric_id: accepted_output_events
-        priority: 2
 
 feature_definition:
   definition: TODO define what counts as a durable project feature.

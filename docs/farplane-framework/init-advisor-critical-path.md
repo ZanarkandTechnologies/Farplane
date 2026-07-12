@@ -104,7 +104,7 @@ Ignored runtime state:
 Key ownership:
 
 - `manifest.json`: versioned paths and compact project identity;
-- `harness.yaml`: typed human charter, descriptive products, authority,
+- `harness.yaml`: typed human charter, planning areas/instructions, authority,
   capability refs, and selected metric refs;
 - `metrics.yaml`: provider-independent metric definitions with direction,
   freshness, and optional guard rules;

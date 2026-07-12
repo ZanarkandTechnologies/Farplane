@@ -26,8 +26,8 @@ routes smaller advisor calls when needed, then proposes executable starter ticke
 The default durable outputs are the standard Farplane project files:
 
 ```text
-farplane/harness.yaml = typed charter: identity, descriptive products,
-                        capability refs, selected metric refs, constraints,
+farplane/harness.yaml = typed charter: identity, planning areas,
+                        area guidance, capability refs, selected metric refs, constraints,
                         authority, feature definition, and change rule
 farplane/metrics.yaml = provider-independent metric definitions with direction,
                         freshness, and optional hard-guard rules
@@ -70,7 +70,7 @@ project_harness_creator(project_idea, values?, priorities?, mode_presets?, conte
    + proposed_tickets
    + initial_metric_objectives
    + goal_advisor_handoff
-state: reads(operator idea, values, constraints, local assets/docs/tickets/skills, docs/skills/registry.jsonl, .agents/skills/**?, harness doctrine, farplane/harness.yaml, farplane/metrics.yaml, farplane/automations.toml, and farplane/bindings.yaml when present, current external research only when domain truth matters); writes(farplane/harness.yaml typed-charter/product/capability/metric-selection deltas only with explicit approval, farplane/metrics.yaml definition/direction/freshness/guard deltas, proposed tickets, farplane/automations.toml, farplane/bindings.yaml when configuring providers or recurring work, .agents/skills/<capability>/SKILL.md stubs or refinement-ticket handoffs, optional capability/gap/handoff sidecars, optional Goal Packet drafts)
+state: reads(operator idea, values, constraints, local assets/docs/tickets/skills, docs/skills/registry.jsonl, .agents/skills/**?, harness doctrine, farplane/harness.yaml, farplane/metrics.yaml, farplane/automations.toml, and farplane/bindings.yaml when present, current external research only when domain truth matters); writes(farplane/harness.yaml typed-charter/area/capability/metric-selection deltas only with explicit approval, farplane/metrics.yaml definition/direction/freshness/guard deltas, proposed tickets, farplane/automations.toml, farplane/bindings.yaml when configuring providers or recurring work, .agents/skills/<capability>/SKILL.md stubs or refinement-ticket handoffs, optional capability/gap/handoff sidecars, optional Goal Packet drafts)
 gates: values_or_default_values_named; priorities_named; feedback_loop_defined_or_ticketed; metric_objectives_honest; existing_tickets_checked_first; existing_skills_checked_before_capability_skill_stubs; capability_skill_reuse_map_written; missing_systems_named; blockers_ticketed; side_effect_gates_named; initial_objectives_named; pm_activation_gate_named; goal_advisor_handoff_ready
 routes: init-advisor | research:* | ingest-content | metric-advisor | harness-advisor | skill-creator | goal-advisor | automation-advisor | optimize-with-human | interval-update | review | relevant domain skill
 fails: runs Goal before designing harness; treats parent harness as an indefinite native Goal; schedules hidden runtime; analyzes metrics that do not exist; creates local capability skills before checking existing reusable skills and systems; promotes project-local capability skills to root skills before repeated proof; activates PM loops before core capability skills or refinement tickets exist; performs R&D when a standard system template is enough; triggers publishing/spend/account/customer side effects without approval
@@ -147,7 +147,8 @@ skill to root `skills/` only after repeated proof shows cross-project reuse.
    - [ ] Use [templates/project-harness.md](templates/project-harness.md) only
      as a transient split-surface planning worksheet when one review artifact
      is useful.
-   - [ ] Write approved identity, products, feature meaning, constraints,
+   - [ ] Write approved identity, planning areas with compact planner
+     instructions, feature meaning, constraints,
      authority, stable capability refs, and selected objective/guard refs to
      `farplane/harness.yaml`; write reusable metric meaning, direction,
      freshness, and optional guard rules to `farplane/metrics.yaml`.
@@ -224,17 +225,18 @@ skill to root `skills/` only after repeated proof shows cross-project reuse.
    - [ ] Create or update tracked `farplane/bindings.yaml` for project-specific
      external coordinates needed by skills.
    - [ ] Use one `pulse-update` heartbeat for board reconciliation, due
-     check-ins, bounded dispatch, and empty-board BAU refill. Keep Feed Scout,
-     Daily/Weekly BAU reporting, and weekly Dogfood as separate cron jobs.
+     check-ins, bounded dispatch, and empty unclaimed-ready-board refill. Keep
+     Feed Scout, Daily/Weekly reporting, and weekly Dogfood as report/context cron jobs.
    - [ ] Keep ticket selection inside `pulse-update`: fetch executable tickets
-     first, dispatch within worker capacity, and call the BAU-only planner only
-     when no ordinary or due-check-in work exists.
-   - [ ] `interval-update` writes bounded Daily/Weekly problem reports and may
-     resurface only prior-evidenced maintenance. It does not plan new direction,
-     score rewards, or own self-improvement.
+     first, dispatch within Pulse worker capacity, and call one adaptive planner
+     only when no unclaimed ordinary or due-check-in work exists. Human-active
+     tickets do not consume Pulse capacity.
+   - [ ] `interval-update` writes bounded Daily/Weekly problem reports and
+     candidate interventions from prior evidence. It does not create tickets,
+     plan new direction, score rewards, or own self-improvement admission.
    - [ ] `dogfood-review` aggregates already-recorded experiment outcomes and
-     may create a capacity-bounded non-interfering experiment wave. Pulse later
-     executes those tickets and their ticket-local check-ins.
+     emits bounded experiment candidates. The one next-wave planner ranks the
+     self-improvement area globally; Pulse alone materializes admitted tickets.
    - [ ] When horizon work can split safely, express subagent lanes as
      `delegate(context_ref, task_prompt, skills?, output?)`; `context_ref` must
      be a file, ticket, Goal Packet, or artifact path.
@@ -307,7 +309,7 @@ Return or write:
 
 ```text
 Typed Charter Delta (`farplane/harness.yaml`):
-Product / Capability / Metric Selection Delta (`farplane/harness.yaml`):
+Area / Capability / Metric Selection Delta (`farplane/harness.yaml`):
 Capability Skill Reuse Map:
 Local Capability Skill Stubs (`.agents/skills/<capability>/SKILL.md`):
 Capability Skill Refinement Ticket:
@@ -348,8 +350,8 @@ tickets/TASK-YYYY-unblock-*.md      # preferred for human access/setup blockers
 
 ## Gotchas
 
-- Split files first: `farplane/harness.yaml` owns human meaning, descriptive
-  products, capability refs, selected metric refs, constraints, and authority;
+- Split files first: `farplane/harness.yaml` owns human meaning, planning
+  areas/instructions, capability refs, selected metric refs, constraints, and authority;
   `farplane/metrics.yaml` owns reusable metric meaning, direction, freshness,
   and guard rules. A `project-harness.md` worksheet is evidence, not canonical
   truth.

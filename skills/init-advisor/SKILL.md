@@ -108,7 +108,7 @@ shallow or misleading answers. Record the intake choice and missing answers in
 
 Do not treat file existence as readiness. Placeholder or stale split project
 files mean "operating model still missing", not "initialized". Keep human
-meaning, hard constraints, products, and selected metric refs in
+meaning, hard constraints, planning areas, and selected metric refs in
 `farplane/harness.yaml`; keep reusable metric direction, freshness, and guard
 rules in `farplane/metrics.yaml`; use
 `goal-advisor` only after a ticket is concrete enough for a Goal Packet.

@@ -44,7 +44,7 @@ init_advisor_qa(project_root, init_mode, activation_requested?)
 
 5. `objectives_and_capabilities_split`
    - Pass: selected objective/guard refs, stable human policy, descriptive
-     products, and capability refs live in `farplane/harness.yaml`; reusable
+     planning areas and capability refs live in `farplane/harness.yaml`; reusable
      metric meaning, direction, freshness, and guard rules live in
      `farplane/metrics.yaml`; executable work and proof live in tickets.
    - Fail: a capability skill becomes a planning controller or duplicates
@@ -59,7 +59,7 @@ init_advisor_qa(project_root, init_mode, activation_requested?)
 
 6. `objective_operating_model`
    - Pass: `farplane/harness.yaml` captures mission, human thesis, non-tradeoffs,
-     decision boundaries, authority, products, and selected metric refs;
+     decision boundaries, authority, planning areas, and selected metric refs;
      `farplane/metrics.yaml` captures metric definitions, directions,
      freshness, and guard rules.
    - Fail: file existence is treated as enough when the operating model is
@@ -94,7 +94,7 @@ init_advisor_qa(project_root, init_mode, activation_requested?)
      missing, stale, placeholder, or ungrounded in operator intent.
 
 10. `split_file_delta_boundary`
-   - Pass: `farplane/harness.yaml` keeps human meaning, products, hard
+   - Pass: `farplane/harness.yaml` keeps human meaning, planning areas, hard
      constraints, and selected metric refs while `farplane/metrics.yaml` keeps
      reusable metric meaning, direction, freshness, and guard rules; split-file
      deltas are applied only after operator intent is known; `goal-advisor` is
@@ -114,12 +114,15 @@ init_advisor_qa(project_root, init_mode, activation_requested?)
      retired Steer thread is required.
 
 12. `pulse_selection`
-   - Pass: Pulse dispatches executable tickets up to the worker limit, makes
-     due original-ticket check-ins eligible, and calls the BAU-only next-wave
-     planner when refill is allowed; Feed Scout, Interval maintenance, and
-     Dogfood remain separate ticket sources.
+   - Pass: Pulse dispatches unclaimed executable tickets up to the Pulse worker
+     limit, does not count human-active tickets as Pulse workers, makes due
+     original-ticket check-ins eligible, and calls one adaptive next-wave
+     planner when refill is allowed; Feed Scout, Interval, and Dogfood provide
+     report/candidate context plus bounded evidence-backed recovery tickets;
+     they never independently admit opportunities or experiments.
    - Fail: selection, execution, or check-in dispatch is split into another
-     automation, or Pulse refill invents self-improvement work.
+     automation, area planner subagents are required, or scheduled report
+     automations independently admit proactive tickets.
 
 13. `live_automation_activation`
    - Pass: when activation was requested, live Codex automation records match

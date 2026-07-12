@@ -2,7 +2,7 @@
 title: "Generated System Registry"
 status: generated
 owner: system-registry
-updated_at: 2026-07-11
+updated_at: 2026-07-12
 refs:
   - docs/systems/registry.jsonl
   - docs/features/registry.jsonl

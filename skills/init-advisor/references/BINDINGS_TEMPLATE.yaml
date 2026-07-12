@@ -58,6 +58,9 @@ metric_bindings:
     refresh: Call $interval-update.calculate_autonomy_time_ratio(runtime_dir=".farplane",
       date="<YYYY-MM-DD>") and store the returned value/status/payload.
 event_routes:
+  - route_id: ticket-completion-learning-v1
+    event_name: farplane.ticket.completed
+    program_ref: core:ticket-completion-learning@1.1.0
   - route_id: ticket-completion-lean-v1
     event_name: farplane.ticket.completed
     program_ref: core:ticket-completion-lean@1.0.0

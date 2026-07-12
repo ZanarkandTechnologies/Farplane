@@ -2,7 +2,7 @@
 title: "Generated Feature Registry"
 status: generated
 owner: feature-registry
-updated_at: 2026-07-11
+updated_at: 2026-07-12
 refs:
   - docs/features/registry.jsonl
   - docs/features/validate_features.py
@@ -42,5 +42,5 @@ This file is generated. Edit the feature specs in `docs/features/` instead.
 | [FEAT-0067 Daily and weekly BAU problem reports](../features/FEAT-0067-daily-interval-review-reports.md) | [Horizon Loop](../systems/horizon-loop.md) | `implemented` | `true` | `false` | `planning` |
 | [FEAT-0068 Goal-backed ticket execution](../features/FEAT-0068-goal-backed-ticket-execution.md) | [Work Loop](../systems/work-loop.md) | `implemented` | `true` | `false` | `execution` |
 | [FEAT-0069 Retired Taste Loop human-feedback optimization](../features/FEAT-0069-taste-loop-human-feedback-optimization.md) | [Self-Improvement And Learning](../systems/self-improvement-learning.md) | `retired` | `false` | `FEAT-0070`, `FEAT-0071` | `improvement-loop` |
-| [FEAT-0070 Dogfood experiment review and ticket supply](../features/FEAT-0070-experimental-feature-evaluation-reports.md) | [Self-Improvement And Learning](../systems/self-improvement-learning.md) | `implemented` | `true` | `false` | `improvement-loop` |
+| [FEAT-0070 Dogfood experiment review and candidate supply](../features/FEAT-0070-experimental-feature-evaluation-reports.md) | [Self-Improvement And Learning](../systems/self-improvement-learning.md) | `implemented` | `true` | `false` | `improvement-loop` |
 | [FEAT-0071 Project Work Pulse](../features/FEAT-0071-project-work-pulse.md) | [Horizon Loop](../systems/horizon-loop.md) | `implemented` | `true` | `false` | `planning` |

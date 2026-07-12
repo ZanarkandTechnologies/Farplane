@@ -4,7 +4,7 @@
     {
       "id": "init_advisor_pulse_interval_01",
       "prompt": "A new Farplane project is being initialized for autonomous operation. What should the generated automation surfaces contain?",
-      "expected_output": "Creates farplane/automations.toml as the reviewable full automation config source; Creates farplane/harness.yaml as the static human charter with human thesis, static leverage commitments, non-tradeoffs, agent authority, and change rule; Creates farplane/metrics.yaml for provider-independent metric definitions and keeps provider refresh coordinates in farplane/bindings.yaml; Keeps recurring artifact production in reusable or project-local capability skills rather than product controller files; Grounds the team archetype against real-world equivalents before finalizing harness, capability workflows, or goals; Uses Work Pulse as the only heartbeat and shared ticket executor; Uses a separate Feed Scout cron for report-first source intake and bounded ticket projection; Uses Daily and Weekly BAU cron records for Problems-ledger reporting and bounded prior-evidenced maintenance; Uses a separate weekly Dogfood cron for portfolio review and a bounded experiment Goal Packet wave under configured capacity; Keeps consolidation as cron and routes human-feedback improvement through Dogfood tickets rather than another controller; Does not create farplane/steer.config.toml or .farplane/state/steer-scheduler.json; Uses date-stamped interval reports rather than latest.md as the canonical report path",
+      "expected_output": "Creates farplane/automations.toml as the reviewable full automation config source; Creates farplane/harness.yaml as the static human charter with human thesis, leverage commitments, non-tradeoffs, authority, change rule, and planning areas; Creates farplane/metrics.yaml for provider-independent metric definitions and keeps provider refresh coordinates in farplane/bindings.yaml; Keeps recurring artifact production in capability skills rather than controllers; Uses Work Pulse as the only heartbeat, adaptive planner, exploratory ticket-admission point, and shared ticket executor; Uses separate Feed Scout, Daily/Weekly BAU, and Dogfood cron records for reports, bounded candidates, and capped direct recovery only; Keeps consolidation as cron and routes human-feedback improvement through Dogfood candidates rather than another controller; Uses date-stamped reports rather than latest.md as canonical state",
       "files": [],
       "assertions": [
         "Creates farplane/automations.toml as the reviewable full automation config source",
@@ -12,11 +12,9 @@
         "Creates farplane/metrics.yaml for provider-independent metric definitions and keeps provider refresh coordinates in farplane/bindings.yaml",
         "Keeps recurring artifact production in reusable or project-local capability skills rather than product controller files",
         "Grounds the team archetype against real-world equivalents before finalizing harness, capability workflows, or goals",
-        "Uses Work Pulse as the only heartbeat and shared ticket executor",
-        "Uses a separate Feed Scout cron for report-first source intake and bounded ticket projection",
-        "Uses Daily and Weekly BAU cron records for Problems-ledger reporting and bounded prior-evidenced maintenance",
-        "Uses a separate weekly Dogfood cron for portfolio review and a bounded experiment Goal Packet wave under configured capacity",
-        "Keeps consolidation as cron and routes human-feedback improvement through Dogfood tickets rather than another controller",
+        "Uses Work Pulse as the only heartbeat, adaptive planner, proactive ticket-admission point, and shared ticket executor",
+        "Uses separate Feed Scout, Daily/Weekly BAU, and Dogfood cron records for reports, bounded candidates, and capped direct recovery only",
+        "Keeps consolidation as cron and routes human-feedback improvement through Dogfood candidates rather than another controller",
         "Does not create farplane/steer.config.toml or .farplane/state/steer-scheduler.json",
         "Uses date-stamped interval reports rather than latest.md as the canonical report path"
       ],
@@ -34,12 +32,13 @@
     {
       "id": "init_advisor_ticket_selection_inside_pulse_01",
       "prompt": "The initialized project has local tickets and a Pulse automation. What should the template say about selecting work?",
-      "expected_output": "Pulse dispatches executable tickets up to the configured worker limit and makes due original-ticket check-ins eligible; Pulse reads farplane/harness.yaml, goals, metrics, ticket history, and current reports when shaping an empty-board BAU refill; The next-wave planner creates only bounded BAU ticket specs; Feed Scout, Interval maintenance, and Dogfood own their separate ticket sources; Local ready and unblocked tickets are preferred over blocked or approval-required work; Substantial implementation routes through harness-creator first when the operating model is missing, then goal-advisor only after a concrete milestone exists; No separate ticket-drainer or check-in automation is required because Pulse owns selection, execution, and due check-in dispatch",
+      "expected_output": "Pulse dispatches unclaimed executable tickets up to the configured Pulse-worker limit and makes due original-ticket check-ins eligible; Human-active tickets are unselectable but consume no Pulse capacity and do not block refill; Pulse reads harness areas, metric objectives and guards, a recent global ticket-history sample, and current reports when the executable board is empty; The adaptive planner progressively filters history only when needed and creates bounded globally ranked specs; Feed Scout, Interval, and Dogfood may create bounded evidence-backed direct recovery tickets but supply opportunities, uncertain fixes, and experiments only as candidates; No separate ticket-drainer or check-in automation is required",
       "files": [],
       "assertions": [
-        "Pulse dispatches executable tickets up to the configured worker limit and makes due original-ticket check-ins eligible",
-        "Pulse reads farplane/harness.yaml, goals, metrics, ticket history, and current reports when shaping an empty-board BAU refill",
-        "The next-wave planner creates only bounded BAU ticket specs; Feed Scout, Interval maintenance, and Dogfood own their separate ticket sources",
+        "Pulse dispatches unclaimed executable tickets up to the configured Pulse-worker limit and makes due original-ticket check-ins eligible",
+        "Human-active tickets are unselectable but consume no Pulse capacity and do not block refill",
+        "The adaptive planner reads a recent global ticket-history sample before optional progressive filters",
+        "Feed Scout, Interval, and Dogfood may create bounded evidence-backed direct recovery tickets but supply opportunities, uncertain fixes, and experiments only as candidates",
         "Local ready and unblocked tickets are preferred over blocked or approval-required work",
         "Substantial implementation routes through harness-creator first when the operating model is missing, then goal-advisor only after a concrete milestone exists",
         "No separate ticket-drainer or check-in automation is required because Pulse owns selection, execution, and due check-in dispatch"
@@ -82,7 +81,7 @@
     {
       "id": "init_advisor_full_mode_goal_intake_01",
       "prompt": "A brownfield repo has placeholder charter and metric files that are not grounded in the operator's current intent. The operator asks to initialize it as a full Farplane project. What should init-advisor do before claiming the project is initialized?",
-      "expected_output": "Distinguishes substrate_complete from project_initialized instead of treating file existence as enough; Audits farplane/harness.yaml for missing human thesis, leverage commitments, non-tradeoffs, authority, and change rule; Audits docs/bootstrap-brief.md, capability workflow ownership, and farplane/metrics.yaml for honest measurable objectives, directions, guards, and providers; In full mode, calls harness-creator after substrate setup for static charter, capability workflows, feedback loops, missing systems, and metric objectives; Asks the first missing harness-creator parameter instead of running separate interviews; Keeps human meaning, products, and metric selection in harness.yaml plus metric meaning, direction, freshness, and guards in metrics.yaml; Writes readiness gaps into docs/bootstrap-brief.md; Uses goal-advisor only after an executable ticket is concrete enough for a Goal Packet",
+      "expected_output": "Distinguishes substrate_complete from project_initialized instead of treating file existence as enough; Audits farplane/harness.yaml for missing human thesis, leverage commitments, non-tradeoffs, authority, change rule, and planning areas; Audits docs/bootstrap-brief.md, capability workflow ownership, and farplane/metrics.yaml for honest measurable objectives, directions, guards, and providers; In full mode, calls harness-creator after substrate setup for static charter, capability workflows, feedback loops, missing systems, and metric objectives; Asks the first missing harness-creator parameter instead of running separate interviews; Keeps human meaning, areas, and metric selection in harness.yaml plus metric meaning, direction, freshness, and guards in metrics.yaml; Writes readiness gaps into docs/bootstrap-brief.md; Uses goal-advisor only after an executable ticket is concrete enough for a Goal Packet",
       "files": [],
       "assertions": [
         "Distinguishes substrate_complete from project_initialized instead of treating file existence as enough",
@@ -90,7 +89,7 @@
         "Audits docs/bootstrap-brief.md, capability workflow ownership, and farplane/metrics.yaml for honest measurable objectives, directions, guards, and providers",
         "In full mode, calls harness-creator after substrate setup for static charter, capability workflows, goals, feedback loops, missing systems, current milestone, and any Goal Advisor handoff",
         "Asks the first missing harness-creator parameter instead of running separate capability/goals/advisor interviews from init-advisor",
-        "Keeps human meaning, products, and metric selection in harness.yaml plus metric meaning, direction, freshness, and guards in metrics.yaml",
+        "Keeps human meaning, planning areas, and metric selection in harness.yaml plus metric meaning, direction, freshness, and guards in metrics.yaml",
         "Writes the readiness state or missing answers into docs/bootstrap-brief.md and proposes or applies split-file deltas only after operator intent is known",
         "Uses goal-advisor only after a current milestone is concrete enough to compile into a ticket-backed Goal Packet"
       ],
