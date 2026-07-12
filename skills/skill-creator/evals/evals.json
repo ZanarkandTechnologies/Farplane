@@ -27,6 +27,32 @@
           "notes": "Protects the source-safe book-summary-to-skill workflow: online summaries are mined for actionable workflows, then transformed into skill behavior rather than recreated as book notes."
         }
       }
+    },
+    {
+      "id": "skill_creator_new_skill_eval_run_and_self_improve_01",
+      "prompt": "Create a reusable artifact-writing skill for producing investor update memos. It should be good enough to use, and if it keeps improving from real outputs we can tune it later.",
+      "expected_output": "Creates the skill only if the trigger and reusable workflow are stable; Enables evals for the new behavior-sensitive skill; Creates representative eval cases for the skill before claiming it is done; Runs the evals and records the pass, fail, or deferred-proof result; Uses failed evals as blockers or fixes and reruns the smallest failing case before readiness; For the artifact-creation skill, creates a follow-up self-improve ticket or Goal Packet seeded with the baseline eval result when ongoing optimization is warranted, or records no_self_improve_reason",
+      "files": [],
+      "assertions": [
+        "Creates the skill only if the trigger and reusable workflow are stable",
+        "Enables evals for the new behavior-sensitive skill",
+        "Creates representative eval cases for the skill before claiming it is done",
+        "Runs the evals and records the pass, fail, or deferred-proof result",
+        "Uses failed evals as blockers or fixes and reruns the smallest failing case before readiness",
+        "For the artifact-creation skill, creates a follow-up self-improve ticket or Goal Packet seeded with the baseline eval result when ongoing optimization is warranted, or records no_self_improve_reason"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Skill Creator runs evals before new skill readiness",
+          "tags": [
+            "skill-creator",
+            "evals",
+            "self-improve",
+            "artifact-skills"
+          ],
+          "notes": "Protects the new-skill lifecycle: behavior-sensitive skills need evals created and run before done, while artifact-creation skills route ongoing optimization to self-improve instead of hiding it in the creation ticket."
+        }
+      }
     }
   ]
 }

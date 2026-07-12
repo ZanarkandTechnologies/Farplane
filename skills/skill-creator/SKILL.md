@@ -33,8 +33,11 @@ contract.
 ```text
 create_or_update_skill(request, existing_surface?, proof_need?) -> skill_package_change + validation_result
 state: reads(skill-system docs, registry, target skill, template); writes(SKILL.md, references?, scripts?, registry?)
-gates: trigger_stable; template_structure_valid; proof_or_blocker_named; review_ready
-routes: gap-analysis | skill-maintenance | research:source-synthesis | advise | deliberative-advice | review
+gates: trigger_stable; template_structure_valid;
+       new_behavior_skill_evals_created_and_run_or_deferred;
+       proof_or_blocker_named; review_ready
+routes: gap-analysis | skill-maintenance | research:source-synthesis | advise |
+  deliberative-advice | self-improve | goal-advisor | review
 fails: creates duplicate skills; hides required logic in references; omits proof; stamps stale template version
 ```
 
@@ -130,10 +133,16 @@ fails: creates duplicate skills; hides required logic in references; omits proof
      multi-agent/router skills, eval-facing skills, or any change where agent
      comprehension is the claim, create or update `skills/<skill-name>/evals/evals.json`
      or record the stronger owner of behavior proof.
+   - [ ] For new behavior-sensitive skills, enable evals, create representative
+     cases, run the evals before completion, and record the result or an
+     explicit deferred-proof blocker.
    - [ ] Run at least one behavior proof for behavior-sensitive skill work:
      an `eval` smoke case, `agent-behavior-test`, or a target skill-local QA
      scenario. If the proof fails, patch the skill and rerun the smallest
      failing case before claiming readiness.
+   - [ ] For artifact-creation skills, create a follow-up self-improve ticket or
+     Goal Packet seeded with the baseline eval result when ongoing quality
+     optimization is warranted; otherwise record `no_self_improve_reason`.
    - [ ] Review depth chosen with
      [docs/skills/best-practices.md](../../docs/skills/best-practices.md#structure-optimization):
      direct self-check for tiny mechanical edits, `advise` for normal recent
@@ -253,5 +262,9 @@ After this skill runs:
 - Registry validation passes, or the remaining blocker is recorded with the
   exact failing command.
 - The Skill Structure QA Checklist has been applied to the changed surfaces.
-- Behavior-sensitive skill changes have an eval, behavior-test, or skill-local
+- New behavior-sensitive skills have enabled evals, representative cases, a
+  recorded eval run, and a pass/fail/deferred-proof result.
+- Behavior-sensitive skill updates have an eval, behavior-test, or skill-local
   QA proof artifact, or an explicit blocker naming why that proof could not run.
+- Artifact-creation skills have a follow-up self-improve ticket/Goal Packet
+  seeded from the baseline eval result, or a recorded `no_self_improve_reason`.
