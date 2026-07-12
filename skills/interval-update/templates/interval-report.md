@@ -36,15 +36,15 @@ source_gaps: []
 
 Use ordinary Markdown rows only. Label each open row in prose as either
 `carried` from prior finalized evidence or `new` in this report. New rows are
-not eligible for Interval-created tickets in this run.
+left for the adaptive project planner to evaluate.
 
-## Maintenance Ticket Deltas
+## Maintenance Candidates
 
-| Problem | Prior finalized evidence | Dedupe evidence | Proof / stop condition | Ticket | Result |
+| Problem | Prior finalized evidence | Dedupe evidence | Proof / stop condition | Area / KPI | Result |
 | --- | --- | --- | --- | --- | --- |
 
-Results: `created`, `updated`, `already_owned`, `ledger_only_new`,
-`ineligible_direction`, `source_gap`, `cap_reached`.
+Results: `planner_candidate`, `already_owned`, `ledger_only_new`,
+`ineligible_direction`, `source_gap`.
 
 ## Source Gaps
 
@@ -53,9 +53,10 @@ Results: `created`, `updated`, `already_owned`, `ledger_only_new`,
 
 ## Receipts
 
-- `report_finalized_before_ticket_delta:` yes | no
-- `maintenance_ticket_limit:`
-- `maintenance_ticket_count:`
+- `report_finalized_before_candidate_handoff:` yes | no
+- `recovery_ticket_limit:`
+- `recovery_tickets_created_or_updated:`
+- `experimental_or_new_direction_tickets_created:` 0
 - `new_direction_planned:` no
 - `provider_or_dogfood_run:` no
 - `reward_or_checkin_mutated:` no

@@ -93,6 +93,26 @@ PRIMITIVE_CATALOG: dict[str, dict[str, Any]] = {
         "emits": ["evidence_distribution_reach", "payload.components", "payload.missing_components"],
         "source_gap_policy": "Emit source_gap when no same-day platform view component observations exist.",
     },
+    "project_adoption": {
+        "primitive_id": "project_adoption",
+        "provider": "farplane-core",
+        "owner": "farplane-core",
+        "command": "python3 bin/farplane.py metrics primitives --project-root <project> --date <YYYY-MM-DD>",
+        "store_to": ".farplane/metrics/observations/project_adoption/<YYYY-MM-DD>.json",
+        "required_inputs": ["farplane/manifest.json", "nearby project farplane/manifest.json files", "nearby .farplane/automation/decisions.jsonl"],
+        "emits": ["activated_external_projects", "payload.projects", "payload.excluded"],
+        "source_gap_policy": "Emit source_gap when the standard manifest lacks a spec version; drifted or not-yet-activated nearby projects are excluded with reasons.",
+    },
+    "planner_ticket_quality": {
+        "primitive_id": "planner_ticket_quality",
+        "provider": "farplane-core",
+        "owner": "farplane-core",
+        "command": "python3 bin/farplane.py metrics primitives --project-root <project> --date <YYYY-MM-DD>",
+        "store_to": ".farplane/metrics/observations/planner_ticket_quality/<YYYY-MM-DD>.json",
+        "required_inputs": ["tickets/**/ticket.md", "Reward.kpi_rewards[]"],
+        "emits": ["rejected_ai_ticket_count", "payload.tickets"],
+        "source_gap_policy": "Empty windows emit available zero; rejected reward-bearing tickets retain ticket refs in payload.",
+    },
     "ticket_thread_association_backfill": {
         "primitive_id": "ticket_thread_association_backfill",
         "provider": "mechanical",
@@ -432,13 +452,14 @@ def load_metric_selection(project_root: Path) -> dict[str, Any]:
         for row in raw_project_rows
         if isinstance(row, dict) and row.get("metric_id")
     ]
-    products = harness.get("products") if isinstance(harness.get("products"), dict) else {}
-    for product_id, product in products.items():
-        if not isinstance(product, dict):
+    area_rows: list[dict[str, Any]] = []
+    areas = harness.get("areas") if isinstance(harness.get("areas"), dict) else {}
+    for area_id, area in areas.items():
+        if not isinstance(area, dict):
             continue
-        rows = product.get("metric_refs") if isinstance(product.get("metric_refs"), list) else []
-        objective_rows.extend(
-            {**row, "scope": "product", "product_id": str(product_id)}
+        rows = area.get("metric_refs") if isinstance(area.get("metric_refs"), list) else []
+        area_rows.extend(
+            {**row, "scope": "area", "area_id": str(area_id)}
             for row in rows
             if isinstance(row, dict) and row.get("metric_id")
         )
@@ -446,6 +467,7 @@ def load_metric_selection(project_root: Path) -> dict[str, Any]:
     guard_ids = refs.get("guards") if isinstance(refs.get("guards"), list) else []
     return {
         "objectives": objective_rows,
+        "area_metrics": area_rows,
         "guards": [
             {"metric_id": str(metric_id), "scope": "project"}
             for metric_id in guard_ids
@@ -760,6 +782,10 @@ def primitive_id_for_metric(metric_id: str, recipe: dict[str, Any]) -> str:
         return "ai_burn_estimate"
     if metric_id == "evidence_distribution_reach":
         return "content_views_total"
+    if metric_id == "activated_external_projects":
+        return "project_adoption"
+    if metric_id == "rejected_ai_ticket_count":
+        return "planner_ticket_quality"
     if metric_id == "kpi_attributed_ticket_ratio":
         return "kpi_attributed_ticket_ratio"
     return "manual_source_gap"
@@ -777,6 +803,7 @@ def metric_definitions(project_root: Path) -> tuple[dict[str, Any], list[str]]:
         for metric_id in sorted(set(raw_metrics) - set(metric_bindings))
     ]
     objective_rows = selection.get("objectives") if isinstance(selection.get("objectives"), list) else []
+    area_rows = selection.get("area_metrics") if isinstance(selection.get("area_metrics"), list) else []
     guard_rows = selection.get("guards") if isinstance(selection.get("guards"), list) else []
     objective_by_id = {
         str(row.get("metric_id")): row
@@ -788,6 +815,11 @@ def metric_definitions(project_root: Path) -> tuple[dict[str, Any], list[str]]:
         for row in guard_rows
         if isinstance(row, dict) and row.get("metric_id")
     }
+    areas_by_id: dict[str, list[dict[str, Any]]] = {}
+    for row in area_rows:
+        if not isinstance(row, dict) or not row.get("metric_id"):
+            continue
+        areas_by_id.setdefault(str(row["metric_id"]), []).append(row)
     for metric_id, raw_definition in raw_metrics.items():
         definition = raw_definition if isinstance(raw_definition, dict) else {}
         raw_binding = metric_bindings.get(metric_id)
@@ -802,6 +834,7 @@ def metric_definitions(project_root: Path) -> tuple[dict[str, Any], list[str]]:
             aggregation = "daily" if kind == "daily" else "point"
             cumulative = bool(recipe.get("cumulative", False))
         objective = objective_by_id.get(str(metric_id), {})
+        area_selections = areas_by_id.get(str(metric_id), [])
         guard_ref = guard_by_id.get(str(metric_id), {})
         guard = definition.get("guard") if isinstance(definition.get("guard"), dict) and guard_ref else {}
         raw_target = guard.get("threshold") if "threshold" in guard else recipe.get("target")
@@ -815,8 +848,8 @@ def metric_definitions(project_root: Path) -> tuple[dict[str, Any], list[str]]:
             "label": str(recipe.get("label") or str(metric_id).replace("_", " ").capitalize()),
             "description": description,
             "tooltip": description,
-            "selection_role": "objective" if objective else "guard" if guard else "observation",
-            "selection": objective or guard_ref or None,
+            "selection_role": "objective" if objective else "guard" if guard else "area" if area_selections else "observation",
+            "selection": objective or guard_ref or (area_selections if area_selections else None),
             "direction": definition.get("direction"),
             "max_age_days": definition.get("max_age_days"),
             "guard": guard or None,
@@ -1439,7 +1472,7 @@ def load_project_snapshot(project_root: Path, snapshot_date: str | None = None) 
         "operating_principles": harness.get("operating_principles") if isinstance(harness.get("operating_principles"), list) else [],
         "stable_capabilities": harness.get("stable_capabilities") if isinstance(harness.get("stable_capabilities"), list) else [],
         "non_tradeoffs": constraints.get("non_tradeoffs") if isinstance(constraints.get("non_tradeoffs"), list) else [],
-        "products": harness.get("products") if isinstance(harness.get("products"), dict) else {},
+        "areas": harness.get("areas") if isinstance(harness.get("areas"), dict) else {},
         "feature_definition": harness.get("feature_definition") if isinstance(harness.get("feature_definition"), dict) else {},
         "leverage_commitments": harness.get("leverage_commitments") if isinstance(harness.get("leverage_commitments"), list) else [],
     }

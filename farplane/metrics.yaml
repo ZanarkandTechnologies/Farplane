@@ -5,6 +5,24 @@ updated_at: 2026-07-12
 framework_template_version: "0.3.0"
 owner: metric-advisor
 metrics:
+  activated_external_projects:
+    label: Activated external projects
+    description: Count of non-Farplane local projects whose manifest is current and whose Work Pulse recorded a decision after that manifest update.
+    pinned: true
+    kind: point
+    unit: projects
+    display: reading
+    direction: maximize
+    max_age_days: 7
+  distribution_reach_per_artifact:
+    label: Distribution reach per published artifact
+    description: Same-window evidence distribution reach divided by published artifacts; this measures distribution efficiency rather than rewarding raw output volume.
+    pinned: true
+    kind: point
+    unit: views_per_artifact
+    display: line
+    direction: maximize
+    max_age_days: 7
   accepted_evidence_cycles:
     label: Accepted evidence cycles
     description: Daily count of completed tickets whose Reward names this metric and whose ticket-scoped review evidence records verdict pass at TAS-A.
@@ -90,6 +108,11 @@ metrics:
     kind: daily_count
     unit: tickets
     display: bar_plus_cumulative
+    direction: minimize
+    max_age_days: 1
+    guard:
+      operator: less_than_or_equal
+      threshold: 1
   intervention_free_ticket_count:
     label: Intervention-free tickets
     description: Daily count of completed associated tickets with zero human turns after execution start.

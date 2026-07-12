@@ -21,7 +21,7 @@ Parent responsibilities:
 - distinguish prior finalized evidence from discoveries first written during
   this run;
 - synthesize a compact report and Markdown Problems ledger;
-- write and finalize the dated report before any maintenance ticket delta;
+- write and finalize the dated report before any maintenance candidate handoff;
 - apply only maintenance deltas that pass the admission gates and cap;
 - return source gaps and a no-execution receipt.
 

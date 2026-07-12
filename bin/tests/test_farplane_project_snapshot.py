@@ -60,7 +60,7 @@ metric_refs:
     - metric_id: accepted_harness_improvements
       priority: 1
   guards: []
-products: {}
+areas: {}
 feature_definition: {}
 operating_principles: [Prefer visible artifacts.]
 stable_capabilities: []

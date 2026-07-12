@@ -60,26 +60,23 @@
     and judgement. Do not delegate writing or ranking to a script.
 14. Write `.farplane/feed-scout/daily/feed-YYYY-MM-DD.json`,
     `.farplane/feed-scout/daily/latest.json`, and the dated Markdown report
-    when configured. The report must exist before any local or Notion ticket
-    projection; `latest` pointers are convenience indexes, not canonical truth.
+    when configured. The report must exist before candidate handoff; `latest`
+    pointers are convenience indexes, not canonical truth.
 15. Validate the written daily feed with
     `scripts/validate_daily_feed.py`. This script is installed with the
     `feed-scout` skill package, so installed projects can call it from the
     local skill copy without needing a global binary.
 16. Update the ingestion ledger with scout, skill-creator handoff, or proposal
     links.
-17. After the report exists, evaluate ticket candidates against canonical
+17. After the report exists, evaluate planner candidates against canonical
     source evidence, strong signal, active-ticket dedupe, executable scope,
     expected Reward, proof, stop condition, authority, ticket quality, and the
-    configured cap. Link created and rejected candidates in the report.
-18. When writing to a live Notion Tasks database, resolve `Project` and `Areas`
-    from explicit request context, parent project/task context, or private
-    Notion handles under `~/.codex/private/`. If either relation is unresolved,
-    keep the proposal in the ledger or local inbox with `routing_missing`.
-19. After live Tasks writeback, fetch the page and record whether `Project` and
-    `Areas` are present.
-20. Stop after projection. Do not invoke Goal, Pulse, workers, implementation,
-    publication, outreach, or another Feed Scout run.
+    candidate budget. Link selected and rejected candidates in the report.
+18. After the report, create at most the configured recovery-ticket cap only
+    for an evidenced existing failure with a known direct correction, KPI/guard,
+    proof route, and no experiment debt. Keep opportunities and uncertain
+    hypotheses as candidates. Do not create Notion Tasks, Goal Packets, Pulse,
+    workers, implementation, publication, outreach, or another Feed Scout run.
 
 ## Platform Tool Map
 
@@ -124,15 +121,11 @@ snapshot.
 2. Group by tags, profile, or repeated decision pattern.
 3. Use `best-of-worlds` for related proposals when several sources converge.
 4. Recommend accept, reject, defer, or ticket.
-5. Keep candidates in the dated report until all post-report ticket gates pass.
+5. Keep candidates in the dated report for adaptive project-planner admission.
 6. Route later accepted implementation work to `impl-plan`; Feed Scout itself
    does not start implementation.
-7. Before creating or updating a live Tasks ticket, verify the
-   `NotionTaskProjection`:
-   - `routing_status=resolved`
-   - `project_relation` present
-   - one or more `areas_relations` present
-   - readback required after write
+7. Do not create live Tasks tickets or experiment tickets; only local bounded
+   recovery tickets are allowed by the recovery gate.
 
 ## Status
 
@@ -145,7 +138,7 @@ Report:
 - pending proposal count
 - credential or Notion blockers
 - latest local evidence path
-- ticket projection cap, created paths, and rejection reasons
+- planner candidate count, evidence refs, and rejection reasons
 - no-execution receipt
 
 ## Judgement Questions

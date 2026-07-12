@@ -7,9 +7,9 @@ review_window: <start>..<end>
 status: draft
 ui_summary: "<one concise source-change summary under 100 words>"
 source_gaps: []
-ticket_projection:
-  limit: <n>
-  created: []
+candidate_handoff:
+  candidates: []
+  recovery_tickets_created: []
   no_execution_receipt: "no Goal, Pulse, worker, implementation, publication, or outreach invoked"
 ---
 
@@ -37,17 +37,19 @@ ticket_projection:
 | Candidate | Source evidence | Executable scope | Reward / proof / stop | Authority | Verdict / reason |
 | --- | --- | --- | --- | --- | --- |
 
-Verdicts: `create_after_report`, `duplicate`, `insufficient_signal`,
+Verdicts: `planner_candidate`, `duplicate`, `insufficient_signal`,
 `scope_missing`, `proof_missing`, `authority_missing`, `report_only`.
 
-## Ticket Projection Receipt
+## Planner Candidate Handoff
 
-| Ticket | Candidate | Admission | Source refs | Result |
+| Candidate | Area / KPI | Expected reward | Source refs | Verdict |
 | --- | --- | --- | --- | --- |
 
-- `report_written_before_projection:` yes | no
-- `ticket_limit:`
-- `tickets_created:`
+- `report_written_before_handoff:` yes | no
+- `recovery_ticket_limit:`
+- `recovery_tickets_created:`
+- `exploration_or_experiment_tickets_created:` 0
+- `notion_tasks_created:` 0
 - `execution_started:` no
 
 ## Source Gaps And Blockers

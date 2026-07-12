@@ -56,6 +56,10 @@ No lane folders. No hand-maintained board file. The ticket itself is the board c
 - transcripts are useful evidence but are not the canonical resume surface
 - deliberate reset/resume requires `progress.md` to carry the current action,
   latest verification, blockers, and evidence references
+- one ticket owns one persistent Codex task titled exactly
+  `[TASK-XXXX] <ticket title>`; execution, review, feedback, waiting, and
+  check-in resume it. Do not create `Plan ...` or `Execute ...` copies, and do
+  not parse the display title as identity.
 
 ## Goal Packets
 

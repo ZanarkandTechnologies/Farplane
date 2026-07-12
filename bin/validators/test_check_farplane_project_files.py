@@ -147,14 +147,13 @@ metric_refs:
     - metric_id: accepted_output_events
       priority: 1
   guards: []
-products:
+areas:
   test_output:
-    description: A recurring test output.
-    output: A reviewed test artifact.
+    description: A recurring test investment area.
+    planner_instruction: Propose executable test outputs tied to the selected metric.
     skill_refs: [test-output]
     metric_refs:
       - metric_id: accepted_product_output
-        priority: 2
 feature_definition: {}
 operating_principles: [Prefer visible artifacts.]
 stable_capabilities: []

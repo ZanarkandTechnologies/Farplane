@@ -5,8 +5,8 @@ This folder owns the feed-scout recipe for tracked-profile monitoring.
 ## Local Rules
 
 - Keep `feed-scout` as an explicit-run recipe, not a daemon or hidden runner.
-- Write the dated report before projecting any ticket; cap and link all
-  source-backed ticket decisions in that report.
+- Write the dated report before handing off candidates or creating a bounded
+  local recovery ticket. Opportunity and experiment tickets are forbidden.
 - Model user configuration as tracked profiles first, then discovered content
   items, then URL-keyed ledger rows.
 - Use helper scripts for deterministic validation, URL keys, and fixture
@@ -16,12 +16,7 @@ This folder owns the feed-scout recipe for tracked-profile monitoring.
 - Promote only useful/scouted items into `docs/sources/registry.jsonl`.
 - Keep Notion as proposal review/writeback, not the only durable source of
   truth.
-- Do not invoke Goal, Pulse, workers, implementation, publication, or outreach
-  from ticket projection.
-- For live Notion Tasks writeback, resolve required `Project` and `Areas`
-  relations from explicit context or private Notion handles before writing, and
-  verify them by readback after writing. If either relation is missing, mark the
-  projection `routing_missing` or use local-only output instead of claiming
-  success. See `MEM-0123`.
+- Do not invoke Goal, Pulse, workers, implementation, publication, outreach, or
+  live Tasks writeback from candidate or recovery generation.
 - Never commit private Notion database IDs, page IDs, or workspace handles to
   reusable skill files, templates, fixtures, or docs.

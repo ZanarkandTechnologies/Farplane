@@ -196,7 +196,7 @@ long-horizon planning becoming greedy
 Use this ownership split for long-running work:
 
 ```text
-harness.yaml = human meaning + descriptive products + selected metric refs + hard constraints
+harness.yaml = human meaning + planning areas/instructions + selected metric refs + hard constraints
 metrics.yaml = metric meaning + direction + freshness + optional guard rules
 ticket.md = executable leaf contract + Done / Proof
 program.md = loop policy + metric + stop condition

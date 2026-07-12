@@ -14,7 +14,7 @@ applies_to:
 Use before an Interval run and again before returning its report.
 
 ```text
-interval_check(report, evidence, ticket_deltas) -> pass | violation | source_gap
+interval_check(report, evidence, candidates, recovery_tickets) -> pass | violation | source_gap
 ```
 
 ## Checklist
@@ -27,12 +27,13 @@ interval_check(report, evidence, ticket_deltas) -> pass | violation | source_gap
       refs; the run did not invoke them when missing.
 - [ ] The run did not call Dogfood Review, reward check-ins, priority planning,
       leverage planning, harness improvement, Goal, Pulse, or a worker.
-- [ ] Every maintenance delta cites evidence finalized before the current
-      report, is corrective rather than directional, names proof and a stop
-      condition, and has no active duplicate.
-- [ ] Problems first recorded in this report remain ledger-only even when they
-      look actionable.
-- [ ] The dated report existed before any allowed maintenance delta, the cap
-      was respected, and all deltas or rejections are linked in the report.
+- [ ] Every maintenance candidate cites current or prior evidence of an
+      existing failure, is corrective rather than directional, names proof and
+      a stop condition, and has no active duplicate.
+- [ ] The dated report existed before candidate handoff or recovery admission.
+      Every created ticket is a bounded, evidence-backed, deduped, KPI/guard-
+      linked direct recovery with a known correction and no experiment debt.
+- [ ] New direction, opportunities, and uncertain fixes
+      remain report candidates; the recovery ticket cap is respected.
 - [ ] Finalized prior reports were not rewritten; unresolved problems were
       carried forward by reference.

@@ -26,38 +26,39 @@
       }
     },
     {
-      "id": "interval_same_run_problem_stays_ledger_only",
-      "prompt": "A Weekly run discovers a serious documentation drift problem for the first time. It is concrete and no ticket exists. maintenance_ticket_limit is 2. What happens?",
-      "expected_output": "Records the problem as a new unchecked Markdown Problems row with current evidence; Does not create a ticket because no prior finalized report, ticket, review, or run artifact recorded the problem; Leaves the finalized report as an immutable snapshot after completion; Allows a later Interval to carry the unresolved row forward and reconsider it",
+      "id": "interval_same_run_known_failure_can_recover",
+      "prompt": "A Weekly run discovers a serious documentation drift failure for the first time. Current evidence proves the existing failure, the direct correction and existing guard are known, proof and stop are defined, no experiment or active duplicate exists, and the recovery cap is one. What happens?",
+      "expected_output": "Records the problem as a new unchecked Markdown Problems row with current evidence and writes the report first; Classifies it as direct recovery rather than new direction or an experiment; Creates at most one deduped guard-linked recovery ticket with the known correction, proof, and stop; Links the ticket from the finalized report; Does not start Goal, Pulse, a worker, or implementation",
       "files": [],
       "assertions": [
         "Records the problem as a new unchecked Markdown Problems row with current evidence",
-        "Does not create a ticket because no prior finalized report, ticket, review, or run artifact recorded the problem",
-        "Leaves the finalized report as an immutable snapshot after completion",
-        "Allows a later Interval to carry the unresolved row forward and reconsider it"
+        "Classifies it as direct recovery rather than new direction or an experiment",
+        "Creates at most one deduped guard-linked recovery ticket with the known correction, proof, and stop",
+        "Links the ticket from the finalized report",
+        "Does not start Goal, Pulse, a worker, or implementation"
       ],
       "metadata": {
         "farplane": {
-          "title": "Same-run problem cannot become an Interval ticket",
+          "title": "Same-run evidenced failure can become direct recovery",
           "tags": [
             "interval-update",
             "maintenance",
             "same-run",
-            "ledger"
+            "recovery"
           ]
         }
       }
     },
     {
       "id": "interval_resurfaces_prior_evidenced_maintenance",
-      "prompt": "A prior finalized Daily report and a failed review both record the same unresolved validator defect. No active ticket owns it and the Weekly cap is one. What gates apply?",
-      "expected_output": "Writes the Weekly report before any ticket delta; Confirms the defect is corrective maintenance rather than new direction or a harness experiment; Dedupes against active tickets and requires executable scope, proof, stop condition, and local authority; Creates or updates at most one maintenance ticket and links it from the Problems ledger; Does not execute the ticket or start Goal or Pulse",
+      "prompt": "A prior finalized Daily report and a failed review both record the same unresolved validator defect. The direct repair is known, names an existing guard, requires no experiment, and no active ticket owns it. The recovery cap is one. What gates apply?",
+      "expected_output": "Writes the Weekly report before recovery admission; Confirms the defect is corrective recovery rather than new direction or an experiment; Dedupes against active tickets and requires known direct scope, existing KPI or guard, proof, stop condition, and local authority; Creates or updates at most one recovery ticket and links it from the Problems ledger; Does not start Goal or Pulse",
       "files": [],
       "assertions": [
-        "Writes the Weekly report before any ticket delta",
+        "Writes the Weekly report before recovery admission",
         "Confirms the defect is corrective maintenance rather than new direction or a harness experiment",
         "Dedupes against active tickets and requires executable scope, proof, stop condition, and local authority",
-        "Creates or updates at most one maintenance ticket and links it from the Problems ledger",
+        "Creates or updates at most one recovery ticket and links it from the Problems ledger",
         "Does not execute the ticket or start Goal or Pulse"
       ],
       "metadata": {

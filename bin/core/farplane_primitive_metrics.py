@@ -552,6 +552,22 @@ def ticket_count_by_kpi_with_status(
     return output
 
 
+def ai_planned_ticket_ids(project_root: Path) -> set[str]:
+    ids: set[str] = set()
+    for row in read_jsonl(project_root / ".farplane" / "automation" / "decisions.jsonl"):
+        receipt = row.get("pulse_receipt") if isinstance(row.get("pulse_receipt"), dict) else {}
+        action = str(row.get("action") or receipt.get("mode") or "").strip()
+        if action != "plan_next_wave":
+            continue
+        admitted = row.get("admitted") if isinstance(row.get("admitted"), list) else receipt.get("admitted")
+        if isinstance(admitted, list):
+            ids.update(str(ticket_id).strip() for ticket_id in admitted if str(ticket_id).strip())
+        ticket_id = str(row.get("ticket_id") or "").strip()
+        if ticket_id:
+            ids.add(ticket_id)
+    return ids
+
+
 def thread_rows_from_sqlite(codex_home: Path, project_root: Path, window: Window) -> tuple[list[dict[str, Any]], list[str]]:
     db_path = codex_home / "sqlite" / "state_5.sqlite"
     if not db_path.exists():
@@ -881,6 +897,87 @@ def content_views_total(project_root: Path, date_value: str) -> dict[str, Any]:
     )
 
 
+def activated_external_projects(project_root: Path) -> dict[str, Any]:
+    """Count current nearby projects with post-migration Work Pulse evidence."""
+
+    standard_manifest_path = project_root / "farplane" / "manifest.json"
+    standard_manifest = read_json(standard_manifest_path)
+    expected_spec = str(standard_manifest.get("spec_version") or "")
+    expected_templates = standard_manifest.get("template_uses")
+    if not isinstance(expected_templates, dict):
+        expected_templates = {}
+
+    candidate_roots: set[Path] = set()
+    for manifest_path in project_root.parent.glob("*/farplane/manifest.json"):
+        candidate_roots.add(manifest_path.parents[1].resolve())
+    organization_root = project_root.parent.parent
+    if (organization_root / "farplane" / "manifest.json").exists():
+        candidate_roots.add(organization_root.resolve())
+    candidate_roots.discard(project_root.resolve())
+
+    activated: list[dict[str, Any]] = []
+    excluded: list[dict[str, Any]] = []
+    for root in sorted(candidate_roots, key=str):
+        manifest_path = root / "farplane" / "manifest.json"
+        manifest = read_json(manifest_path)
+        spec_version = str(manifest.get("spec_version") or "")
+        template_uses = manifest.get("template_uses")
+        if not isinstance(template_uses, dict):
+            template_uses = {}
+        drift: list[str] = []
+        if not expected_spec or spec_version != expected_spec:
+            drift.append(f"spec_version:{spec_version or 'missing'}!={expected_spec or 'missing'}")
+        for template_id, expected_version in sorted(expected_templates.items()):
+            pinned = str(template_uses.get(template_id) or "")
+            if pinned != str(expected_version):
+                drift.append(f"template:{template_id}:{pinned or 'missing'}!={expected_version}")
+        row = {
+            "project_id": str(manifest.get("project_id") or root.name),
+            "root": str(root),
+            "manifest": str(manifest_path),
+            "spec_version": spec_version,
+            "drift": drift,
+        }
+        if drift:
+            excluded.append(row)
+        else:
+            manifest_mtime = datetime.fromtimestamp(manifest_path.stat().st_mtime, tz=timezone.utc)
+            activation_rows = []
+            for decision in read_jsonl(root / ".farplane" / "automation" / "decisions.jsonl"):
+                timestamp = event_timestamp(decision)
+                pulse_owned = (
+                    str(decision.get("lane") or "") == "pulse"
+                    or str(decision.get("mode") or "") == "work_pulse"
+                    or str(decision.get("automation_id") or "").endswith("ticket-update")
+                )
+                if pulse_owned and timestamp and timestamp >= manifest_mtime:
+                    activation_rows.append(
+                        {
+                            "timestamp": timestamp.isoformat(),
+                            "action": str(decision.get("action") or ""),
+                            "ticket_id": decision.get("ticket_id"),
+                        }
+                    )
+            row["activation_evidence"] = activation_rows[-3:]
+            if activation_rows:
+                activated.append(row)
+            else:
+                row["activation_gap"] = "no_work_pulse_decision_after_manifest_update"
+                excluded.append(row)
+    return reading(
+        len(activated),
+        "available" if expected_spec else "source_gap",
+        {
+            "projects": activated,
+            "excluded": excluded,
+            "candidate_count": len(candidate_roots),
+            "standard_root": str(project_root),
+            "expected_spec_version": expected_spec,
+            "gaps": [] if expected_spec else [f"missing_or_invalid:{standard_manifest_path}"],
+        },
+    )
+
+
 def primitive_snapshot(
     project_root: Path,
     date_value: str,
@@ -894,6 +991,13 @@ def primitive_snapshot(
     effective_monthly_spend = monthly_spend if monthly_spend is not None else configured_monthly_ai_spend(project_root)
     ticket_basics, tickets, ticket_gaps = ticket_counts(project_root, window)
     by_kpi = ticket_count_by_kpi(tickets, window)
+    ai_ticket_ids = ai_planned_ticket_ids(project_root)
+    rejected_ai_ticket_count = ticket_count_by_kpi_with_status(
+        [ticket for ticket in tickets if ticket.ticket_id in ai_ticket_ids],
+        window,
+        "rejected",
+    )["_total"]
+    rejected_ai_ticket_count["payload"]["origin_filter"] = "pulse_plan_next_wave_admitted"
     if ticket_status:
         by_kpi_status = ticket_count_by_kpi_with_status(tickets, window, ticket_status)
     else:
@@ -905,6 +1009,7 @@ def primitive_snapshot(
     association_rows = read_jsonl(association_path) if write else []
     coverage = ticket_thread_link_coverage(tickets, window, association_rows)
     distribution_reach = content_views_total(project_root, date_value)
+    project_adoption = activated_external_projects(project_root)
     diagnostic_gaps = [
         *ticket_gaps,
         *association.get("payload", {}).get("gaps", []),
@@ -927,6 +1032,8 @@ def primitive_snapshot(
             "codex_thread_usage": thread_usage,
             "ai_burn_estimate": burn,
             "content_views_total": {"evidence_distribution_reach": distribution_reach},
+            "project_adoption": {"activated_external_projects": project_adoption},
+            "planner_ticket_quality": {"rejected_ai_ticket_count": rejected_ai_ticket_count},
             "ticket_thread_association_backfill": association,
             "ticket_thread_link_coverage": coverage,
         },

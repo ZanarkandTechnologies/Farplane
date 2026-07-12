@@ -4,11 +4,12 @@
     {
       "id": "pulse_dispatches_generic_ready_ticket",
       "prompt": "A project heartbeat finds one ready, unclaimed, approval-free ticket with satisfied dependencies. It has no product or reward fields. What should happen?",
-      "expected_output": "Admits the ticket from executable state without requiring product or reward metadata; Creates a worker handoff with ticket, optional program/progress, proof, authority gates, and stop condition; Does not implement the ticket body in the parent heartbeat; Records the decision and report state",
+      "expected_output": "Admits the ticket from executable state without requiring product or reward metadata; Creates or resumes exactly one persistent task titled [TASK-XXXX] <ticket title> with ticket, optional program/progress, proof, authority gates, and stop condition; Does not prefix the title with Plan or Execute and does not parse title text as identity; Does not implement the ticket body in the parent heartbeat; Records the decision and report state",
       "files": [],
       "assertions": [
         "Admits the ticket from executable state without requiring product or reward metadata",
-        "Creates a worker handoff with ticket, optional program/progress, proof, authority gates, and stop condition",
+        "Creates or resumes exactly one persistent task titled [TASK-XXXX] <ticket title> with ticket, optional program/progress, proof, authority gates, and stop condition",
+        "Does not prefix the title with Plan or Execute and does not parse title text as identity",
         "Does not implement the ticket body in the parent heartbeat",
         "Records the decision and report state"
       ],
@@ -26,15 +27,18 @@
     {
       "id": "pulse_empty_board_calls_pure_planner",
       "prompt": "The board has no executable ticket, review WIP is below its limit, and the project program and objective are current. The heartbeat may create at most three tickets and run one worker. What should happen?",
-      "expected_output": "Chooses plan_next_wave only after reconciliation finds no executable ticket; Binds identity, product boundaries, selected metric refs, and guards from harness.yaml plus metric direction and freshness from metrics.yaml; Passes program, objective contract, ticket history, current context, and wave_size three to the planner; Pulse materializes only accepted specs and the planner performs no writes or dispatch; Dispatches at most one ticket because worker_limit is separate from wave_size; Does not invoke a product controller",
+      "expected_output": "Chooses plan_next_wave only after reconciliation finds no unclaimed executable ticket; Builds a canonical planning input and atomically acquires its fingerprint before planning; Returns no_op_unchanged_input for an identical completed fingerprint and blocked_overlap for an active claim; Binds identity, areas, selected metric refs, and guards from harness.yaml plus metric direction and freshness from metrics.yaml; Passes areas, objective contract, metric state, adaptive ticket-history query, current context, and wave_size three to the planner; Requires a latest global history query before progressive area or AI-origin filters; Pulse materializes only complete KPI-linked accepted specs, records each selected area_id, and finishes the claim without exceeding wave_size; Dispatches at most one ticket because worker_limit is separate from wave_size; Does not invoke an area planner or product controller",
       "files": [],
       "assertions": [
-        "Chooses plan_next_wave only after reconciliation finds no executable ticket",
-        "Binds identity, product boundaries, selected metric refs, and guards from harness.yaml plus metric direction and freshness from metrics.yaml",
-        "Passes program, objective contract, ticket history, current context, and wave_size three to the planner",
-        "Pulse materializes only accepted specs and the planner performs no writes or dispatch",
+        "Chooses plan_next_wave only after reconciliation finds no unclaimed executable ticket",
+        "Builds a canonical planning input and atomically acquires its fingerprint before planning",
+        "Returns no_op_unchanged_input for an identical completed fingerprint and blocked_overlap for an active claim",
+        "Binds identity, areas, selected metric refs, and guards from harness.yaml plus metric direction and freshness from metrics.yaml",
+        "Passes areas, objective contract, metric state, adaptive ticket-history query, current context, and wave_size three to the planner",
+        "Requires a latest global history query before progressive area or AI-origin filters",
+        "Pulse materializes only complete KPI-linked accepted specs, records each selected area_id, and finishes the claim without exceeding wave_size",
         "Dispatches at most one ticket because worker_limit is separate from wave_size",
-        "Does not invoke a product controller"
+        "Does not invoke an area planner or product controller"
       ],
       "metadata": {
         "farplane": {
@@ -44,6 +48,25 @@
             "empty-board",
             "planner-boundary"
           ]
+        }
+      }
+    },
+    {
+      "id": "pulse_human_active_ticket_does_not_consume_worker",
+      "prompt": "Kenji is already working in one status active ticket with claimed_by set, but there is no Pulse spawned-thread ledger row and no unclaimed todo or due check-in ticket. One Pulse worker slot is configured. What happens?",
+      "expected_output": "Keeps the human-active ticket ineligible for redispatch; Does not count its claim as a Pulse worker; Preserves one idle Pulse worker slot; Treats the unclaimed executable board as empty and may call plan_next_wave when review WIP and context allow; Does not wait merely because Kenji is working in another task",
+      "files": [],
+      "assertions": [
+        "Keeps the human-active ticket ineligible for redispatch",
+        "Does not count its claim as a Pulse worker",
+        "Preserves one idle Pulse worker slot",
+        "Treats the unclaimed executable board as empty and may call plan_next_wave when review WIP and context allow",
+        "Does not wait merely because Kenji is working in another task"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Human active work does not occupy Pulse capacity",
+          "tags": ["pulse-update", "worker-capacity", "human-active"]
         }
       }
     },
@@ -138,15 +161,15 @@
     {
       "id": "pulse_resumes_due_reward_on_original_ticket",
       "prompt": "An experiment ticket is status waiting_signal. Reward row 0 matured yesterday and still has a blank decision; row 1 matures tomorrow. There are no ordinary todo tickets. What should this Work Pulse do?",
-      "expected_output": "Derives row 0 as due because check_in_at is at or before now and decision is blank or monitor; Admits and resumes the original waiting_signal ticket for the matured row; Hands the original ticket/program/progress, only matured row 0, timestamp, and evidence refs to a worker and leaves future row 1 dormant; Instructs the worker to read program.md first and execute its Check-In Program; Does not restate or invent the experiment evaluation and decision algorithm in Pulse; Does not create a check-in ticket or ask Interval to evaluate the reward",
+      "expected_output": "Derives row 0 as due because check_in_at is at or before now and decision is blank or monitor; Admits and resumes the original waiting_signal ticket and its existing [TASK-XXXX] <ticket title> task for the matured row; Hands the original ticket/program/progress, only matured row 0, timestamp, and evidence refs to a worker and leaves future row 1 dormant; Instructs the worker to read program.md first and execute its Check-In Program; Does not restate or invent the experiment evaluation and decision algorithm in Pulse; Does not create a check-in ticket or a second task and does not ask Interval to evaluate the reward",
       "files": [],
       "assertions": [
         "Derives row 0 as due because check_in_at is at or before now and decision is blank or monitor",
-        "Admits and resumes the original waiting_signal ticket for the matured row",
+        "Admits and resumes the original waiting_signal ticket and its existing [TASK-XXXX] <ticket title> task for the matured row",
         "Hands the original ticket/program/progress, only matured row 0, timestamp, and evidence refs to a worker and leaves future row 1 dormant",
         "Instructs the worker to read program.md first and execute its Check-In Program",
         "Does not restate or invent the experiment scoring and decision algorithm in Pulse",
-        "Does not create a check-in ticket or ask Interval to evaluate the reward"
+        "Does not create a check-in ticket or a second task and does not ask Interval to evaluate the reward"
       ],
       "metadata": {
         "farplane": {

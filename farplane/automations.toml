@@ -14,8 +14,10 @@ prompt = '''
 Use $pulse-update.
 
 Run one bounded Work Pulse. Reconcile the board, make due ticket check-ins
-eligible, dispatch executable tickets up to the worker limit, and refill an
-empty BAU board through the next-wave planner. Pulse owns admission, dispatch,
+eligible, dispatch unclaimed executable tickets up to the worker limit, and
+refill an empty unclaimed-ready board through the one adaptive next-wave
+planner. Human-active tickets remain unavailable but do not consume Pulse
+worker capacity. Pulse owns admission, dispatch,
 worker-free review routing and reminders, and check-in routing; workers execute ticket
 programs and produce proof. Do not implement ticket bodies inside the
 heartbeat, and use Farplane V1 terminology rather than retired product or
@@ -45,16 +47,17 @@ prompt = '''
 Use $feed-scout.
 
 Run the bounded daily Feed Scout from the configured sources. Write its dated
-report first, then create at most one deduped, source-backed opportunity
-ticket when the skill's evidence, authority, and ticket-quality gates pass.
-Do not execute that ticket; Work Pulse owns execution.
+report and bounded source-backed candidate interventions. You may create one
+direct recovery ticket only for an evidenced existing failure with known fix,
+KPI/guard, proof, and no experiment debt. Opportunities remain candidates for
+the next-wave planner. Do not execute tickets.
 
 Params:
 project_root = "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane"
 config_ref = "farplane/bindings.yaml#feed_scout"
 window = "last_24h"
-ticket_limit = 1
-write_policy = "local ticket creation allowed; default review-required unless no human or external gate remains"
+recovery_ticket_limit = 1
+write_policy = "local recovery tickets only; no opportunity or experiment tickets"
 
 Config source:
 farplane/automations.toml automation id="farplane-feed-scout"
@@ -75,17 +78,17 @@ prompt = '''
 Use $interval-update.
 
 Run the daily BAU review for the last 24 hours. Write a dated report with the
-incremental Problems ledger. You may create or update at most one maintenance
-ticket only for an unresolved, deduped problem evidenced before this run.
-Same-run discoveries stay in the report. Do not plan new direction, review
-harness experiments, mutate rewards, or execute tickets.
+incremental Problems ledger and bounded candidate interventions for unresolved
+current or prior evidence. You may create one evidence-backed direct recovery ticket with
+known fix and no experiment debt. Do not plan new direction, review harness
+experiments, mutate rewards, or execute tickets.
 
 Params:
 project_root = "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane"
 interval_id = "daily"
 review_window = "last_24h"
 maintenance_ticket_limit = 1
-write_policy = "local maintenance ticket creation allowed; default review-required unless no human or external gate remains"
+write_policy = "local recovery tickets only; no new direction or experiment tickets"
 timezone = "Asia/Kuala_Lumpur"
 
 Reads:
@@ -111,17 +114,17 @@ prompt = '''
 Use $interval-update.
 
 Run the weekly BAU review. Summarize the completed daily reports and ticket
-evidence into a dated report with the incremental Problems ledger. You may
-create or update at most two maintenance tickets only for unresolved,
-deduped problems evidenced before this run. Do not plan new direction, review
-harness experiments, mutate rewards, or execute tickets.
+evidence into a dated report with the incremental Problems ledger and bounded
+candidate interventions. You may create up to two evidence-backed direct
+recovery tickets with known fixes and no experiment debt. Do not plan new
+direction, review harness experiments, mutate rewards, or execute tickets.
 
 Params:
 project_root = "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane"
 interval_id = "weekly"
 review_window = "last_week"
 maintenance_ticket_limit = 2
-write_policy = "local maintenance ticket creation allowed; default review-required unless no human or external gate remains"
+write_policy = "local recovery tickets only; no new direction or experiment tickets"
 timezone = "Asia/Kuala_Lumpur"
 
 Reads:
@@ -150,19 +153,20 @@ Use $dogfood-review.
 Run the weekly self-improvement review. Review active and completed experiment
 Goal Packets, recent archived experiment Goal Packets, the previous Dogfood
 report, reward outcomes, pending check-ins, and tracked feature/system
-evidence. Write the dated portfolio report first, then create a bounded,
-non-interfering next wave from available capacity. Do not start or check in an
-experiment; Work Pulse owns implementation and later check-ins by executing
-the original ticket's program.md.
+evidence. Write the dated portfolio report, bounded experiment candidates, and
+at most one direct recovery ticket for a settled attributable failure with a
+known fix and no experiment debt. Do not create, start, or check in experiment
+tickets; the next-wave planner ranks uncertain experiments against all areas.
 
 Params:
 project_root = "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane"
 window = "last_week"
-experiment_wave_size = 1
+experiment_candidate_limit = 1
+recovery_ticket_limit = 1
 experiment_wip_limit = 2
 max_concurrent_live_delayed = 1
 one_active_per_attributable_surface = true
-write_policy = "local experiment Goal Packet creation allowed; default review-required unless no human or external gate remains"
+write_policy = "local recovery tickets only; no experiment ticket creation"
 
 Reads:
 - active experiment Goal Packets

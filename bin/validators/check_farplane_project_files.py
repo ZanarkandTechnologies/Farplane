@@ -54,7 +54,7 @@ HARNESS_ALLOWED_TOP_LEVEL = {
     "owner",
     "identity",
     "metric_refs",
-    "products",
+    "areas",
     "feature_definition",
     "operating_principles",
     "stable_capabilities",
@@ -63,7 +63,7 @@ HARNESS_ALLOWED_TOP_LEVEL = {
     "authority",
     "change_rule",
 }
-PRODUCT_ALLOWED_FIELDS = {"description", "output", "skill_refs", "metric_refs"}
+AREA_ALLOWED_FIELDS = {"description", "planner_instruction", "skill_refs", "metric_refs"}
 AUTOMATION_RUNTIME_STATE_KEYS = {
     "last_run",
     "last_run_at",
@@ -780,13 +780,19 @@ def validate_cross_file_contract(root: Path) -> list[str]:
             "while farplane/harness.yaml selects active objectives and guards."
         )
     harness = load_harness(harness_file)
-    objective_rows, guard_ids = selected_metric_rows(harness)
+    objective_rows, area_metric_rows, guard_ids = selected_metric_rows(harness)
     objective_ids = {
         str(row.get("metric_id") or "").strip()
         for row in objective_rows
         if str(row.get("metric_id") or "").strip()
     }
-    selected_ids = objective_ids | set(guard_ids)
+    area_metric_ids = {
+        str(row.get("metric_id") or "").strip()
+        for row in area_metric_rows
+        if str(row.get("metric_id") or "").strip()
+    }
+    selected_ids = objective_ids | area_metric_ids | set(guard_ids)
+    planning_control_ids = objective_ids | set(guard_ids)
     unknown_selected_ids = sorted(selected_ids - set(metrics))
     if unknown_selected_ids:
         errors.append(
@@ -800,7 +806,7 @@ def validate_cross_file_contract(root: Path) -> list[str]:
     )
     selected_definitions_without_freshness = sorted(
         metric_id
-        for metric_id in selected_ids
+        for metric_id in planning_control_ids
         if metric_id in metrics
         and (not isinstance(metrics[metric_id].get("max_age_days"), int) or metrics[metric_id]["max_age_days"] < 1)
     )
@@ -863,18 +869,29 @@ def load_harness(harness_file: Path) -> dict[str, Any]:
     return read_yaml_file(harness_file)
 
 
-def selected_metric_rows(harness: dict[str, Any]) -> tuple[list[dict[str, Any]], list[str]]:
-    refs = harness.get("metric_refs") if isinstance(harness.get("metric_refs"), dict) else {}
-    project_rows = refs.get("objectives") if isinstance(refs.get("objectives"), list) else []
-    rows = [row for row in project_rows if isinstance(row, dict)]
-    products = harness.get("products") if isinstance(harness.get("products"), dict) else {}
-    for product in products.values():
-        if not isinstance(product, dict):
+def selected_metric_rows(
+    harness: dict[str, Any],
+) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[str]]:
+    metric_refs = harness.get("metric_refs") if isinstance(harness.get("metric_refs"), dict) else {}
+    project_rows = metric_refs.get("objectives") if isinstance(metric_refs.get("objectives"), list) else []
+    objective_rows = [row for row in project_rows if isinstance(row, dict)]
+    area_rows: list[dict[str, Any]] = []
+    areas = harness.get("areas") if isinstance(harness.get("areas"), dict) else {}
+    for area_id, area in areas.items():
+        if not isinstance(area, dict):
             continue
-        product_rows = product.get("metric_refs") if isinstance(product.get("metric_refs"), list) else []
-        rows.extend(row for row in product_rows if isinstance(row, dict))
-    guards = refs.get("guards") if isinstance(refs.get("guards"), list) else []
-    return rows, [str(metric_id).strip() for metric_id in guards if isinstance(metric_id, str) and metric_id.strip()]
+        area_refs = area.get("metric_refs") if isinstance(area.get("metric_refs"), list) else []
+        area_rows.extend(
+            {**row, "area_id": str(area_id)}
+            for row in area_refs
+            if isinstance(row, dict)
+        )
+    guards = metric_refs.get("guards") if isinstance(metric_refs.get("guards"), list) else []
+    return (
+        objective_rows,
+        area_rows,
+        [str(metric_id).strip() for metric_id in guards if isinstance(metric_id, str) and metric_id.strip()],
+    )
 
 
 def project_skill_ids(root: Path) -> set[str]:
@@ -919,7 +936,7 @@ def validate_harness_file(root: Path, harness_file: Path) -> list[str]:
     if not isinstance(refs.get("guards"), list):
         errors.append(f"{rel_path} metric_refs.guards must be a list.")
 
-    objective_rows, guard_ids = selected_metric_rows(payload)
+    objective_rows, _area_metric_rows, guard_ids = selected_metric_rows(payload)
     priorities: list[int] = []
     objective_ids: list[str] = []
     for index, row in enumerate(objective_rows):
@@ -937,32 +954,32 @@ def validate_harness_file(root: Path, harness_file: Path) -> list[str]:
     if duplicates:
         errors.append(f"{rel_path} objective metric refs must be unique: {', '.join(duplicates)}.")
     if len(priorities) != len(set(priorities)):
-        errors.append(f"{rel_path} objective priorities must be unique across project and products.")
+        errors.append(f"{rel_path} objective priorities must be unique.")
     if len(guard_ids) != len(set(guard_ids)):
         errors.append(f"{rel_path} metric_refs.guards must not contain duplicates.")
 
-    products = payload.get("products") if isinstance(payload.get("products"), dict) else {}
-    if not products:
-        errors.append(f"{rel_path} products must declare at least one recurring deliverable.")
+    areas = payload.get("areas") if isinstance(payload.get("areas"), dict) else {}
+    if not areas:
+        errors.append(f"{rel_path} areas must declare at least one planning area.")
     known_skills = project_skill_ids(root)
-    for product_id, product in products.items():
-        prefix = f"{rel_path} products.{product_id}"
-        if not isinstance(product, dict):
+    for area_id, area in areas.items():
+        prefix = f"{rel_path} areas.{area_id}"
+        if not isinstance(area, dict):
             errors.append(f"{prefix} must be an object.")
             continue
-        unsupported = sorted(set(product) - PRODUCT_ALLOWED_FIELDS)
+        unsupported = sorted(set(area) - AREA_ALLOWED_FIELDS)
         if unsupported:
             errors.append(f"{prefix} has controller or unsupported fields: {', '.join(unsupported)}.")
-        for field in ("description", "output"):
-            if not isinstance(product.get(field), str) or not product.get(field, "").strip():
+        for field in ("description", "planner_instruction"):
+            if not isinstance(area.get(field), str) or not area.get(field, "").strip():
                 errors.append(f"{prefix}.{field} must be a non-empty string.")
-        skill_refs = product.get("skill_refs") if isinstance(product.get("skill_refs"), list) else []
+        skill_refs = area.get("skill_refs") if isinstance(area.get("skill_refs"), list) else []
         if not skill_refs and not is_draft:
             errors.append(f"{prefix}.skill_refs must be a non-empty list.")
         dangling = sorted(str(skill_id) for skill_id in skill_refs if str(skill_id) not in known_skills)
         if dangling:
             errors.append(f"{prefix}.skill_refs are unresolved: {', '.join(dangling)}.")
-        if not isinstance(product.get("metric_refs"), list) or not product.get("metric_refs"):
+        if not isinstance(area.get("metric_refs"), list) or not area.get("metric_refs"):
             errors.append(f"{prefix}.metric_refs must be a non-empty list.")
 
     if not isinstance(payload.get("feature_definition"), dict):

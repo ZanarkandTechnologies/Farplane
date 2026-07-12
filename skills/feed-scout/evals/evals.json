@@ -3,14 +3,14 @@
   "evals": [
     {
       "id": "feed_scout_report_only_when_candidates_fail",
-      "prompt": "A bounded Feed Scout run finds five new articles, but two duplicate active tickets and the others lack executable scope or proof. ticket_limit is two. What happens?",
-      "expected_output": "Normalizes, canonical-key dedupes, extracts, and evaluates the configured sources; Writes the dated Feed Scout report with Core report frontmatter before ticket projection; Records duplicate, scope-missing, and proof-missing candidates in the report; Creates no tickets merely to fill the cap; Does not invoke Interval, Goal, Pulse, workers, implementation, publication, or outreach",
+      "prompt": "A bounded Feed Scout run finds five new articles, but two duplicate active tickets and the others lack executable scope or proof. What happens?",
+      "expected_output": "Normalizes, canonical-key dedupes, extracts, and evaluates the configured sources; Writes the dated Feed Scout report with Core report frontmatter before candidate handoff; Records duplicate, scope-missing, and proof-missing candidates in the report; Creates or updates no tickets or Notion tasks; Leaves global ranking and proactive admission to Work Pulse; Does not invoke Interval, Goal, Pulse, workers, implementation, publication, or outreach",
       "files": [],
       "assertions": [
         "Normalizes, canonical-key dedupes, extracts, and evaluates the configured sources",
-        "Writes the dated Feed Scout report with Core report frontmatter before ticket projection",
+        "Writes the dated Feed Scout report with Core report frontmatter before candidate handoff",
         "Records duplicate, scope-missing, and proof-missing candidates in the report",
-        "Creates no tickets merely to fill the cap",
+        "Creates or updates no tickets or Notion tasks",
         "Does not invoke Interval, Goal, Pulse, workers, implementation, publication, or outreach"
       ],
       "metadata": {
@@ -26,23 +26,47 @@
       }
     },
     {
-      "id": "feed_scout_projects_bounded_source_backed_ticket",
-      "prompt": "After writing its report, Feed Scout has one high-signal source delta with canonical evidence, no active duplicate, executable scope, expected Reward, proof, stop condition, and local write authority. ticket_limit is one. What may it do?",
-      "expected_output": "Writes at most one local ticket after the dated report exists; Links the source evidence, ticket path, and admission decision back into the report; Defaults the ticket to review-required unless explicit write policy grants automatic local admission and no human or external gate remains; Does not start Goal, Pulse, a worker, implementation, spend, publication, or outreach; Returns the report path before ticket paths and a no-execution receipt",
+      "id": "feed_scout_hands_off_bounded_source_backed_candidate",
+      "prompt": "After writing its report, Feed Scout has one high-signal source delta with canonical evidence, no active duplicate, executable scope, expected Reward, proof, and stop condition. What may it do?",
+      "expected_output": "Writes the source-backed candidate into the dated report with area or KPI, expected Reward, proof, stop, source evidence, dedupe, and authority gaps; Creates or updates no ticket or Notion task; Leaves global ranking and proactive admission to Work Pulse; Does not start Goal, Pulse, a worker, implementation, spend, publication, or outreach; Returns a no-admission and no-execution receipt",
       "files": [],
       "assertions": [
-        "Writes at most one local ticket after the dated report exists",
-        "Links the source evidence, ticket path, and admission decision back into the report",
-        "Defaults the ticket to review-required unless explicit write policy grants automatic local admission and no human or external gate remains",
+        "Writes the source-backed candidate into the dated report with area or KPI, expected Reward, proof, stop, source evidence, dedupe, and authority gaps",
+        "Creates or updates no ticket or Notion task",
+        "Leaves global ranking and proactive admission to Work Pulse",
         "Does not start Goal, Pulse, a worker, implementation, spend, publication, or outreach",
-        "Returns the report path before ticket paths and a no-execution receipt"
+        "Returns a no-admission and no-execution receipt"
       ],
       "metadata": {
         "farplane": {
-          "title": "Feed Scout creates a bounded source-backed opportunity ticket",
+          "title": "Feed Scout hands off a bounded source-backed candidate",
           "tags": [
             "feed-scout",
-            "tickets",
+            "candidates",
+            "source-evidence",
+            "bounded"
+          ]
+        }
+      }
+    },
+    {
+      "id": "feed_scout_can_admit_bounded_direct_recovery",
+      "prompt": "After writing its report, Feed Scout finds an upstream release notice proving that the project's existing integration now calls a removed endpoint. The direct local correction, existing reliability guard, proof, stop, and dedupe checks are settled; no experiment is required and the recovery cap is one. What may it do?",
+      "expected_output": "Writes the finding and evidence into the dated report first; Classifies it as an existing project failure with a known direct correction rather than a source opportunity; Creates at most one deduped reliability-guard-linked recovery ticket and links it from the report; Does not create an opportunity or experiment ticket; Does not start Goal, Pulse, a worker, implementation, publication, outreach, or spend",
+      "files": [],
+      "assertions": [
+        "Writes the finding and evidence into the dated report first",
+        "Classifies it as an existing project failure with a known direct correction rather than a source opportunity",
+        "Creates at most one deduped reliability-guard-linked recovery ticket and links it from the report",
+        "Does not create an opportunity or experiment ticket",
+        "Does not start Goal, Pulse, a worker, implementation, publication, outreach, or spend"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Feed Scout admits bounded direct recovery",
+          "tags": [
+            "feed-scout",
+            "recovery",
             "source-evidence",
             "bounded"
           ]
@@ -51,7 +75,7 @@
     },
     {
       "id": "feed_scout_book_summary_workflow_route_01",
-      "prompt": "Run a dry pass over configured book-summary sources. Several new items contain exercises and reusable workflows. What happens before any ticket projection?",
+      "prompt": "Run a dry pass over configured book-summary sources. Several new items contain exercises and reusable workflows. What happens before candidate handoff?",
       "expected_output": "Keeps the run explicit and bounded with no daemon, unapproved spend, or external write; Normalizes and dedupes items before extraction; Uses summarize and extracts triggers, inputs, steps, decisions, exercises, outputs, and proof ideas rather than generic recaps; Routes reusable skill behavior to skill-creator, broader techniques to harness-scout, converged patterns to best-of-worlds, and weak recaps to ledger-only status; Writes the dated report before applying source, dedupe, proof, authority, ticket-quality, and cap gates",
       "files": [],
       "assertions": [

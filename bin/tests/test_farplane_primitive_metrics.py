@@ -5,7 +5,7 @@ import sqlite3
 import sys
 import tempfile
 import unittest
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -14,6 +14,7 @@ if str(CORE_DIR) not in sys.path:
     sys.path.insert(0, str(CORE_DIR))
 
 from farplane_primitive_metrics import (
+    activated_external_projects,
     backfill_ticket_thread_associations,
     fetch_codex_thread_usage,
     primitive_snapshot,
@@ -28,6 +29,59 @@ def write_ticket(root: Path, ticket_id: str, body: str) -> None:
 
 
 class FarplanePrimitiveMetricsTests(unittest.TestCase):
+    def test_activated_external_projects_requires_current_manifest_and_post_migration_pulse(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            projects = Path(tmp) / "projects"
+            root = projects / "Farplane"
+            current = projects / "Current"
+            inactive = projects / "Inactive"
+            drifted = projects / "Drifted"
+            for project in (root, current, inactive, drifted):
+                (project / "farplane").mkdir(parents=True)
+            standard = {
+                "project_id": "Farplane",
+                "spec_version": "2.0.0",
+                "template_uses": {"farplane-framework": "2.0.0"},
+            }
+            (root / "farplane" / "manifest.json").write_text(json.dumps(standard), encoding="utf-8")
+            (current / "farplane" / "manifest.json").write_text(
+                json.dumps({**standard, "project_id": "Current"}), encoding="utf-8"
+            )
+            (inactive / "farplane" / "manifest.json").write_text(
+                json.dumps({**standard, "project_id": "Inactive"}), encoding="utf-8"
+            )
+            (drifted / "farplane" / "manifest.json").write_text(
+                json.dumps({**standard, "project_id": "Drifted", "spec_version": "1.0.0"}),
+                encoding="utf-8",
+            )
+            decisions = current / ".farplane" / "automation" / "decisions.jsonl"
+            decisions.parent.mkdir(parents=True)
+            decisions.write_text(
+                json.dumps(
+                    {
+                        "ts": (datetime.now(timezone.utc) + timedelta(seconds=5)).isoformat(),
+                        "automation_id": "current-ticket-update",
+                        "lane": "pulse",
+                        "mode": "work_pulse",
+                        "action": "no_op",
+                    }
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+
+            result = activated_external_projects(root)
+
+        self.assertEqual(result["status"], "available")
+        self.assertEqual(result["value"], 1)
+        self.assertEqual(result["payload"]["projects"][0]["project_id"], "Current")
+        excluded = {row["project_id"]: row for row in result["payload"]["excluded"]}
+        self.assertIn("Drifted", excluded)
+        self.assertEqual(
+            excluded["Inactive"]["activation_gap"],
+            "no_work_pulse_decision_after_manifest_update",
+        )
+
     def test_kpi_counts_require_realized_accepted_ticket_rewards(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
@@ -165,6 +219,43 @@ kpi_rewards:
 - TAS-A verdict: pass
 """,
             )
+            write_ticket(
+                root,
+                "TASK-0003",
+                """---
+ticket_id: TASK-0003
+status: rejected
+created_at: 2026-07-03T04:30:00Z
+updated_at: 2026-07-03T05:00:00Z
+---
+
+## Reward
+
+```yaml
+kpi_rewards:
+  - reward_id: direct-rejected
+    kpi_id: accepted_harness_improvements
+    expected_reward: direct request
+    actual_result: rejected direct request
+    decision: kill
+    evaluated_at: 2026-07-03T05:00:00Z
+    evaluation_key: direct-rejected
+    evidence_refs: [artifacts/direct-rejection.md]
+```
+""",
+            )
+            decisions = root / ".farplane" / "automation" / "decisions.jsonl"
+            decisions.parent.mkdir(parents=True)
+            decisions.write_text(
+                json.dumps(
+                    {
+                        "action": "plan_next_wave",
+                        "pulse_receipt": {"admitted": ["TASK-0001"]},
+                    }
+                )
+                + "\n",
+                encoding="utf-8",
+            )
 
             payload = primitive_snapshot(
                 root,
@@ -176,14 +267,22 @@ kpi_rewards:
             )
 
         rejected_counts = payload["primitives"]["ticket_count_by_kpi_status:rejected"]
-        self.assertEqual(rejected_counts["_total"]["value"], 1)
-        self.assertEqual(rejected_counts["accepted_harness_improvements"]["value"], 1)
+        self.assertEqual(rejected_counts["_total"]["value"], 2)
+        self.assertEqual(rejected_counts["accepted_harness_improvements"]["value"], 2)
         self.assertEqual(
             rejected_counts["accepted_harness_improvements"]["payload"]["tickets"][0]["status"],
             "rejected",
         )
         realized = payload["primitives"]["ticket_count_by_kpi"]["accepted_harness_improvements"]["value"]
         self.assertEqual(realized, 1)
+        planner_rejections = payload["primitives"]["planner_ticket_quality"][
+            "rejected_ai_ticket_count"
+        ]
+        self.assertEqual(planner_rejections["value"], 1)
+        self.assertEqual(
+            planner_rejections["payload"]["origin_filter"],
+            "pulse_plan_next_wave_admitted",
+        )
 
     def test_empty_windows_are_zero_readings_not_source_gaps(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

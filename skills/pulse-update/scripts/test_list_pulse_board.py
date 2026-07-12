@@ -248,8 +248,27 @@ class WorkPulseBoardTests(unittest.TestCase):
             self.assertIn("terminal", exclusions["TASK-DONE"])
             self.assertIn("awaiting_review", exclusions["TASK-REVIEW"])
             self.assertEqual(result["review_wip"], 2)
-            self.assertEqual(result["idle_worker_slots"], 1)
+            self.assertEqual(result["idle_worker_slots"], 2)
+            self.assertEqual(
+                [row["ticket_id"] for row in result["human_active_tickets"]],
+                ["TASK-CLAIMED"],
+            )
             self.assertFalse(result["empty_executable_board"])
+
+    def test_human_active_ticket_does_not_block_empty_board_refill_or_capacity(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            write_ticket(root, "TASK-HUMAN", status="active", claimed_by="codex-human")
+
+            result = BOARD.build_board(root, worker_limit=1)
+
+            self.assertTrue(result["empty_executable_board"])
+            self.assertEqual(result["idle_worker_slots"], 1)
+            self.assertEqual(result["active_workers"], [])
+            self.assertEqual(
+                [row["ticket_id"] for row in result["human_active_tickets"]],
+                ["TASK-HUMAN"],
+            )
 
     def test_worker_limit_excludes_released_review_and_blocked_rows(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

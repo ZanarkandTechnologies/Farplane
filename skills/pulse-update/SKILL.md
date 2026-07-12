@@ -21,13 +21,14 @@ controllers.
 
 Work Pulse owns five state-changing responsibilities:
 
-1. Reconcile completed, failed, blocked, active, and review-ready work.
+1. Reconcile completed, failed, blocked, active, and review-ready work without
+   treating human-active tickets as Pulse workers.
 2. Derive matured delayed-reward check-ins and hand their original Goal
    Packets to a worker that executes the ticket-owned Check-In Program.
 3. Select and dispatch executable tickets within worker capacity.
 4. Request human review once, mark the ticket awaiting review, release the
    worker, and reconcile at most one due reminder without worker assignment.
-5. When no executable ticket or due check-in exists, call the pure
+5. When no unclaimed executable ticket or due check-in exists, call the pure
    [ticket opportunity generator](../ticket-opportunity-generator/SKILL.md),
    materialize its accepted specs, and dispatch within remaining capacity.
 
@@ -73,7 +74,8 @@ gates:
   review_status_excluded_from_execution;
   due_review_reminder_derived_from_progress; one_due_reminder_per_pulse;
   reminder_does_not_consume_worker; queue_size_does_not_trigger_chase;
-  worker_limit_respected; review_wip_respected; empty_board_before_refill;
+  worker_limit_respected; human_active_ticket_does_not_consume_worker;
+  review_wip_respected; empty_board_before_refill;
   wave_size_respected; planner_output_qa_passed; pulse_owns_materialization;
   no_inline_ticket_implementation; ticket_program_progress_proof_handoff;
   human_review_worker_released; side_effect_gates_respected;
@@ -91,6 +93,7 @@ fails:
   conflates_wave_size_with_worker_limit; exceeds_review_wip;
   implements_ticket_in_parent_pulse; keeps_worker_alive_only_for_human_review;
   assigns_worker_to_review_reminder; chases_based_on_review_queue_size;
+  counts_human_ticket_claim_as_pulse_worker; spawns_area_planner;
   writes_planner_side_effects_before_candidate_qa; returns_silent_no_op
 ```
 
@@ -120,10 +123,11 @@ capacity, ticket scope, or external side-effect permission.
         `python3 skills/pulse-update/scripts/list_pulse_board.py --project-root <root> --worker-limit <n> --now <iso-datetime>`.
   - [ ] Archive terminal active tickets when safe or record the exact archive
         action still required.
-  - [ ] Record active workers, released blocked workers, awaiting-review
-        tickets, missing outputs, and stale ledger rows. Count a `status:
-        active` ticket with `claimed_by` as occupied even when its worker-ledger
-        row is missing; dedupe it against any matching active ledger row.
+  - [ ] Record Pulse-owned active workers from the spawned-thread ledger,
+        human-active tickets, released blocked workers, awaiting-review
+        tickets, missing outputs, and stale ledger rows. A `status: active`
+        ticket without a live Pulse worker-ledger row is unavailable for
+        dispatch but does not consume `worker_limit`.
 - [ ] 2. Handle completed, waiting, or matured work.
   - [ ] Reconcile ticket/program/progress/proof and outcome state before
         selecting new work.
@@ -166,22 +170,41 @@ capacity, ticket scope, or external side-effect permission.
         tickets with due check-ins, then create handoffs up to available worker
         slots.
   - [ ] `plan_next_wave`: only when no ordinary executable ticket or due
-        check-in exists, review WIP is below its limit, and current
+        check-in exists—even when human-active tickets remain—review WIP is
+        below its limit, and current
         program/objective context is sufficient.
+    - [ ] Build one canonical planning-input object from harness areas,
+          objectives/guards, metric readings, global-history query receipt,
+          report refs, board state, and wave size. Call
+          `scripts/plan_wave_guard.py begin` before planning. An identical
+          completed fingerprint is `no_op_unchanged_input`; an active claim is
+          `blocked_overlap`.
   - [ ] `request_human`: when value direction, authority, credentials, or a
         material source gap blocks both execution and safe planning.
   - [ ] `no_op`: only when reconciliation produced no due action and the exact
         reason is recorded.
 - [ ] 5. Plan or dispatch without mixing ownership.
   - [ ] For refill, call
-        `plan_next_wave(program, objective_contract, ticket_history,
-        current_context, wave_size)` and accept only QA-passing executable
-        specs. Bind identity, product boundaries, selected objective refs, and
+        `plan_next_wave(harness_areas, objective_contract, metric_state,
+        ticket_history_query, current_context, wave_size)` and accept only
+        QA-passing executable specs. Bind identity, area guidance, selected objective refs, and
         guard refs from `harness.yaml`; resolve metric direction, freshness,
         and guard rules from `metrics.yaml`. Reports remain optional current
         context rather than a second planning owner.
+  - [ ] Require the planner to read the latest global ticket history sample
+        first through `query_ticket_history.py`; allow progressive origin/area/
+        KPI/status/Reward filters only when the sample is insufficient. Do not
+        create area planner subagents.
   - [ ] Pulse alone materializes accepted specs as ticket files, then reruns
         admission before dispatch.
+  - [ ] Before materialization, serialize the proposed spec set and run
+        `ticket-opportunity-generator/scripts/validate_ticket_specs.py`; reject
+        the whole invalid spec, never silently fill missing KPI/provider/check-in
+        fields in Pulse.
+  - [ ] Finish the atomic planning claim with admitted ticket IDs and their
+        selected `area_id`. The guard rejects duplicate IDs and admissions
+        above `wave_size`; record `completed`, `no_op`, `source_gap`, or
+        `human_request` in the existing decisions ledger and release the lock.
   - [ ] For each handoff, list `ticket.md`, optional `program.md`, optional
         `progress.md`, expected proof, authority gates, stop condition, and
         review route. Use Goal Advisor when the ticket requires Goal-backed
@@ -232,7 +255,8 @@ worker produces output + proof
 
 - `dispatch_ready`: hand off up to `idle_worker_slots` ordinary or due-check-in
   tickets. A due handoff resumes the existing Goal Packet and never creates a
-  check-in ticket.
+  check-in ticket. Create or resume exactly one persistent task per ticket,
+  titled `[TASK-XXXX] <ticket title>`; lifecycle state never changes the title.
 - `plan_next_wave`: obtain `0..wave_size` specs, materialize accepted specs,
   then dispatch only up to remaining worker capacity.
 - `request_human`: write one precise request with attempted safe alternatives.
@@ -245,7 +269,7 @@ pulse_receipt:
   mode:
   admitted: []
   excluded: []
-  planner_call: none | {program, objective_contract, ticket_history, current_context, wave_size}
+  planner_call: none | {harness_areas, objective_contract, metric_state, ticket_history_queries, current_context, wave_size}
   planner_writes_or_dispatches: false
   product_controller: none
   worker_handoffs: [] # each uses the full Worker Handoff Contract above
@@ -261,6 +285,8 @@ it is not an extra workflow or registry.
 ## Gotchas
 
 - `wave_size` controls backlog creation; `worker_limit` controls concurrency.
+- Human-active tickets are board commitments, not Pulse workers. Only live
+  Pulse spawned-thread ledger rows consume `worker_limit`.
 - Review WIP is human-attention backpressure, not a reason to keep workers
   alive and not a chase trigger.
 - A product or capability may appear inside a ticket without becoming a Pulse

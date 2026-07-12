@@ -3,7 +3,7 @@ title: Project Work Pulse
 status: implemented
 owner: feature-registry
 created_at: 2026-07-10
-updated_at: 2026-07-11
+updated_at: 2026-07-12
 tags:
   - farplane
   - feature
@@ -13,6 +13,7 @@ refs:
   - docs/prd.md
   - skills/pulse-update/SKILL.md
   - skills/ticket-opportunity-generator/SKILL.md
+  - skills/ticket-opportunity-generator/scripts/query_ticket_history.py
 feature_id: FEAT-0071
 system_id: SYS-0003
 category: planning
@@ -37,7 +38,7 @@ metrics:
   - work_pulse_dispatch_correctness
   - empty_board_refill_quality
   - review_worker_release
-last_verified: 2026-07-11
+last_verified: 2026-07-12
 experimental: true
 superseded_by: false
 track: >-
@@ -89,8 +90,11 @@ do an executable ticket; otherwise plan a bounded next wave
 - Derives matured check-in eligibility from the original ticket's
   `Reward.kpi_rewards[]` rows and Goal Packet instead of creating check-in tickets.
 - Admits tickets by executable state, not product or reward origin.
-- Dispatches up to `worker_limit` shared workers.
-- Calls a pure planner only when no executable ticket exists.
+- Dispatches up to `worker_limit` Pulse-owned workers; human-active tickets do
+  not consume this capacity.
+- Calls one pure adaptive planner only when no unclaimed executable ticket exists.
+- Requires a recent global ticket-history sample before optional progressive
+  area/origin/KPI/Reward filters; it does not spawn area planners.
 - Materializes no more than `wave_size` accepted specs.
 - Releases workers when tickets reach human review and applies `review_wip`
   backpressure.
@@ -106,10 +110,13 @@ do an executable ticket; otherwise plan a bounded next wave
 - Goal Advisor owns material ticket execution compilation.
 - Worker Artifact Review Request owns the phone-readable review message and
   receipt.
-- Interval supplies dated BAU problem reports and bounded prior-evidenced
-  maintenance tickets.
-- Feed Scout, Interval, Dogfood, and the operator may create bounded tickets;
-  Work Pulse is their shared admission, execution, and check-in heartbeat.
+- Interval supplies dated problem reports, planner candidates, and bounded
+  direct recovery tickets for evidenced known failures.
+- Feed Scout, Interval, and Dogfood may admit bounded recovery tickets only for
+  evidenced existing failures with known direct fixes and no experiment debt.
+  New opportunities, uncertain fixes, and experiments remain candidates; Work
+  Pulse globally ranks and materializes those proactive specs. Direct
+  operator/customer/incident tickets remain obligations.
 
 ## Feature Flow
 
@@ -122,7 +129,7 @@ flowchart LR
   board["tickets + worker state"]:::keep
   pulse["Work Pulse"]:::changed
   planner["pure plan_next_wave"]:::added
-  sources["Feed Scout / Interval / Dogfood<br/>bounded tickets"]:::keep
+  sources["Feed Scout / Interval / Dogfood<br/>reports + candidates"]:::keep
   checkin["derived due Reward rows"]:::added
   worker["ticket/program/progress/proof"]:::changed
   review["awaiting review<br/>worker released"]:::added
@@ -130,7 +137,7 @@ flowchart LR
   board --> pulse
   pulse -->|"empty executable board"| planner
   planner -->|"0..wave_size specs"| pulse
-  sources --> pulse
+  sources --> planner
   checkin --> pulse
   pulse --> worker --> review
 ```
@@ -145,6 +152,9 @@ Required proof:
 - controlled classifier fixtures for `todo`, waiting, review, terminal,
   dependency, priority, and claim states;
 - due review reminder fixture proving worker capacity is unchanged;
+- human-active ticket fixture proving it is unselectable but does not consume
+  Pulse worker capacity or block refill;
+- global-first ticket-history query and progressive filter fixtures;
 - derived due-row fixtures with matured and future Reward rows;
 - skill evals for generic dispatch, bounded refill, Interval boundary, and
   product-parameter removal;
@@ -169,11 +179,14 @@ Required proof:
   state was not justified by the basic loop proof.
 - Fold the planner into Pulse: rejected because pure selection/specification
   and state-changing materialization/dispatch have different proof boundaries.
-- Make Interval the planner wrapper: rejected because reporting and executable
-  ticket supply have different latency and side effects.
+- Make Interval the planner wrapper: rejected because reporting and proactive
+  ticket admission have different latency and side effects.
 
 ## Change History
 
 - 2026-07-10: Added as the Workstream 1 successor to FEAT-0066.
 - 2026-07-11: Added derived experiment check-ins and shared execution for
-  Feed Scout, Interval, and Dogfood ticket sources.
+  tickets informed by Feed Scout, Interval, and Dogfood.
+- 2026-07-12: Made human-active work worker-free, replaced product descriptions
+  with planning areas, added adaptive global-first history retrieval, and made
+  scheduled sources context-only.

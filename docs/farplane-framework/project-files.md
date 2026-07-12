@@ -70,15 +70,16 @@ ignored paths and carries `project.name`, `project.description`, and
 
 ### `farplane/harness.yaml`
 
-Typed human charter: identity, descriptive products, feature meaning,
+Typed human charter: identity, planning areas and compact planner instructions, feature meaning,
 operating principles, non-tradeoffs, durable leverage commitments, allocation
 guardrails, authority, stable capability references, and selected metric refs.
 
 This is the owner for the human idea the system must preserve. Agents may
 propose changes with evidence, but protected charter changes require explicit
-human approval. Products describe recurring valuable outputs; they do not own
-workers, controllers, budgets, progress, or strategy. Capability references
-identify workflows; the referenced skills own their procedures.
+human approval. Areas group metric and history context for one adaptive
+planner; they do not own planners, workers, quotas, controllers, budgets,
+progress, or strategy. Capability references identify workflows; the
+referenced skills own their procedures.
 
 Use typed YAML. Do not add a custom harness DSL, live backlog, worker
 allocation table, changing goal state, or product controller state here.
@@ -91,8 +92,8 @@ Daily/Weekly BAU, Dogfood self-improvement, and low-frequency maintenance.
 
 Each record owns its schedule, workspace, status, and exact project-specific
 prompt. Generic workflow behavior remains in the called skill. Scheduled
-sources may write reports and their bounded ticket class; they do not execute
-the tickets they create.
+sources write reports and bounded candidate context; Work Pulse owns normal
+proactive ticket admission and execution.
 
 ### `farplane/metrics.yaml`
 
@@ -197,7 +198,7 @@ labels.
 
 `init-advisor` creates or preserves the minimal tracked config, ignored runtime
 folders, ticket/QA surfaces, and optional project-local skill home. In `full`
-mode, `harness-creator` grounds the typed charter, descriptive products,
+mode, `harness-creator` grounds the typed charter, planning areas/instructions,
 required capabilities, feedback loops, missing-system tickets, and selected
 metric objectives.
 

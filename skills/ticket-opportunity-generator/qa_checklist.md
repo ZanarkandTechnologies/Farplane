@@ -15,26 +15,28 @@ Apply this before returning any `plan_next_wave` spec. Every accepted spec must
 pass all hard gates; `wave_size` never forces a weak ticket.
 
 ```text
-next_wave_qa(candidate, harness, metric_objectives, metric_state, ticket_history)
+next_wave_qa(candidate, harness_areas, metric_objectives, metric_state, ticket_history_queries)
   -> pass | reject + failed_gates
 ```
 
 ## Hard Gates
 
 1. `objective_contribution`
-   - Names the objective or bottleneck and the expected contribution.
-   - Uses an existing metric/review signal or states `none mechanical`.
+   - Names an existing KPI or selected guard, causal mechanism, expected
+     change, metric provider, signal horizon, delayed `check_in_at` when
+     applicable, expected Reward, and proof route.
+   - Rejects a proactive spec when no honest KPI/guard binding exists; never
+     uses `none mechanical`.
    - Rejects ordinary admission when a hard guard reading is missing or stale;
      only bounded observation-restoration work may pass that condition.
 
-2. `bau_boundary`
-   - The primary outcome advances the project's product, customer, operations,
-     reliability, deliverable, or user-facing capability.
-   - The candidate is not primarily a Farplane harness, planner, skill-system,
-     framework-automation, doctrine/docs, hook/validator, registry, or
-     self-evaluation improvement.
-   - Product docs and operational automation are not rejected merely because
-     their artifact types resemble framework surfaces.
+2. `project_value_boundary`
+   - The primary outcome advances a project objective, preserves a selected
+     guard, fulfills a direct obligation, or tests an evidenced process change.
+   - Self-improvement cites an observed failure, Reward outcome, guard
+     regression, or toy/eval proof; speculative framework work fails.
+   - Internal plans, summaries, recommendations, ticket volume, and other
+     activity artifacts do not count as independent value.
 
 3. `executable_now`
    - A worker can start from named inputs and produce the named output.
@@ -49,6 +51,8 @@ next_wave_qa(candidate, harness, metric_objectives, metric_state, ticket_history
    - Compares intended outcome, artifact, target surface, and evidence against
      active and recent attempts.
    - Duplicate or already-completed work is rejected.
+   - Planner read the latest global `N` rows before any area/origin filter and
+     recorded the progressive query receipts used for deeper comparison.
 
 6. `proof_and_stop`
    - Names checks, evidence artifact or review question, and a stop condition.
@@ -67,13 +71,15 @@ next_wave_qa(candidate, harness, metric_objectives, metric_state, ticket_history
    - Names the bottleneck, candidate lever, objective impact, bottleneck
      relief, urgency, proof speed, compounding value, cost/risk, and review
      load at useful qualitative resolution.
-   - Compounding value reinforces direct BAU progress and does not smuggle in
+   - Compounding value reinforces direct project progress and does not smuggle in
      speculative infrastructure.
    - Plausible losing candidates have a deprioritization reason.
    - Ranking compares expected metric delta, confidence, duration,
      time-to-signal, cost, risk, reversibility, information gain, compounding
      value, interference, and prerequisites instead of greedily selecting the
      easiest immediate delta.
+   - Area ticket counts inform attention only; outcome/metric movement and
+     recent Reward evidence determine whether an area is actually under-moving.
 
 10. `minimal_scope`
    - Contains one coherent result and the smallest work that can prove it.
@@ -85,8 +91,14 @@ next_wave_qa(candidate, harness, metric_objectives, metric_state, ticket_history
 
 12. `pure_planner_output`
     - The result is a spec plus gaps/rejections only.
-    - No ticket write, worker spawn, review send, report write, or external
-      mutation happened inside planning.
+   - No ticket write, worker spawn, review send, report write, or external
+     mutation happened inside planning.
+
+13. `single_adaptive_planner`
+   - One planner owns global sampling, progressive retrieval, proposal
+     generation, dedupe, and ranking.
+   - No area planner subagents, area Pulses, quotas, or planning mode enum were
+     introduced.
 
 ## Finish Gate
 

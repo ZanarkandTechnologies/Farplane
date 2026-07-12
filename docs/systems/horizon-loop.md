@@ -3,7 +3,7 @@ title: "Horizon Loop"
 status: active
 owner: farplane-framework
 created_at: 2026-06-26
-updated_at: 2026-07-11
+updated_at: 2026-07-12
 tags:
   - farplane
   - systems
@@ -19,7 +19,7 @@ system_record_json: |
     "id": "SYS-0003",
     "name": "Horizon Loop",
     "status": "implemented",
-    "summary": "The project control loop with one Work Pulse heartbeat plus bounded scheduled ticket sources for BAU reports, source scouting, feedback, and self-improvement.",
+    "summary": "The project control loop with one Work Pulse heartbeat and bounded scheduled report/candidate sources for BAU, scouting, and self-improvement.",
     "owner_spec": "docs/systems/horizon-loop.md",
     "primary_feature_ref": "FEAT-0032",
     "feature_refs": [
@@ -37,13 +37,13 @@ system_record_json: |
       "docs/features/FEAT-0067-daily-interval-review-reports.md",
       "docs/features/FEAT-0071-project-work-pulse.md"
     ],
-    "last_verified": "2026-07-11"
+    "last_verified": "2026-07-12"
   }
 ---
 # Horizon Loop
 
 The project control loop that coordinates Goal Packets, one Work Pulse
-heartbeat, and bounded scheduled ticket sources without becoming a hidden
+heartbeat, and bounded scheduled report/candidate sources without becoming a hidden
 daemon.
 
 ```text
@@ -61,8 +61,8 @@ horizon_loop(change, repo_state?) -> owned_feature_set + boundary_decision + mai
 ## Role
 
 Horizon Loop owns recurring and longer-running autonomy: Goal Packets, one Work
-Pulse, scheduled BAU reports, backoff, PR watching, and the shared ticket-board
-handoff from Feed Scout, Dogfood, and operator sources.
+Pulse, scheduled BAU reports, backoff, PR watching, and the shared candidate
+handoff from Feed Scout, Dogfood, Interval, and operator sources.
 
 ## Feature Docs
 
@@ -90,8 +90,10 @@ And Learning; proof standards belong in Proof And Review.
 - Automations may no-op when no safe valuable action exists.
 - Exactly one base project automation is a heartbeat: Work Pulse. Other
   recurring jobs are bounded cron/manual automations.
-- Scheduled sources may create bounded tickets only through their own evidence,
-  dedupe, proof, authority, and cap contracts; Work Pulse executes them.
+- Scheduled sources write reports and bounded candidates, and may admit direct
+  recovery tickets for evidenced existing failures with known fixes and no
+  experiment debt. The adaptive Work Pulse planner globally ranks proactive
+  opportunities, uncertain fixes, and experiments.
 - Backoff and polling stay tracked and bounded.
 - Human authority remains required for ambiguous or high-risk direction.
 - Feature-level behavior belongs in `docs/features/FEAT-*.md`; this page owns the system boundary and feature grouping.
@@ -112,22 +114,23 @@ flowchart LR
   advisor["FEAT-0032<br/>goal-advisor"]:::changed
   pulse["FEAT-0071<br/>project Work Pulse"]:::added
   interval["FEAT-0067<br/>Daily / Weekly BAU reports"]:::changed
-  sources["Feed Scout + Dogfood + operator<br/>bounded ticket sources"]:::keep
+  sources["Feed Scout + Dogfood + Interval + operator<br/>reports + candidates"]:::keep
   old["FEAT-0065<br/>retired umbrella automation"]:::retired
   productPulse["FEAT-0066<br/>retired product-scoped Pulse"]:::retired
+  planner["adaptive project planner<br/>global rank + admission"]:::added
   outputs["tickets + reports<br/>bounded next work"]:::added
 
   goals --> advisor --> outputs
   automations --> pulse --> outputs
   automations --> interval --> outputs
-  sources --> outputs --> pulse
+  sources --> planner --> outputs --> pulse
   old -. "superseded_by" .-> pulse
   old -. "superseded_by" .-> interval
   productPulse -. "superseded_by" .-> pulse
 ```
 
 The Horizon Loop coordinates one execution heartbeat and several report-backed
-ticket sources without giving each source its own executor.
+candidate sources without giving each source its own admission policy or executor.
 
 ## Surfaces
 
@@ -153,3 +156,6 @@ ticket sources without giving each source its own executor.
 - 2026-07-10: Retired product-scoped Pulse and added one project Work Pulse.
 - 2026-07-11: Limited heartbeat ownership to Work Pulse and added bounded
   scheduled BAU/source/experiment ticket sources.
+- 2026-07-12: Centralized exploratory ticket admission in the adaptive Work
+  Pulse planner while preserving bounded evidence-backed recovery admission in
+  scheduled jobs.

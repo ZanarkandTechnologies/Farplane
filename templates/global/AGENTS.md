@@ -1,6 +1,6 @@
 <!--
 template_id: global-agents-template
-template_version: 0.2.18
+template_version: 0.2.19
 feature_refs:
   - FEAT-0022
   - FEAT-0042
@@ -349,6 +349,10 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
   progress artifact, or thread-handoff ledger. Use native subagents for bounded
   specialist work whose output should collapse back into the current thread,
   such as review, QA, research, or focused implementation evidence.
+- When a persistent task is owned by a ticket, keep one task for its full
+  lifecycle and title it exactly `[TASK-XXXX] <ticket title>`. Resume that task
+  for execution, review, feedback, waiting, and check-in; do not prefix the
+  title with lifecycle verbs. Treat the ticket ID, not display text, as identity.
 - Use reviewer lanes for plans, implementations, prompts, evidence bundles,
   skill changes, and completion claims.
 - For material proof, use the ticket `Done / Proof` block or Goal program as

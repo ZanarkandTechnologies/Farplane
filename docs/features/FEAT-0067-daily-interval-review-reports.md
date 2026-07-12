@@ -3,7 +3,7 @@ title: Daily and weekly BAU problem reports
 status: implemented
 owner: feature-registry
 created_at: 2026-07-07
-updated_at: 2026-07-11
+updated_at: 2026-07-12
 tags:
   - farplane
   - feature
@@ -30,7 +30,7 @@ evidence_refs:
   - skills/interval-update/evals/evals.json
   - tickets/archive/TASK-0319/ticket.md
   - tickets/archive/TASK-0319/artifacts/qa/integrated-qa.md
-known_limits: "Reports may resurface only prior-evidenced BAU maintenance; same-run discoveries remain ledger-only, and the first proof uses representative ticket-local fixtures rather than wall-clock cron runs."
+known_limits: "Reports may admit only bounded direct recovery for evidenced known failures; uncertain fixes, new direction, and experiments remain planner candidates."
 metrics:
   - interval_report_usefulness
   - maintenance_ticket_precision
@@ -39,9 +39,9 @@ experimental: true
 superseded_by: false
 track: >-
   Review Daily and Weekly BAU reports for the current window. Read the dated
-  report, its Problems ledger, source refs, and maintenance tickets it created
-  or updated. Judge compression, source-gap honesty, prior-evidence enforcement,
-  dedupe, ticket proof/stop quality, and whether the run avoided new strategy,
+  report, its Problems ledger, source refs, and maintenance candidates. Judge
+  compression, source-gap honesty, recovery-ticket gating, dedupe, and
+  whether the run avoided exploratory ticket creation and new strategy,
   Feed Scout execution, Dogfood review, reward check-ins, and ticket execution.
   Return continue, adjust, cap, pause, graduate, or source_gap.
 ---
@@ -49,14 +49,16 @@ track: >-
 # Daily and weekly BAU problem reports
 
 Daily and Weekly Interval compress bounded project evidence into reports and
-resurface already-known business-as-usual problems as executable maintenance
-tickets. They do not plan new direction or execute ticket work.
+resurface already-known business-as-usual problems as candidate interventions.
+They may create bounded recovery tickets for current- or prior-evidenced failures with a
+known direct fix and no experiment debt. They do not create new-direction or
+experiment tickets, plan strategy, or execute work.
 
 ```text
 interval_update(project_root, interval_id, review_window, context_refs?,
-                maintenance_ticket_limit?)
+                maintenance_ticket_limit = 1, write_policy?)
   -> dated_report + problems
-   + maintenance_ticket_deltas[0..limit] + source_gaps
+   + candidate_interventions[] + recovery_tickets[] + source_gaps
 ```
 
 ## At A Glance
@@ -67,15 +69,15 @@ interval_update(project_root, interval_id, review_window, context_refs?,
 - Experimental: `true`
 - Category: `planning`
 - Primary user: operator and Work Pulse planner
-- Job: preserve a compact BAU problem history and create only already-justified
-  corrective work.
+- Job: preserve a compact BAU problem history and resurface only
+  already-evidenced corrective candidates.
 
 ## Problem
 
 The previous Interval matrix mixed reflection, Feed Scout, Dogfood Review,
 reward mutation, maintenance, leverage synthesis, and next-window planning.
 That made a reporting cadence compete with Pulse and self-improvement for
-ticket supply.
+ticket admission.
 
 ## What It Does
 
@@ -84,23 +86,24 @@ ticket supply.
 - Weekly synthesizes repeated BAU problems, goal/metric drift, review load, and
   unresolved maintenance across Daily reports.
 - Each report contains a minimal Markdown `## Problems` checkbox ledger.
-- A report may create or update a bounded maintenance ticket only when a prior
-  finalized report, ticket, review, or run artifact already proves the problem.
-- A problem first discovered in the current run remains ledger-only until a
-  later interval or explicit operator action.
+- A report may create a bounded recovery ticket when current or prior evidence
+  proves an existing failure and the direct correction, KPI/guard, proof, stop,
+  authority, and dedupe checks are already settled.
+- A finding remains ledger/candidate-only when the correction is uncertain,
+  changes direction, needs an experiment, or lacks a safe proof route.
 
 ## Operating Contract
 
 ```text
 new BAU direction       -> plan_next_wave
-known BAU problem       -> Interval report + optional maintenance ticket
-experiment improvement  -> Dogfood self-improvement automation
+known BAU problem       -> Interval report + bounded direct recovery ticket
+uncertain improvement   -> planner candidate
 ticket execution/checkin -> Work Pulse
 ```
 
-Interval writes its report before any ticket delta. Maintenance tickets must be
-actionable, material, deduped against active/recent work, authority-safe, and
-able to name proof plus a stop condition. Interval does not run Feed Scout,
+Interval writes its report before any recovery ticket. Candidates must be actionable,
+material, deduped against active/recent work, authority-safe, and able to name
+proof plus a stop condition. Interval does not run Feed Scout,
 Dogfood Review, reward check-ins, priority planning, Goal execution, or workers.
 
 ## Feature Flow
@@ -116,13 +119,16 @@ flowchart LR
   interval["Daily / Weekly Interval<br/>bounded BAU synthesis"]:::changed
   report["dated report<br/>Problems ledger"]:::added
   prior["prior finalized evidence?"]:::keep
-  maintenance["0..limit maintenance tickets"]:::added
+  maintenance["bounded maintenance candidates"]:::added
   pulse["Work Pulse<br/>execution"]:::keep
   planning["priority / Dogfood / check-ins"]:::retired
 
   evidence --> interval --> report
   report --> prior
-  prior -->|"yes + gates pass"| maintenance --> pulse
+  planner["adaptive project planner"]:::added
+  recovery["known direct recovery?<br/>bounded ticket"]:::added
+  prior -->|"known fix + no experiment"| recovery --> pulse
+  prior -->|"uncertain / new direction"| maintenance --> planner --> pulse
   prior -->|"no"| report
   planning -. removed .-> interval
 ```
@@ -131,8 +137,10 @@ flowchart LR
 
 Required proof:
 
-- current-run discoveries remain ledger-only;
-- prior-evidenced problems can create no more than the configured ticket cap;
+- current- or prior-evidenced known fixes may create bounded recovery tickets,
+  while
+  uncertain fixes and new direction remain planner candidates;
+- recovery tickets remain grounded, deduped, bounded, and experiment-free;
 - duplicates, vague fixes, authority gaps, and new direction are rejected;
 - Daily and Weekly reports remain useful without priority planning;
 - `python3 docs/features/validate_features.py` and
@@ -141,8 +149,8 @@ Required proof:
 ## Rollout And Maintenance
 
 - Update path: refine the two report profiles, Problems ledger, and maintenance
-  admission checks.
-- Rollback path: set maintenance ticket limit to zero while retaining reports.
+  candidate-quality checks.
+- Rollback path: retain reports with an empty candidate set.
 - Maintenance owner: Horizon Loop.
 
 ## Limits And Non-Goals
@@ -157,4 +165,6 @@ Required proof:
 
 - 2026-07-07: Created as an experimental Daily report feature.
 - 2026-07-11: Reframed Daily and Weekly as BAU problem reports with bounded
-  prior-evidence maintenance ticket supply.
+  prior-evidence maintenance candidates.
+- 2026-07-12: Centralized exploratory admission in the one global planner while
+  preserving bounded direct recovery for evidenced known failures.

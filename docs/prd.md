@@ -82,8 +82,8 @@ project program
    -> execute admitted ticket
    -> perform matured ticket check-in
    -> request worker-free human review
-   -> plan bounded BAU wave when executable board is empty
--> bounded scheduled ticket/report sources
+   -> plan a bounded cross-area wave when no unclaimed executable work exists
+-> bounded scheduled report/candidate sources
 -> ticket-local QA, review, reward, and closeout
 -> durable learning back into metric objectives, policy, skills, docs, or features
 ```
@@ -92,7 +92,7 @@ project program
 
 | Surface | Responsibility |
 | --- | --- |
-| `farplane/harness.yaml` | identity, products, authority, capability refs, selected metrics |
+| `farplane/harness.yaml` | identity, planning areas/instructions, authority, capability refs, selected metrics |
 | `farplane/metrics.yaml` | metric meaning, direction, freshness, and guard rules |
 | `farplane/bindings.yaml` | safe provider coordinates and refresh recipes |
 | `farplane/automations.toml` | one Work Pulse plus bounded scheduled jobs |
@@ -116,10 +116,10 @@ remain in the ticket body, Goal Packet, progress log, or artifacts.
 
 | Source | Authority |
 | --- | --- |
-| BAU planner | new ranked project-progress tickets when the executable board is empty |
-| Feed Scout | source report and bounded evidence-backed opportunity tickets |
-| Daily/Weekly BAU | problem report and deduped already-evidenced maintenance |
-| Dogfood Review | experiment portfolio report and bounded self-improvement tickets |
+| Work Pulse next-wave planner | globally ranked tickets when no unclaimed executable or due-check-in work exists |
+| Feed Scout | source report, candidates, and bounded direct recovery tickets |
+| Daily/Weekly BAU | problem report, candidates, and bounded direct recovery tickets |
+| Dogfood Review | experiment portfolio report/candidates and bounded direct recovery tickets |
 | Operator | explicit direction, feedback, correction, or approval |
 
 Only Work Pulse executes tickets and matured check-ins.
@@ -128,8 +128,8 @@ Only Work Pulse executes tickets and matured check-ins.
 
 ### FR-1: Project Program
 
-- A project can express stable policy, descriptive products, selected metrics, provider
-  bindings, capability routes, and automation topology in tracked files.
+- A project can express stable policy, planning areas, selected metrics,
+  provider bindings, capability routes, and automation topology in tracked files.
 - Generated observations never silently replace those source owners.
 
 ### FR-2: Ticket-As-Program
@@ -145,7 +145,10 @@ Only Work Pulse executes tickets and matured check-ins.
 - Ordinary `todo` work and matured `waiting_signal` check-ins use the same
   worker path.
 - `awaiting_review`, dormant signals, and blocked tickets do not occupy workers.
-- Pulse plans a bounded BAU wave only when no admitted executable work exists.
+- Human-active tickets remain ineligible for redispatch but do not consume
+  Pulse worker capacity.
+- Pulse plans a bounded cross-area wave only when no unclaimed executable or
+  due-check-in work exists.
 - Wave size, worker capacity, review WIP, and experiment capacity remain
   separate controls.
 
@@ -160,9 +163,10 @@ Only Work Pulse executes tickets and matured check-ins.
 
 - Feed Scout, BAU Interval, and Dogfood run as bounded cron/manual jobs rather
   than extra heartbeats.
-- Each source may create only its declared ticket class.
-- Interval does not choose new strategy; Dogfood does not execute experiments;
-  Feed Scout does not execute opportunities.
+- Scheduled sources write reports and bounded candidates but do not admit
+  proactive tickets. The one next-wave planner compares them globally.
+- Interval does not choose new strategy; Dogfood does not create or execute
+  experiments; Feed Scout does not create or execute opportunities.
 
 ### FR-6: Self-Improvement
 
@@ -172,6 +176,8 @@ Only Work Pulse executes tickets and matured check-ins.
 - Delayed feedback stays on the original ticket and resumes through its
   Check-In Program.
 - Accepted patterns require transfer evidence before doctrine promotion.
+- Self-improvement is one evidence-gated planning area in the global ranking,
+  not a separate Pulse or guaranteed weekly quota.
 
 ### FR-7: Capability Boundary
 
@@ -190,8 +196,9 @@ Only Work Pulse executes tickets and matured check-ins.
 
 ### FR-9: Portable Event Mining
 
-- Core captures typed project file events, persists them before advancing the
-  file snapshot, and retries failed routes through a durable local outbox.
+- Core captures typed project file events to a durable local outbox, then the
+  hook launches a fixed Core-owned local mining process. Failed launches leave
+  pending events retryable; no cloud dispatcher sits between capture and mining.
 - `hooks.json` selects capture patterns; `bindings.yaml` maps event names to
   immutable mining programs.
 - Default completion mining emits coverage, observations, material findings,
@@ -201,12 +208,18 @@ Only Work Pulse executes tickets and matured check-ins.
 
 ## Success Metrics
 
+`activated_external_projects` is the current project-level planning objective.
+The remaining rows are area diagnostics, system-health measures, or guards;
+they do not independently authorize proactive tickets.
+
 | Metric | Direction | Meaning |
 | --- | --- | --- |
+| `activated_external_projects` | maximize | nearby non-standard projects run the current contract and record a Work Pulse decision after migration |
+| `evidence_distribution_reach` | area diagnostic within anti-spam guardrails | accepted evidence reaches builders without rewarding artifact count |
 | `auto_completion_rate` | maximize | completed associated tickets required no post-start human intervention |
 | `intervention_free_ticket_count` | maximize | autonomous completion produces useful throughput |
 | `ticket_intervention_turn_count` | minimize within quality floor | supervision falls without false completion or drift |
-| `rejected_ai_ticket_count` | diagnostic | Dogfood can compare planner variants without globally blocking BAU |
+| `rejected_ai_ticket_count` | minimize; guard ≤ 1/day | rejected AI-planned work backpressures planner quality |
 | `todo_unclaimed_ticket_count` | bounded operating signal | executable supply is visible without uncontrolled backlog growth |
 | `accepted_harness_improvements` | increase selectively | self-improvement produces reviewed durable value |
 | `latest_eval_pass_rate` | diagnostic | latest local eval result is visible without treating unrelated suites as one global guard |
@@ -220,11 +233,13 @@ cards.
 ## V1 Acceptance
 
 - [x] Product-scoped Pulse controllers and product state are retired.
-- [x] `harness.yaml` owns typed identity, products, capabilities, and metric selection.
+- [x] `harness.yaml` owns typed identity, planning areas, capabilities, and metric selection.
 - [x] One project Work Pulse handles ordinary tickets and matured check-ins.
 - [x] Ticket metadata is reduced to lifecycle and sparse routing.
 - [x] Human review and signal waits release workers.
-- [x] Feed Scout, Daily/Weekly BAU, and Dogfood are bounded independent jobs.
+- [x] Feed Scout, Daily/Weekly BAU, and Dogfood may create bounded recovery
+      tickets for evidenced known failures; exploratory opportunities,
+      uncertain fixes, and experiments go through Work Pulse planning.
 - [x] Immediate and delayed self-improvement use ticket Goal Packets.
 - [x] `metrics.yaml` owns metric definitions; bindings own provider mechanics.
 - [x] Core owns typed file events and mining; UI is an adapter over Core artifacts.

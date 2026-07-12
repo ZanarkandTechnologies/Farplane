@@ -58,21 +58,23 @@ forward with the prior report link.
 ## Maintenance Admission
 
 ```text
-resurface_problem(problem, prior_finalized_evidence, active_tickets, limit)
+resurface_problem(problem, current_or_prior_evidence, active_tickets, limit)
   -> 0..limit maintenance_ticket_deltas
 ```
 
 A candidate passes only when all are true:
 
-1. A finalized artifact from before this report already records the problem.
+1. Current or prior evidence proves an existing problem.
 2. The problem remains unresolved and is material enough to act on.
 3. The scope is corrective maintenance, not a new direction or experiment.
 4. No active ticket already owns substantially the same problem.
 5. The ticket can name executable scope, proof, and a stop condition.
 6. Local ticket creation is authorized and the run cap remains available.
 
-Same-run discoveries stay ledger-only even when urgent. The operator may create
-an explicit ticket immediately; Interval itself waits for prior evidence.
+Same-run findings may create recovery only when the direct correction and all
+proof, KPI/guard, authority, dedupe, and stop gates are already settled. An
+uncertain diagnosis stays in the report for planner comparison or experiment
+design.
 
 ## Ownership Boundaries
 

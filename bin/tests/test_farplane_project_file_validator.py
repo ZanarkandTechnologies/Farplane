@@ -22,7 +22,7 @@ def select_project_objective(farplane: Path, metric_id: str, *, guards: list[str
 
 
 class FarplaneProjectFileValidatorTests(unittest.TestCase):
-    def test_draft_harness_may_defer_product_skill_selection(self) -> None:
+    def test_draft_harness_may_defer_area_skill_selection(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             farplane = root / "farplane"
@@ -32,13 +32,13 @@ class FarplaneProjectFileValidatorTests(unittest.TestCase):
             harness_path = farplane / "harness.yaml"
             harness = yaml.safe_load(harness_path.read_text(encoding="utf-8"))
             harness["status"] = "draft"
-            harness["products"]["test_output"]["skill_refs"] = []
+            harness["areas"]["test_output"]["skill_refs"] = []
             harness_path.write_text(yaml.safe_dump(harness, sort_keys=False), encoding="utf-8")
 
             errors = validate(root)
 
         self.assertNotIn(
-            "farplane/harness.yaml products.test_output.skill_refs must be a non-empty list.",
+            "farplane/harness.yaml areas.test_output.skill_refs must be a non-empty list.",
             errors,
         )
 
@@ -55,7 +55,7 @@ class FarplaneProjectFileValidatorTests(unittest.TestCase):
 
         self.assertIn("farplane/harness.yaml metric refs lack metrics.yaml definitions: unknown_metric.", errors)
 
-    def test_objective_metric_does_not_require_product_owner(self) -> None:
+    def test_objective_metric_does_not_require_area_owner(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             farplane = root / "farplane"

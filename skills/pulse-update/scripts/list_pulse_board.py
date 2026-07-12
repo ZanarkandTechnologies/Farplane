@@ -433,20 +433,18 @@ def build_board(
     active_worker_ticket_ids = {
         str(row.get("ticket_id") or "").strip() for row in active_workers
     }
-    for row in rows:
-        if (
-            row["status"].lower() == "active"
-            and row["claimed_by"]
-            and row["ticket_id"] not in active_worker_ticket_ids
-        ):
-            active_workers.append(
-                {
-                    "ticket_id": row["ticket_id"],
-                    "status": "active",
-                    "claimed_by": row["claimed_by"],
-                    "source": "ticket_claim",
-                }
-            )
+    # A claimed active ticket is unavailable for dispatch, but a ticket claim
+    # alone does not prove that Pulse owns a live worker. Human-started and
+    # directly-created Codex tasks commonly claim tickets without a row in the
+    # Pulse spawned-thread ledger. Only live ledger rows consume the configured
+    # Pulse worker pool.
+    human_active_tickets = [
+        row
+        for row in rows
+        if row["status"].lower() == "active"
+        and row["claimed_by"]
+        and row["ticket_id"] not in active_worker_ticket_ids
+    ]
     worker_limit = max(0, worker_limit)
     return {
         "schema": "farplane.work_pulse_board.v2",
@@ -466,6 +464,7 @@ def build_board(
         "future_checkin_tickets": future_checkins,
         "review_wip": len(awaiting_review),
         "active_workers": active_workers,
+        "human_active_tickets": human_active_tickets,
         "released_worker_rows": released_worker_rows,
         "worker_limit": worker_limit,
         "idle_worker_slots": max(0, worker_limit - len(active_workers)),

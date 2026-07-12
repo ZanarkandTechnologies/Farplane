@@ -3,7 +3,7 @@ status: active
 project: Farplane
 created_at: 2026-06-15
 updated_at: 2026-07-12
-framework_template_version: "0.4.0"
+framework_template_version: "0.5.0"
 owner: harness
 
 identity:
@@ -21,52 +21,71 @@ identity:
 
 metric_refs:
   objectives:
-    - metric_id: accepted_evidence_cycles
-      priority: 4
-    - metric_id: ticket_intervention_turn_count
-      priority: 5
-  guards: []
+    - metric_id: activated_external_projects
+      priority: 1
+  guards:
+    - rejected_ai_ticket_count
 
-products:
-  proven_harness_improvements:
+areas:
+  framework_delivery:
     description: >-
-      Reviewed changes to skills, prompts, workflows, features, validators,
-      automations, or agent contracts backed by evidence that they should
-      remain.
-    output: >-
-      A durable harness change with baseline or contrast evidence, an explicit
-      keep or reject decision, rollout proof, and residual risk.
+      User-facing Farplane framework capabilities, reliability, installation,
+      proof surfaces, documentation, and reusable workflows.
+    planner_instruction: >-
+      Prefer a concrete user-facing capability, reliability correction, or
+      adoption blocker with executable inputs and proof. Do not create a ticket
+      whose primary output is another plan, framework recommendation, or
+      internal activity artifact.
     skill_refs:
       - farplane-experiment-report
       - farplane-ablation-proof
       - farplane-productization
     metric_refs:
+      - metric_id: activated_external_projects
       - metric_id: accepted_harness_improvements
-        priority: 1
-  user_and_adoption_decisions:
+      - metric_id: accepted_evidence_cycles
+  customer_learning:
     description: >-
-      Source-backed decisions about users, problems, alternatives,
-      positioning, distribution, and adoption friction.
-    output: >-
-      A decision brief that names the evidence, confidence, decision changed,
-      and next action or no-action result.
+      Evidence-acquiring actions that reduce a concrete adoption, audience,
+      positioning, onboarding, or use-case uncertainty.
+    planner_instruction: >-
+      Propose an executable probe or product change tied to a current adoption
+      decision. A standalone research brief, market summary, or recommendation
+      is not ticketable without an independent use path.
     skill_refs:
       - farplane-market-learning
     metric_refs:
       - metric_id: decision_changing_learning_briefs
-        priority: 2
-  evidence_backed_content_and_demos:
+  adoption_and_distribution:
     description: >-
-      Content, demonstrations, case studies, launch notes, papers, or videos
-      whose claims are grounded in accepted Farplane evidence.
-    output: >-
-      A reviewable distribution artifact with claim-to-proof links and
-      platform-specific response observations.
+      Evidence-backed distribution, content, demos, and conversion surfaces
+      that help qualified builders discover and adopt Farplane.
+    planner_instruction: >-
+      Prefer proof-mapped distribution or conversion work that improves reach
+      per published artifact or external adoption. Do not optimize output count
+      and do not create publish/account actions without the required human gate.
     skill_refs:
       - farplane-evidence-content
     metric_refs:
+      - metric_id: distribution_reach_per_artifact
       - metric_id: evidence_distribution_reach
-        priority: 3
+      - metric_id: x_followers
+      - metric_id: instagram_followers
+  self_improvement:
+    description: >-
+      Measured changes to the planner, Pulse, skills, prompts, hooks,
+      automations, validators, and other harness behavior.
+    planner_instruction: >-
+      Compete globally with direct project work. Admit only when an observed
+      failure, completed Reward, guard regression, or toy/eval proof supports a
+      causal process change; speculative harness cleanup is not ticketable.
+    skill_refs:
+      - self-improve
+      - dogfood-review
+    metric_refs:
+      - metric_id: accepted_harness_improvements
+      - metric_id: auto_completion_rate
+      - metric_id: ticket_intervention_turn_count
 
 feature_definition:
   definition: >-
@@ -96,7 +115,7 @@ operating_principles:
   - Shape material work through tickets before long autonomous execution.
   - Prove behavior with validators, reviews, evals, or artifact evidence.
   - Count realized evidence, not planned intent, as metric movement.
-  - Let project BAU objectives drive planning; framework self-improvement remains a separate weekly portfolio lane.
+  - Let project objectives drive one global ranking; self-improvement is one evidence-gated planning area, not a separate Pulse.
 
 stable_capabilities:
   - pulse-update
@@ -129,7 +148,7 @@ constraints:
   allocation_guardrails:
     proof: Claims about autonomy, trust, quality, or productivity require nonzero proof work.
     maintenance: Admin work stays bounded unless it unblocks product, proof, or current objectives.
-    distribution: Trust distribution must be grounded in accepted evidence, user pain, or an adoption gap.
+    distribution: Trust distribution must be grounded in accepted evidence, user pain, or an adoption gap; raw reach cannot justify output spam when reach per artifact or proof quality falls.
     productization: Durable behavior follows accepted experiment, ablation, review, or operator-feedback evidence.
     runway: Work must justify burn through revenue, validated learning, proof quality, distribution, reusable leverage, or unblock value.
 
