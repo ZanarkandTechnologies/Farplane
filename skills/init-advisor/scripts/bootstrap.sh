@@ -125,10 +125,12 @@ mkdir -p \
   "${TARGET_DIR}/.farplane/reports" \
   "${TARGET_DIR}/.farplane/evals/runs" \
   "${TARGET_DIR}/.farplane/logs" \
-  "${TARGET_DIR}/.farplane/crm/reports"
+  "${TARGET_DIR}/.farplane/crm" \
+  "${TARGET_DIR}/.farplane/customer-research/reports" \
+  "${TARGET_DIR}/.farplane/lead-scout/reports"
 write_file_if_missing "${TARGET_DIR}/.farplane/README.md" "# .farplane\n\nIgnored generated and tool-owned state for this project.\n\nUse owner-named paths for reports, metric observations, eval outputs, content, logs, and tool-specific continuation state. Do not add a generic runtime, evidence, or review bucket.\n\nTracked framework config belongs in farplane/.\n"
 copy_file "${REF_DIR}/CRM_README_TEMPLATE.md" "${TARGET_DIR}/.farplane/crm/README.md"
-write_file_if_missing "${TARGET_DIR}/.farplane/crm/index.jsonl" ""
+write_file_if_missing "${TARGET_DIR}/.farplane/crm/entities.json" "{\n  \"entities\": []\n}\n"
 
 mkdir -p "${TARGET_DIR}/docs/features" "${TARGET_DIR}/docs/systems"
 copy_file "${REF_DIR}/FEATURES_README_TEMPLATE.md" "${TARGET_DIR}/docs/features/README.md"
@@ -187,7 +189,7 @@ echo "  - Run automation-advisor when you want to activate the live Work Pulse a
 echo "  - Add farplane/hooks.json entries only for installed deterministic hooks; file-length warnings belong in rules/git-review-gates.toml."
 echo "  - Fill in farplane/pm.json with PM-visible chat and automation thread IDs so the UI groups them under one employee."
 echo "  - Use owner-named .farplane/ paths for ignored reports, metric observations, eval outputs, content, logs, and tool-specific state; do not add generic runtime, evidence, or review buckets."
-echo "  - Use .farplane/crm/reports/ for local customer research reports and rebuild .farplane/crm/index.jsonl from report frontmatter."
+echo "  - Keep relationship state in .farplane/crm/entities.json; skill reports live under .farplane/<skill-name>/reports/ and link entities with entity_refs."
 echo "  - Start by refining docs/bootstrap-brief.md with a deep-interview-quality intake before locking stack or topology decisions."
 echo "  - Fill the bootstrap brief's agent-experience section so the repo knows how agents should reach, inspect, and verify important app states."
 echo "  - Refine docs/TASTE.md so UI tickets and QA share one visual doctrine."

@@ -1,31 +1,45 @@
 # CRM
 
-Ignored local customer and relationship research state for this project.
+Ignored local customer and relationship state for this project.
 
-Use this directory for customer research reports produced before calls. These
-reports may include private notes, sourced public facts, and operator judgment,
-so they stay under `.farplane/` by default.
+Use this directory for a small entity ledger. Skill-produced reports live under
+their producing skill, such as `.farplane/customer-research/reports/`, and link
+back here with stable `entity_refs`.
 
 ## Layout
 
 ```text
 .farplane/crm/
   README.md
-  reports/
-    YYYY-MM-DD-person-name.md
-  index.jsonl
+  entities.json
 ```
 
-`reports/*.md` are the source of truth. `index.jsonl` is derived from report
-frontmatter and can be rebuilt.
+`entities.json` is hand-authored relationship state. Keep it deliberately small:
 
-## Report Frontmatter
+```json
+{
+  "entities": [
+    {
+      "id": "jane-smith",
+      "name": "Jane Smith",
+      "description": "Founder of Acme and a prospective design partner.",
+      "links": ["https://example.com/jane"],
+      "status": "researching"
+    }
+  ]
+}
+```
+
+## Report Links
 
 Keep frontmatter minimal:
 
 ```yaml
 ---
 skill: "customer-research"
+entity_refs:
+  - "jane-smith"
+  - "acme"
 name: "Person Name"
 links:
   - "https://example.com/profile"
@@ -35,10 +49,11 @@ created_at: "YYYY-MM-DD"
 ---
 ```
 
-`skill` names the report-producing skill so other report workflows can share
-the same index and still be filtered by source. `industry` is optional. Link a
-report to its owning ticket or capability skill when additional provenance is
-needed; do not introduce a product-catalog foreign key.
+`entity_refs` values must resolve to IDs in `entities.json`. Do not hand-maintain
+report arrays on CRM entities; discover backlinks by scanning
+`.farplane/*/reports/**/*.md`. CRM has no report index. Any future derived
+cross-skill report index must live outside CRM and be introduced through a
+ticketed reporting change.
 
 Put role, story, field overview, pain hypotheses, conversation questions,
 confidence, unknowns, and next actions in the report body.

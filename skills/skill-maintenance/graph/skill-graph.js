@@ -6,7 +6,7 @@ window.SKILL_GRAPH = {
       "todo-chain": 404
     },
     "edges": 821,
-    "nodes": 116,
+    "nodes": 117,
     "skill_heat_config": {
       "default_top_n": 25,
       "event_types": [
@@ -24,12 +24,12 @@ window.SKILL_GRAPH = {
     ],
     "sources": {
       "external": 3,
-      "local": 113
+      "local": 114
     },
     "tiers": {
       "1": 6,
       "2": 40,
-      "3": 70
+      "3": 71
     }
   },
   "edges": [
@@ -6589,7 +6589,7 @@ window.SKILL_GRAPH = {
       "type": "todo-chain"
     }
   ],
-  "generated_at": "2026-07-12T10:36:22+00:00",
+  "generated_at": "2026-07-12T12:51:54+00:00",
   "nodes": [
     {
       "description": "Turn an under-specified decision into three options, tradeoffs, and one recommendation when the user asks for advice.",
@@ -11705,6 +11705,66 @@ window.SKILL_GRAPH = {
         "best-of-worlds",
         "impl-plan"
       ]
+    },
+    {
+      "description": "Turn a person image, public profile, concept, or brand cue into a researched, validated, packaged Codex pet and animated 8x9 spritesheet.",
+      "eval": "evals/evals.json",
+      "group": "media",
+      "has_checklist": true,
+      "heat": {
+        "distinct_threads_window": 0,
+        "distinct_tickets_window": 0,
+        "invocation_count_all": 0,
+        "invocation_count_recent": 0,
+        "invocation_count_window": 0,
+        "last_invoked_at": "",
+        "observed_event_count_all": 0,
+        "recent_days": 7,
+        "window_days": 30
+      },
+      "id": "hatch-pet",
+      "label": "hatch-pet",
+      "methods": [],
+      "path": "skills/hatch-pet/SKILL.md",
+      "qa_checklist": "qa_checklist.md",
+      "signals": {
+        "composition_heat": {
+          "hot_referrer_count": 0,
+          "incoming_ref_count": 0,
+          "last_referenced_at": "",
+          "top_referrers": [],
+          "window_referrer_invocations": 0
+        },
+        "direct_heat": {
+          "distinct_threads_window": 0,
+          "distinct_tickets_window": 0,
+          "invocation_count_recent": 0,
+          "invocation_count_window": 0,
+          "last_invoked_at": ""
+        },
+        "maintenance_burden": {
+          "findings": [],
+          "has_checklist": true,
+          "has_eval": true,
+          "has_qa_checklist": true,
+          "status": "low",
+          "template_version": "0.3.8"
+        },
+        "maintenance_recommendation": "retire_review",
+        "uniqueness": {
+          "group": "media",
+          "has_skill_ui": false,
+          "incoming_ref_count": 0,
+          "method_count": 0,
+          "outgoing_ref_count": 0,
+          "source": "local",
+          "tier": 3
+        }
+      },
+      "skill_ui": "",
+      "source": "local",
+      "tier": 3,
+      "todo_skill_refs": []
     },
     {
       "description": "Turn one selected coding ticket or material implementation request into an approval-ready ticket plan, test strategy, and proof contract.",

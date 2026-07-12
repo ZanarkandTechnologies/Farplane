@@ -18,19 +18,21 @@ common_chains:
 
 Use this when the operator has a call, intro, prospect, customer, partner, or
 domain expert and needs enough grounded context to have a useful conversation.
-The normal output is a Markdown report, not a CRM pipeline record.
+The normal output is a Markdown report linked to CRM entities, not a CRM
+pipeline record.
 
-Reports use minimal frontmatter for indexing only. Put judgment, confidence,
-pain hypotheses, questions, and next actions in the report body. `skill` names
-the report-producing skill so shared report indexes can filter by source.
-`industry` is optional when it improves search; omit it when unknown. Do not
-add project-controller or pipeline fields to the report schema.
+Reports use minimal frontmatter for discovery and entity linking. Put judgment,
+confidence, pain hypotheses, questions, and next actions in the report body.
+`entity_refs` contains stable IDs from `.farplane/crm/entities.json`; one report
+may reference a person, their organization, or several related entities. Do not
+duplicate entity records or add pipeline fields to the report schema.
 
 Default storage:
 
-- Project-specific target: `.farplane/crm/reports/YYYY-MM-DD-<person>.md`
-- No project target: `~/.farplane/crm/reports/YYYY-MM-DD-<person>.md`
-- Derived index: `.farplane/crm/index.jsonl` or `~/.farplane/crm/index.jsonl`
+- Project-specific target: `.farplane/customer-research/reports/YYYY-MM-DD-<person>.md`
+- No project target: `~/.farplane/customer-research/reports/YYYY-MM-DD-<person>.md`
+- CRM entity ledger: `.farplane/crm/entities.json` or `~/.farplane/crm/entities.json`
+- Cross-skill discovery pattern: `.farplane/*/reports/**/*.md`
 
 Keep the work ethical and source-labeled: use public or supplied business
 context, label inference, and do not present private or guessed personal facts
@@ -40,9 +42,9 @@ as truth.
 
 ```text
 customer_research(target, call_context?, project_context?, output_root?)
-  -> customer_research_report + crm_index_delta?
-state: reads(public/supplied sources, local project context when provided);
-       writes(report markdown, optional derived crm index)
+  -> customer_research_report + crm_entity_delta?
+state: reads(public/supplied sources, local project context, optional CRM entities);
+       writes(skill-local report markdown, optional CRM entity create/update)
 gates: target_bound; sources_labeled; inference_labeled; minimal_frontmatter;
        conversation_plan_present; no_private_dossiering
 routes: research:user-grounding | research:source-synthesis | solution-shaping
@@ -62,8 +64,9 @@ authoring inline unless a separate research artifact is needed.
 
 - [ ] 1. Bind the call target and output location.
   - [ ] Resolve the person's name, supplied links, company or field, call reason,
-        and whether the report belongs to a project `.farplane/crm/` directory
-        or the global `~/.farplane/crm/` directory.
+        and whether the report belongs to a project
+        `.farplane/customer-research/` directory or the global
+        `~/.farplane/customer-research/` directory.
   - [ ] If the target cannot be identified from the request, ask one narrow
         blocking question instead of researching the wrong person.
 - [ ] 2. Gather the smallest useful source set.
@@ -74,8 +77,9 @@ authoring inline unless a separate research artifact is needed.
   - [ ] Use [research:source-synthesis](../research/SKILL.md#researchsource-synthesis)
         when several sources must be normalized before writing.
 - [ ] 3. Draft the customer research report from `templates/report.md`.
-  - [ ] Keep frontmatter minimal: `skill`, `name`, `links`, optional
-        `industry`, `relevance`, and `created_at`.
+  - [ ] Resolve or create stable CRM entity IDs, then keep report frontmatter
+        minimal: `skill`, `entity_refs`, `name`, `links`, optional `industry`,
+        `relevance`, and `created_at`.
   - [ ] Include who they are, their meaningful story, field overview, company or
         context, sourced facts, labeled inferences, unknowns, and source notes.
 - [ ] 4. Shape the conversation.
@@ -85,13 +89,14 @@ authoring inline unless a separate research artifact is needed.
   - [ ] Include warm openers, useful topics, questions to ask, conversation
         risks, and follow-up hooks.
   - [ ] Prefer correction-seeking questions over leading pitch questions.
-- [ ] 5. Write and index the artifact.
-  - [ ] Save the report in the selected CRM reports directory.
-  - [ ] If requested or useful, run
-        `python3 scripts/sync_crm_frontmatter.py <crm-root>` to rebuild the
-        derived `index.jsonl`.
+- [ ] 5. Write and link the artifact.
+  - [ ] Save the report in the selected skill-local reports directory.
+  - [ ] Ensure every `entity_refs` value resolves to the CRM entity ledger;
+        update entity description, links, or status only when the report
+        produced new operator-approved relationship state.
 - [ ] 6. Finish-check the report.
-  - [ ] Frontmatter is minimal and index-oriented.
+  - [ ] Frontmatter is minimal, discovery-oriented, and every entity reference
+        resolves to the CRM ledger.
   - [ ] Every important claim is sourced, supplied, or clearly labeled as an
         inference or unknown.
   - [ ] The report helps the operator lead a better call rather than pretending
@@ -109,12 +114,12 @@ authoring inline unless a separate research artifact is needed.
 
 ## Gotchas
 
-- Do not turn the report into a lead-scoring CRM object. It is a dated research
-  artifact with a derived index.
+- Do not turn the report into a lead-scoring CRM object. It is a dated,
+  skill-owned research artifact linked to stable CRM entity IDs.
 - Do not put pain hypotheses, next actions, relationship stage, confidence, or
   project fields in frontmatter.
-- Do not invent report IDs when the report path and created date already
-  identify the artifact. Use `skill` to name the producer.
+- Do not hand-maintain report paths on CRM entities. Discover backlinks by
+  scanning skill-local report frontmatter for `entity_refs`.
 - Do not invent an industry or a replacement project-controller field for
   indexing. Omit optional fields when the mapping is not clear.
 - Do not write a generic pitch. Start from the person's likely world, then offer
@@ -136,6 +141,8 @@ Write a Markdown report with this frontmatter shape:
 ```yaml
 ---
 skill: "customer-research"
+entity_refs:
+  - "person-name"
 name: "Person Name"
 links:
   - "https://example.com/profile"

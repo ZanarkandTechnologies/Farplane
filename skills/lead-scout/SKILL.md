@@ -31,12 +31,14 @@ dedupe-first discipline without writing lead logic into `feed-scout`.
 
 ```text
 lead_scout(source_set, qualification_filter, outreach_goal?,
-           limit?, project_context?, crm_root?)
+           limit?, project_context?, crm_file?)
   -> ranked_candidates + qualification_evidence + research_handoffs
+   + crm_entity_delta?
 state:
-  reads(public/supplied sources, local project context, optional CRM reports/index,
-        qa_checklist.md)
-  writes(candidate packet or dry-run report when caller owns an output path)
+  reads(public/supplied sources, local project context, optional CRM entities,
+        optional skill-local reports, qa_checklist.md)
+  writes(candidate packet under the caller path or `.farplane/lead-scout/reports/`,
+         optional CRM entity create/update)
 gates:
   source_boundary_explicit; filter_operationalized; public_or_supplied_sources;
   deduped_candidates; qualification_reasons_labeled; no_private_dossiering;
@@ -101,9 +103,9 @@ Use `customer-research` for shortlisted people or companies after qualification.
 - [ ] 4. Produce the ranked candidate packet.
   - [ ] Include accepted candidates, rejected near-misses, evidence snippets or
         source notes, confidence, and recommended next owner for each candidate.
-  - [ ] For CRM writeback, keep it minimal: record the candidate packet path,
-        status, owner, next action, and linked report refs. Do not create a
-        separate CRM pipeline model inside this skill.
+  - [ ] For CRM writeback, create or update only the entity's stable ID, name,
+        description, links, and status in `.farplane/crm/entities.json`. Put
+        report paths and workflow details in the skill-owned candidate packet.
 - [ ] 5. Route shortlisted candidates.
   - [ ] Route qualified people or companies to
         [customer-research](../customer-research/SKILL.md) for sourced reports.
@@ -192,5 +194,5 @@ CRM writeback:
   notes.
 - `research_handoffs`: next candidates for `customer-research` and, later,
   `solution-shaping`.
-- `crm_writeback_delta`: optional minimal status/next-action/index update when
-  the caller supplies a CRM root or project convention.
+- `crm_entity_delta`: optional entity create/update when the caller supplies a
+  CRM file or project convention.

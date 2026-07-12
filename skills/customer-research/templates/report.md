@@ -1,5 +1,7 @@
 ---
 skill: "customer-research"
+entity_refs:
+  - "{{ person_entity_id }}"
 name: "{{ person_name }}"
 links:
   - "{{ primary_link }}"
@@ -7,6 +9,9 @@ industry: "{{ industry_or_field }}"
 relevance: "{{ one_sentence_reason_this_person_matters }}"
 created_at: "{{ YYYY-MM-DD }}"
 ---
+
+Add other resolved CRM IDs to `entity_refs` only when the report actually
+covers those entities.
 
 # {{ Person Name }} Customer Research
 

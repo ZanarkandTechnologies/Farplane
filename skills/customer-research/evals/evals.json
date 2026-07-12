@@ -4,13 +4,13 @@
     {
       "id": "customer_research_minimal_frontmatter_01",
       "prompt": "I have a call with Jane Doe from Acme Logistics. Her LinkedIn is https://example.com/jane and I want to talk about whether AI workflow automation could help their operations team. Prep me.",
-      "expected_output": "Produces or describes a customer research report rather than a CRM pipeline record; Uses minimal frontmatter with skill, name, links, optional industry, relevance, and created_at; Uses skill to identify the report-producing skill instead of inventing a report_id; Keeps role, confidence, pain hypotheses, next actions, and relationship stage in the body or omits them; Does not add pipeline or replacement project-controller metadata; Labels sourced facts, inferences, and unknowns separately; Includes conversation topics, questions to ask, and a correction-seeking help angle",
+      "expected_output": "Produces or describes a customer research report under .farplane/customer-research/reports rather than a CRM pipeline record; Uses minimal frontmatter with skill, entity_refs, name, links, optional industry, relevance, and created_at; Resolves stable entity_refs against .farplane/crm/entities.json and does not hand-maintain report backlinks on CRM entities; Keeps role, confidence, pain hypotheses, next actions, and relationship stage in the body or CRM entity status as appropriate; Does not add pipeline or replacement project-controller metadata; Labels sourced facts, inferences, and unknowns separately; Includes conversation topics, questions to ask, and a correction-seeking help angle",
       "files": [],
       "assertions": [
-        "Produces or describes a customer research report rather than a CRM pipeline record",
-        "Uses minimal frontmatter with skill, name, links, optional industry, relevance, and created_at",
-        "Uses skill to identify the report-producing skill instead of inventing a report_id",
-        "Keeps role, confidence, pain hypotheses, next actions, and relationship stage in the body or omits them",
+        "Produces or describes a customer research report under .farplane/customer-research/reports rather than a CRM pipeline record",
+        "Uses minimal frontmatter with skill, entity_refs, name, links, optional industry, relevance, and created_at",
+        "Resolves stable entity_refs against .farplane/crm/entities.json and does not hand-maintain report backlinks on CRM entities",
+        "Keeps role, confidence, pain hypotheses, next actions, and relationship stage in the body or CRM entity status as appropriate",
         "Does not add pipeline or replacement project-controller metadata",
         "Labels sourced facts, inferences, and unknowns separately",
         "Includes conversation topics, questions to ask, and a correction-seeking help angle"

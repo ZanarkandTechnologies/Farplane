@@ -39,6 +39,11 @@ Rejected near-misses:
 
 CRM writeback:
 
+- Entity ID: `example-founder`
+- Name: `Example Founder`
+- Description: `Founder of ExampleOps with a public onboarding workflow signal.`
+- Links: `https://example.com/profile`, `https://example.com/company`
 - Status: `scouted`
-- Next action: run `customer-research` for top 3 only.
-- Notes: keep fit and pain labels as inference until sourced report confirms.
+
+Next action: run `customer-research` for top 3 only. The resulting report uses
+`entity_refs: [example-founder]`; the CRM record does not store report paths.

@@ -2,7 +2,7 @@
 kind: farplane-framework-reporting-standard
 status: active
 created_at: 2026-07-08
-updated_at: 2026-07-08
+updated_at: 2026-07-12
 framework_template_version: "0.1.0"
 ---
 
@@ -35,6 +35,10 @@ The reporting system is in place at the Core registry layer:
   producer or human supplies truthful `kind`, `created_at`, and `ui_summary`.
 - Not included by default: CRM/customer research reports, ticket QA/review
   artifacts, review runs, mining runs, backfill jobs, and event-miner runs.
+
+Skill-local memory reports use `.farplane/<skill-name>/reports/**/*.md`. They
+may be discovered across skills with `.farplane/*/reports/**/*.md`, but they do
+not require a compiled index or the Core report-card frontmatter contract.
 
 ## Minimal Report Frontmatter
 
@@ -101,8 +105,11 @@ Each indexed report includes:
 }
 ```
 
-Use `.farplane/crm/reports/*` and its own index for CRM/customer research unless
-a future ticket explicitly opts those reports into the main project registry.
+Customer research uses `.farplane/customer-research/reports/*` and links CRM
+entities through `entity_refs`. CRM state lives separately in
+`.farplane/crm/entities.json`; it has no report index or handwritten report
+backlinks. A future ticket may opt selected skill-local reports into the main
+project registry by adopting the Core report-card contract.
 Ticket QA/review/mining/backfill artifacts stay outside this registry by
 default.
 

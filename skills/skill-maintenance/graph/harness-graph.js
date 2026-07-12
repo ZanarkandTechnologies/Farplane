@@ -1,26 +1,26 @@
 window.HARNESS_GRAPH = {
   "counts": {
     "edge_types": {
-      "directory-contains": 181,
-      "literal-path": 3645,
+      "directory-contains": 191,
+      "literal-path": 3656,
       "markdown-link": 702
     },
-    "edges": 4528,
+    "edges": 4549,
     "node_kinds": {
       "agent": 16,
       "doc": 43,
-      "file": 528,
+      "file": 541,
       "review-rubric": 24,
       "root-doc": 6,
-      "script": 100,
-      "skill": 116,
+      "script": 101,
+      "skill": 117,
       "skill-doc": 8,
       "spec": 36,
       "template": 5
     },
-    "nodes": 882,
-    "scanned_files": 1449,
-    "unresolved_refs": 1423
+    "nodes": 897,
+    "scanned_files": 1474,
+    "unresolved_refs": 1463
   },
   "edges": [
     {
@@ -917,6 +917,76 @@ window.HARNESS_GRAPH = {
       "raw_ref": "skills/doc-advisor/references",
       "source": "dir:skills/doc-advisor/references",
       "target": "file:skills/doc-advisor/references/metadata-and-registries.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "skills/hatch-pet/scripts",
+      "raw_ref": "skills/hatch-pet/scripts",
+      "source": "dir:skills/hatch-pet/scripts",
+      "target": "file:skills/hatch-pet/scripts/compose_atlas.py",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "skills/hatch-pet/scripts",
+      "raw_ref": "skills/hatch-pet/scripts",
+      "source": "dir:skills/hatch-pet/scripts",
+      "target": "file:skills/hatch-pet/scripts/derive_running_left_from_running_right.py",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "skills/hatch-pet/scripts",
+      "raw_ref": "skills/hatch-pet/scripts",
+      "source": "dir:skills/hatch-pet/scripts",
+      "target": "file:skills/hatch-pet/scripts/extract_strip_frames.py",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "skills/hatch-pet/scripts",
+      "raw_ref": "skills/hatch-pet/scripts",
+      "source": "dir:skills/hatch-pet/scripts",
+      "target": "file:skills/hatch-pet/scripts/inspect_frames.py",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "skills/hatch-pet/scripts",
+      "raw_ref": "skills/hatch-pet/scripts",
+      "source": "dir:skills/hatch-pet/scripts",
+      "target": "file:skills/hatch-pet/scripts/make_contact_sheet.py",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "skills/hatch-pet/scripts",
+      "raw_ref": "skills/hatch-pet/scripts",
+      "source": "dir:skills/hatch-pet/scripts",
+      "target": "file:skills/hatch-pet/scripts/prepare_pet_run.py",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "skills/hatch-pet/scripts",
+      "raw_ref": "skills/hatch-pet/scripts",
+      "source": "dir:skills/hatch-pet/scripts",
+      "target": "file:skills/hatch-pet/scripts/render_animation_previews.py",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "skills/hatch-pet/scripts",
+      "raw_ref": "skills/hatch-pet/scripts",
+      "source": "dir:skills/hatch-pet/scripts",
+      "target": "file:skills/hatch-pet/scripts/test_prepare_pet_run.py",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "skills/hatch-pet/scripts",
+      "raw_ref": "skills/hatch-pet/scripts",
+      "source": "dir:skills/hatch-pet/scripts",
+      "target": "file:skills/hatch-pet/scripts/validate_atlas.py",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "skills/hatch-pet/scripts",
+      "raw_ref": "skills/hatch-pet/scripts",
+      "source": "dir:skills/hatch-pet/scripts",
+      "target": "file:skills/hatch-pet/scripts/write_run_summary.py",
       "type": "directory-contains"
     },
     {
@@ -7850,6 +7920,13 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
+      "from_file": "docs/features/FEAT-0071-project-work-pulse.md",
+      "raw_ref": "skills/ticket-opportunity-generator/scripts/query_ticket_history.py",
+      "source": "file:docs/features/FEAT-0071-project-work-pulse.md",
+      "target": "file:skills/ticket-opportunity-generator/scripts/query_ticket_history.py",
+      "type": "literal-path"
+    },
+    {
       "from_file": "docs/features/README.md",
       "raw_ref": "docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md",
       "source": "file:docs/features/README.md",
@@ -10507,6 +10584,13 @@ window.HARNESS_GRAPH = {
       "raw_ref": "skills/harness-scout/SKILL.md",
       "source": "file:docs/skills/registry.jsonl",
       "target": "file:skills/harness-scout/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/skills/registry.jsonl",
+      "raw_ref": "skills/hatch-pet/SKILL.md",
+      "source": "file:docs/skills/registry.jsonl",
+      "target": "file:skills/hatch-pet/SKILL.md",
       "type": "literal-path"
     },
     {
@@ -15403,13 +15487,6 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
-      "from_file": "skills/customer-research/audits/2026-07-07-initial-skill.md",
-      "raw_ref": "skills/customer-research/scripts/sync_crm_frontmatter.py",
-      "source": "skill:customer-research",
-      "target": "file:skills/customer-research/scripts/sync_crm_frontmatter.py",
-      "type": "literal-path"
-    },
-    {
       "from_file": "skills/customer-research/SKILL.md",
       "raw_ref": "../research/SKILL.md#researchuser-grounding",
       "source": "skill:customer-research",
@@ -19797,6 +19874,48 @@ window.HARNESS_GRAPH = {
       "source": "skill:harness-scout",
       "target": "file:skills/video-understanding/SKILL.md",
       "type": "markdown-link"
+    },
+    {
+      "from_file": "skills/hatch-pet/audits/2026-07-12-friend-import.md",
+      "raw_ref": "skills/hatch-pet/scripts",
+      "source": "skill:hatch-pet",
+      "target": "dir:skills/hatch-pet/scripts",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/hatch-pet/audits/2026-07-12-friend-import.md",
+      "raw_ref": "skills/eval/scripts/check_eval_queries.py",
+      "source": "skill:hatch-pet",
+      "target": "file:skills/eval/scripts/check_eval_queries.py",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/hatch-pet/audits/2026-07-12-friend-import.md",
+      "raw_ref": "skills/hatch-pet",
+      "source": "skill:hatch-pet",
+      "target": "file:skills/hatch-pet/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/hatch-pet/audits/2026-07-12-friend-import.md",
+      "raw_ref": "skills/hatch-pet/evals/evals.json",
+      "source": "skill:hatch-pet",
+      "target": "file:skills/hatch-pet/evals/evals.json",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/hatch-pet/audits/2026-07-12-friend-import.md",
+      "raw_ref": "skills/hatch-pet/scripts/test_prepare_pet_run.py",
+      "source": "skill:hatch-pet",
+      "target": "file:skills/hatch-pet/scripts/test_prepare_pet_run.py",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/hatch-pet/audits/2026-07-12-friend-import.md",
+      "raw_ref": "skills/skill-maintenance/scripts/check_skills.py",
+      "source": "skill:hatch-pet",
+      "target": "file:skills/skill-maintenance/scripts/check_skills.py",
+      "type": "literal-path"
     },
     {
       "from_file": "skills/impl-plan/AGENTS.md",
@@ -28395,6 +28514,20 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
+      "from_file": "skills/skill-maintenance/graph/skill-template-intelligence.js",
+      "raw_ref": "skills/hatch-pet/SKILL.md",
+      "source": "skill:skill-maintenance",
+      "target": "file:skills/hatch-pet/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/skill-maintenance/graph/skill-template-intelligence.json",
+      "raw_ref": "skills/hatch-pet/SKILL.md",
+      "source": "skill:skill-maintenance",
+      "target": "file:skills/hatch-pet/SKILL.md",
+      "type": "literal-path"
+    },
+    {
       "from_file": "skills/skill-maintenance/audits/2026-06-26-coding-grounding-gate.md",
       "raw_ref": "skills/impl-plan/SKILL.md",
       "source": "skill:skill-maintenance",
@@ -31209,6 +31342,13 @@ window.HARNESS_GRAPH = {
       "type": "markdown-link"
     },
     {
+      "from_file": "skills/ticket-opportunity-generator/scripts/query_ticket_history.py",
+      "raw_ref": "tickets/archive",
+      "source": "skill:ticket-opportunity-generator",
+      "target": "dir:tickets/archive",
+      "type": "literal-path"
+    },
+    {
       "from_file": "skills/ticket-opportunity-generator/SKILL.md",
       "raw_ref": "farplane/harness.yaml",
       "source": "skill:ticket-opportunity-generator",
@@ -31241,6 +31381,13 @@ window.HARNESS_GRAPH = {
       "raw_ref": "skills/ticket-opportunity-generator/qa_checklist.md",
       "source": "skill:ticket-opportunity-generator",
       "target": "file:skills/ticket-opportunity-generator/qa_checklist.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/ticket-opportunity-generator/SKILL.md",
+      "raw_ref": "skills/ticket-opportunity-generator/scripts/query_ticket_history.py",
+      "source": "skill:ticket-opportunity-generator",
+      "target": "file:skills/ticket-opportunity-generator/scripts/query_ticket_history.py",
       "type": "literal-path"
     },
     {
@@ -31720,7 +31867,7 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     }
   ],
-  "generated_at": "2026-07-12T10:36:22+00:00",
+  "generated_at": "2026-07-12T12:53:48+00:00",
   "nodes": [
     {
       "id": "file:agents/asset-generator.toml",
@@ -32597,12 +32744,6 @@ window.HARNESS_GRAPH = {
       "kind": "file",
       "label": "skills/customer-research/examples/first-call/example.md",
       "path": "skills/customer-research/examples/first-call/example.md"
-    },
-    {
-      "id": "file:skills/customer-research/scripts/sync_crm_frontmatter.py",
-      "kind": "file",
-      "label": "skills/customer-research/scripts/sync_crm_frontmatter.py",
-      "path": "skills/customer-research/scripts/sync_crm_frontmatter.py"
     },
     {
       "id": "file:skills/data-viz/SKILL.md",
@@ -33587,6 +33728,84 @@ window.HARNESS_GRAPH = {
       "kind": "file",
       "label": "skills/harness-scout/references/video-to-skill.md",
       "path": "skills/harness-scout/references/video-to-skill.md"
+    },
+    {
+      "id": "file:skills/hatch-pet/SKILL.md",
+      "kind": "file",
+      "label": "skills/hatch-pet/SKILL.md",
+      "path": "skills/hatch-pet/SKILL.md"
+    },
+    {
+      "id": "file:skills/hatch-pet/evals/evals.json",
+      "kind": "file",
+      "label": "skills/hatch-pet/evals/evals.json",
+      "path": "skills/hatch-pet/evals/evals.json"
+    },
+    {
+      "id": "dir:skills/hatch-pet/scripts",
+      "kind": "file",
+      "label": "skills/hatch-pet/scripts/",
+      "path": "skills/hatch-pet/scripts"
+    },
+    {
+      "id": "file:skills/hatch-pet/scripts/compose_atlas.py",
+      "kind": "file",
+      "label": "skills/hatch-pet/scripts/compose_atlas.py",
+      "path": "skills/hatch-pet/scripts/compose_atlas.py"
+    },
+    {
+      "id": "file:skills/hatch-pet/scripts/derive_running_left_from_running_right.py",
+      "kind": "file",
+      "label": "skills/hatch-pet/scripts/derive_running_left_from_running_right.py",
+      "path": "skills/hatch-pet/scripts/derive_running_left_from_running_right.py"
+    },
+    {
+      "id": "file:skills/hatch-pet/scripts/extract_strip_frames.py",
+      "kind": "file",
+      "label": "skills/hatch-pet/scripts/extract_strip_frames.py",
+      "path": "skills/hatch-pet/scripts/extract_strip_frames.py"
+    },
+    {
+      "id": "file:skills/hatch-pet/scripts/inspect_frames.py",
+      "kind": "file",
+      "label": "skills/hatch-pet/scripts/inspect_frames.py",
+      "path": "skills/hatch-pet/scripts/inspect_frames.py"
+    },
+    {
+      "id": "file:skills/hatch-pet/scripts/make_contact_sheet.py",
+      "kind": "file",
+      "label": "skills/hatch-pet/scripts/make_contact_sheet.py",
+      "path": "skills/hatch-pet/scripts/make_contact_sheet.py"
+    },
+    {
+      "id": "file:skills/hatch-pet/scripts/prepare_pet_run.py",
+      "kind": "file",
+      "label": "skills/hatch-pet/scripts/prepare_pet_run.py",
+      "path": "skills/hatch-pet/scripts/prepare_pet_run.py"
+    },
+    {
+      "id": "file:skills/hatch-pet/scripts/render_animation_previews.py",
+      "kind": "file",
+      "label": "skills/hatch-pet/scripts/render_animation_previews.py",
+      "path": "skills/hatch-pet/scripts/render_animation_previews.py"
+    },
+    {
+      "id": "file:skills/hatch-pet/scripts/test_prepare_pet_run.py",
+      "kind": "file",
+      "label": "skills/hatch-pet/scripts/test_prepare_pet_run.py",
+      "path": "skills/hatch-pet/scripts/test_prepare_pet_run.py"
+    },
+    {
+      "id": "file:skills/hatch-pet/scripts/validate_atlas.py",
+      "kind": "file",
+      "label": "skills/hatch-pet/scripts/validate_atlas.py",
+      "path": "skills/hatch-pet/scripts/validate_atlas.py"
+    },
+    {
+      "id": "file:skills/hatch-pet/scripts/write_run_summary.py",
+      "kind": "file",
+      "label": "skills/hatch-pet/scripts/write_run_summary.py",
+      "path": "skills/hatch-pet/scripts/write_run_summary.py"
     },
     {
       "id": "file:skills/impl-plan/README.md",
@@ -35071,6 +35290,12 @@ window.HARNESS_GRAPH = {
       "path": "skills/ticket-opportunity-generator/qa_checklist.md"
     },
     {
+      "id": "file:skills/ticket-opportunity-generator/scripts/query_ticket_history.py",
+      "kind": "file",
+      "label": "skills/ticket-opportunity-generator/scripts/query_ticket_history.py",
+      "path": "skills/ticket-opportunity-generator/scripts/query_ticket_history.py"
+    },
+    {
       "id": "file:skills/update-memory/SKILL.md",
       "kind": "file",
       "label": "skills/update-memory/SKILL.md",
@@ -35543,6 +35768,12 @@ window.HARNESS_GRAPH = {
       "kind": "script",
       "label": "bin/core/mining_programs/ticket-completion-lean-v1.json",
       "path": "bin/core/mining_programs/ticket-completion-lean-v1.json"
+    },
+    {
+      "id": "file:bin/core/mining_programs/ticket-completion-learning-v1.json",
+      "kind": "script",
+      "label": "bin/core/mining_programs/ticket-completion-learning-v1.json",
+      "path": "bin/core/mining_programs/ticket-completion-learning-v1.json"
     },
     {
       "id": "file:bin/core/runtime_config.py",
@@ -36359,6 +36590,12 @@ window.HARNESS_GRAPH = {
       "kind": "skill",
       "label": "harness-scout",
       "path": "skills/harness-scout/SKILL.md"
+    },
+    {
+      "id": "skill:hatch-pet",
+      "kind": "skill",
+      "label": "hatch-pet",
+      "path": "skills/hatch-pet/SKILL.md"
     },
     {
       "id": "skill:impl-plan",
@@ -37203,6 +37440,26 @@ window.HARNESS_GRAPH = {
       "source": "bin/core/farplane_mining.py"
     },
     {
+      "candidate": "tickets/TASK-",
+      "raw_ref": "tickets/TASK-",
+      "source": "bin/core/farplane_mining.py"
+    },
+    {
+      "candidate": "tickets/TASK-",
+      "raw_ref": "tickets/TASK-",
+      "source": "bin/core/farplane_mining.py"
+    },
+    {
+      "candidate": "tickets/archive/TASK-",
+      "raw_ref": "tickets/archive/TASK-",
+      "source": "bin/core/farplane_mining.py"
+    },
+    {
+      "candidate": "tickets/archive/TASK-",
+      "raw_ref": "tickets/archive/TASK-",
+      "source": "bin/core/farplane_mining.py"
+    },
+    {
       "candidate": "*/farplane/manifest.json",
       "raw_ref": "*/farplane/manifest.json",
       "source": "bin/core/farplane_primitive_metrics.py"
@@ -37281,6 +37538,21 @@ window.HARNESS_GRAPH = {
       "candidate": "tickets/TASK-1234/artifacts/review.json",
       "raw_ref": "tickets/TASK-1234/artifacts/review.json",
       "source": "bin/tests/test_farplane_invocation.py"
+    },
+    {
+      "candidate": "tickets/TASK-0001/ticket.md",
+      "raw_ref": "tickets/TASK-0001/ticket.md",
+      "source": "bin/tests/test_farplane_mining.py"
+    },
+    {
+      "candidate": "tickets/TASK-0001/ticket.md",
+      "raw_ref": "tickets/TASK-0001/ticket.md",
+      "source": "bin/tests/test_farplane_mining.py"
+    },
+    {
+      "candidate": "tickets/TASK-0001/ticket.md",
+      "raw_ref": "tickets/TASK-0001/ticket.md",
+      "source": "bin/tests/test_farplane_mining.py"
     },
     {
       "candidate": "tickets/TASK-0001/ticket.md",
@@ -37981,41 +38253,6 @@ window.HARNESS_GRAPH = {
       "candidate": "hooks-and-runtime.md",
       "raw_ref": "hooks-and-runtime.md",
       "source": "docs/farplane-framework/README.md"
-    },
-    {
-      "candidate": "init-advisor-critical-path.md",
-      "raw_ref": "init-advisor-critical-path.md",
-      "source": "docs/farplane-framework/README.md"
-    },
-    {
-      "candidate": "lifecycle.md",
-      "raw_ref": "lifecycle.md",
-      "source": "docs/farplane-framework/README.md"
-    },
-    {
-      "candidate": "project-files.md",
-      "raw_ref": "project-files.md",
-      "source": "docs/farplane-framework/README.md"
-    },
-    {
-      "candidate": "pulse-and-interval-loop.md",
-      "raw_ref": "pulse-and-interval-loop.md",
-      "source": "docs/farplane-framework/README.md"
-    },
-    {
-      "candidate": "reporting.md",
-      "raw_ref": "reporting.md",
-      "source": "docs/farplane-framework/README.md"
-    },
-    {
-      "candidate": "ticket-execution-loop.md",
-      "raw_ref": "ticket-execution-loop.md",
-      "source": "docs/farplane-framework/README.md"
-    },
-    {
-      "candidate": "tickets/TASK-0001/ticket.md",
-      "raw_ref": "tickets/TASK-0001/ticket.md",
-      "source": "docs/farplane-framework/init-advisor-critical-path.md"
     }
   ]
 };

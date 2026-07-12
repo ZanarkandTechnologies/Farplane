@@ -1,5 +1,8 @@
 ---
 skill: "customer-research"
+entity_refs:
+  - "maya-tan"
+  - "helios-ops"
 name: "Maya Tan"
 links:
   - "https://example.com/maya-tan"
