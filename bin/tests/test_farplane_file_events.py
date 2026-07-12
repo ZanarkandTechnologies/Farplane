@@ -55,7 +55,7 @@ class FarplaneFileEventTests(unittest.TestCase):
             root = Path(tmp)
             ticket = write_project(root)
             ticket.write_text(
-                "---\nstatus: completed\napi_token: should-not-leak\n---\n\n# Ticket\n",
+                "---\nstatus: completed\nupdated_at: 2026-07-12T18:55:00+08:00\napi_token: should-not-leak\n---\n\n# Ticket\n",
                 encoding="utf-8",
             )
 
@@ -64,6 +64,8 @@ class FarplaneFileEventTests(unittest.TestCase):
             self.assertEqual(event["event_name"], "farplane.ticket.completed")
             token_delta = next(row for row in event["privacy_safe_delta"]["changed_fields"] if row["path"] == "api_token")
             self.assertEqual(token_delta["after"]["preview"], "[redacted]")
+            updated_delta = next(row for row in event["privacy_safe_delta"]["changed_fields"] if row["path"] == "updated_at")
+            self.assertEqual(updated_delta["after"]["preview"], "[redacted]")
             self.assertNotIn("should-not-leak", json.dumps(event))
             snapshot = file_events.read_json(file_events.snapshot_path(root, "tickets/TASK-0001/ticket.md"))
             self.assertNotIn("should-not-leak", json.dumps(snapshot))

@@ -15,7 +15,7 @@ import os
 import re
 import shlex
 import tempfile
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable
 
@@ -63,7 +63,18 @@ def now_iso() -> str:
 
 
 def canonical_json(value: Any) -> str:
-    return json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
+    def encode_yaml_scalar(item: Any) -> str:
+        if isinstance(item, (datetime, date)):
+            return item.isoformat()
+        raise TypeError(f"Object of type {item.__class__.__name__} is not JSON serializable")
+
+    return json.dumps(
+        value,
+        sort_keys=True,
+        separators=(",", ":"),
+        ensure_ascii=False,
+        default=encode_yaml_scalar,
+    )
 
 
 def sha256_value(value: Any) -> str:

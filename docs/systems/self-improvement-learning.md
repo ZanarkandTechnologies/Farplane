@@ -3,7 +3,7 @@ title: "Self-Improvement And Learning"
 status: active
 owner: farplane-framework
 created_at: 2026-06-26
-updated_at: 2026-07-11
+updated_at: 2026-07-12
 tags:
   - farplane
   - systems
@@ -20,7 +20,7 @@ system_record_json: |
     "id": "SYS-0007",
     "name": "Self-Improvement And Learning",
     "status": "implemented",
-    "summary": "The learning loop that reviews experiment Goal Packets, chooses bounded harness experiments, and turns proven outcomes into skills, evals, docs, features, or policy.",
+    "summary": "The learning loop that reviews experiment Goal Packets, supplies bounded experiment candidates, and turns proven outcomes into durable behavior.",
     "owner_spec": "docs/systems/self-improvement-learning.md",
     "primary_feature_ref": "FEAT-0063",
     "feature_refs": [
@@ -35,15 +35,16 @@ system_record_json: |
       "docs/TROUBLES.md",
       "skills/metric-advisor/SKILL.md"
     ],
-    "last_verified": "2026-07-11"
+    "last_verified": "2026-07-12"
   }
 ---
 # Self-Improvement And Learning
 
-The learning loop that observes behavior gaps, reviews experiment Goal Packets,
-chooses bounded experiments, and turns proven outcomes into skills, evals,
-docs, features, or policy. This page owns self-improvement selection and
-learning; Work Pulse still owns experiment execution and check-ins.
+The learning loop that observes behavior gaps from completed-ticket learning
+reports, reviews experiment Goal Packets, supplies bounded experiment
+candidates, and turns proven outcomes into skills, evals, docs, features, or
+policy. This page owns self-improvement selection and learning; Work Pulse still
+owns experiment execution and check-ins.
 
 ```text
 self_improvement_and_learning(change, repo_state?) -> owned_feature_set + boundary_decision + maintenance_signal
@@ -60,8 +61,8 @@ self_improvement_and_learning(change, repo_state?) -> owned_feature_set + bounda
 ## Role
 
 Self-Improvement And Learning owns correction loops: observe behavior gaps,
-review existing experiments, choose metrics and proof routes, create bounded
-experiment Goal Packets, and promote repeated evidence into durable owners.
+review existing experiments, choose metrics and proof routes, supply bounded
+experiment candidates, and promote repeated evidence into durable owners.
 
 ## Feature Docs
 
@@ -72,7 +73,7 @@ experiment Goal Packets, and promote repeated evidence into durable owners.
 ## What Belongs Here
 
 Gap analysis, metric cards, hardcase capture, lesson promotion, Dogfood
-experiment review/ticket supply, human-feedback optimization, and
+experiment review/candidate supply, human-feedback optimization, and
 correction-route decisions.
 
 ## What Belongs Elsewhere
@@ -87,10 +88,17 @@ problem reports remain in Horizon Loop.
 - Metric cards choose honest primary and guard metrics before optimization.
 - Repeated misses promote into durable prevention surfaces.
 - Broad self-improvement migrations require representative proof.
-- Dogfood Review runs as the weekly portfolio learner/planner: it reads active
+- Completed-ticket learning writes a compact report and Core projects at most
+  one deduped actionable ticket from its strongest grounded finding. Direct
+  corrections use a fix program; uncertain improvements use a prove-or-reject
+  program before durable adoption. Stable semantic keys dedupe paraphrases,
+  and generated learning tickets cannot project another learning ticket.
+- Dogfood Review runs as the weekly portfolio learner: it reads active
   and recent archived experiment packets plus its prior report, carries a
-  derived outcome ledger, and creates a bounded non-interfering next wave from
-  available capacity.
+  derived outcome ledger, and proposes a bounded non-interfering next wave from
+  available capacity. It counts completion-projected tickets once and does not
+  recreate them. It may admit direct recovery from other settled failures; the
+  adaptive project planner owns ordinary experiment admission.
 - Every experiment carries Reward rows and Goal Packet state; Work Pulse alone
   executes the experiment and resumes matured check-ins. Delayed packets put
   the executable check-in instructions in `program.md`; the resumed worker
@@ -130,13 +138,14 @@ flowchart LR
   signals["behavior gaps + experiment outcomes<br/>reports, tickets, feedback"]:::keep
   metrics["FEAT-0063<br/>metric advisor cards"]:::changed
   taste["FEAT-0069 retired<br/>human feedback decomposed"]:::retired
-  dogfood["FEAT-0070<br/>portfolio ledger + next wave"]:::changed
+  dogfood["FEAT-0070<br/>portfolio ledger + candidates"]:::changed
+  planner["adaptive project planner<br/>global rank + admission"]:::added
   packet["experiment Goal Packets<br/>Reward + executable program + progress"]:::added
   pulse["Work Pulse<br/>execute + check in"]:::keep
   memory["docs/TROUBLES.md<br/>docs/LESSONS.md"]:::added
   action["skill / eval / feature change<br/>next experiment"]:::added
 
-  signals --> dogfood --> packet --> pulse --> action
+  signals --> dogfood --> planner --> packet --> pulse --> action
   signals --> metrics --> action
   signals --> taste --> action
   dogfood --> metrics
@@ -144,8 +153,8 @@ flowchart LR
 ```
 
 Self-Improvement And Learning converts failures, feedback, and experiment
-results into metrics, lessons, evals, transfer candidates, and the next
-bounded experiment wave.
+results into metrics, lessons, evals, transfer candidates, and a bounded
+experiment-candidate wave for global admission.
 
 ## Surfaces
 
@@ -180,3 +189,5 @@ bounded experiment wave.
   ticket-supply owner while keeping execution/check-ins in Work Pulse.
 - 2026-07-11: Made Dogfood a history-aware portfolio learner/planner and moved
   delayed check-in execution instructions into each experiment `program.md`.
+- 2026-07-12: Centralized experiment admission in Work Pulse while allowing
+  Dogfood to create bounded direct recovery from settled attributable failures.

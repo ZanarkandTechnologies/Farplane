@@ -1,6 +1,6 @@
 ---
 name: dogfood-review
-description: "Review the weekly self-improvement portfolio, carry experiment outcomes forward, and create a bounded non-interfering wave of experiment Goal Packets."
+description: "Review the weekly self-improvement portfolio, supply experiment candidates, and admit bounded evidence-backed recovery tickets."
 tier: 3
 group: harness
 source: local
@@ -16,18 +16,20 @@ allowed-tools: Read, Glob, Grep, Bash
 ## Context
 
 Use this skill from the weekly self-improvement automation or manually.
-Dogfood is a portfolio learner and ticket supplier, not another heartbeat or
+Dogfood is a portfolio learner and candidate supplier, not another heartbeat or
 executor. It snapshots experiment state through a cutoff, carries prior
-outcomes into a dated report, then may create a capacity-limited next wave.
+outcomes into a dated report, then proposes a capacity-aware next wave. It may
+admit a bounded direct recovery ticket for a settled attributable failure, but
+never an experiment ticket. The adaptive planner ranks uncertain experiment
+candidates against all other project areas.
 
 The weekly cutoff is not an experiment deadline. Pulse and the original ticket
 worker own execution and check-ins at the times declared by each Goal Packet.
 Dogfood only observes ticket state that already exists.
 
 Human-taste improvement is not a separate controller. When human judgment is
-the honest reward, Dogfood may create a normal feedback experiment Goal Packet
-that routes through `optimize-with-human`; Work Pulse executes it, and the
-ticket-owned Review block waits for the reply without holding a worker.
+the honest reward, Dogfood may propose a feedback experiment candidate that
+would route through `optimize-with-human` if the project planner admits it.
 
 ## Skill Signature
 
@@ -35,11 +37,12 @@ ticket-owned Review block waits for the reply without holding a worker.
 weekly_self_improvement(project_root, window, cutoff,
                         active_experiment_refs?, recent_archive_refs?,
                         previous_dogfood_report?, registry_refs?, reports?, metrics?,
-                        experiment_wave_size = 2,
+                        experiment_candidate_limit = 2,
+                        recovery_ticket_limit = 1,
                         experiment_wip_limit = 3,
                         max_concurrent_live_delayed = 1,
                         one_active_per_attributable_surface = true,
-                        write_policy?)
+                        write_policy = report_only)
   -> dogfood_report
    + outcome_ledger
    + active_and_pending_portfolio
@@ -48,7 +51,8 @@ weekly_self_improvement(project_root, window, cutoff,
    + rejected_patterns
    + capacity_receipt
    + ranked_improvement_candidates
-   + experiment_goal_packets[0..experiment_wave_size]
+   + experiment_candidates[0..experiment_candidate_limit]
+   + recovery_ticket_paths[0..recovery_ticket_limit]
    + source_gaps
    + no_op_reason?
 
@@ -57,17 +61,19 @@ state:
         tickets/TASK-*/{ticket,program,progress}.md,
         tickets/archive/TASK-*/{ticket,program,progress}.md,
         ticket-owned artifacts, previous Dogfood report, current Pulse/Interval/
-        Feed Scout reports, feature/system registries, operator/reviewer evidence)
+        Feed Scout reports, completed core:ticket-completion-learning@1.1.0
+        reports and their ticket_output receipts, feature/system registries,
+        operator/reviewer evidence)
   writes(.farplane/reports/dogfood-review/<timestamp>.md,
-         optional tickets/TASK-XXXX/{ticket,program,progress}.md[0..wave_size])
+         optional bounded recovery tickets)
 
 gates:
   qa_preflight_loaded; cutoff_bound; active_and_recent_archive_read;
   prior_report_used_as_cursor_not_canonical_state; existing_results_reviewed_first;
   report_written_before_selection; outcome_and_source_gaps_recorded;
   capacity_and_non_interference_proved; one_active_per_surface;
-  delayed_live_cap_respected; packet_wave_cap_respected;
-  canonical_ticket_and_goal_templates_reused; no_execution_or_checkin
+  delayed_live_cap_respected; candidate_wave_cap_respected;
+  recovery_only; no_experiment_ticket_admission; no_execution_or_checkin
 
 routes:
   optimize-harness | self-improve | skill-maintenance | consolidate |
@@ -78,17 +84,17 @@ fails:
   hiding due-check-in-pending work; losing archived outcomes; duplicating a prior
   rejected pattern without new evidence; blocking unrelated immediate proof
   merely because delayed work is monitoring; creating conflicting experiments;
-  creating a bare ticket or delayed packet without executable Check-In Program;
-  executing, promoting, rolling back, or spawning an experiment
+  creating an experiment, opportunity, or new-direction ticket; executing,
+  promoting, rolling back, or spawning an experiment
 ```
 
 ## Phase Boundary
 
-Dogfood derives cross-ticket learning and chooses the next bounded experiment
+Dogfood derives cross-ticket learning and proposes the next bounded experiment
 wave. Ticket Reward rows, `program.md`, `progress.md`, and artifacts remain
 canonical experiment state. The previous Dogfood report is only a cursor for
-carryover, dedupe, and transfer status. Work Pulse later admits and dispatches
-the packets; the worker executes the original `program.md`.
+carryover, dedupe, and transfer status. Work Pulse's adaptive planner may later
+admit a candidate; the worker then executes the ticket-owned `program.md`.
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
@@ -113,6 +119,11 @@ the packets; the worker executes the original `program.md`.
   - [ ] Build the outcome ledger, active/pending view, transfer candidates, and
         rejected patterns. Do not infer a terminal result that the ticket has
         not recorded.
+  - [ ] Read new completed ticket-completion learning reports and their
+        projected-ticket receipts since the prior Dogfood cursor. Treat their
+        compact findings and created/existing/no-ticket decisions as portfolio
+        evidence; do not recreate their tickets, edit a skill, or rewrite
+        doctrine.
 - [ ] 3. Write the dated report before proposing new work.
   - [ ] Use `templates/dogfood-report.md`; carry prior-report transfer/rejection
         status forward only when confirmed by canonical tickets and evidence.
@@ -135,28 +146,28 @@ the packets; the worker executes the original `program.md`.
   - [ ] Treat a recurring request to improve a skill or artifact with human
         taste as an ordinary feedback experiment candidate, not a Taste Loop
         automation or standing worker.
-- [ ] 5. Write zero to `available_slots` complete Goal Packets.
-  - [ ] Reuse canonical ticket and Goal Packet templates; create one folder per
-        independent experiment with `ticket.md`, `program.md`, and `progress.md`.
-  - [ ] Every ticket names surface, hypothesis, baseline, Reward expectation and
-        guard, metric/provider, proof route, budget, and promotion/rollback rule.
-  - [ ] Immediate toy/replay/eval packets use native Goal with an immediately
-        available signal and no future `check_in_at`, event wake, or delayed
-        Check-In Program debt.
-  - [ ] Human-feedback packets name the artifact, one decision question,
-        `optimize-with-human` provider, reply thread, and review-state policy;
-        their waiting state consumes review WIP but no execution worker.
-  - [ ] Delayed packets set Reward `check_in_at` or an event wake and completely
-        fill the canonical `program.md` Check-In Program: `inputs`, ordered
-        `procedure`, matured-row-only `writeback`, `decisions`, `idempotency`,
-        and `source_gap`, backed by Metric Provider, Heartbeat Policy, Stop
-        Conditions, and Rollout Policy.
-  - [ ] Default packets to `status: awaiting_review` unless `write_policy`
-        explicitly grants `status: todo` admission and no human/external gate
-        remains. Link all
-        created packets from the report and append initialization progress only.
+- [ ] 5. Write zero to `available_slots` experiment candidates in the report.
+  - [ ] Every candidate names area, surface, hypothesis, baseline, expected
+        Reward and guard, metric/provider, proof route, horizon, cost/risk,
+        budget, stop condition, and promotion/rollback rule.
+  - [ ] Mark the proposed feedback shape as immediate toy/replay/eval,
+        human-feedback, or delayed. Delayed candidates include the required
+        future signal and check-in procedure outline so planner admission can
+        materialize a complete Goal Packet without inventing the experiment.
+  - [ ] Link uncertain experiment candidates to their evidence and leave their
+        ticket paths empty. The adaptive project planner performs global ranking
+        and any later experiment admission.
+  - [ ] A settled finding may become a recovery ticket only when canonical
+        Reward/proof shows an attributable existing failure, the direct fix is
+        known, an existing KPI/guard and proof route are named, no experiment is
+        required, and no active duplicate exists. Create at most
+        `recovery_ticket_limit`; never materialize an experiment Goal Packet.
+  - [ ] Completion learning already projects at most one direct-fix or
+        prove-or-reject ticket. Reconcile that ticket in portfolio capacity and
+        never create a second recovery or experiment ticket for the same
+        report/semantic dedupe key.
 - [ ] 6. Finish-check and hand off.
-  - [ ] Reapply `qa_checklist.md`; return report/packet paths, outcome and
+  - [ ] Reapply `qa_checklist.md`; return report/candidates/recovery paths, outcome and
         capacity receipts, ranking, source gaps/no-op reason, and proof that no
         experiment, check-in, promotion, rollback, or external action ran.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
@@ -165,11 +176,6 @@ the packets; the worker executes the original `program.md`.
 
 - [Weekly Dogfood report](templates/dogfood-report.md) - outcome ledger,
   portfolio/capacity snapshot, candidate ranking, and packet-wave receipts.
-- [Canonical ticket template](../../tickets/templates/ticket.md) - selected
-  experiment scope, Reward rows, and Done / Proof.
-- [Canonical Goal program](../../tickets/templates/goal-loop/program.md) and
-  [progress template](../../tickets/templates/goal-loop/progress.md) - load
-  whenever creating a packet; delayed packets must fill Check-In Program.
 
 ## Gotchas
 
@@ -198,5 +204,5 @@ the packets; the worker executes the original `program.md`.
 
 ## Output
 
-One dated portfolio report; zero to the capacity-bounded wave of complete
-experiment Goal Packets; and a no-execution/check-in receipt.
+One dated portfolio report; a bounded experiment-candidate wave; zero or more
+direct recovery tickets; and a no-experiment-execution/check-in receipt.

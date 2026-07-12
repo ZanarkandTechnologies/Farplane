@@ -12,7 +12,6 @@ if str(RUNTIME_DIR) not in sys.path:
     sys.path.insert(0, str(RUNTIME_DIR))
 
 from user_turn import (
-    append_conversation_assistant_response,
     append_conversation_user_turn,
     build_runtime_claim,
     capture_user_turn,
@@ -23,8 +22,6 @@ from user_turn import (
     is_internal_user_prompt,
     normalize_user_turn,
     recent_conversation_windows,
-    should_review_skill_opportunities,
-    skill_opportunity_application_dir,
 )
 
 
@@ -195,7 +192,7 @@ class RuntimeClaimTests(unittest.TestCase):
         self.assertFalse((project_root / ".farplane" / "state" / "sessions" / "sess-init.json").exists())
         self.assertFalse((project_root / ".farplane" / "state" / "current-run.json").exists())
 
-    def test_conversation_window_pairs_user_and_assistant_turns(self) -> None:
+    def test_conversation_window_promotes_previous_operator_turn(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             project_root = Path(tmp)
             user_turn = normalize_user_turn(
@@ -206,22 +203,24 @@ class RuntimeClaimTests(unittest.TestCase):
             )
 
             append_conversation_user_turn(project_root, "sess-window", user_turn)
-            window = append_conversation_assistant_response(
+            window = append_conversation_user_turn(
                 project_root,
                 "sess-window",
-                "plan complete",
-                captured_at="2026-05-08T00:00:01Z",
-                source="test-stop",
+                normalize_user_turn(
+                    "follow-up correction",
+                    turn_id="turn-2",
+                    source="test",
+                    captured_at="2026-05-08T00:00:01Z",
+                ),
             )
-            self.assertTrue(skill_opportunity_application_dir(project_root).is_dir())
+            self.assertTrue(conversation_window_path(project_root, "sess-window").is_file())
 
-        self.assertEqual(window["turn_count"], 1)
-        self.assertEqual(window["pending_user_turn"], {})
+        self.assertEqual(window["turn_count"], 2)
+        self.assertEqual(window["pending_user_turn"]["user_turn_id"], "turn-2")
         self.assertEqual(len(window["rolling_exchanges"]), 1)
         exchange = window["rolling_exchanges"][0]
         self.assertEqual(exchange["user_turn_id"], "turn-1")
-        self.assertEqual(exchange["assistant_text"], "plan complete")
-        self.assertEqual(exchange["assistant_source"], "test-stop")
+        self.assertNotIn("assistant_text", exchange)
 
     def test_conversation_window_preserves_runtime_marker(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -235,19 +234,22 @@ class RuntimeClaimTests(unittest.TestCase):
             )
 
             append_conversation_user_turn(project_root, "sess-window", user_turn)
-            window = append_conversation_assistant_response(
+            window = append_conversation_user_turn(
                 project_root,
                 "sess-window",
-                "eval complete",
-                captured_at="2026-05-08T00:00:01Z",
-                source="test-stop",
+                normalize_user_turn(
+                    "next operator turn",
+                    turn_id="turn-2",
+                    source="test",
+                    captured_at="2026-05-08T00:00:01Z",
+                ),
             )
 
         self.assertEqual(window["runtime"], {"kind": "ephemeral", "purpose": "eval", "source": "env"})
         exchange = window["rolling_exchanges"][0]
         self.assertEqual(exchange["runtime"], {"kind": "ephemeral", "purpose": "eval", "source": "env"})
 
-    def test_conversation_window_trims_to_last_ten_exchanges_and_tracks_cadence(self) -> None:
+    def test_conversation_window_trims_to_last_ten_exchanges(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             project_root = Path(tmp)
             (project_root / ".farplane" / "state").mkdir(parents=True, exist_ok=True)
@@ -258,24 +260,15 @@ class RuntimeClaimTests(unittest.TestCase):
                     source="test",
                     captured_at=f"2026-05-08T00:00:{index:02d}Z",
                 )
-                append_conversation_user_turn(project_root, "sess-window", user_turn)
-                window = append_conversation_assistant_response(
-                    project_root,
-                    "sess-window",
-                    f"response {index}",
-                    captured_at=f"2026-05-08T00:01:{index:02d}Z",
-                    source="test-stop",
-                )
+                window = append_conversation_user_turn(project_root, "sess-window", user_turn)
 
             saved = json.loads(conversation_window_path(project_root, "sess-window").read_text(encoding="utf-8"))
 
         self.assertEqual(window["turn_count"], 12)
         self.assertEqual(len(window["rolling_exchanges"]), 10)
-        self.assertEqual(window["rolling_exchanges"][0]["user_turn_id"], "turn-2")
-        self.assertEqual(saved["rolling_exchanges"][-1]["assistant_text"], "response 11")
-        trigger = should_review_skill_opportunities(window, cadence=10)
-        self.assertTrue(trigger["due"])
-        self.assertEqual(trigger["turn_count"], 12)
+        self.assertEqual(window["rolling_exchanges"][0]["user_turn_id"], "turn-1")
+        self.assertEqual(saved["rolling_exchanges"][-1]["user_turn_id"], "turn-10")
+        self.assertEqual(saved["pending_user_turn"]["user_turn_id"], "turn-11")
 
     def test_recent_conversation_windows_prefers_current_then_recent_sessions(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -288,13 +281,6 @@ class RuntimeClaimTests(unittest.TestCase):
                     captured_at=f"2026-05-08T00:00:0{index}Z",
                 )
                 append_conversation_user_turn(project_root, session_id, user_turn)
-                append_conversation_assistant_response(
-                    project_root,
-                    session_id,
-                    f"response {index}",
-                    captured_at=f"2026-05-08T00:01:0{index}Z",
-                    source="test-stop",
-                )
 
             windows = recent_conversation_windows(project_root, current_session_id="sess-current", limit=2)
 

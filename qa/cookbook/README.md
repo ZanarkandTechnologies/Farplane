@@ -22,6 +22,7 @@ Use [TEMPLATE.md](TEMPLATE.md) when adding a new page.
 
 ## Current Pages
 
+- [Core Hooks Runtime](core-hooks-runtime.md)
 - [Framework Validation](framework-validation.md)
 - [Skill Validation](skill-validation.md)
 - [Ticket Metadata](ticket-metadata.md)

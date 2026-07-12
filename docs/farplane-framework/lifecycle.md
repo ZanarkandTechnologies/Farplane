@@ -35,8 +35,8 @@ center is deliberately small:
 project(program, progress)
   -> typed charter + selected metrics + reusable capability skills
   -> one ticket board
-  -> one Work Pulse executes tickets or plans a bounded BAU wave
-  -> scheduled sources add reports and bounded ticket classes
+  -> one Work Pulse executes tickets or plans a bounded cross-area wave
+  -> scheduled sources add reports and candidate context
   -> ticket programs, progress, QA, and review preserve proof
   -> durable outcomes flow back to docs, metric objectives, and skills
 ```
@@ -49,7 +49,7 @@ own planner, worker pool, strategy file, or heartbeat.
 ## Quick Start
 
 1. Run `init-advisor` to create or migrate the project substrate.
-2. Read `farplane/harness.yaml` for identity, products, policy, capabilities,
+2. Read `farplane/harness.yaml` for identity, planning areas/instructions, policy, capabilities,
    and selected objectives/guards.
 3. Read `farplane/metrics.yaml` for metric meaning, direction, freshness, and
    guard rules; read generated observations for current values.
@@ -83,10 +83,10 @@ flowchart TD
   G --> I["QA + review evidence inside ticket"]:::proof
   I --> J["closeout + durable writeback"]:::proof
 
-  K["Feed Scout"]:::source --> D
-  L["Daily / Weekly BAU"]:::source --> D
-  M["Dogfood self-improvement"]:::source --> D
-  N["Maintenance"]:::source --> D
+  K["Feed Scout"]:::source --> O
+  L["Daily / Weekly BAU"]:::source --> O
+  M["Dogfood self-improvement"]:::source --> O
+  N["Maintenance"]:::source --> O
   K --> O["dated reports"]:::source
   L --> O
   M --> O
@@ -109,8 +109,9 @@ Work Pulse is the only execution heartbeat. On each beat it:
 2. derives due check-in eligibility from ticket Reward rows;
 3. admits executable tickets under worker and review capacity;
 4. hands workers the original ticket Goal Packet and proof contract;
-5. asks the BAU-only planner for a bounded wave only when the admitted board is
-   empty and refill is allowed;
+5. asks one adaptive planner for a bounded globally ranked wave only when no
+   unclaimed executable or due-check-in work exists; human-active tickets do
+   not consume Pulse worker capacity;
 6. writes a dated receipt.
 
 It does not run separate capability controllers or perform long-horizon
@@ -119,19 +120,35 @@ needs them.
 
 ## Scheduled Sources
 
-Scheduled automations are ticket sources or report producers, not additional
-heartbeats:
+Scheduled automations are report and candidate-context producers, not
+additional heartbeats or proactive ticket authorities:
 
-| Source | Reads | Writes | May create |
+| Source | Reads | Writes | Ticket authority |
 | --- | --- | --- | --- |
-| Feed Scout | configured feeds and prior source reports | source report | bounded source-backed opportunity tickets |
-| Daily / Weekly BAU | bounded project window and prior finalized evidence | Problems ledger | bounded already-evidenced maintenance tickets |
-| Dogfood | active and recent archived experiments plus prior report | portfolio learning report | bounded non-interfering experiment Goal Packets |
-| Maintenance | registries, docs, skills, validators | maintenance report | explicit repair tickets when its contract allows |
+| Feed Scout | configured feeds and prior source reports | source report + candidates | none; next-wave planner compares candidates |
+| Daily / Weekly BAU | bounded project window and prior finalized evidence | Problems ledger + candidates | none; next-wave planner compares candidates |
+| Dogfood | active and recent archived experiments plus prior report | portfolio learning report + experiment candidates | none; self-improvement competes globally |
+| Maintenance | registries, docs, skills, validators | maintenance report + repair candidates | none unless directly invoked by the operator |
 
-Daily and Weekly do not invent new direction. Feed Scout does not execute its
-opportunities. Dogfood does not implement or check in experiments. Every
-executable commitment returns to the shared board.
+Daily and Weekly do not invent new direction. Feed Scout and Dogfood do not
+materialize their candidates. Work Pulse is the single normal path that turns
+a winning proactive candidate into a ticket on the shared board.
+
+Ticket completion is the narrow event-driven exception, not another heartbeat:
+
+```text
+ticket.completed
+-> bounded learning report
+-> strongest grounded finding
+-> one deduped direct-fix or prove-or-reject ticket
+```
+
+The semantic reviewer remains read-only. Deterministic Core owns the local
+ticket write after schema, evidence, privacy, confidence, KPI, and dedupe gates.
+Declared KPI work enters `todo`; missing KPI remains `awaiting_review`.
+Only source-ticket and self-improvement KPI bindings qualify. A stable semantic
+key dedupes paraphrases, and a projected ticket's own completion is report-only
+to prevent recursive ticket supply.
 
 ## Goal Packets And Check-Ins
 
@@ -155,7 +172,7 @@ does not reconstruct or independently score the experiment policy.
 
 | State | Durable owner |
 | --- | --- |
-| Identity, products, constraints, authority, capabilities, selected metric refs | `farplane/harness.yaml` |
+| Identity, planning areas/instructions, constraints, authority, capabilities, selected metric refs | `farplane/harness.yaml` |
 | Metric meaning, direction, freshness, and guard rules | `farplane/metrics.yaml` |
 | Recurring workflow | reusable `skills/*` or project-local `.agents/skills/*` |
 | Executable commitment and all QA/review evidence | owning ticket and `artifacts/` |
@@ -188,7 +205,7 @@ proof.
 
 A project needs:
 
-- `farplane/harness.yaml` with identity, products, stable policy, authority,
+- `farplane/harness.yaml` with identity, planning areas/instructions, stable policy, authority,
   capability refs, and selected metric refs;
 - `farplane/metrics.yaml` with definitions, direction, freshness, and guard
   rules for every referenced metric;

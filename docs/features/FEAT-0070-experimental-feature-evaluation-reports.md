@@ -1,9 +1,9 @@
 ---
-title: Dogfood experiment review and ticket supply
+title: Dogfood experiment review and candidate supply
 status: implemented
 owner: feature-registry
 created_at: 2026-07-07
-updated_at: 2026-07-11
+updated_at: 2026-07-12
 tags:
   - farplane
   - feature
@@ -33,38 +33,38 @@ evidence_refs:
   - tickets/archive/TASK-0319/artifacts/qa/integrated-qa.md
   - tickets/archive/TASK-0320/ticket.md
   - tickets/archive/TASK-0320/artifacts/qa/integrated-qa.md
-known_limits: "Dogfood creates only a bounded non-interfering wave; execution and matured check-ins remain Pulse-owned, and initial capacity values require real scheduled-run monitoring."
+known_limits: "Dogfood emits bounded non-interfering experiment candidates; the global planner owns admission and Pulse owns execution/check-ins."
 metrics:
   - experimental_feature_decision_quality
   - experiment_ticket_quality
-last_verified: 2026-07-11
+last_verified: 2026-07-12
 experimental: true
 superseded_by: false
 track: >-
   Review the weekly Dogfood self-improvement run. Read its report, active and
   completed experiment Goal Packets, Reward results, feature/system registry
-  evidence, and any new experiment ticket. Judge whether past experiments were
+  evidence, and any proposed experiment candidate. Judge whether past experiments were
   reconciled before proposing another, the new hypothesis is bounded and
-  proofable, Reward rows and Goal Packet files are complete, ticket creation
-  obeys the cap, and Dogfood did not execute or check in the experiment. Return
+  proofable, candidate supply obeys the cap, and Dogfood did not create,
+  execute, or check in an experiment ticket. Return
   continue, adjust, cap, pause, graduate, rollback, or source_gap.
 ---
 
-# Dogfood experiment review and ticket supply
+# Dogfood experiment review and candidate supply
 
 Dogfood Review is Farplane's weekly self-improvement portfolio learner and
-bounded next-wave planner. It reviews experiment history and tracked
-feature/system behavior, writes a dated outcome ledger/report, and may create a
-capacity-limited wave of experiment Goal Packets for Work Pulse.
+candidate generator. It reviews experiment history and tracked feature/system
+behavior, writes a dated outcome ledger/report, and emits capacity-aware
+experiment candidates for the one global next-wave planner.
 
 ```text
 dogfood_review(project_root, window, active_experiments,
                recent_archived_experiments, previous_report?, registry_refs?,
-               experiment_wave_size = 2, experiment_wip_limit = 3,
+               experiment_wip_limit = 3,
                max_concurrent_live_delayed = 1)
   -> dogfood_report + outcome_ledger + active_portfolio
    + transfer_candidates + ranked_candidates
-   + experiment_goal_packets[0..experiment_wave_size] + source_gaps
+   + experiment_candidates[] + source_gaps
 ```
 
 ## At A Glance
@@ -75,7 +75,7 @@ dogfood_review(project_root, window, active_experiments,
 - Experimental: `true`
 - Category: `improvement-loop`
 - Primary user: operator and harness maintainer
-- Job: learn from experiment outcomes and supply the next bounded experiment.
+- Job: learn from experiment outcomes and supply bounded experiment candidates.
 
 ## Problem
 
@@ -97,20 +97,27 @@ surface without creating another executor.
   automation, hook/validator, metric, and context-selection experiments.
 - Writes a dated Dogfood report with settled outcomes, active/pending work,
   due-but-unscored gaps, transfer candidates, rejected patterns, capacity, and
-  next wave before ticket creation.
-- May create a bounded wave of complete experiment folders containing
-  `ticket.md`, executable `program.md`, `progress.md`, and explicit
-  immediate/delayed Reward rows.
+  candidate set. It may add one direct recovery ticket for an evidenced settled
+  failure, but never an experiment ticket.
 
 ## Operating Contract
 
-Dogfood owns experiment review and experiment-ticket creation. It does not
-implement the experiment, score a matured Reward row, dispatch a worker, or
-start another heartbeat.
+Dogfood owns experiment review and candidate generation. It may create a
+bounded direct recovery ticket for a settled attributable failure with a known
+fix and no experiment debt. It does not create or implement an experiment
+ticket, score a matured Reward row, dispatch a worker, or start another heartbeat.
+Ticket-completion learning is upstream of Dogfood: Core already projects at
+most one deduped direct-fix or prove-or-reject ticket and records its path in
+the learning report. Projection ranks confidence and known fixes
+deterministically, dedupes by a validated semantic key, accepts only a source
+or self-improvement KPI, and stops at one generated-ticket depth. Dogfood
+counts that ticket once and never recreates it.
 
 ```text
-Dogfood cron -> portfolio report -> bounded experiment Goal Packet wave
-Work Pulse   -> admit -> execute -> derive due Reward rows -> resume check-in
+ticket.completed -> learning report + projected ticket[0..1]
+Dogfood cron -> portfolio report -> other bounded recovery tickets + experiment candidates
+plan_next_wave -> compare self-improvement with all areas -> executable specs
+Work Pulse -> materialize -> execute -> derive due Reward rows -> resume check-in
 ```
 
 The new experiment must name the target surface, gap, hypothesis, baseline,
@@ -131,13 +138,14 @@ flowchart LR
   registry["tracked features / systems"]:::keep
   dogfood["Dogfood weekly automation<br/>review + rank"]:::changed
   report["dated Dogfood report"]:::added
-  packet["0..wave_size Goal Packets"]:::added
+  packet["bounded experiment candidates"]:::added
   pulse["Work Pulse<br/>execute + check in"]:::keep
   interval["Interval-owned Dogfood"]:::retired
 
   experiments --> dogfood
   registry --> dogfood
-  dogfood --> report --> packet --> pulse
+  planner["adaptive project planner"]:::added
+  dogfood --> report --> packet --> planner --> pulse
   interval -. removed .-> dogfood
 ```
 
@@ -146,18 +154,17 @@ flowchart LR
 Required proof:
 
 - existing experiment results are reviewed before ranking a new experiment;
-- report is written before any experiment ticket;
-- wave/WIP/delayed-live caps, non-interference, dedupe, Goal Packet, Reward,
+- report is written with candidates and no experiment ticket mutation;
+- wave/WIP/delayed-live caps, non-interference, dedupe, Reward,
   proof, and authority gates hold;
-- Dogfood does not execute or mature-check its new experiment;
+- Dogfood does not create, execute, or mature-check an experiment;
 - `python3 docs/features/validate_features.py` and
   `python3 bin/validators/check_doc_refs.py` pass.
 
 ## Rollout And Maintenance
 
-- Update path: refine experiment evidence, ranking, report, and Goal Packet
-  templates.
-- Rollback path: set experiment wave size to zero and retain report-only runs.
+- Update path: refine experiment evidence, ranking, report, and candidate shape.
+- Rollback path: retain report-only runs with an empty candidate set.
 - Maintenance owner: Self-Improvement And Learning.
 
 ## Limits And Non-Goals
@@ -174,3 +181,5 @@ Required proof:
   ticket-supply owner.
 - 2026-07-11: Expanded Dogfood into a history-aware portfolio learner with a
   bounded non-interfering packet wave and program-owned delayed check-ins.
+- 2026-07-12: Moved experiment admission into the one global next-wave planner
+  while preserving bounded direct recovery for settled attributable failures.

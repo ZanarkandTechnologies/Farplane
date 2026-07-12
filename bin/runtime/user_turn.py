@@ -57,7 +57,7 @@ HARD_CONSTRAINTS = {
 SESSION_ORIGINS = {"control", "internal", "non_owning"}
 EXECUTION_PHASES = {"build", "qa", "demo"}
 TICKET_PATH_ID_PATTERN = re.compile(r"(TASK-\d{4}|TKT-[0-9A-Za-z-]+)")
-SELF_IMPROVEMENT_WINDOW_SCHEMA_VERSION = 1
+MESSAGE_WINDOW_SCHEMA_VERSION = 1
 
 
 def now_iso() -> str:
@@ -110,13 +110,8 @@ def conversation_window_dir(project_root: Path) -> Path:
     return runtime_dir(project_root) / "state" / "message-windows"
 
 
-def skill_opportunity_application_dir(project_root: Path) -> Path:
-    return runtime_dir(project_root) / "state" / "learning-reviews"
-
-
-def ensure_self_improvement_state_setup(project_root: Path) -> None:
+def ensure_conversation_window_setup(project_root: Path) -> None:
     conversation_window_dir(project_root).mkdir(parents=True, exist_ok=True)
-    skill_opportunity_application_dir(project_root).mkdir(parents=True, exist_ok=True)
 
 
 def conversation_window_path(project_root: Path, session_id: str) -> Path:
@@ -147,31 +142,25 @@ def configured_positive_int(raw: str | None, default: int, *, minimum: int = 1) 
 
 
 def max_conversation_exchanges() -> int:
-    return configured_positive_int(os.environ.get("FARPLANE_SKILL_OPPORTUNITY_MAX_EXCHANGES"), 10)
+    return configured_positive_int(os.environ.get("FARPLANE_MESSAGE_WINDOW_MAX_EXCHANGES"), 10)
 
 
 def load_conversation_window(project_root: Path, session_id: str) -> dict[str, object]:
     normalized_session_id = normalize_session_id(session_id)
-    ensure_self_improvement_state_setup(project_root)
+    ensure_conversation_window_setup(project_root)
     payload = load_json_dict(conversation_window_path(project_root, normalized_session_id))
     if not payload:
         return {
-            "schema_version": SELF_IMPROVEMENT_WINDOW_SCHEMA_VERSION,
+            "schema_version": MESSAGE_WINDOW_SCHEMA_VERSION,
             "session_id": normalized_session_id,
             "turn_count": 0,
-            "last_review_turn_count": 0,
-            "last_review_at": "",
-            "last_review_run_path": "",
             "rolling_exchanges": [],
             "pending_user_turn": {},
             "updated_at": "",
         }
-    payload["schema_version"] = SELF_IMPROVEMENT_WINDOW_SCHEMA_VERSION
+    payload["schema_version"] = MESSAGE_WINDOW_SCHEMA_VERSION
     payload["session_id"] = normalized_session_id
     payload.setdefault("turn_count", 0)
-    payload.setdefault("last_review_turn_count", 0)
-    payload.setdefault("last_review_at", "")
-    payload.setdefault("last_review_run_path", "")
     payload.setdefault("rolling_exchanges", [])
     payload.setdefault("pending_user_turn", {})
     payload.setdefault("updated_at", "")
@@ -203,7 +192,7 @@ def recent_conversation_windows(
     current_session_id: str,
     limit: int = 5,
 ) -> list[dict[str, object]]:
-    ensure_self_improvement_state_setup(project_root)
+    ensure_conversation_window_setup(project_root)
     normalized_current = normalize_session_id(current_session_id)
     windows: list[dict[str, object]] = []
     directory = conversation_window_dir(project_root)
@@ -240,18 +229,11 @@ def trim_conversation_window(window: dict[str, object], *, max_exchanges: int | 
 
 def promote_pending_conversation_exchange(
     window: dict[str, object],
-    *,
-    assistant_text: str = "",
-    assistant_captured_at: str = "",
-    assistant_source: str = "",
 ) -> dict[str, object]:
     pending = window.get("pending_user_turn")
     if not isinstance(pending, Mapping) or not pending:
         return window
     exchange = dict(pending)
-    exchange["assistant_captured_at"] = assistant_captured_at
-    exchange["assistant_text"] = assistant_text
-    exchange["assistant_source"] = assistant_source
     exchanges = rolling_exchanges_from_window(window)
     exchanges.append(exchange)
     window["rolling_exchanges"] = exchanges
@@ -269,10 +251,7 @@ def append_conversation_user_turn(
         return {}
     captured_at = str(last_user_turn.get("captured_at") or now_iso())
     window = load_conversation_window(project_root, normalized_session_id)
-    window = promote_pending_conversation_exchange(
-        window,
-        assistant_source="missing_stop_before_next_user_turn",
-    )
+    window = promote_pending_conversation_exchange(window)
     turn_count = normalized_window_int(window, "turn_count") + 1
     turn_id = str(last_user_turn.get("turn_id") or f"turn-{captured_at}").strip()
     window["turn_count"] = turn_count
@@ -285,9 +264,6 @@ def append_conversation_user_turn(
         "intent_mode": str(last_user_turn.get("intent_mode") or ""),
         "control_surface": str(last_user_turn.get("control_surface") or ""),
         "source": str(last_user_turn.get("source") or ""),
-        "assistant_captured_at": "",
-        "assistant_text": "",
-        "assistant_source": "",
     }
     runtime = normalize_runtime_metadata(
         last_user_turn.get("runtime") if isinstance(last_user_turn.get("runtime"), Mapping) else None
@@ -297,78 +273,6 @@ def append_conversation_user_turn(
         window["runtime"] = runtime
     window["updated_at"] = captured_at
     trim_conversation_window(window)
-    write_json(conversation_window_path(project_root, normalized_session_id), window)
-    return window
-
-
-def append_conversation_assistant_response(
-    project_root: Path,
-    session_id: str,
-    response: str,
-    *,
-    captured_at: str | None = None,
-    source: str = "assistant_response_capture",
-) -> dict[str, object]:
-    normalized_session_id = normalize_session_id(session_id)
-    if not normalized_session_id:
-        return {}
-    captured_at_value = captured_at or now_iso()
-    window = load_conversation_window(project_root, normalized_session_id)
-    pending = window.get("pending_user_turn")
-    if isinstance(pending, Mapping) and pending:
-        window = promote_pending_conversation_exchange(
-            window,
-            assistant_text=response,
-            assistant_captured_at=captured_at_value,
-            assistant_source=source,
-        )
-    window["updated_at"] = captured_at_value
-    trim_conversation_window(window)
-    write_json(conversation_window_path(project_root, normalized_session_id), window)
-    return window
-
-
-def should_review_skill_opportunities(
-    window: Mapping[str, object],
-    *,
-    cadence: int = 10,
-) -> dict[str, object]:
-    interval = cadence if cadence > 0 else 10
-    turn_count = normalized_window_int(window, "turn_count")
-    last_review_turn_count = normalized_window_int(window, "last_review_turn_count")
-    delta = turn_count - last_review_turn_count
-    due = turn_count > 0 and delta >= interval
-    reason = (
-        f"{delta} captured user turns since last review"
-        if due
-        else f"{max(delta, 0)} captured user turns since last review; waiting for {interval}"
-    )
-    return {
-        "due": due,
-        "turn_count": turn_count,
-        "last_review_turn_count": last_review_turn_count,
-        "cadence": interval,
-        "reason": reason,
-    }
-
-
-def mark_skill_opportunity_review_launched(
-    project_root: Path,
-    session_id: str,
-    *,
-    review_run_path: str,
-    reviewed_at: str | None = None,
-    current_window: Mapping[str, object] | None = None,
-) -> dict[str, object]:
-    normalized_session_id = normalize_session_id(session_id)
-    if not normalized_session_id:
-        return {}
-    reviewed_at_value = reviewed_at or now_iso()
-    window = dict(current_window) if isinstance(current_window, Mapping) else load_conversation_window(project_root, normalized_session_id)
-    window["last_review_turn_count"] = normalized_window_int(window, "turn_count")
-    window["last_review_at"] = reviewed_at_value
-    window["last_review_run_path"] = review_run_path
-    window["updated_at"] = reviewed_at_value
     write_json(conversation_window_path(project_root, normalized_session_id), window)
     return window
 

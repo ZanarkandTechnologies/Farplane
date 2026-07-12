@@ -56,7 +56,7 @@ verdict records.
 
 ```text
 event_id = sha256(project_id, event_name, entity_ref, previous_hash, content_hash)
-run_id   = sha256(event_id, route_id, program_digest, input_digest)
+run_id   = sha256(event_id, route_id, program_digest)
 ```
 
 Session and task IDs are provenance only. The hook process does not run mining
@@ -68,9 +68,28 @@ write `.farplane/hooks/drain-launches/*.json` receipts and leave outbox rows
 retryable; operators or UI can still call `farplane mining drain`. There is no
 daemon, shell-tail workflow engine, or extra heartbeat.
 
-The default completion report contains `source`, `program`, `coverage`,
-`observations`, `material_findings`, `source_gaps`, and `escalation`. It does
-not emit a false-precision scalar quality score.
+Ticket completion fans out to two immutable Core programs. The lean report
+contains `source`, `program`, `coverage`, `observations`, `material_findings`,
+`source_gaps`, and `escalation` without a false-precision quality score. The
+completion-learning program freezes the ticket packet with only the bounded
+operator-turn window named by immutable event thread/session provenance, then
+runs a structured read-only Codex review in the detached drain process.
+Assistant responses are intentionally excluded: ticket/program/progress are
+the authoritative completion record. The executor ignores user config and
+rules; Core validates the output schema, evidence refs, sensitive patterns, and
+raw-source overlap before accepting a report. It emits compact
+problem/solution/owner/evidence findings, then deterministically projects at
+most the strongest high/medium-confidence finding into one deduped local
+`todo` ticket with a source-ticket or self-improvement KPI Reward. When no
+declared project KPI exists, Core still writes the ticket as `awaiting_review`
+instead of admitting metricless work. Known corrections become direct-fix
+tickets; uncertain improvements become prove-or-reject tickets. A validated
+semantic `dedupe_key` collapses paraphrased equivalents across active/archive
+tickets, and completion-learning-generated tickets are report-only on their
+own completion so projection cannot recurse. The semantic executor still never
+edits docs, skills, tickets, or external systems. Missing association or executor failures become visible
+replayable source gaps; there is no turn-count trigger or daily scan. Cloud
+telemetry receives status/count metadata only, never finding prose or evidence.
 
 ## Runtime State Boundaries
 

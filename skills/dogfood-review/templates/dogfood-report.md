@@ -100,31 +100,33 @@ replay, or eval may use remaining total capacity.
 Verdicts: `selected`, `rejected`, `deferred`, `duplicate`, `interferes`,
 `source_gap`.
 
-## Experiment Goal Packet Wave
+## Experiment Candidate Wave
 
-| Packet | Feedback | Surface | Admission | Reward signal | Check-in / wake | Execution route | Selection evidence |
+| Candidate | Area | Feedback | Surface | Expected Reward | Horizon / check-in shape | Cost / risk | Selection evidence |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 
-- `goal_packets_created:` 0..<available_packet_slots>
-- `packet_paths:`
+- `candidates_proposed:` 0..<available_packet_slots>
+- `recovery_ticket_limit:`
+- `recovery_tickets_created_or_updated:`
+- `experiment_tickets_created:` 0
 - `no_op_reason:` none | <reason>
 
-### Packet Requirements
+### Candidate Requirements
 
-Each packet is one canonical folder containing `ticket.md`, `program.md`, and
-`progress.md`; it is not a parent/child ticket tree.
+Each candidate is a report row, not a ticket or Goal Packet.
 
-- Every ticket declares an attributable surface, hypothesis, baseline, Reward
+- Every candidate declares an area, attributable surface, hypothesis, baseline, Reward
   expectation/guard, metric provider, proof route, budget, stop conditions, and
   promotion/rollback policy.
-- Immediate packets use an immediately available signal and have no future
+- Immediate candidates use an immediately available signal and have no future
   `check_in_at`, event wake, or delayed Check-In Program debt.
-- Delayed packets set `check_in_at` or an event wake and fill `program.md`
-  Check-In Program `inputs`, ordered `procedure`, matured-row-only `writeback`,
-  `decisions`, `idempotency`, and `source_gap`, backed by the packet's Metric
-  Provider, Heartbeat Policy, Stop Conditions, and Rollout Policy.
-- Packets default to `status: awaiting_review` unless explicit local write policy grants
-  Pulse admission with no remaining human/external gate.
+- Delayed candidates name the future signal, provider, and check-in procedure
+  outline needed if the adaptive planner admits and materializes the experiment.
+- Work Pulse's adaptive planner globally ranks and admits ordinary experiment
+  candidates. Completion-learning tickets already exist and are counted once
+  from their report receipt; Dogfood must not recreate them. Dogfood may create
+  only a bounded direct recovery ticket for other settled evidence and never
+  creates an experiment ticket.
 
 ## Source Gaps
 

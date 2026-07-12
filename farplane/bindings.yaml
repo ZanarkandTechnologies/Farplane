@@ -209,6 +209,10 @@ feed_scout:
         - iamlukethedev
         - Claw3D
 metric_bindings:
+  activated_external_projects:
+    refresh: Run `farplane metrics primitives --project-root . --date <YYYY-MM-DD> --json`; read `primitives.project_adoption.activated_external_projects`. Count only non-standard projects whose manifest is current and whose Work Pulse has a decision after the manifest update; preserve excluded drift and activation gaps.
+  distribution_reach_per_artifact:
+    refresh: Read same-window evidence_distribution_reach and posts_published observations; divide reach by published artifact count when count is positive, otherwise store source_gap with the missing denominator. Preserve component readings and window in the payload.
   accepted_evidence_cycles:
     refresh: Call $interval-update.count_ticket_kpi_rewards(ticket_dir="tickets", date="<YYYY-MM-DD>", kpi_key="accepted_evidence_cycles"); count only ticket-scoped review evidence with verdict pass at TAS-A, and store gaps when acceptance evidence is missing.
   accepted_trust_ablations:
@@ -268,6 +272,9 @@ metric_bindings:
   posts_published:
     refresh: Count rows in `.farplane/content/ledger.jsonl` with status=posted and published_at on <YYYY-MM-DD>; store source_gap if the ledger is missing.
 event_routes:
+  - route_id: ticket-completion-learning-v1
+    event_name: farplane.ticket.completed
+    program_ref: core:ticket-completion-learning@1.1.0
   - route_id: ticket-completion-lean-v1
     event_name: farplane.ticket.completed
     program_ref: core:ticket-completion-lean@1.0.0

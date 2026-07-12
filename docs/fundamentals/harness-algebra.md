@@ -11,7 +11,6 @@ refs:
   - docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md
   - docs/skills/README.md
   - templates/global/AGENTS.md
-  - agents/skill-opportunity-applier.toml
   - skills/optimize-harness/SKILL.md
   - skills/goal-advisor/SKILL.md
 ---
@@ -699,17 +698,28 @@ context_starvation =
 + missing_proof_contract
 ```
 
-Hook-backed learning:
+Ticket-completion learning:
 
 ```text
-message_window(session)
-  -> skill_opportunity_applier
-  -> docs/TROUBLES.md? + docs/LESSONS.md?
+ticket_completed(ticket, thread_id)
+  -> freeze(ticket + program + progress + operator_turn_window(thread_id))
+  -> ticket_completion_learning
+  -> learning_report + projected_ticket?[0..1]
 ```
 
-The learning reviewer writes only strong, compact local rows. It does not run
-`optimize-harness`. Later drains decide whether those rows should become skill,
-prompt, ticket, eval, or doctrine changes.
+The completion reviewer writes only a compact local report. The final assistant
+reply is not an input; ticket/program/progress own the completed solution and
+the bounded window contributes operator corrections. Core freezes the first
+event snapshot and validates schema/evidence/privacy. The read-only semantic
+executor never mutates durable state; Core may project the strongest grounded
+finding into one deduped ticket. A source-ticket or self-improvement KPI makes
+it executable as `todo`; a missing KPI leaves it `awaiting_review` rather than
+admitting metricless work. A known correction gets a direct-fix program; an
+uncertain improvement gets a prove-or-reject program. Weekly
+Dogfood consumes the report/ticket receipt without recreating the ticket. There
+is no turn-count trigger or daily all-thread scan. The model supplies a locally
+validated semantic dedupe key, Core independently ranks accepted findings, and
+completion-learning-generated tickets cannot project another ticket.
 
 Drain flow:
 
@@ -1012,7 +1022,7 @@ drift_check(ticket, program, progress_tail, current_claim)
 Long-term project control:
 
 ```text
-harness.yaml = human meaning + descriptive products + selected metric refs + hard constraints
+harness.yaml = human meaning + planning areas + selected metric refs + hard constraints
 metrics.yaml = metric meaning + direction + freshness + optional guard rules
 ticket.md = executable leaf contract + Done + QA Strategy
 program.md = loop configuration + metric + stop policy

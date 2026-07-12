@@ -4,15 +4,11 @@ from __future__ import annotations
 import argparse
 import json
 import os
-import re
 import sys
 from collections import Counter
 from pathlib import Path
 from typing import Mapping
 from urllib import error, request
-
-
-MAX_MESSAGE_EXCERPT = 180
 
 
 def _safe_str(value: object) -> str:
@@ -38,14 +34,6 @@ def _load_json_dict(path: Path) -> dict[str, object]:
     except (FileNotFoundError, json.JSONDecodeError):
         return {}
     return payload if isinstance(payload, dict) else {}
-
-
-def _redact_text(raw: object, *, limit: int = MAX_MESSAGE_EXCERPT) -> str:
-    text = " ".join(_safe_str(raw).split())
-    text = re.sub(r"/Users/[^ ]+", "[local path]", text)
-    if len(text) <= limit:
-        return text
-    return text[: max(0, limit - 1)].rstrip() + "…"
 
 
 def _event_files(project_root: Path) -> list[Path]:
@@ -113,63 +101,6 @@ def _windows(project_root: Path) -> list[dict[str, object]]:
     return [window for window in windows if window]
 
 
-def _proof_hop_summary(report: Mapping[str, object]) -> dict[str, object]:
-    raw_hops = report.get("proof_hops")
-    if not isinstance(raw_hops, list):
-        return {"present": 0, "total": 0, "missing": []}
-    missing: list[str] = []
-    present = 0
-    for index, hop in enumerate(raw_hops, start=1):
-        if not isinstance(hop, Mapping):
-            missing.append(f"hop_{index}")
-            continue
-        status = _safe_str(hop.get("status")).lower()
-        label = _safe_str(hop.get("label")) or _safe_str(hop.get("name")) or f"hop_{index}"
-        if status in {"pass", "present", "done", "complete", "ok"}:
-            present += 1
-        else:
-            missing.append(label)
-    return {"present": present, "total": len(raw_hops), "missing": missing}
-
-
-def _messages_from_input(input_payload: Mapping[str, object], *, limit: int = 4) -> list[dict[str, object]]:
-    window = input_payload.get("window")
-    if not isinstance(window, Mapping):
-        return []
-    raw_exchanges = window.get("rolling_exchanges")
-    if not isinstance(raw_exchanges, list):
-        return []
-    messages: list[dict[str, object]] = []
-    for exchange in raw_exchanges[-limit:]:
-        if not isinstance(exchange, Mapping):
-            continue
-        user_turn = exchange.get("user_turn")
-        user_map = user_turn if isinstance(user_turn, Mapping) else exchange
-        user_text = _safe_str(user_map.get("summary")) or _safe_str(user_map.get("raw_text"))
-        assistant_text = _safe_str(exchange.get("assistant_text"))
-        if user_text:
-            messages.append(
-                {
-                    "id": _safe_str(user_map.get("turn_id")) or _safe_str(exchange.get("user_turn_id")),
-                    "role": "user",
-                    "occurred_at": _safe_str(user_map.get("captured_at")),
-                    "summary": _redact_text(user_text, limit=110),
-                    "redacted_excerpt": _redact_text(user_map.get("raw_text") or user_text),
-                }
-            )
-        if assistant_text:
-            messages.append(
-                {
-                    "id": _safe_str(exchange.get("assistant_turn_id")),
-                    "role": "assistant",
-                    "occurred_at": _safe_str(exchange.get("assistant_captured_at")),
-                    "summary": _redact_text(assistant_text, limit=110),
-                    "redacted_excerpt": _redact_text(assistant_text),
-                }
-            )
-    return messages[-limit:]
-
-
 def _first_mapping(raw: object) -> Mapping[str, object]:
     if isinstance(raw, list):
         for item in raw:
@@ -180,68 +111,67 @@ def _first_mapping(raw: object) -> Mapping[str, object]:
 
 def _learning_status(report: Mapping[str, object], run_dir: Path) -> str:
     raw_status = _safe_str(report.get("status"))
-    if raw_status == "docs_updated":
-        return "docs_updated"
-    if raw_status == "no_change":
+    if raw_status == "no_signal":
         return "no_signal"
     if raw_status == "dry_run":
         return "dry_run"
     if raw_status in {"failed", "blocked", "error"}:
         return "failed"
-    if not report and ((run_dir / "stderr.log").exists() or (run_dir / "stdout.log").exists()):
+    if not report and ((run_dir / "executor.stderr.log").exists() or (run_dir / "executor.stdout.log").exists()):
         return "running_or_failed"
     return raw_status or "unknown"
 
 
 def _run_summary(run_dir: Path) -> dict[str, object]:
+    run = _load_json_dict(run_dir / "run.json")
     input_payload = _load_json_dict(run_dir / "input.json")
     report = _load_json_dict(run_dir / "report.json")
-    trigger = input_payload.get("trigger") if isinstance(input_payload.get("trigger"), Mapping) else {}
-    decision = _first_mapping(report.get("decisions"))
-    docs_delta = report.get("docs_delta") if isinstance(report.get("docs_delta"), Mapping) else {}
-    first_trouble = _first_mapping(docs_delta.get("troubles_appended")) if isinstance(docs_delta, Mapping) else {}
-    first_lesson = _first_mapping(docs_delta.get("lessons_appended")) if isinstance(docs_delta, Mapping) else {}
-    proof = _proof_hop_summary(report)
-    title = (
-        _safe_str(first_trouble.get("line"))
-        or _safe_str(first_lesson.get("line"))
-        or _safe_str(decision.get("summary"))
-        or _safe_str(report.get("summary"))
-        or "No learning docs change recorded"
-    )
-    owner = _safe_str(decision.get("target")) or _safe_str(report.get("owner"))
+    finding = _first_mapping(report.get("material_findings"))
+    ticket_output = report.get("ticket_output") if isinstance(report.get("ticket_output"), Mapping) else {}
+    context = input_payload.get("semantic_context") if isinstance(input_payload.get("semantic_context"), Mapping) else {}
+    event = input_payload.get("event") if isinstance(input_payload.get("event"), Mapping) else {}
+    entity = event.get("entity_ref") if isinstance(event.get("entity_ref"), Mapping) else {}
+    title = _safe_str(finding.get("problem")) or _safe_str(report.get("summary")) or "No reusable completion learning found"
+    owner = _safe_str(finding.get("owner_surface"))
     status = _learning_status(report, run_dir)
     return {
         "run_path": str(run_dir),
-        "session_id": _safe_str(input_payload.get("session_id")),
+        "run_id": _safe_str(run.get("run_id")),
+        "ticket_id": _safe_str(entity.get("id")),
+        "session_id": _safe_str(context.get("thread_id")),
         "status": status,
-        "cadence": _safe_int(trigger.get("cadence")) if isinstance(trigger, Mapping) else 0,
-        "turn_count": _safe_int(trigger.get("turn_count")) if isinstance(trigger, Mapping) else 0,
-        "last_review_turn_count": _safe_int(trigger.get("last_review_turn_count")) if isinstance(trigger, Mapping) else 0,
         "candidate_title": title,
-        "plain_summary": _safe_str(report.get("speak")) or title,
+        "plain_summary": _safe_str(report.get("summary")) or title,
         "recommended_owner": owner or "unassigned",
-        "confidence": _safe_str(decision.get("confidence")),
-        "message_count": len(_messages_from_input(input_payload)),
-        "messages": _messages_from_input(input_payload),
-        "proof_hops_present": proof["present"],
-        "proof_hops_total": proof["total"],
-        "proof_hops_missing": proof["missing"],
+        "confidence": _safe_str(finding.get("confidence")),
+        "finding_count": len(report.get("material_findings")) if isinstance(report.get("material_findings"), list) else 0,
+        "recovery_eligible": bool(finding.get("recovery_eligible")),
+        "ticket_decision": _safe_str(ticket_output.get("decision")),
+        "projected_ticket_id": _safe_str(ticket_output.get("ticket_id")),
+        "projected_ticket_mode": _safe_str(ticket_output.get("mode")),
+        "projected_ticket_status": _safe_str(ticket_output.get("status")),
+        "evidence_refs": finding.get("evidence_refs") if isinstance(finding.get("evidence_refs"), list) else [],
         "artifacts": {
             "input": str(run_dir / "input.json") if (run_dir / "input.json").exists() else "",
             "report": str(run_dir / "report.json") if (run_dir / "report.json").exists() else "",
-            "stdout": str(run_dir / "stdout.log") if (run_dir / "stdout.log").exists() else "",
-            "stderr": str(run_dir / "stderr.log") if (run_dir / "stderr.log").exists() else "",
+            "stdout": str(run_dir / "executor.stdout.log") if (run_dir / "executor.stdout.log").exists() else "",
+            "stderr": str(run_dir / "executor.stderr.log") if (run_dir / "executor.stderr.log").exists() else "",
         },
-        "reason": _safe_str(report.get("reason")) or _safe_str(trigger.get("reason")) if isinstance(trigger, Mapping) else "",
+        "reason": ",".join(str(item) for item in ((report.get("escalation") or {}).get("reason_codes") or [])) if isinstance(report.get("escalation"), Mapping) else "",
     }
 
 
 def load_learning_runs(project_root: Path) -> list[dict[str, object]]:
-    applications_dir = self_improve_root(project_root) / "learning-reviews"
-    if not applications_dir.exists():
+    runs_dir = project_root / ".farplane" / "mine" / "runs"
+    if not runs_dir.exists():
         return []
-    run_dirs = [path for path in applications_dir.iterdir() if path.is_dir()]
+    run_dirs = []
+    for path in runs_dir.iterdir():
+        if not path.is_dir():
+            continue
+        run = _load_json_dict(path / "run.json")
+        if _safe_str(run.get("program_ref")).startswith("core:ticket-completion-learning@"):
+            run_dirs.append(path)
     return [_run_summary(path) for path in sorted(run_dirs, key=lambda item: item.name, reverse=True)]
 
 
@@ -251,8 +181,6 @@ def summarize_learning(project_root: Path) -> dict[str, object]:
     statuses = Counter(_safe_str(run.get("status")) for run in runs if _safe_str(run.get("status")))
     return {
         "window_count": len(windows),
-        "turn_count": sum(_safe_int(window.get("turn_count")) for window in windows),
-        "reviewed_turn_count": sum(_safe_int(window.get("last_review_turn_count")) for window in windows),
         "run_count": len(runs),
         "by_status": dict(sorted(statuses.items())),
         "latest_runs": runs[:10],
@@ -301,21 +229,16 @@ def _cloud_learning_run(run: object) -> dict[str, object]:
     if isinstance(artifact_map, Mapping):
         artifact_labels = [str(key) for key, value in artifact_map.items() if _safe_str(value)]
     allowed = {
-        "session_id",
         "status",
-        "cadence",
-        "turn_count",
-        "last_review_turn_count",
-        "candidate_title",
-        "plain_summary",
+        "ticket_id",
         "recommended_owner",
         "confidence",
-        "message_count",
-        "messages",
-        "proof_hops_present",
-        "proof_hops_total",
-        "proof_hops_missing",
-        "reason",
+        "finding_count",
+        "recovery_eligible",
+        "ticket_decision",
+        "projected_ticket_id",
+        "projected_ticket_mode",
+        "projected_ticket_status",
     }
     payload = {key: value for key, value in run.items() if key in allowed}
     payload["run_path"] = Path(_safe_str(run.get("run_path"))).name or "learning-run"

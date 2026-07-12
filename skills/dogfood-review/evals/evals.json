@@ -4,14 +4,14 @@
     {
       "id": "weekly_portfolio_uses_cutoff_and_archived_history",
       "prompt": "It is Monday morning. One experiment was archived before Sunday evening, another settled just after Sunday evening, and last week's report contains an untested rollout idea. Produce the self-improvement review and decide what history informs this wave.",
-      "expected_output": "Binds an explicit portfolio cutoff and treats it as a snapshot rather than an experiment deadline; Reads the active packet, recent archived packet, previous report cursor, Reward rows, program, progress, and cited evidence before generating candidates; Includes the result archived before cutoff in the current outcome ledger and defers the later settlement to the next report; Treats the prior report as carryover/dedupe context while canonical ticket evidence wins; Writes the dated report before selecting any new packet and performs no check-in",
+      "expected_output": "Binds an explicit portfolio cutoff and treats it as a snapshot rather than an experiment deadline; Reads the active packet, recent archived packet, previous report cursor, Reward rows, program, progress, and cited evidence before generating candidates; Includes the result archived before cutoff in the current outcome ledger and defers the later settlement to the next report; Treats the prior report as carryover/dedupe context while canonical ticket evidence wins; Writes the dated report before selecting candidates and performs no ticket mutation or check-in",
       "files": [],
       "assertions": [
         "Binds an explicit portfolio cutoff and treats it as a snapshot rather than an experiment deadline",
         "Reads the active packet, recent archived packet, previous report cursor, Reward rows, program, progress, and cited evidence before generating candidates",
         "Includes the result archived before cutoff in the current outcome ledger and defers the later settlement to the next report",
         "Treats the prior report as carryover/dedupe context while canonical ticket evidence wins",
-        "Writes the dated report before selecting any new packet and performs no check-in"
+        "Writes the dated report before selecting candidates and performs no ticket mutation or check-in"
       ],
       "metadata": {
         "farplane": {
@@ -52,14 +52,14 @@
     {
       "id": "monitoring_delayed_allows_unrelated_immediate_toys",
       "prompt": "The portfolio has one legitimate long-running market pilot in monitoring state. Total WIP is 1. Two cheap toy eval candidates touch different skills and return signals immediately. Review capacity and select the next wave.",
-      "expected_output": "Counts the monitoring pilot toward total WIP and the delayed-live cap; Computes two available total slots from WIP limit 3 and wave size 2; Rejects another live delayed pilot while the delayed-live cap is occupied; May select both non-interfering immediate toy evals because they touch unoccupied surfaces; Creates at most two complete Goal Packets and executes none",
+      "expected_output": "Counts the monitoring pilot toward total WIP and the delayed-live cap; Computes two available total slots from WIP limit 3 and candidate limit 2; Rejects another live delayed pilot while the delayed-live cap is occupied; May select both non-interfering immediate toy eval candidates because they touch unoccupied surfaces; Writes at most two candidates in the report and creates no experiment tickets",
       "files": [],
       "assertions": [
         "Counts the monitoring pilot toward total WIP and the delayed-live cap",
         "Computes two available total slots from WIP limit 3 and wave size 2",
         "Rejects another live delayed pilot while the delayed-live cap is occupied",
-        "May select both non-interfering immediate toy evals because they touch unoccupied surfaces",
-        "Creates at most two complete Goal Packets and executes none"
+        "May select both non-interfering immediate toy eval candidates because they touch unoccupied surfaces",
+        "Writes at most two candidates in the report and creates no experiment tickets"
       ],
       "metadata": {
         "farplane": {
@@ -76,13 +76,13 @@
     {
       "id": "accepted_toy_becomes_bounded_transfer_candidate",
       "prompt": "A completed local replay shows that one planner instruction improves a scored behavior on its source skill. The previous report proposed copying it broadly. What should this week's portfolio review do?",
-      "expected_output": "Records the accepted source experiment and attribution evidence in the outcome ledger; Creates a transfer-candidate row rather than treating the result as automatic doctrine-wide rollout; Checks guards, target-surface differences, duplicates, and occupied surfaces before selection; When justified, proposes a bounded transfer or real-pilot Goal Packet with its own proof contract; Carries rejected or deferred rollout reasoning into the report for later dedupe",
+      "expected_output": "Records the accepted source experiment and attribution evidence in the outcome ledger; Creates a transfer-candidate row rather than treating the result as automatic doctrine-wide rollout; Checks guards, target-surface differences, duplicates, and occupied surfaces before selection; When justified, proposes a bounded transfer or real-pilot candidate with its own proof contract; Carries rejected or deferred rollout reasoning into the report and creates no experiment ticket",
       "files": [],
       "assertions": [
         "Records the accepted source experiment and attribution evidence in the outcome ledger",
         "Creates a transfer-candidate row rather than treating the result as automatic doctrine-wide rollout",
         "Checks guards, target-surface differences, duplicates, and occupied surfaces before selection",
-        "When justified, proposes a bounded transfer or real-pilot Goal Packet with its own proof contract",
+        "When justified, proposes a bounded transfer or real-pilot candidate with its own proof contract",
         "Carries rejected or deferred rollout reasoning into the report for later dedupe"
       ],
       "metadata": {
@@ -98,20 +98,19 @@
       }
     },
     {
-      "id": "immediate_packet_has_no_future_checkin_debt",
-      "prompt": "A ranked candidate can be falsified by a deterministic replay whose metric is available as soon as the run finishes. Capacity and authority permit ticket creation. What packet should be written?",
-      "expected_output": "Creates one canonical folder with ticket.md, program.md, and progress.md after the report exists; Names the attributable surface, hypothesis, baseline, Reward expectation/guard, immediate signal, proof, budget, and rollout/rollback policy; Uses native Goal execution and does not invent a future check_in_at, event wake, or delayed Check-In Program debt; Defaults admission to review-required unless the write policy explicitly grants safe local automatic admission; Stops after initialization and does not invoke Goal, Pulse, a worker, or implementation",
+      "id": "immediate_candidate_has_no_future_checkin_debt",
+      "prompt": "A ranked candidate can be falsified by a deterministic replay whose metric is available as soon as the run finishes. What should Dogfood write?",
+      "expected_output": "Writes one report candidate naming area, attributable surface, hypothesis, baseline, Reward expectation and guard, immediate signal, proof, horizon, cost and risk, budget, and rollout or rollback policy; Does not invent a future check_in_at or delayed Check-In Program debt; Creates no experiment ticket or Goal Packet; Leaves experiment admission and materialization to Work Pulse's adaptive planner",
       "files": [],
       "assertions": [
-        "Creates one canonical folder with ticket.md, program.md, and progress.md after the report exists",
-        "Names the attributable surface, hypothesis, baseline, Reward expectation/guard, immediate signal, proof, budget, and rollout/rollback policy",
-        "Uses native Goal execution and does not invent a future check_in_at, event wake, or delayed Check-In Program debt",
-        "Defaults admission to review-required unless the write policy explicitly grants safe local automatic admission",
-        "Stops after initialization and does not invoke Goal, Pulse, a worker, or implementation"
+        "Writes one report candidate naming area, attributable surface, hypothesis, baseline, Reward expectation and guard, immediate signal, proof, horizon, cost and risk, budget, and rollout or rollback policy",
+        "Does not invent a future check_in_at or delayed Check-In Program debt",
+        "Creates no experiment ticket or Goal Packet",
+        "Leaves admission and materialization to Work Pulse's adaptive planner"
       ],
       "metadata": {
         "farplane": {
-          "title": "Immediate proof packet ends without delayed debt",
+          "title": "Immediate proof candidate carries no delayed debt",
           "tags": [
             "dogfood-review",
             "goal-packet",
@@ -122,26 +121,62 @@
       }
     },
     {
-      "id": "delayed_packet_has_executable_checkin_program",
-      "prompt": "A selected AGENTS policy pilot needs seven days of behavior evidence before a decision. The weekly planner is authorized to create its packet. Describe the delayed packet and handoff.",
-      "expected_output": "Creates a complete Goal Packet only after report, capacity, surface, dedupe, and delayed-live gates pass; Sets the Reward check_in_at or event wake plus Metric Provider signal and minimum; Fills program.md Check-In Program inputs and ordered procedure so a resumed worker can inspect evidence and choose accept, kill, or monitor; Defines idempotent writeback by stable Reward ID and evaluation key, appends progress, preserves future/terminal rows, and handles source gaps and next wake; Leaves execution and check-in dispatch to Work Pulse and does not score or promote the experiment",
+      "id": "delayed_candidate_has_checkin_shape",
+      "prompt": "A selected AGENTS policy pilot needs seven days of behavior evidence before a decision. Describe Dogfood's delayed candidate handoff.",
+      "expected_output": "Writes a delayed candidate only after report, capacity, surface, dedupe, and delayed-live gates pass; Names the future Reward signal, provider, minimum, horizon, and a check-in procedure outline covering inputs, decision options, idempotency, source gaps, and next wake; Creates no experiment ticket or Goal Packet; Leaves admission and complete Check-In Program materialization to Work Pulse's adaptive planner and leaves execution and check-in dispatch to Work Pulse",
       "files": [],
       "assertions": [
-        "Creates a complete Goal Packet only after report, capacity, surface, dedupe, and delayed-live gates pass",
-        "Sets the Reward check_in_at or event wake plus Metric Provider signal and minimum",
-        "Fills program.md Check-In Program inputs and ordered procedure so a resumed worker can inspect evidence and choose accept, kill, or monitor",
-        "Defines idempotent writeback that updates only handed-off matured Reward rows, appends progress, preserves future/completed rows, and handles source gaps and next wake",
-        "Leaves execution and check-in dispatch to Work Pulse and does not score or promote the experiment"
+        "Writes a delayed candidate only after report, capacity, surface, dedupe, and delayed-live gates pass",
+        "Names the future Reward signal, provider, minimum, horizon, and a check-in procedure outline",
+        "Creates no experiment ticket or Goal Packet",
+        "Leaves admission and complete Check-In Program materialization to Work Pulse's adaptive planner",
+        "Leaves execution and check-in dispatch to Work Pulse"
       ],
       "metadata": {
         "farplane": {
-          "title": "Delayed packet owns its future check-in instructions",
+          "title": "Delayed candidate carries its future check-in shape",
           "tags": [
             "dogfood-review",
             "goal-packet",
             "delayed-reward",
             "checkin-program"
           ]
+        }
+      }
+    },
+    {
+      "id": "settled_failure_can_create_bounded_recovery_ticket",
+      "prompt": "A completed planner experiment has terminal kill evidence proving one validator accepts an invalid spec. The exact validator fix is known, uses the rejected_ai_ticket_count guard, needs no further experiment, has no active duplicate, and recovery_ticket_limit is one. What may Dogfood do?",
+      "expected_output": "Writes the Dogfood report first and records the settled attributable failure; Distinguishes the known direct repair from uncertain experiment candidates; Creates at most one deduped recovery ticket with the existing guard, causal fix, proof route, stop condition, and no experiment debt; Links the recovery ticket from the report; Does not create or run another experiment, check in a Reward, or execute the recovery",
+      "files": [],
+      "assertions": [
+        "Writes the Dogfood report first and records the settled attributable failure",
+        "Distinguishes the known direct repair from uncertain experiment candidates",
+        "Creates at most one deduped recovery ticket with the existing guard, causal fix, proof route, stop condition, and no experiment debt",
+        "Does not create or run another experiment, check in a Reward, or execute the recovery"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Settled failure may produce direct recovery",
+          "tags": ["dogfood-review", "recovery", "no-experiment"]
+        }
+      }
+    },
+    {
+      "id": "completion_learning_report_routes_without_direct_mutation",
+      "prompt": "Use $dogfood-review. A new core:ticket-completion-learning@1.1.0 report contains one known validator correction and a ticket_output receipt showing Core created its direct-fix ticket. What should the weekly review do?",
+      "expected_output": "Reads the completion-learning report and ticket_output receipt as portfolio evidence; Counts the projected direct-fix ticket once against capacity and dedupe; Does not create another recovery or experiment ticket for the same report or semantic dedupe key; Does not edit skills/docs, check in a Reward, or execute the projected ticket",
+      "files": [],
+      "assertions": [
+        "Reads the completion-learning report and ticket_output receipt as portfolio evidence",
+        "Counts the projected direct-fix ticket once against capacity and dedupe",
+        "Does not create another recovery or experiment ticket for the same report or semantic dedupe key",
+        "Does not edit skills/docs, check in a Reward, or execute the projected ticket"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Completion learning routes through recovery or experiment candidates",
+          "tags": ["dogfood-review", "completion-learning", "recovery", "candidate"]
         }
       }
     }

@@ -118,7 +118,8 @@ Runtime routing is session-first for parallel Codex usage:
 - explicit run-state selector when a managed lane exports one
 - hook `session_id` for telemetry and association-log correlation
 - `.farplane/state/ticket-thread-associations.jsonl` for ticket/thread joins
-- conversation windows for lightweight prompt/response cadence
+- bounded operator-turn windows as ticket-completion learning evidence, with
+  one deduped Core-projected direct-fix or prove-or-reject ticket when grounded
 
 `UserPromptSubmit` no longer writes `.farplane/state/current-run.json` or
 `.farplane/state/sessions/<session_id>.json`. Those Ralph-era singleton and

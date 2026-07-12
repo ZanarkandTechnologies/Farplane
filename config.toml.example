@@ -35,7 +35,7 @@ FARPLANE_SKILL_HEAT_WINDOW_DAYS = "30"
 FARPLANE_SKILL_HEAT_RECENT_DAYS = "7"
 FARPLANE_SKILL_HEAT_TOP_N = "25"
 # Comma-separated event types counted as skill heat.
-FARPLANE_SKILL_HEAT_EVENT_TYPES = "control_surface_detected,hook_result,learning_review_launched,skill_requested"
+FARPLANE_SKILL_HEAT_EVENT_TYPES = "control_surface_detected,hook_result,skill_requested"
 # Phone reminder / LiveKit voice-agent settings. Store real values in
 # runtime env when possible, optionally injected with Doppler. Private
 # ~/.farplane/config.toml may cache fallback/bootstrap values; install.sh
@@ -130,10 +130,6 @@ config_file = "agents/librarian.toml"
 [agents.qa-tester]
 description = "QA subagent that plans and executes tests. Keeps the agent prompt thin by delegating detailed workflows to Skills (Playwright, agent-browser, cinematic landing testing)."
 config_file = "agents/qa-tester.toml"
-
-[agents.skill-opportunity-applier]
-description = "Hook sidecar that turns recent conversation windows into Notion approval tasks for agent self-improvement."
-config_file = "agents/skill-opportunity-applier.toml"
 
 [agents.repent-scribe]
 description = "Post-fix repent lesson scribe that writes LESSONS rows and optional Notion improvement proposals."

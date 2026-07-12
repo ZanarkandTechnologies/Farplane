@@ -34,11 +34,11 @@ class FarplaneTelemetryStatusTests(unittest.TestCase):
                         ),
                         json.dumps(
                             {
-                                "event_type": "learning_review_launched",
+                                "event_type": "ticket_completion_learning",
                                 "skill_name": "goal-advisor",
-                                "hook_name": "Stop",
+                                "hook_name": "PostToolUse",
                                 "ticket_id": "TASK-0160",
-                                "status": "launched",
+                                "status": "complete",
                             }
                         ),
                     ]
@@ -49,30 +49,26 @@ class FarplaneTelemetryStatusTests(unittest.TestCase):
             windows_dir = project_root / ".farplane" / "state" / "message-windows"
             windows_dir.mkdir(parents=True)
             (windows_dir / "sess-123.json").write_text(
-                json.dumps({"session_id": "sess-123", "turn_count": 10, "last_review_turn_count": 10}),
+                json.dumps({"session_id": "sess-123", "turn_count": 10}),
                 encoding="utf-8",
             )
-            run_dir = project_root / ".farplane" / "state" / "learning-reviews" / "20260526-sess-123"
+            run_dir = project_root / ".farplane" / "mine" / "runs" / ("a" * 64)
             run_dir.mkdir(parents=True)
+            (run_dir / "run.json").write_text(
+                json.dumps(
+                    {
+                        "run_id": "a" * 64,
+                        "program_ref": "core:ticket-completion-learning@1.1.0",
+                        "status": "complete",
+                    }
+                ),
+                encoding="utf-8",
+            )
             (run_dir / "input.json").write_text(
                 json.dumps(
                     {
-                        "session_id": "sess-123",
-                        "trigger": {"cadence": 10, "turn_count": 10, "last_review_turn_count": 0},
-                        "window": {
-                            "rolling_exchanges": [
-                                {
-                                    "user_turn": {
-                                        "turn_id": "turn-1",
-                                        "captured_at": "2026-05-26T00:00:00Z",
-                                        "summary": "asked for $goal-advisor",
-                                        "raw_text": "please $goal-advisor /Users/example/secret/file",
-                                    },
-                                    "assistant_text": "I will run the implementation plan and capture proof.",
-                                    "assistant_captured_at": "2026-05-26T00:00:01Z",
-                                }
-                            ]
-                        },
+                        "event": {"entity_ref": {"kind": "ticket", "id": "TASK-0160", "path": "tickets/TASK-0160/ticket.md"}},
+                        "semantic_context": {"thread_id": "sess-123", "conversation_window_found": True},
                     }
                 ),
                 encoding="utf-8",
@@ -80,18 +76,27 @@ class FarplaneTelemetryStatusTests(unittest.TestCase):
             (run_dir / "report.json").write_text(
                 json.dumps(
                     {
-                        "status": "docs_updated",
-                        "speak": "Logged a lesson to improve impl proof.",
-                        "docs_delta": {
-                            "lessons_appended": [{"line": "2026-05-26 00:00 Z | goal-advisor,proof | source | Improve goal proof | skills/goal-advisor | tighten proof"}],
-                            "troubles_appended": [],
-                        },
-                        "decisions": [{"summary": "Improve goal proof", "target": "docs/LESSONS.md", "confidence": "medium"}],
-                        "proof_hops": [
-                            {"name": "user_capture", "status": "present"},
-                            {"name": "assistant_capture", "status": "present"},
-                            {"name": "learning_docs_write", "status": "present"},
+                        "status": "complete",
+                        "summary": "One reusable proof improvement found.",
+                        "material_findings": [
+                            {
+                                "problem": "Completion proof was repeatedly incomplete.",
+                                "reusable_pattern": "Make proof routing explicit.",
+                                "proposed_solution": "Refine the owning skill.",
+                                "owner_surface": "skill",
+                                "evidence_refs": ["tickets/TASK-0160/ticket.md", "turn-1"],
+                                "confidence": "medium",
+                                "recovery_eligible": False,
+                            }
                         ],
+                        "source_gaps": [],
+                        "escalation": {"decision": "dogfood", "reason_codes": ["skill_candidate"]},
+                        "ticket_output": {
+                            "decision": "created",
+                            "ticket_id": "TASK-0161",
+                            "mode": "prove_or_reject",
+                            "status": "todo"
+                        },
                     }
                 ),
                 encoding="utf-8",
@@ -101,19 +106,20 @@ class FarplaneTelemetryStatusTests(unittest.TestCase):
 
         self.assertEqual(status["events"]["total"], 2)
         self.assertEqual(status["events"]["by_event_type"]["skill_requested"], 1)
-        self.assertEqual(status["events"]["by_status"]["launched"], 1)
+        self.assertEqual(status["events"]["by_status"]["complete"], 1)
         self.assertEqual(status["learning"]["window_count"], 1)
-        self.assertEqual(status["learning"]["turn_count"], 10)
+        self.assertNotIn("turn_count", status["learning"])
         self.assertEqual(status["learning"]["run_count"], 1)
         run = status["learning"]["latest_runs"][0]
-        self.assertEqual(run["status"], "docs_updated")
-        self.assertIn("Improve goal proof", run["candidate_title"])
-        self.assertEqual(run["recommended_owner"], "docs/LESSONS.md")
-        self.assertEqual(run["proof_hops_present"], 3)
-        self.assertEqual(run["proof_hops_total"], 3)
-        self.assertEqual(run["proof_hops_missing"], [])
-        self.assertEqual(run["message_count"], 2)
-        self.assertIn("[local path]", run["messages"][0]["redacted_excerpt"])
+        self.assertEqual(run["status"], "complete")
+        self.assertIn("proof was repeatedly incomplete", run["candidate_title"])
+        self.assertEqual(run["recommended_owner"], "skill")
+        self.assertEqual(run["ticket_id"], "TASK-0160")
+        self.assertEqual(run["finding_count"], 1)
+        self.assertFalse(run["recovery_eligible"])
+        self.assertEqual(run["ticket_decision"], "created")
+        self.assertEqual(run["projected_ticket_id"], "TASK-0161")
+        self.assertEqual(run["projected_ticket_mode"], "prove_or_reject")
 
     def test_build_status_handles_empty_project(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -141,9 +147,10 @@ class FarplaneTelemetryStatusTests(unittest.TestCase):
             "learning": {
                 "latest_runs": [
                     {
-                        "run_path": "/Users/example/private/Farplane/.farplane/state/learning-reviews/run-1",
+                        "run_path": "/Users/example/private/Farplane/.farplane/mine/runs/run-1",
+                        "ticket_id": "TASK-0160",
                         "candidate_title": "Improve proof",
-                        "messages": [{"role": "user", "summary": "hello", "redacted_excerpt": "[local path]"}],
+                        "evidence_refs": ["tickets/TASK-0160/ticket.md"],
                         "artifacts": {
                             "input": "/Users/example/private/Farplane/input.json",
                             "report": "/Users/example/private/Farplane/report.json",
@@ -159,6 +166,8 @@ class FarplaneTelemetryStatusTests(unittest.TestCase):
         self.assertNotIn("project_root", payload)
         self.assertNotIn("metadata", payload["events"]["latest"][0])
         self.assertNotIn("/Users/example", encoded)
+        self.assertNotIn("candidate_title", payload["learning"]["latest_runs"][0])
+        self.assertNotIn("evidence_refs", payload["learning"]["latest_runs"][0])
         self.assertEqual(payload["learning"]["latest_runs"][0]["run_path"], "run-1")
         self.assertEqual(payload["learning"]["latest_runs"][0]["artifacts"], {"input": "present", "report": "present"})
 
