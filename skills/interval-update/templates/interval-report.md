@@ -21,7 +21,7 @@ source_gaps: []
 
 ## Work Reviewed
 
-| State | Tickets / reports | Evidence | Observation |
+| State | Work items / reports | Sanitized evidence | Observation |
 | --- | --- | --- | --- |
 
 ## Objective And Metric Signals
@@ -51,6 +51,10 @@ Results: `planner_candidate`, `already_owned`, `ledger_only_new`,
 | Missing or stale source | Effect on report | Safe fallback |
 | --- | --- | --- |
 
+For an unavailable configured kanban provider, use `none` as the safe fallback
+when filesystem ticket policy is `exclude`. Never include resolved private IDs,
+URLs, tokens, or raw provider payloads.
+
 ## Receipts
 
 - `report_finalized_before_candidate_handoff:` yes | no
@@ -59,5 +63,7 @@ Results: `planner_candidate`, `already_owned`, `ledger_only_new`,
 - `experimental_or_new_direction_tickets_created:` 0
 - `new_direction_planned:` no
 - `provider_or_dogfood_run:` no
+- `kanban_provider:` filesystem_tickets | notion | source_gap
+- `filesystem_ticket_fallback_used:` no | yes_legacy_default
 - `reward_or_checkin_mutated:` no
 - `ticket_execution_started:` no

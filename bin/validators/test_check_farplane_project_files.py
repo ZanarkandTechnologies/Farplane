@@ -3,7 +3,7 @@ from pathlib import Path
 
 import yaml
 
-from bin.validators.check_farplane_project_files import validate
+from bin.validators.check_farplane_project_files import validate, validate_bindings_file
 
 RETIRED_INTEGRATIONS_REF = "farplane/" + "integrations.md"
 
@@ -186,6 +186,63 @@ def test_missing_automations_file_fails(tmp_path: Path) -> None:
     errors = validate(tmp_path)
 
     assert "farplane/automations.toml is required for full Codex automation configs." in errors
+
+
+def test_bindings_accept_filesystem_and_notion_kanban_contracts(tmp_path: Path) -> None:
+    farplane = tmp_path / "farplane"
+    farplane.mkdir()
+    bindings = farplane / "bindings.yaml"
+    bindings.write_text(
+        '''kind: project-bindings
+framework_template_version: "0.4.0"
+project: {}
+integrations:
+  kanban:
+    provider: filesystem_tickets
+    filesystem_ticket_policy: include
+    tickets_dir: tickets
+    archive_dir: tickets/archive
+''',
+        encoding="utf-8",
+    )
+    assert validate_bindings_file(tmp_path, bindings) == []
+
+    bindings.write_text(
+        '''kind: project-bindings
+framework_template_version: "0.4.0"
+project: {}
+integrations:
+  kanban:
+    provider: notion
+    filesystem_ticket_policy: exclude
+    task_source_handle: notion.tasks.source
+''',
+        encoding="utf-8",
+    )
+    assert validate_bindings_file(tmp_path, bindings) == []
+
+
+def test_notion_kanban_binding_cannot_enable_filesystem_fallback(tmp_path: Path) -> None:
+    farplane = tmp_path / "farplane"
+    farplane.mkdir()
+    bindings = farplane / "bindings.yaml"
+    bindings.write_text(
+        '''kind: project-bindings
+framework_template_version: "0.4.0"
+project: {}
+integrations:
+  kanban:
+    provider: notion
+    filesystem_ticket_policy: include
+    task_source_handle: notion.tasks.source
+''',
+        encoding="utf-8",
+    )
+
+    assert (
+        "farplane/bindings.yaml integrations.kanban.filesystem_ticket_policy must be exclude for provider notion."
+        in validate_bindings_file(tmp_path, bindings)
+    )
 
 
 def test_missing_metrics_file_fails(tmp_path: Path) -> None:

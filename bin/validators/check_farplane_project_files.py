@@ -486,6 +486,34 @@ def validate_bindings_file(root: Path, bindings_file: Path) -> list[str]:
     if not isinstance(data.get("metric_bindings"), dict):
         errors.append(f"{rel_path} metric_bindings must be an object.")
 
+    integrations = data.get("integrations")
+    integrations = integrations if isinstance(integrations, dict) else {}
+    kanban = integrations.get("kanban")
+    if kanban is not None:
+        prefix = f"{rel_path} integrations.kanban"
+        if not isinstance(kanban, dict):
+            errors.append(f"{prefix} must be an object.")
+        else:
+            provider = kanban.get("provider")
+            if provider not in {"filesystem_tickets", "notion"}:
+                errors.append(f"{prefix}.provider must be filesystem_tickets or notion.")
+            filesystem_policy = kanban.get("filesystem_ticket_policy")
+            if filesystem_policy not in {"include", "exclude"}:
+                errors.append(f"{prefix}.filesystem_ticket_policy must be include or exclude.")
+            if provider == "filesystem_tickets":
+                for field in ("tickets_dir", "archive_dir"):
+                    value = kanban.get(field)
+                    if not isinstance(value, str) or not value.strip() or Path(value).is_absolute() or ".." in Path(value).parts:
+                        errors.append(f"{prefix}.{field} must be a safe project-relative path.")
+            if provider == "notion":
+                handle = kanban.get("task_source_handle")
+                if not isinstance(handle, str) or not re.fullmatch(
+                    r"[a-z][a-z0-9_-]*(?:\.[a-z][a-z0-9_-]*)+", handle.strip()
+                ):
+                    errors.append(f"{prefix}.task_source_handle must name a private handle alias.")
+                if filesystem_policy != "exclude":
+                    errors.append(f"{prefix}.filesystem_ticket_policy must be exclude for provider notion.")
+
     for line_number, line in enumerate(bindings_file.read_text(encoding="utf-8").splitlines(), start=1):
         if SECRET_VALUE_RE.search(line):
             errors.append(

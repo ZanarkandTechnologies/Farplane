@@ -38,6 +38,13 @@ integrations:
     project_page_url: null
     task_database_alias: null
     write_policy: local_first
+  kanban:
+    provider: filesystem_tickets
+    filesystem_ticket_policy: include
+    tickets_dir: tickets
+    archive_dir: tickets/archive
+    write_policy: local_first
+    poll_seconds: 60
   posthog:
     project_id: null
     host: null

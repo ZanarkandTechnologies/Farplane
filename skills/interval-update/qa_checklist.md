@@ -21,6 +21,19 @@ interval_check(report, evidence, candidates, recovery_tickets) -> pass | violati
 
 - [ ] The run is a bounded Daily, Weekly, or explicitly BAU-only profile and
       writes one dated report with Core report frontmatter.
+- [ ] The run resolved `farplane/bindings.yaml#integrations.kanban` when present
+      and used only that provider's non-secret coordinates. Filesystem tickets
+      were read only for `provider: filesystem_tickets` or the documented
+      no-bindings legacy default.
+- [ ] A Notion binding used a named private handle plus `ntn`; tracked reports,
+      source gaps, candidates, and tickets contain no raw private IDs, URLs,
+      tokens, or provider payload dumps.
+- [ ] Provider access failure is a `source_gap`. A Notion binding with
+      `filesystem_ticket_policy: exclude` never falls back to `tickets/**`,
+      including for work review, dedupe, or recovery-ticket creation.
+- [ ] `access_ready` is not claimed for Notion from CLI/handle discovery alone;
+      the bounded compact `ntn` query must succeed before provider evidence is
+      treated as available.
 - [ ] The report contains a Markdown `Problems` checklist; no finding IDs,
       finding frontmatter, or findings registry were added.
 - [ ] Feed Scout and other provider outputs were read only as completed report

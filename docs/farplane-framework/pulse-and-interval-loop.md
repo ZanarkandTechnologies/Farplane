@@ -180,6 +180,13 @@ direct recovery tickets when current or prior evidence proves an existing
 failure and the correction is settled. Uncertain findings and new direction
 remain planner context.
 
+Interval resolves `farplane/bindings.yaml#integrations.kanban` before work-item
+evidence. Filesystem bindings preserve ticket reads. Notion bindings use only a
+named private handle through `ntn`, sanitize evidence before tracked output,
+and fail closed with a source gap when access is unavailable. An explicit
+filesystem exclusion forbids local-ticket fallback, including dedupe and
+recovery admission.
+
 Interval does not run Feed Scout, Dogfood, reward check-ins, priority planning,
 native Goals, or workers.
 

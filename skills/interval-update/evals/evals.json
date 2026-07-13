@@ -72,6 +72,44 @@
           ]
         }
       }
+    },
+    {
+      "id": "interval_filesystem_binding_preserves_ticket_evidence",
+      "prompt": "A project binds integrations.kanban.provider to filesystem_tickets with filesystem_ticket_policy include and project-relative tickets/archive directories. Run Daily Interval. What evidence does it use, what may it write, and what work may it start?",
+      "expected_output": "Loads farplane/bindings.yaml before board evidence; Reads only the configured filesystem ticket directories for work review and active-work dedupe; Preserves report-first bounded recovery behavior; Does not run providers, Goal, Pulse, workers, or ticket execution",
+      "files": [],
+      "assertions": [
+        "Loads farplane/bindings.yaml before board evidence",
+        "Reads only the configured filesystem ticket directories for work review and active-work dedupe",
+        "Preserves report-first bounded recovery behavior",
+        "Does not run providers, Goal, Pulse, workers, or ticket execution"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Filesystem binding preserves ticket evidence behavior",
+          "tags": ["interval-update", "bindings", "filesystem", "evidence"]
+        }
+      }
+    },
+    {
+      "id": "interval_notion_binding_fails_closed_without_ticket_fallback",
+      "prompt": "A project binds integrations.kanban.provider to notion, task_source_handle to notion.tasks.source, and filesystem_ticket_policy to exclude. The private handle or ntn access is unavailable, while a local tickets directory exists. Run Weekly Interval. What happens?",
+      "expected_output": "Loads farplane/bindings.yaml and keeps Notion as the configured evidence provider; Records the missing private handle or ntn access as a source_gap; Does not inspect local tickets for work review, dedupe, or recovery admission; Writes the bounded report with available report and metric evidence; Does not expose raw private IDs, URLs, tokens, or payloads; Does not invoke another provider, Goal, Pulse, a worker, or execution",
+      "files": [],
+      "assertions": [
+        "Loads farplane/bindings.yaml and keeps Notion as the configured evidence provider",
+        "Records the missing private handle or ntn access as a source_gap",
+        "Does not inspect local tickets for work review, dedupe, or recovery admission",
+        "Writes the bounded report with available report and metric evidence",
+        "Does not expose raw private IDs, URLs, tokens, or payloads",
+        "Does not invoke another provider, Goal, Pulse, a worker, or execution"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Unavailable Notion binding fails closed without filesystem fallback",
+          "tags": ["interval-update", "bindings", "notion", "source-gap", "privacy"]
+        }
+      }
     }
   ]
 }

@@ -27,17 +27,21 @@ pointers outside the report. The report remains the durable decision surface.
 
 ## Work Outcomes
 
-| Ticket / report | State | Observation | Evidence |
+| Work item / report | State | Observation | Sanitized evidence ref |
 | --- | --- | --- | --- |
+
+Provider: `<filesystem_tickets|notion|source_gap>`. Binding:
+`farplane/bindings.yaml#integrations.kanban` or `legacy_default`. Never include
+resolved private provider IDs, URLs, tokens, or raw payloads.
 
 ## Completed Provider Reports
 
 | Provider | Report ref | Freshness | Useful signal / source gap |
 | --- | --- | --- | --- |
 
-## Active Ticket Dedupe Set
+## Active Work-Item Dedupe Set
 
-| Ticket | Problem / scope | State |
+| Sanitized work-item ref | Problem / scope | State |
 | --- | --- | --- |
 
 ## Source Gaps

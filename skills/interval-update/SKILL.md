@@ -29,6 +29,12 @@ self-improvement, or ticket execution. Separate provider reports are evidence;
 Work Pulse owns execution and due experiment check-ins; `plan_next_wave` owns
 new BAU direction; the weekly self-improvement automation owns experiments.
 
+Before reading any work-item or filesystem-board evidence, Interval loads
+`farplane/bindings.yaml` when present and resolves exactly one kanban provider.
+Every provider branch preserves the same outer contract: synthesize and
+finalize the bounded report before recovery handoff, do not run the provider's
+workflow, and do not start Goal, Pulse, a worker, or ticket execution.
+
 ## Skill Signature
 
 ```text
@@ -41,8 +47,9 @@ interval_update(project_root, interval_id, review_window, context_refs?,
    + source_gaps
 
 state:
-  reads(farplane/harness.yaml?, farplane/metrics.yaml?, .farplane/metrics/**?,
-        tickets/**, .farplane/reports/pulse/**,
+  reads(farplane/bindings.yaml?, farplane/harness.yaml?, farplane/metrics.yaml?,
+        .farplane/metrics/**?, configured kanban evidence,
+        .farplane/reports/pulse/**,
         .farplane/reports/interval/**,
         latest completed provider reports supplied through context_refs,
         review/run artifacts and project memory refs when supplied)
@@ -74,6 +81,10 @@ fails:
   - [ ] Read `qa_checklist.md` before gathering evidence.
   - [ ] Resolve `project_root`, `interval_id`, `review_window`, optional
         `context_refs`, `maintenance_ticket_limit`, and write authority.
+  - [ ] Run `scripts/resolve_evidence_binding.py --project-root <project_root>`.
+        When `farplane/bindings.yaml` is present, obey
+        `integrations.kanban.provider`, its non-secret coordinates, and
+        `filesystem_ticket_policy`; do not infer a second board.
   - [ ] Use `daily` for recent BAU failures, drift, obligations, and provider
         signals; use `weekly` for repeated problems, completed/abandoned work,
         review load, resource use, and pending proof.
@@ -109,6 +120,10 @@ fails:
   - [ ] Do not start Goal, Pulse, a worker, or implementation.
 - [ ] 5. Finish-check and return.
   - [ ] Apply `qa_checklist.md` again and index reports when the CLI is available.
+  - [ ] Return the binding ref, selected provider, sanitized configured source,
+        filesystem policy, and source gaps; for filesystem providers, state
+        that work review and active-work dedupe used only the configured
+        directories loaded after binding resolution.
   - [ ] Return report path, carried/new/resolved problems, maintenance
         candidates, recovery ticket paths, source gaps, and a no-execution receipt.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
@@ -125,6 +140,9 @@ fails:
   settled. Novelty alone never makes an uncertain diagnosis ticketable.
 - A suggestion in a provider report is context, not automatically a known
   maintenance problem. Feed Scout also supplies candidates, not tickets.
+- Provider selection is evidence routing, not permission to run another
+  workflow. Notion reads stay read-only and bounded; recovery writes require a
+  separately authorized provider write route and otherwise remain candidates.
 - Weekly repetition increases confidence but does not grant broader authority.
 
 ## Reference Map
@@ -145,3 +163,5 @@ fails:
   evidence of an existing failure and requiring no experiment.
 - Source gaps and a receipt that Interval did not plan direction, run providers,
   score experiments, or execute tickets.
+- A sanitized provider-resolution receipt proving bindings were loaded before
+  work-item evidence and naming the only source used for review and dedupe.
