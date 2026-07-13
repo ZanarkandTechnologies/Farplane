@@ -2,8 +2,8 @@
 kind: farplane-framework-reporting-standard
 status: active
 created_at: 2026-07-08
-updated_at: 2026-07-12
-framework_template_version: "0.1.0"
+updated_at: 2026-07-13
+framework_template_version: "0.1.1"
 ---
 
 # Farplane Reporting
@@ -39,6 +39,28 @@ The reporting system is in place at the Core registry layer:
 Skill-local memory reports use `.farplane/<skill-name>/reports/**/*.md`. They
 may be discovered across skills with `.farplane/*/reports/**/*.md`, but they do
 not require a compiled index or the Core report-card frontmatter contract.
+
+## Human Reading Contract
+
+Report metadata and report readability are separate contracts. UI-indexed
+reports keep the Core frontmatter below. Analytical report bodies should use
+the decision-first spine in
+`docs/templates/HUMAN_REPORT_TEMPLATE.md` when their producer adopts it:
+
+```text
+decision -> situation map -> material findings -> risks -> next action -> supporting evidence
+```
+
+The human body owns the conclusion and the shortest honest path to action.
+Supporting artifacts own exhaustive ledgers, raw observations, and machine
+receipts. A canonical receipt should preserve authority, mutations, validation,
+and stop state in structured form; the human report links it instead of
+repeating it as prose. This boundary reduces reading cost without deleting
+proof or changing downstream machine state.
+
+Use one compact diagram only when it makes a relationship or state transition
+materially easier to understand. Empty sections, workflow instructions,
+repeated summaries, and duplicate evidence are not report content.
 
 ## Minimal Report Frontmatter
 

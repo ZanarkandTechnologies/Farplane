@@ -2,7 +2,7 @@
 title: Template Registry
 status: active
 owner: Farplane
-updated_at: 2026-06-28
+updated_at: 2026-07-13
 ---
 
 # Template Registry
@@ -27,6 +27,7 @@ The registry is deliberately focused on high-leverage surfaces:
 - `tickets/templates/goal-loop/program.md`
 - `skills/harness-creator/templates/project-harness.md`
 - `skills/init-advisor/references/MANIFEST_TEMPLATE.json`
+- `docs/templates/HUMAN_REPORT_TEMPLATE.md` (prototype consumer only)
 
 Each tracked template declares:
 
@@ -60,6 +61,11 @@ JSON consumers use the same shape:
 The rollout report lives in
 `skills/skill-maintenance/graph/skill-template-intelligence.json` under
 `template_rollout_summary` and `template_rollout`.
+
+`HUMAN_REPORT_TEMPLATE.md` is deliberately at prototype scope. It defines the
+shared human reading spine and proof boundary, but no live report-producing
+skill has adopted it yet. Expand `consumer_scope` and `applies_to` only after a
+representative prototype passes review and a rollout wave is accepted.
 
 ## Commands
 

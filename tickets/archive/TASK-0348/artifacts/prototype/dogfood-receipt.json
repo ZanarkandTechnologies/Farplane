@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "receipt_kind": "dogfood-review-prototype-normalization",
+  "source_report": ".farplane/reports/dogfood-review/2026-07-13T060328+0800.md",
+  "source_ref": "reports/dogfood-review/2026-07-13T060328+0800",
+  "portfolio_cutoff": "2026-07-13T06:03:28+08:00",
+  "authority": {
+    "write_policy": "report_only",
+    "external_actions": false
+  },
+  "mutations": {
+    "goal_packets_created": 0,
+    "experiment_tickets_created": 0,
+    "recovery_tickets_created": 0,
+    "experiment_executed_or_checked_in": false,
+    "pulse_or_worker_invoked": false,
+    "reward_rows_mutated": false,
+    "completion_learning_receipts_recreated": false
+  },
+  "guards": {
+    "active_and_recent_archive_reviewed_before_candidates": true,
+    "previous_report_used_as_cursor_only": true,
+    "report_written_before_selection": true,
+    "cutoff_applied_without_forcing_terminal_decisions": true,
+    "total_wip_cap_respected": true,
+    "delayed_live_cap_respected": true,
+    "one_active_per_surface_respected": true,
+    "non_interfering_immediate_capacity_preserved": true
+  },
+  "stop": {
+    "no_execution_receipt": "no implementation, Goal, Pulse, worker, check-in, promotion, rollback, external action, or experiment-ticket creation invoked"
+  },
+  "normalization_scope": "ticket-local prototype; source report remains canonical and unchanged"
+}

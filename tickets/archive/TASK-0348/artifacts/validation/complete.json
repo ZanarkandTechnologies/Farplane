@@ -1,0 +1,71 @@
+{
+  "base": null,
+  "changed_paths": [
+    "docs/farplane-framework/reporting.md",
+    "docs/templates/HUMAN_REPORT_TEMPLATE.md",
+    "docs/templates/README.md",
+    "docs/templates/registry.jsonl",
+    "rules/template-registry.toml",
+    "rules/template-version-watch.toml",
+    "tickets/archive/TASK-0348/artifacts/prototype/comparison.md",
+    "tickets/archive/TASK-0348/artifacts/prototype/dogfood-after.md",
+    "tickets/archive/TASK-0348/artifacts/prototype/dogfood-receipt.json",
+    "tickets/archive/TASK-0348/artifacts/prototype/pre-existing-overlap.md",
+    "tickets/archive/TASK-0348/artifacts/prototype/verification.md",
+    "tickets/archive/TASK-0348/artifacts/review/completion-review.md",
+    "tickets/archive/TASK-0348/artifacts/review/plan-review.md",
+    "tickets/archive/TASK-0348/diagrams.md",
+    "tickets/archive/TASK-0348/ticket.md"
+  ],
+  "ok": true,
+  "path_source": "explicit",
+  "phase": "complete",
+  "results": [
+    {
+      "check_id": "ticket.metadata",
+      "mode": "block",
+      "output": "ticket metadata OK",
+      "status": "pass"
+    },
+    {
+      "check_id": "ticket.completion-evidence",
+      "mode": "block",
+      "output": "completion evidence OK",
+      "status": "pass"
+    },
+    {
+      "check_id": "docs.refs",
+      "mode": "block",
+      "output": "doc refs OK (1888 refs checked)",
+      "status": "pass"
+    },
+    {
+      "check_id": "docs.contracts",
+      "mode": "block",
+      "output": "structural doc parity OK (6 files checked, 24 rules)",
+      "status": "pass"
+    },
+    {
+      "check_id": "templates.check",
+      "mode": "block",
+      "output": "template registry OK",
+      "status": "pass"
+    },
+    {
+      "check_id": "harness.check",
+      "mode": "block",
+      "output": "harness invariants OK (5 files checked, 16 agents, 17 rules, project files checked)",
+      "status": "pass"
+    }
+  ],
+  "schema_version": 1,
+  "selected_checks": [
+    "ticket.metadata",
+    "ticket.completion-evidence",
+    "docs.refs",
+    "docs.contracts",
+    "templates.check",
+    "harness.check"
+  ],
+  "ticket": "tickets/archive/TASK-0348/ticket.md"
+}
