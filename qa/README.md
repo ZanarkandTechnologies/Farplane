@@ -1,107 +1,155 @@
-# QA
+---
+title: QA Guide
+status: active
+owner: qa
+updated_at: 2026-07-14
+refs:
+  - skills/qa/SKILL.md
+  - agents/qa-tester.toml
+  - qa/cookbook/README.md
+---
 
-Reusable browser-QA guidance lives here.
+# QA Guide
 
-This folder is for durable how-to surfaces that make UI verification fast,
-deterministic, and easy to automate. It is not the place for per-ticket proof
-artifacts. Those still belong under `tickets/TASK-XXXX/artifacts/`.
-
-## Recommendation
-
-Default to this flow:
-
-1. prove or debug the workflow with `agent-browser` when the path is new,
-   brittle, or not yet instrumented
-2. capture the ticket evidence from `agent-browser`: snapshot, screenshots,
-   console logs, page errors, and the tested route or state
-3. codify the stable happy path in Playwright only when repeated regression
-   coverage is worth the extra harness overhead
-
-In practice, that means:
-
-- **`agent-browser` first for browser proof:** use it for most ticket QA,
-  exploratory UI checks, visual state capture, console/error inspection, and
-  any workflow whose selectors or assertions are not already settled
-- **Playwright for regression:** use Playwright when the task explicitly needs
-  a durable automated UX regression, an existing Playwright suite is the
-  acceptance surface, or a stable flow is ready to graduate into scripted
-  coverage
-- **instrumentation over wandering:** if QA has to click through too much UI,
-  add a shortcut, deep link, seed/reset path, debug HUD, or test-only toggle
-  and record it in the cookbook
-
-## Human-Like Adversarial QA
-
-Use `agent-qa-test` when the proof claim needs a skeptical human-like tester and
-an independent evidence-review lane, not just ordinary artifact capture. The
-tester lane cannot self-approve proof.
-
-A human-like QA pass should define `HumanLikeQACase` entries before or during
-the run:
-
-- `happy-path`: the intended user goal and workflow
-- `confused-user`: the likely wrong path, ambiguous affordance, or first-time
-  hesitation
-- `edge-error`: invalid, empty, interrupted, or degraded state
-- `regression-canary`: a known fragile path when prior evidence names one
-
-Each case should name the user goal, expected workflow, likely confusion or
-wrong path, required proof artifacts, falsifying evidence, reviewer attack
-questions, and the smallest instrumentation request when proof is weak.
-
-The normal ownership split still applies:
-
-- `qa-tester` or `agent-browser` captures screenshots, logs, snapshots,
-  commands, files, traces, and `result.json`
-- `visual-qa` judges user-visible screenshots when UI quality is in scope
-- `agent-qa-test` reconciles tester output with independent evidence review for
-  adversarial claims
-- `reviewer` judges final proof-bundle sufficiency before a material completion
-  claim
-
-## What Belongs Here
-
-- deep links to the relevant route or screen
-- auth bypass or seeded-state notes for local/test environments
-- keyboard shortcuts, debug buttons, and quick-open panels
-- deterministic setup flows such as reset, seed, pause, resume, or step
-- stable selector expectations such as `data-testid` contracts
-- notes about when a flow deserves Playwright coverage instead of
-  `agent-browser` proof alone
-
-## Suggested Layout
+Farplane QA turns one ticket claim into inspectable evidence, independent
+judgment when required, a canonical receipt, and selective reusable learning.
+The ticket owns what must be proved; this guide explains how to run that proof.
 
 ```text
-qa/
-  AGENTS.md
-  README.md
-  cookbook/
-    README.md
-    TEMPLATE.md
-    <app-or-feature>.md
+qa_journey(ticket, runtime_target?, proof_policy_override?)
+  -> choose -> capture -> reconcile -> judge -> receipt -> learn
 ```
 
-## Cookbook Workflow
+Per-run evidence belongs under `tickets/TASK-XXXX/artifacts/qa/`. Reusable
+entry paths, shortcuts, selectors, seeds, and observability belong in
+`qa/cookbook/`.
 
-Use a cookbook page when a feature needs repeated QA access.
+## Start Here
 
-- Start with the fastest deterministic entry path.
-- Name the `agent-browser` evidence to capture for the normal QA path.
-- Record the selectors and assertion surfaces Playwright should use only when
-  the flow is ready for regression coverage.
-- If the path is still painful, write down the missing instrumentation as a
-  follow-up instead of normalizing brittle manual setup.
+1. **Choose proof.** Read ticket `Done`, `QA Strategy`, optional `Agent
+   Contract`, linked specs, and any explicit proof-policy override. Together
+   they form the effective proof policy.
+2. **Bind the runtime.** Use the ticket/runtime handoff. If an app or API target
+   is ambiguous, block instead of guessing a port, URL, session, or account.
+3. **Use deterministic entry.** Read the matching cookbook page before manual
+   exploration. Prefer a documented route, deep link, seed, reset, shortcut,
+   debug control, or test hook.
+4. **Capture the real mechanism.** Exercise the implementation that owns the
+   result and collect evidence appropriate to the proof type.
+5. **Reconcile the claim.** Mark each `Done` and `QA Strategy` obligation
+   `PASS`, `FAIL`, or `not_provable` with an artifact path.
+6. **Judge separately when required.** Browser operation is not visual or
+   completion judgment.
+7. **Write the receipt.** Produce `report.md` and validated `result.json`, then
+   link the strongest evidence from ticket `Links`.
+8. **Learn selectively.** Decide whether the run stays ticket-local, updates a
+   cookbook page, or needs an instrumentation follow-up.
 
-## Regression Graduation Rule
+## Choose the Proof Route
 
-The final proof target for user-facing browser flows should usually be an
-`agent-browser` evidence bundle unless the ticket asks for repeatable
-regression coverage.
+| Work under test | Normal proof | Owner |
+| --- | --- | --- |
+| CLI, script, validator, or generated artifact | command output, logs, files, focused tests | `qa` / implementing lane |
+| API or integration | bound runtime, responses, logs, traces | `qa-tester` when operated capture helps |
+| New or exploratory UI workflow | snapshots, screenshots, console, errors, storyboard | `qa-tester` using `agent-browser` |
+| User-visible quality | already captured images plus design/taste baseline | `visual-qa` |
+| Explicit adversarial agent claim | tester evidence plus independent evidence review | `agent-qa-test` |
+| Stable repeated UX regression | scripted assertions | Playwright |
+| Material completion sufficiency | complete proof bundle | `reviewer` |
 
-Playwright is still valuable, but mostly for:
+`agent-browser` is the browser tool, not the QA owner. In material or
+Goal-backed runs, `qa-tester` owns browser operation and artifact capture.
+Playwright is the graduation path for stable, repeatedly valuable regressions;
+it is not the default response to an unsettled selector or workflow.
 
-- stable, already-understood flows
-- critical paths that need repeated automated coverage
-- failures in an existing scripted suite
+## Evidence by Proof Type
 
-See [cookbook/README.md](cookbook/README.md) for the per-workflow template.
+- CLI/artifact: exact commands, exit status, logs, generated files, and the
+  strongest non-image artifact as `best_evidence`.
+- API: bound runtime target, request/response evidence, service logs, and
+  relevant traces.
+- Browser/UI: runtime target, pre-interaction snapshot, important-state
+  screenshots, console logs, page errors, and ordered frames when the journey
+  matters. A pass requires image `best_evidence`; an honest non-pass may use
+  `best_evidence: null` and name the missing capture in `blockers`.
+- Failure: capture the strongest available evidence and name the missing or
+  falsifying evidence in `blockers`; do not manufacture a pass.
+
+Screenshots are required for browser/UI proof, not for every QA run.
+
+## Ownership Boundaries
+
+- `qa` owns the effective proof policy, five-gate journey, canonical receipt,
+  ticket reconciliation, and learning decision.
+- `qa-tester` owns operated runtime/browser capture and writes the receipt back
+  to the ticket.
+- `agent-browser` supplies page operation, snapshots, screenshots, console
+  logs, page errors, and traces.
+- `visual-qa` judges captured UI evidence; it does not drive the browser.
+- `agent-qa-test` is only for explicit adversarial agent/workflow claims.
+- `reviewer` judges whether material evidence is sufficient for completion.
+
+The tester may perform one skeptical failure check during ordinary QA. That
+does not turn ordinary QA into the separate `agent-qa-test` protocol.
+
+## Ticket Writeback
+
+- Always store run artifacts under `tickets/TASK-XXXX/artifacts/qa/<run>/`.
+- Always link `report.md`, `result.json`, the verdict, and strongest evidence
+  from ticket `Links`.
+- Append `progress.md` only when it already exists, the run is Goal-backed, or
+  blocker/review state needs an append-only entry. Do not create `progress.md`
+  for every QA run.
+- Never write to retired ticket `State` or `Evidence` sections.
+
+## Learning After Every Run
+
+Make the decision every time; do not edit shared documentation every time.
+
+```text
+classify_qa_learning(run)
+  -> ticket_only | cookbook_update | instrumentation_ticket
+```
+
+- `ticket_only`: one-off workaround, transient failure, or task-specific fact.
+  Keep it in the report and ticket links.
+- `cookbook_update`: verified reusable route, shortcut, selector, seed/reset,
+  debug control, observability method, or stable regression path. Update the
+  existing workflow page and cite the verifying receipt.
+- `instrumentation_ticket`: missing shortcut, deterministic state control,
+  selector, runtime handoff, log, or debug surface requires implementation.
+  Create a linked follow-up only when it is genuinely required work.
+
+## Shortcuts and Test Controls
+
+A QA shortcut is any deterministic accelerator: keyboard command, deep link,
+debug button, quick-open panel, seed/reset command, test-only toggle, pause,
+step, or state mirror. It is not a universal QA mode.
+
+Every documented shortcut states:
+
+- exact trigger or command
+- supported environment and safety guard
+- prerequisites
+- expected visible and internal state
+- reset or cleanup
+- verification and evidence to capture
+- source ticket and last verified receipt
+
+If QA needs repeated wandering, improve testability instead of normalizing the
+wandering. See [the cookbook template](cookbook/TEMPLATE.md).
+
+## Browser Loop Limits
+
+- Refresh element references after navigation or state-changing interactions.
+- Try the same DOM intent at most twice.
+- After three interaction cycles without reaching a new declared state, stop,
+  capture the failure bundle, and return `FAIL` or `not_provable` with one
+  concrete testability request.
+
+## Regression Graduation
+
+Graduate a browser path to Playwright when the flow and selectors are stable,
+the regression is important enough to rerun, or an existing Playwright suite
+is already the acceptance surface. Reuse the same cookbook entry, setup,
+selectors, and expected observations.

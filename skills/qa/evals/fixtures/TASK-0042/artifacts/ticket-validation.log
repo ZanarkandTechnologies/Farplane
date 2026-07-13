@@ -1,0 +1,3 @@
+command: fixture-ticket validate TASK-0042
+exit_code: 0
+assertion: current ticket metadata is valid

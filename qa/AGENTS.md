@@ -5,16 +5,18 @@ and humans reach important app states quickly and deterministically.
 
 ## Purpose
 
-- keep durable browser-test entry guidance out of chat transcripts
+- keep durable QA entry guidance out of chat transcripts
 - store shortcuts, deep links, seeded fixtures, and debug hooks that make UI
   proof fast
-- complement `tickets/artifacts/` instead of replacing it
+- complement ticket-scoped artifacts instead of replacing them
 
 ## Rules
 
 - use `qa/` for reusable guidance, not per-run evidence
 - keep screenshots, logs, traces, and one-off reports under
-  `tickets/artifacts/TASK-XXXX/`
+  `tickets/TASK-XXXX/artifacts/`
+- treat `skills/qa/SKILL.md` as the execution and receipt contract; this module
+  owns readable guidance and reusable runbooks
 - prefer `agent-browser` for browser proof: page operation, snapshots,
   screenshots, console logs, and page-error capture
 - use Playwright only when stable UX regression coverage is explicitly needed,
@@ -23,6 +25,8 @@ and humans reach important app states quickly and deterministically.
 - when a workflow is hard to automate, document the missing shortcut,
   deterministic setup, or instrumentation helper here so later tickets can land
   the fix intentionally
+- after each run classify learning as `ticket_only`, `cookbook_update`, or
+  `instrumentation_ticket`; do not force a cookbook edit for one-off facts
 
 ## Expected Contents
 
@@ -37,3 +41,4 @@ Each cookbook page should stay short and answer:
 2. which shortcuts, deep links, seeds, or fixtures make it deterministic
 3. what `agent-browser` should capture for the normal proof path
 4. when the flow is worth graduating to Playwright regression coverage
+5. the shortcut environment guard, expected state, cleanup, and last verified receipt

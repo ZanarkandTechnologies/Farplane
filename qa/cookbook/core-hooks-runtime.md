@@ -3,8 +3,13 @@ template_id: qa-cookbook-workflow
 template_version: "0.1.0"
 ticket_refs:
   - TASK-0333
-status: planned
-updated_at: 2026-07-12
+status: verified
+owner: core-runtime
+source_ticket: TASK-0333
+updated_at: 2026-07-14
+last_verified_at: 2026-07-13
+last_verified_receipt: tickets/TASK-0333/artifacts/review/completion-review.md
+environment: local
 ---
 
 # Core Hooks Runtime
@@ -64,8 +69,14 @@ entrypoint and update this cookbook atomically.
 
 Write compact receipts and logs under:
 
-- `tickets/TASK-0333/artifacts/smoke/`
-- `tickets/TASK-0333/artifacts/qa/`
+- `tickets/<OWNING-TICKET>/artifacts/smoke/`
+- `tickets/<OWNING-TICKET>/artifacts/qa/`
 
 The final reviewer must compare the healthy and deliberately broken Doctor
 results and inspect the two-route run identities.
+
+## Learning History
+
+- 2026-07-13 — `cookbook_update` — verified by
+  `tickets/TASK-0333/artifacts/qa/qa-evidence-review.md` and
+  `tickets/TASK-0333/artifacts/review/completion-review.md`.

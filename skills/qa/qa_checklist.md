@@ -4,7 +4,7 @@ owner: qa
 status: active
 kind: qa-checklist
 created_at: 2026-06-22
-updated_at: 2026-06-27
+updated_at: 2026-07-13
 applies_to:
   - qa
   - ticket-proof
@@ -12,37 +12,49 @@ applies_to:
 
 # QA Skill Runtime Checklist
 
-Use this for material QA reports and after changing the `qa` skill.
+Use this for material QA reports and after changing the `qa` skill. One QA
+owner applies all five gates as one coherent proof journey and returns one
+receipt. The gates are evidence categories, not separately spawned tasks.
 
-## Checks
+```text
+qa_journey(ticket, proof_policy, runtime_target?)
+  -> verdict + best_evidence + blockers + residual_risk + learning_decision
+```
 
-1. `ticket-proof-read`
-   - Question: Did QA read the selected ticket, `Done`, `QA Strategy`, proof weight,
-     and any design baseline before collecting evidence?
-   - Violation: QA improvises a flow from chat or route intuition.
+## Five Gates
 
-2. `delegated-capture`
-   - Question: For browser/user-visible proof, did `qa-tester` or an equivalent
-     delegated lane own operation and capture when available?
-   - Violation: The coordinator self-certifies operated evidence.
+1. **Contract and critical path.** Read the selected ticket, `Done`, QA
+   strategy, optional Agent Contract, proof weight, design baseline, and
+   runtime handoff. Build the effective proof policy and name the
+   claimed workflow and ordered sanity checks; never improvise it from chat or
+   pass proxies while the real path remains implicit. Block app/API operation
+   when the runtime target is ambiguous.
 
-3. `artifact-set-complete`
-   - Question: Are `report.md`, `result.json`, and required supporting
-     screenshots/logs/snapshots present or explicitly blocked?
-   - Violation: QA passes with only prose or terminal output.
+2. **Real mechanism and evidence.** Exercise the implementation that owns the
+   result and capture concrete outputs, traces, API responses, logs, or files.
+   For interactive agent demos, verify material claims come from the visible
+   tool or state transition rather than narration or prerecorded output. Do
+   not fabricate future commands or artifacts. When an external source is
+   unavailable, preserve the source gap while still recording independent
+   deterministic local checks that can honestly run.
 
-4. `critical-path-reconciled`
-   - Question: For material feature work, did QA reconcile evidence against the
-     ticket's critical-path proof notes in `QA Strategy`, including smaller
-     ordered sanity checks and any unrun full-path risk?
-   - Violation: QA passes proxy checks while the claimed workflow, hook
-     lifecycle, user path, or session path remains implicit or unexercised.
+3. **Responsive journey.** Preserve context across the meaningful state change
+   under test. For editable or conversational demos, verify the exact edit,
+   fresh run or explicit fork, changed result where expected, and retained
+   prior trace. Record any unrun full-path step as residual risk or a blocker.
 
-5. `visual-judgment-separated`
-   - Question: For UI proof, did `visual-qa` judge captured screenshots?
-   - Violation: Browser capture is treated as visual judgment.
+4. **Adversarial trust and presentation.** Exercise the most relevant failure,
+   constraint, or stale-state risk. Use `qa-tester` for operated browser capture,
+   `visual-qa` for visual judgment, and `agent-qa-test` for adversarial agent
+   behavior when required, while keeping one primary journey owner.
 
-6. `best-evidence-named`
-   - Question: Does the QA result name `best_evidence`, preferably an image path
-     for UI/user-visible tickets?
-   - Violation: Final reporting cannot show the strongest proof.
+5. **Receipt completeness and learning.** Produce `report.md`, a validated
+   canonical `result.json`, supporting artifacts, gate verdicts, blockers,
+   residual risk, judgment receipts, `best_evidence`, and one learning outcome.
+   Prefer an image for user-visible work. Always update ticket `Links`; update
+   `progress.md` only when it exists or Goal/blocker/review state requires it.
+   Candidate reusable paths stay `ticket_only` before capture; verified
+   reusable paths become `cookbook_update` with a concrete
+   `qa/cookbook/*.md` reference.
+   Return revise, fail, blocked, or `not_provable` when evidence cannot support
+   the claim.

@@ -1,0 +1,3 @@
+command: fixture-cli regression
+exit_code: 0
+assertion: prior behavior remains passing

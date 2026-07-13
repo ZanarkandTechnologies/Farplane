@@ -1,0 +1,27 @@
+{
+  "base": null,
+  "changed_paths": [],
+  "ok": true,
+  "path_source": "unavailable",
+  "phase": "planning",
+  "results": [
+    {
+      "check_id": "ticket.metadata",
+      "mode": "block",
+      "output": "ticket metadata OK",
+      "status": "pass"
+    },
+    {
+      "check_id": "ticket.visual-companion",
+      "mode": "block",
+      "output": "visual companion OK: /Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0356/diagrams.md",
+      "status": "pass"
+    }
+  ],
+  "schema_version": 1,
+  "selected_checks": [
+    "ticket.metadata",
+    "ticket.visual-companion"
+  ],
+  "ticket": "tickets/TASK-0356/ticket.md"
+}

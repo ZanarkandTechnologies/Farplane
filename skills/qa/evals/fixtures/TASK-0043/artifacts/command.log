@@ -1,0 +1,3 @@
+command: fixture-ui build-check
+exit_code: 0
+observation: build passed; rendered state was not observed

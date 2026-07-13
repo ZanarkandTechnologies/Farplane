@@ -1,0 +1,4 @@
+command: fixture-provider local-contract-check
+exit_code: 0
+assertion: local response parser accepts the documented shape
+limitation: no live provider response or recorded export was observed

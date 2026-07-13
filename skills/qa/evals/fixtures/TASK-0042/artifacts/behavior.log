@@ -1,0 +1,3 @@
+command: fixture-cli behavior
+exit_code: 0
+assertion: expected value observed

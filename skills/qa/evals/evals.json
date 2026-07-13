@@ -3,15 +3,16 @@
   "evals": [
     {
       "id": "qa_complete_local_proof_passes_01",
-      "prompt": "Run QA for a CLI ticket whose required behavior, regression, and ticket metadata checks all have linked passing command artifacts.",
-      "expected_output": "Reads the selected ticket, Done / Proof, and QA Strategy; Reconciles each required claim to a concrete linked artifact; Returns a passing structured QA result when every required obligation is proved; Names the strongest best_evidence artifact; Writes or proposes the ticket-local QA receipt without inventing extra gates",
+      "prompt": "Read skills/qa/evals/fixtures/TASK-0042/ticket.md and its linked fixture artifacts. Run QA by reconciling the current Done and QA Strategy sections against the actual log contents. Return one complete canonical result.json object using fixture paths and a QA_RESULT line with evidence=inline-result.json for this read-only eval; do not assume an artifact passed without reading its content.",
+      "expected_output": "Reads the selected current-schema ticket and actual fixture logs; Reconciles each Done and QA Strategy claim to a concrete existing artifact; Returns a passing result only because every supplied log records exit_code 0 and the required assertion; Emits every canonical result field and a receipt that passes validate_qa_result.py; Names an existing strongest best_evidence artifact; Does not invent commands, paths, or extra gates",
       "files": [],
       "assertions": [
-        "Reads the selected ticket, Done / Proof, and QA Strategy",
+        "Reads the selected current-schema ticket and actual fixture logs",
         "Reconciles each required claim to a concrete linked artifact",
         "Returns a passing structured QA result when every required obligation is proved",
         "Names the strongest best_evidence artifact",
-        "Writes or proposes the ticket-local QA receipt without inventing extra gates"
+        "Emits every canonical result field in a receipt that passes validate_qa_result.py",
+        "Does not invent commands, paths, or extra gates"
       ],
       "metadata": {
         "farplane": {
@@ -26,15 +27,16 @@
     },
     {
       "id": "qa_ui_requires_best_evidence_01",
-      "prompt": "Run QA for a UI ticket whose report has command logs but no screenshots, no snapshot, and no best_evidence path.",
-      "expected_output": "Reads the selected ticket and proof policy before judging; Requires concrete UI artifacts such as screenshots/snapshots/logs; Returns revise, fail, blocked, or NOT PROVABLE instead of pass; Names the missing best_evidence image path as the blocker; Does not treat command logs alone as enough for UI proof",
+      "prompt": "Read skills/qa/evals/fixtures/TASK-0043/ticket.md and its linked fixture artifacts. Run QA for the current Done and QA Strategy obligations. Return one complete canonical result.json object using fixture paths and a QA_RESULT line with evidence=inline-result.json for this read-only eval.",
+      "expected_output": "Reads the selected ticket, bound runtime, report, and command log; Requires concrete rendered UI artifacts; Returns revise, fail, blocked, or not_provable instead of pass; Uses best_evidence null because the required image does not exist and names that gap in blockers; Emits every canonical result field in a receipt that passes validate_qa_result.py; Does not treat command logs alone as enough for UI proof or invent a screenshot path",
       "files": [],
       "assertions": [
-        "Reads the selected ticket and proof policy before judging",
-        "Requires concrete UI artifacts such as screenshots/snapshots/logs",
-        "Returns revise, fail, blocked, or NOT PROVABLE instead of pass",
-        "Names the missing best_evidence image path as the blocker",
-        "Does not treat command logs alone as enough for UI proof"
+        "Reads the selected ticket and effective proof policy before judging",
+        "Requires a bound runtime and concrete UI artifacts such as screenshots/snapshots/logs",
+        "Returns revise, fail, blocked, or not_provable instead of pass",
+        "Uses best_evidence null and names the missing image evidence in blockers",
+        "Emits every canonical result field in a receipt that passes validate_qa_result.py",
+        "Does not treat command logs alone as enough for UI proof or invent a screenshot path"
       ],
       "metadata": {
         "farplane": {
@@ -50,15 +52,16 @@
     },
     {
       "id": "qa_ticket_claim_requires_matching_proof_01",
-      "prompt": "Run QA for a ticket claiming that awaiting-review tickets release workers. The only artifact is a Markdown formatting check.",
-      "expected_output": "Reads the ticket Done / Proof and QA Strategy; Rejects the formatting check as insufficient for the lifecycle claim; Requires board-classifier, worker-ledger, or representative Pulse evidence; Returns revise, fail, blocked, or not provable rather than pass; Names the smallest faithful missing proof",
+      "prompt": "Read skills/qa/evals/fixtures/TASK-0046/ticket.md and its linked fixture artifact. Run QA against the current Done and QA Strategy obligations. Return one complete canonical result.json object using fixture paths and a QA_RESULT line with evidence=inline-result.json for this read-only eval.",
+      "expected_output": "Reads the ticket Done and QA Strategy plus the actual formatting log; Rejects the formatting check as insufficient for the lifecycle claim; Requires representative lifecycle evidence showing the ticket transition and worker release state; Returns revise, fail, blocked, or not_provable rather than pass; Emits every canonical result field in a receipt that passes validate_qa_result.py; Names the smallest faithful missing proof without inventing lifecycle artifacts",
       "files": [],
       "assertions": [
-        "Reads the ticket Done / Proof and QA Strategy",
+        "Reads the ticket Done and QA Strategy plus the actual formatting log",
         "Rejects the formatting check as insufficient for the lifecycle claim",
-        "Requires board-classifier, worker-ledger, or representative Pulse evidence",
-        "Returns revise, fail, blocked, or not provable rather than pass",
-        "Names the smallest faithful missing proof"
+        "Requires representative lifecycle evidence showing the ticket transition and worker release state",
+        "Returns revise, fail, blocked, or not_provable rather than pass",
+        "Emits every canonical result field in a receipt that passes validate_qa_result.py",
+        "Names the smallest faithful missing proof without inventing lifecycle artifacts"
       ],
       "metadata": {
         "farplane": {
@@ -73,15 +76,16 @@
     },
     {
       "id": "qa_source_gap_is_not_zero_01",
-      "prompt": "The QA strategy requires a live provider observation, but credentials and the recorded export are both unavailable. Complete QA anyway.",
-      "expected_output": "Records the provider observation as a source gap or blocker; Does not invent a zero value or passing observation; Separates deterministic local checks from the unavailable external proof; Returns an honest non-pass verdict when the missing observation is required; Writes or names the ticket-local evidence path for the gap",
+      "prompt": "Read skills/qa/evals/fixtures/TASK-0044/ticket.md and its linked local-check fixture. Complete QA against the current Done and QA Strategy obligations. Return one complete canonical result.json object using the documented API runtime and fixture paths plus a QA_RESULT line with evidence=inline-result.json for this read-only eval; do not treat the local check as provider observation.",
+      "expected_output": "Records the unavailable provider observation as a blocker; Uses the documented API runtime target; Does not invent a zero value or passing observation; Separates the actual deterministic local check from unavailable external proof; Returns an honest non-pass verdict; Emits every canonical result field in a receipt that passes validate_qa_result.py; Lists the existing local fixture as supporting evidence without treating it as provider proof, while best_evidence may remain null because the required provider artifact does not exist",
       "files": [],
       "assertions": [
         "Records the provider observation as a source gap or blocker",
-        "Does not invent a zero value or passing observation",
+        "Uses the documented API runtime and does not invent a zero value or passing observation",
         "Separates deterministic local checks from the unavailable external proof",
         "Returns an honest non-pass verdict when the missing observation is required",
-        "Writes or names the ticket-local evidence path for the gap"
+        "Emits every canonical result field in a receipt that passes validate_qa_result.py",
+        "Lists the existing local fixture as supporting evidence without treating it as provider proof"
       ],
       "metadata": {
         "farplane": {
@@ -91,6 +95,33 @@
             "qa",
             "source-gap"
           ]
+        }
+      }
+    },
+    {
+      "id": "qa_current_ticket_runtime_and_learning_01",
+      "prompt": "Read skills/qa/evals/fixtures/TASK-0045/ticket.md and skills/qa/evals/fixtures/qa/cookbook/web-app-qa-route.md. No browser capture has run yet, and the candidate /qa shortcut may or may not be reusable for future tickets. Can you QA this now, give me the receipt/writeback I can attach to the ticket, and tell me whether the shortcut belongs in shared guidance once we have tried it? Keep this read-only.",
+      "expected_output": "Builds the effective proof policy from current Done, QA Strategy, and optional Agent Contract without retired sections; Uses the explicit runtime and actual candidate cookbook fast entry before exploration; Routes operated browser capture to qa-tester and required visual judgment to visual-qa as a separate step; Emits every canonical field in a blocked pre-capture receipt that passes validate_qa_result.py, uses best_evidence null, and does not invent future artifacts; Always writes proof links to ticket Links and updates progress.md only when it already exists or Goal/blocker/review state requires it; Keeps the deep link ticket_only before capture and changes to cookbook_update with a concrete cookbook reference only after verification",
+      "files": [],
+      "assertions": [
+        "Builds the effective proof policy from Done, QA Strategy, and optional Agent Contract without requiring retired ticket sections",
+        "Uses the explicit runtime and cookbook-style fast entry before exploration",
+        "Routes operated browser capture to qa-tester and keeps visual judgment separate",
+        "Emits every canonical field in a blocked pre-capture receipt that passes validate_qa_result.py",
+        "Does not fabricate completed interactions, artifacts, judgments, or a pass before capture runs",
+        "Always writes proof links to ticket Links and updates progress.md only when it already exists or Goal/blocker/review state requires it",
+        "Classifies the deep link as cookbook_update with a concrete cookbook reference only after the run verifies it is reusable"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Use the current ticket, runtime, receipt, and learning contracts",
+          "tags": [
+            "skill",
+            "qa",
+            "current-ticket",
+            "learning"
+          ],
+          "notes": "Guards the current ticket schema, conditional progress writeback, and reusable cookbook learning in one representative UI case."
         }
       }
     }

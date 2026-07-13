@@ -1,0 +1,4 @@
+command: markdown-format-check ticket.md
+exit_code: 0
+assertion: Markdown formatting is valid
+limitation: no ticket transition or worker state was exercised
