@@ -2,7 +2,7 @@ kind: project-harness
 status: active
 project: Farplane
 created_at: 2026-06-15
-updated_at: 2026-07-12
+updated_at: 2026-07-13
 framework_template_version: "0.5.0"
 owner: harness
 
@@ -25,6 +25,7 @@ metric_refs:
       priority: 1
   guards:
     - rejected_ai_ticket_count
+    - harness_health_source_gap_count
 
 areas:
   framework_delivery:
@@ -86,6 +87,7 @@ areas:
       - metric_id: accepted_harness_improvements
       - metric_id: auto_completion_rate
       - metric_id: ticket_intervention_turn_count
+      - metric_id: priority_skill_health_gap_count
 
 feature_definition:
   definition: >-

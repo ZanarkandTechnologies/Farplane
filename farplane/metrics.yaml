@@ -1,9 +1,19 @@
 kind: project-metrics
 status: active
 created_at: 2026-07-11
-updated_at: 2026-07-12
+updated_at: 2026-07-13
 framework_template_version: "0.3.0"
 owner: metric-advisor
+refreshers:
+  harness_health:
+    refresh: >-
+      Run `farplane harness health compile --project-root . --date
+      <YYYY-MM-DD> --json`. Preserve the Core-written priority cohort,
+      component gap counts, anti-metrics, and source gaps; never turn missing
+      health evidence into a healthy zero.
+    provides:
+      - priority_skill_health_gap_count
+      - harness_health_source_gap_count
 metrics:
   activated_external_projects:
     label: Activated external projects
@@ -78,6 +88,29 @@ metrics:
     kind: point
     unit: ratio
     display: reading
+  priority_skill_health_gap_count:
+    refresh_ref: harness_health
+    label: Priority skill health gaps
+    description: Count of local Tier 1 or directly used skills with a template, eval-coverage, or QA-checklist gap; each unhealthy skill counts once.
+    pinned: true
+    kind: point
+    unit: skills
+    display: reading
+    direction: minimize
+    max_age_days: 7
+  harness_health_source_gap_count:
+    refresh_ref: harness_health
+    label: Harness health source gaps
+    description: Count of missing or malformed inputs required to compile local skill, rollout, and eval health evidence.
+    pinned: false
+    kind: point
+    unit: gaps
+    display: reading
+    direction: minimize
+    max_age_days: 1
+    guard:
+      operator: less_than_or_equal
+      threshold: 0
   decision_changing_learning_briefs:
     label: Decision-changing learning briefs
     description: Daily count of learning briefs whose implication changes positioning, audience, distribution, workflow, or no-action decisions.

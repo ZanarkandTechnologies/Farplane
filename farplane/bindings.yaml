@@ -209,6 +209,10 @@ feed_scout:
         - iamlukethedev
         - Claw3D
 metric_bindings:
+  priority_skill_health_gap_count:
+    refresh: Run `farplane harness health compile --project-root . --date <YYYY-MM-DD> --json`; read the Core-written priority cohort and component gaps, and never turn missing source evidence into a healthy zero.
+  harness_health_source_gap_count:
+    refresh: Run `farplane harness health compile --project-root . --date <YYYY-MM-DD> --json`; read the numeric source-gap observation and preserve every missing or malformed input in the payload.
   activated_external_projects:
     refresh: Run `farplane metrics primitives --project-root . --date <YYYY-MM-DD> --json`; read `primitives.project_adoption.activated_external_projects`. Count only non-standard projects whose manifest is current and whose Work Pulse has a decision after the manifest update; preserve excluded drift and activation gaps.
   distribution_reach_per_artifact:

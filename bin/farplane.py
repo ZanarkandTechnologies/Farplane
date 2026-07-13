@@ -1036,6 +1036,16 @@ def run_skill_rollout_scan_cli(args: argparse.Namespace) -> int:
         return 1
 
 
+def run_harness_health_compile_cli(args: argparse.Namespace) -> int:
+    from farplane_harness_health import HarnessHealthError, run_compile
+
+    try:
+        return int(run_compile(args))
+    except HarnessHealthError as exc:
+        print(f"farplane harness health: {exc}", file=sys.stderr)
+        return 1
+
+
 def run_metrics_primitives_cli(args: argparse.Namespace) -> int:
     from farplane_primitive_metrics import run_primitives
 
@@ -1366,6 +1376,22 @@ def build_parser() -> argparse.ArgumentParser:
     skills_rollout_scan.add_argument("--json", action="store_true")
     skills_rollout_scan.set_defaults(func=run_skill_rollout_scan_cli)
 
+    harness = sub.add_parser("harness", help="Compile and inspect local harness projections.")
+    harness_sub = harness.add_subparsers(dest="harness_command")
+    harness_health = harness_sub.add_parser("health", help="Compile local skill, eval, and rollout health.")
+    harness_health_sub = harness_health.add_subparsers(dest="harness_health_command")
+    harness_health_compile = harness_health_sub.add_parser(
+        "compile", help="Write .farplane/state/harness-health.json."
+    )
+    harness_health_compile.add_argument("--project-root", default=os.getcwd())
+    harness_health_compile.add_argument("--standard-root", default=str(CORE_ROOT))
+    harness_health_compile.add_argument("--evals-root")
+    harness_health_compile.add_argument("--output")
+    harness_health_compile.add_argument("--date", default=datetime.now(timezone.utc).date().isoformat())
+    harness_health_compile.add_argument("--no-write", action="store_true")
+    harness_health_compile.add_argument("--json", action="store_true")
+    harness_health_compile.set_defaults(func=run_harness_health_compile_cli)
+
     metrics = sub.add_parser("metrics", help="Refresh Farplane primitive metric readings.")
     metrics_sub = metrics.add_subparsers(dest="metrics_command")
     metrics_primitives = metrics_sub.add_parser("primitives", help="Refresh Core primitive metrics for one project/date.")
@@ -1530,6 +1556,10 @@ def main(argv: list[str]) -> int:
         parser.error("skills requires a subcommand: rollout")
     if getattr(args, "skills_command", None) == "rollout" and getattr(args, "skills_rollout_command", None) is None:
         parser.error("skills rollout requires a subcommand: scan")
+    if getattr(args, "command", None) == "harness" and getattr(args, "harness_command", None) is None:
+        parser.error("harness requires a subcommand: health")
+    if getattr(args, "harness_command", None) == "health" and getattr(args, "harness_health_command", None) is None:
+        parser.error("harness health requires a subcommand: compile")
     if getattr(args, "command", None) == "metrics" and getattr(args, "metrics_command", None) is None:
         parser.error("metrics requires a subcommand: primitives")
     if getattr(args, "command", None) == "project" and getattr(args, "project_command", None) is None:

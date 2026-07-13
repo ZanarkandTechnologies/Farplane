@@ -60,6 +60,7 @@ same interpretation in each generator, CLI command, or UI route.
 | `skills/skill-maintenance/scripts/graph_projection.py` | Generic graph filtering, projection writing, and stale-output checks. | Projection dispatcher and graph tests. |
 | `bin/core/farplane_adoption.py` | Project manifest adoption and feature/template drift resolution. | `farplane adoption scan`, Farplane UI project rollout views. |
 | `bin/core/farplane_skill_rollout.py` | Read-only UI-facing normalization over generated skill/template rollout intelligence. | `farplane skills rollout scan`, Farplane UI skill rollout views. |
+| `bin/core/farplane_harness_health.py` | Compile transparent skill, rollout, latest-eval health, and actionable priority-skill/source-gap readings from generated artifacts and local eval runs. | `farplane harness health compile`, local planners, Farplane UI health views. |
 | `bin/core/farplane_primitive_metrics.py` | Deterministic primitive reducers over tickets, project bindings, local Codex stores, and ignored Farplane runtime state. | `farplane metrics primitives`, interval-update, project snapshot compiler, Farplane UI metric tabs. |
 | `bin/core/farplane_project_snapshot.py` | Read-only project/company projection joining canonical files, primitive readings, Feed Scout artifacts, and source gaps. | `farplane project snapshot`, Farplane UI Overview/Goals/Products/Distribution/News tabs, interval context. |
 
@@ -88,6 +89,7 @@ UI route or CLI projection
 | Skill template rollout | `docs/skills/registry.jsonl` plus `docs/skills/templates/SKILL_TEMPLATE.md` metadata | `skills/skill-maintenance/graph/skill-template-intelligence.json` fields `rollout` and `rollout_summary` | `python3 skills/skill-maintenance/scripts/generate_template_intelligence.py` | Show which skills are current, stale, missing, or external for the current skill template. |
 | Template rollout | `docs/templates/registry.jsonl` plus consumer `template_uses` fields | `skill-template-intelligence.json` fields `template_rollout` and `template_rollout_summary` | `python3 skills/skill-maintenance/scripts/generate_template_intelligence.py` | Show high-impact template adoption across skills and projects. |
 | Skill rollout CLI | Skill registry plus template intelligence artifact | `farplane skills rollout scan --json` | `python3 bin/farplane.py skills rollout scan --json` | Stable UI-facing payload for skill/template rollout without reading graph internals directly. |
+| Harness health projection | Skill graph/docs, skill rollout intelligence, registry, and local eval runs | `.farplane/state/harness-health.json` and `.farplane/metrics/observations/harness_health/YYYY-MM-DD.json` | `python3 bin/farplane.py harness health compile --project-root . --date YYYY-MM-DD` | Give planners and UI one versioned local bundle plus actionable priority-skill and source-integrity readings without promoting weighted health scores into objectives. |
 | Skill graph | `docs/skills/registry.jsonl` plus `.farplane/events/*.jsonl` skill telemetry | `skills/skill-maintenance/graph/skill-graph.json` and `skill-docs.json` | `python3 skills/skill-maintenance/scripts/generate_skill_graph.py` | Visualize skill nodes, skill docs, observed skill heat, Markdown links, todo-chain edges, and Tier 3 chain edges. |
 | Harness reference graph | Repo Markdown links and literal local paths | `skills/skill-maintenance/graph/harness-graph.json` and doc audit report | `python3 skills/skill-maintenance/scripts/generate_harness_graph.py` | Audit local references, backlink cleanup, unresolved docs paths, and navigation sprawl. |
 | Lifecycle graph | Skill signatures, hooks, curated framework files, automations, reports, tickets, and runtime surfaces | `skills/skill-maintenance/graph/farplane-lifecycle-graph.json` | `python3 skills/skill-maintenance/scripts/generate_farplane_lifecycle_graph.py` | Provide semantic framework maps and finite-state projections for UI and agent context. |
@@ -245,6 +247,9 @@ python3 bin/farplane.py adoption scan --project-root . --json
 
 # Skill/template rollout for UI
 python3 bin/farplane.py skills rollout scan --json
+
+# Filesystem-backed skill, rollout, and eval health for planners and UI
+python3 bin/farplane.py harness health compile --project-root .
 
 # Skill registry and skill contract upkeep
 python3 skills/skill-maintenance/scripts/check_skills.py --write
