@@ -151,6 +151,12 @@ areas:
   test_output:
     description: A recurring test investment area.
     planner_instruction: Propose executable test outputs tied to the selected metric.
+    icp:
+      label: Test builders
+      description: Builders deciding whether a test artifact is credible.
+      jobs_to_be_done: [Compare an artifact with a named baseline.]
+      pain_points: [Generic claims without reproducible evidence.]
+      evidence_bar: A repeatable comparison with source evidence.
     skill_refs: [test-output]
     metric_refs:
       - metric_id: accepted_product_output

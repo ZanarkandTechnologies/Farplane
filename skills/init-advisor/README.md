@@ -104,7 +104,7 @@ Read the project's current `farplane/manifest.json` and compare
 migration entry in order. The changelog is the canonical version-to-version
 migration guide; this section is the operational checklist.
 
-For the V1 `2.0.2` contract, the important boundary is:
+For the V1 `2.0.4` contract, the important boundary is:
 
 ```text
 tracked owners:
@@ -275,7 +275,7 @@ Those can come after one clean ticket run.
 - [ ] `farplane/manifest.json` records the Farplane project spec version and standard tracked/ignored paths
 - [ ] `farplane/harness.yaml` exists or `init_mode=substrate` has a recorded readiness gap
 - [ ] `farplane/metrics.yaml` declares at least one measurable objective and defines every objective/guard metric ID
-- [ ] every metric definition has a matching `farplane/bindings.yaml.metric_bindings` refresh recipe or an explicit source-gap route
+- [ ] every metric definition has exactly one inline `refresh` or valid `refresh_ref` in `farplane/metrics.yaml`, with an explicit source-gap route
 - [ ] `farplane/automations.toml` contains exactly one Work Pulse heartbeat plus separate cron records for Feed Scout, Daily BAU, Weekly BAU, self-improvement, and optional scheduled workflows
 - [ ] `farplane/bindings.yaml` exists and names non-secret project IDs, URLs, labels, and aliases needed by reusable skills
 - [ ] `farplane/hooks.json` exists or `init_mode=substrate` has a recorded readiness gap
@@ -283,7 +283,7 @@ Those can come after one clean ticket run.
 - [ ] `farplane/pm.json` exists when the UI should fold chat and automation thread IDs into one visual project PM
 - [ ] Live automation activation, when requested, is handled by
       `automation-advisor` and appends PM-visible thread IDs to `farplane/pm.json`
-- [ ] owner-named `.farplane/reports/`, `.farplane/<skill-name>/reports/`, `.farplane/crm/entities.json`, `.farplane/metrics/daily/`, `.farplane/evals/runs/`, and `.farplane/logs/` exist as ignored generated state
+- [ ] owner-named `.farplane/reports/`, `.farplane/<skill-name>/reports/`, `.farplane/crm/entities/**/*.md`, generated `.farplane/crm/entities.json`, `.farplane/metrics/daily/`, `.farplane/evals/runs/`, and `.farplane/logs/` exist as ignored local state
 - [ ] primitive metrics and `.farplane/project/ui/latest.json` were regenerated after canonical project-file migration
 - [ ] `python3 bin/validators/check_farplane_project_files.py` passes when the repo has Farplane validators
 - [ ] `docs/prd.md`, `docs/features/`, `docs/TROUBLES.md`, `docs/LESSONS.md` exist

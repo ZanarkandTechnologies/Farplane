@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import sys
 from datetime import date as date_type
 from datetime import timedelta
 from datetime import datetime, timezone
@@ -16,6 +17,82 @@ from pathlib import Path
 from typing import Any
 
 import yaml
+
+ROOT = Path(__file__).resolve().parents[3]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+try:
+    from bin.core.farplane_metric_schema import observation_from_reading, write_metric_batch
+except ImportError:  # pragma: no cover
+    observation_from_reading = None
+    write_metric_batch = None
+
+
+def resolve_refresh_plan(
+    metrics_file: Path,
+    requested_metric_ids: list[str],
+    date: str,
+    fresh_metric_ids: set[str] | None = None,
+) -> dict[str, Any]:
+    """Resolve prompt jobs; the Interval agent executes them and writes results."""
+    fresh = fresh_metric_ids or set()
+    try:
+        config = yaml.safe_load(metrics_file.read_text(encoding="utf-8")) or {}
+    except (OSError, yaml.YAMLError) as exc:
+        return {"date": date, "refresh_groups": [], "skipped_metric_ids": [], "source_gaps": [f"invalid_metrics_config:{exc}"]}
+    metrics = config.get("metrics") if isinstance(config, dict) else {}
+    refreshers = config.get("refreshers") if isinstance(config, dict) else {}
+    metrics = metrics if isinstance(metrics, dict) else {}
+    refreshers = refreshers if isinstance(refreshers, dict) else {}
+    jobs: dict[str, dict[str, Any]] = {}
+    skipped: list[str] = []
+    gaps: list[str] = []
+    for metric_id in requested_metric_ids:
+        if metric_id in fresh:
+            skipped.append(metric_id)
+            continue
+        definition = metrics.get(metric_id)
+        if not isinstance(definition, dict):
+            gaps.append(f"unknown_metric:{metric_id}")
+            continue
+        refresh_ref = str(definition.get("refresh_ref") or "").strip()
+        inline = str(definition.get("refresh") or "").strip()
+        if bool(refresh_ref) == bool(inline):
+            gaps.append(f"invalid_refresh_owner:{metric_id}")
+            continue
+        if inline:
+            jobs[f"metric:{metric_id}"] = {"refresh_id": f"metric:{metric_id}", "refresh": inline.replace("<YYYY-MM-DD>", date), "provides": [metric_id], "requested_metric_ids": [metric_id]}
+            continue
+        refresher = refreshers.get(refresh_ref)
+        if not isinstance(refresher, dict) or not str(refresher.get("refresh") or "").strip():
+            gaps.append(f"missing_refresher:{metric_id}:{refresh_ref}")
+            continue
+        job = jobs.setdefault(refresh_ref, {"refresh_id": refresh_ref, "refresh": str(refresher["refresh"]).replace("<YYYY-MM-DD>", date), "provides": list(refresher.get("provides") or []), "requested_metric_ids": []})
+        job["requested_metric_ids"].append(metric_id)
+    return {"date": date, "refresh_groups": list(jobs.values()), "skipped_metric_ids": skipped, "source_gaps": gaps}
+
+
+def resolve_interval_refresh_plan(interval_id: str, enabled: bool, *args: Any, **kwargs: Any) -> dict[str, Any]:
+    if interval_id != "daily" or not enabled:
+        return {"date": kwargs.get("date") or (args[2] if len(args) > 2 else None), "refresh_groups": [], "skipped_metric_ids": [], "source_gaps": [], "reason": "weekly_read_only" if interval_id == "weekly" else "refresh_disabled"}
+    return resolve_refresh_plan(*args, **kwargs)
+
+
+def record_refresh_result(project_root: Path, date: str, job: dict[str, Any], readings: dict[str, Any]) -> dict[str, Any]:
+    """Normalize one agent-executed group result into flat metric observations."""
+    if observation_from_reading is None or write_metric_batch is None:
+        raise RuntimeError("Farplane metric schema is unavailable")
+    observations = []
+    gaps: list[str] = []
+    for metric_id in job.get("requested_metric_ids", []):
+        reading = readings.get(metric_id)
+        if not isinstance(reading, dict):
+            gaps.append(f"missing_refresh_output:{metric_id}")
+            continue
+        observations.append(observation_from_reading(metric_id, date, reading, {"refresh_id": job.get("refresh_id")}))
+    path = write_metric_batch(project_root, str(job.get("refresh_id") or "metric_refresh"), date, observations, gaps=gaps, payload={"requested_metric_ids": job.get("requested_metric_ids", [])})
+    return {"path": str(path), "observation_metric_ids": [row.metric_id for row in observations], "source_gaps": gaps}
 
 
 def parse_iso_datetime(value: Any) -> datetime | None:
@@ -403,6 +480,8 @@ def calculate_autonomy_time_ratio(runtime_dir: Path, date: str) -> dict[str, Any
         for row in spawned_rows
         if row.get("thread_id") or row.get("session_id")
     }
+
+
     human_times_by_session: dict[str, list[datetime]] = {}
     for row in event_rows:
         if row_date(row) != date:
@@ -432,15 +511,40 @@ def calculate_autonomy_time_ratio(runtime_dir: Path, date: str) -> dict[str, Any
             rewarded_threads.add(thread_id)
 
     autonomous_minutes = 0.0
+    intervals: list[tuple[datetime, datetime]] = []
+    accepted_minutes = 0.0
     for thread_id, start in spawned_today.items():
         end = latest_by_thread.get(thread_id, start)
         elapsed = max((end - start).total_seconds() / 60.0, 0.0)
-        autonomous_minutes += elapsed if elapsed > 0 else 30.0
+        effective_elapsed = elapsed if elapsed > 0 else 30.0
+        effective_end = end if elapsed > 0 else start + timedelta(minutes=30)
+        autonomous_minutes += effective_elapsed
+        intervals.append((start, effective_end))
+        if thread_id in rewarded_threads:
+            accepted_minutes += effective_elapsed
+    union_minutes = 0.0
+    for start, end in sorted(intervals):
+        if not intervals:
+            break
+        if union_minutes == 0.0:
+            current_start, current_end = start, end
+            union_minutes = max((current_end - current_start).total_seconds() / 60.0, 0.0)
+            continue
+        if start > current_end:
+            current_start, current_end = start, end
+            union_minutes += max((end - start).total_seconds() / 60.0, 0.0)
+        elif end > current_end:
+            union_minutes += max((end - current_end).total_seconds() / 60.0, 0.0)
+            current_end = end
     human_prompt_count = sum(len(times) for times in human_times_by_session.values())
     human_active_threads = len(human_times_by_session)
     human_minutes = sum(estimate_human_attention_minutes(times) for times in human_times_by_session.values())
     accepted_today = accepted_reward_count(reward_rows, date)
     ratio = autonomous_minutes / human_minutes if human_minutes else (autonomous_minutes if autonomous_minutes else 0.0)
+    potential_saved_minutes = max(accepted_minutes - human_minutes, 0.0)
+    if spawned_today and not rewarded_threads:
+        gaps.append("missing:accepted_thread_runtime_attribution")
+    gaps.extend(["source_gap:waiting_for_human_hours", "source_gap:unproductive_agent_hours"])
     return {
         "value": round(float(ratio), 4),
         "status": "available",
@@ -450,11 +554,72 @@ def calculate_autonomy_time_ratio(runtime_dir: Path, date: str) -> dict[str, Any
             "human_attention_minutes_estimated": round(float(human_minutes), 2),
             "autonomous_thread_count": len(spawned_today),
             "autonomous_worker_elapsed_minutes": round(float(autonomous_minutes), 2),
+            "clone_hours": round(float(autonomous_minutes / 60.0), 4),
+            "concurrent_agent_wall_hours": round(float(union_minutes / 60.0), 4),
+            "accepted_clone_hours": round(float(accepted_minutes / 60.0), 4) if rewarded_threads else None,
+            "nonaccepted_clone_hours": None,
+            "potential_human_time_saved_hours_estimated": round(float(potential_saved_minutes / 60.0), 4) if rewarded_threads else None,
+            "formula": "max(accepted_clone_hours - human_attention_hours_estimated, 0)",
+            "concurrency_policy": "clone_hours sum parallel intervals; concurrent_agent_wall_hours uses their union",
+            "confidence": "estimated",
             "rewarded_autonomous_thread_count": len(rewarded_threads),
             "output_per_human_prompt": round(float(accepted_today / human_prompt_count), 4) if human_prompt_count else 0.0,
             "gaps": gaps,
         },
     }
+
+
+def calculate_autonomy_savings(ticket_dir: Path, runtime_dir: Path, date: str, baseline_reasonable_hours: float | None = None, baseline_max_hours: float | None = None) -> dict[str, Any]:
+    """Project accepted/nonaccepted clone hours through ticket proof and TAS-A."""
+    attention = calculate_autonomy_time_ratio(runtime_dir, date)
+    human_minutes = float(attention.get("payload", {}).get("human_attention_minutes_estimated") or 0.0)
+    by_ticket: dict[str, list[dict[str, Any]]] = {}
+    for row in read_jsonl(runtime_dir / "state" / "ticket-thread-associations.jsonl"):
+        if row.get("ticket_id"):
+            by_ticket.setdefault(str(row["ticket_id"]), []).append(row)
+    accepted_minutes = nonaccepted_minutes = 0.0
+    intervals: list[tuple[datetime, datetime]] = []
+    terminal_count = attributed_count = 0
+    items: list[dict[str, Any]] = []
+    gaps: list[str] = []
+    for ticket in iter_ticket_files(ticket_dir.resolve()):
+        fm = parse_ticket_frontmatter(ticket)
+        status = str(fm.get("status") or "").lower()
+        completed = parse_iso_datetime(fm.get("completed_at") or fm.get("closed_at") or fm.get("updated_at"))
+        if status not in {"done", "failed", "rejected"} or completed is None or completed.date().isoformat() != date:
+            continue
+        terminal_count += 1
+        ticket_id = str(fm.get("ticket_id") or ticket.parent.name)
+        rows = by_ticket.get(ticket_id, [])
+        thread_ids = {str(row.get("thread_id") or row.get("session_id")) for row in rows if row.get("thread_id") or row.get("session_id")}
+        starts = [parse_iso_datetime(row.get("execution_started_at") or row.get("started_at") or row.get("created_at") or row.get("timestamp") or row.get("ts")) for row in rows]
+        starts = [value for value in starts if value is not None]
+        if len(thread_ids) != 1 or not starts or completed <= min(starts):
+            gaps.append(f"{ticket_id}:missing_or_ambiguous_runtime_attribution")
+            continue
+        start = min(starts)
+        minutes = (completed - start).total_seconds() / 60.0
+        markdown = ticket.read_text(encoding="utf-8")
+        accepted = status == "done" and ticket_has_completion_proof(markdown) and ticket_has_acceptance_evidence(ticket, markdown)
+        accepted_minutes += minutes if accepted else 0.0
+        nonaccepted_minutes += 0.0 if accepted else minutes
+        attributed_count += 1
+        intervals.append((start, completed))
+        items.append({"ticket_id": ticket_id, "thread_id": next(iter(thread_ids)), "minutes": round(minutes, 2), "accepted": accepted})
+    union_minutes = 0.0
+    current_end: datetime | None = None
+    for start, end in sorted(intervals):
+        if current_end is None or start > current_end:
+            union_minutes += (end - start).total_seconds() / 60.0
+            current_end = end
+        elif end > current_end:
+            union_minutes += (end - current_end).total_seconds() / 60.0
+            current_end = end
+    if terminal_count and not attributed_count:
+        gaps.append("missing:accepted_runtime_attribution")
+    coverage = attributed_count / terminal_count if terminal_count else None
+    saved_minutes = max(accepted_minutes - human_minutes, 0.0) if attributed_count else None
+    return {"value": round(saved_minutes / 60.0, 4) if saved_minutes is not None else None, "status": "available" if saved_minutes is not None else "source_gap", "payload": {"clone_hours": round((accepted_minutes + nonaccepted_minutes) / 60.0, 4), "concurrent_agent_wall_hours": round(union_minutes / 60.0, 4), "accepted_clone_hours": round(accepted_minutes / 60.0, 4), "nonaccepted_clone_hours": round(nonaccepted_minutes / 60.0, 4), "human_attention_hours_estimated": round(human_minutes / 60.0, 4), "potential_human_time_saved_hours_estimated": round(saved_minutes / 60.0, 4) if saved_minutes is not None else None, "attribution_coverage": round(coverage, 4) if coverage is not None else None, "baseline_provenance": {"reasonable_hours_per_day": baseline_reasonable_hours, "max_hours_per_day": baseline_max_hours, "source": "operator_provided" if baseline_reasonable_hours is not None or baseline_max_hours is not None else "not_provided"}, "formula": "max(accepted_clone_hours - human_attention_hours_estimated, 0)", "items": items, "gaps": gaps}}
 
 
 def is_human_turn(row: dict[str, Any]) -> bool:
@@ -581,12 +746,25 @@ def main() -> int:
     interventions.add_argument("--runtime-dir", required=True)
     interventions.add_argument("--date", required=True)
 
+    savings = subparsers.add_parser("autonomy-savings")
+    savings.add_argument("--ticket-dir", required=True)
+    savings.add_argument("--runtime-dir", required=True)
+    savings.add_argument("--date", required=True)
+    savings.add_argument("--baseline-reasonable-hours", type=float)
+    savings.add_argument("--baseline-max-hours", type=float)
+
     content_targets = subparsers.add_parser("content-targets")
     content_targets.add_argument("--content-ledger", required=True)
     content_targets.add_argument("--platform", required=True)
     content_targets.add_argument("--kpi-key", required=True)
     content_targets.add_argument("--date", required=True)
     content_targets.add_argument("--window-days", type=int, default=7)
+
+    refresh_plan = subparsers.add_parser("refresh-plan")
+    refresh_plan.add_argument("--metrics-file", required=True)
+    refresh_plan.add_argument("--date", required=True)
+    refresh_plan.add_argument("--metric-id", action="append", default=[])
+    refresh_plan.add_argument("--fresh-metric-id", action="append", default=[])
 
     args = parser.parse_args()
     if args.command == "ticket-reward-count":
@@ -595,6 +773,8 @@ def main() -> int:
         return print_json(calculate_autonomy_time_ratio(Path(args.runtime_dir), args.date))
     if args.command == "ticket-intervention-metrics":
         return print_json(calculate_ticket_intervention_metrics(Path(args.ticket_dir), Path(args.runtime_dir), args.date))
+    if args.command == "autonomy-savings":
+        return print_json(calculate_autonomy_savings(Path(args.ticket_dir), Path(args.runtime_dir), args.date, args.baseline_reasonable_hours, args.baseline_max_hours))
     if args.command == "content-targets":
         return print_json(
             select_content_metric_targets(
@@ -605,6 +785,8 @@ def main() -> int:
                 args.window_days,
             )
         )
+    if args.command == "refresh-plan":
+        return print_json(resolve_refresh_plan(Path(args.metrics_file), args.metric_id, args.date, set(args.fresh_metric_id)))
     return 2
 
 

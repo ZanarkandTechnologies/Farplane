@@ -93,12 +93,13 @@ problem reports remain in Horizon Loop.
   corrections use a fix program; uncertain improvements use a prove-or-reject
   program before durable adoption. Stable semantic keys dedupe paraphrases,
   and generated learning tickets cannot project another learning ticket.
-- Dogfood Review runs as the weekly portfolio learner: it reads active
+- Dogfood Review runs as the weekly portfolio learner and reserved allocator: it reads active
   and recent archived experiment packets plus its prior report, carries a
-  derived outcome ledger, and proposes a bounded non-interfering next wave from
-  available capacity. It counts completion-projected tickets once and does not
-  recreate them. It may admit direct recovery from other settled failures; the
-  adaptive project planner owns ordinary experiment admission.
+  derived outcome ledger, consumes Core Reward history and harness-health
+  evidence, applies
+  `harness.areas.self_improvement.planner_instruction`, then asks the adaptive planner for a target-five
+  `reserved_area:self_improvement` wave. It counts completion-projected tickets
+  once and does not recreate them. Pulse alone materializes admitted specs.
 - Every experiment carries Reward rows and Goal Packet state; Work Pulse alone
   executes the experiment and resumes matured check-ins. Delayed packets put
   the executable check-in instructions in `program.md`; the resumed worker
@@ -138,8 +139,8 @@ flowchart LR
   signals["behavior gaps + experiment outcomes<br/>reports, tickets, feedback"]:::keep
   metrics["FEAT-0063<br/>metric advisor cards"]:::changed
   taste["FEAT-0069 retired<br/>human feedback decomposed"]:::retired
-  dogfood["FEAT-0070<br/>portfolio ledger + candidates"]:::changed
-  planner["adaptive project planner<br/>global rank + admission"]:::added
+  dogfood["FEAT-0070<br/>portfolio ledger + reserved allocation"]:::changed
+  planner["adaptive project planner<br/>global or reserved scope"]:::added
   packet["experiment Goal Packets<br/>Reward + executable program + progress"]:::added
   pulse["Work Pulse<br/>execute + check in"]:::keep
   memory["docs/TROUBLES.md<br/>docs/LESSONS.md"]:::added
@@ -153,8 +154,8 @@ flowchart LR
 ```
 
 Self-Improvement And Learning converts failures, feedback, and experiment
-results into metrics, lessons, evals, transfer candidates, and a bounded
-experiment-candidate wave for global admission.
+results into metrics, lessons, evals, transfer candidates, and a target-five
+weekly reserved experiment wave.
 
 ## Surfaces
 
@@ -191,3 +192,6 @@ experiment-candidate wave for global admission.
   delayed check-in execution instructions into each experiment `program.md`.
 - 2026-07-12: Centralized experiment admission in Work Pulse while allowing
   Dogfood to create bounded direct recovery from settled attributable failures.
+- 2026-07-13: Made Dogfood the target-five weekly reserved self-improvement
+  allocator while keeping planner logic shared and Pulse ownership of ticket
+  materialization, workers, and check-ins.

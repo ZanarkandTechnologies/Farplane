@@ -29,10 +29,10 @@ filming, external generation, and account mutation remain separately gated.
 ## Skill Signature
 
 ```text
-farplane_content_creation(source_or_idea, audience, content_goal, channels?, taste_refs?, ticket?, variation_count=10)
+farplane_content_creation(source_or_idea, audience, content_goal, channels?, taste_refs?, ticket?, audience_context?, variation_count=10)
   -> best_bet_proposals + approved_skeleton + optimized_exemplar + variation_matrix + ranked_shortlist + distribution_handoff + proof_refs
-state: reads(farplane/harness.yaml, farplane/metrics.yaml, source/evidence refs, taste refs, ticket Goal Packet); writes(ticket-local proposals, skeleton, exemplar, variants, review evidence, and feedback state)
-gates: audience_named; content_goal_named; claim_strength_matches_proof; planning_approval_before_execution; exemplar_approval_before_variations; publish_requires_separate_approval
+state: reads(farplane/harness.yaml, farplane/metrics.yaml, ticket audience_context first or configured Feed Scout memory as fallback, source/evidence refs, taste refs, ticket Goal Packet); writes(ticket-local proposals, skeleton, exemplar, variants, review evidence, and feedback state)
+gates: canonical_icp_bound; baseline_named; intended_belief_or_behavior_delta_named; audience_named; content_goal_named; claim_strength_matches_proof; planning_approval_before_execution; exemplar_approval_before_variations; publish_requires_separate_approval
 routes: root skill `content-impl-plan` | root skill `optimize-with-human` | root skill `goal-advisor` | root skill `storyboard` | root skill `social-content` | root skill `video-production` | root skill `remotion` | root skill `qa` | root skill `review`
 fails: executes before skeleton approval; asks a human to judge an undifferentiated batch; generates random rewrites; varies the proof spine; publishes all variants; treats feedback as publication authority
 ```
@@ -109,7 +109,7 @@ silently broaden into another action class.
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-- [ ] 1. Bind the audience, content goal, channel constraints, source evidence or idea, taste references, rights, proof limits, and authority boundary.
+- [ ] 1. Bind the audience, content goal, channel constraints, source evidence or idea, taste references, rights, proof limits, and authority boundary. Read ticket-owned `audience_context` first; otherwise resolve the selected area's canonical ICP and configured Feed Scout memory. Name the current baseline/default and the belief or workflow decision the artifact should change; a trend label or generic ICP pain is not a content premise.
 - [ ] 2. Use `content-impl-plan` to shape one Best Bet by default and no more than three genuinely distinct proposals for planning feedback.
 - [ ] 3. Run `optimize-with-human` in `phase: planning`; revise or reject locally until the human approves one proposal, then write its frozen skeleton and `approved_plan_ref`.
 - [ ] 4. Route the skeleton to the smallest faithful artifact-producing skill and build one exemplar before any batch expansion.
@@ -129,6 +129,8 @@ The content brief must name:
 - taste references and the specific patterns worth borrowing;
 - claim boundaries, prohibited claims, rights constraints, and approval gates;
 - the smallest useful artifact that can test the premise.
+- canonical ICP and world-memory refs, the current baseline/default, and the
+  precise belief or behavior delta the artifact is designed to cause.
 
 Evidence-backed content must map material claims to proof. An unproven idea may
 be explored, but it must remain labeled as a premise or hypothesis rather than

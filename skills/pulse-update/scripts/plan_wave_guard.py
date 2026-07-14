@@ -15,11 +15,128 @@ from typing import Any
 
 
 FINAL_OUTCOMES = {"completed", "no_op", "source_gap", "human_request"}
+SERIALIZATION_TIME_KEYS = {"as_of", "serialized_at"}
+SEMANTIC_TIME_FIELDS = {
+    "metric_freshness",
+    "goal_urgency",
+    "matured_reward_ids",
+    "operator_availability",
+}
 
 
 def canonical_fingerprint(value: Any) -> str:
     payload = json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=True)
     return hashlib.sha256(payload.encode("utf-8")).hexdigest()
+
+
+def is_temporary_json_ref(key: str, value: Any) -> bool:
+    if not key.endswith("ref") or not isinstance(value, str):
+        return False
+    normalized = value.replace("\\", "/")
+    return "/.farplane/tmp/" in f"/{normalized.lstrip('/')}" and normalized.endswith(".json")
+
+
+def normalized_legacy_clock(value: Any) -> str:
+    """Canonicalize an old planning clock without weakening time correctness."""
+
+    raw = str(value or "").strip()
+    if not raw:
+        return "missing"
+    candidate = raw[:-1] + "+00:00" if raw.endswith("Z") else raw
+    try:
+        parsed = datetime.fromisoformat(candidate)
+    except ValueError:
+        return raw
+    if parsed.tzinfo is None:
+        parsed = parsed.replace(tzinfo=timezone.utc)
+    return parsed.astimezone(timezone.utc).isoformat().replace("+00:00", "Z")
+
+
+def normalize_semantic_time_state(value: Any) -> dict[str, Any]:
+    """Validate the derived time boundaries that can change planning."""
+
+    if not isinstance(value, dict):
+        raise ValueError("semantic_time_state must be an object")
+    missing = sorted(SEMANTIC_TIME_FIELDS.difference(value))
+    if missing:
+        raise ValueError(
+            "semantic_time_state missing required fields: " + ", ".join(missing)
+        )
+    if not isinstance(value["metric_freshness"], dict):
+        raise ValueError("semantic_time_state.metric_freshness must be an object")
+    if not isinstance(value["goal_urgency"], dict):
+        raise ValueError("semantic_time_state.goal_urgency must be an object")
+    if not isinstance(value["matured_reward_ids"], list):
+        raise ValueError("semantic_time_state.matured_reward_ids must be a list")
+    if not isinstance(value["operator_availability"], dict):
+        raise ValueError("semantic_time_state.operator_availability must be an object")
+    return {
+        **value,
+        "matured_reward_ids": sorted(
+            {str(item).strip() for item in value["matured_reward_ids"] if str(item).strip()}
+        ),
+    }
+
+
+def semantic_planning_value(
+    project_root: Path,
+    value: Any,
+) -> Any:
+    """Remove run-envelope churn while preserving planning evidence changes.
+
+    With explicit ``semantic_time_state``, ``as_of`` and ``serialized_at`` are
+    serialization metadata while derived freshness, deadline, maturation, and
+    availability boundaries remain fingerprinted. Legacy inputs without that
+    state retain their canonical top-level ``as_of`` as a safe semantic clock;
+    they may replan more often but can never suppress a time transition.
+    """
+
+    root = project_root.resolve()
+    explicit_time_state = value.get("semantic_time_state") if isinstance(value, dict) else None
+    normalized_time_state = (
+        normalize_semantic_time_state(explicit_time_state)
+        if explicit_time_state is not None
+        else None
+    )
+    legacy_clock = value.get("as_of") if isinstance(value, dict) else None
+
+    def project(item: Any) -> Any:
+        if isinstance(item, dict):
+            result: dict[str, Any] = {}
+            for raw_key, child in item.items():
+                key = str(raw_key)
+                if key in SERIALIZATION_TIME_KEYS:
+                    continue
+                if key == "semantic_time_state" and normalized_time_state is not None:
+                    result[key] = project(normalized_time_state)
+                    continue
+                if is_temporary_json_ref(key, child):
+                    path = Path(child)
+                    if not path.is_absolute():
+                        path = root / path
+                    try:
+                        loaded = json.loads(path.read_text(encoding="utf-8"))
+                    except (OSError, json.JSONDecodeError):
+                        # A missing or malformed input is itself meaningful and
+                        # must not silently dedupe with a valid receipt.
+                        result[key] = child
+                    else:
+                        result[f"{key}_content"] = project(loaded)
+                    continue
+                result[key] = project(child)
+            return result
+        if isinstance(item, list):
+            return [project(child) for child in item]
+        return item
+
+    projected = project(value)
+    if isinstance(projected, dict) and normalized_time_state is None:
+        projected["legacy_semantic_clock"] = normalized_legacy_clock(legacy_clock)
+    return projected
+
+
+def semantic_planning_fingerprint(project_root: Path, value: Any) -> str:
+    return canonical_fingerprint(semantic_planning_value(project_root, value))
 
 
 def now_iso() -> str:
@@ -77,7 +194,7 @@ def begin_wave(project_root: Path, planning_input: Any, wave_size: int) -> dict[
     if wave_size < 0:
         raise ValueError("wave_size must be non-negative")
     project_root = project_root.resolve()
-    fingerprint = canonical_fingerprint(planning_input)
+    fingerprint = semantic_planning_fingerprint(project_root, planning_input)
     decisions = read_jsonl(decision_path(project_root))
     if any(
         row.get("action") == "plan_next_wave"
@@ -141,6 +258,7 @@ def finish_wave(
     admitted: list[str],
     admitted_areas: dict[str, str] | None = None,
     reason: str = "",
+    admitted_lanes: dict[str, str] | None = None,
 ) -> dict[str, Any]:
     if outcome not in FINAL_OUTCOMES:
         raise ValueError(f"invalid outcome: {outcome}")
@@ -167,6 +285,11 @@ def finish_wave(
         raise ValueError("every admitted ticket must have exactly one selected area_id")
     if any(not str(area_id).strip() for area_id in admitted_areas.values()):
         raise ValueError("selected area_id cannot be blank")
+    admitted_lanes = admitted_lanes or {}
+    if set(admitted_lanes) != set(admitted):
+        raise ValueError("every admitted ticket must have exactly one selected lane")
+    if any(not str(lane).strip() for lane in admitted_lanes.values()):
+        raise ValueError("selected lane cannot be blank")
 
     row = {
         "schema": "farplane.plan_wave_decision.v1",
@@ -177,7 +300,11 @@ def finish_wave(
         "wave_size": wave_size,
         "admitted": admitted,
         "admitted_specs": [
-            {"ticket_id": ticket_id, "area_id": admitted_areas[ticket_id]}
+            {
+                "ticket_id": ticket_id,
+                "area_id": admitted_areas[ticket_id],
+                "ranking": {"lane": admitted_lanes[ticket_id]},
+            }
             for ticket_id in admitted
         ],
         "reason": reason,
@@ -207,6 +334,12 @@ def parse_args() -> argparse.Namespace:
         default=[],
         help="TICKET_ID=AREA_ID; required once for every admitted ticket",
     )
+    finish.add_argument(
+        "--admitted-lane",
+        action="append",
+        default=[],
+        help="TICKET_ID=LANE; required once for every admitted ticket",
+    )
     finish.add_argument("--reason", default="")
     return parser.parse_args()
 
@@ -224,9 +357,15 @@ def main() -> int:
                 if not separator:
                     raise ValueError(f"invalid --admitted-area: {raw}")
                 admitted_areas[ticket_id.strip()] = area_id.strip()
+            admitted_lanes = {}
+            for raw in args.admitted_lane:
+                ticket_id, separator, lane = raw.partition("=")
+                if not separator:
+                    raise ValueError(f"invalid --admitted-lane: {raw}")
+                admitted_lanes[ticket_id.strip()] = lane.strip()
             result = finish_wave(
                 Path(args.project_root), args.claim_id, args.outcome, args.admitted,
-                admitted_areas, args.reason
+                admitted_areas, args.reason, admitted_lanes
             )
     except (OSError, ValueError, json.JSONDecodeError) as exc:
         print(json.dumps({"ok": False, "error": str(exc)}, sort_keys=True))

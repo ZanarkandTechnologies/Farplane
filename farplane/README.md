@@ -26,7 +26,7 @@ farplane/
   harness.yaml     # typed charter, planning areas, capability refs, metric selection
   metrics.yaml     # metric definitions, direction, freshness, guard rules
   automations.toml # one Work Pulse heartbeat plus separate scheduled sources
-  bindings.yaml    # non-secret project IDs, provider coordinates, refresh bindings
+  bindings.yaml    # non-secret project IDs and provider coordinates
   hooks.json       # declarative Farplane-native hook configuration
   pm.json          # optional UI thread manifest for one visual project PM
 

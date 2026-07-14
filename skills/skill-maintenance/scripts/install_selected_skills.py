@@ -12,6 +12,11 @@ from pathlib import Path
 from typing import Sequence
 
 
+RETIRED_SKILL_NAMES = {
+    "ticket-opportunity-generator",
+}
+
+
 @dataclass(frozen=True)
 class Skill:
     name: str
@@ -220,6 +225,10 @@ def install_skills(
         repo_skills = repo / "skills"
         for dest in sorted(skills_target.iterdir()):
             if dest.name in selected:
+                continue
+            if dest.name in RETIRED_SKILL_NAMES:
+                backup_existing(dest, backup_root, dry_run)
+                pruned.append(dest.name)
                 continue
             if dest.is_symlink():
                 try:

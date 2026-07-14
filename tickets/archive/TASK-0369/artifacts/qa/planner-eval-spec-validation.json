@@ -1,0 +1,15 @@
+{
+  "run": ".farplane/evals/runs/20260714-121825-task-0369-planner-unspoiled-final",
+  "task_id": "planner_rejects_shallow_icp_trend_repetition",
+  "validator": "skills/plan-next-wave/scripts/validate_ticket_specs.py",
+  "query_spoiler_verdict": "pass",
+  "memory_fixture_validation": "pass",
+  "spec_count": 1,
+  "ok": true,
+  "results": [
+    {
+      "index": 0,
+      "errors": []
+    }
+  ]
+}

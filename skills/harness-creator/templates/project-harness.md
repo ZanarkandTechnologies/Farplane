@@ -4,7 +4,7 @@ status: draft
 created_at: TODO
 updated_at: TODO
 template_id: project-harness
-template_version: "0.3.8"
+template_version: "0.3.9"
 feature_refs:
   - FEAT-0007
 project_id: TODO
@@ -34,7 +34,7 @@ Farplane files:
   freshness, and optional guard rules. The planner owns trajectory comparison.
 - `farplane/automations.toml` owns reviewable full Codex automation config.
 - `farplane/bindings.yaml` owns non-secret project/provider coordinates and
-  refresh bindings.
+  coordinates; `farplane/metrics.yaml` owns grouped refresh prompts.
 - `farplane/hooks.json` owns declarative project hook config.
 - `.agents/skills/` owns project-local capability workflows.
 

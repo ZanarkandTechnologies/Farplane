@@ -11,7 +11,45 @@ import sys
 from pathlib import Path
 
 
-ROOT = Path(__file__).resolve().parents[3]
+SCRIPT_PATH = Path(__file__).resolve()
+RUNTIME_RELATIVE_PATH = Path("farplane") / "phone-chaser"
+CORE_RELATIVE_PATH = Path("bin") / "core"
+
+
+def _valid_repo_root(path: Path) -> bool:
+    return (
+        (path / RUNTIME_RELATIVE_PATH).is_dir()
+        and (path / CORE_RELATIVE_PATH / "runtime_config.py").exists()
+    )
+
+
+def _first_valid_parent(path: Path) -> Path | None:
+    for candidate in (path, *path.parents):
+        if _valid_repo_root(candidate):
+            return candidate
+    return None
+
+
+def resolve_repo_root(script_path: Path = SCRIPT_PATH) -> Path:
+    """Resolve the shipped Farplane checkout from a repo or installed skill copy."""
+    direct = _first_valid_parent(script_path.parent)
+    if direct is not None:
+        return direct
+
+    installed_root = script_path.parents[3]
+    linked_core = installed_root / CORE_RELATIVE_PATH
+    if linked_core.exists() or linked_core.is_symlink():
+        linked = _first_valid_parent(linked_core.resolve())
+        if linked is not None:
+            return linked
+
+    raise SystemExit(
+        "missing Farplane Phone Chaser runtime; expected "
+        f"{RUNTIME_RELATIVE_PATH} in the checkout or through installed {CORE_RELATIVE_PATH}"
+    )
+
+
+ROOT = resolve_repo_root()
 CORE_DIR = ROOT / "bin" / "core"
 if str(CORE_DIR) not in sys.path:
     sys.path.insert(0, str(CORE_DIR))
@@ -20,6 +58,10 @@ from runtime_config import load_runtime_env  # noqa: E402
 
 
 DEFAULT_URGENCY = "normal"
+
+
+def runtime_dir() -> Path:
+    return ROOT / RUNTIME_RELATIVE_PATH
 
 
 def parse_args() -> argparse.Namespace:
@@ -155,7 +197,7 @@ def dispatch(agent_name: str, metadata: dict[str, object]) -> subprocess.Complet
     ]
     return subprocess.run(
         cmd,
-        cwd=ROOT / "farplane" / "phone-chaser",
+        cwd=runtime_dir(),
         check=False,
         text=True,
         stdout=subprocess.PIPE,
@@ -173,6 +215,7 @@ def main() -> int:
         "phone_number": sanitize_phone(phone_number),
         "urgency": metadata["urgency"],
         "message_summary": summarize_message(str(metadata["message"])),
+        "runtime_dir": str(runtime_dir()),
         "review": sanitize_review_metadata(metadata),
     }
 

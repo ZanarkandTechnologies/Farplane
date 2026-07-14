@@ -276,7 +276,7 @@ skill to root `skills/` only after repeated proof shows cross-project reuse.
      `feedback_primitive_implementation_plan` with:
      trigger, input IDs or export shape, official/source grounding, private env
      keys, `farplane/metrics.yaml` definitions, non-secret
-     `farplane/bindings.yaml` provider refresh bindings,
+     `farplane/bindings.yaml` provider coordinates and `farplane/metrics.yaml` grouped refresh prompts,
      `farplane/harness.yaml` selected objective and guard metric IDs,
      storage path, fetch/import scripts, normalization shape, eval rows,
      branch-scoped QA checklist, blocked-mode proof, and live-proof command.

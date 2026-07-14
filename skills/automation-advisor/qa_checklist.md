@@ -137,3 +137,12 @@ automation_prompt_qa(automation_prompt, called_skill, project_context)
      or record source gaps.
    - Fail: workflows infer project-specific sources from cadence name, operator
      identity, private context, or generic extra refs with unclear ownership.
+
+19. `final_response_contract`
+   - Pass: scheduled report-producing prompts include a compact final response
+     contract that surfaces key findings, tickets created or updated, candidate
+     decisions with reasons, source gaps, operator-needed items, and next owner
+     or no-execution receipts.
+   - Fail: the prompt allows a receipt that only says the report was written,
+     the index was regenerated, or no ticket was created without summarizing
+     the report and admission decisions.

@@ -424,7 +424,8 @@ done
 python3 "$REPO_DIR/skills/skill-maintenance/scripts/install_selected_skills.py" \
   --repo "$REPO_DIR" \
   --target "$TARGET_DIR" \
-  --all
+  --all \
+  --prune
 
 for rule_file in "$REPO_DIR"/rules/*; do
   link_path "$rule_file" "$TARGET_DIR/rules/$(basename "$rule_file")"

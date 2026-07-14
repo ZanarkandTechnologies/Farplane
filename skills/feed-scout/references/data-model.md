@@ -22,6 +22,7 @@ FeedScoutConfig {
   daily_feed_root: string
   ledger: string
   proposal_ledger: string
+  memory: string
   destination: "local_ledger" | "local_inbox" | "notion_tasks"
   write_policy: "local_first" | "report_only"
   ui?: {
@@ -47,6 +48,8 @@ FeedEntity {
 Rules:
 
 - Config paths are project-relative unless absolute.
+- `memory` points to one Markdown file updated in place. It is current
+  synthesis, not a daily/monthly ledger or snapshot timeline.
 - Key sources by the person, organization, or project the operator wants to
   track, for example `entities.theo-ping.sources.instagram`, so UI can render
   one creator with all websites, social accounts, repos, channels, and docs
@@ -297,6 +300,67 @@ DailyFeedFile {
   latest_report_ref?: string
 }
 ```
+
+## FeedScoutMemory
+
+The memory file is the compact retrieval surface between daily Feed Scout runs
+and downstream planning. It uses Markdown because the content is
+judgment-shaped, but deterministic headings and frontmatter keep the contract
+inspectable.
+
+```text
+FeedScoutMemory {
+  frontmatter: {
+    kind: "feed-scout-memory"
+    status: "active"
+    updated_at: datetime
+    canonical_icp_ref: "farplane/harness.yaml#areas"
+    source_ledger: string
+    last_report_ref?: string
+  }
+  sections: {
+    ICPs: AreaIcpMemory[]
+    Trends: TrendMemory[]
+    "Other Notable Things": NotableMemory[]
+    "Source Gaps": string[]
+  }
+}
+
+AreaIcpMemory {
+  area_id: string
+  canonical_ref: string
+  canonical_profile: object
+  current_concerns: string[]
+  current_language: string[]
+  source_refs: string[]
+}
+
+TrendMemory {
+  title: string
+  icp_refs: string[]
+  current_synthesis: string
+  why_it_matters: string
+  baseline_or_default: string
+  last_observed: date
+  confidence: "low" | "medium" | "high"
+  source_refs: string[]
+  candidate_experiment_shapes: string[]
+}
+```
+
+Rules:
+
+- `harness.areas.<area_id>.icp` is canonical. A daily run re-renders those
+  fields and may update only observed concerns, language, trends, notable
+  things, source gaps, and provenance.
+- Update existing concepts in place, merge duplicates, and remove or replace
+  superseded synthesis. Do not append dated run sections or preserve snapshots.
+- Stale facts may remain when useful, but `last_observed`, confidence, and
+  source gaps must make their status honest.
+- Memory is optional evidence. It never overrides metrics, ticket history,
+  authority, or the planner's admission gates.
+- Validate the final file with `scripts/validate_memory.py`; the helper checks
+  structure and provenance affordances but does not author or rank content.
 
 ## ProposalDraft
 

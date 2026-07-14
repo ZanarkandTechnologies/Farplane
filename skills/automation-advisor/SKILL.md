@@ -19,7 +19,7 @@ allowed-tools: Read, Glob, Grep, Bash
 Use this skill when creating, revising, or auditing Farplane Codex automations.
 It is Farplane-specific authoring guidance for live Codex automation configs.
 Work Pulse is the only base heartbeat and owns frequent reconciliation,
-dispatch, due ticket check-ins, and empty-board BAU refill. Feed Scout, Daily
+dispatch, due ticket check-ins, and low-watermark BAU refill. Feed Scout, Daily
 and Weekly BAU review, weekly Dogfood self-improvement, and low-frequency
 consolidation are separate `cron` records. They may produce
 reports or bounded ticket supply, but Work Pulse remains the shared executor.
@@ -175,6 +175,11 @@ fails:
   - [ ] Reject prompt prose that restates the called skill's scoring,
         selection, proof, benchmark, output-shape, or safety contract.
   - [ ] Name side-effect gates and final state/report writebacks.
+  - [ ] Add a compact `Final response` section for report-producing
+        automations so the operator sees key findings, tickets created or
+        updated, candidate decisions with reasons, source gaps, operator-needed
+        items, and the no-execution or next-owner receipt without opening the
+        report first.
 - [ ] 5. Activate live Codex loops only when requested.
   - [ ] Do not create live threads or automations during passive planning or
         substrate bootstrap.

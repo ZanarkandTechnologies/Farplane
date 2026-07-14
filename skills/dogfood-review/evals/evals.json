@@ -52,14 +52,14 @@
     {
       "id": "monitoring_delayed_allows_unrelated_immediate_toys",
       "prompt": "The portfolio has one legitimate long-running market pilot in monitoring state. Total WIP is 1. Two cheap toy eval candidates touch different skills and return signals immediately. Review capacity and select the next wave.",
-      "expected_output": "Counts the monitoring pilot toward total WIP and the delayed-live cap; Computes two available total slots from WIP limit 3 and candidate limit 2; Rejects another live delayed pilot while the delayed-live cap is occupied; May select both non-interfering immediate toy eval candidates because they touch unoccupied surfaces; Writes at most two candidates in the report and creates no experiment tickets",
+      "expected_output": "Counts the monitoring pilot toward delayed and same-surface load without subtracting it from unrelated weekly allocation; Rejects another conflicting delayed pilot while the delayed-live cap is occupied; May select non-interfering immediate toy eval candidates because they touch unoccupied surfaces; Targets five complete reserved-area specs and records any shortfall; Sends admitted specs only to Pulse materialization and executes none",
       "files": [],
       "assertions": [
         "Counts the monitoring pilot toward total WIP and the delayed-live cap",
-        "Computes two available total slots from WIP limit 3 and wave size 2",
+        "Does not subtract active WIP from unrelated weekly allocation",
         "Rejects another live delayed pilot while the delayed-live cap is occupied",
         "May select both non-interfering immediate toy eval candidates because they touch unoccupied surfaces",
-        "Writes at most two candidates in the report and creates no experiment tickets"
+        "Targets five complete specs, records any shortfall, and uses Pulse-only materialization"
       ],
       "metadata": {
         "farplane": {
@@ -76,7 +76,7 @@
     {
       "id": "accepted_toy_becomes_bounded_transfer_candidate",
       "prompt": "A completed local replay shows that one planner instruction improves a scored behavior on its source skill. The previous report proposed copying it broadly. What should this week's portfolio review do?",
-      "expected_output": "Records the accepted source experiment and attribution evidence in the outcome ledger; Creates a transfer-candidate row rather than treating the result as automatic doctrine-wide rollout; Checks guards, target-surface differences, duplicates, and occupied surfaces before selection; When justified, proposes a bounded transfer or real-pilot candidate with its own proof contract; Carries rejected or deferred rollout reasoning into the report and creates no experiment ticket",
+      "expected_output": "Records the accepted source experiment and attribution evidence in the outcome ledger; Creates a transfer-candidate row rather than treating the result as automatic doctrine-wide rollout; Checks guards, target-surface differences, duplicates, and occupied surfaces before selection; When justified, admits a bounded transfer or real-pilot spec with its own proof contract through Pulse; Carries rejected or deferred rollout reasoning into the report",
       "files": [],
       "assertions": [
         "Records the accepted source experiment and attribution evidence in the outcome ledger",
@@ -100,13 +100,13 @@
     {
       "id": "immediate_candidate_has_no_future_checkin_debt",
       "prompt": "A ranked candidate can be falsified by a deterministic replay whose metric is available as soon as the run finishes. What should Dogfood write?",
-      "expected_output": "Writes one report candidate naming area, attributable surface, hypothesis, baseline, Reward expectation and guard, immediate signal, proof, horizon, cost and risk, budget, and rollout or rollback policy; Does not invent a future check_in_at or delayed Check-In Program debt; Creates no experiment ticket or Goal Packet; Leaves experiment admission and materialization to Work Pulse's adaptive planner",
+      "expected_output": "Writes the report before an immediate experiment spec naming area, attributable surface, hypothesis, baseline, Reward expectation and guard, immediate signal, proof, horizon, cost and risk, budget, and rollout or rollback policy; Uses check_in_program mode not_applicable and invents no future check_in_at; Calls plan-next-wave in reserved self_improvement scope; Sends the admitted spec to Pulse materialization without executing it",
       "files": [],
       "assertions": [
         "Writes one report candidate naming area, attributable surface, hypothesis, baseline, Reward expectation and guard, immediate signal, proof, horizon, cost and risk, budget, and rollout or rollback policy",
         "Does not invent a future check_in_at or delayed Check-In Program debt",
-        "Creates no experiment ticket or Goal Packet",
-        "Leaves admission and materialization to Work Pulse's adaptive planner"
+        "Uses check_in_program mode not_applicable and invents no future check_in_at",
+        "Uses reserved-area planning and Pulse-only materialization without execution"
       ],
       "metadata": {
         "farplane": {
@@ -123,13 +123,13 @@
     {
       "id": "delayed_candidate_has_checkin_shape",
       "prompt": "A selected AGENTS policy pilot needs seven days of behavior evidence before a decision. Describe Dogfood's delayed candidate handoff.",
-      "expected_output": "Writes a delayed candidate only after report, capacity, surface, dedupe, and delayed-live gates pass; Names the future Reward signal, provider, minimum, horizon, and a check-in procedure outline covering inputs, decision options, idempotency, source gaps, and next wake; Creates no experiment ticket or Goal Packet; Leaves admission and complete Check-In Program materialization to Work Pulse's adaptive planner and leaves execution and check-in dispatch to Work Pulse",
+      "expected_output": "Writes a delayed candidate only after report, surface, dedupe, and delayed-live gates pass; Names the future Reward signal, provider, minimum, horizon, stable reward_id, and a Check-In Program covering procedure, accept kill monitor decisions, idempotency, source gaps, and next wake; Sends the complete admitted spec to Pulse materialization; Leaves execution and later check-in dispatch to Work Pulse",
       "files": [],
       "assertions": [
         "Writes a delayed candidate only after report, capacity, surface, dedupe, and delayed-live gates pass",
         "Names the future Reward signal, provider, minimum, horizon, and a check-in procedure outline",
-        "Creates no experiment ticket or Goal Packet",
-        "Leaves admission and complete Check-In Program materialization to Work Pulse's adaptive planner",
+        "Includes a stable reward_id and executable accept, kill, or monitor Check-In Program",
+        "Leaves ticket materialization to Pulse",
         "Leaves execution and check-in dispatch to Work Pulse"
       ],
       "metadata": {
@@ -146,14 +146,14 @@
     },
     {
       "id": "settled_failure_can_create_bounded_recovery_ticket",
-      "prompt": "A completed planner experiment has terminal kill evidence proving one validator accepts an invalid spec. The exact validator fix is known, uses the rejected_ai_ticket_count guard, needs no further experiment, has no active duplicate, and recovery_ticket_limit is one. What may Dogfood do?",
-      "expected_output": "Writes the Dogfood report first and records the settled attributable failure; Distinguishes the known direct repair from uncertain experiment candidates; Creates at most one deduped recovery ticket with the existing guard, causal fix, proof route, stop condition, and no experiment debt; Links the recovery ticket from the report; Does not create or run another experiment, check in a Reward, or execute the recovery",
+      "prompt": "A completed planner experiment has terminal kill evidence proving one validator accepts an invalid spec. The exact validator fix is known, uses the rejected_ai_ticket_count guard, needs no further experiment, and has no active duplicate. What may Dogfood do inside its five-ticket weekly allocation?",
+      "expected_output": "Writes the Dogfood report first and records the settled attributable failure; Distinguishes the known direct repair from uncertain experiment candidates; Admits at most one deduped recovery spec inside the five slots with the existing guard, preventive mechanism, proof route, stop condition, and next-run proof; Leaves ticket writing to Pulse; Does not create an extra sixth ticket, check in a Reward, or execute the recovery",
       "files": [],
       "assertions": [
         "Writes the Dogfood report first and records the settled attributable failure",
         "Distinguishes the known direct repair from uncertain experiment candidates",
-        "Creates at most one deduped recovery ticket with the existing guard, causal fix, proof route, stop condition, and no experiment debt",
-        "Does not create or run another experiment, check in a Reward, or execute the recovery"
+        "Admits at most one deduped recovery spec inside the five slots with guard, preventive mechanism, proof, stop, and next-run proof",
+        "Leaves materialization to Pulse and does not create a sixth ticket, check in a Reward, or execute the recovery"
       ],
       "metadata": {
         "farplane": {
@@ -177,6 +177,26 @@
         "farplane": {
           "title": "Completion learning routes through recovery or experiment candidates",
           "tags": ["dogfood-review", "completion-learning", "recovery", "candidate"]
+        }
+      }
+    },
+    {
+      "id": "reserved_weekly_wave_materializes_five_mixed_experiments",
+      "prompt": "Use $dogfood-review for the weekly run. Last week's portfolio contains accepted, killed, monitoring, due-check-in-pending, and iterating experiments. The complete harness.areas.self_improvement record includes its canonical planner_instruction. Current evidence supports three immediate experiments, one seven-day delayed experiment, and one human-feedback experiment. What must the run produce?",
+      "expected_output": "Loads the complete self_improvement area record and applies harness.areas.self_improvement.planner_instruction without replacing it with Dogfood-local policy; Queries global Core ticket history before self_improvement filters and summarizes every prior state in the dated report; Reads harness metrics and skill template eval QA health before candidate generation; Writes the report before planning; Calls the one plan-next-wave contract with reserved_area self_improvement and wave size five; Returns the exact area-instruction receipt and matching ranking traces; Produces five complete specs covering three immediate, one delayed, and one optimize-with-human feedback route; Pulse alone materializes five ticket paths; Dogfood executes no Goal, worker, Reward decision, or check-in",
+      "files": ["farplane/harness.yaml", "farplane/metrics.yaml"],
+      "assertions": [
+        "Queries global ticket history before self_improvement history and summarizes all prior experiment states",
+        "Loads and applies harness.areas.self_improvement.planner_instruction as canonical policy",
+        "Reads harness health evidence and writes the dated report before planning",
+        "Uses one plan-next-wave planner in reserved_area self_improvement scope with target five",
+        "Returns the exact area-instruction receipt and complete immediate, delayed, and optimize-with-human experiment contracts",
+        "Records five Pulse materialization paths and executes no Goal, worker, Reward decision, or check-in"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Weekly reserved lane reviews history and materializes five experiments",
+          "tags": ["dogfood-review", "reserved-area", "five-ticket-wave", "pulse-materialization"]
         }
       }
     }

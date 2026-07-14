@@ -196,7 +196,7 @@ long-horizon planning becoming greedy
 Use this ownership split for long-running work:
 
 ```text
-harness.yaml = human meaning + planning areas/instructions + selected metric refs + hard constraints
+harness.yaml = human meaning + canonical `areas.<area_id>.planner_instruction` contracts + selected metric refs + hard constraints
 metrics.yaml = metric meaning + direction + freshness + optional guard rules
 ticket.md = executable leaf contract + Done / Proof
 program.md = loop policy + metric + stop condition
@@ -207,7 +207,7 @@ artifacts/ = evidence
 Portfolio control:
 
 ```text
-plan_next_wave(harness, metric_state, ticket_history, reports)
+plan_next_wave(harness.areas complete records, metric_state, ticket_history, reports)
   -> ranked_proposals -> admitted_ticket[] | no_op | request_feedback
 ```
 

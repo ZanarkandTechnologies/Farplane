@@ -24,16 +24,25 @@ publish, spend, deploy, contact externals, or mutate accounts.
 
 The initial artifact-producing turn sends once, writes `progress.md`, changes
 the ticket to `status: awaiting_review`, clears `claimed_by`, and exits. A later
-Pulse may call this skill for the first due reminder without assigning an
-execution worker. Review WIP is planning backpressure, not a reminder trigger.
-Phone escalation remains an explicit operator/automation decision routed to
-`phone-chaser`; this skill does not infer it from queue size.
+Pulse may call this skill for a policy-derived Telegram reminder or Phone
+Chaser escalation without assigning an execution worker. Review WIP is
+planning backpressure, not a reminder trigger. The structured
+`farplane/bindings.yaml#operator.review_chase_policy` is the explicit automation
+decision: it owns bounded turn thresholds, active hours, caps, and notification
+authority. This skill never infers escalation from queue size.
+
+Telegram review delivery is an internal automation side effect. A worker
+ticket's `no credentials`, `no publication`, or `no account mutation` boundary
+does not prohibit the review wrapper from using automation-owned Telegram or
+Phone Chaser credentials. Those notifications grant no authority to publish,
+contact customers, spend, deploy, or mutate public accounts.
 
 ## Skill Signature
 
 ```text
 worker_artifact_review_request(ticket, artifacts, thread_ref,
-                               review_question, mode = initial | reminder,
+                               review_question,
+                               mode = initial | reminder | phone_escalation,
                                review_state?)
   -> send_receipt + progress_delta + ticket_delta
 
@@ -46,12 +55,13 @@ state:
 gates:
   artifacts_exist; archive_safe_refs; phone_readable_summary;
   one_reply_action; reply_thread_bound; no_duplicate_send;
-  reminder_is_due_when_mode=reminder; no_secrets;
+  policy_action_is_due_when_mode!=initial; no_secrets;
   no_external_action_permission; receipt_recorded
 
 fails:
   local_path_only_review; vague_reply_action; queue_size_as_chase_trigger;
   worker_reserved_while_waiting; repeated_not_due_reminder;
+  phone_escalation_outside_policy;
   notification_treated_as_final-action approval
 ```
 
@@ -62,19 +72,24 @@ fails:
   - [ ] Read the ticket, artifact, `progress.md`, review question, thread ref,
         final human gate, and `qa_checklist.md`.
   - [ ] Read `telegram-message/SKILL.md` and its checklist before sending.
-  - [ ] For `mode=reminder`, require an undecided Review block whose
-        `next_reminder_at` is due; otherwise return `skipped_not_due`.
+  - [ ] For `mode=reminder` or `phone_escalation`, require the exact due action
+        selected by Pulse from the structured chase policy; otherwise return
+        `skipped_not_due`.
 - [ ] 2. Validate the review surface.
   - [ ] Confirm artifact refs exist or are phone-openable.
   - [ ] Mark local paths desktop-only and include the smallest honest inline
         summary, excerpt, result, or options.
   - [ ] Ask exactly one reply action and preserve external-action gates.
 - [ ] 3. Send once and write state.
-  - [ ] Send through Telegram or record an exact fallback/blocker.
+  - [ ] Send the initial request through Telegram or record an exact transport
+        blocker. Do not treat ticket-local credential restrictions as a
+        notification blocker.
   - [ ] For an initial request, write the Review block below, set
         `status: awaiting_review`, clear `claimed_by`, and release the worker.
-  - [ ] For a reminder, increment `reminder_count`, record the send receipt,
-        and set the next configured reminder time or clear it when capped.
+  - [ ] For a Telegram reminder, increment `reminder_count` and record the
+        send receipt. For phone escalation, call `phone-chaser`, increment
+        `phone_chaser_count`, and record its sanitized dispatch receipt or
+        blocker. Never perform more than the policy-selected action.
   - [ ] Apply `qa_checklist.md` again before returning.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
@@ -89,9 +104,13 @@ artifact_refs:
   - tickets/TASK-XXXX/artifacts/example.md
 thread_ref: codex-thread-ref
 requested_at: 2026-07-11T12:00:00Z
-next_reminder_at: 2026-07-12T12:00:00Z
+telegram_status: sent
+telegram_message_id: telegram-message-id
 reminder_count: 0
-escalation_used: false
+telegram_reminder_message_ids: []
+phone_chaser_count: 0
+phone_chaser_dispatch_ids: []
+last_phone_chaser_at:
 decision:
 ```
 
@@ -115,7 +134,7 @@ workers. Only an active execution turn consumes worker capacity.
 
 ```yaml
 worker_artifact_review:
-  mode: initial | reminder
+  mode: initial | reminder | phone_escalation
   status: sent | blocked | skipped_duplicate | skipped_not_due
   ticket:
   thread_ref:
@@ -131,6 +150,10 @@ worker_artifact_review:
 - Do not send a local-path-only review request.
 - Do not keep a worker alive after the request is recorded.
 - Do not derive reminders from review queue length.
+- Do not let a ticket-local credential boundary suppress automation-owned
+  review notifications.
+- Do not dispatch Phone Chaser outside configured thresholds, active hours,
+  recipient boundaries, receipt-backed repeat intervals, or caps.
 - Do not create child review tickets; the original ticket and progress ledger
   own the decision.
 - Do not confuse human artifact review with a delayed market/metric check-in
@@ -148,5 +171,5 @@ worker_artifact_review:
 
 - Telegram send/fallback receipt.
 - Updated `progress.md` Review state.
-- Initial ticket transition to `awaiting_review` with no live claim, or reminder
-  ledger update with no worker assignment.
+- Initial ticket transition to `awaiting_review` with no live claim, or bounded
+  Telegram/phone ledger update with no worker assignment.

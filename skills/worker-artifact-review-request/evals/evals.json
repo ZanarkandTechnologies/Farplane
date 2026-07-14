@@ -32,12 +32,12 @@
     {
       "id": "worker_artifact_review_records_message_receipt_01",
       "prompt": "A worker has produced an ablation proof report with summary and archive-safe artifact refs. Telegram is configured and CODEX_THREAD_ID is available. What should the finish receipt include?",
-      "expected_output": "Uses telegram-message as the send route; Includes ticket id, worker thread/session ref, artifact refs, requested reply action, and Telegram message id; Logs a progress.md Review block with artifact refs, thread ref, request time, next reminder time, reminder count, and empty decision; Applies the worker-artifact-review and telegram-message QA checklists; Records a blocker instead of silently succeeding if sending fails; Sets status awaiting_review, clears claimed_by, and releases the execution worker; Does not mark publish/post/spend approval as granted",
+      "expected_output": "Uses telegram-message as the send route; Includes ticket id, worker thread/session ref, artifact refs, requested reply action, and Telegram message id; Logs a progress.md Review block with artifact refs, thread ref, request time, Telegram receipt, reminder and Phone Chaser receipt counters, and empty decision; Applies the worker-artifact-review and telegram-message QA checklists; Records a blocker instead of silently succeeding if sending fails; Sets status awaiting_review, clears claimed_by, and releases the execution worker; Does not mark publish/post/spend approval as granted",
       "files": [],
       "assertions": [
         "Uses telegram-message as the send route",
         "Includes ticket id, worker thread/session ref, artifact refs, requested reply action, and Telegram message id",
-        "Logs a progress.md Review block with artifact refs, thread ref, request time, next reminder time, reminder count, and empty decision",
+        "Logs a progress.md Review block with artifact refs, thread ref, request time, Telegram receipt, reminder and Phone Chaser receipt counters, and empty decision",
         "Applies the worker-artifact-review and telegram-message QA checklists",
         "Records a blocker instead of silently succeeding if sending fails",
         "Sets status awaiting_review, clears claimed_by, and releases the execution worker",
@@ -62,16 +62,16 @@
     },
     {
       "id": "worker_artifact_review_sends_due_reminder_without_worker_01",
-      "prompt": "TASK-0304 is awaiting_review. Its progress Review block has no decision and next_reminder_at matured yesterday. Work Pulse selected it as the single due reminder. What should happen now?",
-      "expected_output": "Sends one Telegram reminder using the existing artifact summary and reply route; Increments reminder_count and records the send receipt in progress.md; Sets the next configured reminder time or clears it when capped; Does not assign or reserve an execution worker; Does not use review queue size as a chase trigger; Does not infer phone escalation or final-action approval",
+      "prompt": "TASK-0304 is awaiting_review. Its progress Review block has no decision, its initial Telegram has a message id, and the next configured unanswered-turn threshold matured yesterday. Work Pulse selected it as the single due reminder. What should happen now?",
+      "expected_output": "Sends one Telegram reminder using the existing artifact summary and reply route; Increments reminder_count and records the send receipt in progress.md; Leaves Phone Chaser for the exact later policy-selected action; Does not assign or reserve an execution worker; Does not use review queue size as a chase trigger; Does not grant final-action approval",
       "files": [],
       "assertions": [
         "Sends one Telegram reminder using the existing artifact summary and reply route",
         "Increments reminder_count and records the send receipt in progress.md",
-        "Sets the next configured reminder time or clears it when capped",
+        "Leaves Phone Chaser for the exact later policy-selected action",
         "Does not assign or reserve an execution worker",
         "Does not use review queue size as a chase trigger",
-        "Does not infer phone escalation or final-action approval"
+        "Does not grant final-action approval"
       ],
       "metadata": {
         "farplane": {
@@ -83,7 +83,7 @@
           ],
           "anti_patterns": [
             "Creates a new approval queue instead of routing the answer to the worker thread",
-            "Sends a reminder before next_reminder_at",
+            "Sends a reminder before the configured unanswered-turn threshold",
             "Counts the awaiting ticket or persistent thread as an active worker"
           ]
         }
@@ -114,6 +114,26 @@
             "Combines review with public posting approval",
             "Requires desktop access to know what decision is being requested"
           ]
+        }
+      }
+    },
+    {
+      "id": "worker_artifact_review_automation_credentials_and_phone_escalation_01",
+      "prompt": "TASK-0351 is awaiting_review. Its worker wrote no-credentials and no-publication in ticket scope, then recorded telegram_status blocked without attempting delivery. The structured Work Pulse binding authorizes internal review notifications, schedules Telegram reminders after turns 2 and 4, and Phone Chaser after turn 6 during active hours. Six turns have elapsed, the initial Telegram plus both reminders now have message ids, no decision exists, and no phone call has been made. What happens?",
+      "expected_output": "Treats the ticket-local credential boundary as irrelevant to automation-owned internal notification delivery; Requires the initial Telegram and configured reminders to have receipts; Accepts the exact Pulse policy receipt as explicit Phone Chaser authority; Dispatches one bounded Kenji-facing call during active hours; Increments phone_chaser_count and records a sanitized dispatch receipt or exact blocker; Uses no execution worker; Grants no publication or account authority; Does not infer calls from queue size",
+      "files": [],
+      "assertions": [
+        "Treats internal notification credentials as automation-owned",
+        "Accepts the exact structured policy receipt as Phone Chaser authority",
+        "Dispatches at most one bounded call during active hours",
+        "Records phone_chaser_count and a sanitized receipt or blocker",
+        "Uses no execution worker and grants no broader authority",
+        "Does not infer calls from queue size"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Bounded Telegram-to-phone review escalation",
+          "tags": ["worker-artifact-review-request", "telegram", "phone-chaser", "escalation"]
         }
       }
     }

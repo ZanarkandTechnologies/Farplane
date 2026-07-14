@@ -1,15 +1,15 @@
 ---
-skill: ticket-opportunity-generator
+skill: plan-next-wave
 date: 2026-07-05
 change_type: behavior
 owner: skill-maintenance
 status: pass
 review_route: reviewer
 before_ref: local untracked skill before TASK-0294 implementation
-after_ref: skills/ticket-opportunity-generator/SKILL.md
+after_ref: skills/plan-next-wave/SKILL.md
 reasoning_basis: first_principles
 proof_artifacts:
-  - skills/ticket-opportunity-generator/eval_task.json
+  - skills/plan-next-wave/eval_task.json
   - python3 skills/skill-maintenance/scripts/check_skills.py --write
 eval_required: yes
 ---
@@ -58,7 +58,7 @@ eval_required: yes
 
 ## Proof Artifacts
 
-- Skill-local evals, when needed: `skills/ticket-opportunity-generator/eval_task.json`.
+- Skill-local evals, when needed: `skills/plan-next-wave/eval_task.json`.
 - Structure evals, when needed: `python3 skills/skill-maintenance/scripts/check_skills.py --write`.
 - Reviewer receipt: pending.
 - Validator: `python3 skills/skill-maintenance/scripts/check_skills.py --write` passed.

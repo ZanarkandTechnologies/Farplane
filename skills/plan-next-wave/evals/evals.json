@@ -1,0 +1,413 @@
+{
+  "skill_name": "plan-next-wave",
+  "evals": [
+    {
+      "id": "planner_blocks_on_unknown_hard_guard",
+      "prompt": "Use $plan-next-wave against only this synthetic Farplane fixture. The board is empty. The selected output metric activated_external_projects is current, but configured project guard rejected_ai_ticket_count has no reading and its freshness deadline passed yesterday. A normal framework_delivery delivery ticket and a one-hour local observation-restoration ticket are both safe and available. If restoration enters, return exactly one total executable spec with area_id framework_delivery, kpi_or_guard_id rejected_ai_ticket_count, ranking.setup_burden unavoidable_guard_restoration, execution.setup_changes: [], and exactly one output artifact shaped as {value_class: guard_restoration, kind: metric_observation, guard_id: rejected_ai_ticket_count, ref: <ref>, independent_value: <value>, use_path: <next planner use>}. Do not admit or queue delivery beside it. What enters the wave?",
+      "expected_output": "Treats the unknown or stale hard guard as admission-blocking; Does not admit the ordinary delivery ticket; Admits exactly one bounded local observation-restoration spec; Binds the configured rejected_ai_ticket_count guard and unavoidable_guard_restoration setup burden; Emits only the guard_restoration metric_observation artifact with matching guard_id and required fields; Returns no ordinary direct_value output and no delivery queued behind restoration; Names the fresh observation use path for the next planner run",
+      "files": [],
+      "assertions": [
+        "Treats the unknown or stale hard guard as admission-blocking",
+        "Does not admit the ordinary delivery ticket",
+        "Admits exactly one bounded local observation-restoration spec and no other spec",
+        "Uses the explicit configured guard_restoration metric_observation artifact contract",
+        "Binds rejected_ai_ticket_count and unavoidable_guard_restoration without a direct_value artifact",
+        "Names the fresh observation use path for the next planner run"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Unknown hard guard blocks ordinary admission",
+          "tags": ["plan-next-wave", "hard-guard", "source-gap"],
+          "context": "Synthetic Farplane fixture. Configured area framework_delivery allows activated_external_projects. Project guard rejected_ai_ticket_count is declared in harness.metric_refs.guards and is stale with no current reading. No other areas, guards, metrics, or ticket-history facts are in scope. Local observation is authorized; ordinary delivery must remain blocked until the guard is fresh."
+        }
+      }
+    },
+    {
+      "id": "planner_empty_board_returns_bounded_specs",
+      "prompt": "Use $plan-next-wave. The project has no ready work. Its current objective is to reduce failed ticket closeouts, two recent tickets identified missing proof links, and the next run should stay local. Give me the next small wave of work.",
+      "expected_output": "Returns no more than the requested wave size; Reads the typed charter and selected metric refs from harness.yaml plus metric definitions and current readings from metrics state; Produces complete executable ticket specs with area_id, existing KPI or guard, causal mechanism, expected change, metric provider, signal horizon, delayed check_in_at when applicable, expected Reward, exact inputs and outputs, proof route, stop conditions, and authority boundaries; Returns no partial or KPI-free spec; Does not require a goal tree, bet registry, product lane, or product-local progress file; Does not write tickets or dispatch workers",
+      "files": [],
+      "assertions": [
+        "Returns no more than the requested wave size",
+        "Reads the typed charter and selected metric refs from harness.yaml plus metric definitions and current readings",
+        "Produces complete executable ticket specs with area_id, existing KPI or guard, causal mechanism, expected change, metric provider, signal horizon, delayed check_in_at when applicable, expected Reward, exact inputs and outputs, proof route, stop conditions, and authority boundaries",
+        "Returns no partial or KPI-free spec",
+        "Connects each spec to the stated objective or bottleneck",
+        "Does not require a goal tree, bet registry, product lane, or product-local progress file",
+        "Does not write tickets or dispatch workers"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Empty board produces a bounded executable wave",
+          "tags": [
+            "plan-next-wave",
+            "next-wave",
+            "empty-board"
+          ]
+        }
+      }
+    },
+    {
+      "id": "planner_avoids_greedy_immediate_delta",
+      "prompt": "Use $plan-next-wave. The objective is to maximize accepted customer resolutions while keeping review failures below the guard threshold. Candidate A closes one easy case today. Candidate B takes three days to repair a shared diagnostic step expected to improve the next fifty cases. Candidate C is a reversible one-day probe that would tell us whether B addresses the real bottleneck. Compare the next wave.",
+      "expected_output": "Compares expected metric delta, confidence, duration, time to signal, cost, risk, reversibility, information gain, compounding value, interference, and prerequisites; Does not automatically choose the easiest immediate delta; May admit the probe before the shared repair when uncertainty is material; Preserves the review-failure guard; Returns only non-interfering executable specs within the wave limit",
+      "files": [],
+      "assertions": [
+        "Compares expected metric delta, confidence, duration, time to signal, cost, risk, reversibility, information gain, compounding value, interference, and prerequisites",
+        "Does not automatically choose the easiest immediate delta",
+        "May admit the probe before the shared repair when uncertainty is material",
+        "Preserves the review-failure guard",
+        "Returns only non-interfering executable specs within the wave limit"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Portfolio ranking avoids greedy immediate optimization",
+          "tags": ["plan-next-wave", "portfolio", "delayed-reward"]
+        }
+      }
+    },
+    {
+      "id": "planner_rejects_recent_duplicate",
+      "prompt": "Use $plan-next-wave. The board is empty, but last week's completed work already added and verified a ticket closure validator. A new suggestion proposes adding the same validator under a different title. What should enter the next wave?",
+      "expected_output": "Rejects the suggestion as a duplicate based on outcome and target surface rather than title; Records the prior attempt in duplicate rejections; Does not create a replacement ticket merely to fill the wave; May return no ticket when no distinct high-leverage move survives",
+      "files": [],
+      "assertions": [
+        "Rejects the suggestion as a duplicate based on outcome and target surface rather than title",
+        "Records the prior attempt in duplicate rejections",
+        "Does not create a replacement ticket merely to fill the wave",
+        "May return no ticket when no distinct high-leverage move survives"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Recent outcome duplicate is rejected",
+          "tags": [
+            "plan-next-wave",
+            "dedupe",
+            "history"
+          ]
+        }
+      }
+    },
+    {
+      "id": "planner_labels_missing_objective",
+      "prompt": "Use $plan-next-wave. There are no ready tickets and the project files disagree about whether the priority is customer research or internal refactoring. Pick something ambitious to keep everyone busy.",
+      "expected_output": "Labels the conflicting objective as a source gap; Does not invent a metric or choose a materially branching direction; Returns a human request or no executable specs; Does not treat activity or ambition as objective evidence",
+      "files": [],
+      "assertions": [
+        "Labels the conflicting objective as a source gap",
+        "Does not invent a metric or choose a materially branching direction",
+        "Returns a human request or no executable specs",
+        "Does not treat activity or ambition as objective evidence"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Missing value direction becomes a source gap",
+          "tags": [
+            "plan-next-wave",
+            "source-gap",
+            "objective"
+          ]
+        }
+      }
+    },
+    {
+      "id": "planner_references_capability_without_copying_it",
+      "prompt": "Use $plan-next-wave. A fresh source packet makes a customer-research brief the highest-leverage next artifact. The project already has a customer-research workflow. Shape the work so a worker can start immediately.",
+      "expected_output": "Names the existing customer-research capability as the workflow owner; Names inputs, output artifact, proof, stop condition, and objective contribution; Does not copy the full customer-research procedure into the ticket spec; Does not create a dedicated controller, progress file, or Pulse for the capability",
+      "files": [],
+      "assertions": [
+        "Names the existing customer-research capability as the workflow owner",
+        "Names inputs, output artifact, proof, stop condition, and objective contribution",
+        "Does not copy the full customer-research procedure into the ticket spec",
+        "Does not create a dedicated controller, progress file, or Pulse for the capability"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Domain workflow stays in its capability skill",
+          "tags": [
+            "plan-next-wave",
+            "capability",
+            "ownership"
+          ]
+        }
+      }
+    },
+    {
+      "id": "planner_evidence_gates_self_improvement_area",
+      "prompt": "Use $plan-next-wave. The board is empty. The current customer objective is to deliver a working export CLI. A report says the ticket planner prompt is verbose, while three terminal ticket Rewards show the planner repeatedly created non-executable tickets. Compare direct delivery and self-improvement in one wave.",
+      "expected_output": "Names delivery of the export CLI as the current objective bottleneck; Rejects prompt cleanup justified only by verbosity; Treats the repeated terminal Reward failures as valid evidence for a bounded self-improvement candidate; Ranks direct delivery and evidenced self-improvement globally by expected objective or guard effect, horizon, risk, signal time, interference, and human load; Does not invoke a weekly Dogfood planner or area subagent",
+      "files": [],
+      "assertions": [
+        "Names delivery of the export CLI as the current objective bottleneck",
+        "Rejects prompt cleanup justified only by verbosity",
+        "Treats the repeated terminal Reward failures as valid evidence for a bounded self-improvement candidate",
+        "Ranks direct delivery and evidenced self-improvement globally by expected objective or guard effect, horizon, risk, signal time, interference, and human load",
+        "Does not invoke a weekly Dogfood planner or area subagent"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Self-improvement competes only when evidence-gated",
+          "tags": [
+            "plan-next-wave",
+            "area-ranking",
+            "self-improvement"
+          ]
+        }
+      }
+    },
+    {
+      "id": "planner_queries_global_history_before_area_filter",
+      "prompt": "Use $plan-next-wave. The board has five configured planning areas and no unclaimed executable ticket. The latest twenty tickets appear concentrated in development, while marketing has one ticket. Explain how plan_next_wave gathers enough history before proposing work.",
+      "expected_output": "Uses one planner rather than spawning an agent per area; Fetches the latest twenty compact ticket rows globally before applying filters; Inspects area distribution, AI-planned origin, KPI movement, rejection, and actual Reward outcomes; Treats low ticket count as an attention hint rather than proof of missing value; Queries AI-planned marketing history or widens the window only when the global sample is insufficient; Records query receipts and ranks all surviving proposals globally",
+      "files": [],
+      "assertions": [
+        "Uses one planner rather than spawning an agent per area",
+        "Fetches the latest twenty compact ticket rows globally before applying filters",
+        "Inspects area distribution, AI-planned origin, KPI movement, rejection, and actual Reward outcomes",
+        "Treats low ticket count as an attention hint rather than proof of missing value",
+        "Queries AI-planned marketing history or widens the window only when the global sample is insufficient",
+        "Records query receipts and ranks all surviving proposals globally"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "One planner progressively retrieves area history",
+          "tags": ["plan-next-wave", "adaptive-history", "areas"]
+        }
+      }
+    },
+    {
+      "id": "planner_preserves_bau_docs_automation_and_customer_features",
+      "prompt": "Use $plan-next-wave. A customer cannot complete onboarding because the user guide omits one required step, the production welcome-email automation drops their workspace link, and the customer-facing import endpoint rejects valid CSV. The board is empty. Rank a wave of two tickets.",
+      "expected_output": "Treats the user guide, production operational automation, and customer-facing endpoint as legitimate BAU candidates; Does not reject them merely because one is documentation and another is automation; Ranks at most two using customer impact, bottleneck relief, urgency, proof speed, cost/risk, and review load; Records the losing plausible candidate as deprioritized rather than self-improvement; Returns executable specs with exact outputs and proof",
+      "files": [],
+      "assertions": [
+        "Treats the user guide, production operational automation, and customer-facing endpoint as legitimate BAU candidates",
+        "Does not reject them merely because one is documentation and another is automation",
+        "Ranks at most two using customer impact, bottleneck relief, urgency, proof speed, cost/risk, and review load",
+        "Records the losing plausible candidate as deprioritized rather than self-improvement",
+        "Returns executable specs with exact outputs and proof"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Artifact type alone does not exclude legitimate BAU",
+          "tags": [
+            "plan-next-wave",
+            "bau-boundary",
+            "customer-work"
+          ]
+        }
+      }
+    },
+    {
+      "id": "planner_ranks_compounding_bau_leverage",
+      "prompt": "Use $plan-next-wave. The goal is to shorten lead qualification time this month. Candidate A manually qualifies one lead today. Candidate B adds a small reusable enrichment step to the existing approved lead workflow and proves it on ten leads. Candidate C builds a generic orchestration platform. Pick and justify the next ticket.",
+      "expected_output": "Names lead qualification throughput as the bottleneck and enumerates direct, reusable-workflow, and speculative-platform levers; Ranks the bounded reusable enrichment step when its direct impact, proof speed, and compounding reuse beat the one-off action; Rejects the generic orchestration platform as speculative infrastructure; Uses qualitative ranking rather than invented numeric precision; Names why the one-off action was deprioritized",
+      "files": [],
+      "assertions": [
+        "Names lead qualification throughput as the bottleneck and enumerates direct, reusable-workflow, and speculative-platform levers",
+        "Ranks the bounded reusable enrichment step when its direct impact, proof speed, and compounding reuse beat the one-off action",
+        "Rejects the generic orchestration platform as speculative infrastructure",
+        "Uses qualitative ranking rather than invented numeric precision",
+        "Names why the one-off action was deprioritized"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Compounding value strengthens direct project progress",
+          "tags": [
+            "plan-next-wave",
+            "ranking",
+            "compounding-leverage"
+          ]
+        }
+      }
+    },
+    {
+      "id": "planner_compares_bau_sales_and_self_improvement_horizons",
+      "prompt": "Use $plan-next-wave. The selected goal is activated external projects. Evidence shows one qualified project has an onboarding blocker, sales has three warm leads but no proof-backed demo follow-up, and a failed planner eval shows duplicate proposals. The board has room for one ticket. Decide the next wave.",
+      "expected_output": "Names activation as the bottleneck; Compares materially distinct immediate, near-term, and compounding trajectories spanning the onboarding BAU fix, a bounded sales/demo follow-up, and evidence-backed planner self-improvement; Names a positive output, KPI causal path, time-to-signal, Reward shape, proof, cost/risk, and compounding value for each; Admits only the highest-leverage complete executable spec; Deprioritizes the other sensible proposals with reasons; Rejects generic cleanup, briefs, and activity-only work",
+      "files": [],
+      "assertions": [
+        "Compares immediate, near-term, and compounding trajectories",
+        "Includes direct BAU or sales work and evidence-backed self-improvement in one global ranking",
+        "Names positive outputs, KPI causal paths, Reward shapes, and proof",
+        "Admits only the highest-leverage complete executable spec",
+        "Deprioritizes plausible losing proposals and rejects activity-only work"
+      ],
+      "metadata": {"farplane": {"title": "Global planner compares needle-moving work across horizons", "tags": ["plan-next-wave", "cross-horizon", "sales", "self-improvement"]}}
+    },
+    {
+      "id": "planner_unattended_wave_rejects_human_dependent_cross_project_work",
+      "prompt": "Use $plan-next-wave. The operator is unavailable until tomorrow. One candidate could activate a dirty brownfield external project but may require migration choices; another can autonomously produce and validate a reusable lead-enrichment output tonight. The board has room for ten tickets. Decide the wave.",
+      "expected_output": "Binds the current unattended window; Keeps the dirty cross-project activation as deprioritized or a human request rather than executable; Admits only authority-safe autonomous work with a concrete positive output and KPI path; Does not treat wave_size ten as a quota; Explains the expected unattended throughput difference",
+      "files": [],
+      "assertions": [
+        "Binds the current unattended window",
+        "Keeps the dirty cross-project activation as deprioritized or a human request rather than executable",
+        "Admits only authority-safe autonomous work with a concrete positive output and KPI path",
+        "Does not treat wave_size ten as a quota",
+        "Explains the expected unattended throughput difference"
+      ],
+      "metadata": {"farplane": {"title": "Unattended waves reject human-dependent work", "tags": ["plan-next-wave", "authority", "unattended"]}}
+    },
+    {
+      "id": "planner_self_improvement_must_prevent_recurrence",
+      "prompt": "Use $plan-next-wave. A week-old duplicate ticket-ID incident was manually cleaned up. Candidate A renumbers old folders again. Candidate B adds one canonical allocator that scans active plus archived durable ticket identities and proves the next multi-ticket creation is collision-free. Compare them as self-improvement work.",
+      "expected_output": "Treats repeated renumbering as one-off maintenance rather than compounding leverage; Names duplicate ID creation as the recurring failure; Prefers the canonical active-plus-archive allocator as the durable preventive mechanism when evidence supports it; Requires proof on a reproduced or next multi-ticket creation; Rejects retrospective cleanup as the positive output",
+      "files": [],
+      "assertions": [
+        "Treats repeated renumbering as one-off maintenance rather than compounding leverage",
+        "Names duplicate ID creation as the recurring failure",
+        "Prefers the canonical active-plus-archive allocator as the durable preventive mechanism when evidence supports it",
+        "Requires proof on a reproduced or next multi-ticket creation",
+        "Rejects retrospective cleanup as the positive output"
+      ],
+      "metadata": {"farplane": {"title": "Self-improvement prevents recurrence", "tags": ["plan-next-wave", "self-improvement", "prevention"]}}
+    },
+    {
+      "id": "planner_bundles_setup_into_first_creator_exemplar",
+      "prompt": "Use $plan-next-wave with wave_size 10 against only the supplied synthetic Farplane fixture; do not run live commands, claim live ticket history, or add history facts beyond the fixture. Candidate proposals separately create a creator charter, experiment schema, video template, storyboard, render pipeline setup, three ablation-result videos, two research-result videos, and a product demo. In this fixture the charter, schema, template, storyboard, and render-pipeline work are setup: they must not be admitted as standalone tickets or relabeled product_surface/distribution_asset; bundle all required pieces into execution.setup_changes of the first rendered exemplar. All setup can be completed locally and publishing remains human-gated. Return the required response contract. Use only configured area_id and KPI values. The supported direct-value kinds are exactly working_product, product_surface, rendered_media, demo, distribution_asset, sales_asset, customer_deliverable, ablation_result, experiment_result, research_result, and preventive_mechanism; use rendered_media for every video and demo for the product demo. Put every admitted video under adoption_and_distribution with evidence_distribution_reach or distribution_reach_per_artifact; customer_learning has no candidate because its only configured KPI is not selected and F-002 had no use path. Every admitted spec must include execution.setup_changes as a list: the one bundled exemplar lists all setup there and every non-setup spec uses setup_changes: []. Encode every useful output exactly as output_artifacts: [{value_class: direct_value, kind: <supported kind>, ref: <ref>, independent_value: <value>, use_path: <next use>}]; do not nest under direct_value and do not use video, path, description, direct_use_path, product_demo, or unsupported setup kinds. Every delayed signal_horizon must have a non-empty check_in_at and every unattended spec must use operator_dependency: none. Only the one spec with setup_burden: bundled requires bundled_setup as a non-empty summary string and first_exemplar exactly equal to one direct_value artifact ref; specs with setup_burden: none may leave bundled_setup and first_exemplar null or empty. The admitted specs must pass skills/plan-next-wave/scripts/validate_ticket_specs.py against the fixture's configured areas and metrics. Plan the next wave.",
+      "expected_output": "Uses one planner and one global ranking; Reads complete harness area records and returns an exact planner-instruction receipt for framework_delivery, customer_learning, adoption_and_distribution, and self_improvement, with a candidate or explicit no-candidate reason for each; Every admitted area_id is one of those four configured areas and every spec has the matching ranking.area_instruction_ref plus a non-empty area_instruction_applied explanation; Every KPI binding is one of the fixture's configured metrics and belongs to the selected area; Rejects the decomposed charter, schema, template, storyboard, and render-setup tickets; Consolidates minimum setup into at most one ticket that also ships the first direct_value exemplar; Every other admitted ticket produces a structured direct_value artifact with supported kind, ref, independent_value, and use_path; Every emitted admitted spec passes validate_ticket_specs.py, including area-instruction trace, delayed check_in_at, operator_dependency none, a bundled_setup string and exact first_exemplar ref only for the bundled spec, and supported demo kind; Does not create a content Pulse, area planners, quotas, or filler",
+      "files": ["farplane/harness.yaml", "farplane/metrics.yaml"],
+      "assertions": [
+        "Uses one planner and one global ranking",
+        "Reads complete area records and returns exact canonical planner-instruction receipts",
+        "areas_considered uses only framework_delivery, customer_learning, adoption_and_distribution, and self_improvement, with a candidate or explicit no-candidate reason for each",
+        "Every admitted area_id is configured, traces to its matching planner instruction, and binds a metric owned by that area",
+        "Rejects decomposed setup tickets and bundles setup into at most one first-exemplar ticket",
+        "Requires every other admitted ticket to produce a structured direct_value artifact with supported kind, ref, independent_value, and use_path",
+        "Every emitted admitted spec passes the mechanical ticket-spec validator without field-shape or authority errors",
+        "Prefers compound outputs and does not create a content Pulse, area planners, quotas, or filler"
+      ],
+      "metadata": {"farplane": {"title": "Creator wave bundles setup and maximizes real artifacts", "tags": ["plan-next-wave", "hardcase", "artifact-density", "setup-bundling", "unified-pulse"], "hardcase": true, "difficulty": "high", "benchmark_value": "Proves the planner can compose a demo-producing portfolio without regressing to product controllers", "sanitization_notes": "No private account coordinates or unpublished content included", "context": "Synthetic Farplane integration fixture derived from farplane/harness.yaml and farplane/metrics.yaml. Project: Farplane. Flagship proof: autonomous research creator. Configured areas and allowed KPI bindings: framework_delivery -> activated_external_projects, accepted_harness_improvements, accepted_evidence_cycles; customer_learning -> decision_changing_learning_briefs; adoption_and_distribution -> distribution_reach_per_artifact, evidence_distribution_reach, x_followers, instagram_followers; self_improvement -> accepted_harness_improvements, auto_completion_rate, ticket_intervention_turn_count. Selected objective priorities: evidence_distribution_reach=1, distribution_reach_per_artifact=2, accepted_evidence_cycles=3, activated_external_projects=4. Guard rejected_ai_ticket_count is fresh and passing. Operator is unavailable; local artifact production is authorized, publishing is not. Valid area_id values are exactly framework_delivery, customer_learning, adoption_and_distribution, self_improvement. Ticket-history fixture, newest first: F-003 done adoption_and_distribution evidence_distribution_reach produced a proof-mapped text thread but no rendered media; F-002 rejected customer_learning decision_changing_learning_briefs produced a standalone summary with no use path; F-001 done framework_delivery accepted_evidence_cycles produced one accepted ablation result. No active or recent ticket produced creator charter, experiment schema, reusable video template, rendered creator video, or end-to-end product demo. Treat these three rows as the complete global query receipt for this eval; do not invent other tickets or use proposal categories as area IDs."}}
+    },
+    {
+      "id": "planner_proof_receipts_do_not_count_as_output_artifacts",
+      "prompt": "Use $plan-next-wave. Candidate A updates a schema and writes a passing test receipt. Candidate B uses the same schema work inside a ticket that also produces a working ablation comparison, chart, and rendered demo clip. Both are safe and address the same current bottleneck. Decide what enters the wave using the structured setup_changes and direct_value output_artifacts contract.",
+      "expected_output": "Rejects the schema-plus-proof-receipt proposal as setup-only when it can be bundled; Prefers the coherent candidate that declares schema work under setup_changes and ships structured direct_value ablation/demo artifacts; Each output artifact names supported kind, ref, independent_value, and use_path; Does not count tests, configuration, schema, or a proof receipt alone as project value; Records setup burden as bundled and makes first_exemplar equal a direct_value artifact ref",
+      "files": [],
+      "assertions": [
+        "Rejects setup plus proof receipts as an independent value ticket when bundling is possible",
+        "Prefers the coherent artifact-producing candidate",
+        "Names independently reviewable outputs and their direct use path",
+        "Records bundled setup and the first exemplar",
+        "Does not count tests, configuration, schema, or proof receipts alone as project value"
+      ],
+      "metadata": {"farplane": {"title": "Proof receipts are not product artifacts", "tags": ["plan-next-wave", "artifact-output", "setup-bundling"]}}
+    },
+    {
+      "id": "planner_reserved_self_improvement_reuses_global_history_and_spec_gates",
+      "prompt": "Use $plan-next-wave with planning_scope reserved_area:self_improvement and wave_size 5. This allocation is explicitly supplied by the weekly Dogfood caller. Read the supplied complete harness.areas.self_improvement record and apply harness.areas.self_improvement.planner_instruction. Begin from the supplied global ticket-history receipt, then use the supplied self_improvement Reward history. Five non-duplicate candidates survive: three immediate eval experiments, one delayed seven-day experiment, and one optimize-with-human experiment. Return the required response contract without writing tickets.",
+      "expected_output": "Uses one planner and records the explicit reserved-area allocation; Loads the complete self_improvement area record and returns an instruction-use receipt for harness.areas.self_improvement.planner_instruction; Preserves the global history receipt before the self_improvement progressive query; Ranks only self_improvement candidates while using global history for dedupe and interference; Every admitted spec traces ranking.area_instruction_ref to the canonical self_improvement instruction and explains how it was applied; Emits five complete executable specs with experiment feedback contracts; Immediate specs use check_in_program mode not_applicable; Delayed and human-feedback specs use stable reward IDs and executable accept kill monitor procedures; Human feedback routes through optimize-with-human and names a feedback artifact; Leaves ticket materialization to Pulse",
+      "files": ["farplane/harness.yaml", "farplane/metrics.yaml"],
+      "assertions": [
+        "Records explicit reserved_area self_improvement scope without creating a second planner",
+        "Loads and applies harness.areas.self_improvement.planner_instruction from the complete area record",
+        "Uses global ticket history before the self_improvement progressive query",
+        "Ranks only the reserved area's evidence-backed candidates and admits five complete specs",
+        "Every admitted spec traces its ranking to the canonical self_improvement planner instruction",
+        "Immediate, delayed, and human-feedback experiment contracts satisfy their distinct check-in requirements",
+        "Leaves all ticket writes and execution to Pulse"
+      ],
+      "metadata": {"farplane": {"title": "Reserved weekly self-improvement uses its canonical area instruction", "tags": ["plan-next-wave", "reserved-area", "self-improvement", "area-instruction", "five-ticket-wave"]}}
+    },
+    {
+      "id": "planner_global_scope_applies_every_canonical_area_instruction",
+      "prompt": "Use $plan-next-wave in global scope. The supplied harness has four complete area records, each with a distinct planner_instruction, skill_refs, and metric_refs. Read all four instructions before generating candidates. One area has no evidence-backed move. Return the required response contract and do not invent policy from area names or metrics.",
+      "expected_output": "Uses the complete harness.areas records rather than IDs or metric lists; Returns one area_instruction_receipt for every objective-relevant configured area with the exact harness.areas.<area_id>.planner_instruction ref; Applies each instruction before candidate generation; Records an explicit no-candidate reason for the area without a supported move; Ranks surviving candidates once; Every admitted spec carries the matching ranking.area_instruction_ref and a non-empty area_instruction_applied explanation; Does not create area planners or caller-local policy",
+      "files": ["farplane/harness.yaml", "farplane/metrics.yaml"],
+      "assertions": [
+        "Reads every complete scope-relevant harness area record",
+        "Returns exact canonical planner-instruction receipts for all objective-relevant areas",
+        "Records a candidate or explicit no-candidate reason after applying each instruction",
+        "Every admitted spec traces to the matching area instruction",
+        "Uses one ranking and does not reconstruct area policy outside harness.yaml"
+      ],
+      "metadata": {"farplane": {"title": "Global planning applies every canonical area instruction", "tags": ["plan-next-wave", "global", "area-instruction", "harness-contract"]}}
+    },
+    {
+      "id": "planner_blocked_or_review_work_does_not_reserve_area",
+      "prompt": "Use $plan-next-wave with wave_size 4. Framework ticket A is blocked on browser screenshot proof for one world-data demo. Distribution ticket B is awaiting human review for one Farplane-UI text case study. Four worker slots are idle. Current accepted evidence independently supports: a rendered ablation-result video, a separate CLI walkthrough demo, and a proof-mapped sales asset. None needs A's browser environment, B's publication decision, or the same output/target surface. Decide the wave.",
+      "expected_output": "Treats A and B as owners only of their exact outputs, target surfaces, and unresolved prerequisites; Rejects true duplicates of the world-data demo or Farplane-UI case study; Compares and may admit the independent rendered video, CLI walkthrough, and sales asset when their own objective, guard, evidence, authority, proof, and interference gates pass; Does not reserve framework_delivery or adoption_and_distribution as whole areas; Does not use idle slots as permission for filler",
+      "files": [],
+      "assertions": [
+        "Narrows active ownership to exact outcomes, target surfaces, and prerequisites",
+        "Rejects true duplicates of blocked or review-waiting work",
+        "Keeps independent non-interfering artifacts eligible in the same areas",
+        "Does not reserve an area, KPI, audience, or objective",
+        "Still applies every normal admission gate and rejects filler"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Blocked ownership does not starve independent artifacts",
+          "tags": ["plan-next-wave", "dedupe", "blocked", "awaiting-review", "artifact-density"]
+        }
+      }
+    },
+    {
+      "id": "planner_metric_first_lanes_choose_global_top_n",
+      "prompt": "Plan the next wave with capacity for three tickets. The selected objectives are qualified reach priority 1, accepted evidence cycles priority 2, and activated projects priority 3. Current evidence says qualified reach is badly behind its dated target, evidence cycles are on track, and activation is ahead. Candidate evidence supports two independent distribution deliverables with large near-term reach deltas, one low-risk ablation with a small evidence-cycle delta, one speculative additive experiment, one rollout whose source result is not yet accepted, and one routine cleanup with no metric unblock. Compare the trajectories and return executable work only.",
+      "expected_output": "Returns objective_progress rows with configured priorities, current/target/pace evidence, and behind/on_track/ahead status; Enumerates delivery, ablation, experiment, rollout, and operations with requested_count, candidate_count, candidates, and exact shortfall receipts; Uses one global priority-ordered constrained ranking rather than lane quotas; May select both independent delivery candidates when their risk-adjusted expected movement outranks weaker cross-lane candidates; Rejects the unaccepted rollout and metric-free cleanup; Every admitted spec names ranking.lane, a complete priority_trace, expected metric delta, confidence, duration, time-to-signal, cost, risk, human load, information gain, compounding value, interference, and rank reason; Returns at most three non-interfering tickets",
+      "files": ["farplane/harness.yaml", "farplane/metrics.yaml"],
+      "assertions": [
+        "Derives target-aware objective progress without inventing missing values",
+        "Enumerates top-N proposals or an evidence-backed shortfall for all five candidate lanes inside one planner",
+        "Treats lanes as search lenses rather than quotas or reserved slots",
+        "Selects the global top N compatible trajectories by expected metric impact",
+        "Allows multiple winners from one lane when they outrank weaker candidates",
+        "Rejects rollout without accepted source evidence and operations without a metric or guard path",
+        "Returns complete priority traces for every admitted ticket"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Metric urgency outranks lane balancing",
+          "tags": ["plan-next-wave", "metric-priority", "candidate-lanes", "portfolio", "hardcase"],
+          "hardcase": true,
+          "difficulty": "high",
+          "benchmark_value": "Proves candidate coverage cannot override risk-adjusted objective movement"
+        }
+      }
+    },
+    {
+      "id": "planner_each_lane_proposes_top_n_before_global_ranking",
+      "prompt": "Plan the next wave with capacity for ten tickets from the supplied project snapshot. Review pools are full and I will be unavailable overnight. What should the project work on?",
+      "expected_output": "Returns five lane receipts with requested_count ten, candidate_count, candidates, and evidence-backed shortfall reasons; Does not stop any lane at one candidate; Globally ranks all surviving candidates without quotas; Prefers unattended-safe machine-verifiable or delayed-feedback work under review saturation; Keeps human-dependent work deprioritized; Admits only distinct artifact-producing specs up to wave_size",
+      "files": ["farplane/harness.yaml", "farplane/metrics.yaml"],
+      "assertions": [
+        "Every canonical lane requests up to wave_size proposals and reports its full candidate count",
+        "No lane has an artificial one-candidate ceiling",
+        "One global ranking selects winners without lane quotas",
+        "Review saturation changes selection toward unattended-safe productive work instead of stopping planning",
+        "Every admission remains distinct and artifact-producing"
+      ],
+      "metadata": {"farplane": {"title": "Top-N lane portfolios stay productive under review saturation", "context": "This supplied synthetic planning snapshot is authoritative and complete for this eval case; use its candidate and availability facts directly rather than replacing them with live-project source gaps. The staged harness files supply schema and area bindings. Accepted evidence cycles is priority 1 and behind target; activated projects is priority 2 and on track. Ticket history confirms the following candidates are distinct and have no active owner. Delivery: D1 local activation walkthrough video (+2 qualified demo uses, machine-rendered), D2 activation evidence report (+1 accepted evidence cycle, machine-checked), D3 local proof inspector (+1 activated-project assist, browser-smokeable), D4 publish-now launch post (+reach, human publication gate). Ablation: A1 manifest-freshness counterfactual (+1 evidence cycle, machine-scored), A2 remove the one-candidate lane cap (+1 evidence cycle, deterministic replay), A3 review-pool digest compression (+1 operator-throughput guard, snapshot-tested). Experiment: E1 skill-trigger benchmark (+1 evidence cycle, immediate score), E2 planner-ranking perturbation (+1 evidence cycle, immediate score), E3 delayed activation-message test (+2 expected activations, seven-day signal), E4 artifact-density prompt test (+1 evidence cycle, immediate score), E5 creator taste interview (+learning, requires operator interview). Rollout: R1 install the accepted freshness validator (+2 activation reliability, accepted source result), R2 propagate the accepted review digest template (+1 review throughput, accepted source result). Operations: O1 repair stale snapshot detection (+1 activation reliability, machine test), O2 repair ticket-ID allocation (+1 dispatch reliability, machine test), O3 clean an old notes archive (no metric or guard effect). Review pools are saturated and operator availability is false until morning. Machine-verifiable work may proceed; publication and interviews remain human-gated.", "tags": ["plan-next-wave", "candidate-lanes", "review-saturation", "unattended", "hardcase"], "hardcase": true, "difficulty": "high", "benchmark_value": "Proves review saturation changes portfolio strategy without restoring the one-candidate lane ceiling", "sanitization_notes": "Synthetic counts and no private account identifiers"}}
+    },
+    {
+      "id": "planner_optional_goals_retire_when_metric_target_is_reached",
+      "prompt": "The project has two dated targets: raise qualified reach to 1000 by 2026-08-01 and reduce failed closeouts to 2 by 2026-07-31. Current readings are qualified reach 1000 and failed closeouts 7. Return only a compact JSON goal-projection diagnosis of what should still affect the next work ranking; this is not a request to generate a wave.",
+      "expected_output": "Derives the qualified reach goal as completed from its maximize direction and current value; Removes that completed goal from urgency without deleting or mutating it; Keeps the failed closeouts goal active with its target and date; Does not invent mutable goal status or additional targets; Uses permanent metric priorities plus only the active goal for ranking",
+      "files": [],
+      "assertions": [
+        "Derives completion from current reading and metric direction",
+        "Completed goals stop adding urgency while remaining configured history",
+        "Active goals retain target and date urgency",
+        "Does not invent goals, targets, or mutable status"
+      ],
+      "metadata": {"farplane": {"title": "Completed optional goals retire from urgency", "context": "The supplied synthetic goal and metric readings are authoritative and complete for this eval case. Return the required planner response contract without substituting live-project source gaps for these readings.", "tags": ["plan-next-wave", "goals", "metrics", "priority"]}}
+    },
+    {
+      "id": "planner_rejects_shallow_icp_trend_repetition",
+      "prompt": "Plan the next outward-facing evidence wave. The adoption ICP is technical agent builders. Current Feed Scout memory says they are discussing long-running agents, but the cited source also shows they distrust autonomy claims without a baseline. Candidate A is a generic video called 'Agents Are the Future.' Candidate B is a fair Farplane-ticket-system versus manual-task-file comparison that measures recovery, supervision turns, and proof completeness, then produces an ablation report plus a proof-led demo. Both are otherwise executable and distinct. Decide what survives.",
+      "expected_output": "Loads the complete adoption area including its canonical ICP and the relevant Feed Scout memory entry; Rejects Candidate A because a trend label and broad audience pain do not name a baseline or change expert belief; May admit Candidate B because it binds the ICP job, manual-task-file baseline, intended implementation decision, current memory and source refs, measurable comparison, and direct-value artifacts; Writes complete audience_context into the spec and execution inputs; Keeps execution.operator_dependency none while publication stays in lifecycle.human_gate; Uses signal_horizon immediate for same-run evidence or an ISO check_in_at for delayed signal; Keeps memory as evidence rather than authority and still applies metric, dedupe, proof, authority, deterministic ticket-spec validation, and global-ranking gates",
+      "files": ["farplane/harness.yaml", "farplane/metrics.yaml", "skills/plan-next-wave/evals/fixtures/icp-world-memory.md"],
+      "assertions": [
+        "Loads canonical ICP and relevant world-memory context",
+        "Rejects generic trend repetition without a baseline or decision delta",
+        "Prefers a grounded comparison that can change an expert implementation decision",
+        "Carries ICP, baseline, belief or behavior delta, and evidence refs into audience_context",
+        "Returns an admitted spec that passes validate_ticket_specs including operator dependency and delayed check-in fields",
+        "Does not let memory bypass ordinary planner gates"
+      ],
+      "metadata": {"farplane": {"title": "ICP grounding rejects shallow trend content", "tags": ["plan-next-wave", "icp", "world-memory", "baseline", "hardcase"], "hardcase": true, "difficulty": "high", "benchmark_value": "Proves the idea gate distinguishes game-changing evidence from generic topical content"}}
+    }
+  ]
+}

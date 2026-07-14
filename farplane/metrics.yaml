@@ -5,6 +5,76 @@ updated_at: 2026-07-13
 framework_template_version: "0.3.0"
 owner: metric-advisor
 refreshers:
+  local_project_metrics:
+    refresh: >-
+      Run `farplane metrics primitives --project-root . --date <YYYY-MM-DD> --json`,
+      then use the interval metric helpers for accepted Reward, intervention,
+      autonomy, content-ledger, and eval readings not emitted by Core. For
+      clone-hour metrics, prefer the canonical Farplane UI Harness Usage
+      completed-agent-hours summary for this project/window when accessible;
+      otherwise use local lifecycle telemetry and record the missing Harness
+      Usage source as a gap. Call `autonomy-savings` with ticket-dir `tickets`,
+      runtime-dir `.farplane`, and the operator-provided baseline of 10
+      reasonable or 20 maximum human hours per day; only terminal TAS-A work may
+      contribute accepted hours. Write each
+      requested metric as a flat observation with raw components, provenance,
+      confidence, and source gaps; never turn missing evidence into zero.
+    provides:
+      - activated_external_projects
+      - distribution_reach_per_artifact
+      - accepted_evidence_cycles
+      - accepted_trust_ablations
+      - accepted_harness_improvements
+      - interesting_autonomy_results
+      - auto_time_ratio
+      - clone_hours
+      - concurrent_agent_wall_hours
+      - accepted_clone_hours
+      - nonaccepted_clone_hours
+      - potential_human_time_saved_hours_estimated
+      - evidence_distribution_reach
+      - latest_eval_pass_rate
+      - decision_changing_learning_briefs
+      - auto_completion_rate
+      - rejected_ai_ticket_count
+      - intervention_free_ticket_count
+      - ticket_intervention_turn_count
+      - todo_unclaimed_ticket_count
+      - posts_published
+  github_metrics:
+    refresh: >-
+      Use the configured GitHub repository coordinate and `gh api` once for the
+      <YYYY-MM-DD> traffic window. Write every requested GitHub metric as a flat
+      observation or an explicit permission/source gap.
+    provides:
+      - github_views
+  x_account_metrics:
+    refresh: >-
+      Call $x-account once for the configured Farplane account and <YYYY-MM-DD>
+      window. Collect all requested account and selected-post readings, then
+      write separate flat observations with per-post evidence and source gaps.
+    provides:
+      - x_followers
+      - x_views
+      - x_likes
+  instagram_account_metrics:
+    refresh: >-
+      Call $instagram-account once for the configured Farplane account and
+      <YYYY-MM-DD> window. Collect all requested account, Reel, reach,
+      interaction, watch-time, and retention readings, then write separate flat
+      observations with per-media evidence and source gaps.
+    provides:
+      - instagram_followers
+      - instagram_views
+      - instagram_likes
+      - instagram_comments
+      - instagram_shares
+      - instagram_saves
+      - instagram_reach
+      - instagram_total_interactions
+      - instagram_avg_watch_time
+      - instagram_total_watch_time
+      - instagram_retention_score
   harness_health:
     refresh: >-
       Run `farplane harness health compile --project-root . --date
@@ -16,6 +86,7 @@ refreshers:
       - harness_health_source_gap_count
 metrics:
   activated_external_projects:
+    refresh_ref: local_project_metrics
     label: Activated external projects
     description: Count of non-Farplane local projects whose manifest is current and whose Work Pulse recorded a decision after that manifest update.
     pinned: true
@@ -25,6 +96,7 @@ metrics:
     direction: maximize
     max_age_days: 7
   distribution_reach_per_artifact:
+    refresh_ref: local_project_metrics
     label: Distribution reach per published artifact
     description: Same-window evidence distribution reach divided by published artifacts; this measures distribution efficiency rather than rewarding raw output volume.
     pinned: true
@@ -34,6 +106,7 @@ metrics:
     direction: maximize
     max_age_days: 7
   accepted_evidence_cycles:
+    refresh_ref: local_project_metrics
     label: Accepted evidence cycles
     description: Daily count of completed tickets whose Reward names this metric and whose ticket-scoped review evidence records verdict pass at TAS-A.
     pinned: true
@@ -43,6 +116,7 @@ metrics:
     direction: maximize
     max_age_days: 7
   accepted_trust_ablations:
+    refresh_ref: local_project_metrics
     label: Accepted trust ablations
     description: Daily count of completed tickets whose Reward.kpi_rewards includes this KPI and whose proof shows a with/without trust decision.
     pinned: false
@@ -50,6 +124,7 @@ metrics:
     unit: ablations
     display: bar_plus_cumulative
   accepted_harness_improvements:
+    refresh_ref: local_project_metrics
     label: Accepted harness improvements
     description: Daily count of completed tickets whose Reward.kpi_rewards includes this KPI and whose proof shows a shipped Farplane improvement.
     pinned: false
@@ -59,6 +134,7 @@ metrics:
     direction: maximize
     max_age_days: 7
   interesting_autonomy_results:
+    refresh_ref: local_project_metrics
     label: Interesting autonomy results
     description: Daily count of distinct interesting results found in ticket proof from the review window.
     pinned: false
@@ -66,13 +142,63 @@ metrics:
     unit: results
     display: bar_plus_cumulative
   auto_time_ratio:
+    refresh_ref: local_project_metrics
     label: Autonomous time ratio
     description: Autonomous worker elapsed minutes divided by estimated human attention minutes for the day.
     pinned: false
     kind: point
     unit: ratio
     display: reading
+  clone_hours:
+    refresh_ref: local_project_metrics
+    label: Parallel clone hours
+    description: Sum of attributed agent-thread elapsed hours in the window; parallel threads intentionally accumulate and may exceed 24 hours per day.
+    pinned: true
+    kind: daily
+    unit: hours
+    display: line
+    direction: maximize
+    max_age_days: 1
+  concurrent_agent_wall_hours:
+    refresh_ref: local_project_metrics
+    label: Concurrent agent wall hours
+    description: Union of attributed agent-thread intervals in the window, preventing parallel threads from double-counting wall-clock coverage.
+    pinned: false
+    kind: daily
+    unit: hours
+    display: line
+  accepted_clone_hours:
+    refresh_ref: local_project_metrics
+    label: Accepted clone hours
+    description: Attributed clone hours for terminal tickets with completion proof and TAS-A acceptance evidence; ongoing or evidence-incomplete work is excluded.
+    pinned: true
+    kind: daily
+    unit: hours
+    display: line
+    direction: maximize
+    max_age_days: 1
+  nonaccepted_clone_hours:
+    refresh_ref: local_project_metrics
+    label: Non-accepted clone hours
+    description: Attributed clone hours for failed or rejected tickets and completed tickets without acceptance evidence; this is recoverable-cost evidence, not a claim that ongoing work is waste.
+    pinned: true
+    kind: daily
+    unit: hours
+    display: line
+    direction: minimize
+    max_age_days: 1
+  potential_human_time_saved_hours_estimated:
+    refresh_ref: local_project_metrics
+    label: Potential human time saved
+    description: Estimated max of accepted clone hours minus prompt-cluster human-attention hours and zero, with formula, baseline provenance, attribution coverage, and confidence retained in the payload.
+    pinned: true
+    kind: daily
+    unit: hours
+    display: line
+    direction: maximize
+    max_age_days: 1
   evidence_distribution_reach:
+    refresh_ref: local_project_metrics
     label: Evidence distribution reach
     description: Same-window reach across available evidence-backed distribution channels, with per-platform components retained in the observation payload.
     pinned: true
@@ -82,6 +208,7 @@ metrics:
     direction: maximize
     max_age_days: 7
   latest_eval_pass_rate:
+    refresh_ref: local_project_metrics
     label: Latest eval pass rate
     description: Diagnostic pass rate from the most recent local eval summary; not a project-wide admission guard because eval runs cover different scopes and difficulties.
     pinned: false
@@ -112,6 +239,7 @@ metrics:
       operator: less_than_or_equal
       threshold: 0
   decision_changing_learning_briefs:
+    refresh_ref: local_project_metrics
     label: Decision-changing learning briefs
     description: Daily count of learning briefs whose implication changes positioning, audience, distribution, workflow, or no-action decisions.
     pinned: false
@@ -121,6 +249,7 @@ metrics:
     direction: maximize
     max_age_days: 14
   github_views:
+    refresh_ref: github_metrics
     label: GitHub views
     description: Daily GitHub traffic views for the Farplane repository when traffic API access is available.
     pinned: false
@@ -128,6 +257,7 @@ metrics:
     unit: views
     display: bar_plus_cumulative
   auto_completion_rate:
+    refresh_ref: local_project_metrics
     label: Auto completion rate
     description: Completed associated tickets with zero post-start human intervention turns divided by all completed associated tickets for the day.
     pinned: false
@@ -135,6 +265,7 @@ metrics:
     unit: ratio
     display: reading
   rejected_ai_ticket_count:
+    refresh_ref: local_project_metrics
     label: Rejected AI tickets
     description: Daily diagnostic count of AI-planned reward-bearing tickets marked status rejected; Dogfood may use the history to evaluate planner variants.
     pinned: false
@@ -147,6 +278,7 @@ metrics:
       operator: less_than_or_equal
       threshold: 1
   intervention_free_ticket_count:
+    refresh_ref: local_project_metrics
     label: Intervention-free tickets
     description: Daily count of completed associated tickets with zero human turns after execution start.
     pinned: false
@@ -154,6 +286,7 @@ metrics:
     unit: tickets
     display: bar_plus_cumulative
   ticket_intervention_turn_count:
+    refresh_ref: local_project_metrics
     label: Ticket intervention turns
     description: Daily count of human turns after execution start and before completion across completed associated tickets.
     pinned: true
@@ -163,6 +296,7 @@ metrics:
     direction: minimize
     max_age_days: 1
   todo_unclaimed_ticket_count:
+    refresh_ref: local_project_metrics
     label: Todo unclaimed tickets
     description: Current count of unclaimed status=todo tickets with satisfied dependencies.
     pinned: false
@@ -170,6 +304,7 @@ metrics:
     unit: tickets
     display: reading
   x_followers:
+    refresh_ref: x_account_metrics
     label: X followers
     description: Current follower count for the configured Farplane X account.
     pinned: false
@@ -177,6 +312,7 @@ metrics:
     unit: followers
     display: line
   x_views:
+    refresh_ref: x_account_metrics
     label: X views
     description: Daily aggregate X views for posted content selected from the content ledger.
     pinned: false
@@ -186,6 +322,7 @@ metrics:
     direction: maximize
     max_age_days: 7
   x_likes:
+    refresh_ref: x_account_metrics
     label: X likes
     description: Daily aggregate X likes for posted content selected from the content ledger.
     pinned: false
@@ -193,6 +330,7 @@ metrics:
     unit: likes
     display: bar_plus_cumulative
   instagram_followers:
+    refresh_ref: instagram_account_metrics
     label: Instagram followers
     description: Current follower count for the configured Farplane Instagram account.
     pinned: false
@@ -200,6 +338,7 @@ metrics:
     unit: followers
     display: line
   instagram_views:
+    refresh_ref: instagram_account_metrics
     label: Instagram views
     description: Daily aggregate Instagram views for posted content selected from the content ledger.
     pinned: false
@@ -209,6 +348,7 @@ metrics:
     direction: maximize
     max_age_days: 7
   instagram_likes:
+    refresh_ref: instagram_account_metrics
     label: Instagram likes
     description: Daily aggregate Instagram likes for posted content selected from the content ledger.
     pinned: false
@@ -216,6 +356,7 @@ metrics:
     unit: likes
     display: bar_plus_cumulative
   instagram_comments:
+    refresh_ref: instagram_account_metrics
     label: Instagram comments
     description: Daily aggregate Instagram comments for posted content selected from the content ledger.
     pinned: false
@@ -223,6 +364,7 @@ metrics:
     unit: comments
     display: bar_plus_cumulative
   instagram_shares:
+    refresh_ref: instagram_account_metrics
     label: Instagram shares
     description: Daily aggregate Instagram shares for posted content selected from the content ledger.
     pinned: false
@@ -230,6 +372,7 @@ metrics:
     unit: shares
     display: bar_plus_cumulative
   instagram_saves:
+    refresh_ref: instagram_account_metrics
     label: Instagram saves
     description: Daily aggregate Instagram saves for posted content selected from the content ledger.
     pinned: false
@@ -237,6 +380,7 @@ metrics:
     unit: saves
     display: bar_plus_cumulative
   instagram_reach:
+    refresh_ref: instagram_account_metrics
     label: Instagram reach
     description: Daily aggregate Instagram reached accounts for posted content selected from the content ledger.
     pinned: false
@@ -244,6 +388,7 @@ metrics:
     unit: accounts
     display: bar_plus_cumulative
   instagram_total_interactions:
+    refresh_ref: instagram_account_metrics
     label: Instagram total interactions
     description: Daily aggregate Instagram interactions for posted content selected from the content ledger.
     pinned: false
@@ -251,6 +396,7 @@ metrics:
     unit: interactions
     display: bar_plus_cumulative
   instagram_avg_watch_time:
+    refresh_ref: instagram_account_metrics
     label: Instagram average watch time
     description: Average watch time for selected Instagram Reel content when the account API returns watch-time fields.
     pinned: false
@@ -258,6 +404,7 @@ metrics:
     unit: milliseconds
     display: line
   instagram_total_watch_time:
+    refresh_ref: instagram_account_metrics
     label: Instagram total watch time
     description: Total watch time for selected Instagram Reel content when the account API returns watch-time fields.
     pinned: false
@@ -265,6 +412,7 @@ metrics:
     unit: milliseconds
     display: bar_plus_cumulative
   instagram_retention_score:
+    refresh_ref: instagram_account_metrics
     label: Instagram retention score
     description: Instagram Reel retention score from watch-time and duration data when those fields are available.
     pinned: false
@@ -272,6 +420,7 @@ metrics:
     unit: percent
     display: line
   posts_published:
+    refresh_ref: local_project_metrics
     label: Posts published
     description: Daily count of content ledger rows posted on the snapshot date.
     pinned: false

@@ -20,10 +20,10 @@ rollout. Accepted results may route to `farplane-productization`.
 ## Skill Signature
 
 ```text
-farplane_experiment_report(hypothesis, target_surface, metric, baseline?, variant?, ticket?)
+farplane_experiment_report(hypothesis, target_surface, metric, baseline?, variant?, ticket?, audience_context?)
   -> experiment_report + keep_reject_decision + follow_up_ticket_or_handoff
-state: reads(farplane/harness.yaml, farplane/metrics.yaml, ticket/program/progress/proof refs, target surface); writes(ticket artifact)
-gates: baseline_named; metric_direction_named; evidence_not_vibes; rollout_not_implicit
+state: reads(farplane/harness.yaml, farplane/metrics.yaml, ticket audience_context first or configured Feed Scout memory as fallback, ticket/program/progress/proof refs, target surface); writes(ticket artifact)
+gates: canonical_icp_bound; baseline_named; intended_decision_delta_named; metric_direction_named; evidence_not_vibes; rollout_not_implicit
 routes: root skill `prototyping` | root skill `eval` | root skill `agent-behavior-test` | ../farplane-productization/SKILL.md
 fails: changes strategy without evidence; claims improvement without baseline; rolls out before deciding keep/reject
 ```
@@ -31,7 +31,7 @@ fails: changes strategy without evidence; claims improvement without baseline; r
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-- [ ] 1. Name the hypothesis, target surface, metric, expected direction, and decision rule.
+- [ ] 1. Name the hypothesis, target surface, metric, expected direction, and decision rule. Read ticket-owned `audience_context` first; otherwise resolve the selected area's ICP and configured Feed Scout memory. State whose belief or workflow decision the result can change. Purely internal experiments may use local run/eval evidence instead of external memory.
 - [ ] 2. Establish the smallest honest baseline and comparable variant.
 - [ ] 3. Use deterministic checks for mechanical claims and behavior evals for agent claims.
 - [ ] 4. Write baseline, variant, metric, evidence, decision, risks, and next action.

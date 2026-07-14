@@ -3,7 +3,7 @@ title: Project Files
 status: active
 owner: harness
 created_at: 2026-06-15
-updated_at: 2026-07-12
+updated_at: 2026-07-14
 framework_template_version: "0.3.0"
 source_of_truth:
   - docs/farplane-framework/README.md
@@ -70,9 +70,10 @@ ignored paths and carries `project.name`, `project.description`, and
 
 ### `farplane/harness.yaml`
 
-Typed human charter: identity, planning areas and compact planner instructions, feature meaning,
-operating principles, non-tradeoffs, durable leverage commitments, allocation
-guardrails, authority, stable capability references, and selected metric refs.
+Typed human charter: identity, planning areas with canonical per-area ICPs and
+planner instructions, feature meaning, operating principles, non-tradeoffs, durable
+leverage commitments, allocation guardrails, authority, stable capability
+references, selected metric refs, and optional dated metric goals.
 
 This is the owner for the human idea the system must preserve. Agents may
 propose changes with evidence, but protected charter changes require explicit
@@ -81,8 +82,43 @@ planner; they do not own planners, workers, quotas, controllers, budgets,
 progress, or strategy. Capability references identify workflows; the
 referenced skills own their procedures.
 
+`goals` is the only optional target layer. Each row binds a unique `goal_id` to
+one selected objective `metric_id`, a numeric `target_value`, and an ISO
+`target_date`. It does not copy metric direction or store mutable progress:
+
+```text
+goal_progress(goal, metric_definition, current_observation)
+  -> active | completed | unknown
+
+maximize: completed when current >= target_value
+minimize: completed when current <= target_value
+```
+
+Plan Next Wave may use an active goal's target and date as urgency evidence.
+Once current metric evidence satisfies the direction-derived comparison, the
+goal is completed and stops adding urgency. Missing or stale evidence never
+proves completion. Projects without a dated target use `goals: []` or omit the
+field; no separate goals file or changing goal-status ledger is introduced.
+
+Each area is a complete planning record:
+
+```text
+harness.areas.<area_id> =
+  description + icp + planner_instruction + skill_refs + metric_refs
+```
+
+`icp` names the people served by the area, their relevant jobs and pains, and
+the evidence bar that would change their belief or workflow. This is canonical
+human meaning. Feed Scout may render it into persistent memory and add observed
+current context, but external evidence cannot silently rewrite it.
+
+`planner_instruction` is the canonical candidate-generation policy for that
+area. Plan Next Wave reads every scope-relevant complete area record before
+generating candidates. Pulse, Dogfood, reports, and automations pass or point
+to this record; they do not maintain competing area-policy paraphrases.
+
 Use typed YAML. Do not add a custom harness DSL, live backlog, worker
-allocation table, changing goal state, or product controller state here.
+allocation table, mutable goal status, or product controller state here.
 
 ### `farplane/automations.toml`
 
@@ -95,7 +131,21 @@ prompt. Generic workflow behavior remains in the called skill. Scheduled
 sources write reports and bounded candidate context; Work Pulse owns normal
 proactive ticket admission and execution.
 
+### `.farplane/feed-scout/memory.md`
+
+One ignored, update-in-place Markdown synthesis of canonical ICP profiles,
+current trends, notable things, and source gaps. It is a cheap retrieval surface
+for Feed Scout, Plan Next Wave, Pulse, and ticket-owned artifact work—not a
+snapshot archive, monthly trend ledger, planner, or source of authority.
+
 ### `farplane/metrics.yaml`
+
+This file owns metric meaning and acquisition. Reusable `refreshers` group one
+prompt or owner-skill call that can provide several metrics; flat metric
+definitions select that group with `refresh_ref`. A metric may instead carry
+one inline `refresh`, but never both. The Daily Interval agent resolves stale
+selected metrics into unique groups, executes each prompt once, and stores
+separate flat observations.
 
 Canonical reusable metric semantics. Each definition owns its stable ID,
 label, description, unit, display behavior, direction, freshness, pinned state,
@@ -109,10 +159,18 @@ tracked file defines what the observations mean, not their current values.
 ### `farplane/bindings.yaml`
 
 Non-secret connector and provider coordinates: safe IDs, URLs, labels,
-aliases, source configuration, dashboard refs, and metric-provider refresh
-instructions. Secrets are runtime inputs supplied by environment or private
-local config, never tracked here. Metric meaning belongs in `metrics.yaml`;
-this file explains how a provider can obtain or refresh a reading.
+aliases, source configuration, and dashboard refs. Secrets are runtime inputs supplied by environment or private
+local config, never tracked here. Metric meaning and refresh prompts belong in
+`metrics.yaml`; bindings contain only non-secret project/provider coordinates,
+which refresh prompts may resolve when calling their owner tools.
+
+`integrations.kanban` selects the work-evidence provider for generic reporting
+workflows. `filesystem_tickets` uses safe project-relative ticket directories.
+`notion` uses a named private-handle alias and the existing private-context plus
+`ntn` boundary; the binding never stores the resolved database ID, URL, or
+credential. `filesystem_ticket_policy: exclude` is a hard no-fallback gate:
+provider access failures become source gaps rather than permission to inspect
+`tickets/**`.
 
 ### `farplane/hooks.json`
 

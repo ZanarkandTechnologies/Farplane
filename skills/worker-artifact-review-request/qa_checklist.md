@@ -32,7 +32,8 @@ worker_artifact_review_request_check(packet, artifacts, route, receipt?)
 - [ ] `reply_route`: A thread/session route target exists, or fallback is
   recorded with the exact missing route/credential.
 - [ ] `review_state_bound`: The request records artifact refs, thread ref,
-  request time, next reminder time, reminder count, and decision in the
+  request time, Telegram status/message id, reminder count with matching
+  reminder message ids, Phone Chaser count/dispatch ids/last dispatch time, and decision in the
   ticket-owned `progress.md` Review block.
 - [ ] `no_secrets`: No tokens, credentials, private unrelated data, or unsafe
   command output appears in the message or receipt.
@@ -40,8 +41,12 @@ worker_artifact_review_request_check(packet, artifacts, route, receipt?)
   publishing, spending, deploying, contacting externals, or account mutation.
 - [ ] `no_duplicate_spam`: If a recent review request exists for the same
   artifact, the packet records why another reminder is necessary or skips it.
-- [ ] `due_reminder_only`: Reminder mode runs only when `next_reminder_at` is
-  due and Pulse selected the item; review queue size never triggers a chase.
+- [ ] `policy_action_only`: Reminder or Phone Chaser mode runs only when Pulse
+  selected that exact action from structured turn thresholds, active hours,
+  and caps; review queue size never triggers a chase.
+- [ ] `automation_notification_authority`: Ticket-local no-credential,
+  no-publication, or no-account-mutation scope does not suppress internal
+  review notification credentials, and notification grants no broader action.
 - [ ] `worker_released`: Initial request records a Telegram message id or
   blocker, sets `status: awaiting_review`, clears `claimed_by`, and releases
   the execution worker.

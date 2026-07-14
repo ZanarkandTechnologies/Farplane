@@ -7,7 +7,7 @@ kind: skill-maintenance-audit
 ticket_ref: tickets/TASK-0330/ticket.md
 skills:
   - pulse-update
-  - ticket-opportunity-generator
+  - plan-next-wave
   - dogfood-review
   - harness-creator
   - goal-advisor
@@ -52,7 +52,7 @@ score was added.
 | Skill | Lines before | Lines after | Result |
 | --- | ---: | ---: | --- |
 | `pulse-update` | 284 | 285 | stable-ID check-in and typed context made explicit |
-| `ticket-opportunity-generator` | 224 | 250 | accepted prior planner trajectory contract plus typed selection |
+| `plan-next-wave` | 224 | 250 | accepted prior planner trajectory contract plus typed selection |
 | `dogfood-review` | 190 | 202 | two-horizon portfolio boundary made explicit |
 | `harness-creator` | 399 | 388 | stale interval/goal language removed despite new typed contract |
 | `goal-advisor` | 462 | 463 | stable Reward IDs replace row-index/iterate semantics |

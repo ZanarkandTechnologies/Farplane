@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Project compact ticket history for adaptive next-wave planning."""
+"""Project compact ticket history for adaptive planning and review."""
 
 from __future__ import annotations
 
@@ -12,19 +12,7 @@ from typing import Any
 
 import yaml
 
-
-def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--project-root", default=".")
-    parser.add_argument("--limit", type=int, default=20)
-    parser.add_argument("--sort", choices=("recent", "oldest"), default="recent")
-    parser.add_argument("--origin", action="append", choices=("ai_planned", "direct_or_unknown"))
-    parser.add_argument("--area", action="append")
-    parser.add_argument("--status", action="append")
-    parser.add_argument("--kpi", action="append")
-    parser.add_argument("--reward-decision", action="append", choices=("pending", "accept", "kill", "monitor"))
-    parser.add_argument("--active-only", action="store_true", help="Exclude tickets/archive history.")
-    return parser.parse_args()
+CANDIDATE_LANES = frozenset({"delivery", "ablation", "experiment", "rollout", "operations"})
 
 
 def read_yaml(path: Path) -> dict[str, Any]:
@@ -66,9 +54,8 @@ def heading_section(markdown: str, heading: str) -> str:
 
 
 def first_paragraph(section: str) -> str:
-    paragraphs = [part.strip() for part in section.split("\n\n") if part.strip()]
-    for paragraph in paragraphs:
-        if not paragraph.startswith("```"):
+    for paragraph in (part.strip() for part in section.split("\n\n")):
+        if paragraph and not paragraph.startswith("```"):
             return " ".join(line.strip() for line in paragraph.splitlines()).strip()
     return ""
 
@@ -88,6 +75,14 @@ def fenced_yaml(section: str) -> dict[str, Any]:
     return loaded if isinstance(loaded, dict) else {}
 
 
+def scalar_text(value: Any) -> str:
+    if value is None:
+        return ""
+    if isinstance(value, (date, datetime)):
+        return value.isoformat()
+    return str(value).strip()
+
+
 def compact_rewards(markdown: str) -> list[dict[str, Any]]:
     payload = fenced_yaml(heading_section(markdown, "Reward"))
     raw_rows = payload.get("kpi_rewards")
@@ -97,30 +92,21 @@ def compact_rewards(markdown: str) -> list[dict[str, Any]]:
     for raw in raw_rows:
         if not isinstance(raw, dict):
             continue
-        decision = str(raw.get("decision") or "").strip().lower() or "pending"
         rows.append(
             {
                 "reward_id": str(raw.get("reward_id") or "").strip(),
                 "kpi_id": str(raw.get("kpi_id") or "").strip(),
                 "expected_reward": raw.get("expected_reward"),
                 "actual_result": raw.get("actual_result"),
-                "decision": decision,
+                "decision": str(raw.get("decision") or "").strip().lower() or "pending",
                 "check_in_at": scalar_text(raw.get("check_in_at")),
                 "evaluated_at": scalar_text(raw.get("evaluated_at")),
-                "evidence_refs": raw.get("evidence_refs") if isinstance(raw.get("evidence_refs"), list) else [],
+                "evidence_refs": raw.get("evidence_refs")
+                if isinstance(raw.get("evidence_refs"), list)
+                else [],
             }
         )
     return rows
-
-
-def scalar_text(value: Any) -> str:
-    if value is None:
-        return ""
-    if isinstance(value, datetime):
-        return value.isoformat()
-    if isinstance(value, date):
-        return value.isoformat()
-    return str(value).strip()
 
 
 def load_jsonl(path: Path) -> list[dict[str, Any]]:
@@ -145,30 +131,41 @@ def ai_planned_ticket_ids(decisions: list[dict[str, Any]]) -> set[str]:
         receipt = row.get("pulse_receipt") if isinstance(row.get("pulse_receipt"), dict) else {}
         action = str(row.get("action") or receipt.get("mode") or "").strip()
         admitted = receipt.get("admitted") if isinstance(receipt.get("admitted"), list) else []
-        if action == "plan_next_wave":
+        if action in {"plan_next_wave", "materialize_reserved_wave"}:
             ids.update(str(ticket_id).strip() for ticket_id in admitted if str(ticket_id).strip())
+            for owner in (row, receipt):
+                specs = owner.get("admitted_specs") if isinstance(owner.get("admitted_specs"), list) else []
+                ids.update(
+                    str(spec.get("ticket_id") or "").strip()
+                    for spec in specs
+                    if isinstance(spec, dict) and str(spec.get("ticket_id") or "").strip()
+                )
             ticket_id = str(row.get("ticket_id") or "").strip()
             if ticket_id:
                 ids.add(ticket_id)
     return ids
 
 
-def planner_areas_by_ticket(decisions: list[dict[str, Any]]) -> dict[str, str]:
-    """Read the planner-selected area recorded beside admitted ticket IDs."""
-
-    mapping: dict[str, str] = {}
+def planner_metadata_by_ticket(decisions: list[dict[str, Any]]) -> dict[str, dict[str, str]]:
+    mapping: dict[str, dict[str, str]] = {}
     for row in decisions:
         receipt = row.get("pulse_receipt") if isinstance(row.get("pulse_receipt"), dict) else {}
         planner_call = receipt.get("planner_call") if isinstance(receipt.get("planner_call"), dict) else {}
-        for owner in (row, planner_call):
+        for owner in (row, receipt, planner_call):
             specs = owner.get("admitted_specs") if isinstance(owner.get("admitted_specs"), list) else []
             for spec in specs:
                 if not isinstance(spec, dict):
                     continue
                 ticket_id = str(spec.get("ticket_id") or "").strip()
                 area_id = str(spec.get("area_id") or "").strip()
-                if ticket_id and area_id:
-                    mapping[ticket_id] = area_id
+                ranking = spec.get("ranking") if isinstance(spec.get("ranking"), dict) else {}
+                lane = str(ranking.get("lane") or "").strip()
+                if ticket_id:
+                    metadata = mapping.setdefault(ticket_id, {})
+                    if area_id:
+                        metadata["area_id"] = area_id
+                    if lane in CANDIDATE_LANES:
+                        metadata["lane"] = lane
     return mapping
 
 
@@ -206,13 +203,14 @@ def timestamp_key(row: dict[str, Any]) -> tuple[datetime, str]:
     return parsed.astimezone(timezone.utc), str(row.get("ticket_id") or "")
 
 
-def build_history(
+def build_ticket_history(
     root: Path,
     *,
     limit: int = 20,
     sort: str = "recent",
     origins: set[str] | None = None,
     areas: set[str] | None = None,
+    lanes: set[str] | None = None,
     statuses: set[str] | None = None,
     kpis: set[str] | None = None,
     reward_decisions: set[str] | None = None,
@@ -223,7 +221,7 @@ def build_history(
     metric_areas = area_metric_map(harness)
     decisions = load_jsonl(root / ".farplane" / "automation" / "decisions.jsonl")
     ai_ids = ai_planned_ticket_ids(decisions)
-    planner_areas = planner_areas_by_ticket(decisions)
+    planner_metadata = planner_metadata_by_ticket(decisions)
     rows: list[dict[str, Any]] = []
     for path in ticket_paths(root, active_only):
         markdown = path.read_text(encoding="utf-8", errors="replace")
@@ -231,7 +229,8 @@ def build_history(
         ticket_id = str(frontmatter.get("ticket_id") or path.parent.name).strip()
         rewards = compact_rewards(markdown)
         kpi_ids = sorted({row["kpi_id"] for row in rewards if row["kpi_id"]})
-        selected_area = planner_areas.get(ticket_id)
+        selected_area = planner_metadata.get(ticket_id, {}).get("area_id")
+        selected_lane = planner_metadata.get(ticket_id, {}).get("lane") or "unknown"
         area_refs = (
             [selected_area]
             if selected_area
@@ -239,7 +238,6 @@ def build_history(
         )
         if not area_refs:
             area_refs = ["unknown"]
-        origin = "ai_planned" if ticket_id in ai_ids else "direct_or_unknown"
         try:
             relative = path.relative_to(root).as_posix()
         except ValueError:
@@ -253,10 +251,12 @@ def build_history(
                 "priority": str(frontmatter.get("priority") or "medium").strip().lower(),
                 "created_at": scalar_text(frontmatter.get("created_at")),
                 "updated_at": scalar_text(frontmatter.get("updated_at")),
-                "creation_origin": origin,
+                "creation_origin": "ai_planned" if ticket_id in ai_ids else "direct_or_unknown",
                 "creation_reason": first_paragraph(heading_section(markdown, "Summary")),
                 "area_refs": area_refs,
                 "area_derivation": "planner_receipt" if selected_area else "kpi_binding_fallback",
+                "lane": selected_lane,
+                "lane_derivation": "planner_receipt" if selected_lane != "unknown" else "unknown",
                 "kpi_ids": kpi_ids,
                 "rewards": rewards,
             }
@@ -267,13 +267,16 @@ def build_history(
         rows = [row for row in rows if row["creation_origin"] in origins]
     if areas:
         rows = [row for row in rows if areas.intersection(row["area_refs"])]
+    if lanes:
+        rows = [row for row in rows if row["lane"] in lanes]
     if statuses:
         rows = [row for row in rows if row["status"] in statuses]
     if kpis:
         rows = [row for row in rows if kpis.intersection(row["kpi_ids"])]
     if reward_decisions:
         rows = [
-            row for row in rows
+            row
+            for row in rows
             if any(reward["decision"] in reward_decisions for reward in row["rewards"])
         ]
     filtered_count = len(rows)
@@ -287,6 +290,7 @@ def build_history(
             "sort": sort,
             "origins": sorted(origins or []),
             "areas": sorted(areas or []),
+            "lanes": sorted(lanes or []),
             "statuses": sorted(statuses or []),
             "kpis": sorted(kpis or []),
             "reward_decisions": sorted(reward_decisions or []),
@@ -297,28 +301,66 @@ def build_history(
             "filtered_count": filtered_count,
             "returned_count": len(rows),
         },
-        "area_distribution": dict(sorted(Counter(area for row in rows for area in row["area_refs"]).items())),
-        "origin_distribution": dict(sorted(Counter(row["creation_origin"] for row in rows).items())),
+        "area_distribution": dict(
+            sorted(Counter(area for row in rows for area in row["area_refs"]).items())
+        ),
+        "lane_distribution": dict(sorted(Counter(row["lane"] for row in rows).items())),
+        "origin_distribution": dict(
+            sorted(Counter(row["creation_origin"] for row in rows).items())
+        ),
         "rows": rows,
     }
 
 
-def main() -> int:
-    args = parse_args()
-    payload = build_history(
+def add_history_arguments(parser: argparse.ArgumentParser) -> None:
+    parser.add_argument("--project-root", default=".")
+    parser.add_argument("--limit", type=int, default=20)
+    parser.add_argument("--sort", choices=("recent", "oldest"), default="recent")
+    parser.add_argument("--origin", action="append", choices=("ai_planned", "direct_or_unknown"))
+    parser.add_argument("--area", action="append")
+    parser.add_argument(
+        "--lane",
+        action="append",
+        choices=(*sorted(CANDIDATE_LANES), "unknown"),
+    )
+    parser.add_argument("--status", action="append")
+    parser.add_argument("--kpi", action="append")
+    parser.add_argument(
+        "--reward-decision",
+        action="append",
+        choices=("pending", "accept", "kill", "monitor"),
+    )
+    parser.add_argument("--active-only", action="store_true")
+    parser.add_argument("--json", action="store_true")
+
+
+def history_from_args(args: argparse.Namespace) -> dict[str, Any]:
+    return build_ticket_history(
         Path(args.project_root),
         limit=args.limit,
         sort=args.sort,
         origins=set(args.origin or []),
         areas=set(args.area or []),
+        lanes=set(args.lane or []),
         statuses={value.lower() for value in args.status or []},
         kpis=set(args.kpi or []),
         reward_decisions=set(args.reward_decision or []),
         active_only=args.active_only,
     )
-    print(json.dumps(payload, indent=2, sort_keys=True, default=str))
+
+
+def run_history(args: argparse.Namespace) -> int:
+    payload = history_from_args(args)
+    if args.json:
+        print(json.dumps(payload, indent=2, sort_keys=True, default=str))
+        return 0
+    receipt = payload["receipt"]
+    print(
+        "farplane ticket history: "
+        f"{receipt['returned_count']} returned / {receipt['filtered_count']} matched / "
+        f"{receipt['input_count']} scanned"
+    )
+    for row in payload["rows"]:
+        decisions = ",".join(reward["decision"] for reward in row["rewards"]) or "no-reward"
+        print(f"- {row['ticket_id']} [{row['status']}] {row['title']} ({decisions})")
     return 0
-
-
-if __name__ == "__main__":
-    raise SystemExit(main())

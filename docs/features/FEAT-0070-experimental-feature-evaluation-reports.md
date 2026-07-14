@@ -33,7 +33,7 @@ evidence_refs:
   - tickets/archive/TASK-0319/artifacts/qa/integrated-qa.md
   - tickets/archive/TASK-0320/ticket.md
   - tickets/archive/TASK-0320/artifacts/qa/integrated-qa.md
-known_limits: "Dogfood emits bounded non-interfering experiment candidates; the global planner owns admission and Pulse owns execution/check-ins."
+known_limits: "Dogfood reserves a target-five weekly self-improvement wave through the shared planner; Pulse owns materialization, execution, and check-ins, and hard gates may produce an explicit shortfall."
 metrics:
   - experimental_feature_decision_quality
   - experiment_ticket_quality
@@ -43,28 +43,30 @@ superseded_by: false
 track: >-
   Review the weekly Dogfood self-improvement run. Read its report, active and
   completed experiment Goal Packets, Reward results, feature/system registry
-  evidence, and any proposed experiment candidate. Judge whether past experiments were
-  reconciled before proposing another, the new hypothesis is bounded and
-  proofable, candidate supply obeys the cap, and Dogfood did not create,
-  execute, or check in an experiment ticket. Return
+  evidence, history-query receipts, harness-health findings, and admitted
+  experiment specs. Judge whether past experiments were reconciled before
+  planning the reserved five-ticket wave, each hypothesis is bounded and
+  proofable, shortfalls are explicit, Pulse alone materialized tickets, and
+  Dogfood did not execute or check in an experiment. Return
   continue, adjust, cap, pause, graduate, rollback, or source_gap.
 ---
 
 # Dogfood experiment review and candidate supply
 
 Dogfood Review is Farplane's weekly self-improvement portfolio learner and
-candidate generator. It reviews experiment history and tracked feature/system
-behavior, writes a dated outcome ledger/report, and emits capacity-aware
-experiment candidates for the one global next-wave planner.
+reserved allocator. It reviews experiment history and tracked feature/system
+behavior, writes a dated outcome ledger/report, then asks the one next-wave
+planner for a target-five `self_improvement` wave and hands admitted specs to
+Pulse for materialization.
 
 ```text
 dogfood_review(project_root, window, active_experiments,
                recent_archived_experiments, previous_report?, registry_refs?,
-               experiment_wip_limit = 3,
-               max_concurrent_live_delayed = 1)
+               ticket_history_query, weekly_ticket_target = 5,
+               max_concurrent_live_delayed = 5)
   -> dogfood_report + outcome_ledger + active_portfolio
    + transfer_candidates + ranked_candidates
-   + experiment_candidates[] + source_gaps
+   + admitted_experiment_specs[0..5] + pulse_ticket_paths[] + source_gaps
 ```
 
 ## At A Glance
@@ -75,7 +77,7 @@ dogfood_review(project_root, window, active_experiments,
 - Experimental: `true`
 - Category: `improvement-loop`
 - Primary user: operator and harness maintainer
-- Job: learn from experiment outcomes and supply bounded experiment candidates.
+- Job: learn from experiment outcomes and reserve five weekly experiment tickets.
 
 ## Problem
 
@@ -93,19 +95,30 @@ surface without creating another executor.
   feature policy.
 - Returns continue, adjust, cap, pause, rollback, graduate, merge, split, or
   source-gap decisions for existing experiments and features.
+- Reads Core ticket-history Reward receipts plus current harness metrics,
+  skill/template rollout, eval/QA coverage, heat, and recurring correction
+  evidence before generating new work.
+- Loads the complete `harness.areas.self_improvement` record and applies
+  `harness.areas.self_improvement.planner_instruction` as the canonical
+  candidate-generation policy. Dogfood and its automation do not maintain a
+  narrower duplicate policy.
 - Ranks bounded hardening, refinement, documentation, feature, policy,
   automation, hook/validator, metric, and context-selection experiments.
 - Writes a dated Dogfood report with settled outcomes, active/pending work,
   due-but-unscored gaps, transfer candidates, rejected patterns, capacity, and
-  candidate set. It may add one direct recovery ticket for an evidenced settled
-  failure, but never an experiment ticket.
+  candidate set before admission.
+- Calls `plan-next-wave` in explicit `reserved_area:self_improvement` scope,
+  passes the complete area record, targets five complete experiment specs,
+  requires instruction-use traces, and sends accepted specs to Pulse's
+  bounded materialization route. A direct known-fix recovery may occupy one of
+  those five slots.
 
 ## Operating Contract
 
-Dogfood owns experiment review and candidate generation. It may create a
-bounded direct recovery ticket for a settled attributable failure with a known
-fix and no experiment debt. It does not create or implement an experiment
-ticket, score a matured Reward row, dispatch a worker, or start another heartbeat.
+Dogfood owns experiment review and reserved-area candidate generation. It does
+not write ticket files directly, implement an experiment, score a matured
+Reward row, dispatch a worker, or start another heartbeat. Pulse alone
+materializes admitted specs and later dispatches workers or matured check-ins.
 Ticket-completion learning is upstream of Dogfood: Core already projects at
 most one deduped direct-fix or prove-or-reject ticket and records its path in
 the learning report. Projection ranks confidence and known fixes
@@ -115,9 +128,11 @@ counts that ticket once and never recreates it.
 
 ```text
 ticket.completed -> learning report + projected ticket[0..1]
-Dogfood cron -> portfolio report -> other bounded recovery tickets + experiment candidates
-plan_next_wave -> compare self-improvement with all areas -> executable specs
-Work Pulse -> materialize -> execute -> derive due Reward rows -> resume check-in
+Dogfood cron -> portfolio report -> reserved self_improvement candidate portfolio
+plan_next_wave(harness.areas.self_improvement complete record,
+               reserved_area:self_improvement, wave_size=5) -> executable specs
+Work Pulse materialization -> ticket paths
+later Work Pulse -> execute -> derive due Reward rows -> resume check-in
 ```
 
 The new experiment must name the target surface, gap, hypothesis, baseline,
@@ -138,13 +153,13 @@ flowchart LR
   registry["tracked features / systems"]:::keep
   dogfood["Dogfood weekly automation<br/>review + rank"]:::changed
   report["dated Dogfood report"]:::added
-  packet["bounded experiment candidates"]:::added
+  packet["reserved five-spec wave"]:::added
   pulse["Work Pulse<br/>execute + check in"]:::keep
   interval["Interval-owned Dogfood"]:::retired
 
   experiments --> dogfood
   registry --> dogfood
-  planner["adaptive project planner"]:::added
+  planner["one adaptive planner<br/>reserved area scope"]:::added
   dogfood --> report --> packet --> planner --> pulse
   interval -. removed .-> dogfood
 ```
@@ -154,10 +169,11 @@ flowchart LR
 Required proof:
 
 - existing experiment results are reviewed before ranking a new experiment;
-- report is written with candidates and no experiment ticket mutation;
+- report is written before candidate ranking and ticket materialization;
 - wave/WIP/delayed-live caps, non-interference, dedupe, Reward,
   proof, and authority gates hold;
-- Dogfood does not create, execute, or mature-check an experiment;
+- Pulse alone materializes admitted specs; Dogfood does not execute or
+  mature-check an experiment;
 - `python3 docs/features/validate_features.py` and
   `python3 bin/validators/check_doc_refs.py` pass.
 
@@ -183,3 +199,5 @@ Required proof:
   bounded non-interfering packet wave and program-owned delayed check-ins.
 - 2026-07-12: Moved experiment admission into the one global next-wave planner
   while preserving bounded direct recovery for settled attributable failures.
+- 2026-07-13: Added a target-five weekly reserved self-improvement allocation,
+  shared Core Reward-history input, and Pulse-only materialization.

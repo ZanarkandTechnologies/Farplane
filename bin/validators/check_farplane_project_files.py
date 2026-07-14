@@ -4,7 +4,9 @@
 from __future__ import annotations
 
 import argparse
+from datetime import date, datetime
 import json
+import math
 import re
 import subprocess
 import sys
@@ -54,6 +56,7 @@ HARNESS_ALLOWED_TOP_LEVEL = {
     "owner",
     "identity",
     "metric_refs",
+    "goals",
     "areas",
     "feature_definition",
     "operating_principles",
@@ -63,7 +66,15 @@ HARNESS_ALLOWED_TOP_LEVEL = {
     "authority",
     "change_rule",
 }
-AREA_ALLOWED_FIELDS = {"description", "planner_instruction", "skill_refs", "metric_refs"}
+AREA_ALLOWED_FIELDS = {"description", "planner_instruction", "icp", "skill_refs", "metric_refs"}
+ICP_ALLOWED_FIELDS = {
+    "label",
+    "description",
+    "jobs_to_be_done",
+    "pain_points",
+    "evidence_bar",
+}
+GOAL_ALLOWED_FIELDS = {"goal_id", "metric_id", "target_value", "target_date"}
 AUTOMATION_RUNTIME_STATE_KEYS = {
     "last_run",
     "last_run_at",
@@ -483,8 +494,8 @@ def validate_bindings_file(root: Path, bindings_file: Path) -> list[str]:
         errors.append(f"{rel_path} project must be an object.")
     if "metrics" in data:
         errors.append(f"{rel_path} metrics is retired; semantic definitions belong in farplane/metrics.yaml.")
-    if not isinstance(data.get("metric_bindings"), dict):
-        errors.append(f"{rel_path} metric_bindings must be an object.")
+    if "metric_bindings" in data:
+        errors.append(f"{rel_path} metric_bindings is retired; refresh prompts belong in farplane/metrics.yaml.")
 
     integrations = data.get("integrations")
     integrations = integrations if isinstance(integrations, dict) else {}
@@ -597,20 +608,12 @@ def read_yaml_file(path: Path) -> dict[str, Any]:
     return payload if isinstance(payload, dict) else {}
 
 
-def load_metric_bindings(bindings_file: Path) -> dict[str, dict]:
-    if not bindings_file.exists():
+def load_metric_refreshers(metrics_file: Path) -> dict[str, dict]:
+    payload = read_yaml_file(metrics_file)
+    refreshers = payload.get("refreshers") if isinstance(payload, dict) else {}
+    if not isinstance(refreshers, dict):
         return {}
-    try:
-        data = yaml.safe_load(bindings_file.read_text(encoding="utf-8")) or {}
-    except yaml.YAMLError:
-        return {}
-    bindings = data.get("metric_bindings") if isinstance(data, dict) else {}
-    if not isinstance(bindings, dict):
-        return {}
-    return {
-        str(metric_id): binding if isinstance(binding, dict) else {}
-        for metric_id, binding in bindings.items()
-    }
+    return {str(key): value if isinstance(value, dict) else {} for key, value in refreshers.items()}
 
 
 def pydantic_path(error: dict) -> str:
@@ -641,8 +644,10 @@ def validate_metric_definition_schema(metrics: dict[str, dict]) -> list[str]:
     allowed_displays = {"bar_plus_cumulative", "reading", "line"}
     for metric_id, definition in sorted(metrics.items()):
         prefix = f"farplane/metrics.yaml metrics.{metric_id}"
-        if "refresh" in definition:
-            errors.append(f"{prefix}.refresh belongs in farplane/bindings.yaml metric_bindings.{metric_id}.")
+        refresh_ref = definition.get("refresh_ref")
+        inline_refresh = definition.get("refresh")
+        if bool(refresh_ref) == bool(inline_refresh):
+            errors.append(f"{prefix} must declare exactly one of refresh_ref or refresh.")
         if "product" in definition:
             errors.append(f"{prefix}.product is retired; metrics are project-level definitions.")
         if "max_age_days" in definition and (
@@ -683,22 +688,25 @@ def validate_metric_definition_schema(metrics: dict[str, dict]) -> list[str]:
     return errors
 
 
-def validate_metric_binding_schema(metric_bindings: dict[str, dict]) -> list[str]:
+def validate_metric_refresh_schema(metrics: dict[str, dict], refreshers: dict[str, dict]) -> list[str]:
     errors: list[str] = []
-    semantic_fields = {"label", "description", "kind", "unit", "display", "pinned", "product"}
-    for metric_id, binding in sorted(metric_bindings.items()):
-        prefix = f"farplane/bindings.yaml metric_bindings.{metric_id}"
-        leaked_fields = sorted(semantic_fields & set(binding))
-        if leaked_fields:
-            errors.append(
-                f"{prefix} contains semantic fields owned by farplane/metrics.yaml: {', '.join(leaked_fields)}."
-            )
-        try:
-            MetricBindingModel.model_validate(binding)
-        except ValidationError as exc:
-            for error in exc.errors():
-                field = pydantic_path(error)
-                errors.append(f"{prefix}.{field} must be a non-empty string.")
+    for refresh_id, refresher in sorted(refreshers.items()):
+        prefix = f"farplane/metrics.yaml refreshers.{refresh_id}"
+        if not str(refresher.get("refresh") or "").strip():
+            errors.append(f"{prefix}.refresh must be a non-empty string.")
+        provides = refresher.get("provides")
+        if not isinstance(provides, list) or not provides or not all(isinstance(item, str) and item.strip() for item in provides):
+            errors.append(f"{prefix}.provides must be a non-empty metric-id list.")
+            continue
+        unknown = sorted(set(provides) - set(metrics))
+        if unknown:
+            errors.append(f"{prefix}.provides lacks metric definitions: {', '.join(unknown)}.")
+    for metric_id, definition in sorted(metrics.items()):
+        refresh_ref = str(definition.get("refresh_ref") or "").strip()
+        if refresh_ref and refresh_ref not in refreshers:
+            errors.append(f"farplane/metrics.yaml metrics.{metric_id}.refresh_ref is unknown: {refresh_ref}.")
+        if refresh_ref and metric_id not in set(refreshers.get(refresh_ref, {}).get("provides") or []):
+            errors.append(f"farplane/metrics.yaml refreshers.{refresh_ref}.provides must include {metric_id}.")
     return errors
 
 
@@ -789,7 +797,7 @@ def validate_cross_file_contract(root: Path) -> list[str]:
     metrics_file = root / "farplane" / "metrics.yaml"
     bindings_file = root / "farplane" / "bindings.yaml"
     metrics = load_metrics(metrics_file)
-    metric_bindings = load_metric_bindings(bindings_file)
+    refreshers = load_metric_refreshers(metrics_file)
     errors: list[str] = []
     if goals_file.exists():
         errors.append(
@@ -799,7 +807,7 @@ def validate_cross_file_contract(root: Path) -> list[str]:
     if metrics_file.exists():
         errors.extend(validate_metrics_file(root, metrics_file))
     errors.extend(validate_metric_definition_schema(metrics))
-    errors.extend(validate_metric_binding_schema(metric_bindings))
+    errors.extend(validate_metric_refresh_schema(metrics, refreshers))
     errors.extend(validate_metric_observation_files(root, metrics))
     metrics_payload = read_yaml_file(metrics_file)
     if "optimization" in metrics_payload:
@@ -867,16 +875,6 @@ def validate_cross_file_contract(root: Path) -> list[str]:
             f"{', '.join(unselected_guard_rules)}."
         )
 
-    missing_bindings = sorted(set(metrics) - set(metric_bindings))
-    unknown_bindings = sorted(set(metric_bindings) - set(metrics))
-    if missing_bindings:
-        errors.append(
-            f"farplane/metrics.yaml definitions lack bindings.yaml metric_bindings rows: {', '.join(missing_bindings)}."
-        )
-    if unknown_bindings:
-        errors.append(
-            f"farplane/bindings.yaml metric_bindings lack metrics.yaml definitions: {', '.join(unknown_bindings)}."
-        )
 
     selected_metrics_without_unit = sorted(
         kpi_id
@@ -986,6 +984,54 @@ def validate_harness_file(root: Path, harness_file: Path) -> list[str]:
     if len(guard_ids) != len(set(guard_ids)):
         errors.append(f"{rel_path} metric_refs.guards must not contain duplicates.")
 
+    goals = payload.get("goals", [])
+    if not isinstance(goals, list):
+        errors.append(f"{rel_path} goals must be a list when present.")
+        goals = []
+    goal_ids: list[str] = []
+    selected_objective_ids = set(objective_ids)
+    for index, goal in enumerate(goals):
+        prefix = f"{rel_path} goals[{index}]"
+        if not isinstance(goal, dict):
+            errors.append(f"{prefix} must be an object.")
+            continue
+        unsupported = sorted(set(goal) - GOAL_ALLOWED_FIELDS)
+        if unsupported:
+            errors.append(f"{prefix} has unsupported fields: {', '.join(unsupported)}.")
+        raw_goal_id = goal.get("goal_id")
+        goal_id = raw_goal_id.strip() if isinstance(raw_goal_id, str) else ""
+        metric_id = str(goal.get("metric_id") or "").strip()
+        target_value = goal.get("target_value")
+        target_date = goal.get("target_date")
+        if not goal_id:
+            errors.append(f"{prefix}.goal_id must be a non-empty string.")
+        else:
+            goal_ids.append(goal_id)
+        if metric_id not in selected_objective_ids:
+            errors.append(f"{prefix}.metric_id must reference a selected objective metric.")
+        if (
+            isinstance(target_value, bool)
+            or not isinstance(target_value, (int, float))
+            or not math.isfinite(float(target_value))
+        ):
+            errors.append(f"{prefix}.target_value must be a finite number.")
+        valid_target_date = False
+        if isinstance(target_date, date) and not isinstance(target_date, datetime):
+            valid_target_date = True
+        elif isinstance(target_date, str):
+            try:
+                date.fromisoformat(target_date)
+                valid_target_date = True
+            except ValueError:
+                pass
+        if not valid_target_date:
+            errors.append(f"{prefix}.target_date must be an ISO date (YYYY-MM-DD).")
+    duplicate_goal_ids = sorted(
+        {goal_id for goal_id in goal_ids if goal_ids.count(goal_id) > 1}
+    )
+    if duplicate_goal_ids:
+        errors.append(f"{rel_path} goal IDs must be unique: {', '.join(duplicate_goal_ids)}.")
+
     areas = payload.get("areas") if isinstance(payload.get("areas"), dict) else {}
     if not areas:
         errors.append(f"{rel_path} areas must declare at least one planning area.")
@@ -1001,6 +1047,25 @@ def validate_harness_file(root: Path, harness_file: Path) -> list[str]:
         for field in ("description", "planner_instruction"):
             if not isinstance(area.get(field), str) or not area.get(field, "").strip():
                 errors.append(f"{prefix}.{field} must be a non-empty string.")
+        icp = area.get("icp")
+        if not isinstance(icp, dict):
+            if not is_draft:
+                errors.append(f"{prefix}.icp must be an object.")
+        else:
+            unsupported_icp = sorted(set(icp) - ICP_ALLOWED_FIELDS)
+            if unsupported_icp:
+                errors.append(f"{prefix}.icp has unsupported fields: {', '.join(unsupported_icp)}.")
+            for field in ("label", "description", "evidence_bar"):
+                if not isinstance(icp.get(field), str) or not icp.get(field, "").strip():
+                    errors.append(f"{prefix}.icp.{field} must be a non-empty string.")
+            for field in ("jobs_to_be_done", "pain_points"):
+                values = icp.get(field)
+                if (
+                    not isinstance(values, list)
+                    or not values
+                    or any(not isinstance(value, str) or not value.strip() for value in values)
+                ):
+                    errors.append(f"{prefix}.icp.{field} must be a non-empty list of strings.")
         skill_refs = area.get("skill_refs") if isinstance(area.get("skill_refs"), list) else []
         if not skill_refs and not is_draft:
             errors.append(f"{prefix}.skill_refs must be a non-empty list.")

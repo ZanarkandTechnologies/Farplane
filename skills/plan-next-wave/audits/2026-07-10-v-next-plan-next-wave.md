@@ -1,12 +1,12 @@
 ---
-skill: ticket-opportunity-generator
+skill: plan-next-wave
 date: 2026-07-10
 change_type: behavior
 owner: skill-maintenance
 status: accepted
 review_route: reviewer
-before_ref: skills/ticket-opportunity-generator/SKILL.md@794-lines-product-idea-compiler
-after_ref: skills/ticket-opportunity-generator/SKILL.md@182-lines-plan-next-wave
+before_ref: skills/plan-next-wave/SKILL.md@794-lines-product-idea-compiler
+after_ref: skills/plan-next-wave/SKILL.md@182-lines-plan-next-wave
 reasoning_basis: reviewer
 proof_artifacts:
   - tickets/TASK-0318/artifacts/review/plan-review.md
@@ -87,8 +87,8 @@ first_load_review:
 
 ## Proof Artifacts
 
-- Skill-local evals: `skills/ticket-opportunity-generator/eval_task.json`
-- Runtime checklist: `skills/ticket-opportunity-generator/qa_checklist.md`
+- Skill-local evals: `skills/plan-next-wave/eval_task.json`
+- Runtime checklist: `skills/plan-next-wave/qa_checklist.md`
 - Query-spoiler check: passed before eval run
 - Behavior eval: `.farplane/evals/runs/20260710-134210-task-0318-plan-next-wave-gpt55` (2/2 TAS-A)
 - Reviewer receipt: `tickets/TASK-0318/artifacts/review/completion-review.md`

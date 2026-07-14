@@ -2,7 +2,7 @@
 # Runtime logs, run IDs, last-run status, and automation memory stay outside tracked config.
 schema = "farplane_project_automations"
 framework_template_version = "1.0.0"
-updated_at = "2026-07-11"
+updated_at = "2026-07-14"
 owner = "automation-advisor"
 
 [[automations]]
@@ -13,21 +13,77 @@ status = "active"
 prompt = '''
 Use $pulse-update.
 
-Run one bounded Work Pulse. Reconcile the board, make due ticket check-ins
-eligible, dispatch unclaimed executable tickets up to the worker limit, and
-refill an empty unclaimed-ready board through the one adaptive next-wave
-planner. Human-active tickets remain unavailable but do not consume Pulse
-worker capacity. Pulse owns admission, dispatch,
-worker-free review routing and reminders, and check-in routing; workers execute ticket
-programs and produce proof. Do not implement ticket bodies inside the
-heartbeat, and use Farplane V1 terminology rather than retired product or
-v-next language.
+Run one bounded multi-phase Work Pulse: maintenance, due review service,
+dispatch, low-watermark refill, then one combined receipt. Reconcile all safe
+terminal state, route at most the review chase limit without consuming a
+worker, dispatch unclaimed executable tickets up to the worker limit, and call
+the one adaptive next-wave planner whenever unclaimed ready supply ends below
+the configured watermark. Review WIP caps operator-facing area pools; when
+those pools are full, keep safe workers productive by preferring machine-
+verifiable or delayed-feedback work with low immediate human load.
+Human-active tickets remain unavailable but do not consume Pulse worker
+capacity. Workers execute ticket programs and produce proof; do not implement
+ticket bodies or wait for workers inside the heartbeat. Use Farplane V1
+terminology rather than retired product or v-next language.
+
+Overrides:
+- Treat the operator as unavailable unless current context explicitly proves
+  availability. Do not admit work whose positive output depends on a human
+  decision, dirty cross-project mutation, publication, outreach, credentials,
+  or destructive authority during an unattended window.
+- Self-improvement must prevent a recurring failure through a durable forward
+  mechanism and name its next-run proof. One-off historical cleanup is
+  maintenance, not compounding leverage.
+- After two consecutive worker create/lookup failures, open a dispatch circuit
+  for that mechanism until a later successful health check. Continue safe
+  planning/refill, but do not repeat the same failed launch every wake.
+- Apply the structured `farplane/bindings.yaml#operator.review_chase_policy`.
+  An awaiting-review ticket without a valid Review block is repair work, not a
+  silent wait. Initial Telegram, due Telegram reminders, and policy-selected
+  Phone Chaser calls use automation-owned credentials and are not blocked by a
+  worker ticket's no-credentials boundary. Record every send/dispatch receipt
+  and never infer a chase from queue size.
+- Treat blocked and awaiting-review ownership narrowly. They dedupe the same
+  output or prerequisite, not an entire area, KPI, audience, or objective;
+  continue admitting independent non-interfering artifact work.
+- Pass optional `harness.yaml#goals`, derive completed goals from current metric
+  direction/value, and ignore completed goals for urgency. Do not invent goals.
+- Require delivery, ablation, experiment, rollout, and operations each to
+  propose up to `wave_size` distinct candidates (or an evidence-backed
+  shortfall) before one global ranking. Lanes never receive quotas.
+- Query ticket/Reward history by lane when needed. For content/distribution
+  hypotheses, use a relevant Tasty Pack as optional taste evidence without
+  creating a content Pulse.
+- Load `farplane/bindings.yaml#feed_scout.memory` once when it exists and pass
+  relevant entry refs, freshness/confidence, source gaps, and a content hash to
+  the planner. Every outward-facing admitted ticket must bind its canonical
+  area ICP, a specific job or pain, a named baseline/default, the belief or
+  workflow delta it should cause, and relevant memory/source refs. A trend name
+  or generic ICP pain is not enough. Self-improvement may use local
+  ticket/Reward/eval evidence when external memory is irrelevant.
+- Keep review tickets distinct but summarize pending review in bounded
+  per-area pools. Pass review_wip to the board projection, expose active versus
+  queued pools plus one deterministic digest per active area, and never drop
+  underlying ticket review refs or decisions. Full pools never globally block
+  unattended-safe dispatch.
+- Include derived semantic_time_state in the planner input for metric
+  freshness, goal urgency/deadline buckets, matured Reward IDs, and operator
+  availability validity. Serialization timestamps alone do not create novelty,
+  but crossing one of those planning boundaries must change the fingerprint.
 
 Params:
 project_root = "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane"
-wave_size = 1
-worker_limit = 1
+wave_size = 10
+worker_limit = 4
 review_wip = 3
+review_chase_limit = 1
+ready_low_watermark = 20
+
+Final response:
+- State the action taken or no-op reason.
+- List tickets dispatched, chased, admitted, completed/reconciled, or blocked.
+- Summarize refill outcome, worker/review limits, source gaps, and next owner.
+- Link any report, ticket, worker, or receipt artifacts created by the beat.
 
 Config source:
 farplane/automations.toml automation id="farplane-ticket-update"
@@ -47,7 +103,11 @@ prompt = '''
 Use $feed-scout.
 
 Run the bounded daily Feed Scout from the configured sources. Write its dated
-report and bounded source-backed candidate interventions. You may create one
+report, then update and validate the configured persistent Markdown memory
+before bounded source-backed candidate interventions. Re-render canonical ICP
+fields from `farplane/harness.yaml#areas`; update only source-backed concerns,
+language, trends, notable things, and source gaps. Merge or replace current
+synthesis in place—do not append daily snapshots or a monthly timeline. You may create one
 direct recovery ticket only for an evidenced existing failure with known fix,
 KPI/guard, proof, and no experiment debt. Opportunities remain candidates for
 the next-wave planner. Do not execute tickets.
@@ -58,6 +118,16 @@ config_ref = "farplane/bindings.yaml#feed_scout"
 window = "last_24h"
 recovery_ticket_limit = 1
 write_policy = "local recovery tickets only; no opportunity or experiment tickets"
+
+Final response:
+- Link the Feed Scout report path and summarize the strongest findings in 2-4 bullets.
+- Link the memory path and include its changed headings, `updated_at`, source
+  refs, and validation result.
+- List direct recovery tickets created or updated, or `none`.
+- List candidate interventions and their admission result: `created`,
+  `planner_candidate`, `source_gap`, `blocked_by_gate`, or `not_ticketable`.
+- Name source gaps, external side-effect gates, and next owner.
+- Include the no-execution receipt.
 
 Config source:
 farplane/automations.toml automation id="farplane-feed-scout"
@@ -87,6 +157,8 @@ Params:
 project_root = "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane"
 interval_id = "daily"
 review_window = "last_24h"
+refresh_metrics = true
+refresh_scope = "selected_stale"
 maintenance_ticket_limit = 1
 write_policy = "local recovery tickets only; no new direction or experiment tickets"
 timezone = "Asia/Kuala_Lumpur"
@@ -94,6 +166,16 @@ timezone = "Asia/Kuala_Lumpur"
 Reads:
 - latest completed Feed Scout report when present
 - latest completed weekly BAU report when present
+
+Final response:
+- Link the report path and summarize the report in 2-4 bullets.
+- List tickets created or updated, or `none`.
+- List each maintenance candidate/admission decision with the reason: `created`,
+  `updated`, `already_owned`, `planner_candidate`, `source_gap`,
+  `same_run_ledger`, `blocked_by_gate`, or `not_ticketable`.
+- Name operator-needed items, source gaps, and next owner.
+- Include the no-execution receipt: no new direction, no harness experiments,
+  no rewards mutation, and no ticket execution.
 
 Config source:
 farplane/automations.toml automation id="farplane-daily-interval"
@@ -131,6 +213,16 @@ Reads:
 - completed daily BAU reports inside the review window
 - completed Feed Scout reports inside the review window
 
+Final response:
+- Link the report path and summarize the weekly pattern in 2-4 bullets.
+- List tickets created or updated, or `none`.
+- List each maintenance candidate/admission decision with the reason: `created`,
+  `updated`, `already_owned`, `planner_candidate`, `source_gap`,
+  `same_run_ledger`, `blocked_by_gate`, or `not_ticketable`.
+- Name operator-needed items, source gaps, and next owner.
+- Include the no-execution receipt: no new direction, no harness experiments,
+  no rewards mutation, and no ticket execution.
+
 Config source:
 farplane/automations.toml automation id="farplane-weekly-interval"
 '''
@@ -153,25 +245,44 @@ Use $dogfood-review.
 Run the weekly self-improvement review. Review active and completed experiment
 Goal Packets, recent archived experiment Goal Packets, the previous Dogfood
 report, reward outcomes, pending check-ins, and tracked feature/system
-evidence. Write the dated portfolio report, bounded experiment candidates, and
-at most one direct recovery ticket for a settled attributable failure with a
-known fix and no experiment debt. Do not create, start, or check in experiment
-tickets; the next-wave planner ranks uncertain experiments against all areas.
+evidence. Write the dated retrospective report first, then use the shared
+next-wave planner in the reserved self_improvement area to target five complete
+experiment specs. Send admitted specs to Pulse's bounded materialization route.
+Load the complete `harness.areas.self_improvement` record and apply
+`harness.areas.self_improvement.planner_instruction` as the canonical
+candidate-generation policy; do not replace it with automation-local area
+instructions.
+Do not execute experiments, dispatch workers, or decide/check in Reward rows in
+this run. Return fewer than five only with explicit guard, duplicate, conflict,
+source-gap, delayed-cap, or incomplete-spec evidence.
 
 Params:
 project_root = "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane"
 window = "last_week"
-experiment_candidate_limit = 1
+weekly_ticket_target = 5
 recovery_ticket_limit = 1
-experiment_wip_limit = 2
-max_concurrent_live_delayed = 1
+planning_scope = "reserved_area:self_improvement"
+max_concurrent_live_delayed = 5
 one_active_per_attributable_surface = true
-write_policy = "local recovery tickets only; no experiment ticket creation"
+write_policy = "Pulse materialization only after the dated report"
 
 Reads:
 - active experiment Goal Packets
 - recent archived experiment Goal Packets
 - previous dated Dogfood report when present
+- farplane/harness.yaml areas.self_improvement complete record and planner_instruction
+- Core ticket history Reward receipts
+- current harness metrics and skill/template/eval/QA rollout health
+
+Final response:
+- Link the retrospective report path and summarize the portfolio decision in 2-4 bullets.
+- List specs/tickets admitted, sent to Pulse materialization, or rejected.
+- List each shortfall or candidate decision with the reason: `admitted`,
+  `already_owned`, `duplicate`, `conflict`, `source_gap`, `delayed_cap`,
+  `incomplete_spec`, `blocked_by_gate`, or `not_ticketable`.
+- Name operator-needed items, source gaps, and next owner.
+- Include the no-execution receipt: no experiment execution, no dispatch, and
+  no Reward decisions/check-ins.
 
 Config source:
 farplane/automations.toml automation id="farplane-weekly-self-improvement"
@@ -200,6 +311,12 @@ Params:
 project_root = "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane"
 review_window = "last_month"
 structure = "registry"
+
+Final response:
+- Link the consolidation report path and summarize the key duplicate/stale/wrong-owner findings.
+- List registry edits or tickets created; this run should normally report `none`.
+- List recommended follow-ups with owner surface and reason.
+- Name source gaps and include the no-mutation receipt.
 
 Config source:
 farplane/automations.toml automation id="farplane-monthly-registry-consolidation"

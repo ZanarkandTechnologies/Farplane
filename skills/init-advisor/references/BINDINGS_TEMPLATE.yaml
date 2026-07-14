@@ -42,23 +42,20 @@ integrations:
     project_id: null
     project_url: null
     production_url: null
-metric_bindings:
-  TODO_metric_name:
-    refresh: TODO call $skill-name or $interval-update.helper_name(param="value", date="<YYYY-MM-DD>")
-      to prepare this daily reading. Record source_gap when the reading cannot be collected.
-  TODO_quality_metric:
-    refresh: TODO call the proof or review owner that produces this quality reading for
-      date="<YYYY-MM-DD>". Record source_gap when the reading cannot be collected.
-  todo_unclaimed_ticket_count:
-    refresh: Count unclaimed status=todo tickets under tickets/ whose dependencies are
-      satisfied; store value/status/payload in the daily metric file.
-  accepted_output_events:
-    refresh: Call $interval-update.count_ticket_kpi_rewards(ticket_dir="tickets", date="<YYYY-MM-DD>",
-      kpi_key="accepted_output_events") when this KPI is ticket-derived, or read the accepted
-      reward ledger when configured.
-  auto_time_ratio:
-    refresh: Call $interval-update.calculate_autonomy_time_ratio(runtime_dir=".farplane",
-      date="<YYYY-MM-DD>") and store the returned value/status/payload.
+feed_scout:
+  enabled: false
+  cadence: daily
+  timezone: TODO
+  report_root: .farplane/reports/feed-scout
+  latest_report: .farplane/reports/feed-scout/latest.json
+  daily_feed_root: .farplane/feed-scout/daily
+  ledger: .farplane/feed-scout/ledger.jsonl
+  proposal_ledger: .farplane/feed-scout/proposals.jsonl
+  memory: .farplane/feed-scout/memory.md
+  destination: local_ledger
+  write_policy: local_first
+  entities: {}
+# Metric acquisition prompts live in farplane/metrics.yaml; bindings retain coordinates only.
 event_routes:
   - route_id: ticket-completion-learning-v1
     event_name: farplane.ticket.completed

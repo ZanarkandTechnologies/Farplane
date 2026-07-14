@@ -39,11 +39,13 @@ workflow, and do not start Goal, Pulse, a worker, or ticket execution.
 
 ```text
 interval_update(project_root, interval_id, review_window, context_refs?,
-                maintenance_ticket_limit = 1, write_policy?, now?)
+                maintenance_ticket_limit = 1, write_policy?, now?,
+                refresh_metrics = false, refresh_scope = "selected_stale")
   -> interval_report
    + problems
    + maintenance_candidates
    + recovery_ticket_paths[0..maintenance_ticket_limit]
+   + metric_refresh_receipt?
    + source_gaps
 
 state:
@@ -65,7 +67,7 @@ gates:
   no_new_direction; no_experiment_or_reward_mutation
 
 routes:
-  pulse-update | ticket-opportunity-generator | feed-scout | review
+  pulse-update | plan-next-wave | feed-scout | review
 
 fails:
   planning new product, campaign, strategy, capability, or harness direction;
@@ -89,8 +91,25 @@ fails:
         signals; use `weekly` for repeated problems, completed/abandoned work,
         review load, resource use, and pending proof.
 - [ ] 2. Build a compact evidence bundle.
-  - [ ] Read tickets and Pulse/report evidence inside `review_window` plus the
-        previous finalized report for carry-forward problems.
+  - [ ] For Daily only when `refresh_metrics = true`, resolve selected/pinned
+        stale metric IDs through `scripts/metric_refresh.py refresh-plan`.
+        Execute each returned refresh group once in the Interval agent context,
+        let provider skills return partial readings or source gaps, and write
+        flat observations before report synthesis. Weekly and disabled runs
+        execute zero refresh groups. A provider gap never blocks the report.
+  - [ ] Read the configured kanban evidence and Pulse/report evidence inside
+        `review_window` plus the previous finalized report for carry-forward
+        problems. A `filesystem_tickets` binding reads its configured project-
+        relative directories. A `notion` binding resolves only its named handle
+        from private Notion context and queries through `ntn`; normalize rows
+        immediately and keep raw IDs, URLs, tokens, and private payloads out of
+        tracked reports and tickets.
+  - [ ] If the configured provider, private handle, CLI, credential, or compact
+        query is unavailable, record a `source_gap`. When
+        `filesystem_ticket_policy: exclude`, do not inspect or dedupe against
+        `tickets/**` and do not fall back to it even when it exists. Still write
+        the bounded report from available metrics, completed reports, prior
+        finalized Interval evidence, and supplied `context_refs`.
   - [ ] Read only the latest completed Feed Scout or other provider report
         explicitly supplied through `context_refs`; missing inputs become
         source gaps and never trigger the provider.
@@ -126,6 +145,10 @@ fails:
         directories loaded after binding resolution.
   - [ ] Return report path, carried/new/resolved problems, maintenance
         candidates, recovery ticket paths, source gaps, and a no-execution receipt.
+  - [ ] In the final chat response, summarize the report's decision content:
+        report path, 2-4 key findings, tickets created or updated, each
+        candidate's admission result and reason, operator-needed items, source
+        gaps, and the no-execution receipt.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 ## Templates
@@ -153,7 +176,7 @@ fails:
   caller integration checks; this `SKILL.md` remains runtime authority.
 - [../pulse-update/SKILL.md](../pulse-update/SKILL.md) - owner of ticket
   execution and matured experiment check-ins.
-- [../ticket-opportunity-generator/SKILL.md](../ticket-opportunity-generator/SKILL.md)
+- [../plan-next-wave/SKILL.md](../plan-next-wave/SKILL.md)
   - owner of new BAU direction when the board needs refill.
 
 ## Output
@@ -165,3 +188,6 @@ fails:
   score experiments, or execute tickets.
 - A sanitized provider-resolution receipt proving bindings were loaded before
   work-item evidence and naming the only source used for review and dedupe.
+- A final chat receipt that makes the report readable without opening it: key
+  findings, created/updated tickets, candidate decisions with reasons,
+  operator-needed items, source gaps, and no-execution receipt.

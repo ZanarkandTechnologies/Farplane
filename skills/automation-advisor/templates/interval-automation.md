@@ -30,6 +30,15 @@ human needs to edit. Let the skill own its normal workflow and output shape.
 Params:
 project_root = "<project-root>"
 
+Final response:
+- Link the report path and summarize the report in 2-4 bullets.
+- List tickets created or updated, or `none`.
+- List each candidate/admission decision with the reason: `created`,
+  `updated`, `already_owned`, `planner_candidate`, `source_gap`,
+  `same_run_ledger`, `blocked_by_gate`, or `not_ticketable`.
+- Name operator-needed items, source gaps, and the next owner.
+- Include the no-execution receipt for report-only runs.
+
 Config source:
 farplane/automations.toml automation id="<automation-id>"
 '''
@@ -49,4 +58,6 @@ Daily and Weekly BAU review call `$interval-update`; they write dated reports
 with a Problems ledger and may only create bounded maintenance tickets for
 problems evidenced before the current run. Feed Scout calls `$feed-scout` and
 weekly self-improvement calls `$dogfood-review`. None of these records execute
-their tickets; the single Work Pulse heartbeat does.
+their tickets; the single Work Pulse heartbeat does. The final response should
+make the report useful in chat instead of merely saying that the report was
+written.

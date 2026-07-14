@@ -96,6 +96,20 @@
           ]
         }
       }
+    },
+    {
+      "id": "feed_scout_updates_persistent_icp_world_memory",
+      "prompt": "A bounded daily Feed Scout run has written its dated report. The configured memory already contains one older relevant trend, one duplicate observation, and canonical ICP profiles. Today's sources add a new harness-engineering concern and weaken the old trend's confidence. What happens before candidate handoff?",
+      "expected_output": "Reads the existing memory and complete harness area ICP records; Re-renders canonical ICP fields without letting sources redefine them; Updates one Markdown file in place by merging the duplicate, preserving useful context, and revising the old trend confidence and last-observed evidence; Keeps exactly the ICPs, Trends, Other Notable Things, and Source Gaps sections with no daily snapshot or monthly timeline; Validates memory and returns changed headings, updated_at, source refs, and validation status; Requires candidate ICP, baseline/default, belief or behavior delta, and memory/source refs before handoff",
+      "files": ["farplane/harness.yaml", "farplane/bindings.yaml", "skills/feed-scout/templates/memory.md"],
+      "assertions": [
+        "Updates one persistent Markdown memory in place after the report",
+        "Keeps canonical ICP meaning owned by harness.yaml",
+        "Merges duplicates and revises current synthesis without creating a timeline",
+        "Validates the memory and emits a provenance-bearing update receipt",
+        "Rejects shallow candidate handoff without ICP, baseline, decision delta, and evidence refs"
+      ],
+      "metadata": {"farplane": {"title": "Feed Scout maintains compact ICP and world memory", "tags": ["feed-scout", "memory", "icp", "provenance", "hardcase"], "hardcase": true, "difficulty": "high", "benchmark_value": "Proves persistent context stays compact, canonical, and usable by planning"}}
     }
   ]
 }

@@ -35,6 +35,12 @@ wave_size = 3
 worker_limit = 1
 review_wip = 3
 
+Final response:
+- State the action taken or no-op reason.
+- List tickets dispatched, chased, admitted, completed/reconciled, or blocked.
+- Summarize refill outcome, worker/review limits, source gaps, and next owner.
+- Link any report, ticket, worker, or receipt artifacts created by the beat.
+
 Config source:
 farplane/automations.toml automation id="<pulse-automation-id>"
 '''

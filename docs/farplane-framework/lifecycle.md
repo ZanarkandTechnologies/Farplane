@@ -49,7 +49,8 @@ own planner, worker pool, strategy file, or heartbeat.
 ## Quick Start
 
 1. Run `init-advisor` to create or migrate the project substrate.
-2. Read `farplane/harness.yaml` for identity, planning areas/instructions, policy, capabilities,
+2. Read `farplane/harness.yaml` for identity, complete planning area records
+   and each canonical `areas.<area_id>.planner_instruction`, policy, capabilities,
    and selected objectives/guards.
 3. Read `farplane/metrics.yaml` for metric meaning, direction, freshness, and
    guard rules; read generated observations for current values.
@@ -99,7 +100,8 @@ flowchart TD
 ```text
 pulse(tickets, worker_limit, review_wip, wave_size)
   -> do(admitted_ticket)
-   | plan_next_wave(harness, metric_definitions, metric_state,
+   | plan_next_wave(harness.areas complete records and planner instructions,
+                    metric_definitions, metric_state,
                     ticket_history, current_context, wave_size)
 ```
 
@@ -179,7 +181,7 @@ does not reconstruct or independently score the experiment policy.
 | Goal/check-in loop policy | ticket `program.md` |
 | Append-only task or experiment observations | ticket `progress.md` |
 | Desired automation topology and prompts | `farplane/automations.toml` |
-| Provider coordinates and metric refresh bindings | `farplane/bindings.yaml` |
+| Provider coordinates | `farplane/bindings.yaml` |
 | Runtime receipts and derived context | `.farplane/reports/**` and other generated `.farplane/**` projections |
 
 Reports help the next reader plan, but are not a second source of executable

@@ -20,10 +20,10 @@ learning brief, not generic research.
 ## Skill Signature
 
 ```text
-farplane_market_learning(question, audience?, source_refs?, ticket?)
+farplane_market_learning(question, audience?, source_refs?, ticket?, audience_context?)
   -> learning_brief + implication + next_action
-state: reads(farplane/harness.yaml, farplane/metrics.yaml, source refs, ticket context); writes(ticket artifact)
-gates: decision_named; source_quality_named; implication_not_generic; outreach_requires_approval
+state: reads(farplane/harness.yaml, farplane/metrics.yaml, ticket audience_context first or configured Feed Scout memory as fallback, source refs, ticket context); writes(ticket artifact)
+gates: canonical_icp_bound; baseline_named; decision_named; source_quality_named; implication_not_generic; outreach_requires_approval
 routes: root skill `research` | root skill `best-of-worlds` | root skill `harness-scout` | ../farplane-content-creation/SKILL.md
 fails: produces broad notes with no decision; changes direction without evidence; contacts users without approval
 ```
@@ -31,7 +31,7 @@ fails: produces broad notes with no decision; changes direction without evidence
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-- [ ] 1. State the audience, positioning, distribution, or adoption decision this should inform.
+- [ ] 1. State the audience, positioning, distribution, or adoption decision this should inform. Read ticket-owned `audience_context` first; otherwise resolve the selected area's ICP and configured Feed Scout memory. Name the current baseline/default and which belief or behavior the learning could change.
 - [ ] 2. Read current goals and use local evidence before external research.
 - [ ] 3. Record question, sources, findings, confidence, implication, and next action.
 - [ ] 4. Route useful implications to BAU planning or evidence content; keep external actions gated.

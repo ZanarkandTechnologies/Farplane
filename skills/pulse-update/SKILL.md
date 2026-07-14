@@ -1,6 +1,6 @@
 ---
 name: pulse-update
-description: "Run one project Work Pulse: reconcile ordinary and due-check-in work, dispatch executable tickets, refill an empty board, request review, and write receipts."
+description: "Run one bounded multi-phase Work Pulse: maintain state, service due reviews, dispatch executable tickets, refill low ready supply, and write one receipt."
 tier: 3
 group: harness
 source: local
@@ -19,34 +19,65 @@ allowed-tools: Read, Write, Glob, Grep, Bash
 one board and one shared worker pool. It does not route through product-local
 controllers.
 
-Work Pulse owns five state-changing responsibilities:
+Each wake runs five bounded phases in order; an earlier phase never suppresses
+a later eligible phase:
 
 1. Reconcile completed, failed, blocked, active, and review-ready work without
    treating human-active tickets as Pulse workers.
 2. Derive matured delayed-reward check-ins and hand their original Goal
    Packets to a worker that executes the ticket-owned Check-In Program.
 3. Select and dispatch executable tickets within worker capacity.
-4. Request human review once, mark the ticket awaiting review, release the
-   worker, and reconcile at most one due reminder without worker assignment.
-5. When no unclaimed executable ticket or due check-in exists, call the pure
-   [ticket opportunity generator](../ticket-opportunity-generator/SKILL.md),
+4. Request human review once per completed artifact, mark the ticket awaiting
+   review, release the worker, repair malformed review ledgers, and execute
+   policy-derived Telegram or Phone Chaser actions up to `review_chase_limit`
+   without worker assignment. Keep the tickets distinct while projecting one
+   bounded review pool per area for operator presentation.
+5. When unclaimed ready supply after dispatch is below its configured low
+   watermark, call the pure
+   [plan next wave](../plan-next-wave/SKILL.md),
    materialize its accepted specs, and dispatch within remaining capacity.
+
+Hard output invariant: the canonical Pulse receipt is exactly one valid JSON
+object with no YAML, Markdown fence, or prose around it. Whenever refill runs,
+the response must render `pulse_receipt.planner_call` rather than only
+narrating the decision.
+That receipt carries the actual planning-input envelope, the lane-aware history
+query/receipt, goals, review-pool and operator-availability state, optional
+taste evidence, and all five lane receipts with requested count, candidate
+count, candidates, and shortfall. It then renders an ordered cross-lane
+`global_ranking` before showing the one global admission result. A receipt that
+omits `planner_call`, lane-aware history, any lane receipt, or the global
+ranking is invalid.
+
+Ticket dispatch is context-isolated:
+`create_thread(complete_handoff) -> verify clean first turn -> set canonical
+title -> claim/register`. Never fork the Pulse manager to create a worker.
 
 Daily and Weekly Interval reports may supply current evidence and non-mutating
 suggestions. They do not materialize planner specs or dispatch work in this
 loop. Goal Advisor remains the execution compiler for material ticket work;
 Pulse is the board manager, not the worker.
 
+`dogfood-review` may call a bounded materialization entry with an already
+validated `reserved_area:self_improvement` planner receipt. In that entry Pulse
+only allocates IDs, writes the accepted ticket specs, records exact area/origin
+provenance, and returns paths. It does not run maintenance, dispatch, Goal
+execution, or due check-ins during the Dogfood automation.
+
 ## Skill Signature
 
 ```text
 work_pulse(project_root, wave_size = 1, worker_limit = 1,
-           review_wip = 3, extensions?)
+           review_wip = 3, review_chase_limit = 1,
+           ready_low_watermark = 1, extensions?,
+           materialization_request?)
   -> reconciliation
-   + execution_mode
-   + ticket_deltas?
-   + worker_handoffs?
-   + human_review_requests?
+   + maintenance_actions[]
+   + review_service_actions[]
+   + review_area_pools[]
+   + worker_handoffs[]
+   + refill_result?
+   + blockers[]
    + report_ref
    + next_wake?
 
@@ -56,14 +87,17 @@ state:
         farplane/automations.toml?, tickets/TASK-*/ticket.md,
         tickets/TASK-*/program.md?, tickets/TASK-*/progress.md?,
         ticket Reward.kpi_rewards[]?, Goal Packet Check-In Program?,
-        tickets/archive/**, latest dated interval/feed reports?,
+        tickets/archive/**, configured Feed Scout Markdown memory?,
+        latest dated interval/feed reports?,
         .farplane/automation/spawned-threads.jsonl?,
-        .farplane/automation/action-outcomes.jsonl?, farplane/pm.json?)
+        .farplane/automation/action-outcomes.jsonl?,
+        .farplane/state/dispatch-circuit.json?, farplane/pm.json?)
   writes(tickets/TASK-*/ticket.md when accepted planner specs are materialized,
          .farplane/reports/pulse/<timestamp>.md,
          .farplane/automation/decisions.jsonl?,
          .farplane/automation/spawned-threads.jsonl?,
          .farplane/automation/action-outcomes.jsonl?,
+         .farplane/state/dispatch-circuit.json?,
          farplane/pm.json when a persistent project worker thread is created)
 
 gates:
@@ -71,29 +105,45 @@ gates:
   due_reward_rows_derived; original_checkin_ticket_resumed;
   delayed_checkin_program_handed_off_without_reimplementation;
   matured_rows_handed_off_together; future_reward_rows_unchanged;
-  review_status_excluded_from_execution;
-  due_review_reminder_derived_from_progress; one_due_reminder_per_pulse;
+  review_status_excluded_from_execution; malformed_review_state_repaired;
+  due_review_action_derived_from_progress_and_binding; review_chase_limit_respected;
+  notification_credentials_owned_by_automation; phone_chaser_policy_respected;
   reminder_does_not_consume_worker; queue_size_does_not_trigger_chase;
   worker_limit_respected; human_active_ticket_does_not_consume_worker;
-  review_wip_respected; empty_board_before_refill;
-  wave_size_respected; planner_output_qa_passed; pulse_owns_materialization;
+  review_pool_limit_respected; review_saturation_changes_selection_strategy;
+  ready_low_watermark_checked_after_dispatch;
+  maintenance_does_not_suppress_later_phases; review_service_does_not_consume_worker;
+  wave_size_respected; complete_harness_area_records_passed;
+  canonical_area_icps_passed; world_memory_loaded_once_and_referenced;
+  canonical_area_instructions_not_reconstructed; planner_output_qa_passed;
+  pulse_owns_materialization;
   no_inline_ticket_implementation; ticket_program_progress_proof_handoff;
+  clean_worker_task_created_without_manager_history;
   human_review_worker_released; side_effect_gates_respected;
   decision_and_report_written
 
+materialization_request:
+  accepts(source = dogfood-review, planning_scope = reserved_area:self_improvement,
+          report_ref, admitted_specs[0..5])
+  returns(ticket_paths[], admission_receipt)
+  forbids(maintenance, dispatch, Goal execution, Reward check-in)
+
 routes:
-  ticket-opportunity-generator | goal-advisor |
+  plan-next-wave | goal-advisor |
   worker-artifact-review-request | telegram-message | qa | review
 
 fails:
   requires_or_invokes_product_controller; filters_tickets_by_product_origin;
-  asks_interval_to_create_or_dispatch_work; plans_with_ready_work_available;
+  asks_interval_to_create_or_dispatch_work;
   creates_checkin_ticket; delegates_future_reward_row; asks_interval_to_evaluate_reward;
   duplicates_or_invents_checkin_decision_policy;
-  conflates_wave_size_with_worker_limit; exceeds_review_wip;
+  conflates_wave_size_with_worker_limit; exceeds_review_area_pool_limit;
+  globally_blocks_safe_dispatch_due_to_review_saturation;
   implements_ticket_in_parent_pulse; keeps_worker_alive_only_for_human_review;
-  assigns_worker_to_review_reminder; chases_based_on_review_queue_size;
+  assigns_worker_to_review_action; chases_based_on_review_queue_size;
+  lets_ticket_credential_scope_block_internal_notification;
   counts_human_ticket_claim_as_pulse_worker; spawns_area_planner;
+  forks_manager_thread_for_ticket_worker; claims_worker_before_clean_lineage_verified;
   writes_planner_side_effects_before_candidate_qa; returns_silent_no_op
 ```
 
@@ -105,6 +155,8 @@ pulse-update @30m
   wave_size = 1
   worker_limit = 1
   review_wip = 3
+  review_chase_limit = 1
+  ready_low_watermark = 1
 ```
 
 Cadence only controls wake timing. It does not expand authority, worker
@@ -115,12 +167,12 @@ capacity, ticket scope, or external side-effect permission.
 
 - [ ] 1. Bind project policy and reconcile state.
   - [ ] Resolve `project_root`, `wave_size`, `worker_limit`, `review_wip`,
-        `farplane/harness.yaml`, `farplane/metrics.yaml`, current metric readings,
+        `farplane/harness.yaml` including optional goals, `farplane/metrics.yaml`, current metric readings,
         ticket paths, worker ledger, latest outcomes, current dated context,
         and project side-effect gates. Read bindings only when provider or
         authority mechanics affect the current decision.
   - [ ] Run or emulate
-        `python3 skills/pulse-update/scripts/list_pulse_board.py --project-root <root> --worker-limit <n> --now <iso-datetime>`.
+        `python3 skills/pulse-update/scripts/list_pulse_board.py --project-root <root> --worker-limit <n> --review-wip <n> --now <iso-datetime>`.
   - [ ] Archive terminal active tickets when safe or record the exact archive
         action still required.
   - [ ] Record Pulse-owned active workers from the spawned-thread ledger,
@@ -128,6 +180,9 @@ capacity, ticket scope, or external side-effect permission.
         tickets, missing outputs, and stale ledger rows. A `status: active`
         ticket without a live Pulse worker-ledger row is unavailable for
         dispatch but does not consume `worker_limit`.
+  - [ ] Project awaiting-review tickets into one pool per canonical area.
+        `review_wip` limits those operator-facing pools, not the number of
+        distinct ticket artifacts and not worker concurrency.
 - [ ] 2. Handle completed, waiting, or matured work.
   - [ ] Reconcile ticket/program/progress/proof and outcome state before
         selecting new work.
@@ -149,10 +204,21 @@ capacity, ticket scope, or external side-effect permission.
         [worker artifact review request](../worker-artifact-review-request/SKILL.md),
         record the receipt or blocker, set the ticket to awaiting review, and
         release the worker slot.
-  - [ ] Read `progress.md` Review blocks for awaiting-review tickets. If one or
-        more `next_reminder_at` values are due and undecided, select at most the
-        oldest one and call the review-request wrapper in reminder mode without
-        assigning a worker. Review WIP limits refill; it does not trigger chase.
+  - [ ] Read `progress.md` Review blocks for awaiting-review tickets and the
+        structured `bindings.yaml#operator.review_chase_policy`. An
+        awaiting-review ticket with no parseable Review block is a mechanical
+        repair action, never a silent wait.
+  - [ ] Select the oldest due actions up to `review_chase_limit`: retry a
+        missing/blocked initial Telegram, send a configured Telegram reminder,
+        or dispatch a configured Phone Chaser call. Execute them through
+        `worker-artifact-review-request` without assigning workers.
+  - [ ] Treat internal review notifications as automation-owned credential use;
+        ticket-local no-credential/publication/account boundaries do not block
+        notification delivery and notification grants no broader authority.
+        Review WIP does not trigger chase or suppress planning.
+  - [ ] Keep each ticket's Review block and decision canonical. Area pooling is
+        a presentation and prioritization projection; it never merges tickets,
+        Rewards, decisions, or proof obligations.
   - [ ] Keep publish, post, spend, deploy, external contact, account mutation,
         and destructive actions gated even when local preparation is complete.
 - [ ] 3. Admit executable tickets.
@@ -165,44 +231,112 @@ capacity, ticket scope, or external side-effect permission.
         metadata for ordinary or improvement tickets.
   - [ ] Treat `human_gate` as a final-action boundary: dispatch safe local work
         when it can stop before the gated action.
-- [ ] 4. Choose one mode.
+- [ ] 4. Run every bounded manager phase.
+  - [ ] `maintenance`: archive all mechanically safe terminal work, reconcile
+        stale worker/outcome rows, and derive due check-ins. This phase consumes
+        no worker slot and never ends the beat by itself.
+  - [ ] `review_service`: repair invalid ticket-owned review state and execute
+        up to `review_chase_limit` policy-derived Telegram/phone actions without
+        workers. Queue size alone never triggers chase.
   - [ ] `dispatch_ready`: choose ordinary executable tickets and original
         tickets with due check-ins, then create handoffs up to available worker
-        slots.
-  - [ ] `plan_next_wave`: only when no ordinary executable ticket or due
-        check-in exists—even when human-active tickets remain—review WIP is
-        below its limit, and current
-        program/objective context is sufficient.
-    - [ ] Build one canonical planning-input object from harness areas,
-          objectives/guards, metric readings, global-history query receipt,
-          report refs, board state, and wave size. Call
+        slots. Saturated review pools do not globally block dispatch; prefer
+        unattended-safe tickets with machine or delayed feedback and low
+        immediate review load.
+    - [ ] For a new ticket worker, use the app's clean `create_thread(prompt,
+          project target)` path with the complete handoff as its initial prompt.
+          Never use `fork_thread` for a ticket worker: a fork copies the Pulse
+          manager's heartbeat history and is reserved for work whose source
+          conversation is itself required context. Resume an existing task only
+          when the durable ticket/worker ledger already binds that task ID.
+    - [ ] Before claiming the ticket or registering the worker, verify the
+          returned task is the requested project task and begins from the
+          delegation packet rather than inherited manager turns. Treat
+          `forked_from_id`, pre-delegation heartbeat history, or unverifiable
+          lineage as a failed launch: archive or release the bad task when safe,
+          record the circuit failure, and leave the ticket unclaimed.
+    - [ ] Treat worker create/lookup as a shared dispatch mechanism. After two
+          consecutive non-returning or unverifiable attempts, open a circuit,
+          stop repeating that launch on every wake, and record the health-check
+          condition required to close it. Continue maintenance, review service,
+          and safe refill while the circuit is open.
+    - [ ] Before worker launch, run `scripts/dispatch_circuit.py probe`. Record
+          each failed create/lookup with `failure --reason <reason>` and each
+          verified success with `success`. An open circuit blocks ordinary
+          launches for thirty minutes, then permits exactly one half-open probe;
+          probe failure reopens it and verified success closes it.
+    - [ ] Bound each worker create/lookup attempt to 30 seconds. If it has not
+          returned with a verifiable thread ID, stop waiting, record `failure`,
+          leave the ticket unclaimed, and continue later phases. Never hold the
+          whole heartbeat open for coordination recovery.
+  - [ ] `plan_next_wave`: after dispatch, call the planner when remaining
+        unclaimed ready supply is below `ready_low_watermark`, even when
+        maintenance, review service, dispatch, human-active tickets, or
+        awaiting-review tickets also exist. Do not wait for spawned workers.
+    - [ ] Build one canonical planning-input object containing the complete
+          `harness.areas` map. Preserve every area's `description`, `icp`,
+          `planner_instruction`, `skill_refs`, and `metric_refs`; do not reduce
+          areas to IDs/metrics or reconstruct instructions in Pulse. Add
+          objectives/guards, optional goals, metric readings, lane-aware global
+          history, review-area-pool state, operator availability, optional
+          Tasty Pack evidence for relevant content candidates, report refs,
+          board state, and wave size. Include a derived `semantic_time_state`
+          for metric freshness, goal urgency/deadline buckets, matured Reward
+          IDs, and operator-availability validity; serialization time alone is
+          not planning novelty. Call
           `scripts/plan_wave_guard.py begin` before planning. An identical
           completed fingerprint is `no_op_unchanged_input`; an active claim is
           `blocked_overlap`.
-  - [ ] `request_human`: when value direction, authority, credentials, or a
+    - [ ] Resolve `farplane/bindings.yaml#feed_scout.memory` once per planning
+          call. When present, include its file ref, `updated_at`, relevant
+          entry refs, confidence/freshness, and source gaps as `world_memory`.
+          Include the memory content hash in the semantic planning input so a
+          meaningful update can trigger replanning; do not replay all dated
+          reports or treat the memory as authority.
+  - [ ] `request_human`: record a precise blocker when value direction, authority, credentials, or a
         material source gap blocks both execution and safe planning.
   - [ ] `no_op`: only when reconciliation produced no due action and the exact
         reason is recorded.
 - [ ] 5. Plan or dispatch without mixing ownership.
   - [ ] For refill, call
-        `plan_next_wave(harness_areas, objective_contract, metric_state,
-        ticket_history_query, current_context, wave_size)` and accept only
-        QA-passing executable specs. Bind identity, area guidance, selected objective refs, and
-        guard refs from `harness.yaml`; resolve metric direction, freshness,
+        `plan_next_wave(harness_areas = harness.areas, objective_contract,
+        metric_goals = harness.goals, metric_state, ticket_history_query,
+        current_context, world_memory, taste_evidence, wave_size)` and accept only
+        QA-passing executable specs. Bind identity, each area's canonical
+        `planner_instruction`, selected objective refs, and guard refs from
+        `harness.yaml`; resolve metric direction, freshness,
         and guard rules from `metrics.yaml`. Reports remain optional current
         context rather than a second planning owner.
+  - [ ] Require every admitted spec to carry `audience_context` from its
+        canonical area ICP: job/problem, baseline/default, intended belief or
+        behavior delta, and evidence refs. Outward-facing specs require a
+        relevant world-memory ref; self-improvement may use local
+        ticket/Reward/eval evidence instead.
   - [ ] Require the planner to read the latest global ticket history sample
-        first through `query_ticket_history.py`; allow progressive origin/area/
+        first through `farplane tickets history --json`; allow progressive origin/lane/area/
         KPI/status/Reward filters only when the sample is insufficient. Do not
         create area planner subagents.
+  - [ ] Require every lane receipt to request up to `wave_size` proposals and
+        return `candidate_count`, `candidates[]`, and an evidence-backed
+        shortfall reason. Reject the old one-candidate-per-lane ceiling before
+        materialization; one global ranker still chooses all admissions.
   - [ ] Pulse alone materializes accepted specs as ticket files, then reruns
         admission before dispatch.
+  - [ ] For a Dogfood materialization request, require the dated report ref,
+        `reserved_area:self_improvement` planner receipt, and `0..5` complete
+        validated specs. Materialize and return immediately without entering
+        ordinary heartbeat phases or dispatching workers.
+  - [ ] Before materializing a batch, allocate collision-free IDs with
+        `python3 skills/pulse-update/scripts/next_ticket_id.py --project-root <root>
+        --count <n> --reserve`. The allocator atomically reserves a batch after
+        scanning active and archived durable ticket paths plus frontmatter
+        identities. Never infer the next ID from the active board alone.
   - [ ] Before materialization, serialize the proposed spec set and run
-        `ticket-opportunity-generator/scripts/validate_ticket_specs.py`; reject
+        `plan-next-wave/scripts/validate_ticket_specs.py`; reject
         the whole invalid spec, never silently fill missing KPI/provider/check-in
         fields in Pulse.
-  - [ ] Finish the atomic planning claim with admitted ticket IDs and their
-        selected `area_id`. The guard rejects duplicate IDs and admissions
+  - [ ] Finish the atomic planning claim with admitted ticket IDs plus each
+        selected `area_id` and `ranking.lane`. The guard rejects duplicate IDs and admissions
         above `wave_size`; record `completed`, `no_op`, `source_gap`, or
         `human_request` in the existing decisions ledger and release the lock.
   - [ ] For each handoff, list `ticket.md`, optional `program.md`, optional
@@ -225,8 +359,19 @@ capacity, ticket scope, or external side-effect permission.
 
 ## Worker Handoff Contract
 
+```text
+create_ticket_worker(complete_handoff, project_target, canonical_title)
+  -> create_thread(initial_prompt = complete_handoff, target = project_target)
+  -> verify(project_target + first_turn_is_delegation + no_inherited_history)
+  -> set_title("[TASK-XXXX] <ticket title>")
+  -> claim_ticket + register_worker
+
+reject: fork_thread | claim_before_verification | title_as_ticket_identity
+```
+
 ```yaml
 worker_handoff:
+  creation_mode: clean_thread # create_thread; never fork_thread for ticket workers
   ticket: tickets/TASK-XXXX/ticket.md
   program: tickets/TASK-XXXX/program.md | none
   progress: tickets/TASK-XXXX/progress.md | none
@@ -246,19 +391,30 @@ Default review transition:
 worker produces output + proof
 -> sends one review request or records blocker
 -> ticket becomes awaiting_review
--> progress.md records requested_at + next_reminder_at + thread_ref
+-> progress.md records requested_at + Telegram/phone receipts + thread_ref
 -> worker exits
 -> Pulse may dispatch other eligible work
 ```
 
-## Execution Modes
+## Phase Outcomes
 
+- `maintenance`: reconcile every safe mechanical action in the current board snapshot.
+- `review_service`: repair malformed waits and execute at most
+  `review_chase_limit` due Telegram/phone actions.
 - `dispatch_ready`: hand off up to `idle_worker_slots` ordinary or due-check-in
   tickets. A due handoff resumes the existing Goal Packet and never creates a
   check-in ticket. Create or resume exactly one persistent task per ticket,
   titled `[TASK-XXXX] <ticket title>`; lifecycle state never changes the title.
-- `plan_next_wave`: obtain `0..wave_size` specs, materialize accepted specs,
-  then dispatch only up to remaining worker capacity.
+  New tasks use clean creation with the handoff as their initial prompt. They
+  never fork the Pulse manager or inherit its heartbeat transcript, and Pulse
+  verifies that clean first turn before setting the canonical title, claiming
+  the ticket, or writing the worker ledger. Ticket identity comes from the
+  durable ticket ID and task ID, never parsed title text.
+- `plan_next_wave`: obtain `0..wave_size` specs when ready supply is below the
+  low watermark, materialize accepted specs, then dispatch only up to remaining capacity.
+- `materialize_reserved_wave`: validate and write an already admitted Dogfood
+  spec batch, record exact `area_id` and source report, then return without
+  execution or check-ins.
 - `request_human`: write one precise request with attempted safe alternatives.
 - `no_op`: write the reconciled reason and next wake; no silent completion.
 
@@ -266,14 +422,35 @@ Every mode ends with this compact receipt, including explicit `none` values:
 
 ```yaml
 pulse_receipt:
-  mode:
+  phases:
+    maintenance: {archived: [], repaired: []}
+    review_service: {actions: []}
+    execution: {dispatched: [], idle_slots_after: 0}
+    refill: {called: false, admitted: [], reason: none}
   admitted: []
   excluded: []
-  planner_call: none | {harness_areas, objective_contract, metric_state, ticket_history_queries, current_context, wave_size}
+  planner_call:
+    value: none | planned
+    input_ref:
+    harness_areas: []
+    objective_contract: {}
+    metric_goals: []
+    metric_state: {}
+    semantic_time_state: {}
+    ticket_history_queries: []
+    world_memory: none # or {ref, updated_at, content_hash, relevant_entry_refs, source_gaps}
+    lane_receipts: []
+    global_ranking: [] # ordered cross-lane candidates with admission/deprioritization reason
+    review_pool_state: {limit: 0, active: [], queued: [], saturated: false}
+    taste_evidence: none
+    current_context: {}
+    wave_size: 0
+    admitted_area_lane_provenance: []
+  area_instruction_receipts: [] # exact harness.areas.<area_id>.planner_instruction refs applied by the planner
   planner_writes_or_dispatches: false
   product_controller: none
   worker_handoffs: [] # each uses the full Worker Handoff Contract above
-  review_reminder: none | {ticket, progress_ref, send_receipt}
+  review_action: none | {ticket, progress_ref, action, send_or_dispatch_receipt}
   report_ref:
   decision_or_outcome_rows: []
   next_wake:
@@ -282,13 +459,30 @@ pulse_receipt:
 The receipt is the minimum visible proof that Pulse made a bounded decision;
 it is not an extra workflow or registry.
 
+When `phases.refill.called` is `true`, `planner_call.value` must be `planned`
+and the receipt must populate the actual canonical planning inputs shown above,
+including goals, lane-aware history queries, review-pool state, operator
+availability in `current_context`, world memory, taste evidence, and all five lane receipts.
+Each lane receipt must show `requested_count = wave_size`, its candidate count,
+candidate list, and an evidence-backed shortfall. Omitting that input envelope
+or the five-lane top-N receipt makes the Pulse receipt incomplete even when the
+dispatch recommendation itself is sensible. After the lane receipts, include
+an ordered `global_ranking` that compares candidates across lanes and records
+which survive admission before listing admitted tickets.
+
 ## Gotchas
 
 - `wave_size` controls backlog creation; `worker_limit` controls concurrency.
+- `ready_low_watermark` controls when planning compares the next portfolio; it
+  does not force admission and may trigger after a dispatch in the same wake.
+- A dispatch circuit breaker prevents repeated task-create/lookup outages from
+  consuming every wake. It does not authorize inline ticket execution.
 - Human-active tickets are board commitments, not Pulse workers. Only live
   Pulse spawned-thread ledger rows consume `worker_limit`.
-- Review WIP is human-attention backpressure, not a reason to keep workers
-  alive and not a chase trigger.
+- Review WIP caps operator-facing area pools. Saturation changes selection
+  toward unattended-safe, machine-verifiable work; it is not a global dispatch
+  block, planner suppression rule, reason to keep workers alive, or chase
+  trigger.
 - A product or capability may appear inside a ticket without becoming a Pulse
   controller.
 - Improvement and ordinary tickets use the same admission and handoff path.
@@ -301,8 +495,8 @@ it is not an extra workflow or registry.
 
 ## Reference Map
 
-- [ticket opportunity generator](../ticket-opportunity-generator/SKILL.md) -
-  pure next-wave planning when no executable ticket exists.
+- [plan next wave](../plan-next-wave/SKILL.md) -
+  pure next-wave planning when ready supply is below its configured watermark.
 - [worker artifact review request](../worker-artifact-review-request/SKILL.md) -
   phone-readable review request and receipt when a worker reaches human review.
 - [goal-advisor](../goal-advisor/SKILL.md) - material ticket execution

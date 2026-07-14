@@ -104,13 +104,14 @@ Ignored runtime state:
 Key ownership:
 
 - `manifest.json`: versioned paths and compact project identity;
-- `harness.yaml`: typed human charter, planning areas/instructions, authority,
+- `harness.yaml`: typed human charter, complete planning area records with
+  canonical `areas.<area_id>.planner_instruction`, authority,
   capability refs, and selected metric refs;
 - `metrics.yaml`: provider-independent metric definitions with direction,
   freshness, and optional guard rules;
 - `.agents/skills/`: project-local recurring capability workflows;
 - `automations.toml`: one Work Pulse heartbeat plus separate scheduled sources;
-- `bindings.yaml`: non-secret connector/provider and refresh coordinates;
+- `bindings.yaml`: non-secret connector/provider coordinates;
 - tickets: executable commitments and all QA/review evidence;
 - `.farplane/**`: generated/local observations and reports, not strategy.
 

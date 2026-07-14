@@ -59,7 +59,7 @@ The retired feature:
 
 ## Retirement Boundary
 
-- Active `pulse-update` and `ticket-opportunity-generator` no longer require or
+- Active `pulse-update` and `plan-next-wave` no longer require or
   invoke product controllers.
 - The five product Pulse automations are removed in TASK-0318.
 - TASK-0321 removed the retained product files, registry, and active readers.

@@ -1,8 +1,8 @@
 {
   "schema": "farplane_project",
-  "spec_version": "2.0.2",
+  "spec_version": "2.0.4",
   "template_uses": {
-    "farplane-framework": "2.0.2"
+    "farplane-framework": "2.0.4"
   },
   "project": {
     "name": "Farplane",
@@ -45,6 +45,7 @@
       ".farplane/metrics/daily/",
       ".farplane/project/ui/",
       ".farplane/reports/",
+      ".farplane/crm/",
       ".farplane/evals/runs/",
       ".farplane/events/",
       ".farplane/logs/",
@@ -76,6 +77,7 @@
         "docs/farplane-framework/graph-contract.md",
         "docs/farplane-framework/hooks-and-runtime.md",
         "docs/farplane-framework/harness-maintenance.md",
+        "docs/farplane-framework/crm.md",
         "docs/farplane-framework/reporting.md"
       ],
       "exclude": [

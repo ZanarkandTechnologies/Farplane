@@ -1,5 +1,5 @@
 ---
-skill: ticket-opportunity-generator
+skill: plan-next-wave
 date: 2026-07-11
 change_type: behavior
 owner: skill-maintenance
@@ -29,4 +29,4 @@ eval_required: yes
 - Eval cases: `planner_rejects_harness_self_improvement`,
   `planner_preserves_bau_docs_automation_and_customer_features`, and
   `planner_ranks_compounding_bau_leverage`
-- JSON parse: `jq empty skills/ticket-opportunity-generator/eval_task.json`
+- JSON parse: `jq empty skills/plan-next-wave/eval_task.json`

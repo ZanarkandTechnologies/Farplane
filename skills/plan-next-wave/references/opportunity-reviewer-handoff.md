@@ -1,6 +1,6 @@
 ---
 title: Ticket Spec Reviewer Handoff
-owner: ticket-opportunity-generator
+owner: plan-next-wave
 status: active
 kind: reviewer-handoff
 created_at: 2026-07-06

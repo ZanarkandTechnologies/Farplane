@@ -23,10 +23,10 @@ versus absent, and whether the claim should remain part of the harness.
 ## Skill Signature
 
 ```text
-farplane_ablation_proof(claim, surface, task_case, with_surface?, without_surface?, ticket?)
+farplane_ablation_proof(claim, surface, task_case, with_surface?, without_surface?, ticket?, audience_context?)
   -> ablation_report + trust_decision + follow_up
-state: reads(farplane/harness.yaml, farplane/metrics.yaml, target surface, task/eval evidence); writes(ticket artifact)
-gates: claim_is_specific; comparison_is_fair; evidence_cites_both_conditions; no_proof_theater
+state: reads(farplane/harness.yaml, farplane/metrics.yaml, ticket audience_context first or configured Feed Scout memory as fallback, target surface, task/eval evidence); writes(ticket artifact)
+gates: claim_is_specific; canonical_icp_bound; baseline_named; comparison_is_fair; evidence_cites_both_conditions; no_proof_theater
 routes: root skill `prototyping` | root skill `eval` | root skill `agent-qa-test` | ../farplane-productization/SKILL.md
 fails: uses only intuition; compares different tasks; keeps a surface because it sounds good
 ```
@@ -37,6 +37,11 @@ fails: uses only intuition; compares different tasks; keeps a surface because it
 - [ ] 1. Bind the trust claim.
   - [ ] State the claim in falsifiable language.
   - [ ] Name the surface being tested and the user or agent behavior it should improve.
+  - [ ] Read ticket-owned `audience_context` first. If absent, resolve the
+        selected area's ICP and configured Feed Scout memory; name the baseline
+        and the belief or workflow decision this proof should change. External
+        memory is optional only when the claim is purely internal and local
+        run/eval evidence is the stronger grounding.
 - [ ] 2. Choose one representative ablation case.
   - [ ] Keep task, inputs, and success criteria stable across both conditions.
   - [ ] Use `prototyping` when a smaller honest case is needed.

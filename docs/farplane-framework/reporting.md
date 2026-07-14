@@ -128,9 +128,10 @@ Each indexed report includes:
 ```
 
 Customer research uses `.farplane/customer-research/reports/*` and links CRM
-entities through `entity_refs`. CRM state lives separately in
-`.farplane/crm/entities.json`; it has no report index or handwritten report
-backlinks. A future ticket may opt selected skill-local reports into the main
+entities through `entity_refs`. CRM source state lives separately in
+`.farplane/crm/entities/**/*.md`; `farplane crm compile` generates
+`.farplane/crm/entities.json`. CRM has no handwritten report backlinks. A
+future ticket may opt selected skill-local reports into the main
 project registry by adopting the Core report-card contract.
 Ticket QA/review/mining/backfill artifacts stay outside this registry by
 default.

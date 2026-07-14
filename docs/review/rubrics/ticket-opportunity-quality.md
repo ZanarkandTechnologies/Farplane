@@ -63,7 +63,7 @@ not worth Kenji's review attention before admitting it.
 - ticket-local `program.md`, `progress.md`, or explicit source gap
 - recent ticket artifacts and rejection reasons
 - Feed Scout/source refs for distribution and market-learning
-- `skills/ticket-opportunity-generator/qa_checklist.md`
+- `skills/plan-next-wave/qa_checklist.md`
 
 ## Finding Cues
 

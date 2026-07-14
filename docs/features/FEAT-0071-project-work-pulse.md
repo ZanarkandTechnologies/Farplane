@@ -3,7 +3,7 @@ title: Project Work Pulse
 status: implemented
 owner: feature-registry
 created_at: 2026-07-10
-updated_at: 2026-07-12
+updated_at: 2026-07-14
 tags:
   - farplane
   - feature
@@ -12,8 +12,9 @@ refs:
   - docs/farplane-framework/pulse-and-interval-loop.md
   - docs/prd.md
   - skills/pulse-update/SKILL.md
-  - skills/ticket-opportunity-generator/SKILL.md
-  - skills/ticket-opportunity-generator/scripts/query_ticket_history.py
+  - skills/plan-next-wave/SKILL.md
+  - bin/core/farplane_ticket_history.py
+  - docs/features/FEAT-0072-persistent-icp-and-world-memory.md
 feature_id: FEAT-0071
 system_id: SYS-0003
 category: planning
@@ -22,7 +23,7 @@ surfaces:
   - farplane/automations.toml
   - skills/pulse-update/SKILL.md
   - skills/pulse-update/scripts/list_pulse_board.py
-  - skills/ticket-opportunity-generator/SKILL.md
+  - skills/plan-next-wave/SKILL.md
 source_refs:
   - docs/prd.md
   - tickets/archive/TASK-0318/ticket.md
@@ -30,21 +31,23 @@ external_refs: []
 evidence_refs:
   - skills/pulse-update/evals/evals.json
   - skills/pulse-update/scripts/test_list_pulse_board.py
-  - skills/ticket-opportunity-generator/evals/evals.json
+  - skills/plan-next-wave/evals/evals.json
+  - skills/plan-next-wave/audits/2026-07-14-metric-first-lane-ranking.md
+  - tickets/archive/TASK-0358/ticket.md
   - tickets/archive/TASK-0318/artifacts/qa/work-pulse-proof.md
   - tickets/archive/TASK-0319/artifacts/qa/integrated-qa.md
-known_limits: "The empty-board prototype is proven locally; low-watermark refill and longer real scheduled-run monitoring remain future evidence."
+known_limits: "Low-watermark contract and planner behavior are covered by focused tests and evals; longer real scheduled-run monitoring remains future evidence."
 metrics:
   - work_pulse_dispatch_correctness
   - empty_board_refill_quality
   - review_worker_release
-last_verified: 2026-07-12
+last_verified: 2026-07-14
 experimental: true
 superseded_by: false
 track: >-
   Review project Work Pulse for the current window. Read dated Pulse reports,
   selected and excluded ticket rows, planner results, worker handoffs, review
-  receipts, and action outcomes. Judge generic ticket admission, empty-board
+  receipts, and action outcomes. Judge generic ticket admission, low-watermark
   refill quality, wave/worker/review limit separation, worker release at human
   review, absence of product-controller routing, and useful blocker/no-op
   reasons. Return continue, adjust, cap, pause, graduate, rollback, or
@@ -54,13 +57,14 @@ track: >-
 
 # Project Work Pulse
 
-Project Work Pulse is the one fast board manager for a Farplane project. It
-reconciles state, dispatches executable tickets, refills an empty board through
-a pure planner, requests review, and writes visible receipts without creating
+Project Work Pulse is the one fast board manager for a Farplane project. Each
+wake runs bounded maintenance, review service, dispatch, and low-watermark
+refill phases, then writes one visible receipt without creating
 product-local controllers.
 
 ```text
-work_pulse(project, wave_size, worker_limit, review_wip)
+work_pulse(project, wave_size, worker_limit, review_wip,
+           review_chase_limit, ready_low_watermark)
   -> reconciliation + ticket_deltas? + handoffs? + review_requests?
    + dated_report
 ```
@@ -92,20 +96,72 @@ do an executable ticket; otherwise plan a bounded next wave
 - Admits tickets by executable state, not product or reward origin.
 - Dispatches up to `worker_limit` Pulse-owned workers; human-active tickets do
   not consume this capacity.
-- Calls one pure adaptive planner only when no unclaimed executable ticket exists.
+- Calls one pure adaptive `plan-next-wave` planner when ready supply after dispatch is below the
+  configured low watermark; review backlog does not suppress comparison.
 - Requires a recent global ticket-history sample before optional progressive
-  area/origin/KPI/Reward filters; it does not spawn area planners.
+  lane/area/origin/KPI/Reward filters; it does not spawn area planners.
+- Passes the complete `harness.areas` map and requires the planner to apply each
+  scope-relevant `harness.areas.<area_id>.planner_instruction` before candidate
+  generation. Global scope covers every objective-relevant area; explicit
+  reserved scope covers its selected area. Areas never become planners or
+  controllers.
+- Passes each area's canonical ICP plus one configured Feed Scout Markdown
+  memory synthesis. Outward-facing specs must name the ICP job/pain, relevant
+  memory and source refs, baseline/default, and intended belief or workflow
+  delta; a trend label alone is not admissible context.
+- Requires the same planner to enumerate `delivery`, `ablation`, `experiment`,
+  `rollout`, and `operations` as candidate-generation lenses. Each lane
+  proposes up to `wave_size` distinct candidates or records an evidence-backed
+  shortfall before one global ranking; lanes never receive quotas, reserved
+  slots, worker pools, or separate ranking passes.
+- Uses optional `harness.yaml#goals` to add target/date urgency to permanent
+  selected metrics. Goal completion is derived from current value and metric
+  direction, and completed goals stop affecting priority.
+- Uses lane-aware ticket Reward history as the experiment/experience ledger;
+  optional Tasty Pack evidence can ground content taste without creating a
+  separate content planner or Pulse.
+- Derives one objective-progress receipt per selected metric from configured
+  priority, current reading, freshness/source, and target trajectory when
+  available. Missing target, date, pace, or reading evidence stays `unknown`;
+  the planner does not infer urgency from stale UI projections.
+- Fingerprints a derived `semantic_time_state` covering metric freshness, goal
+  urgency/deadline buckets, matured Reward IDs, and operator-availability
+  validity. `as_of` or `serialized_at` churn is ignored only when that state is
+  present; legacy inputs retain their canonical `as_of` as a conservative
+  semantic clock so elapsed time cannot suppress replanning.
+- Selects the top `0..wave_size` compatible specs through one priority-ordered
+  constrained comparison of expected metric delta, confidence, duration,
+  time-to-signal, cost, risk, human load, information gain, compounding value,
+  and interference. Lane diversity and artifact count cannot displace a
+  stronger risk-adjusted objective trajectory.
+- Bundles avoidable setup into at most one first-exemplar ticket and prefers
+  waves whose remaining work produces independently reviewable artifacts.
 - Materializes no more than `wave_size` accepted specs.
-- Releases workers when tickets reach human review and applies `review_wip`
-  backpressure.
-- Reconciles at most one due ticket-owned review reminder without assigning a
-  worker; queue size is not a chase trigger.
+- Releases workers when tickets reach human review, keeps every ticket and
+  decision distinct, and projects pending review into at most `review_wip`
+  operator-facing area pools. Saturation switches ranking and dispatch toward
+  unattended-safe, machine-verifiable or delayed-feedback work rather than
+  globally stopping workers. The projection preserves active and queued pools,
+  constituent review refs/decisions, and one deterministic digest per active
+  area.
+- Reconciles due ticket-owned review reminders up to `review_chase_limit`
+  without assigning workers; queue size is not a chase trigger.
+- Treats missing or malformed Review ledgers as repair actions. The structured
+  binding sends initial Telegram immediately, chases after configured
+  unanswered Pulse turns, and then routes bounded Phone Chaser calls during
+  active hours. Notification credentials belong to the automation, not the
+  reviewed ticket's publication/account authority.
+- Treats active ownership narrowly: blocked and awaiting-review tickets dedupe
+  their own outputs and prerequisites but do not reserve an entire planning
+  area, KPI, audience, or objective from independent artifact work.
 - Writes dated reports and changed worker/decision/outcome receipts.
 
 ## Operating Contract
 
 - `pulse-update` owns board state transitions and dispatch.
-- `ticket-opportunity-generator` owns pure next-wave specification.
+- `plan-next-wave` owns pure next-wave specification. The separate package
+  exists to keep judgment-only planning testable and side-effect free; Pulse
+  alone materializes tickets and dispatches workers.
 - Capability skills own domain workflows.
 - Goal Advisor owns material ticket execution compilation.
 - Worker Artifact Review Request owns the phone-readable review message and
@@ -135,7 +191,7 @@ flowchart LR
   review["awaiting review<br/>worker released"]:::added
 
   board --> pulse
-  pulse -->|"empty executable board"| planner
+  pulse -->|"ready supply below watermark"| planner
   planner -->|"0..wave_size specs"| pulse
   sources --> planner
   checkin --> pulse
@@ -152,9 +208,20 @@ Required proof:
 - controlled classifier fixtures for `todo`, waiting, review, terminal,
   dependency, priority, and claim states;
 - due review reminder fixture proving worker capacity is unchanged;
+- missing-ledger, blocked-initial-Telegram, and Telegram-to-phone escalation
+  fixtures proving silent review waits cannot persist;
+- blocked/review ownership fixture proving independent substitute artifacts
+  remain eligible;
 - human-active ticket fixture proving it is unselectable but does not consume
   Pulse worker capacity or block refill;
 - global-first ticket-history query and progressive filter fixtures;
+- setup-bundling and artifact-density fixtures proving a creator/demo wave does
+  not decompose into setup tickets or create another Pulse;
+- metric-first lane fixture proving all candidate lanes are inspected while
+  several winners from one lane may beat weaker cross-lane candidates;
+- deterministic ticket-spec validation for canonical lane, configured
+  objective priority, target/pace evidence or explicit unknowns, metric source,
+  rank reason, and human load;
 - derived due-row fixtures with matured and future Reward rows;
 - skill evals for generic dispatch, bounded refill, Interval boundary, and
   product-parameter removal;
@@ -171,7 +238,8 @@ Required proof:
   under TASK-0321 and TASK-0322.
 - This feature does not add a daemon, scheduler, ticket executor skill, or
   hidden board runtime.
-- Low-watermark refill is not active.
+- Low-watermark refill is active; longer scheduled-run monitoring remains an
+  evidence follow-up rather than an implementation dependency.
 
 ## Alternatives Considered
 
@@ -179,6 +247,9 @@ Required proof:
   state was not justified by the basic loop proof.
 - Fold the planner into Pulse: rejected because pure selection/specification
   and state-changing materialization/dispatch have different proof boundaries.
+- Keep the historical `ticket-opportunity-generator` package name: rejected
+  because `plan_next_wave` is now the canonical contract and active pre-launch
+  surfaces do not need an obsolete compatibility identity.
 - Make Interval the planner wrapper: rejected because reporting and proactive
   ticket admission have different latency and side effects.
 
@@ -190,3 +261,6 @@ Required proof:
 - 2026-07-12: Made human-active work worker-free, replaced product descriptions
   with planning areas, added adaptive global-first history retrieval, and made
   scheduled sources context-only.
+- 2026-07-14: Added metric-first candidate-lane enumeration and target/pace
+  receipts while preserving one global top-N ranking with no lane quotas.
+- 2026-07-14: Added FEAT-0072 ICP/world-memory retrieval and ticket context.

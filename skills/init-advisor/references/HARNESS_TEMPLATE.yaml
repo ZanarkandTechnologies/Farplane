@@ -3,7 +3,7 @@ status: draft
 project: TODO
 created_at: TODO
 updated_at: TODO
-framework_template_version: "0.5.0"
+framework_template_version: "0.5.1"
 owner: harness
 
 identity:
@@ -18,10 +18,22 @@ metric_refs:
   guards:
     - TODO_quality_metric
 
+# Optional dated targets for selected objective metrics. Completion is derived
+# from each metric definition's maximize/minimize direction.
+goals: []
+
 areas:
   primary_area:
     description: TODO describe the recurring area of project investment.
-    planner_instruction: TODO explain which executable ideas belong here and what is not ticketable.
+    planner_instruction: TODO define this area's canonical candidate-generation policy, including valuable moves, evidence gates, and what is not ticketable.
+    icp:
+      label: TODO name the people whose decision or workflow this area serves.
+      description: TODO describe their relevant context and sophistication.
+      jobs_to_be_done:
+        - TODO name one concrete job this area helps them complete.
+      pain_points:
+        - TODO name one costly failure or weak default they face.
+      evidence_bar: TODO define what evidence would change this ICP's belief or behavior.
     skill_refs: []
     metric_refs:
       - metric_id: accepted_output_events

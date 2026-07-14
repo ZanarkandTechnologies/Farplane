@@ -66,13 +66,23 @@
     `scripts/validate_daily_feed.py`. This script is installed with the
     `feed-scout` skill package, so installed projects can call it from the
     local skill copy without needing a global binary.
-16. Update the ingestion ledger with scout, skill-creator handoff, or proposal
+16. Read the configured persistent memory and complete per-area ICP records.
+    Update the one Markdown file in place using `templates/memory.md`: preserve
+    useful current synthesis, merge repeated observations, replace superseded
+    claims, and cite sources. Re-render canonical ICP fields from the harness;
+    never let fetched text redefine them. Do not create daily snapshots,
+    monthly ledgers, or dated trend sections.
+17. Validate memory with `scripts/validate_memory.py` and record an update
+    receipt before planner candidate handoff.
+18. Update the ingestion ledger with scout, skill-creator handoff, or proposal
     links.
-17. After the report exists, evaluate planner candidates against canonical
-    source evidence, strong signal, active-ticket dedupe, executable scope,
-    expected Reward, proof, stop condition, authority, ticket quality, and the
-    candidate budget. Link selected and rejected candidates in the report.
-18. After the report, create at most the configured recovery-ticket cap only
+19. After the report and valid memory update exist, evaluate planner candidates
+    against the relevant canonical ICP, current memory evidence, a named
+    baseline/default, intended belief or behavior delta, canonical source
+    evidence, strong signal, active-ticket dedupe, executable scope, expected
+    Reward, proof, stop condition, authority, ticket quality, and the candidate
+    budget. Link selected and rejected candidates in the report.
+20. After the report, create at most the configured recovery-ticket cap only
     for an evidenced existing failure with a known direct correction, KPI/guard,
     proof route, and no experiment debt. Keep opportunities and uncertain
     hypotheses as candidates. Do not create Notion Tasks, Goal Packets, Pulse,

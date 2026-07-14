@@ -16,6 +16,10 @@ if str(SCRIPT_DIR) not in sys.path:
 import dispatch_call
 
 
+EXPECTED_REPO_ROOT = dispatch_call.ROOT
+SOURCE_SCRIPT = EXPECTED_REPO_ROOT / "skills" / "phone-chaser" / "scripts" / "dispatch_call.py"
+
+
 class DispatchCallMetadataTest(unittest.TestCase):
     def write_metadata(self, value: dict[str, object]) -> str:
         handle = tempfile.NamedTemporaryFile("w", suffix=".json", delete=False, encoding="utf-8")
@@ -64,6 +68,31 @@ class DispatchCallMetadataTest(unittest.TestCase):
         )
 
         self.assertEqual(dispatch_call.load_metadata_file(path)["call_id"], "call-1")
+
+
+class DispatchCallRuntimeResolutionTest(unittest.TestCase):
+    def test_checkout_script_resolves_repo_runtime(self) -> None:
+        resolved = dispatch_call.resolve_repo_root(SOURCE_SCRIPT)
+
+        self.assertEqual(resolved, EXPECTED_REPO_ROOT)
+        self.assertTrue((resolved / "farplane" / "phone-chaser").is_dir())
+
+    def test_installed_skill_copy_resolves_repo_runtime_through_core_link(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            codex_home = Path(tmp) / ".codex"
+            installed_script = codex_home / "skills" / "phone-chaser" / "scripts" / "dispatch_call.py"
+            installed_script.parent.mkdir(parents=True)
+            installed_script.touch()
+            (codex_home / "bin").mkdir(parents=True)
+            (codex_home / "bin" / "core").symlink_to(
+                EXPECTED_REPO_ROOT / "bin" / "core", target_is_directory=True
+            )
+
+            resolved = dispatch_call.resolve_repo_root(installed_script)
+
+        self.assertEqual(resolved, EXPECTED_REPO_ROOT)
+        self.assertNotEqual(resolved, codex_home)
+        self.assertTrue((resolved / "farplane" / "phone-chaser").is_dir())
 
 
 if __name__ == "__main__":

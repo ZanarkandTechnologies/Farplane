@@ -1,9 +1,11 @@
 from __future__ import annotations
 
 import json
+import os
 import sys
 import tempfile
 import unittest
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import yaml
@@ -18,18 +20,14 @@ from farplane_project_snapshot import (
     load_project_snapshot,
     write_project_ui_snapshot,
 )
+from farplane_primitive_metrics import activated_external_projects
 
 
 def add_metric(root: Path, metric_id: str, definition: dict, refresh: str) -> None:
     metrics_path = root / "farplane" / "metrics.yaml"
     metrics_payload = yaml.safe_load(metrics_path.read_text(encoding="utf-8"))
-    metrics_payload["metrics"][metric_id] = definition
+    metrics_payload["metrics"][metric_id] = {**definition, "refresh": refresh}
     metrics_path.write_text(yaml.safe_dump(metrics_payload, sort_keys=False), encoding="utf-8")
-
-    bindings_path = root / "farplane" / "bindings.yaml"
-    bindings_payload = yaml.safe_load(bindings_path.read_text(encoding="utf-8"))
-    bindings_payload["metric_bindings"][metric_id] = {"refresh": refresh}
-    bindings_path.write_text(yaml.safe_dump(bindings_payload, sort_keys=False), encoding="utf-8")
 
 
 def write_minimal_project(root: Path) -> None:
@@ -76,6 +74,7 @@ change_rule: Protected changes require approval.
 framework_template_version: "0.1.0"
 metrics:
   accepted_harness_improvements:
+    refresh: Call count_ticket_kpi_rewards for accepted_harness_improvements.
     label: Accepted harness improvements
     description: Accepted harness improvements.
     pinned: true
@@ -92,9 +91,6 @@ metrics:
 framework_template_version: "0.1.0"
 project:
   id: test_project
-metric_bindings:
-  accepted_harness_improvements:
-    refresh: Call count_ticket_kpi_rewards for accepted_harness_improvements.
 """,
         encoding="utf-8",
     )
@@ -195,7 +191,7 @@ kpi_rewards:
         metric_def = snapshot["metrics"]["definitions"]["accepted_harness_improvements"]
         self.assertIn("description", metric_def)
         self.assertEqual(metric_def["source_ref"]["path"], "farplane/metrics.yaml")
-        self.assertEqual(metric_def["binding_source_ref"]["path"], "farplane/bindings.yaml")
+        self.assertEqual(metric_def["refresh_source_ref"]["path"], "farplane/metrics.yaml")
         self.assertIn("farplane/metrics.yaml", {source["path"] for source in snapshot["sources"]})
         self.assertEqual(metric_def["tooltip"], metric_def["description"])
         self.assertEqual(metric_def["selection_role"], "objective")
@@ -305,19 +301,19 @@ kpi_rewards:
         metric_gap = next(gap for gap in snapshot["source_gaps"] if "metrics.yaml#metrics" in gap["id"])
         self.assertEqual(metric_gap["source_ref"]["path"], "farplane/metrics.yaml")
 
-    def test_snapshot_reports_missing_metric_binding_from_bindings_source(self) -> None:
+    def test_snapshot_reports_missing_refresh_from_metrics_source(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             write_minimal_project(root)
-            bindings_path = root / "farplane" / "bindings.yaml"
-            bindings = yaml.safe_load(bindings_path.read_text(encoding="utf-8"))
-            bindings["metric_bindings"] = {}
-            bindings_path.write_text(yaml.safe_dump(bindings, sort_keys=False), encoding="utf-8")
+            metrics_path = root / "farplane" / "metrics.yaml"
+            metrics = yaml.safe_load(metrics_path.read_text(encoding="utf-8"))
+            metrics["metrics"]["accepted_harness_improvements"].pop("refresh")
+            metrics_path.write_text(yaml.safe_dump(metrics, sort_keys=False), encoding="utf-8")
 
             snapshot = load_project_snapshot(root, "2026-07-03")
 
-        metric_gap = next(gap for gap in snapshot["source_gaps"] if "metric_bindings" in gap["id"])
-        self.assertEqual(metric_gap["source_ref"]["path"], "farplane/bindings.yaml")
+        metric_gap = next(gap for gap in snapshot["source_gaps"] if "metrics.yaml#metrics" in gap["id"])
+        self.assertEqual(metric_gap["source_ref"]["path"], "farplane/metrics.yaml")
 
     def test_snapshot_builds_content_metric_cards_from_daily_readings(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -603,6 +599,76 @@ feed_scout:
         self.assertNotIn("no available observation for metric", gaps)
         metric_card = {card["metric_id"]: card for card in snapshot["metrics"]["series"]}["external_metric"]
         self.assertEqual(metric_card["status"], "missing")
+        self.assertEqual(metric_card["source_gaps"], [])
+
+    def test_activated_external_projects_reports_missing_when_project_adoption_refresh_is_absent(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            projects = Path(tmp) / "projects"
+            root = projects / "Farplane"
+            external = projects / "CurrentExternal"
+            root.mkdir(parents=True)
+            write_minimal_project(root)
+            manifest_time = datetime(2026, 7, 14, 7, 30, tzinfo=timezone.utc).timestamp()
+            root_manifest_path = root / "farplane" / "manifest.json"
+            root_manifest = json.loads(root_manifest_path.read_text(encoding="utf-8"))
+            root_manifest["spec_version"] = "2.0.4"
+            root_manifest["template_uses"] = {"farplane-framework": "2.0.4"}
+            root_manifest_path.write_text(json.dumps(root_manifest), encoding="utf-8")
+            os.utime(root_manifest_path, (manifest_time, manifest_time))
+            external_manifest_path = external / "farplane" / "manifest.json"
+            external_manifest_path.parent.mkdir(parents=True)
+            external_manifest_path.write_text(
+                json.dumps(
+                    {
+                        "project_id": "CurrentExternal",
+                        "spec_version": "2.0.4",
+                        "template_uses": {"farplane-framework": "2.0.4"},
+                    }
+                ),
+                encoding="utf-8",
+            )
+            os.utime(external_manifest_path, (manifest_time, manifest_time))
+            decisions = external / ".farplane" / "automation" / "decisions.jsonl"
+            decisions.parent.mkdir(parents=True)
+            decisions.write_text(
+                json.dumps(
+                    {
+                        "ts": (datetime.fromtimestamp(manifest_time, tz=timezone.utc) + timedelta(minutes=5)).isoformat(),
+                        "automation_id": "fixture-ticket-update",
+                        "lane": "pulse",
+                        "mode": "work_pulse",
+                        "action": "no_op",
+                    }
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+            add_metric(
+                root,
+                "activated_external_projects",
+                {
+                    "label": "Activated external projects",
+                    "description": "Activated external projects.",
+                    "kind": "point",
+                    "unit": "projects",
+                    "display": "reading",
+                    "pinned": True,
+                },
+                "Run the project_adoption primitive refresh.",
+            )
+
+            direct_classifier = activated_external_projects(root)
+            snapshot = load_project_snapshot(root, "2026-07-03")
+
+        self.assertEqual(direct_classifier["status"], "available")
+        self.assertEqual(direct_classifier["value"], 1)
+        self.assertEqual(direct_classifier["payload"]["projects"][0]["project_id"], "CurrentExternal")
+        metric_card = {card["metric_id"]: card for card in snapshot["metrics"]["series"]}[
+            "activated_external_projects"
+        ]
+        self.assertEqual(metric_card["primitive_id"], "project_adoption")
+        self.assertEqual(metric_card["status"], "missing")
+        self.assertIsNone(metric_card["current"])
         self.assertEqual(metric_card["source_gaps"], [])
 
     def test_snapshot_discovers_nested_active_and_archived_ticket_proof(self) -> None:

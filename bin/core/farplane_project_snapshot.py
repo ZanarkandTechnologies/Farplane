@@ -476,10 +476,10 @@ def load_metric_selection(project_root: Path) -> dict[str, Any]:
     }
 
 
-def load_metric_bindings(project_root: Path) -> dict[str, Any]:
-    payload = load_bindings(project_root)
-    bindings = payload.get("metric_bindings") if isinstance(payload, dict) else None
-    return bindings if isinstance(bindings, dict) else {}
+def load_metric_refreshers(project_root: Path) -> dict[str, Any]:
+    payload = read_yaml(project_root / "farplane" / "metrics.yaml")
+    refreshers = payload.get("refreshers") if isinstance(payload, dict) else None
+    return refreshers if isinstance(refreshers, dict) else {}
 
 
 def parse_ticket_kpi_rewards(markdown: str) -> list[dict[str, Any]]:
@@ -794,14 +794,11 @@ def primitive_id_for_metric(metric_id: str, recipe: dict[str, Any]) -> str:
 def metric_definitions(project_root: Path) -> tuple[dict[str, Any], list[str]]:
     raw_metrics = load_metric_definitions(project_root)
     selection = load_metric_selection(project_root)
-    metric_bindings = load_metric_bindings(project_root)
+    refreshers = load_metric_refreshers(project_root)
     if not raw_metrics:
         return {}, ["missing:farplane/metrics.yaml#metrics"]
     definitions: dict[str, Any] = {}
-    gaps = [
-        f"missing:farplane/bindings.yaml#metric_bindings/{metric_id}"
-        for metric_id in sorted(set(raw_metrics) - set(metric_bindings))
-    ]
+    gaps: list[str] = []
     objective_rows = selection.get("objectives") if isinstance(selection.get("objectives"), list) else []
     area_rows = selection.get("area_metrics") if isinstance(selection.get("area_metrics"), list) else []
     guard_rows = selection.get("guards") if isinstance(selection.get("guards"), list) else []
@@ -822,9 +819,12 @@ def metric_definitions(project_root: Path) -> tuple[dict[str, Any], list[str]]:
         areas_by_id.setdefault(str(row["metric_id"]), []).append(row)
     for metric_id, raw_definition in raw_metrics.items():
         definition = raw_definition if isinstance(raw_definition, dict) else {}
-        raw_binding = metric_bindings.get(metric_id)
-        binding = raw_binding if isinstance(raw_binding, dict) else {}
-        recipe = {**definition, **binding}
+        recipe = definition
+        refresh_ref = str(definition.get("refresh_ref") or "")
+        refresher = refreshers.get(refresh_ref) if refresh_ref else None
+        refresh_prompt = definition.get("refresh") or (refresher.get("refresh") if isinstance(refresher, dict) else "")
+        if not refresh_prompt:
+            gaps.append(f"missing:farplane/metrics.yaml#metrics/{metric_id}/refresh")
         primitive_id = primitive_id_for_metric(str(metric_id), recipe)
         kind = str(recipe.get("kind") or recipe.get("aggregation") or "point")
         if kind == "daily_count":
@@ -868,12 +868,10 @@ def metric_definitions(project_root: Path) -> tuple[dict[str, Any], list[str]]:
                 "unit": target_unit,
             },
             "primitive_id": primitive_id,
-            "refresh": recipe.get("refresh") or recipe.get("update_prompt") or "",
+            "refresh": refresh_prompt,
+            "refresh_ref": refresh_ref or None,
             "source_ref": {"path": "farplane/metrics.yaml", "pointer": f"/metrics/{metric_id}"},
-            "binding_source_ref": {
-                "path": "farplane/bindings.yaml",
-                "pointer": f"/metric_bindings/{metric_id}",
-            },
+            "refresh_source_ref": {"path": "farplane/metrics.yaml", "pointer": f"/refreshers/{refresh_ref}" if refresh_ref else f"/metrics/{metric_id}/refresh"},
         }
     return definitions, gaps
 

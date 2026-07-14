@@ -14,7 +14,7 @@ recent_archived_experiment_refs: []
 tracked_refs: []
 source_gaps: []
 experiment_goal_packets: []
-no_execution_receipt: "no implementation, Goal, Pulse, worker, check-in, promotion, rollback, or external action invoked"
+no_execution_receipt: "Pulse materialization only; no implementation, Goal execution, worker dispatch, check-in, promotion, rollback, or external action invoked"
 ---
 
 # Weekly Self-Improvement Portfolio Report
@@ -74,23 +74,39 @@ not permission for automatic global rollout.
 Tracked feature/system decisions may be `continue`, `adjust`, `cap`, `pause`,
 `rollback`, `graduate`, `split_feature`, `merge`, or `source_gap`.
 
-## Capacity Receipt
+## History Query Receipts
 
-- `experiment_wave_size:` 2
-- `experiment_wip_limit:` 3
-- `max_concurrent_live_delayed:` 1
+| Query | Input | Matched | Returned | Area derivation gaps | Use |
+| --- | ---: | ---: | ---: | --- | --- |
+| global latest 20 | | | | | dedupe, attention, recent Reward context |
+| self_improvement history | | | | | accepted/killed/pending patterns and active conflicts |
+
+## Harness Health Findings
+
+| Surface / signal | Current evidence | Importance / heat | Failure or opportunity | Candidate effect |
+| --- | --- | --- | --- | --- |
+
+## Weekly Allocation Receipt
+
+- `planning_scope:` `reserved_area:self_improvement`
+- `area_record_ref:` `harness.areas.self_improvement`
+- `area_instruction_ref:` `harness.areas.self_improvement.planner_instruction`
+- `area_instruction_applied:`
+- `weekly_ticket_target:` 5
+- `max_concurrent_live_delayed:` 5
 - `one_active_per_attributable_surface:` true
 - `active_nonterminal_wip:`
 - `active_live_delayed_wip:`
-- `raw_total_capacity:` `max(0, experiment_wip_limit - active_nonterminal_wip)`
-- `available_packet_slots:` `min(experiment_wave_size, raw_total_capacity)`
+- `new_weekly_slots:` 5
 - `available_delayed_slots:` `max(0, max_concurrent_live_delayed - active_live_delayed_wip)`
 - `occupied_surfaces:`
 - `review_or_operator_capacity_constraint:`
-- `capacity_verdict:`
+- `allocation_verdict:` target_five | shortfall
+- `shortfall_reasons:` []
 
-The delayed-live cap limits new delayed pilots only. An unrelated immediate toy,
-replay, or eval may use remaining total capacity.
+Active WIP constrains conflicts, delayed load, dedupe, and review burden; it
+does not subtract from unrelated weekly slots. The delayed-live cap limits new
+delayed pilots only. Immediate experiments may fill independent slots.
 
 ## Ranked Improvement Candidates
 
@@ -100,20 +116,23 @@ replay, or eval may use remaining total capacity.
 Verdicts: `selected`, `rejected`, `deferred`, `duplicate`, `interferes`,
 `source_gap`.
 
-## Experiment Candidate Wave
+## Reserved Self-Improvement Wave
 
-| Candidate | Area | Feedback | Surface | Expected Reward | Horizon / check-in shape | Cost / risk | Selection evidence |
-| --- | --- | --- | --- | --- | --- | --- | --- |
+| Candidate | Feedback | Surface | Expected Reward | Goal / check-in shape | Output artifact | Verdict / ticket path |
+| --- | --- | --- | --- | --- | --- | --- |
 
-- `candidates_proposed:` 0..<available_packet_slots>
-- `recovery_ticket_limit:`
-- `recovery_tickets_created_or_updated:`
-- `experiment_tickets_created:` 0
+- `candidates_compared:`
+- `area_instruction_receipt:` `{area_id: self_improvement, instruction_ref: harness.areas.self_improvement.planner_instruction, instruction_applied: <summary>, candidate_or_no_candidate: <result>}`
+- `specs_admitted:` 0..5
+- `tickets_materialized_by_pulse:` 0..5
+- `ticket_paths:` []
+- `known_fix_recoveries_within_wave:` 0..1
 - `no_op_reason:` none | <reason>
 
 ### Candidate Requirements
 
-Each candidate is a report row, not a ticket or Goal Packet.
+Each admitted candidate is a complete `plan-next-wave` executable experiment
+spec. Pulse, not Dogfood, materializes its ticket path.
 
 - Every candidate declares an area, attributable surface, hypothesis, baseline, Reward
   expectation/guard, metric provider, proof route, budget, stop conditions, and
@@ -122,11 +141,13 @@ Each candidate is a report row, not a ticket or Goal Packet.
   `check_in_at`, event wake, or delayed Check-In Program debt.
 - Delayed candidates name the future signal, provider, and check-in procedure
   outline needed if the adaptive planner admits and materializes the experiment.
-- Work Pulse's adaptive planner globally ranks and admits ordinary experiment
-  candidates. Completion-learning tickets already exist and are counted once
-  from their report receipt; Dogfood must not recreate them. Dogfood may create
-  only a bounded direct recovery ticket for other settled evidence and never
-  creates an experiment ticket.
+- Human-feedback candidates route through `optimize-with-human` and name their
+  feedback artifact plus later decision procedure.
+- Dogfood calls the one adaptive planner in
+  `reserved_area:self_improvement` scope with target wave size five, then sends
+  accepted specs to Pulse's bounded materialization route.
+- Completion-learning tickets already exist and are deduped once. A known-fix
+  recovery may occupy one of five slots but never becomes an extra sixth ticket.
 
 ## Source Gaps
 
@@ -139,10 +160,12 @@ Each candidate is a report row, not a ticket or Goal Packet.
 - `previous_report_used_as_cursor_only:` yes | no | not_available
 - `report_written_before_selection:` yes | no
 - `cutoff_applied_without_forcing_terminal_decisions:` yes | no
-- `total_wip_cap_respected:` yes | no
+- `weekly_target_or_shortfall_proved:` yes | no
 - `delayed_live_cap_respected:` yes | no
 - `one_active_per_surface_respected:` yes | no
 - `non_interfering_immediate_capacity_preserved:` yes | no | not_applicable
-- `goal_packets_created:` 0..<available_packet_slots>
+- `planner_specs_admitted:` 0..5
+- `pulse_ticket_paths_created:` 0..5
 - `all_delayed_packets_have_executable_checkin_program:` yes | no | not_applicable
+- `all_human_feedback_packets_route_optimize_with_human:` yes | no | not_applicable
 - `experiment_executed_or_checked_in:` no

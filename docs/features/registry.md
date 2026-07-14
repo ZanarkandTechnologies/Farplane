@@ -2,7 +2,7 @@
 title: "Generated Feature Registry"
 status: generated
 owner: feature-registry
-updated_at: 2026-07-12
+updated_at: 2026-07-14
 refs:
   - docs/features/registry.jsonl
   - docs/features/validate_features.py
@@ -44,3 +44,4 @@ This file is generated. Edit the feature specs in `docs/features/` instead.
 | [FEAT-0069 Retired Taste Loop human-feedback optimization](../features/FEAT-0069-taste-loop-human-feedback-optimization.md) | [Self-Improvement And Learning](../systems/self-improvement-learning.md) | `retired` | `false` | `FEAT-0070`, `FEAT-0071` | `improvement-loop` |
 | [FEAT-0070 Dogfood experiment review and candidate supply](../features/FEAT-0070-experimental-feature-evaluation-reports.md) | [Self-Improvement And Learning](../systems/self-improvement-learning.md) | `implemented` | `true` | `false` | `improvement-loop` |
 | [FEAT-0071 Project Work Pulse](../features/FEAT-0071-project-work-pulse.md) | [Horizon Loop](../systems/horizon-loop.md) | `implemented` | `true` | `false` | `planning` |
+| [FEAT-0072 Persistent ICP and world memory](../features/FEAT-0072-persistent-icp-and-world-memory.md) | [Source And Sidecar Systems](../systems/source-sidecar-systems.md) | `implemented` | `true` | `false` | `context-routing` |

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 import sqlite3
 import sys
 import tempfile
@@ -26,6 +27,40 @@ def write_ticket(root: Path, ticket_id: str, body: str) -> None:
     ticket_dir = root / "tickets" / ticket_id
     ticket_dir.mkdir(parents=True)
     (ticket_dir / "ticket.md").write_text(body, encoding="utf-8")
+
+
+def write_activation_manifest(root: Path, project_id: str, spec_version: str, template_version: str) -> Path:
+    manifest_path = root / "farplane" / "manifest.json"
+    manifest_path.parent.mkdir(parents=True, exist_ok=True)
+    manifest_path.write_text(
+        json.dumps(
+            {
+                "project_id": project_id,
+                "spec_version": spec_version,
+                "template_uses": {"farplane-framework": template_version},
+            }
+        ),
+        encoding="utf-8",
+    )
+    return manifest_path
+
+
+def write_pulse_decision(root: Path, timestamp: datetime) -> None:
+    decisions = root / ".farplane" / "automation" / "decisions.jsonl"
+    decisions.parent.mkdir(parents=True, exist_ok=True)
+    decisions.write_text(
+        json.dumps(
+            {
+                "ts": timestamp.isoformat(),
+                "automation_id": "fixture-ticket-update",
+                "lane": "pulse",
+                "mode": "work_pulse",
+                "action": "no_op",
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
 
 
 class FarplanePrimitiveMetricsTests(unittest.TestCase):
@@ -79,6 +114,50 @@ class FarplanePrimitiveMetricsTests(unittest.TestCase):
         self.assertIn("Drifted", excluded)
         self.assertEqual(
             excluded["Inactive"]["activation_gap"],
+            "no_work_pulse_decision_after_manifest_update",
+        )
+
+    def test_activation_lifecycle_fixture_matrix_isolates_manifest_and_decision_conditions(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            projects = Path(tmp) / "projects"
+            root = projects / "Farplane"
+            current = projects / "Current"
+            stale_manifest = projects / "StaleManifest"
+            missing_decision = projects / "MissingDecision"
+            manifest_time = datetime(2026, 7, 14, 7, 30, tzinfo=timezone.utc).timestamp()
+
+            for project, project_id, spec, template in (
+                (root, "Farplane", "2.0.4", "2.0.4"),
+                (current, "Current", "2.0.4", "2.0.4"),
+                (stale_manifest, "StaleManifest", "2.0.3", "2.0.3"),
+                (missing_decision, "MissingDecision", "2.0.4", "2.0.4"),
+            ):
+                manifest_path = write_activation_manifest(project, project_id, spec, template)
+                os.utime(manifest_path, (manifest_time, manifest_time))
+
+            write_pulse_decision(current, datetime.fromtimestamp(manifest_time, tz=timezone.utc) + timedelta(minutes=5))
+            write_pulse_decision(
+                stale_manifest,
+                datetime.fromtimestamp(manifest_time, tz=timezone.utc) + timedelta(minutes=5),
+            )
+
+            result = activated_external_projects(root)
+
+        self.assertEqual(result["status"], "available")
+        self.assertEqual(result["value"], 1)
+        self.assertEqual(result["payload"]["projects"][0]["project_id"], "Current")
+        excluded = {row["project_id"]: row for row in result["payload"]["excluded"]}
+        self.assertEqual(
+            excluded["StaleManifest"]["drift"],
+            [
+                "spec_version:2.0.3!=2.0.4",
+                "template:farplane-framework:2.0.3!=2.0.4",
+            ],
+        )
+        self.assertNotIn("activation_gap", excluded["StaleManifest"])
+        self.assertEqual(excluded["MissingDecision"]["drift"], [])
+        self.assertEqual(
+            excluded["MissingDecision"]["activation_gap"],
             "no_work_pulse_decision_after_manifest_update",
         )
 
@@ -436,6 +515,160 @@ kpi_rewards:
         self.assertEqual(result["status"], "available")
         self.assertEqual(rows[0]["confidence"], "completion_only")
         self.assertNotIn("execution_started_at", rows[0])
+
+    def test_pulse_ledgers_backfill_deduped_association_rows(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            mine_run = root / ".farplane" / "mine" / "runs" / "mine-a"
+            mine_run.mkdir(parents=True)
+            (mine_run / "input.json").write_text(
+                json.dumps(
+                    {
+                        "sourceEventKey": "mine:event:TASK-0001",
+                        "sources": [
+                            {
+                                "ticketId": "TASK-0001",
+                                "inputRef": "tickets/TASK-0001/ticket.md",
+                                "sessionId": "thread-mine",
+                                "threadId": "thread-mine",
+                                "updatedAt": "2026-07-03T01:00:00Z",
+                            }
+                        ],
+                    }
+                ),
+                encoding="utf-8",
+            )
+            automation = root / ".farplane" / "automation"
+            automation.mkdir(parents=True)
+            spawned = {
+                "ts": "2026-07-03T02:00:00Z",
+                "ticket_id": "TASK-0001",
+                "thread_id": "thread-pulse",
+                "status": "spawned",
+            }
+            (automation / "spawned-threads.jsonl").write_text(
+                json.dumps(spawned) + "\n" + json.dumps(spawned) + "\n",
+                encoding="utf-8",
+            )
+            (automation / "action-outcomes.jsonl").write_text(
+                "\n".join(
+                    [
+                        json.dumps(
+                            {
+                                "ts": "2026-07-03T03:00:00Z",
+                                "ticket_id": "TASK-0002",
+                                "thread_id": "thread-outcome",
+                                "status": "archived_done",
+                                "archive_path": "tickets/archive/TASK-0002",
+                            }
+                        ),
+                        json.dumps(
+                            {
+                                "ts": "2026-07-03T04:00:00Z",
+                                "ticket_id": "TASK-0003",
+                                "thread_id": None,
+                                "status": "dispatch_failed_before_claim",
+                            }
+                        ),
+                    ]
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+            output = root / ".farplane" / "state" / "ticket-thread-associations.jsonl"
+
+            result = backfill_ticket_thread_associations(root, mine_run.parent, output)
+            rows = [json.loads(line) for line in output.read_text(encoding="utf-8").splitlines()]
+
+        keys = {(row["ticket_id"], row["thread_id"], row["source"]) for row in rows}
+        self.assertEqual(result["status"], "available")
+        self.assertEqual(result["payload"]["added_count"], 3)
+        self.assertIn(("TASK-0001", "thread-mine", "mine_input"), keys)
+        self.assertIn(("TASK-0001", "thread-pulse", "pulse_spawned_ledger"), keys)
+        self.assertIn(("TASK-0002", "thread-outcome", "pulse_outcome_ledger"), keys)
+        spawned_rows = [row for row in rows if row["source"] == "pulse_spawned_ledger"]
+        self.assertEqual(len(spawned_rows), 1)
+        self.assertEqual(spawned_rows[0]["confidence"], "execution_started")
+        self.assertEqual(spawned_rows[0]["execution_started_at"], "2026-07-03T02:00:00Z")
+        outcome_row = next(row for row in rows if row["source"] == "pulse_outcome_ledger")
+        self.assertEqual(outcome_row["confidence"], "completion_or_release")
+        self.assertEqual(outcome_row["ticket_path"], "tickets/archive/TASK-0002/ticket.md")
+        self.assertNotIn("execution_started_at", outcome_row)
+        self.assertIn(
+            ".farplane/automation/action-outcomes.jsonl:TASK-0003:missing_thread_id",
+            result["payload"]["gaps"],
+        )
+
+    def test_pulse_outcome_association_covers_archived_completed_ticket_without_fabricating_missing_threads(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "farplane").mkdir()
+            ticket_dir = root / "tickets" / "archive" / "TASK-0001"
+            ticket_dir.mkdir(parents=True)
+            (ticket_dir / "ticket.md").write_text(
+                """---
+ticket_id: TASK-0001
+phase: complete
+status: done
+created_at: 2026-07-03T01:00:00Z
+updated_at: 2026-07-03T03:00:00Z
+completed_at: 2026-07-03T03:00:00Z
+---
+
+# TASK-0001
+
+## Done / Proof
+- Evidence: artifacts/proof.md
+""",
+                encoding="utf-8",
+            )
+            automation = root / ".farplane" / "automation"
+            automation.mkdir(parents=True)
+            (automation / "spawned-threads.jsonl").write_text("", encoding="utf-8")
+            (automation / "action-outcomes.jsonl").write_text(
+                "\n".join(
+                    [
+                        json.dumps(
+                            {
+                                "ts": "2026-07-03T03:10:00Z",
+                                "ticket_id": "TASK-0001",
+                                "thread_id": "thread-outcome",
+                                "status": "archived_done",
+                                "archive_path": "tickets/archive/TASK-0001",
+                            }
+                        ),
+                        json.dumps(
+                            {
+                                "ts": "2026-07-03T03:20:00Z",
+                                "ticket_id": "TASK-0002",
+                                "thread_id": None,
+                                "status": "archived_done",
+                                "archive_path": "tickets/archive/TASK-0002",
+                            }
+                        ),
+                    ]
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+
+            payload = primitive_snapshot(root, "2026-07-03", root / ".codex", monthly_spend=31, write=True)
+            association_rows = [
+                json.loads(line)
+                for line in (root / ".farplane" / "state" / "ticket-thread-associations.jsonl")
+                .read_text(encoding="utf-8")
+                .splitlines()
+            ]
+
+        coverage = payload["primitives"]["ticket_thread_link_coverage"]
+        self.assertEqual(coverage["payload"]["completed_tickets"], 1)
+        self.assertEqual(coverage["payload"]["associated_completed_tickets"], 1)
+        self.assertEqual(coverage["value"], 1.0)
+        self.assertEqual({row["ticket_id"] for row in association_rows}, {"TASK-0001"})
+        self.assertIn(
+            ".farplane/automation/action-outcomes.jsonl:TASK-0002:missing_thread_id",
+            payload["diagnostics"]["non_warning_gaps"],
+        )
 
     def test_codex_thread_usage_reads_sqlite_and_session_token_counts(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

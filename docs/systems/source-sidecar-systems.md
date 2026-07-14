@@ -3,7 +3,7 @@ title: "Source And Sidecar Systems"
 status: active
 owner: farplane-framework
 created_at: 2026-06-26
-updated_at: 2026-06-27
+updated_at: 2026-07-14
 tags:
   - farplane
   - systems
@@ -13,6 +13,7 @@ refs:
   - skills/harness-scout/SKILL.md
   - skills/feed-scout/SKILL.md
   - docs/features/FEAT-0056-inspiration-vault.md
+  - docs/features/FEAT-0072-persistent-icp-and-world-memory.md
 system_record_json: |
   {
     "id": "SYS-0008",
@@ -24,15 +25,17 @@ system_record_json: |
     "feature_refs": [
       "FEAT-0011",
       "FEAT-0025",
-      "FEAT-0056"
+      "FEAT-0056",
+      "FEAT-0072"
     ],
     "refs": [
       "docs/sources/registry.jsonl",
       "skills/harness-scout/SKILL.md",
       "skills/feed-scout/SKILL.md",
-      "docs/features/FEAT-0056-inspiration-vault.md"
+      "docs/features/FEAT-0056-inspiration-vault.md",
+      "docs/features/FEAT-0072-persistent-icp-and-world-memory.md"
     ],
-    "last_verified": "2026-06-27"
+    "last_verified": "2026-07-14"
   }
 ---
 # Source And Sidecar Systems
@@ -52,7 +55,7 @@ source_and_sidecar_systems(change, repo_state?) -> owned_feature_set + boundary_
 - Status: `implemented`
 - Primary feature: `FEAT-0011`
 - Owner spec: `docs/systems/source-sidecar-systems.md`
-- Feature count: `3`
+- Feature count: `4`
 
 ## Role
 
@@ -65,6 +68,7 @@ learn without making every pattern a live dependency.
 - [FEAT-0011 Harness scout source ingestion](../features/FEAT-0011-harness-scout-source-ingestion.md)
 - [FEAT-0025 Video-to-skill source reconstruction](../features/FEAT-0025-video-to-skill-source-reconstruction.md)
 - [FEAT-0056 Inspiration Vault](../features/FEAT-0056-inspiration-vault.md)
+- [FEAT-0072 Persistent ICP and world memory](../features/FEAT-0072-persistent-icp-and-world-memory.md)
 
 ## What Belongs Here
 
@@ -115,6 +119,7 @@ Source And Sidecar Systems let Farplane learn from outside material while keepin
 - `skills/harness-scout/SKILL.md`
 - `skills/feed-scout/SKILL.md`
 - `docs/features/FEAT-0056-inspiration-vault.md`
+- `docs/features/FEAT-0072-persistent-icp-and-world-memory.md`
 
 ## Proof And Maintenance
 
@@ -126,4 +131,5 @@ Source And Sidecar Systems let Farplane learn from outside material while keepin
 
 ## Change History
 
+- 2026-07-14: Added persistent ICP and world memory as the compact current-context handoff from sources to planning.
 - 2026-06-27: Migrated into the reader-first system-spec shape.

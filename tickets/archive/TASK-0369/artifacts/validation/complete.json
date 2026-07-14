@@ -1,0 +1,85 @@
+{
+  "base": null,
+  "changed_paths": [
+    "bin/validators/check_farplane_project_files.py",
+    "docs/farplane-framework/project-files.md",
+    "docs/features/FEAT-0071-project-work-pulse.md",
+    "docs/features/FEAT-0072-persistent-icp-and-world-memory.md",
+    "docs/systems/source-sidecar-systems.md",
+    "farplane/automations.toml",
+    "farplane/bindings.yaml",
+    "farplane/harness.yaml",
+    "skills/feed-scout/SKILL.md",
+    "skills/feed-scout/scripts/validate_memory.py",
+    "skills/init-advisor/references/HARNESS_TEMPLATE.yaml",
+    "skills/plan-next-wave/SKILL.md",
+    "skills/plan-next-wave/evals/evals.json",
+    "skills/pulse-update/SKILL.md",
+    "tickets/archive/TASK-0369/ticket.md"
+  ],
+  "ok": true,
+  "path_source": "explicit",
+  "phase": "complete",
+  "results": [
+    {
+      "check_id": "ticket.metadata",
+      "mode": "block",
+      "output": "ticket metadata OK",
+      "status": "pass"
+    },
+    {
+      "check_id": "ticket.completion-evidence",
+      "mode": "block",
+      "output": "completion evidence OK",
+      "status": "pass"
+    },
+    {
+      "check_id": "skills.check",
+      "mode": "block",
+      "output": "skill todo list sections OK\nexternal skills without direct todo lists skipped: agent-browser, convex, vercel-react-best-practices\nskill registry OK (121 skill rows)\ntemplate registry OK\nskill todo tier check OK\nTier 0 phase protocol check OK\nskill surface budget: checked=20 skipped=101 failed=0\nskill capability fixtures OK (3 capabilities, 2 value signals)\nskill eval query lint OK\ndoc refs OK (1908 refs checked)\n+ python3 skills/skill-maintenance/scripts/sync_skill_checklists.py\n+ python3 bin/validators/sync_skill_registry.py --check\n+ python3 bin/validators/sync_template_registry.py --check\n+ python3 bin/validators/check_skill_todo_tiers.py --allow-peer-tier3\n+ python3 bin/validators/check_tier0_phase_protocol.py\n+ python3 bin/validators/check_skill_surface_budget.py\n+ python3 bin/validators/check_skill_capabilities.py validate\n+ python3 skills/eval/scripts/check_eval_queries.py --root .\n+ python3 bin/validators/check_doc_refs.py\nskill method reference templates OK\n+ python3 -m py_compile bin/validators/sync_skill_registry.py bin/validators/sync_template_registry.py bin/validators/template_usage.py bin/validators/check_doc_refs.py bin/validators/check_skill_todo_tiers.py bin/validators/check_tier0_phase_protocol.py bin/validators/check_skill_surface_budget.py bin/validators/check_skill_capabilities.py skills/skill-maintenance/scripts/check_skills.py skills/skill-maintenance/scripts/minimize_skill_surface.py skills/skill-maintenance/scripts/sync_skill_checklists.py skills/skill-maintenance/scripts/generate_template_intelligence.py skills/eval/scripts/check_eval_queries.py\nskill system summary:\n{\n  \"checklists\": {\n    \"has\": 118,\n    \"missing\": 3\n  },\n  \"missing_checklists\": [\n    {\n      \"name\": \"agent-browser\",\n      \"source\": \"external\",\n      \"tier\": 2,\n      \"upstream_url\": \"https://github.com/vercel-labs/agent-browser/blob/main/skill-data/core/SKILL.md\"\n    },\n    {\n      \"name\": \"convex\",\n      \"source\": \"external\",\n      \"tier\": 3,\n      \"upstream_url\": \"https://github.com/get-convex/agent-skills/blob/main/skills/convex/SKILL.md\"\n    },\n    {\n      \"name\": \"vercel-react-best-practices\",\n      \"source\": \"external\",\n      \"tier\": 3,\n      \"upstream_url\": \"https://github.com/vercel-labs/agent-skills/tree/main/skills/react-best-practices\"\n    }\n  ],\n  \"missing_skill_template_version\": [\n    {\n      \"name\": \"agent-behavior-test\",\n      \"source\": \"local\",\n      \"tier\": 2\n    },\n    {\n      \"name\": \"agent-browser\",\n      \"source\": \"external\",\n      \"tier\": 2\n    },\n    {\n      \"name\": \"agent-qa-test\",\n      \"source\": \"local\",\n      \"tier\": 2\n    },\n    {\n      \"name\": \"agent-testability-plan\",\n      \"source\": \"local\",\n      \"tier\": 3\n    },\n    {\n      \"name\": \"apify\",\n      \"source\": \"local\",\n      \"tier\": 2\n    },\n    {\n      \"name\": \"bash-efficiency\",\n      \"source\": \"local\",\n      \"tier\": 2\n    },\n    {\n      \"name\": \"best-of-worlds\",\n      \"source\": \"local\",\n      \"tier\": 2\n    },\n    {\n      \"name\": \"brainstorm\",\n      \"source\": \"local\",\n      \"tier\": 2\n    },\n    {\n      \"name\": \"close-ticket\",\n      \"source\": \"local\",\n      \"tier\": 3\n    },\n    {\n      \"name\": \"codebase-analysis\",\n      \"source\": \"local\",\n      \"tier\": 2\n    },\n    {\n      \"name\": \"coderabbit-review\",\n      \"source\": \"local\",\n      \"tier\": 2\n    },\n    {\n      \"name\": \"commit-message\",\n      \"source\": \"local\",\n      \"tier\": 2\n    },\n    {\n      \"name\": \"convex\",\n      \"source\": \"external\",\n      \"tier\": 3\n    },\n    {\n      \"name\": \"data-viz\",\n      \"source\": \"local\",\n      \"tier\": 3\n    },\n    {\n      \"name\": \"deep-interview\",\n      \"source\": \"local\",\n      \"tier\": 2\n    },\n    {\n      \"name\": \"deep-system-design\",\n      \"source\": \"local\",\n      \"tier\": 2\n    },\n    {\n      \"name\": \"deep-ui-design\",\n      \"source\": \"local\",\n      \"tier\": 2\n    },\n    {\n      \"name\": \"delegate-cli\",\n      \"source\": \"local\",\n      \"tier\": 3\n    },\n    {\n      \"name\": \"delegate-frontend\",\n      \"source\": \"local\",\n      \"tier\": 3\n    },\n    {\n      \"name\": \"demo\",\n      \"source\": \"local\",\n      \"tier\": 3\n    },\n    {\n      \"name\": \"demo-realism\",\n      \"source\": \"local\",\n      \"tier\": 3\n    },\n    {\n      \"name\": \"desloppify\",\n      \"source\": \"local\",\n      \"tier\": 3\n    },\n    {\n      \"name\": \"diagramming\",\n      \"source\": \"local\",\n      \"tier\": 2\n    },\n    {\n      \"name\": \"execute\",\n      \"source\": \"local\",\n      \"tier\": 2\n    },\n    {\n      \"name\": \"external-patterns\",\n      \"source\": \"local\",\n      \"tier\": 2\n    },\n    {\n      \"name\": \"farplane-invocation\",\n      \"source\": \"local\",\n      \"tier\": 3\n    },\n    {\n      \"name\": \"find-skills\",\n      \"source\": \"local\",\n      \"tier\": 2\n    },\n    {\n      \"name\": \"frontend-design\",\n      \"source\": \"local\",\n      \"tier\": 3\n    },\n    {\n      \"name\": \"functional-ui\",\n      \"source\": \"local\",\n      \"tier\": 3\n    },\n    {\n      \"name\": \"harness-scout\",\n      \"source\": \"local\",\n      \"tier\": 3\n    },\n    {\n      \"name\": \"init-advisor\",\n      \"source\": \"local\",\n      \"tier\": 3\n    },\n    {\n      \"name\": \"landing-page\",\n      \"source\": \"local\",\n      \"tier\": 3\n    },\n    {\n      \"name\": \"pr-review-watch\",\n      \"source\": \"local\",\n      \"tier\": 3\n    },\n    {\n      \"name\": \"pr-runtime\",\n      \"source\": \"local\",\n      \"tier\": 3\n    },\n    {\n      \"name\": \"pr-splitting\",\n      \"source\": \"local\",\n      \"tier\": 3\n    },\n    {\n      \"name\": \"prd\",\n      \"source\": \"local\",\n      \"tier\": 3\n    },\n    {\n      \"name\": \"product-photography\",\n      \"source\": \"local\",\n      \"tier\": 3\n    },\n    {\n      \"name\": \"react-flow\",\n      \"source\": \"local\",\n      \"tier\": 3\n    },\n    {\n      \"name\": \"reel-collage\",\n      \"source\": \"local\",\n      \"tier\": 3\n    },\n    {\n      \"name\": \"remotion-render\",\n      \"source\": \"local\",\n      \"tier\": 3\n    },\n    {\n      \"name\": \"research\",\n      \"source\": \"local\",\n      \"tier\": 2\n    },\n    {\n      \"name\": \"skill-registry-ui\",\n      \"source\": \"local\",\n      \"tier\": 3\n    },\n    {\n      \"name\": \"spec-to-ticket\",\n      \"source\": \"local\",\n      \"tier\": 3\n    },\n    {\n      \"name\": \"summarize\",\n      \"source\": \"local\",\n      \"tier\": 2\n    },\n    {\n      \"name\": \"testing\",\n      \"source\": \"local\",\n      \"tier\": 2\n    },\n    {\n      \"name\": \"vercel-react-best-practices\",\n      \"source\": \"external\",\n      \"tier\": 3\n    },\n    {\n      \"name\": \"video-production\",\n      \"source\": \"local\",\n      \"tier\": 3\n    },\n    {\n      \"name\": \"video-understanding\",\n      \"source\": \"local\",\n      \"tier\": 2\n    },\n    {\n      \"name\": \"visual-design\",\n      \"source\": \"local\",\n      \"tier\": 3\n    },\n    {\n      \"name\": \"visual-qa\",\n      \"source\": \"local\",\n      \"tier\": 2\n    },\n    {\n      \"name\": \"web-design-guidelines\",\n      \"source\": \"local\",\n      \"tier\": 2\n    }\n  ],\n  \"rows\": 121,\n  \"skill_template_versions\": {\n    \"0.1.0\": 3,\n    \"0.2.0\": 20,\n    \"0.3.0\": 5,\n    \"0.3.2\": 9,\n    \"0.3.5\": 1,\n    \"0.3.6\": 4,\n    \"0.3.7\": 24,\n    \"0.3.8\": 4,\n    \"missing\": 51\n  },\n  \"sources\": {\n    \"external\": 3,\n    \"local\": 118\n  },\n  \"template_uses\": {\n    \"skill-eval-task\": 38,\n    \"skill-method-reference\": 1,\n    \"skill-qa-checklist\": 28,\n    \"skill-surface-budget\": 20,\n    \"skill-template\": 70\n  },\n  \"tiers\": {\n    \"1\": 6,\n    \"2\": 40,\n    \"3\": 75\n  }\n}",
+      "status": "pass"
+    },
+    {
+      "check_id": "docs.refs",
+      "mode": "block",
+      "output": "doc refs OK (1908 refs checked)",
+      "status": "pass"
+    },
+    {
+      "check_id": "docs.contracts",
+      "mode": "block",
+      "output": "structural doc parity OK (6 files checked, 24 rules)",
+      "status": "pass"
+    },
+    {
+      "check_id": "docs.features",
+      "mode": "block",
+      "output": "system + feature registry contract OK (11 systems, 31 features)",
+      "status": "pass"
+    },
+    {
+      "check_id": "project.check",
+      "mode": "block",
+      "output": "Farplane project file conventions OK",
+      "status": "pass"
+    },
+    {
+      "check_id": "harness.check",
+      "mode": "block",
+      "output": "harness invariants OK (5 files checked, 16 agents, 17 rules, project files checked)",
+      "status": "pass"
+    }
+  ],
+  "schema_version": 1,
+  "selected_checks": [
+    "ticket.metadata",
+    "ticket.completion-evidence",
+    "skills.check",
+    "docs.refs",
+    "docs.contracts",
+    "docs.features",
+    "project.check",
+    "harness.check"
+  ],
+  "ticket": "tickets/archive/TASK-0369/ticket.md"
+}

@@ -9,6 +9,7 @@ Configured local surfaces:
 - daily feed root: `.farplane/feed-scout/daily`
 - ingestion ledger: `.farplane/feed-scout/ledger.jsonl`
 - proposal ledger or local inbox: `.farplane/feed-scout/proposals.jsonl`
+- persistent memory: `.farplane/feed-scout/memory.md`
 - report root: `.farplane/reports/feed-scout`
 - local ticket cap and write policy: supplied by this automation
 
@@ -23,15 +24,22 @@ Steps:
    feed-scout`, `created_at`, and `ui_summary`.
 5. Write and validate the feed/report artifacts, then index reports when the
    Farplane CLI is available.
-6. Only after the report exists, project up to the configured ticket cap.
-   Require canonical source evidence, strong signal, active-ticket dedupe,
-   executable scope, Reward, proof, stop condition, authority, and ticket
-   quality. Link created and rejected candidates back into the report.
-7. Default tickets to `status: awaiting_review`. Use `status: todo` only when this
+6. Read the existing memory and complete `harness.areas` ICP records. Update
+   one Markdown file in place with canonical ICPs, current trends, notable
+   things, and source gaps; merge duplicates and replace superseded synthesis
+   instead of appending daily/monthly snapshots. Validate it with
+   `scripts/validate_memory.py` and record the update receipt.
+7. Only after the report and memory exist, project up to the configured ticket
+   cap. Require canonical ICP and memory refs, a named baseline/default,
+   intended belief or workflow delta, canonical source evidence, strong signal,
+   active-ticket dedupe, executable scope, Reward, proof, stop condition,
+   authority, and ticket quality. Link created and rejected candidates back
+   into the report.
+8. Default tickets to `status: awaiting_review`. Use `status: todo` only when this
    automation's explicit write policy grants automatic local admission and no
    human or external-action gate remains.
-8. Return report path, feed path, ticket paths, rejections, source gaps, cap,
-   and a no-execution receipt.
+9. Return report path, feed path, memory update receipt, ticket paths,
+   rejections, source gaps, cap, and a no-execution receipt.
 
 Do not poll forever, run Interval, launch Goal/Pulse/workers, implement created
 tickets, publish, perform outreach, spend API budget, or create/write live

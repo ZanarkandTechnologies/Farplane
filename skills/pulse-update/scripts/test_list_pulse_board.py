@@ -29,6 +29,7 @@ def write_ticket(
     priority: str = "medium",
     reward_rows: list[dict[str, object]] | None = None,
     review_state: dict[str, object] | None = None,
+    area_id: str = "",
 ) -> Path:
     path = root / "tickets" / ticket_id / "ticket.md"
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -47,6 +48,8 @@ def write_ticket(
                 f"# {ticket_id}",
                 "",
     ]
+    if area_id:
+        lines.extend(["## State", "", f"- `area:` {area_id}", ""])
     if reward_rows is not None:
         lines.extend(
             [
@@ -94,6 +97,7 @@ def run_minimal_pulse_fixture(
     *,
     wave_size: int,
     worker_limit: int,
+    ready_low_watermark: int = 1,
 ) -> dict[str, object]:
     """Exercise the prompt-owned Pulse boundary without inventing a runtime.
 
@@ -106,9 +110,15 @@ def run_minimal_pulse_fixture(
     board = BOARD.build_board(root, worker_limit=worker_limit)
     planner_calls = 0
     materialized: list[str] = []
+    initial_dispatch_limit = min(board["idle_worker_slots"], len(board["executable_tickets"]))
+    dispatched = [
+        row["ticket_id"] for row in board["executable_tickets"][:initial_dispatch_limit]
+    ]
+    remaining_slots = board["idle_worker_slots"] - len(dispatched)
+    ready_after_dispatch = max(0, board["ready_ticket_count"] - len(dispatched))
     mode = "dispatch_ready"
-    if board["empty_executable_board"]:
-        mode = "plan_next_wave"
+    if ready_after_dispatch < max(0, ready_low_watermark):
+        mode = "dispatch_then_plan" if dispatched else "plan_next_wave"
         project_context = {
             name: (root / "farplane" / name).read_text(encoding="utf-8")
             for name in ("harness.yaml", "metrics.yaml")
@@ -121,11 +131,11 @@ def run_minimal_pulse_fixture(
             write_ticket(root, ticket_id)
             materialized.append(ticket_id)
         board = BOARD.build_board(root, worker_limit=worker_limit)
-
-    dispatch_limit = min(board["idle_worker_slots"], len(board["executable_tickets"]))
-    dispatched = [
-        row["ticket_id"] for row in board["executable_tickets"][:dispatch_limit]
-    ]
+        newly_ready = [
+            row["ticket_id"] for row in board["executable_tickets"]
+            if row["ticket_id"] not in dispatched
+        ]
+        dispatched.extend(newly_ready[:remaining_slots])
     return {
         "mode": mode,
         "planner_calls": planner_calls,
@@ -136,6 +146,122 @@ def run_minimal_pulse_fixture(
 
 
 class WorkPulseBoardTests(unittest.TestCase):
+    def test_review_tickets_project_to_area_pools_without_consuming_workers(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            write_ticket(root, "TASK-REVIEW-A", status="awaiting_review")
+            write_ticket(root, "TASK-REVIEW-B", status="awaiting_review")
+            write_ticket(root, "TASK-REVIEW-C", status="awaiting_review", area_id="delivery")
+            decisions = root / ".farplane" / "automation" / "decisions.jsonl"
+            decisions.parent.mkdir(parents=True, exist_ok=True)
+            decisions.write_text(
+                json.dumps(
+                    {
+                        "action": "plan_next_wave",
+                        "status": "completed",
+                        "admitted_specs": [
+                            {"ticket_id": "TASK-REVIEW-A", "area_id": "self_improvement"},
+                            {"ticket_id": "TASK-REVIEW-B", "area_id": "self_improvement"},
+                        ],
+                    }
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+
+            result = BOARD.build_board(root, worker_limit=4)
+
+            self.assertEqual(result["review_item_count"], 3)
+            self.assertEqual(result["review_pool_count"], 2)
+            self.assertEqual(result["review_wip"], 2)
+            self.assertEqual(
+                [pool["pool_id"] for pool in result["review_pools"]],
+                ["delivery", "self_improvement"],
+            )
+            self.assertEqual(
+                result["review_pools"][1]["ticket_ids"],
+                ["TASK-REVIEW-A", "TASK-REVIEW-B"],
+            )
+            self.assertEqual(result["review_pool_limit"], 3)
+            self.assertEqual(result["total_review_pool_count"], 2)
+            self.assertFalse(result["review_pool_saturated"])
+            self.assertEqual(result["queued_review_pools"], [])
+            self.assertEqual(result["idle_worker_slots"], 4)
+
+    def test_review_pool_limit_caps_active_digests_and_queues_every_other_area(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            for suffix, area in zip("ABCD", ("area-a", "area-b", "area-c", "area-d")):
+                write_ticket(
+                    root,
+                    f"TASK-REVIEW-{suffix}",
+                    status="awaiting_review",
+                    area_id=area,
+                    review_state={
+                        "artifact_refs": [f"tickets/TASK-REVIEW-{suffix}/artifacts/output.md"],
+                        "thread_ref": f"thread-{suffix.lower()}",
+                        "requested_at": "2026-07-14T10:00:00Z",
+                        "decision": "",
+                        "reminder_count": 0,
+                        "telegram_reminder_message_ids": [],
+                        "phone_chaser_count": 0,
+                        "phone_chaser_dispatch_ids": [],
+                    },
+                )
+
+            result = BOARD.build_board(root, worker_limit=4, review_wip=2)
+            rerun = BOARD.build_board(root, worker_limit=4, review_wip=2)
+
+            self.assertEqual(result["review_pool_limit"], 2)
+            self.assertEqual(result["total_review_pool_count"], 4)
+            self.assertEqual(result["review_pool_count"], 2)
+            self.assertEqual(result["review_wip"], 2)
+            self.assertTrue(result["review_pool_saturated"])
+            self.assertEqual(
+                [pool["pool_id"] for pool in result["review_pools"]],
+                ["area-a", "area-b"],
+            )
+            self.assertEqual(
+                [pool["pool_id"] for pool in result["queued_review_pools"]],
+                ["area-c", "area-d"],
+            )
+            digest = result["review_pools"][0]["operator_digest"]
+            self.assertEqual(digest["area_id"], "area-a")
+            self.assertEqual(
+                digest["tickets"][0],
+                {
+                    "ticket_id": "TASK-REVIEW-A",
+                    "ticket_path": "tickets/TASK-REVIEW-A/ticket.md",
+                    "progress_ref": "tickets/TASK-REVIEW-A/progress.md",
+                    "artifact_refs": ["tickets/TASK-REVIEW-A/artifacts/output.md"],
+                    "thread_ref": "thread-a",
+                    "requested_at": "2026-07-14T10:00:00Z",
+                    "decision": "",
+                    "next_action": "send_initial_telegram",
+                },
+            )
+            self.assertEqual(
+                digest["digest_id"],
+                rerun["review_pools"][0]["operator_digest"]["digest_id"],
+            )
+            self.assertEqual(result["review_item_count"], 4)
+            self.assertEqual(result["idle_worker_slots"], 4)
+
+    def test_missing_review_area_provenance_never_collapses_unrelated_tickets(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            write_ticket(root, "TASK-UNKNOWN-A", status="awaiting_review")
+            write_ticket(root, "TASK-UNKNOWN-B", status="awaiting_review")
+
+            result = BOARD.build_board(root, worker_limit=1)
+
+            self.assertEqual(result["review_item_count"], 2)
+            self.assertEqual(result["review_pool_count"], 2)
+            self.assertEqual(
+                [pool["pool_id"] for pool in result["review_pools"]],
+                ["unassigned:TASK-UNKNOWN-A", "unassigned:TASK-UNKNOWN-B"],
+            )
+
     def test_composed_ready_ticket_dispatch_skips_planner(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
@@ -209,6 +335,31 @@ class WorkPulseBoardTests(unittest.TestCase):
             )
             self.assertFalse((root / "tickets" / "TASK-PLAN-OVERFLOW").exists())
 
+    def test_composed_dispatch_then_refills_below_ready_low_watermark(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            farplane = root / "farplane"
+            farplane.mkdir()
+            (farplane / "harness.yaml").write_text("kind: project-harness\n", encoding="utf-8")
+            (farplane / "metrics.yaml").write_text("metrics: {}\n", encoding="utf-8")
+            write_ticket(root, "TASK-READY")
+
+            def planner(*_args: object) -> list[dict[str, str]]:
+                return [{"ticket_id": "TASK-REFILL"}]
+
+            result = run_minimal_pulse_fixture(
+                root,
+                planner,
+                wave_size=1,
+                worker_limit=2,
+                ready_low_watermark=2,
+            )
+
+            self.assertEqual(result["mode"], "dispatch_then_plan")
+            self.assertEqual(result["planner_calls"], 1)
+            self.assertEqual(result["materialized"], ["TASK-REFILL"])
+            self.assertEqual(result["dispatched"], ["TASK-READY", "TASK-REFILL"])
+
     def test_empty_board_exposes_refill_condition_without_product_state(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
@@ -216,7 +367,7 @@ class WorkPulseBoardTests(unittest.TestCase):
             result = BOARD.build_board(root, worker_limit=2)
 
             self.assertEqual(result["executable_tickets"], [])
-            self.assertTrue(result["empty_executable_board"])
+            self.assertEqual(result["ready_ticket_count"], 0)
             self.assertEqual(result["idle_worker_slots"], 2)
             self.assertNotIn("products", result)
 
@@ -253,7 +404,7 @@ class WorkPulseBoardTests(unittest.TestCase):
                 [row["ticket_id"] for row in result["human_active_tickets"]],
                 ["TASK-CLAIMED"],
             )
-            self.assertFalse(result["empty_executable_board"])
+            self.assertEqual(result["ready_ticket_count"], 1)
 
     def test_human_active_ticket_does_not_block_empty_board_refill_or_capacity(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -262,7 +413,7 @@ class WorkPulseBoardTests(unittest.TestCase):
 
             result = BOARD.build_board(root, worker_limit=1)
 
-            self.assertTrue(result["empty_executable_board"])
+            self.assertEqual(result["ready_ticket_count"], 0)
             self.assertEqual(result["idle_worker_slots"], 1)
             self.assertEqual(result["active_workers"], [])
             self.assertEqual(
@@ -358,7 +509,7 @@ class WorkPulseBoardTests(unittest.TestCase):
                 ticket["terminal_reward_outcomes"][0]["state"], "terminal_accept"
             )
             self.assertEqual(result["due_checkin_tickets"][0]["path"], "tickets/TASK-EXPERIMENT/ticket.md")
-            self.assertFalse(result["empty_executable_board"])
+            self.assertEqual(result["ready_ticket_count"], 1)
 
     def test_due_projection_uses_decision_state_and_keeps_safety_gates(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -488,7 +639,7 @@ class WorkPulseBoardTests(unittest.TestCase):
             )
             self.assertIn("unsatisfied_dependencies", rejected_row["exclusion_reasons"])
 
-    def test_due_review_reminder_is_worker_free_and_decision_closes_it(self) -> None:
+    def test_due_review_action_is_worker_free_and_decision_closes_it(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             write_ticket(
@@ -499,9 +650,10 @@ class WorkPulseBoardTests(unittest.TestCase):
                     "artifact_refs": ["tickets/TASK-REVIEW/artifacts/example.md"],
                     "thread_ref": "thread-1",
                     "requested_at": "2026-07-09T00:00:00Z",
-                    "next_reminder_at": "2026-07-10T00:00:00Z",
                     "reminder_count": 0,
-                    "escalation_used": False,
+                    "phone_chaser_count": 0,
+                    "telegram_status": "sent",
+                    "telegram_message_id": "telegram-1",
                     "decision": None,
                 },
             )
@@ -511,7 +663,8 @@ class WorkPulseBoardTests(unittest.TestCase):
                 status="awaiting_review",
                 review_state={
                     "thread_ref": "thread-2",
-                    "next_reminder_at": "2026-07-10T00:00:00Z",
+                    "requested_at": "2026-07-09T00:00:00Z",
+                    "artifact_refs": ["tickets/TASK-DECIDED/artifacts/example.md"],
                     "decision": "approved",
                 },
             )
@@ -522,10 +675,354 @@ class WorkPulseBoardTests(unittest.TestCase):
                 now=datetime(2026, 7, 11, tzinfo=timezone.utc),
             )
 
-            self.assertEqual(result["next_due_review_reminder"]["ticket_id"], "TASK-REVIEW")
-            self.assertEqual(result["due_review_reminder_count"], 1)
+            self.assertEqual(result["next_due_review_action"]["ticket_id"], "TASK-REVIEW")
+            self.assertEqual(
+                result["next_due_review_action"]["review"]["action"],
+                "send_telegram_reminder",
+            )
+            self.assertEqual(result["due_review_action_count"], 1)
             self.assertEqual(result["idle_worker_slots"], 1)
             self.assertEqual(result["active_workers"], [])
+
+    def test_missing_review_ledger_is_repair_action_not_silent_wait(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            write_ticket(root, "TASK-REVIEW", status="awaiting_review")
+
+            result = BOARD.build_board(root, now=datetime(2026, 7, 11, tzinfo=timezone.utc))
+
+            action = result["next_due_review_action"]
+            self.assertEqual(action["ticket_id"], "TASK-REVIEW")
+            self.assertEqual(action["review"]["action"], "repair_review_state")
+            self.assertEqual(action["review"]["reason"], "missing_progress_md")
+
+    def test_blocked_initial_telegram_is_retried_by_automation_authority(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            write_ticket(
+                root,
+                "TASK-REVIEW",
+                status="awaiting_review",
+                review_state={
+                    "artifact_refs": ["tickets/TASK-REVIEW/artifacts/example.md"],
+                    "thread_ref": "thread-1",
+                    "requested_at": "2026-07-11T00:00:00Z",
+                    "telegram_status": "blocked",
+                    "telegram_message_id": None,
+                    "reminder_count": 0,
+                    "phone_chaser_count": 0,
+                    "decision": None,
+                },
+            )
+
+            result = BOARD.build_board(root, now=datetime(2026, 7, 11, 1, tzinfo=timezone.utc))
+
+            self.assertEqual(
+                result["next_due_review_action"]["review"]["action"],
+                "send_initial_telegram",
+            )
+
+    def test_documented_plain_yaml_review_block_is_parsed(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            ticket = write_ticket(root, "TASK-REVIEW", status="awaiting_review")
+            (ticket.parent / "progress.md").write_text(
+                """## Review
+
+artifact_refs:
+  - tickets/TASK-REVIEW/artifacts/example.md
+thread_ref: thread-1
+requested_at: 2026-07-11T00:00:00Z
+telegram_status: blocked
+telegram_message_id:
+reminder_count: 0
+phone_chaser_count: 0
+decision:
+""",
+                encoding="utf-8",
+            )
+
+            result = BOARD.build_board(root, now=datetime(2026, 7, 11, 1, tzinfo=timezone.utc))
+
+            self.assertEqual(
+                result["next_due_review_action"]["review"]["action"],
+                "send_initial_telegram",
+            )
+
+    def test_phone_chaser_follows_two_unanswered_telegram_reminders(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            bindings = root / "farplane" / "bindings.yaml"
+            bindings.parent.mkdir(parents=True)
+            bindings.write_text(
+                """operator:
+  review_chase_policy:
+    timezone: UTC
+    active_hours: {start: '00:00', end: '23:59'}
+    pulse_interval_minutes: 30
+    telegram_reminder_after_unanswered_turns: [2, 4]
+    phone_chaser_after_unanswered_turns: [6, 12]
+    telegram_reminder_limit: 2
+    phone_chaser_limit: 2
+""",
+                encoding="utf-8",
+            )
+            write_ticket(
+                root,
+                "TASK-REVIEW",
+                status="awaiting_review",
+                review_state={
+                    "artifact_refs": ["tickets/TASK-REVIEW/artifacts/example.md"],
+                    "thread_ref": "thread-1",
+                    "requested_at": "2026-07-11T00:00:00Z",
+                    "telegram_status": "sent",
+                    "telegram_message_id": "telegram-1",
+                    "reminder_count": 2,
+                    "telegram_reminder_message_ids": ["telegram-2", "telegram-3"],
+                    "phone_chaser_count": 0,
+                    "decision": None,
+                },
+            )
+
+            result = BOARD.build_board(root, now=datetime(2026, 7, 11, 3, tzinfo=timezone.utc))
+
+            action = result["next_due_review_action"]["review"]
+            self.assertEqual(action["action"], "dispatch_phone_chaser")
+            self.assertEqual(action["unanswered_pulse_turns"], 6)
+
+    def test_phone_chaser_requires_receipts_for_prior_telegram_reminders(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            write_ticket(
+                root,
+                "TASK-REVIEW",
+                status="awaiting_review",
+                review_state={
+                    "artifact_refs": ["tickets/TASK-REVIEW/artifacts/example.md"],
+                    "thread_ref": "thread-1",
+                    "requested_at": "2026-07-11T00:00:00Z",
+                    "telegram_status": "sent",
+                    "telegram_message_id": "telegram-1",
+                    "reminder_count": 2,
+                    "telegram_reminder_message_ids": ["telegram-2"],
+                    "phone_chaser_count": 0,
+                    "decision": None,
+                },
+            )
+
+            result = BOARD.build_board(root, now=datetime(2026, 7, 11, 3, tzinfo=timezone.utc))
+
+            action = result["next_due_review_action"]["review"]
+            self.assertEqual(action["action"], "repair_review_state")
+            self.assertEqual(action["reason"], "telegram_reminder_receipt_count_mismatch")
+
+    def test_delayed_first_phone_call_preserves_repeat_interval(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            bindings = root / "farplane" / "bindings.yaml"
+            bindings.parent.mkdir(parents=True)
+            bindings.write_text(
+                """operator:
+  review_chase_policy:
+    timezone: UTC
+    active_hours: {start: '00:00', end: '23:59'}
+    pulse_interval_minutes: 30
+    telegram_reminder_after_unanswered_turns: [2, 4]
+    phone_chaser_after_unanswered_turns: [6, 12]
+    phone_chaser_repeat_after_turns: 6
+    telegram_reminder_limit: 2
+    phone_chaser_limit: 2
+""",
+                encoding="utf-8",
+            )
+            write_ticket(
+                root,
+                "TASK-REVIEW",
+                status="awaiting_review",
+                review_state={
+                    "artifact_refs": ["tickets/TASK-REVIEW/artifacts/example.md"],
+                    "thread_ref": "thread-1",
+                    "requested_at": "2026-07-11T00:00:00Z",
+                    "telegram_status": "sent",
+                    "telegram_message_id": "telegram-1",
+                    "reminder_count": 2,
+                    "telegram_reminder_message_ids": ["telegram-2", "telegram-3"],
+                    "phone_chaser_count": 1,
+                    "phone_chaser_dispatch_ids": ["call-1"],
+                    "last_phone_chaser_at": "2026-07-11T06:00:00Z",
+                    "decision": None,
+                },
+            )
+
+            result = BOARD.build_board(root, now=datetime(2026, 7, 11, 6, 30, tzinfo=timezone.utc))
+
+            self.assertIsNone(result["next_due_review_action"])
+
+    def test_malformed_review_counter_becomes_repair_action(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            write_ticket(
+                root,
+                "TASK-REVIEW",
+                status="awaiting_review",
+                review_state={
+                    "artifact_refs": ["tickets/TASK-REVIEW/artifacts/example.md"],
+                    "thread_ref": "thread-1",
+                    "requested_at": "2026-07-11T00:00:00Z",
+                    "telegram_status": "sent",
+                    "telegram_message_id": "telegram-1",
+                    "reminder_count": "nope",
+                    "phone_chaser_count": 0,
+                    "decision": None,
+                },
+            )
+
+            result = BOARD.build_board(root, now=datetime(2026, 7, 11, 1, tzinfo=timezone.utc))
+
+            action = result["next_due_review_action"]["review"]
+            self.assertEqual(action["action"], "repair_review_state")
+            self.assertEqual(action["reason"], "invalid_review_counter")
+
+    def test_malformed_numeric_policy_uses_safe_defaults(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            bindings = root / "farplane" / "bindings.yaml"
+            bindings.parent.mkdir(parents=True)
+            bindings.write_text(
+                """operator:
+  review_chase_policy:
+    timezone: UTC
+    active_hours: {start: '00:00', end: '23:59'}
+    pulse_interval_minutes: nope
+    telegram_reminder_after_unanswered_turns: [2, 4]
+    phone_chaser_after_unanswered_turns: [6, 12]
+    phone_chaser_repeat_after_turns: nope
+    telegram_reminder_limit: nope
+    phone_chaser_limit: nope
+""",
+                encoding="utf-8",
+            )
+            write_ticket(
+                root,
+                "TASK-REVIEW",
+                status="awaiting_review",
+                review_state={
+                    "artifact_refs": ["tickets/TASK-REVIEW/artifacts/example.md"],
+                    "thread_ref": "thread-1",
+                    "requested_at": "2026-07-11T00:00:00Z",
+                    "telegram_status": "sent",
+                    "telegram_message_id": "telegram-1",
+                    "reminder_count": 0,
+                    "phone_chaser_count": 0,
+                    "decision": None,
+                },
+            )
+
+            result = BOARD.build_board(root, now=datetime(2026, 7, 11, 1, tzinfo=timezone.utc))
+
+            self.assertEqual(
+                result["next_due_review_action"]["review"]["action"],
+                "send_telegram_reminder",
+            )
+
+    def test_phone_receipt_count_and_timestamp_are_required(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            ticket = write_ticket(
+                root,
+                "TASK-REVIEW",
+                status="awaiting_review",
+                review_state={
+                    "artifact_refs": ["tickets/TASK-REVIEW/artifacts/example.md"],
+                    "thread_ref": "thread-1",
+                    "requested_at": "2026-07-11T00:00:00Z",
+                    "telegram_status": "sent",
+                    "telegram_message_id": "telegram-1",
+                    "reminder_count": 2,
+                    "telegram_reminder_message_ids": ["telegram-2", "telegram-3"],
+                    "phone_chaser_count": 1,
+                    "phone_chaser_dispatch_ids": [],
+                    "decision": None,
+                },
+            )
+            result = BOARD.build_board(root, now=datetime(2026, 7, 11, 6, tzinfo=timezone.utc))
+            self.assertEqual(
+                result["next_due_review_action"]["review"]["reason"],
+                "phone_chaser_receipt_count_mismatch",
+            )
+
+            progress = ticket.parent / "progress.md"
+            progress.write_text(
+                progress.read_text(encoding="utf-8").replace(
+                    "phone_chaser_dispatch_ids: []",
+                    'phone_chaser_dispatch_ids: ["call-1"]',
+                ),
+                encoding="utf-8",
+            )
+            result = BOARD.build_board(root, now=datetime(2026, 7, 11, 6, tzinfo=timezone.utc))
+            self.assertEqual(
+                result["next_due_review_action"]["review"]["reason"],
+                "missing_last_phone_chaser_at",
+            )
+
+    def test_phone_chaser_is_held_outside_active_hours_and_stops_at_cap(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            bindings = root / "farplane" / "bindings.yaml"
+            bindings.parent.mkdir(parents=True)
+            bindings.write_text(
+                """operator:
+  review_chase_policy:
+    timezone: Asia/Kuala_Lumpur
+    active_hours: {start: '10:00', end: '01:00'}
+    pulse_interval_minutes: 30
+    telegram_reminder_after_unanswered_turns: [2, 4]
+    phone_chaser_after_unanswered_turns: [6, 12]
+    phone_chaser_repeat_after_turns: 6
+    telegram_reminder_limit: 2
+    phone_chaser_limit: 2
+""",
+                encoding="utf-8",
+            )
+            ticket = write_ticket(
+                root,
+                "TASK-REVIEW",
+                status="awaiting_review",
+                review_state={
+                    "artifact_refs": ["tickets/TASK-REVIEW/artifacts/example.md"],
+                    "thread_ref": "thread-1",
+                    "requested_at": "2026-07-10T16:00:00Z",
+                    "telegram_status": "sent",
+                    "telegram_message_id": "telegram-1",
+                    "reminder_count": 2,
+                    "telegram_reminder_message_ids": ["telegram-2", "telegram-3"],
+                    "phone_chaser_count": 0,
+                    "phone_chaser_dispatch_ids": [],
+                    "decision": None,
+                },
+            )
+
+            result = BOARD.build_board(root, now=datetime(2026, 7, 10, 19, tzinfo=timezone.utc))
+            self.assertIsNone(result["next_due_review_action"])
+            self.assertEqual(
+                result["held_review_chases"][0]["review"]["held_action"],
+                "dispatch_phone_chaser",
+            )
+
+            progress = ticket.parent / "progress.md"
+            progress.write_text(
+                progress.read_text(encoding="utf-8")
+                .replace("phone_chaser_count: 0", "phone_chaser_count: 2")
+                .replace(
+                    "phone_chaser_dispatch_ids: []",
+                    'phone_chaser_dispatch_ids: ["call-1", "call-2"]',
+                )
+                .replace("decision: null", "last_phone_chaser_at: 2026-07-10T18:00:00Z\ndecision: null"),
+                encoding="utf-8",
+            )
+            result = BOARD.build_board(root, now=datetime(2026, 7, 11, 4, tzinfo=timezone.utc))
+            self.assertIsNone(result["next_due_review_action"])
+            self.assertEqual(result["held_review_chases"], [])
 
     def test_awaiting_review_releases_stale_active_ledger_row(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

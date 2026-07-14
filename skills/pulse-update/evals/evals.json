@@ -25,18 +25,36 @@
       }
     },
     {
-      "id": "pulse_empty_board_calls_pure_planner",
-      "prompt": "The board has no executable ticket, review WIP is below its limit, and the project program and objective are current. The heartbeat may create at most three tickets and run one worker. What should happen?",
-      "expected_output": "Chooses plan_next_wave only after reconciliation finds no unclaimed executable ticket; Builds a canonical planning input and atomically acquires its fingerprint before planning; Returns no_op_unchanged_input for an identical completed fingerprint and blocked_overlap for an active claim; Binds identity, areas, selected metric refs, and guards from harness.yaml plus metric direction and freshness from metrics.yaml; Passes areas, objective contract, metric state, adaptive ticket-history query, current context, and wave_size three to the planner; Requires a latest global history query before progressive area or AI-origin filters; Pulse materializes only complete KPI-linked accepted specs, records each selected area_id, and finishes the claim without exceeding wave_size; Dispatches at most one ticket because worker_limit is separate from wave_size; Does not invoke an area planner or product controller",
+      "id": "pulse_creates_context_isolated_worker_task",
+      "prompt": "A heartbeat manager has a long history of previous beats and needs to start a persistent worker for one newly admitted ticket. The worker only needs the ticket handoff, not the manager conversation. How should the worker task be created and registered?",
+      "expected_output": "Creates one clean standalone project task with create_thread and the complete ticket handoff as its initial prompt; Never uses fork_thread or copies the manager heartbeat history; Verifies the returned project task begins with the delegation and has no inherited history before claiming the ticket or registering the worker; Sets the canonical [TASK-XXXX] <ticket title> display title only after verification",
       "files": [],
       "assertions": [
-        "Chooses plan_next_wave only after reconciliation finds no unclaimed executable ticket",
+        "Creates one clean standalone project task with create_thread and the complete ticket handoff as its initial prompt",
+        "Never uses fork_thread or copies the manager heartbeat history",
+        "Verifies the returned project task begins with the delegation and has no inherited history before claiming the ticket or registering the worker",
+        "Sets the canonical [TASK-XXXX] <ticket title> display title only after verification"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Worker task excludes manager heartbeat history",
+          "tags": ["pulse-update", "worker-context", "thread-lineage", "regression"]
+        }
+      }
+    },
+    {
+      "id": "pulse_empty_board_calls_pure_planner",
+      "prompt": "The board has no executable ticket, review WIP is below its limit, and the project program and objective are current. The heartbeat may create at most three tickets and run one worker. What should happen?",
+      "expected_output": "Chooses plan_next_wave after reconciliation and dispatch leave ready supply below the configured low watermark; Builds a canonical planning input and atomically acquires its fingerprint before planning; Returns no_op_unchanged_input for an identical completed fingerprint and blocked_overlap for an active claim; Binds identity, complete harness.areas records including every planner_instruction, selected metric refs, and guards from harness.yaml plus metric direction and freshness from metrics.yaml; Passes complete areas, objective contract, metric state, adaptive ticket-history query, current context, and wave_size three to the planner without reconstructing area policy; Requires a latest global history query before progressive area or AI-origin filters; Pulse materializes only complete KPI-linked accepted specs with matching area-instruction traces, records each selected area_id, and finishes the claim without exceeding wave_size; Dispatches at most one ticket because worker_limit is separate from wave_size; Does not invoke an area planner or product controller",
+      "files": ["farplane/harness.yaml", "farplane/metrics.yaml"],
+      "assertions": [
+        "Chooses plan_next_wave after reconciliation and dispatch leave ready supply below the configured low watermark",
         "Builds a canonical planning input and atomically acquires its fingerprint before planning",
         "Returns no_op_unchanged_input for an identical completed fingerprint and blocked_overlap for an active claim",
-        "Binds identity, areas, selected metric refs, and guards from harness.yaml plus metric direction and freshness from metrics.yaml",
-        "Passes areas, objective contract, metric state, adaptive ticket-history query, current context, and wave_size three to the planner",
+        "Binds identity, complete area records and planner instructions, selected metric refs, and guards from harness.yaml plus metric direction and freshness from metrics.yaml",
+        "Passes complete harness.areas records, objective contract, metric state, adaptive ticket-history query, current context, and wave_size three to the planner",
         "Requires a latest global history query before progressive area or AI-origin filters",
-        "Pulse materializes only complete KPI-linked accepted specs, records each selected area_id, and finishes the claim without exceeding wave_size",
+        "Pulse materializes only complete KPI-linked accepted specs with matching area-instruction traces, records each selected area_id, and finishes the claim without exceeding wave_size",
         "Dispatches at most one ticket because worker_limit is separate from wave_size",
         "Does not invoke an area planner or product controller"
       ],
@@ -117,13 +135,13 @@
     {
       "id": "pulse_interval_suggestions_are_non_mutating",
       "prompt": "The latest weekly report contains suggested ticket deltas, but there are no ticket files for them. The board still has one executable ticket. Which surface may create or dispatch work?",
-      "expected_output": "Treats Interval suggestions as non-mutating context; Dispatches the existing executable ticket; Does not ask Interval to materialize or dispatch its suggestions; Allows Pulse to materialize planner specs only on a later empty-board refill",
+      "expected_output": "Treats Interval suggestions as non-mutating context; Dispatches the existing executable ticket; Does not ask Interval to materialize or dispatch its suggestions; Recomputes ready supply and may call the planner in the same beat when it falls below the low watermark",
       "files": [],
       "assertions": [
         "Treats Interval suggestions as non-mutating context",
         "Dispatches the existing executable ticket",
         "Does not ask Interval to materialize or dispatch its suggestions",
-        "Allows Pulse to materialize planner specs only on a later empty-board refill"
+        "Recomputes ready supply and may call the planner in the same beat when it falls below the low watermark"
       ],
       "metadata": {
         "farplane": {
@@ -209,14 +227,14 @@
     {
       "id": "pulse_due_review_reminder_is_worker_free",
       "prompt": "Four tickets are awaiting review, but only one has an undecided progress Review block whose next_reminder_at is due. One worker slot is idle. What should Pulse do?",
-      "expected_output": "Selects at most the one due reminder instead of chasing from queue size; Calls worker-artifact-review-request in reminder mode without a worker handoff; Preserves the idle execution worker slot for todo or due check-in work; Updates reminder_count and the next reminder or cap in progress.md; Treats review WIP as refill backpressure, not a spam trigger",
+      "expected_output": "Selects at most the one due policy action instead of chasing from queue size; Calls worker-artifact-review-request in reminder mode without a worker handoff; Preserves the idle execution worker slot for todo or due check-in work; Updates reminder_count and the Telegram receipt in progress.md; Projects distinct review tickets into area pools; Treats review WIP as an area-pool limit and strategy signal, not a global dispatch block, planning suppression, or spam trigger",
       "files": [],
       "assertions": [
-        "Selects at most the one due reminder instead of chasing from queue size",
+        "Selects at most the one due policy action instead of chasing from queue size",
         "Calls worker-artifact-review-request in reminder mode without a worker handoff",
         "Preserves the idle execution worker slot for todo or due check-in work",
-        "Updates reminder_count and the next reminder or cap in progress.md",
-        "Treats review WIP as refill backpressure, not a spam trigger"
+        "Updates reminder_count and the Telegram receipt in progress.md",
+        "Treats review WIP as an area-pool limit and strategy signal, not a global dispatch block, planning suppression, or spam trigger"
       ],
       "metadata": {
         "farplane": {
@@ -228,6 +246,81 @@
           ]
         }
       }
+    },
+    {
+      "id": "pulse_runs_maintenance_review_dispatch_and_refill_together",
+      "prompt": "A heartbeat finds two terminal tickets, one due review reminder, one ready ticket, two idle worker slots, and ready_low_watermark two. What should one Work Pulse do?",
+      "expected_output": "Archives both safe terminal tickets; Sends the one due reminder without a worker; Dispatches the ready ticket into one idle slot; Recomputes ready supply after dispatch and calls plan_next_wave because it is below the low watermark; May materialize and dispatch one QA-passing spec into the remaining slot; Writes one combined phase receipt; Does not wait for either worker or perform ticket bodies inline",
+      "files": [],
+      "assertions": [
+        "Archives both safe terminal tickets",
+        "Sends the due reminder without consuming a worker",
+        "Dispatches the existing ready ticket",
+        "Calls plan_next_wave after dispatch because ready supply is below the low watermark",
+        "Writes one combined phase receipt without waiting or implementing inline"
+      ],
+      "metadata": {"farplane": {"title": "One bounded beat runs every eligible manager phase", "tags": ["pulse-update", "multi-phase", "low-watermark"]}}
+    },
+    {
+      "id": "pulse_opens_dispatch_circuit_after_repeated_task_failures",
+      "prompt": "Worker create or lookup failed to return on the last two wakes. Four worker slots are nominally idle, ready supply is one, and ready_low_watermark is twenty. What should Pulse do now?",
+      "expected_output": "Opens a circuit for the failed shared dispatch mechanism; Does not repeat four more unverifiable worker launches; Continues maintenance, review service, and low-watermark planning; May materialize only QA-passing unattended-safe tickets up to wave_size; Records the health check needed to close the circuit and does not implement tickets inline",
+      "files": [],
+      "assertions": [
+        "Opens a circuit for the failed shared dispatch mechanism",
+        "Does not repeat four more unverifiable worker launches",
+        "Continues maintenance, review service, and low-watermark planning",
+        "May materialize only QA-passing unattended-safe tickets up to wave_size",
+        "Records the health check needed to close the circuit and does not implement tickets inline"
+      ],
+      "metadata": {"farplane": {"title": "Dispatch outages trip a bounded circuit", "tags": ["pulse-update", "dispatch", "circuit-breaker"]}}
+    },
+    {
+      "id": "pulse_repairs_silent_review_and_executes_bound_phone_action",
+      "prompt": "Work Pulse finds TASK-A awaiting_review with no progress.md and TASK-B awaiting_review with a valid undecided Review block. TASK-B has sent initial Telegram plus two configured reminders, six unanswered Pulse turns have elapsed, current time is inside active hours, and Phone Chaser count is zero. The binding authorizes one review action per beat. Both workers were already released. What happens?",
+      "expected_output": "Surfaces TASK-A as malformed review state requiring a Review-ledger repair instead of calling it not due; Selects only the oldest one of the repair or TASK-B phone escalation according to policy ordering and actions_per_beat; Uses worker-artifact-review-request and a structured Phone Chaser policy receipt when TASK-B wins; Does not assign a worker; Records the Telegram or sanitized phone receipt and count; Continues dispatch/refill phases; Does not infer escalation from review queue size",
+      "files": [],
+      "assertions": [
+        "Treats missing progress Review state as repair work rather than a silent wait",
+        "Selects no more than the configured review actions per beat",
+        "Uses the structured policy receipt for Phone Chaser",
+        "Does not consume a worker or infer a call from queue size",
+        "Continues later dispatch and refill phases"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Pulse repairs silent reviews and executes bounded phone escalation",
+          "tags": ["pulse-update", "review", "telegram", "phone-chaser", "repair"]
+        }
+      }
+    },
+    {
+      "id": "pulse_full_review_pools_keep_safe_workers_productive",
+      "prompt": "Run one Work Pulse from the supplied project snapshot. Four worker slots are idle, ready supply is below twenty, and the operator is unavailable. Return the canonical machine-readable Pulse receipt that the next automation wake can consume.",
+      "expected_output": "Keeps all five review tickets and their decisions distinct while presenting three area pools; Does not globally block dispatch because review_wip is full; Calls plan_next_wave with goals, lane-aware history, review-pool state, operator availability, and optional taste evidence; Requires top-N receipts from all five lanes before one global ranking; Admits and dispatches only unattended-safe artifact-producing work within wave and worker limits; Keeps publish-now work human-gated and deprioritized",
+      "files": [],
+      "assertions": [
+        "Review pooling does not merge canonical tickets or decisions",
+        "Full review pools do not globally block safe dispatch or planning",
+        "Pulse passes goals, lane-aware history, pool state, and operator availability to the planner",
+        "Every lane proposes top-N before one global ranking",
+        "Only unattended-safe artifact work enters workers while publication stays gated"
+      ],
+      "metadata": {"farplane": {"title": "Full review pools switch strategy instead of stopping Pulse", "context": "This supplied synthetic project snapshot is authoritative and complete for this eval case; use it as the canonical planning-input object rather than substituting live-project source gaps. The downstream automation consumes the standard structured Pulse receipt. review_wip is 3. The three active area pools contain five distinct undecided tickets: delivery has REV-1 and REV-2, research has REV-3 and REV-4, operations has REV-5; each retains its own artifact, request, and decision. Goals contain one completed reach target and one active failed-closeout target. Lane-aware history shows a recent accepted ablation, an accepted experiment, and no duplicate of the current candidates. Operator availability is false until morning. Optional taste evidence favors proof-led technical artifacts but grants no publication authority. Candidate inventory by lane is delivery: two artifact refinements; ablation: two machine-scored ablations; experiment: two delayed-signal experiments with executable check-ins; rollout: one rollout backed by an accepted result; operations: no safe candidate, with shortfall reason that no metric- or guard-restoring repair is evidenced. A separate publish-now campaign requires human publication approval and is not authority-safe overnight. All other candidates are distinct. Four workers are idle, unclaimed ready supply is below ready_low_watermark 20, wave_size is 10, and worker_limit is 4.", "tags": ["pulse-update", "review-pools", "unattended", "top-n", "hardcase"], "hardcase": true, "difficulty": "high", "benchmark_value": "Proves the shared Pulse remains productive overnight while retaining distinct ticket review state", "sanitization_notes": "Synthetic queue state with no private handles or content"}}
+    },
+    {
+      "id": "pulse_passes_icp_world_memory_into_ticket_context",
+      "prompt": "Ready supply is below the low watermark. A valid Feed Scout memory exists with an updated_at timestamp, source-backed trend entries, and one stale/conflicting note. What must Work Pulse pass to Plan Next Wave and materialize into any outward-facing accepted ticket?",
+      "expected_output": "Loads the configured memory once and includes its ref, updated_at, content hash, relevant entry refs, confidence or freshness, and source gaps in the semantic planning input; Passes complete harness area records including canonical ICPs; Requires every outward-facing accepted spec to name the ICP job or pain, baseline/default, intended belief or workflow delta, world-memory refs, and source evidence; Preserves the stale/conflicting note as a labeled gap rather than current fact; Carries the same stable refs into ticket execution inputs; Does not create another planner, Pulse, or memory authority",
+      "files": ["farplane/harness.yaml", "farplane/bindings.yaml"],
+      "assertions": [
+        "Loads persistent memory once with a semantic content hash",
+        "Passes complete canonical ICP records to the one planner",
+        "Requires baseline and belief or workflow delta for outward tickets",
+        "Carries relevant memory and source refs into the materialized ticket",
+        "Keeps stale evidence labeled and memory non-authoritative"
+      ],
+      "metadata": {"farplane": {"title": "Pulse preserves ICP and world context through materialization", "tags": ["pulse-update", "icp", "world-memory", "ticket-context"]}}
     }
   ]
 }

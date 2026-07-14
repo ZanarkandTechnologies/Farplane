@@ -3,7 +3,7 @@ status: active
 project: Farplane
 created_at: 2026-06-15
 updated_at: 2026-07-13
-framework_template_version: "0.5.0"
+framework_template_version: "0.5.1"
 owner: harness
 
 identity:
@@ -17,15 +17,28 @@ identity:
   north_star: >-
     Farplane becomes the standard way researchers and builders create
     harnesses that run longer, improve from evidence, and produce
-    higher-quality results with less human intervention.
+    higher-quality results with less human intervention. Its immediate
+    flagship proof is an autonomous research creator that selects worthwhile
+    experiments, produces evidence-backed media and demos, measures audience
+    response, and improves what it makes next.
 
 metric_refs:
   objectives:
-    - metric_id: activated_external_projects
+    - metric_id: evidence_distribution_reach
       priority: 1
+    - metric_id: distribution_reach_per_artifact
+      priority: 2
+    - metric_id: accepted_evidence_cycles
+      priority: 3
+    - metric_id: activated_external_projects
+      priority: 4
   guards:
     - rejected_ai_ticket_count
     - harness_health_source_gap_count
+
+# Optional dated targets for selected objective metrics. Completion is derived
+# from each metric definition's maximize/minimize direction.
+goals: []
 
 areas:
   framework_delivery:
@@ -34,9 +47,25 @@ areas:
       proof surfaces, documentation, and reusable workflows.
     planner_instruction: >-
       Prefer a concrete user-facing capability, reliability correction, or
-      adoption blocker with executable inputs and proof. Do not create a ticket
-      whose primary output is another plan, framework recommendation, or
-      internal activity artifact.
+      adoption blocker that ends in an independently reviewable product,
+      ablation, experiment, or demo artifact. Prefer compound outputs whose
+      accepted proof can also become a public demonstration. Bundle avoidable
+      setup into the first exemplar; do not create setup chains or tickets
+      whose primary output is another plan or internal activity artifact.
+    icp:
+      label: Harness engineers
+      description: >-
+        Engineers building reliable coding-agent and long-running agent
+        workflows who need visible state, recovery, evaluation, and proof.
+      jobs_to_be_done:
+        - Make agents run longer and recover with less supervision.
+        - Decide which harness components earn their complexity.
+      pain_points:
+        - Agent workflows that look autonomous but silently stall or drift.
+        - Framework claims without reproducible comparisons or working artifacts.
+      evidence_bar: >-
+        A runnable product surface or fair with/without comparison that changes
+        an implementation decision against a named baseline.
     skill_refs:
       - farplane-experiment-report
       - farplane-ablation-proof
@@ -50,9 +79,24 @@ areas:
       Evidence-acquiring actions that reduce a concrete adoption, audience,
       positioning, onboarding, or use-case uncertainty.
     planner_instruction: >-
-      Propose an executable probe or product change tied to a current adoption
-      decision. A standalone research brief, market summary, or recommendation
-      is not ticketable without an independent use path.
+      Propose an executable probe or product change tied to a current audience,
+      adoption, positioning, or creator-taste decision. It must produce a
+      research or experiment artifact with an immediate product, demo, sales,
+      or publish-ready use path; standalone summaries are not ticketable.
+    icp:
+      label: Agent and harness builders evaluating adoption
+      description: >-
+        Serious builders deciding whether Farplane solves a costly orchestration,
+        proof, or long-running-work problem better than their current scripts.
+      jobs_to_be_done:
+        - Identify which Farplane workflow is worth adopting now.
+        - Compare Farplane with an existing manual or framework baseline.
+      pain_points:
+        - Broad AI research that does not change a product or adoption decision.
+        - Missing evidence about migration cost, reliability, or realized value.
+      evidence_bar: >-
+        Source-backed learning tied to a named decision, alternative, and
+        immediate product, sales, demo, or experiment use.
     skill_refs:
       - farplane-market-learning
     metric_refs:
@@ -62,9 +106,27 @@ areas:
       Evidence-backed distribution, content, demos, and conversion surfaces
       that help qualified builders discover and adopt Farplane.
     planner_instruction: >-
-      Prefer proof-mapped distribution or conversion work that improves reach
-      per published artifact or external adoption. Do not optimize output count
-      and do not create publish/account actions without the required human gate.
+      Prefer finished proof-mapped media, demos, conversion surfaces, or
+      controlled content variants that improve qualified reach per artifact or
+      external adoption. Production may proceed unattended to a reviewable
+      artifact; publishing and account actions retain the required human gate.
+      Do not split creator setup, scripting, and rendering into prerequisite
+      tickets when one coherent ticket can ship the artifact.
+    icp:
+      label: Technical agent builders who share and adopt proven patterns
+      description: >-
+        Harness and agent engineers who pay attention to surprising,
+        reproducible knowledge and credible demonstrations rather than generic
+        AI commentary.
+      jobs_to_be_done:
+        - Learn a game-changing harness technique they can reproduce.
+        - See enough proof to try Farplane on a real project.
+      pain_points:
+        - Shallow trend summaries and product marketing without technical evidence.
+        - Demos that hide the baseline, failure mode, or reusable method.
+      evidence_bar: >-
+        A proof-led artifact with a named baseline, observed delta, reusable
+        method, and honest limit that can survive expert scrutiny.
     skill_refs:
       - farplane-content-creation
     metric_refs:
@@ -77,9 +139,38 @@ areas:
       Measured changes to the planner, Pulse, skills, prompts, hooks,
       automations, validators, and other harness behavior.
     planner_instruction: >-
-      Compete globally with direct project work. Admit only when an observed
-      failure, completed Reward, guard regression, or toy/eval proof supports a
-      causal process change; speculative harness cleanup is not ticketable.
+      Optimize the full harness portfolio across system prompts, AGENTS policy,
+      skills, agents, automations, templates, ticket contracts, hooks,
+      validators, metrics, and docs. Candidate actions may create, refine,
+      shorten, refactor, consolidate, retire, repair, or roll out a surface.
+      Use invocation frequency and recency, unique callers, Reward outcomes,
+      downstream use, eval and QA coverage, rollout health, context and
+      maintenance cost, duplication, and recurring failures. Invocation count
+      is evidence rather than an automatic deletion rule; preserve rare
+      surfaces with clear strategic or safety value. Prefer high-use unhealthy
+      or overgrown surfaces for refinement, low-use duplicated low-value
+      surfaces for consolidation or retirement, and proven underused
+      capabilities for rollout. System-prompt and global-policy changes require
+      representative eval evidence because of their broad blast radius. Admit
+      only bounded causal changes that ship a preventive mechanism or accepted
+      experiment result with representative next-run proof; speculative cleanup
+      and setup-only work are not ticketable. This area competes in default
+      global planning and may receive an explicit scheduled reserved allocation
+      without creating a separate planner or Pulse.
+    icp:
+      label: Farplane operators and harness maintainers
+      description: >-
+        Operators responsible for keeping autonomous work useful, reviewable,
+        and productive while human attention is unavailable.
+      jobs_to_be_done:
+        - Prevent recurring stalls, shallow planning, and unnecessary intervention.
+        - Improve the harness from measured failures and accepted outcomes.
+      pain_points:
+        - One-off cleanup mislabeled as compounding improvement.
+        - Prompt or workflow changes shipped without representative next-run proof.
+      evidence_bar: >-
+        A causal before/after eval or reproduced production-path run proving a
+        durable preventive mechanism, with rollback or rejection criteria.
     skill_refs:
       - self-improve
       - dogfood-review
@@ -117,11 +208,13 @@ operating_principles:
   - Shape material work through tickets before long autonomous execution.
   - Prove behavior with validators, reviews, evals, or artifact evidence.
   - Count realized evidence, not planned intent, as metric movement.
-  - Let project objectives drive one global ranking; self-improvement is one evidence-gated planning area, not a separate Pulse.
+  - Let project objectives drive one adaptive ranking; self-improvement is one evidence-gated planning area and may receive an explicit scheduled reserved allocation, never a separate planner or Pulse.
+  - Generate candidates by applying each scope-relevant `areas.<area_id>.planner_instruction`, then rank globally or within an explicit caller-reserved area; areas never become planners or Pulses.
+  - Bundle avoidable setup into the first independently useful exemplar and maximize artifact-producing work after quality, guard, authority, and interference gates.
 
 stable_capabilities:
   - pulse-update
-  - ticket-opportunity-generator
+  - plan-next-wave
   - interval-update
   - feed-scout
   - dogfood-review

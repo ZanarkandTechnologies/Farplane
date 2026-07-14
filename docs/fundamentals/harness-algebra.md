@@ -1022,7 +1022,7 @@ drift_check(ticket, program, progress_tail, current_claim)
 Long-term project control:
 
 ```text
-harness.yaml = human meaning + planning areas + selected metric refs + hard constraints
+harness.yaml = human meaning + canonical `areas.<area_id>.planner_instruction` contracts + selected metric refs + hard constraints
 metrics.yaml = metric meaning + direction + freshness + optional guard rules
 ticket.md = executable leaf contract + Done + QA Strategy
 program.md = loop configuration + metric + stop policy

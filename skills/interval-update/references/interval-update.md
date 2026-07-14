@@ -120,7 +120,7 @@ design.
 
 | Decision | Owner |
 | --- | --- |
-| New BAU direction | `ticket-opportunity-generator.plan_next_wave` |
+| New BAU direction | `plan-next-wave.plan_next_wave` |
 | Feed/provider discovery and source-backed ticket | provider skill |
 | Harness experiment selection | weekly `dogfood-review` automation |
 | Ticket execution and matured reward check-in | Work Pulse |

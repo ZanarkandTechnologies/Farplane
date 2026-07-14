@@ -94,7 +94,7 @@ project program
 | --- | --- |
 | `farplane/harness.yaml` | identity, planning areas/instructions, authority, capability refs, selected metrics |
 | `farplane/metrics.yaml` | metric meaning, direction, freshness, and guard rules |
-| `farplane/bindings.yaml` | safe provider coordinates and refresh recipes |
+| `farplane/bindings.yaml` | safe provider coordinates |
 | `farplane/automations.toml` | one Work Pulse plus bounded scheduled jobs |
 | `tickets/TASK-*/` | work, program, progress, reward, evidence, QA, review |
 | `skills/*`, `.agents/skills/*` | reusable and project-local capabilities |
@@ -208,14 +208,18 @@ Only Work Pulse executes tickets and matured check-ins.
 
 ## Success Metrics
 
-`activated_external_projects` is the current project-level planning objective.
-The remaining rows are area diagnostics, system-health measures, or guards;
-they do not independently authorize proactive tickets.
+The current project-level objective portfolio prioritizes evidence distribution
+reach, reach efficiency, and accepted evidence cycles as the flagship
+autonomous-research-creator proof, while external-project activation remains a
+lower-priority compounding adoption objective. One planner considers every
+area lens and globally ranks work against this shared portfolio.
 
 | Metric | Direction | Meaning |
 | --- | --- | --- |
+| `evidence_distribution_reach` | maximize | accepted evidence reaches qualified builders through proof-backed media and demos |
+| `distribution_reach_per_artifact` | maximize | attention efficiency rises without rewarding output spam |
+| `accepted_evidence_cycles` | maximize | ablations, experiments, or proof cycles finish with accepted reusable evidence |
 | `activated_external_projects` | maximize | nearby non-standard projects run the current contract and record a Work Pulse decision after migration |
-| `evidence_distribution_reach` | area diagnostic within anti-spam guardrails | accepted evidence reaches builders without rewarding artifact count |
 | `auto_completion_rate` | maximize | completed associated tickets required no post-start human intervention |
 | `intervention_free_ticket_count` | maximize | autonomous completion produces useful throughput |
 | `ticket_intervention_turn_count` | minimize within quality floor | supervision falls without false completion or drift |
@@ -224,7 +228,7 @@ they do not independently authorize proactive tickets.
 | `accepted_harness_improvements` | increase selectively | self-improvement produces reviewed durable value |
 | `latest_eval_pass_rate` | diagnostic | latest local eval result is visible without treating unrelated suites as one global guard |
 
-Metric semantics live in `farplane/metrics.yaml`; provider refresh mechanics
+Metric semantics and grouped refresh prompts live in `farplane/metrics.yaml`; provider coordinates
 live in `farplane/bindings.yaml`. Dispatch correctness, review-worker release,
 resumeability, maintenance precision, and experiment-packet completeness remain
 binary feature/test gates until repeated operation justifies registered metric

@@ -1046,6 +1046,12 @@ def run_harness_health_compile_cli(args: argparse.Namespace) -> int:
         return 1
 
 
+def run_ticket_history_cli(args: argparse.Namespace) -> int:
+    from farplane_ticket_history import run_history
+
+    return int(run_history(args))
+
+
 def run_metrics_primitives_cli(args: argparse.Namespace) -> int:
     from farplane_primitive_metrics import run_primitives
 
@@ -1392,6 +1398,17 @@ def build_parser() -> argparse.ArgumentParser:
     harness_health_compile.add_argument("--json", action="store_true")
     harness_health_compile.set_defaults(func=run_harness_health_compile_cli)
 
+    tickets = sub.add_parser("tickets", help="Inspect Farplane ticket projections.")
+    tickets_sub = tickets.add_subparsers(dest="tickets_command")
+    tickets_history = tickets_sub.add_parser(
+        "history",
+        help="Query compact active and archived ticket Reward history.",
+    )
+    from farplane_ticket_history import add_history_arguments
+
+    add_history_arguments(tickets_history)
+    tickets_history.set_defaults(func=run_ticket_history_cli)
+
     metrics = sub.add_parser("metrics", help="Refresh Farplane primitive metric readings.")
     metrics_sub = metrics.add_subparsers(dest="metrics_command")
     metrics_primitives = metrics_sub.add_parser("primitives", help="Refresh Core primitive metrics for one project/date.")
@@ -1560,6 +1577,8 @@ def main(argv: list[str]) -> int:
         parser.error("harness requires a subcommand: health")
     if getattr(args, "harness_command", None) == "health" and getattr(args, "harness_health_command", None) is None:
         parser.error("harness health requires a subcommand: compile")
+    if getattr(args, "command", None) == "tickets" and getattr(args, "tickets_command", None) is None:
+        parser.error("tickets requires a subcommand: history")
     if getattr(args, "command", None) == "metrics" and getattr(args, "metrics_command", None) is None:
         parser.error("metrics requires a subcommand: primitives")
     if getattr(args, "command", None) == "project" and getattr(args, "project_command", None) is None:

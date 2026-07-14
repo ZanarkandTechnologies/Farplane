@@ -1,0 +1,11 @@
+{
+  "verdict": "pass",
+  "ticket_id": "TASK-0369",
+  "checked_at": "2026-07-14T12:23:28Z",
+  "evidence": [
+    "verification.md",
+    "planner-eval-spec-validation.json",
+    ".farplane/evals/runs/20260714-121825-task-0369-planner-unspoiled-final/summary.json"
+  ],
+  "summary": "45 focused tests and all strict memory, planner, project, docs, install, eval, and post-spec validation gates passed."
+}

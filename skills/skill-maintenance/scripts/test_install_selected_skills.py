@@ -174,6 +174,20 @@ class InstallSelectedSkillsTests(unittest.TestCase):
             self.assertFalse((target / "skills" / "visual-qa").exists())
             self.assertTrue(outside_dest.exists())
 
+    def test_prune_removes_retired_rendered_skill_name(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp) / "repo"
+            target = Path(tmp) / "codex"
+            write_skill(repo, "review", "Run quality checks.")
+            retired = target / "skills" / "ticket-opportunity-generator"
+            retired.mkdir(parents=True)
+            (retired / "SKILL.md").write_text("retired installed copy\n", encoding="utf-8")
+
+            result = installer.install_skills(repo, target, ["review"], True, False)
+
+            self.assertIn("ticket-opportunity-generator", result.pruned)
+            self.assertFalse(retired.exists())
+
     def test_dry_run_does_not_create_target(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             repo = Path(tmp) / "repo"

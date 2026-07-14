@@ -4,10 +4,13 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
-from datetime import datetime, timezone
+import re
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 import yaml
 
@@ -18,12 +21,35 @@ REVIEW_STATUSES = {"awaiting_review"}
 SIGNAL_WAIT_STATUSES = {"waiting_signal"}
 TERMINAL_STATUSES = {"done", "failed", "rejected"}
 PRIORITY_ORDER = {"urgent": 0, "high": 1, "medium": 2, "low": 3}
+REVIEW_ACTION_PRIORITY = {
+    "send_initial_telegram": 0,
+    "send_telegram_reminder": 1,
+    "dispatch_phone_chaser": 2,
+    "repair_review_state": 3,
+}
+DEFAULT_REVIEW_CHASE_POLICY = {
+    "timezone": "UTC",
+    "active_hours": {"start": "00:00", "end": "23:59"},
+    "pulse_interval_minutes": 30,
+    "telegram_reminder_after_unanswered_turns": [2, 4],
+    "phone_chaser_after_unanswered_turns": [6, 12],
+    "phone_chaser_repeat_after_turns": 6,
+    "telegram_reminder_limit": 2,
+    "phone_chaser_limit": 2,
+    "actions_per_beat": 1,
+}
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--project-root", default=".")
     parser.add_argument("--worker-limit", type=int, default=1)
+    parser.add_argument(
+        "--review-wip",
+        type=int,
+        default=3,
+        help="Maximum operator-facing review-area pools. Does not limit workers.",
+    )
     parser.add_argument(
         "--now",
         default="",
@@ -95,6 +121,19 @@ def parse_fenced_yaml(section: str) -> dict[str, Any]:
         return {}
     try:
         loaded = yaml.safe_load(section[yaml_start + 1 : fence_end]) or {}
+    except yaml.YAMLError:
+        return {}
+    return loaded if isinstance(loaded, dict) else {}
+
+
+def parse_yaml_section(section: str) -> dict[str, Any]:
+    """Parse the documented plain Review block or an explicitly fenced one."""
+
+    fenced = parse_fenced_yaml(section)
+    if fenced:
+        return fenced
+    try:
+        loaded = yaml.safe_load(section) or {}
     except yaml.YAMLError:
         return {}
     return loaded if isinstance(loaded, dict) else {}
@@ -226,25 +265,214 @@ def review_state(progress_path: Path) -> dict[str, Any]:
     if not progress_path.is_file():
         return {}
     markdown = progress_path.read_text(encoding="utf-8", errors="replace")
-    return parse_fenced_yaml(markdown_heading_section(markdown, "Review"))
+    return parse_yaml_section(markdown_heading_section(markdown, "Review"))
 
 
-def due_review_reminder(progress_path: Path, now: datetime) -> dict[str, Any] | None:
+def review_chase_policy(root: Path) -> dict[str, Any]:
+    policy = dict(DEFAULT_REVIEW_CHASE_POLICY)
+    bindings_path = root / "farplane" / "bindings.yaml"
+    if not bindings_path.is_file():
+        return policy
+    try:
+        bindings = yaml.safe_load(bindings_path.read_text(encoding="utf-8")) or {}
+    except yaml.YAMLError:
+        return policy
+    configured = (bindings.get("operator") or {}).get("review_chase_policy")
+    if isinstance(configured, dict):
+        policy.update(configured)
+    return policy
+
+
+def parse_clock(value: Any) -> tuple[int, int] | None:
+    try:
+        hour, minute = str(value).split(":", 1)
+        parsed = (int(hour), int(minute))
+    except (TypeError, ValueError):
+        return None
+    return parsed if 0 <= parsed[0] <= 23 and 0 <= parsed[1] <= 59 else None
+
+
+def within_active_hours(now: datetime, policy: dict[str, Any]) -> bool:
+    try:
+        local_now = now.astimezone(ZoneInfo(str(policy.get("timezone") or "UTC")))
+    except ZoneInfoNotFoundError:
+        local_now = now.astimezone(timezone.utc)
+    hours = policy.get("active_hours") or {}
+    start = parse_clock(hours.get("start"))
+    end = parse_clock(hours.get("end"))
+    if not start or not end:
+        return False
+    current = (local_now.hour, local_now.minute)
+    if start <= end:
+        return start <= current < end
+    return current >= start or current < end
+
+
+def integer_list(value: Any, limit: int) -> list[int]:
+    if not isinstance(value, list):
+        return []
+    result: list[int] = []
+    for item in value[: max(0, limit)]:
+        try:
+            parsed = int(item)
+        except (TypeError, ValueError):
+            continue
+        if parsed >= 0:
+            result.append(parsed)
+    return result
+
+
+def parse_nonnegative_int(value: Any) -> int | None:
+    try:
+        parsed = int(value)
+    except (TypeError, ValueError):
+        return None
+    return parsed if parsed >= 0 else None
+
+
+def policy_nonnegative_int(policy: dict[str, Any], key: str) -> int:
+    configured = parse_nonnegative_int(policy.get(key))
+    if configured is not None:
+        return configured
+    fallback = parse_nonnegative_int(DEFAULT_REVIEW_CHASE_POLICY.get(key))
+    return fallback or 0
+
+
+def review_action(
+    progress_path: Path,
+    now: datetime,
+    policy: dict[str, Any],
+) -> dict[str, Any]:
     state = review_state(progress_path)
-    if not state or str(state.get("decision") or "").strip():
-        return None
-    next_reminder_at = parse_iso_datetime(state.get("next_reminder_at"))
-    if next_reminder_at is None or next_reminder_at > now:
-        return None
-    return {
+    if not progress_path.is_file():
+        return {"action": "repair_review_state", "reason": "missing_progress_md"}
+    if not state:
+        return {"action": "repair_review_state", "reason": "missing_or_invalid_review_block"}
+    if str(state.get("decision") or "").strip():
+        return {"action": "none", "reason": "review_decided"}
+
+    required = ["artifact_refs", "thread_ref", "requested_at"]
+    missing = [name for name in required if not state.get(name)]
+    requested_at = parse_iso_datetime(state.get("requested_at"))
+    if requested_at is None:
+        missing.append("requested_at_valid_iso8601")
+    if missing:
+        return {
+            "action": "repair_review_state",
+            "reason": "missing_required_review_fields",
+            "missing_fields": sorted(set(missing)),
+        }
+
+    reminder_count = parse_nonnegative_int(state.get("reminder_count") or 0)
+    phone_chaser_count = parse_nonnegative_int(state.get("phone_chaser_count") or 0)
+    if reminder_count is None or phone_chaser_count is None:
+        return {
+            "action": "repair_review_state",
+            "reason": "invalid_review_counter",
+            "reminder_count": state.get("reminder_count"),
+            "phone_chaser_count": state.get("phone_chaser_count"),
+        }
+    reminder_message_ids = as_list(state.get("telegram_reminder_message_ids"))
+    if reminder_count != len(reminder_message_ids):
+        return {
+            "action": "repair_review_state",
+            "reason": "telegram_reminder_receipt_count_mismatch",
+            "reminder_count": reminder_count,
+            "telegram_reminder_message_id_count": len(reminder_message_ids),
+        }
+
+    phone_chaser_dispatch_ids = as_list(state.get("phone_chaser_dispatch_ids"))
+    if phone_chaser_count != len(phone_chaser_dispatch_ids):
+        return {
+            "action": "repair_review_state",
+            "reason": "phone_chaser_receipt_count_mismatch",
+            "phone_chaser_count": phone_chaser_count,
+            "phone_chaser_dispatch_id_count": len(phone_chaser_dispatch_ids),
+        }
+    last_phone_chaser_at = parse_iso_datetime(state.get("last_phone_chaser_at"))
+    if phone_chaser_count and last_phone_chaser_at is None:
+        return {
+            "action": "repair_review_state",
+            "reason": "missing_last_phone_chaser_at",
+            "phone_chaser_count": phone_chaser_count,
+        }
+
+    base = {
         "progress_path": str(progress_path),
         "artifact_refs": as_list(state.get("artifact_refs")),
         "thread_ref": str(state.get("thread_ref") or "").strip(),
         "requested_at": str(state.get("requested_at") or "").strip(),
-        "next_reminder_at": str(state.get("next_reminder_at") or "").strip(),
-        "reminder_count": int(state.get("reminder_count") or 0),
-        "escalation_used": state.get("escalation_used") is True,
+        "reminder_count": reminder_count,
+        "telegram_reminder_message_ids": reminder_message_ids,
+        "phone_chaser_count": phone_chaser_count,
+        "phone_chaser_dispatch_ids": phone_chaser_dispatch_ids,
+        "last_phone_chaser_at": (
+            last_phone_chaser_at.isoformat() if last_phone_chaser_at else ""
+        ),
     }
+
+    telegram_sent = (
+        str(state.get("telegram_status") or "").strip().lower() == "sent"
+        and bool(str(state.get("telegram_message_id") or "").strip())
+    )
+    if not telegram_sent:
+        return {
+            **base,
+            "action": "send_initial_telegram",
+            "reason": "initial_review_notification_missing_or_blocked",
+            "due_at": requested_at.isoformat(),
+        }
+
+    interval_minutes = max(1, policy_nonnegative_int(policy, "pulse_interval_minutes"))
+    elapsed_turns = max(
+        0,
+        int((now - requested_at).total_seconds() // (interval_minutes * 60)),
+    )
+    active_now = within_active_hours(now, policy)
+    telegram_limit = policy_nonnegative_int(policy, "telegram_reminder_limit")
+    reminder_turns = integer_list(
+        policy.get("telegram_reminder_after_unanswered_turns"), telegram_limit
+    )
+    reminder_count = base["reminder_count"]
+    if reminder_count < len(reminder_turns):
+        threshold = reminder_turns[reminder_count]
+        due_at = requested_at + timedelta(minutes=interval_minutes * threshold)
+        if elapsed_turns >= threshold:
+            action = "send_telegram_reminder" if active_now else "held_outside_active_hours"
+            return {
+                **base,
+                "action": action,
+                "held_action": None if active_now else "send_telegram_reminder",
+                "reason": "telegram_chase_due" if active_now else "telegram_chase_outside_active_hours",
+                "due_at": due_at.isoformat(),
+                "unanswered_pulse_turns": elapsed_turns,
+            }
+        return {**base, "action": "none", "reason": "telegram_chase_not_due"}
+
+    phone_limit = policy_nonnegative_int(policy, "phone_chaser_limit")
+    phone_turns = integer_list(policy.get("phone_chaser_after_unanswered_turns"), phone_limit)
+    phone_count = base["phone_chaser_count"]
+    if phone_count < len(phone_turns):
+        threshold = phone_turns[phone_count]
+        due_at = requested_at + timedelta(minutes=interval_minutes * threshold)
+        repeat_turns = policy_nonnegative_int(policy, "phone_chaser_repeat_after_turns")
+        if last_phone_chaser_at is not None:
+            due_at = max(
+                due_at,
+                last_phone_chaser_at
+                + timedelta(minutes=interval_minutes * repeat_turns),
+            )
+        if now >= due_at:
+            action = "dispatch_phone_chaser" if active_now else "held_outside_active_hours"
+            return {
+                **base,
+                "action": action,
+                "held_action": None if active_now else "dispatch_phone_chaser",
+                "reason": "phone_chaser_due" if active_now else "phone_chaser_outside_active_hours",
+                "due_at": due_at.isoformat(),
+                "unanswered_pulse_turns": elapsed_turns,
+            }
+    return {**base, "action": "none", "reason": "review_chase_not_due_or_capped"}
 
 
 def ticket_paths(root: Path, explicit: list[str] | None = None) -> list[Path]:
@@ -282,6 +510,90 @@ def load_jsonl(path: Path) -> list[dict[str, Any]]:
         if isinstance(value, dict):
             rows.append(value)
     return rows
+
+
+def planner_area_by_ticket(root: Path) -> dict[str, str]:
+    """Resolve immutable planner-selected area provenance from admission rows."""
+
+    resolved: dict[str, str] = {}
+    decision_rows = load_jsonl(
+        root / ".farplane" / "automation" / "decisions.jsonl"
+    )
+    for decision in decision_rows:
+        specs = decision.get("admitted_specs")
+        if not isinstance(specs, list):
+            continue
+        for spec in specs:
+            if not isinstance(spec, dict):
+                continue
+            ticket_id = str(spec.get("ticket_id") or "").strip()
+            area_id = str(spec.get("area_id") or "").strip()
+            if ticket_id and area_id:
+                resolved[ticket_id] = area_id
+    return resolved
+
+
+def ticket_state_area(markdown: str) -> str:
+    """Read the compact ticket-body ``State`` area when no receipt exists."""
+
+    section = markdown_heading_section(markdown, "State")
+    match = re.search(
+        r"^\s*(?:[-*]\s*)?(?:`?area`?)\s*:\s*`?([^`\n]+?)`?\s*$",
+        section,
+        flags=re.MULTILINE,
+    )
+    return match.group(1).strip() if match else ""
+
+
+def project_review_pools(
+    awaiting_review: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    """Keep review tickets distinct while grouping their human decision surface."""
+
+    grouped: dict[str, list[dict[str, Any]]] = {}
+    for ticket in awaiting_review:
+        area_id = str(ticket.get("area_id") or "").strip()
+        # Missing provenance must not make unrelated tickets look like one
+        # decision surface. A ticket-scoped pool is the honest fallback.
+        pool_id = area_id or f"unassigned:{ticket['ticket_id']}"
+        grouped.setdefault(pool_id, []).append(ticket)
+
+    pools: list[dict[str, Any]] = []
+    for pool_id, tickets in sorted(grouped.items()):
+        tickets.sort(key=lambda row: row["ticket_id"])
+        digest_tickets = [
+            {
+                "ticket_id": row["ticket_id"],
+                "ticket_path": row["path"],
+                "progress_ref": row.get("review_ref", ""),
+                "artifact_refs": row.get("review_artifact_refs", []),
+                "thread_ref": row.get("review_thread_ref", ""),
+                "requested_at": row.get("review_requested_at", ""),
+                "decision": row.get("review_decision", ""),
+                "next_action": row.get("review_next_action", ""),
+            }
+            for row in tickets
+        ]
+        digest = {
+            "area_id": pool_id if not pool_id.startswith("unassigned:") else "",
+            "tickets": digest_tickets,
+        }
+        digest_id = hashlib.sha256(
+            json.dumps(
+                digest, sort_keys=True, separators=(",", ":"), ensure_ascii=True
+            ).encode("utf-8")
+        ).hexdigest()
+        pools.append(
+            {
+                "pool_id": pool_id,
+                "area_id": pool_id if not pool_id.startswith("unassigned:") else "",
+                "ticket_count": len(tickets),
+                "ticket_ids": [row["ticket_id"] for row in tickets],
+                "ticket_paths": [row["path"] for row in tickets],
+                "operator_digest": {**digest, "digest_id": digest_id},
+            }
+        )
+    return pools
 
 
 def latest_worker_rows(rows: list[dict[str, Any]]) -> dict[str, dict[str, Any]]:
@@ -325,12 +637,14 @@ def classify_ticket(
 def build_board(
     root: Path,
     worker_limit: int = 1,
+    review_wip: int = 3,
     explicit_ticket_paths: list[str] | None = None,
     now: datetime | None = None,
 ) -> dict[str, Any]:
     root = root.resolve()
     now = (now or datetime.now(timezone.utc)).astimezone(timezone.utc)
     paths = ticket_paths(root, explicit_ticket_paths)
+    receipt_areas = planner_area_by_ticket(root)
     rows: list[dict[str, Any]] = []
     active_completed_ids: set[str] = set()
 
@@ -357,6 +671,7 @@ def build_board(
                 "depends_on": as_list(data.get("depends_on")),
                 "human_gate": data.get("human_gate", "none"),
                 "terminal": terminal,
+                "area_id": receipt_areas.get(ticket_id) or ticket_state_area(markdown),
                 "due_reward_checkins": reward_checkins["due"],
                 "future_reward_checkins": reward_checkins["future"],
                 "terminal_reward_outcomes": reward_checkins["terminal"],
@@ -371,7 +686,9 @@ def build_board(
     awaiting_review: list[dict[str, Any]] = []
     due_checkins: list[dict[str, Any]] = []
     future_checkins: list[dict[str, Any]] = []
-    due_review_reminders: list[dict[str, Any]] = []
+    review_actions: list[dict[str, Any]] = []
+    held_review_chases: list[dict[str, Any]] = []
+    chase_policy = review_chase_policy(root)
 
     for row in rows:
         reasons = classify_ticket(row, satisfied_dependencies)
@@ -380,9 +697,33 @@ def build_board(
             archive_needed.append(row)
         if row["status"].lower() in REVIEW_STATUSES:
             awaiting_review.append(row)
-            reminder = due_review_reminder(root / Path(row["path"]).parent / "progress.md", now)
-            if reminder:
-                due_review_reminders.append({**row, "review": reminder})
+            progress_path = root / Path(row["path"]).parent / "progress.md"
+            state = review_state(progress_path)
+            action = review_action(
+                progress_path, now, chase_policy
+            )
+            try:
+                progress_ref = str(progress_path.relative_to(root))
+            except ValueError:
+                progress_ref = str(progress_path)
+            row.update(
+                review_ref=progress_ref,
+                review_artifact_refs=as_list(state.get("artifact_refs")),
+                review_thread_ref=str(state.get("thread_ref") or "").strip(),
+                review_requested_at=str(state.get("requested_at") or "").strip(),
+                review_decision=str(state.get("decision") or "").strip(),
+                review_next_action=str(action.get("action") or "").strip(),
+            )
+            action_row = {**row, "review": action}
+            if action["action"] in {
+                "repair_review_state",
+                "send_initial_telegram",
+                "send_telegram_reminder",
+                "dispatch_phone_chaser",
+            }:
+                review_actions.append(action_row)
+            elif action["action"] == "held_outside_active_hours":
+                held_review_chases.append(action_row)
         if row["status"].lower() in SIGNAL_WAIT_STATUSES and row["due_reward_checkins"]:
             due_checkins.append(row)
         if row["status"].lower() in SIGNAL_WAIT_STATUSES and row["future_reward_checkins"]:
@@ -401,8 +742,12 @@ def build_board(
             row["ticket_id"],
         )
     )
-    due_review_reminders.sort(
-        key=lambda row: (row["review"]["next_reminder_at"], row["ticket_id"])
+    review_actions.sort(
+        key=lambda row: (
+            REVIEW_ACTION_PRIORITY.get(row["review"]["action"], 99),
+            row["review"].get("due_at", ""),
+            row["ticket_id"],
+        )
     )
 
     ledger_path = root / ".farplane" / "automation" / "spawned-threads.jsonl"
@@ -446,6 +791,13 @@ def build_board(
         and row["ticket_id"] not in active_worker_ticket_ids
     ]
     worker_limit = max(0, worker_limit)
+    review_pool_limit = max(0, review_wip)
+    all_review_pools = project_review_pools(awaiting_review)
+    review_pools = all_review_pools[:review_pool_limit]
+    queued_review_pools = all_review_pools[review_pool_limit:]
+    review_pool_saturated = bool(all_review_pools) and (
+        len(review_pools) >= review_pool_limit
+    )
     return {
         "schema": "farplane.work_pulse_board.v2",
         "project_root": str(root),
@@ -456,21 +808,33 @@ def build_board(
         "excluded_tickets": excluded,
         "archive_needed_tickets": archive_needed,
         "awaiting_review_tickets": awaiting_review,
-        # Reconciliation exposes one action even when several waits are due.
-        # It does not reserve or assign an execution worker.
-        "next_due_review_reminder": due_review_reminders[0] if due_review_reminders else None,
-        "due_review_reminder_count": len(due_review_reminders),
+        "review_pools": review_pools,
+        "queued_review_pools": queued_review_pools,
+        "review_pool_count": len(review_pools),
+        "review_pool_limit": review_pool_limit,
+        "total_review_pool_count": len(all_review_pools),
+        "review_pool_saturated": review_pool_saturated,
+        "review_item_count": len(awaiting_review),
+        # Reconciliation exposes one policy-derived action even when several
+        # waits need service. Review actions never reserve an execution worker.
+        "review_chase_policy": chase_policy,
+        "next_due_review_action": review_actions[0] if review_actions else None,
+        "due_review_action_count": len(review_actions),
+        "held_review_chases": held_review_chases,
         "due_checkin_tickets": due_checkins,
         "future_checkin_tickets": future_checkins,
-        "review_wip": len(awaiting_review),
+        # Review WIP is a bounded human-decision surface, not execution-worker
+        # occupancy. Distinct underlying tickets and their chase ledgers remain
+        # visible in ``awaiting_review_tickets``.
+        "review_wip": len(review_pools),
         "active_workers": active_workers,
         "human_active_tickets": human_active_tickets,
         "released_worker_rows": released_worker_rows,
         "worker_limit": worker_limit,
         "idle_worker_slots": max(0, worker_limit - len(active_workers)),
-        # Pulse combines this fact with review_wip and current context before
-        # choosing plan_next_wave; the classifier does not make that decision.
-        "empty_executable_board": not executable,
+        # Pulse subtracts tickets dispatched in the current phase before
+        # comparing remaining ready supply with ready_low_watermark.
+        "ready_ticket_count": len(executable),
     }
 
 
@@ -482,6 +846,7 @@ def main() -> int:
     result = build_board(
         Path(args.project_root),
         worker_limit=args.worker_limit,
+        review_wip=args.review_wip,
         explicit_ticket_paths=args.ticket_paths,
         now=now,
     )

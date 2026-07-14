@@ -25,6 +25,8 @@ OBSERVATION_ROOT = Path(".farplane/metrics/observations")
 DAILY_METRICS_ROOT = Path(".farplane/metrics/daily")
 ASSOCIATION_PATH = Path(".farplane/state/ticket-thread-associations.jsonl")
 REWARD_CONTRACT = "terminal_evidence_v1"
+PULSE_SPAWNED_LEDGER = Path(".farplane/automation/spawned-threads.jsonl")
+PULSE_OUTCOME_LEDGER = Path(".farplane/automation/action-outcomes.jsonl")
 
 
 @dataclass(frozen=True)
@@ -754,6 +756,72 @@ def association_row_from_source(source: dict[str, Any], input_path: Path, projec
     }
 
 
+def relative_evidence_path(path: Path, project_root: Path) -> str:
+    try:
+        return str(path.relative_to(project_root))
+    except ValueError:
+        return str(path)
+
+
+def ticket_path_from_pulse_row(row: dict[str, Any], ticket_id: str) -> str:
+    archive_path = str(row.get("archive_path") or "").strip()
+    if archive_path:
+        if archive_path.endswith("/ticket.md"):
+            return archive_path
+        return f"{archive_path.rstrip('/')}/ticket.md"
+    ticket_path = str(row.get("ticket_path") or row.get("ticketPath") or row.get("inputRef") or "").strip()
+    return ticket_path or f"tickets/{ticket_id}/ticket.md"
+
+
+def pulse_source_event_key(row: dict[str, Any], ledger_path: Path, project_root: Path) -> str:
+    ticket_id = str(row.get("ticket_id") or row.get("ticketId") or "").strip()
+    thread_id = str(row.get("thread_id") or row.get("threadId") or "").strip()
+    timestamp = str(row.get("ts") or row.get("timestamp") or row.get("created_at") or "").strip()
+    status = str(row.get("status") or row.get("action") or "").strip()
+    return ":".join(
+        [
+            relative_evidence_path(ledger_path, project_root),
+            timestamp,
+            ticket_id,
+            thread_id,
+            status,
+        ]
+    )
+
+
+def pulse_association_row(
+    row: dict[str, Any],
+    ledger_path: Path,
+    project_root: Path,
+    source: str,
+) -> tuple[dict[str, Any] | None, str | None]:
+    ticket_id = str(row.get("ticket_id") or row.get("ticketId") or "").strip()
+    thread_id = str(row.get("thread_id") or row.get("threadId") or "").strip()
+    if not ticket_id:
+        return None, f"{relative_evidence_path(ledger_path, project_root)}:missing_ticket_id"
+    if not thread_id or thread_id.lower() in {"none", "null"}:
+        return None, f"{relative_evidence_path(ledger_path, project_root)}:{ticket_id}:missing_thread_id"
+
+    observed = row.get("ts") or row.get("timestamp") or row.get("created_at") or row.get("updated_at")
+    observed_at = normalize_observed_at(observed)
+    status = str(row.get("status") or "").strip()
+    output = {
+        "ticket_id": ticket_id,
+        "ticket_path": ticket_path_from_pulse_row(row, ticket_id),
+        "session_id": str(row.get("session_id") or row.get("sessionId") or thread_id),
+        "thread_id": thread_id,
+        "observed_at": observed_at,
+        "source": source,
+        "source_event_key": pulse_source_event_key(row, ledger_path, project_root),
+        "confidence": "completion_or_release",
+        "pulse_status": status,
+    }
+    if source == "pulse_spawned_ledger" and status in {"spawned", "resumed"} and observed:
+        output["execution_started_at"] = observed_at
+        output["confidence"] = "execution_started"
+    return output, None
+
+
 def backfill_ticket_thread_associations(project_root: Path, mine_runs_root: Path, output_path: Path, write: bool = True) -> dict[str, Any]:
     existing = read_jsonl(output_path)
     rows_by_key: dict[tuple[str, str, str], dict[str, Any]] = {}
@@ -782,6 +850,29 @@ def backfill_ticket_thread_associations(project_root: Path, mine_runs_root: Path
             if key not in rows_by_key:
                 added += 1
             rows_by_key[key] = row
+
+    pulse_ledgers = (
+        (project_root / PULSE_SPAWNED_LEDGER, "pulse_spawned_ledger"),
+        (project_root / PULSE_OUTCOME_LEDGER, "pulse_outcome_ledger"),
+    )
+    for ledger_path, source in pulse_ledgers:
+        pulse_rows = read_jsonl(ledger_path)
+        if not ledger_path.exists():
+            gaps.append(f"missing:{relative_evidence_path(ledger_path, project_root)}")
+            continue
+        if not pulse_rows:
+            gaps.append(f"empty:{relative_evidence_path(ledger_path, project_root)}")
+            continue
+        for pulse_row in pulse_rows:
+            row, gap = pulse_association_row(pulse_row, ledger_path, project_root, source)
+            if gap:
+                gaps.append(gap)
+            if row is None:
+                continue
+            key = (row["ticket_id"], row["thread_id"], row["source_event_key"])
+            if key not in rows_by_key:
+                added += 1
+            rows_by_key[key] = row
     rows = sorted(rows_by_key.values(), key=lambda row: (str(row.get("ticket_id")), str(row.get("observed_at")), str(row.get("thread_id"))))
     if write:
         write_jsonl(output_path, rows)
@@ -793,8 +884,8 @@ def backfill_ticket_thread_associations(project_root: Path, mine_runs_root: Path
             "existing_count": len(existing),
             "added_count": added,
             "total_count": len(rows),
-            "confidence": "completion_only",
-            "gaps": gaps,
+            "confidence": "mixed",
+            "gaps": sorted(set(gaps)),
         },
     }
 

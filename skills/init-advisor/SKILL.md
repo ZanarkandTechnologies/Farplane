@@ -158,9 +158,9 @@ setup_project_operating_model(bootstrap_brief, project_context,
   - [ ] Use [AUTOMATION_TEMPLATE.toml](references/AUTOMATION_TEMPLATE.toml) as
         the `farplane/automations.toml` source; do not duplicate automation
         config rules in this skill.
-  - [ ] Create or preserve `farplane/metrics.yaml` as the provider-independent
-        metric-definition contract; keep connector/provider refresh mechanics
-        in `farplane/bindings.yaml`.
+  - [ ] Create or preserve `farplane/metrics.yaml` as the metric-definition and
+        grouped-refresh contract; keep only non-secret connector/provider
+        coordinates in `farplane/bindings.yaml`.
   - [ ] Do not create legacy Steer scheduler files such as
         `farplane/steer.config.toml` or
         `.farplane/state/steer-scheduler.json`.
