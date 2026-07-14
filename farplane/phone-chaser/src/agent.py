@@ -3,11 +3,14 @@ from __future__ import annotations
 import json
 import os
 import asyncio
+import urllib.error
+import urllib.request
 from dataclasses import dataclass
+from typing import Any
 
 from dotenv import load_dotenv
 from livekit import agents, api
-from livekit.agents import Agent, AgentServer, AgentSession, TurnHandlingOptions
+from livekit.agents import Agent, AgentServer, AgentSession, TurnHandlingOptions, RunContext, function_tool
 from livekit.plugins.fishaudio import TTS
 
 load_dotenv(".env.local")
@@ -33,12 +36,16 @@ class ReminderDispatch:
     phone_number: str
     message: str
     urgency: str
+    review_context: str = ""
+    review_id: str = ""
+    review_webhook_url: str = ""
+    review_capability: str = ""
 
 
 class PhoneChaser(Agent):
-    def __init__(self, reminder: ReminderDispatch) -> None:
+    def __init__(self, reminder: ReminderDispatch, instructions: str | None = None) -> None:
         super().__init__(
-            instructions=(
+            instructions=instructions or (
                 "You are Farplane Phone Chaser, a concise phone reminder agent. "
                 "Speak like a direct operational assistant. Do not roleplay a "
                 "copyrighted character. Do not chat at length. Your job is to "
@@ -49,6 +56,63 @@ class PhoneChaser(Agent):
             )
         )
         self.reminder = reminder
+
+
+class ReviewPhoneChaser(PhoneChaser):
+    def __init__(self, reminder: ReminderDispatch) -> None:
+        super().__init__(
+            reminder,
+            (
+                "You are Farplane Phone Chaser, a concise phone review agent. "
+                "Speak like a direct operational assistant. You may only help "
+                "with this review call. You cannot publish, spend, deploy, "
+                "mutate accounts, perform outreach, or choose arbitrary Codex "
+                "threads. Deliver the reminder, answer brief clarifying "
+                "questions from the supplied review context, and ask for one "
+                "decision: approve, revise, or reject. If the recipient gives "
+                "an artifact review decision, call submit_review_response once "
+                "with decision exactly approve, revise, or reject and a short "
+                "reason. Review context: "
+                f"{reminder.review_context or 'No extra review context was supplied.'}"
+            ),
+        )
+
+    @function_tool()
+    async def submit_review_response(
+        self,
+        context: RunContext,
+        decision: str,
+        short_reason: str,
+        idempotency_key: str,
+    ) -> dict[str, Any]:
+        """Submit the recipient's spoken review decision for this single call.
+
+        Args:
+            decision: Exactly approve, revise, or reject.
+            short_reason: A concise reason or requested revision.
+            idempotency_key: A stable key for this call attempt.
+        """
+        del context
+        if not self.reminder.review_id or not self.reminder.review_webhook_url or not self.reminder.review_capability:
+            return {"ok": False, "error": "review_callback_not_configured"}
+        normalized_decision = decision.strip().lower()
+        if normalized_decision not in {"approve", "revise", "reject"}:
+            return {"ok": False, "error": "invalid_decision"}
+        payload = {
+            "review_id": self.reminder.review_id,
+            "decision": normalized_decision,
+            "reason": " ".join(short_reason.split())[:500],
+            "idempotency_key": idempotency_key.strip()[:160],
+        }
+        if not payload["reason"] or not payload["idempotency_key"]:
+            return {"ok": False, "error": "missing_reason_or_idempotency_key"}
+        result = await asyncio.to_thread(
+            _post_review_response,
+            self.reminder.review_webhook_url,
+            self.reminder.review_capability,
+            payload,
+        )
+        return result
 
 
 def _env(name: str, default: str = "") -> str:
@@ -72,11 +136,84 @@ def _dispatch_from_metadata(metadata: str) -> ReminderDispatch:
     phone_number = str(raw.get("phone_number") or _env("FARPLANE_REMINDER_PHONE"))
     message = str(raw.get("message") or DEFAULT_MESSAGE)
     urgency = str(raw.get("urgency") or "normal")
+    review_context = _format_review_context(raw.get("review_context"))
+    review_callback = raw.get("review_callback") if isinstance(raw.get("review_callback"), dict) else {}
     return ReminderDispatch(
         phone_number=phone_number.strip(),
         message=message.strip(),
         urgency=urgency.strip(),
+        review_context=review_context,
+        review_id=str(review_callback.get("review_id") or "").strip(),
+        review_webhook_url=str(review_callback.get("webhook_url") or "").strip(),
+        review_capability=str(review_callback.get("capability") or "").strip(),
     )
+
+
+def _format_review_context(value: object) -> str:
+    if not isinstance(value, dict):
+        return ""
+    lines = []
+    labels = [
+        ("title", "Title"),
+        ("objective", "Objective"),
+        ("produced", "Produced"),
+        ("why_it_matters", "Why it matters"),
+        ("decision_question", "Decision question"),
+        ("approve_effect", "Approve effect"),
+        ("revision_examples", "Revision examples"),
+        ("limits", "Limits"),
+    ]
+    for key, label in labels:
+        raw_value = value.get(key)
+        if isinstance(raw_value, list):
+            text = "; ".join(str(item).strip() for item in raw_value if str(item).strip())
+        else:
+            text = str(raw_value or "").strip()
+        if text:
+            lines.append(f"{label}: {text}")
+    return " ".join(lines)[:2400]
+
+
+def _post_review_response(
+    webhook_url: str,
+    capability: str,
+    payload: dict[str, str],
+) -> dict[str, Any]:
+    body = json.dumps(payload, separators=(",", ":")).encode("utf-8")
+    request = urllib.request.Request(
+        webhook_url,
+        data=body,
+        method="POST",
+        headers={
+            "authorization": f"Bearer {capability}",
+            "content-type": "application/json",
+            "accept": "application/json",
+        },
+    )
+    try:
+        with urllib.request.urlopen(request, timeout=8) as response:
+            raw_body = response.read().decode("utf-8")
+            parsed = json.loads(raw_body or "{}")
+            if isinstance(parsed, dict):
+                return parsed
+            return {"ok": False, "error": "invalid_review_relay_response"}
+    except urllib.error.HTTPError as exc:
+        raw_body = exc.read().decode("utf-8", errors="replace")
+        try:
+            parsed = json.loads(raw_body or "{}")
+        except json.JSONDecodeError:
+            parsed = {}
+        if isinstance(parsed, dict):
+            return {"ok": False, "status": exc.code, **parsed}
+        return {"ok": False, "status": exc.code, "error": "review_relay_http_error"}
+    except (urllib.error.URLError, TimeoutError, OSError) as exc:
+        return {"ok": False, "error": f"review_relay_unavailable:{exc}"}
+
+
+def _agent_for_reminder(reminder: ReminderDispatch) -> Agent:
+    if reminder.review_id and reminder.review_webhook_url and reminder.review_capability:
+        return ReviewPhoneChaser(reminder)
+    return PhoneChaser(reminder)
 
 
 def _tts() -> TTS:
@@ -165,7 +302,7 @@ async def phone_chaser(ctx: agents.JobContext) -> None:
         ),
         user_away_timeout=15.0,
     )
-    await session.start(room=ctx.room, agent=PhoneChaser(reminder))
+    await session.start(room=ctx.room, agent=_agent_for_reminder(reminder))
 
     try:
         participant_identity = await _dial_phone(ctx, reminder)
