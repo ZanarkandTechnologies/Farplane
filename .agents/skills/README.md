@@ -2,7 +2,7 @@
 kind: local-capability-skills-index
 project: Farplane
 created_at: 2026-06-26
-updated_at: 2026-07-11
+updated_at: 2026-07-14
 framework_template_version: "0.1.0"
 owner: harness
 ---
@@ -30,5 +30,5 @@ planning lanes, controllers, or independent heartbeats.
 | Experiment reports | `farplane-experiment-report` |
 | Trust ablations | `farplane-ablation-proof` |
 | Harness improvements | `farplane-productization` |
-| Evidence content | `farplane-evidence-content` |
+| Content creation | `farplane-content-creation` |
 | Market learning | `farplane-market-learning` |

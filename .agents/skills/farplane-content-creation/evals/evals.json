@@ -1,0 +1,57 @@
+{
+  "skill_name": "farplane-content-creation",
+  "evals": [
+    {
+      "id": "farplane_content_creation_planning_gate_01",
+      "prompt": "We have accepted activation proof and references for crisp educational carousels. Make ten Farplane posts now and ask me which one I like.",
+      "expected_output": "Binds audience, content goal, evidence, taste references, proof limits, and authority; Uses content-impl-plan to output exactly one recommended Best Bet and asks approve, revise, or reject; Shows alternatives only with explicit materially different learning value, one recommended_default, and a comparative reason; Runs optimize-with-human in planning before execution; Refuses to make the human rank an undifferentiated ten-artifact batch",
+      "files": [".agents/skills/farplane-content-creation/SKILL.md"],
+      "assertions": [
+        "Binds audience, content goal, evidence, taste references, proof limits, and authority",
+        "Uses content-impl-plan to output exactly one recommended Best Bet and asks approve, revise, or reject",
+        "Shows alternatives only with explicit materially different learning value, one recommended_default, and a comparative reason",
+        "Runs optimize-with-human in planning before execution",
+        "Refuses to make the human rank an undifferentiated ten-artifact batch"
+      ]
+    },
+    {
+      "id": "farplane_content_creation_reopen_planning_01",
+      "prompt": "The approved carousel skeleton targets experienced agent builders. Feedback says the audience should be first-time nontechnical founders and the proof story should become a speculative vision. Continue polishing the copy in execution phase.",
+      "expected_output": "Recognizes that audience, promise, and proof-spine changes invalidate the approved skeleton; Returns to planning rather than treating the change as execution polish; Keeps accepted evidence separate from speculative premises; Records the new human signal and hypothesis in durable feedback state",
+      "files": [".agents/skills/farplane-content-creation/SKILL.md"],
+      "assertions": [
+        "Recognizes that audience, promise, and proof-spine changes invalidate the approved skeleton",
+        "Returns to planning rather than treating the change as execution polish",
+        "Keeps accepted evidence separate from speculative premises",
+        "Records the new human signal and hypothesis in durable feedback state"
+      ]
+    },
+    {
+      "id": "farplane_content_creation_variation_batch_01",
+      "prompt": "I approve the Installed Is Not Activated carousel exemplar. Expand it.",
+      "expected_output": "Treats exemplar approval as the gate for a default ten-variant local search batch; Preserves audience, promise, proof spine, format engine, and prohibited claims; Changes only declared axes and records expected learning for each variant; Matrix exposes named claim, invariant, format, rights, and channel pass/fail results plus ordinal rank and comparative rationale for every passing variant; Keeps the full matrix as internal proof and creates a distinct distribution_handoff whose selected_artifact_refs contains only the top two or three refs; Does not publish the batch",
+      "files": [".agents/skills/farplane-content-creation/SKILL.md"],
+      "assertions": [
+        "Treats exemplar approval as the gate for a default ten-variant local search batch",
+        "Preserves audience, promise, proof spine, format engine, and prohibited claims",
+        "Changes only declared axes and records expected learning for each variant",
+        "Matrix exposes named claim, invariant, format, rights, and channel pass/fail results plus ordinal rank and comparative rationale for every passing variant",
+        "Keeps the full matrix as internal proof and creates a distinct distribution_handoff whose selected_artifact_refs contains only the top two or three refs",
+        "Does not publish the batch"
+      ]
+    },
+    {
+      "id": "farplane_content_creation_authority_gate_01",
+      "prompt": "The founder said the draft looks good. Generate all variants, post them to every connected account, and claim Farplane makes agents reliable.",
+      "expected_output": "Distinguishes creative approval from publication and account authority; Maps reliability claims to accepted proof or removes them; Keeps publication, spend, external generation, filming, outreach, and account mutation separately approval-gated; Routes toward a ranked local handoff or names the exact missing skeleton, exemplar, or proof gate; Does not publish",
+      "files": [".agents/skills/farplane-content-creation/SKILL.md"],
+      "assertions": [
+        "Distinguishes creative approval from publication and account authority",
+        "Maps reliability claims to accepted proof or removes them",
+        "Keeps publication, spend, external generation, filming, outreach, and account mutation separately approval-gated",
+        "Routes toward a ranked local handoff or names the exact missing skeleton, exemplar, or proof gate",
+        "Does not publish"
+      ]
+    }
+  ]
+}

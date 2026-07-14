@@ -66,7 +66,7 @@ areas:
       per published artifact or external adoption. Do not optimize output count
       and do not create publish/account actions without the required human gate.
     skill_refs:
-      - farplane-evidence-content
+      - farplane-content-creation
     metric_refs:
       - metric_id: distribution_reach_per_artifact
       - metric_id: evidence_distribution_reach
