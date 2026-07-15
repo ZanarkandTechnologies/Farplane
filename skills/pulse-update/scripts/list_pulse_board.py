@@ -596,12 +596,35 @@ def project_review_pools(
     return pools
 
 
-def latest_worker_rows(rows: list[dict[str, Any]]) -> dict[str, dict[str, Any]]:
+def association_worker_rows(rows: list[dict[str, Any]]) -> dict[str, dict[str, Any]]:
     latest: dict[str, dict[str, Any]] = {}
     for row in rows:
         ticket_id = str(row.get("ticket_id", "")).strip()
-        if ticket_id:
-            latest[ticket_id] = row
+        thread_id = str(row.get("thread_id") or row.get("session_id") or "").strip()
+        if not ticket_id or not thread_id:
+            continue
+        observed_at = str(
+            row.get("observed_at")
+            or row.get("execution_started_at")
+            or row.get("started_at")
+            or row.get("created_at")
+            or ""
+        ).strip()
+        candidate = {
+            **row,
+            "ticket_id": ticket_id,
+            "thread_id": thread_id,
+            "status": "active",
+            "observed_at": observed_at,
+        }
+        previous = latest.get(ticket_id)
+        previous_at = parse_iso_datetime(previous.get("observed_at")) if previous else None
+        candidate_at = parse_iso_datetime(observed_at)
+        if previous is None or (
+            candidate_at is not None
+            and (previous_at is None or candidate_at >= previous_at)
+        ):
+            latest[ticket_id] = candidate
     return latest
 
 
@@ -750,8 +773,8 @@ def build_board(
         )
     )
 
-    ledger_path = root / ".farplane" / "automation" / "spawned-threads.jsonl"
-    workers_by_ticket = latest_worker_rows(load_jsonl(ledger_path))
+    worker_index_path = root / ".farplane" / "state" / "ticket-thread-associations.jsonl"
+    workers_by_ticket = association_worker_rows(load_jsonl(worker_index_path))
     ticket_status_by_id = {
         row["ticket_id"]: row["status"].lower() for row in rows
     }
@@ -780,9 +803,9 @@ def build_board(
     }
     # A claimed active ticket is unavailable for dispatch, but a ticket claim
     # alone does not prove that Pulse owns a live worker. Human-started and
-    # directly-created Codex tasks commonly claim tickets without a row in the
-    # Pulse spawned-thread ledger. Only live ledger rows consume the configured
-    # Pulse worker pool.
+    # directly-created Codex tasks commonly claim tickets without a canonical
+    # ticket-thread association. Only live association rows consume the
+    # configured Pulse worker pool.
     human_active_tickets = [
         row
         for row in rows
@@ -801,7 +824,7 @@ def build_board(
     return {
         "schema": "farplane.work_pulse_board.v2",
         "project_root": str(root),
-        "ledger": str(ledger_path.relative_to(root)),
+        "worker_index": str(worker_index_path.relative_to(root)),
         "active_ticket_count": len(rows),
         "as_of": now.isoformat(),
         "executable_tickets": executable,

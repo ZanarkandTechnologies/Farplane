@@ -516,90 +516,7 @@ kpi_rewards:
         self.assertEqual(rows[0]["confidence"], "completion_only")
         self.assertNotIn("execution_started_at", rows[0])
 
-    def test_pulse_ledgers_backfill_deduped_association_rows(self) -> None:
-        with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            mine_run = root / ".farplane" / "mine" / "runs" / "mine-a"
-            mine_run.mkdir(parents=True)
-            (mine_run / "input.json").write_text(
-                json.dumps(
-                    {
-                        "sourceEventKey": "mine:event:TASK-0001",
-                        "sources": [
-                            {
-                                "ticketId": "TASK-0001",
-                                "inputRef": "tickets/TASK-0001/ticket.md",
-                                "sessionId": "thread-mine",
-                                "threadId": "thread-mine",
-                                "updatedAt": "2026-07-03T01:00:00Z",
-                            }
-                        ],
-                    }
-                ),
-                encoding="utf-8",
-            )
-            automation = root / ".farplane" / "automation"
-            automation.mkdir(parents=True)
-            spawned = {
-                "ts": "2026-07-03T02:00:00Z",
-                "ticket_id": "TASK-0001",
-                "thread_id": "thread-pulse",
-                "status": "spawned",
-            }
-            (automation / "spawned-threads.jsonl").write_text(
-                json.dumps(spawned) + "\n" + json.dumps(spawned) + "\n",
-                encoding="utf-8",
-            )
-            (automation / "action-outcomes.jsonl").write_text(
-                "\n".join(
-                    [
-                        json.dumps(
-                            {
-                                "ts": "2026-07-03T03:00:00Z",
-                                "ticket_id": "TASK-0002",
-                                "thread_id": "thread-outcome",
-                                "status": "archived_done",
-                                "archive_path": "tickets/archive/TASK-0002",
-                            }
-                        ),
-                        json.dumps(
-                            {
-                                "ts": "2026-07-03T04:00:00Z",
-                                "ticket_id": "TASK-0003",
-                                "thread_id": None,
-                                "status": "dispatch_failed_before_claim",
-                            }
-                        ),
-                    ]
-                )
-                + "\n",
-                encoding="utf-8",
-            )
-            output = root / ".farplane" / "state" / "ticket-thread-associations.jsonl"
-
-            result = backfill_ticket_thread_associations(root, mine_run.parent, output)
-            rows = [json.loads(line) for line in output.read_text(encoding="utf-8").splitlines()]
-
-        keys = {(row["ticket_id"], row["thread_id"], row["source"]) for row in rows}
-        self.assertEqual(result["status"], "available")
-        self.assertEqual(result["payload"]["added_count"], 3)
-        self.assertIn(("TASK-0001", "thread-mine", "mine_input"), keys)
-        self.assertIn(("TASK-0001", "thread-pulse", "pulse_spawned_ledger"), keys)
-        self.assertIn(("TASK-0002", "thread-outcome", "pulse_outcome_ledger"), keys)
-        spawned_rows = [row for row in rows if row["source"] == "pulse_spawned_ledger"]
-        self.assertEqual(len(spawned_rows), 1)
-        self.assertEqual(spawned_rows[0]["confidence"], "execution_started")
-        self.assertEqual(spawned_rows[0]["execution_started_at"], "2026-07-03T02:00:00Z")
-        outcome_row = next(row for row in rows if row["source"] == "pulse_outcome_ledger")
-        self.assertEqual(outcome_row["confidence"], "completion_or_release")
-        self.assertEqual(outcome_row["ticket_path"], "tickets/archive/TASK-0002/ticket.md")
-        self.assertNotIn("execution_started_at", outcome_row)
-        self.assertIn(
-            ".farplane/automation/action-outcomes.jsonl:TASK-0003:missing_thread_id",
-            result["payload"]["gaps"],
-        )
-
-    def test_pulse_outcome_association_covers_archived_completed_ticket_without_fabricating_missing_threads(self) -> None:
+    def test_existing_association_log_covers_archived_completed_ticket(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             (root / "farplane").mkdir()
@@ -622,31 +539,17 @@ completed_at: 2026-07-03T03:00:00Z
 """,
                 encoding="utf-8",
             )
-            automation = root / ".farplane" / "automation"
-            automation.mkdir(parents=True)
-            (automation / "spawned-threads.jsonl").write_text("", encoding="utf-8")
-            (automation / "action-outcomes.jsonl").write_text(
-                "\n".join(
-                    [
-                        json.dumps(
-                            {
-                                "ts": "2026-07-03T03:10:00Z",
-                                "ticket_id": "TASK-0001",
-                                "thread_id": "thread-outcome",
-                                "status": "archived_done",
-                                "archive_path": "tickets/archive/TASK-0001",
-                            }
-                        ),
-                        json.dumps(
-                            {
-                                "ts": "2026-07-03T03:20:00Z",
-                                "ticket_id": "TASK-0002",
-                                "thread_id": None,
-                                "status": "archived_done",
-                                "archive_path": "tickets/archive/TASK-0002",
-                            }
-                        ),
-                    ]
+            state = root / ".farplane" / "state"
+            state.mkdir(parents=True)
+            (state / "ticket-thread-associations.jsonl").write_text(
+                json.dumps(
+                    {
+                        "ticket_id": "TASK-0001",
+                        "thread_id": "thread-outcome",
+                        "source": "ticket_thread_association",
+                        "source_event_key": "test:TASK-0001:thread-outcome",
+                        "observed_at": "2026-07-03T03:10:00Z",
+                    }
                 )
                 + "\n",
                 encoding="utf-8",
@@ -665,10 +568,6 @@ completed_at: 2026-07-03T03:00:00Z
         self.assertEqual(coverage["payload"]["associated_completed_tickets"], 1)
         self.assertEqual(coverage["value"], 1.0)
         self.assertEqual({row["ticket_id"] for row in association_rows}, {"TASK-0001"})
-        self.assertIn(
-            ".farplane/automation/action-outcomes.jsonl:TASK-0002:missing_thread_id",
-            payload["diagnostics"]["non_warning_gaps"],
-        )
 
     def test_codex_thread_usage_reads_sqlite_and_session_token_counts(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

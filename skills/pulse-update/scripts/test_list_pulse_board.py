@@ -91,6 +91,15 @@ def write_ticket(
     return path
 
 
+def write_associations(root: Path, rows: list[dict[str, object]]) -> None:
+    path = root / ".farplane" / "state" / "ticket-thread-associations.jsonl"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(
+        "".join(json.dumps(row, sort_keys=True) + "\n" for row in rows),
+        encoding="utf-8",
+    )
+
+
 def run_minimal_pulse_fixture(
     root: Path,
     planner: Callable[[dict[str, str], list[dict[str, object]], int], list[dict[str, str]]],
@@ -426,23 +435,13 @@ class WorkPulseBoardTests(unittest.TestCase):
             root = Path(tmp)
             write_ticket(root, "TASK-READY")
             write_ticket(root, "TASK-ACTIVE", status="active", claimed_by="codex-active")
-            ledger = root / ".farplane" / "automation" / "spawned-threads.jsonl"
-            ledger.parent.mkdir(parents=True, exist_ok=True)
-            ledger.write_text(
-                "\n".join(
-                    [
-                        json.dumps({"ticket_id": "TASK-ACTIVE", "status": "active"}),
-                        json.dumps(
-                            {
-                                "ticket_id": "TASK-REVIEW",
-                                "status": "waiting_human_review",
-                            }
-                        ),
-                        json.dumps({"ticket_id": "TASK-BLOCKED", "status": "blocked"}),
-                    ]
-                )
-                + "\n",
-                encoding="utf-8",
+            write_associations(
+                root,
+                [
+                    {"ticket_id": "TASK-ACTIVE", "thread_id": "thread-active"},
+                    {"ticket_id": "TASK-REVIEW", "thread_id": "thread-review"},
+                    {"ticket_id": "TASK-BLOCKED", "thread_id": "thread-blocked"},
+                ],
             )
 
             result = BOARD.build_board(root, worker_limit=1)
@@ -1024,16 +1023,11 @@ decision:
             self.assertIsNone(result["next_due_review_action"])
             self.assertEqual(result["held_review_chases"], [])
 
-    def test_awaiting_review_releases_stale_active_ledger_row(self) -> None:
+    def test_awaiting_review_releases_stale_active_association_row(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             write_ticket(root, "TASK-REVIEW", status="awaiting_review")
-            ledger = root / ".farplane" / "automation" / "spawned-threads.jsonl"
-            ledger.parent.mkdir(parents=True)
-            ledger.write_text(
-                json.dumps({"ticket_id": "TASK-REVIEW", "status": "handoff_recorded"}) + "\n",
-                encoding="utf-8",
-            )
+            write_associations(root, [{"ticket_id": "TASK-REVIEW", "thread_id": "thread-review"}])
 
             result = BOARD.build_board(root, worker_limit=1)
 
@@ -1041,15 +1035,10 @@ decision:
             self.assertEqual(result["idle_worker_slots"], 1)
             self.assertEqual(result["released_worker_rows"][0]["release_reason"], "ticket_status:awaiting_review")
 
-    def test_missing_active_ticket_releases_stale_active_ledger_row(self) -> None:
+    def test_missing_active_ticket_releases_stale_active_association_row(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
-            ledger = root / ".farplane" / "automation" / "spawned-threads.jsonl"
-            ledger.parent.mkdir(parents=True)
-            ledger.write_text(
-                json.dumps({"ticket_id": "TASK-ARCHIVED", "status": "active"}) + "\n",
-                encoding="utf-8",
-            )
+            write_associations(root, [{"ticket_id": "TASK-ARCHIVED", "thread_id": "thread-archived"}])
 
             result = BOARD.build_board(root, worker_limit=1)
 

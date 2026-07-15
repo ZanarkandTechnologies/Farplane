@@ -79,18 +79,26 @@ guard: "proof required"
                 + "\n",
                 encoding="utf-8",
             )
-            automation_dir = runtime / "automation"
-            automation_dir.mkdir(parents=True)
-            (automation_dir / "spawned-threads.jsonl").write_text(
+            state_dir = runtime / "state"
+            state_dir.mkdir(parents=True)
+            (state_dir / "ticket-thread-associations.jsonl").write_text(
                 "\n".join(
                     [
-                        json.dumps({"timestamp": "2026-07-02T09:00:00Z", "status": "spawned", "thread_id": "auto-1"}),
-                        json.dumps({"timestamp": "2026-07-02T09:45:00Z", "status": "rewarded_positive", "thread_id": "auto-1"}),
+                        json.dumps(
+                            {
+                                "ticket_id": "TASK-0001",
+                                "thread_id": "auto-1",
+                                "execution_started_at": "2026-07-02T09:00:00Z",
+                                "observed_at": "2026-07-02T09:45:00Z",
+                            }
+                        ),
                     ]
                 )
                 + "\n",
                 encoding="utf-8",
             )
+            automation_dir = runtime / "automation"
+            automation_dir.mkdir(parents=True)
             (automation_dir / "rewards.jsonl").write_text(
                 json.dumps(
                     {

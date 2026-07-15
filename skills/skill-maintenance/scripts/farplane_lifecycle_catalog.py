@@ -41,8 +41,6 @@ CURATED_FILES = {
     ".farplane/reports/interval/<interval_id>/<timestamp>.md": ("report", "Interval reports", ["runtime", "interval"]),
     ".farplane/automation/decisions.jsonl": ("state", "Pulse decisions", ["runtime", "pulse"]),
     ".farplane/automation/rewards.jsonl": ("state", "Pulse rewards", ["runtime", "pulse"]),
-    ".farplane/automation/action-outcomes.jsonl": ("state", "Pulse action outcomes", ["runtime", "pulse"]),
-    ".farplane/automation/spawned-threads.jsonl": ("state", "Spawned thread ledger", ["runtime", "pulse"]),
     "tickets/TASK-*/ticket.md": ("ticket", "Ticket contract", ["ticket", "goal-packet"]),
     "tickets/TASK-*/program.md": ("ticket", "Goal Packet program", ["ticket", "goal-packet"]),
     "tickets/TASK-*/progress.md": ("ticket", "Goal Packet progress", ["ticket", "goal-packet"]),

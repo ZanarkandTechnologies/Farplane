@@ -129,7 +129,7 @@ PRIMITIVE_CATALOG: dict[str, dict[str, Any]] = {
         "owner": "farplane-core",
         "command": "python3 skills/interval-update/scripts/metric_refresh.py autonomy-time-ratio --runtime-dir .farplane --date <YYYY-MM-DD>",
         "store_to": ".farplane/metrics/observations/autonomy_time_feedback/<YYYY-MM-DD>.json",
-        "required_inputs": [".farplane/events/*.jsonl", ".farplane/automation/spawned-threads.jsonl", ".farplane/automation/rewards.jsonl"],
+        "required_inputs": [".farplane/events/*.jsonl", ".farplane/state/ticket-thread-associations.jsonl", ".farplane/automation/rewards.jsonl"],
         "emits": ["auto_time_ratio", "human_attention_minutes_estimated", "autonomous_worker_elapsed_minutes"],
         "source_gap_policy": "Emit source_gap only when all runtime feedback sources are missing.",
     },

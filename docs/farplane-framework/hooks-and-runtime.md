@@ -102,8 +102,6 @@ too noisy for tracked config.
 .farplane/reports/dogfood-review/<timestamp>.md
 .farplane/automation/decisions.jsonl
 .farplane/automation/rewards.jsonl
-.farplane/automation/action-outcomes.jsonl
-.farplane/automation/spawned-threads.jsonl
 .farplane/evals/runs/
 .farplane/events/
 .farplane/file-events/

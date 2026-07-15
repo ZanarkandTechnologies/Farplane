@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 from datetime import date as date_type
 from datetime import timedelta
@@ -459,25 +460,40 @@ def accepted_reward_count(rows: list[dict[str, Any]], date: str) -> int:
     )
 
 
+def reward_ticket_ids(rows: list[dict[str, Any]], date: str) -> set[str]:
+    ids: set[str] = set()
+    for row in rows:
+        if row_date(row) != date or row.get("outcome") not in {"positive", "partial_positive"}:
+            continue
+        evidence = row.get("evidence")
+        if not isinstance(evidence, list):
+            continue
+        for ref in evidence:
+            match = re.search(r"\b(TASK-\d{4})\b", str(ref))
+            if match:
+                ids.add(match.group(1))
+    return ids
+
+
 def calculate_autonomy_time_ratio(runtime_dir: Path, date: str) -> dict[str, Any]:
     """calculate_autonomy_time_ratio(runtime_dir, date) -> MetricReading."""
     root = runtime_dir.resolve()
     event_rows = read_jsonl_glob(root, "events/*.jsonl")
-    spawned_rows = read_jsonl(root / "automation" / "spawned-threads.jsonl")
+    association_rows = read_jsonl(root / "state" / "ticket-thread-associations.jsonl")
     reward_rows = read_jsonl(root / "automation" / "rewards.jsonl")
     gaps = []
     if not (root / "events").exists():
         gaps.append("missing:events")
-    if not (root / "automation" / "spawned-threads.jsonl").exists():
-        gaps.append("missing:automation/spawned-threads.jsonl")
+    if not (root / "state" / "ticket-thread-associations.jsonl").exists():
+        gaps.append("missing:state/ticket-thread-associations.jsonl")
     if not (root / "automation" / "rewards.jsonl").exists():
         gaps.append("missing:automation/rewards.jsonl")
     if len(gaps) == 3:
         return {"value": None, "status": "source_gap", "payload": {"gaps": gaps}}
 
-    spawned_thread_ids = {
+    autonomous_thread_ids = {
         str(row.get("thread_id") or row.get("session_id"))
-        for row in spawned_rows
+        for row in association_rows
         if row.get("thread_id") or row.get("session_id")
     }
 
@@ -489,31 +505,40 @@ def calculate_autonomy_time_ratio(runtime_dir: Path, date: str) -> dict[str, Any
         if str(row.get("event_type") or row.get("type") or "") not in {"turn_start", "user_prompt", "prompt"}:
             continue
         session_id = str(row.get("session_id") or row.get("thread_id") or "unknown")
-        if session_id in spawned_thread_ids:
+        if session_id in autonomous_thread_ids:
             continue
         parsed = parse_iso_datetime(row.get("ts") or row.get("timestamp") or row.get("created_at") or row.get("date"))
         if parsed is not None:
             human_times_by_session.setdefault(session_id, []).append(parsed)
 
-    spawned_today: dict[str, datetime] = {}
+    started_today: dict[str, datetime] = {}
     latest_by_thread: dict[str, datetime] = {}
-    rewarded_threads: set[str] = set()
-    for row in spawned_rows:
+    ticket_ids_by_thread: dict[str, set[str]] = {}
+    for row in association_rows:
         thread_id = str(row.get("thread_id") or row.get("session_id") or "")
-        parsed = parse_iso_datetime(row.get("ts") or row.get("timestamp") or row.get("created_at") or row.get("date"))
-        if not thread_id or parsed is None:
+        ticket_id = str(row.get("ticket_id") or "")
+        started = parse_iso_datetime(row.get("execution_started_at") or row.get("started_at") or row.get("created_at") or row.get("timestamp") or row.get("ts"))
+        observed = parse_iso_datetime(row.get("observed_at") or row.get("updated_at") or row.get("created_at") or row.get("timestamp") or row.get("ts"))
+        if not thread_id:
             continue
-        if row_date(row) == date and str(row.get("status") or row.get("event") or "spawned") in {"spawned", "created", "started"}:
-            spawned_today.setdefault(thread_id, parsed)
-        if parsed.date().isoformat() <= date:
-            latest_by_thread[thread_id] = max(parsed, latest_by_thread.get(thread_id, parsed))
-        if row_date(row) == date and str(row.get("status") or row.get("event") or "").startswith("rewarded"):
-            rewarded_threads.add(thread_id)
+        if ticket_id:
+            ticket_ids_by_thread.setdefault(thread_id, set()).add(ticket_id)
+        if started and started.date().isoformat() == date:
+            started_today.setdefault(thread_id, started)
+        if observed and observed.date().isoformat() <= date:
+            latest_by_thread[thread_id] = max(observed, latest_by_thread.get(thread_id, observed))
+
+    rewarded_ticket_ids = reward_ticket_ids(reward_rows, date)
+    rewarded_threads = {
+        thread_id
+        for thread_id, ticket_ids in ticket_ids_by_thread.items()
+        if ticket_ids & rewarded_ticket_ids
+    }
 
     autonomous_minutes = 0.0
     intervals: list[tuple[datetime, datetime]] = []
     accepted_minutes = 0.0
-    for thread_id, start in spawned_today.items():
+    for thread_id, start in started_today.items():
         end = latest_by_thread.get(thread_id, start)
         elapsed = max((end - start).total_seconds() / 60.0, 0.0)
         effective_elapsed = elapsed if elapsed > 0 else 30.0
@@ -542,7 +567,7 @@ def calculate_autonomy_time_ratio(runtime_dir: Path, date: str) -> dict[str, Any
     accepted_today = accepted_reward_count(reward_rows, date)
     ratio = autonomous_minutes / human_minutes if human_minutes else (autonomous_minutes if autonomous_minutes else 0.0)
     potential_saved_minutes = max(accepted_minutes - human_minutes, 0.0)
-    if spawned_today and not rewarded_threads:
+    if started_today and not rewarded_threads:
         gaps.append("missing:accepted_thread_runtime_attribution")
     gaps.extend(["source_gap:waiting_for_human_hours", "source_gap:unproductive_agent_hours"])
     return {
@@ -552,7 +577,7 @@ def calculate_autonomy_time_ratio(runtime_dir: Path, date: str) -> dict[str, Any
             "human_prompt_count": human_prompt_count,
             "human_active_thread_count": human_active_threads,
             "human_attention_minutes_estimated": round(float(human_minutes), 2),
-            "autonomous_thread_count": len(spawned_today),
+            "autonomous_thread_count": len(started_today),
             "autonomous_worker_elapsed_minutes": round(float(autonomous_minutes), 2),
             "clone_hours": round(float(autonomous_minutes / 60.0), 4),
             "concurrent_agent_wall_hours": round(float(union_minutes / 60.0), 4),

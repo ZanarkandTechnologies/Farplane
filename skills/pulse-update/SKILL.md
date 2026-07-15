@@ -89,14 +89,12 @@ state:
         ticket Reward.kpi_rewards[]?, Goal Packet Check-In Program?,
         tickets/archive/**, configured Feed Scout Markdown memory?,
         latest dated interval/feed reports?,
-        .farplane/automation/spawned-threads.jsonl?,
-        .farplane/automation/action-outcomes.jsonl?,
+        .farplane/state/ticket-thread-associations.jsonl?,
         .farplane/state/dispatch-circuit.json?, farplane/pm.json?)
   writes(tickets/TASK-*/ticket.md when accepted planner specs are materialized,
          .farplane/reports/pulse/<timestamp>.md,
          .farplane/automation/decisions.jsonl?,
-         .farplane/automation/spawned-threads.jsonl?,
-         .farplane/automation/action-outcomes.jsonl?,
+         .farplane/state/ticket-thread-associations.jsonl?,
          .farplane/state/dispatch-circuit.json?,
          farplane/pm.json when a persistent project worker thread is created)
 
@@ -168,17 +166,18 @@ capacity, ticket scope, or external side-effect permission.
 - [ ] 1. Bind project policy and reconcile state.
   - [ ] Resolve `project_root`, `wave_size`, `worker_limit`, `review_wip`,
         `farplane/harness.yaml` including optional goals, `farplane/metrics.yaml`, current metric readings,
-        ticket paths, worker ledger, latest outcomes, current dated context,
+        ticket paths, ticket-thread association index, latest ticket/progress
+        outcomes, current dated context,
         and project side-effect gates. Read bindings only when provider or
         authority mechanics affect the current decision.
   - [ ] Run or emulate
         `python3 skills/pulse-update/scripts/list_pulse_board.py --project-root <root> --worker-limit <n> --review-wip <n> --now <iso-datetime>`.
   - [ ] Archive terminal active tickets when safe or record the exact archive
         action still required.
-  - [ ] Record Pulse-owned active workers from the spawned-thread ledger,
+  - [ ] Record Pulse-owned active workers from the ticket-thread association index,
         human-active tickets, released blocked workers, awaiting-review
-        tickets, missing outputs, and stale ledger rows. A `status: active`
-        ticket without a live Pulse worker-ledger row is unavailable for
+        tickets, missing outputs, and stale association rows. A `status: active`
+        ticket without a live ticket-thread association row is unavailable for
         dispatch but does not consume `worker_limit`.
   - [ ] Project awaiting-review tickets into one pool per canonical area.
         `review_wip` limits those operator-facing pools, not the number of
@@ -233,7 +232,7 @@ capacity, ticket scope, or external side-effect permission.
         when it can stop before the gated action.
 - [ ] 4. Run every bounded manager phase.
   - [ ] `maintenance`: archive all mechanically safe terminal work, reconcile
-        stale worker/outcome rows, and derive due check-ins. This phase consumes
+        stale worker association rows and ticket/progress outcomes, and derive due check-ins. This phase consumes
         no worker slot and never ends the beat by itself.
   - [ ] `review_service`: repair invalid ticket-owned review state and execute
         up to `review_chase_limit` policy-derived Telegram/phone actions without
@@ -248,7 +247,7 @@ capacity, ticket scope, or external side-effect permission.
           Never use `fork_thread` for a ticket worker: a fork copies the Pulse
           manager's heartbeat history and is reserved for work whose source
           conversation is itself required context. Resume an existing task only
-          when the durable ticket/worker ledger already binds that task ID.
+          when the durable ticket-thread association index already binds that task ID.
     - [ ] Before claiming the ticket or registering the worker, verify the
           returned task is the requested project task and begins from the
           delegation packet rather than inherited manager turns. Treat
@@ -352,8 +351,9 @@ capacity, ticket scope, or external side-effect permission.
         `ref`, `kind: pulse`, `created_at`, and `ui_summary`.
   - [ ] Record the mode, admitted/excluded tickets, planner result, worker
         handoffs, review receipts, side-effect boundary, and next wake.
-  - [ ] Append only the decision/outcome/worker ledger rows that actually
-        changed; run `farplane reports index --project-root <root>` when
+  - [ ] Append only decision rows and ticket-thread association rows that
+        actually changed; put outcome receipts in the Pulse report and
+        ticket/progress state. Run `farplane reports index --project-root <root>` when
         available.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
@@ -408,7 +408,7 @@ worker produces output + proof
   New tasks use clean creation with the handoff as their initial prompt. They
   never fork the Pulse manager or inherit its heartbeat transcript, and Pulse
   verifies that clean first turn before setting the canonical title, claiming
-  the ticket, or writing the worker ledger. Ticket identity comes from the
+  the ticket, or writing the ticket-thread association. Ticket identity comes from the
   durable ticket ID and task ID, never parsed title text.
 - `plan_next_wave`: obtain `0..wave_size` specs when ready supply is below the
   low watermark, materialize accepted specs, then dispatch only up to remaining capacity.
@@ -478,7 +478,7 @@ which survive admission before listing admitted tickets.
 - A dispatch circuit breaker prevents repeated task-create/lookup outages from
   consuming every wake. It does not authorize inline ticket execution.
 - Human-active tickets are board commitments, not Pulse workers. Only live
-  Pulse spawned-thread ledger rows consume `worker_limit`.
+  ticket-thread association rows consume `worker_limit`.
 - Review WIP caps operator-facing area pools. Saturation changes selection
   toward unattended-safe, machine-verifiable work; it is not a global dispatch
   block, planner suppression rule, reason to keep workers alive, or chase
