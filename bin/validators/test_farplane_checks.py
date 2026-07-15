@@ -24,6 +24,7 @@ class FarplaneChecksTest(unittest.TestCase):
                 "templates.check",
                 "ticket.completion-evidence",
                 "ticket.metadata",
+                "ticket.reward",
                 "ticket.visual-companion",
             ),
         )

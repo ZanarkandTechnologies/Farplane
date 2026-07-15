@@ -15,6 +15,8 @@ except ImportError:  # package import during tests
     from bin.core.validation.models import CheckMode, CheckResult, CheckSpec, ValidationContext
     from bin.core.validation.registry import CheckRegistry
 
+from bin.core.farplane_ticket_reward import validate_reward_file
+
 
 def _result(check_id: str, mode: CheckMode, returncode: int, output: str, started: float) -> CheckResult:
     return CheckResult(
@@ -56,6 +58,18 @@ def ticket_metadata_check(context: ValidationContext, mode: CheckMode) -> CheckR
     spec.loader.exec_module(module)
     errors = module.validate_ticket(context.ticket)
     return _result("ticket.metadata", mode, 1 if errors else 0, "\n".join(errors) or "ticket metadata OK", started)
+
+
+def ticket_reward_check(context: ValidationContext, mode: CheckMode) -> CheckResult:
+    started = time.monotonic()
+    errors = validate_reward_file(context.ticket)
+    return _result(
+        "ticket.reward",
+        mode,
+        1 if errors else 0,
+        "\n".join(errors) or "ticket Reward scheduling OK",
+        started,
+    )
 
 
 def visual_companion_check(context: ValidationContext, mode: CheckMode) -> CheckResult:
@@ -145,6 +159,7 @@ def build_registry() -> CheckRegistry:
     registry = CheckRegistry()
     specs = (
         CheckSpec("ticket.metadata", ticket_metadata_check),
+        CheckSpec("ticket.reward", ticket_reward_check),
         CheckSpec("ticket.completion-evidence", completion_evidence_check),
         CheckSpec("ticket.visual-companion", visual_companion_check),
         CheckSpec("skills.check", command_check("skills.check", ("python3", "skills/skill-maintenance/scripts/check_skills.py"))),

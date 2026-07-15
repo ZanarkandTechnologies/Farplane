@@ -612,6 +612,7 @@ kpi_rewards:
     expected_reward: {json.dumps(expected_reward, ensure_ascii=False)}
     actual_result:
     decision:
+    check_in_at: unscheduled
     evaluated_at:
     evidence_refs: []
 guard: "count only completed proof, not the generated ticket or planned intent"
@@ -623,7 +624,7 @@ guard: "count only completed proof, not the generated ticket or planned intent"
     )
     return f'''---
 template_id: ticket-template
-template_version: "0.2.1"
+template_version: "0.2.2"
 feature_refs:
   - FEAT-0007
   - FEAT-0070

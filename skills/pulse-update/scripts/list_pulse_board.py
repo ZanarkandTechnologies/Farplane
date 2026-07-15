@@ -38,6 +38,7 @@ DEFAULT_REVIEW_CHASE_POLICY = {
     "phone_chaser_limit": 2,
     "actions_per_beat": 1,
 }
+UNSCHEDULED_CHECK_IN = "unscheduled"
 
 
 def parse_args() -> argparse.Namespace:
@@ -94,6 +95,29 @@ def parse_iso_datetime(value: Any) -> datetime | None:
     return parsed.astimezone(timezone.utc)
 
 
+def parse_reward_check_in_at(value: Any) -> datetime | None:
+    """Parse only explicit timezone-bearing Reward schedule timestamps."""
+
+    if isinstance(value, datetime):
+        if value.tzinfo is None or value.utcoffset() is None:
+            return None
+        return value.astimezone(timezone.utc)
+    if not isinstance(value, str):
+        return None
+    raw = value.strip()
+    if not raw or raw == UNSCHEDULED_CHECK_IN:
+        return None
+    if raw.endswith("Z"):
+        raw = raw[:-1] + "+00:00"
+    try:
+        parsed = datetime.fromisoformat(raw)
+    except ValueError:
+        return None
+    if parsed.tzinfo is None or parsed.utcoffset() is None:
+        return None
+    return parsed.astimezone(timezone.utc)
+
+
 def markdown_heading_section(markdown: str, heading: str) -> str:
     lines = markdown.splitlines()
     target = f"## {heading}"
@@ -140,7 +164,7 @@ def parse_yaml_section(section: str) -> dict[str, Any]:
 
 
 def classify_reward_checkins(markdown: str, now: datetime) -> dict[str, list[dict[str, Any]]]:
-    """Project canonical Reward rows into due, future, terminal, and invalid state.
+    """Project Reward rows into due, future, unscheduled, terminal, and invalid state.
 
     ``reward_id`` is the durable identity handed to a check-in worker. Array
     position is intentionally diagnostic-only so reordering rows cannot change
@@ -150,11 +174,12 @@ def classify_reward_checkins(markdown: str, now: datetime) -> dict[str, list[dic
     reward = parse_fenced_yaml(markdown_heading_section(markdown, "Reward"))
     raw_rewards = reward.get("kpi_rewards")
     if not isinstance(raw_rewards, list):
-        return {"due": [], "future": [], "terminal": [], "invalid": []}
+        return {"due": [], "future": [], "unscheduled": [], "terminal": [], "invalid": []}
 
     result: dict[str, list[dict[str, Any]]] = {
         "due": [],
         "future": [],
+        "unscheduled": [],
         "terminal": [],
         "invalid": [],
     }
@@ -184,7 +209,8 @@ def classify_reward_checkins(markdown: str, now: datetime) -> dict[str, list[dic
                 }
             )
             continue
-        check_in_at = parse_iso_datetime(raw_item.get("check_in_at"))
+        raw_check_in_at = raw_item.get("check_in_at")
+        check_in_at = parse_reward_check_in_at(raw_check_in_at)
         item = {
             "reward_id": reward_id,
             "kpi_id": str(raw_item.get("kpi_id") or ""),
@@ -198,9 +224,17 @@ def classify_reward_checkins(markdown: str, now: datetime) -> dict[str, list[dic
                 {**item, "state": f"terminal_{decision}"}
             )
             continue
+        if raw_check_in_at == UNSCHEDULED_CHECK_IN:
+            result["unscheduled"].append({**item, "state": "unscheduled"})
+            continue
         if check_in_at is None:
+            gap = (
+                "missing_reward_schedule"
+                if raw_check_in_at is None or not str(raw_check_in_at).strip()
+                else "invalid_check_in_at"
+            )
             result["invalid"].append(
-                {**item, "index": index, "gap": "invalid_check_in_at"}
+                {**item, "index": index, "gap": gap}
             )
             continue
         if check_in_at <= now:
@@ -697,6 +731,7 @@ def build_board(
                 "area_id": receipt_areas.get(ticket_id) or ticket_state_area(markdown),
                 "due_reward_checkins": reward_checkins["due"],
                 "future_reward_checkins": reward_checkins["future"],
+                "unscheduled_reward_checkins": reward_checkins["unscheduled"],
                 "terminal_reward_outcomes": reward_checkins["terminal"],
                 "reward_checkin_gaps": reward_checkins["invalid"],
             }

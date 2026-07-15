@@ -214,6 +214,14 @@ python3 tickets/scripts/check_ticket_metadata.py
 The validator treats `tickets/TASK-*/ticket.md` as canonical and still tolerates
 flat `tickets/TASK-*.md` files only as archived pre-directory ticket history.
 
+Reward scheduling is an explicit tagged union:
+
+- `check_in_at: <timezone-bearing ISO-8601 timestamp>` schedules delayed work.
+- `check_in_at: unscheduled` declares that no check-in should be delegated.
+- Missing, blank, null, timezone-naive, or other values are malformed and the
+  owning ticket must repair them; validators and Work Pulse do not invent a
+  date or silently treat them as unscheduled.
+
 ## Body Contract
 
 Keep the body short by default. The main job of a ticket body is to let a

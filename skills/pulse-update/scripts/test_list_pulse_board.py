@@ -510,6 +510,58 @@ class WorkPulseBoardTests(unittest.TestCase):
             self.assertEqual(result["due_checkin_tickets"][0]["path"], "tickets/TASK-EXPERIMENT/ticket.md")
             self.assertEqual(result["ready_ticket_count"], 1)
 
+    def test_unscheduled_rewards_are_valid_inert_and_malformed_rows_stay_actionable(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            write_ticket(
+                root,
+                "TASK-SCHEDULE-SHAPES",
+                status="waiting_signal",
+                reward_rows=[
+                    {
+                        "reward_id": "explicitly-unscheduled",
+                        "check_in_at": "unscheduled",
+                    },
+                    {
+                        "reward_id": "blank-pending",
+                        "check_in_at": None,
+                    },
+                    {
+                        "reward_id": "bad-delayed-time",
+                        "check_in_at": "after review",
+                    },
+                    {
+                        "reward_id": "timezone-naive",
+                        "check_in_at": "2026-07-15T18:00:00",
+                    },
+                ],
+            )
+
+            result = BOARD.build_board(
+                root,
+                now=datetime(2026, 7, 11, tzinfo=timezone.utc),
+            )
+
+            ticket = result["excluded_tickets"][0]
+            self.assertEqual(
+                [row["reward_id"] for row in ticket["unscheduled_reward_checkins"]],
+                ["explicitly-unscheduled"],
+            )
+            self.assertEqual(
+                [row["state"] for row in ticket["unscheduled_reward_checkins"]],
+                ["unscheduled"],
+            )
+            self.assertEqual(
+                [row["reward_id"] for row in ticket["reward_checkin_gaps"]],
+                ["blank-pending", "bad-delayed-time", "timezone-naive"],
+            )
+            self.assertEqual(
+                [row["gap"] for row in ticket["reward_checkin_gaps"]],
+                ["missing_reward_schedule", "invalid_check_in_at", "invalid_check_in_at"],
+            )
+            self.assertEqual(result["due_checkin_tickets"], [])
+            self.assertEqual(result["executable_tickets"], [])
+
     def test_due_projection_uses_decision_state_and_keeps_safety_gates(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

@@ -1,6 +1,6 @@
 ---
 template_id: ticket-template
-template_version: "0.2.1"
+template_version: "0.2.2"
 feature_refs:
   - FEAT-0007
   - FEAT-0008
@@ -64,6 +64,8 @@ kpi_rewards:
   - reward_id: accepted-harness-improvements-7d
     kpi_id: accepted_harness_improvements
     expected_reward: "one proof-backed harness improvement"
+    # Use a timezone-bearing ISO-8601 timestamp for delayed check-in work.
+    # Use the exact literal `unscheduled` when no check-in should be delegated.
     check_in_at: "2026-04-10T00:00:00Z"
     actual_result:
     decision:
