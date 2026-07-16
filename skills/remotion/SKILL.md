@@ -47,10 +47,64 @@ Use this as the ordered checklist whenever `remotion` is active.
   and do not claim Tasty Pack asset reuse.
 - [ ] For stitched model-native clips, probe every source clip duration,
   framerate, dimensions, and frame count before sequencing; set Remotion
-  `Sequence` durations from observed frame counts, not assumed seconds.
+  `Sequence` durations from observed frame counts, not assumed seconds. A
+  requested 24 seconds or 720 frames is a target, not composition metadata,
+  until probes and transition overlaps reconcile it.
+- [ ] When the handoff uses deliberate scene breaks, load
+  [scene-grid production](../video-production/references/scene-grid-production.md),
+  consume one accepted clip per approved scene packet, and preserve the locked
+  grids, character refs, prompts, and clip files. Remotion may trim and assemble
+  them but must not regenerate or silently replace them.
 - [ ] Require one final audio placement plan for narrative reels: VO/music/SFX
-  bed, captions, ducking, transitions, and any deliberate muted source clips.
+  bed, imported transcript/captions, ducking, transitions/effects, and any
+  deliberate muted source clips. Audio providers create assets; Remotion owns
+  their timing on the master edit. Do not substitute a premixed file for the
+  cue/stem placement and ducking contract unless that premix is itself the
+  explicitly approved final master with its source cue sheet attached.
+
+```text
+stitched_scene_preflight(clips, target_duration?)
+  -> for_each clip: ffprobe(width, height, avg_frame_rate, duration,
+                            nb_frames | nb_read_frames)
+  -> sequence_ranges: zero-based half-open [start_frame, end_frame)
+  -> boundary_rule: next_start = prior_end; never repeat end_frame
+  -> duration: sum(observed_ranges) - transition_overlaps
+
+master_audio_timeline:
+  voiceover: asset + start_frame + trim + gain
+  music: asset + start_frame + trim + gain + ducking_ranges
+  sfx[]: asset + cue_frame + trim + gain
+  captions: imported timed transcript aligned to voiceover
+```
+
+Executable probe shape:
+
+```bash
+ffprobe -v error -count_frames -show_entries \
+  stream=width,height,avg_frame_rate,nb_frames,nb_read_frames:format=duration \
+  -of json <clip-path> > <media-probe-artifact.json>
+```
+
+For stitched narrative output, emit both tables even when rows remain blocked:
+
+```text
+| Packet ID | Accepted clip | Locked storyboard inputs | Observed media | In/out half-open range | Generation owner | Failure route |
+| Scene packet | Approved transition | Approved effect | Frames | Blocker |
+| Audio asset | Role | Start frame | End/trim | Gain | Ducking/cue | Blocker |
+```
+
+Use `none` for transitions or effects not named by the storyboard; never add an
+unnamed effect for polish. Populate voiceover, music, and each SFX asset on the
+single frame-based master timeline rather than summarizing that they will be
+mixed later. Each scene row must map the packet ID to the accepted clip and
+locked storyboard assets. A failed primary action must name its generation
+owner and return route. Do not fill duration gaps with playback-rate changes,
+loops, frozen-frame holds, or repeated boundary frames unless that exact remedy
+is approved in the storyboard packet; otherwise return the affected packet.
 - [ ] Render locally with Remotion project commands when a final MP4/still proof is requested and the local project can render.
+- [ ] Even at planning time, name exact workspace paths for the representative
+  still, final MP4, media probe, visual QA, and audio QA, plus the local render
+  commands that will create them; do not leave proof as unnamed intentions.
 - [ ] Route MP4 rendering through [remotion-render](../remotion-render/SKILL.md) only for an explicit external inference.sh render path when local rendering is not the chosen route and external compute is acceptable.
 - [ ] Keep source code, props, local assets, notes, and any render inputs inside the workspace.
 - [ ] Confirm external compute, spend, uploads, or API usage is explicitly acceptable before running render jobs outside local project commands.
@@ -95,6 +149,18 @@ The imported upstream source and refresh note live in `references/upstream-sourc
   Verify source clip counts with `ffprobe`/Remotion metadata, prefer
   `OffthreadVideo` for stitched external clips, avoid repeated boundary frames,
   and add transition frames only when the storyboard names a scene break.
+- For an approved scene-grid handoff, treat scene packet IDs as stable timeline
+  keys. Use the packet's named cut/transition and audio obligations; return a
+  failed primary action with its packet ID to `ai-video-advisor` or the named
+  provider-generation owner instead of merely flagging it, concealing it with a
+  transition, or regenerating its approved storyboard assets.
+
+```text
+scene_failure(packet_id, reason)
+  -> owner: ai-video-advisor | named_provider_generation_owner
+  -> action: regenerate_that_clip_from_locked_assets | request_scene_edit
+  -> never: hide_with_transition | silently_replace_storyboard_assets
+```
 
 ## Reference Routing
 
@@ -107,6 +173,7 @@ The imported upstream source and refresh note live in `references/upstream-sourc
 - Dynamic props, dimensions, metadata, or DOM/text measurement: `rules/parameters.md`, `rules/calculate-metadata.md`, `rules/get-video-dimensions.md`, `rules/get-video-duration.md`, `rules/get-audio-duration.md`, `rules/measuring-dom-nodes.md`, `rules/measuring-text.md`
 - 3D or maps: `rules/3d.md`, `rules/maplibre.md`
 - Remocn copy-paste motion components, transitions, backgrounds, UI scenes, or demo-video blocks: `references/remocn.md`
+- Approved model-native scene packets and locked-asset assembly: `../video-production/references/scene-grid-production.md`
 
 ## When to use
 

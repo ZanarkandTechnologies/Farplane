@@ -1,19 +1,29 @@
 ---
 name: voiceover
-description: Adding AI-generated voiceover to Remotion compositions using TTS
+description: Adding generated voiceover to Remotion compositions using TTS audio artifacts
 metadata:
   tags: voiceover, audio, elevenlabs, tts, speech, calculateMetadata, dynamic duration
 ---
 
 # Adding AI voiceover to a Remotion composition
 
-Use ElevenLabs TTS to generate speech audio per scene, then use [`calculateMetadata`](./calculate-metadata) to dynamically size the composition to match the audio.
+In Farplane, prefer `audio-generation:voice` to create a reviewed generation
+packet or audio artifact per scene, then use
+[`calculateMetadata`](./calculate-metadata) to dynamically size the composition
+to match the observed audio. The direct ElevenLabs recipe below remains a
+provider implementation reference for projects that are not using the wrapper.
 
 ## Prerequisites
 
-By default this guide uses **ElevenLabs** as the TTS provider (`ELEVENLABS_API_KEY` environment variable). Users may substitute any TTS service that can produce an audio file.
+The Farplane wrapper can route Fish or ElevenLabs. Its approved artifact and
+sanitized receipt should provide the file path, format, observed duration, and
+scene binding needed here. For direct use, this guide uses **ElevenLabs** as the
+TTS provider (`ELEVENLABS_API_KEY` environment variable); users may substitute
+any TTS service that can produce an audio file.
 
-If the user has not specified a TTS provider, recommend ElevenLabs and ask for their API key.
+Do not ask users to paste API keys into chat or tracked config. Resolve secrets
+from the managed runtime environment and stop with a missing-secret blocker
+when an explicitly authorized generation cannot access one.
 
 Ensure the environment variable is available when running the generation script:
 
@@ -21,7 +31,7 @@ Ensure the environment variable is available when running the generation script:
 node --strip-types generate-voiceover.ts
 ```
 
-## Generating audio with ElevenLabs
+## Direct ElevenLabs generation reference
 
 Create a script that reads the config, calls the ElevenLabs API for each scene, and writes MP3 files to the `public/` directory so Remotion can access them via `staticFile()`.
 

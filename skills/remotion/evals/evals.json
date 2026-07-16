@@ -3,14 +3,17 @@
   "evals": [
     {
       "id": "remotion_stitched_clips_frame_audio_qa_01",
-      "prompt": "Six local Seedance clips should become a 24s vertical reel with captions, transitions, and a single VO/music/SFX track. The clips are around 4s each but may not be exactly 120 frames.",
-      "expected_output": "Probes or reads each clip's duration, fps, dimensions, and frame count before sequencing; Uses observed frame counts for Sequence duration rather than assuming exact seconds; Avoids repeated boundary frames or accidental holds at cuts; Uses a single final audio placement plan for the full reel; Renders or names local render proof plus visual/audio QA evidence before claiming final quality",
+      "prompt": "I approved packets SC01-SC06 under public/storyboards/<packet>/approved.json; ai-video-advisor owns their generation. Accepted clips are public/clips/SC01.mp4 through SC06.mp4 for a 24s vertical reel. Assemble them with public/audio/voice.wav, public/audio/music.wav, generated SFX under public/audio/sfx/, public/audio/cues.json, and public/captions.json. The clips are around 4s each but may not be exactly 120 frames.",
+      "expected_output": "Maps each approved scene packet to its accepted clip and does not regenerate or replace locked storyboard assets; Probes or reads each clip's duration, fps, dimensions, and frame count before sequencing; Uses observed frame counts for Sequence duration rather than assuming exact seconds; Avoids repeated boundary frames or accidental holds at cuts; Applies only storyboard-named transitions/effects; Places imported transcript/captions and generated VO/music/SFX assets on one master audio timeline; Returns a failed primary action to that scene's generation owner rather than hiding it with effects; Renders or names local render proof plus visual/audio QA evidence before claiming final quality",
       "files": [],
       "assertions": [
+        "Maps each approved scene packet to its accepted clip and does not regenerate or replace locked storyboard assets",
         "Probes or reads each clip's duration, fps, dimensions, and frame count before sequencing",
         "Uses observed frame counts for Sequence duration rather than assuming exact seconds",
         "Avoids repeated boundary frames or accidental holds at cuts",
-        "Uses a single final audio placement plan for the full reel",
+        "Applies only storyboard-named transitions and effects",
+        "Places imported transcript/captions and generated VO/music/SFX assets on one master audio timeline",
+        "Returns a failed primary action to that scene's generation owner rather than hiding it with effects",
         "Renders or names local render proof plus visual/audio QA evidence before claiming final quality"
       ],
       "metadata": {
@@ -27,6 +30,8 @@
             "Assumes every 4s clip has the same exact frame count",
             "Creates a one-frame stutter by overextending Sequence duration",
             "Accepts inconsistent source clip audio without a master mix decision",
+            "Regenerates an approved storyboard asset during assembly",
+            "Uses a transition to conceal a failed primary action",
             "Claims completion based only on Remotion render success"
           ]
         }
