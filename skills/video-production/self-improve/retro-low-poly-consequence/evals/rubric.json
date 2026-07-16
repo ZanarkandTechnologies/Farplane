@@ -1,0 +1,50 @@
+{
+  "schema": "farplane-full-video-facet-rubric-v2",
+  "metric_card": "tickets/TASK-0378/artifacts/full-video-metric-card.md",
+  "overall_threshold": 0.8,
+  "per_facet_threshold": 0.8,
+  "facets": {
+    "story_structure": ["story_1", "story_2", "story_3", "story_4", "story_5"],
+    "factual_clarity": ["facts_1", "facts_2", "facts_3", "facts_4", "facts_5"],
+    "visual_style": ["style_1", "style_2", "style_3", "style_4", "style_5"],
+    "mechanism_legibility": ["mechanism_1", "mechanism_2", "mechanism_3", "mechanism_4", "mechanism_5"],
+    "continuity": ["continuity_1", "continuity_2", "continuity_3", "continuity_4", "continuity_5"],
+    "motion_editing": ["motion_1", "motion_2", "motion_3", "motion_4", "motion_5"],
+    "voice_performance": ["voice_1", "voice_2", "voice_3", "voice_4", "voice_5"],
+    "sound_storytelling": ["sound_1", "sound_2", "sound_3", "sound_4", "sound_5"],
+    "captions_accessibility": ["captions_1", "captions_2", "captions_3", "captions_4", "captions_5"],
+    "technical_delivery": ["technical_1", "technical_2", "technical_3", "technical_4", "technical_5"]
+  },
+  "facet_owners": {
+    "story_structure": "visual-qa",
+    "factual_clarity": "factual-reviewer",
+    "visual_style": "visual-qa",
+    "mechanism_legibility": "visual-qa",
+    "continuity": "visual-qa",
+    "motion_editing": "visual-qa",
+    "voice_performance": "audio-qa",
+    "sound_storytelling": "audio-qa",
+    "captions_accessibility": "visual-qa",
+    "technical_delivery": "qa-tester"
+  },
+  "pre_review_hard_gates": [
+    "full_video_exists",
+    "all_planned_shots_present",
+    "rights_safe",
+    "no_unintended_generated_text",
+    "provider_receipts_sanitized",
+    "spend_within_guard"
+  ],
+  "hard_gate_owners": {
+    "full_video_exists": "qa-tester",
+    "all_planned_shots_present": "qa-tester",
+    "rights_safe": "rights-reviewer",
+    "no_unintended_generated_text": "visual-qa",
+    "provider_receipts_sanitized": "qa-tester",
+    "spend_within_guard": "qa-tester"
+  },
+  "final_review_gate": {
+    "owner": "reviewer",
+    "required_tas": "TAS-A"
+  }
+}

@@ -63,7 +63,7 @@
     {
       "id": "storyboard_connected_frames_for_ai_video_01",
       "prompt": "Storyboard a 24 second vertical reel based on a Tasty Pack where a deadpan guide teaches founders that agents need receipts before they can say done. We plan to use AI video clips and Remotion.",
-      "expected_output": "Names the reel/reference type and core story engine; Defines viewer question -> answer, hook, tension, turn, proof moment, payoff, and final action; Keeps a recurring guide or explicitly states why no recurring character is needed; Keeps a recurring proof object or motif across beats; Produces scene panels plus shot list, script/VO, captions, motion, audio notes, and asset requirements; Includes a continuity handoff with generation_topology and start/end frame pairs for each AI video clip; Names transitions for deliberate scene breaks",
+        "expected_output": "Names the reel/reference type and core story engine; Defines viewer question -> answer, hook, tension, turn, proof moment, payoff, and final action; Keeps a recurring guide or explicitly states why no recurring character is needed; Keeps a recurring proof object or motif across beats; Produces scene panels plus shot list, script/VO, captions, motion, audio notes, and asset requirements; Selects a generation_topology; For deliberate scene breaks, partitions the 24 seconds into normally 4-5 second scene packets with one clean grid, one annotated grid, stable IDs, keyed notes, provider strategy, transition/audio obligations, and reuse_locked assets per clip; Shows the overview and scene packets before generation",
       "files": [],
       "assertions": [
         "Names the reel/reference type and core story engine",
@@ -71,8 +71,10 @@
         "Keeps a recurring guide or explicitly states why no recurring character is needed",
         "Keeps a recurring proof object or motif across beats",
         "Produces scene panels plus shot list, script/VO, captions, motion, audio notes, and asset requirements",
-        "Includes a continuity handoff with generation_topology and start/end frame pairs for each AI video clip",
-        "Names transitions for deliberate scene breaks"
+          "Includes a continuity handoff with generation_topology and uses start/end frame pairs for continuous chains",
+          "For deliberate scene breaks, creates one normally 4-5 second clean/annotated scene-grid packet with keyed notes per provider clip",
+          "Shows all scene grids and notes for approval and locks unchanged assets for reuse",
+          "Names transitions and audio obligations for deliberate scene breaks"
       ],
       "metadata": {
         "farplane": {
@@ -88,10 +90,24 @@
             "Outputs unrelated pretty panels with no cause/effect between scenes",
             "Drops the standout character from the reference without rationale",
             "Omits audio/story timing and leaves Remotion to invent the narrative",
-            "Says to generate clips from each still independently"
+              "Uses one whole-video board as the only input contract for several provider calls",
+              "Regenerates approved character or storyboard images between calls"
           ]
         }
       }
+    },
+    {
+      "id": "storyboard_character_fallback_reapproval_01",
+      "prompt": "Our approved AI-video storyboard uses one recurring human guide. The provider rejected his board and the production team swapped in a robot-safe reference. Update the handoff so generation can continue.",
+      "expected_output": "Marks affected scene approvals invalid rather than carrying approval forward; Preserves the canonical character card path and hash; Creates a versioned provider-safe variant instead of mutating the original; Shows the revised character card and affected scene grids to the operator and asks for feedback before production resumes; Leaves unaffected approved scenes locked",
+      "files": [],
+      "assertions": [
+        "Marks affected scene approvals invalid rather than carrying approval forward",
+        "Preserves the canonical character card path and hash",
+        "Creates a versioned provider-safe variant instead of mutating the original",
+        "Shows the revised character card and affected scene grids to the operator and asks for feedback before production resumes",
+        "Leaves unaffected approved scenes locked"
+      ]
     }
   ]
 }

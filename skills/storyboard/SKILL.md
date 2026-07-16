@@ -34,8 +34,8 @@ and production-specific work to the relevant advisor or Remotion skill.
 ## Skill Signature
 
 ```text
-storyboard(idea_or_brief, icp?, proof?, platform?, duration?, style?, cta?, reference_pattern?, artifact_owner?)
-  -> script_storyboard + scene_handoff | blocked_report
+storyboard(idea_or_brief, icp?, proof?, platform?, duration?, style?, cta?, reference_pattern?, generation_topology?, artifact_owner?)
+  -> script_storyboard + scene_handoff + scene_grid_packets? | blocked_report
 
 state:
   reads(user brief, supplied proof/examples/swipes, active ticket?,
@@ -45,7 +45,8 @@ state:
 gates:
   viewer_promise_bound; proof_or_reason_to_believe_named;
   narrative_signatures_present; beat_sheet_and_script_aligned;
-  storyboard_executable; asset_needs_named; scene_handoff_observable
+  storyboard_executable; asset_needs_named; scene_handoff_observable;
+  scene_grid_packets_reviewable_when_deliberate_breaks
 
 routes:
   content-impl-plan | asset-advisor | audio-advisor | avatar-advisor |
@@ -95,9 +96,24 @@ scene handoff, asset needs, proof, and blocker conditions.
   - [ ] For narrative video, make the storyboard connected: recurring character
     or explicit no-character rationale, recurring object/motif when useful,
     viewer question -> answer, and scene-to-scene cause/effect.
-  - [ ] For model-native clip generation, include start/end frame handoff pairs
-    for each generated clip, plus transition notes for any intentional scene
-    break; do not output isolated pretty panels unless the format is montage.
+  - [ ] For `continuous_chain`, include start/end frame handoff pairs for every
+    generated clip. For `deliberate_scene_breaks`, load
+    `../video-production/references/scene-grid-production.md`, partition the
+    timeline into normally 4-5 second scene units, and create one clean grid,
+    one matching annotated grid, and keyed notes per provider clip. Each unit
+    gets one dominant action and camera/POV; cross-clip frame continuity is not
+    required at an intentional cut. Do not output isolated pretty panels unless
+    the format is montage.
+  - [ ] Give every scene packet stable panel IDs, start/action/end state,
+    fixed landmark and minimum displacement when motion must be measurable,
+    continuity anchors, canonical character path/hash, provider strategy,
+    transition/audio obligations, approved asset paths, and `reuse_locked`
+    policy. A safety or provider fallback that changes visible identity
+    invalidates the affected approval and returns the revised character card
+    and grids to human review. Preserve the canonical card/path/hash unchanged,
+    create the fallback as a versioned sibling, and leave unaffected approved
+    scene packets locked. Use the stable fields `canonical_character_path` and
+    `canonical_character_sha256` in both the scene packet and `approved.json`.
 - [ ] 5. Select the production route.
   - [ ] Route parent ticket/action-list planning to `content-impl-plan`.
   - [ ] Route asset decomposition and recreation planning to `asset-advisor`.
@@ -111,8 +127,13 @@ scene handoff, asset needs, proof, and blocker conditions.
   - [ ] Route captions, launch copy, thread, carousel, or platform copy to
     `social-content`.
 - [ ] 6. Make proof and review observable.
-  - [ ] Name render, still-frame, storyboard-review, script-review, or
-    production-handoff evidence.
+  - [ ] For deliberate breaks, make the minimum human review packet an overview
+    strip plus every scene's existing, dimension-verified clean-grid and
+    annotated-grid image files, keyed notes, and the recurring-character card.
+    Ask for feedback on the visual identity and scene packets before production.
+    Text-only panels remain a draft. Name
+    render, still-frame, storyboard-review, script-review, or
+    production-handoff evidence; generation starts only after approval.
   - [ ] Apply `qa_checklist.md` again before calling the plan production-ready.
   - [ ] Use `review` for material campaign claims, high-visibility output, or
     taste-sensitive plans that will guide real production.
@@ -154,6 +175,10 @@ Continuity Handoff:
   - Clip 1 start frame -> end frame:
 - Scene breaks / transitions:
 
+Scene Grid Packets (required for deliberate_scene_breaks):
+| Scene | Target seconds | Clean grid | Annotated grid | Panel IDs | Action / camera / end state | Provider strategy | Transition / audio | Reuse |
+| --- | ---: | --- | --- | --- | --- | --- | --- | --- |
+
 ## Notes
 - Rejected angles:
 - Taste notes:
@@ -176,6 +201,10 @@ of a Remotion-ready creative ticket.
   supplied examples, or an explicit local-only assumption.
 - Do not render, publish, post, upload, or spend external compute unless the
   user explicitly asks for that next action.
+- Do not use one whole-video grid as the only input contract for several
+  deliberate-break calls. Do not regenerate an approved grid or character
+  reference unless the operator requests it or a named scene-local blocker or
+  approved edit requires a versioned replacement.
 
 ## Reference Map
 
@@ -184,6 +213,8 @@ of a Remotion-ready creative ticket.
   example would improve the creative ticket or proof handoff.
 - `../video-production/SKILL.md` - route broader video planning, ad specs, or
   production method selection after the storyboard is ready.
+- `../video-production/references/scene-grid-production.md` - load when
+  deliberate scene breaks map storyboard grids to model-native provider clips.
 - `../remotion/SKILL.md` - route deterministic composition authoring after the
   storyboard names dimensions, duration, assets, scenes, and proof.
 - `../social-content/SKILL.md` - route captions, launch copy, threads,
@@ -195,5 +226,8 @@ of a Remotion-ready creative ticket.
   visual/audio notes.
 - `scene_handoff`: selected route, required assets, scene map, proof
   contract, and next owner.
+- `scene_grid_packets`: for deliberate scene breaks, one reviewed clean and
+  annotated image grid plus keyed notes, file/dimension receipt, and reuse state
+  per provider clip.
 - `blocked_report`: missing ICP, proof, platform, asset permission, production
   route, or review/proof condition.
