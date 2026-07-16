@@ -60,14 +60,16 @@
     {
       "id": "content_impl_plan_continuity_video_gate_01",
       "prompt": "Idea: make a Farplane founder launch reel from a Tasty Pack with a standout deadpan guide, ritual object, guided-meditation parody pacing, AI video clips, and a final product reveal. Create the content implementation plan.",
-      "expected_output": "Classifies the reference/reel type and names rejected nearby formats; Builds a reference_leverage_map from Tasty Pack elements to concrete shots, assets, edit rhythm, audio cues, motion cues, or narrative beats; Defines narrative_spine plus viewer question -> answer; Defines continuity_spine with recurring character and recurring object or explicit rationale; Declares generation_topology before AI video spend and requires start/end frame handoffs for continuous clips; Requires one audio plan with VO/music/SFX timing before Remotion; Blocks isolated model-native clip batches for a narrative reel unless the chosen format is montage",
+        "expected_output": "Classifies the reference/reel type and names rejected nearby formats; Builds a reference_leverage_map from Tasty Pack elements to concrete shots, assets, edit rhythm, audio cues, motion cues, or narrative beats; Defines narrative_spine plus viewer question -> answer; Defines continuity_spine with recurring character and recurring object or explicit rationale; Declares generation_topology before AI video spend; For deliberate scene breaks, materializes one normally 4-5 second clean/annotated grid image pair plus keyed notes and file/dimension receipt per provider clip before approval and locks unchanged assets for reuse; Treats text-only panels and intended paths as storyboard_draft_ready, not human_review_ready; Requires one audio plan with VO/music/SFX timing before Remotion; Blocks isolated model-native clip batches without either continuous handoffs, deliberate scene packets, or montage rationale",
       "files": [],
       "assertions": [
         "Classifies the reference/reel type and names rejected nearby formats",
         "Builds a reference_leverage_map from Tasty Pack elements to concrete shots, assets, edit rhythm, audio cues, motion cues, or narrative beats",
         "Defines narrative_spine plus viewer question -> answer",
         "Defines continuity_spine with recurring character and recurring object or explicit rationale",
-        "Declares generation_topology before AI video spend and requires start/end frame handoffs for continuous clips",
+          "Declares generation_topology before AI video spend and requires start/end frame handoffs for continuous clips",
+          "For deliberate scene breaks, materializes one normally 4-5 second clean/annotated grid image pair plus keyed notes and file/dimension receipt per provider clip before approval and locks unchanged assets for reuse",
+          "Treats text-only panels and intended paths as storyboard_draft_ready, not human_review_ready",
         "Requires one audio plan with VO/music/SFX timing before Remotion",
         "Blocks isolated model-native clip batches for a narrative reel unless the chosen format is montage"
       ],
@@ -83,9 +85,56 @@
           ],
           "anti_patterns": [
             "Copies only the art style from the reference",
-            "Plans six independent video generations without connected start/end frames",
+              "Plans six provider clips without continuous handoffs or one reviewed scene-grid packet per deliberate break",
+              "Regenerates approved storyboard assets by default",
             "Lets each generated clip have unrelated audio",
             "Routes directly to Remotion before creative_lock"
+          ]
+        }
+      }
+    },
+    {
+      "id": "content_impl_plan_style_profile_without_inspiration_01",
+      "prompt": "Plan a 60-second explainer using the applied-math-story profile. I have no Tasty Pack or reference video for this task.",
+      "expected_output": "Resolves video-production:explainer and applied-math-story as profile_only; Does not require an Inspiration Pack or reference leverage map; Loads the profile compatibility, prompts, example, provenance, and QA assertions; Preserves storyboard, audio, Remotion, and review routes",
+      "files": [],
+      "assertions": [
+        "Resolves video-production:explainer and applied-math-story as profile_only",
+        "Does not require an Inspiration Pack or reference leverage map",
+        "Loads the profile compatibility, prompts, example, provenance, and QA assertions",
+        "Preserves storyboard, audio, Remotion, and review routes"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Plans from a reusable style without task inspiration",
+          "tags": ["skill", "content-impl-plan", "style-profile", "explainer"],
+          "anti_patterns": [
+            "Blocks because no Tasty Pack exists",
+            "Treats the profile as creator impersonation",
+            "Skips the profile's collocated example"
+          ]
+        }
+      }
+    },
+    {
+      "id": "content_impl_plan_composed_direction_conflict_01",
+      "prompt": "Use low-poly-concept for a talking-head-only video and also copy the exact visual identity from my inspiration clip.",
+      "expected_output": "Rejects low-poly-concept as incompatible with talking-head-only output; Rejects exact identity copying; Returns a blocked report or requests a compatible method/profile; Does not silently blend conflicting constraints",
+      "files": [],
+      "assertions": [
+        "Rejects low-poly-concept as incompatible with talking-head-only output",
+        "Rejects exact identity copying",
+        "Returns a blocked report or requests a compatible method/profile",
+        "Does not silently blend conflicting constraints"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Blocks incompatible composed visual direction",
+          "tags": ["skill", "content-impl-plan", "style-profile", "conflict"],
+          "anti_patterns": [
+            "Forces a low-poly profile onto a talking-head-only method",
+            "Copies creator identity",
+            "Pretends the conflict is resolved"
           ]
         }
       }
