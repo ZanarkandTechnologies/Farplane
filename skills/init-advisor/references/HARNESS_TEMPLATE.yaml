@@ -3,13 +3,23 @@ status: draft
 project: TODO
 created_at: TODO
 updated_at: TODO
-framework_template_version: "0.5.1"
+framework_template_version: "0.5.2"
 owner: harness
 
 identity:
   mission: TODO
   human_thesis: TODO
   north_star: TODO
+  problems:
+    - id: TODO_problem_id
+      statement: TODO name one stable customer or operator problem.
+      metric_refs:
+        - TODO_metric_name
+  product_bets:
+    - id: TODO_product_bet_id
+      promise: TODO state the current solution hypothesis in audience-facing language.
+      problem_refs:
+        - TODO_problem_id
 
 metric_refs:
   objectives:

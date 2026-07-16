@@ -827,7 +827,7 @@ def validate_cross_file_contract(root: Path) -> list[str]:
         for row in area_metric_rows
         if str(row.get("metric_id") or "").strip()
     }
-    selected_ids = objective_ids | area_metric_ids | set(guard_ids)
+    selected_ids = objective_ids | area_metric_ids | set(guard_ids) | problem_metric_ids(harness)
     planning_control_ids = objective_ids | set(guard_ids)
     unknown_selected_ids = sorted(selected_ids - set(metrics))
     if unknown_selected_ids:
@@ -920,6 +920,18 @@ def selected_metric_rows(
     )
 
 
+def problem_metric_ids(harness: dict[str, Any]) -> set[str]:
+    identity = harness.get("identity") if isinstance(harness.get("identity"), dict) else {}
+    problems = identity.get("problems") if isinstance(identity.get("problems"), list) else []
+    return {
+        metric_id.strip()
+        for problem in problems
+        if isinstance(problem, dict)
+        for metric_id in (problem.get("metric_refs") if isinstance(problem.get("metric_refs"), list) else [])
+        if isinstance(metric_id, str) and metric_id.strip()
+    }
+
+
 def project_skill_ids(root: Path) -> set[str]:
     ids: set[str] = set()
     registry = root / "docs" / "skills" / "registry.jsonl"
@@ -955,6 +967,89 @@ def validate_harness_file(root: Path, harness_file: Path) -> list[str]:
     for field in ("mission", "human_thesis", "north_star"):
         if not isinstance(identity.get(field), str) or not identity.get(field, "").strip():
             errors.append(f"{rel_path} identity.{field} must be a non-empty string.")
+
+    raw_version = payload.get("framework_template_version")
+    try:
+        version_parts = tuple(int(part) for part in str(raw_version).split("."))
+    except ValueError:
+        version_parts = ()
+    portfolio_required = version_parts >= (0, 5, 2)
+    problems = identity.get("problems")
+    problem_ids: list[str] = []
+    if portfolio_required or problems is not None:
+        if not isinstance(problems, list) or not problems:
+            errors.append(f"{rel_path} identity.problems must be a non-empty list.")
+            problems = []
+        for index, problem in enumerate(problems):
+            prefix = f"{rel_path} identity.problems[{index}]"
+            if not isinstance(problem, dict):
+                errors.append(f"{prefix} must be an object.")
+                continue
+            unsupported = sorted(set(problem) - {"id", "statement", "metric_refs", "measurement_gap"})
+            if unsupported:
+                errors.append(f"{prefix} has unsupported fields: {', '.join(unsupported)}.")
+            raw_problem_id = problem.get("id")
+            problem_id = raw_problem_id.strip() if isinstance(raw_problem_id, str) else ""
+            if not problem_id:
+                errors.append(f"{prefix}.id must be a non-empty string.")
+            else:
+                problem_ids.append(problem_id)
+            if not isinstance(problem.get("statement"), str) or not problem.get("statement", "").strip():
+                errors.append(f"{prefix}.statement must be a non-empty string.")
+            metric_ids = problem.get("metric_refs")
+            if not isinstance(metric_ids, list) or any(
+                not isinstance(metric_id, str) or not metric_id.strip() for metric_id in metric_ids
+            ):
+                errors.append(f"{prefix}.metric_refs must be a list of non-empty strings.")
+            elif len(metric_ids) != len(set(metric_ids)):
+                errors.append(f"{prefix}.metric_refs must not contain duplicates.")
+            if "measurement_gap" in problem and (
+                not isinstance(problem.get("measurement_gap"), str)
+                or not problem.get("measurement_gap", "").strip()
+            ):
+                errors.append(f"{prefix}.measurement_gap must be a non-empty string when present.")
+    duplicate_problem_ids = sorted(
+        {problem_id for problem_id in problem_ids if problem_ids.count(problem_id) > 1}
+    )
+    if duplicate_problem_ids:
+        errors.append(f"{rel_path} identity problem IDs must be unique: {', '.join(duplicate_problem_ids)}.")
+
+    product_bets = identity.get("product_bets")
+    bet_ids: list[str] = []
+    if portfolio_required or product_bets is not None:
+        if not isinstance(product_bets, list) or not product_bets:
+            errors.append(f"{rel_path} identity.product_bets must be a non-empty list.")
+            product_bets = []
+        for index, bet in enumerate(product_bets):
+            prefix = f"{rel_path} identity.product_bets[{index}]"
+            if not isinstance(bet, dict):
+                errors.append(f"{prefix} must be an object.")
+                continue
+            unsupported = sorted(set(bet) - {"id", "promise", "problem_refs"})
+            if unsupported:
+                errors.append(f"{prefix} has unsupported fields: {', '.join(unsupported)}.")
+            raw_bet_id = bet.get("id")
+            bet_id = raw_bet_id.strip() if isinstance(raw_bet_id, str) else ""
+            if not bet_id:
+                errors.append(f"{prefix}.id must be a non-empty string.")
+            else:
+                bet_ids.append(bet_id)
+            if not isinstance(bet.get("promise"), str) or not bet.get("promise", "").strip():
+                errors.append(f"{prefix}.promise must be a non-empty string.")
+            refs = bet.get("problem_refs")
+            if not isinstance(refs, list) or not refs or any(
+                not isinstance(problem_ref, str) or not problem_ref.strip() for problem_ref in refs
+            ):
+                errors.append(f"{prefix}.problem_refs must be a non-empty list of strings.")
+                refs = []
+            elif len(refs) != len(set(refs)):
+                errors.append(f"{prefix}.problem_refs must not contain duplicates.")
+            dangling_refs = sorted(set(refs) - set(problem_ids))
+            if dangling_refs:
+                errors.append(f"{prefix}.problem_refs are unresolved: {', '.join(dangling_refs)}.")
+    duplicate_bet_ids = sorted({bet_id for bet_id in bet_ids if bet_ids.count(bet_id) > 1})
+    if duplicate_bet_ids:
+        errors.append(f"{rel_path} identity product bet IDs must be unique: {', '.join(duplicate_bet_ids)}.")
 
     refs = payload.get("metric_refs") if isinstance(payload.get("metric_refs"), dict) else {}
     if not isinstance(refs.get("objectives"), list) or not refs.get("objectives"):

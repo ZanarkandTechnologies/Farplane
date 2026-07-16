@@ -2,8 +2,8 @@ kind: project-harness
 status: active
 project: Farplane
 created_at: 2026-06-15
-updated_at: 2026-07-13
-framework_template_version: "0.5.1"
+updated_at: 2026-07-17
+framework_template_version: "0.5.2"
 owner: harness
 
 identity:
@@ -21,6 +21,43 @@ identity:
     flagship proof is an autonomous research creator that selects worthwhile
     experiments, produces evidence-backed media and demos, measures audience
     response, and improves what it makes next.
+  problems:
+    - id: unattended_autonomy
+      statement: >-
+        Autonomous teams require too much human supervision to perform useful
+        long-running work.
+      metric_refs:
+        - accepted_clone_hours
+        - auto_completion_rate
+        - ticket_intervention_turn_count
+    - id: operational_visibility
+      statement: >-
+        Operators cannot quickly understand, steer, or recover agent work after
+        stalls, failures, or drift.
+      metric_refs: []
+      measurement_gap: >-
+        Direct recovery-success and recovery-time metrics need a reliable
+        observation source before they become canonical metrics.
+    - id: agent_sdlc
+      statement: >-
+        Skills, prompts, agents, and automations accumulate without reliable
+        evaluation, ownership, or measured improvement.
+      metric_refs:
+        - accepted_harness_improvements
+        - priority_skill_health_gap_count
+        - latest_eval_pass_rate
+  product_bets:
+    - id: autonomous_teams_24_7
+      promise: >-
+        Run autonomous teams continuously without losing visibility or control.
+      problem_refs:
+        - unattended_autonomy
+        - operational_visibility
+    - id: agent_sdlc
+      promise: >-
+        Develop and improve agent systems through evals, review, and evidence.
+      problem_refs:
+        - agent_sdlc
 
 metric_refs:
   objectives:

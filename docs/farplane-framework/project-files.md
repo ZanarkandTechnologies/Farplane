@@ -70,8 +70,8 @@ ignored paths and carries `project.name`, `project.description`, and
 
 ### `farplane/harness.yaml`
 
-Typed human charter: identity, planning areas with canonical per-area ICPs and
-planner instructions, feature meaning, operating principles, non-tradeoffs, durable
+Typed human charter: identity with stable problems and current product bets,
+planning areas with canonical per-area ICPs, feature meaning, operating principles, non-tradeoffs, durable
 leverage commitments, allocation guardrails, authority, stable capability
 references, selected metric refs, and optional dated metric goals.
 

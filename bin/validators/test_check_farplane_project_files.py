@@ -137,11 +137,19 @@ metrics:
     (capability / "SKILL.md").write_text("---\nname: test-output\ndescription: Produce test output.\n---\n", encoding="utf-8")
     (farplane / "harness.yaml").write_text(
         """kind: project-harness
-framework_template_version: "0.4.0"
+framework_template_version: "0.5.2"
 identity:
   mission: Test mission.
   human_thesis: Test thesis.
   north_star: Test north star.
+  problems:
+    - id: test_problem
+      statement: Test work is difficult to complete reliably.
+      metric_refs: []
+  product_bets:
+    - id: test_bet
+      promise: Make test work reliable.
+      problem_refs: [test_problem]
 metric_refs:
   objectives:
     - metric_id: accepted_output_events
@@ -464,6 +472,65 @@ def test_selected_metric_without_definition_fails(tmp_path: Path) -> None:
     errors = validate(tmp_path)
 
     assert "farplane/harness.yaml metric refs lack metrics.yaml definitions: unknown_metric." in errors
+
+
+def test_problem_metric_without_definition_fails(tmp_path: Path) -> None:
+    farplane = tmp_path / "farplane"
+    farplane.mkdir()
+    write_framework_manifest(farplane)
+    write_required_project_files(tmp_path)
+    harness_path = farplane / "harness.yaml"
+    harness = yaml.safe_load(harness_path.read_text(encoding="utf-8"))
+    harness["identity"]["problems"][0]["metric_refs"] = ["unknown_problem_metric"]
+    harness_path.write_text(yaml.safe_dump(harness, sort_keys=False), encoding="utf-8")
+
+    errors = validate(tmp_path)
+
+    assert "farplane/harness.yaml metric refs lack metrics.yaml definitions: unknown_problem_metric." in errors
+
+
+def test_duplicate_problem_id_and_dangling_bet_ref_fail(tmp_path: Path) -> None:
+    farplane = tmp_path / "farplane"
+    farplane.mkdir()
+    write_framework_manifest(farplane)
+    write_required_project_files(tmp_path)
+    harness_path = farplane / "harness.yaml"
+    harness = yaml.safe_load(harness_path.read_text(encoding="utf-8"))
+    harness["identity"]["problems"].append(
+        {"id": "test_problem", "statement": "Duplicate.", "metric_refs": []}
+    )
+    harness["identity"]["product_bets"][0]["problem_refs"] = ["missing_problem"]
+    harness_path.write_text(yaml.safe_dump(harness, sort_keys=False), encoding="utf-8")
+
+    errors = validate(tmp_path)
+
+    assert "farplane/harness.yaml identity problem IDs must be unique: test_problem." in errors
+    assert (
+        "farplane/harness.yaml identity.product_bets[0].problem_refs are unresolved: missing_problem."
+        in errors
+    )
+
+
+def test_problem_and_product_bet_ids_must_be_strings(tmp_path: Path) -> None:
+    farplane = tmp_path / "farplane"
+    farplane.mkdir()
+    write_framework_manifest(farplane)
+    write_required_project_files(tmp_path)
+    harness_path = farplane / "harness.yaml"
+    harness = yaml.safe_load(harness_path.read_text(encoding="utf-8"))
+    harness["identity"]["problems"][0]["id"] = 123
+    harness["identity"]["product_bets"][0]["id"] = 456
+    harness["identity"]["product_bets"][0]["problem_refs"] = ["123"]
+    harness_path.write_text(yaml.safe_dump(harness, sort_keys=False), encoding="utf-8")
+
+    errors = validate(tmp_path)
+
+    assert "farplane/harness.yaml identity.problems[0].id must be a non-empty string." in errors
+    assert "farplane/harness.yaml identity.product_bets[0].id must be a non-empty string." in errors
+    assert (
+        "farplane/harness.yaml identity.product_bets[0].problem_refs are unresolved: 123."
+        in errors
+    )
 
 
 def test_goals_file_is_retired(tmp_path: Path) -> None:

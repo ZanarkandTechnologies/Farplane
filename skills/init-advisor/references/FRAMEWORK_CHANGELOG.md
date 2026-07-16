@@ -3,10 +3,35 @@ title: Farplane Framework Changelog
 owner: init-advisor
 status: active
 kind: framework-changelog
-updated_at: 2026-07-14
+updated_at: 2026-07-17
 ---
 
 # Farplane Framework Changelog
+
+## 2.0.5
+
+Date: 2026-07-17
+
+Primary change: make stable problems and current product bets explicit in the
+typed project charter without duplicating metric definitions.
+
+Changed surfaces:
+
+- `identity.problems` names each durable problem and references canonical
+  metrics from `metrics.yaml`;
+- `identity.product_bets` names current audience-facing solution hypotheses
+  and links each bet to one or more problem IDs;
+- metric definitions, direction, refresh, observations, baselines, and ticket
+  targets remain outside the problem and bet records.
+
+Migration steps:
+
+1. Add a small `identity.problems` list with stable IDs, one-sentence problem
+   statements, and canonical `metric_refs`.
+2. Add `identity.product_bets` with audience-facing promises and
+   `problem_refs`.
+3. Keep missing direct measurements explicit instead of inventing metric
+   observations.
 
 ## 2.0.4
 
