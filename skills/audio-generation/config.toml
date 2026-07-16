@@ -1,0 +1,37 @@
+schema_version = "0.1.0"
+skill = "audio-generation"
+
+[defaults]
+voice_provider = "fish"
+music_provider = "elevenlabs"
+sfx_provider = "elevenlabs"
+output_root = "artifacts/audio"
+execution_mode = "dry_run"
+
+[profiles]
+# Add named, repo-shareable, rights-cleared voice or generation profiles under
+# tables such as [profiles.voice.explainer_narrator]. Keep personal/private
+# voice IDs in invocation or private runtime context instead.
+
+[providers.fish]
+capabilities = ["voice"]
+model = "s2-pro"
+format = "mp3"
+sample_rate = 44100
+mp3_bitrate = 128
+latency = "normal"
+
+[providers.elevenlabs]
+capabilities = ["voice", "music", "sfx"]
+
+[providers.elevenlabs.voice]
+model = "eleven_v3"
+output_format = "mp3_44100_128"
+
+[providers.elevenlabs.music]
+model = "music_v2"
+output_format = "mp3_48000_192"
+
+[providers.elevenlabs.sfx]
+model = "eleven_text_to_sound_v2"
+output_format = "mp3_44100_128"

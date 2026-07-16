@@ -13,9 +13,10 @@ template_uses:
   motion/edit binding, and acceptance check.
 - [ ] Copyright, source, voice, likeness, or consent risks are named when
   relevant.
-- [ ] Avatar/lipsync audio is routed through `avatar-advisor`; provider-specific
-  audio/video generation through `ai-video-advisor`; final placement through
-  `remotion`.
+- [ ] Avatar/lipsync audio is routed through `avatar-advisor`; approved
+  standalone voice/music/SFX generation through `audio-generation`;
+  model-native audio/video behavior through `ai-video-advisor`; final placement
+  through `remotion`.
 - [ ] The Remotion handoff includes files or blockers, cue timing, volume/mix
   notes, proof expectations, and blocks generic beds without timing/motion
   obligations unless explicitly downgraded.

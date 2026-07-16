@@ -46,7 +46,7 @@ gates:
 
 routes:
   storyboard | asset-advisor | avatar-advisor | ai-video-advisor |
-  remotion | media-ingest | review
+  audio-generation | remotion | media-ingest | review
 
 fails:
   vibes_only_audio; copyrighted_track_without_plan; voice_without_consent_note;
@@ -58,8 +58,11 @@ fails:
 
 Use `avatar-advisor` when voice or lipsync belongs to a persistent presenter or
 identity. Use `ai-video-advisor` only for provider/app details when model-native
-video tools also create or transform audio. Use `remotion` for deterministic
-audio placement, captions, ducking, waveform visuals, and local render proof.
+video tools also create or transform audio. Use `audio-generation` after the
+brief, rights, consent, timing, and mix direction are approved and a caller
+needs a Fish or ElevenLabs generation packet or artifact. Use `remotion` for
+deterministic audio placement, captions, ducking, waveform visuals, and local
+render proof.
 
 For Inspiration Pack inputs, consume `audio`, `editing`, `storyboard`, and
 `hook` elements from `captures[].elements`. A generic bed is not enough for an
@@ -95,6 +98,9 @@ honestly.
     generation to disable per-clip generated audio unless the plan explicitly
     needs diegetic source sound for a named beat.
   - [ ] Route asset inventory gaps to `asset-advisor`.
+  - [ ] Route approved standalone voice, music, or SFX briefs to
+    `audio-generation`; this advisor does not select runtime secrets, spend, or
+    execute the provider call itself.
   - [ ] Route final placement, ducking, captions, waveform visuals, and local
     render proof to `remotion`.
 - [ ] 5. Output the audio direction packet.
@@ -150,6 +156,8 @@ honestly.
   direction.
 - `../ai-video-advisor/SKILL.md` - route provider-specific model-native
   audio/video generation details.
+- `../audio-generation/SKILL.md` - route approved standalone voice, music, or
+  SFX briefs into provider-resolved packets or explicitly authorized artifacts.
 - `../remotion/SKILL.md` - route deterministic placement, ducking, captions,
   waveforms, and local render proof.
 
