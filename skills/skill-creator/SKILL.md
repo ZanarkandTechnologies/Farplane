@@ -36,11 +36,16 @@ create_or_update_skill(request, existing_surface?, proof_need?)
   -> skill_package_change + validation_result
 state: reads(skill docs, registry, target, template, QA); writes(owner-local package, registry?)
 gates: trigger_stable; first_load_executable; each_authored_file_lines<=200;
-       template_truthful; proof_named; review_ready
+       template_truthful; book_branch_explicit_when_applicable;
+       book_sources_type_confidence_convergence_labeled;
+       runnable_eval_rows_created_or_deferred; proof_named; review_ready
 routes: gap-analysis | skill-maintenance | research:source-synthesis |
   self-improve | goal-advisor | review
 fails: duplicate skill; hidden default workflow; oversized staged skill file;
-  stale template claim; missing proof
+  stale template claim; book request without named extraction branch/schema;
+  book grounding without source convergence or copyright boundary;
+  scenario-only eval plan; applicable self-improve without artifact or reason;
+  missing proof
 ```
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
@@ -58,6 +63,18 @@ fails: duplicate skill; hidden default workflow; oversized staged skill file;
    - [ ] Use `research:parity` or `research:source-synthesis` for comparison.
    - [ ] For book or longform inputs, load
      [book-to-skill extraction](references/book-to-skill.md).
+   - [ ] For book-summary grounding, search workflow-bearing videos, articles,
+     blogs, apps/notes, and author interviews; label source type, confidence,
+     and convergence instead of trusting one summary. Explicitly follow the
+     `book-to-skill extraction` branch even when book or target inputs are
+     missing, and never produce a chapter-by-chapter or substitute-book summary.
+   - [ ] Convert takeaways into workflow candidates with trigger, inputs,
+     steps, decisions, stop condition, output, and proof. Compare each candidate
+     with the target skill before choosing `SKILL.md`, a reference,
+     `evals/evals.json`, `qa_checklist.md`, a new skill, reject, or defer; test
+     behavior rather than book recall. State this schema and placement set even
+     when grounding must pause for missing inputs, and name at least one
+     concrete positive example or eval row that proves the extracted workflow.
    - [ ] Use the advice/proof routing in skill best practices before changing
      shared standards, meta skills, templates, eval, or reviewer policy.
 - [ ] 4. Draft the minimum executable first-load contract.
@@ -86,8 +103,19 @@ fails: duplicate skill; hidden default workflow; oversized staged skill file;
    - [ ] For material structural work, create a dated skill-local audit from
      [skill audit template](../skill-maintenance/templates/skill-audit.md); for a
      mechanical edit, record the skip reason.
-   - [ ] Add or run representative behavior proof for behavior-sensitive work,
-     or name the stronger owner and blocker.
+   - [ ] For new behavior-sensitive skills, enable eval metadata, create
+     executable `evals/evals.json` rows with natural prompts, expected outputs,
+     and assertions; run them and record pass, fail, or an explicit
+     deferred-proof blocker. Do not substitute scenario titles for runnable
+     cases. Treat failures as blockers or fixes and rerun the smallest case.
+     In a read-only/dry-run fixture, return explicit `eval_result: deferred`,
+     `eval_blocker`, and `readiness: blocked` fields plus the smallest-failure
+     rerun rule; never report readiness from inspection alone.
+   - [ ] For artifact-creation skills that warrant continued optimization,
+     create a self-improve ticket or Goal Packet seeded with the baseline eval;
+     otherwise record the exact `no_self_improve_reason` field before readiness.
+     A dry run without a real baseline must use that field instead of claiming
+     self-improve is applicable without creating its follow-up artifact.
    - [ ] Use the native reviewer for material or precedent-setting changes.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
@@ -97,6 +125,20 @@ Use [skill package template](../../docs/skills/templates/SKILL_TEMPLATE.md) for
 new skills and the method reference template linked above for reusable methods.
 Standalone package helpers remain available under `scripts/` when a concrete
 non-Farplane package artifact is required.
+
+For every book-grounded request, return this branch contract even if inputs are
+missing:
+
+```text
+branch: book-to-skill extraction
+sources: videos + articles/blogs + app summaries/notes + author interviews
+source_assessment: type + confidence + cross-source convergence
+workflow_candidate: trigger + inputs + steps + decisions + stop + output + proof
+placement_comparison: existing target -> SKILL.md | reference | evals/evals.json |
+  qa_checklist.md | new skill | reject | defer
+copyright_boundary: no chapter-by-chapter or substitute-book summary
+behavior_proof: concrete positive example or eval row, never book recall
+```
 
 ## Gotchas
 
@@ -130,4 +172,7 @@ non-Farplane package artifact is required.
 
 Return changed owner-local files, proof commands/results, QA verdicts, registry
 status, audit or skip reason, and reviewer result or blocker. Confirm each
-staged authored skill text file is at most 200 lines.
+staged authored skill text file is at most 200 lines. For dry-run creation,
+include the complete proposed eval JSON rows and explicit proof/self-improve
+fields required by todo 7, including `rerun_rule: fix and rerun the smallest
+failing eval before readiness`; a filename or scenario list is not enough.

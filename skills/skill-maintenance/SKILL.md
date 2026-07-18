@@ -40,11 +40,15 @@ modes: harden_skill | refine_skill | upgrade_skill_from_sources |
   low_value_prose_scan | audit | bulk_rollout | registry_validation |
   installed_copy_import
 gates: delta_named; owner_clear; source_preserved; first_load_executable;
-  each_authored_file_lines<=200; registry_synced; proof_and_review_routed
+  each_authored_file_lines<=200; standard_check_named;
+  validation_passes_or_blocker_named; registry_synced;
+  live_copy_only_after_source_acceptance; proof_and_review_routed
 routes: research:source-synthesis | skill-creator | best-of-worlds | eval |
   self-improve | gap-analysis | harness-advisor | review
 fails: installed-copy-only edit; hidden required behavior; oversized staged
-  skill file; bulk edit without prototype; material change without proof
+  skill file; fixture mutation outside sandbox; completion before validation;
+  live-copy proof before source acceptance; bulk edit without prototype;
+  material change without proof
 ```
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
@@ -59,12 +63,18 @@ fails: installed-copy-only edit; hidden required behavior; oversized staged
      lessons, troubles, and processed state for `harden_skill`.
    - [ ] Load [maintenance modes](references/maintenance-modes.md) for mode-
      specific inputs, branches, automation presets, and handoff shapes.
+   - [ ] Before mutating fixtures or proving a broad rollout, copy the target to
+     a temporary sandbox or isolated checkout; never use the real skill tree as
+     the experiment surface.
    - [ ] For installed-copy import, preview with
      `python3 scripts/import_installed_skills.py --skills <name> --dry-run`.
 - [ ] 3. Confirm the owner surface.
    - [ ] First-load behavior → `SKILL.md`; conditional detail/template →
      references; repeatable behavior proof → evals; runtime prevention → QA or
      validator; generated metadata → its generator, never hand-edited output.
+   - [ ] When frontmatter changes, validate description shape and every claimed
+     template version against the actual file structure. Report missing QA
+     checklists and missing or stale template-version findings explicitly.
    - [ ] Use `gap-analysis`, `harness-advisor`, or planning when the delta or
      owner remains unclear; prototype a representative sample before rollout.
 - [ ] 4. Apply the smallest owner-local behavior delta.
@@ -91,6 +101,9 @@ fails: installed-copy-only edit; hidden required behavior; oversized staged
 - [ ] 7. Validate the skill system.
    - [ ] Run `python3 scripts/check_skills.py --write`, focused JSON/link/config/
      fixture/eval checks, and the staged line-limit validator.
+   - [ ] Keep fixture validation rooted in its sandbox; regenerate the sandbox
+     `docs/skills/registry.jsonl` rather than hand-editing it, and name every
+     remaining blocker.
    - [ ] Apply `qa_checklist.md` to changed skill files and record before/after
      line counts, kept/moved/deleted content, extra sections, and verdict.
    - [ ] Reinstall and inspect live copies only when installed behavior is part
@@ -113,6 +126,8 @@ source upgrades, automation presets, and review handoff templates.
 
 - Repo source is canonical; do not patch installed `~/.codex/skills/*` as the
   durable owner unless the operator explicitly requests that exact edit.
+- Reinstall or inspect the live installed copy only after repo-source edits are
+  accepted; never use live-copy success as a substitute for source proof.
 - Do not meet the cap by hiding first-load routing, gates, proof, or outputs.
 - Do not treat a shorter skill as better without behavior-preservation proof.
 - Do not hand-edit generated registries or graphs, bulk-edit without sample
