@@ -19,7 +19,11 @@ from validate_audio_packet import validate_path
 
 
 API_ROOT = "https://api.elevenlabs.io"
-SAFE_RESPONSE_HEADERS = ("request-id", "character-cost")
+SAFE_RESPONSE_HEADERS = ("request-id", "character-cost", "song-id")
+
+
+def default_output_format(kind: str) -> str:
+    return "mp3_48000_192" if kind == "music" else "mp3_44100_128"
 
 
 def sha256_path(path: Path) -> str:
@@ -40,7 +44,7 @@ def resolve_path(raw: str) -> Path:
 def build_request(packet: dict[str, Any], api_key: str) -> urllib.request.Request:
     parameters = packet["parameters"]
     kind = packet["kind"]
-    output_format = parameters.get("output_format", "mp3_44100_128")
+    output_format = parameters.get("output_format", default_output_format(kind))
     if kind == "voice":
         voice_id = parameters.get("public_voice_id")
         if not isinstance(voice_id, str) or not voice_id:
@@ -66,6 +70,20 @@ def build_request(packet: dict[str, Any], api_key: str) -> urllib.request.Reques
             "duration_seconds": parameters["duration_seconds"],
             "prompt_influence": parameters.get("prompt_influence", 0.3),
             "loop": parameters.get("loop", False),
+        }
+    elif kind == "music":
+        url = (
+            f"{API_ROOT}/v1/music"
+            f"?output_format={urllib.parse.quote(output_format, safe='')}"
+        )
+        duration_seconds = parameters.get(
+            "duration_seconds", packet["timing"]["duration_seconds"]
+        )
+        body = {
+            "prompt": packet["prompt_or_script"],
+            "music_length_ms": round(float(duration_seconds) * 1000),
+            "model_id": parameters["model"],
+            "force_instrumental": parameters.get("force_instrumental", False),
         }
     else:
         raise ValueError(f"ElevenLabs executor does not support kind {kind!r}")
@@ -191,7 +209,7 @@ def dry_run(packet_path: Path) -> dict[str, Any]:
         "provider": "elevenlabs",
         "kind": packet["kind"],
         "model": parameters["model"],
-        "output_format": parameters.get("output_format", "mp3_44100_128"),
+        "output_format": parameters.get("output_format", default_output_format(packet["kind"])),
         "output_path": str(resolve_path(packet["output"]["path"])),
         "credential_present": bool(os.environ.get("ELEVENLABS_API_KEY")),
         "external_call_made": False,

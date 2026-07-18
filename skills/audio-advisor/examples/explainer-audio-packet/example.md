@@ -1,6 +1,6 @@
 ---
 kind: skill-example
-skill: audio-generation
+skill: audio-advisor
 status: positive-fixture
 created_at: 2026-07-15
 ---

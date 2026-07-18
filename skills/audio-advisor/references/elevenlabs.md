@@ -27,6 +27,9 @@ or energy arc, vocal policy, loop/end behavior, and cue/mix acceptance checks.
 Execution always requires explicit spend authority. The tracked default uses
 `music_v2` with `mp3_48000_192`; current API defaults may differ during the
 v1-to-v2 transition, so the packet must carry the selected model explicitly.
+The local executor calls `POST /v1/music` with `prompt`, `music_length_ms`,
+`model_id`, and optional `force_instrumental`, matching the current official
+compose endpoint. Music API access requires a paid ElevenLabs plan.
 
 ### SFX
 
@@ -43,6 +46,8 @@ per current official documentation.
   https://elevenlabs.io/docs/eleven-api/quickstart/
 - Music quickstart:
   https://elevenlabs.io/docs/eleven-api/guides/cookbooks/music
+- Compose Music API:
+  https://elevenlabs.io/docs/api-reference/music/compose
 - Sound-effects quickstart:
   https://elevenlabs.io/docs/eleven-api/guides/cookbooks/sound-effects
 - Official upstream skills (research inputs, not Farplane runtime

@@ -20,7 +20,7 @@ idea + content_kind + method + style_profile? + inspiration_pack?
   -> video-production: method and reusable visual direction
   -> storyboard: narrative, script, beats, scene map and scene packets
   -> asset/avatar/audio/image/video advisors: production-ready inputs
-  -> audio-generation: approved voice, music, or SFX assets
+  -> audio-advisor: SFX candidate links for operator approval, or generated assets
   -> remotion: stitching, transitions, captions, audio placement, render proof
   -> review/qa: plan, asset, render, and output evidence
 ```
@@ -130,6 +130,14 @@ Reference Pattern:
 Reference Leverage Map:
 | Capture / Element | Anchor | Reused As | Planned Output | Acceptance Check |
 | --- | --- | --- | --- | --- |
+
+SFX Candidate Shortlist:
+| Cue | Search Phrase | SoundButtonsWorld Item | Why It Fits | Rights Risk | Status / Fallback |
+| --- | --- | --- | --- | --- | --- |
+
+Use `awaiting_operator_download_and_approval` for candidates and
+`searched_no_fit` when generation remains the fallback. The agent never
+downloads from SoundButtonsWorld.
 
 Scene Grid Review Packet:
 | Scene | Target seconds | Clean grid | Annotated grid | Notes | Provider strategy | Transition / audio | Approval |

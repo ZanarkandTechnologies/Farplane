@@ -1,5 +1,5 @@
 schema_version = "0.1.0"
-skill = "audio-generation"
+skill = "audio-advisor"
 
 [defaults]
 voice_provider = "fish"
@@ -7,6 +7,17 @@ music_provider = "elevenlabs"
 sfx_provider = "elevenlabs"
 output_root = "artifacts/audio"
 execution_mode = "dry_run"
+sfx_route = "reuse_then_discover_then_operator_decides_then_generate"
+
+[providers.soundbuttonsworld]
+capabilities = ["sfx_candidate_discovery"]
+url = "https://soundbuttonsworld.com/"
+discovery = "public_web_index_item_pages_only"
+retrieval = "operator_only"
+default_rights_status = "unresolved"
+site_terms_scope = "personal_noncommercial"
+commercial_use_requires_separate_rights_evidence = true
+agent_download = false
 
 [profiles]
 # Add named, repo-shareable, rights-cleared voice or generation profiles under

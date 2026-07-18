@@ -20,9 +20,11 @@ template_uses:
   packets, or explicit nonuse reasons before Remotion is called production.
 - [ ] Storyboard, asset, avatar, audio, image, video, Remotion, review, and QA
   responsibilities are separated instead of hidden in one generic workflow;
-  `audio-advisor` owns direction/mix while approved provider-ready voice,
-  music, and SFX packets route to `audio-generation`. For deliberate scene
-  breaks, one normally 4-5 second provider clip maps to one scene packet with a
+  `audio-advisor` owns direction, provider-ready voice/music/SFX packets,
+  execution, and mix. Every interesting/common SFX idea has up to three
+  SoundButtonsWorld item-page candidates—or `searched_no_fit`—in the final plan,
+  marked `awaiting_operator_download_and_approval`; the agent downloads nothing.
+  For deliberate scene breaks, one normally 4-5 second provider clip maps to one scene packet with a
   clean grid, annotated grid, keyed notes, transition/audio obligations, and
   provider strategy; the actual dimension-verified image files and notes are
   shown before generation. Text-only panels or intended paths remain draft-only.

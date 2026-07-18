@@ -12,7 +12,7 @@ template_uses:
 eval: evals/evals.json
 qa_checklist: qa_checklist.md
 common_chains:
-  after: ["video-production", "storyboard", "asset-advisor", "avatar-advisor", "audio-advisor", "audio-generation", "ai-image-advisor", "ai-video-advisor", "remotion", "review"]
+  after: ["video-production", "storyboard", "asset-advisor", "avatar-advisor", "audio-advisor", "ai-image-advisor", "ai-video-advisor", "remotion", "review"]
 allowed-tools: Read, Grep, Glob, Bash
 ---
 
@@ -56,7 +56,7 @@ gates:
 
 routes:
   video-production | storyboard | asset-advisor | avatar-advisor |
-  audio-advisor | audio-generation | ai-image-advisor | ai-video-advisor |
+  audio-advisor | ai-image-advisor | ai-video-advisor |
   remotion | social-content | review | qa
 
 fails:
@@ -130,9 +130,11 @@ reference recreation. Use `qa` when a produced artifact needs formal proof.
     grids will be needed are `storyboard_draft_ready`, not human-review-ready.
   - [ ] Route asset inventory and recreation decisions to `asset-advisor`.
   - [ ] Route persistent presenter/character needs to `avatar-advisor`.
-  - [ ] Route voice, music, SFX, Foley, and mix notes to `audio-advisor`.
-  - [ ] Route approved provider-ready voice, music, or SFX packets to
-    `audio-generation`; do not make `audio-advisor` execute providers.
+  - [ ] Route voice, music, SFX, Foley, SoundButtonsWorld candidate discovery,
+    provider packets/execution, receipts, and mix notes to `audio-advisor`.
+  - [ ] For every interesting/common SFX idea, put up to three candidate item
+    links—or `searched_no_fit`—in the final plan as
+    `awaiting_operator_download_and_approval`; never download them.
   - [ ] Route still or model-native generation details to `ai-image-advisor`
     and `ai-video-advisor` only when generation inputs are needed.
 - [ ] 5. Compile the advisor action list.
@@ -163,17 +165,9 @@ reference recreation. Use `qa` when a produced artifact needs formal proof.
 - Do not make `storyboard` carry the whole implementation plan. Storyboard owns
   narrative and scene design; this skill owns the parent ticket and production
   action list.
-- Do not create format-specific skills for every trend. Use Tasty Pack or
-  reusable style profiles plus optional references, then route through stable
-  primitives.
 - Do not require an Inspiration Pack merely to use a named style profile or a
   method default. Do not treat a style profile as permission to impersonate a
   creator or copy protected examples.
-- Do not let Remotion start before assets, cue timing, dimensions, and proof
-  checks are named.
-- Do not treat a Tasty Pack or Inspiration Pack as a vibe source. If the pack
-  has no captures or no creative elements, block or request reingestion before
-  production.
 - Do not let a final video consume only the text of pinned elements when the
   user's expectation is Tasty Pack reuse. Resolve `assetId + anchor` into media
   refs or route regeneration first; otherwise label the output
@@ -191,10 +185,8 @@ reference recreation. Use `qa` when a produced artifact needs formal proof.
   routes.
 - `../avatar-advisor/SKILL.md` - persistent avatar, presenter, or lipsync
   direction.
-- `../audio-advisor/SKILL.md` - voice, music, SFX, Foley, cue sheet, and mix
-  direction.
-- `../audio-generation/SKILL.md` - provider-neutral generation packets for
-  approved voice, music, and SFX execution.
+- `../audio-advisor/SKILL.md` - audio direction, SoundButtonsWorld candidate
+  links for operator approval, provider execution, receipts, and mix.
 - `../video-production/SKILL.md` - method selection, reusable style profiles,
   four-case visual-direction resolution, and style ingestion.
 - `../video-production/references/scene-grid-production.md` - load for
@@ -206,17 +198,3 @@ reference recreation. Use `qa` when a produced artifact needs formal proof.
   edit, or upscale provider route.
 - `../remotion/SKILL.md` - React composition, stitching, captions, audio
   placement, and local render proof.
-
-## Output
-
-- `content_ticket`: executable content-production ticket or ticket-scoped plan
-  artifact.
-- `advisor_action_list`: ordered actions with owner, input, output, acceptance
-  check, and blocker.
-- `production_program`: resolved visual direction, conditional reference
-  leverage map, reviewable scene-grid packets when required, asset, generation,
-  audio, creative lock, Remotion, review, and QA route map. It labels reference
-  type, rejected formats, narrative spine, viewer question/answer, selected
-  topology, and continuous-chain/montage obligations even when not selected.
-- `blocked_report`: missing idea, required reference evidence, proof, rights,
-  production route, owner, or proof gate.

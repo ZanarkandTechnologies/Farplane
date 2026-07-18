@@ -143,12 +143,12 @@ acceptance check.
 
 ## Provider Routes
 
-- Voice: `audio-generation:voice` through Fish or ElevenLabs after selecting a
+- Voice: `audio-advisor:voice` through Fish or ElevenLabs after selecting a
   rights-safe library/designed voice.
-- Music: `audio-generation:music` through ElevenLabs only if the minimal-bed
+- Music: `audio-advisor:music` through ElevenLabs only if the minimal-bed
   route is selected.
-- SFX: `audio-generation:sfx` through ElevenLabs, or approved local library
-  assets, one cue at a time from the table above.
+- SFX: `audio-advisor:sfx` through ElevenLabs, or source-first approved
+  local/library assets, one cue at a time from the table above.
 - Mix and captions: `remotion` using one cue sheet and one master VO.
 
 ## QA Assertions

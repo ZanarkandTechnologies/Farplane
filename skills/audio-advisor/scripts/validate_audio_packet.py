@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate audio-generation packets, blockers, and secret redaction."""
+"""Validate audio-advisor provider packets, blockers, and secret redaction."""
 
 from __future__ import annotations
 
@@ -9,6 +9,7 @@ import re
 import sys
 from pathlib import Path
 from typing import Any
+from urllib.parse import urlparse
 
 
 CAPABILITIES = {
@@ -41,6 +42,8 @@ SECRET_VALUE_PATTERNS = (
     re.compile(r"^gh[pousr]_[A-Za-z0-9]{20,}$"),
     re.compile(r"^xox[baprs]-[A-Za-z0-9-]{10,}$"),
 )
+SOURCE_RECEIPT_USES = {"personal", "noncommercial", "public", "client", "commercial"}
+SOURCE_RIGHTS_STATUSES = {"personal_noncommercial_terms", "separately_cleared"}
 
 
 def normalize(key: str) -> str:
@@ -71,7 +74,66 @@ def secret_errors(value: Any, path: str = "packet") -> list[str]:
     return errors
 
 
+def validate_source_receipt(payload: dict[str, Any]) -> list[str]:
+    errors = secret_errors(payload, "source_receipt")
+    required = {
+        "result", "source", "item_title", "item_page_url", "retrieved_at",
+        "original_filename", "saved_path", "sha256", "observed", "cue_ref", "retrieved_by",
+        "intended_use", "rights_status", "rights_basis", "manual_audio_review",
+        "residual_risk",
+    }
+    missing = sorted(key for key in required if key not in payload)
+    if missing:
+        errors.append(f"source_receipt: missing required fields: {', '.join(missing)}")
+    if payload.get("source") != "soundbuttonsworld":
+        errors.append("source_receipt.source: must be 'soundbuttonsworld'")
+    if payload.get("retrieved_by") != "operator":
+        errors.append("source_receipt.retrieved_by: must be 'operator'")
+    page_url = payload.get("item_page_url")
+    if not isinstance(page_url, str) or not page_url.strip():
+        errors.append("source_receipt.item_page_url: non-empty URL required")
+    else:
+        parsed = urlparse(page_url)
+        if parsed.scheme != "https" or parsed.hostname not in {
+            "soundbuttonsworld.com", "www.soundbuttonsworld.com"
+        } or not parsed.path.startswith("/sound-button/"):
+            errors.append("source_receipt.item_page_url: must be an HTTPS SoundButtonsWorld item page")
+    for field in (
+        "item_title", "retrieved_at", "original_filename", "saved_path",
+        "cue_ref", "rights_basis", "residual_risk",
+    ):
+        if not isinstance(payload.get(field), str) or not payload.get(field, "").strip():
+            errors.append(f"source_receipt.{field}: non-empty string required")
+    checksum = payload.get("sha256")
+    if not isinstance(checksum, str) or re.fullmatch(r"[0-9a-f]{64}", checksum) is None:
+        errors.append("source_receipt.sha256: lowercase 64-character SHA-256 required")
+    observed = payload.get("observed")
+    if not isinstance(observed, dict):
+        errors.append("source_receipt.observed: object required")
+    else:
+        if observed.get("format") != "mp3":
+            errors.append("source_receipt.observed.format: must be 'mp3'")
+        duration = observed.get("duration_seconds")
+        if not isinstance(duration, (int, float)) or isinstance(duration, bool) or duration <= 0:
+            errors.append("source_receipt.observed.duration_seconds: positive number required")
+    intended_use = payload.get("intended_use")
+    if intended_use not in SOURCE_RECEIPT_USES:
+        errors.append("source_receipt.intended_use: unknown usage scope")
+    rights_status = payload.get("rights_status")
+    if rights_status not in SOURCE_RIGHTS_STATUSES:
+        errors.append("source_receipt.rights_status: must be personal_noncommercial_terms or separately_cleared")
+    elif rights_status == "personal_noncommercial_terms" and intended_use not in {
+        "personal", "noncommercial"
+    }:
+        errors.append("source_receipt: site terms cannot clear public, client, or commercial use")
+    if payload.get("manual_audio_review") not in {"pass", "fail", "pending"}:
+        errors.append("source_receipt.manual_audio_review: must be pass, fail, or pending")
+    return errors
+
+
 def validate_packet(payload: dict[str, Any]) -> list[str]:
+    if payload.get("result") == "source_receipt":
+        return validate_source_receipt(payload)
     errors = secret_errors(payload)
     kind = payload.get("kind")
     provider = payload.get("provider")

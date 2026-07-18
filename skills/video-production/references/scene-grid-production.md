@@ -224,7 +224,7 @@ preflight receipt field passes.
 ## Remotion Assembly Contract
 
 `ai-video-advisor` or the selected provider route generates one clip per scene
-packet. `audio-generation` may create approved voice, music, or SFX assets;
+packet. `audio-advisor` may accept operator-approved or generate voice, music, or SFX assets;
 Remotion places them. Remotion then:
 
 - probes each clip's actual duration, fps, dimensions, and frame count;

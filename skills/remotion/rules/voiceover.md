@@ -7,7 +7,7 @@ metadata:
 
 # Adding AI voiceover to a Remotion composition
 
-In Farplane, prefer `audio-generation:voice` to create a reviewed generation
+In Farplane, prefer `audio-advisor:voice` to create a reviewed generation
 packet or audio artifact per scene, then use
 [`calculateMetadata`](./calculate-metadata) to dynamically size the composition
 to match the observed audio. The direct ElevenLabs recipe below remains a
@@ -15,7 +15,7 @@ provider implementation reference for projects that are not using the wrapper.
 
 ## Prerequisites
 
-The Farplane wrapper can route Fish or ElevenLabs. Its approved artifact and
+The Farplane audio advisor can route Fish or ElevenLabs. Its approved artifact and
 sanitized receipt should provide the file path, format, observed duration, and
 scene binding needed here. For direct use, this guide uses **ElevenLabs** as the
 TTS provider (`ELEVENLABS_API_KEY` environment variable); users may substitute

@@ -38,6 +38,61 @@ def packet(provider: str = "fish", kind: str = "voice") -> dict:
 
 
 class AudioPacketValidationTests(unittest.TestCase):
+    def test_accepts_personal_noncommercial_soundbuttonsworld_receipt(self) -> None:
+        receipt = {
+            "result": "source_receipt",
+            "source": "soundbuttonsworld",
+            "item_title": "Camera shutter",
+            "item_page_url": "https://soundbuttonsworld.com/sound-button/camera-shutter-123",
+            "retrieved_at": "2026-07-18T12:00:00+08:00",
+            "original_filename": "camera-shutter.mp3",
+            "saved_path": "artifacts/audio/camera-shutter.mp3",
+            "sha256": "a" * 64,
+            "observed": {"format": "mp3", "duration_seconds": 0.8},
+            "cue_ref": "scene-02/frame-144",
+            "retrieved_by": "operator",
+            "intended_use": "noncommercial",
+            "rights_status": "personal_noncommercial_terms",
+            "rights_basis": "SoundButtonsWorld terms checked 2026-07-18",
+            "attribution_or_uploader": None,
+            "manual_audio_review": "pass",
+            "residual_risk": "Uploader ownership not independently verified",
+        }
+        self.assertEqual(validator.validate_packet(receipt), [])
+
+    def test_rejects_site_terms_as_commercial_clearance(self) -> None:
+        receipt = {
+            "result": "source_receipt",
+            "source": "soundbuttonsworld",
+            "item_title": "Movie quote",
+            "item_page_url": "https://soundbuttonsworld.com/sound-button/movie-quote-123",
+            "retrieved_at": "2026-07-18T12:00:00+08:00",
+            "original_filename": "movie-quote.mp3",
+            "saved_path": "artifacts/audio/movie-quote.mp3",
+            "sha256": "b" * 64,
+            "observed": {"format": "mp3", "duration_seconds": 1.2},
+            "cue_ref": "scene-01",
+            "retrieved_by": "operator",
+            "intended_use": "commercial",
+            "rights_status": "personal_noncommercial_terms",
+            "rights_basis": "Download button was visible",
+            "manual_audio_review": "pass",
+            "residual_risk": "Recognizable copyrighted dialogue",
+        }
+        errors = validator.validate_packet(receipt)
+        self.assertTrue(any("cannot clear" in error for error in errors), errors)
+
+    def test_rejects_malformed_source_receipt(self) -> None:
+        errors = validator.validate_packet({"result": "source_receipt"})
+        self.assertTrue(any("missing required fields" in error for error in errors), errors)
+        self.assertTrue(any("item_page_url" in error for error in errors), errors)
+
+    def test_rejects_agent_retrieval_receipt(self) -> None:
+        errors = validator.validate_packet(
+            {"result": "source_receipt", "retrieved_by": "agent"}
+        )
+        self.assertTrue(any("retrieved_by" in error for error in errors), errors)
+
     def test_accepts_supported_packet(self) -> None:
         self.assertEqual(validator.validate_packet(packet()), [])
 
