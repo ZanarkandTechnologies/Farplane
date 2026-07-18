@@ -12,7 +12,7 @@ checks = [
 
 [[pre_commit.path_check]]
 globs = ["skills/**", "docs/skills/**"]
-checks = ["skill_check"]
+checks = ["skill_file_line_count", "skill_check"]
 
 [[pre_commit.path_check]]
 globs = ["tickets/**"]
@@ -58,6 +58,21 @@ name = "project-memory"
 globs = ["memory.mb", "docs/MEMORY.md"]
 max_lines = 500
 
+[[changed_file_line_count.rule]]
+name = "skill-source"
+globs = ["skills/**"]
+exclude_globs = [
+  "skills/**/assets/**",
+  "skills/**/graph/**",
+  "skills/**/node_modules/**",
+  "skills/**/self-improve/results/**",
+  "skills/**/self-improve/runs/**",
+  "skills/**/package-lock.json",
+  "skills/**/pnpm-lock.yaml",
+  "skills/**/yarn.lock",
+]
+max_lines = 200
+
 [checks.staged_diff_check]
 argv = ["git", "diff", "--cached", "--check"]
 
@@ -87,4 +102,8 @@ argv = ["python3", "bin/validators/check_harness_invariants.py"]
 
 [checks.changed_file_line_count]
 mode = "warn"
-argv = ["python3", "bin/validators/check_changed_file_line_count.py", "--config", "rules/git-review-gates.toml"]
+argv = ["python3", "bin/validators/check_changed_file_line_count.py", "--config", "rules/git-review-gates.toml", "--rule", "project-memory"]
+
+[checks.skill_file_line_count]
+mode = "block"
+argv = ["python3", "bin/validators/check_changed_file_line_count.py", "--config", "rules/git-review-gates.toml", "--rule", "skill-source"]

@@ -183,8 +183,9 @@ reference so it is loaded only after selection.
 
 ## Placement Boundaries
 
-Use progressive disclosure, access frequency, and ownership before line count.
-Length is a pressure signal, not the source of truth.
+Use progressive disclosure, access frequency, and ownership to decide where a
+file splits. Line count is a hard commit invariant for hand-authored skill text,
+not a reason to hide required behavior.
 
 ```text
 place_skill_content(content, needed_now, needed_later, owner_scope, depth, line_count)
@@ -221,14 +222,15 @@ cross-skill policy:
   finish gates, skill structure, or harness algebra.
 - Decisions that should not drift across multiple skill-local references.
 
-Use these thresholds as review triggers:
+Use these thresholds and gates:
 
 - If a `SKILL.md` section grows past roughly 100 lines, ask whether part of it is
   branch-specific detail that belongs in a reference.
-- If `SKILL.md` grows past roughly 250 lines, run a structure review; keep it
-  long only when most lines are truly first-load contract.
-- If one reference grows past roughly 200 lines, split by branch, provider,
-  method, or artifact type.
+- Every staged hand-authored text file under `skills/` must be at most 200 lines.
+  Split by branch, provider, responsibility, method, or artifact type before
+  commit. Generated graphs, dependency locks, and media assets are excluded.
+- The gate is a legacy-safe ratchet: untouched oversized files do not block a
+  commit, but an oversized file fails when it is next staged.
 - If the same rule appears in two or more skills, consider a shared doc or
   template owner. Keep a one-line pointer in each `SKILL.md` when the rule is
   required for first-load behavior.

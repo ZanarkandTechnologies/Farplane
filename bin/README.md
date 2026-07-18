@@ -56,9 +56,9 @@ runtime helpers instead of symlinking every script, validator, and test.
 - `validators/check_template_version_metadata.py` - staged metadata and
   version-bump guard for template files listed in
   `rules/template-version-watch.toml`
-- `validators/check_changed_file_line_count.py` - staged-only warning for
-  files enrolled in explicit line-count limits; it never rewrites files or
-  calls a model
+- `validators/check_changed_file_line_count.py` - staged-only line-limit gate
+  for explicitly enrolled files; skill-source files are blocked above 200
+  lines while generated graphs, dependency locks, and media assets are excluded
 - `capture_user_turn.py` - turn-start user-intent writer for the hook surface
 - `hooks/farplane_file_change.py` - PostToolUse file-change boundary; captures
   typed events to the local outbox and launches the fixed Core drain subprocess

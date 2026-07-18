@@ -12,259 +12,122 @@ template_uses:
 qa_checklist: qa_checklist.md
 license: Complete terms in LICENSE.txt
 allowed-tools: mcp__sequential-thinking__sequentialthinking, Read, Write, Grep, Glob
-
 ---
 
 # Skill Creator
 
 ## Context
 
-Skill creation is part of the Farplane skill system. Read
-[docs/skills/system.md](../../docs/skills/system.md) for the tier model,
-source ownership, frontmatter contract, template versioning, feature tracking,
-and todo-link rules before changing a skill's shape. Use
-[docs/skills/best-practices.md](../../docs/skills/best-practices.md) as the
-skill-authoring standard. Prefer the specific anchored section needed for the
-current edit; load the whole file only when shaping or reviewing the full skill
-contract.
+Use this skill to create or update a stable reusable workflow. Read
+`qa_checklist.md`, the target package, its registry row, and the relevant parts
+of [skill system](../../docs/skills/system.md) and
+[skill best practices](../../docs/skills/best-practices.md) before editing.
+Update an existing owner instead of creating a duplicate skill.
+
+Every staged hand-authored text file under `skills/` must be at most 200 lines.
+Split conditional detail by branch or responsibility; do not hide default-path
+behavior merely to meet the limit. Generated graphs, dependency locks, and
+media assets are excluded by the commit gate.
 
 ## Skill Signature
 
 ```text
-create_or_update_skill(request, existing_surface?, proof_need?) -> skill_package_change + validation_result
-state: reads(skill-system docs, registry, target skill, template); writes(SKILL.md, references?, scripts?, registry?)
-gates: trigger_stable; template_structure_valid;
-       new_behavior_skill_evals_created_and_run_or_deferred;
-       proof_or_blocker_named; review_ready
-routes: gap-analysis | skill-maintenance | research:source-synthesis | advise |
-  deliberative-advice | self-improve | goal-advisor | review
-fails: creates duplicate skills; hides required logic in references; omits proof; stamps stale template version
+create_or_update_skill(request, existing_surface?, proof_need?)
+  -> skill_package_change + validation_result
+state: reads(skill docs, registry, target, template, QA); writes(owner-local package, registry?)
+gates: trigger_stable; first_load_executable; each_authored_file_lines<=200;
+       template_truthful; proof_named; review_ready
+routes: gap-analysis | skill-maintenance | research:source-synthesis |
+  self-improve | goal-advisor | review
+fails: duplicate skill; hidden default workflow; oversized staged skill file;
+  stale template claim; missing proof
 ```
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-- [ ] 1. Read `qa_checklist.md` as preflight guardrails, then read the request,
-   related skills, registry row, nearby project docs,
-   [docs/skills/system.md](../../docs/skills/system.md),
-   [docs/skills/README.md](../../docs/skills/README.md), and
-   the relevant anchored section of
-   [docs/skills/best-practices.md](../../docs/skills/best-practices.md), and
-   any target skill-local `qa_checklist.md` when updating an existing skill
-   with runtime QA guardrails.
-- [ ] 2. Decide the owning surface and write the decision into the edit.
-   - [ ] 1. Create a new skill only when the capability has a stable trigger and
-     reusable workflow.
-   - [ ] 2. Update an existing skill when the request is a branch, method,
-     todo-list fix, reference, script, or prompt inside an existing contract.
-   - [ ] 3. Resolve unclear ownership through the native planning phase or
-     `harness-advisor` when the placement affects Farplane surfaces.
-- [ ] 3. Ground the skill design before drafting when external examples or peer
-   skills could change the contract.
-   - [ ] Use [research:parity](../research/SKILL.md#researchparity) or
-     [research:source-synthesis](../research/SKILL.md#researchsource-synthesis)
-     when source comparison is required.
-   - [ ] When book-summary videos, articles, blogs, apps, or longform sources
-     are grounding material, load
-     [book-to-skill extraction](references/book-to-skill.md) before drafting so
-     online key takeaways become workflow candidates, task analysis,
-     skill-package deltas, and proof.
-   - [ ] Use
-     [advice and proof routing](../../docs/skills/best-practices.md#advice-and-proof-routing)
-     before changing shared standards, Tier 1 primitives, meta skills, `eval`,
-     templates, reviewer rubrics, or cross-skill policy.
-- [ ] 4. Draft or revise `SKILL.md` so the first-load path is executable without
-   hidden chat context.
-   - [ ] Write `description` as one sentence under 220 characters using
-     `Verb input/context into output/artifact when call-condition`.
-   - [ ] Include trigger boundary, context, `## Skill Signature` when useful,
-     ordered `## Todo List`, branches, hard gates, proof command, and output
-     contract.
-   - [ ] Prefer first-load sufficiency over modular neatness: keep required
-     every-invocation context and gates in `SKILL.md` even when they could be
-     abstracted into a reference.
-   - [ ] Use
-     [docs/skills/best-practices.md#placement-boundaries](../../docs/skills/best-practices.md#placement-boundaries)
-     to place content by whether it is needed now on first load or later
-     through an explicit reference branch, plus owner scope, depth, and length.
-   - [ ] Use the structure optimization metrics in
-     [docs/skills/best-practices.md](../../docs/skills/best-practices.md#structure-optimization)
-     to decide what belongs in first-load `SKILL.md` versus references,
-     templates, evals, or review checks.
-   - [ ] Apply the target skill's domain-specificity check before finalizing
-     the todo list: name the domain objects, niche workflow moves, judgment
-     gates, examples, and failure modes that would not transfer unchanged to a
-     generic assistant skill.
-   - [ ] Load and run the
-     [Skill Structure QA Checklist](../skill-maintenance/qa_checklist.md) for
-     every skill create/update invocation; use a compact pass for tiny
-     mechanical edits, but still record pass, violation, or not-applicable for
-     changed surfaces.
-   - [ ] For quality-dependent skills, add one good positive example before
-     optimizing checklist prose; use `examples/<slug>/example.md` plus
-     optional `assets/` when reference media, accepted outputs, provenance, or
-     comparison gates matter.
-- [ ] 5. Move non-first-load material to the right supporting surface.
-   - [ ] Keep every-invocation rules in `SKILL.md`.
-   - [ ] Move conditional branches, examples, templates, long rubrics, model
-     maps, delegated prompts, and rare-path recipes into references.
-   - [ ] When a reference is a reusable subskill or method workflow, declare
-     `template_uses.skill-method-reference` and follow
-     [docs/skills/templates/METHOD_REFERENCE_TEMPLATE.md](../../docs/skills/templates/METHOD_REFERENCE_TEMPLATE.md).
-   - [ ] Keep actor identity, delegation routing, tool-use policy, and artifact
-     writeback in the owning agent prompt or caller skill.
-   - [ ] Promote reference logic back into `SKILL.md` when it must be read every
-     time; delete or merge empty, thin, or duplicated reference files.
-- [ ] 6. Run `python3 ../skill-maintenance/scripts/check_skills.py --write`
-   and fix any reported skill-system drift.
-- [ ] 7. Review the finished skill contract before completion.
-   - [ ] For material skill creation or structural edits, create
-     `skills/<skill-name>/audits/YYYY-MM-DD-<short-change>.md` from
-     [skill-maintenance/templates/skill-audit.md](../skill-maintenance/templates/skill-audit.md),
-     or state why the change is mechanical enough to skip an audit record.
-   - [ ] Apply `qa_checklist.md` against the finished skill package and record
-     pass, violation, not-applicable, or deferral for each item.
-   - [ ] Repeatability from files alone.
-   - [ ] Run each item in
-     [Skill Structure QA Checklist](../skill-maintenance/qa_checklist.md)
-     against the actual changed files; fix or record every violation before
-     completion.
-   - [ ] For new skills, prompt/program skills, budget-bearing skills,
-     multi-agent/router skills, eval-facing skills, or any change where agent
-     comprehension is the claim, create or update `skills/<skill-name>/evals/evals.json`
-     or record the stronger owner of behavior proof.
-   - [ ] For new behavior-sensitive skills, enable evals, create representative
-     cases, run the evals before completion, and record the result or an
-     explicit deferred-proof blocker.
-   - [ ] Run at least one behavior proof for behavior-sensitive skill work:
-     an `eval` smoke case, `agent-behavior-test`, or a target skill-local QA
-     scenario. If the proof fails, patch the skill and rerun the smallest
-     failing case before claiming readiness.
-   - [ ] For artifact-creation skills, create a follow-up self-improve ticket or
-     Goal Packet seeded with the baseline eval result when ongoing quality
-     optimization is warranted; otherwise record `no_self_improve_reason`.
-   - [ ] Review depth chosen with
-     [docs/skills/best-practices.md](../../docs/skills/best-practices.md#structure-optimization):
-     direct self-check for tiny mechanical edits, `advise` for normal recent
-     skills, and `deliberative-advice` for Tier 1, meta, `eval`, stale,
-     high-blast-radius, cross-skill, or precedent-setting structure changes.
-   - [ ] No duplicated first-load logic.
-   - [ ] Actor-prompt versus skill-contract boundaries are clean.
-   - [ ] Explicit proof commands or blockers are recorded.
-   - [ ] Quality-dependent skills have at least one transferable example,
-     preferably an `examples/<slug>/example.md` fixture when assets or
-     comparison gates matter, or an explicit blocker explains why the example
-     cannot be produced yet.
-   - [ ] Native `reviewer` subagent used for material skill-system changes when
-     available.
+- [ ] 1. Ground the request and bind the owner.
+   - [ ] Read `qa_checklist.md`, the target `SKILL.md`, target-local QA/evals,
+     registry row, nearby docs, and the relevant template/best-practice section.
+   - [ ] Create a skill only for a stable reusable trigger; otherwise update the
+     existing skill, reference, script, template, eval, or validator owner.
+   - [ ] Use `harness-advisor` when ownership crosses Farplane surfaces.
+- [ ] 2. Name the behavior delta, trigger boundary, inputs, outputs, state,
+  gates, failure modes, proof need, and non-goals before drafting.
+- [ ] 3. Ground domain behavior when external practice could change the design.
+   - [ ] Use `research:parity` or `research:source-synthesis` for comparison.
+   - [ ] For book or longform inputs, load
+     [book-to-skill extraction](references/book-to-skill.md).
+   - [ ] Use the advice/proof routing in skill best practices before changing
+     shared standards, meta skills, templates, eval, or reviewer policy.
+- [ ] 4. Draft the minimum executable first-load contract.
+   - [ ] Keep trigger/context, signature, numbered todo path, branches, hard
+     gates, stop conditions, proof, reference routing, and output visible.
+   - [ ] Write a one-sentence frontmatter description under 220 characters.
+   - [ ] Apply the domain-specificity rubric from `qa_checklist.md`; include a
+     domain workflow move, judgment gate, and positive example when quality is
+     human-judged.
+   - [ ] Apply the
+     [Skill Structure QA Checklist](../skill-maintenance/qa_checklist.md).
+- [ ] 5. Place supporting detail and enforce the file cap.
+   - [ ] Keep every-invocation behavior in `SKILL.md`; move conditional branches,
+     long examples, templates, rubrics, provider maps, and rare recipes to
+     precisely linked supporting files.
+   - [ ] Use the
+     [method reference template](../../docs/skills/templates/METHOD_REFERENCE_TEMPLATE.md)
+     and declare `skill-method-reference` for reusable method workflows.
+   - [ ] Run the staged line-limit check before completion; split every included
+     authored text file over 200 lines without weakening first-load behavior.
+- [ ] 6. Run `python3 ../skill-maintenance/scripts/check_skills.py --write`,
+  focused script/JSON/eval checks, and the staged line-limit validator.
+- [ ] 7. Finish with proof and review.
+   - [ ] Apply both QA checklists again and record pass, violation,
+     not-applicable, or deferred for changed surfaces.
+   - [ ] For material structural work, create a dated skill-local audit from
+     [skill audit template](../skill-maintenance/templates/skill-audit.md); for a
+     mechanical edit, record the skip reason.
+   - [ ] Add or run representative behavior proof for behavior-sensitive work,
+     or name the stronger owner and blocker.
+   - [ ] Use the native reviewer for material or precedent-setting changes.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 ## Templates
 
-Use [docs/skills/templates/SKILL_TEMPLATE.md](../../docs/skills/templates/SKILL_TEMPLATE.md)
-for new skill package structure. Use
-[docs/skills/templates/METHOD_REFERENCE_TEMPLATE.md](../../docs/skills/templates/METHOD_REFERENCE_TEMPLATE.md)
-when a reusable subskill or method reference needs a standard shape.
+Use [skill package template](../../docs/skills/templates/SKILL_TEMPLATE.md) for
+new skills and the method reference template linked above for reusable methods.
+Standalone package helpers remain available under `scripts/` when a concrete
+non-Farplane package artifact is required.
 
 ## Gotchas
 
-- Do not create a skill for generic model knowledge, raw library
-  documentation, one-off notes, or behavior better expressed as a prompt,
-  script, ticket, or existing skill update.
-- Do not hide the default workflow in references. If skipping all references
-  makes the skill fail, `SKILL.md` is too thin.
-- Put content in `SKILL.md` when it is needed now on first load; put it in
-  `references/*` when it is only needed later through an explicit branch,
-  deeper rationale, optional detail, or rare mode.
-- Do not teach the whole domain in `SKILL.md`. If it reads like onboarding,
-  move the material to references.
-- Do not use frontmatter `description` as a trigger catalog or mini manual. It
-  is only the pre-load routing definition.
-- Do not duplicate the same rule across `SKILL.md`, references, templates,
-  prompts, and README-style docs.
-- Do not put actor identity, delegation routing, tool-use policy, or artifact
-  writeback in a reusable skill contract.
-- Do not spend a full pass polishing structure for a quality-dependent skill
-  that has no representative example; make the example first unless the skill
-  is too broken to run.
-- Do not turn a book into a condensed substitute for the book. Extract
-  transferable practices, cite lawful sources, and transform them into
-  operator-owned skill behavior, gates, examples, and evals.
-- Do not summarize QA as "looks good." Name the checklist verdicts and proof
-  artifact path so the next maintainer can see what actually ran.
+- Do not create skills for generic knowledge, one-off notes, raw library docs,
+  or behavior better owned by a script, ticket, prompt, or existing skill.
+- Do not meet 200 lines by hiding required routing, gates, proof, or output.
+- Do not split one coherent function mechanically; split by branch, provider,
+  responsibility, or artifact type and keep precise load conditions.
+- Do not duplicate rules across `SKILL.md`, references, templates, prompts, and
+  docs, or put actor identity and delegation policy in a reusable skill.
+- Do not call QA complete with “looks good”; name verdicts and evidence paths.
 
 ## Reference Map
 
-- [docs/skills/system.md](../../docs/skills/system.md) - tier model, source
-  ownership, frontmatter contract, template versioning, feature tracking, and
-  todo-link rules.
-- [docs/skills/README.md](../../docs/skills/README.md) - human skill selection
-  guide, generated registry surface, and maintenance commands.
-- [docs/skills/best-practices.md](../../docs/skills/best-practices.md) -
-  first-load todo shape, reference placement, actor-prompt boundaries,
-  structure optimization metrics, duplication control, repeatability, and
-  review gates.
-- [../skill-maintenance/qa_checklist.md](../skill-maintenance/qa_checklist.md)
-  - first-class skill-local QA checklist for first-load size, progressive
-  disclosure, reference routing, and compaction risk.
-- [qa_checklist.md](qa_checklist.md) - skill-creator-specific preflight and
-  final checks for authoring, scaffolding, proof, and template hygiene.
-- [docs/skills/templates/SKILL_TEMPLATE.md](../../docs/skills/templates/SKILL_TEMPLATE.md)
-  - minimal starter template for new skill packages.
-- [docs/skills/templates/METHOD_REFERENCE_TEMPLATE.md](../../docs/skills/templates/METHOD_REFERENCE_TEMPLATE.md)
-  - starter template for reusable subskill or method reference files.
-- [references/workflows.md](references/workflows.md) - branch and
-  outcome-contract patterns when the todo list needs shaping help.
-- [references/architecture.md](references/architecture.md) - boundary between
-  first-load contract, references, scripts, prompts, and assets.
-- [references/judgement-questions.md](references/judgement-questions.md) -
-  advise-style skill decisions.
-- [references/output-patterns.md](references/output-patterns.md) - prompt,
-  template, example, and validation output patterns.
-- [references/book-to-skill.md](references/book-to-skill.md) - load when a skill
-  design is grounded in books, longform reading, author interviews, public book
-  notes, or online summaries.
-- [references/tier3-pipeline-model.md](references/tier3-pipeline-model.md) -
-  optional model for complex Tier 3 pipeline skills.
+- [skill system](../../docs/skills/system.md) — metadata, tiers, registry, and
+  todo-link contracts; read for every structural update.
+- [skill best practices](../../docs/skills/best-practices.md) — placement,
+  repeatability, examples, and review; read the relevant anchored section.
+- [creator QA](qa_checklist.md) — preflight and final authoring guardrails.
+- [structure QA](../skill-maintenance/qa_checklist.md) — apply to every create
+  or update invocation.
+- [workflows](references/workflows.md) — load when todo branches need shaping.
+- [architecture](references/architecture.md) — load when ownership between
+  first load, references, scripts, prompts, and assets is unclear.
+- [output patterns](references/output-patterns.md) — load when a template,
+  example, validator, or structured output needs calibration.
+- [tier-3 pipeline model](references/tier3-pipeline-model.md) — load only for a
+  complex Tier 3 pipeline.
 
 ## Output
 
-Paths here are relative to the `skill-creator` package.
-
-```bash
-python3 ../skill-maintenance/scripts/check_skills.py --write
-```
-
-When creating or packaging a non-Farplane standalone skill, use the local helper
-scripts only when a concrete package artifact is needed:
-
-```bash
-python3 scripts/init_skill.py <skill-name> --path ..
-python3 scripts/package_skill.py ../<skill-name>
-```
-
-`init_skill.py` creates only `SKILL.md` by default. Add optional support files
-with `--with-helper`, `--with-references`, or `--with-assets` only when the new
-skill genuinely needs them. Run added or changed scripts directly before
-claiming they work.
-
-After this skill runs:
-
-- The target skill has valid frontmatter and a direct marker-delimited
-  `## Todo List`.
-- The target skill `description` is a one-sentence functional routing
-  definition under 220 characters.
-- `SKILL.md` contains the minimum first-load contract without tutorial bloat.
-- References are linked directly from `SKILL.md` and used only for conditional
-  detail.
-- Scripts, prompts, assets, and templates exist only when they support repeated
-  execution.
-- Registry validation passes, or the remaining blocker is recorded with the
-  exact failing command.
-- The Skill Structure QA Checklist has been applied to the changed surfaces.
-- New behavior-sensitive skills have enabled evals, representative cases, a
-  recorded eval run, and a pass/fail/deferred-proof result.
-- Behavior-sensitive skill updates have an eval, behavior-test, or skill-local
-  QA proof artifact, or an explicit blocker naming why that proof could not run.
-- Artifact-creation skills have a follow-up self-improve ticket/Goal Packet
-  seeded from the baseline eval result, or a recorded `no_self_improve_reason`.
+Return changed owner-local files, proof commands/results, QA verdicts, registry
+status, audit or skip reason, and reviewer result or blocker. Confirm each
+staged authored skill text file is at most 200 lines.

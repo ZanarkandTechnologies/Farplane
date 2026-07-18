@@ -26,7 +26,14 @@ max_lines = 500
 
             self.assertEqual(
                 load_rules(config),
-                [LineLimitRule("project-memory", ("memory.mb", "docs/MEMORY.md"), 500)],
+                [
+                    LineLimitRule(
+                        "project-memory",
+                        ("memory.mb", "docs/MEMORY.md"),
+                        (),
+                        500,
+                    )
+                ],
             )
 
     def test_collect_warnings_reads_only_matching_changed_files(self) -> None:
@@ -34,7 +41,7 @@ max_lines = 500
             "memory.mb": b"one\ntwo\nthree\n",
             "README.md": b"one\ntwo\nthree\nfour\n",
         }
-        rules = [LineLimitRule("memory", ("memory.mb",), 2)]
+        rules = [LineLimitRule("memory", ("memory.mb",), (), 2)]
 
         warnings = collect_warnings(
             ["memory.mb", "README.md"],
@@ -46,6 +53,25 @@ max_lines = 500
         self.assertEqual(warnings[0].path, "memory.mb")
         self.assertEqual(warnings[0].line_count, 3)
         self.assertEqual(warnings[0].rule.max_lines, 2)
+
+    def test_collect_warnings_skips_excluded_and_binary_files(self) -> None:
+        blobs = {
+            "skills/foo/SKILL.md": b"one\ntwo\nthree\n",
+            "skills/foo/assets/output.svg": b"one\ntwo\nthree\n",
+            "skills/foo/image.png": b"binary\0data\nmore\n",
+        }
+        rules = [
+            LineLimitRule(
+                "skill-source",
+                ("skills/**",),
+                ("skills/**/assets/**",),
+                2,
+            )
+        ]
+
+        warnings = collect_warnings(list(blobs), rules, blobs.get)
+
+        self.assertEqual([warning.path for warning in warnings], ["skills/foo/SKILL.md"])
 
     def test_line_count(self) -> None:
         for blob, expected in (
