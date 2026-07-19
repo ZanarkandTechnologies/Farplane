@@ -74,6 +74,8 @@ specs; task-local state belongs in tickets; generated checks belong in validator
 ## Operating Contract
 
 - Keep always-loaded policy lean and navigational.
+- Require independent evaluation before agreement; responses lead with the
+  conclusion or evidence rather than stock praise or reflexive validation.
 - Route detailed procedures to the smallest durable owner.
 - Preserve feedback-first planning for materially branching design choices.
 - Require local context and proof before implementation completion claims.
@@ -122,4 +124,6 @@ The Agent Kernel turns local and install-time policy into the operating shape ev
 
 ## Change History
 
+- 2026-07-19: Added the cross-project independent-reasoning and
+  non-sycophantic response-opening contract.
 - 2026-06-27: Migrated into the reader-first system-spec shape.
