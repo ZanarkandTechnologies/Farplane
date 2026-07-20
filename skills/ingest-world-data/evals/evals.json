@@ -1,0 +1,63 @@
+{
+  "skill_name": "ingest-world-data",
+  "evals": [
+    {
+      "id": "ingest_world_data_bounded_capture_01",
+      "prompt": "This call excerpt is worth saving: Penang Castings, also called PC Manufacturing, operates in Penang and supplies aluminum housings to our existing CRM company Acme Motors. Update the project knowledge for this excerpt only.",
+      "expected_output": "Uses the supplied excerpt as the bounded source and does not search unrelated transcripts; Searches the current CRM registry before choosing create or update; Merges the alias and flat location without overwriting unrelated Markdown; Encodes the association inside a factual sentence using an explicit crm link to the resolved Acme entity; Does not invent coordinates, relationship predicates, reverse edges, or a separate edge record; Runs the CRM compiler and reports created, updated, skipped, ambiguous, and compile outcomes",
+      "files": [],
+      "assertions": [
+        "Uses the supplied excerpt as the bounded source and does not search unrelated transcripts",
+        "Searches the current CRM registry before choosing create or update",
+        "Merges the alias and flat location without overwriting unrelated Markdown",
+        "Encodes the association inside a factual sentence using an explicit crm link to the resolved Acme entity",
+        "Does not invent coordinates, relationship predicates, reverse edges, or a separate edge record",
+        "Runs the CRM compiler and reports created, updated, skipped, ambiguous, and compile outcomes"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Selected call facts become bounded CRM and world data",
+          "tags": ["skill", "ingest-world-data", "bounded-capture", "crm"]
+        }
+      }
+    },
+    {
+      "id": "ingest_world_data_ambiguous_identity_01",
+      "prompt": "Save that Alex Chen mentioned the Johor supplier relationship. The CRM has two Alex Chen records and the excerpt does not say which one this was.",
+      "expected_output": "Searches IDs, normalized names, aliases, kinds, and locations; Returns both plausible Alex Chen candidates in an ambiguity report; Does not merge, create a third Alex Chen, or write a crm link while identity is unresolved; Preserves the supplied claim for follow-up without turning it into a compiled association; Returns a blocked or partial capture receipt rather than claiming completion",
+      "files": [],
+      "assertions": [
+        "Searches IDs, normalized names, aliases, kinds, and locations",
+        "Returns both plausible Alex Chen candidates in an ambiguity report",
+        "Does not merge, create a third Alex Chen, or write a crm link while identity is unresolved",
+        "Preserves the supplied claim for follow-up without turning it into a compiled association",
+        "Returns a blocked or partial capture receipt rather than claiming completion"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Ambiguous names block silent CRM merging",
+          "tags": ["skill", "ingest-world-data", "ambiguity", "dedupe"]
+        }
+      }
+    },
+    {
+      "id": "ingest_world_data_mining_boundary_01",
+      "prompt": "There may have been useful supply-chain details somewhere in our old research calls. Add whatever you can find to the map.",
+      "expected_output": "Recognizes that no bounded source or selected information was supplied; Does not bulk-search, mine, monitor, or extract old transcripts; Requests or identifies the specific transcript, excerpt, or facts needed for intentional capture; Does not create CRM entities or projections from speculative discovery; Returns a source-gap result",
+      "files": [],
+      "assertions": [
+        "Recognizes that no bounded source or selected information was supplied",
+        "Does not bulk-search, mine, monitor, or extract old transcripts",
+        "Requests or identifies the specific transcript, excerpt, or facts needed for intentional capture",
+        "Does not create CRM entities or projections from speculative discovery",
+        "Returns a source-gap result"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Unbounded transcript mining stays outside the skill",
+          "tags": ["skill", "ingest-world-data", "negative-boundary", "source-gap"]
+        }
+      }
+    }
+  ]
+}

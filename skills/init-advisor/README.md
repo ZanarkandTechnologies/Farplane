@@ -283,7 +283,7 @@ Those can come after one clean ticket run.
 - [ ] `farplane/pm.json` exists when the UI should fold chat and automation thread IDs into one visual project PM
 - [ ] Live automation activation, when requested, is handled by
       `automation-advisor` and appends PM-visible thread IDs to `farplane/pm.json`
-- [ ] owner-named `.farplane/reports/`, `.farplane/<skill-name>/reports/`, `.farplane/crm/entities/**/*.md`, generated `.farplane/crm/entities.json`, `.farplane/metrics/daily/`, `.farplane/evals/runs/`, and `.farplane/logs/` exist as ignored local state
+- [ ] owner-named `.farplane/reports/`, `.farplane/<skill-name>/reports/`, `.farplane/crm/entities/`, `.farplane/metrics/daily/`, `.farplane/evals/runs/`, and `.farplane/logs/` exist as ignored local state; generated `.farplane/crm/entities.json` and `world.json` exist after the first `farplane crm compile`
 - [ ] primitive metrics and `.farplane/project/ui/latest.json` were regenerated after canonical project-file migration
 - [ ] `python3 bin/validators/check_farplane_project_files.py` passes when the repo has Farplane validators
 - [ ] `docs/prd.md`, `docs/features/`, `docs/TROUBLES.md`, `docs/LESSONS.md` exist

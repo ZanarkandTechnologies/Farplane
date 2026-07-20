@@ -3,10 +3,40 @@ title: Farplane Framework Changelog
 owner: init-advisor
 status: active
 kind: framework-changelog
-updated_at: 2026-07-17
+updated_at: 2026-07-20
 ---
 
 # Farplane Framework Changelog
+
+## 2.0.7
+
+Date: 2026-07-20
+
+Primary change: add question-level provenance to Markdown-owned CRM knowledge
+without retaining turn-level conversation history.
+
+Changed surfaces:
+
+- entity claim blocks may cite stable `q-*` footnotes whose definitions retain
+  exact question text and optional local session provenance;
+- CRM schema version 2 compiles question-backed claims plus question refs on
+  nodes and associations, while keeping questions out of the default node set;
+- unresolved, empty, or conflicting question definitions fail compilation;
+- semantic claim and edge keys ignore question/session markers;
+- bootstrap stops seeding generated schema-v1 CRM JSON; the canonical compiler
+  creates both projections after first use.
+
+Migration steps:
+
+1. Bump `farplane/manifest.json` `spec_version` and
+   `template_uses.farplane-framework` to `2.0.7`.
+2. Remove any bootstrap-seeded `.farplane/crm/entities.json`; generated
+   `entities.json` and `world.json` remain disposable compiler output.
+3. Add `[^q-*]` citations only to durable factual claim blocks and define exact
+   matching questions under each entity's `## Question index`.
+4. Keep `session=<id>` optional and local; do not migrate or store turn IDs.
+5. Run `farplane crm compile --project-root <project>` and update consumers for
+   schema-version-2 `questions`, `claims`, and `question_refs` fields.
 
 ## 2.0.5
 

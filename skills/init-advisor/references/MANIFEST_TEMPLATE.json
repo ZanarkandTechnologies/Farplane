@@ -1,15 +1,15 @@
 {
   "_template_metadata": {
     "template_id": "farplane-framework",
-    "template_version": "2.0.5",
+    "template_version": "2.0.7",
     "feature_refs": ["FEAT-0060"],
     "consumer_scope": "project",
     "applies_to": ["farplane/manifest.json"]
   },
   "schema": "farplane_project",
-  "spec_version": "2.0.5",
+  "spec_version": "2.0.7",
   "template_uses": {
-    "farplane-framework": "2.0.5"
+    "farplane-framework": "2.0.7"
   },
   "project": {
     "name": "TODO",

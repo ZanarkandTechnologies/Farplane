@@ -1076,6 +1076,12 @@ def run_reports_repair_refs_cli(args: argparse.Namespace) -> int:
     return int(run_repair_refs(args))
 
 
+def run_crm_compile_cli(args: argparse.Namespace) -> int:
+    from farplane_crm import run_compile
+
+    return int(run_compile(args))
+
+
 def run_mining_cli(args: argparse.Namespace) -> int:
     from farplane_file_events import FileEventError
     from farplane_mining import (
@@ -1446,6 +1452,17 @@ def build_parser() -> argparse.ArgumentParser:
     reports_repair_refs.add_argument("--no-index", action="store_true")
     reports_repair_refs.add_argument("--json", action="store_true")
     reports_repair_refs.set_defaults(func=run_reports_repair_refs_cli)
+
+    crm = sub.add_parser("crm", help="Compile Markdown-owned CRM relationship entities.")
+    crm_sub = crm.add_subparsers(dest="crm_command")
+    crm_compile = crm_sub.add_parser(
+        "compile",
+        help="Write .farplane/crm/entities.json and world.json from entity Markdown.",
+    )
+    crm_compile.add_argument("--project-root", default=os.getcwd())
+    crm_compile.add_argument("--no-write", action="store_true")
+    crm_compile.add_argument("--json", action="store_true")
+    crm_compile.set_defaults(func=run_crm_compile_cli)
 
     mining = sub.add_parser("mining", help="Capture, route, replay, and inspect Core mining runs.")
     mining_sub = mining.add_subparsers(dest="mining_group")
