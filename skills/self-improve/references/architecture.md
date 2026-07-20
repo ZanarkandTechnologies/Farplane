@@ -1,37 +1,29 @@
 # Self Improve Architecture
 
-`self-improve` is skill-specific improvement memory and measured candidate
-comparison.
+Self-improvement is one native Goal over one target skill and one frozen suite.
 
-Inputs:
+```text
+local/source/adversarial coverage preparation
+  -> ordinary ticket Goal Packet
+  -> baseline
+  -> harden until performance target passes
+  -> refine repeatedly while preserving the target
+  -> shortest verified passing candidate
+```
 
-- target skill or harness surface
-- metric or human rubric
-- feedback class: `immediate` or `delayed`
-- realistic prompts or bounded intervention
-- binary assertions or delayed-signal provider
-- original experiment ticket and Goal Packet for delayed feedback
+## Ownership
 
-Outputs:
+- Target `SKILL.md`: editable live behavior.
+- Target `evals/evals.json`: canonical behavior cases.
+- Ticket `ticket.md`: objective, scope, Done, and proof contract.
+- Ticket `program.md`: instantiated harden/refine policy, metrics, budgets,
+  drift, and stop conditions.
+- Ticket `progress.md`: append-only observations, measurements, decisions, and
+  evidence links.
+- `.farplane/evals/runs/<job-id>`: generated Eval evidence only.
+- Native Goal: sole continuation engine.
+- Eval: suite execution, grading, and comparison.
 
-- experiment-local eval cases
-- optional target-skill `self-improve/program.md` memory
-- baseline skill score
-- metric card or no-metric rationale
-- eval, review, human-feedback, or Goal-loop comparison plan
-- immediate measured result or delayed `waiting_signal` state
-- measured skill edits
-- before/after debrief
-
-The target skill is not mutated until the eval baseline exists.
-
-## Storage Boundary
-
-Use `.farplane/self-improve/` for scratch runs and bulky logs. Use
-`skills/<target-skill>/self-improve/` only for durable evals, run summaries, and
-lessons that future improvement passes should read before editing.
-
-Delayed experiment state does not belong in this scratch-memory layout. Keep
-the expectation in the original ticket's `Reward.kpi_rewards[]`, loop policy
-in `program.md`, and append-only observations in `progress.md`. Work Pulse
-derives due check-in eligibility from those files.
+The reusable reference is policy source, not runtime state. Do not add a
+decision helper, event schema, runner, counter file, campaign, target-local
+program/progress pair, or another loop owner.

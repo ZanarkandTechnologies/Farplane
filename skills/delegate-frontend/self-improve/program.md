@@ -1,4 +1,12 @@
-# Self-Improve Program: delegate-frontend
+---
+status: legacy
+runtime_role: none
+---
+
+# Legacy Self-Improve Notes: delegate-frontend
+
+Historical experiment notes only. The active `self-improve` workflow does not
+read, write, generate, parse, or migrate this file as Goal state.
 
 ## Objective
 make external Pi/Kimi frontend delegation reliably produce Terminal-style scroll-scrub landing pages with measurable first-write, motion, visual-quality, and handoff evidence

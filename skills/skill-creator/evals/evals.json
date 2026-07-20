@@ -31,7 +31,7 @@
     {
       "id": "skill_creator_new_skill_eval_run_and_self_improve_01",
       "prompt": "Create a reusable artifact-writing skill for producing investor update memos. It should be good enough to use, and if it keeps improving from real outputs we can tune it later.",
-      "expected_output": "Creates the skill only if the trigger and reusable workflow are stable; Enables evals for the new behavior-sensitive skill; Creates representative eval cases for the skill before claiming it is done; Runs the evals and records the pass, fail, or deferred-proof result; Uses failed evals as blockers or fixes and reruns the smallest failing case before readiness; For the artifact-creation skill, creates a follow-up self-improve ticket or Goal Packet seeded with the baseline eval result when ongoing optimization is warranted, or records no_self_improve_reason",
+      "expected_output": "Creates the skill only if the trigger and reusable workflow are stable; Enables evals for the new behavior-sensitive skill; Creates representative eval cases before claiming it is done; Runs evals and records pass, fail, or deferred proof; Uses failures as blockers or fixes and reruns the smallest failing case; For continued optimization, routes through self-improve with an owning ticket and Goal Packet or records no_self_improve_reason",
       "files": [],
       "assertions": [
         "Creates the skill only if the trigger and reusable workflow are stable",
@@ -39,7 +39,7 @@
         "Creates representative eval cases for the skill before claiming it is done",
         "Runs the evals and records the pass, fail, or deferred-proof result",
         "Uses failed evals as blockers or fixes and reruns the smallest failing case before readiness",
-        "For the artifact-creation skill, creates a follow-up self-improve ticket or Goal Packet seeded with the baseline eval result when ongoing optimization is warranted, or records no_self_improve_reason"
+        "For continued optimization, routes through self-improve with an owning ticket and ticket Goal Packet, or records no_self_improve_reason"
       ],
       "metadata": {
         "farplane": {
@@ -50,7 +50,27 @@
             "self-improve",
             "artifact-skills"
           ],
-          "notes": "Protects the new-skill lifecycle: behavior-sensitive skills need evals created and run before done, while artifact-creation skills route ongoing optimization to self-improve instead of hiding it in the creation ticket."
+          "notes": "Protects the new-skill lifecycle: behavior-sensitive skills need evals before done, while ongoing optimization uses the target skill's program and progress files."
+        }
+      }
+    },
+    {
+      "id": "skill_creator_delegates_eval_execution_01",
+      "prompt": "Draft a new reusable skill for reviewing operational incident reports, prove that it works, and package it when ready.",
+      "expected_output": "Creates realistic canonical eval cases, delegates their execution and grading to eval, compares the draft with no-skill or prior behavior, repairs failures before readiness, and keeps viewer or benchmark implementation out of skill-creator.",
+      "files": [],
+      "assertions": [
+        "Creates realistic cases in the target skill's evals/evals.json",
+        "Calls eval for clean execution and evidence-backed grading rather than self-grading",
+        "Uses a no-skill or previous-skill baseline when claiming skill value",
+        "Treats failed cases as blockers or repairs before packaging",
+        "Does not place runner, benchmark, or viewer implementation inside skill-creator"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Skill Creator delegates proof to Eval",
+          "tags": ["skill-creator", "eval", "ownership"],
+          "notes": "Protects the creation-to-eval handoff after adopting the Agent Skills iteration model."
         }
       }
     }

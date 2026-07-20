@@ -1,6 +1,6 @@
 ---
 name: self-improve
-description: "Turn an existing improvement goal into immediate or delayed measured experiments, evals, Goal context, memory, and promotion evidence."
+description: "Optimize one existing skill through a Goal-backed harden-then-refine loop over a frozen eval suite."
 tier: 3
 group: self-improvement
 source: local
@@ -15,169 +15,152 @@ eval: evals/evals.json
 
 ## Context
 
-Use this when a target skill, prompt, or harness surface needs measured
-optimization against a metric. This skill owns experiment context, evals,
-baselines, candidate comparison, skill-local memory, and promotion rules. It is
-not a generic implementation planner and should not mutate a target before the
-metric card and proof path are clear.
-
-Current mental model:
+Use this when an existing skill has a measurable behavior gap and should improve
+over multiple bounded turns. Native Goal is the sole continuation engine. Each
+invocation instantiates [the reusable Goal program](references/goal-program-template.md)
+into the owning ticket's ordinary Goal Packet:
 
 ```text
-Goal mode = durable loop runner
-goal-advisor = writes the Goal contract
-self-improve/ = target skill memory, evals, prompt candidates, and results
-skill-maintenance = accepted writeback into SKILL.md/references/source copies
+tickets/TASK-XXXX/
+  ticket.md
+  program.md
+  progress.md
+  artifacts/native-goal-prompt.md
 ```
+
+The target keeps its live `SKILL.md` and canonical `evals/evals.json`. Eval
+owns execution and generated evidence under `.farplane/evals/runs/`. Do not
+create target-local lifecycle state or another decision engine.
 
 ## Skill Signature
 
 ```text
-self_improve(target, metric, feedback_class, ticket,
-             program?, progress?, search_space?, eval_suite?)
-  -> immediate_result | waiting_signal
-   + evidence
-   + promotion_decision?
+self_improve(target_skill, owning_ticket, performance_metric, eval_suite?, guards?, budgets?)
+  -> approved_goal_packet + shortest_verified_passing_candidate + eval_evidence
 
 state:
-  reads(target package, evals, metric, prior runs, candidate constraints,
-        ticket Reward.kpi_rewards[], Goal Packet program/progress)
-  writes(evals?, results?, target-local memory?, accepted change?,
-         original ticket Reward rows?, original progress log?)
+  reads(target SKILL.md, canonical evals/evals.json, owning ticket, generated Eval evidence)
+  writes(ticket program.md, ticket progress.md, native Goal prompt,
+         accepted target-skill change)
 
 gates:
-  feedback_classified; metric_named; baseline_recorded;
-  candidate_or_intervention_bounded; promotion_rule_named;
-  immediate_result_measured_in_window_or_delayed_checkin_program_executable
+  target_exists; owning_ticket_exists; metric_named; suite_frozen;
+  baseline_recorded; guards_named; phase_budgets_named; packet_approved
 
-routes: metric-advisor | eval | goal-advisor | skill-maintenance | review |
-        pulse-update
+routes: goal-advisor | eval | metric-advisor | skill-maintenance |
+  agent-qa-test | review
 
 fails:
-  optimizes_by_taste; mutates_before_baseline; promotes_unmeasured_change;
-  creates_checkin_ticket; invents_experiment_metadata;
-  leaves_delayed_checkin_implicit; adds_delayed_checkin_debt_to_immediate_work;
-  bloats_target_skill
+  taste_only_optimization; mutation_before_baseline; changing_suite_mid_goal;
+  refinement_before_target; behavior_for_length_trade; unmeasured_promotion;
+  target_local_loop_state; adversary_self_approval
 ```
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-- [ ] 1. Read the target skill package or harness surface: `SKILL.md`, direct todo list, references,
-  scripts, and existing `self-improve/` memory.
-- [ ] 2. Clarify the improvement target, eval boundary, or editable scope with
-  the native planning phase when any of them is unclear.
-- [ ] 3. Ground external examples or prior variants with
-  [research:source-synthesis](../research/SKILL.md#researchsource-synthesis)
-  when comparison is required.
-- [ ] 4. Define the quality rubric and convert it into binary assertions before
-  optimizing.
-- [ ] 5. If the metric is unclear, derive a metric card first; then establish a
-  baseline score or baseline judgment before mutating the target skill.
-- [ ] 6. Classify feedback timing before choosing the execution route.
-  - [ ] Use `immediate` only when baseline, intervention, result, and keep/kill
-        decision can be observed inside the current execution window. Run it
-        through native Goal without manufacturing a future check-in; keep the
-        Goal Program `Check-In Program` as compact `mode: not_applicable`.
-  - [ ] Use `delayed` when elapsed time, exposure, external action, or later
-        human feedback is required. Encode the wait in the original ticket's
-        `Reward.kpi_rewards[]` and compile an executable `Check-In Program` in
-        its `program.md` through Goal Advisor.
-  - [ ] Give every delayed row a stable `reward_id`. Treat only evidence-backed
-        `accept` or `kill` as terminal; `monitor` updates the same row and wait.
-- [ ] 7. For durable iterative work, prefer native Goal mode as the loop runner;
-  use this skill as the eval, prompt-profile, and skill-memory context surface.
-- [ ] 8. Promote only durable lessons, evals, and accepted changes into the target
-  skill package, normally through [skill-maintenance](../skill-maintenance/SKILL.md).
+- [ ] 1. Read the target `SKILL.md`, canonical `evals/evals.json`, and owning
+  ticket. Route an obvious deterministic repair to direct maintenance instead
+  of creating an optimization Goal.
+- [ ] 2. Bind the performance metric, passing target, guards, editable search
+  space, length metric, and separate harden/refine `max_rounds` plus patience.
+  Use `metric-advisor` only when an honest metric cannot be stated directly.
+- [ ] 3. Prepare coverage before freezing the Goal.
+  - [ ] Start from local failures and scored history.
+  - [ ] When local evidence cannot choose a method, route bounded practitioner,
+    paper, or book research through
+    `skill-maintenance:upgrade_skill_from_sources`; keep the source packet out
+    of the Goal state and record `adopt | adapt | reject | defer` decisions.
+  - [ ] Route adversarial cases through `agent-qa-test`; a separate evidence
+    reviewer must accept a case before Eval does. The tester cannot approve its
+    own case.
+- [ ] 4. Invoke `goal-advisor` to instantiate
+  `references/goal-program-template.md` into the ticket's `program.md`, create
+  or update `progress.md`, and compile a compact Files-listed native Goal
+  prompt. Material packets remain pending until the operator approves the
+  current ticket, program, progress scaffold, and prompt together.
+- [ ] 5. Freeze the complete suite for the Goal and record the baseline before
+  editing. If an accepted case changes the suite later, stop and regenerate a
+  fresh packet and baseline; never change cases mid-comparison.
+- [ ] 6. Harden first. Each turn makes one bounded instruction change, runs the
+  complete frozen suite, and retains it only when behavior improves and every
+  guard passes. Enter refinement only after the full target passes. Exhausting
+  harden patience or `max_rounds` blocks without refinement.
+- [ ] 7. Refine second. Repeatedly remove, merge, or condense instructions and
+  run the complete frozen suite. Retain only candidates that preserve the
+  hardened performance floor and every guard while reducing length; otherwise
+  restore the shortest passing candidate. Stop on refine patience or
+  `max_rounds`.
+- [ ] 8. Run the frozen suite once more on the shortest passing candidate,
+  append final evidence to ticket `progress.md`, obtain required Agent QA and
+  review, then promote the accepted skill change through `skill-maintenance`.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
-## Execution Routes
+## Execution Boundary
 
-Give native Goal mode the smallest measured-search context it needs; do not
-build a parallel loop runner. Use `goal-advisor` when a durable Goal must be
-compiled and `metric-advisor` when the metric provider or guards are unclear.
+The objective is lexicographic:
 
-- `immediate`: baseline, intervention, result, and keep/kill decision are
-  observable inside the current Goal window. Measure and decide in-window; do
-  not manufacture a future check-in or fill delayed check-in procedure fields.
-- `delayed`: the real signal requires elapsed time, exposure, an external
-  event, or later human feedback. Persist the wait in the original ticket's
-  Reward rows, and use Goal Advisor to fill the experiment-specific
-  `program.md` `Check-In Program`. Work Pulse resumes the same packet and its
-  worker executes that program when a row matures.
+```text
+maximize required behavior until target passes
+then minimize instruction length subject to that exact behavior floor
+```
 
-Immediate execution and ticket-local delayed check-in are execution timing
-routes, not extra portfolio learners. Weekly Dogfood is the only aggregation
-horizon and reads terminal Reward decisions without rescoring them. Do not add
-an independent plan-quality loop; join Pulse admission receipts to eventual
-Reward decisions when portfolio attribution is needed.
+One Goal owns both phases. A phase budget is a safety bound, not a competing
+controller. Candidate files may remain temporary; keep only the accepted skill
+change, ticket progress, and generated evidence.
 
-Load [workflows](references/workflows.md) for the full eval sequence, exact
-Reward/Goal fields, due-row rule, and `accept | kill | monitor` decisions.
-Iteration remains same-packet work, not another Reward state. Load [skill
-evals](references/skill-evals.md) before designing cases
-and [skill memory](references/skill-memory.md) before creating a target-local
-`program.md`, run folders, or prompt-profile harness.
+External research is optional and evidence-triggered, not an automatic web
+search. Adversarial agents strengthen the eval boundary before a Goal or force
+a new frozen Goal; they do not mutate or approve the suite during a run.
 
-## Gotchas
-
-1. Do not leak the intended answer into eval prompts.
-2. Do not use judge-only subjective scores as the primary keep/discard metric.
-3. Do not mutate the user's target skill until baseline evals exist.
-4. Do not promote experimental evals into the skill package until they catch at
-   least one real failure mode.
-5. Do not optimize a skill that should be split into smaller skills first.
-6. Do not fill target skill packages with bulky raw logs; store durable
-  summaries, accepted evals, and reusable lessons.
+The reusable Goal program is a compact `program.md` preset only. Limit it to
+metric and frozen-suite bindings, phase budgets, accept/transition/stop rules,
+and the `progress.md` writeback shape. Do not copy editable scope, detailed
+round procedures, proof lanes, completion workflow, or promotion policy from
+the ticket and skills. The ticket owns scope and proof; `progress.md` owns
+observations; `goal-advisor` separately compiles the Files-listed native
+launcher.
 
 ## Reference Map
 
-- [references/architecture.md](references/architecture.md) - self-improvement
-  boundary and ownership model.
-- [references/workflows.md](references/workflows.md) - eval and optimization
-  phases.
-- [references/gotchas.md](references/gotchas.md) - eval leakage and
-  overfitting risks.
-- [references/skill-evals.md](references/skill-evals.md) - case and assertion
-  design.
-- [references/skill-memory.md](references/skill-memory.md) - target-skill
-  `program.md` and run history.
-- [metric-advisor](../metric-advisor/SKILL.md) - metric card, guard metrics,
-  anti-metrics, and no-metric rationale before variant search.
-- [eval](../eval/SKILL.md) - proof and hardcase-marked eval cases.
-- [skill-maintenance](../skill-maintenance/SKILL.md) - accepted writeback to
-  skill source files.
-
-## Templates
-
-Experiment spine:
-
-```text
-target + metric + search_space + eval_suite -> baseline -> candidates -> comparison -> promotion
-```
-
-Promotion note:
-
-```text
-Target:
-Metric:
-Baseline:
-Candidates:
-Best candidate:
-Promotion rule:
-Accepted writeback:
-Residual risk:
-```
+- [Goal program template](references/goal-program-template.md) — instantiate
+  for every material self-improvement Goal.
+- [Goal Packet ownership](references/skill-memory.md) — load when compiling or
+  repairing state surfaces.
+- [Skill eval use](references/skill-evals.md) — load for suite, metric,
+  adversarial, or held-out decisions.
+- [Optimization workflow](references/workflows.md) — load for the full loop.
+- [Architecture boundary](references/architecture.md) — load for ownership.
+- [Gotchas](references/gotchas.md) — load for leakage, overfitting, or bloat.
+- [Bounded source upgrades](../skill-maintenance/references/upgrade-skill-from-sources.md)
+  — load only when local evidence is insufficient.
+- [Adversarial agent proof](../agent-qa-test/SKILL.md) — load when a proposed
+  case needs separate tester and evidence-review lanes.
 
 ## Output
 
-A self-improvement pass should leave:
+- approved ticket Goal Packet and compact native Goal prompt
+- append-only ticket `progress.md` observations and Eval evidence
+- shortest discovered candidate that passes the frozen target and guards
+- accepted target-skill change or an evidence-backed blocked result
+- optional source dispositions and separately reviewed adversarial cases
 
-- eval cases and assertions for the target skill
-- deterministic eval runner/results when the prompt profile is used
-- baseline score and changed-score logs
-- Goal-readable context in `program.md`, latest results, failure analysis, and
-  prompt/eval files
-- updated `self-improve/program.md` when the user wants durable skill memory
-- a concise before/after debrief
-- only measured, reversible target skill edits
+For an active turn or audit, make the decision replayable without another
+helper. Report:
+
+```text
+Packet: owning ticket + approval/freshness + frozen suite
+Phase: baseline | harden | refine
+Budget: harden max_rounds/patience + refine max_rounds/patience
+Observation: performance + guards + length + evidence ref
+Decision: retain | reject | transition_refine | blocked | complete
+Writeback: exact ticket progress.md entry or fields to append
+Next action: one bounded next turn or stop reason
+```
+
+Always report the configured limits for both phases, even when one phase is
+inactive. For every retained or rejected candidate, the writeback names the
+hypothesis, complete frozen-suite evidence reference, performance, guards,
+length, and decision; never invent a missing evidence reference.
+When explaining budget use or exhaustion, restate that one round is one bounded
+target edit followed by the complete frozen eval so the limit is auditable.

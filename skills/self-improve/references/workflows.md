@@ -1,146 +1,45 @@
-# Self Improve Workflows
+# Self Improve Workflow
 
-## Eval-First Skill Optimization
+## 1. Prepare The Goal
 
-1. Read target skill and references.
-2. Read `self-improve/program.md` when the target skill already has durable
-   improvement memory.
-3. Classify whether it needs rewrite or optimization.
-4. Define rubric dimensions.
-5. Use metric-advisor when provider, guard metrics, anti-metrics, or no-metric
-   rationale are unclear.
-6. Convert rubric into binary assertions.
-7. Build at least 3 eval cases.
-8. Baseline pass rate or baseline reviewer/human judgment.
-9. Classify feedback as immediate or delayed.
-10. For immediate feedback, iterate one skill change at a time through native
-    Goal mode or a bounded candidate-comparison pass and decide in-window.
-11. For delayed feedback, record baseline/exposure and exact Reward rows, then
-    use Goal Advisor to compile the experiment-specific evidence, scoring,
-    decision, writeback, idempotency, and source-gap procedure into the
-    original `program.md` `Check-In Program` before entering `waiting_signal`.
-12. Debrief before/after behavior and update durable skill memory with lessons.
+1. Confirm this is measured optimization, not an obvious direct repair.
+2. Read the target skill, canonical suite, and owning ticket.
+3. Define performance target, guards, editable scope, length metric, and
+   separate harden/refine `max_rounds` plus patience.
+4. Strengthen coverage before freezing it:
+   - local failures first;
+   - optional bounded practitioner, paper, or book source upgrade when local
+     evidence cannot choose a method;
+   - adversarial cases from `agent-qa-test`, accepted only by a separate
+     evidence reviewer and Eval owner.
+5. Use `goal-advisor` to instantiate the reusable template into the ordinary
+   ticket Goal Packet and obtain operator approval.
+6. Freeze the full suite and record the baseline.
 
-Use 3-5 cases for smoke validation. Use 20-100 diverse cases before trusting an
-overnight or unattended optimization run.
+## 2. Harden
 
-## Skill-Memory Setup
+On each native Goal turn, make one bounded instruction change, run the complete
+frozen suite, and retain the candidate only when performance improves without a
+guard regression. Continue until the full target passes. If harden patience or
+`max_rounds` is exhausted first, stop blocked and do not refine.
 
-Use this path when the operator wants the skill itself to remember experiments:
+## 3. Refine
 
-1. Run `scripts/init_skill_memory.py <skill-dir> --goal "<goal>"`.
-2. Fill `self-improve/program.md` with the skill contract, rubric, and first
-   hypotheses.
-3. Put reusable binary evals in `self-improve/evals/`.
-4. Create one run directory per candidate-comparison session under
-   `self-improve/runs/<YYYYMMDD-HHMM-slug>/`.
-5. After each run, copy the short lesson into `program.md` and leave bulky raw
-   logs in `.farplane/` unless they are safe and useful.
+Starting from the passing hardened candidate, repeatedly remove, merge, or
+condense instructions. Run the same complete suite after every candidate.
+Retain only a shorter candidate that preserves the hardened performance floor
+and every guard. Otherwise restore the prior shortest passing candidate.
 
-## Prompt-Profile Optimization
+Stop on refine patience or `max_rounds`, run one final full-suite verification,
+and return the shortest passing candidate discovered.
 
-Use this path when a skill is mostly prompt/instruction behavior:
+## 4. Handle New Evidence
 
-1. Scaffold with `scripts/init_skill_memory.py <skill-dir> --prompt-profile`.
-2. Put the active instruction in `prompts/current.txt`.
-3. Generate 2-5 variants in `prompts/candidates/`.
-4. Run `evals/runner.py` against candidate outputs.
-5. Promote the best variant into `prompts/history/` with score in the filename.
-6. Patch the real skill only after the candidate beats current and guard checks
-   pass.
+Do not add a case during the frozen Goal. A newly accepted adversarial or source
+case invalidates the comparison boundary: stop, update Eval, regenerate the
+Goal Packet, and take a fresh baseline.
 
-## Rewrite Before Optimize
-
-Use this path when the skill lacks:
-
-- clear trigger conditions
-- a first-load workflow
-- outcome contract
-- reference navigation
-- concrete validation behavior
-
-Rewrite the skill first, then add evals.
-
-## Delayed Check-In
-
-Use this only when the real signal cannot mature inside the current execution
-window:
-
-1. Keep the intervention and expected result in the original experiment
-   ticket.
-2. Add one or more `Reward.kpi_rewards[]` rows with `check_in_at`; do not add
-   experiment metadata.
-3. Use Goal Advisor to fill `program.md` `Check-In Program` with its packet
-   inputs, exact evidence sources, ordered procedure, writeback, decision
-   thresholds, idempotency, and missing-source behavior.
-4. Append baseline and exposure observations to `progress.md`.
-5. Let Work Pulse derive matured rows and hand the same ticket/program/progress
-   plus stable `reward_id` values and evidence refs to one worker.
-6. Have that worker read `program.md` first, execute `Check-In Program`, update
-   only matured rows by stable Reward ID, append progress, and return `accept`,
-   `kill`, or `monitor`.
-
-### Exact Goal Packet Contract
-
-```text
-ticket.md / Reward.kpi_rewards[]:
-  reward_id
-  kpi_id
-  expected_reward
-  check_in_at
-  actual_result
-  decision: accept | kill | monitor | empty
-  evaluated_at
-  evaluation_key
-  supersedes_evaluation_key
-  evidence_refs
-
-program.md:
-  Metric Provider.signal + minimum
-  Heartbeat Policy.wake_condition
-  Check-In Program:
-    mode: delayed_reward
-    inputs: original ticket/program/progress + matured reward_ids + evidence
-    procedure: ordered evidence collection, attribution, comparison, decision
-    writeback: matured Reward rows + append-only progress entry
-    decisions: accept_when + kill_when + monitor_when
-    idempotency: preserve future/terminal rows; duplicate evaluation_key is a
-      no-op; correction names supersedes_evaluation_key in progress
-    source_gap: record gap + monitor/next check-in unless explicitly overridden
-  Stop Conditions.complete_when + pause_when
-  Rollout Policy.promotion_rule + rollback_or_hold_rule
-
-progress.md:
-  append-only baseline, exposure, observations, and decisions
-```
-
-A row is due when `decision` is empty and `check_in_at <= now`, or when
-`decision: monitor` and its updated `check_in_at <= now`. Work Pulse resumes
-the original non-terminal ticket, hands every matured `reward_id` to one
-worker, and leaves future plus terminal `accept`/`kill` rows alone. It does not
-reproduce the decision rules stored in `program.md`.
-
-Decisions:
-
-- `accept`: keep/promote and close;
-- `kill`: prune/rollback and close;
-- `monitor`: remain dormant and update the same ticket's next check-in.
-
-An iteration is ordinary work on the same experiment packet before another
-terminal decision; it is not a fourth Reward decision or another feedback
-horizon.
-
-For immediate feedback, keep `Check-In Program` to
-`mode: not_applicable` plus a reason. Do not fill any delayed procedure fields.
-
-## Decision Branches
-
-- Rewrite a target missing its first-load contract before optimizing it.
-- If no honest metric exists, use metric-advisor, eval/review, or human
-  feedback instead of a fake score.
-- Read existing target-local memory before proposing another hypothesis.
-- Include scripts in evals when they carry fragile behavior.
-- Use the prompt profile for prompt-like targets.
-- Add cases before trusting a narrow suite; use simplicity guards when scores
-  improve by adding bloat.
-- Keep Goal as the loop runner and this skill as measured context/evidence.
+If the target lacks a clear trigger, workflow, or outcome contract, repair it
+through `skill-maintenance` before optimization. If the signal requires delayed
+real-world exposure, use the owning product experiment rather than expanding
+this loop.

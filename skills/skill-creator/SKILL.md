@@ -24,10 +24,9 @@ of [skill system](../../docs/skills/system.md) and
 [skill best practices](../../docs/skills/best-practices.md) before editing.
 Update an existing owner instead of creating a duplicate skill.
 
-Every staged hand-authored text file under `skills/` must be at most 200 lines.
-Split conditional detail by branch or responsibility; do not hide default-path
-behavior merely to meet the limit. Generated graphs, dependency locks, and
-media assets are excluded by the commit gate.
+Treat file length as a diagnostic, not a gate. Split conditional detail by
+branch or responsibility when doing so improves ownership or first-load cost;
+do not hide default-path behavior merely to reduce a count.
 
 ## Skill Signature
 
@@ -35,13 +34,13 @@ media assets are excluded by the commit gate.
 create_or_update_skill(request, existing_surface?, proof_need?)
   -> skill_package_change + validation_result
 state: reads(skill docs, registry, target, template, QA); writes(owner-local package, registry?)
-gates: trigger_stable; first_load_executable; each_authored_file_lines<=200;
+gates: trigger_stable; first_load_executable; structure_coherent;
        template_truthful; book_branch_explicit_when_applicable;
        book_sources_type_confidence_convergence_labeled;
        runnable_eval_rows_created_or_deferred; proof_named; review_ready
 routes: gap-analysis | skill-maintenance | research:source-synthesis |
-  self-improve | goal-advisor | review
-fails: duplicate skill; hidden default workflow; oversized staged skill file;
+  eval | self-improve | goal-advisor | review
+fails: duplicate skill; hidden default workflow; arbitrary line-count splitting;
   stale template claim; book request without named extraction branch/schema;
   book grounding without source convergence or copyright boundary;
   scenario-only eval plan; applicable self-improve without artifact or reason;
@@ -86,17 +85,17 @@ fails: duplicate skill; hidden default workflow; oversized staged skill file;
      human-judged.
    - [ ] Apply the
      [Skill Structure QA Checklist](../skill-maintenance/qa_checklist.md).
-- [ ] 5. Place supporting detail and enforce the file cap.
+- [ ] 5. Place supporting detail by responsibility and load frequency.
    - [ ] Keep every-invocation behavior in `SKILL.md`; move conditional branches,
      long examples, templates, rubrics, provider maps, and rare recipes to
      precisely linked supporting files.
    - [ ] Use the
      [method reference template](../../docs/skills/templates/METHOD_REFERENCE_TEMPLATE.md)
      and declare `skill-method-reference` for reusable method workflows.
-   - [ ] Run the staged line-limit check before completion; split every included
-     authored text file over 200 lines without weakening first-load behavior.
-- [ ] 6. Run `python3 ../skill-maintenance/scripts/check_skills.py --write`,
-  focused script/JSON/eval checks, and the staged line-limit validator.
+   - [ ] Split only when the result improves ownership or first-load behavior;
+     raw line count is not a pass/fail condition.
+- [ ] 6. Run `python3 ../skill-maintenance/scripts/check_skills.py --write`
+  plus focused script, JSON, and eval checks.
 - [ ] 7. Finish with proof and review.
    - [ ] Apply both QA checklists again and record pass, violation,
      not-applicable, or deferred for changed surfaces.
@@ -105,17 +104,20 @@ fails: duplicate skill; hidden default workflow; oversized staged skill file;
      mechanical edit, record the skip reason.
    - [ ] For new behavior-sensitive skills, enable eval metadata, create
      executable `evals/evals.json` rows with natural prompts, expected outputs,
-     and assertions; run them and record pass, fail, or an explicit
-     deferred-proof blocker. Do not substitute scenario titles for runnable
-     cases. Treat failures as blockers or fixes and rerun the smallest case.
+     and assertions, then hand execution and candidate/baseline comparison to
+     [eval](../eval/SKILL.md). Record pass, fail, or an explicit deferred-proof
+     blocker. Do not self-grade or substitute scenario titles for runnable
+     cases. Treat failures as blockers or fixes and rerun the smallest case
+     through `eval` before readiness.
      In a read-only/dry-run fixture, return explicit `eval_result: deferred`,
      `eval_blocker`, and `readiness: blocked` fields plus the smallest-failure
      rerun rule; never report readiness from inspection alone.
    - [ ] For artifact-creation skills that warrant continued optimization,
-     create a self-improve ticket or Goal Packet seeded with the baseline eval;
-     otherwise record the exact `no_self_improve_reason` field before readiness.
-     A dry run without a real baseline must use that field instead of claiming
-     self-improve is applicable without creating its follow-up artifact.
+     route through `self-improve` with an owning ticket and canonical suite;
+     Goal Advisor instantiates ticket `program.md` and `progress.md`, then the
+     run records a real baseline. Otherwise record the exact
+     `no_self_improve_reason` field before readiness. A dry run without a real
+     baseline must use that field instead of claiming readiness.
    - [ ] Use the native reviewer for material or precedent-setting changes.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
@@ -144,7 +146,7 @@ behavior_proof: concrete positive example or eval row, never book recall
 
 - Do not create skills for generic knowledge, one-off notes, raw library docs,
   or behavior better owned by a script, ticket, prompt, or existing skill.
-- Do not meet 200 lines by hiding required routing, gates, proof, or output.
+- Do not hide required routing, gates, proof, or output to reduce file length.
 - Do not split one coherent function mechanically; split by branch, provider,
   responsibility, or artifact type and keep precise load conditions.
 - Do not duplicate rules across `SKILL.md`, references, templates, prompts, and
@@ -160,6 +162,8 @@ behavior_proof: concrete positive example or eval row, never book recall
 - [creator QA](qa_checklist.md) — preflight and final authoring guardrails.
 - [structure QA](../skill-maintenance/qa_checklist.md) — apply to every create
   or update invocation.
+- [eval](../eval/SKILL.md) — run the initial skill suite, grade evidence, and
+  compare a candidate with no-skill or previous-skill behavior before readiness.
 - [workflows](references/workflows.md) — load when todo branches need shaping.
 - [architecture](references/architecture.md) — load when ownership between
   first load, references, scripts, prompts, and assets is unclear.
@@ -171,8 +175,7 @@ behavior_proof: concrete positive example or eval row, never book recall
 ## Output
 
 Return changed owner-local files, proof commands/results, QA verdicts, registry
-status, audit or skip reason, and reviewer result or blocker. Confirm each
-staged authored skill text file is at most 200 lines. For dry-run creation,
+status, audit or skip reason, and reviewer result or blocker. For dry-run creation,
 include the complete proposed eval JSON rows and explicit proof/self-improve
 fields required by todo 7, including `rerun_rule: fix and rerun the smallest
 failing eval before readiness`; a filename or scenario list is not enough.

@@ -3,7 +3,8 @@ skill: self-improve
 date: 2026-07-11
 change_type: behavior
 owner: skill-maintenance
-status: pass
+status: superseded
+superseded_by: TASK-0397-goal-program-template
 review_route: reviewer
 before_ref: skills/self-improve/SKILL.md; skills/self-improve/references/workflows.md; skills/self-improve/eval_task.json
 after_ref: skills/self-improve/SKILL.md; skills/self-improve/references/workflows.md; skills/self-improve/eval_task.json
@@ -13,6 +14,9 @@ eval_required: yes
 ---
 
 # Self Improve Executable Delayed Check-In Audit
+
+> Historical record. TASK-0397 superseded the intermediate target-local design
+> with the ordinary ticket Goal Packet. Nothing below is active runtime policy.
 
 ## Change
 

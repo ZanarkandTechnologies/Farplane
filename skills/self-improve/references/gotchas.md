@@ -1,20 +1,20 @@
 # Self Improve Gotchas
 
-- Do not optimize before baseline evals exist.
-- Do not leak expected answers into prompts.
-- Do not trust evals with fewer than 3 representative cases.
-- Do not use judge-only scoring as the primary metric.
-- Do not promote experimental evals into the target skill until they catch a
-  real failure or prevent a known regression.
-- Do not make the skill longer just to satisfy one brittle eval.
-- Do not store bulky raw traces, secrets, or local-only transcripts in a target
-  skill's `self-improve/` directory.
-- Do not treat `program.md` as a second `SKILL.md`; it is memory for improving
-  the skill, not the live usage contract.
-- Do not run overnight optimization on smoke evals. Smoke means 3-5 cases;
-  durable optimization needs a diverse suite closer to 20-100 cases.
-- Do not promote a prompt candidate just because it passed one category. Check
-  boundary, negative, and out-of-original-story cases.
-- Do not schedule a future check-in for feedback measurable in the current Goal.
-- Do not create a second ticket, finding, or reward registry for delayed
-  feedback; reuse the original ticket Reward and Goal Packet.
+- Do not mutate the target before recording the baseline.
+- Do not change the eval suite during a Goal; regenerate the packet and
+  baseline after accepted case changes.
+- Do not optimize a judgment-only goal without an honest metric or rubric.
+- Do not enter refinement before every required behavior and guard passes.
+- Do not trade behavior or a guard for fewer words; length is secondary.
+- Do not claim a global mathematical minimum; return the shortest verified
+  passing candidate discovered within the refinement budget.
+- Do not omit phase-local `max_rounds`; patience and maximum rounds bound both
+  hardening and refinement.
+- Do not persist every candidate; keep reversible diffs and retain only the
+  current best plus evidence.
+- Do not create a parser, event schema, counter file, runner, campaign,
+  scheduler, or target-local lifecycle state. Native Goal owns continuation.
+- Do not make web, paper, or book research mandatory. Use bounded source
+  upgrades only when local evidence cannot resolve the method.
+- Do not let an adversarial tester add or approve its own eval case. Separate
+  tester evidence, evidence review, and Eval acceptance.

@@ -2,127 +2,130 @@
   "skill_name": "self-improve",
   "evals": [
     {
-      "id": "self_improve_requires_metric_01",
-      "prompt": "Make the AGI Toy Shop eval skill better. You can just tweak the instructions until it feels smarter.",
-      "expected_output": "Rejects taste-only optimization as insufficient; Defines a metric, rubric, eval boundary, or human feedback schema before mutating the target; Names the target skill package and self-improvement memory to inspect; Distinguishes direct skill-maintenance edits from measured self-improvement; Returns a concrete next step to create or run the proof surface",
+      "id": "self_improve_requires_metric_and_goal_packet_01",
+      "prompt": "Make the AGI Toy Shop planning skill smarter. Keep trying instruction changes until it is reliably good, then make the prompt as small as you can.",
+      "expected_output": "Defines an honest performance target and frozen eval boundary before mutation; Requires an owning ticket and ordinary Goal Packet; Uses native Goal as the continuation engine; Orders hardening before shortening; Returns the baseline and packet-compilation next action",
       "files": [],
       "assertions": [
-        "Rejects taste-only optimization as insufficient",
-        "Defines a metric, rubric, eval boundary, or human feedback schema before mutating the target",
-        "Names the target skill package and self-improvement memory to inspect",
-        "Distinguishes direct skill-maintenance edits from measured self-improvement",
-        "Returns a concrete next step to create or run the proof surface"
+        "Defines a measurable performance target and frozen eval boundary before mutating the target",
+        "Requires an owning ticket with ticket.md, program.md, and progress.md rather than target-local loop state",
+        "Uses native Goal as the sole continuation engine",
+        "Makes passing required behavior lexicographically prior to reducing instruction length",
+        "Returns a concrete baseline and Goal-packet next action"
       ],
-      "metadata": {
-        "farplane": {
-          "title": "Self-improve defines metric before mutation",
-          "tags": [
-            "skill",
-            "self-improve",
-            "metric"
-          ],
-          "notes": "Tests the most important self-improve gate: no optimization loop without a metric or review signal."
-        }
-      }
+      "metadata": {"farplane": {"title": "Self-improve compiles a metric-bound Goal", "tags": ["skill", "self-improve", "goal-packet"], "notes": "Protects the corrected ownership and objective order."}}
     },
     {
-      "id": "self_improve_baseline_before_mutation_01",
-      "prompt": "AGI Toy Shop's skill for writing toy-safety launch plans is almost good. Improve it by trying prompt variants and keep the best one.",
-      "expected_output": "Reads the target skill package and existing self-improve memory before editing; Defines the current baseline behavior or score before proposing variants; Compares candidates against the same metric or rubric; Promotes only changes that improve the measured result without breaking constraints; Records lessons or run notes in the target skill's self-improve memory",
+      "id": "self_improve_program_is_compact_preset_01",
+      "prompt": "Draft the reusable program.md shape for a self-improvement Goal over the toy-planning skill. Keep the Goal Packet lean and explain who produces the native /goal launcher.",
+      "expected_output": "Produces a compact program preset containing metric, phase budgets, harden/refine acceptance, after-turn logging, drift, and stop settings; Leaves scope and proof in ticket.md; Leaves observations in progress.md; Assigns the separate Files-listed native launcher to goal-advisor; Does not embed or duplicate the launcher in the preset",
       "files": [],
       "assertions": [
-        "Reads the target skill package and existing self-improve memory before editing",
-        "Defines the current baseline behavior or score before proposing variants",
-        "Compares candidates against the same metric or rubric",
-        "Promotes only changes that improve the measured result without breaking constraints",
-        "Records lessons or run notes in the target skill's self-improve memory"
+        "Keeps program.md limited to executable loop settings rather than copying ticket scope or proof",
+        "Includes the metric, frozen-suite policy, separate phase budgets, and harden-before-refine transition",
+        "Uses progress.md for append-only observations and evidence",
+        "Assigns native Goal launcher compilation to goal-advisor",
+        "Does not embed or duplicate the native /goal launcher inside the reusable program preset"
       ],
-      "metadata": {
-        "farplane": {
-          "title": "Self-improve baselines before candidate changes",
-          "tags": [
-            "skill",
-            "self-improve",
-            "baseline"
-          ],
-          "notes": "Protects against mutation-first optimization that cannot prove improvement."
-        }
-      }
+      "metadata": {"farplane": {"title": "Self-improve keeps its Goal preset lean", "tags": ["skill", "self-improve", "goal", "debloatability"], "notes": "Regression case for Goal Advisor ownership and compactness."}}
+    },
+    {
+      "id": "self_improve_baseline_and_harden_transition_01",
+      "prompt": "The approved toy-safety self-improvement packet has a frozen ten-case suite, a recorded 8/10 baseline, passing safety guards, harden limits of six rounds with patience two, and refine limits of six rounds with patience two. The next bounded edit tests the hypothesis that an explicit sibling-access escalation closes both misses; the complete suite scores 10/10 with every guard passing and writes evidence run toy-safety-17. Show the decision, durable writeback, and following turn.",
+      "expected_output": "Runs a baseline before editing; Freezes the complete suite; Makes one bounded hardening change per turn and retains only improvements that pass guards; Enters refinement only after the full target passes; Records each turn in ticket progress",
+      "files": [],
+      "assertions": [
+        "Runs and records the baseline before target mutation",
+        "Keeps the complete eval suite frozen across the Goal",
+        "Makes one bounded hardening edit followed by the complete eval per turn",
+        "Enters refinement only after the performance target and every guard pass",
+        "Appends hypothesis, measurements, evidence, and retain or reject decision to ticket progress.md"
+      ],
+      "metadata": {"farplane": {"title": "Self-improve hardens before refining", "tags": ["skill", "self-improve", "hardening"], "notes": "Positive critical-path trace."}}
     },
     {
       "id": "self_improve_not_generic_impl_01",
       "prompt": "The AGI Toy Shop eval skill has a broken Markdown link to its rubric. Please self-improve it.",
-      "expected_output": "Recognizes the request as an obvious direct maintenance fix rather than a metric-driven experiment; Routes to direct edit or skill-maintenance instead of setting up a full self-improve loop; Names the minimal verification such as link check, JSON parse, or skill validation; Avoids creating unnecessary variants, metrics, or experiment scaffolding; Preserves self-improve for cases with search space, baseline, and comparison",
+      "expected_output": "Recognizes an obvious direct maintenance fix; Routes to the minimal edit or skill-maintenance; Names deterministic verification; Avoids a Goal optimization packet; Preserves self-improve for measured multi-turn search",
       "files": [],
       "assertions": [
-        "Recognizes the request as an obvious direct maintenance fix rather than a metric-driven experiment",
-        "Routes to direct edit or skill-maintenance instead of setting up a full self-improve loop",
-        "Names the minimal verification such as link check, JSON parse, or skill validation",
-        "Avoids creating unnecessary variants, metrics, or experiment scaffolding",
-        "Preserves self-improve for cases with search space, baseline, and comparison"
+        "Recognizes the broken link as an obvious direct maintenance fix",
+        "Routes to the minimal edit or skill-maintenance",
+        "Names deterministic verification",
+        "Avoids candidate search and Goal optimization scaffolding",
+        "Preserves self-improve for measured multi-turn optimization"
       ],
-      "metadata": {
-        "farplane": {
-          "title": "Self-improve routes obvious fixes away from experiments",
-          "tags": [
-            "skill",
-            "self-improve",
-            "routing"
-          ],
-          "notes": "Keeps self-improve from becoming a generic implementation wrapper."
-        }
-      }
+      "metadata": {"farplane": {"title": "Self-improve routes direct repairs away", "tags": ["skill", "self-improve", "routing"], "notes": "Prevents generic implementation routing."}}
     },
     {
-      "id": "self_improve_immediate_reward_01",
-      "prompt": "Improve a ticket-writing prompt. We can run its fixed eval suite before and after each candidate and get the score immediately. Set up the right self-improvement route.",
-      "expected_output": "Classifies the feedback as immediate because baseline, candidate result, and promotion decision fit in the current execution window; Uses native Goal for the bounded candidate loop; Records baseline, comparable candidate evidence, and the promotion decision; Does not manufacture a future check_in_at or a separate check-in ticket; Keeps Check-In Program as compact not_applicable rather than filling delayed procedure fields; Promotes only a candidate that meets the metric and guard rules",
+      "id": "self_improve_phase_budgets_and_harden_exhaustion_01",
+      "prompt": "The approved toy-support packet defines one round as one bounded edit plus the complete frozen eval. Harden has max three rounds and patience two; refine has max five rounds and patience two. After harden round three, the best candidate is still 9/10 and the unresolved failure is the late safety-handoff case. What should the unattended run record and do next?",
+      "expected_output": "Defines separate harden and refine max_rounds plus patience; Treats one round as one edit and complete eval; Stops blocked if hardening exhausts its budget before target; Never falls through to refinement; Returns the best evidence and unresolved failure slice",
       "files": [],
       "assertions": [
-        "Classifies the feedback as immediate because baseline, candidate result, and promotion decision fit in the current execution window",
-        "Uses native Goal for the bounded candidate loop",
-        "Records baseline, comparable candidate evidence, and the promotion decision",
-        "Does not manufacture a future check_in_at or a separate check-in ticket",
-        "Keeps Check-In Program as compact not_applicable rather than filling delayed procedure fields",
-        "Promotes only a candidate that meets the metric and guard rules"
+        "Defines phase-local max_rounds and patience for both hardening and refinement",
+        "Defines one round as one bounded target edit followed by the complete frozen eval",
+        "Stops blocked when hardening exhausts max rounds or patience before passing",
+        "Does not enter refinement from a non-passing candidate",
+        "Returns the best measured evidence and unresolved failure slice"
       ],
-      "metadata": {
-        "farplane": {
-          "title": "Immediate feedback completes inside the current Goal",
-          "tags": [
-            "skill",
-            "self-improve",
-            "immediate-reward"
-          ],
-          "notes": "Proves that immediate feedback does not inherit delayed-check-in machinery."
-        }
-      }
+      "metadata": {"farplane": {"title": "Self-improve bounds harden failure", "tags": ["skill", "self-improve", "convergence"], "notes": "Proves the requested max-round and blocked semantics."}}
     },
     {
-      "id": "self_improve_delayed_reward_01",
-      "prompt": "A workflow improvement can only be judged after one week of real use. Its experiment ticket already has ticket.md, program.md, and progress.md. Define the waiting and check-in route without adding experiment metadata.",
-      "expected_output": "Classifies the feedback as delayed because elapsed exposure is required; Uses the existing ticket Reward.kpi_rewards rows with stable reward_id, kpi_id, expected_reward, check_in_at, actual_result, accept|kill|monitor decision, evaluated_at, evaluation keys, and evidence_refs; Uses Goal Advisor to compile an executable program.md Check-In Program with inputs, evidence, ordered procedure, reward_id-based matured-row writeback, decisions, idempotency, and source-gap behavior; Records baseline, exposure, and observations append-only in progress.md; Explains that Work Pulse supplies matured reward_ids and evidence refs while the worker reads program.md first and executes it; Leaves future and terminal Reward rows unchanged while handling every matured row and never creates a check-in ticket",
+      "id": "self_improve_source_route_is_bounded_01",
+      "prompt": "Our toy-safety workflow has stalled on sibling-access and late handoff failures. Could papers, practitioners, or books contain a stronger method worth trying?",
+      "expected_output": "Starts from the measured local failure slice; Treats external sources as optional and bounded; Routes practitioner, paper, and book inputs through the existing source-upgrade method; Records adopt, adapt, reject, or defer decisions; Keeps raw source prose out of Goal state",
       "files": [],
       "assertions": [
-        "Classifies the feedback as delayed because elapsed exposure is required",
-        "Uses the existing ticket Reward.kpi_rewards rows with stable reward_id, kpi_id, expected_reward, check_in_at, actual_result, accept|kill|monitor decision, evaluated_at, evaluation keys, and evidence_refs",
-        "Uses Goal Advisor to compile an executable program.md Check-In Program with inputs, evidence, ordered procedure, matured-row writeback, decisions, idempotency, and source-gap behavior",
-        "Records baseline, exposure, and observations append-only in progress.md",
-        "Explains that Work Pulse supplies matured reward_ids and evidence refs while the worker reads program.md first and executes it",
-        "Leaves future and terminal Reward rows unchanged while handling every matured row and never creates a check-in ticket"
+        "Starts from local failures and the measured baseline before researching",
+        "Uses external research only when local evidence cannot resolve the method",
+        "Routes practitioner, paper, and book inputs through the existing bounded source-upgrade method",
+        "Records adopt, adapt, reject, or defer decisions before testing a method",
+        "Keeps raw source prose out of the Goal Packet and target prompt"
       ],
-      "metadata": {
-        "farplane": {
-          "title": "Delayed feedback stays in the original Goal Packet",
-          "tags": [
-            "skill",
-            "self-improve",
-            "delayed-reward",
-            "goal-packet"
-          ],
-          "notes": "Protects the Farplane V1 delayed-reward state ownership contract."
-        }
-      }
+      "metadata": {"farplane": {"title": "Self-improve bounds source idea generation", "tags": ["skill", "self-improve", "sources"], "notes": "Covers optional paper/book grounding without a crawler."}}
+    },
+    {
+      "id": "self_improve_adversarial_case_invalidates_frozen_goal_01",
+      "prompt": "Halfway through the optimization, a red-team worker found a realistic failure missing from the current cases. Add it now and continue from the current scores.",
+      "expected_output": "Refuses to mutate the frozen suite; Requires separate tester evidence review before Eval acceptance; Prevents tester self-approval; Stops and regenerates the Goal Packet after an accepted case; Takes a fresh baseline before new comparisons",
+      "files": [],
+      "assertions": [
+        "Does not add the case during the frozen Goal comparison",
+        "Requires an adversarial tester and a distinct evidence reviewer before Eval acceptance",
+        "Does not let the tester approve or insert its own case",
+        "Stops and regenerates the Goal Packet when an accepted case changes the suite",
+        "Records a fresh baseline before comparing candidates on the expanded suite"
+      ],
+      "metadata": {"farplane": {"title": "Adversarial findings force a fresh frozen Goal", "tags": ["skill", "self-improve", "adversarial"], "notes": "Proves the red-team ownership and freeze boundary."}}
+    },
+    {
+      "id": "self_improve_refinement_rejects_regression_01",
+      "prompt": "The toy-release planner finally passes every required case. I removed a third of the instructions, and most spot checks still look fine. Decide whether to ship it and state exactly what the run records after verification.",
+      "expected_output": "Rejects spot checks and behavior-for-length tradeoffs; Runs the complete frozen suite; Retains the shorter candidate only with zero performance loss and all guards; Restores the prior shortest passing candidate on regression; Records evidence",
+      "files": [],
+      "assertions": [
+        "Does not trade required behavior or guards for shorter instructions",
+        "Evaluates the shorter candidate against the complete unchanged frozen suite",
+        "Requires performance at or above the hardened floor and every guard to pass",
+        "Restores the prior shortest passing candidate when the shorter version regresses",
+        "Records refinement evidence and the retain or reject decision"
+      ],
+      "metadata": {"farplane": {"title": "Refinement rejects shorter regressions", "tags": ["skill", "self-improve", "refinement"], "notes": "Negative control for performance-preserving compression."}}
+    },
+    {
+      "id": "self_improve_refinement_convergence_01",
+      "prompt": "The skill passes the full suite. Three different attempts to merge or remove more instructions all produced no shorter passing version. How should the unattended run finish?",
+      "expected_output": "Uses refinement patience and max_rounds; Rejects failed shortening attempts and restores the retained best; Runs one final complete eval; Returns the shortest verified passing candidate discovered; Stops without adding a helper or counter file",
+      "files": [],
+      "assertions": [
+        "Uses refinement patience or max_rounds as the convergence stop",
+        "Rejects failed shortening attempts and preserves the prior shortest passing candidate",
+        "Runs the complete frozen suite one final time before completion",
+        "Returns the shortest verified passing candidate discovered within the budget",
+        "Uses ticket progress observations without a decision helper or counter file"
+      ],
+      "metadata": {"farplane": {"title": "Self-improve stops after refinement convergence", "tags": ["skill", "self-improve", "refinement", "convergence"], "notes": "Positive completion trace."}}
     }
   ]
 }

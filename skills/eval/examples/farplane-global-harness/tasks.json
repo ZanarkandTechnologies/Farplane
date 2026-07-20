@@ -365,7 +365,7 @@
       "Reads or calls out the need to read the target skill package before designing changes",
       "Defines a small binary eval boundary with realistic cases and pass/fail assertions",
       "Requires a baseline run or baseline score before mutating the target skill",
-      "Names durable self-improve artifacts such as `self-improve/program.md`, `self-improve/evals/test_cases.jsonl`, `self-improve/results/latest_run.json`, or equivalent target-skill memory",
+      "Names durable self-improve artifacts such as an owning ticket's `program.md` and `progress.md`, canonical eval cases, and generated run evidence",
       "Separates human rubric dimensions from mechanical assertions instead of using subjective scores as the only metric",
       "States that live hook or skill-health monitoring should wait until offline evals exist and catch a real failure",
       "Keeps the next action concrete and artifact-first without asking for broad permission"

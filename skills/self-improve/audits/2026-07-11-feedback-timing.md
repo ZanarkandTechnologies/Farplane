@@ -3,13 +3,17 @@ skill: self-improve
 date: 2026-07-11
 change_type: behavior
 owner: skill-maintenance
-status: implemented
+status: superseded
+superseded_by: TASK-0397-goal-program-template
 review_route: reviewer
 reasoning_basis: TASK-0319
 eval_required: yes
 ---
 
 # Self Improve Feedback-Timing Audit
+
+> Historical record. TASK-0397 superseded the intermediate target-local design
+> with the ordinary ticket Goal Packet. Nothing below is active runtime policy.
 
 ## Change
 

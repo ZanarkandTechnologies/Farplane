@@ -1,4 +1,12 @@
-# Self-Improve Program: landing-page
+---
+status: legacy
+runtime_role: none
+---
+
+# Legacy Self-Improve Notes: landing-page
+
+Historical experiment notes only. The active `self-improve` workflow does not
+read, write, generate, parse, or migrate this file as Goal state.
 
 ## Objective
 Make `landing-page` reliably produce premium/cinematic landing pages with real
