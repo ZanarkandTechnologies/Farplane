@@ -36,6 +36,8 @@ Runtime state lives under `.farplane/` and is intentionally ignored by git.
 
 ```text
 .farplane/
+  views.yaml
+  entities/
   README.md
   automation/
   metrics/daily/
@@ -44,7 +46,10 @@ Runtime state lives under `.farplane/` and is intentionally ignored by git.
   logs/
 ```
 
-Keep canonical project config in `farplane/`. Use `.farplane/` only for
-owner-named local state, generated reports, metric observations, evals, logs,
-and continuation ledgers. Store QA and review evidence under the owning ticket;
-do not add generic runtime, evidence, or review buckets.
+Keep shared canonical project config in `farplane/`. The ignored
+`.farplane/entities/*.md` and `.farplane/views.yaml` files are explicit
+authored local exceptions for private entity memory and named membership.
+Other `.farplane/` paths hold owner-named local state, generated reports,
+metric observations, evals, logs, and continuation ledgers. Store QA and review
+evidence under the owning ticket; do not add generic runtime, evidence, review,
+or config buckets.

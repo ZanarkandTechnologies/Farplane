@@ -18,12 +18,12 @@ common_chains:
 
 Use this when the operator has a call, intro, prospect, customer, partner, or
 domain expert and needs enough grounded context to have a useful conversation.
-The normal output is a Markdown report linked to CRM entities, not a CRM
+The normal output is a Markdown report linked to canonical entities, not a CRM
 pipeline record.
 
 Reports use minimal frontmatter for discovery and entity linking. Put judgment,
 confidence, pain hypotheses, questions, and next actions in the report body.
-`entity_refs` contains stable IDs from `.farplane/crm/entities.json`; one report
+`entity_refs` contains stable IDs compiled from `.farplane/entities/*.md`; one report
 may reference a person, their organization, or several related entities. Do not
 duplicate entity records or add pipeline fields to the report schema.
 
@@ -31,7 +31,8 @@ Default storage:
 
 - Project-specific target: `.farplane/customer-research/reports/YYYY-MM-DD-<person>.md`
 - No project target: `~/.farplane/customer-research/reports/YYYY-MM-DD-<person>.md`
-- CRM entity ledger: `.farplane/crm/entities.json` or `~/.farplane/crm/entities.json`
+- Canonical entity source: `.farplane/entities/*.md` or `~/.farplane/entities/*.md`
+- Compiled entity index: `.farplane/entities/index.json` or `~/.farplane/entities/index.json`
 - Cross-skill discovery pattern: `.farplane/*/reports/**/*.md`
 
 Keep the work ethical and source-labeled: use public or supplied business
@@ -77,9 +78,11 @@ authoring inline unless a separate research artifact is needed.
   - [ ] Use [research:source-synthesis](../research/SKILL.md#researchsource-synthesis)
         when several sources must be normalized before writing.
 - [ ] 3. Draft the customer research report from `templates/report.md`.
-  - [ ] Resolve or create stable CRM entity IDs, then keep report frontmatter
-        minimal: `skill`, `entity_refs`, `name`, `links`, optional `industry`,
-        `relevance`, and `created_at`.
+  - [ ] Resolve stable entity IDs and keep report frontmatter minimal:
+        `skill`, `entity_refs`, `name`, `links`, optional `industry`, `relevance`,
+        and `created_at`. If the ledger is empty and writes are not approved,
+        leave `entity_refs: []`, propose the entity delta in the body, and do
+        not claim linkage or run the compile step.
   - [ ] Include who they are, their meaningful story, field overview, company or
         context, sourced facts, labeled inferences, unknowns, and source notes.
 - [ ] 4. Shape the conversation.
@@ -91,12 +94,12 @@ authoring inline unless a separate research artifact is needed.
   - [ ] Prefer correction-seeking questions over leading pitch questions.
 - [ ] 5. Write and link the artifact.
   - [ ] Save the report in the selected skill-local reports directory.
-  - [ ] Ensure every `entity_refs` value resolves to the CRM entity ledger;
-        update entity description, links, or status only when the report
-        produced new operator-approved relationship state.
+  - [ ] Ensure every `entity_refs` value resolves to the canonical entity index;
+        update the entity Markdown only when the report produced new
+        operator-approved relationship state, then run `farplane entities compile`.
 - [ ] 6. Finish-check the report.
   - [ ] Frontmatter is minimal, discovery-oriented, and every entity reference
-        resolves to the CRM ledger.
+        resolves to the entity index.
   - [ ] Every important claim is sourced, supplied, or clearly labeled as an
         inference or unknown.
   - [ ] The report helps the operator lead a better call rather than pretending
@@ -115,10 +118,10 @@ authoring inline unless a separate research artifact is needed.
 ## Gotchas
 
 - Do not turn the report into a lead-scoring CRM object. It is a dated,
-  skill-owned research artifact linked to stable CRM entity IDs.
+  skill-owned research artifact linked to stable entity IDs.
 - Do not put pain hypotheses, next actions, relationship stage, confidence, or
   project fields in frontmatter.
-- Do not hand-maintain report paths on CRM entities. Discover backlinks by
+- Do not hand-maintain report paths on canonical entities. Discover backlinks by
   scanning skill-local report frontmatter for `entity_refs`.
 - Do not invent an industry or a replacement project-controller field for
   indexing. Omit optional fields when the mapping is not clear.

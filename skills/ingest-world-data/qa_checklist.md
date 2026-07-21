@@ -9,7 +9,7 @@ applies_to:
 
 # Ingest World Data QA Checklist
 
-Read this checklist before editing CRM state and apply it again after compile.
+Read this checklist before editing canonical entity memory and apply it again after compile.
 
 ```text
 ingest_world_data_check(capture, markdown_delta, compile_result)
@@ -24,7 +24,7 @@ ingest_world_data_check(capture, markdown_delta, compile_result)
 - [ ] `markdown_preservation`: unrelated frontmatter and prose remain intact,
   no duplicate claim was added, and generated JSON was not hand-edited.
 - [ ] `association_integrity`: each new edge comes from one explicit resolved
-  `[label](crm:id)` in a factual sentence; no self-link, inferred predicate,
+  `[label](entity:id)` in a factual sentence; no self-link, inferred predicate,
   inverse relationship, or unresolved link remains. When an explicit question
   is bound, every retained claim block cites one resolved stable `q-*` footnote
   with matching exact question text across touched entities; optional session

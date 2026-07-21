@@ -148,8 +148,9 @@ setup_project_operating_model(bootstrap_brief, project_context,
         may be stale.
 - [ ] 3. Initialize the Farplane project substrate.
   - [ ] Run or mirror `scripts/bootstrap.sh` to create tracked `farplane/`
-    config, ignored `.farplane/` runtime state, ignored `.farplane/crm/`
-    entity state, skill-owned report directories, ignored active ticket work with tracked ticket
+    config, ignored `.farplane/` runtime state, flat authored
+    `.farplane/entities/*.md`, authored `.farplane/views.yaml`, skill-owned
+    report directories, ignored active ticket work with tracked ticket
     templates, docs, QA, optional hooks, validation scripts, and review helper
     surfaces.
   - [ ] Use [GITIGNORE_TEMPLATE](references/GITIGNORE_TEMPLATE) as the

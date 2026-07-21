@@ -4,12 +4,12 @@
     {
       "id": "customer_research_minimal_frontmatter_01",
       "prompt": "I have a call with Jane Doe from Acme Logistics. Her LinkedIn is https://example.com/jane and I want to talk about whether AI workflow automation could help their operations team. Prep me.",
-      "expected_output": "Produces or describes a customer research report under .farplane/customer-research/reports rather than a CRM pipeline record; Uses minimal frontmatter with skill, entity_refs, name, links, optional industry, relevance, and created_at; Resolves stable entity_refs against .farplane/crm/entities.json and does not hand-maintain report backlinks on CRM entities; Keeps role, confidence, pain hypotheses, next actions, and relationship stage in the body or CRM entity status as appropriate; Does not add pipeline or replacement project-controller metadata; Labels sourced facts, inferences, and unknowns separately; Includes conversation topics, questions to ask, and a correction-seeking help angle",
+      "expected_output": "Produces or describes a customer research report under .farplane/customer-research/reports rather than a CRM pipeline record; Uses minimal frontmatter with skill, entity_refs, name, links, optional industry, relevance, and created_at; Resolves stable entity_refs against Markdown-owned .farplane/entities, or uses an empty list plus a proposed delta when writes are not approved; Does not hand-maintain report backlinks on canonical entities; Keeps role, confidence, pain hypotheses, next actions, and relationship stage in the body or entity funnel as appropriate; Compiles entity Markdown only after an approved relationship-state update; Does not add pipeline or replacement project-controller metadata; Labels sourced facts, inferences, and unknowns separately; Includes conversation topics, questions to ask, and a correction-seeking help angle",
       "files": [],
       "assertions": [
         "Produces or describes a customer research report under .farplane/customer-research/reports rather than a CRM pipeline record",
         "Uses minimal frontmatter with skill, entity_refs, name, links, optional industry, relevance, and created_at",
-        "Resolves stable entity_refs against .farplane/crm/entities.json and does not hand-maintain report backlinks on CRM entities",
+        "Resolves stable entity_refs against Markdown-owned .farplane/entities, or uses entity_refs: [] plus a proposed-but-not-applied delta when CRM writes are not approved",
         "Keeps role, confidence, pain hypotheses, next actions, and relationship stage in the body or CRM entity status as appropriate",
         "Does not add pipeline or replacement project-controller metadata",
         "Labels sourced facts, inferences, and unknowns separately",

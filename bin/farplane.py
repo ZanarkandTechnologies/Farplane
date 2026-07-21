@@ -1076,8 +1076,8 @@ def run_reports_repair_refs_cli(args: argparse.Namespace) -> int:
     return int(run_repair_refs(args))
 
 
-def run_crm_compile_cli(args: argparse.Namespace) -> int:
-    from farplane_crm import run_compile
+def run_entities_compile_cli(args: argparse.Namespace) -> int:
+    from farplane_entities import run_compile
 
     return int(run_compile(args))
 
@@ -1453,16 +1453,16 @@ def build_parser() -> argparse.ArgumentParser:
     reports_repair_refs.add_argument("--json", action="store_true")
     reports_repair_refs.set_defaults(func=run_reports_repair_refs_cli)
 
-    crm = sub.add_parser("crm", help="Compile Markdown-owned CRM relationship entities.")
-    crm_sub = crm.add_subparsers(dest="crm_command")
-    crm_compile = crm_sub.add_parser(
+    entities = sub.add_parser("entities", help="Compile flat Markdown-owned entities into generated views.")
+    entities_sub = entities.add_subparsers(dest="entities_command")
+    entities_compile = entities_sub.add_parser(
         "compile",
-        help="Write .farplane/crm/entities.json and world.json from entity Markdown.",
+        help="Write .farplane/entities/index.json, world.json, and crm.json from flat entity Markdown.",
     )
-    crm_compile.add_argument("--project-root", default=os.getcwd())
-    crm_compile.add_argument("--no-write", action="store_true")
-    crm_compile.add_argument("--json", action="store_true")
-    crm_compile.set_defaults(func=run_crm_compile_cli)
+    entities_compile.add_argument("--project-root", default=os.getcwd())
+    entities_compile.add_argument("--no-write", action="store_true")
+    entities_compile.add_argument("--json", action="store_true")
+    entities_compile.set_defaults(func=run_entities_compile_cli)
 
     mining = sub.add_parser("mining", help="Capture, route, replay, and inspect Core mining runs.")
     mining_sub = mining.add_subparsers(dest="mining_group")

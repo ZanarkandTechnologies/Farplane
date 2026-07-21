@@ -60,12 +60,14 @@ use for ordinary app work versus QA. It also creates
 
 The script also creates ignored, owner-named `.farplane/` folders:
 `.farplane/reports/`, `.farplane/metrics/daily/`,
-`.farplane/evals/runs/`, `.farplane/logs/`, `.farplane/crm/`, and
-skill-owned report folders such as `.farplane/customer-research/reports/`.
-The CRM directory includes a local [CRM README template](references/CRM_README_TEMPLATE.md);
-`entities.json` is the small relationship ledger, while reports link entities
-through `entity_refs` and remain owned by their producing skills. Keep canonical
-framework config in tracked `farplane/`; use `.farplane/` for generated local state only. It also
+`.farplane/evals/runs/`, `.farplane/logs/`, `.farplane/entities/`,
+`.farplane/views.yaml`, and skill-owned report folders such as
+`.farplane/customer-research/reports/`.
+The flat entity directory is the single source of truth. `index.json`,
+`world.json`, and `crm.json` are generated views, while reports link entities
+through `entity_refs` and remain owned by their producing skills. Keep shared
+canonical framework config in tracked `farplane/`; entity Markdown and
+`views.yaml` are the explicit authored local exceptions under `.farplane/`. It also
 appends [GITIGNORE_TEMPLATE](references/GITIGNORE_TEMPLATE) to `.gitignore` so
 active `tickets/TASK-*` work stays local by default while `tickets/README.md`
 and `tickets/templates/` remain available as tracked scaffold.
@@ -283,7 +285,7 @@ Those can come after one clean ticket run.
 - [ ] `farplane/pm.json` exists when the UI should fold chat and automation thread IDs into one visual project PM
 - [ ] Live automation activation, when requested, is handled by
       `automation-advisor` and appends PM-visible thread IDs to `farplane/pm.json`
-- [ ] owner-named `.farplane/reports/`, `.farplane/<skill-name>/reports/`, `.farplane/crm/entities/`, `.farplane/metrics/daily/`, `.farplane/evals/runs/`, and `.farplane/logs/` exist as ignored local state; generated `.farplane/crm/entities.json` and `world.json` exist after the first `farplane crm compile`
+- [ ] owner-named `.farplane/reports/`, `.farplane/<skill-name>/reports/`, `.farplane/entities/`, `.farplane/views.yaml`, `.farplane/metrics/daily/`, `.farplane/evals/runs/`, and `.farplane/logs/` exist as ignored local state; `views.yaml` starts as `views: {}` and generated `.farplane/entities/index.json`, `world.json`, and `crm.json` exist after the first `farplane entities compile`
 - [ ] primitive metrics and `.farplane/project/ui/latest.json` were regenerated after canonical project-file migration
 - [ ] `python3 bin/validators/check_farplane_project_files.py` passes when the repo has Farplane validators
 - [ ] `docs/prd.md`, `docs/features/`, `docs/TROUBLES.md`, `docs/LESSONS.md` exist

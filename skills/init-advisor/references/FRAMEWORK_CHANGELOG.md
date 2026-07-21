@@ -3,10 +3,69 @@ title: Farplane Framework Changelog
 owner: init-advisor
 status: active
 kind: framework-changelog
-updated_at: 2026-07-20
+updated_at: 2026-07-22
 ---
 
 # Farplane Framework Changelog
+
+## 2.0.9
+
+Date: 2026-07-22
+
+Primary change: add one ignored local named-view config over canonical entity
+IDs and expose those views through generated projections and World UI.
+
+Changed surfaces:
+
+- `.farplane/views.yaml` owns multiple named views as `name + entity_ids`;
+- duplicate YAML/view keys, malformed membership, duplicates, and unresolved
+  entity IDs fail `farplane entities compile`;
+- `index.json`, `world.json`, and `crm.json` carry identical normalized views
+  and one shared fingerprint;
+- Farplane World reads the entity-owned projection path and intersects the
+  selected named view with query, kind, and location filters;
+- Feed Scout groups remain source-owner buckets and do not own view membership.
+
+Migration steps:
+
+1. Add `.farplane/views.yaml` with `views: {}` or one or more named views.
+2. Add `.farplane/views.yaml` to ignored standard paths while keeping shared
+   source/connector configuration in `farplane/bindings.yaml`.
+3. Run `farplane entities compile --project-root <project>` and update World
+   consumers to `.farplane/entities/world.json` plus `index.json`.
+4. Do not add `.farplane/config.yaml`, duplicate entity records, or a second
+   Feed Scout membership list.
+
+## 2.0.8
+
+Date: 2026-07-21
+
+Primary change: make flat entity memory the single source of truth and derive
+World and CRM as views.
+
+Changed surfaces:
+
+- canonical entities move to `.farplane/entities/<id>.md` with no kind/type
+  subdirectories;
+- `kind` remains the classification field and optional non-empty `funnel`
+  frontmatter promotes the same entity into the CRM view;
+- `farplane entities compile` generates adjacent `index.json`, `world.json`,
+  and `crm.json` projections;
+- paragraph-backed links use `entity:<id>` while question footnotes, source
+  references, claims, and optional session provenance remain intact;
+- schema version 3 removes storage paths and entity-link URI spelling from
+  semantic claim and edge key material.
+
+Migration steps:
+
+1. Flatten `.farplane/crm/entities/**/*.md` into `.farplane/entities/*.md` and
+   fail on filename collisions.
+2. Replace body links from `crm:<id>` to `entity:<id>` without changing other
+   entity content.
+3. Remove old generated CRM projections and run
+   `farplane entities compile --project-root <project>`.
+4. Update consumers to `.farplane/entities/index.json`, `world.json`, and
+   `crm.json`; do not keep a dual-read compatibility path.
 
 ## 2.0.7
 

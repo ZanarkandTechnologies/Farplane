@@ -29,7 +29,7 @@ Motors?” Optional origin session: `019f7e88-6864-7f23-8dbb-5e058009e911`.
 - Update or create `penang-castings` only after registry lookup; merge
   `PC Manufacturing` into aliases and set `location: Penang, Malaysia` only if
   that country-level normalization is supported by the source or known context.
-- Add: `Supplies aluminum housings to [Acme Motors](crm:acme-motors). [^q-20260720-01]`
+- Add: `Supplies aluminum housings to [Acme Motors](entity:acme-motors). [^q-20260720-01]`
 - Add the matching question definition under `## Question index`, including the
   supplied session ID but no turn ID.
 - Create the Batu Kawan facility only if the passage establishes it as a

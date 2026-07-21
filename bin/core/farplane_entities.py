@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Compile Markdown-owned CRM entities into a machine-readable registry."""
+"""Compile flat Markdown-owned entities into generated project views."""
 
 from __future__ import annotations
 
@@ -19,10 +19,11 @@ from typing import Any
 import yaml
 
 
-CRM_ROOT = Path(".farplane/crm")
-CRM_ENTITIES_ROOT = CRM_ROOT / "entities"
-CRM_REGISTRY_PATH = CRM_ROOT / "entities.json"
-CRM_WORLD_PATH = CRM_ROOT / "world.json"
+ENTITY_ROOT = Path(".farplane/entities")
+VIEW_CONFIG_PATH = Path(".farplane/views.yaml")
+ENTITY_INDEX_PATH = ENTITY_ROOT / "index.json"
+WORLD_VIEW_PATH = ENTITY_ROOT / "world.json"
+CRM_VIEW_PATH = ENTITY_ROOT / "crm.json"
 REQUIRED_FIELDS = ("id", "kind", "name")
 REFERENCE_FIELDS = (
     "company_ref",
@@ -32,7 +33,7 @@ REFERENCE_FIELDS = (
     "person_refs",
     "relationship_refs",
 )
-CRM_LINK_PATTERN = re.compile(r"(?<!!)\[([^\]\n]+)\]\(crm:([^\s)]+)\)")
+ENTITY_LINK_PATTERN = re.compile(r"(?<!!)\[([^\]\n]+)\]\(entity:([^\s)]+)\)")
 QUESTION_REF_PATTERN = re.compile(r"\[\^(q-[a-z0-9][a-z0-9_-]*)\]")
 QUESTION_DEFINITION_PATTERN = re.compile(
     r"^\[\^(q-[a-z0-9][a-z0-9_-]*)\]:[ \t]*(.*?)[ \t]*$",
@@ -44,9 +45,51 @@ INLINE_CODE_PATTERN = re.compile(r"(`+)[^\n]*?\1")
 
 
 @dataclass(frozen=True)
-class CrmIssue:
+class EntityIssue:
     path: str
     reason: str
+
+
+class UniqueKeyLoader(yaml.SafeLoader):
+    """Safe YAML loader that rejects mappings with duplicate keys."""
+
+
+class DuplicateKeyError(yaml.constructor.ConstructorError):
+    """Raised before YAML mappings can collapse duplicate authored keys."""
+
+
+def construct_unique_mapping(
+    loader: UniqueKeyLoader,
+    node: yaml.nodes.MappingNode,
+    deep: bool = False,
+) -> dict[Any, Any]:
+    mapping: dict[Any, Any] = {}
+    for key_node, value_node in node.value:
+        key = loader.construct_object(key_node, deep=deep)
+        try:
+            duplicate = key in mapping
+        except TypeError as exc:
+            raise yaml.constructor.ConstructorError(
+                "while constructing a mapping",
+                node.start_mark,
+                f"found unacceptable key {key!r}",
+                key_node.start_mark,
+            ) from exc
+        if duplicate:
+            raise DuplicateKeyError(
+                "while constructing a mapping",
+                node.start_mark,
+                f"found duplicate key {key!r}",
+                key_node.start_mark,
+            )
+        mapping[key] = loader.construct_object(value_node, deep=deep)
+    return mapping
+
+
+UniqueKeyLoader.add_constructor(
+    yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG,
+    construct_unique_mapping,
+)
 
 
 def json_value(value: Any) -> Any:
@@ -88,6 +131,93 @@ def validate_id(entity_id: str) -> str | None:
     if entity_id.startswith(('.', '-')) or any(char not in "abcdefghijklmnopqrstuvwxyz0123456789-_" for char in entity_id):
         return "invalid_id"
     return None
+
+
+def load_entity_views(
+    project_root: Path,
+    known_ids: set[str],
+) -> tuple[list[dict[str, Any]], list[EntityIssue]]:
+    """Load one local named-view config and validate canonical entity membership."""
+    config_path = project_root / VIEW_CONFIG_PATH
+    if not config_path.exists():
+        return [], []
+    relative_path = VIEW_CONFIG_PATH.as_posix()
+    try:
+        loaded = yaml.load(config_path.read_text(encoding="utf-8"), Loader=UniqueKeyLoader)
+    except DuplicateKeyError:
+        return [], [EntityIssue(relative_path, "invalid_views_yaml:duplicate_key")]
+    except yaml.YAMLError as exc:
+        return [], [EntityIssue(relative_path, f"invalid_views_yaml:{exc.__class__.__name__}")]
+    except OSError as exc:
+        return [], [EntityIssue(relative_path, f"views_read_error:{exc.__class__.__name__}")]
+    if loaded is None:
+        loaded = {}
+    if not isinstance(loaded, dict):
+        return [], [EntityIssue(relative_path, "views_config_not_object")]
+    raw_views = loaded.get("views")
+    if not isinstance(raw_views, dict):
+        return [], [EntityIssue(relative_path, "views_not_object")]
+
+    views: list[dict[str, Any]] = []
+    issues: list[EntityIssue] = []
+    for raw_view_id, raw_view in raw_views.items():
+        if not isinstance(raw_view_id, str):
+            issues.append(EntityIssue(relative_path, f"invalid_view_id:{raw_view_id}"))
+            continue
+        view_id = raw_view_id.strip()
+        if validate_id(view_id):
+            issues.append(EntityIssue(relative_path, f"invalid_view_id:{view_id}"))
+            continue
+        if not isinstance(raw_view, dict):
+            issues.append(EntityIssue(relative_path, f"invalid_view:{view_id}:not_object"))
+            continue
+        name = field_text(raw_view, "name")
+        if not name:
+            issues.append(EntityIssue(relative_path, f"invalid_view:{view_id}:missing_name"))
+            continue
+        raw_entity_ids = raw_view.get("entity_ids")
+        if not isinstance(raw_entity_ids, list):
+            issues.append(EntityIssue(relative_path, f"invalid_view:{view_id}:entity_ids_not_list"))
+            continue
+        if not raw_entity_ids:
+            issues.append(EntityIssue(relative_path, f"invalid_view:{view_id}:empty_entity_ids"))
+            continue
+
+        entity_ids: list[str] = []
+        seen_entity_ids: set[str] = set()
+        view_valid = True
+        for raw_entity_id in raw_entity_ids:
+            if not isinstance(raw_entity_id, str):
+                issues.append(
+                    EntityIssue(relative_path, f"invalid_view:{view_id}:invalid_entity_id:{raw_entity_id}")
+                )
+                view_valid = False
+                continue
+            entity_id = raw_entity_id.strip()
+            if validate_id(entity_id):
+                issues.append(
+                    EntityIssue(relative_path, f"invalid_view:{view_id}:invalid_entity_id:{entity_id}")
+                )
+                view_valid = False
+                continue
+            if entity_id in seen_entity_ids:
+                issues.append(
+                    EntityIssue(relative_path, f"invalid_view:{view_id}:duplicate_entity_id:{entity_id}")
+                )
+                view_valid = False
+                continue
+            seen_entity_ids.add(entity_id)
+            entity_ids.append(entity_id)
+            if entity_id not in known_ids:
+                issues.append(
+                    EntityIssue(relative_path, f"invalid_view:{view_id}:unresolved_entity_id:{entity_id}")
+                )
+                view_valid = False
+        if view_valid:
+            views.append({"id": view_id, "name": name, "entity_ids": entity_ids})
+
+    views.sort(key=lambda item: item["id"])
+    return views, issues
 
 
 def reference_values(frontmatter: dict[str, Any]) -> list[tuple[str, str]]:
@@ -165,7 +295,7 @@ def section_at(body: str, offset: int) -> str | None:
 
 
 def containing_sentence(body: str, start: int, end: int) -> str:
-    """Extract normalized sentence text containing a CRM link."""
+    """Extract normalized sentence text containing an entity link."""
     left = start
     while left > 0:
         if body[left - 1] in ".!?" and (left == len(body) or body[left].isspace()):
@@ -282,14 +412,15 @@ def body_claims(record: dict[str, Any]) -> list[dict[str, Any]]:
         context = normalized_claim_context(body[left:right])
         if not context or context.startswith("#"):
             continue
-        claim_material = "\0".join((record["id"], record["path"], context))
+        display_context = ENTITY_LINK_PATTERN.sub(lambda link: link.group(1), context)
+        claim_material = "\0".join((record["id"], display_context))
         claim_hash = hashlib.sha256(claim_material.encode("utf-8")).hexdigest()[:16]
         claim_key = f"claim:{claim_hash}"
         claims_by_key[claim_key] = {
             "key": claim_key,
             "entity_id": record["id"],
             "context": context,
-            "display_context": CRM_LINK_PATTERN.sub(lambda link: link.group(1), context),
+            "display_context": display_context,
             "path": record["path"],
             "section": section_at(body, left),
             "question_refs": refs,
@@ -301,14 +432,14 @@ def body_links(record: dict[str, Any]) -> list[dict[str, Any]]:
     body = str(record.get("body") or "")
     searchable_body = mask_question_definitions(mask_markdown_code(body))
     links: list[dict[str, Any]] = []
-    for occurrence, match in enumerate(CRM_LINK_PATTERN.finditer(searchable_body), start=1):
+    for occurrence, match in enumerate(ENTITY_LINK_PATTERN.finditer(searchable_body), start=1):
         context = normalized_claim_context(containing_sentence(body, match.start(), match.end()))
         block_start, block_end = containing_block_bounds(body, match.start(), match.end())
         links.append({
             "label": match.group(1).strip(),
             "target_entity_id": match.group(2).strip(),
             "context": context,
-            "display_context": CRM_LINK_PATTERN.sub(lambda link: link.group(1), context),
+            "display_context": ENTITY_LINK_PATTERN.sub(lambda link: link.group(1), context),
             "section": section_at(body, match.start()),
             "occurrence": occurrence,
             "question_refs": sorted(set(QUESTION_REF_PATTERN.findall(searchable_body[block_start:block_end]))),
@@ -316,34 +447,42 @@ def body_links(record: dict[str, Any]) -> list[dict[str, Any]]:
     return links
 
 
-def build_crm_registry(project_root: Path) -> dict[str, Any]:
-    root = project_root / CRM_ENTITIES_ROOT
-    issues: list[CrmIssue] = []
+def build_entity_index(project_root: Path) -> dict[str, Any]:
+    root = project_root / ENTITY_ROOT
+    issues: list[EntityIssue] = []
     records: list[dict[str, Any]] = []
     seen_ids: dict[str, str] = {}
     excluded_paths: set[str] = set()
 
     if root.exists():
-        for path in sorted(root.glob("**/*.md")):
+        for path in sorted(root.rglob("*.md")):
             rel_path = path.relative_to(project_root).as_posix()
+            if path.parent != root:
+                issues.append(EntityIssue(rel_path, "nested_entity_path"))
+                excluded_paths.add(rel_path)
+                continue
             frontmatter, body, issue = read_entity(path)
             if issue or frontmatter is None:
-                issues.append(CrmIssue(rel_path, issue or "invalid_frontmatter"))
+                issues.append(EntityIssue(rel_path, issue or "invalid_frontmatter"))
                 excluded_paths.add(rel_path)
                 continue
             missing = [field for field in REQUIRED_FIELDS if not field_text(frontmatter, field)]
             if missing:
-                issues.append(CrmIssue(rel_path, "missing_required:" + ",".join(missing)))
+                issues.append(EntityIssue(rel_path, "missing_required:" + ",".join(missing)))
                 excluded_paths.add(rel_path)
                 continue
             entity_id = field_text(frontmatter, "id")
             id_issue = validate_id(entity_id)
             if id_issue:
-                issues.append(CrmIssue(rel_path, id_issue))
+                issues.append(EntityIssue(rel_path, id_issue))
+                excluded_paths.add(rel_path)
+                continue
+            if path.stem != entity_id:
+                issues.append(EntityIssue(rel_path, f"filename_id_mismatch:{path.stem}:{entity_id}"))
                 excluded_paths.add(rel_path)
                 continue
             if entity_id in seen_ids:
-                issues.append(CrmIssue(rel_path, f"duplicate_id:{entity_id}:{seen_ids[entity_id]}"))
+                issues.append(EntityIssue(rel_path, f"duplicate_id:{entity_id}:{seen_ids[entity_id]}"))
                 excluded_paths.add(rel_path)
                 continue
             seen_ids[entity_id] = rel_path
@@ -370,7 +509,7 @@ def build_crm_registry(project_root: Path) -> dict[str, Any]:
             if question_ref not in local_question_ids
         })
         for question_ref in unresolved_local_refs:
-            issues.append(CrmIssue(record["path"], f"unresolved_question_ref:{question_ref}"))
+            issues.append(EntityIssue(record["path"], f"unresolved_question_ref:{question_ref}"))
         claims.extend(record_claims)
         record["question_refs"] = sorted({
             definition["id"] for definition in record_definitions
@@ -382,7 +521,7 @@ def build_crm_registry(project_root: Path) -> dict[str, Any]:
         for definition in record_definitions:
             question_id = definition["id"]
             if not definition["question"]:
-                issues.append(CrmIssue(record["path"], f"empty_question_definition:{question_id}"))
+                issues.append(EntityIssue(record["path"], f"empty_question_definition:{question_id}"))
                 continue
             existing = questions_by_id.get(question_id)
             if existing is None:
@@ -394,7 +533,7 @@ def build_crm_registry(project_root: Path) -> dict[str, Any]:
                     "paths": [record["path"]],
                 }
             elif existing["question"] != definition["question"]:
-                issues.append(CrmIssue(record["path"], f"conflicting_question_definition:{question_id}"))
+                issues.append(EntityIssue(record["path"], f"conflicting_question_definition:{question_id}"))
             else:
                 if definition["session_id"]:
                     existing["session_ids"] = sorted(set(existing["session_ids"] + [definition["session_id"]]))
@@ -404,38 +543,53 @@ def build_crm_registry(project_root: Path) -> dict[str, Any]:
     for record in records:
         for field, ref in reference_values(record["frontmatter"]):
             if ref not in known_ids:
-                issues.append(CrmIssue(record["path"], f"unresolved_ref:{field}:{ref}"))
+                issues.append(EntityIssue(record["path"], f"unresolved_ref:{field}:{ref}"))
+        funnel = record["frontmatter"].get("funnel")
+        if funnel is not None and not isinstance(funnel, dict):
+            issues.append(EntityIssue(record["path"], "invalid_funnel:not_object"))
         _latitude, _longitude, coordinate_issue = coordinate_values(record["frontmatter"])
         if coordinate_issue:
-            issues.append(CrmIssue(record["path"], coordinate_issue))
+            issues.append(EntityIssue(record["path"], coordinate_issue))
         for link in body_links(record):
             target_id = link["target_entity_id"]
             if validate_id(target_id):
-                issues.append(CrmIssue(record["path"], f"invalid_crm_link:{target_id}"))
+                issues.append(EntityIssue(record["path"], f"invalid_entity_link:{target_id}"))
             elif target_id == record["id"]:
-                issues.append(CrmIssue(record["path"], f"self_crm_link:{target_id}"))
+                issues.append(EntityIssue(record["path"], f"self_entity_link:{target_id}"))
             elif target_id not in known_ids:
-                issues.append(CrmIssue(record["path"], f"unresolved_crm_link:{target_id}"))
+                issues.append(EntityIssue(record["path"], f"unresolved_entity_link:{target_id}"))
+
+    views, view_issues = load_entity_views(project_root, known_ids)
+    issues.extend(view_issues)
 
     records.sort(key=lambda item: (str(item["kind"]), str(item["name"]), str(item["id"])))
     claims.sort(key=lambda item: item["key"])
     questions = [questions_by_id[key] for key in sorted(questions_by_id)]
     issue_rows = [issue.__dict__ for issue in issues]
     source_material = json.dumps(
-        {"entities": records, "questions": questions, "claims": claims, "issues": issue_rows},
+        {
+            "entities": records,
+            "views": views,
+            "questions": questions,
+            "claims": claims,
+            "issues": issue_rows,
+        },
         sort_keys=True,
         separators=(",", ":"),
         ensure_ascii=False,
     )
     source_fingerprint = hashlib.sha256(source_material.encode("utf-8")).hexdigest()
     return {
-        "schema_version": 2,
+        "schema_version": 3,
         "source_fingerprint": source_fingerprint,
-        "entity_root": CRM_ENTITIES_ROOT.as_posix(),
-        "registry_path": CRM_REGISTRY_PATH.as_posix(),
+        "entity_root": ENTITY_ROOT.as_posix(),
+        "view_config_path": VIEW_CONFIG_PATH.as_posix(),
+        "index_path": ENTITY_INDEX_PATH.as_posix(),
         "required_frontmatter": list(REQUIRED_FIELDS),
         "entities": records,
         "by_id": {record["id"]: record for record in records},
+        "views": views,
+        "views_by_id": {view["id"]: view for view in views},
         "questions": questions,
         "claims": claims,
         "issues": issue_rows,
@@ -479,7 +633,7 @@ def build_world_projection(registry: dict[str, Any], project_root: Path) -> dict
             target_id = link["target_entity_id"]
             if validate_id(target_id) or target_id not in known_ids or target_id == record["id"]:
                 continue
-            edge_material = "\0".join((record["id"], target_id, record["path"], link["context"]))
+            edge_material = "\0".join((record["id"], target_id, link["display_context"]))
             edge_hash = hashlib.sha256(edge_material.encode("utf-8")).hexdigest()[:16]
             edge_key = f"{project_id}:association:{edge_hash}"
             edges_by_key[edge_key] = {
@@ -535,7 +689,7 @@ def build_world_projection(registry: dict[str, Any], project_root: Path) -> dict
         })
     issues = list(registry["issues"])
     return {
-        "schema_version": 2,
+        "schema_version": 3,
         "source_fingerprint": registry["source_fingerprint"],
         "project": {
             "project_id": project_id,
@@ -546,12 +700,52 @@ def build_world_projection(registry: dict[str, Any], project_root: Path) -> dict
         "edges": edges,
         "questions": world_questions,
         "claims": world_claims,
+        "views": list(registry.get("views", [])),
         "issues": issues,
         "counts": {
             "nodes": len(nodes),
             "located_nodes": sum("latitude" in node for node in nodes),
             "edges": len(edges),
             "issues": len(issues),
+        },
+    }
+
+
+def build_crm_projection(registry: dict[str, Any], project_root: Path) -> dict[str, Any]:
+    """Project funnel-bearing entities without creating a second source of truth."""
+    identity = project_identity(project_root)
+    project_id = identity["id"]
+    entries: list[dict[str, Any]] = []
+    for record in registry["entities"]:
+        funnel = record["frontmatter"].get("funnel")
+        if not isinstance(funnel, dict) or not funnel:
+            continue
+        entries.append({
+            "key": f"{project_id}:{record['id']}",
+            "project_id": project_id,
+            "entity_id": record["id"],
+            "kind": record["kind"],
+            "name": record["name"],
+            "path": record["path"],
+            "funnel": funnel,
+            "frontmatter": record["frontmatter"],
+        })
+    entries.sort(key=lambda item: item["key"])
+    return {
+        "schema_version": 3,
+        "source_fingerprint": registry["source_fingerprint"],
+        "project": {
+            "project_id": project_id,
+            "name": identity["name"],
+            "identity_source": identity["source"],
+        },
+        "entities": entries,
+        "by_id": {entry["entity_id"]: entry for entry in entries},
+        "views": list(registry.get("views", [])),
+        "issues": list(registry["issues"]),
+        "counts": {
+            "entities": len(entries),
+            "issues": len(registry["issues"]),
         },
     }
 
@@ -575,28 +769,36 @@ def atomic_write_json(path: Path, payload: dict[str, Any]) -> Path:
     return path
 
 
-def write_crm_projections(project_root: Path, registry: dict[str, Any], world: dict[str, Any]) -> tuple[Path, Path]:
-    registry_path = atomic_write_json(project_root / CRM_REGISTRY_PATH, registry)
-    world_path = atomic_write_json(project_root / CRM_WORLD_PATH, world)
-    return registry_path, world_path
+def write_entity_projections(
+    project_root: Path,
+    index: dict[str, Any],
+    world: dict[str, Any],
+    crm: dict[str, Any],
+) -> tuple[Path, Path, Path]:
+    index_path = atomic_write_json(project_root / ENTITY_INDEX_PATH, index)
+    world_path = atomic_write_json(project_root / WORLD_VIEW_PATH, world)
+    crm_path = atomic_write_json(project_root / CRM_VIEW_PATH, crm)
+    return index_path, world_path, crm_path
 
 
 def run_compile(args: argparse.Namespace) -> int:
     project_root = Path(args.project_root).expanduser().resolve()
-    registry = build_crm_registry(project_root)
-    world = build_world_projection(registry, project_root)
+    index = build_entity_index(project_root)
+    world = build_world_projection(index, project_root)
+    crm = build_crm_projection(index, project_root)
     if not args.no_write:
-        write_crm_projections(project_root, registry, world)
+        write_entity_projections(project_root, index, world, crm)
     if args.json:
-        print(json.dumps({"registry": registry, "world": world}, indent=2, sort_keys=True))
+        print(json.dumps({"index": index, "world": world, "crm": crm}, indent=2, sort_keys=True))
     else:
-        counts = registry["counts"]
+        counts = index["counts"]
         action = "would compile" if args.no_write else "compiled"
         print(
-            f"farplane crm {action}: {counts['included']} included, {counts['excluded']} excluded; "
-            f"{world['counts']['edges']} associations -> {project_root / CRM_REGISTRY_PATH}, {project_root / CRM_WORLD_PATH}"
+            f"farplane entities {action}: {counts['included']} included, {counts['excluded']} excluded; "
+            f"{world['counts']['edges']} associations, {crm['counts']['entities']} CRM entries -> "
+            f"{project_root / ENTITY_INDEX_PATH}, {project_root / WORLD_VIEW_PATH}, {project_root / CRM_VIEW_PATH}"
         )
-    return 1 if registry["issues"] else 0
+    return 1 if index["issues"] else 0
 
 
 def build_parser() -> argparse.ArgumentParser:

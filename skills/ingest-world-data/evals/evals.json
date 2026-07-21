@@ -4,11 +4,11 @@
     {
       "id": "ingest_world_data_bounded_capture_01",
       "prompt": "This call excerpt is worth saving: Penang Castings, also called PC Manufacturing, operates in Penang and supplies aluminum housings to our existing CRM company Acme Motors. Update the project knowledge for this excerpt only.",
-      "expected_output": "Uses the supplied excerpt as the bounded source and does not search unrelated transcripts; Searches the current CRM registry before choosing create or update; Merges the alias and flat location without overwriting unrelated Markdown; Encodes the association inside a factual sentence using an explicit crm link to the resolved Acme entity; Does not invent coordinates, relationship predicates, reverse edges, or a separate edge record; Runs the CRM compiler and reports created, updated, skipped, ambiguous, and compile outcomes",
+      "expected_output": "Uses the supplied excerpt as the bounded source and does not search unrelated transcripts; Searches the current entity index before choosing create or update; Merges the alias and flat location without overwriting unrelated Markdown; Encodes the association inside a factual sentence using an explicit entity link to the resolved Acme entity; Does not invent coordinates, relationship predicates, reverse edges, or a separate edge record; Runs the entity compiler and reports created, updated, skipped, ambiguous, and compile outcomes",
       "files": [],
       "assertions": [
         "Uses the supplied excerpt as the bounded source and does not search unrelated transcripts",
-        "Searches the current CRM registry before choosing create or update",
+        "Searches the current entity index before choosing create or update",
         "Merges the alias and flat location without overwriting unrelated Markdown",
         "Encodes the association inside a factual sentence using an explicit crm link to the resolved Acme entity",
         "Does not invent coordinates, relationship predicates, reverse edges, or a separate edge record",

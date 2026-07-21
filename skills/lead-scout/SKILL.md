@@ -104,8 +104,9 @@ Use `customer-research` for shortlisted people or companies after qualification.
   - [ ] Include accepted candidates, rejected near-misses, evidence snippets or
         source notes, confidence, and recommended next owner for each candidate.
   - [ ] For CRM writeback, create or update only the entity's stable ID, name,
-        description, links, and status in `.farplane/crm/entities.json`. Put
-        report paths and workflow details in the skill-owned candidate packet.
+        description, links, and status in `.farplane/entities/*.md`, then
+        run `farplane entities compile`. Put report paths and workflow details in the
+        skill-owned candidate packet.
 - [ ] 5. Route shortlisted candidates.
   - [ ] Route qualified people or companies to
         [customer-research](../customer-research/SKILL.md) for sourced reports.

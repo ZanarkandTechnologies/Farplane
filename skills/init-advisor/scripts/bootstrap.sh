@@ -125,13 +125,11 @@ mkdir -p \
   "${TARGET_DIR}/.farplane/reports" \
   "${TARGET_DIR}/.farplane/evals/runs" \
   "${TARGET_DIR}/.farplane/logs" \
-  "${TARGET_DIR}/.farplane/crm/entities/people" \
-  "${TARGET_DIR}/.farplane/crm/entities/companies" \
-  "${TARGET_DIR}/.farplane/crm/entities/opportunities" \
+  "${TARGET_DIR}/.farplane/entities" \
   "${TARGET_DIR}/.farplane/customer-research/reports" \
   "${TARGET_DIR}/.farplane/lead-scout/reports"
-write_file_if_missing "${TARGET_DIR}/.farplane/README.md" "# .farplane\n\nIgnored generated and tool-owned state for this project.\n\nUse owner-named paths for reports, metric observations, eval outputs, content, logs, and tool-specific continuation state. Do not add a generic runtime, evidence, or review bucket.\n\nTracked framework config belongs in farplane/.\n"
-copy_file "${REF_DIR}/CRM_README_TEMPLATE.md" "${TARGET_DIR}/.farplane/crm/README.md"
+write_file_if_missing "${TARGET_DIR}/.farplane/README.md" "# .farplane\n\nIgnored local state for this project.\n\nUse owner-named paths for reports, metric observations, eval outputs, content, logs, and tool-specific continuation state. Flat entity Markdown and views.yaml are explicit authored local exceptions. Do not add a generic runtime, evidence, review, or config bucket.\n\nShared framework config belongs in farplane/.\n"
+write_file_if_missing "${TARGET_DIR}/.farplane/views.yaml" "views: {}\n"
 
 mkdir -p "${TARGET_DIR}/docs/features" "${TARGET_DIR}/docs/systems"
 copy_file "${REF_DIR}/FEATURES_README_TEMPLATE.md" "${TARGET_DIR}/docs/features/README.md"
@@ -190,7 +188,8 @@ echo "  - Run automation-advisor when you want to activate the live Work Pulse a
 echo "  - Add farplane/hooks.json entries only for installed deterministic hooks; file-length warnings belong in rules/git-review-gates.toml."
 echo "  - Fill in farplane/pm.json with PM-visible chat and automation thread IDs so the UI groups them under one employee."
 echo "  - Use owner-named .farplane/ paths for ignored reports, metric observations, eval outputs, content, logs, and tool-specific state; do not add generic runtime, evidence, or review buckets."
-echo "  - Keep relationship state in .farplane/crm/entities/**/*.md; run 'farplane crm compile' to generate entities.json and world.json. Skill reports link entities with entity_refs."
+echo "  - Keep each entity in flat .farplane/entities/<id>.md; run 'farplane entities compile' to generate index.json, world.json, and crm.json. Skill reports link entities with entity_refs."
+echo "  - Define private named entity slices in .farplane/views.yaml; each view lists canonical entity_ids and is compiled into all three entity projections."
 echo "  - Start by refining docs/bootstrap-brief.md with a deep-interview-quality intake before locking stack or topology decisions."
 echo "  - Fill the bootstrap brief's agent-experience section so the repo knows how agents should reach, inspect, and verify important app states."
 echo "  - Refine docs/TASTE.md so UI tickets and QA share one visual doctrine."

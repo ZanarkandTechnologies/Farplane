@@ -2,8 +2,8 @@
 kind: farplane-framework-reporting-standard
 status: active
 created_at: 2026-07-08
-updated_at: 2026-07-13
-framework_template_version: "0.1.1"
+updated_at: 2026-07-21
+framework_template_version: "0.1.2"
 ---
 
 # Farplane Reporting
@@ -127,10 +127,11 @@ Each indexed report includes:
 }
 ```
 
-Customer research uses `.farplane/customer-research/reports/*` and links CRM
-entities through `entity_refs`. CRM source state lives separately in
-`.farplane/crm/entities/**/*.md`; `farplane crm compile` generates
-`.farplane/crm/entities.json`. CRM has no handwritten report backlinks. A
+Customer research uses `.farplane/customer-research/reports/*` and links
+canonical entities through `entity_refs`. Entity source state lives in flat
+`.farplane/entities/*.md`; `farplane entities compile` generates
+`.farplane/entities/index.json`, `world.json`, and `crm.json`. Entities have no
+handwritten report backlinks. A
 future ticket may opt selected skill-local reports into the main
 project registry by adopting the Core report-card contract.
 Ticket QA/review/mining/backfill artifacts stay outside this registry by

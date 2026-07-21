@@ -3,8 +3,8 @@ title: Project Files
 status: active
 owner: harness
 created_at: 2026-06-15
-updated_at: 2026-07-14
-framework_template_version: "0.3.0"
+updated_at: 2026-07-22
+framework_template_version: "0.3.2"
 source_of_truth:
   - docs/farplane-framework/README.md
   - farplane/manifest.json

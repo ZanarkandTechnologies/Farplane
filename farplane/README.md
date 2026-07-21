@@ -110,3 +110,5 @@ See [docs/farplane-framework/project-files.md](../docs/farplane-framework/projec
   truth, duplicate rows, owner drift, and generated-output freshness.
 - Human-feedback improvements are ordinary Dogfood-created Goal Packets;
   Work Pulse executes them and ticket review state waits without a worker.
+  views.yaml
+  entities/

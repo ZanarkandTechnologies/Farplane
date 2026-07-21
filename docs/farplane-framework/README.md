@@ -3,8 +3,8 @@ title: Farplane Framework
 status: active
 owner: harness
 created_at: 2026-06-15
-updated_at: 2026-07-11
-framework_template_version: "0.3.0"
+updated_at: 2026-07-22
+framework_template_version: "0.3.2"
 source_of_truth:
   - docs/prd.md
   - docs/farplane-framework/lifecycle.md
@@ -13,6 +13,7 @@ source_of_truth:
   - docs/farplane-framework/pulse-and-interval-loop.md
   - docs/farplane-framework/ticket-execution-loop.md
   - docs/farplane-framework/hooks-and-runtime.md
+  - docs/farplane-framework/entities.md
   - docs/farplane-framework/reporting.md
   - docs/farplane-framework/graph-contract.md
   - docs/farplane-framework/harness-maintenance.md
@@ -60,6 +61,7 @@ Then open only the contract needed for the current question:
 | How do Pulse, planning, reports, Feed Scout, and Dogfood coordinate? | [Work Pulse And Scheduled Ticket Sources](pulse-and-interval-loop.md) |
 | How does a shaped idea become reviewed completed work? | [Ticket Execution Loop](ticket-execution-loop.md) |
 | What may hooks do, and where does runtime state live? | [Hooks And Runtime](hooks-and-runtime.md) |
+| Where do canonical entities, named views, paragraph links, World, and CRM projections live? | [Entity Memory](entities.md) |
 | What report metadata and registry shape does Core expose? | [Reporting](reporting.md) |
 | How are lifecycle graph projections represented? | [Graph Contract](graph-contract.md) |
 | How do registries, rollout, validators, and graph generators fit together? | [Harness Maintenance](harness-maintenance.md) |
