@@ -12,21 +12,26 @@
      evidence cannot choose a method;
    - adversarial cases from `agent-qa-test`, accepted only by a separate
      evidence reviewer and Eval owner.
-5. Use `goal-advisor` to instantiate the reusable template into the ordinary
+5. Use `leverage-advisor` to build the initial intervention frontier, first
+   proof, and result-dependent replan conditions from the grounded evidence.
+6. Use `goal-advisor` to instantiate the reusable template into the ordinary
    ticket Goal Packet and obtain operator approval.
-6. Freeze the full suite and record the baseline.
+7. Freeze the full suite and record the baseline.
 
 ## 2. Harden
 
-On each native Goal turn, make one bounded instruction change, run the complete
-frozen suite, and retain the candidate only when performance improves without a
-guard regression. Continue until the full target passes. If harden patience or
+On each native Goal turn, use `leverage-advisor` on the program roadmap,
+`progress.md` learnings, current Eval evidence, and remaining harden budget.
+Make the selected bounded instruction change, run the complete frozen suite,
+and retain the candidate only when performance improves without a guard
+regression. Continue until the full target passes. If harden patience or
 `max_rounds` is exhausted first, stop blocked and do not refine.
 
 ## 3. Refine
 
-Starting from the passing hardened candidate, repeatedly remove, merge, or
-condense instructions. Run the same complete suite after every candidate.
+Starting from the passing hardened candidate, replan from progress before each
+round, then remove, merge, or condense the selected instruction boundary. Run
+the same complete suite after every candidate.
 Retain only a shorter candidate that preserves the hardened performance floor
 and every guard. Otherwise restore the prior shortest passing candidate.
 

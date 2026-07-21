@@ -1,0 +1,47 @@
+{
+  "skill_name": "leverage-advisor",
+  "evals": [
+    {
+      "id": "leverage_advisor_replans_from_progress_01",
+      "prompt": "We have a roadmap for improving a model, but the first cheap representation probe was flat overall and improved only one target class. What should we try next?",
+      "expected_output": "Grounds the current objective and observation; Revises the eligible frontier from the asymmetric result; Recommends one evidence-linked next proof instead of continuing a fixed ladder; States positive, negative, and budget replan conditions; Keeps execution and campaign state with the owning workflow",
+      "files": [],
+      "assertions": [
+        "Uses the new progress evidence to revise rather than replay the original roadmap order",
+        "Ranks the remaining frontier by bottleneck fit, information value, unlocks, cost, and risk",
+        "Selects one bounded first proof and names what would falsify it",
+        "States contingent replan conditions for the result",
+        "Does not execute the experiment, compile a Goal, or create a ticket per attempt"
+      ],
+      "metadata": {"farplane": {"title": "Leverage Advisor replans from asymmetric evidence", "tags": ["skill", "leverage", "replanning"], "notes": "Regression for roadmap plus progress selection."}}
+    },
+    {
+      "id": "leverage_advisor_source_gap_01",
+      "prompt": "Help us choose the highest-potential next technique, but the project has no current technique list and the only notes are a vague two-year-old blog summary.",
+      "expected_output": "Identifies the evidence-thin candidate frontier; Routes a bounded parity or source-synthesis step; Requires source-backed candidate dispositions before ranking; Returns a source gap when research cannot run; Avoids fabricating a technique leaderboard",
+      "files": [],
+      "assertions": [
+        "Recognizes that the current lever catalog is absent or stale",
+        "Routes bounded research or source synthesis rather than always researching",
+        "Requires adopt, adapt, reject, or defer dispositions before candidates enter the frontier",
+        "Returns a source gap when the missing evidence cannot be resolved",
+        "Does not invent precise expected lift or a SOTA ranking"
+      ],
+      "metadata": {"farplane": {"title": "Leverage Advisor exposes a source gap", "tags": ["skill", "leverage", "grounding"], "notes": "Protects conditional research and no-fabrication behavior."}}
+    },
+    {
+      "id": "leverage_advisor_campaign_ticket_boundary_01",
+      "prompt": "The next roadmap contains six small experiments under the same metric, evaluator, owner, and compute cap. Should I create six tasks?",
+      "expected_output": "Keeps one bounded campaign ticket; Treats experiments as progress entries and evidence receipts; Splits only for independent ownership, proof, approval, spend, or changed objective/evaluator boundaries; Names the accepted tradeoff; Avoids taking over ticket lifecycle",
+      "files": [],
+      "assertions": [
+        "Recommends one campaign ticket while objective, evaluator, owner, and budget are stable",
+        "Treats individual experiments as ledger entries and artifacts rather than tickets",
+        "Names concrete conditions that would justify a child or new ticket",
+        "Preserves the domain executor and Goal Advisor ownership boundaries",
+        "Does not materialize tickets itself"
+      ],
+      "metadata": {"farplane": {"title": "Leverage Advisor preserves campaign ticket ownership", "tags": ["skill", "leverage", "tickets"], "notes": "Protects the one-campaign-ticket design."}}
+    }
+  ]
+}

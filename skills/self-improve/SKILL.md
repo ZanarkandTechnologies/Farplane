@@ -35,19 +35,22 @@ create target-local lifecycle state or another decision engine.
 ## Skill Signature
 
 ```text
-self_improve(target_skill, owning_ticket, performance_metric, eval_suite?, guards?, budgets?)
+self_improve(target_skill, owning_ticket, performance_metric, eval_suite?,
+             guards?, intervention_catalog?, budgets?)
   -> approved_goal_packet + shortest_verified_passing_candidate + eval_evidence
 
 state:
-  reads(target SKILL.md, canonical evals/evals.json, owning ticket, generated Eval evidence)
+  reads(target SKILL.md, canonical evals/evals.json, owning ticket, program
+        roadmap, progress.md learnings, generated Eval evidence)
   writes(ticket program.md, ticket progress.md, native Goal prompt,
          accepted target-skill change)
 
 gates:
   target_exists; owning_ticket_exists; metric_named; suite_frozen;
-  baseline_recorded; guards_named; phase_budgets_named; packet_approved
+  baseline_recorded; guards_named; phase_budgets_named; roadmap_bound;
+  packet_approved
 
-routes: goal-advisor | eval | metric-advisor | skill-maintenance |
+routes: leverage-advisor | goal-advisor | eval | metric-advisor | skill-maintenance |
   agent-qa-test | review
 
 fails:
@@ -55,6 +58,26 @@ fails:
   refinement_before_target; behavior_for_length_trade; unmeasured_promotion;
   target_local_loop_state; adversary_self_approval
 ```
+
+## Mandatory Composition
+
+Every Goal Packet and active-turn decision must make this named composition
+explicit:
+
+```text
+leverage_advisor(local failures + intervention catalog?) -> initial roadmap
+goal_advisor(ticket.md + program preset + progress.md) -> approved Goal Packet
+leverage_advisor(program.md roadmap + progress.md learnings
+                 + current Eval evidence + remaining phase budget) -> next experiment
+eval(next experiment, frozen complete suite) -> evidence
+progress.md.append(selection + alternatives + evidence + learning + decision)
+native_goal(updated packet state) -> continue | transition | block | complete
+```
+
+Goal Advisor is only the packet/native-Goal compiler. Leverage Advisor is the
+only harden/refine experiment selector. Do not replace either named owner with
+anonymous equivalent logic, and do not select a candidate directly before the
+Leverage Advisor checkpoint.
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
@@ -71,9 +94,13 @@ fails:
     paper, or book research through
     `skill-maintenance:upgrade_skill_from_sources`; keep the source packet out
     of the Goal state and record `adopt | adapt | reject | defer` decisions.
-  - [ ] Route adversarial cases through `agent-qa-test`; a separate evidence
-    reviewer must accept a case before Eval does. The tester cannot approve its
-    own case.
+   - [ ] Route adversarial cases through `agent-qa-test`; a separate evidence
+     reviewer must accept a case before Eval does. The tester cannot approve its
+     own case.
+   - [ ] Use [leverage-advisor](../leverage-advisor/SKILL.md) to turn the
+     supplied or locally grounded intervention catalog into an initial ranked
+     roadmap, first proof, and evidence-dependent replan conditions. Do not
+     invent an intervention leaderboard when coverage is insufficient.
 - [ ] 4. Invoke `goal-advisor` to instantiate
   `references/goal-program-template.md` into the ticket's `program.md`, create
   or update `progress.md`, and compile a compact Files-listed native Goal
@@ -82,15 +109,17 @@ fails:
 - [ ] 5. Freeze the complete suite for the Goal and record the baseline before
   editing. If an accepted case changes the suite later, stop and regenerate a
   fresh packet and baseline; never change cases mid-comparison.
-- [ ] 6. Harden first. Each turn makes one bounded instruction change, runs the
-  complete frozen suite, and retains it only when behavior improves and every
+- [ ] 6. Harden first. Before each turn, invoke Leverage Advisor on the
+  `program.md` roadmap, `progress.md` learnings, current Eval evidence, and
+  remaining harden budget to choose one bounded instruction experiment. Run
+  the complete frozen suite and retain it only when behavior improves and every
   guard passes. Enter refinement only after the full target passes. Exhausting
   harden patience or `max_rounds` blocks without refinement.
-- [ ] 7. Refine second. Repeatedly remove, merge, or condense instructions and
-  run the complete frozen suite. Retain only candidates that preserve the
-  hardened performance floor and every guard while reducing length; otherwise
-  restore the shortest passing candidate. Stop on refine patience or
-  `max_rounds`.
+- [ ] 7. Refine second. Before each turn, use the same evidence-updated
+  selection step to choose one removal, merge, or condensation experiment.
+  Retain only candidates that preserve the hardened performance floor and every
+  guard while reducing length; otherwise restore the shortest passing
+  candidate. Stop on refine patience or `max_rounds`.
 - [ ] 8. Run the frozen suite once more on the shortest passing candidate,
   append final evidence to ticket `progress.md`, obtain required Agent QA and
   review, then promote the accepted skill change through `skill-maintenance`.
@@ -109,6 +138,13 @@ One Goal owns both phases. A phase budget is a safety bound, not a competing
 controller. Candidate files may remain temporary; keep only the accepted skill
 change, ticket progress, and generated evidence.
 
+Leverage Advisor is the existing decision owner for choosing the next
+experiment. `program.md` owns the initial roadmap and replan policy;
+`progress.md` owns observed outcomes. Before every harden or refine round,
+Leverage Advisor rereads both plus current evidence and remaining budget. It
+does not execute Eval, mutate the target, compile the Goal, or create an
+experiment ticket.
+
 External research is optional and evidence-triggered, not an automatic web
 search. Adversarial agents strengthen the eval boundary before a Goal or force
 a new frozen Goal; they do not mutate or approve the suite during a run.
@@ -125,6 +161,8 @@ launcher.
 
 - [Goal program template](references/goal-program-template.md) — instantiate
   for every material self-improvement Goal.
+- [Leverage Advisor](../leverage-advisor/SKILL.md) — use at setup and every
+  experiment checkpoint to choose the next move from roadmap plus progress.
 - [Goal Packet ownership](references/skill-memory.md) — load when compiling or
   repairing state surfaces.
 - [Skill eval use](references/skill-evals.md) — load for suite, metric,
@@ -153,8 +191,10 @@ Packet: owning ticket + approval/freshness + frozen suite
 Phase: baseline | harden | refine
 Budget: harden max_rounds/patience + refine max_rounds/patience
 Observation: performance + guards + length + evidence ref
+Selector: Leverage Advisor inputs + selected move + rejected alternatives
 Decision: retain | reject | transition_refine | blocked | complete
-Writeback: exact ticket progress.md entry or fields to append
+Writeback: selected move + rejected alternatives + measurements + evidence
+           + decision + learned constraint + next action
 Next action: one bounded next turn or stop reason
 ```
 

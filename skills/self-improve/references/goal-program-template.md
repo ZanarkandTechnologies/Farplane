@@ -40,6 +40,22 @@ metric:
   guards: <guards>
   suite: frozen_for_this_goal
 
+selection:
+  owner: leverage-advisor
+  roadmap:
+    objective: <optimization objective>
+    candidates: <initial intervention frontier or project-local catalog ref>
+    first_proof: <baseline-grounded first experiment>
+    contingencies: <positive, flat, negative, invalid, and budget branches>
+  before_each_experiment:
+    inputs:
+      - this program.md roadmap
+      - progress.md learnings and prior decisions
+      - current complete-suite Eval evidence
+      - remaining phase budget and patience
+    output: one next experiment + hypothesis + falsifier + rejected alternatives + replan conditions
+    rule: invoke leverage-advisor; do not continue a fixed roadmap order
+
 loop:
   round: one bounded target edit followed by the complete frozen eval
   harden:
@@ -55,8 +71,9 @@ loop:
     exit: patience or budget exhausted -> final verification
 
 after_each_turn:
-  - run one round in the current phase
-  - append hypothesis, measurements, evidence, decision, and next action to progress.md
+  - use leverage-advisor on the roadmap plus progress.md learnings, current evidence, and remaining budget
+  - preregister and run the one selected round in the current phase
+  - append selected move, rejected alternatives, hypothesis, measurements, evidence, decision, learned constraint, and next action to progress.md
   - continue, transition, block, or complete from the phase rules
 
 drift:
@@ -67,6 +84,7 @@ stop:
   complete: final full-suite verification passes on the shortest retained candidate
 ```
 
-Never trade required behavior for length. Do not create another loop owner or
-target-local state.
+Never trade required behavior for length. Leverage Advisor chooses the move;
+native Goal continues; Eval measures; this ticket's program/progress own state.
+Do not create another loop owner or target-local state.
 ````
