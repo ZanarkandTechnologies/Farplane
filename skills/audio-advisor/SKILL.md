@@ -39,20 +39,21 @@ and Remotion handoff. It never downloads SoundButtonsWorld files.
 ## Skill Signature
 
 ```text
-audio_advisor(script_or_storyboard, inspiration_pack?, kind?, brief?, voice?, music?, sfx?, platform?, duration?, source?, provider?, execution_mode?, artifact_owner?)
+audio_advisor(script_or_storyboard, element_realization_packets?, timing_master_role?, kind?, brief?, voice?, music?, sfx?, platform?, duration?, source?, provider?, execution_mode?, artifact_owner?)
   -> audio_direction_packet | sfx_candidate_shortlist | generation_packet |
      execution_receipt | blocked_report
 
 state:
-  reads(user brief, script/storyboard, Inspiration Pack audio/editing elements,
+  reads(user brief, script/storyboard, complete audio/editing element packets,
         source refs, config.toml when sourcing or generating,
         provider/source reference selected by route, qa_checklist.md,
         runtime secret readiness when authorized generation is requested)
   writes(audio direction artifact, SFX candidate shortlist?, optional generated
-         audio, generation receipt, downstream cue binding)
+         audio, generation receipt, actual duration/alignment/cue binding)
 
 gates:
-  audio_roles_named; timing_cues_aligned; motion_bindings_named;
+  audio_roles_named; selected_elements_conditioned_on_example_and_recipe;
+  timing_cues_aligned; motion_bindings_named;
   rights_or_usage_basis_recorded; voice_consent_resolved_when_relevant;
   candidate_search_completed_when_sfx_idea; provider_capability_matches;
   output_owner_resolved;
@@ -89,18 +90,27 @@ SoundButtonsWorld item pages before proposing generation and put candidates in
 the final content implementation plan for operator approval/retrieval. Never
 download from the site. Paid generation still requires explicit authority.
 
-For Inspiration Pack inputs, consume `audio`, `editing`, `storyboard`, and
-`hook` elements from `captures[].elements`. Important hits, transitions,
+For Brand Kit or Tasty Pack inputs, consume complete `audio`, `editing`,
+`storyboard`, and `hook` realization packets. Important hits, transitions,
 risers, silence, and voice/caption beats require time-coded motion/edit
 bindings rather than a generic bed.
+
+When a selected element conditions audio work, require its resolved golden
+example and golden recipe together. If audio is the selected timing master,
+the execution receipt must include the actual asset, observed duration,
+alignment/timestamps when available, and downstream cue sheet; planned seconds
+alone do not unlock visual generation.
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
 - [ ] 1. Bind the audio job and read `qa_checklist.md` as preflight.
-  - [ ] Resolve the script/storyboard, Inspiration elements, platform,
+  - [ ] Resolve the script/storyboard, selected elements, platform,
     duration, audio roles, rights constraints, artifact owner, desired mode,
     and whether provider execution is explicitly authorized.
+  - [ ] Validate complete realization packets for selected audio/story/editing
+    elements and bind each golden example plus golden recipe to its cue or
+    generation direction.
 - [ ] 2. Split roles and map one audio spine.
   - [ ] Separate voice/dialogue/lipsync, music, SFX/Foley, ambience, UI sounds,
     silence, transitions, and mix/ducking; bind every cue to time/frames, scene,
@@ -139,6 +149,8 @@ bindings rather than a generic bed.
   - [ ] Validate provider JSON with `scripts/validate_audio_packet.py`; confirm
     every audio file opens and probe duration/format; record a sanitized receipt
     and route final placement/mix/render proof to `remotion`.
+  - [ ] When this asset is timing master, attach observed duration,
+    alignment/timestamps, and the revised cue sheet before final visual work.
   - [ ] Reapply `qa_checklist.md` and use independent review for material
     production runs.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->

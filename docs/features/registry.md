@@ -2,7 +2,7 @@
 title: "Generated Feature Registry"
 status: generated
 owner: feature-registry
-updated_at: 2026-07-14
+updated_at: 2026-07-22
 refs:
   - docs/features/registry.jsonl
   - docs/features/validate_features.py
@@ -30,7 +30,7 @@ This file is generated. Edit the feature specs in `docs/features/` instead.
 | [FEAT-0042 Retired lean global agent operating kernel](../features/FEAT-0042-lean-global-agent-operating-kernel.md) | [Agent Kernel](../systems/agent-kernel.md) | `retired` | `false` | `false` | `context-routing` |
 | [FEAT-0043 Retired project-level system prompt eval suite](../features/FEAT-0043-project-level-system-prompt-eval-suite.md) | [Proof And Review](../systems/proof-review.md) | `retired` | `false` | `FEAT-0039` | `proof` |
 | [FEAT-0054 Retired modular skill-local eval tasks](../features/FEAT-0054-modular-skill-local-eval-tasks.md) | [Proof And Review](../systems/proof-review.md) | `retired` | `false` | `FEAT-0039` | `proof` |
-| [FEAT-0056 Tasty Pack inspiration vault](../features/FEAT-0056-inspiration-vault.md) | [Source And Sidecar Systems](../systems/source-sidecar-systems.md) | `implemented` | `false` | `false` | `source-ingestion` |
+| [FEAT-0056 Tasty Pack inspiration vault](../features/FEAT-0056-inspiration-vault.md) | [Content Production](../systems/content-production.md) | `implemented` | `false` | `false` | `content-production` |
 | [FEAT-0057 Skill-local QA checklist artifacts](../features/FEAT-0057-skill-local-qa-checklist-artifacts.md) | [Skill System](../systems/skill-system.md) | `implemented` | `false` | `false` | `skills` |
 | [FEAT-0060 Registry-backed documentation OS](../features/FEAT-0060-registry-backed-documentation-os.md) | [Documentation OS](../systems/documentation-os.md) | `implemented` | `false` | `false` | `context-routing` |
 | [FEAT-0061 Farplane adoption tracker CLI](../features/FEAT-0061-farplane-adoption-tracker-cli.md) | [Maintenance And Release OS](../systems/maintenance-release-os.md) | `implemented` | `false` | `false` | `proof` |
@@ -45,3 +45,4 @@ This file is generated. Edit the feature specs in `docs/features/` instead.
 | [FEAT-0070 Dogfood experiment review and candidate supply](../features/FEAT-0070-experimental-feature-evaluation-reports.md) | [Self-Improvement And Learning](../systems/self-improvement-learning.md) | `implemented` | `true` | `false` | `improvement-loop` |
 | [FEAT-0071 Project Work Pulse](../features/FEAT-0071-project-work-pulse.md) | [Horizon Loop](../systems/horizon-loop.md) | `implemented` | `true` | `false` | `planning` |
 | [FEAT-0072 Persistent ICP and world memory](../features/FEAT-0072-persistent-icp-and-world-memory.md) | [Source And Sidecar Systems](../systems/source-sidecar-systems.md) | `implemented` | `true` | `false` | `context-routing` |
+| [FEAT-0073 Brand Kit approved creative identity](../features/FEAT-0073-brand-kit-approved-creative-identity.md) | [Content Production](../systems/content-production.md) | `designed` | `false` | `false` | `content-production` |

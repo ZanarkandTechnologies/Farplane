@@ -45,8 +45,15 @@ Use this as the ordered checklist whenever `ai-video-advisor` is active.
   before spend. Use start/end frame chaining for `continuous_chain`, require
   transition notes for `deliberate_scene_breaks`, and block isolated I2V
   batches unless the chosen format is explicitly `montage`.
+- [ ] When a selected creative element conditions a clip, require its complete
+  realization packet and bind both the resolved `goldenExample` asset and
+  `goldenRecipe` prompt into the actual provider input. Record the element ID
+  and target output duration in the generation receipt; block title-only or
+  recipe-only handoffs.
 - [ ] When the caller has a master audio plan, set provider audio generation
-  off where the live schema supports it, and record any exception by beat.
+  off where the live schema supports it, derive target clip duration/handles
+  from the observed master duration and cue sheet, and record any exception by
+  beat.
 - [ ] Confirm external compute/spend is acceptable before any `belt app run`.
 - [ ] Save final videos, prompts, input JSON, result JSON, and notes inside the workspace, not only in a remote URL, temp path, or Codex home path.
 - [ ] If the video is used on a web surface, route implementation/proof through `frontend-craft`, `references/frontend-asset-qa.md`, and `visual-qa` when layout or taste is affected.

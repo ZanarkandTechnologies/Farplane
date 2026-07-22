@@ -6,17 +6,18 @@ Use this reference when deciding which subskill owns each phase of
 ## Core Function
 
 ```text
-ingest_content(source, note?)
+ingest_content(source, note?, brand_kit_id?)
   -> read_content(source, note?)
   -> breakdown_content(source_context, note?)
-  -> extract_elements(breakdown, note?)
-  -> store_capture(source, note, analysis, elements)
+  -> extract_complete_elements(breakdown, same_source_assets, note?)
+  -> store_capture(source, note, analysis, complete_elements)
+  -> optional_promote(brand_kit_id, complete_elements)
 ```
 
 The skill should behave like a router with one compact output contract:
 Resource Bank captures store source/ref, operator note/focus, analysis summary,
-creative elements, and tags/facets. They do not require separate evidence
-objects by default.
+complete creative-element capsules, and tags/facets. They do not require a
+parallel evidence or recipe collection.
 
 ## Note Intent
 
@@ -38,7 +39,8 @@ The note should influence:
 - what part of the source is inspected;
 - which creative elements are extracted;
 - which retrieval facets and tags are added;
-- whether generation recipes are stored or generation skills are called now.
+- which same-source asset grounds each element, which golden recipes are
+  stored, and whether generation skills are called now.
 
 ## Read Phase
 
@@ -51,18 +53,20 @@ Routes:
 - URL/article/webpage/PDF/transcript: `summarize` or direct local read.
 - Social/video/audio: use public context, operator note, visible metadata, and
   lightweight inspection when that is enough for a useful capture.
-- Media requiring exact timing, direct reuse, transcript, frames, or audit
-  proof: route to `media-ingest` and then `video-understanding` when needed.
+- Media requiring element-specific visual/audio claims, a defensible golden
+  example, exact timing, direct reuse, transcript, frames, or audit proof:
+  route to `media-ingest` and then `video-understanding` when needed.
 - Media where the note selects the music/song/beat/audio bed: route to
   `media-ingest` for optional music recognition and carry matched
   artist/title/link or no-match status into the source context.
 - Image/screenshot: direct visual inspection.
 - Plain idea: create a note-only capture.
 
-If a source cannot be inspected deeply, say so in the analysis. Do not invent
-timeline, audio, or visual claims. Use creative element anchors such as
-`operator note`, `public metadata`, `opening frame`, or `0-3s` to show what the
-element is grounded in.
+If lightweight evidence cannot support an honest element-specific description,
+why, example, and recipe, deepen the read or block that element. Do not invent
+timeline, audio, or visual claims. Use anchors such as `operator note`, `public
+metadata`, `opening frame`, or `0-3s` only when those inputs genuinely support
+the complete capsule.
 
 ## Breakdown Phase
 
@@ -94,7 +98,7 @@ context summary.
 ## Element Phase
 
 ```text
-extract_elements(analysis, note?) -> CreativeElement[]
+extract_complete_elements(analysis, same_source_assets, note?) -> CreativeElement[]
 ```
 
 Element shape:
@@ -104,10 +108,20 @@ CreativeElement = {
   kind: "visual" | "audio" | "hook" | "storyboard" | "editing" | "copy" | "format" | "constraint" | "character",
   title: string,
   description: string,
+  whyItWorks: string,
+  goldenExample: { assetId: ResourceBankAssetId, description?: string },
+  goldenRecipe: string,
   anchor?: string,
   pinned?: boolean
 }
 ```
+
+Every element must use one asset from the same ingestion job as its golden
+example. Prefer a selected frame/contact sheet/audio/transcript asset when it
+demonstrates the element better; otherwise use the primary source asset with a
+precise example description. Write one kind-specific, rights-safe
+`goldenRecipe` that makes downstream generation conditional on the observed
+mechanic. Do not use the same generic recipe across unrelated kinds.
 
 Extract all useful creative elements needed to understand the source, but pin
 only the sub-elements the operator liked, selected, or wants reused in the
@@ -123,7 +137,7 @@ rights-safe `constraint` element that tells future production to remix the role
 and function rather than the exact expression.
 
 If the operator asks to generate now, route the generation step after storage
-or save the extracted recipe first so the vault remains the durable memory.
+or save the element's `goldenRecipe` first so the vault remains durable memory.
 
 When music recognition matches a track, create an `audio` element named with the
 artist/title and add a `constraint` element that future work should recreate the
@@ -135,7 +149,8 @@ context.
 ## Store Phase
 
 ```text
-store_capture(source, note, analysis, elements) -> capture_handle + retrieval_proof
+store_capture(source, note, analysis, complete_elements, brand_kit_id?)
+  -> capture_handle + retrieval_proof + optional_promotion_receipt
 ```
 
 Current Resource Bank storage should present this active contract:
@@ -143,15 +158,17 @@ Current Resource Bank storage should present this active contract:
 - source URL/ref;
 - operator note/focus;
 - compact analysis summary;
-- creative elements;
+- complete creative-element capsules;
 - tags/facets for retrieval;
 - optional skill findings when the source suggests a reusable technique or
   skill update.
 
-Storage and retrieval must preserve `CreativeElement.pinned` as an element
-field. Retrieval should report pinned counts, operator-note counts, and direct
-warnings in `meta`; do not flatten priority into tags, facets, or source-level
-`tastinessScore`.
+Storage and retrieval must preserve the complete capsule and `pinned` field.
+Validate `goldenExample.assetId` against the capture's ingestion job before the
+write. When `brand_kit_id` is supplied, promote the verified elements in the
+same action and return the exact receipt. Retrieval should report pinned counts,
+operator-note counts, and direct warnings in `meta`; do not flatten priority
+into tags, facets, or source-level `tastinessScore`.
 
 Do not require frame, clip, transcript, or contact-sheet records unless the
 current workflow needs direct media reuse or audit proof.

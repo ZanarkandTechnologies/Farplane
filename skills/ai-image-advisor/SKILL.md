@@ -21,6 +21,11 @@ Use this as the ordered checklist whenever `ai-image-advisor` is active.
 
 - [ ] Classify the request as text-to-image, image-edit, inpainting, multi-reference, text-rendering, style-LoRA, fast-cheap, product-mockup, product-photography, social-visual, carousel, background-removal, upscaling, reference-asset creation, or frontend-bound asset.
 - [ ] For idea plus Tasty Pack/reference planning, use `content-impl-plan`; for asset inventory or recreation planning, use `asset-advisor`.
+- [ ] When a content plan selects a creative element to condition image work,
+  require its complete realization packet and place both the resolved
+  `goldenExample` asset and `goldenRecipe` prompt into the actual model input.
+  Return an incomplete handoff when either is missing; title/description or
+  generic style prose alone is not element-conditioned generation.
 - [ ] For product photography, packshots, e-commerce images, or commercial product shots, use `product-photography`.
 - [ ] For social media content, captions, thumbnails, UGC concepts, or cross-platform campaign assets, use `social-content:cross-platform`.
 - [ ] For LinkedIn posts or professional social writing, use `social-content:linkedin`.

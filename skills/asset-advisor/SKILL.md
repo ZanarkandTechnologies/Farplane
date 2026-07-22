@@ -32,17 +32,18 @@ videos, compose Remotion timelines, record audio, or publish content.
 ## Skill Signature
 
 ```text
-asset_advisor(storyboard_or_reference, inspiration_pack?, source_assets?, platform?, constraints?, artifact_owner?)
+asset_advisor(storyboard_or_reference, element_realization_packets?, source_assets?, platform?, constraints?, artifact_owner?)
   -> asset_inventory + recreation_plan + generation_routes | blocked_report
 
 state:
-  reads(user brief, storyboard/reference material, Inspiration Pack captures
-        and elements, source asset paths or URLs, qa_checklist.md)
+  reads(user brief, storyboard/reference material, complete element realization
+        packets, source asset paths or URLs, qa_checklist.md)
   writes(asset plan artifact when durable handoff is requested)
 
 gates:
   source_material_named; rights_or_usage_risk_noted; asset_units_decomposed;
-  reference_elements_mapped; recreate_reuse_generate_decisions_made;
+  reference_elements_mapped; golden_examples_and_recipes_bound;
+  recreate_reuse_generate_decisions_made;
   route_owner_selected; remotion_handoff_ready_when_stitching_needed
 
 routes:
@@ -53,7 +54,7 @@ fails:
   vague_asset_bucket; reference_copy_without_rights_note;
   generation_prompt_without_asset_inventory; remotion_handoff_without_files;
   one_tool_for_every_asset; css_text_only_for_inspiration_led_video;
-  inspiration_elements_unmapped
+  inspiration_elements_unmapped; title_only_element_handoff
 ```
 
 ## Phase Boundary
@@ -63,8 +64,8 @@ needs metadata, transcripts, or representative frames before decomposition. Use
 `review` when a recreation plan copies a specific reference closely or will
 drive a high-visibility campaign.
 
-For Inspiration Pack inputs, treat `captures[].elements` as the source of
-truth. Every relevant `visual`, `storyboard`, `editing`, `format`, or
+For Brand Kit or Tasty Pack inputs, treat complete element realization packets
+as the source of truth. Every relevant `visual`, `storyboard`, `editing`, `format`, or
 `constraint` element must either map to a concrete asset decision or appear in
 `Missing inputs`. Map pinned elements first because they are the operator's
 taste signal; preserve unpinned elements as context decisions or
@@ -72,6 +73,11 @@ blockers rather than treating every element equally. For inspiration-led videos,
 `blocked_report` when the plan only offers generic CSS/text/cards without
 source, generated, linked, captured, or explicitly composed assets justified by
 the reference leverage map.
+
+For each selected element, require its complete realization packet. Use the
+resolved `goldenExample` plus `goldenRecipe` together to choose `reuse`,
+`source`, `regenerate`, `capture`, or `compose`; return an incomplete handoff
+instead of reducing the element to title/description.
 
 When a Tasty Pack element includes an `anchor` such as `contact_sheet`,
 `frame_08_28.58s`, `frames 1-4`, or `OG thumbnail`, first try to resolve
@@ -95,9 +101,12 @@ the output is explicitly downgraded to `semantic_storyboard_only`.
     references, and final render needs.
   - [ ] Mark each asset as `reuse`, `source`, `regenerate`, `capture`,
     `compose`, or `unknown`.
-  - [ ] Map each relevant Inspiration Pack element to an asset row,
+  - [ ] Map each relevant Brand Kit or Tasty Pack element to an asset row,
     generation route, or missing-input blocker, prioritizing pinned elements
     before ordinary context elements.
+  - [ ] For every selected element, carry its ID/provenance, description,
+    whyItWorks, resolved golden example, golden recipe, planned use, and
+    acceptance check into the asset decision and downstream generation packet.
   - [ ] Resolve `assetId + anchor` into media refs when possible; otherwise
     create regeneration packets for pinned visual/audio/editing elements before
     Remotion.

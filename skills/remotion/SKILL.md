@@ -35,11 +35,15 @@ Use this as the ordered checklist whenever `remotion` is active.
 - [ ] Route asset inventory and recreation planning through [asset-advisor](../asset-advisor/SKILL.md).
 - [ ] Route still assets through `imagegen` or [ai-image-advisor](../ai-image-advisor/SKILL.md).
 - [ ] Route model-native footage through [ai-video-advisor](../ai-video-advisor/SKILL.md), persistent avatar clips through [avatar-advisor](../avatar-advisor/SKILL.md), and audio direction through [audio-advisor](../audio-advisor/SKILL.md).
-- [ ] For content-production videos using a Tasty Pack or Inspiration Pack,
+- [ ] For content-production videos using a Brand Kit or Tasty Pack,
   require a locked storyboard, asset manifest, cue sheet, and
-  `reference_leverage_map` from `content-impl-plan` built from
-  `captures[].elements`; the locked plan must honor pinned elements
+  `element_leverage_map` from `content-impl-plan` built from complete
+  element capsules; the locked plan must honor pinned elements
   when present. Block or label the run `technical_smoke` when those are missing.
+- [ ] Require element realization receipts for every selected Brand Kit or
+  Tasty Pack element used in the composition. Each receipt maps element ID,
+  golden example, golden recipe, planned use, and accepted output; element names
+  or descriptions alone are not grounding proof.
 - [ ] For inspiration-led production, require `media_ready` or `regen_ready`
   handoff: pinned visual/audio/editing elements must arrive as resolved media
   refs or generated asset files with acceptance checks. If Remotion only has
@@ -61,6 +65,10 @@ Use this as the ordered checklist whenever `remotion` is active.
   their timing on the master edit. Do not substitute a premixed file for the
   cue/stem placement and ducking contract unless that premix is itself the
   explicitly approved final master with its source cue sheet attached.
+- [ ] Consume the actual selected timing-master media (`voiceover`, `music`, or
+  `source_video`) with observed duration/alignment/cues before final sequencing;
+  derive scene/caption timing from that receipt and block planned-duration-only
+  handoffs. Use `none` only when the locked plan explicitly selects it.
 
 ```text
 stitched_scene_preflight(clips, target_duration?)

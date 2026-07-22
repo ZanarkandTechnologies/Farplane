@@ -47,9 +47,17 @@ is active.
   composition. Load a profile's `profile.md`, `prompts.md`, and collocated
   `example.md` together; do not claim a named profile when only method defaults
   were used.
+- [ ] When called by `content-impl-plan`, consume its compiled Brand Kit +
+  optional Tasty Pack creative direction and element realization packets. Do
+  not add a style profile as a third composition source, and do not reinterpret
+  selected elements from title/description alone; retain direct standalone
+  profile ingestion and `resolve_visual_direction` behavior for other callers.
 - [ ] For multi-scene model-native video using `deliberate_scene_breaks`, load
   [scene-grid production](./references/scene-grid-production.md). Make one
   normally 4-5 second clean/annotated grid packet map to one provider clip;
+  require in-frame IDs on each moving subject and fixed landmark, motion arrows
+  attached to the actual moving parts, mandatory endpoints, and provider-prompt
+  clauses keyed to those IDs. Generic panel-to-panel arrows do not count;
   obtain storyboard, recurring-character card, and notes approval and lock
   unchanged assets before spend. Any provider fallback that changes a visible
   character or reference invalidates that approval and returns the changed

@@ -4,7 +4,7 @@ status: active
 owner: content-impl-plan
 kind: reference
 created_at: 2026-07-16
-updated_at: 2026-07-16
+updated_at: 2026-07-22
 ---
 
 # Content Implementation Production Contract
@@ -16,20 +16,44 @@ composition, creative lock detail, and the full ticket template.
 ## Production Graph
 
 ```text
-idea + content_kind + method + style_profile? + inspiration_pack?
-  -> video-production: method and reusable visual direction
-  -> storyboard: narrative, script, beats, scene map and scene packets
-  -> asset/avatar/audio/image/video advisors: production-ready inputs
-  -> audio-advisor: SFX candidate links for operator approval, or generated assets
-  -> remotion: stitching, transitions, captions, audio placement, render proof
+idea + brand_kit? + tasty_pack? + invocation_constraints
+  -> compose_elements: creative hypothesis + chosen/rejected leverage map
+  -> storyboard: low-fi visual approval packet tied to element ids
+  -> select_timing_master: voiceover | music | source_video | none
+  -> asset/avatar/audio/image/video advisors: element-conditioned outputs
+  -> remotion: timing-master assembly + element leverage receipts
   -> review/qa: plan, asset, render, and output evidence
 ```
 
-Style profiles and Inspiration Packs are separate inputs. A profile supplies
-creator-neutral aesthetic and motion grammar; Inspiration supplies task facts,
-approved source assets, and task-specific motifs. Invocation constraints win.
-Incompatible hard constraints return a blocked report rather than a silent
-blend.
+The Brand Kit supplies approved identity and constraints. The optional Tasty
+Pack supplies ad-hoc current inspiration. Invocation constraints still bind the
+deliverable, but Brand Kit constraints win creative-source conflicts. Compatible
+Tasty elements augment the kit by role; incompatible elements are explicitly
+rejected or block the plan. `style_profile` is not an input or fallback in this
+composition contract. Standalone `video-production` callers retain their
+separately owned profile behavior.
+
+```text
+compose_elements(brand_kit?, tasty_pack?, idea)
+  -> creative_hypothesis + chosen_elements + rejected_elements + leverage_map
+
+ElementRealizationPacket {
+  elementId
+  provenance: brand_kit | tasty_pack
+  kind
+  description
+  whyItWorks
+  goldenExample { assetId, description? }
+  goldenRecipe
+  plannedUse
+  acceptanceCheck
+}
+```
+
+Every selected element must map to a beat, planned artifact, advisor action, or
+production rule. Any child generation handoff must carry the resolved golden
+example and golden recipe; title/description-only conditioning cannot pass the
+creative lock.
 
 ## Resource Bank And Readiness
 
@@ -41,9 +65,10 @@ blend.
 }
 ```
 
-Consume `captures[].source`, `captures[].analysis`, and
+Consume `captures[].source`, `captures[].analysis`, and complete
 `captures[].elements`; tags/facets live on `capture.source`. Build the
-`reference_leverage_map` from creative elements, prioritize pinned elements,
+`element_leverage_map` from Brand Kit snapshots and Tasty Pack creative
+elements, prioritize pinned Tasty elements,
 and use `analysis.operatorNote` to understand taste. If warnings say an
 operator note exists but nothing from it was pinned, state the gap. Extract
 structure without copying protected assets, likenesses, music, or exact
@@ -53,8 +78,8 @@ expression.
 reference_readiness(pack)
   -> media_ready | regen_ready | semantic_only | blocked
 
-media_ready: pinned visual/audio/editing elements have resolved media refs.
-regen_ready: pinned elements have enough anchors for concrete advisor packets.
+media_ready: selected elements have resolved golden-example media refs.
+regen_ready: selected elements have complete example + recipe advisor packets.
 semantic_only: taste descriptions exist but no reusable media or generation
                packet; usable for planning, not final-production claims.
 blocked: required evidence, rights, or usable inputs are missing.
@@ -66,22 +91,27 @@ patterns, or frame records unless direct reuse or audit proof needs them.
 ## Creative Lock
 
 ```text
-creative_lock(idea, visual_direction, inspiration_pack?, storyboard, asset_plan, audio_plan)
+creative_lock(idea, creative_hypothesis, element_leverage_map, storyboard, timing_master, advisor_receipts)
   -> locked_brief | blocked_report
 ```
 
 Requires:
 
-- resolved `method_default`, `profile_only`, `inspiration_only`, or
-  `composed_direction`, with supplied-profile compatibility checked;
-- a reference leverage map and reference classification when Inspiration is
-  supplied;
+- Brand Kit precedence and explicit choose/augment/reject/block decisions for
+  every selected or conflicting Tasty element;
+- a creative hypothesis plus exact element leverage map with provenance;
+- a low-fidelity demo and visual storyboard image paths/notes tied to element
+  IDs, approved before provider spend;
+- complete realization packets and output receipts for selected elements,
+  including resolved golden example and golden recipe where generation occurs;
 - hook → tension → turn → proof → payoff, exact copy/VO beats, and viewer job;
 - recurring character or explicit no-character rationale, useful recurring
   motif/object, cause/effect, and viewer question → answer;
 - asset manifest and a media/regeneration/nonuse decision for each used pinned
   element;
-- frame/time-coded cue sheet and required motion bindings;
+- selected timing master plus actual media duration/alignment/cue evidence;
+- frame/time-coded cue sheet and required motion bindings derived from that
+  timing master;
 - `continuous_chain`, `deliberate_scene_breaks`, or `montage` topology;
 - start/end frame pairs for chained clips, or one approved scene-grid packet per
   deliberate-break clip using
@@ -92,15 +122,17 @@ Requires:
   panels, or a statement that grids will be created later; text specifications
   may reach `storyboard_draft_ready` but cannot unlock human review or spend;
 - user-intent, video-quality, source-honesty, narrative, asset, and audio-motion
-  QA gates, plus Inspiration-use checks when Inspiration exists.
+  QA gates, plus Brand/Tasty element-use checks when either exists.
 
-Blocks when the method/profile conflict, Inspiration and profile hard
-constraints conflict, an inspiration-led plan has only generic cards, audio has
-no edit/motion obligations, a narrative clip batch has neither continuous
-handoffs nor deliberate scene packets nor montage rationale, pinned elements
-have no media/regeneration route, or proof checks only renderability.
+Blocks when Tasty elements silently override Brand Kit constraints, a selected
+element reaches a child without its example and recipe, a reference-led plan has
+only generic cards, the timing-master media/cues are missing, final visuals are
+generated before a required voice/music/source timing master is measured, a
+narrative clip batch has neither continuous handoffs nor deliberate scene
+packets nor montage rationale, selected elements have no media/regeneration
+route, or proof checks only renderability.
 
-When named Inspiration elements appear in the brief but their capture payload
+When named Tasty Pack elements appear in the brief but their capture payload
 is unavailable, build a provisional element-level leverage map from those
 named elements and mark the missing capture IDs/pins/rights as blockers. Do not
 substitute category-only placeholders for the map.
@@ -114,22 +146,38 @@ What will be produced, for whom, and what proof or marketing job it must do.
 ## Scope
 - In / Out:
 - Platform / target artifact:
-- Content kind / method / visual direction / style profile:
-- Reference / Inspiration Pack / CTA:
+- Content kind / method / Brand Kit / Tasty Pack:
+- Invocation constraints / CTA:
 
 ## Delta
 - Before / After / Why now:
 
 ## Program
+Creative Hypothesis:
+- Why this Brand Kit + selected Tasty Pack combination should work:
+- Falsifier / risk:
+
+Element Decisions:
+- Chosen / augmented / rejected / conflicting:
+
 Reference Pattern:
-- Visual direction / style profile:
+- Compiled creative direction:
 - Hook stack / timeline / story format:
 - Visual / audio / motion-edit patterns:
 - Proof mechanism / must change:
 
-Reference Leverage Map:
-| Capture / Element | Anchor | Reused As | Planned Output | Acceptance Check |
-| --- | --- | --- | --- | --- |
+Element Leverage Map:
+| Provenance / Element | Why It Works | Golden Example | Golden Recipe | Planned Use | Owner / Output | Acceptance Check |
+| --- | --- | --- | --- | --- | --- | --- |
+
+Low-Fidelity Review Packet:
+- Demo path:
+- Visual storyboard image paths / notes / element IDs:
+- Operator approval:
+
+Timing Master:
+- kind: voiceover | music | source_video | none
+- asset / observed duration / alignment / cue receipt:
 
 SFX Candidate Shortlist:
 | Cue | Search Phrase | SoundButtonsWorld Item | Why It Fits | Rights Risk | Status / Fallback |
@@ -153,7 +201,7 @@ Advisor Action List:
 
 ## Done / Proof
 - plan_ready_when / production_ready_when:
-- render_proof / review / residual_risk:
+- element realization receipts / timing proof / render proof / review / residual_risk:
 
 ## State
 draft | review | approved | in_production | blocked

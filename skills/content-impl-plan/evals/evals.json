@@ -2,139 +2,122 @@
   "skill_name": "content-impl-plan",
   "evals": [
     {
-      "id": "content_impl_plan_tasty_pack_to_production_plan_01",
-      "prompt": "Idea: prove agents can create and edit a full marketing short. Tasty Pack: vertical proof videos with fast hooks, kinetic captions, AI b-roll, punchy SFX, and a final CTA. Build the implementation plan.",
-      "expected_output": "Extracts hook, story, visual, and audio patterns from the reference; Creates a ticket-shaped plan; Routes storyboard, asset, avatar/audio/image/video advisors, Remotion, review, and QA separately; Orders actions by dependency with acceptance checks",
+      "id": "content_impl_plan_brand_kit_only_01",
+      "prompt": "Plan a 45-second founder explainer from this approved Brand Kit. It contains complete hook, visual, character, copy, format, and constraint elements plus one kit-wide prompt. No Tasty Pack is supplied.",
+      "expected_output": "Accepts the Brand Kit without requiring a Tasty Pack or style profile.; Treats approved identity and constraints as authoritative.; Emits a creative hypothesis, complete element leverage map, low-fi demo, and visual storyboard with notes tied to element IDs.; Routes selected elements with their description, whyItWorks, goldenExample, and goldenRecipe.; Selects a timing master and ends with Remotion plus review/QA proof.",
       "files": [],
       "assertions": [
-        "Extracts hook, story, visual, and audio patterns from the reference",
-        "Creates a ticket-shaped plan",
-        "Routes storyboard, asset, avatar/audio/image/video advisors, Remotion, review, and QA separately",
-        "Orders actions by dependency with acceptance checks"
+        "Accepts the Brand Kit without requiring a Tasty Pack or style profile.",
+        "Treats approved identity and constraints as authoritative.",
+        "Emits a creative hypothesis, complete element leverage map, low-fi demo, and visual storyboard with notes tied to element IDs.",
+        "Routes selected elements with their description, whyItWorks, goldenExample, and goldenRecipe.",
+        "Selects a timing master and ends with Remotion plus review/QA proof."
       ],
       "metadata": {
         "farplane": {
-          "title": "Compiles idea plus Tasty Pack into a content production plan",
-          "tags": [
-            "skill",
-            "content-impl-plan",
-            "tasty-pack",
-            "autonomous-marketing"
-          ],
+          "title": "Compiles a Brand Kit-only production plan",
+          "tags": ["skill", "content-impl-plan", "brand-kit", "creative-lock"],
           "anti_patterns": [
-            "Uses storyboard as the whole implementation plan",
-            "Creates trend-specific skills instead of routing through primitives",
-            "Omits Remotion or QA/review proof"
+            "Requires a Tasty Pack for approved Brand Kit identity.",
+            "Reintroduces a style profile as a third source.",
+            "Routes only element titles and descriptions."
           ]
         }
       }
     },
     {
-      "id": "content_impl_plan_reject_storyboard_as_parent_01",
-      "prompt": "Make storyboard the whole implementation plan for this content workflow.",
-      "expected_output": "Keeps storyboard as narrative and scene design; Uses content-impl-plan as the parent action-list owner; Ends with Remotion and QA/review proof; Does not create format-specific trend skills",
+      "id": "content_impl_plan_tasty_pack_only_01",
+      "prompt": "Idea: prove agents can create and edit a full marketing short. Tasty Pack elements include complete hook, storyboard, visual, audio, editing, copy, format, character, and constraint capsules. No Brand Kit is supplied.",
+      "expected_output": "Builds a complete element leverage map from Tasty Pack captures.; Prioritizes pinned elements and explains nonuse.; Emits a creative hypothesis and low-fi visual approval packet before spend.; Gives every advisor action the selected element's golden example and golden recipe when it conditions work.; Orders production around voiceover, music, source_video, or none as timing master.; Keeps storyboard as a child and ends with Remotion plus review/QA proof.",
       "files": [],
       "assertions": [
-        "Keeps storyboard as narrative and scene design",
-        "Uses content-impl-plan as the parent action-list owner",
-        "Ends with Remotion and QA/review proof",
-        "Does not create format-specific trend skills"
+        "Builds a complete element leverage map from Tasty Pack captures.",
+        "Prioritizes pinned elements and explains nonuse.",
+        "Emits a creative hypothesis and low-fi visual approval packet before spend.",
+        "Gives every advisor action the selected element's golden example and golden recipe when it conditions work.",
+        "Orders production around voiceover, music, source_video, or none as timing master.",
+        "Keeps storyboard as a child and ends with Remotion plus review/QA proof."
       ],
       "metadata": {
         "farplane": {
-          "title": "Keeps storyboard as a child primitive",
-          "tags": [
-            "skill",
-            "content-impl-plan",
-            "storyboard",
-            "skill-taxonomy"
-          ],
+          "title": "Compiles complete Tasty Pack elements into production",
+          "tags": ["skill", "content-impl-plan", "tasty-pack", "timing-master"],
           "anti_patterns": [
-            "Expands storyboard into a parent ticket compiler",
-            "Hides advisor actions inside prose",
-            "Skips owner routes and blocker conditions"
+            "Treats the pack as a moodboard.",
+            "Uses only source-level analysis.",
+            "Makes storyboard the parent implementation plan."
           ]
         }
       }
     },
     {
-      "id": "content_impl_plan_continuity_video_gate_01",
-      "prompt": "Idea: make a Farplane founder launch reel from a Tasty Pack with a standout deadpan guide, ritual object, guided-meditation parody pacing, AI video clips, and a final product reveal. Create the content implementation plan.",
-        "expected_output": "Classifies the reference/reel type and names rejected nearby formats; Builds a reference_leverage_map from Tasty Pack elements to concrete shots, assets, edit rhythm, audio cues, motion cues, or narrative beats; Defines narrative_spine plus viewer question -> answer; Defines continuity_spine with recurring character and recurring object or explicit rationale; Declares generation_topology before AI video spend; For deliberate scene breaks, materializes one normally 4-5 second clean/annotated grid image pair plus keyed notes and file/dimension receipt per provider clip before approval and locks unchanged assets for reuse; Treats text-only panels and intended paths as storyboard_draft_ready, not human_review_ready; Requires one audio plan with VO/music/SFX timing before Remotion; Blocks isolated model-native clip batches without either continuous handoffs, deliberate scene packets, or montage rationale",
+      "id": "content_impl_plan_brand_wins_tasty_conflict_01",
+      "prompt": "The approved Brand Kit requires a restrained red/black identity and no real-person likeness. The Tasty Pack proposes a pastel creator look and an exact celebrity-like host. Compose the plan.",
+      "expected_output": "Names Brand Kit precedence.; Rejects the conflicting pastel identity and celebrity-like host instead of blending them.; Preserves compatible Tasty mechanics only with explicit provenance and rationale.; Does not add or request a style profile.; Returns a chosen/rejected/conflicting leverage map and rights-safe alternative packets.",
       "files": [],
       "assertions": [
-        "Classifies the reference/reel type and names rejected nearby formats",
-        "Builds a reference_leverage_map from Tasty Pack elements to concrete shots, assets, edit rhythm, audio cues, motion cues, or narrative beats",
-        "Defines narrative_spine plus viewer question -> answer",
-        "Defines continuity_spine with recurring character and recurring object or explicit rationale",
-          "Declares generation_topology before AI video spend and requires start/end frame handoffs for continuous clips",
-          "For deliberate scene breaks, materializes one normally 4-5 second clean/annotated grid image pair plus keyed notes and file/dimension receipt per provider clip before approval and locks unchanged assets for reuse",
-          "Treats text-only panels and intended paths as storyboard_draft_ready, not human_review_ready",
-        "Requires one audio plan with VO/music/SFX timing before Remotion",
-        "Blocks isolated model-native clip batches for a narrative reel unless the chosen format is montage"
+        "Names Brand Kit precedence.",
+        "Rejects the conflicting pastel identity and celebrity-like host instead of blending them.",
+        "Preserves compatible Tasty mechanics only with explicit provenance and rationale.",
+        "Does not add or request a style profile.",
+        "Returns a chosen/rejected/conflicting leverage map and rights-safe alternative packets."
       ],
       "metadata": {
         "farplane": {
-          "title": "Requires reference classification and generation topology before narrative video spend",
-          "tags": [
-            "skill",
-            "content-impl-plan",
-            "tasty-pack",
-            "continuity",
-            "ai-video"
-          ],
+          "title": "Makes Brand Kit constraints win Tasty Pack conflicts",
+          "tags": ["skill", "content-impl-plan", "brand-kit", "conflict"],
           "anti_patterns": [
-            "Copies only the art style from the reference",
-              "Plans six provider clips without continuous handoffs or one reviewed scene-grid packet per deliberate break",
-              "Regenerates approved storyboard assets by default",
-            "Lets each generated clip have unrelated audio",
-            "Routes directly to Remotion before creative_lock"
+            "Silently averages the two visual identities.",
+            "Lets trend inspiration override approved constraints.",
+            "Uses a style profile as a compatibility fallback."
           ]
         }
       }
     },
     {
-      "id": "content_impl_plan_style_profile_without_inspiration_01",
-      "prompt": "Plan a 60-second explainer using the applied-math-story profile. I have no Tasty Pack or reference video for this task.",
-      "expected_output": "Resolves video-production:explainer and applied-math-story as profile_only; Does not require an Inspiration Pack or reference leverage map; Loads the profile compatibility, prompts, example, provenance, and QA assertions; Preserves storyboard, audio, Remotion, and review routes",
+      "id": "content_impl_plan_low_poly_voice_timing_01",
+      "prompt": "Create the pre-spend plan for a low-poly 30-second voice-led product reel from an approved Brand Kit plus the reingested low-poly Tasty Pack. The selected elements have golden examples and recipes. Final provider clips must match the narration.",
+      "expected_output": "Emits a low-fi demo and actual visual storyboard images/notes tied to selected low-poly element IDs before spend.; Selects voiceover as timing master.; Orders script lock, voice generation, duration/alignment receipt, cue/storyboard revision, visual clip generation with safe surplus, then Remotion.; Passes goldenExample plus goldenRecipe to image/video/avatar advisors for each conditioned output.; Requires Remotion to use actual voice/caption cues and element realization receipts.; Blocks final generation until operator storyboard approval.",
       "files": [],
       "assertions": [
-        "Resolves video-production:explainer and applied-math-story as profile_only",
-        "Does not require an Inspiration Pack or reference leverage map",
-        "Loads the profile compatibility, prompts, example, provenance, and QA assertions",
-        "Preserves storyboard, audio, Remotion, and review routes"
+        "Emits a low-fi demo and actual visual storyboard images/notes tied to selected low-poly element IDs before spend.",
+        "Selects voiceover as timing master.",
+        "Orders script lock, voice generation, duration/alignment receipt, cue/storyboard revision, visual clip generation with safe surplus, then Remotion.",
+        "Passes goldenExample plus goldenRecipe to image/video/avatar advisors for each conditioned output.",
+        "Requires Remotion to use actual voice/caption cues and element realization receipts.",
+        "Blocks final generation until operator storyboard approval."
       ],
       "metadata": {
         "farplane": {
-          "title": "Plans from a reusable style without task inspiration",
-          "tags": ["skill", "content-impl-plan", "style-profile", "explainer"],
+          "title": "Uses voice timing and element evidence for low-poly production",
+          "tags": ["skill", "content-impl-plan", "low-poly", "voiceover", "golden-recipe"],
           "anti_patterns": [
-            "Blocks because no Tasty Pack exists",
-            "Treats the profile as creator impersonation",
-            "Skips the profile's collocated example"
+            "Generates final clips before measuring narration.",
+            "Claims low-poly grounding from generic resemblance.",
+            "Spends before visual-storyboard approval."
           ]
         }
       }
     },
     {
-      "id": "content_impl_plan_composed_direction_conflict_01",
-      "prompt": "Use low-poly-concept for a talking-head-only video and also copy the exact visual identity from my inspiration clip.",
-      "expected_output": "Rejects low-poly-concept as incompatible with talking-head-only output; Rejects exact identity copying; Returns a blocked report or requests a compatible method/profile; Does not silently blend conflicting constraints",
+      "id": "content_impl_plan_reject_incomplete_handoff_01",
+      "prompt": "The selected visual element has a title and description in the plan, but its golden example and golden recipe were omitted from the image-generation handoff. Continue to production anyway.",
+      "expected_output": "Refuses to pass creative_lock.; Identifies the missing golden example and golden recipe.; Rebuilds the element realization packet with provenance, description, whyItWorks, resolved example, recipe, planned use, and acceptance check.; Does not accept source-level analysis or element naming as proof of conditioning.",
       "files": [],
       "assertions": [
-        "Rejects low-poly-concept as incompatible with talking-head-only output",
-        "Rejects exact identity copying",
-        "Returns a blocked report or requests a compatible method/profile",
-        "Does not silently blend conflicting constraints"
+        "Refuses to pass creative_lock.",
+        "Identifies the missing golden example and golden recipe.",
+        "Rebuilds the element realization packet with provenance, description, whyItWorks, resolved example, recipe, planned use, and acceptance check.",
+        "Does not accept source-level analysis or element naming as proof of conditioning."
       ],
       "metadata": {
         "farplane": {
-          "title": "Blocks incompatible composed visual direction",
-          "tags": ["skill", "content-impl-plan", "style-profile", "conflict"],
+          "title": "Blocks title-only child advisor handoffs",
+          "tags": ["skill", "content-impl-plan", "element-realization", "blocked"],
           "anti_patterns": [
-            "Forces a low-poly profile onto a talking-head-only method",
-            "Copies creator identity",
-            "Pretends the conflict is resolved"
+            "Continues because the element name appears in the plan.",
+            "Uses source analysis as a substitute for the missing capsule.",
+            "Passes the recipe without the example or the example without the recipe."
           ]
         }
       }

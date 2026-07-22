@@ -3,7 +3,7 @@ title: "Systems"
 status: active
 owner: doc-governance
 created_at: 2026-06-26
-updated_at: 2026-06-26
+updated_at: 2026-07-22
 tags:
   - farplane
   - systems
@@ -61,12 +61,14 @@ flowchart TD
   release["Maintenance And Release OS<br/>adoption + validators"]:::added
   sources["Source And Sidecar Systems<br/>external patterns"]:::changed
   domain["Domain Skill Families<br/>frontend, media, content"]:::changed
+  content["Content Production<br/>Brand Kit + Tasty Pack"]:::added
   invoke["Invocation Runtime<br/>explicit run boundary"]:::changed
 
   operator --> kernel --> work --> proof
   operator --> horizon --> work
-  work --> skills --> domain
+  work --> skills --> domain --> content
   sources --> skills
+  sources --> content
   proof --> learn --> docs
   docs --> release --> kernel
   invoke --> work
@@ -91,6 +93,7 @@ higher level than individual feature flows.
 | Maintenance And Release OS | `FEAT-0061` | `maintenance-release-os.md` |
 | Domain Skill Families | `FEAT-0014` | `domain-skill-families.md` |
 | Documentation OS | `FEAT-0060` | `documentation-os.md` |
+| Content Production | `FEAT-0073` | `content-production.md` |
 
 ## Update Flow
 

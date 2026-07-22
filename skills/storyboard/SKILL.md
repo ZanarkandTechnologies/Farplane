@@ -34,7 +34,7 @@ and production-specific work to the relevant advisor or Remotion skill.
 ## Skill Signature
 
 ```text
-storyboard(idea_or_brief, icp?, proof?, platform?, duration?, style?, cta?, reference_pattern?, generation_topology?, artifact_owner?)
+storyboard(idea_or_brief, icp?, proof?, platform?, duration?, style?, cta?, reference_pattern?, element_realization_packets?, generation_topology?, artifact_owner?)
   -> script_storyboard + scene_handoff + scene_grid_packets? | blocked_report
 
 state:
@@ -45,7 +45,8 @@ state:
 gates:
   viewer_promise_bound; proof_or_reason_to_believe_named;
   narrative_signatures_present; beat_sheet_and_script_aligned;
-  storyboard_executable; asset_needs_named; scene_handoff_observable;
+  storyboard_executable; selected_elements_mapped_to_beats_and_panels;
+  low_fi_visual_storyboard_observable; asset_needs_named; scene_handoff_observable;
   scene_grid_packets_reviewable_when_deliberate_breaks
 
 routes:
@@ -92,6 +93,11 @@ scene handoff, asset needs, proof, and blocker conditions.
   - [ ] Produce beat sheet, voiceover or on-screen copy, scene-by-scene
     storyboard panels, shot list, motion notes, audio notes, captions or
     supers, and asset requirements.
+  - [ ] When element realization packets are supplied, map each selected
+    story-facing hook/copy/storyboard/format/constraint element ID to a beat or
+    panel and condition the visual notes on both its resolved golden example
+    and golden recipe. Return incomplete packets instead of using title-only
+    reference prose.
   - [ ] Ensure each beat has a viewer job and each shot has a production job.
   - [ ] For narrative video, make the storyboard connected: recurring character
     or explicit no-character rationale, recurring object/motif when useful,
@@ -134,6 +140,9 @@ scene handoff, asset needs, proof, and blocker conditions.
     Text-only panels remain a draft. Name
     render, still-frame, storyboard-review, script-review, or
     production-handoff evidence; generation starts only after approval.
+  - [ ] For content-impl-plan handoffs, emit low-fidelity visual storyboard
+    image paths plus notes tied to element IDs; text-only panels and intended
+    paths remain draft-only.
   - [ ] Apply `qa_checklist.md` again before calling the plan production-ready.
   - [ ] Use `review` for material campaign claims, high-visibility output, or
     taste-sensitive plans that will guide real production.

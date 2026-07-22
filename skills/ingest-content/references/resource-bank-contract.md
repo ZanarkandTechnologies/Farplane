@@ -11,7 +11,8 @@ operator supplies another vault:
 
 ## Active Contract
 
-Resource Bank v2 is a compact capture store, not an evidence vault.
+Resource Bank is a compact capture store whose creative elements are complete
+production capsules, not an evidence vault or recipe database.
 
 ```text
 ResourceBankCapture {
@@ -37,19 +38,33 @@ CreativeElement {
   kind: visual | audio | hook | storyboard | editing | copy | format | constraint | character
   title: string
   description: string
+  whyItWorks: string
+  goldenExample: {
+    assetId: ResourceBankAssetId
+    description?: string
+  }
+  goldenRecipe: string
   anchor?: string
   pinned?: boolean
 }
 ```
 
-Store first-class frame, clip, transcript, contact-sheet, or evidence records
-only when a future workflow actually needs direct media reuse or audit proof.
-Do not make evidence objects, lane taxonomies, provenance enums, or
-frame-accurate fields part of the default v2 capture contract.
+`whyItWorks` and `goldenRecipe` are required non-empty strings.
+`goldenExample.assetId` must resolve to one asset created by the same ingestion
+job as the element. Its optional description identifies the exact frame,
+passage, voice, layout, or quality worth conditioning on. The primary source
+asset is valid when it is the clearest example and the description is precise;
+a derived frame, contact sheet, audio, or transcript asset is preferred when it
+grounds the element better.
 
-Storage-backed preview assets are allowed as UI enrichment when another ingest
-phase already produced a real visual. They are derived Resource Bank assets, not
-Tasty Pack payload fields.
+Do not add `director`, `layout`, or `pacing` kinds, element start/end timing,
+recipe collections, required-input/success-criteria/production-hint objects,
+profile tables, or separate production-pattern records.
+
+Storage-backed preview assets are allowed when another ingest phase produced a
+real visual. They remain Resource Bank assets; a complete element may reference
+one through `goldenExample.assetId`, but Tasty Pack does not add a parallel
+preview/evidence collection.
 
 ## Retrieval Fields
 
@@ -87,7 +102,9 @@ analysis:
   constraints: what not to copy literally
 ```
 
-The analysis explains the source; `elements[]` are the production-use pieces.
+The analysis explains the source; it cannot substitute for element-level
+`description`, `whyItWorks`, `goldenExample`, or `goldenRecipe`. `elements[]`
+are the production-use pieces.
 Pinned elements are the operator's taste signal. Store all useful context
 elements needed to understand the reference, but mark only the specific
 sub-elements the operator note liked as `pinned` so future Tasty Packs can bias
@@ -107,6 +124,25 @@ Use compact elements. Prefer several precise elements over one large summary.
 - `constraint`: rights, likeness, brand, source-quality, or remix boundary.
 - `character`: distinctive persona, archetype, guide, host, mascot, recurring
   voice, or character system that makes the reference reusable.
+
+Keep layout semantics inside `visual`, narrative pacing inside `storyboard`,
+cut rhythm inside `editing`, and vocal pacing inside `audio`. The accepted nine
+kinds are sufficient; do not introduce a director-like kind.
+
+For each element:
+
+- `description` says what it is;
+- `whyItWorks` names the mechanism and audience effect;
+- `goldenExample` names one same-source asset and optionally the exact quality
+  to inspect;
+- `goldenRecipe` is one rights-safe prompt that recreates the function.
+
+Recipes must be operational and kind-specific. A visual recipe should specify
+composition/material/light or layout behavior; an audio recipe should specify
+voice/music/SFX role and sonic behavior; storyboard/hook/editing/copy recipes
+should specify their respective beat, attention, rhythm, or language mechanics.
+Do not copy one generic recipe across unrelated kinds or merely restate the
+description.
 
 Use `anchor` for lightweight grounding such as `0-3s`, `opening frame`,
 `voiceover`, `caption`, `cutaway`, `end card`, or `operator note`. If the
@@ -154,7 +190,7 @@ createTastyPack(request) -> {
 }
 ```
 
-Core consumer fields are `captures[].source`, `captures[].analysis`,
+Core consumer fields are `captures[].source`, `captures[].analysis`, complete
 `captures[].elements`, and direct `meta` counts/warnings such as
 `pinnedElementCount`, `operatorNoteCount`, and `warnings`; elements may carry
 `pinned`. Retrieval notes may exist as non-core metadata, but
@@ -164,11 +200,12 @@ output types, audiences, industries, customer roles, platform, source handle,
 and attribution. CLI text may render count/timeframe from `meta`; production
 skills should consume captures/elements and focus more on pinned elements when
 composing a new artifact. The retrieval result should be
-high-signal and production-usable, not moodboard prose, not a duplicated
-production-pattern object, and not separate
-evidence objects. Do not add thumbnails, contact sheets, frame records,
-storage IDs, or preview URLs to the active pack contract unless a future
-production workflow explicitly needs those fields.
+high-signal and production-usable. Retrieval must preserve each element's
+`description`, `whyItWorks`, `goldenExample`, and `goldenRecipe` without
+joining source-level analysis at consumption time. It is not moodboard prose,
+a duplicated production-pattern object, or a separate evidence collection. Do
+not add thumbnails, contact sheets, frame records,
+storage IDs, or preview URLs beside the element capsules.
 
 ## Derived Preview Asset Upload
 
@@ -204,18 +241,21 @@ objects merely to make the dashboard look complete.
 
 1. Create or update one capture for the source.
 2. Store source URL/ref, operator note/focus, analysis summary, tags/facets,
-   and creative elements.
+   and complete creative elements.
 3. Once the primary asset row exists, optionally upload a real representative
    thumbnail/contact sheet/frame image as a derived storage-backed Resource Bank
    asset with `parentAssetId` pointing to that primary asset.
 4. Add optional skill findings only when the source clearly suggests a reusable
    technique, skill update, or skill candidate.
-5. Query Tasty Pack retrieval with the likely timeframe/facets to verify the
+5. Validate that every golden example asset belongs to the same ingestion job.
+6. Optionally promote the verified elements to the requested Brand Kit in the
+   same ingest action and record the kit/revision receipt.
+7. Query Tasty Pack retrieval with the likely timeframe/facets to verify the
    capture returns as `{ captureId, source, analysis, elements }`, with tags and
    facets on `source`, `analysis.operatorNote` when a note exists, element
-   `pinned` preserved, and `meta.pinnedElementCount`, `meta.operatorNoteCount`,
-   and `meta.warnings` populated.
-6. If a preview asset was uploaded, verify the upload returned `assetId` and
+   capsule fields and `pinned` preserved, and `meta.pinnedElementCount`,
+   `meta.operatorNoteCount`, and `meta.warnings` populated.
+8. If a preview asset was uploaded, verify the upload returned `assetId` and
    `storageId`, and verify Resource Bank dashboard hydration can expose the
    asset as `previewAsset.storageUrl` when UI/API access is available.
 
@@ -240,6 +280,7 @@ the start," save:
 - a compact analysis naming what is known and what is inferred;
 - elements such as `hook`, `visual`, `storyboard`, `editing`, `audio`, `copy`,
   `format`, `character`, and `constraint`;
+- one complete what/why/example/recipe capsule for every element;
 - lightweight anchors such as `0-3s`, `opening frame`, or `caption`;
 - `pinned` on the elements the operator explicitly liked, selected, or wants
   reused;
@@ -247,8 +288,9 @@ the start," save:
 
 ## Snapshot And Reset
 
-The active Resource Bank contract is minimal v2. When changing a small old
-vault, do not preserve a long-lived legacy fallback. Snapshot old rows to a
+The active Resource Bank contract is the lean complete-capsule contract. When
+changing a small old vault, do not preserve a long-lived legacy fallback.
+Snapshot old rows to a
 ticket artifact, clear active Resource Bank rows, and reingest keep-worthy
 sources through the current capture contract.
 
@@ -258,13 +300,16 @@ Storage is not done until Resource Bank retrieval returns:
 
 - the source URL/ref and operator note/focus;
 - compact analysis;
-- at least one creative element for video/social inspiration sources;
+- at least one complete creative element for video/social inspiration sources;
+- non-empty `whyItWorks` and `goldenRecipe` plus one resolvable same-ingestion-
+  job `goldenExample.assetId` for every element;
 - pinned creative elements preserved when the operator identified specific
   liked sub-elements;
 - `meta.warnings` warns when an operator note exists but no element was pinned
   from it;
 - tags/facets when supplied;
-- no dependency on a legacy analysis-only fallback or default evidence objects.
+- no dependency on a legacy analysis-only fallback, source-level explanation,
+  or default evidence objects to complete an element.
 
 When a derived preview upload is attempted, preview storage is not done until
 the upload command returns `assetId` and `storageId`. When dashboard/UI access is

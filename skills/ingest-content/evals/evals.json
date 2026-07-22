@@ -2,35 +2,36 @@
   "skill_name": "ingest-content",
   "evals": [
     {
-      "id": "ingest_content_minimal_capture_01",
-      "prompt": "Ingest this Instagram Reel into the Resource Bank. Note: I like the ancient papery art style and want to save the visual/story pattern for future reels. Public metadata and the operator note are available; do not run a deep media extraction unless needed.",
-      "expected_output": "Reads `skills/ingest-content/SKILL.md` and applies the minimal capture contract.; Stores or returns source/ref, operator note/focus, compact analysis, tags/facets, and creative elements.; Creative elements use compact kinds such as visual, hook, storyboard, editing, copy, format, character, or constraint.; Uses optional anchors such as opening frame, 0-3s, caption, or operator note when useful.; States source limitations honestly instead of inventing unseen frames, transcript, audio, or exact timing.; Does not require frame/clip/transcript/evidence records by default.; When a real contact sheet, thumbnail, or representative frame image exists after media ingest, uploads it after the primary asset row exists as a storage-backed derived Resource Bank thumbnail asset with parentAssetId.; If no real visual preview was extracted, explicitly skips preview upload instead of creating a fake placeholder.; Keeps Tasty Pack/Inspiration Pack retrieval minimal: source, analysis, elements, and tags/facets on source, without evidence assets, storageId, or previewAsset.storageUrl in the active pack contract.; Verifies Tasty Pack/Inspiration Pack retrieval returns request, captures, and meta; production consumers use capture source, analysis, and elements without depending on a notes array.",
+      "id": "ingest_content_complete_capsule_01",
+      "prompt": "Ingest this Instagram Reel into the Resource Bank. Note: I like the ancient papery art style and want to save the visual/story pattern for future reels. Public metadata and the operator note are available; deepen media inspection only as needed to ground complete element capsules.",
+      "expected_output": "Reads `skills/ingest-content/SKILL.md` and applies the complete capsule contract.; Stores source/ref, operator note/focus, compact analysis, tags/facets, and creative elements.; Every creative element includes description, a non-empty whyItWorks string, one same-ingestion-job goldenExample assetId with optional description, and one non-empty goldenRecipe prompt.; Uses only the nine canonical kinds and optional anchors/pins.; Deepens media inspection or blocks unsupported elements when metadata and the note cannot ground element-specific claims.; Does not invent unseen frames, transcript, audio, or exact timing.; Keeps Tasty Pack retrieval compact as source, analysis, and complete elements without a parallel evidence or recipe collection.; Verifies retrieval preserves the complete capsule.",
       "files": [],
       "assertions": [
-        "Reads `skills/ingest-content/SKILL.md` and applies the minimal capture contract.",
+        "Reads `skills/ingest-content/SKILL.md` and applies the complete capsule contract.",
         "Stores or returns source/ref, operator note/focus, compact analysis, tags/facets, and creative elements.",
         "Creative elements use compact kinds such as visual, hook, storyboard, editing, copy, format, character, or constraint.",
+        "Every creative element includes description, a non-empty whyItWorks string, one same-ingestion-job goldenExample assetId with optional description, and one non-empty goldenRecipe prompt.",
         "Uses optional anchors such as opening frame, 0-3s, caption, or operator note when useful.",
         "States source limitations honestly instead of inventing unseen frames, transcript, audio, or exact timing.",
-        "Does not require frame/clip/transcript/evidence records by default.",
+        "Deepens media inspection or blocks unsupported elements when metadata and the note cannot ground element-specific claims.",
         "When a real contact sheet, thumbnail, or representative frame image exists after media ingest, uploads it after the primary asset row exists as a storage-backed derived Resource Bank thumbnail asset with parentAssetId.",
         "If no real visual preview was extracted, explicitly skips preview upload instead of creating a fake placeholder.",
-        "Keeps Tasty Pack/Inspiration Pack retrieval minimal: source, analysis, elements, and tags/facets on source, without evidence assets, storageId, or previewAsset.storageUrl in the active pack contract.",
-        "Verifies Tasty Pack/Inspiration Pack retrieval returns request, captures, and meta; production consumers use capture source, analysis, and elements without depending on a notes array."
+        "Keeps Tasty Pack retrieval compact: source, analysis, and complete elements, without parallel evidence arrays, recipe collections, storageId, or previewAsset.storageUrl.",
+        "Verifies Tasty Pack retrieval preserves description, whyItWorks, goldenExample, goldenRecipe, and optional pinned."
       ],
       "metadata": {
         "farplane": {
-          "title": "Ingests social inspiration into compact Resource Bank capture",
+          "title": "Ingests social inspiration into complete Resource Bank capsules",
           "tags": [
             "skill",
             "ingest-content",
-            "minimal-capture",
+            "complete-capsule",
             "resource-bank",
             "creative-elements"
           ],
-          "notes": "Regression for the accepted Resource Bank simplification: useful captures should not be blocked by missing first-class evidence records.",
+          "notes": "Regression for the lean complete-capsule contract: use the smallest source read that can ground every element, and deepen or block when it cannot.",
           "anti_patterns": [
-            "Requires a contact sheet or frame asset before saving a useful capture.",
+            "Accepts shallow title and description elements when element-specific why/example/recipe claims are unsupported.",
             "Creates or uploads a placeholder thumbnail when media ingest did not extract a real visual asset.",
             "Adds contact sheets, storage IDs, or previewAsset URLs to the Tasty Pack payload instead of treating them as Resource Bank UI enrichment.",
             "Expands the capture into lane taxonomy, provenance enums, or evidence objects without a direct reuse/audit need.",
@@ -47,6 +48,7 @@
       "files": [],
       "assertions": [
         "Represents the reel as source, analysis, and creative_elements rather than adding a separate production_pattern object.",
+        "Gives every element a complete description, whyItWorks, same-source goldenExample, and kind-specific goldenRecipe capsule.",
         "Extracts useful context elements across kinds such as format, hook, storyboard, visual, audio, editing, copy, character, and constraint when supported by the source.",
         "Represents the operator-liked deadpan guide as a `character` element with `pinned: true` instead of burying it in visual/storyboard prose.",
         "Marks the operator-liked talisman prop and audio cadence elements with `pinned: true`.",
@@ -84,6 +86,7 @@
       "files": [],
       "assertions": [
         "Keeps the Resource Bank shape as source, analysis, and creative_elements without adding a production_pattern object.",
+        "Gives the character and constraint elements distinct description, whyItWorks, same-source goldenExample, and goldenRecipe values.",
         "Extracts a `character` creative element for the deadpan technical guide/persona and marks it `pinned: true` because the operator note explicitly likes it.",
         "Separates source facts from interpretation and states any inspection limits instead of inventing exact scenes, dialogue, or timing.",
         "Adds supporting context elements only when grounded, such as hook, storyboard, copy, visual, format, or audio.",
@@ -122,6 +125,7 @@
         "Routes audio/video reading through `media-ingest` because the operator selected the music as a liked element.",
         "Attempts optional music recognition when source access and local dependencies allow it, or records a clear no-match, missing-dependency, network, or source-access limit.",
         "Stores a `kind: audio` creative element with artist/title/link when recognition matches, or an honest sonic-pattern description when it does not.",
+        "Stores a non-empty audio-specific whyItWorks, one same-source goldenExample asset, and a rights-safe goldenRecipe prompt for recreating the sonic function.",
         "Marks the audio element with `pinned: true` because the operator note explicitly likes the music.",
         "Adds a `constraint` element explaining that recognized music is attribution/research and future work should use licensed, original, or generated audio rather than copying the protected track.",
         "Keeps the Resource Bank capture compact and does not add a separate music evidence object to the active Tasty Pack contract."
@@ -143,6 +147,56 @@
             "Blocks ingestion entirely when recognition is unavailable.",
             "Suggests copying or reusing the source track without licensing.",
             "Stores raw audio or a bulky recognition evidence object in the active pack contract."
+          ]
+        }
+      }
+    },
+    {
+      "id": "ingest_content_low_poly_complete_capsules_01",
+      "prompt": "Reingest the approved low-poly Instagram source. The extracted source video, opening frame, contact sheet, transcript, and audio are available from one ingestion job. Save visual, hook, storyboard, character, audio, editing, copy, format, and constraint elements for future production.",
+      "expected_output": "Uses only the nine canonical element kinds.; Gives every element description, a specific whyItWorks string, one same-ingestion-job goldenExample assetId with an optional precise description, and one kind-specific goldenRecipe prompt.; Chooses the most useful source or derived asset per element instead of assigning one whole-source example blindly.; Keeps layout under visual, narrative pacing under storyboard, cut rhythm under editing, and vocal pacing under audio.; Preserves complete capsules through Tasty Pack retrieval.; Does not add timing fields, director/layout/pacing kinds, recipe objects, profile records, or a production-pattern table.",
+      "files": [],
+      "assertions": [
+        "Uses only the nine canonical element kinds.",
+        "Gives every element description, a specific whyItWorks string, one same-ingestion-job goldenExample assetId with an optional precise description, and one kind-specific goldenRecipe prompt.",
+        "Chooses the most useful source or derived asset per element instead of assigning one whole-source example blindly.",
+        "Keeps layout under visual, narrative pacing under storyboard, cut rhythm under editing, and vocal pacing under audio.",
+        "Preserves complete capsules through Tasty Pack retrieval.",
+        "Does not add timing fields, director/layout/pacing kinds, recipe objects, profile records, or a production-pattern table."
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Builds production-ready capsules from the low-poly source",
+          "tags": ["skill", "ingest-content", "low-poly", "golden-example", "golden-recipe"],
+          "anti_patterns": [
+            "Copies the same generic recipe onto unrelated element kinds.",
+            "Points every element at one unhelpful whole-source asset.",
+            "Stores why-it-works only in source-level analysis.",
+            "Invents new kinds or element timing fields."
+          ]
+        }
+      }
+    },
+    {
+      "id": "ingest_content_shallow_metadata_blocks_capsule_01",
+      "prompt": "Save this private video as a reusable reference. Only its filename and my note 'nice pacing and visuals' are available; no frames, audio, transcript, playable source, or existing Resource Bank asset can be inspected.",
+      "expected_output": "Records the source-access limit honestly.; Does not invent element-specific visual, pacing, audio, whyItWorks, goldenExample, or goldenRecipe claims.; Attempts the appropriate media-ingest/video-understanding route when access can be recovered.; Returns a blocker for complete creative-element storage when no same-source asset or defensible evidence can be produced.; Does not save shallow elements merely to satisfy the schema.",
+      "files": [],
+      "assertions": [
+        "Records the source-access limit honestly.",
+        "Does not invent element-specific visual, pacing, audio, whyItWorks, goldenExample, or goldenRecipe claims.",
+        "Attempts the appropriate media-ingest/video-understanding route when access can be recovered.",
+        "Returns a blocker for complete creative-element storage when no same-source asset or defensible evidence can be produced.",
+        "Does not save shallow elements merely to satisfy the schema."
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Blocks unsupported capsules from shallow metadata",
+          "tags": ["skill", "ingest-content", "source-honesty", "blocked"],
+          "anti_patterns": [
+            "Invents a golden example asset ID.",
+            "Converts vague operator adjectives directly into complete elements.",
+            "Uses source-level prose as a substitute for required element fields."
           ]
         }
       }

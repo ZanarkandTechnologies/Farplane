@@ -1,6 +1,6 @@
 ---
 name: content-impl-plan
-description: "Turn a content idea, reusable style profile, and optional Inspiration Pack into a ticket-shaped production plan with advisor actions, QA, and production handoff."
+description: "Compose a content idea with an optional Brand Kit and Tasty Pack into a reviewable, timing-aware production plan with advisor handoffs and proof."
 tier: 3
 group: content-production
 source: local
@@ -36,20 +36,21 @@ or replace the advisor skills.
 ## Skill Signature
 
 ```text
-content_impl_plan(idea, content_kind?, video_method?, style_profile?, inspiration_pack?, icp?, platform?, proof?, constraints?, artifact_owner?)
-  -> content_ticket + advisor_action_list + production_program | blocked_report
+content_impl_plan(idea, brand_kit?, tasty_pack?, content_kind?, video_method?, icp?, platform?, proof?, constraints?, artifact_owner?)
+  -> content_ticket + creative_hypothesis + leverage_map + low_fi_visual_storyboard + advisor_action_list + production_program | blocked_report
 
 state:
-  reads(user brief, video-production style profile/config when selected,
-        optional Inspiration Pack/Tasty Pack captures, proof/examples/swipes,
-        active ticket?, qa_checklist.md)
+  reads(user brief, optional approved Brand Kit snapshot, optional complete
+        Tasty Pack captures, proof/examples/swipes, active ticket?,
+        qa_checklist.md)
   writes(content implementation ticket or ticket-scoped artifact when durable
         execution is requested)
 
 gates:
-  idea_bound; audience_and_promise_named; visual_direction_resolved;
-  style_profile_resolved_when_supplied;
-  inspiration_evidence_mapped_when_supplied; storyboard_route_selected;
+  idea_bound; audience_and_promise_named; creative_direction_composed;
+  brand_constraints_preserved_when_supplied;
+  complete_elements_mapped_when_supplied; storyboard_route_selected;
+  low_fi_review_packet_observable; timing_master_selected;
   scene_grid_reviewable_when_deliberate_breaks; asset_graph_planned;
   advisor_actions_ordered; creative_lock_passed;
   remotion_terminal_path_named; review_and_qa_contract_observable
@@ -62,8 +63,9 @@ routes:
 fails:
   storyboard_as_parent_plan; format_sprawl; vibes_only_action_list;
   advisor_actions_without_owner; remotion_without_assets; qa_afterthought;
-  inspiration_pack_as_moodboard; style_profile_as_creator_impersonation;
-  unconditional_reference_gate; creative_lock_skipped
+  tasty_pack_as_moodboard; style_profile_as_third_composition_source;
+  brand_conflict_silently_blended; title_only_element_handoff;
+  final_visuals_before_timing_master; creative_lock_skipped
 ```
 
 ## Production Contract
@@ -84,42 +86,62 @@ reference recreation. Use `qa` when a produced artifact needs formal proof.
 ## Todo List
 
 - [ ] 1. Bind the implementation brief.
-  - [ ] Resolve idea, content kind, video method, optional style profile,
-    optional Inspiration Pack/Tasty Pack/reference material, ICP, viewer
+  - [ ] Resolve idea, content kind, video method, optional approved Brand Kit,
+    optional Tasty Pack/reference material, ICP, viewer
     promise, proof, platform, target artifact, constraints, CTA, deadline, and
     artifact owner.
   - [ ] Read `qa_checklist.md` as preflight guardrails.
-- [ ] 2. Resolve visual direction and conditional reference evidence.
-  - [ ] Route video work through `video-production` and record method_default,
-    profile_only, inspiration_only, composed_direction, or blocked_report.
-  - [ ] When a style profile is supplied, load its profile, prompt, collocated
-    example, compatibility, provenance, and QA assertions.
-  - [ ] When Inspiration is supplied, identify hook stack, timeline beats,
+- [ ] 2. Compose Brand Kit identity with optional Tasty Pack inspiration.
+  - [ ] Treat the Brand Kit as approved identity/constraint truth and the
+    Tasty Pack as optional ad-hoc inspiration. Brand Kit constraints win every
+    conflict; explicitly choose, augment, reject, or block each conflicting
+    Tasty element instead of silently blending it.
+  - [ ] Do not accept or resolve `style_profile` as a third reusable creative
+    source in this skill. Direct callers may still use standalone
+    `video-production` profile behavior outside this composition path.
+  - [ ] Route video method selection through `video-production`, passing the
+    compiled creative direction rather than asking it to merge a profile.
+  - [ ] When a Tasty Pack is supplied, identify hook stack, timeline beats,
     story pattern, pacing, format affordances, creative elements, and why the
     reference likely works; classify the reference type, reject nearby story
     engines, and separate reusable structure from rights/brand constraints.
   - [ ] Emit labeled `Reference type`, `Rejected nearby formats`, `Narrative
     spine`, and `Viewer question -> answer` fields; do not leave these implied
     inside scene prose.
-  - [ ] When Inspiration is supplied, build a `reference_leverage_map` from
-    `captures[].elements` to planned shots, assets, audio cues, motion cues, or narrative beats;
-    map pinned elements first and explain any pinned element not reused. If
+  - [ ] Build one `element_leverage_map` from complete Brand Kit and Tasty Pack
+    elements to planned beats, assets, advisor actions, audio cues, motion
+    cues, copy moves, or production rules. Map pinned Tasty elements first and
+    explain every selected, rejected, conflicting, or unused element. If
     `meta.warnings` says an operator note exists but no element was pinned from
     it, state the gap before treating the pack as production guidance.
   - [ ] If named reference elements exist but their capture payload is missing,
     map those named elements provisionally at element level and block only the
     unresolved evidence/rights fields; do not replace the map with generic
     category placeholders.
-  - [ ] When Inspiration is supplied, classify `reference_readiness` as
+  - [ ] When a Tasty Pack is supplied, classify `reference_readiness` as
     `media_ready`, `regen_ready`, `semantic_only`, or `blocked`; do not route to
     Remotion as production until pinned visual/audio/editing elements have
     resolved media refs or concrete regeneration packets.
-- [ ] 3. Create the content ticket shape.
+  - [ ] Emit a creative hypothesis explaining why the idea, approved Brand Kit
+    identity, and selected Tasty mechanics should work together and what would
+    falsify that hypothesis.
+- [ ] 3. Produce the low-fidelity approval packet.
+  - [ ] Before final generation, emit the creative hypothesis, conflict/reject
+    decisions, exact element leverage map, low-fidelity demo, and visual
+    storyboard with image paths and notes tied to element IDs.
+  - [ ] Treat text-only panels and intended image paths as draft-only. Provider
+    spend waits for the operator's visual-storyboard approval.
+- [ ] 4. Create the content ticket shape.
   - [ ] Use `Summary`, `Scope`, `Delta`, `Program`, `Map`, `Done / Proof`,
     `State`, `Links`, and `Notes`.
   - [ ] Make the before/after explicit: idea plus reference to executable
     production program.
-- [ ] 4. Route child planning work.
+- [ ] 5. Route child planning work with element realization packets.
+  - [ ] For every selected element routed to a child, include element ID,
+    provenance, kind, `description`, `whyItWorks`, resolved
+    `goldenExample { assetId, description? }`, `goldenRecipe`, planned use, and
+    acceptance check. Block generation handoffs that omit the recipe or
+    example; do not route title/description-only packets.
   - [ ] Route narrative, script, beats, and scene map to `storyboard`. For
     deliberate breaks, require one clean/annotated grid packet per 4-5 second
     model-native clip and load
@@ -137,9 +159,15 @@ reference recreation. Use `qa` when a produced artifact needs formal proof.
     `awaiting_operator_download_and_approval`; never download them.
   - [ ] Route still or model-native generation details to `ai-image-advisor`
     and `ai-video-advisor` only when generation inputs are needed.
-- [ ] 5. Compile the advisor action list.
-  - [ ] Order actions by dependency: storyboard, assets, generation/capture,
-    audio, Remotion composition, render proof, review/QA.
+- [ ] 6. Compile the timing-master advisor action list.
+  - [ ] Select `voiceover`, `music`, `source_video`, or `none` as timing master
+    before final visual generation.
+  - [ ] For voice-led explainer/avatar/lipsync work, lock script, generate and
+    measure voice/timestamps, revise cue sheet/storyboard, then generate visual
+    clips with safe surplus before Remotion. For music-led work, select or
+    generate approved music first. For source-video-led work, inspect and
+    measure source media first. Use storyboard/assets first only when timing
+    master is `none` or as low-fi approval work.
   - [ ] For narrative video, declare generation topology before spend:
     `continuous_chain`, `deliberate_scene_breaks`, or `montage`; block isolated
     clip batches unless the chosen format is intentionally montage. For
@@ -150,9 +178,9 @@ reference recreation. Use `qa` when a produced artifact needs formal proof.
     unless the selected format is montage.
   - [ ] Give every action an owner skill, input, output, acceptance check, and
     blocker condition.
-- [ ] 6. End with production proof.
+- [ ] 7. End with production proof.
   - [ ] Run `creative_lock` and stop with a blocked report when narrative,
-    assets, cue timing, Inspiration-use evidence when Inspiration was supplied,
+    assets, timing-master media/cues, element realization receipts,
     or other applicable QA gates are missing.
   - [ ] Route final stitching, captions, overlays, audio placement, and local
     render proof to `remotion` only after `creative_lock` passes.
@@ -165,13 +193,12 @@ reference recreation. Use `qa` when a produced artifact needs formal proof.
 - Do not make `storyboard` carry the whole implementation plan. Storyboard owns
   narrative and scene design; this skill owns the parent ticket and production
   action list.
-- Do not require an Inspiration Pack merely to use a named style profile or a
-  method default. Do not treat a style profile as permission to impersonate a
-  creator or copy protected examples.
-- Do not let a final video consume only the text of pinned elements when the
-  user's expectation is Tasty Pack reuse. Resolve `assetId + anchor` into media
-  refs or route regeneration first; otherwise label the output
-  `semantic_storyboard_only`.
+- Do not reintroduce `style_profile` through aliases, fallback parsing, or
+  `video-production` calls in this composition path. Standalone
+  `video-production` remains the owner of direct profile use.
+- Do not let a child consume only an element title or description. Selected
+  work is conditioned on its resolved golden example and golden recipe, with a
+  receipt mapping the realized output back to the element ID.
 
 ## Reference Map
 
@@ -187,8 +214,9 @@ reference recreation. Use `qa` when a produced artifact needs formal proof.
   direction.
 - `../audio-advisor/SKILL.md` - audio direction, SoundButtonsWorld candidate
   links for operator approval, provider execution, receipts, and mix.
-- `../video-production/SKILL.md` - method selection, reusable style profiles,
-  four-case visual-direction resolution, and style ingestion.
+- `../video-production/SKILL.md` - method selection and direct standalone style
+  profiles; this skill passes compiled Brand Kit + Tasty Pack direction without
+  adding a profile composition lane.
 - `../video-production/references/scene-grid-production.md` - load for
   deliberate-scene-break model-native video; owns per-scene grids, approval,
   reuse locking, and Remotion assembly handoff.

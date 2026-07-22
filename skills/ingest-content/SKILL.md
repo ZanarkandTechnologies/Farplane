@@ -1,13 +1,15 @@
 ---
 name: ingest-content
-description: "Route liked links, images, videos, files, or notes into analyzed, searchable Resource Bank records with audience-aware Tasty Pack retrieval fields."
+description: "Route liked links, images, videos, files, or notes into searchable Resource Bank captures with production-ready creative-element capsules."
 tier: 3
 group: content-social
 source: local
 template_uses:
   skill-template: "0.2.0"
+  skill-qa-checklist: "0.1.1"
   skill-eval-task: "0.2.0"
 eval: evals/evals.json
+qa_checklist: qa_checklist.md
 common_chains:
   after: ["media-ingest", "video-understanding", "summarize", "visual-design"]
 allowed-tools: Read, Glob, Grep, Bash, mcp__convex__status, mcp__convex__functionSpec, mcp__convex__run
@@ -29,18 +31,18 @@ This skill is a Codex-native router pipeline, not a browser extension, app
 agent, or autonomous posting loop. It should reuse subskills for each phase:
 read the content, break it down, extract usefulness, then store a compact
 capture in Resource Bank: source URL/ref, operator note/focus, analysis summary,
-and extracted creative elements. Do not require first-class frame, clip,
-transcript, or evidence records for this v2 contract unless a future workflow
-actually needs direct media reuse or audit proof.
+and extracted creative elements. Each element must carry enough evidence and
+instruction to be realized later: what it is, why it works, one same-source
+golden example asset, and one golden recipe prompt.
 
 ## Skill Signature
 
 ```text
-ingest_content(source, note?, context?) -> saved_capture + creative_elements + retrieval_handle
-state: reads(Resource Bank schema/functions, source content, user note, optional media ingest visual asset); writes(Resource Bank capture with source/note/analysis/elements/tags and optional storage-backed thumbnail asset)
-gates: source_read_or_limit_recorded; note_intent_bound; analysis_summary_written; creative_elements_extracted; primary_asset_exists_before_thumbnail_upload; storage_write_verified; optional_thumbnail_upload_verified_or_skipped; retrieval_verified
+ingest_content(source, note?, brand_kit_id?, context?) -> saved_capture + complete_creative_elements + retrieval_handle + optional_promotion_receipt
+state: reads(Resource Bank schema/functions, source content, user note, optional same-source media assets); writes(Resource Bank capture with source/note/analysis/complete elements/tags, optional derived assets, and optional Brand Kit promotion)
+gates: source_read_or_limit_recorded; note_intent_bound; analysis_summary_written; complete_creative_elements_extracted; every_golden_example_same_ingestion_job; primary_asset_exists_before_derived_upload; storage_write_verified; optional_promotion_verified_or_skipped; retrieval_verified
 routes: summarize | media-ingest | video-understanding | visual-design | ai-image-advisor | ai-video-advisor | social-content | video-production
-fails: treats all media as text; ignores note-specific segment; stores vibes without creative elements; turns hook mechanics into a managed performance-tag taxonomy; fakes thumbnail assets when none were extracted; skips retrieval verification; keeps legacy analysis-only records as active production data
+fails: treats all media as text; ignores note-specific segment; stores shallow or generic creative elements; invents unseen evidence; uses an asset from another source as a golden example; copies one generic recipe across unrelated kinds; skips retrieval verification; keeps legacy analysis-only records as active production data
 ```
 
 Inputs:
@@ -49,6 +51,8 @@ Inputs:
   or manual idea.
 - `note`: optional user intent, such as "use this 2x2 collage background later"
   or "make a video in this style."
+- `brand_kit_id`: optional destination for the same ingest action to promote
+  the newly stored complete elements after storage verifies.
 - `context`: optional project, campaign, future output type, audience, or
   retrieval intent.
 
@@ -61,8 +65,8 @@ ingest_content(source, note?)
   -> read_content(source, note?)
   -> breakdown_content(source_context, note?)
   -> extract_usefulness(breakdown, note?)
-  -> store_capture(source, note, analysis, creative_elements)
-  -> retrieval_handle
+  -> store_capture(source, note, analysis, complete_creative_elements)
+  -> retrieval_handle + optional_promotion_receipt
 ```
 
 The note steers every phase. If the note says "the first few seconds are nice,"
@@ -80,14 +84,25 @@ CreativeElement {
   kind: visual | audio | hook | storyboard | editing | copy | format | constraint | character
   title: string
   description: string
+  whyItWorks: string
+  goldenExample: { assetId: ResourceBankAssetId, description?: string }
+  goldenRecipe: string
   anchor?: string
   pinned?: boolean
 }
 ```
 
+`description` says what the element is. `whyItWorks` explains the element's
+specific creative mechanism. `goldenExample` points to exactly one asset
+created by the same ingestion job; use its optional description to name the
+frame, passage, voice, layout, or quality worth conditioning on.
+`goldenRecipe` is one concrete prompt that recreates the element's function
+without copying protected expression. It must be specific to the element kind,
+not a restatement of `description` or shared generic style prose.
+
 Use `anchor` for lightweight source grounding such as `0-3s`, `opening frame`,
-`voiceover`, `caption`, `cutaway`, or `end card`. Analyses explain why the
-source works; creative elements are the pieces future content plans reuse.
+`voiceover`, `caption`, `cutaway`, or `end card`. Source-level analysis remains
+context; it does not satisfy the element-level fields.
 Use `pinned` for the specific sub-elements the operator liked or explicitly
 wants reused, backed by the ingest note whenever the operator named what they
 liked. Do not ask the operator for numeric weights and do not store durable
@@ -98,8 +113,9 @@ Do not create a separate production-pattern object; a video, landing page,
 post, or screenshot is represented by its element list, and the reusable
 pattern emerges from the set of hook/storyboard/visual/audio/editing/copy/
 format/constraint/character elements.
-Do not promote evidence assets, lanes, provenance enums, or timing schemas into
-the required contract until a real production workflow needs them.
+Do not add recipe collections, required-input lists, success-criteria lists,
+production-hint objects, element timing fields, new kinds, or a separate
+production-pattern object.
 
 ## Phase Boundary
 
@@ -110,7 +126,9 @@ source-reading or downstream interpretation phase:
   extractable text.
 - Use [media-ingest](../media-ingest/SKILL.md) when a URL or local file contains
   audio/video and the source cannot be understood well enough from public
-  context, operator note, or lightweight inspection.
+  context, operator note, or lightweight inspection. For video, route through
+  actual media understanding whenever those inputs cannot support an honest
+  element-specific `whyItWorks`, golden example, and golden recipe.
 - When the note says the music, song, beat, soundtrack, or audio bed is nice,
   ask `media-ingest` for optional music recognition. Store the returned
   artist/title/link as attribution/research inside an `audio` element and a
@@ -122,7 +140,7 @@ source-reading or downstream interpretation phase:
   composition, typography, color, layout, and reusable creative levers.
 - Use [ai-image-advisor](../ai-image-advisor/SKILL.md) or
   [ai-video-advisor](../ai-video-advisor/SKILL.md) only when the operator asks
-  to generate a new derivative asset now; otherwise store generation recipes for
+  to generate a new derivative asset now; otherwise store `goldenRecipe` for
   future reuse.
 
 Do not call phase-like skills recursively at the same scope. Ingestion owns the
@@ -134,8 +152,9 @@ saved record; downstream production skills own making new assets from records.
 - [ ] 1. Bind the capture request.
    - [ ] Read `qa_checklist.md` as preflight guardrails for Resource Bank
      ingestion.
-   - [ ] Identify `source`, `note`, optional project/context, desired future use,
-     and whether the source is public, local, private, or unknown.
+   - [ ] Identify `source`, `note`, optional `brand_kit_id`, project/context,
+     desired future use, and whether the source is public, local, private, or
+     unknown.
    - [ ] Parse the note for target segment, liked element, future output, and
      action intent: save-only, analyze, recreate-later, or generate-now.
   - [ ] Infer retrieval facets when source context or note supports them:
@@ -154,6 +173,9 @@ saved record; downstream production skills own making new assets from records.
    - [ ] If only metadata, thumbnail, or the operator note is available, say so
      in the analysis summary and keep elements anchored to what is actually
      known.
+   - [ ] If that evidence cannot support complete element capsules, deepen the
+     read through `media-ingest` or `video-understanding`; otherwise return a
+     blocker instead of inventing why/example/recipe fields.
    - [ ] For visual-only screenshots/images, inspect the image directly and
      record that the analysis is visual-only.
    - [ ] If the note names a time range, frame, scene, page section, or visual
@@ -175,9 +197,9 @@ saved record; downstream production skills own making new assets from records.
    - [ ] For video, describe the recurring visual/story/editing system only to
      the extent the source context supports it; do not invent unseen frames,
      audio, or timing.
-   - [ ] Extract reusable levers: prompt guess, layout recipe, shot/frame
-     recipe, asset types to recreate, remix constraints, and where it should
-     not be copied literally.
+   - [ ] Extract element-specific reusable levers: layout or shot mechanics,
+     asset types, remix constraints, and concrete recipe prompts that recreate
+     function rather than repeat generic style adjectives.
    - [ ] Separate facts seen in the source from Codex interpretation and the
      operator's note.
 - [ ] 4. Extract usefulness into reusable elements.
@@ -193,7 +215,7 @@ saved record; downstream production skills own making new assets from records.
      `character`, `visual`, `audio`, `hook`, `storyboard`, `editing`, `copy`,
      `format`, and `constraint` are pinned only when the operator note
      explicitly likes, selects, or asks to reuse that specific sub-element.
-   - [ ] For "make my own version" requests, create a generation recipe and
+   - [ ] For "make my own version" requests, create a `goldenRecipe` and
      remix constraints; only call generation skills when the operator wants the
      asset produced now.
    - [ ] When a character/persona resembles a real person, actor, brand mascot,
@@ -203,9 +225,14 @@ saved record; downstream production skills own making new assets from records.
    - [ ] When music recognition returns a track, use it for attribution and
      research, pin the audio element only when the operator selected it, and add
      a licensing-safe constraint against copying protected music directly.
-   - [ ] Give each element a title, description, and optional lightweight
-     `anchor` and `pinned`; keep uncertainty in the analysis summary instead of
-     expanding the element schema further.
+   - [ ] Give every element `title`, `description`, non-empty `whyItWorks`, one
+     `goldenExample { assetId, description? }`, one non-empty `goldenRecipe`,
+     and optional `anchor`/`pinned`.
+   - [ ] Choose the clearest same-ingestion-job asset for each example: a
+     derived frame/contact sheet/audio/transcript asset when useful, otherwise
+     the primary source asset with a precise example description. Do not point
+     to an unrelated job or reuse one unhelpful whole-source example for every
+     element.
 - [ ] 5. Generate storage fields.
    - [ ] Choose `sourceKind`, `assetKind`, title, platform, source URL or
      local-file asset, author/canonical URL when visible, and normalized tags.
@@ -219,7 +246,7 @@ saved record; downstream production skills own making new assets from records.
      inventing them.
 - [ ] 6. Write to Farplane Resource Bank.
    - [ ] Store a capture with source URL/ref, operator note/focus, compact
-     analysis summary, tags/facets, and creative elements.
+     analysis summary, tags/facets, and complete creative-element capsules.
    - [ ] After the primary Resource Bank asset row exists, upload a real
      representative thumbnail/contact sheet/frame image from
      [media-ingest](../media-ingest/SKILL.md) or
@@ -229,18 +256,22 @@ saved record; downstream production skills own making new assets from records.
    - [ ] If no visual thumbnail/contact sheet/frame image was extracted, skip
      derived asset upload and leave the source tile as-is; do not generate or
      fake a preview just to fill the UI.
-   - [ ] Do not require separate frame/clip/transcript/evidence records for v2
-     unless direct media reuse or audit proof is part of the current task; keep
-     Tasty Pack/Inspiration Pack output focused on source, analysis, and
-     creative elements.
+   - [ ] Keep Tasty Pack output focused on source, analysis, and complete
+     creative elements. Derived assets travel only through an element's single
+     `goldenExample.assetId`, not as a parallel evidence collection.
+   - [ ] When `brand_kit_id` is supplied, promote the verified complete
+     elements in the same action and record the exact kit/revision receipt.
    - [ ] Add optional skill findings only when the source clearly suggests a
      reusable technique, skill update, or skill candidate.
 - [ ] 7. Verify retrieval.
    - [ ] Query Tasty Pack/Inspiration Pack retrieval with the likely timeframe
      and any inferred audience/output facets; confirm the saved capture appears
-     with `source`, `analysis`, `elements`, element `pinned` fields when
-     present, `analysis.operatorNote`, and `meta.pinnedElementCount`,
+     with `source`, `analysis`, complete `elements`, element `pinned` fields
+     when present, `analysis.operatorNote`, and `meta.pinnedElementCount`,
      `meta.operatorNoteCount`, and `meta.warnings`.
+   - [ ] Confirm every returned element preserves `description`, `whyItWorks`,
+     `goldenExample`, and `goldenRecipe`; verify each example asset belongs to
+     the capture's ingestion job.
    - [ ] When a derived thumbnail/contact sheet was uploaded, verify the upload
      command returned `assetId` and `storageId`, and verify the Resource Bank UI
      or dashboard hydration can expose that asset as `previewAsset.storageUrl`.
@@ -248,8 +279,8 @@ saved record; downstream production skills own making new assets from records.
      or tool failure and do not claim the item is saved.
 - [ ] 8. Return the ingestion packet and next reuse handle.
    - [ ] Include capture ID or handle, source, retrieval facets, tags, note,
-     analysis summary, top creative elements/levers, storage proof, and
-     recommended downstream skill.
+     analysis summary, top complete creative elements, storage proof, optional
+     promotion receipt, and recommended downstream skill.
    - [ ] For future creation requests, suggest querying by purpose such as
      `2x2 collage`, `talking head overlay`, `meme caption`, `study chaos bg`,
      `short-form video`, or the project tag.
@@ -257,7 +288,8 @@ saved record; downstream production skills own making new assets from records.
    - [ ] Repeatability from files alone.
    - [ ] Source facts, interpretation, and user intent are separated.
    - [ ] Storage write is verified or the blocker is explicit.
-   - [ ] The saved record contains creative elements/levers, not only a summary.
+   - [ ] Every saved element has what/why/example/recipe, not only a title or
+     source-level summary.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 ## Templates
@@ -280,9 +312,9 @@ Ingestion packet:
 - Retention notes:
 - Why it works:
 - Reusable levers:
-- Prompt guess:
+- Golden recipes:
 - Extracted elements:
-- Creative elements stored:
+- Creative elements stored (description / whyItWorks / goldenExample / goldenRecipe):
 - Pinned note-backed elements:
 - Analysis stored:
 - Optional skill findings:
@@ -296,7 +328,7 @@ Compact example:
 source: short-form video URL
 note: "I like the first 3 seconds and want this for founder-facing AI office reels."
 facets: outputTypes=["reel"], audiences=["founders"], industries=["ai"], customerRoles=["founder"]
-analysis: first 0-3s hook, later retention beats, creative elements, prompt guess, remix constraints
+analysis: first 0-3s hook, later retention beats, complete creative elements, remix constraints
 verification: createTastyPack({ timeframe: "past_week", audience: "founders" }) returns the capture with source, analysis including operatorNote, elements including pinned, tags/facets on source, and meta pinned/operator-note counts plus warnings.
 derived_preview: if media-ingest produced `/tmp/contact_sheet.jpg`, run `npm --prefix "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane-UI" run resource-bank:upload-thumbnail -- --job-id <jobId> --parent-asset-id <assetId> --file /tmp/contact_sheet.jpg --title "Contact sheet: <source title>" --source-url <sourceUrl> --canonical-url <canonicalUrl> --tag contact-sheet --tag frame-backed --json`; record returned assetId/storageId and verify previewAsset.storageUrl when available.
 ```
@@ -307,9 +339,9 @@ derived_preview: if media-ingest produced `/tmp/contact_sheet.jpg`, run `npm --p
   explicitly provides or approves.
 - Do not over-save bulky raw media. Prefer source URLs/refs and compact
   analysis unless direct media reuse or audit proof is explicitly needed.
-- Do not put derived thumbnails, contact sheets, frames, transcripts, or other
-  evidence assets back into the active Tasty Pack/Inspiration Pack contract;
-  previews are Resource Bank UI enrichment, not production pack payload.
+- Do not add derived thumbnails, contact sheets, frames, transcripts, or other
+  evidence as a parallel Tasty Pack collection. A complete element may point to
+  one same-source derived asset through `goldenExample.assetId`.
 - Do not upload a placeholder preview when media extraction produced no real
   thumbnail/contact sheet/frame image.
 - Do not turn a simple taste capture into a media-forensics job. If the source
@@ -333,7 +365,7 @@ derived_preview: if media-ingest produced `/tmp/contact_sheet.jpg`, run `npm --p
   audible pattern honestly.
 - Do not preserve old analysis-only Resource Bank rows as active production
   data after a contract reset. Snapshot old rows, clear active records, and
-  reingest keep-worthy sources through this minimal capture contract.
+  reingest keep-worthy sources through the complete capsule contract.
 
 ## Reference Map
 

@@ -3,106 +3,89 @@ title: Tasty Pack inspiration vault
 status: implemented
 owner: feature-registry
 created_at: 2026-06-27
-updated_at: 2026-07-07
+updated_at: 2026-07-22
 tags:
   - farplane
   - feature
-  - sys-0008
+  - sys-0012
 refs:
-  - docs/systems/source-sidecar-systems.md
+  - docs/systems/content-production.md
   - skills/ingest-content/SKILL.md
   - skills/media-ingest/SKILL.md
   - skills/harness-scout/SKILL.md
 feature_id: FEAT-0056
-system_id: SYS-0008
-category: source-ingestion
+system_id: SYS-0012
+category: content-production
 public: true
 surfaces:
-  - docs/systems/source-sidecar-systems.md
+  - docs/systems/content-production.md
   - skills/ingest-content/SKILL.md
   - skills/media-ingest/SKILL.md
   - skills/harness-scout/SKILL.md
 source_refs:
-  - docs/systems/source-sidecar-systems.md
+  - docs/systems/content-production.md
+  - tickets/archive/TASK-0339/ticket.md
 external_refs: []
 evidence_refs:
   - skills/ingest-content/SKILL.md
   - skills/media-ingest/SKILL.md
   - skills/harness-scout/SKILL.md
-known_limits: Implemented as the Tasty Pack inspiration/source memory path; retrieval quality still depends on captured source elements, pinned notes, and downstream product usage.
+known_limits: Tasty Packs are computed retrieval results, not saved rows or approved identity; production quality still depends on complete captured element capsules and downstream proof.
 metrics:
   - inspiration_recall_quality
   - creative_grounding_reuse
-last_verified: 2026-07-07
+last_verified: 2026-07-22
 experimental: false
 superseded_by: false
 ---
 # Tasty Pack inspiration vault
 
-Tasty Pack inspiration vault exists to hold reusable inspiration sources until they can be routed
-into Tasty Packs, products, skills, or experiments. It belongs to [Source And Sidecar
-Systems](../systems/source-sidecar-systems.md) and keeps `FEAT-0056` as a stable
-capability handle because the behavior has an owner, proof path, and maintenance
-boundary.
+Tasty Pack inspiration vault exists to retrieve reusable inspiration as complete creative elements for a specific content-production question. It belongs to [Content Production](../systems/content-production.md) and keeps `FEAT-0056` as the stable feature handle for computed Tasty Packs: ad hoc taste and trend evidence from Resource Bank candidates, not approved identity and not saved production profiles.
 
 ```text
-capture_inspiration(source, use_case)
-  -> capture(source, note, analysis, elements, tags/facets) + reuse_route
+create_tasty_pack(request, resource_bank)
+  -> computed_pack(captures[], complete_elements[], meta)
 ```
 
 ## At A Glance
 
 - Feature ID: `FEAT-0056`
-- System: [Source And Sidecar Systems](../systems/source-sidecar-systems.md)
+- System: [Content Production](../systems/content-production.md)
 - Status: `implemented`
-- Category: `source-ingestion`
+- Category: `content-production`
 - Primary user: researching agent, creator, and product maintainer
-- Job: hold reusable source elements, pinned notes, and creative grounding until they can be routed into Tasty Packs, products, skills, or experiments.
+- Job: retrieve complete source-grounded creative elements that can augment a Brand Kit production plan.
 
 ## Problem
 
-Useful product, content, and workflow references often arrive before Farplane knows the
-exact feature or skill they should change.
-
-An inspiration vault gives those sources a temporary structured owner without pretending
-they are already canonical specs.
+Useful references often arrive before Farplane knows the next artifact they should shape. Earlier Tasty Pack contracts preserved useful source analysis but allowed production consumers to receive shallow element rows, which made later renders look inspired by a source without conditioning generation on the element-specific what, why, example, or recreation prompt.
 
 ## What It Does
 
-- Captures high-signal references with source/ref, operator note/focus, compact
-  analysis, creative elements, tags/facets, and possible reuse route.
-- Separates inspiration from accepted doctrine or shipped behavior.
-- Feeds harness-scout, market-learning, content, design, or skill work when a concrete question appears.
-- Feeds content-production through clean Inspiration Pack/Tasty Pack captures:
-  `{ request: { idea?, timeframe, startAtMs?, endAtMs?, filters },
-  captures: [{ captureId, source, analysis, elements }],
-  meta: { captureCount, timeframe } }`, with tags/facets on `source`.
-  Production consumers bind only to `captures[].source`,
-  `captures[].analysis`, `captures[].elements`, and direct `meta` counts or
-  warnings such as `pinnedElementCount`, `operatorNoteCount`, and `warnings`;
-  elements may carry note-backed `pinned` taste priority, and retrieval notes
-  are non-core metadata.
-- Allows proposed status until the pattern earns a feature, skill, ticket, or experiment owner.
-- Keeps raw inspiration out of long-term docs unless distilled.
+- Retrieves Resource Bank captures for a concrete idea, timeframe, facets, or creative request.
+- Returns complete creative-element capsules without reducing them to title and description.
+- Keeps Tasty Packs computed at query time; there is no saved Tasty Pack table or row.
+- Treats Tasty Pack inspiration as optional production evidence that can augment a Brand Kit, not override approved identity.
+- Preserves source, analysis, elements, and direct meta warnings such as pinned counts, operator-note counts, and retrieval gaps.
+- Keeps raw inspiration out of long-term docs unless distilled into a feature, system, skill, ticket, source decision, or Brand Kit approval.
 
 ## User Stories
 
 - As an operator, I can save a useful reference without deciding its final owner immediately.
-- As a researching agent, I can retrieve inspiration by use case and turn it into a scored decision.
+- As a content planner, I can retrieve recent or relevant Tasty Pack elements and decide which ones fit the current Brand Kit and idea.
 - As a maintainer, I can keep public docs free of unvalidated idea piles.
 
 ## Operating Contract
 
-The vault is a waiting room for reusable signal, not canonical truth.
+Tasty Pack retrieval is a computed inspiration surface, not durable approval.
 
-- Records identify source, why it matters, candidate use, and current status.
-- For video/social inspiration, records should preserve compact creative
-  elements rather than only prose summaries. Element kinds are `visual`,
-  `audio`, `hook`, `storyboard`, `editing`, `copy`, `format`, and
-  `constraint`, with optional lightweight anchors such as `0-3s` or `caption`.
-  Operator-selected sub-elements use element-level `pinned`; Tasty Pack
-  retrieval reports pinned counts, operator-note counts, and direct warnings.
-  Do not create a separate serialized production-pattern object.
+- Resource Bank stores candidate elements. Tasty Pack retrieval returns a pack view over those candidates for the current request.
+- Element kinds remain exactly `visual`, `audio`, `hook`, `storyboard`, `editing`, `copy`, `character`, `format`, and `constraint`.
+- Each returned element includes `description`, `whyItWorks`, `goldenExample { assetId, description? }`, and `goldenRecipe` as one prompt string.
+- `goldenExample.assetId` points to the best Resource Bank asset for that element; the optional description explains the exact visual, audio, text, edit, or behavior worth conditioning on.
+- `goldenRecipe` is not a recipe object, required-input list, success-criteria list, or production-hints collection. It is one compact prompt for recreating the element's function.
+- Elements may still carry source tags, pinned priority, provenance, search metadata, or anchors as storage and retrieval metadata. Those fields do not replace the semantic capsule.
+- A content-production plan composes Tasty Pack elements with Brand Kit snapshots by explicit chosen/rejected role. Brand Kit constraints win when they conflict.
 - Accepted inspiration must move into a feature, skill, ticket, experiment, or source decision.
 - Stale inspiration is pruned or moved to temporary research.
 - Vault records do not override specs or skill instructions.
@@ -120,15 +103,14 @@ flowchart TD
   classDef added fill:#dcfce7,stroke:#15803d,color:#111827
   classDef retired fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d,stroke-dasharray: 5 3
 
-  trigger["Trigger<br/>liked source, media, or creative reference"]:::keep
-  owner["Owner surface<br/>source-sidecar system<br/>ingest-content and media-ingest"]:::changed
-  readers["Files and fields read<br/>source, why it matters<br/>candidate use, status<br/>elements and pinned notes"]:::keep
-  vault["Vault record<br/>visual, audio, hook, storyboard<br/>editing, copy, format, constraint"]:::added
-  artifact["Created artifact/evidence<br/>Resource Bank record<br/>Tasty Pack retrieval signal"]:::added
-  old["Retired<br/>serialized production-pattern object"]:::retired
+  request["Trigger<br/>idea, timeframe, facets<br/>or creative request"]:::keep
+  bank["Resource Bank candidates<br/>source, analysis, complete elements"]:::keep
+  pack["Computed Tasty Pack<br/>captures + complete capsules"]:::changed
+  compose["Content Production<br/>Brand Kit plus optional Tasty Pack"]:::added
+  old["Retired<br/>saved pack rows<br/>recipe/profile tables"]:::retired
 
-  trigger --> owner --> readers --> vault --> artifact
-  old -. replaced by .-> vault
+  request --> bank --> pack --> compose
+  old -. replaced by .-> pack
 ```
 
 Legend:
@@ -142,7 +124,7 @@ Legend:
 
 Owner surfaces:
 
-- `docs/systems/source-sidecar-systems.md`
+- `docs/systems/content-production.md`
 - `skills/ingest-content/SKILL.md`
 - `skills/media-ingest/SKILL.md`
 - `skills/harness-scout/SKILL.md`
@@ -163,6 +145,7 @@ Acceptance signals:
 - The feature remains listed under exactly one owning system.
 - The owner surfaces still exist and agree with this contract.
 - Evidence refs support the current status.
+- Tasty Pack docs do not introduce saved rows, recipe/profile tables, or new element kinds.
 
 ## Rollout And Maintenance
 
@@ -176,9 +159,8 @@ Acceptance signals:
 - This feature is not a permanent archive.
 - This feature does not make raw references public docs.
 - This feature does not skip source scoring when the idea becomes product work.
-- Known limit: Proposed product surface. `TASK-0283` is implementing the
-  first production-ready Inspiration Pack v2 slice with minimal Resource Bank
-  captures and content-production `creative_lock` gates.
+- This feature does not store approved identity; Brand Kit owns approved creative snapshots.
+- Known limit: Tasty Packs are only as useful as the captured element capsules and the production proof that later work records.
 - Delete or merge this feature only when its current truth has moved into a clearer owner and all active refs are removed.
 
 ## Metrics
@@ -203,3 +185,4 @@ Acceptance signals:
   contract: source/ref, operator note/focus, compact analysis, creative
   elements, tags/facets, and snapshot/reset/reingest for small old vaults
   instead of long-lived legacy fallback.
+- 2026-07-22: Moved Tasty Pack ownership to Content Production and narrowed the contract to computed complete-element retrieval.

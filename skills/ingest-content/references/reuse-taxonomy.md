@@ -13,7 +13,8 @@ Each saved reference should answer:
 - `continuation`: what makes the viewer keep watching/reading when relevant.
 - `reusable_levers`: the repeatable parts that can inspire new work.
 - `elements`: production-use components using the compact element kinds.
-- `prompt_guess`: a compact generation or editing prompt when useful.
+- `golden_recipe`: one element-specific generation or editing prompt per
+  creative element.
 - `constraints`: what to avoid copying literally.
 - `best_for`: future project, content type, campaign, product surface, or vibe.
 
@@ -64,10 +65,19 @@ CreativeElement {
   kind: visual | audio | hook | storyboard | editing | copy | format | constraint | character
   title
   description
+  whyItWorks
+  goldenExample { assetId, description? }
+  goldenRecipe
   anchor?
   pinned?
 }
 ```
+
+`description` says what the element is; `whyItWorks` explains the mechanism;
+`goldenExample` points to one same-ingestion-job asset; `goldenRecipe` is one
+prompt that recreates the function. Keep layout under `visual`, narrative
+pacing under `storyboard`, cut rhythm under `editing`, and vocal pacing under
+`audio`. Do not add layout, pacing, or director kinds.
 
 Examples:
 
@@ -107,7 +117,7 @@ create_tasty_pack(idea?, timeframe?, audience?, industry?, outputType?, tags?, c
 ```
 
 Creation skills consume `captures[].source`, `captures[].analysis`,
-`captures[].elements`, and `meta` counts/warnings. They should treat pinned
+complete `captures[].elements`, and `meta` counts/warnings. They should treat pinned
 elements as the primary taste signal and unpinned elements as context.
 Retrieval notes are non-core metadata.
 

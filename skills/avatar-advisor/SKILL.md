@@ -33,17 +33,19 @@ final video by default, render Remotion compositions, or publish content.
 ## Skill Signature
 
 ```text
-avatar_advisor(character_or_presenter, script_or_storyboard, identity_refs?, voice?, consent?, platform?, artifact_owner?)
+avatar_advisor(character_or_presenter, script_or_storyboard, element_realization_packets?, identity_refs?, voice?, timing_master?, consent?, platform?, artifact_owner?)
   -> avatar_direction_packet + generation_route | blocked_report
 
 state:
-  reads(user brief, script/storyboard, identity references, voice refs,
+  reads(user brief, script/storyboard, complete character/audio element packets,
+        identity references, voice refs, timing-master receipt,
         qa_checklist.md)
   writes(avatar direction artifact when durable handoff is requested)
 
 gates:
   identity_rights_checked; persistence_requirements_named; script_aligned;
-  performance_direction_specific; voice_lipsync_route_named;
+  performance_direction_specific; selected_elements_conditioned_on_example_and_recipe;
+  voice_lipsync_route_named; timing_master_bound_when_lipsync;
   asset_and_remotion_handoff_ready
 
 routes:
@@ -75,9 +77,15 @@ render proof.
   - [ ] Specify face/character continuity, wardrobe, framing, gesture style,
     voice, accent, pacing, emotional range, and reusable identity tokens or
     reference assets when available.
+  - [ ] When character or audio elements are selected, bind each resolved
+    golden example and golden recipe to identity/performance direction and
+    downstream provider inputs; block incomplete or title-only packets.
 - [ ] 3. Direct the performance.
   - [ ] Map script beats to expression, gaze, posture, gestures, pauses,
     lipsync needs, and retake criteria.
+  - [ ] For voice-led/lipsync work, consume the actual timing-master asset,
+    observed duration, alignment/timestamps, and cue sheet before final avatar
+    clip generation.
 - [ ] 4. Choose generation and asset routes.
   - [ ] Route portrait/reference creation to `ai-image-advisor` when needed.
   - [ ] Route voice, dubbing, music, SFX, and mix planning to `audio-advisor`.
