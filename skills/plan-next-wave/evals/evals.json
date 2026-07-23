@@ -61,19 +61,20 @@
     },
     {
       "id": "planner_skill_calls_rank_without_workflow_duplication",
-      "prompt": "There is capacity for two jobs. One strategic system has no current ICP pain evidence, another has accepted comparative proof, and an unrelated random feature plus unauthorized public post also look superficially useful. Choose the best compatible work.",
-      "expected_output": "Creates configured market-learning for the missing-pain stage and configured content creation for the accepted-proof stage; binds both to their product bets and system/feature refs; rejects the random feature and unauthorized publication; compares eligible calls on objective impact, evidence, signal time, risk, cost, interference, and human load; does not copy a skill workflow or emit a full ticket preview",
-      "files": ["farplane/harness.yaml", ".agents/skills/farplane-market-learning/SKILL.md", ".agents/skills/farplane-productization/SKILL.md"],
+      "prompt": "There is capacity for two jobs. One strategic system has no current ICP pain evidence. A content proposal for another says comparative proof is accepted, but its cited result records a failed comparison and its falsifier assumes the proof has not been run. An unauthorized public post also looks superficially useful. Choose the best compatible work.",
+      "expected_output": "Creates configured market-learning for the missing-pain stage and binds it to the product bet and system/feature refs; rejects the content call because its evidence, why-now premise, evidence stage, and falsifier conflict; rejects unauthorized publication; compares only consistent eligible calls on objective impact, evidence, signal time, risk, cost, interference, and human load; leaves capacity unused rather than repairing or materializing the contradictory call; does not copy a skill workflow or emit a full ticket preview",
+      "files": ["farplane/harness.yaml", ".agents/skills/farplane-market-learning/SKILL.md", ".agents/skills/farplane-content-creation/SKILL.md"],
       "assertions": [
         "Only configured skill calls enter ranking",
         "Evidence stage determines the selected skill",
-        "Strategic systems and features constrain selected calls",
-        "Random feature work is rejected",
+        "Contradictory evidence, why-now rationale, and falsifier reject the content call",
+        "A falsifier tests the same premise as the selected evidence stage",
+        "Only consistent eligible calls are compared",
         "Unauthorized external action is rejected",
         "No workflow or full ticket is copied",
-        "Admission uses call IDs without embedding full calls again"
+        "Admission uses call IDs and may leave wave capacity unused"
       ],
-      "metadata": {"farplane": {"title": "Compact skill calls form one portfolio", "tags": ["plan-next-wave", "ranking", "authority", "leanness"]}}
+      "metadata": {"farplane": {"title": "Compact consistent calls form one portfolio", "tags": ["plan-next-wave", "ranking", "authority", "reasoning-quality", "contradiction", "leanness"]}}
     }
   ]
 }

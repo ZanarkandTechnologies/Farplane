@@ -49,7 +49,8 @@ gates:
   strategic_system_bound; evidence_stage_correct;
   global_history_first; evidence_grounded; canonical_icp_when_relevant;
   understandable_call; direct_artifact; honest_objective_contribution;
-  falsifier; dedupe; authority_safe; non_interference; wave_size_respected
+  rationale_consistent; falsifier; dedupe; authority_safe; non_interference;
+  wave_size_respected
 
 routes: pulse-update | configured project capability skill | review
 
@@ -57,7 +58,8 @@ fails:
   invents_workflow; invents_lane_or_proposal_type; writes_ticket; materializes;
   copies_skill_procedure; admits_unconfigured_skill; maintenance_as_value;
   random_feature_work; generic_market_report; skips_evidence_stage;
-  duplicates_recent_call; repeats_full_call_or_forecast; fake_ultimate_outcome
+  contradictory_call; duplicates_recent_call; repeats_full_call_or_forecast;
+  fake_ultimate_outcome
 ```
 
 ## Decision Loop
@@ -83,8 +85,10 @@ fails:
    work type; its signature owns the workflow. Bind exactly the declared
    `required_arguments`; Pulse separately owns ticket creation and context.
 7. Reject calls that are maintenance-only, duplicate, vague, unsafe, blocked,
-   unsupported, or whose value exists only in setup, reports, tests, schemas,
-   or proof receipts. Self-improvement requires reproduced failure evidence.
+   unsupported, internally contradictory, or whose value exists only in setup,
+   reports, tests, schemas, or proof receipts. A call's arguments, evidence,
+   why-now rationale, objective contribution, and falsifier must describe one
+   consistent premise. Self-improvement requires reproduced failure evidence.
 8. Rank the remaining calls once by objective impact, evidence, time to signal,
    risk, cost, reversibility, interference, and human load. Return fewer than
    `wave_size` rather than fill capacity.
@@ -126,6 +130,10 @@ fails:
 - Areas may supply ICP and metrics but never generate or reserve work.
 - Product bets constrain the strategic portfolio; system and feature registries
   explain what the selected bet actually contains.
+- Plan Next Wave performs only the bounded comparison needed to admit configured
+  skill calls. It does not invoke `leverage-advisor` during refill; use that
+  separate operator-facing workflow for a capability roadmap or contingent
+  compounding campaign.
 - A validator proves contract integrity, not human interest; human preference
   remains delayed bootstrap evidence.
 

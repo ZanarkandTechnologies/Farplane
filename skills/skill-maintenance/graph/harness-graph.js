@@ -1,8 +1,8 @@
 window.HARNESS_GRAPH = {
   "counts": {
     "edge_types": {
-      "directory-contains": 203,
-      "literal-path": 3822,
+      "directory-contains": 202,
+      "literal-path": 3823,
       "markdown-link": 710
     },
     "edges": 4735,
@@ -10,7 +10,7 @@ window.HARNESS_GRAPH = {
       "agent": 16,
       "doc": 46,
       "file": 600,
-      "review-rubric": 24,
+      "review-rubric": 23,
       "root-doc": 6,
       "script": 110,
       "skill": 121,
@@ -18,9 +18,9 @@ window.HARNESS_GRAPH = {
       "spec": 38,
       "template": 5
     },
-    "nodes": 974,
+    "nodes": 973,
     "scanned_files": 1600,
-    "unresolved_refs": 1747
+    "unresolved_refs": 1749
   },
   "edges": [
     {
@@ -756,13 +756,6 @@ window.HARNESS_GRAPH = {
       "raw_ref": "docs/review/rubrics",
       "source": "dir:docs/review/rubrics",
       "target": "file:docs/review/rubrics/spec-contract.md",
-      "type": "directory-contains"
-    },
-    {
-      "from_file": "docs/review/rubrics",
-      "raw_ref": "docs/review/rubrics",
-      "source": "dir:docs/review/rubrics",
-      "target": "file:docs/review/rubrics/ticket-opportunity-quality.md",
       "type": "directory-contains"
     },
     {
@@ -10129,20 +10122,6 @@ window.HARNESS_GRAPH = {
       "raw_ref": "docs/skills/registry.jsonl",
       "source": "file:docs/review/rubrics/skill-contract.md",
       "target": "file:docs/skills/registry.jsonl",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/review/rubrics/ticket-opportunity-quality.md",
-      "raw_ref": "farplane/metrics.yaml",
-      "source": "file:docs/review/rubrics/ticket-opportunity-quality.md",
-      "target": "file:farplane/metrics.yaml",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/review/rubrics/ticket-opportunity-quality.md",
-      "raw_ref": "skills/plan-next-wave/qa_checklist.md",
-      "source": "file:docs/review/rubrics/ticket-opportunity-quality.md",
-      "target": "file:skills/plan-next-wave/qa_checklist.md",
       "type": "literal-path"
     },
     {
@@ -24664,6 +24643,13 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
+      "from_file": "skills/plan-next-wave/audits/2026-07-23-reasoning-quality-and-leverage-boundary.md",
+      "raw_ref": "docs/features/FEAT-0071-project-work-pulse.md",
+      "source": "skill:plan-next-wave",
+      "target": "file:docs/features/FEAT-0071-project-work-pulse.md",
+      "type": "literal-path"
+    },
+    {
       "from_file": "skills/plan-next-wave/SKILL.md",
       "raw_ref": "docs/features",
       "source": "skill:plan-next-wave",
@@ -24769,8 +24755,22 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
+      "from_file": "skills/plan-next-wave/audits/2026-07-23-reasoning-quality-and-leverage-boundary.md",
+      "raw_ref": "skills/plan-next-wave/SKILL.md",
+      "source": "skill:plan-next-wave",
+      "target": "file:skills/plan-next-wave/SKILL.md",
+      "type": "literal-path"
+    },
+    {
       "from_file": "skills/plan-next-wave/audits/2026-07-14-metric-first-lane-ranking.md",
       "raw_ref": "skills/plan-next-wave/evals/evals.json#planner_metric_first_lanes_choose_global_top_n",
+      "source": "skill:plan-next-wave",
+      "target": "file:skills/plan-next-wave/evals/evals.json",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/plan-next-wave/audits/2026-07-23-reasoning-quality-and-leverage-boundary.md",
+      "raw_ref": "skills/plan-next-wave/evals/evals.json",
       "source": "skill:plan-next-wave",
       "target": "file:skills/plan-next-wave/evals/evals.json",
       "type": "literal-path"
@@ -33169,7 +33169,7 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     }
   ],
-  "generated_at": "2026-07-23T21:37:38+00:00",
+  "generated_at": "2026-07-23T21:38:17+00:00",
   "nodes": [
     {
       "id": "file:agents/asset-generator.toml",
@@ -37258,12 +37258,6 @@ window.HARNESS_GRAPH = {
       "path": "docs/review/rubrics/spec-contract.md"
     },
     {
-      "id": "file:docs/review/rubrics/ticket-opportunity-quality.md",
-      "kind": "review-rubric",
-      "label": "docs/review/rubrics/ticket-opportunity-quality.md",
-      "path": "docs/review/rubrics/ticket-opportunity-quality.md"
-    },
-    {
       "id": "file:docs/review/rubrics/ui-quality.md",
       "kind": "review-rubric",
       "label": "docs/review/rubrics/ui-quality.md",
@@ -37480,10 +37474,10 @@ window.HARNESS_GRAPH = {
       "path": "bin/core/mining_programs/ticket-completion-learning-v1.json"
     },
     {
-      "id": "file:bin/core/mining_programs/ticket-completion-learning-v2.json",
+      "id": "file:bin/core/mining_programs/ticket-completion-learning-v3.json",
       "kind": "script",
-      "label": "bin/core/mining_programs/ticket-completion-learning-v2.json",
-      "path": "bin/core/mining_programs/ticket-completion-learning-v2.json"
+      "label": "bin/core/mining_programs/ticket-completion-learning-v3.json",
+      "path": "bin/core/mining_programs/ticket-completion-learning-v3.json"
     },
     {
       "id": "file:bin/core/runtime_config.py",
@@ -39294,6 +39288,16 @@ window.HARNESS_GRAPH = {
       "source": "bin/tests/test_farplane_mining.py"
     },
     {
+      "candidate": "tickets/TASK-0001/ticket.md",
+      "raw_ref": "tickets/TASK-0001/ticket.md",
+      "source": "bin/tests/test_farplane_mining.py"
+    },
+    {
+      "candidate": "tickets/TASK-0001/ticket.md",
+      "raw_ref": "tickets/TASK-0001/ticket.md",
+      "source": "bin/tests/test_farplane_mining.py"
+    },
+    {
       "candidate": "tickets/archive/TASK-0001/ticket.md",
       "raw_ref": "tickets/archive/TASK-0001/ticket.md",
       "source": "bin/tests/test_farplane_mining.py"
@@ -40007,16 +40011,6 @@ window.HARNESS_GRAPH = {
       "candidate": "templates/docs",
       "raw_ref": "templates/docs",
       "source": "docs/TROUBLES.md"
-    },
-    {
-      "candidate": "entities.md",
-      "raw_ref": "entities.md",
-      "source": "docs/farplane-framework/README.md"
-    },
-    {
-      "candidate": "graph-contract.md",
-      "raw_ref": "graph-contract.md",
-      "source": "docs/farplane-framework/README.md"
     }
   ]
 };

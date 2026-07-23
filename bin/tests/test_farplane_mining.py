@@ -35,7 +35,7 @@ from farplane_mining import (
 
 
 PROGRAM_REF = "core:ticket-completion-lean@1.0.0"
-LEARNING_PROGRAM_REF = "core:ticket-completion-learning@1.2.0"
+LEARNING_PROGRAM_REF = "core:ticket-completion-learning@1.3.0"
 
 
 def ticket_text(status: str = "completed") -> str:
@@ -676,6 +676,66 @@ class FarplaneMiningTests(unittest.TestCase):
             self.assertEqual(report["source_gaps"][0]["reason"], "invalid_evidence_ref")
             self.assertNotIn("/Users/", json.dumps(report))
             self.assertNotIn("person@example.com", json.dumps(report))
+
+    def test_completion_learning_rejects_redundant_or_contradictory_reasoning(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            ticket = write_project(root)
+            (root / "farplane" / "bindings.yaml").write_text(
+                "event_routes:\n"
+                "  - route_id: completion-learning\n"
+                "    event_name: farplane.ticket.completed\n"
+                f"    program_ref: {LEARNING_PROGRAM_REF}\n",
+                encoding="utf-8",
+            )
+            outputs = iter([
+                {
+                    "status": "complete",
+                    "summary": "A finding was reported.",
+                    "material_findings": [{
+                        "issue": "The same manual correction recurred.",
+                        "inefficiency": "The same manual correction recurred.",
+                        "proposed_improvement": "Refine the owning skill.",
+                        "dedupe_key": "manual_correction_recurrence",
+                        "owner_surface": "skill",
+                        "evidence_refs": ["tickets/TASK-0001/ticket.md"],
+                        "confidence": "high",
+                    }],
+                    "source_gaps": [],
+                },
+                {
+                    "status": "no_signal",
+                    "summary": "No actionable issue was found.",
+                    "material_findings": [{
+                        "issue": "A repeated correction was found.",
+                        "inefficiency": "The correction consumed avoidable turns.",
+                        "proposed_improvement": "Refine the owning skill.",
+                        "dedupe_key": "repeated_correction_turns",
+                        "owner_surface": "skill",
+                        "evidence_refs": ["tickets/TASK-0001/ticket.md"],
+                        "confidence": "high",
+                    }],
+                    "source_gaps": [],
+                },
+            ])
+
+            def quality_failure_runner(command: list[str], prompt: str, cwd: Path, timeout: int):
+                Path(command[command.index("--output-last-message") + 1]).write_text(
+                    json.dumps(next(outputs)),
+                    encoding="utf-8",
+                )
+                return subprocess.CompletedProcess(command, 0, stdout="", stderr="")
+
+            run = route_event(event_for(ticket), root, codex_runner=quality_failure_runner)[0]
+            first = show_run(root, run["run_id"])["report"]
+            self.assertEqual(first["source_gaps"][0]["reason"], "semantic_quality_invalid")
+            self.assertIn("redundant_reasoning_fields", first["source_gaps"][0]["input_ref"])
+
+            replay_run(root, run["run_id"], codex_runner=quality_failure_runner)
+            second = show_run(root, run["run_id"])["report"]
+            self.assertEqual(second["source_gaps"][0]["reason"], "semantic_quality_invalid")
+            self.assertIn("no_signal_with_findings", second["source_gaps"][0]["input_ref"])
+            self.assertEqual(second["ticket_output"]["decision"], "no_ticket")
 
     def test_completion_learning_redacts_timeout_command_paths(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

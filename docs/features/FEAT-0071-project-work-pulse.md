@@ -176,6 +176,10 @@ do an executable ticket; otherwise plan a bounded next wave
 - `plan-next-wave` owns pure next-wave skill selection. The separate package
   exists to keep judgment-only planning testable and side-effect free; Pulse
   alone materializes tickets and dispatches workers.
+- Plan Next Wave performs the bounded leverage comparison required for refill
+  directly. It does not invoke `leverage-advisor`; that operator-facing skill
+  owns capability roadmaps, contingent campaigns, and first-proof selection
+  outside the heartbeat refill path.
 - Capability skills own domain workflows.
 - Goal Advisor owns material ticket execution compilation.
 - Worker Artifact Review Request owns the phone-readable review message and

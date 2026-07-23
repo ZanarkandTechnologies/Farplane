@@ -364,6 +364,35 @@ def _schema_issues(value: Any, schema: dict[str, Any], path: str = "$") -> list[
     return issues
 
 
+def _semantic_quality_issues(semantic: dict[str, Any]) -> list[str]:
+    """Reject mechanically visible contradictions before trusting model judgment."""
+
+    issues: list[str] = []
+    status = str(semantic.get("status") or "")
+    findings = semantic.get("material_findings")
+    gaps = semantic.get("source_gaps")
+    finding_rows = findings if isinstance(findings, list) else []
+    gap_rows = gaps if isinstance(gaps, list) else []
+    if status == "complete" and not finding_rows:
+        issues.append("$.status:complete_without_findings")
+    if status == "no_signal" and finding_rows:
+        issues.append("$.status:no_signal_with_findings")
+    if status == "source_gap" and not gap_rows:
+        issues.append("$.status:source_gap_without_gaps")
+
+    for index, finding in enumerate(finding_rows):
+        if not isinstance(finding, dict):
+            continue
+        fields = {
+            key: _canonical_learning_text(finding.get(key))
+            for key in ("issue", "inefficiency", "proposed_improvement")
+        }
+        populated = [value for value in fields.values() if value]
+        if len(populated) != len(set(populated)):
+            issues.append(f"$.material_findings[{index}]:redundant_reasoning_fields")
+    return issues
+
+
 def _redact_sensitive_text(text: str) -> str:
     redacted = text
     for label, pattern in SENSITIVE_TEXT_PATTERNS:
@@ -1109,6 +1138,14 @@ def _execute_semantic_program(
             report,
             reason="raw_source_echo_detected",
             detail=(f"sensitive output pattern: {sensitive_reason}" if sensitive_reason else "semantic output repeated a raw source fragment"),
+            run_dir=run_dir,
+        )
+    quality_issues = _semantic_quality_issues(semantic)
+    if quality_issues:
+        return _semantic_source_gap(
+            report,
+            reason="semantic_quality_invalid",
+            detail=",".join(quality_issues[:8]),
             run_dir=run_dir,
         )
     findings = semantic.get("material_findings") if isinstance(semantic.get("material_findings"), list) else []

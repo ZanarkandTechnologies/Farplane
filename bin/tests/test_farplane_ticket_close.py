@@ -43,7 +43,7 @@ def write_project(root: Path) -> Path:
         "event_routes:\n"
         "  - route_id: completion-learning\n"
         "    event_name: farplane.ticket.completed\n"
-        "    program_ref: core:ticket-completion-learning@1.2.0\n",
+        "    program_ref: core:ticket-completion-learning@1.3.0\n",
         encoding="utf-8",
     )
     ticket = root / "tickets" / "TASK-0001" / "ticket.md"
@@ -100,7 +100,7 @@ class TicketCloseTests(unittest.TestCase):
             bindings = root / "farplane" / "bindings.yaml"
             bindings.write_text(
                 bindings.read_text(encoding="utf-8").replace(
-                    "core:ticket-completion-learning@1.2.0",
+                    "core:ticket-completion-learning@1.3.0",
                     "core:missing-program@9.9.9",
                 ),
                 encoding="utf-8",

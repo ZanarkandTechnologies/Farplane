@@ -58,7 +58,7 @@ class FarplaneTelemetryStatusTests(unittest.TestCase):
                 json.dumps(
                     {
                         "run_id": "a" * 64,
-                        "program_ref": "core:ticket-completion-learning@1.2.0",
+                        "program_ref": "core:ticket-completion-learning@1.3.0",
                         "status": "complete",
                     }
                 ),

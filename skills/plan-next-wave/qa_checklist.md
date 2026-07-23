@@ -50,7 +50,13 @@ Apply before generation and again to the exact final JSON.
      external mutations are explicit; unresolved authority is not executable.
    - Plan writes no ticket, runs no worker, and materializes nothing.
 
-6. `lean_response`
+6. `rationale_consistency`
+   - The call's arguments, expected artifact, current alternative, why-now
+     evidence, objective contribution, and falsifier support one premise.
+   - Contradictory evidence, unsupported causal claims, or a falsifier for a
+     different hypothesis rejects the call rather than being repaired by Pulse.
+
+7. `lean_response`
    - Each proposed call appears exactly once. `decision.admitted_call_ids`
      references canonical rows instead of embedding them again.
    - No lanes, proposal types, Idea QA/TAS blocks, workflow steps, repeated
@@ -63,7 +69,7 @@ Apply before generation and again to the exact final JSON.
 ```text
 accept(call)
   -> configured skill + bound arguments + direct value + honest objective
-   + evidence + dedupe + authority + falsifier
+   + consistent rationale + evidence + dedupe + authority + falsifier
 ```
 
 An independent reviewer judges interest from compact calls plus held-out

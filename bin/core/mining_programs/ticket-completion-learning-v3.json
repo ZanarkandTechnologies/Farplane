@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "program_ref": "core:ticket-completion-learning@1.2.0",
+  "program_ref": "core:ticket-completion-learning@1.3.0",
   "program_id": "ticket-completion-learning",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "kind": "ticket_completion_learning",
   "objective": "Find evidenced issues and execution inefficiencies in one completed ticket, then propose the smallest useful improvement.",
   "required_inputs": ["event_source"],
@@ -29,6 +29,10 @@
     "Order findings strongest and most actionable first because Core projects only the strongest grounded finding into a local ticket.",
     "Give each finding a stable semantic dedupe_key of two to eight lowercase snake_case terms naming the underlying issue, not the implementation or source ticket.",
     "A finding may recommend a skill, policy, docs, automation, hook, validator, feature, ticket contract, or no durable change.",
+    "Before returning a finding, check that issue, inefficiency, and proposed_improvement are non-redundant and each adds distinct information.",
+    "Check that the proposed improvement directly addresses the stated inefficiency and that the finding fields agree with one another.",
+    "Reject a finding that contradicts the completed ticket, proof, artifacts, or bounded task context.",
+    "Treat evidence_refs as claims of support: return no finding when the referenced evidence does not establish the issue, inefficiency, and proposed improvement without invented ground truth.",
     "Return no finding when the evidence is one-off, speculative, already owned by an open ticket, or merely restates completed work."
   ],
   "privacy": {
