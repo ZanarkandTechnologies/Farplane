@@ -1,0 +1,65 @@
+{
+  "global_query_receipt": {"returned_count": 20, "exhausted": false},
+  "diagnosis": {
+    "goal_state": {"active": [], "completed": [], "source_gaps": []},
+    "objective_progress": [],
+    "wave_size": 1,
+    "dogfood_role": "not_supplied",
+    "hard_guard": {"status": "fresh_and_passing"}
+  },
+  "skill_receipts": [
+    {
+      "skill_ref": "farplane-content-creation",
+      "skill_path": ".agents/skills/farplane-content-creation/SKILL.md",
+      "required_arguments": ["product_bet_ref", "system_ref", "feature_refs", "source_or_idea", "audience", "content_goal", "channels"],
+      "eligible": true,
+      "reason": "configured"
+    }
+  ],
+  "progressive_queries": [],
+  "proposed_skill_calls": [
+    {
+      "call_id": "content-accepted-proof",
+      "title": "Transform accepted proof across configured channels",
+      "skill_ref": "farplane-content-creation",
+      "area_id": "adoption_and_distribution",
+      "arguments": {
+        "product_bet_ref": "autonomous_teams_24_7",
+        "system_ref": "SYS-0005",
+        "feature_refs": ["FEAT-0008"],
+        "source_or_idea": "tickets/TASK-9001/artifacts/accepted-proof.md",
+        "audience": "technical agent builders",
+        "content_goal": "teach the result and earn a qualified trial",
+        "channels": "all_configured"
+      },
+      "expected_artifact": "approved skeleton, optimized exemplar, and cross-format content pack",
+      "current_alternative": "separate generic posts without the accepted proof spine",
+      "why_now": "the source proof is accepted and has no content transformation",
+      "evidence_refs": ["tickets/TASK-9001/artifacts/accepted-proof.md"],
+      "objective_contribution": {
+        "ultimate_kpi_id": "evidence_distribution_reach",
+        "contribution_type": "outcome",
+        "kpi_or_guard_id": "evidence_distribution_reach",
+        "causal_mechanism": "one proof-led pack reaches qualified builders",
+        "expected_change": "measure reach after approved distribution",
+        "forecast_basis": {"kind": "source_gap", "source_gap": "no matched format baseline"},
+        "metric_provider": "configured social metrics",
+        "signal_horizon": "delayed",
+        "check_in_at": "unscheduled"
+      },
+      "lifecycle": {"status": "todo", "depends_on": [], "human_gate": ["post", "Publishing requires approval"]},
+      "proof": {"success": "one approved cross-format pack", "falsifier": "reject if the proof spine changes across formats"},
+      "dedupe": {"compared_against": [], "decision": "novel"},
+      "ranking": {"reason": "accepted evidence is ready for transformation", "confidence": "medium", "time_to_signal": "days", "cost": "medium", "risk": "low", "human_load": "two bounded reviews", "interference": "none"}
+    }
+  ],
+  "rejections": [],
+  "decision": {
+    "admitted_call_ids": ["content-accepted-proof"],
+    "source_gaps": [],
+    "human_request": null,
+    "unused_capacity_reason": null,
+    "validation_receipt": {"ok": true, "command": "python3 skills/plan-next-wave/scripts/validate_wave_response.py wave.json"},
+    "no_materialization_receipt": {"tickets_written": 0, "materialized": false, "executed": false, "owner": "pulse-update"}
+  }
+}

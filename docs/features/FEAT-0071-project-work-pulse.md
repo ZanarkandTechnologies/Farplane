@@ -3,7 +3,7 @@ title: Project Work Pulse
 status: implemented
 owner: feature-registry
 created_at: 2026-07-10
-updated_at: 2026-07-14
+updated_at: 2026-07-17
 tags:
   - farplane
   - feature
@@ -23,6 +23,7 @@ surfaces:
   - farplane/automations.toml
   - skills/pulse-update/SKILL.md
   - skills/pulse-update/scripts/list_pulse_board.py
+  - skills/pulse-update/scripts/materialize_skill_call.py
   - skills/plan-next-wave/SKILL.md
 source_refs:
   - docs/prd.md
@@ -31,6 +32,7 @@ external_refs: []
 evidence_refs:
   - skills/pulse-update/evals/evals.json
   - skills/pulse-update/scripts/test_list_pulse_board.py
+  - skills/pulse-update/scripts/test_materialize_skill_call.py
   - skills/plan-next-wave/evals/evals.json
   - skills/plan-next-wave/audits/2026-07-14-metric-first-lane-ranking.md
   - tickets/archive/TASK-0358/ticket.md
@@ -96,28 +98,38 @@ do an executable ticket; otherwise plan a bounded next wave
 - Admits tickets by executable state, not product or reward origin.
 - Dispatches up to `worker_limit` Pulse-owned workers; human-active tickets do
   not consume this capacity.
+- Resolves missing or stale configured hard guards at point of use through each
+  metric's declared refresher before constructing planner input. The
+  skill-owned `guard_preflight.py` groups guards that share a provider, emits
+  one dispatch per `refresh_ref`, reloads observations, and gates the planning
+  fingerprint on a current healthy receipt. Healthy refresh continues in the
+  same Pulse; a current failure stays fail-closed; refresh failure becomes an
+  explicit source gap. Refresh work consumes no ticket or wave capacity.
 - Calls one pure adaptive `plan-next-wave` planner when ready supply after dispatch is below the
   configured low watermark; review backlog does not suppress comparison.
 - Requires a recent global ticket-history sample before optional progressive
-  lane/area/origin/KPI/Reward filters; it does not spawn area planners.
-- Passes the complete `harness.areas` map and requires the planner to apply each
-  scope-relevant `harness.areas.<area_id>.planner_instruction` before candidate
-  generation. Global scope covers every objective-relevant area; explicit
-  reserved scope covers its selected area. Areas never become planners or
-  controllers.
-- Passes each area's canonical ICP plus one configured Feed Scout Markdown
-  memory synthesis. Outward-facing specs must name the ICP job/pain, relevant
-  memory and source refs, baseline/default, and intended belief or workflow
-  delta; a trend label alone is not admissible context.
-- Requires the same planner to enumerate `delivery`, `ablation`, `experiment`,
-  `rollout`, and `operations` as candidate-generation lenses. Each lane
-  proposes up to `wave_size` distinct candidates or records an evidence-backed
-  shortfall before one global ranking; lanes never receive quotas, reserved
-  slots, worker pools, or separate ranking passes.
+  skill/area/origin/KPI/Reward filters; it does not spawn area planners.
+- Passes `harness.planning.skill_refs` as the only work allowlist and requires
+  every selected skill call to bind that skill's declared `planner_contract`.
+  Areas contribute passive ICP, evidence-bar, capability, and metric context;
+  they never define workflows or become planners.
+- Passes each area's canonical ICP plus selected complete facts from one
+  configured Feed Scout World Memory. Outward-facing calls must name the ICP
+  job/pain, complete copied world facts and source refs, baseline/default, and
+  intended belief or workflow delta; a trend label alone is not admissible
+  context.
+- Derives bounded `preference_memory` from terminal AI-planned Reward rows
+  (`accept -> accept`, `kill -> reject`; nonterminal rows omitted) and passes it
+  separately from World Memory and Tasty Pack evidence. Rejection teaches later
+  ranking but is not a same-day planning outage.
+- Requires every proposed call to name its configured `skill_ref`, bind exactly
+  the required arguments, state objective impact and proof, and survive global
+  dedupe and ranking. Pulse then allocates a ticket ID and materializes the call
+  through the generic ticket contract without copying or reinventing workflow.
 - Uses optional `harness.yaml#goals` to add target/date urgency to permanent
   selected metrics. Goal completion is derived from current value and metric
   direction, and completed goals stop affecting priority.
-- Uses lane-aware ticket Reward history as the experiment/experience ledger;
+- Uses skill-aware ticket Reward history as the experiment/experience ledger;
   optional Tasty Pack evidence can ground content taste without creating a
   separate content planner or Pulse.
 - Derives one objective-progress receipt per selected metric from configured
@@ -129,14 +141,16 @@ do an executable ticket; otherwise plan a bounded next wave
   validity. `as_of` or `serialized_at` churn is ignored only when that state is
   present; legacy inputs retain their canonical `as_of` as a conservative
   semantic clock so elapsed time cannot suppress replanning.
-- Selects the top `0..wave_size` compatible specs through one priority-ordered
+- Selects the top `0..wave_size` compatible skill calls through one priority-ordered
   constrained comparison of expected metric delta, confidence, duration,
   time-to-signal, cost, risk, human load, information gain, compounding value,
-  and interference. Lane diversity and artifact count cannot displace a
-  stronger risk-adjusted objective trajectory.
+  and interference. Artifact count cannot displace a stronger risk-adjusted
+  objective trajectory.
+- Never materializes a metric refresh, observation restoration, planning
+  precondition, or source-gap receipt as a wave ticket.
 - Bundles avoidable setup into at most one first-exemplar ticket and prefers
   waves whose remaining work produces independently reviewable artifacts.
-- Materializes no more than `wave_size` accepted specs.
+- Materializes no more than `wave_size` admitted calls.
 - Releases workers when tickets reach human review, keeps every ticket and
   decision distinct, and projects pending review into at most `review_wip`
   operator-facing area pools. Saturation switches ranking and dispatch toward
@@ -159,7 +173,7 @@ do an executable ticket; otherwise plan a bounded next wave
 ## Operating Contract
 
 - `pulse-update` owns board state transitions and dispatch.
-- `plan-next-wave` owns pure next-wave specification. The separate package
+- `plan-next-wave` owns pure next-wave skill selection. The separate package
   exists to keep judgment-only planning testable and side-effect free; Pulse
   alone materializes tickets and dispatches workers.
 - Capability skills own domain workflows.
@@ -168,10 +182,11 @@ do an executable ticket; otherwise plan a bounded next wave
   receipt.
 - Interval supplies dated problem reports, planner candidates, and bounded
   direct recovery tickets for evidenced known failures.
-- Feed Scout, Interval, and Dogfood may admit bounded recovery tickets only for
-  evidenced existing failures with known direct fixes and no experiment debt.
-  New opportunities, uncertain fixes, and experiments remain candidates; Work
-  Pulse globally ranks and materializes those proactive specs. Direct
+- Feed Scout and Interval may admit bounded recovery tickets only for evidenced
+  existing failures with known direct fixes and no experiment debt. Dogfood is
+  report-only planner context. New opportunities, uncertain fixes, and
+  experiments remain candidates; Work Pulse globally ranks and materializes
+  those proactive calls. Direct
   operator/customer/incident tickets remain obligations.
 
 ## Feature Flow
@@ -185,14 +200,14 @@ flowchart LR
   board["tickets + worker state"]:::keep
   pulse["Work Pulse"]:::changed
   planner["pure plan_next_wave"]:::added
-  sources["Feed Scout / Interval / Dogfood<br/>reports + candidates"]:::keep
+  sources["Feed Scout / Interval<br/>reports + candidates<br/>Dogfood checkpoint"]:::keep
   checkin["derived due Reward rows"]:::added
   worker["ticket/program/progress/proof"]:::changed
   review["awaiting review<br/>worker released"]:::added
 
   board --> pulse
   pulse -->|"ready supply below watermark"| planner
-  planner -->|"0..wave_size specs"| pulse
+  planner -->|"0..wave_size skill calls"| pulse
   sources --> planner
   checkin --> pulse
   pulse --> worker --> review
@@ -215,13 +230,12 @@ Required proof:
 - human-active ticket fixture proving it is unselectable but does not consume
   Pulse worker capacity or block refill;
 - global-first ticket-history query and progressive filter fixtures;
-- setup-bundling and artifact-density fixtures proving a creator/demo wave does
-  not decompose into setup tickets or create another Pulse;
-- metric-first lane fixture proving all candidate lanes are inspected while
-  several winners from one lane may beat weaker cross-lane candidates;
-- deterministic ticket-spec validation for canonical lane, configured
-  objective priority, target/pace evidence or explicit unknowns, metric source,
-  rank reason, and human load;
+- configured-skill fixtures proving the allowlist is closed and every selected
+  call binds its public signature without copying workflow;
+- deterministic skill-call validation for objective attribution, forecast
+  evidence, proof, dedupe, authority, rank reason, and human load;
+- bound-call materialization proof showing `skill_ref` and `arguments` survive
+  in the generic ticket while workflow and todo prose do not;
 - derived due-row fixtures with matured and future Reward rows;
 - skill evals for generic dispatch, bounded refill, Interval boundary, and
   product-parameter removal;
@@ -245,7 +259,7 @@ Required proof:
 
 - Keep product-scoped Pulse loops: rejected because independent controller
   state was not justified by the basic loop proof.
-- Fold the planner into Pulse: rejected because pure selection/specification
+- Fold the planner into Pulse: rejected because pure selection
   and state-changing materialization/dispatch have different proof boundaries.
 - Keep the historical `ticket-opportunity-generator` package name: rejected
   because `plan_next_wave` is now the canonical contract and active pre-launch
@@ -261,6 +275,8 @@ Required proof:
 - 2026-07-12: Made human-active work worker-free, replaced product descriptions
   with planning areas, added adaptive global-first history retrieval, and made
   scheduled sources context-only.
-- 2026-07-14: Added metric-first candidate-lane enumeration and target/pace
-  receipts while preserving one global top-N ranking with no lane quotas.
+- 2026-07-16: Made Dogfood a report-only portfolio checkpoint; normal Plan Next
+  Wave retains generation/ranking/admission and Pulse retains materialization.
 - 2026-07-14: Added FEAT-0072 ICP/world-memory retrieval and ticket context.
+- 2026-07-17: Replaced free-form work generation with configured skill
+  calls and generic Pulse materialization.

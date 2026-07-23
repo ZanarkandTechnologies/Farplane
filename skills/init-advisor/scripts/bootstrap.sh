@@ -114,7 +114,6 @@ copy_file "${REF_DIR}/HARNESS_TEMPLATE.yaml" "${TARGET_DIR}/farplane/harness.yam
 copy_file "${REF_DIR}/METRICS_TEMPLATE.yaml" "${TARGET_DIR}/farplane/metrics.yaml"
 copy_file "${REF_DIR}/AUTOMATION_TEMPLATE.toml" "${TARGET_DIR}/farplane/automations.toml"
 copy_file "${REF_DIR}/BINDINGS_TEMPLATE.yaml" "${TARGET_DIR}/farplane/bindings.yaml"
-copy_file "${REF_DIR}/HOOKS_TEMPLATE.json" "${TARGET_DIR}/farplane/hooks.json"
 copy_file "${REF_DIR}/LOCAL_SKILLS_README_TEMPLATE.md" "${TARGET_DIR}/.agents/skills/README.md"
 copy_file "${REF_DIR}/PM_TEMPLATE.json" "${TARGET_DIR}/farplane/pm.json"
 
@@ -185,7 +184,6 @@ echo "  - Use .agents/skills/ for project-local capability skills; promote only 
 echo "  - Use metric-advisor to shape measurable objectives and guards when they are missing or weak."
 echo "  - Use goal-advisor to compile the first executable frontier after goals are concrete."
 echo "  - Run automation-advisor when you want to activate the live Work Pulse and scheduled automations; bootstrap only creates the files."
-echo "  - Add farplane/hooks.json entries only for installed deterministic hooks; file-length warnings belong in rules/git-review-gates.toml."
 echo "  - Fill in farplane/pm.json with PM-visible chat and automation thread IDs so the UI groups them under one employee."
 echo "  - Use owner-named .farplane/ paths for ignored reports, metric observations, eval outputs, content, logs, and tool-specific state; do not add generic runtime, evidence, or review buckets."
 echo "  - Keep each entity in flat .farplane/entities/<id>.md; run 'farplane entities compile' to generate index.json, world.json, and crm.json. Skill reports link entities with entity_refs."

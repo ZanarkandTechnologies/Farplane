@@ -3,7 +3,7 @@ status: draft
 project: TODO
 created_at: TODO
 updated_at: TODO
-framework_template_version: "0.5.2"
+framework_template_version: "0.5.3"
 owner: harness
 
 identity:
@@ -20,6 +20,10 @@ identity:
       promise: TODO state the current solution hypothesis in audience-facing language.
       problem_refs:
         - TODO_problem_id
+      system_refs:
+        - TODO_system_id
+      feature_refs:
+        - TODO_feature_id
 
 metric_refs:
   objectives:
@@ -32,10 +36,15 @@ metric_refs:
 # from each metric definition's maximize/minimize direction.
 goals: []
 
+# Plan Next Wave may select only these existing skills. Each selected skill
+# owns its workflow and declares the arguments the planner must bind.
+planning:
+  skill_refs:
+    - TODO_skill_name
+
 areas:
   primary_area:
     description: TODO describe the recurring area of project investment.
-    planner_instruction: TODO define this area's canonical candidate-generation policy, including valuable moves, evidence gates, and what is not ticketable.
     icp:
       label: TODO name the people whose decision or workflow this area serves.
       description: TODO describe their relevant context and sophistication.

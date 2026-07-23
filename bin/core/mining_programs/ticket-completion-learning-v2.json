@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "program_ref": "core:ticket-completion-learning@1.2.0",
+  "program_id": "ticket-completion-learning",
+  "version": "1.2.0",
+  "kind": "ticket_completion_learning",
+  "objective": "Find evidenced issues and execution inefficiencies in one completed ticket, then propose the smallest useful improvement.",
+  "required_inputs": ["event_source"],
+  "optional_inputs": ["program", "progress", "artifact", "operator_turn_window"],
+  "report_schema_version": 3,
+  "executor": {
+    "kind": "codex_exec",
+    "model": "gpt-5.4-mini",
+    "reasoning_effort": "low",
+    "profile": "",
+    "timeout_seconds": 180,
+    "sandbox": "read-only",
+    "hooks": "disabled"
+  },
+  "ticket_projection": {
+    "enabled": true,
+    "max_tickets": 1,
+    "minimum_confidence": "medium",
+    "status": "todo"
+  },
+  "instructions": [
+    "Find concrete problems, avoidable work, repeated corrections, unnecessary turns or tools, missing reusable workflows, and other execution inefficiencies.",
+    "For each finding, separate the observed issue from the inefficiency it caused and the proposed improvement.",
+    "Order findings strongest and most actionable first because Core projects only the strongest grounded finding into a local ticket.",
+    "Give each finding a stable semantic dedupe_key of two to eight lowercase snake_case terms naming the underlying issue, not the implementation or source ticket.",
+    "A finding may recommend a skill, policy, docs, automation, hook, validator, feature, ticket contract, or no durable change.",
+    "Return no finding when the evidence is one-off, speculative, already owned by an open ticket, or merely restates completed work."
+  ],
+  "privacy": {
+    "source_snapshot": "local_bounded_only",
+    "raw_transcript_output": "forbidden",
+    "quotes": "forbidden",
+    "external_write": "forbidden"
+  },
+  "output_schema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["status", "summary", "material_findings", "source_gaps"],
+    "properties": {
+      "status": {"type": "string", "enum": ["complete", "no_signal", "source_gap"]},
+      "summary": {"type": "string", "maxLength": 300},
+      "material_findings": {
+        "type": "array",
+        "maxItems": 5,
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["issue", "inefficiency", "proposed_improvement", "dedupe_key", "owner_surface", "evidence_refs", "confidence"],
+          "properties": {
+            "issue": {"type": "string", "maxLength": 240},
+            "inefficiency": {"type": "string", "maxLength": 300},
+            "proposed_improvement": {"type": "string", "maxLength": 300},
+            "dedupe_key": {"type": "string", "minLength": 3, "maxLength": 96, "pattern": "^[a-z0-9]+(?:_[a-z0-9]+){1,7}$"},
+            "owner_surface": {"type": "string", "enum": ["skill", "policy", "docs", "automation", "hook", "validator", "feature", "ticket", "none"]},
+            "evidence_refs": {"type": "array", "minItems": 1, "maxItems": 8, "items": {"type": "string", "maxLength": 240}},
+            "confidence": {"type": "string", "enum": ["high", "medium", "low"]}
+          }
+        }
+      },
+      "source_gaps": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["id", "reason", "input_ref"],
+          "properties": {
+            "id": {"type": "string", "maxLength": 160},
+            "reason": {"type": "string", "maxLength": 240},
+            "input_ref": {"type": "string", "maxLength": 500}
+          }
+        }
+      }
+    }
+  }
+}

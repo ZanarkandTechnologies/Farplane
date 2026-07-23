@@ -8,7 +8,8 @@ template_uses:
   skill-template: "0.2.0"
   skill-eval-task: "0.2.0"
 eval: evals/evals.json
-
+planner_contract:
+  required_arguments: ["target_skill", "performance_metric", "feedback_class", "failure_evidence"]
 ---
 
 # Self Improve
@@ -35,8 +36,8 @@ create target-local lifecycle state or another decision engine.
 ## Skill Signature
 
 ```text
-self_improve(target_skill, owning_ticket, performance_metric, eval_suite?,
-             guards?, intervention_catalog?, budgets?)
+self_improve(target_skill, performance_metric, feedback_class, failure_evidence,
+             owning_ticket?, eval_suite?, guards?, intervention_catalog?, budgets?)
   -> approved_goal_packet + shortest_verified_passing_candidate + eval_evidence
 
 state:

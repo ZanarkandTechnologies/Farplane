@@ -16,11 +16,13 @@ if str(CORE_DIR) not in sys.path:
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from farplane_file_events import create_json_exclusive, outbox_path, pending_events, sha256_value
+from farplane_event_store import create_json_exclusive, outbox_path, pending_events, sha256_value
 from farplane_mining import (
     DEFAULT_PROGRAM_ROOT,
+    MiningError,
     drain_pending,
     list_runs,
+    mine_ticket,
     remove_route,
     replay_run,
     rerun_run,
@@ -30,11 +32,10 @@ from farplane_mining import (
     show_run,
     validate_routes,
 )
-from hooks.farplane_file_change import handle_payload
 
 
 PROGRAM_REF = "core:ticket-completion-lean@1.0.0"
-LEARNING_PROGRAM_REF = "core:ticket-completion-learning@1.1.0"
+LEARNING_PROGRAM_REF = "core:ticket-completion-learning@1.2.0"
 
 
 def ticket_text(status: str = "completed") -> str:
@@ -77,11 +78,58 @@ def event_for(ticket: Path) -> dict[str, object]:
         "entity_ref": {"kind": "ticket", "id": ticket_id, "path": relative},
         "content_hash": sha256_value(ticket.read_text(encoding="utf-8")),
         "terminal": True,
-        "provenance": {"source": "codex_post_tool_use", "session_id": "sess-1", "thread_id": "sess-1"},
+        "provenance": {"source": "ticket_close", "session_id": "sess-1", "thread_id": "sess-1"},
     }
 
 
 class FarplaneMiningTests(unittest.TestCase):
+    def test_mine_ticket_resolves_archived_ticket_and_associated_thread_from_id(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            ticket = write_project(root)
+            (root / "farplane" / "bindings.yaml").write_text(
+                "kind: project-bindings\nproject:\n  id: mine-test\nevent_routes:\n"
+                "  - route_id: completion-learning\n"
+                "    event_name: farplane.ticket.completed\n"
+                f"    program_ref: {LEARNING_PROGRAM_REF}\n",
+                encoding="utf-8",
+            )
+            archive = root / "tickets" / "archive" / "TASK-0001"
+            archive.parent.mkdir(parents=True)
+            ticket.parent.rename(archive)
+            state = root / ".farplane" / "state"
+            state.mkdir(parents=True)
+            (state / "ticket-thread-associations.jsonl").write_text(
+                json.dumps({"ticket_id": "TASK-0001", "thread_id": "thread-1"}) + "\n",
+                encoding="utf-8",
+            )
+
+            def no_signal_runner(command: list[str], prompt: str, cwd: Path, timeout: int):
+                Path(command[command.index("--output-last-message") + 1]).write_text(
+                    json.dumps({
+                        "status": "no_signal",
+                        "summary": "No actionable issue found.",
+                        "material_findings": [],
+                        "source_gaps": [],
+                    }),
+                    encoding="utf-8",
+                )
+                return subprocess.CompletedProcess(command, 0, stdout="", stderr="")
+
+            first = mine_ticket(root, "task-0001", codex_runner=no_signal_runner)
+            second = mine_ticket(root, "TASK-0001", codex_runner=no_signal_runner)
+
+            self.assertEqual(first["ticket_path"], "tickets/archive/TASK-0001/ticket.md")
+            self.assertEqual(first["thread_id"], "thread-1")
+            self.assertEqual(first["runs"][0]["run_id"], second["runs"][0]["run_id"])
+            detail = show_run(root, first["runs"][0]["run_id"])
+            self.assertEqual(detail["report"]["ticket_output"]["reason"], "report_status:no_signal")
+
+            archived_ticket = archive / "ticket.md"
+            archived_ticket.write_text(ticket_text("todo"), encoding="utf-8")
+            with self.assertRaisesRegex(MiningError, "ticket_not_terminal:TASK-0001"):
+                mine_ticket(root, "TASK-0001", codex_runner=no_signal_runner)
+
     def test_completion_learning_joins_bounded_window_and_runs_once(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
@@ -91,10 +139,7 @@ class FarplaneMiningTests(unittest.TestCase):
                 "event_routes:\n"
                 "  - route_id: completion-learning\n"
                 "    event_name: farplane.ticket.completed\n"
-                f"    program_ref: {LEARNING_PROGRAM_REF}\n"
-                "  - route_id: completion-lean\n"
-                "    event_name: farplane.ticket.completed\n"
-                f"    program_ref: {PROGRAM_REF}\n",
+                f"    program_ref: {LEARNING_PROGRAM_REF}\n",
                 encoding="utf-8",
             )
             window_dir = root / ".farplane" / "state" / "message-windows"
@@ -129,18 +174,16 @@ class FarplaneMiningTests(unittest.TestCase):
                             "summary": "One reusable workflow opportunity found.",
                             "material_findings": [
                                 {
-                                    "problem": "The same correction requires manual reconstruction.",
-                                    "reusable_pattern": "Package the accepted correction as a callable workflow.",
-                                    "proposed_solution": "Create or refine the owning skill after normal planner review.",
+                                    "issue": "The same correction requires manual reconstruction.",
+                                    "inefficiency": "The skill-signature workflow is rebuilt manually on every occurrence.",
+                                    "proposed_improvement": "Create or refine the owning reusable skill.",
                                     "dedupe_key": "repeated_correction_workflow",
                                     "owner_surface": "skill",
                                     "evidence_refs": ["tickets/TASK-0001/ticket.md", "turn-1"],
                                     "confidence": "high",
-                                    "recovery_eligible": False,
                                 }
                             ],
                             "source_gaps": [],
-                            "escalation": {"decision": "dogfood", "reason_codes": ["reusable_skill_candidate"]},
                         }
                     ),
                     encoding="utf-8",
@@ -150,21 +193,22 @@ class FarplaneMiningTests(unittest.TestCase):
             first = route_event(event_for(ticket), root, codex_runner=fake_runner)
             second = route_event(event_for(ticket), root, codex_runner=fake_runner)
 
-            self.assertEqual(len(first), 2)
+            self.assertEqual(len(first), 1)
             self.assertEqual([row["run_id"] for row in first], [row["run_id"] for row in second])
             self.assertEqual(len(calls), 1)
             learning = next(show_run(root, row["run_id"]) for row in first if row["program_ref"] == LEARNING_PROGRAM_REF)
             self.assertTrue(learning["input"]["semantic_context"]["conversation_window_found"])
             self.assertEqual(learning["report"]["material_findings"][0]["owner_surface"], "skill")
             self.assertEqual(learning["report"]["ticket_output"]["decision"], "created")
-            self.assertEqual(learning["report"]["ticket_output"]["mode"], "prove_or_reject")
+            self.assertEqual(learning["report"]["ticket_output"]["mode"], "improve_or_reject")
             self.assertIn(learning["report"]["ticket_output"]["ticket_path"], learning["run"]["outputs"])
             projected = root / learning["report"]["ticket_output"]["ticket_path"]
             self.assertTrue(projected.is_file())
             projected_text = projected.read_text(encoding="utf-8")
             self.assertIn("status: todo", projected_text)
-            self.assertIn("kpi_id: accepted_harness_improvements", projected_text)
-            self.assertIn("mode: prove_or_reject", projected_text)
+            self.assertIn("title: \"Improve repeated correction workflow\"", projected_text)
+            self.assertNotIn("## Reward", projected_text)
+            self.assertIn("mode: improve_or_reject", projected_text)
             self.assertIn("completion_learning_fingerprint:", projected_text)
             self.assertEqual(len(list((root / "tickets").glob("TASK-*/ticket.md"))), 2)
             replay_run(root, learning["run"]["run_id"], codex_runner=fake_runner)
@@ -206,7 +250,6 @@ class FarplaneMiningTests(unittest.TestCase):
                         "summary": "No reusable pattern found.",
                         "material_findings": [],
                         "source_gaps": [],
-                        "escalation": {"decision": "none", "reason_codes": []},
                     }),
                     encoding="utf-8",
                 )
@@ -227,7 +270,7 @@ class FarplaneMiningTests(unittest.TestCase):
             self.assertEqual(detail["report"]["ticket_output"]["reason"], "report_status:no_signal")
             self.assertEqual(len(list((root / "tickets").glob("TASK-*/ticket.md"))), 1)
 
-    def test_completion_learning_projects_direct_fix_once_and_skips_low_confidence(self) -> None:
+    def test_completion_learning_projects_improvement_once_and_skips_low_confidence(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             ticket = write_project(root)
@@ -257,17 +300,15 @@ class FarplaneMiningTests(unittest.TestCase):
                         "status": "complete",
                         "summary": "One validator correction is actionable.",
                         "material_findings": [{
-                            "problem": problem,
-                            "reusable_pattern": pattern,
-                            "proposed_solution": solution,
+                            "issue": problem,
+                            "inefficiency": pattern,
+                            "proposed_improvement": solution,
                             "dedupe_key": dedupe_key,
                             "owner_surface": "validator",
                             "evidence_refs": [evidence_ticket, "turn-1"],
                             "confidence": confidence,
-                            "recovery_eligible": True,
                         }],
                         "source_gaps": [],
-                        "escalation": {"decision": "recovery_candidate", "reason_codes": ["known_direct_fix"]},
                     }),
                     encoding="utf-8",
                 )
@@ -278,9 +319,9 @@ class FarplaneMiningTests(unittest.TestCase):
             first = route_event(first_event, root, codex_runner=fake_runner)[0]
             first_detail = show_run(root, first["run_id"])
             self.assertEqual(first_detail["report"]["ticket_output"]["decision"], "created")
-            self.assertEqual(first_detail["report"]["ticket_output"]["mode"], "direct_fix")
+            self.assertEqual(first_detail["report"]["ticket_output"]["mode"], "improve_or_reject")
             created_path = root / first_detail["report"]["ticket_output"]["ticket_path"]
-            self.assertIn("mode: direct_fix", created_path.read_text(encoding="utf-8"))
+            self.assertIn("mode: improve_or_reject", created_path.read_text(encoding="utf-8"))
 
             second_event = {**first_event, "event_id": "c" * 64}
             second = route_event(second_event, root, codex_runner=fake_runner)[0]
@@ -342,36 +383,19 @@ class FarplaneMiningTests(unittest.TestCase):
             self.assertEqual(len(list((root / "tickets").glob("TASK-*/ticket.md"))), 2)
 
             confidence = "high"
-            problem = "A separate completion guard lacks a declared project KPI."
-            dedupe_key = "missing_completion_guard_kpi"
+            problem = "A separate completion guard still wastes a manual verification step."
+            dedupe_key = "manual_completion_verification"
             (root / "farplane" / "metrics.yaml").unlink()
             (root / "farplane" / "harness.yaml").unlink()
             fourth_event = {**first_event, "event_id": "1" * 64}
             fourth = route_event(fourth_event, root, codex_runner=fake_runner)[0]
             fourth_detail = show_run(root, fourth["run_id"])
             self.assertEqual(fourth_detail["report"]["ticket_output"]["decision"], "created")
-            self.assertEqual(fourth_detail["report"]["ticket_output"]["status"], "awaiting_review")
+            self.assertEqual(fourth_detail["report"]["ticket_output"]["status"], "todo")
             no_kpi_ticket = root / fourth_detail["report"]["ticket_output"]["ticket_path"]
             no_kpi_text = no_kpi_ticket.read_text(encoding="utf-8")
-            self.assertIn("status: awaiting_review", no_kpi_text)
+            self.assertIn("status: todo", no_kpi_text)
             self.assertNotIn("## Reward", no_kpi_text)
-
-            problem = "An unrelated global revenue objective exists."
-            dedupe_key = "unrelated_global_objective"
-            (root / "farplane" / "metrics.yaml").write_text(
-                "kind: project-metrics\nmetrics:\n  revenue:\n    direction: maximize\n",
-                encoding="utf-8",
-            )
-            (root / "farplane" / "harness.yaml").write_text(
-                "kind: project-harness\nmetric_refs:\n  objectives:\n    - metric_id: revenue\n",
-                encoding="utf-8",
-            )
-            objective_event = {**first_event, "event_id": "2" * 64}
-            objective_run = route_event(objective_event, root, codex_runner=fake_runner)[0]
-            objective_detail = show_run(root, objective_run["run_id"])
-            self.assertEqual(objective_detail["report"]["ticket_output"]["decision"], "created")
-            self.assertEqual(objective_detail["report"]["ticket_output"]["status"], "awaiting_review")
-            self.assertIsNone(objective_detail["report"]["ticket_output"]["kpi_id"])
 
     def test_completion_learning_selects_strongest_finding_independent_of_model_order(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -398,28 +422,25 @@ class FarplaneMiningTests(unittest.TestCase):
                         "summary": "Two accepted findings with different strengths.",
                         "material_findings": [
                             {
-                                "problem": "A possible workflow improvement needs proof.",
-                                "reusable_pattern": "Try a smaller optional workflow.",
-                                "proposed_solution": "Run a bounded proof.",
+                                "issue": "A possible workflow improvement needs proof.",
+                                "inefficiency": "The optional workflow adds repeated manual work.",
+                                "proposed_improvement": "Run a bounded proof.",
                                 "dedupe_key": "optional_workflow_proof",
                                 "owner_surface": "skill",
                                 "evidence_refs": ["tickets/TASK-0001/ticket.md", "turn-1"],
                                 "confidence": "medium",
-                                "recovery_eligible": False,
                             },
                             {
-                                "problem": "A completion validator accepts invalid state.",
-                                "reusable_pattern": "Reject invalid completion state deterministically.",
-                                "proposed_solution": "Add the missing validation branch and regression.",
+                                "issue": "A completion validator accepts invalid state.",
+                                "inefficiency": "Invalid state requires manual detection after completion.",
+                                "proposed_improvement": "Add the missing validation branch and regression.",
                                 "dedupe_key": "invalid_completion_state",
                                 "owner_surface": "validator",
                                 "evidence_refs": ["tickets/TASK-0001/ticket.md", "turn-1"],
                                 "confidence": "high",
-                                "recovery_eligible": True,
                             },
                         ],
                         "source_gaps": [],
-                        "escalation": {"decision": "recovery_candidate", "reason_codes": ["known_direct_fix"]},
                     }),
                     encoding="utf-8",
                 )
@@ -429,12 +450,12 @@ class FarplaneMiningTests(unittest.TestCase):
             detail = show_run(root, run["run_id"])
             receipt = detail["report"]["ticket_output"]
             self.assertEqual(receipt["decision"], "created")
-            self.assertEqual(receipt["mode"], "direct_fix")
+            self.assertEqual(receipt["mode"], "improve_or_reject")
             projected = (root / receipt["ticket_path"]).read_text(encoding="utf-8")
             self.assertIn("A completion validator accepts invalid state", projected)
             self.assertNotIn("A possible workflow improvement needs proof", projected)
 
-    def test_completion_learning_missing_window_is_visible_without_broad_scan(self) -> None:
+    def test_completion_learning_runs_from_ticket_when_window_is_missing(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             ticket = write_project(root)
@@ -446,12 +467,25 @@ class FarplaneMiningTests(unittest.TestCase):
                 encoding="utf-8",
             )
 
-            run = route_event(event_for(ticket), root, codex_runner=lambda *_: self.fail("runner must not start"))[0]
+            def no_signal_runner(command: list[str], prompt: str, cwd: Path, timeout: int):
+                Path(command[command.index("--output-last-message") + 1]).write_text(
+                    json.dumps({
+                        "status": "no_signal",
+                        "summary": "No actionable issue found in the ticket packet.",
+                        "material_findings": [],
+                        "source_gaps": [],
+                    }),
+                    encoding="utf-8",
+                )
+                return subprocess.CompletedProcess(command, 0, stdout="", stderr="")
+
+            run = route_event(event_for(ticket), root, codex_runner=no_signal_runner)[0]
             report = show_run(root, run["run_id"])["report"]
 
-            self.assertEqual(report["status"], "source_gap")
-            self.assertEqual(report["source_gaps"][0]["reason"], "conversation_window_missing")
+            self.assertEqual(report["status"], "no_signal")
+            self.assertEqual(report["source_gaps"], [])
             self.assertEqual(report["material_findings"], [])
+            self.assertEqual(report["ticket_output"]["reason"], "report_status:no_signal")
 
     def test_completion_learning_executor_failure_is_reported_and_replayable(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -471,18 +505,43 @@ class FarplaneMiningTests(unittest.TestCase):
                 encoding="utf-8",
             )
 
-            def failed_runner(command: list[str], prompt: str, cwd: Path, timeout: int):
-                return subprocess.CompletedProcess(command, 9, stdout="", stderr="model unavailable")
+            attempts = 0
 
-            run = route_event(event_for(ticket), root, codex_runner=failed_runner)[0]
+            def recovering_runner(command: list[str], prompt: str, cwd: Path, timeout: int):
+                nonlocal attempts
+                attempts += 1
+                if attempts == 1:
+                    return subprocess.CompletedProcess(command, 9, stdout="", stderr="model unavailable")
+                Path(command[command.index("--output-last-message") + 1]).write_text(
+                    json.dumps({
+                        "status": "complete",
+                        "summary": "One replayable issue was recovered.",
+                        "material_findings": [{
+                            "issue": "A failed mining attempt previously blocked issue discovery.",
+                            "inefficiency": "The useful finding would be lost without replay.",
+                            "proposed_improvement": "Allow a successful replay to replace a prior no-ticket decision.",
+                            "dedupe_key": "replay_no_ticket_recovery",
+                            "owner_surface": "feature",
+                            "evidence_refs": ["tickets/TASK-0001/ticket.md"],
+                            "confidence": "high",
+                        }],
+                        "source_gaps": [],
+                    }),
+                    encoding="utf-8",
+                )
+                return subprocess.CompletedProcess(command, 0, stdout="", stderr="")
+
+            run = route_event(event_for(ticket), root, codex_runner=recovering_runner)[0]
             detail = show_run(root, run["run_id"])
 
             self.assertEqual(detail["report"]["status"], "source_gap")
             self.assertEqual(detail["report"]["source_gaps"][0]["reason"], "codex_executor_nonzero")
             self.assertTrue((root / ".farplane" / "mine" / "runs" / run["run_id"] / "executor.stderr.log").is_file())
-            replayed = replay_run(root, run["run_id"], codex_runner=failed_runner)
+            replayed = replay_run(root, run["run_id"], codex_runner=recovering_runner)
             self.assertEqual(replayed["run_id"], run["run_id"])
-            self.assertEqual(len(show_run(root, run["run_id"])["attempts"]), 2)
+            replay_detail = show_run(root, run["run_id"])
+            self.assertEqual(len(replay_detail["attempts"]), 2)
+            self.assertEqual(replay_detail["report"]["ticket_output"]["decision"], "created")
 
     def test_completion_learning_rejects_raw_message_echo(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -512,7 +571,6 @@ class FarplaneMiningTests(unittest.TestCase):
                             "summary": raw,
                             "material_findings": [],
                             "source_gaps": [],
-                            "escalation": {"decision": "none", "reason_codes": []},
                         }
                     ),
                     encoding="utf-8",
@@ -559,7 +617,6 @@ class FarplaneMiningTests(unittest.TestCase):
                         "summary": next(outputs),
                         "material_findings": [],
                         "source_gaps": [],
-                        "escalation": {"decision": "none", "reason_codes": []},
                     }),
                     encoding="utf-8",
                 )
@@ -596,17 +653,15 @@ class FarplaneMiningTests(unittest.TestCase):
                     "status": "complete",
                     "summary": "A reusable correction was found.",
                     "material_findings": [{
-                        "problem": "A workflow correction recurred.",
-                        "reusable_pattern": "Use one owned workflow.",
-                        "proposed_solution": "Refine the owning skill.",
+                        "issue": "A workflow correction recurred.",
+                        "inefficiency": "The correction is repeated manually.",
+                        "proposed_improvement": "Refine the owning skill.",
                         "dedupe_key": "owned_workflow_correction",
                         "owner_surface": "skill",
                         "evidence_refs": ["/Users/private/person@example.com"],
                         "confidence": "high",
-                        "recovery_eligible": False,
                     }],
                     "source_gaps": [],
-                    "escalation": {"decision": "dogfood", "reason_codes": []},
                 },
             ])
 
@@ -677,56 +732,6 @@ class FarplaneMiningTests(unittest.TestCase):
             self.assertEqual(pending_events(root), [])
             detail = show_run(root, list_runs(root)[0]["run_id"])
             self.assertEqual(len(detail["attempts"]), 1)
-
-    def test_hook_drains_before_capture_and_routes_completion_after_capture(self) -> None:
-        with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            ticket = write_project(root)
-            ticket.write_text(ticket_text("todo"), encoding="utf-8")
-            hook_payload = {
-                "hook_event_name": "PostToolUse",
-                "tool_name": "apply_patch",
-                "cwd": str(root),
-                "session_id": "hook-test",
-                "tool_input": {"patch": "*** Update File: tickets/TASK-0001/ticket.md"},
-            }
-            baseline = handle_payload(hook_payload, root, wait_for_drain=True)
-            self.assertEqual(len(baseline["captured_event_ids"]), 1)
-            self.assertNotEqual(baseline["drain_launch"]["parent_pid"], baseline["drain_launch"]["child_pid"])
-            self.assertEqual(baseline["drain_launch"]["status"], "complete")
-            self.assertEqual(list_runs(root), [])
-
-            ticket.write_text(ticket_text("completed"), encoding="utf-8")
-            completed = handle_payload(hook_payload, root, wait_for_drain=True)
-
-            self.assertTrue(completed["ok"])
-            self.assertEqual(completed["drain_launch"]["status"], "complete")
-            self.assertEqual(len(list_runs(root)), 1)
-
-    def test_failed_hook_drain_launch_leaves_pending_event_for_later_drain(self) -> None:
-        with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            ticket = write_project(root)
-            ticket.write_text(ticket_text("todo"), encoding="utf-8")
-            payload = {
-                "hook_event_name": "PostToolUse",
-                "tool_name": "apply_patch",
-                "cwd": str(root),
-                "session_id": "hook-test",
-                "tool_input": {"patch": "*** Update File: tickets/TASK-0001/ticket.md"},
-            }
-            handle_payload(payload, root, wait_for_drain=True)
-            ticket.write_text(ticket_text("completed"), encoding="utf-8")
-
-            failed = handle_payload(payload, root, drain_command=["/definitely/missing/farplane-miner"])
-
-            self.assertFalse(failed["ok"])
-            self.assertEqual(failed["drain_launch"]["status"], "failed_to_launch")
-            self.assertEqual(len(pending_events(root)), 1)
-            recovered = drain_pending(root)
-            self.assertTrue(recovered["ok"])
-            self.assertEqual(len(pending_events(root)), 0)
-            self.assertEqual(len(list_runs(root)), 1)
 
     def test_route_fanout_is_deterministic_atomic_and_lean(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

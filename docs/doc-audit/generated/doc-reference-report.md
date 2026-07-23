@@ -15,7 +15,7 @@ refs:
 
 # Docs Reference Audit
 
-Generated at `2026-07-12T12:53:48+00:00` from local Markdown links and literal repo-path
+Generated at `2026-07-23T21:37:38+00:00` from local Markdown links and literal repo-path
 references. This is a navigation and cleanup aid, not a deletion authority.
 
 ## Harness Math Doc
@@ -29,33 +29,33 @@ The harness math doc is `docs/fundamentals/harness-algebra.md`.
 
 ## Counts
 
-- Scanned files: `1474`
-- Nodes: `897`
-- Edges: `4549`
-- Unresolved local-looking refs: `1463`
+- Scanned files: `1600`
+- Nodes: `974`
+- Edges: `4735`
+- Unresolved local-looking refs: `1747`
 
 ## Most Referenced Docs
 
 | Doc | All refs | Skill refs |
 | --- | --- | --- |
-| `docs/features/README.md` | 68 | 30 |
-| `docs/features/validate_features.py` | 55 | 7 |
-| `docs/MEMORY.md` | 54 | 24 |
-| `docs/HISTORY.md` | 48 | 14 |
-| `docs/LESSONS.md` | 43 | 22 |
+| `docs/features/README.md` | 67 | 30 |
+| `docs/features/validate_features.py` | 56 | 7 |
+| `docs/MEMORY.md` | 50 | 23 |
+| `docs/HISTORY.md` | 44 | 13 |
 | `docs/systems/README.md` | 39 | 15 |
+| `docs/LESSONS.md` | 38 | 20 |
 | `docs/prd.md` | 38 | 19 |
-| `docs/skills/README.md` | 36 | 16 |
 | `docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md` | 36 | 17 |
-| `docs/skills/registry.jsonl` | 35 | 23 |
-| `docs/TROUBLES.md` | 34 | 17 |
+| `docs/skills/registry.jsonl` | 36 | 24 |
 | `docs/features/registry.jsonl` | 32 | 9 |
-| `docs/skills/system.md` | 27 | 16 |
-| `docs/skills/best-practices.md` | 26 | 17 |
-| `docs/skills/templates/SKILL_TEMPLATE.md` | 25 | 10 |
+| `docs/skills/README.md` | 32 | 12 |
+| `docs/TROUBLES.md` | 29 | 15 |
+| `docs/skills/system.md` | 25 | 14 |
 | `docs/features/FEAT-0060-registry-backed-documentation-os.md` | 24 | 7 |
+| `docs/skills/best-practices.md` | 24 | 15 |
 | `docs/bootstrap-brief.md` | 24 | 19 |
-| `docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md` | 23 | 8 |
+| `docs/skills/templates/SKILL_TEMPLATE.md` | 22 | 7 |
+| `docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md` | 22 | 8 |
 | `docs/features/FEAT-0065-pulse-and-interval-automation.md` | 20 | 11 |
 | `docs/features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md` | 19 | 2 |
 
@@ -76,16 +76,16 @@ The harness math doc is `docs/fundamentals/harness-algebra.md`.
 | `docs/features/FEAT-0031-agent-behavior-test-workflow.md` | 7 | 3 | keep active |
 | `docs/features/FEAT-0032-goal-advisor-execution-compilation.md` | 5 | 0 | keep active |
 | `docs/features/FEAT-0034-adversarial-agent-qa-test-skill.md` | 4 | 0 | keep active |
-| `docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md` | 23 | 8 | keep active |
+| `docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md` | 22 | 8 | keep active |
 | `docs/features/FEAT-0042-lean-global-agent-operating-kernel.md` | 13 | 4 | keep active |
 | `docs/features/FEAT-0043-project-level-system-prompt-eval-suite.md` | 5 | 0 | keep active |
 | `docs/features/FEAT-0054-modular-skill-local-eval-tasks.md` | 4 | 0 | keep active |
-| `docs/features/FEAT-0056-inspiration-vault.md` | 6 | 0 | keep active |
+| `docs/features/FEAT-0056-inspiration-vault.md` | 7 | 0 | keep active |
 | `docs/features/FEAT-0057-skill-local-qa-checklist-artifacts.md` | 4 | 0 | keep active |
 | `docs/features/FEAT-0060-registry-backed-documentation-os.md` | 24 | 7 | keep active |
 | `docs/features/FEAT-0061-farplane-adoption-tracker-cli.md` | 6 | 0 | keep active |
 | `docs/features/FEAT-0062-capped-skill-surface-budget.md` | 8 | 3 | keep active |
-| `docs/features/FEAT-0063-metric-advisor-cards.md` | 4 | 0 | keep active |
+| `docs/features/FEAT-0063-metric-advisor-cards.md` | 5 | 0 | keep active |
 | `docs/features/FEAT-0064-skill-signals.md` | 10 | 2 | keep active |
 | `docs/features/FEAT-0065-pulse-and-interval-automation.md` | 20 | 11 | keep active |
 | `docs/features/FEAT-0066-product-scoped-pulse-loops.md` | 7 | 0 | keep active |
@@ -93,8 +93,10 @@ The harness math doc is `docs/fundamentals/harness-algebra.md`.
 | `docs/features/FEAT-0068-goal-backed-ticket-execution.md` | 7 | 0 | keep active |
 | `docs/features/FEAT-0069-taste-loop-human-feedback-optimization.md` | 6 | 0 | keep active |
 | `docs/features/FEAT-0070-experimental-feature-evaluation-reports.md` | 8 | 0 | keep active |
-| `docs/features/FEAT-0071-project-work-pulse.md` | 12 | 1 | keep active |
-| `docs/features/README.md` | 68 | 30 | keep active |
+| `docs/features/FEAT-0071-project-work-pulse.md` | 13 | 1 | keep active |
+| `docs/features/FEAT-0072-persistent-icp-and-world-memory.md` | 7 | 0 | keep active |
+| `docs/features/FEAT-0073-brand-kit-approved-creative-identity.md` | 6 | 0 | keep active |
+| `docs/features/README.md` | 67 | 30 | keep active |
 | `docs/features/TEMPLATE.md` | 6 | 1 | keep active |
 | `docs/features/registry.md` | 3 | 0 | keep active |
 

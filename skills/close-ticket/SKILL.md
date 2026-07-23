@@ -40,8 +40,9 @@ template_uses:
   or the configured reviewer lane.
 - [ ] Commit only the intended closeout slice.
 - [ ] Push only when the user or workflow explicitly calls for publishing.
-- [ ] Leave the ticket archive-ready (`status: done`), blocked, or active with
-  one concrete next action in `progress.md`.
+- [ ] When the ticket is complete, run `farplane ticket close TASK-XXXX`; let
+  that command set terminal metadata, archive the ticket, and emit mining.
+  Otherwise leave it blocked or active with one concrete next action.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 Use this skill when one ticket is functionally done and the remaining work is
@@ -84,7 +85,8 @@ Ensure an agent can execute the core path after only reading this file.
      subject
   6. make the commit when the repo state is ready
   7. push only when the user or workflow explicitly calls for publishing
-  8. leave the ticket archive-ready with clear handoff state
+  8. run `farplane ticket close TASK-XXXX` as the single successful close and
+     archive transition
 - Core decision branches:
   - docs/proof only -> write back, validate, close
   - missing final review/proof -> refresh review before commit
@@ -95,6 +97,8 @@ Ensure an agent can execute the core path after only reading this file.
   - do not let commit prep hide missing ticket or doc writeback
 - Outcome contract:
   - ticket evidence, handoff, linked docs, next action, and verification are updated
+  - the close receipt identifies the archived ticket, completion event, and
+    mining result or retryable mining failure
   - durable docs such as `docs/HISTORY.md`, `docs/MEMORY.md`, and `docs/LESSONS.md`
     are updated when needed
   - the repo has run the appropriate closeout checks
@@ -121,7 +125,7 @@ Update the selected ticket with:
 - final handoff notes
 - next action
 - last verification
-- clear closeout outcome: archived, ready to archive, committed, or blocked
+- clear closeout outcome: archived by `farplane ticket close`, or blocked
 
 Update durable docs when the closeout pass changes durable repo truth:
 

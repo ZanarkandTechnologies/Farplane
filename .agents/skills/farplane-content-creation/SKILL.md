@@ -10,6 +10,8 @@ template_uses:
   skill-surface-budget: "0.1.0"
 qa_checklist: qa_checklist.md
 eval: evals/evals.json
+planner_contract:
+  required_arguments: ["product_bet_ref", "system_ref", "feature_refs", "source_or_idea", "audience", "content_goal", "channels"]
 ---
 
 # Farplane Content Creation
@@ -29,7 +31,7 @@ filming, external generation, and account mutation remain separately gated.
 ## Skill Signature
 
 ```text
-farplane_content_creation(source_or_idea, audience, content_goal, channels?, content_kind?, video_method?, style_profile?, taste_refs?, ticket?, audience_context?, variation_count=10)
+farplane_content_creation(product_bet_ref, system_ref, feature_refs, source_or_idea, audience, content_goal, channels=all_configured, content_kind?, video_method?, style_profile?, taste_refs?, ticket?, audience_context?, variation_count=10)
   -> best_bet_proposals + approved_skeleton + optimized_exemplar + variation_matrix + ranked_shortlist + distribution_handoff + proof_refs
 state: reads(farplane/harness.yaml, farplane/metrics.yaml, ticket audience_context first or configured Feed Scout World Memory as fallback, source/evidence refs, taste refs, ticket Goal Packet); writes(ticket-local proposals, skeleton, exemplar, variants, review evidence, and feedback state)
 gates: canonical_icp_bound; baseline_named; intended_belief_or_behavior_delta_named; audience_named; content_goal_named; claim_strength_matches_proof; planning_approval_before_execution; exemplar_approval_before_variations; publish_requires_separate_approval

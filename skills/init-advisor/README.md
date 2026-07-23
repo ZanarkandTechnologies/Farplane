@@ -35,8 +35,8 @@ bash ~/.codex/skills/init-advisor/scripts/bootstrap.sh
 
 Before finalizing the scaffold, run a bootstrap intake with the same discipline
 as `deep-interview` and keep the answers in `docs/bootstrap-brief.md`.
-That intake should explicitly answer whether local hooks should be enabled, what
-belongs in `pre-push` or `pre-commit`, whether the Codex SDK diff reviewer
+That intake should explicitly answer what belongs in `pre-push` or `pre-commit`,
+whether the Codex SDK diff reviewer
 should be advisory or strict, which heavy local checks such as `desloppify` are
 desired, and whether a separate CI/deployment gate exists. It
 should also name the canonical app-only run path, canonical full QA or
@@ -46,7 +46,7 @@ created during init, select the stack scaffold before running commands.
 
 That also writes `farplane/README.md`, `farplane/manifest.json`, `farplane/harness.yaml`,
 `farplane/metrics.yaml`, `farplane/automations.toml`, `farplane/bindings.yaml`,
-`farplane/hooks.json`, `.agents/skills/README.md`, `farplane/pm.json`, `docs/bootstrap-brief.md`, `qa/README.md`,
+`.agents/skills/README.md`, `farplane/pm.json`, `docs/bootstrap-brief.md`, `qa/README.md`,
 `qa/cookbook/TEMPLATE.md`, `.githooks/README.md`,
 `.githooks/pre-commit`, `.githooks/pre-push`, `scripts/pre_commit_check.sh`,
 `scripts/pre_push_check.sh`, review docs, and review-agent helper scripts as
@@ -149,7 +149,6 @@ Then copy in:
 - `farplane/metrics.yaml`
 - `farplane/automations.toml`
 - `farplane/bindings.yaml`
-- `farplane/hooks.json`
 - `.agents/skills/README.md`
 - `farplane/pm.json`
 - `docs/TASTE.md`
@@ -263,7 +262,7 @@ Those can come after one clean ticket run.
 - [ ] `farplane/manifest.json` was compared with the versioned migration entries in `references/FRAMEWORK_CHANGELOG.md`
 - [ ] V1 migrations removed product controllers/registries and detached review/evidence stores after migrating active readers
 - [ ] `docs/bootstrap-brief.md` exists and captures stack/topology/gate decisions
-- [ ] `docs/bootstrap-brief.md` captures local-hook, heavy-check, and CI/deploy-gate decisions
+- [ ] `docs/bootstrap-brief.md` captures local-gate, heavy-check, and CI/deploy-gate decisions
 - [ ] `docs/bootstrap-brief.md` captures Codex SDK diff-review policy and code-review skill linkage
 - [ ] `docs/bootstrap-brief.md` captures canonical app/QA run paths plus required services and port/env assumptions
 - [ ] `docs/bootstrap-brief.md` captures agent-experience/testability decisions
@@ -280,7 +279,6 @@ Those can come after one clean ticket run.
 - [ ] every metric definition has exactly one inline `refresh` or valid `refresh_ref` in `farplane/metrics.yaml`, with an explicit source-gap route
 - [ ] `farplane/automations.toml` contains exactly one Work Pulse heartbeat plus separate cron records for Feed Scout, Daily BAU, Weekly BAU, self-improvement, and optional scheduled workflows
 - [ ] `farplane/bindings.yaml` exists and names non-secret project IDs, URLs, labels, and aliases needed by reusable skills
-- [ ] `farplane/hooks.json` exists or `init_mode=substrate` has a recorded readiness gap
 - [ ] `.agents/skills/README.md` exists as the local capability-skill home
 - [ ] `farplane/pm.json` exists when the UI should fold chat and automation thread IDs into one visual project PM
 - [ ] Live automation activation, when requested, is handled by

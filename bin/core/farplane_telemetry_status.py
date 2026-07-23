@@ -131,7 +131,7 @@ def _run_summary(run_dir: Path) -> dict[str, object]:
     context = input_payload.get("semantic_context") if isinstance(input_payload.get("semantic_context"), Mapping) else {}
     event = input_payload.get("event") if isinstance(input_payload.get("event"), Mapping) else {}
     entity = event.get("entity_ref") if isinstance(event.get("entity_ref"), Mapping) else {}
-    title = _safe_str(finding.get("problem")) or _safe_str(report.get("summary")) or "No reusable completion learning found"
+    title = _safe_str(finding.get("issue")) or _safe_str(report.get("summary")) or "No actionable ticket issue found"
     owner = _safe_str(finding.get("owner_surface"))
     status = _learning_status(report, run_dir)
     return {
@@ -145,7 +145,6 @@ def _run_summary(run_dir: Path) -> dict[str, object]:
         "recommended_owner": owner or "unassigned",
         "confidence": _safe_str(finding.get("confidence")),
         "finding_count": len(report.get("material_findings")) if isinstance(report.get("material_findings"), list) else 0,
-        "recovery_eligible": bool(finding.get("recovery_eligible")),
         "ticket_decision": _safe_str(ticket_output.get("decision")),
         "projected_ticket_id": _safe_str(ticket_output.get("ticket_id")),
         "projected_ticket_mode": _safe_str(ticket_output.get("mode")),
@@ -234,7 +233,6 @@ def _cloud_learning_run(run: object) -> dict[str, object]:
         "recommended_owner",
         "confidence",
         "finding_count",
-        "recovery_eligible",
         "ticket_decision",
         "projected_ticket_id",
         "projected_ticket_mode",

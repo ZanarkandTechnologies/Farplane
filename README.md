@@ -258,7 +258,7 @@ bash install.sh
 farplane doctor
 farplane hooks list --json
 farplane hooks doctor
-farplane hooks test --project-root /tmp/farplane-hooks-smoke --json
+farplane ticket close TASK-XXXX
 farplane ui link /path/to/Farplane-UI
 farplane ui start
 ```
@@ -276,9 +276,9 @@ What Core owns:
 - `farplane hooks doctor`: verifies Core-owned hook links, command targets,
   interpreters, and known silent-skip regressions without requiring optional
   Farplane UI/Node telemetry.
-- `farplane hooks test`: runs the deterministic local hook smoke: capture typed
-  event, launch Core drain subprocess, apply two matching `event_routes`, prove
-  idempotent runs, and prove failed-launch retry.
+- `farplane ticket close TASK-XXXX`: marks the ticket done, clears its claim,
+  archives it, emits one completion event, and invokes the configured mining
+  route; reruns are idempotent.
 - `farplane notify status|enable|disable`: inspects or toggles the Farplane
   turn-complete notify script in the rendered Codex config, preserving desktop
   notify wrappers when present.

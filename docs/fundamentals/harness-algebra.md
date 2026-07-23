@@ -701,25 +701,26 @@ context_starvation =
 Ticket-completion learning:
 
 ```text
-ticket_completed(ticket, thread_id)
-  -> freeze(ticket + program + progress + operator_turn_window(thread_id))
-  -> ticket_completion_learning
-  -> learning_report + projected_ticket?[0..1]
+ticket_completed(ticket, thread_id?)
+  -> freeze(ticket + program? + progress? + artifacts? + operator_turn_window?(thread_id))
+  -> ticket_improvement_mining
+  -> issue_findings + projected_ticket?[0..1] + machine_receipt
 ```
 
-The completion reviewer writes only a compact local report. The final assistant
-reply is not an input; ticket/program/progress own the completed solution and
-the bounded window contributes operator corrections. Core freezes the first
-event snapshot and validates schema/evidence/privacy. The read-only semantic
-executor never mutates durable state; Core may project the strongest grounded
-finding into one deduped ticket. A source-ticket or self-improvement KPI makes
-it executable as `todo`; a missing KPI leaves it `awaiting_review` rather than
-admitting metricless work. A known correction gets a direct-fix program; an
-uncertain improvement gets a prove-or-reject program. Weekly
-Dogfood consumes the report/ticket receipt without recreating the ticket. There
-is no turn-count trigger or daily all-thread scan. The model supplies a locally
-validated semantic dedupe key, Core independently ranks accepted findings, and
-completion-learning-generated tickets cannot project another ticket.
+`farplane ticket close TASK-XXXX` constructs `ticket_completed` from the ticket
+ID after completing and archiving the ticket. `farplane mining ticket
+TASK-XXXX` can reconstruct the same mining input for repair or backfill.
+
+The completion miner writes only a small local machine receipt. Ticket,
+program, progress, and artifacts own the completed solution; an available
+bounded window contributes operator corrections but is not required. Core
+freezes the first event snapshot and validates schema, evidence, and privacy.
+The read-only semantic executor never mutates durable state; Core may project
+the strongest grounded issue and proposed improvement into one deduped ordinary
+`todo` ticket. There is no ticket score, KPI admission gate, human lean report,
+turn-count trigger, daily all-thread scan, or automatic eval decision. The model
+supplies a locally validated semantic dedupe key, Core ranks accepted findings,
+and generated mining tickets cannot project another ticket.
 
 Drain flow:
 
@@ -1022,7 +1023,7 @@ drift_check(ticket, program, progress_tail, current_claim)
 Long-term project control:
 
 ```text
-harness.yaml = human meaning + canonical `areas.<area_id>.planner_instruction` contracts + selected metric refs + hard constraints
+harness.yaml = human meaning + configured planning skill refs + passive area/ICP context + selected metric refs + hard constraints
 metrics.yaml = metric meaning + direction + freshness + optional guard rules
 ticket.md = executable leaf contract + Done + QA Strategy
 program.md = loop configuration + metric + stop policy

@@ -134,11 +134,11 @@ INSTALL_BIN_FILES=(
 )
 INSTALL_HOOK_FILES=(
   farplane_console_ping.py
-  farplane_file_change.py
-  farplane_local_event.py
 )
 RETIRED_INSTALL_PATHS=(
   bin/file_growth_hook.py
+  hooks/farplane_file_change.py
+  hooks/farplane_local_event.py
 )
 
 if [ "$SKILLS_ONLY" -eq 1 ]; then

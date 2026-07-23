@@ -1,9 +1,9 @@
 ---
-title: Persistent ICP and world memory
+title: Persistent ICP and World Memory
 status: implemented
 owner: feed-scout
 created_at: 2026-07-14
-updated_at: 2026-07-14
+updated_at: 2026-07-18
 tags:
   - farplane
   - feature
@@ -21,28 +21,31 @@ surfaces:
   - farplane/harness.yaml
   - farplane/bindings.yaml
   - skills/feed-scout/SKILL.md
-  - skills/feed-scout/templates/memory.md
-  - skills/feed-scout/scripts/validate_memory.py
+  - skills/feed-scout/templates/world-memory.md
+  - skills/feed-scout/scripts/validate_world_memory.py
   - skills/plan-next-wave/SKILL.md
   - skills/pulse-update/SKILL.md
 source_refs:
   - tickets/archive/TASK-0369/ticket.md
 external_refs: []
 evidence_refs:
-  - skills/feed-scout/scripts/test_validate_memory.py
-  - skills/plan-next-wave/scripts/test_validate_ticket_specs.py
+  - skills/feed-scout/scripts/test_validate_world_memory.py
+  - skills/plan-next-wave/scripts/test_validate_wave_response.py
   - tickets/archive/TASK-0369/artifacts/qa/verification.md
 known_limits: >-
-  Memory is compact mutable synthesis rather than a historical trend store;
-  realized ticket-quality improvement still requires later Pulse and Reward evidence.
+  Memory is capped compact mutable synthesis rather than a historical trend
+  store; realized ticket-quality improvement still requires later Pulse and
+  Reward evidence.
 metrics:
   - accepted_evidence_cycles
   - rejected_ai_ticket_count
+  - planner_idea_comprehension_rate
+  - planner_idea_keep_rate
 last_verified: 2026-07-14
 experimental: true
 superseded_by: false
 track: >-
-  Review the current Feed Scout memory, later Pulse planner receipts, and
+  Review the current Feed Scout World Memory, later Pulse planner receipts, and
   admitted ticket audience_context. Judge ICP fidelity, source provenance,
   baseline and belief-delta quality, memory compactness, and whether later
   artifacts change qualified builder decisions rather than repeating trends.
@@ -53,8 +56,8 @@ track: >-
 This feature gives Farplane one cheap current-context loop:
 
 ```text
-daily_sources + canonical_area_icps + existing_memory
-  -> feed_scout_update_in_place
+daily_sources + canonical_area_icps + existing_world_memory
+  -> feed_scout_world_memory_update_in_place
   -> planner_context
   -> ticket.audience_context
   -> grounded_artifact
@@ -64,21 +67,29 @@ daily_sources + canonical_area_icps + existing_memory
 
 - `harness.areas.<area_id>.icp` is canonical audience truth: label,
   description, jobs, pains, and evidence bar.
-- `farplane/bindings.yaml#feed_scout.memory` points to one ignored Markdown
-  file with `ICPs`, `Trends`, `Other Notable Things`, and `Source Gaps`.
+- `farplane/bindings.yaml#feed_scout.world_memory` points to one ignored Markdown
+  file with `ICPs`, `Trends`, `Other Notable Things`, and `Source Gaps`. The
+  live file must stay at or under 100 non-empty lines and use simple bullets,
+  not H3 entry blocks or report-like field lists.
 - Feed Scout updates that file after its dated report and validates it before
   candidate handoff. It merges duplicate concepts and replaces superseded
   synthesis instead of adding daily or monthly snapshots.
-- The memory may retain stale-but-useful evidence when its observation date,
-  confidence, and gaps are honest. It never changes canonical ICP fields or
-  overrides metrics, tickets, authority, or planner admission.
-- Plan Next Wave binds outward work to the selected ICP, a relevant memory
-  entry, a named baseline/default, and a specific belief or workflow delta.
+- World Memory may retain stale-but-useful evidence when its observation date,
+  confidence, and gaps are honest. It renders area IDs/labels and current
+  synthesis only; full canonical ICP definitions stay in `harness.yaml`. It
+  never changes canonical ICP fields or overrides metrics, tickets, authority,
+  or planner admission.
+- Plan Next Wave binds outward work to the selected ICP, complete selected
+  source-backed `world_facts`, a named baseline/default, and a specific belief
+  or workflow delta.
+- Selected facts label evidence as observed, analogous, hypothesis, or source
+  gap and preserve causal use in compact `use=` bullets. A citation that does
+  not change the idea cannot satisfy frontier grounding.
   Self-improvement may use local ticket, Reward, run, or eval evidence when
   external context is irrelevant.
-- Pulse carries those refs into `audience_context` and stable execution inputs;
-  artifact skills consume ticket context first and configured memory only as a
-  direct-call fallback.
+- Pulse copies those facts into `audience_context` and stable execution inputs;
+  artifact skills consume ticket context first and configured World Memory only
+  as a direct-call fallback. Tickets never store World Memory pointers or hashes.
 
 ## Non-Goals
 
@@ -90,13 +101,21 @@ daily_sources + canonical_area_icps + existing_memory
 ## Proof
 
 - Project schema fixtures validate complete ICP records.
-- Feed Scout memory fixtures validate headings, frontmatter, provenance
-  affordances, and live/template placeholder boundaries.
-- Ticket-spec fixtures require ICP, baseline, decision delta, and outward
-  memory refs before materialization.
-- Skill evals cover memory update and shallow-candidate rejection.
+- Feed Scout World Memory fixtures validate headings, frontmatter, the 100-line
+  cap, simple bullet syntax, provenance affordances, and live/template
+  placeholder boundaries.
+- Ticket-spec fixtures require ICP, baseline, decision delta, and complete
+  outward world facts before materialization.
+- Skill evals cover World Memory update and shallow-candidate rejection.
 - Independent reviewer checks owner placement and prompt quality.
+- Human-feedback comprehension and keep rate are planner-quality diagnostics;
+  `accepted_evidence_cycles` remains a business/evidence outcome and
+  `rejected_ai_ticket_count` is not a same-day hard planning guard.
 
 ## Change History
 
-- 2026-07-14: Added the Markdown memory loop and ICP-grounded planner handoff.
+- 2026-07-18: Capped live World Memory at 100 non-empty lines and replaced
+  verbose entry blocks with simple typed bullets.
+- 2026-07-14: Added the World Memory loop and ICP-grounded planner handoff.
+- 2026-07-14: Renamed the rolling artifact to World Memory and replaced the
+  pointer-based ticket handoff with copied complete world facts.

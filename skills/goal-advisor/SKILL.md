@@ -250,6 +250,11 @@ only after the branch is selected:
    - [ ] Drift review is read-only and compares the listed files plus recent
      progress; it does not plan or implement.
 - [ ] 8. Craft the native `/goal` or heartbeat prompt when Goal mode is warranted.
+   - [ ] For a prompt-heavy or judgment-dependent Goal architecture, first read
+     [the golden material Goal Packet](examples/golden/material-goal-packet.md)
+     with `qa_checklist.md`. Transfer invariants, never fixture facts or
+     wording; an independent reviewer receives the candidate, golden
+     invariants, QA, and held-out context, but not planner scratch reasoning.
    - [ ] Load `references/prompt-templates.md` before emitting prompt text.
    - [ ] Include an inline `Files:` list before `Task`, `Logging`, `Metric`, and
      `After each turn`.
@@ -275,7 +280,9 @@ only after the branch is selected:
      request the ticket's QA evidence review and
      completion review when required by `QA Strategy` or `program.md`, update
      `ticket.md` plus `progress.md` with the review/evidence links, and block
-     or revise when those reviews are missing or below the ticket gate.
+     or revise when those reviews are missing or below the ticket gate. After
+     those gates pass, run `farplane ticket close TASK-XXXX` before
+     `stop_complete`; do not hand-edit the archive transition.
    - [ ] For implementation feature work, include a final `Grounding:` evidence
      rule in the prompt: name the source class checked, such as Ref MCP,
      official docs, GitHub code search, maintained examples, or web sources, or
@@ -327,8 +334,9 @@ A strong Goal contract includes:
   names what must be shown to the operator before completion, including
   rendered image links for UI/user-visible work when screenshots exist
 - `Completion checkpoint`: QA evidence review and completion review required by
-  `QA Strategy.goal_advisor_inputs.final_checkpoint` or `program.md` before
-  `stop_complete`, with links written back to the ticket and `progress.md`
+  `QA Strategy.goal_advisor_inputs.final_checkpoint` or `program.md`, followed
+  by `farplane ticket close TASK-XXXX` before `stop_complete`, with links
+  written back before the close command
 - `Approval`: whether the packet is `pending`, `approved`, `revise`, or
   `blocked`; material packets pause before native Goal execution unless
   explicitly pre-approved
@@ -450,6 +458,10 @@ Or create/update the Goal Packet files and then report their paths.
 - [references/goal-algebra.md](references/goal-algebra.md) - load when several
   workflow skills compose into one Goal contract or retired-surface migration
   detail matters.
+- [Golden material Goal Packet](examples/golden/material-goal-packet.md) - load
+  with QA when planning or independently reviewing a prompt-heavy or
+  judgment-dependent Goal architecture; transfer invariants, not fixture facts
+  or wording.
 - [../metric-advisor/SKILL.md](../metric-advisor/SKILL.md) - use before this
   skill when the metric objective, guard, or proof provider still needs to be
   authored.

@@ -56,14 +56,11 @@ runtime helpers instead of symlinking every script, validator, and test.
 - `validators/check_template_version_metadata.py` - staged metadata and
   version-bump guard for template files listed in
   `rules/template-version-watch.toml`
-- `validators/check_changed_file_line_count.py` - staged-only line-limit gate
-  for explicitly enrolled files; skill-source files are blocked above 200
-  lines while generated graphs, dependency locks, and media assets are excluded
 - `capture_user_turn.py` - turn-start user-intent writer for the hook surface
-- `hooks/farplane_file_change.py` - PostToolUse file-change boundary; captures
-  typed events to the local outbox and launches the fixed Core drain subprocess
-- `hooks/farplane_local_event.py` - PostToolUse local skill/thread telemetry
-  capture without Farplane UI, Node, or `tsx`
+- `core/farplane_ticket_close.py` - explicit ticket completion, archive, event,
+  and mining boundary used by `farplane ticket close TASK-XXXX`
+- `core/farplane_event_store.py` - durable local event/outbox primitives shared
+  by explicit Core commands
 - `farplane_boards.py` - board adapter contract plus the filesystem
   `FileTicketAdapter` that normalizes `tickets/TASK-*/ticket.md` into a
   `WorkItem`
@@ -118,8 +115,9 @@ Runtime routing is session-first for parallel Codex usage:
 - explicit run-state selector when a managed lane exports one
 - hook `session_id` for telemetry and association-log correlation
 - `.farplane/state/ticket-thread-associations.jsonl` for ticket/thread joins
-- bounded operator-turn windows as ticket-completion learning evidence, with
-  one deduped Core-projected direct-fix or prove-or-reject ticket when grounded
+- completed ticket packets plus optional bounded operator-turn windows as
+  improvement-mining evidence, with one deduped Core-projected `todo` ticket
+  when a grounded issue and improvement exist
 
 `UserPromptSubmit` no longer writes `.farplane/state/current-run.json` or
 `.farplane/state/sessions/<session_id>.json`. Those Ralph-era singleton and

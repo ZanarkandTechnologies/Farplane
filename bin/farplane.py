@@ -15,7 +15,6 @@ import shlex
 import shutil
 import subprocess
 import sys
-import tempfile
 import tomllib
 from dataclasses import dataclass
 from datetime import datetime, timezone
@@ -55,6 +54,8 @@ OLD_CONVEX_SITE_URL = "https://agreeable-finch-230.convex.site"
 PREVIOUS_NOTIFY_FLAG = "--previous-notify"
 MANAGED_HOOK_FILES = (
     "farplane_console_ping.py",
+)
+RETIRED_HOOK_FILES = (
     "farplane_file_change.py",
     "farplane_local_event.py",
 )
@@ -530,6 +531,20 @@ def _replace_symlink(src: Path, dest: Path, *, backup_root: Path | None, dry_run
     return row
 
 
+def _retire_path(path: Path, *, backup_root: Path, dry_run: bool) -> dict[str, Any]:
+    present = path.exists() or path.is_symlink()
+    row: dict[str, Any] = {"dest": str(path), "retired": present, "changed": False}
+    if not present or dry_run:
+        row["changed"] = present
+        return row
+    backup = backup_root / path.name
+    backup.parent.mkdir(parents=True, exist_ok=True)
+    shutil.move(str(path), str(backup))
+    row["backup"] = str(backup)
+    row["changed"] = True
+    return row
+
+
 def install_hooks(codex_home: Path, *, dry_run: bool = False) -> dict[str, Any]:
     codex_home = codex_home.expanduser().resolve()
     stamp = datetime.now().strftime("%Y%m%d-%H%M%S")
@@ -551,6 +566,14 @@ def install_hooks(codex_home: Path, *, dry_run: bool = False) -> dict[str, Any]:
             dry_run=dry_run,
         ),
     ]
+    for hook_name in RETIRED_HOOK_FILES:
+        operations.append(
+            _retire_path(
+                codex_home / "hooks" / hook_name,
+                backup_root=backup_root / "retired-hooks",
+                dry_run=dry_run,
+            )
+        )
     for hook_name in MANAGED_HOOK_FILES:
         operations.append(
             _replace_symlink(
@@ -778,173 +801,6 @@ def run_hooks_doctor(args: argparse.Namespace) -> int:
     return 0 if payload["ok"] else 1
 
 
-def _link_temp_codex_home(codex_home: Path) -> None:
-    (codex_home / "hooks").mkdir(parents=True, exist_ok=True)
-    (codex_home / "bin").mkdir(parents=True, exist_ok=True)
-    os.symlink(CORE_ROOT / "bin" / "capture_user_turn.py", codex_home / "bin" / "capture_user_turn.py")
-    for hook_name in MANAGED_HOOK_FILES:
-        os.symlink(CORE_ROOT / "hooks" / hook_name, codex_home / "hooks" / hook_name)
-    os.symlink(CORE_ROOT / "hooks.json", codex_home / "hooks.json")
-
-
-def _write_hooks_test_project(project_root: Path) -> Path:
-    program_ref = "core:ticket-completion-lean@1.0.0"
-    farplane = project_root / "farplane"
-    farplane.mkdir(parents=True, exist_ok=True)
-    (farplane / "hooks.json").write_text(
-        json.dumps(
-            {
-                "version": 1,
-                "file_events": {
-                    "enabled": True,
-                    "events": ["farplane.ticket.completed", "farplane.ticket.changed"],
-                    "patterns": ["tickets/TASK-*/ticket.md"],
-                },
-            },
-            indent=2,
-            sort_keys=True,
-        )
-        + "\n",
-        encoding="utf-8",
-    )
-    (farplane / "bindings.yaml").write_text(
-        "kind: project-bindings\n"
-        "project:\n"
-        "  id: hooks-test\n"
-        "metric_bindings: {}\n"
-        "event_routes:\n"
-        "  - route_id: completion-a\n"
-        "    event_name: farplane.ticket.completed\n"
-        f"    program_ref: {program_ref}\n"
-        "  - route_id: completion-b\n"
-        "    event_name: farplane.ticket.completed\n"
-        f"    program_ref: {program_ref}\n",
-        encoding="utf-8",
-    )
-    ticket = project_root / "tickets" / "TASK-9001" / "ticket.md"
-    ticket.parent.mkdir(parents=True, exist_ok=True)
-    ticket.write_text("---\nstatus: todo\n---\n\n# Fixture\n\nLocal smoke only.\n", encoding="utf-8")
-    return ticket
-
-
-def hooks_smoke(project_root: Path, receipt_dir: Path | None = None) -> dict[str, Any]:
-    from farplane_file_events import record_hook_error
-    from farplane_mining import drain_pending, list_runs, pending_events, show_run
-    from hooks.farplane_file_change import handle_payload
-
-    project_root.mkdir(parents=True, exist_ok=True)
-    ticket = _write_hooks_test_project(project_root)
-    payload = {
-        "hook_event_name": "PostToolUse",
-        "tool_name": "apply_patch",
-        "cwd": str(project_root),
-        "session_id": "hooks-smoke",
-        "tool_input": {"patch": "*** Update File: tickets/TASK-9001/ticket.md"},
-    }
-    baseline = handle_payload(payload, project_root, wait_for_drain=True)
-    ticket.write_text("---\nstatus: completed\n---\n\n# Fixture\n\nLocal smoke only.\n", encoding="utf-8")
-    completed = handle_payload(payload, project_root, wait_for_drain=True)
-    retry = handle_payload(payload, project_root, wait_for_drain=True)
-    runs = list_runs(project_root)
-    run_details = [show_run(project_root, row["run_id"]) for row in runs]
-
-    failure_root = project_root.parent / f"{project_root.name}-failed-launch"
-    failure_ticket = _write_hooks_test_project(failure_root)
-    failure_payload = {**payload, "cwd": str(failure_root)}
-    failure_ticket.write_text("---\nstatus: todo\n---\n\n# Fixture\n\nLocal smoke only.\n", encoding="utf-8")
-    handle_payload(failure_payload, failure_root, wait_for_drain=True)
-    failure_ticket.write_text("---\nstatus: completed\n---\n\n# Fixture\n\nLocal smoke only.\n", encoding="utf-8")
-    failed_launch = handle_payload(failure_payload, failure_root, drain_command=["/definitely/missing/farplane-miner"])
-    pending_after_failed_launch = len(pending_events(failure_root))
-    recovered = drain_pending(failure_root)
-    failure_runs = list_runs(failure_root)
-
-    error_receipt = record_hook_error(
-        project_root,
-        hook_name="farplane_hooks_test_deliberate_failure",
-        error="deliberate processor failure for fail-open receipt proof",
-        payload=payload,
-    )
-
-    with tempfile.TemporaryDirectory() as tmp:
-        codex_home = Path(tmp) / "codex-home"
-        _link_temp_codex_home(codex_home)
-        healthy = hooks_doctor(codex_home)
-        (codex_home / "hooks" / "farplane_local_event.py").unlink()
-        broken = hooks_doctor(codex_home)
-
-    receipt = {
-        "ok": (
-            healthy["ok"]
-            and not broken["ok"]
-            and completed["ok"]
-            and completed.get("persisted_before_launch", {}).get("event_records_exist") is True
-            and completed.get("persisted_before_launch", {}).get("outbox_rows_exist") is True
-            and retry["ok"]
-            and len(runs) == 2
-            and pending_after_failed_launch == 1
-            and recovered["ok"]
-            and len(failure_runs) == 2
-        ),
-        "summary": "Core hook smoke exercised Doctor and event_routes fanout",
-        "projectRoot": str(project_root),
-        "baseline": baseline,
-        "completed": completed,
-        "retry": retry,
-        "runIds": sorted(row["run_id"] for row in runs),
-        "runDetails": [
-            {
-                "run": detail["run"],
-                "report": detail["report"],
-            }
-            for detail in run_details
-        ],
-        "processSeparation": {
-            "parentPid": completed.get("drain_launch", {}).get("parent_pid"),
-            "childPid": completed.get("drain_launch", {}).get("child_pid"),
-            "distinct": completed.get("drain_launch", {}).get("parent_pid")
-            != completed.get("drain_launch", {}).get("child_pid"),
-            "launchReceipt": completed.get("drain_launch", {}).get("receipt_path"),
-            "capturedBeforeLaunch": completed.get("persisted_before_launch", {}),
-        },
-        "failedLaunchRecovery": {
-            "failedLaunch": failed_launch,
-            "pendingAfterFailedLaunch": pending_after_failed_launch,
-            "recovered": recovered,
-            "runIds": sorted(row["run_id"] for row in failure_runs),
-        },
-        "healthyDoctor": healthy,
-        "brokenDoctor": broken,
-        "errorReceipt": error_receipt,
-        "issues": []
-        if (
-            healthy["ok"]
-            and not broken["ok"]
-            and len(runs) == 2
-            and pending_after_failed_launch == 1
-            and recovered["ok"]
-            and completed.get("persisted_before_launch", {}).get("event_records_exist") is True
-            and completed.get("persisted_before_launch", {}).get("outbox_rows_exist") is True
-        )
-        else ["hooks_smoke_failed"],
-        "hints": [],
-    }
-    if receipt_dir:
-        receipt_dir.mkdir(parents=True, exist_ok=True)
-        path = receipt_dir / "core-hooks-runtime-smoke.json"
-        path.write_text(json.dumps(receipt, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-        receipt["receiptPath"] = str(path)
-    return receipt
-
-
-def run_hooks_test(args: argparse.Namespace) -> int:
-    project_root = Path(args.project_root).expanduser().resolve()
-    receipt_dir = Path(args.receipt_dir).expanduser().resolve() if args.receipt_dir else None
-    payload = hooks_smoke(project_root, receipt_dir)
-    print_payload(payload, args.json)
-    return 0 if payload["ok"] else 1
-
-
 def run_notify_status(args: argparse.Namespace) -> int:
     codex_home = Path(args.target).expanduser().resolve() if args.target else load_config().codex_home
     payload = notify_status_payload(codex_home)
@@ -1052,6 +908,24 @@ def run_ticket_history_cli(args: argparse.Namespace) -> int:
     return int(run_history(args))
 
 
+def run_ticket_close_cli(args: argparse.Namespace) -> int:
+    from farplane_ticket_close import TicketCloseError, close_ticket
+
+    try:
+        payload = close_ticket(Path(args.project_root).expanduser().resolve(), args.ticket_id)
+    except (OSError, TicketCloseError) as exc:
+        raise CliError(f"ticket_close_error:{exc}") from exc
+    if args.json:
+        print(json.dumps(payload, indent=2, sort_keys=True))
+    else:
+        print(
+            f"farplane ticket close {payload['ticket_id']}: {payload['status']} "
+            f"(mining={payload['mining_status']})"
+        )
+        print(f"receipt: {payload['receipt_path']}")
+    return 0 if payload["ok"] else 1
+
+
 def run_metrics_primitives_cli(args: argparse.Namespace) -> int:
     from farplane_primitive_metrics import run_primitives
 
@@ -1083,14 +957,13 @@ def run_entities_compile_cli(args: argparse.Namespace) -> int:
 
 
 def run_mining_cli(args: argparse.Namespace) -> int:
-    from farplane_file_events import FileEventError
     from farplane_mining import (
         MiningError,
         drain_pending,
-        handle_file_change,
         list_programs,
         list_routes,
         list_runs,
+        mine_ticket,
         remove_route,
         replay_run,
         rerun_run,
@@ -1142,15 +1015,11 @@ def run_mining_cli(args: argparse.Namespace) -> int:
             }
         elif group == "drain":
             payload = drain_pending(project_root)
-        elif group == "handle-file-change":
-            raw = sys.stdin.read() if args.payload == "-" else Path(args.payload).read_text(encoding="utf-8")
-            parsed = json.loads(raw)
-            if not isinstance(parsed, dict):
-                raise MiningError("file_change_payload_must_be_object")
-            payload = handle_file_change(parsed, project_root)
+        elif group == "ticket":
+            payload = {"ok": True, **mine_ticket(project_root, args.ticket_id)}
         else:
             raise MiningError(f"unsupported_mining_command:{group}:{action}")
-    except (FileEventError, MiningError, OSError, json.JSONDecodeError) as exc:
+    except (MiningError, OSError, json.JSONDecodeError) as exc:
         raise CliError(f"mining_error:{exc}") from exc
 
     if args.json:
@@ -1312,12 +1181,6 @@ def build_parser() -> argparse.ArgumentParser:
     hooks_doctor_parser.add_argument("--target", help="Codex home target. Defaults to ~/.codex.")
     hooks_doctor_parser.add_argument("--json", action="store_true")
     hooks_doctor_parser.set_defaults(func=run_hooks_doctor)
-    hooks_test = hooks_sub.add_parser("test", help="Run deterministic Core hook runtime smoke.")
-    hooks_test.add_argument("--project-root", required=True, help="Temporary project fixture root to create/use.")
-    hooks_test.add_argument("--receipt-dir", help="Directory for the smoke receipt JSON.")
-    hooks_test.add_argument("--json", action="store_true")
-    hooks_test.set_defaults(func=run_hooks_test)
-
     notify = sub.add_parser("notify", help="Enable, disable, or inspect the Farplane turn-complete notify script.")
     notify_sub = notify.add_subparsers(dest="notify_command")
     notify_status = notify_sub.add_parser("status", help="Show whether the Farplane notify script is enabled.")
@@ -1403,6 +1266,14 @@ def build_parser() -> argparse.ArgumentParser:
     harness_health_compile.add_argument("--no-write", action="store_true")
     harness_health_compile.add_argument("--json", action="store_true")
     harness_health_compile.set_defaults(func=run_harness_health_compile_cli)
+
+    ticket = sub.add_parser("ticket", help="Apply canonical Farplane ticket lifecycle transitions.")
+    ticket_sub = ticket.add_subparsers(dest="ticket_command")
+    ticket_close = ticket_sub.add_parser("close", help="Close, archive, and emit completion mining for one ticket.")
+    ticket_close.add_argument("ticket_id")
+    ticket_close.add_argument("--project-root", default=os.getcwd())
+    ticket_close.add_argument("--json", action="store_true")
+    ticket_close.set_defaults(func=run_ticket_close_cli)
 
     tickets = sub.add_parser("tickets", help="Inspect Farplane ticket projections.")
     tickets_sub = tickets.add_subparsers(dest="tickets_command")
@@ -1522,11 +1393,11 @@ def build_parser() -> argparse.ArgumentParser:
     mining_drain.add_argument("--json", action="store_true")
     mining_drain.set_defaults(func=run_mining_cli, mining_action=None)
 
-    mining_handle = mining_sub.add_parser("handle-file-change", help="Handle one Codex PostToolUse JSON payload.")
-    mining_handle.add_argument("--payload", required=True, help="JSON payload path or - for stdin.")
-    mining_handle.add_argument("--project-root", default=os.getcwd())
-    mining_handle.add_argument("--json", action="store_true")
-    mining_handle.set_defaults(func=run_mining_cli, mining_action=None)
+    mining_ticket = mining_sub.add_parser("ticket", help="Mine one completed ticket by canonical ID.")
+    mining_ticket.add_argument("ticket_id")
+    mining_ticket.add_argument("--project-root", default=os.getcwd())
+    mining_ticket.add_argument("--json", action="store_true")
+    mining_ticket.set_defaults(func=run_mining_cli, mining_action=None)
 
     content = sub.add_parser("content", help="Append or inspect local Farplane content ledger rows.")
     content_sub = content.add_subparsers(dest="content_command")

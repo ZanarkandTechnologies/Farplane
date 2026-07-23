@@ -16,6 +16,9 @@ from typing import Any
 
 FINAL_OUTCOMES = {"completed", "no_op", "source_gap", "human_request"}
 SERIALIZATION_TIME_KEYS = {"as_of", "serialized_at"}
+SERIALIZATION_COUNTER_KEYS = {"unanswered_pulse_turns"}
+BOARD_SOURCE_COORDINATE_KEYS = {"ledger", "worker_index"}
+BOARD_DIAGNOSTIC_KEYS = {"released_worker_rows"}
 SEMANTIC_TIME_FIELDS = {
     "metric_freshness",
     "goal_urgency",
@@ -100,33 +103,39 @@ def semantic_planning_value(
     )
     legacy_clock = value.get("as_of") if isinstance(value, dict) else None
 
-    def project(item: Any) -> Any:
+    def project(item: Any, path: tuple[str, ...] = ()) -> Any:
         if isinstance(item, dict):
             result: dict[str, Any] = {}
             for raw_key, child in item.items():
                 key = str(raw_key)
                 if key in SERIALIZATION_TIME_KEYS:
                     continue
+                if normalized_time_state is not None and key in SERIALIZATION_COUNTER_KEYS:
+                    continue
                 if key == "semantic_time_state" and normalized_time_state is not None:
-                    result[key] = project(normalized_time_state)
+                    result[key] = project(normalized_time_state, (*path, key))
+                    continue
+                if path == ("board",) and key in BOARD_SOURCE_COORDINATE_KEYS:
+                    continue
+                if path == ("board",) and key in BOARD_DIAGNOSTIC_KEYS:
                     continue
                 if is_temporary_json_ref(key, child):
-                    path = Path(child)
-                    if not path.is_absolute():
-                        path = root / path
+                    ref_path = Path(child)
+                    if not ref_path.is_absolute():
+                        ref_path = root / ref_path
                     try:
-                        loaded = json.loads(path.read_text(encoding="utf-8"))
+                        loaded = json.loads(ref_path.read_text(encoding="utf-8"))
                     except (OSError, json.JSONDecodeError):
                         # A missing or malformed input is itself meaningful and
                         # must not silently dedupe with a valid receipt.
                         result[key] = child
                     else:
-                        result[f"{key}_content"] = project(loaded)
+                        result[f"{key}_content"] = project(loaded, (*path, key))
                     continue
-                result[key] = project(child)
+                result[key] = project(child, (*path, key))
             return result
         if isinstance(item, list):
-            return [project(child) for child in item]
+            return [project(child, path) for child in item]
         return item
 
     projected = project(value)
@@ -256,9 +265,9 @@ def finish_wave(
     claim_id: str,
     outcome: str,
     admitted: list[str],
+    admitted_skills: dict[str, str] | None = None,
     admitted_areas: dict[str, str] | None = None,
     reason: str = "",
-    admitted_lanes: dict[str, str] | None = None,
 ) -> dict[str, Any]:
     if outcome not in FINAL_OUTCOMES:
         raise ValueError(f"invalid outcome: {outcome}")
@@ -280,30 +289,44 @@ def finish_wave(
     repeated = sorted(set(admitted).intersection(prior_ids))
     if repeated:
         raise ValueError(f"ticket ids already admitted: {', '.join(repeated)}")
-    admitted_areas = admitted_areas or {}
-    if set(admitted_areas) != set(admitted):
-        raise ValueError("every admitted ticket must have exactly one selected area_id")
+    admitted_skills = {
+        str(ticket_id).strip(): str(skill_ref).strip()
+        for ticket_id, skill_ref in (admitted_skills or {}).items()
+    }
+    if set(admitted_skills) != set(admitted):
+        raise ValueError("every admitted ticket must have exactly one selected skill_ref")
+    if any(not str(skill_ref).strip() for skill_ref in admitted_skills.values()):
+        raise ValueError("selected skill_ref cannot be blank")
+    admitted_areas = {
+        str(ticket_id).strip(): str(area_id).strip()
+        for ticket_id, area_id in (admitted_areas or {}).items()
+    }
+    unexpected_area_ids = sorted(set(admitted_areas).difference(admitted))
+    if unexpected_area_ids:
+        raise ValueError(
+            "area bindings reference non-admitted tickets: "
+            + ", ".join(unexpected_area_ids)
+        )
     if any(not str(area_id).strip() for area_id in admitted_areas.values()):
         raise ValueError("selected area_id cannot be blank")
-    admitted_lanes = admitted_lanes or {}
-    if set(admitted_lanes) != set(admitted):
-        raise ValueError("every admitted ticket must have exactly one selected lane")
-    if any(not str(lane).strip() for lane in admitted_lanes.values()):
-        raise ValueError("selected lane cannot be blank")
 
     row = {
-        "schema": "farplane.plan_wave_decision.v1",
+        "schema": "farplane.plan_wave_decision.v2",
         "action": "plan_next_wave",
         "status": outcome,
         "claim_id": claim_id,
         "planning_fingerprint": claim["planning_fingerprint"],
         "wave_size": wave_size,
         "admitted": admitted,
-        "admitted_specs": [
+        "admitted_skill_calls": [
             {
                 "ticket_id": ticket_id,
-                "area_id": admitted_areas[ticket_id],
-                "ranking": {"lane": admitted_lanes[ticket_id]},
+                "skill_ref": admitted_skills[ticket_id],
+                **(
+                    {"area_id": admitted_areas[ticket_id]}
+                    if ticket_id in admitted_areas
+                    else {}
+                ),
             }
             for ticket_id in admitted
         ],
@@ -329,16 +352,16 @@ def parse_args() -> argparse.Namespace:
     finish.add_argument("--outcome", choices=sorted(FINAL_OUTCOMES), required=True)
     finish.add_argument("--admitted", action="append", default=[])
     finish.add_argument(
+        "--admitted-skill",
+        action="append",
+        default=[],
+        help="TICKET_ID=SKILL_REF; required once for every admitted ticket",
+    )
+    finish.add_argument(
         "--admitted-area",
         action="append",
         default=[],
-        help="TICKET_ID=AREA_ID; required once for every admitted ticket",
-    )
-    finish.add_argument(
-        "--admitted-lane",
-        action="append",
-        default=[],
-        help="TICKET_ID=LANE; required once for every admitted ticket",
+        help="TICKET_ID=AREA_ID; optional passive context for an admitted ticket",
     )
     finish.add_argument("--reason", default="")
     return parser.parse_args()
@@ -351,21 +374,23 @@ def main() -> int:
             raw = sys.stdin.read() if args.input == "-" else Path(args.input).read_text(encoding="utf-8")
             result = begin_wave(Path(args.project_root), json.loads(raw), args.wave_size)
         else:
+            admitted_skills = {}
+            for raw in args.admitted_skill:
+                ticket_id, separator, skill_ref = raw.partition("=")
+                ticket_id = ticket_id.strip()
+                if not separator or not ticket_id or ticket_id in admitted_skills:
+                    raise ValueError(f"invalid or duplicate --admitted-skill: {raw}")
+                admitted_skills[ticket_id] = skill_ref.strip()
             admitted_areas = {}
             for raw in args.admitted_area:
                 ticket_id, separator, area_id = raw.partition("=")
-                if not separator:
-                    raise ValueError(f"invalid --admitted-area: {raw}")
-                admitted_areas[ticket_id.strip()] = area_id.strip()
-            admitted_lanes = {}
-            for raw in args.admitted_lane:
-                ticket_id, separator, lane = raw.partition("=")
-                if not separator:
-                    raise ValueError(f"invalid --admitted-lane: {raw}")
-                admitted_lanes[ticket_id.strip()] = lane.strip()
+                ticket_id = ticket_id.strip()
+                if not separator or not ticket_id or ticket_id in admitted_areas:
+                    raise ValueError(f"invalid or duplicate --admitted-area: {raw}")
+                admitted_areas[ticket_id] = area_id.strip()
             result = finish_wave(
                 Path(args.project_root), args.claim_id, args.outcome, args.admitted,
-                admitted_areas, args.reason, admitted_lanes
+                admitted_skills, admitted_areas, args.reason
             )
     except (OSError, ValueError, json.JSONDecodeError) as exc:
         print(json.dumps({"ok": False, "error": str(exc)}, sort_keys=True))

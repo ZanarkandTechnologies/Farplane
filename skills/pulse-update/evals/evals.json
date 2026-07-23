@@ -45,18 +45,18 @@
     {
       "id": "pulse_empty_board_calls_pure_planner",
       "prompt": "The board has no executable ticket, review WIP is below its limit, and the project program and objective are current. The heartbeat may create at most three tickets and run one worker. What should happen?",
-      "expected_output": "Chooses plan_next_wave after reconciliation and dispatch leave ready supply below the configured low watermark; Builds a canonical planning input and atomically acquires its fingerprint before planning; Returns no_op_unchanged_input for an identical completed fingerprint and blocked_overlap for an active claim; Binds identity, complete harness.areas records including every planner_instruction, selected metric refs, and guards from harness.yaml plus metric direction and freshness from metrics.yaml; Passes complete areas, objective contract, metric state, adaptive ticket-history query, current context, and wave_size three to the planner without reconstructing area policy; Requires a latest global history query before progressive area or AI-origin filters; Pulse materializes only complete KPI-linked accepted specs with matching area-instruction traces, records each selected area_id, and finishes the claim without exceeding wave_size; Dispatches at most one ticket because worker_limit is separate from wave_size; Does not invoke an area planner or product controller",
+      "expected_output": "Chooses plan_next_wave after reconciliation and dispatch leave ready supply below the configured low watermark; Builds a canonical planning input and atomically acquires its fingerprint before planning; Returns no_op_unchanged_input for an identical completed fingerprint and blocked_overlap for an active claim; Binds identity, planning.skill_refs and each skill planner_contract, selected metric refs, and guards from harness.yaml plus metric direction and freshness from metrics.yaml; Passes the configured skill allowlist, passive areas, objective contract, metric state, adaptive skill-aware ticket history, current context, and wave_size three to the planner; Requires a latest global history query before progressive skill, area, or AI-origin filters; Pulse materializes only validated KPI-linked admitted skill calls through the generic ticket contract, records skill_ref plus optional area_id, and finishes the claim without exceeding wave_size; Dispatches at most one ticket because worker_limit is separate from wave_size; Does not invoke an area planner or invent a workflow",
       "files": ["farplane/harness.yaml", "farplane/metrics.yaml"],
       "assertions": [
         "Chooses plan_next_wave after reconciliation and dispatch leave ready supply below the configured low watermark",
         "Builds a canonical planning input and atomically acquires its fingerprint before planning",
         "Returns no_op_unchanged_input for an identical completed fingerprint and blocked_overlap for an active claim",
-        "Binds identity, complete area records and planner instructions, selected metric refs, and guards from harness.yaml plus metric direction and freshness from metrics.yaml",
-        "Passes complete harness.areas records, objective contract, metric state, adaptive ticket-history query, current context, and wave_size three to the planner",
-        "Requires a latest global history query before progressive area or AI-origin filters",
-        "Pulse materializes only complete KPI-linked accepted specs with matching area-instruction traces, records each selected area_id, and finishes the claim without exceeding wave_size",
+        "Binds identity, planning.skill_refs and each skill planner_contract, selected metric refs, and guards from harness.yaml plus metric direction and freshness from metrics.yaml",
+        "Passes the configured skill allowlist, passive areas, objective contract, metric state, adaptive skill-aware ticket history, current context, and wave_size three to the planner",
+        "Requires a latest global history query before progressive skill, area, or AI-origin filters",
+        "Pulse materializes only validated KPI-linked admitted skill calls through the generic ticket contract and records skill_ref plus optional area_id",
         "Dispatches at most one ticket because worker_limit is separate from wave_size",
-        "Does not invoke an area planner or product controller"
+        "Does not invoke an area planner or invent a workflow"
       ],
       "metadata": {
         "farplane": {
@@ -250,7 +250,7 @@
     {
       "id": "pulse_runs_maintenance_review_dispatch_and_refill_together",
       "prompt": "A heartbeat finds two terminal tickets, one due review reminder, one ready ticket, two idle worker slots, and ready_low_watermark two. What should one Work Pulse do?",
-      "expected_output": "Archives both safe terminal tickets; Sends the one due reminder without a worker; Dispatches the ready ticket into one idle slot; Recomputes ready supply after dispatch and calls plan_next_wave because it is below the low watermark; May materialize and dispatch one QA-passing spec into the remaining slot; Writes one combined phase receipt; Does not wait for either worker or perform ticket bodies inline",
+      "expected_output": "Archives both safe terminal tickets; Sends the one due reminder without a worker; Dispatches the ready ticket into one idle slot; Recomputes ready supply after dispatch and calls plan_next_wave because it is below the low watermark; May materialize and dispatch one validated admitted skill call into the remaining slot; Writes one combined phase receipt; Does not wait for either worker or perform ticket bodies inline",
       "files": [],
       "assertions": [
         "Archives both safe terminal tickets",
@@ -297,30 +297,86 @@
     {
       "id": "pulse_full_review_pools_keep_safe_workers_productive",
       "prompt": "Run one Work Pulse from the supplied project snapshot. Four worker slots are idle, ready supply is below twenty, and the operator is unavailable. Return the canonical machine-readable Pulse receipt that the next automation wake can consume.",
-      "expected_output": "Keeps all five review tickets and their decisions distinct while presenting three area pools; Does not globally block dispatch because review_wip is full; Calls plan_next_wave with goals, lane-aware history, review-pool state, operator availability, and optional taste evidence; Requires top-N receipts from all five lanes before one global ranking; Admits and dispatches only unattended-safe artifact-producing work within wave and worker limits; Keeps publish-now work human-gated and deprioritized",
+      "expected_output": "Keeps all five review tickets and their decisions distinct while presenting three review pools; Does not globally block dispatch because review_wip is full; Calls plan_next_wave with configured skills, goals, skill-aware history, review-pool state, operator availability, and optional taste evidence; Compares only fully bound calls to configured skills in one global ranking; Admits and dispatches only unattended-safe artifact-producing work within wave and worker limits; Keeps publish-now work human-gated and deprioritized",
       "files": [],
       "assertions": [
         "Review pooling does not merge canonical tickets or decisions",
         "Full review pools do not globally block safe dispatch or planning",
-        "Pulse passes goals, lane-aware history, pool state, and operator availability to the planner",
-        "Every lane proposes top-N before one global ranking",
+        "Pulse passes configured skills, goals, skill-aware history, pool state, and operator availability to the planner",
+        "Only fully bound configured skill calls enter one global ranking",
         "Only unattended-safe artifact work enters workers while publication stays gated"
       ],
-      "metadata": {"farplane": {"title": "Full review pools switch strategy instead of stopping Pulse", "context": "This supplied synthetic project snapshot is authoritative and complete for this eval case; use it as the canonical planning-input object rather than substituting live-project source gaps. The downstream automation consumes the standard structured Pulse receipt. review_wip is 3. The three active area pools contain five distinct undecided tickets: delivery has REV-1 and REV-2, research has REV-3 and REV-4, operations has REV-5; each retains its own artifact, request, and decision. Goals contain one completed reach target and one active failed-closeout target. Lane-aware history shows a recent accepted ablation, an accepted experiment, and no duplicate of the current candidates. Operator availability is false until morning. Optional taste evidence favors proof-led technical artifacts but grants no publication authority. Candidate inventory by lane is delivery: two artifact refinements; ablation: two machine-scored ablations; experiment: two delayed-signal experiments with executable check-ins; rollout: one rollout backed by an accepted result; operations: no safe candidate, with shortfall reason that no metric- or guard-restoring repair is evidenced. A separate publish-now campaign requires human publication approval and is not authority-safe overnight. All other candidates are distinct. Four workers are idle, unclaimed ready supply is below ready_low_watermark 20, wave_size is 10, and worker_limit is 4.", "tags": ["pulse-update", "review-pools", "unattended", "top-n", "hardcase"], "hardcase": true, "difficulty": "high", "benchmark_value": "Proves the shared Pulse remains productive overnight while retaining distinct ticket review state", "sanitization_notes": "Synthetic queue state with no private handles or content"}}
+      "metadata": {"farplane": {"title": "Full review pools switch strategy instead of stopping Pulse", "context": "This supplied synthetic project snapshot is authoritative and complete for this eval case; use it as the canonical planning-input object rather than substituting live-project source gaps. The downstream automation consumes the standard structured Pulse receipt. review_wip is 3. The three active review pools contain five distinct undecided tickets: delivery has REV-1 and REV-2, research has REV-3 and REV-4, operations has REV-5; each retains its own artifact, request, and decision. Goals contain one completed reach target and one active failed-closeout target. Skill-aware history shows a recent accepted ablation call, an accepted market-learning call, and no duplicate of the current candidates. Operator availability is false until morning. Optional taste evidence favors proof-led technical artifacts but grants no publication authority. The configured planning skills offer several fully bound unattended-safe calls; a separate publish-now campaign requires human publication approval and is not authority-safe overnight. Four workers are idle, unclaimed ready supply is below ready_low_watermark 20, wave_size is 10, and worker_limit is 4.", "tags": ["pulse-update", "review-pools", "unattended", "skill-calls", "hardcase"], "hardcase": true, "difficulty": "high", "benchmark_value": "Proves the shared Pulse remains productive overnight while retaining distinct ticket review state", "sanitization_notes": "Synthetic queue state with no private handles or content"}}
     },
     {
       "id": "pulse_passes_icp_world_memory_into_ticket_context",
-      "prompt": "Ready supply is below the low watermark. A valid Feed Scout memory exists with an updated_at timestamp, source-backed trend entries, and one stale/conflicting note. What must Work Pulse pass to Plan Next Wave and materialize into any outward-facing accepted ticket?",
-      "expected_output": "Loads the configured memory once and includes its ref, updated_at, content hash, relevant entry refs, confidence or freshness, and source gaps in the semantic planning input; Passes complete harness area records including canonical ICPs; Requires every outward-facing accepted spec to name the ICP job or pain, baseline/default, intended belief or workflow delta, world-memory refs, and source evidence; Preserves the stale/conflicting note as a labeled gap rather than current fact; Carries the same stable refs into ticket execution inputs; Does not create another planner, Pulse, or memory authority",
+      "prompt": "Ready supply is below the low watermark. A valid Feed Scout World Memory exists with an updated_at timestamp, source-backed trend entries, and one stale/conflicting note. What must Work Pulse pass to Plan Next Wave and materialize into any outward-facing accepted ticket?",
+      "expected_output": "Loads the configured World Memory once and passes complete relevant source-backed facts, confidence or freshness, and source gaps in the semantic planning input; Passes complete harness area records including canonical ICPs; Requires every outward-facing accepted spec to name the ICP job or pain, baseline/default, intended belief or workflow delta, complete copied world facts, and source evidence; Preserves the stale/conflicting note as a labeled gap rather than current fact; Carries complete selected facts into ticket execution inputs without World Memory pointers or hashes; Does not create another planner, Pulse, or memory authority",
       "files": ["farplane/harness.yaml", "farplane/bindings.yaml"],
       "assertions": [
-        "Loads persistent memory once with a semantic content hash",
+        "Loads World Memory once and selects complete relevant facts",
         "Passes complete canonical ICP records to the one planner",
         "Requires baseline and belief or workflow delta for outward tickets",
-        "Carries relevant memory and source refs into the materialized ticket",
+        "Carries complete selected facts and source refs into the materialized ticket",
         "Keeps stale evidence labeled and memory non-authoritative"
       ],
       "metadata": {"farplane": {"title": "Pulse preserves ICP and world context through materialization", "tags": ["pulse-update", "icp", "world-memory", "ticket-context"]}}
+    },
+    {
+      "id": "pulse_refreshes_stale_healthy_guard_before_top_five",
+      "prompt": "The board needs a five-ticket refill. The only configured hard-guard observation expired yesterday, and its declared local refresher is available. A current pool of fully bound calls to configured planning skills exists. Run the refill decision.",
+      "expected_output": "Runs the declared guard refresher once as Pulse preflight before fingerprinting planner input; Reloads a current healthy zero reading and continues planning in the same Pulse; Passes all fully bound configured skill calls into one combined ranking; Selects C1, C2, S1, S2, and A1 as the five strongest compatible calls; Treats refresh as maintenance that consumes zero wave slots and never materializes it as a ticket",
+      "files": ["farplane/harness.yaml", "farplane/metrics.yaml"],
+      "assertions": [
+        "Refreshes the stale configured guard through its declared provider before planning",
+        "Continues the same Pulse when the refreshed guard is current and healthy",
+        "Ranks one combined pool of fully bound configured skill calls",
+        "Selects C1, C2, S1, S2, and A1 as the global top five",
+        "Consumes no wave slot and creates no metric-refresh ticket"
+      ],
+      "metadata": {"farplane": {"title": "Healthy guard refresh resumes combined top-five ranking", "context": "Synthetic project snapshot. The only guard's latest reading is stale. Its configured refresh_ref resolves locally and returns a current value of 0 against a <= 0 guard. The complete combined pool has ten independently grounded eligible configured-skill calls. Risk-adjusted objective evidence orders them C1, C2, S1, S2, A1, M1, P1, A2, M2, P2 from strongest to weakest. wave_size is 5. Use these supplied identities and ordering without inventing candidate details.", "tags": ["pulse-update", "hard-guard", "refresh", "top-n", "skill-calls", "regression"], "hardcase": true, "difficulty": "high", "benchmark_value": "Proves observability maintenance cannot monopolize an otherwise healthy five-ticket wave", "sanitization_notes": "Synthetic metrics and candidates; no private project data"}}
+    },
+    {
+      "id": "pulse_refreshed_failing_guard_stays_fail_closed",
+      "prompt": "A refill is due, but the configured hard-guard observation is stale. Its declared refresher completes and reports current named failures. What should this Pulse do?",
+      "expected_output": "Runs the declared refresher once and reloads the current result; Does not call Plan Next Wave or materialize ordinary skill calls because the current guard fails; Reports the named underlying failures rather than observation age; Routes bounded mechanical repair through Pulse maintenance or a material real-gap incident path; Creates no observation-refresh ticket and does not relabel the refresh as direct value",
+      "files": ["farplane/harness.yaml", "farplane/metrics.yaml"],
+      "assertions": [
+        "Reloads the refreshed current guard result",
+        "Keeps ordinary admission fail-closed on a real current guard failure",
+        "Names the underlying failures rather than staleness",
+        "Routes actual repair outside the value portfolio",
+        "Creates no observation-refresh ticket"
+      ],
+      "metadata": {"farplane": {"title": "Current guard failure blocks on the real gap", "context": "Synthetic project snapshot. The declared refresher succeeds and returns a current value of 2 against a <= 0 guard, with two named malformed source inputs. No other guard exists.", "tags": ["pulse-update", "hard-guard", "fail-closed", "regression"]}}
+    },
+    {
+      "id": "pulse_guard_refresh_failure_returns_source_gap",
+      "prompt": "Ready supply is below the low watermark and a selected hard guard is stale. The configured refresh attempt cannot produce a current reading. Return the Pulse outcome.",
+      "expected_output": "Attempts the declared guard refresher once before planning; Records the refresh failure and stale guard as an explicit source gap; Does not call the planner with invalid guard state; Returns no admitted specs and no filler; Creates no metric-refresh, observation-restoration, or unblock-the-planner ticket",
+      "files": ["farplane/harness.yaml", "farplane/metrics.yaml"],
+      "assertions": [
+        "Attempts the configured refresher once before planning",
+        "Returns an explicit source gap when no current reading is produced",
+        "Does not pass stale guard state into Plan Next Wave",
+        "Returns an empty wave rather than filler",
+        "Creates no refresh or planner-unblocking ticket"
+      ],
+      "metadata": {"farplane": {"title": "Guard refresh failure is a source gap, not a ticket", "context": "Synthetic project snapshot. The selected guard is stale, the configured refresher exits without a valid current observation, and no alternate current source exists.", "tags": ["pulse-update", "hard-guard", "source-gap", "regression"]}}
+    },
+    {
+      "id": "pulse_transports_terminal_preference_without_rejection_outage",
+      "prompt": "Ready supply is below the low watermark. Use the supplied Reward history and the current harness and metric files. The rejected AI ticket count is 3 today; the remaining configured hard guard is fresh and healthy. What should the refill input and materialization gate do?",
+      "expected_output": "Derives bounded preference_memory from the accept and kill rows only, preserving actual_result, evaluated_at, ticket/reward provenance, applicability, reconsideration boundary, and evidence refs; Omits monitor and blank rows; Keeps preference memory separate from World Memory and taste evidence; Calls the planner because rejected_ai_ticket_count is diagnostic-only; Requires configured skill refs, exact argument bindings, objective impact, proof, and dedupe receipts before comparing or materializing calls; Continues unrelated safe planning while adapting calls that repeat rejected premises",
+      "files": ["skills/plan-next-wave/evals/fixtures/terminal-reward-history.json", "farplane/harness.yaml", "farplane/metrics.yaml"],
+      "assertions": [
+        "Maps accept and kill into preference memory and omits nonterminal rows",
+        "Preserves durable Reward provenance",
+        "Does not use rejected_ai_ticket_count as a same-day hard outage",
+        "Requires configured skill-call validation before materialization",
+        "Keeps World Memory, preference memory, and Tasty Pack evidence separate"
+      ],
+      "metadata": {"farplane": {"title": "Pulse transports rejection learning without freezing planning", "tags": ["pulse-update", "preference", "skill-calls", "metrics", "hardcase"], "hardcase": true, "difficulty": "high", "benchmark_value": "Proves Pulse transports only provenance-bearing terminal preference evidence and applies the actual configured guard set before refill", "sanitization_notes": "Synthetic TOY Reward rows and a raw rejection count; no private ticket history or feedback"}}
     }
   ]
 }

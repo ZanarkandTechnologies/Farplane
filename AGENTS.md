@@ -264,8 +264,8 @@ For harness-design research and external patterns:
 - When summarizing implemented feature changes to the operator, prefer `Before` / `After` / `Example` bullets over one dense prose block. See `MEM-0051`.
 - Keep QA and completion proof artifact-first: link ticket-scoped evidence from `tickets/TASK-XXXX/artifacts/`, and for UI/user-visible work keep browser capture separate from final `visual-qa` judgment. See `MEM-0048`.
 - For adversarial agent testing, treat `agent-qa-test` as the public proof
-  orchestrator and `agent-behavior-test` as the instrumented child-run capture
-  primitive. Serious readiness claims should include tester evidence,
+  orchestrator and Eval `behavior_trace` as the isolated CLI child-run capture
+  mode. Serious readiness claims should include tester evidence,
   evidence-review critique, captured logs when useful, and a final proof-bundle
   review. See `MEM-0115`.
 - In Goal-backed ticket execution, treat `$qa` as a delegated proof surface:
@@ -287,9 +287,10 @@ For harness-design research and external patterns:
   checkpoint. Do not rely on hooks to advance phases.
 - Final completion in Farplane should remain mechanical and visible: material
   Goal prompts must require QA evidence review and reviewer-lane completion
-  review before `stop_complete`, then write the receipt and strongest evidence
-  back to the ticket, `progress.md`, and `artifacts/`. Live Stop hooks collect
-  telemetry only and do not own completion routing.
+  review, write the strongest evidence back to the packet, then run `farplane
+  ticket close TASK-XXXX` before `stop_complete`. That command owns terminal
+  metadata, archive movement, completion-event emission, and mining. Live Stop
+  hooks collect telemetry only and do not own completion routing.
 - In Farplane, `qa_checklist.md` is the self/preflight/repair guardrail and the
   native `reviewer` lane is the independent readiness gate for material claims.
   Do not make every tiny checklist a subagent job; do not let material plans,

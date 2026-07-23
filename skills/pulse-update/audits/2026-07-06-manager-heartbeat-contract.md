@@ -23,7 +23,7 @@ eval_required: yes
   product-lane artifacts, worker review notifications, and execution handoff
   behavior that already belonged to owner skills.
 - After: `pulse-update` keeps the manager heartbeat contract and routes detailed
-  ticket spec quality to `ticket-opportunity-generator`, artifact workflow
+  ticket spec quality to `plan-next-wave`, artifact workflow
   contracts to product skills, execution compilation to `goal-advisor`, and
   Telegram artifact-review details to `worker-artifact-review-request`.
 - Why: Pulse had become harder to maintain because the caller surface carried
@@ -51,7 +51,7 @@ eval_required: yes
 | Check | Verdict | Evidence |
 | --- | --- | --- |
 | `first_load_sufficiency` | pass | Pulse still has signature, modes, gates, todos, routes, output contract, and writeback requirements. |
-| `reference_load_precision` | pass | Pulse links `ticket-opportunity-generator` and `worker-artifact-review-request` at the owner handoff points. |
+| `reference_load_precision` | pass | Pulse links `plan-next-wave` and `worker-artifact-review-request` at the owner handoff points. |
 | `missing_context_rate` | pass | TASK-0294 hard gates remain represented in Pulse, generator, review-request, and evals. |
 | `noisy_context_rate` | pass | Pulse first-load reduced from 572 to 478 lines by removing repeated downstream detail. |
 | `duplicated_instruction_count` | pass | Detailed ticket spec fields now point to the generator owner; Telegram message detail points to review-request owner. |
@@ -69,7 +69,7 @@ eval_required: yes
 - Reviewer receipt: pending `tickets/TASK-0302/artifacts/review/<timestamp>-planning-review.json`.
 - Validator:
   - `python3 -m json.tool skills/pulse-update/eval_task.json`
-  - `python3 -m json.tool skills/ticket-opportunity-generator/eval_task.json`
+  - `python3 -m json.tool skills/plan-next-wave/eval_task.json`
   - `python3 -m json.tool skills/worker-artifact-review-request/eval_task.json`
   - `python3 tickets/scripts/check_ticket_metadata.py tickets/TASK-0302/ticket.md`
 - Eval required: yes.
@@ -90,7 +90,7 @@ eval_required: yes
 - Pulse remains responsible for board/worker reconciliation, proceedable ticket
   admission, mode choice, safe next-wave routing, worker handoff creation or
   recording, and decision/reward/report writeback.
-- `ticket-opportunity-generator` is explicitly the detailed owner for
+- `plan-next-wave` is explicitly the detailed owner for
   executable ticket spec quality.
 - `worker-artifact-review-request` is explicitly the detailed owner for
   Telegram-first worker artifact review.

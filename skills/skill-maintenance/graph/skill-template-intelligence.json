@@ -159,7 +159,7 @@
     },
     {
       "changed_sections": [],
-      "introduced_at": "2026-07-21",
+      "introduced_at": "2026-07-23",
       "section_count": 9,
       "sections": [
         "Context",
@@ -172,8 +172,8 @@
         "Reference Map",
         "Output"
       ],
-      "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.8-42d5b6bb78bc.md",
-      "source_commit": "42d5b6bb78bc",
+      "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.8-18a57c53eb2e.md",
+      "source_commit": "18a57c53eb2e",
       "summary": "working tree current template",
       "version": "0.3.8"
     }
@@ -737,7 +737,7 @@
         "trigger catalogs stay out of frontmatter"
       ],
       "missing_signals": [],
-      "source_commit": "42d5b6bb78bc",
+      "source_commit": "18a57c53eb2e",
       "template_version": "0.3.8",
       "title": "Routing clarity",
       "verdict": "pass"
@@ -751,7 +751,7 @@
         "policy prose is not treated as a top-level todo"
       ],
       "missing_signals": [],
-      "source_commit": "42d5b6bb78bc",
+      "source_commit": "18a57c53eb2e",
       "template_version": "0.3.8",
       "title": "Todo executability",
       "verdict": "pass"
@@ -765,7 +765,7 @@
         "same-scope recursion is forbidden"
       ],
       "missing_signals": [],
-      "source_commit": "42d5b6bb78bc",
+      "source_commit": "18a57c53eb2e",
       "template_version": "0.3.8",
       "title": "Phase boundary",
       "verdict": "pass"
@@ -779,7 +779,7 @@
         "output contract is explicit"
       ],
       "missing_signals": [],
-      "source_commit": "42d5b6bb78bc",
+      "source_commit": "18a57c53eb2e",
       "template_version": "0.3.8",
       "title": "Proof contract",
       "verdict": "pass"
@@ -793,7 +793,7 @@
         "qa_checklist.md is a repeatable runtime guardrail only when warranted"
       ],
       "missing_signals": [],
-      "source_commit": "42d5b6bb78bc",
+      "source_commit": "18a57c53eb2e",
       "template_version": "0.3.8",
       "title": "Eval / QA sync",
       "verdict": "pass"
@@ -939,7 +939,7 @@
       ]
     }
   ],
-  "generated_at": "2026-07-21T19:55:48+00:00",
+  "generated_at": "2026-07-23T21:34:58+00:00",
   "rollout": [
     {
       "eval": "evals/evals.json",
@@ -1941,7 +1941,7 @@
       "eval": "evals/evals.json",
       "has_checklist": true,
       "path": "skills/ingest-content/SKILL.md",
-      "qa_checklist": "",
+      "qa_checklist": "qa_checklist.md",
       "skill_id": "ingest-content",
       "skill_ui": "",
       "source": "local",
@@ -2126,7 +2126,7 @@
       "skill_ui": "",
       "source": "local",
       "status": "stale",
-      "template_version": "0.3.7",
+      "template_version": "0.3.9",
       "tier": 3
     },
     {
@@ -2400,9 +2400,9 @@
       "0.3.2": 7,
       "0.3.5": 1,
       "0.3.6": 4,
-      "0.3.7": 22,
+      "0.3.7": 21,
       "0.3.8": 4,
-      "0.3.9": 2,
+      "0.3.9": 3,
       "missing": 52
     },
     "total_skills": 120
@@ -2410,7 +2410,7 @@
   "schema_version": "1.0.0",
   "source": {
     "feature_registry_path": "docs/features/registry.jsonl",
-    "repo": "/private/tmp/farplane-task0401-cuBsW2",
+    "repo": "/private/tmp/farplane-split.QLkuYh/verify-migration",
     "skill_registry_path": "docs/skills/registry.jsonl",
     "template_path": "docs/skills/templates/SKILL_TEMPLATE.md"
   },
@@ -3149,11 +3149,12 @@
       "path": "skills/ingest-content/SKILL.md",
       "surfaces": {
         "eval": true,
-        "qa_checklist": false,
+        "qa_checklist": true,
         "skill": true
       },
       "template_uses": {
         "skill-eval-task": "0.2.0",
+        "skill-qa-checklist": "0.1.1",
         "skill-template": "0.2.0"
       }
     },
@@ -3399,7 +3400,8 @@
       },
       "template_uses": {
         "skill-eval-task": "0.2.0",
-        "skill-template": "0.3.7"
+        "skill-surface-budget": "0.1.0",
+        "skill-template": "0.3.9"
       }
     },
     {
@@ -3918,22 +3920,22 @@
       }
     },
     {
-      "consumer_id": "farplane-task0401-cuBsW2",
+      "consumer_id": "verify-migration",
       "consumer_scope": "project",
       "path": "farplane/manifest.json",
       "surfaces": {
         "project": true
       },
       "template_uses": {
-        "farplane-framework": "2.0.7"
+        "farplane-framework": "2.0.10"
       }
     }
   ],
   "template_rollout": [
     {
-      "consumer_id": "farplane-task0401-cuBsW2",
+      "consumer_id": "verify-migration",
       "consumer_scope": "project",
-      "current_version": "2.0.7",
+      "current_version": "2.0.10",
       "feature_refs": [
         "FEAT-0060"
       ],
@@ -3941,7 +3943,7 @@
       "status": "current",
       "target_basis": "projects with a farplane/manifest.json surface",
       "template_id": "farplane-framework",
-      "used_version": "2.0.7"
+      "used_version": "2.0.10"
     },
     {
       "consumer_id": "asset-advisor",
@@ -4813,6 +4815,20 @@
         "FEAT-0062"
       ],
       "path": "skills/content-impl-plan/SKILL.md",
+      "status": "current",
+      "target_basis": "skills with a qa_checklist.md surface",
+      "template_id": "skill-qa-checklist",
+      "used_version": "0.1.1"
+    },
+    {
+      "consumer_id": "ingest-content",
+      "consumer_scope": "skill",
+      "current_version": "0.1.1",
+      "feature_refs": [
+        "FEAT-0057",
+        "FEAT-0062"
+      ],
+      "path": "skills/ingest-content/SKILL.md",
       "status": "current",
       "target_basis": "skills with a qa_checklist.md surface",
       "template_id": "skill-qa-checklist",
@@ -6128,7 +6144,7 @@
       "status": "stale",
       "target_basis": "local skills that declare skill-template usage",
       "template_id": "skill-template",
-      "used_version": "0.3.7"
+      "used_version": "0.3.9"
     },
     {
       "consumer_id": "problem-framing",
@@ -6475,7 +6491,7 @@
       "by_status": {
         "current": 1
       },
-      "current_version": "2.0.7",
+      "current_version": "2.0.10",
       "feature_refs": [
         "FEAT-0060"
       ],
@@ -6499,10 +6515,10 @@
     },
     "skill-qa-checklist": {
       "by_scope": {
-        "skill": 44
+        "skill": 45
       },
       "by_status": {
-        "current": 5,
+        "current": 6,
         "missing": 17,
         "stale": 22
       },
@@ -6512,7 +6528,7 @@
         "FEAT-0062"
       ],
       "target_basis": "skills with a qa_checklist.md surface",
-      "total_consumers": 44
+      "total_consumers": 45
     },
     "skill-template": {
       "by_scope": {
@@ -6810,8 +6826,8 @@
     },
     {
       "introduced_at": "2026-07-12",
-      "latest_at": "2026-07-21",
-      "latest_commit": "42d5b6bb78bc",
+      "latest_at": "2026-07-23",
+      "latest_commit": "18a57c53eb2e",
       "latest_summary": "working tree current template",
       "release_count": 2,
       "sections": [
@@ -6825,7 +6841,7 @@
         "Reference Map",
         "Output"
       ],
-      "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.8-42d5b6bb78bc.md",
+      "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.8-18a57c53eb2e.md",
       "snapshots": [
         {
           "introduced_at": "2026-07-12",
@@ -6834,9 +6850,9 @@
           "summary": "chore(project): synchronize eval format and harness updates"
         },
         {
-          "introduced_at": "2026-07-21",
-          "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.8-42d5b6bb78bc.md",
-          "source_commit": "42d5b6bb78bc",
+          "introduced_at": "2026-07-23",
+          "snapshot_path": "tmp/skill-template-snapshots/skill-template-0.3.8-18a57c53eb2e.md",
+          "source_commit": "18a57c53eb2e",
           "summary": "working tree current template"
         }
       ],

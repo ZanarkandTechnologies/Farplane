@@ -6,6 +6,8 @@ source: local
 group: capability
 template_uses:
   skill-template: "0.3.2"
+planner_contract:
+  required_arguments: ["accepted_result", "owner_surface"]
 ---
 
 # Farplane Productization

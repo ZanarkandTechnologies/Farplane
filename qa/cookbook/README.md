@@ -35,7 +35,6 @@ turn missing implementation into a linked instrumentation ticket.
 
 ## Workflow Index
 
-- Verified: [Core Hooks Runtime](core-hooks-runtime.md)
 - Legacy/unverified metadata: [Framework Validation](framework-validation.md)
 - Legacy/unverified metadata: [Skill Validation](skill-validation.md)
 - Legacy/unverified metadata: [Ticket Metadata](ticket-metadata.md)

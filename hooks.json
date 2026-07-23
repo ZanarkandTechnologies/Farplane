@@ -30,36 +30,25 @@
         ]
       }
     ],
-    "PostToolUse": [
+    "SubagentStart": [
       {
-        "matcher": "Bash|mcp__filesystem__.*|mcp__.*read.*",
         "hooks": [
           {
             "type": "command",
-            "command": "python3 \"$HOME/.codex/hooks/farplane_local_event.py\"",
-            "statusMessage": "Read skill MD",
+            "command": "python3 \"$HOME/.codex/hooks/farplane_console_ping.py\"",
+            "statusMessage": "Sending Farplane subagent start",
             "timeout": 5
           }
         ]
-      },
+      }
+    ],
+    "SubagentStop": [
       {
-        "matcher": "Bash|apply_patch|Edit|Write|MultiEdit|mcp__filesystem__.*|mcp__.*write.*|mcp__.*edit.*",
         "hooks": [
           {
             "type": "command",
-            "command": "python3 \"$HOME/.codex/hooks/farplane_file_change.py\"",
-            "statusMessage": "Capture Farplane file event",
-            "timeout": 60
-          }
-        ]
-      },
-      {
-        "matcher": "create_thread|fork_thread|codex_app.*thread|mcp__.*thread.*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "python3 \"$HOME/.codex/hooks/farplane_local_event.py\"",
-            "statusMessage": "Track thread lineage",
+            "command": "python3 \"$HOME/.codex/hooks/farplane_console_ping.py\"",
+            "statusMessage": "Sending Farplane subagent stop",
             "timeout": 5
           }
         ]

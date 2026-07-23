@@ -1,6 +1,6 @@
 <!--
 template_id: global-agents-template
-template_version: 0.2.20
+template_version: 0.2.21
 feature_refs:
   - FEAT-0022
   - FEAT-0042
@@ -285,8 +285,9 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
   reviewer-lane completion review in the ticket `Done / Proof` or Goal program
   final checkpoint. Run or request those reviews before claiming
   `stop_complete`, write receipts and best evidence back to the
-  ticket/progress/artifacts, and block or revise when the checkpoint is
-  missing. Do not assume a Stop hook will repair missing proof.
+  ticket/progress/artifacts, then use the project's explicit ticket-close
+  command when one exists. Block or revise when the checkpoint is missing. Do
+  not assume a Stop hook will repair missing proof.
 - At the start or end of material Goal continuations, compare current progress
   against the ticket and Goal program. Use a read-only drift reviewer when the
   work is high-stakes, long-running, rollout-like, or easy to self-approve.

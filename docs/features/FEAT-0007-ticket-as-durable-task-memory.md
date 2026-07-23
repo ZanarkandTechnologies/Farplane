@@ -103,6 +103,9 @@ A durable ticket is a small program for the next agent, not a generic task note.
 - `progress.md` carries current action, blockers, verification, review state,
   and delayed check-in observations.
 - `Links` points to evidence, artifacts, related specs, sidecars, and handoffs.
+- `farplane ticket close TASK-XXXX` owns the successful terminal transition:
+  it updates metadata, archives the ticket, emits completion, and invokes
+  mining after the ticket's proof gates pass.
 
 The required frontmatter is only `ticket_id`, `title`, `status`, `created_at`,
 and `updated_at`. Optional `priority`, `claimed_by`, `depends_on`, `human_gate`,

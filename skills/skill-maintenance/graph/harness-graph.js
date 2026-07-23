@@ -1,26 +1,26 @@
 window.HARNESS_GRAPH = {
   "counts": {
     "edge_types": {
-      "directory-contains": 191,
-      "literal-path": 3656,
-      "markdown-link": 702
+      "directory-contains": 203,
+      "literal-path": 3822,
+      "markdown-link": 710
     },
-    "edges": 4549,
+    "edges": 4735,
     "node_kinds": {
       "agent": 16,
-      "doc": 43,
-      "file": 541,
+      "doc": 46,
+      "file": 600,
       "review-rubric": 24,
       "root-doc": 6,
-      "script": 101,
-      "skill": 117,
+      "script": 110,
+      "skill": 121,
       "skill-doc": 8,
-      "spec": 36,
+      "spec": 38,
       "template": 5
     },
-    "nodes": 897,
-    "scanned_files": 1474,
-    "unresolved_refs": 1463
+    "nodes": 974,
+    "scanned_files": 1600,
+    "unresolved_refs": 1747
   },
   "edges": [
     {
@@ -62,7 +62,21 @@ window.HARNESS_GRAPH = {
       "from_file": "bin/core",
       "raw_ref": "bin/core",
       "source": "dir:bin/core",
-      "target": "file:bin/core/farplane_file_events.py",
+      "target": "file:bin/core/farplane_entities.py",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "bin/core",
+      "raw_ref": "bin/core",
+      "source": "dir:bin/core",
+      "target": "file:bin/core/farplane_event_store.py",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "bin/core",
+      "raw_ref": "bin/core",
+      "source": "dir:bin/core",
+      "target": "file:bin/core/farplane_harness_health.py",
       "type": "directory-contains"
     },
     {
@@ -126,6 +140,27 @@ window.HARNESS_GRAPH = {
       "raw_ref": "bin/core",
       "source": "dir:bin/core",
       "target": "file:bin/core/farplane_telemetry_status.py",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "bin/core",
+      "raw_ref": "bin/core",
+      "source": "dir:bin/core",
+      "target": "file:bin/core/farplane_ticket_close.py",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "bin/core",
+      "raw_ref": "bin/core",
+      "source": "dir:bin/core",
+      "target": "file:bin/core/farplane_ticket_history.py",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "bin/core",
+      "raw_ref": "bin/core",
+      "source": "dir:bin/core",
+      "target": "file:bin/core/farplane_ticket_reward.py",
       "type": "directory-contains"
     },
     {
@@ -216,21 +251,21 @@ window.HARNESS_GRAPH = {
       "from_file": "bin/tests",
       "raw_ref": "bin/tests",
       "source": "dir:bin/tests",
-      "target": "file:bin/tests/test_farplane_file_events.py",
+      "target": "file:bin/tests/test_farplane_entities.py",
       "type": "directory-contains"
     },
     {
       "from_file": "bin/tests",
       "raw_ref": "bin/tests",
       "source": "dir:bin/tests",
-      "target": "file:bin/tests/test_farplane_hooks_runtime.py",
+      "target": "file:bin/tests/test_farplane_harness_health.py",
       "type": "directory-contains"
     },
     {
       "from_file": "bin/tests",
       "raw_ref": "bin/tests",
       "source": "dir:bin/tests",
-      "target": "file:bin/tests/test_farplane_hooks_schema.py",
+      "target": "file:bin/tests/test_farplane_hooks_install.py",
       "type": "directory-contains"
     },
     {
@@ -301,6 +336,27 @@ window.HARNESS_GRAPH = {
       "raw_ref": "bin/tests",
       "source": "dir:bin/tests",
       "target": "file:bin/tests/test_farplane_telemetry_status.py",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "bin/tests",
+      "raw_ref": "bin/tests",
+      "source": "dir:bin/tests",
+      "target": "file:bin/tests/test_farplane_ticket_close.py",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "bin/tests",
+      "raw_ref": "bin/tests",
+      "source": "dir:bin/tests",
+      "target": "file:bin/tests/test_farplane_ticket_history.py",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "bin/tests",
+      "raw_ref": "bin/tests",
+      "source": "dir:bin/tests",
+      "target": "file:bin/tests/test_farplane_ticket_reward.py",
       "type": "directory-contains"
     },
     {
@@ -1337,6 +1393,34 @@ window.HARNESS_GRAPH = {
       "raw_ref": "skills/skill-maintenance/scripts",
       "source": "dir:skills/skill-maintenance/scripts",
       "target": "file:skills/skill-maintenance/scripts/test_sync_skill_plugins.py",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "skills/video-production/references/explainer-styles/retro-low-poly-consequence",
+      "raw_ref": "skills/video-production/references/explainer-styles/retro-low-poly-consequence",
+      "source": "dir:skills/video-production/references/explainer-styles/retro-low-poly-consequence",
+      "target": "file:skills/video-production/references/explainer-styles/retro-low-poly-consequence/audio.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "skills/video-production/references/explainer-styles/retro-low-poly-consequence",
+      "raw_ref": "skills/video-production/references/explainer-styles/retro-low-poly-consequence",
+      "source": "dir:skills/video-production/references/explainer-styles/retro-low-poly-consequence",
+      "target": "file:skills/video-production/references/explainer-styles/retro-low-poly-consequence/example.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "skills/video-production/references/explainer-styles/retro-low-poly-consequence",
+      "raw_ref": "skills/video-production/references/explainer-styles/retro-low-poly-consequence",
+      "source": "dir:skills/video-production/references/explainer-styles/retro-low-poly-consequence",
+      "target": "file:skills/video-production/references/explainer-styles/retro-low-poly-consequence/profile.md",
+      "type": "directory-contains"
+    },
+    {
+      "from_file": "skills/video-production/references/explainer-styles/retro-low-poly-consequence",
+      "raw_ref": "skills/video-production/references/explainer-styles/retro-low-poly-consequence",
+      "source": "dir:skills/video-production/references/explainer-styles/retro-low-poly-consequence",
+      "target": "file:skills/video-production/references/explainer-styles/retro-low-poly-consequence/prompts.md",
       "type": "directory-contains"
     },
     {
@@ -2566,20 +2650,6 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "agents/qa-tester.toml",
-      "raw_ref": "docs/HISTORY.md",
-      "source": "file:agents/qa-tester.toml",
-      "target": "file:docs/HISTORY.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "agents/qa-tester.toml",
-      "raw_ref": "docs/MEMORY.md",
-      "source": "file:agents/qa-tester.toml",
-      "target": "file:docs/MEMORY.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "agents/qa-tester.toml",
       "raw_ref": "docs/TASTE.md",
       "source": "file:agents/qa-tester.toml",
       "target": "file:docs/TASTE.md",
@@ -2587,16 +2657,16 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "agents/qa-tester.toml",
-      "raw_ref": "qa/README.md",
+      "raw_ref": "qa/cookbook/",
       "source": "file:agents/qa-tester.toml",
-      "target": "file:qa/README.md",
+      "target": "file:qa/cookbook/README.md",
       "type": "literal-path"
     },
     {
       "from_file": "agents/qa-tester.toml",
-      "raw_ref": "qa/cookbook/",
+      "raw_ref": "skills/qa/scripts/validate_qa_result.py",
       "source": "file:agents/qa-tester.toml",
-      "target": "file:qa/cookbook/README.md",
+      "target": "file:skills/qa/scripts/validate_qa_result.py",
       "type": "literal-path"
     },
     {
@@ -2936,31 +3006,10 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
-      "from_file": "bin/core/farplane_file_events.py",
-      "raw_ref": "docs/HISTORY.md",
-      "source": "file:bin/core/farplane_file_events.py",
-      "target": "file:docs/HISTORY.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "bin/core/farplane_file_events.py",
-      "raw_ref": "docs/LESSONS.md",
-      "source": "file:bin/core/farplane_file_events.py",
-      "target": "file:docs/LESSONS.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "bin/core/farplane_file_events.py",
-      "raw_ref": "docs/MEMORY.md",
-      "source": "file:bin/core/farplane_file_events.py",
-      "target": "file:docs/MEMORY.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "bin/core/farplane_file_events.py",
-      "raw_ref": "docs/TROUBLES.md",
-      "source": "file:bin/core/farplane_file_events.py",
-      "target": "file:docs/TROUBLES.md",
+      "from_file": "bin/core/farplane_entities.py",
+      "raw_ref": "farplane/manifest.json",
+      "source": "file:bin/core/farplane_entities.py",
+      "target": "file:farplane/manifest.json",
       "type": "literal-path"
     },
     {
@@ -3048,10 +3097,10 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
-      "from_file": "bin/tests/test_farplane_hooks_runtime.py",
-      "raw_ref": "skills/goal-advisor/SKILL.md",
-      "source": "file:bin/tests/test_farplane_hooks_runtime.py",
-      "target": "file:skills/goal-advisor/SKILL.md",
+      "from_file": "bin/tests/test_farplane_entities.py",
+      "raw_ref": "farplane/manifest.json",
+      "source": "file:bin/tests/test_farplane_entities.py",
+      "target": "file:farplane/manifest.json",
       "type": "literal-path"
     },
     {
@@ -3066,13 +3115,6 @@ window.HARNESS_GRAPH = {
       "raw_ref": "farplane/metrics.yaml",
       "source": "file:bin/tests/test_farplane_project_file_validator.py",
       "target": "file:farplane/metrics.yaml",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "bin/tests/test_farplane_project_snapshot.py",
-      "raw_ref": "farplane/bindings.yaml",
-      "source": "file:bin/tests/test_farplane_project_snapshot.py",
-      "target": "file:farplane/bindings.yaml",
       "type": "literal-path"
     },
     {
@@ -3581,6 +3623,13 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "bin/validators/test_check_farplane_project_files.py",
+      "raw_ref": "tickets/archive",
+      "source": "file:bin/validators/test_check_farplane_project_files.py",
+      "target": "dir:tickets/archive",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "bin/validators/test_check_farplane_project_files.py",
       "raw_ref": "AGENTS.md",
       "source": "file:bin/validators/test_check_farplane_project_files.py",
       "target": "file:AGENTS.md",
@@ -3633,13 +3682,6 @@ window.HARNESS_GRAPH = {
       "raw_ref": "farplane/harness.yaml",
       "source": "file:bin/validators/test_check_farplane_project_files.py",
       "target": "file:farplane/harness.yaml",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "bin/validators/test_check_farplane_project_files.py",
-      "raw_ref": "farplane/hooks.json",
-      "source": "file:bin/validators/test_check_farplane_project_files.py",
-      "target": "file:farplane/hooks.json",
       "type": "literal-path"
     },
     {
@@ -4589,6 +4631,13 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/farplane-framework/README.md",
+      "raw_ref": "docs/farplane-framework/entities.md",
+      "source": "file:docs/farplane-framework/README.md",
+      "target": "file:docs/farplane-framework/entities.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/farplane-framework/README.md",
       "raw_ref": "docs/farplane-framework/graph-contract.md",
       "source": "file:docs/farplane-framework/README.md",
       "target": "file:docs/farplane-framework/graph-contract.md",
@@ -4686,6 +4735,13 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
+      "from_file": "docs/farplane-framework/entities.md",
+      "raw_ref": "farplane/manifest.json",
+      "source": "file:docs/farplane-framework/entities.md",
+      "target": "file:farplane/manifest.json",
+      "type": "literal-path"
+    },
+    {
       "from_file": "docs/farplane-framework/graph-contract.md",
       "raw_ref": "docs/farplane-framework/hooks-and-runtime.md",
       "source": "file:docs/farplane-framework/graph-contract.md",
@@ -4760,6 +4816,13 @@ window.HARNESS_GRAPH = {
       "raw_ref": "bin/core/farplane_adoption.py",
       "source": "file:docs/farplane-framework/harness-maintenance.md",
       "target": "file:bin/core/farplane_adoption.py",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/farplane-framework/harness-maintenance.md",
+      "raw_ref": "bin/core/farplane_harness_health.py",
+      "source": "file:docs/farplane-framework/harness-maintenance.md",
+      "target": "file:bin/core/farplane_harness_health.py",
       "type": "literal-path"
     },
     {
@@ -4946,9 +5009,23 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/farplane-framework/harness-maintenance.md",
+      "raw_ref": "farplane/metrics.yaml",
+      "source": "file:docs/farplane-framework/harness-maintenance.md",
+      "target": "file:farplane/metrics.yaml",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/farplane-framework/harness-maintenance.md",
       "raw_ref": "skills/eval/scripts/run_evals.py",
       "source": "file:docs/farplane-framework/harness-maintenance.md",
       "target": "file:skills/eval/scripts/run_evals.py",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/farplane-framework/harness-maintenance.md",
+      "raw_ref": "skills/interval-update/scripts/metric_refresh.py",
+      "source": "file:docs/farplane-framework/harness-maintenance.md",
+      "target": "file:skills/interval-update/scripts/metric_refresh.py",
       "type": "literal-path"
     },
     {
@@ -5093,23 +5170,9 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/farplane-framework/hooks-and-runtime.md",
-      "raw_ref": "farplane/hooks.json",
-      "source": "file:docs/farplane-framework/hooks-and-runtime.md",
-      "target": "file:farplane/hooks.json",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/farplane-framework/hooks-and-runtime.md",
       "raw_ref": "farplane/pm.json",
       "source": "file:docs/farplane-framework/hooks-and-runtime.md",
       "target": "file:farplane/pm.json",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/farplane-framework/hooks-and-runtime.md",
-      "raw_ref": "qa/cookbook/core-hooks-runtime.md",
-      "source": "file:docs/farplane-framework/hooks-and-runtime.md",
-      "target": "file:qa/cookbook/core-hooks-runtime.md",
       "type": "literal-path"
     },
     {
@@ -5215,13 +5278,6 @@ window.HARNESS_GRAPH = {
       "raw_ref": "farplane/harness.yaml",
       "source": "file:docs/farplane-framework/init-advisor-critical-path.md",
       "target": "file:farplane/harness.yaml",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/farplane-framework/init-advisor-critical-path.md",
-      "raw_ref": "farplane/hooks.json",
-      "source": "file:docs/farplane-framework/init-advisor-critical-path.md",
-      "target": "file:farplane/hooks.json",
       "type": "literal-path"
     },
     {
@@ -5450,13 +5506,6 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/farplane-framework/project-files.md",
-      "raw_ref": "farplane/hooks.json",
-      "source": "file:docs/farplane-framework/project-files.md",
-      "target": "file:farplane/hooks.json",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/farplane-framework/project-files.md",
       "raw_ref": "farplane/manifest.json",
       "source": "file:docs/farplane-framework/project-files.md",
       "target": "file:farplane/manifest.json",
@@ -5534,6 +5583,13 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/farplane-framework/pulse-and-interval-loop.md",
+      "raw_ref": "farplane/bindings.yaml#operator.review_chase_policy",
+      "source": "file:docs/farplane-framework/pulse-and-interval-loop.md",
+      "target": "file:farplane/bindings.yaml",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/farplane-framework/pulse-and-interval-loop.md",
       "raw_ref": "farplane/harness.yaml",
       "source": "file:docs/farplane-framework/pulse-and-interval-loop.md",
       "target": "file:farplane/harness.yaml",
@@ -5544,6 +5600,13 @@ window.HARNESS_GRAPH = {
       "raw_ref": "farplane/metrics.yaml",
       "source": "file:docs/farplane-framework/pulse-and-interval-loop.md",
       "target": "file:farplane/metrics.yaml",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/farplane-framework/reporting.md",
+      "raw_ref": "docs/templates/HUMAN_REPORT_TEMPLATE.md",
+      "source": "file:docs/farplane-framework/reporting.md",
+      "target": "file:docs/templates/HUMAN_REPORT_TEMPLATE.md",
       "type": "literal-path"
     },
     {
@@ -6864,17 +6927,24 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/features/FEAT-0056-inspiration-vault.md",
-      "raw_ref": "docs/systems/source-sidecar-systems.md",
+      "raw_ref": "docs/systems/content-production.md",
       "source": "file:docs/features/FEAT-0056-inspiration-vault.md",
-      "target": "file:docs/systems/source-sidecar-systems.md",
+      "target": "file:docs/systems/content-production.md",
       "type": "literal-path"
     },
     {
       "from_file": "docs/features/FEAT-0056-inspiration-vault.md",
-      "raw_ref": "../systems/source-sidecar-systems.md",
+      "raw_ref": "../systems/content-production.md",
+      "source": "file:docs/features/FEAT-0056-inspiration-vault.md",
+      "target": "file:docs/systems/content-production.md",
+      "type": "markdown-link"
+    },
+    {
+      "from_file": "docs/features/FEAT-0056-inspiration-vault.md",
+      "raw_ref": "docs/systems/source-sidecar-systems.md",
       "source": "file:docs/features/FEAT-0056-inspiration-vault.md",
       "target": "file:docs/systems/source-sidecar-systems.md",
-      "type": "markdown-link"
+      "type": "literal-path"
     },
     {
       "from_file": "docs/features/FEAT-0056-inspiration-vault.md",
@@ -7788,13 +7858,6 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/features/FEAT-0070-experimental-feature-evaluation-reports.md",
-      "raw_ref": "docs/features/README.md",
-      "source": "file:docs/features/FEAT-0070-experimental-feature-evaluation-reports.md",
-      "target": "file:docs/features/README.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/features/FEAT-0070-experimental-feature-evaluation-reports.md",
       "raw_ref": "docs/features/validate_features.py",
       "source": "file:docs/features/FEAT-0070-experimental-feature-evaluation-reports.md",
       "target": "file:docs/features/validate_features.py",
@@ -7809,10 +7872,10 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/features/FEAT-0070-experimental-feature-evaluation-reports.md",
-      "raw_ref": "../systems/self-improvement-learning.md",
+      "raw_ref": "docs/systems/self-improvement-learning.md",
       "source": "file:docs/features/FEAT-0070-experimental-feature-evaluation-reports.md",
       "target": "file:docs/systems/self-improvement-learning.md",
-      "type": "markdown-link"
+      "type": "literal-path"
     },
     {
       "from_file": "docs/features/FEAT-0070-experimental-feature-evaluation-reports.md",
@@ -7851,9 +7914,23 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/features/FEAT-0071-project-work-pulse.md",
+      "raw_ref": "bin/core/farplane_ticket_history.py",
+      "source": "file:docs/features/FEAT-0071-project-work-pulse.md",
+      "target": "file:bin/core/farplane_ticket_history.py",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/features/FEAT-0071-project-work-pulse.md",
       "raw_ref": "docs/farplane-framework/pulse-and-interval-loop.md",
       "source": "file:docs/features/FEAT-0071-project-work-pulse.md",
       "target": "file:docs/farplane-framework/pulse-and-interval-loop.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/features/FEAT-0071-project-work-pulse.md",
+      "raw_ref": "docs/features/FEAT-0072-persistent-icp-and-world-memory.md",
+      "source": "file:docs/features/FEAT-0071-project-work-pulse.md",
+      "target": "file:docs/features/FEAT-0072-persistent-icp-and-world-memory.md",
       "type": "literal-path"
     },
     {
@@ -7879,6 +7956,27 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/features/FEAT-0071-project-work-pulse.md",
+      "raw_ref": "skills/plan-next-wave/SKILL.md",
+      "source": "file:docs/features/FEAT-0071-project-work-pulse.md",
+      "target": "file:skills/plan-next-wave/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/features/FEAT-0071-project-work-pulse.md",
+      "raw_ref": "skills/plan-next-wave/audits/2026-07-14-metric-first-lane-ranking.md",
+      "source": "file:docs/features/FEAT-0071-project-work-pulse.md",
+      "target": "file:skills/plan-next-wave/audits/2026-07-14-metric-first-lane-ranking.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/features/FEAT-0071-project-work-pulse.md",
+      "raw_ref": "skills/plan-next-wave/evals/evals.json",
+      "source": "file:docs/features/FEAT-0071-project-work-pulse.md",
+      "target": "file:skills/plan-next-wave/evals/evals.json",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/features/FEAT-0071-project-work-pulse.md",
       "raw_ref": "skills/pulse-update/SKILL.md",
       "source": "file:docs/features/FEAT-0071-project-work-pulse.md",
       "target": "file:skills/pulse-update/SKILL.md",
@@ -7900,6 +7998,13 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/features/FEAT-0071-project-work-pulse.md",
+      "raw_ref": "skills/pulse-update/scripts/materialize_skill_call.py",
+      "source": "file:docs/features/FEAT-0071-project-work-pulse.md",
+      "target": "file:skills/pulse-update/scripts/materialize_skill_call.py",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/features/FEAT-0071-project-work-pulse.md",
       "raw_ref": "skills/pulse-update/scripts/test_list_pulse_board.py",
       "source": "file:docs/features/FEAT-0071-project-work-pulse.md",
       "target": "file:skills/pulse-update/scripts/test_list_pulse_board.py",
@@ -7907,24 +8012,115 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/features/FEAT-0071-project-work-pulse.md",
-      "raw_ref": "skills/ticket-opportunity-generator/SKILL.md",
+      "raw_ref": "skills/pulse-update/scripts/test_materialize_skill_call.py",
       "source": "file:docs/features/FEAT-0071-project-work-pulse.md",
-      "target": "file:skills/ticket-opportunity-generator/SKILL.md",
+      "target": "file:skills/pulse-update/scripts/test_materialize_skill_call.py",
       "type": "literal-path"
     },
     {
-      "from_file": "docs/features/FEAT-0071-project-work-pulse.md",
-      "raw_ref": "skills/ticket-opportunity-generator/evals/evals.json",
-      "source": "file:docs/features/FEAT-0071-project-work-pulse.md",
-      "target": "file:skills/ticket-opportunity-generator/evals/evals.json",
+      "from_file": "docs/features/FEAT-0072-persistent-icp-and-world-memory.md",
+      "raw_ref": "docs/features/FEAT-0071-project-work-pulse.md",
+      "source": "file:docs/features/FEAT-0072-persistent-icp-and-world-memory.md",
+      "target": "file:docs/features/FEAT-0071-project-work-pulse.md",
       "type": "literal-path"
     },
     {
-      "from_file": "docs/features/FEAT-0071-project-work-pulse.md",
-      "raw_ref": "skills/ticket-opportunity-generator/scripts/query_ticket_history.py",
-      "source": "file:docs/features/FEAT-0071-project-work-pulse.md",
-      "target": "file:skills/ticket-opportunity-generator/scripts/query_ticket_history.py",
+      "from_file": "docs/features/FEAT-0072-persistent-icp-and-world-memory.md",
+      "raw_ref": "farplane/bindings.yaml",
+      "source": "file:docs/features/FEAT-0072-persistent-icp-and-world-memory.md",
+      "target": "file:farplane/bindings.yaml",
       "type": "literal-path"
+    },
+    {
+      "from_file": "docs/features/FEAT-0072-persistent-icp-and-world-memory.md",
+      "raw_ref": "farplane/harness.yaml",
+      "source": "file:docs/features/FEAT-0072-persistent-icp-and-world-memory.md",
+      "target": "file:farplane/harness.yaml",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/features/FEAT-0072-persistent-icp-and-world-memory.md",
+      "raw_ref": "skills/feed-scout/SKILL.md",
+      "source": "file:docs/features/FEAT-0072-persistent-icp-and-world-memory.md",
+      "target": "file:skills/feed-scout/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/features/FEAT-0072-persistent-icp-and-world-memory.md",
+      "raw_ref": "skills/feed-scout/scripts/validate_world_memory.py",
+      "source": "file:docs/features/FEAT-0072-persistent-icp-and-world-memory.md",
+      "target": "file:skills/feed-scout/scripts/validate_world_memory.py",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/features/FEAT-0072-persistent-icp-and-world-memory.md",
+      "raw_ref": "skills/plan-next-wave/SKILL.md",
+      "source": "file:docs/features/FEAT-0072-persistent-icp-and-world-memory.md",
+      "target": "file:skills/plan-next-wave/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/features/FEAT-0072-persistent-icp-and-world-memory.md",
+      "raw_ref": "skills/plan-next-wave/scripts/test_validate_wave_response.py",
+      "source": "file:docs/features/FEAT-0072-persistent-icp-and-world-memory.md",
+      "target": "file:skills/plan-next-wave/scripts/test_validate_wave_response.py",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/features/FEAT-0072-persistent-icp-and-world-memory.md",
+      "raw_ref": "skills/pulse-update/SKILL.md",
+      "source": "file:docs/features/FEAT-0072-persistent-icp-and-world-memory.md",
+      "target": "file:skills/pulse-update/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/features/FEAT-0072-persistent-icp-and-world-memory.md",
+      "raw_ref": "tickets/archive/TASK-0369/artifacts/qa/verification.md",
+      "source": "file:docs/features/FEAT-0072-persistent-icp-and-world-memory.md",
+      "target": "file:tickets/archive/TASK-0369/artifacts/qa/verification.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/features/FEAT-0072-persistent-icp-and-world-memory.md",
+      "raw_ref": "tickets/archive/TASK-0369/ticket.md",
+      "source": "file:docs/features/FEAT-0072-persistent-icp-and-world-memory.md",
+      "target": "file:tickets/archive/TASK-0369/ticket.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/features/FEAT-0073-brand-kit-approved-creative-identity.md",
+      "raw_ref": "bin/validators/check_doc_refs.py",
+      "source": "file:docs/features/FEAT-0073-brand-kit-approved-creative-identity.md",
+      "target": "file:bin/validators/check_doc_refs.py",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/features/FEAT-0073-brand-kit-approved-creative-identity.md",
+      "raw_ref": "docs/features/FEAT-0056-inspiration-vault.md",
+      "source": "file:docs/features/FEAT-0073-brand-kit-approved-creative-identity.md",
+      "target": "file:docs/features/FEAT-0056-inspiration-vault.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/features/FEAT-0073-brand-kit-approved-creative-identity.md",
+      "raw_ref": "docs/features/validate_features.py",
+      "source": "file:docs/features/FEAT-0073-brand-kit-approved-creative-identity.md",
+      "target": "file:docs/features/validate_features.py",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/features/FEAT-0073-brand-kit-approved-creative-identity.md",
+      "raw_ref": "docs/systems/content-production.md",
+      "source": "file:docs/features/FEAT-0073-brand-kit-approved-creative-identity.md",
+      "target": "file:docs/systems/content-production.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/features/FEAT-0073-brand-kit-approved-creative-identity.md",
+      "raw_ref": "../systems/content-production.md",
+      "source": "file:docs/features/FEAT-0073-brand-kit-approved-creative-identity.md",
+      "target": "file:docs/systems/content-production.md",
+      "type": "markdown-link"
     },
     {
       "from_file": "docs/features/README.md",
@@ -8397,6 +8593,20 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/features/registry.jsonl",
+      "raw_ref": "docs/features/FEAT-0072-persistent-icp-and-world-memory.md",
+      "source": "file:docs/features/registry.jsonl",
+      "target": "file:docs/features/FEAT-0072-persistent-icp-and-world-memory.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/features/registry.jsonl",
+      "raw_ref": "docs/features/FEAT-0073-brand-kit-approved-creative-identity.md",
+      "source": "file:docs/features/registry.jsonl",
+      "target": "file:docs/features/FEAT-0073-brand-kit-approved-creative-identity.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/features/registry.jsonl",
       "raw_ref": "docs/features/README.md",
       "source": "file:docs/features/registry.jsonl",
       "target": "file:docs/features/README.md",
@@ -8509,6 +8719,13 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/features/registry.jsonl",
+      "raw_ref": "docs/systems/content-production.md",
+      "source": "file:docs/features/registry.jsonl",
+      "target": "file:docs/systems/content-production.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/features/registry.jsonl",
       "raw_ref": "docs/systems/documentation-os.md",
       "source": "file:docs/features/registry.jsonl",
       "target": "file:docs/systems/documentation-os.md",
@@ -8530,13 +8747,6 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/features/registry.jsonl",
-      "raw_ref": "docs/systems/source-sidecar-systems.md",
-      "source": "file:docs/features/registry.jsonl",
-      "target": "file:docs/systems/source-sidecar-systems.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/features/registry.jsonl",
       "raw_ref": "docs/templates/README.md",
       "source": "file:docs/features/registry.jsonl",
       "target": "file:docs/templates/README.md",
@@ -8554,6 +8764,13 @@ window.HARNESS_GRAPH = {
       "raw_ref": "farplane/automations.toml",
       "source": "file:docs/features/registry.jsonl",
       "target": "file:farplane/automations.toml",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/features/registry.jsonl",
+      "raw_ref": "farplane/bindings.yaml",
+      "source": "file:docs/features/registry.jsonl",
+      "target": "file:farplane/bindings.yaml",
       "type": "literal-path"
     },
     {
@@ -8740,6 +8957,34 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/features/registry.jsonl",
+      "raw_ref": "skills/feed-scout/SKILL.md",
+      "source": "file:docs/features/registry.jsonl",
+      "target": "file:skills/feed-scout/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/features/registry.jsonl",
+      "raw_ref": "skills/feed-scout/scripts/test_validate_memory.py",
+      "source": "file:docs/features/registry.jsonl",
+      "target": "file:skills/feed-scout/scripts/test_validate_memory.py",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/features/registry.jsonl",
+      "raw_ref": "skills/feed-scout/scripts/validate_memory.py",
+      "source": "file:docs/features/registry.jsonl",
+      "target": "file:skills/feed-scout/scripts/validate_memory.py",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/features/registry.jsonl",
+      "raw_ref": "skills/feed-scout/templates/memory.md",
+      "source": "file:docs/features/registry.jsonl",
+      "target": "file:skills/feed-scout/templates/memory.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/features/registry.jsonl",
       "raw_ref": "skills/frontend-craft",
       "source": "file:docs/features/registry.jsonl",
       "target": "file:skills/frontend-craft/README.md",
@@ -8915,6 +9160,27 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/features/registry.jsonl",
+      "raw_ref": "skills/plan-next-wave/SKILL.md",
+      "source": "file:docs/features/registry.jsonl",
+      "target": "file:skills/plan-next-wave/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/features/registry.jsonl",
+      "raw_ref": "skills/plan-next-wave/audits/2026-07-14-metric-first-lane-ranking.md",
+      "source": "file:docs/features/registry.jsonl",
+      "target": "file:skills/plan-next-wave/audits/2026-07-14-metric-first-lane-ranking.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/features/registry.jsonl",
+      "raw_ref": "skills/plan-next-wave/evals/evals.json",
+      "source": "file:docs/features/registry.jsonl",
+      "target": "file:skills/plan-next-wave/evals/evals.json",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/features/registry.jsonl",
       "raw_ref": "skills/plan",
       "source": "file:docs/features/registry.jsonl",
       "target": "file:skills/plan/README.md",
@@ -9069,20 +9335,6 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/features/registry.jsonl",
-      "raw_ref": "skills/ticket-opportunity-generator/SKILL.md",
-      "source": "file:docs/features/registry.jsonl",
-      "target": "file:skills/ticket-opportunity-generator/SKILL.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/features/registry.jsonl",
-      "raw_ref": "skills/ticket-opportunity-generator/evals/evals.json",
-      "source": "file:docs/features/registry.jsonl",
-      "target": "file:skills/ticket-opportunity-generator/evals/evals.json",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/features/registry.jsonl",
       "raw_ref": "skills/video-understanding",
       "source": "file:docs/features/registry.jsonl",
       "target": "file:skills/video-understanding/SKILL.md",
@@ -9135,6 +9387,20 @@ window.HARNESS_GRAPH = {
       "raw_ref": "tickets/README.md",
       "source": "file:docs/features/registry.jsonl",
       "target": "file:tickets/README.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/features/registry.jsonl",
+      "raw_ref": "tickets/archive/TASK-0369/artifacts/qa/verification.md",
+      "source": "file:docs/features/registry.jsonl",
+      "target": "file:tickets/archive/TASK-0369/artifacts/qa/verification.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/features/registry.jsonl",
+      "raw_ref": "tickets/archive/TASK-0369/ticket.md",
+      "source": "file:docs/features/registry.jsonl",
+      "target": "file:tickets/archive/TASK-0369/ticket.md",
       "type": "literal-path"
     },
     {
@@ -9363,6 +9629,20 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/features/registry.md",
+      "raw_ref": "../features/FEAT-0072-persistent-icp-and-world-memory.md",
+      "source": "file:docs/features/registry.md",
+      "target": "file:docs/features/FEAT-0072-persistent-icp-and-world-memory.md",
+      "type": "markdown-link"
+    },
+    {
+      "from_file": "docs/features/registry.md",
+      "raw_ref": "../features/FEAT-0073-brand-kit-approved-creative-identity.md",
+      "source": "file:docs/features/registry.md",
+      "target": "file:docs/features/FEAT-0073-brand-kit-approved-creative-identity.md",
+      "type": "markdown-link"
+    },
+    {
+      "from_file": "docs/features/registry.md",
       "raw_ref": "docs/features/",
       "source": "file:docs/features/registry.md",
       "target": "file:docs/features/README.md",
@@ -9387,6 +9667,13 @@ window.HARNESS_GRAPH = {
       "raw_ref": "../systems/agent-kernel.md",
       "source": "file:docs/features/registry.md",
       "target": "file:docs/systems/agent-kernel.md",
+      "type": "markdown-link"
+    },
+    {
+      "from_file": "docs/features/registry.md",
+      "raw_ref": "../systems/content-production.md",
+      "source": "file:docs/features/registry.md",
+      "target": "file:docs/systems/content-production.md",
       "type": "markdown-link"
     },
     {
@@ -9853,9 +10140,9 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/review/rubrics/ticket-opportunity-quality.md",
-      "raw_ref": "skills/ticket-opportunity-generator/qa_checklist.md",
+      "raw_ref": "skills/plan-next-wave/qa_checklist.md",
       "source": "file:docs/review/rubrics/ticket-opportunity-quality.md",
-      "target": "file:skills/ticket-opportunity-generator/qa_checklist.md",
+      "target": "file:skills/plan-next-wave/qa_checklist.md",
       "type": "literal-path"
     },
     {
@@ -10483,13 +10770,6 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/skills/registry.jsonl",
-      "raw_ref": "skills/eval/templates/viewer-react",
-      "source": "file:docs/skills/registry.jsonl",
-      "target": "file:skills/eval/templates/viewer-react/README.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/skills/registry.jsonl",
       "raw_ref": "skills/execute/SKILL.md",
       "source": "file:docs/skills/registry.jsonl",
       "target": "file:skills/execute/SKILL.md",
@@ -10616,6 +10896,13 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/skills/registry.jsonl",
+      "raw_ref": "skills/ingest-world-data/SKILL.md",
+      "source": "file:docs/skills/registry.jsonl",
+      "target": "file:skills/ingest-world-data/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/skills/registry.jsonl",
       "raw_ref": "skills/init-advisor/SKILL.md",
       "source": "file:docs/skills/registry.jsonl",
       "target": "file:skills/init-advisor/SKILL.md",
@@ -10679,9 +10966,23 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/skills/registry.jsonl",
+      "raw_ref": "skills/meshy-3d-generation/SKILL.md",
+      "source": "file:docs/skills/registry.jsonl",
+      "target": "file:skills/meshy-3d-generation/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/skills/registry.jsonl",
       "raw_ref": "skills/metric-advisor/SKILL.md",
       "source": "file:docs/skills/registry.jsonl",
       "target": "file:skills/metric-advisor/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/skills/registry.jsonl",
+      "raw_ref": "skills/ml-autoresearch/SKILL.md",
+      "source": "file:docs/skills/registry.jsonl",
+      "target": "file:skills/ml-autoresearch/SKILL.md",
       "type": "literal-path"
     },
     {
@@ -10710,6 +11011,13 @@ window.HARNESS_GRAPH = {
       "raw_ref": "skills/phone-chaser/SKILL.md",
       "source": "file:docs/skills/registry.jsonl",
       "target": "file:skills/phone-chaser/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/skills/registry.jsonl",
+      "raw_ref": "skills/plan-next-wave/SKILL.md",
+      "source": "file:docs/skills/registry.jsonl",
+      "target": "file:skills/plan-next-wave/SKILL.md",
       "type": "literal-path"
     },
     {
@@ -10941,13 +11249,6 @@ window.HARNESS_GRAPH = {
       "raw_ref": "skills/testing/SKILL.md",
       "source": "file:docs/skills/registry.jsonl",
       "target": "file:skills/testing/SKILL.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/skills/registry.jsonl",
-      "raw_ref": "skills/ticket-opportunity-generator/SKILL.md",
-      "source": "file:docs/skills/registry.jsonl",
-      "target": "file:skills/ticket-opportunity-generator/SKILL.md",
       "type": "literal-path"
     },
     {
@@ -11340,6 +11641,111 @@ window.HARNESS_GRAPH = {
       "raw_ref": "templates/global/AGENTS.md",
       "source": "file:docs/systems/agent-kernel.md",
       "target": "file:templates/global/AGENTS.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/systems/content-production.md",
+      "raw_ref": "bin/validators/check_doc_refs.py",
+      "source": "file:docs/systems/content-production.md",
+      "target": "file:bin/validators/check_doc_refs.py",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/systems/content-production.md",
+      "raw_ref": "docs/features/FEAT-0056-inspiration-vault.md",
+      "source": "file:docs/systems/content-production.md",
+      "target": "file:docs/features/FEAT-0056-inspiration-vault.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/systems/content-production.md",
+      "raw_ref": "../features/FEAT-0056-inspiration-vault.md",
+      "source": "file:docs/systems/content-production.md",
+      "target": "file:docs/features/FEAT-0056-inspiration-vault.md",
+      "type": "markdown-link"
+    },
+    {
+      "from_file": "docs/systems/content-production.md",
+      "raw_ref": "docs/features/FEAT-0073-brand-kit-approved-creative-identity.md",
+      "source": "file:docs/systems/content-production.md",
+      "target": "file:docs/features/FEAT-0073-brand-kit-approved-creative-identity.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/systems/content-production.md",
+      "raw_ref": "../features/FEAT-0073-brand-kit-approved-creative-identity.md",
+      "source": "file:docs/systems/content-production.md",
+      "target": "file:docs/features/FEAT-0073-brand-kit-approved-creative-identity.md",
+      "type": "markdown-link"
+    },
+    {
+      "from_file": "docs/systems/content-production.md",
+      "raw_ref": "docs/features/validate_features.py",
+      "source": "file:docs/systems/content-production.md",
+      "target": "file:docs/features/validate_features.py",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/systems/content-production.md",
+      "raw_ref": "docs/systems/content-production.md",
+      "source": "file:docs/systems/content-production.md",
+      "target": "file:docs/systems/content-production.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/systems/content-production.md",
+      "raw_ref": "skills/ai-image-advisor/SKILL.md",
+      "source": "file:docs/systems/content-production.md",
+      "target": "file:skills/ai-image-advisor/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/systems/content-production.md",
+      "raw_ref": "skills/ai-video-advisor/SKILL.md",
+      "source": "file:docs/systems/content-production.md",
+      "target": "file:skills/ai-video-advisor/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/systems/content-production.md",
+      "raw_ref": "skills/asset-advisor/SKILL.md",
+      "source": "file:docs/systems/content-production.md",
+      "target": "file:skills/asset-advisor/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/systems/content-production.md",
+      "raw_ref": "skills/audio-advisor/SKILL.md",
+      "source": "file:docs/systems/content-production.md",
+      "target": "file:skills/audio-advisor/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/systems/content-production.md",
+      "raw_ref": "skills/avatar-advisor/SKILL.md",
+      "source": "file:docs/systems/content-production.md",
+      "target": "file:skills/avatar-advisor/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/systems/content-production.md",
+      "raw_ref": "skills/content-impl-plan/SKILL.md",
+      "source": "file:docs/systems/content-production.md",
+      "target": "file:skills/content-impl-plan/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/systems/content-production.md",
+      "raw_ref": "skills/remotion/SKILL.md",
+      "source": "file:docs/systems/content-production.md",
+      "target": "file:skills/remotion/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/systems/content-production.md",
+      "raw_ref": "skills/storyboard/SKILL.md",
+      "source": "file:docs/systems/content-production.md",
+      "target": "file:skills/storyboard/SKILL.md",
       "type": "literal-path"
     },
     {
@@ -11946,6 +12352,20 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/systems/registry.jsonl",
+      "raw_ref": "docs/features/FEAT-0072-persistent-icp-and-world-memory.md",
+      "source": "file:docs/systems/registry.jsonl",
+      "target": "file:docs/features/FEAT-0072-persistent-icp-and-world-memory.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/systems/registry.jsonl",
+      "raw_ref": "docs/features/FEAT-0073-brand-kit-approved-creative-identity.md",
+      "source": "file:docs/systems/registry.jsonl",
+      "target": "file:docs/features/FEAT-0073-brand-kit-approved-creative-identity.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/systems/registry.jsonl",
       "raw_ref": "docs/features/README.md",
       "source": "file:docs/systems/registry.jsonl",
       "target": "file:docs/features/README.md",
@@ -12005,6 +12425,13 @@ window.HARNESS_GRAPH = {
       "raw_ref": "docs/systems/agent-kernel.md",
       "source": "file:docs/systems/registry.jsonl",
       "target": "file:docs/systems/agent-kernel.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/systems/registry.jsonl",
+      "raw_ref": "docs/systems/content-production.md",
+      "source": "file:docs/systems/registry.jsonl",
+      "target": "file:docs/systems/content-production.md",
       "type": "literal-path"
     },
     {
@@ -12086,6 +12513,20 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/systems/registry.jsonl",
+      "raw_ref": "skills/asset-advisor/SKILL.md",
+      "source": "file:docs/systems/registry.jsonl",
+      "target": "file:skills/asset-advisor/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/systems/registry.jsonl",
+      "raw_ref": "skills/content-impl-plan/SKILL.md",
+      "source": "file:docs/systems/registry.jsonl",
+      "target": "file:skills/content-impl-plan/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/systems/registry.jsonl",
       "raw_ref": "skills/delegate-frontend/SKILL.md",
       "source": "file:docs/systems/registry.jsonl",
       "target": "file:skills/delegate-frontend/SKILL.md",
@@ -12149,6 +12590,13 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/systems/registry.jsonl",
+      "raw_ref": "skills/remotion/SKILL.md",
+      "source": "file:docs/systems/registry.jsonl",
+      "target": "file:skills/remotion/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/systems/registry.jsonl",
       "raw_ref": "skills/review/SKILL.md",
       "source": "file:docs/systems/registry.jsonl",
       "target": "file:skills/review/SKILL.md",
@@ -12159,6 +12607,13 @@ window.HARNESS_GRAPH = {
       "raw_ref": "skills/skill-maintenance/SKILL.md",
       "source": "file:docs/systems/registry.jsonl",
       "target": "file:skills/skill-maintenance/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/systems/registry.jsonl",
+      "raw_ref": "skills/storyboard/SKILL.md",
+      "source": "file:docs/systems/registry.jsonl",
+      "target": "file:skills/storyboard/SKILL.md",
       "type": "literal-path"
     },
     {
@@ -12394,6 +12849,20 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/systems/registry.md",
+      "raw_ref": "../features/FEAT-0072-persistent-icp-and-world-memory.md",
+      "source": "file:docs/systems/registry.md",
+      "target": "file:docs/features/FEAT-0072-persistent-icp-and-world-memory.md",
+      "type": "markdown-link"
+    },
+    {
+      "from_file": "docs/systems/registry.md",
+      "raw_ref": "../features/FEAT-0073-brand-kit-approved-creative-identity.md",
+      "source": "file:docs/systems/registry.md",
+      "target": "file:docs/features/FEAT-0073-brand-kit-approved-creative-identity.md",
+      "type": "markdown-link"
+    },
+    {
+      "from_file": "docs/systems/registry.md",
       "raw_ref": "docs/features/",
       "source": "file:docs/systems/registry.md",
       "target": "file:docs/features/README.md",
@@ -12425,6 +12894,13 @@ window.HARNESS_GRAPH = {
       "raw_ref": "../systems/agent-kernel.md",
       "source": "file:docs/systems/registry.md",
       "target": "file:docs/systems/agent-kernel.md",
+      "type": "markdown-link"
+    },
+    {
+      "from_file": "docs/systems/registry.md",
+      "raw_ref": "../systems/content-production.md",
+      "source": "file:docs/systems/registry.md",
+      "target": "file:docs/systems/content-production.md",
       "type": "markdown-link"
     },
     {
@@ -12506,30 +12982,9 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/systems/self-improvement-learning.md",
-      "raw_ref": "bin/validators/check_doc_refs.py",
+      "raw_ref": "docs/features/FEAT-0063-metric-advisor-cards.md",
       "source": "file:docs/systems/self-improvement-learning.md",
-      "target": "file:bin/validators/check_doc_refs.py",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/systems/self-improvement-learning.md",
-      "raw_ref": "docs/LESSONS.md",
-      "source": "file:docs/systems/self-improvement-learning.md",
-      "target": "file:docs/LESSONS.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/systems/self-improvement-learning.md",
-      "raw_ref": "docs/TROUBLES.md",
-      "source": "file:docs/systems/self-improvement-learning.md",
-      "target": "file:docs/TROUBLES.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/systems/self-improvement-learning.md",
-      "raw_ref": "docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md",
-      "source": "file:docs/systems/self-improvement-learning.md",
-      "target": "file:docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md",
+      "target": "file:docs/features/FEAT-0063-metric-advisor-cards.md",
       "type": "literal-path"
     },
     {
@@ -12569,13 +13024,6 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/systems/self-improvement-learning.md",
-      "raw_ref": "docs/features/validate_features.py",
-      "source": "file:docs/systems/self-improvement-learning.md",
-      "target": "file:docs/features/validate_features.py",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "docs/systems/self-improvement-learning.md",
       "raw_ref": "docs/systems/self-improvement-learning.md",
       "source": "file:docs/systems/self-improvement-learning.md",
       "target": "file:docs/systems/self-improvement-learning.md",
@@ -12583,16 +13031,23 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/systems/self-improvement-learning.md",
-      "raw_ref": "farplane/automations.toml",
+      "raw_ref": "skills/eval/SKILL.md",
       "source": "file:docs/systems/self-improvement-learning.md",
-      "target": "file:farplane/automations.toml",
+      "target": "file:skills/eval/SKILL.md",
       "type": "literal-path"
     },
     {
       "from_file": "docs/systems/self-improvement-learning.md",
-      "raw_ref": "skills/dogfood-review/SKILL.md",
+      "raw_ref": "skills/goal-advisor/SKILL.md",
       "source": "file:docs/systems/self-improvement-learning.md",
-      "target": "file:skills/dogfood-review/SKILL.md",
+      "target": "file:skills/goal-advisor/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/systems/self-improvement-learning.md",
+      "raw_ref": "skills/leverage-advisor/SKILL.md",
+      "source": "file:docs/systems/self-improvement-learning.md",
+      "target": "file:skills/leverage-advisor/SKILL.md",
       "type": "literal-path"
     },
     {
@@ -12604,9 +13059,30 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/systems/self-improvement-learning.md",
+      "raw_ref": "skills/ml-autoresearch/SKILL.md",
+      "source": "file:docs/systems/self-improvement-learning.md",
+      "target": "file:skills/ml-autoresearch/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/systems/self-improvement-learning.md",
       "raw_ref": "skills/self-improve/SKILL.md",
       "source": "file:docs/systems/self-improvement-learning.md",
       "target": "file:skills/self-improve/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/systems/self-improvement-learning.md",
+      "raw_ref": "skills/skill-creator/scripts/quick_validate.py",
+      "source": "file:docs/systems/self-improvement-learning.md",
+      "target": "file:skills/skill-creator/scripts/quick_validate.py",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/systems/self-improvement-learning.md",
+      "raw_ref": "skills/skill-maintenance/scripts/check_skills.py",
+      "source": "file:docs/systems/self-improvement-learning.md",
+      "target": "file:skills/skill-maintenance/scripts/check_skills.py",
       "type": "literal-path"
     },
     {
@@ -12723,16 +13199,16 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/systems/source-sidecar-systems.md",
-      "raw_ref": "docs/features/FEAT-0056-inspiration-vault.md",
+      "raw_ref": "docs/features/FEAT-0072-persistent-icp-and-world-memory.md",
       "source": "file:docs/systems/source-sidecar-systems.md",
-      "target": "file:docs/features/FEAT-0056-inspiration-vault.md",
+      "target": "file:docs/features/FEAT-0072-persistent-icp-and-world-memory.md",
       "type": "literal-path"
     },
     {
       "from_file": "docs/systems/source-sidecar-systems.md",
-      "raw_ref": "../features/FEAT-0056-inspiration-vault.md",
+      "raw_ref": "../features/FEAT-0072-persistent-icp-and-world-memory.md",
       "source": "file:docs/systems/source-sidecar-systems.md",
-      "target": "file:docs/features/FEAT-0056-inspiration-vault.md",
+      "target": "file:docs/features/FEAT-0072-persistent-icp-and-world-memory.md",
       "type": "markdown-link"
     },
     {
@@ -12747,6 +13223,13 @@ window.HARNESS_GRAPH = {
       "raw_ref": "docs/sources/registry.jsonl",
       "source": "file:docs/systems/source-sidecar-systems.md",
       "target": "file:docs/sources/registry.jsonl",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/systems/source-sidecar-systems.md",
+      "raw_ref": "docs/systems/content-production.md",
+      "source": "file:docs/systems/source-sidecar-systems.md",
+      "target": "file:docs/systems/content-production.md",
       "type": "literal-path"
     },
     {
@@ -12834,6 +13317,13 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
+      "from_file": "docs/templates/HUMAN_REPORT_TEMPLATE.md",
+      "raw_ref": "tickets/archive/TASK-0348/artifacts/prototype/dogfood-after.md",
+      "source": "file:docs/templates/HUMAN_REPORT_TEMPLATE.md",
+      "target": "file:tickets/archive/TASK-0348/artifacts/prototype/dogfood-after.md",
+      "type": "literal-path"
+    },
+    {
       "from_file": "docs/templates/README.md",
       "raw_ref": "bin/validators/check_template_version_metadata.py",
       "source": "file:docs/templates/README.md",
@@ -12866,6 +13356,13 @@ window.HARNESS_GRAPH = {
       "raw_ref": "docs/skills/templates/SKILL_TEMPLATE.md",
       "source": "file:docs/templates/README.md",
       "target": "file:docs/skills/templates/SKILL_TEMPLATE.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/templates/README.md",
+      "raw_ref": "docs/templates/HUMAN_REPORT_TEMPLATE.md",
+      "source": "file:docs/templates/README.md",
+      "target": "file:docs/templates/HUMAN_REPORT_TEMPLATE.md",
       "type": "literal-path"
     },
     {
@@ -12996,6 +13493,13 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "docs/templates/registry.jsonl",
+      "raw_ref": "docs/templates/HUMAN_REPORT_TEMPLATE.md",
+      "source": "file:docs/templates/registry.jsonl",
+      "target": "file:docs/templates/HUMAN_REPORT_TEMPLATE.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/templates/registry.jsonl",
       "raw_ref": "farplane/manifest.json",
       "source": "file:docs/templates/registry.jsonl",
       "target": "file:farplane/manifest.json",
@@ -13027,6 +13531,13 @@ window.HARNESS_GRAPH = {
       "raw_ref": "templates/global/AGENTS.md",
       "source": "file:docs/templates/registry.jsonl",
       "target": "file:templates/global/AGENTS.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "docs/templates/registry.jsonl",
+      "raw_ref": "tickets/archive/TASK-0348/artifacts/prototype/dogfood-after.md",
+      "source": "file:docs/templates/registry.jsonl",
+      "target": "file:tickets/archive/TASK-0348/artifacts/prototype/dogfood-after.md",
       "type": "literal-path"
     },
     {
@@ -13086,13 +13597,6 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
-      "from_file": "farplane/README.md",
-      "raw_ref": "farplane/hooks.json",
-      "source": "file:farplane/README.md",
-      "target": "file:farplane/hooks.json",
-      "type": "literal-path"
-    },
-    {
       "from_file": "farplane/automations.toml",
       "raw_ref": "farplane/automations.toml",
       "source": "file:farplane/automations.toml",
@@ -13101,37 +13605,16 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "farplane/automations.toml",
-      "raw_ref": "farplane/bindings.yaml#feed_scout",
+      "raw_ref": "farplane/bindings.yaml#operator.review_chase_policy",
       "source": "file:farplane/automations.toml",
       "target": "file:farplane/bindings.yaml",
       "type": "literal-path"
     },
     {
-      "from_file": "farplane/hooks.json",
-      "raw_ref": "docs/HISTORY.md",
-      "source": "file:farplane/hooks.json",
-      "target": "file:docs/HISTORY.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "farplane/hooks.json",
-      "raw_ref": "docs/LESSONS.md",
-      "source": "file:farplane/hooks.json",
-      "target": "file:docs/LESSONS.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "farplane/hooks.json",
-      "raw_ref": "docs/MEMORY.md",
-      "source": "file:farplane/hooks.json",
-      "target": "file:docs/MEMORY.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "farplane/hooks.json",
-      "raw_ref": "docs/TROUBLES.md",
-      "source": "file:farplane/hooks.json",
-      "target": "file:docs/TROUBLES.md",
+      "from_file": "farplane/automations.toml",
+      "raw_ref": "farplane/harness.yaml#areas",
+      "source": "file:farplane/automations.toml",
+      "target": "file:farplane/harness.yaml",
       "type": "literal-path"
     },
     {
@@ -13216,6 +13699,13 @@ window.HARNESS_GRAPH = {
       "raw_ref": "docs/farplane-framework/README.md",
       "source": "file:farplane/manifest.json",
       "target": "file:docs/farplane-framework/README.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "farplane/manifest.json",
+      "raw_ref": "docs/farplane-framework/entities.md",
+      "source": "file:farplane/manifest.json",
+      "target": "file:docs/farplane-framework/entities.md",
       "type": "literal-path"
     },
     {
@@ -13318,13 +13808,6 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "farplane/manifest.json",
-      "raw_ref": "farplane/hooks.json",
-      "source": "file:farplane/manifest.json",
-      "target": "file:farplane/hooks.json",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "farplane/manifest.json",
       "raw_ref": "farplane/manifest.json",
       "source": "file:farplane/manifest.json",
       "target": "file:farplane/manifest.json",
@@ -13419,6 +13902,20 @@ window.HARNESS_GRAPH = {
       "raw_ref": "skills/phone-chaser/",
       "source": "file:farplane/phone-chaser/README.md",
       "target": "file:skills/phone-chaser/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "farplane/phone-chaser/README.md",
+      "raw_ref": "skills/phone-chaser/scripts/compile_review_call.py",
+      "source": "file:farplane/phone-chaser/README.md",
+      "target": "file:skills/phone-chaser/scripts/compile_review_call.py",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "farplane/phone-chaser/README.md",
+      "raw_ref": "skills/phone-chaser/scripts/dispatch_call.py",
+      "source": "file:farplane/phone-chaser/README.md",
+      "target": "file:skills/phone-chaser/scripts/dispatch_call.py",
       "type": "literal-path"
     },
     {
@@ -13556,6 +14053,13 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "rules/template-registry.toml",
+      "raw_ref": "docs/templates/HUMAN_REPORT_TEMPLATE.md",
+      "source": "file:rules/template-registry.toml",
+      "target": "file:docs/templates/HUMAN_REPORT_TEMPLATE.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "rules/template-registry.toml",
       "raw_ref": "skills/harness-creator/templates/project-harness.md",
       "source": "file:rules/template-registry.toml",
       "target": "file:skills/harness-creator/templates/project-harness.md",
@@ -13622,6 +14126,13 @@ window.HARNESS_GRAPH = {
       "raw_ref": "docs/skills/templates/SKILL_TEMPLATE.md",
       "source": "file:rules/template-version-watch.toml",
       "target": "file:docs/skills/templates/SKILL_TEMPLATE.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "rules/template-version-watch.toml",
+      "raw_ref": "docs/templates/HUMAN_REPORT_TEMPLATE.md",
+      "source": "file:rules/template-version-watch.toml",
+      "target": "file:docs/templates/HUMAN_REPORT_TEMPLATE.md",
       "type": "literal-path"
     },
     {
@@ -14343,6 +14854,111 @@ window.HARNESS_GRAPH = {
       "raw_ref": "../review/SKILL.md",
       "source": "skill:apify",
       "target": "file:skills/review/SKILL.md",
+      "type": "markdown-link"
+    },
+    {
+      "from_file": "skills/audio-advisor/audits/2026-07-18-operator-only-sfx-retrieval.md",
+      "raw_ref": "skills/audio-advisor/SKILL.md",
+      "source": "skill:audio-advisor",
+      "target": "file:skills/audio-advisor/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/audio-advisor/audits/2026-07-18-source-first-generation-merge-review.md",
+      "raw_ref": "skills/audio-advisor/",
+      "source": "skill:audio-advisor",
+      "target": "file:skills/audio-advisor/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/audio-advisor/audits/2026-07-18-source-first-generation-merge.md",
+      "raw_ref": "skills/audio-advisor/SKILL.md",
+      "source": "skill:audio-advisor",
+      "target": "file:skills/audio-advisor/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/audio-advisor/audits/2026-07-18-operator-only-sfx-retrieval-review.md",
+      "raw_ref": "skills/audio-advisor/audits/2026-07-18-operator-only-sfx-retrieval.md",
+      "source": "skill:audio-advisor",
+      "target": "file:skills/audio-advisor/audits/2026-07-18-operator-only-sfx-retrieval.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/audio-advisor/audits/2026-07-18-operator-only-sfx-retrieval.md",
+      "raw_ref": "skills/audio-advisor/audits/2026-07-18-source-first-generation-merge.md",
+      "source": "skill:audio-advisor",
+      "target": "file:skills/audio-advisor/audits/2026-07-18-source-first-generation-merge.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/audio-advisor/audits/2026-07-18-source-first-generation-merge-review.md",
+      "raw_ref": "skills/audio-advisor/audits/2026-07-18-source-first-generation-merge.md",
+      "source": "skill:audio-advisor",
+      "target": "file:skills/audio-advisor/audits/2026-07-18-source-first-generation-merge.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/audio-advisor/audits/2026-07-18-operator-only-sfx-retrieval.md",
+      "raw_ref": "skills/audio-advisor/evals/evals.json",
+      "source": "skill:audio-advisor",
+      "target": "file:skills/audio-advisor/evals/evals.json",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/audio-advisor/audits/2026-07-18-source-first-generation-merge.md",
+      "raw_ref": "skills/audio-advisor/evals/evals.json",
+      "source": "skill:audio-advisor",
+      "target": "file:skills/audio-advisor/evals/evals.json",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/audio-advisor/audits/2026-07-18-operator-only-sfx-retrieval.md",
+      "raw_ref": "skills/audio-advisor/qa_checklist.md",
+      "source": "skill:audio-advisor",
+      "target": "file:skills/audio-advisor/qa_checklist.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/audio-advisor/audits/2026-07-18-source-first-generation-merge.md",
+      "raw_ref": "skills/audio-advisor/qa_checklist.md",
+      "source": "skill:audio-advisor",
+      "target": "file:skills/audio-advisor/qa_checklist.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/audio-advisor/audits/2026-07-18-operator-only-sfx-retrieval.md",
+      "raw_ref": "skills/audio-advisor/references/soundbuttonsworld.md",
+      "source": "skill:audio-advisor",
+      "target": "file:skills/audio-advisor/references/soundbuttonsworld.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/audio-advisor/audits/2026-07-18-source-first-generation-merge.md",
+      "raw_ref": "skills/audio-advisor/references/soundbuttonsworld.md",
+      "source": "skill:audio-advisor",
+      "target": "file:skills/audio-advisor/references/soundbuttonsworld.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/audio-advisor/audits/2026-07-18-source-first-generation-merge.md",
+      "raw_ref": "skills/audio-advisor/scripts/validate_audio_packet.py",
+      "source": "skill:audio-advisor",
+      "target": "file:skills/audio-advisor/scripts/validate_audio_packet.py",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/audio-advisor/SKILL.md",
+      "raw_ref": "../avatar-advisor/SKILL.md",
+      "source": "skill:audio-advisor",
+      "target": "file:skills/avatar-advisor/SKILL.md",
+      "type": "markdown-link"
+    },
+    {
+      "from_file": "skills/audio-advisor/SKILL.md",
+      "raw_ref": "../remotion/SKILL.md",
+      "source": "skill:audio-advisor",
+      "target": "file:skills/remotion/SKILL.md",
       "type": "markdown-link"
     },
     {
@@ -15480,10 +16096,31 @@ window.HARNESS_GRAPH = {
       "type": "markdown-link"
     },
     {
+      "from_file": "skills/customer-research/audits/2026-07-12-skill-local-reports.md",
+      "raw_ref": "skills/customer-research/SKILL.md",
+      "source": "skill:customer-research",
+      "target": "file:skills/customer-research/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/customer-research/audits/2026-07-12-skill-local-reports.md",
+      "raw_ref": "skills/customer-research/evals/evals.json",
+      "source": "skill:customer-research",
+      "target": "file:skills/customer-research/evals/evals.json",
+      "type": "literal-path"
+    },
+    {
       "from_file": "skills/customer-research/audits/2026-07-07-initial-skill.md",
       "raw_ref": "skills/customer-research/examples/first-call/example.md",
       "source": "skill:customer-research",
       "target": "file:skills/customer-research/examples/first-call/example.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/customer-research/audits/2026-07-12-skill-local-reports.md",
+      "raw_ref": "skills/customer-research/templates/report.md",
+      "source": "skill:customer-research",
+      "target": "file:skills/customer-research/templates/report.md",
       "type": "literal-path"
     },
     {
@@ -17111,25 +17748,11 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
-      "from_file": "skills/dogfood-review/SKILL.md",
-      "raw_ref": "../../docs/features/README.md",
-      "source": "skill:dogfood-review",
-      "target": "file:docs/features/README.md",
-      "type": "markdown-link"
-    },
-    {
       "from_file": "skills/dogfood-review/audits/2026-07-07-improvement-ticket-writeback.md",
       "raw_ref": "docs/features/validate_features.py",
       "source": "skill:dogfood-review",
       "target": "file:docs/features/validate_features.py",
       "type": "literal-path"
-    },
-    {
-      "from_file": "skills/dogfood-review/SKILL.md",
-      "raw_ref": "../../docs/systems/README.md",
-      "source": "skill:dogfood-review",
-      "target": "file:docs/systems/README.md",
-      "type": "markdown-link"
     },
     {
       "from_file": "skills/dogfood-review/SKILL.md",
@@ -17139,7 +17762,14 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
-      "from_file": "skills/dogfood-review/SKILL.md",
+      "from_file": "skills/dogfood-review/evals/evals.json",
+      "raw_ref": "farplane/harness.yaml",
+      "source": "skill:dogfood-review",
+      "target": "file:farplane/harness.yaml",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/dogfood-review/evals/evals.json",
       "raw_ref": "farplane/metrics.yaml",
       "source": "skill:dogfood-review",
       "target": "file:farplane/metrics.yaml",
@@ -17207,20 +17837,6 @@ window.HARNESS_GRAPH = {
       "source": "skill:dogfood-review",
       "target": "file:skills/dogfood-review/templates/dogfood-report.md",
       "type": "literal-path"
-    },
-    {
-      "from_file": "skills/dogfood-review/SKILL.md",
-      "raw_ref": "../pulse-update/SKILL.md",
-      "source": "skill:dogfood-review",
-      "target": "file:skills/pulse-update/SKILL.md",
-      "type": "markdown-link"
-    },
-    {
-      "from_file": "skills/dogfood-review/SKILL.md",
-      "raw_ref": "../self-improve/SKILL.md",
-      "source": "skill:dogfood-review",
-      "target": "file:skills/self-improve/SKILL.md",
-      "type": "markdown-link"
     },
     {
       "from_file": "skills/dogfood-review/audits/2026-07-07-improvement-ticket-writeback.md",
@@ -17489,13 +18105,6 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
-      "from_file": "skills/eval/self-improve/feedback-request.md",
-      "raw_ref": "skills/eval",
-      "source": "skill:eval",
-      "target": "file:skills/eval/README.md",
-      "type": "literal-path"
-    },
-    {
       "from_file": "skills/eval/self-improve/program.md",
       "raw_ref": "skills/eval",
       "source": "skill:eval",
@@ -17531,13 +18140,6 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
-      "from_file": "skills/eval/self-improve/feedback-request.md",
-      "raw_ref": "skills/eval/audits/2026-06-11-eval-for-eval-batch-01.md",
-      "source": "skill:eval",
-      "target": "file:skills/eval/audits/2026-06-11-eval-for-eval-batch-01.md",
-      "type": "literal-path"
-    },
-    {
       "from_file": "skills/eval/references/eval-consolidation.md",
       "raw_ref": "skills/eval/evals/evals.json",
       "source": "skill:eval",
@@ -17546,13 +18148,6 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "skills/eval/references/eval-skill-structure-cases.md",
-      "raw_ref": "skills/eval/evals/evals.json",
-      "source": "skill:eval",
-      "target": "file:skills/eval/evals/evals.json",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/eval/self-improve/feedback-request.md",
       "raw_ref": "skills/eval/evals/evals.json",
       "source": "skill:eval",
       "target": "file:skills/eval/evals/evals.json",
@@ -17720,25 +18315,11 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
-      "from_file": "skills/eval/self-improve/feedback-request.md",
-      "raw_ref": "skills/eval/self-improve/program.md",
-      "source": "skill:eval",
-      "target": "file:skills/eval/self-improve/program.md",
-      "type": "literal-path"
-    },
-    {
       "from_file": "skills/eval/audits/2026-06-11-eval-for-eval-batch-01.md",
       "raw_ref": "../self-improve/program.md",
       "source": "skill:eval",
       "target": "file:skills/eval/self-improve/program.md",
       "type": "markdown-link"
-    },
-    {
-      "from_file": "skills/eval/SKILL.md",
-      "raw_ref": "skills/eval/templates/viewer-react",
-      "source": "skill:eval",
-      "target": "file:skills/eval/templates/viewer-react/README.md",
-      "type": "literal-path"
     },
     {
       "from_file": "skills/eval/audits/2026-06-23-eval-template-0.3-upgrade.md",
@@ -17776,6 +18357,13 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
+      "from_file": "skills/eval/SKILL.md",
+      "raw_ref": "../self-improve/SKILL.md",
+      "source": "skill:eval",
+      "target": "file:skills/self-improve/SKILL.md",
+      "type": "markdown-link"
+    },
+    {
       "from_file": "skills/eval/audits/2026-07-12-agent-skills-eval-layout-migration.md",
       "raw_ref": "skills/skill-creator/references/EVAL_TASK_TEMPLATE.json",
       "source": "skill:eval",
@@ -17787,13 +18375,6 @@ window.HARNESS_GRAPH = {
       "raw_ref": "skills/skill-maintenance/SKILL.md",
       "source": "skill:eval",
       "target": "file:skills/skill-maintenance/SKILL.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/eval/self-improve/program.md",
-      "raw_ref": "skills/skill-maintenance/references/eval-fixture-sandbox.md",
-      "source": "skill:eval",
-      "target": "file:skills/skill-maintenance/references/eval-fixture-sandbox.md",
       "type": "literal-path"
     },
     {
@@ -17836,13 +18417,6 @@ window.HARNESS_GRAPH = {
       "raw_ref": "skills/skill-maintenance/scripts/check_skills.py",
       "source": "skill:eval",
       "target": "file:skills/skill-maintenance/scripts/check_skills.py",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/eval/self-improve/program.md",
-      "raw_ref": "skills/skill-maintenance/tests/fixtures/bad-skill-repo/",
-      "source": "skill:eval",
-      "target": "file:skills/skill-maintenance/tests/fixtures/bad-skill-repo/README.md",
       "type": "literal-path"
     },
     {
@@ -18070,6 +18644,13 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
+      "from_file": "skills/feed-scout/evals/evals.json",
+      "raw_ref": "farplane/bindings.yaml",
+      "source": "skill:feed-scout",
+      "target": "file:farplane/bindings.yaml",
+      "type": "literal-path"
+    },
+    {
       "from_file": "skills/feed-scout/references/data-model.md",
       "raw_ref": "farplane/bindings.yaml",
       "source": "skill:feed-scout",
@@ -18081,6 +18662,48 @@ window.HARNESS_GRAPH = {
       "raw_ref": "farplane/bindings.yaml#feed_scout",
       "source": "skill:feed-scout",
       "target": "file:farplane/bindings.yaml",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/feed-scout/evals/evals.json",
+      "raw_ref": "farplane/harness.yaml",
+      "source": "skill:feed-scout",
+      "target": "file:farplane/harness.yaml",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/feed-scout/references/data-model.md",
+      "raw_ref": "farplane/harness.yaml#areas",
+      "source": "skill:feed-scout",
+      "target": "file:farplane/harness.yaml",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/feed-scout/scripts/test_validate_memory.py",
+      "raw_ref": "farplane/harness.yaml#areas",
+      "source": "skill:feed-scout",
+      "target": "file:farplane/harness.yaml",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/feed-scout/scripts/validate_memory.py",
+      "raw_ref": "farplane/harness.yaml#areas",
+      "source": "skill:feed-scout",
+      "target": "file:farplane/harness.yaml",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/feed-scout/scripts/validate_world_memory.py",
+      "raw_ref": "farplane/harness.yaml#areas",
+      "source": "skill:feed-scout",
+      "target": "file:farplane/harness.yaml",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/feed-scout/templates/memory.md",
+      "raw_ref": "farplane/harness.yaml#areas",
+      "source": "skill:feed-scout",
+      "target": "file:farplane/harness.yaml",
       "type": "literal-path"
     },
     {
@@ -18151,6 +18774,13 @@ window.HARNESS_GRAPH = {
       "raw_ref": "skills/feed-scout/scripts/validate_profiles.py",
       "source": "skill:feed-scout",
       "target": "file:skills/feed-scout/scripts/validate_profiles.py",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/feed-scout/evals/evals.json",
+      "raw_ref": "skills/feed-scout/templates/memory.md",
+      "source": "skill:feed-scout",
+      "target": "file:skills/feed-scout/templates/memory.md",
       "type": "literal-path"
     },
     {
@@ -19180,20 +19810,6 @@ window.HARNESS_GRAPH = {
       "raw_ref": "farplane/harness.yaml",
       "source": "skill:harness-creator",
       "target": "file:farplane/harness.yaml",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/harness-creator/SKILL.md",
-      "raw_ref": "farplane/hooks.json",
-      "source": "skill:harness-creator",
-      "target": "file:farplane/hooks.json",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/harness-creator/templates/project-harness.md",
-      "raw_ref": "farplane/hooks.json",
-      "source": "skill:harness-creator",
-      "target": "file:farplane/hooks.json",
       "type": "literal-path"
     },
     {
@@ -20590,6 +21206,20 @@ window.HARNESS_GRAPH = {
       "type": "markdown-link"
     },
     {
+      "from_file": "skills/ingest-world-data/SKILL.md",
+      "raw_ref": "../../docs/farplane-framework/entities.md",
+      "source": "skill:ingest-world-data",
+      "target": "file:docs/farplane-framework/entities.md",
+      "type": "markdown-link"
+    },
+    {
+      "from_file": "skills/ingest-world-data/audits/2026-07-13-initial-world-ingest.md",
+      "raw_ref": "skills/ingest-world-data/SKILL.md",
+      "source": "skill:ingest-world-data",
+      "target": "file:skills/ingest-world-data/SKILL.md",
+      "type": "literal-path"
+    },
+    {
       "from_file": "skills/init-advisor/references/FRAMEWORK_CHANGELOG.md",
       "raw_ref": "bin/tests",
       "source": "skill:init-advisor",
@@ -20933,13 +21563,6 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
-      "from_file": "skills/init-advisor/references/CRM_README_TEMPLATE.md",
-      "raw_ref": "README.md",
-      "source": "skill:init-advisor",
-      "target": "file:README.md",
-      "type": "literal-path"
-    },
-    {
       "from_file": "skills/init-advisor/references/FARPLANE_README_TEMPLATE.md",
       "raw_ref": "README.md",
       "source": "skill:init-advisor",
@@ -21101,13 +21724,6 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
-      "from_file": "skills/init-advisor/references/HOOKS_TEMPLATE.json",
-      "raw_ref": "docs/HISTORY.md",
-      "source": "skill:init-advisor",
-      "target": "file:docs/HISTORY.md",
-      "type": "literal-path"
-    },
-    {
       "from_file": "skills/init-advisor/references/MANIFEST_TEMPLATE.json",
       "raw_ref": "docs/HISTORY.md",
       "source": "skill:init-advisor",
@@ -21137,13 +21753,6 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "skills/init-advisor/references/AGENTS_TEMPLATE.md",
-      "raw_ref": "docs/LESSONS.md",
-      "source": "skill:init-advisor",
-      "target": "file:docs/LESSONS.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/init-advisor/references/HOOKS_TEMPLATE.json",
       "raw_ref": "docs/LESSONS.md",
       "source": "skill:init-advisor",
       "target": "file:docs/LESSONS.md",
@@ -21193,13 +21802,6 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "skills/init-advisor/references/AGENTS_TEMPLATE.md",
-      "raw_ref": "docs/MEMORY.md",
-      "source": "skill:init-advisor",
-      "target": "file:docs/MEMORY.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/init-advisor/references/HOOKS_TEMPLATE.json",
       "raw_ref": "docs/MEMORY.md",
       "source": "skill:init-advisor",
       "target": "file:docs/MEMORY.md",
@@ -21298,13 +21900,6 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "skills/init-advisor/references/AGENTS_TEMPLATE.md",
-      "raw_ref": "docs/TROUBLES.md",
-      "source": "skill:init-advisor",
-      "target": "file:docs/TROUBLES.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/init-advisor/references/HOOKS_TEMPLATE.json",
       "raw_ref": "docs/TROUBLES.md",
       "source": "skill:init-advisor",
       "target": "file:docs/TROUBLES.md",
@@ -21752,6 +22347,13 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
+      "from_file": "skills/init-advisor/references/AUTOMATION_TEMPLATE.toml",
+      "raw_ref": "farplane/harness.yaml",
+      "source": "skill:init-advisor",
+      "target": "file:farplane/harness.yaml",
+      "type": "literal-path"
+    },
+    {
       "from_file": "skills/init-advisor/references/FRAMEWORK_CHANGELOG.md",
       "raw_ref": "farplane/harness.yaml#areas",
       "source": "skill:init-advisor",
@@ -21770,34 +22372,6 @@ window.HARNESS_GRAPH = {
       "raw_ref": "farplane/harness.yaml",
       "source": "skill:init-advisor",
       "target": "file:farplane/harness.yaml",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/init-advisor/README.md",
-      "raw_ref": "farplane/hooks.json",
-      "source": "skill:init-advisor",
-      "target": "file:farplane/hooks.json",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/init-advisor/references/FRAMEWORK_CHANGELOG.md",
-      "raw_ref": "farplane/hooks.json",
-      "source": "skill:init-advisor",
-      "target": "file:farplane/hooks.json",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/init-advisor/references/MANIFEST_TEMPLATE.json",
-      "raw_ref": "farplane/hooks.json",
-      "source": "skill:init-advisor",
-      "target": "file:farplane/hooks.json",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/init-advisor/scripts/bootstrap.sh",
-      "raw_ref": "farplane/hooks.json",
-      "source": "skill:init-advisor",
-      "target": "file:farplane/hooks.json",
       "type": "literal-path"
     },
     {
@@ -22025,13 +22599,6 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
-      "from_file": "skills/init-advisor/scripts/bootstrap.sh",
-      "raw_ref": "rules/git-review-gates.toml",
-      "source": "skill:init-advisor",
-      "target": "file:rules/git-review-gates.toml",
-      "type": "literal-path"
-    },
-    {
       "from_file": "skills/init-advisor/references/MANIFEST_TEMPLATE.json",
       "raw_ref": "skills/code-review/SKILL.md",
       "source": "skill:init-advisor",
@@ -22180,6 +22747,13 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "skills/init-advisor/audits/2026-06-26-gitignore-local-work.md",
+      "raw_ref": "skills/init-advisor/scripts/bootstrap.sh",
+      "source": "skill:init-advisor",
+      "target": "file:skills/init-advisor/scripts/bootstrap.sh",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/init-advisor/audits/2026-07-12-crm-entity-bootstrap.md",
       "raw_ref": "skills/init-advisor/scripts/bootstrap.sh",
       "source": "skill:init-advisor",
       "target": "file:skills/init-advisor/scripts/bootstrap.sh",
@@ -22375,6 +22949,34 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
+      "from_file": "skills/interval-update/evals/evals.json",
+      "raw_ref": "tickets/archive",
+      "source": "skill:interval-update",
+      "target": "dir:tickets/archive",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/interval-update/references/interval-update.md",
+      "raw_ref": "tickets/archive",
+      "source": "skill:interval-update",
+      "target": "dir:tickets/archive",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/interval-update/scripts/resolve_evidence_binding.py",
+      "raw_ref": "tickets/archive",
+      "source": "skill:interval-update",
+      "target": "dir:tickets/archive",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/interval-update/scripts/test_resolve_evidence_binding.py",
+      "raw_ref": "tickets/archive",
+      "source": "skill:interval-update",
+      "target": "dir:tickets/archive",
+      "type": "literal-path"
+    },
+    {
       "from_file": "skills/interval-update/audits/2026-06-24-configured-interval-workflows.md",
       "raw_ref": "bin/validators/check_doc_refs.py",
       "source": "skill:interval-update",
@@ -22389,10 +22991,80 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
+      "from_file": "skills/interval-update/audits/2026-07-14-provider-binding-implementation.md",
+      "raw_ref": "bin/validators/check_farplane_project_files.py",
+      "source": "skill:interval-update",
+      "target": "file:bin/validators/check_farplane_project_files.py",
+      "type": "literal-path"
+    },
+    {
       "from_file": "skills/interval-update/audits/2026-06-24-configured-interval-workflows.md",
       "raw_ref": "bin/validators/test_check_farplane_project_files.py",
       "source": "skill:interval-update",
       "target": "file:bin/validators/test_check_farplane_project_files.py",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/interval-update/audits/2026-07-14-provider-binding-implementation.md",
+      "raw_ref": "bin/validators/test_check_farplane_project_files.py",
+      "source": "skill:interval-update",
+      "target": "file:bin/validators/test_check_farplane_project_files.py",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/interval-update/audits/2026-07-14-provider-binding-implementation.md",
+      "raw_ref": "docs/farplane-framework/pulse-and-interval-loop.md",
+      "source": "skill:interval-update",
+      "target": "file:docs/farplane-framework/pulse-and-interval-loop.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/interval-update/SKILL.md",
+      "raw_ref": "farplane/bindings.yaml",
+      "source": "skill:interval-update",
+      "target": "file:farplane/bindings.yaml",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/interval-update/audits/2026-07-14-provider-binding-implementation.md",
+      "raw_ref": "farplane/bindings.yaml#integrations.kanban",
+      "source": "skill:interval-update",
+      "target": "file:farplane/bindings.yaml",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/interval-update/evals/evals.json",
+      "raw_ref": "farplane/bindings.yaml",
+      "source": "skill:interval-update",
+      "target": "file:farplane/bindings.yaml",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/interval-update/qa_checklist.md",
+      "raw_ref": "farplane/bindings.yaml#integrations.kanban",
+      "source": "skill:interval-update",
+      "target": "file:farplane/bindings.yaml",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/interval-update/references/interval-update.md",
+      "raw_ref": "farplane/bindings.yaml",
+      "source": "skill:interval-update",
+      "target": "file:farplane/bindings.yaml",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/interval-update/scripts/resolve_evidence_binding.py",
+      "raw_ref": "farplane/bindings.yaml#integrations.kanban",
+      "source": "skill:interval-update",
+      "target": "file:farplane/bindings.yaml",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/interval-update/templates/interval-context-bundle.md",
+      "raw_ref": "farplane/bindings.yaml#integrations.kanban",
+      "source": "skill:interval-update",
+      "target": "file:farplane/bindings.yaml",
       "type": "literal-path"
     },
     {
@@ -22407,6 +23079,13 @@ window.HARNESS_GRAPH = {
       "raw_ref": "farplane/metrics.yaml",
       "source": "skill:interval-update",
       "target": "file:farplane/metrics.yaml",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/interval-update/audits/2026-07-14-provider-binding-implementation.md",
+      "raw_ref": "skills/init-advisor/references/BINDINGS_TEMPLATE.yaml",
+      "source": "skill:interval-update",
+      "target": "file:skills/init-advisor/references/BINDINGS_TEMPLATE.yaml",
       "type": "literal-path"
     },
     {
@@ -22431,7 +23110,28 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
+      "from_file": "skills/interval-update/audits/2026-07-14-provider-binding-implementation.md",
+      "raw_ref": "skills/interval-update/SKILL.md",
+      "source": "skill:interval-update",
+      "target": "file:skills/interval-update/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/interval-update/audits/2026-07-14-provider-binding-implementation.md",
+      "raw_ref": "skills/interval-update/evals/evals.json",
+      "source": "skill:interval-update",
+      "target": "file:skills/interval-update/evals/evals.json",
+      "type": "literal-path"
+    },
+    {
       "from_file": "skills/interval-update/audits/2026-07-11-bau-reporting-boundary.md",
+      "raw_ref": "skills/interval-update/qa_checklist.md",
+      "source": "skill:interval-update",
+      "target": "file:skills/interval-update/qa_checklist.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/interval-update/audits/2026-07-14-provider-binding-implementation.md",
       "raw_ref": "skills/interval-update/qa_checklist.md",
       "source": "skill:interval-update",
       "target": "file:skills/interval-update/qa_checklist.md",
@@ -22445,10 +23145,38 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
+      "from_file": "skills/interval-update/audits/2026-07-14-provider-binding-implementation.md",
+      "raw_ref": "skills/interval-update/references/interval-update.md",
+      "source": "skill:interval-update",
+      "target": "file:skills/interval-update/references/interval-update.md",
+      "type": "literal-path"
+    },
+    {
       "from_file": "skills/interval-update/audits/2026-07-09-first-load-slimming.md",
       "raw_ref": "skills/interval-update/references/parent-run-contract.md",
       "source": "skill:interval-update",
       "target": "file:skills/interval-update/references/parent-run-contract.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/interval-update/audits/2026-07-14-provider-binding-implementation.md",
+      "raw_ref": "skills/interval-update/scripts/resolve_evidence_binding.py",
+      "source": "skill:interval-update",
+      "target": "file:skills/interval-update/scripts/resolve_evidence_binding.py",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/interval-update/audits/2026-07-14-provider-binding-implementation.md",
+      "raw_ref": "skills/interval-update/scripts/test_metric_refresh.py",
+      "source": "skill:interval-update",
+      "target": "file:skills/interval-update/scripts/test_metric_refresh.py",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/interval-update/audits/2026-07-14-provider-binding-implementation.md",
+      "raw_ref": "skills/interval-update/scripts/test_resolve_evidence_binding.py",
+      "source": "skill:interval-update",
+      "target": "file:skills/interval-update/scripts/test_resolve_evidence_binding.py",
       "type": "literal-path"
     },
     {
@@ -22457,6 +23185,27 @@ window.HARNESS_GRAPH = {
       "source": "skill:interval-update",
       "target": "file:skills/interval-update/templates/interval-context-bundle.md",
       "type": "literal-path"
+    },
+    {
+      "from_file": "skills/interval-update/audits/2026-07-14-provider-binding-implementation.md",
+      "raw_ref": "skills/interval-update/templates/interval-context-bundle.md",
+      "source": "skill:interval-update",
+      "target": "file:skills/interval-update/templates/interval-context-bundle.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/interval-update/audits/2026-07-14-provider-binding-implementation.md",
+      "raw_ref": "skills/interval-update/templates/interval-report.md",
+      "source": "skill:interval-update",
+      "target": "file:skills/interval-update/templates/interval-report.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/interval-update/SKILL.md",
+      "raw_ref": "../plan-next-wave/SKILL.md",
+      "source": "skill:interval-update",
+      "target": "file:skills/plan-next-wave/SKILL.md",
+      "type": "markdown-link"
     },
     {
       "from_file": "skills/interval-update/SKILL.md",
@@ -22487,18 +23236,25 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
+      "from_file": "skills/interval-update/audits/2026-07-14-provider-binding-implementation.md",
+      "raw_ref": "skills/skill-maintenance/scripts/check_skills.py",
+      "source": "skill:interval-update",
+      "target": "file:skills/skill-maintenance/scripts/check_skills.py",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/interval-update/audits/2026-07-14-provider-binding-implementation.md",
+      "raw_ref": "skills/skill-maintenance/scripts/install_selected_skills.py",
+      "source": "skill:interval-update",
+      "target": "file:skills/skill-maintenance/scripts/install_selected_skills.py",
+      "type": "literal-path"
+    },
+    {
       "from_file": "skills/interval-update/audits/2026-06-24-configured-interval-workflows.md",
       "raw_ref": "skills/skill-maintenance/scripts/test_generate_farplane_lifecycle_graph.py",
       "source": "skill:interval-update",
       "target": "file:skills/skill-maintenance/scripts/test_generate_farplane_lifecycle_graph.py",
       "type": "literal-path"
-    },
-    {
-      "from_file": "skills/interval-update/SKILL.md",
-      "raw_ref": "../ticket-opportunity-generator/SKILL.md",
-      "source": "skill:interval-update",
-      "target": "file:skills/ticket-opportunity-generator/SKILL.md",
-      "type": "markdown-link"
     },
     {
       "from_file": "skills/interval-update/scripts/metric_refresh.py",
@@ -23145,6 +23901,20 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
+      "from_file": "skills/lead-scout/audits/2026-07-12-crm-entity-writeback.md",
+      "raw_ref": "skills/lead-scout/SKILL.md",
+      "source": "skill:lead-scout",
+      "target": "file:skills/lead-scout/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/lead-scout/audits/2026-07-12-crm-entity-writeback.md",
+      "raw_ref": "skills/lead-scout/examples/public-founder-scout/example.md",
+      "source": "skill:lead-scout",
+      "target": "file:skills/lead-scout/examples/public-founder-scout/example.md",
+      "type": "literal-path"
+    },
+    {
       "from_file": "skills/lead-scout/audits/2026-07-09-source-upgrade-pilot.md",
       "raw_ref": "skills/lead-scout/qa_checklist.md",
       "source": "skill:lead-scout",
@@ -23153,6 +23923,13 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "skills/lead-scout/audits/2026-07-09-specificity-hardening.md",
+      "raw_ref": "skills/lead-scout/qa_checklist.md",
+      "source": "skill:lead-scout",
+      "target": "file:skills/lead-scout/qa_checklist.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/lead-scout/audits/2026-07-12-crm-entity-writeback.md",
       "raw_ref": "skills/lead-scout/qa_checklist.md",
       "source": "skill:lead-scout",
       "target": "file:skills/lead-scout/qa_checklist.md",
@@ -23202,6 +23979,13 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "skills/leverage-advisor/SKILL.md",
+      "raw_ref": "../best-of-worlds/SKILL.md",
+      "source": "skill:leverage-advisor",
+      "target": "file:skills/best-of-worlds/SKILL.md",
+      "type": "markdown-link"
+    },
+    {
+      "from_file": "skills/leverage-advisor/SKILL.md",
       "raw_ref": "../goal-advisor/SKILL.md",
       "source": "skill:leverage-advisor",
       "target": "file:skills/goal-advisor/SKILL.md",
@@ -23240,6 +24024,13 @@ window.HARNESS_GRAPH = {
       "raw_ref": "../reference-grounding/SKILL.md",
       "source": "skill:leverage-advisor",
       "target": "file:skills/reference-grounding/SKILL.md",
+      "type": "markdown-link"
+    },
+    {
+      "from_file": "skills/leverage-advisor/SKILL.md",
+      "raw_ref": "../research/SKILL.md",
+      "source": "skill:leverage-advisor",
+      "target": "file:skills/research/SKILL.md",
       "type": "markdown-link"
     },
     {
@@ -23355,6 +24146,13 @@ window.HARNESS_GRAPH = {
       "type": "markdown-link"
     },
     {
+      "from_file": "skills/meshy-3d-generation/audits/2026-07-22-installed-copy-import.md",
+      "raw_ref": "skills/meshy-3d-generation",
+      "source": "skill:meshy-3d-generation",
+      "target": "file:skills/meshy-3d-generation/SKILL.md",
+      "type": "literal-path"
+    },
+    {
       "from_file": "skills/metric-advisor/SKILL.md",
       "raw_ref": "farplane/harness.yaml",
       "source": "skill:metric-advisor",
@@ -23402,6 +24200,41 @@ window.HARNESS_GRAPH = {
       "source": "skill:metric-advisor",
       "target": "file:skills/self-improve/SKILL.md",
       "type": "markdown-link"
+    },
+    {
+      "from_file": "skills/ml-autoresearch/SKILL.md",
+      "raw_ref": "../best-of-worlds/SKILL.md",
+      "source": "skill:ml-autoresearch",
+      "target": "file:skills/best-of-worlds/SKILL.md",
+      "type": "markdown-link"
+    },
+    {
+      "from_file": "skills/ml-autoresearch/SKILL.md",
+      "raw_ref": "../goal-advisor/SKILL.md",
+      "source": "skill:ml-autoresearch",
+      "target": "file:skills/goal-advisor/SKILL.md",
+      "type": "markdown-link"
+    },
+    {
+      "from_file": "skills/ml-autoresearch/SKILL.md",
+      "raw_ref": "../leverage-advisor/SKILL.md",
+      "source": "skill:ml-autoresearch",
+      "target": "file:skills/leverage-advisor/SKILL.md",
+      "type": "markdown-link"
+    },
+    {
+      "from_file": "skills/ml-autoresearch/SKILL.md",
+      "raw_ref": "../metric-advisor/SKILL.md",
+      "source": "skill:ml-autoresearch",
+      "target": "file:skills/metric-advisor/SKILL.md",
+      "type": "markdown-link"
+    },
+    {
+      "from_file": "skills/ml-autoresearch/references/goal-program-template.md",
+      "raw_ref": "skills/ml-autoresearch",
+      "source": "skill:ml-autoresearch",
+      "target": "file:skills/ml-autoresearch/SKILL.md",
+      "type": "literal-path"
     },
     {
       "from_file": "skills/notion-task-field-fill/audits/2026-07-06-notion-token-standard.md",
@@ -23670,6 +24503,13 @@ window.HARNESS_GRAPH = {
       "type": "markdown-link"
     },
     {
+      "from_file": "skills/phone-chaser/SKILL.md",
+      "raw_ref": "farplane/bindings.yaml",
+      "source": "skill:phone-chaser",
+      "target": "file:farplane/bindings.yaml",
+      "type": "literal-path"
+    },
+    {
       "from_file": "skills/phone-chaser/references/setup.md",
       "raw_ref": "farplane/phone-chaser/",
       "source": "skill:phone-chaser",
@@ -23681,6 +24521,13 @@ window.HARNESS_GRAPH = {
       "raw_ref": "skills/phone-chaser/SKILL.md",
       "source": "skill:phone-chaser",
       "target": "file:skills/phone-chaser/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/phone-chaser/SKILL.md",
+      "raw_ref": "skills/phone-chaser/scripts/compile_review_call.py",
+      "source": "skill:phone-chaser",
+      "target": "file:skills/phone-chaser/scripts/compile_review_call.py",
       "type": "literal-path"
     },
     {
@@ -23800,6 +24647,174 @@ window.HARNESS_GRAPH = {
       "raw_ref": "skills/skill-maintenance/scripts/check_skills.py",
       "source": "skill:plan",
       "target": "file:skills/skill-maintenance/scripts/check_skills.py",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/plan-next-wave/audits/2026-07-13-artifact-dense-unified-wave.md",
+      "raw_ref": "bin/validators/check_doc_refs.py",
+      "source": "skill:plan-next-wave",
+      "target": "file:bin/validators/check_doc_refs.py",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/plan-next-wave/audits/2026-07-13-artifact-dense-unified-wave.md",
+      "raw_ref": "bin/validators/check_farplane_project_files.py",
+      "source": "skill:plan-next-wave",
+      "target": "file:bin/validators/check_farplane_project_files.py",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/plan-next-wave/SKILL.md",
+      "raw_ref": "docs/features",
+      "source": "skill:plan-next-wave",
+      "target": "file:docs/features/README.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/plan-next-wave/SKILL.md",
+      "raw_ref": "docs/systems",
+      "source": "skill:plan-next-wave",
+      "target": "file:docs/systems/README.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/plan-next-wave/SKILL.md",
+      "raw_ref": "farplane/harness.yaml#planning.skill_refs",
+      "source": "skill:plan-next-wave",
+      "target": "file:farplane/harness.yaml",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/plan-next-wave/evals/evals.json",
+      "raw_ref": "farplane/harness.yaml",
+      "source": "skill:plan-next-wave",
+      "target": "file:farplane/harness.yaml",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/plan-next-wave/evals/fixtures/icp-world-memory.md",
+      "raw_ref": "farplane/harness.yaml#areas",
+      "source": "skill:plan-next-wave",
+      "target": "file:farplane/harness.yaml",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/plan-next-wave/qa_checklist.md",
+      "raw_ref": "farplane/harness.yaml#planning.skill_refs",
+      "source": "skill:plan-next-wave",
+      "target": "file:farplane/harness.yaml",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/plan-next-wave/scripts/validate_wave_response.py",
+      "raw_ref": "farplane/harness.yaml#planning.skill_refs",
+      "source": "skill:plan-next-wave",
+      "target": "file:farplane/harness.yaml",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/plan-next-wave/SKILL.md",
+      "raw_ref": "farplane/metrics.yaml",
+      "source": "skill:plan-next-wave",
+      "target": "file:farplane/metrics.yaml",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/plan-next-wave/evals/evals.json",
+      "raw_ref": "farplane/metrics.yaml",
+      "source": "skill:plan-next-wave",
+      "target": "file:farplane/metrics.yaml",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/plan-next-wave/audits/2026-07-13-artifact-dense-unified-wave.md",
+      "raw_ref": "skills/eval/scripts/check_eval_queries.py",
+      "source": "skill:plan-next-wave",
+      "target": "file:skills/eval/scripts/check_eval_queries.py",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/plan-next-wave/audits/2026-07-05-bold-reviewable-bets.md",
+      "raw_ref": "skills/plan-next-wave/SKILL.md",
+      "source": "skill:plan-next-wave",
+      "target": "file:skills/plan-next-wave/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/plan-next-wave/audits/2026-07-13-artifact-dense-unified-wave.md",
+      "raw_ref": "skills/plan-next-wave/SKILL.md",
+      "source": "skill:plan-next-wave",
+      "target": "file:skills/plan-next-wave/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/plan-next-wave/audits/2026-07-14-metric-first-lane-ranking.md",
+      "raw_ref": "skills/plan-next-wave/SKILL.md",
+      "source": "skill:plan-next-wave",
+      "target": "file:skills/plan-next-wave/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/plan-next-wave/audits/2026-07-15-pre-spec-idea-qa.md",
+      "raw_ref": "skills/plan-next-wave/",
+      "source": "skill:plan-next-wave",
+      "target": "file:skills/plan-next-wave/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/plan-next-wave/audits/2026-07-17-strategic-evidence-ladder.md",
+      "raw_ref": "skills/plan-next-wave/SKILL.md",
+      "source": "skill:plan-next-wave",
+      "target": "file:skills/plan-next-wave/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/plan-next-wave/audits/2026-07-14-metric-first-lane-ranking.md",
+      "raw_ref": "skills/plan-next-wave/evals/evals.json#planner_metric_first_lanes_choose_global_top_n",
+      "source": "skill:plan-next-wave",
+      "target": "file:skills/plan-next-wave/evals/evals.json",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/plan-next-wave/audits/2026-07-10-v-next-plan-next-wave.md",
+      "raw_ref": "skills/plan-next-wave/qa_checklist.md",
+      "source": "skill:plan-next-wave",
+      "target": "file:skills/plan-next-wave/qa_checklist.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/plan-next-wave/evals/fixtures/skill-call-wave.json",
+      "raw_ref": "skills/plan-next-wave/scripts/validate_wave_response.py",
+      "source": "skill:plan-next-wave",
+      "target": "file:skills/plan-next-wave/scripts/validate_wave_response.py",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/plan-next-wave/evals/evals.json",
+      "raw_ref": "skills/self-improve/SKILL.md",
+      "source": "skill:plan-next-wave",
+      "target": "file:skills/self-improve/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/plan-next-wave/audits/2026-07-05-bold-reviewable-bets.md",
+      "raw_ref": "skills/skill-maintenance/scripts/check_skills.py",
+      "source": "skill:plan-next-wave",
+      "target": "file:skills/skill-maintenance/scripts/check_skills.py",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/plan-next-wave/audits/2026-07-13-artifact-dense-unified-wave.md",
+      "raw_ref": "skills/skill-maintenance/scripts/check_skills.py",
+      "source": "skill:plan-next-wave",
+      "target": "file:skills/skill-maintenance/scripts/check_skills.py",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/plan-next-wave/audits/2026-07-13-artifact-dense-unified-wave.md",
+      "raw_ref": "skills/skill-maintenance/scripts/test_install_selected_skills.py",
+      "source": "skill:plan-next-wave",
+      "target": "file:skills/skill-maintenance/scripts/test_install_selected_skills.py",
       "type": "literal-path"
     },
     {
@@ -24405,6 +25420,13 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
+      "from_file": "skills/pulse-update/evals/evals.json",
+      "raw_ref": "farplane/bindings.yaml",
+      "source": "skill:pulse-update",
+      "target": "file:farplane/bindings.yaml",
+      "type": "literal-path"
+    },
+    {
       "from_file": "skills/pulse-update/SKILL.md",
       "raw_ref": "farplane/harness.yaml",
       "source": "skill:pulse-update",
@@ -24412,7 +25434,28 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
+      "from_file": "skills/pulse-update/evals/evals.json",
+      "raw_ref": "farplane/harness.yaml",
+      "source": "skill:pulse-update",
+      "target": "file:farplane/harness.yaml",
+      "type": "literal-path"
+    },
+    {
       "from_file": "skills/pulse-update/SKILL.md",
+      "raw_ref": "farplane/metrics.yaml",
+      "source": "skill:pulse-update",
+      "target": "file:farplane/metrics.yaml",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/pulse-update/evals/evals.json",
+      "raw_ref": "farplane/metrics.yaml",
+      "source": "skill:pulse-update",
+      "target": "file:farplane/metrics.yaml",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/pulse-update/scripts/test_materialize_skill_call.py",
       "raw_ref": "farplane/metrics.yaml",
       "source": "skill:pulse-update",
       "target": "file:farplane/metrics.yaml",
@@ -24431,6 +25474,27 @@ window.HARNESS_GRAPH = {
       "source": "skill:pulse-update",
       "target": "file:skills/goal-advisor/SKILL.md",
       "type": "markdown-link"
+    },
+    {
+      "from_file": "skills/pulse-update/scripts/test_list_pulse_board.py",
+      "raw_ref": "skills/plan-next-wave",
+      "source": "skill:pulse-update",
+      "target": "file:skills/plan-next-wave/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/pulse-update/SKILL.md",
+      "raw_ref": "../plan-next-wave/SKILL.md",
+      "source": "skill:pulse-update",
+      "target": "file:skills/plan-next-wave/SKILL.md",
+      "type": "markdown-link"
+    },
+    {
+      "from_file": "skills/pulse-update/evals/evals.json",
+      "raw_ref": "skills/plan-next-wave/evals/fixtures/terminal-reward-history.json",
+      "source": "skill:pulse-update",
+      "target": "file:skills/plan-next-wave/evals/fixtures/terminal-reward-history.json",
+      "type": "literal-path"
     },
     {
       "from_file": "skills/pulse-update/audits/2026-07-05-bold-reviewable-bets.md",
@@ -24454,6 +25518,27 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
+      "from_file": "skills/pulse-update/audits/2026-07-13-clean-worker-thread-creation.md",
+      "raw_ref": "skills/pulse-update/SKILL.md",
+      "source": "skill:pulse-update",
+      "target": "file:skills/pulse-update/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/pulse-update/audits/2026-07-13-clean-worker-thread-creation.md",
+      "raw_ref": "skills/pulse-update/evals/evals.json",
+      "source": "skill:pulse-update",
+      "target": "file:skills/pulse-update/evals/evals.json",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/pulse-update/audits/2026-07-15-terminal-preference-transport.md",
+      "raw_ref": "skills/pulse-update/evals/evals.json#pulse_transports_terminal_preference_without_rejection_outage",
+      "source": "skill:pulse-update",
+      "target": "file:skills/pulse-update/evals/evals.json",
+      "type": "literal-path"
+    },
+    {
       "from_file": "skills/pulse-update/SKILL.md",
       "raw_ref": "skills/pulse-update/scripts/list_pulse_board.py",
       "source": "skill:pulse-update",
@@ -24465,6 +25550,13 @@ window.HARNESS_GRAPH = {
       "raw_ref": "skills/pulse-update/scripts/list_pulse_board.py",
       "source": "skill:pulse-update",
       "target": "file:skills/pulse-update/scripts/list_pulse_board.py",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/pulse-update/SKILL.md",
+      "raw_ref": "skills/pulse-update/scripts/next_ticket_id.py",
+      "source": "skill:pulse-update",
+      "target": "file:skills/pulse-update/scripts/next_ticket_id.py",
       "type": "literal-path"
     },
     {
@@ -24496,11 +25588,11 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
-      "from_file": "skills/pulse-update/SKILL.md",
-      "raw_ref": "../ticket-opportunity-generator/SKILL.md",
+      "from_file": "skills/pulse-update/audits/2026-07-13-clean-worker-thread-creation.md",
+      "raw_ref": "skills/skill-maintenance/scripts/check_skills.py",
       "source": "skill:pulse-update",
-      "target": "file:skills/ticket-opportunity-generator/SKILL.md",
-      "type": "markdown-link"
+      "target": "file:skills/skill-maintenance/scripts/check_skills.py",
+      "type": "literal-path"
     },
     {
       "from_file": "skills/pulse-update/SKILL.md",
@@ -24508,6 +25600,34 @@ window.HARNESS_GRAPH = {
       "source": "skill:pulse-update",
       "target": "file:skills/worker-artifact-review-request/SKILL.md",
       "type": "markdown-link"
+    },
+    {
+      "from_file": "skills/qa/audits/2026-07-14-canonical-qa-journey.md",
+      "raw_ref": "skills/qa/evals/fixtures/",
+      "source": "skill:qa",
+      "target": "dir:skills/qa/evals/fixtures",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/qa/scripts/test_validate_eval_run.py",
+      "raw_ref": "skills/qa/evals/fixtures",
+      "source": "skill:qa",
+      "target": "dir:skills/qa/evals/fixtures",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/qa/audits/2026-07-14-canonical-qa-journey.md",
+      "raw_ref": "agents/qa-tester.toml",
+      "source": "skill:qa",
+      "target": "file:agents/qa-tester.toml",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/qa/audits/2026-07-14-template-0.3.8.md",
+      "raw_ref": "docs/skills/registry.jsonl",
+      "source": "skill:qa",
+      "target": "file:docs/skills/registry.jsonl",
+      "type": "literal-path"
     },
     {
       "from_file": "skills/qa/README.md",
@@ -24521,6 +25641,27 @@ window.HARNESS_GRAPH = {
       "raw_ref": "qa/cookbook/",
       "source": "skill:qa",
       "target": "file:qa/cookbook/README.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/qa/SKILL.md",
+      "raw_ref": "qa/cookbook/",
+      "source": "skill:qa",
+      "target": "file:qa/cookbook/README.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/qa/qa_checklist.md",
+      "raw_ref": "qa/cookbook/",
+      "source": "skill:qa",
+      "target": "file:qa/cookbook/README.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/qa/scripts/test_validate_qa_result.py",
+      "raw_ref": "qa/cookbook/ui-browser-proof.md",
+      "source": "skill:qa",
+      "target": "file:qa/cookbook/ui-browser-proof.md",
       "type": "literal-path"
     },
     {
@@ -24559,10 +25700,94 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
+      "from_file": "skills/qa/audits/2026-07-14-canonical-qa-journey.md",
+      "raw_ref": "skills/qa",
+      "source": "skill:qa",
+      "target": "file:skills/qa/README.md",
+      "type": "literal-path"
+    },
+    {
       "from_file": "skills/qa/audits/2026-06-27-goal-completion-proof.md",
       "raw_ref": "skills/qa/SKILL.md",
       "source": "skill:qa",
       "target": "file:skills/qa/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/qa/audits/2026-07-14-template-0.3.8.md",
+      "raw_ref": "skills/qa/SKILL.md",
+      "source": "skill:qa",
+      "target": "file:skills/qa/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/qa/audits/2026-07-14-canonical-qa-journey.md",
+      "raw_ref": "skills/qa/audits/2026-07-13-single-owner-qa-journey.md",
+      "source": "skill:qa",
+      "target": "file:skills/qa/audits/2026-07-13-single-owner-qa-journey.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/qa/audits/2026-07-14-template-0.3.8.md",
+      "raw_ref": "skills/qa/audits/2026-07-14-canonical-qa-journey.md",
+      "source": "skill:qa",
+      "target": "file:skills/qa/audits/2026-07-14-canonical-qa-journey.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/qa/evals/evals.json",
+      "raw_ref": "skills/qa/evals/fixtures/TASK-0042/ticket.md",
+      "source": "skill:qa",
+      "target": "file:skills/qa/evals/fixtures/TASK-0042/ticket.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/qa/evals/evals.json",
+      "raw_ref": "skills/qa/evals/fixtures/TASK-0043/ticket.md",
+      "source": "skill:qa",
+      "target": "file:skills/qa/evals/fixtures/TASK-0043/ticket.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/qa/evals/evals.json",
+      "raw_ref": "skills/qa/evals/fixtures/TASK-0044/ticket.md",
+      "source": "skill:qa",
+      "target": "file:skills/qa/evals/fixtures/TASK-0044/ticket.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/qa/evals/evals.json",
+      "raw_ref": "skills/qa/evals/fixtures/TASK-0045/ticket.md",
+      "source": "skill:qa",
+      "target": "file:skills/qa/evals/fixtures/TASK-0045/ticket.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/qa/evals/evals.json",
+      "raw_ref": "skills/qa/evals/fixtures/TASK-0046/ticket.md",
+      "source": "skill:qa",
+      "target": "file:skills/qa/evals/fixtures/TASK-0046/ticket.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/qa/evals/evals.json",
+      "raw_ref": "skills/qa/evals/fixtures/qa/cookbook/web-app-qa-route.md",
+      "source": "skill:qa",
+      "target": "file:skills/qa/evals/fixtures/qa/cookbook/web-app-qa-route.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/qa/evals/fixtures/TASK-0045/ticket.md",
+      "raw_ref": "../qa/cookbook/web-app-qa-route.md",
+      "source": "skill:qa",
+      "target": "file:skills/qa/evals/fixtures/qa/cookbook/web-app-qa-route.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/qa/SKILL.md",
+      "raw_ref": "skills/qa/scripts/validate_qa_result.py",
+      "source": "skill:qa",
+      "target": "file:skills/qa/scripts/validate_qa_result.py",
       "type": "literal-path"
     },
     {
@@ -24571,6 +25796,34 @@ window.HARNESS_GRAPH = {
       "source": "skill:qa",
       "target": "file:skills/visual-qa/SKILL.md",
       "type": "markdown-link"
+    },
+    {
+      "from_file": "skills/qa/audits/2026-07-14-canonical-qa-journey.md",
+      "raw_ref": "tickets/archive/TASK-0356/artifacts/qa/eval-summary.md",
+      "source": "skill:qa",
+      "target": "file:tickets/archive/TASK-0356/artifacts/qa/eval-summary.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/qa/audits/2026-07-14-canonical-qa-journey.md",
+      "raw_ref": "tickets/archive/TASK-0356/artifacts/qa/test-output.txt",
+      "source": "skill:qa",
+      "target": "file:tickets/archive/TASK-0356/artifacts/qa/test-output.txt",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/qa/audits/2026-07-14-canonical-qa-journey.md",
+      "raw_ref": "tickets/archive/TASK-0356/artifacts/review/completion-review.md",
+      "source": "skill:qa",
+      "target": "file:tickets/archive/TASK-0356/artifacts/review/completion-review.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/qa/audits/2026-07-14-canonical-qa-journey.md",
+      "raw_ref": "tickets/archive/TASK-0356/ticket.md",
+      "source": "skill:qa",
+      "target": "file:tickets/archive/TASK-0356/ticket.md",
+      "type": "literal-path"
     },
     {
       "from_file": "skills/react-flow/SKILL.md",
@@ -24966,6 +26219,13 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "skills/remotion/SKILL.md",
+      "raw_ref": "../video-production/references/scene-grid-production.md",
+      "source": "skill:remotion",
+      "target": "file:skills/video-production/references/scene-grid-production.md",
+      "type": "markdown-link"
+    },
+    {
+      "from_file": "skills/remotion/SKILL.md",
       "raw_ref": "../visual-qa/SKILL.md",
       "source": "skill:remotion",
       "target": "file:skills/visual-qa/SKILL.md",
@@ -25316,28 +26576,42 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "skills/self-improve/SKILL.md",
-      "raw_ref": "../eval/SKILL.md",
+      "raw_ref": "../agent-qa-test/SKILL.md",
+      "source": "skill:self-improve",
+      "target": "file:skills/agent-qa-test/SKILL.md",
+      "type": "markdown-link"
+    },
+    {
+      "from_file": "skills/self-improve/references/skill-evals.md",
+      "raw_ref": "../../eval/SKILL.md",
       "source": "skill:self-improve",
       "target": "file:skills/eval/SKILL.md",
       "type": "markdown-link"
     },
     {
-      "from_file": "skills/self-improve/SKILL.md",
-      "raw_ref": "../metric-advisor/SKILL.md",
+      "from_file": "skills/self-improve/audits/2026-07-19-three-file-self-improve-contract.md",
+      "raw_ref": "skills/eval/tests/test_run_evals.py",
       "source": "skill:self-improve",
-      "target": "file:skills/metric-advisor/SKILL.md",
-      "type": "markdown-link"
+      "target": "file:skills/eval/tests/test_run_evals.py",
+      "type": "literal-path"
     },
     {
       "from_file": "skills/self-improve/SKILL.md",
-      "raw_ref": "../research/SKILL.md#researchsource-synthesis",
+      "raw_ref": "../leverage-advisor/SKILL.md",
       "source": "skill:self-improve",
-      "target": "file:skills/research/SKILL.md",
+      "target": "file:skills/leverage-advisor/SKILL.md",
       "type": "markdown-link"
     },
     {
       "from_file": "skills/self-improve/audits/2026-07-11-executable-delayed-checkins.md",
       "raw_ref": "skills/self-improve/SKILL.md",
+      "source": "skill:self-improve",
+      "target": "file:skills/self-improve/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/self-improve/references/goal-program-template.md",
+      "raw_ref": "skills/self-improve",
       "source": "skill:self-improve",
       "target": "file:skills/self-improve/SKILL.md",
       "type": "literal-path"
@@ -25351,10 +26625,17 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "skills/self-improve/SKILL.md",
-      "raw_ref": "../skill-maintenance/SKILL.md",
+      "raw_ref": "../skill-maintenance/references/upgrade-skill-from-sources.md",
       "source": "skill:self-improve",
-      "target": "file:skills/skill-maintenance/SKILL.md",
+      "target": "file:skills/skill-maintenance/references/upgrade-skill-from-sources.md",
       "type": "markdown-link"
+    },
+    {
+      "from_file": "skills/self-improve/audits/2026-07-19-three-file-self-improve-contract.md",
+      "raw_ref": "skills/skill-maintenance/scripts/check_skills.py",
+      "source": "skill:self-improve",
+      "target": "file:skills/skill-maintenance/scripts/check_skills.py",
+      "type": "literal-path"
     },
     {
       "from_file": "skills/seo-content-advisor/SKILL.md",
@@ -25455,24 +26736,10 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
-      "from_file": "skills/skill-creator/SKILL.md",
-      "raw_ref": "docs/skills/README.md",
+      "from_file": "skills/skill-creator/audits/2026-07-18-staged-file-line-cap.md",
+      "raw_ref": "bin/validators/test_check_changed_file_line_count.py",
       "source": "skill:skill-creator",
-      "target": "file:docs/skills/README.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/skill-creator/SKILL.md",
-      "raw_ref": "../../docs/skills/README.md",
-      "source": "skill:skill-creator",
-      "target": "file:docs/skills/README.md",
-      "type": "markdown-link"
-    },
-    {
-      "from_file": "skills/skill-creator/SKILL.md",
-      "raw_ref": "docs/skills/best-practices.md",
-      "source": "skill:skill-creator",
-      "target": "file:docs/skills/best-practices.md",
+      "target": "file:bin/validators/test_check_changed_file_line_count.py",
       "type": "literal-path"
     },
     {
@@ -25484,24 +26751,10 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "skills/skill-creator/SKILL.md",
-      "raw_ref": "docs/skills/system.md",
-      "source": "skill:skill-creator",
-      "target": "file:docs/skills/system.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/skill-creator/SKILL.md",
       "raw_ref": "../../docs/skills/system.md",
       "source": "skill:skill-creator",
       "target": "file:docs/skills/system.md",
       "type": "markdown-link"
-    },
-    {
-      "from_file": "skills/skill-creator/SKILL.md",
-      "raw_ref": "docs/skills/templates/METHOD_REFERENCE_TEMPLATE.md",
-      "source": "skill:skill-creator",
-      "target": "file:docs/skills/templates/METHOD_REFERENCE_TEMPLATE.md",
-      "type": "literal-path"
     },
     {
       "from_file": "skills/skill-creator/SKILL.md",
@@ -25512,13 +26765,6 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "skills/skill-creator/SKILL.md",
-      "raw_ref": "docs/skills/templates/SKILL_TEMPLATE.md",
-      "source": "skill:skill-creator",
-      "target": "file:docs/skills/templates/SKILL_TEMPLATE.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/skill-creator/SKILL.md",
       "raw_ref": "../../docs/skills/templates/SKILL_TEMPLATE.md",
       "source": "skill:skill-creator",
       "target": "file:docs/skills/templates/SKILL_TEMPLATE.md",
@@ -25526,9 +26772,9 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "skills/skill-creator/SKILL.md",
-      "raw_ref": "../research/SKILL.md#researchparity",
+      "raw_ref": "../eval/SKILL.md",
       "source": "skill:skill-creator",
-      "target": "file:skills/research/SKILL.md",
+      "target": "file:skills/eval/SKILL.md",
       "type": "markdown-link"
     },
     {
@@ -25564,6 +26810,27 @@ window.HARNESS_GRAPH = {
       "raw_ref": "skills/skill-creator/SKILL.md",
       "source": "skill:skill-creator",
       "target": "file:skills/skill-creator/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/skill-creator/audits/2026-07-12-eval-run-self-improve-followup.md",
+      "raw_ref": "skills/skill-creator/SKILL.md",
+      "source": "skill:skill-creator",
+      "target": "file:skills/skill-creator/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/skill-creator/audits/2026-07-18-staged-file-line-cap.md",
+      "raw_ref": "skills/skill-creator/SKILL.md",
+      "source": "skill:skill-creator",
+      "target": "file:skills/skill-creator/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/skill-creator/audits/2026-07-12-eval-run-self-improve-followup.md",
+      "raw_ref": "skills/skill-creator/evals/evals.json",
+      "source": "skill:skill-creator",
+      "target": "file:skills/skill-creator/evals/evals.json",
       "type": "literal-path"
     },
     {
@@ -25673,6 +26940,20 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "skills/skill-creator/audits/2026-07-09-todo-specificity-rubric.md",
+      "raw_ref": "skills/skill-maintenance/scripts/check_skills.py",
+      "source": "skill:skill-creator",
+      "target": "file:skills/skill-maintenance/scripts/check_skills.py",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/skill-creator/audits/2026-07-12-eval-run-self-improve-followup.md",
+      "raw_ref": "skills/skill-maintenance/scripts/check_skills.py",
+      "source": "skill:skill-creator",
+      "target": "file:skills/skill-maintenance/scripts/check_skills.py",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/skill-creator/audits/2026-07-18-staged-file-line-cap.md",
       "raw_ref": "skills/skill-maintenance/scripts/check_skills.py",
       "source": "skill:skill-creator",
       "target": "file:skills/skill-maintenance/scripts/check_skills.py",
@@ -26120,6 +27401,13 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
+      "from_file": "skills/skill-maintenance/audits/2026-07-18-staged-file-line-cap.md",
+      "raw_ref": "bin/validators/test_check_changed_file_line_count.py",
+      "source": "skill:skill-maintenance",
+      "target": "file:bin/validators/test_check_changed_file_line_count.py",
+      "type": "literal-path"
+    },
+    {
       "from_file": "skills/skill-maintenance/audits/2026-06-28-surface-budget-seed-rollout.md",
       "raw_ref": "bin/validators/test_check_skill_surface_budget.py",
       "source": "skill:skill-maintenance",
@@ -26183,13 +27471,6 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
-      "from_file": "skills/skill-maintenance/SKILL.md",
-      "raw_ref": "docs/LESSONS.md",
-      "source": "skill:skill-maintenance",
-      "target": "file:docs/LESSONS.md",
-      "type": "literal-path"
-    },
-    {
       "from_file": "skills/skill-maintenance/audits/2026-06-15-harden-refine-modes.md",
       "raw_ref": "docs/LESSONS.md",
       "source": "skill:skill-maintenance",
@@ -26243,13 +27524,6 @@ window.HARNESS_GRAPH = {
       "raw_ref": "docs/MEMORY.md",
       "source": "skill:skill-maintenance",
       "target": "file:docs/MEMORY.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/skill-maintenance/SKILL.md",
-      "raw_ref": "docs/TROUBLES.md",
-      "source": "skill:skill-maintenance",
-      "target": "file:docs/TROUBLES.md",
       "type": "literal-path"
     },
     {
@@ -26715,13 +27989,6 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
-      "from_file": "skills/skill-maintenance/SKILL.md",
-      "raw_ref": "docs/skills/README.md",
-      "source": "skill:skill-maintenance",
-      "target": "file:docs/skills/README.md",
-      "type": "literal-path"
-    },
-    {
       "from_file": "skills/skill-maintenance/audits/2026-06-13-finish-gates-standard.md",
       "raw_ref": "docs/skills/README.md",
       "source": "skill:skill-maintenance",
@@ -26747,20 +28014,6 @@ window.HARNESS_GRAPH = {
       "raw_ref": "docs/skills/",
       "source": "skill:skill-maintenance",
       "target": "file:docs/skills/README.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/skill-maintenance/SKILL.md",
-      "raw_ref": "../../docs/skills/README.md",
-      "source": "skill:skill-maintenance",
-      "target": "file:docs/skills/README.md",
-      "type": "markdown-link"
-    },
-    {
-      "from_file": "skills/skill-maintenance/SKILL.md",
-      "raw_ref": "docs/skills/best-practices.md",
-      "source": "skill:skill-maintenance",
-      "target": "file:docs/skills/best-practices.md",
       "type": "literal-path"
     },
     {
@@ -26904,13 +28157,6 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
-      "from_file": "skills/skill-maintenance/SKILL.md",
-      "raw_ref": "docs/skills/system.md",
-      "source": "skill:skill-maintenance",
-      "target": "file:docs/skills/system.md",
-      "type": "literal-path"
-    },
-    {
       "from_file": "skills/skill-maintenance/audits/2026-06-13-finish-gates-standard.md",
       "raw_ref": "docs/skills/system.md",
       "source": "skill:skill-maintenance",
@@ -26960,25 +28206,11 @@ window.HARNESS_GRAPH = {
       "type": "markdown-link"
     },
     {
-      "from_file": "skills/skill-maintenance/SKILL.md",
-      "raw_ref": "docs/skills/templates/METHOD_REFERENCE_TEMPLATE.md",
-      "source": "skill:skill-maintenance",
-      "target": "file:docs/skills/templates/METHOD_REFERENCE_TEMPLATE.md",
-      "type": "literal-path"
-    },
-    {
       "from_file": "skills/skill-maintenance/audits/2026-06-24-docs-owned-skill-templates.md",
       "raw_ref": "docs/skills/templates/METHOD_REFERENCE_TEMPLATE.md",
       "source": "skill:skill-maintenance",
       "target": "file:docs/skills/templates/METHOD_REFERENCE_TEMPLATE.md",
       "type": "literal-path"
-    },
-    {
-      "from_file": "skills/skill-maintenance/SKILL.md",
-      "raw_ref": "../../docs/skills/templates/METHOD_REFERENCE_TEMPLATE.md",
-      "source": "skill:skill-maintenance",
-      "target": "file:docs/skills/templates/METHOD_REFERENCE_TEMPLATE.md",
-      "type": "markdown-link"
     },
     {
       "from_file": "skills/skill-maintenance/audits/2026-06-24-docs-owned-skill-templates.md",
@@ -26999,13 +28231,6 @@ window.HARNESS_GRAPH = {
       "raw_ref": "docs/skills/templates/QA_CHECKLIST_TEMPLATE.md",
       "source": "skill:skill-maintenance",
       "target": "file:docs/skills/templates/QA_CHECKLIST_TEMPLATE.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/skill-maintenance/SKILL.md",
-      "raw_ref": "docs/skills/templates/SKILL_TEMPLATE.md",
-      "source": "skill:skill-maintenance",
-      "target": "file:docs/skills/templates/SKILL_TEMPLATE.md",
       "type": "literal-path"
     },
     {
@@ -27030,7 +28255,7 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
-      "from_file": "skills/skill-maintenance/qa_checklist.md",
+      "from_file": "skills/skill-maintenance/references/maintenance-modes.md",
       "raw_ref": "docs/skills/templates/SKILL_TEMPLATE.md",
       "source": "skill:skill-maintenance",
       "target": "file:docs/skills/templates/SKILL_TEMPLATE.md",
@@ -27042,13 +28267,6 @@ window.HARNESS_GRAPH = {
       "source": "skill:skill-maintenance",
       "target": "file:docs/skills/templates/SKILL_TEMPLATE.md",
       "type": "literal-path"
-    },
-    {
-      "from_file": "skills/skill-maintenance/SKILL.md",
-      "raw_ref": "../../docs/skills/templates/SKILL_TEMPLATE.md",
-      "source": "skill:skill-maintenance",
-      "target": "file:docs/skills/templates/SKILL_TEMPLATE.md",
-      "type": "markdown-link"
     },
     {
       "from_file": "skills/skill-maintenance/graph/skill-template-intelligence.js",
@@ -27181,27 +28399,6 @@ window.HARNESS_GRAPH = {
       "raw_ref": "farplane/harness.yaml",
       "source": "skill:skill-maintenance",
       "target": "file:farplane/harness.yaml",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/skill-maintenance/graph/farplane-lifecycle-graph.js",
-      "raw_ref": "farplane/hooks.json",
-      "source": "skill:skill-maintenance",
-      "target": "file:farplane/hooks.json",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/skill-maintenance/graph/farplane-lifecycle-graph.json",
-      "raw_ref": "farplane/hooks.json",
-      "source": "skill:skill-maintenance",
-      "target": "file:farplane/hooks.json",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/skill-maintenance/scripts/farplane_lifecycle_catalog.py",
-      "raw_ref": "farplane/hooks.json",
-      "source": "skill:skill-maintenance",
-      "target": "file:farplane/hooks.json",
       "type": "literal-path"
     },
     {
@@ -27653,13 +28850,6 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
-      "from_file": "skills/skill-maintenance/SKILL.md",
-      "raw_ref": "../best-of-worlds/SKILL.md",
-      "source": "skill:skill-maintenance",
-      "target": "file:skills/best-of-worlds/SKILL.md",
-      "type": "markdown-link"
-    },
-    {
       "from_file": "skills/skill-maintenance/graph/skill-template-intelligence.js",
       "raw_ref": "skills/brainstorm/SKILL.md",
       "source": "skill:skill-maintenance",
@@ -27798,13 +28988,6 @@ window.HARNESS_GRAPH = {
       "source": "skill:skill-maintenance",
       "target": "file:skills/consolidate/SKILL.md",
       "type": "literal-path"
-    },
-    {
-      "from_file": "skills/skill-maintenance/SKILL.md",
-      "raw_ref": "../consolidate/SKILL.md",
-      "source": "skill:skill-maintenance",
-      "target": "file:skills/consolidate/SKILL.md",
-      "type": "markdown-link"
     },
     {
       "from_file": "skills/skill-maintenance/graph/skill-template-intelligence.js",
@@ -28157,13 +29340,6 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
-      "from_file": "skills/skill-maintenance/SKILL.md",
-      "raw_ref": "../eval/SKILL.md",
-      "source": "skill:skill-maintenance",
-      "target": "file:skills/eval/SKILL.md",
-      "type": "markdown-link"
-    },
-    {
       "from_file": "skills/skill-maintenance/audits/2026-06-26-coding-grounding-gate.md",
       "raw_ref": "skills/eval/examples/farplane-global-harness/tasks.json",
       "source": "skill:skill-maintenance",
@@ -28189,20 +29365,6 @@ window.HARNESS_GRAPH = {
       "raw_ref": "skills/eval/scripts/run_evals.py",
       "source": "skill:skill-maintenance",
       "target": "file:skills/eval/scripts/run_evals.py",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/skill-maintenance/graph/skill-template-intelligence.js",
-      "raw_ref": "skills/eval/templates/viewer-react",
-      "source": "skill:skill-maintenance",
-      "target": "file:skills/eval/templates/viewer-react/README.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/skill-maintenance/graph/skill-template-intelligence.json",
-      "raw_ref": "skills/eval/templates/viewer-react",
-      "source": "skill:skill-maintenance",
-      "target": "file:skills/eval/templates/viewer-react/README.md",
       "type": "literal-path"
     },
     {
@@ -28598,6 +29760,20 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
+      "from_file": "skills/skill-maintenance/graph/skill-template-intelligence.js",
+      "raw_ref": "skills/ingest-world-data/SKILL.md",
+      "source": "skill:skill-maintenance",
+      "target": "file:skills/ingest-world-data/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/skill-maintenance/graph/skill-template-intelligence.json",
+      "raw_ref": "skills/ingest-world-data/SKILL.md",
+      "source": "skill:skill-maintenance",
+      "target": "file:skills/ingest-world-data/SKILL.md",
+      "type": "literal-path"
+    },
+    {
       "from_file": "skills/skill-maintenance/graph/farplane-lifecycle-graph.js",
       "raw_ref": "skills/init-advisor/SKILL.md",
       "source": "skill:skill-maintenance",
@@ -28802,6 +29978,20 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "skills/skill-maintenance/graph/skill-template-intelligence.js",
+      "raw_ref": "skills/meshy-3d-generation/SKILL.md",
+      "source": "skill:skill-maintenance",
+      "target": "file:skills/meshy-3d-generation/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/skill-maintenance/graph/skill-template-intelligence.json",
+      "raw_ref": "skills/meshy-3d-generation/SKILL.md",
+      "source": "skill:skill-maintenance",
+      "target": "file:skills/meshy-3d-generation/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/skill-maintenance/graph/skill-template-intelligence.js",
       "raw_ref": "skills/metric-advisor",
       "source": "skill:skill-maintenance",
       "target": "file:skills/metric-advisor/README.md",
@@ -28854,6 +30044,20 @@ window.HARNESS_GRAPH = {
       "raw_ref": "skills/metric-advisor/evals/evals.json",
       "source": "skill:skill-maintenance",
       "target": "file:skills/metric-advisor/evals/evals.json",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/skill-maintenance/graph/skill-template-intelligence.js",
+      "raw_ref": "skills/ml-autoresearch/SKILL.md",
+      "source": "skill:skill-maintenance",
+      "target": "file:skills/ml-autoresearch/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/skill-maintenance/graph/skill-template-intelligence.json",
+      "raw_ref": "skills/ml-autoresearch/SKILL.md",
+      "source": "skill:skill-maintenance",
+      "target": "file:skills/ml-autoresearch/SKILL.md",
       "type": "literal-path"
     },
     {
@@ -28938,6 +30142,20 @@ window.HARNESS_GRAPH = {
       "raw_ref": "skills/phone-chaser/SKILL.md",
       "source": "skill:skill-maintenance",
       "target": "file:skills/phone-chaser/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/skill-maintenance/graph/skill-template-intelligence.js",
+      "raw_ref": "skills/plan-next-wave/SKILL.md",
+      "source": "skill:skill-maintenance",
+      "target": "file:skills/plan-next-wave/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/skill-maintenance/graph/skill-template-intelligence.json",
+      "raw_ref": "skills/plan-next-wave/SKILL.md",
+      "source": "skill:skill-maintenance",
+      "target": "file:skills/plan-next-wave/SKILL.md",
       "type": "literal-path"
     },
     {
@@ -29438,13 +30656,6 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
-      "from_file": "skills/skill-maintenance/SKILL.md",
-      "raw_ref": "../self-improve/SKILL.md",
-      "source": "skill:skill-maintenance",
-      "target": "file:skills/self-improve/SKILL.md",
-      "type": "markdown-link"
-    },
-    {
       "from_file": "skills/skill-maintenance/audits/2026-07-09-marketing-skills-source-upgrade-pilot.md",
       "raw_ref": "skills/seo-content-advisor",
       "source": "skill:skill-maintenance",
@@ -29506,13 +30717,6 @@ window.HARNESS_GRAPH = {
       "source": "skill:skill-maintenance",
       "target": "file:skills/skill-creator/references/book-to-skill.md",
       "type": "literal-path"
-    },
-    {
-      "from_file": "skills/skill-maintenance/SKILL.md",
-      "raw_ref": "../skill-creator/references/book-to-skill.md",
-      "source": "skill:skill-maintenance",
-      "target": "file:skills/skill-creator/references/book-to-skill.md",
-      "type": "markdown-link"
     },
     {
       "from_file": "skills/skill-maintenance/audits/2026-06-15-template-owned-feature-metadata.md",
@@ -29586,6 +30790,13 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "skills/skill-maintenance/audits/2026-07-09-upgrade-skill-from-sources.md",
+      "raw_ref": "skills/skill-maintenance/SKILL.md",
+      "source": "skill:skill-maintenance",
+      "target": "file:skills/skill-maintenance/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/skill-maintenance/audits/2026-07-18-staged-file-line-cap.md",
       "raw_ref": "skills/skill-maintenance/SKILL.md",
       "source": "skill:skill-maintenance",
       "target": "file:skills/skill-maintenance/SKILL.md",
@@ -29942,13 +31153,6 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
-      "from_file": "skills/skill-maintenance/qa_checklist.md",
-      "raw_ref": "skills/skill-maintenance/qa_checklist.md",
-      "source": "skill:skill-maintenance",
-      "target": "file:skills/skill-maintenance/qa_checklist.md",
-      "type": "literal-path"
-    },
-    {
       "from_file": "skills/skill-maintenance/references/low-value-prose-scan.md",
       "raw_ref": "skills/skill-maintenance/qa_checklist.md",
       "source": "skill:skill-maintenance",
@@ -29957,13 +31161,6 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "skills/skill-maintenance/audits/2026-06-24-low-value-prose-scan.md",
-      "raw_ref": "skills/skill-maintenance/references/low-value-prose-scan.md",
-      "source": "skill:skill-maintenance",
-      "target": "file:skills/skill-maintenance/references/low-value-prose-scan.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/skill-maintenance/qa_checklist.md",
       "raw_ref": "skills/skill-maintenance/references/low-value-prose-scan.md",
       "source": "skill:skill-maintenance",
       "target": "file:skills/skill-maintenance/references/low-value-prose-scan.md",
@@ -30076,6 +31273,13 @@ window.HARNESS_GRAPH = {
     },
     {
       "from_file": "skills/skill-maintenance/audits/2026-07-09-upgrade-skill-from-sources.md",
+      "raw_ref": "skills/skill-maintenance/scripts/check_skills.py",
+      "source": "skill:skill-maintenance",
+      "target": "file:skills/skill-maintenance/scripts/check_skills.py",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/skill-maintenance/audits/2026-07-18-staged-file-line-cap.md",
       "raw_ref": "skills/skill-maintenance/scripts/check_skills.py",
       "source": "skill:skill-maintenance",
       "target": "file:skills/skill-maintenance/scripts/check_skills.py",
@@ -30506,34 +31710,6 @@ window.HARNESS_GRAPH = {
       "raw_ref": "skills/testing/SKILL.md",
       "source": "skill:skill-maintenance",
       "target": "file:skills/testing/SKILL.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/skill-maintenance/graph/farplane-lifecycle-graph.js",
-      "raw_ref": "skills/ticket-opportunity-generator/SKILL.md",
-      "source": "skill:skill-maintenance",
-      "target": "file:skills/ticket-opportunity-generator/SKILL.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/skill-maintenance/graph/farplane-lifecycle-graph.json",
-      "raw_ref": "skills/ticket-opportunity-generator/SKILL.md",
-      "source": "skill:skill-maintenance",
-      "target": "file:skills/ticket-opportunity-generator/SKILL.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/skill-maintenance/graph/skill-template-intelligence.js",
-      "raw_ref": "skills/ticket-opportunity-generator/SKILL.md",
-      "source": "skill:skill-maintenance",
-      "target": "file:skills/ticket-opportunity-generator/SKILL.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/skill-maintenance/graph/skill-template-intelligence.json",
-      "raw_ref": "skills/ticket-opportunity-generator/SKILL.md",
-      "source": "skill:skill-maintenance",
-      "target": "file:skills/ticket-opportunity-generator/SKILL.md",
       "type": "literal-path"
     },
     {
@@ -31342,62 +32518,6 @@ window.HARNESS_GRAPH = {
       "type": "markdown-link"
     },
     {
-      "from_file": "skills/ticket-opportunity-generator/scripts/query_ticket_history.py",
-      "raw_ref": "tickets/archive",
-      "source": "skill:ticket-opportunity-generator",
-      "target": "dir:tickets/archive",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/ticket-opportunity-generator/SKILL.md",
-      "raw_ref": "farplane/harness.yaml",
-      "source": "skill:ticket-opportunity-generator",
-      "target": "file:farplane/harness.yaml",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/ticket-opportunity-generator/SKILL.md",
-      "raw_ref": "farplane/metrics.yaml",
-      "source": "skill:ticket-opportunity-generator",
-      "target": "file:farplane/metrics.yaml",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/ticket-opportunity-generator/audits/2026-07-05-bold-reviewable-bets.md",
-      "raw_ref": "skills/skill-maintenance/scripts/check_skills.py",
-      "source": "skill:ticket-opportunity-generator",
-      "target": "file:skills/skill-maintenance/scripts/check_skills.py",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/ticket-opportunity-generator/audits/2026-07-05-bold-reviewable-bets.md",
-      "raw_ref": "skills/ticket-opportunity-generator/SKILL.md",
-      "source": "skill:ticket-opportunity-generator",
-      "target": "file:skills/ticket-opportunity-generator/SKILL.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/ticket-opportunity-generator/audits/2026-07-10-v-next-plan-next-wave.md",
-      "raw_ref": "skills/ticket-opportunity-generator/qa_checklist.md",
-      "source": "skill:ticket-opportunity-generator",
-      "target": "file:skills/ticket-opportunity-generator/qa_checklist.md",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/ticket-opportunity-generator/SKILL.md",
-      "raw_ref": "skills/ticket-opportunity-generator/scripts/query_ticket_history.py",
-      "source": "skill:ticket-opportunity-generator",
-      "target": "file:skills/ticket-opportunity-generator/scripts/query_ticket_history.py",
-      "type": "literal-path"
-    },
-    {
-      "from_file": "skills/ticket-opportunity-generator/SKILL.md",
-      "raw_ref": "../../tickets/templates/ticket.md",
-      "source": "skill:ticket-opportunity-generator",
-      "target": "file:tickets/templates/ticket.md",
-      "type": "markdown-link"
-    },
-    {
       "from_file": "skills/update-memory/SKILL.md",
       "raw_ref": "docs/HISTORY.md",
       "source": "skill:update-memory",
@@ -31496,6 +32616,13 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
+      "from_file": "skills/video-production/audits/2026-07-16-scene-grid-production-contract.md",
+      "raw_ref": "skills/video-production/references/explainer-styles/retro-low-poly-consequence/",
+      "source": "skill:video-production",
+      "target": "dir:skills/video-production/references/explainer-styles/retro-low-poly-consequence",
+      "type": "literal-path"
+    },
+    {
       "from_file": "skills/video-production/README.md",
       "raw_ref": "bin/validators/check_skill_todo_tiers.py",
       "source": "skill:video-production",
@@ -31524,6 +32651,34 @@ window.HARNESS_GRAPH = {
       "type": "markdown-link"
     },
     {
+      "from_file": "skills/video-production/audits/2026-07-16-scene-grid-production-contract.md",
+      "raw_ref": "skills/content-impl-plan/SKILL.md",
+      "source": "skill:video-production",
+      "target": "file:skills/content-impl-plan/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/video-production/audits/2026-07-16-scene-grid-production-contract.md",
+      "raw_ref": "skills/content-impl-plan/evals/evals.json",
+      "source": "skill:video-production",
+      "target": "file:skills/content-impl-plan/evals/evals.json",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/video-production/audits/2026-07-16-scene-grid-production-contract.md",
+      "raw_ref": "skills/content-impl-plan/qa_checklist.md",
+      "source": "skill:video-production",
+      "target": "file:skills/content-impl-plan/qa_checklist.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/video-production/audits/2026-07-16-scene-grid-production-contract.md",
+      "raw_ref": "skills/eval/scripts/check_eval_queries.py",
+      "source": "skill:video-production",
+      "target": "file:skills/eval/scripts/check_eval_queries.py",
+      "type": "literal-path"
+    },
+    {
       "from_file": "skills/video-production/SKILL.md",
       "raw_ref": "../frontend-craft/SKILL.md",
       "source": "skill:video-production",
@@ -31538,11 +32693,25 @@ window.HARNESS_GRAPH = {
       "type": "markdown-link"
     },
     {
+      "from_file": "skills/video-production/audits/2026-07-16-scene-grid-production-contract.md",
+      "raw_ref": "skills/remotion/SKILL.md",
+      "source": "skill:video-production",
+      "target": "file:skills/remotion/SKILL.md",
+      "type": "literal-path"
+    },
+    {
       "from_file": "skills/video-production/SKILL.md",
       "raw_ref": "../remotion/SKILL.md",
       "source": "skill:video-production",
       "target": "file:skills/remotion/SKILL.md",
       "type": "markdown-link"
+    },
+    {
+      "from_file": "skills/video-production/audits/2026-07-16-scene-grid-production-contract.md",
+      "raw_ref": "skills/remotion/evals/evals.json",
+      "source": "skill:video-production",
+      "target": "file:skills/remotion/evals/evals.json",
+      "type": "literal-path"
     },
     {
       "from_file": "skills/video-production/SKILL.md",
@@ -31566,11 +32735,130 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     },
     {
+      "from_file": "skills/video-production/audits/2026-07-15-seedance-reference-conditioning.md",
+      "raw_ref": "skills/skill-maintenance/scripts/check_skills.py",
+      "source": "skill:video-production",
+      "target": "file:skills/skill-maintenance/scripts/check_skills.py",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/video-production/audits/2026-07-16-scene-grid-production-contract.md",
+      "raw_ref": "skills/skill-maintenance/scripts/check_skills.py",
+      "source": "skill:video-production",
+      "target": "file:skills/skill-maintenance/scripts/check_skills.py",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/video-production/audits/2026-07-17-character-fallback-review.md",
+      "raw_ref": "skills/skill-maintenance/scripts/check_skills.py",
+      "source": "skill:video-production",
+      "target": "file:skills/skill-maintenance/scripts/check_skills.py",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/video-production/audits/2026-07-16-scene-grid-production-contract.md",
+      "raw_ref": "skills/storyboard/SKILL.md",
+      "source": "skill:video-production",
+      "target": "file:skills/storyboard/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/video-production/audits/2026-07-16-scene-grid-production-contract.md",
+      "raw_ref": "skills/storyboard/evals/evals.json",
+      "source": "skill:video-production",
+      "target": "file:skills/storyboard/evals/evals.json",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/video-production/audits/2026-07-17-character-fallback-review.md",
+      "raw_ref": "skills/storyboard/evals/evals.json",
+      "source": "skill:video-production",
+      "target": "file:skills/storyboard/evals/evals.json",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/video-production/audits/2026-07-16-scene-grid-production-contract.md",
+      "raw_ref": "skills/storyboard/qa_checklist.md",
+      "source": "skill:video-production",
+      "target": "file:skills/storyboard/qa_checklist.md",
+      "type": "literal-path"
+    },
+    {
       "from_file": "skills/video-production/README.md",
       "raw_ref": "skills/video-production",
       "source": "skill:video-production",
       "target": "file:skills/video-production/README.md",
       "type": "literal-path"
+    },
+    {
+      "from_file": "skills/video-production/audits/2026-07-15-style-profile-workflow.md",
+      "raw_ref": "skills/video-production/SKILL.md",
+      "source": "skill:video-production",
+      "target": "file:skills/video-production/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/video-production/audits/2026-07-16-scene-grid-production-contract.md",
+      "raw_ref": "skills/video-production/SKILL.md",
+      "source": "skill:video-production",
+      "target": "file:skills/video-production/SKILL.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/video-production/audits/2026-07-17-character-fallback-review.md",
+      "raw_ref": "skills/video-production/audits/2026-07-17-character-fallback-approval.md",
+      "source": "skill:video-production",
+      "target": "file:skills/video-production/audits/2026-07-17-character-fallback-approval.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/video-production/SKILL.md",
+      "raw_ref": "./config.toml",
+      "source": "skill:video-production",
+      "target": "file:skills/video-production/config.toml",
+      "type": "markdown-link"
+    },
+    {
+      "from_file": "skills/video-production/audits/2026-07-16-scene-grid-production-contract.md",
+      "raw_ref": "skills/video-production/evals/evals.json",
+      "source": "skill:video-production",
+      "target": "file:skills/video-production/evals/evals.json",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/video-production/audits/2026-07-17-character-fallback-review.md",
+      "raw_ref": "skills/video-production/evals/evals.json",
+      "source": "skill:video-production",
+      "target": "file:skills/video-production/evals/evals.json",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/video-production/audits/2026-07-16-scene-grid-production-contract.md",
+      "raw_ref": "skills/video-production/qa_checklist.md",
+      "source": "skill:video-production",
+      "target": "file:skills/video-production/qa_checklist.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/video-production/audits/2026-07-15-style-profile-workflow.md",
+      "raw_ref": "skills/video-production/references/explainer-styles/index.md",
+      "source": "skill:video-production",
+      "target": "file:skills/video-production/references/explainer-styles/index.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/video-production/audits/2026-07-17-character-fallback-review.md",
+      "raw_ref": "skills/video-production/references/explainer-styles/retro-low-poly-consequence/characters/late-90s-everyperson/identity-sheet.png",
+      "source": "skill:video-production",
+      "target": "file:skills/video-production/references/explainer-styles/retro-low-poly-consequence/characters/late-90s-everyperson/identity-sheet.png",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/video-production/SKILL.md",
+      "raw_ref": "./references/ingest-style.md",
+      "source": "skill:video-production",
+      "target": "file:skills/video-production/references/ingest-style.md",
+      "type": "markdown-link"
     },
     {
       "from_file": "skills/video-production/SKILL.md",
@@ -31584,6 +32872,20 @@ window.HARNESS_GRAPH = {
       "raw_ref": "./references/model.md",
       "source": "skill:video-production",
       "target": "file:skills/video-production/references/model.md",
+      "type": "markdown-link"
+    },
+    {
+      "from_file": "skills/video-production/audits/2026-07-16-scene-grid-production-contract.md",
+      "raw_ref": "skills/video-production/references/scene-grid-production.md",
+      "source": "skill:video-production",
+      "target": "file:skills/video-production/references/scene-grid-production.md",
+      "type": "literal-path"
+    },
+    {
+      "from_file": "skills/video-production/SKILL.md",
+      "raw_ref": "./references/scene-grid-production.md",
+      "source": "skill:video-production",
+      "target": "file:skills/video-production/references/scene-grid-production.md",
       "type": "markdown-link"
     },
     {
@@ -31867,7 +33169,7 @@ window.HARNESS_GRAPH = {
       "type": "literal-path"
     }
   ],
-  "generated_at": "2026-07-12T12:53:48+00:00",
+  "generated_at": "2026-07-23T21:37:38+00:00",
   "nodes": [
     {
       "id": "file:agents/asset-generator.toml",
@@ -32014,6 +33316,12 @@ window.HARNESS_GRAPH = {
       "path": "docs/farplane-framework/README.md"
     },
     {
+      "id": "file:docs/farplane-framework/entities.md",
+      "kind": "doc",
+      "label": "docs/farplane-framework/entities.md",
+      "path": "docs/farplane-framework/entities.md"
+    },
+    {
       "id": "file:docs/farplane-framework/graph-contract.md",
       "kind": "doc",
       "label": "docs/farplane-framework/graph-contract.md",
@@ -32134,6 +33442,12 @@ window.HARNESS_GRAPH = {
       "path": "docs/systems/agent-kernel.md"
     },
     {
+      "id": "file:docs/systems/content-production.md",
+      "kind": "doc",
+      "label": "docs/systems/content-production.md",
+      "path": "docs/systems/content-production.md"
+    },
+    {
       "id": "file:docs/systems/documentation-os.md",
       "kind": "doc",
       "label": "docs/systems/documentation-os.md",
@@ -32204,6 +33518,12 @@ window.HARNESS_GRAPH = {
       "kind": "doc",
       "label": "docs/systems/work-loop.md",
       "path": "docs/systems/work-loop.md"
+    },
+    {
+      "id": "file:docs/templates/HUMAN_REPORT_TEMPLATE.md",
+      "kind": "doc",
+      "label": "docs/templates/HUMAN_REPORT_TEMPLATE.md",
+      "path": "docs/templates/HUMAN_REPORT_TEMPLATE.md"
     },
     {
       "id": "file:docs/templates/README.md",
@@ -32290,12 +33610,6 @@ window.HARNESS_GRAPH = {
       "path": "farplane/harness.yaml"
     },
     {
-      "id": "file:farplane/hooks.json",
-      "kind": "file",
-      "label": "farplane/hooks.json",
-      "path": "farplane/hooks.json"
-    },
-    {
       "id": "file:farplane/manifest.json",
       "kind": "file",
       "label": "farplane/manifest.json",
@@ -32362,10 +33676,10 @@ window.HARNESS_GRAPH = {
       "path": "qa/cookbook/TEMPLATE.md"
     },
     {
-      "id": "file:qa/cookbook/core-hooks-runtime.md",
+      "id": "file:qa/cookbook/ui-browser-proof.md",
       "kind": "file",
-      "label": "qa/cookbook/core-hooks-runtime.md",
-      "path": "qa/cookbook/core-hooks-runtime.md"
+      "label": "qa/cookbook/ui-browser-proof.md",
+      "path": "qa/cookbook/ui-browser-proof.md"
     },
     {
       "id": "file:rules/git-review-gates.toml",
@@ -32528,6 +33842,42 @@ window.HARNESS_GRAPH = {
       "kind": "file",
       "label": "skills/audio-advisor/SKILL.md",
       "path": "skills/audio-advisor/SKILL.md"
+    },
+    {
+      "id": "file:skills/audio-advisor/audits/2026-07-18-operator-only-sfx-retrieval.md",
+      "kind": "file",
+      "label": "skills/audio-advisor/audits/2026-07-18-operator-only-sfx-retrieval.md",
+      "path": "skills/audio-advisor/audits/2026-07-18-operator-only-sfx-retrieval.md"
+    },
+    {
+      "id": "file:skills/audio-advisor/audits/2026-07-18-source-first-generation-merge.md",
+      "kind": "file",
+      "label": "skills/audio-advisor/audits/2026-07-18-source-first-generation-merge.md",
+      "path": "skills/audio-advisor/audits/2026-07-18-source-first-generation-merge.md"
+    },
+    {
+      "id": "file:skills/audio-advisor/evals/evals.json",
+      "kind": "file",
+      "label": "skills/audio-advisor/evals/evals.json",
+      "path": "skills/audio-advisor/evals/evals.json"
+    },
+    {
+      "id": "file:skills/audio-advisor/qa_checklist.md",
+      "kind": "file",
+      "label": "skills/audio-advisor/qa_checklist.md",
+      "path": "skills/audio-advisor/qa_checklist.md"
+    },
+    {
+      "id": "file:skills/audio-advisor/references/soundbuttonsworld.md",
+      "kind": "file",
+      "label": "skills/audio-advisor/references/soundbuttonsworld.md",
+      "path": "skills/audio-advisor/references/soundbuttonsworld.md"
+    },
+    {
+      "id": "file:skills/audio-advisor/scripts/validate_audio_packet.py",
+      "kind": "file",
+      "label": "skills/audio-advisor/scripts/validate_audio_packet.py",
+      "path": "skills/audio-advisor/scripts/validate_audio_packet.py"
     },
     {
       "id": "file:skills/automation-advisor/SKILL.md",
@@ -32710,6 +34060,18 @@ window.HARNESS_GRAPH = {
       "path": "skills/content-impl-plan/SKILL.md"
     },
     {
+      "id": "file:skills/content-impl-plan/evals/evals.json",
+      "kind": "file",
+      "label": "skills/content-impl-plan/evals/evals.json",
+      "path": "skills/content-impl-plan/evals/evals.json"
+    },
+    {
+      "id": "file:skills/content-impl-plan/qa_checklist.md",
+      "kind": "file",
+      "label": "skills/content-impl-plan/qa_checklist.md",
+      "path": "skills/content-impl-plan/qa_checklist.md"
+    },
+    {
       "id": "file:skills/convex/SKILL.md",
       "kind": "file",
       "label": "skills/convex/SKILL.md",
@@ -32740,10 +34102,22 @@ window.HARNESS_GRAPH = {
       "path": "skills/customer-research/SKILL.md"
     },
     {
+      "id": "file:skills/customer-research/evals/evals.json",
+      "kind": "file",
+      "label": "skills/customer-research/evals/evals.json",
+      "path": "skills/customer-research/evals/evals.json"
+    },
+    {
       "id": "file:skills/customer-research/examples/first-call/example.md",
       "kind": "file",
       "label": "skills/customer-research/examples/first-call/example.md",
       "path": "skills/customer-research/examples/first-call/example.md"
+    },
+    {
+      "id": "file:skills/customer-research/templates/report.md",
+      "kind": "file",
+      "label": "skills/customer-research/templates/report.md",
+      "path": "skills/customer-research/templates/report.md"
     },
     {
       "id": "file:skills/data-viz/SKILL.md",
@@ -33310,12 +34684,6 @@ window.HARNESS_GRAPH = {
       "path": "skills/eval/SKILL.md"
     },
     {
-      "id": "file:skills/eval/audits/2026-06-11-eval-for-eval-batch-01.md",
-      "kind": "file",
-      "label": "skills/eval/audits/2026-06-11-eval-for-eval-batch-01.md",
-      "path": "skills/eval/audits/2026-06-11-eval-for-eval-batch-01.md"
-    },
-    {
       "id": "file:skills/eval/evals/evals.json",
       "kind": "file",
       "label": "skills/eval/evals/evals.json",
@@ -33520,16 +34888,40 @@ window.HARNESS_GRAPH = {
       "path": "skills/feed-scout/scripts/normalize_items.py"
     },
     {
+      "id": "file:skills/feed-scout/scripts/test_validate_memory.py",
+      "kind": "file",
+      "label": "skills/feed-scout/scripts/test_validate_memory.py",
+      "path": "skills/feed-scout/scripts/test_validate_memory.py"
+    },
+    {
       "id": "file:skills/feed-scout/scripts/validate_daily_feed.py",
       "kind": "file",
       "label": "skills/feed-scout/scripts/validate_daily_feed.py",
       "path": "skills/feed-scout/scripts/validate_daily_feed.py"
     },
     {
+      "id": "file:skills/feed-scout/scripts/validate_memory.py",
+      "kind": "file",
+      "label": "skills/feed-scout/scripts/validate_memory.py",
+      "path": "skills/feed-scout/scripts/validate_memory.py"
+    },
+    {
       "id": "file:skills/feed-scout/scripts/validate_profiles.py",
       "kind": "file",
       "label": "skills/feed-scout/scripts/validate_profiles.py",
       "path": "skills/feed-scout/scripts/validate_profiles.py"
+    },
+    {
+      "id": "file:skills/feed-scout/scripts/validate_world_memory.py",
+      "kind": "file",
+      "label": "skills/feed-scout/scripts/validate_world_memory.py",
+      "path": "skills/feed-scout/scripts/validate_world_memory.py"
+    },
+    {
+      "id": "file:skills/feed-scout/templates/memory.md",
+      "kind": "file",
+      "label": "skills/feed-scout/templates/memory.md",
+      "path": "skills/feed-scout/templates/memory.md"
     },
     {
       "id": "file:skills/find-skills/SKILL.md",
@@ -33904,6 +35296,12 @@ window.HARNESS_GRAPH = {
       "path": "skills/ingest-content/references/reuse-taxonomy.md"
     },
     {
+      "id": "file:skills/ingest-world-data/SKILL.md",
+      "kind": "file",
+      "label": "skills/ingest-world-data/SKILL.md",
+      "path": "skills/ingest-world-data/SKILL.md"
+    },
+    {
       "id": "file:skills/init-advisor/AGENTS.md",
       "kind": "file",
       "label": "skills/init-advisor/AGENTS.md",
@@ -33932,6 +35330,12 @@ window.HARNESS_GRAPH = {
       "kind": "file",
       "label": "skills/init-advisor/references/AGENTS_TEMPLATE.md",
       "path": "skills/init-advisor/references/AGENTS_TEMPLATE.md"
+    },
+    {
+      "id": "file:skills/init-advisor/references/BINDINGS_TEMPLATE.yaml",
+      "kind": "file",
+      "label": "skills/init-advisor/references/BINDINGS_TEMPLATE.yaml",
+      "path": "skills/init-advisor/references/BINDINGS_TEMPLATE.yaml"
     },
     {
       "id": "file:skills/init-advisor/references/BOOTSTRAP_BRIEF_TEMPLATE.md",
@@ -34028,6 +35432,24 @@ window.HARNESS_GRAPH = {
       "kind": "file",
       "label": "skills/interval-update/scripts/metric_refresh.py",
       "path": "skills/interval-update/scripts/metric_refresh.py"
+    },
+    {
+      "id": "file:skills/interval-update/scripts/resolve_evidence_binding.py",
+      "kind": "file",
+      "label": "skills/interval-update/scripts/resolve_evidence_binding.py",
+      "path": "skills/interval-update/scripts/resolve_evidence_binding.py"
+    },
+    {
+      "id": "file:skills/interval-update/scripts/test_metric_refresh.py",
+      "kind": "file",
+      "label": "skills/interval-update/scripts/test_metric_refresh.py",
+      "path": "skills/interval-update/scripts/test_metric_refresh.py"
+    },
+    {
+      "id": "file:skills/interval-update/scripts/test_resolve_evidence_binding.py",
+      "kind": "file",
+      "label": "skills/interval-update/scripts/test_resolve_evidence_binding.py",
+      "path": "skills/interval-update/scripts/test_resolve_evidence_binding.py"
     },
     {
       "id": "file:skills/interval-update/templates/interval-context-bundle.md",
@@ -34288,6 +35710,12 @@ window.HARNESS_GRAPH = {
       "path": "skills/lead-scout/SKILL.md"
     },
     {
+      "id": "file:skills/lead-scout/examples/public-founder-scout/example.md",
+      "kind": "file",
+      "label": "skills/lead-scout/examples/public-founder-scout/example.md",
+      "path": "skills/lead-scout/examples/public-founder-scout/example.md"
+    },
+    {
       "id": "file:skills/lead-scout/qa_checklist.md",
       "kind": "file",
       "label": "skills/lead-scout/qa_checklist.md",
@@ -34318,6 +35746,12 @@ window.HARNESS_GRAPH = {
       "path": "skills/media-ingest/scripts/recognize_music.py"
     },
     {
+      "id": "file:skills/meshy-3d-generation/SKILL.md",
+      "kind": "file",
+      "label": "skills/meshy-3d-generation/SKILL.md",
+      "path": "skills/meshy-3d-generation/SKILL.md"
+    },
+    {
       "id": "file:skills/metric-advisor/README.md",
       "kind": "file",
       "label": "skills/metric-advisor/README.md",
@@ -34334,6 +35768,12 @@ window.HARNESS_GRAPH = {
       "kind": "file",
       "label": "skills/metric-advisor/evals/evals.json",
       "path": "skills/metric-advisor/evals/evals.json"
+    },
+    {
+      "id": "file:skills/ml-autoresearch/SKILL.md",
+      "kind": "file",
+      "label": "skills/ml-autoresearch/SKILL.md",
+      "path": "skills/ml-autoresearch/SKILL.md"
     },
     {
       "id": "file:skills/notion-task-field-fill/SKILL.md",
@@ -34390,10 +35830,58 @@ window.HARNESS_GRAPH = {
       "path": "skills/phone-chaser/SKILL.md"
     },
     {
+      "id": "file:skills/phone-chaser/scripts/compile_review_call.py",
+      "kind": "file",
+      "label": "skills/phone-chaser/scripts/compile_review_call.py",
+      "path": "skills/phone-chaser/scripts/compile_review_call.py"
+    },
+    {
       "id": "file:skills/phone-chaser/scripts/dispatch_call.py",
       "kind": "file",
       "label": "skills/phone-chaser/scripts/dispatch_call.py",
       "path": "skills/phone-chaser/scripts/dispatch_call.py"
+    },
+    {
+      "id": "file:skills/plan-next-wave/SKILL.md",
+      "kind": "file",
+      "label": "skills/plan-next-wave/SKILL.md",
+      "path": "skills/plan-next-wave/SKILL.md"
+    },
+    {
+      "id": "file:skills/plan-next-wave/audits/2026-07-14-metric-first-lane-ranking.md",
+      "kind": "file",
+      "label": "skills/plan-next-wave/audits/2026-07-14-metric-first-lane-ranking.md",
+      "path": "skills/plan-next-wave/audits/2026-07-14-metric-first-lane-ranking.md"
+    },
+    {
+      "id": "file:skills/plan-next-wave/evals/evals.json",
+      "kind": "file",
+      "label": "skills/plan-next-wave/evals/evals.json",
+      "path": "skills/plan-next-wave/evals/evals.json"
+    },
+    {
+      "id": "file:skills/plan-next-wave/evals/fixtures/terminal-reward-history.json",
+      "kind": "file",
+      "label": "skills/plan-next-wave/evals/fixtures/terminal-reward-history.json",
+      "path": "skills/plan-next-wave/evals/fixtures/terminal-reward-history.json"
+    },
+    {
+      "id": "file:skills/plan-next-wave/qa_checklist.md",
+      "kind": "file",
+      "label": "skills/plan-next-wave/qa_checklist.md",
+      "path": "skills/plan-next-wave/qa_checklist.md"
+    },
+    {
+      "id": "file:skills/plan-next-wave/scripts/test_validate_wave_response.py",
+      "kind": "file",
+      "label": "skills/plan-next-wave/scripts/test_validate_wave_response.py",
+      "path": "skills/plan-next-wave/scripts/test_validate_wave_response.py"
+    },
+    {
+      "id": "file:skills/plan-next-wave/scripts/validate_wave_response.py",
+      "kind": "file",
+      "label": "skills/plan-next-wave/scripts/validate_wave_response.py",
+      "path": "skills/plan-next-wave/scripts/validate_wave_response.py"
     },
     {
       "id": "file:skills/plan/README.md",
@@ -34540,10 +36028,28 @@ window.HARNESS_GRAPH = {
       "path": "skills/pulse-update/scripts/list_pulse_board.py"
     },
     {
+      "id": "file:skills/pulse-update/scripts/materialize_skill_call.py",
+      "kind": "file",
+      "label": "skills/pulse-update/scripts/materialize_skill_call.py",
+      "path": "skills/pulse-update/scripts/materialize_skill_call.py"
+    },
+    {
+      "id": "file:skills/pulse-update/scripts/next_ticket_id.py",
+      "kind": "file",
+      "label": "skills/pulse-update/scripts/next_ticket_id.py",
+      "path": "skills/pulse-update/scripts/next_ticket_id.py"
+    },
+    {
       "id": "file:skills/pulse-update/scripts/test_list_pulse_board.py",
       "kind": "file",
       "label": "skills/pulse-update/scripts/test_list_pulse_board.py",
       "path": "skills/pulse-update/scripts/test_list_pulse_board.py"
+    },
+    {
+      "id": "file:skills/pulse-update/scripts/test_materialize_skill_call.py",
+      "kind": "file",
+      "label": "skills/pulse-update/scripts/test_materialize_skill_call.py",
+      "path": "skills/pulse-update/scripts/test_materialize_skill_call.py"
     },
     {
       "id": "file:skills/qa/AGENTS.md",
@@ -34564,16 +36070,76 @@ window.HARNESS_GRAPH = {
       "path": "skills/qa/SKILL.md"
     },
     {
+      "id": "file:skills/qa/audits/2026-07-13-single-owner-qa-journey.md",
+      "kind": "file",
+      "label": "skills/qa/audits/2026-07-13-single-owner-qa-journey.md",
+      "path": "skills/qa/audits/2026-07-13-single-owner-qa-journey.md"
+    },
+    {
+      "id": "file:skills/qa/audits/2026-07-14-canonical-qa-journey.md",
+      "kind": "file",
+      "label": "skills/qa/audits/2026-07-14-canonical-qa-journey.md",
+      "path": "skills/qa/audits/2026-07-14-canonical-qa-journey.md"
+    },
+    {
       "id": "file:skills/qa/evals/evals.json",
       "kind": "file",
       "label": "skills/qa/evals/evals.json",
       "path": "skills/qa/evals/evals.json"
     },
     {
+      "id": "dir:skills/qa/evals/fixtures",
+      "kind": "file",
+      "label": "skills/qa/evals/fixtures/",
+      "path": "skills/qa/evals/fixtures"
+    },
+    {
+      "id": "file:skills/qa/evals/fixtures/TASK-0042/ticket.md",
+      "kind": "file",
+      "label": "skills/qa/evals/fixtures/TASK-0042/ticket.md",
+      "path": "skills/qa/evals/fixtures/TASK-0042/ticket.md"
+    },
+    {
+      "id": "file:skills/qa/evals/fixtures/TASK-0043/ticket.md",
+      "kind": "file",
+      "label": "skills/qa/evals/fixtures/TASK-0043/ticket.md",
+      "path": "skills/qa/evals/fixtures/TASK-0043/ticket.md"
+    },
+    {
+      "id": "file:skills/qa/evals/fixtures/TASK-0044/ticket.md",
+      "kind": "file",
+      "label": "skills/qa/evals/fixtures/TASK-0044/ticket.md",
+      "path": "skills/qa/evals/fixtures/TASK-0044/ticket.md"
+    },
+    {
+      "id": "file:skills/qa/evals/fixtures/TASK-0045/ticket.md",
+      "kind": "file",
+      "label": "skills/qa/evals/fixtures/TASK-0045/ticket.md",
+      "path": "skills/qa/evals/fixtures/TASK-0045/ticket.md"
+    },
+    {
+      "id": "file:skills/qa/evals/fixtures/TASK-0046/ticket.md",
+      "kind": "file",
+      "label": "skills/qa/evals/fixtures/TASK-0046/ticket.md",
+      "path": "skills/qa/evals/fixtures/TASK-0046/ticket.md"
+    },
+    {
+      "id": "file:skills/qa/evals/fixtures/qa/cookbook/web-app-qa-route.md",
+      "kind": "file",
+      "label": "skills/qa/evals/fixtures/qa/cookbook/web-app-qa-route.md",
+      "path": "skills/qa/evals/fixtures/qa/cookbook/web-app-qa-route.md"
+    },
+    {
       "id": "file:skills/qa/qa_checklist.md",
       "kind": "file",
       "label": "skills/qa/qa_checklist.md",
       "path": "skills/qa/qa_checklist.md"
+    },
+    {
+      "id": "file:skills/qa/scripts/validate_qa_result.py",
+      "kind": "file",
+      "label": "skills/qa/scripts/validate_qa_result.py",
+      "path": "skills/qa/scripts/validate_qa_result.py"
     },
     {
       "id": "file:skills/react-flow/SKILL.md",
@@ -34646,6 +36212,12 @@ window.HARNESS_GRAPH = {
       "kind": "file",
       "label": "skills/remotion/SKILL.md",
       "path": "skills/remotion/SKILL.md"
+    },
+    {
+      "id": "file:skills/remotion/evals/evals.json",
+      "kind": "file",
+      "label": "skills/remotion/evals/evals.json",
+      "path": "skills/remotion/evals/evals.json"
     },
     {
       "id": "file:skills/remotion/rules/audio-visualization.md",
@@ -34810,6 +36382,12 @@ window.HARNESS_GRAPH = {
       "path": "skills/skill-creator/SKILL.md"
     },
     {
+      "id": "file:skills/skill-creator/evals/evals.json",
+      "kind": "file",
+      "label": "skills/skill-creator/evals/evals.json",
+      "path": "skills/skill-creator/evals/evals.json"
+    },
+    {
       "id": "file:skills/skill-creator/qa_checklist.md",
       "kind": "file",
       "label": "skills/skill-creator/qa_checklist.md",
@@ -34952,12 +36530,6 @@ window.HARNESS_GRAPH = {
       "kind": "file",
       "label": "skills/skill-maintenance/qa_checklist.md",
       "path": "skills/skill-maintenance/qa_checklist.md"
-    },
-    {
-      "id": "file:skills/skill-maintenance/references/eval-fixture-sandbox.md",
-      "kind": "file",
-      "label": "skills/skill-maintenance/references/eval-fixture-sandbox.md",
-      "path": "skills/skill-maintenance/references/eval-fixture-sandbox.md"
     },
     {
       "id": "file:skills/skill-maintenance/references/low-value-prose-scan.md",
@@ -35230,6 +36802,12 @@ window.HARNESS_GRAPH = {
       "path": "skills/storyboard/SKILL.md"
     },
     {
+      "id": "file:skills/storyboard/evals/evals.json",
+      "kind": "file",
+      "label": "skills/storyboard/evals/evals.json",
+      "path": "skills/storyboard/evals/evals.json"
+    },
+    {
       "id": "file:skills/storyboard/qa_checklist.md",
       "kind": "file",
       "label": "skills/storyboard/qa_checklist.md",
@@ -35272,30 +36850,6 @@ window.HARNESS_GRAPH = {
       "path": "skills/testing/SKILL.md"
     },
     {
-      "id": "file:skills/ticket-opportunity-generator/SKILL.md",
-      "kind": "file",
-      "label": "skills/ticket-opportunity-generator/SKILL.md",
-      "path": "skills/ticket-opportunity-generator/SKILL.md"
-    },
-    {
-      "id": "file:skills/ticket-opportunity-generator/evals/evals.json",
-      "kind": "file",
-      "label": "skills/ticket-opportunity-generator/evals/evals.json",
-      "path": "skills/ticket-opportunity-generator/evals/evals.json"
-    },
-    {
-      "id": "file:skills/ticket-opportunity-generator/qa_checklist.md",
-      "kind": "file",
-      "label": "skills/ticket-opportunity-generator/qa_checklist.md",
-      "path": "skills/ticket-opportunity-generator/qa_checklist.md"
-    },
-    {
-      "id": "file:skills/ticket-opportunity-generator/scripts/query_ticket_history.py",
-      "kind": "file",
-      "label": "skills/ticket-opportunity-generator/scripts/query_ticket_history.py",
-      "path": "skills/ticket-opportunity-generator/scripts/query_ticket_history.py"
-    },
-    {
       "id": "file:skills/update-memory/SKILL.md",
       "kind": "file",
       "label": "skills/update-memory/SKILL.md",
@@ -35326,6 +36880,78 @@ window.HARNESS_GRAPH = {
       "path": "skills/video-production/SKILL.md"
     },
     {
+      "id": "file:skills/video-production/audits/2026-07-17-character-fallback-approval.md",
+      "kind": "file",
+      "label": "skills/video-production/audits/2026-07-17-character-fallback-approval.md",
+      "path": "skills/video-production/audits/2026-07-17-character-fallback-approval.md"
+    },
+    {
+      "id": "file:skills/video-production/config.toml",
+      "kind": "file",
+      "label": "skills/video-production/config.toml",
+      "path": "skills/video-production/config.toml"
+    },
+    {
+      "id": "file:skills/video-production/evals/evals.json",
+      "kind": "file",
+      "label": "skills/video-production/evals/evals.json",
+      "path": "skills/video-production/evals/evals.json"
+    },
+    {
+      "id": "file:skills/video-production/qa_checklist.md",
+      "kind": "file",
+      "label": "skills/video-production/qa_checklist.md",
+      "path": "skills/video-production/qa_checklist.md"
+    },
+    {
+      "id": "file:skills/video-production/references/explainer-styles/index.md",
+      "kind": "file",
+      "label": "skills/video-production/references/explainer-styles/index.md",
+      "path": "skills/video-production/references/explainer-styles/index.md"
+    },
+    {
+      "id": "dir:skills/video-production/references/explainer-styles/retro-low-poly-consequence",
+      "kind": "file",
+      "label": "skills/video-production/references/explainer-styles/retro-low-poly-consequence/",
+      "path": "skills/video-production/references/explainer-styles/retro-low-poly-consequence"
+    },
+    {
+      "id": "file:skills/video-production/references/explainer-styles/retro-low-poly-consequence/audio.md",
+      "kind": "file",
+      "label": "skills/video-production/references/explainer-styles/retro-low-poly-consequence/audio.md",
+      "path": "skills/video-production/references/explainer-styles/retro-low-poly-consequence/audio.md"
+    },
+    {
+      "id": "file:skills/video-production/references/explainer-styles/retro-low-poly-consequence/characters/late-90s-everyperson/identity-sheet.png",
+      "kind": "file",
+      "label": "skills/video-production/references/explainer-styles/retro-low-poly-consequence/characters/late-90s-everyperson/identity-sheet.png",
+      "path": "skills/video-production/references/explainer-styles/retro-low-poly-consequence/characters/late-90s-everyperson/identity-sheet.png"
+    },
+    {
+      "id": "file:skills/video-production/references/explainer-styles/retro-low-poly-consequence/example.md",
+      "kind": "file",
+      "label": "skills/video-production/references/explainer-styles/retro-low-poly-consequence/example.md",
+      "path": "skills/video-production/references/explainer-styles/retro-low-poly-consequence/example.md"
+    },
+    {
+      "id": "file:skills/video-production/references/explainer-styles/retro-low-poly-consequence/profile.md",
+      "kind": "file",
+      "label": "skills/video-production/references/explainer-styles/retro-low-poly-consequence/profile.md",
+      "path": "skills/video-production/references/explainer-styles/retro-low-poly-consequence/profile.md"
+    },
+    {
+      "id": "file:skills/video-production/references/explainer-styles/retro-low-poly-consequence/prompts.md",
+      "kind": "file",
+      "label": "skills/video-production/references/explainer-styles/retro-low-poly-consequence/prompts.md",
+      "path": "skills/video-production/references/explainer-styles/retro-low-poly-consequence/prompts.md"
+    },
+    {
+      "id": "file:skills/video-production/references/ingest-style.md",
+      "kind": "file",
+      "label": "skills/video-production/references/ingest-style.md",
+      "path": "skills/video-production/references/ingest-style.md"
+    },
+    {
       "id": "file:skills/video-production/references/method-selection-smoke.md",
       "kind": "file",
       "label": "skills/video-production/references/method-selection-smoke.md",
@@ -35336,6 +36962,12 @@ window.HARNESS_GRAPH = {
       "kind": "file",
       "label": "skills/video-production/references/model.md",
       "path": "skills/video-production/references/model.md"
+    },
+    {
+      "id": "file:skills/video-production/references/scene-grid-production.md",
+      "kind": "file",
+      "label": "skills/video-production/references/scene-grid-production.md",
+      "path": "skills/video-production/references/scene-grid-production.md"
     },
     {
       "id": "file:skills/video-understanding/SKILL.md",
@@ -35450,6 +37082,48 @@ window.HARNESS_GRAPH = {
       "kind": "file",
       "label": "tickets/archive/TASK-0240/artifacts/review/2026-06-28-pushed-range-review.md",
       "path": "tickets/archive/TASK-0240/artifacts/review/2026-06-28-pushed-range-review.md"
+    },
+    {
+      "id": "file:tickets/archive/TASK-0348/artifacts/prototype/dogfood-after.md",
+      "kind": "file",
+      "label": "tickets/archive/TASK-0348/artifacts/prototype/dogfood-after.md",
+      "path": "tickets/archive/TASK-0348/artifacts/prototype/dogfood-after.md"
+    },
+    {
+      "id": "file:tickets/archive/TASK-0356/artifacts/qa/eval-summary.md",
+      "kind": "file",
+      "label": "tickets/archive/TASK-0356/artifacts/qa/eval-summary.md",
+      "path": "tickets/archive/TASK-0356/artifacts/qa/eval-summary.md"
+    },
+    {
+      "id": "file:tickets/archive/TASK-0356/artifacts/qa/test-output.txt",
+      "kind": "file",
+      "label": "tickets/archive/TASK-0356/artifacts/qa/test-output.txt",
+      "path": "tickets/archive/TASK-0356/artifacts/qa/test-output.txt"
+    },
+    {
+      "id": "file:tickets/archive/TASK-0356/artifacts/review/completion-review.md",
+      "kind": "file",
+      "label": "tickets/archive/TASK-0356/artifacts/review/completion-review.md",
+      "path": "tickets/archive/TASK-0356/artifacts/review/completion-review.md"
+    },
+    {
+      "id": "file:tickets/archive/TASK-0356/ticket.md",
+      "kind": "file",
+      "label": "tickets/archive/TASK-0356/ticket.md",
+      "path": "tickets/archive/TASK-0356/ticket.md"
+    },
+    {
+      "id": "file:tickets/archive/TASK-0369/artifacts/qa/verification.md",
+      "kind": "file",
+      "label": "tickets/archive/TASK-0369/artifacts/qa/verification.md",
+      "path": "tickets/archive/TASK-0369/artifacts/qa/verification.md"
+    },
+    {
+      "id": "file:tickets/archive/TASK-0369/ticket.md",
+      "kind": "file",
+      "label": "tickets/archive/TASK-0369/ticket.md",
+      "path": "tickets/archive/TASK-0369/ticket.md"
     },
     {
       "id": "dir:tickets/templates",
@@ -35704,10 +37378,22 @@ window.HARNESS_GRAPH = {
       "path": "bin/core/farplane_content.py"
     },
     {
-      "id": "file:bin/core/farplane_file_events.py",
+      "id": "file:bin/core/farplane_entities.py",
       "kind": "script",
-      "label": "bin/core/farplane_file_events.py",
-      "path": "bin/core/farplane_file_events.py"
+      "label": "bin/core/farplane_entities.py",
+      "path": "bin/core/farplane_entities.py"
+    },
+    {
+      "id": "file:bin/core/farplane_event_store.py",
+      "kind": "script",
+      "label": "bin/core/farplane_event_store.py",
+      "path": "bin/core/farplane_event_store.py"
+    },
+    {
+      "id": "file:bin/core/farplane_harness_health.py",
+      "kind": "script",
+      "label": "bin/core/farplane_harness_health.py",
+      "path": "bin/core/farplane_harness_health.py"
     },
     {
       "id": "file:bin/core/farplane_invocation.py",
@@ -35764,6 +37450,24 @@ window.HARNESS_GRAPH = {
       "path": "bin/core/farplane_telemetry_status.py"
     },
     {
+      "id": "file:bin/core/farplane_ticket_close.py",
+      "kind": "script",
+      "label": "bin/core/farplane_ticket_close.py",
+      "path": "bin/core/farplane_ticket_close.py"
+    },
+    {
+      "id": "file:bin/core/farplane_ticket_history.py",
+      "kind": "script",
+      "label": "bin/core/farplane_ticket_history.py",
+      "path": "bin/core/farplane_ticket_history.py"
+    },
+    {
+      "id": "file:bin/core/farplane_ticket_reward.py",
+      "kind": "script",
+      "label": "bin/core/farplane_ticket_reward.py",
+      "path": "bin/core/farplane_ticket_reward.py"
+    },
+    {
       "id": "file:bin/core/mining_programs/ticket-completion-lean-v1.json",
       "kind": "script",
       "label": "bin/core/mining_programs/ticket-completion-lean-v1.json",
@@ -35774,6 +37478,12 @@ window.HARNESS_GRAPH = {
       "kind": "script",
       "label": "bin/core/mining_programs/ticket-completion-learning-v1.json",
       "path": "bin/core/mining_programs/ticket-completion-learning-v1.json"
+    },
+    {
+      "id": "file:bin/core/mining_programs/ticket-completion-learning-v2.json",
+      "kind": "script",
+      "label": "bin/core/mining_programs/ticket-completion-learning-v2.json",
+      "path": "bin/core/mining_programs/ticket-completion-learning-v2.json"
     },
     {
       "id": "file:bin/core/runtime_config.py",
@@ -35926,22 +37636,22 @@ window.HARNESS_GRAPH = {
       "path": "bin/tests/test_farplane_content.py"
     },
     {
-      "id": "file:bin/tests/test_farplane_file_events.py",
+      "id": "file:bin/tests/test_farplane_entities.py",
       "kind": "script",
-      "label": "bin/tests/test_farplane_file_events.py",
-      "path": "bin/tests/test_farplane_file_events.py"
+      "label": "bin/tests/test_farplane_entities.py",
+      "path": "bin/tests/test_farplane_entities.py"
     },
     {
-      "id": "file:bin/tests/test_farplane_hooks_runtime.py",
+      "id": "file:bin/tests/test_farplane_harness_health.py",
       "kind": "script",
-      "label": "bin/tests/test_farplane_hooks_runtime.py",
-      "path": "bin/tests/test_farplane_hooks_runtime.py"
+      "label": "bin/tests/test_farplane_harness_health.py",
+      "path": "bin/tests/test_farplane_harness_health.py"
     },
     {
-      "id": "file:bin/tests/test_farplane_hooks_schema.py",
+      "id": "file:bin/tests/test_farplane_hooks_install.py",
       "kind": "script",
-      "label": "bin/tests/test_farplane_hooks_schema.py",
-      "path": "bin/tests/test_farplane_hooks_schema.py"
+      "label": "bin/tests/test_farplane_hooks_install.py",
+      "path": "bin/tests/test_farplane_hooks_install.py"
     },
     {
       "id": "file:bin/tests/test_farplane_invocation.py",
@@ -36002,6 +37712,24 @@ window.HARNESS_GRAPH = {
       "kind": "script",
       "label": "bin/tests/test_farplane_telemetry_status.py",
       "path": "bin/tests/test_farplane_telemetry_status.py"
+    },
+    {
+      "id": "file:bin/tests/test_farplane_ticket_close.py",
+      "kind": "script",
+      "label": "bin/tests/test_farplane_ticket_close.py",
+      "path": "bin/tests/test_farplane_ticket_close.py"
+    },
+    {
+      "id": "file:bin/tests/test_farplane_ticket_history.py",
+      "kind": "script",
+      "label": "bin/tests/test_farplane_ticket_history.py",
+      "path": "bin/tests/test_farplane_ticket_history.py"
+    },
+    {
+      "id": "file:bin/tests/test_farplane_ticket_reward.py",
+      "kind": "script",
+      "label": "bin/tests/test_farplane_ticket_reward.py",
+      "path": "bin/tests/test_farplane_ticket_reward.py"
     },
     {
       "id": "file:bin/tests/test_instagram_fetch_metrics.py",
@@ -36616,6 +38344,12 @@ window.HARNESS_GRAPH = {
       "path": "skills/ingest-content/SKILL.md"
     },
     {
+      "id": "skill:ingest-world-data",
+      "kind": "skill",
+      "label": "ingest-world-data",
+      "path": "skills/ingest-world-data/SKILL.md"
+    },
+    {
       "id": "skill:init-advisor",
       "kind": "skill",
       "label": "init-advisor",
@@ -36626,6 +38360,12 @@ window.HARNESS_GRAPH = {
       "kind": "skill",
       "label": "instagram-account",
       "path": "skills/instagram-account/SKILL.md"
+    },
+    {
+      "id": "skill:interior-design",
+      "kind": "skill",
+      "label": "interior-design",
+      "path": "skills/interior-design/SKILL.md"
     },
     {
       "id": "skill:interval-update",
@@ -36670,10 +38410,22 @@ window.HARNESS_GRAPH = {
       "path": "skills/media-ingest/SKILL.md"
     },
     {
+      "id": "skill:meshy-3d-generation",
+      "kind": "skill",
+      "label": "meshy-3d-generation",
+      "path": "skills/meshy-3d-generation/SKILL.md"
+    },
+    {
       "id": "skill:metric-advisor",
       "kind": "skill",
       "label": "metric-advisor",
       "path": "skills/metric-advisor/SKILL.md"
+    },
+    {
+      "id": "skill:ml-autoresearch",
+      "kind": "skill",
+      "label": "ml-autoresearch",
+      "path": "skills/ml-autoresearch/SKILL.md"
     },
     {
       "id": "skill:notion-task-field-fill",
@@ -36704,6 +38456,12 @@ window.HARNESS_GRAPH = {
       "kind": "skill",
       "label": "plan",
       "path": "skills/plan/SKILL.md"
+    },
+    {
+      "id": "skill:plan-next-wave",
+      "kind": "skill",
+      "label": "plan-next-wave",
+      "path": "skills/plan-next-wave/SKILL.md"
     },
     {
       "id": "skill:pr-review-watch",
@@ -36890,12 +38648,6 @@ window.HARNESS_GRAPH = {
       "kind": "skill",
       "label": "testing",
       "path": "skills/testing/SKILL.md"
-    },
-    {
-      "id": "skill:ticket-opportunity-generator",
-      "kind": "skill",
-      "label": "ticket-opportunity-generator",
-      "path": "skills/ticket-opportunity-generator/SKILL.md"
     },
     {
       "id": "skill:update-memory",
@@ -37192,6 +38944,18 @@ window.HARNESS_GRAPH = {
       "path": "docs/features/FEAT-0071-project-work-pulse.md"
     },
     {
+      "id": "file:docs/features/FEAT-0072-persistent-icp-and-world-memory.md",
+      "kind": "spec",
+      "label": "docs/features/FEAT-0072-persistent-icp-and-world-memory.md",
+      "path": "docs/features/FEAT-0072-persistent-icp-and-world-memory.md"
+    },
+    {
+      "id": "file:docs/features/FEAT-0073-brand-kit-approved-creative-identity.md",
+      "kind": "spec",
+      "label": "docs/features/FEAT-0073-brand-kit-approved-creative-identity.md",
+      "path": "docs/features/FEAT-0073-brand-kit-approved-creative-identity.md"
+    },
+    {
       "id": "file:docs/features/README.md",
       "kind": "spec",
       "label": "docs/features/README.md",
@@ -37262,6 +39026,11 @@ window.HARNESS_GRAPH = {
     {
       "candidate": "tickets/TASK-",
       "raw_ref": "tickets/TASK-",
+      "source": "ARCHITECTURE.md"
+    },
+    {
+      "candidate": "tickets/scripts/check_ticket_metadata.py",
+      "raw_ref": "tickets/scripts/check_ticket_metadata.py",
       "source": "ARCHITECTURE.md"
     },
     {
@@ -37385,26 +39154,6 @@ window.HARNESS_GRAPH = {
       "source": "agents/planner-agent.toml"
     },
     {
-      "candidate": "docs/specs",
-      "raw_ref": "docs/specs",
-      "source": "agents/qa-tester.toml"
-    },
-    {
-      "candidate": "tickets/TASK-",
-      "raw_ref": "tickets/TASK-",
-      "source": "agents/qa-tester.toml"
-    },
-    {
-      "candidate": "tickets/TASK-",
-      "raw_ref": "tickets/TASK-",
-      "source": "agents/qa-tester.toml"
-    },
-    {
-      "candidate": "tickets/TASK-0000/artifacts/qa",
-      "raw_ref": "tickets/TASK-0000/artifacts/qa/",
-      "source": "agents/qa-tester.toml"
-    },
-    {
       "candidate": "bin/check_doc_refs.py",
       "raw_ref": "bin/check_doc_refs.py",
       "source": "bin/README.md"
@@ -37420,19 +39169,9 @@ window.HARNESS_GRAPH = {
       "source": "bin/README.md"
     },
     {
-      "candidate": "tickets/TASK-",
-      "raw_ref": "tickets/TASK-",
-      "source": "bin/core/farplane_file_events.py"
-    },
-    {
-      "candidate": "tickets/TASK-",
-      "raw_ref": "tickets/TASK-",
-      "source": "bin/core/farplane_file_events.py"
-    },
-    {
-      "candidate": "tickets/TASK-",
-      "raw_ref": "tickets/TASK-",
-      "source": "bin/core/farplane_file_events.py"
+      "candidate": "tickets/scripts/check_ticket_metadata.py",
+      "raw_ref": "tickets/scripts/check_ticket_metadata.py",
+      "source": "bin/README.md"
     },
     {
       "candidate": "skills/docs",
@@ -37475,16 +39214,6 @@ window.HARNESS_GRAPH = {
       "source": "bin/core/farplane_reward_migration.py"
     },
     {
-      "candidate": "tickets/TASK-",
-      "raw_ref": "tickets/TASK-",
-      "source": "bin/farplane.py"
-    },
-    {
-      "candidate": "tickets/TASK-9001/ticket.md",
-      "raw_ref": "tickets/TASK-9001/ticket.md",
-      "source": "bin/farplane.py"
-    },
-    {
       "candidate": "tickets/TASK-1234/artifacts",
       "raw_ref": "tickets/TASK-1234/artifacts",
       "source": "bin/tests/test_farplane_boards.py"
@@ -37500,34 +39229,29 @@ window.HARNESS_GRAPH = {
       "source": "bin/tests/test_farplane_boards.py"
     },
     {
+      "candidate": "tickets/TASK-0055/ticket.md",
+      "raw_ref": "tickets/TASK-0055/ticket.md",
+      "source": "bin/tests/test_farplane_console_ping.py"
+    },
+    {
       "candidate": "tickets/TASK-0001/ticket.md",
       "raw_ref": "tickets/TASK-0001/ticket.md",
       "source": "bin/tests/test_farplane_content.py"
     },
     {
-      "candidate": "tickets/TASK-0001/ticket.md",
-      "raw_ref": "tickets/TASK-0001/ticket.md",
-      "source": "bin/tests/test_farplane_file_events.py"
+      "candidate": "skills/alpha/SKILL.md",
+      "raw_ref": "skills/alpha/SKILL.md",
+      "source": "bin/tests/test_farplane_harness_health.py"
     },
     {
-      "candidate": "tickets/TASK-0001/ticket.md",
-      "raw_ref": "tickets/TASK-0001/ticket.md",
-      "source": "bin/tests/test_farplane_file_events.py"
+      "candidate": "skills/alpha/SKILL.md",
+      "raw_ref": "skills/alpha/SKILL.md",
+      "source": "bin/tests/test_farplane_harness_health.py"
     },
     {
-      "candidate": "tickets/TASK-0001/ticket.md",
-      "raw_ref": "tickets/TASK-0001/ticket.md",
-      "source": "bin/tests/test_farplane_file_events.py"
-    },
-    {
-      "candidate": "tickets/TASK-0001/ticket.md",
-      "raw_ref": "tickets/TASK-0001/ticket.md",
-      "source": "bin/tests/test_farplane_file_events.py"
-    },
-    {
-      "candidate": "tickets/TASK-",
-      "raw_ref": "tickets/TASK-",
-      "source": "bin/tests/test_farplane_hooks_schema.py"
+      "candidate": "skills/alpha/SKILL.md",
+      "raw_ref": "skills/alpha/SKILL.md",
+      "source": "bin/tests/test_farplane_harness_health.py"
     },
     {
       "candidate": "tickets/TASK-1234/artifacts/proof/planning.proof.json",
@@ -37570,8 +39294,8 @@ window.HARNESS_GRAPH = {
       "source": "bin/tests/test_farplane_mining.py"
     },
     {
-      "candidate": "tickets/TASK-0001/ticket.md",
-      "raw_ref": "tickets/TASK-0001/ticket.md",
+      "candidate": "tickets/archive/TASK-0001/ticket.md",
+      "raw_ref": "tickets/archive/TASK-0001/ticket.md",
       "source": "bin/tests/test_farplane_mining.py"
     },
     {
@@ -37740,6 +39464,11 @@ window.HARNESS_GRAPH = {
       "source": "bin/tests/test_ticket_validation.py"
     },
     {
+      "candidate": "tickets/scripts/check_ticket_metadata.py",
+      "raw_ref": "tickets/scripts/check_ticket_metadata.py",
+      "source": "bin/validators/check_doc_parity.py"
+    },
+    {
       "candidate": "[^\"']+",
       "raw_ref": "[^\"']+",
       "source": "bin/validators/check_doc_refs.py"
@@ -37790,6 +39519,26 @@ window.HARNESS_GRAPH = {
       "source": "bin/validators/check_farplane_project_files.py"
     },
     {
+      "candidate": "skills/foo/SKILL.md",
+      "raw_ref": "skills/foo/SKILL.md",
+      "source": "bin/validators/test_check_changed_file_line_count.py"
+    },
+    {
+      "candidate": "skills/foo/SKILL.md",
+      "raw_ref": "skills/foo/SKILL.md",
+      "source": "bin/validators/test_check_changed_file_line_count.py"
+    },
+    {
+      "candidate": "skills/foo/assets/output.svg",
+      "raw_ref": "skills/foo/assets/output.svg",
+      "source": "bin/validators/test_check_changed_file_line_count.py"
+    },
+    {
+      "candidate": "skills/foo/image.png",
+      "raw_ref": "skills/foo/image.png",
+      "source": "bin/validators/test_check_changed_file_line_count.py"
+    },
+    {
       "candidate": "docs/features/missing.md",
       "raw_ref": "docs/features/missing.md",
       "source": "bin/validators/test_check_doc_refs.py"
@@ -37832,6 +39581,11 @@ window.HARNESS_GRAPH = {
     {
       "candidate": "farplane/harness.md",
       "raw_ref": "farplane/harness.md",
+      "source": "bin/validators/test_check_farplane_project_files.py"
+    },
+    {
+      "candidate": "farplane/hooks.json",
+      "raw_ref": "farplane/hooks.json",
       "source": "bin/validators/test_check_farplane_project_files.py"
     },
     {
@@ -37927,6 +39681,11 @@ window.HARNESS_GRAPH = {
     {
       "candidate": "/abs/tickets",
       "raw_ref": "/abs/tickets",
+      "source": "bin/validators/test_doc_parity.py"
+    },
+    {
+      "candidate": "tickets/scripts/check_ticket_metadata.py",
+      "raw_ref": "tickets/scripts/check_ticket_metadata.py",
       "source": "bin/validators/test_doc_parity.py"
     },
     {
@@ -38135,6 +39894,11 @@ window.HARNESS_GRAPH = {
       "source": "docs/LESSONS.md"
     },
     {
+      "candidate": "skills/horizon-advisor",
+      "raw_ref": "skills/horizon-advisor",
+      "source": "docs/LESSONS.md"
+    },
+    {
       "candidate": "skills/init-advisor/references/GOALS_TEMPLATE.md",
       "raw_ref": "skills/init-advisor/references/GOALS_TEMPLATE.md",
       "source": "docs/LESSONS.md"
@@ -38167,6 +39931,11 @@ window.HARNESS_GRAPH = {
     {
       "candidate": "skills/taste-loop/SKILL.md",
       "raw_ref": "skills/taste-loop/SKILL.md",
+      "source": "docs/LESSONS.md"
+    },
+    {
+      "candidate": "tickets/scripts/check_ticket_metadata.py",
+      "raw_ref": "tickets/scripts/check_ticket_metadata.py",
       "source": "docs/LESSONS.md"
     },
     {
@@ -38240,18 +40009,13 @@ window.HARNESS_GRAPH = {
       "source": "docs/TROUBLES.md"
     },
     {
+      "candidate": "entities.md",
+      "raw_ref": "entities.md",
+      "source": "docs/farplane-framework/README.md"
+    },
+    {
       "candidate": "graph-contract.md",
       "raw_ref": "graph-contract.md",
-      "source": "docs/farplane-framework/README.md"
-    },
-    {
-      "candidate": "harness-maintenance.md",
-      "raw_ref": "harness-maintenance.md",
-      "source": "docs/farplane-framework/README.md"
-    },
-    {
-      "candidate": "hooks-and-runtime.md",
-      "raw_ref": "hooks-and-runtime.md",
       "source": "docs/farplane-framework/README.md"
     }
   ]

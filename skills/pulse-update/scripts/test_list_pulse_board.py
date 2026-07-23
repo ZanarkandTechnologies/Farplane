@@ -17,6 +17,41 @@ SPEC = importlib.util.spec_from_file_location("list_pulse_board", MODULE_PATH)
 assert SPEC and SPEC.loader
 BOARD = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(BOARD)
+MATERIALIZER_PATH = Path(__file__).with_name("materialize_skill_call.py")
+MATERIALIZER_SPEC = importlib.util.spec_from_file_location("materialize_skill_call", MATERIALIZER_PATH)
+assert MATERIALIZER_SPEC and MATERIALIZER_SPEC.loader
+MATERIALIZER = importlib.util.module_from_spec(MATERIALIZER_SPEC)
+MATERIALIZER_SPEC.loader.exec_module(MATERIALIZER)
+
+
+def planned_call(ticket_id: str, call_id: str | None = None) -> dict[str, object]:
+    return {
+        "ticket_id": ticket_id,
+        "call_id": call_id or ticket_id.lower(),
+        "title": f"Run {ticket_id}",
+        "skill_ref": "self-improve",
+        "arguments": {
+            "target": "skills/plan-next-wave",
+            "metric": "planner_idea_keep_rate",
+            "feedback_class": "immediate",
+            "failure_evidence": "tickets/TASK-0385/artifacts/review/completion-review.md",
+        },
+        "expected_artifact": "a measured preventive change",
+        "objective_contribution": {
+            "ultimate_kpi_id": "evidence_distribution_reach",
+            "contribution_type": "enabler",
+            "kpi_or_guard_id": "planner_idea_keep_rate",
+            "causal_mechanism": "prevent repeated low-value planner output",
+            "expected_change": "one measured configured-skill improvement",
+            "forecast_basis": {
+                "kind": "configured_threshold",
+                "ref": "tickets/TASK-0385/ticket.md",
+            },
+            "metric_provider": "planner eval",
+            "signal_horizon": "immediate",
+            "check_in_at": "unscheduled",
+        },
+    }
 
 
 def write_ticket(
@@ -111,7 +146,7 @@ def run_minimal_pulse_fixture(
     """Exercise the prompt-owned Pulse boundary without inventing a runtime.
 
     The real board classifier owns admission. This fixture injects the pure
-    planner result, materializes accepted specs as ticket files, reruns
+    planner result, materializes admitted skill calls as ticket files, reruns
     admission, and applies worker capacity so the composed contract is
     executable in tests.
     """
@@ -137,7 +172,13 @@ def run_minimal_pulse_fixture(
         planner_calls += 1
         for spec in specs[:wave_size]:
             ticket_id = spec["ticket_id"]
-            write_ticket(root, ticket_id)
+            call = {key: value for key, value in spec.items() if key != "ticket_id"}
+            MATERIALIZER.materialize_skill_call(
+                root,
+                ticket_id,
+                call,
+                created_at="2026-07-17T00:00:00Z",
+            )
             materialized.append(ticket_id)
         board = BOARD.build_board(root, worker_limit=worker_limit)
         newly_ready = [
@@ -168,9 +209,17 @@ class WorkPulseBoardTests(unittest.TestCase):
                     {
                         "action": "plan_next_wave",
                         "status": "completed",
-                        "admitted_specs": [
-                            {"ticket_id": "TASK-REVIEW-A", "area_id": "self_improvement"},
-                            {"ticket_id": "TASK-REVIEW-B", "area_id": "self_improvement"},
+                        "admitted_skill_calls": [
+                            {
+                                "ticket_id": "TASK-REVIEW-A",
+                                "skill_ref": "self-improve",
+                                "area_id": "self_improvement",
+                            },
+                            {
+                                "ticket_id": "TASK-REVIEW-B",
+                                "skill_ref": "self-improve",
+                                "area_id": "self_improvement",
+                            },
                         ],
                     }
                 )
@@ -196,6 +245,30 @@ class WorkPulseBoardTests(unittest.TestCase):
             self.assertFalse(result["review_pool_saturated"])
             self.assertEqual(result["queued_review_pools"], [])
             self.assertEqual(result["idle_worker_slots"], 4)
+
+    def test_historical_admitted_specs_remain_read_only_area_provenance(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            decisions = root / ".farplane" / "automation" / "decisions.jsonl"
+            decisions.parent.mkdir(parents=True, exist_ok=True)
+            decisions.write_text(
+                json.dumps(
+                    {
+                        "action": "materialize_reserved_wave",
+                        "pulse_receipt": {
+                            "admitted_specs": [
+                                {"ticket_id": "TASK-OLD", "area_id": "legacy-area"}
+                            ]
+                        },
+                    }
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+
+            self.assertEqual(
+                BOARD.planner_area_by_ticket(root), {"TASK-OLD": "legacy-area"}
+            )
 
     def test_review_pool_limit_caps_active_digests_and_queues_every_other_area(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -312,10 +385,10 @@ class WorkPulseBoardTests(unittest.TestCase):
                     wave_size=wave_size,
                 )
                 return [
-                    {"ticket_id": "TASK-PLAN-1"},
-                    {"ticket_id": "TASK-PLAN-2"},
-                    {"ticket_id": "TASK-PLAN-3"},
-                    {"ticket_id": "TASK-PLAN-OVERFLOW"},
+                    planned_call("TASK-PLAN-1"),
+                    planned_call("TASK-PLAN-2"),
+                    planned_call("TASK-PLAN-3"),
+                    planned_call("TASK-PLAN-OVERFLOW"),
                 ]
 
             result = run_minimal_pulse_fixture(
@@ -343,6 +416,13 @@ class WorkPulseBoardTests(unittest.TestCase):
                 ["TASK-PLAN-1", "TASK-PLAN-2", "TASK-PLAN-3"],
             )
             self.assertFalse((root / "tickets" / "TASK-PLAN-OVERFLOW").exists())
+            ticket_text = (root / "tickets" / "TASK-PLAN-1" / "ticket.md").read_text(
+                encoding="utf-8"
+            )
+            self.assertIn("skill_ref: self-improve", ticket_text)
+            self.assertIn("failure_evidence:", ticket_text)
+            self.assertNotIn("workflow_steps", ticket_text)
+            self.assertNotIn("Todo List", ticket_text)
 
     def test_composed_dispatch_then_refills_below_ready_low_watermark(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -354,7 +434,7 @@ class WorkPulseBoardTests(unittest.TestCase):
             write_ticket(root, "TASK-READY")
 
             def planner(*_args: object) -> list[dict[str, str]]:
-                return [{"ticket_id": "TASK-REFILL"}]
+                return [planned_call("TASK-REFILL")]
 
             result = run_minimal_pulse_fixture(
                 root,

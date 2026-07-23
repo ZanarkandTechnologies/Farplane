@@ -24,7 +24,6 @@ farplane/
   metrics.yaml     # metric definitions, direction, freshness, guard rules
   automations.toml # one Work Pulse heartbeat plus separate scheduled jobs
   bindings.yaml      # non-secret project IDs, URLs, labels, aliases
-  hooks.json       # declarative Farplane-native hook configuration
   pm.json          # optional UI thread manifest for one visual project PM
 
 .agents/
@@ -36,9 +35,9 @@ Runtime state lives under `.farplane/` and is intentionally ignored by git.
 
 ```text
 .farplane/
+  README.md
   views.yaml
   entities/
-  README.md
   automation/
   metrics/daily/
   reports/

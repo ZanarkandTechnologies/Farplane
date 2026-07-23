@@ -51,7 +51,7 @@ feed_scout:
   daily_feed_root: .farplane/feed-scout/daily
   ledger: .farplane/feed-scout/ledger.jsonl
   proposal_ledger: .farplane/feed-scout/proposals.jsonl
-  memory: .farplane/feed-scout/memory.md
+  world_memory: .farplane/feed-scout/world-memory.md
   destination: local_ledger
   write_policy: local_first
   entities: {}

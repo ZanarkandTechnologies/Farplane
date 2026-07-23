@@ -3,7 +3,7 @@ title: "Farplane Hooks and Runtime"
 status: active
 owner: farplane-framework
 created_at: 2026-06-23
-updated_at: 2026-07-12
+updated_at: 2026-07-15
 framework_template_version: "0.3.0"
 tags:
   - farplane
@@ -20,17 +20,16 @@ refs:
 
 # Farplane Hooks and Runtime
 
-Farplane has two explicit hook surfaces. Root `hooks.json` contains installed
-Codex lifecycle commands. Project `farplane/hooks.json` selects typed file
-events for portable Core mining. Neither owns project strategy, skill
-optimization, memory rewriting, or native Goal continuation.
+Farplane has one installed hook surface. Root `hooks.json` contains small Codex
+lifecycle telemetry commands. Ticket completion and mining are explicit CLI
+operations; hooks do not infer durable state transitions from arbitrary writes.
 
 ```text
 codex_hook(event, transcript/runtime_state)
   -> telemetry | mechanical_gate
 
-file_change(project_root, path)
-  -> durable FileEvent/outbox -> fixed local drain subprocess -> routes
+ticket_close(project_root, ticket_id)
+  -> terminal metadata + archive + completion event -> mining route
 ```
 
 ## Codex Lifecycle Hooks
@@ -39,57 +38,51 @@ Root `hooks.json` currently defines:
 
 | Event | Commands | Purpose |
 | --- | --- | --- |
-| `UserPromptSubmit` | `capture_user_turn.py`, `farplane_console_ping.py` | classify the current user turn, append lightweight conversation windows, and send `turn_start` hook telemetry |
-| `Stop` | `farplane_console_ping.py` | send `turn_end` hook telemetry |
-| `PostToolUse` read/thread matchers | `farplane_local_event.py` | record small sanitized local skill/thread observations without Farplane UI |
-| `PostToolUse` write matchers | `farplane_file_change.py` | capture typed file events into the local outbox and launch the Core local drain process |
+| `UserPromptSubmit` | `capture_user_turn.py`, `farplane_console_ping.py` | classify the current user turn, append lightweight conversation windows, resolve native/ticket display metadata locally, and send sanitized `turn_start` hook telemetry |
+| `Stop` | `farplane_console_ping.py` | resolve the latest native/ticket display metadata and send sanitized `turn_end` hook telemetry |
+| `SubagentStart` | `farplane_console_ping.py` | send sanitized subagent-start lifecycle telemetry |
+| `SubagentStop` | `farplane_console_ping.py` | send sanitized subagent-stop lifecycle telemetry |
 
 These are graphable as `hook:*` nodes that `triggers` command nodes.
 
-## Project File Events And Mining
+## Explicit Ticket Completion And Mining
 
-Project `farplane/hooks.json` declares allowed file patterns and event names.
 `farplane/bindings.yaml#event_routes` maps an event to a versioned immutable
-Core program. Core owns deterministic event/run IDs, privacy-safe snapshots,
-the durable outbox, frozen replay, current-source rerun, lean reports, and
+Core program. Core owns deterministic event/run IDs, the durable event record
+and outbox, frozen replay, current-source rerun, small machine receipts, and
 verdict records.
 
 ```text
-event_id = sha256(project_id, event_name, entity_ref, previous_hash, content_hash)
+event_id = sha256(source, project_id, ticket_id, content_hash)
 run_id   = sha256(event_id, route_id, program_digest)
 ```
 
-Session and task IDs are provenance only. The hook process does not run mining
-itself and does not call a cloud dispatcher. It writes the typed event and
-outbox row first, then launches the fixed Core local drain entrypoint in a
-separate process. That child reads the local outbox, applies every matching
-`event_routes` row, and writes immutable local runs/reports. Failed launches
-write `.farplane/hooks/drain-launches/*.json` receipts and leave outbox rows
-retryable; operators or UI can still call `farplane mining drain`. There is no
+`farplane ticket close TASK-XXXX` owns the successful terminal transition. It
+sets `status: done`, clears `claimed_by`, advances `updated_at`, archives the
+ticket, writes `farplane.ticket.completed` to the local event store, applies the
+matching route, and returns a closure/mining receipt. Failed mining leaves the
+event retryable through `farplane mining drain`. There is no file watcher,
 daemon, shell-tail workflow engine, or extra heartbeat.
 
-Ticket completion fans out to two immutable Core programs. The lean report
-contains `source`, `program`, `coverage`, `observations`, `material_findings`,
-`source_gaps`, and `escalation` without a false-precision quality score. The
-completion-learning program freezes the ticket packet with only the bounded
-operator-turn window named by immutable event thread/session provenance, then
-runs a structured read-only Codex review in the detached drain process.
-Assistant responses are intentionally excluded: ticket/program/progress are
-the authoritative completion record. The executor ignores user config and
-rules; Core validates the output schema, evidence refs, sensitive patterns, and
-raw-source overlap before accepting a report. It emits compact
-problem/solution/owner/evidence findings, then deterministically projects at
-most the strongest high/medium-confidence finding into one deduped local
-`todo` ticket with a source-ticket or self-improvement KPI Reward. When no
-declared project KPI exists, Core still writes the ticket as `awaiting_review`
-instead of admitting metricless work. Known corrections become direct-fix
-tickets; uncertain improvements become prove-or-reject tickets. A validated
-semantic `dedupe_key` collapses paraphrased equivalents across active/archive
-tickets, and completion-learning-generated tickets are report-only on their
-own completion so projection cannot recurse. The semantic executor still never
-edits docs, skills, tickets, or external systems. Missing association or executor failures become visible
-replayable source gaps; there is no turn-count trigger or daily scan. Cloud
-telemetry receives status/count metadata only, never finding prose or evidence.
+Ticket completion has one active mining route. Its normal entry point is
+`farplane ticket close TASK-XXXX`; `farplane mining ticket TASK-XXXX` remains
+an explicit repair/backfill command. The program freezes the ticket,
+optional program/progress/artifacts, and any bounded operator-turn window named
+by immutable event provenance, then runs a structured read-only Codex review in
+the detached drain process. A missing conversation window does not block mining
+because the completed ticket packet is the required source. The executor
+ignores user config and rules; Core validates output schema, evidence refs,
+sensitive patterns, and raw-source overlap before accepting findings.
+
+Each finding contains an evidenced issue, the inefficiency it caused, a proposed
+improvement, owner, confidence, and stable semantic dedupe key. Core projects at
+most the strongest high/medium-confidence finding into one ordinary deduped
+`todo` ticket. It does not compute a ticket score, require a project KPI, emit a
+human lean report, or choose an eval. Generated mining tickets cannot project
+another ticket. The command resolves active or archived ticket evidence and the
+latest task association from the ID alone. Missing
+sources or executor failures remain replayable machine receipts. Cloud telemetry
+receives status/count metadata only, never finding prose or evidence.
 
 ## Runtime State Boundaries
 
@@ -104,17 +97,25 @@ too noisy for tracked config.
 .farplane/automation/rewards.jsonl
 .farplane/evals/runs/
 .farplane/events/
-.farplane/file-events/
 .farplane/mine/
 .farplane/logs/
 .farplane/state/message-windows/
+.farplane/state/thread-title-bindings/<thread-id>.json
 .farplane/state/ticket-thread-associations.jsonl
 ```
 
-`UserPromptSubmit` does not write singleton current-run or per-session
-ownership files. Hook telemetry, conversation windows, explicit run-state files
-owned by managed lanes, tickets, and ticket/thread association logs are the live
-surfaces.
+`UserPromptSubmit` does not write singleton current-run or execution-ownership
+files. It may write one atomic, display-only thread-title binding when the user
+prompt names exactly one canonical `TASK-XXXX`. This binding is deliberately
+separate from `ticket-thread-associations.jsonl`, which remains an execution
+metrics surface. Prompt text never enters the binding or hook telemetry.
+
+The lifecycle publisher also reads the latest exact-id `thread_name` from the
+append-only Codex `session_index.jsonl`. Telemetry sends only sanitized native
+and ticket title metadata. Native names outrank ticket display titles; a native
+rename is observed on the next lifecycle hook without requiring the Codex app
+server or a background watcher. Subagent and eval hooks do not create or inherit
+root title bindings.
 
 Tracked framework config stays under `farplane/`. The important separation is:
 
@@ -161,12 +162,10 @@ Endpoint selection:
 2. `FARPLANE_CONVEX_SITE_URL` plus `/telemetry/hooks`
 
 The Farplane UI or its setup flow may own the `~/.farplane/*` values; the
-Codex install path owns symlinking `hooks.json`, `hooks/*.py`, and required
-Core Python command targets into `~/.codex`. `farplane hooks list` inventories
-every managed command, `farplane hooks doctor --json` validates each target and
-interpreter, and `farplane hooks test --project-root <fixture> --json` runs the
-deterministic Core hook runtime smoke from
-`qa/cookbook/core-hooks-runtime.md`.
+Codex install path owns symlinking `hooks.json`, the lifecycle telemetry hook,
+and required Core Python command targets into `~/.codex`. `farplane hooks list`
+inventories every managed command and `farplane hooks doctor --json` validates
+each target and interpreter.
 
 ## Hook Rules
 
@@ -176,20 +175,14 @@ deterministic Core hook runtime smoke from
 - Write only small, bounded runtime records unless a ticket or skill owns the
   durable write.
 - Route judgment-heavy work to skills, tickets, reviewers, or drains.
-- Persist file events before advancing snapshots; retry route failure from the
-  outbox rather than dropping or duplicating work.
-- Keep file-change mining out of the hook process. Launch only the fixed
-  Core-owned local drain entrypoint, and keep launch failures inspectable while
-  leaving pending events retryable.
 - Never auto-rewrite durable memory/context files from a hook.
 - Do not use Stop hooks for completion review. Put QA evidence review and
   reviewer-lane completion review in the ticket `Done / Proof` block or Goal
   program final checkpoint.
 
-This rule exists because durable memory cleanup needs source preservation,
-retention scoring, proposal evidence, and review. A hook can notice growth or
-missing capture, but `knowledge-tidier`, `update-memory`, or
-`skill-maintenance` should own the applied change.
+Durable memory and skill cleanup need source preservation, responsibility-based
+structure, proposal evidence, and review. `knowledge-tidier`, `update-memory`,
+or `skill-maintenance` own that work; raw file length does not trigger it.
 
 ## Graph Tags
 

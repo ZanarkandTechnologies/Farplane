@@ -148,6 +148,8 @@ Gray is the accepted ticket input, amber is execution/review behavior, green is 
 - Acceptance signals:
   - Ticket state is enough to resume without chat.
   - Proof and reviewer receipts are linked before material completion.
+  - Successful completion runs `farplane ticket close TASK-XXXX` so archive
+    state and mining are emitted by one explicit boundary.
   - Pulse and interval reports can understand ticket state without acting as executor.
 
 ## Rollout And Maintenance

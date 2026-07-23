@@ -4,7 +4,7 @@ owner: goal-advisor
 status: active
 kind: qa-checklist
 created_at: 2026-06-22
-updated_at: 2026-06-27
+updated_at: 2026-07-16
 applies_to:
   - goals
   - goal-prompts
@@ -97,6 +97,14 @@ goal_advisor_qa(goal_prompt, ticket?, program?) -> checklist_verdicts + fixes_or
      compact `not_applicable` reason?
    - Violation: Pulse or a launcher prompt must reconstruct the experiment's
      scoring policy, or immediate work inherits unused delayed-check-in debt.
+
+13. `golden-review-independence`
+   - Question: For a prompt-heavy or judgment-dependent Goal architecture, did
+     planning use the golden plus this QA while independent review received the
+     candidate, golden invariants, this QA, and held-out context without planner
+     scratch?
+   - Violation: The result copies golden facts/wording, the reviewer inherits
+     the planning chain, or no held-out context tests invariant transfer.
 
 ## Evidence Note Template
 

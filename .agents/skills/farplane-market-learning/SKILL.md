@@ -6,6 +6,8 @@ source: local
 group: capability
 template_uses:
   skill-template: "0.3.2"
+planner_contract:
+  required_arguments: ["product_bet_ref", "system_ref", "feature_refs", "question", "audience", "decision"]
 ---
 
 # Farplane Market Learning
@@ -20,7 +22,7 @@ learning brief, not generic research.
 ## Skill Signature
 
 ```text
-farplane_market_learning(question, audience?, source_refs?, ticket?, audience_context?)
+farplane_market_learning(product_bet_ref, system_ref, feature_refs, question, audience, decision, source_refs?, ticket?, audience_context?)
   -> learning_brief + implication + next_action
 state: reads(farplane/harness.yaml, farplane/metrics.yaml, ticket audience_context first or configured Feed Scout memory as fallback, source refs, ticket context); writes(ticket artifact)
 gates: canonical_icp_bound; baseline_named; decision_named; source_quality_named; implication_not_generic; outreach_requires_approval

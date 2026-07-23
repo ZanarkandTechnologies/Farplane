@@ -1,0 +1,67 @@
+{
+  "project": "AGI Toy Shop",
+  "generated_for": "TASK-0380 clean-room evals",
+  "reward_rows": [
+    {
+      "ticket_id": "TOY-041",
+      "reward_id": "reward-positioning-brief",
+      "status": "done",
+      "decision": "kill",
+      "actual_result": "The control-room positioning brief was understandable but did not create a product experience the operator wanted to keep.",
+      "evaluated_at": "2026-07-12T10:30:00Z",
+      "applies_to": ["positioning-brief", "internal-report"],
+      "reconsider_when": "A materially different mechanism produces a runnable builder experience and a decision-changing comparison.",
+      "evidence_refs": ["tickets/TOY-041/artifacts/operator-feedback.json"]
+    },
+    {
+      "ticket_id": "TOY-042",
+      "reward_id": "reward-recovery-lab",
+      "status": "done",
+      "decision": "accept",
+      "actual_result": "The matched recovery lab made the failure mode observable and was retained for another test round.",
+      "evaluated_at": "2026-07-13T14:00:00Z",
+      "applies_to": ["runnable-recovery-comparison"],
+      "reconsider_when": "Evidence shows the matched baseline does not change a builder decision.",
+      "evidence_refs": ["tickets/TOY-042/artifacts/operator-feedback.json"]
+    },
+    {
+      "ticket_id": "TOY-043",
+      "reward_id": "reward-copy-test",
+      "status": "active",
+      "decision": "monitor",
+      "actual_result": "The copy test has no terminal preference decision yet.",
+      "evaluated_at": null,
+      "applies_to": ["copy-test"],
+      "reconsider_when": null,
+      "evidence_refs": []
+    },
+    {
+      "ticket_id": "TOY-044",
+      "reward_id": "reward-unreviewed-demo",
+      "status": "awaiting-review",
+      "decision": "",
+      "actual_result": "The demo exists but has not been reviewed.",
+      "evaluated_at": null,
+      "applies_to": ["demo"],
+      "reconsider_when": null,
+      "evidence_refs": []
+    }
+  ],
+  "candidate_rows": [
+    {
+      "candidate_id": "A",
+      "title": "Command Deck Narrative",
+      "description": "A renamed control-room positioning brief delivered as a reviewed internal document."
+    },
+    {
+      "candidate_id": "B",
+      "title": "Recovery Decision Lab",
+      "description": "A runnable failure/recovery comparison with a matched baseline, observable supervision steps, and a recorded builder decision."
+    },
+    {
+      "candidate_id": "C",
+      "title": "Toy Discovery Shelf",
+      "description": "An unrelated buyer-facing comparison of three toy discovery flows, grounded in current shop-search evidence."
+    }
+  ]
+}

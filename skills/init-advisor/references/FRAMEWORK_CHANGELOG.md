@@ -8,6 +8,41 @@ updated_at: 2026-07-22
 
 # Farplane Framework Changelog
 
+## 2.0.10
+
+Date: 2026-07-23
+
+Primary change: standardize Markdown-authored typed entity views and separate
+resource dependencies from explicit resource transfers.
+
+Changed surfaces:
+
+- named `## View: <name>` sections own freeform latest status and dated tagged
+  timeline evidence without expanding generic entity frontmatter;
+- typed view projection schema v3 groups evidence into one undirected,
+  date-sorted relationship per entity pair;
+- an optional `resource_tags.<tag>.transfer` mapping emits directed,
+  source-backed `resource_flows` while ordinary observations remain
+  requirements or capacity claims;
+- compilation removes stale generated typed-view JSON after a view is renamed
+  or deleted;
+- generic `world.json` semantics stay unchanged and custom UIs may layer
+  directed transfer rendering over the undirected relationship graph.
+
+Migration steps:
+
+1. Bump `farplane/manifest.json` `spec_version` and
+   `template_uses.farplane-framework` to `2.0.10`.
+2. Keep view language in entity Markdown and `.farplane/views.yaml`; do not add
+   project-specific generic frontmatter fields or authored event IDs.
+3. Add `transfer: source-to-linked` or `linked-to-source` only to tags that
+   prove an exchange with one linked counterparty.
+4. Re-run `farplane entities compile --project-root <project>` and update typed
+   view consumers for schema v3 `resource_flows` and
+   `counts.resource_flows`.
+5. Do not copy generated projections between projects; move canonical Markdown
+   plus view config and compile again.
+
 ## 2.0.9
 
 Date: 2026-07-22
@@ -96,6 +131,28 @@ Migration steps:
 4. Keep `session=<id>` optional and local; do not migrate or store turn IDs.
 5. Run `farplane crm compile --project-root <project>` and update consumers for
    schema-version-2 `questions`, `claims`, and `question_refs` fields.
+
+## 2.0.6
+
+Date: 2026-07-18
+
+Primary change: retire project-level file-change hook configuration in favor of
+the explicit ticket-completion boundary.
+
+Changed surfaces:
+
+- `farplane/hooks.json` is no longer a tracked or optional project file;
+- `farplane ticket close TASK-XXXX` owns successful terminal metadata, archive
+  movement, completion-event emission, and mining;
+- `.farplane/events/` and `.farplane/mine/` remain ignored runtime owners for
+  the explicit event, outbox, immutable run, and receipt.
+
+Migration steps:
+
+1. Remove `farplane/hooks.json` and any project manifest reference to it.
+2. Remove installed PostToolUse file-change/local-event hook adapters.
+3. Close successful tickets through `farplane ticket close TASK-XXXX` after
+   proof and review gates pass.
 
 ## 2.0.5
 

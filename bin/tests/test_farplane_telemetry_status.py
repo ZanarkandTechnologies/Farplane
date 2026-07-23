@@ -36,7 +36,7 @@ class FarplaneTelemetryStatusTests(unittest.TestCase):
                             {
                                 "event_type": "ticket_completion_learning",
                                 "skill_name": "goal-advisor",
-                                "hook_name": "PostToolUse",
+                                "hook_name": "",
                                 "ticket_id": "TASK-0160",
                                 "status": "complete",
                             }
@@ -58,7 +58,7 @@ class FarplaneTelemetryStatusTests(unittest.TestCase):
                 json.dumps(
                     {
                         "run_id": "a" * 64,
-                        "program_ref": "core:ticket-completion-learning@1.1.0",
+                        "program_ref": "core:ticket-completion-learning@1.2.0",
                         "status": "complete",
                     }
                 ),
@@ -80,21 +80,19 @@ class FarplaneTelemetryStatusTests(unittest.TestCase):
                         "summary": "One reusable proof improvement found.",
                         "material_findings": [
                             {
-                                "problem": "Completion proof was repeatedly incomplete.",
-                                "reusable_pattern": "Make proof routing explicit.",
-                                "proposed_solution": "Refine the owning skill.",
+                                "issue": "Completion proof was repeatedly incomplete.",
+                                "inefficiency": "The missing proof caused repeated review repair.",
+                                "proposed_improvement": "Refine the owning skill.",
                                 "owner_surface": "skill",
                                 "evidence_refs": ["tickets/TASK-0160/ticket.md", "turn-1"],
                                 "confidence": "medium",
-                                "recovery_eligible": False,
                             }
                         ],
                         "source_gaps": [],
-                        "escalation": {"decision": "dogfood", "reason_codes": ["skill_candidate"]},
                         "ticket_output": {
                             "decision": "created",
                             "ticket_id": "TASK-0161",
-                            "mode": "prove_or_reject",
+                            "mode": "improve_or_reject",
                             "status": "todo"
                         },
                     }
@@ -116,10 +114,9 @@ class FarplaneTelemetryStatusTests(unittest.TestCase):
         self.assertEqual(run["recommended_owner"], "skill")
         self.assertEqual(run["ticket_id"], "TASK-0160")
         self.assertEqual(run["finding_count"], 1)
-        self.assertFalse(run["recovery_eligible"])
         self.assertEqual(run["ticket_decision"], "created")
         self.assertEqual(run["projected_ticket_id"], "TASK-0161")
-        self.assertEqual(run["projected_ticket_mode"], "prove_or_reject")
+        self.assertEqual(run["projected_ticket_mode"], "improve_or_reject")
 
     def test_build_status_handles_empty_project(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

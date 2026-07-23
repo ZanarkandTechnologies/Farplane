@@ -4,7 +4,7 @@ ticket_id: TASK-XXXX
 status: draft
 created_at: 2026-06-12
 template_id: goal-loop-program
-template_version: "0.1.3"
+template_version: "0.1.4"
 feature_refs:
   - FEAT-0029
   - FEAT-0032
@@ -72,7 +72,7 @@ feature_refs:
 - `final_checkpoint:` before `stop_complete`, run or request QA evidence review
   and completion review when required by this proof policy, and satisfy
   `Docs Strategy` validation; write links back to `ticket.md`, `progress.md`,
-  and `artifacts/`
+  and `artifacts/`, then run `farplane ticket close TASK-XXXX`
 - `self_certification:` allowed only for tiny mechanical checks; prohibited for
   QA, visual QA, adversarial QA, review, demo, or completion claims
 

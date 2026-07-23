@@ -40,8 +40,9 @@ No lane folders. No hand-maintained board file. The ticket itself is the board c
    `awaiting_review` or `waiting_signal`
 4. on a non-ticket blocker, clear the claim, set `blocked`, and record details
    in `progress.md`
-5. after implementation, proof, review, and durable docs, set `done`, clear the
-   claim, and move the ticket to `tickets/archive/`
+5. after implementation, proof, review, and durable docs, run `farplane ticket
+   close TASK-XXXX`; it sets `done`, clears the claim, moves the ticket to
+   `tickets/archive/`, emits completion, and invokes mining
 
 ## Progress Surface Policy
 
@@ -449,6 +450,8 @@ For material Goal-backed work, put the final checkpoint in `QA Strategy`. Name
 the QA evidence review, completion review, reviewer TAS gate, or explicit
 `none` decision that must exist before completion. Do not rely on a Stop hook
 or transcript memory to discover missing QA after the agent claims done.
+After the checkpoint passes, use `farplane ticket close TASK-XXXX` for the
+terminal state and archive transition; do not hand-edit or manually move it.
 
 For UI-bearing, browser-driven, canvas/game, or otherwise agentically hard
 tickets, add `Agent Contract`.

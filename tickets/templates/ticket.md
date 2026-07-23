@@ -1,6 +1,6 @@
 ---
 template_id: ticket-template
-template_version: "0.2.2"
+template_version: "0.2.3"
 feature_refs:
   - FEAT-0007
   - FEAT-0008
@@ -52,18 +52,58 @@ first_principles_basis:
   non_goals:
 ```
 
+## Planned Skill Call
+
+Optional for Pulse-materialized tickets. This records the selected callable
+and its bound public inputs; the skill remains the sole workflow owner.
+
+```yaml
+call_id:
+skill_ref:
+arguments: {}
+area_id: # optional passive context only
+expected_artifact:
+```
+
+## Objective Contribution
+
+Required for every AI-planned or planner-materialized ticket. This is the one
+authored forecast. Name exactly one configured ultimate business outcome and
+classify the ticket's contribution honestly; do not repeat the target in Reward
+or trajectory prose.
+
+```yaml
+objective_contribution:
+  ultimate_kpi_id: revenue_usd | evidence_distribution_reach | active_subscriptions
+  contribution_type: outcome | enabler | guard
+  kpi_or_guard_id: direct outcome, leading metric, or protected guard
+  causal_mechanism:
+  expected_change:
+  forecast_basis:
+    kind: measured_baseline | cited_comparable | configured_threshold | source_gap
+    ref: # required except for source_gap
+    source_gap: # required for source_gap; omit numeric precision from expected_change
+  metric_provider:
+  signal_horizon:
+  check_in_at:
+```
+
 ## Reward
 Required for AI-planned tickets, Pulse-created tactical tickets,
 interval-planned tickets, experimental tickets, and other work where planning
 should show why the ticket matters. Manual/operator tickets may omit it. Keep
-this tiny; use a metric card in `program.md` only when the provider or proof
-route is unclear.
+this tiny. Pulse projects `kpi_id` and `expected_reward` from Objective
+Contribution rather than asking the planner to author the forecast twice.
+`outcome` projects the ultimate KPI. `enabler` and `guard` project only their
+leading or protected metric and cannot count as realized ultimate movement
+without later external ultimate-metric evidence.
 
 ```yaml
 kpi_rewards:
   - reward_id: accepted-harness-improvements-7d
-    kpi_id: accepted_harness_improvements
-    expected_reward: "one proof-backed harness improvement"
+    kpi_id: <ultimate_kpi_id for outcome; kpi_or_guard_id for enabler or guard>
+    projection_type: ultimate_outcome | enabler_result | guard_result
+    expected_reward: <mechanically copied from Objective Contribution.expected_change>
     # Use a timezone-bearing ISO-8601 timestamp for delayed check-in work.
     # Use the exact literal `unscheduled` when no check-in should be delegated.
     check_in_at: "2026-04-10T00:00:00Z"

@@ -49,9 +49,8 @@ own planner, worker pool, strategy file, or heartbeat.
 ## Quick Start
 
 1. Run `init-advisor` to create or migrate the project substrate.
-2. Read `farplane/harness.yaml` for identity, complete planning area records
-   and each canonical `areas.<area_id>.planner_instruction`, policy, capabilities,
-   and selected objectives/guards.
+2. Read `farplane/harness.yaml` for identity, the `planning.skill_refs`
+   allowlist, passive area context, authority, and selected objectives/guards.
 3. Read `farplane/metrics.yaml` for metric meaning, direction, freshness, and
    guard rules; read generated observations for current values.
 4. Read the ticket board for executable commitments and proof.
@@ -140,17 +139,19 @@ Ticket completion is the narrow event-driven exception, not another heartbeat:
 
 ```text
 ticket.completed
--> bounded learning report
--> strongest grounded finding
--> one deduped direct-fix or prove-or-reject ticket
+-> completed ticket packet + optional bounded task context
+-> strongest grounded issue / inefficiency / improvement
+-> one deduped ordinary improvement ticket or no issue
 ```
 
+The normal trigger is `farplane ticket close TASK-XXXX`, which completes and
+archives the active ticket, emits its completion event, and starts mining from
+that ID alone. `farplane mining ticket TASK-XXXX` remains the repair/backfill
+entry for an already completed ticket.
 The semantic reviewer remains read-only. Deterministic Core owns the local
-ticket write after schema, evidence, privacy, confidence, KPI, and dedupe gates.
-Declared KPI work enters `todo`; missing KPI remains `awaiting_review`.
-Only source-ticket and self-improvement KPI bindings qualify. A stable semantic
-key dedupes paraphrases, and a projected ticket's own completion is report-only
-to prevent recursive ticket supply.
+ticket write after schema, evidence, privacy, confidence, and dedupe gates. A
+stable semantic key dedupes paraphrases, and a projected ticket's own completion
+is report-only to prevent recursive ticket supply.
 
 ## Goal Packets And Check-Ins
 

@@ -3,7 +3,7 @@ title: "Work Pulse And Scheduled Context Sources"
 status: active
 owner: farplane-framework
 created_at: 2026-06-29
-updated_at: 2026-07-14
+updated_at: 2026-07-16
 framework_template_version: "0.3.0"
 tags:
   - farplane
@@ -33,54 +33,49 @@ work_pulse(project_root, wave_size, worker_limit, review_wip,
   -> reconciliation + ticket_deltas? + worker_handoffs? + review_requests?
    + dated_report + next_wake?
 
-plan_next_wave(harness_areas, objective_contract, metric_goals?, metric_state,
-               ticket_history_query, current_context?, world_memory?, taste_evidence?, wave_size,
-               planning_scope = global | reserved_area:<area_id>)
-  -> ranked_ticket_specs[0..wave_size] + gaps + duplicate_rejections
+plan_next_wave(planning_skill_refs, harness_areas?, objective_contract, metric_goals?, metric_state,
+               ticket_history_query, current_context?, world_memory?, taste_evidence?, wave_size)
+  -> ranked_skill_calls[0..wave_size] + gaps + duplicate_rejections
 
 interval_update(project_root, interval_id, review_window,
                 context_refs?, maintenance_ticket_limit = 1)
   -> dated_report + problems + candidate_interventions[] + recovery_tickets[]
 
-dogfood_review(project_root, window, active_experiments,
-               recent_archived_experiments, previous_report?, registry_refs?,
-               weekly_ticket_target = 5,
-               max_concurrent_live_delayed = 5)
-  -> dogfood_report + outcome_ledger + experiment_decisions
-   + admitted_experiment_specs[0..5] + pulse_ticket_paths[]
+dogfood_review(project_root, window, cutoff, previous_report?, registry_refs?)
+  -> dogfood_report + complete_outcome_ledger + portfolio_lessons
+   + opportunity_signals + planner_context_ref + source_gaps
 ```
 
-`harness_areas` is the complete `harness.areas` map, not a list of IDs. Every
-scope-relevant record contributes its canonical
-`harness.areas.<area_id>.icp` and
-`harness.areas.<area_id>.planner_instruction`; the planner returns one
-instruction-use receipt per applied area before ranking.
+`planning_skill_refs` is the only active work allowlist. Each referenced skill
+declares a `planner_contract` with required arguments; Plan Next Wave may bind
+those arguments but cannot invent a workflow. `harness_areas` contributes
+optional ICP, evidence-bar, capability, and metric context only.
 
-Feed Scout maintains one configured Markdown memory after each daily report.
-Pulse loads it once and passes relevant entry refs, freshness/confidence, source
-gaps, and a content hash. Outward-facing specs use those refs to name a
-baseline and intended belief/workflow delta; memory never overrides metric,
-ticket-history, authority, or admission evidence.
+Feed Scout maintains one configured Markdown World Memory after each daily
+report. Pulse loads it once and passes complete relevant source-backed facts,
+freshness/confidence, source refs, and source gaps. Outward-facing calls copy
+those facts into ticket `audience_context` beside the baseline and intended
+belief/workflow delta; World Memory never overrides metrics, ticket history,
+authority, or admission evidence.
 
 ## Ownership
 
 ```text
-plan_next_wave -> one planner; global ranking or explicit reserved-area allocation
+plan_next_wave -> one planner; normal global generation, ranking, and admission
 Feed Scout     -> source report + candidates + bounded direct recovery
 Daily/Weekly   -> problem reports + candidates + bounded direct recovery
-Dogfood        -> experiment review + reserved five-spec self-improvement wave
+Dogfood        -> complete self-improvement checkpoint + planner context
 operator       -> explicit tickets and corrections
-Work Pulse     -> exploratory admission, spec materialization, dispatch, execution,
+Work Pulse     -> exploratory admission, generic ticket materialization, dispatch, execution,
                   due reward check-ins, review requests, receipts
 worker         -> ticket/program/progress/proof execution
 ```
 
-Scheduled sources feed candidate context to the one planner. Dogfood is the
-explicit exception for reserved weekly self-improvement capacity: after its
-report it may request five admitted experiment specs and send them to Pulse's
-bounded materialization route. Other scheduled sources may create only bounded
-direct recovery tickets for evidenced existing failures with known fixes.
-None create their own worker/planner controllers. Direct operator,
+Scheduled sources feed context to the one planner. Dogfood has no reserved
+allocation or materialization path; its report is optional `current_context`
+for normal refill. Other scheduled sources may create only bounded direct
+recovery tickets for evidenced existing failures with known fixes. None create
+their own worker/planner controllers. Direct operator,
 customer, and incident tickets still enter the shared board as obligations.
 
 ## System Flow
@@ -92,10 +87,10 @@ flowchart LR
   classDef added fill:#dcfce7,stroke:#15803d,color:#111827
   classDef retired fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d,stroke-dasharray: 5 3
 
-  planner["plan_next_wave<br/>global or reserved-area specs"]:::added
+  planner["plan_next_wave<br/>global generation + ranking"]:::added
   feed["Feed Scout cron<br/>report + candidates"]:::keep
   interval["Daily / Weekly cron<br/>problems + candidates"]:::keep
-  dogfood["Dogfood cron<br/>report + reserved five-spec wave"]:::changed
+  dogfood["Dogfood cron<br/>complete portfolio checkpoint"]:::changed
   operator["operator tickets"]:::keep
   board["one ticket board"]:::added
   pulse["one Work Pulse heartbeat<br/>admit + execute + check in"]:::changed
@@ -122,8 +117,8 @@ Work Pulse performs five bounded phases in one wake:
 4. Request review once, mark the ticket awaiting review, release the worker,
    and execute the bounded binding-owned Telegram-to-phone chase ladder.
 5. When ready supply after dispatch is below its low watermark, ask one adaptive
-   `plan_next_wave` for a bounded globally ranked wave, materialize accepted
-   specs, and dispatch within remaining capacity. Human-active tickets stay unavailable
+   `plan_next_wave` for a bounded globally ranked wave, materialize admitted
+   skill calls, and dispatch within remaining capacity. Human-active tickets stay unavailable
    but do not consume Pulse worker capacity.
 
 ```text
@@ -141,7 +136,7 @@ whose only job is to check another ticket.
 
 | Parameter | Controls | Does not control |
 | --- | --- | --- |
-| `wave_size` | Maximum specs materialized in one low-watermark refill | Concurrent workers |
+| `wave_size` | Maximum skill calls materialized in one low-watermark refill | Concurrent workers |
 | `worker_limit` | Maximum Pulse-owned active worker threads | Human-active tickets, backlog, or experiment count |
 | `review_wip` | Maximum operator-facing area review pools; full pools shift selection toward unattended-safe work | Ticket identity or worker concurrency |
 | `review_chase_limit` | Maximum policy-derived Telegram/phone actions serviced in one wake | Review queue size |
@@ -168,26 +163,21 @@ Pulse remains the sole ticket materializer and dispatcher:
 
 ```text
 read latest N compact tickets globally
--> inspect lane/area/origin/KPI/Reward distribution
+-> inspect skill/area/origin/KPI/Reward distribution
 -> progressively filter or widen history only when needed
--> identify bottleneck or under-moving area
--> enumerate up to wave_size distinct candidates in every canonical lane
--> generate direct and evidence-gated self-improvement moves
+-> identify the strongest configured skill calls
+-> bind every skill's required arguments from current evidence
 -> rank by objective impact, bottleneck relief, compounding value, proof speed,
    cost, review load, and risk
--> crystallize 0..wave_size executable specs
+-> admit 0..wave_size executable skill calls
 ```
 
-In global scope, the planner records a candidate or a concrete no-candidate
-reason for every objective-relevant planning area. An explicit scheduled
-reserved-area allocation uses the same planner and global-first history but
-ranks only that selected area. Both modes apply the canonical per-area
-`planner_instruction` from `farplane/harness.yaml`; callers do not reconstruct
-area policy. Areas remain retrieval lenses, not separate planners. Optional
+The planner compares every configured planning skill in one global ranking.
+Areas remain optional retrieval lenses, not planners or allocation scopes. Optional
 metric-bound goals add target/date urgency and retire from prioritization when
 the current metric reaches the target in its configured direction. Avoidable setup is consolidated into
-at most one first-exemplar spec, and every other ordinary admitted spec must
-produce an independently reviewable artifact with a direct use path. Quality,
+inside a useful first-exemplar call, and every admitted call must produce an
+independently reviewable artifact with a direct use path. Quality,
 guards, authority, dedupe, and interference remain hard gates; artifact count
 never justifies filler.
 
@@ -217,8 +207,8 @@ ticket's publication, account, or credential restrictions; notifications grant
 no authority beyond asking Kenji for the recorded review decision.
 
 The planner stays in one context and does not spawn area planners.
-Self-improvement can compete globally or receive explicit weekly reserved
-capacity, but every admitted move still needs an observed failure, Reward
+Self-improvement competes globally through its configured skill, and every
+admitted move still needs an observed failure, Reward
 outcome, health gap, guard regression, or toy/eval proof.
 
 ## Scheduled Context Sources
@@ -251,20 +241,17 @@ native Goals, or workers.
 
 ### Dogfood Self-Improvement
 
-Dogfood Review is the weekly self-improvement portfolio learner and reserved
-allocator. It reads
-active Goal Packets, recent archived packets, the
-previous Dogfood report, Core ticket-history Reward receipts, harness-health
-signals, and feature/system tracking evidence.
-It writes a dated report containing the derived outcome ledger, active/pending
-portfolio, due-but-unscored gaps, transfer candidates, rejected patterns,
-allocation, and ranked experiment candidates before planning new work.
+Dogfood Review is the weekly self-improvement portfolio reducer. It pages
+through all exact `self_improvement` admission receipts through a cutoff,
+includes every still-live earlier ticket, and reads each packet's Reward,
+progress, check-in, proof, and review evidence. It writes a dated checkpoint
+containing the complete outcome ledger, live work, source gaps,
+portfolio-selection lessons, and qualified/deprioritized opportunity signals.
 
-It passes the complete `harness.areas.self_improvement` record, applies
-`harness.areas.self_improvement.planner_instruction`, and calls
-`plan-next-wave` with `reserved_area:self_improvement` and target wave size
-five. Pulse's bounded materialization route writes admitted ticket paths;
-later ordinary Pulse wakes dispatch workers and compile or resume Goal Packets:
+The report is bounded `current_context` for normal Plan Next Wave. Dogfood does
+not create skill calls/tickets or call Pulse materialization. Later ordinary Pulse
+wakes may use that context, rank configured skill calls, materialize admitted calls,
+and dispatch or resume Goal Packets:
 
 ```text
 tickets/TASK-EXPERIMENT/
@@ -274,10 +261,8 @@ tickets/TASK-EXPERIMENT/
   artifacts/     # baseline, candidates, QA, review
 ```
 
-Initial policy targets five new weekly tickets, allows at most five concurrent
-live delayed experiments, and keeps one active experiment per attributable
-surface. Active WIP remains visible for conflict, delayed-load, dedupe, and
-review decisions but does not subtract from unrelated weekly allocation.
+Read scope is complete and cutoff-bound. Admission remains capacity-bound in
+normal Plan Next Wave; there is no weekly self-improvement ticket target.
 
 Dogfood does not execute or check in experiments. Work Pulse derives due rows,
 resumes the original Goal Packet, and gives the worker `ticket.md`,
@@ -288,8 +273,8 @@ or independently score the experiment policy.
 ### Human Feedback And Maintenance
 
 Human-feedback improvement is a normal self-improvement Goal Packet, not a
-separate controller or schedule. Dogfood may admit it through the reserved
-planner scope, Pulse materializes and later executes it,
+separate controller or schedule. Normal Plan Next Wave may admit it using the
+Dogfood checkpoint as context; Pulse materializes and later executes it,
 and ticket-owned review state waits without holding a worker. Monthly registry
 consolidation and other low-frequency jobs are cron automations and do not
 dispatch ticket work directly unless their explicit skill contract permits
@@ -299,14 +284,14 @@ bounded ticket creation.
 
 | State | Owner |
 | --- | --- |
-| Identity, planning areas/instructions, policy, capabilities, selected metric refs | `farplane/harness.yaml` |
+| Identity, planning skill allowlist, passive areas/ICP, policy, selected metric refs | `farplane/harness.yaml` |
 | Metric direction, freshness, and guard rules | `farplane/metrics.yaml` |
 | Executable commitment, Reward, QA, review | `tickets/TASK-*/ticket.md` and `artifacts/` |
 | Experiment-local policy and history | ticket `program.md`, `progress.md`, Reward, and artifacts |
 | Fast reconciliation/dispatch/check-in receipt | dated Pulse report |
 | Problems and maintenance candidates | dated Interval report |
 | Source opportunities | dated Feed Scout report |
-| Cross-ticket outcome ledger and experiment candidates | dated Dogfood report |
+| Cross-ticket outcome ledger, portfolio lessons, and opportunity signals | dated Dogfood report |
 | Desired cadence and prompts | `farplane/automations.toml` |
 | Live cadence/runtime memory | Codex automation store |
 

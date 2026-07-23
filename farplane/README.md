@@ -27,7 +27,6 @@ farplane/
   metrics.yaml     # metric definitions, direction, freshness, guard rules
   automations.toml # one Work Pulse heartbeat plus separate scheduled sources
   bindings.yaml    # non-secret project IDs and provider coordinates
-  hooks.json       # declarative Farplane-native hook configuration
   pm.json          # optional UI thread manifest for one visual project PM
 
 .agents/
@@ -40,6 +39,8 @@ Runtime state lives under `.farplane/` and is intentionally ignored by git.
 ```text
 .farplane/
   README.md
+  views.yaml
+  entities/
   state/ticket-thread-associations.jsonl
   automation/
   content/ledger.jsonl
@@ -87,13 +88,12 @@ path-derived `ref` frontmatter to existing report Markdown before rebuilding
 the index. The standard lives in
 [docs/farplane-framework/reporting.md](../docs/farplane-framework/reporting.md).
 
-Core file events use `farplane/hooks.json` for capture patterns and
-`farplane/bindings.yaml#event_routes` for event-to-program routing. Events,
-outbox state, frozen run inputs, lean reports, and verdicts remain ignored
-under `.farplane/`. The Codex hook process captures the event/outbox row first,
-then launches the fixed local Core drain subprocess; the child applies all
-matching routes and writes immutable runs. Farplane UI may edit routes and
-render runs through the Core CLI but does not own mining semantics.
+`farplane ticket close TASK-XXXX` completes and archives a ticket, then writes
+its explicit completion event. `farplane/bindings.yaml#event_routes` maps that
+event to an immutable mining program. Events, outbox state, frozen run inputs,
+machine receipts, and verdicts remain ignored under `.farplane/`. Farplane UI
+may edit routes and render runs through the Core CLI but does not own mining
+semantics.
 
 See [docs/farplane-framework/project-files.md](../docs/farplane-framework/project-files.md).
 
@@ -110,5 +110,3 @@ See [docs/farplane-framework/project-files.md](../docs/farplane-framework/projec
   truth, duplicate rows, owner drift, and generated-output freshness.
 - Human-feedback improvements are ordinary Dogfood-created Goal Packets;
   Work Pulse executes them and ticket review state waits without a worker.
-  views.yaml
-  entities/

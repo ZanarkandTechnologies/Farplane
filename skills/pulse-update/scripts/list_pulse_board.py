@@ -554,16 +554,30 @@ def planner_area_by_ticket(root: Path) -> dict[str, str]:
         root / ".farplane" / "automation" / "decisions.jsonl"
     )
     for decision in decision_rows:
-        specs = decision.get("admitted_specs")
-        if not isinstance(specs, list):
-            continue
-        for spec in specs:
-            if not isinstance(spec, dict):
-                continue
-            ticket_id = str(spec.get("ticket_id") or "").strip()
-            area_id = str(spec.get("area_id") or "").strip()
-            if ticket_id and area_id:
-                resolved[ticket_id] = area_id
+        receipt = (
+            decision.get("pulse_receipt")
+            if isinstance(decision.get("pulse_receipt"), dict)
+            else {}
+        )
+        planner_call = (
+            receipt.get("planner_call")
+            if isinstance(receipt.get("planner_call"), dict)
+            else {}
+        )
+        for owner in (decision, receipt, planner_call):
+            # admitted_specs is a historical projection only. New decisions
+            # write admitted_skill_calls and may omit passive area context.
+            for key in ("admitted_specs", "admitted_skill_calls"):
+                rows = owner.get(key)
+                if not isinstance(rows, list):
+                    continue
+                for admission in rows:
+                    if not isinstance(admission, dict):
+                        continue
+                    ticket_id = str(admission.get("ticket_id") or "").strip()
+                    area_id = str(admission.get("area_id") or "").strip()
+                    if ticket_id and area_id:
+                        resolved[ticket_id] = area_id
     return resolved
 
 

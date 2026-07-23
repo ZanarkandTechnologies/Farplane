@@ -1,8 +1,8 @@
 {
   "schema": "farplane_project",
-  "spec_version": "2.0.9",
+  "spec_version": "2.0.10",
   "template_uses": {
-    "farplane-framework": "2.0.9"
+    "farplane-framework": "2.0.10"
   },
   "project": {
     "name": "Farplane",
@@ -56,7 +56,6 @@
   },
   "optional": {
     "tracked": [
-      "farplane/hooks.json",
       "farplane/pm.json",
       ".githooks/README.md",
       ".githooks/pre-commit",
@@ -79,6 +78,7 @@
         "docs/farplane-framework/hooks-and-runtime.md",
         "docs/farplane-framework/harness-maintenance.md",
         "docs/farplane-framework/entities.md",
+        "docs/farplane-framework/entity-view-projection-standard.md",
         "docs/farplane-framework/reporting.md"
       ],
       "exclude": [
