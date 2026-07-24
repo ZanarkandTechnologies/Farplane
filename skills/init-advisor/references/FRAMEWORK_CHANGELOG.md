@@ -3,10 +3,42 @@ title: Farplane Framework Changelog
 owner: init-advisor
 status: active
 kind: framework-changelog
-updated_at: 2026-07-22
+updated_at: 2026-07-24
 ---
 
 # Farplane Framework Changelog
+
+## 2.0.11
+
+Date: 2026-07-24
+
+Primary change: give Feed Scout one flexible inherited `instructions` field for
+each tracked entity/source while preserving fixed proposal and safety gates.
+
+Changed surfaces:
+
+- `instructions` replaces `interest_prompt` and specialized discovery/update
+  prompt fields;
+- entity instructions are inherited and source instructions refine the task;
+- source keys identify source type, so source records no longer repeat `kind`;
+- exact canonical-key dedupe stays separate from conservative claim-relative
+  primary/derivative judgment;
+- guest and show-note source nominations reuse the proposal ledger, stop after
+  one hop, and cannot mutate config during the run;
+- source additions, entity/thesis changes, and product feature ideas route to
+  their existing review boundaries.
+
+Migration steps:
+
+1. Bump `farplane/manifest.json` `spec_version` and
+   `template_uses.farplane-framework` to `2.0.11`.
+2. Bump `farplane/bindings.yaml` `framework_template_version` to `0.5.0`.
+3. Rename Feed Scout entity/source `interest_prompt` fields to `instructions`;
+   do not add `source_discovery_prompt` or action-permission flags.
+4. Remove `kind` from each `owned_sources` record and keep source identity in
+   the source key plus its URL/handle/repo coordinates.
+5. Validate the project and review source proposals through the existing
+   proposal ledger before changing configuration.
 
 ## 2.0.10
 

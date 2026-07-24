@@ -2,6 +2,45 @@
   "skill_name": "feed-scout",
   "evals": [
     {
+      "id": "feed_scout_executes_inherited_source_instructions_without_granting_authority",
+      "prompt": "An entity instruction says to track product changes and propose useful features. Its podcast source instruction says to identify valuable guests and nominate verified first-party sources. What does Feed Scout execute and what may it update?",
+      "expected_output": "Combines the entity and source instructions into the source task; Extracts and ranks product evidence, identifies valuable guests, and may draft source, entity/thesis, or feature proposals; Routes source additions to the existing proposal ledger, entity/thesis evidence to promotion review, and feature ideas to planner candidates; Does not mutate config, canonical entities, or tickets merely because instructions request a change; Preserves privacy, spend, authority, and review gates",
+      "files": ["farplane/bindings.yaml", "skills/feed-scout/references/data-model.md"],
+      "assertions": [
+        "Inherits entity instructions and refines them with source instructions",
+        "Treats instructions as task intent rather than write authority",
+        "Routes each proposal type through its fixed review boundary",
+        "Preserves privacy, spend, authority, and review gates"
+      ],
+      "metadata": {"farplane": {"title": "Feed Scout executes flexible source instructions safely", "tags": ["feed-scout", "instructions", "authority", "hardcase"], "hardcase": true, "difficulty": "high"}}
+    },
+    {
+      "id": "feed_scout_preserves_distinct_derivative_signal",
+      "prompt": "A founder's X post announces a launch. A newsletter repeats the launch, while a podcast includes the founder's original financing explanation and a live demo. How should Feed Scout dedupe and extract these sources?",
+      "expected_output": "Uses canonical URL keys only for exact item identity; Treats source redundancy as a separate claim-relative judgment; Prefers the founder's X post for the announcement claim and skips full newsletter extraction when it adds no distinct evidence; Retains the podcast because original testimony and demonstration are channel-native evidence; Reports the source-family relation, reason, and confidence; Uses unknown rather than suppression when provenance is ambiguous",
+      "files": ["skills/feed-scout/references/workflow.md"],
+      "assertions": [
+        "Separates exact URL dedupe from semantic source redundancy",
+        "Prefers first-party evidence for the claim",
+        "Preserves channel-native testimony or demonstration",
+        "Does not suppress ambiguous provenance"
+      ],
+      "metadata": {"farplane": {"title": "Feed Scout avoids redundant acquisition without losing channel signal", "tags": ["feed-scout", "dedupe", "primary-source", "hardcase"], "hardcase": true, "difficulty": "high"}}
+    },
+    {
+      "id": "feed_scout_guest_source_nomination_is_one_hop",
+      "prompt": "A configured podcast names a new guest and links the guest's official site. The same site was nominated by another episode yesterday. The source instructions ask Feed Scout to discover valuable guest sources. What happens?",
+      "expected_output": "Uses public first-party evidence to verify ownership; Resolves the candidate against configured sources, the ingestion ledger, and the existing proposal ledger; Merges the new episode evidence and scout run into the existing canonical-key proposal instead of creating a duplicate; Does not add the site to configuration or fetch it recursively in this run; Leaves adoption to proposal-ledger review and preserves spend/privacy gates",
+      "files": ["skills/feed-scout/templates/proposal-db.md", "skills/feed-scout/references/workflow.md"],
+      "assertions": [
+        "Verifies first-party ownership before recommendation",
+        "Reuses the canonical-key proposal row",
+        "Stops discovery after one hop",
+        "Does not mutate configuration"
+      ],
+      "metadata": {"farplane": {"title": "Podcast guests nominate deduped one-hop source proposals", "tags": ["feed-scout", "podcast", "source-discovery", "hardcase"], "hardcase": true, "difficulty": "high"}}
+    },
+    {
       "id": "feed_scout_report_only_when_candidates_fail",
       "prompt": "A bounded Feed Scout run finds five new articles, but two duplicate active tickets and the others lack executable scope or proof. What happens?",
       "expected_output": "Normalizes, canonical-key dedupes, extracts, and evaluates the configured sources; Writes the dated Feed Scout report with Core report frontmatter before candidate handoff; Records duplicate, scope-missing, and proof-missing candidates in the report; Creates or updates no tickets or Notion tasks; Leaves global ranking and proactive admission to Work Pulse; Does not invoke Interval, Goal, Pulse, workers, implementation, publication, or outreach",
@@ -99,14 +138,14 @@
     },
     {
       "id": "feed_scout_updates_persistent_icp_world_memory",
-      "prompt": "A bounded daily Feed Scout run has written its dated report. The configured memory already contains one older relevant trend, one duplicate observation, and canonical ICP profiles. Today's sources add a new harness-engineering concern and weaken the old trend's confidence. What happens before candidate handoff?",
-      "expected_output": "Reads the existing memory and complete harness area ICP records; Re-renders canonical ICP fields without letting sources redefine them; Updates one Markdown file in place by merging the duplicate, preserving useful context, and revising the old trend confidence and last-observed evidence; Keeps exactly the ICPs, Trends, Other Notable Things, and Source Gaps sections with no daily snapshot or monthly timeline; Validates memory and returns changed headings, updated_at, source refs, and validation status; Requires candidate ICP, baseline/default, belief or behavior delta, and memory/source refs before handoff",
-      "files": ["farplane/harness.yaml", "farplane/bindings.yaml", "skills/feed-scout/templates/memory.md"],
+      "prompt": "A bounded daily Feed Scout run has written its dated report. The configured World Memory already contains one older relevant trend, one duplicate observation, and canonical ICP profiles. Today's sources add a new harness-engineering concern and weaken the old trend's confidence. What happens before candidate handoff?",
+      "expected_output": "Reads the existing World Memory and complete harness area ICP records; Re-renders area IDs and ICP labels from harness.yaml without letting sources redefine them; Updates one World Memory Markdown file in place by merging the duplicate, preserving useful context, revising the old trend confidence and last-observed evidence, and keeping the live file at or under 100 non-empty lines with simple bullet syntax; Keeps exactly the ICPs, Trends, Other Notable Things, and Source Gaps sections with no daily snapshot or monthly timeline; Validates World Memory and returns changed headings, updated_at, source refs, line-cap status, and validation status; Requires candidate ICP, baseline/default, belief or behavior delta, and complete source-backed facts with source refs before handoff",
+      "files": ["farplane/harness.yaml", "farplane/bindings.yaml", "skills/feed-scout/templates/world-memory.md"],
       "assertions": [
-        "Updates one persistent Markdown memory in place after the report",
+        "Updates one persistent World Memory Markdown file in place after the report",
         "Keeps canonical ICP meaning owned by harness.yaml",
         "Merges duplicates and revises current synthesis without creating a timeline",
-        "Validates the memory and emits a provenance-bearing update receipt",
+        "Validates World Memory and emits a provenance-bearing update receipt",
         "Rejects shallow candidate handoff without ICP, baseline, decision delta, and evidence refs"
       ],
       "metadata": {"farplane": {"title": "Feed Scout maintains compact ICP and world memory", "tags": ["feed-scout", "memory", "icp", "provenance", "hardcase"], "hardcase": true, "difficulty": "high", "benchmark_value": "Proves persistent context stays compact, canonical, and usable by planning"}}

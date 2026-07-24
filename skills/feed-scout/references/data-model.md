@@ -22,7 +22,7 @@ FeedScoutConfig {
   daily_feed_root: string
   ledger: string
   proposal_ledger: string
-  memory: string
+  world_memory: string
   destination: "local_ledger" | "local_inbox" | "notion_tasks"
   write_policy: "local_first" | "report_only"
   ui?: {
@@ -38,7 +38,7 @@ FeedEntity {
   kind: "person" | "organization" | "project" | string
   tags: string[]
   enabled: boolean
-  interest_prompt?: string
+  instructions?: string
   owned_sources: map<string, TrackedProfile | TrackedHarnessResource | SourceRef>
   search_entity_on_platform?: ("x" | "web" | "reddit" | "trustpilot" | "github" | string)[]
   search_queries?: string[]
@@ -48,7 +48,7 @@ FeedEntity {
 Rules:
 
 - Config paths are project-relative unless absolute.
-- `memory` points to one Markdown file updated in place. It is current
+- `world_memory` points to one World Memory Markdown file updated in place. It is current
   synthesis, not a daily/monthly ledger or snapshot timeline.
 - Key sources by the person, organization, or project the operator wants to
   track, for example `entities.theo-ping.sources.instagram`, so UI can render
@@ -57,10 +57,12 @@ Rules:
 - `entities.<entity_id>.owned_sources.<source_id>` is the high-signal source
   list for posts created by the entity. Keep it to official accounts, docs,
   repos, feeds, sites, or creator-owned surfaces.
-- `interest_prompt` is a plain operator preference prompt. The entity-level
-  prompt applies to every source under the entity; source-level prompts refine
-  that source. Use it to steer extraction, ranking, `why_care_today`, and the
-  daily report summary without adding a ranking ontology.
+- `instructions` is one plain operator task prompt. Entity instructions apply
+  to every source under the entity; source instructions refine the inherited
+  task. It may describe what to extract or prioritize, which first-party
+  sources to discover, and which source, entity/thesis, or feature changes to
+  propose. It does not grant update authority: fixed Feed Scout policy routes
+  each proposal through its existing review boundary.
 - `entities.<entity_id>.search_entity_on_platform` is the high-signal mention
   search list for posts about the entity. Keep queries exact enough to avoid
   broad web drift.
@@ -73,16 +75,20 @@ Rules:
 
 ```text
 SourceRef {
-  kind?: string
   url?: string
   handle?: string
   repo?: string
   org?: string
   user?: string
   fetch_method?: string
-  interest_prompt?: string
+  instructions?: string
 }
 ```
+
+The `owned_sources` key is the source identity and type hint, for example
+`website`, `x_founder`, `github_repo`, or `youtube`. Do not repeat that
+information in a `kind` field. URL/handle/repo coordinates and Feed Scout's
+platform routing determine acquisition.
 
 ```text
 TrackedEntity {
@@ -176,7 +182,7 @@ ContentItem {
     reason?: string
   }
   rank: number
-  interest_prompt_ref?: {
+  instructions_ref?: {
     entity_hash?: string
     source_hash?: string
     effective_hash: string
@@ -222,9 +228,9 @@ Daily feed ranking rules:
 - Items with `date_basis: "observed_at"` or `"unknown"` should be excluded
   from the main daily feed unless a later extraction proves a source-published
   date or snapshot diff inside the review window.
-- The effective operator interest prompt should steer extraction and ranking.
-  Emit `interest_prompt_ref` when configured so debugging can prove which
-  entity/source lens shaped the card without dumping long prompts into the UI.
+- The effective operator instructions should steer source work and ranking.
+  Emit `instructions_ref` when configured so debugging can prove which
+  entity/source task shaped the card without dumping long prompts into the UI.
 - Main daily feed output should include only rows that passed the daily
   significance gate. Use `rank` to order the few surviving cards; do not add a
   separate `interesting` boolean or `interesting_item_count`.
@@ -301,17 +307,17 @@ DailyFeedFile {
 }
 ```
 
-## FeedScoutMemory
+## FeedScoutWorldMemory
 
-The memory file is the compact retrieval surface between daily Feed Scout runs
+The World Memory file is the compact retrieval surface between daily Feed Scout runs
 and downstream planning. It uses Markdown because the content is
 judgment-shaped, but deterministic headings and frontmatter keep the contract
 inspectable.
 
 ```text
-FeedScoutMemory {
+FeedScoutWorldMemory {
   frontmatter: {
-    kind: "feed-scout-memory"
+    kind: "feed-scout-world-memory"
     status: "active"
     updated_at: datetime
     canonical_icp_ref: "farplane/harness.yaml#areas"
@@ -319,48 +325,43 @@ FeedScoutMemory {
     last_report_ref?: string
   }
   sections: {
-    ICPs: AreaIcpMemory[]
-    Trends: TrendMemory[]
-    "Other Notable Things": NotableMemory[]
+    ICPs: CompactAreaBullet[]
+    Trends: CompactTrendBullet[]
+    "Other Notable Things": CompactNotableBullet[]
     "Source Gaps": string[]
   }
+  max_non_empty_lines: 100
 }
 
-AreaIcpMemory {
-  area_id: string
-  canonical_ref: string
-  canonical_profile: object
-  current_concerns: string[]
-  current_language: string[]
-  source_refs: string[]
+CompactAreaBullet {
+  syntax: "- `<area_id>` — `<ICP label>` | ref=`farplane/harness.yaml#areas.<area_id>.icp` | concerns=<short> | language=<short> | refs=<refs>"
 }
 
-TrendMemory {
-  title: string
-  icp_refs: string[]
-  current_synthesis: string
-  why_it_matters: string
-  baseline_or_default: string
-  last_observed: date
-  confidence: "low" | "medium" | "high"
-  source_refs: string[]
-  candidate_experiment_shapes: string[]
+CompactTrendBullet {
+  syntax: "- observed|analogous|hypothesis|source_gap | icp=<area_ids> | claim=<one claim> | use=<causal use> | seen=<YYYY-MM-DD> | conf=<low|medium|high> | refs=<refs>"
+}
+
+CompactNotableBullet {
+  syntax: "- observed|analogous|hypothesis|source_gap | type=<type> | icp=<area_ids> | note=<one observation> | use=<safe use> | seen=<YYYY-MM-DD> | refs=<refs>"
 }
 ```
 
 Rules:
 
-- `harness.areas.<area_id>.icp` is canonical. A daily run re-renders those
-  fields and may update only observed concerns, language, trends, notable
-  things, source gaps, and provenance.
+- `harness.areas.<area_id>.icp` is canonical. World Memory renders only area
+  IDs, labels, current concerns/language, trends, notable things, source gaps,
+  and provenance; full canonical profile text stays in `harness.yaml`.
 - Update existing concepts in place, merge duplicates, and remove or replace
   superseded synthesis. Do not append dated run sections or preserve snapshots.
 - Stale facts may remain when useful, but `last_observed`, confidence, and
   source gaps must make their status honest.
-- Memory is optional evidence. It never overrides metrics, ticket history,
+- Keep the live file at or under 100 non-empty lines. Demote detail to the
+  dated Feed Scout report when memory pressure appears.
+- World Memory is optional evidence. It never overrides metrics, ticket history,
   authority, or the planner's admission gates.
-- Validate the final file with `scripts/validate_memory.py`; the helper checks
-  structure and provenance affordances but does not author or rank content.
+- Validate the final file with `scripts/validate_world_memory.py`; the helper checks
+  line cap, simple syntax, structure, and provenance affordances but does not
+  author or rank content.
 
 ## ProposalDraft
 

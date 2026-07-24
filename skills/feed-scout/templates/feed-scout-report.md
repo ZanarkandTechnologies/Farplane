@@ -27,10 +27,15 @@ candidate_handoff:
 | Key | Source / date basis | Today-specific delta | Evidence | Signal | Route |
 | --- | --- | --- | --- | --- | --- |
 
-## Dedupe And Extraction
+## Dedupe, Source Redundancy, And Extraction
 
-| Item | Canonical key | Prior occurrence / active ticket | Extraction path | Result |
-| --- | --- | --- | --- | --- |
+| Item | Canonical key | Exact duplicate / source-family relation | Distinct channel signal | Extraction path | Result |
+| --- | --- | --- | --- | --- | --- |
+
+## Instruction-Driven Proposals
+
+| Source | Effective instruction ref | Proposal type | Candidate | Existing ledger/config match | Review route |
+| --- | --- | --- | --- | --- | --- |
 
 ## Ticket Candidates
 

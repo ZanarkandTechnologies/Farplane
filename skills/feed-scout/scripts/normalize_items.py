@@ -40,6 +40,7 @@ PASSTHROUGH_FIELDS = {
     "evidence_refs",
     "interest_rank",
     "interest_signal",
+    "instructions_ref",
     "date_basis",
     "daily_eligible",
     "novelty",

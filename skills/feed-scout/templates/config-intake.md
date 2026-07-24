@@ -1,41 +1,31 @@
 # Feed Scout Configure Intake
 
-Minimum useful input:
+Minimum useful project YAML:
 
-```json
-{
-  "profiles": [
-    {
-      "url": "https://x.com/example",
-      "content_kinds": ["post", "thread"],
-      "tags": ["agents", "harness"]
-    },
-    {
-      "url": "https://www.youtube.com/@anthropic-ai",
-      "content_kinds": ["video"]
-    },
-    {
-      "url": "https://cursor.com/blog",
-      "content_kinds": ["article"]
-    }
-  ],
-  "defaults": {
-    "cadence": "daily",
-    "min_signal": "high",
-    "proposal_destination": "local_ledger"
-  },
-  "local_surfaces": {
-    "profiles": ".farplane/feed-scout/profiles.jsonl",
-    "entities": ".farplane/feed-scout/entities.jsonl",
-    "resources": ".farplane/feed-scout/resources.jsonl",
-    "ingestion_ledger": ".farplane/feed-scout/ingestion-ledger.jsonl",
-    "proposal_ledger": ".farplane/feed-scout/proposals.jsonl"
-  }
-}
+```yaml
+feed_scout:
+  entities:
+    example-founder:
+      name: Example Founder
+      kind: person
+      instructions: >-
+        Track concrete product and operating-model changes. Propose valuable
+        product features as planner candidates.
+      owned_sources:
+        x:
+          url: https://x.com/example
+          instructions: Prefer original announcements and demonstrations.
+        podcast:
+          url: https://example.fm/feed.xml
+          instructions: >-
+            For new episodes, nominate at most three verified first-party
+            sources for high-value guests. Do not follow nominees recursively.
 ```
 
-Only `url` is always required per profile. `content_kinds` and `tags` are
-routing hints, not identity. Dedupe is URL-key based.
+The source key carries source identity/type, so do not repeat it with `kind`.
+Entity instructions are inherited and source instructions refine them. Exact
+item dedupe remains canonical-URL-key based; source-level semantic redundancy
+is a separate evidence-bearing judgment.
 
 Keep the destination local unless live Notion routing is explicitly configured
 and readback can verify required `Project` and `Areas` relations.

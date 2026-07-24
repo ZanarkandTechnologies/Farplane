@@ -2,7 +2,7 @@ kind: project-bindings
 status: draft
 created_at: TODO
 updated_at: TODO
-framework_template_version: "0.4.0"
+framework_template_version: "0.5.0"
 owner: project-pm-automation
 project:
   id: TODO
@@ -54,7 +54,19 @@ feed_scout:
   world_memory: .farplane/feed-scout/world-memory.md
   destination: local_ledger
   write_policy: local_first
-  entities: {}
+  entities:
+    example:
+      name: TODO
+      kind: TODO
+      instructions: >-
+        Describe what Feed Scout should extract, prioritize, discover, and
+        propose for this entity. This does not grant write authority.
+      owned_sources:
+        website:
+          url: https://example.com
+          instructions: >-
+            Refine the entity task for this source. New source, entity/thesis,
+            and feature ideas remain reviewable proposals.
 # Metric acquisition prompts live in farplane/metrics.yaml; bindings retain coordinates only.
 event_routes:
   - route_id: ticket-completion-learning-v1

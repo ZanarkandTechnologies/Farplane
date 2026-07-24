@@ -259,6 +259,56 @@ integrations:
     )
 
 
+def test_bindings_accept_feed_scout_instructions_without_source_kind(tmp_path: Path) -> None:
+    farplane = tmp_path / "farplane"
+    farplane.mkdir()
+    bindings = farplane / "bindings.yaml"
+    bindings.write_text(
+        '''kind: project-bindings
+framework_template_version: "0.5.0"
+project: {}
+feed_scout:
+  entities:
+    founder:
+      instructions: Track launches and propose useful features.
+      owned_sources:
+        podcast:
+          url: https://example.com/feed.xml
+          instructions: Nominate verified first-party guest sources.
+''',
+        encoding="utf-8",
+    )
+
+    assert validate_bindings_file(tmp_path, bindings) == []
+
+
+def test_bindings_reject_retired_feed_scout_prompts_and_source_kind(tmp_path: Path) -> None:
+    farplane = tmp_path / "farplane"
+    farplane.mkdir()
+    bindings = farplane / "bindings.yaml"
+    bindings.write_text(
+        '''kind: project-bindings
+framework_template_version: "0.5.0"
+project: {}
+feed_scout:
+  entities:
+    founder:
+      interest_prompt: Track launches.
+      owned_sources:
+        podcast:
+          kind: podcast_feed
+          url: https://example.com/feed.xml
+          source_discovery_prompt: Find guests.
+''',
+        encoding="utf-8",
+    )
+
+    errors = validate_bindings_file(tmp_path, bindings)
+
+    assert any("uses a retired prompt field; use instructions" in error for error in errors)
+    assert any(".kind is redundant" in error for error in errors)
+
+
 def test_missing_metrics_file_fails(tmp_path: Path) -> None:
     farplane = tmp_path / "farplane"
     farplane.mkdir()

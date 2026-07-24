@@ -30,7 +30,7 @@ ranks opportunities, uncertain fixes, and experiments globally.
 
 Daily feed items should answer `why_care_today` and include `today_delta`,
 `novelty`, `actionability`, `source_snapshot`, optional bookmark-card `embed`,
-and `interest_prompt_ref` when entity/source prompts are configured.
+and `instructions_ref` when entity/source instructions are configured.
 
 Default local surfaces for project automations:
 

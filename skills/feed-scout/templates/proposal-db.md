@@ -27,6 +27,11 @@ Uniqueness rule: one canonical URL/key should map to one ledger row. If the
 same content is discovered from several profiles, append profile relations
 instead of creating duplicate rows.
 
+Source candidates use this same ledger. Duplicate guest/show-note nominations
+merge source refs and scout runs into the existing canonical-key row. A source
+candidate cannot become configured or nominate another source until a human
+review accepts it in a later workflow.
+
 ## Live Tasks Projection
 
 This ledger can point to a live Notion Tasks ticket, but it is not itself the

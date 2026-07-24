@@ -3,7 +3,7 @@ title: "Source And Sidecar Systems"
 status: active
 owner: farplane-framework
 created_at: 2026-06-26
-updated_at: 2026-07-22
+updated_at: 2026-07-24
 tags:
   - farplane
   - systems
@@ -13,6 +13,7 @@ refs:
   - skills/harness-scout/SKILL.md
   - skills/feed-scout/SKILL.md
   - docs/features/FEAT-0072-persistent-icp-and-world-memory.md
+  - docs/features/FEAT-0074-feed-scout-source-instructions.md
   - docs/systems/content-production.md
 system_record_json: |
   {
@@ -25,16 +26,18 @@ system_record_json: |
     "feature_refs": [
       "FEAT-0011",
       "FEAT-0025",
-      "FEAT-0072"
+      "FEAT-0072",
+      "FEAT-0074"
     ],
     "refs": [
       "docs/sources/registry.jsonl",
       "skills/harness-scout/SKILL.md",
       "skills/feed-scout/SKILL.md",
       "docs/features/FEAT-0072-persistent-icp-and-world-memory.md",
+      "docs/features/FEAT-0074-feed-scout-source-instructions.md",
       "docs/systems/content-production.md"
     ],
-    "last_verified": "2026-07-22"
+    "last_verified": "2026-07-24"
   }
 ---
 # Source And Sidecar Systems
@@ -65,10 +68,13 @@ Source And Sidecar Systems owns outside signal and decoupled capability organs: 
 - [FEAT-0011 Harness scout source ingestion](../features/FEAT-0011-harness-scout-source-ingestion.md)
 - [FEAT-0025 Video-to-skill source reconstruction](../features/FEAT-0025-video-to-skill-source-reconstruction.md)
 - [FEAT-0072 Persistent ICP and world memory](../features/FEAT-0072-persistent-icp-and-world-memory.md)
+- [FEAT-0074 Feed Scout source instructions](../features/FEAT-0074-feed-scout-source-instructions.md)
 
 ## What Belongs Here
 
-Harness scout ingestion, source scorecards, video-to-skill reconstruction, world-memory sidecars, and adopt/adapt/reject/defer decisions.
+Harness scout ingestion, Feed Scout source instructions and proposal routing,
+source scorecards, video-to-skill reconstruction, world-memory sidecars, and
+adopt/adapt/reject/defer decisions.
 
 ## What Belongs Elsewhere
 
@@ -114,6 +120,7 @@ Source And Sidecar Systems let Farplane learn from outside material while keepin
 - `skills/harness-scout/SKILL.md`
 - `skills/feed-scout/SKILL.md`
 - `docs/features/FEAT-0072-persistent-icp-and-world-memory.md`
+- `docs/features/FEAT-0074-feed-scout-source-instructions.md`
 - `docs/systems/content-production.md`
 
 ## Proof And Maintenance
@@ -126,6 +133,8 @@ Source And Sidecar Systems let Farplane learn from outside material while keepin
 
 ## Change History
 
+- 2026-07-24: Added one inherited Feed Scout source-instruction field with
+  reviewed, non-recursive source and feature proposal routing.
 - 2026-07-22: Moved Tasty Pack creative reuse ownership to Content Production while keeping raw source and sidecar ownership here.
 - 2026-07-14: Added persistent ICP and world memory as the compact current-context handoff from sources to planning.
 - 2026-06-27: Migrated into the reader-first system-spec shape.

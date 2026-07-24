@@ -497,6 +497,54 @@ def validate_bindings_file(root: Path, bindings_file: Path) -> list[str]:
     if "metric_bindings" in data:
         errors.append(f"{rel_path} metric_bindings is retired; refresh prompts belong in farplane/metrics.yaml.")
 
+    feed_scout = data.get("feed_scout")
+    if feed_scout is not None:
+        if not isinstance(feed_scout, dict):
+            errors.append(f"{rel_path} feed_scout must be an object.")
+        else:
+            entities = feed_scout.get("entities", {})
+            if not isinstance(entities, dict):
+                errors.append(f"{rel_path} feed_scout.entities must be an object.")
+                entities = {}
+            for entity_id, entity in entities.items():
+                prefix = f"{rel_path} feed_scout.entities.{entity_id}"
+                if not isinstance(entity, dict):
+                    errors.append(f"{prefix} must be an object.")
+                    continue
+                if "interest_prompt" in entity or "source_discovery_prompt" in entity:
+                    errors.append(f"{prefix} uses a retired prompt field; use instructions.")
+                instructions = entity.get("instructions")
+                if instructions is not None and (
+                    not isinstance(instructions, str) or not instructions.strip()
+                ):
+                    errors.append(f"{prefix}.instructions must be a non-empty string.")
+                owned_sources = entity.get("owned_sources", {})
+                if not isinstance(owned_sources, dict):
+                    errors.append(f"{prefix}.owned_sources must be an object.")
+                    continue
+                for source_id, source in owned_sources.items():
+                    source_prefix = f"{prefix}.owned_sources.{source_id}"
+                    if not isinstance(source, dict):
+                        errors.append(f"{source_prefix} must be an object.")
+                        continue
+                    if "kind" in source:
+                        errors.append(
+                            f"{source_prefix}.kind is redundant; encode source identity "
+                            "in the source key and coordinates."
+                        )
+                    if "interest_prompt" in source or "source_discovery_prompt" in source:
+                        errors.append(
+                            f"{source_prefix} uses a retired prompt field; use instructions."
+                        )
+                    source_instructions = source.get("instructions")
+                    if source_instructions is not None and (
+                        not isinstance(source_instructions, str)
+                        or not source_instructions.strip()
+                    ):
+                        errors.append(
+                            f"{source_prefix}.instructions must be a non-empty string."
+                        )
+
     integrations = data.get("integrations")
     integrations = integrations if isinstance(integrations, dict) else {}
     kanban = integrations.get("kanban")
