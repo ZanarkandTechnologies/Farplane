@@ -10,13 +10,15 @@ ingest_content(source, note?, brand_kit_id?)
   -> read_content(source, note?)
   -> breakdown_content(source_context, note?)
   -> extract_complete_elements(breakdown, same_source_assets, note?)
-  -> store_capture(source, note, analysis, complete_elements)
+  -> store_capture(source, note, transcript?, analysis_markdown, selected_elements)
+  -> create_repurpose_ticket(source_ref, note, intended_output)?
   -> optional_promote(brand_kit_id, complete_elements)
 ```
 
 The skill should behave like a router with one compact output contract:
-Resource Bank captures store source/ref, operator note/focus, analysis summary,
-complete creative-element capsules, and tags/facets. They do not require a
+Resource Bank captures store source/ref, operator note/focus, optional
+transcript, freeform analysis Markdown, selected creative-element capsules, and
+tags/facets. They do not require a
 parallel evidence or recipe collection.
 
 ## Note Intent
@@ -40,7 +42,8 @@ The note should influence:
 - which creative elements are extracted;
 - which retrieval facets and tags are added;
 - which same-source asset grounds each element, which golden recipes are
-  stored, and whether generation skills are called now.
+  stored, whether a repurpose ticket is created, and whether generation skills
+  are called now.
 
 ## Read Phase
 
@@ -71,29 +74,32 @@ the complete capsule.
 ## Breakdown Phase
 
 ```text
-breakdown_content(source_context, note?) -> analysis
+breakdown_content(source_context, note?) -> transcript? + analysis_markdown
 ```
 
 Breakdown variants:
 
 - `summary`: what the source is and what is visible/known.
-- `hook`: what earns attention first.
-- `storyboard`: beat, scene, format, or narrative structure.
+- `storyboard`: opening hook beat, semantic copy move, scene, format, or
+  narrative structure.
 - `visual`: composition, typography, color, layout, asset choices, focal point.
 - `audio`: voice, music, sound design, silence, or SFX pattern.
 - `audio-recognition`: optional artist/title/link evidence when a selected
   track is recognized; store it as attribution/research, not as permission to
   reuse the protected song.
-- `editing`: pacing, caption rhythm, transitions, motion, cuts.
-- `copy`: caption, headline, claim, CTA, on-screen text, meme wording.
+- `editing`: pacing, subtitle rendering/timing, caption rhythm, transitions,
+  motion, cuts.
 - `character`: distinctive persona, archetype, guide, host, mascot, or
   recurring character system.
-- `constraint`: rights, likeness, attribution, source-quality, or do-not-copy
-  boundary.
+- `policy`: rights, likeness, attribution, source-quality, or do-not-copy
+  boundary; this is analysis or Brand Kit prompt content, not a
+  CreativeElement kind.
 
-Do not flatten everything into one adjective-heavy summary. If the note
-highlights one part, analyze that part first, then add a one-line whole-source
-context summary.
+Write the result as freeform Markdown rather than a fixed storage taxonomy.
+Short `Breakdown`, `Why It Works`, and `Reuse Notes` sections are a useful
+default, not separate database fields. Preserve a real transcript separately
+from the Markdown. If the note highlights one part, analyze that part first,
+then add enough whole-source context for later hydration.
 
 ## Element Phase
 
@@ -105,16 +111,30 @@ Element shape:
 
 ```text
 CreativeElement = {
-  kind: "visual" | "audio" | "hook" | "storyboard" | "editing" | "copy" | "format" | "constraint" | "character",
+  kind: "format" | "storyboard" | "visual" | "character" | "audio" | "editing",
   title: string,
   description: string,
   whyItWorks: string,
   goldenExample: { assetId: ResourceBankAssetId, description?: string },
   goldenRecipe: string,
   anchor?: string,
-  pinned?: boolean
+  pinned: true
 }
 ```
+
+Create an element only when both gates pass:
+
+```text
+should_store_element(value, note)
+  = is_element(value)
+    && explicitly_selected_for_reuse(value, note)
+```
+
+`is_element(value) = independently selectable && independently conditionable
+from an example && owned by a recognizable production step`. Hook folds into
+the storyboard opening beat; semantic copy folds into storyboard; subtitle
+rendering/timing folds into editing; constraints are production policy or Brand
+Kit prompt content.
 
 Every element must use one asset from the same ingestion job as its golden
 example. Prefer a selected frame/contact sheet/audio/transcript asset when it
@@ -123,41 +143,41 @@ precise example description. Write one kind-specific, rights-safe
 `goldenRecipe` that makes downstream generation conditional on the observed
 mechanic. Do not use the same generic recipe across unrelated kinds.
 
-Extract all useful creative elements needed to understand the source, but pin
-only the sub-elements the operator liked, selected, or wants reused in the
-ingest note. Retrieval derives planning priority from pins instead of storing
-numeric weights or creating a separate production-pattern object.
+Store only the sub-elements the operator liked, selected, or wants reused in
+the ingest note, and mark those stored elements as pinned. Put other observed
+components in the source analysis so the capture preserves whole-source
+context without turning every observation into a production candidate. A
+capture may contain zero CreativeElements.
 
 When the source works because of a distinctive persona, guide, host, mascot, or
 archetype, extract it as `kind: "character"` instead of hiding it inside visual
 or storyboard text. Pin that character only when the note explicitly says the
 operator likes it or wants that persona reused. If direct reuse would risk
-likeness, brand, actor-performance, or protected-character copying, add a
-rights-safe `constraint` element that tells future production to remix the role
+likeness, brand, actor-performance, or protected-character copying, record
+rights-safe production policy that tells future production to remix the role
 and function rather than the exact expression.
 
 If the operator asks to generate now, route the generation step after storage
 or save the element's `goldenRecipe` first so the vault remains durable memory.
 
 When music recognition matches a track, create an `audio` element named with the
-artist/title and add a `constraint` element that future work should recreate the
-energy, tempo, instrumentation, edit function, or mood with licensed,
-original, or generated audio rather than copying the source track. If the
-operator note selected the music, pin the audio element; otherwise leave it as
-context.
+artist/title and record production policy that future work should recreate the
+energy, tempo, instrumentation, edit function, or mood with licensed, original,
+or generated audio rather than copying the source track. If the operator note
+selected the music, pin the audio element; otherwise leave it as context.
 
 ## Store Phase
 
 ```text
-store_capture(source, note, analysis, complete_elements, brand_kit_id?)
-  -> capture_handle + retrieval_proof + optional_promotion_receipt
+store_capture(source, note, transcript?, analysis_markdown, selected_elements, brand_kit_id?)
+  -> capture_handle + tickets[] + retrieval_proof + optional_promotion_receipt
 ```
 
 Current Resource Bank storage should present this active contract:
 
 - source URL/ref;
 - operator note/focus;
-- compact analysis summary;
+- optional top-level transcript plus freeform analysis Markdown;
 - complete creative-element capsules;
 - tags/facets for retrieval;
 - optional skill findings when the source suggests a reusable technique or
@@ -172,3 +192,22 @@ into tags, facets, or source-level `tastinessScore`.
 
 Do not require frame, clip, transcript, or contact-sheet records unless the
 current workflow needs direct media reuse or audit proof.
+
+## Repurpose Ticket Phase
+
+```text
+create_repurpose_ticket(source_ref, note, intended_output)
+  -> created_or_existing_ticket
+```
+
+`future_creation` creates one thin ticket by default. The ticket instruction is
+`Repurpose <idea> from <source URL or Resource Bank asset ID> into <output>`,
+with the operator's material constraints and taste note preserved. Its first
+program operation is `content-impl-plan`; ingest does not need to expand the
+full storyboard or production program.
+
+Save-only intent creates no ticket. `generate_now` creates the same durable
+ticket before continuing into production. Dedupe on normalized source reference
+plus materially equivalent intent across active and archived tickets. Do not
+require or write a reverse ingestion-job/task link merely to join the two
+objects; the stable source reference in the ticket is the handoff.

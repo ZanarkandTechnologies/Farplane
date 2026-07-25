@@ -19,7 +19,8 @@ ResourceBankCapture {
   source: string
   note?: string
   focus?: string
-  analysis: string
+  transcriptText?: string
+  analysisMarkdown: string
   elements: CreativeElement[]
   tags?: string[]
   facets?: {
@@ -35,7 +36,7 @@ ResourceBankCapture {
 }
 
 CreativeElement {
-  kind: visual | audio | hook | storyboard | editing | copy | format | constraint | character
+  kind: format | storyboard | visual | character | audio | editing
   title: string
   description: string
   whyItWorks: string
@@ -45,21 +46,27 @@ CreativeElement {
   }
   goldenRecipe: string
   anchor?: string
-  pinned?: boolean
+  pinned: true
 }
 ```
 
 `whyItWorks` and `goldenRecipe` are required non-empty strings.
 `goldenExample.assetId` must resolve to one asset created by the same ingestion
 job as the element. Its optional description identifies the exact frame,
-passage, voice, layout, or quality worth conditioning on. The primary source
-asset is valid when it is the clearest example and the description is precise;
-a derived frame, contact sheet, audio, or transcript asset is preferred when it
-grounds the element better.
+passage, voice, layout, caption timing, or quality worth conditioning on. The
+primary source asset is valid when it is the clearest example and the
+description is precise; a derived frame, contact sheet, audio, or transcript
+asset is preferred when it grounds the element better.
 
-Do not add `director`, `layout`, or `pacing` kinds, element start/end timing,
-recipe collections, required-input/success-criteria/production-hint objects,
-profile tables, or separate production-pattern records.
+Use `is_element(value) = independently selectable && independently
+conditionable from an example && owned by a recognizable production step`.
+Do not add `hook`, `copy`, `constraint`, `director`, `layout`, or `pacing`
+kinds, element start/end timing, recipe collections, required-input/success-
+criteria/production-hint objects, profile tables, or separate
+production-pattern records. Hook folds into the storyboard opening beat;
+semantic copy folds into storyboard; subtitle rendering/timing folds into
+editing; constraints are production policy or Brand Kit prompt content, not
+CreativeElement rows.
 
 Storage-backed preview assets are allowed when another ingest phase produced a
 real visual. They remain Resource Bank assets; a complete element may reference
@@ -79,8 +86,8 @@ Use facets only for things the operator will filter, group, or pack by:
   a high-value reference.
 
 `tastinessScore` is capture-level priority: "is this whole source worth
-retrieving?" `CreativeElement.pinned` is element-level taste priority inside a
-capture: "which sub-elements did the operator say they liked?" Tasty Pack
+retrieving?" Every active CreativeElement is selected reuse intent and is
+stored with `pinned: true`. Tasty Pack
 retrieval reports pinned counts, operator-note counts, and direct warnings in
 `meta`, but numeric weights are not stored on creative elements.
 
@@ -90,44 +97,58 @@ later UI or query path proves the need.
 
 ## Analysis Shape
 
-Keep analysis compact and source-useful:
+Store analysis as one source-agnostic Markdown field:
 
 ```text
-analysis:
-  summary: what the source is
-  why_it_works: why it caught attention or matters
-  hook: what earns attention in the first 0-3 seconds when relevant
-  continuation: what keeps people watching/reading when relevant
-  reuse_notes: what to borrow at the pattern level
-  constraints: what not to copy literally
+analysisMarkdown: """
+## Breakdown
+What the source is and the useful observed parts.
+
+## Why It Works
+Why it caught attention or matters.
+
+## Reuse Notes
+What to borrow at pattern level and what not to copy literally.
+"""
+transcriptText?: string
 ```
 
-The analysis explains the source; it cannot substitute for element-level
-`description`, `whyItWorks`, `goldenExample`, or `goldenRecipe`. `elements[]`
-are the production-use pieces.
-Pinned elements are the operator's taste signal. Store all useful context
-elements needed to understand the reference, but mark only the specific
-sub-elements the operator note liked as `pinned` so future Tasty Packs can bias
-reuse without losing context.
+The headings are a writing default, not a database schema. This contract works
+for videos, posts, websites, landing pages, screenshots, files, and notes.
+Keep a real transcript in its own optional field so consumers can fetch it
+without parsing prose. The analysis may preserve unselected observations and
+whole-source context, but it cannot substitute for the element-level
+`description`, `whyItWorks`, `goldenExample`, or `goldenRecipe` required when a
+component is actually promoted into `elements[]`.
+
+```text
+should_store_element(value, note)
+  = is_element(value)
+    && explicitly_selected_for_reuse(value, note)
+```
+
+Create a CreativeElement only when the operator explicitly likes, selects, or
+asks to reuse that component. Store other observations in analysis rather than
+as unpinned context elements. A capture may contain zero elements.
 
 ## Creative Element Guidance
 
 Use compact elements. Prefer several precise elements over one large summary.
 
-- `hook`: opening attention move.
-- `storyboard`: beat, scene, narrative move, or structure.
-- `visual`: art direction, object, setting, layout, frame idea, or asset style.
-- `audio`: voice, recognized music, SFX, silence, or sonic pattern.
-- `editing`: pacing, transition, caption rhythm, motion, or cut pattern.
-- `copy`: caption, headline, phrase structure, or script move.
 - `format`: platform/content format or repeatable wrapper.
-- `constraint`: rights, likeness, brand, source-quality, or remix boundary.
+- `storyboard`: opening attention beat, semantic copy move, scene, narrative
+  move, or structure.
+- `visual`: art direction, object, setting, layout, frame idea, or asset style.
 - `character`: distinctive persona, archetype, guide, host, mascot, recurring
   voice, or character system that makes the reference reusable.
+- `audio`: voice, recognized music, SFX, silence, or sonic pattern.
+- `editing`: pacing, transition, subtitle rendering/timing, caption rhythm,
+  motion, or cut pattern.
 
-Keep layout semantics inside `visual`, narrative pacing inside `storyboard`,
-cut rhythm inside `editing`, and vocal pacing inside `audio`. The accepted nine
-kinds are sufficient; do not introduce a director-like kind.
+Keep layout semantics inside `visual`, narrative pacing and semantic copy
+inside `storyboard`, subtitle rendering/timing and cut rhythm inside `editing`,
+and vocal pacing inside `audio`. The accepted six kinds are sufficient; do not
+introduce a director-like kind.
 
 For each element:
 
@@ -139,9 +160,10 @@ For each element:
 
 Recipes must be operational and kind-specific. A visual recipe should specify
 composition/material/light or layout behavior; an audio recipe should specify
-voice/music/SFX role and sonic behavior; storyboard/hook/editing/copy recipes
-should specify their respective beat, attention, rhythm, or language mechanics.
-Do not copy one generic recipe across unrelated kinds or merely restate the
+voice/music/SFX role and sonic behavior; storyboard recipes should specify the
+opening hook, beat, narrative, or language mechanics; editing recipes should
+specify subtitle, caption, transition, motion, rhythm, or cut mechanics. Do not
+copy one generic recipe across unrelated kinds or merely restate the
 description.
 
 Use `anchor` for lightweight grounding such as `0-3s`, `opening frame`,
@@ -149,8 +171,10 @@ Use `anchor` for lightweight grounding such as `0-3s`, `opening frame`,
 source could not be inspected deeply, state that in analysis and keep element
 anchors honest.
 
-Use `pinned` only for liked, selected, or operator-highlighted sub-elements,
-preferably backed by `analysis.operatorNote`. Do not ask for or store numeric
+Active writes create elements only for liked, selected, or operator-highlighted
+sub-elements and therefore require `pinned: true`, preferably backed by the
+operator note. Unpinned rows may still be read as legacy/external violations;
+they are not a valid new-write context model. Do not ask for or store numeric
 creative-element weights. Do not add a separate `production_pattern` object; the
 reference pattern emerges from the element list. This applies across reels,
 landing pages, posts, screenshots, and notes.
@@ -158,18 +182,18 @@ landing pages, posts, screenshots, and notes.
 For `character` elements, describe the reusable role and behavior rather than
 copying protected expression: e.g. "deadpan technical guide who translates
 abstract infrastructure into a dry office ritual." When the source character
-resembles a real person, actor performance, brand mascot, or protected fictional
-character, pair it with a `constraint` element that keeps the remix
-rights-safe: preserve archetype, function, contrast, and emotional job; avoid
+resembles a real person, actor performance, brand mascot, or protected
+fictional character, record rights-safe remix policy in analysis or Brand Kit
+prompt text: preserve archetype, function, contrast, and emotional job; avoid
 copying likeness, name, exact wardrobe, voice, catchphrases, source frames,
 logos, or branded presentation.
 
 For recognized music, use the artist/title/link as attribution and research
 context. The reusable element is the sonic role: tempo, energy, instrument
 palette, mood, edit function, or contrast with the visuals. Pair it with a
-`constraint` element for future creation: do not reuse protected source music
-unless licensed; recreate the function with cleared, original, or generated
-audio.
+production-policy note for future creation: do not reuse protected source
+music unless licensed; recreate the function with cleared, original, or
+generated audio.
 
 ## Tasty Pack Shape
 
@@ -182,7 +206,8 @@ createTastyPack(request) -> {
     {
       captureId,
       source,
-      analysis,
+      transcript?,
+      analysis: { operatorNote?, markdown },
       elements
     }
   ],
@@ -190,7 +215,8 @@ createTastyPack(request) -> {
 }
 ```
 
-Core consumer fields are `captures[].source`, `captures[].analysis`, complete
+Core consumer fields are `captures[].source`, optional `captures[].transcript`,
+`captures[].analysis.markdown`, complete
 `captures[].elements`, and direct `meta` counts/warnings such as
 `pinnedElementCount`, `operatorNoteCount`, and `warnings`; elements may carry
 `pinned`. Retrieval notes may exist as non-core metadata, but
@@ -240,8 +266,8 @@ objects merely to make the dashboard look complete.
 ## Write Sequence
 
 1. Create or update one capture for the source.
-2. Store source URL/ref, operator note/focus, analysis summary, tags/facets,
-   and complete creative elements.
+2. Store source URL/ref, operator note/focus, optional transcript,
+   `analysisMarkdown`, tags/facets, and selected creative elements.
 3. Once the primary asset row exists, optionally upload a real representative
    thumbnail/contact sheet/frame image as a derived storage-backed Resource Bank
    asset with `parentAssetId` pointing to that primary asset.
@@ -252,7 +278,8 @@ objects merely to make the dashboard look complete.
    same ingest action and record the kit/revision receipt.
 7. Query Tasty Pack retrieval with the likely timeframe/facets to verify the
    capture returns as `{ captureId, source, analysis, elements }`, with tags and
-   facets on `source`, `analysis.operatorNote` when a note exists, element
+   facets on `source`, `analysis.operatorNote` when a note exists,
+   `analysis.markdown`, optional top-level `transcript`, element
    capsule fields and `pinned` preserved, and `meta.pinnedElementCount`,
    `meta.operatorNoteCount`, and `meta.warnings` populated.
 8. If a preview asset was uploaded, verify the upload returned `assetId` and
@@ -277,9 +304,9 @@ the start," save:
 
 - the whole source URL/ref as `source`;
 - the operator note/focus;
-- a compact analysis naming what is known and what is inferred;
-- elements such as `hook`, `visual`, `storyboard`, `editing`, `audio`, `copy`,
-  `format`, `character`, and `constraint`;
+- compact freeform analysis Markdown naming what is known and what is inferred;
+- elements such as `format`, `storyboard`, `visual`, `character`, `audio`,
+  and `editing`;
 - one complete what/why/example/recipe capsule for every element;
 - lightweight anchors such as `0-3s`, `opening frame`, or `caption`;
 - `pinned` on the elements the operator explicitly liked, selected, or wants
@@ -299,8 +326,9 @@ sources through the current capture contract.
 Storage is not done until Resource Bank retrieval returns:
 
 - the source URL/ref and operator note/focus;
-- compact analysis;
-- at least one complete creative element for video/social inspiration sources;
+- optional transcript plus compact freeform analysis Markdown;
+- zero or more complete creative elements, with every stored element explicitly
+  selected for reuse by the operator note;
 - non-empty `whyItWorks` and `goldenRecipe` plus one resolvable same-ingestion-
   job `goldenExample.assetId` for every element;
 - pinned creative elements preserved when the operator identified specific

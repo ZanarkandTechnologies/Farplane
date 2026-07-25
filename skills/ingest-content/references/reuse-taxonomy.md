@@ -3,9 +3,11 @@
 Use this taxonomy to make saved inspiration searchable by future creator
 skills. Prefer concrete tags and reusable levers over generic taste words.
 
-## Analysis Facets
+## Analysis Prose
 
-Each saved reference should answer:
+Each saved reference should answer the useful subset of these questions inside
+one freeform `analysisMarkdown` value. These are writing prompts, not storage
+fields:
 
 - `what_it_is`: the source format and visible/known subject.
 - `why_it_works`: hook, contrast, novelty, emotional promise, craft move, or
@@ -43,7 +45,7 @@ idea?" quickly.
 
 Use tags for lightweight recall and creative language. Do not maintain a large
 taxonomy for hook/open-loop/pacing/retention mechanics; those belong in
-analysis and creative elements.
+analysis and the owning production-step element.
 
 Use a mix of these buckets when source context supports them:
 
@@ -62,46 +64,52 @@ Use a mix of these buckets when source context supports them:
 
 ```text
 CreativeElement {
-  kind: visual | audio | hook | storyboard | editing | copy | format | constraint | character
+  kind: format | storyboard | visual | character | audio | editing
   title
   description
   whyItWorks
   goldenExample { assetId, description? }
   goldenRecipe
   anchor?
-  pinned?
+  pinned: true
 }
 ```
 
 `description` says what the element is; `whyItWorks` explains the mechanism;
 `goldenExample` points to one same-ingestion-job asset; `goldenRecipe` is one
-prompt that recreates the function. Keep layout under `visual`, narrative
-pacing under `storyboard`, cut rhythm under `editing`, and vocal pacing under
-`audio`. Do not add layout, pacing, or director kinds.
+prompt that recreates the function. Use
+`is_element(value) = independently selectable && independently conditionable
+from an example && owned by a recognizable production step`. Keep layout under
+`visual`, opening hooks and semantic copy under `storyboard`, subtitle
+rendering/timing and cut rhythm under `editing`, and vocal pacing under
+`audio`. Do not add hook, copy, constraint, layout, pacing, or director kinds.
 
 Examples:
 
-- `hook`: "fake AI-news headline buys attention in 0-3s."
-- `storyboard`: "wellness ritual escalates into product reveal."
-- `visual`: "ancient papery fresco texture with central mythic figure."
-- `audio`: "guided-meditation voiceover cadence remixed with devtool terms."
-- `editing`: "headline wrapper -> ritual beat -> product reveal -> end card."
-- `copy`: "spiritualized coding slogan used as affirmation."
 - `format`: "social-news wrapper around parody campaign clip."
+- `storyboard`: "fake AI-news opening beat escalates into product reveal."
+- `visual`: "ancient papery fresco texture with central mythic figure."
 - `character`: "deadpan infrastructure guide whose dry office persona makes
   the abstract product feel specific and rewatchable."
-- `constraint`: "do not copy actor likeness, source frames, captions, or brand."
+- `audio`: "guided-meditation voiceover cadence remixed with devtool terms."
+- `editing`: "caption rhythm and cuts carry headline -> ritual beat -> product reveal -> end card."
 
-Use `pinned` for the exact sub-elements the operator liked or selected in the
-ingest note. Do not store numeric creative-element weights or duplicate this
-signal with a separate production-pattern record. A reel, post, landing page,
-or screenshot becomes a list of creative elements with selected taste pins.
+Constraints such as "do not copy actor likeness, source frames, captions, or
+brand" are production policy or Brand Kit prompt content, not CreativeElement
+rows.
+
+Create elements only for the exact sub-elements the operator liked or selected
+in the ingest note, and store every active write with `pinned: true`. Do not
+store numeric creative-element weights or duplicate this signal with a separate
+production-pattern record. A reel, post, landing page, or screenshot may have
+zero or more selected creative elements; surrounding context remains in
+analysis Markdown.
 Use `character` when a distinctive persona, archetype, guide, host, mascot, or
 recurring character system is one of the reasons the reference is useful. If
 the character is based on a real person, actor performance, brand mascot, or
-protected fictional character, add a `constraint` element for a rights-safe
-remix: borrow the role, contrast, and narrative function, not the likeness,
-name, exact styling, voice, catchphrase, or source frames.
+protected fictional character, record rights-safe remix policy: borrow the
+role, contrast, and narrative function, not the likeness, name, exact styling,
+voice, catchphrase, or source frames.
 
 ## Future Retrieval Query Shape
 
@@ -111,14 +119,15 @@ Future creation skills should query by:
 create_tasty_pack(idea?, timeframe?, audience?, industry?, outputType?, tags?, count?)
   -> {
        request: { idea?, timeframe, startAtMs?, endAtMs?, filters },
-       captures: [{ captureId, source, analysis, elements }],
+       captures: [{ captureId, source, transcript?, analysis: { operatorNote?, markdown }, elements }],
        meta: { captureCount: number, timeframe: string }
      }
 ```
 
-Creation skills consume `captures[].source`, `captures[].analysis`,
-complete `captures[].elements`, and `meta` counts/warnings. They should treat pinned
-elements as the primary taste signal and unpinned elements as context.
+Creation skills consume `captures[].source`, optional `captures[].transcript`,
+`captures[].analysis.markdown`, selected `captures[].elements`, and `meta`
+counts/warnings. Active elements are pinned taste signals; legacy or external
+unpinned rows are violations to warn about, not the context model.
 Retrieval notes are non-core metadata.
 
 Example retrieval requests:

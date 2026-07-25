@@ -18,12 +18,29 @@ the skill contract.
 ## Checks
 
 - [ ] `capture-shape`: The output stores source/ref, operator note or focus,
-  compact analysis, creative elements, and tags/facets when useful.
-- [ ] `element-shape`: Every creative element uses one of the nine canonical
-  kinds and includes non-empty `title`, `description`, `whyItWorks`, one
+  optional top-level transcript, freeform `analysisMarkdown`, selected creative
+  elements, and tags/facets when useful.
+- [ ] `element-shape`: Every creative element passes
+  `is_element(value) = independently selectable && independently conditionable
+  from an example && owned by a recognizable production step`, uses one of the
+  six canonical kinds (`format`, `storyboard`, `visual`, `character`, `audio`,
+  `editing`), and includes non-empty `title`, `description`, `whyItWorks`, one
   `goldenExample { assetId, description? }`, and one non-empty `goldenRecipe`,
-  plus optional `anchor`/`pinned`; no director/layout/pacing kind, element
-  timing, recipe object/collection, or production-pattern record is added.
+  plus optional `anchor`/`pinned`; no `hook`, `copy`, `constraint`,
+  `director`, `layout`, or `pacing` kind, element timing, recipe
+  object/collection, or production-pattern record is added. Hook folds into
+  storyboard opening beat; semantic copy folds into storyboard; subtitle
+  rendering/timing folds into editing; constraints are production policy or
+  Brand Kit prompt content.
+- [ ] `selection-gate`: Every newly stored CreativeElement also passes
+  `should_store_element(value, note) = is_element(value) &&
+  explicitly_selected_for_reuse(value, note)`. Unselected observations remain
+  in capture analysis, a capture may contain zero elements, and whole-source
+  context is not represented as unpinned CreativeElement rows.
+- [ ] `analysis-shape`: Transcript is optional and top-level. All other
+  source-specific interpretation is one freeform Markdown value; headings such
+  as Breakdown, Why It Works, and Reuse Notes remain prose sections rather than
+  dedicated storage fields.
 - [ ] `example-ownership`: Every `goldenExample.assetId` resolves to an asset
   created by the same ingestion job. The chosen asset and optional description
   identify the specific visual, audio, passage, layout, or source quality worth
@@ -38,8 +55,9 @@ the skill contract.
   note-backed pinning rule as every other element kind.
 - [ ] `rights-safe-character-remix`: Character/persona elements that resemble a
   real person, actor performance, brand mascot, or protected character include
-  a `constraint` element that avoids copying likeness, exact styling, name,
-  voice, catchphrases, source frames, logos, or branded expression.
+  production-policy or Brand Kit prompt text that avoids copying likeness,
+  exact styling, name, voice, catchphrases, source frames, logos, or branded
+  expression.
 - [ ] `source-honesty`: The analysis states what is known from the source or
   note and does not invent unseen frames, audio, transcripts, or timing.
 - [ ] `selected-music-recognition`: When the note explicitly likes or asks to
@@ -48,8 +66,8 @@ the skill contract.
 - [ ] `usefulness-extracted`: Source-level analysis is context only; every
   reusable element carries its own what/why/example/recipe capsule.
 - [ ] `music-rights-safe`: Recognized music is stored as attribution/research
-  and reusable sonic direction, with a constraint against copying protected
-  music unless licensed.
+  and reusable sonic direction, with production policy against copying
+  protected music unless licensed.
 - [ ] `storage-verified`: The final proof includes a Resource Bank capture
   handle or precise blocker.
 - [ ] `derived-preview-real`: If a thumbnail/contact sheet/frame image exists,
@@ -68,6 +86,14 @@ the skill contract.
 - [ ] `promotion-verified`: When a Brand Kit destination was requested, the
   same ingest action returns a promotion receipt for the verified complete
   elements; when none was requested, promotion is explicitly skipped.
+- [ ] `repurpose-ticket`: Save-only intent returns `tickets: []`.
+  Future-creation intent creates or reuses one thin ticket containing the
+  stable source URL/asset ID, the operator's material details, intended output,
+  and `content-impl-plan` as its first operation. It does not require a reverse
+  ingestion-job/task link.
+- [ ] `repurpose-dedupe`: Repeating materially equivalent future-creation
+  intent for the same source returns the existing ticket rather than creating
+  a duplicate.
 
 ## Reviewer Prompt
 
