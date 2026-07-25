@@ -83,32 +83,11 @@ continues to choose the runner backend only.
 Claude users should run the same `.farplane/evals/run_evals.py` commands with
 `--harness claude`.
 
+
 ## Viewer
 
-Use the packaged shadcn React viewer:
-
-```bash
-cd .farplane/evals/viewer-react
-pnpm install
-pnpm dev --host 127.0.0.1
-```
-
-Open the local URL and click `Load latest`.
-
-For a no-install fallback, open `viewer.html` in the eval folder and pick:
-
-- one `runs/<job_id>/summary.json`
-- optional `runs/<job_id>/tasks/*.json`
-
-That path works directly from the filesystem with file pickers.
-
-If you want the quick loader to pull the newest run from `./runs`, serve the
-folder locally first:
-
-```bash
-cd .farplane/evals
-python3 -m http.server
-```
+Farplane UI `Eval OS` is the only product viewer. These templates define Core
+runner inputs and artifacts only; do not add a skill-local HTML or React viewer.
 
 ## Read Results
 

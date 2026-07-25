@@ -10,8 +10,6 @@ Purpose: scaffold and run harness-native evals for Codex and Claude.
 ├── config.json
 ├── contexts/
 │   └── agi-toy-shop.md
-├── viewer.html
-├── viewer-react/
 ├── prompts/
 │   ├── agent.md
 │   └── judge.md
@@ -54,20 +52,10 @@ the baseline profile only after the target skill triggers. For trigger-sensitive
 cases, write natural user requests in `prompt`; do not name the skill unless the
 case is explicitly testing direct invocation.
 
-Then open `.farplane/evals/viewer.html`, or run the shadcn React viewer:
-
-```bash
-cd .farplane/evals/viewer-react
-pnpm install
-pnpm dev --host 127.0.0.1
-```
-
-If you want the quick loader to fetch `./runs/index.json`, serve the folder:
-
-```bash
-cd .farplane/evals
-python3 -m http.server
-```
+Inspect project and framework runs in Farplane UI's first-class `Eval OS`
+module. Core intentionally ships no second viewer; it owns the files under
+`.farplane/evals`, while Farplane UI owns navigation, rendering, comparison,
+history, and task drilldown.
 
 ## Test
 

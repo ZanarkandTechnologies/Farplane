@@ -30,9 +30,6 @@ REQUIRED_EVAL_FILES = (
     "run_evals.py",
     "config.json",
     "contexts/agi-toy-shop.md",
-    "viewer.html",
-    "viewer-react/package.json",
-    "viewer-react/src/App.tsx",
     "prompts/agent.md",
     "prompts/judge.md",
     "tasks/harness_tasks.json",
@@ -897,14 +894,6 @@ def copy_template(src: Path, dest: Path, force: bool) -> None:
     shutil.copyfile(src, dest)
 
 
-def copy_template_dir(src: Path, dest: Path, force: bool) -> None:
-    if dest.exists() and not force:
-        return
-    if dest.exists():
-        shutil.rmtree(dest)
-    shutil.copytree(src, dest, ignore=shutil.ignore_patterns("node_modules", "dist", ".vite", "*.tsbuildinfo"))
-
-
 def command_init(args: argparse.Namespace) -> int:
     target_root = Path(args.target_root).resolve()
     eval_dir = Path(args.eval_dir).resolve() if args.eval_dir else default_eval_dir(args.harness, target_root)
@@ -916,8 +905,6 @@ def command_init(args: argparse.Namespace) -> int:
     copy_template(templates / "agent.md", eval_dir / "prompts" / "agent.md", args.force)
     copy_template(templates / "judge.md", eval_dir / "prompts" / "judge.md", args.force)
     copy_template(templates / "README.md", eval_dir / "README.md", args.force)
-    copy_template(templates / "viewer.html", eval_dir / "viewer.html", args.force)
-    copy_template_dir(templates / "viewer-react", eval_dir / "viewer-react", args.force)
     copy_template(Path(__file__).resolve(), eval_dir / "run_evals.py", args.force)
     (eval_dir / "runs").mkdir(parents=True, exist_ok=True)
     print(f"Initialized {eval_dir}")
@@ -926,8 +913,7 @@ def command_init(args: argparse.Namespace) -> int:
     print(f"  1. Edit {eval_dir / 'tasks' / 'harness_tasks.json'} or {eval_dir / 'tasks' / 'agents_md_tasks.json'} with one important task.")
     print("  2. Use tags/notes to mark whether a task is skill, workflow, or system-prompt level.")
     print(f"  3. Run: python3 {eval_dir / 'run_evals.py'} run --harness {args.harness} --label baseline --limit 1")
-    print(f"  4. Inspect results with either {eval_dir / 'viewer.html'} or the React viewer:")
-    print(f"     cd {eval_dir / 'viewer-react'} && pnpm install && pnpm dev --host 127.0.0.1")
+    print("  4. Inspect run artifacts in Farplane UI Eval OS.")
     return 0
 
 
