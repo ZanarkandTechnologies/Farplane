@@ -3,12 +3,12 @@
   "evals": [
     {
       "id": "content_impl_plan_brand_kit_only_01",
-      "prompt": "Plan a 45-second founder explainer from this approved Brand Kit. It contains complete hook, visual, character, copy, format, and constraint elements plus one kit-wide prompt. No Tasty Pack is supplied.",
-      "expected_output": "Accepts the Brand Kit without requiring a Tasty Pack or style profile.; Treats approved identity and constraints as authoritative.; Emits a creative hypothesis, complete element leverage map, low-fi demo, and visual storyboard with notes tied to element IDs.; Routes selected elements with their description, whyItWorks, goldenExample, and goldenRecipe.; Selects a timing master and ends with Remotion plus review/QA proof.",
+      "prompt": "Plan a 45-second founder explainer from this approved Brand Kit. It contains complete format, storyboard, visual, character, audio, and editing elements plus one kit-wide prompt with production policy. No Tasty Pack is supplied.",
+      "expected_output": "Accepts the Brand Kit without requiring a Tasty Pack or style profile.; Treats approved identity and policy as authoritative.; Emits a creative hypothesis, complete element leverage map, low-fi demo, and visual storyboard with notes tied to element IDs.; Routes selected elements with their description, whyItWorks, goldenExample, and goldenRecipe.; Selects a timing master and ends with Remotion plus review/QA proof.",
       "files": [],
       "assertions": [
         "Accepts the Brand Kit without requiring a Tasty Pack or style profile.",
-        "Treats approved identity and constraints as authoritative.",
+        "Treats approved identity and policy as authoritative.",
         "Emits a creative hypothesis, complete element leverage map, low-fi demo, and visual storyboard with notes tied to element IDs.",
         "Routes selected elements with their description, whyItWorks, goldenExample, and goldenRecipe.",
         "Selects a timing master and ends with Remotion plus review/QA proof."
@@ -27,7 +27,7 @@
     },
     {
       "id": "content_impl_plan_tasty_pack_only_01",
-      "prompt": "Idea: prove agents can create and edit a full marketing short. Tasty Pack elements include complete hook, storyboard, visual, audio, editing, copy, format, character, and constraint capsules. No Brand Kit is supplied.",
+      "prompt": "Idea: prove agents can create and edit a full marketing short. Tasty Pack elements include complete format, storyboard, visual, character, audio, and editing capsules. Hook is represented as the storyboard opening beat, copy as storyboard semantics, subtitle timing as editing, and constraints as production policy. No Brand Kit is supplied.",
       "expected_output": "Builds a complete element leverage map from Tasty Pack captures.; Prioritizes pinned elements and explains nonuse.; Emits a creative hypothesis and low-fi visual approval packet before spend.; Gives every advisor action the selected element's golden example and golden recipe when it conditions work.; Orders production around voiceover, music, source_video, or none as timing master.; Keeps storyboard as a child and ends with Remotion plus review/QA proof.",
       "files": [],
       "assertions": [
@@ -64,11 +64,11 @@
       ],
       "metadata": {
         "farplane": {
-          "title": "Makes Brand Kit constraints win Tasty Pack conflicts",
+          "title": "Makes Brand Kit policy win Tasty Pack conflicts",
           "tags": ["skill", "content-impl-plan", "brand-kit", "conflict"],
           "anti_patterns": [
             "Silently averages the two visual identities.",
-            "Lets trend inspiration override approved constraints.",
+            "Lets trend inspiration override approved policy.",
             "Uses a style profile as a compatibility fallback."
           ]
         }

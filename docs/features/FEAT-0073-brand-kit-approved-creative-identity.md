@@ -58,7 +58,9 @@ Reusable creative identity needs a stronger owner than raw inspiration. Tasty Pa
 ## What It Does
 
 - Stores approved creative elements as embedded Brand Kit snapshots.
-- Preserves the same nine element kinds used by Resource Bank and Tasty Packs: `visual`, `audio`, `hook`, `storyboard`, `editing`, `copy`, `character`, `format`, and `constraint`.
+- Uses the governing test `is_element(value) = independently selectable && independently conditionable from an example && owned by a recognizable production step`.
+- Preserves the same six element kinds used by Resource Bank and Tasty Packs: `format`, `storyboard`, `visual`, `character`, `audio`, and `editing`.
+- Stores constraints as Brand Kit prompt or production policy, not CreativeElement snapshots.
 - Preserves each element's `description`, `whyItWorks`, `goldenExample { assetId, description? }`, and `goldenRecipe` prompt string.
 - Copies the stable golden-example locator needed for production, so a kit remains usable even when candidate Resource Bank rows are reset or reingested.
 - Maintains exactly one kit-wide freeform prompt for the approved creative identity.
@@ -77,9 +79,9 @@ Brand Kit is approved identity, not candidate inspiration.
 - Brand Kit snapshots are embedded approved elements with copied provenance and stable example locators.
 - Brand Kit does not add prompt variants, per-prompt membership, inheritance, bindings tables, formula tables, recipe collections, or style-profile tables.
 - The kit prompt is one freeform prompt for whole-kit identity. It is distinct from each element's `goldenRecipe`, which is one prompt string for reproducing that element's function.
-- Promotion from Resource Bank copies the complete semantic capsule and preserves the canonical kind. Hook, copy, storyboard, character, and constraint elements do not collapse into a generic story kind.
+- Promotion from Resource Bank copies the complete semantic capsule and preserves the canonical kind. Opening hooks and semantic copy remain inside `storyboard`; subtitle/caption rendering and timing remain inside `editing`; constraints remain policy or prompt content.
 - Snapshot identity and dedupe semantics include the semantic fields and stable example locator, so changed recipes or examples create meaningful new revisions.
-- Content Production treats Brand Kit constraints as the default truth. Tasty Pack inspiration can be selected only when it is compatible or when the conflict is explicitly rejected, revised, or escalated.
+- Content Production treats Brand Kit policy and prompt constraints as the default truth. Tasty Pack inspiration can be selected only when it is compatible or when the conflict is explicitly rejected, revised, or escalated.
 - Production outputs should record the Brand Kit revision, kit prompt revision, selected element IDs or hashes, and evidence of element-conditioned use.
 
 ## Feature Flow
@@ -134,7 +136,7 @@ Acceptance signals:
 
 - The feature is listed under exactly one owning system, `SYS-0012`.
 - The docs preserve one kit prompt and one element-level `goldenRecipe` string without adding recipe/profile tables.
-- The docs preserve the existing nine kinds and do not introduce `director`, `layout`, or `pacing`.
+- The docs preserve the six approved kinds and do not introduce `hook`, `copy`, `constraint`, `director`, `layout`, or `pacing` as CreativeElement kinds.
 - The owning implementation ticket can prove Resource Bank to Tasty Pack to Brand Kit to production without field or kind loss.
 
 ## Rollout And Maintenance

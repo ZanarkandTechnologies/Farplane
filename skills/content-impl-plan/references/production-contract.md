@@ -16,7 +16,7 @@ composition, creative lock detail, and the full ticket template.
 ## Production Graph
 
 ```text
-idea + brand_kit? + tasty_pack? + invocation_constraints
+idea + brand_kit? + tasty_pack? + invocation_policy
   -> compose_elements: creative hypothesis + chosen/rejected leverage map
   -> storyboard: low-fi visual approval packet tied to element ids
   -> select_timing_master: voiceover | music | source_video | none
@@ -25,9 +25,9 @@ idea + brand_kit? + tasty_pack? + invocation_constraints
   -> review/qa: plan, asset, render, and output evidence
 ```
 
-The Brand Kit supplies approved identity and constraints. The optional Tasty
-Pack supplies ad-hoc current inspiration. Invocation constraints still bind the
-deliverable, but Brand Kit constraints win creative-source conflicts. Compatible
+The Brand Kit supplies approved identity, production policy, and prompt truth.
+The optional Tasty Pack supplies ad-hoc current inspiration. Invocation policy
+still binds the deliverable, but Brand Kit policy wins creative-source conflicts. Compatible
 Tasty elements augment the kit by role; incompatible elements are explicitly
 rejected or block the plan. `style_profile` is not an input or fallback in this
 composition contract. Standalone `video-production` callers retain their
@@ -40,7 +40,7 @@ compose_elements(brand_kit?, tasty_pack?, idea)
 ElementRealizationPacket {
   elementId
   provenance: brand_kit | tasty_pack
-  kind
+  kind: format | storyboard | visual | character | audio | editing
   description
   whyItWorks
   goldenExample { assetId, description? }
@@ -54,6 +54,12 @@ Every selected element must map to a beat, planned artifact, advisor action, or
 production rule. Any child generation handoff must carry the resolved golden
 example and golden recipe; title/description-only conditioning cannot pass the
 creative lock.
+
+Use `is_element(value) = independently selectable && independently
+conditionable from an example && owned by a recognizable production step`.
+Hook folds into the storyboard opening beat; semantic copy folds into
+storyboard; subtitle rendering/timing folds into editing; constraints are
+production policy or Brand Kit prompt content, not CreativeElement rows.
 
 ## Resource Bank And Readiness
 
@@ -97,14 +103,15 @@ creative_lock(idea, creative_hypothesis, element_leverage_map, storyboard, timin
 
 Requires:
 
-- Brand Kit precedence and explicit choose/augment/reject/block decisions for
+- Brand Kit policy precedence and explicit choose/augment/reject/block decisions for
   every selected or conflicting Tasty element;
 - a creative hypothesis plus exact element leverage map with provenance;
 - a low-fidelity demo and visual storyboard image paths/notes tied to element
   IDs, approved before provider spend;
 - complete realization packets and output receipts for selected elements,
   including resolved golden example and golden recipe where generation occurs;
-- hook → tension → turn → proof → payoff, exact copy/VO beats, and viewer job;
+- storyboard opening beat -> tension -> turn -> proof -> payoff, exact
+  semantic copy/VO beats, and viewer job;
 - recurring character or explicit no-character rationale, useful recurring
   motif/object, cause/effect, and viewer question → answer;
 - asset manifest and a media/regeneration/nonuse decision for each used pinned
@@ -124,7 +131,7 @@ Requires:
 - user-intent, video-quality, source-honesty, narrative, asset, and audio-motion
   QA gates, plus Brand/Tasty element-use checks when either exists.
 
-Blocks when Tasty elements silently override Brand Kit constraints, a selected
+Blocks when Tasty elements silently override Brand Kit policy, a selected
 element reaches a child without its example and recipe, a reference-led plan has
 only generic cards, the timing-master media/cues are missing, final visuals are
 generated before a required voice/music/source timing master is measured, a
@@ -147,7 +154,7 @@ What will be produced, for whom, and what proof or marketing job it must do.
 - In / Out:
 - Platform / target artifact:
 - Content kind / method / Brand Kit / Tasty Pack:
-- Invocation constraints / CTA:
+- Invocation policy / CTA:
 
 ## Delta
 - Before / After / Why now:
@@ -162,7 +169,7 @@ Element Decisions:
 
 Reference Pattern:
 - Compiled creative direction:
-- Hook stack / timeline / story format:
+- Storyboard opening beat / timeline / story format:
 - Visual / audio / motion-edit patterns:
 - Proof mechanism / must change:
 

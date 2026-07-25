@@ -3,7 +3,7 @@ title: "Content Production"
 status: designed
 owner: farplane-framework
 created_at: 2026-07-22
-updated_at: 2026-07-22
+updated_at: 2026-07-24
 tags:
   - farplane
   - systems
@@ -35,7 +35,7 @@ system_record_json: |
       "skills/asset-advisor/SKILL.md",
       "skills/remotion/SKILL.md"
     ],
-    "last_verified": "2026-07-22"
+    "last_verified": "2026-07-24"
   }
 ---
 # Content Production
@@ -76,14 +76,22 @@ Raw source capture and unresolved inspiration belong in [Source And Sidecar Syst
 
 ## Operating Contract
 
-- The only reusable creative inputs for this path are `Brand Kit` and optional computed `Tasty Pack`; the task idea and invocation constraints remain the brief.
-- Brand Kit supplies approved identity, constraints, and one kit-wide prompt. Its embedded element snapshots are durable production inputs, not live Resource Bank pointers.
+- The only reusable creative inputs for this path are `Brand Kit` and optional computed `Tasty Pack`; the task idea and invocation policy remain the brief.
+- Brand Kit supplies approved identity, production policy, and one kit-wide prompt. Its embedded element snapshots are durable production inputs, not live Resource Bank pointers.
 - Tasty Pack supplies ad hoc source-grounded inspiration from Resource Bank candidates. It is computed at retrieval time and does not create saved Tasty Pack rows.
 - Resource Bank remains candidate storage. It is not a production profile system and does not create recipe, formula, or profile tables.
-- Creative elements keep the existing nine kinds: `visual`, `audio`, `hook`, `storyboard`, `editing`, `copy`, `character`, `format`, and `constraint`.
+- `is_element(value) = independently selectable && independently conditionable from an example && owned by a recognizable production step`.
+- `should_store_element(value, note) = is_element(value) && explicitly_selected_for_reuse(value, note)`: whole-source context belongs in capture analysis, while only operator-selected reusable components become CreativeElement rows.
+- Resource Bank captures keep optional transcript text separate from one
+  freeform analysis-Markdown field. A note with future-creation intent creates
+  or reuses a thin source-addressable content ticket whose first operation is
+  `content-impl-plan`; the ticket does not require a reverse ingestion-job link.
+- Creative elements use exactly six kinds: `format`, `storyboard`, `visual`, `character`, `audio`, and `editing`.
+- Hook mechanics fold into the opening beat of `storyboard`; semantic copy folds into `storyboard`; subtitle rendering, caption timing, transitions, and cut rhythm belong to `editing`; layout remains `visual`; vocal pacing remains `audio`.
+- Constraints are production policy or Brand Kit prompt content, not `CreativeElement` rows.
 - Each production-ready element carries `description`, `whyItWorks`, `goldenExample { assetId, description? }`, and `goldenRecipe` as one prompt string.
-- Brand Kit constraints win over conflicting Tasty Pack inspiration. Compatible Tasty Pack elements can augment the idea by role; conflicts must be selected or rejected explicitly.
-- Each selected element maps to a beat, planned artifact, advisor action, production rule, or constraint. Not every element creates a file.
+- Brand Kit production policy wins over conflicting Tasty Pack inspiration. Compatible Tasty Pack elements can augment the idea by role; conflicts must be selected or rejected explicitly.
+- Each selected element maps to a beat, planned artifact, advisor action, or production rule. Not every element creates a file.
 - The approval packet names the creative hypothesis, why the combination should work, rejected conflicts, low-fidelity demo, visual storyboard notes, and exact element leverage map before final generation.
 - Timing-sensitive production chooses a timing master before final visual generation when applicable: voiceover, music, source video, or none.
 - Voice-led work locks script and voice timing before final visual prompts; music-led work selects or generates music first; source-video-led work inspects source duration first; all paths converge on Remotion with evidence.
@@ -96,7 +104,7 @@ flowchart LR
   classDef changed fill:#fef3c7,stroke:#b45309,color:#111827
   classDef added fill:#dcfce7,stroke:#15803d,color:#111827
 
-  idea["idea + constraints<br/>task brief"]:::keep
+  idea["idea + policy<br/>task brief"]:::keep
   kit["FEAT-0073<br/>Brand Kit approved snapshots<br/>one kit prompt"]:::changed
   tasty["FEAT-0056<br/>computed Tasty Pack<br/>complete element capsules"]:::changed
   plan["content-impl-plan<br/>hypothesis, conflicts<br/>low-fi review, storyboard"]:::added

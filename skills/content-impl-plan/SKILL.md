@@ -36,7 +36,7 @@ or replace the advisor skills.
 ## Skill Signature
 
 ```text
-content_impl_plan(idea, brand_kit?, tasty_pack?, content_kind?, video_method?, icp?, platform?, proof?, constraints?, artifact_owner?)
+content_impl_plan(idea, brand_kit?, tasty_pack?, content_kind?, video_method?, icp?, platform?, proof?, production_policy?, artifact_owner?)
   -> content_ticket + creative_hypothesis + leverage_map + low_fi_visual_storyboard + advisor_action_list + production_program | blocked_report
 
 state:
@@ -48,7 +48,7 @@ state:
 
 gates:
   idea_bound; audience_and_promise_named; creative_direction_composed;
-  brand_constraints_preserved_when_supplied;
+  brand_policy_preserved_when_supplied;
   complete_elements_mapped_when_supplied; storyboard_route_selected;
   low_fi_review_packet_observable; timing_master_selected;
   scene_grid_reviewable_when_deliberate_breaks; asset_graph_planned;
@@ -88,12 +88,12 @@ reference recreation. Use `qa` when a produced artifact needs formal proof.
 - [ ] 1. Bind the implementation brief.
   - [ ] Resolve idea, content kind, video method, optional approved Brand Kit,
     optional Tasty Pack/reference material, ICP, viewer
-    promise, proof, platform, target artifact, constraints, CTA, deadline, and
+    promise, proof, platform, target artifact, production policy, CTA, deadline, and
     artifact owner.
   - [ ] Read `qa_checklist.md` as preflight guardrails.
 - [ ] 2. Compose Brand Kit identity with optional Tasty Pack inspiration.
-  - [ ] Treat the Brand Kit as approved identity/constraint truth and the
-    Tasty Pack as optional ad-hoc inspiration. Brand Kit constraints win every
+  - [ ] Treat the Brand Kit as approved identity and policy/prompt truth and
+    the Tasty Pack as optional ad-hoc inspiration. Brand Kit policy wins every
     conflict; explicitly choose, augment, reject, or block each conflicting
     Tasty element instead of silently blending it.
   - [ ] Do not accept or resolve `style_profile` as a third reusable creative
@@ -101,19 +101,28 @@ reference recreation. Use `qa` when a produced artifact needs formal proof.
     `video-production` profile behavior outside this composition path.
   - [ ] Route video method selection through `video-production`, passing the
     compiled creative direction rather than asking it to merge a profile.
-  - [ ] When a Tasty Pack is supplied, identify hook stack, timeline beats,
-    story pattern, pacing, format affordances, creative elements, and why the
-    reference likely works; classify the reference type, reject nearby story
-    engines, and separate reusable structure from rights/brand constraints.
+  - [ ] When a Tasty Pack is supplied, identify the storyboard opening beat,
+    timeline beats, story pattern, editing rhythm, format affordances, creative
+    elements, and why the reference likely works; classify the reference type,
+    reject nearby story engines, and separate reusable structure from rights or
+    brand policy.
   - [ ] Emit labeled `Reference type`, `Rejected nearby formats`, `Narrative
     spine`, and `Viewer question -> answer` fields; do not leave these implied
     inside scene prose.
   - [ ] Build one `element_leverage_map` from complete Brand Kit and Tasty Pack
     elements to planned beats, assets, advisor actions, audio cues, motion
-    cues, copy moves, or production rules. Map pinned Tasty elements first and
+    cues, storyboard copy moves, editing/subtitle moves, or production rules.
+    Map pinned Tasty elements first and
     explain every selected, rejected, conflicting, or unused element. If
     `meta.warnings` says an operator note exists but no element was pinned from
     it, state the gap before treating the pack as production guidance.
+  - [ ] Enforce `is_element(value) = independently selectable &&
+    independently conditionable from an example && owned by a recognizable
+    production step`; accept only `format`, `storyboard`, `visual`,
+    `character`, `audio`, and `editing` as CreativeElement kinds. Fold hook
+    into storyboard opening beat, semantic copy into storyboard, subtitle
+    rendering/timing into editing, and constraints into production policy or
+    Brand Kit prompt text.
   - [ ] If named reference elements exist but their capture payload is missing,
     map those named elements provisionally at element level and block only the
     unresolved evidence/rights fields; do not replace the map with generic

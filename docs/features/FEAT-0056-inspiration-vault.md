@@ -3,7 +3,7 @@ title: Tasty Pack inspiration vault
 status: implemented
 owner: feature-registry
 created_at: 2026-06-27
-updated_at: 2026-07-22
+updated_at: 2026-07-24
 tags:
   - farplane
   - feature
@@ -34,7 +34,7 @@ known_limits: Tasty Packs are computed retrieval results, not saved rows or appr
 metrics:
   - inspiration_recall_quality
   - creative_grounding_reuse
-last_verified: 2026-07-22
+last_verified: 2026-07-24
 experimental: false
 superseded_by: false
 ---
@@ -66,7 +66,9 @@ Useful references often arrive before Farplane knows the next artifact they shou
 - Returns complete creative-element capsules without reducing them to title and description.
 - Keeps Tasty Packs computed at query time; there is no saved Tasty Pack table or row.
 - Treats Tasty Pack inspiration as optional production evidence that can augment a Brand Kit, not override approved identity.
-- Preserves source, analysis, elements, and direct meta warnings such as pinned counts, operator-note counts, and retrieval gaps.
+- Preserves source, optional transcript, freeform analysis Markdown, selected
+  elements, and direct meta warnings such as pinned counts, operator-note
+  counts, and retrieval gaps.
 - Keeps raw inspiration out of long-term docs unless distilled into a feature, system, skill, ticket, source decision, or Brand Kit approval.
 
 ## User Stories
@@ -80,12 +82,24 @@ Useful references often arrive before Farplane knows the next artifact they shou
 Tasty Pack retrieval is a computed inspiration surface, not durable approval.
 
 - Resource Bank stores candidate elements. Tasty Pack retrieval returns a pack view over those candidates for the current request.
-- Element kinds remain exactly `visual`, `audio`, `hook`, `storyboard`, `editing`, `copy`, `character`, `format`, and `constraint`.
+- `is_element(value) = independently selectable && independently conditionable from an example && owned by a recognizable production step`.
+- Storage applies a second selection gate:
+  `should_store_element(value, note) = is_element(value) && explicitly_selected_for_reuse(value, note)`.
+  Whole-source understanding remains in capture analysis; only components the
+  operator explicitly likes, selects, or asks to reuse become CreativeElement
+  rows. A capture may therefore contain zero elements.
+- Future-creation notes create or reuse one thin content-production ticket
+  containing the stable source URL or Resource Bank asset ID, intended output,
+  and operator details. Its first operation is `content-impl-plan`; no reverse
+  ingestion-job/task link is required.
+- Element kinds remain exactly `format`, `storyboard`, `visual`, `character`, `audio`, and `editing`.
+- Hook mechanics are the opening beat of `storyboard`; semantic copy is part of `storyboard`; subtitle rendering, caption timing, transition behavior, and cut rhythm belong to `editing`; layout stays under `visual`; vocal pacing stays under `audio`.
+- Constraints are source/production policy or later Brand Kit prompt content, not CreativeElement rows.
 - Each returned element includes `description`, `whyItWorks`, `goldenExample { assetId, description? }`, and `goldenRecipe` as one prompt string.
 - `goldenExample.assetId` points to the best Resource Bank asset for that element; the optional description explains the exact visual, audio, text, edit, or behavior worth conditioning on.
 - `goldenRecipe` is not a recipe object, required-input list, success-criteria list, or production-hints collection. It is one compact prompt for recreating the element's function.
 - Elements may still carry source tags, pinned priority, provenance, search metadata, or anchors as storage and retrieval metadata. Those fields do not replace the semantic capsule.
-- A content-production plan composes Tasty Pack elements with Brand Kit snapshots by explicit chosen/rejected role. Brand Kit constraints win when they conflict.
+- A content-production plan composes Tasty Pack elements with Brand Kit snapshots by explicit chosen/rejected role. Brand Kit policy and prompt constraints win when they conflict.
 - Accepted inspiration must move into a feature, skill, ticket, experiment, or source decision.
 - Stale inspiration is pruned or moved to temporary research.
 - Vault records do not override specs or skill instructions.
@@ -104,7 +118,7 @@ flowchart TD
   classDef retired fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d,stroke-dasharray: 5 3
 
   request["Trigger<br/>idea, timeframe, facets<br/>or creative request"]:::keep
-  bank["Resource Bank candidates<br/>source, analysis, complete elements"]:::keep
+  bank["Resource Bank candidates<br/>source, transcript, analysis Markdown, selected elements"]:::keep
   pack["Computed Tasty Pack<br/>captures + complete capsules"]:::changed
   compose["Content Production<br/>Brand Kit plus optional Tasty Pack"]:::added
   old["Retired<br/>saved pack rows<br/>recipe/profile tables"]:::retired
@@ -186,3 +200,6 @@ Acceptance signals:
   elements, tags/facets, and snapshot/reset/reingest for small old vaults
   instead of long-lived legacy fallback.
 - 2026-07-22: Moved Tasty Pack ownership to Content Production and narrowed the contract to computed complete-element retrieval.
+- 2026-07-24: Simplified capture analysis to optional transcript plus freeform
+  Markdown, required active elements to be explicitly selected, and added thin
+  repurpose-ticket creation for future-creation notes.

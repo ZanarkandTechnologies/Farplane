@@ -8,14 +8,16 @@ template_uses:
 - [ ] `composition-boundary`: The plan accepts `brand_kit?` and `tasty_pack?`
   as its reusable creative inputs. It does not accept, alias, or merge
   `style_profile` in this path; direct standalone `video-production` profile
-  behavior stays intact. Brand Kit identity/constraints win conflicts, and
+  behavior stays intact. Brand Kit identity/policy wins conflicts, and
   each Brand/Tasty element considered is marked chosen, augmented, rejected,
   conflicting, or unused with provenance and rationale.
 - [ ] `complete-leverage-map`: Every selected element preserves `description`,
   `whyItWorks`, one `goldenExample { assetId, description? }`, and one
   `goldenRecipe`. The `element_leverage_map` ties it to a beat, artifact,
-  advisor action, audio/motion cue, copy move, or production rule; incompatible
-  Tasty elements are never silently blended.
+  advisor action, audio/motion cue, storyboard copy move, editing/subtitle
+  move, or production rule; incompatible Tasty elements are never silently
+  blended. Elements use only `format`, `storyboard`, `visual`, `character`,
+  `audio`, and `editing`; hook/copy/constraint are not CreativeElement kinds.
 - [ ] `review-and-realization`: Before provider spend, the plan exposes a
   creative hypothesis, why the combination should work, conflict/reject
   decisions, exact leverage map, low-fi demo, and actual visual storyboard
