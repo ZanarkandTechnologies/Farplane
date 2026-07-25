@@ -58,6 +58,11 @@ URLs, tokens, or raw provider payloads.
 ## Receipts
 
 - `report_finalized_before_candidate_handoff:` yes | no
+- `highlight_selection_after_report_complete:` yes | no
+- `team_slug:`
+- `win_highlight:` appended | already_exists | no_eligible_win
+- `failure_highlight:` appended | already_exists | no_eligible_failure
+- `highlight_memory_or_correction_action:` none
 - `recovery_ticket_limit:`
 - `recovery_tickets_created_or_updated:`
 - `experimental_or_new_direction_tickets_created:` 0

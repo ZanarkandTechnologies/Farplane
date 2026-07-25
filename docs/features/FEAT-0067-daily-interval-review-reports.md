@@ -3,7 +3,7 @@ title: Daily and weekly BAU problem reports
 status: implemented
 owner: feature-registry
 created_at: 2026-07-07
-updated_at: 2026-07-12
+updated_at: 2026-07-24
 tags:
   - farplane
   - feature
@@ -20,6 +20,7 @@ surfaces:
   - skills/interval-update/SKILL.md
   - skills/interval-update/references/interval-update.md
   - skills/interval-update/templates/interval-report.md
+  - skills/interval-update/scripts/highlight_ledger.py
   - farplane/automations.toml
 source_refs:
   - docs/features/FEAT-0065-pulse-and-interval-automation.md
@@ -86,6 +87,13 @@ ticket admission.
 - Weekly synthesizes repeated BAU problems, goal/metric drift, review load, and
   unresolved maintenance across Daily reports.
 - Each report contains a minimal Markdown `## Problems` checkbox ledger.
+- After finalization, a report may select at most one exceptional metric win
+  and one lesson-bearing failure per team. Selection appends minimal rows to
+  `.farplane/highlights/wins.jsonl` and `failures.jsonl`; an honest no-op is
+  valid.
+- Wins require verified comparative metric evidence such as a record,
+  meaningful threshold crossing, or exceptional delta. Routine delivery is not
+  a win. Failures require a reusable lesson for a human or later agent.
 - A report may create a bounded recovery ticket when current or prior evidence
   proves an existing failure and the direct correction, KPI/guard, proof, stop,
   authority, and dedupe checks are already settled.
@@ -105,6 +113,8 @@ Interval writes its report before any recovery ticket. Candidates must be action
 material, deduped against active/recent work, authority-safe, and able to name
 proof plus a stop condition. Interval does not run Feed Scout,
 Dogfood Review, reward check-ins, priority planning, Goal execution, or workers.
+Highlight selection is presentation output, not correction memory: tickets,
+skills, gotchas, and lessons continue to own fixes and prevention.
 
 ## Feature Flow
 
@@ -142,6 +152,8 @@ Required proof:
   uncertain fixes and new direction remain planner candidates;
 - recovery tickets remain grounded, deduped, bounded, and experiment-free;
 - duplicates, vague fixes, authority gaps, and new direction are rejected;
+- highlight reruns are idempotent by `(kind, team, report)`, ordinary shipping
+  is rejected as a win, and every failure includes a reusable lesson;
 - Daily and Weekly reports remain useful without priority planning;
 - `python3 docs/features/validate_features.py` and
   `python3 bin/validators/check_doc_refs.py` pass.
@@ -168,3 +180,5 @@ Required proof:
   prior-evidence maintenance candidates.
 - 2026-07-12: Centralized exploratory admission in the one global planner while
   preserving bounded direct recovery for evidenced known failures.
+- 2026-07-24: Added post-finalization exceptional-win and lesson-bearing
+  failure highlights backed by minimal append-only JSONL ledgers.

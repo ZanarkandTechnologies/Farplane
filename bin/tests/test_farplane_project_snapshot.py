@@ -17,9 +17,12 @@ if str(CORE_DIR) not in sys.path:
 
 from farplane_project_snapshot import (
     collect_ticket_refs,
+    highlight_cadence,
+    load_highlights,
     load_project_snapshot,
     write_project_ui_snapshot,
 )
+from farplane_reports import build_report_registry
 from farplane_primitive_metrics import activated_external_projects
 
 
@@ -134,6 +137,30 @@ project:
     )
 
 
+def write_interval_report(
+    root: Path,
+    ref: str,
+    *,
+    created_at: str,
+    interval_id: str,
+) -> None:
+    path = root / ".farplane" / f"{ref}.md"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(
+        f"""---
+ref: {ref}
+kind: interval-report
+created_at: {created_at}
+ui_summary: Interval summary.
+interval_id: {interval_id}
+---
+
+# Interval Report
+""",
+        encoding="utf-8",
+    )
+
+
 class FarplaneProjectSnapshotTests(unittest.TestCase):
     def test_ticket_reward_projection_uses_canonical_reward_identity_and_state(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -216,6 +243,185 @@ kpi_rewards:
         self.assertFalse(snapshot["tabs"]["news"]["feed_scout"]["enabled"])
         self.assertEqual(snapshot["tabs"]["news"]["items"], [])
         self.assertIn("source_gap_ids", snapshot["tabs"]["kanban"])
+
+    def test_snapshot_projects_highlights_from_minimal_ledgers(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            write_minimal_project(root)
+            write_interval_report(
+                root,
+                "reports/interval/daily_interval/2026-07-23T220000Z",
+                created_at="2026-07-24T06:00:00+08:00",
+                interval_id="daily_interval",
+            )
+            write_interval_report(
+                root,
+                "reports/interval/weekly_interval/2026-07-19T220000Z",
+                created_at="2026-07-20T06:00:00+08:00",
+                interval_id="weekly_interval",
+            )
+            related = root / "tickets" / "TASK-0001" / "ticket.md"
+            related.parent.mkdir(parents=True)
+            related.write_text("# Related ticket\n", encoding="utf-8")
+            highlight_root = root / ".farplane" / "highlights"
+            highlight_root.mkdir(parents=True)
+            daily_ref = "reports/interval/daily_interval/2026-07-23T220000Z"
+            weekly_ref = "reports/interval/weekly_interval/2026-07-19T220000Z"
+            (highlight_root / "wins.jsonl").write_text(
+                "\n".join(
+                    [
+                        json.dumps(
+                            {
+                                "team": "test_project",
+                                "report": weekly_ref,
+                                "summary": "Weekly throughput beat the prior record by 40%.",
+                            }
+                        ),
+                        json.dumps(
+                            {
+                                "team": "test_project",
+                                "report": daily_ref,
+                                "summary": "Daily throughput beat the prior record by 20%.",
+                                "links": ["[Related ticket](tickets/TASK-0001/ticket.md)"],
+                            }
+                        ),
+                        json.dumps(
+                            {
+                                "team": "test_project",
+                                "report": daily_ref,
+                                "summary": "Duplicate rerun must not replace the first row.",
+                            }
+                        ),
+                    ]
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+            (highlight_root / "failures.jsonl").write_text(
+                json.dumps(
+                    {
+                        "team": "test_project",
+                        "report": daily_ref,
+                        "summary": "A simple task stalled behind delegation.",
+                        "lesson": "Do not delegate when the job is simpler to finish directly.",
+                    }
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+
+            first = load_project_snapshot(root, "2026-07-03")
+            second = load_project_snapshot(root, "2026-07-03")
+
+        highlights = first["tabs"]["highlights"]
+        self.assertEqual(first["schema_version"], 2)
+        self.assertEqual([card["cadence"] for card in highlights["wins"]], ["daily", "weekly"])
+        self.assertEqual(highlights["wins"][0]["period"], "2026-07-24")
+        self.assertEqual(highlights["wins"][0]["project_id"], "test_project")
+        self.assertEqual(
+            highlights["wins"][0]["links"],
+            [{"label": "Related ticket", "href": "tickets/TASK-0001/ticket.md"}],
+        )
+        self.assertEqual(highlights["wins"][0]["source_href"], f".farplane/{daily_ref}.md")
+        self.assertEqual(
+            highlights["failures"][0]["lesson"],
+            "Do not delegate when the job is simpler to finish directly.",
+        )
+        self.assertEqual(
+            first["tabs"]["highlights"]["wins"][0]["id"],
+            second["tabs"]["highlights"]["wins"][0]["id"],
+        )
+        self.assertEqual(len(highlights["wins"]), 2)
+        self.assertIn("duplicate_highlight:win:3", highlights["source_gap_ids"])
+        self.assertIn("highlight_card", first["shared_shapes"])
+
+    def test_highlight_cadence_accepts_current_and_legacy_interval_ids(self) -> None:
+        for interval_id in ("daily", "daily_interval"):
+            self.assertEqual(
+                highlight_cadence({"frontmatter": {"interval_id": interval_id}}),
+                "daily",
+            )
+        for interval_id in ("weekly", "weekly_interval"):
+            self.assertEqual(
+                highlight_cadence({"frontmatter": {"interval_id": interval_id}}),
+                "weekly",
+            )
+
+    def test_highlight_projection_is_tolerant_and_bounded(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            write_minimal_project(root)
+            write_interval_report(
+                root,
+                "reports/interval/daily_interval/2026-07-22T220000Z",
+                created_at="2026-07-23T06:00:00+08:00",
+                interval_id="daily_interval",
+            )
+            highlight_root = root / ".farplane" / "highlights"
+            highlight_root.mkdir(parents=True)
+            (highlight_root / "wins.jsonl").write_text(
+                "\n".join(
+                    [
+                        "{not-json",
+                        json.dumps(
+                            {
+                                "team": "test_project",
+                                "report": "reports/interval/daily_interval/missing",
+                                "summary": "A valid card whose report is unavailable.",
+                                "links": ["https://example.com", "tickets/TASK-9999/ticket.md"],
+                            }
+                        ),
+                        json.dumps(
+                            {
+                                "team": "test_project",
+                                "report": "reports/interval/daily_interval/2026-07-22T220000Z",
+                                "summary": "A valid recent card.",
+                            }
+                        ),
+                        json.dumps(
+                            {
+                                "team": "test_project",
+                                "report": "reports/interval/daily_interval/derived",
+                                "summary": "Derived fields invalidate a canonical row.",
+                                "created_at": "2026-07-24T00:00:00Z",
+                            }
+                        ),
+                    ]
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+
+            registry = build_report_registry(root)
+            all_highlights, gaps = load_highlights(root, registry, "test_project")
+            highlights, _bounded_gaps = load_highlights(root, registry, "test_project", history_limit=1)
+
+        self.assertEqual(len(highlights["wins"]), 1)
+        self.assertEqual(highlights["wins"][0]["summary"], "A valid recent card.")
+        unresolved = next(
+            card for card in all_highlights["wins"] if card["report"].endswith("/missing")
+        )
+        self.assertEqual(unresolved["cadence"], "")
+        self.assertEqual(unresolved["period"], "")
+        self.assertEqual(unresolved["created_at"], "")
+        self.assertNotIn("source_href", unresolved)
+        self.assertIn("missing_highlight_report:win:2", unresolved["source_gap_ids"])
+        gap_ids = {gap["id"] for gap in gaps}
+        self.assertIn("malformed_highlight_json:win:1", gap_ids)
+        self.assertIn("missing_highlight_report:win:2", gap_ids)
+        self.assertIn("invalid_highlight_link:win:2:1", gap_ids)
+        self.assertIn("missing_highlight_link:win:2:2", gap_ids)
+        self.assertIn("invalid_highlight_row:win:4", gap_ids)
+
+    def test_snapshot_treats_missing_highlight_ledgers_as_empty_optional_state(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            write_minimal_project(root)
+
+            snapshot = load_project_snapshot(root, "2026-07-03")
+
+        self.assertEqual(snapshot["tabs"]["highlights"], {"wins": [], "failures": [], "source_gap_ids": []})
+        self.assertFalse(any(gap["owner"] == "highlights" for gap in snapshot["source_gaps"]))
 
     def test_snapshot_ignores_intent_era_reward_observations(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -398,6 +604,7 @@ feed_scout:
   daily_feed_root: .farplane/feed-scout/daily
   ledger: .farplane/feed-scout/ledger.jsonl
   proposal_ledger: .farplane/feed-scout/proposals.jsonl
+  world_memory: .farplane/feed-scout/world-memory.md
   latest_report: .farplane/reports/feed-scout/latest.json
   ui:
     latest_feed: .farplane/feed-scout/daily/latest.json
@@ -457,6 +664,8 @@ feed_scout:
         self.assertEqual(news["latest_report"]["report_path"], ".farplane/reports/feed-scout/2026-07-03.md")
         self.assertTrue(news["feed_scout"]["enabled"])
         self.assertEqual(news["feed_scout"]["config"]["latest_feed"], ".farplane/feed-scout/daily/latest.json")
+        self.assertEqual(news["feed_scout"]["config"]["world_memory"], ".farplane/feed-scout/world-memory.md")
+        self.assertNotIn("memory", news["feed_scout"]["config"])
         self.assertEqual(news["source_gap_ids"], [])
 
     def test_enabled_feed_scout_reports_news_source_gaps_when_latest_files_are_missing(self) -> None:

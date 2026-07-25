@@ -32,6 +32,11 @@ REWARD_CONTRACT = "terminal_evidence_v1"
 CONTENT_LEDGER_PATH = Path(".farplane/content/ledger.jsonl")
 FEED_SCOUT_LATEST_FEED_PATH = Path(".farplane/feed-scout/daily/latest.json")
 FEED_SCOUT_LATEST_REPORT_PATH = Path(".farplane/reports/feed-scout/latest.json")
+HIGHLIGHT_LEDGER_PATHS = {
+    "win": Path(".farplane/highlights/wins.jsonl"),
+    "failure": Path(".farplane/highlights/failures.jsonl"),
+}
+HIGHLIGHT_HISTORY_LIMIT_PER_KIND = 24
 
 
 class SourceGap(TypedDict):
@@ -211,6 +216,21 @@ SHARED_SHAPES: dict[str, list[str]] = {
         "parent_ref?",
         "children_refs[]",
         "source_ref",
+    ],
+    "highlight_card": [
+        "id",
+        "kind",
+        "team",
+        "project_id",
+        "report",
+        "summary",
+        "lesson?",
+        "links[]",
+        "cadence",
+        "period",
+        "created_at",
+        "source_href?",
+        "source_gap_ids[]",
     ],
 }
 
@@ -687,6 +707,7 @@ def load_feed_scout_snapshot(project_root: Path, bindings: dict[str, Any]) -> tu
                 "daily_feed_root": str(config.get("daily_feed_root") or ""),
                 "ledger": str(config.get("ledger") or ""),
                 "proposal_ledger": str(config.get("proposal_ledger") or ""),
+                "world_memory": str(config.get("world_memory") or ""),
                 "latest_feed": str(latest_feed_path),
                 "latest_report": str(latest_report_path),
                 "source_ref": {"path": "farplane/bindings.yaml", "pointer": "feed_scout"},
@@ -702,8 +723,11 @@ def load_feed_scout_snapshot(project_root: Path, bindings: dict[str, Any]) -> tu
     )
 
 
-def report_cards(project_root: Path) -> list[dict[str, Any]]:
-    registry = build_report_registry(project_root)
+def report_cards(
+    project_root: Path,
+    registry: dict[str, Any] | None = None,
+) -> list[dict[str, Any]]:
+    registry = registry or build_report_registry(project_root)
     cards: list[dict[str, Any]] = []
     for report in registry.get("reports", [])[:20]:
         if not isinstance(report, dict):
@@ -725,6 +749,243 @@ def report_cards(project_root: Path) -> list[dict[str, Any]]:
             }
         )
     return cards
+
+
+def highlight_id(kind: str, team: str, report: str) -> str:
+    natural_key = "\0".join((kind, team, report)).encode("utf-8")
+    return f"highlight:{kind}:{hashlib.sha256(natural_key).hexdigest()[:16]}"
+
+
+def highlight_cadence(report: dict[str, Any]) -> str:
+    frontmatter = report.get("frontmatter") if isinstance(report.get("frontmatter"), dict) else {}
+    interval_id = str(frontmatter.get("interval_id") or "").strip().lower()
+    if interval_id in {"daily", "daily_interval"}:
+        return "daily"
+    if interval_id in {"weekly", "weekly_interval"}:
+        return "weekly"
+    return ""
+
+
+def highlight_period(report: dict[str, Any]) -> str:
+    raw = str(report.get("created_at") or "").strip()
+    if not raw:
+        return ""
+    try:
+        created_at = datetime.fromisoformat(raw[:-1] + "+00:00" if raw.endswith("Z") else raw)
+    except ValueError:
+        return ""
+    return created_at.date().isoformat()
+
+
+def parse_highlight_link(value: Any) -> tuple[str, str] | None:
+    if not isinstance(value, str):
+        return None
+    raw = value.strip()
+    if not raw:
+        return None
+    markdown_match = re.fullmatch(r"\[([^\]]+)\]\(([^)]+)\)", raw)
+    if markdown_match:
+        label = markdown_match.group(1).strip()
+        href = markdown_match.group(2).strip()
+    else:
+        href = raw
+        path_part = href.split("#", 1)[0]
+        label = Path(path_part).name or path_part
+    path_part = href.split("#", 1)[0]
+    parts = Path(path_part).parts
+    if (
+        not label
+        or not path_part
+        or href.startswith(("/", "#"))
+        or "://" in href
+        or any(part in {".", ".."} for part in parts)
+    ):
+        return None
+    return label, href
+
+
+def normalize_highlight_links(
+    project_root: Path,
+    values: Any,
+    *,
+    kind: str,
+    line_number: int,
+    ledger_path: Path,
+) -> tuple[list[dict[str, str]], list[SourceGap]]:
+    if values is None:
+        return [], []
+    if not isinstance(values, list):
+        return [], [
+            source_gap(
+                f"invalid_highlight_links:{kind}:{line_number}",
+                "highlights",
+                "Highlight links must be a list of project-relative file or Markdown refs.",
+                f"{ledger_path.as_posix()}#L{line_number}",
+            )
+        ]
+    links: list[dict[str, str]] = []
+    gaps: list[SourceGap] = []
+    seen: set[str] = set()
+    for index, value in enumerate(values, start=1):
+        parsed = parse_highlight_link(value)
+        if parsed is None:
+            gaps.append(
+                source_gap(
+                    f"invalid_highlight_link:{kind}:{line_number}:{index}",
+                    "highlights",
+                    "Highlight link is not a project-relative file or Markdown ref.",
+                    f"{ledger_path.as_posix()}#L{line_number}",
+                )
+            )
+            continue
+        label, href = parsed
+        path_part = href.split("#", 1)[0]
+        if not (project_root / path_part).exists():
+            gaps.append(
+                source_gap(
+                    f"missing_highlight_link:{kind}:{line_number}:{index}",
+                    "highlights",
+                    f"Highlight link target does not exist: {path_part}",
+                    f"{ledger_path.as_posix()}#L{line_number}",
+                )
+            )
+            continue
+        if href not in seen:
+            links.append({"label": label, "href": href})
+            seen.add(href)
+    return links, gaps
+
+
+def load_highlights(
+    project_root: Path,
+    report_registry: dict[str, Any],
+    project_id: str,
+    *,
+    history_limit: int = HIGHLIGHT_HISTORY_LIMIT_PER_KIND,
+) -> tuple[dict[str, Any], list[SourceGap]]:
+    """Project minimal append-only highlight rows into render-ready cards."""
+
+    by_ref = report_registry.get("by_ref") if isinstance(report_registry.get("by_ref"), dict) else {}
+    projected: dict[str, list[dict[str, Any]]] = {"wins": [], "failures": []}
+    gaps: list[SourceGap] = []
+    seen_keys: set[tuple[str, str, str]] = set()
+
+    for kind, ledger_path in HIGHLIGHT_LEDGER_PATHS.items():
+        path = project_root / ledger_path
+        if not path.exists():
+            continue
+        try:
+            lines = path.read_text(encoding="utf-8").splitlines()
+        except (OSError, UnicodeError) as exc:
+            gaps.append(
+                source_gap(
+                    f"unreadable_highlight_ledger:{kind}",
+                    "highlights",
+                    f"Could not read highlight ledger: {exc.__class__.__name__}",
+                    ledger_path.as_posix(),
+                )
+            )
+            continue
+
+        for line_number, raw_line in enumerate(lines, start=1):
+            if not raw_line.strip():
+                continue
+            line_ref = f"{ledger_path.as_posix()}#L{line_number}"
+            try:
+                row = json.loads(raw_line)
+            except json.JSONDecodeError:
+                gaps.append(
+                    source_gap(
+                        f"malformed_highlight_json:{kind}:{line_number}",
+                        "highlights",
+                        "Highlight ledger line is not valid JSON.",
+                        line_ref,
+                    )
+                )
+                continue
+            required = {"team", "report", "summary"}
+            allowed = required | {"links"} | ({"lesson"} if kind == "failure" else set())
+            if (
+                not isinstance(row, dict)
+                or any(not isinstance(row.get(field), str) or not row.get(field, "").strip() for field in required)
+                or (kind == "failure" and (not isinstance(row.get("lesson"), str) or not row.get("lesson", "").strip()))
+                or set(row) - allowed
+            ):
+                gaps.append(
+                    source_gap(
+                        f"invalid_highlight_row:{kind}:{line_number}",
+                        "highlights",
+                        "Highlight row does not match the minimal canonical schema.",
+                        line_ref,
+                    )
+                )
+                continue
+
+            team = str(row["team"]).strip()
+            report_ref = str(row["report"]).strip()
+            natural_key = (kind, team, report_ref)
+            if natural_key in seen_keys:
+                gaps.append(
+                    source_gap(
+                        f"duplicate_highlight:{kind}:{line_number}",
+                        "highlights",
+                        "Duplicate highlight natural key was ignored.",
+                        line_ref,
+                    )
+                )
+                continue
+            seen_keys.add(natural_key)
+
+            report = by_ref.get(report_ref)
+            card_gap_ids: list[str] = []
+            if not isinstance(report, dict):
+                gap = source_gap(
+                    f"missing_highlight_report:{kind}:{line_number}",
+                    "highlights",
+                    f"Highlight source report is absent from the report registry: {report_ref}",
+                    line_ref,
+                )
+                gaps.append(gap)
+                card_gap_ids.append(gap["id"])
+                report = {}
+
+            links, link_gaps = normalize_highlight_links(
+                project_root,
+                row.get("links"),
+                kind=kind,
+                line_number=line_number,
+                ledger_path=ledger_path,
+            )
+            gaps.extend(link_gaps)
+            card_gap_ids.extend(gap["id"] for gap in link_gaps)
+            source_href = str(report.get("path") or "")
+            card: dict[str, Any] = {
+                "id": highlight_id(kind, team, report_ref),
+                "kind": kind,
+                "team": team,
+                "project_id": project_id,
+                "report": report_ref,
+                "summary": str(row["summary"]).strip(),
+                "links": links,
+                "cadence": highlight_cadence(report),
+                "period": highlight_period(report),
+                "created_at": str(report.get("created_at") or ""),
+                "source_gap_ids": card_gap_ids,
+            }
+            if kind == "failure":
+                card["lesson"] = str(row["lesson"]).strip()
+            if source_href:
+                card["source_href"] = source_href
+            projected["wins" if kind == "win" else "failures"].append(card)
+
+    for key in ("wins", "failures"):
+        projected[key].sort(
+            key=lambda card: (parse_iso_datetime(card.get("created_at")) or datetime.min.replace(tzinfo=timezone.utc), card["id"]),
+            reverse=True,
+        )
+        projected[key] = projected[key][: max(0, history_limit)]
+    projected["source_gap_ids"] = [gap["id"] for gap in gaps]
+    return projected, gaps
 
 
 def proof_artifacts(project_root: Path) -> list[dict[str, Any]]:
@@ -1392,7 +1653,11 @@ def load_project_snapshot(project_root: Path, snapshot_date: str | None = None) 
     content_items, content_gap_ids = load_content_items(project_root)
     automations, automation_gap_ids = load_automations(project_root)
     feed_scout, feed_scout_gaps = load_feed_scout_snapshot(project_root, bindings)
-    reports = report_cards(project_root)
+    project = manifest.get("project") if isinstance(manifest.get("project"), dict) else {}
+    project_id = str(bindings.get("project", {}).get("id") or project.get("name") or project_root.name).lower().replace(" ", "-")
+    report_registry = build_report_registry(project_root)
+    reports = report_cards(project_root, report_registry)
+    highlights, highlight_gaps = load_highlights(project_root, report_registry, project_id)
     proof_items = proof_artifacts(project_root)
     eval_items = eval_runs(project_root)
     sources = [
@@ -1418,6 +1683,7 @@ def load_project_snapshot(project_root: Path, snapshot_date: str | None = None) 
     source_gaps.extend(source_gap(gap_id, "distribution", gap_id, ".farplane/content/ledger.jsonl") for gap_id in content_gap_ids)
     source_gaps.extend(source_gap(gap_id, "cadence", gap_id, "farplane/automations.toml") for gap_id in automation_gap_ids)
     source_gaps.extend(feed_scout_gaps)
+    source_gaps.extend(highlight_gaps)
     if not reports:
         source_gaps.append(source_gap("missing_recent_reports", "cadence", "No recent report cards found under .farplane/reports/.", ".farplane/reports/"))
     if not ticket_refs:
@@ -1436,7 +1702,6 @@ def load_project_snapshot(project_root: Path, snapshot_date: str | None = None) 
                 "source_ref": {"path": ".farplane/metrics/daily/"},
             }
         )
-    project = manifest.get("project") if isinstance(manifest.get("project"), dict) else {}
     source_gap_ids = [gap["id"] for gap in source_gaps]
     distribution_gap_ids = [gap for gap in source_gap_ids if gap.startswith("missing_content")]
     cadence_gap_ids = [gap for gap in source_gap_ids if gap.startswith("missing_recent") or gap.startswith("missing_automations") or gap.startswith("invalid_automations")]
@@ -1480,7 +1745,7 @@ def load_project_snapshot(project_root: Path, snapshot_date: str | None = None) 
         "project_root": str(project_root),
         "shared_shapes": SHARED_SHAPES,
         "project": {
-            "id": str(bindings.get("project", {}).get("id") or project.get("name") or project_root.name).lower().replace(" ", "-"),
+            "id": project_id,
             "name": project.get("name") or project_root.name,
             "description": project.get("description") or "",
             "archetype": project.get("archetype") or "",
@@ -1569,6 +1834,7 @@ def load_project_snapshot(project_root: Path, snapshot_date: str | None = None) 
                 "report_cards": reports,
                 "source_gap_ids": [],
             },
+            "highlights": highlights,
         },
     }
 

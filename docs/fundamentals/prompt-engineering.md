@@ -3,7 +3,7 @@ title: "Prompt Engineering"
 status: active
 owner: prompt-governance
 created_at: 2026-06-12
-updated_at: 2026-06-12
+updated_at: 2026-07-24
 tags:
   - prompts
   - templates
@@ -204,6 +204,46 @@ Use:
 Do not ask for fake precision. Scores need a calibrated rubric; otherwise use
 named verdicts, pass/fail checks, or concrete findings.
 
+### Canonical Schema Minimality
+
+For JSON, JSONL, YAML, tool arguments, and other structured outputs, separate
+canonical authored state from replaceable projections:
+
+```text
+design_schema(authored_facts, natural_identity, consumers)
+  -> minimal_canonical_fields + justified_projection_fields
+```
+
+Persist a field only when at least one current need applies:
+
+- it cannot be losslessly derived from other canonical fields;
+- it preserves snapshot-time meaning that later derivation would change;
+- an observed query or index needs the stored value;
+- an interchange boundary requires a stable explicit identity.
+
+Otherwise derive it at the consumer or projection boundary. Prefer a natural or
+composite key over an authored ID when it is stable and unambiguous. A
+replaceable UI/search projection may denormalize fields for a named consumer,
+but it must not turn those conveniences into duplicated canonical state.
+
+Positive example:
+
+```json
+{"team":"farplane","report":"reports/interval/daily/2026-07-24","summary":"Activation passed the prior record."}
+```
+
+Here `(kind, team, report)` can provide identity, while cadence, period,
+timestamp, project, and display labels come from the report registry.
+
+Negative example:
+
+```json
+{"id":"win-farplane-2026-07-24","project":"farplane","team":"farplane","cadence":"daily","period":"2026-07-24","report":"reports/interval/daily/2026-07-24"}
+```
+
+It fails unless a current consumer proves why those duplicated fields must be
+canonical rather than derived.
+
 ## Proof Rules
 
 Every material prompt should say how the model should know it is done.
@@ -249,6 +289,8 @@ explicit, example-calibrated, and proof-backed.
   enough.
 - [ ] A negative example is included when there is a likely costly failure mode.
 - [ ] Output shape is explicit enough for the next consumer.
+- [ ] Canonical schemas omit derivable fields unless a current snapshot,
+      query/index, or interchange need justifies them.
 - [ ] Proof, verification, or review expectations are named.
 - [ ] Safety boundaries cover destructive, external, spend, deploy, and publish
   actions when relevant.

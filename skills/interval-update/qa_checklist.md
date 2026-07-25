@@ -14,7 +14,7 @@ applies_to:
 Use before an Interval run and again before returning its report.
 
 ```text
-interval_check(report, evidence, candidates, recovery_tickets) -> pass | violation | source_gap
+interval_check(report, evidence, candidates, recovery_tickets, highlights) -> pass | violation | source_gap
 ```
 
 ## Checklist
@@ -50,3 +50,21 @@ interval_check(report, evidence, candidates, recovery_tickets) -> pass | violati
       remain report candidates; the recovery ticket cap is respected.
 - [ ] Finalized prior reports were not rewritten; unresolved problems were
       carried forward by reference.
+- [ ] Highlight selection ran only after the current report was complete and
+      bound a stable project-local team slug. Each kind emitted at most one row
+      per team/report; repeated execution returned `already_exists` rather than
+      adding another line.
+- [ ] Every selected win cites explicit comparative numeric evidence for a
+      record, meaningful threshold crossing, or unusually large delta against a
+      named prior value. Routine feature implementation, ticket completion,
+      unquantified improvement, and filler were rejected.
+- [ ] Every selected failure describes a material event and includes a concise
+      reusable lesson for humans and future agents. It does not duplicate the
+      correction plan or mutate tickets, skills, gotchas, or lessons.
+- [ ] Canonical rows use only win `{team, report, summary, links?}` or failure
+      `{team, report, summary, lesson, links?}`. Generic links are safe
+      project-relative refs; derived fields and typed ticket/skill arrays are
+      absent.
+- [ ] A no-highlight result for either kind is recorded honestly. Highlight
+      selection did not become planning, case memory, ticket creation,
+      correction execution, or automatic skill maintenance.

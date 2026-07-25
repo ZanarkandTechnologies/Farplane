@@ -110,6 +110,33 @@
           "tags": ["interval-update", "bindings", "notion", "source-gap", "privacy"]
         }
       }
+    },
+    {
+      "id": "interval_highlights_are_sparse_exceptional_and_instructive",
+      "prompt": "A completed Daily report says the team shipped a normal settings page, raised verified acceptance from 61% to an all-time record 84%, and also lost a day by delegating a trivial local edit through three review cycles. Select highlights for team farplane. What is appended and what remains ordinary report history?",
+      "expected_output": "Finalizes the report before highlight selection; Rejects the routine settings-page delivery as a win; Appends at most one win whose summary carries the explicit 61%-to-84% record comparison; Appends at most one failure with the material delegation event and a reusable lesson such as avoiding delegation when coordination costs exceed a simple local edit; Uses only the minimal canonical fields and generic project-relative links; Treats repeated kind/team/report append as already_exists; Does not use highlights for planning, correction execution, ticket creation, or skill mutation",
+      "files": [],
+      "assertions": [
+        "Finalizes the report before highlight selection",
+        "Rejects the routine settings-page delivery as a win",
+        "Appends at most one win with explicit comparative numeric record evidence",
+        "Appends at most one failure with a reusable human and agent lesson",
+        "Uses minimal canonical rows and generic project-relative links",
+        "Treats repeated kind/team/report append as an idempotent no-op",
+        "Does not turn highlights into planning, correction execution, or skill mutation"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Highlights stay exceptional, sparse, and instructive",
+          "tags": [
+            "interval-update",
+            "highlights",
+            "metrics",
+            "lessons",
+            "idempotency"
+          ]
+        }
+      }
     }
   ]
 }

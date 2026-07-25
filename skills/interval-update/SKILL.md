@@ -1,6 +1,6 @@
 ---
 name: interval-update
-description: "Turn one Daily or Weekly BAU review window into a dated problem report, bounded recovery tickets, and planner candidates."
+description: "Turn one Daily or Weekly BAU review window into a dated problem report, bounded highlights, recovery tickets, and planner candidates."
 tier: 3
 group: harness
 source: local
@@ -21,7 +21,9 @@ Use this skill for one bounded Daily or Weekly BAU reporting automation. The
 Codex app owns cadence. This skill compresses the completed review window into
 a dated report, maintains a small Markdown `Problems` ledger, and surfaces
 already-observed maintenance as planner candidates and may admit a bounded
-recovery ticket when the cause and correction are already evidenced.
+recovery ticket when the cause and correction are already evidenced. After the
+report is complete, it may append a low-volume exceptional win and instructive
+failure for presentation.
 
 Interval does not choose new direction. It does not run Feed Scout, Dogfood
 Review, reward check-ins, priority planning, leverage planning, harness
@@ -45,6 +47,8 @@ interval_update(project_root, interval_id, review_window, context_refs?,
    + problems
    + maintenance_candidates
    + recovery_ticket_paths[0..maintenance_ticket_limit]
+   + highlights {wins[0..1 per team], failures[0..1 per team]}
+   + highlight_receipt
    + metric_refresh_receipt?
    + source_gaps
 
@@ -56,6 +60,8 @@ state:
         latest completed provider reports supplied through context_refs,
         review/run artifacts and project memory refs when supplied)
   writes(.farplane/reports/interval/<interval_id>/<timestamp>.md,
+         .farplane/highlights/wins.jsonl?,
+         .farplane/highlights/failures.jsonl?,
          optional recovery tickets after the report)
 
 gates:
@@ -65,6 +71,8 @@ gates:
   recovery_scope_settled; maintenance_only; active_ticket_deduped;
   proof_and_stop_condition_named; recovery_only; ticket_cap_respected;
   no_new_direction; no_experiment_or_reward_mutation
+  report_complete_before_highlight_append; highlight_cap_respected;
+  exceptional_comparative_metric_win; reusable_failure_lesson
 
 routes:
   pulse-update | plan-next-wave | feed-scout | review
@@ -73,7 +81,8 @@ fails:
   planning new product, campaign, strategy, capability, or harness direction;
   running provider or self-improvement workflows; scoring ticket rewards;
   creating a new-direction or experiment ticket; emitting duplicate or
-  unbounded maintenance candidates; executing work
+  unbounded maintenance candidates; treating routine delivery as a win;
+  using highlights as planning or correction memory; executing work
 ```
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
@@ -137,14 +146,39 @@ fails:
         link them to the Problems ledger. New direction, opportunities, and
         uncertain hypotheses remain candidates for the adaptive planner.
   - [ ] Do not start Goal, Pulse, a worker, or implementation.
-- [ ] 5. Finish-check and return.
+- [ ] 5. Select bounded highlights after report finalization.
+  - [ ] Bind a stable project-local team slug explicitly; do not infer a
+        Convex or UI object ID.
+  - [ ] Select at most one win and one failure per team for this exact report.
+        An honest no-op for either kind is preferred to filler.
+  - [ ] Admit a win only for an exceptional metric event backed by explicit
+        comparative numbers: an all-time/window record, a meaningful threshold
+        crossing, or an unusually large delta against a named prior value.
+        Routine feature completion, ticket closure, and unquantified praise are
+        never wins.
+  - [ ] Admit a failure only when the report evidences a material event and the
+        row can state both its consequence/context and a concise reusable lesson
+        for humans and future agents.
+  - [ ] Append through
+        `scripts/highlight_ledger.py append --project-root <root> --kind
+        <win|failure> --row-json <json>`. Keep canonical rows minimal: win
+        `{team, report, summary, links?}` and failure
+        `{team, report, summary, lesson, links?}`. Use generic project-relative
+        `links`; do not add IDs, project, cadence, period, timestamps, origin,
+        status, metric decomposition, or typed ticket/skill references.
+  - [ ] Treat `(kind, team, report)` as identity and report `already_exists` as
+        an idempotent no-op. Do not mutate a finalized report or use the
+        highlights to plan, create a correction, execute work, or update a
+        skill/lesson.
+- [ ] 6. Finish-check and return.
   - [ ] Apply `qa_checklist.md` again and index reports when the CLI is available.
   - [ ] Return the binding ref, selected provider, sanitized configured source,
         filesystem policy, and source gaps; for filesystem providers, state
         that work review and active-work dedupe used only the configured
         directories loaded after binding resolution.
   - [ ] Return report path, carried/new/resolved problems, maintenance
-        candidates, recovery ticket paths, source gaps, and a no-execution receipt.
+        candidates, recovery ticket paths, selected/no-op highlights, source
+        gaps, and a no-execution receipt.
   - [ ] In the final chat response, summarize the report's decision content:
         report path, 2-4 key findings, tickets created or updated, each
         candidate's admission result and reason, operator-needed items, source
@@ -167,6 +201,12 @@ fails:
   workflow. Notion reads stay read-only and bounded; recovery writes require a
   separately authorized provider write route and otherwise remain candidates.
 - Weekly repetition increases confidence but does not grant broader authority.
+- Highlight selection is a presentation judgment, not a second Problems or
+  case-memory system. Tickets, skills, gotchas, and lessons continue to own
+  correction and prevention.
+- Do not infer win eligibility from prose keywords. The Interval agent must
+  cite explicit comparative metric evidence already present in the bounded
+  evidence bundle.
 
 ## Reference Map
 
@@ -186,6 +226,9 @@ fails:
   evidence of an existing failure and requiring no experiment.
 - Source gaps and a receipt that Interval did not plan direction, run providers,
   score experiments, or execute tickets.
+- Zero or one exceptional metric win and zero or one lesson-bearing failure per
+  team, appended only after the owning report is complete, plus an idempotency
+  receipt.
 - A sanitized provider-resolution receipt proving bindings were loaded before
   work-item evidence and naming the only source used for review and dedupe.
 - A final chat receipt that makes the report readable without opening it: key
