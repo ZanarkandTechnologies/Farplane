@@ -24,6 +24,65 @@
           "notes": "Prevents QA-surface confusion in the Goal proof loop."
         }
       }
+    },
+    {
+      "id": "agent_qa_experiment_faulty_reproduction_01",
+      "prompt": "A reproduction of a paper showed no improvement, so the experimenter wants to report that the method does not work. The positive control also failed and the preprocessing settings were not checked against the paper. Review the conclusion.",
+      "expected_output": "Treats the result as invalid or inconclusive rather than method-refuting; Compares the observation with a preregistered expectation or marks that contract missing; Checks controls, implementation fidelity, evaluator sensitivity, and alternatives before inference; Proposes only a bounded discriminating repair or rerun; Keeps the domain executor separate from the independent diagnosis lane",
+      "files": [],
+      "assertions": [
+        "Treats the result as invalid or inconclusive rather than method-refuting",
+        "Compares the observation with a preregistered expectation or marks that contract missing",
+        "Checks controls, implementation fidelity, evaluator sensitivity, and alternatives before inference",
+        "Proposes only a bounded discriminating repair or rerun",
+        "Keeps the domain executor separate from the independent diagnosis lane"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Agent QA blocks premature falsification from a faulty reproduction",
+          "tags": ["skill", "agent-qa-test", "experiment", "faulty-reproduction"],
+          "notes": "Primary regression case for TASK-0408."
+        }
+      }
+    },
+    {
+      "id": "agent_qa_experiment_valid_negative_01",
+      "prompt": "A bounded reproduction matched the source configuration, passed baseline and positive controls, demonstrated evaluator sensitivity with a synthetic effect, and found no improvement across the declared reruns. How strong can the conclusion be?",
+      "expected_output": "Allows a method-refuted-in-scope verdict only for the named implementation, data, evaluator, and budget; Requires evidence for controls, fidelity, sensitivity, alternatives, and rerun history; Preserves uncertainty outside the tested scope; Hands the material conclusion to scientific-evidence review rather than self-approving it",
+      "files": [],
+      "assertions": [
+        "Allows a method-refuted-in-scope verdict only for the named implementation, data, evaluator, and budget",
+        "Requires evidence for controls, fidelity, sensitivity, alternatives, and rerun history",
+        "Preserves uncertainty outside the tested scope",
+        "Hands the material conclusion to scientific-evidence review rather than self-approving it"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Agent QA permits a well-supported scoped negative conclusion",
+          "tags": ["skill", "agent-qa-test", "experiment", "valid-negative"],
+          "notes": "Ensures the gate can support rejection when evidence is genuinely strong."
+        }
+      }
+    },
+    {
+      "id": "agent_qa_experiment_conditional_research_01",
+      "prompt": "Our prompt experiment was expected to fix one or two held-out failures, but it suddenly passed every case. Local artifacts cannot tell whether the benchmark examples leaked into training context. Should we accept the result or research further?",
+      "expected_output": "Classifies the result as implausibly positive rather than automatically promoting it; Audits leakage, contamination, evaluator drift, baseline comparability, and equal task budgets; Uses targeted external research only if the source or domain assumption remains disputed after local checks; Proposes the cheapest bounded discriminating probe; Does not broaden into generic research or unbounded reruns",
+      "files": [],
+      "assertions": [
+        "Classifies the result as implausibly positive rather than automatically promoting it",
+        "Audits leakage, contamination, evaluator drift, baseline comparability, and equal task budgets",
+        "Uses targeted external research only if the source or domain assumption remains disputed after local checks",
+        "Proposes the cheapest bounded discriminating probe",
+        "Does not broaden into generic research or unbounded reruns"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Agent QA audits suspicious success and researches conditionally",
+          "tags": ["skill", "agent-qa-test", "experiment", "conditional-research"],
+          "notes": "Covers two-sided surprise and bounded research."
+        }
+      }
     }
   ]
 }

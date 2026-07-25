@@ -20,7 +20,9 @@ Apply before campaign approval and again before completion.
       from its roadmap plus `progress.md` learnings, current receipts, and
       remaining budget.
 - [ ] Every experiment preregisters one attributable change, hypothesis,
-      falsifier, cost, guards, and keep/kill rule before full metrics are read.
+      expected observation, observation horizon, named confidence, falsifier,
+      surprise trigger, cost, guards, and keep/kill rule before full metrics
+      are read.
 - [ ] Every valid, invalid, failed, kept, and discarded attempt has an
       append-only receipt with hashes, command/environment, metrics, guards,
       runtime/cost, learning, and frontier update.
@@ -30,3 +32,6 @@ Apply before campaign approval and again before completion.
 - [ ] Final claims come from the frozen best candidate's complete evaluator and
       independent leakage/reproducibility/evidence review, not the executor's
       self-assessment.
+- [ ] A material negative miss or implausibly strong positive result has an
+      `agent-qa-test:experiment` diagnosis receipt before method rejection or
+      candidate promotion.

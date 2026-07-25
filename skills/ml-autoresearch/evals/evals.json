@@ -56,6 +56,20 @@
         "Does not create one ticket per experiment"
       ],
       "metadata": {"farplane": {"title": "ML Autoresearch uses one campaign ticket", "tags": ["skill", "ml", "autoresearch", "tickets"], "notes": "Protects campaign state locality."}}
+    },
+    {
+      "id": "ml_autoresearch_negative_gate_01",
+      "prompt": "A paper reproduction produced no gain, and the campaign wants to stop with a supported negative conclusion. The baseline ran, but the positive control also failed. What should the loop record and do next?",
+      "expected_output": "Requires the experiment's preregistered expected observation, horizon, confidence, falsifier, and surprise trigger; Preserves the immutable failed receipt; Routes the surprising negative result to agent-qa-test:experiment; Treats the failed positive control as invalid or inconclusive evidence rather than a supported method rejection; Keeps any repair or rerun inside the campaign budget and domain executor",
+      "files": [],
+      "assertions": [
+        "Requires the experiment's preregistered expected observation, horizon, confidence, falsifier, and surprise trigger",
+        "Preserves the immutable failed receipt",
+        "Routes the surprising negative result to agent-qa-test:experiment",
+        "Treats the failed positive control as invalid or inconclusive evidence rather than a supported method rejection",
+        "Keeps any repair or rerun inside the campaign budget and domain executor"
+      ],
+      "metadata": {"farplane": {"title": "ML Autoresearch audits a surprising negative before stopping", "tags": ["skill", "ml", "autoresearch", "scientific-evidence"], "notes": "Prevents premature falsification inside the campaign loop."}}
     }
   ]
 }

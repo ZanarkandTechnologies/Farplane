@@ -172,6 +172,46 @@
           "notes": "Protects the TASK-0200 lifecycle: immediate eval rows are the safety net; weekly eval drain reduces noise afterward."
         }
       }
+    },
+    {
+      "id": "eval_behavior_trace_01",
+      "prompt": "A fresh AGI Toy Shop worker is supposed to follow the inventory-check workflow and write a receipt, but its final claim is not enough. Capture one isolated run so we can inspect what it actually did and compare it with the current baseline.",
+      "expected_output": "Chooses Eval behavior trace rather than a second standalone workflow; Preserves the exact prompt, raw event stream, stdout/stderr, final output, commands, usage, checkpoints, and artifacts; Uses the standard behavior-report schema when structured output matters; Runs one worker and retains ephemeral hook-disabled Codex isolation; Keeps baseline comparison available and routes native-subagent-only capture to Agent QA",
+      "files": [],
+      "assertions": [
+        "Chooses Eval behavior trace rather than a second standalone workflow",
+        "Preserves the exact prompt, raw event stream, stdout/stderr, final output, commands, usage, checkpoints, and artifacts",
+        "Uses the standard behavior-report schema when structured output matters",
+        "Runs one worker and retains ephemeral hook-disabled Codex isolation",
+        "Keeps baseline comparison available and routes native-subagent-only capture to Agent QA"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Eval owns isolated behavior traces",
+          "tags": ["skill", "eval", "behavior-trace"],
+          "notes": "Regression coverage for TASK-0384 consolidation."
+        }
+      }
+    },
+    {
+      "id": "eval_experiment_surprise_gate_01",
+      "prompt": "We changed the AGI Toy Shop support prompt and expect fewer missed escalations on the same held-out tasks. Plan the comparison before looking at the new run, then explain what to do if the result is unchanged or somehow becomes perfect.",
+      "expected_output": "Uses eval:experiment or an equivalent comparative eval path; Preregisters an aggregate expected observation, horizon, named confidence, falsifier, and surprise trigger before reading candidate results; Keeps that forecast outside the user-facing task queries and distinct from assertions or reference points; Holds task set, evaluator, and budget constant across baseline and candidate; Routes an unchanged material miss or implausibly perfect result to agent-qa-test:experiment before rejecting the prompt method or promoting the candidate",
+      "files": [],
+      "assertions": [
+        "Uses eval:experiment or an equivalent comparative eval path",
+        "Preregisters an aggregate expected observation, horizon, named confidence, falsifier, and surprise trigger before reading candidate results",
+        "Keeps that forecast outside the user-facing task queries and distinct from assertions or reference points",
+        "Holds task set, evaluator, and budget constant across baseline and candidate",
+        "Routes an unchanged material miss or implausibly perfect result to agent-qa-test:experiment before rejecting the prompt method or promoting the candidate"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Eval preregisters aggregate expectations and audits surprise",
+          "tags": ["skill", "eval", "experiment", "surprise"],
+          "notes": "Protects the difference between hidden grading truth and a pre-run forecast about aggregate behavior."
+        }
+      }
     }
   ]
 }

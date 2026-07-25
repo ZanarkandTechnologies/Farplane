@@ -7,4 +7,4 @@
 {"applies_to":["skills/*/references/*.md"],"consumer_scope":"skill-reference","feature_refs":["FEAT-0057"],"path":"docs/skills/templates/METHOD_REFERENCE_TEMPLATE.md","template_id":"skill-method-reference","template_version":"0.1.0"}
 {"applies_to":["skills/*/qa_checklist.md"],"consumer_scope":"skill","feature_refs":["FEAT-0057","FEAT-0062"],"path":"docs/skills/templates/QA_CHECKLIST_TEMPLATE.md","template_id":"skill-qa-checklist","template_version":"0.1.1"}
 {"applies_to":["skills/*/SKILL.md"],"consumer_scope":"skill","feature_refs":["FEAT-0022","FEAT-0054","FEAT-0057","FEAT-0062"],"path":"docs/skills/templates/SKILL_TEMPLATE.md","template_id":"skill-template","template_version":"0.3.8"}
-{"feature_refs":["FEAT-0007","FEAT-0008"],"path":"tickets/templates/ticket.md","template_id":"ticket-template","template_version":"0.2.3"}
+{"feature_refs":["FEAT-0007","FEAT-0008"],"path":"tickets/templates/ticket.md","template_id":"ticket-template","template_version":"0.2.4"}

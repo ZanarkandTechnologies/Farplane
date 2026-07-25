@@ -14,6 +14,7 @@ methods:
   - eval:onboarding
   - eval:consolidate
   - eval:behavior-trace
+  - eval:experiment
 allowed-tools: Read, Glob, Grep, Bash
 
 ---
@@ -40,9 +41,9 @@ companies unless a real repo fixture is required.
 ## Skill Signature
 
 ```text
-eval(task_intent, harness?, target_root?, mode?, budget?) -> eval_case? + run_summary? + consolidation_report? + next_fix
-state: reads(existing evals, skill evals/evals.json files, qa_checklist?, fixtures, task context, expected behavior, eval-drain processed state); writes(eval tasks, hardcase metadata, run artifacts, consolidation reports, processed state)
-gates: expected_behavior:testable; baseline_before_mutation; query_not_spoiled; hardcase:sanitized_and_reusable; evidence_inspected_before_claim
+eval(task_intent, harness?, target_root?, mode?, budget?, expectation?) -> eval_case? + run_summary? + observed_delta? + surprise_verdict? + consolidation_report? + next_fix
+state: reads(existing evals, skill evals/evals.json files, qa_checklist?, fixtures, task context, expected behavior, optional Metric Card expectation, eval-drain processed state); writes(eval tasks, hardcase metadata, run artifacts, consolidation reports, processed state)
+gates: expected_behavior:testable; baseline_before_mutation; query_not_spoiled; experimental_run:expectation_preregistered; hardcase:sanitized_and_reusable; evidence_inspected_before_claim
 routes: optimize-harness | self-improve | skill-maintenance | deliberative-advice | agent-qa-test | review
 fails: wording-only eval; query_teaches_answer; stores raw private transcript; delays obvious regression coverage; marks hardcase without benchmark value
 ```
@@ -72,6 +73,10 @@ Common modes:
   checkpoint scores, produced-artifact inventory, optional output-schema
   validation, and normal task/run summaries. It composes with baseline
   comparison and keeps native Codex runs ephemeral with hooks disabled.
+- `experiment`: compare a baseline and candidate or test a causal hypothesis.
+  Before results are known, consume a Metric Card expectation naming the
+  expected aggregate observation, horizon, confidence, falsifier, and surprise
+  trigger. Keep it separate from assertions/reference points that grade answers.
 - `consolidate`: run the eval drain. Fetch skill eval files edited since the
   last drain, call `consolidate(target = changed_eval_file,
   structure = eval_suite, constraints = { preserve_evidence: true })`, and
@@ -106,7 +111,9 @@ completion claims need independent judgment. Call `skill-maintenance` when
 eval reference points should become reusable runtime guardrails in
 `qa_checklist.md`. Use Eval `behavior_trace` for stable CLI-event capture. Use
 `agent-qa-test` when native subagent roles, Desktop-only tools, or an
-adversarial tester/evidence-review loop are required.
+adversarial tester/evidence-review loop are required. Route a material
+experimental surprise to `agent-qa-test:experiment`; Eval still owns task
+execution and run artifacts.
 
 Do not call `eval` recursively for the same eval-design task. Split the child
 scope to a narrower target such as one task row, one judge prompt, or one
@@ -158,6 +165,17 @@ changed skill file.
     `metadata.farplane.behavior_requirements.required_successful_command_regexes`
     on the eval row; the runner scores successful captured commands without
     rendering those regexes into the child or judge prompt.
+  - [ ] 9. If comparing variants or testing a causal hypothesis, use
+    `eval:experiment`.
+    - [ ] Before reading candidate results, bind a Metric Advisor expectation:
+          expected aggregate observation, horizon, confidence, falsifier, and
+          material surprise trigger.
+    - [ ] Keep the expectation in the experiment plan, ticket/program,
+          comparison artifact, or run notes—not the user-facing query,
+          `expected_output`, assertions, or reference points; state this
+          separation in the experiment plan.
+    - [ ] Use the same task set, evaluator, and budget for baseline and
+          candidate unless the hypothesis explicitly changes one.
 - [ ] 3. Write skill-local evals in the Agent Skills shape: realistic `prompt`,
   human-readable `expected_output`, optional `files`, visible `assertions`, and
   optional Farplane metadata. Keep project harness tasks in their existing
@@ -195,6 +213,11 @@ changed skill file.
 - [ ] 7. Summarize findings from `summary.json`, task detail artifacts, or eval
   drain reports: verdict counts or changed files, important failures or coverage
   risks, likely cause, and the next concrete fix.
+  - [ ] For `eval:experiment`, compare the observed aggregate delta with the
+        preregistered expectation. Route an unchanged material miss, other
+        material negative surprise, or implausibly strong result to
+        `agent-qa-test:experiment` before rejecting a method or promoting the
+        change.
 - [ ] 8. Review before completion.
   - [ ] If the eval task changes a Tier 1, meta, `eval`, cross-skill, or
     precedent-setting behavior, record the `deliberative-advice` recommendation
@@ -212,6 +235,10 @@ prompt guidance, or a minimal smoke workflow.
 Use `eval:consolidate` for the weekly eval drain: fetch changed eval files,
 call `consolidate` once per file, and reduce noise without delaying fresh
 regression coverage.
+
+Use `eval:experiment` for comparative or causal runs. It adds a pre-result
+forecast and post-result surprise decision; it does not add the forecast to
+task JSON queries or replace existing runner artifacts.
 
 ## Templates
 
@@ -274,6 +301,12 @@ regression coverage.
 - Do not store raw private transcripts, secrets, local handles, or unsanitized
   user context inside a hardcase eval.
 - Do not delay obvious regression coverage into a future drain process.
+- Do not confuse `expected_output`, assertions, or reference points with an
+  experiment expectation. The former grade answers; the latter forecasts the
+  aggregate run-level change before results are read.
+- Do not promote an implausibly perfect candidate without checking leakage,
+  contamination, evaluator drift, baseline comparability, and equal budgets
+  through `agent-qa-test:experiment`.
 - Do not use parallel behavior traces against one checkout: the produced-file
   inventory is attributable only when `--max-parallel-tasks 1`.
 - Do not consolidate evals by count alone. Preserve hardcases and distinct
@@ -285,6 +318,7 @@ regression coverage.
 - `mode`
 - `hardcase_metadata` when applicable
 - `run_artifacts`
+- `observed_delta` and `surprise_verdict` for `eval:experiment`
 - `consolidation_report` and `processed_state_delta` when applicable
 - `summary`
 - `next_fix`

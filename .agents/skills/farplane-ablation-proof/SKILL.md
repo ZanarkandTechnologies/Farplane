@@ -6,6 +6,9 @@ source: local
 group: capability
 template_uses:
   skill-template: "0.3.2"
+  skill-eval-task: "0.2.0"
+eval: evals/evals.json
+qa_checklist: qa_checklist.md
 planner_contract:
   required_arguments: ["product_bet_ref", "system_ref", "feature_refs", "claim", "surface", "task_case", "baseline"]
 ---
@@ -25,7 +28,7 @@ versus absent, and whether the claim should remain part of the harness.
 ## Skill Signature
 
 ```text
-farplane_ablation_proof(product_bet_ref, system_ref, feature_refs, claim, surface, task_case, baseline, with_surface?, without_surface?, ticket?, audience_context?)
+farplane_ablation_proof(product_bet_ref, system_ref, feature_refs, claim, surface, task_case, baseline, with_surface?, without_surface?, expectation?, ticket?, audience_context?)
   -> ablation_report + trust_decision + follow_up
 state: reads(farplane/harness.yaml, farplane/metrics.yaml, ticket audience_context first or configured Feed Scout memory as fallback, target surface, task/eval evidence); writes(ticket artifact)
 gates: claim_is_specific; canonical_icp_bound; baseline_named; comparison_is_fair; evidence_cites_both_conditions; no_proof_theater
@@ -38,6 +41,8 @@ fails: uses only intuition; compares different tasks; keeps a surface because it
 
 - [ ] 1. Bind the trust claim.
   - [ ] State the claim in falsifiable language.
+  - [ ] Before reading the comparison, preregister the expected observation,
+        horizon, confidence, falsifier, and surprise trigger.
   - [ ] Name the surface being tested and the user or agent behavior it should improve.
   - [ ] Read ticket-owned `audience_context` first. If absent, resolve the
         selected area's ICP and configured Feed Scout memory; name the baseline
@@ -50,7 +55,10 @@ fails: uses only intuition; compares different tasks; keeps a surface because it
 - [ ] 3. Capture both conditions.
   - [ ] Record quality, failure mode, cost, and supervision evidence.
 - [ ] 4. Write claim, method, observed delta, decision, and residual risk.
-- [ ] 5. Keep and roll out a meaningful win; remove, simplify, or repair a weak surface.
+- [ ] 5. Route a material expectation miss or implausibly strong result through
+      `agent-qa-test:experiment` before remove or productization; keep the
+      ablation owner responsible for execution and state.
+- [ ] 6. Keep and roll out a meaningful win; remove, simplify, or repair a weak surface.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 ## Output

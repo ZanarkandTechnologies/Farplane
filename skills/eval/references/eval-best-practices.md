@@ -85,6 +85,35 @@ Use this when writing or revising task files and judge prompts.
   missing.
 - Keep the judge output machine-readable and boring.
 
+## Experiment Expectations
+
+Use this only when an eval run compares variants or tests a causal hypothesis.
+The experiment expectation is a forecast about aggregate run behavior, not the
+answer key for any task:
+
+```text
+EvalExperimentExpectation:
+  hypothesis:
+  expected_observation:
+  observation_horizon:
+  confidence: low | medium | high
+  falsifier:
+  surprise_trigger:
+  surprise_route: agent-qa-test:experiment
+```
+
+Write it before candidate results are read and keep it in the ticket, Goal
+program, experiment plan, comparison artifact, or run notes. Never render it
+into the user-facing query. Keep `expected_output`, assertions, and reference
+points as hidden grading truth.
+
+After the run, compare the aggregate observation against the preregistered
+band. Continue normally when it is expected. Route a material negative miss or
+an implausibly strong result through `agent-qa-test:experiment` to check setup,
+implementation fidelity, leakage, contamination, evaluator integrity, baseline
+comparability, and alternatives before rejecting a method or promoting a
+candidate.
+
 ## Harness Realism
 
 - Run the task through the target harness CLI when behavior depends on system

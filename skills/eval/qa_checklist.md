@@ -87,6 +87,46 @@ eval_query_review:
   remaining_risk:
 ```
 
+## Behavior Trace Check
+
+Apply this when `--behavior-trace` is used:
+
+- The plan was checked against
+  `examples/golden/behavior-trace.md` without copying its facts into the task.
+- The run used one worker so observed file deltas remain attributable.
+- The receipt preserves the exact prompt, raw event stream, stdout/stderr,
+  final output, command/usage summary, checkpoint score, and artifact inventory.
+- Required command evidence is declared only in hidden Farplane metadata,
+  omitted from child/judge prompts, and fails the behavior trace unless every
+  regex matches a captured completed command with exit code zero.
+- Declared artifacts exist inside the target root; unsafe or missing paths fail.
+- The standard behavior schema was used when a structured child report matters,
+  and the preserved receipt records local validation.
+- Candidate and baseline used the same task and budget when comparison is claimed.
+- A separate reviewer inspected the trace and this checklist before a material
+  behavior claim passed.
+- Native-subagent-only evidence was routed to `agent-qa-test`; it was not
+  described as Codex CLI JSON-event parity.
+
+## Experiment Expectation Check
+
+Apply this when an eval run compares variants or tests a causal hypothesis:
+
+- The expected aggregate observation was written before candidate results were
+  read and includes horizon, named confidence, falsifier, and material surprise
+  trigger.
+- The experiment expectation lives in the plan, ticket/program, comparison
+  artifact, or run notes; it is not inserted into the user-facing task query.
+- Assertions, reference points, and `expected_output` remain grading truth,
+  not a substitute for the pre-run forecast.
+- Baseline and candidate use the same task set, evaluator, and budget unless the
+  hypothesis explicitly changes one of those variables.
+- The post-run receipt compares observed versus expected behavior and records
+  `expected | surprising_negative | implausibly_positive | unresolved`.
+- A material negative miss or implausibly strong result routes to
+  `agent-qa-test:experiment` before method rejection or candidate promotion.
+- A routine result inside the expected band stays on the normal Eval path.
+
 ## Subagent Review Prompt
 
 Use a reviewer or QA subagent when independent eval-row checking is worth the

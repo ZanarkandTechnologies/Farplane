@@ -76,6 +76,77 @@
           "notes": "Prevents metric-advisor from resurrecting deleted autoresearch skill routes when a mechanical metric exists."
         }
       }
+    },
+    {
+      "id": "metric_advisor_experiment_expectation_01",
+      "prompt": "We're changing the support agent prompt because six of twenty held-out cases currently miss the escalation policy. Before we run the same cases again, define what result would actually support the hypothesis and what should happen if the result is very different.",
+      "expected_output": "Builds an eval-backed metric card with the held-out miss count as the primary signal; Preregisters an expected aggregate observation before the run, including direction or meaningful band, horizon, named confidence, falsifier, and surprise trigger; Treats both a disappointing result and an implausibly perfect result as possible surprises; Keeps hidden answer keys or reference points out of the user-facing eval prompts; Routes a material causal surprise to agent-qa-test:experiment without taking over execution",
+      "files": [],
+      "assertions": [
+        "Builds an eval-backed metric card with the held-out miss count as the primary signal",
+        "Preregisters an expected aggregate observation before the run, including direction or meaningful band, horizon, named confidence, falsifier, and surprise trigger",
+        "Treats both a disappointing result and an implausibly perfect result as possible surprises",
+        "Keeps hidden answer keys or reference points out of the user-facing eval prompts",
+        "Routes a material causal surprise to agent-qa-test:experiment without taking over execution"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Metric advisor preregisters an experiment expectation",
+          "tags": [
+            "skill",
+            "metric-advisor",
+            "experiment-expectation"
+          ],
+          "notes": "Tests the immediate expected-observation layer without confusing it with grading truth or delayed Reward."
+        }
+      }
+    },
+    {
+      "id": "metric_advisor_deterministic_no_expectation_01",
+      "prompt": "This ticket only renames a documented command and updates all references. The proof is a search plus the existing validators. Do we need to invent a hypothesis and confidence score before doing it?",
+      "expected_output": "Uses mechanical checks for the deterministic change; Does not invent an experiment hypothesis, expected observation band, or confidence score; Keeps the normal metric, guard, anti-metric, and proof route; Explains that the expectation block is only for causal, comparative, or uncertainty-reducing work",
+      "files": [],
+      "assertions": [
+        "Uses mechanical checks for the deterministic change",
+        "Does not invent an experiment hypothesis, expected observation band, or confidence score",
+        "Keeps the normal metric, guard, anti-metric, and proof route",
+        "Explains that the expectation block is only for causal, comparative, or uncertainty-reducing work"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Metric advisor does not force experiments onto deterministic work",
+          "tags": [
+            "skill",
+            "metric-advisor",
+            "non-trigger"
+          ],
+          "notes": "Protects the optional boundary of the expectation contract."
+        }
+      }
+    },
+    {
+      "id": "metric_advisor_reward_miss_routes_gap_01",
+      "prompt": "A completed documentation ticket expected higher activation after two weeks, but the delayed check-in shows no movement. There was no causal experiment—only the shipped change and later product analytics. What review path should the check-in take?",
+      "expected_output": "Treats Reward.expected_reward as a delayed realized-value forecast rather than an immediate experiment prediction; Routes the expected-versus-actual miss to gap-analysis; Preserves the Reward accept, kill, or monitor check-in decision; Does not invoke a scientific method-refutation verdict or agent-qa-test:experiment without a causal experiment surprise",
+      "files": [],
+      "assertions": [
+        "Treats Reward.expected_reward as a delayed realized-value forecast rather than an immediate experiment prediction",
+        "Routes the expected-versus-actual miss to gap-analysis",
+        "Preserves the Reward accept, kill, or monitor check-in decision",
+        "Does not invoke a scientific method-refutation verdict or agent-qa-test:experiment without a causal experiment surprise"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Metric advisor keeps delayed Reward misses on gap analysis",
+          "tags": [
+            "skill",
+            "metric-advisor",
+            "reward",
+            "routing"
+          ],
+          "notes": "Proves the delayed-value boundary against the immediate scientific-surprise route."
+        }
+      }
     }
   ]
 }

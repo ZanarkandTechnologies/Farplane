@@ -121,20 +121,35 @@ the authority named by the ticket.
   - [ ] Before every experiment, invoke Leverage Advisor on the `program.md`
     roadmap, `progress.md` learnings, current full-evaluator receipts, and
     remaining budget. Do not continue a fixed roadmap order.
-  - [ ] Preregister one hypothesis, falsifier, changed boundary, expected
-    information, cost, guards, and keep/kill rule.
+  - [ ] Preregister one hypothesis, expected observation, observation horizon,
+    named confidence, falsifier, surprise trigger, changed boundary, expected
+    information, cost, guards, and keep/kill rule. Label `falsifier` and
+    `surprise_trigger` separately; one failure threshold cannot silently stand
+    in for both.
 - [ ] 6. Execute and record one bounded experiment.
   - [ ] Modify only the allowed surface, run correctness smokes, then run the
     exact full frozen evaluator when valid.
   - [ ] Append the receipt, measurements, learned constraint, keep/discard/
     repair-once decision, rejected alternatives, cumulative budget, and next
     action to ticket `progress.md`; never overwrite a failed attempt.
+  - [ ] When the observation materially misses its expectation or is
+        implausibly strong, route the immutable receipt through
+        `agent-qa-test:experiment` before rejecting the method or promoting the
+        candidate. The domain executor owns every repair/rerun and must keep it
+        inside the campaign's remaining time, compute, spend, and attempt budget.
 - [ ] 7. Continue, replan, or stop mechanically.
   - [ ] Keep only candidates that improve the primary objective while every
     guard passes; prefer the simpler candidate when materially tied.
   - [ ] Replan after every valid full result. Stop on success, supported
     negative conclusion, exhausted useful frontier, stale packet, blocker, or
     budget before silently expanding scope.
+  - [ ] In any negative-stop or surprise response, explicitly echo the
+        preregistered `expected_observation`, `observation_horizon`,
+        `confidence`, `falsifier`, and `surprise_trigger`; do not collapse them
+        into one generic failure threshold. Explicitly say the domain executor
+        owns any repair/rerun within the remaining campaign budget. Keep the
+        Goal Packet active for an in-contract repair; mark it stale only when a
+        frozen surface, scope, metric, data boundary, budget, or approval changes.
 - [ ] 8. Finish with independent evidence review.
   - [ ] Re-run the full evaluator on the frozen best candidate, verify receipt
     and budget integrity, apply the QA checklist, obtain required QA/reviewer
@@ -151,7 +166,11 @@ parent_candidate:
 selected_from_roadmap:
 progress_evidence_refs: []
 hypothesis:
+expected_observation:
+observation_horizon:
+confidence: low | medium | high
 falsifier:
+surprise_trigger:
 changed_boundary:
 config_code_data_evaluator_hashes: {}
 command_environment:
@@ -207,5 +226,6 @@ Roadmap: program.md frontier + contingencies
 Progress: progress.md learnings + current full-evaluator receipt refs
 Selector: Leverage Advisor inputs + one selected move + rejected alternatives
 Experiment: hypothesis + falsifier + changed boundary + guards + cost
+Expectation: expected observation + horizon + confidence + surprise trigger
 Writeback: measurements + decision + learned constraint + frontier update + next action
 ```

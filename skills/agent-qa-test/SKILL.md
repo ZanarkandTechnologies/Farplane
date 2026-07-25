@@ -10,6 +10,7 @@ methods:
   - agent-qa-test:app
   - agent-qa-test:skill
   - agent-qa-test:regression
+  - agent-qa-test:experiment
 allowed-tools: Read, Glob, Grep, Bash
 ---
 
@@ -31,6 +32,38 @@ gates: claim_under_test_written; tester_lane_collects_artifacts; evidence_review
 routes: agent-behavior-test | qa | visual-qa | review
 fails: replaces normal ticket QA; lets tester self-approve; reports narrow proof as broad pass; treats missing screenshots/logs as harmless
 ```
+
+```text
+agent_qa_test_experiment(claim, experiment_contract, result_bundle, rerun_budget?)
+  -> diagnosis_receipt + scoped_verdict + scientific_audit_packet
+gates: expectation_preregistered; observation_immutable; diagnosis_lane_independent;
+       controls_and_fidelity_checked; reruns_within_budget; conclusion_scoped
+routes: domain_executor | research:targeted | scientific-evidence review
+fails: null_result_means_method_false; suspicious_success_auto_promoted;
+  diagnosis_lane_becomes_experiment_controller; unbounded_rerun
+```
+
+### Experiment Profile Gate
+
+For `agent-qa-test:experiment`, always return these minimum decisions:
+
+1. `expectation_comparison`: compare the immutable observation with the
+   preregistered expected observation, horizon, confidence, falsifier, and
+   surprise trigger; explicitly mark a missing pre-result contract.
+2. `validity_checks`: report observation integrity, baseline/controls,
+   implementation fidelity, evaluator sensitivity/integrity, baseline
+   comparability, equal budgets, and material alternative explanations.
+3. `probe`: choose the cheapest discriminating probe inside remaining
+   attempt/time/compute/spend authority. The domain executor runs it; the
+   independent diagnosis lane does not control or self-approve the experiment.
+4. `research`: use targeted external research only after local checks when
+   source interpretation, expected mechanism/effect, or a domain assumption
+   remains disputed.
+5. `verdict`: return `invalid_experiment | inconclusive | method_challenged |
+   method_refuted_in_scope | method_supported_in_scope`; material conclusions
+   still require `scientific-evidence` review. Any refuted/supported verdict
+   explicitly names the tested implementation, data, evaluator, conditions,
+   and budget; never substitute vague “configuration” wording.
 
 ## Phase Boundary
 
@@ -57,6 +90,14 @@ bundles to `review`, but Goal mode remains the continuation owner.
     wrong path, required proof artifacts, falsifier, reviewer attack questions,
     and instrumentation request.
 - [ ] Write the claim under test and the evidence that would falsify it.
+- [ ] For `agent-qa-test:experiment`, load
+      [scientific claim review](references/scientific-claim-review.md), bind the
+      preregistered expected observation, and compare it with the immutable
+      result before selecting discriminating probes.
+  - [ ] Return all five Experiment Profile Gate decisions by name even when the
+        requested answer can be brief: expectation comparison; every validity
+        check; bounded probe plus executor/diagnosis ownership; conditional
+        research; scoped verdict plus scientific-evidence review.
 - [ ] Decide whether the tester lane needs `agent-behavior-test`-style
   instrumented run capture for child-agent logs, command events, or artifact
   conformance.
@@ -70,6 +111,9 @@ bundles to `review`, but Goal mode remains the continuation owner.
 - [ ] Draft or run an evidence-review lane that attacks unsupported claims,
   scope mismatch, missing screenshots/logs/states, and weak artifacts.
 - [ ] Reconcile both lane reports into pass, fail, blocked, fix, or rerun.
+  - [ ] For experiment review, use only the scoped scientific verdicts defined
+        in the reference; do not translate a failed run directly into a failed
+        method.
 - [ ] For serious readiness claims, reusable fixtures, or completion gates, run
   a final proof-bundle check through `review` or a dedicated reviewer lane.
 - [ ] Use [advise](../advise/SKILL.md) when runner choice, evidence threshold,
@@ -193,6 +237,9 @@ agent-qa-test orchestrates
   adherence, required context loading, and final output shape.
 - **`agent-qa-test:regression`:** rerun a known scenario before and after a fix
   or compare current behavior against an expected report.
+- **`agent-qa-test:experiment`:** independently diagnose a material deviation
+  from a preregistered expected observation, authorize only bounded
+  discriminating probes, and return a scoped scientific verdict.
 
 ## First-Load Workflow
 
@@ -320,12 +367,17 @@ Known gaps are not harmless caveats when they falsify the claim under test.
 
 Use these templates when the operator wants prompt output instead of direct
 execution:
+- `prompts/experiment-loop.md` for independent first-principles experiment
+  diagnosis and reconciliation
 
 - `prompts/run-loop.md` for the default adversarial testing loop
 - `prompts/prompt-only.md` for a compact paste-ready instruction block
 
 ## Reference Map
 
+- [`references/scientific-claim-review.md`](references/scientific-claim-review.md) -
+  load only for `agent-qa-test:experiment`; it owns experiment contracts,
+  diagnosis order, rerun authority, and scoped verdicts.
 - [`references/goal-composition.md`](references/goal-composition.md) - split
   between Goal lifecycle ownership and agent QA proof ownership.
 
@@ -346,6 +398,9 @@ rerun/fix policy, and stop condition.
   under test must include the downstream outcome, not only the upstream trigger.
 - **Regression canary:** run the same test shape against the old expected
   behavior and current behavior; record the delta.
+- **Experiment surprise:** check validity before inference. Audit both material
+  negative surprise and implausibly positive results that may indicate leakage,
+  contamination, evaluator failure, or baseline mismatch.
 - **Prompt-only request:** do not run tools or spawn lanes; return the compact
   prompt with lane contracts and stop condition.
 

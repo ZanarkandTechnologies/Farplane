@@ -1,7 +1,7 @@
 ---
 name: metric-advisor
 version: 0.1.0
-description: "Turn objectives and evidence into honest metric cards, guard metrics, anti-metrics, and route hints."
+description: "Turn objectives and evidence into honest metric cards, experiment expectations, guard metrics, anti-metrics, and route hints."
 tier: 1
 source: local
 template_uses:
@@ -18,6 +18,8 @@ Use this when an objective, eval result, ticket, Goal loop, strategy artifact,
 or improvement idea needs an honest metric before work continues. The output is
 a metric card: provider, primary signal, direction, guard metrics,
 anti-metrics, minimum meaningful delta, measurement method, and route hint.
+For causal, comparative, or uncertainty-reducing work, the same card also
+preregisters the observation expected before the result is known.
 
 This skill does not run evals, reviews, Goals, QA, or experiments. It gives the
 caller the smallest trustworthy measurement contract and may write the
@@ -31,14 +33,14 @@ and `review` judges evidence.
 
 ```text
 metric_advice(objective, evidence?, proof_surface?, constraints?)
-  -> metric_card + route_hint + no_metric_reason?
+  -> metric_card + expectation? + derived_movement_contract + route_hint + no_metric_reason?
 state: reads(objective, farplane/harness.yaml?, farplane/metrics.yaml?, ticket/progress/eval/review artifacts, constraints);
        writes(none by default; optional farplane/metrics.yaml definition/direction/freshness/guard delta plus farplane/harness.yaml selection delta; caller writes ticket/program/progress/proof)
 gates: objective_named; provider_truthful; metric_matches_objective;
-       guard_metric_named; anti_metric_named; measurement_method_named;
-       no_fake_precision
+       direction_named; guard_metric_named; anti_metric_named; measurement_method_named;
+       experimental_work:expectation_preregistered; no_fake_precision
 routes: optimize-harness | goal-advisor | self-improve | impl-plan |
-  proof-advisor | review
+  proof-advisor | agent-qa-test:experiment | gap-analysis | review
 fails: fake numeric score; proxy gaming; missing guard metric; hidden
   subjective judgment; resurrecting retired autoresearch skill routes
 ```
@@ -72,6 +74,10 @@ none            no honest metric; use judgment questions and write "none mechani
   - [ ] Use `review`, `agent_qa`, `human_feedback`, `market`, or `hybrid` when
         the honest signal is judgment-heavy or external.
   - [ ] Use `none` and `none mechanical` when no real metric exists.
+  - [ ] Declare `maximize` or `minimize` for every quantitative metric so Core
+        can derive direction-normalized movement from raw observations.
+  - [ ] Do not author a second growth or momentum metric when consecutive
+        observations of the primary metric provide the same evidence.
 - [ ] 4. Add guard metrics, anti-metrics, and minimum meaningful delta.
   - [ ] Guard against breaking correctness, quality, safety, proof, user
         value, or operator control while moving the primary signal.
@@ -81,16 +87,31 @@ none            no honest metric; use judgment questions and write "none mechani
   - [ ] Name at least one anti-metric that would make the optimization a cheat.
   - [ ] Give the smallest delta that would justify action, or say
         `qualitative threshold`.
-- [ ] 5. Name measurement method and route hint.
+- [ ] 5. For experiment-like work, preregister the expected observation before
+      reading the result.
+  - [ ] Name the observation, direction or qualitative band, horizon,
+        confidence (`low | medium | high`), falsifier, and material surprise
+        trigger.
+  - [ ] Include unexpectedly weak and implausibly strong results when leakage,
+        contamination, evaluator bugs, or baseline mismatch are credible.
+  - [ ] Omit this block for deterministic implementation or ordinary status
+        reporting; do not invent a fake hypothesis. When asked why it is
+        omitted, explicitly state: `The expectation block applies only to
+        causal, comparative, or uncertainty-reducing work.`
+- [ ] 6. Name measurement method and route hint.
   - [ ] Explain exactly how the caller measures or judges the metric.
   - [ ] Route direct repair when owner and fix are clear.
   - [ ] Route `self-improve` only when candidate search, baseline, and variant
         comparison are needed.
   - [ ] Route `goal-advisor` when the metric belongs inside a ticket-backed
         Goal Packet or heartbeat.
+  - [ ] Route material causal surprise to `agent-qa-test:experiment`.
+  - [ ] Route a delayed ticket Reward miss without a causal experiment to
+        `gap-analysis`, then preserve the ticket check-in's
+        `accept | kill | monitor` decision.
   - [ ] Do not route to retired autoresearch skill routes; choose the live
         owner instead.
-- [ ] 6. Finish-check for fake precision and proxy gaming.
+- [ ] 7. Finish-check for fake precision and proxy gaming.
   - [ ] If the primary metric is a proxy, say what it misses and which guard
         catches that miss.
   - [ ] If the metric is qualitative, keep it qualitative and provide
@@ -111,6 +132,17 @@ Guard metrics:
 Anti-metrics:
 Minimum meaningful delta:
 Measurement method:
+Expectation: # optional; required only for experiment-like work
+  Hypothesis:
+  Expected observation:
+  Observation horizon:
+  Confidence: low | medium | high
+  Falsifier:
+  Surprise trigger:
+  Surprise route:
+Derived movement: raw delta, elapsed days, raw velocity, direction-normalized
+  progress delta/velocity, and improving/flat/worsening; unknown when readings
+  are missing, stale, invalid, or not time-comparable.
 Judgment questions:
 Route hint:
 No-metric reason:
@@ -129,6 +161,16 @@ Anti-metrics: inflating reference points; hiding expected behavior in queries;
   broad prompt bloat; ignoring failed owner skills.
 Minimum meaningful delta: at least one C -> B/A without lowering any A to B/C.
 Measurement method: rerun the same lifecycle eval subset and compare summary.json.
+Expectation:
+  Hypothesis: the owner-local repair removes at least one repeated lifecycle
+    failure without weakening passing behavior.
+  Expected observation: C count falls by at least one while A count does not fall.
+  Observation horizon: the next equal-budget selected-suite run.
+  Confidence: medium.
+  Falsifier: no C case improves, an A case regresses, or query lint fails.
+  Surprise trigger: the observed delta is outside that band, including an
+    implausible all-A jump suggesting leakage or grading drift.
+  Surprise route: agent-qa-test:experiment.
 Judgment questions: did the fix target the failing owner? did proof stay local?
 Route hint: optimize-harness direct repair first; self-improve only if candidate
   search is needed after direct repair fails.
@@ -173,6 +215,12 @@ Route hint: goal-advisor or self-improve, not retired autoresearch skills.
 - Do not route to retired autoresearch skill routes.
 - Do not turn this skill into the executor. It only returns the measurement
   contract and route hint.
+- Do not confuse the immediate experiment expectation with
+  `Reward.expected_reward`, which forecasts delayed realized value.
+- Do not confuse an Eval expectation with its assertions or reference points;
+  those grade behavior and stay outside the user-facing query.
+- Store canonical raw observations only. Direction-aware movement is a Core
+  projection, not a second persisted observation or hand-maintained metric.
 
 ## Reference Map
 
@@ -184,11 +232,16 @@ Route hint: goal-advisor or self-improve, not retired autoresearch skills.
   candidate comparison, experiment memory, and promotion rules.
 - [../proof-advisor/SKILL.md](../proof-advisor/SKILL.md) - turns behavior
   claims into proof cases and proof surface choices.
+- [../agent-qa-test/SKILL.md](../agent-qa-test/SKILL.md) - independently
+  diagnoses material observation surprises.
+- [../gap-analysis/SKILL.md](../gap-analysis/SKILL.md) - diagnoses delayed
+  expected-versus-actual value gaps that are not scientific experiment claims.
 - [../review/SKILL.md](../review/SKILL.md) - judges evidence when metric
   traceability or qualitative sufficiency needs independent review.
 
 ## Output
 
-Return a compact metric card plus the route hint. Include `No-metric reason`
+Return a compact metric card plus the optional expectation and route hint.
+Include `Expectation` only for experiment-like work. Include `No-metric reason`
 only when the provider is `none` or the honest route is review/human judgment
 without a mechanical metric.

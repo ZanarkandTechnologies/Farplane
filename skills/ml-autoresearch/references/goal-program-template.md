@@ -59,18 +59,26 @@ selection:
       - progress.md learnings, prior selections, and rejected moves
       - current full-evaluator experiment receipts
       - remaining time, compute, spend, attempt, and patience budget
-    output: one next experiment + hypothesis + falsifier + changed boundary + rejected alternatives + replan conditions
+    output: one next experiment + hypothesis + expected observation +
+      observation horizon + confidence + falsifier + surprise trigger +
+      changed boundary + rejected alternatives + replan conditions
     rule: invoke leverage-advisor; do not continue a fixed roadmap order
 
 loop:
   baseline: run and record before any mutation
   round:
     - select one experiment through leverage-advisor
-    - preregister hypothesis, falsifier, changed boundary, cost, guards, and keep/kill rule
+    - preregister hypothesis, expected observation, observation horizon,
+      confidence, falsifier, surprise trigger, changed boundary, cost, guards,
+      and keep/kill rule
     - implement the smallest attributable delta on the mutable surface
     - run correctness smoke
     - when valid, run the exact full frozen evaluator
     - append an immutable receipt and update the learned frontier
+    - if the observation materially violates the expectation or is implausibly
+      strong, route the receipt through agent-qa-test:experiment before method
+      rejection or candidate promotion; the domain executor owns any repair or
+      rerun inside the campaign's remaining budget
     - keep | discard | repair_once | defer | failed
 
 after_each_turn:

@@ -29,7 +29,9 @@ Judges decide whether the observed answer met the reference points.
 | Cross-skill or workflow behavior coverage | `.farplane/evals/tasks/harness_tasks.json` or reusable examples | One skill package |
 | AGENTS.md or system-prompt behavior coverage | `.farplane/evals/tasks/agents_md_tasks.json` | Skill-local task file |
 | Judge strictness, tier rules, required output shape | Judge prompt or eval quality rubric | Task query |
+| Pre-run aggregate prediction for a comparative/causal eval | Metric Card plus ticket/program, experiment plan, comparison artifact, or run notes | Task query, assertions, or runner schema by default |
 | Runner behavior, profile selection, artifact layout, summary schema | `run_evals.py` plus tests and templates | Skill instructions only |
+| Codex eval session/hook/notify isolation | `run_evals.py` mandatory argument tail | Optional Codex profiles |
 | Deterministic structural invariant | Validator, lint, or unit test | LLM eval |
 | Judgment-heavy placement or prioritization | `harness-advisor`, `review`, or eval rubric | Hook |
 
@@ -122,6 +124,9 @@ and harness mechanics in the profile or runner.
   Shop fixture context.
 - If the change affects what one task asks or proves, update `evals/evals.json`.
 - If the change affects how results are judged, update judge prompt or rubric.
+- If the change predicts aggregate experimental movement, keep it outside the
+  task query and compare it after the run; do not add runner schema fields
+  unless a current machine consumer requires them.
 - If the change is structural and deterministic, add a validator or unit test.
 - If the change is about which surface owns the fix, route through
   `harness-advisor`.

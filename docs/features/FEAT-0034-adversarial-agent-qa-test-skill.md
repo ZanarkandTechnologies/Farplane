@@ -3,7 +3,7 @@ title: Adversarial agent QA test skill
 status: implemented
 owner: feature-registry
 created_at: 2026-06-26
-updated_at: 2026-06-27
+updated_at: 2026-07-25
 tags:
   - farplane
   - feature
@@ -14,6 +14,8 @@ refs:
   - docs/fundamentals/harness-engineering-doctrine.md
   - "docs/features/registry.jsonl#FEAT-0031"
   - skills/agent-qa-test/SKILL.md
+  - skills/agent-qa-test/references/scientific-claim-review.md
+  - docs/review/rubrics/scientific-evidence.md
   - docs/HISTORY.md
 feature_id: FEAT-0034
 system_id: SYS-0005
@@ -32,7 +34,7 @@ evidence_refs:
 known_limits: Skill and prompt-template surface only; actual native subagent execution still depends on the invoking agent and available runtime tools.
 metrics:
   - agent_qa_test_skill_validation_pass
-last_verified: 2026-05-26
+last_verified: 2026-07-25
 experimental: false
 superseded_by: false
 ---
@@ -71,6 +73,11 @@ run or capture evidence, critique results, and publish a proof bundle.
 - Collects tester evidence, critique, findings, and residual risk.
 - Produces a readiness verdict instead of a vague confidence statement.
 - Routes repeated failures into hardcases, evals, or skill maintenance.
+- Exposes `agent-qa-test:experiment` for independent first-principles diagnosis
+  when an observation materially violates a preregistered expectation.
+- Distinguishes invalid, inconclusive, challenged, refuted-in-scope, and
+  supported-in-scope experimental verdicts; suspiciously strong success is
+  audited before promotion.
 
 ## User Stories
 
@@ -86,6 +93,9 @@ Agent QA is a proof orchestrator around behavior tests and reviewer judgment.
 - Evidence is stored as artifacts, logs, screenshots, or reports as appropriate.
 - The verdict includes blockers, residual risk, and follow-up route.
 - Passing QA does not delete underlying evidence.
+- Experiment execution stays with the domain owner. Agent QA owns diagnosis and
+  bounded probe guidance; `scientific-evidence` review owns final inference
+  readiness for material conclusions.
 
 ## Feature Flow
 
@@ -156,6 +166,8 @@ Acceptance signals:
 - This feature is not generic unit testing.
 - This feature does not make the implementer self-approve.
 - This feature does not replace evals when a repeatable regression test is needed.
+- This feature does not run experiments, expand compute/spend authority, or
+  turn every ordinary result into a scientific audit.
 - Known limit: Skill and prompt-template surface only; actual native subagent execution still depends on the invoking agent and available runtime tools.
 - Delete or merge this feature only when its current truth has moved into a clearer owner and all active refs are removed.
 
@@ -176,3 +188,5 @@ Acceptance signals:
 
 - 2026-06-26: Feature spec created.
 - 2026-06-27: Migrated into the reader-first feature-spec shape.
+- 2026-07-25: Added the risk-triggered `agent-qa-test:experiment` method,
+  two-sided surprise diagnosis, bounded reruns, and scoped scientific verdicts.

@@ -331,6 +331,30 @@ outcome analysis, but Farplane has no independent plan score or plan-wave loop.
 If the provider, guard, anti-metric, or proof route needs more detail, put the
 metric card in `program.md` or route through `metric-advisor`.
 
+### Reward versus experiment prediction
+
+These are different learning horizons:
+
+```text
+Experiment prediction:
+  immediate expected observation if a causal hypothesis is right
+  owner: Metric Card plus experiment plan/program
+  miss route: agent-qa-test:experiment for first-principles validity/inference review
+
+Reward.expected_reward:
+  delayed realized value expected from the completed ticket
+  owner: Objective Contribution projection plus Reward row
+  miss route: gap-analysis, then accept | kill | monitor at check-in
+```
+
+Do not duplicate either value. An experiment-like ticket may use both because
+they answer different questions: “did the mechanism produce the expected
+observation now?” and “did the shipped work create the expected value later?”
+A deterministic implementation ticket can omit the experiment prediction.
+When a Reward miss is also downstream of a causal experiment surprise, preserve
+both receipts and run the scientific surprise route before making a method-level
+claim.
+
 Use `Change Plan` for the executable task-local program and file map. Split it
 into one heading and one fenced block per coherent change:
 

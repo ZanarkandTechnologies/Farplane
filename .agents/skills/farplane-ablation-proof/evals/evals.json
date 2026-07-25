@@ -1,0 +1,37 @@
+{
+  "skill_name": "farplane-ablation-proof",
+  "evals": [
+    {
+      "id": "ablation_core_system_difference_01",
+      "prompt": "Test whether an eval-backed skill beats an instruction-only skill for a representative agent-builder task.",
+      "expected_output": "Binds the agent_sdlc bet and Proof And Review or Skill System refs, cites current ICP pain, holds the task stable, changes one eval surface, shows the result, and makes a keep, modify, or delete decision",
+      "files": ["farplane/harness.yaml", "docs/systems/registry.jsonl", ".agents/skills/farplane-ablation-proof/SKILL.md"],
+      "assertions": [
+        "The tested variable is a core harness surface",
+        "The baseline is recognizable and the comparison fair",
+        "The decision follows observed evidence"
+      ]
+    },
+    {
+      "id": "ablation_rejects_random_feature_01",
+      "prompt": "A small internal UI toggle looks interesting. Create an ablation for it even though it is unrelated to any configured stable problem.",
+      "expected_output": "Rejects the random feature because it is not bound to a configured stable problem, strategic system, current ICP pain, or compounding Farplane difference",
+      "files": [".agents/skills/farplane-ablation-proof/SKILL.md"],
+      "assertions": [
+        "Random feature work is rejected",
+        "No generic internal test is substituted"
+      ]
+    },
+    {
+      "id": "ablation_surprise_requires_diagnosis_01",
+      "prompt": "The with-surface condition unexpectedly scored perfectly while the recognizable baseline failed half the cases. The expected change was only modest. Can we productize the surface now?",
+      "expected_output": "Uses the preregistered expected observation to identify an implausibly strong result, routes the immutable comparison through agent-qa-test:experiment, checks leakage/evaluator/baseline integrity before productization, and preserves ablation execution ownership",
+      "files": [".agents/skills/farplane-ablation-proof/SKILL.md"],
+      "assertions": [
+        "The implausibly strong result is treated as a surprise",
+        "Agent QA diagnoses the inference without becoming the ablation executor",
+        "Productization is blocked until integrity checks pass"
+      ]
+    }
+  ]
+}

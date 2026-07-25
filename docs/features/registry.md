@@ -2,7 +2,7 @@
 title: "Generated Feature Registry"
 status: generated
 owner: feature-registry
-updated_at: 2026-07-22
+updated_at: 2026-07-25
 refs:
   - docs/features/registry.jsonl
   - docs/features/validate_features.py

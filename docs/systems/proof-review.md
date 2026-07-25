@@ -3,7 +3,7 @@ title: "Proof And Review"
 status: active
 owner: farplane-framework
 created_at: 2026-06-26
-updated_at: 2026-06-27
+updated_at: 2026-07-25
 tags:
   - farplane
   - systems
@@ -37,7 +37,7 @@ system_record_json: |
       "skills/review/SKILL.md",
       "docs/review/rubrics"
     ],
-    "last_verified": "2026-07-07"
+    "last_verified": "2026-07-25"
   }
 ---
 # Proof And Review
@@ -78,7 +78,8 @@ the system from self-certification.
 
 Artifact-first QA, reviewer lanes, evidence bundles, adversarial agent QA,
 behavior-test capture, Farplane evals, prompt eval cases, skill-local eval
-cases, and completion verdicts.
+cases, first-principles experiment diagnosis, scientific-inference review, and
+completion verdicts.
 
 ## What Belongs Elsewhere
 
@@ -94,6 +95,10 @@ belongs in Self-Improvement And Learning.
   review rubrics classify readiness, and reward events preserve reasons and
   repair hints for later learning.
 - Proof scales with risk rather than becoming ceremony for every tiny edit.
+- Experimental work preregisters its expected observation through the metric or
+  experiment owner. Material negative surprise or implausibly positive results
+  route to `agent-qa-test:experiment`; final causal inference routes through
+  `scientific-evidence`. Domain skills remain experiment executors.
 - Feature-level behavior belongs in `docs/features/FEAT-*.md`; this page owns the system boundary and feature grouping.
 - Registry data is generated from system and feature docs, not edited by hand.
 - When a capability no longer deserves a feature page, fold its current truth into the best owner and remove active refs.
@@ -128,6 +133,7 @@ Proof And Review turns claims into evidence, evals, independent judgment, and du
 - `skills/qa/SKILL.md`
 - `skills/review/SKILL.md`
 - `docs/review/rubrics`
+- `docs/review/rubrics/scientific-evidence.md`
 
 ## Proof And Maintenance
 
@@ -141,3 +147,5 @@ Proof And Review turns claims into evidence, evals, independent judgment, and du
 
 - 2026-06-27: Migrated into the reader-first system-spec shape.
 - 2026-07-07: Consolidated eval feature ownership under `FEAT-0039`.
+- 2026-07-25: Added expectation-triggered scientific diagnosis and independent
+  inference-readiness review to the existing Agent QA capability.

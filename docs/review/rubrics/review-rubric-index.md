@@ -109,6 +109,8 @@ Default required family verdicts:
 - `prompt-quality`: `TAS-A` when subagent, delegated CLI, eval, structured
   output, or AI-app prompts changed
 - `eval-quality`: `TAS-A` when eval tasks, judges, fixtures, or runners changed
+- `scientific-evidence`: `TAS-A` for material experimental inference,
+  method/trust rejection, or promotion from an implausibly positive result
 
 Hard gates:
 
@@ -168,6 +170,10 @@ Choose rubric families from the ticket context:
   - `integration-readiness`
 - eval review:
   - `eval-quality`
+  - `evidence-quality`
+  - `integration-readiness`
+- material reproduction, experiment, or ablation conclusion:
+  - `scientific-evidence`
   - `evidence-quality`
   - `integration-readiness`
 - AI-planned skill-call or materialized-ticket review:
@@ -278,6 +284,15 @@ When unsure, prefer adding `evidence-quality` and `integration-readiness`.
   - traceability
   - consistency
   - inspectability
+
+### 7b. Scientific Evidence
+- File: `scientific-evidence.md`
+- Focus:
+  - preregistered expectation versus observed result
+  - controls, implementation fidelity, and evaluator sensitivity
+  - causal alternatives and bounded rerun history
+  - suspicious positive-result integrity
+  - scoped scientific inference
 
 ### 7. Demo Quality
 - File: `demo-quality.md`

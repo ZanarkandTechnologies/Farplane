@@ -1,6 +1,6 @@
 ---
 template_id: ticket-template
-template_version: "0.2.3"
+template_version: "0.2.4"
 feature_refs:
   - FEAT-0007
   - FEAT-0008
@@ -116,6 +116,14 @@ kpi_rewards:
 guard: "do not count planned intent as KPI movement; count only completed tickets with proof"
 ```
 
+`Reward.expected_reward` is the delayed value forecast, not the immediate
+observation expected from an experiment. For causal, comparative, or
+uncertainty-reducing work, put the pre-result expected observation, horizon,
+confidence, falsifier, and surprise trigger in the Metric Card or `program.md`.
+Route material experiment surprise to `agent-qa-test:experiment`; route an
+ordinary delayed Reward miss to `gap-analysis`. Deterministic tickets do not
+need a fabricated experiment expectation.
+
 ## Change Plan
 Filled by `impl-plan(ticket)`. This is the executable task-local program and
 file map. Group by coherent change unit so each unit carries its own problem
@@ -222,6 +230,10 @@ For material features, include critical-path QA here as flexible bullets:
 name the real workflow or lifecycle being claimed, break long end-to-end proof
 into ordered sanity checks, state the expected observation for each check, link
 the evidence, and name any unrun final path or residual risk.
+These QA expected observations describe what a check should visibly prove. For
+an experiment, also preregister the aggregate result expectation in the Metric
+Card or `program.md`; do not hide it in Eval user queries or duplicate
+`Reward.expected_reward`.
 For material Goal-backed work, include the final checkpoint in this same block:
 which QA evidence review, completion review, or reviewer TAS gate must run
 before completion, and where its receipt will be linked.
