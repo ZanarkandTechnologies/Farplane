@@ -1,0 +1,40 @@
+{
+  "assertion_results": [
+    {
+      "text": "Runs the full movement-to-bottleneck review and records the known cause and coherent correction",
+      "passed": true,
+      "evidence": "It records worsening acceptance, the reproduced parser-branch cause, and comparison of the correction against alternatives."
+    },
+    {
+      "text": "Finalizes the dated report before highlight selection and applies the ticket delta only after highlights",
+      "passed": true,
+      "evidence": "The sequence explicitly finalizes the report, handles highlights, then creates the ticket."
+    },
+    {
+      "text": "Creates one concrete solution ticket in the same run with correction, proof, and stop condition",
+      "passed": false,
+      "evidence": "It creates one ticket, but explicitly places the stop condition in the report rather than stating that correction, proof, and stop condition are all present in the ticket contract."
+    },
+    {
+      "text": "Does not delay grounded work for Plan Next Wave",
+      "passed": true,
+      "evidence": "It explicitly says the grounded correction is not deferred to Plan Next Wave."
+    },
+    {
+      "text": "Does not execute the ticket or start Goal, Pulse, or a worker",
+      "passed": false,
+      "evidence": "It says the fix is not executed, but does not explicitly confirm that Goal, Pulse, and workers are not started."
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 2,
+    "total": 5,
+    "pass_rate": 0.6
+  },
+  "judge": {
+    "verdict": "B",
+    "pass": false,
+    "reason": "The decision chain and ordering are strong, but two explicit safety/contract details are missing: the ticket itself must carry the stop condition, and the no-execution receipt must state that no Goal, Pulse, or worker is started."
+  }
+}

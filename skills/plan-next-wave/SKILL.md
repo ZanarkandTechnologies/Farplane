@@ -29,14 +29,14 @@ registries, and specialized ticket templates are not planning inputs.
 ## Skill Signature
 
 ```text
-plan_next_wave(planning_skill_refs, metric_objectives, metric_state,
-               ticket_history_query, product_bets, areas?, current_context?, world_memory?,
+plan_next_wave(planning_skill_refs, problems, areas, metric_objectives, metric_state,
+               ticket_history_query, current_context?, world_memory?,
                preference_memory?, wave_size = 1)
   -> input_receipts + proposed_skill_calls[] + admitted_call_ids[]
    + rejections[] + source_gaps[] + validation_receipt
 
 state:
-  reads(farplane/harness.yaml planning skill allowlist, product bets, and passive areas,
+  reads(farplane/harness.yaml planning skill allowlist, stable problems, and passive areas,
         docs/systems and docs/features registries,
         allowed skill SKILL.md signatures and planner_contracts,
         farplane/metrics.yaml and observations, global-first ticket history,
@@ -71,9 +71,9 @@ fails:
    empty wave and the caller-owned source gap; never create a refresh ticket.
 3. Read the latest 20 tickets globally, then query deeper only for dedupe or
    terminal preference evidence. Read World Memory before outward-facing calls.
-4. Bind each market-learning, ablation, or content call to one
-   configured product bet and its canonical `system_refs` and `feature_refs`.
-   Reject random features and work that cannot strengthen a stated bet.
+4. Bind each market-learning, ablation, or content call to one configured
+   stable problem plus canonical `system_ref` and coherent `feature_refs`.
+   Reject random features and work that cannot address a configured problem.
 5. Select the missing evidence stage without copying its workflow:
    - no current ICP pain evidence -> `farplane-market-learning`;
    - current pain evidence but no comparative proof -> `farplane-ablation-proof`;
@@ -102,10 +102,11 @@ fails:
 ## Todo List
 
 - [ ] 1. Read configured planning skills, their signatures and planner contracts,
-      product bets and canonical system/feature refs, metrics/guards, passive area ICP context, World Memory when relevant,
+      stable problems and canonical system/feature refs, metric movement/guards,
+      passive area ICP context, World Memory when relevant,
       current context, and global-first history/preference evidence.
 - [ ] 2. Stop with an empty wave on an unhealthy hard guard or unresolved skill.
-- [ ] 3. Select the missing evidence stage; bind product-bet, system, and feature
+- [ ] 3. Select the missing evidence stage; bind problem, system, and feature
       refs when the selected `planner_contract` declares them; then produce only
       compact configured-skill calls with exactly the required arguments bound.
 - [ ] 4. Reject maintenance, workflow invention, duplicates, vague calls,
@@ -128,8 +129,8 @@ fails:
 - A configured skill is permission to call that workflow, not evidence that a
   particular call is valuable.
 - Areas may supply ICP and metrics but never generate or reserve work.
-- Product bets constrain the strategic portfolio; system and feature registries
-  explain what the selected bet actually contains.
+- Stable problems constrain refill; system and feature registries keep proposed
+  solution evidence coherent without storing mutable solution bets in the harness.
 - Plan Next Wave performs only the bounded comparison needed to admit configured
   skill calls. It does not invoke `leverage-advisor` during refill; use that
   separate operator-facing workflow for a capability roadmap or contingent

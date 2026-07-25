@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"019f99e5-3449-7582-9d0b-c35d8c810148"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"Two tickets—one per independent root problem. Reject the third idea as an incoherent lifecycle-stage split."}}
+{"type":"turn.completed","usage":{"input_tokens":34213,"cached_input_tokens":0,"output_tokens":25,"reasoning_output_tokens":0}}

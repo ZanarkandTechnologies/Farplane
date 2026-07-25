@@ -4,9 +4,7 @@
 from __future__ import annotations
 
 import argparse
-from datetime import date, datetime
 import json
-import math
 import re
 import subprocess
 import sys
@@ -23,7 +21,6 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from bin.validators.template_usage import TemplateUsageError, normalize_template_uses
-from bin.core.farplane_file_events import DEFAULT_EVENTS
 from bin.core.farplane_metric_schema import MetricObservationBatch
 TEXT_SUFFIXES = {
     ".json",
@@ -56,7 +53,7 @@ HARNESS_ALLOWED_TOP_LEVEL = {
     "owner",
     "identity",
     "metric_refs",
-    "goals",
+    "planning",
     "areas",
     "feature_definition",
     "operating_principles",
@@ -66,7 +63,7 @@ HARNESS_ALLOWED_TOP_LEVEL = {
     "authority",
     "change_rule",
 }
-AREA_ALLOWED_FIELDS = {"description", "planner_instruction", "icp", "skill_refs", "metric_refs"}
+AREA_ALLOWED_FIELDS = {"description", "icp", "skill_refs", "metric_refs"}
 ICP_ALLOWED_FIELDS = {
     "label",
     "description",
@@ -74,7 +71,6 @@ ICP_ALLOWED_FIELDS = {
     "pain_points",
     "evidence_bar",
 }
-GOAL_ALLOWED_FIELDS = {"goal_id", "metric_id", "target_value", "target_date"}
 AUTOMATION_RUNTIME_STATE_KEYS = {
     "last_run",
     "last_run_at",
@@ -103,7 +99,6 @@ ALLOWED_DIAGNOSTIC_SOURCE_IDS = {
     "pulse_reward_ledger",
     "ticket_board",
 }
-ALLOWED_FILE_EVENT_NAMES = set(DEFAULT_EVENTS)
 
 
 class StrictYamlModel(BaseModel):
@@ -325,53 +320,6 @@ def validate_framework_manifest(root: Path, framework_manifest: Path) -> list[st
                 errors.append(f"{rel_path} standard.ignored path is missing or not a directory: {path_ref}.")
         elif not path.exists():
             errors.append(f"{rel_path} standard.ignored path is missing: {path_ref}.")
-
-    return errors
-
-
-def validate_hooks_file(root: Path, hooks_file: Path) -> list[str]:
-    rel_path = hooks_file.relative_to(root).as_posix()
-    errors: list[str] = []
-
-    try:
-        data = json.loads(hooks_file.read_text(encoding="utf-8"))
-    except json.JSONDecodeError as exc:
-        return [f"{rel_path} must be valid JSON: {exc.msg}."]
-
-    if not isinstance(data, dict):
-        return [f"{rel_path} must be a JSON object."]
-    if data.get("version") != 1:
-        errors.append(f"{rel_path} version must be 1.")
-    unsupported = sorted(set(data) - {"version", "file_events"})
-    if unsupported:
-        errors.append(f"{rel_path} has unsupported top-level keys: {', '.join(unsupported)}.")
-    file_events = data.get("file_events")
-    if not isinstance(file_events, dict):
-        errors.append(f"{rel_path} file_events must be an object.")
-        return errors
-
-    if not isinstance(file_events.get("enabled"), bool):
-        errors.append(f"{rel_path} file_events.enabled must be a boolean.")
-    events = file_events.get("events")
-    if not isinstance(events, list) or not events or any(not isinstance(row, str) or not row for row in events):
-        errors.append(f"{rel_path} file_events.events must be a non-empty string list.")
-    else:
-        duplicates = sorted({row for row in events if events.count(row) > 1})
-        unknown = sorted(set(events) - ALLOWED_FILE_EVENT_NAMES)
-        if duplicates:
-            errors.append(f"{rel_path} file_events.events has duplicates: {', '.join(duplicates)}.")
-        if unknown:
-            errors.append(f"{rel_path} file_events.events has unsupported values: {', '.join(unknown)}.")
-    patterns = file_events.get("patterns")
-    if not isinstance(patterns, list) or not patterns or any(not isinstance(row, str) or not row for row in patterns):
-        errors.append(f"{rel_path} file_events.patterns must be a non-empty string list.")
-    else:
-        duplicates = sorted({row for row in patterns if patterns.count(row) > 1})
-        unsafe = sorted(row for row in patterns if Path(row).is_absolute() or ".." in Path(row).parts)
-        if duplicates:
-            errors.append(f"{rel_path} file_events.patterns has duplicates: {', '.join(duplicates)}.")
-        if unsafe:
-            errors.append(f"{rel_path} file_events.patterns has unsafe values: {', '.join(unsafe)}.")
 
     return errors
 
@@ -883,10 +831,10 @@ def validate_cross_file_contract(root: Path) -> list[str]:
             "farplane/harness.yaml metric refs lack metrics.yaml definitions: "
             f"{', '.join(unknown_selected_ids)}."
         )
-    objective_definitions_without_direction = sorted(
+    metric_definitions_without_direction = sorted(
         metric_id
-        for metric_id in objective_ids
-        if metric_id in metrics and metrics[metric_id].get("direction") not in {"maximize", "minimize"}
+        for metric_id, definition in metrics.items()
+        if definition.get("direction") not in {"maximize", "minimize"}
     )
     selected_definitions_without_freshness = sorted(
         metric_id
@@ -894,10 +842,10 @@ def validate_cross_file_contract(root: Path) -> list[str]:
         if metric_id in metrics
         and (not isinstance(metrics[metric_id].get("max_age_days"), int) or metrics[metric_id]["max_age_days"] < 1)
     )
-    if objective_definitions_without_direction:
+    if metric_definitions_without_direction:
         errors.append(
-            "farplane/metrics.yaml selected objective definitions must declare direction: "
-            f"{', '.join(objective_definitions_without_direction)}."
+            "farplane/metrics.yaml metric definitions must declare direction: "
+            f"{', '.join(metric_definitions_without_direction)}."
         )
     if selected_definitions_without_freshness:
         errors.append(
@@ -1012,6 +960,23 @@ def validate_harness_file(root: Path, harness_file: Path) -> list[str]:
         errors.append(f"{rel_path} must declare framework_template_version.")
 
     identity = payload.get("identity") if isinstance(payload.get("identity"), dict) else {}
+    unsupported_identity = sorted(
+        set(identity) - {"mission", "human_thesis", "north_star", "problems"}
+    )
+    if unsupported_identity:
+        errors.append(
+            f"{rel_path} identity has unsupported fields: {', '.join(unsupported_identity)}."
+        )
+    if "product_bets" in identity:
+        errors.append(
+            f"{rel_path} identity.product_bets is retired; bind stable identity.problems "
+            "and keep mutable solution choices, order, deadlines, and proof on tickets."
+        )
+    if "goals" in payload:
+        errors.append(
+            f"{rel_path} goals is retired; keep objective metric movement in metric observations "
+            "and mutable urgency, due dates, and proof on tickets."
+        )
     for field in ("mission", "human_thesis", "north_star"):
         if not isinstance(identity.get(field), str) or not identity.get(field, "").strip():
             errors.append(f"{rel_path} identity.{field} must be a non-empty string.")
@@ -1062,43 +1027,6 @@ def validate_harness_file(root: Path, harness_file: Path) -> list[str]:
     if duplicate_problem_ids:
         errors.append(f"{rel_path} identity problem IDs must be unique: {', '.join(duplicate_problem_ids)}.")
 
-    product_bets = identity.get("product_bets")
-    bet_ids: list[str] = []
-    if portfolio_required or product_bets is not None:
-        if not isinstance(product_bets, list) or not product_bets:
-            errors.append(f"{rel_path} identity.product_bets must be a non-empty list.")
-            product_bets = []
-        for index, bet in enumerate(product_bets):
-            prefix = f"{rel_path} identity.product_bets[{index}]"
-            if not isinstance(bet, dict):
-                errors.append(f"{prefix} must be an object.")
-                continue
-            unsupported = sorted(set(bet) - {"id", "promise", "problem_refs"})
-            if unsupported:
-                errors.append(f"{prefix} has unsupported fields: {', '.join(unsupported)}.")
-            raw_bet_id = bet.get("id")
-            bet_id = raw_bet_id.strip() if isinstance(raw_bet_id, str) else ""
-            if not bet_id:
-                errors.append(f"{prefix}.id must be a non-empty string.")
-            else:
-                bet_ids.append(bet_id)
-            if not isinstance(bet.get("promise"), str) or not bet.get("promise", "").strip():
-                errors.append(f"{prefix}.promise must be a non-empty string.")
-            refs = bet.get("problem_refs")
-            if not isinstance(refs, list) or not refs or any(
-                not isinstance(problem_ref, str) or not problem_ref.strip() for problem_ref in refs
-            ):
-                errors.append(f"{prefix}.problem_refs must be a non-empty list of strings.")
-                refs = []
-            elif len(refs) != len(set(refs)):
-                errors.append(f"{prefix}.problem_refs must not contain duplicates.")
-            dangling_refs = sorted(set(refs) - set(problem_ids))
-            if dangling_refs:
-                errors.append(f"{prefix}.problem_refs are unresolved: {', '.join(dangling_refs)}.")
-    duplicate_bet_ids = sorted({bet_id for bet_id in bet_ids if bet_ids.count(bet_id) > 1})
-    if duplicate_bet_ids:
-        errors.append(f"{rel_path} identity product bet IDs must be unique: {', '.join(duplicate_bet_ids)}.")
-
     refs = payload.get("metric_refs") if isinstance(payload.get("metric_refs"), dict) else {}
     if not isinstance(refs.get("objectives"), list) or not refs.get("objectives"):
         errors.append(f"{rel_path} metric_refs.objectives must be a non-empty list.")
@@ -1127,58 +1055,42 @@ def validate_harness_file(root: Path, harness_file: Path) -> list[str]:
     if len(guard_ids) != len(set(guard_ids)):
         errors.append(f"{rel_path} metric_refs.guards must not contain duplicates.")
 
-    goals = payload.get("goals", [])
-    if not isinstance(goals, list):
-        errors.append(f"{rel_path} goals must be a list when present.")
-        goals = []
-    goal_ids: list[str] = []
-    selected_objective_ids = set(objective_ids)
-    for index, goal in enumerate(goals):
-        prefix = f"{rel_path} goals[{index}]"
-        if not isinstance(goal, dict):
-            errors.append(f"{prefix} must be an object.")
-            continue
-        unsupported = sorted(set(goal) - GOAL_ALLOWED_FIELDS)
-        if unsupported:
-            errors.append(f"{prefix} has unsupported fields: {', '.join(unsupported)}.")
-        raw_goal_id = goal.get("goal_id")
-        goal_id = raw_goal_id.strip() if isinstance(raw_goal_id, str) else ""
-        metric_id = str(goal.get("metric_id") or "").strip()
-        target_value = goal.get("target_value")
-        target_date = goal.get("target_date")
-        if not goal_id:
-            errors.append(f"{prefix}.goal_id must be a non-empty string.")
-        else:
-            goal_ids.append(goal_id)
-        if metric_id not in selected_objective_ids:
-            errors.append(f"{prefix}.metric_id must reference a selected objective metric.")
+    known_skills = project_skill_ids(root)
+    planning = payload.get("planning")
+    if not isinstance(planning, dict):
+        errors.append(f"{rel_path} planning must be an object.")
+    else:
+        unsupported_planning = sorted(set(planning) - {"skill_refs"})
+        if unsupported_planning:
+            errors.append(
+                f"{rel_path} planning has unsupported fields: {', '.join(unsupported_planning)}."
+            )
+        planning_skill_refs = planning.get("skill_refs")
         if (
-            isinstance(target_value, bool)
-            or not isinstance(target_value, (int, float))
-            or not math.isfinite(float(target_value))
+            not isinstance(planning_skill_refs, list)
+            or not planning_skill_refs
+            or any(not isinstance(skill_id, str) or not skill_id.strip() for skill_id in planning_skill_refs)
         ):
-            errors.append(f"{prefix}.target_value must be a finite number.")
-        valid_target_date = False
-        if isinstance(target_date, date) and not isinstance(target_date, datetime):
-            valid_target_date = True
-        elif isinstance(target_date, str):
-            try:
-                date.fromisoformat(target_date)
-                valid_target_date = True
-            except ValueError:
-                pass
-        if not valid_target_date:
-            errors.append(f"{prefix}.target_date must be an ISO date (YYYY-MM-DD).")
-    duplicate_goal_ids = sorted(
-        {goal_id for goal_id in goal_ids if goal_ids.count(goal_id) > 1}
-    )
-    if duplicate_goal_ids:
-        errors.append(f"{rel_path} goal IDs must be unique: {', '.join(duplicate_goal_ids)}.")
+            errors.append(f"{rel_path} planning.skill_refs must be a non-empty list of strings.")
+        else:
+            duplicate_planning_skills = sorted(
+                {skill_id for skill_id in planning_skill_refs if planning_skill_refs.count(skill_id) > 1}
+            )
+            if duplicate_planning_skills:
+                errors.append(
+                    f"{rel_path} planning.skill_refs must be unique: {', '.join(duplicate_planning_skills)}."
+                )
+            dangling_planning_skills = sorted(
+                skill_id for skill_id in planning_skill_refs if skill_id not in known_skills
+            )
+            if dangling_planning_skills:
+                errors.append(
+                    f"{rel_path} planning.skill_refs are unresolved: {', '.join(dangling_planning_skills)}."
+                )
 
     areas = payload.get("areas") if isinstance(payload.get("areas"), dict) else {}
     if not areas:
         errors.append(f"{rel_path} areas must declare at least one planning area.")
-    known_skills = project_skill_ids(root)
     for area_id, area in areas.items():
         prefix = f"{rel_path} areas.{area_id}"
         if not isinstance(area, dict):
@@ -1187,9 +1099,8 @@ def validate_harness_file(root: Path, harness_file: Path) -> list[str]:
         unsupported = sorted(set(area) - AREA_ALLOWED_FIELDS)
         if unsupported:
             errors.append(f"{prefix} has controller or unsupported fields: {', '.join(unsupported)}.")
-        for field in ("description", "planner_instruction"):
-            if not isinstance(area.get(field), str) or not area.get(field, "").strip():
-                errors.append(f"{prefix}.{field} must be a non-empty string.")
+        if not isinstance(area.get("description"), str) or not area.get("description", "").strip():
+            errors.append(f"{prefix}.description must be a non-empty string.")
         icp = area.get("icp")
         if not isinstance(icp, dict):
             if not is_draft:
@@ -1238,7 +1149,6 @@ def validate(root: Path) -> list[str]:
     metrics = framework_dir / "metrics.yaml"
     harness = framework_dir / "harness.yaml"
     retired_harness_markdown = framework_dir / "harness.md"
-    hooks = framework_dir / "hooks.json"
     retired_file_growth_hook = framework_dir / "file-growth-hook.json"
     duplicate_project_charter = framework_dir / "project.md"
     pm_manifest = framework_dir / "pm.json"
@@ -1264,10 +1174,7 @@ def validate(root: Path) -> list[str]:
     if retired_steer_state.exists():
         errors.append(".farplane/state/steer-scheduler.json is retired; Codex automation cadence owns scheduling.")
     if retired_file_growth_hook.exists():
-        errors.append(
-            "farplane/file-growth-hook.json is retired; use the deterministic "
-            "changed-file gate in rules/git-review-gates.toml."
-        )
+        errors.append("farplane/file-growth-hook.json is retired; remove the automatic file-growth hook config.")
     if duplicate_project_charter.exists():
         errors.append(
             "farplane/project.md would duplicate the active typed charter; use farplane/harness.yaml "
@@ -1289,15 +1196,12 @@ def validate(root: Path) -> list[str]:
     products_json = root / "farplane" / "products.json"
     products_dir = root / "farplane" / "products"
     if products_json.exists():
-        errors.append("farplane/products.json is retired; metrics, goals, and tickets are the project primitives.")
+        errors.append("farplane/products.json is retired; objective metrics and tickets are the project primitives.")
     if products_dir.exists():
         errors.append("farplane/products/ is retired; keep reusable artifact workflows as skills.")
 
     if pm_manifest.exists():
         errors.extend(validate_pm_manifest(root, pm_manifest))
-
-    if hooks.exists():
-        errors.extend(validate_hooks_file(root, hooks))
 
     if not bindings.exists():
         errors.append("farplane/bindings.yaml is required for project bindings.")

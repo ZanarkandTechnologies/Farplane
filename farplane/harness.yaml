@@ -46,35 +46,6 @@ identity:
         - accepted_harness_improvements
         - priority_skill_health_gap_count
         - latest_eval_pass_rate
-  product_bets:
-    - id: autonomous_teams_24_7
-      promise: >-
-        Run autonomous teams continuously without losing visibility or control.
-      problem_refs:
-        - unattended_autonomy
-        - operational_visibility
-      system_refs:
-        - SYS-0002
-        - SYS-0003
-        - SYS-0005
-      feature_refs:
-        - FEAT-0007
-        - FEAT-0032
-        - FEAT-0008
-    - id: agent_sdlc
-      promise: >-
-        Develop and improve agent systems through evals, review, and evidence.
-      problem_refs:
-        - agent_sdlc
-      system_refs:
-        - SYS-0001
-        - SYS-0005
-        - SYS-0006
-      feature_refs:
-        - FEAT-0042
-        - FEAT-0039
-        - FEAT-0022
-
 metric_refs:
   objectives:
     - metric_id: evidence_distribution_reach
@@ -87,10 +58,6 @@ metric_refs:
       priority: 4
   guards:
     - harness_health_source_gap_count
-
-# Optional dated targets for selected objective metrics. Completion is derived
-# from each metric definition's maximize/minimize direction.
-goals: []
 
 # Plan Next Wave may create work only by binding these existing skill
 # signatures. The skills own workflow; areas below supply passive ICP/metric

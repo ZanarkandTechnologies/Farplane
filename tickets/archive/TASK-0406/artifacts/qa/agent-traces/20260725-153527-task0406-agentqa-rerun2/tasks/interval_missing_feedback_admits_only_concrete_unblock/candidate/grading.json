@@ -1,0 +1,40 @@
+{
+  "assertion_results": [
+    {
+      "text": "Diagnoses missing instrumentation and does not optimize from vibes",
+      "passed": true,
+      "evidence": "Explicitly identifies missing instrumentation and rejects activity as outcome evidence."
+    },
+    {
+      "text": "Rejects the unsupported onboarding optimization",
+      "passed": true,
+      "evidence": "Direct onboarding optimization is clearly rejected as guesswork."
+    },
+    {
+      "text": "Applies the normal admission predicate to the feedback-loop unblock",
+      "passed": true,
+      "evidence": "Materiality, executable scope, duplicate, proof, and write-authority gates are applied."
+    },
+    {
+      "text": "Requires a named signal, capture artifact, unlocked decision, and stop condition",
+      "passed": false,
+      "evidence": "It mentions these categories but does not name the actual signal, artifact, threshold-based decision, or stop condition."
+    },
+    {
+      "text": "Reports blocked systems, missing feedback, explicit delta or no-action, and next owner without execution",
+      "passed": false,
+      "evidence": "Missing feedback and no-execution are clear, but blocked systems and the next execution owner are not explicitly named."
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 2,
+    "total": 5,
+    "pass_rate": 0.6
+  },
+  "judge": {
+    "verdict": "C",
+    "pass": false,
+    "reason": "The decision direction is correct and concise, but the proposed unblock remains insufficiently concrete and omits required blocked-system and ownership reporting."
+  }
+}

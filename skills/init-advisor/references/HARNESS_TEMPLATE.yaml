@@ -15,26 +15,12 @@ identity:
       statement: TODO name one stable customer or operator problem.
       metric_refs:
         - TODO_metric_name
-  product_bets:
-    - id: TODO_product_bet_id
-      promise: TODO state the current solution hypothesis in audience-facing language.
-      problem_refs:
-        - TODO_problem_id
-      system_refs:
-        - TODO_system_id
-      feature_refs:
-        - TODO_feature_id
-
 metric_refs:
   objectives:
     - metric_id: TODO_metric_name
       priority: 1
   guards:
     - TODO_quality_metric
-
-# Optional dated targets for selected objective metrics. Completion is derived
-# from each metric definition's maximize/minimize direction.
-goals: []
 
 # Plan Next Wave may select only these existing skills. Each selected skill
 # owns its workflow and declares the arguments the planner must bind.

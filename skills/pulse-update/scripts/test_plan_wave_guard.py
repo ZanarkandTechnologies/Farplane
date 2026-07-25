@@ -20,7 +20,6 @@ class PlanWaveGuardTests(unittest.TestCase):
     def semantic_time_state(**overrides: object) -> dict[str, object]:
         state: dict[str, object] = {
             "metric_freshness": {"reach": "fresh"},
-            "goal_urgency": {"reach-goal": "on_track"},
             "matured_reward_ids": [],
             "operator_availability": {"state": "unavailable", "validity": "current"},
         }
@@ -40,14 +39,14 @@ class PlanWaveGuardTests(unittest.TestCase):
                 "as_of": "2026-07-14T10:00:00Z",
                 "board": {"held_review_chases": [{"review": {"unanswered_pulse_turns": 22}}]},
                 "history_query": {"ref": ".farplane/tmp/history-1000.json", "limit": 20},
-                "goals": [{"metric_id": "reach", "target_value": 100}],
+                "metric_movement": {"reach": {"current": 10, "previous": 9}},
                 "semantic_time_state": self.semantic_time_state(),
             }
             second_input = {
                 "as_of": "2026-07-14T10:30:00Z",
                 "board": {"held_review_chases": [{"review": {"unanswered_pulse_turns": 23}}]},
                 "history_query": {"ref": ".farplane/tmp/history-1030.json", "limit": 20},
-                "goals": [{"metric_id": "reach", "target_value": 100}],
+                "metric_movement": {"reach": {"current": 10, "previous": 9}},
                 "semantic_time_state": self.semantic_time_state(),
             }
 
@@ -71,9 +70,6 @@ class PlanWaveGuardTests(unittest.TestCase):
             states = {
                 "metric_becomes_stale": self.semantic_time_state(
                     metric_freshness={"reach": "stale"}
-                ),
-                "goal_enters_deadline_bucket": self.semantic_time_state(
-                    goal_urgency={"reach-goal": "due_within_24h"}
                 ),
                 "delayed_checkin_matures": self.semantic_time_state(
                     matured_reward_ids=["reach-checkin-7d"]
@@ -214,7 +210,6 @@ class PlanWaveGuardTests(unittest.TestCase):
                     {
                         "semantic_time_state": {
                             "metric_freshness": {},
-                            "goal_urgency": {},
                             "operator_availability": {},
                         }
                     },
@@ -231,7 +226,7 @@ class PlanWaveGuardTests(unittest.TestCase):
             )
             baseline = {
                 "metrics": {"reach": 10},
-                "goals": [{"metric_id": "reach", "target_value": 100}],
+                "metric_movement": {"reach": {"current": 10, "previous": 9}},
                 "board": {
                     "idle_worker_slots": 4,
                     "review_wip": 2,
@@ -245,7 +240,7 @@ class PlanWaveGuardTests(unittest.TestCase):
             baseline_fingerprint = guard.semantic_planning_fingerprint(root, baseline)
             variants = [
                 {**baseline, "metrics": {"reach": 11}},
-                {**baseline, "goals": [{"metric_id": "reach", "target_value": 200}]},
+                {**baseline, "metric_movement": {"reach": {"current": 11, "previous": 10}}},
                 {**baseline, "board": {"idle_worker_slots": 3, "review_wip": 2}},
                 {
                     **baseline,

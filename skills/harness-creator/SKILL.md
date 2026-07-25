@@ -232,16 +232,19 @@ skill to root `skills/` only after repeated proof shows cross-project reuse.
      only when no unclaimed ordinary or due-check-in work exists. Human-active
      tickets do not consume Pulse capacity.
    - [ ] `interval-update` writes bounded Daily/Weekly problem reports and
-     candidate interventions from prior evidence. It does not create tickets,
-     plan new direction, score rewards, or own self-improvement admission.
+     admits, updates, or rejects evidence-grounded ticket deltas after the
+     report is finalized. It does not dispatch work, score rewards, or replace
+     low-watermark candidate discovery.
    - [ ] `dogfood-review` aggregates already-recorded experiment outcomes and
-     emits bounded experiment candidates. The one next-wave planner ranks the
-     self-improvement area globally; Pulse alone materializes admitted tickets.
+     emits bounded experiment candidates. Interval may admit grounded deltas;
+     Plan Next Wave compares only refill candidates when ready supply is weak,
+     and Pulse alone materializes planner-admitted calls.
    - [ ] When horizon work can split safely, express subagent lanes as
      `delegate(context_ref, task_prompt, skills?, output?)`; `context_ref` must
      be a file, ticket, Goal Packet, or artifact path.
-   - [ ] Use [update-strategy](../update-strategy/SKILL.md) for new strategy,
-     system gaps, experiments, and ticket deltas.
+   - [ ] Use [interval-update](../interval-update/SKILL.md) for evidence-backed
+     problem diagnosis and admitted ticket deltas; keep mutable strategy on the
+     ticket board.
    - [ ] Use [update-memory](../update-memory/SKILL.md) for consolidated
      memory, README/doc deltas, and stale-context notes.
    - [ ] Use `skill-maintenance(mode: harden_skill)` for new evals, gotchas,
@@ -382,8 +385,6 @@ tickets/TASK-YYYY-unblock-*.md      # preferred for human access/setup blockers
   standard repo, ticket, QA, feedback, or bootstrap systems.
 - [interval-update](../interval-update/SKILL.md) - scheduled bounded BAU
   problem reporting and prior-evidenced maintenance resurfacing.
-- [update-strategy](../update-strategy/SKILL.md) - generic project strategy
-  refresh primitive for interval updates.
 - [update-memory](../update-memory/SKILL.md) - generic project memory refresh
   primitive for interval updates.
 - [examples/faceless-ai-channel.md](examples/faceless-ai-channel.md) - pilot

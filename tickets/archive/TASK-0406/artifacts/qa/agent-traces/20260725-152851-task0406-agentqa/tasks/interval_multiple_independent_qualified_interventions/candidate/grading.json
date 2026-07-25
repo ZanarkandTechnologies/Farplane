@@ -1,0 +1,40 @@
+{
+  "assertion_results": [
+    {
+      "text": "Evaluates every candidate independently with no numeric ticket cap or target",
+      "passed": false,
+      "evidence": "It gives the correct count but does not state independent evaluation or the no-cap rule."
+    },
+    {
+      "text": "Admits both independently material coherent interventions",
+      "passed": true,
+      "evidence": "It admits one ticket for each independent root problem."
+    },
+    {
+      "text": "Rejects lifecycle-stage fragmentation of one correction",
+      "passed": true,
+      "evidence": "It explicitly rejects the third idea as a lifecycle-stage split."
+    },
+    {
+      "text": "Does not equate ticket volume with momentum",
+      "passed": false,
+      "evidence": "It does not address ticket volume or momentum."
+    },
+    {
+      "text": "Records decisions before highlights and board mutation",
+      "passed": false,
+      "evidence": "It omits the required report-finalization, highlights, and mutation ordering."
+    }
+  ],
+  "summary": {
+    "passed": 2,
+    "failed": 3,
+    "total": 5,
+    "pass_rate": 0.4
+  },
+  "judge": {
+    "verdict": "C",
+    "pass": false,
+    "reason": "The answer reaches the correct ticket count and rejects fragmentation, but omits three required operating rules."
+  }
+}

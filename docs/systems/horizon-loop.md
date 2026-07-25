@@ -3,7 +3,7 @@ title: "Horizon Loop"
 status: active
 owner: farplane-framework
 created_at: 2026-06-26
-updated_at: 2026-07-12
+updated_at: 2026-07-25
 tags:
   - farplane
   - systems
@@ -19,7 +19,7 @@ system_record_json: |
     "id": "SYS-0003",
     "name": "Horizon Loop",
     "status": "implemented",
-    "summary": "The project control loop with one Work Pulse heartbeat and bounded scheduled report/candidate sources for BAU, scouting, and self-improvement.",
+    "summary": "The project control loop where metric movement flows through report-first Interval review into the ticket board, with Work Pulse dispatch and Plan Next Wave as low-supply refill.",
     "owner_spec": "docs/systems/horizon-loop.md",
     "primary_feature_ref": "FEAT-0032",
     "feature_refs": [
@@ -37,14 +37,16 @@ system_record_json: |
       "docs/features/FEAT-0067-daily-interval-review-reports.md",
       "docs/features/FEAT-0071-project-work-pulse.md"
     ],
-    "last_verified": "2026-07-12"
+    "last_verified": "2026-07-25"
   }
 ---
 # Horizon Loop
 
-The project control loop that coordinates Goal Packets, one Work Pulse
-heartbeat, and bounded scheduled report/candidate sources without becoming a hidden
-daemon.
+The project control loop where metric movement and evidence flow through
+report-first Interval review into the ticket board, then Work Pulse dispatches
+or checks in work. Plan Next Wave remains the side-effect-free low-supply
+refill path. Native Goal Packets remain the continuation mechanism for
+material ticket execution.
 
 ```text
 horizon_loop(change, repo_state?) -> owned_feature_set + boundary_decision + maintenance_signal
@@ -61,8 +63,9 @@ horizon_loop(change, repo_state?) -> owned_feature_set + boundary_decision + mai
 ## Role
 
 Horizon Loop owns recurring and longer-running autonomy: Goal Packets, one Work
-Pulse, scheduled BAU reports, backoff, PR watching, and the shared candidate
-handoff from Feed Scout, Dogfood, Interval, and operator sources.
+Pulse, Daily/Weekly Interval reports, low-supply refill, backoff, PR watching,
+and the bounded handoff from Feed Scout, Dogfood, Interval, and operator
+sources.
 
 ## Feature Docs
 
@@ -75,8 +78,9 @@ handoff from Feed Scout, Dogfood, Interval, and operator sources.
 
 ## What Belongs Here
 
-Goal-backed continuation, Pulse admission/dispatch/check-ins, BAU interval
-reports, horizon recalibration, adaptive waits, and visible automation cadence.
+Goal-backed continuation, Pulse dispatch/check-ins, report-first Interval
+review/admission, low-supply refill, adaptive waits, and visible automation
+cadence.
 
 ## What Belongs Elsewhere
 
@@ -90,10 +94,12 @@ And Learning; proof standards belong in Proof And Review.
 - Automations may no-op when no safe valuable action exists.
 - Exactly one base project automation is a heartbeat: Work Pulse. Other
   recurring jobs are bounded cron/manual automations.
-- Scheduled sources write reports and bounded candidates, and may admit direct
-  recovery tickets for evidenced existing failures with known fixes and no
-  experiment debt. The adaptive Work Pulse planner globally ranks proactive
-  opportunities, uncertain fixes, and experiments.
+- Daily and Weekly Interval write reports before ticket deltas, may admit
+  grounded interventions or decision-changing investigations, and otherwise
+  leave findings as source gaps or refill context.
+- Work Pulse dispatches executable tickets and calls Plan Next Wave only when
+  ready supply is low. Plan Next Wave ranks configured skill calls from stable
+  problems, areas, metric movement, source-backed context, and ticket history.
 - Backoff and polling stay tracked and bounded.
 - Human authority remains required for ambiguous or high-risk direction.
 - Feature-level behavior belongs in `docs/features/FEAT-*.md`; this page owns the system boundary and feature grouping.
@@ -109,28 +115,34 @@ flowchart LR
   classDef added fill:#dcfce7,stroke:#15803d,color:#111827
   classDef retired fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d,stroke-dasharray: 5 3
 
-  goals["program / goals / tickets"]:::keep
+  metrics["metric observations<br/>raw + movement"]:::keep
+  intent["stable intent<br/>problems + areas + metrics"]:::keep
   automations["automations<br/>farplane/automations.toml"]:::keep
   advisor["FEAT-0032<br/>goal-advisor"]:::changed
   pulse["FEAT-0071<br/>project Work Pulse"]:::added
-  interval["FEAT-0067<br/>Daily / Weekly BAU reports"]:::changed
-  sources["Feed Scout + Dogfood + Interval + operator<br/>reports + candidates"]:::keep
+  interval["FEAT-0067<br/>Daily / Weekly review"]:::changed
+  sources["Feed Scout + Dogfood + operator<br/>reports + context"]:::keep
   old["FEAT-0065<br/>retired umbrella automation"]:::retired
   productPulse["FEAT-0066<br/>retired product-scoped Pulse"]:::retired
-  planner["adaptive project planner<br/>global rank + admission"]:::added
-  outputs["tickets + reports<br/>bounded next work"]:::added
+  planner["Plan Next Wave<br/>low-supply refill"]:::added
+  board["ticket board<br/>priority + due_at + proof"]:::added
+  outputs["reports + tickets<br/>bounded next work"]:::added
 
-  goals --> advisor --> outputs
-  automations --> pulse --> outputs
-  automations --> interval --> outputs
-  sources --> planner --> outputs --> pulse
+  metrics --> interval --> outputs --> board
+  intent --> interval
+  intent --> planner
+  automations --> pulse --> board
+  automations --> interval
+  sources --> planner --> board --> pulse
+  board --> advisor --> outputs
   old -. "superseded_by" .-> pulse
   old -. "superseded_by" .-> interval
   productPulse -. "superseded_by" .-> pulse
 ```
 
-The Horizon Loop coordinates one execution heartbeat and several report-backed
-candidate sources without giving each source its own admission policy or executor.
+The Horizon Loop coordinates one execution heartbeat, one report-first
+Interval review path, and one low-supply refill planner without giving every
+source its own strategy ledger or executor.
 
 ## Surfaces
 
@@ -159,3 +171,6 @@ candidate sources without giving each source its own admission policy or executo
 - 2026-07-12: Centralized exploratory ticket admission in the adaptive Work
   Pulse planner while preserving bounded evidence-backed recovery admission in
   scheduled jobs.
+- 2026-07-25: Consolidated the metric-to-ticket loop: Interval owns
+  report-first evidence admission, Work Pulse owns dispatch and due_at
+  ordering, and Plan Next Wave owns only low-supply refill.

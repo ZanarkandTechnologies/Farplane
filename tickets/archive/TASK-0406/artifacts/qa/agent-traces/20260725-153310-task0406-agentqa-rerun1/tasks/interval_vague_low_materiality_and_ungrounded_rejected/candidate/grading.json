@@ -1,0 +1,40 @@
+{
+  "assertion_results": [
+    {
+      "text": "Rejects vague strategy and planning-only work",
+      "passed": true,
+      "evidence": "Explicitly rejects both as planning residue without concrete output or proof."
+    },
+    {
+      "text": "Rejects the cosmetic chore for low materiality",
+      "passed": true,
+      "evidence": "Rejects cleanup lacking objective effect."
+    },
+    {
+      "text": "Keeps the material ungrounded symptom as a planner candidate",
+      "passed": true,
+      "evidence": "Retains it in the finalized report and routes it to Plan Next Wave."
+    },
+    {
+      "text": "Creates no artifact-free ticket",
+      "passed": true,
+      "evidence": "Applies zero ticket deltas and rejects work without an artifact, outcome, or proof."
+    },
+    {
+      "text": "Preserves uncertainty and source gaps",
+      "passed": true,
+      "evidence": "Does not invent a cause and preserves the unsupported symptom in the report for further grounding."
+    }
+  ],
+  "summary": {
+    "passed": 5,
+    "failed": 0,
+    "total": 5,
+    "pass_rate": 1.0
+  },
+  "judge": {
+    "verdict": "A",
+    "pass": true,
+    "reason": "The answer correctly admits no tickets, explains every candidate decision, preserves the ungrounded material symptom for planning, and includes report-first, no-highlight-filler, and no-execution boundaries."
+  }
+}

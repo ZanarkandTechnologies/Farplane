@@ -1,0 +1,74 @@
+{
+  "schema_version": 2,
+  "job_id": "20260725-153527-task0406-agentqa-rerun2",
+  "label": "task0406-agentqa-rerun2",
+  "created_at": "2026-07-25T15:35:27.733456+00:00",
+  "completed_at": "2026-07-25T15:37:01.074659+00:00",
+  "harness": "codex",
+  "judge_harness": "codex",
+  "scopes": [
+    "skills"
+  ],
+  "default_context_file": "contexts/agi-toy-shop.md",
+  "skill_context": "inline",
+  "compare_baseline": false,
+  "behavior_trace": true,
+  "task_files": [
+    "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/skills/interval-update/evals/evals.json"
+  ],
+  "task_count": 3,
+  "pass_rate": 0.33,
+  "verdict_counts": {
+    "B": 1,
+    "A": 1,
+    "C": 1
+  },
+  "tasks": [
+    {
+      "task_id": "interval_known_intervention_same_run_ticket",
+      "title": "Known intervention becomes a same-run solution ticket",
+      "verdict": "B",
+      "pass": false,
+      "reason": "The decision chain and ordering are strong, but two explicit safety/contract details are missing: the ticket itself must carry the stop condition, and the no-execution receipt must state that no Goal, Pulse, or worker is started.",
+      "candidate_metrics": {
+        "duration_ms": 32052,
+        "total_tokens": 71350
+      },
+      "behavior_verdict": "pass",
+      "behavior_trace_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-153527-task0406-agentqa-rerun2/tasks/interval_known_intervention_same_run_ticket/behavior_trace.json",
+      "detail_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-153527-task0406-agentqa-rerun2/tasks/interval_known_intervention_same_run_ticket.json"
+    },
+    {
+      "task_id": "interval_multiple_independent_qualified_interventions",
+      "title": "No cap suppresses multiple qualified root-problem interventions",
+      "verdict": "A",
+      "pass": true,
+      "reason": "Correctly admits two tickets, rejects the fragmented third candidate, and concisely preserves the required ordering and no-cap principles.",
+      "candidate_metrics": {
+        "duration_ms": 25186,
+        "total_tokens": 70796
+      },
+      "behavior_verdict": "pass",
+      "behavior_trace_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-153527-task0406-agentqa-rerun2/tasks/interval_multiple_independent_qualified_interventions/behavior_trace.json",
+      "detail_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-153527-task0406-agentqa-rerun2/tasks/interval_multiple_independent_qualified_interventions.json"
+    },
+    {
+      "task_id": "interval_missing_feedback_admits_only_concrete_unblock",
+      "title": "Missing feedback routes to a concrete evidence unblock",
+      "verdict": "C",
+      "pass": false,
+      "reason": "The decision direction is correct and concise, but the proposed unblock remains insufficiently concrete and omits required blocked-system and ownership reporting.",
+      "candidate_metrics": {
+        "duration_ms": 30294,
+        "total_tokens": 71302
+      },
+      "behavior_verdict": "pass",
+      "behavior_trace_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-153527-task0406-agentqa-rerun2/tasks/interval_missing_feedback_admits_only_concrete_unblock/behavior_trace.json",
+      "detail_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-153527-task0406-agentqa-rerun2/tasks/interval_missing_feedback_admits_only_concrete_unblock.json"
+    }
+  ],
+  "behavior_verdict_counts": {
+    "pass": 3
+  },
+  "benchmark_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-153527-task0406-agentqa-rerun2/benchmark.json"
+}

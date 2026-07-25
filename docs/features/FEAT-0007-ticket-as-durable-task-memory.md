@@ -3,7 +3,7 @@ title: Ticket as durable task memory
 status: implemented
 owner: feature-registry
 created_at: 2026-06-26
-updated_at: 2026-07-11
+updated_at: 2026-07-25
 tags:
   - farplane
   - feature
@@ -37,7 +37,7 @@ evidence_refs:
   - docs/HISTORY.md
 known_limits: Only works when agents keep the compact ticket-as-program body, ticket Links, progress logs, and artifact pointers current instead of hiding state in chat.
 metrics: []
-last_verified: 2026-07-11
+last_verified: 2026-07-25
 experimental: false
 superseded_by: false
 ---
@@ -51,6 +51,7 @@ because the behavior has an owner, proof path, and maintenance boundary.
 ```text
 ticket_memory(intent, repo_state?) -> ticket_contract + proof_scoreboard + resume_state
 ticket_status(ticket, dependencies, reward_rows, claim?) -> executable | waiting | terminal
+ticket_sort_key(ticket) -> priority + due_at? + ticket_id
 ```
 
 ## At A Glance
@@ -100,6 +101,10 @@ A durable ticket is a small program for the next agent, not a generic task note.
   evidence, goal-advisor inputs, final checkpoint, and residual risk.
 - Frontmatter carries one lifecycle status plus identity/freshness and only the
   sparse routing overrides that differ from defaults.
+- Optional `due_at` is a delivery deadline as a timezone-bearing ISO-8601
+  timestamp. It is used for ordinary executable-board ordering inside the same
+  priority band; it is not priority, lifecycle state, delayed Reward
+  `check_in_at`, or Goal Packet timing.
 - `progress.md` carries current action, blockers, verification, review state,
   and delayed check-in observations.
 - `Links` points to evidence, artifacts, related specs, sidecars, and handoffs.
@@ -108,8 +113,8 @@ A durable ticket is a small program for the next agent, not a generic task note.
   mining after the ticket's proof gates pass.
 
 The required frontmatter is only `ticket_id`, `title`, `status`, `created_at`,
-and `updated_at`. Optional `priority`, `claimed_by`, `depends_on`, `human_gate`,
-and `compute_target` exist only when they change routing. There is
+and `updated_at`. Optional `priority`, `due_at`, `claimed_by`, `depends_on`,
+`human_gate`, and `compute_target` exist only when they change routing. There is
 no parallel `phase`, hand-maintained `ready`, approval boolean, blocker list,
 QA/demo flags, next action, or verification field.
 
@@ -125,7 +130,7 @@ flowchart TD
   trigger["Trigger<br/>accepted task or planning handoff"]:::keep
   owner["Owner surface<br/>tickets/README.md<br/>tickets/templates/ticket.md"]:::changed
   readers["Files and fields read<br/>Summary, Scope, Delta<br/>Change Plan, Done, QA Strategy<br/>frontmatter state, Links"]:::keep
-  routes["Execution routes<br/>skills/impl-plan<br/>skills/spec-to-ticket"]:::changed
+  routes["Execution routes<br/>impl-plan, spec-to-ticket<br/>Pulse priority + due_at ordering"]:::changed
   artifact["Created artifact/evidence<br/>tickets/TASK-XXXX/ticket.md<br/>with proof scoreboard"]:::added
   old["Retired<br/>chat-only task memory"]:::retired
 
@@ -171,6 +176,8 @@ Acceptance signals:
 
 - The feature remains listed under exactly one owning system.
 - The owner surfaces still exist and agree with this contract.
+- Optional `due_at` stays timezone-bearing and affects ordering only after
+  priority; tickets without it sort last inside their priority band.
 - Evidence refs support the current status.
 
 ## Rollout And Maintenance
@@ -210,3 +217,5 @@ Acceptance signals:
 - 2026-07-11: Collapsed ticket metadata to one status-owned lifecycle and
   moved mutable review/check-in/next-action/proof state into the ticket body,
   `progress.md`, and ticket artifacts.
+- 2026-07-25: Added optional `due_at` as a timezone-bearing delivery deadline
+  for same-priority executable-board ordering.

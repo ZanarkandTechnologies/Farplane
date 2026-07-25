@@ -3,7 +3,7 @@ title: "Work Pulse And Scheduled Context Sources"
 status: active
 owner: farplane-framework
 created_at: 2026-06-29
-updated_at: 2026-07-16
+updated_at: 2026-07-25
 framework_template_version: "0.3.0"
 tags:
   - farplane
@@ -23,9 +23,10 @@ refs:
 
 # Work Pulse And Scheduled Ticket Sources
 
-Farplane uses one project Work Pulse heartbeat for fast admission, execution,
-and due check-ins. Feed Scout, Daily, Weekly, Dogfood self-improvement, and
-low-frequency maintenance run as separate bounded automations.
+Farplane uses one project Work Pulse heartbeat for reconciliation, execution,
+low-supply refill, and due check-ins. Daily and Weekly Interval own
+report-first evidence-to-ticket review. Feed Scout, Dogfood self-improvement,
+and low-frequency maintenance run as separate bounded automations.
 
 ```text
 work_pulse(project_root, wave_size, worker_limit, review_wip,
@@ -33,13 +34,15 @@ work_pulse(project_root, wave_size, worker_limit, review_wip,
   -> reconciliation + ticket_deltas? + worker_handoffs? + review_requests?
    + dated_report + next_wake?
 
-plan_next_wave(planning_skill_refs, harness_areas?, objective_contract, metric_goals?, metric_state,
-               ticket_history_query, current_context?, world_memory?, taste_evidence?, wave_size)
+plan_next_wave(planning_skill_refs, stable_problems, harness_areas?,
+               objective_metric_state, ticket_history_query,
+               current_context?, world_memory?, taste_evidence?, wave_size)
   -> ranked_skill_calls[0..wave_size] + gaps + duplicate_rejections
 
 interval_update(project_root, interval_id, review_window,
-                context_refs?, maintenance_ticket_limit = 1)
-  -> dated_report + problems + candidate_interventions[] + recovery_tickets[]
+                context_refs?)
+  -> dated_report + problems + admitted_ticket_deltas[]
+   + rejected_candidates[] + source_gaps
 
 dogfood_review(project_root, window, cutoff, previous_report?, registry_refs?)
   -> dogfood_report + complete_outcome_ledger + portfolio_lessons
@@ -49,7 +52,8 @@ dogfood_review(project_root, window, cutoff, previous_report?, registry_refs?)
 `planning_skill_refs` is the only active work allowlist. Each referenced skill
 declares a `planner_contract` with required arguments; Plan Next Wave may bind
 those arguments but cannot invent a workflow. `harness_areas` contributes
-optional ICP, evidence-bar, capability, and metric context only.
+optional ICP, evidence-bar, capability, and metric context only. Retired
+project-level goals and product-bet portfolios are not planner inputs.
 
 Feed Scout maintains one configured Markdown World Memory after each daily
 report. Pulse loads it once and passes complete relevant source-backed facts,
@@ -61,22 +65,22 @@ authority, or admission evidence.
 ## Ownership
 
 ```text
-plan_next_wave -> one planner; normal global generation, ranking, and admission
+plan_next_wave -> one planner; low-supply refill generation and ranking only
 Feed Scout     -> source report + candidates + bounded direct recovery
-Daily/Weekly   -> problem reports + candidates + bounded direct recovery
+Daily/Weekly   -> report-first evidence review + grounded ticket deltas
 Dogfood        -> complete self-improvement checkpoint + planner context
 operator       -> explicit tickets and corrections
-Work Pulse     -> exploratory admission, generic ticket materialization, dispatch, execution,
+Work Pulse     -> generic ticket materialization, dispatch, execution,
                   due reward check-ins, review requests, receipts
 worker         -> ticket/program/progress/proof execution
 ```
 
-Scheduled sources feed context to the one planner. Dogfood has no reserved
-allocation or materialization path; its report is optional `current_context`
-for normal refill. Other scheduled sources may create only bounded direct
-recovery tickets for evidenced existing failures with known fixes. None create
-their own worker/planner controllers. Direct operator,
-customer, and incident tickets still enter the shared board as obligations.
+Scheduled sources feed reports and context to the board loop. Dogfood has no
+reserved allocation or materialization path; its report is optional
+`current_context` for normal refill. Interval may admit only grounded ticket
+deltas or decision-changing investigations after the report is written. None
+create their own worker/planner controllers. Direct operator, customer, and
+incident tickets still enter the shared board as obligations.
 
 ## System Flow
 
@@ -87,9 +91,9 @@ flowchart LR
   classDef added fill:#dcfce7,stroke:#15803d,color:#111827
   classDef retired fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d,stroke-dasharray: 5 3
 
-  planner["plan_next_wave<br/>global generation + ranking"]:::added
+  planner["plan_next_wave<br/>low-supply refill"]:::added
   feed["Feed Scout cron<br/>report + candidates"]:::keep
-  interval["Daily / Weekly cron<br/>problems + candidates"]:::keep
+  interval["Daily / Weekly cron<br/>report-first review"]:::keep
   dogfood["Dogfood cron<br/>complete portfolio checkpoint"]:::changed
   operator["operator tickets"]:::keep
   board["one ticket board"]:::added
@@ -99,7 +103,7 @@ flowchart LR
   controllers["source-local execution controllers"]:::retired
 
   feed --> planner
-  interval --> planner
+  interval --> board
   dogfood --> planner
   planner --> board
   operator --> board
@@ -113,7 +117,9 @@ Work Pulse performs five bounded phases in one wake:
 
 1. Reconcile ticket, worker, outcome, blocker, and review state.
 2. Derive matured Reward rows from original tickets and their Goal Packets.
-3. Dispatch eligible existing or due-check-in tickets within `worker_limit`.
+3. Dispatch eligible existing or due-check-in tickets within `worker_limit`,
+   sorted by priority, earliest valid `due_at` with missing deadlines last,
+   then ticket ID.
 4. Request review once, mark the ticket awaiting review, release the worker,
    and execute the bounded binding-owned Telegram-to-phone chase ladder.
 5. When ready supply after dispatch is below its low watermark, ask one adaptive
@@ -143,13 +149,18 @@ whose only job is to check another ticket.
 | `ready_low_watermark` | Ready-supply threshold that triggers planning after dispatch | Admission quality or worker capacity |
 | source candidate limit | Candidates a scheduled report may emit | Ticket admission or dispatch |
 
-### Ticket Eligibility
+### Ticket Eligibility And Ordering
 
 Ordinary ticket eligibility requires `status: todo`, no claim, and satisfied
 dependencies. Human-review states remain ineligible. Due check-ins are a
 derived exception:
 the ticket is admitted because a matured Reward row makes its Goal Packet ready
 to resume, not because new frontmatter was added.
+
+`due_at` is an optional delivery deadline on the ticket frontmatter. It affects
+ordinary executable-board ordering only after priority. `Reward.check_in_at`
+remains delayed outcome-evaluation timing for Goal Packets and never sorts the
+ordinary ticket board.
 
 `human_gate` remains a final-action boundary. Local preparation and proof may
 continue when execution can stop before publish, spend, deploy, external
@@ -173,13 +184,14 @@ read latest N compact tickets globally
 ```
 
 The planner compares every configured planning skill in one global ranking.
-Areas remain optional retrieval lenses, not planners or allocation scopes. Optional
-metric-bound goals add target/date urgency and retire from prioritization when
-the current metric reaches the target in its configured direction. Avoidable setup is consolidated into
-inside a useful first-exemplar call, and every admitted call must produce an
-independently reviewable artifact with a direct use path. Quality,
-guards, authority, dedupe, and interference remain hard gates; artifact count
-never justifies filler.
+Areas remain optional retrieval lenses, not planners or allocation scopes.
+Stable problems, selected objective metric movement, report context, world
+memory, and ticket history provide refill context; retired project-level goals
+and product bets do not. Avoidable setup is consolidated into a useful
+first-exemplar call, and every admitted call must produce an independently
+reviewable artifact with a direct use path. Quality, guards, authority,
+dedupe, and interference remain hard gates; artifact count never justifies
+filler.
 
 Blocked or awaiting-review work owns only its intended output, target surface,
 and unresolved prerequisite. It does not reserve its whole area, KPI, audience,
@@ -221,13 +233,18 @@ for an evidenced existing project failure with a known fix and no experiment
 debt; the next low-watermark planner pass compares exploratory candidates across all
 areas.
 
-### Daily And Weekly BAU Reports
+### Daily And Weekly Control-Loop Reviews
 
 Daily and Weekly use the same small Interval skill with different evidence
-windows. Reports contain a Markdown `## Problems` ledger and may create bounded
-direct recovery tickets when current or prior evidence proves an existing
-failure and the correction is settled. Uncertain findings and new direction
-remain planner context.
+windows. Reports contain a Markdown `## Problems` ledger, raw observations,
+derived metric movement, bottleneck analysis, and admitted or rejected ticket
+deltas. Interval writes the dated report before highlights or board mutation.
+It may create, update, reprioritize, date, or reject tickets only when the
+problem and next intervention pass materiality, executability, concrete proof,
+dedupe, authority, and coherence gates. An investigation ticket is valid only
+when it must produce decision-changing evidence: reproduced cause, ruled-out
+alternatives, selected correction, and proof artifact. Uncertain or
+low-evidence findings remain report-only context for a later low-supply refill.
 
 Interval resolves `farplane/bindings.yaml#integrations.kanban` before work-item
 evidence. Filesystem bindings preserve ticket reads. Notion bindings use only a
@@ -236,7 +253,7 @@ and fail closed with a source gap when access is unavailable. An explicit
 filesystem exclusion forbids local-ticket fallback, including dedupe and
 recovery admission.
 
-Interval does not run Feed Scout, Dogfood, reward check-ins, priority planning,
+Interval does not run Feed Scout, Dogfood, reward check-ins, Plan Next Wave,
 native Goals, or workers.
 
 ### Dogfood Self-Improvement
@@ -289,7 +306,7 @@ bounded ticket creation.
 | Executable commitment, Reward, QA, review | `tickets/TASK-*/ticket.md` and `artifacts/` |
 | Experiment-local policy and history | ticket `program.md`, `progress.md`, Reward, and artifacts |
 | Fast reconciliation/dispatch/check-in receipt | dated Pulse report |
-| Problems and maintenance candidates | dated Interval report |
+| Problems, metric movement review, and ticket deltas | dated Interval report |
 | Source opportunities | dated Feed Scout report |
 | Cross-ticket outcome ledger, portfolio lessons, and opportunity signals | dated Dogfood report |
 | Desired cadence and prompts | `farplane/automations.toml` |
@@ -317,9 +334,12 @@ does not depend on adjacent clock times.
 Workstream 2 must prove:
 
 - desired and live Farplane automation state contains one heartbeat;
-- each scheduled source writes its report/candidates without creating tickets;
-- planner admission caps, dedupe, proof, authority, and owner boundaries hold;
-- Interval cannot invent direction and Dogfood cannot execute experiments;
+- each scheduled source writes its report/candidates; Interval writes its
+  report before any admitted ticket delta;
+- planner refill caps, dedupe, proof, authority, and owner boundaries hold;
+- priority then due_at ticket ordering is deterministic;
+- Interval cannot invent direction, fake momentum, or execute work, and Dogfood
+  cannot execute experiments;
 - one immediate and one delayed Reward case choose the correct route;
 - a matured row resumes the original ticket while a future row stays dormant;
 - ticket-owned QA/review evidence and independent completion review pass.

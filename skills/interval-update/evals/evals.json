@@ -2,139 +2,211 @@
   "skill_name": "interval-update",
   "evals": [
     {
-      "id": "interval_daily_bau_report_only",
-      "prompt": "Run Daily Interval over tickets, Pulse reports, and the latest completed Feed Scout report. The Feed report contains three exciting new opportunities. What may Interval write?",
-      "expected_output": "Writes one dated Daily BAU report with Core report frontmatter and a Markdown Problems ledger; Reads the completed Feed Scout report as context but does not run Feed Scout; May report opportunity signals as observations but does not create new-direction tickets from them; Does not run priority planning, leverage planning, Dogfood Review, reward check-ins, Goal, Pulse, or workers; Returns source gaps when a configured completed provider report is missing",
+      "id": "interval_known_intervention_same_run_ticket",
+      "prompt": "Daily Interval observes a material acceptance regression. Evidence reproduces the root cause in one parser branch; the correction, regression artifact, stop condition, and authorized filesystem write route are known, and no ticket owns it. What happens?",
+      "expected_output": "Runs the full movement-to-bottleneck review and records the known cause and coherent correction; Finalizes the dated report before highlight selection and applies the ticket delta only after highlights; Creates one concrete solution ticket in the same run with the correction, behavior/artifact proof, and stop condition; Does not delay the grounded work for Plan Next Wave; Does not start Goal, Pulse, a worker, or execution",
       "files": [],
       "assertions": [
-        "Writes one dated Daily BAU report with Core report frontmatter and a Markdown Problems ledger",
-        "Reads the completed Feed Scout report as context but does not run Feed Scout",
-        "May report opportunity signals as observations but does not create new-direction tickets from them",
-        "Does not run priority planning, leverage planning, Dogfood Review, reward check-ins, Goal, Pulse, or workers",
-        "Returns source gaps when a configured completed provider report is missing"
+        "Runs the full movement-to-bottleneck review and records the known cause and coherent correction",
+        "Finalizes the dated report before highlight selection and applies the ticket delta only after highlights",
+        "Creates one concrete solution ticket in the same run with correction, proof, and stop condition",
+        "Does not delay grounded work for Plan Next Wave",
+        "Does not execute the ticket or start Goal, Pulse, or a worker"
       ],
       "metadata": {
         "farplane": {
-          "title": "Daily compresses BAU evidence without planning direction",
-          "tags": [
-            "interval-update",
-            "daily",
-            "bau",
-            "ownership"
-          ]
+          "title": "Known intervention becomes a same-run solution ticket",
+          "tags": ["interval-update", "known-fix", "admission", "report-first"]
         }
       }
     },
     {
-      "id": "interval_same_run_known_failure_can_recover",
-      "prompt": "A Weekly run discovers a serious documentation drift failure for the first time. Current evidence proves the existing failure, the direct correction and existing guard are known, proof and stop are defined, no experiment or active duplicate exists, and the recovery cap is one. What happens?",
-      "expected_output": "Records the problem as a new unchecked Markdown Problems row with current evidence and writes the report first; Classifies it as direct recovery rather than new direction or an experiment; Creates at most one deduped guard-linked recovery ticket with the known correction, proof, and stop; Links the ticket from the finalized report; Does not start Goal, Pulse, a worker, or implementation",
+      "id": "interval_uncertain_cause_decision_changing_investigation",
+      "prompt": "Weekly Interval sees a material recurring failure, but evidence cannot yet distinguish cache invalidation from provider ordering. A bounded trace can reproduce the cause, rule out alternatives, select the correction, and save a proof artifact. May Interval create work?",
+      "expected_output": "Preserves uncertainty in the root-cause analysis; Compares the bounded trace against other interventions; May create one investigation ticket only because its required output is reproduced cause, ruled-out alternatives, selected correction, and proof artifact; Rejects generic research, planning, or option-analysis scope; Finalizes the report and highlights before applying the delta and does not execute it",
       "files": [],
       "assertions": [
-        "Records the problem as a new unchecked Markdown Problems row with current evidence",
-        "Classifies it as direct recovery rather than new direction or an experiment",
-        "Creates at most one deduped guard-linked recovery ticket with the known correction, proof, and stop",
-        "Links the ticket from the finalized report",
-        "Does not start Goal, Pulse, a worker, or implementation"
+        "Preserves uncertainty in the root-cause analysis",
+        "Compares the bounded decision-changing investigation against alternatives",
+        "Requires reproduced cause, ruled-out alternatives, selected correction, and proof artifact",
+        "Rejects generic research, planning, or option-analysis scope",
+        "Applies the delta after report finalization and highlights without executing it"
       ],
       "metadata": {
         "farplane": {
-          "title": "Same-run evidenced failure can become direct recovery",
-          "tags": [
-            "interval-update",
-            "maintenance",
-            "same-run",
-            "recovery"
-          ]
+          "title": "Uncertain cause admits only decision-changing investigation",
+          "tags": ["interval-update", "investigation", "uncertainty", "proof"]
         }
       }
     },
     {
-      "id": "interval_resurfaces_prior_evidenced_maintenance",
-      "prompt": "A prior finalized Daily report and a failed review both record the same unresolved validator defect. The direct repair is known, names an existing guard, requires no experiment, and no active ticket owns it. The recovery cap is one. What gates apply?",
-      "expected_output": "Writes the Weekly report before recovery admission; Confirms the defect is corrective recovery rather than new direction or an experiment; Dedupes against active tickets and requires known direct scope, existing KPI or guard, proof, stop condition, and local authority; Creates or updates at most one recovery ticket and links it from the Problems ledger; Does not start Goal or Pulse",
+      "id": "interval_multiple_independent_qualified_interventions",
+      "prompt": "A Weekly review proves two independent material root problems. Each has an executable coherent intervention, concrete proof, no active duplicate, and authorized board writes. A third idea is merely a lifecycle-stage split of the first correction. How many tickets may be admitted?",
+      "expected_output": "Evaluates every candidate independently with no numeric ticket cap or target; Admits both independently material coherent interventions; Rejects the third lifecycle-stage fragment as planning residue or incoherent splitting; Does not equate more tickets with more momentum; Records all decisions in the report before highlights and board mutation",
       "files": [],
       "assertions": [
-        "Writes the Weekly report before recovery admission",
-        "Confirms the defect is corrective maintenance rather than new direction or a harness experiment",
-        "Dedupes against active tickets and requires executable scope, proof, stop condition, and local authority",
-        "Creates or updates at most one recovery ticket and links it from the Problems ledger",
-        "Does not execute the ticket or start Goal or Pulse"
+        "Evaluates every candidate independently with no numeric ticket cap or target",
+        "Admits both independently material coherent interventions",
+        "Rejects lifecycle-stage fragmentation of one correction",
+        "Does not equate ticket volume with momentum",
+        "Records decisions before highlights and board mutation"
       ],
       "metadata": {
         "farplane": {
-          "title": "Weekly resurfaces bounded known maintenance",
-          "tags": [
-            "interval-update",
-            "weekly",
-            "maintenance",
-            "report-first"
-          ]
+          "title": "No cap suppresses multiple qualified root-problem interventions",
+          "tags": ["interval-update", "no-cap", "coherence", "multiple"]
         }
       }
     },
     {
-      "id": "interval_filesystem_binding_preserves_ticket_evidence",
-      "prompt": "A project binds integrations.kanban.provider to filesystem_tickets with filesystem_ticket_policy include and project-relative tickets/archive directories. Run Daily Interval. What evidence does it use, what may it write, and what work may it start?",
-      "expected_output": "Loads farplane/bindings.yaml before board evidence; Reads only the configured filesystem ticket directories for work review and active-work dedupe; Preserves report-first bounded recovery behavior; Does not run providers, Goal, Pulse, workers, or ticket execution",
+      "id": "interval_duplicate_active_owner_rejected",
+      "prompt": "Daily Interval finds a material known correction, but an active ticket with a different title already owns substantially the same root problem and proof path. What delta is allowed?",
+      "expected_output": "Dedupes by substantive problem and intervention ownership rather than exact title; Records already_owned or duplicate with evidence in the report; Creates no second ticket and does not rewrite the active owner; Preserves the active ticket as the execution owner; Does not start or execute it",
       "files": [],
       "assertions": [
-        "Loads farplane/bindings.yaml before board evidence",
-        "Reads only the configured filesystem ticket directories for work review and active-work dedupe",
-        "Preserves report-first bounded recovery behavior",
-        "Does not run providers, Goal, Pulse, workers, or ticket execution"
+        "Dedupes by substantive ownership rather than exact title",
+        "Records duplicate or already_owned with evidence",
+        "Creates no second ticket",
+        "Does not rewrite the active owner",
+        "Does not execute the existing ticket"
       ],
       "metadata": {
         "farplane": {
-          "title": "Filesystem binding preserves ticket evidence behavior",
-          "tags": ["interval-update", "bindings", "filesystem", "evidence"]
+          "title": "Substantive active duplicate blocks a second ticket",
+          "tags": ["interval-update", "dedupe", "active", "protected-state"]
         }
       }
     },
     {
-      "id": "interval_notion_binding_fails_closed_without_ticket_fallback",
-      "prompt": "A project binds integrations.kanban.provider to notion, task_source_handle to notion.tasks.source, and filesystem_ticket_policy to exclude. The private handle or ntn access is unavailable, while a local tickets directory exists. Run Weekly Interval. What happens?",
-      "expected_output": "Loads farplane/bindings.yaml and keeps Notion as the configured evidence provider; Records the missing private handle or ntn access as a source_gap; Does not inspect local tickets for work review, dedupe, or recovery admission; Writes the bounded report with available report and metric evidence; Does not expose raw private IDs, URLs, tokens, or payloads; Does not invoke another provider, Goal, Pulse, a worker, or execution",
+      "id": "interval_stale_todo_ticket_delta",
+      "prompt": "Weekly Interval finds a todo ticket whose intervention is still the largest coherent correction, but its priority, due_at, and proof contract are stale. A second todo is disproved by current evidence. What may Interval do?",
+      "expected_output": "Records evidence and intended deltas in the finalized report; Clarifies, reprioritizes, dates, and strengthens proof only on the matching mutable todo; Rejects the disproved todo with a reason while preserving history; Does not physically delete either ticket; Applies mutations through the authorized provider only after highlights",
       "files": [],
       "assertions": [
-        "Loads farplane/bindings.yaml and keeps Notion as the configured evidence provider",
-        "Records the missing private handle or ntn access as a source_gap",
-        "Does not inspect local tickets for work review, dedupe, or recovery admission",
-        "Writes the bounded report with available report and metric evidence",
-        "Does not expose raw private IDs, URLs, tokens, or payloads",
-        "Does not invoke another provider, Goal, Pulse, a worker, or execution"
+        "Records evidence and intended todo deltas in the report",
+        "May clarify, reprioritize, date, and strengthen proof on a mutable todo",
+        "Rejects a disproved todo with a reason while preserving history",
+        "Does not physically delete tickets",
+        "Applies authorized mutations only after highlights"
       ],
       "metadata": {
         "farplane": {
-          "title": "Unavailable Notion binding fails closed without filesystem fallback",
-          "tags": ["interval-update", "bindings", "notion", "source-gap", "privacy"]
+          "title": "Stale todo work can be updated or rejected with history",
+          "tags": ["interval-update", "todo", "reprioritize", "reject"]
         }
       }
     },
     {
-      "id": "interval_highlights_are_sparse_exceptional_and_instructive",
-      "prompt": "A completed Daily report says the team shipped a normal settings page, raised verified acceptance from 61% to an all-time record 84%, and also lost a day by delegating a trivial local edit through three review cycles. Select highlights for team farplane. What is appended and what remains ordinary report history?",
-      "expected_output": "Finalizes the report before highlight selection; Rejects the routine settings-page delivery as a win; Appends at most one win whose summary carries the explicit 61%-to-84% record comparison; Appends at most one failure with the material delegation event and a reusable lesson such as avoiding delegation when coordination costs exceed a simple local edit; Uses only the minimal canonical fields and generic project-relative links; Treats repeated kind/team/report append as already_exists; Does not use highlights for planning, correction execution, ticket creation, or skill mutation",
+      "id": "interval_protected_states_are_not_rewritten",
+      "prompt": "A Daily review disagrees with scope, priority, and due_at on matching tickets in active, review, waiting-signal, blocked execution, completed, and rejected states. Current evidence suggests a better intervention. May Interval rewrite them?",
+      "expected_output": "Treats active, review, waiting-signal, blocked-execution, and terminal contracts as protected; Records the disagreement, owner, and evidence without silent mutation; Creates no replacement that duplicates protected work; Routes operator-needed or later-owner action explicitly when required; Never deletes or rewrites history",
       "files": [],
       "assertions": [
-        "Finalizes the report before highlight selection",
-        "Rejects the routine settings-page delivery as a win",
-        "Appends at most one win with explicit comparative numeric record evidence",
-        "Appends at most one failure with a reusable human and agent lesson",
-        "Uses minimal canonical rows and generic project-relative links",
-        "Treats repeated kind/team/report append as an idempotent no-op",
-        "Does not turn highlights into planning, correction execution, or skill mutation"
+        "Treats active, review, waiting-signal, blocked-execution, and terminal contracts as protected",
+        "Records disagreement and evidence without silent mutation",
+        "Creates no duplicate replacement",
+        "Names operator-needed or later-owner action when required",
+        "Never deletes or rewrites history"
       ],
       "metadata": {
         "farplane": {
-          "title": "Highlights stay exceptional, sparse, and instructive",
-          "tags": [
-            "interval-update",
-            "highlights",
-            "metrics",
-            "lessons",
-            "idempotency"
-          ]
+          "title": "Protected ticket states remain immutable",
+          "tags": ["interval-update", "protected-state", "history", "safety"]
+        }
+      }
+    },
+    {
+      "id": "interval_vague_low_materiality_and_ungrounded_rejected",
+      "prompt": "The evidence window contains: 'plan our strategy,' a cosmetic low-impact cleanup with no objective effect, a material symptom with no supported cause, and a proposed ticket that only produces a plan. What is admitted?",
+      "expected_output": "Rejects vague strategy and planning-only work because there is no executable concrete output; Rejects the cosmetic chore for low materiality; Keeps the material but ungrounded symptom as a report candidate for later Plan Next Wave refill; Creates no artifact-free ticket; Preserves source gaps and does not force a diagnosis",
+      "files": [],
+      "assertions": [
+        "Rejects vague strategy and planning-only work",
+        "Rejects the cosmetic chore for low materiality",
+        "Keeps the material ungrounded symptom as a planner candidate",
+        "Creates no artifact-free ticket",
+        "Preserves uncertainty and source gaps"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Vague, trivial, planning-only, and ungrounded work stays out",
+          "tags": ["interval-update", "planning-residue", "materiality", "ungrounded"]
+        }
+      }
+    },
+    {
+      "id": "interval_daily_weekly_reasoning_parity",
+      "prompt": "Run Daily over the last 24 hours and Weekly over the last week using equivalent evidence of a material regression. What is shared, and what may differ?",
+      "expected_output": "Both use metric movement, dominant bottleneck, symptom/root-cause separation, objective rebuild, intervention comparison, and identical admission gates; Daily emphasizes recent movement and outcomes and may refresh selected stale metrics; Weekly adds completed Daily reports, recurrence, wider history, resource use, and pending proof; Cadence never lowers decision quality, changes ticket caps, or grants broader authority; Both preserve report then highlights then ticket-deltas ordering",
+      "files": [],
+      "assertions": [
+        "Both cadences use the same complete reasoning and admission algorithm",
+        "Daily emphasizes recent evidence and optional selected metric refresh",
+        "Weekly adds recurrence and wider evidence coverage",
+        "Cadence does not change admission quality, cap tickets, or broaden authority",
+        "Both preserve report then highlights then ticket-deltas ordering"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Daily and Weekly differ only in evidence coverage",
+          "tags": ["interval-update", "daily", "weekly", "parity"]
+        }
+      }
+    },
+    {
+      "id": "interval_notion_binding_fails_closed",
+      "prompt": "The project binds Notion with filesystem_ticket_policy exclude, but the private handle, compact query, or authorized write route fails while local tickets exist. Run Weekly Interval.",
+      "expected_output": "Keeps Notion as the configured provider and records the failed access or write route as a source_gap; Does not inspect local tickets for review or dedupe and does not mutate them; Finishes the bounded report from available metric and completed-report evidence; Admits no authority-unsafe ticket delta; Exposes no private IDs, URLs, tokens, or payloads and invokes no other provider",
+      "files": [],
+      "assertions": [
+        "Keeps the configured Notion provider and records a source_gap",
+        "Does not inspect or mutate local tickets",
+        "Finishes the report from available evidence",
+        "Admits no authority-unsafe delta",
+        "Exposes no private data and invokes no fallback provider"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Unavailable configured provider fails closed",
+          "tags": ["interval-update", "notion", "source-gap", "authority"]
+        }
+      }
+    },
+    {
+      "id": "interval_highlights_remain_sparse_and_nonplanning",
+      "prompt": "A finalized Daily report contains an ordinary shipped page, a verified 61%-to-84% all-time record, and a material failed delegation with a reusable lesson. The same team/report was already appended once. How does the consolidated Interval handle highlights and ticket reasoning?",
+      "expected_output": "Finalizes the report before selection and before ticket deltas; Rejects routine shipping as a win and selects at most the explicit comparative record plus one lesson-bearing failure; Uses minimal canonical rows and treats the repeated kind/team/report append as already_exists; Does not read highlights as planning, root-cause, or ticket-admission evidence; Applies any independently qualified ticket delta only after the highlight no-op",
+      "files": [],
+      "assertions": [
+        "Finalizes the report before highlight selection and ticket deltas",
+        "Rejects routine shipping and requires comparative numeric win evidence",
+        "Requires a reusable lesson for the failure",
+        "Uses minimal rows and idempotent already_exists behavior",
+        "Does not use highlights as planning or admission evidence"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "TASK-0405 highlight contract survives consolidated review",
+          "tags": ["interval-update", "highlights", "idempotency", "ordering"]
+        }
+      }
+    },
+    {
+      "id": "interval_missing_feedback_admits_only_concrete_unblock",
+      "prompt": "The review has ticket activity but no outcome feedback, proxy, or human-review signal. Someone proposes optimizing onboarding anyway. A second, material and executable candidate would capture the `first_value_accepted` signal in `.farplane/evidence/onboarding-acceptance.jsonl`, use 20 completed trials to decide whether onboarding A or B reaches the 60% acceptance threshold, then stop; its local write route is authorized and no active ticket owns it. What does Interval do?",
+      "expected_output": "Diagnoses the feedback loop as missing instrumentation and does not optimize from vibes; Rejects the unsupported onboarding optimization; Compares the concrete feedback-loop unblock under the normal materiality, executability, proof, dedupe, authority, and coherence gates; May admit the unblock only when it names the signal, capture artifact, decision it unlocks, and stop condition; Reports what changed and why, blocked systems, missing feedback, the ticket delta or no-action reason, and the next Goal or heartbeat owner without starting execution",
+      "files": [],
+      "assertions": [
+        "Diagnoses missing instrumentation and does not optimize from vibes",
+        "Rejects the unsupported onboarding optimization",
+        "Applies the normal admission predicate to the feedback-loop unblock",
+        "Requires a named signal, capture artifact, unlocked decision, and stop condition",
+        "Reports blocked systems, missing feedback, explicit delta or no-action, and next owner without execution"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Missing feedback routes to a concrete evidence unblock",
+          "tags": ["interval-update", "feedback-loop", "instrumentation", "evidence"]
         }
       }
     }

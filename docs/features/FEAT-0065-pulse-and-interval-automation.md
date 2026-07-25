@@ -72,7 +72,10 @@ reports, tickets, artifacts, and no-op decisions all have visible owners.
 
 - Runs Pulse as a fast bounded action decision.
 - Runs interval or daily updates to reconcile recent outcomes and plan the next window.
-- Runs horizon updates to recalibrate goals, product bets, ticket supply, and skill hardening priorities.
+- Historically ran horizon updates to recalibrate project-level goals, product
+  bets, ticket supply, and skill hardening priorities. Active Horizon Loop
+  contracts now use stable problems, metric movement, tickets, Interval, and
+  low-supply refill instead.
 - Uses adaptive backoff for polling and waits without creating hidden background queues.
 - Feeds repeated unmet needs into maintenance, feature work, or sidecar systems.
 
@@ -105,7 +108,7 @@ flowchart TD
   retired["FEAT-0065<br/>status: retired<br/>superseded_by: FEAT-0071 + FEAT-0067"]:::retired
   pulse["FEAT-0071 Work Pulse<br/>skills/pulse-update/SKILL.md"]:::changed
   interval["FEAT-0067 Interval<br/>skills/interval-update/SKILL.md"]:::changed
-  horizon["SYS-0003 Horizon Loop<br/>automation-advisor<br/>goals and ticket supply"]:::changed
+  horizon["SYS-0003 Horizon Loop<br/>tickets + metric movement"]:::changed
   outputs["reports and proof<br/>pulse reports<br/>interval reports<br/>evals/evals.json evidence"]:::added
 
   config --> retired

@@ -3,7 +3,7 @@ title: Metric advisor cards
 status: implemented
 owner: feature-registry
 created_at: 2026-06-26
-updated_at: 2026-06-27
+updated_at: 2026-07-25
 tags:
   - farplane
   - feature
@@ -35,24 +35,25 @@ evidence_refs:
   - skills/metric-advisor/SKILL.md
   - skills/metric-advisor/evals/evals.json
   - tickets/archive/TASK-0228/ticket.md
-known_limits: Advisory metric-card contract only; callers still own execution, proof, review, and writeback. It must preserve qualitative `none mechanical` cases instead of forcing fake scores.
+known_limits: Advisory metric-card contract only; callers still own execution, proof, review, and writeback. It must preserve qualitative `none mechanical` cases instead of forcing fake scores. Quantitative metrics require a direction so Core can derive movement without duplicate growth metrics.
 metrics:
   - metric_card_traceability_pass
   - skill_eval_query_lint_pass
-last_verified: 2026-06-26
+last_verified: 2026-07-25
 experimental: false
 superseded_by: false
 ---
 # Metric advisor cards
 
 Metric advisor cards exists to turn fuzzy improvement goals into honest metric cards
-with guards and anti-metrics. It belongs to [Self-Improvement And
+with direction, guards, and anti-metrics. It belongs to [Self-Improvement And
 Learning](../systems/self-improvement-learning.md) and keeps `FEAT-0063` as a stable
 capability handle because the behavior has an owner, proof path, and maintenance
 boundary.
 
 ```text
-metric_card(objective, evidence) -> metric + guard_metrics + anti_metrics + route
+metric_card(objective, evidence)
+  -> metric(direction) + guard_metrics + anti_metrics + route
 ```
 
 ## At A Glance
@@ -62,7 +63,8 @@ metric_card(objective, evidence) -> metric + guard_metrics + anti_metrics + rout
 - Status: `implemented`
 - Category: `skills`
 - Primary user: operator, maintainer, and self-improvement agent
-- Job: turn fuzzy improvement goals into honest metric cards with guards and anti-metrics.
+- Job: turn fuzzy improvement goals into honest metric cards with direction,
+  guards, anti-metrics, and a proof route.
 
 ## Problem
 
@@ -74,10 +76,16 @@ be stated before self-improvement or productization claims.
 
 ## What It Does
 
-- Defines one primary metric for an objective and the evidence it depends on.
+- Defines one primary metric for an objective, the evidence it depends on, and
+  the honest optimize direction: `maximize` or `minimize`.
 - Adds guard metrics and anti-metrics to prevent gaming.
 - Names the measurement window, owner, and route into tickets, evals, reports, or docs.
 - Keeps judgment-heavy work honest by allowing qualitative or rubric-based scores when numeric metrics would be fake.
+- Leaves raw observations canonical while allowing Core to derive raw delta,
+  elapsed time, raw velocity, direction-normalized progress delta/velocity,
+  and improving/flat/worsening momentum from consecutive available readings.
+- Avoids duplicate authored "growth" metrics when a movement view can be
+  derived from the metric's direction and observations.
 - Feeds self-improvement, documentation QA, skill maintenance, and product learning loops.
 
 ## User Stories
@@ -90,8 +98,11 @@ be stated before self-improvement or productization claims.
 
 A metric card makes the measurement choice explicit and falsifiable.
 
-- Every card names objective, primary metric, evidence source, guard metrics, and anti-metrics.
+- Every quantitative card names objective, primary metric, evidence source,
+  direction, guard metrics, and anti-metrics.
 - The card states what would make the metric misleading.
+- Direction means favorable movement: positive progress velocity is favorable
+  for both maximize and minimize metrics after Core normalizes raw movement.
 - Judgment rubrics are allowed when they are more honest than pseudo-precision.
 - Metric changes update the downstream workflow that consumes them.
 
@@ -107,11 +118,12 @@ flowchart TD
   trigger["Trigger<br/>objective needs an honest measure"]:::keep
   owner["Owner surface<br/>skills/metric-advisor<br/>self-improvement docs"]:::changed
   readers["Files and fields read<br/>objective, evidence source<br/>primary metric, guard metrics<br/>anti-metrics and failure modes"]:::keep
-  card["Metric card<br/>falsifiable measurement choice<br/>consumer workflow update"]:::added
+  card["Metric card<br/>direction + falsifiable measurement<br/>consumer workflow update"]:::added
+  movement["Core projection<br/>raw observations -> movement"]:::added
   artifact["Created artifact/evidence<br/>metric card + traceability proof<br/>or eval-task update"]:::added
   old["Retired<br/>fake precision metric"]:::retired
 
-  trigger --> owner --> readers --> card --> artifact
+  trigger --> owner --> readers --> card --> movement --> artifact
   old -. replaced by .-> card
 ```
 
@@ -154,6 +166,8 @@ Acceptance signals:
 
 - The feature remains listed under exactly one owning system.
 - The owner surfaces still exist and agree with this contract.
+- Quantitative metrics declare `maximize` or `minimize`; derived movement does
+  not replace or mutate raw observations.
 - Evidence refs support the current status.
 
 ## Rollout And Maintenance
@@ -168,7 +182,9 @@ Acceptance signals:
 - This feature does not invent fake quantitative metrics for subjective work.
 - This feature does not run experiments by itself.
 - This feature does not replace evals or proof artifacts.
-- Known limit: Advisory metric-card contract only; callers still own execution, proof, review, and writeback. It must preserve qualitative `none mechanical` cases instead of forcing fake scores.
+- Known limit: Advisory metric-card contract only; callers still own
+  execution, proof, review, and writeback. It must preserve qualitative
+  `none mechanical` cases instead of forcing fake scores.
 - Delete or merge this feature only when its current truth has moved into a clearer owner and all active refs are removed.
 
 ## Metrics
@@ -189,3 +205,5 @@ Acceptance signals:
 
 - 2026-06-26: Feature spec created.
 - 2026-06-27: Migrated into the reader-first feature-spec shape.
+- 2026-07-25: Required direction for quantitative metrics and documented Core
+  derived movement as a projection over canonical raw observations.

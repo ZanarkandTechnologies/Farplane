@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-07-25T15:35:44.540718+00:00",
+  "verdict": "pass",
+  "failures": [],
+  "returncode": 0,
+  "prompt_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-153527-task0406-agentqa-rerun2/tasks/interval_known_intervention_same_run_ticket/agent_prompt.md",
+  "events_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-153527-task0406-agentqa-rerun2/tasks/interval_known_intervention_same_run_ticket/events.jsonl",
+  "stdout_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-153527-task0406-agentqa-rerun2/tasks/interval_known_intervention_same_run_ticket/agent_stdout.log",
+  "stderr_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-153527-task0406-agentqa-rerun2/tasks/interval_known_intervention_same_run_ticket/agent_stderr.log",
+  "final_output_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-153527-task0406-agentqa-rerun2/tasks/interval_known_intervention_same_run_ticket/agent_answer.txt",
+  "output_schema_path": "",
+  "schema_validation": {
+    "requested": false,
+    "pass": true,
+    "errors": []
+  },
+  "event_summary": {
+    "thread_id": "019f99ea-c9d3-7d80-a8bb-35e3d02e611d",
+    "event_count": 4,
+    "agent_message_count": 1,
+    "command_count": 0,
+    "failed_command_count": 0,
+    "commands": [],
+    "usage": {
+      "input_tokens": 34484,
+      "cached_input_tokens": 0,
+      "output_tokens": 249,
+      "reasoning_output_tokens": 71
+    }
+  },
+  "command_requirement_score": {
+    "required": 0,
+    "matched": 0,
+    "results": []
+  },
+  "checkpoint_score": {
+    "total": 0,
+    "done": 0,
+    "skipped": 0,
+    "blocked": 0,
+    "invalid": 0
+  },
+  "artifact_inventory": {
+    "declared": [],
+    "present": [],
+    "missing_or_unsafe": [],
+    "observed_file_delta": {
+      "created": [
+        ".farplane/evals/runs/20260725-153451-task-0408-boundary-cases-rerun/tasks/metric_advisor_reward_miss_routes_gap_01/agent_answer.txt",
+        ".farplane/evals/runs/20260725-153451-task-0408-boundary-cases-rerun/tasks/metric_advisor_reward_miss_routes_gap_01/behavior_trace.json",
+        ".farplane/evals/runs/20260725-153451-task-0408-boundary-cases-rerun/tasks/metric_advisor_reward_miss_routes_gap_01/events.jsonl",
+        ".farplane/evals/runs/20260725-153451-task-0408-boundary-cases-rerun/tasks/metric_advisor_reward_miss_routes_gap_01/judge_prompt.md"
+      ],
+      "modified": [],
+      "deleted": []
+    }
+  },
+  "behavior_report_detected": false,
+  "final_output_format": "text_or_other_json",
+  "final_report": null
+}

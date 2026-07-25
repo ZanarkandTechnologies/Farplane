@@ -1,0 +1,10 @@
+The finalized report remains immutable.
+
+- Ordinary shipped page: no highlight; routine delivery is not a win.
+- 61% → 84% verified all-time record: qualifies as the team’s single win.
+- Material failed delegation: qualifies as the single failure if its consequence and reusable lesson are recorded.
+- Deduplication uses `(kind, team, report)`. An existing matching entry returns `already_exists` as an idempotent no-op. A prior win does not block a failure entry because `kind` differs.
+
+Ticket reasoning does not use highlights as planning input. Each problem is evaluated independently from the finalized report’s bottleneck, root cause, intervention, and evidence. A ticket is admitted only when the failed delegation represents a material problem with an executable, coherent correction, concrete output and proof, no active duplicate, and write authority. Otherwise it stays in the report—routed to Plan Next Wave only when insufficiently grounded.
+
+There is no ticket-count cap, no volume-as-momentum claim, and Interval executes none of the admitted work.

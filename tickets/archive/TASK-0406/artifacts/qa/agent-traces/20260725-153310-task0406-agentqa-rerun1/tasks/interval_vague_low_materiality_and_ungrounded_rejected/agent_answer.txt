@@ -1,0 +1,8 @@
+No ticket is admitted.
+
+- “Plan our strategy” → reject as vague planning residue.
+- Cosmetic cleanup → reject as low materiality with no objective effect.
+- Material symptom, unsupported cause → record in the finalized report; route to Plan Next Wave unless reframed as one decision-changing investigation with reproduced cause, ruled-out alternatives, selected correction, and proof.
+- Plan-only ticket → reject because it produces no concrete behavior, artifact, outcome, or proof.
+
+Finalize the report first, append no filler highlights, apply zero ticket deltas, and execute nothing. Candidates are evaluated independently; there is no ticket cap, but none passes admission here.

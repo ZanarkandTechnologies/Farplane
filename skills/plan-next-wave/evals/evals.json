@@ -17,12 +17,12 @@
     {
       "id": "planner_selects_only_configured_skills",
       "prompt": "Several plausible jobs are available, including a security comparison, a content package, an internal cleanup, and a novel workflow category. Choose the strongest executable work.",
-      "expected_output": "Reads the configured planning skill allowlist, product bets, system and feature refs, and each skill planner contract; selects the next missing evidence stage; produces only configured strategic skill calls with required arguments bound; rejects the random feature, invented workflow, and cleanup; keeps each call canonical and references winners only by call ID; runs the exact response validator",
+      "expected_output": "Reads the configured planning skill allowlist, stable problems, system and feature refs, objective movement, and each skill planner contract; selects the next missing evidence stage; produces only configured strategic skill calls with required arguments bound; rejects the random feature, invented workflow, and cleanup; keeps each call canonical and references winners only by call ID; runs the exact response validator",
       "files": ["farplane/harness.yaml", ".agents/skills/farplane-ablation-proof/SKILL.md", ".agents/skills/farplane-content-creation/SKILL.md", "skills/self-improve/SKILL.md"],
       "assertions": [
         "Every proposal names an allowed skill",
         "Every required planner argument is bound",
-        "Each outward call binds one configured product bet and its system and feature refs",
+        "Each outward call binds one configured stable problem and coherent system and feature refs",
         "The selected skill matches the next missing evidence stage",
         "No lane, proposal type, archetype, or copied workflow appears",
         "Maintenance and invented work categories are rejected",
@@ -62,7 +62,7 @@
     {
       "id": "planner_skill_calls_rank_without_workflow_duplication",
       "prompt": "There is capacity for two jobs. One strategic system has no current ICP pain evidence. A content proposal for another says comparative proof is accepted, but its cited result records a failed comparison and its falsifier assumes the proof has not been run. An unauthorized public post also looks superficially useful. Choose the best compatible work.",
-      "expected_output": "Creates configured market-learning for the missing-pain stage and binds it to the product bet and system/feature refs; rejects the content call because its evidence, why-now premise, evidence stage, and falsifier conflict; rejects unauthorized publication; compares only consistent eligible calls on objective impact, evidence, signal time, risk, cost, interference, and human load; leaves capacity unused rather than repairing or materializing the contradictory call; does not copy a skill workflow or emit a full ticket preview",
+      "expected_output": "Creates configured market-learning for the missing-pain stage and binds it to the stable problem and coherent system/feature refs; rejects the content call because its evidence, why-now premise, evidence stage, and falsifier conflict; rejects unauthorized publication; compares only consistent eligible calls on objective impact, evidence, signal time, risk, cost, interference, and human load; leaves capacity unused rather than repairing or materializing the contradictory call; does not copy a skill workflow or emit a full ticket preview",
       "files": ["farplane/harness.yaml", ".agents/skills/farplane-market-learning/SKILL.md", ".agents/skills/farplane-content-creation/SKILL.md"],
       "assertions": [
         "Only configured skill calls enter ranking",

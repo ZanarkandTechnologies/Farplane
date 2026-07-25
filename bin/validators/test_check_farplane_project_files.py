@@ -3,7 +3,11 @@ from pathlib import Path
 
 import yaml
 
-from bin.validators.check_farplane_project_files import validate, validate_bindings_file
+from bin.validators.check_farplane_project_files import (
+    validate,
+    validate_bindings_file,
+    validate_harness_file,
+)
 
 RETIRED_INTEGRATIONS_REF = "farplane/" + "integrations.md"
 
@@ -49,7 +53,7 @@ def write_framework_manifest(farplane: Path) -> None:
                     "ignored": [".farplane/project/ui/"],
                 },
                 "optional": {
-                    "tracked": ["farplane/hooks.json", "farplane/pm.json"],
+                    "tracked": ["farplane/pm.json"],
                     "ignored": [],
                 },
             }
@@ -121,11 +125,6 @@ metrics:
 ''',
         encoding="utf-8",
     )
-    (farplane / "hooks.json").write_text(
-        '{"version": 1, "file_events": {"enabled": true, "events": ["farplane.ticket.completed"], '
-        '"patterns": ["tickets/TASK-*/ticket.md"]}}\n',
-        encoding="utf-8",
-    )
     skills_dir = root / ".agents" / "skills"
     skills_dir.mkdir(parents=True)
     (skills_dir / "README.md").write_text(
@@ -146,19 +145,16 @@ identity:
     - id: test_problem
       statement: Test work is difficult to complete reliably.
       metric_refs: []
-  product_bets:
-    - id: test_bet
-      promise: Make test work reliable.
-      problem_refs: [test_problem]
 metric_refs:
   objectives:
     - metric_id: accepted_output_events
       priority: 1
   guards: []
+planning:
+  skill_refs: [test-output]
 areas:
   test_output:
     description: A recurring test investment area.
-    planner_instruction: Propose executable test outputs tied to the selected metric.
     icp:
       label: Test builders
       description: Builders deciding whether a test artifact is credible.
@@ -360,7 +356,7 @@ def test_retired_product_files_fail(tmp_path: Path) -> None:
 
     errors = validate(tmp_path)
 
-    assert "farplane/products.json is retired; metrics, goals, and tickets are the project primitives." in errors
+    assert "farplane/products.json is retired; objective metrics and tickets are the project primitives." in errors
     assert "farplane/products/ is retired; keep reusable artifact workflows as skills." in errors
 
 
@@ -498,8 +494,7 @@ def test_retired_file_growth_hook_config_fails(tmp_path: Path) -> None:
     errors = validate(tmp_path)
 
     assert (
-        "farplane/file-growth-hook.json is retired; use the deterministic changed-file gate in "
-        "rules/git-review-gates.toml."
+        "farplane/file-growth-hook.json is retired; remove the automatic file-growth hook config."
     ) in errors
 
 
@@ -539,7 +534,7 @@ def test_problem_metric_without_definition_fails(tmp_path: Path) -> None:
     assert "farplane/harness.yaml metric refs lack metrics.yaml definitions: unknown_problem_metric." in errors
 
 
-def test_duplicate_problem_id_and_dangling_bet_ref_fail(tmp_path: Path) -> None:
+def test_duplicate_problem_id_fails(tmp_path: Path) -> None:
     farplane = tmp_path / "farplane"
     farplane.mkdir()
     write_framework_manifest(farplane)
@@ -549,19 +544,14 @@ def test_duplicate_problem_id_and_dangling_bet_ref_fail(tmp_path: Path) -> None:
     harness["identity"]["problems"].append(
         {"id": "test_problem", "statement": "Duplicate.", "metric_refs": []}
     )
-    harness["identity"]["product_bets"][0]["problem_refs"] = ["missing_problem"]
     harness_path.write_text(yaml.safe_dump(harness, sort_keys=False), encoding="utf-8")
 
     errors = validate(tmp_path)
 
     assert "farplane/harness.yaml identity problem IDs must be unique: test_problem." in errors
-    assert (
-        "farplane/harness.yaml identity.product_bets[0].problem_refs are unresolved: missing_problem."
-        in errors
-    )
 
 
-def test_problem_and_product_bet_ids_must_be_strings(tmp_path: Path) -> None:
+def test_problem_ids_must_be_strings(tmp_path: Path) -> None:
     farplane = tmp_path / "farplane"
     farplane.mkdir()
     write_framework_manifest(farplane)
@@ -569,16 +559,58 @@ def test_problem_and_product_bet_ids_must_be_strings(tmp_path: Path) -> None:
     harness_path = farplane / "harness.yaml"
     harness = yaml.safe_load(harness_path.read_text(encoding="utf-8"))
     harness["identity"]["problems"][0]["id"] = 123
-    harness["identity"]["product_bets"][0]["id"] = 456
-    harness["identity"]["product_bets"][0]["problem_refs"] = ["123"]
     harness_path.write_text(yaml.safe_dump(harness, sort_keys=False), encoding="utf-8")
 
     errors = validate(tmp_path)
 
     assert "farplane/harness.yaml identity.problems[0].id must be a non-empty string." in errors
-    assert "farplane/harness.yaml identity.product_bets[0].id must be a non-empty string." in errors
+
+
+def test_retired_product_bets_fail_with_migration_message(tmp_path: Path) -> None:
+    farplane = tmp_path / "farplane"
+    farplane.mkdir()
+    write_required_project_files(tmp_path)
+    harness_path = farplane / "harness.yaml"
+    harness = yaml.safe_load(harness_path.read_text(encoding="utf-8"))
+    harness["identity"]["product_bets"] = [
+        {
+            "id": "test_bet",
+            "promise": "Make test work reliable.",
+            "problem_refs": ["test_problem"],
+        }
+    ]
+    harness_path.write_text(yaml.safe_dump(harness, sort_keys=False), encoding="utf-8")
+
+    errors = validate_harness_file(tmp_path, harness_path)
+
     assert (
-        "farplane/harness.yaml identity.product_bets[0].problem_refs are unresolved: 123."
+        "farplane/harness.yaml identity.product_bets is retired; bind stable identity.problems "
+        "and keep mutable solution choices, order, deadlines, and proof on tickets."
+        in errors
+    )
+
+
+def test_retired_harness_goals_fail_with_migration_message(tmp_path: Path) -> None:
+    farplane = tmp_path / "farplane"
+    farplane.mkdir()
+    write_required_project_files(tmp_path)
+    harness_path = farplane / "harness.yaml"
+    harness = yaml.safe_load(harness_path.read_text(encoding="utf-8"))
+    harness["goals"] = [
+        {
+            "goal_id": "accepted-output-target",
+            "metric_id": "accepted_output_events",
+            "target_value": 10,
+            "target_date": "2026-08-01",
+        }
+    ]
+    harness_path.write_text(yaml.safe_dump(harness, sort_keys=False), encoding="utf-8")
+
+    errors = validate_harness_file(tmp_path, harness_path)
+
+    assert (
+        "farplane/harness.yaml goals is retired; keep objective metric movement in metric "
+        "observations and mutable urgency, due dates, and proof on tickets."
         in errors
     )
 
@@ -966,8 +998,8 @@ metric_bindings:
     errors = validate(tmp_path)
 
     assert (
-        "farplane/metrics.yaml selected objective definitions must declare direction: "
-        "accepted_harness_improvements."
+        "farplane/metrics.yaml metric definitions must declare direction: "
+        "accepted_harness_improvements, todo_unclaimed_ticket_count."
     ) in errors
     assert (
         "farplane/harness.yaml guard refs lack metrics.yaml guard rules: todo_unclaimed_ticket_count."

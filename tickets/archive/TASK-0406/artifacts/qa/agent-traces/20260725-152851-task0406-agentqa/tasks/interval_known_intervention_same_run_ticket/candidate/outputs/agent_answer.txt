@@ -1,0 +1,5 @@
+It creates one concrete solution ticket after finalizing the Daily report and appending any qualified highlights.
+
+The ticket owns the full correction, regression artifact, stop condition, and proof—no analysis/build/proof splitting. The regression is recorded as a problem with its reproduced root cause and admission rationale. Interval does not implement or start the ticket; Pulse/Goal owns execution.
+
+Grounding: supplied `interval-update` contract.

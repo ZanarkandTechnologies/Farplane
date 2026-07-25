@@ -1,0 +1,40 @@
+{
+  "assertion_results": [
+    {
+      "text": "Evaluates every candidate independently with no numeric ticket cap or target",
+      "passed": true,
+      "evidence": "States there is no numeric cap and treats each independent root problem separately."
+    },
+    {
+      "text": "Admits both independently material coherent interventions",
+      "passed": true,
+      "evidence": "Correctly admits two tickets, one per independent root problem."
+    },
+    {
+      "text": "Rejects lifecycle-stage fragmentation of one correction",
+      "passed": true,
+      "evidence": "Explicitly rejects the third lifecycle-stage split."
+    },
+    {
+      "text": "Does not equate ticket volume with momentum",
+      "passed": false,
+      "evidence": "Does not explicitly distinguish qualified ticket volume from momentum."
+    },
+    {
+      "text": "Records decisions before highlights and board mutation",
+      "passed": false,
+      "evidence": "Omits the required finalized-report, highlights, then board-mutation ordering."
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 2,
+    "total": 5,
+    "pass_rate": 0.6
+  },
+  "judge": {
+    "verdict": "C",
+    "pass": false,
+    "reason": "The ticket count and fragmentation decision are correct, but the answer omits two required safeguards and the compact decision-chain ordering mandated by the skill."
+  }
+}

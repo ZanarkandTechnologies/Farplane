@@ -1,0 +1,19 @@
+Feedback loop: **missing instrumentation**. Ticket activity is not outcome evidence, so onboarding optimization is rejected as ungrounded.
+
+- Bottleneck/root cause: no `first_value_accepted` feedback, blocking evidence-based onboarding selection.
+- Intervention: prefer the reversible signal-capture experiment over blind optimization.
+- Report: finalize the immutable Interval report with this diagnosis and both candidate decisions.
+- Highlights: honest no-op; no qualifying highlight evidence was supplied.
+- Ticket delta: admit one instrumentation ticket after report finalization. Its contract contains:
+  - Correction: capture `first_value_accepted`.
+  - Output: `.farplane/evidence/onboarding-acceptance.jsonl`.
+  - Proof/falsifier: 20 completed, variant-labelled trials and calculated acceptance rates.
+  - Decision: identify whether A or B reaches 60%; report neither if neither qualifies.
+  - Stop condition: evidence and decision recorded after 20 valid trials.
+- Blind onboarding optimization: rejected; insufficiently grounded, not deferred as a prerequisite for the admitted work.
+- Blocked systems: onboarding optimization and variant selection.
+- Next owner: Work Pulse, for execution of the admitted ticket.
+
+Candidates are evaluated independently; there is no ticket-count target, and ticket volume is not momentum. The grounded instrumentation ticket is not delayed for Plan Next Wave.
+
+Receipt: Interval started no Goal, no Pulse, no worker, and no execution.

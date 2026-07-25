@@ -1,0 +1,77 @@
+{
+  "schema_version": "1",
+  "ticket_id": "TASK-0406",
+  "fixture_id": "control-loop-known-intervention",
+  "verdict": "pass",
+  "proof_type": "replayable_integration_fixture",
+  "replay": {
+    "command": "python3 tickets/TASK-0406/artifacts/qa/run_control_loop_fixtures.py",
+    "observed_receipt": "tickets/TASK-0406/artifacts/qa/fixture-output/known-replay.json",
+    "generated_report": "tickets/TASK-0406/artifacts/qa/fixture-output/known-interval-report.md",
+    "generated_ticket": "tickets/TASK-0406/artifacts/qa/fixture-output/known-admitted-ticket.md"
+  },
+  "claimed_path": [
+    "metric observations produce direction-normalized movement",
+    "Interval reads movement and evidence window",
+    "Interval finalizes report before board mutation",
+    "known material intervention is admitted as a concrete ticket delta",
+    "ticket carries priority and due_at",
+    "Pulse orders executable work by priority, then due_at, then ticket ID",
+    "Plan Next Wave is not invoked for already-grounded work"
+  ],
+  "input": {
+    "metric": {
+      "id": "auto_completion_rate",
+      "direction": "maximize",
+      "previous_observation": {
+        "observed_at": "2026-07-23T00:00:00+08:00",
+        "value": 0.42
+      },
+      "current_observation": {
+        "observed_at": "2026-07-25T00:00:00+08:00",
+        "value": 0.37
+      }
+    },
+    "interval_evidence": {
+      "window": "daily",
+      "dominant_bottleneck": "accepted tickets lack concrete proof artifacts before execution",
+      "root_cause_confidence": "high",
+      "intervention": "tighten QA receipt generation and link best evidence before ticket close",
+      "duplicate_active_ticket": false,
+      "authority": "local_repo",
+      "concrete_output": "ticket-scoped QA receipt and validator evidence"
+    },
+    "candidate_ticket_delta": {
+      "status": "todo",
+      "priority": "high",
+      "due_at": "2026-07-26T18:00:00+08:00",
+      "proof": "validated QA result and evidence review"
+    },
+    "plan_next_wave_called": false
+  },
+  "expected_observations": {
+    "movement": {
+      "raw_delta": -0.05,
+      "elapsed_days": 2.0,
+      "raw_velocity_per_day": -0.025,
+      "progress_delta": -0.05,
+      "progress_velocity_per_day": -0.025,
+      "momentum_state": "worsening"
+    },
+    "interval_admission": "create_or_update_ticket",
+    "admission_reason": "material problem, executable intervention, concrete proof artifact, no duplicate, local authority",
+    "pulse_ordering": "high priority first; within high, earliest due_at before later/missing due_at",
+    "planner_boundary": "Plan Next Wave remains unused because the evidence already produced grounded work"
+  },
+  "evidence_refs": [
+    "bin/core/farplane_project_snapshot.py",
+    "bin/tests/test_farplane_project_snapshot.py",
+    "skills/interval-update/SKILL.md",
+    "skills/interval-update/references/interval-update.md",
+    "skills/pulse-update/scripts/list_pulse_board.py",
+    "skills/pulse-update/scripts/test_list_pulse_board.py",
+    "tickets/TASK-0406/artifacts/qa/test-results.txt"
+    ,"tickets/TASK-0406/artifacts/qa/run_control_loop_fixtures.py"
+    ,"tickets/TASK-0406/artifacts/qa/fixture-output/known-replay.json"
+  ]
+}

@@ -36,6 +36,7 @@ metrics:
     kind: point
     unit: TODO_unit
     display: reading
+    direction: maximize
     max_age_days: 7
     guard:
       operator: greater_than_or_equal
@@ -48,6 +49,7 @@ metrics:
     kind: point
     unit: tickets
     display: reading
+    direction: minimize
   accepted_output_events:
     refresh_ref: local_project_metrics
     label: Accepted output events
@@ -66,3 +68,4 @@ metrics:
     kind: point
     unit: ratio
     display: reading
+    direction: maximize

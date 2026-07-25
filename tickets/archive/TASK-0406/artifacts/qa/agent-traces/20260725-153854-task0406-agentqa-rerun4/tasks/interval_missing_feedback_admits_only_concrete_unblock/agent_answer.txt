@@ -1,0 +1,17 @@
+Feedback-loop status is **missing instrumentation**. Ticket activity is not outcome movement, so onboarding performance is unavailable—not improving.
+
+- **Bottleneck:** No decision-quality onboarding feedback.
+- **Root cause:** `first_value_accepted` is not captured.
+- **Reject:** “Optimize onboarding anyway.” It lacks evidence and a falsifiable intervention; retain only as a report/Plan Next Wave candidate.
+- **Admit:** One instrumentation ticket to:
+  - capture `first_value_accepted` plus A/B variant in `.farplane/evidence/onboarding-acceptance.jsonl`;
+  - collect 20 completed trials;
+  - determine whether A or B reaches 60% acceptance;
+  - prove the result from the 20 valid records;
+  - stop after recording the decision.
+
+Interval first finalizes the immutable dated report, then makes an honest highlight no-op because no exceptional comparative result is established, then creates the authorized ticket. The ticket itself contains the correction, output, proof/falsifier, and stop condition.
+
+Candidates are evaluated independently; there is no numeric ticket target, and one qualified ticket is not “momentum.” Grounded instrumentation is not delayed for Plan Next Wave.
+
+Receipt: Interval started no Goal, Pulse, worker, trial, or implementation. A later Pulse/Goal owner executes the ticket.

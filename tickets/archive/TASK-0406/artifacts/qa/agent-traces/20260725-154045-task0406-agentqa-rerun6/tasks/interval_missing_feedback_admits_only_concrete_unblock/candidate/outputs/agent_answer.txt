@@ -1,0 +1,14 @@
+Movement is outcome-unavailable: ticket activity alone is not progress. The dominant bottleneck is missing onboarding feedback, not onboarding performance.
+
+- Reject “optimize onboarding” as ungrounded; no signal identifies A or B as the correction.
+- Admit one instrumentation ticket to capture `first_value_accepted` in `.farplane/evidence/onboarding-acceptance.jsonl`, evaluate 20 completed trials, choose A or B only if it reaches the 60% threshold, then stop.
+- Finalize the dated report first, recording the missing feedback, root cause, compared interventions, and decisions.
+- Append no highlight unless exceptional evidence independently qualifies; activity is not a win.
+- Then create the ticket through the authorized local route.
+
+The ticket contract itself includes the correction, evidence artifact, 20-trial proof/falsifier, 60% decision threshold, and stop condition. It passes every gate: material problem, executable intervention, concrete output and proof, no active duplicate, write authority, and coherent scope.
+
+`blocked_systems`: onboarding optimization and evidence-based A/B selection.
+`next_owner`: Goal, to implement the admitted ticket. Plan Next Wave is unnecessary because this candidate is already grounded.
+
+There is no ticket-count target; one qualified ticket is not “momentum.” Interval starts no Goal, Pulse, worker, trial, or implementation.

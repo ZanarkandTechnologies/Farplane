@@ -21,7 +21,6 @@ BOARD_SOURCE_COORDINATE_KEYS = {"ledger", "worker_index"}
 BOARD_DIAGNOSTIC_KEYS = {"released_worker_rows"}
 SEMANTIC_TIME_FIELDS = {
     "metric_freshness",
-    "goal_urgency",
     "matured_reward_ids",
     "operator_availability",
 }
@@ -67,8 +66,6 @@ def normalize_semantic_time_state(value: Any) -> dict[str, Any]:
         )
     if not isinstance(value["metric_freshness"], dict):
         raise ValueError("semantic_time_state.metric_freshness must be an object")
-    if not isinstance(value["goal_urgency"], dict):
-        raise ValueError("semantic_time_state.goal_urgency must be an object")
     if not isinstance(value["matured_reward_ids"], list):
         raise ValueError("semantic_time_state.matured_reward_ids must be a list")
     if not isinstance(value["operator_availability"], dict):
@@ -88,7 +85,7 @@ def semantic_planning_value(
     """Remove run-envelope churn while preserving planning evidence changes.
 
     With explicit ``semantic_time_state``, ``as_of`` and ``serialized_at`` are
-    serialization metadata while derived freshness, deadline, maturation, and
+    serialization metadata while derived freshness, maturation, and
     availability boundaries remain fingerprinted. Legacy inputs without that
     state retain their canonical top-level ``as_of`` as a safe semantic clock;
     they may replan more often but can never suppress a time transition.

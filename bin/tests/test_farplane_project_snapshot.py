@@ -16,7 +16,9 @@ if str(CORE_DIR) not in sys.path:
     sys.path.insert(0, str(CORE_DIR))
 
 from farplane_project_snapshot import (
+    build_metric_card,
     collect_ticket_refs,
+    derive_metric_movement,
     highlight_cadence,
     load_highlights,
     load_project_snapshot,
@@ -173,6 +175,7 @@ ticket_id: TASK-0001
 title: Reward projection
 status: done
 phase: complete
+due_at: 2026-07-10T17:00:00+08:00
 ---
 
 ## Reward
@@ -197,6 +200,7 @@ kpi_rewards:
             refs, rewards = collect_ticket_refs(root)
 
         self.assertEqual(refs[0]["kpi_rewards"], ["accepted_harness_improvements"])
+        self.assertEqual(refs[0]["due_at"], "2026-07-10T17:00:00+08:00")
         self.assertEqual(refs[0]["reward_rows"][0]["reward_id"], "accepted-7d")
         self.assertEqual(rewards[0]["decision"], "accept")
         self.assertEqual(rewards[0]["ticket_status"], "done")
@@ -226,7 +230,8 @@ kpi_rewards:
         self.assertEqual(metric_card["description"], metric_def["description"])
         self.assertEqual(metric_card["target_spec"], metric_def["target_spec"])
         self.assertEqual(metric_card["current"], 2)
-        self.assertEqual(metric_card["series"][-1]["daily_diff"], 1)
+        self.assertEqual(metric_card["series"][-1]["movement"]["raw_delta"], 1)
+        self.assertEqual(metric_card["momentum"]["momentum_state"], "improving")
         self.assertEqual(metric_card["series"][-1]["cumulative"], 3)
         self.assertEqual(snapshot["tabs"]["overview"]["pinned_metric_cards"][0]["metric_id"], "accepted_harness_improvements")
         self.assertEqual(snapshot["tabs"]["overview"]["charter"]["mission"], "Make useful work.")
@@ -243,6 +248,115 @@ kpi_rewards:
         self.assertFalse(snapshot["tabs"]["news"]["feed_scout"]["enabled"])
         self.assertEqual(snapshot["tabs"]["news"]["items"], [])
         self.assertIn("source_gap_ids", snapshot["tabs"]["kanban"])
+
+    def test_metric_movement_normalizes_direction_and_elapsed_time(self) -> None:
+        maximize = derive_metric_movement(
+            "maximize",
+            {"date": "2026-07-01", "value": 10},
+            {"date": "2026-07-03", "value": 12},
+        )
+        minimize = derive_metric_movement(
+            "minimize",
+            {"date": "2026-07-01", "value": 10},
+            {"date": "2026-07-03", "value": 8},
+        )
+        worsening = derive_metric_movement(
+            "minimize",
+            {"date": "2026-07-01", "value": 8},
+            {"date": "2026-07-03", "value": 10},
+        )
+        ratio = derive_metric_movement(
+            "maximize",
+            {"date": "2026-07-01T00:00:00Z", "value": 0.5},
+            {"date": "2026-07-01T12:00:00Z", "value": 0.75},
+        )
+        flat = derive_metric_movement(
+            "maximize",
+            {"date": "2026-07-01", "value": 4},
+            {"date": "2026-07-02", "value": 4},
+        )
+
+        self.assertEqual(maximize["raw_delta"], 2)
+        self.assertEqual(maximize["elapsed_days"], 2)
+        self.assertEqual(maximize["raw_velocity_per_day"], 1)
+        self.assertEqual(maximize["progress_velocity_per_day"], 1)
+        self.assertEqual(maximize["momentum_state"], "improving")
+        self.assertEqual(minimize["raw_delta"], -2)
+        self.assertEqual(minimize["progress_delta"], 2)
+        self.assertEqual(minimize["progress_velocity_per_day"], 1)
+        self.assertEqual(minimize["momentum_state"], "improving")
+        self.assertEqual(worsening["progress_velocity_per_day"], -1)
+        self.assertEqual(worsening["momentum_state"], "worsening")
+        self.assertEqual(ratio["elapsed_days"], 0.5)
+        self.assertEqual(ratio["raw_velocity_per_day"], 0.5)
+        self.assertEqual(ratio["momentum_state"], "improving")
+        self.assertEqual(flat["progress_velocity_per_day"], 0)
+        self.assertEqual(flat["momentum_state"], "flat")
+
+    def test_metric_movement_reports_unknown_without_comparable_points(self) -> None:
+        cases = [
+            derive_metric_movement("maximize", None, {"date": "2026-07-01", "value": 1}),
+            derive_metric_movement(
+                "maximize",
+                {"date": "not-a-date", "value": 1},
+                {"date": "2026-07-02", "value": 2},
+            ),
+            derive_metric_movement(
+                "maximize",
+                {"date": "2026-07-01", "value": 1},
+                {"date": "2026-07-01", "value": 2},
+            ),
+            derive_metric_movement(
+                None,
+                {"date": "2026-07-01", "value": 1},
+                {"date": "2026-07-02", "value": 2},
+            ),
+            derive_metric_movement(
+                "maximize",
+                {"date": "2026-07-01-garbage", "value": 1},
+                {"date": "2026-07-02", "value": 2},
+            ),
+        ]
+
+        self.assertEqual(
+            [movement["momentum_state"] for movement in cases],
+            ["unknown", "unknown", "unknown", "unknown", "unknown"],
+        )
+        self.assertEqual(
+            [movement["reason"] for movement in cases],
+            [
+                "no_previous_observation",
+                "invalid_observation_date",
+                "non_positive_elapsed_time",
+                "missing_or_invalid_direction",
+                "invalid_observation_date",
+            ],
+        )
+
+    def test_metric_card_does_not_bridge_source_gap_or_report_stale_momentum(self) -> None:
+        observations = [
+            {"metric_id": "quality", "date": "2026-07-01", "value": 1, "status": "available"},
+            {"metric_id": "quality", "date": "2026-07-02", "value": None, "status": "source_gap"},
+            {"metric_id": "quality", "date": "2026-07-03", "value": 3, "status": "available"},
+        ]
+        definition = {
+            "label": "Quality",
+            "direction": "maximize",
+            "unit": "score",
+            "max_age_days": 1,
+        }
+
+        current = build_metric_card("quality", definition, observations, "2026-07-03")
+        stale = build_metric_card("quality", definition, observations, "2026-07-05")
+
+        self.assertEqual(
+            current["series"][-1]["movement"]["reason"],
+            "no_previous_observation",
+        )
+        self.assertEqual(current["momentum"]["momentum_state"], "unknown")
+        self.assertEqual(current["momentum"]["reason"], "no_previous_observation")
+        self.assertEqual(stale["status"], "stale")
+        self.assertEqual(stale["momentum"]["reason"], "stale_observation")
 
     def test_snapshot_projects_highlights_from_minimal_ledgers(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

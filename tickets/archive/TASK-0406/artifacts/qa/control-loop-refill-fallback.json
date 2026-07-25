@@ -1,0 +1,77 @@
+{
+  "schema_version": "1",
+  "ticket_id": "TASK-0406",
+  "fixture_id": "control-loop-refill-fallback",
+  "verdict": "pass",
+  "proof_type": "replayable_integration_fixture",
+  "replay": {
+    "command": "python3 tickets/TASK-0406/artifacts/qa/run_control_loop_fixtures.py",
+    "observed_receipt": "tickets/TASK-0406/artifacts/qa/fixture-output/refill-replay.json",
+    "generated_report": "tickets/TASK-0406/artifacts/qa/fixture-output/refill-interval-report.md"
+  },
+  "claimed_path": [
+    "metric movement is visible but evidence is insufficient for a direct intervention",
+    "Interval records the candidate and source gap in the report",
+    "Interval creates no planning-only or artifact-free ticket",
+    "board supply later falls below the Pulse low-watermark",
+    "Plan Next Wave is invoked as a side-effect-free configured-skill refill planner",
+    "Pulse materializes only validated concrete configured-skill calls"
+  ],
+  "input": {
+    "metric": {
+      "id": "evidence_distribution_reach",
+      "direction": "maximize",
+      "previous_observation": {
+        "observed_at": "2026-07-18T00:00:00+08:00",
+        "value": 1200
+      },
+      "current_observation": {
+        "observed_at": "2026-07-25T00:00:00+08:00",
+        "value": 1185
+      }
+    },
+    "interval_evidence": {
+      "window": "weekly",
+      "dominant_bottleneck": "distribution reach dipped, but source attribution is missing",
+      "root_cause_confidence": "low",
+      "candidate_intervention": "investigate channel attribution before choosing a correction",
+      "decision_changing_output_defined": false,
+      "duplicate_active_ticket": false,
+      "authority": "local_repo"
+    },
+    "interval_ticket_delta": null,
+    "later_pulse_state": {
+      "ready_supply": 0,
+      "low_watermark": 1,
+      "stable_problem_ref": "autonomous-completion-control-loop",
+      "objective_movement_available": true
+    },
+    "plan_next_wave_called": true
+  },
+  "expected_observations": {
+    "movement": {
+      "raw_delta": -15,
+      "elapsed_days": 7.0,
+      "raw_velocity_per_day": -2.1428571429,
+      "progress_delta": -15,
+      "progress_velocity_per_day": -2.1428571429,
+      "momentum_state": "worsening"
+    },
+    "interval_admission": "reject_direct_ticket",
+    "admission_reason": "insufficient diagnosis and no decision-changing investigation output",
+    "refill_boundary": "Plan Next Wave is allowed only after low ready supply, and remains side-effect-free",
+    "materialization_boundary": "Pulse writes tickets only after planner response validation"
+  },
+  "evidence_refs": [
+    "skills/interval-update/SKILL.md",
+    "skills/interval-update/evals/evals.json",
+    "skills/plan-next-wave/SKILL.md",
+    "skills/plan-next-wave/scripts/validate_wave_response.py",
+    "skills/plan-next-wave/scripts/test_validate_wave_response.py",
+    "skills/pulse-update/SKILL.md",
+    "skills/pulse-update/scripts/test_plan_wave_guard.py",
+    "tickets/TASK-0406/artifacts/qa/test-results.txt"
+    ,"tickets/TASK-0406/artifacts/qa/run_control_loop_fixtures.py"
+    ,"tickets/TASK-0406/artifacts/qa/fixture-output/refill-replay.json"
+  ]
+}

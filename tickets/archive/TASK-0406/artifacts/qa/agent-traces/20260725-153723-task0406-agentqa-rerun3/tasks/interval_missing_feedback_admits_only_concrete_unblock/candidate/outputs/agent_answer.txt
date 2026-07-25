@@ -1,0 +1,14 @@
+Interval does not optimize onboarding from ticket activity alone.
+
+- Movement: activity exists, but outcome movement is unavailable.
+- Bottleneck: missing acceptance feedback.
+- Root cause: no outcome, proxy, or human-review signal—not demonstrated onboarding friction.
+- Intervention comparison:
+  - Reject/defer onboarding optimization as ungrounded; record it for Plan Next Wave if useful.
+  - Admit the bounded acceptance-capture ticket because it has an artifact, decision threshold, stop condition, and write authority.
+
+Interval then finalizes the immutable dated report, performs an honest highlight no-op because no exceptional numeric win or lesson-bearing failure is evidenced, and only afterward creates the ticket delta. The ticket itself must contain the capture correction, concrete artifact, threshold/proof or falsifier, and stop condition.
+
+Candidates are evaluated independently; there is no ticket cap, and ticket volume is not momentum. Execution belongs to the next Goal/Pulse owner.
+
+Receipt: Interval started no Goal, Pulse, worker, experiment, or implementation.

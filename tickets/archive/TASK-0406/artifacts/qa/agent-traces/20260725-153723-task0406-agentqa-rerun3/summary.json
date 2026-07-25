@@ -1,0 +1,59 @@
+{
+  "schema_version": 2,
+  "job_id": "20260725-153723-task0406-agentqa-rerun3",
+  "label": "task0406-agentqa-rerun3",
+  "created_at": "2026-07-25T15:37:23.710257+00:00",
+  "completed_at": "2026-07-25T15:38:32.306197+00:00",
+  "harness": "codex",
+  "judge_harness": "codex",
+  "scopes": [
+    "skills"
+  ],
+  "default_context_file": "contexts/agi-toy-shop.md",
+  "skill_context": "inline",
+  "compare_baseline": false,
+  "behavior_trace": true,
+  "task_files": [
+    "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/skills/interval-update/evals/evals.json"
+  ],
+  "task_count": 2,
+  "pass_rate": 0.5,
+  "verdict_counts": {
+    "A": 1,
+    "C": 1
+  },
+  "tasks": [
+    {
+      "task_id": "interval_known_intervention_same_run_ticket",
+      "title": "Known intervention becomes a same-run solution ticket",
+      "verdict": "A",
+      "pass": true,
+      "reason": "The answer gives the complete compact decision chain, preserves report-first ordering and admission gates, creates the correct same-run ticket, and clearly avoids execution.",
+      "candidate_metrics": {
+        "duration_ms": 32703,
+        "total_tokens": 71438
+      },
+      "behavior_verdict": "pass",
+      "behavior_trace_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-153723-task0406-agentqa-rerun3/tasks/interval_known_intervention_same_run_ticket/behavior_trace.json",
+      "detail_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-153723-task0406-agentqa-rerun3/tasks/interval_known_intervention_same_run_ticket.json"
+    },
+    {
+      "task_id": "interval_missing_feedback_admits_only_concrete_unblock",
+      "title": "Missing feedback routes to a concrete evidence unblock",
+      "verdict": "C",
+      "pass": false,
+      "reason": "The core diagnosis and rejection are correct, but the answer prematurely admits a generic instrumentation ticket without concrete bindings or the full admission-gate check.",
+      "candidate_metrics": {
+        "duration_ms": 32198,
+        "total_tokens": 71769
+      },
+      "behavior_verdict": "pass",
+      "behavior_trace_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-153723-task0406-agentqa-rerun3/tasks/interval_missing_feedback_admits_only_concrete_unblock/behavior_trace.json",
+      "detail_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-153723-task0406-agentqa-rerun3/tasks/interval_missing_feedback_admits_only_concrete_unblock.json"
+    }
+  ],
+  "behavior_verdict_counts": {
+    "pass": 2
+  },
+  "benchmark_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-153723-task0406-agentqa-rerun3/benchmark.json"
+}

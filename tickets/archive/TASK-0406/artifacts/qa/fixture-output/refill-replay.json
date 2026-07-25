@@ -1,0 +1,45 @@
+{
+  "fixture_id": "control-loop-refill-fallback",
+  "interval_ticket_delta": null,
+  "low_watermark_guard": {
+    "begin": {
+      "claim_id": "c6048b51511d6df67a8c3ec41bf7115a78421c9588eb25692fa988d7ca12998d",
+      "claimed_at": "2026-07-25T15:45:55.851958Z",
+      "ok": true,
+      "pid": 82635,
+      "planning_fingerprint": "0fa9414eac0074a6b27d18f1db5fe7707e03056e7ecb72644ebbad5f91e16301",
+      "schema": "farplane.plan_wave_claim.v1",
+      "status": "acquired",
+      "wave_size": 1
+    },
+    "decision_statuses": [
+      "claimed",
+      "no_op"
+    ],
+    "finish": {
+      "action": "plan_next_wave",
+      "admitted": [],
+      "admitted_skill_calls": [],
+      "claim_id": "c6048b51511d6df67a8c3ec41bf7115a78421c9588eb25692fa988d7ca12998d",
+      "completed_at": "2026-07-25T15:45:55.852379Z",
+      "no_op_category": "source_gap",
+      "ok": true,
+      "planning_fingerprint": "0fa9414eac0074a6b27d18f1db5fe7707e03056e7ecb72644ebbad5f91e16301",
+      "reason": "source_gap",
+      "schema": "farplane.plan_wave_decision.v2",
+      "status": "no_op",
+      "wave_size": 1
+    }
+  },
+  "movement": {
+    "elapsed_days": 7.0,
+    "momentum_state": "worsening",
+    "progress_delta": -15.0,
+    "progress_velocity_per_day": -2.142857142857143,
+    "raw_delta": -15.0,
+    "raw_velocity_per_day": -2.142857142857143,
+    "reason": null
+  },
+  "source_gap_preserved": true,
+  "verdict": "pass"
+}

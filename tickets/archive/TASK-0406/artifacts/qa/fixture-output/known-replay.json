@@ -1,0 +1,33 @@
+{
+  "fixture_id": "control-loop-known-intervention",
+  "highlight_receipts": [
+    "appended",
+    "already_exists"
+  ],
+  "movement": {
+    "elapsed_days": 2.0,
+    "momentum_state": "worsening",
+    "progress_delta": -0.04999999999999999,
+    "progress_velocity_per_day": -0.024999999999999994,
+    "raw_delta": -0.04999999999999999,
+    "raw_velocity_per_day": -0.024999999999999994,
+    "reason": null
+  },
+  "plan_next_wave_called": false,
+  "pulse_order": [
+    "TASK-9001",
+    "TASK-8999",
+    "TASK-1000",
+    "TASK-0001"
+  ],
+  "report_finalized_before_highlight": true,
+  "ticket_delta": {
+    "artifact": "validated QA receipt",
+    "due_at": "2026-07-26T18:00:00+08:00",
+    "priority": "high",
+    "report_ref": "reports/interval/daily/2026-07-25T15-30-00Z",
+    "status": "todo",
+    "ticket_id": "TASK-9001"
+  },
+  "verdict": "pass"
+}

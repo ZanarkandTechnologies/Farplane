@@ -125,8 +125,8 @@ project "Faceless AI Engineering Channel" {
 
   heartbeat weekly_interval {
     first: grouped_jobs_with_report_cache
-    jobs: [update_external_context, update_memory, skill_hardening, skill_refinement, update_strategy, quarterly_plan, annual_review]
-    skills: [feed_scout, update_memory, update_strategy, skill_maintenance, goal_advisor, review]
+    jobs: [update_external_context, update_memory, skill_hardening, skill_refinement, interval_review, quarterly_plan, annual_review]
+    skills: [feed_scout, update_memory, interval_update, skill_maintenance, goal_advisor, review]
     delegate: delegate(ref("project-harness.md"), "refresh channel strategy and skill upkeep", skills=[weekly_strategy_analysis, skill_maintenance])
     gates: [review_before_external_side_effects]
   }

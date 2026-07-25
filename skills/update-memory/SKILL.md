@@ -124,8 +124,9 @@ Memory Update
 
 ## Gotchas
 
-- Do not turn memory refresh into strategy planning; use `update-strategy` for
-  bets, priorities, experiments, and tickets.
+- Do not turn memory refresh into strategy planning; use `interval-update` for
+  evidence-backed problem diagnosis and ticket admission, while the ticket
+  board owns mutable priority, solution choice, due date, and proof.
 - Do not create a separate docs heartbeat by default; route substantial docs
   work through `doc-advisor` inside this context update or create a focused
   ticket when it is too large.

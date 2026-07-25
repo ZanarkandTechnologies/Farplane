@@ -41,6 +41,27 @@ DEFAULT_REVIEW_CHASE_POLICY = {
 UNSCHEDULED_CHECK_IN = "unscheduled"
 
 
+def normalize_due_at(value: Any) -> str:
+    if isinstance(value, datetime):
+        return value.isoformat()
+    return str(value or "").strip()
+
+
+def ticket_sort_key(row: dict[str, Any]) -> tuple[int, tuple[int, datetime], str]:
+    due_at = normalize_due_at(row.get("due_at"))
+    if due_at:
+        raw = due_at[:-1] + "+00:00" if due_at.endswith("Z") else due_at
+        deadline = datetime.fromisoformat(raw).astimezone(timezone.utc)
+        due_key = (0, deadline)
+    else:
+        due_key = (1, datetime.max.replace(tzinfo=timezone.utc))
+    return (
+        PRIORITY_ORDER.get(row["priority"], PRIORITY_ORDER["medium"]),
+        due_key,
+        row["ticket_id"],
+    )
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--project-root", default=".")
@@ -738,6 +759,7 @@ def build_board(
                 "title": str(data.get("title", "")).strip(),
                 "status": str(data.get("status", "")).strip(),
                 "priority": str(data.get("priority") or "medium").strip().lower(),
+                "due_at": normalize_due_at(data.get("due_at")),
                 "claimed_by": str(data.get("claimed_by") or "").strip(),
                 "depends_on": as_list(data.get("depends_on")),
                 "human_gate": data.get("human_gate", "none"),
@@ -808,12 +830,7 @@ def build_board(
             )
             executable.append(row)
 
-    executable.sort(
-        key=lambda row: (
-            PRIORITY_ORDER.get(row["priority"], PRIORITY_ORDER["medium"]),
-            row["ticket_id"],
-        )
-    )
+    executable.sort(key=ticket_sort_key)
     review_actions.sort(
         key=lambda row: (
             REVIEW_ACTION_PRIORITY.get(row["review"]["action"], 99),

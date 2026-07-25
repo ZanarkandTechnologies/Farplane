@@ -1,0 +1,40 @@
+{
+  "assertion_results": [
+    {
+      "text": "Rejects vague strategy and planning-only work",
+      "passed": true,
+      "evidence": "Explicitly rejects both vague strategy and the plan-only ticket."
+    },
+    {
+      "text": "Rejects the cosmetic chore for low materiality",
+      "passed": true,
+      "evidence": "Explicitly rejects the cosmetic cleanup as low materiality."
+    },
+    {
+      "text": "Keeps the material ungrounded symptom as a planner candidate",
+      "passed": false,
+      "evidence": "Keeps it in the report but does not explicitly route it as a Plan Next Wave planner candidate."
+    },
+    {
+      "text": "Creates no artifact-free ticket",
+      "passed": true,
+      "evidence": "States that ticket deltas are zero and rejects artifact-free planning work."
+    },
+    {
+      "text": "Preserves uncertainty and source gaps",
+      "passed": true,
+      "evidence": "Does not invent a cause and makes qualification conditional on decision-changing diagnostic evidence, though source-gap handling could be more explicit."
+    }
+  ],
+  "summary": {
+    "passed": 4,
+    "failed": 1,
+    "total": 5,
+    "pass_rate": 0.8
+  },
+  "judge": {
+    "verdict": "B",
+    "pass": false,
+    "reason": "Accurate and concise, but it omits the required explicit planner-candidate routing for the material ungrounded symptom."
+  }
+}

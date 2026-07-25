@@ -553,6 +553,12 @@ def collect_ticket_refs(project_root: Path) -> tuple[list[dict[str, Any]], list[
         kpi_ids = sorted({row["kpi_id"] for row in reward_rows})
         status = str(fm.get("status") or "").strip().lower()
         phase = str(fm.get("phase") or "").strip().lower()
+        raw_due_at = fm.get("due_at")
+        due_at = (
+            raw_due_at.isoformat()
+            if isinstance(raw_due_at, datetime)
+            else str(raw_due_at or "").strip() or None
+        )
         ticket_ref = {
             "ticket_id": ticket_id,
             "path": str(path.relative_to(project_root)),
@@ -560,6 +566,7 @@ def collect_ticket_refs(project_root: Path) -> tuple[list[dict[str, Any]], list[
             "status": status,
             "phase": phase,
             "priority": str(fm.get("priority") or "medium"),
+            "due_at": due_at,
             "kpi_rewards": kpi_ids,
             "reward_rows": reward_rows,
             "source_ref": {"path": str(path.relative_to(project_root))},
@@ -1385,20 +1392,98 @@ def source_gap_reason(obs: dict[str, Any]) -> str:
     return str(obs.get("status") or "source_gap")
 
 
+def unknown_metric_movement(reason: str) -> dict[str, Any]:
+    return {
+        "raw_delta": None,
+        "elapsed_days": None,
+        "raw_velocity_per_day": None,
+        "progress_delta": None,
+        "progress_velocity_per_day": None,
+        "momentum_state": "unknown",
+        "reason": reason,
+    }
+
+
+def parse_metric_observation_datetime(value: Any) -> datetime | None:
+    """Parse a complete observation date/timestamp without accepting trailing junk."""
+    raw = str(value or "").strip()
+    if not raw:
+        return None
+    try:
+        if len(raw) == 10:
+            parsed_date = date_type.fromisoformat(raw)
+            return datetime.combine(parsed_date, datetime.min.time(), tzinfo=timezone.utc)
+        if raw.endswith("Z"):
+            raw = raw[:-1] + "+00:00"
+        parsed = datetime.fromisoformat(raw)
+    except ValueError:
+        return None
+    if parsed.tzinfo is None:
+        parsed = parsed.replace(tzinfo=timezone.utc)
+    return parsed.astimezone(timezone.utc)
+
+
+def derive_metric_movement(
+    direction: Any,
+    previous_point: dict[str, Any] | None,
+    current_point: dict[str, Any],
+) -> dict[str, Any]:
+    """Derive comparable movement from two raw observations without persisting it."""
+    normalized_direction = str(direction or "").strip().lower()
+    if normalized_direction not in {"maximize", "minimize"}:
+        return unknown_metric_movement("missing_or_invalid_direction")
+    if previous_point is None:
+        return unknown_metric_movement("no_previous_observation")
+    previous_value = previous_point.get("value")
+    current_value = current_point.get("value")
+    if not isinstance(previous_value, (int, float)) or not isinstance(current_value, (int, float)):
+        return unknown_metric_movement("non_numeric_observation")
+    previous_at = parse_metric_observation_datetime(previous_point.get("date"))
+    current_at = parse_metric_observation_datetime(current_point.get("date"))
+    if previous_at is None or current_at is None:
+        return unknown_metric_movement("invalid_observation_date")
+    elapsed_days = (current_at - previous_at).total_seconds() / 86400
+    if elapsed_days <= 0:
+        return unknown_metric_movement("non_positive_elapsed_time")
+    raw_delta = float(current_value) - float(previous_value)
+    raw_velocity = raw_delta / elapsed_days
+    progress_factor = 1.0 if normalized_direction == "maximize" else -1.0
+    progress_delta = raw_delta * progress_factor
+    progress_velocity = raw_velocity * progress_factor
+    return {
+        "raw_delta": raw_delta,
+        "elapsed_days": elapsed_days,
+        "raw_velocity_per_day": raw_velocity,
+        "progress_delta": progress_delta,
+        "progress_velocity_per_day": progress_velocity,
+        "momentum_state": (
+            "improving"
+            if progress_velocity > 0
+            else "worsening"
+            if progress_velocity < 0
+            else "flat"
+        ),
+        "reason": None,
+    }
+
+
 def build_metric_card(
     metric_id: str,
     metric_def: dict[str, Any],
     observations: list[dict[str, Any]],
     snapshot_date: str | None = None,
 ) -> dict[str, Any]:
-    metric_obs = sorted(
+    ordered_metric_obs = sorted(
         [
             obs
             for obs in observations
-            if obs.get("metric_id") == metric_id and obs.get("status", "available") == "available"
+            if obs.get("metric_id") == metric_id
         ],
         key=lambda obs: str(obs.get("date", "")),
     )
+    metric_obs = [
+        obs for obs in ordered_metric_obs if obs.get("status", "available") == "available"
+    ]
     metric_gaps = sorted(
         [
             obs
@@ -1414,12 +1499,21 @@ def build_metric_card(
     target = metric_def.get("target")
     target_direction = normalize_target_direction(metric_def.get("target_direction"))
     target_unit = str(metric_def.get("target_unit") or metric_def.get("unit") or "")
-    for obs in metric_obs:
+    previous_point: dict[str, Any] | None = None
+    for obs in ordered_metric_obs:
+        if obs.get("status", "available") != "available":
+            previous_point = None
+            continue
         value = obs.get("value")
         if not isinstance(value, (int, float)):
+            previous_point = None
             continue
         point: dict[str, Any] = {"date": obs.get("date"), "value": float(value)}
-        point["daily_diff"] = float(value) - float(series[-1]["value"]) if series else None
+        point["movement"] = derive_metric_movement(
+            metric_def.get("direction"),
+            previous_point,
+            point,
+        )
         if isinstance(obs.get("payload"), dict):
             point["payload"] = obs["payload"]
         payload = obs.get("payload") if isinstance(obs.get("payload"), dict) else {}
@@ -1441,6 +1535,7 @@ def build_metric_card(
             hit_at = str(obs.get("date"))
             hit_value = comparison_value
         series.append(point)
+        previous_point = point
     latest_gap = metric_gaps[-1] if metric_gaps else None
     source_gaps: list[dict[str, Any]] = []
     if latest_gap:
@@ -1463,6 +1558,17 @@ def build_metric_card(
             status = "stale"
             stale_reason = f"latest observation is {age_days} days old; max_age_days={max_age_days}"
             source_gaps.append({"date": series[-1].get("date"), "status": "stale", "reason": stale_reason})
+    latest_movement = (
+        series[-1]["movement"]
+        if series
+        else unknown_metric_movement("no_available_observation")
+    )
+    if status == "stale":
+        latest_movement = unknown_metric_movement("stale_observation")
+    elif latest_gap and (
+        not series or str(latest_gap.get("date") or "") >= str(series[-1].get("date") or "")
+    ):
+        latest_movement = unknown_metric_movement("latest_observation_unavailable")
     return {
         "metric_id": metric_id,
         "label": metric_def.get("label") or metric_id,
@@ -1485,6 +1591,7 @@ def build_metric_card(
         "status": status,
         "current": series[-1]["value"] if series and status == "available" else None,
         "series": series,
+        "momentum": latest_movement,
         "best_daily": max((float(point["value"]) for point in series), default=None),
         "source_gaps": source_gaps,
         "target_hit": {"hit_at": hit_at, "hit_value": hit_value} if hit_at else None,

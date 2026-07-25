@@ -1,0 +1,359 @@
+{
+  "schema_version": 2,
+  "task": {
+    "id": "interval_multiple_independent_qualified_interventions",
+    "title": "No cap suppresses multiple qualified root-problem interventions",
+    "query": "A Weekly review proves two independent material root problems. Each has an executable coherent intervention, concrete proof, no active duplicate, and authorized board writes. A third idea is merely a lifecycle-stage split of the first correction. How many tickets may be admitted?",
+    "reference_points": [
+      "Evaluates every candidate independently with no numeric ticket cap or target",
+      "Admits both independently material coherent interventions",
+      "Rejects lifecycle-stage fragmentation of one correction",
+      "Does not equate ticket volume with momentum",
+      "Records decisions before highlights and board mutation"
+    ],
+    "files": [],
+    "tags": [
+      "interval-update",
+      "no-cap",
+      "coherence",
+      "multiple"
+    ],
+    "notes": "",
+    "context": "AGI Toy Shop is a clean-room toy app company fully run by agents.\n\nIt has an agent-run storefront, toy inventory, support desk, safety review,\nmarketing, release workflow, docs, skills, and tickets.\n\nUse this fixture for generic harness evals that test language, reasoning,\nrouting, escalation, pushback, planning, artifact selection, self-improvement,\nor proof behavior. Respond as the harness agent for this fictional company\nwithout touching real files.\n\n---\n\nSkill under evaluation: interval-update\nSource file: skills/interval-update/SKILL.md\n\nSkill context:\n\n---\nname: interval-update\ndescription: \"Turn one Daily or Weekly evidence window into a first-principles bottleneck review, dated report, sparse highlights, and concrete ticket deltas.\"\ntier: 3\ngroup: harness\nsource: local\ntemplate_uses:\n  skill-template: \"0.2.0\"\n  skill-eval-task: \"0.2.0\"\neval: evals/evals.json\nqa_checklist: qa_checklist.md\nallowed-tools: Read, Glob, Grep, Bash\n\n---\n\n# Interval Update\n\n## Context\n\nUse this skill for one bounded Daily or Weekly control-loop review. The Codex\napp owns cadence; both profiles use the same reasoning and admission quality.\nDaily emphasizes recent movement and outcomes. Weekly adds recurrence, wider\nticket history, resource use, and unresolved proof. Each run identifies the\ndominant bottleneck, distinguishes symptom from root cause, compares coherent\ninterventions, finalizes an immutable report, appends sparse presentation\nhighlights, and only then applies qualified ticket deltas.\n\nInterval does not execute admitted work or maintain a separate strategy store.\nInsufficiently grounded work remains a report candidate for Plan Next Wave.\nWork Pulse owns execution and due experiment check-ins. The weekly\nself-improvement automation owns its portfolio review.\n\nBefore reading work items, load `farplane/bindings.yaml` when present and\nresolve exactly one kanban provider. Provider failure remains a `source_gap`;\nan excluded filesystem board is never a fallback or hidden dedupe source.\n\n## Skill Signature\n\n```text\ninterval_update(project_root, interval_id, review_window, context_refs?,\n                write_policy?, now?, refresh_metrics = false,\n                refresh_scope = \"selected_stale\")\n  -> interval_report\n   + problems\n   + feedback_loop_status\n   + system_gaps\n   + bottleneck_analysis\n   + candidate_interventions\n   + ticket_deltas\n   + highlights {wins[0..1 per team], failures[0..1 per team]}\n   + highlight_receipt\n   + metric_refresh_receipt?\n   + source_gaps\n\nstate:\n  reads(farplane/bindings.yaml?, farplane/harness.yaml?, farplane/metrics.yaml?,\n        .farplane/metrics/**?, configured kanban evidence,\n        .farplane/reports/pulse/**, .farplane/reports/interval/**,\n        completed provider reports supplied through context_refs,\n        review/run artifacts and project memory refs when supplied)\n  writes(.farplane/reports/interval/<interval_id>/<timestamp>.md,\n         .farplane/highlights/wins.jsonl?,\n         .farplane/highlights/failures.jsonl?,\n         qualified ticket deltas through the configured authorized board route)\n\ngates:\n  interval_id in [daily, weekly] or explicit BAU profile;\n  review_window_bound; configured_provider_resolved; report_finalized;\n  report_complete_before_highlight_append; highlight_cap_respected;\n  ticket_deltas_after_highlights; material_problem; executable_intervention;\n  concrete_output_and_proof; active_duplicate_absent; write_authority;\n  largest_coherent_intervention; protected_state_immutable;\n  no_planning_residue; no_execution\n\nroutes:\n  pulse-update | plan-next-wave | feed-scout | review\n\nfails:\n  creating vague planning or low-materiality tickets; splitting one correction\n  into analysis/design/build/proof tickets; rewriting active, review, waiting,\n  or terminal work; bypassing provider or authority gates; treating highlights\n  as planning input; invoking providers; executing admitted work\n```\n\n<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->\n## Todo List\n\n- [ ] 1. Bind one evidence window and provider.\n  - [ ] Read `qa_checklist.md`; resolve `project_root`, `interval_id`,\n        `review_window`, optional `context_refs`, write authority, and metric\n        refresh inputs.\n  - [ ] Run `scripts/resolve_evidence_binding.py --project-root <project_root>`.\n        Obey the selected provider, non-secret coordinates, and\n        `filesystem_ticket_policy`; never infer a second board.\n  - [ ] Use the same review algorithm for Daily and Weekly. Change only the\n        window and evidence coverage described in the reference.\n- [ ] 2. Build the bounded evidence bundle.\n  - [ ] For Daily only when `refresh_metrics = true`, resolve selected/pinned\n        stale metric IDs through `scripts/metric_refresh.py refresh-plan`.\n        Execute each returned refresh group once, record partial readings or\n        source gaps, and write flat observations before synthesis. Weekly and\n        disabled runs execute zero refresh groups.\n  - [ ] Read configured board evidence, metric movement, Pulse/report evidence,\n        outcomes, proof, and the previous finalized Interval report inside the\n        profile's window.\n  - [ ] Read only completed provider reports supplied through `context_refs`.\n        Never invoke a missing provider. Normalize Notion rows immediately and\n        keep raw IDs, URLs, tokens, and payloads out of tracked artifacts.\n  - [ ] If provider access fails, record a `source_gap`. With\n        `filesystem_ticket_policy: exclude`, do not inspect, dedupe, or write\n        `tickets/**`; finish from the remaining evidence.\n- [ ] 3. Run the first-principles review.\n  - [ ] Diagnose the feedback loop as working, proxy-only, human-review-only,\n        or missing instrumentation. Do not optimize from vibes. When feedback\n        is missing, compare a concrete instrumentation/unblock intervention\n        under the same admission predicate as every other candidate.\n  - [ ] Name material improving, flat, worsening, unavailable, and incomparable\n        movement without inventing favorable momentum from source gaps.\n  - [ ] Identify material stalls/regressions and outcome gaps; select the\n        dominant current bottleneck by objective impact rather than activity.\n        Ground every problem/system-gap diagnosis in ticket, progress, metric,\n        feedback, or completed-report evidence.\n  - [ ] Separate observed symptom from root cause, state confidence and ruled-\n        out alternatives, and rebuild the simplest correct path from the\n        objective and constraints.\n  - [ ] Compare coherent interventions by expected compounding effect,\n        recurrence prevention, time to evidence, reversibility, dependencies,\n        and risk. Prefer one largest coherent intervention per root problem.\n- [ ] 4. Finalize the dated report and Problems ledger.\n  - [ ] Use `templates/interval-report.md` under\n        `.farplane/reports/interval/<interval_id>/<timestamp>.md` with Core\n        report frontmatter.\n  - [ ] Record ordinary Markdown problem checkboxes with evidence and optional\n        ticket links; add no finding IDs, frontmatter, or registry.\n  - [ ] Record metric movement, bottleneck/root-cause reasoning, compared\n        interventions, feedback-loop status, blocked systems, admission\n        decisions, and intended ticket deltas. For each actionable finding,\n        record the admitted delta or an explicit no-action reason.\n  - [ ] Finalize the snapshot before any highlight append or board mutation.\n        Carry unresolved prior problems by link; never rewrite prior reports.\n- [ ] 5. Append sparse TASK-0405 highlights.\n  - [ ] Bind a stable project-local team slug and select at most one win and one\n        failure per team for this report; prefer an honest no-op to filler.\n  - [ ] Require explicit comparative numeric evidence for a record, meaningful\n        threshold crossing, or exceptional delta. Routine delivery is not a\n        win. Require consequence/context plus a reusable lesson for a failure.\n  - [ ] Append with `scripts/highlight_ledger.py`; use only win\n        `{team, report, summary, links?}` or failure\n        `{team, report, summary, lesson, links?}`.\n  - [ ] Treat `(kind, team, report)` as identity and `already_exists` as an\n        idempotent no-op. Do not read highlights as correction/planning input or\n        mutate the finalized report.\n- [ ] 6. Apply qualified ticket deltas after highlights.\n  - [ ] Evaluate every candidate independently; there is no numeric ticket cap.\n        Admission requires a material problem AND executable next intervention\n        AND concrete artifact/behavior/experiment-result/outcome plus proof AND\n        no active duplicate, with provider write authority and coherent scope.\n  - [ ] For a known cause/intervention, create a concrete solution ticket or\n        clarify/reprioritize/date a substantially matching `todo` ticket. The\n        ticket itself must state the correction, concrete output, proof or\n        falsifier, and stop condition rather than leaving those only in the\n        report.\n  - [ ] For an uncertain cause/intervention, admit only one decision-changing\n        investigation whose required output is reproduced cause, ruled-out\n        alternatives, selected correction, and proof artifact.\n  - [ ] Reject planning residue, low-materiality chores, vague strategy work,\n        artifact-free work, duplicates, unsafe writes, and incoherent splits.\n        Keep source gaps and insufficient grounding as report candidates.\n  - [ ] Preserve explicit approval gates for spend, publishing, customer\n        contact, account changes, and private-data use. Lack of authority means\n        no mutation even when the intervention is otherwise qualified.\n  - [ ] Never rewrite `active`, `review`, waiting-signal, blocked execution, or\n        terminal ticket contracts. Reject stale `todo` tickets with a reason\n        rather than deleting history; create a replacement only when the\n        qualified intervention needs one.\n  - [ ] Do not start Goal, Pulse, a worker, an experiment, or implementation.\n- [ ] 7. Finish-check and return.\n  - [ ] Reapply `qa_checklist.md` and index the report when the CLI is available.\n  - [ ] Return the provider receipt, source gaps, report path, problems,\n        feedback-loop status, bottleneck, candidate decisions, ticket deltas,\n        blocked systems, missing feedback, highlight receipts, operator-needed\n        items, next Goal/heartbeat owner, and a no-execution receipt.\n  - [ ] Summarize 2-4 findings and every candidate's admission result and reason\n        so the operator can understand the decision without opening the report.\n<!-- END FARPLANE_IMPORTANT_CHECKLIST -->\n\n## Templates\n\n- [templates/interval-report.md](templates/interval-report.md) - shared Daily\n  or Weekly movement-to-bottleneck-to-ticket report.\n\n## Gotchas\n\n- Cadence changes evidence coverage, never decision quality or admission gates.\n- A new same-run problem may be ticketable when its cause/intervention is known\n  and all admission gates pass; novelty does not imply uncertainty.\n- \u201cInvestigate\u201d is ticketable only with the complete decision-changing output,\n  not as permission to think, research generally, or write a plan.\n- Missing feedback is not evidence that a favored intervention works. Treat a\n  qualified instrumentation/unblock ticket as the intervention when it is the\n  fastest path to decision-changing evidence. Name the exact signal, capture\n  artifact, decision the evidence unlocks, stop condition, and systems blocked\n  by the missing feedback; do not return generic \"add instrumentation\" work.\n- Multiple independent material root problems may each produce a ticket. One\n  problem should not produce lifecycle-stage fragments.\n- Provider suggestions are context, not automatically grounded problems.\n- Highlight selection remains presentation judgment after report finalization,\n  not a second Problems ledger, planning memory, or correction mechanism.\n- Ticket reasoning is independent of highlights, not independent of report\n  evidence: every admission or rejection must cite the finalized report's\n  movement, bottleneck, root-cause, intervention, and source-gap evidence.\n- For scenario, eval, or operator decision questions, return the whole compact\n  decision chain even when the final ticket count is obvious:\n  `movement/bottleneck/root cause/interventions -> finalized report ->\n  highlights -> per-candidate admission (including Plan Next Wave boundary) ->\n  no-execution receipt`. State that candidates are evaluated independently,\n  there is no numeric cap or volume-as-momentum claim, and grounded work is not\n  delayed for Plan Next Wave.\n\n## Reference Map\n\n- [BAU interval contract](references/interval-update.md) - Daily/Weekly evidence\n  profiles, first-principles review, admission examples, and carry-forward.\n- [Parent run contract](references/parent-run-contract.md) - caller integration\n  checks; this `SKILL.md` remains runtime authority.\n- [../pulse-update/SKILL.md](../pulse-update/SKILL.md) - owns execution.\n- [../plan-next-wave/SKILL.md](../plan-next-wave/SKILL.md) - owns board refill\n  when Interval evidence remains insufficiently grounded.\n\n## Output\n\n- Never answer an Interval scenario with only a ticket count or disposition.\n  Always state the compact chain: movement/bottleneck/cause/intervention,\n  report finalized, highlight append or honest no-op, then board mutation.\n  Explicitly say qualified ticket count is not momentum and no numeric target\n  exists.\n- One immutable dated Daily or Weekly report with movement, bottleneck,\n  root-cause, intervention comparison, Problems, and ticket-decision evidence.\n- Zero or more independently qualified ticket deltas with no arbitrary cap.\n- Zero or one exceptional win and zero or one lesson-bearing failure per team,\n  appended idempotently after report finalization and before ticket deltas.\n- Source/provider receipts and proof that Interval neither invoked missing\n  providers nor planned in highlights nor executed admitted work."
+  },
+  "run_config": {
+    "harness": "codex",
+    "judge_harness": "codex",
+    "agent_profile": null,
+    "judge_profile": null
+  },
+  "agent": {
+    "returncode": 0,
+    "answer_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-153527-task0406-agentqa-rerun2/tasks/interval_multiple_independent_qualified_interventions/agent_answer.txt"
+  },
+  "behavior_trace": {
+    "schema_version": 1,
+    "created_at": "2026-07-25T15:36:15.215575+00:00",
+    "verdict": "pass",
+    "failures": [],
+    "returncode": 0,
+    "prompt_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-153527-task0406-agentqa-rerun2/tasks/interval_multiple_independent_qualified_interventions/agent_prompt.md",
+    "events_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-153527-task0406-agentqa-rerun2/tasks/interval_multiple_independent_qualified_interventions/events.jsonl",
+    "stdout_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-153527-task0406-agentqa-rerun2/tasks/interval_multiple_independent_qualified_interventions/agent_stdout.log",
+    "stderr_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-153527-task0406-agentqa-rerun2/tasks/interval_multiple_independent_qualified_interventions/agent_stderr.log",
+    "final_output_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-153527-task0406-agentqa-rerun2/tasks/interval_multiple_independent_qualified_interventions/agent_answer.txt",
+    "output_schema_path": "",
+    "schema_validation": {
+      "requested": false,
+      "pass": true,
+      "errors": []
+    },
+    "event_summary": {
+      "thread_id": "019f99eb-4e20-7c50-94cc-cf4686e10f40",
+      "event_count": 4,
+      "agent_message_count": 1,
+      "command_count": 0,
+      "failed_command_count": 0,
+      "commands": [],
+      "usage": {
+        "input_tokens": 34489,
+        "cached_input_tokens": 0,
+        "output_tokens": 138,
+        "reasoning_output_tokens": 42
+      }
+    },
+    "command_requirement_score": {
+      "required": 0,
+      "matched": 0,
+      "results": []
+    },
+    "checkpoint_score": {
+      "total": 0,
+      "done": 0,
+      "skipped": 0,
+      "blocked": 0,
+      "invalid": 0
+    },
+    "artifact_inventory": {
+      "declared": [],
+      "present": [],
+      "missing_or_unsafe": [],
+      "observed_file_delta": {
+        "created": [],
+        "modified": [],
+        "deleted": []
+      }
+    },
+    "behavior_report_detected": false,
+    "final_output_format": "text_or_other_json",
+    "final_report": null,
+    "trace_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-153527-task0406-agentqa-rerun2/tasks/interval_multiple_independent_qualified_interventions/behavior_trace.json"
+  },
+  "judge": {
+    "verdict": "A",
+    "pass": true,
+    "rubric": {
+      "groundedness": "A",
+      "completeness": "A",
+      "usefulness": "A",
+      "repeatability": "A",
+      "length_balance": "A"
+    },
+    "reference_point_results": [
+      {
+        "reference_point": "Evaluates every candidate independently with no numeric ticket cap or target",
+        "met": true,
+        "reason": "Explicitly states independent evaluation and no numeric cap."
+      },
+      {
+        "reference_point": "Admits both independently material coherent interventions",
+        "met": true,
+        "reason": "Admits one coherent ticket for each qualified root problem."
+      },
+      {
+        "reference_point": "Rejects lifecycle-stage fragmentation of one correction",
+        "met": true,
+        "reason": "Explicitly rejects the third idea as lifecycle-stage fragmentation."
+      },
+      {
+        "reference_point": "Does not equate ticket volume with momentum",
+        "met": true,
+        "reason": "Explicitly says ticket volume is not momentum."
+      },
+      {
+        "reference_point": "Records decisions before highlights and board mutation",
+        "met": true,
+        "reason": "Orders report finalization before highlights and ticket deltas."
+      }
+    ],
+    "reason": "Correctly admits two tickets, rejects the fragmented third candidate, and concisely preserves the required ordering and no-cap principles.",
+    "raw": {
+      "verdict": "A",
+      "pass": true,
+      "rubric": {
+        "groundedness": "A",
+        "completeness": "A",
+        "usefulness": "A",
+        "repeatability": "A",
+        "length_balance": "A"
+      },
+      "reference_point_results": [
+        {
+          "reference_point": "Evaluates every candidate independently with no numeric ticket cap or target",
+          "met": true,
+          "reason": "Explicitly states independent evaluation and no numeric cap."
+        },
+        {
+          "reference_point": "Admits both independently material coherent interventions",
+          "met": true,
+          "reason": "Admits one coherent ticket for each qualified root problem."
+        },
+        {
+          "reference_point": "Rejects lifecycle-stage fragmentation of one correction",
+          "met": true,
+          "reason": "Explicitly rejects the third idea as lifecycle-stage fragmentation."
+        },
+        {
+          "reference_point": "Does not equate ticket volume with momentum",
+          "met": true,
+          "reason": "Explicitly says ticket volume is not momentum."
+        },
+        {
+          "reference_point": "Records decisions before highlights and board mutation",
+          "met": true,
+          "reason": "Orders report finalization before highlights and ticket deltas."
+        }
+      ],
+      "reason": "Correctly admits two tickets, rejects the fragmented third candidate, and concisely preserves the required ordering and no-cap principles."
+    },
+    "raw_response": "{\"verdict\":\"A\",\"pass\":true,\"rubric\":{\"groundedness\":\"A\",\"completeness\":\"A\",\"usefulness\":\"A\",\"repeatability\":\"A\",\"length_balance\":\"A\"},\"reference_point_results\":[{\"reference_point\":\"Evaluates every candidate independently with no numeric ticket cap or target\",\"met\":true,\"reason\":\"Explicitly states independent evaluation and no numeric cap.\"},{\"reference_point\":\"Admits both independently material coherent interventions\",\"met\":true,\"reason\":\"Admits one coherent ticket for each qualified root problem.\"},{\"reference_point\":\"Rejects lifecycle-stage fragmentation of one correction\",\"met\":true,\"reason\":\"Explicitly rejects the third idea as lifecycle-stage fragmentation.\"},{\"reference_point\":\"Does not equate ticket volume with momentum\",\"met\":true,\"reason\":\"Explicitly says ticket volume is not momentum.\"},{\"reference_point\":\"Records decisions before highlights and board mutation\",\"met\":true,\"reason\":\"Orders report finalization before highlights and ticket deltas.\"}],\"reason\":\"Correctly admits two tickets, rejects the fragmented third candidate, and concisely preserves the required ordering and no-cap principles.\"}"
+  },
+  "candidate": {
+    "agent": {
+      "returncode": 0,
+      "answer_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-153527-task0406-agentqa-rerun2/tasks/interval_multiple_independent_qualified_interventions/agent_answer.txt"
+    },
+    "judge": {
+      "verdict": "A",
+      "pass": true,
+      "rubric": {
+        "groundedness": "A",
+        "completeness": "A",
+        "usefulness": "A",
+        "repeatability": "A",
+        "length_balance": "A"
+      },
+      "reference_point_results": [
+        {
+          "reference_point": "Evaluates every candidate independently with no numeric ticket cap or target",
+          "met": true,
+          "reason": "Explicitly states independent evaluation and no numeric cap."
+        },
+        {
+          "reference_point": "Admits both independently material coherent interventions",
+          "met": true,
+          "reason": "Admits one coherent ticket for each qualified root problem."
+        },
+        {
+          "reference_point": "Rejects lifecycle-stage fragmentation of one correction",
+          "met": true,
+          "reason": "Explicitly rejects the third idea as lifecycle-stage fragmentation."
+        },
+        {
+          "reference_point": "Does not equate ticket volume with momentum",
+          "met": true,
+          "reason": "Explicitly says ticket volume is not momentum."
+        },
+        {
+          "reference_point": "Records decisions before highlights and board mutation",
+          "met": true,
+          "reason": "Orders report finalization before highlights and ticket deltas."
+        }
+      ],
+      "reason": "Correctly admits two tickets, rejects the fragmented third candidate, and concisely preserves the required ordering and no-cap principles.",
+      "raw": {
+        "verdict": "A",
+        "pass": true,
+        "rubric": {
+          "groundedness": "A",
+          "completeness": "A",
+          "usefulness": "A",
+          "repeatability": "A",
+          "length_balance": "A"
+        },
+        "reference_point_results": [
+          {
+            "reference_point": "Evaluates every candidate independently with no numeric ticket cap or target",
+            "met": true,
+            "reason": "Explicitly states independent evaluation and no numeric cap."
+          },
+          {
+            "reference_point": "Admits both independently material coherent interventions",
+            "met": true,
+            "reason": "Admits one coherent ticket for each qualified root problem."
+          },
+          {
+            "reference_point": "Rejects lifecycle-stage fragmentation of one correction",
+            "met": true,
+            "reason": "Explicitly rejects the third idea as lifecycle-stage fragmentation."
+          },
+          {
+            "reference_point": "Does not equate ticket volume with momentum",
+            "met": true,
+            "reason": "Explicitly says ticket volume is not momentum."
+          },
+          {
+            "reference_point": "Records decisions before highlights and board mutation",
+            "met": true,
+            "reason": "Orders report finalization before highlights and ticket deltas."
+          }
+        ],
+        "reason": "Correctly admits two tickets, rejects the fragmented third candidate, and concisely preserves the required ordering and no-cap principles."
+      },
+      "raw_response": "{\"verdict\":\"A\",\"pass\":true,\"rubric\":{\"groundedness\":\"A\",\"completeness\":\"A\",\"usefulness\":\"A\",\"repeatability\":\"A\",\"length_balance\":\"A\"},\"reference_point_results\":[{\"reference_point\":\"Evaluates every candidate independently with no numeric ticket cap or target\",\"met\":true,\"reason\":\"Explicitly states independent evaluation and no numeric cap.\"},{\"reference_point\":\"Admits both independently material coherent interventions\",\"met\":true,\"reason\":\"Admits one coherent ticket for each qualified root problem.\"},{\"reference_point\":\"Rejects lifecycle-stage fragmentation of one correction\",\"met\":true,\"reason\":\"Explicitly rejects the third idea as lifecycle-stage fragmentation.\"},{\"reference_point\":\"Does not equate ticket volume with momentum\",\"met\":true,\"reason\":\"Explicitly says ticket volume is not momentum.\"},{\"reference_point\":\"Records decisions before highlights and board mutation\",\"met\":true,\"reason\":\"Orders report finalization before highlights and ticket deltas.\"}],\"reason\":\"Correctly admits two tickets, rejects the fragmented third candidate, and concisely preserves the required ordering and no-cap principles.\"}"
+    },
+    "timing": {
+      "duration_ms": 25186,
+      "total_tokens": 70796
+    },
+    "grading": {
+      "assertion_results": [
+        {
+          "text": "Evaluates every candidate independently with no numeric ticket cap or target",
+          "passed": true,
+          "evidence": "Explicitly states independent evaluation and no numeric cap."
+        },
+        {
+          "text": "Admits both independently material coherent interventions",
+          "passed": true,
+          "evidence": "Admits one coherent ticket for each qualified root problem."
+        },
+        {
+          "text": "Rejects lifecycle-stage fragmentation of one correction",
+          "passed": true,
+          "evidence": "Explicitly rejects the third idea as lifecycle-stage fragmentation."
+        },
+        {
+          "text": "Does not equate ticket volume with momentum",
+          "passed": true,
+          "evidence": "Explicitly says ticket volume is not momentum."
+        },
+        {
+          "text": "Records decisions before highlights and board mutation",
+          "passed": true,
+          "evidence": "Orders report finalization before highlights and ticket deltas."
+        }
+      ],
+      "summary": {
+        "passed": 5,
+        "failed": 0,
+        "total": 5,
+        "pass_rate": 1.0
+      },
+      "judge": {
+        "verdict": "A",
+        "pass": true,
+        "reason": "Correctly admits two tickets, rejects the fragmented third candidate, and concisely preserves the required ordering and no-cap principles."
+      }
+    },
+    "artifact_dir": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-153527-task0406-agentqa-rerun2/tasks/interval_multiple_independent_qualified_interventions/candidate",
+    "behavior_trace": {
+      "schema_version": 1,
+      "created_at": "2026-07-25T15:36:15.215575+00:00",
+      "verdict": "pass",
+      "failures": [],
+      "returncode": 0,
+      "prompt_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-153527-task0406-agentqa-rerun2/tasks/interval_multiple_independent_qualified_interventions/agent_prompt.md",
+      "events_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-153527-task0406-agentqa-rerun2/tasks/interval_multiple_independent_qualified_interventions/events.jsonl",
+      "stdout_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-153527-task0406-agentqa-rerun2/tasks/interval_multiple_independent_qualified_interventions/agent_stdout.log",
+      "stderr_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-153527-task0406-agentqa-rerun2/tasks/interval_multiple_independent_qualified_interventions/agent_stderr.log",
+      "final_output_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-153527-task0406-agentqa-rerun2/tasks/interval_multiple_independent_qualified_interventions/agent_answer.txt",
+      "output_schema_path": "",
+      "schema_validation": {
+        "requested": false,
+        "pass": true,
+        "errors": []
+      },
+      "event_summary": {
+        "thread_id": "019f99eb-4e20-7c50-94cc-cf4686e10f40",
+        "event_count": 4,
+        "agent_message_count": 1,
+        "command_count": 0,
+        "failed_command_count": 0,
+        "commands": [],
+        "usage": {
+          "input_tokens": 34489,
+          "cached_input_tokens": 0,
+          "output_tokens": 138,
+          "reasoning_output_tokens": 42
+        }
+      },
+      "command_requirement_score": {
+        "required": 0,
+        "matched": 0,
+        "results": []
+      },
+      "checkpoint_score": {
+        "total": 0,
+        "done": 0,
+        "skipped": 0,
+        "blocked": 0,
+        "invalid": 0
+      },
+      "artifact_inventory": {
+        "declared": [],
+        "present": [],
+        "missing_or_unsafe": [],
+        "observed_file_delta": {
+          "created": [],
+          "modified": [],
+          "deleted": []
+        }
+      },
+      "behavior_report_detected": false,
+      "final_output_format": "text_or_other_json",
+      "final_report": null,
+      "trace_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-153527-task0406-agentqa-rerun2/tasks/interval_multiple_independent_qualified_interventions/behavior_trace.json"
+    }
+  }
+}

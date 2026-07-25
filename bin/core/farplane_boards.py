@@ -28,6 +28,7 @@ class WorkItem:
     phase: str
     status: str
     priority: str
+    due_at: str | None
     labels: tuple[str, ...]
     blocked_by: tuple[str, ...]
     depends_on: tuple[str, ...]
@@ -52,6 +53,7 @@ class WorkItem:
             "phase": self.phase,
             "status": self.status,
             "priority": self.priority,
+            "dueAt": self.due_at,
             "labels": list(self.labels),
             "blockedBy": list(self.blocked_by),
             "dependsOn": list(self.depends_on),
@@ -234,6 +236,11 @@ def normalize_ticket(frontmatter: dict[str, Any], body: str, path: Path) -> Work
         phase=phase,
         status=status,
         priority=str(frontmatter.get("priority") or "medium").strip(),
+        due_at=(
+            str(frontmatter["due_at"]).strip()
+            if frontmatter.get("due_at") is not None
+            else None
+        ),
         labels=normalize_string_list(frontmatter.get("labels")),
         blocked_by=(),
         depends_on=normalize_string_list(frontmatter.get("depends_on")),

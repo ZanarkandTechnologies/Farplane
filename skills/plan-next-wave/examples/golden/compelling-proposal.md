@@ -16,7 +16,7 @@ title: Transform the accepted recovery ablation across social formats
 skill_ref: farplane-content-creation
 area_id: adoption_and_distribution
 arguments:
-  product_bet_ref: autonomous_teams_24_7
+  problem_ref: operational_visibility
   system_ref: SYS-0005
   feature_refs: [FEAT-0008]
   source_or_idea: tickets/TASK-9001/artifacts/accepted-ablation.md
@@ -29,7 +29,7 @@ why_now: the source ablation is accepted and no content transformation exists
 ```
 
 It passes because it chooses an allowed skill at the accepted-proof stage,
-binds one product bet and its system/feature refs, names one finished result
+binds one stable problem and coherent system/feature refs, names one finished result
 and contrast, and leaves the content workflow inside the skill.
 
 ## Tempting negative
@@ -46,7 +46,7 @@ it invents a workflow.
 
 - Select an existing configured skill; never create a work category.
 - Bind its required arguments from cited evidence.
-- Bind outward work to one configured product bet and its canonical system and feature refs.
+- Bind outward work to one configured stable problem and canonical, coherent system and feature refs.
 - Make the artifact and alternative understandable without copying the workflow.
 - Keep objective, authority, falsifier, dedupe, and ranking evidence compact.
 - Store each call once and refer to it by `call_id` after selection.

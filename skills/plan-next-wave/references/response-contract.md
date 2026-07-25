@@ -12,8 +12,8 @@ Return exactly one JSON object:
 ```yaml
 global_query_receipt: {}
 diagnosis:
-  goal_state: {active: [], completed: [], source_gaps: []}
-  objective_progress: []
+  problem_context: []
+  objective_movement: []
   wave_size: 1
   dogfood_role: current_context_only | not_supplied
   hard_guard: {}

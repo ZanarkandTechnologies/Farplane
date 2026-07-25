@@ -1,0 +1,51 @@
+{
+  "schema_version": "1",
+  "ticket_id": "TASK-0406",
+  "verdict": "pass",
+  "required_tas": "TAS-A",
+  "final_receipts": [
+    {
+      "task_id": "interval_duplicate_active_owner_rejected",
+      "judge": "A",
+      "receipt": "20260725-152851-task0406-agentqa/tasks/interval_duplicate_active_owner_rejected.json"
+    },
+    {
+      "task_id": "interval_notion_binding_fails_closed",
+      "judge": "A",
+      "receipt": "20260725-152851-task0406-agentqa/tasks/interval_notion_binding_fails_closed.json"
+    },
+    {
+      "task_id": "interval_vague_low_materiality_and_ungrounded_rejected",
+      "judge": "A",
+      "receipt": "20260725-153310-task0406-agentqa-rerun1/tasks/interval_vague_low_materiality_and_ungrounded_rejected.json"
+    },
+    {
+      "task_id": "interval_highlights_remain_sparse_and_nonplanning",
+      "judge": "A",
+      "receipt": "20260725-153310-task0406-agentqa-rerun1/tasks/interval_highlights_remain_sparse_and_nonplanning.json"
+    },
+    {
+      "task_id": "interval_multiple_independent_qualified_interventions",
+      "judge": "A",
+      "receipt": "20260725-153527-task0406-agentqa-rerun2/tasks/interval_multiple_independent_qualified_interventions.json"
+    },
+    {
+      "task_id": "interval_known_intervention_same_run_ticket",
+      "judge": "A",
+      "receipt": "20260725-153723-task0406-agentqa-rerun3/tasks/interval_known_intervention_same_run_ticket.json"
+    },
+    {
+      "task_id": "interval_missing_feedback_admits_only_concrete_unblock",
+      "judge": "A",
+      "receipt": "20260725-154045-task0406-agentqa-rerun6/tasks/interval_missing_feedback_admits_only_concrete_unblock.json"
+    }
+  ],
+  "superseded_runs_preserved": [
+    "20260725-152851-task0406-agentqa",
+    "20260725-153310-task0406-agentqa-rerun1",
+    "20260725-153527-task0406-agentqa-rerun2",
+    "20260725-153723-task0406-agentqa-rerun3",
+    "20260725-153854-task0406-agentqa-rerun4",
+    "20260725-153948-task0406-agentqa-rerun5"
+  ]
+}

@@ -147,11 +147,25 @@ status = "active"
 prompt = '''
 Use $interval-update.
 
-Run the daily BAU review for the last 24 hours. Write a dated report with the
-incremental Problems ledger and bounded candidate interventions for unresolved
-current or prior evidence. You may create one evidence-backed direct recovery ticket with
-known fix and no experiment debt. Do not plan new direction, review harness
-experiments, mutate rewards, or execute tickets.
+Run the shared first-principles BAU review over the last 24 hours. Read metric
+movement and outcomes, identify material stalls or regressions, select the
+dominant bottleneck, separate symptom from root cause, rebuild the simplest
+correct path from the objective, and compare the largest coherent compounding
+interventions. Diagnose feedback-loop status; when instrumentation is missing,
+compare a concrete evidence-capture unblock instead of optimizing from vibes.
+Ground every problem/system gap in ticket, progress, metric, feedback, or
+completed-report evidence. Finalize the dated report first, append sparse highlights
+second, then apply every independently qualified ticket delta through the
+configured authorized board route.
+
+Known grounded interventions become concrete solution tickets or mutable todo
+updates in this run. Admit uncertain work only when the investigation must
+reproduce the cause, rule out alternatives, select the correction, and preserve
+a proof artifact. Reject low-materiality, vague, duplicate, artifact-free,
+planning-only, authority-unsafe, or protected-state rewrites. Apply no numeric
+ticket cap. Preserve spend, publishing, customer-contact, account-change, and
+private-data gates. Do not review harness experiments, mutate rewards, or
+execute work.
 
 Params:
 project_root = "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane"
@@ -159,8 +173,7 @@ interval_id = "daily"
 review_window = "last_24h"
 refresh_metrics = true
 refresh_scope = "selected_stale"
-maintenance_ticket_limit = 1
-write_policy = "local recovery tickets only; no new direction or experiment tickets"
+write_policy = "report, sparse highlights, then qualified ticket deltas through the configured authorized provider; no execution"
 timezone = "Asia/Kuala_Lumpur"
 
 Reads:
@@ -170,12 +183,17 @@ Reads:
 Final response:
 - Link the report path and summarize the report in 2-4 bullets.
 - List tickets created or updated, or `none`.
-- List each maintenance candidate/admission decision with the reason: `created`,
-  `updated`, `already_owned`, `planner_candidate`, `source_gap`,
-  `same_run_ledger`, `blocked_by_gate`, or `not_ticketable`.
+- Name what changed and why, feedback-loop status, the dominant bottleneck,
+  root-cause confidence, blocked systems, and missing feedback.
+- List each candidate intervention and ticket delta with the reason: `created`,
+  `updated_todo`, `rejected_todo`, `investigation`, `duplicate`,
+  `planner_candidate`, `low_materiality`, `planning_residue`, `source_gap`,
+  `blocked_by_authority`, or `not_ticketable`.
 - Name operator-needed items, source gaps, and next owner.
-- Include the no-execution receipt: no new direction, no harness experiments,
-  no rewards mutation, and no ticket execution.
+- Name the next native Goal/heartbeat owner without starting it.
+- Include report-before-highlights-before-ticket-deltas and no-execution
+  receipts: no harness experiment review, rewards mutation, Goal, Pulse,
+  worker, or ticket execution.
 
 Config source:
 farplane/automations.toml automation id="farplane-daily-interval"
@@ -195,18 +213,33 @@ status = "active"
 prompt = '''
 Use $interval-update.
 
-Run the weekly BAU review. Summarize the completed daily reports and ticket
-evidence into a dated report with the incremental Problems ledger and bounded
-candidate interventions. You may create up to two evidence-backed direct
-recovery tickets with known fixes and no experiment debt. Do not plan new
-direction, review harness experiments, mutate rewards, or execute tickets.
+Run the shared first-principles BAU review over the last week. Read metric
+movement, completed Daily reports, wider ticket outcomes, recurrence, resource
+use, and pending proof; identify material stalls or regressions, select the
+dominant bottleneck, separate symptom from root cause, rebuild the simplest
+correct path from the objective, and compare the largest coherent compounding
+interventions. Diagnose feedback-loop status; when instrumentation is missing,
+compare a concrete evidence-capture unblock instead of optimizing from vibes.
+Ground every problem/system gap in ticket, progress, metric, feedback, or
+completed-report evidence. Finalize the dated report first, append sparse highlights
+second, then apply every independently qualified ticket delta through the
+configured authorized board route.
+
+Known grounded interventions become concrete solution tickets or mutable todo
+updates in this run. Admit uncertain work only when the investigation must
+reproduce the cause, rule out alternatives, select the correction, and preserve
+a proof artifact. Reject low-materiality, vague, duplicate, artifact-free,
+planning-only, authority-unsafe, or protected-state rewrites. Apply no numeric
+ticket cap. Preserve spend, publishing, customer-contact, account-change, and
+private-data gates. Do not review harness experiments, mutate rewards, or
+execute work.
 
 Params:
 project_root = "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane"
 interval_id = "weekly"
 review_window = "last_week"
-maintenance_ticket_limit = 2
-write_policy = "local recovery tickets only; no new direction or experiment tickets"
+refresh_metrics = false
+write_policy = "report, sparse highlights, then qualified ticket deltas through the configured authorized provider; no execution"
 timezone = "Asia/Kuala_Lumpur"
 
 Reads:
@@ -216,12 +249,17 @@ Reads:
 Final response:
 - Link the report path and summarize the weekly pattern in 2-4 bullets.
 - List tickets created or updated, or `none`.
-- List each maintenance candidate/admission decision with the reason: `created`,
-  `updated`, `already_owned`, `planner_candidate`, `source_gap`,
-  `same_run_ledger`, `blocked_by_gate`, or `not_ticketable`.
+- Name what changed and why, feedback-loop status, the dominant bottleneck,
+  root-cause confidence, blocked systems, and missing feedback.
+- List each candidate intervention and ticket delta with the reason: `created`,
+  `updated_todo`, `rejected_todo`, `investigation`, `duplicate`,
+  `planner_candidate`, `low_materiality`, `planning_residue`, `source_gap`,
+  `blocked_by_authority`, or `not_ticketable`.
 - Name operator-needed items, source gaps, and next owner.
-- Include the no-execution receipt: no new direction, no harness experiments,
-  no rewards mutation, and no ticket execution.
+- Name the next native Goal/heartbeat owner without starting it.
+- Include report-before-highlights-before-ticket-deltas and no-execution
+  receipts: no harness experiment review, rewards mutation, Goal, Pulse,
+  worker, or ticket execution.
 
 Config source:
 farplane/automations.toml automation id="farplane-weekly-interval"

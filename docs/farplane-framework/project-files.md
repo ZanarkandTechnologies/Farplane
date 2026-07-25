@@ -147,11 +147,19 @@ one inline `refresh`, but never both. The Daily Interval agent resolves stale
 selected metrics into unique groups, executes each prompt once, and stores
 separate flat observations.
 
-Canonical reusable metric semantics. Each definition owns its stable ID,
-label, description, unit, display behavior, direction, freshness, pinned state,
-and optional hard-guard operator/threshold. `harness.yaml` selects active
-objectives/guards and owns objective priority. Unselected non-guard metrics are
-tracked observations, not ordinary planner context.
+Canonical reusable metric semantics. Each quantitative definition owns its
+stable ID, label, description, unit, display behavior, required direction
+(`maximize` or `minimize`), freshness, pinned state, and optional hard-guard
+operator/threshold. `harness.yaml` selects active objectives/guards and owns
+objective priority. Unselected non-guard metrics are tracked observations, not
+ordinary planner context.
+
+Raw observations remain canonical runtime evidence. Core derives raw delta,
+elapsed time, raw velocity, direction-normalized progress delta/velocity, and
+improving/flat/worsening momentum from consecutive available observations for
+metric cards and Interval review. Do not author duplicate "growth" or
+"momentum" metric definitions when the movement can be derived from a metric's
+direction and raw observations.
 
 Metric observations remain generated runtime evidence under `.farplane/`; this
 tracked file defines what the observations mean, not their current values.

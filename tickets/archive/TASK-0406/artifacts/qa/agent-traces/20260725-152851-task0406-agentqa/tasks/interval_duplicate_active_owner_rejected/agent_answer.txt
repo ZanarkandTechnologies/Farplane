@@ -1,0 +1,1 @@
+No ticket delta is allowed. Treat the active ticket as the duplicate owner, link it in the Daily report, and record the candidate as rejected: `active_duplicate_present`. Do not rename, rewrite, reprioritize, or create a replacement ticket. Interval executes nothing.

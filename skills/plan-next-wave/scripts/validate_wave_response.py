@@ -6,10 +6,18 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import sys
 from pathlib import Path
 from typing import Any
 
 import yaml
+
+
+CORE_DIR = Path(__file__).resolve().parents[3] / "bin" / "core"
+if str(CORE_DIR) not in sys.path:
+    sys.path.insert(0, str(CORE_DIR))
+
+from farplane_ticket_reward import is_timezone_bearing_iso_datetime
 
 
 ROOT_FIELDS = {
@@ -123,6 +131,20 @@ def feature_system_ids(path: Path) -> dict[str, str]:
         if isinstance(feature_ref, str) and isinstance(system_ref, str):
             bindings[feature_ref] = system_ref
     return bindings
+
+
+def registry_ids(path: Path) -> set[str]:
+    ids: set[str] = set()
+    if not path.exists():
+        return ids
+    for line in path.read_text(encoding="utf-8").splitlines():
+        try:
+            row = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        if isinstance(row, dict) and nonempty(row.get("id")):
+            ids.add(str(row["id"]).strip())
+    return ids
 
 
 def public_signature_arguments(path: Path) -> set[str]:
@@ -249,7 +271,9 @@ def validate_call(
     call: Any,
     index: int,
     allowed_refs: set[str],
-    product_bets: list[dict[str, Any]],
+    problem_ids: set[str],
+    system_ids: set[str],
+    feature_ids: set[str],
     feature_systems: dict[str, str],
     project_root: Path,
     errors: list[str],
@@ -287,42 +311,39 @@ def validate_call(
             if not concretely_bound(arguments[name]):
                 errors.append(f"{prefix}.arguments.{name} must be concretely bound")
 
-    strategic_names = {"product_bet_ref", "system_ref", "feature_refs"}
+    strategic_names = {"problem_ref", "system_ref", "feature_refs"}
     if strategic_names & set(arguments):
         if not strategic_names <= set(arguments):
             missing_strategic = sorted(strategic_names - set(arguments))
             errors.append(f"{prefix}.arguments is missing strategic refs: {', '.join(missing_strategic)}")
         else:
-            product_bet_ref = arguments.get("product_bet_ref")
+            problem_ref = arguments.get("problem_ref")
             system_ref = arguments.get("system_ref")
             feature_refs = arguments.get("feature_refs")
+            if problem_ref not in problem_ids:
+                errors.append(f"{prefix}.arguments.problem_ref must name a configured stable problem")
+            if system_ref not in system_ids:
+                errors.append(f"{prefix}.arguments.system_ref must name a canonical system")
             if not isinstance(feature_refs, list) or not feature_refs or not all(
                 isinstance(ref, str) and ref.strip() for ref in feature_refs
             ):
                 errors.append(f"{prefix}.arguments.feature_refs must be a non-empty list of refs")
             else:
-                matching_bets = [bet for bet in product_bets if bet.get("id") == product_bet_ref]
-                if not matching_bets:
-                    errors.append(f"{prefix}.arguments.product_bet_ref must name a configured product bet")
-                else:
-                    bet = matching_bets[0]
-                    if system_ref not in (bet.get("system_refs") or []):
-                        errors.append(f"{prefix}.arguments.system_ref must belong to the configured product bet")
-                    unknown_features = sorted(set(feature_refs) - set(bet.get("feature_refs") or []))
-                    if unknown_features:
-                        errors.append(
-                            f"{prefix}.arguments.feature_refs must belong to the configured product bet: "
-                            + ", ".join(unknown_features)
-                        )
-                    incoherent_features = sorted(
-                        ref for ref in feature_refs
-                        if feature_systems.get(ref) and feature_systems[ref] != system_ref
+                unknown_features = sorted(set(feature_refs) - feature_ids)
+                if unknown_features:
+                    errors.append(
+                        f"{prefix}.arguments.feature_refs must name canonical features: "
+                        + ", ".join(unknown_features)
                     )
-                    if incoherent_features:
-                        errors.append(
-                            f"{prefix}.arguments.feature_refs must belong to system_ref: "
-                            + ", ".join(incoherent_features)
-                        )
+                incoherent_features = sorted(
+                    ref for ref in feature_refs
+                    if feature_systems.get(ref) and feature_systems[ref] != system_ref
+                )
+                if incoherent_features:
+                    errors.append(
+                        f"{prefix}.arguments.feature_refs must belong to system_ref: "
+                        + ", ".join(incoherent_features)
+                    )
 
     evidence = row.get("evidence_refs")
     if not isinstance(evidence, list) or not evidence or not all(nonempty(ref) for ref in evidence):
@@ -331,7 +352,11 @@ def validate_call(
     validate_objective(row.get("objective_contribution"), f"{prefix}.objective_contribution", errors)
 
     lifecycle = require_object_fields(
-        row.get("lifecycle"), {"status", "depends_on", "human_gate"}, f"{prefix}.lifecycle", errors
+        row.get("lifecycle"),
+        {"status", "depends_on", "human_gate"},
+        f"{prefix}.lifecycle",
+        errors,
+        optional={"due_at"},
     )
     if lifecycle.get("status") != "todo":
         errors.append(f"{prefix}.lifecycle.status must be todo")
@@ -342,6 +367,8 @@ def validate_call(
         isinstance(gate, list) and len(gate) == 2 and all(nonempty(item) for item in gate)
     ):
         errors.append(f"{prefix}.lifecycle.human_gate must be none or [tag, reason]")
+    if "due_at" in lifecycle and not is_timezone_bearing_iso_datetime(lifecycle["due_at"]):
+        errors.append(f"{prefix}.lifecycle.due_at must be a timezone-bearing ISO-8601 timestamp")
 
     proof = require_object_fields(row.get("proof"), {"success", "falsifier"}, f"{prefix}.proof", errors)
     require_nonempty_fields(proof, {"success", "falsifier"}, f"{prefix}.proof", errors)
@@ -384,17 +411,22 @@ def validate_wave_response(payload: Any, project_root: Path | None = None) -> li
             raise ValueError("farplane/harness.yaml#planning.skill_refs must be a list of skill refs")
         allowed_refs = {str(ref).strip() for ref in configured}
         identity = harness.get("identity") if isinstance(harness.get("identity"), dict) else {}
-        raw_product_bets = identity.get("product_bets")
-        product_bets = (
-            [row for row in raw_product_bets if isinstance(row, dict)]
-            if isinstance(raw_product_bets, list)
-            else []
-        )
-        feature_systems = feature_system_ids(project_root / "docs" / "features" / "registry.jsonl")
+        raw_problems = identity.get("problems")
+        problem_ids = {
+            str(row["id"]).strip()
+            for row in raw_problems if isinstance(row, dict) and nonempty(row.get("id"))
+        } if isinstance(raw_problems, list) else set()
+        systems_registry = project_root / "docs" / "systems" / "registry.jsonl"
+        features_registry = project_root / "docs" / "features" / "registry.jsonl"
+        system_ids = registry_ids(systems_registry)
+        feature_ids = registry_ids(features_registry)
+        feature_systems = feature_system_ids(features_registry)
     except (OSError, ValueError, yaml.YAMLError) as exc:
         errors.append(f"cannot resolve planner skill allowlist: {exc}")
         allowed_refs = set()
-        product_bets = []
+        problem_ids = set()
+        system_ids = set()
+        feature_ids = set()
         feature_systems = {}
 
     for skill_ref in sorted(allowed_refs):
@@ -411,18 +443,14 @@ def validate_wave_response(payload: Any, project_root: Path | None = None) -> li
 
     diagnosis = require_object_fields(
         payload.get("diagnosis"),
-        {"goal_state", "objective_progress", "wave_size", "dogfood_role", "hard_guard"},
+        {"problem_context", "objective_movement", "wave_size", "dogfood_role", "hard_guard"},
         "diagnosis",
         errors,
     )
-    goal_state = require_object_fields(
-        diagnosis.get("goal_state"), {"active", "completed", "source_gaps"}, "diagnosis.goal_state", errors
-    )
-    for field in ("active", "completed", "source_gaps"):
-        if not isinstance(goal_state.get(field), list):
-            errors.append(f"diagnosis.goal_state.{field} must be a list")
-    if not isinstance(diagnosis.get("objective_progress"), list):
-        errors.append("diagnosis.objective_progress must be a list")
+    if not isinstance(diagnosis.get("problem_context"), list):
+        errors.append("diagnosis.problem_context must be a list")
+    if not isinstance(diagnosis.get("objective_movement"), list):
+        errors.append("diagnosis.objective_movement must be a list")
     wave_size = diagnosis.get("wave_size")
     if isinstance(wave_size, bool) or not isinstance(wave_size, int) or wave_size < 0:
         errors.append("diagnosis.wave_size must be a non-negative integer")
@@ -437,7 +465,10 @@ def validate_wave_response(payload: Any, project_root: Path | None = None) -> li
         errors.append("proposed_skill_calls must be a list")
         calls = []
     for index, call in enumerate(calls):
-        validate_call(call, index, allowed_refs, product_bets, feature_systems, project_root, errors)
+        validate_call(
+            call, index, allowed_refs, problem_ids, system_ids, feature_ids,
+            feature_systems, project_root, errors
+        )
 
     call_ids = [str(call.get("call_id") or "").strip() for call in calls if isinstance(call, dict)]
     if len(call_ids) != len(set(call_ids)):

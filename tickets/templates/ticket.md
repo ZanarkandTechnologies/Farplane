@@ -1,6 +1,6 @@
 ---
 template_id: ticket-template
-template_version: "0.2.4"
+template_version: "0.2.5"
 feature_refs:
   - FEAT-0007
   - FEAT-0008
@@ -13,8 +13,9 @@ updated_at: 2026-04-03T00:00:00Z
 
 # TASK-XXXX: title
 
-<!-- Sparse optional routing fields: priority, claimed_by, depends_on, human_gate, compute_target. -->
+<!-- Sparse optional routing fields: priority, due_at, claimed_by, depends_on, human_gate, compute_target. -->
 <!-- `claimed_by` is present only while status=active. Absent priority means medium. -->
+<!-- Delivery deadline shape: due_at: 2026-04-10T17:00:00+08:00 (timezone required). -->
 <!-- Human gate shape: human_gate: [post, "reason the final action needs Kenji"] -->
 
 ## Summary

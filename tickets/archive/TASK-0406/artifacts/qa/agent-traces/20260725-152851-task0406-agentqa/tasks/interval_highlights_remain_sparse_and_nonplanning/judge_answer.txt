@@ -1,0 +1,39 @@
+{
+  "verdict": "B",
+  "pass": false,
+  "rubric": {
+    "groundedness": "B",
+    "completeness": "A",
+    "usefulness": "B",
+    "repeatability": "A",
+    "length_balance": "A"
+  },
+  "reference_point_results": [
+    {
+      "reference_point": "Finalizes the report before highlight selection and ticket deltas",
+      "met": true,
+      "reason": "The answer states the report is finalized first and ticket reasoning follows highlights."
+    },
+    {
+      "reference_point": "Rejects routine shipping and requires comparative numeric win evidence",
+      "met": true,
+      "reason": "It rejects the ordinary page and selects the verified 61%-to-84% record."
+    },
+    {
+      "reference_point": "Requires a reusable lesson for the failure",
+      "met": true,
+      "reason": "The selected failure explicitly includes consequence and a reusable lesson."
+    },
+    {
+      "reference_point": "Uses minimal rows and idempotent already_exists behavior",
+      "met": true,
+      "reason": "It selects at most one row per kind and correctly explains kind-specific idempotency."
+    },
+    {
+      "reference_point": "Does not use highlights as planning or admission evidence",
+      "met": true,
+      "reason": "It explicitly says highlights do not influence planning."
+    }
+  ],
+  "reason": "Near-complete, but the claim that ticket reasoning runs independently from report evidence is misleading: it should run independently from highlights while remaining grounded in finalized report evidence."
+}

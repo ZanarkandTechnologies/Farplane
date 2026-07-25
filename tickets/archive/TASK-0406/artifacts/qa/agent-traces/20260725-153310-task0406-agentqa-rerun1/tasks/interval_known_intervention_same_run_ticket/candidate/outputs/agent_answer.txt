@@ -1,0 +1,12 @@
+The Daily Interval:
+
+1. Records the worsening acceptance metric and identifies the parser branch as the dominant bottleneck and reproduced root cause.
+2. Compares the coherent parser correction against alternatives such as instrumentation-only or broad investigation; rejects those because the cause and fix are already known.
+3. Finalizes the immutable dated report with evidence, regression artifact, stop condition, and intended ticket delta.
+4. Appends at most one qualifying highlight per team—or no highlight—without using highlights for planning.
+5. Creates one concrete solution ticket through the authorized filesystem route. It covers correction plus regression proof as one coherent intervention, not separate analysis/build/test tickets.
+6. Does not defer the grounded work to Plan Next Wave and does not execute the fix, start Goal/Pulse, or launch a worker.
+
+Candidate decision: **admit**—the problem is material, the intervention is executable, output and proof are concrete, no duplicate exists, and write authority is present. Candidates are evaluated independently; there is no numeric ticket cap.
+
+No-execution receipt: ticket created only; implementation remains for the execution owner.

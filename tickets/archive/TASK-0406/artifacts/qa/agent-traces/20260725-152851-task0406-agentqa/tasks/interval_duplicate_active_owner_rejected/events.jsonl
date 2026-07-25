@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"019f99e5-9f0a-7cf2-a472-8b57514f5a76"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"No ticket delta is allowed. Treat the active ticket as the duplicate owner, link it in the Daily report, and record the candidate as rejected: `active_duplicate_present`. Do not rename, rewrite, reprioritize, or create a replacement ticket. Interval executes nothing."}}
+{"type":"turn.completed","usage":{"input_tokens":34195,"cached_input_tokens":0,"output_tokens":58,"reasoning_output_tokens":0}}

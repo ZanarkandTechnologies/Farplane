@@ -1,0 +1,40 @@
+{
+  "assertion_results": [
+    {
+      "text": "Finalizes the report before highlight selection and ticket deltas",
+      "passed": true,
+      "evidence": "States the finalized report is immutable and performs highlight handling before independent ticket reasoning."
+    },
+    {
+      "text": "Rejects routine shipping and requires comparative numeric win evidence",
+      "passed": true,
+      "evidence": "Rejects the ordinary shipped page and admits the verified 61%-to-84% record."
+    },
+    {
+      "text": "Requires a reusable lesson for the failure",
+      "passed": true,
+      "evidence": "Conditions failure admission on consequence and a reusable lesson."
+    },
+    {
+      "text": "Uses minimal rows and idempotent already_exists behavior",
+      "passed": true,
+      "evidence": "Selects at most the single qualifying win and failure and explains identity-based already_exists no-op behavior."
+    },
+    {
+      "text": "Does not use highlights as planning or admission evidence",
+      "passed": true,
+      "evidence": "Explicitly bases ticket admission on finalized report evidence rather than highlights."
+    }
+  ],
+  "summary": {
+    "passed": 5,
+    "failed": 0,
+    "total": 5,
+    "pass_rate": 1.0
+  },
+  "judge": {
+    "verdict": "A",
+    "pass": true,
+    "reason": "The answer gives the complete ordered decision chain, applies sparse and idempotent highlight rules correctly, and keeps ticket admission independent from highlight presentation."
+  }
+}

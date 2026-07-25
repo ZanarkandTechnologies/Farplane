@@ -1,0 +1,88 @@
+{
+  "schema_version": 2,
+  "job_id": "20260725-153310-task0406-agentqa-rerun1",
+  "label": "task0406-agentqa-rerun1",
+  "created_at": "2026-07-25T15:33:10.666891+00:00",
+  "completed_at": "2026-07-25T15:35:14.356618+00:00",
+  "harness": "codex",
+  "judge_harness": "codex",
+  "scopes": [
+    "skills"
+  ],
+  "default_context_file": "contexts/agi-toy-shop.md",
+  "skill_context": "inline",
+  "compare_baseline": false,
+  "behavior_trace": true,
+  "task_files": [
+    "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/skills/interval-update/evals/evals.json"
+  ],
+  "task_count": 4,
+  "pass_rate": 0.5,
+  "verdict_counts": {
+    "B": 1,
+    "C": 1,
+    "A": 2
+  },
+  "tasks": [
+    {
+      "task_id": "interval_known_intervention_same_run_ticket",
+      "title": "Known intervention becomes a same-run solution ticket",
+      "verdict": "B",
+      "pass": false,
+      "reason": "Strong and correctly sequenced, but the concrete ticket description should explicitly include the known stop condition.",
+      "candidate_metrics": {
+        "duration_ms": 30756,
+        "total_tokens": 70988
+      },
+      "behavior_verdict": "pass",
+      "behavior_trace_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-153310-task0406-agentqa-rerun1/tasks/interval_known_intervention_same_run_ticket/behavior_trace.json",
+      "detail_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-153310-task0406-agentqa-rerun1/tasks/interval_known_intervention_same_run_ticket.json"
+    },
+    {
+      "task_id": "interval_multiple_independent_qualified_interventions",
+      "title": "No cap suppresses multiple qualified root-problem interventions",
+      "verdict": "C",
+      "pass": false,
+      "reason": "The ticket count and fragmentation decision are correct, but the answer omits two required safeguards and the compact decision-chain ordering mandated by the skill.",
+      "candidate_metrics": {
+        "duration_ms": 24784,
+        "total_tokens": 70542
+      },
+      "behavior_verdict": "pass",
+      "behavior_trace_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-153310-task0406-agentqa-rerun1/tasks/interval_multiple_independent_qualified_interventions/behavior_trace.json",
+      "detail_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-153310-task0406-agentqa-rerun1/tasks/interval_multiple_independent_qualified_interventions.json"
+    },
+    {
+      "task_id": "interval_vague_low_materiality_and_ungrounded_rejected",
+      "title": "Vague, trivial, planning-only, and ungrounded work stays out",
+      "verdict": "A",
+      "pass": true,
+      "reason": "The answer correctly admits no tickets, explains every candidate decision, preserves the ungrounded material symptom for planning, and includes report-first, no-highlight-filler, and no-execution boundaries.",
+      "candidate_metrics": {
+        "duration_ms": 29054,
+        "total_tokens": 70851
+      },
+      "behavior_verdict": "pass",
+      "behavior_trace_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-153310-task0406-agentqa-rerun1/tasks/interval_vague_low_materiality_and_ungrounded_rejected/behavior_trace.json",
+      "detail_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-153310-task0406-agentqa-rerun1/tasks/interval_vague_low_materiality_and_ungrounded_rejected.json"
+    },
+    {
+      "task_id": "interval_highlights_remain_sparse_and_nonplanning",
+      "title": "TASK-0405 highlight contract survives consolidated review",
+      "verdict": "A",
+      "pass": true,
+      "reason": "The answer gives the complete ordered decision chain, applies sparse and idempotent highlight rules correctly, and keeps ticket admission independent from highlight presentation.",
+      "candidate_metrics": {
+        "duration_ms": 31292,
+        "total_tokens": 70994
+      },
+      "behavior_verdict": "pass",
+      "behavior_trace_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-153310-task0406-agentqa-rerun1/tasks/interval_highlights_remain_sparse_and_nonplanning/behavior_trace.json",
+      "detail_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-153310-task0406-agentqa-rerun1/tasks/interval_highlights_remain_sparse_and_nonplanning.json"
+    }
+  ],
+  "behavior_verdict_counts": {
+    "pass": 4
+  },
+  "benchmark_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-153310-task0406-agentqa-rerun1/benchmark.json"
+}

@@ -1,0 +1,40 @@
+{
+  "assertion_results": [
+    {
+      "text": "Runs the full movement-to-bottleneck review and records the known cause and coherent correction",
+      "passed": false,
+      "evidence": "Records the regression and cause, but omits the full review and intervention comparison."
+    },
+    {
+      "text": "Finalizes the dated report before highlight selection and applies the ticket delta only after highlights",
+      "passed": true,
+      "evidence": "States the required report, highlights, then ticket sequence."
+    },
+    {
+      "text": "Creates one concrete solution ticket in the same run with correction, proof, and stop condition",
+      "passed": true,
+      "evidence": "Specifies one unsplit solution ticket containing correction, regression proof, and stop condition."
+    },
+    {
+      "text": "Does not delay grounded work for Plan Next Wave",
+      "passed": false,
+      "evidence": "Does not explicitly distinguish this grounded admission from Plan Next Wave routing."
+    },
+    {
+      "text": "Does not execute the ticket or start Goal, Pulse, or a worker",
+      "passed": true,
+      "evidence": "Explicitly says Interval does not implement or start the ticket."
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 2,
+    "total": 5,
+    "pass_rate": 0.6
+  },
+  "judge": {
+    "verdict": "B",
+    "pass": false,
+    "reason": "Correct core outcome and ordering, but it omits the complete movement-to-bottleneck review and explicit no-delay Plan Next Wave decision."
+  }
+}

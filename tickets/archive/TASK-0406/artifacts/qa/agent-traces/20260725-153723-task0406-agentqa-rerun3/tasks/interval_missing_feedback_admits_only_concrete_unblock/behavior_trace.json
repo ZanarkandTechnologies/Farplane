@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-07-25T15:38:16.565687+00:00",
+  "verdict": "pass",
+  "failures": [],
+  "returncode": 0,
+  "prompt_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-153723-task0406-agentqa-rerun3/tasks/interval_missing_feedback_admits_only_concrete_unblock/agent_prompt.md",
+  "events_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-153723-task0406-agentqa-rerun3/tasks/interval_missing_feedback_admits_only_concrete_unblock/events.jsonl",
+  "stdout_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-153723-task0406-agentqa-rerun3/tasks/interval_missing_feedback_admits_only_concrete_unblock/agent_stdout.log",
+  "stderr_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-153723-task0406-agentqa-rerun3/tasks/interval_missing_feedback_admits_only_concrete_unblock/agent_stderr.log",
+  "final_output_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-153723-task0406-agentqa-rerun3/tasks/interval_missing_feedback_admits_only_concrete_unblock/agent_answer.txt",
+  "output_schema_path": "",
+  "schema_validation": {
+    "requested": false,
+    "pass": true,
+    "errors": []
+  },
+  "event_summary": {
+    "thread_id": "019f99ed-15c1-7030-97ed-de5f009d4a3e",
+    "event_count": 5,
+    "agent_message_count": 2,
+    "command_count": 0,
+    "failed_command_count": 0,
+    "commands": [],
+    "usage": {
+      "input_tokens": 34604,
+      "cached_input_tokens": 0,
+      "output_tokens": 515,
+      "reasoning_output_tokens": 277
+    }
+  },
+  "command_requirement_score": {
+    "required": 0,
+    "matched": 0,
+    "results": []
+  },
+  "checkpoint_score": {
+    "total": 0,
+    "done": 0,
+    "skipped": 0,
+    "blocked": 0,
+    "invalid": 0
+  },
+  "artifact_inventory": {
+    "declared": [],
+    "present": [],
+    "missing_or_unsafe": [],
+    "observed_file_delta": {
+      "created": [],
+      "modified": [
+        "tickets/TASK-0408/artifacts/qa/evidence-review.json"
+      ],
+      "deleted": []
+    }
+  },
+  "behavior_report_detected": false,
+  "final_output_format": "text_or_other_json",
+  "final_report": null
+}

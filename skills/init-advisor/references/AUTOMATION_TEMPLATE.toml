@@ -181,35 +181,24 @@ status = "paused"
 prompt = '''
 Use $dogfood-review.
 
-Review active experiment Goal Packets, recent archived experiment Goal Packets,
-the previous Dogfood report, Core ticket-history Reward outcomes, pending
-check-ins, harness-health metrics, and tracked feature/system evidence. Write
-the dated portfolio report first. Then use the shared next-wave planner with
-`reserved_area:self_improvement` to target five complete experiment specs and
-send admitted specs to Pulse's bounded materialization route. Pulse alone
-writes the tickets. Do not execute, dispatch, decide Reward, or run check-ins.
-Load the complete `harness.areas.self_improvement` record and apply
-`harness.areas.self_improvement.planner_instruction` as the canonical
-candidate-generation policy; do not replace it with automation-local area
-instructions.
-Create fewer than five only when a named hard gate rejects the remaining slots,
-and record the exact shortfall reason. A direct recovery ticket may occupy at
-most one of the five slots when the failure is settled, attributable, has a
-known fix, and carries no experiment debt; it is never a sixth ticket.
+Bind a cutoff, page through all exact `self_improvement` admission receipts in
+the interval, include every still-live earlier packet, and read ticket Reward,
+check-in, progress, artifact, and review evidence. Write one dated checkpoint
+with the complete outcome ledger, live work, source gaps, portfolio-selection
+lessons, and qualified/deprioritized opportunity signals. Expose only the
+report as `planner_context_ref` for normal global planning. Do not create specs
+or tickets, reserve a wave, materialize, execute, dispatch, decide Reward, run
+check-ins, or mutate skills/policy.
 
 Params:
 project_root = "<project-root>"
 window = "last_week"
-weekly_ticket_target = 5
-recovery_ticket_limit = 1
-planning_scope = "reserved_area:self_improvement"
-max_concurrent_live_delayed = 5
-one_active_per_attributable_surface = true
-write_policy = "Pulse materialization only after the dated report"
+planning_scope = "report_only_current_context"
+write_policy = "dated Dogfood checkpoint only"
 
 Reads:
-- active experiment Goal Packets
-- recent archived experiment Goal Packets
+- all exact self_improvement admission receipts through cutoff
+- every still-live earlier self_improvement packet
 - previous dated Dogfood report when present
 - farplane/harness.yaml areas.self_improvement complete record and planner_instruction
 - Core active/archive ticket history with expected and actual Reward

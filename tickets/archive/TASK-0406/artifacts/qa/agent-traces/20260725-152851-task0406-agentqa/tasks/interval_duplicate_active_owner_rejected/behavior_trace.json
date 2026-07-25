@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-07-25T15:30:01.852600+00:00",
+  "verdict": "pass",
+  "failures": [],
+  "returncode": 0,
+  "prompt_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-152851-task0406-agentqa/tasks/interval_duplicate_active_owner_rejected/agent_prompt.md",
+  "events_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-152851-task0406-agentqa/tasks/interval_duplicate_active_owner_rejected/events.jsonl",
+  "stdout_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-152851-task0406-agentqa/tasks/interval_duplicate_active_owner_rejected/agent_stdout.log",
+  "stderr_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-152851-task0406-agentqa/tasks/interval_duplicate_active_owner_rejected/agent_stderr.log",
+  "final_output_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-152851-task0406-agentqa/tasks/interval_duplicate_active_owner_rejected/agent_answer.txt",
+  "output_schema_path": "",
+  "schema_validation": {
+    "requested": false,
+    "pass": true,
+    "errors": []
+  },
+  "event_summary": {
+    "thread_id": "019f99e5-9f0a-7cf2-a472-8b57514f5a76",
+    "event_count": 4,
+    "agent_message_count": 1,
+    "command_count": 0,
+    "failed_command_count": 0,
+    "commands": [],
+    "usage": {
+      "input_tokens": 34195,
+      "cached_input_tokens": 0,
+      "output_tokens": 58,
+      "reasoning_output_tokens": 0
+    }
+  },
+  "command_requirement_score": {
+    "required": 0,
+    "matched": 0,
+    "results": []
+  },
+  "checkpoint_score": {
+    "total": 0,
+    "done": 0,
+    "skipped": 0,
+    "blocked": 0,
+    "invalid": 0
+  },
+  "artifact_inventory": {
+    "declared": [],
+    "present": [],
+    "missing_or_unsafe": [],
+    "observed_file_delta": {
+      "created": [
+        "tickets/TASK-0408/artifacts/qa/conditional-research/behavior-trace.json",
+        "tickets/TASK-0408/artifacts/qa/conditional-research/task-detail.json",
+        "tickets/TASK-0408/artifacts/qa/eval-surprise/behavior-trace.json",
+        "tickets/TASK-0408/artifacts/qa/eval-surprise/task-detail.json",
+        "tickets/TASK-0408/artifacts/qa/expectation-contract/behavior-trace.json",
+        "tickets/TASK-0408/artifacts/qa/expectation-contract/source-run-summary.json",
+        "tickets/TASK-0408/artifacts/qa/expectation-contract/task-detail.json",
+        "tickets/TASK-0408/artifacts/qa/faulty-reproduction/behavior-trace.json",
+        "tickets/TASK-0408/artifacts/qa/faulty-reproduction/task-detail.json",
+        "tickets/TASK-0408/artifacts/qa/ml-negative-gate/behavior-trace.json",
+        "tickets/TASK-0408/artifacts/qa/ml-negative-gate/task-detail.json",
+        "tickets/TASK-0408/artifacts/qa/valid-negative/behavior-trace.json",
+        "tickets/TASK-0408/artifacts/qa/valid-negative/task-detail.json"
+      ],
+      "modified": [
+        ".farplane/generated/graphs/skill-template-intelligence.js",
+        ".farplane/generated/graphs/skill-template-intelligence.json",
+        "docs/skills/registry.jsonl",
+        "docs/templates/registry.jsonl",
+        "tickets/TASK-0406/artifacts/qa/run_control_loop_fixtures.py",
+        "tmp/skill-template-snapshots/skill-template-0.3.2-a55523040aca.md",
+        "tmp/skill-template-snapshots/skill-template-0.3.3-b8f67d0311ce.md",
+        "tmp/skill-template-snapshots/skill-template-0.3.4-60be77718277.md",
+        "tmp/skill-template-snapshots/skill-template-0.3.5-6462bf356fad.md",
+        "tmp/skill-template-snapshots/skill-template-0.3.6-79a4641842e9.md",
+        "tmp/skill-template-snapshots/skill-template-0.3.7-a4724e232c9e.md",
+        "tmp/skill-template-snapshots/skill-template-0.3.8-0dbcd1ace262.md",
+        "tmp/skill-template-snapshots/skill-template-0.3.9-885edcb6ed8d.md"
+      ],
+      "deleted": []
+    }
+  },
+  "behavior_report_detected": false,
+  "final_output_format": "text_or_other_json",
+  "final_report": null
+}

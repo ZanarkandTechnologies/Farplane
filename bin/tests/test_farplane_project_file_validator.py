@@ -22,7 +22,7 @@ def select_project_objective(farplane: Path, metric_id: str, *, guards: list[str
 
 
 class FarplaneProjectFileValidatorTests(unittest.TestCase):
-    def test_optional_goals_bind_selected_objectives_without_mutable_status(self) -> None:
+    def test_harness_goals_are_rejected_as_duplicate_mutable_strategy(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             farplane = root / "farplane"
@@ -43,9 +43,13 @@ class FarplaneProjectFileValidatorTests(unittest.TestCase):
 
             errors = validate(root)
 
-        self.assertFalse(any("goals" in error or "goal ID" in error for error in errors), errors)
+        self.assertIn(
+            "farplane/harness.yaml goals is retired; keep objective metric movement in metric "
+            "observations and mutable urgency, due dates, and proof on tickets.",
+            errors,
+        )
 
-    def test_goals_reject_invalid_rows_and_nonobjective_metrics(self) -> None:
+    def test_planning_allowlist_requires_resolvable_unique_skills(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             farplane = root / "farplane"
@@ -54,54 +58,19 @@ class FarplaneProjectFileValidatorTests(unittest.TestCase):
             write_required_project_files(root)
             harness_path = farplane / "harness.yaml"
             harness = yaml.safe_load(harness_path.read_text(encoding="utf-8"))
-            harness["goals"] = [
-                {
-                    "goal_id": "duplicate",
-                    "metric_id": "accepted_product_output",
-                    "target_value": True,
-                    "target_date": "August",
-                    "status": "completed",
-                },
-                {
-                    "goal_id": "duplicate",
-                    "metric_id": "unknown",
-                    "target_value": float("inf"),
-                    "target_date": "2026-08-01T12:00:00Z",
-                },
-            ]
-            harness_path.write_text(yaml.safe_dump(harness, sort_keys=False), encoding="utf-8")
-
-            errors = validate(root)
-
-        joined = "\n".join(errors)
-        self.assertIn("goals[0] has unsupported fields: status", joined)
-        self.assertIn("goals[0].metric_id must reference a selected objective metric", joined)
-        self.assertIn("goals[0].target_value must be a finite number", joined)
-        self.assertIn("goals[0].target_date must be an ISO date", joined)
-        self.assertIn("goals[1].metric_id must reference a selected objective metric", joined)
-        self.assertIn("goal IDs must be unique: duplicate", joined)
-
-    def test_planning_area_requires_canonical_instruction_and_rejects_typo(self) -> None:
-        with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            farplane = root / "farplane"
-            farplane.mkdir()
-            write_framework_manifest(farplane)
-            write_required_project_files(root)
-            harness_path = farplane / "harness.yaml"
-            harness = yaml.safe_load(harness_path.read_text(encoding="utf-8"))
-            instruction = harness["areas"]["test_output"].pop("planner_instruction")
-            harness["areas"]["test_output"]["planner_instrcuitions"] = instruction
+            harness["planning"] = {
+                "skill_refs": ["test-output", "test-output", "missing-skill"]
+            }
             harness_path.write_text(yaml.safe_dump(harness, sort_keys=False), encoding="utf-8")
 
             errors = validate(root)
 
         self.assertIn(
-            "farplane/harness.yaml areas.test_output has controller or unsupported fields: planner_instrcuitions.",
+            "farplane/harness.yaml planning.skill_refs must be unique: test-output.",
             errors,
         )
         self.assertIn(
-            "farplane/harness.yaml areas.test_output.planner_instruction must be a non-empty string.",
+            "farplane/harness.yaml planning.skill_refs are unresolved: missing-skill.",
             errors,
         )
 
@@ -336,7 +305,7 @@ metric_bindings:
             errors = validate(root)
 
         self.assertIn(
-            "farplane/metrics.yaml selected objective definitions must declare direction: accepted_harness_improvements.",
+            "farplane/metrics.yaml metric definitions must declare direction: accepted_harness_improvements, todo_unclaimed_ticket_count.",
             errors,
         )
         self.assertIn(

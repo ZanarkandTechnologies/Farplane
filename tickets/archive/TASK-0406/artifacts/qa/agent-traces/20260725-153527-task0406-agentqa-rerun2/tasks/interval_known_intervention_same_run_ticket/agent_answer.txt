@@ -1,0 +1,9 @@
+The Daily Interval:
+
+1. Records worsening acceptance, identifies the parser branch as the reproduced root cause, and compares the concrete correction against alternatives.
+2. Finalizes the immutable dated report, including the regression artifact, stop condition, proof requirements, and intended ticket delta.
+3. Appends only a genuinely exceptional highlight; otherwise records an honest highlight no-op.
+4. Creates one coherent solution ticket through the authorized filesystem route because the problem is material, the intervention and proof are concrete, and no active duplicate exists.
+5. Does not defer the grounded correction to Plan Next Wave and does not execute the fix—that belongs to Pulse/Goal execution.
+
+Result: **one qualified ticket**, but ticket count is not momentum and there is no numeric target or cap. Provider/write receipt, report path, highlight receipt, ticket delta, and a no-execution receipt are returned.

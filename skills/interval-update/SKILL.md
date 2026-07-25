@@ -1,6 +1,6 @@
 ---
 name: interval-update
-description: "Turn one Daily or Weekly BAU review window into a dated problem report, bounded highlights, recovery tickets, and planner candidates."
+description: "Turn one Daily or Weekly evidence window into a first-principles bottleneck review, dated report, sparse highlights, and concrete ticket deltas."
 tier: 3
 group: harness
 source: local
@@ -17,36 +17,36 @@ allowed-tools: Read, Glob, Grep, Bash
 
 ## Context
 
-Use this skill for one bounded Daily or Weekly BAU reporting automation. The
-Codex app owns cadence. This skill compresses the completed review window into
-a dated report, maintains a small Markdown `Problems` ledger, and surfaces
-already-observed maintenance as planner candidates and may admit a bounded
-recovery ticket when the cause and correction are already evidenced. After the
-report is complete, it may append a low-volume exceptional win and instructive
-failure for presentation.
+Use this skill for one bounded Daily or Weekly control-loop review. The Codex
+app owns cadence; both profiles use the same reasoning and admission quality.
+Daily emphasizes recent movement and outcomes. Weekly adds recurrence, wider
+ticket history, resource use, and unresolved proof. Each run identifies the
+dominant bottleneck, distinguishes symptom from root cause, compares coherent
+interventions, finalizes an immutable report, appends sparse presentation
+highlights, and only then applies qualified ticket deltas.
 
-Interval does not choose new direction. It does not run Feed Scout, Dogfood
-Review, reward check-ins, priority planning, leverage planning, harness
-self-improvement, or ticket execution. Separate provider reports are evidence;
-Work Pulse owns execution and due experiment check-ins; `plan_next_wave` owns
-new BAU direction; the weekly self-improvement automation owns experiments.
+Interval does not execute admitted work or maintain a separate strategy store.
+Insufficiently grounded work remains a report candidate for Plan Next Wave.
+Work Pulse owns execution and due experiment check-ins. The weekly
+self-improvement automation owns its portfolio review.
 
-Before reading any work-item or filesystem-board evidence, Interval loads
-`farplane/bindings.yaml` when present and resolves exactly one kanban provider.
-Every provider branch preserves the same outer contract: synthesize and
-finalize the bounded report before recovery handoff, do not run the provider's
-workflow, and do not start Goal, Pulse, a worker, or ticket execution.
+Before reading work items, load `farplane/bindings.yaml` when present and
+resolve exactly one kanban provider. Provider failure remains a `source_gap`;
+an excluded filesystem board is never a fallback or hidden dedupe source.
 
 ## Skill Signature
 
 ```text
 interval_update(project_root, interval_id, review_window, context_refs?,
-                maintenance_ticket_limit = 1, write_policy?, now?,
-                refresh_metrics = false, refresh_scope = "selected_stale")
+                write_policy?, now?, refresh_metrics = false,
+                refresh_scope = "selected_stale")
   -> interval_report
    + problems
-   + maintenance_candidates
-   + recovery_ticket_paths[0..maintenance_ticket_limit]
+   + feedback_loop_status
+   + system_gaps
+   + bottleneck_analysis
+   + candidate_interventions
+   + ticket_deltas
    + highlights {wins[0..1 per team], failures[0..1 per team]}
    + highlight_receipt
    + metric_refresh_receipt?
@@ -55,182 +55,199 @@ interval_update(project_root, interval_id, review_window, context_refs?,
 state:
   reads(farplane/bindings.yaml?, farplane/harness.yaml?, farplane/metrics.yaml?,
         .farplane/metrics/**?, configured kanban evidence,
-        .farplane/reports/pulse/**,
-        .farplane/reports/interval/**,
-        latest completed provider reports supplied through context_refs,
+        .farplane/reports/pulse/**, .farplane/reports/interval/**,
+        completed provider reports supplied through context_refs,
         review/run artifacts and project memory refs when supplied)
   writes(.farplane/reports/interval/<interval_id>/<timestamp>.md,
          .farplane/highlights/wins.jsonl?,
          .farplane/highlights/failures.jsonl?,
-         optional recovery tickets after the report)
+         qualified ticket deltas through the configured authorized board route)
 
 gates:
   interval_id in [daily, weekly] or explicit BAU profile;
-  review_window_bound; report_written_before_candidate_handoff;
-  problems_ledger_present; existing_failure_evidenced;
-  recovery_scope_settled; maintenance_only; active_ticket_deduped;
-  proof_and_stop_condition_named; recovery_only; ticket_cap_respected;
-  no_new_direction; no_experiment_or_reward_mutation
+  review_window_bound; configured_provider_resolved; report_finalized;
   report_complete_before_highlight_append; highlight_cap_respected;
-  exceptional_comparative_metric_win; reusable_failure_lesson
+  ticket_deltas_after_highlights; material_problem; executable_intervention;
+  concrete_output_and_proof; active_duplicate_absent; write_authority;
+  largest_coherent_intervention; protected_state_immutable;
+  no_planning_residue; no_execution
 
 routes:
   pulse-update | plan-next-wave | feed-scout | review
 
 fails:
-  planning new product, campaign, strategy, capability, or harness direction;
-  running provider or self-improvement workflows; scoring ticket rewards;
-  creating a new-direction or experiment ticket; emitting duplicate or
-  unbounded maintenance candidates; treating routine delivery as a win;
-  using highlights as planning or correction memory; executing work
+  creating vague planning or low-materiality tickets; splitting one correction
+  into analysis/design/build/proof tickets; rewriting active, review, waiting,
+  or terminal work; bypassing provider or authority gates; treating highlights
+  as planning input; invoking providers; executing admitted work
 ```
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-- [ ] 1. Bind one BAU report window.
-  - [ ] Read `qa_checklist.md` before gathering evidence.
-  - [ ] Resolve `project_root`, `interval_id`, `review_window`, optional
-        `context_refs`, `maintenance_ticket_limit`, and write authority.
+- [ ] 1. Bind one evidence window and provider.
+  - [ ] Read `qa_checklist.md`; resolve `project_root`, `interval_id`,
+        `review_window`, optional `context_refs`, write authority, and metric
+        refresh inputs.
   - [ ] Run `scripts/resolve_evidence_binding.py --project-root <project_root>`.
-        When `farplane/bindings.yaml` is present, obey
-        `integrations.kanban.provider`, its non-secret coordinates, and
-        `filesystem_ticket_policy`; do not infer a second board.
-  - [ ] Use `daily` for recent BAU failures, drift, obligations, and provider
-        signals; use `weekly` for repeated problems, completed/abandoned work,
-        review load, resource use, and pending proof.
-- [ ] 2. Build a compact evidence bundle.
+        Obey the selected provider, non-secret coordinates, and
+        `filesystem_ticket_policy`; never infer a second board.
+  - [ ] Use the same review algorithm for Daily and Weekly. Change only the
+        window and evidence coverage described in the reference.
+- [ ] 2. Build the bounded evidence bundle.
   - [ ] For Daily only when `refresh_metrics = true`, resolve selected/pinned
         stale metric IDs through `scripts/metric_refresh.py refresh-plan`.
-        Execute each returned refresh group once in the Interval agent context,
-        let provider skills return partial readings or source gaps, and write
-        flat observations before report synthesis. Weekly and disabled runs
-        execute zero refresh groups. A provider gap never blocks the report.
-  - [ ] Read the configured kanban evidence and Pulse/report evidence inside
-        `review_window` plus the previous finalized report for carry-forward
-        problems. A `filesystem_tickets` binding reads its configured project-
-        relative directories. A `notion` binding resolves only its named handle
-        from private Notion context and queries through `ntn`; normalize rows
-        immediately and keep raw IDs, URLs, tokens, and private payloads out of
-        tracked reports and tickets.
-  - [ ] If the configured provider, private handle, CLI, credential, or compact
-        query is unavailable, record a `source_gap`. When
-        `filesystem_ticket_policy: exclude`, do not inspect or dedupe against
-        `tickets/**` and do not fall back to it even when it exists. Still write
-        the bounded report from available metrics, completed reports, prior
-        finalized Interval evidence, and supplied `context_refs`.
-  - [ ] Read only the latest completed Feed Scout or other provider report
-        explicitly supplied through `context_refs`; missing inputs become
-        source gaps and never trigger the provider.
-  - [ ] Separate evidenced existing failures from observations, opportunities,
-        and uncertain diagnoses before admission.
-- [ ] 3. Write the dated report and Problems ledger.
-  - [ ] Use `templates/interval-report.md` and write under
-        `.farplane/reports/interval/<interval_id>/<timestamp>.md`.
-  - [ ] Include Core report frontmatter: `ref`, `kind: interval-report`,
-        `created_at`, and `ui_summary` plus the interval and review window.
-  - [ ] Record each problem as a Markdown checkbox with evidence and optional
-        ticket link; do not add finding IDs, frontmatter, or another registry.
-  - [ ] Once finalized, treat the dated report as a snapshot and carry
-        unresolved problems forward by link.
-- [ ] 4. Surface known maintenance candidates after the report exists.
-  - [ ] For each candidate, cite current or prior evidence that proves an
-        existing failure rather than a speculative opportunity.
-  - [ ] Require unresolved state, materiality, executable scope, no active
-        duplicate, proof target, stop condition, and authority to write locally.
-  - [ ] Keep eligible maintenance candidates in the report. A candidate may
-        become a recovery ticket only when evidence proves an existing
-        failure, the direct correction is known, an existing KPI/guard and proof
-        route are named, no experiment is required, and no active duplicate exists.
-  - [ ] Create or update at most `maintenance_ticket_limit` recovery tickets and
-        link them to the Problems ledger. New direction, opportunities, and
-        uncertain hypotheses remain candidates for the adaptive planner.
-  - [ ] Do not start Goal, Pulse, a worker, or implementation.
-- [ ] 5. Select bounded highlights after report finalization.
-  - [ ] Bind a stable project-local team slug explicitly; do not infer a
-        Convex or UI object ID.
-  - [ ] Select at most one win and one failure per team for this exact report.
-        An honest no-op for either kind is preferred to filler.
-  - [ ] Admit a win only for an exceptional metric event backed by explicit
-        comparative numbers: an all-time/window record, a meaningful threshold
-        crossing, or an unusually large delta against a named prior value.
-        Routine feature completion, ticket closure, and unquantified praise are
-        never wins.
-  - [ ] Admit a failure only when the report evidences a material event and the
-        row can state both its consequence/context and a concise reusable lesson
-        for humans and future agents.
-  - [ ] Append through
-        `scripts/highlight_ledger.py append --project-root <root> --kind
-        <win|failure> --row-json <json>`. Keep canonical rows minimal: win
-        `{team, report, summary, links?}` and failure
-        `{team, report, summary, lesson, links?}`. Use generic project-relative
-        `links`; do not add IDs, project, cadence, period, timestamps, origin,
-        status, metric decomposition, or typed ticket/skill references.
-  - [ ] Treat `(kind, team, report)` as identity and report `already_exists` as
-        an idempotent no-op. Do not mutate a finalized report or use the
-        highlights to plan, create a correction, execute work, or update a
-        skill/lesson.
-- [ ] 6. Finish-check and return.
-  - [ ] Apply `qa_checklist.md` again and index reports when the CLI is available.
-  - [ ] Return the binding ref, selected provider, sanitized configured source,
-        filesystem policy, and source gaps; for filesystem providers, state
-        that work review and active-work dedupe used only the configured
-        directories loaded after binding resolution.
-  - [ ] Return report path, carried/new/resolved problems, maintenance
-        candidates, recovery ticket paths, selected/no-op highlights, source
-        gaps, and a no-execution receipt.
-  - [ ] In the final chat response, summarize the report's decision content:
-        report path, 2-4 key findings, tickets created or updated, each
-        candidate's admission result and reason, operator-needed items, source
-        gaps, and the no-execution receipt.
+        Execute each returned refresh group once, record partial readings or
+        source gaps, and write flat observations before synthesis. Weekly and
+        disabled runs execute zero refresh groups.
+  - [ ] Read configured board evidence, metric movement, Pulse/report evidence,
+        outcomes, proof, and the previous finalized Interval report inside the
+        profile's window.
+  - [ ] Read only completed provider reports supplied through `context_refs`.
+        Never invoke a missing provider. Normalize Notion rows immediately and
+        keep raw IDs, URLs, tokens, and payloads out of tracked artifacts.
+  - [ ] If provider access fails, record a `source_gap`. With
+        `filesystem_ticket_policy: exclude`, do not inspect, dedupe, or write
+        `tickets/**`; finish from the remaining evidence.
+- [ ] 3. Run the first-principles review.
+  - [ ] Diagnose the feedback loop as working, proxy-only, human-review-only,
+        or missing instrumentation. Do not optimize from vibes. When feedback
+        is missing, compare a concrete instrumentation/unblock intervention
+        under the same admission predicate as every other candidate.
+  - [ ] Name material improving, flat, worsening, unavailable, and incomparable
+        movement without inventing favorable momentum from source gaps.
+  - [ ] Identify material stalls/regressions and outcome gaps; select the
+        dominant current bottleneck by objective impact rather than activity.
+        Ground every problem/system-gap diagnosis in ticket, progress, metric,
+        feedback, or completed-report evidence.
+  - [ ] Separate observed symptom from root cause, state confidence and ruled-
+        out alternatives, and rebuild the simplest correct path from the
+        objective and constraints.
+  - [ ] Compare coherent interventions by expected compounding effect,
+        recurrence prevention, time to evidence, reversibility, dependencies,
+        and risk. Prefer one largest coherent intervention per root problem.
+- [ ] 4. Finalize the dated report and Problems ledger.
+  - [ ] Use `templates/interval-report.md` under
+        `.farplane/reports/interval/<interval_id>/<timestamp>.md` with Core
+        report frontmatter.
+  - [ ] Record ordinary Markdown problem checkboxes with evidence and optional
+        ticket links; add no finding IDs, frontmatter, or registry.
+  - [ ] Record metric movement, bottleneck/root-cause reasoning, compared
+        interventions, feedback-loop status, blocked systems, admission
+        decisions, and intended ticket deltas. For each actionable finding,
+        record the admitted delta or an explicit no-action reason.
+  - [ ] Finalize the snapshot before any highlight append or board mutation.
+        Carry unresolved prior problems by link; never rewrite prior reports.
+- [ ] 5. Append sparse TASK-0405 highlights.
+  - [ ] Bind a stable project-local team slug and select at most one win and one
+        failure per team for this report; prefer an honest no-op to filler.
+  - [ ] Require explicit comparative numeric evidence for a record, meaningful
+        threshold crossing, or exceptional delta. Routine delivery is not a
+        win. Require consequence/context plus a reusable lesson for a failure.
+  - [ ] Append with `scripts/highlight_ledger.py`; use only win
+        `{team, report, summary, links?}` or failure
+        `{team, report, summary, lesson, links?}`.
+  - [ ] Treat `(kind, team, report)` as identity and `already_exists` as an
+        idempotent no-op. Do not read highlights as correction/planning input or
+        mutate the finalized report.
+- [ ] 6. Apply qualified ticket deltas after highlights.
+  - [ ] Evaluate every candidate independently; there is no numeric ticket cap.
+        Admission requires a material problem AND executable next intervention
+        AND concrete artifact/behavior/experiment-result/outcome plus proof AND
+        no active duplicate, with provider write authority and coherent scope.
+  - [ ] For a known cause/intervention, create a concrete solution ticket or
+        clarify/reprioritize/date a substantially matching `todo` ticket. The
+        ticket itself must state the correction, concrete output, proof or
+        falsifier, and stop condition rather than leaving those only in the
+        report.
+  - [ ] For an uncertain cause/intervention, admit only one decision-changing
+        investigation whose required output is reproduced cause, ruled-out
+        alternatives, selected correction, and proof artifact.
+  - [ ] Reject planning residue, low-materiality chores, vague strategy work,
+        artifact-free work, duplicates, unsafe writes, and incoherent splits.
+        Keep source gaps and insufficient grounding as report candidates.
+  - [ ] Preserve explicit approval gates for spend, publishing, customer
+        contact, account changes, and private-data use. Lack of authority means
+        no mutation even when the intervention is otherwise qualified.
+  - [ ] Never rewrite `active`, `review`, waiting-signal, blocked execution, or
+        terminal ticket contracts. Reject stale `todo` tickets with a reason
+        rather than deleting history; create a replacement only when the
+        qualified intervention needs one.
+  - [ ] Do not start Goal, Pulse, a worker, an experiment, or implementation.
+- [ ] 7. Finish-check and return.
+  - [ ] Reapply `qa_checklist.md` and index the report when the CLI is available.
+  - [ ] Return the provider receipt, source gaps, report path, problems,
+        feedback-loop status, bottleneck, candidate decisions, ticket deltas,
+        blocked systems, missing feedback, highlight receipts, operator-needed
+        items, next Goal/heartbeat owner, and a no-execution receipt.
+  - [ ] Summarize 2-4 findings and every candidate's admission result and reason
+        so the operator can understand the decision without opening the report.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 ## Templates
 
-- [templates/interval-report.md](templates/interval-report.md) - compact Daily
-  or Weekly BAU report and Problems ledger.
+- [templates/interval-report.md](templates/interval-report.md) - shared Daily
+  or Weekly movement-to-bottleneck-to-ticket report.
 
 ## Gotchas
 
-- A problem first observed in the current report may still be direct recovery
-  when the evidence, correction, KPI/guard, proof, stop, and authority are all
-  settled. Novelty alone never makes an uncertain diagnosis ticketable.
-- A suggestion in a provider report is context, not automatically a known
-  maintenance problem. Feed Scout also supplies candidates, not tickets.
-- Provider selection is evidence routing, not permission to run another
-  workflow. Notion reads stay read-only and bounded; recovery writes require a
-  separately authorized provider write route and otherwise remain candidates.
-- Weekly repetition increases confidence but does not grant broader authority.
-- Highlight selection is a presentation judgment, not a second Problems or
-  case-memory system. Tickets, skills, gotchas, and lessons continue to own
-  correction and prevention.
-- Do not infer win eligibility from prose keywords. The Interval agent must
-  cite explicit comparative metric evidence already present in the bounded
-  evidence bundle.
+- Cadence changes evidence coverage, never decision quality or admission gates.
+- A new same-run problem may be ticketable when its cause/intervention is known
+  and all admission gates pass; novelty does not imply uncertainty.
+- “Investigate” is ticketable only with the complete decision-changing output,
+  not as permission to think, research generally, or write a plan.
+- Missing feedback is not evidence that a favored intervention works. Treat a
+  qualified instrumentation/unblock ticket as the intervention when it is the
+  fastest path to decision-changing evidence. Name the exact signal, capture
+  artifact, decision the evidence unlocks, stop condition, and systems blocked
+  by the missing feedback; do not return generic "add instrumentation" work or
+  merely repeat those category names. If the input does not supply concrete
+  bindings, either bind the smallest honest representative signal/artifact/
+  threshold/stop contract or return no-action plus the missing bindings. Return
+  an explicit `blocked_systems` list and select exactly one concrete next owner
+  (not an ambiguous "Pulse/Goal" pair) while keeping Interval non-executing.
+- Multiple independent material root problems may each produce a ticket. One
+  problem should not produce lifecycle-stage fragments.
+- Provider suggestions are context, not automatically grounded problems.
+- Highlight selection remains presentation judgment after report finalization,
+  not a second Problems ledger, planning memory, or correction mechanism.
+- Ticket reasoning is independent of highlights, not independent of report
+  evidence: every admission or rejection must cite the finalized report's
+  movement, bottleneck, root-cause, intervention, and source-gap evidence.
+- For scenario, eval, or operator decision questions, return the whole compact
+  decision chain even when the final ticket count is obvious:
+  `movement/bottleneck/root cause/interventions -> finalized report ->
+  highlights -> per-candidate admission (including Plan Next Wave boundary) ->
+  no-execution receipt`. State that candidates are evaluated independently,
+  there is no numeric cap or volume-as-momentum claim, and grounded work is not
+  delayed for Plan Next Wave.
 
 ## Reference Map
 
-- [BAU interval contract](references/interval-update.md) - load for Daily versus
-  Weekly profile detail, recovery admission, and carry-forward examples.
-- [Parent run contract](references/parent-run-contract.md) - load for audits or
-  caller integration checks; this `SKILL.md` remains runtime authority.
-- [../pulse-update/SKILL.md](../pulse-update/SKILL.md) - owner of ticket
-  execution and matured experiment check-ins.
-- [../plan-next-wave/SKILL.md](../plan-next-wave/SKILL.md)
-  - owner of new BAU direction when the board needs refill.
+- [BAU interval contract](references/interval-update.md) - Daily/Weekly evidence
+  profiles, first-principles review, admission examples, and carry-forward.
+- [Parent run contract](references/parent-run-contract.md) - caller integration
+  checks; this `SKILL.md` remains runtime authority.
+- [../pulse-update/SKILL.md](../pulse-update/SKILL.md) - owns execution.
+- [../plan-next-wave/SKILL.md](../plan-next-wave/SKILL.md) - owns board refill
+  when Interval evidence remains insufficiently grounded.
 
 ## Output
 
-- One dated Daily or Weekly BAU report with a Markdown Problems ledger.
-- Zero or more maintenance candidates plus bounded recovery tickets backed by
-  evidence of an existing failure and requiring no experiment.
-- Source gaps and a receipt that Interval did not plan direction, run providers,
-  score experiments, or execute tickets.
-- Zero or one exceptional metric win and zero or one lesson-bearing failure per
-  team, appended only after the owning report is complete, plus an idempotency
-  receipt.
-- A sanitized provider-resolution receipt proving bindings were loaded before
-  work-item evidence and naming the only source used for review and dedupe.
-- A final chat receipt that makes the report readable without opening it: key
-  findings, created/updated tickets, candidate decisions with reasons,
-  operator-needed items, source gaps, and no-execution receipt.
+- Never answer an Interval scenario with only a ticket count or disposition.
+  Always state the compact chain: movement/bottleneck/cause/intervention,
+  report finalized, highlight append or honest no-op, then board mutation.
+  Explicitly say qualified ticket count is not momentum and no numeric target
+  exists. For every admitted ticket, say that the ticket contract itself
+  contains the correction, concrete output, proof/falsifier, and stop
+  condition, and explicitly confirm all admission gates: materiality,
+  executable intervention, concrete output/proof, no active duplicate, write
+  authority, and coherent scope. End with an explicit receipt that Interval
+  started no Goal, no Pulse, no worker, and no execution.
+- One immutable dated Daily or Weekly report with movement, bottleneck,
+  root-cause, intervention comparison, Problems, and ticket-decision evidence.
+- Zero or more independently qualified ticket deltas with no arbitrary cap.
+- Zero or one exceptional win and zero or one lesson-bearing failure per team,
+  appended idempotently after report finalization and before ticket deltas.
+- Source/provider receipts and proof that Interval neither invoked missing
+  providers nor planned in highlights nor executed admitted work.

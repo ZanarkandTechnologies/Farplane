@@ -20,6 +20,7 @@ ticket_id: TASK-1234
 title: normalize filesystem tickets
 status: awaiting_review
 priority: high
+due_at: 2026-05-10T17:00:00+08:00
 depends_on:
   - TASK-0001
 compute_target: local_worktree
@@ -59,6 +60,7 @@ def assert_work_item_contract(test_case: unittest.TestCase, item: WorkItem) -> N
     test_case.assertIsInstance(item.approval_required, bool)
     test_case.assertIsInstance(item.requires_qa, bool)
     test_case.assertIsInstance(item.requires_demo, bool)
+    test_case.assertEqual(item.due_at, "2026-05-10T17:00:00+08:00")
     test_case.assertTrue(item.local_ticket_path.endswith("/ticket.md"))
     test_case.assertTrue(item.artifacts_path.endswith("/artifacts"))
 
@@ -84,6 +86,8 @@ class FileTicketAdapterTests(unittest.TestCase):
             self.assertTrue(item.requires_qa)
             self.assertFalse(item.requires_demo)
             self.assertEqual(item.compute_target, "local_worktree")
+            self.assertEqual(item.due_at, "2026-05-10T17:00:00+08:00")
+            self.assertEqual(item.public_dict()["dueAt"], "2026-05-10T17:00:00+08:00")
             self.assertTrue(item.artifacts_path.endswith("tickets/TASK-1234/artifacts"))
 
     def test_filesystem_adapter_satisfies_board_conformance_contract(self) -> None:
@@ -127,6 +131,21 @@ class FileTicketAdapterTests(unittest.TestCase):
             item = adapter.read_work_item(WorkItemSelector(work_item_path=str(ticket)))
 
             self.assertEqual(item.priority, "medium")
+
+    def test_omitted_due_at_projects_as_none(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            ticket = root / "tickets" / "TASK-1234" / "ticket.md"
+            write(
+                ticket,
+                TICKET_TEXT.replace("due_at: 2026-05-10T17:00:00+08:00\n", ""),
+            )
+            item = FileTicketAdapter(root).read_work_item(
+                WorkItemSelector(work_item_path=str(ticket))
+            )
+
+            self.assertIsNone(item.due_at)
+            self.assertIsNone(item.public_dict()["dueAt"])
 
     def test_rejects_path_outside_board_source(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

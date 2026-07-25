@@ -28,8 +28,6 @@ updated_at: 2026-04-10T00:00:00Z
 ## Summary
 Validator fixture.
 """
-
-
 def write_file(path: Path, text: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(textwrap.dedent(text), encoding="utf-8")
@@ -81,6 +79,35 @@ class CheckTicketMetadataTest(unittest.TestCase):
             )
             errors = self.ticket_metadata.validate_ticket(path)
             self.assertEqual(errors, [])
+
+    def test_validator_accepts_timezone_bearing_due_at_or_absence(self) -> None:
+        for due_at in (None, "2026-04-10T09:00:00Z", "2026-04-10T17:00:00+08:00"):
+            with self.subTest(due_at=due_at), tempfile.TemporaryDirectory(dir=ROOT) as tmpdir:
+                root = Path(tmpdir)
+                path = root / "TASK-9999" / "ticket.md"
+                insertion = "" if due_at is None else f"due_at: {due_at}\n"
+                write_file(
+                    path,
+                    VALID_TICKET_TEXT.replace("priority: medium\n", f"priority: medium\n{insertion}"),
+                )
+                self.assertEqual(self.ticket_metadata.validate_ticket(path), [])
+
+    def test_validator_rejects_invalid_due_at(self) -> None:
+        for due_at in ("2026-04-10", "2026-04-10T09:00:00", "not-a-deadline"):
+            with self.subTest(due_at=due_at), tempfile.TemporaryDirectory(dir=ROOT) as tmpdir:
+                root = Path(tmpdir)
+                path = root / "TASK-9999" / "ticket.md"
+                write_file(
+                    path,
+                    VALID_TICKET_TEXT.replace(
+                        "priority: medium\n", f"priority: medium\ndue_at: {due_at}\n"
+                    ),
+                )
+                errors = self.ticket_metadata.validate_ticket(path)
+                self.assertIn(
+                    "due_at must be a timezone-bearing ISO-8601 timestamp",
+                    "\n".join(errors),
+                )
 
     def test_validator_rejects_retired_duplicate_state_fields(self) -> None:
         with tempfile.TemporaryDirectory(dir=ROOT) as tmpdir:

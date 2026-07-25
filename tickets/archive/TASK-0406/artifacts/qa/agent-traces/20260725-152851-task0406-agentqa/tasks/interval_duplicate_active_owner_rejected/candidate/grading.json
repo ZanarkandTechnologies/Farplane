@@ -1,0 +1,40 @@
+{
+  "assertion_results": [
+    {
+      "text": "Dedupes by substantive ownership rather than exact title",
+      "passed": true,
+      "evidence": "Treats the differently titled active ticket as the duplicate owner based on shared ownership."
+    },
+    {
+      "text": "Records duplicate or already_owned with evidence",
+      "passed": true,
+      "evidence": "Requires linking the owner in the report and recording `active_duplicate_present`."
+    },
+    {
+      "text": "Creates no second ticket",
+      "passed": true,
+      "evidence": "Explicitly prohibits a replacement or other new ticket."
+    },
+    {
+      "text": "Does not rewrite the active owner",
+      "passed": true,
+      "evidence": "Explicitly prohibits renaming, rewriting, or reprioritizing it."
+    },
+    {
+      "text": "Does not execute the existing ticket",
+      "passed": true,
+      "evidence": "States that Interval executes nothing."
+    }
+  ],
+  "summary": {
+    "passed": 5,
+    "failed": 0,
+    "total": 5,
+    "pass_rate": 1.0
+  },
+  "judge": {
+    "verdict": "A",
+    "pass": true,
+    "reason": "The answer directly and concisely applies every protected-state and duplicate-admission rule."
+  }
+}

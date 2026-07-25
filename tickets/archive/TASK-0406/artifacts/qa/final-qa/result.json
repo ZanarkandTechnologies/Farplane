@@ -1,0 +1,40 @@
+{
+  "schema_version": "1",
+  "ticket_id": "TASK-0406",
+  "phase": "qa",
+  "proof_type": "artifact",
+  "runtime_target": "local CLI, replayable fixture runner, and Eval behavior_trace child agents",
+  "proof_policy": "Done + QA Strategy + replayable integration and independently judged agent-behavior proof; independent review gates handled after this QA receipt",
+  "verdict": "pass",
+  "summary": "QA proved TASK-0406 with the ordered test matrix, replayed control-loop branches, TASK-0405 regression receipt, and final A-rated adversarial Interval behavior traces.",
+  "gate_results": {
+    "contract": "pass",
+    "mechanism": "pass",
+    "journey": "pass",
+    "adversarial": "pass",
+    "receipt": "pass"
+  },
+  "best_evidence": "tickets/TASK-0406/artifacts/qa/interval-agent-qa.md",
+  "artifacts": [
+    "tickets/TASK-0406/artifacts/qa/final-qa/report.md",
+    "tickets/TASK-0406/artifacts/qa/final-qa/result.json",
+    "tickets/TASK-0406/artifacts/qa/test-results.txt",
+    "tickets/TASK-0406/artifacts/qa/control-loop-known-intervention.json",
+    "tickets/TASK-0406/artifacts/qa/control-loop-refill-fallback.json",
+    "tickets/TASK-0406/artifacts/qa/interval-agent-qa.md",
+    "tickets/TASK-0406/artifacts/qa/task-0405-highlight-regression.txt"
+    ,"tickets/TASK-0406/artifacts/qa/run_control_loop_fixtures.py"
+    ,"tickets/TASK-0406/artifacts/qa/fixture-output/known-replay.json"
+    ,"tickets/TASK-0406/artifacts/qa/fixture-output/refill-replay.json"
+    ,"tickets/TASK-0406/artifacts/qa/agent-traces/"
+  ],
+  "blockers": [],
+  "residual_risk": [
+    "No live scheduled Daily/Weekly automation or external board provider run was executed; local integration was replayed and child-agent prompt behavior was independently judged."
+  ],
+  "judgment_receipts": [],
+  "learning": {
+    "outcome": "ticket_only",
+    "ref": null
+  }
+}

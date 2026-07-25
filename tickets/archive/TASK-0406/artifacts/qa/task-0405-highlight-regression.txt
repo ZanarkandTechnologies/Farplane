@@ -1,0 +1,20 @@
+TASK-0405 highlight regression receipt
+
+Verdict: PASS
+
+Claim checked:
+- The TASK-0405 Interval highlight contract remains intact after TASK-0406:
+  report-finalized before highlight append, sparse highlight rows,
+  append idempotency, and Core projection compatibility.
+
+Evidence:
+- `uv run --with pytest pytest -q skills/interval-update/scripts/test_highlight_ledger.py`
+  passed with 18 tests.
+- `tickets/TASK-0406/artifacts/qa/test-results.txt` captures the passing
+  highlight ledger run and the full ordered TASK-0406 validation matrix.
+- The implementation did not move highlight selection into Plan Next Wave or
+  use highlights as planning/correction input.
+
+Residual risk:
+- This is deterministic script coverage for the accepted TASK-0405 helper
+  contract, not a live scheduled automation run.

@@ -1,0 +1,10 @@
+Interval diagnoses the feedback loop as **missing instrumentation**. Ticket activity is not outcome evidence, so it does not optimize onboarding from vibes.
+
+- **Onboarding optimization:** rejected for now as insufficiently grounded.
+- **Bounded acceptance capture:** admitted as the preferred intervention because it provides a concrete artifact, decision threshold, stop condition, proof, and authorized implementation—assuming no active duplicate exists.
+- **Order:** finalize the immutable report → append any qualified highlights → create/update the acceptance-capture ticket.
+- **Execution:** none. Pulse/Goal owns later implementation.
+
+The dominant bottleneck is the absence of decision-changing outcome feedback, not onboarding performance itself.
+
+Grounding: supplied `interval-update` skill contract.

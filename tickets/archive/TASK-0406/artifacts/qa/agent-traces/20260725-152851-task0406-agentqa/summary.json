@@ -1,0 +1,130 @@
+{
+  "schema_version": 2,
+  "job_id": "20260725-152851-task0406-agentqa",
+  "label": "task0406-agentqa",
+  "created_at": "2026-07-25T15:28:51.346494+00:00",
+  "completed_at": "2026-07-25T15:32:36.807595+00:00",
+  "harness": "codex",
+  "judge_harness": "codex",
+  "scopes": [
+    "skills"
+  ],
+  "default_context_file": "contexts/agi-toy-shop.md",
+  "skill_context": "inline",
+  "compare_baseline": false,
+  "behavior_trace": true,
+  "task_files": [
+    "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/skills/interval-update/evals/evals.json"
+  ],
+  "task_count": 7,
+  "pass_rate": 0.29,
+  "verdict_counts": {
+    "B": 4,
+    "C": 1,
+    "A": 2
+  },
+  "tasks": [
+    {
+      "task_id": "interval_known_intervention_same_run_ticket",
+      "title": "Known intervention becomes a same-run solution ticket",
+      "verdict": "B",
+      "pass": false,
+      "reason": "Correct core outcome and ordering, but it omits the complete movement-to-bottleneck review and explicit no-delay Plan Next Wave decision.",
+      "candidate_metrics": {
+        "duration_ms": 28690,
+        "total_tokens": 70384
+      },
+      "behavior_verdict": "pass",
+      "behavior_trace_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-152851-task0406-agentqa/tasks/interval_known_intervention_same_run_ticket/behavior_trace.json",
+      "detail_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-152851-task0406-agentqa/tasks/interval_known_intervention_same_run_ticket.json"
+    },
+    {
+      "task_id": "interval_multiple_independent_qualified_interventions",
+      "title": "No cap suppresses multiple qualified root-problem interventions",
+      "verdict": "C",
+      "pass": false,
+      "reason": "The answer reaches the correct ticket count and rejects fragmentation, but omits three required operating rules.",
+      "candidate_metrics": {
+        "duration_ms": 25240,
+        "total_tokens": 70064
+      },
+      "behavior_verdict": "pass",
+      "behavior_trace_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-152851-task0406-agentqa/tasks/interval_multiple_independent_qualified_interventions/behavior_trace.json",
+      "detail_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-152851-task0406-agentqa/tasks/interval_multiple_independent_qualified_interventions.json"
+    },
+    {
+      "task_id": "interval_duplicate_active_owner_rejected",
+      "title": "Substantive active duplicate blocks a second ticket",
+      "verdict": "A",
+      "pass": true,
+      "reason": "The answer directly and concisely applies every protected-state and duplicate-admission rule.",
+      "candidate_metrics": {
+        "duration_ms": 24434,
+        "total_tokens": 70033
+      },
+      "behavior_verdict": "pass",
+      "behavior_trace_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-152851-task0406-agentqa/tasks/interval_duplicate_active_owner_rejected/behavior_trace.json",
+      "detail_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-152851-task0406-agentqa/tasks/interval_duplicate_active_owner_rejected.json"
+    },
+    {
+      "task_id": "interval_vague_low_materiality_and_ungrounded_rejected",
+      "title": "Vague, trivial, planning-only, and ungrounded work stays out",
+      "verdict": "B",
+      "pass": false,
+      "reason": "Accurate and concise, but it omits the required explicit planner-candidate routing for the material ungrounded symptom.",
+      "candidate_metrics": {
+        "duration_ms": 28097,
+        "total_tokens": 70337
+      },
+      "behavior_verdict": "pass",
+      "behavior_trace_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-152851-task0406-agentqa/tasks/interval_vague_low_materiality_and_ungrounded_rejected/behavior_trace.json",
+      "detail_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-152851-task0406-agentqa/tasks/interval_vague_low_materiality_and_ungrounded_rejected.json"
+    },
+    {
+      "task_id": "interval_notion_binding_fails_closed",
+      "title": "Unavailable configured provider fails closed",
+      "verdict": "A",
+      "pass": true,
+      "reason": "The answer fails closed exactly as required, clearly records unavailable evidence and authority constraints, and remains concise and actionable.",
+      "candidate_metrics": {
+        "duration_ms": 43799,
+        "total_tokens": 71601
+      },
+      "behavior_verdict": "pass",
+      "behavior_trace_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-152851-task0406-agentqa/tasks/interval_notion_binding_fails_closed/behavior_trace.json",
+      "detail_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-152851-task0406-agentqa/tasks/interval_notion_binding_fails_closed.json"
+    },
+    {
+      "task_id": "interval_highlights_remain_sparse_and_nonplanning",
+      "title": "TASK-0405 highlight contract survives consolidated review",
+      "verdict": "B",
+      "pass": false,
+      "reason": "Near-complete, but the claim that ticket reasoning runs independently from report evidence is misleading: it should run independently from highlights while remaining grounded in finalized report evidence.",
+      "candidate_metrics": {
+        "duration_ms": 33435,
+        "total_tokens": 70786
+      },
+      "behavior_verdict": "pass",
+      "behavior_trace_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-152851-task0406-agentqa/tasks/interval_highlights_remain_sparse_and_nonplanning/behavior_trace.json",
+      "detail_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-152851-task0406-agentqa/tasks/interval_highlights_remain_sparse_and_nonplanning.json"
+    },
+    {
+      "task_id": "interval_missing_feedback_admits_only_concrete_unblock",
+      "title": "Missing feedback routes to a concrete evidence unblock",
+      "verdict": "B",
+      "pass": false,
+      "reason": "The core routing is correct and concise, but the acceptance capture remains underspecified and the required blocked-systems reporting is absent.",
+      "candidate_metrics": {
+        "duration_ms": 28608,
+        "total_tokens": 70558
+      },
+      "behavior_verdict": "pass",
+      "behavior_trace_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-152851-task0406-agentqa/tasks/interval_missing_feedback_admits_only_concrete_unblock/behavior_trace.json",
+      "detail_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-152851-task0406-agentqa/tasks/interval_missing_feedback_admits_only_concrete_unblock.json"
+    }
+  ],
+  "behavior_verdict_counts": {
+    "pass": 7
+  },
+  "benchmark_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-152851-task0406-agentqa/benchmark.json"
+}

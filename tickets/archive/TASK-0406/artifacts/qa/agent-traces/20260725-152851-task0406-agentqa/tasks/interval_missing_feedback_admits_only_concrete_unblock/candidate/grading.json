@@ -1,0 +1,40 @@
+{
+  "assertion_results": [
+    {
+      "text": "Diagnoses missing instrumentation and does not optimize from vibes",
+      "passed": true,
+      "evidence": "Explicitly diagnoses missing instrumentation and rejects activity as outcome evidence."
+    },
+    {
+      "text": "Rejects the unsupported onboarding optimization",
+      "passed": true,
+      "evidence": "Clearly rejects onboarding optimization as insufficiently grounded."
+    },
+    {
+      "text": "Applies the normal admission predicate to the feedback-loop unblock",
+      "passed": true,
+      "evidence": "Checks artifact, threshold, stop condition, proof, authority, and duplicate status."
+    },
+    {
+      "text": "Requires a named signal, capture artifact, unlocked decision, and stop condition",
+      "passed": false,
+      "evidence": "Mentions these categories but does not name the signal, artifact, or specific decision the evidence unlocks."
+    },
+    {
+      "text": "Reports blocked systems, missing feedback, explicit delta or no-action, and next owner without execution",
+      "passed": false,
+      "evidence": "Reports missing feedback, admission decisions, ownership, and no execution, but does not explicitly identify the blocked systems."
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 2,
+    "total": 5,
+    "pass_rate": 0.6
+  },
+  "judge": {
+    "verdict": "B",
+    "pass": false,
+    "reason": "The core routing is correct and concise, but the acceptance capture remains underspecified and the required blocked-systems reporting is absent."
+  }
+}

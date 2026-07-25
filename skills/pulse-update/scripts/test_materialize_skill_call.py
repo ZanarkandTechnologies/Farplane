@@ -79,6 +79,27 @@ class MaterializeSkillCallTests(unittest.TestCase):
             with self.assertRaises(FileExistsError):
                 materializer.materialize_skill_call(root, "TASK-1001", call("content-1"))
 
+    def test_materializes_optional_lifecycle_due_at_unchanged(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            dated = call("dated")
+            dated["lifecycle"] = {
+                "status": "todo",
+                "depends_on": [],
+                "human_gate": "none",
+                "due_at": "2026-08-01T08:00:00+08:00",
+            }
+            dated_path = materializer.materialize_skill_call(root, "TASK-1001", dated)
+            undated_path = materializer.materialize_skill_call(
+                root, "TASK-1002", call("undated")
+            )
+
+            self.assertIn(
+                "due_at: '2026-08-01T08:00:00+08:00'",
+                dated_path.read_text(encoding="utf-8"),
+            )
+            self.assertNotIn("due_at:", undated_path.read_text(encoding="utf-8"))
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -25,8 +25,8 @@ Apply before generation and again to the exact final JSON.
      never becomes a planning task.
 
 3. `strategic_stage_and_understandable_value`
-   - Every market-learning, ablation, or content call names
-     one configured product bet and valid system/feature refs from that bet.
+   - Every market-learning, ablation, or content call names one configured
+     stable problem plus canonical, coherent system/feature refs.
    - The selected skill matches the next missing evidence rung: current ICP
      pain, comparative proof, content from accepted proof, or productization
      from an accepted delta. Random features and generic research fail.

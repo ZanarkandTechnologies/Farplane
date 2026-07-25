@@ -1,0 +1,8 @@
+Nothing is admitted.
+
+- “Plan our strategy” → rejected as vague planning residue.
+- Cosmetic cleanup → rejected as low materiality.
+- Material symptom without a supported cause → recorded in the report; only a decision-changing investigation with concrete diagnostic outputs and proof could qualify.
+- Plan-only ticket → rejected as artifact-free planning work.
+
+Ticket deltas: zero. Execution: none.

@@ -34,6 +34,7 @@ lifecycle:
   status: todo
   depends_on: []
   human_gate: none | [tag, reason]
+  due_at: timezone-bearing ISO-8601 timestamp # optional; omit when evidence supplies none
 proof:
   success:
   falsifier:

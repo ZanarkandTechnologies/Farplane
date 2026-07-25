@@ -1,0 +1,13 @@
+Interval diagnoses the feedback loop as **missing instrumentation**. Ticket activity is not outcome movement, so optimizing onboarding would be guesswork.
+
+Decision chain:
+
+- **Movement:** Outcome movement is unavailable; activity alone is not favorable momentum.
+- **Bottleneck/root cause:** The dominant bottleneck is missing acceptance feedback, which prevents evidence-based onboarding decisions.
+- **Interventions:** Reject direct onboarding optimization. Prefer the bounded acceptance capture because it specifies the signal, artifact, decision threshold, stop condition, and authorized implementation.
+- **Report:** Finalize the immutable dated report with this reasoning and the blocked decision.
+- **Highlights:** Append only an exceptional evidence-backed highlight; otherwise record an honest no-op.
+- **Ticket deltas:** Independently admit one coherent acceptance-capture ticket if the problem is material, no active duplicate exists, and proof/write-authority gates pass. Keep onboarding optimization as a report/Plan Next Wave candidate until evidence supports it.
+- **Execution:** Interval creates or updates the qualified ticket only; it does not implement the capture or optimize onboarding.
+
+There is no numeric ticket target, and one admitted ticket is not treated as momentum.

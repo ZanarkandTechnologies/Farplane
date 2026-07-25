@@ -64,6 +64,9 @@ def materialize_skill_call(
         "created_at": timestamp,
         "updated_at": timestamp,
     }
+    lifecycle = call.get("lifecycle")
+    if isinstance(lifecycle, dict) and "due_at" in lifecycle:
+        frontmatter["due_at"] = lifecycle["due_at"]
     body = "\n".join(
         [
             "---",

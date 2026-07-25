@@ -62,6 +62,7 @@ def write_ticket(
     claimed_by: str = "",
     depends_on: list[str] | None = None,
     priority: str = "medium",
+    due_at: str = "",
     reward_rows: list[dict[str, object]] | None = None,
     review_state: dict[str, object] | None = None,
     area_id: str = "",
@@ -74,6 +75,7 @@ def write_ticket(
                 f"title: {ticket_id}",
                 f"status: {status}",
                 f"priority: {priority}",
+                *( [f"due_at: {due_at}"] if due_at else [] ),
                 f"claimed_by: {claimed_by}",
                 f"depends_on: {json.dumps(depends_on or [])}",
                 "created_at: 2026-07-01T00:00:00Z",
@@ -744,6 +746,47 @@ class WorkPulseBoardTests(unittest.TestCase):
             self.assertEqual(
                 [row["ticket_id"] for row in result["executable_tickets"]],
                 ["TASK-HIGH", "TASK-LOW"],
+            )
+
+    def test_due_at_orders_within_priority_and_missing_is_last(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            write_ticket(root, "TASK-MISSING")
+            write_ticket(root, "TASK-LATE", due_at="2026-07-20T00:00:00Z")
+            write_ticket(root, "TASK-EARLY", due_at="2026-07-10T09:00:00+08:00")
+            write_ticket(root, "TASK-OVERDUE", due_at="2026-06-30T00:00:00Z")
+
+            result = BOARD.build_board(
+                root, now=datetime(2026, 7, 1, tzinfo=timezone.utc)
+            )
+
+            self.assertEqual(
+                [row["ticket_id"] for row in result["executable_tickets"]],
+                ["TASK-OVERDUE", "TASK-EARLY", "TASK-LATE", "TASK-MISSING"],
+            )
+
+    def test_priority_precedes_due_at_and_ticket_id_breaks_due_ties(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            write_ticket(root, "TASK-URGENT", priority="urgent")
+            write_ticket(
+                root,
+                "TASK-B",
+                priority="high",
+                due_at="2026-07-01T00:00:00Z",
+            )
+            write_ticket(
+                root,
+                "TASK-A",
+                priority="high",
+                due_at="2026-07-01T08:00:00+08:00",
+            )
+
+            result = BOARD.build_board(root)
+
+            self.assertEqual(
+                [row["ticket_id"] for row in result["executable_tickets"]],
+                ["TASK-URGENT", "TASK-A", "TASK-B"],
             )
 
     def test_only_done_dependencies_are_satisfied(self) -> None:

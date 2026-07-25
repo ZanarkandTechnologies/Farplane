@@ -4,6 +4,8 @@
 .credentials.json
 auth.json
 config.toml
+!skills/*/config.toml
+!.agents/skills/*/config.toml
 
 # Session and history state
 history.jsonl
@@ -67,6 +69,9 @@ plugins/farplane-research/skills/feed-scout/config/
 # Local ticket working set. Keep the executable Goal Program template
 # source-controlled while other local ticket packets stay ignored.
 tickets/*
+!tickets/scripts/
+tickets/scripts/*
+!tickets/scripts/check_ticket_metadata.py
 !tickets/templates/
 tickets/templates/*
 !tickets/templates/goal-loop/

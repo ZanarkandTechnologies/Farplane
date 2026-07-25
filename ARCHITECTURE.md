@@ -21,8 +21,8 @@ ticket execution, hooks, reporting, and graphs.
 Farplane is the cloneable harness substrate for running long-form AI work
 through visible artifacts instead of hidden runtime state or transcript memory
 alone. Operators clone Farplane to own their standards, skills, evals,
-templates, tickets, automations, runtime adapters, goals, guardrails, review
-loops, and self-improvement machinery.
+templates, tickets, automations, runtime adapters, Goal Packets, guardrails,
+review loops, and self-improvement machinery.
 
 Farplane Core pairs with Farplane UI:
 
@@ -37,8 +37,8 @@ The UI scope split is part of the architecture contract:
 - **Global harness surfaces** inspect and maintain Farplane itself: Harness
   Map, Skill OS, Eval OS, Rollout, Template Tracking, User Comms, and Settings.
 - **Project/company surfaces** treat each project as an autonomous company with
-  goals, teams, agents, board state, files, memory, evidence, metrics, and
-  review loops.
+  stable problems, teams, agents, board state, files, memory, evidence,
+  metrics, and review loops.
 
 The repo is organized around five concerns:
 

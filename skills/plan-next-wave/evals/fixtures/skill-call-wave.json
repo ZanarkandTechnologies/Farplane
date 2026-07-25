@@ -1,8 +1,8 @@
 {
   "global_query_receipt": {"returned_count": 20, "exhausted": false},
   "diagnosis": {
-    "goal_state": {"active": [], "completed": [], "source_gaps": []},
-    "objective_progress": [],
+    "problem_context": [{"problem_ref": "operational_visibility"}],
+    "objective_movement": [],
     "wave_size": 1,
     "dogfood_role": "not_supplied",
     "hard_guard": {"status": "fresh_and_passing"}
@@ -11,7 +11,7 @@
     {
       "skill_ref": "farplane-content-creation",
       "skill_path": ".agents/skills/farplane-content-creation/SKILL.md",
-      "required_arguments": ["product_bet_ref", "system_ref", "feature_refs", "source_or_idea", "audience", "content_goal", "channels"],
+      "required_arguments": ["problem_ref", "system_ref", "feature_refs", "source_or_idea", "audience", "content_goal", "channels"],
       "eligible": true,
       "reason": "configured"
     }
@@ -24,7 +24,7 @@
       "skill_ref": "farplane-content-creation",
       "area_id": "adoption_and_distribution",
       "arguments": {
-        "product_bet_ref": "autonomous_teams_24_7",
+        "problem_ref": "operational_visibility",
         "system_ref": "SYS-0005",
         "feature_refs": ["FEAT-0008"],
         "source_or_idea": "tickets/TASK-9001/artifacts/accepted-proof.md",

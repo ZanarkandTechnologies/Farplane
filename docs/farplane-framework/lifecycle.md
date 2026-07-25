@@ -3,13 +3,13 @@ title: "Farplane Lifecycle"
 status: active
 owner: farplane-framework
 created_at: 2026-06-23
-updated_at: 2026-07-12
+updated_at: 2026-07-25
 framework_template_version: "0.3.0"
 tags:
   - farplane
   - lifecycle
   - automations
-  - goals
+  - goal-packets
   - graph
 refs:
   - docs/farplane-framework/README.md
@@ -35,8 +35,9 @@ center is deliberately small:
 project(program, progress)
   -> typed charter + selected metrics + reusable capability skills
   -> one ticket board
-  -> one Work Pulse executes tickets or plans a bounded cross-area wave
-  -> scheduled sources add reports and candidate context
+  -> Daily/Weekly Interval turns metric movement into report-first ticket review
+  -> one Work Pulse executes tickets or plans a bounded refill wave
+  -> scheduled sources add reports and context
   -> ticket programs, progress, QA, and review preserve proof
   -> durable outcomes flow back to docs, metric objectives, and skills
 ```
@@ -54,7 +55,8 @@ own planner, worker pool, strategy file, or heartbeat.
 3. Read `farplane/metrics.yaml` for metric meaning, direction, freshness, and
    guard rules; read generated observations for current values.
 4. Read the ticket board for executable commitments and proof.
-5. Use `metric-advisor` when the objective, guard, or proof provider needs a material change.
+5. Use `metric-advisor` when the objective, direction, guard, or proof
+   provider needs a material change.
 6. Use `goal-advisor` when a selected material ticket needs a Goal Packet.
 7. Activate exactly one Work Pulse heartbeat after the board and proof surfaces
    are ready. Feed Scout, BAU reports, Dogfood, and maintenance are
@@ -78,7 +80,7 @@ flowchart TD
   D --> E["one Work Pulse"]:::work
   E --> F{"executable ticket?"}:::work
   F -->|yes| G["worker runs ticket / program / progress"]:::work
-  F -->|no| H["plan_next_wave"]:::work
+  F -->|no / low supply| H["plan_next_wave<br/>refill"]:::work
   H --> D
   G --> I["QA + review evidence inside ticket"]:::proof
   I --> J["closeout + durable writeback"]:::proof
@@ -91,6 +93,7 @@ flowchart TD
   L --> O
   M --> O
   N --> O
+  L --> D
   O --> H
 ```
 
@@ -110,9 +113,9 @@ Work Pulse is the only execution heartbeat. On each beat it:
 2. derives due check-in eligibility from ticket Reward rows;
 3. admits executable tickets under worker and review capacity;
 4. hands workers the original ticket Goal Packet and proof contract;
-5. asks one adaptive planner for a bounded globally ranked wave only when no
-   unclaimed executable or due-check-in work exists; human-active tickets do
-   not consume Pulse worker capacity;
+5. asks one adaptive planner for a bounded globally ranked refill wave only
+   when ready supply is low after dispatch; human-active tickets do not consume
+   Pulse worker capacity;
 6. writes a dated receipt.
 
 It does not run separate capability controllers or perform long-horizon
@@ -121,19 +124,20 @@ needs them.
 
 ## Scheduled Sources
 
-Scheduled automations are report and candidate-context producers, not
-additional heartbeats or proactive ticket authorities:
+Scheduled automations are report and context producers, not additional
+heartbeats or worker authorities:
 
 | Source | Reads | Writes | Ticket authority |
 | --- | --- | --- | --- |
 | Feed Scout | configured feeds and prior source reports | source report + candidates | none; next-wave planner compares candidates |
-| Daily / Weekly BAU | bounded project window and prior finalized evidence | Problems ledger + candidates | none; next-wave planner compares candidates |
+| Daily / Weekly BAU | bounded project window, raw observations, movement, and prior finalized evidence | Problems ledger + report-first ticket deltas | grounded interventions and decision-changing investigations only |
 | Dogfood | active and recent archived experiments plus prior report | portfolio learning report + experiment candidates | none; self-improvement competes globally |
 | Maintenance | registries, docs, skills, validators | maintenance report + repair candidates | none unless directly invoked by the operator |
 
-Daily and Weekly do not invent new direction. Feed Scout and Dogfood do not
-materialize their candidates. Work Pulse is the single normal path that turns
-a winning proactive candidate into a ticket on the shared board.
+Daily and Weekly do not invent direction, fake momentum, execute work, or call
+Plan Next Wave. Feed Scout and Dogfood do not materialize their candidates.
+Work Pulse is the single normal path that turns a low-supply refill candidate
+into a ticket on the shared board.
 
 Ticket completion is the narrow event-driven exception, not another heartbeat:
 
@@ -175,8 +179,8 @@ does not reconstruct or independently score the experiment policy.
 
 | State | Durable owner |
 | --- | --- |
-| Identity, planning areas/instructions, constraints, authority, capabilities, selected metric refs | `farplane/harness.yaml` |
-| Metric meaning, direction, freshness, and guard rules | `farplane/metrics.yaml` |
+| Identity, stable problems, planning areas/instructions, constraints, authority, capabilities, selected metric refs | `farplane/harness.yaml` |
+| Metric meaning, required direction, freshness, guard rules, and raw-observation interpretation | `farplane/metrics.yaml` |
 | Recurring workflow | reusable `skills/*` or project-local `.agents/skills/*` |
 | Executable commitment and all QA/review evidence | owning ticket and `artifacts/` |
 | Goal/check-in loop policy | ticket `program.md` |
@@ -185,9 +189,10 @@ does not reconstruct or independently score the experiment policy.
 | Provider coordinates | `farplane/bindings.yaml` |
 | Runtime receipts and derived context | `.farplane/reports/**` and other generated `.farplane/**` projections |
 
-Reports help the next reader plan, but are not a second source of executable
-state. Generated indexes are projections over these owners, not hand-maintained
-strategy ledgers.
+Reports help the next reader plan. Interval reports may be followed by
+grounded ticket deltas, but reports are not a second source of executable
+state. Generated indexes are projections over these owners, not
+hand-maintained strategy ledgers.
 
 ## Capability Skills
 

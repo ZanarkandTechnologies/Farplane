@@ -1,0 +1,40 @@
+{
+  "assertion_results": [
+    {
+      "text": "Runs the full movement-to-bottleneck review and records the known cause and coherent correction",
+      "passed": true,
+      "evidence": "Names the worsening metric, bottleneck, reproduced cause, alternatives, and selected correction."
+    },
+    {
+      "text": "Finalizes the dated report before highlight selection and applies the ticket delta only after highlights",
+      "passed": true,
+      "evidence": "The sequence explicitly finalizes the report, appends highlights, then creates the ticket."
+    },
+    {
+      "text": "Creates one concrete solution ticket in the same run with correction, proof, and stop condition",
+      "passed": false,
+      "evidence": "The ticket explicitly includes correction and regression proof, but its stop condition is not explicitly included."
+    },
+    {
+      "text": "Does not delay grounded work for Plan Next Wave",
+      "passed": true,
+      "evidence": "Explicitly states the grounded work is not deferred."
+    },
+    {
+      "text": "Does not execute the ticket or start Goal, Pulse, or a worker",
+      "passed": true,
+      "evidence": "Provides a clear no-execution receipt covering all prohibited starts."
+    }
+  ],
+  "summary": {
+    "passed": 4,
+    "failed": 1,
+    "total": 5,
+    "pass_rate": 0.8
+  },
+  "judge": {
+    "verdict": "B",
+    "pass": false,
+    "reason": "Strong and correctly sequenced, but the concrete ticket description should explicitly include the known stop condition."
+  }
+}

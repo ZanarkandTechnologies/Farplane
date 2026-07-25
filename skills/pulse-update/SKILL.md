@@ -42,17 +42,20 @@ object with no YAML, Markdown fence, or prose around it. Whenever refill runs,
 the response must render `pulse_receipt.planner_call` rather than only
 narrating the decision.
 That receipt carries the actual planning-input envelope, configured planning
-skill refs, global-first history, goals, review-pool and operator-availability
-state, optional World Memory, canonical proposed skill calls, and admitted call
-IDs. A receipt that omits `planner_call`, configured skills, global history, or
-the admitted call references is invalid.
+skill refs, stable problems, objective movement, global-first history,
+review-pool and operator-availability state, optional World Memory, canonical
+proposed skill calls, and admitted call IDs. A receipt that omits
+`planner_call`, configured skills, global history, or the admitted call
+references is invalid.
 
 Ticket dispatch is context-isolated:
 `create_thread(complete_handoff) -> verify clean first turn -> set canonical
 title -> claim/register`. Never fork the Pulse manager to create a worker.
 
 Daily and Weekly Interval reports may supply current evidence and non-mutating
-suggestions. They do not materialize planner calls or dispatch work in this
+suggestions. Tickets created or updated from accepted Interval findings enter
+the ordinary board directly; Plan Next Wave is not a gate for known work.
+Interval does not materialize refill planner calls or dispatch work in this
 loop. Goal Advisor remains the execution compiler for material ticket work;
 Pulse is the board manager, not the worker.
 
@@ -158,7 +161,8 @@ capacity, ticket scope, or external side-effect permission.
 
 - [ ] 1. Bind project policy and reconcile state.
   - [ ] Resolve `project_root`, `wave_size`, `worker_limit`, `review_wip`,
-        `farplane/harness.yaml` including optional goals, `farplane/metrics.yaml`, current metric readings,
+        `farplane/harness.yaml` stable problems, areas, and planning skills,
+        `farplane/metrics.yaml`, current metric readings and movement,
         ticket paths, ticket-thread association index, latest ticket/progress
         outcomes, current dated context,
         and project side-effect gates. Read bindings only when provider or
@@ -288,13 +292,14 @@ capacity, ticket scope, or external side-effect permission.
         awaiting-review tickets also exist. Do not wait for spawned workers.
     - [ ] Build one canonical planning-input object containing
           `harness.planning.skill_refs` plus the complete passive
-          `harness.areas` ICP/metric context. Add objectives/guards, optional
-          goals, metric readings, global-first history, bounded terminal Reward preference memory,
+          `harness.areas` ICP/metric context and stable `identity.problems`.
+          Add objectives/guards, metric readings and movement, global-first
+          history, bounded terminal Reward preference memory,
           review-area-pool state, operator availability, optional
           Tasty Pack evidence for relevant content candidates, report refs,
           board state, and wave size. Include a derived `semantic_time_state`
-          for metric freshness, goal urgency/deadline buckets, matured Reward
-          IDs, and operator-availability validity; serialization time alone is
+          for metric freshness, matured Reward IDs, and operator-availability
+          validity; serialization time alone is
           not planning novelty. Call
           `scripts/plan_wave_guard.py begin` before planning. An identical
           completed fingerprint is `no_op_unchanged_input`; an active claim is
@@ -321,7 +326,8 @@ capacity, ticket scope, or external side-effect permission.
 - [ ] 5. Plan or dispatch without mixing ownership.
   - [ ] For refill, call
         `plan_next_wave(planning_skill_refs = harness.planning.skill_refs,
-        areas = harness.areas, objective_contract, metric_goals = harness.goals,
+        problems = harness.identity.problems, areas = harness.areas,
+        objective_contract,
         metric_state, ticket_history_query, current_context, world_memory,
         preference_memory, wave_size)` and accept only validated configured-skill
         calls. Resolve metric direction, freshness, and guards from
@@ -452,9 +458,9 @@ pulse_receipt:
     value: none | planned
     input_ref:
     planning_skill_refs: []
+    stable_problems: []
     passive_areas: []
     objective_contract: {}
-    metric_goals: []
     metric_state: {}
     semantic_time_state: {}
     ticket_history_queries: []
@@ -482,10 +488,10 @@ it is not an extra workflow or registry.
 
 When `phases.refill.called` is `true`, `planner_call.value` must be `planned`
 and the receipt must populate the canonical inputs shown above, including
-configured skills, goals, global-first history, review-pool state, operator
-availability, World Memory, preference memory, canonical proposed calls, and
-admitted call IDs. Omission of the configured-skill or call receipt makes the
-Pulse decision incomplete.
+configured skills, stable problems, objective movement, global-first history,
+review-pool state, operator availability, World Memory, preference memory,
+canonical proposed calls, and admitted call IDs. Omission of the
+configured-skill or call receipt makes the Pulse decision incomplete.
 
 ## Gotchas
 

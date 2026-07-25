@@ -123,6 +123,7 @@ metrics:
     kind: daily_count
     unit: ablations
     display: bar_plus_cumulative
+    direction: maximize
   accepted_harness_improvements:
     refresh_ref: local_project_metrics
     label: Accepted harness improvements
@@ -141,6 +142,7 @@ metrics:
     kind: daily_count
     unit: results
     display: bar_plus_cumulative
+    direction: maximize
   auto_time_ratio:
     refresh_ref: local_project_metrics
     label: Autonomous time ratio
@@ -149,6 +151,7 @@ metrics:
     kind: point
     unit: ratio
     display: reading
+    direction: maximize
   clone_hours:
     refresh_ref: local_project_metrics
     label: Parallel clone hours
@@ -167,6 +170,7 @@ metrics:
     kind: daily
     unit: hours
     display: line
+    direction: maximize
   accepted_clone_hours:
     refresh_ref: local_project_metrics
     label: Accepted clone hours
@@ -215,6 +219,7 @@ metrics:
     kind: point
     unit: ratio
     display: reading
+    direction: maximize
   priority_skill_health_gap_count:
     refresh_ref: harness_health
     label: Priority skill health gaps
@@ -256,6 +261,7 @@ metrics:
     kind: daily_count
     unit: views
     display: bar_plus_cumulative
+    direction: maximize
   auto_completion_rate:
     refresh_ref: local_project_metrics
     label: Auto completion rate
@@ -264,6 +270,7 @@ metrics:
     kind: point
     unit: ratio
     display: reading
+    direction: maximize
   rejected_ai_ticket_count:
     refresh_ref: local_project_metrics
     label: Rejected AI tickets
@@ -274,9 +281,6 @@ metrics:
     display: bar_plus_cumulative
     direction: minimize
     max_age_days: 1
-    guard:
-      operator: less_than_or_equal
-      threshold: 1
   intervention_free_ticket_count:
     refresh_ref: local_project_metrics
     label: Intervention-free tickets
@@ -285,6 +289,7 @@ metrics:
     kind: daily_count
     unit: tickets
     display: bar_plus_cumulative
+    direction: maximize
   ticket_intervention_turn_count:
     refresh_ref: local_project_metrics
     label: Ticket intervention turns
@@ -303,6 +308,7 @@ metrics:
     kind: point
     unit: tickets
     display: reading
+    direction: minimize
   x_followers:
     refresh_ref: x_account_metrics
     label: X followers
@@ -311,6 +317,7 @@ metrics:
     kind: point
     unit: followers
     display: line
+    direction: maximize
   x_views:
     refresh_ref: x_account_metrics
     label: X views
@@ -329,6 +336,7 @@ metrics:
     kind: daily_count
     unit: likes
     display: bar_plus_cumulative
+    direction: maximize
   instagram_followers:
     refresh_ref: instagram_account_metrics
     label: Instagram followers
@@ -337,6 +345,7 @@ metrics:
     kind: point
     unit: followers
     display: line
+    direction: maximize
   instagram_views:
     refresh_ref: instagram_account_metrics
     label: Instagram views
@@ -355,6 +364,7 @@ metrics:
     kind: daily_count
     unit: likes
     display: bar_plus_cumulative
+    direction: maximize
   instagram_comments:
     refresh_ref: instagram_account_metrics
     label: Instagram comments
@@ -363,6 +373,7 @@ metrics:
     kind: daily_count
     unit: comments
     display: bar_plus_cumulative
+    direction: maximize
   instagram_shares:
     refresh_ref: instagram_account_metrics
     label: Instagram shares
@@ -371,6 +382,7 @@ metrics:
     kind: daily_count
     unit: shares
     display: bar_plus_cumulative
+    direction: maximize
   instagram_saves:
     refresh_ref: instagram_account_metrics
     label: Instagram saves
@@ -379,6 +391,7 @@ metrics:
     kind: daily_count
     unit: saves
     display: bar_plus_cumulative
+    direction: maximize
   instagram_reach:
     refresh_ref: instagram_account_metrics
     label: Instagram reach
@@ -387,6 +400,7 @@ metrics:
     kind: daily_count
     unit: accounts
     display: bar_plus_cumulative
+    direction: maximize
   instagram_total_interactions:
     refresh_ref: instagram_account_metrics
     label: Instagram total interactions
@@ -395,6 +409,7 @@ metrics:
     kind: daily_count
     unit: interactions
     display: bar_plus_cumulative
+    direction: maximize
   instagram_avg_watch_time:
     refresh_ref: instagram_account_metrics
     label: Instagram average watch time
@@ -403,6 +418,7 @@ metrics:
     kind: point
     unit: milliseconds
     display: line
+    direction: maximize
   instagram_total_watch_time:
     refresh_ref: instagram_account_metrics
     label: Instagram total watch time
@@ -411,6 +427,7 @@ metrics:
     kind: daily_count
     unit: milliseconds
     display: bar_plus_cumulative
+    direction: maximize
   instagram_retention_score:
     refresh_ref: instagram_account_metrics
     label: Instagram retention score
@@ -419,6 +436,7 @@ metrics:
     kind: point
     unit: percent
     display: line
+    direction: maximize
   posts_published:
     refresh_ref: local_project_metrics
     label: Posts published
@@ -427,3 +445,4 @@ metrics:
     kind: daily_count
     unit: posts
     display: bar_plus_cumulative
+    direction: maximize

@@ -1,0 +1,44 @@
+{
+  "schema_version": 2,
+  "job_id": "20260725-153854-task0406-agentqa-rerun4",
+  "label": "task0406-agentqa-rerun4",
+  "created_at": "2026-07-25T15:38:54.840939+00:00",
+  "completed_at": "2026-07-25T15:39:34.970169+00:00",
+  "harness": "codex",
+  "judge_harness": "codex",
+  "scopes": [
+    "skills"
+  ],
+  "default_context_file": "contexts/agi-toy-shop.md",
+  "skill_context": "inline",
+  "compare_baseline": false,
+  "behavior_trace": true,
+  "task_files": [
+    "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/skills/interval-update/evals/evals.json"
+  ],
+  "task_count": 1,
+  "pass_rate": 0.0,
+  "verdict_counts": {
+    "B": 1
+  },
+  "tasks": [
+    {
+      "task_id": "interval_missing_feedback_admits_only_concrete_unblock",
+      "title": "Missing feedback routes to a concrete evidence unblock",
+      "verdict": "B",
+      "pass": false,
+      "reason": "Strong and compact decision chain, but it should explicitly name the onboarding decisions or systems blocked by missing feedback and select one concrete execution owner.",
+      "candidate_metrics": {
+        "duration_ms": 38208,
+        "total_tokens": 72366
+      },
+      "behavior_verdict": "pass",
+      "behavior_trace_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-153854-task0406-agentqa-rerun4/tasks/interval_missing_feedback_admits_only_concrete_unblock/behavior_trace.json",
+      "detail_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-153854-task0406-agentqa-rerun4/tasks/interval_missing_feedback_admits_only_concrete_unblock.json"
+    }
+  ],
+  "behavior_verdict_counts": {
+    "pass": 1
+  },
+  "benchmark_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-153854-task0406-agentqa-rerun4/benchmark.json"
+}

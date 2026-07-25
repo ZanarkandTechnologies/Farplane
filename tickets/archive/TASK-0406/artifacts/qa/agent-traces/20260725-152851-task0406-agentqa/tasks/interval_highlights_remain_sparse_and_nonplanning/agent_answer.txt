@@ -1,0 +1,13 @@
+The Interval handles them in this order:
+
+- Finalize the Daily report first.
+- Ignore the ordinary shipped page as highlight filler.
+- Select the verified 61%→84% record as the team’s one win.
+- Select the material failed delegation, including consequence and reusable lesson, as the team’s one failure.
+- Append each through the highlight ledger. Identity is `(kind, team, report)`, so an existing win is an idempotent `already_exists` no-op but does not block a failure for the same team/report, and vice versa.
+
+Highlights do not influence planning or mutate the finalized report.
+
+Ticket reasoning then runs independently from the report evidence. The delegation failure produces a ticket delta only if it represents a material problem with a known executable intervention, concrete output and proof, no active duplicate, coherent scope, and write authority. Otherwise it remains a documented problem or Plan Next Wave candidate. The record and routine shipment do not automatically justify tickets.
+
+No implementation, worker, Pulse, or experiment starts during Interval.

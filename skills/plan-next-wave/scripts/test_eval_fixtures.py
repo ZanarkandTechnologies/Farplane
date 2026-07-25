@@ -34,7 +34,7 @@ class EvalFixtureContractTest(unittest.TestCase):
 
     def test_golden_is_a_skill_call_not_a_workflow(self) -> None:
         text = GOLDEN.read_text(encoding="utf-8")
-        for value in ("skill_ref: farplane-content-creation", "product_bet_ref:", "system_ref:", "feature_refs:", "expected_artifact:", "## Transferable invariants"):
+        for value in ("skill_ref: farplane-content-creation", "problem_ref:", "system_ref:", "feature_refs:", "expected_artifact:", "## Transferable invariants"):
             self.assertIn(value, text)
         self.assertNotIn("proposal_type:", text)
         self.assertNotIn("lane:", text)

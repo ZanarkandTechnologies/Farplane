@@ -1,0 +1,11 @@
+The Daily Interval admits one concrete correction ticket.
+
+- Movement: material acceptance regression.
+- Bottleneck: the affected parser branch.
+- Root cause: reproduced with sufficient confidence.
+- Intervention: fix that branch and add the known regression artifact; broad investigation or Plan Next Wave would add no value.
+- Report: finalize the immutable dated Daily report first.
+- Highlights: append a failure only if consequence and a reusable lesson are evidenced; otherwise honest no-op.
+- Ticket delta: create one solution ticket through the authorized filesystem route. Its contract includes the correction, concrete output, regression proof/falsifier, and stop condition.
+
+Candidates are evaluated independently; there is no ticket cap, and ticket count is not momentum. Interval starts no Goal, Pulse, worker, or execution.

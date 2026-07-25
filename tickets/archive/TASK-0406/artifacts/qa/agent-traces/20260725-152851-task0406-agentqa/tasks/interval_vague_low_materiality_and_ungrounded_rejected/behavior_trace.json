@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-07-25T15:30:29.975895+00:00",
+  "verdict": "pass",
+  "failures": [],
+  "returncode": 0,
+  "prompt_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-152851-task0406-agentqa/tasks/interval_vague_low_materiality_and_ungrounded_rejected/agent_prompt.md",
+  "events_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-152851-task0406-agentqa/tasks/interval_vague_low_materiality_and_ungrounded_rejected/events.jsonl",
+  "stdout_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-152851-task0406-agentqa/tasks/interval_vague_low_materiality_and_ungrounded_rejected/agent_stdout.log",
+  "stderr_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-152851-task0406-agentqa/tasks/interval_vague_low_materiality_and_ungrounded_rejected/agent_stderr.log",
+  "final_output_path": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane/tickets/TASK-0406/artifacts/qa/agent-traces/20260725-152851-task0406-agentqa/tasks/interval_vague_low_materiality_and_ungrounded_rejected/agent_answer.txt",
+  "output_schema_path": "",
+  "schema_validation": {
+    "requested": false,
+    "pass": true,
+    "errors": []
+  },
+  "event_summary": {
+    "thread_id": "019f99e6-060e-7940-8656-c9acf6d0594a",
+    "event_count": 4,
+    "agent_message_count": 1,
+    "command_count": 0,
+    "failed_command_count": 0,
+    "commands": [],
+    "usage": {
+      "input_tokens": 34205,
+      "cached_input_tokens": 0,
+      "output_tokens": 187,
+      "reasoning_output_tokens": 105
+    }
+  },
+  "command_requirement_score": {
+    "required": 0,
+    "matched": 0,
+    "results": []
+  },
+  "checkpoint_score": {
+    "total": 0,
+    "done": 0,
+    "skipped": 0,
+    "blocked": 0,
+    "invalid": 0
+  },
+  "artifact_inventory": {
+    "declared": [],
+    "present": [],
+    "missing_or_unsafe": [],
+    "observed_file_delta": {
+      "created": [],
+      "modified": [],
+      "deleted": []
+    }
+  },
+  "behavior_report_detected": false,
+  "final_output_format": "text_or_other_json",
+  "final_report": null
+}

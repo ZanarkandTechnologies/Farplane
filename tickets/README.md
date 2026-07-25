@@ -121,6 +121,7 @@ Sparse routing overrides are added only when they differ from defaults:
 
 ```yaml
 priority: high
+due_at: 2026-04-10T17:00:00+08:00
 claimed_by: codex-019ef784
 depends_on: [TASK-0001]
 human_gate: [post, "Public X post needs Kenji approval."]
@@ -132,7 +133,13 @@ compute_target: local_worktree
 - `status`: the sole lifecycle state: `todo`, `active`, `awaiting_review`,
   `waiting_signal`, `blocked`, `done`, `failed`, or `rejected`.
 - `priority`: optional `urgent`, `high`, `medium`, or `low`; omission means
-  `medium`.
+  `medium`. Priority expresses strategic importance.
+- `due_at`: optional delivery deadline as a timezone-bearing ISO-8601
+  timestamp, for example `2026-04-10T17:00:00+08:00` or
+  `2026-04-10T09:00:00Z`. It expresses when the ticket artifact or outcome is
+  needed; it is distinct from priority and from Reward `check_in_at`, which
+  schedules outcome evaluation. Executable tickets sort by priority, then
+  earliest `due_at` with missing deadlines last, then ticket ID.
 - `claimed_by`: optional human-facing alias for the current active execution
   turn. It is present only with `status: active` and cleared when execution
   parks, waits, completes, or releases the worker.

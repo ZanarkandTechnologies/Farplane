@@ -10,7 +10,7 @@ template_uses:
 eval: evals/evals.json
 qa_checklist: qa_checklist.md
 planner_contract:
-  required_arguments: ["product_bet_ref", "system_ref", "feature_refs", "claim", "surface", "task_case", "baseline"]
+  required_arguments: ["problem_ref", "system_ref", "feature_refs", "claim", "surface", "task_case", "baseline"]
 ---
 
 # Farplane Ablation Proof
@@ -28,7 +28,7 @@ versus absent, and whether the claim should remain part of the harness.
 ## Skill Signature
 
 ```text
-farplane_ablation_proof(product_bet_ref, system_ref, feature_refs, claim, surface, task_case, baseline, with_surface?, without_surface?, expectation?, ticket?, audience_context?)
+farplane_ablation_proof(problem_ref, system_ref, feature_refs, claim, surface, task_case, baseline, with_surface?, without_surface?, expectation?, ticket?, audience_context?)
   -> ablation_report + trust_decision + follow_up
 state: reads(farplane/harness.yaml, farplane/metrics.yaml, ticket audience_context first or configured Feed Scout memory as fallback, target surface, task/eval evidence); writes(ticket artifact)
 gates: claim_is_specific; canonical_icp_bound; baseline_named; comparison_is_fair; evidence_cites_both_conditions; no_proof_theater

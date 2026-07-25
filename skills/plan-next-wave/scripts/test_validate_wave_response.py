@@ -24,7 +24,7 @@ def valid_call(call_id: str = "content-1") -> dict:
         "skill_ref": "farplane-content-creation",
         "area_id": "framework_delivery",
         "arguments": {
-            "product_bet_ref": "autonomous_teams_24_7",
+            "problem_ref": "operational_visibility",
             "system_ref": "SYS-0005",
             "feature_refs": ["FEAT-0008"],
             "source_or_idea": "tickets/TASK-0384/artifacts/accepted-ablation.md",
@@ -76,8 +76,8 @@ def valid_payload() -> dict:
     return {
         "global_query_receipt": {"command": "farplane tickets history --json", "limit": 20},
         "diagnosis": {
-            "goal_state": {"active": [], "completed": [], "source_gaps": []},
-            "objective_progress": [],
+            "problem_context": [{"problem_ref": "operational_visibility"}],
+            "objective_movement": [],
             "wave_size": 1,
             "dogfood_role": "not_supplied",
             "hard_guard": {"status": "healthy"},
@@ -105,6 +105,22 @@ def valid_payload() -> dict:
 class WaveResponseValidatorTests(unittest.TestCase):
     def test_representative_compact_call_passes(self) -> None:
         self.assertEqual(validator.validate_wave_response(valid_payload(), PROJECT_ROOT), [])
+
+    def test_lifecycle_accepts_optional_timezone_bearing_due_at(self) -> None:
+        for due_at in (None, "2026-08-01T00:00:00Z", "2026-08-01T08:00:00+08:00"):
+            with self.subTest(due_at=due_at):
+                payload = valid_payload()
+                if due_at is not None:
+                    payload["proposed_skill_calls"][0]["lifecycle"]["due_at"] = due_at
+                self.assertEqual(validator.validate_wave_response(payload, PROJECT_ROOT), [])
+
+    def test_lifecycle_rejects_invalid_due_at(self) -> None:
+        for due_at in ("2026-08-01", "2026-08-01T00:00:00", "soon"):
+            with self.subTest(due_at=due_at):
+                payload = valid_payload()
+                payload["proposed_skill_calls"][0]["lifecycle"]["due_at"] = due_at
+                errors = validator.validate_wave_response(payload, PROJECT_ROOT)
+                self.assertTrue(any("lifecycle.due_at must be" in error for error in errors))
 
     def test_empty_wave_with_exact_guard_reason_passes(self) -> None:
         payload = valid_payload()
@@ -181,22 +197,28 @@ broken_skill(question, ticket?)
         errors = validator.validate_wave_response(payload, PROJECT_ROOT)
         self.assertTrue(any("content_goal must be concretely bound" in error for error in errors))
 
-    def test_strategic_refs_must_belong_to_one_product_bet(self) -> None:
+    def test_unknown_problem_and_system_refs_are_rejected(self) -> None:
         payload = valid_payload()
-        payload["proposed_skill_calls"][0]["arguments"]["system_ref"] = "SYS-0006"
-        payload["proposed_skill_calls"][0]["arguments"]["feature_refs"] = ["FEAT-0022"]
+        payload["proposed_skill_calls"][0]["arguments"]["problem_ref"] = "missing_problem"
+        payload["proposed_skill_calls"][0]["arguments"]["system_ref"] = "SYS-MISSING"
         errors = validator.validate_wave_response(payload, PROJECT_ROOT)
-        self.assertTrue(any("system_ref must belong" in error for error in errors))
-        self.assertTrue(any("feature_refs must belong" in error for error in errors))
+        self.assertTrue(any("problem_ref must name a configured stable problem" in error for error in errors))
+        self.assertTrue(any("system_ref must name a canonical system" in error for error in errors))
 
     def test_feature_refs_must_belong_to_selected_system(self) -> None:
         payload = valid_payload()
         arguments = payload["proposed_skill_calls"][0]["arguments"]
-        arguments["product_bet_ref"] = "agent_sdlc"
+        arguments["problem_ref"] = "agent_sdlc"
         arguments["system_ref"] = "SYS-0005"
         arguments["feature_refs"] = ["FEAT-0022"]
         errors = validator.validate_wave_response(payload, PROJECT_ROOT)
         self.assertTrue(any("feature_refs must belong to system_ref" in error for error in errors))
+
+    def test_unknown_feature_ref_is_rejected(self) -> None:
+        payload = valid_payload()
+        payload["proposed_skill_calls"][0]["arguments"]["feature_refs"] = ["FEAT-MISSING"]
+        errors = validator.validate_wave_response(payload, PROJECT_ROOT)
+        self.assertTrue(any("feature_refs must name canonical features" in error for error in errors))
 
     def test_admission_ids_are_unique_known_and_within_wave_size(self) -> None:
         payload = valid_payload()

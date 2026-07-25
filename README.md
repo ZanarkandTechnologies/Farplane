@@ -10,7 +10,7 @@ technical contracts.
 
 Clone this repo when you want to build and maintain your own operating harness
 for AI work: standards, skills, evals, templates, tickets, automations, runtime
-adapters, goals, guardrails, graph projections, review loops, and
+adapters, Goal Packets, guardrails, graph projections, review loops, and
 self-improvement machinery. Farplane Core is the durable substrate; Farplane UI
 is the cockpit that makes the substrate visible and steerable.
 
@@ -20,8 +20,8 @@ The product has two operating scopes:
   skills, evals, templates, rollout, graph/lifecycle maps, runtime settings,
   and user communication surfaces.
 - **Project/company scope**: treat each project as an autonomous company with
-  goals, teams, agents, board state, files, memory, evidence, metrics, and
-  review loops.
+  stable problems, teams, agents, board state, files, memory, evidence,
+  metrics, and review loops.
 
 Farplane is broader than tickets. The ticket-first autonomous coding loop is
 one important feature, but the larger purpose is to keep an AI harness learning
@@ -36,7 +36,8 @@ their repo into a haze of prompts, chat memory, and unverifiable claims.
    runtime state, memories, feature specs, and proof in files that developers can diff,
    review, and repair.
 2. **Objective loops that do not drift.** Project metric objectives live in
-   `farplane/metrics.yaml`; Goal Packets give selected long-running work a
+   `farplane/metrics.yaml` with explicit direction, and Core derives movement
+   from raw observations. Goal Packets give selected long-running work a
    `ticket.md`, `program.md`, and `progress.md` so a business, product, or
    multi-agent loop can keep a longer horizon without becoming one giant
    prompt.
@@ -95,7 +96,7 @@ flowchart LR
   engine --> map["harness map<br/>skills + docs + backlinks"]:::module
   engine --> state[".farplane/<br/>project runtime state"]:::module
   ui --> global["global harness modules<br/>map, skills, evals, rollout,<br/>templates, comms, settings"]:::module
-  ui --> project["project/company views<br/>goals, teams, board,<br/>memory, evidence, metrics"]:::module
+  ui --> project["project/company views<br/>problems, teams, board,<br/>memory, evidence, metrics"]:::module
   ui --> scene["office scene<br/>project entrypoints"]:::module
   ui --> nudges
   engine -. runtime adapter .-> openclaw["OpenClaw"]:::adapter
