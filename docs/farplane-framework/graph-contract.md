@@ -17,7 +17,7 @@ refs:
   - docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md
   - skills/skill-maintenance/scripts/farplane_lifecycle_graph.py
   - skills/skill-maintenance/scripts/generate_farplane_lifecycle_graph.py
-  - skills/skill-maintenance/graph/farplane-lifecycle-graph.json
+  - .farplane/generated/graphs/farplane-lifecycle-graph.json
 ---
 
 # Farplane Lifecycle Graph Contract

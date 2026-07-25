@@ -10,7 +10,7 @@ tags:
   - skill-maintenance
 refs:
   - skills/skill-maintenance/scripts/generate_harness_graph.py
-  - skills/skill-maintenance/graph/harness-graph.json
+  - .farplane/generated/graphs/harness-graph.json
 ---
 
 # Docs Reference Audit

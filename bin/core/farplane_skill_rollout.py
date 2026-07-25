@@ -118,7 +118,7 @@ def resolve_skill_rollout_stats(
     registry = registry_path or standard_root / "docs" / "skills" / "registry.jsonl"
     intelligence = (
         intelligence_path
-        or standard_root / "skills" / "skill-maintenance" / "graph" / "skill-template-intelligence.json"
+        or standard_root / ".farplane" / "generated" / "graphs" / "skill-template-intelligence.json"
     )
     registry_rows = read_jsonl(registry)
     intelligence_payload = read_json(intelligence)

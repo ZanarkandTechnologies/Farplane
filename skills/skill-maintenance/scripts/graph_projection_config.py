@@ -6,6 +6,13 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 
 
+GENERATED_GRAPH_ROOT = ".farplane/generated/graphs"
+
+
+def generated_graph_path(filename: str) -> str:
+    return f"{GENERATED_GRAPH_ROOT}/{filename}"
+
+
 @dataclass(frozen=True)
 class ProjectionConfig:
     name: str
@@ -36,11 +43,11 @@ PROJECTION_CONFIGS: dict[str, ProjectionConfig] = {
         name="skill-registry",
         description="Skill registry graph and rendered skill docs.",
         output_schema="skill_graph",
-        default_out="skills/skill-maintenance/graph/skill-graph.json",
-        default_js_out="skills/skill-maintenance/graph/skill-graph.js",
+        default_out=generated_graph_path("skill-graph.json"),
+        default_js_out=generated_graph_path("skill-graph.js"),
         js_global="SKILL_GRAPH",
-        docs_out="skills/skill-maintenance/graph/skill-docs.json",
-        docs_js_out="skills/skill-maintenance/graph/skill-docs.js",
+        docs_out=generated_graph_path("skill-docs.json"),
+        docs_js_out=generated_graph_path("skill-docs.js"),
         docs_js_global="SKILL_DOCS",
         flatteners=("method_routes",),
     ),
@@ -48,8 +55,8 @@ PROJECTION_CONFIGS: dict[str, ProjectionConfig] = {
         name="harness-reference",
         description="Repo-wide local-reference graph plus docs audit report.",
         output_schema="harness_graph",
-        default_out="skills/skill-maintenance/graph/harness-graph.json",
-        default_js_out="skills/skill-maintenance/graph/harness-graph.js",
+        default_out=generated_graph_path("harness-graph.json"),
+        default_js_out=generated_graph_path("harness-graph.js"),
         js_global="HARNESS_GRAPH",
         report_out="docs/doc-audit/generated/doc-reference-report.md",
     ),
@@ -57,16 +64,16 @@ PROJECTION_CONFIGS: dict[str, ProjectionConfig] = {
         name="farplane-framework-core",
         description="Manifest-backed Farplane framework core graph.",
         output_schema="framework_core_graph",
-        default_out="skills/skill-maintenance/graph/farplane-framework-core-graph.json",
-        default_js_out="skills/skill-maintenance/graph/farplane-framework-core-graph.js",
+        default_out=generated_graph_path("farplane-framework-core-graph.json"),
+        default_js_out=generated_graph_path("farplane-framework-core-graph.js"),
         js_global="FARPLANE_FRAMEWORK_CORE_GRAPH",
     ),
     "farplane-lifecycle-core": ProjectionConfig(
         name="farplane-lifecycle-core",
         description="Compact Farplane lifecycle graph for UI and agent context.",
         output_schema="lifecycle_graph",
-        default_out="skills/skill-maintenance/graph/farplane-lifecycle-graph.json",
-        default_js_out="skills/skill-maintenance/graph/farplane-lifecycle-graph.js",
+        default_out=generated_graph_path("farplane-lifecycle-graph.json"),
+        default_js_out=generated_graph_path("farplane-lifecycle-graph.js"),
         js_global="FARPLANE_LIFECYCLE_GRAPH",
         flatteners=("ticket_ids", "timestamped_reports", "method_routes"),
     ),
@@ -74,8 +81,8 @@ PROJECTION_CONFIGS: dict[str, ProjectionConfig] = {
         name="farplane-lifecycle-full",
         description="Audit lifecycle graph with gates, abstract state, and FSA state nodes.",
         output_schema="lifecycle_graph",
-        default_out="skills/skill-maintenance/graph/farplane-lifecycle-graph.json",
-        default_js_out="skills/skill-maintenance/graph/farplane-lifecycle-graph.js",
+        default_out=generated_graph_path("farplane-lifecycle-graph.json"),
+        default_js_out=generated_graph_path("farplane-lifecycle-graph.js"),
         js_global="FARPLANE_LIFECYCLE_GRAPH",
         flatteners=("ticket_ids", "timestamped_reports", "method_routes"),
         optional_nodes=frozenset({"gates", "abstract_state", "fsa_state_nodes"}),

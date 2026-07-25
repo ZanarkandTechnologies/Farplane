@@ -26,7 +26,7 @@ def write_json(path: Path, payload: object) -> None:
 
 
 def write_fixture(root: Path) -> None:
-    graph_root = root / "skills" / "skill-maintenance" / "graph"
+    graph_root = root / ".farplane" / "generated" / "graphs"
     write_json(
         graph_root / "skill-graph.json",
         {

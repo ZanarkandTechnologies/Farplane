@@ -19,6 +19,7 @@ from farplane_skill_rollout import SkillRolloutError, resolve_skill_rollout_stat
 SCHEMA = "farplane_harness_health"
 SCHEMA_VERSION = "0.1.0"
 DEFAULT_OUTPUT = Path(".farplane/state/harness-health.json")
+DEFAULT_GRAPH_ROOT = Path(".farplane/generated/graphs")
 EXPECTED_EVAL_COUNT = 5
 METRIC_SOURCE_ID = "harness_health"
 PRIORITY_SKILL_METRIC_ID = "priority_skill_health_gap_count"
@@ -405,7 +406,7 @@ def compile_harness_health(
     project_root = project_root.resolve()
     standard_root = standard_root.resolve()
     evals_root = (evals_root or project_root / ".farplane" / "evals").resolve()
-    graph_root = standard_root / "skills" / "skill-maintenance" / "graph"
+    graph_root = standard_root / DEFAULT_GRAPH_ROOT
     graph_path = graph_root / "skill-graph.json"
     docs_path = graph_root / "skill-docs.json"
     intelligence_path = graph_root / "skill-template-intelligence.json"

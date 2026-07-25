@@ -15,12 +15,11 @@ into a second place to maintain skill truth.
 - This README is the human selection guide. Use it to understand why neighboring
   skills differ and which one should own a request before opening the generated
   registry or individual `SKILL.md` files.
-- `skills/skill-maintenance/graph/` contains the generated local visualization
-  of skill nodes, Markdown-reference edges, Tier 3 chain edges, and rendered
-  skill documents. It also generates a repo-wide harness reference graph and
-  docs audit report for backlink cleanup. The generated UI is owned by
-  `skill-maintenance` for now so `docs/skills/` stays an index plus registry
-  surface.
+- `skills/skill-maintenance/graph/` contains the tracked local visualization
+  shell. Its generated skill, document, harness, and lifecycle data lives under
+  ignored `.farplane/generated/graphs/`, preventing routine refreshes from
+  creating repository diffs. The UI is owned by `skill-maintenance` for now so
+  `docs/skills/` stays an index plus registry surface.
 - `skills/skill-registry-ui/` is the operator skill for refreshing, opening,
   and validating that graph UI.
 - If the graph expands beyond skills into repo-wide Markdown or JSON backlinks,

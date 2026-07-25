@@ -1,24 +1,33 @@
 # Skill Graph
 
-Generated visual inspection surface for Farplane skills and harness docs.
+Tracked static viewer for Farplane skills and harness docs. Generated data is
+written under `.farplane/generated/graphs/` so routine refreshes do not create
+repository diffs.
 
 ## Files
 
-- `skill-graph.json`: generated graph data from `docs/skills/registry.jsonl`
-- `skill-graph.js`: generated local-file wrapper for the same graph data
-- `skill-docs.json`: generated `SKILL.md` frontmatter and body Markdown
-- `skill-docs.js`: generated local-file wrapper for the same skill docs
-- `harness-graph.json`: generated repo-wide local-reference graph for docs,
+- `.farplane/generated/graphs/skill-graph.json`: generated graph data from
+  `docs/skills/registry.jsonl`
+- `.farplane/generated/graphs/skill-graph.js`: generated local-file wrapper
+  for the same graph data
+- `.farplane/generated/graphs/skill-docs.json`: generated `SKILL.md`
+  frontmatter and body Markdown
+- `.farplane/generated/graphs/skill-docs.js`: generated local-file wrapper for
+  the same skill docs
+- `.farplane/generated/graphs/harness-graph.json`: generated repo-wide
+  local-reference graph for docs,
   skills, templates, agents, scripts, and root docs
-- `harness-graph.js`: generated local-file wrapper for the same harness graph
-- `farplane-framework-core-graph.json`: generated manifest-backed Framework
-  Core graph for Harness OS Map
-- `farplane-framework-core-graph.js`: generated local-file wrapper for the
-  same Framework Core graph
-- `farplane-lifecycle-graph.json`: generated semantic Farplane lifecycle graph
-  with skill reads/writes/routes, framework files, hooks, and FSA projections
-- `farplane-lifecycle-graph.js`: generated local-file wrapper for the same
-  lifecycle graph
+- `.farplane/generated/graphs/harness-graph.js`: generated local-file wrapper
+  for the same harness graph
+- `.farplane/generated/graphs/farplane-framework-core-graph.json`: generated
+  manifest-backed Framework Core graph for Harness OS Map
+- `.farplane/generated/graphs/farplane-framework-core-graph.js`: generated
+  local-file wrapper for the same Framework Core graph
+- `.farplane/generated/graphs/farplane-lifecycle-graph.json`: generated
+  semantic Farplane lifecycle graph with skill reads/writes/routes, framework
+  files, hooks, and FSA projections
+- `.farplane/generated/graphs/farplane-lifecycle-graph.js`: generated
+  local-file wrapper for the same lifecycle graph
 - `index.html`: static graph viewer
 - `docs/doc-audit/generated/doc-reference-report.md`: generated Markdown audit
   report for docs cleanup, global-docs bundling, and archive candidates
@@ -81,6 +90,9 @@ python3 skills/skill-maintenance/scripts/generate_farplane_lifecycle_graph.py --
 
 Open `index.html` directly, or serve the repo root with a local static server
 and visit `/skills/skill-maintenance/graph/`.
+
+Run the generators first after a fresh clone. The tracked viewer loads its
+ignored runtime data from `.farplane/generated/graphs/`.
 
 The graph treats `skill_links` as solid Markdown-reference edges,
 `todo_skill_refs` as ordered todo-chain edges, and `common_chains.after` as

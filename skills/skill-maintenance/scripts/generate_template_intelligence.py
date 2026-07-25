@@ -27,9 +27,12 @@ if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
 from bin.validators.template_usage import normalize_template_uses, template_target_basis
+from graph_projection_config import generated_graph_path
+
+
 TEMPLATE_PATH = Path("docs/skills/templates/SKILL_TEMPLATE.md")
-DEFAULT_OUT = Path("skills/skill-maintenance/graph/skill-template-intelligence.json")
-DEFAULT_JS_OUT = Path("skills/skill-maintenance/graph/skill-template-intelligence.js")
+DEFAULT_OUT = Path(generated_graph_path("skill-template-intelligence.json"))
+DEFAULT_JS_OUT = Path(generated_graph_path("skill-template-intelligence.js"))
 DEFAULT_ARCHIVE_DIR = Path("tmp/skill-template-snapshots")
 PROJECT_ROOTS = (
     Path("."),

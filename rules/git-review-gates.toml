@@ -46,8 +46,6 @@ checks = ["harness_invariants"]
 [large_file_guard]
 max_bytes = 1048576
 skip_globs = [
-  "skills/skill-maintenance/graph/*.json",
-  "skills/skill-maintenance/graph/*.js",
   "docs/features/*.md",
 ]
 

@@ -59,7 +59,7 @@ JSON consumers use the same shape:
 ```
 
 The rollout report lives in
-`skills/skill-maintenance/graph/skill-template-intelligence.json` under
+`.farplane/generated/graphs/skill-template-intelligence.json` under
 `template_rollout_summary` and `template_rollout`.
 
 `HUMAN_REPORT_TEMPLATE.md` is deliberately at prototype scope. It defines the

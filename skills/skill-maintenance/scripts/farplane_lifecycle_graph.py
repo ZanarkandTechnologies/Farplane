@@ -519,10 +519,11 @@ def validate_graph(graph: dict[str, Any]) -> list[str]:
 
 
 def main() -> int:
+    config = get_projection_config("farplane-lifecycle-core")
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--repo-root", default=".")
-    parser.add_argument("--out", default="skills/skill-maintenance/graph/farplane-lifecycle-graph.json")
-    parser.add_argument("--js-out", default="skills/skill-maintenance/graph/farplane-lifecycle-graph.js")
+    parser.add_argument("--out", default=config.default_out)
+    parser.add_argument("--js-out", default=config.default_js_out)
     parser.add_argument("--check", action="store_true", help="validate generated graph shape and on-disk artifact")
     parser.add_argument("--full", action="store_true", help="include gates, abstract state, and FSA state nodes")
     parser.add_argument("--include-gates", action="store_true", help="include skill gate nodes and guard edges")

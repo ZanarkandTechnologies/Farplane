@@ -40,7 +40,7 @@ Rules:
 - When `docs/skills/templates/SKILL_TEMPLATE.md` changes, treat it as a
   template release candidate: run
   `python3 skills/skill-maintenance/scripts/check_skills.py --write` so
-  `skills/skill-maintenance/graph/skill-template-intelligence.json` refreshes
+  `.farplane/generated/graphs/skill-template-intelligence.json` refreshes
   with the template metadata. Do not hand-edit generated template intelligence
   files.
 - Treat numeric skill tiers as compounding leverage classes for upgrade

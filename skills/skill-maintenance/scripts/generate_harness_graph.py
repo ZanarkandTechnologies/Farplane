@@ -33,6 +33,7 @@ TEXT_SUFFIXES = {
 
 IGNORE_PARTS = {
     ".git",
+    ".farplane",
     ".venv",
     "node_modules",
     "__pycache__",
@@ -44,17 +45,7 @@ IGNORE_PREFIXES = (
     "docs/futureideas/",
 )
 
-GENERATED_PATHS = {
-    "skills/skill-maintenance/graph/skill-graph.json",
-    "skills/skill-maintenance/graph/skill-graph.js",
-    "skills/skill-maintenance/graph/skill-docs.json",
-    "skills/skill-maintenance/graph/skill-docs.js",
-    "skills/skill-maintenance/graph/harness-graph.json",
-    "skills/skill-maintenance/graph/harness-graph.js",
-    "skills/skill-maintenance/graph/farplane-framework-core-graph.json",
-    "skills/skill-maintenance/graph/farplane-framework-core-graph.js",
-    "docs/doc-audit/generated/doc-reference-report.md",
-}
+GENERATED_PATHS = {"docs/doc-audit/generated/doc-reference-report.md"}
 
 MARKDOWN_LINK_RE = re.compile(r"!?\[[^\]]*]\(([^)\s]+)(?:\s+\"[^\"]*\")?\)")
 LOCAL_PATH_RE = re.compile(
@@ -459,7 +450,7 @@ tags:
   - skill-maintenance
 refs:
   - skills/skill-maintenance/scripts/generate_harness_graph.py
-  - skills/skill-maintenance/graph/harness-graph.json
+  - .farplane/generated/graphs/harness-graph.json
 ---
 
 # Docs Reference Audit
@@ -516,11 +507,12 @@ can still be worth keeping.
 
 
 def main() -> int:
+    config = get_projection_config("harness-reference")
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--repo-root", default=".")
-    parser.add_argument("--out", default="skills/skill-maintenance/graph/harness-graph.json")
-    parser.add_argument("--js-out", default="skills/skill-maintenance/graph/harness-graph.js")
-    parser.add_argument("--report-out", default="docs/doc-audit/generated/doc-reference-report.md")
+    parser.add_argument("--out", default=config.default_out)
+    parser.add_argument("--js-out", default=config.default_js_out)
+    parser.add_argument("--report-out", default=config.report_out)
     parser.add_argument("--projection", default="harness-reference", help="projection profile name")
     args = parser.parse_args()
 

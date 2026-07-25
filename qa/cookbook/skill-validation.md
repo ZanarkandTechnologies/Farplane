@@ -29,7 +29,7 @@
 
 ## Observability
 - `docs/skills/registry.jsonl`
-- `skills/skill-maintenance/graph/*.json`
+- `.farplane/generated/graphs/*.json`
 - Target `SKILL.md`, `qa_checklist.md`, and eval task files.
 
 ## Known Gaps

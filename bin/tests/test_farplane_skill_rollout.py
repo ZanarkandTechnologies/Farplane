@@ -32,7 +32,7 @@ class FarplaneSkillRolloutTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             registry = root / "docs" / "skills" / "registry.jsonl"
-            intelligence = root / "skills" / "skill-maintenance" / "graph" / "skill-template-intelligence.json"
+            intelligence = root / ".farplane" / "generated" / "graphs" / "skill-template-intelligence.json"
             write_jsonl(
                 registry,
                 [
@@ -147,7 +147,7 @@ class FarplaneSkillRolloutTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             registry = root / "docs" / "skills" / "registry.jsonl"
-            intelligence = root / "skills" / "skill-maintenance" / "graph" / "skill-template-intelligence.json"
+            intelligence = root / ".farplane" / "generated" / "graphs" / "skill-template-intelligence.json"
             write_jsonl(registry, [])
             write_json(
                 intelligence,

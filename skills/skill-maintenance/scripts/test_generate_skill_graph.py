@@ -12,6 +12,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import generate_skill_graph
+from graph_projection_config import GENERATED_GRAPH_ROOT, list_projection_configs
 
 
 class EnvPatch:
@@ -33,6 +34,16 @@ class EnvPatch:
 
 
 class GenerateSkillGraphTests(unittest.TestCase):
+    def test_projection_defaults_use_ignored_runtime_graph_root(self) -> None:
+        for config in list_projection_configs():
+            self.assertTrue(config.default_out.startswith(f"{GENERATED_GRAPH_ROOT}/"))
+            if config.default_js_out:
+                self.assertTrue(config.default_js_out.startswith(f"{GENERATED_GRAPH_ROOT}/"))
+            if config.docs_out:
+                self.assertTrue(config.docs_out.startswith(f"{GENERATED_GRAPH_ROOT}/"))
+            if config.docs_js_out:
+                self.assertTrue(config.docs_js_out.startswith(f"{GENERATED_GRAPH_ROOT}/"))
+
     def test_todo_skill_refs_become_ordered_todo_chain_edges(self) -> None:
         rows = [
             {

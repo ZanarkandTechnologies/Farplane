@@ -9,6 +9,7 @@ Open and validate the local Farplane skill graph viewer.
 - `skills/skill-registry-ui/SKILL.md`
 - `skills/skill-maintenance/graph/index.html`
 - `skills/skill-maintenance/scripts/generate_skill_graph.py`
+- `.farplane/generated/graphs/` (ignored generated viewer data)
 
 ## Example
 

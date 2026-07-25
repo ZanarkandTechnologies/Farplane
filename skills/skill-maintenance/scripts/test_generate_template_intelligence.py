@@ -7,6 +7,11 @@ import generate_template_intelligence as generator
 
 
 class GenerateTemplateIntelligenceTests(unittest.TestCase):
+    def test_default_outputs_use_ignored_runtime_graph_root(self) -> None:
+        expected_root = ".farplane/generated/graphs"
+        self.assertEqual(generator.DEFAULT_OUT.parent.as_posix(), expected_root)
+        self.assertEqual(generator.DEFAULT_JS_OUT.parent.as_posix(), expected_root)
+
     def test_evaluate_template_passes_current_signals(self) -> None:
         snapshot = generator.TemplateSnapshot(
             version="0.2.0",
