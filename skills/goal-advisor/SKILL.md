@@ -74,7 +74,7 @@ advise_goal_use(intent, files?, trigger?, budget?, proof_policy?, approval_polic
 state: reads(operator intent, listed files, tickets, board files?, farplane/harness.yaml?, farplane/metrics.yaml?, program.md?, progress.md?, Reward.kpi_rewards[]?, goal-loop contract, relevant skills/docs); writes(ticket/program/progress? generated goal prompt? or recommendation)
 gates: missing_execution_inputs_resolved_or_asked; material_goal_has_files; loop_owner_single; progress_surface_named; metric_provider_named; delayed_checkin_program_compiled_or_not_applicable; budget_named; drift_policy_named; logging_policy_named; proof_route_named; final_evidence_policy_named; approval_before_goal_run_when_material
 routes: metric-advisor | impl-plan | optimize-with-human | qa | visual-qa | agent-qa-test | review | direct-answer
-fails: creates hidden loop runtime; uses Goal without durable state; treats human feedback/heartbeat/rollout as competing loop owners; emits prompt-only material Goal; hides required files behind transcript memory; leaves delayed_checkin_policy_scattered_or_implicit; adds_delayed_checkin_debt_to_immediate_goal; routes public work through retired work/ralph/batch-work surfaces; emits long Goal prompt that restates ticket context; allows self-certified QA/review/visual completion; runs material Goal before packet approval
+fails: creates hidden loop runtime; uses Goal without durable state; treats human feedback/heartbeat/rollout as competing loop owners; emits prompt-only material Goal; hides required files behind transcript memory; renames_literal_files_heading; leaves delayed_checkin_policy_scattered_or_implicit; adds_delayed_checkin_debt_to_immediate_goal; omits_named_goal_drift_reviewer_on_material_goal; routes public work through retired work/ralph/batch-work surfaces; emits long Goal prompt that restates ticket context; allows self-certified QA/review/visual completion; runs material Goal before packet approval
 ```
 
 ## Phase Contract
@@ -151,6 +151,8 @@ only after the branch is selected:
    - [ ] `feedback_loop`: needs human or reviewer feedback before continuing.
    - [ ] `skill_improvement`: improves a target skill using evals, review, or
      feedback.
+   - [ ] `ml_autoresearch`: runs bounded experiments over a frozen evaluator,
+     data boundary, metric, guards, and mutable surface.
    - [ ] If the shape is `skill_improvement` and feedback is Kenji's fastest
      honest quality signal before market tests or benchmarks, route through the
      `optimize-with-human` preset inside the Goal Packet rather than inventing a
@@ -194,7 +196,7 @@ only after the branch is selected:
     selected ticket needs project charter or objective context.
 - [ ] 4. Choose the time/budget policy.
    - [ ] Treat the unit as a time/budget window, not ticket size.
-   - [ ] Name time, token/model/compute, subagent, review, QA, feedback, and
+   - [ ] Name time, token/model/compute, review, QA, feedback, and
      spend limits when they matter; write `none` or `not specified` otherwise.
    - [ ] Use heartbeat when the next useful action depends on elapsed time,
      feedback arrival, an external event, or a periodic board-drain check.
@@ -211,6 +213,15 @@ only after the branch is selected:
      `next_instruction`.
    - [ ] `market`: external result such as clicks, replies, sales, or retention.
    - [ ] `hybrid`: combine signals without inventing fake numbers.
+   - [ ] Compile an explicit evaluation step after each bounded action and
+     before progress writeback. The ticket or active skill defines the
+     evaluator; `program.md` binds it into continuation.
+   - [ ] When a declared expectation is materially missed, a result is
+     implausibly strong, or evidence appears invalid, require an evaluator or
+     evidence-integrity check and allow bounded in-budget repairs or reruns only
+     while a concrete integrity concern remains. Repeated valid contrary
+     evidence must update the next action rather than being overridden by
+     intuition.
    - [ ] If proof weight includes `qa`, `visual_qa`, `agent_qa`, `review`, or
      `demo`, require delegated proof and reject self-certification as the
      metric.
@@ -319,6 +330,17 @@ only after the branch is selected:
    output the final native `/goal` prompt.
    - [ ] Include before/after behavior when this changes how a loop will run.
    - [ ] Name open risks, blocked decisions, and proof path.
+   - [ ] For every material Goal recommendation, show the inline `Files:` list,
+     name `goal-drift-reviewer` literally and state when it runs, and either
+     emit the native prompt or
+     explicitly promise its `Files`, `Task`, `Logging`, `Metric`, and
+     `After each turn` sections.
+   - [ ] Use the literal heading `Files:` even when paths are proposed or
+     unresolved; do not rename it to `Proposed files`, `State`, or another
+     conversational label.
+   - [ ] Report the iteration contract explicitly:
+     `choose -> act -> evaluate -> write observation/evidence/learning/decision
+     -> next action`.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 ## Goal Contract
@@ -333,8 +355,9 @@ A strong Goal contract includes:
   conditions
 - `Logging`: how to update `progress.md`
 - `Metric`: how progress is judged, from `program.md`
-- `After each turn`: how to drift-check, continue, wait, complete, or block
-- `Budget`: optional time/token/model/compute/subagent/review/QA/spend limit
+- `After each turn`: how to choose, act, evaluate, record learning, select the
+  next action, drift-check, continue, wait, complete, or block
+- `Budget`: optional time/token/model/compute/review/QA/spend limit
 - `QA proof route`: copied from `QA Strategy.goal_advisor_inputs.proof_route`;
   names which delegated lane owns QA, visual QA, adversarial QA, review, demo,
   or human feedback
@@ -408,6 +431,8 @@ Trigger:
 Budget:
 Metric / Feedback Provider:
 Drift Policy:
+Drift Reviewer:
+Iteration Contract:
 QA Strategy:
 QA Proof Route:
 Final Evidence:

@@ -4,14 +4,14 @@
     {
       "id": "self_improve_replans_from_program_and_progress_01",
       "prompt": "The toy-planning improvement run has three possible instruction fixes in its roadmap. The first edit improved safety but made delegation worse, and the second idea depends on delegation already passing. Show the next bounded turn.",
-      "expected_output": "Reads the program roadmap and progress learning; Uses Leverage Advisor to filter the now-ineligible dependent move and rank the remaining frontier; Selects one hypothesis and falsifier within the remaining harden budget; Runs one complete frozen-suite round; Appends the selected move, rejected alternatives, evidence, learned constraint, and next action to progress",
+      "expected_output": "Reads the program roadmap and progress learning; Uses Leverage Advisor to filter the now-ineligible dependent move and rank the remaining frontier; Verifies candidate eligibility and that one complete round fits the remaining harden budget; Selects one hypothesis and falsifier only when those checks pass; Renders a compact progress writeback with observation, evidence, decision, learned constraint, and next action; Records rejected alternatives only when they materially explain the selection",
       "files": [],
       "assertions": [
-        "Uses the program.md roadmap together with progress.md learnings and current Eval evidence",
-        "Invokes Leverage Advisor before selecting the next experiment",
+        "Uses the program.md roadmap together with progress.md learnings and current Eval evidence, or names any exact missing input",
+        "Invokes Leverage Advisor before selecting the next experiment, or blocks selection until its required inputs are available",
         "Rejects or defers the candidate whose prerequisite is no longer satisfied",
-        "Chooses one bounded edit and complete frozen-suite evaluation within the remaining budget",
-        "Appends selected move, rejected alternatives, measurements, decision, learned constraint, and next action to ticket progress.md"
+        "Verifies candidate eligibility and that one bounded edit plus complete frozen-suite evaluation fits the remaining budget before acting",
+        "Renders observation, evidence, decision, learned constraint, and next action for ticket progress.md without requiring a rejected-alternatives field every turn"
       ],
       "metadata": {"farplane": {"title": "Self-improve replans from roadmap and progress", "tags": ["skill", "self-improve", "leverage", "goal-packet"], "notes": "Protects evidence-updated experiment selection."}}
     },

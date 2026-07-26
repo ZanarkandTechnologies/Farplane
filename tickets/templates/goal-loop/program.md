@@ -4,7 +4,7 @@ ticket_id: TASK-XXXX
 status: draft
 created_at: 2026-06-12
 template_id: goal-loop-program
-template_version: "0.1.5"
+template_version: "0.1.6"
 feature_refs:
   - FEAT-0029
   - FEAT-0032
@@ -15,7 +15,7 @@ feature_refs:
 ## Goal Mode
 
 - `mode:` `active_goal` | `heartbeat` | `rollout` | `skill_improvement` |
-  `feedback_loop` | `batch_goal`
+  `ml_autoresearch` | `feedback_loop` | `batch_goal`
 - `trigger:` `native_goal` | `scheduled_heartbeat` |
   `human_feedback_received` | `manual_resume`
 - `files:` inline list of ticket/program/progress/spec/board/artifact files the
@@ -25,7 +25,7 @@ feature_refs:
 - `generated_prompt:` path to the native `/goal` prompt artifact, inline prompt
   location, or `none` only for explicit direct execution without native Goal
 - `approval:` `pending` | `approved` | `revise` | `blocked`
-- `budget:` time/token/model/compute/subagent/review/QA/feedback/spend limits,
+- `budget:` time/token/model/compute/review/QA/feedback/spend limits,
   or `none`
 - `time_window:` uninterrupted native Goal window, heartbeat cadence, or `none`
 - `portfolio_boundary:` optional; use only when a longer planning graph is
@@ -88,12 +88,21 @@ feature_refs:
 1. Read every file listed in `files`, including each relevant `progress.md`
    tail.
 2. Choose the next action from the largest unresolved acceptance, evidence, or
-   blocker gap.
+   blocker gap. Optimization modes select from their program roadmap or
+   frontier using current progress learnings and evidence.
 3. Execute one bounded step.
-4. Append a structured entry to every `progress.md` whose ticket state changed.
-5. Run or request drift check when required by `Drift Policy`; delegate the
+4. Evaluate the result with the declared Metric Provider, ticket proof
+   contract, or active skill evaluator.
+5. If a result materially misses a declared expectation, is implausibly
+   strong, or appears invalid, check evaluator and evidence integrity before
+   trusting it. Allow bounded in-budget repairs or reruns only while a concrete
+   integrity concern remains; repeated valid contradictory evidence must update
+   the next action.
+6. Append a compact observation, evidence link, learning, decision, and
+   `next_action` to every `progress.md` whose ticket state changed.
+7. Run or request drift check when required by `Drift Policy`; delegate the
    check when proof policy forbids self-certification.
-6. Continue, stop complete, stop blocked, or wait for heartbeat/feedback.
+8. Continue, stop complete, stop blocked, or wait for heartbeat/feedback.
 
 ## After Completion
 

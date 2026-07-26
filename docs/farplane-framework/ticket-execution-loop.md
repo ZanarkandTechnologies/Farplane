@@ -3,7 +3,7 @@ title: "Ticket Execution Loop"
 status: active
 owner: farplane-framework
 created_at: 2026-06-29
-updated_at: 2026-07-01
+updated_at: 2026-07-27
 framework_template_version: "0.2.1"
 tags:
   - farplane
@@ -17,6 +17,7 @@ refs:
   - docs/features/FEAT-0007-ticket-as-durable-task-memory.md
   - docs/features/FEAT-0008-artifact-first-qa-and-completion-proof.md
   - docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md
+  - docs/features/FEAT-0032-goal-advisor-execution-compilation.md
   - docs/MEMORY.md
 ---
 
@@ -89,6 +90,100 @@ it records loop shape, trigger, budget, metric or feedback provider, proof
 policy, drift policy, stop conditions, and batch/heartbeat rules when relevant.
 `progress.md` is append-only observed state: what changed, what was verified,
 what review said, what remains blocked, and what the next action is.
+
+## Goal Packet Ownership
+
+Keep each concern in one durable owner:
+
+```text
+ticket.md   = desired end state + scope + constraints + Done / Proof
+skill       = domain procedure + detailed evaluation logic
+program.md  = budget + continuation + drift + stopping + optional optimization roadmap
+progress.md = observations + evidence links + learned constraints + next action
+Goal prompt = compact pointer to the packet
+```
+
+The common continuation cycle is:
+
+```text
+read state
+  -> choose one bounded move
+  -> act
+  -> evaluate with the provider declared by the ticket or skill
+  -> append the observation, evidence, learning, and next action
+  -> drift-check when required
+  -> continue | complete | block
+```
+
+Evaluation is therefore a distinct step, not another name for choosing what to
+do next. The ticket or domain skill owns what counts as evidence and how to
+interpret it. `program.md` only binds that evaluator into the continuation
+loop. For optimization Goals, promising candidates remain in the program's
+roadmap or frontier until evidence rejects or invalidates them. `progress.md`
+records the selected move, rejected alternatives when relevant, learned
+constraints, evidence links, and the current `next_action`; selecting one move
+does not silently discard the remaining candidates.
+
+### Lean `program.md`
+
+A lean `program.md` fills the existing template sections without repeating the
+ticket. Its after-turn and stopping instructions can be as compact as this:
+
+```markdown
+## After Each Turn
+
+- Re-read the ticket and progress tail.
+- Choose the largest unresolved acceptance, evidence, or blocker gap. For an
+  optimization loop, select from the program roadmap or frontier using current
+  progress learnings.
+- Execute one bounded move, run the evaluator declared by the ticket or active
+  skill, and append the observation, evidence, learning, and next action.
+- Use `goal-drift-reviewer` before a material replan or completion.
+
+## Stop Conditions
+
+- `blocked_when:` Report attempted paths, strongest evidence, remaining work, and
+  the exact input or contract change that would unlock progress.
+```
+
+This excerpt belongs in `program.md`, not `ticket.md`. Still fill the
+template's required Goal Mode, budget, Metric Provider, Proof Policy, drift,
+check-in, batch, or rollout sections when applicable.
+
+The launcher stays small because it is not the durable contract:
+
+```text
+/goal Work on TASK-1243 until its Done and QA Strategy pass or the declared
+budget ends. Read ticket.md, program.md, and progress.md. Follow program.md
+between iterations. Do not expand ticket scope. If blocked, return attempted
+paths, evidence, and the required unlock.
+```
+
+`best_so_far` is useful only for optimization campaigns whose candidates can
+be compared. Ordinary feature work instead records completed proof and the
+remaining `next_action`.
+
+### Evaluation By Goal Shape
+
+The shared cycle stays constant while the evaluation provider changes.
+`ml_autoresearch` is an allowed Goal Mode instantiated through its skill-owned
+preset, while `delayed_reward` belongs under Check-In Program rather than the
+top-level mode field.
+
+| Shape or program submode | Evaluation after a move | What feeds the next action |
+| --- | --- | --- |
+| Active ticket Goal | ticket `Done / Proof`, tests, QA evidence, and required review | unresolved in-scope ticket gaps |
+| Skill improvement | frozen skill eval plus agent-behavior QA when declared | ranked prompt, workflow, or harness interventions |
+| ML autoresearch | frozen metric evaluator; diagnose surprising or invalid results before trusting them | ranked experiment techniques and learned constraints |
+| Feedback loop | structured human verdict and next instruction | remaining revisions implied by accepted feedback |
+| Heartbeat | eligibility and current-state check; choose `start_goal`, `resume_goal`, `request_feedback`, `replan`, `blocked`, or `no_op` | the next proceedable ticket or unblock action |
+| Delayed-reward check-in | matured external evidence against the declared acceptance rule | `accept`, `kill`, or continue monitoring |
+| Batch Goal | each ticket's own proof contract, plus integration proof when required | remaining proceedable tickets |
+| Rollout policy | sample or batch evidence against promotion and rollback rules | promote, repair, roll back, or run the next batch |
+
+Detailed experiment receipts, surprise handling, feedback schemas, and rollout
+rules remain in their owning skill or ticket. The generic program should
+reference them rather than copy them into every Goal Packet.
 
 ## Where Autonomy Starts
 

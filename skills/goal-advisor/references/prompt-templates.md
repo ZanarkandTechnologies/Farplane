@@ -105,9 +105,15 @@ checks, planning-only Goals, or direct non-Goal work.
 When every gate passes, run `farplane ticket close TASK-XXXX` and include its
 receipt before `stop_complete`. Do not move the ticket by hand.
 
-After each turn: Compare progress against the listed files, request <drift
-reviewer> or the delegated QA/review lane when required by `program.md`,
-continue within the current time/budget window if useful, otherwise stop
+After each turn: Compare progress against the listed files, choose and execute
+one bounded action, evaluate it with the ticket/program provider, then append a
+compact observation, evidence link, learning, decision, and next action. When
+a result materially misses a declared expectation, is implausibly strong, or
+appears invalid, check evaluator/evidence integrity and allow bounded in-budget
+repairs or reruns only while a concrete integrity concern remains; repeated
+valid contrary evidence must update the next action. Request <drift reviewer>
+or the delegated QA/review lane when required by `program.md`.
+Continue within the current time/budget window if useful; otherwise stop
 complete, stop blocked, or emit the next heartbeat action with attempted paths
 and one missing input. For UI or user-visible changes, stop complete only after
 the final response can include the strongest screenshot/image evidence as a
@@ -196,8 +202,10 @@ verification, metric sample, drift verdict, next action, and blockers.
 Metric: Use the listed eval, review, or human feedback provider. Do not promote
 unverified changes as accepted rules.
 
-After each turn: Change one bounded part of the skill, verify it, request drift
-review when required, and promote only durable accepted rules. Use Goal mode as
-the durable loop runner, `self-improve` only for eval/memory/prompt scaffolding,
-and `skill-maintenance` for accepted writeback.
+After each turn: Select and change one bounded part of the skill, run the
+declared complete evaluator, append the observation, evidence, learning,
+decision, and next action, then request drift review when required. Promote
+only durable accepted rules. Use Goal mode as the durable loop runner,
+`self-improve` only for eval/memory/prompt scaffolding, and `skill-maintenance`
+for accepted writeback.
 ```

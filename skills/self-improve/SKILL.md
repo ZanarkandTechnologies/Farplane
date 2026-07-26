@@ -71,7 +71,7 @@ goal_advisor(ticket.md + program preset + progress.md) -> approved Goal Packet
 leverage_advisor(program.md roadmap + progress.md learnings
                  + current Eval evidence + remaining phase budget) -> next experiment
 eval(next experiment, frozen complete suite) -> evidence
-progress.md.append(selection + alternatives + evidence + learning + decision)
+progress.md.append(observation + evidence + learning + decision + next_action)
 native_goal(updated packet state) -> continue | transition | block | complete
 ```
 
@@ -112,9 +112,13 @@ Leverage Advisor checkpoint.
   fresh packet and baseline; never change cases mid-comparison.
 - [ ] 6. Harden first. Before each turn, invoke Leverage Advisor on the
   `program.md` roadmap, `progress.md` learnings, current Eval evidence, and
-  remaining harden budget to choose one bounded instruction experiment. Run
-  the complete frozen suite and retain it only when behavior improves and every
-  guard passes. Enter refinement only after the full target passes. Exhausting
+  remaining harden budget to choose one eligible bounded instruction
+  experiment. Verify that one complete round fits the remaining budget; never
+  assume an unstated budget or candidate prerequisite. Run the complete frozen
+  suite and retain it only when behavior improves and every guard passes.
+  Append the observation, evidence, learning, decision, and next action;
+  include rejected alternatives only when they materially explain the
+  selection. Enter refinement only after the full target passes. Exhausting
   harden patience or `max_rounds` blocks without refinement.
 - [ ] 7. Refine second. Before each turn, use the same evidence-updated
   selection step to choose one removal, merge, or condensation experiment.
@@ -192,12 +196,17 @@ Packet: owning ticket + approval/freshness + frozen suite
 Phase: baseline | harden | refine
 Budget: harden max_rounds/patience + refine max_rounds/patience
 Observation: performance + guards + length + evidence ref
-Selector: Leverage Advisor inputs + selected move + rejected alternatives
+Selector: Leverage Advisor inputs + selected move + material selection rationale
 Decision: retain | reject | transition_refine | blocked | complete
-Writeback: selected move + rejected alternatives + measurements + evidence
-           + decision + learned constraint + next action
+Writeback: observation + evidence + decision + learned constraint + next action
 Next action: one bounded next turn or stop reason
 ```
+
+When asked to show an active turn, render the compact `progress.md` writeback
+with `observation`, `evidence`, `decision`, `learning`, and `next_action`
+instead of merely saying it will be appended. If the remaining budget,
+eligibility, or evidence is unknown, make resolving that value the next action
+rather than inventing it.
 
 Always report the configured limits for both phases, even when one phase is
 inactive. For every retained or rejected candidate, the writeback names the

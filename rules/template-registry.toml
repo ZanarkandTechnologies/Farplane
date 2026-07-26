@@ -9,6 +9,7 @@ paths = [
   "docs/skills/templates/QA_CHECKLIST_TEMPLATE.md",
   "tickets/templates/ticket.md",
   "tickets/templates/goal-loop/program.md",
+  "tickets/templates/goal-loop/progress.md",
   "skills/harness-creator/templates/project-harness.md",
   "skills/init-advisor/references/MANIFEST_TEMPLATE.json",
   "docs/templates/HUMAN_REPORT_TEMPLATE.md",

@@ -53,8 +53,8 @@ selection:
       - progress.md learnings and prior decisions
       - current complete-suite Eval evidence
       - remaining phase budget and patience
-    output: one next experiment + hypothesis + falsifier + rejected alternatives + replan conditions
-    rule: invoke leverage-advisor; do not continue a fixed roadmap order
+    output: one next experiment + hypothesis + falsifier + material selection rationale + replan conditions
+    rule: invoke leverage-advisor; verify candidate eligibility and that one complete round fits the remaining budget; do not continue a fixed roadmap order
 
 loop:
   round: one bounded target edit followed by the complete frozen eval
@@ -73,7 +73,7 @@ loop:
 after_each_turn:
   - use leverage-advisor on the roadmap plus progress.md learnings, current evidence, and remaining budget
   - preregister and run the one selected round in the current phase
-  - append selected move, rejected alternatives, hypothesis, measurements, evidence, decision, learned constraint, and next action to progress.md
+  - append observation, evidence, decision, learned constraint, and next action to progress.md; include rejected alternatives only when they materially explain the selection
   - continue, transition, block, or complete from the phase rules
 
 drift:

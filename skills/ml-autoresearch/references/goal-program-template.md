@@ -61,7 +61,7 @@ selection:
       - remaining time, compute, spend, attempt, and patience budget
     output: one next experiment + hypothesis + expected observation +
       observation horizon + confidence + falsifier + surprise trigger +
-      changed boundary + rejected alternatives + replan conditions
+      changed boundary + material selection rationale + replan conditions
     rule: invoke leverage-advisor; do not continue a fixed roadmap order
 
 loop:
@@ -85,7 +85,7 @@ after_each_turn:
   - read this roadmap and the complete progress.md tail
   - use leverage-advisor on roadmap + progress learnings + current receipts + remaining budget
   - execute at most one selected experiment
-  - append selected move, rejected alternatives, hypothesis, metrics, guards, receipt, learning, cumulative budget, decision, and next action to progress.md
+  - append receipt ref, learning, frontier update, decision, and next action to progress.md; include rejected alternatives or a budget checkpoint only when they materially affect the selection or a ceiling
   - continue, replan, block, or complete from the declared rules
 
 drift:

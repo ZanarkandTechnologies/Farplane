@@ -129,9 +129,10 @@ the authority named by the ticket.
 - [ ] 6. Execute and record one bounded experiment.
   - [ ] Modify only the allowed surface, run correctness smokes, then run the
     exact full frozen evaluator when valid.
-  - [ ] Append the receipt, measurements, learned constraint, keep/discard/
-    repair-once decision, rejected alternatives, cumulative budget, and next
-    action to ticket `progress.md`; never overwrite a failed attempt.
+  - [ ] Append the receipt link, learned constraint, keep/discard/repair-once
+    decision, frontier update, and next action to ticket `progress.md`; include
+    rejected alternatives or a budget checkpoint only when they materially
+    affect the selection or a ceiling. Never overwrite a failed attempt.
   - [ ] When the observation materially misses its expectation or is
         implausibly strong, route the immutable receipt through
         `agent-qa-test:experiment` before rejecting the method or promoting the
@@ -214,7 +215,7 @@ next_action:
 
 - one approved campaign Goal Packet and compact native Goal prompt;
 - baseline and append-only experiment receipts linked from `progress.md`;
-- evidence-updated roadmap decisions with rejected alternatives;
+- evidence-updated roadmap decisions with material selection rationale;
 - best verified candidate or an evidence-backed no-improvement/blocked result;
 - independent final evidence review and residual-risk statement.
 
@@ -224,8 +225,8 @@ For any requested loop policy, packet draft, or active turn, explicitly report:
 Packet: ticket.md + program.md + progress.md + Goal Advisor compilation state
 Roadmap: program.md frontier + contingencies
 Progress: progress.md learnings + current full-evaluator receipt refs
-Selector: Leverage Advisor inputs + one selected move + rejected alternatives
+Selector: Leverage Advisor inputs + one selected move + material selection rationale
 Experiment: hypothesis + falsifier + changed boundary + guards + cost
 Expectation: expected observation + horizon + confidence + surprise trigger
-Writeback: measurements + decision + learned constraint + frontier update + next action
+Writeback: receipt ref + decision + learned constraint + frontier update + next action
 ```

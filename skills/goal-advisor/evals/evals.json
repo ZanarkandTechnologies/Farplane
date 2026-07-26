@@ -4,14 +4,16 @@
     {
       "id": "goal_advisor_material_goal_packet_01",
       "prompt": "I want AGI Toy Shop to keep improving its autonomous storefront until the checkout and support workflow are clearly better. How should we use Goal mode?",
-      "expected_output": "Recommends native Goal or heartbeat only with durable listed files; Names ticket.md, program.md, and progress.md under an inline Files list; Chooses a metric or feedback provider without inventing fake numbers; Defines a drift policy and when to use goal-drift-reviewer; Includes or promises a native /goal prompt with Files, Task, Logging, Metric, and After each turn sections",
+      "expected_output": "Recommends native Goal or heartbeat only with durable listed files; Names ticket.md, program.md, and progress.md under an inline Files list; Chooses a metric or feedback provider without inventing fake numbers; Defines a drift policy and when to use goal-drift-reviewer; Includes or promises a native /goal prompt with Files, Task, Logging, Metric, and After each turn sections; Makes evaluation explicit between each bounded action and progress writeback; Keeps budgets free of subagent-count ceilings",
       "files": [],
       "assertions": [
         "Recommends native Goal or heartbeat only with durable listed files",
         "Names ticket.md, program.md, and progress.md under an inline Files list",
         "Chooses a metric or feedback provider without inventing fake numbers",
         "Defines a drift policy and when to use goal-drift-reviewer",
-        "Includes or promises a native /goal prompt with Files, Task, Logging, Metric, and After each turn sections"
+        "Includes or promises a native /goal prompt with Files, Task, Logging, Metric, and After each turn sections",
+        "Evaluates each bounded action with the declared provider before writing observation, evidence, learning, decision, and next action",
+        "Does not use a subagent-count ceiling as an execution budget"
       ],
       "metadata": {
         "farplane": {
