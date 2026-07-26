@@ -129,13 +129,13 @@ INSTALL_BIN_FILES=(
   notify.py
   runtime_telemetry.py
   ticket-runtime
-  ticket_runtime.py
   user_turn.py
 )
 INSTALL_HOOK_FILES=(
   farplane_console_ping.py
 )
 RETIRED_INSTALL_PATHS=(
+  bin/ticket_runtime.py
   bin/file_growth_hook.py
   hooks/farplane_file_change.py
   hooks/farplane_local_event.py

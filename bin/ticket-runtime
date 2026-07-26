@@ -1,4 +1,4 @@
 #!/usr/bin/env python3
 from _compat import run_script
 
-run_script("core/ticket_runtime.py")
+run_script("core/farplane_ticket_runtime.py")

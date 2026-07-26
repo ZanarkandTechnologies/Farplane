@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+"""Ticket-scoped local runtime records, processes, ports, and QA targets."""
+
 from __future__ import annotations
 
 import argparse

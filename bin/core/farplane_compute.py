@@ -100,7 +100,7 @@ CAPABILITIES: dict[str, ComputeCapability] = {
         requires_runtime_record=True,
         setup_hint=(
             "prepare .farplane/state/tickets/<ticket>.runtime.json with "
-            "bin/ticket_runtime.py ensure or pr-runtime"
+            "bin/ticket-runtime ensure or pr-runtime"
         ),
         handoff="route to the selected Farplane phase skill after the runtime record exists",
     ),
@@ -191,7 +191,7 @@ def select_compute(
         runtime_path = str(runtime_path_obj)
         runtime_hints.append("local_worktree requires an existing ticket runtime record")
         required_setup.append(
-            "python3 bin/ticket_runtime.py ensure "
+            "bin/ticket-runtime ensure "
             f"--ticket {item.identifier} "
             "--checkout-mode worktree "
             "--runtime-mode branch-runtime "

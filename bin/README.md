@@ -75,14 +75,15 @@ runtime helpers instead of symlinking every script, validator, and test.
   registries, drift, and Office-consumable adoption stats; implementation lives
   in `bin/core/farplane_adoption.py`
 - `notify.py` - local notification helper
-- `ticket_runtime.py` / `ticket-runtime` - local helper for ticket runtime
+- `ticket-runtime` - public command for ticket runtime
   records, optional isolated checkouts, port reservation, runtime
-  launch/teardown, and QA target lookup
+  launch/teardown, and QA target lookup; its importable implementation is
+  `core/farplane_ticket_runtime.py`
 
 ## Runtime Decisions
 
 - `capture_user_turn.py`: keep
-- `ticket_runtime.py`: keep
+- `ticket-runtime`: keep
 
 Runtime state stays lightweight and machine-facing. The grouped `claim` object
 tracks the active ticket/run/session ownership for hook consumers, while
@@ -131,16 +132,16 @@ See [the invocation and adapters spec](../docs/features/FEAT-0015-symphony-compa
 Use the existing helpers directly, but prefer output modes that keep routine
 success quiet and make failure output the thing that stands out.
 
-- `python3 bin/ticket_runtime.py ensure ...`
+- `bin/ticket-runtime ensure ...`
   Use when a skill or operator needs a ticket-scoped runtime record, optional
   isolated checkout path, declared commands, and QA targets without launching yet
-- `python3 bin/ticket_runtime.py up ...`
+- `bin/ticket-runtime up ...`
   Use when the ticket runtime should actually start configured frontend/backend
   processes or a compose-backed runtime
-- `python3 bin/ticket_runtime.py qa ...`
+- `bin/ticket-runtime qa ...`
   Use when QA needs the current runtime status plus only the live targets that
   are actually open for the ticket right now
-- `python3 bin/ticket_runtime.py down ...`
+- `bin/ticket-runtime down ...`
   Use when the helper should stop tracked processes or run the declared
   compose-down command, then release reserved ports
 - `python3 skills/delegate-cli/scripts/delegate_cli_agent.py doctor --profile frontend-pi-kimi --json`
@@ -206,7 +207,7 @@ followup ok: TASK-0033 -> building pane=%42 session=main run=.farplane/runs/task
 ## Minimal Example
 
 ```bash
-python3 bin/ticket_runtime.py up \
+bin/ticket-runtime up \
   --ticket TASK-0014 \
   --branch pr-123 \
   --checkout-mode worktree \
@@ -218,8 +219,8 @@ python3 bin/ticket_runtime.py up \
   --backend-cmd "npm run api" \
   --json
 
-python3 bin/ticket_runtime.py qa --ticket TASK-0014 --json
-python3 bin/ticket_runtime.py down --ticket TASK-0014 --json
+bin/ticket-runtime qa --ticket TASK-0014 --json
+bin/ticket-runtime down --ticket TASK-0014 --json
 
 python3 skills/delegate-cli/scripts/delegate_cli_agent.py doctor --profile frontend-pi-kimi --json
 python3 skills/delegate-cli/scripts/delegate_cli_agent.py run \
@@ -245,7 +246,7 @@ QA/review evidence owns completion; live Stop hooks are telemetry-only.
 - `python3 -m unittest skills/pr-review-watch/scripts/test_pr_review_watch.py`
 - `python3 -m unittest bin/tests/test_ticket_metadata.py`
 - `python3 -m unittest bin/tests/test_ticket_runtime.py`
-- `python3 -m py_compile bin/ticket_runtime.py bin/core/ticket_runtime.py bin/tests/test_ticket_runtime.py`
+- `python3 -m py_compile bin/core/farplane_ticket_runtime.py bin/tests/test_ticket_runtime.py`
 - `python3 -m py_compile bin/capture_user_turn.py bin/runtime/capture_user_turn.py bin/runtime/user_turn.py`
 - `python3 -m py_compile bin/validators/check_harness_invariants.py bin/validators/test_harness_invariants.py`
 - `python3 -m py_compile bin/validators/check_doc_parity.py bin/validators/test_doc_parity.py`

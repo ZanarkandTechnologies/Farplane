@@ -21,7 +21,7 @@ allowed-tools: Read, Glob, Grep
   branch/runtime workspace.
 - [ ] Decide runtime mode: `shared`, `branch-runtime`, or `branch-compose`.
 - [ ] Use the lightest sufficient helper command:
-  `python3 bin/ticket_runtime.py ensure|up|status|qa|down`.
+  `bin/ticket-runtime ensure|up|status|qa|down`.
 - [ ] If QA needs a live frontend/backend target, publish it through the runtime
   record instead of chat-only port notes.
 - [ ] Hand the runtime record to [qa](../qa/SKILL.md) so browser/API evidence
@@ -106,11 +106,11 @@ When this skill is used, return:
 
 Use:
 
-- `python3 bin/ticket_runtime.py ensure ...`
-- `python3 bin/ticket_runtime.py up ...`
-- `python3 bin/ticket_runtime.py status ...`
-- `python3 bin/ticket_runtime.py qa ...`
-- `python3 bin/ticket_runtime.py down ...`
+- `bin/ticket-runtime ensure ...`
+- `bin/ticket-runtime up ...`
+- `bin/ticket-runtime status ...`
+- `bin/ticket-runtime qa ...`
+- `bin/ticket-runtime down ...`
 
 Runtime records live at:
 
@@ -123,7 +123,7 @@ Port reservations live at:
 ## Minimal Example
 
 ```bash
-python3 bin/ticket_runtime.py up \
+bin/ticket-runtime up \
   --ticket TASK-0123 \
   --branch pr-123 \
   --checkout-mode worktree \
@@ -135,6 +135,6 @@ python3 bin/ticket_runtime.py up \
   --backend-cmd "npm run api" \
   --json
 
-python3 bin/ticket_runtime.py qa --ticket TASK-0123 --json
-python3 bin/ticket_runtime.py down --ticket TASK-0123 --json
+bin/ticket-runtime qa --ticket TASK-0123 --json
+bin/ticket-runtime down --ticket TASK-0123 --json
 ```

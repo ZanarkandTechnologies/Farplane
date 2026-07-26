@@ -71,7 +71,7 @@ class ComputeSelectorTests(unittest.TestCase):
             self.assertTrue(decision.allowed)
             self.assertEqual(decision.target, "local_worktree")
             self.assertEqual(decision.runtime_record_path, str(runtime_path))
-            self.assertIn("ticket_runtime.py ensure", " ".join(decision.required_setup))
+            self.assertIn("ticket-runtime ensure", " ".join(decision.required_setup))
 
     def test_worktree_blocks_until_runtime_record_exists(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

@@ -14,7 +14,7 @@ CORE_DIR = ROOT / "bin" / "core"
 if str(CORE_DIR) not in sys.path:
     sys.path.insert(0, str(CORE_DIR))
 
-import ticket_runtime
+import farplane_ticket_runtime as ticket_runtime
 
 
 def wait_for_path(path: Path, timeout: float = 5.0) -> None:
@@ -248,7 +248,7 @@ class TicketRuntimeTests(unittest.TestCase):
                 }
             }
             ticket_runtime.persist_runtime_record(record, root=root)
-            with mock.patch("ticket_runtime.stop_process_group", return_value=False):
+            with mock.patch("farplane_ticket_runtime.stop_process_group", return_value=False):
                 stopped = ticket_runtime.down_runtime_record(
                     "TASK-0099", remove_worktree=False, root=root
                 )
