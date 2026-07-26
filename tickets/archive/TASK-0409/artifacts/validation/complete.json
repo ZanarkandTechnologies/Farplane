@@ -1,0 +1,53 @@
+{
+  "base": null,
+  "changed_paths": [
+    "bin/core/mining_programs/ticket-completion-learning-v4.json",
+    "bin/tests/test_farplane_mining.py",
+    "farplane/bindings.yaml",
+    "tickets/TASK-0409/ticket.md"
+  ],
+  "ok": true,
+  "path_source": "explicit",
+  "phase": "complete",
+  "results": [
+    {
+      "check_id": "ticket.metadata",
+      "mode": "block",
+      "output": "ticket metadata OK",
+      "status": "pass"
+    },
+    {
+      "check_id": "ticket.reward",
+      "mode": "block",
+      "output": "ticket Reward scheduling OK",
+      "status": "pass"
+    },
+    {
+      "check_id": "ticket.completion-evidence",
+      "mode": "block",
+      "output": "completion evidence OK",
+      "status": "pass"
+    },
+    {
+      "check_id": "project.check",
+      "mode": "block",
+      "output": "Farplane project file conventions OK",
+      "status": "pass"
+    },
+    {
+      "check_id": "harness.check",
+      "mode": "block",
+      "output": "harness invariants OK (4 files checked, 16 agents, 14 rules, project files checked)",
+      "status": "pass"
+    }
+  ],
+  "schema_version": 1,
+  "selected_checks": [
+    "ticket.metadata",
+    "ticket.reward",
+    "ticket.completion-evidence",
+    "project.check",
+    "harness.check"
+  ],
+  "ticket": "tickets/TASK-0409/ticket.md"
+}

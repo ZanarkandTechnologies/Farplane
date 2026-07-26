@@ -1,0 +1,28 @@
+{
+  "work_type": "completion-learning prompt contract",
+  "search_scope": [
+    "tickets/TASK-0409/ticket.md",
+    "bin/core/mining_programs/ticket-completion-learning-v4.json",
+    "farplane/bindings.yaml",
+    "bin/tests/test_farplane_mining.py",
+    "TASK-0408 replay report"
+  ],
+  "rubrics_used": [
+    "prompt-quality",
+    "integration-readiness",
+    "evidence-quality"
+  ],
+  "adversarial_rejection_attempts": [
+    "Checked whether the new rule suppresses legitimate inability-to-start findings; it preserves reusable testability-prerequisite findings.",
+    "Checked whether delayed outcomes disappear; they remain waiting signals or dated check-ins.",
+    "Replayed the exact source ticket that generated the false positive; version 1.4.0 returned no_signal and created no ticket."
+  ],
+  "overall_tas": "TAS-A",
+  "verdict": "pass",
+  "rerun_required": false,
+  "hard_gate_failures": [],
+  "failed_checks": [],
+  "finding_log": [],
+  "blocking_findings": [],
+  "next_action": "Close TASK-0409 and keep the replay as the regression example."
+}

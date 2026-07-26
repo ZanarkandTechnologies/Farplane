@@ -22,6 +22,7 @@ from farplane_mining import (
     MiningError,
     drain_pending,
     list_runs,
+    load_program,
     mine_ticket,
     remove_route,
     replay_run,
@@ -36,6 +37,7 @@ from farplane_mining import (
 
 PROGRAM_REF = "core:ticket-completion-lean@1.0.0"
 LEARNING_PROGRAM_REF = "core:ticket-completion-learning@1.3.0"
+ACTIVE_LEARNING_PROGRAM_REF = "core:ticket-completion-learning@1.4.0"
 
 
 def ticket_text(status: str = "completed") -> str:
@@ -83,6 +85,16 @@ def event_for(ticket: Path) -> dict[str, object]:
 
 
 class FarplaneMiningTests(unittest.TestCase):
+    def test_active_completion_learning_classifies_qa_evidence_before_finding(self) -> None:
+        program = load_program(ACTIVE_LEARNING_PROGRAM_REF)
+        instructions = " ".join(program["instructions"])
+
+        self.assertIn("testability prerequisite", instructions)
+        self.assertIn("QA-owned evidence", instructions)
+        self.assertIn("delayed external fact", instructions)
+        self.assertIn("Return no pre-QA gate finding", instructions)
+        self.assertIn("waiting signal or dated check-in", instructions)
+
     def test_mine_ticket_resolves_archived_ticket_and_associated_thread_from_id(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

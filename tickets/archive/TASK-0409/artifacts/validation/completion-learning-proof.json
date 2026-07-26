@@ -1,0 +1,25 @@
+{
+  "ticket_id": "TASK-0409",
+  "status": "pass",
+  "claim": "Completion learning no longer treats an ordinary QA revise-and-rerun loop as evidence that a pre-QA proof gate is needed.",
+  "checks": [
+    {
+      "command": "python3 -m unittest bin.tests.test_farplane_mining",
+      "result": "pass"
+    },
+    {
+      "command": "farplane mining ticket TASK-0408 --project-root . --json",
+      "result": "pass",
+      "run_id": "c3a8636586e9dde7537eb4b20ccdbe181e8b50b5fe6dfbd65cca872ddd14ed49",
+      "program_ref": "core:ticket-completion-learning@1.4.0",
+      "report_status": "no_signal",
+      "ticket_decision": "no_ticket",
+      "summary": "The rerun classified TASK-0408 as an approved plan with iterative QA repair and successful completion gates, not avoidable waste."
+    }
+  ],
+  "classification_contract": {
+    "testability_prerequisite": "May justify a readiness improvement when its absence prevented QA from starting and reflects a reusable gap.",
+    "qa_owned_evidence": "QA collects it or returns revise; its first-pass absence does not justify a pre-QA gate.",
+    "delayed_external_fact": "Becomes a waiting signal or dated check-in, not QA preflight."
+  }
+}
