@@ -145,7 +145,6 @@ GROUP_DEFINITIONS: tuple[dict[str, object], ...] = (
             "skill-registry-ui",
             "agent-behavior-test",
             "agent-testability-plan",
-            "farplane-invocation",
             "delegate-cli",
             "self-improve",
             "desloppify",

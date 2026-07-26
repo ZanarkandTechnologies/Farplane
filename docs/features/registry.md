@@ -2,7 +2,7 @@
 title: "Generated Feature Registry"
 status: generated
 owner: feature-registry
-updated_at: 2026-07-25
+updated_at: 2026-07-26
 refs:
   - docs/features/registry.jsonl
   - docs/features/validate_features.py
@@ -18,7 +18,7 @@ This file is generated. Edit the feature specs in `docs/features/` instead.
 | [FEAT-0008 Artifact-first QA and completion proof](../features/FEAT-0008-artifact-first-qa-and-completion-proof.md) | [Proof And Review](../systems/proof-review.md) | `implemented` | `false` | `false` | `proof` |
 | [FEAT-0011 Harness scout source ingestion](../features/FEAT-0011-harness-scout-source-ingestion.md) | [Source And Sidecar Systems](../systems/source-sidecar-systems.md) | `implemented` | `false` | `false` | `source-ingestion` |
 | [FEAT-0014 Frontend skill parity upgrade](../features/FEAT-0014-frontend-skill-parity-upgrade.md) | [Domain Skill Families](../systems/domain-skill-families.md) | `retired` | `false` | `false` | `frontend-skills` |
-| [FEAT-0015 Retired Symphony-compatible invocation contract](../features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md) | [Invocation Runtime](../systems/invocation-runtime.md) | `retired` | `false` | `false` | `execution` |
+| [FEAT-0015 Retired Symphony-compatible invocation contract](../features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md) | [Retired Invocation Runtime](../systems/invocation-runtime.md) | `retired` | `false` | `false` | `execution` |
 | [FEAT-0022 Skill tier leverage classes](../features/FEAT-0022-skill-tier-leverage-classes.md) | [Skill System](../systems/skill-system.md) | `implemented` | `false` | `false` | `skills` |
 | [FEAT-0025 Retired video-to-skill source reconstruction](../features/FEAT-0025-video-to-skill-source-reconstruction.md) | [Source And Sidecar Systems](../systems/source-sidecar-systems.md) | `retired` | `false` | `false` | `source-ingestion` |
 | [FEAT-0029 Retired Goal Packet architecture](../features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md) | [Horizon Loop](../systems/horizon-loop.md) | `retired` | `false` | `FEAT-0032` | `planning` |

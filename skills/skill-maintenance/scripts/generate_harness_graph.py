@@ -423,7 +423,6 @@ def build_report(graph: dict[str, Any], repo_root: Path) -> str:
         "docs/fundamentals/harness-algebra.md",
         "docs/fundamentals/harness-engineering-doctrine.md",
         "docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md",
-        "docs/features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md",
         "docs/skills/README.md",
         "docs/skills/system.md",
         "docs/skills/best-practices.md",

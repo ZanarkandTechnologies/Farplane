@@ -7,7 +7,7 @@ group: coding
 source: local
 allowed-tools: Read, Glob, Grep, Bash
 common_chains:
-  after: ["pr-runtime", "review"]
+  after: ["review"]
 ---
 
 # PR Review Watch
@@ -21,8 +21,9 @@ common_chains:
   skill focused on the coding-ticket PR watcher workflow.
 - [ ] Use the native planning phase when repo target, PR number, notification
   policy, push permission, or project review commands are unclear.
-- [ ] Use [pr-runtime](../pr-runtime/SKILL.md) when an existing PR branch,
-  isolated checkout, or declared QA target is needed.
+- [ ] Use the checkout assigned to the current Codex task. Treat a different
+  checkout or runtime target as explicit caller input rather than creating
+  Farplane runtime state.
 - [ ] Load `docs/pr-review-pipeline.md` first, then `PROJECT_RULES.md`, and
   require an explicit `pr_review_pipeline` JSON block before live watching.
 - [ ] Use adaptive backoff from `docs/features/FEAT-0065-pulse-and-interval-automation.md` for repeated
@@ -50,8 +51,6 @@ contract, one heartbeat at a time.
 
 This skill composes existing Farplane surfaces:
 
-- [pr-runtime](../pr-runtime/SKILL.md) decides whether the PR branch needs an
-  isolated checkout or runtime record.
 - [review](../review/SKILL.md) or the configured reviewer lane handles material
   review findings when project memory asks for review.
 - the native execution phase supplies the proof/writeback shape for ticketed
@@ -101,24 +100,22 @@ copyable project-local contract.
 1. Resolve the target repo and PR number. If the user did not provide a PR
    number, discover the active PR from the current branch with GitHub CLI.
 2. Read project memory and load the `pr_review_pipeline` config.
-3. Use `pr-runtime` when an existing PR branch should be isolated from the
-   shared checkout.
-4. Run:
+3. Run:
 
    ```bash
    python3 skills/pr-review-watch/scripts/pr_review_watch.py classify --repo <repo> --pr <number> --json
    ```
 
-5. Inspect the `WatchVerdict`:
+4. Inspect the `WatchVerdict`:
    - `pass`: run terminal notification with the PR URL and stop.
    - `blocked`: write blocker details, notify with the PR URL when configured,
      and stop.
    - `wait`: create a visible Codex automation heartbeat with the next interval.
    - `actionable`: fix only the listed items, run configured checks, then
      reclassify.
-6. Run only project-configured local checks and Farplane reviewer-agent review
+5. Run only project-configured local checks and Farplane reviewer-agent review
    commands. Do not make external review CLIs a universal PR gate.
-7. On timeout, summarize the last verdict and notify with the PR URL when
+6. On timeout, summarize the last verdict and notify with the PR URL when
    configured.
 
 ## Automation Heartbeat

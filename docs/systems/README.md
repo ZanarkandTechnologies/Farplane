@@ -62,7 +62,6 @@ flowchart TD
   sources["Source And Sidecar Systems<br/>external patterns"]:::changed
   domain["Domain Skill Families<br/>frontend, media, content"]:::changed
   content["Content Production<br/>Brand Kit + Tasty Pack"]:::added
-  invoke["Invocation Runtime<br/>explicit run boundary"]:::changed
 
   operator --> kernel --> work --> proof
   operator --> horizon --> work
@@ -71,7 +70,6 @@ flowchart TD
   sources --> content
   proof --> learn --> docs
   docs --> release --> kernel
-  invoke --> work
 ```
 
 Each owner doc also includes a `## System Flow` diagram that shows that
@@ -85,7 +83,6 @@ higher level than individual feature flows.
 | Agent Kernel | `FEAT-0042` | `agent-kernel.md` |
 | Work Loop | `FEAT-0007` | `work-loop.md` |
 | Horizon Loop | `FEAT-0029` | `horizon-loop.md` |
-| Invocation Runtime | `FEAT-0015` | `invocation-runtime.md` |
 | Proof And Review | `FEAT-0008` | `proof-review.md` |
 | Skill System | `FEAT-0022` | `skill-system.md` |
 | Self-Improvement And Learning | `FEAT-0039` | `self-improvement-learning.md` |

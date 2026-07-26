@@ -1,0 +1,58 @@
+{
+  "ticket_id": "TASK-0414",
+  "status": "pass",
+  "installed_bin_allowlist": [
+    "_compat.py",
+    "capture_user_turn.py",
+    "farplane",
+    "farplane.py",
+    "notify.py"
+  ],
+  "classification": {
+    "farplane": "sole user-facing CLI",
+    "farplane.py": "CLI implementation invoked by farplane",
+    "capture_user_turn.py": "required UserPromptSubmit hook launcher",
+    "notify.py": "required Codex notify launcher",
+    "_compat.py": "shared launcher support for the two required Python edges"
+  },
+  "removed_families": [
+    "Ticket Runtime and ticket-runtime",
+    "pr-runtime skill",
+    "farplane-invocation skill and WORKFLOW.md",
+    "standalone board, compute, and invocation wrappers and implementations",
+    "standalone user_turn.py and runtime_telemetry.py wrappers"
+  ],
+  "checks": [
+    {
+      "command": "python3 -m unittest discover -s bin/tests -p 'test_*.py'",
+      "result": "pass",
+      "tests": 244
+    },
+    {
+      "command": "python3 -m unittest discover -s bin/validators -p 'test_*.py'",
+      "result": "pass",
+      "tests": 45
+    },
+    {
+      "command": "python3 skills/skill-maintenance/scripts/check_skills.py --write",
+      "result": "pass",
+      "skill_rows": 121
+    },
+    {
+      "command": "python3 docs/features/validate_features.py",
+      "result": "pass",
+      "systems": 12,
+      "features": 33
+    },
+    {
+      "command": "farplane hooks doctor --json",
+      "result": "pass"
+    },
+    {
+      "command": "bash install.sh",
+      "result": "pass_with_environment_notice",
+      "observation": "Removed binaries and skills were moved to timestamped install backups; the live bin surface contains only the five allowlisted files.",
+      "notice": "REF_API_KEY and NOTION_TOKEN were not present, but they are optional for this mechanical install path."
+    }
+  ]
+}

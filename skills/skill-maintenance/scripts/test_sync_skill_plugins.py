@@ -179,14 +179,14 @@ class SyncSkillPluginsTests(unittest.TestCase):
     def test_listing_treats_farplane_named_skills_as_individual_plugins(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             repo = Path(tmp)
-            write_skill(repo, "farplane-invocation", "Invoke Farplane envelopes.")
+            write_skill(repo, "farplane-example", "Exercise Farplane plugin naming.")
             plugins = syncer.build_plugins(syncer.discover_skills(repo / "skills"))
 
             listing = syncer.plugin_listing(plugins)
 
             bundle_section, individual_section = listing.split("Individual skill plugins:")
-            self.assertNotIn("- farplane-invocation:", bundle_section)
-            self.assertIn("- farplane-invocation:", individual_section)
+            self.assertNotIn("- farplane-example:", bundle_section)
+            self.assertIn("- farplane-example:", individual_section)
 
     def test_check_uses_fresh_generated_plugins(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

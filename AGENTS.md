@@ -150,14 +150,11 @@ Those skills own premium/Terminal landing gates, generated-media proof,
 Pi/Kimi first-write rules, browser evidence, and frontend guideline scoring.
 See `MEM-0072`, `MEM-0076` through `MEM-0085`, and `MEM-0088` through
 `MEM-0096`.
-For Farplane invocation, compute selection, board adapters, and future
-Symphony/Codex Cloud handoff work, use `farplane-invocation`,
-`pr-runtime`, `docs/features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md`,
-`docs/features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md`, and
-`docs/features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md`. Keep Farplane as an
-explicit invocation and proof layer; do not expand it into a daemon, hosted
-control plane, scheduler, or hidden cloud wrapper without a new ticketed need.
-See `MEM-0077`, `MEM-0081`, and `MEM-0082`.
+Farplane currently assumes local Codex execution in the checkout selected by
+the task. Do not add compute selection, per-ticket runtime orchestration, a
+daemon, hosted control plane, scheduler, or cloud wrapper without a new
+ticketed need. Keep Farplane focused on visible invocation, ticket, and proof
+surfaces. See `MEM-0077`, `MEM-0081`, and `MEM-0082`.
 
 ## Project Structure
 
@@ -195,7 +192,6 @@ For harness tuning and repo-shape changes:
 - `docs/features/README.md`
 - `docs/features/FEAT-0007-ticket-as-durable-task-memory.md`
 - `docs/features/FEAT-0008-artifact-first-qa-and-completion-proof.md`
-- `docs/features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md`
 
 For install and bootstrap work:
 

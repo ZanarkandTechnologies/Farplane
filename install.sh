@@ -122,20 +122,22 @@ INSTALL_BIN_FILES=(
   _compat.py
   capture_user_turn.py
   farplane
-  farplane_boards.py
-  farplane_compute.py
-  farplane_invocation.py
   farplane.py
   notify.py
-  runtime_telemetry.py
-  ticket-runtime
-  user_turn.py
 )
 INSTALL_HOOK_FILES=(
   farplane_console_ping.py
 )
 RETIRED_INSTALL_PATHS=(
   bin/ticket_runtime.py
+  bin/ticket-runtime
+  bin/farplane_boards.py
+  bin/farplane_compute.py
+  bin/farplane_invocation.py
+  bin/runtime_telemetry.py
+  bin/user_turn.py
+  skills/pr-runtime
+  skills/farplane-invocation
   bin/file_growth_hook.py
   hooks/farplane_file_change.py
   hooks/farplane_local_event.py

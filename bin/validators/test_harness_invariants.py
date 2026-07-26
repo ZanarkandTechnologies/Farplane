@@ -27,16 +27,6 @@ The install-time global harness contract now lives at `templates/global/AGENTS.m
 - Prefer `.farplane/` for live runtime state.
 """
 
-INVOCATION_AND_ADAPTERS_TEXT = """\
-# Invocation And Adapters
-
-There is no separate public retired execution surface anymore.
-
-## Runtime Surface
-
-- Public docs should describe `.farplane/` as the canonical live runtime root.
-"""
-
 BIN_README_TEXT = """\
 # Bin
 
@@ -86,7 +76,6 @@ model = "gpt-5.5"
 developer_instructions = "review"
 """,
         )
-        write_file(root / "docs/features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md", INVOCATION_AND_ADAPTERS_TEXT)
         write_file(root / "bin/README.md", BIN_README_TEXT)
         write_file(root / "tickets/README.md", TICKETS_README_TEXT)
         write_file(root / "tickets/templates/ticket.md", TICKET_TEMPLATE_TEXT)
@@ -124,19 +113,6 @@ This file is generic instructions.
             self.assertNotEqual(result.returncode, 0)
             self.assertIn("templates/global/AGENTS.md", result.stdout)
             self.assertIn("remediation", result.stdout)
-
-    def test_validator_fails_on_retired_runtime_root(self) -> None:
-        with tempfile.TemporaryDirectory() as tmpdir:
-            root = Path(tmpdir)
-            self.build_repo(root)
-            write_file(
-                root / "docs/features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md",
-                INVOCATION_AND_ADAPTERS_TEXT + "\nLegacy note: `.ralph/state/current-run.json`\n",
-            )
-            result = self.run_validator(root)
-            self.assertNotEqual(result.returncode, 0)
-            self.assertIn("contains forbidden retired-path text", result.stdout)
-            self.assertIn(".ralph/", result.stdout)
 
     def test_validator_fails_when_ticket_template_drops_claim_alias_boundary(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:

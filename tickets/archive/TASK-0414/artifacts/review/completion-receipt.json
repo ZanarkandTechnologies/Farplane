@@ -1,0 +1,29 @@
+{
+  "work_type": "dead runtime and binary surface removal",
+  "search_scope": [
+    "install.sh and installed ~/.codex/bin surface",
+    "bin wrappers, implementations, tests, and active callers",
+    "pr-runtime, farplane-invocation, QA, and PR review skill contracts",
+    "feature, system, skill registries, architecture, and active docs"
+  ],
+  "rubrics_used": [
+    "code-quality",
+    "debloatability",
+    "integration-readiness",
+    "evidence-quality"
+  ],
+  "adversarial_rejection_attempts": [
+    "Searched active code and docs for hidden callers before deletion; only self-documentation and retired surfaces referenced the removed command families.",
+    "Checked whether hook and notify launchers could also be removed; Codex configuration still calls them directly, so they remain.",
+    "Checked live installation rather than source only; retired binaries and skills were moved to recoverable timestamped backups.",
+    "Ran full Core and validator suites after deletion and checked live hook health."
+  ],
+  "overall_tas": "TAS-A",
+  "verdict": "pass",
+  "rerun_required": false,
+  "hard_gate_failures": [],
+  "failed_checks": [],
+  "finding_log": [],
+  "blocking_findings": [],
+  "next_action": "Close TASK-0414; require a new ticket before introducing remote compute or per-ticket runtime orchestration."
+}

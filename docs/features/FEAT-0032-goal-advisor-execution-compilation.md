@@ -11,7 +11,6 @@ tags:
 refs:
   - skills/goal-advisor
   - docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md
-  - docs/features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md
   - docs/features/FEAT-0007-ticket-as-durable-task-memory.md
   - tickets/templates/goal-loop/program.md
   - tickets/archive/TASK-0196/ticket.md
@@ -24,13 +23,11 @@ public: true
 surfaces:
   - skills/goal-advisor
   - docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md
-  - docs/features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md
   - docs/features/FEAT-0007-ticket-as-durable-task-memory.md
   - tickets/templates/goal-loop/program.md
 source_refs:
   - skills/goal-advisor
   - docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md
-  - docs/features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md
   - tickets/archive/TASK-0196/ticket.md
 external_refs:
   - https://developers.openai.com/codex/use-cases/follow-goals
@@ -127,7 +124,6 @@ Owner surfaces:
 
 - `skills/goal-advisor`
 - `docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md`
-- `docs/features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md`
 - `docs/features/FEAT-0007-ticket-as-durable-task-memory.md`
 - `tickets/templates/goal-loop/program.md`
 
@@ -135,7 +131,6 @@ Source context:
 
 - `skills/goal-advisor`
 - `docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md`
-- `docs/features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md`
 - `tickets/archive/TASK-0196/ticket.md`
 
 External context:

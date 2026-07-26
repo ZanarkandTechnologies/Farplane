@@ -88,7 +88,7 @@ flowchart LR
     ticketSkill["spec-to-ticket"]:::callout
     planSkill["impl-plan<br/>diagramming"]:::callout
     goalSkill["goal-advisor<br/>native Goal<br/>heartbeat<br/>batch"]:::callout
-    execSkill["farplane-invocation<br/>goal-advisor"]:::callout
+    execSkill["goal-advisor<br/>native Codex task checkout"]:::callout
     assetSkill["image-generation<br/>video-generation<br/>remotion-render<br/>imagegen"]:::skill
     externalCli["delegate-cli<br/>delegate-frontend"]:::skill
     closeSkill["close-ticket<br/>commit-message<br/>pr-splitting"]:::callout
@@ -103,7 +103,7 @@ flowchart LR
   subgraph Runtime["Runtime + Tooling"]
     hooks[(hooks.json<br/>Stop + input hooks)]:::runtime
     bin[(bin/*<br/>runtime, validators, launchers)]:::runtime
-    harness[(.farplane/state/*<br/>session + ticket runtime)]:::runtime
+    harness[(.farplane/state/*<br/>session + local runtime state)]:::runtime
     agentsDir[(agents/*.toml<br/>bounded specialists)]:::runtime
   end
 
@@ -214,15 +214,10 @@ during cleanup unless the replacement carries the same routing information.
 - [docs/features/README.md](docs/features/README.md)
   Purpose: index of canonical feature specs and generated registry outputs
 - [docs/features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md](docs/features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md)
-  Purpose: completed capped Symphony-inspired follow-through: explicit
-  invocation triggers, adapter conformance, external compute recipes, and clear
-  deferrals
+  Purpose: historical record of the removed invocation, board, compute, and
+  ticket-runtime experiment
 - [docs/fundamentals/harness-engineering-doctrine.md](docs/fundamentals/harness-engineering-doctrine.md)
   Purpose: routing doctrine for where harness changes belong before widening policy or adding new surfaces
-- [docs/features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md](docs/features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md)
-  Purpose: canonical ownership split for BoardAdapter, WorkItem, explicit
-  ticket invocation, ComputeSelector, local Farplane, Goal heartbeat board
-  drain, and future Symphony/shared board compute modes
 - [docs/features/README.md](docs/features/README.md)
   Purpose: current-state technique inventory, with implemented versus proposed
   techniques kept explicit
@@ -286,16 +281,11 @@ The review scoring model is canonical in `skills/review/*`, not in this file.
 - [docs/features/FEAT-0007-ticket-as-durable-task-memory.md](docs/features/FEAT-0007-ticket-as-durable-task-memory.md)
   Purpose: end-to-end execution model, lane roles, and orchestration boundaries
 - [docs/features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md](docs/features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md)
-  Purpose: invocation, adapter, compute, runtime state, and operator-visible surfaces, with `.farplane/` as the canonical live root
+  Purpose: retired runtime history; it is not an active execution surface
 - [skills/goal-advisor/SKILL.md](skills/goal-advisor/SKILL.md)
   Purpose: canonical execution compiler that turns listed files, trigger mode,
   budget, and proof policy into native Goal, heartbeat, batch, rollout,
   feedback, or direct-route prompts
-- [skills/farplane-invocation/SKILL.md](skills/farplane-invocation/SKILL.md)
-  Purpose: normal-Codex invocation contract that loads `WORKFLOW.md`,
-  validates one explicit `FarplaneRunEnvelope`, selects local compute, routes
-  to the existing phase skill, and writes parseable proof without launching
-  Codex or treating ticket existence as a trigger
 - [skills/delegate-cli/SKILL.md](skills/delegate-cli/SKILL.md)
   Purpose: public external CLI delegation workflow for routing bounded builder
   work through profile/adapter contracts while Farplane keeps ticket, QA, and

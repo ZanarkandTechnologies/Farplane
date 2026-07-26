@@ -37,8 +37,8 @@ runtime helpers instead of symlinking every script, validator, and test.
 - `farplane` / `farplane.py` - Core-owned global CLI for install, hooks,
   doctor checks, UI linking/start, skill rollout projections, and delegation
   into the linked Farplane-UI module checkout
-- `core/*` - implementation modules for global CLI, invocation, board, compute,
-  ticket-runtime, telemetry-status, and adoption helpers
+- `core/*` - implementation modules for the global CLI, ticket lifecycle,
+  mining, telemetry status, and adoption helpers
 - `runtime/*` - implementation modules for Codex hooks, user-turn capture,
   notification, and runtime telemetry
 - `tests/*` - Core-owned tests for `bin/core`, `bin/runtime`, and public
@@ -61,29 +61,15 @@ runtime helpers instead of symlinking every script, validator, and test.
   and mining boundary used by `farplane ticket close TASK-XXXX`
 - `core/farplane_event_store.py` - durable local event/outbox primitives shared
   by explicit Core commands
-- `farplane_boards.py` - board adapter contract plus the filesystem
-  `FileTicketAdapter` that normalizes `tickets/TASK-*/ticket.md` into a
-  `WorkItem`
-- `farplane_compute.py` - compute admission policy for `local_shared`,
-  `local_worktree`, `symphony`, and `codex_cloud`; it emits blockers and setup
-  hints but never launches compute
-- `farplane_invocation.py` - contract helper for `WORKFLOW.md`,
-  `FarplaneRunEnvelope`, board-backed `WorkItem`, compute selection, skill
-  routing, and `ProofPacket` validation; it does not launch Codex
 - `farplane.py adoption scan` - local adoption resolver for project
   `farplane/manifest.json` pins, optional project `.agents/skills/`, feature/template
   registries, drift, and Office-consumable adoption stats; implementation lives
   in `bin/core/farplane_adoption.py`
 - `notify.py` - local notification helper
-- `ticket-runtime` - public command for ticket runtime
-  records, optional isolated checkouts, port reservation, runtime
-  launch/teardown, and QA target lookup; its importable implementation is
-  `core/farplane_ticket_runtime.py`
-
-## Runtime Decisions
-
-- `capture_user_turn.py`: keep
-- `ticket-runtime`: keep
+The installed binary allowlist contains one user-facing command, `farplane`,
+plus the hook and notification launchers that Codex configuration calls
+directly. Internal helpers are imported from `bin/core/` or `bin/runtime/`;
+they are not separately installed command surfaces.
 
 Runtime state stays lightweight and machine-facing. The grouped `claim` object
 tracks the active ticket/run/session ownership for hook consumers, while
@@ -125,25 +111,11 @@ Runtime routing is session-first for parallel Codex usage:
 per-session files may remain in fixtures or historical local state, but they
 are not authoritative runtime ownership surfaces.
 
-See [the invocation and adapters spec](../docs/features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md) for the canonical runtime and invocation decision table.
-
 ## Preferred Agent-Facing Command Surfaces
 
 Use the existing helpers directly, but prefer output modes that keep routine
 success quiet and make failure output the thing that stands out.
 
-- `bin/ticket-runtime ensure ...`
-  Use when a skill or operator needs a ticket-scoped runtime record, optional
-  isolated checkout path, declared commands, and QA targets without launching yet
-- `bin/ticket-runtime up ...`
-  Use when the ticket runtime should actually start configured frontend/backend
-  processes or a compose-backed runtime
-- `bin/ticket-runtime qa ...`
-  Use when QA needs the current runtime status plus only the live targets that
-  are actually open for the ticket right now
-- `bin/ticket-runtime down ...`
-  Use when the helper should stop tracked processes or run the declared
-  compose-down command, then release reserved ports
 - `python3 skills/delegate-cli/scripts/delegate_cli_agent.py doctor --profile frontend-pi-kimi --json`
   Use before a live external CLI run to check the profile templates, copied
   skill sources, executable, and required environment variables
@@ -176,15 +148,6 @@ success quiet and make failure output the thing that stands out.
 - `python3 bin/validators/sync_skill_registry.py --check`
   Use after skill metadata changes when debugging the broader
   `skills/skill-maintenance/scripts/check_skills.py --write` path.
-- `python3 -m unittest bin/tests/test_farplane_boards.py`
-  Use to prove the filesystem BoardAdapter path containment and ticket
-  normalization contract before changing invocation or Ralph selection behavior
-- `python3 -m unittest bin/tests/test_farplane_compute.py`
-  Use to prove compute precedence, blockers, worktree runtime hints, and future
-  target behavior without launching local or remote compute
-- `python3 bin/farplane_invocation.py prepare --ticket <ticket> --phase planning --proof .farplane/results/<ticket>.proof.json`
-  Use to validate a local Farplane invocation envelope and inspect the selected
-  skill route without launching Codex
 - `python3 bin/farplane.py adoption scan --project-root . --json`
   Use to inspect a project's Farplane manifest pins, local skill presence,
   feature/template adoption, and drift against the global Farplane standard.
@@ -207,21 +170,6 @@ followup ok: TASK-0033 -> building pane=%42 session=main run=.farplane/runs/task
 ## Minimal Example
 
 ```bash
-bin/ticket-runtime up \
-  --ticket TASK-0014 \
-  --branch pr-123 \
-  --checkout-mode worktree \
-  --runtime-mode branch-runtime \
-  --create-worktree \
-  --reserve frontend \
-  --reserve backend \
-  --frontend-cmd "npm run dev" \
-  --backend-cmd "npm run api" \
-  --json
-
-bin/ticket-runtime qa --ticket TASK-0014 --json
-bin/ticket-runtime down --ticket TASK-0014 --json
-
 python3 skills/delegate-cli/scripts/delegate_cli_agent.py doctor --profile frontend-pi-kimi --json
 python3 skills/delegate-cli/scripts/delegate_cli_agent.py run \
   --profile frontend-pi-kimi \

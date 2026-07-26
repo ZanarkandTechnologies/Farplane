@@ -9,8 +9,8 @@ Keep this skill explicit, bounded, and project-config driven.
 - Keep live provider behavior optional; unit tests must rely on local fixtures.
 - Keep project-specific commands in `docs/pr-review-pipeline.md` or
   `PROJECT_RULES.md`, not in the skill body.
-- Use `pr-runtime` for checkout isolation and `review` / reviewer lanes for
-  material review instead of duplicating those contracts here.
+- Use the checkout assigned to the current Codex task and `review` / reviewer
+  lanes for material review instead of duplicating those contracts here.
 
 ## Checks
 

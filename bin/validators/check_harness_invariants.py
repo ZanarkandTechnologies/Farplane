@@ -46,19 +46,6 @@ RULES: tuple[HarnessRule, ...] = (
         ),
     ),
     HarnessRule(
-        relative_path="docs/features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md",
-        required_substrings=(
-            "Public docs should describe `.farplane/` as the canonical live runtime root.",
-            "There is no separate public retired execution surface anymore.",
-        ),
-        forbidden_substrings=(".ralph/",),
-        remediation=(
-            "keep invocation/runtime docs on the live Farplane contract: "
-            "`.farplane/` is canonical and retired runtime paths belong only "
-            "in historical surfaces"
-        ),
-    ),
-    HarnessRule(
         relative_path="bin/README.md",
         required_substrings=(
             "raw `session_id` should stay runtime-only",

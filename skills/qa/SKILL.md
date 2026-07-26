@@ -87,8 +87,8 @@ checklist item.
     judging loose logs.
 - [ ] 2. Choose the proof branch and bind testability.
   - [ ] For browser, UI, or API proof, bind the runtime from the ticket,
-    [PR Runtime](../pr-runtime/SKILL.md), or a verified cookbook entry; never
-    guess a port, URL, process, account, fixture, or stale session.
+    explicit caller handoff, or a verified cookbook entry; never guess a port,
+    URL, process, account, fixture, or stale session.
   - [ ] When a matching `qa/cookbook/*.md` entry exists, use its verified fast
     entry, setup, reset, and verification path before manual exploration. The
     cookbook accelerates capture; it does not prove the current run passed.
@@ -208,8 +208,6 @@ Canonical `result.json`:
   again at the finish gate.
 - [Agent Browser](../agent-browser/SKILL.md) — load through `qa-tester` when
   browser operation is required.
-- [PR Runtime](../pr-runtime/SKILL.md) — load when a live app/API target needs
-  an explicit runtime handoff.
 - [Visual QA](../visual-qa/SKILL.md) — load after UI capture when visual
   judgment is required.
 - `qa/cookbook/*.md` — read the matching project runbook before manual
