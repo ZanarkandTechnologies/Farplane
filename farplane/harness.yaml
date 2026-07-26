@@ -2,257 +2,223 @@ kind: project-harness
 status: active
 project: Farplane
 created_at: 2026-06-15
-updated_at: 2026-07-17
-framework_template_version: "0.5.3"
+updated_at: '2026-07-26'
+framework_template_version: 0.5.3
 owner: harness
-
 identity:
-  mission: >-
-    Make autonomous Codex work visible, reviewable, repeatable, and useful
-    through files, tickets, skills, measured outcomes, and proof.
-  human_thesis: >-
-    Farplane helps humans form reliable digital clones that can do meaningful
-    long-running work while preserving human intent instead of drifting into
-    busywork.
-  north_star: >-
-    Farplane becomes the standard way researchers and builders create
-    harnesses that run longer, improve from evidence, and produce
-    higher-quality results with less human intervention. Its immediate
-    flagship proof is an autonomous research creator that selects worthwhile
-    experiments, produces evidence-backed media and demos, measures audience
-    response, and improves what it makes next.
+  mission: Make autonomous Codex work visible, reviewable, repeatable, and useful through files, tickets,
+    skills, measured outcomes, and proof.
+  human_thesis: Farplane helps humans form reliable digital clones that can do meaningful long-running
+    work while preserving human intent instead of drifting into busywork.
+  north_star: Farplane becomes the standard way researchers and builders create harnesses that run longer,
+    improve from evidence, and produce higher-quality results with less human intervention. Its immediate
+    flagship proof is an autonomous research creator that selects worthwhile experiments, produces evidence-backed
+    media and demos, measures audience response, and improves what it makes next.
   problems:
-    - id: unattended_autonomy
-      statement: >-
-        Autonomous teams require too much human supervision to perform useful
-        long-running work.
-      metric_refs:
-        - accepted_clone_hours
-        - auto_completion_rate
-        - ticket_intervention_turn_count
-    - id: operational_visibility
-      statement: >-
-        Operators cannot quickly understand, steer, or recover agent work after
-        stalls, failures, or drift.
-      metric_refs: []
-      measurement_gap: >-
-        Direct recovery-success and recovery-time metrics need a reliable
-        observation source before they become canonical metrics.
-    - id: agent_sdlc
-      statement: >-
-        Skills, prompts, agents, and automations accumulate without reliable
-        evaluation, ownership, or measured improvement.
-      metric_refs:
-        - accepted_harness_improvements
-        - priority_skill_health_gap_count
-        - latest_eval_pass_rate
+  - id: unattended_autonomy
+    statement: Autonomous teams require too much human supervision to perform useful long-running work.
+    metric_refs:
+    - accepted_clone_hours
+    - auto_completion_rate
+    - ticket_intervention_turn_count
+  - id: operational_visibility
+    statement: Operators cannot quickly understand, steer, or recover agent work after stalls, failures,
+      or drift.
+    metric_refs: []
+    measurement_gap: Direct recovery-success and recovery-time metrics need a reliable observation source
+      before they become canonical metrics.
+  - id: agent_sdlc
+    statement: Skills, prompts, agents, and automations accumulate without reliable evaluation, ownership,
+      or measured improvement.
+    metric_refs:
+    - accepted_harness_improvements
+    - priority_skill_health_gap_count
+    - latest_eval_pass_rate
 metric_refs:
   objectives:
-    - metric_id: evidence_distribution_reach
-      priority: 1
-    - metric_id: distribution_reach_per_artifact
-      priority: 2
-    - metric_id: accepted_evidence_cycles
-      priority: 3
-    - metric_id: activated_external_projects
-      priority: 4
+  - metric_id: evidence_distribution_reach
+    priority: 1
+  - metric_id: distribution_reach_per_artifact
+    priority: 2
+  - metric_id: accepted_evidence_cycles
+    priority: 3
+  - metric_id: activated_external_projects
+    priority: 4
   guards:
-    - harness_health_source_gap_count
-
-# Plan Next Wave may create work only by binding these existing skill
-# signatures. The skills own workflow; areas below supply passive ICP/metric
-# context only.
+  - harness_health_source_gap_count
 planning:
   skill_refs:
-    - farplane-content-creation
-    - farplane-market-learning
-    - farplane-ablation-proof
-    - farplane-productization
-    - self-improve
-
+  - farplane-content-creation
+  - farplane-market-learning
+  - farplane-ablation-proof
+  - farplane-productization
+  - self-improve
 areas:
   framework_delivery:
-    description: >-
-      User-facing Farplane framework capabilities, reliability, installation,
-      proof surfaces, documentation, and reusable workflows.
+    description: User-facing Farplane framework capabilities, reliability, installation, proof surfaces,
+      documentation, and reusable workflows.
     icp:
       label: Harness engineers
-      description: >-
-        Engineers building reliable coding-agent and long-running agent
-        workflows who need visible state, recovery, evaluation, and proof.
+      description: Engineers building reliable coding-agent and long-running agent workflows who need
+        visible state, recovery, evaluation, and proof.
       jobs_to_be_done:
-        - Make agents run longer and recover with less supervision.
-        - Decide which harness components earn their complexity.
+      - Make agents run longer and recover with less supervision.
+      - Decide which harness components earn their complexity.
       pain_points:
-        - Agent workflows that look autonomous but silently stall or drift.
-        - Framework claims without reproducible comparisons or working artifacts.
-      evidence_bar: >-
-        A runnable product surface or fair with/without comparison that changes
-        an implementation decision against a named baseline.
+      - Agent workflows that look autonomous but silently stall or drift.
+      - Framework claims without reproducible comparisons or working artifacts.
+      evidence_bar: A runnable product surface or fair with/without comparison that changes an implementation
+        decision against a named baseline.
     skill_refs:
-      - farplane-experiment-report
-      - farplane-ablation-proof
-      - farplane-productization
+    - farplane-experiment-report
+    - farplane-ablation-proof
+    - farplane-productization
     metric_refs:
-      - metric_id: activated_external_projects
-      - metric_id: accepted_harness_improvements
-      - metric_id: accepted_evidence_cycles
+    - metric_id: activated_external_projects
+    - metric_id: accepted_harness_improvements
+    - metric_id: accepted_evidence_cycles
   customer_learning:
-    description: >-
-      Evidence-acquiring actions that reduce a concrete adoption, audience,
-      positioning, onboarding, or use-case uncertainty.
+    description: Evidence-acquiring actions that reduce a concrete adoption, audience, positioning, onboarding,
+      or use-case uncertainty.
     icp:
       label: Agent and harness builders evaluating adoption
-      description: >-
-        Serious builders deciding whether Farplane solves a costly orchestration,
-        proof, or long-running-work problem better than their current scripts.
+      description: Serious builders deciding whether Farplane solves a costly orchestration, proof, or
+        long-running-work problem better than their current scripts.
       jobs_to_be_done:
-        - Identify which Farplane workflow is worth adopting now.
-        - Compare Farplane with an existing manual or framework baseline.
+      - Identify which Farplane workflow is worth adopting now.
+      - Compare Farplane with an existing manual or framework baseline.
       pain_points:
-        - Broad AI research that does not change a product or adoption decision.
-        - Missing evidence about migration cost, reliability, or realized value.
-      evidence_bar: >-
-        Source-backed learning tied to a named decision, alternative, and
-        immediate product, sales, demo, or experiment use.
+      - Broad AI research that does not change a product or adoption decision.
+      - Missing evidence about migration cost, reliability, or realized value.
+      evidence_bar: Source-backed learning tied to a named decision, alternative, and immediate product,
+        sales, demo, or experiment use.
     skill_refs:
-      - farplane-market-learning
+    - farplane-market-learning
     metric_refs:
-      - metric_id: decision_changing_learning_briefs
+    - metric_id: decision_changing_learning_briefs
   adoption_and_distribution:
-    description: >-
-      Evidence-backed distribution, content, demos, and conversion surfaces
-      that help qualified builders discover and adopt Farplane.
+    description: Evidence-backed distribution, content, demos, and conversion surfaces that help qualified
+      builders discover and adopt Farplane.
     icp:
       label: Technical agent builders who share and adopt proven patterns
-      description: >-
-        Harness and agent engineers who pay attention to surprising,
-        reproducible knowledge and credible demonstrations rather than generic
-        AI commentary.
+      description: Harness and agent engineers who pay attention to surprising, reproducible knowledge
+        and credible demonstrations rather than generic AI commentary.
       jobs_to_be_done:
-        - Learn a game-changing harness technique they can reproduce.
-        - See enough proof to try Farplane on a real project.
+      - Learn a game-changing harness technique they can reproduce.
+      - See enough proof to try Farplane on a real project.
       pain_points:
-        - Shallow trend summaries and product marketing without technical evidence.
-        - Demos that hide the baseline, failure mode, or reusable method.
-      evidence_bar: >-
-        A proof-led artifact with a named baseline, observed delta, reusable
-        method, and honest limit that can survive expert scrutiny.
+      - Shallow trend summaries and product marketing without technical evidence.
+      - Demos that hide the baseline, failure mode, or reusable method.
+      evidence_bar: A proof-led artifact with a named baseline, observed delta, reusable method, and honest
+        limit that can survive expert scrutiny.
     skill_refs:
-      - farplane-content-creation
+    - farplane-content-creation
     metric_refs:
-      - metric_id: distribution_reach_per_artifact
-      - metric_id: evidence_distribution_reach
-      - metric_id: x_followers
-      - metric_id: instagram_followers
+    - metric_id: distribution_reach_per_artifact
+    - metric_id: evidence_distribution_reach
+    - metric_id: x_followers
+    - metric_id: instagram_followers
   self_improvement:
-    description: >-
-      Measured changes to the planner, Pulse, skills, prompts, hooks,
-      automations, validators, and other harness behavior.
+    description: Measured changes to the planner, Pulse, skills, prompts, hooks, automations, validators,
+      and other harness behavior.
     icp:
       label: Farplane operators and harness maintainers
-      description: >-
-        Operators responsible for keeping autonomous work useful, reviewable,
-        and productive while human attention is unavailable.
+      description: Operators responsible for keeping autonomous work useful, reviewable, and productive
+        while human attention is unavailable.
       jobs_to_be_done:
-        - Prevent recurring stalls, shallow planning, and unnecessary intervention.
-        - Improve the harness from measured failures and accepted outcomes.
+      - Prevent recurring stalls, shallow planning, and unnecessary intervention.
+      - Improve the harness from measured failures and accepted outcomes.
       pain_points:
-        - One-off cleanup mislabeled as compounding improvement.
-        - Prompt or workflow changes shipped without representative next-run proof.
-      evidence_bar: >-
-        A causal before/after eval or reproduced production-path run proving a
-        durable preventive mechanism, with rollback or rejection criteria.
+      - One-off cleanup mislabeled as compounding improvement.
+      - Prompt or workflow changes shipped without representative next-run proof.
+      evidence_bar: A causal before/after eval or reproduced production-path run proving a durable preventive
+        mechanism, with rollback or rejection criteria.
     skill_refs:
-      - self-improve
-      - dogfood-review
+    - self-improve
+    - dogfood-review
     metric_refs:
-      - metric_id: accepted_harness_improvements
-      - metric_id: auto_completion_rate
-      - metric_id: ticket_intervention_turn_count
-      - metric_id: priority_skill_health_gap_count
-
+    - metric_id: accepted_harness_improvements
+    - metric_id: auto_completion_rate
+    - metric_id: ticket_intervention_turn_count
+    - metric_id: priority_skill_health_gap_count
 feature_definition:
-  definition: >-
-    A Farplane feature is a durable capability or UX contract that helps an
-    operator or agent maintain, evaluate, steer, prove, report on, or
-    productize harness behavior.
+  definition: A Farplane feature is a durable capability or UX contract that helps an operator or agent
+    maintain, evaluate, steer, prove, report on, or productize harness behavior.
   statuses:
-    - stable
-    - experimental
+  - stable
+  - experimental
   evidence_may_include:
-    - tickets
-    - experiments
-    - automation_runs
-    - reports
-    - evals
+  - tickets
+  - experiments
+  - automation_runs
+  - reports
+  - evals
   not_automatically_features:
-    - individual_tickets
-    - hypotheses
-    - reports
-    - automation_configuration
-    - one_off_patches
-    - retired_implementation_shapes
-
+  - individual_tickets
+  - hypotheses
+  - reports
+  - automation_configuration
+  - one_off_patches
+  - retired_implementation_shapes
 operating_principles:
-  - Prefer visible artifacts over hidden runtime state.
-  - Keep reusable behavior in skills and project-specific coordinates in bindings.
-  - Shape material work through tickets before long autonomous execution.
-  - Prove behavior with validators, reviews, evals, or artifact evidence.
-  - Count realized evidence, not planned intent, as metric movement.
-  - Let project objectives drive one adaptive ranking; self-improvement competes through its configured skill call, never a separate planner or Pulse.
-  - Generate work only as bound calls to `planning.skill_refs`; areas supply passive ICP and metric context and never generate, reserve, or own work.
-  - Bundle avoidable setup into the first independently useful exemplar and maximize artifact-producing work after quality, guard, authority, and interference gates.
-
+- Prefer visible artifacts over hidden runtime state.
+- Keep reusable behavior in skills and project-specific coordinates in bindings.
+- Shape material work through tickets before long autonomous execution.
+- Prove behavior with validators, reviews, evals, or artifact evidence.
+- Count realized evidence, not planned intent, as metric movement.
+- Let project objectives drive one adaptive ranking; self-improvement competes through its configured
+  skill call, never a separate planner or Pulse.
+- Generate work only as bound calls to `planning.skill_refs`; areas supply passive ICP and metric context
+  and never generate, reserve, or own work.
+- Bundle avoidable setup into the first independently useful exemplar and maximize artifact-producing
+  work after quality, guard, authority, and interference gates.
 stable_capabilities:
-  - pulse-update
-  - plan-next-wave
-  - interval-update
-  - feed-scout
-  - dogfood-review
-  - eval
-
+- pulse-update
+- plan-next-wave
+- interval-update
+- feed-scout
+- dogfood-review
+- eval
 leverage_commitments:
-  - id: evals_and_proof_systems
-    why_it_compounds: Accepted proof patterns raise trust and reduce supervision.
-    evidence_to_seek: Accepted outputs rise while false completion and correction turns fall.
-    pivot_signal: Proof artifacts add friction without changing decisions or trust.
-  - id: skill_systems
-    why_it_compounds: Lessons become callable workflows instead of transcript residue.
-    evidence_to_seek: Repeated misses decrease after skill updates and later accepted uses.
-    pivot_signal: Skills become stale instructions that agents ignore or over-call.
-  - id: template_tracking
-    why_it_compounds: Framework fixes become defaults instead of one-off repairs.
-    evidence_to_seek: New projects reach their first measured loop with fewer missing surfaces.
-    pivot_signal: Templates drift faster than they help or become too hard to configure.
-
+- id: evals_and_proof_systems
+  why_it_compounds: Accepted proof patterns raise trust and reduce supervision.
+  evidence_to_seek: Accepted outputs rise while false completion and correction turns fall.
+  pivot_signal: Proof artifacts add friction without changing decisions or trust.
+- id: skill_systems
+  why_it_compounds: Lessons become callable workflows instead of transcript residue.
+  evidence_to_seek: Repeated misses decrease after skill updates and later accepted uses.
+  pivot_signal: Skills become stale instructions that agents ignore or over-call.
+- id: template_tracking
+  why_it_compounds: Framework fixes become defaults instead of one-off repairs.
+  evidence_to_seek: New projects reach their first measured loop with fewer missing surfaces.
+  pivot_signal: Templates drift faster than they help or become too hard to configure.
 constraints:
   non_tradeoffs:
-    - Do not hide orchestration state in chat.
-    - Do not create a scheduler or daemon when visible automation prompts are enough.
-    - Do not store secrets in tracked project config.
-    - Do not silently rewrite the human thesis, north star, leverage commitments, or product boundary.
+  - Do not hide orchestration state in chat.
+  - Do not create a scheduler or daemon when visible automation prompts are enough.
+  - Do not store secrets in tracked project config.
+  - Do not silently rewrite the human thesis, north star, leverage commitments, or product boundary.
   allocation_guardrails:
     proof: Claims about autonomy, trust, quality, or productivity require nonzero proof work.
     maintenance: Admin work stays bounded unless it unblocks product, proof, or current objectives.
-    distribution: Trust distribution must be grounded in accepted evidence, user pain, or an adoption gap; raw reach cannot justify output spam when reach per artifact or proof quality falls.
-    productization: Durable behavior follows accepted experiment, ablation, review, or operator-feedback evidence.
-    runway: Work must justify burn through revenue, validated learning, proof quality, distribution, reusable leverage, or unblock value.
-
+    distribution: Trust distribution must be grounded in accepted evidence, user pain, or an adoption
+      gap; raw reach cannot justify output spam when reach per artifact or proof quality falls.
+    productization: Durable behavior follows accepted experiment, ablation, review, or operator-feedback
+      evidence.
+    runway: Work must justify burn through revenue, validated learning, proof quality, distribution, reusable
+      leverage, or unblock value.
 authority:
   agents_may:
-    - Evolve capabilities, audiences, tickets, and metric proposals through evidence-backed deltas.
-    - Challenge the static thesis with evidence.
-    - Propose a charter delta in a dated report.
+  - Evolve capabilities, audiences, tickets, and metric proposals through evidence-backed deltas.
+  - Challenge the static thesis with evidence.
+  - Propose a charter delta in a dated report.
   human_approval_required:
-    - publishing
-    - spend
-    - customer_contact
-    - deploy
-    - destructive_cleanup
-    - product_boundary_change
-    - protected_charter_change
-
-change_rule: >-
-  Protected charter changes require an explicit human-approved harness delta;
-  reports and agents may propose but may not silently apply them.
+  - publishing
+  - spend
+  - customer_contact
+  - deploy
+  - destructive_cleanup
+  - product_boundary_change
+  - protected_charter_change
+change_rule: Protected charter changes require an explicit human-approved harness delta; reports and agents
+  may propose but may not silently apply them.

@@ -9,9 +9,10 @@ import json
 import re
 import tomllib
 from datetime import date as date_type
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, TypedDict
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 import yaml
 
@@ -193,7 +194,17 @@ SHARED_SHAPES: dict[str, list[str]] = {
     "source_ref": ["path", "pointer?", "kind?"],
     "source_gap": ["id", "severity", "owner", "message", "source_ref"],
     "metric_ref": ["metric_id", "label?", "primitive_id?", "latest_status?", "source_gap_ids[]"],
-    "metric_series": ["metric_id", "status", "current", "series[]", "target_hit?", "source_gaps[]"],
+    "metric_series": [
+        "metric_id",
+        "type",
+        "status",
+        "current",
+        "comparison",
+        "cumulative?",
+        "series[]",
+        "target_hit?",
+        "source_gaps[]",
+    ],
     "content_metric": ["content_id", "platform?", "external_id?", "metrics[]"],
     "feed_scout_item": ["title", "summary", "canonical_url?", "platform?", "entity_group_id?", "rank?", "signal?", "actionability?"],
     "metric_primitive": ["primitive_id", "provider", "owner", "command", "store_to", "required_inputs[]", "emits[]", "source_gap_policy"],
@@ -1094,13 +1105,7 @@ def metric_definitions(project_root: Path) -> tuple[dict[str, Any], list[str]]:
         if not refresh_prompt:
             gaps.append(f"missing:farplane/metrics.yaml#metrics/{metric_id}/refresh")
         primitive_id = primitive_id_for_metric(str(metric_id), recipe)
-        kind = str(recipe.get("kind") or recipe.get("aggregation") or "point")
-        if kind == "daily_count":
-            aggregation = "daily"
-            cumulative = True
-        else:
-            aggregation = "daily" if kind == "daily" else "point"
-            cumulative = bool(recipe.get("cumulative", False))
+        metric_type = str(recipe.get("type") or "")
         objective = objective_by_id.get(str(metric_id), {})
         area_selections = areas_by_id.get(str(metric_id), [])
         guard_ref = guard_by_id.get(str(metric_id), {})
@@ -1124,9 +1129,7 @@ def metric_definitions(project_root: Path) -> tuple[dict[str, Any], list[str]]:
             "unit": target_unit,
             "display": str(recipe.get("display") or "reading"),
             "pinned": bool(recipe.get("pinned", False)),
-            "kind": kind,
-            "aggregation": aggregation,
-            "cumulative": cumulative,
+            "type": metric_type,
             "target": target_value,
             "target_direction": target_direction,
             "target_unit": target_unit,
@@ -1392,18 +1395,6 @@ def source_gap_reason(obs: dict[str, Any]) -> str:
     return str(obs.get("status") or "source_gap")
 
 
-def unknown_metric_movement(reason: str) -> dict[str, Any]:
-    return {
-        "raw_delta": None,
-        "elapsed_days": None,
-        "raw_velocity_per_day": None,
-        "progress_delta": None,
-        "progress_velocity_per_day": None,
-        "momentum_state": "unknown",
-        "reason": reason,
-    }
-
-
 def parse_metric_observation_datetime(value: Any) -> datetime | None:
     """Parse a complete observation date/timestamp without accepting trailing junk."""
     raw = str(value or "").strip()
@@ -1423,47 +1414,222 @@ def parse_metric_observation_datetime(value: Any) -> datetime | None:
     return parsed.astimezone(timezone.utc)
 
 
-def derive_metric_movement(
-    direction: Any,
-    previous_point: dict[str, Any] | None,
-    current_point: dict[str, Any],
+def metric_observation_date(value: Any, timezone_name: str) -> date_type | None:
+    raw = str(value or "").strip()
+    if not raw:
+        return None
+    if len(raw) == 10:
+        try:
+            return date_type.fromisoformat(raw)
+        except ValueError:
+            return None
+    parsed = parse_metric_observation_datetime(raw)
+    if parsed is None:
+        return None
+    try:
+        zone = ZoneInfo(timezone_name)
+    except ZoneInfoNotFoundError:
+        return None
+    return parsed.astimezone(zone).date()
+
+
+def projection_window(
+    snapshot_date: str | None,
+    window_start: str | None = None,
+    window_end: str | None = None,
+    timezone_name: str = "UTC",
 ) -> dict[str, Any]:
-    """Derive comparable movement from two raw observations without persisting it."""
+    """Resolve one inclusive calendar window and its preceding equal window."""
+    try:
+        ZoneInfo(timezone_name)
+    except ZoneInfoNotFoundError as exc:
+        raise ValueError(f"unknown metric projection timezone: {timezone_name}") from exc
+    end_raw = window_end or snapshot_date or datetime.now(ZoneInfo(timezone_name)).date().isoformat()
+    start_raw = window_start or end_raw
+    try:
+        start = date_type.fromisoformat(start_raw)
+        end = date_type.fromisoformat(end_raw)
+    except ValueError as exc:
+        raise ValueError("metric projection windows must use YYYY-MM-DD dates") from exc
+    if start > end:
+        raise ValueError("metric projection window_start must be on or before window_end")
+    window_days = (end - start).days + 1
+    previous_end = start - timedelta(days=1)
+    previous_start = previous_end - timedelta(days=window_days - 1)
+    return {
+        "start": start.isoformat(),
+        "end": end.isoformat(),
+        "timezone": timezone_name,
+        "days": window_days,
+        "previous_start": previous_start.isoformat(),
+        "previous_end": previous_end.isoformat(),
+    }
+
+
+def unavailable_comparison(window: dict[str, Any], reason: str) -> dict[str, Any]:
+    return {
+        "previous_start": window["previous_start"],
+        "previous_end": window["previous_end"],
+        "previous_value": None,
+        "absolute_delta": None,
+        "percent_delta": None,
+        "progress_delta": None,
+        "momentum": "unknown",
+        "reason": reason,
+    }
+
+
+def metric_comparison(
+    direction: Any,
+    current_value: float | None,
+    previous_value: float | None,
+    window: dict[str, Any],
+    *,
+    current_complete: bool,
+    previous_complete: bool,
+) -> dict[str, Any]:
     normalized_direction = str(direction or "").strip().lower()
     if normalized_direction not in {"maximize", "minimize"}:
-        return unknown_metric_movement("missing_or_invalid_direction")
-    if previous_point is None:
-        return unknown_metric_movement("no_previous_observation")
-    previous_value = previous_point.get("value")
-    current_value = current_point.get("value")
-    if not isinstance(previous_value, (int, float)) or not isinstance(current_value, (int, float)):
-        return unknown_metric_movement("non_numeric_observation")
-    previous_at = parse_metric_observation_datetime(previous_point.get("date"))
-    current_at = parse_metric_observation_datetime(current_point.get("date"))
-    if previous_at is None or current_at is None:
-        return unknown_metric_movement("invalid_observation_date")
-    elapsed_days = (current_at - previous_at).total_seconds() / 86400
-    if elapsed_days <= 0:
-        return unknown_metric_movement("non_positive_elapsed_time")
-    raw_delta = float(current_value) - float(previous_value)
-    raw_velocity = raw_delta / elapsed_days
+        return unavailable_comparison(window, "missing_or_invalid_direction")
+    if not current_complete:
+        return unavailable_comparison(window, "current_window_incomplete")
+    if current_value is None:
+        return unavailable_comparison(window, "no_current_window_observation")
+    if not previous_complete:
+        return unavailable_comparison(window, "previous_window_incomplete")
+    if previous_value is None:
+        return unavailable_comparison(window, "no_previous_window_observation")
+    absolute_delta = current_value - previous_value
     progress_factor = 1.0 if normalized_direction == "maximize" else -1.0
-    progress_delta = raw_delta * progress_factor
-    progress_velocity = raw_velocity * progress_factor
+    progress_delta = absolute_delta * progress_factor
+    percent_delta = None if previous_value == 0 else (absolute_delta / abs(previous_value)) * 100
+    momentum = "improving" if progress_delta > 0 else "worsening" if progress_delta < 0 else "flat"
     return {
-        "raw_delta": raw_delta,
-        "elapsed_days": elapsed_days,
-        "raw_velocity_per_day": raw_velocity,
+        "previous_start": window["previous_start"],
+        "previous_end": window["previous_end"],
+        "previous_value": previous_value,
+        "absolute_delta": absolute_delta,
+        "percent_delta": percent_delta,
         "progress_delta": progress_delta,
-        "progress_velocity_per_day": progress_velocity,
-        "momentum_state": (
-            "improving"
-            if progress_velocity > 0
-            else "worsening"
-            if progress_velocity < 0
-            else "flat"
-        ),
-        "reason": None,
+        "momentum": momentum,
+        "reason": "previous_value_zero" if previous_value == 0 else None,
+    }
+
+
+def window_observations(
+    observations: list[dict[str, Any]],
+    start: date_type,
+    end: date_type,
+    timezone_name: str,
+    *,
+    statuses: set[str] | None = None,
+) -> list[dict[str, Any]]:
+    accepted_statuses = statuses or {"available"}
+    output: list[dict[str, Any]] = []
+    for observation_row in observations:
+        observed_date = metric_observation_date(observation_row.get("date"), timezone_name)
+        if observed_date is None or not start <= observed_date <= end:
+            continue
+        if str(observation_row.get("status") or "available") not in accepted_statuses:
+            continue
+        output.append(observation_row)
+    return output
+
+
+def canonical_metric_observations(
+    observations: list[dict[str, Any]],
+    timezone_name: str,
+) -> list[dict[str, Any]]:
+    """Collapse identical daily facts and surface conflicting facts as gaps."""
+    grouped: dict[date_type | None, list[dict[str, Any]]] = {}
+    for row in observations:
+        grouped.setdefault(metric_observation_date(row.get("date"), timezone_name), []).append(row)
+    output: list[dict[str, Any]] = []
+    for observed_date, rows in grouped.items():
+        if observed_date is None:
+            output.extend(rows)
+            continue
+        available = [
+            row
+            for row in rows
+            if str(row.get("status") or "available") == "available"
+            and isinstance(row.get("value"), (int, float))
+        ]
+        distinct_values = {float(row["value"]) for row in available}
+        if len(distinct_values) > 1:
+            output.extend(
+                row
+                for row in rows
+                if str(row.get("status") or "available") != "available"
+            )
+            output.append(
+                {
+                    "metric_id": str(rows[0].get("metric_id") or ""),
+                    "date": observed_date.isoformat(),
+                    "value": None,
+                    "status": "source_gap",
+                    "payload": {
+                        "reason": "conflicting_daily_observations",
+                        "values": sorted(distinct_values),
+                    },
+                }
+            )
+            continue
+        if available:
+            output.append(max(available, key=lambda row: str(row.get("date") or "")))
+        output.extend(
+            row
+            for row in rows
+            if str(row.get("status") or "available") != "available"
+        )
+    return sorted(output, key=lambda row: str(row.get("date") or ""))
+
+
+def aggregate_metric_window(
+    metric_type: str,
+    observations: list[dict[str, Any]],
+    start: date_type,
+    end: date_type,
+    timezone_name: str,
+) -> dict[str, Any]:
+    if metric_type == "stock":
+        available = [
+            row
+            for row in observations
+            if str(row.get("status") or "available") == "available"
+            and (
+                observed_date := metric_observation_date(row.get("date"), timezone_name)
+            )
+            is not None
+            and observed_date <= end
+        ]
+    else:
+        available = window_observations(observations, start, end, timezone_name)
+    gaps = window_observations(
+        observations,
+        start,
+        end,
+        timezone_name,
+        statuses={"source_gap", "not_applicable", "blocked"},
+    )
+    numeric = [row for row in available if isinstance(row.get("value"), (int, float))]
+    if metric_type == "flow":
+        value = sum(float(row["value"]) for row in numeric) if numeric else None
+        observed_at = max((str(row.get("date") or "") for row in numeric), default=None)
+    elif metric_type == "stock":
+        latest = max(numeric, key=lambda row: str(row.get("date") or ""), default=None)
+        value = float(latest["value"]) if latest else None
+        observed_at = str(latest.get("date") or "") if latest else None
+    else:
+        value = None
+        observed_at = None
+    return {
+        "value": value,
+        "observed_at": observed_at,
+        "available_count": len(numeric),
+        "source_gap_count": len(gaps),
+        "complete": not gaps,
+        "status": "partial" if numeric and gaps else "available" if numeric else "source_gap" if gaps else "missing",
     }
 
 
@@ -1472,14 +1638,13 @@ def build_metric_card(
     metric_def: dict[str, Any],
     observations: list[dict[str, Any]],
     snapshot_date: str | None = None,
+    window_start: str | None = None,
+    window_end: str | None = None,
+    timezone_name: str = "UTC",
 ) -> dict[str, Any]:
-    ordered_metric_obs = sorted(
-        [
-            obs
-            for obs in observations
-            if obs.get("metric_id") == metric_id
-        ],
-        key=lambda obs: str(obs.get("date", "")),
+    ordered_metric_obs = canonical_metric_observations(
+        [obs for obs in observations if obs.get("metric_id") == metric_id],
+        timezone_name,
     )
     metric_obs = [
         obs for obs in ordered_metric_obs if obs.get("status", "available") == "available"
@@ -1487,96 +1652,136 @@ def build_metric_card(
     metric_gaps = sorted(
         [
             obs
-            for obs in observations
-            if obs.get("metric_id") == metric_id and obs.get("status", "available") != "available"
+            for obs in ordered_metric_obs
+            if obs.get("status", "available") != "available"
         ],
         key=lambda obs: str(obs.get("date", "")),
     )
     series: list[dict[str, Any]] = []
-    running = 0.0
-    hit_at: str | None = None
-    hit_value: float | None = None
     target = metric_def.get("target")
     target_direction = normalize_target_direction(metric_def.get("target_direction"))
     target_unit = str(metric_def.get("target_unit") or metric_def.get("unit") or "")
-    previous_point: dict[str, Any] | None = None
     for obs in ordered_metric_obs:
         if obs.get("status", "available") != "available":
-            previous_point = None
             continue
         value = obs.get("value")
         if not isinstance(value, (int, float)):
-            previous_point = None
             continue
         point: dict[str, Any] = {"date": obs.get("date"), "value": float(value)}
-        point["movement"] = derive_metric_movement(
-            metric_def.get("direction"),
-            previous_point,
-            point,
-        )
         if isinstance(obs.get("payload"), dict):
             point["payload"] = obs["payload"]
         payload = obs.get("payload") if isinstance(obs.get("payload"), dict) else {}
         if isinstance(payload.get("items"), list):
             point["items"] = payload["items"]
-        comparison_value = float(value)
-        if metric_def.get("aggregation") == "daily" and metric_def.get("cumulative"):
-            running += float(value)
-            point["cumulative"] = running
-            comparison_value = running
-        else:
-            point["current"] = float(value)
-        target_hit = (
-            comparison_value >= target
-            if target_direction == "above"
-            else comparison_value <= target
-        ) if isinstance(target, (int, float)) else False
-        if target_hit and hit_at is None:
-            hit_at = str(obs.get("date"))
-            hit_value = comparison_value
         series.append(point)
-        previous_point = point
-    latest_gap = metric_gaps[-1] if metric_gaps else None
-    source_gaps: list[dict[str, Any]] = []
-    if latest_gap:
-        gap: dict[str, Any] = {
-            "date": latest_gap.get("date"),
-            "status": latest_gap.get("status"),
-            "reason": source_gap_reason(latest_gap),
+    window = projection_window(snapshot_date, window_start, window_end, timezone_name)
+    current_start = date_type.fromisoformat(window["start"])
+    current_end = date_type.fromisoformat(window["end"])
+    previous_start = date_type.fromisoformat(window["previous_start"])
+    previous_end = date_type.fromisoformat(window["previous_end"])
+    metric_type = str(metric_def.get("type") or "")
+    current_projection = aggregate_metric_window(
+        metric_type,
+        ordered_metric_obs,
+        current_start,
+        current_end,
+        timezone_name,
+    )
+    previous_projection = aggregate_metric_window(
+        metric_type,
+        ordered_metric_obs,
+        previous_start,
+        previous_end,
+        timezone_name,
+    )
+    comparison = metric_comparison(
+        metric_def.get("direction"),
+        current_projection["value"],
+        previous_projection["value"],
+        window,
+        current_complete=bool(current_projection["complete"]),
+        previous_complete=bool(previous_projection["complete"]),
+    )
+    cumulative: dict[str, Any] | None = None
+    if metric_type == "flow":
+        first_date = min(
+            (
+                observed_date
+                for row in ordered_metric_obs
+                if (observed_date := metric_observation_date(row.get("date"), timezone_name)) is not None
+            ),
+            default=current_start,
+        )
+        cumulative_projection = aggregate_metric_window(
+            metric_type,
+            ordered_metric_obs,
+            first_date,
+            current_end,
+            timezone_name,
+        )
+        cumulative = {
+            "value": cumulative_projection["value"],
+            "through": window["end"],
+            "status": cumulative_projection["status"],
         }
-        if isinstance(latest_gap.get("payload"), dict):
-            gap["payload"] = latest_gap["payload"]
+    source_gaps: list[dict[str, Any]] = []
+    for gap_row in metric_gaps:
+        gap_date = metric_observation_date(gap_row.get("date"), timezone_name)
+        if gap_date is None or gap_date > current_end:
+            continue
+        gap: dict[str, Any] = {
+            "date": gap_row.get("date"),
+            "status": gap_row.get("status"),
+            "reason": source_gap_reason(gap_row),
+        }
+        if isinstance(gap_row.get("payload"), dict):
+            gap["payload"] = gap_row["payload"]
         source_gaps.append(gap)
-    status = "available" if series else str(latest_gap.get("status") if latest_gap else "missing")
+    status = str(current_projection["status"])
     max_age_days = metric_def.get("max_age_days") if isinstance(metric_def.get("max_age_days"), int) else None
     stale_reason: str | None = None
-    if series and max_age_days:
-        as_of = date_type.fromisoformat(snapshot_date) if snapshot_date else datetime.now(timezone.utc).date()
-        observed_at = date_type.fromisoformat(str(series[-1].get("date"))[:10])
-        age_days = (as_of - observed_at).days
+    current_observed_at = current_projection.get("observed_at")
+    if current_observed_at is None and max_age_days:
+        current_observed_at = max(
+            (
+                str(row.get("date") or "")
+                for row in metric_obs
+                if (
+                    observed_date := metric_observation_date(
+                        row.get("date"), timezone_name
+                    )
+                )
+                is not None
+                and observed_date <= current_end
+            ),
+            default=None,
+        )
+    if current_observed_at and max_age_days:
+        observed_at = metric_observation_date(current_observed_at, timezone_name)
+        age_days = (current_end - observed_at).days if observed_at else max_age_days + 1
         if age_days > max_age_days:
             status = "stale"
             stale_reason = f"latest observation is {age_days} days old; max_age_days={max_age_days}"
-            source_gaps.append({"date": series[-1].get("date"), "status": "stale", "reason": stale_reason})
-    latest_movement = (
-        series[-1]["movement"]
-        if series
-        else unknown_metric_movement("no_available_observation")
-    )
+            source_gaps.append({"date": current_observed_at, "status": "stale", "reason": stale_reason})
     if status == "stale":
-        latest_movement = unknown_metric_movement("stale_observation")
-    elif latest_gap and (
-        not series or str(latest_gap.get("date") or "") >= str(series[-1].get("date") or "")
-    ):
-        latest_movement = unknown_metric_movement("latest_observation_unavailable")
+        comparison = unavailable_comparison(window, "stale_observation")
+    comparison_value = current_projection["value"]
+    target_hit = (
+        comparison_value >= target
+        if target_direction == "above"
+        else comparison_value <= target
+    ) if (
+        status == "available"
+        and isinstance(comparison_value, (int, float))
+        and isinstance(target, (int, float))
+    ) else False
     return {
         "metric_id": metric_id,
         "label": metric_def.get("label") or metric_id,
         "description": metric_def.get("description") or "",
         "tooltip": metric_def.get("tooltip") or metric_def.get("description") or "",
         "primitive_id": metric_def.get("primitive_id"),
-        "aggregation": metric_def.get("aggregation"),
-        "cumulative": bool(metric_def.get("cumulative")),
+        "type": metric_type,
         "target": target,
         "target_direction": target_direction,
         "target_unit": target_unit,
@@ -1589,12 +1794,24 @@ def build_metric_card(
         "display": metric_def.get("display") or "reading",
         "pinned": bool(metric_def.get("pinned")),
         "status": status,
-        "current": series[-1]["value"] if series and status == "available" else None,
+        "window": {
+            "start": window["start"],
+            "end": window["end"],
+            "timezone": window["timezone"],
+        },
+        "current": {
+            "value": current_projection["value"] if status != "stale" else None,
+            "observed_at": current_projection["observed_at"],
+            "status": status,
+        },
+        "comparison": comparison,
+        "cumulative": cumulative,
         "series": series,
-        "momentum": latest_movement,
-        "best_daily": max((float(point["value"]) for point in series), default=None),
         "source_gaps": source_gaps,
-        "target_hit": {"hit_at": hit_at, "hit_value": hit_value} if hit_at else None,
+        "target_hit": {
+            "hit_at": window["end"],
+            "hit_value": comparison_value,
+        } if target_hit else None,
         "source_ref": metric_def.get("source_ref"),
     }
 
@@ -1711,13 +1928,28 @@ def build_content_metric_cards(metric_cards: list[dict[str, Any]], ledger_rows: 
     return sorted(output, key=lambda item: (str(item.get("published_at") or ""), str(item.get("content_id") or "")))
 
 
-def metric_projection(project_root: Path, metric_defs: dict[str, Any], snapshot_date: str | None) -> dict[str, Any]:
+def metric_projection(
+    project_root: Path,
+    metric_defs: dict[str, Any],
+    snapshot_date: str | None,
+    window_start: str | None = None,
+    window_end: str | None = None,
+    timezone_name: str = "UTC",
+) -> dict[str, Any]:
     observations = daily_observations(project_root, metric_defs, snapshot_date)
     observations.extend(provider_observations(project_root, metric_defs, snapshot_date))
     observations.extend(ledger_content_observations(project_root, snapshot_date))
     observations.extend(ledger_missing_observations(project_root, metric_defs, snapshot_date))
     metric_cards = [
-        build_metric_card(metric_id, metric_def, observations, snapshot_date)
+        build_metric_card(
+            metric_id,
+            metric_def,
+            observations,
+            snapshot_date,
+            window_start,
+            window_end,
+            timezone_name,
+        )
         for metric_id, metric_def in sorted(metric_defs.items())
     ]
     source_gaps = []
@@ -1738,20 +1970,34 @@ def metric_projection(project_root: Path, metric_defs: dict[str, Any], snapshot_
             }
         )
     return {
+        "window": projection_window(snapshot_date, window_start, window_end, timezone_name),
         "series": metric_cards,
         "contents": build_content_metric_cards(metric_cards, load_content_ledger_rows(project_root)),
         "source_gaps": source_gaps,
     }
 
 
-def load_project_snapshot(project_root: Path, snapshot_date: str | None = None) -> dict[str, Any]:
+def load_project_snapshot(
+    project_root: Path,
+    snapshot_date: str | None = None,
+    window_start: str | None = None,
+    window_end: str | None = None,
+    timezone_name: str = "UTC",
+) -> dict[str, Any]:
     project_root = project_root.resolve()
     manifest = read_json(project_root / "farplane" / "manifest.json")
     bindings = load_bindings(project_root)
     harness = load_harness_config(project_root)
     selection = load_metric_selection(project_root)
     metric_defs, metric_gaps = metric_definitions(project_root)
-    metric_view = metric_projection(project_root, metric_defs, snapshot_date)
+    metric_view = metric_projection(
+        project_root,
+        metric_defs,
+        snapshot_date,
+        window_start,
+        window_end,
+        timezone_name,
+    )
     metric_cards = metric_view["series"] if isinstance(metric_view.get("series"), list) else []
     metric_cards_by_id = {str(card.get("metric_id")): card for card in metric_cards if isinstance(card, dict)}
     latest = latest_primitives(project_root, snapshot_date)
@@ -1847,7 +2093,7 @@ def load_project_snapshot(project_root: Path, snapshot_date: str | None = None) 
         "leverage_commitments": harness.get("leverage_commitments") if isinstance(harness.get("leverage_commitments"), list) else [],
     }
     return {
-        "schema_version": 2,
+        "schema_version": 3,
         "generated_at": now_utc(),
         "project_root": str(project_root),
         "shared_shapes": SHARED_SHAPES,
@@ -1860,6 +2106,7 @@ def load_project_snapshot(project_root: Path, snapshot_date: str | None = None) 
         "sources": sources,
         "source_gaps": source_gaps,
         "metrics": {
+            "window": metric_view.get("window"),
             "selection": selection,
             "definitions": metric_defs,
             "primitives": PRIMITIVE_CATALOG,
@@ -1956,7 +2203,13 @@ def write_project_ui_snapshot(snapshot: dict[str, Any], output_path: Path) -> Pa
 
 def run_snapshot(args: argparse.Namespace) -> int:
     project_root = Path(args.project_root).expanduser().resolve()
-    snapshot = load_project_snapshot(project_root, args.date)
+    snapshot = load_project_snapshot(
+        project_root,
+        args.date,
+        args.window_start,
+        args.window_end,
+        args.timezone,
+    )
     output_path = project_root / PROJECT_SNAPSHOT_PATH
     if not args.no_write:
         write_project_ui_snapshot(snapshot, output_path)

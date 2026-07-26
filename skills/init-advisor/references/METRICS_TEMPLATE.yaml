@@ -2,7 +2,7 @@ kind: project-metrics
 status: draft
 created_at: TODO
 updated_at: TODO
-framework_template_version: "0.3.0"
+framework_template_version: "0.4.0"
 owner: metric-advisor
 refreshers:
   local_project_metrics:
@@ -23,7 +23,7 @@ metrics:
     label: TODO metric label
     description: TODO explain what this metric means, including numerator/denominator or source window when relevant.
     pinned: false
-    kind: daily_count
+    type: flow
     unit: TODO_unit
     display: bar_plus_cumulative
     direction: maximize
@@ -33,7 +33,7 @@ metrics:
     label: TODO quality metric label
     description: TODO explain the quality or proof threshold this metric measures.
     pinned: false
-    kind: point
+    type: stock
     unit: TODO_unit
     display: reading
     direction: maximize
@@ -46,7 +46,7 @@ metrics:
     label: Todo unclaimed tickets
     description: Current count of unclaimed status=todo tickets with satisfied dependencies.
     pinned: false
-    kind: point
+    type: stock
     unit: tickets
     display: reading
     direction: minimize
@@ -55,7 +55,7 @@ metrics:
     label: Accepted output events
     description: Daily count of completed tickets or reward-ledger events accepted for this project's output KPI.
     pinned: true
-    kind: daily_count
+    type: flow
     unit: events
     display: bar_plus_cumulative
     direction: maximize
@@ -65,7 +65,7 @@ metrics:
     label: Autonomous time ratio
     description: Autonomous worker elapsed minutes divided by estimated human attention minutes for the day.
     pinned: true
-    kind: point
+    type: stock
     unit: ratio
     display: reading
     direction: maximize

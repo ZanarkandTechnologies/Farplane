@@ -155,13 +155,17 @@ Then copy in:
 - `qa/`
 - `tickets/templates/ticket.md`
 
-The bootstrap script can still help:
+Use the versioned, field-preserving migration for an existing project:
 
 ```bash
-bash ~/.codex/skills/init-advisor/scripts/bootstrap.sh .
+python3 ~/.codex/skills/init-advisor/scripts/migrate_framework.py \
+  --project-root . --force
 ```
 
-Use `--force` only if you want to overwrite files that already exist.
+This `--force` applies only known framework deltas. It preserves human-authored
+charter, metric definitions, refresh prompts, bindings, docs, and tickets.
+Do not use `bootstrap.sh --force` for framework upgrades; bootstrap owns
+whole-file scaffolding and is reserved for explicit scaffold replacement.
 
 After merging human-owned charter and strategy content, regenerate the runtime
 read models and validate the project:

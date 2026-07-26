@@ -173,7 +173,7 @@ metrics:
     refresh: Count ticket Reward rows.
     label: Accepted harness improvements
     description: Accepted improvements with ticket proof.
-    kind: daily_count
+    type: flow
     unit: improvements
     display: bar_plus_cumulative
     direction: maximize
@@ -182,7 +182,7 @@ metrics:
     refresh: Count accepted product outputs.
     label: Accepted product output
     description: Accepted product output.
-    kind: daily_count
+    type: flow
     unit: artifacts
     display: bar_plus_cumulative
     direction: maximize
@@ -202,7 +202,7 @@ project: {}
 
         self.assertEqual(errors, [])
 
-    def test_metric_recipe_requires_description_and_valid_types(self) -> None:
+    def test_metric_recipe_requires_lean_semantics_and_rejects_projection_config(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             farplane = root / "farplane"
@@ -216,6 +216,8 @@ metrics:
   accepted_harness_improvements:
     label: Accepted harness improvements
     kind: weekly_magic
+    formula: revenue - cost
+    windows: [week]
     unit: improvements
     display: sparkles
     pinned: "true"
@@ -236,11 +238,11 @@ metric_bindings:
             errors = validate(root)
 
         self.assertIn(
-            "farplane/metrics.yaml metrics.accepted_harness_improvements.description must be a non-empty string.",
+            "farplane/metrics.yaml metrics.accepted_harness_improvements uses unsupported derived/projection config: formula, kind, windows; declare only type: flow|stock and let refreshers emit facts while Core derives window views.",
             errors,
         )
         self.assertIn(
-            "farplane/metrics.yaml metrics.accepted_harness_improvements.kind must be one of: daily, daily_count, point.",
+            "farplane/metrics.yaml metrics.accepted_harness_improvements.type must be a non-empty string.",
             errors,
         )
         self.assertIn(
@@ -267,19 +269,19 @@ metrics:
   accepted_harness_improvements:
     label: Accepted harness improvements
     description: Accepted improvements.
-    kind: daily_count
+    type: flow
     unit: improvements
     display: bar_plus_cumulative
   todo_unclaimed_ticket_count:
     label: Ready unclaimed tickets
     description: Ready unclaimed tickets.
-    kind: point
+    type: stock
     unit: tickets
     display: reading
   accepted_product_output:
     label: Accepted product output
     description: Accepted product output.
-    kind: daily_count
+    type: flow
     unit: artifacts
     display: bar_plus_cumulative
     direction: maximize
@@ -332,14 +334,14 @@ metrics:
   accepted_harness_improvements:
     label: Accepted harness improvements
     description: Accepted improvements.
-    kind: daily_count
+    type: flow
     display: bar_plus_cumulative
     direction: maximize
     max_age_days: 7
   accepted_product_output:
     label: Accepted product output
     description: Accepted product output.
-    kind: daily_count
+    type: flow
     unit: artifacts
     display: bar_plus_cumulative
     direction: maximize

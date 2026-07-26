@@ -106,22 +106,29 @@ class StrictYamlModel(BaseModel):
 
 
 class MetricDefinitionModel(StrictYamlModel):
-    label: str
-    description: str
-    kind: Literal["daily_count", "daily", "point"]
+    type: Literal["flow", "stock"]
     unit: str
-    display: Literal["bar_plus_cumulative", "line", "reading"]
+    direction: Literal["maximize", "minimize"]
+    label: str | None = None
+    description: str | None = None
+    display: Literal["bar_plus_cumulative", "line", "reading"] | None = None
     pinned: StrictBool | None = None
-    direction: Literal["maximize", "minimize"] | None = None
     max_age_days: int | None = None
     guard: dict[str, Any] | None = None
 
-    @field_validator("label", "description", "unit")
+    @field_validator("unit")
     @classmethod
     def non_empty_string(cls, value: str) -> str:
         if not isinstance(value, str) or not value.strip():
             raise ValueError("must be a non-empty string")
         return value.strip()
+
+    @field_validator("label", "description")
+    @classmethod
+    def optional_non_empty_string(cls, value: str | None) -> str | None:
+        if value is not None and not value.strip():
+            raise ValueError("must be a non-empty string when present")
+        return value.strip() if value is not None else None
 
 
 class MetricBindingModel(StrictYamlModel):
@@ -636,7 +643,7 @@ def validate_metrics_file(root: Path, metrics_file: Path) -> list[str]:
 
 def validate_metric_definition_schema(metrics: dict[str, dict]) -> list[str]:
     errors: list[str] = []
-    allowed_kinds = {"daily_count", "daily", "point"}
+    allowed_types = {"flow", "stock"}
     allowed_displays = {"bar_plus_cumulative", "reading", "line"}
     for metric_id, definition in sorted(metrics.items()):
         prefix = f"farplane/metrics.yaml metrics.{metric_id}"
@@ -646,6 +653,28 @@ def validate_metric_definition_schema(metrics: dict[str, dict]) -> list[str]:
             errors.append(f"{prefix} must declare exactly one of refresh_ref or refresh.")
         if "product" in definition:
             errors.append(f"{prefix}.product is retired; metrics are project-level definitions.")
+        derived_or_projection_fields = sorted(
+            field
+            for field in (
+                "aggregation",
+                "alignment",
+                "cadence",
+                "compare",
+                "cumulative",
+                "formula",
+                "kind",
+                "timezone",
+                "window",
+                "windows",
+            )
+            if field in definition
+        )
+        if derived_or_projection_fields:
+            errors.append(
+                f"{prefix} uses unsupported derived/projection config: "
+                f"{', '.join(derived_or_projection_fields)}; declare only type: "
+                "flow|stock and let refreshers emit facts while Core derives window views."
+            )
         if "max_age_days" in definition and (
             not isinstance(definition.get("max_age_days"), int) or definition.get("max_age_days", 0) < 1
         ):
@@ -667,14 +696,18 @@ def validate_metric_definition_schema(metrics: dict[str, dict]) -> list[str]:
             for error in exc.errors():
                 field = pydantic_path(error)
                 error_type = str(error.get("type") or "")
-                if field in {"label", "description", "kind", "unit", "display"} and error_type in {
+                if field in {"type", "unit", "direction"} and error_type in {
                     "missing",
                     "value_error",
                     "string_type",
                 }:
                     errors.append(f"{prefix}.{field} must be a non-empty string.")
-                elif field == "kind" and error_type == "literal_error":
-                    errors.append(f"{prefix}.kind must be one of: {', '.join(sorted(allowed_kinds))}.")
+                elif field == "type" and error_type == "literal_error":
+                    errors.append(f"{prefix}.type must be one of: {', '.join(sorted(allowed_types))}.")
+                elif field == "direction" and error_type == "literal_error":
+                    errors.append(f"{prefix}.direction must be maximize or minimize.")
+                elif field in {"label", "description"}:
+                    errors.append(f"{prefix}.{field} must be a non-empty string when present.")
                 elif field == "display" and error_type == "literal_error":
                     errors.append(f"{prefix}.display must be one of: {', '.join(sorted(allowed_displays))}.")
                 elif field == "pinned":

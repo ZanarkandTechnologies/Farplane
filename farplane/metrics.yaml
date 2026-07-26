@@ -1,15 +1,16 @@
 kind: project-metrics
 status: active
 created_at: 2026-07-11
-updated_at: 2026-07-13
-framework_template_version: "0.3.0"
+updated_at: 2026-07-26
+framework_template_version: "0.4.0"
 owner: metric-advisor
 refreshers:
   local_project_metrics:
     refresh: >-
       Run `farplane metrics primitives --project-root . --date <YYYY-MM-DD> --json`,
       then use the interval metric helpers for accepted Reward, intervention,
-      autonomy, content-ledger, and eval readings not emitted by Core. For
+      autonomy, content-ledger, eval, and planner human-feedback readings not
+      emitted by Core. For
       clone-hour metrics, prefer the canonical Farplane UI Harness Usage
       completed-agent-hours summary for this project/window when accessible;
       otherwise use local lifecycle telemetry and record the missing Harness
@@ -37,10 +38,22 @@ refreshers:
       - decision_changing_learning_briefs
       - auto_completion_rate
       - rejected_ai_ticket_count
+      - planner_idea_comprehension_rate
+      - planner_idea_keep_rate
       - intervention_free_ticket_count
       - ticket_intervention_turn_count
       - todo_unclaimed_ticket_count
       - posts_published
+  business_outcome_metrics:
+    refresh: >-
+      Read the connected billing or subscription system for <YYYY-MM-DD> and
+      write realized revenue plus paid active-subscription observations with
+      source provenance. When no authoritative billing source is connected or
+      accessible, write an explicit source gap; never infer money or active
+      subscriptions from produced assets, leads, sign-up intent, or plans.
+    provides:
+      - revenue_usd
+      - active_subscriptions
   github_metrics:
     refresh: >-
       Use the configured GitHub repository coordinate and `gh api` once for the
@@ -90,7 +103,7 @@ metrics:
     label: Activated external projects
     description: Count of non-Farplane local projects whose manifest is current and whose Work Pulse recorded a decision after that manifest update.
     pinned: true
-    kind: point
+    type: stock
     unit: projects
     display: reading
     direction: maximize
@@ -100,7 +113,7 @@ metrics:
     label: Distribution reach per published artifact
     description: Same-window evidence distribution reach divided by published artifacts; this measures distribution efficiency rather than rewarding raw output volume.
     pinned: true
-    kind: point
+    type: stock
     unit: views_per_artifact
     display: line
     direction: maximize
@@ -110,7 +123,7 @@ metrics:
     label: Accepted evidence cycles
     description: Daily count of completed tickets whose Reward names this metric and whose ticket-scoped review evidence records verdict pass at TAS-A.
     pinned: true
-    kind: daily_count
+    type: flow
     unit: cycles
     display: bar_plus_cumulative
     direction: maximize
@@ -120,7 +133,7 @@ metrics:
     label: Accepted trust ablations
     description: Daily count of completed tickets whose Reward.kpi_rewards includes this KPI and whose proof shows a with/without trust decision.
     pinned: false
-    kind: daily_count
+    type: flow
     unit: ablations
     display: bar_plus_cumulative
     direction: maximize
@@ -129,7 +142,7 @@ metrics:
     label: Accepted harness improvements
     description: Daily count of completed tickets whose Reward.kpi_rewards includes this KPI and whose proof shows a shipped Farplane improvement.
     pinned: false
-    kind: daily_count
+    type: flow
     unit: improvements
     display: bar_plus_cumulative
     direction: maximize
@@ -139,7 +152,7 @@ metrics:
     label: Interesting autonomy results
     description: Daily count of distinct interesting results found in ticket proof from the review window.
     pinned: false
-    kind: daily_count
+    type: flow
     unit: results
     display: bar_plus_cumulative
     direction: maximize
@@ -148,7 +161,7 @@ metrics:
     label: Autonomous time ratio
     description: Autonomous worker elapsed minutes divided by estimated human attention minutes for the day.
     pinned: false
-    kind: point
+    type: stock
     unit: ratio
     display: reading
     direction: maximize
@@ -157,7 +170,7 @@ metrics:
     label: Parallel clone hours
     description: Sum of attributed agent-thread elapsed hours in the window; parallel threads intentionally accumulate and may exceed 24 hours per day.
     pinned: true
-    kind: daily
+    type: flow
     unit: hours
     display: line
     direction: maximize
@@ -167,7 +180,7 @@ metrics:
     label: Concurrent agent wall hours
     description: Union of attributed agent-thread intervals in the window, preventing parallel threads from double-counting wall-clock coverage.
     pinned: false
-    kind: daily
+    type: flow
     unit: hours
     display: line
     direction: maximize
@@ -176,7 +189,7 @@ metrics:
     label: Accepted clone hours
     description: Attributed clone hours for terminal tickets with completion proof and TAS-A acceptance evidence; ongoing or evidence-incomplete work is excluded.
     pinned: true
-    kind: daily
+    type: flow
     unit: hours
     display: line
     direction: maximize
@@ -186,7 +199,7 @@ metrics:
     label: Non-accepted clone hours
     description: Attributed clone hours for failed or rejected tickets and completed tickets without acceptance evidence; this is recoverable-cost evidence, not a claim that ongoing work is waste.
     pinned: true
-    kind: daily
+    type: flow
     unit: hours
     display: line
     direction: minimize
@@ -196,19 +209,42 @@ metrics:
     label: Potential human time saved
     description: Estimated max of accepted clone hours minus prompt-cluster human-attention hours and zero, with formula, baseline provenance, attribution coverage, and confidence retained in the payload.
     pinned: true
-    kind: daily
+    type: flow
     unit: hours
     display: line
     direction: maximize
     max_age_days: 1
+  revenue_usd:
+    refresh_ref: business_outcome_metrics
+    label: Realized revenue
+    description: Realized revenue in US dollars from an authoritative billing source; produced assets, pipeline value, and unverified intent do not count.
+    ultimate_outcome: true
+    pinned: true
+    type: flow
+    unit: USD
+    display: line
+    direction: maximize
+    max_age_days: 7
   evidence_distribution_reach:
     refresh_ref: local_project_metrics
     label: Evidence distribution reach
     description: Same-window reach across available evidence-backed distribution channels, with per-platform components retained in the observation payload.
+    ultimate_outcome: true
     pinned: true
-    kind: daily_count
+    type: flow
     unit: views
     display: bar_plus_cumulative
+    direction: maximize
+    max_age_days: 7
+  active_subscriptions:
+    refresh_ref: business_outcome_metrics
+    label: Active paid subscriptions
+    description: Current paid active subscriptions from an authoritative subscription source; trials, sign-up intent, and unverified account state do not count.
+    ultimate_outcome: true
+    pinned: true
+    type: stock
+    unit: subscriptions
+    display: reading
     direction: maximize
     max_age_days: 7
   latest_eval_pass_rate:
@@ -216,7 +252,7 @@ metrics:
     label: Latest eval pass rate
     description: Diagnostic pass rate from the most recent local eval summary; not a project-wide admission guard because eval runs cover different scopes and difficulties.
     pinned: false
-    kind: point
+    type: stock
     unit: ratio
     display: reading
     direction: maximize
@@ -225,7 +261,7 @@ metrics:
     label: Priority skill health gaps
     description: Count of local Tier 1 or directly used skills with a template, eval-coverage, or QA-checklist gap; each unhealthy skill counts once.
     pinned: true
-    kind: point
+    type: stock
     unit: skills
     display: reading
     direction: minimize
@@ -235,7 +271,7 @@ metrics:
     label: Harness health source gaps
     description: Count of missing or malformed inputs required to compile local skill, rollout, and eval health evidence.
     pinned: false
-    kind: point
+    type: stock
     unit: gaps
     display: reading
     direction: minimize
@@ -248,7 +284,7 @@ metrics:
     label: Decision-changing learning briefs
     description: Daily count of learning briefs whose implication changes positioning, audience, distribution, workflow, or no-action decisions.
     pinned: false
-    kind: daily_count
+    type: flow
     unit: briefs
     display: bar_plus_cumulative
     direction: maximize
@@ -258,7 +294,7 @@ metrics:
     label: GitHub views
     description: Daily GitHub traffic views for the Farplane repository when traffic API access is available.
     pinned: false
-    kind: daily_count
+    type: flow
     unit: views
     display: bar_plus_cumulative
     direction: maximize
@@ -267,26 +303,46 @@ metrics:
     label: Auto completion rate
     description: Completed associated tickets with zero post-start human intervention turns divided by all completed associated tickets for the day.
     pinned: false
-    kind: point
+    type: stock
     unit: ratio
     display: reading
     direction: maximize
   rejected_ai_ticket_count:
     refresh_ref: local_project_metrics
     label: Rejected AI tickets
-    description: Daily diagnostic count of AI-planned reward-bearing tickets marked status rejected; Dogfood may use the history to evaluate planner variants.
+    description: Daily diagnostic count of AI-planned reward-bearing tickets marked status rejected; it informs planner experiments but is not a hard planning guard or business outcome.
     pinned: false
-    kind: daily_count
+    type: flow
     unit: tickets
     display: bar_plus_cumulative
     direction: minimize
     max_age_days: 1
+  planner_idea_comprehension_rate:
+    refresh_ref: local_project_metrics
+    label: Planner idea comprehension rate
+    description: Share of blinded human-feedback idea cards whose area, type, audience, impact, and finished experience are understood within ten seconds; source gaps remain unknown rather than zero.
+    pinned: false
+    type: stock
+    unit: ratio
+    display: reading
+    direction: maximize
+    max_age_days: 30
+  planner_idea_keep_rate:
+    refresh_ref: local_project_metrics
+    label: Planner idea keep rate
+    description: Share of blinded human-feedback idea cards the operator elects to keep for full-spec consideration; this is planner quality evidence, not realized business impact.
+    pinned: false
+    type: stock
+    unit: ratio
+    display: reading
+    direction: maximize
+    max_age_days: 30
   intervention_free_ticket_count:
     refresh_ref: local_project_metrics
     label: Intervention-free tickets
     description: Daily count of completed associated tickets with zero human turns after execution start.
     pinned: false
-    kind: daily_count
+    type: flow
     unit: tickets
     display: bar_plus_cumulative
     direction: maximize
@@ -295,7 +351,7 @@ metrics:
     label: Ticket intervention turns
     description: Daily count of human turns after execution start and before completion across completed associated tickets.
     pinned: true
-    kind: daily_count
+    type: flow
     unit: turns
     display: bar_plus_cumulative
     direction: minimize
@@ -305,7 +361,7 @@ metrics:
     label: Todo unclaimed tickets
     description: Current count of unclaimed status=todo tickets with satisfied dependencies.
     pinned: false
-    kind: point
+    type: stock
     unit: tickets
     display: reading
     direction: minimize
@@ -314,7 +370,7 @@ metrics:
     label: X followers
     description: Current follower count for the configured Farplane X account.
     pinned: false
-    kind: point
+    type: stock
     unit: followers
     display: line
     direction: maximize
@@ -323,7 +379,7 @@ metrics:
     label: X views
     description: Daily aggregate X views for posted content selected from the content ledger.
     pinned: false
-    kind: daily_count
+    type: flow
     unit: views
     display: bar_plus_cumulative
     direction: maximize
@@ -333,7 +389,7 @@ metrics:
     label: X likes
     description: Daily aggregate X likes for posted content selected from the content ledger.
     pinned: false
-    kind: daily_count
+    type: flow
     unit: likes
     display: bar_plus_cumulative
     direction: maximize
@@ -342,7 +398,7 @@ metrics:
     label: Instagram followers
     description: Current follower count for the configured Farplane Instagram account.
     pinned: false
-    kind: point
+    type: stock
     unit: followers
     display: line
     direction: maximize
@@ -351,7 +407,7 @@ metrics:
     label: Instagram views
     description: Daily aggregate Instagram views for posted content selected from the content ledger.
     pinned: false
-    kind: daily_count
+    type: flow
     unit: views
     display: bar_plus_cumulative
     direction: maximize
@@ -361,7 +417,7 @@ metrics:
     label: Instagram likes
     description: Daily aggregate Instagram likes for posted content selected from the content ledger.
     pinned: false
-    kind: daily_count
+    type: flow
     unit: likes
     display: bar_plus_cumulative
     direction: maximize
@@ -370,7 +426,7 @@ metrics:
     label: Instagram comments
     description: Daily aggregate Instagram comments for posted content selected from the content ledger.
     pinned: false
-    kind: daily_count
+    type: flow
     unit: comments
     display: bar_plus_cumulative
     direction: maximize
@@ -379,7 +435,7 @@ metrics:
     label: Instagram shares
     description: Daily aggregate Instagram shares for posted content selected from the content ledger.
     pinned: false
-    kind: daily_count
+    type: flow
     unit: shares
     display: bar_plus_cumulative
     direction: maximize
@@ -388,7 +444,7 @@ metrics:
     label: Instagram saves
     description: Daily aggregate Instagram saves for posted content selected from the content ledger.
     pinned: false
-    kind: daily_count
+    type: flow
     unit: saves
     display: bar_plus_cumulative
     direction: maximize
@@ -397,7 +453,7 @@ metrics:
     label: Instagram reach
     description: Daily aggregate Instagram reached accounts for posted content selected from the content ledger.
     pinned: false
-    kind: daily_count
+    type: flow
     unit: accounts
     display: bar_plus_cumulative
     direction: maximize
@@ -406,7 +462,7 @@ metrics:
     label: Instagram total interactions
     description: Daily aggregate Instagram interactions for posted content selected from the content ledger.
     pinned: false
-    kind: daily_count
+    type: flow
     unit: interactions
     display: bar_plus_cumulative
     direction: maximize
@@ -415,7 +471,7 @@ metrics:
     label: Instagram average watch time
     description: Average watch time for selected Instagram Reel content when the account API returns watch-time fields.
     pinned: false
-    kind: point
+    type: stock
     unit: milliseconds
     display: line
     direction: maximize
@@ -424,7 +480,7 @@ metrics:
     label: Instagram total watch time
     description: Total watch time for selected Instagram Reel content when the account API returns watch-time fields.
     pinned: false
-    kind: daily_count
+    type: flow
     unit: milliseconds
     display: bar_plus_cumulative
     direction: maximize
@@ -433,7 +489,7 @@ metrics:
     label: Instagram retention score
     description: Instagram Reel retention score from watch-time and duration data when those fields are available.
     pinned: false
-    kind: point
+    type: stock
     unit: percent
     display: line
     direction: maximize
@@ -442,7 +498,7 @@ metrics:
     label: Posts published
     description: Daily count of content ledger rows posted on the snapshot date.
     pinned: false
-    kind: daily_count
+    type: flow
     unit: posts
     display: bar_plus_cumulative
     direction: maximize

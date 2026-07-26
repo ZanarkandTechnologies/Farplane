@@ -18,7 +18,6 @@ if str(CORE_DIR) not in sys.path:
 from farplane_project_snapshot import (
     build_metric_card,
     collect_ticket_refs,
-    derive_metric_movement,
     highlight_cadence,
     load_highlights,
     load_project_snapshot,
@@ -83,7 +82,7 @@ metrics:
     label: Accepted harness improvements
     description: Accepted harness improvements.
     pinned: true
-    kind: daily_count
+    type: flow
     unit: improvements
     display: bar_plus_cumulative
     direction: maximize
@@ -229,10 +228,12 @@ kpi_rewards:
         self.assertEqual(metric_def["target_spec"], {"value": None, "direction": "above", "unit": "improvements"})
         self.assertEqual(metric_card["description"], metric_def["description"])
         self.assertEqual(metric_card["target_spec"], metric_def["target_spec"])
-        self.assertEqual(metric_card["current"], 2)
-        self.assertEqual(metric_card["series"][-1]["movement"]["raw_delta"], 1)
-        self.assertEqual(metric_card["momentum"]["momentum_state"], "improving")
-        self.assertEqual(metric_card["series"][-1]["cumulative"], 3)
+        self.assertEqual(metric_card["type"], "flow")
+        self.assertEqual(metric_card["current"]["value"], 2)
+        self.assertEqual(metric_card["comparison"]["absolute_delta"], 1)
+        self.assertEqual(metric_card["comparison"]["percent_delta"], 100)
+        self.assertEqual(metric_card["comparison"]["momentum"], "improving")
+        self.assertEqual(metric_card["cumulative"]["value"], 3)
         self.assertEqual(snapshot["tabs"]["overview"]["pinned_metric_cards"][0]["metric_id"], "accepted_harness_improvements")
         self.assertEqual(snapshot["tabs"]["overview"]["charter"]["mission"], "Make useful work.")
         self.assertEqual(snapshot["tabs"]["overview"]["charter"]["north_star"], "Make reliable work normal.")
@@ -240,7 +241,7 @@ kpi_rewards:
         self.assertIn("ticket_ref", snapshot["shared_shapes"])
         self.assertNotIn("products", snapshot["tabs"])
         self.assertNotIn("goals", snapshot["tabs"])
-        self.assertEqual(snapshot["tabs"]["objectives"]["metric_cards"][0]["current"], 2)
+        self.assertEqual(snapshot["tabs"]["objectives"]["metric_cards"][0]["current"]["value"], 2)
         self.assertIn("source_gap_ids", snapshot["tabs"]["distribution"])
         self.assertNotIn("feed_scout", snapshot["tabs"]["distribution"])
         self.assertIn("missing_content_ledger", snapshot["tabs"]["distribution"]["source_gap_ids"])
@@ -249,89 +250,107 @@ kpi_rewards:
         self.assertEqual(snapshot["tabs"]["news"]["items"], [])
         self.assertIn("source_gap_ids", snapshot["tabs"]["kanban"])
 
-    def test_metric_movement_normalizes_direction_and_elapsed_time(self) -> None:
-        maximize = derive_metric_movement(
-            "maximize",
-            {"date": "2026-07-01", "value": 10},
-            {"date": "2026-07-03", "value": 12},
-        )
-        minimize = derive_metric_movement(
-            "minimize",
-            {"date": "2026-07-01", "value": 10},
-            {"date": "2026-07-03", "value": 8},
-        )
-        worsening = derive_metric_movement(
-            "minimize",
-            {"date": "2026-07-01", "value": 8},
-            {"date": "2026-07-03", "value": 10},
-        )
-        ratio = derive_metric_movement(
-            "maximize",
-            {"date": "2026-07-01T00:00:00Z", "value": 0.5},
-            {"date": "2026-07-01T12:00:00Z", "value": 0.75},
-        )
-        flat = derive_metric_movement(
-            "maximize",
-            {"date": "2026-07-01", "value": 4},
-            {"date": "2026-07-02", "value": 4},
-        )
-
-        self.assertEqual(maximize["raw_delta"], 2)
-        self.assertEqual(maximize["elapsed_days"], 2)
-        self.assertEqual(maximize["raw_velocity_per_day"], 1)
-        self.assertEqual(maximize["progress_velocity_per_day"], 1)
-        self.assertEqual(maximize["momentum_state"], "improving")
-        self.assertEqual(minimize["raw_delta"], -2)
-        self.assertEqual(minimize["progress_delta"], 2)
-        self.assertEqual(minimize["progress_velocity_per_day"], 1)
-        self.assertEqual(minimize["momentum_state"], "improving")
-        self.assertEqual(worsening["progress_velocity_per_day"], -1)
-        self.assertEqual(worsening["momentum_state"], "worsening")
-        self.assertEqual(ratio["elapsed_days"], 0.5)
-        self.assertEqual(ratio["raw_velocity_per_day"], 0.5)
-        self.assertEqual(ratio["momentum_state"], "improving")
-        self.assertEqual(flat["progress_velocity_per_day"], 0)
-        self.assertEqual(flat["momentum_state"], "flat")
-
-    def test_metric_movement_reports_unknown_without_comparable_points(self) -> None:
-        cases = [
-            derive_metric_movement("maximize", None, {"date": "2026-07-01", "value": 1}),
-            derive_metric_movement(
-                "maximize",
-                {"date": "not-a-date", "value": 1},
-                {"date": "2026-07-02", "value": 2},
-            ),
-            derive_metric_movement(
-                "maximize",
-                {"date": "2026-07-01", "value": 1},
-                {"date": "2026-07-01", "value": 2},
-            ),
-            derive_metric_movement(
-                None,
-                {"date": "2026-07-01", "value": 1},
-                {"date": "2026-07-02", "value": 2},
-            ),
-            derive_metric_movement(
-                "maximize",
-                {"date": "2026-07-01-garbage", "value": 1},
-                {"date": "2026-07-02", "value": 2},
-            ),
+    def test_flow_metric_projects_equal_windows_and_cumulative_total(self) -> None:
+        observations = [
+            {"metric_id": "revenue", "date": "2026-07-01", "value": 400, "status": "available"},
+            {"metric_id": "revenue", "date": "2026-07-02", "value": 600, "status": "available"},
+            {"metric_id": "revenue", "date": "2026-07-03", "value": 700, "status": "available"},
+            {"metric_id": "revenue", "date": "2026-07-04", "value": 700, "status": "available"},
         ]
+        definition = {"type": "flow", "direction": "maximize", "unit": "USD"}
 
-        self.assertEqual(
-            [movement["momentum_state"] for movement in cases],
-            ["unknown", "unknown", "unknown", "unknown", "unknown"],
+        card = build_metric_card(
+            "revenue",
+            definition,
+            observations,
+            "2026-07-04",
+            "2026-07-03",
+            "2026-07-04",
+            "Asia/Kuala_Lumpur",
         )
-        self.assertEqual(
-            [movement["reason"] for movement in cases],
-            [
-                "no_previous_observation",
-                "invalid_observation_date",
-                "non_positive_elapsed_time",
-                "missing_or_invalid_direction",
-                "invalid_observation_date",
-            ],
+
+        self.assertEqual(card["window"]["start"], "2026-07-03")
+        self.assertEqual(card["current"]["value"], 1400)
+        self.assertEqual(card["comparison"]["previous_value"], 1000)
+        self.assertEqual(card["comparison"]["absolute_delta"], 400)
+        self.assertEqual(card["comparison"]["percent_delta"], 40)
+        self.assertEqual(card["comparison"]["momentum"], "improving")
+        self.assertEqual(card["cumulative"]["value"], 2400)
+
+    def test_stock_metric_uses_latest_window_reading_without_cumulative(self) -> None:
+        observations = [
+            {"metric_id": "cost_rate", "date": "2026-07-01T16:30:00Z", "value": 12, "status": "available"},
+            {"metric_id": "cost_rate", "date": "2026-07-02T16:30:00Z", "value": 10, "status": "available"},
+        ]
+        definition = {"type": "stock", "direction": "minimize", "unit": "percent"}
+
+        card = build_metric_card(
+            "cost_rate",
+            definition,
+            observations,
+            "2026-07-03",
+            "2026-07-03",
+            "2026-07-03",
+            "Asia/Kuala_Lumpur",
         )
+
+        self.assertEqual(card["current"]["value"], 10)
+        self.assertEqual(card["comparison"]["previous_value"], 12)
+        self.assertEqual(card["comparison"]["progress_delta"], 2)
+        self.assertEqual(card["comparison"]["momentum"], "improving")
+        self.assertIsNone(card["cumulative"])
+
+    def test_flow_metric_handles_zero_baseline_and_duplicate_daily_facts(self) -> None:
+        observations = [
+            {"metric_id": "revenue", "date": "2026-07-01", "value": 0, "status": "available"},
+            {"metric_id": "revenue", "date": "2026-07-02", "value": 10, "status": "available"},
+            {"metric_id": "revenue", "date": "2026-07-02", "value": 10, "status": "available"},
+        ]
+        definition = {"type": "flow", "direction": "maximize", "unit": "USD"}
+
+        card = build_metric_card("revenue", definition, observations, "2026-07-02")
+
+        self.assertEqual(card["current"]["value"], 10)
+        self.assertEqual(card["cumulative"]["value"], 10)
+        self.assertEqual(card["comparison"]["absolute_delta"], 10)
+        self.assertIsNone(card["comparison"]["percent_delta"])
+        self.assertEqual(card["comparison"]["reason"], "previous_value_zero")
+        self.assertEqual(card["comparison"]["momentum"], "improving")
+
+    def test_conflicting_daily_facts_become_a_source_gap(self) -> None:
+        observations = [
+            {"metric_id": "revenue", "date": "2026-07-02", "value": 10, "status": "available"},
+            {"metric_id": "revenue", "date": "2026-07-02", "value": 12, "status": "available"},
+        ]
+        definition = {"type": "flow", "direction": "maximize", "unit": "USD"}
+
+        card = build_metric_card("revenue", definition, observations, "2026-07-02")
+
+        self.assertEqual(card["status"], "source_gap")
+        self.assertIsNone(card["current"]["value"])
+        self.assertEqual(card["comparison"]["momentum"], "unknown")
+        self.assertEqual(card["source_gaps"][0]["reason"], "conflicting_daily_observations")
+
+    def test_metric_projection_rejects_invalid_window_or_timezone(self) -> None:
+        definition = {"type": "flow", "direction": "maximize", "unit": "USD"}
+
+        with self.assertRaisesRegex(ValueError, "window_start"):
+            build_metric_card(
+                "revenue",
+                definition,
+                [],
+                "2026-07-02",
+                "2026-07-03",
+                "2026-07-02",
+            )
+        with self.assertRaisesRegex(ValueError, "timezone"):
+            build_metric_card(
+                "revenue",
+                definition,
+                [],
+                "2026-07-02",
+                timezone_name="Mars/Olympus",
+            )
 
     def test_metric_card_does_not_bridge_source_gap_or_report_stale_momentum(self) -> None:
         observations = [
@@ -341,22 +360,22 @@ kpi_rewards:
         ]
         definition = {
             "label": "Quality",
+            "type": "stock",
             "direction": "maximize",
             "unit": "score",
             "max_age_days": 1,
+            "target": 2,
+            "target_direction": "above",
         }
 
         current = build_metric_card("quality", definition, observations, "2026-07-03")
         stale = build_metric_card("quality", definition, observations, "2026-07-05")
 
-        self.assertEqual(
-            current["series"][-1]["movement"]["reason"],
-            "no_previous_observation",
-        )
-        self.assertEqual(current["momentum"]["momentum_state"], "unknown")
-        self.assertEqual(current["momentum"]["reason"], "no_previous_observation")
+        self.assertEqual(current["comparison"]["momentum"], "unknown")
+        self.assertEqual(current["comparison"]["reason"], "previous_window_incomplete")
         self.assertEqual(stale["status"], "stale")
-        self.assertEqual(stale["momentum"]["reason"], "stale_observation")
+        self.assertEqual(stale["comparison"]["reason"], "stale_observation")
+        self.assertIsNone(stale["target_hit"])
 
     def test_snapshot_projects_highlights_from_minimal_ledgers(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -428,7 +447,7 @@ kpi_rewards:
             second = load_project_snapshot(root, "2026-07-03")
 
         highlights = first["tabs"]["highlights"]
-        self.assertEqual(first["schema_version"], 2)
+        self.assertEqual(first["schema_version"], 3)
         self.assertEqual([card["cadence"] for card in highlights["wins"]], ["daily", "weekly"])
         self.assertEqual(highlights["wins"][0]["period"], "2026-07-24")
         self.assertEqual(highlights["wins"][0]["project_id"], "test_project")
@@ -532,7 +551,7 @@ kpi_rewards:
             root = Path(tmp)
             write_minimal_project(root)
 
-            snapshot = load_project_snapshot(root, "2026-07-03")
+            snapshot = load_project_snapshot(root, "2026-07-01")
 
         self.assertEqual(snapshot["tabs"]["highlights"], {"wins": [], "failures": [], "source_gap_ids": []})
         self.assertFalse(any(gap["owner"] == "highlights" for gap in snapshot["source_gaps"]))
@@ -546,7 +565,7 @@ kpi_rewards:
                 "accepted_evidence_cycles",
                 {
                     "label": "Accepted evidence cycles",
-                    "kind": "daily_count",
+                    "type": "flow",
                     "unit": "cycles",
                     "display": "bar_plus_cumulative",
                     "direction": "maximize",
@@ -589,13 +608,13 @@ kpi_rewards:
         metric = {card["metric_id"]: card for card in snapshot["metrics"]["series"]}[
             "accepted_harness_improvements"
         ]
-        self.assertEqual(metric["current"], 2)
-        self.assertEqual(metric["series"][-1]["cumulative"], 3)
+        self.assertEqual(metric["current"]["value"], 2)
+        self.assertEqual(metric["cumulative"]["value"], 3)
         self.assertNotIn(30, [point["value"] for point in metric["series"]])
         evidence_cycles = {card["metric_id"]: card for card in snapshot["metrics"]["series"]}[
             "accepted_evidence_cycles"
         ]
-        self.assertEqual(evidence_cycles["current"], 0)
+        self.assertEqual(evidence_cycles["current"]["value"], 0)
         self.assertNotIn(2, [point["value"] for point in evidence_cycles["series"]])
 
     def test_snapshot_does_not_fall_back_to_legacy_bindings_metrics(self) -> None:
@@ -608,7 +627,7 @@ kpi_rewards:
             bindings["metrics"] = {
                 "legacy_metric": {
                     "label": "Legacy metric",
-                    "kind": "point",
+                    "type": "stock",
                     "unit": "score",
                     "display": "reading",
                 }
@@ -647,7 +666,7 @@ kpi_rewards:
                     "description": "Daily X views.",
                     "unit": "views",
                     "display": "bar_plus_cumulative",
-                    "kind": "daily_count",
+                    "type": "flow",
                 },
                 "x-account writes a daily metric reading.",
             )
@@ -698,7 +717,7 @@ kpi_rewards:
 
         metric_card = {card["metric_id"]: card for card in snapshot["metrics"]["series"]}["x_views"]
         content_card = snapshot["tabs"]["distribution"]["content_metric_cards"][0]
-        self.assertEqual(metric_card["current"], 9)
+        self.assertEqual(metric_card["current"]["value"], 9)
         self.assertEqual(content_card["content_id"], "x:1")
         self.assertEqual(content_card["metrics"][0]["metric_id"], "x_views")
         self.assertEqual(content_card["metrics"][0]["current"], 9)
@@ -833,21 +852,21 @@ feed_scout:
 
         metric_card = {card["metric_id"]: card for card in snapshot["metrics"]["series"]}["accepted_harness_improvements"]
         self.assertEqual(metric_card["status"], "available")
-        self.assertEqual(metric_card["current"], 0)
+        self.assertEqual(metric_card["current"]["value"], 0)
         self.assertEqual(metric_card["source_gaps"], [])
         objective_card = snapshot["tabs"]["objectives"]["metric_cards"][0]
         self.assertEqual(objective_card["status"], "available")
-        self.assertEqual(objective_card["current"], 0)
+        self.assertEqual(objective_card["current"]["value"], 0)
 
     def test_interval_provider_observations_back_goal_metrics(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             write_minimal_project(root)
             provider_refresh = 'Call $interval-update.calculate_ticket_intervention_metrics(ticket_dir="tickets", runtime_dir=".farplane", date="<YYYY-MM-DD>").'
-            add_metric(root, "auto_time_ratio", {"label": "Autonomous time ratio", "description": "Autonomous time ratio.", "kind": "point", "unit": "ratio", "display": "reading"}, 'Call $interval-update.calculate_autonomy_time_ratio(runtime_dir=".farplane", date="<YYYY-MM-DD>").')
-            add_metric(root, "ticket_intervention_turn_count", {"label": "Ticket intervention turns", "description": "Ticket intervention turns.", "kind": "daily_count", "unit": "turns", "display": "bar_plus_cumulative"}, provider_refresh)
-            add_metric(root, "intervention_free_ticket_count", {"label": "Intervention-free tickets", "description": "Intervention-free tickets.", "kind": "daily_count", "unit": "tickets", "display": "bar_plus_cumulative"}, provider_refresh)
-            add_metric(root, "auto_completion_rate", {"label": "Auto completion rate", "description": "Auto completion rate.", "kind": "point", "unit": "ratio", "display": "reading"}, provider_refresh)
+            add_metric(root, "auto_time_ratio", {"label": "Autonomous time ratio", "description": "Autonomous time ratio.", "type": "stock", "unit": "ratio", "display": "reading"}, 'Call $interval-update.calculate_autonomy_time_ratio(runtime_dir=".farplane", date="<YYYY-MM-DD>").')
+            add_metric(root, "ticket_intervention_turn_count", {"label": "Ticket intervention turns", "description": "Ticket intervention turns.", "type": "flow", "unit": "turns", "display": "bar_plus_cumulative"}, provider_refresh)
+            add_metric(root, "intervention_free_ticket_count", {"label": "Intervention-free tickets", "description": "Intervention-free tickets.", "type": "flow", "unit": "tickets", "display": "bar_plus_cumulative"}, provider_refresh)
+            add_metric(root, "auto_completion_rate", {"label": "Auto completion rate", "description": "Auto completion rate.", "type": "stock", "unit": "ratio", "display": "reading"}, provider_refresh)
             observations = root / ".farplane" / "metrics" / "observations"
             (observations / "autonomy_time_feedback").mkdir(parents=True)
             (observations / "autonomy_time_feedback" / "2026-07-01.json").write_text(
@@ -892,18 +911,18 @@ feed_scout:
                 encoding="utf-8",
             )
 
-            snapshot = load_project_snapshot(root, "2026-07-03")
+            snapshot = load_project_snapshot(root, "2026-07-01")
 
         definitions = snapshot["metrics"]["definitions"]
         self.assertEqual(definitions["auto_time_ratio"]["primitive_id"], "autonomy_time_feedback")
         self.assertEqual(definitions["ticket_intervention_turn_count"]["primitive_id"], "ticket_intervention_feedback")
         cards = {card["metric_id"]: card for card in snapshot["metrics"]["series"]}
         self.assertEqual(cards["auto_time_ratio"]["status"], "available")
-        self.assertEqual(cards["auto_time_ratio"]["current"], 0.2541)
+        self.assertEqual(cards["auto_time_ratio"]["current"]["value"], 0.2541)
         self.assertEqual(cards["ticket_intervention_turn_count"]["status"], "available")
-        self.assertEqual(cards["ticket_intervention_turn_count"]["current"], 0)
-        self.assertEqual(cards["intervention_free_ticket_count"]["current"], 8)
-        self.assertEqual(cards["auto_completion_rate"]["current"], 1.0)
+        self.assertEqual(cards["ticket_intervention_turn_count"]["current"]["value"], 0)
+        self.assertEqual(cards["intervention_free_ticket_count"]["current"]["value"], 8)
+        self.assertEqual(cards["auto_completion_rate"]["current"]["value"], 1.0)
 
     def test_missing_observation_is_not_promoted_to_global_source_gap(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -912,7 +931,7 @@ feed_scout:
             add_metric(
                 root,
                 "external_metric",
-                {"label": "External metric", "description": "External metric.", "kind": "point", "unit": "score", "display": "reading"},
+                {"label": "External metric", "description": "External metric.", "type": "stock", "unit": "score", "display": "reading"},
                 "External owner writes this later.",
             )
 
@@ -972,7 +991,7 @@ feed_scout:
                 {
                     "label": "Activated external projects",
                     "description": "Activated external projects.",
-                    "kind": "point",
+                    "type": "stock",
                     "unit": "projects",
                     "display": "reading",
                     "pinned": True,
@@ -991,7 +1010,7 @@ feed_scout:
         ]
         self.assertEqual(metric_card["primitive_id"], "project_adoption")
         self.assertEqual(metric_card["status"], "missing")
-        self.assertIsNone(metric_card["current"])
+        self.assertIsNone(metric_card["current"]["value"])
         self.assertEqual(metric_card["source_gaps"], [])
 
     def test_snapshot_discovers_nested_active_and_archived_ticket_proof(self) -> None:
@@ -1024,7 +1043,7 @@ feed_scout:
             add_metric(
                 root,
                 "instagram_retention_score",
-                {"label": "Instagram retention score", "description": "Instagram retention score.", "kind": "point", "unit": "ratio", "display": "reading"},
+                {"label": "Instagram retention score", "description": "Instagram retention score.", "type": "stock", "unit": "ratio", "display": "reading"},
                 "Instagram account writes this when duration is available.",
             )
             daily = root / ".farplane" / "metrics" / "daily"
@@ -1075,7 +1094,7 @@ feed_scout:
 
         card = snapshot["tabs"]["objectives"]["metric_cards"][0]
         self.assertEqual(card["status"], "stale")
-        self.assertIsNone(card["current"])
+        self.assertIsNone(card["current"]["value"])
         self.assertIn("max_age_days=2", card["source_gaps"][-1]["reason"])
 
 

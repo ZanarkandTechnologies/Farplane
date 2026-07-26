@@ -107,17 +107,19 @@ def write_required_project_files(root: Path) -> None:
 framework_template_version: "0.2.0"
 metrics:
   accepted_output_events:
+    refresh: Count accepted ticket outputs.
     label: Accepted output events
     description: Accepted output events.
-    kind: daily_count
+    type: flow
     unit: events
     display: bar_plus_cumulative
     direction: maximize
     max_age_days: 7
   accepted_product_output:
+    refresh: Count accepted product outputs.
     label: Accepted product output
     description: Accepted product output.
-    kind: daily_count
+    type: flow
     unit: artifacts
     display: bar_plus_cumulative
     direction: maximize
@@ -175,7 +177,7 @@ change_rule: Static charter changes require approval.
         encoding="utf-8",
     )
     (farplane / "bindings.yaml").write_text(
-        'kind: project-bindings\nframework_template_version: "0.1.0"\nproject: {}\nmetric_bindings:\n  accepted_output_events:\n    refresh: Count accepted ticket outputs.\n  accepted_product_output:\n    refresh: Count accepted product outputs.\n',
+        'kind: project-bindings\nframework_template_version: "0.1.0"\nproject: {}\n',
         encoding="utf-8",
     )
     write_automations_toml(farplane)
@@ -647,10 +649,11 @@ def test_metric_product_owner_is_retired(tmp_path: Path) -> None:
 framework_template_version: "0.1.0"
 metrics:
   accepted_harness_improvements:
+    refresh: Count ticket Reward rows.
     label: Accepted harness improvements
     description: Accepted improvements with ticket proof.
     product: old_product
-    kind: daily_count
+    type: flow
     unit: improvements
     display: bar_plus_cumulative
 """,
@@ -687,17 +690,19 @@ def test_objective_metric_does_not_require_product_owner(tmp_path: Path) -> None
 framework_template_version: "0.2.0"
 metrics:
   accepted_harness_improvements:
+    refresh: Count ticket Reward rows.
     label: Accepted harness improvements
     description: Accepted improvements with ticket proof.
-    kind: daily_count
+    type: flow
     unit: improvements
     display: bar_plus_cumulative
     direction: maximize
     max_age_days: 7
   accepted_product_output:
+    refresh: Count accepted product outputs.
     label: Accepted product output
     description: Accepted product output.
-    kind: daily_count
+    type: flow
     unit: artifacts
     display: bar_plus_cumulative
     direction: maximize
@@ -705,25 +710,12 @@ metrics:
 """,
         encoding="utf-8",
     )
-    (farplane / "bindings.yaml").write_text(
-        """kind: project-bindings
-framework_template_version: "0.1.0"
-project: {}
-metric_bindings:
-  accepted_harness_improvements:
-    refresh: Count ticket Reward rows.
-  accepted_product_output:
-    refresh: Count accepted product outputs.
-""",
-        encoding="utf-8",
-    )
-
     errors = validate(tmp_path)
 
     assert errors == []
 
 
-def test_metric_recipe_requires_description_and_valid_types(tmp_path: Path) -> None:
+def test_metric_recipe_requires_lean_semantics_and_rejects_projection_config(tmp_path: Path) -> None:
     farplane = tmp_path / "farplane"
     farplane.mkdir()
     write_framework_manifest(farplane)
@@ -735,6 +727,8 @@ metrics:
   accepted_harness_improvements:
     label: Accepted harness improvements
     kind: weekly_magic
+    formula: revenue - cost
+    windows: [week]
     unit: improvements
     display: sparkles
     pinned: "true"
@@ -754,13 +748,13 @@ metric_bindings:
 
     errors = validate(tmp_path)
 
-    assert "farplane/metrics.yaml metrics.accepted_harness_improvements.description must be a non-empty string." in errors
-    assert "farplane/metrics.yaml metrics.accepted_harness_improvements.kind must be one of: daily, daily_count, point." in errors
+    assert "farplane/metrics.yaml metrics.accepted_harness_improvements uses unsupported derived/projection config: formula, kind, windows; declare only type: flow|stock and let refreshers emit facts while Core derives window views." in errors
+    assert "farplane/metrics.yaml metrics.accepted_harness_improvements.type must be a non-empty string." in errors
     assert "farplane/metrics.yaml metrics.accepted_harness_improvements.display must be one of: bar_plus_cumulative, line, reading." in errors
     assert "farplane/metrics.yaml metrics.accepted_harness_improvements.pinned must be boolean when present." in errors
 
 
-def test_metric_definitions_and_bindings_require_exact_id_parity(tmp_path: Path) -> None:
+def test_metric_definitions_require_refresh_and_direction(tmp_path: Path) -> None:
     farplane = tmp_path / "farplane"
     farplane.mkdir()
     write_framework_manifest(farplane)
@@ -772,27 +766,16 @@ metrics:
   defined_only:
     label: Defined only
     description: Missing its refresh binding.
-    kind: point
+    type: stock
     unit: score
     display: reading
 """,
         encoding="utf-8",
     )
-    (farplane / "bindings.yaml").write_text(
-        """kind: project-bindings
-framework_template_version: "0.1.0"
-project: {}
-metric_bindings:
-  bound_only:
-    refresh: Refresh an undefined metric.
-""",
-        encoding="utf-8",
-    )
-
     errors = validate(tmp_path)
 
-    assert "farplane/metrics.yaml definitions lack bindings.yaml metric_bindings rows: defined_only." in errors
-    assert "farplane/bindings.yaml metric_bindings lack metrics.yaml definitions: bound_only." in errors
+    assert "farplane/metrics.yaml metrics.defined_only must declare exactly one of refresh_ref or refresh." in errors
+    assert "farplane/metrics.yaml metrics.defined_only.direction must be a non-empty string." in errors
 
 
 def test_old_bindings_metrics_and_semantic_binding_fields_are_rejected(tmp_path: Path) -> None:
@@ -816,11 +799,7 @@ metric_bindings:
     errors = validate(tmp_path)
 
     assert "farplane/bindings.yaml metrics is retired; semantic definitions belong in farplane/metrics.yaml." in errors
-    assert (
-        "farplane/bindings.yaml metric_bindings.semantic_leak contains semantic fields owned by "
-        "farplane/metrics.yaml: label."
-        in errors
-    )
+    assert "farplane/bindings.yaml metric_bindings is retired; refresh prompts belong in farplane/metrics.yaml." in errors
 
 
 def write_metric_binding(farplane: Path, metric_id: str = "instagram_views") -> None:
@@ -831,7 +810,7 @@ metrics:
   {metric_id}:
     label: Instagram views
     description: Daily aggregate Instagram views.
-    kind: daily_count
+    type: flow
     unit: views
     display: bar_plus_cumulative
 """,
@@ -960,19 +939,19 @@ metrics:
   accepted_harness_improvements:
     label: Accepted harness improvements
     description: Accepted improvements.
-    kind: daily_count
+    type: flow
     unit: improvements
     display: bar_plus_cumulative
   todo_unclaimed_ticket_count:
     label: Ready unclaimed tickets
     description: Ready unclaimed tickets.
-    kind: point
+    type: stock
     unit: tickets
     display: reading
   accepted_product_output:
     label: Accepted product output
     description: Accepted product output.
-    kind: daily_count
+    type: flow
     unit: artifacts
     display: bar_plus_cumulative
     direction: maximize
@@ -1023,14 +1002,14 @@ metrics:
   accepted_harness_improvements:
     label: Accepted harness improvements
     description: Accepted improvements.
-    kind: daily_count
+    type: flow
     display: bar_plus_cumulative
     direction: maximize
     max_age_days: 7
   accepted_product_output:
     label: Accepted product output
     description: Accepted product output.
-    kind: daily_count
+    type: flow
     unit: artifacts
     display: bar_plus_cumulative
     direction: maximize

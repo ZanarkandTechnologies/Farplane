@@ -1,6 +1,6 @@
 ---
 name: init-advisor
-version: 3.0.0
+version: 3.1.0
 description: "Turn a new-project intake into a Farplane substrate, readiness audit, optional code scaffold, and harness-creator handoff."
 tier: 3
 group: coding
@@ -34,6 +34,14 @@ common repo types such as Convex, Next.js, Clerk, shadcn, React apps, and
 optional quality tooling. Keep those recipes in this skill or its references;
 do not delete the code-repo scaffolding branch while simplifying project
 initialization.
+
+For an existing project framework upgrade, run
+`scripts/migrate_framework.py --project-root <project> --force`. This is the
+only safe force path: it updates versioned framework fields and deterministic
+metric `kind -> type` mappings while preserving human-authored charter,
+descriptions, refresh prompts, bindings, tickets, and docs. Do not use
+`bootstrap.sh --force` as a general project upgrade because bootstrap owns
+whole-file scaffolding.
 
 Reusable project automation config templates live in
 [AUTOMATION_TEMPLATE.toml](references/AUTOMATION_TEMPLATE.toml). Generated

@@ -3,7 +3,7 @@ title: Project Files
 status: active
 owner: harness
 created_at: 2026-06-15
-updated_at: 2026-07-22
+updated_at: 2026-07-26
 framework_template_version: "0.3.2"
 source_of_truth:
   - docs/farplane-framework/README.md
@@ -70,10 +70,11 @@ ignored paths and carries `project.name`, `project.description`, and
 
 ### `farplane/harness.yaml`
 
-Typed human charter: identity with stable problems and current product bets,
-planning areas with canonical per-area ICPs, feature meaning, operating principles, non-tradeoffs, durable
-leverage commitments, allocation guardrails, authority, stable capability
-references, selected metric refs, and optional dated metric goals.
+Typed human charter: identity with stable problems linked to canonical system
+and feature refs, planning areas with canonical per-area ICPs, feature meaning,
+operating principles, non-tradeoffs, durable leverage commitments, allocation
+guardrails, authority, stable capability references, selected metric refs, and
+planner skill allowlists.
 
 This is the owner for the human idea the system must preserve. Agents may
 propose changes with evidence, but protected charter changes require explicit
@@ -82,43 +83,32 @@ planner; they do not own planners, workers, quotas, controllers, budgets,
 progress, or strategy. Capability references identify workflows; the
 referenced skills own their procedures.
 
-`goals` is the only optional target layer. Each row binds a unique `goal_id` to
-one selected objective `metric_id`, a numeric `target_value`, and an ISO
-`target_date`. It does not copy metric direction or store mutable progress:
+Mutable strategy does not live in `harness.yaml`. Project-level dated goals and
+product-bet portfolios are retired active surfaces. Stable intent constrains
+review and refill through problems, areas, authority, selected metrics, and
+configured skills; chosen interventions live on tickets with priority,
+optional `due_at`, dependencies, proof, Reward, and Goal Packets when needed.
 
-```text
-goal_progress(goal, metric_definition, current_observation)
-  -> active | completed | unknown
-
-maximize: completed when current >= target_value
-minimize: completed when current <= target_value
-```
-
-Plan Next Wave may use an active goal's target and date as urgency evidence.
-Once current metric evidence satisfies the direction-derived comparison, the
-goal is completed and stops adding urgency. Missing or stale evidence never
-proves completion. Projects without a dated target use `goals: []` or omit the
-field; no separate goals file or changing goal-status ledger is introduced.
-
-Each area is a complete planning record:
+Each area is passive planning context:
 
 ```text
 harness.areas.<area_id> =
-  description + icp + planner_instruction + skill_refs + metric_refs
+  description + icp + skill_refs + metric_refs
 ```
 
 `icp` names the people served by the area, their relevant jobs and pains, and
 the evidence bar that would change their belief or workflow. This is canonical
-human meaning. Feed Scout may render it into persistent memory and add observed
+human meaning. Feed Scout may render it into World Memory and add observed
 current context, but external evidence cannot silently rewrite it.
 
-`planner_instruction` is the canonical candidate-generation policy for that
-area. Plan Next Wave reads every scope-relevant complete area record before
-generating candidates. Pulse, Dogfood, reports, and automations pass or point
-to this record; they do not maintain competing area-policy paraphrases.
+`planning.skill_refs` is the active allowlist for Plan Next Wave. Each skill's
+`planner_contract` owns its required arguments, while its skill body owns the
+workflow. Pulse may use areas to ground audience and metrics but may not derive
+new work types from area prose.
 
 Use typed YAML. Do not add a custom harness DSL, live backlog, worker
-allocation table, mutable goal status, or product controller state here.
+allocation table, mutable goal status, product-bet portfolio, project strategy
+ledger, or product controller state here.
 
 ### `farplane/automations.toml`
 
@@ -147,19 +137,22 @@ one inline `refresh`, but never both. The Daily Interval agent resolves stale
 selected metrics into unique groups, executes each prompt once, and stores
 separate flat observations.
 
-Canonical reusable metric semantics. Each quantitative definition owns its
-stable ID, label, description, unit, display behavior, required direction
-(`maximize` or `minimize`), freshness, pinned state, and optional hard-guard
-operator/threshold. `harness.yaml` selects active objectives/guards and owns
-objective priority. Unselected non-guard metrics are tracked observations, not
-ordinary planner context.
+Canonical reusable metric semantics. Each quantitative definition requires
+`type: flow | stock`, `unit`, `direction: maximize | minimize`, and one refresh
+source. Labels, descriptions, display hints, freshness, pinned state, and hard
+guards are optional. Flow means additive activity; stock means a point-in-time
+balance. `harness.yaml` selects active objectives/guards and owns objective
+priority. Unselected non-guard metrics are tracked observations, not ordinary
+planner context.
 
-Raw observations remain canonical runtime evidence. Core derives raw delta,
-elapsed time, raw velocity, direction-normalized progress delta/velocity, and
-improving/flat/worsening momentum from consecutive available observations for
-metric cards and Interval review. Do not author duplicate "growth" or
-"momentum" metric definitions when the movement can be derived from a metric's
-direction and raw observations.
+Dated facts remain canonical runtime evidence. The snapshot, UI, or Interval
+caller supplies an inclusive calendar window and timezone. Core then derives
+the current-window value, the preceding equal-window absolute and percentage
+delta, a direction-normalized improving/flat/worsening trend, and a cumulative
+total for flows only. Flows sum within windows; stocks use the latest known
+reading at each window boundary and never accumulate. Do not store formula,
+cadence, comparison, aggregation, cumulative, or window configuration here,
+and do not author duplicate growth, timeframe, or cumulative metrics.
 
 Metric observations remain generated runtime evidence under `.farplane/`; this
 tracked file defines what the observations mean, not their current values.

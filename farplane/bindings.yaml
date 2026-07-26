@@ -1,31 +1,35 @@
 kind: project-bindings
 status: active
 created_at: 2026-06-15
-updated_at: 2026-07-24
-framework_template_version: "0.5.0"
+updated_at: '2026-07-26'
+framework_template_version: 0.5.0
 owner: project-pm-automation
 project:
   id: farplane
   name: Farplane
   root: /Users/kenjipcx/Zanarkand Technologies/projects/Farplane
 human_gates:
-  - post
-  - publish
-  - spend
-  - deploy
-  - external_contact
-  - account_mutation
-  - destructive_cleanup
+- post
+- publish
+- spend
+- deploy
+- external_contact
+- account_mutation
+- destructive_cleanup
 operator:
   review_chase_policy:
     timezone: Asia/Kuala_Lumpur
     active_hours:
-      start: "10:00"
-      end: "01:00"
+      start: '10:00'
+      end: 01:00
     pulse_interval_minutes: 30
     initial_telegram: immediate
-    telegram_reminder_after_unanswered_turns: [2, 4]
-    phone_chaser_after_unanswered_turns: [6, 12]
+    telegram_reminder_after_unanswered_turns:
+    - 2
+    - 4
+    phone_chaser_after_unanswered_turns:
+    - 6
+    - 12
     phone_chaser_repeat_after_turns: 6
     telegram_reminder_limit: 2
     phone_chaser_limit: 2
@@ -33,22 +37,18 @@ operator:
     notification_authority:
       owner: work_pulse_automation
       allows:
-        - telegram_review_request
-        - telegram_review_reminder
-        - phone_review_chaser
-      rule: >-
-        Internal review notifications use automation-owned credentials and are
-        not blocked by a worker ticket's no-credentials, no-publication, or
-        no-account-mutation boundary. They never authorize publication,
-        outreach, spend, deploy, or mutation of a public account.
-    escalation_rule: >-
-      Send the initial Telegram review request immediately. While the Review
-      block is undecided, send bounded Telegram reminders after two and four
-      unanswered Pulse turns, then dispatch bounded Phone Chaser calls after
-      six and twelve unanswered turns. A later phone call must also be at least
-      six Pulse turns after the prior dispatch. Chases run only during active
-      hours, at most one action per beat, and only for Kenji or an explicitly
-      approved internal recipient. Queue size never triggers a chase.
+      - telegram_review_request
+      - telegram_review_reminder
+      - phone_review_chaser
+      rule: Internal review notifications use automation-owned credentials and are not blocked by a worker
+        ticket's no-credentials, no-publication, or no-account-mutation boundary. They never authorize
+        publication, outreach, spend, deploy, or mutation of a public account.
+    escalation_rule: Send the initial Telegram review request immediately. While the Review block is undecided,
+      send bounded Telegram reminders after two and four unanswered Pulse turns, then dispatch bounded
+      Phone Chaser calls after six and twelve unanswered turns. A later phone call must also be at least
+      six Pulse turns after the prior dispatch. Chases run only during active hours, at most one action
+      per beat, and only for Kenji or an explicitly approved internal recipient. Queue size never triggers
+      a chase.
 spend_model:
   monthly_ai_spend: 400
 integrations:
@@ -99,22 +99,18 @@ feed_scout:
     polsia:
       name: Polsia
       kind: competitor
-      instructions: >-
-        Track concrete product, pricing, GTM, funding, hiring, customer proof,
-        release, and autonomous-company workflow changes. Ignore static
-        homepage rediscovery unless page content materially changed today.
-        Prioritize details that affect Farplane positioning, proof strategy, or
-        UI/product strategy.
+      instructions: Track concrete product, pricing, GTM, funding, hiring, customer proof, release, and
+        autonomous-company workflow changes. Ignore static homepage rediscovery unless page content materially
+        changed today. Prioritize details that affect Farplane positioning, proof strategy, or UI/product
+        strategy.
       aliases:
-        - Polsia
-        - Ben Cera
+      - Polsia
+      - Ben Cera
       owned_sources:
         website:
           url: https://polsia.com/
-          instructions: >-
-            Look for new product capabilities, pricing, proof claims, launch
-            language, screenshots, customer metrics, and positioning changes
-            since the previous crawl.
+          instructions: Look for new product capabilities, pricing, proof claims, launch language, screenshots,
+            customer metrics, and positioning changes since the previous crawl.
         x_founder:
           handle: bencera
           url: https://x.com/bencera
@@ -126,39 +122,33 @@ feed_scout:
         github_org:
           org: Polsia-Inc
           url: https://github.com/Polsia-Inc
-          instructions: >-
-            Only rank GitHub activity highly when it shows a release,
-            meaningful feature work, documentation change, or public repo that
-            reveals product direction.
+          instructions: Only rank GitHub activity highly when it shows a release, meaningful feature work,
+            documentation change, or public repo that reveals product direction.
       search_entity_on_platform:
-        - x
-        - reddit
-        - web
-        - trustpilot
+      - x
+      - reddit
+      - web
+      - trustpilot
       search_queries:
-        - Polsia
-        - '"Ben Cera" Polsia'
-        - polsia.com
+      - Polsia
+      - '"Ben Cera" Polsia'
+      - polsia.com
     paperclip:
       name: Paperclip
       kind: competitor
-      instructions: >-
-        Track concrete product, pricing, GTM, funding, hiring, release, and
-        agent-management workflow changes. Ignore static homepage rediscovery
-        unless page content materially changed today. Prioritize details that
-        affect Farplane positioning or UI/product strategy.
+      instructions: Track concrete product, pricing, GTM, funding, hiring, release, and agent-management
+        workflow changes. Ignore static homepage rediscovery unless page content materially changed today.
+        Prioritize details that affect Farplane positioning or UI/product strategy.
       aliases:
-        - Paperclip
-        - Paperclip AI
-        - paperclip.ing
+      - Paperclip
+      - Paperclip AI
+      - paperclip.ing
       owned_sources:
         website:
           url: https://paperclip.ing/
           fetch_method: web-page-scan
-          instructions: >-
-            Look for new product capabilities, pricing, integration claims,
-            org-chart/governance language, screenshots, customer proof, and
-            launch/positioning changes since the previous crawl.
+          instructions: Look for new product capabilities, pricing, integration claims, org-chart/governance
+            language, screenshots, customer proof, and launch/positioning changes since the previous crawl.
         docs:
           url: https://docs.paperclip.ing/
         x:
@@ -168,31 +158,27 @@ feed_scout:
           repo: paperclipai/paperclip
           url: https://github.com/paperclipai/paperclip
           fetch_method: github-api
-          instructions: >-
-            Only rank repo activity highly when there is a release, meaningful
-            feature commit, notable star/fork delta, or documentation change
-            that reveals product direction.
+          instructions: Only rank repo activity highly when there is a release, meaningful feature commit,
+            notable star/fork delta, or documentation change that reveals product direction.
       search_entity_on_platform:
-        - x
-        - reddit
-        - web
-        - github
+      - x
+      - reddit
+      - web
+      - github
       search_queries:
-        - '"Paperclip" "AI agents"'
-        - paperclip.ing
-        - paperclipai/paperclip
+      - '"Paperclip" "AI agents"'
+      - paperclip.ing
+      - paperclipai/paperclip
     lukethedev:
       name: Luke The Dev
       kind: creator
-      instructions: >-
-        Track creator posts, releases, demos, repo changes, and product pivots
-        around OpenClaw, Claw3D, 3D agent workspaces, and agent observability.
-        Ignore stale profile/homepage rediscovery unless there is a clear
-        today-specific delta.
+      instructions: Track creator posts, releases, demos, repo changes, and product pivots around OpenClaw,
+        Claw3D, 3D agent workspaces, and agent observability. Ignore stale profile/homepage rediscovery
+        unless there is a clear today-specific delta.
       aliases:
-        - Luke The Dev
-        - iamlukethedev
-        - Claw3D
+      - Luke The Dev
+      - iamlukethedev
+      - Claw3D
       owned_sources:
         linktree:
           url: https://linktr.ee/iamlukethedev
@@ -203,30 +189,25 @@ feed_scout:
           user: iamlukethedev
           url: https://github.com/iamlukethedev
           fetch_method: github-api
-          instructions: >-
-            Rank GitHub activity highly only when it contains a meaningful new
-            repo, feature commit, release, docs change, or signal about Claw3D
-            and agent workspace direction.
+          instructions: Rank GitHub activity highly only when it contains a meaningful new repo, feature
+            commit, release, docs change, or signal about Claw3D and agent workspace direction.
         website:
           url: https://www.claw3d.ai/
         youtube:
           url: https://www.youtube.com/@Claw3DWorld
           fetch_method: youtube-rss
-          instructions: >-
-            Rank new videos highly when they demonstrate agent workspace,
-            observability, cost, workflow, or product positioning lessons that
-            Farplane can adapt.
+          instructions: Rank new videos highly when they demonstrate agent workspace, observability, cost,
+            workflow, or product positioning lessons that Farplane can adapt.
       search_entity_on_platform:
-        - x
-        - reddit
-        - web
-        - github
+      - x
+      - reddit
+      - web
+      - github
       search_queries:
-        - '"Luke The Dev"'
-        - iamlukethedev
-        - Claw3D
-# Metric acquisition prompts live in farplane/metrics.yaml; bindings retain coordinates only.
+      - '"Luke The Dev"'
+      - iamlukethedev
+      - Claw3D
 event_routes:
-  - route_id: ticket-completion-learning-v1
-    event_name: farplane.ticket.completed
-    program_ref: core:ticket-completion-learning@1.3.0
+- route_id: ticket-completion-learning-v1
+  event_name: farplane.ticket.completed
+  program_ref: core:ticket-completion-learning@1.3.0

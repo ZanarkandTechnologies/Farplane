@@ -3,10 +3,43 @@ title: Farplane Framework Changelog
 owner: init-advisor
 status: active
 kind: framework-changelog
-updated_at: 2026-07-24
+updated_at: 2026-07-26
 ---
 
 # Farplane Framework Changelog
+
+## 2.0.12
+
+Date: 2026-07-26
+
+Primary change: make every metric one typed observation contract with
+Core-projected current-window, comparison/momentum, cumulative, and raw-series
+views.
+
+Changed surfaces:
+
+- metric definitions require `type: flow | stock`; legacy `kind`,
+  `aggregation`, boolean `cumulative`, formula, and window projection fields
+  are invalid;
+- schema-v3 project snapshots expose typed `current`, `comparison`,
+  `cumulative`, and raw `series` views;
+- Core owns comparison and direction-aware momentum; renderers must not derive
+  a second movement model from adjacent readings;
+- cumulative projection is emitted only for flow metrics;
+- Init Advisor ships a field-preserving force migration instead of replacing
+  human-authored project files.
+
+Migration steps:
+
+1. Run `python3 skills/init-advisor/scripts/migrate_framework.py
+   --project-root <project> --force`.
+2. Resolve any reported ambiguous legacy projection fields in the metric
+   refresh prompt or observation producer.
+3. Regenerate `.farplane/project/ui/latest.json`; it must report
+   `schema_version: 3`.
+4. Update snapshot consumers to read `current.value`, `comparison.*`, and
+   flow-only `cumulative.value`.
+5. Validate the project with the current Farplane project-file validator.
 
 ## 2.0.11
 
