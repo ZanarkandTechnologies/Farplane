@@ -4,7 +4,7 @@ ticket_id: TASK-XXXX
 status: draft
 created_at: 2026-06-12
 template_id: goal-loop-program
-template_version: "0.1.4"
+template_version: "0.1.5"
 feature_refs:
   - FEAT-0029
   - FEAT-0032
@@ -98,10 +98,13 @@ feature_refs:
 ## After Completion
 
 - `on_goal_window_complete:` append completion progress to changed files, run
-  proof/review, run or request final QA evidence review and completion review
-  when required by `Proof Policy`, satisfy `Docs Strategy` validation, surface
-  final evidence required by `Proof Policy`, then start/resume the next eligible
-  file set or wait for heartbeat
+  proof/review; for a material implementation Goal, after QA passes run the
+  `demo` skill to produce its narrated lead-engineer recap MP4; then run or
+  request final QA evidence review and completion review when required by
+  `Proof Policy`, satisfy `Docs Strategy` validation, surface final evidence
+  required by `Proof Policy`, and close the ticket before `stop_complete`.
+  Heartbeats, feedback checks, planning-only Goals, and direct non-Goal work do
+  not inherit this demo step
 - `on_milestone_complete:` run parent heartbeat or replan routine before
   expanding the next branch
 - `manual_replan_allowed:` yes/no

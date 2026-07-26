@@ -1,0 +1,38 @@
+{
+  "work_type": "skill change + prompt/workflow change + eval change + integration/evidence final review",
+  "search_scope": [
+    "tickets/TASK-0413/ticket.md",
+    "skills/demo/",
+    "skills/goal-advisor/",
+    "tickets/templates/goal-loop/program.md",
+    "tickets/TASK-0413/artifacts/validation/validation.md",
+    "docs/skills/registry.jsonl",
+    "skills/qa/SKILL.md",
+    ".farplane/evals/runs/20260726-132928-task-0413-demo-recap-final-v2/",
+    ".farplane/evals/runs/20260726-133122-task-0413-demo-recap-final-two/",
+    ".farplane/evals/runs/20260726-132937-task-0413-goal-demo-compiler-v3/"
+  ],
+  "rubrics_used": {
+    "skill-contract": "TAS-A",
+    "prompt-quality": "TAS-A",
+    "eval-quality": "TAS-A",
+    "integration-readiness": "TAS-A",
+    "evidence-quality": "TAS-A"
+  },
+  "overall_tas": "TAS-A",
+  "verdict": "pass",
+  "rerun_required": false,
+  "hard_gate_failures": [],
+  "failed_checks": [],
+  "finding_log": [
+    {
+      "severity": "low",
+      "confidence": "high",
+      "family": "evidence-quality",
+      "finding": "The first final demo run retains two superseded failed cases.",
+      "disposition": "Non-blocking: the validation receipt scopes that run to its two unchanged TAS-A cases; the two corrected cases pass TAS-A in the later rerun."
+    }
+  ],
+  "blocking_findings": [],
+  "next_action": "Persist and link this receipt, validate the ticket, then close it."
+}

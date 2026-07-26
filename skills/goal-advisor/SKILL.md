@@ -56,6 +56,12 @@ it before execution, and bind completion to the ticket's scope and proof
 contract. Keep templates with this skill, but load full template references
 only after the branch requires prompt emission.
 
+For a material implementation Goal, preserve this terminal compiler invariant:
+`QA pass -> narrated lead-engineer demo MP4 -> completion review -> ticket
+close -> stop_complete`. Write proof to ticket, progress, and artifacts, then
+return the required `Ticket`, `Verification`, `Artifacts`, `Grounding`, and
+`Residual risk` lines.
+
 `$work`, `$ralph`, `batch-work`, and the legacy impl skill are retired public
 orchestration surfaces. Their useful policies live here as admission/profile,
 heartbeat board-drain, batch proof rows, coding-ticket Goal execution,
@@ -277,8 +283,10 @@ only after the branch is selected:
    - [ ] Include a final completion checkpoint for material ticket work:
      before `stop_complete`, run `farplane validate ticket <ticket.md> --phase
      complete` with the Goal's explicit changed-path/base boundary, then run or
-     request the ticket's QA evidence review and
-     completion review when required by `QA Strategy` or `program.md`, update
+     request the ticket's QA evidence review; for material implementation Goals,
+     run `demo` after QA passes to produce the default narrated lead-engineer
+     recap MP4; then run completion review when required by `QA Strategy` or
+     `program.md`, update
      `ticket.md` plus `progress.md` with the review/evidence links, and block
      or revise when those reviews are missing or below the ticket gate. After
      those gates pass, run `farplane ticket close TASK-XXXX` before

@@ -199,14 +199,14 @@
     },
     {
       "id": "goal_advisor_material_goal_final_checkpoint_01",
-      "prompt": "Create the native Goal prompt for TASK-2345. It is a material feature ticket with QA Strategy proof_weight: qa + review, critical-path bullets, program.md, and progress.md. The old Stop hook is disabled; keep the prompt compact.",
-      "expected_output": "Uses an inline Files list with ticket.md, program.md, and progress.md instead of transcript memory; States that native Goal mode owns continuation and does not rely on a Stop hook; Requires ordered critical-path sanity checks and evidence writeback before completion; Requires QA evidence review and completion review before stop_complete; Requires ticket/progress/artifact writeback plus final Ticket, Verification, Artifacts, Grounding, and Residual risk lines",
+      "prompt": "Create the native Goal prompt for TASK-2345. It is a material implementation ticket with critical-path bullets, program.md, progress.md, a HEAD~1..HEAD validation boundary, and complete QA inputs: qa-tester then reviewer, evidence written to ticket/progress/artifacts, and QA evidence plus completion review before close. The old Stop hook is disabled; keep the prompt compact.",
+      "expected_output": "Uses an inline Files list with ticket.md, program.md, and progress.md instead of transcript memory; States that native Goal mode owns continuation and does not rely on a Stop hook; Requires ordered critical-path sanity checks and evidence writeback before completion; Requires QA evidence review, the default narrated demo MP4, and completion review before stop_complete; Requires ticket/progress/artifact writeback plus final Ticket, Verification, Artifacts, Grounding, and Residual risk lines",
       "files": [],
       "assertions": [
         "Uses an inline Files list with ticket.md, program.md, and progress.md instead of transcript memory",
         "States that native Goal mode owns continuation and does not rely on a Stop hook",
         "Requires ordered critical-path sanity checks and evidence writeback before completion",
-        "Requires QA evidence review and completion review before stop_complete",
+        "Requires QA evidence review, the default narrated demo MP4, and completion review before stop_complete",
         "Requires ticket/progress/artifact writeback plus final Ticket, Verification, Artifacts, Grounding, and Residual risk lines"
       ],
       "metadata": {

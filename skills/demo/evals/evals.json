@@ -1,0 +1,61 @@
+{
+  "skill_name": "demo",
+  "evals": [
+    {
+      "id": "demo_builds_verified_lead_recap_01",
+      "prompt": "$demo TASK-0042. It is a material implementation Goal with passing QA, diagrams, screenshots, test receipts, and review inputs. Before producing the recap, summarize the exact package, production route, and finish gates you will use.",
+      "expected_output": "Selects one 60-120 second narrated lead-engineer MP4; Covers problem, solution, final behavior, proof, and residual risk; Uses ticket-scoped content planning and deterministic Remotion; Maps every claim to verified evidence; Requires media verification and independent TAS-A review",
+      "files": [],
+      "assertions": [
+        "Selects one 60-120 second narrated lead-engineer MP4",
+        "Covers problem, solution, final behavior, proof, and residual risk",
+        "Uses ticket-scoped content planning and deterministic Remotion",
+        "Maps every claim to verified evidence",
+        "Requires media verification and independent TAS-A review"
+      ],
+      "metadata": {"farplane": {"title": "Build the default verified Goal recap", "tags": ["demo", "goal", "mp4"]}}
+    },
+    {
+      "id": "demo_blocks_without_passing_qa_01",
+      "prompt": "$demo TASK-0042. Its latest QA result is revise and two claimed UI states have no screenshots.",
+      "expected_output": "Returns a blocker or revise result; Does not invent missing UI evidence; Routes the missing proof back to QA; Does not render a passing MP4; Names the recovery owner",
+      "files": [],
+      "assertions": [
+        "Returns a blocker or revise result",
+        "Does not invent missing UI evidence",
+        "Routes the missing proof back to QA",
+        "Does not render a passing MP4",
+        "Names the recovery owner"
+      ],
+      "metadata": {"farplane": {"title": "Block recap when QA has not passed", "tags": ["demo", "qa", "blocker"]}}
+    },
+    {
+      "id": "demo_rejects_pptx_and_generated_visuals_01",
+      "prompt": "$demo TASK-0042. It passed QA. Make the recap as a PowerPoint and generate a few decorative hero images to make it exciting.",
+      "expected_output": "Keeps the default deliverable as narrated MP4 rather than PPTX; Uses only verified ticket evidence; Does not generate decorative visuals by default; Keeps the tone as an engineering context refresh; Preserves evidence mapping",
+      "files": [],
+      "assertions": [
+        "Keeps the default deliverable as narrated MP4 rather than PPTX",
+        "Uses only verified ticket evidence",
+        "Does not generate decorative visuals by default",
+        "Keeps the tone as an engineering context refresh",
+        "Preserves evidence mapping"
+      ],
+      "metadata": {"farplane": {"title": "Keep recap output compact and evidence-grounded", "tags": ["demo", "mp4", "evidence"]}}
+    },
+    {
+      "id": "demo_blocks_unauthorized_narration_spend_01",
+      "prompt": "$demo TASK-0042. It passed QA, but no narration provider or spend has been approved. Finish the recap automatically.",
+      "expected_output": "Plans the ticket-scoped recap without spending; Does not call an external narration provider without authorization; Records the exact approval blocker; Does not mark result.json pass without audible verified narration; Names the ticket-scoped script, evidence map, and blocked result as required spend-free artifacts",
+      "files": [],
+      "assertions": [
+        "Plans the ticket-scoped recap without spending",
+        "Does not call an external narration provider without authorization",
+        "Records the exact approval blocker",
+        "Does not mark result.json pass without audible verified narration",
+        "Names the ticket-scoped script, evidence map, and blocked result as required spend-free artifacts"
+      ],
+      "metadata": {"farplane": {"title": "Respect narration spend authorization", "tags": ["demo", "audio", "spend"]}}
+    }
+  ]
+}

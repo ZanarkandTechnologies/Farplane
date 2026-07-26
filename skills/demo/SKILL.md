@@ -1,82 +1,127 @@
 ---
 name: demo
-description: "Turn passing QA artifacts for one ticket into demo-ready outputs and a structured demo result for ticket completion review."
+description: "Turn passing ticket QA evidence into a narrated lead-engineer recap MP4, evidence map, and reviewed demo result before Goal completion."
 tier: 3
 group: coding
 source: local
+template_uses:
+  skill-template: "0.3.9"
+  skill-surface-budget: "0.1.0"
+  skill-eval-task: "0.2.0"
+  skill-qa-checklist: "0.1.1"
+eval: evals/evals.json
+qa_checklist: qa_checklist.md
 common_chains:
   after: ["close-ticket"]
+allowed-tools: Read, Glob, Grep, Bash
 ---
 
 # Demo
 
+## Context
+
+`demo` is the terminal presentation phase for a material implementation Goal.
+It turns already-passing ticket evidence into one concise narrated MP4 for a
+lead engineer who needs the problem, decision, result, proof, and remaining
+risk without rereading the full ticket.
+
+The default applies to material implementation Goals and explicit `$demo`
+calls. Direct non-Goal fixes, heartbeats, feedback checks, and planning-only
+work do not require a recap. The MP4 explains existing proof; it never replaces
+QA or creates new product claims. Default duration is 60–120 seconds, covering
+the problem and stakes, chosen solution and tradeoff, final workflow, proof,
+and honest residual risk.
+
+## Skill Signature
+
+```text
+demo(ticket, passed_qa, brand_kit?) -> narrated_mp4 + evidence_map + result_json + review_receipts
+state: reads(ticket, diagrams, progress, QA/test/review evidence, optional brand kit);
+       writes(ticket-scoped demo artifacts, ticket Links, progress)
+gates: selected_ticket; QA_pass; verified_sources; recap_plan; media_probe;
+       independent_demo_video_evidence_review_TAS_A
+routes: content-impl-plan | storyboard | audio-advisor | remotion | reviewer
+fails: invents evidence; runs before QA passes; emits PPTX instead of MP4;
+       generates unsupported visuals; spends without authorization; self-certifies
+```
+
+Resolve missing evidence from the selected ticket and its artifact tree. If QA
+has not passed or a claim cannot be sourced, return a blocker instead of
+guessing.
+
+## Phase Contract
+
+```text
+demo(ticket, evidence)
+  -> evidence inventory
+   + ticket-scoped content plan
+   + storyboard and narration
+   + deterministic Remotion composition
+   + MP4/media verification
+   + independent review
+   + ticket/progress writeback
+```
+
+The content plan is a child artifact of this ticket, not a second content
+ticket. Externalized skills specialize production; they do not reopen the
+feature scope.
+
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-- [ ] Read the selected ticket, demo requirement, and latest QA artifacts before
-  creating demo output.
-- [ ] Use [qa](../qa/SKILL.md) as the source of truth for evidence; do not
-  invent a demo from unverified behavior.
-- [ ] Decide the lightest presentable format: annotated screenshot report,
-  HTML summary, slide/storyboard pack, short clip, or video walkthrough.
-- [ ] If QA evidence is missing or not presentable, request a QA rerun or use
-  [agent-browser](../agent-browser/SKILL.md) only for a narrow missing browser
-  capture.
-- [ ] Package demo outputs under
-  `tickets/TASK-XXXX/artifacts/demo/<timestamp>-<slug>/`.
-- [ ] Annotate what changed, why it matters, and which QA artifact proves each
-  visible claim.
-- [ ] Write `result.json` with ticket id, phase, verdict, summary, and artifact
-  paths.
-- [ ] Update the ticket Evidence section with demo artifact links.
-- [ ] If the demo is not presentation-ready, return a revise/blocker verdict
-  instead of marking demo complete.
+- [ ] 1. Bind the selected ticket, passing QA result, audience, and optional
+  Brand Kit; read `qa_checklist.md` as preflight.
+- [ ] 2. Inventory only verified ticket sources: problem/scope, diagrams,
+  progress, test output, QA captures, review receipts, and residual risks.
+- [ ] 3. Create
+  `tickets/TASK-XXXX/artifacts/demo/<timestamp>-<slug>/`, then load
+  [the lead-engineer recap recipe](references/lead-engineer-recap.md).
+- [ ] 4. Use [content-impl-plan](../content-impl-plan/SKILL.md) in
+  ticket-scoped artifact mode to write the recap plan and evidence map; do not
+  create another ticket or add per-ticket demo configuration.
+- [ ] 5. Route beats and narration to
+  [storyboard](../storyboard/SKILL.md), using the default sequence and duration
+  from the recipe; every spoken or visible claim must name its evidence source.
+- [ ] 6. Route authorized narration to
+  [audio-advisor](../audio-advisor/SKILL.md) and deterministic assembly to
+  [remotion](../remotion/SKILL.md). Reuse verified screenshots, diagrams, logs,
+  and text; generated visuals are forbidden by default. If narration approval
+  blocks production, preserve the spend-free content plan, evidence map, and
+  script before returning the blocker.
+- [ ] 7. Render `final.mp4`; verify video, frames, duration, and audible
+  narration with `ffprobe` plus representative frame/audio inspection. Write
+  `media-probe.json`, `evidence-map.json`, and compatible `result.json`.
+- [ ] 8. Send the MP4, evidence map, source artifacts, and `qa_checklist.md` to
+  the independent `reviewer` using demo, video, and evidence rubrics. Require
+  TAS-A, then link the reviewed artifacts from the ticket and `progress.md`.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
-`$demo` is the demo-packaging phase for a selected ticket.
+## Gotchas
 
-Use it when:
+- Do not produce a PowerPoint, slide deck, generic evidence montage, or
+  marketing trailer. The default deliverable is one narrated MP4.
+- Do not recapture or reinterpret failed behavior to make the story cleaner.
+  Return to QA when proof is missing or weak.
+- Do not hide provider spend, generated assets, or unsupported facts inside a
+  production child route.
+- A passing `result.json` means the reviewed recap is present and technically
+  playable; it does not weaken the Goal's completion review.
 
-- the ticket requires demo output
-- QA has already passed and produced reusable artifacts
-- `goal-advisor` or the operator needs to rerun demo generation without redoing QA
+## Output
 
-Do not use it when:
+Write the package under
+`tickets/TASK-XXXX/artifacts/demo/<timestamp>-<slug>/`. Every plan or success
+summary must name the 60–120 second MP4, full narrative spine, ticket-scoped
+path, `evidence-map.json`, deterministic Remotion route, media probe, and TAS-A
+review gate.
 
-- QA has not passed yet
-- the ticket does not require a demo artifact
+Finish with:
 
-## Contract
-
-- Read the selected ticket plus linked docs/specs.
-- Reuse QA artifacts from `tickets/TASK-XXXX/artifacts/qa/`.
-- If QA evidence is missing, weak, or not presentation-ready, request a QA rerun
-  or use [agent-browser](../agent-browser/SKILL.md) only for a narrow missing
-  browser capture.
-- Write demo outputs under `tickets/TASK-XXXX/artifacts/demo/`.
-- Update the ticket `Evidence` section with demo artifact links.
-- Write `result.json` under the demo artifact root and finish with:
-  - `EXECUTION_RESULT: status=demo_complete next=building reason=...`
-
-## Required artifacts
-
-- `result.json`
-- at least one demo-ready output such as HTML, slides, clip, or storyboard pack
-
-## `result.json` shape
-
-```json
-{
-  "ticket_id": "TASK-0000",
-  "phase": "demo",
-  "verdict": "pass",
-  "summary": "demo artifacts are ready",
-  "artifacts": [
-    "tickets/TASK-0000/artifacts/demo/2026-04-24T211500Z/demo.html"
-  ]
-}
+```text
+EXECUTION_RESULT: status=demo_complete next=completion_review reason=<brief>
 ```
 
-The final reviewer-lane completion check may still fail completion even when
-demo `verdict` is `pass` if the output is not presentation-ready enough to show
-upward to a PM or CEO.
+On missing proof, authorization, failed media verification, or sub-TAS-A
+review, preserve every spend-free plan/map/script already possible, write a
+blocked/revise `result.json` at the ticket-scoped path, and return the exact
+recovery owner.

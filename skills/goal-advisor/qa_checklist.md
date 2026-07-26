@@ -85,8 +85,10 @@ goal_advisor_qa(goal_prompt, ticket?, program?) -> checklist_verdicts + fixes_or
 
 11. `final-completion-checkpoint`
    - Question: For material ticket work, does the prompt require QA evidence
-     review and completion review before `stop_complete`, with writeback to
-     `ticket.md`, `progress.md`, and artifact links?
+     review, the default narrated `demo` MP4 for material implementation Goals,
+     and completion review before `stop_complete`, with writeback to
+     `ticket.md`, `progress.md`, and artifact links while excluding heartbeat,
+     feedback, planning-only, and direct non-Goal routes?
    - Violation: The Goal prompt assumes a Stop hook, transcript memory, or the
      executor's own final summary will catch missing proof.
 

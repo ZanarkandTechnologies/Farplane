@@ -98,6 +98,10 @@ review receipt, command checks, docs validation, and any residual risk back to
 the ticket `Links` and the relevant `progress.md`. If QA evidence review,
 completion review, docs validation, or packet freshness is missing, stale, or
 below the required gate, stop blocked or revise instead of claiming completion.
+For a material implementation Goal, after QA passes and before completion
+review, run the `demo` skill to produce the default narrated lead-engineer recap
+MP4. Do not add a ticket demo flag or apply this step to heartbeats, feedback
+checks, planning-only Goals, or direct non-Goal work.
 When every gate passes, run `farplane ticket close TASK-XXXX` and include its
 receipt before `stop_complete`. Do not move the ticket by hand.
 
