@@ -134,6 +134,7 @@ Common families:
 - `ui-quality`
 - `frontend-guidelines`
 - `user-intent-satisfaction`
+- `icp-purchase-conviction`
 - `debloatability`
 - `evidence-quality`
 - `demo-quality`

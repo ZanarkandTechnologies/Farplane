@@ -92,6 +92,33 @@
           ]
         }
       }
+    },
+    {
+      "id": "review_icp_purchase_calibration_01",
+      "prompt": "Apply icp-purchase-conviction separately to five finished-product cases and return one TAS plus buyer verdict for each. Case A: an enterprise RevOps director can approve tools under $2,000/month; manual research costs $5,000/month; the inspected $1,200/month product cuts the same work from six hours to two, preserves sources, passes stated security review, fits the CRM, and has guided onboarding. Case B: the same buyer sees faster work and acceptable pricing, but source traceability is incomplete and manager review-time reduction is unproven; a four-week pilot is available. Case C: a sales-operations manager prioritizes rep administration time; the current workflow costs $400/month with no duplicate entry, while the reviewed $1,100/month product adds two hours of weekly tagging and shows no pipeline benefit. Case D: the audience combines startups, global enterprises, founders, operators, procurement, legal, and sponsors, with no authority, alternative, price, switching cost, or role-specific evidence. Case E: a polished demo received enthusiastic internal comments, but no explicit buyer, alternative, price, adoption constraints, customer behavior, or purchase evidence exists; the team claims this proves customers will buy and the product has product-market fit.",
+      "expected_output": "Case A returns TAS-A and buy or approve now from the supplied value, proof, alternative, price, and adoption context; Case B returns TAS-B and trial or evaluate with the repairable proof objection; Case C returns TAS-C and no-buy because the status quo dominates on cost and administration; Case D returns TAS-D and invalid because buyer context is blended and underspecified; Case E returns TAS-D or invalid and rejects demo enthusiasm as proof of demand, willingness to pay, or product-market fit; Every case keeps one buyer verdict separate from observed market evidence",
+      "files": [
+        "docs/review/rubrics/icp-purchase-conviction.md"
+      ],
+      "assertions": [
+        "Case A returns TAS-A and buy or approve now from the supplied value, proof, alternative, price, and adoption context",
+        "Case B returns TAS-B and trial or evaluate with the repairable proof objection",
+        "Case C returns TAS-C and no-buy because the status quo dominates on cost and administration",
+        "Case D returns TAS-D and invalid because buyer context is blended and underspecified",
+        "Case E returns TAS-D or invalid and rejects demo enthusiasm as proof of demand, willingness to pay, or product-market fit",
+        "Every case keeps one buyer verdict separate from observed market evidence"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Calibrate ICP purchase conviction across five buyer states",
+          "tags": [
+            "review",
+            "icp-purchase-conviction",
+            "tas",
+            "buyer-calibration"
+          ]
+        }
+      }
     }
   ]
 }

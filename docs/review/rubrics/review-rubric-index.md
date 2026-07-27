@@ -99,6 +99,8 @@ Default required family verdicts:
 - `ui-quality`: `TAS-A`
 - `frontend-guidelines`: `TAS-A`
 - `user-intent-satisfaction`: `TAS-A`
+- `icp-purchase-conviction`: `TAS-A` when purchase, approval, or adoption
+  conviction is a declared gate
 - `documentation-quality`: `TAS-A` when selected for canonical, public,
   cross-surface, or policy-bearing docs
 - `evidence-quality`: `TAS-A`
@@ -156,6 +158,8 @@ Choose rubric families from the ticket context:
   - `video-quality` when a video is present
 - final completion review:
   - `user-intent-satisfaction` when the ticket is user-facing
+  - `icp-purchase-conviction` when the completion claim asks whether one
+    explicit ICP would buy, approve, or adopt the finished product or offer
   - `integration-readiness`
   - `evidence-quality`
   - optional `demo-quality`
@@ -181,7 +185,20 @@ Choose rubric families from the ticket context:
   - `evidence-quality`
   - `integration-readiness`
 
-If the reviewer wants to make stronger "worth it", willingness-to-pay, or competitive-market claims, the ticket/spec must already carry explicit user, alternative, and price-point evidence. Otherwise keep the judgment at the `user-intent-satisfaction` level and call the stronger market question underspecified.
+- finished product or credible offer review:
+  - `icp-purchase-conviction` when one explicit buyer, product or offer,
+    current alternative, price or equivalent commitment, and material adoption
+    constraints are supplied
+  - run the family separately for each decision-relevant role in a buying group
+  - use `evidence-quality` when the purchase claim depends on product, customer,
+    pricing, or market artifacts
+
+If the reviewer wants to answer whether one explicit ICP would buy, approve, or
+adopt, select `icp-purchase-conviction` only when buyer, product or offer,
+alternative, price or equivalent commitment, and adoption evidence are
+available. Otherwise keep the judgment at `user-intent-satisfaction` and call
+the purchase question underspecified. A simulated buyer verdict never proves
+actual willingness to pay or product-market fit.
 
 When unsure, prefer adding `evidence-quality` and `integration-readiness`.
 
@@ -329,6 +346,16 @@ When unsure, prefer adding `evidence-quality` and `integration-readiness`.
   - leverage or worth-it feel for the intended user
   - whether the result would actually satisfy or impress the user
   - evidence confidence for any stronger value claims
+
+### 10b. ICP Purchase Conviction
+- File: `icp-purchase-conviction.md`
+- Focus:
+  - one explicit buyer or approver profile
+  - problem priority and outcome value
+  - advantage over the current alternative
+  - trust, proof, price, adoption cost, and deal-breakers
+  - decisive `buy`, `trial`, `no-buy`, or `invalid` buyer verdict
+  - separation between simulated conviction and observed demand
 
 ### 11. Skill Contract
 - File: `skill-contract.md`

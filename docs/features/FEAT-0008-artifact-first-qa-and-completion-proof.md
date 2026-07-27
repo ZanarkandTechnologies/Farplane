@@ -3,7 +3,7 @@ title: Artifact-first QA and completion proof
 status: implemented
 owner: feature-registry
 created_at: 2026-06-26
-updated_at: 2026-06-28
+updated_at: 2026-07-27
 tags:
   - farplane
   - feature
@@ -13,6 +13,7 @@ refs:
   - tickets/templates/ticket.md
   - skills/qa
   - skills/review
+  - docs/review/rubrics
   - docs/features/FEAT-0008-artifact-first-qa-and-completion-proof.md
   - "docs/MEMORY.md#MEM-0048"
   - "docs/MEMORY.md#MEM-0064"
@@ -27,6 +28,7 @@ surfaces:
   - tickets/templates/ticket.md
   - skills/qa
   - skills/review
+  - docs/review/rubrics
   - docs/features/FEAT-0008-artifact-first-qa-and-completion-proof.md
 source_refs:
   - "docs/MEMORY.md#MEM-0048"
@@ -37,7 +39,7 @@ evidence_refs:
   - docs/HISTORY.md
 known_limits: Depends on compact `Done` conditions, `QA Strategy`, linked artifacts, progress logs, and reviewer gates, not ticket-body proof theater.
 metrics: []
-last_verified: 2026-06-12
+last_verified: 2026-07-27
 experimental: false
 superseded_by: false
 ---
@@ -76,6 +78,10 @@ contract.
 - Reads ticket `Done` conditions and `QA Strategy` as the scoreboard for checks, evidence, and review gates.
 - Produces or links command output, screenshots, traces, console logs, failure captures, review reports, and QA notes.
 - Routes material plans, implementations, prompts, evidence bundles, and completion claims through reviewer judgment when required.
+- Uses docs-owned rubric families for domain-specific TAS judgments while the
+  caller or ticket owns family selection and required gates.
+- Supports an evidence-bounded ICP purchase-conviction review for one explicit
+  buyer without treating reviewer simulation as observed market demand.
 - Keeps Goal-backed completion mechanical and visible: implementation, QA, demo when required, and final completion review receipt.
 - Refuses silent completion when required evidence is missing.
 
@@ -98,6 +104,11 @@ Proof scales with risk, blast radius, and user-facing impact.
 - Ticket-local artifacts hold bulky proof and reports.
 - QA owns user-visible and runtime evidence capture.
 - Reviewer owns material judgment of plans, implementations, prompts, evidence, and completion claims.
+- `docs/review/rubrics` owns family definitions, stable checks, TAS calibration,
+  and evidence limits; tickets and caller workflows own rubric routing.
+- Purchase-conviction review requires one explicit buyer, a credible product or
+  offer, the current alternative, price or equivalent commitment, and material
+  adoption constraints. Buying groups are reviewed one role at a time.
 - Completion claims must name the checks and evidence used.
 
 ## Feature Flow
@@ -135,6 +146,7 @@ Owner surfaces:
 - `tickets/templates/ticket.md`
 - `skills/qa`
 - `skills/review`
+- `docs/review/rubrics`
 - `docs/features/FEAT-0008-artifact-first-qa-and-completion-proof.md`
 
 Source context:
@@ -159,6 +171,8 @@ Acceptance signals:
 - The feature remains listed under exactly one owning system.
 - The owner surfaces still exist and agree with this contract.
 - Evidence refs support the current status.
+- Selected rubric families are discoverable from the canonical index and keep
+  their claims within the supplied evidence.
 
 ## Rollout And Maintenance
 
@@ -171,7 +185,9 @@ Acceptance signals:
 
 - This feature does not make every task heavyweight.
 - This feature does not require proof to live inside the ticket body.
-- This feature does not replace ticket scope, specs, or review rubrics.
+- This feature does not replace ticket scope or specs.
+- Review verdicts do not substitute for observed customer behavior, market
+  validation, willingness-to-pay evidence, or product-market-fit evidence.
 - Known limit: Depends on compact `Done` conditions, `QA Strategy`, linked artifacts, progress logs, and reviewer gates, not ticket-body proof theater.
 - Delete or merge this feature only when its current truth has moved into a clearer owner and all active refs are removed.
 
@@ -190,6 +206,8 @@ Acceptance signals:
 
 ## Change History
 
+- 2026-07-27: Added docs-owned rubric-family selection and an evidence-bounded
+  ICP purchase-conviction review contract.
 - 2026-06-26: Feature spec created.
 - 2026-06-27: Migrated into the reader-first feature-spec shape.
 - 2026-06-28: Split completion obligations into `Done` conditions and `QA Strategy`.
