@@ -77,6 +77,19 @@
         "Shows the revised character card and affected clean/annotated grids for explicit human feedback",
         "Binds the canonical character path and hash into every character-bearing provider packet before spend"
       ]
+    },
+    {
+      "id": "video_production_keyed_motion_annotations_01",
+      "prompt": "I made eleven three-panel storyboard strips for a short. Each annotated strip says P01, P02, and P03, with one arrow between each panel. The clean grids look good, so launch the video batch now.",
+      "expected_output": "Refuses generation because generic panel-to-panel arrows are not an executable spatial contract; Requires IDs pinned to every moving subject or body part and each fixed landmark used to prove displacement; Requires arrows to start on the moving points and terminate in the intended direction with mandatory endpoint IDs; Requires notes and provider prompts to map every visible ID to a literal instruction; Shows the readable annotated overview for human approval before spend",
+      "files": [],
+      "assertions": [
+        "Refuses generation because generic panel-to-panel arrows are not an executable spatial contract",
+        "Requires IDs pinned to every moving subject or body part and each fixed landmark used to prove displacement",
+        "Requires arrows to start on the moving points and terminate in the intended direction with mandatory endpoint IDs",
+        "Requires notes and provider prompts to map every visible ID to a literal instruction",
+        "Shows the readable annotated overview for human approval before spend"
+      ]
     }
   ]
 }

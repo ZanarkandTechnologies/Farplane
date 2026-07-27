@@ -26,8 +26,10 @@ each asset. It is the decomposition layer for Tasty Pack outputs, swipe files,
 example videos, storyboards, and source media.
 
 This skill owns asset inventory, recreation strategy, route selection, rights
-and source notes, and handoff packaging. It does not generate images, render
-videos, compose Remotion timelines, record audio, or publish content.
+and source notes, candidate discovery, and handoff packaging. It must search
+for useful existing assets before routing generation. It does not generate
+images, render videos, compose Remotion timelines, record audio, or publish
+content.
 
 ## Skill Signature
 
@@ -42,6 +44,8 @@ state:
 
 gates:
   source_material_named; rights_or_usage_risk_noted; asset_units_decomposed;
+  candidate_discovery_receipt_complete; searched_no_fit_evidenced_when_used;
+  no_custom_svg_animation_assets;
   reference_elements_mapped; golden_examples_and_recipes_bound;
   recreate_reuse_generate_decisions_made;
   route_owner_selected; remotion_handoff_ready_when_stitching_needed
@@ -54,7 +58,9 @@ fails:
   vague_asset_bucket; reference_copy_without_rights_note;
   generation_prompt_without_asset_inventory; remotion_handoff_without_files;
   one_tool_for_every_asset; css_text_only_for_inspiration_led_video;
-  inspiration_elements_unmapped; title_only_element_handoff
+  inspiration_elements_unmapped; title_only_element_handoff;
+  generation_before_asset_search; custom_svg_animation_asset;
+  jsx_or_programmatic_drawing_as_asset_substitute
 ```
 
 ## Phase Boundary
@@ -63,6 +69,15 @@ Use `media-ingest` or `video-understanding` when the input is raw media that
 needs metadata, transcripts, or representative frames before decomposition. Use
 `review` when a recreation plan copies a specific reference closely or will
 drive a high-visibility campaign.
+
+When the user has approved execution and search tools are available, candidate
+discovery is an action in the current run, not a future recommendation. Execute
+the searches, inspect useful candidates, and populate the receipt. If the
+storyboard is too vague to search, first turn each scene into a concrete asset
+need from the available narration/reference; block only the unresolved rows. If
+search tooling or required scene meaning is genuinely unavailable, return an
+exact blocker rather than a production-ready plan or a table whose only result
+is `pending`.
 
 For Brand Kit or Tasty Pack inputs, treat complete element realization packets
 as the source of truth. Every relevant `visual`, `storyboard`, `editing`, `format`, or
@@ -96,11 +111,29 @@ the output is explicitly downgraded to `semantic_storyboard_only`.
     constraints, and artifact owner.
   - [ ] Read `qa_checklist.md` as preflight guardrails.
 - [ ] 2. Decompose the asset graph.
+  - [ ] Before choosing generation, search for useful existing assets. Inspect
+    supplied/local media and Resource Bank/reference anchors, then suitable
+    web, stock, archive, icon/illustration, footage, texture, or overlay
+    libraries for the asset class. Record the exact queries, candidate URLs or
+    asset IDs, preview/metadata evidence, rights or license status, fit/reject
+    rationale, and selected file. `searched_no_fit` is valid only when this
+    receipt exists; “custom is faster” is not a search result.
+  - [ ] In an approved execution run, perform those searches now with the
+    available image/web/library/Resource Bank tools. Do not return every row as
+    `pending discovery` and call the handoff ready. Preserve at least the
+    strongest fit, the strongest rejected alternative, and the reason for the
+    selection or no-fit decision for each material asset need.
   - [ ] List footage, stills, frames, clips, avatars, voiceover, music, SFX,
     captions, overlays, fonts, logos, data, product shots, motion/edit
     references, and final render needs.
   - [ ] Mark each asset as `reuse`, `source`, `regenerate`, `capture`,
     `compose`, or `unknown`.
+  - [ ] Treat `compose` as arranging or treating accepted source media, not
+    drawing new content assets. Ban custom-created SVG animation assets and
+    SVG/JSX/programmatic vector substitutes for scene illustrations,
+    characters, props, backgrounds, textures, or diagrams. Existing
+    user-supplied, brand-owned, licensed, or discovered SVG files may be
+    accepted as static source media with provenance and rights recorded.
   - [ ] Map each relevant Brand Kit or Tasty Pack element to an asset row,
     generation route, or missing-input blocker, prioritizing pinned elements
     before ordinary context elements.
@@ -113,12 +146,21 @@ the output is explicitly downgraded to `semantic_storyboard_only`.
   - [ ] For narrative video, create continuity assets: character bible or
     no-character rationale, recurring prop/object bible, location/lighting
     anchors, and start/end frame assets for each model-native clip handoff.
+  - [ ] For a layered documentary/editorial reel, load the
+    [documentary reel production contract](../remotion/references/documentary-reel.md).
+    Inventory background, dominant subject, foreground, and overlay media per
+    scene. For particles, haze, dust, scratches, light artifacts, mattes, and
+    shadows, own sourcing and preparation: provenance, rights, dimensions,
+    alpha or black-background suitability, level/edge/loop cleanup, expected
+    blend behavior, accepted file, and acceptance check.
 - [ ] 3. Add recreation constraints.
   - [ ] Note rights, likeness, brand, source quality, duration, aspect ratio,
     visual continuity, audio continuity, and platform-specific constraints.
 - [ ] 4. Choose owner routes.
   - [ ] Route still image creation or editing to `ai-image-advisor` or
-    `imagegen`.
+    `imagegen` only after existing-asset discovery returns `searched_no_fit` or
+    the brief explicitly requires generation. Request raster/project media
+    outputs rather than custom SVG animation assets.
   - [ ] Route model-native clips to `ai-video-advisor`.
   - [ ] Route persistent presenter or character direction to `avatar-advisor`.
   - [ ] Route voice, music, SFX, Foley, and mix notes to `audio-advisor`.
@@ -137,6 +179,10 @@ the output is explicitly downgraded to `semantic_storyboard_only`.
 | Asset | Role | Source | Decision | Owner | Acceptance Check |
 | --- | --- | --- | --- | --- | --- |
 
+## Asset Discovery Receipt
+| Asset Need | Source Classes | Queries | Candidate Links / IDs | Rights | Fit Decision | Selected File / `searched_no_fit` |
+| --- | --- | --- | --- | --- | --- | --- |
+
 ## Inspiration Element Map
 | Element | Anchor | Asset Decision | Output / Blocker |
 | --- | --- | --- | --- |
@@ -144,6 +190,10 @@ the output is explicitly downgraded to `semantic_storyboard_only`.
 ## Regeneration Packets
 | Packet | Source Element | Anchor | Owner | Prompt / Direction | Acceptance Check |
 | --- | --- | --- | --- | --- | --- |
+
+## Overlay Media Preparation
+| Scene | Overlay | File / Blocker | Alpha / Background | Cleanup | Expected Blend | Acceptance |
+| --- | --- | --- | --- | --- | --- | --- |
 
 ## Recreation Plan
 - Reference pattern:
@@ -182,6 +232,10 @@ the output is explicitly downgraded to `semantic_storyboard_only`.
   from it; a verbal paraphrase is not enough for production.
 - Do not collapse avatar, audio, stills, and model-native clips into one generic
   prompt. Each asset class has different continuity and proof needs.
+- Do not respond to missing assets by drawing custom SVG/JSX illustrations or
+  procedural vector stand-ins. Search first, preserve the candidate receipt,
+  then route a raster/video generation owner only when no acceptable asset is
+  found or generation is an explicit requirement.
 
 ## Reference Map
 
@@ -194,6 +248,9 @@ the output is explicitly downgraded to `semantic_storyboard_only`.
 - `../avatar-advisor/SKILL.md` - route persistent presenter, character,
   likeness, or lipsync direction.
 - `../audio-advisor/SKILL.md` - route voice, music, Foley, SFX, and mix plans.
+- `../remotion/references/documentary-reel.md` - load for layered
+  documentary/editorial reel media preparation and the explicit boundary
+  between overlay assets and deterministic compositing.
 - `../remotion/SKILL.md` - route final deterministic composition and local
   render proof after assets are specified.
 
@@ -201,6 +258,9 @@ the output is explicitly downgraded to `semantic_storyboard_only`.
 
 - `asset_inventory`: decomposed asset table with source, decision, owner, and
   acceptance check.
+- `asset_discovery_receipt`: searched source classes, exact queries, candidate
+  links or IDs, rights/fit decisions, selected files, and evidenced
+  `searched_no_fit` rows.
 - `recreation_plan`: what to preserve, change, regenerate, source, or compose.
 - `generation_routes`: concrete next-owner handoffs for each asset class.
 - `blocked_report`: missing source material, rights uncertainty, missing

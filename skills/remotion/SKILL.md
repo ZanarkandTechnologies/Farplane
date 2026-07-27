@@ -32,7 +32,24 @@ Use this as the ordered checklist whenever `remotion` is active.
 - [ ] For animations that should be editable in Remotion Studio, keep `interpolate()` inline in the `style` prop and use individual transform properties such as `scale`, `translate`, and `rotate` rather than building a `transform` string.
 - [ ] If the user asks for Remocn or the task benefits from copy-paste motion primitives, transitions, backgrounds, UI scenes, or demo-video blocks, load [remocn](references/remocn.md) before adding registry components.
 - [ ] Route parent production planning through [content-impl-plan](../content-impl-plan/SKILL.md) when the storyboard, assets, advisor actions, or QA gates are not yet compiled.
-- [ ] Route asset inventory and recreation planning through [asset-advisor](../asset-advisor/SKILL.md).
+- [ ] Route asset inventory, candidate discovery, rights/fit decisions, and
+  recreation planning through [asset-advisor](../asset-advisor/SKILL.md).
+  Block content-production authoring when required visuals have no accepted
+  source file or evidenced `searched_no_fit` generation route.
+- [ ] Do not create custom SVG animation assets or use SVG/JSX/programmatic
+  vector drawings as substitutes for missing scene illustrations, characters,
+  props, backgrounds, textures, or diagrams. Existing user-supplied,
+  brand-owned, licensed, or discovered SVG files may be consumed as accepted
+  static media and animated with Remotion transforms, masks, crops, or
+  treatment. A generation route counts only when Asset Advisor records
+  candidate discovery and `searched_no_fit` (or the brief explicitly requires
+  generation); `regen_ready` without that receipt does not bypass discovery.
+- [ ] For a voice-led documentary or editorial reel made from layered stills
+  and overlay media, load the
+  [documentary reel production contract](references/documentary-reel.md).
+  Require prepared overlay files from `asset-advisor`; keep deterministic
+  treatment, compositing, micro-motion, and frame-addressed choreography in
+  Remotion.
 - [ ] Route still assets through `imagegen` or [ai-image-advisor](../ai-image-advisor/SKILL.md).
 - [ ] Route model-native footage through [ai-video-advisor](../ai-video-advisor/SKILL.md), persistent avatar clips through [avatar-advisor](../avatar-advisor/SKILL.md), and audio direction through [audio-advisor](../audio-advisor/SKILL.md).
 - [ ] For content-production videos using a Brand Kit or Tasty Pack,
@@ -48,7 +65,11 @@ Use this as the ordered checklist whenever `remotion` is active.
   handoff: pinned visual/audio/editing elements must arrive as resolved media
   refs or generated asset files with acceptance checks. If Remotion only has
   semantic element descriptions, label the render `semantic_storyboard_only`
-  and do not claim Tasty Pack asset reuse.
+  and do not claim Tasty Pack asset reuse. For visual scene assets,
+  `regen_ready` additionally requires an Asset Advisor discovery receipt ending
+  in `searched_no_fit` or an explicit brief requirement for generation; it
+  permits the named raster/video generation owner but does not unlock Remotion
+  until accepted files exist.
 - [ ] For stitched model-native clips, probe every source clip duration,
   framerate, dimensions, and frame count before sequencing; set Remotion
   `Sequence` durations from observed frame counts, not assumed seconds. A
@@ -133,7 +154,10 @@ The imported upstream source and refresh note live in `references/upstream-sourc
 - Use `content-impl-plan` before this skill when the parent content ticket,
   advisor action list, or proof path is not ready.
 - Use `asset-advisor` when the storyboard/reference still needs an asset
-  inventory, recreation plan, or owner route map.
+  inventory, candidate search receipt, recreation plan, or owner route map.
+- For content-production work, never author custom SVG animation assets or
+  SVG/JSX vector scene substitutes. Remotion animates accepted media; it does
+  not replace Asset Advisor discovery with locally drawn illustrations.
 - Use `imagegen` or `ai-image-advisor` for still assets that will be placed in Remotion `public/`.
 - Use `ai-video-advisor` for model-native footage, `avatar-advisor` for
   persistent avatar direction, and `audio-advisor` for voice/music/SFX cue
@@ -182,6 +206,9 @@ scene_failure(packet_id, reason)
 - 3D or maps: `rules/3d.md`, `rules/maplibre.md`
 - Remocn copy-paste motion components, transitions, backgrounds, UI scenes, or demo-video blocks: `references/remocn.md`
 - Approved model-native scene packets and locked-asset assembly: `../video-production/references/scene-grid-production.md`
+- Voice-led documentary/editorial reels using layered stills, prepared
+  overlays, shared film treatment, micro-motion, and frame-addressed
+  choreography: `references/documentary-reel.md`
 
 ## When to use
 
@@ -470,7 +497,14 @@ See [rules/light-leaks.md](rules/light-leaks.md) for light leak overlay effects 
 
 ## Visual and pixel effects
 
-When creating a visual effect, prefer: 1. normal Remotion/HTML/CSS/SVG/filter/blend/mask animation, 2. a listed effect via [rules/effects.md](rules/effects.md), including on HTML rendered through `<HtmlInCanvas>`, 3. a custom `createEffect()` via [rules/effects.md](rules/effects.md) when the user asks for a reusable/project-specific effect, 4. custom `<HtmlInCanvas onPaint>` via [rules/html-in-canvas.md](rules/html-in-canvas.md) only if no effect fits.
+When creating a visual effect, prefer: 1. normal
+Remotion/HTML/CSS/filter/blend/mask treatment over accepted media, 2. a listed
+effect via [rules/effects.md](rules/effects.md), including on HTML rendered
+through `<HtmlInCanvas>`, 3. a custom `createEffect()` via
+[rules/effects.md](rules/effects.md) when the user asks for a
+reusable/project-specific effect, 4. custom `<HtmlInCanvas onPaint>` via
+[rules/html-in-canvas.md](rules/html-in-canvas.md) only if no effect fits.
+This effects route does not permit custom SVG/JSX scene-asset authoring.
 
 ## Lottie animations
 

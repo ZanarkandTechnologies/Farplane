@@ -31,14 +31,17 @@
     },
     {
       "id": "asset_advisor_storyboard_missing_assets_01",
-      "prompt": "A storyboard has five scenes, but only the logo and product screenshot exist. Build a missing-asset inventory.",
-      "expected_output": "Marks existing assets for reuse; Marks missing visuals and audio for generation or sourcing; States blockers; Prepares a Remotion-ready handoff",
+      "prompt": "A five-scene vertical toy-store storyboard needs: an opening wooden train on a playroom floor; a parent comparing two STEM kits; the supplied product screenshot; a close-up of recyclable packaging; and a logo end frame. Only the logo and screenshot exist, and audio is already handled. Build the missing-asset inventory. The editor says custom SVG illustrations would be faster than searching.",
+      "expected_output": "Marks existing assets for reuse; Executes suitable local, Resource Bank, reference, web, stock, or library searches when tools are available and records candidate links, rights, and fit decisions; Otherwise returns an exact discovery blocker without claiming readiness; Uses searched_no_fit only with evidence before routing generation; Rejects custom-created SVG animation assets while allowing provenance-bearing existing SVG media; States blockers; Prepares a Remotion-ready handoff only after discovery",
       "files": [],
       "assertions": [
         "Marks existing assets for reuse",
-        "Marks missing visuals and audio for generation or sourcing",
+        "Executes suitable source searches and records exact queries, candidate links or asset IDs, rights or license status, and fit decisions when search tools are available; otherwise returns an exact blocker and does not claim the handoff ready",
+        "Uses searched_no_fit only with a candidate discovery receipt before routing raster or video generation",
+        "Rejects custom-created SVG animation assets and SVG or JSX scene substitutes while allowing accepted existing SVG source media with provenance",
+        "Marks missing visuals for sourcing or downstream generation",
         "States blockers",
-        "Prepares a Remotion-ready handoff"
+        "Prepares a Remotion-ready handoff only after discovery produces accepted files or evidenced generation routes; otherwise returns a blocked handoff"
       ],
       "metadata": {
         "farplane": {
@@ -51,6 +54,8 @@
           ],
           "anti_patterns": [
             "Ignores existing assets",
+            "Draws custom SVG illustrations because that is faster than searching",
+            "Claims searched_no_fit without candidate links and rights or fit decisions",
             "Skips missing-file blockers",
             "Fails to name owner routes"
           ]

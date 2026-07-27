@@ -16,8 +16,12 @@ composition, creative lock detail, and the full ticket template.
 ## Production Graph
 
 ```text
-idea + brand_kit? + tasty_pack? + invocation_policy
+idea + icp + evidence + brand_kit? + tasty_pack? + invocation_policy
+  -> compile_story: causal beats + viewer-state turns + persona lenses
   -> compose_elements: creative hypothesis + chosen/rejected leverage map
+  -> choose_assets: jobs + evidence levels + provenance + rights
+  -> discover_assets: candidates + rights/fit + selected file | searched_no_fit
+  -> gather_scene_assets: background + main topic + foreground per scene
   -> storyboard: low-fi visual approval packet tied to element ids
   -> select_timing_master: voiceover | music | source_video | none
   -> asset/avatar/audio/image/video advisors: element-conditioned outputs
@@ -55,6 +59,18 @@ production rule. Any child generation handoff must carry the resolved golden
 example and golden recipe; title/description-only conditioning cannot pass the
 creative lock.
 
+For a repair request, retrieve the selected element by its authoritative ID and
+show the repaired packet with its actual stored values. A type signature or
+instruction to retrieve later is not a repaired handoff.
+
+When a Tasty Pack exists, make the decision surface visible:
+
+| Element / provenance | Pinned | Decision | Rationale | Planned use or nonuse | Owner / output | Acceptance |
+| --- | --- | --- | --- | --- | --- | --- |
+
+List pinned elements first, then every remaining captured element. `unused`
+requires a reason; do not hide nonuse in prose.
+
 Use `is_element(value) = independently selectable && independently
 conditionable from an example && owned by a recognizable production step`.
 Hook folds into the storyboard opening beat; semantic copy folds into
@@ -84,8 +100,13 @@ expression.
 reference_readiness(pack)
   -> media_ready | regen_ready | semantic_only | blocked
 
-media_ready: selected elements have resolved golden-example media refs.
-regen_ready: selected elements have complete example + recipe advisor packets.
+media_ready: selected elements have resolved golden-example media refs or
+             accepted discovered source files.
+regen_ready: selected visual elements have complete example + recipe advisor
+             packets plus an Asset Advisor discovery receipt ending in
+             searched_no_fit, or the brief explicitly requires generation.
+             This state permits the named raster/video generation owner; it
+             does not unlock Remotion until generated files are accepted.
 semantic_only: taste descriptions exist but no reusable media or generation
                packet; usable for planning, not final-production claims.
 blocked: required evidence, rights, or usable inputs are missing.
@@ -103,6 +124,29 @@ creative_lock(idea, creative_hypothesis, element_leverage_map, storyboard, timin
 
 Requires:
 
+- a resolved ICP contract plus decision-relevant persona lenses;
+- one point of view plus stakes, a causal spine, and beat-level viewer-state
+  changes in a two-column narration/visual script;
+- evidence/explanation/soul beat functions and a paid-off opening promise;
+- asset decisions with jobs, evidence levels, material identity, motion purpose,
+  provenance, rights, and acceptance; wallpaper rejected or quarantined;
+- Asset Advisor candidate-discovery receipts for every missing visual, with
+  queries, candidate links or asset IDs, rights/fit decisions, and a selected
+  file, evidenced `searched_no_fit`, or explicit generation requirement;
+- no custom-created SVG animation assets, SVG/JSX scene illustrations, or
+  programmatic vector asset substitutes; provenance-bearing existing SVG media
+  remains allowed as static source material;
+- one `SceneAssetBundle` per production scene under
+  `scene-asset-bundles.md`: genuine shared background, dominant main-topic
+  asset, and separate foreground asset, with complete packets and accepted
+  files before lock;
+- a representative layered frame proving one background world, one dominant
+  topic, and one foreground depth/attention layer without a card-grid
+  composition;
+- thumbnail alternatives for the opening, mechanism, and payoff, plus timed
+  animatic silent/mute tests;
+- an independent pre-production `PersonaContentReview` passing the thresholds
+  in `storytelling-asset-persona.md`;
 - Brand Kit policy precedence and explicit choose/augment/reject/block decisions for
   every selected or conflicting Tasty element;
 - a creative hypothesis plus exact element leverage map with provenance;
@@ -131,18 +175,28 @@ Requires:
 - user-intent, video-quality, source-honesty, narrative, asset, and audio-motion
   QA gates, plus Brand/Tasty element-use checks when either exists.
 
-Blocks when Tasty elements silently override Brand Kit policy, a selected
+Blocks when ICP resolution is generic, a beat does not change viewer state,
+metaphor is used as factual proof, wallpaper fills the asset plan, a required
+persona concern remains unresolved, any scene lacks a genuine background,
+main-topic, or foreground asset, a chart or supplied PNG is treated as a whole
+scene, planned paths are treated as accepted files, Tasty elements silently override Brand Kit policy, a selected
 element reaches a child without its example and recipe, a reference-led plan has
 only generic cards, the timing-master media/cues are missing, final visuals are
 generated before a required voice/music/source timing master is measured, a
 narrative clip batch has neither continuous handoffs nor deliberate scene
 packets nor montage rationale, selected elements have no media/regeneration
-route, or proof checks only renderability.
+route, a visual regeneration route lacks Asset Advisor discovery evidence,
+custom SVG/JSX drawings substitute for missing scene assets, or proof checks
+only renderability.
 
 When named Tasty Pack elements appear in the brief but their capture payload
 is unavailable, build a provisional element-level leverage map from those
 named elements and mark the missing capture IDs/pins/rights as blockers. Do not
 substitute category-only placeholders for the map.
+
+When a brief names enough elements or roles to compile a provisional plan,
+compile them first and isolate missing payload, rights, approval, or media as
+specific blockers. Do not return only a generic blocked report.
 
 ## Ticket Template
 
@@ -160,6 +214,28 @@ What will be produced, for whom, and what proof or marketing job it must do.
 - Before / After / Why now:
 
 ## Program
+ICP Contract:
+- role/job / context / starting belief / friction / knowledge:
+- emotional stake / objection / must-believe-after / desired action:
+
+Story Contract:
+- point of view + stakes / backbone / promise-payoff:
+- two-column beats with viewer-state before/after:
+- evidence / explanation / soul:
+
+Asset Decisions:
+| Asset | Beat | Job | Claim | Evidence Level | Material | Motion Purpose | Provenance / Rights | Decision / Acceptance |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+
+Scene Asset Manifest:
+| Scene | Beat | Shared Background | Main Topic | Foreground | Layer / Reveal Order | Source or Generation Packet | Owner | Rights Note | Expected Output | Accepted File | Acceptance Check | Readiness |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+
+Persona Content Review:
+- lenses / acceptance checks / objections / must-see proof:
+- comprehension / relevance / trust / action clarity:
+- blockers / conflicts / receipt / independent reviewer / verdict:
+
 Creative Hypothesis:
 - Why this Brand Kit + selected Tasty Pack combination should work:
 - Falsifier / risk:

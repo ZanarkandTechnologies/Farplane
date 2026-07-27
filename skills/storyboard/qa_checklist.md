@@ -39,9 +39,19 @@ storyboard_check(creative_ticket, production_handoff?)
   the revised character card and affected grids receive fresh human review.
   The canonical card remains unchanged, the fallback is a versioned sibling,
   and unaffected approved scenes remain locked.
+  When the selected format is a voice-led documentary/editorial reel, measured
+  narration defines compact causal scene ranges. Each scene names one
+  viewer-state change, a dominant spatial action,
+  background/subject/foreground needs, exact frame events, restrained
+  micro-motion, and audio/caption obligations. Each missing visual has a
+  searchable Asset Advisor brief with subject, source classes, rights
+  constraint, framing, and acceptance check; the storyboard does not prescribe
+  custom-created SVG/JSX/programmatic vector animation assets as substitutes.
 - [ ] `production_route`: The handoff names the next owner, such as `remotion`,
   `video-production`, `ai-video-advisor`, `remotion-render`, or
-  `social-content`, with required inputs and blocker conditions.
+  `social-content`, with required inputs and blocker conditions. When visuals
+  are missing, `asset-advisor` candidate discovery precedes generation and
+  Remotion; accepted static SVG source media remains allowed with provenance.
 - [ ] `proof_observable`: Done/proof names the review, still-frame, render,
   storyboard, script, or asset evidence needed before claiming production
   readiness. For deliberate breaks, the human sees the overview strip plus all

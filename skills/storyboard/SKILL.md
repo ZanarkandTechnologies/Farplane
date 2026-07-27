@@ -47,6 +47,7 @@ gates:
   narrative_signatures_present; beat_sheet_and_script_aligned;
   storyboard_executable; selected_elements_mapped_to_beats_and_panels;
   low_fi_visual_storyboard_observable; asset_needs_named; scene_handoff_observable;
+  asset_discovery_handoff_named; no_custom_svg_animation_assets;
   scene_grid_packets_reviewable_when_deliberate_breaks
 
 routes:
@@ -57,6 +58,7 @@ fails:
   vague_video_idea_as_plan; script_without_shots; shots_without_viewer_promise;
   generic_brand_filler; parent_action_list_hidden_in_storyboard;
   production_handoff_without_assets_or_proof;
+  custom_svg_animation_asset; missing_asset_discovery_route;
   publishing_or_rendering_as_default
 ```
 
@@ -87,12 +89,31 @@ scene handoff, asset needs, proof, and blocker conditions.
 - [ ] 3. Draft the narrative spine.
   - [ ] Include `Narrative Signatures`: hook, tension, turn, proof moment,
     payoff, and final action.
+  - [ ] For a voice-led documentary or editorial reel, load the
+    [documentary reel production contract](../remotion/references/documentary-reel.md).
+    Usually use five or six compact causal clauses, but derive scene ranges
+    from measured narration. Give every scene one viewer-state change, one
+    dominant spatial action, background/subject/foreground needs, named
+    frame-addressed events, micro-motion, and audio/caption obligations.
   - [ ] If the user needs a full ticket/action list, route back to
     `content-impl-plan` instead of expanding this skill's scope.
 - [ ] 4. Write the script and storyboard as one connected plan.
   - [ ] Produce beat sheet, voiceover or on-screen copy, scene-by-scene
     storyboard panels, shot list, motion notes, audio notes, captions or
     supers, and asset requirements.
+  - [ ] Make every missing visual requirement searchable by naming the concrete
+    subject, material identity, source classes, rights constraint, framing, and
+    acceptance check for `asset-advisor`. Do not resolve missing visuals by
+    prescribing custom-created SVG animation assets, SVG/JSX illustrations, or
+    programmatic vector stand-ins.
+  - [ ] Use the available narration and causal beat to make that brief specific
+    enough to search now. Do not hide behind generic labels such as “primary
+    visual,” “editorial framing,” or “supporting prop” when the clause names a
+    recognizable place, person type, object, document, product, or event.
+  - [ ] Emit one searchable Asset Advisor row per storyboard scene; each row
+    names subject, material identity, source classes, rights constraint,
+    framing/crop, and acceptance check. A partial asset list cannot represent a
+    scene-complete handoff.
   - [ ] When element realization packets are supplied, map each selected
     story-facing hook/copy/storyboard/format/constraint element ID to a beat or
     panel and condition the visual notes on both its resolved golden example
@@ -122,7 +143,10 @@ scene handoff, asset needs, proof, and blocker conditions.
     `canonical_character_sha256` in both the scene packet and `approved.json`.
 - [ ] 5. Select the production route.
   - [ ] Route parent ticket/action-list planning to `content-impl-plan`.
-  - [ ] Route asset decomposition and recreation planning to `asset-advisor`.
+  - [ ] Route asset decomposition, candidate discovery, rights/fit decisions,
+    and recreation planning to `asset-advisor`; block Remotion while required
+    visual rows lack accepted files or evidenced `searched_no_fit` generation
+    routes.
   - [ ] Route persistent presenter or character direction to `avatar-advisor`.
   - [ ] Route voice, music, SFX, Foley, and mix notes to `audio-advisor`.
   - [ ] Route deterministic motion graphics, captions, overlays, and editing to
@@ -214,6 +238,9 @@ of a Remotion-ready creative ticket.
   deliberate-break calls. Do not regenerate an approved grid or character
   reference unless the operator requests it or a named scene-local blocker or
   approved edit requires a versioned replacement.
+- Do not use custom SVG/JSX drawings as a shortcut around a missing visual.
+  Existing accepted SVG media can appear in a storyboard, but sourcing and
+  rights belong in the Asset Advisor handoff.
 
 ## Reference Map
 
@@ -224,6 +251,9 @@ of a Remotion-ready creative ticket.
   production method selection after the storyboard is ready.
 - `../video-production/references/scene-grid-production.md` - load when
   deliberate scene breaks map storyboard grids to model-native provider clips.
+- `../remotion/references/documentary-reel.md` - load for voice-led
+  documentary/editorial reels that need causal clauses, layered scenes,
+  frame-addressed choreography, and shared treatment handoff.
 - `../remotion/SKILL.md` - route deterministic composition authoring after the
   storyboard names dimensions, duration, assets, scenes, and proof.
 - `../social-content/SKILL.md` - route captions, launch copy, threads,

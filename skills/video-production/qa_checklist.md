@@ -29,6 +29,14 @@ template_uses:
   assign final transitions, captions/transcription timing, and audio placement
   to Remotion. The local generation envelope must prove approved identity/grid
   hashes and the effective character's presence in provider `reference_images`.
+- [ ] Each annotated scene grid pins short IDs to the actual moving subjects or
+  body parts and fixed displacement landmarks, draws motion arrows from those
+  points toward mandatory endpoints, maps every visible ID to one literal note
+  and provider-prompt instruction, and remains readable in the human review
+  surface. Generic arrows drawn only between panels fail this check.
+- [ ] Inspect generated clips for annotation leakage. Point IDs, arrows, panel
+  labels, rulers, and prompt notes are control surfaces, not final pixels;
+  repair, explicitly accept, or exclude any clip that renders them.
 - [ ] The result does not impersonate a creator, claim an unselected named
   profile, trigger generation/spend without authority, or separate a profile's
   example from its package.

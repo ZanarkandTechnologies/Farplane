@@ -73,6 +73,12 @@ notes:
   end_state:
   camera:
   end_hold_seconds:
+motion_bindings:
+  - id:
+    points_to:
+    panel_id:
+    instruction:
+    overlay_type: subject_point | landmark_point | motion_arrow | endpoint
 continuity_anchors: []
 canonical_character_path:
 canonical_character_sha256:
@@ -109,6 +115,33 @@ motion arrows, landmarks, and endpoint marks. `notes.md` defines every mark in
 plain language and ties it to the panel ID. The provider prompt names the
 active IDs and forbids rendering the annotation layer.
 
+Treat that prohibition as a clip-review gate, not merely prompt wording.
+Colored arrows, point IDs, panel IDs, rulers, or note text that survive into
+the provider output are annotation leakage. Prefer the clean grid as the
+pixel-bearing input and repeat the keyed bindings in the prompt; use the
+annotated grid only as a control reference when the provider needs it. A clip
+with visible control marks must be repaired, deliberately accepted as part of
+the final visual language, or excluded from the final edit.
+
+Annotations are an executable spatial contract, not decoration. Every moving
+subject or moving body part gets a short point ID placed on that object. Every
+landmark used to prove displacement gets its own fixed ID placed on the
+landmark. Each motion arrow begins at the moving point or its current position
+and terminates in the intended direction; every required final state gets a
+visible endpoint such as `E1`. The keyed notes map each ID to exactly one
+literal provider instruction, and the provider prompt repeats those bindings.
+An arrow drawn only between panels, a legend with no in-frame point, or prose
+that does not name the visible IDs fails the packet.
+
+Minimum keyed example:
+
+```text
+L1 = character torso center; keep on one diagonal path
+H1 = grabbing hand; close briefly at fixed rail point R1
+P1 = arrow from L1 through the rail without redirection
+E1 = mandatory endpoint one body width past the rail; hold one second
+```
+
 Choose the smallest conditioning route that can express the scene:
 
 - `storyboard_only`: clean grid + annotated grid + keyed notes. Default for one
@@ -128,6 +161,10 @@ The minimum pre-generation review packet contains:
    audio obligations.
 4. The recurring-character card or an explicit no-character rationale.
 5. The provider strategy and any runtime video reference that would be uploaded.
+
+The human-facing overview must make the keyed overlays readable at review size.
+Showing only clean grids or first-frame thumbnails does not satisfy review when
+the annotated boards are the motion contract.
 
 Approval of this packet authorizes generation and Remotion assembly within the
 already accepted ticket scope and spend budget. It does not authorize publishing,
