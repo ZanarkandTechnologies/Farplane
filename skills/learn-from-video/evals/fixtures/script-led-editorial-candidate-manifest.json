@@ -1,0 +1,123 @@
+{
+  "schema_version": 1,
+  "composition": {
+    "id": "TheShorterTripHome",
+    "width": 1920,
+    "height": 1080,
+    "fps": 30,
+    "duration_frames": 543,
+    "duration_seconds": 18.1
+  },
+  "visual_system": {
+    "background": "warm-paper-field-v1",
+    "type": "system-sans-editorial-v1",
+    "accent_primary": "#cf4b3c",
+    "accent_secondary": "#4d7f7d",
+    "stable_across_scenes": true
+  },
+  "narration": {
+    "asset": "public/narration.wav",
+    "voice_basis": "macOS local system voice; no clone or source identity",
+    "observed_duration_seconds": 18.016167,
+    "beats": [
+      {"id": "beat-01", "start_frame": 18, "end_frame": 94, "scene": "long-wait"},
+      {"id": "beat-02", "start_frame": 98, "end_frame": 174, "scene": "long-wait"},
+      {"id": "beat-03", "start_frame": 178, "end_frame": 239, "scene": "repair-route"},
+      {"id": "beat-04", "start_frame": 243, "end_frame": 303, "scene": "repair-route"},
+      {"id": "beat-05", "start_frame": 308, "end_frame": 404, "scene": "repair-route"},
+      {"id": "beat-06", "start_frame": 408, "end_frame": 513, "scene": "short-trip"}
+    ]
+  },
+  "master_scene_ranges": [
+    {"id": "long-wait", "range": [0, 178]},
+    {"id": "repair-route", "range": [178, 408]},
+    {"id": "short-trip", "range": [408, 543]}
+  ],
+  "scenes": [
+    {
+      "id": "long-wait",
+      "layers": {
+        "background": "warm-paper-field-v1",
+        "midground": ["technician.png", "broken-teddy.png"],
+        "foreground": ["repair-kiosk.png", "14-days-data-mark"]
+      },
+      "motion": {
+        "foreground_onset_frame": 8,
+        "midground_onset_frames": [32, 48],
+        "foreground_role": "spring",
+        "midground_role": "staggered-spring"
+      },
+      "controls": {
+        "kiosk": {"x": 650, "y": 355, "scale": 0.86},
+        "technician": {"x": 1180, "y": 294, "scale": 0.64},
+        "teddy": {"x": 520, "y": 485, "scale": 0.48}
+      }
+    },
+    {
+      "id": "repair-route",
+      "layers": {
+        "background": "warm-paper-field-v1",
+        "midground": ["technician.png", "broken-teddy.png"],
+        "foreground": ["sorting-tray.png", "repair-route-data-mark", "72-percent-counter"]
+      },
+      "motion": {
+        "foreground_onset_frame": 0,
+        "midground_onset_frames": [30, 45],
+        "foreground_role": "spring",
+        "route_and_counter_role": "interpolate",
+        "final_value": 72
+      },
+      "controls": {
+        "tray": {"x": 550, "y": 540, "scale": 0.78},
+        "technician": {"x": 1210, "y": 315, "scale": 0.58},
+        "teddy": {"x": 980, "y": 430, "scale": 0.38}
+      }
+    },
+    {
+      "id": "short-trip",
+      "layers": {
+        "background": "warm-paper-field-v1",
+        "midground": ["repaired-teddy.png"],
+        "foreground": ["repair-kiosk.png", "14-to-3-day-route"]
+      },
+      "motion": {
+        "foreground_onset_frame": 0,
+        "midground_onset_frame": 26,
+        "foreground_role": "spring",
+        "route_role": "interpolate"
+      },
+      "controls": {
+        "kiosk": {"x": 940, "y": 448, "scale": 0.58},
+        "repaired_teddy": {"x": 1180, "y": 300, "scale": 0.68}
+      }
+    }
+  ],
+  "audio": {
+    "voice": "public/narration.wav",
+    "music": "public/music-bed.wav",
+    "separate_sfx": "none",
+    "integrated_loudness_lufs": -16.48,
+    "true_peak_db": -5.07
+  },
+  "rights": {
+    "story": "original toy-repair story",
+    "raster_assets": "generated specifically for TASK-0419",
+    "data_marks": "original code-native visualization",
+    "source_expression_used": false,
+    "affiliation_claimed": false
+  },
+  "output": {
+    "path": "script-led-editorial-candidate.mp4",
+    "sha256": "51a80395b3f20213fe6613d9b7118041a7221e577af65eb095fe8764846688fd",
+    "production_artifact_sha256": "e8c66daf0bef6922938041d5a4bbc13cdada3f2b33bd867016fdbcea657e1c23",
+    "fixture_proxy": {
+      "purpose": "rights-safe eval proxy below the repository staged-blob limit",
+      "codec": "h264",
+      "width": 1920,
+      "height": 1080,
+      "fps": 30,
+      "duration_seconds": 18.154,
+      "size_bytes": 652334
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "fixture": "generic-demo-baseline",
+  "artifact": "generic-demo-baseline.mp4",
+  "contact_sheet": "generic-demo-baseline-contact-sheet.jpg",
+  "technical_render": {
+    "status": "pass",
+    "duration_seconds": 28,
+    "fps": 30,
+    "width": 480,
+    "height": 270
+  },
+  "rights": {
+    "status": "clean-room",
+    "source_media_reused": false
+  },
+  "observed_content": {
+    "map": "three invented circles connected by a curve; no geographic geometry or projection",
+    "bars": "one generic bar example",
+    "dots": "one flat dot strip; no semicircular lattice",
+    "lines": "one decorative line; no three-series comparison",
+    "treatment": "warm paper texture"
+  },
+  "retention": {
+    "status": "failed-regression-baseline",
+    "overwrite": false
+  }
+}

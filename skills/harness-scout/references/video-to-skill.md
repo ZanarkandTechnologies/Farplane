@@ -14,6 +14,13 @@ teach a reusable skill.
 6. Route the copied-skill candidate to the likely owner skill, using
    `harness-advisor` only when ownership is ambiguous.
 
+When the operator asks to prove that the video was learned by recreating its
+demonstrated output, hand the completed reconstruction brief to
+[learn-from-video](../../learn-from-video/SKILL.md). `harness-scout` continues
+to own source registry, adoption scoring, and feature handoff;
+`learn-from-video` owns the reconstruction prompt, frozen source-output eval,
+candidate comparison, and skill-change evidence.
+
 ## Source Todo Statuses
 
 Use these labels in the source-todo comparison:
@@ -36,6 +43,8 @@ A video-to-skill scout run should leave:
 - copied-skill candidate
 - owner handoff
 - confidence limits, especially transcript/frame gaps
+- optional `learn-from-video` reconstruction packet when executable transfer
+  proof was requested
 
 ## Smoke Fixture
 

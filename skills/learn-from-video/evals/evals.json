@@ -1,0 +1,109 @@
+{
+  "skill_name": "learn-from-video",
+  "evals": [
+    {
+      "id": "learn_video_reconstructs_demonstrated_workflow_01",
+      "prompt": "This tutorial shows how to build an animated data story, and I want our agents to genuinely learn the production method. A production owner says the attached candidate is done. Use the available transcript and representative frames to decide whether it actually learned the method, then tell me what reusable capability should change.",
+      "expected_output": "Produces an evidence-separated reconstruction packet, freezes an observable source-output eval before generation, creates or routes creation of a real candidate artifact, compares the candidate with transcript/frame anchors, and ends in an existing-owner or new-skill handoff without directly mutating the target.",
+      "files": [
+        "skills/learn-from-video/evals/fixtures/animated-data-story-evidence.md",
+        "skills/learn-from-video/evals/fixtures/animated-data-story-frozen-source-output-eval.md",
+        "skills/learn-from-video/evals/fixtures/animated-data-story-candidate.mp4",
+        "skills/learn-from-video/evals/fixtures/animated-data-story-candidate-contact-sheet.jpg",
+        "skills/learn-from-video/evals/fixtures/animated-data-story-candidate-manifest.json"
+      ],
+      "assertions": [
+        "Separates transcript-backed facts, frame-backed evidence, creator claims, inference, and candidate observations",
+        "Identifies the demonstrated output and blocks if it is not judgeable",
+        "Freezes must-match, may-vary, reject, and source-anchor checks before candidate generation",
+        "Requires a real rights-safe candidate artifact rather than a summary, plan, or generic technical smoke",
+        "Grades observable produced behavior rather than transcript recall",
+        "Records failures with evidence anchor, candidate observation, likely owner, and smallest repair",
+        "Routes existing-owner changes to maintenance or self-improve and missing capabilities to skill-creator without mutating the target itself"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Tutorial becomes reconstruction proof and owner handoff",
+          "tags": ["learn-from-video", "reconstruction", "skill-handoff"],
+          "notes": "Happy-path behavior for executable learning from transcript and frame evidence."
+        }
+      }
+    },
+    {
+      "id": "learn_video_rejects_generic_demo_01",
+      "prompt": "I gave you a motion-design tutorial and the result you made only borrowed the paper texture and some generic charts. It compiled, but it did not recreate the workflow the instructor demonstrated. Fix the learning process so this kind of miss is caught before you call it learned.",
+      "expected_output": "Treats the generic successful render as a failed reconstruction, derives source-anchored behavioral checks, requires a new candidate that exercises the demonstrated mechanics, preserves the failed artifact as regression evidence, and hands reusable production gaps to the correct skill owner.",
+      "files": [
+        "skills/learn-from-video/evals/fixtures/animated-data-story-evidence.md",
+        "skills/learn-from-video/evals/fixtures/animated-data-story-frozen-source-output-eval.md",
+        "skills/learn-from-video/evals/fixtures/generic-demo-baseline.mp4",
+        "skills/learn-from-video/evals/fixtures/generic-demo-baseline-contact-sheet.jpg",
+        "skills/learn-from-video/evals/fixtures/generic-demo-baseline-manifest.json"
+      ],
+      "assertions": [
+        "Does not accept render success, visual polish, or generic stylistic resemblance as reconstruction proof",
+        "Preserves the prior generic demo as failure evidence instead of discarding it",
+        "Derives checks from the tutorial's visible operations, state changes, and final output",
+        "Requires a candidate that exercises the source-taught mechanics with rights-safe substitute content",
+        "Keeps the frozen rubric unchanged after seeing the candidate",
+        "Produces a placement-aware repair handoff and rerun rule"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Generic inspired demo fails the learned-behavior gate",
+          "tags": ["learn-from-video", "regression", "generic-demo"],
+          "notes": "Direct regression for TASK-0073's summary-to-generic-demo failure."
+        }
+      }
+    },
+    {
+      "id": "learn_video_blocks_insufficient_evidence_01",
+      "prompt": "There is a private tutorial called “Make Cinematic Interfaces” that I watched last month. I cannot share the video, transcript, screenshots, or final output, but please learn its exact workflow and update whichever skill owns it.",
+      "expected_output": "Returns an insufficient-evidence blocker, names the minimum transcript/frame/output evidence needed, does not invent the workflow or mutate a skill, and offers a safe resumption packet.",
+      "files": [],
+      "assertions": [
+        "Does not invent source instructions, visual states, prompt details, or final output",
+        "Blocks exact reconstruction because no judgeable evidence is available",
+        "Names the minimum acceptable evidence bundle",
+        "Does not create or update a target skill",
+        "Returns a safe resume condition and preserves privacy constraints"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Missing private tutorial evidence blocks skill learning",
+          "tags": ["learn-from-video", "evidence-boundary", "privacy"],
+          "notes": "Prevents confident learning claims from title-only or inaccessible video context."
+        }
+      }
+    },
+    {
+      "id": "learn_video_reconstructs_script_led_multiscene_workflow_01",
+      "prompt": "I followed this tutorial to build a short narrated explainer. The final MP4 renders and looks polished, but I need to know whether our production workflow actually learned what the tutorial demonstrated. Inspect the supplied evidence and candidate package, then tell me what should happen next.",
+      "expected_output": "Inspects the staged evidence and real candidate, reconstructs the tutorial as observable script-led scene contracts, distinguishes render integrity from workflow fidelity, preserves the failed boundary state as regression evidence, grades the final artifact against source anchors, and returns a placement-aware owner handoff without directly mutating a target skill.",
+      "files": [
+        "skills/learn-from-video/evals/fixtures/script-led-editorial-workflow-evidence.md",
+        "skills/learn-from-video/evals/fixtures/script-led-editorial-candidate.mp4",
+        "skills/learn-from-video/evals/fixtures/script-led-editorial-candidate-contact-sheet.jpg",
+        "skills/learn-from-video/evals/fixtures/script-led-editorial-candidate-manifest.json",
+        "skills/learn-from-video/evals/fixtures/script-led-editorial-frozen-source-output-eval.md",
+        "skills/learn-from-video/evals/fixtures/script-led-editorial-regression-blank-boundary.jpg"
+      ],
+      "assertions": [
+        "Inspects the supplied evidence, MP4 or contact sheet, manifest, and regression image before judging the workflow",
+        "Separates transcript facts, frame observations, creator claims, inference, and candidate observations",
+        "Derives observable checks for narration beat to scene mapping, a stable visual system, three layer roles, foreground-first staggering, distinct motion roles, persisted controls, narration-derived scene bounds, data resolution, and mixed final output",
+        "Treats technical render success separately from source-output reconstruction quality",
+        "Preserves the round-one blank-boundary artifact as replayable failed evidence rather than replacing or ignoring it",
+        "Applies an explicit rights substitution boundary and does not require source identity, protected expression, or affiliation",
+        "Returns the literal existing-owner and missing-owner placement branches and does not directly mutate a production skill"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Script-led multiscene tutorial becomes observable reconstruction proof",
+          "tags": ["learn-from-video", "narration-timing", "regression", "editorial-motion"],
+          "notes": "Cold workflow-transfer case derived from TASK-0419. Prompt intentionally omits the expected mechanics and routing answer."
+        }
+      }
+    }
+  ]
+}

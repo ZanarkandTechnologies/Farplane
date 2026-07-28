@@ -1,0 +1,40 @@
+{
+  "fixture": "animated-data-story-candidate",
+  "artifact": "animated-data-story-candidate.mp4",
+  "contact_sheet": "animated-data-story-candidate-contact-sheet.jpg",
+  "rights": {
+    "status": "clean-room",
+    "source_data_reused": false,
+    "source_copy_reused": false,
+    "source_media_reused": false,
+    "content": "original illustrative civic-comment data",
+    "fonts": "system fonts"
+  },
+  "media": {
+    "duration_seconds": 12,
+    "fps": 30,
+    "width": 480,
+    "height": 270,
+    "scene_boundaries_seconds": [0, 4, 8, 12]
+  },
+  "bars": {
+    "visible_zero_baseline": true,
+    "final_values": [38, 27, 21, 14],
+    "labels_finish_on_values": true
+  },
+  "lattice": {
+    "shape": "semicircle",
+    "seat_count": 72,
+    "reveal_order": "final_x_ascending",
+    "revealed_position_shift_px": 0
+  },
+  "lines": {
+    "series_count": 3,
+    "draw_order": "chronological",
+    "direct_endpoint_labels": true,
+    "endpoint_boil_amplitude_px": 0,
+    "text_boil_amplitude_px": 0,
+    "inner_point_boil_amplitude_px_max": 1.7,
+    "seeded": true
+  }
+}
