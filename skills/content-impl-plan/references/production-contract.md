@@ -20,7 +20,8 @@ idea + icp + evidence + brand_kit? + tasty_pack? + invocation_policy
   -> compile_story: causal beats + viewer-state turns + persona lenses
   -> compose_elements: creative hypothesis + chosen/rejected leverage map
   -> choose_assets: jobs + evidence levels + provenance + rights
-  -> discover_assets: candidates + rights/fit + selected file | searched_no_fit
+  -> discover_assets: candidates + rights/fit
+     + selected_source | inspiration_for_generation | searched_no_reference
   -> gather_scene_assets: background + main topic + foreground per scene
   -> storyboard: low-fi visual approval packet tied to element ids
   -> select_timing_master: voiceover | music | source_video | none
@@ -104,7 +105,8 @@ media_ready: selected elements have resolved golden-example media refs or
              accepted discovered source files.
 regen_ready: selected visual elements have complete example + recipe advisor
              packets plus an Asset Advisor discovery receipt ending in
-             searched_no_fit, or the brief explicitly requires generation.
+             inspiration_for_generation or searched_no_reference, or the
+             brief explicitly requires generation.
              This state permits the named raster/video generation owner; it
              does not unlock Remotion until generated files are accepted.
 semantic_only: taste descriptions exist but no reusable media or generation
@@ -132,7 +134,8 @@ Requires:
   provenance, rights, and acceptance; wallpaper rejected or quarantined;
 - Asset Advisor candidate-discovery receipts for every missing visual, with
   queries, candidate links or asset IDs, rights/fit decisions, and a selected
-  file, evidenced `searched_no_fit`, or explicit generation requirement;
+  file, `inspiration_for_generation`, `searched_no_reference`, or explicit
+  generation requirement;
 - no custom-created SVG animation assets, SVG/JSX scene illustrations, or
   programmatic vector asset substitutes; provenance-bearing existing SVG media
   remains allowed as static source material;

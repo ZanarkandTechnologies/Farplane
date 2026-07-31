@@ -50,6 +50,14 @@ Use this as the ordered checklist whenever `ai-video-advisor` is active.
   `goldenRecipe` prompt into the actual provider input. Record the element ID
   and target output duration in the generation receipt; block title-only or
   recipe-only handoffs.
+- [ ] When `asset-advisor` routes `inspired_generation`, bind its rights-safe
+  reference media, transferable composition/lighting/palette/material/camera
+  traits, and must-not-copy constraints into the actual provider input and
+  saved prompt packet. When it routes `original_generation`, preserve the
+  evidenced no-reference or explicit-generation reason, rights/likeness note,
+  output path, and acceptance check. Do not copy a reference's exact
+  composition, identifiable likeness, signature, logo, or protected
+  expression.
 - [ ] When the caller has a master audio plan, set provider audio generation
   off where the live schema supports it, derive target clip duration/handles
   from the observed master duration and cue sheet, and record any exception by

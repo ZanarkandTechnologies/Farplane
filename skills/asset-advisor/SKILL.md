@@ -27,9 +27,11 @@ example videos, storyboards, and source media.
 
 This skill owns asset inventory, recreation strategy, route selection, rights
 and source notes, candidate discovery, and handoff packaging. It must search
-for useful existing assets before routing generation. It does not generate
-images, render videos, compose Remotion timelines, record audio, or publish
-content.
+for useful existing assets before routing generation unless the brief
+explicitly requires an original generated asset. Search is not stock-only: it
+may select a rights-cleared source or create a bounded inspiration packet for
+original raster/video generation. It does not generate images, render videos,
+compose Remotion timelines, record audio, or publish content.
 
 ## Skill Signature
 
@@ -44,7 +46,8 @@ state:
 
 gates:
   source_material_named; rights_or_usage_risk_noted; asset_units_decomposed;
-  candidate_discovery_receipt_complete; searched_no_fit_evidenced_when_used;
+  candidate_discovery_receipt_complete; asset_resolution_decision_complete;
+  inspiration_packet_complete_when_used;
   no_custom_svg_animation_assets;
   reference_elements_mapped; golden_examples_and_recipes_bound;
   recreate_reuse_generate_decisions_made;
@@ -59,7 +62,8 @@ fails:
   generation_prompt_without_asset_inventory; remotion_handoff_without_files;
   one_tool_for_every_asset; css_text_only_for_inspiration_led_video;
   inspiration_elements_unmapped; title_only_element_handoff;
-  generation_before_asset_search; custom_svg_animation_asset;
+  ungrounded_generation_without_explicit_brief; inspiration_without_trait_map;
+  reference_copy_disguised_as_generation; custom_svg_animation_asset;
   jsx_or_programmatic_drawing_as_asset_substitute
 ```
 
@@ -77,7 +81,9 @@ storyboard is too vague to search, first turn each scene into a concrete asset
 need from the available narration/reference; block only the unresolved rows. If
 search tooling or required scene meaning is genuinely unavailable, return an
 exact blocker rather than a production-ready plan or a table whose only result
-is `pending`.
+is `pending`. Tool unavailability is not `searched_no_reference`; that result
+requires an executed search receipt with specific candidate pages or asset IDs
+and fit decisions.
 
 For Brand Kit or Tasty Pack inputs, treat complete element realization packets
 as the source of truth. Every relevant `visual`, `storyboard`, `editing`, `format`, or
@@ -91,8 +97,9 @@ the reference leverage map.
 
 For each selected element, require its complete realization packet. Use the
 resolved `goldenExample` plus `goldenRecipe` together to choose `reuse`,
-`source`, `regenerate`, `capture`, or `compose`; return an incomplete handoff
-instead of reducing the element to title/description.
+`source`, `inspired_generation`, `original_generation`, `capture`, or
+`compose`; return an incomplete handoff instead of reducing the element to
+title/description.
 
 When a Tasty Pack element includes an `anchor` such as `contact_sheet`,
 `frame_08_28.58s`, `frames 1-4`, or `OG thumbnail`, first try to resolve
@@ -111,13 +118,26 @@ the output is explicitly downgraded to `semantic_storyboard_only`.
     constraints, and artifact owner.
   - [ ] Read `qa_checklist.md` as preflight guardrails.
 - [ ] 2. Decompose the asset graph.
-  - [ ] Before choosing generation, search for useful existing assets. Inspect
+  - [ ] Before choosing generation, search for useful existing assets unless
+    the brief explicitly requires an original generated asset. Inspect
     supplied/local media and Resource Bank/reference anchors, then suitable
     web, stock, archive, icon/illustration, footage, texture, or overlay
     libraries for the asset class. Record the exact queries, candidate URLs or
     asset IDs, preview/metadata evidence, rights or license status, fit/reject
-    rationale, and selected file. `searched_no_fit` is valid only when this
-    receipt exists; “custom is faster” is not a search result.
+    rationale, and one result:
+    `selected_source`, `inspiration_for_generation`, or
+    `searched_no_reference`. A search-results page is not a candidate URL;
+    retain the specific asset page and verify its rights basis. “Custom is
+    faster” is not a search result.
+  - [ ] Resolve every missing visual with the hybrid decision ladder:
+    `reuse -> source -> inspired_generation -> original_generation`.
+    `inspired_generation` requires a rights-safe reference set plus a
+    transferable-trait map for composition, lighting, palette, texture,
+    material, or camera relationship; it must also name protected expression,
+    likeness, logos, signatures, or exact composition that the output must not
+    copy. `original_generation` is valid after `searched_no_reference` or when
+    the brief explicitly requires generation, and still needs a concrete
+    prompt, owner, output path, rights/likeness note, and acceptance check.
   - [ ] In an approved execution run, perform those searches now with the
     available image/web/library/Resource Bank tools. Do not return every row as
     `pending discovery` and call the handoff ready. Preserve at least the
@@ -126,8 +146,8 @@ the output is explicitly downgraded to `semantic_storyboard_only`.
   - [ ] List footage, stills, frames, clips, avatars, voiceover, music, SFX,
     captions, overlays, fonts, logos, data, product shots, motion/edit
     references, and final render needs.
-  - [ ] Mark each asset as `reuse`, `source`, `regenerate`, `capture`,
-    `compose`, or `unknown`.
+  - [ ] Mark each asset as `reuse`, `source`, `inspired_generation`,
+    `original_generation`, `capture`, `compose`, or `unknown`.
   - [ ] Treat `compose` as arranging or treating accepted source media, not
     drawing new content assets. Ban custom-created SVG animation assets and
     SVG/JSX/programmatic vector substitutes for scene illustrations,
@@ -158,9 +178,12 @@ the output is explicitly downgraded to `semantic_storyboard_only`.
     visual continuity, audio continuity, and platform-specific constraints.
 - [ ] 4. Choose owner routes.
   - [ ] Route still image creation or editing to `ai-image-advisor` or
-    `imagegen` only after existing-asset discovery returns `searched_no_fit` or
-    the brief explicitly requires generation. Request raster/project media
-    outputs rather than custom SVG animation assets.
+    `imagegen` when the chosen result is `inspired_generation` or
+    `original_generation`, or when the brief explicitly requires generation.
+    Pass the complete inspiration or original-generation packet and request
+    raster/project media outputs rather than custom SVG animation assets. Every
+    packet must explicitly reject SVG, JSX, canvas, and programmatic-vector
+    scene substitutes.
   - [ ] Route model-native clips to `ai-video-advisor`.
   - [ ] Route persistent presenter or character direction to `avatar-advisor`.
   - [ ] Route voice, music, SFX, Foley, and mix notes to `audio-advisor`.
@@ -169,6 +192,11 @@ the output is explicitly downgraded to `semantic_storyboard_only`.
 - [ ] 5. Produce the handoff.
   - [ ] Include an asset table, file/source map, generation prompts or prompt
     briefs, acceptance checks, missing inputs, and next production owner.
+  - [ ] For every generation packet, name the expected final raster/video path,
+    keep `accepted_file_ref` empty until the output is inspected, and emit
+    `remotion_handoff: blocked_pending_accepted_file` even when Remotion is not
+    part of the immediate task. A prompt or successful provider job never
+    counts as an accepted scene asset.
   - [ ] Apply `qa_checklist.md` again before calling the asset plan ready.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
@@ -180,8 +208,15 @@ the output is explicitly downgraded to `semantic_storyboard_only`.
 | --- | --- | --- | --- | --- | --- |
 
 ## Asset Discovery Receipt
-| Asset Need | Source Classes | Queries | Candidate Links / IDs | Rights | Fit Decision | Selected File / `searched_no_fit` |
+| Asset Need | Source Classes | Queries | Candidate Links / IDs | Rights | Fit Decision | Result |
 | --- | --- | --- | --- | --- | --- | --- |
+
+Result is exactly `selected_source`, `inspiration_for_generation`, or
+`searched_no_reference`.
+
+## Generation Packets
+| Packet | Decision | Inspiration refs | Transferable traits | Must not copy | Prompt / Direction | Owner | Expected Output | Accepted File | Remotion Handoff | Acceptance Check |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 
 ## Inspiration Element Map
 | Element | Anchor | Asset Decision | Output / Blocker |
@@ -233,9 +268,11 @@ the output is explicitly downgraded to `semantic_storyboard_only`.
 - Do not collapse avatar, audio, stills, and model-native clips into one generic
   prompt. Each asset class has different continuity and proof needs.
 - Do not respond to missing assets by drawing custom SVG/JSX illustrations or
-  procedural vector stand-ins. Search first, preserve the candidate receipt,
-  then route a raster/video generation owner only when no acceptable asset is
-  found or generation is an explicit requirement.
+  procedural vector stand-ins. Search first when the brief allows it, then
+  either use the selected source, convert the strongest references into a
+  bounded inspiration packet for original generation, or route
+  original-generation after an evidenced no-reference result. Inspiration
+  transfers attributes, not a specific photograph's protected expression.
 
 ## Reference Map
 
@@ -259,8 +296,8 @@ the output is explicitly downgraded to `semantic_storyboard_only`.
 - `asset_inventory`: decomposed asset table with source, decision, owner, and
   acceptance check.
 - `asset_discovery_receipt`: searched source classes, exact queries, candidate
-  links or IDs, rights/fit decisions, selected files, and evidenced
-  `searched_no_fit` rows.
+  links or IDs, rights/fit decisions, selected files, inspiration references,
+  and evidenced `searched_no_reference` rows.
 - `recreation_plan`: what to preserve, change, regenerate, source, or compose.
 - `generation_routes`: concrete next-owner handoffs for each asset class.
 - `blocked_report`: missing source material, rights uncertainty, missing

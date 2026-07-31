@@ -43,7 +43,9 @@ AssetLayer {
   story_role
   job
   discovery_receipt_ref
-  discovery_result: selected_source | searched_no_fit | explicit_generation_requirement
+  discovery_result:
+    selected_source | inspiration_for_generation |
+    searched_no_reference | explicit_generation_requirement
   source_ref_or_generation_packet
   owner
   rights_note
@@ -179,9 +181,11 @@ An accepted layer must point to a concrete existing file. A complete
 generation/source packet may make the row `asset_packet_ready`, but it is not
 an accepted layer and cannot pass creative lock. Every missing layer first
 needs an Asset Advisor discovery receipt with candidate links or asset IDs,
-rights/fit decisions, and either a selected source, evidenced
-`searched_no_fit`, or an explicit brief requirement for generation. Only the
-last two outcomes may route raster/video generation.
+rights/fit decisions, and either a selected source,
+`inspiration_for_generation`, `searched_no_reference`, or an explicit brief
+requirement for generation. The last three outcomes may route raster/video
+generation; inspired generation must include transferable traits and explicit
+must-not-copy constraints.
 
 Custom-created SVG animation assets, SVG/JSX scene illustrations, and
 programmatic vector stand-ins never satisfy the layer contract. Existing
@@ -246,7 +250,8 @@ storyboard_draft_ready
 - `asset_packet_ready`: all three layer packets are complete, with owners,
   Asset Advisor discovery receipts, rights notes, expected outputs, and
   acceptance checks. A generation packet is complete only when discovery
-  records `searched_no_fit` or the brief explicitly requires generation.
+  records `inspiration_for_generation`, `searched_no_reference`, or the brief
+  explicitly requires generation.
   Outputs may still be missing or unaccepted, so this state never unlocks
   Remotion.
 - `creative_lock_passed`: all three accepted files exist, their dimensions and
@@ -298,7 +303,7 @@ leaving them as category labels:
 
 ```text
 shared_background_packet:
-  owner: asset-advisor -> ai-image-advisor only after searched_no_fit
+  owner: asset-advisor -> ai-image-advisor after inspired_generation or original_generation
   discovery_receipt: queries + candidate links/IDs + rights/fit decisions
   source_or_generation: selected source or complete raster generation prompt
   rights_note: required license/receipt
@@ -306,7 +311,7 @@ shared_background_packet:
   acceptance: continuity, contrast, dimensions
 
 foreground_packet:
-  owner: asset-advisor -> ai-image-advisor only after searched_no_fit
+  owner: asset-advisor -> ai-image-advisor after inspired_generation or original_generation
   discovery_receipt: queries + candidate links/IDs + rights/fit decisions
   source_or_generation: selected source or complete raster generation prompt
   rights_note: required license/receipt
@@ -325,7 +330,7 @@ editorial chart scene, a safe inferred example is:
 ```text
 shared_background_packet:
   owner: asset-advisor -> ai-image-advisor
-  discovery_result: searched_no_fit
+  discovery_result: searched_no_reference
   source_or_generation: "16:9 continuous editorial paper/map plate,
     low-contrast grayscale, no text, no panels or frames"
   rights_note: generated output receipt; no protected marks
@@ -334,7 +339,7 @@ shared_background_packet:
 
 foreground_packet:
   owner: asset-advisor -> ai-image-advisor
-  discovery_result: searched_no_fit
+  discovery_result: searched_no_reference
   source_or_generation: "rights-safe transparent contextual object tied to
     the chart claim; clean isolated cutout; no card, label, or container"
   rights_note: licensed/public-domain source or generated-output receipt

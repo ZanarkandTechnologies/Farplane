@@ -112,13 +112,13 @@
     {
       "id": "storyboard_asset_discovery_before_remotion_01",
       "prompt": "Storyboard a 30-second editorial reel from this voiceover: “The first agent keeps the customer goal. The handoff keeps only a summary. The second agent improves the wrong version. Both outputs look competent. One shared ticket exposes the mismatch before launch.” No scene imagery exists yet. The editor proposes drawing custom SVG characters, props, and backgrounds directly in Remotion to save time.",
-      "expected_output": "Produces executable visual briefs for every scene; Routes missing imagery to Asset Advisor candidate discovery before generation or Remotion; Names subject, material identity, source classes, rights constraint, framing, and acceptance check; Rejects custom-created SVG or JSX scene assets; Blocks production until accepted files or evidenced searched_no_fit generation routes exist",
+      "expected_output": "Produces executable visual briefs for every scene; Routes missing imagery to Asset Advisor candidate discovery before generation or Remotion; Names subject, material identity, source classes, rights constraint, framing, and acceptance check; Allows selected_source, inspiration_for_generation, or searched_no_reference plus original_generation as valid resolution outcomes; Rejects custom-created SVG or JSX scene assets; Blocks production until accepted files exist",
       "files": [],
       "assertions": [
         "Produces a searchable asset brief for every scene with concrete subject, material identity, source classes, rights constraint, framing, and acceptance check",
         "Routes missing imagery to Asset Advisor candidate discovery before image or video generation and before Remotion",
         "Rejects custom-created SVG animation assets and SVG or JSX scene substitutes",
-        "Blocks the Remotion handoff until required visuals have accepted files or evidenced searched_no_fit generation routes"
+        "Blocks the Remotion handoff until required visuals have accepted files; generation packets alone do not unlock production"
       ],
       "metadata": {
         "farplane": {

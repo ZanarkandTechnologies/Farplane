@@ -21,6 +21,12 @@ Use this as the ordered checklist whenever `ai-image-advisor` is active.
 
 - [ ] Classify the request as text-to-image, image-edit, inpainting, multi-reference, text-rendering, style-LoRA, fast-cheap, product-mockup, product-photography, social-visual, carousel, background-removal, upscaling, reference-asset creation, or frontend-bound asset.
 - [ ] For idea plus Tasty Pack/reference planning, use `content-impl-plan`; for asset inventory or recreation planning, use `asset-advisor`.
+- [ ] When `asset-advisor` routes `inspired_generation`, bind its rights-safe
+  reference assets, transferable-trait map, and must-not-copy constraints into
+  the actual model input and save them with the prompt. When it routes
+  `original_generation`, preserve the evidenced no-reference or explicit-
+  generation reason, rights/likeness note, output path, and acceptance check.
+  Do not collapse either packet into generic style prose.
 - [ ] When a content plan selects a creative element to condition image work,
   require its complete realization packet and place both the resolved
   `goldenExample` asset and `goldenRecipe` prompt into the actual model input.
@@ -74,9 +80,12 @@ Copied upstream references are read-only usage docs. Do not run `npx skills add 
 3. Load the specific reference file only after a family is selected.
 4. Capability-gate the CLI path with `command -v belt`, `belt --help`, `belt app get <app>`, and `belt app sample <app>` before trusting any cached schema.
 5. Treat `belt app run` as external compute/spend. Do not run it until that cost is acceptable for this task.
-6. Save project assets, prompt/input JSON, result JSON, and notes inside the workspace.
-7. For long-running or batched jobs, use the async workflow below instead of blocking the whole pass.
-8. If the asset is used in a web surface, hand it to `frontend-craft` and verify loading, dimensions, alt text, responsive crops, and visual quality.
+6. Preserve any `inspired_generation` reference paths, transferable traits,
+   and must-not-copy constraints—or the `original_generation` reason—in the
+   saved prompt/input packet.
+7. Save project assets, prompt/input JSON, result JSON, and notes inside the workspace.
+8. For long-running or batched jobs, use the async workflow below instead of blocking the whole pass.
+9. If the asset is used in a web surface, hand it to `frontend-craft` and verify loading, dimensions, alt text, responsive crops, and visual quality.
 
 ## Best Current Defaults
 

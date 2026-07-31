@@ -32,16 +32,17 @@
     {
       "id": "asset_advisor_storyboard_missing_assets_01",
       "prompt": "A five-scene vertical toy-store storyboard needs: an opening wooden train on a playroom floor; a parent comparing two STEM kits; the supplied product screenshot; a close-up of recyclable packaging; and a logo end frame. Only the logo and screenshot exist, and audio is already handled. Build the missing-asset inventory. The editor says custom SVG illustrations would be faster than searching.",
-      "expected_output": "Marks existing assets for reuse; Executes suitable local, Resource Bank, reference, web, stock, or library searches when tools are available and records candidate links, rights, and fit decisions; Otherwise returns an exact discovery blocker without claiming readiness; Uses searched_no_fit only with evidence before routing generation; Rejects custom-created SVG animation assets while allowing provenance-bearing existing SVG media; States blockers; Prepares a Remotion-ready handoff only after discovery",
+      "expected_output": "Marks existing assets for reuse; Executes suitable local, Resource Bank, reference, web, stock, or library searches when tools are available and records candidate links, rights, and fit decisions; Otherwise returns an exact discovery blocker without claiming readiness; Resolves each missing visual as source, inspired_generation, or original_generation with the required receipt and packet; Rejects custom-created SVG animation assets while allowing provenance-bearing existing SVG media; States blockers; Prepares a Remotion-ready handoff only after accepted asset files exist",
       "files": [],
       "assertions": [
         "Marks existing assets for reuse",
         "Executes suitable source searches and records exact queries, candidate links or asset IDs, rights or license status, and fit decisions when search tools are available; otherwise returns an exact blocker and does not claim the handoff ready",
-        "Uses searched_no_fit only with a candidate discovery receipt before routing raster or video generation",
+        "Uses selected_source, inspiration_for_generation, or searched_no_reference as the discovery result before routing raster or video generation",
+        "For inspired generation, preserves rights-safe references, transferable traits, must-not-copy constraints, prompt, owner, output path, and acceptance check",
         "Rejects custom-created SVG animation assets and SVG or JSX scene substitutes while allowing accepted existing SVG source media with provenance",
         "Marks missing visuals for sourcing or downstream generation",
         "States blockers",
-        "Prepares a Remotion-ready handoff only after discovery produces accepted files or evidenced generation routes; otherwise returns a blocked handoff"
+        "Prepares a Remotion-ready handoff only after accepted source files or materialized accepted generated outputs exist; a generation packet alone remains blocked"
       ],
       "metadata": {
         "farplane": {
@@ -55,7 +56,7 @@
           "anti_patterns": [
             "Ignores existing assets",
             "Draws custom SVG illustrations because that is faster than searching",
-            "Claims searched_no_fit without candidate links and rights or fit decisions",
+            "Routes inspiration-led generation without reference provenance, transferable traits, or must-not-copy constraints",
             "Skips missing-file blockers",
             "Fails to name owner routes"
           ]
@@ -90,6 +91,32 @@
             "Treats concept art as enough without start/end frame assets",
             "Ignores recurring character or prop consistency",
             "Hands Remotion only a mood board with no file/source map"
+          ]
+        }
+      }
+    },
+    {
+      "id": "asset_advisor_hybrid_source_or_generate_01",
+      "prompt": "We need a high-end monochrome documentary still of a tailored negotiator beside distressed architecture. Web search is available in this run. Search visual libraries such as Unsplash for useful assets and inspiration. If a source photo is not the best final fit, generate an original raster image from the useful visual traits. Do not create SVG artwork.",
+      "expected_output": "Searches useful source classes and records at least one specific asset-page URL or asset ID per material need, rights status or an explicit verification blocker, and fit decisions; Search-results URLs may appear only as query evidence and never as the sole candidate evidence; Unverified rights block direct reuse but may remain provenance for a bounded non-copying inspiration packet; May select a source or choose inspiration_for_generation even when references are useful; For inspired generation maps transferable composition, lighting, palette, texture, material, and camera traits while naming exact composition, likeness, logos, signatures, and protected expression that must not be copied; If and only if no useful reference exists, records searched_no_reference and emits an original_generation packet; Routes raster output to imagegen or ai-image-advisor; Blocks Remotion until the generated file exists and passes acceptance; Rejects custom SVG scene art",
+      "files": [],
+      "assertions": [
+        "Searches source candidates and records at least one specific asset-page URL or asset ID per material need, rights status or an explicit verification blocker, and fit decisions; search-results pages may appear only as query evidence and cannot be the sole candidate evidence; unverified rights block direct reuse",
+        "Allows inspiration_for_generation as a successful discovery outcome rather than requiring searched_no_reference",
+        "Inspired generation includes transferable traits and explicit must-not-copy constraints",
+        "If no useful reference exists, the fallback produces an original_generation raster packet with prompt, owner, output path, rights note, and acceptance check; this assertion is not applicable when inspiration_for_generation is selected",
+        "Blocks Remotion until a generated raster file exists and is accepted",
+        "Rejects custom SVG, JSX, or programmatic vector scene substitutes"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Uses search as either a source route or an original-generation inspiration route",
+          "tags": ["skill", "asset-advisor", "inspiration", "image-generation", "svg"],
+          "anti_patterns": [
+            "Treats stock search as the only valid asset route",
+            "Copies one reference photograph's exact expression",
+            "Generates without provenance or acceptance checks",
+            "Draws the scene as custom SVG"
           ]
         }
       }

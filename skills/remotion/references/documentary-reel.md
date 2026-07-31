@@ -62,10 +62,13 @@ documentary_scene:
   expected blend behavior;
 - search supplied/local media, Resource Bank/reference anchors, and suitable
   archive/stock/library sources; retain candidate links or asset IDs,
-  rights/fit decisions, and the selected file or evidenced `searched_no_fit`;
+  rights/fit decisions, and one result: selected source,
+  `inspiration_for_generation`, or `searched_no_reference`;
 - source particles, haze, dust, scratches, light artifacts, mattes, shadows,
   texture plates, backgrounds, subjects, and foregrounds as concrete files;
-  after `searched_no_fit`, route raster/video generation to its owning advisor;
+  for `inspiration_for_generation`, pass rights-safe references, transferable
+  traits, and must-not-copy constraints to the owning raster/video advisor;
+  after `searched_no_reference`, route an original-generation packet;
 - inspect alpha or black-background suitability, unwanted gray levels, hard
   edges, loops, and resolution; prescribe crop, level cleanup, matte, feather,
   or regeneration work with an acceptance check;

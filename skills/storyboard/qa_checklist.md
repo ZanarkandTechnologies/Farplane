@@ -50,8 +50,11 @@ storyboard_check(creative_ticket, production_handoff?)
 - [ ] `production_route`: The handoff names the next owner, such as `remotion`,
   `video-production`, `ai-video-advisor`, `remotion-render`, or
   `social-content`, with required inputs and blocker conditions. When visuals
-  are missing, `asset-advisor` candidate discovery precedes generation and
-  Remotion; accepted static SVG source media remains allowed with provenance.
+  are missing, `asset-advisor` candidate discovery precedes generation unless
+  the brief explicitly requires an original generated asset. Discovery may
+  select a source, create a rights-safe inspiration packet for original
+  generation, or record no usable reference and route original generation.
+  Accepted static SVG source media remains allowed with provenance.
 - [ ] `proof_observable`: Done/proof names the review, still-frame, render,
   storyboard, script, or asset evidence needed before claiming production
   readiness. For deliberate breaks, the human sees the overview strip plus all

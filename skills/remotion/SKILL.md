@@ -35,15 +35,17 @@ Use this as the ordered checklist whenever `remotion` is active.
 - [ ] Route asset inventory, candidate discovery, rights/fit decisions, and
   recreation planning through [asset-advisor](../asset-advisor/SKILL.md).
   Block content-production authoring when required visuals have no accepted
-  source file or evidenced `searched_no_fit` generation route.
+  source file or complete `inspired_generation` / `original_generation`
+  packet with a materialized accepted output.
 - [ ] Do not create custom SVG animation assets or use SVG/JSX/programmatic
   vector drawings as substitutes for missing scene illustrations, characters,
   props, backgrounds, textures, or diagrams. Existing user-supplied,
   brand-owned, licensed, or discovered SVG files may be consumed as accepted
   static media and animated with Remotion transforms, masks, crops, or
   treatment. A generation route counts only when Asset Advisor records
-  candidate discovery and `searched_no_fit` (or the brief explicitly requires
-  generation); `regen_ready` without that receipt does not bypass discovery.
+  `inspiration_for_generation`, `searched_no_reference`, or an explicit
+  generation requirement and supplies the corresponding packet;
+  `regen_ready` without that receipt does not bypass discovery.
 - [ ] For a voice-led documentary or editorial reel made from layered stills
   and overlay media, load the
   [documentary reel production contract](references/documentary-reel.md).
@@ -67,9 +69,9 @@ Use this as the ordered checklist whenever `remotion` is active.
   semantic element descriptions, label the render `semantic_storyboard_only`
   and do not claim Tasty Pack asset reuse. For visual scene assets,
   `regen_ready` additionally requires an Asset Advisor discovery receipt ending
-  in `searched_no_fit` or an explicit brief requirement for generation; it
-  permits the named raster/video generation owner but does not unlock Remotion
-  until accepted files exist.
+  in `inspiration_for_generation`, `searched_no_reference`, or an explicit
+  brief requirement for generation. It permits the named raster/video
+  generation owner but does not unlock Remotion until accepted files exist.
 - [ ] For stitched model-native clips, probe every source clip duration,
   framerate, dimensions, and frame count before sequencing; set Remotion
   `Sequence` durations from observed frame counts, not assumed seconds. A

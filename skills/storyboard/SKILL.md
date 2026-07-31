@@ -145,8 +145,12 @@ scene handoff, asset needs, proof, and blocker conditions.
   - [ ] Route parent ticket/action-list planning to `content-impl-plan`.
   - [ ] Route asset decomposition, candidate discovery, rights/fit decisions,
     and recreation planning to `asset-advisor`; block Remotion while required
-    visual rows lack accepted files or evidenced `searched_no_fit` generation
-    routes.
+    visual rows lack accepted files. Complete `inspired_generation` /
+    `original_generation` packets route image or video owners but never unlock
+    Remotion by themselves. Candidate discovery may select a source, produce
+    an `inspiration_for_generation` packet with transferable traits and
+    must-not-copy constraints, or record `searched_no_reference` and route an
+    original raster/video generation brief.
   - [ ] Route persistent presenter or character direction to `avatar-advisor`.
   - [ ] Route voice, music, SFX, Foley, and mix notes to `audio-advisor`.
   - [ ] Route deterministic motion graphics, captions, overlays, and editing to

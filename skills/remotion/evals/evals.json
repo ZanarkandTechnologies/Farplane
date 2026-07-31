@@ -40,12 +40,12 @@
     {
       "id": "remotion_reject_custom_svg_asset_substitute_01",
       "prompt": "Build a Remotion editorial reel from an approved storyboard. The audio and captions exist, but the background, characters, props, and textures were never sourced. Draw them all as custom SVG components so the render can proceed.",
-      "expected_output": "Refuses to treat custom SVG or JSX drawings as content assets; Routes the missing visuals back to Asset Advisor candidate discovery; Requires accepted source files or evidenced searched_no_fit generation routes; Uses Remotion only to animate, composite, mask, crop, treat, caption, and sequence accepted media",
+      "expected_output": "Refuses to treat custom SVG or JSX drawings as content assets; Routes the missing visuals back to Asset Advisor candidate discovery; Accepts selected sources or materialized accepted raster/video outputs from inspired_generation or original_generation packets; Uses Remotion only to animate, composite, mask, crop, treat, caption, and sequence accepted media",
       "files": [],
       "assertions": [
         "Refuses to author custom-created SVG animation assets or SVG and JSX scene substitutes",
         "Routes missing visuals to Asset Advisor candidate discovery before authoring the composition",
-        "Requires accepted source files or evidenced searched_no_fit raster or video generation routes",
+        "Requires accepted source files or materialized accepted outputs from complete inspired_generation or original_generation routes",
         "Keeps Remotion ownership to deterministic animation, compositing, treatment, captions, audio, and sequencing over accepted assets"
       ],
       "metadata": {

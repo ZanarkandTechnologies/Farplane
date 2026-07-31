@@ -28,7 +28,11 @@ template_uses:
   without an explicit format rationale and persona acceptance. Every missing
   visual also has an Asset Advisor discovery receipt with searched source
   classes, queries, candidate links or asset IDs, rights/fit decisions, and an
-  accepted file or `searched_no_fit` before generation is routed.
+  exact result: `selected_source`, `inspiration_for_generation`, or
+  `searched_no_reference`. Inspired generation includes a transferable-trait
+  map, must-not-copy constraints, prompt/owner/output, provenance, and an
+  acceptance check; original generation follows evidenced no-reference or an
+  explicit generation brief.
 - [ ] `scene-asset-bundles`: Every production scene has a visible manifest row
   containing scene, beat, shared background, main-topic asset, foreground
   asset, layer/reveal order, source or generation packet, owner, rights note,

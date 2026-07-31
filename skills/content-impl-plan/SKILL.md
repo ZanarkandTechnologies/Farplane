@@ -51,7 +51,8 @@ state:
 gates:
   idea_bound; icp_contract_resolved; audience_and_promise_named;
   causal_story_and_viewer_turns_named; asset_evidence_decisions_complete;
-  asset_discovery_receipts_complete; no_custom_svg_animation_assets;
+  asset_discovery_receipts_complete; hybrid_asset_resolution_complete;
+  no_custom_svg_animation_assets;
   scene_asset_bundles_complete; genuine_asset_files_accepted;
   persona_review_passed; creative_direction_composed;
   brand_policy_preserved_when_supplied;
@@ -76,7 +77,8 @@ fails:
   missing_scene_asset_triad; renamed_box_as_asset;
   chart_as_complete_scene; creative_lock_from_planned_paths;
   remotion_before_asset_discovery; custom_svg_animation_asset;
-  jsx_or_programmatic_drawing_as_asset_substitute
+  jsx_or_programmatic_drawing_as_asset_substitute;
+  inspiration_generation_without_trait_or_avoidance_map
 ```
 
 ## Production Contract
@@ -228,13 +230,24 @@ SceneDirection {
     chart containers, generic document mocks, generic silhouettes, and
     unmaterialized filenames do not count as gathered layers. A chart is a
     main-topic asset and still needs background and foreground assets.
-  - [ ] Enforce discovery before generation. Route every missing visual layer
+  - [ ] Enforce discovery before generation unless the brief explicitly
+    requires an original generated asset. Route every missing visual layer
     through `asset-advisor` for a visible candidate-search receipt covering
     local/source media, Resource Bank or supplied references, and suitable
     web/stock/library sources. The receipt must preserve queries, candidate
-    links or asset IDs, rights/licensing notes, fit decisions, and the selected
-    file or `searched_no_fit`. Do not route generation merely because drawing a
+    links or asset IDs, rights/licensing notes, fit decisions, and exactly one
+    result: `selected_source`, `inspiration_for_generation`, or
+    `searched_no_reference`. Do not route generation merely because drawing a
     substitute would be faster.
+  - [ ] Resolve each missing visual through
+    `reuse -> source -> inspired_generation -> original_generation`.
+    An inspired-generation packet preserves rights-safe reference links,
+    transferable traits such as composition, lighting, palette, texture,
+    material, and camera relationship, plus explicit protected expression,
+    likeness, logos, signatures, and exact composition that must not be copied.
+    Original generation follows `searched_no_reference` or an explicit
+    generation brief. Both routes require a raster/video owner, prompt, output
+    path, provenance/rights note, and acceptance check.
   - [ ] Distinguish planning from approved execution. A planning artifact may
     carry unresolved discovery rows and remain below `creative_lock`; once the
     operator approves execution, activate `asset-advisor` in the same work loop
@@ -246,8 +259,10 @@ SceneDirection {
     primitives, or programmatic vector art. Existing user-supplied,
     brand-owned, licensed, or discovered SVG files may be accepted as static
     source media and transformed in Remotion. After a documented
-    `searched_no_fit`, route new still or moving imagery to the appropriate
-    image/video owner as raster or video media, not a custom SVG animation.
+    `inspiration_for_generation`, `searched_no_reference`, or an explicit
+    generation requirement, route new still or moving imagery to the
+    appropriate image/video owner as raster or video media, not a custom SVG
+    animation.
   - [ ] Record every row as exactly `storyboard_draft_ready`,
     `asset_packet_ready`, or `creative_lock_passed`. Use the lowest row state as
     production state. Do not route Remotion until accepted files exist for all
@@ -320,9 +335,10 @@ SceneDirection {
     `media_ready`, `regen_ready`, `semantic_only`, or `blocked`; do not route to
     Remotion as production until pinned visual/audio/editing elements have
     accepted media files. For visual scene assets, `regen_ready` follows
-    `references/production-contract.md`: it requires Asset Advisor discovery
-    evidence and permits only the named raster/video generation owner; a
-    regeneration packet never unlocks Remotion by itself.
+    `references/production-contract.md`: it requires an Asset Advisor
+    `inspiration_for_generation`, `searched_no_reference`, or explicit
+    generation result and permits only the named raster/video generation
+    owner; a generation packet never unlocks Remotion by itself.
   - [ ] Emit a creative hypothesis explaining why the idea, approved Brand Kit
     identity, and selected Tasty mechanics should work together and what would
     falsify that hypothesis.
@@ -356,7 +372,8 @@ SceneDirection {
     grids will be needed are `storyboard_draft_ready`, not human-review-ready.
   - [ ] Route asset inventory, candidate discovery, rights/fit decisions, and
     recreation decisions to `asset-advisor`; require its discovery receipt
-    before any image/video generation handoff or Remotion production route.
+    and hybrid resolution decision before any image/video generation handoff
+    or Remotion production route.
   - [ ] Route persistent presenter/character needs to `avatar-advisor`.
   - [ ] Route voice, music, SFX, Foley, SoundButtonsWorld candidate discovery,
     provider packets/execution, receipts, and mix notes to `audio-advisor`.

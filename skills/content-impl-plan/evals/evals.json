@@ -202,7 +202,7 @@
       "assertions": [
         "Emits a scene-level manifest with scene, shared background, main-topic asset, foreground asset, owner, source or generation packet, rights note, acceptance check, and creative-lock status.",
         "Resolves all three story-bearing layers for every production scene and explicitly reuses one shared background unless a justified world change is named.",
-        "Requires Asset Advisor discovery receipts with queries, candidate links or asset IDs, rights and fit decisions, and selected files or evidenced searched_no_fit before generation.",
+        "Requires Asset Advisor discovery receipts with queries, candidate links or asset IDs, rights and fit decisions, and selected_source, inspiration_for_generation, or searched_no_reference results before generation.",
         "Rejects custom-created SVG animation assets and SVG or JSX drawings as substitutes for missing scene layers while allowing provenance-bearing existing SVG source media.",
         "Rejects CSS rectangles, card frames, text panels, generic document mocks, chart containers, generic silhouettes, and semantic labels as completed assets without concrete source or generation evidence.",
         "Distinguishes storyboard_draft_ready, asset_packet_ready, and creative_lock_passed instead of treating planned packets as accepted files.",
