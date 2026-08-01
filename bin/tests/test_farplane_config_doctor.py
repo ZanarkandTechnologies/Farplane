@@ -146,6 +146,10 @@ class FarplaneConfigDoctorTests(unittest.TestCase):
                 'SERVICE_API_KEY = "real-looking-secret-value"\n',
                 encoding="utf-8",
             )
+            (project_root / "setup.md").write_text(
+                'export MESHY_API_KEY="msy_PASTE_KEY_HERE"\n',
+                encoding="utf-8",
+            )
 
             payload = farplane_config_doctor.config_doctor(
                 codex_home=codex_home,

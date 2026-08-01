@@ -21,7 +21,6 @@ CONFIG_DOCTOR_SECRET_KEYS = (
     "LIVEKIT_SIP_AUTH_PASSWORD",
     "TELNYX_API_KEY",
     "FISH_API_KEY",
-    "FARPLANE_MESHY_API_KEY",
     "MESHY_API_KEY",
 )
 DOPPLER_COMMAND = ["doppler"]
@@ -88,7 +87,6 @@ def env_strings(row: dict[str, Any]) -> dict[str, str]:
 def structured_config_value(key: str, config: dict[str, Any]) -> str:
     paths = {
         "FARPLANE_TELEMETRY_TOKEN": [["convex", "telemetry_token"]],
-        "FARPLANE_MESHY_API_KEY": [["integrations", "meshy_api_key"]],
         "MESHY_API_KEY": [["integrations", "meshy_api_key"]],
         "NOTION_TOKEN": [["integrations", "notion_token"]],
         "REF_API_KEY": [["integrations", "ref_api_key"]],
@@ -205,6 +203,7 @@ def looks_like_placeholder(value: str) -> bool:
         or normalized.startswith("your_")
         or normalized.startswith("your-")
         or "placeholder" in normalized
+        or "paste_key_here" in normalized
         or normalized in {"changeme", "change-me", "example", "example-token", "test", "test-token"}
     )
 

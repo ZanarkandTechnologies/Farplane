@@ -43,6 +43,7 @@ class RuntimeConfigTests(unittest.TestCase):
                         'telemetry_token = "canonical-token"',
                         "",
                         "[integrations]",
+                        'meshy_api_key = "meshy-key"',
                         'notion_token = "canonical-notion"',
                         "",
                         "[livekit]",
@@ -91,6 +92,8 @@ class RuntimeConfigTests(unittest.TestCase):
         self.assertEqual(env["FARPLANE_TELEMETRY_TOKEN"], "canonical-token")
         self.assertEqual(env["NOTION_TOKEN"], "canonical-notion")
         self.assertNotIn("NOTION_API_KEY", env)
+        self.assertEqual(env["MESHY_API_KEY"], "meshy-key")
+        self.assertNotIn("FARPLANE_MESHY_API_KEY", env)
         self.assertEqual(env["CODEX_APP_SERVER_URL"], "ws://127.0.0.1:9999")
         self.assertEqual(env["FARPLANE_STATE_BASE"], "http://127.0.0.1:5173")
         self.assertEqual(env["LIVEKIT_URL"], "wss://example.livekit.cloud")

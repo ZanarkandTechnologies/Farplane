@@ -87,10 +87,6 @@ def _structured_runtime_env(config: Mapping[str, object], secrets: Mapping[str, 
             secrets,
             [["convex", "telemetry_token"]],
         ),
-        "FARPLANE_MESHY_API_KEY": _first_object_string_at(
-            secrets,
-            [["integrations", "meshy_api_key"]],
-        ),
         "MESHY_API_KEY": _first_object_string_at(
             secrets,
             [["integrations", "meshy_api_key"]],

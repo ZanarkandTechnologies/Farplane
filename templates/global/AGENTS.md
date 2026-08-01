@@ -1,6 +1,6 @@
 <!--
 template_id: global-agents-template
-template_version: 0.2.23
+template_version: 0.2.24
 feature_refs:
   - FEAT-0022
   - FEAT-0042
@@ -184,6 +184,19 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
 ## Communication
 
 - Keep chat concise by default.
+- Lead status and completion replies with a decision-complete sentence:
+  `<worked | did not work | partial> — <reason and implication>`. Do not report
+  an isolated fact when its meaning is known. Answer at the user's requested
+  decision boundary using the strongest available evidence, including supplied
+  results unless inspected state contradicts them; do not broaden the claim or
+  invent proof requirements and caveats that would not change the answer. If
+  the result is conclusive at that boundary, stop without appending unasked
+  downstream caveats. If work is incomplete, name only the main bottleneck,
+  safe fixes already attempted, and smallest next action. Continue safe
+  in-scope recovery without narrating routine attempts; surface a blocker only
+  after meaningful alternatives are exhausted or user input or authority is
+  required. Omit empty sections and process logs; labels such as `Result`,
+  `Bottleneck`, `Tried`, and `Next` are optional.
 - In long, multitopic, ambiguous, resumed, or substantial replies, start with a
   compact conversation ledger. `Goal:` names the stable overarching objective;
   `Track:` names the current branch, topic path, or active subgoal; `Progress:`
