@@ -84,7 +84,7 @@ projection-filter primitives. Named profiles then generate sibling views:
 | `skill-registry` | Skills, declared skill references, todo order, common chains, rendered skill docs, and usage signals |
 | `harness-reference` | Repo-wide local links and literal-path references used for navigation, backlinks, and documentation audits |
 | `farplane-framework-core` | Manifest-selected framework sources plus a curated operator-facing workflow spine |
-| `farplane-lifecycle-core` | Compact skills/files/hooks/routes lifecycle graph |
+| `farplane-lifecycle-core` | Compact lifecycle graph across skills, files, hooks, and routes |
 | `farplane-lifecycle-full` | Audit view with optional gates, abstract state, and finite-state nodes |
 
 ## Skill Links And Backlinks
