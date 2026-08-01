@@ -249,6 +249,31 @@
           ]
         }
       }
+    },
+    {
+      "id": "ingest_content_pinterest_canonical_source_01",
+      "prompt": "Save this Pinterest pin because I like the landing page's oversized product hero and restrained type. Source URL: https://www.pinterest.com/pin/123456789012345678/. I am not asking to make a page yet. If the pin points to the real site, use that as the durable reference.",
+      "expected_output": "Attempts canonical original resolution while preserving discovery provenance; Keeps unresolved pins inspiration-only with rights_status unknown; Stores selected complete visual elements only when source evidence supports them and otherwise returns a precise capsule blocker; Infers no license or protected-expression reuse; Creates no ticket; Verifies Resource Bank and Tasty Pack writes or reports their exact blockers",
+      "files": [],
+      "assertions": [
+        "Attempts to resolve and store the canonical original landing page while preserving the Pinterest discovery URL and operator note.",
+        "If the original cannot be resolved, stores the pin honestly as inspiration-only with rights_status: unknown.",
+        "Creates only operator-selected reusable visual elements with same-ingestion-job golden examples and rights-safe golden recipes when the pin or original is inspectable; otherwise blocks unsupported element capsules without inventing evidence.",
+        "Does not infer a production license or suggest copying protected expression from the page.",
+        "Returns tickets: [] for save-only intent and returns a capture handle plus verified Tasty Pack retrieval, or precise storage and retrieval blockers when those systems are unavailable."
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Canonicalizes a Pinterest-discovered landing reference",
+          "tags": ["skill", "ingest-content", "pinterest", "canonical-source", "tasty-pack"],
+          "anti_patterns": [
+            "Stores only the Pinterest wrapper when the original is resolvable",
+            "Treats a pin as licensed production media",
+            "Creates a landing-page ticket despite save-only intent",
+            "Adds a Pinterest-specific Resource Bank schema field"
+          ]
+        }
+      }
     }
   ]
 }

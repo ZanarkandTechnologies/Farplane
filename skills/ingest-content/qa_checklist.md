@@ -60,6 +60,21 @@ the skill contract.
   expression.
 - [ ] `source-honesty`: The analysis states what is known from the source or
   note and does not invent unseen frames, audio, transcripts, or timing.
+- [ ] `discovery-canonicalization`: Pinterest pins and curated-gallery items
+  attempt canonical-original resolution. A resolved capture preserves both the
+  original and discovery provenance; an unresolved item remains
+  inspiration-only with `rights_status: unknown`. No license is inferred and no
+  source-specific schema field is added. The final packet exposes
+  a resolution attempt with method/candidate URLs/evidence/access limit or
+  no-match reason, `source_resolution`, storage handle/blocker, Tasty Pack
+  retrieval verdict, and `tickets: []` for save-only intent. Failure to resolve
+  the original does not block a URL/note capture; it only blocks unsupported
+  element capsules or a write when storage itself is unavailable.
+  `attempt_method: not_attempted` fails unless the packet records the exact
+  browser/web command or tool failure that prevented the attempt.
+  When storage is unavailable, a complete `pending_capture_payload` preserves
+  the unresolved inspiration-only capture for deterministic rerun; a prose
+  suggestion to save it later is insufficient.
 - [ ] `selected-music-recognition`: When the note explicitly likes or asks to
   identify the music/song/beat/audio bed, the result includes a recognition
   match or an honest no-match/missing-dependency/source-access limit.

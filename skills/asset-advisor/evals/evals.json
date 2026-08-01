@@ -120,6 +120,31 @@
           ]
         }
       }
+    },
+    {
+      "id": "asset_advisor_reference_roles_moodboard_01",
+      "prompt": "I need a cinematic hero image for a premium industrial landing page. References: ShotDeck composition https://shotdeck.com/browse/stills, FilmGrab lighting https://film-grab.com/, and Pinterest editorial texture https://www.pinterest.com/search/pins/?q=industrial%20editorial. Turn these into a production-ready image direction without copying the originals.",
+      "expected_output": "Classifies usage role independently from rights status; Treats film frames as cinematic references and Pinterest as taste discovery rather than production assets; Extracts transferable traits and must-not-copy constraints; Records moodboard acceptance before prompt compilation; Preserves provenance, owner, output, rights notes, and acceptance checks",
+      "files": [],
+      "assertions": [
+        "Classifies every reference with an independent usage_role and rights_status.",
+        "Treats ShotDeck and FilmGrab as cinematic_reference and Pinterest as taste_discovery rather than cleared production sources.",
+        "Extracts transferable composition, lighting, palette, texture/material, and camera/editorial traits plus explicit must-not-copy constraints.",
+        "Records moodboard_traits_accepted_at before compiling the generation prompt.",
+        "Preserves candidate URLs, current rights uncertainty, owner, output path, and acceptance checks in the asset receipt."
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Separates inspiration use from rights before prompt compilation",
+          "tags": ["skill", "asset-advisor", "reference-routing", "moodboard"],
+          "anti_patterns": [
+            "Treats public reference libraries as licensed production media",
+            "Collapses source use and rights into one label",
+            "Writes a final prompt before the transferable traits are accepted",
+            "Copies an exact film frame or Pinterest composition"
+          ]
+        }
+      }
     }
   ]
 }

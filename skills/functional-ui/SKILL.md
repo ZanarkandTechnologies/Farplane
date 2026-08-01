@@ -1,15 +1,18 @@
 ---
 name: functional-ui
-version: 1.1.0
+version: 1.2.0
 description: "Turn broken or unclear product workflows into user stories, UI-state diagnosis, comparable examples, and implementation handoff."
 tier: 3
 group: frontend
 source: local
 template_uses:
   skill-qa-checklist: "0.1.0"
+  skill-eval-task: "0.2.0"
 qa_checklist: qa_checklist.md
+eval: evals/evals.json
 common_chains:
-  after: ["visual-design"]
+  after: ["agent-browser", "visual-design"]
+allowed-tools: Read, Grep, Glob, Bash
 ---
 
 # Functional UI
@@ -27,6 +30,26 @@ common_chains:
 - [ ] Use [research:competitor](../research/SKILL.md#researchcompetitor) or
   [research:parity](../research/SKILL.md#researchparity) when comparable app
   workflows or established product patterns should shape the options.
+- [ ] For a material, unsettled, current, or SOTA workflow, use
+  [agent-browser](../agent-browser/SKILL.md) to operate 2-4 established
+  comparables or direct products and capture the actual sequence, states, and
+  access limits. First run `agent-browser skills get core`, then use its
+  `open -> snapshot -i -u -> interact -> re-snapshot` loop on public Mobbin,
+  Page Flows, or relevant direct-product pages; do not substitute web search or
+  documentation for this operation step. Record source URL, user job/query,
+  observed behavior, evidence
+  refs, and `adopt | adapt | reject`. Skip this pass for tiny same-pattern
+  fixes, already-settled interaction models, and pure visual polish. Pinterest
+  and similar taste surfaces may inform `visual-design` or `ingest-content`,
+  but do not count as functional workflow proof. If browser operation itself
+  is unavailable, record `browser_operation: blocked` with the exact tool or
+  access limit; public docs may support a provisional recommendation but must
+  not be labeled operated workflow evidence.
+- [ ] If the task already supplies a current browser-operation receipt for the
+  same user job, validate its URLs, observed sequence/states, access limits,
+  evidence refs, and `adopt | adapt | reject` decisions, then reuse it instead
+  of rerunning the same sources. A fresh complete receipt satisfies the
+  operation gate; a docs-only summary does not.
 - [ ] Diagnose the current UI or planned workflow before proposing visual or
   component changes.
 - [ ] Use the native planning phase to compare the strongest interaction models
@@ -73,7 +96,12 @@ Use this before visual implementation when the question is how the product shoul
 1. Capture the primary user/persona and the top jobs-to-be-done.
 2. Read the PRD, spec, ticket, request, screenshot, or current component to extract states, constraints, and failure modes.
 3. Diagnose the current UI using [redesign-diagnosis.md](references/redesign-diagnosis.md) when a broken UI exists.
-4. Inspect 2-4 comparable apps, examples, or established patterns using [comparable-patterns.md](references/comparable-patterns.md). Focus on workflow and behavior, not surface aesthetics.
+4. For material, unsettled, current, or SOTA workflows, operate 2-4 comparable
+   apps, examples, or established patterns with `agent-browser` using
+   [comparable-patterns.md](references/comparable-patterns.md). Capture actual
+   workflow/state evidence and access limits; focus on behavior, not surface
+   aesthetics. Use settled local patterns without broad research for tiny
+   same-pattern corrections.
 5. Produce 3 grounded UI options with pros and cons.
 6. Recommend one workflow and explain why it best fits the user stories.
 7. Define screens, states, IA, interaction rules, data/content ranges, and edge cases.
@@ -95,9 +123,17 @@ Produce a compact planning artifact with:
 
 - `Users + stories`
 - `Current UI diagnosis` when redesigning an existing surface
-- `Comparable apps`
+- `Comparable Evidence Receipt` for material/unsettled/current/SOTA work, with
+  2-4 rows containing source URL, user job/query, operated sequence and states,
+  evidence ref, access/login limit, and `adopt | adapt | reject`; otherwise an
+  explicit `comparable_research_skipped` reason
+- `Browser Operation Blocker Receipt` instead of comparable rows only when the
+  operation tool cannot run: attempted method/command, exact error or missing
+  capability, evidence ref such as captured stderr/tool inventory, public
+  surfaces attempted, and `recommendation_status: provisional`
 - `Recommendation`
-- `Key screens/states`
+- `Key screens/states`, including applicable empty, loading/in-progress,
+  partial, success/return, error, and retry/recovery behavior
 - `Interaction rules`
 - `Implementation handoff`
 - `Options appendix`
@@ -107,6 +143,14 @@ Produce a compact planning artifact with:
 - start from the user story, not the component library
 - borrow proven patterns before inventing new ones
 - compare workflows, not just visual references
+- do not count Pinterest, galleries, or isolated aesthetic screenshots as
+  functional workflow proof; route taste evidence to `visual-design` or
+  `ingest-content`
+- do not bypass login walls or fabricate states hidden behind unavailable
+  access; record the limit and continue with accessible comparables
+- do not relabel public documentation or search results as browser-operated
+  workflow evidence; downgrade the recommendation to provisional when no
+  comparable could actually be operated
 - always recommend one path; do not stop at inspiration
 - if the user did not provide a take, assume they want guided product judgment
 - do not solve functional failures with visual-only advice

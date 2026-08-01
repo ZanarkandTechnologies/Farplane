@@ -192,6 +192,27 @@ saved record; downstream production skills own making new assets from records.
      and note asset only when the operator clearly wants to save the idea
      itself.
 - [ ] 2. Read or extract the source through the narrowest existing route.
+   - [ ] When the supplied URL is a discovery or aggregation surface such as a
+     Pinterest pin or curated landing-page gallery, try to resolve the
+     canonical original page. Prefer that original as the durable source while
+     preserving the discovery URL and operator note as provenance. If the
+     original cannot be resolved, store the discovery item honestly as
+     inspiration-only with `rights_status: unknown`; never infer a production
+     license from public visibility, downloadability, or curation.
+   - [ ] Record the resolution attempt: method/tool, inspected discovery URL,
+     outbound candidate URLs, observed evidence, selected canonical original
+     or no-match reason, and access limit. An unresolved canonical original
+     does not block storing a URL/note capture: save the discovery URL as an
+     inspiration-only capture with `rights_status: unknown`; block only
+     unsupported CreativeElement capsules or an unavailable storage write.
+   - [ ] For dynamic discovery pages, load
+     [agent-browser](../agent-browser/SKILL.md), run
+     `agent-browser skills get core`, and use its public
+     `open -> snapshot -i -u -> interact -> re-snapshot` loop to inspect
+     outbound/original links. `attempt_method: not_attempted` is invalid when
+     browser or web tools are available; when no operation tool can run, record
+     the exact command/tool failure instead of treating the fixture as the
+     reason.
    - [ ] For text, URL, article, PDF, transcript, or webpage, use
      [summarize](../summarize/SKILL.md) or a direct local read.
   - [ ] For audio/video/social media, use
@@ -279,6 +300,9 @@ saved record; downstream production skills own making new assets from records.
      for hook, open-loop, pacing, or retention mechanics.
    - [ ] Preserve attribution fields; if missing, mark them unknown rather than
      inventing them.
+   - [ ] For a resolved discovery item, store the canonical original in the
+     existing canonical/source fields and retain the discovery URL in capture
+     provenance or analysis. Do not add a Pinterest-specific schema field.
 - [ ] 6. Write to Farplane Resource Bank.
    - [ ] Store a capture with source URL/ref, operator note/focus, compact
      `analysisMarkdown`, optional top-level `transcriptText`, tags/facets, and
@@ -418,6 +442,10 @@ derived_preview: if media-ingest produced `/tmp/contact_sheet.jpg`, run `npm --p
   that to a separate content loop spec after ingestion and retrieval work.
 - Do not copy protected creative work verbatim into a new asset plan; store
   inspiration patterns, attribution, and remix constraints.
+- Do not treat Pinterest pins or curated-gallery cards as the canonical work or
+  as licensed production assets when an original landing page can be resolved.
+  Preserve the discovery trail; unresolved items remain inspiration-only with
+  `rights_status: unknown`.
 - Do not treat "the music is nice" as only a vague vibe. Try optional
   Shazam-style recognition through `media-ingest` when local dependencies and
   source access allow it; if it fails, record the limit and still describe the
@@ -455,3 +483,36 @@ completed, return the full analysis packet and a precise blocker so the user
 can rerun the final write step. A ticket may still use the canonical source URL
 when no Resource Bank asset ID could be written, but the failed storage claim
 must remain explicit.
+
+For a discovery or aggregation URL, the packet must also include:
+
+```text
+source_resolution:
+  discovery_url:
+  canonical_original_url:
+  resolution_status: resolved | unresolved
+  attempt_method:
+  candidate_original_urls:
+  evidence_checked:
+  access_limit:
+  no_match_reason:
+  rights_status: cleared | restricted_reference_only |
+    per_item_verification_required | unknown
+  durable_source:
+  provenance_note:
+storage:
+  capture_handle:
+  tasty_pack_retrieval: verified | blocked
+tickets: []  # for save-only intent
+```
+
+An unresolved source uses the discovery URL as `durable_source` only as an
+inspiration reference, with `rights_status: unknown`; it never implies direct
+production reuse.
+
+When Resource Bank is unavailable, also return a ready-to-write
+`pending_capture_payload` containing the durable discovery URL, canonical URL
+when resolved, operator note, inspiration-only analysis, rights status, tags,
+zero unsupported elements, and `tickets: []`, plus the exact write and
+retrieval blockers. Storage unavailability must not erase the fallback capture
+that should be written on rerun.

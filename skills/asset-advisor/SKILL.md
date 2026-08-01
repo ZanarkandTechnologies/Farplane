@@ -46,8 +46,9 @@ state:
 
 gates:
   source_material_named; rights_or_usage_risk_noted; asset_units_decomposed;
+  source_usage_role_and_rights_status_separated;
   candidate_discovery_receipt_complete; asset_resolution_decision_complete;
-  inspiration_packet_complete_when_used;
+  inspiration_packet_complete_when_used; moodboard_traits_accepted_before_prompt;
   no_custom_svg_animation_assets;
   reference_elements_mapped; golden_examples_and_recipes_bound;
   recreate_reuse_generate_decisions_made;
@@ -118,6 +119,15 @@ the output is explicitly downgraded to `semantic_storyboard_only`.
     constraints, and artifact owner.
   - [ ] Read `qa_checklist.md` as preflight guardrails.
 - [ ] 2. Decompose the asset graph.
+  - [ ] Classify every supplied or discovered reference on two independent
+    axes before deciding whether to use it: `usage_role` is one of
+    `production_source`, `cinematic_reference`, `taste_discovery`,
+    `archive_reference`, or `generated`; `rights_status` is one of `cleared`,
+    `restricted_reference_only`, `per_item_verification_required`, or
+    `unknown`. A useful reference is not automatically licensed production
+    media. Load [source roles and moodboard gate](references/source-roles.md)
+    when the brief mixes source libraries, film frames, galleries, or social
+    discovery.
   - [ ] Before choosing generation, search for useful existing assets unless
     the brief explicitly requires an original generated asset. Inspect
     supplied/local media and Resource Bank/reference anchors, then suitable
@@ -129,13 +139,22 @@ the output is explicitly downgraded to `semantic_storyboard_only`.
     `searched_no_reference`. A search-results page is not a candidate URL;
     retain the specific asset page and verify its rights basis. “Custom is
     faster” is not a search result.
+  - [ ] Complete every Asset Discovery Receipt row before moving on. Each row
+    must contain source class, `usage_role`, `rights_status`, exact query,
+    specific candidate URL/ID or exact missing-input blocker, fit decision,
+    result, owner, a concrete expected output file path, and acceptance check.
+    Do not shorten the required table or move owner/output/acceptance into
+    unrelated prose.
   - [ ] Resolve every missing visual with the hybrid decision ladder:
     `reuse -> source -> inspired_generation -> original_generation`.
     `inspired_generation` requires a rights-safe reference set plus a
     transferable-trait map for composition, lighting, palette, texture,
     material, or camera relationship; it must also name protected expression,
     likeness, logos, signatures, or exact composition that the output must not
-    copy. `original_generation` is valid after `searched_no_reference` or when
+    copy. Present that map as the moodboard decision, record
+    `moodboard_traits_accepted_at`, and compile the generation prompt only
+    after the traits are accepted by the operator or controlling approved
+    spec. `original_generation` is valid after `searched_no_reference` or when
     the brief explicitly requires generation, and still needs a concrete
     prompt, owner, output path, rights/likeness note, and acceptance check.
   - [ ] In an approved execution run, perform those searches now with the
@@ -208,15 +227,33 @@ the output is explicitly downgraded to `semantic_storyboard_only`.
 | --- | --- | --- | --- | --- | --- |
 
 ## Asset Discovery Receipt
-| Asset Need | Source Classes | Queries | Candidate Links / IDs | Rights | Fit Decision | Result |
-| --- | --- | --- | --- | --- | --- | --- |
+| Asset Need | Source Class | Usage Role | Rights Status | Queries | Candidate Links / IDs | Fit Decision | Result | Owner | Expected Output | Acceptance Check |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 
 Result is exactly `selected_source`, `inspiration_for_generation`, or
 `searched_no_reference`.
 
+## Moodboard Decision
+| Packet | Inspiration Refs | Transferable Traits | Must Not Copy | Status | Accepted At | Approval Source |
+| --- | --- | --- | --- | --- | --- | --- |
+
+Status is `pending` or `accepted`. While pending, emit
+`prompt_compilation: blocked_until_moodboard_accepted` and do not write the
+generation prompt. A controlling approved spec may supply the acceptance
+source and timestamp.
+
+Do not render `Generation Packets` for a pending moodboard. Replace the whole
+section with `generation_packets: blocked_until_moodboard_accepted`; render the
+table below only after acceptance exists.
+
+Even while prompt compilation is blocked, `Expected Output` is a concrete
+future file path, not `direction packet`, `TBD`, or another planning label.
+Preserve supplied candidate URLs verbatim; if a URL/file was not supplied,
+write the exact missing-input blocker instead of inventing one.
+
 ## Generation Packets
-| Packet | Decision | Inspiration refs | Transferable traits | Must not copy | Prompt / Direction | Owner | Expected Output | Accepted File | Remotion Handoff | Acceptance Check |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Packet | Decision | Inspiration refs | Transferable traits | Moodboard Accepted At | Must not copy | Prompt / Direction | Owner | Expected Output | Accepted File | Remotion Handoff | Acceptance Check |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 
 ## Inspiration Element Map
 | Element | Anchor | Asset Decision | Output / Blocker |
@@ -259,6 +296,9 @@ Result is exactly `selected_source`, `inspiration_for_generation`, or
   underlying pattern.
 - Do not hand Remotion a vague mood board. It needs files, durations, scene
   roles, dimensions, captions, and acceptance checks.
+- Do not collapse the moodboard decision and generation prompt into one
+  response when no acceptance source exists. Return the complete pending
+  moodboard receipt and the blocked prompt-compilation state first.
 - Do not hand Remotion an inspiration-led asset plan where every visual is
   generic CSS/text/cards unless the run is explicitly labeled `technical_smoke`
   or `text_only_format` and the content claim is downgraded.
@@ -277,6 +317,9 @@ Result is exactly `selected_source`, `inspiration_for_generation`, or
 ## Reference Map
 
 - `qa_checklist.md` - read at start and finish for asset-plan QA.
+- [references/source-roles.md](references/source-roles.md) - classify how a
+  reference is used separately from its rights, then accept transferable
+  moodboard traits before prompt compilation.
 - `../storyboard/SKILL.md` - route narrative, script, and scene planning before
   asset decomposition when the creative plan is not ready.
 - `../ai-image-advisor/SKILL.md` - route still generation, edits, upscales, and
@@ -296,8 +339,9 @@ Result is exactly `selected_source`, `inspiration_for_generation`, or
 - `asset_inventory`: decomposed asset table with source, decision, owner, and
   acceptance check.
 - `asset_discovery_receipt`: searched source classes, exact queries, candidate
-  links or IDs, rights/fit decisions, selected files, inspiration references,
-  and evidenced `searched_no_reference` rows.
+  links or IDs, independent usage-role and rights-status decisions, selected
+  files, inspiration references, accepted moodboard traits, and evidenced
+  `searched_no_reference` rows.
 - `recreation_plan`: what to preserve, change, regenerate, source, or compose.
 - `generation_routes`: concrete next-owner handoffs for each asset class.
 - `blocked_report`: missing source material, rights uncertainty, missing

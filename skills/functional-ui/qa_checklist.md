@@ -26,6 +26,17 @@ functional_ui_qa_checklist(surface, users, workflow_artifact, evidence?)
 
 ## Checks
 
+0. `comparable-evidence-route`
+   - Question: For a material, unsettled, current, or SOTA workflow, were 2-4
+     comparables or direct products operated with browser evidence covering
+     URLs, job/query, sequence, states, access limits, evidence refs, and
+     `adopt | adapt | reject` decisions? For a tiny same-pattern fix, settled
+     model, or pure visual task, is the skip reason explicit?
+   - Violation: The recommendation relies on memory, snippets, vibes, isolated
+     screenshots, or Pinterest/gallery taste as functional proof; hidden states
+     behind login walls are invented; or a tiny correction is delayed by an
+     unnecessary broad research pass.
+
 1. `primary-workspace-priority`
    - Question: Does the main panel or primary workspace take most of the usable
      screen area for the user's core job?
@@ -86,6 +97,10 @@ functional_ui_qa_checklist(surface, users, workflow_artifact, evidence?)
      affect the user's job?
    - Violation: The happy path is planned but realistic states would break the
      layout, hide the next step, lose data, or strand the user.
+   - Required handoff vocabulary: name applicable `empty`,
+     `loading/in-progress`, `partial`, `success/return`, `error`, and
+     `retry/recovery` behavior rather than relying on a generic "states"
+     promise.
 
 9. `workflow-efficiency`
    - Question: Does the interaction model minimize repeated work for common
@@ -120,5 +135,7 @@ Return one row per checklist item:
 
 Focus on workflow usefulness, spatial priority, readability, overflow,
 ethical interaction patterns, accessibility, state coverage, and efficiency.
-Do not judge visual taste except where it affects functional clarity.
+Do not judge visual taste except where it affects functional clarity. Verify
+the comparable-evidence route or its explicit skip reason before passing a
+material workflow recommendation.
 ```

@@ -20,8 +20,15 @@ template_uses:
   queries, candidate links or IDs, rights/fit decisions, and exactly one
   result: `selected_source`, `inspiration_for_generation`, or
   `searched_no_reference`. Inspired generation carries rights-safe reference
-  links, transferable visual traits, explicit must-not-copy constraints,
-  prompt/owner/output, and an acceptance check. Original generation follows an
+  links, independent `usage_role` and `rights_status` values for every
+  reference, transferable visual traits, explicit must-not-copy constraints,
+  and a `moodboard_traits_accepted_at` receipt that precedes prompt
+  compilation. Without an approval source, the Moodboard Decision is
+  `pending`, the complete Generation Packets section is
+  `blocked_until_moodboard_accepted`, and no generation prompt or prompt-like
+  direction is emitted. The discovery receipt itself preserves candidate
+  URLs/IDs, owner, expected output path, and acceptance check. After acceptance, the generation
+  packet carries prompt/owner/output and an acceptance check. Original generation follows an
   evidenced no-reference result or an explicit generation brief; generation
   never happens merely because it is faster than searching. For layered
   documentary/editorial reels, every overlay has concrete
@@ -39,7 +46,9 @@ template_uses:
   brand-owned, licensed, or discovered SVG files are allowed only as
   provenance-bearing static source media.
 - [ ] Rights, likeness, brand, platform, duration, and aspect-ratio risks are
-  named when relevant.
+  named when relevant. Rights status is never inferred from the source's
+  usefulness: cinematic frames and taste galleries remain reference-only or
+  per-item/unknown until a production license is verified.
 - [ ] Remotion handoff includes files or missing-file blockers, scene roles,
   timing, captions/overlays, proof expectations, and no generic CSS/text-only
   pass for inspiration-led video unless explicitly downgraded. Every generation

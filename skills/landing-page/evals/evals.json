@@ -1,0 +1,30 @@
+{
+  "skill_name": "landing-page",
+  "evals": [
+    {
+      "id": "landing_page_conditional_asset_advisor_01",
+      "prompt": "Plan two launch pages. Page A has approved licensed product photography, logo files, and complete UI screenshots. Page B only has a Pinterest board and one cinematic reference frame for its hero. Keep the planning efficient and call out what each page needs before frontend work.",
+      "expected_output": "Records provenance and skips discovery for complete licensed assets; Routes missing reference-led media through Asset Advisor; Requires source-role, rights, moodboard, output, and acceptance evidence; Does not treat inspiration as licensed production media; Blocks only actual unresolved gaps",
+      "files": [],
+      "assertions": [
+        "Records provenance and an explicit Asset Advisor skip reason for Page A because its supplied licensed media set is complete.",
+        "Routes Page B through Asset Advisor before approving the landing specification.",
+        "Requires Page B to resolve source roles, rights status, accepted moodboard traits, sourcing or generation, concrete outputs, and acceptance checks.",
+        "Does not treat the Pinterest board or cinematic frame as licensed production media.",
+        "Keeps frontend handoff blocked only for each page's actual unresolved specification or asset gaps."
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Routes landing assets conditionally instead of always or never",
+          "tags": ["workflow", "landing-page", "asset-advisor", "route-gate"],
+          "anti_patterns": [
+            "Runs external discovery again for a complete licensed asset set",
+            "Lets reference-only media pass directly to frontend implementation",
+            "Treats Pinterest as production licensing evidence",
+            "Blocks the complete page for work only the incomplete page needs"
+          ]
+        }
+      }
+    }
+  ]
+}

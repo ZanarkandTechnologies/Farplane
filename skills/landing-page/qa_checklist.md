@@ -41,6 +41,12 @@ landing_page_runtime_check(spec, artifact, quality_target, user_refs)
   `layout + asset carrier + motion lever + proof payload + fallback + QA`.
 - [ ] A static HTML/CSS-only page is accepted only for `simple` or `standard`,
   or as a labeled blocker/prototype when richer assets cannot be produced.
+- [ ] `asset-advisor-route` is explicit: missing media, external discovery,
+  reference-led generation, and rights/recreation decisions have an Asset
+  Advisor receipt before spec approval; a complete supplied asset set skips
+  the route only with provenance, planned-use rights, and the skip reason. The
+  landing brief contains an `Asset Advisor Route Decision` row for every page
+  or materially different asset path; inference from prose is not enough.
 
 ## Final Review
 

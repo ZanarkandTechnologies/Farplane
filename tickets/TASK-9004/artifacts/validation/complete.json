@@ -1,0 +1,70 @@
+{
+  "base": null,
+  "changed_paths": [
+    "docs/skills/registry.jsonl",
+    "docs/templates/registry.jsonl",
+    "skills/asset-advisor",
+    "skills/functional-ui",
+    "skills/ingest-content",
+    "skills/landing-page",
+    "tickets/TASK-9004"
+  ],
+  "ok": false,
+  "path_source": "explicit",
+  "phase": "complete",
+  "results": [
+    {
+      "check_id": "ticket.metadata",
+      "mode": "block",
+      "output": "ticket metadata OK",
+      "status": "pass"
+    },
+    {
+      "check_id": "ticket.reward",
+      "mode": "block",
+      "output": "ticket Reward scheduling OK",
+      "status": "pass"
+    },
+    {
+      "check_id": "ticket.completion-evidence",
+      "mode": "block",
+      "output": "completion evidence OK",
+      "status": "pass"
+    },
+    {
+      "check_id": "skills.check",
+      "mode": "block",
+      "output": "skill todo list sections OK\nexternal skills without direct todo lists skipped: agent-browser, convex, meshy-3d-generation, vercel-react-best-practices\nskill registry OK (122 skill rows)\ntemplate registry OK\nskill todo tier check OK\nTier 0 phase protocol check OK\nskills/content-impl-plan/qa_checklist.md: content-impl-plan qa_checklist has 19 items; limit is 5\n  Run: python3 skills/skill-maintenance/scripts/minimize_skill_surface.py skills/content-impl-plan --surface qa --limit 5\nskills/content-impl-plan/evals/evals.json: content-impl-plan eval_tasks has 19 items; limit is 5\n  Run: python3 skills/skill-maintenance/scripts/minimize_skill_surface.py skills/content-impl-plan --surface eval --limit 5\nskill surface budget: checked=24 skipped=98 failed=2\n+ python3 skills/skill-maintenance/scripts/sync_skill_checklists.py\n+ python3 bin/validators/sync_skill_registry.py --check\n+ python3 bin/validators/sync_template_registry.py --check\n+ python3 bin/validators/check_skill_todo_tiers.py --allow-peer-tier3\n+ python3 bin/validators/check_tier0_phase_protocol.py\n+ python3 bin/validators/check_skill_surface_budget.py",
+      "status": "fail"
+    },
+    {
+      "check_id": "docs.refs",
+      "mode": "block",
+      "output": "doc refs OK (2036 refs checked)",
+      "status": "pass"
+    },
+    {
+      "check_id": "docs.contracts",
+      "mode": "block",
+      "output": "structural doc parity OK (6 files checked, 24 rules)",
+      "status": "pass"
+    },
+    {
+      "check_id": "templates.check",
+      "mode": "block",
+      "output": "template registry OK",
+      "status": "pass"
+    }
+  ],
+  "schema_version": 1,
+  "selected_checks": [
+    "ticket.metadata",
+    "ticket.reward",
+    "ticket.completion-evidence",
+    "skills.check",
+    "docs.refs",
+    "docs.contracts",
+    "templates.check"
+  ],
+  "ticket": "tickets/TASK-9004/ticket.md"
+}

@@ -1,12 +1,15 @@
 ---
 name: landing-page
-version: 1.0.0
+version: 1.1.0
 description: "Turn a one-page marketing or launch surface into offer, story arc, sections, assets, motion, and proof before frontend implementation."
 tier: 3
 group: frontend-content
 source: local
 allowed-tools: Read, Grep, Glob, Bash
 qa_checklist: qa_checklist.md
+eval: evals/evals.json
+common_chains:
+  after: ["asset-advisor", "frontend-craft"]
 ---
 
 # Landing Page
@@ -44,6 +47,12 @@ when the request earns that depth.
   claim, layout, asset carrier, motion lever, proof payload, fallback, and QA.
 - [ ] Draft the low-fidelity ASCII page flow before generating assets or
   writing code.
+- [ ] Route the `AssetPlan` through
+  [asset-advisor](../asset-advisor/SKILL.md) when the page needs external
+  discovery, reference-led generation, missing production media, or a
+  rights/recreation decision. If the supplied asset set is complete and
+  licensed for the planned use, record provenance and the explicit skip reason
+  instead of forcing another discovery pass.
 
 ## 3. Choose Methods
 
@@ -235,6 +244,12 @@ builder until the spec passes the planning gates below.
    page, but they do not satisfy the generated-media asset requirement by
    themselves. Hand-authored SVG illustrations should not be used for premium
    landing-page graphics.
+   When those assets are missing, reference-led, or rights-uncertain, route the
+   `AssetPlan` through `asset-advisor` and require its discovery receipt,
+   independent usage-role/rights-status decisions, accepted moodboard traits,
+   concrete owner/output paths, and acceptance checks before approving the
+   spec. Skip that route only when supplied assets are complete and licensed
+   for the planned use; preserve their provenance and the skip reason.
 13. **Set landing visual rules.** Use `visual-design` for register, scene
    sentence, numeric taste dials, typography, color strategy, density, and
    anti-slop constraints. For premium or delegated pages, preserve those
@@ -260,6 +275,8 @@ builder until the spec passes the planning gates below.
    `sourceVideo`, or equivalent) in the asset manifest. Do not count Seedream or
    other ai-image-advisor stills assembled with `ffmpeg` as `generated-video`;
    declare that as `frame-sequence` or downgrade to prototype.
+   Execute an approved Asset Advisor handoff when the spec required one; do not
+   rediscover or reinterpret its references inside the frontend builder.
 4. Implement the page through `frontend-craft` or `delegate-frontend`.
 5. Run asset-evidence QA, scroll/media QA, section-quality QA,
    designer-judgment review, `qa_checklist.md`, mobile, reduced-motion, browser
@@ -386,6 +403,8 @@ For landing pages with reusable formulas or inspiration references:
 - `references/workflows.md` - standard landing and cinematic scrolltelling paths.
 - `references/planner-executor.md` - spec-first planner/executor contract.
 - `references/asset-evidence.md` - generated/real media proof gate.
+- [asset-advisor](../asset-advisor/SKILL.md) - conditional owner for missing,
+  discovered, reference-led, generated, or rights-sensitive production media.
 - `references/designer-judgment.md` - final 5% premium quality rubric.
 - `references/gotchas.md` - common landing-page mistakes.
 - `qa_checklist.md` - preflight and final guardrails for ambition fit,
@@ -415,6 +434,22 @@ Return a landing brief with:
 - `QA plan`
 - `Downgrade/blocker policy`
 - `Implementation handoff`
+
+Every brief must include this route receipt before the Asset Plan:
+
+```text
+Asset Advisor Route Decision
+| Page / Section | Supplied Assets | Planned-Use Rights / Provenance | Missing Or Reference-Led Need | Required Usage Roles | Required Rights Statuses | Route | Skip Reason | Receipt Status |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+
+Route is `asset-advisor` or `skip_complete_licensed_inputs`.
+```
+
+For `asset-advisor`, the receipt status remains blocked until source usage
+roles, rights statuses, accepted moodboard traits when generation is involved,
+owner/output paths, and acceptance checks are complete. For
+`skip_complete_licensed_inputs`, provenance, planned-use rights, completeness,
+and the explicit skip reason are required.
 
 For executor handoff, prefer a checked-in or ticket-attached `LANDING_SPEC.md`
 with:
