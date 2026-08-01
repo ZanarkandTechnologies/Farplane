@@ -35,7 +35,7 @@ outcomes.
 
 ```text
 proposal_pricing(transcript_or_notes)
-  -> missing_value_question | concise_proposal
+  -> missing_value_question | not_ready | concise_proposal
 
 state: reads(customer transcript or notes and supplied proposal context);
        writes one proposal report or returns one blocking question
@@ -71,12 +71,25 @@ independent judgment. This skill never sends the proposal or writes contracts.
   - [ ] Do not add two anchors when they describe the same impact. Prefer the
         clearest conservative anchor and mention other effects without pricing them.
 - [ ] 3. Decide whether one price is defensible.
-  - [ ] If one anchor can be calculated, proceed without asking for every
-        possible value signal.
-  - [ ] If one number would complete an anchor, ask one direct question about
-        that number and stop. Never return a general intake list.
-  - [ ] If the transcript contains no proposed outcome, return `not_ready` in
-        one sentence rather than inventing a service.
+  - [ ] First require a proposed outcome. If none exists, return `not_ready` in
+        one sentence even when the transcript contains cost evidence; never
+        invent the service being proposed.
+  - [ ] Treat an anchor as complete only when its annual money value can be
+        calculated: people, time, and loaded rate; consequence frequency and
+        cost; or one direct annual money amount.
+  - [ ] If any anchor is complete, proceed without asking for every possible
+        value signal. Use the clearest conservative non-overlapping anchor.
+  - [ ] If no anchor is complete, ask exactly one next-best economic question
+        and stop. Continue one question per turn as answers are added; never
+        return a general intake list.
+    - [ ] Prefer the started anchor with the fewest missing fields.
+    - [ ] For a people-time anchor, ask for total time first, then loaded rate.
+    - [ ] For a consequence anchor, ask for frequency first, then cost per event.
+    - [ ] If no quantitative anchor has started, ask what the problem costs in
+          a typical month or year.
+  - [ ] When complete numbers conflict, use a later explicit correction or a
+        clearly authoritative estimate. If the conflict remains unresolved,
+        ask one clarification and stop.
 - [ ] 4. Calculate annual value and the starting price.
   - [ ] Use `scripts/calculate_value.py` when the source fits a supported anchor.
   - [ ] Default to 15% of conservative annual value and round to the nearest
@@ -93,6 +106,9 @@ independent judgment. This skill never sends the proposal or writes contracts.
   - [ ] Use [the concise proposal template](templates/proposal.md).
   - [ ] Target 800 words or fewer, short paragraphs, concrete bullets, one
         visible calculation, five or fewer assumptions/exclusions, and one next step.
+  - [ ] Return only the proposal body. Do not prepend chat status, process
+        commentary, or a `Grounding:` line, and do not append an offer to do
+        more work. For a question or `not_ready` result, return only that line.
   - [ ] Do not include internal margins, cost floors, confidence taxonomies,
         evidence ledgers, pricing theory, or a meeting-summary transcript dump.
 - [ ] 7. Finish with proof and human review.
@@ -123,6 +139,8 @@ Price: $9,500, approximately 15% of annual value and a 6.6× client return.
 
 - People and time without a monetary rate do not yet produce a money value;
   ask for the rate or a direct consequence cost, not a full discovery form.
+- When an anchor needs several facts, collect them one question per turn in the
+  priority order above; do not collapse them into a multi-part questionnaire.
 - Do not stack recovered labor and revenue enabled by that same recovered time.
 - Concise does not mean vague: the price, calculation, deliverable, milestones,
   exclusions, and next step must remain visible.

@@ -11,6 +11,7 @@
         "Recommends one price and states the correct client return multiple",
         "Keeps the proposal at 800 words or fewer",
         "Includes a concrete outcome, scope, milestones, exclusions, and next step",
+        "Returns only the proposal body without a chat-status preamble or Grounding footer",
         "Omits internal pricing theory, evidence-ledger prose, and decorative options"
       ]
     },
@@ -47,6 +48,88 @@
         "Does not invent a problem, service, value, or price",
         "Does not generate a proposal",
         "Does not return a broad questionnaire"
+      ]
+    },
+    {
+      "id": "proposal_pricing_direct_money_01",
+      "prompt": "Please turn this call into a proposal for review. The finance lead said duplicate supplier payments and recovery work cost about $90,000 each year. We discussed adding an approval check that catches likely duplicates before payment. Keep the document direct.",
+      "expected_output": "Uses the stated $90,000 direct annual cost as the sole value anchor; recommends one price near the default 15% starting point, approximately $13,500, with a correct 6.7x return multiple; produces a concise proposal without asking for headcount, hours, or consequence frequency that are unnecessary to price the engagement.",
+      "assertions": [
+        "Uses the direct $90,000 annual money amount as a complete anchor",
+        "Does not ask for unnecessary people, time, or consequence inputs",
+        "Recommends one price near $13,500 with a correct return multiple",
+        "Produces a concise human-readable proposal"
+      ]
+    },
+    {
+      "id": "proposal_pricing_multiple_missing_01",
+      "prompt": "Here are the call notes for a proposal. Eight analysts manually check incoming applications. We discussed automatically checking routine applications and sending exceptions to an analyst. The customer never said how much time the checks consume or what the analysts cost.",
+      "expected_output": "Recognizes that the outcome exists but the people-time anchor still lacks both time and loaded rate; asks exactly one question for the team's total weekly time spent on the checks and stops. It does not ask for time and rate together, return a discovery checklist, invent a value, or draft a priced proposal.",
+      "assertions": [
+        "Asks exactly one question for total weekly time",
+        "Does not also ask for loaded rate in the same turn",
+        "Does not return a broad intake questionnaire",
+        "Does not invent value or produce a priced proposal",
+        "Stops after the single question"
+      ]
+    },
+    {
+      "id": "proposal_pricing_overlapping_anchors_01",
+      "prompt": "Draft the proposal from this call. Two operations staff spend five hours each week fixing failed imports at a loaded cost of $40 an hour. The failures happen around twice a month and are estimated at $1,000 each, but the customer explained that this failure estimate already includes the staff correction time. We proposed validating files before import and routing bad rows for review.",
+      "expected_output": "Recognizes that the labor and failure estimates overlap and does not add them together. Uses one conservative annual anchor, preferably the $20,800 labor calculation rather than claiming $44,800, then recommends one corresponding price and correct return multiple in a concise proposal. It may mention the other estimate as corroborating context without pricing it again.",
+      "assertions": [
+        "Does not add the overlapping labor and failure estimates together",
+        "Uses one transparent conservative annual value anchor",
+        "Recommends one price with a return multiple consistent with the chosen anchor",
+        "May mention but does not separately monetize the overlapping estimate",
+        "Produces a concise proposal"
+      ]
+    },
+    {
+      "id": "proposal_pricing_corrected_number_01",
+      "prompt": "Make the proposal from this transcript.\n\nOperations: We probably lose two shipments a month, maybe about $1,000 each.\nHost: We discussed an address-validation step before labels are created.\nFinance: I checked the incident log while we were talking. Please use one failed shipment per month at roughly $800; the earlier number was an old estimate.\nOperations: That validation outcome still sounds right.\n\nThere was also unrelated discussion about office moves and hiring. Keep the proposal short.",
+      "expected_output": "Uses Finance's explicit correction rather than the superseded Operations estimate, calculating $9,600 annual value from one failure per month at $800. Recommends one price near the rounded 15% starting point, approximately $1,500, with a correct 6.4x return. Ignores unrelated transcript noise and produces a concise proposal without presenting both estimates as additive value.",
+      "assertions": [
+        "Uses the later explicit Finance correction",
+        "Calculates $9,600 annual value correctly",
+        "Does not add or average the superseded estimate",
+        "Recommends one price near $1,500 with a correct return multiple",
+        "Ignores irrelevant transcript discussion and remains concise"
+      ]
+    },
+    {
+      "id": "proposal_pricing_value_without_outcome_01",
+      "prompt": "Price a proposal from these notes. Finance estimates the current process loses about $60,000 per year, but the call ended before anyone discussed what change, deliverable, or outcome we would propose. The customer asked us to come back after we had thought about it.",
+      "expected_output": "Returns a one-sentence not_ready result because no proposed outcome exists, despite the complete direct annual cost anchor. It does not invent a solution, scope, or price and does not return a discovery questionnaire.",
+      "assertions": [
+        "Returns not_ready in one sentence",
+        "Recognizes that value evidence alone does not define the proposed outcome",
+        "Does not invent a solution, scope, or price",
+        "Does not return a broad questionnaire"
+      ]
+    },
+    {
+      "id": "proposal_pricing_outcome_without_numbers_01",
+      "prompt": "I need the proposal from this call. We agreed the intended outcome is to route incoming invoices automatically and send exceptions to accounts payable. Nobody discussed team size, time spent, salaries, error frequency, or what the current problem costs.",
+      "expected_output": "Recognizes that the proposed outcome exists but no quantitative anchor has started; asks exactly one direct question about what the current problem costs in a typical month or year and stops. It does not ask a multi-part discovery list, invent assumptions, or draft a priced proposal.",
+      "assertions": [
+        "Asks exactly one question about the problem's typical monthly or annual cost",
+        "Does not ask a multi-part discovery questionnaire",
+        "Does not invent people, time, consequence, value, or price",
+        "Does not draft a proposal",
+        "Stops after the single question"
+      ]
+    },
+    {
+      "id": "proposal_pricing_unresolved_conflict_01",
+      "prompt": "Draft the proposal from these notes. We discussed a retention alert that flags at-risk renewals for the account team. Sales estimated four avoidable churn cases per quarter at about $5,000 each. Finance estimated two per quarter at about $3,000 each. Both said their estimate was current, and the call ended without choosing which basis to use.",
+      "expected_output": "Recognizes that two complete consequence estimates conflict without an explicit correction or authoritative choice; asks exactly one clarification about which estimate should be used as the proposal's value basis and stops. It does not average, add, or silently choose the figures and does not produce a priced proposal.",
+      "assertions": [
+        "Asks exactly one clarification about the value basis",
+        "Does not average, add, or silently choose the conflicting estimates",
+        "Does not invent an authority or correction",
+        "Does not produce a priced proposal",
+        "Stops after the single clarification"
       ]
     }
   ]

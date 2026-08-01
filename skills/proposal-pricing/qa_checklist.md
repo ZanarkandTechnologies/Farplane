@@ -17,7 +17,12 @@ Read before drafting and apply again before returning the proposal.
 - [ ] Every number is customer-stated, operator-supplied, or transparently derived.
 - [ ] One conservative annual value anchor is visible and arithmetically correct.
 - [ ] Overlapping labor, consequence, and revenue effects are not double counted.
-- [ ] Missing evidence produces one direct question, not a broad intake list.
+- [ ] A proposal is produced only when both a proposed outcome and one complete
+      annual money anchor exist.
+- [ ] Missing evidence produces exactly one next-best economic question per
+      turn, following the nearest-anchor priority rather than a broad intake list.
+- [ ] Conflicting numbers use an explicit correction or authoritative estimate;
+      unresolved conflicts produce one clarification rather than an assumption.
 
 ## Human readability
 
@@ -27,6 +32,9 @@ Read before drafting and apply again before returning the proposal.
       exclusions, and next step are easy to scan.
 - [ ] It does not repeat the transcript, narrate the pricing method, or expose
       internal cost, margin, confidence, or negotiation detail.
+- [ ] The response contains only the proposal body or exact fallback line; it
+      has no chat-status preamble, process commentary, `Grounding:` footer, or
+      offer to continue.
 - [ ] Assumptions and exclusions total five bullets or fewer.
 
 ## Commercial safety
