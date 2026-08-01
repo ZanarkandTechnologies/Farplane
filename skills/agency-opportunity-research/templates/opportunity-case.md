@@ -122,7 +122,8 @@ questions, relevant proof, and follow-up rationale. Link full reports through
       explicit approval.
 - [ ] The exact CRM entity delta has explicit approval before Markdown changes
       are applied and compiled with `farplane entities compile`;
-      generated `entities.json` is never hand-edited.
+      generated `.farplane/entities/index.json` is never hand-edited; it is a
+      lookup catalogue, so follow a matched record's `path` for full Markdown.
 
 ## Evidence And Next Action
 

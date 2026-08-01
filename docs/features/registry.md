@@ -2,7 +2,7 @@
 title: "Generated Feature Registry"
 status: generated
 owner: feature-registry
-updated_at: 2026-08-01
+updated_at: 2026-08-02
 refs:
   - docs/features/registry.jsonl
   - docs/features/validate_features.py
@@ -47,3 +47,7 @@ This file is generated. Edit the feature specs in `docs/features/` instead.
 | [FEAT-0072 Persistent ICP and World Memory](../features/FEAT-0072-persistent-icp-and-world-memory.md) | [Source And Sidecar Systems](../systems/source-sidecar-systems.md) | `implemented` | `true` | `false` | `context-routing` |
 | [FEAT-0073 Brand Kit approved creative identity](../features/FEAT-0073-brand-kit-approved-creative-identity.md) | [Content Production](../systems/content-production.md) | `designed` | `false` | `false` | `content-production` |
 | [FEAT-0074 Feed Scout Source Instructions](../features/FEAT-0074-feed-scout-source-instructions.md) | [Source And Sidecar Systems](../systems/source-sidecar-systems.md) | `implemented` | `true` | `false` | `source-intelligence` |
+| [FEAT-0075 Entity Markdown and World projection](../features/FEAT-0075-entity-markdown-and-world-projection.md) | [Graph Systems](../systems/graph-systems.md) | `implemented` | `false` | `false` | `memory` |
+| [FEAT-0076 Typed entity view projections](../features/FEAT-0076-typed-entity-view-projections.md) | [Graph Systems](../systems/graph-systems.md) | `implemented` | `false` | `false` | `projections` |
+| [FEAT-0077 CRM entity projection](../features/FEAT-0077-crm-entity-projection.md) | [Graph Systems](../systems/graph-systems.md) | `implemented` | `false` | `false` | `projections` |
+| [FEAT-0078 Harness GraphIR projections](../features/FEAT-0078-harness-graphir-projections.md) | [Graph Systems](../systems/graph-systems.md) | `implemented` | `false` | `false` | `projections` |

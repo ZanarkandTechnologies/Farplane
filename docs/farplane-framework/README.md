@@ -14,6 +14,8 @@ source_of_truth:
   - docs/farplane-framework/ticket-execution-loop.md
   - docs/farplane-framework/hooks-and-runtime.md
   - docs/farplane-framework/entities.md
+  - docs/farplane-framework/entity-markdown-authoring.md
+  - docs/farplane-framework/entity-view-projection-standard.md
   - docs/farplane-framework/reporting.md
   - docs/farplane-framework/graph-contract.md
   - docs/farplane-framework/harness-maintenance.md
@@ -62,6 +64,8 @@ Then open only the contract needed for the current question:
 | How does a shaped idea become reviewed completed work? | [Ticket Execution Loop](ticket-execution-loop.md) |
 | What may hooks do, and where does runtime state live? | [Hooks And Runtime](hooks-and-runtime.md) |
 | Where do canonical entities, named views, paragraph links, World, and CRM projections live? | [Entity Memory](entities.md) |
+| How do I author entity links, question provenance, timelines, view tags, and CRM funnel state? | [Entity Markdown Authoring](entity-markdown-authoring.md) |
+| How do typed views distinguish observations, dependencies, and directed resource transfers? | [Entity View Projection Standard](entity-view-projection-standard.md) |
 | What report metadata and registry shape does Core expose? | [Reporting](reporting.md) |
 | How are lifecycle graph projections represented? | [Graph Contract](graph-contract.md) |
 | How do registries, rollout, validators, and graph generators fit together? | [Harness Maintenance](harness-maintenance.md) |

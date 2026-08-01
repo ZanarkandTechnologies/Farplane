@@ -167,6 +167,21 @@ charter, metric definitions, refresh prompts, bindings, docs, and tickets.
 Do not use `bootstrap.sh --force` for framework upgrades; bootstrap owns
 whole-file scaffolding and is reserved for explicit scaffold replacement.
 
+When a migration entry changes generated entity schemas, validate canonical
+Entity Markdown with the updated shared compiler before replacing read models:
+
+```bash
+farplane entities compile --project-root . --no-write --json
+farplane entities compile --project-root .
+```
+
+The first command returns source and typed-view diagnostics without writing.
+After it passes, the second atomically regenerates `index.json`, `world.json`,
+`crm.json`, and configured typed views while deleting stale typed-view files.
+Never migrate those generated files by hand; update current consumers for the
+new schema first and regenerate from `.farplane/entities/*.md` plus
+`.farplane/views.yaml`.
+
 After merging human-owned charter and strategy content, regenerate the runtime
 read models and validate the project:
 
@@ -288,6 +303,7 @@ Those can come after one clean ticket run.
 - [ ] Live automation activation, when requested, is handled by
       `automation-advisor` and appends PM-visible thread IDs to `farplane/pm.json`
 - [ ] owner-named `.farplane/reports/`, `.farplane/<skill-name>/reports/`, `.farplane/entities/`, `.farplane/views.yaml`, `.farplane/metrics/daily/`, `.farplane/evals/runs/`, and `.farplane/logs/` exist as ignored local state; `views.yaml` starts as `views: {}` and generated `.farplane/entities/index.json`, `world.json`, and `crm.json` exist after the first `farplane entities compile`
+- [ ] framework migrations that change entity schemas pass `farplane entities compile --no-write --json` before regenerating projections, and generated schema versions match the current changelog
 - [ ] primitive metrics and `.farplane/project/ui/latest.json` were regenerated after canonical project-file migration
 - [ ] `python3 bin/validators/check_farplane_project_files.py` passes when the repo has Farplane validators
 - [ ] `docs/prd.md`, `docs/features/`, `docs/TROUBLES.md`, `docs/LESSONS.md` exist

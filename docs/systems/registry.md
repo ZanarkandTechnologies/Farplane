@@ -2,7 +2,7 @@
 title: "Generated System Registry"
 status: generated
 owner: system-registry
-updated_at: 2026-08-01
+updated_at: 2026-08-02
 refs:
   - docs/systems/registry.jsonl
   - docs/features/registry.jsonl
@@ -27,3 +27,4 @@ This file is generated. Edit system pages in `docs/systems/` and feature specs i
 | [SYS-0010 Domain Skill Families](../systems/domain-skill-families.md) | [FEAT-0014 Frontend skill parity upgrade](../features/FEAT-0014-frontend-skill-parity-upgrade.md) | [FEAT-0014](../features/FEAT-0014-frontend-skill-parity-upgrade.md) |
 | [SYS-0011 Documentation OS](../systems/documentation-os.md) | [FEAT-0060 Registry-backed documentation OS](../features/FEAT-0060-registry-backed-documentation-os.md) | [FEAT-0060](../features/FEAT-0060-registry-backed-documentation-os.md) |
 | [SYS-0012 Content Production](../systems/content-production.md) | [FEAT-0073 Brand Kit approved creative identity](../features/FEAT-0073-brand-kit-approved-creative-identity.md) | [FEAT-0056](../features/FEAT-0056-inspiration-vault.md), [FEAT-0073](../features/FEAT-0073-brand-kit-approved-creative-identity.md) |
+| [SYS-0013 Graph Systems](../systems/graph-systems.md) | [FEAT-0075 Entity Markdown and World projection](../features/FEAT-0075-entity-markdown-and-world-projection.md) | [FEAT-0075](../features/FEAT-0075-entity-markdown-and-world-projection.md), [FEAT-0076](../features/FEAT-0076-typed-entity-view-projections.md), [FEAT-0077](../features/FEAT-0077-crm-entity-projection.md), [FEAT-0078](../features/FEAT-0078-harness-graphir-projections.md) |

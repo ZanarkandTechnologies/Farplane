@@ -37,7 +37,9 @@ independent reviewer to try to reject material customer-facing packages.
    separate from Markdown-body context. Reports, speculative pain, option ranks,
    selection logic, relationship judgments, and message prose remain linked
    artifacts. Approved entity Markdown compiles through
-   `farplane entities compile`; generated `entities.json` is never hand-edited.
+   `farplane entities compile`; generated `.farplane/entities/index.json` is
+   never hand-edited or treated as a full entity record. Resolve through the
+   index and follow the matched `path` for full Markdown context.
    CRM writes, sends, publishing, proposals, account changes, private data,
    enrichment, and spend remain unapplied without exact approval.
 5. **Actionable learning** — name the correction ask, evidence gaps, next owner,

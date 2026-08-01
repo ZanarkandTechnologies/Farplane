@@ -36,8 +36,10 @@ Motors?” Optional origin session: `019f7e88-6864-7f23-8dbb-5e058009e911`.
   durable named entity; preserve the opening-date uncertainty in prose.
 - Report both Alex Chen records as ambiguous. Do not merge them, create a third
   record, or link one to the claim.
-- Compile `entities.json` and `world.json`; report that Penang Castings is
-  unlocated on the map unless verified coordinates were supplied.
+- Compile `.farplane/entities/index.json` and
+  `.farplane/entities/world.json`; use the index only for identity/reference
+  lookup, and report that Penang Castings is unlocated on the map unless
+  verified coordinates were supplied.
 
 ## Comparison Gates
 

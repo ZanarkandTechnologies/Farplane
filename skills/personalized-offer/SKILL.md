@@ -169,9 +169,10 @@ Route missing market or qualification work to `agency-opportunity-research`.
         a sourced durable summary in the entity body.
   - [ ] Do not store approach options, ordinal judgments, selection rationale,
         or computed relationship value in entity Markdown or CRM frontmatter.
-  - [ ] Never hand-edit `entities.json`; after an approved Markdown entity
-        change, run `farplane entities compile` and confirm compiled records retain
-        both `frontmatter` and `body`.
+  - [ ] Never hand-edit `.farplane/entities/index.json`; after an approved
+        Markdown entity change, run `farplane entities compile`, resolve the
+        entity through the generated lookup record, and follow its `path` when
+        full frontmatter or Markdown body context is needed.
 - [ ] 9. Finish-check and review.
   - [ ] Render `templates/personalized-offer-report.md`, then apply
         `qa_checklist.md` again.

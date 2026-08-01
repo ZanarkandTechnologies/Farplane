@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Apply the field-preserving Farplane framework 2.0.12 migration."""
+"""Apply the field-preserving Farplane framework 2.0.14 migration."""
 
 from __future__ import annotations
 
@@ -13,11 +13,11 @@ from typing import Any
 
 import yaml
 
-FRAMEWORK_VERSION = "2.0.12"
+FRAMEWORK_VERSION = "2.0.14"
 METRICS_TEMPLATE_VERSION = "0.4.0"
 HARNESS_TEMPLATE_VERSION = "0.5.3"
 BINDINGS_TEMPLATE_VERSION = "0.5.0"
-MIGRATION_DATE = "2026-07-26"
+MIGRATION_DATE = "2026-08-02"
 LEGACY_TYPE_MAP = {
     "daily": "flow",
     "daily_count": "flow",
@@ -69,7 +69,7 @@ def _migrate_manifest(path: Path) -> tuple[str, list[str]]:
     for key in ("_template_metadata", "standard", "optional"):
         if source.get(key) != template[key]:
             source[key] = template[key]
-            changes.append(f"manifest.{key} -> 2.0.12 standard")
+            changes.append(f"manifest.{key} -> {FRAMEWORK_VERSION} standard")
     return json.dumps(source, indent=2, ensure_ascii=False) + "\n", changes
 
 
@@ -364,7 +364,7 @@ def migrate_project(project_root: Path, *, force: bool) -> dict[str, Any]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Migrate one Farplane project to framework 2.0.12 without replacing human-authored files."
+        description="Migrate one Farplane project to framework 2.0.14 without replacing human-authored files."
     )
     parser.add_argument("--project-root", type=Path, default=Path.cwd())
     parser.add_argument(

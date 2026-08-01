@@ -3,10 +3,72 @@ title: Farplane Framework Changelog
 owner: init-advisor
 status: active
 kind: framework-changelog
-updated_at: 2026-07-26
+updated_at: 2026-08-02
 ---
 
 # Farplane Framework Changelog
+
+## 2.0.14
+
+Date: 2026-08-02
+
+Primary change: consolidate generated entity projections around one private
+compiler registry and remove data that belongs to canonical Markdown or the
+compiler result.
+
+Changed surfaces:
+
+- `index.json` schema v5 contains only schema version, source fingerprint, and
+  bounded lookup rows;
+- `world.json` schema v4 removes raw frontmatter, generic metadata, copied
+  diagnostics, and derived counts while preserving graph evidence;
+- `crm.json` schema v4 contains only project identity plus lean entity
+  identity/path/funnel records, with no raw frontmatter, `by_id`, copied views,
+  diagnostics, or counts;
+- typed view schema v4 preserves domain semantics while inheriting lean World
+  entity nodes;
+- `farplane entities compile --json` owns source counts and validation issues
+  under top-level `diagnostics`.
+
+Migration steps:
+
+1. Bump the framework contract to `2.0.14` and recompile all entity projections.
+2. Read arbitrary entity fields from the canonical Markdown `path` rather than
+   World or CRM frontmatter.
+3. Read compile issues and counts from CLI JSON `diagnostics` rather than a
+   generated projection.
+4. Replace CRM `by_id` reads with one caller-local map only when lookup speed is
+   actually needed; do not restore duplicate serialized records.
+5. Do not add compatibility fields or dual-read schema fallbacks.
+
+## 2.0.13
+
+Date: 2026-08-02
+
+Primary change: make the generated entity index a bounded lookup catalogue
+instead of a duplicate Markdown document store.
+
+Changed surfaces:
+
+- `index.json` schema v4 retains only entity identity, aliases, location,
+  explicit references, question references, and canonical source path;
+- Markdown bodies, raw frontmatter, funnel state, view definitions, claims,
+  timelines, and duplicate `by_id` records are no longer serialized there;
+- the entity compiler keeps full parsed records in memory while producing
+  World, CRM, and typed-view projections unchanged;
+- consumers resolve through the index and read the matched Markdown `path`
+  when they need full context.
+
+Migration steps:
+
+1. Bump `farplane/manifest.json` `spec_version` and
+   `template_uses.farplane-framework` to `2.0.13`.
+2. Run `farplane entities compile --project-root <project>` to replace the old
+   schema-v3 index with schema v4.
+3. Update consumers that read `index.entities[*].body`, `frontmatter`, `by_id`,
+   claims, timelines, or views to load the canonical entity `path` or the
+   projection that owns that data.
+4. Do not add a compatibility body field or a second full-document snapshot.
 
 ## 2.0.12
 

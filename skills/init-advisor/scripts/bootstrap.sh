@@ -187,7 +187,7 @@ echo "  - Run automation-advisor when you want to activate the live Work Pulse a
 echo "  - Fill in farplane/pm.json with PM-visible chat and automation thread IDs so the UI groups them under one employee."
 echo "  - Use owner-named .farplane/ paths for ignored reports, metric observations, eval outputs, content, logs, and tool-specific state; do not add generic runtime, evidence, or review buckets."
 echo "  - Keep each entity in flat .farplane/entities/<id>.md; run 'farplane entities compile' to generate index.json, world.json, and crm.json. Skill reports link entities with entity_refs."
-echo "  - Define private named entity slices in .farplane/views.yaml; each view lists canonical entity_ids and is compiled into all three entity projections."
+echo "  - Define private named entity slices in .farplane/views.yaml; each view lists canonical entity_ids and compiles into bounded World membership plus .farplane/views/<view-id>.json, not the lookup index or CRM."
 echo "  - Start by refining docs/bootstrap-brief.md with a deep-interview-quality intake before locking stack or topology decisions."
 echo "  - Fill the bootstrap brief's agent-experience section so the repo knows how agents should reach, inspect, and verify important app states."
 echo "  - Refine docs/TASTE.md so UI tickets and QA share one visual doctrine."

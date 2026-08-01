@@ -46,7 +46,9 @@ Default storage:
 - Project-specific target: `.farplane/customer-research/reports/YYYY-MM-DD-<person>.md`
 - No project target: `~/.farplane/customer-research/reports/YYYY-MM-DD-<person>.md`
 - Canonical entity source: `.farplane/entities/*.md` or `~/.farplane/entities/*.md`
-- Compiled entity index: `.farplane/entities/index.json` or `~/.farplane/entities/index.json`
+- Compiled entity lookup index: `.farplane/entities/index.json` or
+  `~/.farplane/entities/index.json`; use it for identity resolution, then read
+  the matched `path` for full canonical Markdown
 - Cross-skill discovery pattern: `.farplane/*/reports/**/*.md`
 
 Keep the work ethical and source-labeled: use public or supplied business

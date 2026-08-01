@@ -25,7 +25,8 @@ extractor, or automatic enrichment system.
 
 Flat entity Markdown under `.farplane/entities/` is canonical. Generated
 `index.json`, `world.json`, and `crm.json` in that directory are disposable
-read models. Follow the shared
+read models. The index resolves bounded identity and reference fields; follow
+its `path` to read or edit full canonical Markdown. Follow the shared
 [entity-memory contract](../../docs/farplane-framework/entities.md) for fields, links, and
 compiler behavior.
 
@@ -84,8 +85,10 @@ the supplied source. Do not widen one capture into discovery across old calls.
   - [ ] Keep tentative language tentative. Skip chatter, duplicate phrasing,
         speculative private facts, and claims with no supplied source basis.
 - [ ] 3. Resolve each candidate against current entity memory.
-  - [ ] Compile first when `entities.json` is absent or stale, then search exact
-        ID, normalized name, aliases, kind, and location across the registry.
+  - [ ] Compile first when `index.json` is absent or stale, then search exact ID,
+        normalized name, aliases, kind, location, and explicit references in
+        the lookup index. Follow the matched record's `path` before reading or
+        editing full entity context; the index never carries the Markdown body.
   - [ ] Update one strong match, create only when no plausible match exists,
         and return all plausible candidates in `ambiguity_report` instead of
         merging when identity remains ambiguous.

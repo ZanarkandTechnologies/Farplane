@@ -164,9 +164,9 @@ the caller's selected demo-realism and implementation path.
         `entity_refs` for canonical entity IDs.
   - [ ] Apply CRM changes and run `farplane entities compile` only after explicit
         approval of that exact entity delta; report or offer approval alone is
-        not CRM-write approval. Never hand-edit `index.json`; verify compiled
-        records retain both
-        `frontmatter` and `body`.
+        not CRM-write approval. Never hand-edit `index.json`; resolve the
+        entity through its lookup row and follow `path` when full frontmatter
+        or Markdown body context is needed.
   - [ ] Apply `qa_checklist.md` again and use `review` for material cases before
         presenting a target list, offer, or proof package as ready.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
