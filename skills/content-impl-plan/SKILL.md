@@ -76,6 +76,7 @@ fails:
   generic_icp; wallpaper_assets; metaphor_as_proof; persona_self_approval;
   missing_scene_asset_triad; renamed_box_as_asset;
   chart_as_complete_scene; creative_lock_from_planned_paths;
+  unresolved_asset_claimed_ready;
   remotion_before_asset_discovery; custom_svg_animation_asset;
   jsx_or_programmatic_drawing_as_asset_substitute;
   inspiration_generation_without_trait_or_avoidance_map
@@ -121,6 +122,23 @@ a schema alone.
   prompt, rights note, output path, and acceptance check. A complete trio of
   packets is `asset_packet_ready`; it is not `creative_lock_passed` until the
   outputs and assembled frame are accepted.
+- When repairing newspaper/newsprint direction, state the evidence boundary in
+  the answer by explicitly defining all three classes, even after selecting
+  one: `source_baked_scan` means texture already exists in the supplied media,
+  `demonstrated_added_effect` requires visible controls or before/after proof,
+  and `operator_requested_style` is a desired result with no proven source
+  recipe. Then emit the complete newsprint receipt below. Require crisp
+  alpha, a consistent final-resolution halftone scale, final-resolution
+  subject-mask and background-crop proof, and restrained orange/red
+  registration only where it supports hierarchy. Asset/image ownership prepares
+  and proves a rights-cleared raster paper/scan plate and printed subject;
+  Remotion owns deterministic
+  page-bound compositing and its receipt. The parent plan records these refs but
+  cannot claim it proved downstream pixels. Any packet with an unresolved
+  accepted file or rights decision is `blocked_unresolved`, never
+  `asset_packet_ready`. State the rejection gate literally: neither a global
+  noise layer nor a tiny halftone swatch can satisfy final-resolution subject
+  and background proof.
 
 ## Mandatory production-plan emissions
 
@@ -169,9 +187,33 @@ SceneDirection {
   objects, mostly empty PNGs, and one-pixel borders fail.
 - `newsprint_treatment_receipts`: asset/image ownership records prepared
   grayscale/contrast, subject-mask halftone scale, alpha, and accent.
-  Remotion ownership records deterministic final compositing. Independent style
-  review inspects final-resolution subject and background crops. Creative lock
-  remains blocked until all three receipts pass.
+  Each receipt must emit this first-load schema rather than hiding it in a
+  linked reference:
+
+  ```text
+  newsprint_treatment_receipt:
+    texture_classification: source_baked_scan | demonstrated_added_effect | operator_requested_style
+    raster_paper_asset_ref: <accepted raster path or stable asset locator>
+    raster_paper_rights_ref: <license, provenance, or operator-owned source receipt>
+    page_or_object_coordinates: true
+    full_frame_texture_proof_ref: <full frame at final delivery resolution>
+    close_crop_texture_proof_ref: <close crop at final delivery resolution>
+    final_resolution_halftone_scale: <measured or inspectable subject-print scale>
+    crisp_alpha: true
+    subject_mask_final_resolution_proof_ref: <subject crop at final delivery resolution>
+    background_crop_final_resolution_proof_ref: <paper crop at final delivery resolution>
+    remotion_compositing_receipt_ref: <deterministic page-bound render receipt>
+    independent_style_review_ref: <review receipt>
+    rejection_gate: global noise or a tiny halftone swatch cannot pass
+  ```
+
+  Remotion ownership records deterministic final compositing. Independent
+  style review inspects final-resolution subject and background crops. Reject
+  sepia, tears, stains, splatters, scrapbook seams, and uniform full-frame
+  grime/noise unless the story explicitly requires archival damage. A global
+  noise layer or tiny halftone swatch cannot satisfy the receipt. Creative lock
+  remains blocked until the raster surface, prepared subject treatment, and
+  final-resolution compositing/review receipts all pass.
 - `independent_story_review`: compare viable boards pairwise; cite every scene
   on specificity, causal clarity, hierarchy/depth, neighbor novelty, silent
   comprehension, and evidence integrity; provisionally select the strongest
@@ -220,6 +262,12 @@ SceneDirection {
     background, a dominant main-topic asset, and a separate foreground
     depth/attention asset, each with a source or generation packet, owner,
     rights note, expected output, accepted-file field, and acceptance check.
+  - [ ] When the direction calls for newspaper, newsprint, scanned-paper, or
+    editorial-print treatment, load
+    [newsprint treatment](references/newsprint-treatment.md). Classify whether
+    texture is baked into source media, explicitly demonstrated as an added
+    effect, or only operator-requested style; never invent an exact source
+    filter recipe from appearance alone.
   - [ ] Assign `asset_family_id` to every main-topic and foreground asset.
     Renames, recolors, flips, crops, and small rotations remain one family.
     Excluding the shared background and a declared transformed story motif,
@@ -442,6 +490,9 @@ SceneDirection {
 - `references/scene-asset-bundles.md` - load for every visual production scene;
   owns concrete background/main-topic/foreground bundles, readiness states,
   and the representative frame gate.
+- `references/newsprint-treatment.md` - load for newspaper/newsprint visual
+  direction; owns source-honest texture classification, raster paper sourcing,
+  compositing handoff, Brand Kit placement, and final-resolution proof.
 - `qa_checklist.md` - read at start and finish for content implementation plan
   QA.
 - `../storyboard/SKILL.md` - narrative, script, beat sheet, and scene map.

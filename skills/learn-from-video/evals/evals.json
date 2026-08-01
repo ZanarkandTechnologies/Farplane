@@ -104,6 +104,30 @@
           "notes": "Cold workflow-transfer case derived from TASK-0419. Prompt intentionally omits the expected mechanics and routing answer."
         }
       }
+    },
+    {
+      "id": "learn_video_confirms_ambiguous_scope_before_reconstruction_01",
+      "prompt": "Here is a short reference video with a dense editorial page, camera zooms, animated arrows and circles, textured print, and distinctive typography. I like it—learn from this and make something similar.",
+      "expected_output": "Inspects enough source evidence to name the plausible learning layers, then asks the operator to confirm one or more concrete targets before freezing the source-output eval or generating a candidate. Offers a full-system option because the visible layers work together.",
+      "files": [],
+      "assertions": [
+        "Does not silently infer that the most salient or easiest technique is the complete operator learning goal",
+        "Presents two to four total concise source-grounded targets and includes full-system as one of those choices when the layers form one visual system",
+        "Allows the operator to select multiple targets and recommends the narrowest faithful option",
+        "Returns clarification_required and does not freeze an eval or generate a candidate before scope confirmation",
+        "Would skip the follow-up only if the operator had already named concrete elements precise enough to define must-match checks"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Broad similarity request confirms learning scope first",
+          "tags": [
+            "learn-from-video",
+            "scope-confirmation",
+            "regression"
+          ],
+          "notes": "Regression for the 2026-08-02 editorial-reference miss where line mechanics were reconstructed before the operator clarified the full visual system."
+        }
+      }
     }
   ]
 }

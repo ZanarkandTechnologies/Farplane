@@ -11,6 +11,11 @@ from typing import Any
 
 CONCEPT_TYPES = {"literal_evidence", "causal_physical", "context_scale"}
 REVEAL_KINDS = {"introduce", "transform", "connect", "remove", "recontextualize"}
+TEXTURE_CLASSIFICATIONS = {
+    "source_baked_scan",
+    "demonstrated_added_effect",
+    "operator_requested_style",
+}
 
 
 def _ratio(values: list[str]) -> float:
@@ -109,10 +114,27 @@ def verify(payload: dict[str, Any]) -> dict[str, Any]:
                 "subject_halftone",
                 "crisp_alpha",
                 "registration_restrained",
+                "raster_paper_asset_ref",
+                "raster_paper_rights_ref",
+                "page_or_object_coordinates",
+                "full_frame_texture_proof_ref",
+                "close_crop_texture_proof_ref",
+                "final_resolution_halftone_scale",
+                "subject_mask_final_resolution_proof_ref",
+                "background_crop_final_resolution_proof_ref",
+                "remotion_compositing_receipt_ref",
+                "independent_style_review_ref",
+                "rejection_gate",
             )
             missing = [field for field in required if not treatment.get(field)]
             if missing:
                 fail("newsprint_treatment", f"{scene_id}: treatment receipt missing {', '.join(missing)}.")
+            classification = treatment.get("texture_classification")
+            if classification not in TEXTURE_CLASSIFICATIONS:
+                fail(
+                    "newsprint_treatment",
+                    f"{scene_id}: texture_classification must be one of {', '.join(sorted(TEXTURE_CLASSIFICATIONS))}.",
+                )
             if treatment.get("global_distress"):
                 fail("newsprint_treatment", f"{scene_id}: global distress is not valid subject treatment.")
 

@@ -75,8 +75,14 @@ template_uses:
 - [ ] `clean-newsprint-treatment`: Final-resolution background and
   dominant-subject crops prove a quiet high-key stage plus subject-level
   grayscale/contrast, controlled halftone or dithering, crisp alpha, and
-  restrained registration. Global noise, sepia, stains, tears, splatters, or a
-  tiny halftone swatch cannot pass this receipt.
+  restrained registration. The receipt classifies texture as source-baked,
+  explicitly demonstrated, or operator-requested; appearance alone never
+  becomes a claimed source filter recipe. A rights-cleared raster paper/scan
+  plate is composited in page/object coordinates and remains visibly effective
+  in both full-frame and close crops at final delivery resolution. Global
+  procedural noise, sepia, stains, tears, splatters, or a tiny halftone swatch
+  cannot pass this receipt. Record an inspectable final-resolution halftone
+  scale and an independent style-review reference before creative lock.
 - [ ] `story-prototype`: Opening, mechanism, and payoff each have three cheap
   thumbnail alternatives with a recorded selection. Thumbnail -> board ->
   measured animatic -> anchor style frames -> asset lock stays ordered.

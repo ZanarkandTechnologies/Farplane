@@ -4,7 +4,7 @@ status: active
 owner: content-impl-plan
 kind: reference
 created_at: 2026-07-27
-updated_at: 2026-07-27
+updated_at: 2026-08-02
 ---
 
 # Scene Asset Bundles
@@ -158,6 +158,12 @@ canvas area, one-pixel borders, or a mostly empty wide PNG cannot satisfy the
 gate.
 
 ### 4. Scope the surface treatment
+
+For newspaper, newsprint, scanned-paper, or editorial-print direction, load
+[newsprint treatment](newsprint-treatment.md) before asset lock. It separates
+source-baked texture from demonstrated effects and operator-requested style,
+then assigns raster sourcing, subject preparation, final compositing, and proof
+to their proper owners.
 
 Use grayscale, halftone, posterization, or a restrained accent to unify subject
 assets. Keep alpha edges crisp. Background grain stays subtle and global;

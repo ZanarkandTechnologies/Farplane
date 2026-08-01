@@ -423,6 +423,8 @@
       "assertions": [
         "Rejects sepia parchment, torn edges, stains, splatters, scrapbook seams, and uniform whole-frame grime as a mismatch for the supplied reference.",
         "Specifies a quiet high-key shared background with only subtle grid or grain and applies controlled grayscale, contrast, halftone or dithering primarily within dominant subject masks.",
+        "Distinguishes texture baked into supplied source media from an explicitly demonstrated added effect and does not invent an exact filter recipe from appearance alone.",
+        "Requires a rights-cleared raster paper or scan plate composited in page or object coordinates and verifies that texture remains visible in full-frame and close crops at final delivery resolution.",
         "Requires crisp alpha edges, a consistent final-resolution halftone scale, and only a restrained orange or red registration accent where it supports hierarchy.",
         "Assigns asset preparation receipts to asset or image ownership and final deterministic compositing receipts to Remotion, rather than claiming the parent planner proved downstream pixels.",
         "Blocks creative lock pending final-resolution subject-mask and background-crop evidence plus independent style review; global noise or a tiny halftone swatch cannot satisfy the gate."

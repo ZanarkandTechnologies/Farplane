@@ -46,7 +46,8 @@ state:
          eval, candidate artifact refs, comparison receipt, skill-change handoff)
 
 gates:
-  source_output_identified; transcript_or_visual_limit_recorded;
+  source_output_identified; learning_scope_confirmed;
+  transcript_or_visual_limit_recorded;
   evidence_classes_separated; eval_is_observable; rights_boundary_explicit;
   candidate_generated; comparison_inspected; owner_placement_resolved
 
@@ -57,6 +58,7 @@ routes:
 
 fails:
   summary_claimed_as_learning; generic_demo_claimed_as_reconstruction;
+  ambiguous_scope_silently_inferred; candidate_before_scope_confirmation;
   transcript_recall_eval; copied_source_expression; answer_leaked_in_eval_prompt;
   skill_mutation_without_owner_handoff; technical_render_claimed_as_source_match
 ```
@@ -97,9 +99,10 @@ candidate pass.
 ## Todo List
 
 - [ ] 1. Bind the learning request and proof budget.
-   - [ ] Resolve the canonical source, operator learning goal, intended reusable
-     capability, optional target skill, output type, rights boundary,
-     reconstruction-round limit, and finish gate.
+   - [ ] Resolve the canonical source, any explicit operator learning goal,
+     optional target skill, output type, rights boundary, reconstruction-round
+     limit, and finish gate. Do not silently turn a broad request such as
+     “something similar” into one narrow learning target.
    - [ ] Read `qa_checklist.md` as preflight guardrails.
 - [ ] 2. Reuse or create the evidence bundle.
    - [ ] When the request says evidence or a candidate is attached, supplied,
@@ -129,6 +132,18 @@ candidate pass.
      one mixed table. Keep candidate observations in their own section.
    - [ ] Name the source's input, transformation, parameters, state changes,
      output, and visible proof; block when no output is judgeable.
+   - [ ] Before freezing the eval, confirm the learning scope when the operator's
+     goal is missing or broad and the evidence supports multiple plausible
+     targets. Present two to four total short source-grounded choices, include
+     `full_system` as one of those choices when the layers work together, allow
+     multiple selections, and recommend the narrowest faithful option. When
+     `full_system` is included, group closely related layers so the total never
+     exceeds four. Do not ask a context-free “what do you want to learn?”
+     question.
+   - [ ] Skip a follow-up only when the operator already named concrete elements
+     precise enough to determine `must_match`; record that prompt as the scope
+     confirmation. If confirmation is required but unavailable, return
+     `clarification_required` and do not freeze an eval or generate a candidate.
 - [ ] 4. Compile the reconstruction prompt and frozen source-output eval.
    - [ ] Load [evidence-to-reconstruction](references/evidence-to-reconstruction.md).
    - [ ] Write a creator-neutral prompt that preserves functional method and
@@ -231,6 +246,11 @@ Bad output: a generic paper-texture montage that compiles successfully and is
 described as "inspired by the tutorial."
 ```
 
+For a broad request such as “make something similar” where the source visibly
+contains editorial layout, camera choreography, annotation motion, and print
+treatment, first offer those layers plus `full_system`. Choosing only the most
+salient effect and beginning reconstruction fails the scope gate.
+
 ## Templates
 
 - [Learned Video Packet](templates/learned-video-packet.md) — task-scoped final
@@ -245,6 +265,9 @@ described as "inspired by the tutorial."
 
 - Do not score whether the agent can repeat the tutorial explanation; score the
   produced artifact and its observable states.
+- Do not use source salience as operator intent. When several visual or
+  procedural layers are plausible and the request is broad, confirm one or more
+  named targets before freezing the eval or generating media.
 - Do not convert “not inlined in chat” into “not supplied.” Resolve named,
   attached, or staged files first and record the actual lookup result. An
   insufficient-evidence blocker is valid only after that lookup fails or the
@@ -296,6 +319,11 @@ evidence_ledger:
   creator_claims: []         # standalone section
   inference: []              # standalone section
   candidate_observations: [] # standalone section, including "not generated"
+learning_scope:
+  status: confirmed | clarification_required
+  confirmation_source: operator_prompt | operator_reply
+  selected_targets: []
+  candidate_targets: []
 frozen_eval:
   frozen_before_candidate_review: true
   must_match: []

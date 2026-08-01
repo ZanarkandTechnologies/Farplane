@@ -4,11 +4,24 @@ owner: learn-from-video
 status: active
 kind: qa-checklist
 created_at: 2026-07-28
+updated_at: 2026-08-02
 ---
 
 # Learn From Video QA Checklist
 
 Apply before reconstruction and again before completion.
+
+## Scope
+
+- [ ] A concrete operator learning goal is recorded before the eval is frozen.
+- [ ] When the initial request is broad and the source supports multiple
+  plausible targets, the operator was shown two to four total source-grounded
+  choices, with `full_system` occupying one choice when appropriate, and could
+  select multiple targets.
+- [ ] A follow-up was skipped only because the operator's prompt already named
+  concrete elements precise enough to determine `must_match`.
+- [ ] No candidate generation began while scope status was
+  `clarification_required`.
 
 ## Evidence
 

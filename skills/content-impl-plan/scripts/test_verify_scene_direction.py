@@ -45,6 +45,18 @@ def scene(scene_id: str, start: float, main: str, foreground: str) -> dict:
             "subject_halftone": True,
             "crisp_alpha": True,
             "registration_restrained": True,
+            "texture_classification": "operator_requested_style",
+            "raster_paper_asset_ref": "assets/paper-scan.jpg",
+            "raster_paper_rights_ref": "proof/paper-license.txt",
+            "page_or_object_coordinates": True,
+            "full_frame_texture_proof_ref": "proof/full-frame.png",
+            "close_crop_texture_proof_ref": "proof/close-crop.png",
+            "final_resolution_halftone_scale": "6 px cell at 1080x1920",
+            "subject_mask_final_resolution_proof_ref": "proof/subject-mask.png",
+            "background_crop_final_resolution_proof_ref": "proof/background-crop.png",
+            "remotion_compositing_receipt_ref": "proof/remotion-compositing.json",
+            "independent_style_review_ref": "proof/style-review.md",
+            "rejection_gate": "global noise or a tiny halftone swatch cannot pass",
             "global_distress": False,
         },
         "readiness": "creative_lock_passed",
@@ -82,6 +94,42 @@ class VerifySceneDirectionTest(unittest.TestCase):
             }
         )
         self.assertTrue(result["pass"], result["failures"])
+
+    def test_newsprint_receipt_requires_classification_raster_and_proof_refs(self) -> None:
+        missing = scene("S01", 0, "m1", "f1")
+        treatment = missing["treatment_receipt"]
+        del treatment["texture_classification"]
+        del treatment["raster_paper_asset_ref"]
+        del treatment["raster_paper_rights_ref"]
+        del treatment["full_frame_texture_proof_ref"]
+        del treatment["final_resolution_halftone_scale"]
+        del treatment["subject_mask_final_resolution_proof_ref"]
+        del treatment["background_crop_final_resolution_proof_ref"]
+        del treatment["remotion_compositing_receipt_ref"]
+        del treatment["independent_style_review_ref"]
+        del treatment["rejection_gate"]
+        result = verify({"scenes": [missing]})
+        messages = "\n".join(failure["message"] for failure in result["failures"])
+        self.assertFalse(result["pass"])
+        self.assertIn("texture_classification", messages)
+        self.assertIn("raster_paper_asset_ref", messages)
+        self.assertIn("raster_paper_rights_ref", messages)
+        self.assertIn("full_frame_texture_proof_ref", messages)
+        self.assertIn("final_resolution_halftone_scale", messages)
+        self.assertIn("subject_mask_final_resolution_proof_ref", messages)
+        self.assertIn("background_crop_final_resolution_proof_ref", messages)
+        self.assertIn("remotion_compositing_receipt_ref", messages)
+        self.assertIn("independent_style_review_ref", messages)
+        self.assertIn("rejection_gate", messages)
+
+    def test_newsprint_receipt_rejects_unknown_texture_classification(self) -> None:
+        invalid = scene("S01", 0, "m1", "f1")
+        invalid["treatment_receipt"]["texture_classification"] = "vox_grain_filter"
+        result = verify({"scenes": [invalid]})
+        self.assertFalse(result["pass"])
+        self.assertTrue(
+            any("texture_classification must be one of" in failure["message"] for failure in result["failures"])
+        )
 
 
 if __name__ == "__main__":
