@@ -3,7 +3,7 @@ title: "Prompt Engineering"
 status: active
 owner: prompt-governance
 created_at: 2026-06-12
-updated_at: 2026-07-24
+updated_at: 2026-08-02
 tags:
   - prompts
   - templates
@@ -213,6 +213,31 @@ canonical authored state from replaceable projections:
 design_schema(authored_facts, natural_identity, consumers)
   -> minimal_canonical_fields + justified_projection_fields
 ```
+
+Before adding configuration or parameter fields, classify each candidate by
+the kind of control it represents:
+
+```text
+config_field(candidate, callers, contracts)
+  -> field | prompt_instruction | skill_policy | derived_value
+```
+
+- Use `field` when a named caller needs to vary or inspect the value
+  independently, an external contract requires it, or snapshot-time meaning
+  must be preserved.
+- Use `prompt_instruction` when the behavior varies by context and needs
+  qualitative natural-language judgment.
+- Use `skill_policy` when the behavior is stable workflow logic shared by calls
+  to the owning skill.
+- Use `derived_value` when the value is safely and losslessly computable from
+  canonical inputs or context.
+
+Prefer one prompt or instructions field over a cluster of speculative knobs
+when contextual judgment is the real input. Promote a fine-grained parameter
+only after a named caller needs independent, validated control. A field with
+one valid value is normally policy rather than configuration; keep it only when
+an external schema requires it, a human must review or override the explicit
+default, or the stored value preserves historical meaning.
 
 Persist a field only when at least one current need applies:
 

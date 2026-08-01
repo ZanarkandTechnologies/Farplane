@@ -1,6 +1,6 @@
 <!--
 template_id: global-agents-template
-template_version: 0.2.21
+template_version: 0.2.23
 feature_refs:
   - FEAT-0022
   - FEAT-0042
@@ -114,6 +114,14 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
 - Look for what already works in the repo and in the world before inventing a
   novel implementation, unless novelty is the goal.
 - Explore data, logs, examples, and code paths before drawing conclusions.
+- When designing configuration, schemas, or tool parameters, minimize the
+  control surface. Add a field only for independently variable or inspectable
+  caller input, runtime facts, external contracts, separately mutable settings,
+  or snapshot state. Keep fixed, safely derived, and stable behavior in the
+  owning skill, prompt, or code. Use a prompt or instructions field for
+  contextual judgment; add fine-grained parameters only for independent,
+  validated control. Preserve explicit defaults only when human review or
+  override, external contracts, or snapshot meaning require them.
 - Use `prototyping` before broad scale: prove the pattern on the smallest
   honest representative sample, then expand from `1 -> 10 -> 100`.
 - Do things that do not scale first when they reduce uncertainty, reveal the
