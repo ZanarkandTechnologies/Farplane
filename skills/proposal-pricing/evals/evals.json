@@ -1,0 +1,53 @@
+{
+  "skill_name": "proposal-pricing",
+  "evals": [
+    {
+      "id": "proposal_pricing_people_time_01",
+      "prompt": "Turn these call notes into the proposal I can review with the customer: three coordinators each spend ten hours a week correcting order errors, their loaded cost is $40 per hour, and we discussed a workflow that validates orders and sends only exceptions to a coordinator. Keep it short and recommend the price.",
+      "expected_output": "Uses the supplied people, time, rate, and outcome without asking for them again; shows the $62,400 annual calculation; recommends one price near the default 15% starting point with correct return multiple; writes a concise human proposal with no more than five scope bullets, objective milestones, material exclusions, and one next step; does not include pricing theory, an evidence ledger, internal margin, or decorative tiers.",
+      "assertions": [
+        "Does not ask for information already supplied",
+        "Shows the correct $62,400 annual value calculation",
+        "Recommends one price and states the correct client return multiple",
+        "Keeps the proposal at 800 words or fewer",
+        "Includes a concrete outcome, scope, milestones, exclusions, and next step",
+        "Omits internal pricing theory, evidence-ledger prose, and decorative options"
+      ]
+    },
+    {
+      "id": "proposal_pricing_one_missing_number_01",
+      "prompt": "I need a proposal from this call. Five support staff spend about four hours each week on repetitive ticket replies. We discussed routing routine tickets automatically and handing complex cases to people with context, but the call never covered the team's loaded hourly cost.",
+      "expected_output": "Asks one direct question for the loaded hourly cost or a defensible direct consequence cost and stops; does not ask for company background, technical scope, authority, integrations, security, multiple value categories, or a general discovery intake; does not invent a price or draft a proposal before one annual value anchor can be calculated.",
+      "assertions": [
+        "Asks exactly one missing-value question",
+        "Does not return a broad intake questionnaire",
+        "Does not repeat known people, time, or outcome facts",
+        "Does not invent a rate, value, or price",
+        "Stops after the direct question"
+      ]
+    },
+    {
+      "id": "proposal_pricing_consequence_01",
+      "prompt": "Write a concise proposal from these notes. The manual order process causes two scheduling failures per month and each failure costs about $1,000. We proposed a validation step that catches incomplete orders before scheduling. The customer also mentioned that it saves admin time, but gave no time estimate.",
+      "expected_output": "Uses the consequence anchor alone to calculate $24,000 annual value; does not block on missing labor time or stack an invented labor benefit; recommends one price near the default 15% starting point with a correct return multiple; labels the $1,000 consequence cost as an estimate and returns a concise proposal for human review.",
+      "assertions": [
+        "Uses one sufficient consequence-cost anchor",
+        "Calculates $24,000 annual value correctly",
+        "Does not ask for or invent labor savings",
+        "Recommends one price with a correct return multiple",
+        "Labels the estimated consequence basis honestly"
+      ]
+    },
+    {
+      "id": "proposal_pricing_no_outcome_01",
+      "prompt": "Make me a priced proposal. The transcript only says the customer is curious about AI and has a team of twelve people. No problem, consequence, time cost, money cost, or proposed outcome was discussed.",
+      "expected_output": "Returns a one-sentence not_ready result because no proposed outcome or value anchor exists; does not invent a service, price, pain, or proposal; does not compensate with a long discovery questionnaire.",
+      "assertions": [
+        "Returns not_ready in one sentence",
+        "Does not invent a problem, service, value, or price",
+        "Does not generate a proposal",
+        "Does not return a broad questionnaire"
+      ]
+    }
+  ]
+}
