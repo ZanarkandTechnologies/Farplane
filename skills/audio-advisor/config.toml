@@ -26,7 +26,7 @@ agent_download = false
 
 [providers.fish]
 capabilities = ["voice"]
-model = "s2-pro"
+model = "s2.1-pro-free"
 format = "mp3"
 sample_rate = 44100
 mp3_bitrate = 128

@@ -3,6 +3,7 @@ from __future__ import annotations
 import importlib.util
 import json
 import sys
+import tomllib
 import unittest
 from pathlib import Path
 
@@ -31,6 +32,11 @@ def packet() -> dict:
 
 
 class FishAudioExecutorTests(unittest.TestCase):
+    def test_tracked_default_uses_current_free_engine(self) -> None:
+        config_path = SCRIPT.parents[1] / "config.toml"
+        config = tomllib.loads(config_path.read_text(encoding="utf-8"))
+        self.assertEqual(config["providers"]["fish"]["model"], "s2.1-pro-free")
+
     def test_request_keeps_reference_out_of_url_and_uses_free_model(self) -> None:
         request = executor.build_tts_request(packet(), "credential", "private-reference")
         body = json.loads(request.data)

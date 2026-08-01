@@ -7,7 +7,10 @@ template_uses:
 
 - [ ] Voice, music, SFX/Foley, ambience, silence, and mix/ducking are separated;
   multi-clip narrative work uses one time-coded master audio spine with
-  motion/edit bindings and acceptance checks.
+  motion/edit bindings and acceptance checks. For a voice-led
+  documentary/editorial reel, observed narration timestamps define half-open
+  scene ranges, and music, sparse SFX, ambience, silence, ducking, captions,
+  and named motion/edit events bind to the same master spine.
 - [ ] Each interesting/common SFX cue follows `reuse -> candidate discovery ->
   operator decision -> generate`; the final content plan lists up to three item
   links with cue, search phrase, fit, rights risk, and approval status, or an

@@ -77,7 +77,11 @@ Raw source capture and unresolved inspiration belong in [Source And Sidecar Syst
 ## Operating Contract
 
 - The only reusable creative inputs for this path are `Brand Kit` and optional computed `Tasty Pack`; the task idea and invocation policy remain the brief.
-- Brand Kit supplies approved identity, production policy, and one kit-wide prompt. Its embedded element snapshots are durable production inputs, not live Resource Bank pointers.
+- Brand Kit supplies approved identity, production policy, and one kit-wide
+  prompt. Its embedded element snapshots are durable production inputs, not
+  live Resource Bank pointers. The prompt may include provider, model, voice,
+  format, and other advisor direction as prose; downstream agents interpret the
+  complete prompt without a parallel advisor-configuration object.
 - Tasty Pack supplies ad hoc source-grounded inspiration from Resource Bank candidates. It is computed at retrieval time and does not create saved Tasty Pack rows.
 - Resource Bank remains candidate storage. It is not a production profile system and does not create recipe, formula, or profile tables.
 - `is_element(value) = independently selectable && independently conditionable from an example && owned by a recognizable production step`.

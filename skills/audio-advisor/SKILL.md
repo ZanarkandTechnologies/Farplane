@@ -73,7 +73,9 @@ fails:
 ```
 
 Config precedence is `invocation > config.toml > explicit fallback in this
-file`. Credentials resolve separately from the runtime environment, normally
+file`. A supplied Brand Kit prompt remains prose production direction in the
+brief; interpret it directly rather than requiring structured advisor fields.
+Credentials resolve separately from the runtime environment, normally
 through `farplane run -- <command>` or `doppler run -- <command>`; never write
 credential values into packets, artifacts, receipts, or tracked files.
 
@@ -117,6 +119,11 @@ alone do not unlock visual generation.
     intent, motion/edit event, gain/pan/fade needs, and acceptance check.
   - [ ] For multi-clip narrative reels, use one master audio spine and disable
     per-clip generated audio unless a named beat needs diegetic source sound.
+  - [ ] For a voice-led documentary/editorial reel, load the
+    [documentary reel production contract](../remotion/references/documentary-reel.md).
+    Measure the locked narration first, bind each causal clause to a half-open
+    frame range, and place music, sparse synchronized SFX, ambience, silence,
+    ducking, captions, and named motion/edit events on that same spine.
 - [ ] 3. Choose `reuse existing -> discover candidate -> operator decision -> generate` per cue.
   - [ ] Prefer an approved local asset for a common, literal SFX; generate only
     after candidate discovery finds no fit or the operator rejects the options.
@@ -203,6 +210,8 @@ combined voice, music, and SFX packet.
   voice, music, or SFX.
 - [Audio packet example](examples/explainer-audio-packet/example.md) - load only
   for combined packet shaping or review.
+- [Documentary reel contract](../remotion/references/documentary-reel.md) -
+  load for voice-led documentary/editorial reel timing and cue binding.
 - `scripts/validate_audio_packet.py` - validate provider packets and blockers.
 - `scripts/execute_fish_audio.py` - authorized Fish voice execution.
 - `scripts/execute_elevenlabs.py` - authorized ElevenLabs voice, music, or SFX

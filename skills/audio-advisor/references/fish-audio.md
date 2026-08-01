@@ -8,10 +8,14 @@ Fish is not a music or SFX route in this skill.
 - Runtime secret: `FISH_API_KEY`, resolved from the managed environment and
   checked only for presence before an authorized execution.
 - Endpoint/SDK capability: text-to-speech.
-- Recommended production default: `s2-pro`; use the current official model
-  documentation before changing the tracked default.
+- Farplane default: `s2.1-pro-free`, selected through the required `model`
+  request header. Fish documents this as the S2.1 Pro engine on the free
+  developer tier.
 - Voice input: a rights-safe `reference_id`, or explicitly authorized reference
   audio plus transcript. Treat private voice handles as private context.
+- Keep the engine and voice identifiers distinct: `model` selects the TTS
+  engine (for example `s2.1-pro-free`), while `reference_id` selects the voice
+  catalog entry (for example the ID copied from a Fish `modelId` URL).
 - Useful packet parameters: `model`, `format`, `sample_rate`, `mp3_bitrate`,
   `latency`, `prosody.speed`, `prosody.volume`, normalization, and optional
   sampling controls.

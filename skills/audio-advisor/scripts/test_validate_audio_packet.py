@@ -24,7 +24,7 @@ def packet(provider: str = "fish", kind: str = "voice") -> dict:
         "brief_ref": "audio-direction.md",
         "prompt_or_script": "Explain the queue.",
         "profile_ref": None,
-        "parameters": {"model": "s2-pro"},
+        "parameters": {"model": "s2.1-pro-free"},
         "timing": {"duration_seconds": 4, "cue_ref": "cue:scene-01.voice"},
         "output": {
             "owner": "tickets/TASK-0376/artifacts/audio",

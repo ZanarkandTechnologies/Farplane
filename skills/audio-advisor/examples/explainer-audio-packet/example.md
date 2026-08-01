@@ -20,7 +20,8 @@ audio_generation_packets:
     prompt_or_script: "Why does a tiny delay become a giant queue?"
     profile_ref: rights-safe narrator selected at invocation
     parameters:
-      model: s2-pro
+      model: s2.1-pro-free
+      reference_id_source: FISH_AUDIO_REFERENCE_ID
       format: mp3
       sample_rate: 44100
       latency: normal

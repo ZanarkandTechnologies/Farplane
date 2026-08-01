@@ -295,6 +295,9 @@ SceneDirection {
     the Tasty Pack as optional ad-hoc inspiration. Brand Kit policy wins every
     conflict; explicitly choose, augment, reject, or block each conflicting
     Tasty element instead of silently blending it.
+  - [ ] Pass the complete Brand Kit prompt into every selected child advisor as
+    production direction. Keep it as prose for agent judgment; do not invent or
+    require a parallel advisor-config schema, profile object, or bindings merge.
   - [ ] Do not accept or resolve `style_profile` as a third reusable creative
     source in this skill. Direct callers may still use standalone
     `video-production` profile behavior outside this composition path.
