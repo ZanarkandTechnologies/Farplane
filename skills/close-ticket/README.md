@@ -2,11 +2,11 @@
 
 ## Purpose
 
-Provide the operator-facing contract for the canonical closeout control surface:
-`$close-ticket`. This is a Tier 3 Farplane coding-pipeline closeout skill that
-uses the generic
-[`execute`](/Users/kenjipcx/coding-harness/Farplane/skills/execute/SKILL.md)
-interface's proof and writeback shape.
+Provide the operator-facing contract for Farplane's canonical closeout surface:
+`$close-ticket`. It turns a proven ticket into one glanceable issue in the
+project repository from `integrations.github.repo`, places the reviewed feature
+demo first for material feature work, verifies every attachment, closes the
+issue, then lets Core mine, index, and delete the exact local packet.
 
 ## Public API / Entrypoints
 
@@ -18,17 +18,32 @@ interface's proof and writeback shape.
 ## Minimal Example
 
 1. Start the prompt with `$close-ticket TASK-00XX`.
-2. Update the ticket writeback and durable docs for the final state.
-3. Run the repo-local closeout checks for the touched surfaces.
-4. Use `commit-message` to write the commit subject.
-5. Commit the closeout slice.
-6. Push only if the user or workflow explicitly calls for publishing.
+2. Update ticket/docs evidence and pass QA plus independent review.
+3. For material feature work, run `$demo` and select its reviewed `final.mp4`
+   first; select supporting screenshots only when useful.
+4. Render the concise `Before`, `After`, `Example`, `Key decisions`, and
+   `Proof` issue in the configured project repository.
+5. Use `gh` for issue creation, body updates, reads, and completed close state;
+   treat browser sign-in as a separate gate from `gh auth`.
+6. Upload one marked attachment comment per selected media file through
+   GitHub's authenticated web composer, demo first. Wait for the real
+   `github.com/user-attachments` URL; `gh issue comment --body-file` cannot
+   upload a local binary.
+7. Verify each marker and attachment URL with `gh`, open the comment fragment
+   to prove GitHub renders the image/video, and link the first demo comment from
+   the issue's `Proof` section.
+8. Close as completed, then run `farplane ticket close` so Core verifies,
+   mines, indexes, and deletes safely.
 
 ## How to Test
 
-- Confirm `SKILL.md` positions `close-ticket` as the canonical name and
-  `docs-closeout` as alias-only.
-- Confirm the `SKILL.md` Todo List stays a plain ordered checklist with Markdown links to
-  related skills.
-- Confirm the workflow covers docs writeback, checks, commit prep, and optional
-  push in that order.
+- Run `python3 -m unittest bin.tests.test_farplane_ticket_close`.
+- Confirm material feature work blocks before GitHub mutation without a passing
+  reviewed demo, while maintenance-only work does not invent one.
+- Confirm Core rejects marker-only media comments and retains the local packet.
+- Confirm a signed-out composer preserves the open issue, packet, and next
+  digest; after sign-in the retry resumes that issue and uploads once.
+- Confirm `gh` is never presented as a binary attachment uploader and no
+  repository commit, Release, or private upload endpoint is used as fallback.
+- Confirm exact configured-repository identity, no Releases or secondary repo,
+  concise issue headings, attachment verification, and retry-safe cleanup.
