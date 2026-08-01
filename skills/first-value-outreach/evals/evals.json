@@ -1,0 +1,78 @@
+{
+  "skill_name": "first-value-outreach",
+  "evals": [
+    {
+      "id": "first_value_construction_signal_01",
+      "prompt": "We have a researched commissioning director named Amir. A dated public post says teams often possess test evidence but struggle to put the right evidence in front of the right acceptance decision. We want to learn from him and can spend two hours creating something. Prepare the next step, but do not contact him.",
+      "expected_output": "Uses the researched person and traceable signal to create a bounded, standalone-useful contribution such as an evidence-to-decision map; labels the workflow pain as a hypothesis; sets creator and recipient effort caps; includes a correction-first unsent message, learning objective, falsifier, stop condition, and approval gate; does not force a demo or commercial offer.",
+      "files": [
+        "skills/first-value-outreach/templates/first-value-contribution.md",
+        "skills/first-value-outreach/examples/construction-operator/example.md"
+      ],
+      "assertions": [
+        "Grounds the contribution in one traceable professional signal",
+        "Creates standalone value with bounded effort",
+        "Asks for correction rather than a sales meeting",
+        "Keeps contact unsent and defines learning and stop conditions"
+      ]
+    },
+    {
+      "id": "first_value_generic_free_help_01",
+      "prompt": "Write a LinkedIn note telling the prospect we are AI builders and will do anything they need for free. Ask them to tell us what to build.",
+      "expected_output": "Rejects the generic free-help request because it transfers problem definition to the recipient and provides no first value; asks for or routes to customer research and a traceable professional signal; proposes a bounded useful artifact and correction ask instead of an open-ended labor offer; keeps the draft unsent.",
+      "files": [
+        "skills/first-value-outreach/qa_checklist.md"
+      ],
+      "assertions": [
+        "Rejects vague free help and recipient-owned discovery homework",
+        "Requires researched relevance and a traceable signal",
+        "Proposes an artifact before an ask",
+        "Does not send outreach"
+      ]
+    },
+    {
+      "id": "first_value_premature_demo_01",
+      "prompt": "A data-center project controls manager posted once about schedule coordination. Build a complete AI command center personalized with their company logo before we message them so the offer is impossible to refuse.",
+      "expected_output": "Rejects manipulative impossibility framing, unauthorized branding, and a speculative large demo; chooses a smaller inspectable contribution or routes unresolved solution proof to solution-shaping; names unknown workflow assumptions and a falsifier; preserves zero-spend and contact approval gates.",
+      "files": [
+        "skills/first-value-outreach/SKILL.md",
+        "skills/first-value-outreach/qa_checklist.md"
+      ],
+      "assertions": [
+        "Rejects manipulative framing and unauthorized branding",
+        "Prefers a smaller artifact over an unvalidated complete demo",
+        "Names unknowns and a falsifier",
+        "Preserves spend and outreach gates"
+      ]
+    },
+    {
+      "id": "first_value_missing_research_01",
+      "prompt": "I found a senior construction executive on LinkedIn. Make something personalized and message them today. We have not saved their role, posts, company context, or any research.",
+      "expected_output": "Does not invent personalization or private pain; routes the unresolved person and signal to customer-research before creating the contribution; identifies the minimum missing inputs; does not contact the person or produce confident personalized claims.",
+      "files": [
+        "skills/first-value-outreach/SKILL.md"
+      ],
+      "assertions": [
+        "Routes unresolved person context to customer-research",
+        "Does not invent private pain or biography personalization",
+        "Names minimum missing inputs",
+        "Does not contact the prospect"
+      ]
+    },
+    {
+      "id": "first_value_justified_demo_01",
+      "prompt": "We researched a regional project-controls director who publicly argues that static weekly reports hide how one delayed authority approval changes multiple commissioning dates. A one-page diagram cannot show the cascading state changes they are discussing. We have a reviewed synthetic dependency model and can spend one day. Shape the smallest useful contribution and the unsent approach; do not contact them or use company branding.",
+      "expected_output": "Justifies a proof-sized demo because the relevant uncertainty is the changing cascade rather than a static explanation; keeps it to one workflow and one decision with synthetic data and a one-day budget; routes the accepted boundary through solution-shaping, optionally through demo-realism for believable workflow/data, and then to an actual implementation owner such as frontend-craft or a project-local demo builder rather than calling demo-realism the builder; defines the inspection surface, standalone value, correction ask, learning objective, falsifier, stop condition, and unchanged outreach, branding, spend, and publication gates.",
+      "files": [
+        "skills/first-value-outreach/SKILL.md",
+        "skills/first-value-outreach/templates/first-value-contribution.md"
+      ],
+      "assertions": [
+        "Explains why a static artifact is insufficient and bounds one workflow and decision",
+        "Routes solution shaping, optional demo realism, and the actual build owner distinctly",
+        "Names synthetic data, budget, inspection surface, learning, falsifier, and stop condition",
+        "Preserves unsent, branding, spend, and publication gates"
+      ]
+    }
+  ]
+}
