@@ -25,18 +25,22 @@ This is the decision workflow, not an execution or continuation loop. It
 generates or consumes candidate levers, ranks short contingent trajectories,
 chooses the next wave and first proof, and states when later evidence should
 cause replanning. Domain entrypoints execute the move. Goal Advisor compiles a
-material campaign. Tickets, `program.md`, and `progress.md` own durable state.
+material campaign. The ticket and `program.md` own scope and policy,
+`hypothesis-tree.json` owns current experiment-search state when enabled, and
+`progress.md` owns chronological receipts.
 
 ## Skill Signature
 
 ```text
 advise_leverage(subject_ref, objective?, evidence_refs?, constraints?,
-                lever_catalog?, progress_ref?, remaining_budget?)
+                lever_catalog?, hypothesis_tree_ref?, progress_ref?,
+                remaining_budget?)
   -> leverage_plan + ranked_frontier + next_wave + first_proof
    + replan_conditions + source_gap?
 state: reads(subject docs, registries, tickets/specs, optional lever catalog,
-             roadmap, progress observations, experiment receipts, prior proof,
-             constraints and remaining budget);
+             optional hypothesis tree, program policy, progress observations,
+             experiment receipts, prior proof, constraints and remaining
+             budget);
        writes(leverage plan or ticket seed only when the caller owns a path)
 gates: subject_grounded; objective_named; catalog_resolved_or_source_gap;
        eligible_frontier_ranked; next_wave_earned; first_proof_named;
@@ -46,7 +50,8 @@ routes: reference-grounding | advise | research:parity |
   impl-plan | goal-advisor | harness-advisor | leverage-rollout
 fails: generic strategy; invented capability or candidate; fixed ladder that
   ignores progress; fake-precision score; roadmap without proof or replan;
-  execution, Goal compilation, or ticket-per-experiment ownership
+  pairwise tournament; persistent rank ownership; execution, Goal compilation,
+  or ticket-per-experiment ownership
 ```
 
 When `subject_ref` is underspecified, resolve it from local files, active
@@ -65,8 +70,9 @@ the chosen next step needs its own artifact, budget, or proof surface.
 - [ ] 1. Bind the feature and ambition.
    - [ ] Identify the feature, capability, workflow, artifact, or bounded
      campaign being maximized and name its objective.
-   - [ ] Bind supplied constraints, remaining budget, roadmap, catalog, and
-     `progress.md` or experiment evidence when this is a replan checkpoint.
+   - [ ] Bind supplied constraints, remaining budget, program policy, optional
+     hypothesis tree, catalog, and `progress.md` or experiment evidence when
+     this is a replan checkpoint.
    - [ ] Set the default objective to "compound leverage from existing
      capability" only when the caller does not provide a more concrete one.
    - [ ] Set default constraints to low operator effort, fast proof, reusable
@@ -79,9 +85,16 @@ the chosen next step needs its own artifact, budget, or proof surface.
    - [ ] State what the subject already does, what progress has established or
      falsified, what remains uncertain, and what local assets can be reused.
 - [ ] 3. Resolve the candidate frontier.
-   - [ ] Use the supplied or project-local lever catalog when it is current and
-     sufficient; otherwise generate candidates from grounded capability,
-     failures, prior proof, and remaining constraints.
+   - [ ] When an experiment-backed campaign supplies
+     `hypothesis-tree.json`, treat eligible pending leaves as the current
+     frontier. Derive leaves from parent and status; do not require stored
+     ranks, child lists, depth, or a duplicate frontier.
+   - [ ] Before the first mutation, use the supplied or project-local lever
+     catalog, local failures, source-stage techniques, mechanisms, and variables
+     to create intervention hypotheses with expected observations, falsifiers,
+     expected rewards, and concise reward bases.
+   - [ ] Otherwise generate candidates from grounded capability, failures,
+     prior proof, and remaining constraints.
    - [ ] When credible candidates are missing, stale, or too weak to justify a
      choice, route bounded external research or multi-source synthesis through
      the owning workflow, then record `adopt | adapt | reject | defer`
@@ -97,6 +110,9 @@ the chosen next step needs its own artifact, budget, or proof surface.
      unless calibrated numeric priors exist.
    - [ ] Include exactly three options when three viable options exist; do not
      invent a third weak option.
+   - [ ] Make one ordinal comparison. Do not use a pairwise tournament, invent
+     uncalibrated numeric lift, persist rank scores in the tree, or create a
+     second selection algorithm.
 - [ ] 5. Recommend the next wave and first proof.
    - [ ] Name the tradeoff accepted.
    - [ ] Choose one move by default. Admit multiple moves only when they are
@@ -109,8 +125,13 @@ the chosen next step needs its own artifact, budget, or proof surface.
    - [ ] Define how positive, flat, negative, branch-specific, invalid, or
      budget evidence changes the frontier; do not return a fixed ladder.
    - [ ] Keep one stable objective, evaluator, and budget in one campaign
-     ticket. Treat experiments as progress entries and receipts; split only at
-     a real ownership, proof, approval, spend, or objective boundary.
+     ticket. Update current node state in `hypothesis-tree.json` and append the
+     same selection/mutation receipt to `progress.md`; split only at a real
+     ownership, proof, approval, spend, or objective boundary.
+   - [ ] Add at most the program-bounded diagnostic children when a result is
+     surprising, invalid, prerequisite-uncertain, or causally ambiguous.
+     Expected negatives may close directly. After diagnosis, repair, reject,
+     defer, or backtrack while preserving credible siblings.
    - [ ] Use [metric-advisor](../metric-advisor/SKILL.md) when the first proof
      depends on choosing a metric, reward signal, guard metric, or no-metric
      rationale.
@@ -134,7 +155,8 @@ the chosen next step needs its own artifact, budget, or proof surface.
 vars:
   subject = subject_ref
   objective = objective? or "compound leverage from existing capability"
-  evidence = evidence_refs? + progress_ref? + discover_nearest_context(subject)
+  evidence = evidence_refs? + hypothesis_tree_ref? + progress_ref?
+    + discover_nearest_context(subject)
   constraints = constraints? or [
     low_operator_effort,
     fast_proof,
@@ -146,7 +168,7 @@ program:
   ground(subject, objective, evidence) -> current_state + learned_constraints
 
   resolve_candidates(
-    lever_catalog?, current_state, learned_constraints
+    hypothesis_tree_ref?, lever_catalog?, current_state, learned_constraints
   ) -> candidate_frontier | bounded_source_gap
 
   filter(candidate_frontier,
@@ -166,15 +188,15 @@ program:
       reversibility,
       interference
     ]
-  ) -> ranked_frontier
+  ) -> ordinal_ranked_frontier
 
-  advise(ranked_frontier) -> next_wave + tradeoff_accepted
+  advise(ordinal_ranked_frontier) -> next_wave + tradeoff_accepted
 
   design_first_test(next_wave) -> first_proof
 
   define_replan_conditions(
-    next_wave, ranked_frontier
-  ) -> positive + flat + negative + invalid + budget branches
+    next_wave, ordinal_ranked_frontier
+  ) -> positive + flat + negative + invalid + diagnostic + budget branches
 
   decide_execution_shape(next_wave) ->
     direct_action | metric_card | impl_plan | goal_packet | leverage_rollout
@@ -211,6 +233,8 @@ Output:
   direct.
 - Do not become a global registry, research engine, experiment executor, Goal
   compiler, ticket materializer, or second continuation owner.
+- Do not become the hypothesis-tree state owner. Read the tree, return one
+  selection and mutation expectation, and let the campaign update it.
 - Do not rank technique names by novelty. Tie every move to the current
   bottleneck, evidence, cheapest falsifier, and result-dependent frontier
   update.
@@ -243,6 +267,7 @@ Return this shape in chat or write it to the requested artifact:
 
 - `Feature Grounding`
 - `Objective And Progress Grounding`
+- `Hypothesis Tree Grounding`, when supplied
 - `Ranked Frontier And Rejected Moves`
 - `Next Wave`
 - `Tradeoff Accepted`
@@ -251,3 +276,16 @@ Return this shape in chat or write it to the requested artifact:
 - `Source Gap`, when applicable
 - `Next Owner`
 - `Goal / Rollout Readiness`
+
+For a source-stage request with sufficient inputs, do not return only a schema.
+Render the extracted `Source refs`, `Techniques`, `Mechanisms`, and `Variables`,
+then at least two concrete intervention candidates when credible alternatives
+exist. Every candidate must include `hypothesis`, `mechanism`,
+`expected_observation`, `falsifier`, `expected_reward`, `reward_basis`, and
+`source_refs`. Finish with one ordinal selected candidate and its rationale. A
+source gap is valid only when the supplied facts genuinely cannot support those
+fields.
+
+For an ambiguous-result request, render `Diagnostic children`, `Preserved
+siblings`, `Outcome branches` (`repair | reject | defer | backtrack`), and
+`Writeback order` (`hypothesis-tree.json` before `progress.md`).

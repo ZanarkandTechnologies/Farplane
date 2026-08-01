@@ -7,7 +7,7 @@
       "expected_output": "Binds one campaign ticket and exact mutable surface; Freezes evaluator, data boundary, metric, guards, and budget; Runs the unchanged baseline first; Uses Goal Advisor for bounded continuation; Uses Leverage Advisor for experiment selection; Returns a receipt-backed best candidate or negative result",
       "files": [],
       "assertions": [
-        "Requires one campaign ticket with ticket.md, program.md, and progress.md",
+        "Requires one campaign ticket with ticket.md, program.md, hypothesis-tree.json, and progress.md",
         "Names the exact mutable surface and freezes evaluator, data/splits, metric, guards, and compute budget",
         "Runs and records the unchanged full-evaluator baseline before mutation",
         "Uses Goal Advisor as the sole bounded continuation compiler",
@@ -18,12 +18,12 @@
     {
       "id": "ml_autoresearch_program_replans_from_progress_01",
       "prompt": "Draft the compact loop policy for a model-research campaign where later experiments must learn from earlier failures instead of marching through the original architecture list.",
-      "expected_output": "Keeps the roadmap in program.md and observations in progress.md; Before every experiment invokes Leverage Advisor on roadmap, progress learnings, current receipts, and remaining budget; Selects one hypothesis and falsifier; Appends the immutable result and frontier update; Keeps Goal Advisor out of technique selection",
+      "expected_output": "Keeps source/search policy in program.md, current research state in hypothesis-tree.json, and receipts in progress.md; Before every experiment invokes Leverage Advisor on pending leaves, progress learnings, current receipts, and remaining budget; Selects one hypothesis and falsifier; Updates the tree then appends the immutable result; Keeps Goal Advisor out of technique selection",
       "files": [],
       "assertions": [
-        "Places the initial roadmap and replan policy in program.md",
-        "Places append-only experiment observations and learnings in progress.md",
-        "Invokes Leverage Advisor before every next-experiment decision using roadmap, progress, receipts, and remaining budget",
+        "Places source/search and replan policy in program.md",
+        "Places current hypotheses, results, and insights in hypothesis-tree.json and chronological receipts in progress.md",
+        "Invokes Leverage Advisor before every next-experiment decision using pending tree leaves, progress, receipts, and remaining budget",
         "Selects and records one attributable hypothesis, falsifier, and changed boundary per round",
         "Keeps Goal Advisor as the Goal Packet compiler rather than the technique selector"
       ],
@@ -32,12 +32,12 @@
     {
       "id": "ml_autoresearch_missing_catalog_routes_research_01",
       "prompt": "We know the baseline is weak, but nobody has assembled credible techniques for this kind of data and our notes are stale. Start the experiment loop anyway.",
-      "expected_output": "Refuses to fabricate a technique order; Routes bounded parity or source synthesis and dispositions before roadmap selection; Keeps source material outside runtime progress; Returns a source gap or blocked setup when grounding cannot run; Does not spend compute before the frontier is credible",
+      "expected_output": "Refuses to fabricate a technique order; Routes bounded parity or source synthesis and dispositions before tree seeding; Keeps raw source material outside runtime state; Returns a source gap or blocked setup when grounding cannot run; Does not spend compute before the frontier is credible",
       "files": [],
       "assertions": [
         "Recognizes the candidate technique frontier is missing or stale",
         "Routes bounded research or Best Of Worlds before ranking rather than always browsing",
-        "Requires source-backed adopt, adapt, reject, or defer decisions",
+        "Requires source-backed adopt, adapt, reject, or defer decisions and extracts techniques, mechanisms, and variables",
         "Returns a source gap or setup blocker when credible candidates cannot be obtained",
         "Does not launch compute or invent a fixed technique ladder"
       ],
@@ -70,6 +70,34 @@
         "Keeps any repair or rerun inside the campaign budget and domain executor"
       ],
       "metadata": {"farplane": {"title": "ML Autoresearch audits a surprising negative before stopping", "tags": ["skill", "ml", "autoresearch", "scientific-evidence"], "notes": "Prevents premature falsification inside the campaign loop."}}
+    },
+    {
+      "id": "ml_autoresearch_source_stage_seeds_tree_01",
+      "prompt": "Before an image-model campaign begins, synthesize these bounded refs into initial experiments. local-ablation-4: small-object recall falls when crop scale exceeds 0.8. feed-paper-1: area-aware sampling increases exposure of small targets; feed-paper-2: multi-scale tokens preserve fine detail; feed-paper-3: focal loss shifts gradient mass toward hard examples; feed-paper-4: aggressive augmentation can erase tiny features. repo-area-sampler: maintained code exposes sampling weight and crop-scale variables. The frozen evaluator reports small-object recall, overall accuracy, and latency.",
+      "expected_output": "Runs a bounded source stage; Extracts applicable techniques, mechanisms, and variables; Seeds intervention hypotheses with expected reward contracts; Uses one ordinal compounding selection; Avoids a tournament or database",
+      "files": [],
+      "assertions": [
+        "Runs the bounded source stage before the first mutation",
+        "Extracts applicable techniques, mechanisms, variables, failure conditions, and source refs rather than raw prose",
+        "Generates intervention hypotheses through combination, permutation, transfer, ablation, or new direction",
+        "Records expected observation, falsifier, expected compounding reward, and reward basis per node",
+        "Uses one ordinal Leverage Advisor judgment without a tournament, persistent rank, or invented numeric lift"
+      ],
+      "metadata": {"farplane": {"title": "ML Autoresearch seeds a source-grounded tree", "tags": ["skill", "ml", "autoresearch", "hypothesis-tree"], "notes": "Protects the source-stage contract before compute."}}
+    },
+    {
+      "id": "ml_autoresearch_surprise_diagnostic_backtrack_01",
+      "prompt": "A normalization intervention missed its expected reward, its positive control is noisy, and an upstream data prerequisite may be absent. Decide whether to discard it and update the campaign.",
+      "expected_output": "Treats the evidence as ambiguous; Adds bounded diagnostic children; Preserves siblings; Defines repair, rejection, deferral, or backtracking; Updates the tree before progress",
+      "files": [],
+      "assertions": [
+        "Treats the evidence as invalid or causally ambiguous rather than a supported rejection",
+        "Creates only budget-bounded diagnostic children for the control and prerequisite explanations",
+        "Keeps credible sibling intervention leaves available",
+        "Defines repair, reject, defer, or backtrack outcomes from the diagnostic evidence",
+        "Updates hypothesis-tree.json before appending the immutable progress receipt"
+      ],
+      "metadata": {"farplane": {"title": "ML Autoresearch diagnoses before rejection", "tags": ["skill", "ml", "autoresearch", "diagnosis"], "notes": "Protects diagnostic learning and backtracking on ambiguous evidence."}}
     }
   ]
 }

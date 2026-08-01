@@ -4,6 +4,7 @@ owner: optimize-with-human
 status: active
 kind: qa-checklist
 created_at: 2026-06-27
+updated_at: 2026-07-31
 ---
 
 # Optimize With Human QA Checklist
@@ -20,7 +21,8 @@ optimize_with_human_qa(goal_packet, phase, artifact_refs, notification_result)
 
 1. `goal_packet_present`
    - Pass: `ticket.md`, `program.md`, and `progress.md` are present or named
-     before a feedback request is sent.
+     before a feedback request is sent; multi-turn experiment-backed packets
+     also name `hypothesis-tree.json`.
    - Fail: the loop relies on chat memory or a standalone Telegram request.
 
 2. `phase_bound`
@@ -35,9 +37,9 @@ optimize_with_human_qa(goal_packet, phase, artifact_refs, notification_result)
      or plan reference.
 
 4. `experiment_proposal_logged`
-   - Pass: `progress.md` has an experiment proposal with phase, hypothesis,
-     skill delta candidate, rollout batch, and expected feedback before the
-     request goes out.
+   - Pass: the selected hypothesis is current in `hypothesis-tree.json` when
+     enabled, and `progress.md` has its proposal receipt with phase, skill delta
+     candidate, rollout batch, and expected feedback before the request goes out.
    - Fail: the worker asks for feedback before recording what it is testing.
 
 5. `reply_path_bound`
@@ -96,8 +98,9 @@ optimize_with_human_qa(goal_packet, phase, artifact_refs, notification_result)
    - Fail: the thread state exists only in chat.
 
 4. `experiment_result_logged`
-   - Pass: after feedback, the same experiment row or follow-up progress entry
-     records verdict, result, next phase action, and promotion decision.
+   - Pass: after feedback, the tree node is updated first when enabled, and the
+     follow-up progress entry records verdict, result, tree mutation, next phase
+     action, and promotion decision.
    - Fail: the loop records only that a message was sent.
 
 5. `skill_promotion_guard`
@@ -111,3 +114,9 @@ optimize_with_human_qa(goal_packet, phase, artifact_refs, notification_result)
    - Pass: terminal stops name `keep`, `approve`, `convergence`, `budget`, or
      `blocker`.
    - Fail: the loop claims completion without a terminal reason.
+
+7. `tree_selection_is_lean`
+   - Pass: experiment-backed loops use one ordinal compounding-leverage choice,
+     no tournament or persisted rank; human variant ranking remains only an
+     observation inside a selected experiment.
+   - Fail: the feedback variants become a second hypothesis-selection engine.

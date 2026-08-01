@@ -3,17 +3,17 @@
   "evals": [
     {
       "id": "leverage_advisor_replans_from_progress_01",
-      "prompt": "We have a roadmap for improving a model, but the first cheap representation probe was flat overall and improved only one target class. What should we try next?",
-      "expected_output": "Grounds the current objective and observation; Revises the eligible frontier from the asymmetric result; Recommends one evidence-linked next proof instead of continuing a fixed ladder; States positive, negative, and budget replan conditions; Keeps execution and campaign state with the owning workflow",
+      "prompt": "We have a hypothesis tree for improving a model, but the first cheap representation probe was flat overall and improved only one target class. What should we try next?",
+      "expected_output": "Grounds the current objective and observation; Revises eligible pending leaves from the asymmetric result; Recommends one evidence-linked next proof; States positive, negative, diagnostic, and budget replan conditions; Keeps execution and tree mutation with the owning workflow",
       "files": [],
       "assertions": [
-        "Uses the new progress evidence to revise rather than replay the original roadmap order",
+        "Uses program policy, current tree leaves, progress evidence, and receipts rather than replaying the original order",
         "Ranks the remaining frontier by bottleneck fit, information value, unlocks, cost, and risk",
         "Selects one bounded first proof and names what would falsify it",
         "States contingent replan conditions for the result",
-        "Does not execute the experiment, compile a Goal, or create a ticket per attempt"
+        "Does not execute the experiment, mutate the tree, compile a Goal, or create a ticket per attempt"
       ],
-      "metadata": {"farplane": {"title": "Leverage Advisor replans from asymmetric evidence", "tags": ["skill", "leverage", "replanning"], "notes": "Regression for roadmap plus progress selection."}}
+      "metadata": {"farplane": {"title": "Leverage Advisor replans from asymmetric evidence", "tags": ["skill", "leverage", "replanning"], "notes": "Regression for tree plus evidence selection."}}
     },
     {
       "id": "leverage_advisor_source_gap_01",
@@ -42,6 +42,34 @@
         "Does not materialize tickets itself"
       ],
       "metadata": {"farplane": {"title": "Leverage Advisor preserves campaign ticket ownership", "tags": ["skill", "leverage", "tickets"], "notes": "Protects the one-campaign-ticket design."}}
+    },
+    {
+      "id": "leverage_advisor_seeds_hypotheses_from_sources_01",
+      "prompt": "Seed the first research frontier from these bounded refs. S1 local-eval: both safety misses occur after a late handoff. S2 feed-scout:paper-17 reports that explicit prerequisite binding makes required state visible before a decision. S3 repo:handoff-guards demonstrates colocating verification beside the handoff. Applicable techniques: explicit prerequisite binding and colocated verification. Plausible mechanism: make the missing state observable at the decision point. Controllable variables: prerequisite wording, verification placement, and handoff timing.",
+      "expected_output": "Extracts only applicable techniques, mechanisms, variables, failure conditions, and source refs; Generates intervention hypotheses with expected observations, falsifiers, expected compounding rewards, and reward bases; Keeps raw source prose outside the tree; Makes one ordinal selection",
+      "files": [],
+      "assertions": [
+        "Grounds source refs and separates techniques, mechanisms, and variables",
+        "Generates intervention hypotheses through combination, permutation, transfer, ablation, or new direction",
+        "Records expected observation, falsifier, expected reward, and concise reward basis on each candidate",
+        "Uses one ordinal compounding-leverage comparison without a tournament, persistent rank, or invented numeric lift",
+        "Does not create a global technique database or store raw source prose in campaign state"
+      ],
+      "metadata": {"farplane": {"title": "Leverage Advisor seeds a source-grounded hypothesis tree", "tags": ["skill", "leverage", "hypothesis-tree"], "notes": "Protects the bounded source-to-hypothesis stage."}}
+    },
+    {
+      "id": "leverage_advisor_diagnoses_then_backtracks_01",
+      "prompt": "A selected intervention missed its expected reward, but the control was noisy and a prerequisite may be absent. Preserve useful alternatives and decide the next research move.",
+      "expected_output": "Treats the miss as causally ambiguous; Proposes only bounded diagnostic children; Preserves credible siblings; Defines repair, reject, defer, and backtrack outcomes; Returns a tree mutation expectation without owning state",
+      "files": [],
+      "assertions": [
+        "Distinguishes an intervention hypothesis from diagnostic hypotheses about the miss",
+        "Adds no more diagnostic children than the program budget allows",
+        "Preserves credible sibling intervention leaves while diagnosing",
+        "Defines how diagnostic evidence causes repair, rejection, deferral, or backtracking",
+        "Does not rescue every expected negative or take ownership of tree mutation"
+      ],
+      "metadata": {"farplane": {"title": "Leverage Advisor diagnoses a surprise before backtracking", "tags": ["skill", "leverage", "diagnosis"], "notes": "Protects bounded depth-first learning with breadth preservation."}}
     }
   ]
 }

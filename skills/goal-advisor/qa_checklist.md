@@ -4,7 +4,7 @@ owner: goal-advisor
 status: active
 kind: qa-checklist
 created_at: 2026-06-22
-updated_at: 2026-07-16
+updated_at: 2026-07-31
 applies_to:
   - goals
   - goal-prompts
@@ -108,6 +108,20 @@ goal_advisor_qa(goal_prompt, ticket?, program?) -> checklist_verdicts + fixes_or
    - Violation: The result copies golden facts/wording, the reviewer inherits
      the planning chain, or no held-out context tests invariant transfer.
 
+14. `experiment-backbone-ownership`
+   - Question: For experiment-backed improvement Goals, does the packet list
+     `hypothesis-tree.json`, keep source/search policy in `program.md`, current
+     research state in the tree, and chronological receipts in `progress.md`?
+   - Violation: The packet omits the tree, adds it to an ordinary coding Goal,
+     or duplicates nodes/frontiers/ranks across state surfaces.
+
+15. `tree-writeback-order`
+   - Question: Does an experiment turn update its selected tree node and
+     bounded diagnostic children before appending the corresponding progress
+     receipt?
+   - Violation: Current branch state exists only in prose, or progress becomes
+     a competing mutable frontier.
+
 ## Evidence Note Template
 
 ```text
@@ -120,6 +134,7 @@ goal_advisor_qa:
   final_evidence_rule:
   critical_path_proof_rule:
   final_completion_checkpoint:
+  experiment_backbone:
   violations:
   fixes_or_deferrals:
 ```

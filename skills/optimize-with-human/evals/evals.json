@@ -4,23 +4,24 @@
     {
       "id": "optimize_with_human_preset_01",
       "prompt": "AGI Toy Shop has 8 TikTok hook variants for a new toy drop. Set up a loop that uses Kenji's feedback to improve the content skill before market testing.",
-      "expected_output": "Treats optimize-with-human as a Goal Advisor preset, not a separate loop runtime; Binds target, objective, metric_provider=human_feedback, feedback_channel=telegram, and feedback_policy=ask_when_artifact_ready; Requires or points to a ticket-backed Goal Packet with ticket.md, program.md, and progress.md; Binds phase=planning or phase=execution before requesting feedback; Uses proposal cards, offer briefs, storyboard premises, hook batches, or compact plans as valid planning-phase artifacts; Requires non-trivial planning feedback to include audience or buyer, taste insight, artifact shape, core angle, execution beats, why it could win, cringe risks, references or taste pack, feedback question, and next step if approved; Allows hook-only planning feedback only when the artifact being judged is itself a hook or similarly tiny unit; Requires approved_plan_ref before execution-phase feedback unless the artifact is explicitly a tiny planning test; Logs a hypothesis cycle in progress.md before the feedback request with phase, current_hypothesis, planned_attempt, artifact_refs, human_question, expected_signal, and skill_delta_candidate; Asks one short review question Kenji can answer quickly; Includes artifact references and a concrete feedback.json shape; Defines how the parent Goal should pause and resume from the feedback; Applies the turn exit gate before stopping: waiting turns must send Telegram or a fallback/blocker; non-terminal feedback turns must send the next artifact request or blocker; Records human_signal, learning, next_hypothesis, and promotion_decision in progress.md after a reply; Does not harden target skills from a first rejection; it perturbs local planning or execution until repeated same-phase evidence supports promotion; Can use the fixed AGI Toy Shop scenario when no live scenario is supplied; Supports founder_lens=true for product, content, distribution, offer, and market-learning artifacts; When founder_lens=true, frames the loop around customer, problem, wedge, offer or artifact, distribution angle, validation question, next bet if approved, and pivot trigger if rejected; Uses founder-mode questions like whether Kenji would want to build, sell, or test the bet instead of only asking whether the artifact is good; Records terminal reasons as keep, approve, convergence, budget, or blocker",
+      "expected_output": "Treats optimize-with-human as a Goal Advisor preset, not a separate loop runtime; Binds target, objective, metric_provider=human_feedback, feedback_channel=telegram, and feedback_policy=ask_when_artifact_ready; Requires or points to a ticket-backed Goal Packet with ticket.md, program.md, hypothesis-tree.json, and progress.md for multi-turn optimization; Seeds and ordinally selects a source-grounded hypothesis without a tournament; Binds phase=planning or phase=execution before requesting feedback; Uses proposal cards, offer briefs, storyboard premises, hook batches, or compact plans as valid planning-phase artifacts; Requires non-trivial planning feedback to include audience or buyer, taste insight, artifact shape, core angle, execution beats, why it could win, cringe risks, references or taste pack, feedback question, and next step if approved; Allows hook-only planning feedback only when the artifact being judged is itself a hook or similarly tiny unit; Requires approved_plan_ref before execution-phase feedback unless the artifact is explicitly a tiny planning test; Logs a hypothesis cycle in progress.md before the feedback request; Asks one short review question Kenji can answer quickly; Includes artifact references and a concrete feedback.json shape; Defines how the parent Goal should pause and resume from the feedback; Updates the tree before the progress receipt after feedback; Keeps human ranking as an experiment signal rather than the hypothesis selector; Applies the turn exit gate before stopping; Does not harden target skills from a first rejection; Supports founder_lens=true; Records terminal reasons as keep, approve, convergence, budget, or blocker",
       "files": [],
       "assertions": [
         "Treats optimize-with-human as a Goal Advisor preset, not a separate loop runtime",
         "Binds target, objective, metric_provider=human_feedback, feedback_channel=telegram, and feedback_policy=ask_when_artifact_ready",
-        "Requires or points to a ticket-backed Goal Packet with ticket.md, program.md, and progress.md",
+        "Requires or points to a ticket-backed Goal Packet with ticket.md, program.md, hypothesis-tree.json, and progress.md for this multi-turn optimization loop",
         "Binds phase=planning or phase=execution before requesting feedback",
         "Uses proposal cards, offer briefs, storyboard premises, hook batches, or compact plans as valid planning-phase artifacts",
         "Requires non-trivial planning feedback to include audience or buyer, taste insight, artifact shape, core angle, execution beats, why it could win, cringe risks, references or taste pack, feedback question, and next step if approved",
         "Allows hook-only planning feedback only when the artifact being judged is itself a hook or similarly tiny unit",
         "Requires approved_plan_ref before execution-phase feedback unless the artifact is explicitly a tiny planning test",
-        "Logs a hypothesis cycle in progress.md before the feedback request with phase, current_hypothesis, planned_attempt, artifact_refs, human_question, expected_signal, and skill_delta_candidate",
+        "Seeds source-grounded intervention hypotheses, selects one pending tree leaf by ordinal compounding leverage, and logs its cycle in progress.md before feedback",
         "Asks one short review question Kenji can answer quickly",
         "Includes artifact references and a concrete feedback.json shape",
         "Defines how the parent Goal should pause and resume from the feedback",
         "Applies the turn exit gate before stopping: waiting turns must send Telegram or a fallback/blocker; non-terminal feedback turns must send the next artifact request or blocker",
-        "Records human_signal, learning, next_hypothesis, and promotion_decision in progress.md after a reply",
+        "Updates the selected tree node before recording human_signal, learning, next_hypothesis, and promotion_decision in progress.md after a reply",
+        "Keeps human variant ranking as a feedback signal rather than a tournament for selecting research hypotheses",
         "Does not harden target skills from a first rejection; it perturbs local planning or execution until repeated same-phase evidence supports promotion",
         "Can use the fixed AGI Toy Shop scenario when no live scenario is supplied",
         "Supports founder_lens=true for product, content, distribution, offer, and market-learning artifacts",
@@ -40,6 +41,20 @@
           "notes": "Tests the human-feedback optimization preset abstraction for the intended content-skill rollout."
         }
       }
+    },
+    {
+      "id": "optimize_with_human_experiment_tree_01",
+      "prompt": "An approved multi-turn toy-launch content Goal uses human feedback as its evaluator. local-feedback-3 says the product benefit appears too late; feed-scout:creator-9 reports that contrast-before-reveal improves comprehension. Technique: move contrast before reveal. Mechanism: establish the problem before showing the toy. Variables: contrast wording and reveal timing. Seed and select the first hypothesis, show the feedback turn writeback, and state what a one-off review would omit.",
+      "expected_output": "Extracts the source facts; Seeds a concrete hypothesis with expected reward fields; Uses one ordinal selection; Updates the tree before progress after feedback; Omits the tree for one-off review",
+      "files": [],
+      "assertions": [
+        "Extracts source refs, technique, mechanism, and variables into a concrete intervention hypothesis",
+        "Records expected observation, falsifier, expected reward, and reward basis before feedback",
+        "Uses one ordinal compounding-leverage selection rather than a variant tournament",
+        "Updates hypothesis-tree.json before appending the progress.md feedback receipt and preserves siblings or bounded diagnostics when relevant",
+        "States that a one-off feedback request omits hypothesis-tree.json"
+      ],
+      "metadata": {"farplane": {"title": "Optimize With Human uses the experiment tree conditionally", "tags": ["skill", "human-feedback", "hypothesis-tree"], "notes": "Protects the thin human-evaluator adapter and one-off exception."}}
     }
   ]
 }

@@ -33,8 +33,8 @@ Native Goal mode is the only formal continuation loop. Farplane adds visible
 state around it through a Goal Packet:
 
 ```text
-GoalPacket := files[] + ticket.md + program.md + progress.md + generated_goal_prompt + drift_check_contract
-GoalFiles := [ticket.md | program.md | progress.md | spec.md | board.md | artifact]
+GoalPacket := files[] + ticket.md + program.md + hypothesis-tree.json? + progress.md + generated_goal_prompt + drift_check_contract
+GoalFiles := [ticket.md | program.md | hypothesis-tree.json | progress.md | spec.md | board.md | artifact]
 ```
 
 Generated prompts must name source files inline under `Files:`. Do not expose a
@@ -45,7 +45,10 @@ the executable loop policy: trigger mode, metric, budget, heartbeat, drift,
 after-turn routine, check-in program, and stop policy. For delayed rewards,
 Goal Advisor compiles the experiment-specific check-in procedure into
 `program.md`; Work Pulse only supplies due rows and resumes it. `progress.md`
-owns compact append-only observations. `farplane/harness.yaml` and
+owns compact append-only observations. For experiment-backed improvement
+packets, `hypothesis-tree.json` owns the current source synthesis, hypotheses,
+results, and insights; it is omitted for ordinary coding and one-off feedback
+Goals. `farplane/harness.yaml` and
 `farplane/metrics.yaml` are optional project context when execution needs the
 human charter or metric objective contract.
 
@@ -71,7 +74,7 @@ compute/budget, and blocker handling.
 
 ```text
 advise_goal_use(intent, files?, trigger?, budget?, proof_policy?, approval_policy?) -> goal_architecture + files[] + goal_packet? + heartbeat_prompt? + native_goal_prompt? + next_action
-state: reads(operator intent, listed files, tickets, board files?, farplane/harness.yaml?, farplane/metrics.yaml?, program.md?, progress.md?, Reward.kpi_rewards[]?, goal-loop contract, relevant skills/docs); writes(ticket/program/progress? generated goal prompt? or recommendation)
+state: reads(operator intent, listed files, tickets, board files?, farplane/harness.yaml?, farplane/metrics.yaml?, program.md?, hypothesis-tree.json?, progress.md?, Reward.kpi_rewards[]?, goal-loop contract, relevant skills/docs); writes(ticket/program/hypothesis-tree?/progress? generated goal prompt? or recommendation)
 gates: missing_execution_inputs_resolved_or_asked; material_goal_has_files; loop_owner_single; progress_surface_named; metric_provider_named; delayed_checkin_program_compiled_or_not_applicable; budget_named; drift_policy_named; logging_policy_named; proof_route_named; final_evidence_policy_named; approval_before_goal_run_when_material
 routes: metric-advisor | impl-plan | optimize-with-human | qa | visual-qa | agent-qa-test | review | direct-answer
 fails: creates hidden loop runtime; uses Goal without durable state; treats human feedback/heartbeat/rollout as competing loop owners; emits prompt-only material Goal; hides required files behind transcript memory; renames_literal_files_heading; leaves delayed_checkin_policy_scattered_or_implicit; adds_delayed_checkin_debt_to_immediate_goal; omits_named_goal_drift_reviewer_on_material_goal; routes public work through retired work/ralph/batch-work surfaces; emits long Goal prompt that restates ticket context; allows self-certified QA/review/visual completion; runs material Goal before packet approval
@@ -144,6 +147,14 @@ only after the branch is selected:
    - [ ] If the task is tiny or one-turn, recommend direct work instead of Goal.
    - [ ] If native Goal or heartbeat is warranted, require listed source files
      or a create/update step for `ticket.md`, `program.md`, and `progress.md`.
+   - [ ] For `skill_improvement`, `ml_autoresearch`, or a multi-turn
+     experiment-backed `feedback_loop`, instantiate
+     `tickets/templates/goal-loop/hypothesis-tree.json`, list it under
+     `Files:`, and bind the `program.md` Experiment Backbone. Omit the tree
+     from ordinary coding and one-off feedback packets.
+   - [ ] Keep source/search policy in `program.md`, current research state in
+     the tree, and chronology in `progress.md`; never duplicate nodes, pending
+     leaves, child lists, depths, or ranks across them.
 - [ ] 2. Classify the loop shape.
    - [ ] `active_goal`: uninterrupted execution window with no planned pause.
    - [ ] `heartbeat`: continuation when pauses, board drain, feedback, external
@@ -191,7 +202,7 @@ only after the branch is selected:
      the one-line classifier above.
 - [ ] 3. Choose the state surfaces.
   - [ ] `Files:` in the generated prompt names every ticket, program,
-    progress, board, spec, or artifact file the Goal must read.
+    hypothesis tree, progress, board, spec, or artifact file the Goal must read.
   - [ ] Include `farplane/harness.yaml` and `farplane/metrics.yaml` only when the
     selected ticket needs project charter or objective context.
 - [ ] 4. Choose the time/budget policy.
@@ -240,6 +251,9 @@ only after the branch is selected:
      tickets, skips blocked/gated work, and logs no-op when nothing can advance.
    - [ ] For coding leaves, compile an `active_goal` prompt over the ticket,
      program, progress, and proof files.
+   - [ ] For experiment-backed leaves, compile over the ticket, program,
+     hypothesis tree, progress, evaluator, and proof files. Require each turn
+     to update the tree before appending its progress receipt.
    - [ ] For coding leaves that implement features, require a grounding step
      before final evidence: check code documentation or maintained
      implementation evidence through Ref MCP, official docs, GitHub code
@@ -277,6 +291,9 @@ only after the branch is selected:
      `After each turn`.
    - [ ] Instruct the executor to read `program.md` before execution and treat
      it as the Goal Packet's executable loop policy, not optional context.
+   - [ ] When a hypothesis tree is listed, instruct the executor to treat it as
+     current research state, derive eligible leaves instead of trusting a
+     stored rank, and update it before `progress.md`.
    - [ ] For a resumed delayed check-in, list the original ticket, program, and
      progress files plus matured Reward IDs and evidence refs; instruct
      the worker to execute `program.md` `Check-In Program` without rebuilding
@@ -319,7 +336,8 @@ only after the branch is selected:
      `approval: pending` and `Next Action: human approves plan + Goal Packet`
      unless explicit auto-run approval already exists.
    - [ ] If the ticket plan changed since the packet was compiled, regenerate
-     `program.md`, `progress.md`, and the native `/goal` prompt before approval.
+     `program.md`, `hypothesis-tree.json` when enabled, `progress.md`, and the
+     native `/goal` prompt before approval.
    - [ ] Use `optimize-with-human` when the metric provider is `human_feedback`
      and the loop needs a Telegram-first feedback protocol.
    - [ ] For skill-improvement loops with human feedback before market tests,
@@ -354,6 +372,8 @@ A strong Goal contract includes:
   drift policy, after-turn routine, heartbeat or batch rules, and stop
   conditions
 - `Logging`: how to update `progress.md`
+- `Hypothesis Tree`: when enabled, how current node state is read and updated
+  before chronological logging
 - `Metric`: how progress is judged, from `program.md`
 - `After each turn`: how to choose, act, evaluate, record learning, select the
   next action, drift-check, continue, wait, complete, or block
@@ -397,15 +417,17 @@ used only when conflicts are reported and the ticket remains the winning source
 for scope and proof.
 
 Compile the `Files:` manifest from the ticket, not transcript memory. Include
-`ticket.md`, `program.md`, and `progress.md`, then add required design/spec,
+`ticket.md`, `program.md`, optional `hypothesis-tree.json`, and `progress.md`,
+then add required design/spec,
 board, artifact, or context files named by `Change Plan` read/write paths,
 `QA Strategy`, `Agent Contract`, `Docs Strategy`, and `Links`. If a required
 file cannot be resolved, block or ask before emitting the native Goal prompt.
 
 Packet freshness is part of approval. Record the ticket `updated_at` value used
 to compile the packet in `program.md` or the prompt artifact. If `ticket.md`
-changes after compilation, regenerate `program.md`, `progress.md` if needed,
-and the native `/goal` prompt before execution.
+changes after compilation, regenerate `program.md`, `hypothesis-tree.json` when
+enabled, `progress.md` if needed, and the native `/goal` prompt before
+execution.
 
 For UI or user-visible work with `visual_qa` proof weight, the Goal prompt must
 spell out the concrete lane chain instead of generic "visual proof" language:

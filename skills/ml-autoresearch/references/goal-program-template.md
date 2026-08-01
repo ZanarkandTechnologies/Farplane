@@ -29,6 +29,7 @@ generated_prompt: <native-goal-prompt-path>
 files:
   - <ticket.md>
   - <program.md>
+  - <hypothesis-tree.json>
   - <progress.md>
   - <target docs/code>
   - <mutable surface>
@@ -48,21 +49,22 @@ metric:
 
 selection:
   owner: leverage-advisor
-  roadmap:
-    objective: <campaign objective>
-    candidates: <initial technique frontier or project-local catalog ref>
-    first_proof: <baseline-grounded first experiment>
-    contingencies: <positive, flat, negative, branch-specific, invalid, and budget branches>
+  hypothesis_tree: <hypothesis-tree.json>
+  source_stage:
+    inputs: <local failures, supplied refs, configured Feed Scout signals, or bounded research>
+    extracts: <techniques, mechanisms, variables, failure conditions, source refs>
+  rule: one ordinal compounding-leverage judgment; no tournament, persistent rank, or uncalibrated lift
   before_each_experiment:
     inputs:
-      - this program.md roadmap
+      - this program.md policy
+      - eligible pending hypothesis-tree.json leaves
       - progress.md learnings, prior selections, and rejected moves
       - current full-evaluator experiment receipts
       - remaining time, compute, spend, attempt, and patience budget
     output: one next experiment + hypothesis + expected observation +
       observation horizon + confidence + falsifier + surprise trigger +
-      changed boundary + material selection rationale + replan conditions
-    rule: invoke leverage-advisor; do not continue a fixed roadmap order
+      changed boundary + expected reward + reward basis + material selection rationale + replan conditions
+    rule: invoke leverage-advisor
 
 loop:
   baseline: run and record before any mutation
@@ -74,18 +76,21 @@ loop:
     - implement the smallest attributable delta on the mutable surface
     - run correctness smoke
     - when valid, run the exact full frozen evaluator
-    - append an immutable receipt and update the learned frontier
+    - update the selected tree node and append an immutable receipt
     - if the observation materially violates the expectation or is implausibly
       strong, route the receipt through agent-qa-test:experiment before method
       rejection or candidate promotion; the domain executor owns any repair or
       rerun inside the campaign's remaining budget
+    - for surprising, invalid, prerequisite-uncertain, or causally ambiguous
+      evidence, add only program-bounded diagnostic children; otherwise close
+      the node and backtrack to the best credible sibling
     - keep | discard | repair_once | defer | failed
 
 after_each_turn:
-  - read this roadmap and the complete progress.md tail
-  - use leverage-advisor on roadmap + progress learnings + current receipts + remaining budget
+  - read this policy, hypothesis-tree.json, and the complete progress.md tail
+  - use leverage-advisor on pending tree leaves + progress learnings + current receipts + remaining budget
   - execute at most one selected experiment
-  - append receipt ref, learning, frontier update, decision, and next action to progress.md; include rejected alternatives or a budget checkpoint only when they materially affect the selection or a ceiling
+  - update the tree, then append receipt ref, learning, tree mutation, decision, and next action to progress.md
   - continue, replan, block, or complete from the declared rules
 
 drift:
@@ -100,6 +105,6 @@ stop:
 ```
 
 Leverage Advisor chooses; the domain executor runs; native Goal continues; the
-ticket packet owns state. Do not add another runner, planner skill, state file,
-or ticket per experiment.
+tree owns current research state and progress owns chronology. Do not add
+another runner, planner skill, state file, or ticket per experiment.
 ````

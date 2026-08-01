@@ -34,6 +34,9 @@ Next Action:
 Create or update:
 - tickets/TASK-XXXX/ticket.md
 - tickets/TASK-XXXX/program.md from tickets/templates/goal-loop/program.md
+- tickets/TASK-XXXX/hypothesis-tree.json from
+  tickets/templates/goal-loop/hypothesis-tree.json when the packet is
+  experiment-backed
 - tickets/TASK-XXXX/progress.md from tickets/templates/goal-loop/progress.md
 
 Then generate the native `/goal` prompt from the same packet.
@@ -58,12 +61,16 @@ no delayed Reward row, keep only `mode: not_applicable` plus a reason.
 Files:
 - <ticket.md>
 - <program.md>
+- <hypothesis-tree.json when Experiment Backbone is enabled>
 - <progress.md>
 - <optional additional ticket/program/progress/spec/board/artifact files>
 
 First read `program.md`; it is the executable loop policy for this Goal
 Packet. Then read `ticket.md`; it is the scope, acceptance, and proof contract.
-Use `progress.md` as the append-only state log. If `program.md` is missing,
+When listed, use `hypothesis-tree.json` as the sole current research-state
+owner: derive eligible leaves from parent and status, and do not trust or write
+a duplicate frontier, child list, depth, or rank. Use `progress.md` as the
+append-only state log. If `program.md` is missing,
 stale, not listed here, or conflicts with the ticket's scope/proof policy, stop
 blocked or return to `goal-advisor` to regenerate the packet.
 
@@ -106,8 +113,10 @@ When every gate passes, run `farplane ticket close TASK-XXXX` and include its
 receipt before `stop_complete`. Do not move the ticket by hand.
 
 After each turn: Compare progress against the listed files, choose and execute
-one bounded action, evaluate it with the ticket/program provider, then append a
-compact observation, evidence link, learning, decision, and next action. When
+one bounded action, and evaluate it with the ticket/program provider. When a
+hypothesis tree is listed, update the selected node and bounded children first;
+then append a compact selection and mutation receipt, evidence link, learning,
+decision, and next action to `progress.md`. When
 a result materially misses a declared expectation, is implausibly strong, or
 appears invalid, check evaluator/evidence integrity and allow bounded in-budget
 repairs or reruns only while a concrete integrity concern remains; repeated
@@ -188,6 +197,7 @@ artifact> while preserving <skill contract constraints>.
 Files:
 - <ticket.md>
 - <program.md>
+- <hypothesis-tree.json>
 - <progress.md>
 - <target skill SKILL.md>
 - <optional references/scripts/evals/self-improve files>
@@ -196,15 +206,20 @@ Task: Improve the target skill toward the metric, rubric, or feedback schema
 defined in the listed program. If no metric exists, first define the cheapest
 honest feedback surface before mutating the skill.
 
-Logging: Use `progress.md` as the turn log. Append progress, changed files,
-verification, metric sample, drift verdict, next action, and blockers.
+State: Use `hypothesis-tree.json` as the current source/hypothesis/result state.
+Derive pending leaves; do not store a tournament rank or duplicate frontier.
+
+Logging: Update the selected tree node first, then use `progress.md` as the turn
+log. Append the selection and mutation receipt, changed files, verification,
+metric sample, drift verdict, next action, and blockers.
 
 Metric: Use the listed eval, review, or human feedback provider. Do not promote
 unverified changes as accepted rules.
 
-After each turn: Select and change one bounded part of the skill, run the
-declared complete evaluator, append the observation, evidence, learning,
-decision, and next action, then request drift review when required. Promote
+After each turn: Use Leverage Advisor to select one eligible pending node,
+change one bounded part of the skill, run the declared complete evaluator,
+update the tree, append the observation, evidence, learning, decision, and next
+action, then request drift review when required. Promote
 only durable accepted rules. Use Goal mode as the durable loop runner,
 `self-improve` only for eval/memory/prompt scaffolding, and `skill-maintenance`
 for accepted writeback.

@@ -54,11 +54,11 @@
     {
       "id": "goal_advisor_skill_improvement_optimize_with_human_01",
       "prompt": "I want AGI Toy Shop's social-content skill to keep improving short-form toy launch posts by showing me variants for feedback before we try market tests. How should we use Goal mode?",
-      "expected_output": "Classifies the work as a skill-improvement Goal loop rather than a separate human-feedback runtime; Requires a Goal Packet with an inline Files list that names ticket.md, program.md, and progress.md; Uses optimize-with-human as the human-feedback optimization preset and defines the feedback artifact shape; Includes a native /goal prompt or prompt plan with Files, Task, Logging, Metric, and After each turn sections; Names drift review or inline drift checks before continuing after feedback",
+      "expected_output": "Classifies the work as a skill-improvement Goal loop rather than a separate human-feedback runtime; Requires a Goal Packet with an inline Files list that names ticket.md, program.md, hypothesis-tree.json, and progress.md; Uses optimize-with-human as the human-feedback optimization preset and defines the feedback artifact shape; Includes a native /goal prompt or prompt plan with Files, Task, Logging, Metric, and After each turn sections; Names drift review or inline drift checks before continuing after feedback",
       "files": [],
       "assertions": [
         "Classifies the work as a skill-improvement Goal loop rather than a separate human-feedback runtime",
-        "Requires a Goal Packet with an inline Files list that names ticket.md, program.md, and progress.md",
+        "Requires a Goal Packet with an inline Files list that names ticket.md, program.md, hypothesis-tree.json, and progress.md",
         "Uses optimize-with-human as the human-feedback optimization preset and defines the feedback artifact shape",
         "Includes a native /goal prompt or prompt plan with Files, Task, Logging, Metric, and After each turn sections",
         "Names drift review or inline drift checks before continuing after feedback"
@@ -248,6 +248,20 @@
           "notes": "Guards program-owned delayed check-ins so Pulse remains a dispatcher."
         }
       }
+    },
+    {
+      "id": "goal_advisor_compiles_experiment_backbone_01",
+      "prompt": "Compile the packet for an approved ML autoresearch campaign. It has a bounded source stage, frozen evaluator, and initial intervention hypotheses. Keep the state model lean.",
+      "expected_output": "Lists the four packet state files; Instantiates the tree only for the experiment-backed mode; Keeps policy, current state, and chronology separate; Requires tree-first writeback; Avoids duplicate derived state",
+      "files": [],
+      "assertions": [
+        "Lists ticket.md, program.md, hypothesis-tree.json, and progress.md under Files",
+        "Instantiates hypothesis-tree.json only because this packet is experiment-backed",
+        "Keeps source and search policy in program.md, current hypotheses and results in the tree, and chronology in progress.md",
+        "Requires tree mutation before the matching progress receipt after each experiment",
+        "Does not duplicate a frontier, children, depth, rank, tournament, or numeric scorer"
+      ],
+      "metadata": {"farplane": {"title": "Goal Advisor compiles the experiment backbone", "tags": ["skill", "goal-advisor", "hypothesis-tree"], "notes": "Protects conditional tree instantiation and state ownership."}}
     }
   ]
 }

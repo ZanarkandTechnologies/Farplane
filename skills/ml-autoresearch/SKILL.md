@@ -25,8 +25,8 @@ entries and evidence receipts, not tickets.
 
 This adapts Karpathy's minimal Autoresearch loop—baseline, one code experiment,
 evaluate, keep or discard, repeat—into Farplane's visible Goal Packet. Leverage
-Advisor chooses every next experiment from the initial roadmap plus accumulated
-`progress.md` learnings. Native Goal is the sole continuation engine. Goal
+Advisor chooses every next experiment from eligible leaves in a ticket-local
+`hypothesis-tree.json` plus accumulated evidence. Native Goal is the sole continuation engine. Goal
 Advisor compiles the packet but does not choose ML techniques.
 
 ## Skill Signature
@@ -39,15 +39,17 @@ ml_autoresearch(target_system, owning_ticket, mutable_surface,
 
 state:
   reads(target code/docs, immutable data/evaluator contract, owning ticket,
-        program roadmap, progress.md learnings, experiment receipts,
+        program policy, hypothesis-tree.json, progress.md learnings, experiment receipts,
         optional technique catalog, current compute/budget state)
-  writes(ticket program.md, ticket progress.md, native Goal prompt,
-         ticket-local experiment receipts, accepted mutable-surface change)
+  writes(ticket program.md, ticket hypothesis-tree.json, ticket progress.md,
+         native Goal prompt, ticket-local experiment receipts,
+         accepted mutable-surface change)
 
 gates:
   target_exists; owning_ticket_exists; mutable_surface_bounded;
   evaluator_frozen; metric_and_direction_named; baseline_recorded;
-  guards_and_budget_named; roadmap_bound; packet_approved
+  guards_and_budget_named; source_stage_grounded; hypothesis_tree_bound;
+  packet_approved
 
 routes:
   leverage-advisor | goal-advisor | metric-advisor | research:parity |
@@ -66,18 +68,22 @@ Every campaign plan, policy, packet, and active-turn decision must make this
 named composition explicit:
 
 ```text
-leverage_advisor(local evidence + technique catalog?) -> initial roadmap
-goal_advisor(ticket.md + program preset + progress.md) -> approved Goal Packet
-leverage_advisor(program.md roadmap + progress.md learnings
+source_stage(local evidence + technique catalog + Feed Scout/research inputs?)
+  -> techniques + mechanisms + variables
+leverage_advisor(source synthesis) -> initial hypothesis candidates + first selection
+campaign.initialize_tree(initial hypothesis candidates)
+goal_advisor(ticket.md + program preset + hypothesis-tree.json + progress.md)
+  -> approved Goal Packet
+leverage_advisor(program.md policy + pending tree leaves + progress.md learnings
                  + current receipts + remaining budget) -> next experiment
-domain_executor(next experiment) -> receipt + progress.md append
+domain_executor(next experiment) -> receipt + tree update + progress.md append
 native_goal(updated packet state) -> continue | replan | block | complete
 ```
 
-The campaign Goal Packet always contains `ticket.md`, `program.md`, and
-`progress.md`. `program.md` owns both the initial roadmap and the policy that
-requires evidence-updated replanning before every experiment; `progress.md`
-owns append-only observations, receipts, learnings, and decisions. Goal Advisor
+The campaign Goal Packet always contains `ticket.md`, `program.md`,
+`hypothesis-tree.json`, and `progress.md`. `program.md` owns source/search
+policy; the tree owns current hypotheses, results, and insights; `progress.md`
+owns append-only selections and mutation receipts. Goal Advisor
 is only the packet/native-Goal compiler. Leverage Advisor is the only
 next-experiment selector. Do not replace either named owner with anonymous
 equivalent logic, and do not select a technique directly before the Leverage
@@ -106,20 +112,28 @@ the authority named by the ticket.
     environment, and baseline candidate before mutation.
   - [ ] Run the baseline through the exact full evaluator; use smokes only for
     correctness, never promotion.
-- [ ] 3. Build the initial compounding roadmap.
-  - [ ] Use [Leverage Advisor](../leverage-advisor/SKILL.md) on local evidence
-    and the optional technique catalog to produce the ranked frontier, first
-    proof, rejected moves, and positive/flat/negative/invalid/budget branches.
-  - [ ] When credible techniques are missing or stale, route bounded research
-    or [Best Of Worlds](../best-of-worlds/SKILL.md); record source dispositions
-    before a technique becomes eligible.
+- [ ] 3. Run the source stage and seed the hypothesis tree.
+  - [ ] Start with local failures, the optional technique catalog, supplied
+    references, and configured Feed Scout signals. When credible coverage is
+    missing or stale, route bounded research or
+    [Best Of Worlds](../best-of-worlds/SKILL.md).
+  - [ ] Extract applicable techniques, mechanisms, variables, failure
+    conditions, and source refs; record source dispositions before use.
+  - [ ] Generate intervention hypotheses through combination, permutation,
+    transfer, ablation, or new direction. Give each an expected observation,
+    falsifier, expected compounding reward, and short reward basis in
+    `hypothesis-tree.json`.
+  - [ ] Use [Leverage Advisor](../leverage-advisor/SKILL.md) for one ordinal
+    compounding-leverage comparison. Do not use a tournament, persistent rank,
+    or uncalibrated numeric lift.
 - [ ] 4. Use [Goal Advisor](../goal-advisor/SKILL.md) to instantiate
   [the ML Goal program preset](references/goal-program-template.md) into the
-  owning ticket's `program.md`, create or update `progress.md`, compile the
-  Files-listed native Goal prompt, and obtain required approval.
+  owning ticket's `program.md`, create or update `hypothesis-tree.json` and
+  `progress.md`, compile the Files-listed native Goal prompt, and obtain
+  required approval.
 - [ ] 5. Select the next experiment from current evidence.
-  - [ ] Before every experiment, invoke Leverage Advisor on the `program.md`
-    roadmap, `progress.md` learnings, current full-evaluator receipts, and
+  - [ ] Before every experiment, invoke Leverage Advisor on `program.md`
+    policy, eligible pending tree leaves, `progress.md` learnings, current full-evaluator receipts, and
     remaining budget. Do not continue a fixed roadmap order.
   - [ ] Preregister one hypothesis, expected observation, observation horizon,
     named confidence, falsifier, surprise trigger, changed boundary, expected
@@ -129,8 +143,9 @@ the authority named by the ticket.
 - [ ] 6. Execute and record one bounded experiment.
   - [ ] Modify only the allowed surface, run correctness smokes, then run the
     exact full frozen evaluator when valid.
-  - [ ] Append the receipt link, learned constraint, keep/discard/repair-once
-    decision, frontier update, and next action to ticket `progress.md`; include
+  - [ ] Update the selected tree node with the result, evidence, and insight,
+    then append the receipt link, learned constraint, keep/discard/repair-once
+    decision, tree mutation, and next action to ticket `progress.md`; include
     rejected alternatives or a budget checkpoint only when they materially
     affect the selection or a ceiling. Never overwrite a failed attempt.
   - [ ] When the observation materially misses its expectation or is
@@ -138,6 +153,10 @@ the authority named by the ticket.
         `agent-qa-test:experiment` before rejecting the method or promoting the
         candidate. The domain executor owns every repair/rerun and must keep it
         inside the campaign's remaining time, compute, spend, and attempt budget.
+  - [ ] For a surprising, invalid, prerequisite-uncertain, or causally
+    ambiguous result, add only program-bounded diagnostic children before
+    rejecting the method. Expected negatives may close directly; after
+    diagnosis, repair, reject, defer, or backtrack to a credible sibling.
 - [ ] 7. Continue, replan, or stop mechanically.
   - [ ] Keep only candidates that improve the primary objective while every
     guard passes; prefer the simpler candidate when materially tied.
@@ -164,14 +183,18 @@ Compact experiment receipt:
 ```yaml
 experiment_id:
 parent_candidate:
-selected_from_roadmap:
+selected_tree_node:
 progress_evidence_refs: []
 hypothesis:
+mechanism:
 expected_observation:
 observation_horizon:
 confidence: low | medium | high
 falsifier:
 surprise_trigger:
+expected_reward:
+reward_basis:
+source_refs: []
 changed_boundary:
 config_code_data_evaluator_hashes: {}
 command_environment:
@@ -181,7 +204,7 @@ guards: {}
 runtime_compute_cost: {}
 decision: keep | discard | repair_once | failed | defer
 failure_or_learning:
-frontier_update:
+tree_mutation:
 next_action:
 ```
 
@@ -190,7 +213,7 @@ next_action:
 - Do not mistake search volume for research quality. Prefer the experiment that
   best distinguishes the current bottleneck or unlocks reusable capability.
 - Do not let Leverage Advisor become an ML executor or state store. It returns
-  a decision; the campaign ticket and receipts preserve state.
+  a decision; the campaign tree and receipts preserve state.
 - Do not mutate the evaluator, split, primary metric, or prohibited inputs to
   manufacture improvement. Such changes stale the packet and require a new
   campaign decision.
@@ -201,9 +224,9 @@ next_action:
 ## Reference Map
 
 - [ML Goal program preset](references/goal-program-template.md) — instantiate
-  for every material campaign; it owns roadmap-plus-progress replanning.
-- [Leverage Advisor](../leverage-advisor/SKILL.md) — initial roadmap and every
-  next-experiment decision.
+  for every material campaign; it owns source/search and tree writeback policy.
+- [Leverage Advisor](../leverage-advisor/SKILL.md) — initial tree selection and
+  every next-experiment decision.
 - [Goal Advisor](../goal-advisor/SKILL.md) — packet and native Goal compiler;
   never the technique selector.
 - [Metric Advisor](../metric-advisor/SKILL.md) — use when the primary metric,
@@ -215,18 +238,30 @@ next_action:
 
 - one approved campaign Goal Packet and compact native Goal prompt;
 - baseline and append-only experiment receipts linked from `progress.md`;
-- evidence-updated roadmap decisions with material selection rationale;
+- evidence-updated tree decisions with material selection rationale;
 - best verified candidate or an evidence-backed no-improvement/blocked result;
 - independent final evidence review and residual-risk statement.
 
 For any requested loop policy, packet draft, or active turn, explicitly report:
 
 ```text
-Packet: ticket.md + program.md + progress.md + Goal Advisor compilation state
-Roadmap: program.md frontier + contingencies
+Packet: ticket.md + program.md + hypothesis-tree.json + progress.md + Goal Advisor compilation state
+Tree: source synthesis + eligible pending leaves + current branch state
 Progress: progress.md learnings + current full-evaluator receipt refs
 Selector: Leverage Advisor inputs + one selected move + material selection rationale
 Experiment: hypothesis + falsifier + changed boundary + guards + cost
 Expectation: expected observation + horizon + confidence + surprise trigger
-Writeback: receipt ref + decision + learned constraint + frontier update + next action
+Writeback: receipt ref + decision + learned constraint + tree mutation + next action
 ```
+
+For a source-stage request with concrete inputs, also render the extracted
+`Source refs`, `Techniques`, `Mechanisms`, `Variables`, and `Failure conditions`,
+followed by concrete initial nodes. Every node includes `hypothesis`,
+`mechanism`, `expected_observation`, `falsifier`, `expected_reward`,
+`reward_basis`, and `source_refs`; then make one ordinal Leverage Advisor
+selection. Do not replace these outputs with a setup checklist.
+
+For a surprise request, explicitly render the bounded diagnostic children,
+credible sibling leaves preserved for breadth, outcome branches (`repair |
+reject | defer | backtrack`), and literal writeback order:
+`hypothesis-tree.json` first, then the immutable `progress.md` receipt.

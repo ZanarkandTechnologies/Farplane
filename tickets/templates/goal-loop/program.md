@@ -4,7 +4,7 @@ ticket_id: TASK-XXXX
 status: draft
 created_at: 2026-06-12
 template_id: goal-loop-program
-template_version: "0.1.6"
+template_version: "0.1.7"
 feature_refs:
   - FEAT-0029
   - FEAT-0032
@@ -19,7 +19,8 @@ feature_refs:
 - `trigger:` `native_goal` | `scheduled_heartbeat` |
   `human_feedback_received` | `manual_resume`
 - `files:` inline list of ticket/program/progress/spec/board/artifact files the
-  generated Goal prompt must name under `Files:` and read before execution
+  generated Goal prompt must name under `Files:` and read before execution;
+  experiment-backed packets also list their `hypothesis-tree.json`
 - `compiled_from_ticket_updated_at:` timestamp copied from `ticket.md`
   frontmatter when this packet was generated
 - `generated_prompt:` path to the native `/goal` prompt artifact, inline prompt
@@ -39,6 +40,9 @@ feature_refs:
   current next action
 - `progress_role:` append-only observed state, evidence pointers, drift notes,
   blockers, and next actions
+- `hypothesis_tree_role:` when Experiment Backbone is enabled, the sole current
+  research-state owner; `program.md` must not duplicate nodes and `progress.md`
+  must not become a competing frontier
 - `prompt_contract:` the generated native `/goal` prompt must list this file
   under `Files:`, instruct the executor to read it before execution, and obey
   it for trigger mode, budget, metric or feedback provider, proof route, drift
@@ -56,6 +60,40 @@ feature_refs:
   artifact-presence check
 - `direction:` `higher` | `lower` | `pass/fail` | `accept/revise` | `none`
 - `minimum:` pass threshold, TAS gate, human decision, or `none`
+
+## Experiment Backbone
+
+- `mode:` `disabled` | `enabled`
+- `source_stage:` before the first mutation, bind the evaluator and baseline,
+  then use local failures, supplied material, configured Feed Scout signals,
+  linked papers/repos, or bounded direct research to extract applicable
+  techniques, mechanisms, variables, and source references; stop on sufficient
+  coverage rather than source count
+- `hypothesis_tree:` `tickets/TASK-XXXX/hypothesis-tree.json` when enabled
+- `tree_contract:` top-level source synthesis plus nodes keyed by stable ID;
+  each node contains only `parent`, `family` (`intervention` or `diagnostic`),
+  `hypothesis`, `mechanism`, `expected_observation`, `falsifier`,
+  `expected_reward`, `reward_basis`, `source_refs`, `status`, `result`,
+  `insight`, and `evidence_refs`; status is `pending`, `running`, `supported`,
+  `falsified`, `inconclusive`, or `pruned`
+- `derived_state:` derive children, depth, and pending leaves from `parent` and
+  `status`; do not persist a second frontier, rank score, or Markdown projection
+- `selector:` `leverage-advisor` performs one evidence-backed ordinal
+  compounding comparison over eligible pending leaves; no pairwise tournament
+  or tree-local scorer
+- `selection_inputs:` objective, current bottleneck, tree, progress learnings,
+  experiment receipts, constraints, guards, prerequisites, and remaining budget
+- `search_budget:` bind beam/breadth, diagnostic-child, repair/rerun, mutable
+  surface, compute, spend, and stopping limits inside this packet
+- `diagnostic_rule:` create bounded diagnostic children only for surprising,
+  invalid, prerequisite-uncertain, or causally ambiguous evidence; expected
+  negative evidence can close a branch directly
+- `writeback:` after evaluation, update the selected node and any new children
+  in `hypothesis-tree.json`, then append the same selection rationale, evidence,
+  learning, disposition, mutation, and next action chronologically to
+  `progress.md`
+- `concurrency:` parallelize source synthesis or experiments only when mutation
+  surfaces and attribution are independent; one writer reconciles the tree
 
 ## Proof Policy
 
@@ -86,10 +124,11 @@ feature_refs:
 ## After Each Turn
 
 1. Read every file listed in `files`, including each relevant `progress.md`
-   tail.
+   tail and the current `hypothesis-tree.json` when enabled.
 2. Choose the next action from the largest unresolved acceptance, evidence, or
-   blocker gap. Optimization modes select from their program roadmap or
-   frontier using current progress learnings and evidence.
+   blocker gap. Experiment-backed modes use Leverage Advisor to select an
+   eligible pending tree leaf from current evidence; they do not replay a fixed
+   order.
 3. Execute one bounded step.
 4. Evaluate the result with the declared Metric Provider, ticket proof
    contract, or active skill evaluator.
@@ -98,7 +137,8 @@ feature_refs:
    trusting it. Allow bounded in-budget repairs or reruns only while a concrete
    integrity concern remains; repeated valid contradictory evidence must update
    the next action.
-6. Append a compact observation, evidence link, learning, decision, and
+6. For experiment-backed modes, update the canonical tree first. Then append a
+   compact observation, evidence link, learning, decision, tree mutation, and
    `next_action` to every `progress.md` whose ticket state changed.
 7. Run or request drift check when required by `Drift Policy`; delegate the
    check when proof policy forbids self-certification.

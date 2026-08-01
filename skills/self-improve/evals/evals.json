@@ -3,15 +3,15 @@
   "evals": [
     {
       "id": "self_improve_replans_from_program_and_progress_01",
-      "prompt": "The toy-planning improvement run has three possible instruction fixes in its roadmap. The first edit improved safety but made delegation worse, and the second idea depends on delegation already passing. Show the next bounded turn.",
+      "prompt": "The toy-planning improvement run has three pending instruction hypotheses in its tree. The first edit improved safety but made delegation worse, and the second idea depends on delegation already passing. Show the next bounded turn.",
       "expected_output": "Reads the program roadmap and progress learning; Uses Leverage Advisor to filter the now-ineligible dependent move and rank the remaining frontier; Verifies candidate eligibility and that one complete round fits the remaining harden budget; Selects one hypothesis and falsifier only when those checks pass; Renders a compact progress writeback with observation, evidence, decision, learned constraint, and next action; Records rejected alternatives only when they materially explain the selection",
       "files": [],
       "assertions": [
-        "Uses the program.md roadmap together with progress.md learnings and current Eval evidence, or names any exact missing input",
+        "Uses program.md policy, eligible pending tree leaves, progress.md learnings, and current Eval evidence, or names any exact missing input",
         "Invokes Leverage Advisor before selecting the next experiment, or blocks selection until its required inputs are available",
         "Rejects or defers the candidate whose prerequisite is no longer satisfied",
         "Verifies candidate eligibility and that one bounded edit plus complete frozen-suite evaluation fits the remaining budget before acting",
-        "Renders observation, evidence, decision, learned constraint, and next action for ticket progress.md without requiring a rejected-alternatives field every turn"
+        "Updates the selected tree node first, then renders selection, mutation, evidence, learned constraint, and next action for ticket progress.md"
       ],
       "metadata": {"farplane": {"title": "Self-improve replans from roadmap and progress", "tags": ["skill", "self-improve", "leverage", "goal-packet"], "notes": "Protects evidence-updated experiment selection."}}
     },
@@ -22,7 +22,7 @@
       "files": [],
       "assertions": [
         "Defines a measurable performance target and frozen eval boundary before mutating the target",
-        "Requires an owning ticket with ticket.md, program.md, and progress.md rather than target-local loop state",
+        "Requires an owning ticket with ticket.md, program.md, hypothesis-tree.json, and progress.md rather than target-local loop state",
         "Uses native Goal as the sole continuation engine",
         "Makes passing required behavior lexicographically prior to reducing instruction length",
         "Returns a concrete baseline and Goal-packet next action"
@@ -37,7 +37,7 @@
       "assertions": [
         "Keeps program.md limited to executable loop settings rather than copying ticket scope or proof",
         "Includes the metric, frozen-suite policy, separate phase budgets, and harden-before-refine transition",
-        "Uses progress.md for append-only observations and evidence",
+        "Uses hypothesis-tree.json for current search state and progress.md for append-only receipts",
         "Assigns native Goal launcher compilation to goal-advisor",
         "Does not embed or duplicate the native /goal launcher inside the reusable program preset"
       ],
@@ -95,7 +95,8 @@
         "Uses external research only when local evidence cannot resolve the method",
         "Routes practitioner, paper, and book inputs through the existing bounded source-upgrade method",
         "Records adopt, adapt, reject, or defer decisions before testing a method",
-        "Keeps raw source prose out of the Goal Packet and target prompt"
+        "Extracts techniques, mechanisms, and variables while keeping raw source prose out of the Goal Packet and target prompt",
+        "Seeds intervention hypotheses with expected observations, falsifiers, expected rewards, and reward bases before mutation"
       ],
       "metadata": {"farplane": {"title": "Self-improve bounds source idea generation", "tags": ["skill", "self-improve", "sources"], "notes": "Covers optional paper/book grounding without a crawler."}}
     },
@@ -140,6 +141,20 @@
         "Uses ticket progress observations without a decision helper or counter file"
       ],
       "metadata": {"farplane": {"title": "Self-improve stops after refinement convergence", "tags": ["skill", "self-improve", "refinement", "convergence"], "notes": "Positive completion trace."}}
+    },
+    {
+      "id": "self_improve_surprise_diagnostic_backtrack_01",
+      "prompt": "A skill intervention expected to fix two safety misses instead fixes neither, but the eval log suggests its prerequisite instruction was never reached. What does the next bounded turn do?",
+      "expected_output": "Treats the result as causally ambiguous; Adds only bounded diagnostic children; Preserves credible sibling interventions; Defines repair, rejection, deferral, or backtracking; Updates the tree before progress",
+      "files": [],
+      "assertions": [
+        "Treats the result as surprising or causally ambiguous rather than immediately falsifying the technique",
+        "Adds only program-bounded diagnostic children to the selected tree node",
+        "Preserves credible sibling intervention hypotheses",
+        "Defines how the diagnostic result leads to repair, rejection, deferral, or backtracking",
+        "Updates hypothesis-tree.json before appending the matching progress.md receipt"
+      ],
+      "metadata": {"farplane": {"title": "Self Improve diagnoses a surprising miss", "tags": ["skill", "self-improve", "hypothesis-tree"], "notes": "Protects bounded diagnostic depth and sibling-preserving backtracking."}}
     }
   ]
 }

@@ -28,6 +28,7 @@ generated_prompt: <native-goal-prompt-path>
 files:
   - <ticket.md>
   - <program.md>
+  - <hypothesis-tree.json>
   - <progress.md>
   - <target-skill>/SKILL.md
   - <target-skill>/evals/evals.json
@@ -42,19 +43,20 @@ metric:
 
 selection:
   owner: leverage-advisor
-  roadmap:
-    objective: <optimization objective>
-    candidates: <initial intervention frontier or project-local catalog ref>
-    first_proof: <baseline-grounded first experiment>
-    contingencies: <positive, flat, negative, invalid, and budget branches>
+  hypothesis_tree: <hypothesis-tree.json>
+  source_stage:
+    inputs: <local failures, supplied refs, configured Feed Scout signals, or bounded research>
+    extracts: <techniques, mechanisms, variables, failure conditions, source refs>
+  rule: one ordinal compounding-leverage judgment; no tournament, persistent rank, or uncalibrated lift
   before_each_experiment:
     inputs:
-      - this program.md roadmap
+      - this program.md policy
+      - eligible pending hypothesis-tree.json leaves
       - progress.md learnings and prior decisions
       - current complete-suite Eval evidence
       - remaining phase budget and patience
-    output: one next experiment + hypothesis + falsifier + material selection rationale + replan conditions
-    rule: invoke leverage-advisor; verify candidate eligibility and that one complete round fits the remaining budget; do not continue a fixed roadmap order
+    output: one next experiment + expected observation + falsifier + expected reward + reward basis + material selection rationale + replan conditions
+    rule: invoke leverage-advisor; verify candidate eligibility and that one complete round fits the remaining budget
 
 loop:
   round: one bounded target edit followed by the complete frozen eval
@@ -71,9 +73,10 @@ loop:
     exit: patience or budget exhausted -> final verification
 
 after_each_turn:
-  - use leverage-advisor on the roadmap plus progress.md learnings, current evidence, and remaining budget
+  - use leverage-advisor on pending tree leaves plus progress.md learnings, current evidence, and remaining budget
   - preregister and run the one selected round in the current phase
-  - append observation, evidence, decision, learned constraint, and next action to progress.md; include rejected alternatives only when they materially explain the selection
+  - update the selected tree node with its result and insight; add only bounded diagnostic children for surprising, invalid, prerequisite-uncertain, or causally ambiguous evidence
+  - append selection, tree mutation, evidence, decision, learned constraint, and next action to progress.md
   - continue, transition, block, or complete from the phase rules
 
 drift:
@@ -85,6 +88,7 @@ stop:
 ```
 
 Never trade required behavior for length. Leverage Advisor chooses the move;
-native Goal continues; Eval measures; this ticket's program/progress own state.
-Do not create another loop owner or target-local state.
+native Goal continues; Eval measures; the tree owns current search state and
+progress owns chronology. Do not create another loop owner or target-local
+state.
 ````

@@ -26,7 +26,9 @@ This skill is not a separate continuation runtime. Native Goal mode owns
 uninterrupted continuation; persistent Codex worker threads own Telegram reply
 routing when feedback should resume the same job; `goal-advisor` owns Goal
 architecture and native `/goal` prompt compilation; the ticket Goal Packet owns
-durable state. This skill owns the human feedback policy, Telegram-first
+durable state. Multi-turn experiment-backed packets also use
+`hypothesis-tree.json` as their current hypothesis state; simple one-off
+feedback does not require it. This skill owns the human feedback policy, Telegram-first
 communication protocol, phase experiment log, feedback request, and
 feedback-file contract for optimization loops.
 
@@ -41,9 +43,9 @@ optimize_with_human(target, objective, artifacts?, budget?, channel=telegram,
                     approved_plan_ref?, founder_lens=false?)
   -> goal_advisor_params + feedback_protocol + goal_packet_ref +
      progress_log_ref + feedback_request_ref
-state: reads(operator intent, target skill/artifacts, ticket/program/progress?,
+state: reads(operator intent, target skill/artifacts, ticket/program/hypothesis-tree?/progress?,
              worker_thread_ref?); writes(feedback-request.md? feedback.json?
-             progress entry?)
+             hypothesis-tree mutation? progress entry?)
 gates: target_named; objective_named; feedback_policy_named;
        artifact_refs_visible_or_generation_step_named; goal_advisor_owns_loop;
        telegram_reply_path_bound_when_needed; goal_packet_exists;
@@ -105,8 +107,10 @@ distribution angle, validation question, and what feedback would change the
 next bet. The objective is not merely "impress Kenji"; it is to earn Kenji's
 conviction that this bet is worth making, selling, or testing.
 
-Before a feedback request is sent, append a hypothesis cycle to `progress.md`.
-After feedback arrives, append the human signal, learning, and next hypothesis.
+Before a feedback request is sent, select and mark the current tree node when
+the packet is experiment-backed, then append the hypothesis cycle to
+`progress.md`. After feedback arrives, update that node and append the human
+signal, learning, tree mutation, and next hypothesis.
 Promote a skill, prompt, workflow, or template change only after repeated
 same-phase failure or a reusable operator-approved pattern. First rejections
 perturb the local plan or execution attempt; they do not harden source skills.
@@ -122,7 +126,13 @@ perturb the local plan or execution attempt; they do not harden source skills.
      artifact review.
 - [ ] 2. Decide whether a Goal Packet already exists.
    - [ ] If not, route to `goal-advisor` with human-feedback parameters.
-   - [ ] If yes, read or name `ticket.md`, `program.md`, and `progress.md`.
+   - [ ] If yes, read or name `ticket.md`, `program.md`, `progress.md`, and
+     `hypothesis-tree.json` when Experiment Backbone is enabled.
+   - [ ] For a new multi-turn optimization campaign, run the program's bounded
+     source stage over prior feedback, supplied references, Feed Scout signals,
+     or direct research; extract techniques, mechanisms, and variables, then
+     seed intervention hypotheses with expected rewards. Skip this tree for a
+     one-off feedback request.
 - [ ] 3. Bind the phase, reply path, and feedback policy.
    - [ ] Choose `phase=planning` or `phase=execution`.
    - [ ] For planning, accept proposal cards or compact artifact plans as
@@ -139,6 +149,10 @@ perturb the local plan or execution attempt; they do not harden source skills.
    - [ ] Fall back to a local `feedback-request.md` path when Telegram is not
      configured.
 - [ ] 4. Log the hypothesis cycle in `progress.md`.
+   - [ ] For an experiment-backed packet, use Leverage Advisor to select one
+     eligible pending tree leaf by ordinal compounding leverage. Do not use a
+     variant tournament as the hypothesis-selection algorithm; human ranking
+     remains valid only as the feedback signal for the selected experiment.
    - [ ] Include `phase`, `current_hypothesis`, `planned_attempt`,
      `artifact_refs`, `human_question`, `expected_signal`, and
      `skill_delta_candidate`.
@@ -178,6 +192,9 @@ perturb the local plan or execution attempt; they do not harden source skills.
    - [ ] If the loop is terminal, record keep/approve/convergence/budget/blocker
      in `progress.md`.
 - [ ] 11. Record the experiment result.
+   - [ ] When a tree exists, update the selected node before appending the
+     progress receipt. Add bounded diagnostic children only when feedback is
+     surprising or causally ambiguous, then repair, reject, defer, or backtrack.
    - [ ] Append the feedback verdict and phase-specific next action to
      `progress.md`.
    - [ ] Use `promotion_decision=keep_local`, `rerun`, `harden_skill`, or
@@ -198,7 +215,7 @@ loop_shape: skill_improvement | optimization
 metric_provider: human_feedback
 feedback_channel: telegram
 feedback_policy: ask_when_artifact_ready
-state_surfaces: ticket.md + program.md + progress.md
+state_surfaces: ticket.md + program.md + hypothesis-tree.json + progress.md
 phase: planning | execution
 approved_plan_ref: <required for execution unless tiny planning test>
 after_each_turn: log progress, request feedback when artifacts exist, pause or continue from feedback
@@ -220,8 +237,10 @@ resume_policy: Telegram replies land in worker_thread_ref; worker appends
 
 ## Progress Log Contract
 
-Append this shape to the owning `progress.md` before feedback is requested,
-then append the feedback result and next hypothesis after the reply. The cycle
+For experiment-backed packets, store the live hypothesis in
+`hypothesis-tree.json` and append this receipt shape to `progress.md` before
+feedback is requested, then update the tree and append the feedback result and
+next hypothesis after the reply. The cycle
 does not need a fresh named experiment id; timestamped `progress.md` headings
 are enough unless the caller needs a stable artifact handle.
 
@@ -356,6 +375,27 @@ Return or write:
 - `pause_or_resume_policy`
 - `notification_status`
 - `turn_exit_gate_status`
+
+For an experiment-backed setup, also return `source_stage`,
+`hypothesis_tree_ref`, and a concrete `selected_tree_node` containing
+`hypothesis`, `mechanism`, `expected_observation`, `falsifier`,
+`expected_reward`, `reward_basis`, and `source_refs`. Name
+`selection_owner=leverage-advisor` and give one ordinal compounding-leverage
+rationale; do not substitute human variant ranking. After feedback, return `tree_mutation` before
+`progress_log_ref`, plus preserved siblings and bounded diagnostic children
+when the signal is surprising or causally ambiguous. Omit these fields for a
+one-off feedback request.
+
+When asked to show the feedback-turn writeback, render this order literally;
+if feedback is still pending, show it as the required future writeback without
+inventing the result:
+
+```text
+tree_mutation: selected node result + insight + status
+preserved_siblings: []
+diagnostic_children: [] | bounded child ids
+progress_receipt: feedback + mutation summary + next action
+```
 
 ## Templates
 

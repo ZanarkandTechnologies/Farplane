@@ -3,7 +3,7 @@ title: Goal Advisor execution loop
 status: implemented
 owner: feature-registry
 created_at: 2026-06-26
-updated_at: 2026-07-07
+updated_at: 2026-08-01
 tags:
   - farplane
   - feature
@@ -13,6 +13,8 @@ refs:
   - docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md
   - docs/features/FEAT-0007-ticket-as-durable-task-memory.md
   - tickets/templates/goal-loop/program.md
+  - tickets/templates/goal-loop/hypothesis-tree.json
+  - docs/systems/self-improvement-learning.md
   - tickets/archive/TASK-0196/ticket.md
   - skills/goal-advisor/SKILL.md
   - docs/HISTORY.md
@@ -25,19 +27,22 @@ surfaces:
   - docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md
   - docs/features/FEAT-0007-ticket-as-durable-task-memory.md
   - tickets/templates/goal-loop/program.md
+  - tickets/templates/goal-loop/hypothesis-tree.json
 source_refs:
   - skills/goal-advisor
   - docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md
+  - docs/systems/self-improvement-learning.md
   - tickets/archive/TASK-0196/ticket.md
 external_refs:
   - https://developers.openai.com/codex/use-cases/follow-goals
 evidence_refs:
   - skills/goal-advisor/SKILL.md
+  - skills/goal-advisor/evals/evals.json
   - docs/HISTORY.md
   - tickets/archive/TASK-0196/ticket.md
 known_limits: Goal Advisor compiles and routes visible execution loops; it does not implement a daemon, hidden scheduler, Codex Cloud launcher, Symphony runner, or automatic Goal manager.
 metrics: []
-last_verified: 2026-07-07
+last_verified: 2026-08-01
 experimental: false
 superseded_by: false
 ---
@@ -49,7 +54,7 @@ Loop](../systems/horizon-loop.md) and keeps `FEAT-0032` as a stable capability h
 because the behavior has an owner, proof path, and maintenance boundary.
 
 ```text
-compile_execution_route(ticket, trigger, budget?) -> goal | heartbeat | rollout | direct
+compile_execution_route(ticket, trigger, budget?, hypothesis_tree?) -> goal | heartbeat | rollout | direct
 ```
 
 ## At A Glance
@@ -71,10 +76,13 @@ proof expectations.
 
 ## What It Does
 
-- Reads ticket, program, progress, specs, and current trigger context.
+- Reads ticket, program, optional hypothesis tree, progress, specs, and current
+  trigger context.
 - Chooses native Goal, heartbeat, rollout, feedback, or direct route.
 - Compiles a concrete execution prompt with proof gates and continuation state.
 - Keeps the ticket as the source of truth for scope and Done / Proof.
+- For experiment-backed campaigns, binds `hypothesis-tree.json` as the sole
+  current research-state owner without adding it to ordinary Goal Packets.
 - Routes phases such as build, QA, and demo when the ticket requires them.
 
 ## User Stories
@@ -89,6 +97,10 @@ Goal Advisor is an execution compiler, not a replacement for the ticket.
 
 - Material work must have a visible ticket or packet before goal-backed execution.
 - Route choice names trigger mode, budget, files, and proof expectations.
+- Ordinary Goal Packets use `ticket.md`, `program.md`, and `progress.md`.
+  Experiment-backed packets conditionally add `hypothesis-tree.json`; the
+  [Self-Improvement And Learning system](../systems/self-improvement-learning.md)
+  owns its research-search semantics.
 - The compiled prompt shrinks the task rather than expanding global policy.
 - Completion still uses the ticket's proof and review gates.
 
@@ -104,14 +116,17 @@ flowchart LR
   request["Goal / ticket request<br/>trigger + budget"]:::keep
   advisor["skills/goal-advisor<br/>compile_execution_route"]:::changed
   packet["Goal Packet files<br/>ticket.md<br/>program.md<br/>progress.md"]:::added
+  tree["experiment-backed only<br/>hypothesis-tree.json"]:::added
   route["native Goal<br/>or direct route"]:::changed
   proof["QA + reviewer completion<br/>ticket Done / Proof"]:::added
   hidden["hidden scheduler / daemon"]:::retired
 
   request --> advisor
   advisor --> packet
+  advisor -. when enabled .-> tree
   advisor --> route
   packet --> route
+  tree --> route
   route --> proof
   advisor -. does not create .-> hidden
 ```
@@ -126,11 +141,13 @@ Owner surfaces:
 - `docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md`
 - `docs/features/FEAT-0007-ticket-as-durable-task-memory.md`
 - `tickets/templates/goal-loop/program.md`
+- `tickets/templates/goal-loop/hypothesis-tree.json`
 
 Source context:
 
 - `skills/goal-advisor`
 - `docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md`
+- `docs/systems/self-improvement-learning.md`
 - `tickets/archive/TASK-0196/ticket.md`
 
 External context:
@@ -140,6 +157,7 @@ External context:
 Evidence:
 
 - `skills/goal-advisor/SKILL.md`
+- `skills/goal-advisor/evals/evals.json`
 - `docs/HISTORY.md`
 - `tickets/archive/TASK-0196/ticket.md`
 
@@ -188,3 +206,5 @@ Acceptance signals:
 
 - 2026-06-26: Feature spec created.
 - 2026-06-27: Migrated into the reader-first feature-spec shape.
+- 2026-08-01: Added the conditional experiment-backed hypothesis-tree packet
+  extension and linked its system owner and completion evidence.

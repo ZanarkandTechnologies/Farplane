@@ -3,7 +3,7 @@ title: "Self-Improvement And Learning"
 status: active
 owner: farplane-framework
 created_at: 2026-06-26
-updated_at: 2026-07-22
+updated_at: 2026-07-31
 tags:
   - farplane
   - systems
@@ -23,21 +23,23 @@ system_record_json: |
     "id": "SYS-0007",
     "name": "Self-Improvement And Learning",
     "status": "implemented",
-    "summary": "Goal-backed skill and ML improvement loops whose next experiments are selected from roadmap plus progress evidence through Leverage Advisor.",
+    "summary": "Goal-backed improvement loops that seed a campaign-local hypothesis tree from bounded sources, then select experiments through Leverage Advisor and refine from evidence.",
     "owner_spec": "docs/systems/self-improvement-learning.md",
     "primary_feature_ref": "FEAT-0063",
     "feature_refs": ["FEAT-0063", "FEAT-0069", "FEAT-0070"],
     "refs": ["skills/eval/SKILL.md", "skills/goal-advisor/SKILL.md", "skills/leverage-advisor/SKILL.md", "skills/metric-advisor/SKILL.md", "skills/ml-autoresearch/SKILL.md", "skills/self-improve/SKILL.md"],
-    "last_verified": "2026-07-22"
+    "last_verified": "2026-07-31"
   }
 ---
 
 # Self-Improvement And Learning
 
 Self-Improvement and Learning runs bounded, measurable improvement campaigns
-over skills or ML systems. Leverage Advisor chooses every next experiment from
-the campaign roadmap plus `progress.md` learnings; the domain skill executes;
-native Goal owns continuation through the ordinary ticket Goal Packet.
+over skills, ML systems, or human-evaluated artifacts. Each campaign first
+grounds a source stage, then stores its live hypothesis search state in one
+ticket-local JSON tree. Leverage Advisor chooses every next experiment from
+that tree plus current evidence; the domain skill executes; native Goal owns
+continuation.
 
 ```text
 self_improve(target_skill, owning_ticket, performance_target, phase_budgets)
@@ -57,8 +59,9 @@ target skill:
 
 owning ticket Goal Packet:
   ticket.md                  objective, scope, Done, proof
-  program.md                 initial roadmap, selection policy, metrics, budgets, stops
-  progress.md                append-only selections, observations, learning, evidence
+  program.md                 source/search policy, metrics, budgets, stops
+  hypothesis-tree.json       current source synthesis, hypotheses, results, insights
+  progress.md                append-only selection and mutation receipts
   artifacts/native-goal-prompt.md
   artifacts/experiments/     optional bulky trial receipts
 
@@ -75,15 +78,17 @@ active workflow does not read, write, generate, parse, or migrate them.
 
 ```text
 advise_leverage(subject, objective, evidence, constraints, catalog?,
-                progress?, remaining_budget?)
+                hypothesis_tree?, progress?, remaining_budget?)
   -> ranked_frontier + next_wave + first_proof + replan_conditions + source_gap?
 ```
 
 Leverage Advisor owns candidate generation, compounding ranking, and the next
-proof. Before every experiment it reads the `program.md` roadmap,
-`progress.md` learnings, current evidence receipts, and remaining budget. It
-does not execute the experiment, compile the Goal, create experiment tickets,
-or own campaign state.
+proof. Before every experiment it reads `program.md` policy, eligible pending
+leaves from `hypothesis-tree.json`, `progress.md` learnings, current evidence
+receipts, and remaining budget. It uses one evidence-backed ordinal judgment;
+there is no pairwise tournament or persistent numeric rank. It does not execute
+the experiment, compile the Goal, create experiment tickets, or own campaign
+state.
 
 When the candidate frontier is missing, stale, or evidence-thin, Leverage
 Advisor conditionally routes bounded parity/source research or Best Of Worlds.
@@ -104,54 +109,82 @@ Each phase declares `max_rounds` and patience. Hardening exhaustion blocks
 without refinement. Refinement stops on patience or its maximum rounds and
 returns the shortest verified passing candidate discovered within the budget.
 
-Before every harden or refine round, Leverage Advisor selects one experiment
-from the current frontier. No deterministic decision helper, structured event
-schema, stored counter, target-local loop state, daemon, or second continuation
-engine participates. Ticket `progress.md` records ordinary observations; Eval
-supplies measurements; native Goal applies the program.
+Before every harden or refine round, Leverage Advisor selects one pending tree
+leaf. No deterministic decision helper, tournament, stored counter, daemon, or
+second continuation engine participates. The JSON tree stores current branch
+state, ticket `progress.md` records chronological receipts, Eval supplies
+measurements, and native Goal applies the program.
 
 ## ML Autoresearch Contract
 
 ML Autoresearch freezes the evaluator, data/split boundary, metric, guards,
 mutable surface, baseline, and compute/spend budget before the first change.
-Each Goal turn selects one attributable technique experiment through Leverage
-Advisor, preregisters its hypothesis and falsifier, runs correctness smokes and
-the full evaluator, appends an immutable receipt, and replans. The campaign
-keeps the best verified candidate or returns an evidence-backed negative result.
+Each Goal turn selects one attributable intervention or diagnostic hypothesis
+through Leverage Advisor, preregisters its expectation and falsifier, runs
+correctness smokes and the full evaluator, updates the tree, appends an
+immutable receipt, and replans. The campaign keeps the best verified candidate
+or returns an evidence-backed negative result.
 
-## Coverage And Idea Generation
+## Source Stage And Hypothesis Generation
 
-Start with local failures and scored history. External method discovery is
-optional, not automatic:
+Every experiment-backed campaign runs a source stage before the first
+mutation. The stage can finish from local failures and scored history alone, or
+add supplied material, configured Feed Scout signals, linked papers/repos, and
+bounded direct research when the frontier is weak. It extracts only applicable
+techniques, mechanisms, variables, failure conditions, and source references;
+raw source prose stays outside Goal state.
 
-- when local evidence cannot resolve the method, route bounded practitioner,
-  paper, or book work through
-  `skill-maintenance:upgrade_skill_from_sources`;
-- keep source packets outside Goal state and record `adopt | adapt | reject |
-  defer` decisions before testing a method;
+Generate intervention hypotheses from that synthesis through combination,
+permutation, transfer, ablation, or new direction. Record their mechanism,
+expected observation, falsifier, expected compounding reward, and short reward
+basis. Use diagnostic hypotheses only after surprising, invalid, prerequisite-
+uncertain, or causally ambiguous evidence. A diagnostic branch should learn
+enough to repair, reject, defer, or backtrack; it is not an obligation to rescue
+every failed technique.
+
+- preserve `adopt | adapt | reject | defer` source dispositions;
+- follow linked primary evidence when it materially changes mechanism or
+  confidence, without requiring direct-paper subscriptions;
 - route adversarial break cases through `agent-qa-test`, then require a
-  distinct evidence reviewer and Eval owner to accept them.
+  distinct evidence reviewer and Eval owner to accept them;
+- guard against seed anchoring by preserving credible sibling branches and
+  expanding sources only for a named coverage gap.
 
 The suite remains frozen for the full Goal. A newly accepted source or
 adversarial case stops the current comparison, regenerates the Goal Packet, and
 requires a fresh baseline.
 
+## Research Grounding
+
+- `SRC-0013` Arbor motivates a persistent hypothesis tree with evidence and
+  distilled insights. Farplane adapts the state shape, not Arbor's coordinator,
+  worktree executor, renderer, tournament, or score machinery.
+- `SRC-0014` Robin supports the source-to-hypothesis-to-experiment-to-
+  interpretation loop. Farplane binds that loop to existing skills and the
+  Goal Packet instead of importing a new multi-agent runtime.
+- `SRC-0015` documents seed-literature narrowing risk. Farplane therefore
+  preserves credible sibling branches and expands source coverage only for a
+  named evidence gap.
+
 ## System Flow
 
 ```mermaid
 flowchart LR
-  coverage["local failures + optional sources + reviewed adversarial cases"]
-  leverage["Leverage Advisor<br/>roadmap + next proof"]
-  packet["ticket Goal Packet<br/>program + progress"]
+  coverage["source stage<br/>techniques + mechanisms + variables"]
+  tree["hypothesis-tree.json<br/>current research state"]
+  leverage["Leverage Advisor<br/>compounding selector"]
+  packet["Goal Packet policy<br/>program + progress"]
   baseline["frozen-suite baseline"]
-  select["select from roadmap<br/>+ progress learning"]
+  select["select pending<br/>intervention or diagnostic"]
   execute["domain experiment<br/>+ full evaluator"]
   harden["skill harden/refine<br/>or ML keep/discard"]
   blocked["blocked<br/>budget before pass"]
   result["best verified candidate<br/>or negative result"]
 
-  coverage --> leverage --> packet --> baseline --> select --> execute --> harden
-  harden -->|supported move; budget remains| select
+  coverage --> tree --> leverage --> packet --> baseline --> select --> execute --> harden
+  harden -->|update result + insight| tree
+  tree -->|budget remains| leverage
+  leverage --> select
   harden -->|limit, stale packet, or blocker| blocked
   harden -->|success or exhausted useful frontier| result
 ```
@@ -160,7 +193,9 @@ flowchart LR
 
 - `goal-advisor` compiles and freshness-binds the packet and native launcher.
 - `leverage-advisor` generates and ranks the frontier and chooses each next
-  experiment from roadmap plus progress evidence.
+  experiment from program, tree, progress, and receipt evidence.
+- `hypothesis-tree.json` is the sole current research-state owner; children,
+  depth, pending leaves, and rank are derived rather than duplicated.
 - `eval` owns clean execution, grading, comparison, and run artifacts.
 - `metric-advisor` helps when the honest performance target or guard is unclear.
 - `agent-qa-test` proposes adversarial evidence but cannot approve its own case.
@@ -195,3 +230,5 @@ flowchart LR
   two-phase harden-then-refine program template.
 - 2026-07-22: Made Leverage Advisor the shared evidence-updated experiment
   selector and added the ML Autoresearch domain entrypoint.
+- 2026-07-31: Added the source stage and one canonical JSON hypothesis tree for
+  evidence-driven intervention, diagnosis, and backtracking across modalities.

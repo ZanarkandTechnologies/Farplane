@@ -6,26 +6,32 @@
 2. Read the target skill, canonical suite, and owning ticket.
 3. Define performance target, guards, editable scope, length metric, and
    separate harden/refine `max_rounds` plus patience.
-4. Strengthen coverage before freezing it:
+4. Run the source stage before freezing it:
    - local failures first;
-   - optional bounded practitioner, paper, or book source upgrade when local
-     evidence cannot choose a method;
+   - supplied references and configured Feed Scout signals when relevant;
+   - bounded practitioner, paper, or book source upgrade for a named gap;
+   - extract applicable techniques, mechanisms, variables, failure conditions,
+     and source refs;
    - adversarial cases from `agent-qa-test`, accepted only by a separate
      evidence reviewer and Eval owner.
-5. Use `leverage-advisor` to build the initial intervention frontier, first
-   proof, and result-dependent replan conditions from the grounded evidence.
+5. Seed `hypothesis-tree.json` with intervention hypotheses, expected
+   observations, falsifiers, expected rewards, and reward bases. Use
+   `leverage-advisor` for one ordinal compounding-leverage selection.
 6. Use `goal-advisor` to instantiate the reusable template into the ordinary
    ticket Goal Packet and obtain operator approval.
 7. Freeze the full suite and record the baseline.
 
 ## 2. Harden
 
-On each native Goal turn, use `leverage-advisor` on the program roadmap,
-`progress.md` learnings, current Eval evidence, and remaining harden budget.
+On each native Goal turn, use `leverage-advisor` on the program policy,
+eligible pending tree leaves, `progress.md` learnings, current Eval evidence,
+and remaining harden budget.
 Make the selected bounded instruction change, run the complete frozen suite,
 and retain the candidate only when performance improves without a guard
 regression. Continue until the full target passes. If harden patience or
 `max_rounds` is exhausted first, stop blocked and do not refine.
+When a result is surprising or causally ambiguous, add only program-bounded
+diagnostic children; after diagnosis, repair, reject, defer, or backtrack.
 
 ## 3. Refine
 
