@@ -24,28 +24,11 @@ Load this before live Instagram API work.
 - Facebook Page, `/me/accounts`, and Page-linked `instagram_business_account`
   flows are intentionally out of scope for this skill.
 
-## Minimal Config Contract
+## Runtime Contract
 
-Use runtime env first, normally through `farplane run -- <command>` / Doppler.
-Private `~/.farplane/config.toml` remains a fallback/cache with the same field
-shape:
-
-```toml
-[social.instagram]
-username = ""
-api_mode = "instagram_login"
-login_access_token = ""
-login_user_id = ""
-business_account_id = ""
-
-[social.meta]
-app_id = ""
-app_secret = ""
-graph_version = "v21.0"
-```
-
-Use explicit `FARPLANE_INSTAGRAM_*` and `FARPLANE_META_*` environment variables
-as the normal runtime contract. Do not commit credentials or generated env
+Use explicit `FARPLANE_INSTAGRAM_*` and `FARPLANE_META_*` environment
+variables, normally injected by `farplane run -- <command>` / Doppler. Local
+TOML is not a credential source. Do not commit credentials or generated env
 files.
 
 ## Live API Gates

@@ -1,13 +1,14 @@
 """Farplane runtime config loading.
 
-Inputs: process env, ~/.farplane/config.toml, and ~/.codex/config.toml.
+Inputs: process env, non-secret settings in ~/.farplane/config.toml, and
+~/.codex/config.toml.
 Outputs: a merged env dict for Farplane Core commands and hooks.
 Side effects: read-only filesystem access, except hydrate_process_env mutates
 os.environ at process boundaries.
 
-Precedence is process env, then private Farplane config, then rendered Codex
-adapter config. `~/.farplane/config.toml` is a local fallback/cache, not the
-canonical source for secrets when a runtime injector such as Doppler is present.
+Precedence is process env, then private non-secret Farplane settings, then the
+rendered Codex adapter config. Secrets are never read from
+`~/.farplane/config.toml`; inject them into the process with Doppler.
 """
 
 from __future__ import annotations
@@ -68,33 +69,18 @@ def _iter_env_strings(row: Mapping[str, object]) -> dict[str, str]:
     }
 
 
-def saved_runtime_env(env: Mapping[str, str] | None = None) -> dict[str, str]:
+def saved_runtime_settings(env: Mapping[str, str] | None = None) -> dict[str, str]:
     source = env if env is not None else os.environ
     if str(source.get(DISABLE_ENV) or "").strip() == "1":
         return {}
 
     root = farplane_home(source)
     config_toml = _read_toml_object(root / "config.toml")
-    values: dict[str, str] = {}
-    values.update(_structured_runtime_env(config_toml, config_toml))
-    values.update(_iter_env_strings(config_toml))
-    return values
+    return _structured_local_settings(config_toml)
 
 
-def _structured_runtime_env(config: Mapping[str, object], secrets: Mapping[str, object]) -> dict[str, str]:
+def _structured_local_settings(config: Mapping[str, object]) -> dict[str, str]:
     aliases = {
-        "FARPLANE_TELEMETRY_TOKEN": _first_object_string_at(
-            secrets,
-            [["convex", "telemetry_token"]],
-        ),
-        "MESHY_API_KEY": _first_object_string_at(
-            secrets,
-            [["integrations", "meshy_api_key"]],
-        ),
-        "NOTION_TOKEN": _first_object_string_at(
-            secrets, [["integrations", "notion_token"]]
-        ),
-        "REF_API_KEY": _first_object_string_at(secrets, [["integrations", "ref_api_key"]]),
         "CODEX_APP_SERVER_URL": (
             _first_object_string_at(
                 config,
@@ -124,15 +110,7 @@ def _structured_runtime_env(config: Mapping[str, object], secrets: Mapping[str, 
             _first_object_string_at(config, [["env", "VITE_CONVEX_URL"]])
             or _first_object_string_at(config, [["convex", "client_url"]])
         ),
-        "LIVEKIT_URL": _first_object_string_at(
-            secrets, [["livekit", "url"]]
-        ),
-        "LIVEKIT_API_KEY": _first_object_string_at(
-            secrets, [["livekit", "api_key"]]
-        ),
-        "LIVEKIT_API_SECRET": _first_object_string_at(
-            secrets, [["livekit", "api_secret"]]
-        ),
+        "LIVEKIT_URL": _first_object_string_at(config, [["livekit", "url"]]),
         "LIVEKIT_PHONE_NUMBER": _first_object_string_at(
             config, [["livekit", "phone_number"], ["phone_reminder", "caller_number"]]
         ),
@@ -143,7 +121,7 @@ def _structured_runtime_env(config: Mapping[str, object], secrets: Mapping[str, 
             config, [["livekit", "sip_dispatch_rule_id"]]
         ),
         "LIVEKIT_SIP_TRUNK_ID": _first_object_string_at(
-            secrets,
+            config,
             [
                 ["livekit", "sip_outbound_trunk_id"],
                 ["livekit", "sip", "outbound_trunk_id"],
@@ -159,35 +137,18 @@ def _structured_runtime_env(config: Mapping[str, object], secrets: Mapping[str, 
             ],
         ),
         "LIVEKIT_SIP_OUTBOUND_ADDRESS": _first_object_string_at(
-            secrets,
+            config,
             [
                 ["livekit", "sip_outbound_address"],
                 ["livekit", "sip", "outbound_address"],
             ],
         ),
         "LIVEKIT_SIP_AUTH_USERNAME": _first_object_string_at(
-            secrets,
+            config,
             [
                 ["livekit", "sip_auth_username"],
                 ["livekit", "sip", "auth_username"],
             ],
-        ),
-        "LIVEKIT_SIP_AUTH_PASSWORD": _first_object_string_at(
-            secrets,
-            [
-                ["livekit", "sip_auth_password"],
-                ["livekit", "sip", "auth_password"],
-            ],
-        ),
-        "TELNYX_API_KEY": _first_object_string_at(
-            secrets,
-            [
-                ["livekit", "sip", "telnyx_api_key"],
-                ["integrations", "telnyx_api_key"],
-            ],
-        ),
-        "FISH_API_KEY": _first_object_string_at(
-            secrets, [["fish_audio", "api_key"]]
         ),
         "FISH_AUDIO_REFERENCE_ID": _first_object_string_at(
             config, [["fish_audio", "reference_id"]]
@@ -210,7 +171,7 @@ def _structured_runtime_env(config: Mapping[str, object], secrets: Mapping[str, 
 
 def read_config_value(name: str, env: Mapping[str, str] | None = None) -> str:
     source = env if env is not None else os.environ
-    return str(source.get(name) or "").strip() or saved_runtime_env(source).get(name, "")
+    return str(source.get(name) or "").strip() or saved_runtime_settings(source).get(name, "")
 
 
 def load_runtime_env(base_env: Mapping[str, str] | None = None) -> dict[str, str]:
@@ -223,7 +184,7 @@ def load_runtime_env(base_env: Mapping[str, str] | None = None) -> dict[str, str
         _read_toml_object(codex_home(process_env) / "config.toml")
     )
     merged.update(rendered_toml_env)
-    merged.update(saved_runtime_env(process_env))
+    merged.update(saved_runtime_settings(process_env))
     merged.update(process_env)
     return merged
 

@@ -14,7 +14,7 @@ from urllib.error import HTTPError, URLError
 from urllib.parse import quote, urlencode
 from urllib.request import urlopen
 
-from social_config import env_value, load_config_values
+from runtime_env import env_value, load_runtime_values
 
 ROOT = Path(__file__).resolve().parents[3]
 if str(ROOT) not in sys.path:
@@ -328,9 +328,9 @@ def fetch_metrics(
     latest_reel: bool = False,
     yesterday: bool = False,
 ) -> dict[str, Any]:
-    file_values = load_config_values()
-    token = env_value("FARPLANE_INSTAGRAM_LOGIN_ACCESS_TOKEN", file_values)
-    version = env_value("FARPLANE_META_GRAPH_VERSION", file_values) or "v21.0"
+    runtime_values = load_runtime_values()
+    token = env_value("FARPLANE_INSTAGRAM_LOGIN_ACCESS_TOKEN", runtime_values)
+    version = env_value("FARPLANE_META_GRAPH_VERSION", runtime_values) or "v21.0"
 
     if not token:
         return {

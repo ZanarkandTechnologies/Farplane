@@ -19,7 +19,7 @@ from urllib.error import HTTPError, URLError
 from urllib.parse import quote, urlencode
 from urllib.request import Request, urlopen
 
-from social_config import env_value, farplane_config_path, load_config_values
+from runtime_env import env_value, load_runtime_values
 from validate_post_payload import tweets_from
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -140,69 +140,6 @@ def refresh_oauth2_access_token(file_values: dict[str, str]) -> str:
     if not isinstance(access_token, str) or not access_token:
         raise RuntimeError("oauth2_refresh_missing_access_token")
     return access_token
-
-
-def toml_string(value: str) -> str:
-    return json.dumps(value)
-
-
-def update_toml_section_values(text: str, section: str, values: dict[str, str]) -> str:
-    lines = text.splitlines()
-    header = f"[{section}]"
-    start = None
-    end = len(lines)
-    for index, line in enumerate(lines):
-        stripped = line.strip()
-        if stripped == header:
-            start = index
-            continue
-        if start is not None and index > start and stripped.startswith("[") and stripped.endswith("]"):
-            end = index
-            break
-    rendered = {key: f"{key} = {toml_string(value)}" for key, value in values.items() if value}
-    if start is None:
-        next_lines = list(lines)
-        if next_lines and next_lines[-1].strip():
-            next_lines.append("")
-        next_lines.append(header)
-        next_lines.extend(rendered.values())
-        return "\n".join(next_lines) + "\n"
-    seen: set[str] = set()
-    next_lines = list(lines[: start + 1])
-    for line in lines[start + 1 : end]:
-        stripped = line.strip()
-        replaced = False
-        for key, rendered_line in rendered.items():
-            if stripped.startswith(f"{key}") and stripped[len(key) :].lstrip().startswith("="):
-                next_lines.append(rendered_line)
-                seen.add(key)
-                replaced = True
-                break
-        if not replaced:
-            next_lines.append(line)
-    for key, rendered_line in rendered.items():
-        if key not in seen:
-            next_lines.append(rendered_line)
-    next_lines.extend(lines[end:])
-    return "\n".join(next_lines) + "\n"
-
-
-def save_refreshed_oauth2_tokens(access_token: str, refresh_token: str | None, path: Path | None = None) -> Path:
-    config_path = path or farplane_config_path()
-    original = config_path.read_text(encoding="utf-8") if config_path.exists() else ""
-    values = {"oauth2_access_token": access_token}
-    if refresh_token:
-        values["oauth2_refresh_token"] = refresh_token
-    updated = update_toml_section_values(original, "social.x", values)
-    config_path.parent.mkdir(parents=True, exist_ok=True)
-    tmp_path = config_path.with_name(f".{config_path.name}.tmp")
-    tmp_path.write_text(updated, encoding="utf-8")
-    if config_path.exists():
-        tmp_path.chmod(config_path.stat().st_mode)
-    else:
-        tmp_path.chmod(0o600)
-    tmp_path.replace(config_path)
-    return config_path
 
 
 def oauth1_ready(file_values: dict[str, str]) -> bool:
@@ -375,7 +312,7 @@ def publish(args: argparse.Namespace) -> dict[str, Any]:
     tweets = tweet_payloads(payload)
     if issues:
         return {"ok": False, "mutated": False, "issues": issues, "redacted": True}
-    file_values = load_config_values()
+    file_values = load_runtime_values()
     token = env_value("FARPLANE_X_OAUTH2_ACCESS_TOKEN", file_values)
     dry_run = not args.execute
     if args.execute and not args.approval_ref:
@@ -418,7 +355,7 @@ def publish(args: argparse.Namespace) -> dict[str, Any]:
             "redacted": True,
         }
     used_auth_mode = "oauth2_user"
-    saved_refreshed_token = False
+    credential_rotation_required = False
     try:
         tweet_ids: list[str] = []
         for item in tweets:
@@ -431,13 +368,7 @@ def publish(args: argparse.Namespace) -> dict[str, Any]:
                 refreshed_token = refresh_payload.get("access_token")
                 if not isinstance(refreshed_token, str) or not refreshed_token:
                     raise RuntimeError("oauth2_refresh_missing_access_token")
-                refreshed_refresh_token = refresh_payload.get("refresh_token")
-                if not args.no_save_refreshed_token:
-                    save_refreshed_oauth2_tokens(
-                        refreshed_token,
-                        refreshed_refresh_token if isinstance(refreshed_refresh_token, str) else None,
-                    )
-                    saved_refreshed_token = True
+                credential_rotation_required = isinstance(refresh_payload.get("refresh_token"), str)
                 tweet_ids = []
                 for item in tweets:
                     media_ids = [upload_media(path, refreshed_token, args.media_timeout_seconds) for path in normalize_media_paths(item.get("media"))]
@@ -506,7 +437,7 @@ def publish(args: argparse.Namespace) -> dict[str, Any]:
         "published_at": timestamp,
         "ledger": ledger,
         "auth_mode": used_auth_mode,
-        "saved_refreshed_token": saved_refreshed_token,
+        "credential_rotation_required": credential_rotation_required,
         "redacted": True,
     }
 
@@ -521,11 +452,10 @@ def main() -> int:
     parser.add_argument("--content-id", help="Stable ledger content ID to update from draft to posted.")
     parser.add_argument("--campaign")
     parser.add_argument("--kpis", default=",".join(DEFAULT_KPIS))
-    parser.add_argument("--username", help="Username for result URLs; falls back to private config when set.")
+    parser.add_argument("--username", help="Username for result URLs; falls back to FARPLANE_X_USERNAME.")
     parser.add_argument("--limit", type=int, default=280)
     parser.add_argument("--media-timeout-seconds", type=int, default=300)
     parser.add_argument("--no-ledger", action="store_true")
-    parser.add_argument("--no-save-refreshed-token", action="store_true", help="Refresh OAuth2 in memory only; default saves successful refreshed tokens to private config.")
     args = parser.parse_args()
     result = publish(args)
     print(json.dumps(result, indent=2, sort_keys=True))

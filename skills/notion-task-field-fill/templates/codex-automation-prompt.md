@@ -17,9 +17,8 @@ Steps:
    resolved private IDs in tracked artifacts.
 3. If a local helper script needs Notion credentials, use
    `scripts/notion_config.py` to load `NOTION_TOKEN` from the runtime env
-   supplied by `farplane run -- <command>` or Doppler. Private
-   `~/.farplane/config.toml` is fallback/cache only; do not read
-   `NOTION_API_KEY` or Codex MCP config. When invoking `ntn`, bridge
+   supplied by `farplane run -- <command>` or Doppler. Local TOML is not a
+   credential source; do not read `NOTION_API_KEY` or Codex MCP config. When invoking `ntn`, bridge
    `NOTION_TOKEN` to `NOTION_API_TOKEN` only for that subprocess.
 4. Enforce compact-query mode before any `ntn` Notion call:
    - At most 1 Tasks candidate query, `page_size <= 25`.

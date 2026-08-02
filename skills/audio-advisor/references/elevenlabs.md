@@ -17,14 +17,14 @@ packet.
 ### Voice
 
 Require text, a rights-safe voice/profile handle, model, output format, and
-scene/cue timing. The tracked default uses `eleven_v3` and
+scene/cue timing. The Farplane default uses `eleven_v3` and
 `mp3_44100_128`; confirm current official docs before changing them.
 
 ### Music
 
 Require musical job, duration, structure, instrumentation/style traits, tempo
 or energy arc, vocal policy, loop/end behavior, and cue/mix acceptance checks.
-Execution always requires explicit spend authority. The tracked default uses
+Execution always requires explicit spend authority. Farplane defaults to
 `music_v2` with `mp3_48000_192`; current API defaults may differ during the
 v1-to-v2 transition, so the packet must carry the selected model explicitly.
 The local executor calls `POST /v1/music` with `prompt`, `music_length_ms`,
@@ -35,7 +35,7 @@ compose endpoint. Music API access requires a paid ElevenLabs plan.
 
 Require the event/texture, duration when bounded, loop policy, prompt influence
 when intentionally overridden, placement cue, and acceptance check. The
-tracked default uses `eleven_text_to_sound_v2`; effects may be up to 30 seconds
+Farplane defaults to `eleven_text_to_sound_v2`; effects may be up to 30 seconds
 per current official documentation.
 
 ## Official grounding

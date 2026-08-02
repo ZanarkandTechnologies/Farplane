@@ -49,7 +49,6 @@ class PublishPostTests(unittest.TestCase):
             limit=280,
             media_timeout_seconds=1,
             no_ledger=False,
-            no_save_refreshed_token=False,
         )
 
     def test_dry_run_does_not_require_credentials_or_mutate(self) -> None:
@@ -71,7 +70,7 @@ class PublishPostTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as raw_tmp:
             tmp = Path(raw_tmp)
             payload = self.write_payload(tmp, {"tweets": [{"text": "First"}, {"text": "Second"}]})
-            with patch.object(self.module, "load_config_values", return_value={"FARPLANE_X_OAUTH2_ACCESS_TOKEN": "token"}), patch.object(
+            with patch.object(self.module, "load_runtime_values", return_value={"FARPLANE_X_OAUTH2_ACCESS_TOKEN": "token"}), patch.object(
                 self.module, "create_tweet", side_effect=["111", "222"]
             ) as create_tweet:
                 result = self.module.publish(self.args(payload, tmp, execute=True))
@@ -84,36 +83,6 @@ class PublishPostTests(unittest.TestCase):
             self.assertTrue(ledger.exists())
             self.assertIn('"external_id": "111"', ledger.read_text(encoding="utf-8"))
             self.assertIn('"status": "posted"', ledger.read_text(encoding="utf-8"))
-
-    def test_update_toml_section_values_only_replaces_social_x_tokens(self) -> None:
-        original = """
-[social.x]
-username = "farplane"
-oauth2_access_token = "old-access"
-oauth2_refresh_token = "old-refresh"
-
-[social.instagram]
-oauth2_access_token = "leave-alone"
-""".lstrip()
-        updated = self.module.update_toml_section_values(
-            original,
-            "social.x",
-            {"oauth2_access_token": "new-access", "oauth2_refresh_token": "new-refresh"},
-        )
-        self.assertIn('oauth2_access_token = "new-access"', updated)
-        self.assertIn('oauth2_refresh_token = "new-refresh"', updated)
-        self.assertIn('username = "farplane"', updated)
-        self.assertIn('[social.instagram]\noauth2_access_token = "leave-alone"', updated)
-
-    def test_save_refreshed_oauth2_tokens_updates_private_config_path(self) -> None:
-        with tempfile.TemporaryDirectory() as raw_tmp:
-            path = Path(raw_tmp) / "config.toml"
-            path.write_text('[social.x]\nusername = "farplane"\noauth2_access_token = "old"\n', encoding="utf-8")
-            self.module.save_refreshed_oauth2_tokens("new-access", "new-refresh", path)
-            updated = path.read_text(encoding="utf-8")
-        self.assertIn('oauth2_access_token = "new-access"', updated)
-        self.assertIn('oauth2_refresh_token = "new-refresh"', updated)
-
 
 if __name__ == "__main__":
     unittest.main()

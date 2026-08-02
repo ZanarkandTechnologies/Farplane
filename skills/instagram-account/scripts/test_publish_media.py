@@ -66,7 +66,7 @@ class PublishMediaTests(unittest.TestCase):
             payload = self.write_payload(tmp, {"caption": "Demo", "media_type": "image", "media": "https://example.com/image.jpg"})
             with patch.object(
                 self.module,
-                "load_config_values",
+                "load_runtime_values",
                 return_value={
                     "FARPLANE_INSTAGRAM_LOGIN_ACCESS_TOKEN": "token",
                     "FARPLANE_INSTAGRAM_LOGIN_USER_ID": "17841400000000000",

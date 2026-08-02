@@ -26,8 +26,8 @@ Broad listening, competitor scraping, and attention-graph reads route through
 Secrets never live in tracked files. Project aliases and non-secret policy live
 in `farplane/bindings.yaml`; credentials come from runtime env first, normally
 via `farplane run -- <command>` / Doppler using the `FARPLANE_X_` prefix.
-Private `~/.farplane/config.toml` `[social.x]` is fallback/cache only. Prefer
-current X OAuth 2.0 user tokens for account timeline/deep reads; OAuth 1.0a
+Local TOML is not a credential source. Prefer current X OAuth 2.0 user tokens
+for account timeline/deep reads; OAuth 1.0a
 credentials are kept as fallback/legacy support.
 
 ## Skill Signature
@@ -37,7 +37,7 @@ x_account(action, artifact?, account_binding?, date_window?, source_file?)
   -> draft_validation | publish_result | metrics_snapshot | blocked_report
 state:
   reads(farplane/bindings.yaml, ~/.codex/private/docs/social.md?,
-        runtime env / private fallback ~/.farplane/config.toml [social.x]?,
+        runtime env,
         source_file?)
   writes(.farplane/metrics/manual/x_account.json when normalizing exports,
          .farplane/content/ledger.jsonl after confirmed publishing)
@@ -71,8 +71,10 @@ first live posting branch.
         the exact draft, account alias, and publish boundary.
   - [ ] For API actions, require credentials from private env only; never print
         tokens or paste them into artifacts.
-  - [ ] Use `scripts/check_config.py` when credential readiness is unclear.
-  - [ ] If credentials are missing, return `blocked_report` with setup steps.
+  - [ ] Run `scripts/check_config.py` once before live API work; it checks read
+        and publish readiness together without a capability selector.
+  - [ ] If it is not ready, return `blocked_report` with the reported missing
+        key names and setup steps; never expose values.
 - [ ] 3. Choose the execution branch.
   - [ ] 1. Validation branch: check X character/thread/media constraints and
         return `draft_validation`. Use this before a publish request, before
@@ -141,7 +143,8 @@ Normalized metric snapshot:
 
 - `references/api.md` - load for X API endpoint/auth grounding before live API work.
 - `references/metrics-snapshot.md` - load when importing or normalizing account metrics.
-- `scripts/check_config.py` - check private env readiness without printing secrets.
+- `scripts/check_config.py` - check complete read-and-publish private env
+  readiness in one redacted report.
 - `scripts/fetch_metrics.py` - fetch read-only account/profile/post metrics and write KPI observations.
   Use no post IDs for account snapshot mode; repeat `--tweet-id` for exact post metrics.
   Use `--latest`, `--yesterday`, `--since-date`, or `--until-date` to select
@@ -153,8 +156,8 @@ Normalized metric snapshot:
 - `scripts/publish_post.py` - dry-run or publish an approved X post/thread
   from JSON using OAuth 2.0 user auth. If the stored OAuth 2.0 access token is
   unauthorized and refresh credentials exist, the script refreshes OAuth 2.0
-  and saves the refreshed token back to private `~/.farplane/config.toml`
-  before retrying, unless `--no-save-refreshed-token` is set. It falls back to
+  in memory before retrying and reports when Doppler rotation is required. It
+  falls back to
   OAuth 1.0a user-context for text-only posts if refresh/retry fails. Defaults
   to dry-run; live mutation requires `--execute`, `--account-alias`, and
   `--approval-ref`. Supports local image upload and chunked video/GIF upload

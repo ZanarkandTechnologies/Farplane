@@ -135,15 +135,15 @@ Codex lifecycle telemetry is defined by the installed Codex hook config.
 this order:
 
 1. process env
-2. private local fallback/cache `~/.farplane/config.toml`
+2. non-secret local settings from `~/.farplane/config.toml`
 3. rendered adapter fallback `~/.codex/config.toml`
 
 This keeps Farplane compatible with Doppler-style secret injection:
 `doppler run -- farplane install`, `doppler run -- codex`, or any equivalent
 runtime env source can supply API keys without making Doppler a required
-Farplane dependency. `~/.farplane/config.toml` may still hold local bootstrap
-or UI-managed fallback values, but it is not the preferred canonical source for
-rotatable secrets when an injector is available.
+Farplane dependency. `~/.farplane/config.toml` may hold local bootstrap or
+UI-managed settings, but Core does not read rotatable secrets from it. See
+[secret management](../fundamentals/secret-management.md).
 
 In this Farplane checkout, use `farplane run -- <command>` as the standard
 project wrapper for credentialed scripts. It checks the current project's

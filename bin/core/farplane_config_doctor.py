@@ -34,6 +34,10 @@ SECRET_ASSIGNMENT_RE = re.compile(
     """
 )
 SECRET_SCAN_SUFFIXES = {".env", ".json", ".md", ".py", ".sh", ".toml", ".yaml", ".yml"}
+PRIVATE_SECRET_FIELD_RE = re.compile(
+    r"(?:^|_)(?:api_?key|token|secret|password|private_?key|auth_?header)(?:$|_)",
+    re.IGNORECASE,
+)
 SECRET_SCAN_EXCLUDED_PARTS = {
     ".git",
     ".farplane",
@@ -54,6 +58,16 @@ def read_toml(path: Path) -> dict[str, Any]:
     except Exception:
         return {}
     return parsed if isinstance(parsed, dict) else {}
+
+
+def toml_parse_issue(path: Path) -> str | None:
+    if not path.exists():
+        return None
+    try:
+        tomllib.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return f"invalid_toml:{path}"
+    return None
 
 
 def object_string_at(row: dict[str, Any], path_parts: list[str]) -> str:
@@ -84,8 +98,8 @@ def env_strings(row: dict[str, Any]) -> dict[str, str]:
     }
 
 
-def structured_config_value(key: str, config: dict[str, Any]) -> str:
-    paths = {
+def private_secret_paths() -> dict[str, list[list[str]]]:
+    return {
         "FARPLANE_TELEMETRY_TOKEN": [["convex", "telemetry_token"]],
         "MESHY_API_KEY": [["integrations", "meshy_api_key"]],
         "NOTION_TOKEN": [["integrations", "notion_token"]],
@@ -97,20 +111,50 @@ def structured_config_value(key: str, config: dict[str, Any]) -> str:
         "TELNYX_API_KEY": [["livekit", "sip", "telnyx_api_key"], ["integrations", "telnyx_api_key"]],
         "FISH_API_KEY": [["fish_audio", "api_key"]],
     }
-    return first_object_string_at(config, paths.get(key, []))
+
+
+def private_secret_keys(config: dict[str, Any]) -> list[str]:
+    found = {
+        key
+        for key, paths in private_secret_paths().items()
+        if first_object_string_at(config, paths) or env_strings(config).get(key)
+    }
+    env = config.get("env")
+    if isinstance(env, dict):
+        found.update(
+            str(key)
+            for key, value in env.items()
+            if isinstance(key, str)
+            and isinstance(value, str)
+            and value.strip()
+            and re.search(r"(?:API[_-]?KEY|TOKEN|SECRET|PASSWORD)", key, re.IGNORECASE)
+        )
+    return sorted(found)
+
+
+def private_secret_fields(config: dict[str, Any]) -> list[str]:
+    fields: list[str] = []
+
+    def visit(value: Any, path: list[str]) -> None:
+        if isinstance(value, dict):
+            for key, child in value.items():
+                visit(child, [*path, str(key)])
+            return
+        if path and isinstance(value, str) and value.strip() and PRIVATE_SECRET_FIELD_RE.search(path[-1]):
+            fields.append(".".join(path))
+
+    visit(config, [])
+    return sorted(set(fields))
 
 
 def config_value_sources(
     key: str,
     process_env: dict[str, str],
-    farplane_config: dict[str, Any],
     rendered_config: dict[str, Any],
 ) -> list[str]:
     sources: list[str] = []
     if process_env.get(key):
         sources.append("process_env")
-    if structured_config_value(key, farplane_config) or env_strings(farplane_config).get(key):
-        sources.append("~/.farplane/config.toml")
     if env_strings(rendered_config).get(key):
         sources.append("~/.codex/config.toml")
     return sources
@@ -268,7 +312,7 @@ def config_doctor(
     doppler_names = set(doppler.get("secretNames", []))
 
     for key in CONFIG_DOCTOR_SECRET_KEYS:
-        sources = config_value_sources(key, env, farplane_config, rendered_config)
+        sources = config_value_sources(key, env, rendered_config)
         if key in doppler_names:
             sources.append("doppler")
         required = key in CONFIG_DOCTOR_REQUIRED_KEYS
@@ -290,11 +334,21 @@ def config_doctor(
         if warning
     ]
     leak_candidates = scan_secret_literals(project_root)
+    prohibited_private_keys = private_secret_keys(farplane_config)
+    prohibited_private_fields = private_secret_fields(farplane_config)
+    parse_issues = [
+        issue
+        for issue in [toml_parse_issue(farplane_config_path), toml_parse_issue(rendered_config_path)]
+        if issue
+    ]
     doppler_path = shutil.which("doppler")
     issues = [
         *(f"missing_required_secret:{key}" for key in missing_required),
         *doppler["issues"],
         *permission_warnings,
+        *parse_issues,
+        *(f"secret_in_farplane_config:{key}" for key in prohibited_private_keys),
+        *(f"secret_field_in_farplane_config:{field}" for field in prohibited_private_fields),
         *(f"tracked_secret_candidate:{row['path']}:{row['line']}:{row['key']}" for row in leak_candidates),
     ]
     hints: list[str] = []
@@ -306,11 +360,13 @@ def config_doctor(
         hints.append("optional: install/configure Doppler if you want managed secret injection")
     if permission_warnings:
         hints.append("tighten private config permissions, e.g. `chmod 600 ~/.farplane/config.toml ~/.codex/config.toml`")
+    if prohibited_private_keys:
+        hints.append("move reported secret keys to Doppler; ~/.farplane/config.toml is for non-secret settings only")
 
     return {
         "ok": not issues,
         "summary": "runtime secret sources look healthy" if not issues else "runtime secret sources need attention",
-        "precedence": ["process_env", "~/.farplane/config.toml", "~/.codex/config.toml"],
+        "precedence": ["process_env", "~/.codex/config.toml"],
         "farplaneConfig": str(farplane_config_path),
         "codexConfig": str(rendered_config_path),
         "projectRoot": str(project_root),
@@ -326,6 +382,8 @@ def config_doctor(
         },
         "keys": keys,
         "permissionWarnings": permission_warnings,
+        "prohibitedPrivateSecretKeys": prohibited_private_keys,
+        "prohibitedPrivateSecretFields": prohibited_private_fields,
         "trackedSecretCandidates": leak_candidates,
         "issues": issues,
         "hints": hints,

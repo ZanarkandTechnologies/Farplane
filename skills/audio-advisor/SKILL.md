@@ -45,7 +45,7 @@ audio_advisor(script_or_storyboard, element_realization_packets?, timing_master_
 
 state:
   reads(user brief, script/storyboard, complete audio/editing element packets,
-        source refs, config.toml when sourcing or generating,
+        source refs,
         provider/source reference selected by route, qa_checklist.md,
         runtime secret readiness when authorized generation is requested)
   writes(audio direction artifact, SFX candidate shortlist?, optional generated
@@ -72,8 +72,9 @@ fails:
   mix_notes_missing_for_final_stitch; audio_bed_without_motion_bindings
 ```
 
-Config precedence is `invocation > config.toml > explicit fallback in this
-file`. A supplied Brand Kit prompt remains prose production direction in the
+Invocation values override these defaults: Fish for voice, ElevenLabs for
+music and generated SFX, `artifacts/audio` for output, and `dry_run` execution.
+A supplied Brand Kit prompt remains prose production direction in the
 brief; interpret it directly rather than requiring structured advisor fields.
 Credentials resolve separately from the runtime environment, normally
 through `farplane run -- <command>` or `doppler run -- <command>`; never write
@@ -138,8 +139,8 @@ alone do not unlock visual generation.
     search phrase, title, item-page URL, why it fits, rights risk, and
     `awaiting_operator_download_and_approval`; record `searched_no_fit` when empty.
 - [ ] 5. Resolve provider detail only for cues selected for generation.
-  - [ ] Read `config.toml`; Fish supports voice, while ElevenLabs supports
-    voice, music, and SFX. Load `references/fish-audio.md` only for Fish voice
+  - [ ] Fish supports voice, while ElevenLabs supports voice, music, and SFX.
+    Load `references/fish-audio.md` only for Fish voice
     or `references/elevenlabs.md` only for an ElevenLabs route; block every
     unsupported pair rather than silently switching.
   - [ ] Build the validated packet with provider/model/format, prompt or script,
@@ -202,7 +203,6 @@ combined voice, music, and SFX packet.
 
 - `qa_checklist.md` - read at start and finish for direction, sourcing,
   generation, and handoff QA.
-- `config.toml` - read before source/provider/default selection.
 - [SoundButtonsWorld discovery](references/soundbuttonsworld.md) - load before
   candidate search; returns links only.
 - [Fish Audio route](references/fish-audio.md) - load only for Fish voice.

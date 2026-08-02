@@ -31,9 +31,9 @@ allowed-tools: Read, Grep, Glob, Bash
 Use this checklist whenever `video-production` or one of its method addresses
 is active.
 
-- [ ] Read [config.toml](./config.toml) before selecting a method, named style,
-  or fallback. Apply precedence `invocation > config.toml > SKILL.md fallback`;
-  never resolve secrets from this file.
+- [ ] Bind invocation inputs before selecting a method, named style, or
+  fallback. Invocation constraints override the explicit defaults in this
+  skill.
 - [ ] Read [model](./references/model.md) and build the scene/deliverable
   matrix: job, channel, duration, format, source assets, method, asset route,
   delivery specs, and proof.
@@ -158,8 +158,8 @@ Use method addresses to choose the smallest relevant workflow:
 
 ## Steps
 
-1. Read `config.toml`, validate that it contains only non-secret method/style
-   defaults, and bind invocation overrides.
+1. Bind invocation overrides; otherwise default to `explainer`, method-default
+   visual direction, and `16:9` delivery.
 2. Load the shared [domain video production workflow](../ai-video-advisor/references/domain-production.md).
 3. Select exactly one primary method from the requested artifact and add
    supporting methods only when the deliverable genuinely spans formats.

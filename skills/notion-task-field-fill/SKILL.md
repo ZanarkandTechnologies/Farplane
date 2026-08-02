@@ -25,8 +25,7 @@ Notion property updates from typed high-confidence proposals.
 Low-level helper scripts in this skill that need direct Notion credentials must
 load a single key through `scripts/notion_config.py`: `NOTION_TOKEN` from the
 process environment, preferably via `farplane run -- <command>` or
-`doppler run -- <command>`. Private `[integrations].notion_token` in
-`~/.farplane/config.toml` is fallback/cache only. Do not read
+`doppler run -- <command>`. Local TOML is not a credential source. Do not read
 `NOTION_API_KEY`, `notion_api_key`, or Codex MCP config from skill scripts.
 When launching `ntn`, bridge `NOTION_TOKEN` to `NOTION_API_TOKEN` only at the
 subprocess boundary.

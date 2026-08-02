@@ -14,7 +14,7 @@ import runtime_config
 
 
 class RuntimeConfigTests(unittest.TestCase):
-    def test_process_env_overrides_farplane_config_toml_and_rendered_toml(self) -> None:
+    def test_private_toml_supplies_settings_but_not_secrets(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             farplane_home = root / "farplane"
@@ -89,26 +89,26 @@ class RuntimeConfigTests(unittest.TestCase):
             )
 
         self.assertEqual(env["FARPLANE_CONVEX_SITE_URL"], "https://process.convex.site")
-        self.assertEqual(env["FARPLANE_TELEMETRY_TOKEN"], "canonical-token")
-        self.assertEqual(env["NOTION_TOKEN"], "canonical-notion")
+        self.assertEqual(env["FARPLANE_TELEMETRY_TOKEN"], "rendered-token")
+        self.assertNotIn("NOTION_TOKEN", env)
         self.assertNotIn("NOTION_API_KEY", env)
-        self.assertEqual(env["MESHY_API_KEY"], "meshy-key")
+        self.assertNotIn("MESHY_API_KEY", env)
         self.assertNotIn("FARPLANE_MESHY_API_KEY", env)
         self.assertEqual(env["CODEX_APP_SERVER_URL"], "ws://127.0.0.1:9999")
         self.assertEqual(env["FARPLANE_STATE_BASE"], "http://127.0.0.1:5173")
         self.assertEqual(env["LIVEKIT_URL"], "wss://example.livekit.cloud")
-        self.assertEqual(env["LIVEKIT_API_KEY"], "livekit-key")
-        self.assertEqual(env["LIVEKIT_API_SECRET"], "livekit-secret")
+        self.assertNotIn("LIVEKIT_API_KEY", env)
+        self.assertNotIn("LIVEKIT_API_SECRET", env)
         self.assertEqual(env["LIVEKIT_PHONE_NUMBER"], "+15551234567")
         self.assertEqual(env["LIVEKIT_PHONE_NUMBER_ID"], "PN_test")
         self.assertEqual(env["LIVEKIT_SIP_DISPATCH_RULE_ID"], "SDR_test")
         self.assertEqual(env["LIVEKIT_SIP_TRUNK_ID"], "ST_test")
         self.assertEqual(env["LIVEKIT_SIP_OUTBOUND_ADDRESS"], "sip.example.com")
         self.assertEqual(env["LIVEKIT_SIP_AUTH_USERNAME"], "sip-user")
-        self.assertEqual(env["LIVEKIT_SIP_AUTH_PASSWORD"], "sip-pass")
-        self.assertEqual(env["TELNYX_API_KEY"], "telnyx-key")
+        self.assertNotIn("LIVEKIT_SIP_AUTH_PASSWORD", env)
+        self.assertNotIn("TELNYX_API_KEY", env)
         self.assertEqual(env["LIVEKIT_SIP_NUMBER"], "+15551234567")
-        self.assertEqual(env["FISH_API_KEY"], "fish-key")
+        self.assertNotIn("FISH_API_KEY", env)
         self.assertEqual(env["FISH_AUDIO_REFERENCE_ID"], "fish-voice")
         self.assertEqual(env["FISH_AUDIO_MODEL"], "s1")
         self.assertEqual(env["FISH_AUDIO_LATENCY_MODE"], "balanced")

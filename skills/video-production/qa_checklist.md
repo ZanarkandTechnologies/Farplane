@@ -5,8 +5,8 @@ template_uses:
 
 # Video Production QA Checklist
 
-- [ ] `config.toml` was read before method or style defaults were selected;
-  invocation values win and no credential value was loaded from skill config.
+- [ ] Invocation values win; otherwise method, direction, and aspect ratio use
+  the explicit defaults in `SKILL.md`.
 - [ ] The visual-direction result matches exactly one of the four cases:
   method default, profile only, inspiration over method default, or composed.
 - [ ] A named profile supports the selected method and its `profile.md`,

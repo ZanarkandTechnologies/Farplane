@@ -25,8 +25,7 @@ explicitly approved publishing. `social-content` owns creative drafting;
 Secrets never live in tracked files. Project aliases and non-secret policy live
 in `farplane/bindings.yaml`; credentials come from runtime env first, normally
 via `farplane run -- <command>` / Doppler using the `FARPLANE_INSTAGRAM_` and
-`FARPLANE_META_` prefixes. Private `~/.farplane/config.toml`
-`[social.instagram]` and `[social.meta]` are fallback/cache only. Metrics use
+`FARPLANE_META_` prefixes. Local TOML is not a credential source. Metrics use
 Instagram Login credentials against `graph.instagram.com`; Facebook Page
 ownership belongs in a separate future Facebook Pages skill if needed.
 
@@ -37,8 +36,7 @@ instagram_account(action, artifact?, account_binding?, date_window?, source_file
   -> draft_validation | publish_result | metrics_snapshot | blocked_report
 state:
   reads(farplane/bindings.yaml, ~/.codex/private/docs/social.md?,
-        runtime env / private fallback ~/.farplane/config.toml
-        [social.instagram]/[social.meta]?, source_file?)
+        runtime env, source_file?)
   writes(.farplane/metrics/manual/instagram_account.json when normalizing exports,
          .farplane/content/ledger.jsonl after confirmed publishing)
 gates:
@@ -72,8 +70,10 @@ publishing.
         insights or content publishing before promising live API behavior.
   - [ ] For publish actions, require explicit approval naming the exact
         artifact, account alias, and publish boundary.
-  - [ ] Use `scripts/check_config.py` when credential readiness is unclear.
-  - [ ] If credentials are missing, return `blocked_report` with setup steps.
+  - [ ] Run `scripts/check_config.py` once before live API work; it checks read
+        and publish readiness together without a capability selector.
+  - [ ] If it is not ready, return `blocked_report` with the reported missing
+        key names and setup steps; never expose values.
 - [ ] 3. Choose the execution branch.
   - [ ] 1. Validation branch: check caption, media, carousel, reel, and publish
         boundary requirements. Use this before a publish request, before
@@ -145,7 +145,8 @@ Normalized metric snapshot:
 
 - `references/api.md` - load for Instagram API endpoint/auth grounding before live API work.
 - `references/metrics-snapshot.md` - load when importing or normalizing account metrics.
-- `scripts/check_config.py` - check private env readiness without printing secrets.
+- `scripts/check_config.py` - check complete read-and-publish private env
+  readiness in one redacted report.
 - `scripts/fetch_metrics.py` - fetch read-only profile/media metrics and write KPI observations.
   Use no media IDs for account snapshot mode; repeat `--media-id` for exact media metrics.
   Use `--latest`, `--latest-reel`, `--yesterday`, `--since-date`, or

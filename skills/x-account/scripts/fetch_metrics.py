@@ -19,7 +19,7 @@ from urllib.error import HTTPError, URLError
 from urllib.parse import quote, urlencode
 from urllib.request import Request, urlopen
 
-from social_config import env_value, load_config_values
+from runtime_env import env_value, load_runtime_values
 
 ROOT = Path(__file__).resolve().parents[3]
 if str(ROOT) not in sys.path:
@@ -368,7 +368,7 @@ def fetch_metrics(
     latest: bool = False,
     yesterday: bool = False,
 ) -> dict[str, Any]:
-    file_values = load_config_values()
+    file_values = load_runtime_values()
     app_auth = app_bearer_header(file_values)
     user_auth = oauth2_header(file_values)
     if not app_auth and not user_auth:

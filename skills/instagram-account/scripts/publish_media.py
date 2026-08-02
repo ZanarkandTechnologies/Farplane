@@ -14,7 +14,7 @@ from urllib.error import HTTPError, URLError
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
-from social_config import env_value, load_config_values
+from runtime_env import env_value, load_runtime_values
 
 ROOT = Path(__file__).resolve().parents[3]
 if str(ROOT) not in sys.path:
@@ -193,10 +193,10 @@ def publish(args: argparse.Namespace) -> dict[str, Any]:
     issues = validate(payload)
     if issues:
         return {"ok": False, "mutated": False, "issues": issues, "redacted": True}
-    file_values = load_config_values()
-    token = env_value("FARPLANE_INSTAGRAM_LOGIN_ACCESS_TOKEN", file_values) or env_value("FARPLANE_INSTAGRAM_ACCESS_TOKEN", file_values)
-    user_id = args.instagram_user_id or env_value("FARPLANE_INSTAGRAM_BUSINESS_ACCOUNT_ID", file_values) or env_value("FARPLANE_INSTAGRAM_LOGIN_USER_ID", file_values)
-    version = args.graph_version or env_value("FARPLANE_META_GRAPH_VERSION", file_values) or "v21.0"
+    runtime_values = load_runtime_values()
+    token = env_value("FARPLANE_INSTAGRAM_LOGIN_ACCESS_TOKEN", runtime_values) or env_value("FARPLANE_INSTAGRAM_ACCESS_TOKEN", runtime_values)
+    user_id = args.instagram_user_id or env_value("FARPLANE_INSTAGRAM_BUSINESS_ACCOUNT_ID", runtime_values) or env_value("FARPLANE_INSTAGRAM_LOGIN_USER_ID", runtime_values)
+    version = args.graph_version or env_value("FARPLANE_META_GRAPH_VERSION", runtime_values) or "v21.0"
     dry_run = not args.execute
     if args.execute and not args.approval_ref:
         return {"ok": False, "mutated": False, "issues": ["missing_approval_ref"], "redacted": True}
@@ -266,7 +266,10 @@ def main() -> int:
     parser.add_argument("--project-root", default=str(ROOT))
     parser.add_argument("--campaign")
     parser.add_argument("--kpis", default=",".join(DEFAULT_KPIS))
-    parser.add_argument("--instagram-user-id", help="Overrides private config user/business account ID.")
+    parser.add_argument(
+        "--instagram-user-id",
+        help="Overrides the injected Instagram user/business account ID.",
+    )
     parser.add_argument("--graph-version")
     parser.add_argument("--container-timeout-seconds", type=int, default=300)
     parser.add_argument("--no-ledger", action="store_true")

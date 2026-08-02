@@ -304,8 +304,10 @@ uses Doppler for local secret injection, so credentialed scripts should run
 through `farplane run -- <command>` or `doppler run -- <command>`. `farplane
 run` uses the current working directory's Doppler setup, which lets scripts live
 under `skills/` while secrets come from the project scope. Farplane does not
-store Doppler tokens in the repo. Private `~/.farplane/config.toml` remains a
-local fallback/cache for UI-managed settings and bootstrap values.
+store Doppler tokens in the repo. Private `~/.farplane/config.toml` stores
+non-secret UI-managed machine/operator settings only; Core ignores credential
+fields there and `farplane doctor` reports their names for migration. See
+[secret management](docs/fundamentals/secret-management.md).
 `config.toml.example` still renders the installed `~/.codex/config.toml`, but
 that file is a Codex adapter output and the lowest-priority fallback, not the
 Farplane source of truth.
@@ -316,7 +318,7 @@ The command grammar is intentionally small: `doctor` reports readiness,
 
 Keep tracked project coordinates such as URLs, aliases, safe IDs, and metric
 recipes in `farplane/bindings.yaml`. Keep API keys, tokens, passwords, OAuth
-credentials, and webhook secrets in runtime env or private local config only.
+credentials, and webhook secrets in Doppler-injected runtime env only.
 
 Override the linked UI checkout for one shell with `FARPLANE_UI_REPO=/path/to/Farplane-UI`.
 Use `FARPLANE_CLI_LINK_DIR=/custom/bin bash install.sh` if your preferred

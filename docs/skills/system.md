@@ -29,32 +29,32 @@ Keep this file focused on stable system rules. Do not duplicate first-load
 authoring detail here; link `docs/skills/best-practices.md` for checklist
 shape, reference placement, repeatability, and finish gates.
 
-## Skill-Local Configuration
-
-A local Farplane skill may own an optional `config.toml` at its package root
-when reusable non-secret defaults would otherwise drift across prompts or
-prose. This is a package input, not a second runtime controller:
+Credential-bearing skills should expose one package-local
+`scripts/check_config.py` readiness command when configuration failures would
+otherwise require guesswork:
 
 ```text
-load_skill_defaults(skill/config.toml, invocation)
-  -> parsed_safe_defaults | blocked_report
-
-precedence: invocation > skill-local config > explicit SKILL.md fallback
-secrets: runtime environment / Doppler only
+check_config(runtime_environment) -> {
+  skill,
+  ready,
+  read_ready,
+  publish_ready,
+  redacted,
+  missing? # present only when blocked
+}
 ```
 
-The skill must read its config before choosing a default method, profile, or
-provider. Tracked config is safe to commit and limited to `schema_version`,
-`skill`, and the `defaults`, `profiles`, and `providers` tables. Values are TOML
-scalars or scalar arrays. API keys, tokens, passwords, private keys, auth
-material, webhook secrets, and credential-bearing keys are forbidden at every
-depth. Provider voice/reference IDs may be tracked only when intentionally
-repo-shareable and rights-safe; personal or private IDs remain invocation or
-private runtime context.
-
-`skills/skill-maintenance/scripts/validate_skill_configs.py` enforces this
-boundary across root and project-local skill packages. Adding `config.toml` to
-one skill does not require migrating unrelated skills.
+The command checks every supported credential branch in one invocation; do not
+add a capability selector. `ready` and the process exit status represent full
+read-and-publish readiness, while branch-specific fields explain partial
+readiness. Keep successful output to those five fields; add `missing` with
+required key names or alternative key groups only when blocked. Optional app,
+refresh, or enhancement credentials do not belong in the default report and do
+not block `ready`. Exit `0` when ready and `1` when blocked. Never print secret
+values, put credential names in skill frontmatter, or make tracked files the
+secret source; runtime environment and Doppler remain the credential boundary.
+Provider-specific remediation belongs in a conditional reference, while
+`SKILL.md` routes agents to the checker.
 
 ## Tier Model
 

@@ -27,29 +27,11 @@ Load this before live X API work.
   falling back to app-only bearer reads. Private or organic analytics require
   user-context auth and account access level support.
 
-## Minimal Config Contract
+## Runtime Contract
 
-Use runtime env first, normally through `farplane run -- <command>` / Doppler.
-Private `~/.farplane/config.toml` remains a fallback/cache with the same field
-shape:
-
-```toml
-[social.x]
-bearer_token = ""
-oauth2_client_id = ""
-oauth2_client_secret = ""
-oauth2_access_token = ""
-oauth2_refresh_token = ""
-access_token = ""
-access_token_secret = ""
-api_key = ""
-api_key_secret = ""
-user_id = ""
-username = ""
-```
-
-Use explicit `FARPLANE_X_*` environment variables as the normal runtime
-contract. Do not commit credentials or generated env files.
+Use explicit `FARPLANE_X_*` environment variables, normally injected by
+`farplane run -- <command>` / Doppler. Local TOML is not a credential source.
+Do not commit credentials or generated env files.
 
 ## Live API Gates
 
@@ -66,9 +48,8 @@ contract. Do not commit credentials or generated env files.
 - `scripts/publish_post.py` is the live write path. It uses OAuth 2.0 user
   access for X API v2 media upload and `POST /2/tweets`. When the stored OAuth
   2.0 access token returns unauthorized and refresh credentials exist, it
-  refreshes OAuth 2.0, saves the refreshed token back to private
-  `~/.farplane/config.toml` unless `--no-save-refreshed-token` is set, and
-  retries before using OAuth 1.0a user-context fallback for text-only
+  refreshes OAuth 2.0 in memory, reports when the Doppler credential requires
+  rotation, and retries before using OAuth 1.0a user-context fallback for text-only
   `POST /2/tweets`. Dry-run is the default, and account mutation requires
   `--execute` plus `--approval-ref`.
   Dry-run writes a local `draft` content-ledger row using a stable

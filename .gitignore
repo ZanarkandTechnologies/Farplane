@@ -4,8 +4,6 @@
 .credentials.json
 auth.json
 config.toml
-!skills/*/config.toml
-!.agents/skills/*/config.toml
 
 # Session and history state
 history.jsonl
