@@ -84,6 +84,23 @@ loop:
     - for surprising, invalid, prerequisite-uncertain, or causally ambiguous
       evidence, add only program-bounded diagnostic children; otherwise close
       the node and backtrack to the best credible sibling
+    - treat claim failure and causal resolution separately: a missed metric may
+      falsify the parent claim but cannot establish a cause without completed
+      diagnostic evidence that discriminates against credible alternatives
+    - label evidence roles: target-local success proves target learnability but
+      not the failed transfer mechanism; background research supports
+      plausibility but does not isolate a cause from live confounds
+    - when a cause is supported, propagate the causal insight and diagnostic
+      evidence refs to the parent node before the progress receipt; when it is
+      not isolated, keep the parent cause unresolved and select the next
+      highest-information discriminator inside the remaining budget
+    - reserve `failed because` for a supported cause; an unresolved branch says
+      only that the tested configuration failed and its cause remains unresolved
+    - validate diagnostic receipts against the frozen evaluator, split, config,
+      code, data, and metric before causal use; preserve drifted receipts
+      append-only but remove them from causal evidence, change stale supported
+      diagnostic and parent-cause labels to unresolved, mark the packet stale,
+      and authorize only Goal Advisor regeneration
     - keep | discard | repair_once | defer | failed
 
 after_each_turn:

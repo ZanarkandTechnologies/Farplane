@@ -2,102 +2,89 @@
   "skill_name": "ml-autoresearch",
   "evals": [
     {
-      "id": "ml_autoresearch_requires_frozen_baseline_and_goal_01",
-      "prompt": "Let an agent improve our training code overnight. It can change the model and optimizer, but the validation score and compute cap must stay trustworthy.",
-      "expected_output": "Binds one campaign ticket and exact mutable surface; Freezes evaluator, data boundary, metric, guards, and budget; Runs the unchanged baseline first; Uses Goal Advisor for bounded continuation; Uses Leverage Advisor for experiment selection; Returns a receipt-backed best candidate or negative result",
+      "id": "ml_autoresearch_pipeline_smoke_01",
+      "prompt": "Set up a small image-model improvement campaign. The evaluator and GPU cap are fixed. Our notes say large crop scales hurt small-object recall, area-aware sampling may help, and aggressive augmentation can erase tiny features. Show the initial research plan and what the loop should do if its first experiment misses.",
+      "expected_output": "Freezes and records the baseline; Extracts techniques, mechanisms, variables, and failure conditions; Seeds a small hypothesis tree with expected outcomes and falsifiers; Uses one compounding-leverage selection; Replans from the result with bounded diagnostics rather than following a fixed ladder",
       "files": [],
       "assertions": [
-        "Requires one campaign ticket with ticket.md, program.md, hypothesis-tree.json, and progress.md",
-        "Names the exact mutable surface and freezes evaluator, data/splits, metric, guards, and compute budget",
-        "Runs and records the unchanged full-evaluator baseline before mutation",
-        "Uses Goal Advisor as the sole bounded continuation compiler",
-        "Uses Leverage Advisor to choose experiments and returns evidence-backed results"
+        "Freezes the evaluator, data boundary, metric, guards, GPU budget, and unchanged baseline before mutation",
+        "Extracts techniques, mechanisms, variables, failure conditions, and source refs into a small initial hypothesis tree",
+        "Gives each initial hypothesis an expected observation, falsifier, and logical compounding-reward basis, then makes one ordinal Leverage Advisor selection without a tournament",
+        "After the miss, updates the tree before progress and uses bounded diagnostic children or a credible sibling instead of continuing a fixed roadmap"
       ],
-      "metadata": {"farplane": {"title": "ML Autoresearch freezes the experiment boundary", "tags": ["skill", "ml", "autoresearch", "goal-packet"], "notes": "Protects the baseline and ownership contract."}}
+      "metadata": {
+        "farplane": {
+          "title": "ML Autoresearch pipeline smoke",
+          "tags": ["skill", "ml", "autoresearch", "smoke"],
+          "notes": "One lightweight canary for baseline, source seeding, selection, and evidence-driven replanning."
+        }
+      }
     },
     {
-      "id": "ml_autoresearch_program_replans_from_progress_01",
-      "prompt": "Draft the compact loop policy for a model-research campaign where later experiments must learn from earlier failures instead of marching through the original architecture list.",
-      "expected_output": "Keeps source/search policy in program.md, current research state in hypothesis-tree.json, and receipts in progress.md; Before every experiment invokes Leverage Advisor on pending leaves, progress learnings, current receipts, and remaining budget; Selects one hypothesis and falsifier; Updates the tree then appends the immutable result; Keeps Goal Advisor out of technique selection",
-      "files": [],
+      "id": "ml_autoresearch_resolves_diagnostic_cause_01",
+      "prompt": "The transfer experiment and its follow-up diagnostics are finished. Reconcile the attached campaign state, decide what caused the miss, and give the final stakeholder conclusion.",
+      "expected_output": "Uses controlled diagnostics rather than the bad score alone; Supports lithology shift and falsifies resolution; Propagates valid evidence to the parent; Gives a bounded failed-because conclusion; Updates the tree before progress",
+      "files": ["skills/ml-autoresearch/evals/fixtures/domain-transfer-resolved.json"],
       "assertions": [
-        "Places source/search and replan policy in program.md",
-        "Places current hypotheses, results, and insights in hypothesis-tree.json and chronological receipts in progress.md",
-        "Invokes Leverage Advisor before every next-experiment decision using pending tree leaves, progress, receipts, and remaining budget",
-        "Selects and records one attributable hypothesis, falsifier, and changed boundary per round",
-        "Keeps Goal Advisor as the Goal Packet compiler rather than the technique selector"
+        "Treats the performance failure and causal diagnosis as separate decisions",
+        "Treats lithology shift as supported and grid resolution as falsified from the completed diagnostics",
+        "Updates the parent insight and evidence refs with the valid diagnostic evidence before progress",
+        "States that transfer failed because of lithology shift within the tested campaign boundary without inventing another cause"
       ],
-      "metadata": {"farplane": {"title": "ML Autoresearch replans from program and progress", "tags": ["skill", "ml", "autoresearch", "replanning"], "notes": "Critical composition regression."}}
+      "metadata": {
+        "farplane": {
+          "title": "ML Autoresearch reports a proven cause",
+          "tags": ["skill", "ml", "autoresearch", "causal-proof"],
+          "notes": "Happy path: a controlled diagnostic isolates the root cause.",
+          "behavior_requirements": {
+            "required_successful_command_regexes": ["(?:cat|sed|jq|rg|python3|python)\\s+[^\\n;&|]*domain-transfer-resolved\\.json"]
+          }
+        }
+      }
     },
     {
-      "id": "ml_autoresearch_missing_catalog_routes_research_01",
-      "prompt": "We know the baseline is weak, but nobody has assembled credible techniques for this kind of data and our notes are stale. Start the experiment loop anyway.",
-      "expected_output": "Refuses to fabricate a technique order; Routes bounded parity or source synthesis and dispositions before tree seeding; Keeps raw source material outside runtime state; Returns a source gap or blocked setup when grounding cannot run; Does not spend compute before the frontier is credible",
-      "files": [],
+      "id": "ml_autoresearch_refuses_unproven_cause_01",
+      "prompt": "The cross-region run missed its target. Local training is better and a geology note says the regions differ, but the grid resolutions also differ and no matched ablation has run. The team wants a confident reason and wants to close today. Reconcile the attached campaign state.",
+      "expected_output": "Records the tested performance failure but keeps its cause unresolved; Treats local performance and research as clues; Preserves one bounded discriminator; Refuses a fabricated failed-because conclusion; Updates the tree before progress",
+      "files": ["skills/ml-autoresearch/evals/fixtures/domain-transfer-unresolved.json"],
       "assertions": [
-        "Recognizes the candidate technique frontier is missing or stale",
-        "Routes bounded research or Best Of Worlds before ranking rather than always browsing",
-        "Requires source-backed adopt, adapt, reject, or defer decisions and extracts techniques, mechanisms, and variables",
-        "Returns a source gap or setup blocker when credible candidates cannot be obtained",
-        "Does not launch compute or invent a fixed technique ladder"
+        "Records that the tested transfer configuration failed its control without treating the score as a cause",
+        "Explains that target-local performance and background research do not isolate domain shift from resolution",
+        "Keeps the parent causal status unresolved and preserves one authorized discriminating diagnostic",
+        "Refuses a confident failed-because conclusion and updates the tree before progress"
       ],
-      "metadata": {"farplane": {"title": "ML Autoresearch grounds a missing frontier", "tags": ["skill", "ml", "autoresearch", "research"], "notes": "Protects the conditional source-gap branch."}}
+      "metadata": {
+        "farplane": {
+          "title": "ML Autoresearch leaves an unproven cause unresolved",
+          "tags": ["skill", "ml", "autoresearch", "causal-restraint"],
+          "notes": "Negative path: plausible clues are not causal isolation.",
+          "behavior_requirements": {
+            "required_successful_command_regexes": ["(?:cat|sed|jq|rg|python3|python)\\s+[^\\n;&|]*domain-transfer-unresolved\\.json"]
+          }
+        }
+      }
     },
     {
-      "id": "ml_autoresearch_attempts_stay_in_campaign_01",
-      "prompt": "Our approved run has eight possible experiments under the same dataset, score, owner, and GPU budget. Make a task for each one so we can track them.",
-      "expected_output": "Keeps one bounded campaign ticket; Records experiments as progress entries and ticket-local receipts; Splits only for changed objective/evaluator, independent owner/deliverable, parallel proof, or approval/spend boundary; Preserves append-only failed results; Avoids ticket explosion",
-      "files": [],
+      "id": "ml_autoresearch_rejects_drifted_diagnostic_receipt_01",
+      "prompt": "The follow-up run is complete and the campaign tree marks a cause as supported. Reconcile the attached state and close the campaign if the evidence is defensible.",
+      "expected_output": "Checks receipt integrity before trusting the tree label; Names evaluator and split drift; Keeps the invalid receipt append-only but removes it from causal support; Makes the cause unresolved and packet stale; Does not run again or use failed-because language",
+      "files": ["skills/ml-autoresearch/evals/fixtures/domain-transfer-drifted-diagnostic.json"],
       "assertions": [
-        "Keeps one campaign ticket while objective, evaluator, data boundary, owner, and budget remain stable",
-        "Treats each experiment as a progress entry and ticket-local evidence receipt",
-        "Preserves failed and discarded experiments append-only",
-        "Names concrete conditions that require a child or new ticket",
-        "Does not create one ticket per experiment"
+        "Names evaluator_hash eval-v2 versus eval-v1 and data_split_hash target-split-v2 versus target-split-v1",
+        "Preserves the drifted receipt append-only while removing it from diagnostic and parent causal evidence",
+        "Keeps the parent performance claim falsified but changes the stale supported diagnostic and parent cause to unresolved",
+        "Marks the packet stale, authorizes only Goal Advisor regeneration, and avoids a failed-because conclusion"
       ],
-      "metadata": {"farplane": {"title": "ML Autoresearch uses one campaign ticket", "tags": ["skill", "ml", "autoresearch", "tickets"], "notes": "Protects campaign state locality."}}
-    },
-    {
-      "id": "ml_autoresearch_negative_gate_01",
-      "prompt": "A paper reproduction produced no gain, and the campaign wants to stop with a supported negative conclusion. The baseline ran, but the positive control also failed. What should the loop record and do next?",
-      "expected_output": "Requires the experiment's preregistered expected observation, horizon, confidence, falsifier, and surprise trigger; Preserves the immutable failed receipt; Routes the surprising negative result to agent-qa-test:experiment; Treats the failed positive control as invalid or inconclusive evidence rather than a supported method rejection; Keeps any repair or rerun inside the campaign budget and domain executor",
-      "files": [],
-      "assertions": [
-        "Requires the experiment's preregistered expected observation, horizon, confidence, falsifier, and surprise trigger",
-        "Preserves the immutable failed receipt",
-        "Routes the surprising negative result to agent-qa-test:experiment",
-        "Treats the failed positive control as invalid or inconclusive evidence rather than a supported method rejection",
-        "Keeps any repair or rerun inside the campaign budget and domain executor"
-      ],
-      "metadata": {"farplane": {"title": "ML Autoresearch audits a surprising negative before stopping", "tags": ["skill", "ml", "autoresearch", "scientific-evidence"], "notes": "Prevents premature falsification inside the campaign loop."}}
-    },
-    {
-      "id": "ml_autoresearch_source_stage_seeds_tree_01",
-      "prompt": "Before an image-model campaign begins, synthesize these bounded refs into initial experiments. local-ablation-4: small-object recall falls when crop scale exceeds 0.8. feed-paper-1: area-aware sampling increases exposure of small targets; feed-paper-2: multi-scale tokens preserve fine detail; feed-paper-3: focal loss shifts gradient mass toward hard examples; feed-paper-4: aggressive augmentation can erase tiny features. repo-area-sampler: maintained code exposes sampling weight and crop-scale variables. The frozen evaluator reports small-object recall, overall accuracy, and latency.",
-      "expected_output": "Runs a bounded source stage; Extracts applicable techniques, mechanisms, and variables; Seeds intervention hypotheses with expected reward contracts; Uses one ordinal compounding selection; Avoids a tournament or database",
-      "files": [],
-      "assertions": [
-        "Runs the bounded source stage before the first mutation",
-        "Extracts applicable techniques, mechanisms, variables, failure conditions, and source refs rather than raw prose",
-        "Generates intervention hypotheses through combination, permutation, transfer, ablation, or new direction",
-        "Records expected observation, falsifier, expected compounding reward, and reward basis per node",
-        "Uses one ordinal Leverage Advisor judgment without a tournament, persistent rank, or invented numeric lift"
-      ],
-      "metadata": {"farplane": {"title": "ML Autoresearch seeds a source-grounded tree", "tags": ["skill", "ml", "autoresearch", "hypothesis-tree"], "notes": "Protects the source-stage contract before compute."}}
-    },
-    {
-      "id": "ml_autoresearch_surprise_diagnostic_backtrack_01",
-      "prompt": "A normalization intervention missed its expected reward, its positive control is noisy, and an upstream data prerequisite may be absent. Decide whether to discard it and update the campaign.",
-      "expected_output": "Treats the evidence as ambiguous; Adds bounded diagnostic children; Preserves siblings; Defines repair, rejection, deferral, or backtracking; Updates the tree before progress",
-      "files": [],
-      "assertions": [
-        "Treats the evidence as invalid or causally ambiguous rather than a supported rejection",
-        "Creates only budget-bounded diagnostic children for the control and prerequisite explanations",
-        "Keeps credible sibling intervention leaves available",
-        "Defines repair, reject, defer, or backtrack outcomes from the diagnostic evidence",
-        "Updates hypothesis-tree.json before appending the immutable progress receipt"
-      ],
-      "metadata": {"farplane": {"title": "ML Autoresearch diagnoses before rejection", "tags": ["skill", "ml", "autoresearch", "diagnosis"], "notes": "Protects diagnostic learning and backtracking on ambiguous evidence."}}
+      "metadata": {
+        "farplane": {
+          "title": "ML Autoresearch rejects invalid causal evidence",
+          "tags": ["skill", "ml", "autoresearch", "integrity"],
+          "notes": "Integrity boundary: state labels cannot override a drifted receipt.",
+          "behavior_requirements": {
+            "required_successful_command_regexes": ["(?:cat|sed|jq|rg|python3|python)\\s+[^\\n;&|]*domain-transfer-drifted-diagnostic\\.json"]
+          }
+        }
+      }
     }
   ]
 }

@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "case_id": "domain-transfer-unresolved",
+  "source_class": "sanitized_user_regression_boundary",
+  "campaign": {
+    "objective": "Determine whether a source-region geological representation transfers to the target region.",
+    "primary_metric": "target_region_score (higher is better)",
+    "evaluator_frozen": true,
+    "remaining_diagnostic_budget": {
+      "experiments": 2,
+      "research_passes": 1
+    }
+  },
+  "observations": {
+    "cross_region_score": 0.12,
+    "null_q95": 0.124,
+    "target_local_score": 0.262,
+    "public_research": "The regions have different mapped lithology distributions.",
+    "uncontrolled_difference": "The source and target evaluations use different grid resolutions.",
+    "missing_evidence": [
+      "No matched-resolution transfer control has run.",
+      "No lithology-aware reweighting or matched-cohort ablation has run."
+    ]
+  },
+  "tree": {
+    "nodes": {
+      "h_transfer": {
+        "parent": null,
+        "family": "intervention",
+        "status": "falsified",
+        "result": "The current zero-shot configuration did not beat null_q95.",
+        "insight": "The performance claim is falsified for this configuration; the cause remains unresolved."
+      },
+      "d_lithology_shift": {
+        "parent": "h_transfer",
+        "family": "diagnostic",
+        "status": "pending",
+        "hypothesis": "Lithology-distribution shift caused the miss."
+      },
+      "d_grid_resolution": {
+        "parent": "h_transfer",
+        "family": "diagnostic",
+        "status": "pending",
+        "hypothesis": "Grid-resolution mismatch caused the miss."
+      }
+    }
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "case_id": "domain-transfer-drifted-diagnostic",
+  "source_class": "sanitized_integrity_regression",
+  "campaign": {
+    "objective": "Determine whether a source-region geological representation transfers to the target region.",
+    "primary_metric": "target_region_score (higher is better)",
+    "frozen_boundary": {
+      "evaluator_hash": "eval-v1",
+      "data_split_hash": "target-split-v1",
+      "metric": "target_region_score",
+      "frozen_surfaces": [
+        "evaluator_hash",
+        "data_split_hash",
+        "metric"
+      ]
+    },
+    "remaining_diagnostic_budget": {
+      "experiments": 1,
+      "research_passes": 0
+    }
+  },
+  "tree": {
+    "nodes": {
+      "h_transfer": {
+        "parent": null,
+        "family": "intervention",
+        "status": "falsified",
+        "causal_status": "supported",
+        "claimed_cause": "lithology-distribution shift",
+        "result": {
+          "target_region_score": 0.12,
+          "null_q95": 0.124
+        },
+        "evidence_refs": [
+          "receipts/cross-region-full-evaluator.json",
+          "receipts/lithology-diagnostic-drifted.json"
+        ]
+      },
+      "d_lithology_shift": {
+        "parent": "h_transfer",
+        "family": "diagnostic",
+        "status": "supported",
+        "receipt": {
+          "ref": "receipts/lithology-diagnostic-drifted.json",
+          "score": 0.234,
+          "evaluator_hash": "eval-v2",
+          "data_split_hash": "target-split-v2",
+          "metric": "target_region_score",
+          "changed_boundary": "Lithology reweighting plus evaluator revision and data-split revision."
+        }
+      },
+      "d_grid_resolution": {
+        "parent": "h_transfer",
+        "family": "diagnostic",
+        "status": "falsified",
+        "receipt": {
+          "ref": "receipts/matched-resolution-control.json",
+          "score": 0.126,
+          "evaluator_hash": "eval-v1",
+          "data_split_hash": "target-split-v1",
+          "metric": "target_region_score"
+        }
+      }
+    }
+  },
+  "required_reconciliation": {
+    "receipt_policy": "Keep receipts append-only even when invalid or non-comparable.",
+    "causal_policy": "A tree status label cannot override evaluator or data-split integrity.",
+    "packet_policy": "Evaluator or split drift stales the current packet; do not spend the remaining experiment until the packet is regenerated or comparable restored-boundary evidence exists.",
+    "writeback_order": "Correct hypothesis-tree.json before appending the integrity finding to progress.md."
+  }
+}

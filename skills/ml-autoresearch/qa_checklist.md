@@ -37,6 +37,21 @@ Apply before campaign approval and again before completion.
 - [ ] Surprising, invalid, prerequisite-uncertain, or causally ambiguous
       results get only program-bounded diagnostic children before rejection;
       expected negatives may close directly and backtrack to a credible sibling.
+- [ ] A failed score falsifies only the tested performance claim. Any reported
+      root cause is supported by completed discriminating diagnostics, is
+      propagated to the parent insight with concrete evidence refs, and names
+      the tested boundary; otherwise the parent cause remains unresolved and a
+      next discriminator is preserved within budget.
+- [ ] Target-local performance and background research are labeled as clues:
+      they establish target learnability or mechanism plausibility, not causal
+      isolation from remaining experimental confounds.
+- [ ] `Failed because` appears only with a supported cause. An unresolved
+      branch states that the tested configuration failed and its cause remains
+      unresolved; it does not call an unresolved combination the explanation.
+- [ ] Every causal receipt matches the frozen evaluator, split, config, code,
+      data, and metric. Drifted receipts stay append-only but are removed from
+      causal evidence, stale supported labels become unresolved, and the packet
+      stops for Goal Advisor regeneration even when attempt budget remains.
 - [ ] Final claims come from the frozen best candidate's complete evaluator and
       independent leakage/reproducibility/evidence review, not the executor's
       self-assessment.

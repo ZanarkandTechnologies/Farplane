@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "case_id": "domain-transfer-resolved",
+  "source_class": "sanitized_user_regression",
+  "campaign": {
+    "objective": "Determine whether a source-region geological representation transfers to the target region.",
+    "primary_metric": "target_region_score (higher is better)",
+    "evaluator_frozen": true,
+    "remaining_diagnostic_budget": {
+      "experiments": 0,
+      "research_passes": 0
+    }
+  },
+  "tree": {
+    "nodes": {
+      "h_transfer": {
+        "parent": null,
+        "family": "intervention",
+        "hypothesis": "A representation trained in the source region transfers above the target-region null control.",
+        "mechanism": "The learned geological structure is invariant across regions.",
+        "expected_observation": "target_region_score >= 0.20 and at least 0.03 above null_q95",
+        "falsifier": "target_region_score <= null_q95",
+        "status": "falsified",
+        "result": {
+          "target_region_score": 0.12,
+          "null_q95": 0.124
+        },
+        "insight": "The performance claim is falsified; causal diagnosis must be propagated from completed diagnostic children.",
+        "evidence_refs": [
+          "receipts/cross-region-full-evaluator.json"
+        ]
+      },
+      "d_lithology_shift": {
+        "parent": "h_transfer",
+        "family": "diagnostic",
+        "hypothesis": "Lithology-distribution shift between the source and target regions caused the transfer failure.",
+        "mechanism": "Source-trained features weight rock classes that are uncommon in the target region.",
+        "expected_observation": "Target-local training and lithology-aware source reweighting both recover performance under the frozen evaluator.",
+        "falsifier": "Neither target-local training nor lithology-aware reweighting materially improves over the cross-region score.",
+        "status": "supported",
+        "result": {
+          "cross_region_score": 0.12,
+          "target_local_score": 0.262,
+          "lithology_reweighted_transfer_score": 0.224,
+          "null_q95": 0.124,
+          "research_observation": "The target region's mapped lithology distribution differs materially from the source cohort."
+        },
+        "insight": "Under the same frozen evaluator, both target-local training and lithology-aware reweighting recover the miss, supporting lithology domain shift as the cause within this campaign boundary.",
+        "evidence_refs": [
+          "receipts/target-local-control.json",
+          "receipts/lithology-reweighting-ablation.json",
+          "research/lithology-distribution-comparison.md"
+        ]
+      },
+      "d_grid_resolution": {
+        "parent": "h_transfer",
+        "family": "diagnostic",
+        "hypothesis": "Grid-resolution mismatch caused the transfer failure.",
+        "mechanism": "Coarse cells erase target-scale geological structure.",
+        "expected_observation": "Matching the target grid resolution materially restores transfer performance.",
+        "falsifier": "The matched-resolution control remains within 0.01 of the original cross-region score.",
+        "status": "falsified",
+        "result": {
+          "cross_region_score": 0.12,
+          "matched_resolution_score": 0.126
+        },
+        "insight": "Resolution may limit targeting precision, but the matched-resolution control does not explain this transfer miss.",
+        "evidence_refs": [
+          "receipts/matched-resolution-control.json"
+        ]
+      }
+    }
+  },
+  "writeback_contract": {
+    "first": "Update h_transfer.insight and evidence_refs from completed diagnostic children.",
+    "second": "Append the causal conclusion, scope, evidence, and disposition to progress.md."
+  }
+}
