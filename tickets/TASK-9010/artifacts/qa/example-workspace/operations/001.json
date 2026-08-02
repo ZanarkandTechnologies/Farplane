@@ -1,0 +1,32 @@
+{
+  "base_checkpoint": "checkpoints/000.png",
+  "operations": [
+    {
+      "box": [
+        0.04,
+        0.04,
+        0.42,
+        0.28
+      ],
+      "color": "#ff3b30",
+      "label": "reference region",
+      "op": "box"
+    },
+    {
+      "color": "#ff3b30",
+      "label": "reasoning link",
+      "op": "arrow",
+      "points": [
+        [
+          0.23,
+          0.28
+        ],
+        [
+          0.5,
+          0.5
+        ]
+      ]
+    }
+  ],
+  "result_checkpoint": "checkpoints/001.png"
+}

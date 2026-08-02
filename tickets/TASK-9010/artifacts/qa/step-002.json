@@ -1,0 +1,16 @@
+{
+  "operations": [
+    {
+      "op": "grid",
+      "rows": 3,
+      "columns": 3,
+      "color": "#0066ff"
+    },
+    {
+      "op": "point",
+      "at": [0.76, 0.74],
+      "label": "verification target",
+      "color": "#16a34a"
+    }
+  ]
+}

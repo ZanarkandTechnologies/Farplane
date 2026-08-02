@@ -1,0 +1,17 @@
+{
+  "base_checkpoint": "checkpoints/000.png",
+  "operations": [
+    {
+      "box": [
+        0.06,
+        0.48,
+        0.34,
+        0.63
+      ],
+      "color": "#ff3b30",
+      "label": "card 1",
+      "op": "box"
+    }
+  ],
+  "result_checkpoint": "checkpoints/001.png"
+}

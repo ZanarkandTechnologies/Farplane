@@ -1,0 +1,21 @@
+{
+  "base_checkpoint": "checkpoints/001.png",
+  "operations": [
+    {
+      "color": "#0066ff",
+      "columns": 3,
+      "op": "grid",
+      "rows": 3
+    },
+    {
+      "at": [
+        0.76,
+        0.74
+      ],
+      "color": "#16a34a",
+      "label": "verification target",
+      "op": "point"
+    }
+  ],
+  "result_checkpoint": "checkpoints/002.png"
+}

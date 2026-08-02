@@ -1,0 +1,102 @@
+{
+  "skill_name": "visual-reasoning",
+  "evals": [
+    {
+      "id": "visual_reasoning_dense_count_01",
+      "prompt": "In the attached infographic, how many numbered control cards appear in the middle workflow row? Mark each card so I can inspect the count.",
+      "expected_output": "Uses a checkpointed analytical image workspace because the task asks for inspectable entity references; preserves the source and marks the three numbered cards with stable points or boxes; renders and re-inspects the marked image for omissions or duplicates before answering 3; returns the final checkpoint as evidence; does not invoke a detector merely because the task says count",
+      "files": ["assets/harness-algebra-infographic.png"],
+      "assertions": [
+        "Recognizes dense counting as a visual reference-tracking problem that warrants a workspace",
+        "Preserves the source and uses stable point or box annotations for candidate people",
+        "Renders and reobserves the annotated checkpoint before finalizing the count",
+        "Checks for missed and duplicate instances",
+        "Names the final checkpoint as inspectable evidence",
+        "Does not blindly invoke an object detector"
+      ],
+      "metadata": {
+        "farplane": {
+          "context": "Staged fixture inputs are read-only. Creating new files only inside this isolated eval task's artifacts/ directory is authorized and required; do not modify staged fixtures or live project files.",
+          "behavior_requirements": {
+            "required_successful_command_regexes": ["python3\\s+[^\\n;&|]*visual_workspace\\.py\\s+(?:init|apply)"]
+          }
+        }
+      }
+    },
+    {
+      "id": "visual_reasoning_tangled_path_01",
+      "prompt": "In the attached infographic, trace the middle workflow from card 1 through card 2 to card 3. Show the route you followed instead of only describing it.",
+      "expected_output": "Creates or resumes one visual workspace; follows the visible card 1 to card 2 to card 3 workflow with a normalized path or arrows; renders the route and reobserves continuity against the existing black connectors; appends a correction checkpoint rather than overwriting if needed; answers with the ordered route and final checkpoint",
+      "files": ["assets/harness-algebra-infographic.png"],
+      "assertions": [
+        "Uses one checkpointed workspace for the image",
+        "Represents cable continuity with a path or waypoints",
+        "Uses finer spatial references near ambiguous crossings",
+        "Reobserves the rendered route before answering",
+        "Appends corrections instead of overwriting earlier checkpoints",
+        "Returns the final checkpoint with the ordered route"
+      ],
+      "metadata": {
+        "farplane": {
+          "context": "Staged fixture inputs are read-only. Creating new files only inside this isolated eval task's artifacts/ directory is authorized and required; do not modify staged fixtures or live project files.",
+          "behavior_requirements": {
+            "required_successful_command_regexes": ["python3\\s+[^\\n;&|]*visual_workspace\\.py\\s+(?:init|apply)"]
+          }
+        }
+      }
+    },
+    {
+      "id": "visual_reasoning_simple_direct_answer_01",
+      "prompt": "What is the dominant background color in the attached simple infographic?",
+      "expected_output": "Inspects the image and answers directly when the color is visually unambiguous; does not create a visual workspace, draw decorative marks, or call a CV provider without a reference-tracking or perception need",
+      "files": ["assets/harness-algebra-infographic.png"],
+      "assertions": [
+        "Uses the direct-answer path for a simple unambiguous visual question",
+        "Does not create a checkpoint workspace unnecessarily",
+        "Does not add decorative annotations",
+        "Does not call a CV provider without a mechanical need"
+      ]
+    },
+    {
+      "id": "visual_reasoning_checkpoint_resume_01",
+      "prompt": "Continue the attached checkpoint workspace. Add an arrow from the already boxed card 1 toward card 2, but make sure I can recover every prior version.",
+      "expected_output": "Inspects the existing operation receipts and latest image; adds the arrow to the latest checkpoint; validates the batch before publishing; writes the next numbered checkpoint and matching receipt; updates latest.png without modifying prior checkpoints; reobserves latest.png and reports the lineage",
+      "files": [
+        "skills/visual-reasoning/evals/fixtures/resume-workspace/source.png",
+        "skills/visual-reasoning/evals/fixtures/resume-workspace/latest.png",
+        "skills/visual-reasoning/evals/fixtures/resume-workspace/checkpoints/000.png",
+        "skills/visual-reasoning/evals/fixtures/resume-workspace/checkpoints/001.png",
+        "skills/visual-reasoning/evals/fixtures/resume-workspace/operations/001.json"
+      ],
+      "assertions": [
+        "Resumes rather than reinitializes the existing workspace",
+        "Reads prior receipts and latest.png before editing",
+        "Validates the edit batch before publishing it",
+        "Writes a new numbered checkpoint and matching operation receipt",
+        "Leaves every prior checkpoint recoverable",
+        "Reobserves and reports the new latest checkpoint"
+      ],
+      "metadata": {
+        "farplane": {
+          "context": "The staged workspace is read-only input. Copy its complete lineage into this isolated eval task's artifacts/ directory, then resume that writable copy; do not modify staged fixtures or live project files.",
+          "behavior_requirements": {
+            "required_successful_command_regexes": ["python3\\s+[^\\n;&|]*visual_workspace\\.py\\s+apply"]
+          }
+        }
+      }
+    },
+    {
+      "id": "visual_reasoning_cv_boundary_01",
+      "prompt": "For the attached infographic, produce a segmentation mask for the coral proof circle and calculate its pixel-area ratio. Do not estimate the ratio visually. Use an appropriate deterministic tool only if it is actually available.",
+      "expected_output": "Identifies the requested mask and pixel-area ratio as a deterministic CV-adapter need; verifies whether an appropriate tool is available and either uses it or blocks without fabricating support; if used, preserves source, tool input/output, and an overlay or checkpoint receipt; distinguishes the tool-produced mask and measurement from model interpretation; does not use a generative edit as geometric proof",
+      "files": ["assets/harness-algebra-infographic.png"],
+      "assertions": [
+        "Routes the mask and pixel-measurement problem to the conditional CV-adapter branch",
+        "Uses only an available authorized tool or reports the capability gap",
+        "Preserves source plus tool input and output evidence",
+        "Distinguishes a tool-produced mask from model interpretation",
+        "Does not use generative image editing as geometric evidence"
+      ]
+    }
+  ]
+}

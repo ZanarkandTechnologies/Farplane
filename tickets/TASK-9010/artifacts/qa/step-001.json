@@ -1,0 +1,15 @@
+{
+  "operations": [
+    {
+      "op": "box",
+      "box": [0.04, 0.04, 0.42, 0.28],
+      "label": "reference region"
+    },
+    {
+      "op": "arrow",
+      "points": [[0.23, 0.28], [0.50, 0.50]],
+      "label": "reasoning link",
+      "color": "#ff3b30"
+    }
+  ]
+}
