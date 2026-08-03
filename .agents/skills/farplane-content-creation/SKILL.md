@@ -32,11 +32,11 @@ filming, external generation, and account mutation remain separately gated.
 
 ```text
 farplane_content_creation(problem_ref, system_ref, feature_refs, source_or_idea, audience, content_goal, channels=all_configured, content_kind?, video_method?, style_profile?, taste_refs?, ticket?, audience_context?, variation_count=10)
-  -> best_bet_proposals + approved_skeleton + optimized_exemplar + variation_matrix + ranked_shortlist + distribution_handoff + proof_refs
-state: reads(farplane/harness.yaml, farplane/metrics.yaml, ticket audience_context first or configured Feed Scout World Memory as fallback, source/evidence refs, taste refs, ticket Goal Packet); writes(ticket-local proposals, skeleton, exemplar, variants, review evidence, and feedback state)
-gates: canonical_icp_bound; baseline_named; intended_belief_or_behavior_delta_named; audience_named; content_goal_named; claim_strength_matches_proof; planning_approval_before_execution; exemplar_approval_before_variations; publish_requires_separate_approval
+  -> best_bet_proposals + approved_skeleton + optimized_exemplar + format_transformations + variation_matrix + ranked_shortlist + distribution_handoff + proof_refs
+state: reads(farplane/harness.yaml stable problems, docs/systems and docs/features registries, farplane/metrics.yaml, ticket audience_context first or configured Feed Scout World Memory as fallback, source/evidence refs, taste refs, ticket Goal Packet); writes(ticket-local proposals, skeleton, exemplar, variants, review evidence, and feedback state)
+gates: strategic_ref_bound; source_ref_preserved; audience_problem_named; canonical_icp_bound; baseline_named; intended_belief_or_behavior_delta_named; audience_named; content_goal_named; claim_strength_matches_proof; planning_approval_before_execution; exemplar_approval_before_variations; publish_requires_separate_approval
 routes: root skill `content-impl-plan` | root skill `optimize-with-human` | root skill `goal-advisor` | root skill `storyboard` | root skill `social-content` | root skill `video-production` | root skill `remotion` | root skill `qa` | root skill `review`
-fails: executes before skeleton approval; asks a human to judge an undifferentiated batch; generates random rewrites; varies the proof spine; publishes all variants; treats feedback as publication authority
+fails: unreferenced_random_feature; internal_name_as_hook; executes before skeleton approval; asks a human to judge an undifferentiated batch; generates random rewrites; varies the proof spine; publishes all variants; treats feedback as publication authority
 ```
 
 ## Pipeline Contract
@@ -48,6 +48,7 @@ content_pipeline(input)
   -> frozen_skeleton
   -> exemplar_execution
   -> human_execution_loop(keep | approve | revise | reject)
+  -> cross_format_transformations(configured channels)
   -> controlled_variants(default=10)
   -> qa_and_rank(top=2..3)
   -> gated_distribution_handoff
@@ -67,6 +68,9 @@ proposals or artifacts, emit or persist this compact receipt:
 content_pipeline_state:
   phase: planning | execution | variation | distribution_handoff
   route: content-impl-plan -> optimize-with-human
+  problem_ref: configured stable problem
+  system_ref: canonical system
+  feature_refs: [canonical feature refs]
   audience: named audience
   content_goal: intended effect
   channel: format or undecided
@@ -111,12 +115,12 @@ silently broaden into another action class.
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-- [ ] 1. Bind the audience, content goal, channel constraints, source evidence or idea, taste references, rights, proof limits, and authority boundary. Read ticket-owned `audience_context` first; otherwise resolve the selected area's canonical ICP and configured Feed Scout World Memory. Name the current baseline/default and the belief or workflow decision the artifact should change; a trend label or generic ICP pain is not a content premise.
+- [ ] 1. Bind one stable `problem_ref`, canonical `system_ref`, relevant `feature_refs`, audience, recognizable problem, content goal, channels, accepted source evidence, taste references, rights, proof limits, and authority. Preserve those refs through every format. Lead with the audience's pain and visible result—not an internal Farplane feature name.
 - [ ] 2. Use `content-impl-plan` to shape one Best Bet by default and no more than three genuinely distinct proposals for planning feedback; for video, bind content kind, method, optional reusable style profile, and optional task inspiration independently.
 - [ ] 3. Run `optimize-with-human` in `phase: planning`; revise or reject locally until the human approves one proposal, then write its frozen skeleton and `approved_plan_ref`.
 - [ ] 4. Route the skeleton to the smallest faithful artifact-producing skill and build one exemplar before any batch expansion. Dispatch video through the selected `video-production` method and pass the approved style profile/visual direction instead of forcing every video through explainer.
 - [ ] 5. Run `optimize-with-human` in `phase: execution` until the exemplar reaches keep, approve, convergence, budget, or blocker; planning-invalidating feedback reopens step 2.
-- [ ] 6. After exemplar approval, generate ten controlled variants by default from declared variable axes while preserving every skeleton invariant and proof boundary.
+- [ ] 6. After exemplar approval, transform the frozen skeleton across every configured channel and useful format in the same ticket, then generate ten controlled variants by default from declared variable axes while preserving every skeleton invariant and proof boundary.
 - [ ] 7. QA the batch, record the variation matrix and expected learning, then rank a two-to-three-item shortlist instead of sending or publishing the whole batch.
 - [ ] 8. Obtain independent review for material readiness, persist feedback and proof receipts, and leave publication, outreach, spend, filming, external generation, and account actions approval-gated.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
@@ -125,6 +129,7 @@ silently broaden into another action class.
 
 The content brief must name:
 
+- stable problem, canonical system, relevant features, and accepted evidence refs;
 - audience or buyer and the problem they recognize;
 - content goal and intended channel or format;
 - source evidence, market learning, or explicitly unproven idea;
@@ -137,6 +142,10 @@ The content brief must name:
 Evidence-backed content must map material claims to proof. An unproven idea may
 be explored, but it must remain labeled as a premise or hypothesis rather than
 being laundered into a Farplane result.
+
+The viewer-facing hook should answer how the audience can do something valuable
+or avoid a recognized failure. Internal system and feature names remain proof
+metadata unless the audience already uses those names.
 
 ## 2. Shape Best Bets
 
@@ -212,7 +221,10 @@ harden a reusable skill from one rejection; first perturb the local execution.
 
 ## 5. Expand The Proven Pattern
 
-Only an approved exemplar unlocks the batch. Generate ten variants by default
+Only an approved exemplar unlocks transformation and the batch. First produce
+the configured cross-format pack—such as primary video, short cuts, carousel,
+X thread, and LinkedIn post—without changing the proof spine. Do not split one
+approved skeleton into one ticket per format. Then generate ten variants by default
 unless the ticket explicitly sets another count. A controlled variant changes
 one or two declared axes, such as hook, opening visual, metaphor, proof order,
 CTA wording, or channel adaptation, while preserving the skeleton invariants.

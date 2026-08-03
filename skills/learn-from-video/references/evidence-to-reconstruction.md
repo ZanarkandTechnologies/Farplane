@@ -5,6 +5,8 @@ template_uses:
 
 # Evidence-To-Reconstruction
 
+## Use When
+
 Use this reference after transcript and representative frames exist and before
 any candidate is generated.
 
@@ -17,7 +19,13 @@ gates: output_judgeable; anchors_present; rights_substitutions_named
 fails: summary prompt; style adjectives without mechanics; post-hoc rubric
 ```
 
-## Evidence ledger
+## Inputs
+
+Supply the transcript, representative frames, storyboard, visible
+prompts/parameters/output, learning goal, and rights policy. Compile them into
+this evidence ledger before writing the reconstruction prompt.
+
+### Evidence ledger
 
 For each relevant beat record:
 
@@ -34,7 +42,9 @@ For each relevant beat record:
 Do not promote low-confidence inference into a must-match check without a
 separate visible output observation.
 
-## Reconstruction prompt
+## Workflow
+
+### Reconstruction prompt
 
 Compile the prompt in this order:
 
@@ -54,7 +64,7 @@ Compile the prompt in this order:
 Avoid creator/style-name prompts. Replace “make it like X” with source-anchored
 mechanics and observable output.
 
-## Frozen source-output eval
+### Frozen source-output eval
 
 Write before generation:
 
@@ -79,9 +89,23 @@ Must-match checks should be boolean or coarse-tier judgeable. Examples:
 - event audio begins within the declared frame tolerance;
 - treatment does not move data marks or blur text.
 
-“Looks professional” and “feels similar” are not sufficient checks.
+## Output Shape
 
-## Output
+Return `evidence_ledger`, `reconstruction_prompt`, `source_output_eval`,
+`unresolved_evidence_gaps`, and `production_owner_requirements`.
 
-Return the evidence ledger, reconstruction prompt, frozen eval, unresolved
-evidence gaps, and production-owner requirements.
+## Quality Gates
+
+- Every must-match claim cites a source anchor and is observable in the output.
+- Low-confidence inference never becomes a must-match without separate visible
+  evidence.
+- Substitute content is original or licensed and source identity is excluded.
+- The frozen eval exists before candidate generation and separates mechanical,
+  judgment, and rights checks.
+
+## Bad Output
+
+- “Make it like the creator's style” without source-anchored mechanics.
+- “Looks professional” or “feels similar” as the pass rule.
+- A reconstruction prompt with no observable boundary, hold, or final states.
+- A rubric written after seeing the candidate.

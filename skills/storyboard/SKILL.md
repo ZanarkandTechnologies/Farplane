@@ -34,8 +34,8 @@ and production-specific work to the relevant advisor or Remotion skill.
 ## Skill Signature
 
 ```text
-storyboard(idea_or_brief, icp?, proof?, platform?, duration?, style?, cta?, reference_pattern?, element_realization_packets?, generation_topology?, artifact_owner?)
-  -> script_storyboard + scene_handoff + scene_grid_packets? | blocked_report
+storyboard(idea_or_brief, icp?, proof?, platform?, duration?, style?, cta?, reference_pattern?, source_title?, element_realization_packets?, generation_topology?, artifact_owner?)
+  -> script_storyboard + hook_decision? + scene_handoff + scene_grid_packets? | blocked_report
 
 state:
   reads(user brief, supplied proof/examples/swipes, active ticket?,
@@ -44,7 +44,8 @@ state:
 
 gates:
   viewer_promise_bound; proof_or_reason_to_believe_named;
-  narrative_signatures_present; beat_sheet_and_script_aligned;
+  narrative_signatures_present; short_form_hook_compared_when_applicable;
+  beat_sheet_and_script_aligned;
   storyboard_executable; selected_elements_mapped_to_beats_and_panels;
   low_fi_visual_storyboard_observable; asset_needs_named; scene_handoff_observable;
   asset_discovery_handoff_named; no_custom_svg_animation_assets;
@@ -58,6 +59,8 @@ fails:
   vague_video_idea_as_plan; script_without_shots; shots_without_viewer_promise;
   generic_brand_filler; parent_action_list_hidden_in_storyboard;
   production_handoff_without_assets_or_proof;
+  short_form_hook_lab_incomplete; source_title_not_compared;
+  hook_requires_jargon_decoding;
   custom_svg_animation_asset; missing_asset_discovery_route;
   publishing_or_rendering_as_default
 ```
@@ -89,6 +92,65 @@ scene handoff, asset needs, proof, and blocker conditions.
 - [ ] 3. Draft the narrative spine.
   - [ ] Include `Narrative Signatures`: hook, tension, turn, proof moment,
     payoff, and final action.
+  - [ ] For short-form, latest-news, title-led, or retention-sensitive work,
+    load the [plain-language hook lab](references/plain-language-hook-lab.md)
+    and complete it before drafting the script:
+    `hook_lab(idea, proof, audience, source_title?) -> candidates[10+] +
+    finalists[3+] + winner + first_3_seconds + rejected_reasons`.
+    Generate materially different promises and causal framings, not minor
+    synonym swaps. Tag candidates across at least six lenses—actor causes
+    consequence, actor stops/reverses consequence, contradiction, before/after,
+    unexpected buyer/payer/helper, threat/deadline, familiar comparison, or
+    simple paradox—and use no more than two candidates from one lens. Output
+    all ten or more candidates and the full finalist comparison; do not
+    silently collapse the lab to a few preferred lines.
+    Compare finalists with the source title when one exists.
+  - [ ] Make the winning hook child-simple without becoming childish: an
+    unfamiliar general viewer should understand it immediately, normally as
+    one recognizable actor, one concrete action, and one understandable
+    consequence. For a short-form display hook, target at most eight words;
+    let the following voiceover carry necessary detail. Prefer one-breath
+    phrasing and words a viewer can visualize.
+    Reject unexplained legal, financial, technical, or infrastructure jargon;
+    reject abstract bridge phrases such as `get the money`, `get backing`,
+    `help fund`, or `secure financing` when the evidence supports an ordinary
+    visible action such as `help buy`, `help pay`, `build`, `stop`, or `save`.
+    If the hook needs a definition before it becomes interesting, rewrite it.
+    `Help` is allowed only when it directly modifies a concrete action such as
+    `help buy`, `help build`, or `help pay`; the second verb carries the image.
+    When two named actors appear, repeat the relevant name or object instead of
+    using an ambiguous `it`, `its`, `they`, or `their`.
+    Before ranking finalists, remove any display hook containing `guarantee`,
+    `back`, `backing`, `finance`, `financing`, `fund`, `funding`, `secure`,
+    `support`, `get money`, `get backing`, or `unlock` unless the ordinary word
+    itself is the story and the audience already understands it. A blocked
+    display term cannot win by receiving a high score elsewhere. The displayed
+    candidate table is the post-cleanup set: blocked drafts may appear only
+    under rejected lines with the rejection reason, never as candidates or
+    finalists.
+    Do not replace source jargon with a coined simplification such as `AI
+    factory`, `computer hub`, or another label the audience must also decode.
+    Prefer a familiar evidence-backed noun, or move the object detail into
+    sentence two. When one company may help a customer obtain that same
+    company's product, surface that simple loop directly in the hook.
+    After drafting, mark candidates that only restate another line, weaken the
+    evidence-backed relationship, or change syntax without changing actor,
+    action, consequence, or question opened. Keep them only when their rejection
+    reason is visible, and exclude them from the finalist comparison.
+  - [ ] Select the winner on immediate comprehension, curiosity, factual
+    accuracy, spoken brevity, and first-frame visual potential. It must beat
+    the supplied source title on the combined test or remain unlocked. Record
+    why the strongest rejected finalists lost.
+  - [ ] Bind the winner to the exact first three seconds: on-screen copy,
+    voiceover, dominant visual action, and compact evidence qualifier. Preserve
+    uncertainty in reported, forecast, alleged, or unsigned developments; do
+    not buy drama by turning a possibility into a fact.
+    For an applicable hook-lab branch, populate every `Hook Decision` template
+    field before returning: the complete candidate table with keep/reject
+    reasons, three or more finalists, the criterion-by-criterion source-title
+    contest, winner rationale, rejected-finalist reasons, and all four
+    first-three-second fields. Missing fields return an incomplete draft or
+    blocker, not a silently shortened hook decision.
   - [ ] For a voice-led documentary or editorial reel, load the
     [documentary reel production contract](../remotion/references/documentary-reel.md).
     Usually use five or six compact causal clauses, but derive scene ranges
@@ -184,6 +246,28 @@ scene handoff, asset needs, proof, and blocker conditions.
 Storyboard core:
 
 ```text
+Hook Decision (required for short-form/latest-news/title-led work):
+- Source title:
+- Candidates (10+, tagged across 6+ lenses):
+  | Lens | Hook | keep / reject + reason |
+  | --- | --- | --- |
+- Finalists (3+):
+- Winner:
+- Why it beats the source title:
+- Rejected finalists + reasons:
+- Source-title contest:
+  | Line | Immediate meaning | Curiosity | Accuracy | One breath | Drawable first frame | Verdict |
+  | --- | --- | --- | --- | --- | --- | --- |
+  | Source title | | | | | | |
+  | Finalist A | | | | | | |
+  | Finalist B | | | | | | |
+  | Finalist C | | | | | | |
+- First 3 seconds:
+  - On-screen copy:
+  - Voiceover:
+  - Visual action:
+  - Evidence qualifier:
+
 Narrative Signatures:
 - Hook:
 - Tension:
@@ -231,6 +315,10 @@ of a Remotion-ready creative ticket.
 - Do not output only a premise, angle, or theme when the user needs production.
   The plan must include beats, script, storyboard panels, asset needs, and
   proof.
+- Do not treat an accurate sentence or shortened source headline as a strong
+  hook. For applicable short-form work, generate alternatives, compare the
+  strongest candidates, and reject openings that require jargon decoding
+  before the viewer can feel curiosity or stakes.
 - Do not separate script quality from shot feasibility. If the copy implies a
   visual, name the shot or asset; if the shot carries the point, name the copy
   or viewer job.
@@ -249,6 +337,8 @@ of a Remotion-ready creative ticket.
 ## Reference Map
 
 - `qa_checklist.md` - read at start and finish for storyboard QA.
+- `references/plain-language-hook-lab.md` - load for short-form, latest-news,
+  title-led, or retention-sensitive work before drafting the script.
 - `examples/remotion-proof-video/example.md` - load when a Remotion-ready
   example would improve the creative ticket or proof handoff.
 - `../video-production/SKILL.md` - route broader video planning, ad specs, or

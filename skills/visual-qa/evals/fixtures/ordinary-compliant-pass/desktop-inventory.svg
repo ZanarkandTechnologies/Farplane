@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="900" viewBox="0 0 1440 900">
+  <rect width="1440" height="900" fill="#f5f7fb"/>
+  <rect x="36" y="28" width="1368" height="72" rx="14" fill="#ffffff"/>
+  <text x="68" y="73" font-family="Arial" font-size="25" font-weight="700" fill="#182230">Inventory</text>
+  <rect x="1260" y="46" width="112" height="38" rx="9" fill="#1f5f88"/>
+  <text x="1286" y="71" font-family="Arial" font-size="16" fill="#ffffff">Export</text>
+  <rect x="36" y="120" width="1010" height="730" rx="14" fill="#ffffff"/>
+  <rect x="1068" y="120" width="336" height="730" rx="14" fill="#ffffff"/>
+  <text x="1100" y="164" font-family="Arial" font-size="20" font-weight="700" fill="#182230">Safety review</text>
+  <text x="68" y="166" font-family="Arial" font-size="16" font-weight="700" fill="#637083">TOY</text>
+  <text x="510" y="166" font-family="Arial" font-size="16" font-weight="700" fill="#637083">STOCK</text>
+  <text x="770" y="166" font-family="Arial" font-size="16" font-weight="700" fill="#637083">STATUS</text>
+  <g font-family="Arial" font-size="18" fill="#243244">
+    <text x="68" y="220">Wooden Rover</text><text x="510" y="220">48</text>
+    <text x="68" y="282">Puzzle Garden</text><text x="510" y="282">7</text>
+    <text x="68" y="344">Cloud Blocks</text><text x="510" y="344">12</text>
+    <text x="68" y="406">Story Lantern</text><text x="510" y="406">31</text>
+  </g>
+  <g fill="#dceaf4">
+    <rect x="752" y="194" width="136" height="34" rx="17"/>
+    <rect x="752" y="256" width="136" height="34" rx="17"/>
+    <rect x="752" y="318" width="136" height="34" rx="17"/>
+    <rect x="752" y="380" width="136" height="34" rx="17"/>
+  </g>
+  <g font-family="Arial" font-size="15" fill="#24536f">
+    <text x="778" y="216">In stock</text><text x="778" y="278">Low stock</text>
+    <text x="778" y="340">Low stock</text><text x="778" y="402">In stock</text>
+  </g>
+  <rect x="1100" y="194" width="272" height="108" rx="12" fill="#eef4f8"/>
+  <text x="1124" y="230" font-family="Arial" font-size="16" fill="#243244">2 items need review</text>
+  <text x="1124" y="264" font-family="Arial" font-size="14" fill="#637083">No critical safety holds</text>
+</svg>

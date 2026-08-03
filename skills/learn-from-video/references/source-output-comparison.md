@@ -5,6 +5,8 @@ template_uses:
 
 # Source-Output Comparison
 
+## Use When
+
 Use this reference only after a candidate artifact exists.
 
 ```text
@@ -16,7 +18,15 @@ gates: candidate_real; full_eval_run; failures_attributed
 fails: render-only pass; cherry-picked frames; self-scored taste claim
 ```
 
-## Comparison order
+## Inputs
+
+Supply the frozen source-output eval, real candidate media/code, manifests,
+probes, representative frames, and provenance evidence. Do not compare from a
+render claim or thumbnail alone.
+
+## Workflow
+
+### Comparison order
 
 1. **Integrity:** candidate file exists, decodes, has expected duration/frame
    count/dimensions, and references real inputs.
@@ -33,7 +43,7 @@ fails: render-only pass; cherry-picked frames; self-scored taste claim
 Never average away a hard failure. Integrity, rights, missing must-match
 behavior, and unjudgeable evidence block the pass.
 
-## Failure attribution
+### Failure attribution
 
 For every miss:
 
@@ -54,7 +64,7 @@ failure:
   the existing owner.
 - A stable capability with no owner becomes a Skill Creator handoff.
 
-## Visual proof
+### Visual proof
 
 Use contact sheets for coverage, but inspect full-resolution frames for text,
 geometry, treatment, edge artifacts, and exact state. For video, include:
@@ -67,7 +77,7 @@ geometry, treatment, edge artifacts, and exact state. For video, include:
 - media probe;
 - reviewer receipt when visual match is material.
 
-## Verdict
+## Output Shape
 
 ```text
 comparison_verdict:
@@ -81,3 +91,23 @@ comparison_verdict:
 ```
 
 Only judgment `A` passes. `B` is useful but requires repair.
+
+Return `comparison_receipt`, `owner_failures`, the structured verdict, and the
+smallest bounded rerun or handoff.
+
+## Quality Gates
+
+- The candidate decodes and matches the expected media envelope.
+- Every must-match check runs against the frozen pre-generation eval.
+- Rights and provenance pass independently of visual quality.
+- Source/candidate anchors include boundaries, holds, and final output, with
+  full-resolution inspection where exact detail matters.
+- Every failure names its likely owner and smallest rerun scope; material
+  judgment comes from an independent reviewer.
+
+## Bad Output
+
+- Passing because a render exists or one cherry-picked frame looks plausible.
+- Averaging a rights, integrity, or missing must-match failure into a pass.
+- Scoring taste without source/candidate anchors or a reviewer receipt.
+- Rewriting the frozen eval after observing the candidate.

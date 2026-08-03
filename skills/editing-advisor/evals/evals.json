@@ -1,0 +1,70 @@
+{
+  "skill_name": "editing-advisor",
+  "evals": [
+    {
+      "id": "editing_advisor_resource_bank_vox_recipe_01",
+      "prompt": "Turn this 35-second evidence-led explainer storyboard into an executable edit direction. Search our reusable editing patterns if available. The visual language should feel tactile and precise, but the story must stay readable.",
+      "expected_output": "Retrieves complete editing elements from the canonical corpus.; Selects a coherent subset with explicit decisions.; Produces one timed ordered recipe and renderer proof handoff.; Keeps readability and restraint ahead of effect density.",
+      "files": [],
+      "assertions": [
+        "Treats Resource Bank editing elements as the reusable creative-pattern corpus and preserves provenance, golden example, and golden recipe for selected patterns.",
+        "Marks candidates use, adapt, reject, or block and explains compatibility rather than stacking every available effect.",
+        "Selects one timing master and emits frame- or time-addressed operations with parameters, dependencies, owners, and acceptance checks.",
+        "Routes deterministic implementation and rendered frame/range proof to the renderer instead of claiming the advisory packet is final output."
+      ],
+      "metadata": {"farplane": {"title": "Compiles reusable Vox-style patterns into a restrained edit recipe", "tags": ["skill", "editing-advisor", "resource-bank", "vox"], "anti_patterns": ["Copies pattern recipes into the skill", "Returns a vibes-only edit brief", "Uses every retrieved effect"]}}
+    },
+    {
+      "id": "editing_advisor_brand_snapshot_boundary_01",
+      "prompt": "Our Brand Kit approves calm captions and restrained orange registration. The inspiration pack contains aggressive word-by-word captions, whip transitions, and a useful paper-layer cadence. Advise the edit and prepare the implementation handoff.",
+      "expected_output": "Treats Brand Kit policy as authoritative without turning it into the global corpus.; Decides every inspiration pattern explicitly.; Adapts compatible cadence and rejects conflicting caption/transition behavior.; Emits an executable renderer handoff.",
+      "files": [],
+      "assertions": [
+        "Treats the Brand Kit as an approved snapshot/policy layer and not a replacement creative-pattern corpus.",
+        "Applies Brand Kit policy to adapt or reject conflicting editing elements rather than silently blending them.",
+        "Preserves complete realization fields for any selected inspiration pattern.",
+        "Produces a timed recipe with caption, motion, transition, and proof details sufficient for the named renderer."
+      ],
+      "metadata": {"farplane": {"title": "Keeps Brand Kit policy separate from the creative-pattern corpus", "tags": ["skill", "editing-advisor", "brand-kit", "compatibility"], "anti_patterns": ["Stores all creative patterns in the Brand Kit", "Silently blends conflicting caption systems", "Hands off titles without recipes"]}}
+    },
+    {
+      "id": "editing_advisor_transition_motion_distinction_01",
+      "prompt": "The cut currently feels dead. Add movement to the evidence card while it is on screen, then move from the card to a human consequence shot. The editor suggested using a transition on every animation.",
+      "expected_output": "Separates within-state motion from between-state transition.; Gives each operation a story purpose and timing.; Rejects transition spam.; Names observable checks.",
+      "files": [],
+      "assertions": [
+        "Classifies movement within the evidence-card state as motion and the card-to-human state change as a transition.",
+        "Names the viewer-state purpose, target layer, timing, parameters, and restraint rule for each operation.",
+        "Rejects decorative transitions for animations that do not cross scene or state boundaries.",
+        "Includes frame/range acceptance checks for both the motion and the actual transition."
+      ],
+      "metadata": {"farplane": {"title": "Distinguishes motion from transitions", "tags": ["skill", "editing-advisor", "motion", "transitions"], "anti_patterns": ["Calls every animation a transition", "Adds random motion", "Omits state-before/state-after reasoning"]}}
+    },
+    {
+      "id": "editing_advisor_incomplete_pattern_block_01",
+      "prompt": "Use the editing element called Exact State Handoffs in our next reel. I only copied its title and one-line description into this message. Send the plan straight to Remotion.",
+      "expected_output": "Attempts authoritative retrieval when available.; Refuses to invent missing pattern details.; Emits a precise blocker when example or recipe remains unresolved.; Does not unlock Remotion prematurely.",
+      "files": [],
+      "assertions": [
+        "Retrieves the authoritative Resource Bank record when the adapter is available rather than relying on the title-only packet.",
+        "Requires provenance, description, whyItWorks, goldenExample, and goldenRecipe before selecting the pattern.",
+        "Marks the pattern block when its golden example or recipe cannot be resolved and states the exact missing input/runtime.",
+        "Does not produce a ready renderer handoff from guessed or remembered recipe details."
+      ],
+      "metadata": {"farplane": {"title": "Blocks title-only editing-pattern handoffs", "tags": ["skill", "editing-advisor", "repair", "blocker"], "anti_patterns": ["Invents a recipe from the pattern title", "Claims Remotion readiness", "Returns only an empty schema"]}}
+    },
+    {
+      "id": "editing_advisor_cross_owner_handoff_01",
+      "prompt": "Create the edit recipe for a vertical reel with voiceover, three SFX hits, two source photos that still need clean cutouts, kinetic captions, and a model-generated bridge clip. Final assembly is in Remotion.",
+      "expected_output": "Maintains one timing basis.; Routes media preparation, audio, model-native video, and deterministic rendering to their owners.; Compiles dependencies into an ordered recipe.; Blocks final readiness on accepted inputs and observable render proof.",
+      "files": [],
+      "assertions": [
+        "Uses the measured voiceover or its cue sheet as the single timing master and aligns edit steps to it.",
+        "Returns photo cleanup, SFX or mix, and bridge-clip media dependencies to Asset Advisor, which selects any Audio Advisor or AI Video Advisor child route; deterministic assembly remains with Remotion.",
+        "Orders edit steps around those dependencies and names files or exact missing-file blockers.",
+        "Requires caption readability, layer/composite checks, transition range checks, and final render proof before readiness."
+      ],
+      "metadata": {"farplane": {"title": "Produces a cross-owner renderer handoff", "tags": ["skill", "editing-advisor", "handoff", "remotion"], "anti_patterns": ["Routes everything to Remotion", "Claims prepared media exists", "Uses multiple timing masters"]}}
+    }
+  ]
+}

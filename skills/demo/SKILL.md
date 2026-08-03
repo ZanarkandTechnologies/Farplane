@@ -1,6 +1,6 @@
 ---
 name: demo
-description: "Turn passing ticket QA evidence into a narrated lead-engineer recap MP4, evidence map, and reviewed demo result before Goal completion."
+description: "Turn passing feature QA into a concise Before/After/Example MP4 that leads the GitHub closeout, with evidence and independent review."
 tier: 3
 group: coding
 source: local
@@ -25,12 +25,13 @@ It turns already-passing ticket evidence into one concise narrated MP4 for a
 lead engineer who needs the problem, decision, result, proof, and remaining
 risk without rereading the full ticket.
 
-The default applies to material implementation Goals and explicit `$demo`
+The default applies to material feature implementation Goals and explicit `$demo`
 calls. Direct non-Goal fixes, heartbeats, feedback checks, and planning-only
 work do not require a recap. The MP4 explains existing proof; it never replaces
-QA or creates new product claims. Default duration is 60–120 seconds, covering
-the problem and stakes, chosen solution and tradeoff, final workflow, proof,
-and honest residual risk.
+QA or creates new product claims. Default duration is 45–90 seconds. The recap
+is optimized for an operator who will watch the video instead of reading the
+ticket: `Before`, `After`, one concrete `Example`, and the few `Key decisions`
+needed to understand the result. Proof and residual risk stay compact.
 
 ## Skill Signature
 
@@ -81,7 +82,9 @@ feature scope.
   create another ticket or add per-ticket demo configuration.
 - [ ] 5. Route beats and narration to
   [storyboard](../storyboard/SKILL.md), using the default sequence and duration
-  from the recipe; every spoken or visible claim must name its evidence source.
+  from the recipe. Use the visible narrative spine `Before -> After -> Example
+  -> Key decisions -> Proof`; every spoken or visible claim must name its
+  evidence source.
 - [ ] 6. Route authorized narration to
   [audio-advisor](../audio-advisor/SKILL.md) and deterministic assembly to
   [remotion](../remotion/SKILL.md). Reuse verified screenshots, diagrams, logs,
@@ -111,7 +114,7 @@ feature scope.
 
 Write the package under
 `tickets/TASK-XXXX/artifacts/demo/<timestamp>-<slug>/`. Every plan or success
-summary must name the 60–120 second MP4, full narrative spine, ticket-scoped
+summary must name the 45–90 second MP4, glanceable narrative spine, ticket-scoped
 path, `evidence-map.json`, deterministic Remotion route, media probe, and TAS-A
 review gate.
 

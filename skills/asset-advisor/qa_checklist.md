@@ -49,11 +49,11 @@ template_uses:
   named when relevant. Rights status is never inferred from the source's
   usefulness: cinematic frames and taste galleries remain reference-only or
   per-item/unknown until a production license is verified.
-- [ ] Remotion handoff includes files or missing-file blockers, scene roles,
-  timing, captions/overlays, proof expectations, and no generic CSS/text-only
-  pass for inspiration-led video unless explicitly downgraded. Every generation
+- [ ] Downstream asset handoff includes files or missing-file blockers, scene
+  roles, timing-relevant media metadata, and no generic CSS/text-only asset
+  substitute for inspiration-led video unless explicitly downgraded. Every generation
   packet remains `blocked_pending_accepted_file` until its expected raster/video
   path exists and the output passes inspection; a prompt or provider result
-  alone never unlocks Remotion.
+  alone never unlocks downstream Editing Advisor or Remotion work.
 - [ ] The output separates stills, model-native clips, avatar, audio, and
-  composition work instead of routing everything to one skill.
+  accepted asset receipts instead of routing everything to one generation skill.

@@ -26,6 +26,10 @@ source: local
   locally supplied material before inventing synthetic replacements.
 - [ ] Pick the pitch-worthy MVP slice and decompose it into workflow,
   screen/state, and data needs.
+- [ ] For an operational decision demo, use the
+  [Mine-To-Margin reference standard](../solution-shaping/references/mine-to-margin-reference-standard.md):
+  name one recurring decision, the deterministic domain mechanism, and the
+  ordinary, constrained, and changed-condition cases that should alter it.
 - [ ] Generate realistic entities, records, timelines, statuses, edge cases,
   empty states, and failure states.
 - [ ] Score the pack with `references/rubric.md` and keep assumptions explicit.
@@ -115,6 +119,8 @@ Produce one compact realism pack with:
 - `Workflow ladder`
 - `Screen/state ladder`
 - `Demo-data pack`
+- `Decision mechanism and responsive proof cases` when the demo makes an
+  operational recommendation
 - `Source provenance`
 - `Realism rubric`
 - `Assumption ledger`
@@ -136,7 +142,10 @@ For demo-bearing build or review handoffs, append:
 1. Capture the client type, operator, and business context.
 2. Infer the likely day-to-day operating loop and adjacent tools.
 3. Name the highest-value MVP slice for a believable demo.
-4. Run the source-artifact ladder when the demo depends on documents, media,
+4. For an operational decision demo, define which retrieval, calculation,
+   optimization, rule, or state transition owns the material result and which
+   scenarios should change it.
+5. Run the source-artifact ladder when the demo depends on documents, media,
    forms, records, blueprints, logs, invoices, regulations, or other concrete
    real-world inputs:
    - use user-provided or locally supplied material first
@@ -146,17 +155,17 @@ For demo-bearing build or review handoffs, append:
      sensitive, explicitly out of scope, or the user asks for synthetic
    - label every artifact as `real-public`, `user-provided`, `local-supplied`,
      or `synthetic-fallback`
-5. Decompose that slice:
+6. Decompose that slice:
    - app/story level
    - workflow/feature level
    - screen/state level
-6. Derive the data pack:
+7. Derive the data pack:
    - core entities
    - realistic records
    - timelines and statuses
    - edge cases and failure states
-7. Score the result using the realism rubric in [`references/rubric.md`](references/rubric.md).
-8. If the downstream work is demo-bearing, define the expectation-check
+8. Score the result using the realism rubric in [`references/rubric.md`](references/rubric.md).
+9. If the downstream work is demo-bearing, define the expectation-check
    contract before handoff:
    - realistic data or representative pack to exercise
    - workflow action sequence to run
@@ -164,7 +173,7 @@ For demo-bearing build or review handoffs, append:
    - evidence to capture, such as logs, screenshots, fixture outputs, or links
    - mismatch notes when the observed result does not match the expected value
    - concrete operator question for Kenji Review
-9. Hand off:
+10. Hand off:
    - `functional-ui` if workflow shape still needs product/UI planning
    - `visual-design` if realism is settled and visual direction should start
    - `frontend-craft` if realism is settled and implementation should start
@@ -194,6 +203,9 @@ For demo-bearing build or review handoffs, append:
 - do not create synthetic replacements for realism-critical artifacts until the
   source-artifact ladder has been attempted or intentionally waived
 - do not stop at screens; tie every screen back to a workflow and operator need
+- do not ask the language model to imitate specialist computation when a
+  deterministic tool, solver, retrieval, rule, or state transition should own
+  the result
 - do not let a downstream builder claim demo-bearing completion without naming
   the realistic data exercised, observed result, mismatch notes, evidence, and
   operator question
@@ -205,3 +217,5 @@ For demo-bearing build or review handoffs, append:
 - Detailed workflow: [`references/workflows.md`](references/workflows.md)
 - Failure modes: [`references/gotchas.md`](references/gotchas.md)
 - Scoring rubric: [`references/rubric.md`](references/rubric.md)
+- Operational decision reference:
+  [Mine-To-Margin](../solution-shaping/references/mine-to-margin-reference-standard.md)

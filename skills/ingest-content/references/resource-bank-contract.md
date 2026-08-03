@@ -271,20 +271,22 @@ objects merely to make the dashboard look complete.
 3. Once the primary asset row exists, optionally upload a real representative
    thumbnail/contact sheet/frame image as a derived storage-backed Resource Bank
    asset with `parentAssetId` pointing to that primary asset.
-4. Add optional skill findings only when the source clearly suggests a reusable
-   technique, skill update, or skill candidate.
-5. Validate that every golden example asset belongs to the same ingestion job.
-6. Optionally promote the verified elements to the requested Brand Kit in the
+4. Validate that every golden example asset belongs to the same ingestion job.
+5. Optionally promote the verified elements to the requested Brand Kit in the
    same ingest action and record the kit/revision receipt.
-7. Query Tasty Pack retrieval with the likely timeframe/facets to verify the
+6. Query Tasty Pack retrieval with the likely timeframe/facets to verify the
    capture returns as `{ captureId, source, analysis, elements }`, with tags and
    facets on `source`, `analysis.operatorNote` when a note exists,
    `analysis.markdown`, optional top-level `transcript`, element
    capsule fields and `pinned` preserved, and `meta.pinnedElementCount`,
    `meta.operatorNoteCount`, and `meta.warnings` populated.
-8. If a preview asset was uploaded, verify the upload returned `assetId` and
+7. If a preview asset was uploaded, verify the upload returned `assetId` and
    `storageId`, and verify Resource Bank dashboard hydration can expose the
    asset as `previewAsset.storageUrl` when UI/API access is available.
+
+Skill-benefit findings are a terminal ingestion result, not Resource Bank
+schema. After retrieval verification for a video source, the owning skill may
+return an evidence-backed `skill_findings[]` packet or an honest empty list.
 
 ## Source Kind Mapping
 

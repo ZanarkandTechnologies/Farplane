@@ -36,14 +36,20 @@ elements. Each selected element must carry enough evidence and
 instruction to be realized later: what it is, why it works, one same-source
 golden example asset, and one golden recipe prompt.
 
+Broad source analysis never implies broad element promotion. Promote only the
+components the note explicitly selects for reuse. A note requesting the
+complete production system may select several or all evidenced kinds; a narrow
+note such as “only the caption entrance” must keep every other observation in
+analysis and create only the selected editing element.
+
 ## Skill Signature
 
 ```text
-ingest_content(source, note?, brand_kit_id?, context?) -> saved_capture + selected_creative_elements + tickets[] + retrieval_handle + optional_promotion_receipt
-state: reads(Resource Bank schema/functions, source content, user note, optional same-source media assets, current project ticket conventions); writes(Resource Bank capture with source/note/transcript/analysisMarkdown/selected elements/tags, zero or one thin repurpose ticket by default, optional derived assets, and optional Brand Kit promotion)
-gates: source_read_or_limit_recorded; note_intent_bound; analysis_markdown_written; selected_elements_only; every_golden_example_same_ingestion_job; repurpose_ticket_created_or_not_requested; primary_asset_exists_before_derived_upload; storage_write_verified; optional_promotion_verified_or_skipped; retrieval_verified
-routes: summarize | media-ingest | video-understanding | visual-design | content-impl-plan | ai-image-advisor | ai-video-advisor | social-content | video-production
-fails: treats all media as text; ignores note-specific segment; stores shallow or generic creative elements; invents unseen evidence; uses an asset from another source as a golden example; copies one generic recipe across unrelated kinds; skips retrieval verification; keeps legacy analysis-only records as active production data
+ingest_content(source, note?, brand_kit_id?, context?) -> saved_capture + selected_creative_elements + tickets[] + retrieval_handle + skill_findings[] + optional_promotion_receipt
+state: reads(Resource Bank schema/functions, source content, user note, optional same-source media assets, skill registry and likely owner skills for video sources, current project ticket conventions); writes(Resource Bank capture with source/note/transcript/analysisMarkdown/selected elements/tags, zero or one thin repurpose ticket by default, optional derived assets, and optional Brand Kit promotion)
+gates: source_read_or_limit_recorded; note_intent_bound; analysis_markdown_written; selected_elements_only; every_golden_example_same_ingestion_job; repurpose_ticket_created_or_not_requested; primary_asset_exists_before_derived_upload; storage_write_verified; optional_promotion_verified_or_skipped; retrieval_verified; video_skill_benefit_scan_complete_or_blocked_or_not_applicable
+routes: summarize | media-ingest | video-understanding | visual-design | harness-scout | skill-maintenance | skill-creator | content-impl-plan | ai-image-advisor | ai-video-advisor | social-content | video-production
+fails: treats all media as text; ignores note-specific segment; stores shallow or generic creative elements; invents unseen evidence; uses an asset from another source as a golden example; copies one generic recipe across unrelated kinds; skips retrieval verification; skips the terminal video skill-benefit scan; auto-edits skills from weak source evidence; keeps legacy analysis-only records as active production data
 ```
 
 Inputs:
@@ -68,7 +74,9 @@ ingest_content(source, note?)
   -> extract_usefulness(breakdown, note?)
   -> store_capture(source, note, transcript?, analysis_markdown, selected_creative_elements)
   -> create_repurpose_ticket(source_ref, note, intended_output)?
-  -> retrieval_handle + tickets[] + optional_promotion_receipt
+  -> verify_retrieval(capture_handle)
+  -> verify_skill_benefit(capture, source_evidence, skill_registry)?
+  -> retrieval_handle + tickets[] + skill_findings[] + optional_promotion_receipt
 ```
 
 The note steers every phase. If the note says "the first few seconds are nice,"
@@ -160,6 +168,11 @@ source-reading or downstream interpretation phase:
   block ingestion when recognition is unavailable or returns no match.
 - Use [video-understanding](../video-understanding/SKILL.md) when frames or
   transcripts need storyboard-level interpretation.
+- After retrieval verification for every video source, run a lightweight
+  skill-benefit scan against `docs/skills/registry.jsonl` and the most likely
+  owner skills. Use [harness-scout](../harness-scout/SKILL.md) only when the
+  source credibly teaches or demonstrates a reusable workflow that needs
+  source-todo extraction and full local comparison.
 - Use [visual-design](../visual-design/SKILL.md) only for visual taste language,
   composition, typography, color, layout, and reusable creative levers.
 - Use [ai-image-advisor](../ai-image-advisor/SKILL.md) or
@@ -320,8 +333,6 @@ saved record; downstream production skills own making new assets from records.
      `goldenExample.assetId`, not as a parallel evidence collection.
    - [ ] When `brand_kit_id` is supplied, promote the verified complete
      elements in the same action and record the exact kit/revision receipt.
-   - [ ] Add optional skill findings only when the source clearly suggests a
-     reusable technique, skill update, or skill candidate.
 - [ ] 7. Create the requested repurpose ticket.
    - [ ] For `future_creation`, create one thin content-production ticket by
      default. For save-only notes, create zero tickets. For `generate_now`,
@@ -357,14 +368,50 @@ saved record; downstream production skills own making new assets from records.
      or dashboard hydration can expose that asset as `previewAsset.storageUrl`.
    - [ ] If Convex is unavailable, write a blocker note with the exact command
      or tool failure and do not claim the item is saved.
-- [ ] 9. Return the ingestion packet and next reuse handle.
+- [ ] 9. Verify whether a video could benefit a Farplane skill.
+   - [ ] For every video source, run a lightweight terminal scan after
+     retrieval verification; for non-video sources, mark the scan
+     `not_applicable` unless the source explicitly teaches a reusable workflow.
+   - [ ] Carry `retrievalStatus: verified | blocked` into the scan result. Do
+     not mark the scan `complete` unless retrieval verification passed; when
+     retrieval is blocked, return a blocked scan rather than hiding the unmet
+     prerequisite.
+   - [ ] Search `docs/skills/registry.jsonl` first to shortlist likely owners,
+     then inspect only the relevant owner `SKILL.md` and todo list instead of
+     loading the full skill tree.
+   - [ ] Extract only evidence-backed operational techniques from transcript,
+     frames, source analysis, or precise anchors. Aesthetic inspiration alone
+     is not a skill improvement.
+   - [ ] Compare each credible technique to the likely owner as `covered`,
+     `augment`, `missing`, `reject`, or `defer`.
+   - [ ] When one technique overlaps several skills, select one primary owner
+     for any proposed change and explain the ownership boundary. Do not return
+     duplicate `augment` findings without deciding which skill should own the
+     behavior.
+   - [ ] Return each finding with `skill`, `status`, `evidenceAnchor`,
+     `benefit`, `confidence`, and `recommendedRoute`.
+   - [ ] Use `recommendedRoute: harness-scout` when the video credibly teaches
+     a reusable workflow that needs source-todo reconstruction and deeper local
+     comparison. Use `skill-maintenance` only after an accepted owner-local
+     delta, and `skill-creator` only when a reviewed `missing` finding has no
+     suitable owner.
+   - [ ] Return `skill_findings: []` when no evidence-backed benefit exists.
+     Set the scan-level recommended route to `none`; do not invent a finding or
+     a skill-improvement route merely because the source is a video.
+   - [ ] Claim registry or owner-skill inspection only for files actually read.
+     Keep unavailable comparisons explicit instead of fabricating local
+     grounding.
+   - [ ] Do not edit a skill, create a skill-improvement ticket, or add a new
+     Resource Bank schema field from this scan. Findings are a recommendation
+     packet until the operator accepts a deeper route.
+- [ ] 10. Return the ingestion packet and next reuse handle.
    - [ ] Include capture ID or handle, source, retrieval facets, tags, note,
      analysis Markdown, top selected creative elements, storage proof, optional
-     promotion receipt, and recommended downstream skill.
+     promotion receipt, `skill_findings[]`, and recommended downstream skill.
    - [ ] Return `tickets[]` with each created or reused ticket ID/path, source
      reference, intended output, and status. For a future-creation note, do not
      downgrade the result to a suggestion.
-- [ ] 10. Review before completion.
+- [ ] 11. Review before completion.
    - [ ] Repeatability from files alone.
    - [ ] Source facts, interpretation, and user intent are separated.
    - [ ] Storage write is verified or the blocker is explicit.
@@ -397,8 +444,10 @@ Ingestion packet:
 - Creative elements stored (description / whyItWorks / goldenExample / goldenRecipe):
 - Pinned note-backed elements:
 - Analysis stored:
-- Optional skill findings:
 - Verification:
+- Skill benefit scan: `complete | not_applicable | blocked`
+- Retrieval status: `verified | blocked`
+- Skill findings (`skill`, `status`, `evidenceAnchor`, `benefit`, `confidence`, `recommendedRoute`):
 - Tickets:
 - Downstream reuse:
 ```
@@ -455,6 +504,12 @@ derived_preview: if media-ingest produced `/tmp/contact_sheet.jpg`, run `npm --p
 - Do not make the user invoke a separate planning skill just to remember a
   future-creation request. Create the thin source-addressable ticket during
   ingest and let `content-impl-plan` expand it when production begins.
+- Do not treat every useful-looking video as a skill-improvement source.
+  Aesthetic taste belongs in Resource Bank elements; only evidence-backed
+  operational techniques belong in `skill_findings`.
+- Do not auto-edit skills or open skill-improvement tickets from the terminal
+  scan. Escalate credible workflow-teaching videos through `harness-scout` so
+  source todos, local coverage, ownership, and adoption are reviewed.
 
 ## Reference Map
 
@@ -473,15 +528,20 @@ derived_preview: if media-ingest produced `/tmp/contact_sheet.jpg`, run `npm --p
   music/song/audio-bed identification.
 - [../video-understanding/SKILL.md](../video-understanding/SKILL.md) - deeper
   storyboard interpretation when video evidence matters.
+- [../harness-scout](../harness-scout/SKILL.md) - deeper video-to-skill
+  reconstruction for credible workflow-teaching sources after the lightweight
+  terminal scan finds a possible owner-local benefit.
 
 ## Output
 
 Return a compact ingestion packet plus the Resource Bank capture handle,
-`tickets[]`, and retrieval proof after verification. When storage cannot be
-completed, return the full analysis packet and a precise blocker so the user
-can rerun the final write step. A ticket may still use the canonical source URL
-when no Resource Bank asset ID could be written, but the failed storage claim
-must remain explicit.
+`tickets[]`, `skill_findings[]`, and retrieval proof after verification. For
+video sources, include a completed or blocked skill-benefit scan; an honest
+empty finding list is a valid result. When storage cannot be completed, return
+the full analysis packet and a precise blocker so the user can rerun the final
+write step. A ticket may still use the canonical source URL when no Resource
+Bank asset ID could be written, but the failed storage claim must remain
+explicit.
 
 For a discovery or aggregation URL, the packet must also include:
 

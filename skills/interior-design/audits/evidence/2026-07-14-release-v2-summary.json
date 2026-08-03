@@ -1,0 +1,33 @@
+{
+  "source_run": "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane-UI/.farplane/evals/runs/20260714-073522-interior-design-template-038-release-v2/summary.json",
+  "label": "interior-design-template-038-release-v2",
+  "agent_model": "gpt-5.4",
+  "judge_model": "gpt-5.4",
+  "task_count": 5,
+  "pass_rate": 1.0,
+  "verdict_counts": {
+    "A": 5
+  },
+  "tasks": [
+    {
+      "task_id": "interior_design_office_f_reset_01",
+      "verdict": "A"
+    },
+    {
+      "task_id": "interior_design_density_circulation_02",
+      "verdict": "A"
+    },
+    {
+      "task_id": "interior_design_reference_missing_03",
+      "verdict": "A"
+    },
+    {
+      "task_id": "interior_design_dashboard_boundary_04",
+      "verdict": "A"
+    },
+    {
+      "task_id": "interior_design_construction_boundary_05",
+      "verdict": "A"
+    }
+  ]
+}

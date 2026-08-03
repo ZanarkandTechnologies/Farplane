@@ -13,17 +13,78 @@
         "Names the missing best evidence image",
         "Does not reward route completion or logs as visual proof"
       ],
-      "metadata": {
-        "farplane": {
-          "title": "Visual QA refuses to pass without screenshot evidence and expected state",
-          "tags": [
-            "skill",
-            "visual-qa",
-            "screenshots"
-          ],
-          "notes": "Guards visual QA from becoming prose-only UI approval."
-        }
-      }
+      "metadata": {"farplane": {"title": "Visual QA refuses to pass without screenshot evidence and expected state", "tags": ["skill", "visual-qa", "screenshots"]}}
+    },
+    {
+      "id": "visual_qa_explicit_veto_conflict_01",
+      "prompt": "Can you review the new AGI Toy Shop checkout screenshots against the design notes and tell me whether it is ready to ship?",
+      "expected_output": "Names design-notes.md as the baseline; Maps both explicit visual vetoes to desktop screenshot facts and marks them failing; Treats the visible checkout action as passing without passing overall; Does not let 92/100 readiness prose override artifact evidence; Names the best evidence item",
+      "files": ["skills/visual-qa/evals/fixtures/explicit-veto-conflict/design-notes.md", "skills/visual-qa/evals/fixtures/explicit-veto-conflict/desktop-checkout.facts.json", "skills/visual-qa/evals/fixtures/explicit-veto-conflict/mobile-checkout.facts.json", "skills/visual-qa/evals/fixtures/explicit-veto-conflict/summary.md"],
+      "assertions": [
+        "Names the expected baseline from design-notes.md",
+        "Maps the red banner veto to desktop-checkout evidence and marks it failing",
+        "Maps the floating-card veto to desktop-checkout evidence and marks it failing",
+        "Does not allow the 92/100 score or readiness prose to override failed vetoes",
+        "May mark the checkout action as passing while still returning revise or fail overall",
+        "Names the best evidence item used for the blocking verdict"
+      ],
+      "metadata": {"farplane": {"title": "Explicit visual vetoes block aggregate readiness", "tags": ["skill", "visual-qa", "metamorphic-pair", "must-avoid"], "pair": "visual_qa_opposite_preference_control_01"}}
+    },
+    {
+      "id": "visual_qa_ordinary_compliant_pass_01",
+      "prompt": "Please check the AGI Toy Shop inventory screen package and give me the visual QA verdict for the release note.",
+      "expected_output": "Names design-notes.md as the baseline; Maps every avoid and preserve requirement to screenshot or snapshot facts; Passes because every listed constraint has evidence; Does not invent unrelated taste vetoes; Names the best image evidence item",
+      "files": ["skills/visual-qa/evals/fixtures/ordinary-compliant-pass/design-notes.md", "skills/visual-qa/evals/fixtures/ordinary-compliant-pass/desktop-inventory.png", "skills/visual-qa/evals/fixtures/ordinary-compliant-pass/mobile-inventory.png", "skills/visual-qa/evals/fixtures/ordinary-compliant-pass/desktop-inventory.facts.json", "skills/visual-qa/evals/fixtures/ordinary-compliant-pass/mobile-inventory.facts.json", "skills/visual-qa/evals/fixtures/ordinary-compliant-pass/snapshot.json"],
+      "assertions": [
+        "Names the expected baseline from design-notes.md",
+        "Maps each avoid and preserve requirement to screenshot or snapshot evidence",
+        "Returns pass because every listed constraint has supporting evidence",
+        "Does not invent an unrelated taste veto",
+        "Identifies the best image evidence item"
+      ],
+      "metadata": {"farplane": {"title": "Compliant visual package can pass", "tags": ["skill", "visual-qa", "happy-path"]}}
+    },
+    {
+      "id": "visual_qa_earlier_state_persistence_01",
+      "prompt": "I added the final AGI Toy Shop launch page screenshots to the same review packet. Can you do the visual pass now?",
+      "expected_output": "Carries the earlier workbench-photo constraint into the baseline; Cites final-desktop facts as contradicting the first-viewport anchor; Does not pass from later copy improvements or final readiness; Explains the persisted-constraint failure; The behavior trace preserves supplied ordered context and artifact inventory",
+      "files": ["skills/visual-qa/evals/fixtures/earlier-state-persistence/packet.md", "skills/visual-qa/evals/fixtures/earlier-state-persistence/final-desktop.facts.json", "skills/visual-qa/evals/fixtures/earlier-state-persistence/final-mobile.facts.json"],
+      "assertions": [
+        "Carries the earlier workbench-photo constraint into the final expected baseline",
+        "Cites final-desktop as contradicting the first-viewport anchor requirement",
+        "Does not treat later copy improvements or final-summary readiness as sufficient for pass",
+        "Explains the state-persistence failure in the verdict or fix plan",
+        "Preserves enough trace evidence to verify the earlier constraint was available"
+      ],
+      "metadata": {"farplane": {"title": "Earlier accepted visual constraints persist", "tags": ["skill", "visual-qa", "behavior-trace", "state"]}}
+    },
+    {
+      "id": "visual_qa_artifact_over_summary_01",
+      "prompt": "The AGI Toy Shop support redesign came back with a strong review score. Can you sanity-check the visual evidence before I mark it done?",
+      "expected_output": "Uses screenshot facts as the verdict basis; Blocks on the missing drawer and escalation fields; Flags the retained mascot area; Does not substitute TAS-A, clean logs, or check count for the declared visual state; Names the screenshot as best evidence",
+      "files": ["skills/visual-qa/evals/fixtures/artifact-over-summary/design-notes.md", "skills/visual-qa/evals/fixtures/artifact-over-summary/review.md", "skills/visual-qa/evals/fixtures/artifact-over-summary/support-escalation.facts.json", "skills/visual-qa/evals/fixtures/artifact-over-summary/console.log"],
+      "assertions": [
+        "Uses screenshot facts as the verdict basis",
+        "Marks the missing escalation drawer and fields as blocking for the declared state",
+        "Marks the retained mascot area as contradicting the notes",
+        "Does not use TAS-A, clean logs, or passing checks as substitutes for visual evidence",
+        "Names the screenshot as the best evidence item for the non-pass verdict"
+      ],
+      "metadata": {"farplane": {"title": "Artifact facts outrank review summaries", "tags": ["skill", "visual-qa", "evidence-conflict"]}}
+    },
+    {
+      "id": "visual_qa_opposite_preference_control_01",
+      "prompt": "Please review this AGI Toy Shop birthday campaign page against the brief. The team wants to know if the screenshots match what they asked for.",
+      "expected_output": "Does not import unrelated bans on red, cards, decorations, or playfulness; Treats red gift-card tiles as matching this brief; Checks CTA and mobile overflow; Passes because fixture-specific constraints are satisfied; Would only fail for a fixture-specific contradiction",
+      "files": ["skills/visual-qa/evals/fixtures/opposite-preference-control/brief.md", "skills/visual-qa/evals/fixtures/opposite-preference-control/birthday-desktop.png", "skills/visual-qa/evals/fixtures/opposite-preference-control/birthday-mobile.png", "skills/visual-qa/evals/fixtures/opposite-preference-control/birthday-desktop.facts.json", "skills/visual-qa/evals/fixtures/opposite-preference-control/birthday-mobile.facts.json", "skills/visual-qa/evals/fixtures/opposite-preference-control/snapshot.json"],
+      "assertions": [
+        "Does not import unrelated bans on red, cards, decorations, or playful treatment",
+        "Judges red gift-card tiles as matching the current campaign brief",
+        "Checks visible CTA and mobile overflow evidence before passing",
+        "Returns pass when the fixture-specific constraints are satisfied",
+        "Would only return non-pass for a fixture-specific contradiction"
+      ],
+      "metadata": {"farplane": {"title": "Current brief overrides unrelated taste memory", "tags": ["skill", "visual-qa", "metamorphic-pair", "anti-overfit"], "pair": "visual_qa_explicit_veto_conflict_01"}}
     }
   ]
 }

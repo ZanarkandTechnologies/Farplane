@@ -4,11 +4,11 @@
     {
       "id": "asset_advisor_tasty_pack_recreation_plan_01",
       "prompt": "A Tasty Pack reference shows a 20s vertical product teaser with a fast hook, AI product b-roll, kinetic captions, a presenter voiceover, and three punchy SFX hits. Create the asset plan for Remotion execution.",
-      "expected_output": "Decomposes footage, stills, captions, voiceover, SFX, and final composition; Routes stills, video clips, avatar/audio, and Remotion separately; Names rights or recreation constraints; Includes acceptance checks for each asset",
+      "expected_output": "Decomposes footage, stills, caption media dependencies, voiceover, and SFX; Routes stills, video clips, avatar, and audio realization while returning accepted assets to the parent; Names rights or recreation constraints; Includes acceptance checks for each asset",
       "files": [],
       "assertions": [
-        "Decomposes footage, stills, captions, voiceover, SFX, and final composition",
-        "Routes stills, video clips, avatar/audio, and Remotion separately",
+        "Decomposes footage, stills, caption media dependencies, voiceover, and SFX without authoring the final edit or composition",
+        "Routes stills, video clips, avatar, and audio realization while returning accepted asset receipts to the parent production plan",
         "Names rights or recreation constraints",
         "Includes acceptance checks for each asset"
       ],
@@ -32,7 +32,7 @@
     {
       "id": "asset_advisor_storyboard_missing_assets_01",
       "prompt": "A five-scene vertical toy-store storyboard needs: an opening wooden train on a playroom floor; a parent comparing two STEM kits; the supplied product screenshot; a close-up of recyclable packaging; and a logo end frame. Only the logo and screenshot exist, and audio is already handled. Build the missing-asset inventory. The editor says custom SVG illustrations would be faster than searching.",
-      "expected_output": "Marks existing assets for reuse; Executes suitable local, Resource Bank, reference, web, stock, or library searches when tools are available and records candidate links, rights, and fit decisions; Otherwise returns an exact discovery blocker without claiming readiness; Resolves each missing visual as source, inspired_generation, or original_generation with the required receipt and packet; Rejects custom-created SVG animation assets while allowing provenance-bearing existing SVG media; States blockers; Prepares a Remotion-ready handoff only after accepted asset files exist",
+      "expected_output": "Marks existing assets for reuse; Executes suitable local, Resource Bank, reference, web, stock, or library searches when tools are available and records candidate links, rights, and fit decisions; Otherwise returns an exact discovery blocker without claiming readiness; Resolves each missing visual as source, inspired_generation, or original_generation with the required receipt and packet; Rejects custom-created SVG animation assets while allowing provenance-bearing existing SVG media; States blockers; Prepares a downstream asset handoff only after accepted asset files exist",
       "files": [],
       "assertions": [
         "Marks existing assets for reuse",
@@ -42,7 +42,7 @@
         "Rejects custom-created SVG animation assets and SVG or JSX scene substitutes while allowing accepted existing SVG source media with provenance",
         "Marks missing visuals for sourcing or downstream generation",
         "States blockers",
-        "Prepares a Remotion-ready handoff only after accepted source files or materialized accepted generated outputs exist; a generation packet alone remains blocked"
+        "Prepares a downstream asset handoff only after accepted source files or materialized accepted generated outputs exist; a generation packet alone remains blocked"
       ],
       "metadata": {
         "farplane": {
@@ -66,14 +66,14 @@
     {
       "id": "asset_advisor_continuity_asset_graph_01",
       "prompt": "A storyboard has six beats for a vertical reel with one recurring guide, one proof talisman, and Seedance clips that must connect from one beat to the next. Build the asset plan.",
-      "expected_output": "Creates a character bible or explicit no-character rationale; Creates a recurring prop/object bible; Names location, lighting, wardrobe/style, and product anchors that must persist; Lists start and end frame assets for each model-native clip handoff; Routes still frame generation/editing, model-native clips, audio, and Remotion separately; Includes acceptance checks for continuity and source/reference use",
+      "expected_output": "Creates a character bible or explicit no-character rationale; Creates a recurring prop/object bible; Names location, lighting, wardrobe/style, and product anchors that must persist; Lists start and end frame assets for each model-native clip handoff; Routes still frame generation, model-native clips, and audio realization while returning accepted assets to the parent; Includes acceptance checks for continuity and source/reference use",
       "files": [],
       "assertions": [
         "Creates a character bible or explicit no-character rationale",
         "Creates a recurring prop/object bible",
         "Names location, lighting, wardrobe/style, and product anchors that must persist",
         "Lists start and end frame assets for each model-native clip handoff",
-        "Routes still frame generation/editing, model-native clips, audio, and Remotion separately",
+        "Routes still frame generation, model-native clips, and audio realization while returning accepted asset receipts to the parent production plan",
         "Includes acceptance checks for continuity and source/reference use"
       ],
       "metadata": {
@@ -98,14 +98,14 @@
     {
       "id": "asset_advisor_hybrid_source_or_generate_01",
       "prompt": "We need a high-end monochrome documentary still of a tailored negotiator beside distressed architecture. Web search is available in this run. Search visual libraries such as Unsplash for useful assets and inspiration. If a source photo is not the best final fit, generate an original raster image from the useful visual traits. Do not create SVG artwork.",
-      "expected_output": "Searches useful source classes and records at least one specific asset-page URL or asset ID per material need, rights status or an explicit verification blocker, and fit decisions; Search-results URLs may appear only as query evidence and never as the sole candidate evidence; Unverified rights block direct reuse but may remain provenance for a bounded non-copying inspiration packet; May select a source or choose inspiration_for_generation even when references are useful; For inspired generation maps transferable composition, lighting, palette, texture, material, and camera traits while naming exact composition, likeness, logos, signatures, and protected expression that must not be copied; If and only if no useful reference exists, records searched_no_reference and emits an original_generation packet; Routes raster output to imagegen or ai-image-advisor; Blocks Remotion until the generated file exists and passes acceptance; Rejects custom SVG scene art",
+      "expected_output": "Searches useful source classes and records at least one specific asset-page URL or asset ID per material need, rights status or an explicit verification blocker, and fit decisions; Search-results URLs may appear only as query evidence and never as the sole candidate evidence; Unverified rights block direct reuse but may remain provenance for a bounded non-copying inspiration packet; May select a source or choose inspiration_for_generation even when references are useful; For inspired generation maps transferable composition, lighting, palette, texture, material, and camera traits while naming exact composition, likeness, logos, signatures, and protected expression that must not be copied; If and only if no useful reference exists, records searched_no_reference and emits an original_generation packet; Routes raster output to imagegen or ai-image-advisor; Blocks downstream production until the generated file exists and passes acceptance; Rejects custom SVG scene art",
       "files": [],
       "assertions": [
         "Searches source candidates and records at least one specific asset-page URL or asset ID per material need, rights status or an explicit verification blocker, and fit decisions; search-results pages may appear only as query evidence and cannot be the sole candidate evidence; unverified rights block direct reuse",
         "Allows inspiration_for_generation as a successful discovery outcome rather than requiring searched_no_reference",
         "Inspired generation includes transferable traits and explicit must-not-copy constraints",
         "If no useful reference exists, the fallback produces an original_generation raster packet with prompt, owner, output path, rights note, and acceptance check; this assertion is not applicable when inspiration_for_generation is selected",
-        "Blocks Remotion until a generated raster file exists and is accepted",
+        "Blocks downstream production until a generated raster file exists and is accepted",
         "Rejects custom SVG, JSX, or programmatic vector scene substitutes"
       ],
       "metadata": {

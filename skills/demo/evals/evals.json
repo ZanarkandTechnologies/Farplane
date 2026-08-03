@@ -4,14 +4,15 @@
     {
       "id": "demo_builds_verified_lead_recap_01",
       "prompt": "$demo TASK-0042. It is a material implementation Goal with passing QA, diagrams, screenshots, test receipts, and review inputs. Before producing the recap, summarize the exact package, production route, and finish gates you will use.",
-      "expected_output": "Selects one 60-120 second narrated lead-engineer MP4; Covers problem, solution, final behavior, proof, and residual risk; Uses ticket-scoped content planning and deterministic Remotion; Maps every claim to verified evidence; Requires media verification and independent TAS-A review",
+      "expected_output": "Selects one 45-90 second narrated lead-engineer MP4; Uses the glanceable Before, After, Example, Key decisions, and compact Proof spine; Uses ticket-scoped content planning and deterministic Remotion; Maps every claim to verified evidence; Requires media verification and independent TAS-A review; Hands the reviewed feature MP4 to close-ticket as the first selected media item",
       "files": [],
       "assertions": [
-        "Selects one 60-120 second narrated lead-engineer MP4",
-        "Covers problem, solution, final behavior, proof, and residual risk",
+        "Selects one 45-90 second narrated lead-engineer MP4",
+        "Uses the glanceable Before, After, Example, Key decisions, and compact Proof spine",
         "Uses ticket-scoped content planning and deterministic Remotion",
         "Maps every claim to verified evidence",
-        "Requires media verification and independent TAS-A review"
+        "Requires media verification and independent TAS-A review",
+        "Hands the reviewed feature MP4 to close-ticket as the first selected media item"
       ],
       "metadata": {"farplane": {"title": "Build the default verified Goal recap", "tags": ["demo", "goal", "mp4"]}}
     },

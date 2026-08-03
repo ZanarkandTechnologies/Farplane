@@ -31,6 +31,77 @@
           ]
         }
       }
+    },
+    {
+      "id": "ai_video_advisor_visual_camera_simple_single_shot_01",
+      "prompt": "I drew an S-shaped arrow over one clean aerial image of a pier. The camera should move forward at one altitude, make two gentle bends, keep looking down the route, and finish at the ocean end. There are no orbits, reversals, or separate perspective states. Please turn this into a model-native video input packet.",
+      "expected_output": "Selects ai-video-advisor:visual-camera-control; Compiles the arrow into path, altitude, orientation, gaze, speed, time, and terminal-state semantics; Selects single_shot because the move is one compatible route with no large orbit or independent perspective sequence; Separates the clean identity image from the instruction-only annotated diagram; Adds observable adherence checks and prohibits annotation leakage; Produces trajectory, prompt/input, result, and adherence artifact paths before claiming success",
+      "files": [
+        "skills/ai-video-advisor/references/visual-camera-control.md"
+      ],
+      "assertions": [
+        "Selects ai-video-advisor:visual-camera-control",
+        "Compiles the arrow into path, altitude, orientation, gaze, speed, time, and terminal-state semantics",
+        "Selects single_shot because the move is one compatible route with no large orbit or independent perspective sequence",
+        "Separates the clean identity image from the instruction-only annotated diagram",
+        "Adds observable adherence checks and prohibits annotation leakage",
+        "Produces trajectory, prompt/input, result, and adherence artifact paths before claiming success"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Keeps a bounded compatible arrow route in one generated shot",
+          "tags": [
+            "skill",
+            "ai-video-advisor",
+            "visual-camera-control",
+            "single-shot",
+            "content-video"
+          ],
+          "anti_patterns": [
+            "Treats the arrow image as the complete prompt",
+            "Invents chained clips for a bounded compatible route",
+            "Allows arrows or labels to become scene content",
+            "Grades cinematic quality without route adherence"
+          ]
+        }
+      }
+    },
+    {
+      "id": "ai_video_advisor_visual_camera_compound_chain_01",
+      "prompt": "Use one annotated location map to make a 10-second continuous shot with five states: high aerial approach, corkscrew dive, low pier fly-by, a gaze-locked 270-degree Ferris-wheel orbit, and an exact top-down crane-out. We tried putting all five into one prompt before; the orbit and final top-down view were only partial. Please run it again.",
+      "expected_output": "Selects ai-video-advisor:visual-camera-control; Blocks another overloaded single-shot generation before spend; Selects chained_maneuvers because there are five independently scored states, a >120-degree orbit, high/low/exact-terminal views, and a prior adherence failure; Splits by geometric maneuver rather than every waypoint; Requires start/end perspective anchors and frame handoffs for each clip; Defines a real orbit as translation around a gaze-locked landmark rather than roll, spin, pan, or fly-by; Requires per-maneuver clear/partial/absent evidence and preserves failed clips as regression evidence",
+      "files": [
+        "skills/ai-video-advisor/references/visual-camera-control.md",
+        "tickets/TASK-0424/artifacts/experiment-evidence.md"
+      ],
+      "assertions": [
+        "Selects ai-video-advisor:visual-camera-control",
+        "Blocks another overloaded single-shot generation before spend",
+        "Selects chained_maneuvers because there are five independently scored states, a >120-degree orbit, high/low/exact-terminal views, and a prior adherence failure",
+        "Splits by geometric maneuver rather than every waypoint",
+        "Requires start/end perspective anchors and frame handoffs for each clip",
+        "Defines a real orbit as translation around a gaze-locked landmark rather than roll, spin, pan, or fly-by",
+        "Requires per-maneuver clear/partial/absent evidence and preserves failed clips as regression evidence"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Routes a failed compound trajectory into chained maneuver clips",
+          "tags": [
+            "skill",
+            "ai-video-advisor",
+            "visual-camera-control",
+            "chained-maneuvers",
+            "content-video"
+          ],
+          "anti_patterns": [
+            "Retries the same five-state ten-second prompt",
+            "Counts waypoints instead of independently testable camera states",
+            "Generates all clips before the hardest maneuver passes",
+            "Calls camera roll a landmark orbit",
+            "Omits exact terminal-frame anchors"
+          ]
+        }
+      }
     }
   ]
 }

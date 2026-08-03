@@ -251,6 +251,90 @@
       }
     },
     {
+      "id": "ingest_content_video_skill_benefit_01",
+      "prompt": "Finish the terminal step for an already-saved public tutorial-video capture. Resource Bank capture rb_demo_workflow has passed retrieval verification. Evidence packet: transcript 01:10-01:28 says, 'I make one card per scene, list every image, voice, and sound the scene needs, and I do not open the editor until every card is green.' Frames at 01:12 and 01:24 show a scene-card board with per-scene asset checkboxes, then a separate editing timeline. Relevant registry excerpt: content-impl-plan owns production programs and scene planning but has no explicit pre-edit asset-completeness gate; storyboard owns scenes and beats; asset-advisor owns asset requirements. Determine whether this video could benefit a current skill.",
+      "expected_output": "Carries retrievalStatus: verified into the terminal skill-benefit result before marking the scan complete.; Uses the supplied registry excerpt to shortlist likely owner skills instead of loading an entire skill tree.; Grounds every possible benefit in the supplied transcript or frame anchors.; Compares each credible operational technique to the likely owner as covered, augment, missing, reject, or defer.; Returns skill findings with skill, status, evidenceAnchor, benefit, confidence, and recommendedRoute.; Routes the credible workflow-teaching source to harness-scout for source-todo reconstruction and deeper local comparison.; Does not edit a skill, create a skill-improvement ticket, or add a Resource Bank schema field during ingestion.",
+      "files": [],
+      "assertions": [
+        "Carries retrievalStatus: verified into the result before marking the terminal skill-benefit scan complete.",
+        "Uses the supplied registry excerpt to shortlist likely owners rather than loading an entire skill tree.",
+        "Grounds possible skill benefits in transcript 01:10-01:28 or frames 01:12 and 01:24.",
+        "Uses only covered, augment, missing, reject, or defer for comparison status.",
+        "Returns each finding with skill, status, evidenceAnchor, benefit, confidence, and recommendedRoute.",
+        "Recommends harness-scout when the video credibly teaches a reusable workflow that needs source-todo reconstruction.",
+        "Does not edit skills, create skill-improvement tickets, or add Resource Bank schema fields during the scan."
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Scans a workflow-teaching video for evidence-backed skill benefits",
+          "tags": ["skill", "ingest-content", "video", "skill-benefit", "harness-scout"],
+          "notes": "Regression for the terminal video skill-benefit scan and its non-mutating handoff boundary.",
+          "anti_patterns": [
+            "Skips the scan after retrieval verification.",
+            "Searches or loads the entire skill tree without shortlisting likely owners.",
+            "Calls an aesthetic preference a skill improvement without operational evidence.",
+            "Edits a skill or creates a ticket during ingestion.",
+            "Declares a new skill without checking existing owners."
+          ]
+        }
+      }
+    },
+    {
+      "id": "ingest_content_aesthetic_video_no_skill_finding_01",
+      "prompt": "Finish the terminal step for an already-saved short visual-reference capture. Resource Bank capture rb_demo_aesthetic has passed retrieval verification and contains complete selected visual/editing capsules. Evidence packet: frames at 00:00, 00:03, and 00:07 show warm paper texture, a slow push-in, and a muted palette; there is no speech, transcript, tutorial, interface, checklist, or demonstrated workflow. Determine whether this video could benefit a Farplane skill.",
+      "expected_output": "Recognizes that retrieval verification and complete capsule storage are already finished.; Completes the terminal video skill-benefit scan and returns skill_findings: [] because the source provides aesthetic inspiration but no evidence-backed operational technique.; Does not invoke a heavyweight video-to-skill comparison, invent a skill candidate, edit a skill, create a skill-improvement ticket, or add Resource Bank schema fields.",
+      "files": [],
+      "assertions": [
+        "Recognizes that complete capsule storage and retrieval verification are already finished.",
+        "Runs the terminal video skill-benefit scan after that verified state.",
+        "Returns skill_findings: [] because the video does not teach or demonstrate an operational technique.",
+        "Does not route aesthetic inspiration through a heavyweight harness-scout pass.",
+        "Does not invent a skill candidate, edit a skill, create a skill-improvement ticket, or add Resource Bank schema fields."
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Returns no skill finding for a purely aesthetic video",
+          "tags": ["skill", "ingest-content", "video", "aesthetic", "no-op"],
+          "notes": "Negative calibration: every video gets a scan, but not every video deserves a skill-improvement finding.",
+          "anti_patterns": [
+            "Treats visual taste as evidence that visual-design or another skill needs modification.",
+            "Skips the scan because no finding is expected.",
+            "Escalates to harness-scout without a workflow-teaching signal.",
+            "Creates an empty placeholder skill-improvement ticket."
+          ]
+        }
+      }
+    },
+    {
+      "id": "ingest_content_video_skill_owner_comparison_01",
+      "prompt": "Finish the terminal skill-benefit step for verified Resource Bank capture rb_demo_review_loop. Video evidence: transcript 02:05-02:22 says, 'After drafting the scenes, I mark every factual claim, match it to the source material, and rewrite or remove anything I cannot support before production.' Frames at 02:08 and 02:19 show claim annotations beside scene cards and then a cleaned scene board. Registry shortlist: content-impl-plan turns an idea and references into a production program; storyboard turns a plan into scenes and beats; proof-advisor shapes proof requirements and evidence routes. Compare the demonstrated technique with these likely owners and return the terminal scan result.",
+      "expected_output": "Carries verified retrieval state into a complete terminal scan.; Compares the demonstrated evidence-checking technique with the supplied likely owners and chooses an owner/status with a concise ownership rationale rather than echoing an answer from the prompt.; Grounds the decision in transcript or frame anchors.; Uses only covered, augment, missing, reject, or defer and returns the complete finding fields.; Recommends harness-scout when deeper source-todo reconstruction is warranted.; Does not mutate skills, create a skill-improvement ticket, or add Resource Bank schema.",
+      "files": [],
+      "assertions": [
+        "Returns retrievalStatus: verified before marking the scan complete.",
+        "Compares at least two supplied likely owners and explains why the selected owner is the best fit.",
+        "Grounds the decision in transcript 02:05-02:22 or frames 02:08 and 02:19.",
+        "Uses only covered, augment, missing, reject, or defer for the finding status.",
+        "Returns skill, status, evidenceAnchor, benefit, confidence, and recommendedRoute.",
+        "Uses harness-scout only when deeper workflow reconstruction and local comparison are warranted.",
+        "Does not edit skills, create a skill-improvement ticket, or add Resource Bank schema fields."
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Compares a video technique across plausible skill owners",
+          "tags": ["skill", "ingest-content", "video", "owner-comparison", "held-out"],
+          "notes": "Held-out calibration for owner-selection judgment: the prompt supplies neutral owner descriptions without naming the intended owner or gap.",
+          "anti_patterns": [
+            "Chooses an owner without comparing the plausible alternatives.",
+            "Invents owner files or registry details beyond the supplied shortlist.",
+            "Uses adopt or adapt instead of the allowed comparison statuses.",
+            "Omits source anchors or the no-mutation boundary.",
+            "Creates a new skill merely because several current owners overlap."
+          ]
+        }
+      }
+    },
+    {
       "id": "ingest_content_pinterest_canonical_source_01",
       "prompt": "Save this Pinterest pin because I like the landing page's oversized product hero and restrained type. Source URL: https://www.pinterest.com/pin/123456789012345678/. I am not asking to make a page yet. If the pin points to the real site, use that as the durable reference.",
       "expected_output": "Attempts canonical original resolution while preserving discovery provenance; Keeps unresolved pins inspiration-only with rights_status unknown; Stores selected complete visual elements only when source evidence supports them and otherwise returns a precise capsule blocker; Infers no license or protected-expression reuse; Creates no ticket; Verifies Resource Bank and Tasty Pack writes or reports their exact blockers",

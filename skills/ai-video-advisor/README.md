@@ -15,6 +15,7 @@ Keep video generation as the model/app execution skill with the upstream umbrell
 - `references/long-running-jobs.md`: async `--no-wait`, task ID, polling, timer, and delegation guidance.
 - `references/reference-overrides.md`: local overrides for stale upstream commands and app IDs.
 - `references/prompting/video-prompting-guide.md`: copied upstream video prompting guide for shot, camera, lighting, pacing, and model-specific phrasing.
+- `references/visual-camera-control.md`: provider-neutral method for compiling annotated routes and perspective anchors into single-shot or chained camera-control packets.
 - `references/frontend-asset-qa.md`: Farplane handoff rules for web use.
 
 Use `SKILL.md` for routing and its Todo List to select only the relevant branch:
@@ -29,6 +30,11 @@ Use `video-production` methods for artifact-level work:
 - `video-production:storyboard`
 - `video-production:talking-head`
 - `video-production:ad-spec`
+
+Use `ai-video-advisor:visual-camera-control` when arrows, maps, annotated
+assets, landmark orbits, or ordered location perspectives must control the
+camera. Resource Bank may store the references and examples; this method owns
+the executable topology, prompt packet, and adherence evidence.
 
 Prompting guidance lives inside the matching `video-production` method
 reference, with the upstream video prompting guide kept as

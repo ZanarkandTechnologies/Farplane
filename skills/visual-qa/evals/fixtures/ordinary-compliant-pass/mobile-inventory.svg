@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="390" height="844" viewBox="0 0 390 844">
+  <rect width="390" height="844" fill="#f5f7fb"/>
+  <rect x="16" y="18" width="358" height="62" rx="12" fill="#ffffff"/>
+  <text x="32" y="56" font-family="Arial" font-size="21" font-weight="700" fill="#182230">Inventory</text>
+  <rect x="286" y="31" width="72" height="36" rx="8" fill="#1f5f88"/>
+  <text x="301" y="54" font-family="Arial" font-size="14" fill="#ffffff">Export</text>
+  <rect x="16" y="96" width="358" height="400" rx="12" fill="#ffffff"/>
+  <g font-family="Arial" fill="#243244">
+    <text x="32" y="132" font-size="13" font-weight="700">TOY</text><text x="244" y="132" font-size="13" font-weight="700">STATUS</text>
+    <text x="32" y="180" font-size="16">Wooden Rover</text><text x="250" y="180" font-size="14" fill="#24536f">In stock</text>
+    <text x="32" y="232" font-size="16">Puzzle Garden</text><text x="250" y="232" font-size="14" fill="#24536f">Low stock</text>
+    <text x="32" y="284" font-size="16">Cloud Blocks</text><text x="250" y="284" font-size="14" fill="#24536f">Low stock</text>
+  </g>
+  <rect x="16" y="516" width="358" height="270" rx="12" fill="#ffffff"/>
+  <text x="32" y="558" font-family="Arial" font-size="19" font-weight="700" fill="#182230">Safety review</text>
+  <rect x="32" y="584" width="326" height="92" rx="10" fill="#eef4f8"/>
+  <text x="50" y="620" font-family="Arial" font-size="15" fill="#243244">2 items need review</text>
+  <text x="50" y="650" font-family="Arial" font-size="13" fill="#637083">No critical safety holds</text>
+</svg>

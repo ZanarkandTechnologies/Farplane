@@ -50,18 +50,15 @@ input_packet:
 1. **Inventory evidence.** Build `evidence-map.json` before scripting. Mark
    gaps as blockers; do not write around them.
 2. **Plan one story.** Use `content-impl-plan` in ticket-scoped artifact mode.
-   Default audience is the lead engineer and default duration is 60–120
+   Default audience is the lead engineer and default duration is 45–90
    seconds. Produce MP4 only.
-3. **Use the fixed narrative spine.**
-   - Outcome and why it matters.
-   - Original problem and its stakes.
-   - Chosen solution and the important tradeoff.
-   - Simplified system or workflow explanation, preferably using the existing
-     Mermaid/architecture diagram.
-   - Final behavior shown with verified screenshots, clips, logs, or code
-     evidence.
-   - QA and review proof.
-   - Residual risk or follow-up, when non-empty.
+3. **Use the fixed glanceable narrative spine.**
+   - `Before`: old behavior and why it mattered.
+   - `After`: the shipped behavior.
+   - `Example`: one concrete end-to-end use case shown with verified evidence.
+   - `Key decisions`: at most three decisions or tradeoffs needed to understand
+     the result.
+   - `Proof`: compact QA/review evidence and any honest residual risk.
 4. **Script and storyboard.** Keep each beat tied to evidence IDs. Prefer
    readable crops, callouts, and deterministic motion over decorative scenes.
 5. **Produce narration.** Use an authorized existing voice/audio route. If
@@ -108,6 +105,8 @@ Keep `result.json` compatible with Farplane validators:
 - MP4 media checks pass and independent review reaches TAS-A.
 - The recap can refresh context without requiring the viewer to open the
   ticket, while artifact links remain available for deeper inspection.
+- For material feature work, the reviewed MP4 is ready to become the first
+  selected `$close-ticket` media comment.
 
 ## Bad Output
 

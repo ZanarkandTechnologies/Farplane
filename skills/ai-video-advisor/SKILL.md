@@ -1,10 +1,12 @@
 ---
 name: ai-video-advisor
-version: 1.0.0
+version: 1.1.0
 description: "Turn model-native video create/edit/upscale requests into provider route, prompt/input packet, spend gate, and saved video asset bundle."
 tier: 3
 group: content-video
 source: local
+methods:
+  - ai-video-advisor:visual-camera-control
 template_uses:
   skill-template: "0.3.7"
 eval: evals/evals.json
@@ -34,6 +36,7 @@ Use this as the ordered checklist whenever `ai-video-advisor` is active.
 - [ ] For marketing/proof videos, explainers, product demos, storyboard/action-list work, or idea plus Tasty Pack planning, use `content-impl-plan` or `storyboard` before this skill.
 - [ ] For social/video ad specs, use `video-production:ad-spec`.
 - [ ] For prompt improvement, use the owning `video-production` method's prompting reference; if no artifact domain is known, load `references/prompting/video-prompting-guide.md`.
+- [ ] For annotated routes, arrows, maps, camera paths, landmark orbits, or multi-perspective location moves, load [visual camera control](references/visual-camera-control.md) and select single-shot versus chained-maneuver topology before spend.
 - [ ] For shared production routing from a domain skill, load `references/domain-production.md`.
 - [ ] For long-running or batched generations, load `references/long-running-jobs.md`; use `--no-wait`, task IDs, and `jobs.md` instead of terminal scrollback.
 - [ ] Before copying commands from upstream references, load `references/reference-overrides.md` and let it override stale app examples.
@@ -115,6 +118,60 @@ Block and route back to `content-impl-plan`, `storyboard`, `asset-advisor`, or
 per-clip audio, or no continuity assets. Independent async batches are only
 appropriate for montage, parallel asset exploration, or non-sequential b-roll.
 
+## Visual Camera Control Gate
+
+When annotations or a camera trajectory condition the clip, load
+[visual camera control](references/visual-camera-control.md). Compile arrows and
+diagrams into explicit path, altitude, orientation, gaze, speed, timing, and
+terminal-state semantics. The diagram is never sufficient by itself.
+
+Use one generation only for a bounded compatible move. Block an overloaded
+single-shot run and choose chained maneuvers when the request contains three or
+more independently scored camera states, a large landmark orbit, self-crossing
+or reversing geometry, both high and low perspectives plus an exact terminal
+view, or a prior single-shot adherence failure. Require start/end frame
+handoffs and per-maneuver acceptance checks before external spend.
+
+Before returning even a planning-only camera-control packet, choose the bundle
+slug and name the exact `trajectory.json`, prompt/input, result, clip, and
+`adherence.md` paths. Mark uncreated paths `planned`. Say `worked` or `pass`
+only after the claimed files exist and the adherence evidence has been checked.
+
+For chained maneuvers, generate and judge the hardest geometric move before
+spending on the remaining clips. A real orbit requires camera translation
+around a gaze-locked landmark; roll, spin, pan, and fly-by are not substitutes.
+Score every maneuver `clear`, `partial`, or `absent`, and preserve failed clips
+plus their adherence notes as regression evidence.
+Any maneuver previously scored `partial` or `absent` gets its own clip and may
+not be merged with an easier adjacent move during the retry.
+
+Every camera-control response must make the selected method and proof state
+machine-glanceable:
+
+```text
+camera_control_response:
+  method: ai-video-advisor:visual-camera-control
+  topology: single_shot | chained_maneuvers
+  bundle_paths: exact created or planned paths; expand every clip; no wildcard placeholders
+  clip_plan:
+    - clip_id:
+      maneuver_ids: []
+      start_frame:
+      end_frame:
+      handoff_to:
+      prompt_path:
+      input_path:
+      result_path:
+      final_clip_path:
+  maneuver_evidence:
+    - maneuver_id:
+      acceptance: observable geometry rule, including gaze and translation when relevant
+      score_scale: [clear, partial, absent]
+      score: pending | clear | partial | absent
+      evidence_path:
+      failed_clip_retention_path: predeclared for every maneuver
+```
+
 ## Best Current Defaults
 
 These defaults come from the upstream inference.sh skill snapshot at `c5ad36c`. Always verify live availability and schema with `belt app get <app>` before a run.
@@ -195,6 +252,8 @@ belt app list --category video
 - Prompt improvement: use the owning `video-production` method's prompting
   reference; if no artifact domain is known, load
   `references/prompting/video-prompting-guide.md`
+- Annotated camera routes, arrows, maps, landmark orbits, or multi-perspective
+  movement: [visual camera control](references/visual-camera-control.md)
 - Shared artifact production workflow for domain video skills: `references/domain-production.md`
 - Long-running jobs, batched tasks, timers, or delegated polling: `references/long-running-jobs.md`
 - Copied-reference overrides and known stale app IDs: `references/reference-overrides.md`
@@ -254,8 +313,14 @@ output/ai-video-advisor/<slug>/
   final.mp4
   poster.png
   notes.md
+  trajectory.json   # when visual-camera-control is active
+  adherence.md      # when visual-camera-control is active
 ```
 
 Use the repo's existing asset directory instead when one already exists for the target app or site.
 
 Return the final video path or remote result plus workspace copy plan, prompt/input JSON path, result JSON path, any still/reference asset paths, and QA evidence path or skipped-QA reason.
+
+For planning-only outputs, return the same exact bundle paths with
+`status: planned`; do not imply that generation or adherence proof already
+exists.

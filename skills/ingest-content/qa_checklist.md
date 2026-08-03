@@ -17,6 +17,11 @@ the skill contract.
 
 ## Checks
 
+- [ ] `note-selection-cardinality`: Broad analysis does not create broad
+  Creative Elements. A narrow note promotes only its evidenced selected
+  components; an explicit complete-system note may promote several or all six
+  evidenced kinds. There is no fixed one-element or six-element default.
+
 - [ ] `capture-shape`: The output stores source/ref, operator note or focus,
   optional top-level transcript, freeform `analysisMarkdown`, selected creative
   elements, and tags/facets when useful.
@@ -109,6 +114,32 @@ the skill contract.
 - [ ] `repurpose-dedupe`: Repeating materially equivalent future-creation
   intent for the same source returns the existing ticket rather than creating
   a duplicate.
+- [ ] `video-skill-benefit-scan`: Every video ingestion ends with a lightweight
+  skill-benefit scan after retrieval verification. Non-video sources mark it
+  `not_applicable` unless they explicitly teach a reusable workflow. The scan
+  carries `retrievalStatus: verified | blocked` and cannot report `complete`
+  when retrieval is blocked.
+- [ ] `skill-finding-grounding`: Skill findings are based on operational
+  techniques visible in transcript, frames, analysis, or precise source
+  anchors; each finding names `skill`, `status`, `evidenceAnchor`, `benefit`,
+  `confidence`, and `recommendedRoute`. Purely aesthetic inspiration returns
+  `skill_findings: []` with scan-level route `none`; it does not invent a
+  downstream skill-improvement route.
+- [ ] `skill-owner-comparison`: The scan shortlists owners through
+  `docs/skills/registry.jsonl`, inspects only likely owner skills, and uses
+  exactly `covered`, `augment`, `missing`, `reject`, or `defer` rather than
+  declaring every novel-looking technique a new skill.
+- [ ] `skill-primary-owner`: When one technique overlaps multiple skills, the
+  result chooses one primary owner for the proposed change, explains the
+  boundary, and does not return unresolved duplicate `augment` findings.
+- [ ] `skill-grounding-honesty`: The result claims registry or owner-skill
+  inspection only for files actually read and labels unavailable comparisons
+  instead of fabricating local grounding.
+- [ ] `skill-action-boundary`: The scan does not edit skills, create
+  skill-improvement tickets, or add Resource Bank schema fields. Credible
+  workflow-teaching videos route to `harness-scout`; accepted owner-local
+  changes may later route to `skill-maintenance`, and reviewed ownerless gaps
+  may later route to `skill-creator`.
 
 ## Reviewer Prompt
 
@@ -117,6 +148,7 @@ Review the ingest-content result against
 skills/ingest-content/qa_checklist.md. Return pass, violation, or blocked for
 each failed check. Focus on whether every element has an honest, same-source
 what/why/example/recipe capsule, whether recipes are operational rather than
-generic, and whether retrieval/promotion preserve that capsule without adding
-parallel evidence or recipe collections.
+generic, whether retrieval/promotion preserve that capsule without adding
+parallel evidence or recipe collections, and whether video ingestion ends with
+an evidence-backed, non-mutating skill-benefit scan.
 ```

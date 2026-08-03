@@ -43,6 +43,15 @@ Use this rubric before handing off the realism pack downstream.
 - `3`: inference is directionally right but still broad
 - `5`: inference feels appropriately targeted to the client type without claiming verified truth
 
+### 7. Decision And Mechanism Integrity
+
+- `1`: the demo presents an AI recommendation without an inspectable mechanism
+- `3`: the mechanism is plausible but weakly connected to changed inputs,
+  constraints, or visible evidence
+- `5`: one valuable decision is produced by an appropriate retrieval,
+  calculation, optimization, rule, or state transition and visibly responds to
+  representative scenario changes
+
 ## Pass Rule
 
 The realism pack is ready for downstream handoff only when:
@@ -53,6 +62,8 @@ The realism pack is ready for downstream handoff only when:
 - `source provenance` is at least `4` when the demo depends on concrete
   documents, media, forms, records, blueprints, logs, invoices, regulations, or
   other real-world source artifacts
+- `decision and mechanism integrity` is at least `4` when the demo makes an
+  operational recommendation or claims tool-backed analysis
 - demo-bearing build or review handoffs include an expectation-check contract
   with realistic data to exercise, workflow to run, expected demo value,
   evidence to capture, mismatch-note requirement, and operator question
@@ -64,6 +75,8 @@ An expectation-check artifact is ready for Kenji Review only when:
 - `realistic data exercised` names concrete records, source artifacts, or a
   representative demo pack
 - `workflow exercised` is a real action sequence tied to operator value
+- `mechanism exercised` names the tool, calculation, retrieval, optimization,
+  rule, or state transition that produced material output
 - `observed result` says what happened after the workflow was exercised
 - `mismatch notes` are present, even when the answer is `none observed`
 - `evidence` points to auditable screenshots, logs, command output, fixture
@@ -83,6 +96,8 @@ An expectation-check artifact is ready for Kenji Review only when:
 - Are all synthetic artifacts clearly labeled as fallback rather than treated
   as proof?
 - Does the pack show a strong future-state pitch without pretending to be exact current-state truth?
+- Does a real mechanism own the important result, and do ordinary,
+  constrained, and changed-condition cases prove that the decision responds?
 - If implementation has happened, did the worker exercise the demo with
   realistic data and ask the concrete expectation question instead of only
   reporting success?

@@ -25,6 +25,40 @@ storyboard_check(creative_ticket, production_handoff?)
   explicitly assumed.
 - [ ] `narrative_shape`: The plan names hook, tension, turn, proof moment,
   payoff, and final action; every beat advances that shape.
+  For short-form, latest-news, title-led, or
+  retention-sensitive work, the plan generates at least ten materially
+  different hook candidates spanning at least six causal lenses with no more
+  than two candidates from one lens, compares at least three finalists, and
+  selects one winner. The output shows the complete candidate set with
+  keep/reject reasons and a source-title
+  comparison table rather than collapsing the lab to a few preferred lines.
+  An unfamiliar general viewer can understand the winner
+  immediately without decoding unexplained legal, financial, technical, or
+  infrastructure jargon. The winner normally expresses one recognizable
+  actor, one concrete action, and one understandable consequence in one
+  breath and at most eight display words; abstract verbs and bridge phrases
+  such as `back`, `backing`, `secure`, `facilitate`, `support`, `finance`,
+  `fund`, `get the money`, or `help fund` fail when a concrete everyday action
+  such as `help buy`, `help pay`, `build`, `stop`, or `save` can express the
+  evidence safely. A finalist containing a blocked abstract term is removed
+  before scoring rather than averaged into a win; the displayed candidate set
+  is also post-cleanup, with blocked drafts allowed only in rejected-line
+  notes. Coined simplifications such
+  as `AI factory` or `computer hub` also fail when they create a new metaphor
+  to decode. When the evidence places one company on both sides of a purchase,
+  the candidate pass tests the direct supplier/customer/product loop. `Help`
+  is acceptable only when it directly modifies a drawable action such as
+  `buy`, `build`, or `pay`, and two-actor hooks repeat names or objects instead
+  of using ambiguous pronouns. When a source title exists, the comparison shows why the winner is
+  stronger on comprehension, curiosity, factual accuracy, brevity, and
+  first-frame visual potential; otherwise the hook remains unlocked. The
+  first-three-second packet gives exact on-screen copy, voiceover, dominant
+  visual action, and a compact evidence qualifier. Reported, forecast,
+  alleged, or unsigned claims retain their uncertainty. An applicable hook
+  decision cannot pass with an abbreviated finalist list: the complete
+  candidate decisions, criterion-by-criterion source-title table, winner
+  rationale, rejected-finalist reasons, and all four first-three-second fields
+  are mandatory.
 - [ ] `storyboard_alignment`: Script lines, storyboard panels, shot
   list, motion notes, captions/supers, audio notes, and asset needs describe
   one executable production path. Narrative video storyboards name recurring

@@ -12,7 +12,7 @@ template_uses:
 eval: evals/evals.json
 qa_checklist: qa_checklist.md
 common_chains:
-  after: ["storyboard", "ai-image-advisor", "ai-video-advisor", "avatar-advisor", "audio-advisor", "remotion"]
+  after: ["storyboard", "ai-image-advisor", "ai-video-advisor", "avatar-advisor", "audio-advisor"]
 allowed-tools: Read, Grep, Glob, Bash
 ---
 
@@ -25,19 +25,23 @@ created, what can be recreated from references, and which production skill owns
 each asset. It is the decomposition layer for Tasty Pack outputs, swipe files,
 example videos, storyboards, and source media.
 
-This skill owns asset inventory, recreation strategy, route selection, rights
-and source notes, candidate discovery, and handoff packaging. It must search
+This skill owns the asset lane: asset inventory, recreation strategy, route
+selection, rights and source notes, candidate discovery, accepted files, and
+asset-receipt packaging. It must search
 for useful existing assets before routing generation unless the brief
 explicitly requires an original generated asset. Search is not stock-only: it
 may select a rights-cleared source or create a bounded inspiration packet for
-original raster/video generation. It does not generate images, render videos,
-compose Remotion timelines, record audio, or publish content.
+original raster/video generation. It may route image, video, avatar, and audio
+realization children, but Content Impl Plan remains the orchestrator. It does
+not author storyboards, edit direction, Remotion timelines, rendered proof, or
+publication.
 
 ## Skill Signature
 
 ```text
 asset_advisor(storyboard_or_reference, element_realization_packets?, source_assets?, platform?, constraints?, artifact_owner?)
-  -> asset_inventory + recreation_plan + generation_routes | blocked_report
+  -> asset_inventory + recreation_plan + generation_routes
+   + accepted_asset_files + provenance + asset_receipts | blocked_report
 
 state:
   reads(user brief, storyboard/reference material, complete element realization
@@ -52,20 +56,21 @@ gates:
   no_custom_svg_animation_assets;
   reference_elements_mapped; golden_examples_and_recipes_bound;
   recreate_reuse_generate_decisions_made;
-  route_owner_selected; remotion_handoff_ready_when_stitching_needed
+  route_owner_selected; downstream_asset_handoff_ready
 
 routes:
   storyboard | ai-image-advisor | ai-video-advisor | avatar-advisor |
-  audio-advisor | remotion | media-ingest | video-understanding | review
+  audio-advisor | media-ingest | video-understanding | review
 
 fails:
   vague_asset_bucket; reference_copy_without_rights_note;
-  generation_prompt_without_asset_inventory; remotion_handoff_without_files;
+  generation_prompt_without_asset_inventory; downstream_handoff_without_files;
   one_tool_for_every_asset; css_text_only_for_inspiration_led_video;
   inspiration_elements_unmapped; title_only_element_handoff;
   ungrounded_generation_without_explicit_brief; inspiration_without_trait_map;
   reference_copy_disguised_as_generation; custom_svg_animation_asset;
-  jsx_or_programmatic_drawing_as_asset_substitute
+  jsx_or_programmatic_drawing_as_asset_substitute;
+  invalid_discovery_result; expected_output_is_directory
 ```
 
 ## Phase Boundary
@@ -87,9 +92,11 @@ requires an executed search receipt with specific candidate pages or asset IDs
 and fit decisions.
 
 For Brand Kit or Tasty Pack inputs, treat complete element realization packets
-as the source of truth. Every relevant `visual`, `storyboard`, `editing`, `format`, or
-`constraint` element must either map to a concrete asset decision or appear in
-`Missing inputs`. Map pinned elements first because they are the operator's
+as the source of truth. Every relevant `visual`, `storyboard`, `character`,
+`audio`, or `format` element that implies a file must either map to a concrete
+asset decision or appear in `Missing inputs`. Editing patterns remain owned by
+the sibling Editing Advisor; this skill maps only their explicit media
+dependencies. Map pinned elements first because they are the operator's
 taste signal; preserve unpinned elements as context decisions or
 blockers rather than treating every element equally. For inspiration-led videos, return a
 `blocked_report` when the plan only offers generic CSS/text/cards without
@@ -145,6 +152,10 @@ the output is explicitly downgraded to `semantic_storyboard_only`.
     result, owner, a concrete expected output file path, and acceptance check.
     Do not shorten the required table or move owner/output/acceptance into
     unrelated prose.
+  - [ ] Use only the three allowed discovery results. Put unavailable-tool or
+    missing-input state in the blocker/fit explanation; never invent `blocked`
+    as a fourth Result value. Every expected output ends in a concrete file
+    name and extension, never a directory.
   - [ ] Resolve every missing visual with the hybrid decision ladder:
     `reuse -> source -> inspired_generation -> original_generation`.
     `inspired_generation` requires a rights-safe reference set plus a
@@ -180,8 +191,10 @@ the output is explicitly downgraded to `semantic_storyboard_only`.
     whyItWorks, resolved golden example, golden recipe, planned use, and
     acceptance check into the asset decision and downstream generation packet.
   - [ ] Resolve `assetId + anchor` into media refs when possible; otherwise
-    create regeneration packets for pinned visual/audio/editing elements before
-    Remotion.
+    create regeneration packets for pinned visual/audio elements before the
+    parent production plan can order downstream work. For editing patterns,
+    resolve only explicitly required media dependencies and leave edit
+    direction to Editing Advisor.
   - [ ] For narrative video, create continuity assets: character bible or
     no-character rationale, recurring prop/object bible, location/lighting
     anchors, and start/end frame assets for each model-native clip handoff.
@@ -206,15 +219,14 @@ the output is explicitly downgraded to `semantic_storyboard_only`.
   - [ ] Route model-native clips to `ai-video-advisor`.
   - [ ] Route persistent presenter or character direction to `avatar-advisor`.
   - [ ] Route voice, music, SFX, Foley, and mix notes to `audio-advisor`.
-  - [ ] Route deterministic assembly, captions, overlays, and local render
-    proof to `remotion`.
+  - [ ] Return accepted asset files and receipts to the parent production plan;
+    the parent separately orders Editing Advisor and Remotion lanes.
 - [ ] 5. Produce the handoff.
   - [ ] Include an asset table, file/source map, generation prompts or prompt
     briefs, acceptance checks, missing inputs, and next production owner.
   - [ ] For every generation packet, name the expected final raster/video path,
     keep `accepted_file_ref` empty until the output is inspected, and emit
-    `remotion_handoff: blocked_pending_accepted_file` even when Remotion is not
-    part of the immediate task. A prompt or successful provider job never
+    `downstream_asset_handoff: blocked_pending_accepted_file`. A prompt or successful provider job never
     counts as an accepted scene asset.
   - [ ] Apply `qa_checklist.md` again before calling the asset plan ready.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
@@ -247,12 +259,14 @@ section with `generation_packets: blocked_until_moodboard_accepted`; render the
 table below only after acceptance exists.
 
 Even while prompt compilation is blocked, `Expected Output` is a concrete
-future file path, not `direction packet`, `TBD`, or another planning label.
+future file path with a filename and extension, not a directory, `direction
+packet`, `TBD`, or another planning label. Blocked state belongs in the fit or
+blocker explanation; it is never a fourth discovery Result value.
 Preserve supplied candidate URLs verbatim; if a URL/file was not supplied,
 write the exact missing-input blocker instead of inventing one.
 
 ## Generation Packets
-| Packet | Decision | Inspiration refs | Transferable traits | Moodboard Accepted At | Must not copy | Prompt / Direction | Owner | Expected Output | Accepted File | Remotion Handoff | Acceptance Check |
+| Packet | Decision | Inspiration refs | Transferable traits | Moodboard Accepted At | Must not copy | Prompt / Direction | Owner | Expected Output | Accepted File | Downstream Asset Handoff | Acceptance Check |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 
 ## Inspiration Element Map
@@ -281,7 +295,7 @@ write the exact missing-input blocker instead of inventing one.
 - Video clips:
 - Avatar:
 - Audio:
-- Remotion:
+- Downstream asset handoff:
 
 ## Done / Proof
 - ready_when:
@@ -294,12 +308,13 @@ write the exact missing-input blocker instead of inventing one.
 - Do not treat a viral reference as permission to clone exact visuals,
   likenesses, music, or protected assets. Name the risk and recreate the
   underlying pattern.
-- Do not hand Remotion a vague mood board. It needs files, durations, scene
-  roles, dimensions, captions, and acceptance checks.
+- Do not return a vague mood board to the parent production plan. Downstream
+  lanes need accepted files, durations, scene roles, dimensions, and
+  acceptance checks.
 - Do not collapse the moodboard decision and generation prompt into one
   response when no acceptance source exists. Return the complete pending
   moodboard receipt and the blocked prompt-compilation state first.
-- Do not hand Remotion an inspiration-led asset plan where every visual is
+- Do not return an inspiration-led asset plan where every visual is
   generic CSS/text/cards unless the run is explicitly labeled `technical_smoke`
   or `text_only_format` and the content claim is downgraded.
 - Do not discard Tasty Pack anchors. If the pack says `frame_03_8.42s` or
@@ -331,8 +346,8 @@ write the exact missing-input blocker instead of inventing one.
 - `../remotion/references/documentary-reel.md` - load for layered
   documentary/editorial reel media preparation and the explicit boundary
   between overlay assets and deterministic compositing.
-- `../remotion/SKILL.md` - route final deterministic composition and local
-  render proof after assets are specified.
+- `../content-impl-plan/SKILL.md` - parent orchestration that orders sibling
+  Editing Advisor and Remotion lanes after accepted assets are returned.
 
 ## Output
 

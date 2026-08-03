@@ -14,6 +14,7 @@ refs:
   - skills/content-impl-plan/SKILL.md
   - skills/storyboard/SKILL.md
   - skills/asset-advisor/SKILL.md
+  - skills/editing-advisor/SKILL.md
   - skills/remotion/SKILL.md
 system_record_json: |
   {
@@ -33,6 +34,7 @@ system_record_json: |
       "skills/content-impl-plan/SKILL.md",
       "skills/storyboard/SKILL.md",
       "skills/asset-advisor/SKILL.md",
+      "skills/editing-advisor/SKILL.md",
       "skills/remotion/SKILL.md"
     ],
     "last_verified": "2026-07-24"
@@ -96,6 +98,17 @@ Raw source capture and unresolved inspiration belong in [Source And Sidecar Syst
 - Each production-ready element carries `description`, `whyItWorks`, `goldenExample { assetId, description? }`, and `goldenRecipe` as one prompt string.
 - Brand Kit production policy wins over conflicting Tasty Pack inspiration. Compatible Tasty Pack elements can augment the idea by role; conflicts must be selected or rejected explicitly.
 - Each selected element maps to a beat, planned artifact, advisor action, or production rule. Not every element creates a file.
+- Content Impl Plan owns orchestration and aggregation, not every child result:
+  Storyboard authors narrative/scene design; Asset Advisor resolves media;
+  Editing Advisor authors timed edit direction; Remotion implements and
+  renders; Review / QA judges readiness.
+- Asset Advisor may route image, video, avatar, and audio realization, but it
+  does not own edit direction, timeline assembly, or rendering. Content Impl
+  Plan orders Asset Advisor's returned realization actions without re-deciding
+  their generation route.
+- Resource Bank Creative Elements are reusable creative patterns whose
+  `goldenRecipe` is conditioning data. Skill methods are executable agent
+  procedures with branching, tools, gates, failure handling, and proof.
 - The approval packet names the creative hypothesis, why the combination should work, rejected conflicts, low-fidelity demo, visual storyboard notes, and exact element leverage map before final generation.
 - Timing-sensitive production chooses a timing master before final visual generation when applicable: voiceover, music, source video, or none.
 - Voice-led work locks script and voice timing before final visual prompts; music-led work selects or generates music first; source-video-led work inspects source duration first; all paths converge on Remotion with evidence.
@@ -112,14 +125,28 @@ flowchart LR
   kit["FEAT-0073<br/>Brand Kit approved snapshots<br/>one kit prompt"]:::changed
   tasty["FEAT-0056<br/>computed Tasty Pack<br/>complete element capsules"]:::changed
   plan["content-impl-plan<br/>hypothesis, conflicts<br/>low-fi review, storyboard"]:::added
-  advisors["existing advisors<br/>storyboard, asset, audio<br/>image/video/avatar"]:::added
-  render["Remotion assembly<br/>timing master + receipts"]:::added
+  storyboard["Storyboard<br/>narrative + scene design"]:::added
+  assets["Asset Advisor<br/>accepted media + provenance"]:::added
+  generation["image / video / avatar / audio<br/>asset realization"]:::added
+  edit["Editing Advisor<br/>timed edit direction"]:::added
+  render["Remotion<br/>timeline + rendered video"]:::added
   proof["grounding proof<br/>element-to-output map"]:::added
 
   idea --> plan
   kit --> plan
   tasty --> plan
-  plan --> advisors --> render --> proof
+  plan --> storyboard
+  plan --> assets
+  assets --> generation
+  generation --> assets
+  plan --> edit
+  storyboard --> edit
+  assets --> edit
+  plan --> render
+  storyboard --> render
+  assets --> render
+  edit --> render
+  render --> proof
 ```
 
 Content Production converts approved identity and optional inspiration into a bounded production program with visible review gates.
@@ -135,6 +162,7 @@ Content Production converts approved identity and optional inspiration into a bo
 - `skills/ai-image-advisor/SKILL.md`
 - `skills/ai-video-advisor/SKILL.md`
 - `skills/avatar-advisor/SKILL.md`
+- `skills/editing-advisor/SKILL.md`
 - `skills/remotion/SKILL.md`
 
 ## Proof And Maintenance
@@ -147,4 +175,6 @@ Content Production converts approved identity and optional inspiration into a bo
 
 ## Change History
 
+- 2026-08-03: Standardized sibling production lanes and separated reusable
+  creative patterns from executable skill methods.
 - 2026-07-22: Created SYS-0012 for the TASK-0068 durable documentation slice.

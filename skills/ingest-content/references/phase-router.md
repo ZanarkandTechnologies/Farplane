@@ -13,6 +13,8 @@ ingest_content(source, note?, brand_kit_id?)
   -> store_capture(source, note, transcript?, analysis_markdown, selected_elements)
   -> create_repurpose_ticket(source_ref, note, intended_output)?
   -> optional_promote(brand_kit_id, complete_elements)
+  -> verify_retrieval(capture_handle)
+  -> verify_skill_benefit(capture, source_evidence, skill_registry)?
 ```
 
 The skill should behave like a router with one compact output contract:
@@ -170,7 +172,7 @@ selected the music, pin the audio element; otherwise leave it as context.
 
 ```text
 store_capture(source, note, transcript?, analysis_markdown, selected_elements, brand_kit_id?)
-  -> capture_handle + tickets[] + retrieval_proof + optional_promotion_receipt
+  -> capture_handle + optional_promotion_receipt
 ```
 
 Current Resource Bank storage should present this active contract:
@@ -179,9 +181,7 @@ Current Resource Bank storage should present this active contract:
 - operator note/focus;
 - optional top-level transcript plus freeform analysis Markdown;
 - complete creative-element capsules;
-- tags/facets for retrieval;
-- optional skill findings when the source suggests a reusable technique or
-  skill update.
+- tags/facets for retrieval.
 
 Storage and retrieval must preserve the complete capsule and `pinned` field.
 Validate `goldenExample.assetId` against the capture's ingestion job before the
@@ -211,3 +211,30 @@ ticket before continuing into production. Dedupe on normalized source reference
 plus materially equivalent intent across active and archived tickets. Do not
 require or write a reverse ingestion-job/task link merely to join the two
 objects; the stable source reference in the ticket is the handoff.
+
+## Skill Benefit Phase
+
+```text
+verify_skill_benefit(capture, source_evidence, skill_registry)
+  -> retrievalStatus + scanStatus + recommendedRoute + skill_findings[]
+```
+
+Run this lightweight terminal phase after retrieval verification for every
+video source. Search `docs/skills/registry.jsonl` to shortlist likely owners,
+then inspect only the relevant owner skills. Compare evidence-backed
+operational techniques as `covered`, `augment`, `missing`, `reject`, or
+`defer`. When one technique overlaps several skills, select one primary owner
+for the proposed change and explain why the other candidates are secondary;
+do not return unresolved duplicate `augment` findings.
+
+Each finding names `skill`, `status`, `evidenceAnchor`, `benefit`, `confidence`,
+and `recommendedRoute`. Carry `retrievalStatus: verified | blocked` into the
+result. A scan may report `complete` only when retrieval is verified; otherwise
+return `scanStatus: blocked` and preserve the unmet prerequisite.
+
+Purely aesthetic videos return `skill_findings: []` with scan-level
+`recommendedRoute: none`. Route credible workflow-teaching videos to
+`harness-scout` for source-todo reconstruction and deeper local comparison.
+Claim registry or owner inspection only for files actually read. Do not edit
+skills, create skill-improvement tickets, or extend Resource Bank schema during
+ingestion.

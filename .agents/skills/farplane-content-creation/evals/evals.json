@@ -3,11 +3,13 @@
   "evals": [
     {
       "id": "farplane_content_creation_planning_gate_01",
-      "prompt": "We have accepted activation proof and references for crisp educational carousels. Make ten Farplane posts now and ask me which one I like.",
-      "expected_output": "Binds audience, content goal, evidence, taste references, proof limits, and authority; Uses content-impl-plan to output exactly one recommended Best Bet and asks approve, revise, or reject; Shows alternatives only with explicit materially different learning value, one recommended_default, and a comparative reason; Runs optimize-with-human in planning before execution; Refuses to make the human rank an undifferentiated ten-artifact batch",
+      "prompt": "We have accepted proof that artifact-first review helps serious agent builders catch unsupported completion claims. Make ten Farplane posts now and ask me which one I like.",
+      "expected_output": "Binds the agent_sdlc bet, Proof And Review system, artifact-first feature, audience problem, visible result, content goal, accepted evidence, taste references, proof limits, and authority; leads with how builders catch false completion rather than an internal feature name; Uses content-impl-plan to output exactly one recommended Best Bet and asks approve, revise, or reject; Shows alternatives only with explicit materially different learning value, one recommended_default, and a comparative reason; Runs optimize-with-human in planning before execution; Refuses to make the human rank an undifferentiated ten-artifact batch",
       "files": [".agents/skills/farplane-content-creation/SKILL.md"],
       "assertions": [
-        "Binds audience, content goal, evidence, taste references, proof limits, and authority",
+        "Binds one configured stable problem plus canonical system and feature refs",
+        "Leads with the audience problem and visible result rather than an internal feature name",
+        "Binds audience, content goal, accepted evidence, taste references, proof limits, and authority",
         "Uses content-impl-plan to output exactly one recommended Best Bet and asks approve, revise, or reject",
         "Shows alternatives only with explicit materially different learning value, one recommended_default, and a comparative reason",
         "Runs optimize-with-human in planning before execution",
@@ -29,10 +31,11 @@
     {
       "id": "farplane_content_creation_variation_batch_01",
       "prompt": "I approve the Installed Is Not Activated carousel exemplar. Expand it.",
-      "expected_output": "Treats exemplar approval as the gate for a default ten-variant local search batch; Preserves audience, promise, proof spine, format engine, and prohibited claims; Changes only declared axes and records expected learning for each variant; Matrix exposes named claim, invariant, format, rights, and channel pass/fail results plus ordinal rank and comparative rationale for every passing variant; Keeps the full matrix as internal proof and creates a distinct distribution_handoff whose selected_artifact_refs contains only the top two or three refs; Does not publish the batch",
+      "expected_output": "Treats exemplar approval as the gate for one same-ticket cross-format pack and then a default ten-variant local search batch; Transforms the frozen skeleton into every configured useful format such as video, short cuts, carousel, X, and LinkedIn without creating separate format tickets; Preserves audience, promise, proof spine, format engine, and prohibited claims; Changes only declared axes and records expected learning for each variant; Matrix exposes named claim, invariant, format, rights, and channel pass/fail results plus ordinal rank and comparative rationale for every passing variant; Keeps the full matrix as internal proof and creates a distinct distribution_handoff whose selected_artifact_refs contains only the top two or three refs; Does not publish the batch",
       "files": [".agents/skills/farplane-content-creation/SKILL.md"],
       "assertions": [
-        "Treats exemplar approval as the gate for a default ten-variant local search batch",
+        "Treats exemplar approval as the gate for one same-ticket cross-format pack and then a default ten-variant local search batch",
+        "Transforms the frozen skeleton across configured useful formats without separate format tickets",
         "Preserves audience, promise, proof spine, format engine, and prohibited claims",
         "Changes only declared axes and records expected learning for each variant",
         "Matrix exposes named claim, invariant, format, rights, and channel pass/fail results plus ordinal rank and comparative rationale for every passing variant",

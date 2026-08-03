@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="900" viewBox="0 0 1440 900">
+  <rect width="1440" height="900" fill="#fff4e8"/>
+  <circle cx="122" cy="110" r="64" fill="#ffd23f"/><circle cx="1320" cy="130" r="78" fill="#ff7a7a"/>
+  <text x="110" y="180" font-family="Arial" font-size="68" font-weight="800" fill="#b8172c">Birthday Gift-Card Party</text>
+  <text x="112" y="228" font-family="Arial" font-size="24" fill="#55343a">Collect a playful card for every kind of celebration.</text>
+  <rect x="1130" y="166" width="200" height="58" rx="18" fill="#b8172c"/>
+  <text x="1170" y="202" font-family="Arial" font-size="20" font-weight="700" fill="#ffffff">Start handoff</text>
+  <g fill="#d9273e">
+    <rect x="110" y="300" width="350" height="210" rx="28"/>
+    <rect x="545" y="300" width="350" height="210" rx="28"/>
+    <rect x="980" y="300" width="350" height="210" rx="28"/>
+    <rect x="110" y="570" width="350" height="210" rx="28"/>
+    <rect x="545" y="570" width="350" height="210" rx="28"/>
+    <rect x="980" y="570" width="350" height="210" rx="28"/>
+  </g>
+  <g font-family="Arial" fill="#ffffff">
+    <text x="150" y="370" font-size="30" font-weight="700">Build-a-Bear Day</text><text x="150" y="420" font-size="22">Gift card 01</text>
+    <text x="585" y="370" font-size="30" font-weight="700">Puzzle Party</text><text x="585" y="420" font-size="22">Gift card 02</text>
+    <text x="1020" y="370" font-size="30" font-weight="700">Rover Rally</text><text x="1020" y="420" font-size="22">Gift card 03</text>
+    <text x="150" y="640" font-size="30" font-weight="700">Block Bash</text><text x="150" y="690" font-size="22">Gift card 04</text>
+    <text x="585" y="640" font-size="30" font-weight="700">Story Night</text><text x="585" y="690" font-size="22">Gift card 05</text>
+    <text x="1020" y="640" font-size="30" font-weight="700">Garden Games</text><text x="1020" y="690" font-size="22">Gift card 06</text>
+  </g>
+</svg>
