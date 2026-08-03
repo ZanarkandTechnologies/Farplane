@@ -143,7 +143,7 @@ GROUP_DEFINITIONS: tuple[dict[str, object], ...] = (
             "skill-maintenance",
             "skill-creator",
             "skill-registry-ui",
-            "agent-behavior-test",
+            "eval",
             "agent-testability-plan",
             "delegate-cli",
             "self-improve",

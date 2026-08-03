@@ -26,6 +26,10 @@ arguments from current evidence, ranks the resulting calls, and returns
 Areas are passive ICP and metric context. Lanes, proposal types, archetype
 registries, and specialized ticket templates are not planning inputs.
 
+This workflow runs only at the portfolio boundary when the executable board
+needs refill. It never participates in `choose_next` inside an active Goal;
+Goal Advisor compiles a selected leaf and the domain Goal owns its decisions.
+
 ## Skill Signature
 
 ```text

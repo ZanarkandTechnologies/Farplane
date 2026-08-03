@@ -71,10 +71,10 @@ init_advisor(project_root?, project_idea?, repo_shape?, stack_profile?, init_mod
    + ticket_system
    + qa_surface
    + runtime_contract
-   + starter_prd_ticket
+   + business_foundation_tickets
    + automation_setup_handoff?
    + next_planning_handoff
-state: reads(existing repo files, README/AGENTS/docs/tickets when present, bootstrap brief, project profile, operator context); writes AGENTS/PROJECT_RULES/ARCHITECTURE/docs/tickets/qa/farplane scaffolds, optional stack scaffold, and starter PRD ticket
+state: reads(existing repo files, README/AGENTS/docs/tickets when present, bootstrap brief, project profile, operator context); writes AGENTS/PROJECT_RULES/ARCHITECTURE/docs/tickets/qa/farplane scaffolds, optional stack scaffold, and three dependent business-foundation tickets
 gates: existing_files_preserved; spec_version_recorded; human_gates_named; human_intake_decision_recorded; secrets_not_written; no_hidden_automation; interactive_stack_steps_stop_for_human
 routes: harness-creator | automation-advisor | deep-interview | prd | spec-to-ticket | research:official-docs | research:code-patterns
 fails: creates only code scaffolding with no Farplane project config; treats PRD authoring as required init completion; claims full project initialization when human intent, measurable objectives, success criteria, non-goals, or decision boundaries are still missing; deletes stack setup recipes; overwrites existing project state silently
@@ -85,8 +85,8 @@ fails: creates only code scaffolding with no Farplane project config; treats PRD
 This skill follows Tier 0 phases inline. Use compact grounding before
 finalizing project archetype, static charter, capability workflows, or metric objectives; use deeper
 research only when stack commands, framework conventions, or market assumptions
-may be stale. PRD authoring is a downstream ticketed handoff, not init
-completion.
+may be stale. PRD authoring is downstream of the three-ticket business
+foundation, not init completion.
 
 `init_mode` controls completion semantics:
 
@@ -187,13 +187,20 @@ setup_project_operating_model(bootstrap_brief, project_context,
         project-specific setup.
   - [ ] Let `harness-creator` decide whether to route to `metric-advisor`,
         `harness-advisor`, `skill-creator`, or `goal-advisor`.
-- [ ] 5. Create the starter planning handoff.
-  - [ ] Create or preserve `tickets/TASK-0001/ticket.md` for drafting the
-    initial PRD.
+- [ ] 5. Create the business foundation.
+  - [ ] Create or preserve exactly three ordinary ticket paths:
+    `TASK-0001` finds the first customer, `TASK-0002` delivers the first value,
+    and `TASK-0003` collects the first revenue.
+  - [ ] Give each ticket its scalar `foundation_step`, numbered
+    `foundation_sequence`, and the ordinary dependency on the preceding ticket
+    where applicable. Keep any external-action approval instructions in the
+    ticket program rather than retired ticket metadata.
+  - [ ] Preserve every existing ticket path independently unless explicit
+    scaffold replacement was requested; report partial collisions honestly.
   - [ ] Leave `docs/prd.md` as a draft placeholder unless PRD work is
     explicitly requested now.
-  - [ ] Route to the next planning skill after init; do not conduct the planning
-    phase inside this skill.
+  - [ ] Do not create live work or automation. Complete the foundation in
+    order, then route to PRD/spec planning for the next product slice.
 - [ ] 6. Prepare automation activation.
   - [ ] Create `farplane/pm.json` as UI grouping glue with `threads.chats` and
         `threads.automations`.
@@ -217,7 +224,7 @@ setup_project_operating_model(bootstrap_brief, project_context,
     setup missing"; include the snake_case internal status only when writing a
     machine-readable field or validator-facing note.
   - [ ] Report the initialized stack profile, any skipped human-gated steps,
-    the starter PRD ticket, and the next command or skill.
+    the three business-foundation tickets, and the next command or skill.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 ## Reference Map
@@ -247,10 +254,16 @@ setup_project_operating_model(bootstrap_brief, project_context,
 - [references/CODE_SCAFFOLD_RECIPES.md](references/CODE_SCAFFOLD_RECIPES.md) -
   load only when `include_code_scaffold == true`, the user asks which stack can
   be scaffolded, or stack setup commands need review.
-- [references/PRD_TICKET_TEMPLATE.md](references/PRD_TICKET_TEMPLATE.md) -
-  copied to `tickets/TASK-0001/ticket.md` as the post-init PRD handoff.
+- [references/FOUNDATION_FIND_CUSTOMER_TICKET_TEMPLATE.md](references/FOUNDATION_FIND_CUSTOMER_TICKET_TEMPLATE.md),
+  [references/FOUNDATION_DELIVER_VALUE_TICKET_TEMPLATE.md](references/FOUNDATION_DELIVER_VALUE_TICKET_TEMPLATE.md),
+  and [references/FOUNDATION_COLLECT_REVENUE_TICKET_TEMPLATE.md](references/FOUNDATION_COLLECT_REVENUE_TICKET_TEMPLATE.md)
+  - copied to `TASK-0001` through `TASK-0003` as the dependency-ordered
+    business foundation.
 - [references/PROJECT_RULES_TEMPLATE.md](references/PROJECT_RULES_TEMPLATE.md)
   - copied to `PROJECT_RULES.md` for project stack, runtime, and QA commands.
+- [references/TICKETS_README_TEMPLATE.md](references/TICKETS_README_TEMPLATE.md)
+  and [references/TICKET_TEMPLATE.md](references/TICKET_TEMPLATE.md) - packaged
+  ticket lifecycle/template scaffolds used by both source and installed runs.
 - [references/qa/](references/qa/) - copied when creating the QA cookbook
   surface.
 - [../harness-creator/SKILL.md](../harness-creator/SKILL.md) - call in full

@@ -1,7 +1,7 @@
 # Skill Maintenance Modes
 
 Load this after selecting a `skill-maintenance` mode. Keep the default owner,
-line-cap, validation, audit, and review gates in `SKILL.md`.
+validation, audit, and review gates in `SKILL.md`.
 
 ## Hardening
 
@@ -17,7 +17,7 @@ Weekly Interval may call this as `skill_hardening`.
 ## Refinement
 
 ```text
-refine_skill(skill, evals?, gotchas?, usage?, target_size=200)
+refine_skill(skill, evals?, gotchas?, usage?)
   -> consolidated_evals + consolidated_gotchas + skill_delta + review_notes
 ```
 
@@ -25,7 +25,7 @@ Call `consolidate(target = edited_skill, structure = skill,
 template = docs/skills/templates/SKILL_TEMPLATE.md,
 constraints = {preserve_evidence: true, preserve_required_sections: true})`.
 Apply only accepted owner-local edits. Split by branch or responsibility when
-one authored text file remains over 200 lines.
+evidence shows mixed ownership or avoidable first-load cost.
 
 ## Source Upgrade
 
@@ -37,8 +37,7 @@ or QA without copying source prose.
 
 ## Other Modes
 
-- `structure_update`: apply structure QA, first-load sufficiency, and the
-  staged 200-line cap.
+- `structure_update`: apply structure QA and first-load sufficiency.
 - `metadata_update`: preserve source ownership, regenerate registries, and
   prove template claims.
 - `qa_checklist_design`: compare target QA, eval assertions, gotchas, and
@@ -93,7 +92,7 @@ Review handoff:
 
 ```text
 Review changed skill files for contract and integration readiness. Check source
-ownership, first-load sufficiency, the 200-line staged cap, registry sync,
+ownership, first-load sufficiency, structure coherence, registry sync,
 template truth, eval-to-QA sync, audit evidence, and reviewer routing. Return
 TAS verdicts, blockers, and the smallest required fixes.
 ```

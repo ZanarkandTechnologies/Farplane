@@ -38,11 +38,10 @@ human handoffs; precise reference load conditions; proof; output contract; and
 short normally-run commands. Put branch-only examples, templates, rubrics,
 provider maps, and rare recipes in references with explicit load conditions.
 
-Every staged hand-authored text file under `skills/` must be at most 200 lines.
-Generated graphs, dependency locks, and media assets are excluded. Split by
-branch, provider, responsibility, method, or artifact type; never satisfy the
-cap by hiding required first-load behavior. Untouched legacy files are ratcheted
-when next staged.
+Treat file length as a diagnostic rather than a gate. Split by branch, provider,
+responsibility, method, or artifact type only when the result has clearer
+ownership and lower first-load cost; never hide required behavior to reduce a
+count.
 
 The baseline section set comes from
 `../../docs/skills/templates/SKILL_TEMPLATE.md`. Extra top-level sections must
@@ -61,8 +60,8 @@ Map`, or `Output`.
 4. `noisy_context_rate` — first load excludes rare branches, long examples,
    tutorials, inventories, and rationale.
 5. `duplicated_instruction_count` — one owner holds each operational rule.
-6. `authored_file_line_cap` — every included staged authored text file is at
-   most 200 lines; excluded generated/media files are named, not implicit.
+6. `authored_file_structure` — authored files have coherent responsibility;
+   any split improves ownership rather than only lowering a count.
 7. `maintenance_locality` — a future maintainer can identify one owner surface.
 8. `composition_clarity` — inputs, outputs, state reads/writes, evidence, routes,
    side effects, and failures are explicit.
@@ -74,8 +73,8 @@ Map`, or `Output`.
     `must`, and `if/when` instructions live in or are routed by todos/gates.
 13. `reference_escape_hatch` — moved detail is reachable through a precise
     branch condition.
-14. `line_budget_review` — before/after counts and split decisions are recorded;
-    over-200 included authored files are a failure.
+14. `structure_budget_review` — split decisions name the ownership or loading
+    improvement; raw size alone does not determine pass or fail.
 15. `question_list_to_signature` — long fixed intake lists become parameters or
     schemas when missing values can be requested normally.
 16. `extra_section_value` — kept extra sections name behavior lost by folding or
@@ -116,9 +115,7 @@ Map`, or `Output`.
 
 ```text
 first_load_review:
-  line_count_before:
-  line_count_after:
-  staged_authored_files_over_200:
+  authored_file_structure:
   kept_in_skill:
   moved_to_reference:
   deleted_as_duplicate_or_rationale:
@@ -136,14 +133,25 @@ first_load_review:
   verdict: pass | fail | unknown
 ```
 
+For behavior-affecting changes, also record:
+
+```text
+behavior_eval_review:
+  suite:
+  baseline_artifact:
+  candidate_artifact:
+  comparison_artifact:
+  promotion_decision: accept | hold | rollback
+  eval_skip_reason: # mechanical-only changes
+```
+
 ## Reviewer Prompt
 
 ```text
 Review the changed skill files against this checklist and the target skill's QA.
 For every check return verdict, exact file/line evidence, and smallest fix. For
 extra sections, decide fold, move, delete, or keep with unique first-load value.
-Verify every included staged authored skill text file is <=200 lines. Do not
-rewrite the skill or judge product quality. For golden-calibrated work, use only
+Do not rewrite the skill or judge product quality. For golden-calibrated work, use only
 candidate, invariants, QA, and held-out context; never planner scratch reasoning.
 Return the highest-risk unresolved issue and TAS readiness verdict.
 ```

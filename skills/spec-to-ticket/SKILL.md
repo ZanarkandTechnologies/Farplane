@@ -108,7 +108,7 @@ Given one concrete feature spec in `docs/features/`, pick exactly one SLC slice 
 ## Inputs
 
 - one concrete feature spec in `docs/features/`
-- optionally an agent-testability brief or `docs/features/FEAT-0031-agent-behavior-test-workflow.md`
+- optionally an agent-testability brief or Eval `behavior_trace` proof contract
 - optionally `docs/bootstrap-brief.md`
 - optionally `docs/prd.md` for slice intent
 - optionally `docs/features/FEAT-0042-lean-global-agent-operating-kernel.md` when shaping material

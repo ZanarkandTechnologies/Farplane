@@ -12,8 +12,8 @@ source_of_truth:
   - farplane/metrics.yaml
   - farplane/automations.toml
   - docs/farplane-framework/reporting.md
+  - docs/farplane-framework/entities.md
   - farplane/bindings.yaml
-  - farplane/hooks.json
   - .agents/skills/README.md
   - farplane/pm.json
   - .gitignore
@@ -53,7 +53,6 @@ farplane/
   metrics.yaml
   automations.toml
   bindings.yaml
-  hooks.json
   pm.json
 
 .agents/
@@ -121,9 +120,9 @@ prompt. Generic workflow behavior remains in the called skill. Scheduled
 sources write reports and bounded candidate context; Work Pulse owns normal
 proactive ticket admission and execution.
 
-### `.farplane/feed-scout/memory.md`
+### `.farplane/feed-scout/world-memory.md`
 
-One ignored, update-in-place Markdown synthesis of canonical ICP profiles,
+One ignored, update-in-place Markdown World Memory synthesis of canonical ICP profiles,
 current trends, notable things, and source gaps. It is a cheap retrieval surface
 for Feed Scout, Plan Next Wave, Pulse, and ticket-owned artifact work—not a
 snapshot archive, monthly trend ledger, planner, or source of authority.
@@ -173,14 +172,6 @@ credential. `filesystem_ticket_policy: exclude` is a hard no-fallback gate:
 provider access failures become source gaps rather than permission to inspect
 `tickets/**`.
 
-### `farplane/hooks.json`
-
-Declarative typed file-event capture configuration. Core owns event identity,
-durable outbox/snapshots, route validation, mining runs, and lean reports;
-`bindings.yaml` maps local event names to immutable Core programs. Hooks observe
-and route; they do not own continuation or ticket planning, and no daemon is
-required.
-
 ### `.agents/skills/`
 
 Project-local capability workflows. Use this when an important recurring
@@ -229,22 +220,33 @@ owner:
 
 ```text
 .farplane/
+  views.yaml
+  entities/
   reports/
   metrics/
   project/ui/
   automation/
   events/
-  file-events/
   mine/
   state/
   evals/runs/
   logs/
 ```
 
-Reports are dated context for readers and planners. Metric observations are
-raw/normalized readings. UI snapshots and registries are generated projections
-over canonical files and runtime evidence. If a projection is stale, rebuild
-it from its owners rather than hand-editing it.
+Flat `.farplane/entities/<id>.md` files are canonical local entity memory;
+`.farplane/views.yaml` is canonical local named membership over those IDs;
+their adjacent `index.json`, `world.json`, and `crm.json` files are generated
+views. See [Entity Memory](entities.md). Reports are dated context for readers
+and planners. Metric observations are raw/normalized readings. UI snapshots
+and registries are generated projections over canonical files and runtime
+evidence. If a projection is stale, rebuild it from its owners rather than
+hand-editing it.
+
+The ignored `.farplane/` boundary normally owns generated/runtime state, with
+two explicit authored local exceptions: entity Markdown and `views.yaml`.
+These remain local because they may contain personal research and relationship
+organization. Shared connector/source coordinates still belong in tracked
+`farplane/bindings.yaml`; do not introduce a generic `.farplane/config.yaml`.
 
 ## Runtime Secrets
 

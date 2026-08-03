@@ -4,7 +4,7 @@
     {
       "id": "goal_advisor_material_goal_packet_01",
       "prompt": "I want AGI Toy Shop to keep improving its autonomous storefront until the checkout and support workflow are clearly better. How should we use Goal mode?",
-      "expected_output": "Recommends native Goal or heartbeat only with durable listed files; Names ticket.md, program.md, and progress.md under an inline Files list; Chooses a metric or feedback provider without inventing fake numbers; Defines a drift policy and when to use goal-drift-reviewer; Includes or promises a native /goal prompt with Files, Task, Logging, Metric, and After each turn sections; Makes evaluation explicit between each bounded action and progress writeback; Keeps budgets free of subagent-count ceilings",
+      "expected_output": "Recommends native Goal or heartbeat only with durable listed files; Names ticket.md, program.md, and progress.md under an inline Files list; Uses the shared observe, choose-next, act, verify, write-back backbone; Bounds first load to ticket, program, and the latest 80 progress lines; Chooses a metric or feedback provider without inventing fake numbers; Defines drift; Makes evaluation explicit between each bounded action and progress writeback; Keeps budgets free of subagent-count ceilings",
       "files": [],
       "assertions": [
         "Recommends native Goal or heartbeat only with durable listed files",
@@ -12,6 +12,8 @@
         "Chooses a metric or feedback provider without inventing fake numbers",
         "Defines a drift policy and when to use goal-drift-reviewer",
         "Includes or promises a native /goal prompt with Files, Task, Logging, Metric, and After each turn sections",
+        "Uses observe -> choose_next -> act -> verify -> write_back and compares further work with report_now, request_feedback, and stop",
+        "Bounds first load to full ticket/program plus the latest 80 progress lines and requires the packet context budget gate",
         "Evaluates each bounded action with the declared provider before writing observation, evidence, learning, decision, and next action",
         "Does not use a subagent-count ceiling as an execution budget"
       ],

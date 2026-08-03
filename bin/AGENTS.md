@@ -51,7 +51,8 @@ For runtime helper scripts:
 - run-state files remain runtime-only and lightweight
 - runtime state should group active execution ownership into a lightweight `claim` object instead of scattering claim semantics across multiple ad hoc top-level reads
 - native Goal mode owns implementation persistence. Stop hooks are telemetry
-  boundaries and must not be used as live completion authority.
+  boundaries plus bounded deterministic gates and must not be used as live
+  completion authority.
 - `close-ticket` is the canonical live documenting-phase control skill. Runtime
   parsing does not accept the retired docs-closeout alias; live prompts and
   handoffs should use `$close-ticket`.

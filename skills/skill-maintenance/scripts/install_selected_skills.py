@@ -13,7 +13,10 @@ from typing import Sequence
 
 
 RETIRED_SKILL_NAMES = {
+    "horizon-advisor",
+    "image-generation",
     "ticket-opportunity-generator",
+    "video-generation",
 }
 
 
@@ -226,17 +229,18 @@ def install_skills(
         for dest in sorted(skills_target.iterdir()):
             if dest.name in selected:
                 continue
+            if dest.is_symlink():
+                try:
+                    resolved = dest.resolve(strict=True)
+                except FileNotFoundError:
+                    resolved = dest.resolve(strict=False)
+                if not is_relative_to(resolved, repo_skills):
+                    continue
             if dest.name in RETIRED_SKILL_NAMES:
                 backup_existing(dest, backup_root, dry_run)
                 pruned.append(dest.name)
                 continue
             if dest.is_symlink():
-                try:
-                    resolved = dest.resolve(strict=True)
-                except FileNotFoundError:
-                    continue
-                if not is_relative_to(resolved, repo_skills):
-                    continue
                 backup_existing(dest, backup_root, dry_run)
                 pruned.append(dest.name)
                 continue

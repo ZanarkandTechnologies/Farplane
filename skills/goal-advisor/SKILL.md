@@ -12,388 +12,163 @@ template_uses:
 eval: evals/evals.json
 qa_checklist: qa_checklist.md
 allowed-tools: Read, Write, Glob, Grep, Bash
-
 ---
 
 # Goal Advisor
 
 ## Context
 
-`goal-advisor` is the canonical execution compiler for durable Farplane work.
-Use it when the operator wants to turn an intent, ticket, board, batch, rollout,
-selected project-goal frontier, skill-improvement loop, or feedback loop into a
-native Goal, heartbeat, or direct-route recommendation.
+Goal Advisor is Farplane's execution compiler. Use it after an intent or ticket
+is selected enough to become a native Goal, heartbeat, rollout, feedback loop,
+or direct-route decision. Tiny one-turn work stays direct.
 
-Use `metric-advisor` before this skill when the measurable objective, guard,
-or proof provider is still unclear. `goal-advisor` starts once a ticket or
-proposal frontier is selected enough to
-compile into files and execution policy.
-
-Native Goal mode is the only formal continuation loop. Farplane adds visible
-state around it through a Goal Packet:
+Native Goal is the only continuation engine. Farplane keeps its state visible:
 
 ```text
-GoalPacket := files[] + ticket.md + program.md + hypothesis-tree.json? + progress.md + generated_goal_prompt + drift_check_contract
-GoalFiles := [ticket.md | program.md | hypothesis-tree.json | progress.md | spec.md | board.md | artifact]
+GoalPacket := ticket.md + program.md + progress.md + generated_goal_prompt
+            + hypothesis-tree.json? + listed context/evidence files?
 ```
 
-Generated prompts must name source files inline under `Files:`. Do not expose a
-new abstraction such as `refs[]` to the operator.
+Ownership is strict:
 
-`ticket.md` owns the task contract, `Done`, and `QA Strategy`. `program.md` owns
-the executable loop policy: trigger mode, metric, budget, heartbeat, drift,
-after-turn routine, check-in program, and stop policy. For delayed rewards,
-Goal Advisor compiles the experiment-specific check-in procedure into
-`program.md`; Work Pulse only supplies due rows and resumes it. `progress.md`
-owns compact append-only observations. For experiment-backed improvement
-packets, `hypothesis-tree.json` owns the current source synthesis, hypotheses,
-results, and insights; it is omitted for ordinary coding and one-off feedback
-Goals. `farplane/harness.yaml` and
-`farplane/metrics.yaml` are optional project context when execution needs the
-human charter or metric objective contract.
+- `ticket.md`: valuable outcome, scope, Done, QA/proof, blockers, links.
+- `program.md`: trigger, metric/provider, budget, decision loop, drift, stops.
+- `hypothesis-tree.json`: current experiment state, only when experimental.
+- `progress.md`: append-only observations, evidence, decisions, next action.
+- Goal Advisor: compile/regenerate packet and launcher; never choose each turn.
 
-This skill owns both architecture choice and final native `/goal` or heartbeat
-prompt compilation. The native Goal prompt is a compact launcher over the Goal
-Packet: it must list `program.md` under `Files:`, instruct the executor to read
-it before execution, and bind completion to the ticket's scope and proof
-contract. Keep templates with this skill, but load full template references
-only after the branch requires prompt emission.
+Every program uses one runtime backbone:
 
-For a material implementation Goal, preserve this terminal compiler invariant:
-`QA pass -> narrated lead-engineer demo MP4 -> completion review -> ticket
-close -> stop_complete`. Write proof to ticket, progress, and artifacts, then
-return the required `Ticket`, `Verification`, `Artifacts`, `Grounding`, and
-`Residual risk` lines.
+```text
+observe -> choose_next(execute | diagnose | report_now | request_feedback | stop)
+        -> act -> verify -> write_back
+```
 
-`$work`, `$ralph`, `batch-work`, and the legacy impl skill are retired public
-orchestration surfaces. Their useful policies live here as admission/profile,
-heartbeat board-drain, batch proof rows, coding-ticket Goal execution,
-compute/budget, and blocker handling.
+Metric Advisor is setup/repair only. Leverage Advisor is conditional on several
+plausible moves needing judgment. Plan Next Wave refills an empty board and
+never participates inside an active Goal. The domain skill executes.
 
 ## Skill Signature
 
 ```text
-advise_goal_use(intent, files?, trigger?, budget?, proof_policy?, approval_policy?) -> goal_architecture + files[] + goal_packet? + heartbeat_prompt? + native_goal_prompt? + next_action
-state: reads(operator intent, listed files, tickets, board files?, farplane/harness.yaml?, farplane/metrics.yaml?, program.md?, hypothesis-tree.json?, progress.md?, Reward.kpi_rewards[]?, goal-loop contract, relevant skills/docs); writes(ticket/program/hypothesis-tree?/progress? generated goal prompt? or recommendation)
-gates: missing_execution_inputs_resolved_or_asked; material_goal_has_files; loop_owner_single; progress_surface_named; metric_provider_named; delayed_checkin_program_compiled_or_not_applicable; budget_named; drift_policy_named; logging_policy_named; proof_route_named; final_evidence_policy_named; approval_before_goal_run_when_material
-routes: metric-advisor | impl-plan | optimize-with-human | qa | visual-qa | agent-qa-test | review | direct-answer
-fails: creates hidden loop runtime; uses Goal without durable state; treats human feedback/heartbeat/rollout as competing loop owners; emits prompt-only material Goal; hides required files behind transcript memory; renames_literal_files_heading; leaves delayed_checkin_policy_scattered_or_implicit; adds_delayed_checkin_debt_to_immediate_goal; omits_named_goal_drift_reviewer_on_material_goal; routes public work through retired work/ralph/batch-work surfaces; emits long Goal prompt that restates ticket context; allows self-certified QA/review/visual completion; runs material Goal before packet approval
-```
-
-## Phase Contract
-
-```text
-goal_advice_phase(intent, state)
-  -> task_shape
-   + files[]
-   + trigger_mode
-   + budget
-   + state_surfaces
-   + metric_provider
-   + drift_policy
-   + native_goal_prompt?
-   + next_owner
+advise_goal_use(intent, files?, trigger?, budget?, proof_policy?, approval_policy?)
+  -> goal_architecture + goal_packet? + native_goal_prompt? + next_action
+state:
+  reads(operator intent, ticket/program/tree/progress, named context and proof);
+  writes(ticket/program/tree?/progress?, generated prompt, or direct-route note)
+gates:
+  material_goal_has_files; loop_owner_single; metric_provider_named;
+  budget_and_stops_named; drift_and_logging_named; proof_route_named;
+  packet_context_budget_pass; material_packet_approved
+routes:
+  metric-advisor | impl-plan | optimize-with-human | qa | visual-qa |
+  agent-qa-test | review | direct-answer
+fails:
+  hidden_loop; prompt_only_material_goal; full_progress_first_load;
+  duplicated_ticket_policy; self_certified_material_proof; stale_packet;
+  plan_next_wave_inside_active_goal; advisor_chain_owns_next_turn;
+  invented_baseline_or_threshold; invented_budget
 ```
 
 ## Phase Boundary
 
-This skill may route to `optimize-with-human` or `review` only after it chooses
-the Goal architecture. It may also emit the native Goal prompt for direct
-coding-ticket execution. It does not launch hidden schedulers or preserve
-retired public orchestration skills as peers.
-
-When `loop_shape == skill_improvement | optimization` and
-`metric_provider == human_feedback`, name `optimize-with-human` as the
-human-feedback optimization preset. The Goal Packet still owns state and native
-Goal continuation; `optimize-with-human` supplies the feedback protocol:
-`feedback-request.md` plus `feedback.json` with `artifact_id`, `score` or
-`null`, `verdict`, `feedback`, `labels`, and `next_instruction`.
-
-When called from `impl-plan`, this skill compiles a Goal Packet preview for the
-same approval surface as the ticket plan. It should create or update
-`program.md`, `progress.md`, and the native `/goal` prompt preview, then pause
-for human approval unless an explicit approved auto-run policy already exists.
-If the ticket plan changes, rerun this skill and replace the preview before
-execution.
-
-## Progressive Load Rule
-
-Use this placement test before loading or adding detail:
-
-```text
-place_goal_advisor_detail(detail)
-  -> SKILL.md when defer_loading_risk > context_rot_risk + compaction_loss_risk
-  -> reference when defer_loading_risk <= context_rot_risk + compaction_loss_risk
-```
-
-Keep first load limited to rules that affect the next decision. Load references
-only after the branch is selected:
+Goal Advisor chooses the architecture and may create the packet and launcher.
+It does not launch hidden schedulers or execute the domain work. When called
+from `impl-plan`, compile the preview with `approval: pending`; regenerate it
+whenever the ticket changes. For branch detail load only the relevant reference:
 
 - prompt emission -> `references/prompt-templates.md`
-- loop-shape nuance, batch, board drain, rollout, or project-goals boundary ->
-  `references/goal-shapes.md`
-- workflow-skill composition or retired-surface migration detail ->
-  `references/goal-algebra.md`
-- project metric objective design -> `../metric-advisor/SKILL.md`
-- worked examples -> `examples/`
+- heartbeat, batch, rollout, project goals -> `references/goal-shapes.md`
+- composed workflows or retired-route migration -> `references/goal-algebra.md`
+- delayed reward -> the program template's `Check-In Program`
+- prompt-heavy/judgment-heavy packet -> golden example plus `qa_checklist.md`
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-- [ ] 1. Bind the intent and decide whether this is material enough for Goal.
-   - [ ] Ask up to 3 clarifying questions only when missing execution inputs
-     are blocking or materially change files, budget, metric, QA Strategy,
-     drift policy, human gates, or destructive/deploy/spend boundaries.
-   - [ ] If the task is tiny or one-turn, recommend direct work instead of Goal.
-   - [ ] If native Goal or heartbeat is warranted, require listed source files
-     or a create/update step for `ticket.md`, `program.md`, and `progress.md`.
-   - [ ] For `skill_improvement`, `ml_autoresearch`, or a multi-turn
-     experiment-backed `feedback_loop`, instantiate
-     `tickets/templates/goal-loop/hypothesis-tree.json`, list it under
-     `Files:`, and bind the `program.md` Experiment Backbone. Omit the tree
-     from ordinary coding and one-off feedback packets.
-   - [ ] Keep source/search policy in `program.md`, current research state in
-     the tree, and chronology in `progress.md`; never duplicate nodes, pending
-     leaves, child lists, depths, or ranks across them.
-- [ ] 2. Classify the loop shape.
-   - [ ] `active_goal`: uninterrupted execution window with no planned pause.
-   - [ ] `heartbeat`: continuation when pauses, board drain, feedback, external
-     state, or cadence matter.
-   - [ ] `feedback_loop`: needs human or reviewer feedback before continuing.
-   - [ ] `skill_improvement`: improves a target skill using evals, review, or
-     feedback.
-   - [ ] `ml_autoresearch`: runs bounded experiments over a frozen evaluator,
-     data boundary, metric, guards, and mutable surface.
-   - [ ] If the shape is `skill_improvement` and feedback is Kenji's fastest
-     honest quality signal before market tests or benchmarks, route through the
-     `optimize-with-human` preset inside the Goal Packet rather than inventing a
-     separate feedback runtime.
-   - [ ] `rollout`: applies a proven pattern across a target set.
-   - [ ] `batch_goal`: executes a listed file set inside one time/budget window
-     while preserving per-ticket proof.
-   - [ ] `business_loop` or `project_goals`: coordinates recurring or
-     long-horizon project work through heartbeat/manual resume and leaf Goals.
-   - [ ] For `project_goals` parent work, explicitly explain the boundary:
-     native Goal is for one uninterrupted time/budget window over a selected
-     file set, while heartbeat/manual resume is for paused, recurring, or
-     parent-controller work that chooses the next leaf after state changes.
-   - [ ] For any `heartbeat`, explicitly say heartbeat is a trigger over the
-     same Goal Packet state, not a separate loop runtime, hidden scheduler, or
-     second state owner.
-   - [ ] For parent heartbeats, define the action vocabulary:
-     `start_goal` starts a ready leaf Goal, `resume_goal` continues a blocked or
-     paused child when its blocker clears, `request_feedback` asks for missing
-     human/reviewer input, `replan` revises the frontier when the current one is
-     exhausted or invalid, and `no_op` logs that nothing useful can advance.
-   - [ ] For non-parent heartbeat answers, still name `resume_goal`,
-     `blocked`, and `no_op`: `resume_goal` when a paused Goal can continue,
-     `blocked` when required input/approval/evidence is missing, and `no_op`
-     when no useful eligible work can advance.
-   - [ ] Any heartbeat prompt's `Action vocabulary` must include:
-     `start_goal`, `resume_goal`, `request_feedback`, `replan`, `blocked`, and
-     `no_op`, with one-line meanings.
-   - [ ] After a child completes, parent heartbeat records the child completion,
-     updates the child node to `complete` or `complete_candidate`, runs or
-     requests required proof/review before treating it as done, then chooses
-     exactly one next action: `start_goal` or `resume_goal` for the next eligible
-     sibling, `request_feedback`, `replan` when the current frontier is
-     complete/invalid, or `no_op`.
-   - [ ] Load `references/goal-shapes.md` when the chosen shape needs more than
-     the one-line classifier above.
-- [ ] 3. Choose the state surfaces.
-  - [ ] `Files:` in the generated prompt names every ticket, program,
-    hypothesis tree, progress, board, spec, or artifact file the Goal must read.
-  - [ ] Include `farplane/harness.yaml` and `farplane/metrics.yaml` only when the
-    selected ticket needs project charter or objective context.
-- [ ] 4. Choose the time/budget policy.
-   - [ ] Treat the unit as a time/budget window, not ticket size.
-   - [ ] Name time, token/model/compute, review, QA, feedback, and
-     spend limits when they matter; write `none` or `not specified` otherwise.
-   - [ ] Use heartbeat when the next useful action depends on elapsed time,
-     feedback arrival, an external event, or a periodic board-drain check.
-- [ ] 5. Choose the metric or feedback provider.
-   - [ ] If the provider, guard metrics, anti-metrics, or no-metric rationale
-     are unclear, derive a metric card before writing `program.md`.
-   - [ ] `mechanical`: command, script, eval, benchmark, or artifact check.
-   - [ ] `review`: TAS verdict from review.
-   - [ ] `agent_qa`: adversarial QA evidence.
-   - [ ] `human_feedback`: human score, qualitative feedback, or approval.
-   - [ ] For `human_feedback` optimization loops, name `optimize-with-human`,
-     `feedback-request.md`, and `feedback.json`; define feedback shape as
-     `artifact_id`, `score` or `null`, `verdict`, `feedback`, `labels`, and
-     `next_instruction`.
-   - [ ] `market`: external result such as clicks, replies, sales, or retention.
-   - [ ] `hybrid`: combine signals without inventing fake numbers.
-   - [ ] Compile an explicit evaluation step after each bounded action and
-     before progress writeback. The ticket or active skill defines the
-     evaluator; `program.md` binds it into continuation.
-   - [ ] When a declared expectation is materially missed, a result is
-     implausibly strong, or evidence appears invalid, require an evaluator or
-     evidence-integrity check and allow bounded in-budget repairs or reruns only
-     while a concrete integrity concern remains. Repeated valid contrary
-     evidence must update the next action rather than being overridden by
-     intuition.
-   - [ ] If proof weight includes `qa`, `visual_qa`, `agent_qa`, `review`, or
-     `demo`, require delegated proof and reject self-certification as the
-     metric.
-   - [ ] If the metric is delayed, fill `program.md` `Check-In Program` with
-     the original packet inputs, exact evidence sources, ordered scoring and
-     attribution procedure, matured-row-only writeback, experiment-specific
-     `accept | kill | monitor` conditions, stable Reward IDs, evaluation-key
-     idempotency, and
-     source-gap behavior. If feedback is immediate, keep the section
-     `mode: not_applicable` with only a reason; do not compile future check-in
-     machinery.
-- [ ] 6. Define batch, board-drain, or leaf execution policy when relevant.
-   - [ ] For multi-ticket file lists, preserve one proof row per ticket plus
-     any batch/integration proof.
-   - [ ] For board drain, compile a heartbeat prompt that fetches proceedable
-     tickets, skips blocked/gated work, and logs no-op when nothing can advance.
-   - [ ] For coding leaves, compile an `active_goal` prompt over the ticket,
-     program, progress, and proof files.
-   - [ ] For experiment-backed leaves, compile over the ticket, program,
-     hypothesis tree, progress, evaluator, and proof files. Require each turn
-     to update the tree before appending its progress receipt.
-   - [ ] For coding leaves that implement features, require a grounding step
-     before final evidence: check code documentation or maintained
-     implementation evidence through Ref MCP, official docs, GitHub code
-     search, maintained examples, or web search unless the ticket is explicitly
-     local-only.
-   - [ ] For material feature leaves, require execution to follow the ticket's
-     critical-path proof notes in `QA Strategy`: run the smaller sanity checks
-     in order before claiming a long workflow or lifecycle, record evidence for
-     each checkpoint, and block or revise when the final path remains unrun
-     without an explicit residual-risk note.
-   - [ ] For project leaf Goals, list only the selected leaf file set plus
-     `farplane/harness.yaml` and `farplane/metrics.yaml` when project context is needed; do not include
-     sibling tickets as executable work files.
-   - [ ] Leaf Goal logging must append `progress.md` observations and a
-     completion entry for every changed ticket before returning control to the
-     parent heartbeat.
-   - [ ] Load `references/goal-shapes.md` for batch, board-drain, rollout, or
-     project-goals details.
-- [ ] 7. Define drift policy.
-   - [ ] Use inline drift checks for small normal goals.
-   - [ ] Use `goal-drift-reviewer` for material, long-running, strategic,
-     rollout, or self-approval-prone loops.
-   - [ ] Use delegated reviewer or QA lanes for material coding leaves when
-     the ticket QA Strategy is judgment-heavy, user-visible, or UI-affecting.
-   - [ ] Drift review is read-only and compares the listed files plus recent
-     progress; it does not plan or implement.
-- [ ] 8. Craft the native `/goal` or heartbeat prompt when Goal mode is warranted.
-   - [ ] For a prompt-heavy or judgment-dependent Goal architecture, first read
-     [the golden material Goal Packet](examples/golden/material-goal-packet.md)
-     with `qa_checklist.md`. Transfer invariants, never fixture facts or
-     wording; an independent reviewer receives the candidate, golden
-     invariants, QA, and held-out context, but not planner scratch reasoning.
-   - [ ] Load `references/prompt-templates.md` before emitting prompt text.
-   - [ ] Include an inline `Files:` list before `Task`, `Logging`, `Metric`, and
-     `After each turn`.
-   - [ ] Instruct the executor to read `program.md` before execution and treat
-     it as the Goal Packet's executable loop policy, not optional context.
-   - [ ] When a hypothesis tree is listed, instruct the executor to treat it as
-     current research state, derive eligible leaves instead of trusting a
-     stored rank, and update it before `progress.md`.
-   - [ ] For a resumed delayed check-in, list the original ticket, program, and
-     progress files plus matured Reward IDs and evidence refs; instruct
-     the worker to execute `program.md` `Check-In Program` without rebuilding
-     its decision algorithm in the launcher prompt.
-   - [ ] Bind the prompt to the listed files, honest metric provider, logging
-     files, drift policy, budget, and completion/blocked policy.
-   - [ ] Keep the Goal prompt compact: cite ticket/program/design/progress files
-     as source of truth instead of restating their full contents.
-   - [ ] Include final evidence policy. For UI/user-visible work, completion
-     must return best screenshot/image evidence or block with the missing proof.
-   - [ ] Include critical-path proof policy for material feature work:
-     completion must report which ordered sanity checks ran, where evidence
-     lives, and which full-path check remains blocked if the real workflow was
-     not exercised.
-   - [ ] Include a final completion checkpoint for material ticket work:
-     before `stop_complete`, run `farplane validate ticket <ticket.md> --phase
-     complete` with the Goal's explicit changed-path/base boundary, then run or
-     request the ticket's QA evidence review; for material implementation Goals,
-     run `demo` after QA passes to produce the default narrated lead-engineer
-     recap MP4; then run completion review when required by `QA Strategy` or
-     `program.md`, update
-     `ticket.md` plus `progress.md` with the review/evidence links, and block
-     or revise when those reviews are missing or below the ticket gate. After
-     those gates pass, run `farplane ticket close TASK-XXXX` before
-     `stop_complete`; do not hand-edit the archive transition.
-   - [ ] For implementation feature work, include a final `Grounding:` evidence
-     rule in the prompt: name the source class checked, such as Ref MCP,
-     official docs, GitHub code search, maintained examples, or web sources, or
-     state the local-only reason.
-   - [ ] For UI/user-visible work, include literal Markdown image syntax in the
-     prompt's final evidence rule:
-     `Final evidence: include ![best evidence](ABSOLUTE_SCREENSHOT_PATH), or
-     block/revise with the missing screenshot proof.`
-   - [ ] Ask only missing execution-safety questions that materially affect the
-     Goal contract; cap questions at 3.
-   - [ ] Reject proxy-only completion evidence unless it satisfies the actual
-     objective.
-- [ ] 9. Decide the next owner.
-   - [ ] When called from `impl-plan`, return a Goal Packet preview with
-     `approval: pending` and `Next Action: human approves plan + Goal Packet`
-     unless explicit auto-run approval already exists.
-   - [ ] If the ticket plan changed since the packet was compiled, regenerate
-     `program.md`, `hypothesis-tree.json` when enabled, `progress.md`, and the
-     native `/goal` prompt before approval.
-   - [ ] Use `optimize-with-human` when the metric provider is `human_feedback`
-     and the loop needs a Telegram-first feedback protocol.
-   - [ ] For skill-improvement loops with human feedback before market tests,
-     output `Use optimize-with-human preset` in the Goal Architecture and
-     include the concrete feedback artifact shape.
-   - [ ] Use direct ticket creation/update when the missing surface is state.
-- [ ] 10. Return a Goal Architecture note, create Goal Packet scaffolding, or
-   output the final native `/goal` prompt.
-   - [ ] Include before/after behavior when this changes how a loop will run.
-   - [ ] Name open risks, blocked decisions, and proof path.
-   - [ ] For every material Goal recommendation, show the inline `Files:` list,
-     name `goal-drift-reviewer` literally and state when it runs, and either
-     emit the native prompt or
-     explicitly promise its `Files`, `Task`, `Logging`, `Metric`, and
-     `After each turn` sections.
-   - [ ] Use the literal heading `Files:` even when paths are proposed or
-     unresolved; do not rename it to `Proposed files`, `State`, or another
-     conversational label.
-   - [ ] Report the iteration contract explicitly:
-     `choose -> act -> evaluate -> write observation/evidence/learning/decision
-     -> next action`.
+- [ ] 1. Bind intent, files, authority, and whether Goal is warranted.
+  - [ ] Keep tiny work direct. Material Goal work requires `ticket.md`,
+    `program.md`, `progress.md`, and an inline literal `Files:` list.
+  - [ ] Ask at most three questions only for missing inputs that materially
+    affect scope, metric, budget, proof, approval, spend, deploy, or safety.
+  - [ ] Never invent a baseline, threshold, budget, attempt count, or example
+    outcome. Preserve placeholders and name exact missing bindings. Even a
+    blocked architecture still returns the literal Files list and compact
+    launcher skeleton so the approval surface is complete.
+  - [ ] Add `hypothesis-tree.json` only for skill improvement, ML autoresearch,
+    or another truly experiment-backed loop; never duplicate its derived state.
+- [ ] 2. Classify one trigger shape.
+  - [ ] `active_goal`: uninterrupted bounded execution window.
+  - [ ] `heartbeat`: delayed inspection over the same packet; it is not a
+    second runtime. Load `references/goal-shapes.md` for its action vocabulary.
+  - [ ] `feedback`, `rollout`, `batch`, or `project_goals`: load only the
+    selected branch. Use `optimize-with-human` for skill optimization whose
+    honest provider is human feedback.
+- [ ] 3. Compile the minimal program.
+  - [ ] Bind objective, mutable surface, metric/provider, guards, anti-metrics,
+    budget, proof route, drift policy, and stop conditions without copying the
+    ticket or tree.
+  - [ ] Use Metric Advisor only when the measurement contract is unclear.
+  - [ ] Select the honest provider class even when its threshold is still
+    pending. For an underspecified “clearly better” workflow with no reliable
+    market baseline, default to `hybrid` frozen-scenario eval plus explicit
+    human/reviewer judgment; keep the rubric and threshold unresolved rather
+    than leaving the provider itself unchosen or inventing numbers.
+  - [ ] Compile delayed `accept | kill | monitor` procedure only for matured
+    Reward work; immediate Goals mark it not applicable.
+  - [ ] Use the shared Decision Backbone. Invoke Leverage Advisor only when
+    several plausible moves need judgment; otherwise act directly.
+- [ ] 4. Enforce the first-load budget.
+  - [ ] Initial context is full `ticket.md`, full `program.md`, and at most the
+    latest 80 lines of `progress.md`. Load older receipts or artifacts only for
+    a named evidence gap.
+  - [ ] Target at most 300 lines and require `ticket.context-budget` to block
+    above 400. Consolidate duplication or move bulky evidence; never weaken
+    scope, safety, proof, or reconstruction behavior to hit the cap.
+- [ ] 5. Compile state, logging, and drift.
+  - [ ] `Files:` names every required ticket/program/tree/progress/spec/design/
+    board/artifact file. Project harness/metrics files appear only when needed.
+  - [ ] After each turn append observation, evidence, learning, decision,
+    remaining budget, and next action; update the tree before the receipt.
+  - [ ] Use inline drift for small Goals and `goal-drift-reviewer` for material,
+    long-running, strategic, rollout, or self-approval-prone work.
+- [ ] 6. Compile proof and completion.
+  - [ ] Ticket Done and QA Strategy win over program or launcher prose.
+  - [ ] Name `qa-tester`, `visual-qa`, `agent-qa-test`, `reviewer`, `demo`, or
+    human feedback when required; self-certification is not proof.
+  - [ ] Material implementation invariant: ordered sanity checks -> QA evidence
+    review -> narrated lead-engineer demo MP4 -> ticket-scoped response draft ->
+    completion review with `approved_response` -> ticket writeback ->
+    `farplane ticket close TASK-XXXX` -> `stop_complete`.
+  - [ ] Require current official/maintained implementation grounding for feature
+    work unless explicitly local-only, and best screenshot evidence for UI work.
+- [ ] 7. Emit the launcher only after loading `references/prompt-templates.md`.
+  - [ ] Keep literal sections `Files`, `Task`, `Logging`, `Metric`, and `After
+    each turn`; point to files instead of restating them.
+  - [ ] Make `choose_next`, outside options, provider evaluation, writeback,
+    budget, drift, blockers, and final proof explicit.
+  - [ ] A material architecture is invalid unless it literally states the
+    300/400 context gate and 80-line progress tail, evaluates with the provider
+    before writeback, compares `execute | diagnose | report_now |
+    request_feedback | stop`, names `goal-drift-reviewer` plus when it runs,
+    and gives the receipt fields `observation`, `evidence`, `learning`,
+    `decision`, `remaining_budget`, and `next_action`.
+  - [ ] Do not paraphrase the selector as “compare options.” The launcher must
+    literally preserve `choose_next(objective, evidence, eligible_moves,
+    remaining_budget) -> execute | diagnose | report_now | request_feedback |
+    stop` so the owner and vocabulary survive compilation.
+- [ ] 8. Finish-check packet freshness, approval, and QA.
+  - [ ] Record the ticket `updated_at` compiled into the packet. Regenerate
+    after ticket, suite, evaluator, scope, or proof-policy drift.
+  - [ ] Material packets remain pending until the operator approves ticket,
+    program, tree when present, progress scaffold, and launcher together.
+  - [ ] Apply `qa_checklist.md`; route material prompt/packet review to the
+    reviewer and do not accept below the required TAS gate.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
-## Goal Contract
+## Templates
 
-A strong Goal contract includes:
-
-- `Files`: inline list of every source file the Goal must read
-- `Task`: what must be true, from `ticket.md`
-- `Program`: explicit instruction that `program.md` is the executable loop
-  policy for trigger mode, budget, metric or feedback provider, proof route,
-  drift policy, after-turn routine, heartbeat or batch rules, and stop
-  conditions
-- `Logging`: how to update `progress.md`
-- `Hypothesis Tree`: when enabled, how current node state is read and updated
-  before chronological logging
-- `Metric`: how progress is judged, from `program.md`
-- `After each turn`: how to choose, act, evaluate, record learning, select the
-  next action, drift-check, continue, wait, complete, or block
-- `Budget`: optional time/token/model/compute/review/QA/spend limit
-- `QA proof route`: copied from `QA Strategy.goal_advisor_inputs.proof_route`;
-  names which delegated lane owns QA, visual QA, adversarial QA, review, demo,
-  or human feedback
-- `Final evidence`: copied from `QA Strategy.goal_advisor_inputs.final_evidence`;
-  names what must be shown to the operator before completion, including
-  rendered image links for UI/user-visible work when screenshots exist
-- `Completion checkpoint`: QA evidence review and completion review required by
-  `QA Strategy.goal_advisor_inputs.final_checkpoint` or `program.md`, followed
-  by `farplane ticket close TASK-XXXX` before `stop_complete`, with links
-  written back before the close command
-- `Approval`: whether the packet is `pending`, `approved`, `revise`, or
-  `blocked`; material packets pause before native Goal execution unless
-  explicitly pre-approved
-
-When compiling from an `impl-plan`-filled ticket, read ticket sections by
-owner rather than treating the ticket as undifferentiated prose:
+Goal packet compilation:
 
 ```text
 ticket_to_goal_packet(ticket.md)
@@ -401,130 +176,76 @@ ticket_to_goal_packet(ticket.md)
   execution_units <- Change Plan
   completion_scoreboard <- Done
   proof_policy <- QA Strategy
-  proof_route/final_evidence/final_checkpoint <- QA Strategy.goal_advisor_inputs
-  docs_runtime_human_gates <- Docs Strategy + Agent Contract + Run Hints
-  sidecars_and_artifacts <- Links
+  current_state <- State + latest 80 progress lines
+  context_and_evidence <- Links + only branch-required files
 ```
 
-This is an extraction guide, not a second ticket schema. Do not copy these
-sections wholesale into `program.md` or the Goal prompt; cite the files and
-compile only compact loop settings. For material Goal-backed work, prefer
-`QA Strategy.goal_advisor_inputs`; if those fields are missing, block, revise,
-or ask instead of inferring proof route, final evidence, or final checkpoint
-from vague prose. For older active tickets, fallback sources such as `Done /
-Proof`, `Run Hints`, `Goal Packet Preview`, or existing `program.md` may be
-used only when conflicts are reported and the ticket remains the winning source
-for scope and proof.
-
-Compile the `Files:` manifest from the ticket, not transcript memory. Include
-`ticket.md`, `program.md`, optional `hypothesis-tree.json`, and `progress.md`,
-then add required design/spec,
-board, artifact, or context files named by `Change Plan` read/write paths,
-`QA Strategy`, `Agent Contract`, `Docs Strategy`, and `Links`. If a required
-file cannot be resolved, block or ask before emitting the native Goal prompt.
-
-Packet freshness is part of approval. Record the ticket `updated_at` value used
-to compile the packet in `program.md` or the prompt artifact. If `ticket.md`
-changes after compilation, regenerate `program.md`, `hypothesis-tree.json` when
-enabled, `progress.md` if needed, and the native `/goal` prompt before
-execution.
-
-For UI or user-visible work with `visual_qa` proof weight, the Goal prompt must
-spell out the concrete lane chain instead of generic "visual proof" language:
+Compiled launcher shape:
 
 ```text
-QA proof route: qa-tester captures screenshots/logs/result.json -> visual-qa judges screenshots against design.md -> reviewer judges final evidence sufficiency.
-Self-certification: forbidden for QA, visual judgment, and final completion.
-Final evidence: final response includes ![best evidence](ABSOLUTE_SCREENSHOT_PATH), or blocks/revises with the exact missing screenshot proof.
+/goal Run the listed files as one Goal Packet.
+Files: <literal paths>
+Task: <ticket scope and Done>
+Logging: <tree-first when present; compact progress receipt>
+Metric: <program provider and guards>
+After each turn: observe -> choose_next(objective, evidence, eligible_moves,
+remaining_budget) -> execute | diagnose | report_now | request_feedback | stop
+-> act -> verify -> write_back
+Context gate: ticket + program + latest 80 progress lines; target 300, hard 400
+Drift reviewer: goal-drift-reviewer at <checkpoint>
+Approval: <pending | approved | revise | blocked>
 ```
 
-## Output
+The compact progress receipt is:
 
-Return either:
+```yaml
+observation:
+evidence: []
+learning:
+decision: execute | diagnose | report_now | request_feedback | stop | blocked
+remaining_budget:
+next_action:
+```
+
+Material completion output:
 
 ```text
-Goal Architecture:
-Project Goals:
 Ticket:
-Program:
-Progress:
-Files:
-Trigger:
-Budget:
-Metric / Feedback Provider:
-Drift Policy:
-Drift Reviewer:
-Iteration Contract:
-QA Strategy:
-QA Proof Route:
-Final Evidence:
-Approval:
-Heartbeat Prompt:
-Native Goal Prompt:
-Next Action:
+Verification:
+Artifacts:
+Grounding:
+Residual risk:
 ```
-
-Or create/update the Goal Packet files and then report their paths.
 
 ## Gotchas
 
-- Do not treat `program.md` as a second ticket or as optional background
-  context. The ticket says what must be true; the program is the executable loop
-  policy for how the Goal runs.
-- Do not emit a native Goal prompt that only says to work on a ticket. It must
-  list the Goal Packet files and explicitly require reading and obeying
-  `program.md` before execution.
-- Do not treat `progress.md` as transcript storage. It is compact observed
-  state.
-- Do not make parent tickets mandatory. Use an inline file list for normal
-  multi-file Goals; add the charter and metric contract only when needed.
-- Do not hide required files behind transcript memory. If the Goal depends on a
-  ticket, program, progress log, board, spec, or artifact, list it in `Files:`.
-- Do not make heartbeat automations into hidden autonomy. They are delayed
-  triggers for the same Goal Packet contract.
-- Do not force numeric metrics onto judgment-heavy work. Use human feedback,
-  review verdicts, or artifact-presence signals when those are more honest.
-- Do not re-invent the metric contract inside the Goal prompt. When the signal
-  is unclear, derive the metric card first and cite it compactly.
-- Do not emit a prompt-only material Goal without a named ticket/program/progress
-  setup path.
-- Do not route new public execution through `$work`, `$ralph`, or `batch-work`.
-  Use Goal Advisor modes instead.
-- Do not produce bloated native Goal prompts. The Goal prompt should be a
-  compact execution contract over listed files, not a rewritten ticket.
-- Do not allow Goal completion to self-certify proof-heavy work. Delegate drift,
-  QA, visual judgment, adversarial evidence review, and final readiness when the
-  ticket QA Strategy requires those lanes.
-- Do not rely on a Stop hook to repair missing QA or completion review. The
-  generated Goal prompt must make those reviews part of the ticket's own final
-  checkpoint.
-- Do not call UI/user-visible work complete unless the final response includes
-  the strongest screenshot/image evidence or a clear blocker explaining why no
-  such evidence exists.
+- `program.md` is executable loop policy, not a second ticket or optional note.
+- `progress.md` is evidence memory, not a transcript; initial load uses its tail.
+- A listed file is context or evidence unless the ticket grants executable scope.
+- Heartbeat is a trigger over the same packet, never hidden autonomy.
+- Honest review/human/market signals beat fake numeric metrics.
+- Do not route new work through retired `$work`, `$ralph`, or `batch-work`.
+- A Stop hook does not repair proof, review, closeout, or packet drift.
 
 ## Reference Map
 
-- [docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md](../../docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md) -
-  canonical Goal Packet, heartbeat, feedback, drift, and rollout model.
-- [references/prompt-templates.md](references/prompt-templates.md) - load only
-  when emitting native Goal, heartbeat, setup, or skill-improvement prompt text.
-- [references/goal-shapes.md](references/goal-shapes.md) - load when loop-shape
-  nuance, batch proof, board drain, rollout, or project-goals boundaries matter.
-- [references/goal-algebra.md](references/goal-algebra.md) - load when several
-  workflow skills compose into one Goal contract or retired-surface migration
-  detail matters.
-- [Golden material Goal Packet](examples/golden/material-goal-packet.md) - load
-  with QA when planning or independently reviewing a prompt-heavy or
-  judgment-dependent Goal architecture; transfer invariants, not fixture facts
-  or wording.
-- [../metric-advisor/SKILL.md](../metric-advisor/SKILL.md) - use before this
-  skill when the metric objective, guard, or proof provider still needs to be
-  authored.
-- [../metric-advisor/SKILL.md](../metric-advisor/SKILL.md) - derive honest
-  metric cards before Goal Packet metric provider compilation.
-- [optimize-with-human](../optimize-with-human/SKILL.md) - route optimization
-  loops through human feedback and feedback-file contracts.
-- [tickets/templates/goal-loop/program.md](../../tickets/templates/goal-loop/program.md) -
-  program template.
-- [tickets/templates/goal-loop/progress.md](../../tickets/templates/goal-loop/progress.md) -
-  progress template.
+- [Goal Packet feature](../../docs/features/FEAT-0032-goal-advisor-execution-compilation.md)
+- [Prompt templates](references/prompt-templates.md) — load for launcher text.
+- [Goal shapes](references/goal-shapes.md) — load for non-default triggers.
+- [Goal algebra](references/goal-algebra.md) — load for composed workflows.
+- [Golden material packet](examples/golden/material-goal-packet.md) — load with
+  QA for prompt-heavy/judgment-heavy planning and independent review.
+- [Program template](../../tickets/templates/goal-loop/program.md)
+- [Progress template](../../tickets/templates/goal-loop/progress.md)
+- [Metric Advisor](../metric-advisor/SKILL.md)
+- [Optimize With Human](../optimize-with-human/SKILL.md)
+
+## Output
+
+Return or write one of:
+
+- direct-route recommendation for one-turn work;
+- Goal Architecture with Ticket, Program, Progress, Files, Trigger, Budget,
+  Metric/Provider, Drift, Decision Backbone, Proof, Approval, and Next Action;
+- created/updated packet paths plus the compact native `/goal` or heartbeat
+  launcher.

@@ -18,6 +18,11 @@ except ImportError:  # package import during tests
 from bin.core.farplane_ticket_reward import validate_reward_file
 
 
+GOAL_CONTEXT_TARGET_LINES = 300
+GOAL_CONTEXT_HARD_LIMIT_LINES = 400
+PROGRESS_TAIL_LINES = 80
+
+
 def _result(check_id: str, mode: CheckMode, returncode: int, output: str, started: float) -> CheckResult:
     return CheckResult(
         check_id=check_id,
@@ -70,6 +75,38 @@ def ticket_reward_check(context: ValidationContext, mode: CheckMode) -> CheckRes
         "\n".join(errors) or "ticket Reward scheduling OK",
         started,
     )
+
+
+def _line_count(path: Path) -> int:
+    if not path.is_file():
+        return 0
+    return len(path.read_text(encoding="utf-8").splitlines())
+
+
+def ticket_context_budget_check(context: ValidationContext, mode: CheckMode) -> CheckResult:
+    """Bound executable first-load state without treating length as quality."""
+    started = time.monotonic()
+    ticket_lines = _line_count(context.ticket)
+    program_lines = _line_count(context.ticket.parent / "program.md")
+    progress_lines = _line_count(context.ticket.parent / "progress.md")
+    progress_tail_lines = min(progress_lines, PROGRESS_TAIL_LINES)
+    total = ticket_lines + program_lines + progress_tail_lines
+    detail = (
+        f"ticket={ticket_lines} program={program_lines} "
+        f"progress_tail={progress_tail_lines}/{progress_lines} total={total}; "
+        f"target<={GOAL_CONTEXT_TARGET_LINES} hard_limit<={GOAL_CONTEXT_HARD_LIMIT_LINES}"
+    )
+    if total > GOAL_CONTEXT_HARD_LIMIT_LINES:
+        return _result(
+            "ticket.context-budget",
+            mode,
+            1,
+            f"Goal first-load context exceeds the hard limit: {detail}. "
+            "Consolidate duplicated policy or move bulky evidence to artifacts; do not weaken proof.",
+            started,
+        )
+    pressure = "target pressure; consolidation review required" if total > GOAL_CONTEXT_TARGET_LINES else "within target"
+    return _result("ticket.context-budget", mode, 0, f"Goal first-load context {pressure}: {detail}", started)
 
 
 def visual_companion_check(context: ValidationContext, mode: CheckMode) -> CheckResult:
@@ -158,6 +195,7 @@ def completion_evidence_check(context: ValidationContext, mode: CheckMode) -> Ch
 def build_registry() -> CheckRegistry:
     registry = CheckRegistry()
     specs = (
+        CheckSpec("ticket.context-budget", ticket_context_budget_check),
         CheckSpec("ticket.metadata", ticket_metadata_check),
         CheckSpec("ticket.reward", ticket_reward_check),
         CheckSpec("ticket.completion-evidence", completion_evidence_check),

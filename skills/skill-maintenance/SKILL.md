@@ -22,11 +22,10 @@ out Farplane skill changes after the owner surface is known. It owns package
 mechanics: `SKILL.md` shape, references, eval/checklist sync, source ownership,
 metadata, registry sync, audits, installed-copy checks, and review routing.
 
-Every staged hand-authored text file under `skills/` must be at most 200 lines.
-The pre-commit gate owns enforcement; this skill owns behavior-preserving
-splitting and repair. Generated graphs, dependency locks, and media assets are
-excluded. Use `consolidate(target = edited_skill, structure = skill)` when
-compaction needs judgment rather than mechanical extraction.
+Use responsibility, first-load cost, duplication, and observed maintenance pain
+to decide when a skill file should split. Raw line count is a diagnostic, not a
+completion gate. Use `consolidate(target = edited_skill, structure = skill)`
+when compaction needs judgment rather than mechanical extraction.
 
 ## Skill Signature
 
@@ -40,13 +39,13 @@ modes: harden_skill | refine_skill | upgrade_skill_from_sources |
   low_value_prose_scan | audit | bulk_rollout | registry_validation |
   installed_copy_import
 gates: delta_named; owner_clear; source_preserved; first_load_executable;
-  each_authored_file_lines<=200; standard_check_named;
+  standard_check_named;
   validation_passes_or_blocker_named; registry_synced;
   live_copy_only_after_source_acceptance; proof_and_review_routed
 routes: research:source-synthesis | skill-creator | best-of-worlds | eval |
   self-improve | gap-analysis | harness-advisor | review
-fails: installed-copy-only edit; hidden required behavior; oversized staged
-  skill file; fixture mutation outside sandbox; completion before validation;
+fails: installed-copy-only edit; hidden required behavior; arbitrary line-count
+  splitting; fixture mutation outside sandbox; completion before validation;
   live-copy proof before source acceptance; bulk edit without prototype;
   material change without proof
 ```
@@ -87,25 +86,30 @@ fails: installed-copy-only edit; hidden required behavior; oversized staged
      precise load conditions.
    - [ ] Reject skill-local `todos.md`; todo truth lives in the marker-delimited
      `## Todo List` in `SKILL.md`.
-- [ ] 5. Enforce the 200-line staged-file cap.
-   - [ ] Run the staged `skill-source` line-limit validator before completion.
-   - [ ] Split oversized authored text by branch, provider, responsibility, or
-     artifact type; do not move default-path behavior out of first load.
+- [ ] 5. Improve structure only where ownership evidence supports it.
+   - [ ] Split authored text by branch, provider, responsibility, or artifact
+     type only when that reduces real first-load or maintenance cost.
+   - [ ] Do not move default-path behavior out of first load to hit a size target.
    - [ ] Re-run links, imports, tests, and generators affected by a split.
 - [ ] 6. Sync behavior proof and runtime guardrails.
    - [ ] If eval assertions changed, promote only reusable runtime prevention
      into QA, `SKILL.md`, a reference, or a validator; keep rare benchmark
      points in evals with an audit note.
-   - [ ] Use `eval` for runnable regressions and `self-improve` only for measured
-     variant search with a metric and promotion rule.
+   - [ ] For behavior-affecting maintenance, capture the current baseline, apply
+     the bounded change, and run the same suite through
+     [eval](../eval/SKILL.md) for candidate/baseline comparison before
+     promotion. Mechanical-only changes may skip execution only with an exact
+     `eval_skip_reason` and a deterministic replacement check.
+   - [ ] Use `self-improve` only for measured variant search with a metric and
+     promotion rule; it calls `eval` rather than owning another runner.
 - [ ] 7. Validate the skill system.
-   - [ ] Run `python3 scripts/check_skills.py --write`, focused JSON/link/config/
-     fixture/eval checks, and the staged line-limit validator.
+   - [ ] Run `python3 scripts/check_skills.py --write` plus focused JSON, link,
+     config, fixture, and eval checks.
    - [ ] Keep fixture validation rooted in its sandbox; regenerate the sandbox
      `docs/skills/registry.jsonl` rather than hand-editing it, and name every
      remaining blocker.
-   - [ ] Apply `qa_checklist.md` to changed skill files and record before/after
-     line counts, kept/moved/deleted content, extra sections, and verdict.
+   - [ ] Apply `qa_checklist.md` to changed skill files and record
+     kept/moved/deleted content, ownership changes, extra sections, and verdict.
    - [ ] Reinstall and inspect live copies only when installed behavior is part
      of the claim.
 - [ ] 8. Finish with audit, review, and writeback.
@@ -155,5 +159,6 @@ source upgrades, automation presets, and review handoff templates.
 
 ## Output
 
-Return owner-local changes, line-cap results, registry/validation proof, audit
-or skip reason, and reviewer verdict or blocker.
+Return owner-local changes, structure results, registry/validation proof, audit
+or skip reason, eval comparison receipt or `eval_skip_reason`, and reviewer
+verdict or blocker.

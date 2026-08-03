@@ -27,7 +27,9 @@ This file is loaded every loop. Keep it operational and project-specific.
 - Lessons: `docs/LESSONS.md`
 - Taste: `docs/TASTE.md`
 - Code review: `docs/code_review.md` and `docs/review-agent.md`
-- Tickets: active `tickets/TASK-*/ticket.md`, completed `tickets/archive/TASK-*/ticket.md`
+- Tickets: active `tickets/TASK-*/ticket.md`, new closed-ticket locators in
+  `tickets/archive-index.jsonl`, and legacy local archives in
+  `tickets/archive/TASK-*/ticket.md`
 
 ## Project Lifecycle
 
@@ -114,7 +116,13 @@ slice, proof/falsification, tradeoffs, and non-goals.
   and the relevant `qa/` cookbook page instead of guessing commands or ports.
 - If the same helper logic is appearing across multiple modules, extract it to
   the approved shared utility surface instead of copying it again.
-- Update ticket status, phase, blockers, and spawned follow-ups in the ticket file as work progresses. When a ticket is complete and its writeback is done, move it into `tickets/archive/`.
+- Update ticket status, phase, blockers, and spawned follow-ups in the ticket
+  file as work progresses. When a ticket is complete and its writeback is done,
+  use `$close-ticket` to verify its issue in the project's configured GitHub
+  repository,
+  then run `farplane ticket close TASK-XXXX --github-issue-url <url>` with one
+  `--media <path>` per selected file; do not move it into `tickets/archive/`
+  manually.
 - If the same failure or user correction happens more than once, append a short raw entry to `docs/TROUBLES.md` with the miss, correction, and prevention idea.
 - If that raw entry produces a reusable prompt, skill, eval, or policy improvement, distill it into `docs/LESSONS.md`.
 - During weekly skill hardening, read recent `docs/TROUBLES.md` and

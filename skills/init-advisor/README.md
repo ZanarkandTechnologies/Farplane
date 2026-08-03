@@ -2,8 +2,9 @@
 
 Bootstrap or migrate a project into the Farplane docs-first, ticket-first
 harness model. Init sets up the project substrate first, can optionally run a
-code/app scaffold such as Next.js, React, or Convex, and then leaves a starter
-PRD ticket for the next phase.
+code/app scaffold such as Next.js, React, or Convex, and then leaves three
+dependent business-foundation tickets: find the first customer, deliver the
+first value, and collect the first revenue.
 
 This setup should scaffold optional `.githooks` samples plus project-local
 `scripts/pre_*_check.sh` files for local quality gates, a Codex SDK pre-push
@@ -55,8 +56,12 @@ lint/typecheck/test/build commands, run advisory Codex SDK diff review during
 pre-push, and activate only `pre-push` unless the repo wants an extra
 pre-commit gate. The other required follow-through is to fill
 `PROJECT_RULES.md` and `qa/` with the authoritative launch path agents should
-use for ordinary app work versus QA. It also creates
-`tickets/TASK-0001/ticket.md` as the starter PRD handoff.
+use for ordinary app work versus QA. It also creates exactly three ordinary
+foundation tickets at `tickets/TASK-0001` through
+`tickets/TASK-0003`. They use normal dependencies to enforce customer -> value
+-> revenue order. Existing ticket paths are preserved independently unless
+`--force` was explicitly requested, so brownfield partial collisions are
+reported and left untouched.
 
 The script also creates ignored, owner-named `.farplane/` folders:
 `.farplane/reports/`, `.farplane/metrics/daily/`,
@@ -87,7 +92,7 @@ Optional code scaffold recipes live in
 selected recipe during init when requested, but stop for interactive cloud
 setup, credentials, billing, deploys, and destructive actions.
 
-After init, follow the planning funnel:
+After the business foundation closes, follow the planning funnel:
 
 ```text
 brainstorm -> deep-interview -> metric-advisor -> goal-advisor
@@ -313,7 +318,14 @@ Those can come after one clean ticket run.
 - [ ] `docs/features/README.md` exists
 - [ ] `tickets/` structure exists
 - [ ] `tickets/archive/` exists for completed tickets
-- [ ] `tickets/TASK-0001/ticket.md` exists as the initial PRD handoff
+- [ ] `tickets/TASK-0001/ticket.md` exists for `find_customer` with
+      `foundation_sequence: 1`
+- [ ] `tickets/TASK-0002/ticket.md` exists for `deliver_value`, depends on
+      `TASK-0001`
+- [ ] `tickets/TASK-0003/ticket.md` exists for `collect_revenue`, depends on
+      `TASK-0002`
+- [ ] existing foundation ticket paths were preserved individually and any
+      partial collision was reported
 - [ ] one first ticket exists
 - [ ] one first `impl-plan` run is successful
 - [ ] one first `goal-advisor` run is successful

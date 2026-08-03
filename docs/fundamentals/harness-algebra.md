@@ -3,7 +3,7 @@ title: Harness Algebra
 status: active
 owner: harness-advisor
 created_at: 2026-06-09
-updated_at: 2026-06-28
+updated_at: 2026-08-01
 refs:
   - docs/fundamentals/harness-engineering-doctrine.md
   - docs/fundamentals/prompt-engineering.md
@@ -930,16 +930,19 @@ required gate passes.
 ## 8. Hooks, Automations, And Goal Control
 
 Control decides when work starts, pauses, resumes, blocks, or completes.
+Observation records what happened without silently taking over that control.
 
 ```text
-control(event, state, artifacts)
+control_or_observe(event, state, artifacts)
   -> continue | block | complete | wait | start_child_work
+   | telemetry + observations
 ```
 
 Real control levers:
 
 ```text
-Stop hook          = end-of-turn gate and continuation/completion control
+Stop hook          = end-of-turn observation, telemetry, and bounded deterministic gates; never completion authority
+ticket close cmd   = verified terminal transition, writeback, and cleanup
 UserPrompt hook    = turn-start intent capture
 learning sidecar   = bounded-window trouble/lesson writer
 validators         = mechanical invariants
@@ -952,7 +955,7 @@ drift reviewer     = read-only alignment check
 Hook:
 
 ```text
-Hook(event, state, artifacts) -> gate_decision + evidence
+Hook(event, state, artifacts) -> observations + telemetry
 ```
 
 Automation:
@@ -1048,8 +1051,9 @@ leaf_native_goal(ticket.md, program.md, progress.md)
 Completion transition:
 
 ```text
-complete_ticket(ticket, metric_observations, reports)
-  -> progress_entry + evidence + next_pulse_trigger
+ticket_close_command(ticket, verified_archive, metric_observations, reports)
+  -> terminal_metadata + completion_event + mined_learning
+   + archive_locator + packet_cleanup + next_pulse_trigger
 ```
 
 Rollout:
@@ -1060,8 +1064,11 @@ rollout_goal(pattern, sample_results, target_set)
 ```
 
 The proposal portfolio compares longer trajectories before selecting bounded
-tickets. Native Goal mode executes one admitted leaf. Completion updates ticket
-evidence and metric observations before the next Pulse replans.
+tickets. Native Goal mode executes one admitted leaf. The explicit ticket-close
+command owns the verified terminal transition and updates evidence and metric
+observations before the next Pulse replans. The Stop hook observes that turn
+and may continue only an over-limit final response for compression; it does not
+continue ticket execution, complete, archive, or clean up the ticket.
 
 Control improves reliability only when trigger, state, stop condition, and
 proof are explicit:

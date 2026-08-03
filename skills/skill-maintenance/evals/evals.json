@@ -75,6 +75,26 @@
           "notes": "Protects against editing ~/.codex/skills as the durable source of truth."
         }
       }
+    },
+    {
+      "id": "skill_maintenance_behavior_eval_comparison_01",
+      "prompt": "Tighten an existing skill's decision rules because it sometimes chooses the wrong workflow. Make the maintenance change safely and show why it should be accepted.",
+      "expected_output": "Captures the current behavior as a baseline, applies the bounded skill change, runs the same canonical suite through eval, compares candidate and baseline evidence, and accepts, holds, or rolls back from the measured result.",
+      "files": [],
+      "assertions": [
+        "Captures a baseline before the behavior-affecting edit",
+        "Runs the same canonical eval suite against candidate and baseline through eval",
+        "Uses evidence-backed comparison rather than self-certifying the wording change",
+        "Records an accept, hold, or rollback decision",
+        "Uses eval_skip_reason only for mechanical-only changes with a deterministic replacement check"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Skill Maintenance compares behavior through Eval",
+          "tags": ["skill-maintenance", "eval", "baseline", "promotion"],
+          "notes": "Protects the maintenance-to-eval handoff for behavior-sensitive skill changes."
+        }
+      }
     }
   ]
 }

@@ -9,7 +9,6 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[3]
 SKILLS_ROOT = REPO_ROOT / "skills"
 UI_SKILLS = {
-    "eval": "skills/eval/templates/viewer-react",
     "skill-maintenance": "skills/skill-maintenance/graph/index.html",
     "harness-advisor": "skills/harness-advisor",
 }

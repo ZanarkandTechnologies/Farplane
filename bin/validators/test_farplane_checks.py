@@ -5,7 +5,11 @@ import tempfile
 from pathlib import Path
 
 from bin.core.validation.models import PathBoundary, ValidationContext
-from bin.validators.farplane_checks import build_registry, completion_evidence_check
+from bin.validators.farplane_checks import (
+    build_registry,
+    completion_evidence_check,
+    ticket_context_budget_check,
+)
 
 
 class FarplaneChecksTest(unittest.TestCase):
@@ -23,11 +27,46 @@ class FarplaneChecksTest(unittest.TestCase):
                 "skills.check",
                 "templates.check",
                 "ticket.completion-evidence",
+                "ticket.context-budget",
                 "ticket.metadata",
                 "ticket.reward",
                 "ticket.visual-companion",
             ),
         )
+
+    def test_ticket_context_budget_uses_bounded_progress_tail(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            ticket_dir = root / "tickets" / "TASK-0001"
+            ticket_dir.mkdir(parents=True)
+            ticket = ticket_dir / "ticket.md"
+            ticket.write_text("\n".join(["ticket"] * 150) + "\n")
+            (ticket_dir / "program.md").write_text("\n".join(["program"] * 60) + "\n")
+            (ticket_dir / "progress.md").write_text("\n".join(["progress"] * 1000) + "\n")
+            context = ValidationContext(root, ticket, "planning", PathBoundary("unavailable"))
+
+            result = ticket_context_budget_check(context, "block")
+
+            self.assertEqual(result.status, "pass")
+            self.assertIn("total=290", result.output)
+            self.assertIn("progress_tail=80/1000", result.output)
+
+    def test_ticket_context_budget_blocks_above_400_lines(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            ticket_dir = root / "tickets" / "TASK-0001"
+            ticket_dir.mkdir(parents=True)
+            ticket = ticket_dir / "ticket.md"
+            ticket.write_text("\n".join(["ticket"] * 250) + "\n")
+            (ticket_dir / "program.md").write_text("\n".join(["program"] * 100) + "\n")
+            (ticket_dir / "progress.md").write_text("\n".join(["progress"] * 80) + "\n")
+            context = ValidationContext(root, ticket, "complete", PathBoundary("explicit", ("a.py",)))
+
+            result = ticket_context_budget_check(context, "block")
+
+            self.assertEqual(result.status, "fail")
+            self.assertIn("total=430", result.output)
+            self.assertIn("do not weaken proof", result.output)
 
     def test_validation_registry_does_not_expose_workflow_actions(self):
         forbidden = {"write", "install", "credentials", "repair-ticket", "hardcase"}

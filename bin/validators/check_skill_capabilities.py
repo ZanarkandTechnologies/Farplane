@@ -266,12 +266,21 @@ def slug_ticket_title(title: str) -> str:
 
 
 def next_ticket_id(tickets_root: Path) -> str:
-    max_id = 0
-    for path in tickets_root.glob("TASK-*"):
-        match = TICKET_ID_RE.fullmatch(path.name)
-        if match:
-            max_id = max(max_id, int(match.group(1)))
-    return f"TASK-{max_id + 1:04d}"
+    scripts_dir = tickets_root.parent / "skills" / "pulse-update" / "scripts"
+    if str(scripts_dir) not in sys.path:
+        sys.path.insert(0, str(scripts_dir))
+    from next_ticket_id import next_ticket_id as allocate_ticket_id
+
+    return allocate_ticket_id(tickets_root.parent)
+
+
+def reserve_ticket_id(tickets_root: Path) -> str:
+    scripts_dir = tickets_root.parent / "skills" / "pulse-update" / "scripts"
+    if str(scripts_dir) not in sys.path:
+        sys.path.insert(0, str(scripts_dir))
+    from next_ticket_id import reserve_ticket_ids
+
+    return reserve_ticket_ids(tickets_root.parent, 1)[0]
 
 
 def ticket_contains_packet(path: Path, packet: SkillFailurePacket) -> bool:
@@ -408,7 +417,7 @@ def write_repair_ticket(root: Path, packet: SkillFailurePacket) -> Path:
     existing = find_existing_repair_ticket(root, packet)
     if existing is not None:
         return existing
-    ticket_id = next_ticket_id(root / "tickets")
+    ticket_id = reserve_ticket_id(root / "tickets")
     ticket_dir = root / "tickets" / ticket_id
     ticket_dir.mkdir(parents=True, exist_ok=False)
     ticket_path = ticket_dir / "ticket.md"

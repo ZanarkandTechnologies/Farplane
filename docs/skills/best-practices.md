@@ -226,11 +226,9 @@ Use these thresholds and gates:
 
 - If a `SKILL.md` section grows past roughly 100 lines, ask whether part of it is
   branch-specific detail that belongs in a reference.
-- Every staged hand-authored text file under `skills/` must be at most 200 lines.
-  Split by branch, provider, responsibility, method, or artifact type before
-  commit. Generated graphs, dependency locks, and media assets are excluded.
-- The gate is a legacy-safe ratchet: untouched oversized files do not block a
-  commit, but an oversized file fails when it is next staged.
+- Treat file length as a diagnostic, not a hard gate. Split by branch,
+  provider, responsibility, method, or artifact type when doing so improves
+  ownership, first-load precision, or maintainability.
 - If the same rule appears in two or more skills, consider a shared doc or
   template owner. Keep a one-line pointer in each `SKILL.md` when the rule is
   required for first-load behavior.

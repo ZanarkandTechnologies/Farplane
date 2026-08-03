@@ -1,6 +1,6 @@
 ---
 template_id: skill-template
-template_version: "0.3.8"
+template_version: "0.3.9"
 feature_refs:
   - FEAT-0022
   - FEAT-0054
@@ -22,7 +22,7 @@ description: "[TODO: Verb input/context into output/artifact when call-condition
 tier: [TODO: 1 | 2 | 3]
 source: local
 template_uses:
-  skill-template: "0.3.8"
+  skill-template: "0.3.9"
   # Add only after the skill fits 10 top-level todos, 5 QA checklist items,
   # and 5 eval tasks.
   # skill-surface-budget: "0.1.0"
@@ -154,6 +154,9 @@ Do not call phase-like skills recursively at the same scope.
 - [ ] 2. Read required context and current artifacts.
    - [ ] If `qa_checklist.md` exists, read it now and use it as preflight
      guardrails while executing this skill.
+   - [ ] If the work is prompt-heavy or quality-dependent and a relevant
+     `examples/golden/*.md` exists, read it with the applicable QA checklist.
+     Transfer its invariants; do not copy its fixture facts or wording.
 - [ ] 3. Choose the branch.
    - [ ] 1. Default branch.
    - [ ] 2. Update/repair branch.
@@ -168,14 +171,22 @@ Do not call phase-like skills recursively at the same scope.
    - [ ] No duplicated first-load logic.
    - [ ] Structure checklist scanned against changed files for long templates,
      examples, rare branches, missing reference routing, and first-load bloat.
+   - [ ] Independent review of prompt-heavy or quality-dependent work receives
+     the candidate, golden invariants, applicable QA, and held-out context—but
+     not planner scratch reasoning—and rejects duplicate state, workflows,
+     fields, or avoidable first-load context.
    - [ ] Explicit proof command or blocker.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 ## Templates
 
-- [TODO: Inline one short positive example. For quality-dependent skills with
-  reference assets, accepted outputs, or comparison gates, add
-  `examples/<slug>/example.md` plus optional `examples/<slug>/assets/*`.
+- [TODO: Inline one short positive example. For prompt-heavy or
+  quality-dependent skills, use
+  `docs/skills/templates/GOLDEN_EXAMPLE.md` to add one compact
+  `examples/golden/<case>.md`; load it conditionally with QA and calibrate from
+  invariants rather than copied facts or wording. For other reference assets,
+  accepted outputs, or comparison gates, add `examples/<slug>/example.md` plus
+  optional `examples/<slug>/assets/*`.
   Use `templates/*` or `prompts/*` when the reusable asset is a prompt,
   packet, or generated artifact shape.]
 - [TODO: If this skill needs a focused behavioral eval, add

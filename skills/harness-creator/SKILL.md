@@ -32,7 +32,6 @@ farplane/harness.yaml = typed charter: identity, planning areas,
 farplane/metrics.yaml = provider-independent metric definitions with direction,
                         freshness, and optional hard-guard rules
 farplane/bindings.yaml = non-secret project and provider coordinates
-farplane/hooks.json  = declarative project hook config
 .agents/skills/      = local capability skills for company-specific production
                        workflows
 ```

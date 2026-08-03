@@ -156,6 +156,22 @@ init_advisor_qa(project_root, init_mode, activation_requested?)
      config by default.
 
 17. `proof_commands`
-    - Pass: the final init or dogfood result names the exact validator,
-      checklist, eval, or manual evidence used.
-    - Fail: completion is claimed with "looks good" and no proof ref.
+   - Pass: the final init or dogfood result names the exact validator,
+     checklist, eval, or manual evidence used.
+   - Fail: completion is claimed with "looks good" and no proof ref.
+
+18. `business_foundation_tickets`
+   - Pass: a fresh bootstrap creates exactly `TASK-0001` `find_customer`,
+     `TASK-0002` `deliver_value`, and `TASK-0003` `collect_revenue`; sequences
+     are `1..3`, later tickets depend on the preceding ticket, and no live work
+     or automation starts. External-action approvals stay in the ticket program,
+     not retired ticket metadata.
+   - Fail: bootstrap emits the retired starter PRD ticket, omits or duplicates
+     a foundation step, weakens approval/dependency ordering, or activates work.
+
+19. `foundation_ticket_preservation`
+   - Pass: without `--force`, each existing foundation ticket path is preserved
+     byte-for-byte, missing sibling tickets are still created, and every
+     collision is reported with its exact destination path.
+   - Fail: a brownfield collision is silently overwritten, suppresses creation
+     of unrelated missing tickets, or is reported as a clean three-ticket init.

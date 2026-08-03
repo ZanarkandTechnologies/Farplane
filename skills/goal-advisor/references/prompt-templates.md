@@ -69,8 +69,9 @@ First read `program.md`; it is the executable loop policy for this Goal
 Packet. Then read `ticket.md`; it is the scope, acceptance, and proof contract.
 When listed, use `hypothesis-tree.json` as the sole current research-state
 owner: derive eligible leaves from parent and status, and do not trust or write
-a duplicate frontier, child list, depth, or rank. Use `progress.md` as the
-append-only state log. If `program.md` is missing,
+a duplicate frontier, child list, depth, or rank. Read only the latest 80 lines
+of `progress.md` initially; load older receipts only to resolve a named evidence
+gap. Use `progress.md` as the append-only state log. If `program.md` is missing,
 stale, not listed here, or conflicts with the ticket's scope/proof policy, stop
 blocked or return to `goal-advisor` to regenerate the packet.
 
@@ -99,11 +100,12 @@ QA Strategy proof weight includes `qa`, `visual_qa`, `agent_qa`, `review`, or
 self-certification as proof.
 
 Final checkpoint: Before `stop_complete` on material ticket work, run or
-request the QA evidence review and completion review required by the ticket's
+request the QA evidence review, write the proposed user-facing response to a
+ticket artifact, and run completion review required by the ticket's
 `QA Strategy.goal_advisor_inputs`, or `program.md`. Write the strongest evidence,
 review receipt, command checks, docs validation, and any residual risk back to
 the ticket `Links` and the relevant `progress.md`. If QA evidence review,
-completion review, docs validation, or packet freshness is missing, stale, or
+completion review, reviewed `approved_response`, docs validation, or packet freshness is missing, stale, or
 below the required gate, stop blocked or revise instead of claiming completion.
 For a material implementation Goal, after QA passes and before completion
 review, run the `demo` skill to produce the default narrated lead-engineer recap
@@ -112,8 +114,11 @@ checks, planning-only Goals, or direct non-Goal work.
 When every gate passes, run `farplane ticket close TASK-XXXX` and include its
 receipt before `stop_complete`. Do not move the ticket by hand.
 
-After each turn: Compare progress against the listed files, choose and execute
-one bounded action, and evaluate it with the ticket/program provider. When a
+After each turn: Apply `observe -> choose_next -> act -> verify -> write_back`.
+Choose among `execute`, `diagnose`, `report_now`, `request_feedback`, and
+`stop`; spend more budget only when the selected move beats the outside
+options. Invoke Leverage Advisor only when several plausible moves need
+judgment. Execute a mechanically implied move directly. When a
 hypothesis tree is listed, update the selected node and bounded children first;
 then append a compact selection and mutation receipt, evidence link, learning,
 decision, and next action to `progress.md`. When
@@ -216,8 +221,9 @@ metric sample, drift verdict, next action, and blockers.
 Metric: Use the listed eval, review, or human feedback provider. Do not promote
 unverified changes as accepted rules.
 
-After each turn: Use Leverage Advisor to select one eligible pending node,
-change one bounded part of the skill, run the declared complete evaluator,
+After each turn: Apply the program's Decision Backbone. Use Leverage Advisor
+only when several eligible nodes need judgment; otherwise execute the
+mechanically implied node directly. Change one bounded part of the skill, run the declared complete evaluator,
 update the tree, append the observation, evidence, learning, decision, and next
 action, then request drift review when required. Promote
 only durable accepted rules. Use Goal mode as the durable loop runner,

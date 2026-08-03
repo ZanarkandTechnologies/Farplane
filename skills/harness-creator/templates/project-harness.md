@@ -15,7 +15,6 @@ canonical_targets:
   - farplane/metrics.yaml
   - farplane/automations.toml
   - farplane/bindings.yaml
-  - farplane/hooks.json
   - .agents/skills/README.md
 ---
 
@@ -35,7 +34,6 @@ Farplane files:
 - `farplane/automations.toml` owns reviewable full Codex automation config.
 - `farplane/bindings.yaml` owns non-secret project/provider coordinates and
   coordinates; `farplane/metrics.yaml` owns grouped refresh prompts.
-- `farplane/hooks.json` owns declarative project hook config.
 - `.agents/skills/` owns project-local capability workflows.
 
 ## Static Charter Delta

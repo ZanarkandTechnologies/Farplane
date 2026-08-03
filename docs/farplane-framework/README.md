@@ -3,7 +3,7 @@ title: Farplane Framework
 status: active
 owner: harness
 created_at: 2026-06-15
-updated_at: 2026-07-22
+updated_at: 2026-07-31
 framework_template_version: "0.3.2"
 source_of_truth:
   - docs/prd.md
@@ -49,6 +49,7 @@ Read [Lifecycle](lifecycle.md) first. It summarizes the V1 system:
 ```text
 program files + capability skills
 -> one ticket board
+-> Daily/Weekly report-first metric review
 -> one Work Pulse
 -> bounded scheduled sources
 -> ticket-local execution, QA, review, and learning

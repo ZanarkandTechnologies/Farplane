@@ -5,6 +5,7 @@ paths = [
   "templates/global/AGENTS.md",
   "docs/skills/templates/SKILL_TEMPLATE.md",
   "docs/skills/templates/METHOD_REFERENCE_TEMPLATE.md",
+  "docs/skills/templates/GOLDEN_EXAMPLE.md",
   "skills/skill-creator/references/EVAL_TASK_TEMPLATE.json",
   "docs/skills/templates/QA_CHECKLIST_TEMPLATE.md",
   "tickets/templates/ticket.md",

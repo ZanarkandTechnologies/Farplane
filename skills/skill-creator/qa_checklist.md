@@ -25,7 +25,10 @@ for material skill work.
   unless needed.
 - [ ] Proof and QA match the behavior risk, including domain-specific todo/QA
   review, skill-local examples, skill-local QA, and skill-maintenance checks
-  for material structure or runtime guardrail changes.
+  for material structure or runtime guardrail changes. Behavior-sensitive
+  creation hands its canonical `evals/evals.json` to `eval` for evidence-backed
+  execution and candidate/baseline comparison; `skill-creator` does not
+  self-grade or own a parallel eval runner.
 
 ## Domain-Specificity Rubric
 

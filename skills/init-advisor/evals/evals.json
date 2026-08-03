@@ -2,6 +2,30 @@
   "skill_name": "init-advisor",
   "evals": [
     {
+      "id": "init_advisor_business_foundation_01",
+      "prompt": "A fresh Farplane project is initialized, while a brownfield project already has a custom tickets/TASK-0002/ticket.md. What ticket scaffold should init-advisor create and preserve?",
+      "expected_output": "Fresh bootstrap creates exactly three ordinary foundation tickets: TASK-0001 find_customer, TASK-0002 deliver_value depending on TASK-0001, and TASK-0003 collect_revenue depending on TASK-0002; Every ticket has the matching foundation_sequence 1 through 3 and uses the current ticket schema; It creates no starter PRD ticket and starts no live work or automation; In the brownfield project it preserves the existing TASK-0002 byte-for-byte, reports that exact collision, and still creates missing TASK-0001 and TASK-0003 unless force was explicitly requested",
+      "files": [],
+      "assertions": [
+        "Fresh bootstrap creates exactly TASK-0001 find_customer, TASK-0002 deliver_value, and TASK-0003 collect_revenue as ordinary tickets",
+        "Foundation sequences are 1, 2, and 3 without retired ticket metadata",
+        "TASK-0002 depends on TASK-0001 and TASK-0003 depends on TASK-0002",
+        "Does not create the retired starter PRD ticket or start live work or automation",
+        "Without force, preserves an existing TASK-0002 byte-for-byte and reports the exact collision",
+        "A partial TASK-0002 collision does not suppress creation of missing TASK-0001 and TASK-0003"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Init advisor creates and preserves the three-ticket business foundation",
+          "tags": [
+            "init-advisor",
+            "business-foundation",
+            "bootstrap"
+          ]
+        }
+      }
+    },
+    {
       "id": "init_advisor_pulse_interval_01",
       "prompt": "A new Farplane project is being initialized for autonomous operation. What should the generated automation surfaces contain?",
       "expected_output": "Creates farplane/automations.toml as the reviewable full automation config source; Creates farplane/harness.yaml as the static human charter with human thesis, leverage commitments, non-tradeoffs, authority, change rule, and planning areas; Creates farplane/metrics.yaml for provider-independent metric definitions and keeps provider refresh coordinates in farplane/bindings.yaml; Keeps recurring artifact production in capability skills rather than controllers; Uses Work Pulse as the only heartbeat, adaptive planner, exploratory ticket-admission point, and shared ticket executor; Uses separate Feed Scout, Daily/Weekly BAU, and Dogfood cron records for reports, bounded candidates, and capped direct recovery only; Keeps consolidation as cron and routes human-feedback improvement through Dogfood candidates rather than another controller; Uses date-stamped reports rather than latest.md as canonical state",

@@ -3,13 +3,14 @@ title: "Skill System"
 status: active
 owner: farplane-framework
 created_at: 2026-06-26
-updated_at: 2026-06-28
+updated_at: 2026-08-03
 tags:
   - farplane
   - systems
   - skill-system
 refs:
   - docs/skills/README.md
+  - docs/skills/advisors.md
   - docs/skills/system.md
   - docs/skills/templates/SKILL_TEMPLATE.md
   - skills/skill-maintenance/SKILL.md
@@ -30,11 +31,12 @@ system_record_json: |
     ],
     "refs": [
       "docs/skills/README.md",
+      "docs/skills/advisors.md",
       "docs/skills/system.md",
       "docs/skills/templates/SKILL_TEMPLATE.md",
       "skills/skill-maintenance/SKILL.md"
     ],
-    "last_verified": "2026-06-28"
+    "last_verified": "2026-08-03"
   }
 ---
 # Skill System
@@ -61,6 +63,11 @@ skill_system(change, repo_state?) -> owned_feature_set + boundary_decision + mai
 Skill System owns reusable expertise: skill packages, tiering, templates, local evals,
 QA checklists, registry intelligence, and maintenance constraints. It lets Farplane add
 capability without bloating the agent kernel.
+
+The [Advisor System Index](../skills/advisors.md) is the human discovery view
+for the cross-cutting advisor family inside this system. It does not create a
+second registry or a separate formal subsystem: advisor package metadata stays
+canonical in each skill and in the generated skill registry.
 
 ## Feature Docs
 
@@ -117,6 +124,7 @@ The Skill System owns reusable workflow packaging, tier semantics, QA sidecars, 
 ## Surfaces
 
 - `docs/skills/README.md`
+- `docs/skills/advisors.md`
 - `docs/skills/system.md`
 - `docs/skills/templates/SKILL_TEMPLATE.md`
 - `skills/skill-maintenance/SKILL.md`
@@ -131,6 +139,8 @@ The Skill System owns reusable workflow packaging, tier semantics, QA sidecars, 
 
 ## Change History
 
+- 2026-08-03: Added the grouped Advisor System index as a human discovery
+  surface backed by the generated skill registry.
 - 2026-06-28: Added capped skill surface budget as a Skill System feature.
 - 2026-06-27: Migrated into the reader-first system-spec shape.
 - 2026-07-07: Moved skill-local eval task feature ownership into consolidated

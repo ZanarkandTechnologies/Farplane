@@ -84,7 +84,6 @@ farplane/harness.yaml
 farplane/metrics.yaml
 farplane/automations.toml
 farplane/bindings.yaml
-farplane/hooks.json
 farplane/pm.json
 .agents/skills/README.md
 ```
@@ -104,9 +103,8 @@ Ignored runtime state:
 Key ownership:
 
 - `manifest.json`: versioned paths and compact project identity;
-- `harness.yaml`: typed human charter, complete planning area records with
-  canonical `areas.<area_id>.planner_instruction`, authority,
-  capability refs, and selected metric refs;
+- `harness.yaml`: typed human charter, configured planning skill allowlist,
+  passive area/ICP context, authority, capability refs, and selected metric refs;
 - `metrics.yaml`: provider-independent metric definitions with direction,
   freshness, and optional guard rules;
 - `.agents/skills/`: project-local recurring capability workflows;

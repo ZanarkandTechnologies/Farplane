@@ -50,7 +50,8 @@ source snapshot when the account/export/API cannot provide the metric.
 For content review windows, keep the stable KPI as the key and put media IDs
 under that KPI's `items`. Do not create dynamic KPI names from media IDs.
 `metrics.<kpi>.value` is the provider reading for that date; the UI derives
-daily difference from consecutive readings.
+the requested-window value, preceding equal-window comparison, trend, and
+cumulative view when the metric is a flow.
 
 Only Reel media can produce watch-time/retention observations. Non-Reel media
 should record a retention source gap, not zero.

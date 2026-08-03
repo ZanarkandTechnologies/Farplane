@@ -59,6 +59,10 @@ accept_plan(plan)
      and prompt variables limited to values the current ticket truly needs?
    - Violation: The plan introduces knobs for hypothetical variants, broad
      configurability, or caller choice without a current caller and proof path.
+   - For canonical structured state, name the natural/composite identity and
+     separate authored fields from replaceable projection fields. A derivable
+     field is a violation unless the plan names its current snapshot-time,
+     query/index, or interchange requirement.
 
 5. `function-breakdown-necessary`
    - Question: Does each proposed helper, function, class, component, or module
@@ -208,6 +212,7 @@ plan_qa:
   minimal_required_version: pass | revise | block
   reuse_before_new_surface: pass | revise | block
   least_parameters: pass | revise | block
+  canonical_schema_minimality: pass | revise | block | not_applicable
   new_files_functions_justified: pass | revise | block
   minimal_impl_plan_claim: pass | revise | block
   existing_service_fit: pass | revise | block

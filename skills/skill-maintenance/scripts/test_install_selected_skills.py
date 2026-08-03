@@ -179,14 +179,44 @@ class InstallSelectedSkillsTests(unittest.TestCase):
             repo = Path(tmp) / "repo"
             target = Path(tmp) / "codex"
             write_skill(repo, "review", "Run quality checks.")
-            retired = target / "skills" / "ticket-opportunity-generator"
-            retired.mkdir(parents=True)
-            (retired / "SKILL.md").write_text("retired installed copy\n", encoding="utf-8")
+            retired_names = {
+                "horizon-advisor",
+                "image-generation",
+                "ticket-opportunity-generator",
+                "video-generation",
+            }
+            for name in retired_names:
+                retired = target / "skills" / name
+                retired.mkdir(parents=True)
+                (retired / "SKILL.md").write_text(
+                    "retired installed copy\n", encoding="utf-8"
+                )
 
             result = installer.install_skills(repo, target, ["review"], True, False)
 
-            self.assertIn("ticket-opportunity-generator", result.pruned)
-            self.assertFalse(retired.exists())
+            self.assertEqual(set(result.pruned), retired_names)
+            for name in retired_names:
+                self.assertFalse((target / "skills" / name).exists())
+
+    def test_prune_preserves_external_symlink_with_retired_name(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp) / "repo"
+            target = Path(tmp) / "codex"
+            external = Path(tmp) / "external"
+            write_skill(repo, "review", "Run quality checks.")
+            write_skill(external, "image-generation", "External image skill.")
+            external_dest = target / "skills" / "image-generation"
+            external_dest.parent.mkdir(parents=True)
+            external_dest.symlink_to(external / "skills" / "image-generation")
+
+            result = installer.install_skills(repo, target, ["review"], True, False)
+
+            self.assertNotIn("image-generation", result.pruned)
+            self.assertTrue(external_dest.is_symlink())
+            self.assertEqual(
+                external_dest.resolve(),
+                (external / "skills" / "image-generation").resolve(),
+            )
 
     def test_dry_run_does_not_create_target(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

@@ -15,6 +15,9 @@ into a second place to maintain skill truth.
 - This README is the human selection guide. Use it to understand why neighboring
   skills differ and which one should own a request before opening the generated
   registry or individual `SKILL.md` files.
+- [`advisors.md`](advisors.md) is the human-facing Advisor System index. It
+  groups every current advisor by operator use case while leaving package
+  metadata and `registry.jsonl` as inventory truth.
 - `skills/skill-maintenance/graph/` contains the tracked local visualization
   shell. Its generated skill, document, harness, and lifecycle data lives under
   ignored `.farplane/generated/graphs/`, preventing routine refreshes from
@@ -80,6 +83,10 @@ Use this rule of thumb:
 
 ## Human Selection Guide
 
+For advisor-shaped requests, start with the grouped
+[`Advisor System Index`](advisors.md), then use this broader table when the
+right owner is not an advisor.
+
 Use this table when two skills look similar. It is intentionally prose-first;
 `registry.jsonl` remains the machine-readable inventory.
 
@@ -98,9 +105,8 @@ Use this table when two skills look similar. It is intentionally prose-first;
 | Compose skill todos into a task-specific strategy and proof-bearing plan | `plan` | It is the Tier 2 planning prompt-template for binding context, choosing grounding/search budget, composing workflows, and producing executable todos. | A domain planner already owns the artifact and no cross-skill composition or strategy choice is needed. |
 | Handle an explicit legacy `$execute` call | `execute` | It is a deprecated compatibility wrapper over the native Tier 0 execution phase. | A task merely has an execution phase; use the native phase or a public domain execution skill such as `goal-advisor` or `frontend-craft`. |
 | Watch an existing PR until review agents and checks pass | `pr-review-watch` | It owns explicit heartbeat polling, project-local PR review memory, normalized PR verdicts, fix loops, and terminal notifications while reusing the task's assigned checkout and reviewer-agent review. | You only need one explicit material review (`review`). |
-| Test whether a child agent, skill, prompt, or narrow path visibly behaved correctly | `agent-behavior-test` | It captures one isolated child run with prompt, events/subagent report, output, artifacts, and a scored behavior verdict. | The operator wants full readiness proof, adversarial evidence review, or fix/rerun orchestration. |
-| Check, scaffold, onboard, and run harness-native evals | `eval` | It checks for `.farplane/evals`, initializes missing files, designs clean-room starter tasks with `eval:onboarding`, discovers modular `skills/*/evals/evals.json` rows, judges with boolean/tier verdicts, and treats hardcase as eval metadata. | You need a model/provider/prompt comparison matrix; graduate to Promptfoo after the local suite stabilizes. |
-| Test a feature, skill, prompt, or workflow adversarially | `agent-qa-test` | It designs cases, runs or drafts a tester lane, attacks the tester evidence with an evidence-review lane, reconciles fixes/reruns, and can include `agent-behavior-test`-style run capture. | You only need one cheap conformance probe and no adversarial proof loop. |
+| Check, scaffold, onboard, and run harness-native evals | `eval` | It initializes/discovers clean-room eval tasks, judges boolean/tier outcomes, treats hardcases as metadata, and can preserve one isolated CLI run as a scored `behavior_trace` with prompt, events, logs, output, checkpoints, artifacts, schema verdict, and baseline comparison. | You need adversarial tester/evidence-review orchestration or only native-subagent evidence; use `agent-qa-test`. |
+| Test a feature, skill, prompt, or workflow adversarially | `agent-qa-test` | It designs cases, runs or drafts a tester lane, attacks the tester evidence with an evidence-review lane, reconciles fixes/reruns, and can include Eval `behavior_trace` capture. | You only need one cheap CLI conformance probe and no adversarial proof loop. |
 | Choose how to prove a behavior claim | `proof-advisor` | It turns a claim or failure risk into proof cases, proof-surface choice, and a handoff to testing, eval, QA, visual QA, agent QA, review, or a source-gap ticket. | The proof surface is already selected and you only need to run it; use the executor such as `testing`, `eval`, `qa`, or `review`. |
 | Apply settled skill-local runtime guardrails | `qa_checklist.md` beside the skill | It is the real-time checklist surface for reusable checks that should be read before execution, applied before completion, and independently reviewed after material skill edits. | You need to discover expected behavior or compare variants; use `evals/evals.json` or an eval suite. |
 | Review local diffs before commit or push | `code-review` | It owns lightweight diff review from deterministic check logs, changed files, and project review overlays, then escalates material claims to `review`. | The work needs a TAS verdict, completion receipt, or evidence-bundle judgment; use `review`. |
@@ -120,13 +126,13 @@ Agent testing stack:
 ```text
 agent-qa-test orchestrates serious proof
   -> tester lane gathers evidence
-  -> agent-behavior-test captures child-agent behavior when useful
+  -> Eval behavior_trace captures CLI child-agent behavior when useful
   -> evidence-review lane attacks proof strength
   -> main agent fixes, reruns, or records a blocker
   -> review/final proof-bundle check judges readiness
 ```
 
-Use `agent-behavior-test` alone for cheap skill or prompt conformance probes.
+Use Eval `behavior_trace` alone for cheap CLI skill or prompt conformance probes.
 Use `agent-qa-test` for `$test`, "please test properly", app readiness, or any
 claim where the evidence itself needs a skeptical lane.
 

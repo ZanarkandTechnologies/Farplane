@@ -28,6 +28,19 @@ goal_advisor_qa(goal_prompt, ticket?, program?) -> checklist_verdicts + fixes_or
    - Violation: The prompt duplicates large context that belongs in
      `ticket.md`, `program.md`, `progress.md`, or `design.md`.
 
+1a. `first-load-context-budget`
+   - Question: Does initial execution read full ticket/program plus at most the
+     latest 80 progress lines, pass the 400-line hard gate, and treat 300 lines
+     as consolidation pressure rather than a quality score?
+   - Violation: The prompt loads the full progress history, exceeds the hard
+     gate, hides required policy, or weakens proof to become shorter.
+
+1b. `single-decision-backbone`
+   - Question: Does one Goal own `observe -> choose_next -> act -> verify ->
+     write_back`, with advisor skills invoked only at their conditional boundary?
+   - Violation: Goal Advisor, Metric Advisor, Leverage Advisor, Plan Next Wave,
+     or a domain skill all appear to own the same next-turn decision.
+
 2. `proof-route-named`
    - Question: Does the prompt name the proof route for `qa`, `visual_qa`,
      `agent_qa`, `review`, or `demo` proof weights?
@@ -65,6 +78,11 @@ goal_advisor_qa(goal_prompt, ticket?, program?) -> checklist_verdicts + fixes_or
      human gates, or destructive/deploy/spend boundaries resolved or asked
      before compiling the packet?
    - Violation: The Goal Packet guesses at execution-safety inputs.
+
+8a. `no-invented-bindings`
+   - Question: Are missing baselines, thresholds, budgets, attempt counts, and
+     example outcomes preserved as placeholders rather than fabricated?
+   - Violation: The architecture becomes concrete by inventing numbers.
 
 9. `coding-grounding-evidence`
    - Question: For implementation feature work, does the Goal prompt require
@@ -135,6 +153,8 @@ goal_advisor_qa:
   critical_path_proof_rule:
   final_completion_checkpoint:
   experiment_backbone:
+  first_load_context_budget:
+  decision_backbone:
   violations:
   fixes_or_deferrals:
 ```

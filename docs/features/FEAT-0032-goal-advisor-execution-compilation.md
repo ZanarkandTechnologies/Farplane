@@ -102,6 +102,12 @@ Goal Advisor is an execution compiler, not a replacement for the ticket.
   [Self-Improvement And Learning system](../systems/self-improvement-learning.md)
   owns its research-search semantics.
 - The compiled prompt shrinks the task rather than expanding global policy.
+- Every compiled program uses `observe -> choose_next -> act -> verify ->
+  write_back`. Advisor skills are conditional methods: Metric Advisor for
+  setup/repair, Leverage Advisor for real multi-option judgment, and Plan Next
+  Wave only outside an active Goal when the board needs refill.
+- First load is bounded to full ticket/program plus the latest 80 progress
+  lines, with a 300-line target and 400-line hard validation gate.
 - Completion still uses the ticket's proof and review gates.
 
 ## Feature Flow

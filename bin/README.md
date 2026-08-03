@@ -181,7 +181,8 @@ python3 skills/delegate-cli/scripts/delegate_cli_agent.py run \
 
 In the live interactive path, `goal-advisor` compiles the Goal-backed ticket
 execution contract. Native Goal mode owns persistence and ticket-local
-QA/review evidence owns completion; live Stop hooks are telemetry-only.
+QA/review evidence owns completion; the live Stop hook adds only a deterministic
+final-response length retry beside telemetry.
 
 ## How To Test
 

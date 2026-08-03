@@ -22,10 +22,11 @@ the configured watermark. Review WIP backpressures dispatch, not planning.
 Human-active tickets do not consume Pulse worker capacity. Workers execute
 ticket programs and produce proof; do not implement ticket bodies or wait for
 workers inside the heartbeat.
-When configured Feed Scout memory exists, load it once and pass relevant
-entry refs plus canonical per-area ICPs into Plan Next Wave. Outward-facing
-tickets must name a baseline/default and intended belief or workflow delta;
-memory is evidence, not authority.
+When configured Feed Scout World Memory exists, load it once and pass relevant
+complete source-backed facts plus canonical per-area ICPs into Plan Next Wave.
+Outward-facing tickets must copy selected facts into `audience_context`, name a
+baseline/default and intended belief or workflow delta; World Memory is
+evidence, not authority.
 
 Params:
 project_root = "<project-root>"
@@ -59,7 +60,7 @@ prompt = '''
 Use $feed-scout.
 
 Run the bounded daily Feed Scout. Write its dated report, then update and
-validate the configured Markdown memory in place with canonical ICPs, current
+validate the configured World Memory in place with canonical ICPs, current
 trends, notable things, and source gaps. Merge current synthesis rather than
 creating daily/monthly snapshots. Then produce bounded source-backed candidate
 interventions. You may create one direct recovery
@@ -75,7 +76,7 @@ write_policy = "local recovery tickets only; no opportunity or experiment ticket
 
 Final response:
 - Link the Feed Scout report path and summarize the strongest findings in 2-4 bullets.
-- Link the memory path and report changed headings, source refs, and validation.
+- Link the World Memory path and report changed headings, source refs, and validation.
 - List direct recovery tickets created or updated, or `none`.
 - List candidate interventions and their admission result: `created`,
   `planner_candidate`, `source_gap`, `blocked_by_gate`, or `not_ticketable`.
@@ -206,12 +207,11 @@ Reads:
 
 Final response:
 - Link the retrospective report path and summarize the portfolio decision in 2-4 bullets.
-- List specs/tickets admitted, sent to Pulse materialization, or rejected.
-- List each shortfall or candidate decision with the reason: `admitted`,
-  `already_owned`, `duplicate`, `conflict`, `source_gap`, `delayed_cap`,
-  `incomplete_spec`, `blocked_by_gate`, or `not_ticketable`.
+- List all opportunity signals with `qualified`, `deprioritized`, `duplicate`,
+  `conflict`, `source_gap`, or `not_ticketable` evidence.
 - Name operator-needed items, source gaps, and next owner.
-- Include the no-execution receipt.
+- Include the no-action receipt: no planning, ticket/spec creation,
+  materialization, execution, dispatch, check-in, Reward decision, or mutation.
 
 Config source:
 farplane/automations.toml automation id="project-weekly-self-improvement"
