@@ -3,7 +3,7 @@ title: "Farplane Hooks and Runtime"
 status: active
 owner: farplane-framework
 created_at: 2026-06-23
-updated_at: 2026-07-15
+updated_at: 2026-08-03
 framework_template_version: "0.3.0"
 tags:
   - farplane
@@ -39,7 +39,7 @@ Root `hooks.json` currently defines:
 | Event | Commands | Purpose |
 | --- | --- | --- |
 | `UserPromptSubmit` | `shared_checkout_guard.py`, `capture_user_turn.py`, `farplane_console_ping.py` | claim the primary Git checkout for one active session, classify the current user turn, append lightweight conversation windows, resolve native/ticket display metadata locally, and send sanitized `turn_start` hook telemetry |
-| `Stop` | `shared_checkout_guard.py`, `farplane_console_ping.py` | release primary-checkout ownership, resolve the latest native/ticket display metadata, and send sanitized `turn_end` hook telemetry |
+| `Stop` | `final_response_gate.py`, `shared_checkout_guard.py`, `farplane_console_ping.py` | compress over-limit user-facing responses before releasing primary-checkout ownership, then send sanitized `turn_end` hook telemetry |
 | `SubagentStart` | `farplane_console_ping.py` | send sanitized subagent-start lifecycle telemetry |
 | `SubagentStop` | `farplane_console_ping.py` | send sanitized subagent-stop lifecycle telemetry |
 
@@ -176,9 +176,16 @@ each target and interpreter.
 
 ## Hook Rules
 
+Global Codex installation is primary-checkout-only. `farplane install`,
+`farplane hooks install`, and direct `install.sh` execution reject linked Git
+worktrees so `~/.codex` cannot be repointed at an ephemeral task checkout.
+
 - Detect or capture cheaply.
-- Keep live Stop behavior telemetry-only unless a future ticket introduces a
-  non-continuing guard with explicit evidence and no native Goal reentry.
+- Keep live Stop behavior telemetry-only except for small deterministic gates
+  with explicit evidence. The final-response gate may continue a turn only to
+  compress an over-limit user-facing message; it may not judge completion,
+  rewrite artifacts, start new work, or treat budget-exempt presentation as
+  permission to introduce more topics.
 - Write only small, bounded runtime records unless a ticket or skill owns the
   durable write.
 - Route judgment-heavy work to skills, tickets, reviewers, or drains.
@@ -200,8 +207,12 @@ Hook and runtime nodes should use these tags:
 - `runtime`: ignored local state under `.farplane/`
 - `automation`: Codex automation prompt/thread surface
 - `pm-ui`: UI grouping through `farplane/pm.json`
-- `mechanical-gate`: deterministic validation surface; no live Stop gate is
-  configured by default
+- `mechanical-gate`: deterministic validation surface; the final-response prose
+  word ceiling is hard, while the normal prose-line ceiling requests one
+  semantic compression pass. Closed Mermaid, exact image/video embed lines,
+  and trailing link-only references are classified separately by
+  `bin/core/farplane_response.py`; malformed or mixed forms count as prose. The
+  gate never truncates or owns task completion.
 
 These tags let the lifecycle graph show hook boundaries without implying that
 hooks are a central orchestrator.

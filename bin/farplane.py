@@ -53,6 +53,7 @@ DELEGATED_COMMANDS = {
 OLD_CONVEX_SITE_URL = "https://agreeable-finch-230.convex.site"
 PREVIOUS_NOTIFY_FLAG = "--previous-notify"
 MANAGED_HOOK_FILES = (
+    "final_response_gate.py",
     "farplane_console_ping.py",
     "shared_checkout_guard.py",
 )
@@ -74,6 +75,31 @@ class CliError(Exception):
     def __init__(self, message: str, code: int = 1) -> None:
         super().__init__(message)
         self.code = code
+
+
+def is_linked_worktree(root: Path = CORE_ROOT) -> bool:
+    """Return whether root is a linked worktree rather than the primary checkout."""
+    commands = (
+        ["git", "-C", str(root), "rev-parse", "--path-format=absolute", "--git-dir"],
+        ["git", "-C", str(root), "rev-parse", "--path-format=absolute", "--git-common-dir"],
+    )
+    paths: list[Path] = []
+    for command in commands:
+        result = subprocess.run(command, capture_output=True, text=True)
+        if result.returncode != 0 or not result.stdout.strip():
+            return False
+        paths.append(Path(result.stdout.strip()).resolve())
+    return paths[0] != paths[1]
+
+
+def require_primary_checkout_install(action: str, root: Path = CORE_ROOT) -> None:
+    if is_linked_worktree(root):
+        raise CliError(
+            f"{action}_from_linked_worktree_blocked: global Codex installation must "
+            "come from the primary Farplane checkout; merge or restore the change "
+            "there, then rerun the install",
+            2,
+        )
 
 
 def now_iso() -> str:
@@ -712,6 +738,7 @@ def run_with_doppler(args: argparse.Namespace) -> int:
 
 
 def run_install(args: argparse.Namespace) -> int:
+    require_primary_checkout_install("install")
     command = ["bash", str(CORE_ROOT / "install.sh")]
     if args.target:
         command.extend(["--target", args.target])
@@ -782,6 +809,7 @@ def hooks_doctor(target: Path | None = None) -> dict[str, Any]:
 
 
 def run_hooks_install(args: argparse.Namespace) -> int:
+    require_primary_checkout_install("hooks_install")
     target = Path(args.target).expanduser() if args.target else DEFAULT_CODEX_HOME
     payload = install_hooks(target, dry_run=args.dry_run)
     print_payload(payload, args.json)
@@ -901,6 +929,40 @@ def run_harness_health_compile_cli(args: argparse.Namespace) -> int:
     except HarnessHealthError as exc:
         print(f"farplane harness health: {exc}", file=sys.stderr)
         return 1
+
+
+def run_response_check_cli(args: argparse.Namespace) -> int:
+    from farplane_response import check_response
+
+    if args.stdin and args.path:
+        raise CliError("response_check_error:choose either --stdin or PATH", code=2)
+    if args.max_words <= 0 or args.max_lines <= 0:
+        raise CliError("response_check_error:limits must be positive integers", code=2)
+    try:
+        markdown = (
+            Path(args.path).expanduser().read_text(encoding="utf-8")
+            if args.path
+            else sys.stdin.read()
+        )
+    except OSError as exc:
+        raise CliError(f"response_check_error:{exc}", code=2) from exc
+
+    payload = check_response(markdown, args.max_words, args.max_lines)
+    if args.json:
+        print(json.dumps(payload, indent=2, sort_keys=True))
+    else:
+        counts = payload["counts"]
+        print(
+            "farplane response check: "
+            f"{'pass' if payload['ok'] else 'fail'} "
+            f"(prose_words={counts['prose_words']}/{args.max_words}, "
+            f"prose_lines={counts['prose_nonblank_lines']}/{args.max_lines}, "
+            f"mermaid={counts['mermaid_blocks']}, media={counts['media_embeds']}, "
+            f"references={counts['reference_entries']})"
+        )
+        for violation in payload["violations"]:
+            print(f"- over limit: {violation}")
+    return 0 if payload["ok"] else 1
 
 
 def run_ticket_history_cli(args: argparse.Namespace) -> int:
@@ -1268,6 +1330,18 @@ def build_parser() -> argparse.ArgumentParser:
     harness_health_compile.add_argument("--json", action="store_true")
     harness_health_compile.set_defaults(func=run_harness_health_compile_cli)
 
+    response = sub.add_parser("response", help="Inspect user-facing response budgets.")
+    response_sub = response.add_subparsers(dest="response_command")
+    response_check = response_sub.add_parser(
+        "check", help="Count prose and report excluded presentation blocks."
+    )
+    response_check.add_argument("path", nargs="?", help="Markdown file; stdin when omitted.")
+    response_check.add_argument("--stdin", action="store_true", help="Read Markdown from stdin.")
+    response_check.add_argument("--max-words", type=int, default=500)
+    response_check.add_argument("--max-lines", type=int, default=20)
+    response_check.add_argument("--json", action="store_true")
+    response_check.set_defaults(func=run_response_check_cli)
+
     ticket = sub.add_parser("ticket", help="Apply canonical Farplane ticket lifecycle transitions.")
     ticket_sub = ticket.add_subparsers(dest="ticket_command")
     ticket_close = ticket_sub.add_parser("close", help="Close, archive, and emit completion mining for one ticket.")
@@ -1452,6 +1526,8 @@ def main(argv: list[str]) -> int:
         parser.error("hooks requires a subcommand: install or doctor")
     if getattr(args, "command", None) == "validate" and getattr(args, "validate_command", None) is None:
         parser.error("validate requires a subcommand: ticket")
+    if getattr(args, "command", None) == "response" and getattr(args, "response_command", None) is None:
+        parser.error("response requires a subcommand: check")
     if getattr(args, "command", None) == "notify" and getattr(args, "notify_command", None) is None:
         return run_notify_status(argparse.Namespace(target=None, json=False))
     if getattr(args, "command", None) == "ui" and getattr(args, "ui_command", None) is None:

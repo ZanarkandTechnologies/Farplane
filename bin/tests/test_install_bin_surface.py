@@ -39,11 +39,16 @@ class InstallBinSurfaceTests(unittest.TestCase):
             }.issubset(retired)
         )
 
-    def test_installed_hook_allowlist_contains_checkout_guard(self) -> None:
+    def test_installed_hook_allowlist_contains_managed_hooks(self) -> None:
         self.assertEqual(
             shell_array("INSTALL_HOOK_FILES"),
-            ("farplane_console_ping.py", "shared_checkout_guard.py"),
+            ("final_response_gate.py", "farplane_console_ping.py", "shared_checkout_guard.py"),
         )
+
+    def test_install_blocks_linked_worktree_sources(self) -> None:
+        text = INSTALL.read_text(encoding="utf-8")
+        self.assertIn("--git-common-dir", text)
+        self.assertIn("global Codex installation must come from the primary", text)
 
     def test_removed_runtime_and_invocation_sources_do_not_exist(self) -> None:
         removed = (

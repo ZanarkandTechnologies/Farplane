@@ -114,6 +114,17 @@ while [ "$#" -gt 0 ]; do
   esac
 done
 
+# Global Codex links must never point into an ephemeral linked worktree. A task
+# may test there, but only the primary checkout owns ~/.codex installation.
+if command -v git >/dev/null 2>&1; then
+  CURRENT_GIT_DIR="$(git -C "$REPO_DIR" rev-parse --path-format=absolute --git-dir 2>/dev/null || true)"
+  COMMON_GIT_DIR="$(git -C "$REPO_DIR" rev-parse --path-format=absolute --git-common-dir 2>/dev/null || true)"
+  if [ -n "$CURRENT_GIT_DIR" ] && [ -n "$COMMON_GIT_DIR" ] && [ "$CURRENT_GIT_DIR" != "$COMMON_GIT_DIR" ]; then
+    echo "Install blocked: global Codex installation must come from the primary Farplane checkout, not linked worktree $REPO_DIR" >&2
+    exit 2
+  fi
+fi
+
 STAMP="$(date +%Y%m%d-%H%M%S)"
 BACKUP_ROOT="${TARGET_DIR}/.install-backups/${STAMP}"
 LOCAL_TOML_FILE="${TARGET_DIR}/config.local.toml"
@@ -126,6 +137,7 @@ INSTALL_BIN_FILES=(
   notify.py
 )
 INSTALL_HOOK_FILES=(
+  final_response_gate.py
   farplane_console_ping.py
   shared_checkout_guard.py
 )
