@@ -3,7 +3,7 @@ title: Farplane evals
 status: implemented
 owner: feature-registry
 created_at: 2026-06-26
-updated_at: 2026-07-07
+updated_at: 2026-07-16
 tags:
   - farplane
   - feature
@@ -17,7 +17,6 @@ refs:
   - docs/LESSONS.md
   - docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md
   - docs/HISTORY.md
-  - "docs/features/registry.jsonl#FEAT-0031"
   - "docs/features/registry.jsonl#FEAT-0063"
 feature_id: FEAT-0039
 system_id: SYS-0005
@@ -33,7 +32,6 @@ surfaces:
   - docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md
 source_refs:
   - docs/HISTORY.md
-  - "docs/features/registry.jsonl#FEAT-0031"
   - "docs/features/registry.jsonl#FEAT-0063"
   - docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md
 external_refs: []
@@ -46,14 +44,14 @@ evidence_refs:
   - docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md
   - tickets/archive/TASK-0228/ticket.md
   - docs/HISTORY.md
-known_limits: Owns Farplane eval capture and runnable eval surfaces; broader correction strategy still belongs to Self-Improvement And Learning.
+known_limits: Owns Farplane eval capture, runnable eval surfaces, and isolated CLI behavior traces; broader correction strategy still belongs to Self-Improvement And Learning.
 metrics:
   - gap_packet_quality_pass
   - harness_placement_quality_pass
   - metric_card_traceability_pass
   - hardcase_eval_metadata_pass
   - narrow_regression_eval_pass
-last_verified: 2026-07-07
+last_verified: 2026-07-16
 experimental: false
 superseded_by: false
 ---
@@ -87,6 +85,13 @@ owner, patch the smallest durable surface, and prove it with a representative ca
 - Uses gap-analysis to describe expected versus observed behavior.
 - Uses harness-advisor to choose the owner surface for a fix.
 - Captures hardcases as eval metadata with input, expected behavior, observed failure, owner, tags, proof artifacts, and promotion status.
+- Captures isolated CLI behavior traces with exact prompt/events/logs/output,
+  checkpoint and artifact scoring, optional output-schema validation, and
+  equal-task baseline comparison.
+- Reduces repeated comparable run summaries into strict-grade, behavior-pass,
+  exact-suite, and per-case stability evidence before material promotion.
+- Reports image-evidence fixture tension separately from target behavior so a
+  facts-only fixture cannot silently masquerade as rendered visual proof.
 - Routes metric selection through metric-advisor before self-improvement claims.
 - Promotes repeated failures into skills, evals, lessons, docs, hooks, validators, or tickets.
 
@@ -104,6 +109,11 @@ Self-improvement must land in an owner, not a memory dump.
 - Hardcases are narrow enough to rerun or reason about.
 - Local Farplane wrappers, fixtures, registries, and evals are patched before external installed skills.
 - Broad migrations require proof before rollout.
+- Material stochastic promotions use two or more comparable summaries;
+  `stable_pass` requires every repeated strict grade and behavior trace to pass.
+- Repeated evidence measures observed variance rather than eliminating it.
+  Legacy summaries without model/profile/prompt hashes remain explicitly
+  marked as a metadata gap even when their recorded fields are compatible.
 
 ## Feature Flow
 
@@ -147,7 +157,6 @@ Owner surfaces:
 Source context:
 
 - `docs/HISTORY.md`
-- `docs/features/registry.jsonl#FEAT-0031`
 - `docs/features/registry.jsonl#FEAT-0063`
 - `docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md`
 
@@ -188,6 +197,8 @@ Acceptance signals:
 - This feature does not inspect full Codex histories without a seed anchor.
 - This feature does not auto-apply broad harness migrations without proof.
 - Known limit: Correction is skill-and-artifact driven. Hardcase is eval metadata and legacy standalone hardcase artifacts should become runnable eval rows when the expected behavior is testable. Metric selection routes through metric-advisor before self-improve. The loop does not train models, sell data, inspect full Codex histories without a seed anchor, or auto-apply broad harness migrations without proof.
+- Native-subagent-only reports do not claim CLI JSON-event parity; route them
+  through Agent QA.
 - Delete or merge this feature only when its current truth has moved into a clearer owner and all active refs are removed.
 
 ## Metrics
@@ -208,6 +219,9 @@ Acceptance signals:
   Reason: keep the `FEAT-*` page while templates, skills, tickets, or proof surfaces need a stable capability handle.
 
 ## Change History
+
+- 2026-07-16: Absorbed standalone Agent Behavior Test as Eval
+  `behavior_trace` after parity proof; removed the duplicate skill and alias.
 
 - 2026-06-26: Feature spec created.
 - 2026-06-27: Migrated into the reader-first feature-spec shape.

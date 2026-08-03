@@ -29,7 +29,7 @@ that attacks whether the artifacts prove the claim.
 agent_qa_test(claim, target, evidence_policy?) -> tester_report + evidence_review + verdict
 state: reads(ticket/spec/skill/prompt/workflow, prior QA evidence, optional design.md); writes tester/evidence-review reports or prompt template
 gates: claim_under_test_written; tester_lane_collects_artifacts; evidence_review_lane_independent; pass_requires_strong_artifacts
-routes: agent-behavior-test | qa | visual-qa | review
+routes: eval:behavior-trace | qa | visual-qa | review
 fails: replaces normal ticket QA; lets tester self-approve; reports narrow proof as broad pass; treats missing screenshots/logs as harmless
 ```
 
@@ -67,8 +67,8 @@ For `agent-qa-test:experiment`, always return these minimum decisions:
 
 ## Phase Boundary
 
-This skill designs and reconciles adversarial proof. It may compose
-`agent-behavior-test` for instrumented child-agent capture and hand final proof
+This skill designs and reconciles adversarial proof. It may compose Eval
+`behavior_trace` for instrumented CLI child-agent capture and hand final proof
 bundles to `review`, but Goal mode remains the continuation owner.
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
@@ -98,7 +98,7 @@ bundles to `review`, but Goal mode remains the continuation owner.
         requested answer can be brief: expectation comparison; every validity
         check; bounded probe plus executor/diagnosis ownership; conditional
         research; scoped verdict plus scientific-evidence review.
-- [ ] Decide whether the tester lane needs `agent-behavior-test`-style
+- [ ] Decide whether the tester lane needs Eval `behavior_trace`
   instrumented run capture for child-agent logs, command events, or artifact
   conformance.
 - [ ] Draft or run a tester lane that gathers concrete artifacts instead of
@@ -201,8 +201,8 @@ missing hooks, and weak observability as QA findings. A pass claim is valid only
 when the evidence-review lane agrees that the artifacts answer the attack
 questions for the original claim under test.
 
-`goal-advisor` writes high-level native Goals. `agent-behavior-test` owns
-isolated run capture and scoring. `agent-qa-test` composes that lower-level
+`goal-advisor` writes high-level native Goals. Eval `behavior_trace` owns
+isolated CLI run capture and scoring. `agent-qa-test` composes that lower-level
 capture when tester-lane evidence needs durable child-agent logs, command
 events, final output, or scored artifact conformance. `agent-qa-test` sits
 between high-level intent and raw run capture: it turns the operator's "test
@@ -220,7 +220,7 @@ For serious readiness claims, the proof stack is:
 ```text
 agent-qa-test orchestrates
   -> tester lane gathers evidence
-  -> agent-behavior-test-style capture records child-agent behavior when useful
+  -> Eval behavior trace records CLI child-agent behavior when useful
   -> evidence-review lane attacks the tester artifacts
   -> main agent fixes, reruns, or reconciles
   -> review/final proof-bundle check judges whether the whole evidence package
@@ -264,7 +264,7 @@ agent-qa-test orchestrates
    pass would prove, plus the main evidence that would falsify it. Keep this
    claim stable unless the final verdict explicitly says the test narrowed.
 7. Decide whether the tester lane needs **instrumented run capture**:
-   - use `agent-behavior-test` shape when testing skill/prompt conformance,
+   - use Eval `behavior_trace` when testing skill/prompt conformance,
      child-agent behavior, artifact contracts, command logs, or regression
      canaries
    - plain tester-lane evidence is enough when manual screenshots/logs/files
@@ -367,19 +367,19 @@ Known gaps are not harmless caveats when they falsify the claim under test.
 
 Use these templates when the operator wants prompt output instead of direct
 execution:
-- `prompts/experiment-loop.md` for independent first-principles experiment
-  diagnosis and reconciliation
 
 - `prompts/run-loop.md` for the default adversarial testing loop
 - `prompts/prompt-only.md` for a compact paste-ready instruction block
+- `prompts/experiment-loop.md` for independent first-principles experiment
+  diagnosis and reconciliation
 
 ## Reference Map
 
+- [`references/goal-composition.md`](references/goal-composition.md) - split
+  between Goal lifecycle ownership and agent QA proof ownership.
 - [`references/scientific-claim-review.md`](references/scientific-claim-review.md) -
   load only for `agent-qa-test:experiment`; it owns experiment contracts,
   diagnosis order, rerun authority, and scoped verdicts.
-- [`references/goal-composition.md`](references/goal-composition.md) - split
-  between Goal lifecycle ownership and agent QA proof ownership.
 
 Keep generated prompts concrete: target, cases, evidence, lane prompts,
 rerun/fix policy, and stop condition.
@@ -391,7 +391,7 @@ rerun/fix policy, and stop condition.
   UI changed.
 - **Skill behavior:** require the tester to load the target skill, follow its
   first-load todo list, produce visible checkpoints, expose skipped steps, and
-  usually use `agent-behavior-test`-style captured run artifacts.
+  usually use Eval `behavior_trace` artifacts.
 - **Prompt/workflow behavior:** require phase checkpoints and compare the
   emitted report against the expected workflow sequence.
 - **Composite workflow:** when one workflow promises to call another, the claim

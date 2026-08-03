@@ -48,12 +48,12 @@ metric:
   anti_metrics: <signals that cannot promote>
 
 selection:
-  owner: leverage-advisor
+  owner: active-goal
   hypothesis_tree: <hypothesis-tree.json>
   source_stage:
     inputs: <local failures, supplied refs, configured Feed Scout signals, or bounded research>
     extracts: <techniques, mechanisms, variables, failure conditions, source refs>
-  rule: one ordinal compounding-leverage judgment; no tournament, persistent rank, or uncalibrated lift
+  rule: choose execute | diagnose | report_now | request_feedback | stop; use leverage-advisor only for real multi-option judgment
   before_each_experiment:
     inputs:
       - this program.md policy
@@ -64,12 +64,12 @@ selection:
     output: one next experiment + hypothesis + expected observation +
       observation horizon + confidence + falsifier + surprise trigger +
       changed boundary + expected reward + reward basis + material selection rationale + replan conditions
-    rule: invoke leverage-advisor
+    rule: execute a mechanically implied move directly; otherwise invoke leverage-advisor
 
 loop:
   baseline: run and record before any mutation
   round:
-    - select one experiment through leverage-advisor
+    - choose one experiment directly or through leverage-advisor when ranking is genuinely needed
     - preregister hypothesis, expected observation, observation horizon,
       confidence, falsifier, surprise trigger, changed boundary, cost, guards,
       and keep/kill rule
@@ -104,8 +104,8 @@ loop:
     - keep | discard | repair_once | defer | failed
 
 after_each_turn:
-  - read this policy, hypothesis-tree.json, and the complete progress.md tail
-  - use leverage-advisor on pending tree leaves + progress learnings + current receipts + remaining budget
+  - read this policy, hypothesis-tree.json, and the latest 80 progress.md lines
+  - choose execute | diagnose | report_now | request_feedback | stop from pending leaves, evidence, and budget; use leverage-advisor only when several moves need judgment
   - execute at most one selected experiment
   - update the tree, then append receipt ref, learning, tree mutation, decision, and next action to progress.md
   - continue, replan, block, or complete from the declared rules
@@ -121,7 +121,7 @@ stop:
   budget: the next faithful experiment would cross a declared ceiling
 ```
 
-Leverage Advisor chooses; the domain executor runs; native Goal continues; the
+The Goal chooses; Leverage Advisor conditionally compares; the domain executor runs; native Goal continues; the
 tree owns current research state and progress owns chronology. Do not add
 another runner, planner skill, state file, or ticket per experiment.
 ````

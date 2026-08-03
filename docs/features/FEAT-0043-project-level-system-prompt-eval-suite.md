@@ -152,7 +152,9 @@ Acceptance signals:
 - This feature is not a full model benchmark.
 - This feature does not replace reviewer judgment for major prompt changes.
 - This feature does not require evals for trivial typo fixes.
-- Known limit: The current runner judges final answers and task artifacts, not full hidden reasoning or complete live tool-event traces. Behavior claims that need child-agent command logs should use agent-behavior-test or agent-qa-test.
+- Known limit: Eval does not expose hidden chain-of-thought. Use Eval
+  `behavior_trace` for visible CLI events/logs and Agent QA for adversarial or
+  native-subagent-only evidence.
 - Delete or merge this feature only when its current truth has moved into a clearer owner and all active refs are removed.
 
 ## Metrics

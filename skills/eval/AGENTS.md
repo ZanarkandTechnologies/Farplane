@@ -8,7 +8,7 @@ This module owns the reusable local eval harness for Codex and Claude:
 - define the simple task JSON contract
 - define shared eval config such as default fixture context
 - run harness-native evals
-- render local run artifacts through the bundled viewer
+- emit stable local run artifacts for Farplane UI Eval OS
 
 ## Editing Rules
 
@@ -25,7 +25,8 @@ This module owns the reusable local eval harness for Codex and Claude:
 - Keep rubric policy in judge prompts, not task JSON.
 - Prefer reusable templates under `templates/` over one-off runtime-only changes.
 - If install-time behavior changes, update `scripts/run_evals.py`, the matching template files, and tests together.
-- Keep the viewer standalone and local-first: it should work from a file picker without requiring a framework build.
+- Keep UI implementation out of this package. Farplane UI owns Eval OS;
+  this package owns only the artifact contract it consumes.
 
 ## Verification
 

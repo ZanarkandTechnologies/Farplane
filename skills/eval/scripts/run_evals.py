@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import re
@@ -12,6 +13,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass
 from datetime import datetime, timezone
@@ -32,9 +34,22 @@ REQUIRED_EVAL_FILES = (
     "contexts/agi-toy-shop.md",
     "prompts/agent.md",
     "prompts/judge.md",
+    "schemas/behavior-report.schema.json",
     "tasks/harness_tasks.json",
     "tasks/agents_md_tasks.json",
 )
+BEHAVIOR_REPORT_VERDICTS = {"pass", "fail", "blocked"}
+BEHAVIOR_CHECKPOINT_STATUSES = {"done", "skipped", "blocked"}
+RELIABILITY_COMPATIBILITY_FIELDS = (
+    "harness",
+    "judge_harness",
+    "skill_context",
+    "compare_baseline",
+    "behavior_trace",
+    "scopes",
+    "task_files",
+)
+IMAGE_SUFFIXES = {".avif", ".gif", ".jpeg", ".jpg", ".png", ".svg", ".webp"}
 
 
 class EvalError(ValueError):
@@ -48,8 +63,10 @@ class EvalTask:
     context: str
     query: str
     reference_points: tuple[str, ...]
+    files: tuple[str, ...]
     tags: tuple[str, ...]
     notes: str
+    required_successful_command_regexes: tuple[str, ...]
 
 
 @dataclass(frozen=True)
@@ -58,6 +75,8 @@ class CommandResult:
     returncode: int
     raw_stdout: str
     raw_stderr: str
+    duration_ms: int
+    total_tokens: int | None
 
 
 @dataclass(frozen=True)
@@ -97,6 +116,138 @@ def write_json(path: Path, value: Any) -> None:
     path.write_text(json.dumps(value, indent=2) + "\n")
 
 
+def sha256_text(value: str) -> str:
+    return hashlib.sha256(value.encode()).hexdigest()
+
+
+def read_json_lines(text: str) -> list[dict[str, Any]]:
+    events: list[dict[str, Any]] = []
+    for line in text.splitlines():
+        try:
+            event = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        if isinstance(event, dict):
+            events.append(event)
+    return events
+
+
+def extract_total_tokens(raw_stdout: str) -> int | None:
+    """Read the last available total-token value from a JSONL harness stream."""
+    total: int | None = None
+    for event in read_json_lines(raw_stdout):
+        usage = event.get("usage")
+        if not isinstance(usage, dict):
+            continue
+        explicit = usage.get("total_tokens")
+        if isinstance(explicit, int):
+            total = explicit
+            continue
+        input_tokens = usage.get("input_tokens")
+        output_tokens = usage.get("output_tokens")
+        if isinstance(input_tokens, int) and isinstance(output_tokens, int):
+            total = input_tokens + output_tokens
+    return total
+
+
+def parse_json_object(text: str) -> dict[str, Any] | None:
+    stripped = text.strip()
+    if not stripped:
+        return None
+    if stripped.startswith("```"):
+        stripped = re.sub(r"^```(?:json)?\s*", "", stripped)
+        stripped = re.sub(r"\s*```$", "", stripped)
+    try:
+        value = json.loads(stripped)
+    except json.JSONDecodeError:
+        return None
+    return value if isinstance(value, dict) else None
+
+
+def validate_json_schema(value: Any, schema: Any, path: str = "$") -> list[str]:
+    """Validate the compact JSON Schema subset used by behavior reports."""
+    if not isinstance(schema, dict):
+        return [f"{path}: schema must be an object"]
+    errors: list[str] = []
+    expected_type = schema.get("type")
+    type_map = {
+        "object": dict,
+        "array": list,
+        "string": str,
+        "number": (int, float),
+        "integer": int,
+        "boolean": bool,
+        "null": type(None),
+    }
+    if isinstance(expected_type, str) and expected_type in type_map:
+        expected_python = type_map[expected_type]
+        valid_type = isinstance(value, expected_python)
+        if expected_type in {"number", "integer"} and isinstance(value, bool):
+            valid_type = False
+        if not valid_type:
+            return [f"{path}: expected {expected_type}"]
+    if "enum" in schema and value not in schema.get("enum", []):
+        errors.append(f"{path}: value is not in enum")
+    if "const" in schema and value != schema["const"]:
+        errors.append(f"{path}: value does not match const")
+    if isinstance(value, dict):
+        required = schema.get("required", [])
+        if isinstance(required, list):
+            for key in required:
+                if isinstance(key, str) and key not in value:
+                    errors.append(f"{path}: missing required property {key}")
+        properties = schema.get("properties", {})
+        if isinstance(properties, dict):
+            for key, child_schema in properties.items():
+                if key in value:
+                    errors.extend(validate_json_schema(value[key], child_schema, f"{path}.{key}"))
+        if schema.get("additionalProperties") is False and isinstance(properties, dict):
+            for key in value.keys() - properties.keys():
+                errors.append(f"{path}: unexpected property {key}")
+    if isinstance(value, list):
+        if isinstance(schema.get("minItems"), int) and len(value) < schema["minItems"]:
+            errors.append(f"{path}: expected at least {schema['minItems']} items")
+        item_schema = schema.get("items")
+        if isinstance(item_schema, dict):
+            for index, item in enumerate(value):
+                errors.extend(validate_json_schema(item, item_schema, f"{path}[{index}]"))
+    return errors
+
+
+def snapshot_files(root: Path, excluded_root: Path) -> dict[str, tuple[int, int]]:
+    ignored_names = {".git", "node_modules", "__pycache__", ".venv", "venv"}
+    snapshot: dict[str, tuple[int, int]] = {}
+    root = root.resolve()
+    excluded_root = excluded_root.resolve()
+    for current, dirs, files in os.walk(root):
+        current_path = Path(current).resolve()
+        dirs[:] = [
+            name
+            for name in dirs
+            if name not in ignored_names
+            and not (current_path / name).resolve().is_relative_to(excluded_root)
+        ]
+        if current_path.is_relative_to(excluded_root):
+            continue
+        for name in files:
+            path = current_path / name
+            try:
+                stat = path.stat()
+                relative = path.resolve().relative_to(root).as_posix()
+            except (FileNotFoundError, ValueError):
+                continue
+            snapshot[relative] = (stat.st_size, stat.st_mtime_ns)
+    return snapshot
+
+
+def snapshot_delta(before: dict[str, tuple[int, int]], after: dict[str, tuple[int, int]]) -> dict[str, list[str]]:
+    return {
+        "created": sorted(after.keys() - before.keys()),
+        "modified": sorted(path for path in before.keys() & after.keys() if before[path] != after[path]),
+        "deleted": sorted(before.keys() - after.keys()),
+    }
+
+
 def require_string(raw: dict[str, Any], field: str, path: Path) -> str:
     value = raw.get(field)
     if not isinstance(value, str) or not value.strip():
@@ -129,23 +280,26 @@ def task_context(raw: dict[str, Any], default_context: str) -> str:
     return str(raw.get("context", "")).strip()
 
 
-def normalize_task_rows(raw: Any, path: Path) -> list[dict[str, Any]]:
+def normalize_task_rows(
+    raw: Any,
+    path: Path,
+    task_ids: set[str] | None = None,
+) -> list[dict[str, Any]]:
     if isinstance(raw, list):
-        return raw
+        if not task_ids:
+            return raw
+        return [item for item in raw if isinstance(item, dict) and str(item.get("id", "")) in task_ids]
     if isinstance(raw, dict) and isinstance(raw.get("evals"), list):
         rows: list[dict[str, Any]] = []
         for item in raw["evals"]:
             if not isinstance(item, dict):
                 raise EvalError(f"{path}: each eval must be an object")
+            if task_ids and str(item.get("id", "")) not in task_ids:
+                continue
             metadata = item.get("metadata", {})
             farplane = metadata.get("farplane", {}) if isinstance(metadata, dict) else {}
             if not isinstance(farplane, dict):
                 farplane = {}
-            files = item.get("files", [])
-            if files:
-                raise EvalError(
-                    f"{path}: eval {item.get('id', '<unknown>')} uses files, which this runner does not stage yet"
-                )
             assertions = item.get("assertions")
             if not assertions and isinstance(item.get("expected_output"), str):
                 assertions = [item["expected_output"]]
@@ -154,9 +308,13 @@ def normalize_task_rows(raw: Any, path: Path) -> list[dict[str, Any]]:
                 "title": farplane.get("title") or item.get("expected_output") or str(item.get("id", "")),
                 "query": item.get("prompt"),
                 "reference_points": assertions,
+                "files": item.get("files", []),
                 "tags": farplane.get("tags", []),
                 "notes": farplane.get("notes", ""),
             }
+            behavior_requirements = farplane.get("behavior_requirements", {})
+            if isinstance(behavior_requirements, dict):
+                row["behavior_requirements"] = behavior_requirements
             if "context" in farplane:
                 row["context"] = farplane["context"]
             rows.append(row)
@@ -164,9 +322,15 @@ def normalize_task_rows(raw: Any, path: Path) -> list[dict[str, Any]]:
     raise EvalError(f"{path}: task file must contain a JSON list or an Agent Skills evals object")
 
 
-def load_tasks(path: Path, limit: int | None = None, default_context: str = "") -> list[EvalTask]:
+def load_tasks(
+    path: Path,
+    limit: int | None = None,
+    default_context: str = "",
+    task_ids: set[str] | None = None,
+    target_root: Path | None = None,
+) -> list[EvalTask]:
     raw = read_json(path)
-    raw = normalize_task_rows(raw, path)
+    raw = normalize_task_rows(raw, path, task_ids=task_ids)
     tasks: list[EvalTask] = []
     for item in raw:
         if not isinstance(item, dict):
@@ -177,6 +341,40 @@ def load_tasks(path: Path, limit: int | None = None, default_context: str = "") 
         tags = item.get("tags", [])
         if not isinstance(tags, list) or not all(isinstance(tag, str) for tag in tags):
             raise EvalError(f"{path}: task {item.get('id', '<unknown>')} tags must be strings")
+        files = item.get("files", [])
+        if not isinstance(files, list) or not all(isinstance(file, str) and file.strip() for file in files):
+            raise EvalError(f"{path}: task {item.get('id', '<unknown>')} files must be non-empty strings")
+        resolved_root = (target_root or path.parent).resolve()
+        normalized_files: list[str] = []
+        for file in files:
+            relative = Path(file.strip())
+            if relative.is_absolute():
+                raise EvalError(f"{path}: task {item.get('id', '<unknown>')} file must be target-root relative: {file}")
+            source = (resolved_root / relative).resolve()
+            if not source.is_relative_to(resolved_root):
+                raise EvalError(f"{path}: task {item.get('id', '<unknown>')} file escapes target root: {file}")
+            if not source.is_file():
+                raise EvalError(f"{path}: task {item.get('id', '<unknown>')} file not found: {file}")
+            normalized_files.append(relative.as_posix())
+        behavior_requirements = item.get("behavior_requirements", {})
+        if not isinstance(behavior_requirements, dict):
+            raise EvalError(
+                f"{path}: task {item.get('id', '<unknown>')} behavior_requirements must be an object"
+            )
+        command_regexes = behavior_requirements.get("required_successful_command_regexes", [])
+        if not isinstance(command_regexes, list) or not all(
+            isinstance(pattern, str) and pattern.strip() for pattern in command_regexes
+        ):
+            raise EvalError(
+                f"{path}: task {item.get('id', '<unknown>')} required_successful_command_regexes must be non-empty strings"
+            )
+        for pattern in command_regexes:
+            try:
+                re.compile(pattern)
+            except re.error as exc:
+                raise EvalError(
+                    f"{path}: task {item.get('id', '<unknown>')} invalid command regex {pattern!r}: {exc}"
+                ) from exc
         tasks.append(
             EvalTask(
                 id=require_string(item, "id", path),
@@ -184,8 +382,12 @@ def load_tasks(path: Path, limit: int | None = None, default_context: str = "") 
                 context=task_context(item, default_context),
                 query=require_string(item, "query", path),
                 reference_points=tuple(ref.strip() for ref in refs),
+                files=tuple(normalized_files),
                 tags=tuple(tag.strip() for tag in tags if tag.strip()),
                 notes=str(item.get("notes", "")).strip(),
+                required_successful_command_regexes=tuple(
+                    pattern.strip() for pattern in command_regexes
+                ),
             )
         )
     return tasks[:limit] if limit else tasks
@@ -332,7 +534,14 @@ def load_task_suite(
     resolved_root = target_root.resolve() if target_root else Path.cwd().resolve()
     for path in paths:
         skill_context = "" if native_skill_context else skill_context_for_task_file(path, resolved_root)
-        loaded.extend(load_tasks(path, default_context=compose_task_context(default_context, skill_context)))
+        loaded.extend(
+            load_tasks(
+                path,
+                default_context=compose_task_context(default_context, skill_context),
+                task_ids=task_ids,
+                target_root=resolved_root,
+            )
+        )
     if task_ids:
         loaded = [task for task in loaded if task.id in task_ids]
         missing = sorted(task_ids - {task.id for task in loaded})
@@ -351,6 +560,7 @@ def task_to_json(task: EvalTask) -> str:
         "title": task.title,
         "query": task.query,
         "reference_points": list(task.reference_points),
+        "files": list(task.files),
         "tags": list(task.tags),
         "notes": task.notes,
     }
@@ -373,6 +583,37 @@ def render_template(template: str, task: EvalTask, answer: str = "") -> str:
     for placeholder, value in replacements.items():
         rendered = rendered.replace(placeholder, value)
     return rendered
+
+
+def stage_task_files(task: EvalTask, target_root: Path, task_dir: Path) -> EvalTask:
+    if not task.files:
+        return task
+    fixture_root = task_dir / "fixtures"
+    manifest: list[str] = []
+    for relative_text in task.files:
+        relative = Path(relative_text)
+        source = (target_root / relative).resolve()
+        destination = fixture_root / relative
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(source, destination)
+        destination.chmod(0o444)
+        manifest.append(f"- {relative.as_posix()}: {destination.resolve()}")
+    fixture_context = (
+        "Eval fixture files (staged read-only copies; use these paths instead of live source files):\n"
+        + "\n".join(manifest)
+    )
+    context = compose_task_context(task.context, fixture_context)
+    return EvalTask(
+        id=task.id,
+        title=task.title,
+        context=context,
+        query=task.query,
+        reference_points=task.reference_points,
+        files=task.files,
+        tags=task.tags,
+        notes=task.notes,
+        required_successful_command_regexes=task.required_successful_command_regexes,
+    )
 
 
 def build_job_id(label: str) -> str:
@@ -487,6 +728,7 @@ def run_custom_command(command_template: str, prompt: str, output_file: Path, cw
         cwd=str(cwd),
     )
     try:
+        started_at = time.perf_counter()
         completed = subprocess.run(
             shlex.split(command),
             cwd=cwd,
@@ -494,10 +736,18 @@ def run_custom_command(command_template: str, prompt: str, output_file: Path, cw
             capture_output=True,
             check=False,
         )
+        duration_ms = round((time.perf_counter() - started_at) * 1000)
     finally:
         prompt_path.unlink(missing_ok=True)
     text = output_file.read_text() if output_file.exists() else completed.stdout
-    return CommandResult(text=text, returncode=completed.returncode, raw_stdout=completed.stdout, raw_stderr=completed.stderr)
+    return CommandResult(
+        text=text,
+        returncode=completed.returncode,
+        raw_stdout=completed.stdout,
+        raw_stderr=completed.stderr,
+        duration_ms=duration_ms,
+        total_tokens=extract_total_tokens(completed.stdout),
+    )
 
 
 def codex_extra_args(extra_args: Sequence[str], profile: str | None = None) -> list[str]:
@@ -508,6 +758,10 @@ def codex_extra_args(extra_args: Sequence[str], profile: str | None = None) -> l
             raise EvalError("--profile values may contain only letters, numbers, hyphens, and underscores")
         args.extend(["--profile", profile])
     args.extend(extra_args)
+    # Eval isolation is a runner invariant, not an optional profile concern.
+    # Keep this tail last so user arguments cannot re-enable hooks/notify or
+    # accidentally persist agent, judge, or baseline sessions.
+    args.extend(["--ephemeral", "--disable", "hooks", "-c", "notify=[]"])
     return args
 
 
@@ -529,16 +783,34 @@ def run_codex(
         *codex_extra_args(extra_args, profile),
         "-",
     ]
+    started_at = time.perf_counter()
     completed = subprocess.run(command, input=prompt, text=True, capture_output=True, check=False)
+    duration_ms = round((time.perf_counter() - started_at) * 1000)
     text = output_file.read_text() if output_file.exists() else completed.stdout
-    return CommandResult(text=text, returncode=completed.returncode, raw_stdout=completed.stdout, raw_stderr=completed.stderr)
+    return CommandResult(
+        text=text,
+        returncode=completed.returncode,
+        raw_stdout=completed.stdout,
+        raw_stderr=completed.stderr,
+        duration_ms=duration_ms,
+        total_tokens=extract_total_tokens(completed.stdout),
+    )
 
 
 def run_claude(prompt: str, output_file: Path, cwd: Path, extra_args: Sequence[str]) -> CommandResult:
     command = ["claude", "-p", "--output-format", "text", *extra_args, prompt]
+    started_at = time.perf_counter()
     completed = subprocess.run(command, cwd=cwd, text=True, capture_output=True, check=False)
+    duration_ms = round((time.perf_counter() - started_at) * 1000)
     output_file.write_text(completed.stdout)
-    return CommandResult(text=completed.stdout, returncode=completed.returncode, raw_stdout=completed.stdout, raw_stderr=completed.stderr)
+    return CommandResult(
+        text=completed.stdout,
+        returncode=completed.returncode,
+        raw_stdout=completed.stdout,
+        raw_stderr=completed.stderr,
+        duration_ms=duration_ms,
+        total_tokens=extract_total_tokens(completed.stdout),
+    )
 
 
 def run_harness(
@@ -566,6 +838,258 @@ def task_detail_path(job_dir: Path, task_id: str) -> Path:
     return job_dir / "tasks" / f"{task_id}.json"
 
 
+def behavior_event_summary(events: list[dict[str, Any]]) -> dict[str, Any]:
+    thread_id = ""
+    usage: dict[str, Any] = {}
+    commands: list[dict[str, Any]] = []
+    message_count = 0
+    for event in events:
+        if event.get("type") == "thread.started" and isinstance(event.get("thread_id"), str):
+            thread_id = event["thread_id"]
+        if event.get("type") == "turn.completed" and isinstance(event.get("usage"), dict):
+            usage = event["usage"]
+        item = event.get("item")
+        if not isinstance(item, dict):
+            continue
+        if item.get("type") == "agent_message":
+            message_count += 1
+        if item.get("type") == "command_execution" and event.get("type") == "item.completed":
+            commands.append(
+                {
+                    "command": item.get("command"),
+                    "exit_code": item.get("exit_code"),
+                    "status": item.get("status"),
+                }
+            )
+    return {
+        "thread_id": thread_id,
+        "event_count": len(events),
+        "agent_message_count": message_count,
+        "command_count": len(commands),
+        "failed_command_count": sum(1 for command in commands if command.get("exit_code") not in {0, None}),
+        "commands": commands,
+        "usage": usage,
+    }
+
+
+def score_required_successful_commands(
+    patterns: Sequence[str], event_summary: dict[str, Any]
+) -> dict[str, Any]:
+    commands = event_summary.get("commands", [])
+    successful = [
+        str(command.get("command") or "")
+        for command in commands
+        if isinstance(command, dict)
+        and command.get("exit_code") == 0
+        and command.get("status") == "completed"
+    ]
+    results = [
+        {
+            "regex": pattern,
+            "matched": any(re.search(pattern, command) for command in successful),
+        }
+        for pattern in patterns
+    ]
+    return {
+        "required": len(results),
+        "matched": sum(1 for result in results if result["matched"]),
+        "results": results,
+    }
+
+
+def resolve_declared_artifacts(report: dict[str, Any] | None, target_root: Path) -> dict[str, list[str]]:
+    declared = report.get("artifacts", []) if isinstance(report, dict) else []
+    if not isinstance(declared, list):
+        return {"declared": [], "present": [], "missing_or_unsafe": ["artifacts must be an array"]}
+    present: list[str] = []
+    missing: list[str] = []
+    normalized: list[str] = []
+    root = target_root.resolve()
+    for item in declared:
+        if not isinstance(item, str) or not item.strip():
+            missing.append(str(item))
+            continue
+        candidate = Path(item.strip())
+        path = candidate.resolve() if candidate.is_absolute() else (root / candidate).resolve()
+        try:
+            relative = path.relative_to(root).as_posix()
+        except ValueError:
+            missing.append(f"unsafe:{item}")
+            continue
+        normalized.append(relative)
+        if path.exists():
+            present.append(relative)
+        else:
+            missing.append(relative)
+    return {"declared": normalized, "present": present, "missing_or_unsafe": missing}
+
+
+def score_checkpoints(report: dict[str, Any] | None) -> dict[str, Any]:
+    checkpoints = report.get("checkpoints", []) if isinstance(report, dict) else []
+    if not isinstance(checkpoints, list):
+        return {"total": 0, "done": 0, "skipped": 0, "blocked": 0, "invalid": 1}
+    counts = {"total": len(checkpoints), "done": 0, "skipped": 0, "blocked": 0, "invalid": 0}
+    for checkpoint in checkpoints:
+        if not isinstance(checkpoint, dict):
+            counts["invalid"] += 1
+            continue
+        status = checkpoint.get("status")
+        name = checkpoint.get("name")
+        evidence = checkpoint.get("evidence")
+        if (
+            status not in BEHAVIOR_CHECKPOINT_STATUSES
+            or not isinstance(name, str)
+            or not name.strip()
+            or (status == "done" and (not isinstance(evidence, str) or not evidence.strip()))
+        ):
+            counts["invalid"] += 1
+            continue
+        counts[str(status)] += 1
+    return counts
+
+
+def build_behavior_trace(
+    result: CommandResult,
+    prompt_path: Path,
+    answer_path: Path,
+    task_dir: Path,
+    target_root: Path,
+    before_snapshot: dict[str, tuple[int, int]],
+    prefix: str,
+    schema_path: Path | None,
+    required_successful_command_regexes: Sequence[str],
+) -> dict[str, Any]:
+    events_path = task_dir / f"{prefix}events.jsonl"
+    events_path.write_text(result.raw_stdout)
+    events = read_json_lines(result.raw_stdout)
+    final_output = answer_path.read_text() if answer_path.exists() else result.text
+    final_report = parse_json_object(final_output)
+    behavior_report_keys = {"target", "persona", "checkpoints", "artifacts", "deviations", "verdict"}
+    is_behavior_report = isinstance(final_report, dict) and behavior_report_keys.issubset(final_report)
+    schema_errors: list[str] = []
+    schema_copy_path = ""
+    if schema_path:
+        schema = read_json(schema_path)
+        schema_copy = task_dir / f"{prefix}output_schema.json"
+        schema_copy.write_text(json.dumps(schema, indent=2) + "\n")
+        schema_copy_path = str(schema_copy)
+        schema_errors = validate_json_schema(final_report, schema) if final_report is not None else ["$: final output is not a JSON object"]
+    event_summary = behavior_event_summary(events)
+    command_requirements = score_required_successful_commands(
+        required_successful_command_regexes, event_summary
+    )
+    artifacts = resolve_declared_artifacts(final_report if is_behavior_report else None, target_root)
+    checkpoints = score_checkpoints(final_report if is_behavior_report else None)
+    after_snapshot = snapshot_files(target_root, task_dir)
+    file_delta = snapshot_delta(before_snapshot, after_snapshot)
+    report_verdict = final_report.get("verdict") if is_behavior_report else None
+    failures: list[str] = []
+    if result.returncode != 0:
+        failures.append(f"agent exited {result.returncode}")
+    if not final_output.strip():
+        failures.append("final output is empty")
+    if schema_errors:
+        failures.append("output schema validation failed")
+    missing_commands = [
+        result["regex"]
+        for result in command_requirements["results"]
+        if not result["matched"]
+    ]
+    if missing_commands:
+        failures.append(
+            "required successful command evidence missing: " + ", ".join(missing_commands)
+        )
+    if is_behavior_report:
+        if report_verdict not in BEHAVIOR_REPORT_VERDICTS:
+            failures.append("behavior report verdict must be pass, fail, or blocked")
+        if checkpoints["invalid"]:
+            failures.append("one or more checkpoints are invalid")
+        if artifacts["missing_or_unsafe"]:
+            failures.append("one or more declared artifacts are missing or unsafe")
+    verdict = "fail" if failures else str(report_verdict or "pass")
+    trace_path = task_dir / f"{prefix}behavior_trace.json"
+    trace = {
+        "schema_version": 1,
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "verdict": verdict,
+        "failures": failures,
+        "returncode": result.returncode,
+        "prompt_path": str(prompt_path),
+        "events_path": str(events_path),
+        "stdout_path": str(task_dir / f"{prefix}agent_stdout.log"),
+        "stderr_path": str(task_dir / f"{prefix}agent_stderr.log"),
+        "final_output_path": str(answer_path),
+        "output_schema_path": schema_copy_path,
+        "schema_validation": {"requested": bool(schema_path), "pass": not schema_errors, "errors": schema_errors},
+        "event_summary": event_summary,
+        "command_requirement_score": command_requirements,
+        "checkpoint_score": checkpoints,
+        "artifact_inventory": {**artifacts, "observed_file_delta": file_delta},
+        "behavior_report_detected": is_behavior_report,
+        "final_output_format": "json_object" if final_report is not None else "text_or_other_json",
+        "final_report": final_report,
+    }
+    write_json(trace_path, trace)
+    return {**trace, "trace_path": str(trace_path)}
+
+
+def normalize_assertion_results(judge: dict[str, Any]) -> list[dict[str, Any]]:
+    results = judge.get("reference_point_results", [])
+    if not isinstance(results, list):
+        return []
+    normalized: list[dict[str, Any]] = []
+    for result in results:
+        if not isinstance(result, dict):
+            continue
+        text = str(result.get("reference_point") or result.get("text") or result.get("label") or "").strip()
+        if not text:
+            continue
+        passed = bool(result.get("met", result.get("passed", result.get("status") == "pass")))
+        normalized.append(
+            {
+                "text": text,
+                "passed": passed,
+                "evidence": str(result.get("reason") or result.get("evidence") or "").strip(),
+            }
+        )
+    return normalized
+
+
+def write_agent_skills_artifacts(
+    task_dir: Path,
+    variant: str,
+    answer_text: str,
+    judge: dict[str, Any],
+    duration_ms: int,
+    total_tokens: int | None,
+) -> dict[str, Any]:
+    """Write the Agent Skills-shaped timing, grading, and output artifacts."""
+    variant_dir = task_dir / variant
+    outputs_dir = variant_dir / "outputs"
+    outputs_dir.mkdir(parents=True, exist_ok=True)
+    (outputs_dir / "agent_answer.txt").write_text(answer_text)
+    timing = {"duration_ms": duration_ms, "total_tokens": total_tokens}
+    assertion_results = normalize_assertion_results(judge)
+    passed = sum(1 for result in assertion_results if result["passed"])
+    grading = {
+        "assertion_results": assertion_results,
+        "summary": {
+            "passed": passed,
+            "failed": len(assertion_results) - passed,
+            "total": len(assertion_results),
+            "pass_rate": round(passed / len(assertion_results), 4) if assertion_results else None,
+        },
+        "judge": {
+            "verdict": judge.get("verdict"),
+            "pass": judge.get("pass"),
+            "reason": judge.get("reason"),
+        },
+    }
+    write_json(variant_dir / "timing.json", timing)
+    write_json(variant_dir / "grading.json", grading)
+    return {"timing": timing, "grading": grading, "artifact_dir": str(variant_dir)}
+
+
 def run_agent_and_judge(
     task: EvalTask,
     args: argparse.Namespace,
@@ -576,19 +1100,39 @@ def run_agent_and_judge(
     prefix: str = "",
 ) -> dict[str, Any]:
     task_dir.mkdir(parents=True, exist_ok=True)
+    task = stage_task_files(task, Path(args.target_root).resolve(), task_dir)
     agent_prompt = render_template(agent_template, task)
     agent_prompt_path = task_dir / f"{prefix}agent_prompt.md"
     agent_answer_path = task_dir / f"{prefix}agent_answer.txt"
     agent_prompt_path.write_text(agent_prompt)
+    before_snapshot = snapshot_files(Path(args.target_root).resolve(), task_dir) if args.behavior_trace else {}
+    agent_extra_args = list(args.agent_extra_arg)
+    schema_path = Path(args.behavior_output_schema).resolve() if args.behavior_output_schema else None
+    if args.behavior_trace and schema_path and args.harness == "codex" and not args.agent_command_template:
+        agent_extra_args.extend(["--output-schema", str(schema_path)])
     agent_result = run_harness(
         args.harness,
         agent_prompt,
         agent_answer_path,
         Path(args.target_root).resolve(),
         args.agent_command_template,
-        args.agent_extra_arg,
+        agent_extra_args,
         agent_profile,
     )
+    behavior_trace = None
+    if args.behavior_trace:
+        behavior_trace = build_behavior_trace(
+            agent_result,
+            agent_prompt_path,
+            agent_answer_path,
+            task_dir,
+            Path(args.target_root).resolve(),
+            before_snapshot,
+            prefix,
+            schema_path,
+            task.required_successful_command_regexes,
+        )
+    judge_result: CommandResult | None = None
     if agent_result.returncode != 0:
         judge = {
             "verdict": "D",
@@ -627,6 +1171,18 @@ def run_agent_and_judge(
             (task_dir / f"{prefix}judge_stderr.log").write_text(judge_result.raw_stderr)
     (task_dir / f"{prefix}agent_stdout.log").write_text(agent_result.raw_stdout)
     (task_dir / f"{prefix}agent_stderr.log").write_text(agent_result.raw_stderr)
+    duration_ms = agent_result.duration_ms + (judge_result.duration_ms if judge_result else 0)
+    token_values = [value for value in (agent_result.total_tokens, judge_result.total_tokens if judge_result else None) if value is not None]
+    total_tokens = sum(token_values) if token_values else None
+    variant = prefix.rstrip("_") or "candidate"
+    artifacts = write_agent_skills_artifacts(
+        task_dir,
+        variant,
+        agent_result.text,
+        judge,
+        duration_ms,
+        total_tokens,
+    )
     return {
         "profile": agent_profile,
         "agent": {
@@ -634,6 +1190,8 @@ def run_agent_and_judge(
             "answer_path": str(agent_answer_path),
         },
         "judge": judge,
+        **artifacts,
+        "behavior_trace": behavior_trace,
         "raw_stdout": agent_result.raw_stdout,
     }
 
@@ -641,8 +1199,12 @@ def run_agent_and_judge(
 def comparison_delta(candidate: dict[str, Any], baseline: dict[str, Any] | None) -> str:
     if not baseline:
         return "baseline_skipped"
-    candidate_pass = bool(candidate["judge"].get("pass", False))
-    baseline_pass = bool(baseline["judge"].get("pass", False))
+    candidate_pass = bool(candidate["judge"].get("pass", False)) and (
+        not candidate.get("behavior_trace") or candidate["behavior_trace"].get("verdict") == "pass"
+    )
+    baseline_pass = bool(baseline["judge"].get("pass", False)) and (
+        not baseline.get("behavior_trace") or baseline["behavior_trace"].get("verdict") == "pass"
+    )
     if candidate_pass and not baseline_pass:
         return "candidate_wins"
     if baseline_pass and not candidate_pass:
@@ -684,6 +1246,7 @@ def run_comparison_task(
         baseline.pop("raw_stdout", None)
     delta = comparison_delta(candidate, baseline)
     detail = {
+        "schema_version": 2,
         "task": json.loads(task_to_json(task)),
         "run_config": {
             "harness": args.harness,
@@ -701,14 +1264,22 @@ def run_comparison_task(
         },
     }
     write_json(task_detail_path(job_dir, task.id), detail)
+    write_json(task_dir / "comparison.json", detail["comparison"])
     return {
         "task_id": task.id,
         "title": task.title,
         "verdict": candidate["judge"].get("verdict", "fail"),
-        "pass": bool(candidate["judge"].get("pass", False)),
+        "pass": bool(candidate["judge"].get("pass", False))
+        and (not args.behavior_trace or candidate["behavior_trace"]["verdict"] == "pass"),
         "reason": candidate["judge"].get("reason", ""),
         "skill_triggered": skill_triggered,
         "comparison_delta": delta,
+        "candidate_metrics": candidate["timing"],
+        "baseline_metrics": baseline["timing"] if baseline else None,
+        "baseline_pass": bool(baseline and baseline["judge"].get("pass", False))
+        and (not args.behavior_trace or baseline["behavior_trace"]["verdict"] == "pass"),
+        "behavior_verdict": candidate["behavior_trace"]["verdict"] if candidate["behavior_trace"] else None,
+        "behavior_trace_path": candidate["behavior_trace"]["trace_path"] if candidate["behavior_trace"] else None,
         "detail_path": str(task_detail_path(job_dir, task.id)),
     }
 
@@ -731,6 +1302,7 @@ def run_single_task(
     )
     result.pop("raw_stdout", None)
     detail = {
+        "schema_version": 2,
         "task": json.loads(task_to_json(task)),
         "run_config": {
             "harness": args.harness,
@@ -739,15 +1311,28 @@ def run_single_task(
             "judge_profile": args.judge_profile,
         },
         "agent": result["agent"],
+        "behavior_trace": result["behavior_trace"],
         "judge": result["judge"],
+        "candidate": {
+            "agent": result["agent"],
+            "judge": result["judge"],
+            "timing": result["timing"],
+            "grading": result["grading"],
+            "artifact_dir": result["artifact_dir"],
+            "behavior_trace": result["behavior_trace"],
+        },
     }
     write_json(task_detail_path(job_dir, task.id), detail)
     return {
         "task_id": task.id,
         "title": task.title,
         "verdict": result["judge"].get("verdict", "fail"),
-        "pass": result["judge"]["pass"],
+        "pass": result["judge"]["pass"]
+        and (not args.behavior_trace or result["behavior_trace"]["verdict"] == "pass"),
         "reason": result["judge"]["reason"],
+        "candidate_metrics": result["timing"],
+        "behavior_verdict": result["behavior_trace"]["verdict"] if result["behavior_trace"] else None,
+        "behavior_trace_path": result["behavior_trace"]["trace_path"] if result["behavior_trace"] else None,
         "detail_path": str(task_detail_path(job_dir, task.id)),
     }
 
@@ -771,6 +1356,7 @@ def update_index(runs_dir: Path, summary: dict[str, Any]) -> None:
     if not isinstance(existing, list):
         existing = []
     compact = {
+        "schema_version": summary.get("schema_version", 1),
         "job_id": summary["job_id"],
         "label": summary["label"],
         "created_at": summary["created_at"],
@@ -780,6 +1366,57 @@ def update_index(runs_dir: Path, summary: dict[str, Any]) -> None:
         "harness": summary["harness"],
     }
     write_json(index_path, [compact, *[row for row in existing if row.get("job_id") != summary["job_id"]]])
+
+
+def mean_metric(rows: list[dict[str, Any]], variant: str, field: str) -> float | None:
+    values: list[float] = []
+    for row in rows:
+        metrics = row.get(f"{variant}_metrics")
+        if isinstance(metrics, dict) and isinstance(metrics.get(field), (int, float)):
+            values.append(float(metrics[field]))
+    return round(sum(values) / len(values), 4) if values else None
+
+
+def build_benchmark(rows: list[dict[str, Any]], compare_baseline: bool) -> dict[str, Any]:
+    candidate_pass_rate = round(sum(1 for row in rows if row.get("pass")) / len(rows), 4) if rows else 0
+    candidate = {
+        "pass_rate": {"mean": candidate_pass_rate, "stddev": 0.0},
+        "duration_ms": {"mean": mean_metric(rows, "candidate", "duration_ms"), "stddev": 0.0},
+        "total_tokens": {"mean": mean_metric(rows, "candidate", "total_tokens"), "stddev": 0.0},
+    }
+    benchmark: dict[str, Any] = {
+        "schema_version": 2,
+        "repetitions": 1,
+        "run_summary": {"candidate": candidate},
+    }
+    if not compare_baseline:
+        return benchmark
+    comparable = [row for row in rows if isinstance(row.get("baseline_metrics"), dict)]
+    baseline_pass_rate = (
+        round(
+            sum(1 for row in comparable if row.get("baseline_pass") is True)
+            / len(comparable),
+            4,
+        )
+        if comparable
+        else None
+    )
+    baseline = {
+        "pass_rate": {"mean": baseline_pass_rate, "stddev": 0.0},
+        "duration_ms": {"mean": mean_metric(rows, "baseline", "duration_ms"), "stddev": 0.0},
+        "total_tokens": {"mean": mean_metric(rows, "baseline", "total_tokens"), "stddev": 0.0},
+    }
+    benchmark["run_summary"]["baseline"] = baseline
+    benchmark["run_summary"]["delta"] = {
+        field: (
+            candidate[field]["mean"] - baseline[field]["mean"]
+            if isinstance(candidate[field]["mean"], (int, float))
+            and isinstance(baseline[field]["mean"], (int, float))
+            else None
+        )
+        for field in ("pass_rate", "duration_ms", "total_tokens")
+    }
+    return benchmark
 
 
 def inspect_eval_setup(harness: str, target_root: Path, eval_dir: str | None) -> tuple[Path, list[str]]:
@@ -801,6 +1438,245 @@ def command_status(args: argparse.Namespace) -> int:
     return 0
 
 
+def load_reliability_summary(path: Path) -> dict[str, Any]:
+    raw = read_json(path)
+    if not isinstance(raw, dict):
+        raise EvalError(f"{path}: summary must be a JSON object")
+    tasks = raw.get("tasks")
+    if not isinstance(tasks, list) or not tasks:
+        raise EvalError(f"{path}: summary tasks must be a non-empty list")
+    if raw.get("task_count") != len(tasks):
+        raise EvalError(f"{path}: task_count does not match tasks")
+    for field in RELIABILITY_COMPATIBILITY_FIELDS:
+        if field not in raw:
+            raise EvalError(f"{path}: missing comparison metadata field {field}")
+    for field in ("harness", "judge_harness", "skill_context"):
+        if not isinstance(raw[field], str) or not raw[field].strip():
+            raise EvalError(f"{path}: comparison metadata field {field} must be a non-empty string")
+    for field in ("compare_baseline", "behavior_trace"):
+        if not isinstance(raw[field], bool):
+            raise EvalError(f"{path}: comparison metadata field {field} must be boolean")
+    for field in ("scopes", "task_files"):
+        if not isinstance(raw[field], list) or not raw[field] or not all(
+            isinstance(value, str) and value.strip() for value in raw[field]
+        ):
+            raise EvalError(f"{path}: comparison metadata field {field} must be non-empty strings")
+    if "comparison_metadata" in raw and not isinstance(raw["comparison_metadata"], dict):
+        raise EvalError(f"{path}: comparison_metadata must be an object")
+    seen: set[str] = set()
+    for index, row in enumerate(tasks):
+        if not isinstance(row, dict):
+            raise EvalError(f"{path}: task at index {index} must be an object")
+        task_id = row.get("task_id")
+        title = row.get("title")
+        verdict = row.get("verdict")
+        behavior_verdict = row.get("behavior_verdict")
+        if not isinstance(task_id, str) or not task_id.strip():
+            raise EvalError(f"{path}: task at index {index} needs a non-empty task_id")
+        if task_id in seen:
+            raise EvalError(f"{path}: duplicate task_id {task_id}")
+        seen.add(task_id)
+        if not isinstance(title, str) or not title.strip():
+            raise EvalError(f"{path}: task {task_id} needs a non-empty title")
+        if not isinstance(verdict, str) or not verdict.strip():
+            raise EvalError(f"{path}: task {task_id} needs a non-empty verdict")
+        if behavior_verdict not in {"pass", "fail", "blocked"}:
+            raise EvalError(f"{path}: task {task_id} needs behavior_verdict pass, fail, or blocked")
+    return raw
+
+
+def count_values(values: Sequence[str]) -> dict[str, int]:
+    counts: dict[str, int] = {}
+    for value in values:
+        counts[value] = counts.get(value, 0) + 1
+    return dict(sorted(counts.items()))
+
+
+def rate(count: int, total: int) -> float:
+    return round(count / total, 4) if total else 0.0
+
+
+def inspect_fixture_evidence(eval_file: Path, target_root: Path) -> dict[str, Any]:
+    raw = read_json(eval_file)
+    rows = normalize_task_rows(raw, eval_file)
+    task_reports: list[dict[str, Any]] = []
+    tension_counts: dict[str, int] = {}
+    for row in rows:
+        task_id = str(row.get("id", ""))
+        source_row = next(
+            (
+                item
+                for item in (raw.get("evals", []) if isinstance(raw, dict) else raw)
+                if isinstance(item, dict) and str(item.get("id", "")) == task_id
+            ),
+            {},
+        )
+        assertions = source_row.get("assertions", []) if isinstance(source_row, dict) else []
+        expectation_parts = [str(source_row.get("expected_output", ""))]
+        if isinstance(assertions, list):
+            expectation_parts.extend(str(item) for item in assertions)
+        expectation = " ".join(expectation_parts).lower()
+        requires_image = bool(re.search(r"\b(screenshot|screenshots|image|images|visual evidence)\b", expectation))
+        files = [str(item) for item in row.get("files", [])]
+        image_files = [item for item in files if Path(item).suffix.lower() in IMAGE_SUFFIXES]
+        missing_files = [item for item in files if not (target_root / item).is_file()]
+        if missing_files:
+            raise EvalError(f"{eval_file}: task {task_id} fixture files not found: {', '.join(missing_files)}")
+        classification = "not_required"
+        if requires_image and image_files:
+            classification = "supported"
+        elif requires_image:
+            prompt = str(source_row.get("prompt", "")).lower()
+            intentional = "no screenshot" in prompt or "without screenshot" in expectation
+            classification = (
+                "intentional_missing_evidence_control"
+                if intentional
+                else "potential_fixture_evaluator_tension"
+            )
+        tension_counts[classification] = tension_counts.get(classification, 0) + 1
+        task_reports.append(
+            {
+                "task_id": task_id,
+                "requires_image_evidence": requires_image,
+                "image_files": image_files,
+                "missing_files": missing_files,
+                "classification": classification,
+            }
+        )
+    return {
+        "eval_file": str(eval_file),
+        "task_count": len(task_reports),
+        "classification_counts": dict(sorted(tension_counts.items())),
+        "tasks": task_reports,
+    }
+
+
+def build_reliability_report(
+    summaries: Sequence[tuple[Path, dict[str, Any]]],
+    fixture_report: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    if len(summaries) < 2:
+        raise EvalError("reliability requires at least two summary.json paths")
+    first_path, first = summaries[0]
+    expected_metadata = {field: first[field] for field in RELIABILITY_COMPATIBILITY_FIELDS}
+    first_tasks = {str(row["task_id"]): str(row["title"]) for row in first["tasks"]}
+    has_extended_metadata = "comparison_metadata" in first
+    for path, summary in summaries[1:]:
+        metadata = {field: summary[field] for field in RELIABILITY_COMPATIBILITY_FIELDS}
+        if metadata != expected_metadata:
+            unequal = [field for field in RELIABILITY_COMPATIBILITY_FIELDS if metadata[field] != expected_metadata[field]]
+            raise EvalError(f"{path}: incompatible comparison metadata: {', '.join(unequal)}")
+        tasks = {str(row["task_id"]): str(row["title"]) for row in summary["tasks"]}
+        if tasks != first_tasks:
+            raise EvalError(f"{path}: incompatible task id/title set compared with {first_path}")
+        if ("comparison_metadata" in summary) != has_extended_metadata:
+            raise EvalError(f"{path}: incompatible comparison_metadata availability")
+        if has_extended_metadata and summary["comparison_metadata"] != first["comparison_metadata"]:
+            raise EvalError(f"{path}: incompatible comparison_metadata")
+
+    per_case: list[dict[str, Any]] = []
+    disagreement_flags: list[dict[str, Any]] = []
+    strict_values: list[str] = []
+    behavior_values: list[str] = []
+    exact_suite_count = 0
+    for _, summary in summaries:
+        rows = {str(row["task_id"]): row for row in summary["tasks"]}
+        run_strict = [str(rows[task_id]["verdict"]) for task_id in first_tasks]
+        strict_values.extend(run_strict)
+        behavior_values.extend(str(rows[task_id]["behavior_verdict"]) for task_id in first_tasks)
+        if all(value == "A" for value in run_strict):
+            exact_suite_count += 1
+
+    for task_id, title in first_tasks.items():
+        strict = [str(next(row for row in summary["tasks"] if row["task_id"] == task_id)["verdict"]) for _, summary in summaries]
+        behavior = [str(next(row for row in summary["tasks"] if row["task_id"] == task_id)["behavior_verdict"]) for _, summary in summaries]
+        strict_a_count = sum(value == "A" for value in strict)
+        behavior_pass_count = sum(value == "pass" for value in behavior)
+        case_report = {
+            "task_id": task_id,
+            "title": title,
+            "strict_grade_counts": count_values(strict),
+            "strict_a_count": strict_a_count,
+            "strict_a_rate": rate(strict_a_count, len(strict)),
+            "behavior_verdict_counts": count_values(behavior),
+            "behavior_pass_count": behavior_pass_count,
+            "behavior_pass_rate": rate(behavior_pass_count, len(behavior)),
+        }
+        per_case.append(case_report)
+        if behavior_pass_count == len(behavior) and strict_a_count != len(strict):
+            disagreement_flags.append(
+                {
+                    "kind": "behavior_stable_strict_grade_variance",
+                    "task_id": task_id,
+                    "strict_a_count": strict_a_count,
+                    "behavior_pass_count": behavior_pass_count,
+                }
+            )
+
+    strict_a_count = sum(value == "A" for value in strict_values)
+    behavior_pass_count = sum(value == "pass" for value in behavior_values)
+    if behavior_pass_count != len(behavior_values):
+        promotion_verdict = "fail"
+    elif strict_a_count == len(strict_values):
+        promotion_verdict = "stable_pass"
+    else:
+        promotion_verdict = "unstable"
+    if not has_extended_metadata:
+        disagreement_flags.append(
+            {
+                "kind": "legacy_comparison_metadata_gap",
+                "detail": "summaries predate recorded model/profile/prompt hashes; explicit inputs assert equality for those unrecorded settings",
+            }
+        )
+
+    report: dict[str, Any] = {
+        "schema_version": 1,
+        "kind": "eval_reliability",
+        "input_summaries": [str(path) for path, _ in summaries],
+        "comparison_metadata": first.get("comparison_metadata", expected_metadata),
+        "run_count": len(summaries),
+        "task_count": len(first_tasks),
+        "strict_grade": {
+            "verdict_counts": count_values(strict_values),
+            "a_count": strict_a_count,
+            "total": len(strict_values),
+            "a_rate": rate(strict_a_count, len(strict_values)),
+        },
+        "behavior": {
+            "verdict_counts": count_values(behavior_values),
+            "pass_count": behavior_pass_count,
+            "total": len(behavior_values),
+            "pass_rate": rate(behavior_pass_count, len(behavior_values)),
+        },
+        "exact_suite": {
+            "strict_a_pass_count": exact_suite_count,
+            "total": len(summaries),
+            "pass_rate": rate(exact_suite_count, len(summaries)),
+        },
+        "per_case": per_case,
+        "disagreement_flags": disagreement_flags,
+        "promotion_verdict": promotion_verdict,
+    }
+    if fixture_report is not None:
+        report["fixture_evidence_contract"] = fixture_report
+    return report
+
+
+def command_reliability(args: argparse.Namespace) -> int:
+    summaries = [(Path(value).resolve(), load_reliability_summary(Path(value).resolve())) for value in args.summaries]
+    fixture_report = None
+    if args.eval_file:
+        fixture_report = inspect_fixture_evidence(Path(args.eval_file).resolve(), Path(args.target_root).resolve())
+    report = build_reliability_report(summaries, fixture_report)
+    if args.output:
+        output = Path(args.output).resolve()
+        write_json(output, report)
+        print(f"Wrote {output}")
+    else:
+        print(json.dumps(report, indent=2))
+    return 0 if report["promotion_verdict"] == "stable_pass" else 1
+
+
 def command_run(args: argparse.Namespace) -> int:
     target_root = Path(args.target_root).resolve()
     eval_dir = Path(args.eval_dir).resolve() if args.eval_dir else default_eval_dir(args.harness, target_root)
@@ -817,6 +1693,12 @@ def command_run(args: argparse.Namespace) -> int:
         if len(selected) != 1:
             raise EvalError("--compare-baseline requires exactly one --skill")
         args.target_skill = next(iter(selected))
+    if args.behavior_output_schema and not args.behavior_trace:
+        raise EvalError("--behavior-output-schema requires --behavior-trace")
+    if args.behavior_output_schema and not Path(args.behavior_output_schema).resolve().is_file():
+        raise EvalError(f"behavior output schema not found: {Path(args.behavior_output_schema).resolve()}")
+    if args.behavior_trace and args.max_parallel_tasks != 1:
+        raise EvalError("--behavior-trace requires --max-parallel-tasks 1 for attributable file inventory")
     native_skill_context = args.compare_baseline or uses_native_skill_context(args.harness, args.agent_profile)
     tasks = load_task_suite(
         task_paths,
@@ -861,26 +1743,62 @@ def command_run(args: argparse.Namespace) -> int:
             trigger_key = "unknown" if triggered is None else str(bool(triggered)).lower()
             skill_trigger_counts[trigger_key] = skill_trigger_counts.get(trigger_key, 0) + 1
     summary = {
+        "schema_version": 2,
         "job_id": job_id,
         "label": args.label,
         "created_at": created_at,
+        "completed_at": datetime.now(timezone.utc).isoformat(),
         "harness": args.harness,
         "judge_harness": args.judge_harness or args.harness,
         "scopes": ["custom"] if args.tasks else list(scopes),
         "default_context_file": eval_config.default_context_file,
         "skill_context": "native" if native_skill_context else "inline",
         "compare_baseline": bool(args.compare_baseline),
+        "behavior_trace": bool(args.behavior_trace),
         "task_files": [str(path) for path in task_paths],
         "task_count": len(rows),
         "pass_rate": pass_rate,
         "verdict_counts": verdict_counts,
         "tasks": rows,
+        "comparison_metadata": {
+            "agent_profile": args.agent_profile,
+            "judge_profile": args.judge_profile,
+            "baseline_agent_profile": args.baseline_agent_profile,
+            "max_parallel_tasks": args.max_parallel_tasks,
+            "agent_extra_args": list(args.agent_extra_arg),
+            "judge_extra_args": list(args.judge_extra_arg),
+            "agent_prompt_sha256": sha256_text(agent_template),
+            "judge_prompt_sha256": sha256_text(judge_template),
+            "behavior_output_schema_sha256": (
+                sha256_text(read_text(Path(args.behavior_output_schema).resolve()))
+                if args.behavior_output_schema
+                else None
+            ),
+            "agent_command_template_sha256": (
+                sha256_text(args.agent_command_template) if args.agent_command_template else None
+            ),
+            "judge_command_template_sha256": (
+                sha256_text(args.judge_command_template) if args.judge_command_template else None
+            ),
+            "task_file_sha256": {
+                str(path): sha256_text(read_text(path)) for path in task_paths
+            },
+        },
     }
+    if args.behavior_trace:
+        behavior_verdict_counts: dict[str, int] = {}
+        for row in rows:
+            verdict = str(row.get("behavior_verdict", "unknown"))
+            behavior_verdict_counts[verdict] = behavior_verdict_counts.get(verdict, 0) + 1
+        summary["behavior_verdict_counts"] = behavior_verdict_counts
     if args.compare_baseline:
         triggered_count = skill_trigger_counts.get("true", 0)
         summary["comparison_counts"] = comparison_counts
         summary["skill_trigger_counts"] = skill_trigger_counts
         summary["skill_trigger_rate"] = round(triggered_count / len(rows), 2) if rows else 0
+    benchmark = build_benchmark(rows, bool(args.compare_baseline))
+    summary["benchmark_path"] = str(job_dir / "benchmark.json")
+    write_json(job_dir / "benchmark.json", benchmark)
     write_json(job_dir / "summary.json", summary)
     update_index(runs_dir, summary)
     print(f"Wrote {job_dir}")
@@ -904,6 +1822,7 @@ def command_init(args: argparse.Namespace) -> int:
     copy_template(templates / "agents_md_tasks.json", eval_dir / "tasks" / "agents_md_tasks.json", args.force)
     copy_template(templates / "agent.md", eval_dir / "prompts" / "agent.md", args.force)
     copy_template(templates / "judge.md", eval_dir / "prompts" / "judge.md", args.force)
+    copy_template(templates / "behavior-report.schema.json", eval_dir / "schemas" / "behavior-report.schema.json", args.force)
     copy_template(templates / "README.md", eval_dir / "README.md", args.force)
     copy_template(Path(__file__).resolve(), eval_dir / "run_evals.py", args.force)
     (eval_dir / "runs").mkdir(parents=True, exist_ok=True)
@@ -934,6 +1853,16 @@ def build_parser() -> argparse.ArgumentParser:
     status_parser.add_argument("--eval-dir")
     status_parser.set_defaults(func=command_status)
 
+    reliability_parser = subparsers.add_parser(
+        "reliability",
+        help="Reduce two or more comparable summary.json files into a promotion reliability report.",
+    )
+    reliability_parser.add_argument("summaries", nargs="+")
+    reliability_parser.add_argument("--eval-file", help="Optional eval manifest to inspect for image-evidence fixture tension.")
+    reliability_parser.add_argument("--target-root", default=".")
+    reliability_parser.add_argument("--output")
+    reliability_parser.set_defaults(func=command_reliability)
+
     run_parser = subparsers.add_parser("run", help="Run eval tasks")
     run_parser.add_argument("--harness", choices=["codex", "claude", "custom"], required=True)
     run_parser.add_argument("--judge-harness", choices=["codex", "claude", "custom"])
@@ -961,6 +1890,15 @@ def build_parser() -> argparse.ArgumentParser:
     run_parser.add_argument("--judge-profile", help="Codex config profile for judge runs, loaded with codex exec --profile.")
     run_parser.add_argument("--compare-baseline", action="store_true", help="Run selected skill evals in native skill mode, record whether the target skill triggered, and run a baseline profile only after a trigger.")
     run_parser.add_argument("--baseline-agent-profile", help="Codex config profile for baseline agent runs when --compare-baseline is set.")
+    run_parser.add_argument(
+        "--behavior-trace",
+        action="store_true",
+        help="Preserve a scored agent behavior trace: exact prompt, Codex JSONL events, logs, checkpoints, artifacts, usage, and final output.",
+    )
+    run_parser.add_argument(
+        "--behavior-output-schema",
+        help="Optional JSON schema for the final behavior report; passed to Codex and validated in the preserved trace.",
+    )
     run_parser.add_argument("--agent-extra-arg", action="append", default=[])
     run_parser.add_argument("--judge-extra-arg", action="append", default=[])
     run_parser.add_argument(

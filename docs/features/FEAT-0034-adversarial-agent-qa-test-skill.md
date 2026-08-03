@@ -12,7 +12,7 @@ refs:
   - skills/agent-qa-test
   - docs/skills/registry.jsonl
   - docs/fundamentals/harness-engineering-doctrine.md
-  - "docs/features/registry.jsonl#FEAT-0031"
+  - skills/eval
   - skills/agent-qa-test/SKILL.md
   - skills/agent-qa-test/references/scientific-claim-review.md
   - docs/review/rubrics/scientific-evidence.md
@@ -26,7 +26,7 @@ surfaces:
   - docs/skills/registry.jsonl
 source_refs:
   - docs/fundamentals/harness-engineering-doctrine.md
-  - "docs/features/registry.jsonl#FEAT-0031"
+  - skills/eval
 external_refs: []
 evidence_refs:
   - skills/agent-qa-test/SKILL.md
@@ -134,7 +134,7 @@ Owner surfaces:
 Source context:
 
 - `docs/fundamentals/harness-engineering-doctrine.md`
-- `docs/features/registry.jsonl#FEAT-0031`
+- `skills/eval`
 
 Evidence:
 
@@ -188,5 +188,8 @@ Acceptance signals:
 
 - 2026-06-26: Feature spec created.
 - 2026-06-27: Migrated into the reader-first feature-spec shape.
+- 2026-07-16: Routed instrumented CLI child runs through Eval
+  `behavior_trace`; Agent QA keeps adversarial and native-subagent evidence
+  review.
 - 2026-07-25: Added the risk-triggered `agent-qa-test:experiment` method,
   two-sided surprise diagnosis, bounded reruns, and scoped scientific verdicts.

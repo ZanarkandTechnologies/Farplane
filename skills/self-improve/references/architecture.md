@@ -24,11 +24,13 @@ local/source/adversarial coverage preparation
 - Ticket `progress.md`: append-only selection and mutation receipts.
 - `.farplane/evals/runs/<job-id>`: generated Eval evidence only.
 - Native Goal: sole continuation engine.
-- Leverage Advisor: chooses each next experiment from eligible pending tree
-  leaves plus progress learnings, current evidence, and remaining budget.
+- Active Goal: owns `choose_next` from eligible pending tree leaves, progress
+  learnings, current evidence, and remaining budget.
+- Leverage Advisor: supplies a stateless ordinal comparison only when several
+  eligible moves need judgment.
 - Eval: suite execution, grading, and comparison.
 
 The reusable reference is policy source, not runtime state. Leverage Advisor is
-an existing skill composition, not a second state or continuation owner. Do not
+a conditional skill composition, not a state, decision, or continuation owner. Do not
 add a deterministic decision helper, event schema, runner, counter file,
 target-local program/tree/progress set, tournament, or another loop owner.

@@ -241,7 +241,7 @@ Keep the brief compact and directly reusable.
 ## References
 
 - [references/review.md](references/review.md)
-- [docs/features/FEAT-0031-agent-behavior-test-workflow.md](/Users/kenjipcx/coding-harness/Farplane/docs/features/FEAT-0031-agent-behavior-test-workflow.md)
+- [Eval behavior traces](../eval/SKILL.md)
 - [skills/deep-system-design/SKILL.md](/Users/kenjipcx/coding-harness/Farplane/skills/deep-system-design/SKILL.md)
 - [skills/spec-to-ticket/SKILL.md](/Users/kenjipcx/coding-harness/Farplane/skills/spec-to-ticket/SKILL.md)
 - [skills/impl-plan/SKILL.md](/Users/kenjipcx/coding-harness/Farplane/skills/impl-plan/SKILL.md)

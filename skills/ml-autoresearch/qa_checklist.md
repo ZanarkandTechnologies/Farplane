@@ -12,6 +12,9 @@ Apply before campaign approval and again before completion.
 
 - [ ] One campaign ticket owns a stable objective, evaluator, data/split
       boundary, mutable surface, metric, guards, budget, proof, and stop rules.
+- [ ] Missing numeric ceilings or thresholds remain unresolved and block packet
+      approval; no attempt count, GPU budget, guard, or repeatability band is
+      invented.
 - [ ] The exact baseline ran before mutation, and smokes are never used for
       keep, kill, promotion, or scientific claims.
 - [ ] The evaluator, metric direction, prohibited inputs, and data/split
@@ -20,10 +23,11 @@ Apply before campaign approval and again before completion.
       variables, failure conditions, and source refs before the first mutation.
 - [ ] `hypothesis-tree.json` is the only current research-state owner;
       `program.md` owns policy and `progress.md` owns chronological receipts.
-- [ ] `program.md` requires Leverage Advisor to choose every next experiment
-      from eligible pending tree leaves plus learnings, current receipts, and
-      remaining budget using one ordinal judgment—never a tournament or stored
-      rank.
+- [ ] `program.md` makes the active Goal the `choose_next` owner. It executes a
+      mechanically implied move directly and uses Leverage Advisor only when
+      several plausible experiments need one ordinal judgment—never a
+      tournament or stored rank—and compares further work with report, feedback,
+      and stop.
 - [ ] Every experiment preregisters one attributable change, hypothesis,
       expected observation, observation horizon, named confidence, falsifier,
       surprise trigger, cost, guards, and keep/kill rule before full metrics

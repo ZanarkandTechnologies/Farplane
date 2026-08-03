@@ -22,9 +22,9 @@ rollout. Accepted results may route to `farplane-productization`.
 ```text
 farplane_experiment_report(hypothesis, target_surface, metric, baseline?, variant?, expectation?, ticket?, audience_context?)
   -> experiment_report + keep_reject_decision + follow_up_ticket_or_handoff
-state: reads(farplane/harness.yaml, farplane/metrics.yaml, ticket audience_context first or configured Feed Scout memory as fallback, ticket/program/progress/proof refs, target surface); writes(ticket artifact)
+state: reads(farplane/harness.yaml, farplane/metrics.yaml, ticket audience_context first or configured Feed Scout World Memory as fallback, ticket/program/progress/proof refs, target surface); writes(ticket artifact)
 gates: canonical_icp_bound; baseline_named; intended_decision_delta_named; metric_direction_named; evidence_not_vibes; rollout_not_implicit
-routes: root skill `prototyping` | root skill `eval` | root skill `agent-behavior-test` | root skill `agent-qa-test:experiment` for material surprise | ../farplane-productization/SKILL.md
+routes: root skill `prototyping` | root skill `eval` with `behavior_trace` for isolated agent evidence | root skill `agent-qa-test:experiment` for material surprise | ../farplane-productization/SKILL.md
 fails: changes strategy without evidence; claims improvement without baseline; rolls out before deciding keep/reject
 ```
 
@@ -35,9 +35,9 @@ fails: changes strategy without evidence; claims improvement without baseline; r
       observation horizon, confidence, falsifier, surprise trigger, and
       decision rule before reading results. Read ticket-owned `audience_context`
       first; otherwise resolve the selected area's ICP and configured Feed Scout
-      memory. State whose belief or workflow decision the result can change.
-      Purely internal experiments may use local run/eval evidence instead of
-      external memory.
+      World Memory. State whose belief or workflow decision the result can
+      change. Purely internal experiments may use local run/eval evidence
+      instead of external World Memory.
 - [ ] 2. Establish the smallest honest baseline and comparable variant.
 - [ ] 3. Use deterministic checks for mechanical claims and behavior evals for agent claims.
 - [ ] 4. Write baseline, variant, metric, evidence, decision, risks, and next action.

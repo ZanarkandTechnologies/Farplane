@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["target", "persona", "checkpoints", "artifacts", "deviations", "verdict"],
+  "properties": {
+    "target": {"type": "string"},
+    "persona": {"type": "string"},
+    "checkpoints": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "status", "evidence"],
+        "properties": {
+          "name": {"type": "string"},
+          "status": {"type": "string", "enum": ["done", "skipped", "blocked"]},
+          "evidence": {"type": "string"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "artifacts": {"type": "array", "items": {"type": "string"}},
+    "deviations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["expected", "observed", "owner"],
+        "properties": {
+          "expected": {"type": "string"},
+          "observed": {"type": "string"},
+          "owner": {"type": "string"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "verdict": {"type": "string", "enum": ["pass", "fail", "blocked"]}
+  },
+  "additionalProperties": false
+}

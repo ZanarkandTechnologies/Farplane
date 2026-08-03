@@ -68,6 +68,86 @@ def write_fake_cli(path: Path) -> None:
     path.chmod(0o755)
 
 
+def write_behavior_cli(path: Path) -> None:
+    path.write_text(
+        textwrap.dedent(
+            """\
+            #!/usr/bin/env python3
+            from __future__ import annotations
+
+            import argparse
+            import json
+            from pathlib import Path
+
+            parser = argparse.ArgumentParser()
+            parser.add_argument("--prompt-file", required=True)
+            parser.add_argument("--output-file", required=True)
+            parser.add_argument("--skill-event", default="")
+            parser.add_argument("--output-kind", choices=["behavior", "planner-json", "text"], default="behavior")
+            args = parser.parse_args()
+            prompt = Path(args.prompt_file).read_text()
+            output = Path(args.output_file)
+            if "Assistant answer:" in prompt:
+                output.write_text(json.dumps({
+                    "verdict": "A",
+                    "pass": True,
+                    "rubric": {},
+                    "reference_point_results": [],
+                    "reason": "behavior evidence is complete"
+                }))
+            else:
+                print(json.dumps({"type": "thread.started", "thread_id": "trace-thread"}))
+                if args.skill_event:
+                    print(json.dumps({"type": "item.completed", "item": {"type": "skill", "name": args.skill_event}}))
+                print(json.dumps({
+                    "type": "item.completed",
+                    "item": {"type": "command_execution", "command": "printf visible", "exit_code": 0, "status": "completed"}
+                }))
+                print(json.dumps({"type": "turn.completed", "usage": {"input_tokens": 12, "output_tokens": 8}}))
+                if args.output_kind == "planner-json":
+                    output.write_text(json.dumps({"selected": ["TASK-9001"], "rationale": "highest expected value"}))
+                elif args.output_kind == "text":
+                    output.write_text("Selected TASK-9001 because it has the highest expected value.")
+                else:
+                    Path("produced.txt").write_text("visible artifact\\n")
+                    output.write_text(json.dumps({
+                        "target": "eval behavior trace",
+                        "persona": "skill caller",
+                        "checkpoints": [{"name": "created_artifact", "status": "done", "evidence": "produced.txt"}],
+                        "artifacts": ["produced.txt"],
+                        "deviations": [],
+                        "verdict": "pass"
+                    }))
+            """
+        )
+    )
+    path.chmod(0o755)
+
+
+def reliability_summary(rows: list[dict[str, str]], **overrides: object) -> dict[str, object]:
+    summary: dict[str, object] = {
+        "harness": "codex",
+        "judge_harness": "codex",
+        "skill_context": "inline",
+        "compare_baseline": False,
+        "behavior_trace": True,
+        "scopes": ["skills"],
+        "task_files": ["/repo/skills/example/evals/evals.json"],
+        "task_count": len(rows),
+        "tasks": [
+            {
+                "task_id": row["task_id"],
+                "title": row.get("title", row["task_id"]),
+                "verdict": row["verdict"],
+                "behavior_verdict": row["behavior_verdict"],
+            }
+            for row in rows
+        ],
+    }
+    summary.update(overrides)
+    return summary
+
+
 def write_tasks(path: Path) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     if path.parts[-2:] == ("evals", "evals.json"):
@@ -201,7 +281,7 @@ class EvalRunnerTests(unittest.TestCase):
             self.assertIn("Skill under evaluation: qa", context)
             self.assertIn("Capture evidence.", context)
 
-    def test_standard_skill_eval_rejects_unstaged_files(self) -> None:
+    def test_standard_skill_eval_rejects_missing_fixture_files(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / "evals.json"
             path.write_text(
@@ -220,8 +300,115 @@ class EvalRunnerTests(unittest.TestCase):
                 )
             )
 
-            with self.assertRaisesRegex(runner.EvalError, "does not stage yet"):
-                runner.load_tasks(path)
+            with self.assertRaisesRegex(runner.EvalError, "file not found"):
+                runner.load_tasks(path, target_root=Path(tmp))
+
+    def test_selected_standard_skill_eval_skips_unrelated_unstaged_files(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "evals.json"
+            path.write_text(
+                json.dumps(
+                    {
+                        "skill_name": "qa",
+                        "evals": [
+                            {
+                                "id": "legacy_with_files",
+                                "prompt": "Check this file.",
+                                "expected_output": "A result.",
+                                "files": ["evals/files/input.txt"],
+                            },
+                            {
+                                "id": "selected_portable",
+                                "prompt": "Review this scenario.",
+                                "expected_output": "A portable result.",
+                                "files": [],
+                            },
+                        ],
+                    }
+                )
+            )
+
+            tasks = runner.load_tasks(path, task_ids={"selected_portable"}, target_root=Path(tmp))
+
+        self.assertEqual([task.id for task in tasks], ["selected_portable"])
+
+    def test_selected_standard_skill_eval_still_rejects_its_missing_files(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "evals.json"
+            path.write_text(
+                json.dumps(
+                    {
+                        "skill_name": "qa",
+                        "evals": [
+                            {
+                                "id": "selected_with_files",
+                                "prompt": "Check this file.",
+                                "expected_output": "A result.",
+                                "files": ["evals/files/input.txt"],
+                            }
+                        ],
+                    }
+                )
+            )
+
+            with self.assertRaisesRegex(runner.EvalError, "file not found"):
+                runner.load_tasks(path, task_ids={"selected_with_files"}, target_root=Path(tmp))
+
+    def test_selected_standard_skill_eval_rejects_file_escape(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp) / "root"
+            root.mkdir()
+            path = root / "evals.json"
+            path.write_text(
+                json.dumps(
+                    {
+                        "skill_name": "qa",
+                        "evals": [
+                            {
+                                "id": "selected_escape",
+                                "prompt": "Check the supplied input.",
+                                "expected_output": "A result.",
+                                "files": ["../outside.txt"],
+                            }
+                        ],
+                    }
+                )
+            )
+
+            with self.assertRaisesRegex(runner.EvalError, "escapes target root"):
+                runner.load_tasks(path, task_ids={"selected_escape"}, target_root=root)
+
+    def test_selected_standard_skill_eval_stages_read_only_file_copy(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            fixture = root / "fixtures" / "input.txt"
+            fixture.parent.mkdir()
+            fixture.write_text("fixture value\n")
+            path = root / "evals.json"
+            path.write_text(
+                json.dumps(
+                    {
+                        "skill_name": "qa",
+                        "evals": [
+                            {
+                                "id": "selected_with_file",
+                                "prompt": "Check the supplied input.",
+                                "expected_output": "A result.",
+                                "files": ["fixtures/input.txt"],
+                            }
+                        ],
+                    }
+                )
+            )
+            task = runner.load_tasks(path, task_ids={"selected_with_file"}, target_root=root)[0]
+            task_dir = root / "run" / task.id
+
+            staged_task = runner.stage_task_files(task, root, task_dir)
+
+            staged = task_dir / "fixtures" / "fixtures" / "input.txt"
+            self.assertEqual(staged.read_text(), "fixture value\n")
+            self.assertEqual(staged.stat().st_mode & 0o222, 0)
+            self.assertIn(str(staged.resolve()), staged_task.context)
 
     def test_only_a_verdict_passes(self) -> None:
         self.assertTrue(runner.normalize_judge({"verdict": "A"})["pass"])
@@ -231,7 +418,34 @@ class EvalRunnerTests(unittest.TestCase):
 
     def test_codex_profile_args_are_first_class(self) -> None:
         args = runner.codex_extra_args(["--model", "gpt-5.5"], "skill-eval")
-        self.assertEqual(args, ["--profile", "skill-eval", "--model", "gpt-5.5"])
+        self.assertEqual(
+            args,
+            [
+                "--profile",
+                "skill-eval",
+                "--model",
+                "gpt-5.5",
+                "--ephemeral",
+                "--disable",
+                "hooks",
+                "-c",
+                "notify=[]",
+            ],
+        )
+
+    def test_codex_runs_are_isolated_without_a_profile(self) -> None:
+        self.assertEqual(
+            runner.codex_extra_args([], None),
+            ["--ephemeral", "--disable", "hooks", "-c", "notify=[]"],
+        )
+
+    def test_codex_eval_isolation_tail_wins_over_user_overrides(self) -> None:
+        args = runner.codex_extra_args(
+            ["--enable", "hooks", "-c", 'notify=["custom"]'],
+            "skill-eval",
+        )
+
+        self.assertEqual(args[-5:], ["--ephemeral", "--disable", "hooks", "-c", "notify=[]"])
 
     def test_codex_profile_rejects_path_like_names(self) -> None:
         with self.assertRaises(runner.EvalError):
@@ -327,7 +541,244 @@ class EvalRunnerTests(unittest.TestCase):
             self.assertEqual(summary["scopes"], ["custom"])
             self.assertEqual(summary["pass_rate"], 1.0)
             self.assertEqual(summary["verdict_counts"], {"A": 1})
+            self.assertEqual(summary["comparison_metadata"]["max_parallel_tasks"], 2)
+            self.assertEqual(len(summary["comparison_metadata"]["agent_prompt_sha256"]), 64)
+            self.assertEqual(len(summary["comparison_metadata"]["task_file_sha256"][str(tasks)]), 64)
             self.assertTrue((run_dirs[0] / "tasks" / "proof_01.json").exists())
+
+    def test_behavior_trace_preserves_and_scores_unique_behavior_contract(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            eval_dir = root / "evals"
+            fake_cli = root / "behavior_cli.py"
+            tasks = eval_dir / "tasks" / "harness_tasks.json"
+            schema = root / "behavior-schema.json"
+            (eval_dir / "prompts").mkdir(parents=True)
+            tasks.parent.mkdir(parents=True)
+            write_behavior_cli(fake_cli)
+            write_tasks(tasks)
+            schema.write_text(
+                json.dumps(
+                    {
+                        "type": "object",
+                        "required": ["target", "persona", "checkpoints", "artifacts", "deviations", "verdict"],
+                        "properties": {
+                            "target": {"type": "string"},
+                            "persona": {"type": "string"},
+                            "checkpoints": {"type": "array", "minItems": 1},
+                            "artifacts": {"type": "array", "items": {"type": "string"}},
+                            "deviations": {"type": "array"},
+                            "verdict": {"type": "string", "enum": ["pass", "fail", "blocked"]},
+                        },
+                    }
+                )
+            )
+            (eval_dir / "prompts" / "agent.md").write_text("Task: {query}\n{task_json}\n")
+            (eval_dir / "prompts" / "judge.md").write_text("Task: {task_json}\nAssistant answer:\n{answer}\n")
+            template = f"{sys.executable} {fake_cli} --prompt-file {{prompt_file}} --output-file {{output_file}}"
+
+            code = runner.main(
+                [
+                    "run",
+                    "--harness",
+                    "custom",
+                    "--eval-dir",
+                    str(eval_dir),
+                    "--target-root",
+                    str(root),
+                    "--tasks",
+                    str(tasks),
+                    "--label",
+                    "behavior",
+                    "--max-parallel-tasks",
+                    "1",
+                    "--behavior-trace",
+                    "--behavior-output-schema",
+                    str(schema),
+                    "--agent-command-template",
+                    template,
+                    "--judge-command-template",
+                    template,
+                ]
+            )
+
+            self.assertEqual(code, 0)
+            run_dir = next((eval_dir / "runs").glob("*-behavior"))
+            summary = json.loads((run_dir / "summary.json").read_text())
+            detail = json.loads((run_dir / "tasks" / "proof_01.json").read_text())
+            trace = detail["behavior_trace"]
+            task_dir = run_dir / "tasks" / "proof_01"
+            self.assertTrue(summary["behavior_trace"])
+            self.assertEqual(summary["behavior_verdict_counts"], {"pass": 1})
+            self.assertEqual(trace["verdict"], "pass")
+            self.assertEqual(trace["event_summary"]["thread_id"], "trace-thread")
+            self.assertEqual(trace["event_summary"]["command_count"], 1)
+            self.assertEqual(trace["event_summary"]["usage"]["input_tokens"], 12)
+            self.assertEqual(trace["checkpoint_score"]["done"], 1)
+            self.assertIn("produced.txt", trace["artifact_inventory"]["present"])
+            self.assertIn("produced.txt", trace["artifact_inventory"]["observed_file_delta"]["created"])
+            self.assertTrue(trace["schema_validation"]["pass"])
+            self.assertTrue((task_dir / "agent_prompt.md").exists())
+            self.assertTrue((task_dir / "events.jsonl").exists())
+            self.assertTrue((task_dir / "agent_stdout.log").exists())
+            self.assertTrue((task_dir / "agent_stderr.log").exists())
+            self.assertTrue((task_dir / "agent_answer.txt").exists())
+            self.assertTrue((task_dir / "behavior_trace.json").exists())
+            self.assertTrue((task_dir / "output_schema.json").exists())
+
+    def test_behavior_trace_keeps_baseline_comparison(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            eval_dir = root / "evals"
+            fake_cli = root / "behavior_cli.py"
+            qa_eval = root / "skills" / "qa" / "evals/evals.json"
+            (eval_dir / "prompts").mkdir(parents=True)
+            qa_eval.parent.mkdir(parents=True)
+            write_behavior_cli(fake_cli)
+            write_tasks(qa_eval)
+            (eval_dir / "prompts" / "agent.md").write_text("Task: {query}\n{task_json}\n")
+            (eval_dir / "prompts" / "judge.md").write_text("Task: {task_json}\nAssistant answer:\n{answer}\n")
+            template = f"{sys.executable} {fake_cli} --skill-event qa --prompt-file {{prompt_file}} --output-file {{output_file}}"
+
+            code = runner.main(
+                [
+                    "run",
+                    "--harness",
+                    "custom",
+                    "--eval-dir",
+                    str(eval_dir),
+                    "--target-root",
+                    str(root),
+                    "--skill",
+                    "qa",
+                    "--label",
+                    "behavior-compare",
+                    "--compare-baseline",
+                    "--behavior-trace",
+                    "--max-parallel-tasks",
+                    "1",
+                    "--agent-command-template",
+                    template,
+                    "--judge-command-template",
+                    template,
+                ]
+            )
+
+            self.assertEqual(code, 0)
+            run_dir = next((eval_dir / "runs").glob("*-behavior-compare"))
+            detail = json.loads((run_dir / "tasks" / "proof_01.json").read_text())
+            self.assertEqual(detail["comparison"]["delta"], "tie")
+            self.assertEqual(detail["candidate"]["behavior_trace"]["verdict"], "pass")
+            self.assertEqual(detail["baseline"]["behavior_trace"]["verdict"], "pass")
+
+    def test_behavior_trace_without_schema_accepts_arbitrary_json_and_text(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            eval_dir = root / "evals"
+            fake_cli = root / "behavior_cli.py"
+            tasks = eval_dir / "tasks" / "harness_tasks.json"
+            (eval_dir / "prompts").mkdir(parents=True)
+            tasks.parent.mkdir(parents=True)
+            write_behavior_cli(fake_cli)
+            write_tasks(tasks)
+            task_rows = json.loads(tasks.read_text())
+            task_rows[0]["behavior_requirements"] = {
+                "required_successful_command_regexes": [r"printf\s+visible"]
+            }
+            tasks.write_text(json.dumps(task_rows))
+            (eval_dir / "prompts" / "agent.md").write_text("Task: {query}\n{task_json}\n")
+            (eval_dir / "prompts" / "judge.md").write_text("Task: {task_json}\nAssistant answer:\n{answer}\n")
+
+            for output_kind in ("planner-json", "text"):
+                with self.subTest(output_kind=output_kind):
+                    template = (
+                        f"{sys.executable} {fake_cli} --output-kind {output_kind} "
+                        "--prompt-file {prompt_file} --output-file {output_file}"
+                    )
+                    code = runner.main(
+                        [
+                            "run",
+                            "--harness",
+                            "custom",
+                            "--eval-dir",
+                            str(eval_dir),
+                            "--target-root",
+                            str(root),
+                            "--tasks",
+                            str(tasks),
+                            "--label",
+                            f"trace-{output_kind}",
+                            "--max-parallel-tasks",
+                            "1",
+                            "--behavior-trace",
+                            "--agent-command-template",
+                            template,
+                            "--judge-command-template",
+                            template,
+                        ]
+                    )
+
+                    self.assertEqual(code, 0)
+                    run_dir = next((eval_dir / "runs").glob(f"*-trace-{output_kind}"))
+                    detail = json.loads((run_dir / "tasks" / "proof_01.json").read_text())
+                    trace = detail["behavior_trace"]
+                    self.assertEqual(trace["verdict"], "pass")
+                    self.assertEqual(trace["command_requirement_score"]["matched"], 1)
+                    self.assertNotIn(
+                        "required_successful_command_regexes",
+                        (run_dir / "tasks" / "proof_01" / "agent_prompt.md").read_text(),
+                    )
+                    self.assertFalse(trace["behavior_report_detected"])
+                    self.assertFalse(trace["schema_validation"]["requested"])
+                    self.assertEqual(trace["failures"], [])
+                    if output_kind == "planner-json":
+                        self.assertEqual(trace["final_report"]["selected"], ["TASK-9001"])
+                    else:
+                        self.assertIsNone(trace["final_report"])
+
+    def test_behavior_trace_fails_when_required_successful_command_is_missing(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            eval_dir = root / "evals"
+            fake_cli = root / "behavior_cli.py"
+            tasks = eval_dir / "tasks" / "harness_tasks.json"
+            (eval_dir / "prompts").mkdir(parents=True)
+            tasks.parent.mkdir(parents=True)
+            write_behavior_cli(fake_cli)
+            write_tasks(tasks)
+            task_rows = json.loads(tasks.read_text())
+            task_rows[0]["behavior_requirements"] = {
+                "required_successful_command_regexes": [r"validate_missing\.py"]
+            }
+            tasks.write_text(json.dumps(task_rows))
+            (eval_dir / "prompts" / "agent.md").write_text("Task: {query}\n{task_json}\n")
+            (eval_dir / "prompts" / "judge.md").write_text(
+                "Task: {task_json}\nAssistant answer:\n{answer}\n"
+            )
+            template = (
+                f"{sys.executable} {fake_cli} --output-kind planner-json "
+                "--prompt-file {prompt_file} --output-file {output_file}"
+            )
+
+            code = runner.main(
+                [
+                    "run", "--harness", "custom", "--eval-dir", str(eval_dir),
+                    "--target-root", str(root), "--tasks", str(tasks),
+                    "--label", "missing-required-command", "--behavior-trace",
+                    "--max-parallel-tasks", "1", "--agent-command-template", template,
+                    "--judge-command-template", template,
+                ]
+            )
+
+            self.assertEqual(code, 1)
+            run_dir = next((eval_dir / "runs").glob("*-missing-required-command"))
+            summary = json.loads((run_dir / "summary.json").read_text())
+            detail = json.loads((run_dir / "tasks" / "proof_01.json").read_text())
+            trace = detail["behavior_trace"]
+            self.assertFalse(summary["tasks"][0]["pass"])
+            self.assertEqual(trace["verdict"], "fail")
+            self.assertEqual(trace["command_requirement_score"]["matched"], 0)
+            self.assertIn("required successful command evidence missing", trace["failures"][0])
 
     def test_harness_scope_loads_harness_task_file(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -674,14 +1125,25 @@ class EvalRunnerTests(unittest.TestCase):
             run_dir = next((eval_dir / "runs").glob("*-compare"))
             summary = json.loads((run_dir / "summary.json").read_text())
             detail = json.loads((run_dir / "tasks" / "proof_01.json").read_text())
+            benchmark = json.loads((run_dir / "benchmark.json").read_text())
             candidate_prompt = (run_dir / "tasks" / "proof_01" / "candidate_agent_prompt.md").read_text()
 
             self.assertTrue(summary["compare_baseline"])
             self.assertEqual(summary["skill_context"], "native")
             self.assertEqual(summary["skill_trigger_counts"], {"true": 1})
             self.assertEqual(summary["comparison_counts"], {"tie": 1})
+            self.assertEqual(summary["schema_version"], 2)
+            self.assertEqual(detail["schema_version"], 2)
             self.assertTrue(detail["candidate"]["skill_triggered"])
             self.assertFalse(detail["baseline"]["skipped"] if "skipped" in detail["baseline"] else False)
+            self.assertTrue((run_dir / "tasks" / "proof_01" / "candidate" / "timing.json").exists())
+            self.assertTrue((run_dir / "tasks" / "proof_01" / "candidate" / "grading.json").exists())
+            self.assertTrue((run_dir / "tasks" / "proof_01" / "baseline" / "timing.json").exists())
+            self.assertTrue((run_dir / "tasks" / "proof_01" / "comparison.json").exists())
+            self.assertIn("candidate", benchmark["run_summary"])
+            self.assertIn("baseline", benchmark["run_summary"])
+            self.assertEqual(benchmark["repetitions"], 1)
+            self.assertFalse((eval_dir / "campaigns").exists())
             self.assertNotIn("Should not be inlined", candidate_prompt)
 
     def test_detect_skill_triggered_matches_real_codex_skill_file_read(self) -> None:
@@ -782,6 +1244,139 @@ class EvalRunnerTests(unittest.TestCase):
             tasks = runner.load_task_suite([path], target_root=root, task_ids={"keep_01"})
 
         self.assertEqual([task.id for task in tasks], ["keep_01"])
+
+    def test_reliability_report_distinguishes_stable_unstable_and_behavior_failure(self) -> None:
+        stable_rows = [
+            {"task_id": "one", "verdict": "A", "behavior_verdict": "pass"},
+            {"task_id": "two", "verdict": "A", "behavior_verdict": "pass"},
+        ]
+        stable = runner.build_reliability_report(
+            [(Path("run-1"), reliability_summary(stable_rows)), (Path("run-2"), reliability_summary(stable_rows))]
+        )
+        self.assertEqual(stable["promotion_verdict"], "stable_pass")
+        self.assertEqual(stable["strict_grade"]["a_count"], 4)
+        self.assertEqual(stable["exact_suite"]["strict_a_pass_count"], 2)
+
+        varied_rows = [
+            {"task_id": "one", "verdict": "B", "behavior_verdict": "pass"},
+            {"task_id": "two", "verdict": "A", "behavior_verdict": "pass"},
+        ]
+        unstable = runner.build_reliability_report(
+            [(Path("run-1"), reliability_summary(stable_rows)), (Path("run-2"), reliability_summary(varied_rows))]
+        )
+        self.assertEqual(unstable["promotion_verdict"], "unstable")
+        self.assertEqual(unstable["strict_grade"]["a_count"], 3)
+        self.assertEqual(unstable["behavior"]["pass_count"], 4)
+        self.assertEqual(unstable["exact_suite"]["strict_a_pass_count"], 1)
+        self.assertEqual(unstable["disagreement_flags"][0]["task_id"], "one")
+
+        failed_rows = [
+            {"task_id": "one", "verdict": "A", "behavior_verdict": "fail"},
+            {"task_id": "two", "verdict": "A", "behavior_verdict": "pass"},
+        ]
+        failed = runner.build_reliability_report(
+            [(Path("run-1"), reliability_summary(stable_rows)), (Path("run-2"), reliability_summary(failed_rows))]
+        )
+        self.assertEqual(failed["promotion_verdict"], "fail")
+
+    def test_reliability_report_fails_closed_on_incompatible_or_malformed_summaries(self) -> None:
+        rows = [{"task_id": "one", "verdict": "A", "behavior_verdict": "pass"}]
+        incompatible = reliability_summary(rows, harness="claude")
+        with self.assertRaisesRegex(runner.EvalError, "incompatible comparison metadata"):
+            runner.build_reliability_report(
+                [(Path("run-1"), reliability_summary(rows)), (Path("run-2"), incompatible)]
+            )
+
+        changed_task = [{"task_id": "different", "verdict": "A", "behavior_verdict": "pass"}]
+        with self.assertRaisesRegex(runner.EvalError, "incompatible task id/title set"):
+            runner.build_reliability_report(
+                [(Path("run-1"), reliability_summary(rows)), (Path("run-2"), reliability_summary(changed_task))]
+            )
+
+        with tempfile.TemporaryDirectory() as tmp:
+            malformed = Path(tmp) / "summary.json"
+            malformed.write_text("{not json")
+            with self.assertRaisesRegex(runner.EvalError, "invalid JSON"):
+                runner.load_reliability_summary(malformed)
+
+            duplicate = Path(tmp) / "duplicate.json"
+            duplicate.write_text(json.dumps(reliability_summary(rows + rows)))
+            with self.assertRaisesRegex(runner.EvalError, "duplicate task_id"):
+                runner.load_reliability_summary(duplicate)
+
+            missing_field = Path(tmp) / "missing-field.json"
+            missing = reliability_summary(rows)
+            del missing["behavior_trace"]
+            missing_field.write_text(json.dumps(missing))
+            with self.assertRaisesRegex(runner.EvalError, "missing comparison metadata field behavior_trace"):
+                runner.load_reliability_summary(missing_field)
+
+    def test_fixture_evidence_inspection_separates_controls_from_tension(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            image = root / "fixtures" / "screen.png"
+            image.parent.mkdir(parents=True)
+            image.write_bytes(b"png")
+            eval_file = root / "evals.json"
+            eval_file.write_text(
+                json.dumps(
+                    {
+                        "skill_name": "fixture",
+                        "evals": [
+                            {
+                                "id": "missing-control",
+                                "prompt": "Review this state with no screenshot.",
+                                "expected_output": "Refuses to pass without screenshot evidence.",
+                                "files": [],
+                                "assertions": ["Names the missing image"],
+                            },
+                            {
+                                "id": "facts-only",
+                                "prompt": "Review the evidence.",
+                                "expected_output": "Uses screenshot facts as the verdict basis.",
+                                "files": ["fixtures/state.facts.json"],
+                                "assertions": ["Names the screenshot as best evidence"],
+                            },
+                            {
+                                "id": "pixels",
+                                "prompt": "Review the screenshot.",
+                                "expected_output": "Names the best image evidence.",
+                                "files": ["fixtures/screen.png"],
+                                "assertions": ["Uses screenshot evidence"],
+                            },
+                        ],
+                    }
+                )
+            )
+            (root / "fixtures" / "state.facts.json").write_text("{}")
+            report = runner.inspect_fixture_evidence(eval_file, root)
+
+        self.assertEqual(
+            report["classification_counts"],
+            {
+                "intentional_missing_evidence_control": 1,
+                "potential_fixture_evaluator_tension": 1,
+                "supported": 1,
+            },
+        )
+
+    def test_reliability_cli_writes_unstable_report(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            first = root / "first.json"
+            second = root / "second.json"
+            output = root / "report.json"
+            first.write_text(
+                json.dumps(reliability_summary([{"task_id": "one", "verdict": "A", "behavior_verdict": "pass"}]))
+            )
+            second.write_text(
+                json.dumps(reliability_summary([{"task_id": "one", "verdict": "B", "behavior_verdict": "pass"}]))
+            )
+            code = runner.main(["reliability", str(first), str(second), "--output", str(output)])
+            report = json.loads(output.read_text())
+
+        self.assertEqual(code, 1)
+        self.assertEqual(report["promotion_verdict"], "unstable")
 
     def test_status_reports_missing_and_ready_layout(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

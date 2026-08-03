@@ -25,7 +25,7 @@ This skill owns proof selection and proof-case design. It does not execute
 every proof surface itself. Deterministic behavior should become code, schema,
 fixture, unit, integration, contract, browser, or validator checks when
 possible. AI, prompt, agent, and skill behavior should become eval rows,
-model/human judge criteria, `agent-behavior-test`, or `agent-qa-test` when
+model/human judge criteria, Eval `behavior_trace`, or `agent-qa-test` when
 output variation or multi-step behavior is the thing being tested.
 
 ## Skill Signature
@@ -50,7 +50,7 @@ gates:
   cases_distinct_and_judgeable; proof_surface_fit; anti-cheat_reviewed
 
 routes:
-  testing | eval | agent-qa-test | agent-behavior-test | qa | visual-qa |
+  testing | eval:behavior-trace | agent-qa-test | qa | visual-qa |
   metric-advisor | skill-maintenance | review
 
 fails:
@@ -100,6 +100,11 @@ Run grounding and proof-case design inline by default. Route to:
     fixtures, or the owning skill, not in the query.
 - [ ] 5. Score and select cases with
   [proof-case rubric](references/proof-case-rubric.md).
+  - [ ] For a prompt-heavy or judgment-dependent proof plan, first read
+    [the golden proof plan](examples/golden/proof-plan.md) with
+    `qa_checklist.md`. Transfer invariants, never fixture facts or wording; an
+    independent reviewer receives the candidate, golden invariants, QA, and
+    held-out context, but not planner scratch reasoning.
   - [ ] Reject near-duplicates, vague goodness checks, hidden-oracle cases,
     impossible fixtures, and cases whose failure would not identify an owner.
   - [ ] Keep fewer high-signal cases over broad but blurry coverage.
@@ -109,7 +114,7 @@ Run grounding and proof-case design inline by default. Route to:
     no-mechanical-metric rationale.
   - [ ] Use deterministic tests, validators, schemas, or scripts when the
     expected result is mechanically checkable.
-  - [ ] Use `testing`, `eval`, `agent-qa-test`, `agent-behavior-test`, `qa`,
+  - [ ] Use `testing`, Eval `behavior_trace`, `agent-qa-test`, `qa`,
     `visual-qa`, or `review` according to proof-surface fit.
   - [ ] Use evals or model/human judges when the behavior is variable but the
     criteria are explicit.
@@ -186,6 +191,9 @@ coverage_gaps:
   scoring, selecting, rejecting, or reviewing proof cases.
 - [qa_checklist.md](qa_checklist.md) - run before claiming material proof-case
   design is ready.
+- [Golden proof plan](examples/golden/proof-plan.md) - load with QA when
+  planning or independently reviewing prompt-heavy or judgment-dependent proof
+  advice; transfer invariants, not case facts or wording.
 - [../testing/SKILL.md](../testing/SKILL.md) - route proof-surface execution and
   testing backpressure decisions.
 - [../eval/SKILL.md](../eval/SKILL.md) - route runnable eval rows, judges,

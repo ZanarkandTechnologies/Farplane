@@ -4,12 +4,12 @@
     {
       "id": "ml_autoresearch_pipeline_smoke_01",
       "prompt": "Set up a small image-model improvement campaign. The evaluator and GPU cap are fixed. Our notes say large crop scales hurt small-object recall, area-aware sampling may help, and aggressive augmentation can erase tiny features. Show the initial research plan and what the loop should do if its first experiment misses.",
-      "expected_output": "Freezes and records the baseline; Extracts techniques, mechanisms, variables, and failure conditions; Seeds a small hypothesis tree with expected outcomes and falsifiers; Uses one compounding-leverage selection; Replans from the result with bounded diagnostics rather than following a fixed ladder",
+      "expected_output": "Freezes and records the baseline; Extracts techniques, mechanisms, variables, and failure conditions; Seeds a small hypothesis tree with expected outcomes and falsifiers; Applies choose-next and uses one compounding-leverage comparison because several initial moves need judgment; Replans from the result with bounded diagnostics rather than following a fixed ladder",
       "files": [],
       "assertions": [
         "Freezes the evaluator, data boundary, metric, guards, GPU budget, and unchanged baseline before mutation",
         "Extracts techniques, mechanisms, variables, failure conditions, and source refs into a small initial hypothesis tree",
-        "Gives each initial hypothesis an expected observation, falsifier, and logical compounding-reward basis, then makes one ordinal Leverage Advisor selection without a tournament",
+        "Gives each initial hypothesis an expected observation, falsifier, and logical compounding-reward basis, then applies choose-next and makes one ordinal Leverage Advisor comparison without a tournament because several moves are plausible",
         "After the miss, updates the tree before progress and uses bounded diagnostic children or a credible sibling instead of continuing a fixed roadmap"
       ],
       "metadata": {

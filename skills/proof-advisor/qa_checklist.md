@@ -3,7 +3,7 @@ title: Proof Advisor QA Checklist
 owner: skills/proof-advisor
 status: active
 kind: qa-checklist
-updated_at: 2026-06-23
+updated_at: 2026-07-16
 ---
 
 # Proof Advisor QA Checklist
@@ -68,6 +68,13 @@ proof_case_qa(case_matrix, selected_cases, claim_or_behavior)
     - Pass: the artifact names how future real failures will be added, noisy
       cases retired, and judge criteria calibrated.
     - Fail: the suite is treated as one-and-done.
+
+11. `golden_review_independence`
+    - Pass: prompt-heavy or judgment-dependent planning used the golden plus
+      this QA, and independent review received the candidate, transferable
+      invariants, this QA, and held-out context without planner scratch.
+    - Fail: output copies golden facts/wording, review sees the planning chain,
+      or no held-out case tests transfer.
 
 ## Common Fixes
 

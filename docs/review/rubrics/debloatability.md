@@ -19,6 +19,7 @@ Required TAS: `TAS-A`
 - `dead-surface-removal`
 - `compatibility-cleanup`
 - `duplication-reduction`
+- `schema-field-minimality`
 - `clarity-improvement`
 - `deletion-safety`
 
@@ -59,6 +60,20 @@ Ask:
 
 - Is the new shape materially easier to reason about?
 - Did deletion improve legibility, or only line count?
+
+### `schema-field-minimality`
+
+Inspect: whether canonical structured state stores only authored facts and
+justified stable identity, while replaceable projections own fields derivable
+for presentation or querying.
+
+Ask:
+
+- Which fields are losslessly derivable from the natural/composite key or an
+  existing registry?
+- Does each denormalized canonical field have a current snapshot-time,
+  query/index, or interchange consumer?
+- Could the same convenience live in a replaceable projection instead?
 
 ### `deletion-safety`
 

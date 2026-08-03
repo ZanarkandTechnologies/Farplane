@@ -63,30 +63,30 @@ fails:
   target_local_loop_state; adversary_self_approval
 ```
 
-## Mandatory Composition
+## Decision Backbone
 
-Every Goal Packet and active-turn decision must make this named composition
-explicit:
+One Goal owns the active decision. Advisors are setup or conditional methods:
 
 ```text
 source_stage(local failures + supplied sources + Feed Scout signals?)
   -> techniques + mechanisms + variables
-leverage_advisor(source synthesis) -> initial hypothesis candidates + first selection
 campaign.initialize_tree(initial hypothesis candidates)
 goal_advisor(ticket.md + program preset + hypothesis-tree.json + progress.md)
   -> approved Goal Packet
-leverage_advisor(program.md policy + pending tree leaves + progress.md learnings
-                 + current Eval evidence + remaining phase budget) -> next experiment
+observe(ticket + program + tree + progress tail + current Eval evidence)
+choose_next(eligible leaves + remaining budget)
+  -> execute | diagnose | report_now | request_feedback | stop
+leverage_advisor(eligible leaves + evidence + outside options)? -> selected move
 eval(next experiment, frozen complete suite) -> evidence
 update_tree(result + insight + bounded diagnostic children?)
 progress.md.append(selection + tree mutation + evidence + next_action)
 native_goal(updated packet state) -> continue | transition | block | complete
 ```
 
-Goal Advisor is only the packet/native-Goal compiler. Leverage Advisor is the
-only harden/refine experiment selector. Do not replace either named owner with
-anonymous equivalent logic, and do not select a candidate directly before the
-Leverage Advisor checkpoint.
+Goal Advisor compiles or regenerates the packet. Metric Advisor is setup/repair
+only. Invoke Leverage Advisor when several plausible moves need judgment; when
+one move is mechanically implied, execute it directly. Always compare further
+work with `report_now`, `request_feedback`, and `stop`.
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
@@ -111,9 +111,10 @@ Leverage Advisor checkpoint.
    - [ ] Route adversarial cases through `agent-qa-test`; a separate evidence
      reviewer must accept a case before Eval does. The tester cannot approve its
      own case.
-   - [ ] Use [leverage-advisor](../leverage-advisor/SKILL.md) for one ordinal
-     compounding-leverage comparison over eligible leaves and the first proof.
-     Do not use a pairwise tournament, persistent score table, or invented lift.
+   - [ ] When several credible initial leaves need judgment, use
+     [leverage-advisor](../leverage-advisor/SKILL.md) for one ordinal comparison
+     that includes outside options. Skip this hop when one move is mechanically
+     implied. Never use a tournament, persistent score table, or invented lift.
 - [ ] 4. Invoke `goal-advisor` to instantiate
   `references/goal-program-template.md` into the ticket's `program.md`, create
   or update `hypothesis-tree.json` and `progress.md`, and compile a compact
@@ -123,11 +124,13 @@ Leverage Advisor checkpoint.
 - [ ] 5. Freeze the complete suite for the Goal and record the baseline before
   editing. If an accepted case changes the suite later, stop and regenerate a
   fresh packet and baseline; never change cases mid-comparison.
-- [ ] 6. Harden first. Before each turn, invoke Leverage Advisor on the
-  `program.md` policy, pending tree leaves, `progress.md` learnings, current
-  Eval evidence, and remaining harden budget to choose one eligible bounded instruction
-  experiment. Verify that one complete round fits the remaining budget; never
-  assume an unstated budget or candidate prerequisite. Run the complete frozen
+- [ ] 6. Harden first. Apply `choose_next` to the `program.md` policy, pending
+  tree leaves, recent `progress.md` learnings, current Eval evidence, and
+  remaining harden budget. Invoke Leverage Advisor only for a real multi-option
+  judgment. Before ranking, disposition every known prerequisite-invalid leaf
+  explicitly as `reject` or `defer` and record the failed prerequisite; omission
+  is not filtering. Verify that one complete round fits the remaining budget;
+  never assume an unstated budget or candidate prerequisite. Run the complete frozen
   suite and retain it only when behavior improves and every guard passes.
   Update the selected node, add only program-bounded diagnostic children for a
   surprising or causally ambiguous result, then append the selection, tree
@@ -135,8 +138,8 @@ Leverage Advisor checkpoint.
   include rejected alternatives only when they materially explain the
   selection. Enter refinement only after the full target passes. Exhausting
   harden patience or `max_rounds` blocks without refinement.
-- [ ] 7. Refine second. Before each turn, use the same evidence-updated
-  selection step to choose one removal, merge, or condensation experiment.
+- [ ] 7. Refine second. Before each turn, use the same `choose_next` step to
+  choose one removal, merge, or condensation experiment.
   Retain only candidates that preserve the hardened performance floor and every
   guard while reducing length; otherwise restore the shortest passing
   candidate. Stop on refine patience or `max_rounds`.
@@ -158,13 +161,11 @@ One Goal owns both phases. A phase budget is a safety bound, not a competing
 controller. Candidate files may remain temporary; keep only the accepted skill
 change, ticket progress, and generated evidence.
 
-Leverage Advisor is the existing decision owner for choosing the next
-experiment. `program.md` owns source/search and replan policy;
+The active Goal owns `choose_next`. `program.md` owns source/search and replan policy;
 `hypothesis-tree.json` owns current hypotheses, results, and insights;
-`progress.md` owns chronological receipts. Before every harden or refine round,
-Leverage Advisor rereads all three plus current evidence and remaining budget. It
-does not execute Eval, mutate the target, compile the Goal, or create an
-experiment ticket.
+`progress.md` owns chronological receipts. Leverage Advisor is loaded only when
+several plausible moves need evidence-backed ordinal comparison. It does not
+execute Eval, mutate the target, compile the Goal, or create an experiment ticket.
 
 External research is optional and evidence-triggered, not an automatic web
 search. Adversarial agents strengthen the eval boundary before a Goal or force
@@ -182,8 +183,8 @@ launcher.
 
 - [Goal program template](references/goal-program-template.md) — instantiate
   for every material self-improvement Goal.
-- [Leverage Advisor](../leverage-advisor/SKILL.md) — use at setup and every
-  experiment checkpoint to choose the next pending tree leaf from current evidence.
+- [Leverage Advisor](../leverage-advisor/SKILL.md) — load only when several
+  eligible moves need evidence-backed comparison.
 - [Goal Packet ownership](references/skill-memory.md) — load when compiling or
   repairing state surfaces.
 - [Skill eval use](references/skill-evals.md) — load for suite, metric,
@@ -213,7 +214,7 @@ Packet: owning ticket + program + hypothesis tree + progress + approval/freshnes
 Phase: baseline | harden | refine
 Budget: harden max_rounds/patience + refine max_rounds/patience
 Observation: performance + guards + length + evidence ref
-Selector: eligible pending leaves + Leverage Advisor selection rationale
+Selector: eligible pending leaves + direct or Leverage-assisted rationale + outside-option comparison
 Decision: retain | reject | transition_refine | blocked | complete
 Diagnostic: bounded children + preserved sibling ids + repair/reject/defer/backtrack branches, when evidence is ambiguous
 Writeback: tree mutation + observation + evidence + learned constraint + next action
@@ -221,11 +222,24 @@ Writeback order: hypothesis-tree.json then progress.md
 Next action: one bounded next turn or stop reason
 ```
 
+Return exactly one terminal turn decision. `report_now`, `request_feedback`,
+`blocked`, and `stop` are decisions, not commentary beside a different
+decision. When missing inputs prevent a real tree mutation, render the proposed
+tree patch or state `tree mutation: none` with the reason before the progress
+receipt; keep `next_action` consistent with that one decision.
+Render an outside-option comparison, not a list: give a one-line win/lose reason
+for `report_now`, `request_feedback`, and `stop`, then name the winner.
+
 When asked to show an active turn, render the compact `progress.md` writeback
 with `observation`, `evidence`, `decision`, `learning`, and `next_action`
 instead of merely saying it will be appended. If the remaining budget,
 eligibility, or evidence is unknown, make resolving that value the next action
-rather than inventing it.
+rather than inventing it. Even when missing packet state blocks selection,
+explicitly `reject` or `defer` any candidate already known to have an
+unsatisfied prerequisite and name that prerequisite. A blocking turn must list
+the presence or exact absence of all selector inputs: `program.md policy`,
+eligible pending tree leaves, `progress.md learnings`, current Eval evidence,
+and remaining budget.
 
 When asked to seed from supplied sources, render the extracted source refs,
 techniques, mechanisms, variables, and concrete initial nodes. Each node names

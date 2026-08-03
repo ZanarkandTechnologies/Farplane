@@ -21,7 +21,7 @@ source_refs:
 external_refs: []
 evidence_refs:
   - skills/dogfood-review/evals/evals.json
-  - tickets/TASK-0384/ticket.md
+  - tickets/archive/TASK-0384/ticket.md
 known_limits: "Normal weekly materialization remains disabled until TASK-0384's frozen bootstrap eval, real shadow path, and independent TAS-A completion review pass."
 metrics:
   - experimental_feature_decision_quality

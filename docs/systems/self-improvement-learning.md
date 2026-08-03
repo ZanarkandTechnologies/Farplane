@@ -23,7 +23,7 @@ system_record_json: |
     "id": "SYS-0007",
     "name": "Self-Improvement And Learning",
     "status": "implemented",
-    "summary": "Goal-backed improvement loops that seed a campaign-local hypothesis tree from bounded sources, then select experiments through Leverage Advisor and refine from evidence.",
+    "summary": "Goal-backed improvement loops that seed a campaign-local hypothesis tree from bounded sources, then use one active-Goal choose-next decision with conditional Leverage comparison and refine from evidence.",
     "owner_spec": "docs/systems/self-improvement-learning.md",
     "primary_feature_ref": "FEAT-0063",
     "feature_refs": ["FEAT-0063", "FEAT-0069", "FEAT-0070"],
@@ -37,9 +37,9 @@ system_record_json: |
 Self-Improvement and Learning runs bounded, measurable improvement campaigns
 over skills, ML systems, or human-evaluated artifacts. Each campaign first
 grounds a source stage, then stores its live hypothesis search state in one
-ticket-local JSON tree. Leverage Advisor chooses every next experiment from
-that tree plus current evidence; the domain skill executes; native Goal owns
-continuation.
+ticket-local JSON tree. The active Goal owns `choose_next` from that tree plus
+current evidence; Leverage Advisor is conditional on a real multi-option
+judgment; the domain skill executes; native Goal owns continuation.
 
 ```text
 self_improve(target_skill, owning_ticket, performance_target, phase_budgets)
@@ -74,21 +74,29 @@ sources instantiated into each ticket. They are not runtime state. Existing
 target-local `self-improve/*` folders are legacy experiment material; the
 active workflow does not read, write, generate, parse, or migrate them.
 
-## Shared Selection Contract
+## Shared Decision Backbone
 
 ```text
-advise_leverage(subject, objective, evidence, constraints, catalog?,
-                hypothesis_tree?, progress?, remaining_budget?)
-  -> ranked_frontier + next_wave + first_proof + replan_conditions + source_gap?
+choose_next(objective, evidence, eligible_moves, remaining_budget)
+  -> execute | diagnose | report_now | request_feedback | stop
 ```
 
-Leverage Advisor owns candidate generation, compounding ranking, and the next
-proof. Before every experiment it reads `program.md` policy, eligible pending
-leaves from `hypothesis-tree.json`, `progress.md` learnings, current evidence
-receipts, and remaining budget. It uses one evidence-backed ordinal judgment;
-there is no pairwise tournament or persistent numeric rank. It does not execute
-the experiment, compile the Goal, create experiment tickets, or own campaign
-state.
+The active Goal owns this five-step loop:
+
+```text
+observe -> choose_next -> act -> verify -> write_back
+```
+
+The domain skill derives eligible moves from the tree and evidence. When one
+move is mechanically implied, it executes directly. When several credible
+moves require judgment, it invokes Leverage Advisor for one evidence-backed
+ordinal comparison that includes `report_now`, `request_feedback`, and `stop`.
+Leverage Advisor does not execute, compile the Goal, or own campaign state.
+
+Metric Advisor is used at setup or when the measurement contract becomes
+invalid. Goal Advisor compiles or regenerates the packet. Plan Next Wave only
+refills the project board and never enters an active campaign. These boundaries
+make the Goal—not a chain of advisors—the sole next-decision owner.
 
 When the candidate frontier is missing, stale, or evidence-thin, Leverage
 Advisor conditionally routes bounded parity/source research or Best Of Worlds.
@@ -109,18 +117,18 @@ Each phase declares `max_rounds` and patience. Hardening exhaustion blocks
 without refinement. Refinement stops on patience or its maximum rounds and
 returns the shortest verified passing candidate discovered within the budget.
 
-Before every harden or refine round, Leverage Advisor selects one pending tree
-leaf. No deterministic decision helper, tournament, stored counter, daemon, or
-second continuation engine participates. The JSON tree stores current branch
-state, ticket `progress.md` records chronological receipts, Eval supplies
-measurements, and native Goal applies the program.
+Before every harden or refine round, the Goal applies `choose_next`; Leverage
+Advisor is conditional on a real ranking decision. No tournament, stored
+counter, daemon, or second continuation engine participates. The JSON tree
+stores current branch state, ticket `progress.md` records chronological
+receipts, Eval supplies measurements, and native Goal applies the program.
 
 ## ML Autoresearch Contract
 
 ML Autoresearch freezes the evaluator, data/split boundary, metric, guards,
 mutable surface, baseline, and compute/spend budget before the first change.
 Each Goal turn selects one attributable intervention or diagnostic hypothesis
-through Leverage Advisor, preregisters its expectation and falsifier, runs
+through `choose_next`, conditionally using Leverage Advisor, preregisters its expectation and falsifier, runs
 correctness smokes and the full evaluator, updates the tree, appends an
 immutable receipt, and replans. The campaign keeps the best verified candidate
 or returns an evidence-backed negative result.
@@ -172,7 +180,7 @@ requires a fresh baseline.
 flowchart LR
   coverage["source stage<br/>techniques + mechanisms + variables"]
   tree["hypothesis-tree.json<br/>current research state"]
-  leverage["Leverage Advisor<br/>compounding selector"]
+  leverage["Leverage Advisor<br/>conditional comparison"]
   packet["Goal Packet policy<br/>program + progress"]
   baseline["frozen-suite baseline"]
   select["select pending<br/>intervention or diagnostic"]
@@ -192,10 +200,20 @@ flowchart LR
 ## Boundaries
 
 - `goal-advisor` compiles and freshness-binds the packet and native launcher.
-- `leverage-advisor` generates and ranks the frontier and chooses each next
-  experiment from program, tree, progress, and receipt evidence.
+- The active Goal owns `choose_next` from program, tree, progress, receipt
+  evidence, and remaining budget. `leverage-advisor` supplies one stateless
+  ordinal comparison only when several eligible moves need judgment.
 - `hypothesis-tree.json` is the sole current research-state owner; children,
   depth, pending leaves, and rank are derived rather than duplicated.
+- ML campaign trees separate performance-claim disposition from causal status.
+  A failed metric can falsify the parent claim, but only completed diagnostic
+  evidence that discriminates among credible explanations can mark its cause
+  supported. The supported causal insight and evidence refs propagate to the
+  parent before the chronological progress receipt; otherwise its cause stays
+  unresolved and the next bounded discriminator remains in the frontier.
+  Final language follows the same state: `failed because` is reserved for a
+  supported cause; unresolved branches say the tested configuration failed and
+  its cause remains unresolved.
 - `eval` owns clean execution, grading, comparison, and run artifacts.
 - `metric-advisor` helps when the honest performance target or guard is unclear.
 - `agent-qa-test` proposes adversarial evidence but cannot approve its own case.

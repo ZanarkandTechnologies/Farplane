@@ -56,6 +56,8 @@ Prefer caller prompts that provide:
 - required_tas: family-to-required-TAS gates, especially hard-gate families
 - hard_gates: task-specific pass/fail constraints the review must enforce
 - expected_output: review artifact path when durable proof is required
+- final_response_draft: optional ticket-scoped draft path for material completion review
+- response_band: required maximum words when final_response_draft is supplied
 </expected_caller_input>
 
 <explore>
@@ -70,6 +72,12 @@ Prefer caller prompts that provide:
 9) Stage 6 - Rank substantive findings by severity and confidence before deciding whether they block trust.
 10) Stage 7 - Assign a TAS verdict for each selected family and the overall review.
 11) Return a normalized rubric output with search_scope, finding_log, overall_tas, verdict, rerun_required, hard_gate_failures, blocking findings, and next_action.
+12) When `final_response_draft` is supplied, return `approved_response` within
+the declared `response_band`. Preserve only the decision-complete outcome,
+decisive evidence, required action or blocker, verification pointers, and any
+safety-critical qualification. Remove process narration, repetition, generic
+advice, and unasked follow-up offers. Do not weaken or broaden the reviewed
+claim.
 </explore>
 
 <tas_contract>

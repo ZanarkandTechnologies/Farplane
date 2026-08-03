@@ -31,6 +31,8 @@ one skill's behavior rather than the whole harness.
 - `config.json` and `contexts/*`: shared fixture setup such as AGI Toy Shop.
 - `prompts/judge.md`: the rubric. Keep rubric rules here, not in task JSON,
   and use A-D tiers plus booleans instead of 0-100 scores.
+- `schemas/behavior-report.schema.json`: standard final report for instrumented
+  behavior traces.
 
 Task JSON should stay simple:
 
@@ -74,6 +76,8 @@ python3 .farplane/evals/run_evals.py run --harness codex --harness-evals --label
 python3 .farplane/evals/run_evals.py run --harness codex --agents-md --label agents-md
 python3 .farplane/evals/run_evals.py run --harness codex --skills --label skill-baseline
 python3 .farplane/evals/run_evals.py run --harness codex --skill qa --label qa-skill
+python3 .farplane/evals/run_evals.py run --harness codex --skill qa --behavior-trace --behavior-output-schema .farplane/evals/schemas/behavior-report.schema.json --max-parallel-tasks 1 --label qa-trace
+python3 skills/eval/scripts/run_evals.py reliability path/to/run-1/summary.json path/to/run-2/summary.json --eval-file skills/qa/evals/evals.json --output path/to/reliability.json
 ```
 
 No-scope `run` executes every known available family. Use `--harness-evals`,
@@ -83,6 +87,27 @@ continues to choose the runner backend only.
 Claude users should run the same `.farplane/evals/run_evals.py` commands with
 `--harness claude`.
 
+Native Codex agent, judge, and baseline invocations are always launched with
+`--ephemeral --disable hooks -c notify=[]`. This isolation is enforced by the
+runner after profile and user arguments; profiles remain responsible for
+model, sandbox, MCP, and skill behavior, not session or telemetry safety.
+Custom command templates are operator-owned and do not receive this automatic
+Codex isolation tail.
+
+`--behavior-trace` preserves the exact prompt, Codex JSONL stream, stdout and
+stderr, final output, command/usage summary, checkpoint score, produced-file
+inventory, and optional schema validation in each task receipt. It composes
+with baseline comparison and requires `--max-parallel-tasks 1` so file deltas
+remain attributable. Use Agent QA for native-subagent-only capture.
+Skill-local rows may declare hidden
+`metadata.farplane.behavior_requirements.required_successful_command_regexes`;
+the trace then fails unless every pattern matches a completed zero-exit command.
+
+Before a material stochastic promotion, pass two or more comparable summaries
+to `reliability`. `stable_pass` requires every strict grade and behavior trace
+to pass across every repetition; `unstable` exposes strict-grade variance and
+`fail` identifies a behavior regression. New summaries record comparison
+metadata; legacy summaries retain an explicit metadata-gap warning.
 
 ## Viewer
 

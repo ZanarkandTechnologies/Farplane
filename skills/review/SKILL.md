@@ -54,6 +54,22 @@ ReviewBudget = {
 }
 ```
 
+For material completion reviews, the caller may also request final-response
+review:
+
+```text
+review_response(task_ref, draft_ref, response_band)
+  -> approved_response + response_findings
+```
+
+Read the draft from the named artifact. Preserve the outcome, decisive
+evidence, required action or blocker, verification pointers, and any
+safety-critical qualification. Remove process narration, repeated context,
+generic advice, and unasked follow-up offers. Return `approved_response` within
+the caller's band as part of the ordinary completion receipt. This is a
+semantic editing mode inside an already-required material review, not a reason
+to create a reviewer lane for routine replies.
+
 For material checklist conformance, use a typed `reviewer` subagent to apply
 the relevant `qa_checklist.md` as a hostile acceptance review. The checklist is
 ammunition for rejection, not a box-check form. Use `qa-tester` when evidence
@@ -208,6 +224,7 @@ Return or write:
 - `rubric_sections`
 - `blocking_findings`
 - `next_action`
+- `approved_response` when final-response review was requested
 
 ## Templates
 

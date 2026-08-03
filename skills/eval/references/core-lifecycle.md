@@ -2,7 +2,7 @@
 title: Core Lifecycle Eval Matrix
 owner: eval
 status: active
-updated_at: 2026-07-11
+updated_at: 2026-07-19
 ---
 
 # Core Lifecycle Eval Matrix
@@ -17,8 +17,8 @@ claiming behavior success.
 | --- | --- |
 | Bootstrap and objectives | `init-advisor`, `harness-creator`, `metric-advisor` |
 | Execution compilation and recurring work | `goal-advisor`, `automation-advisor`, `pulse-update` |
-| Work supply and interval learning | `ticket-opportunity-generator`, `interval-update`, `feed-scout` |
-| Self-improvement | `dogfood-review`, `self-improve` |
+| Work supply and interval learning | `plan-next-wave`, `interval-update`, `feed-scout` |
+| Skill self-improvement | `eval`, `self-improve` |
 | Review and completion | `worker-artifact-review-request`, `impl-plan`, `qa`, `review`, `close-ticket` |
 
 ```text
