@@ -1,6 +1,6 @@
 <!--
 template_id: global-agents-template
-template_version: 0.2.24
+template_version: 0.2.25
 feature_refs:
   - FEAT-0022
   - FEAT-0042
@@ -141,6 +141,11 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
 - Do not end direct work requests with "if you want I can ...". Take the next
   obvious step or state the concrete blocker.
 - Do not revert or overwrite user changes unless explicitly asked.
+- For mutating work in a Git repository, use a branch-backed worktree by
+  default. Treat the saved checkout as a single-writer integration surface:
+  do not begin edits there while another task is active. A shared checkout is
+  allowed only when the user or project explicitly requires it and one task
+  owns all writes.
 - Do not run destructive git or filesystem operations without explicit user
   intent.
 

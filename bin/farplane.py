@@ -54,6 +54,7 @@ OLD_CONVEX_SITE_URL = "https://agreeable-finch-230.convex.site"
 PREVIOUS_NOTIFY_FLAG = "--previous-notify"
 MANAGED_HOOK_FILES = (
     "farplane_console_ping.py",
+    "shared_checkout_guard.py",
 )
 RETIRED_HOOK_FILES = (
     "farplane_file_change.py",

@@ -127,6 +127,7 @@ INSTALL_BIN_FILES=(
 )
 INSTALL_HOOK_FILES=(
   farplane_console_ping.py
+  shared_checkout_guard.py
 )
 RETIRED_INSTALL_PATHS=(
   bin/ticket_runtime.py

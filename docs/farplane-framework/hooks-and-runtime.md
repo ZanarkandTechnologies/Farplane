@@ -38,8 +38,8 @@ Root `hooks.json` currently defines:
 
 | Event | Commands | Purpose |
 | --- | --- | --- |
-| `UserPromptSubmit` | `capture_user_turn.py`, `farplane_console_ping.py` | classify the current user turn, append lightweight conversation windows, resolve native/ticket display metadata locally, and send sanitized `turn_start` hook telemetry |
-| `Stop` | `farplane_console_ping.py` | resolve the latest native/ticket display metadata and send sanitized `turn_end` hook telemetry |
+| `UserPromptSubmit` | `shared_checkout_guard.py`, `capture_user_turn.py`, `farplane_console_ping.py` | claim the primary Git checkout for one active session, classify the current user turn, append lightweight conversation windows, resolve native/ticket display metadata locally, and send sanitized `turn_start` hook telemetry |
+| `Stop` | `shared_checkout_guard.py`, `farplane_console_ping.py` | release primary-checkout ownership, resolve the latest native/ticket display metadata, and send sanitized `turn_end` hook telemetry |
 | `SubagentStart` | `farplane_console_ping.py` | send sanitized subagent-start lifecycle telemetry |
 | `SubagentStop` | `farplane_console_ping.py` | send sanitized subagent-stop lifecycle telemetry |
 
@@ -109,6 +109,13 @@ files. It may write one atomic, display-only thread-title binding when the user
 prompt names exactly one canonical `TASK-XXXX`. This binding is deliberately
 separate from `ticket-thread-associations.jsonl`, which remains an execution
 metrics surface. Prompt text never enters the binding or hook telemetry.
+
+`shared_checkout_guard.py` is narrower than ticket execution ownership. It
+stores a local lease under the primary checkout's Git directory for the active
+turn and blocks a different Codex session from starting there until `Stop`
+releases it. Linked Git worktrees bypass the lease because their filesystem
+writes are already isolated. A stale lease expires after 24 hours; set
+`FARPLANE_SHARED_CHECKOUT_GUARD=0` only for deliberate single-writer recovery.
 
 The lifecycle publisher also reads the latest exact-id `thread_name` from the
 append-only Codex `session_index.jsonl`. Telemetry sends only sanitized native

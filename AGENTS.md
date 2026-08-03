@@ -210,6 +210,11 @@ For harness-design research and external patterns:
 ## Local Operating Rules
 
 - No blind edits. Read the relevant feature spec, ticket, and nearby module docs first.
+- Treat the saved `main` checkout as a single-writer integration surface.
+  Persistent mutating tasks default to branch-backed Codex worktrees;
+  `local_shared` is an explicit exception only when one task owns every write.
+  Native subagents share their parent's checkout and do not provide filesystem
+  isolation.
 - Tickets and docs are the source of truth; do not hide state in chat.
 - This Farplane checkout uses Doppler for runtime secrets. For credentialed
   scripts, skill helpers, API checks, installs, or local commands, use

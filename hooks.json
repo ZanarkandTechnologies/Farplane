@@ -5,6 +5,12 @@
         "hooks": [
           {
             "type": "command",
+            "command": "python3 \"$HOME/.codex/hooks/shared_checkout_guard.py\"",
+            "statusMessage": "Checking shared checkout ownership",
+            "timeout": 5
+          },
+          {
+            "type": "command",
             "command": "python3 \"$HOME/.codex/bin/capture_user_turn.py\"",
             "statusMessage": "Capturing current-turn user intent",
             "timeout": 30
@@ -21,6 +27,12 @@
     "Stop": [
       {
         "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$HOME/.codex/hooks/shared_checkout_guard.py\"",
+            "statusMessage": "Releasing shared checkout ownership",
+            "timeout": 5
+          },
           {
             "type": "command",
             "command": "python3 \"$HOME/.codex/hooks/farplane_console_ping.py\"",

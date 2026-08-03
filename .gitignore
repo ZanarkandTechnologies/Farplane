@@ -48,6 +48,11 @@ __pycache__/
 .coverage.*
 htmlcov/
 
+# Local renderer/build caches and interrupted validation sandboxes
+.cache/
+.remotion/
+.tmp-validation.*/
+
 # Editor / temp noise
 *.swp
 *.swo
