@@ -726,9 +726,6 @@ def is_internal_user_prompt(raw_text: str) -> bool:
         return True
     if DELEGATED_REVIEW_PROMPT_PATTERN.match(text) and has_structured_return and is_read_only_contract:
         return True
-    if lowered.startswith("use agent-browser") and has_structured_return and is_read_only_contract:
-        return True
-
     return False
 
 

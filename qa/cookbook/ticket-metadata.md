@@ -22,7 +22,7 @@
 - Assertion targets: ticket front matter, status, proof block, and archive
   shape accepted by validators.
 
-## agent-browser Path
+## Browser Path
 1. Not applicable unless validating ticket rendering in Farplane UI.
 
 ## Playwright Path

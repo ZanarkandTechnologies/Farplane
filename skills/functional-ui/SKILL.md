@@ -11,7 +11,7 @@ template_uses:
 qa_checklist: qa_checklist.md
 eval: evals/evals.json
 common_chains:
-  after: ["agent-browser", "visual-design"]
+  after: ["visual-design"]
 allowed-tools: Read, Grep, Glob, Bash
 ---
 
@@ -30,14 +30,12 @@ allowed-tools: Read, Grep, Glob, Bash
 - [ ] Use [research:competitor](../research/SKILL.md#researchcompetitor) or
   [research:parity](../research/SKILL.md#researchparity) when comparable app
   workflows or established product patterns should shape the options.
-- [ ] For a material, unsettled, current, or SOTA workflow, use
-  [agent-browser](../agent-browser/SKILL.md) to operate 2-4 established
-  comparables or direct products and capture the actual sequence, states, and
-  access limits. First run `agent-browser skills get core`, then use its
-  `open -> snapshot -i -u -> interact -> re-snapshot` loop on public Mobbin,
-  Page Flows, or relevant direct-product pages; do not substitute web search or
-  documentation for this operation step. Record source URL, user job/query,
-  observed behavior, evidence
+- [ ] For a material, unsettled, current, or SOTA workflow, use the Codex
+  in-app Browser to operate 2-4 established comparables or direct products and
+  capture the actual sequence, states, and access limits. Reuse one browser
+  binding with a tab per source; do not substitute web search or documentation
+  for this operation step. Record source URL, user job/query, observed
+  behavior, evidence
   refs, and `adopt | adapt | reject`. Skip this pass for tiny same-pattern
   fixes, already-settled interaction models, and pure visual polish. Pinterest
   and similar taste surfaces may inform `visual-design` or `ingest-content`,
@@ -97,7 +95,7 @@ Use this before visual implementation when the question is how the product shoul
 2. Read the PRD, spec, ticket, request, screenshot, or current component to extract states, constraints, and failure modes.
 3. Diagnose the current UI using [redesign-diagnosis.md](references/redesign-diagnosis.md) when a broken UI exists.
 4. For material, unsettled, current, or SOTA workflows, operate 2-4 comparable
-   apps, examples, or established patterns with `agent-browser` using
+   apps, examples, or established patterns with the Codex in-app Browser using
    [comparable-patterns.md](references/comparable-patterns.md). Capture actual
    workflow/state evidence and access limits; focus on behavior, not surface
    aesthetics. Use settled local patterns without broad research for tiny

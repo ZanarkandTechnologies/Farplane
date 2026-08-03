@@ -133,7 +133,7 @@ description = "Agent for exploring external codebases and patterns. Handles broa
 config_file = "agents/librarian.toml"
 
 [agents.qa-tester]
-description = "QA subagent that plans and executes tests. Keeps the agent prompt thin by delegating detailed workflows to Skills (Playwright, agent-browser, cinematic landing testing)."
+description = "QA subagent that plans and executes tests. Uses the Codex in-app Browser for operated proof and Playwright for stable regression coverage."
 config_file = "agents/qa-tester.toml"
 
 [agents.repent-scribe]

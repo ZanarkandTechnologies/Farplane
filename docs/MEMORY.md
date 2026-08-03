@@ -156,9 +156,11 @@ MEM-0129, MEM-0131, MEM-0149, MEM-0150.
 - QA and completion proof are artifact-first. Link screenshots, logs, review
   reports, clips, and proof from ticket evidence; keep bulky proof under
   `tickets/TASK-XXXX/artifacts/`.
-- Browser/user-visible QA defaults to `qa-tester` or `agent-browser` for direct
-  page operation, screenshots, snapshots, console logs, and page errors.
-  Playwright is for explicit regression coverage or stable scripted flows.
+- Browser/user-visible QA defaults to `qa-tester` using the Codex in-app
+  Browser for direct page operation, screenshots, snapshots, console/network
+  inspection, and page errors. Reuse tabs across sequential work; use
+  `@Chrome` only for existing authenticated Chrome state. Playwright is for
+  explicit regression coverage or stable scripted flows.
 - Serious adversarial agent testing combines tester evidence, optional captured
   child-agent logs, evidence critique, fix/rerun reconciliation, and final
   proof-bundle review.

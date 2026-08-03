@@ -27,9 +27,10 @@ keeping Farplane responsible for final integration, QA, and claims.
 Profile skill for routing frontend implementation through `delegate-cli`.
 
 The first profile is `frontend-pi-kimi`, which targets Pi with Kimi K2.6.
-The managed profile mounts frontend/media skills plus `agent-browser`,
-`visual-qa`, `review`, and `web-design-guidelines` so the delegated builder can
-capture runnable browser evidence in the same thread before handoff.
+The managed profile mounts frontend/media skills plus `visual-qa`, `review`,
+and `web-design-guidelines`. The delegated builder returns a runnable URL and
+deterministic QA artifacts; the coordinating Codex `qa-tester` captures
+operated browser evidence through the in-app Browser.
 
 ## Minimal Usage
 

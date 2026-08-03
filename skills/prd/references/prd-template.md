@@ -86,7 +86,7 @@ When [context], I want to [action], so I can [outcome].
 - [ ] Observable criterion
 - [ ] Error-path criterion
 - [ ] Typecheck passes
-- [ ] [UI stories only] Verify in browser using dev-browser skill
+- [ ] [UI stories only] Verify in the Codex in-app Browser
 
 ## Functional Requirements
 - FR-1: ...

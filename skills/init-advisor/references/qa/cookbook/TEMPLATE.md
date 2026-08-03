@@ -21,7 +21,7 @@
 - Roles / labels:
 - Assertion targets:
 
-## agent-browser Path
+## Codex Browser Path
 1. Open the same fast entry path.
 2. Use the shortcut or debug control if needed.
 3. Capture `snapshot.json`, screenshots, console, and errors on failure.

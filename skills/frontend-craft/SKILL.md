@@ -46,7 +46,7 @@ routes:
   research:user-grounding | functional-ui | visual-design | best-of-worlds |
   frontend-design | landing-page | ai-image-advisor | ai-video-advisor |
   remotion | remotion-render | web-design-guidelines | visual-qa |
-  agent-browser
+  Codex Browser
 
 fails:
   implements before audience/workflow is known; treats a router as a design
@@ -116,8 +116,8 @@ work. It does not own every niche frontend rule:
 - [ ] 12. Use [web-design-guidelines](../web-design-guidelines/SKILL.md) for
   source-fresh UI fundamentals and [visual-qa](../visual-qa/SKILL.md) for
   user-visible visual proof.
-- [ ] 13. Use [agent-browser](../agent-browser/SKILL.md) or ticket QA to collect
-  screenshots, snapshots, console/page errors, and route proof.
+- [ ] 13. Use ticket QA with the Codex in-app Browser to collect screenshots,
+  snapshots, console/page errors, and route proof.
 - [ ] 14. Before completion, apply [qa_checklist.md](./qa_checklist.md) when the
   change includes UI copy, help text, settings/status panels, onboarding,
   tooltips, or developer/operator-facing surfaces.

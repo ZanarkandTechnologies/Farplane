@@ -3,10 +3,7 @@
 Canonical workflow and output contract live in `../SKILL.md`.
 Use this file only for variants that are not needed every run.
 
-<!--
-Command-heavy browser workflows live here on purpose.
-Keep the top-level visual-qa skill focused on judgment and report shape.
--->
+<!-- Keep the top-level visual-qa skill focused on judgment and report shape. -->
 
 ## Baseline rule
 
@@ -26,17 +23,10 @@ Use this when no special repro mode is needed and the ticket already defines the
 
 Use this for standard visual QA when you need a compact before/after evidence bundle.
 
-```bash
-mkdir -p test-results
-agent-browser snapshot -i -c --json > test-results/before.snapshot.json
-agent-browser screenshot test-results/before.png
-
-# Exercise changed UI using snapshot refs (prefer @e1 over CSS selectors)
-agent-browser snapshot -i -c --json
-
-agent-browser snapshot -i -c --json > test-results/after.snapshot.json
-agent-browser screenshot test-results/after.png
-```
+Use one Codex in-app Browser tab to capture the initial page state and
+`before.png`, exercise the changed workflow, then capture the final page state
+and `after.png`. Save the artifacts under the owning ticket rather than a
+shared browser-state directory.
 
 Use the ticket's declared screens/states to decide what to capture; do not rely on ad-hoc exploration alone.
 
@@ -48,13 +38,9 @@ Use this when you need a compact artifact pack for one failing state rather than
 
 Use this when you already know the failing state and need a compact repro bundle.
 
-```bash
-mkdir -p test-results
-agent-browser snapshot -i -c --json > test-results/repro.snapshot.json
-agent-browser screenshot test-results/repro.png
-agent-browser console > test-results/console.txt || true
-agent-browser errors > test-results/errors.txt || true
-```
+Use the Codex in-app Browser to capture the failing page state, screenshot,
+console output, network evidence when relevant, and page errors from the same
+tab.
 
 Report repro steps plus artifact paths in `tickets/TASK-XXXX/artifacts/qa/<timestamp>/visual-qa.md`, and name which declared screen/state the bundle corresponds to.
 
@@ -67,36 +53,20 @@ This should be opt-in because traces are heavier than the default artifact pack.
 
 Use this when timing or flake is part of the bug.
 
-```bash
-mkdir -p test-results
-agent-browser trace start test-results/trace.zip
+Use the Codex in-app Browser with developer access to start a trace, reproduce
+the issue, capture the final screenshot, and save both artifacts under the
+ticket QA directory.
 
-# Reproduce issue
-agent-browser snapshot -i -c --json
-
-agent-browser trace stop test-results/trace.zip
-agent-browser screenshot test-results/after.png
-```
-
-## Variant: Multi-user flows with sessions
+## Variant: Multi-user flows with isolated contexts
 
 <!--
 Separate sessions keep role-dependent UI evidence from collapsing into one browser context.
 -->
 
-Use separate browser sessions when layout/state depends on two roles or users.
-
-```bash
-agent-browser --session A open http://localhost:3000
-agent-browser --session B open http://localhost:3000
-agent-browser --session A snapshot -i -c --json
-agent-browser --session B snapshot -i -c --json
-# ...drive both sides...
-agent-browser --session A screenshot test-results/sessionA.png
-agent-browser --session B screenshot test-results/sessionB.png
-agent-browser --session A close
-agent-browser --session B close
-```
+Use Playwright browser contexts when layout or state depends on two roles or
+users. Keep both contexts inside one browser process when the test runner
+supports it, capture each role separately, and close the contexts after the
+run.
 
 ## Variant: Scroll-driven or animation-heavy pages
 

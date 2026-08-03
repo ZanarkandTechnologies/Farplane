@@ -119,8 +119,8 @@ the active skill. Farplane project docs own tier taxonomy and inventories.
 
 ### Browser QA Routing
 
-`Before:` Global names `agent-browser`, `qa-tester`, and Playwright as a
-specific browser-proof route.
+`Before:` Global names a project-specific browser CLI, `qa-tester`, and
+Playwright as a specific browser-proof route.
 
 `After:` Global says material proof uses `Done / Proof` or Goal program as the
 scoreboard, delegates independent QA/review when needed, and uses the

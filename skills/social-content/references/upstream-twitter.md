@@ -207,11 +207,8 @@ belt app run infsh/html-to-image --input '{
   "html": "<div style=\"width:1200px;height:675px;background:linear-gradient(135deg,#0f172a,#1e293b);display:flex;align-items:center;justify-content:center;padding:60px;font-family:system-ui;color:white;text-align:center\"><div><h1 style=\"font-size:48px;font-weight:900;line-height:1.2;margin:0\">10 SaaS Pricing Mistakes<br>That Cost You Revenue</h1><p style=\"font-size:22px;opacity:0.5;margin-top:20px\">A thread 🧵</p></div></div>"
 }'
 
-# Generate screenshots for evidence
-belt app run infsh/agent-browser --input '{
-  "url": "https://example.com/pricing",
-  "action": "screenshot"
-}'
+# Generate screenshots for evidence with the Codex in-app Browser after the
+# page is available. Keep screenshot paths in the owning ticket artifacts.
 ```
 
 ### Image Specs

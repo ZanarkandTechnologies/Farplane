@@ -118,7 +118,7 @@ class SyncSkillChecklistsTests(unittest.TestCase):
     def test_external_skill_without_todos_is_skipped(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             repo = Path(tmp)
-            write_skill(repo, "agent-browser", source="external")
+            write_skill(repo, "external-tool", source="external")
 
             self.assertEqual(checklists.sync_repo(repo, write=False), 0)
 

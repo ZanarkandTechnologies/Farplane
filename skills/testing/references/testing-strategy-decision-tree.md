@@ -26,11 +26,12 @@ Playwright is not sufficient alone when:
 
 ### Browser workflow recommendation
 
-- Start with `agent-browser` when the path is new, fragile, or under-instrumented.
+- Start with the Codex in-app Browser when the path is new, fragile, or
+  under-instrumented.
 - Move the stable happy path into Playwright as soon as selectors and setup are
   deterministic.
-- Keep `agent-browser` as the debugging lane for failed Playwright runs and for
-  evidence capture while the UI is still in flux.
+- Keep the Codex in-app Browser as the debugging lane for failed Playwright
+  runs and for evidence capture while the UI is still in flux.
 - Store reusable shortcuts, deep links, seeds, and test hooks in `qa/`.
 
 ### Step 2: Pick backpressure types (mix as needed)

@@ -111,7 +111,7 @@ Tradeoffs:
 - Convex dashboard state inspection.
 - Network throttling for latency/jitter simulation.
 
-### Smoke test flow (agent-browser)
+### Smoke test flow (Codex Browser or Playwright contexts)
 1. Player A creates room and captures room code.
 2. Player B joins with code.
 3. Both clients show connected for both players.

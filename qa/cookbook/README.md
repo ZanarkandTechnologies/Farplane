@@ -20,7 +20,7 @@ fast and deterministic; they do not store per-run evidence.
   state, cleanup, verification, and proof receipt.
 - Setup: seed, reset, auth, fixture, runtime handoff, or local command.
 - Stable selectors/assertions: roles, labels, test IDs, outputs, or state probes.
-- Capture path: normal `agent-browser`, command, API, or artifact evidence.
+- Capture path: Codex in-app Browser, command, API, or artifact evidence.
 - Playwright path: only after stable regression graduation.
 - Observability: logs, HUDs, DOM mirrors, debug panels, or traces.
 - Known gaps: missing instrumentation that still needs implementation.

@@ -25,7 +25,7 @@
 - Assertion targets: visible changed behavior, loading/error states, and
   absence of console/page errors.
 
-## agent-browser Path
+## Codex Browser Path
 1. Start the app with the authoritative QA path.
 2. Open the fast-entry route.
 3. Exercise the user-visible workflow.

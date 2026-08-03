@@ -271,13 +271,18 @@ For harness-design research and external patterns:
   review. See `MEM-0115`.
 - In Goal-backed ticket execution, treat `$qa` as a delegated proof surface:
   the coordinating lane should hand browser driving and proof capture to
-  `qa-tester` instead of using `agent-browser` directly. See `MEM-0069`.
-- Outside tmux or lane-specific runtime flows, keep the same ownership split: native `qa-tester` delegation is the default way to run meaningful QA or browser proof, and the main agent should not personally use `agent-browser` when that QA ownership can be isolated. See `MEM-0070`.
+  `qa-tester` instead of self-certifying operated proof. See `MEM-0069`.
+- Outside tmux or lane-specific runtime flows, keep the same ownership split:
+  native `qa-tester` delegation is the default way to run meaningful QA or
+  browser proof. See `MEM-0070`.
 - For browser proof inside Farplane, make the efficient path the default:
-  `qa-tester` should use `agent-browser` for page operation, screenshots,
-  snapshots, console logs, and page errors unless the ticket explicitly asks
-  for Playwright regression coverage or the flow is already codified in an
-  existing Playwright suite. See `MEM-0149`.
+  `qa-tester` should use the Codex in-app Browser for page operation,
+  screenshots, snapshots, console logs, network inspection, and page errors.
+  Reuse the existing browser binding and tabs across sequential work. Use
+  `@Chrome` only when the operator's existing authenticated Chrome state is
+  required. Use Playwright when the ticket explicitly asks for regression
+  coverage or the flow is already codified in an existing suite. See
+  `MEM-0149`.
 - Treat `goal-advisor` as the canonical execution compiler for material
   Farplane work: it turns listed ticket/program/progress/spec/board files,
   trigger mode, and budget into native Goal, heartbeat, rollout, feedback, or

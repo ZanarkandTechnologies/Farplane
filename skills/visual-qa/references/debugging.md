@@ -5,30 +5,20 @@ Use this file for escalation patterns when the default bundle is not enough.
 
 ## Escalation: Trace capture for timing/flakes
 
-```bash
-mkdir -p test-results
-agent-browser trace start test-results/trace.zip
-# Reproduce issue
-agent-browser snapshot -i -c --json
-agent-browser trace stop test-results/trace.zip
-agent-browser screenshot test-results/after.png
-```
+Use the Codex in-app Browser with developer access to start a trace, reproduce
+the issue in the existing tab, capture the final page state and screenshot,
+then save the trace and image under the ticket QA artifact directory.
 
 ## Escalation: Headed mode for visual parity checks
 
-```bash
-agent-browser open http://localhost:3000 --headed
-agent-browser snapshot -i -c --json
-```
+Open the local route in the Codex in-app Browser, inspect the visible and
+interactive page state, and capture the parity screenshot from that tab.
 
 ## Escalation: Auth/gated-flow state capture
 
-```bash
-mkdir -p test-results
-agent-browser state save test-results/auth.json
-# Later
-agent-browser state load test-results/auth.json
-```
+Use `@Chrome` only when the flow requires the operator's existing authenticated
+Chrome state. Never export cookies, local storage, credentials, or browser
+profiles into the repository. Verify the active account before acting.
 
 ## Escalation notes
 

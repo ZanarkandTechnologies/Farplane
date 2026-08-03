@@ -21,7 +21,7 @@
 - Roles / labels: n/a.
 - Assertion targets: command exit status and generated registry diff.
 
-## agent-browser Path
+## Browser Path
 1. Not applicable for skill file validation.
 
 ## Playwright Path

@@ -27,7 +27,7 @@ completion. Any unchecked item retains the local ticket packet.
 - [ ] For a material feature ticket, a passing independently reviewed `$demo`
   `final.mp4` is the first selected media item and first marked comment.
   Maintenance-only tickets do not invent a demo.
-- [ ] Authenticated `agent-browser` uploaded only missing media, one comment per
+- [ ] Authenticated `@Chrome` uploaded only missing media, one comment per
   SHA-256 marker, captured each canonical comment URL, and wrote no credential,
   cookie, token, browser state, or profile data into the repository.
 - [ ] `gh` was used only for documented issue text/state operations. Browser

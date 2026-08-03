@@ -22,7 +22,7 @@
 - Roles / labels: n/a.
 - Assertion targets: each command exits zero.
 
-## agent-browser Path
+## Browser Path
 1. Not applicable for framework-only validation.
 2. Use terminal proof unless a UI ticket explicitly asks for browser evidence.
 

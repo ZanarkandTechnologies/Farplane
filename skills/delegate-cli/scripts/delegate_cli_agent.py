@@ -56,7 +56,6 @@ DEFAULT_FRONTEND_REQUIRED_SKILLS = (
     "data-viz",
     "react-flow",
     "vercel-react-best-practices",
-    "agent-browser",
     "visual-qa",
     "review",
     "web-design-guidelines",

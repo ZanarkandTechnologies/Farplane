@@ -98,8 +98,8 @@ hand the finished report and one traceable professional signal to
 - [ ] 2. Gather the smallest useful source set.
   - [ ] Start with supplied links, local project notes, LinkedIn or company pages
         when available, and current public web sources.
-  - [ ] For a supplied web profile, use [agent-browser](../agent-browser/SKILL.md)
-        when available to inspect the rendered page before declaring it
+  - [ ] For a supplied web profile, use the Codex in-app Browser when available
+        to inspect the rendered page before declaring it
         inaccessible. Never log in, enter credentials, export cookies, or assume
         access to a private session. When the operator explicitly attaches and
         authorizes a browser session, inspect it read-only: do not message,
@@ -251,8 +251,8 @@ hand the finished report and one traceable professional signal to
   grounding is needed.
 - [../solution-shaping/SKILL.md](../solution-shaping/SKILL.md) - load when the
   report needs pain hypotheses and a realistic MVP/help angle.
-- [../agent-browser/SKILL.md](../agent-browser/SKILL.md) - load when a supplied
-  profile or company page needs rendered browser inspection.
+- Codex in-app Browser - use when a supplied profile or company page needs
+  rendered browser inspection.
 - [First Value Outreach](../first-value-outreach/SKILL.md) - load after the
   person and one professional signal are resolved when the next step is a
   contribution-first approach rather than a commercial offer.

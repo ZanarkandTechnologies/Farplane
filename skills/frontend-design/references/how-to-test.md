@@ -1,7 +1,7 @@
 # How to Test Frontend Features
 
 ## Testing Strategy
-1. **Visual verification**: dev-browser skill for screenshots.
+1. **Visual verification**: Codex in-app Browser for screenshots.
 2. **Interaction tests**: Playwright for user flows.
 3. **Accessibility audits**: axe-core or manual checks.
 
@@ -13,7 +13,7 @@
 
 ## Tools
 - Playwright for E2E and visual regression.
-- dev-browser skill for quick visual checks.
+- Codex in-app Browser for quick operated visual checks.
 - Storybook for component isolation (if available).
 
 ## Common Gotchas

@@ -87,7 +87,6 @@ pi \
   --skill .farplane/external-cli/profiles/frontend-pi-kimi/skills/ai-image-advisor \
   --skill .farplane/external-cli/profiles/frontend-pi-kimi/skills/ai-video-advisor \
   --skill .farplane/external-cli/profiles/frontend-pi-kimi/skills/product-photography \
-  --skill .farplane/external-cli/profiles/frontend-pi-kimi/skills/agent-browser \
   --skill .farplane/external-cli/profiles/frontend-pi-kimi/skills/visual-qa \
   --skill .farplane/external-cli/profiles/frontend-pi-kimi/skills/review \
   --skill .farplane/external-cli/profiles/frontend-pi-kimi/skills/web-design-guidelines \
@@ -212,9 +211,10 @@ Codex lane.
    `python3 skills/delegate-frontend/self-improve/scripts/asset_manifest_lint.py <asset-manifest>`
    and do not start implementation unless it passes.
 10. Send any resulting UI changes back through Farplane QA, `visual-qa`, and
-    `review`. For runnable delegated UI, require the Pi profile to use the
-    mounted `agent-browser` skill so page snapshots, screenshots, console logs,
-    and page errors are captured in the same thread as the builder handoff.
+    `review`. For runnable delegated UI, require the Pi profile to return the
+    launch command, URL, and deterministic QA artifacts. The coordinating
+    Codex `qa-tester` captures snapshots, screenshots, console/network logs,
+    and page errors through the in-app Browser.
 
 ## Core Decision Branches
 
@@ -239,10 +239,10 @@ Codex lane.
   treating implementation as unblocked.
 - `implementation ready` -> call `delegate-cli --profile frontend-pi-kimi` with
   `--expect-output` for the files the phase owns.
-- `browser-runnable UI` -> use mounted `agent-browser` inside the delegated
-  thread for page-open, snapshot, screenshot, console, and error evidence before
-  handoff; use specialized scroll-scrub QA in addition for Terminal-style
-  pages.
+- `browser-runnable UI` -> external builder returns the launch command, URL,
+  and deterministic QA artifacts; the coordinating Codex `qa-tester` performs
+  operated Browser proof. Use specialized scroll-scrub QA in addition for
+  Terminal-style pages.
 - `repair ready` -> compile a `repair` phase prompt with one owned output and
   explicit QA gates. The prompt must tell Pi not to read `scroll_scrub_qa.cjs`
   or broad references before patching, and must name the observable
@@ -319,8 +319,8 @@ whether Farplane should first produce a stronger UX/visual brief.
     stalls, kill the run, restore from backup or session evidence, and retry
     with a sidecar-owned output or smaller patch boundary.
 18. Do not assume browser QA happened because the page renders locally. For
-    delegated UI work, the handoff should name the `agent-browser` or visual QA
-    artifacts that were actually captured.
+    delegated UI work, the handoff must name the runnable URL and deterministic
+    QA artifacts; coordinating Codex QA records the operated Browser evidence.
 
 ## Outcome Contract
 

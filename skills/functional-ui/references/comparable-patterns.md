@@ -13,23 +13,14 @@ Pick 2-4 examples from:
 - Latest public examples when the user asks for current/SOTA references.
 
 For material, unsettled, current, or SOTA workflows, operate the examples with
-[`agent-browser`](../../agent-browser/SKILL.md) instead of relying on memory or
-search snippets. Stay within public access or an already-authorized user
-session; record login walls and inaccessible states rather than bypassing them.
+the Codex in-app Browser instead of relying on memory or search snippets. Stay
+within public access or an already-authorized user session; record login walls
+and inaccessible states rather than bypassing them.
 
-Executable start:
-
-```bash
-agent-browser skills get core
-agent-browser open <public-comparable-url>
-agent-browser snapshot -i -u
-# interact with visible filters, categories, screens, or flow entries
-agent-browser snapshot -i -u
-agent-browser close
-```
-
-Use a named session per source when operating several sites concurrently. Do
-not declare browser operation blocked merely because no authenticated session
+Open one tab per source in the existing in-app Browser binding, inspect the
+visible and interactive state, exercise the relevant flow, and capture the
+resulting screenshots or page evidence. Do not declare browser operation
+blocked merely because no authenticated session
 exists: inspect the public surface first, then record the exact login wall if a
 deeper state is unavailable.
 

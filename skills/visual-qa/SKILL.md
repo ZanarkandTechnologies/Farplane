@@ -287,7 +287,7 @@ Before handoff, read `references/review.md` and tighten the QA verdict until it 
 ## References
 
 - `visual-qa` -> `references/review.md` (final review questions before handoff)
-- `agent-browser` -> `references/qa-workflows.md` (advanced refs, sessions, JSON outputs)
+- Codex in-app Browser -> `references/workflows.md` (capture and debugging workflows)
 - `visual-qa` -> `references/workflows.md` (extended workflow variants)
 - `visual-qa` -> `references/debugging.md` (debug escalation recipes)
 - For animation-heavy landings: `landing-page` -> `references/qa.md`

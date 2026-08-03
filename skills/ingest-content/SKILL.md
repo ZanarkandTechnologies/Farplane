@@ -205,11 +205,10 @@ saved record; downstream production skills own making new assets from records.
      does not block storing a URL/note capture: save the discovery URL as an
      inspiration-only capture with `rights_status: unknown`; block only
      unsupported CreativeElement capsules or an unavailable storage write.
-   - [ ] For dynamic discovery pages, load
-     [agent-browser](../agent-browser/SKILL.md), run
-     `agent-browser skills get core`, and use its public
-     `open -> snapshot -i -u -> interact -> re-snapshot` loop to inspect
-     outbound/original links. `attempt_method: not_attempted` is invalid when
+   - [ ] For dynamic discovery pages, use the Codex in-app Browser to inspect
+     the rendered page, interact with visible controls, and resolve
+     outbound/original links. Reuse the existing browser binding and tabs.
+     `attempt_method: not_attempted` is invalid when
      browser or web tools are available; when no operation tool can run, record
      the exact command/tool failure instead of treating the fixture as the
      reason.

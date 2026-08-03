@@ -10,16 +10,16 @@ artifacts. Those still belong under `tickets/TASK-XXXX/artifacts/`.
 
 Default to this flow:
 
-1. prove or debug the workflow with `agent-browser` when the path is new,
+1. prove or debug the workflow with the Codex in-app Browser when the path is new,
    brittle, or not yet instrumented
-2. capture the ticket evidence from `agent-browser`: snapshot, screenshots,
+2. capture the ticket evidence from the Codex in-app Browser: snapshots, screenshots,
    console logs, page errors, and the tested route or state
 3. codify the stable happy path in Playwright only when repeated regression
    coverage is worth the extra harness overhead
 
 In practice, that means:
 
-- **`agent-browser` first for browser proof:** use it for most ticket QA,
+- **Codex Browser first for browser proof:** use it for most ticket QA,
   exploratory UI checks, visual state capture, console/error inspection, and
   any workflow whose selectors or assertions are not already settled
 - **Playwright for regression:** use Playwright when the task explicitly needs
@@ -47,7 +47,7 @@ Before any browser evidence run, the repo should also document:
 - deterministic setup flows such as reset, seed, pause, resume, or step
 - stable selector expectations such as `data-testid` contracts
 - notes about when a flow deserves Playwright coverage instead of
-  `agent-browser` proof alone
+  Codex Browser proof alone
 
 ## Suggested Layout
 
@@ -67,7 +67,7 @@ Use a cookbook page when a feature needs repeated QA access.
 
 - Start with the fastest deterministic entry path.
 - Name the launch command or runtime profile that should already be running.
-- Name the `agent-browser` evidence to capture for the normal QA path.
+- Name the Codex Browser evidence to capture for the normal QA path.
 - Record the selectors and assertion surfaces Playwright should use only when
   the flow is ready for regression coverage.
 - If the path is still painful, write down the missing instrumentation as a
@@ -76,7 +76,7 @@ Use a cookbook page when a feature needs repeated QA access.
 ## Regression Graduation Rule
 
 The final proof target for user-facing browser flows should usually be an
-`agent-browser` evidence bundle unless the ticket asks for repeatable
+Codex Browser evidence bundle unless the ticket asks for repeatable
 regression coverage.
 
 Playwright is still valuable, but mostly for:

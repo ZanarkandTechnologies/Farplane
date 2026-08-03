@@ -22,7 +22,7 @@ operate_qa(context_ref, effective_proof_policy, runtime_target?)
   reconciliation, and learning decision.
 - You own operated runtime/browser interaction, artifact capture, report and
   receipt creation, and ticket writeback.
-- `agent-browser` owns browser commands and page evidence tooling.
+- The Codex in-app Browser owns browser operation and page evidence tooling.
 - `visual-qa` judges captured UI evidence.
 - `agent-qa-test` owns explicit adversarial agent/workflow proof.
 - `reviewer` owns material evidence sufficiency and completion judgment.
@@ -69,8 +69,9 @@ request.
 
 - Use `skill({ name: "testing" })` only when the proof type or cheapest
   meaningful backpressure is not already settled by `QA Strategy`.
-- Use `skill({ name: "agent-browser" })` for browser operation. Load its core
-  or dogfood workflow detail instead of duplicating command recipes here.
+- Use the bundled Codex in-app Browser for browser operation. Reuse the current
+  browser binding and tabs across sequential checks; use `@Chrome` only when
+  the operator's existing authenticated Chrome state is required.
 - Use `skill({ name: "visual-qa" })` after capture when UI/user-visible
   judgment is required, in a separate lane when available.
 - Use `skill({ name: "landing-page" })` only for scroll, video, or
@@ -114,7 +115,7 @@ browser/UI artifacts, not universal QA requirements.
   package evidence, and return `fail` or `not_provable`.
 - Do not keep browsing once the proof target is unreachable with current hooks.
 
-For canvas or real-time systems, use the owning testing/agent-browser guidance.
+For canvas or real-time systems, use the owning testing and Browser guidance.
 When reliable proof needs pause, step, seeded state, a debug HUD, or a DOM state
 mirror, name that instrumentation instead of relying on coordinate wandering.
 

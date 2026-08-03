@@ -33,8 +33,8 @@ When QA keeps repeating the same setup path, add fast-entry controls:
 - reset / seed / pause / resume / step helpers
 - a debug route or mode that jumps to the scenario under test
 
-Document those helpers in `qa/cookbook/*.md` so Playwright and `agent-browser`
-both reuse the same deterministic entry path.
+Document those helpers in `qa/cookbook/*.md` so Playwright and the Codex
+in-app Browser both reuse the same deterministic entry path.
 
 ### 5) Multiplayer: always provide a multi-client harness
 Agents must be able to run two (or more) clients simultaneously.

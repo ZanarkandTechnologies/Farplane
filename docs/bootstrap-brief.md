@@ -103,8 +103,8 @@ source:
 - Reset / seed / fixture strategy: avoid destructive reset; create ticket-local
   fixtures or experiment artifacts when needed.
 - Hidden state that needs probes, HUDs, or DOM mirrors: none by default.
-- Preferred browser proof stack: delegated `qa-tester` / `agent-browser` for
-  user-visible flows; direct validators for repo framework checks.
+- Preferred browser proof stack: delegated `qa-tester` using the Codex in-app
+  Browser for user-visible flows; direct validators for repo framework checks.
 - Initial QA cookbook workflows to document: framework validation, ticket
   metadata validation, skill validation, and UI/browser proof when Farplane UI
   work is active.

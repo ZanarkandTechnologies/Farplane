@@ -108,10 +108,10 @@ fails: changes without proof; optimizes vague taste; creates new skill before ch
     failure, workflow/e2e when composition across skills or routing is the
     behavior under test.
   - [ ] For browser/user-visible proof, preserve QA ownership: delegate
-    operated browser proof to `qa-tester` when available; qa-tester may use
-    `agent-browser` for page operation, screenshots, snapshots, console logs,
-    and page errors. Keep Playwright for regression suites, existing tests, or
-    already-settled scripted flows.
+    operated browser proof to `qa-tester` when available; qa-tester uses the
+    Codex in-app Browser for page operation, screenshots, snapshots, console
+    and network inspection, and page errors. Keep Playwright for regression
+    suites, existing tests, or already-settled scripted flows.
 - [ ] 7. Choose direct change, experiment, or execution handoff.
   - [ ] 1. Use direct implementation when the owner and proof are clear.
   - [ ] 2. Use [self-improve](../self-improve/SKILL.md) when a target skill or
@@ -179,7 +179,7 @@ Proof route: proof-advisor or eval, with proof surface and evidence artifact.
 Execution route: direct change, self-improve, skill-maintenance, impl-plan, or
   goal-advisor, with direct-change versus self-improve justification.
 QA ownership: qa-tester for operated browser/user-visible proof when available;
-  qa-tester may use agent-browser for fast page operation and evidence capture.
+  qa-tester uses the Codex in-app Browser for page operation and evidence capture.
 Review route: review before claiming the harness behavior changed.
 ```
 
@@ -214,9 +214,9 @@ material harness behavior gap -> optimize-harness
   artifact must visibly name `gap-analysis`, `harness-advisor`, proof route,
   direct change versus `self-improve`, and review/validation status.
 - Do not let browser proof routing bypass QA ownership. For operated browser
-  evidence, preserve `qa-tester` delegation when available; `agent-browser` is
-  the fast page-operation tool inside that QA lane, while Playwright remains
-  for regression tests, existing suites, or settled scripted flows.
+  evidence, preserve `qa-tester` delegation when available; the Codex in-app
+  Browser is the page-operation tool inside that QA lane, while Playwright
+  remains for regression tests, existing suites, or settled scripted flows.
 - Do not keep hard cases in a separate capture backlog. Hardcase is eval
   metadata for a runnable proof case.
 - Do not add a new skill before checking the generated skill registry for an

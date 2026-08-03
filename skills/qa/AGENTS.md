@@ -8,7 +8,9 @@ Rules for the `qa` skill module.
 
 ## Invariants
 
-- In live Goal-backed ticket execution loops, `$qa` is a delegated execution surface. The coordinating lane should route browser/tool-driving work to `qa-tester` instead of using `agent-browser` directly. See `MEM-0069`.
+- In live Goal-backed ticket execution loops, `$qa` is a delegated execution
+  surface. The coordinating lane should route browser/tool-driving work to
+  `qa-tester` instead of self-certifying operated proof. See `MEM-0069`.
 - QA owns artifact capture and ticket reconciliation; `visual-qa` owns the separate UI judgment pass.
 - Keep reusable browser-entry guidance in repo-owned `qa/` docs and cookbook pages, not in transient chat or ticket-local prose.
 

@@ -23,8 +23,9 @@ Ticket: {{ticket_ref}}
 Use these mounted skill paths when relevant. For UI-bearing work, use the
 frontend skills for implementation. For media-heavy or Terminal-style landing
 work, use the mounted inference.sh image/video/remotion skills during the asset
-phase, then use `agent-browser`, `visual-qa`, `review`, and
-`web-design-guidelines` in the same Pi thread before writing the handoff:
+phase, then use `visual-qa`, `review`, and `web-design-guidelines` before
+writing the handoff. Do not launch a browser; return the launch command and URL
+for the coordinating Codex QA lane:
 
 {{skill_list}}
 
@@ -64,8 +65,8 @@ For scroll-scrub or Terminal-style landing pages, the handoff must also include:
 - checkpoint states at 0%, 25%, 50%, 75%, and 95% scroll,
 - scroll-scrub QA JSON/screenshot artifact paths plus the `verdict` and
   `hasRequiredDebugContract` score when the harness can run,
-- agent-browser snapshot/screenshot/console/error artifact paths when the page
-  is runnable in a browser,
+- runnable URL, expected states, and deterministic QA artifact paths when the
+  page is browser-runnable; operated Browser evidence is captured by Codex QA,
 - `terminalVerdict` and `terminalFinalReady` for Terminal/Terminus-level final
   builds; a basic `verdict: PASS` is only mechanics proof.
 - `maxCheckpointChangedRatio`, `meaningfulCheckpointDeltaCount`,

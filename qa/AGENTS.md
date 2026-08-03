@@ -17,8 +17,8 @@ and humans reach important app states quickly and deterministically.
   `tickets/TASK-XXXX/artifacts/`
 - treat `skills/qa/SKILL.md` as the execution and receipt contract; this module
   owns readable guidance and reusable runbooks
-- prefer `agent-browser` for browser proof: page operation, snapshots,
-  screenshots, console logs, and page-error capture
+- prefer the Codex in-app Browser for browser proof: page operation, snapshots,
+  screenshots, console/network inspection, and page-error capture
 - use Playwright only when stable UX regression coverage is explicitly needed,
   when an existing suite is the acceptance surface, or when a settled flow is
   ready to graduate into scripted coverage
@@ -39,6 +39,6 @@ Each cookbook page should stay short and answer:
 
 1. how QA reaches the target state quickly
 2. which shortcuts, deep links, seeds, or fixtures make it deterministic
-3. what `agent-browser` should capture for the normal proof path
+3. what the Codex in-app Browser should capture for the normal proof path
 4. when the flow is worth graduating to Playwright regression coverage
 5. the shortcut environment guard, expected state, cleanup, and last verified receipt

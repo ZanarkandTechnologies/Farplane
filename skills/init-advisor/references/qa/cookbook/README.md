@@ -12,7 +12,7 @@ Keep each page short and biased toward deterministic access.
 - `Targets:` frontend/backend URLs, ports, or supporting services QA should trust
 - `Stable selectors:` the roles, labels, or `data-testid` values that should
   stay reliable
-- `agent-browser path:` the normal page-operation and evidence-capture path
+- `Codex Browser path:` the normal page-operation and evidence-capture path
 - `Playwright path:` only when the workflow has graduated to scripted
   regression coverage
 - `Observability:` logs, HUDs, DOM mirrors, or debug panels that make failures

@@ -99,8 +99,8 @@ checklist item.
   - [ ] Capture the relevant commands, exit status, responses, generated files,
     screenshots, snapshots, console logs, page errors, traces, or API evidence.
   - [ ] For material browser work, delegate operation and capture to
-    `qa-tester`, which uses [Agent Browser](../agent-browser/SKILL.md); the
-    coordinating lane must not self-certify operated proof.
+    `qa-tester`, which uses the Codex in-app Browser; the coordinating lane
+    must not self-certify operated proof.
   - [ ] If an external source is unavailable, still record independent
     deterministic local checks, preserve the source gap, and never substitute
     an invented observation.
@@ -206,8 +206,8 @@ Canonical `result.json`:
 
 - [QA checklist](qa_checklist.md) — read before material execution and apply
   again at the finish gate.
-- [Agent Browser](../agent-browser/SKILL.md) — load through `qa-tester` when
-  browser operation is required.
+- Codex in-app Browser — use through `qa-tester` when browser operation is
+  required.
 - [Visual QA](../visual-qa/SKILL.md) — load after UI capture when visual
   judgment is required.
 - `qa/cookbook/*.md` — read the matching project runbook before manual

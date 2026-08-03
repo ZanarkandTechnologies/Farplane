@@ -13,7 +13,7 @@
 
 ## Tools
 - Playwright for drag-and-drop simulation.
-- dev-browser skill for quick visual checks.
+- Codex in-app Browser for quick operated visual checks.
 - Unit tests for graph state logic.
 
 ## Common Gotchas

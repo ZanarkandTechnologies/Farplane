@@ -48,10 +48,10 @@ template_uses:
   `$demo` `final.mp4` as the first selected media item; do not close a feature
   ticket with text or screenshots alone.
 - [ ] Create or resume exactly one marked issue, upload only missing marked
-  media comments through an authenticated browser-operation surface such as
-  [agent-browser](../agent-browser/SKILL.md), verify the complete remote record,
-  and close it with reason `completed`. Use `gh` for issue text/state, never as
-  a fake local-file attachment uploader.
+  media comments through `@Chrome` using the operator's authenticated GitHub
+  session, verify the complete remote record, and close it with reason
+  `completed`. Use `gh` for issue text/state, never as a fake local-file
+  attachment uploader.
 - [ ] Run `farplane ticket close TASK-XXXX --github-issue-url <url>` with one
   `--media <path>` per selected file. Let Core verify, mine, index, and delete
   the exact local packet; otherwise retain it with one concrete next action.
