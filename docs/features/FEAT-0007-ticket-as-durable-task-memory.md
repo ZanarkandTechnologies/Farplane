@@ -3,7 +3,7 @@ title: Ticket as durable task memory
 status: implemented
 owner: feature-registry
 created_at: 2026-06-26
-updated_at: 2026-07-25
+updated_at: 2026-08-02
 tags:
   - farplane
   - feature
@@ -13,6 +13,7 @@ refs:
   - tickets/templates/ticket.md
   - skills/impl-plan
   - skills/spec-to-ticket
+  - skills/close-ticket
   - docs/features/FEAT-0007-ticket-as-durable-task-memory.md
   - docs/features/README.md
   - "docs/MEMORY.md#MEM-0058"
@@ -27,6 +28,7 @@ surfaces:
   - tickets/templates/ticket.md
   - skills/impl-plan
   - skills/spec-to-ticket
+  - skills/close-ticket
   - docs/features/FEAT-0007-ticket-as-durable-task-memory.md
 source_refs:
   - docs/features/README.md
@@ -37,7 +39,7 @@ evidence_refs:
   - docs/HISTORY.md
 known_limits: Only works when agents keep the compact ticket-as-program body, ticket Links, progress logs, and artifact pointers current instead of hiding state in chat.
 metrics: []
-last_verified: 2026-07-25
+last_verified: 2026-08-02
 experimental: false
 superseded_by: false
 ---
@@ -79,6 +81,9 @@ Chat can steer the work, but the ticket owns the durable contract.
 - Moves bulky proof into `tickets/TASK-*/artifacts/` and links it from the ticket.
 - Lets `impl-plan`, `spec-to-ticket`, Goal Packets, QA, review, and closeout all read the same task contract.
 - Preserves resume state through `program.md`, `progress.md`, and artifact links when a work loop needs more than one turn.
+- Turns each newly completed ticket into one verified closed issue in the
+  project's configured GitHub repository, then retains only a compact local
+  locator after completion mining succeeds.
 
 ## User Stories
 
@@ -107,10 +112,23 @@ A durable ticket is a small program for the next agent, not a generic task note.
   `check_in_at`, or Goal Packet timing.
 - `progress.md` carries current action, blockers, verification, review state,
   and delayed check-in observations.
+- The first-load envelope is the full ticket, full Goal program when present,
+  and the latest 80 progress lines. It targets 300 lines and blocks planning or
+  completion above 400 through `ticket.context-budget`; length never licenses
+  deleting required proof or hiding executable policy.
 - `Links` points to evidence, artifacts, related specs, sidecars, and handoffs.
-- `farplane ticket close TASK-XXXX` owns the successful terminal transition:
-  it updates metadata, archives the ticket, emits completion, and invokes
-  mining after the ticket's proof gates pass.
+- `$close-ticket` owns remote publication: create or resume one marked issue in
+  `integrations.github.repo`, render concise `Before`, `After`, `Example`, `Key
+  decisions`, and `Proof`, upload the reviewed `$demo` MP4 first for material
+  feature tickets followed by explicitly selected supporting media as marked
+  browser comments, verify the issue, and close it.
+- `farplane ticket close TASK-XXXX` owns the successful local terminal
+  transaction: re-verify the closed issue and media markers, update metadata,
+  mine the still-local packet, atomically write the compact locator, emit
+  completion, and only then delete the exact active packet.
+- Any failed remote, mining, locator, or deletion prerequisite retains the
+  packet for a retry against the same marked issue. Agents do not manually move
+  or delete it.
 
 The required frontmatter is only `ticket_id`, `title`, `status`, `created_at`,
 and `updated_at`. Optional `priority`, `due_at`, `claimed_by`, `depends_on`,
@@ -132,9 +150,11 @@ flowchart TD
   readers["Files and fields read<br/>Summary, Scope, Delta<br/>Change Plan, Done, QA Strategy<br/>frontmatter state, Links"]:::keep
   routes["Execution routes<br/>impl-plan, spec-to-ticket<br/>Pulse priority + due_at ordering"]:::changed
   artifact["Created artifact/evidence<br/>tickets/TASK-XXXX/ticket.md<br/>with proof scoreboard"]:::added
+  close["Terminal record<br/>verified closed configured-repo issue<br/>compact local locator"]:::added
   old["Retired<br/>chat-only task memory"]:::retired
 
   trigger --> owner --> readers --> routes --> artifact
+  artifact --> close
   old -. replaced by .-> artifact
 ```
 
@@ -153,6 +173,7 @@ Owner surfaces:
 - `tickets/templates/ticket.md`
 - `skills/impl-plan`
 - `skills/spec-to-ticket`
+- `skills/close-ticket`
 - `docs/features/FEAT-0007-ticket-as-durable-task-memory.md`
 
 Source context:
@@ -178,6 +199,10 @@ Acceptance signals:
 - The owner surfaces still exist and agree with this contract.
 - Optional `due_at` stays timezone-bearing and affects ordering only after
   priority; tickets without it sort last inside their priority band.
+- New closes resolve terminal identity from one compact GitHub issue locator,
+  while legacy local archive directories remain readable.
+- Local packet deletion happens only after remote verification, completion
+  mining, and locator write succeed.
 - Evidence refs support the current status.
 
 ## Rollout And Maintenance
@@ -192,6 +217,9 @@ Acceptance signals:
 - This feature is not a project-management app.
 - This feature does not make ticket existence an invocation trigger.
 - This feature does not replace feature specs, system specs, review rubrics, or bulky proof artifacts.
+- GitHub Releases, release assets, tags, downloadable bundles, remote restore,
+  and migration of existing local archives are future work, not part of the
+  current ticket-memory contract.
 - Known limit: Only works when agents keep the compact ticket-as-program body, ticket Links, progress logs, and artifact pointers current instead of hiding state in chat.
 - Delete or merge this feature only when its current truth has moved into a clearer owner and all active refs are removed.
 
@@ -210,6 +238,12 @@ Acceptance signals:
 
 ## Change History
 
+- 2026-08-02: Bound new terminal issues to the project's existing
+  `integrations.github.repo`; configured public, private, and internal
+  repositories are valid targets.
+- 2026-08-01: Made one verified closed GitHub issue the terminal record for new
+  closes, with mine-and-index-before-delete ordering and readable legacy local
+  archives.
 - 2026-06-26: Feature spec created.
 - 2026-06-27: Migrated into the reader-first feature-spec shape.
 - 2026-06-28: Merged Program and Map into `Change Plan` and moved body state

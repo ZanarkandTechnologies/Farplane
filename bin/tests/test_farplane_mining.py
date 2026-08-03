@@ -142,6 +142,108 @@ class FarplaneMiningTests(unittest.TestCase):
             with self.assertRaisesRegex(MiningError, "ticket_not_terminal:TASK-0001"):
                 mine_ticket(root, "TASK-0001", codex_runner=no_signal_runner)
 
+    def test_mine_ticket_repairs_from_compact_issue_text_without_downloading_media(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            ticket = write_project(root)
+            ticket.parent.rename(root / "deleted-ticket-fixture")
+            (root / "farplane" / "bindings.yaml").write_text(
+                "kind: project-bindings\nproject:\n  id: mine-test\nevent_routes:\n"
+                "  - route_id: completion-learning\n"
+                "    event_name: farplane.ticket.completed\n"
+                f"    program_ref: {LEARNING_PROGRAM_REF}\n",
+                encoding="utf-8",
+            )
+            index = root / "tickets" / "archive-index.jsonl"
+            index.parent.mkdir(parents=True, exist_ok=True)
+            issue_url = "https://github.com/acme/archive/issues/1"
+            index.write_text(
+                json.dumps(
+                    {
+                        "schema_version": 1,
+                        "storage": "github_issue",
+                        "ticket_id": "TASK-0001",
+                        "title": "Archived ticket",
+                        "status": "done",
+                        "closed_at": "2026-07-20T00:00:00Z",
+                        "github_issue_url": issue_url,
+                        "github_issue_number": 1,
+                        "media_comment_urls": [f"{issue_url}#issuecomment-10"],
+                        "event_id": "old-event",
+                        "runs": ["old-run"],
+                    }
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+            calls: list[list[str]] = []
+
+            def fake_github_runner(command: list[str], cwd: Path):
+                calls.append(command)
+                self.assertEqual(cwd, root.resolve())
+                return subprocess.CompletedProcess(
+                    command,
+                    0,
+                    stdout=json.dumps(
+                        {
+                            "title": "Archived ticket",
+                            "body": "## Original problem\nA race.\n\n## Solution\nSerialized writes.",
+                            "state": "CLOSED",
+                            "closedAt": "2026-07-20T00:00:00Z",
+                            "number": 1,
+                            "url": issue_url,
+                            "comments": [
+                                {
+                                    "body": "Final proof: https://github.com/user-attachments/assets/media-id",
+                                    "url": f"{issue_url}#issuecomment-10",
+                                    "createdAt": "2026-07-20T00:00:00Z",
+                                }
+                            ],
+                        }
+                    ),
+                    stderr="",
+                )
+
+            def no_signal_runner(command: list[str], prompt: str, cwd: Path, timeout: int):
+                Path(command[command.index("--output-last-message") + 1]).write_text(
+                    json.dumps(
+                        {
+                            "status": "no_signal",
+                            "summary": "No actionable issue found.",
+                            "material_findings": [],
+                            "source_gaps": [],
+                        }
+                    ),
+                    encoding="utf-8",
+                )
+                return subprocess.CompletedProcess(command, 0, stdout="", stderr="")
+
+            result = mine_ticket(
+                root,
+                "TASK-0001",
+                github_runner=fake_github_runner,
+                codex_runner=no_signal_runner,
+            )
+
+            self.assertEqual(result["storage"], "github_issue")
+            self.assertEqual(result["ticket_path"], issue_url)
+            self.assertEqual(len(calls), 1)
+            self.assertEqual(calls[0][:4], ["gh", "issue", "view", issue_url])
+            self.assertNotIn("download", calls[0])
+            detail = show_run(root, result["runs"][0]["run_id"])
+            archived_source = detail["input"]["event"]["provenance"]["archived_ticket"]
+            self.assertIn("Serialized writes", archived_source["body"])
+            self.assertEqual(
+                archived_source["comments"][0]["url"],
+                f"{issue_url}#issuecomment-10",
+            )
+            self.assertTrue(detail["input"]["input_manifest"][0]["virtual"])
+            self.assertTrue(detail["input"]["input_manifest"][0]["matches_event"])
+            virtual_packet = detail["input"]["semantic_context"]["ticket_packet"][0]
+            self.assertIn("Serialized writes", virtual_packet["text"])
+            self.assertIn("issuecomment-10", virtual_packet["text"])
+            self.assertFalse((root / "tickets" / "TASK-0001").exists())
+
     def test_completion_learning_joins_bounded_window_and_runs_once(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

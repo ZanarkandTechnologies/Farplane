@@ -8,6 +8,7 @@ One source of truth per concern:
 - body = plan, references, evidence, and blockers
 - `.farplane/state/` = live runtime state
 - `docs/` = durable knowledge after the ticket is done
+- `tickets/archive-index.jsonl` = compact locator for new GitHub-issue closes
 - transcript = disposable context, not the canonical resume surface
 
 ## Canonical Layout
@@ -21,8 +22,9 @@ tickets/
     artifacts/
   TASK-0002/
     ticket.md
+  archive-index.jsonl  # compact locator for new GitHub-issue closes
   archive/
-    TASK-0000/
+    TASK-0000/         # legacy local archive; remains readable
       ticket.md
       artifacts/
   templates/
@@ -40,9 +42,40 @@ No lane folders. No hand-maintained board file. The ticket itself is the board c
    `awaiting_review` or `waiting_signal`
 4. on a non-ticket blocker, clear the claim, set `blocked`, and record details
    in `progress.md`
-5. after implementation, proof, review, and durable docs, run `farplane ticket
-   close TASK-XXXX`; it sets `done`, clears the claim, moves the ticket to
-   `tickets/archive/`, emits completion, and invokes mining
+5. after implementation, proof, review, and durable docs, use `$close-ticket`
+   to create or resume one issue in the project's configured GitHub repository
+6. keep the issue glanceable with `Before`, `After`, `Example`, `Key decisions`,
+   and compact `Proof`; for material feature work, require the passing reviewed
+   `$demo` MP4 as the first marked comment, followed by any explicitly selected
+   supporting screenshots through the authenticated GitHub browser composer
+7. verify the issue body and every expected media marker, then close the issue
+   as completed
+8. run `farplane ticket close TASK-XXXX` with that issue and selected media;
+   Core re-verifies the closed issue, writes terminal metadata, mines the
+   still-local packet, writes its compact locator, emits completion, and only
+   then deletes the exact packet
+
+## Terminal Archive Contract
+
+For newly closed tickets, the closed issue is the durable terminal record.
+Its body preserves the concise before/after/example, key decisions, and proof
+summary. Explicitly selected final screenshots and videos are preserved as
+marked issue comments so each upload can be verified and retried independently.
+The compact `tickets/archive-index.jsonl` row is a local identity, status, and
+URL projection; it is not a second ticket archive.
+
+Every terminal gate is retain-local. A repository that does not match
+`integrations.github.repo`, missing authentication, unsupported media, missing
+or duplicate marker, failed upload, unclosed issue, mining failure, or locator
+conflict leaves the full active packet in place. The configured repository may
+be public, private, or internal. Retries resume the exact marked issue and
+comments rather than creating duplicates. Agents must not manually move or
+delete the packet.
+
+Existing `tickets/archive/TASK-*` directories remain readable legacy records.
+This workflow does not migrate or delete them. GitHub Releases, release assets,
+tags, downloadable bundles, manifests, remote restore, and reconstruction of a
+deleted ticket packet are future work and outside the current contract.
 
 ## Progress Surface Policy
 
@@ -55,8 +88,9 @@ No lane folders. No hand-maintained board file. The ticket itself is the board c
   scratch or explicit adapter output, not the preferred durable evidence home
 - `.farplane/state/` is runtime-only and may track active claim/lane/session/verdict state
 - transcripts are useful evidence but are not the canonical resume surface
-- deliberate reset/resume requires `progress.md` to carry the current action,
-  latest verification, blockers, and evidence references
+- deliberate reset/resume starts from `ticket.md`, `program.md`, and the latest
+  80 lines of `progress.md`; load older receipts only to resolve a named
+  evidence gap
 - one ticket owns one persistent Codex task titled exactly
   `[TASK-XXXX] <ticket title>`; execution, review, feedback, waiting, and
   check-in resume it. Do not create `Plan ...` or `Execute ...` copies, and do
@@ -71,6 +105,19 @@ feedback-heavy, rollout, heartbeat, business-loop, or skill-improvement work.
 goal_loop(ticket.md, program.md, progress.md, trigger)
   -> next_turn + evidence + drift_verdict + state_delta
 ```
+
+Every active Goal uses one decision backbone:
+
+```text
+observe -> choose_next(execute | diagnose | report_now | request_feedback | stop)
+        -> act -> verify -> write_back
+```
+
+Goal Advisor compiles the packet, Metric Advisor establishes or repairs the
+measurement contract, Leverage Advisor compares moves only when several
+plausible options need judgment, and the domain skill executes. Plan Next Wave
+is an upstream empty-board refiller and never participates inside an active
+Goal.
 
 - `ticket.md` owns objective, scope, acceptance criteria, proof, blockers, and
   current next action.
@@ -170,9 +217,10 @@ ticket `Program`/`Change Plan`, `QA Strategy`, `Done`, and `progress.md`.
 For Goal Advisor, Pulse, heartbeat, and board-drain, the explicit invocation is
 the operator or automation running the selector. After that, a ticket is
 selectable only when `status: todo`, `claimed_by` is absent, and every
-dependency is complete or archived. A `waiting_signal` ticket is temporarily
-selectable only when a ticket Reward row matures. These are hard gates, not
-ranking preferences.
+dependency is active-board complete, present in the compact closed-ticket
+locator, or present in a legacy local archive. A `waiting_signal` ticket is
+temporarily selectable only when a ticket Reward row matures. These are hard
+gates, not ranking preferences.
 
 `human_gate` is not a second ticket-start approval gate. It marks a final
 outside-world action that the worker must not take without Kenji. Pulse records
@@ -204,6 +252,13 @@ before they become live ticket sources.
 
 ## Sizing Doctrine
 
+- first-load Goal state is the full `ticket.md`, full `program.md` when
+  present, and at most the latest 80 lines of `progress.md`
+- target at most 300 first-load lines; block planning or completion above 400
+  lines until duplicated policy is consolidated or bulky evidence moves to
+  `artifacts/`
+- line count is a context constraint, not a quality score: required proof,
+  safety, ownership, and reconstruction behavior must remain intact
 - default ticket = the largest coherent capability an agent can build and prove in one strong pass
 - CRUD workflows stay whole by default: schema, handlers, UI, validation, and proof belong together when they serve one operator workflow
 - for complex systems, the first ticket should usually create one reusable proof surface plus one minimal end-to-end happy path
@@ -217,7 +272,11 @@ Run:
 
 ```bash
 python3 tickets/scripts/check_ticket_metadata.py
+farplane validate ticket tickets/TASK-XXXX/ticket.md --phase planning
 ```
+
+The ticket validation route includes `ticket.context-budget`. It reports
+pressure above the 300-line target and blocks above the 400-line hard limit.
 
 The validator treats `tickets/TASK-*/ticket.md` as canonical and still tolerates
 flat `tickets/TASK-*.md` files only as archived pre-directory ticket history.
@@ -242,8 +301,10 @@ Default sections:
 - `Scope`
 - `Delta`
 - `Change Plan`
+- `Map`
 - `Done`
 - `QA Strategy`
+- `State`
 - `Docs Strategy`
 - `Links`
 - `Notes`
@@ -251,6 +312,8 @@ Default sections:
 Optional sections only when they add signal:
 
 - `Reward`
+- `Planned Skill Call`
+- `Objective Contribution`
 - `Gap Analysis`
 - `Agent Contract`
 - `Run Hints`
@@ -270,9 +333,9 @@ Use `Delta` to answer:
    constraints, first viable slice, proof/falsification, tradeoff, and
    non-goals when material
 
-Keep `Delta` brief after ticket creation. When `impl-plan(ticket)` runs, it
-expands the work into `Change Plan` units instead of making readers cross-map
-separate Delta, Program, and Map sections.
+Keep `Delta` brief after ticket creation. `Change Plan` owns executable units;
+`Map` is only their compact visual or signature projection and must not repeat
+the prose.
 
 Use `Reward` for Pulse-created tactical tickets, interval-planned tickets,
 experiments, and other work whose planning value should be obvious before
@@ -482,7 +545,9 @@ the QA evidence review, completion review, reviewer TAS gate, or explicit
 `none` decision that must exist before completion. Do not rely on a Stop hook
 or transcript memory to discover missing QA after the agent claims done.
 After the checkpoint passes, use `farplane ticket close TASK-XXXX` for the
-terminal state and archive transition; do not hand-edit or manually move it.
+terminal state, verified archive writeback, mining, locator write, and cleanup;
+do not hand-edit, manually move, or manually delete the packet. Farplane Stop
+hooks are telemetry-only and do not own proof repair or terminal closeout.
 
 For UI-bearing, browser-driven, canvas/game, or otherwise agentically hard
 tickets, add `Agent Contract`.

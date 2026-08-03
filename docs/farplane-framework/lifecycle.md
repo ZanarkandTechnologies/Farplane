@@ -3,7 +3,7 @@ title: "Farplane Lifecycle"
 status: active
 owner: farplane-framework
 created_at: 2026-06-23
-updated_at: 2026-07-25
+updated_at: 2026-08-02
 framework_template_version: "0.3.0"
 tags:
   - farplane
@@ -83,7 +83,7 @@ flowchart TD
   F -->|no / low supply| H["plan_next_wave<br/>refill"]:::work
   H --> D
   G --> I["QA + review evidence inside ticket"]:::proof
-  I --> J["closeout + durable writeback"]:::proof
+  I --> J["verified configured-repo issue<br/>mine + locator + local cleanup"]:::proof
 
   K["Feed Scout"]:::source --> O
   L["Daily / Weekly BAU"]:::source --> O
@@ -142,16 +142,35 @@ into a ticket on the shared board.
 Ticket completion is the narrow event-driven exception, not another heartbeat:
 
 ```text
-ticket.completed
--> completed ticket packet + optional bounded task context
+verified closed issue
+-> still-local completed ticket packet + optional bounded task context
 -> strongest grounded issue / inefficiency / improvement
 -> one deduped ordinary improvement ticket or no issue
+-> compact closed-ticket locator
+-> exact local packet deletion
 ```
 
-The normal trigger is `farplane ticket close TASK-XXXX`, which completes and
-archives the active ticket, emits its completion event, and starts mining from
-that ID alone. `farplane mining ticket TASK-XXXX` remains the repair/backfill
-entry for an already completed ticket.
+The normal closeout starts in `$close-ticket`. It creates or resumes one issue
+in the project's `integrations.github.repo`, writes concise `Before`, `After`,
+`Example`, `Key decisions`, and `Proof`, then uploads marked media through the
+authenticated browser composer. Material feature tickets require the passing
+reviewed `$demo` MP4 as the first comment; supporting screenshots may follow.
+The skill verifies the expected body and comments, then closes the issue.
+
+`farplane ticket close TASK-XXXX` then re-verifies that closed issue, mines the
+still-local packet from that ID alone, atomically writes its compact locator,
+emits completion, and only then deletes the exact active packet. Every failed
+verification, mining, or locator gate retains the packet for retry. Farplane
+Stop hooks collect telemetry and may apply bounded deterministic guards such as
+final-response length; they do not repair proof, advance closeout, archive
+tickets, or delete packets.
+
+Existing `tickets/archive/TASK-*` packets remain readable legacy records and
+are not migrated. `farplane mining ticket TASK-XXXX` remains the explicit
+repair/backfill entry: new remote closes can supply issue text and comments,
+but repair does not download attachments or reconstruct a deleted packet.
+GitHub Releases, release assets, tags, bundles, manifests, remote restore, and
+old-archive migration are future work and outside the current lifecycle.
 The semantic reviewer remains read-only. Deterministic Core owns the local
 ticket write after schema, evidence, privacy, confidence, and dedupe gates. A
 stable semantic key dedupes paraphrases, and a projected ticket's own completion
@@ -185,6 +204,7 @@ does not reconstruct or independently score the experiment policy.
 | Executable commitment and all QA/review evidence | owning ticket and `artifacts/` |
 | Goal/check-in loop policy | ticket `program.md` |
 | Append-only task or experiment observations | ticket `progress.md` |
+| Closed-ticket identity and archive location | `tickets/archive-index.jsonl` for new GitHub-issue closes; `tickets/archive/TASK-*` for readable legacy archives |
 | Desired automation topology and prompts | `farplane/automations.toml` |
 | Provider coordinates | `farplane/bindings.yaml` |
 | Runtime receipts and derived context | `.farplane/reports/**` and other generated `.farplane/**` projections |
@@ -238,7 +258,9 @@ smallest owner:
 - stable policy evidence can propose a human-reviewed `harness.yaml` delta;
 - repeated workflow evidence can harden or refine the owning skill;
 - unresolved executable work remains a ticket;
-- raw run detail stays in ticket artifacts or dated reports.
+- raw run detail stays in ticket artifacts or dated reports; only the selected
+  terminal problem, solution, verification, screenshots, and videos are copied
+  to the closed issue before local cleanup.
 
 This preserves `program + progress` without turning every observation into a
 new schema or global ledger.

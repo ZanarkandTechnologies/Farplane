@@ -3,7 +3,7 @@ title: Artifact-first QA and completion proof
 status: implemented
 owner: feature-registry
 created_at: 2026-06-26
-updated_at: 2026-07-27
+updated_at: 2026-08-02
 tags:
   - farplane
   - feature
@@ -13,6 +13,7 @@ refs:
   - tickets/templates/ticket.md
   - skills/qa
   - skills/review
+  - skills/close-ticket
   - docs/review/rubrics
   - docs/features/FEAT-0008-artifact-first-qa-and-completion-proof.md
   - "docs/MEMORY.md#MEM-0048"
@@ -28,6 +29,7 @@ surfaces:
   - tickets/templates/ticket.md
   - skills/qa
   - skills/review
+  - skills/close-ticket
   - docs/review/rubrics
   - docs/features/FEAT-0008-artifact-first-qa-and-completion-proof.md
 source_refs:
@@ -39,7 +41,7 @@ evidence_refs:
   - docs/HISTORY.md
 known_limits: Depends on compact `Done` conditions, `QA Strategy`, linked artifacts, progress logs, and reviewer gates, not ticket-body proof theater.
 metrics: []
-last_verified: 2026-07-27
+last_verified: 2026-08-02
 experimental: false
 superseded_by: false
 ---
@@ -83,6 +85,9 @@ contract.
 - Supports an evidence-bounded ICP purchase-conviction review for one explicit
   buyer without treating reviewer simulation as observed market demand.
 - Keeps Goal-backed completion mechanical and visible: implementation, QA, demo when required, and final completion review receipt.
+- Preserves the final verification summary and explicitly selected screenshots
+  or videos in the newly closed ticket's issue in the project's configured
+  GitHub repository.
 - Refuses silent completion when required evidence is missing.
 
 ## User Stories
@@ -104,6 +109,18 @@ Proof scales with risk, blast radius, and user-facing impact.
 - Ticket-local artifacts hold bulky proof and reports.
 - QA owns user-visible and runtime evidence capture.
 - Reviewer owns material judgment of plans, implementations, prompts, evidence, and completion claims.
+- For a new terminal close, the issue body is deliberately glanceable:
+  `Before`, `After`, `Example`, `Key decisions`, and compact `Proof`. Material
+  feature tickets require the passing independently reviewed `$demo` MP4 as
+  the first marked browser comment; explicitly selected screenshots may follow.
+- `$close-ticket` verifies the issue body and every expected media comment
+  before closing the issue. Core independently re-verifies those markers and
+  requires a real GitHub user-attachment URL in every selected-media comment,
+  mines while the local evidence still exists, writes the compact locator, and
+  only then deletes the ticket packet.
+- Missing media, missing markers, an open or mismatched issue, failed mining, or
+  failed locator write blocks cleanup and keeps the local proof available for
+  retry.
 - `docs/review/rubrics` owns family definitions, stable checks, TAS calibration,
   and evidence limits; tickets and caller workflows own rubric routing.
 - Purchase-conviction review requires one explicit buyer, a credible product or
@@ -125,9 +142,10 @@ flowchart TD
   readers["Files and fields read<br/>ticket critical path<br/>expected checks, artifacts<br/>review gates, residual risk"]:::keep
   evidence["Evidence capture<br/>logs, screenshots, reports<br/>ticket-scoped artifacts"]:::added
   artifact["Created artifact/evidence<br/>QA result + reviewer receipt<br/>linked from ticket"]:::added
+  terminal["Terminal proof<br/>glanceable issue summary<br/>feature demo first<br/>supporting media comments"]:::added
   old["Retired<br/>unsupported done claim"]:::retired
 
-  trigger --> owner --> readers --> evidence --> artifact
+  trigger --> owner --> readers --> evidence --> artifact --> terminal
   old -. blocked by .-> owner
 ```
 
@@ -146,6 +164,7 @@ Owner surfaces:
 - `tickets/templates/ticket.md`
 - `skills/qa`
 - `skills/review`
+- `skills/close-ticket`
 - `docs/review/rubrics`
 - `docs/features/FEAT-0008-artifact-first-qa-and-completion-proof.md`
 
@@ -173,6 +192,8 @@ Acceptance signals:
 - Evidence refs support the current status.
 - Selected rubric families are discoverable from the canonical index and keep
   their claims within the supplied evidence.
+- New closes do not delete local evidence until the closed issue and every
+  selected media marker are verified and completion mining succeeds.
 
 ## Rollout And Maintenance
 
@@ -186,6 +207,10 @@ Acceptance signals:
 - This feature does not make every task heavyweight.
 - This feature does not require proof to live inside the ticket body.
 - This feature does not replace ticket scope or specs.
+- Terminal media selection is explicit; this feature does not automatically
+  choose, redact, edit, transcode, or upload every ticket artifact.
+- GitHub Releases, downloadable evidence bundles, remote restore, and migration
+  of legacy local archives are future work and outside this proof contract.
 - Review verdicts do not substitute for observed customer behavior, market
   validation, willingness-to-pay evidence, or product-market-fit evidence.
 - Known limit: Depends on compact `Done` conditions, `QA Strategy`, linked artifacts, progress logs, and reviewer gates, not ticket-body proof theater.
@@ -206,6 +231,11 @@ Acceptance signals:
 
 ## Change History
 
+- 2026-08-02: Clarified that closeout uses `integrations.github.repo` directly;
+  repository visibility does not alter the proof contract.
+- 2026-08-01: Added verified GitHub-issue closeout for new tickets: completion
+  text in the issue body, selected final media in marked comments, and a hard
+  retain-local gate until mining and locator write succeed.
 - 2026-07-27: Added docs-owned rubric-family selection and an evidence-bounded
   ICP purchase-conviction review contract.
 - 2026-06-26: Feature spec created.

@@ -1,11 +1,13 @@
 from __future__ import annotations
 
+import hashlib
 import json
 import subprocess
 import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -13,8 +15,13 @@ CORE_DIR = ROOT / "bin" / "core"
 if str(CORE_DIR) not in sys.path:
     sys.path.insert(0, str(CORE_DIR))
 
+import farplane_ticket_close as close_module
 from farplane_event_store import pending_events
 from farplane_ticket_close import TicketCloseError, close_ticket
+
+
+PROJECT_REPO = "acme/farplane"
+ISSUE_URL = f"https://github.com/{PROJECT_REPO}/issues/17"
 
 
 def no_signal_runner(command: list[str], prompt: str, cwd: Path, timeout: int):
@@ -33,17 +40,70 @@ def no_signal_runner(command: list[str], prompt: str, cwd: Path, timeout: int):
     return subprocess.CompletedProcess(command, 0, stdout="", stderr="")
 
 
-def write_project(root: Path) -> Path:
+class GitHubFixture:
+    def __init__(
+        self,
+        *,
+        ticket_id: str = "TASK-0001",
+        media_digests: tuple[str, ...] = (),
+        state: str = "CLOSED",
+        body: str | None = None,
+        comments: list[dict[str, str]] | None = None,
+    ) -> None:
+        self.calls: list[list[str]] = []
+        self.issue = {
+            "number": 17,
+            "title": "Close fixture",
+            "state": state,
+            "body": body
+            if body is not None
+            else (
+                "## Before\n\nCompleted tickets only had a local archive.\n\n"
+                "## After\n\nThe completed behavior is recorded in one project issue.\n\n"
+                "## Example\n\nClose a feature ticket and find its demo below the summary.\n\n"
+                "## Key decisions\n\n- Use the configured project repository.\n\n"
+                "## Proof\n\n- Checks and independent review passed.\n\n"
+                f"<!-- farplane-ticket-id:{ticket_id} -->"
+            ),
+            "comments": comments
+            if comments is not None
+            else [
+                {
+                    "body": (
+                        f"<!-- farplane-ticket-media:{ticket_id}:{digest} -->\n"
+                        f"![proof](https://github.com/user-attachments/assets/{index:08d}-0000-0000-0000-000000000000)"
+                    ),
+                    "url": f"{ISSUE_URL}#issuecomment-{index}",
+                }
+                for index, digest in enumerate(media_digests, start=1)
+            ],
+            "closedAt": "2026-08-01T07:00:00Z",
+            "url": ISSUE_URL,
+        }
+
+    def __call__(self, command: list[str], cwd: Path) -> subprocess.CompletedProcess[str]:
+        self.calls.append(command)
+        if command[:3] == ["gh", "issue", "view"]:
+            payload = self.issue
+        else:
+            return subprocess.CompletedProcess(command, 1, stdout="", stderr="unexpected command")
+        return subprocess.CompletedProcess(command, 0, stdout=json.dumps(payload), stderr="")
+
+
+def write_project(root: Path, *, program_ref: str = "core:ticket-completion-learning@1.3.0") -> Path:
     farplane = root / "farplane"
     farplane.mkdir()
     (farplane / "bindings.yaml").write_text(
         "kind: project-bindings\n"
         "project:\n"
         "  id: close-test\n"
+        "integrations:\n"
+        "  github:\n"
+        f"    repo: {PROJECT_REPO}\n"
         "event_routes:\n"
         "  - route_id: completion-learning\n"
         "    event_name: farplane.ticket.completed\n"
-        "    program_ref: core:ticket-completion-learning@1.3.0\n",
+        f"    program_ref: {program_ref}\n",
         encoding="utf-8",
     )
     ticket = root / "tickets" / "TASK-0001" / "ticket.md"
@@ -62,57 +122,304 @@ def write_project(root: Path) -> Path:
     return ticket
 
 
+def write_media(root: Path) -> tuple[Path, str]:
+    media = root / "tickets" / "TASK-0001" / "artifacts" / "final.png"
+    media.parent.mkdir(parents=True)
+    media.write_bytes(b"final visual proof")
+    return media, hashlib.sha256(media.read_bytes()).hexdigest()
+
+
 class TicketCloseTests(unittest.TestCase):
-    def test_close_archives_updates_metadata_and_emits_once(self) -> None:
-        with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            write_project(root)
-
-            first = close_ticket(root, "task-0001", codex_runner=no_signal_runner)
-            second = close_ticket(root, "TASK-0001", codex_runner=no_signal_runner)
-
-            archived = root / "tickets" / "archive" / "TASK-0001" / "ticket.md"
-            text = archived.read_text(encoding="utf-8")
-            self.assertFalse((root / "tickets" / "TASK-0001").exists())
-            self.assertIn("status: done", text)
-            self.assertNotIn("claimed_by:", text)
-            self.assertNotIn("updated_at: 2026-07-18T00:00:00Z", text)
-            self.assertEqual(first["status"], "closed")
-            self.assertEqual(second["status"], "already_closed")
-            self.assertEqual(first["event_id"], second["event_id"])
-            self.assertEqual(first["runs"][0]["run_id"], second["runs"][0]["run_id"])
-            self.assertEqual(pending_events(root), [])
-            self.assertTrue(Path(second["receipt_path"]).is_file())
-
-    def test_close_rejects_non_success_terminal_ticket(self) -> None:
+    def test_close_verifies_mines_indexes_deletes_and_retries_idempotently(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             ticket = write_project(root)
-            ticket.write_text(ticket.read_text(encoding="utf-8").replace("status: active", "status: rejected"), encoding="utf-8")
+            media, digest = write_media(root)
+            github = GitHubFixture(media_digests=(digest,))
 
-            with self.assertRaisesRegex(TicketCloseError, "non_success_terminal_status"):
-                close_ticket(root, "TASK-0001", codex_runner=no_signal_runner)
-
-    def test_close_keeps_completion_event_pending_when_route_fails(self) -> None:
-        with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            write_project(root)
-            bindings = root / "farplane" / "bindings.yaml"
-            bindings.write_text(
-                bindings.read_text(encoding="utf-8").replace(
-                    "core:ticket-completion-learning@1.3.0",
-                    "core:missing-program@9.9.9",
-                ),
-                encoding="utf-8",
+            first = close_ticket(
+                root,
+                "task-0001",
+                ISSUE_URL,
+                [media.relative_to(root).as_posix()],
+                codex_runner=no_signal_runner,
+                github_runner=github,
+            )
+            second = close_ticket(
+                root,
+                "TASK-0001",
+                ISSUE_URL,
+                [media.relative_to(root).as_posix()],
+                codex_runner=no_signal_runner,
+                github_runner=github,
             )
 
-            receipt = close_ticket(root, "TASK-0001", codex_runner=no_signal_runner)
+            rows = [json.loads(line) for line in (root / "tickets" / "archive-index.jsonl").read_text().splitlines()]
+            self.assertFalse(ticket.parent.exists())
+            self.assertFalse((root / "tickets" / "archive" / "TASK-0001").exists())
+            self.assertEqual(first["status"], "closed")
+            self.assertEqual(second["status"], "already_closed")
+            self.assertTrue(second["local_packet_deleted"])
+            self.assertEqual(first["event_id"], second["event_id"])
+            self.assertEqual(first["runs"][0]["run_id"], second["runs"][0]["run_id"])
+            self.assertEqual(len(rows), 1)
+            self.assertEqual(rows[0]["schema_version"], 1)
+            self.assertEqual(rows[0]["storage"], "github_issue")
+            self.assertEqual(rows[0]["status"], "done")
+            self.assertEqual(rows[0]["github_issue_url"], ISSUE_URL)
+            self.assertEqual(rows[0]["media_comment_urls"], [f"{ISSUE_URL}#issuecomment-1"])
+            self.assertEqual(pending_events(root), [])
+            self.assertEqual(len(github.calls), 2)
+            self.assertEqual(
+                github.calls[0],
+                [
+                    "gh",
+                    "issue",
+                    "view",
+                    "17",
+                    "--repo",
+                    PROJECT_REPO,
+                    "--json",
+                    "number,title,state,body,comments,closedAt,url",
+                ],
+            )
+
+    def test_public_configured_repository_is_allowed_and_open_or_mismatched_issue_blocks(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            ticket = write_project(root)
+            github = GitHubFixture()
+
+            result = close_ticket(
+                root,
+                "TASK-0001",
+                ISSUE_URL,
+                codex_runner=no_signal_runner,
+                github_runner=github,
+            )
+
+            self.assertTrue(result["ok"])
+            self.assertFalse(ticket.parent.exists())
+            self.assertTrue(github.calls)
+            self.assertTrue(all(call[:3] != ["gh", "repo", "view"] for call in github.calls))
+
+        for label, url, github, error in (
+            ("mismatch", "https://github.com/acme/other/issues/17", GitHubFixture(), "repo_mismatch"),
+            ("open", ISSUE_URL, GitHubFixture(state="OPEN"), "not_closed"),
+        ):
+            with self.subTest(label=label), tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp)
+                ticket = write_project(root)
+                original = ticket.read_text()
+                with self.assertRaisesRegex(TicketCloseError, error):
+                    close_ticket(root, "TASK-0001", url, github_runner=github)
+                self.assertEqual(ticket.read_text(), original)
+                self.assertFalse((root / "tickets" / "archive-index.jsonl").exists())
+
+    def test_missing_or_invalid_configured_repository_blocks_without_remote_or_local_mutation(self) -> None:
+        for label, github_config in (
+            ("missing", "  github: {}\n"),
+            ("invalid", "  github:\n    repo: https://github.com/acme/farplane\n"),
+        ):
+            with self.subTest(label=label), tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp)
+                ticket = write_project(root)
+                bindings = root / "farplane" / "bindings.yaml"
+                text = bindings.read_text(encoding="utf-8")
+                text = text.replace(f"  github:\n    repo: {PROJECT_REPO}\n", github_config)
+                bindings.write_text(text, encoding="utf-8")
+                github = GitHubFixture()
+
+                with self.assertRaisesRegex(TicketCloseError, "github_repo_not_configured"):
+                    close_ticket(root, "TASK-0001", ISSUE_URL, github_runner=github)
+
+                self.assertIn("status: active", ticket.read_text(encoding="utf-8"))
+                self.assertEqual(github.calls, [])
+                self.assertFalse((root / "tickets" / "archive-index.jsonl").exists())
+
+    def test_missing_ticket_or_media_marker_blocks_without_mutation(self) -> None:
+        for label in ("ticket", "media"):
+            with self.subTest(label=label), tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp)
+                ticket = write_project(root)
+                media, digest = write_media(root)
+                github = (
+                    GitHubFixture(media_digests=(digest,), body="missing marker")
+                    if label == "ticket"
+                    else GitHubFixture(media_digests=())
+                )
+                with self.assertRaisesRegex(TicketCloseError, "marker"):
+                    close_ticket(root, "TASK-0001", ISSUE_URL, [media], github_runner=github)
+                self.assertIn("status: active", ticket.read_text())
+                self.assertFalse((root / "tickets" / "archive-index.jsonl").exists())
+
+    def test_marker_only_media_comment_blocks_without_deleting_packet(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            ticket = write_project(root)
+            media, digest = write_media(root)
+            github = GitHubFixture(
+                comments=[
+                    {
+                        "body": f"<!-- farplane-ticket-media:TASK-0001:{digest} -->",
+                        "url": f"{ISSUE_URL}#issuecomment-1",
+                    }
+                ]
+            )
+
+            with self.assertRaisesRegex(TicketCloseError, "github_issue_media_attachment_missing"):
+                close_ticket(root, "TASK-0001", ISSUE_URL, [media], github_runner=github)
+
+            self.assertTrue(ticket.is_file())
+            self.assertIn("status: active", ticket.read_text())
+            self.assertFalse((root / "tickets" / "archive-index.jsonl").exists())
+
+    def test_missing_required_issue_section_blocks_without_mutation(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            ticket = write_project(root)
+            body = (
+                "## Before\n\nProblem.\n\n"
+                "## After\n\nResult.\n\n"
+                "## Example\n\nExample.\n\n"
+                "## Proof\n\nChecks passed.\n\n"
+                "<!-- farplane-ticket-id:TASK-0001 -->"
+            )
+
+            with self.assertRaisesRegex(TicketCloseError, "github_issue_section_missing:key_decisions"):
+                close_ticket(root, "TASK-0001", ISSUE_URL, github_runner=GitHubFixture(body=body))
+
+            self.assertIn("status: active", ticket.read_text())
+            self.assertFalse((root / "tickets" / "archive-index.jsonl").exists())
+
+    def test_mining_failure_retains_terminal_local_packet_and_skips_index(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            ticket = write_project(root, program_ref="core:missing-program@9.9.9")
+            github = GitHubFixture()
+
+            receipt = close_ticket(
+                root,
+                "TASK-0001",
+                ISSUE_URL,
+                codex_runner=no_signal_runner,
+                github_runner=github,
+            )
 
             self.assertFalse(receipt["ok"])
             self.assertEqual(receipt["mining_status"], "pending")
+            self.assertEqual(receipt["phase"], "mining_pending")
             self.assertTrue(receipt["event_id"])
-            self.assertTrue((root / "tickets" / "archive" / "TASK-0001" / "ticket.md").is_file())
+            self.assertTrue(ticket.is_file())
+            self.assertIn("status: done", ticket.read_text())
+            self.assertNotIn("claimed_by:", ticket.read_text())
+            self.assertFalse((root / "tickets" / "archive-index.jsonl").exists())
             self.assertEqual(len(pending_events(root)), 1)
+
+    def test_archive_index_conflict_rejects_before_remote_or_local_mutation(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            ticket = write_project(root)
+            index = root / "tickets" / "archive-index.jsonl"
+            index.write_text(
+                json.dumps(
+                    {
+                        "ticket_id": "TASK-0001",
+                        "github_issue_url": "https://github.com/acme/private-ticket-archive/issues/99",
+                    }
+                )
+                + "\n"
+            )
+            github = GitHubFixture()
+
+            with self.assertRaisesRegex(TicketCloseError, "archive_index_issue_conflict"):
+                close_ticket(root, "TASK-0001", ISSUE_URL, github_runner=github)
+
+            self.assertIn("status: active", ticket.read_text())
+            self.assertEqual(github.calls, [])
+
+    def test_terminal_or_index_write_failure_retains_local_packet(self) -> None:
+        for failure_path in ("ticket.md", "archive-index.jsonl"):
+            with self.subTest(failure_path=failure_path), tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp)
+                ticket = write_project(root)
+                github = GitHubFixture()
+                original_atomic_write = close_module._atomic_write_text
+
+                def fail_selected(path: Path, text: str) -> None:
+                    if path.name == failure_path:
+                        raise OSError(f"write failed: {failure_path}")
+                    original_atomic_write(path, text)
+
+                with mock.patch("farplane_ticket_close._atomic_write_text", side_effect=fail_selected):
+                    with self.assertRaisesRegex(OSError, "write failed"):
+                        close_ticket(
+                            root,
+                            "TASK-0001",
+                            ISSUE_URL,
+                            codex_runner=no_signal_runner,
+                            github_runner=github,
+                        )
+
+                self.assertTrue(ticket.is_file())
+                self.assertFalse((root / "tickets" / "archive-index.jsonl").exists())
+                if failure_path == "ticket.md":
+                    self.assertIn("status: active", ticket.read_text())
+                else:
+                    self.assertIn("status: done", ticket.read_text())
+                    receipt = json.loads(
+                        (root / ".farplane" / "tickets" / "closures" / "TASK-0001.json").read_text()
+                    )
+                    self.assertEqual(receipt["phase"], "mined")
+
+    def test_delete_failure_occurs_after_index_and_retries_without_new_mining_run(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            ticket = write_project(root)
+            github = GitHubFixture()
+
+            with mock.patch("farplane_ticket_close.shutil.rmtree", side_effect=OSError("delete failed")):
+                with self.assertRaisesRegex(OSError, "delete failed"):
+                    close_ticket(
+                        root,
+                        "TASK-0001",
+                        ISSUE_URL,
+                        codex_runner=no_signal_runner,
+                        github_runner=github,
+                    )
+
+            indexed_receipt = json.loads(
+                (root / ".farplane" / "tickets" / "closures" / "TASK-0001.json").read_text()
+            )
+            rows_before = (root / "tickets" / "archive-index.jsonl").read_text().splitlines()
+            self.assertEqual(indexed_receipt["phase"], "indexed")
+            self.assertFalse(indexed_receipt["local_packet_deleted"])
+            self.assertTrue(ticket.is_file())
+            self.assertEqual(len(rows_before), 1)
+
+            retried = close_ticket(
+                root,
+                "TASK-0001",
+                ISSUE_URL,
+                codex_runner=no_signal_runner,
+                github_runner=github,
+            )
+            rows_after = (root / "tickets" / "archive-index.jsonl").read_text().splitlines()
+            self.assertEqual(retried["status"], "already_closed")
+            self.assertEqual(retried["event_id"], indexed_receipt["event_id"])
+            self.assertEqual(retried["runs"], indexed_receipt["runs"])
+            self.assertFalse(ticket.parent.exists())
+            self.assertEqual(rows_before, rows_after)
+
+    def test_non_success_terminal_ticket_is_not_mutated(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            ticket = write_project(root)
+            ticket.write_text(ticket.read_text().replace("status: active", "status: rejected"))
+
+            with self.assertRaisesRegex(TicketCloseError, "non_success_terminal_status"):
+                close_ticket(root, "TASK-0001", ISSUE_URL, github_runner=GitHubFixture())
+            self.assertIn("status: rejected", ticket.read_text())
 
 
 if __name__ == "__main__":

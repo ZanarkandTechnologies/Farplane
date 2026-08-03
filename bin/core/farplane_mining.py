@@ -58,6 +58,7 @@ SENSITIVE_TEXT_PATTERNS = (
 )
 
 CodexRunner = Callable[[list[str], str, Path, int], subprocess.CompletedProcess[str]]
+GitHubRunner = Callable[[list[str], Path], subprocess.CompletedProcess[str]]
 
 
 class MiningError(RuntimeError):
@@ -801,6 +802,23 @@ def _semantic_context(event: dict[str, Any], project_root: Path, manifest: list[
     for row in manifest:
         if not isinstance(row, dict) or row.get("role") not in {"event_source", "program", "progress"} or not row.get("exists"):
             continue
+        if row.get("virtual"):
+            archived_ticket = (
+                provenance.get("archived_ticket")
+                if isinstance(provenance.get("archived_ticket"), dict)
+                else {}
+            )
+            packet_files.append(
+                {
+                    "role": "event_source",
+                    "path": str(row.get("path") or ""),
+                    "sha256": row.get("sha256"),
+                    "text": _bounded_text(
+                        json.dumps(archived_ticket, ensure_ascii=False, sort_keys=True)
+                    ),
+                }
+            )
+            continue
         relative = str(row.get("path") or "")
         absolute = (project_root / relative).resolve()
         try:
@@ -843,8 +861,30 @@ def build_input(
     primary_path = str(entity_ref.get("path") or "")
     if not primary_path:
         raise MiningError("event_entity_path_missing")
-    manifest = [_file_manifest_entry(project_root, primary_path, role="event_source", required=True)]
-    if entity_ref.get("kind") == "ticket":
+    provenance = event.get("provenance") if isinstance(event.get("provenance"), dict) else {}
+    archived_ticket = (
+        provenance.get("archived_ticket")
+        if isinstance(provenance.get("archived_ticket"), dict)
+        else {}
+    )
+    if archived_ticket:
+        source_text = json.dumps(archived_ticket, ensure_ascii=False, sort_keys=True)
+        manifest = [
+            {
+                "role": "event_source",
+                "path": primary_path,
+                "required": True,
+                "exists": True,
+                "virtual": True,
+                "sha256": sha256_value(source_text),
+                "bytes": len(source_text.encode("utf-8")),
+                "event_sha256": event.get("content_hash"),
+                "matches_event": sha256_value(source_text) == event.get("content_hash"),
+            }
+        ]
+    else:
+        manifest = [_file_manifest_entry(project_root, primary_path, role="event_source", required=True)]
+    if entity_ref.get("kind") == "ticket" and not archived_ticket:
         ticket_dir = Path(primary_path).parent.as_posix()
         manifest.extend(
             [
@@ -858,7 +898,7 @@ def build_input(
                 if path.is_file() and len(manifest) < 43:
                     relative = path.relative_to(project_root).as_posix()
                     manifest.append(_file_manifest_entry(project_root, relative, role="artifact", required=False))
-    if manifest[0].get("exists"):
+    if manifest[0].get("exists") and not manifest[0].get("virtual"):
         manifest[0]["event_sha256"] = event.get("content_hash")
         manifest[0]["matches_event"] = manifest[0].get("sha256") == event.get("content_hash")
     payload = {
@@ -1360,7 +1400,39 @@ def route_event(
     return runs
 
 
-def _ticket_path(project_root: Path, ticket_id: str) -> Path:
+def _archive_index_row(project_root: Path, ticket_id: str) -> dict[str, Any] | None:
+    path = project_root / "tickets" / "archive-index.jsonl"
+    if not path.is_file():
+        return None
+    matches: list[dict[str, Any]] = []
+    for line_number, line in enumerate(
+        path.read_text(encoding="utf-8", errors="replace").splitlines(), 1
+    ):
+        if not line.strip():
+            continue
+        try:
+            row = json.loads(line)
+        except json.JSONDecodeError as exc:
+            raise MiningError(f"invalid_archive_index_json:{line_number}") from exc
+        if not isinstance(row, dict):
+            raise MiningError(f"invalid_archive_index_row:{line_number}")
+        if str(row.get("ticket_id") or "").strip().upper() == ticket_id:
+            matches.append(row)
+    if not matches:
+        return None
+    issue_urls = {str(row.get("github_issue_url") or "").strip() for row in matches}
+    if len(issue_urls) != 1 or not next(iter(issue_urls)):
+        raise MiningError(f"conflicting_archive_index_rows:{ticket_id}")
+    row = matches[-1]
+    if (
+        str(row.get("storage") or "").strip() != "github_issue"
+        or str(row.get("status") or "").strip().lower() != "done"
+    ):
+        raise MiningError(f"invalid_archive_index_locator:{ticket_id}")
+    return row
+
+
+def _ticket_path(project_root: Path, ticket_id: str) -> Path | None:
     normalized = ticket_id.strip().upper()
     if TICKET_ID_PATTERN.fullmatch(normalized) is None:
         raise MiningError(f"invalid_ticket_id:{ticket_id}")
@@ -1371,7 +1443,74 @@ def _ticket_path(project_root: Path, ticket_id: str) -> Path:
     for candidate in candidates:
         if candidate.is_file():
             return candidate
-    raise MiningError(f"ticket_not_found:{normalized}")
+    return None
+
+
+def _default_github_runner(command: list[str], cwd: Path) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(
+        command,
+        text=True,
+        capture_output=True,
+        check=False,
+        cwd=str(cwd),
+    )
+
+
+def _github_ticket_snapshot(
+    project_root: Path,
+    row: dict[str, Any],
+    *,
+    github_runner: GitHubRunner | None,
+) -> dict[str, Any]:
+    issue_url = str(row.get("github_issue_url") or "").strip()
+    runner = github_runner or _default_github_runner
+    command = [
+        "gh",
+        "issue",
+        "view",
+        issue_url,
+        "--json",
+        "title,body,state,closedAt,comments,number,url",
+    ]
+    try:
+        completed = runner(command, project_root)
+    except (OSError, subprocess.SubprocessError) as exc:
+        raise MiningError(f"github_issue_fetch_failed:{exc}") from exc
+    if completed.returncode != 0:
+        detail = (completed.stderr or completed.stdout or "unknown gh failure").strip()
+        raise MiningError(f"github_issue_fetch_failed:{detail[:300]}")
+    try:
+        payload = json.loads(completed.stdout)
+    except json.JSONDecodeError as exc:
+        raise MiningError("github_issue_fetch_invalid_json") from exc
+    if not isinstance(payload, dict):
+        raise MiningError("github_issue_fetch_invalid_shape")
+    if str(payload.get("state") or "").strip().lower() != "closed":
+        raise MiningError("github_issue_not_closed")
+    fetched_url = str(payload.get("url") or issue_url).strip()
+    if fetched_url != issue_url:
+        raise MiningError("github_issue_url_mismatch")
+    raw_comments = payload.get("comments") if isinstance(payload.get("comments"), list) else []
+    comments = [
+        {
+            "body": str(comment.get("body") or ""),
+            "url": str(comment.get("url") or ""),
+            "created_at": str(comment.get("createdAt") or ""),
+        }
+        for comment in raw_comments
+        if isinstance(comment, dict)
+    ]
+    return {
+        "storage": "github_issue",
+        "ticket_id": str(row.get("ticket_id") or "").strip().upper(),
+        "title": str(payload.get("title") or row.get("title") or "").strip(),
+        "body": str(payload.get("body") or ""),
+        "state": "closed",
+        "closed_at": str(payload.get("closedAt") or row.get("closed_at") or ""),
+        "github_issue_url": fetched_url,
+        "github_issue_number": payload.get("number", row.get("github_issue_number")),
+        "comments": comments,
+    }
 
 
 def _ticket_frontmatter(path: Path) -> dict[str, Any]:
@@ -1420,16 +1559,32 @@ def mine_ticket(
     *,
     program_root: Path = DEFAULT_PROGRAM_ROOT,
     codex_runner: CodexRunner | None = None,
+    github_runner: GitHubRunner | None = None,
 ) -> dict[str, Any]:
     """Resolve and mine one terminal ticket from its canonical ID alone."""
 
     project_root = project_root.resolve()
     normalized = ticket_id.strip().upper()
+    if TICKET_ID_PATTERN.fullmatch(normalized) is None:
+        raise MiningError(f"invalid_ticket_id:{ticket_id}")
     path = _ticket_path(project_root, normalized)
-    if not _ticket_terminal(path):
-        raise MiningError(f"ticket_not_terminal:{normalized}")
-    relative = path.relative_to(project_root).as_posix()
-    content_hash = sha256_value(path.read_text(encoding="utf-8", errors="replace"))
+    archived_ticket: dict[str, Any] = {}
+    if path is not None:
+        if not _ticket_terminal(path):
+            raise MiningError(f"ticket_not_terminal:{normalized}")
+        relative = path.relative_to(project_root).as_posix()
+        content_hash = sha256_value(path.read_text(encoding="utf-8", errors="replace"))
+    else:
+        index_row = _archive_index_row(project_root, normalized)
+        if index_row is None:
+            raise MiningError(f"ticket_not_found:{normalized}")
+        archived_ticket = _github_ticket_snapshot(
+            project_root, index_row, github_runner=github_runner
+        )
+        relative = str(archived_ticket["github_issue_url"])
+        content_hash = sha256_value(
+            json.dumps(archived_ticket, ensure_ascii=False, sort_keys=True)
+        )
     thread_id = _associated_thread(project_root, normalized)
     bindings = _yaml_mapping(bindings_path(project_root))
     project = bindings.get("project") if isinstance(bindings.get("project"), dict) else {}
@@ -1455,9 +1610,10 @@ def mine_ticket(
         "event_at": now_iso(),
         "privacy_safe_delta": {"changed_fields": []},
         "provenance": {
-            "source": "ticket_id",
+            "source": "github_issue" if archived_ticket else "ticket_id",
             "session_id": thread_id or None,
             "thread_id": thread_id or None,
+            "archived_ticket": archived_ticket or None,
         },
     }
     event_paths = enqueue_event(project_root, event)
@@ -1473,6 +1629,8 @@ def mine_ticket(
         "event_record": event_paths["event_record"],
         "thread_id": thread_id or None,
         "runs": runs,
+        "storage": "github_issue" if archived_ticket else "local_ticket",
+        "github_issue_url": relative if archived_ticket else None,
     }
 
 

@@ -5,329 +5,95 @@ feature_refs:
   - FEAT-0007
   - FEAT-0008
 ticket_id: TASK-XXXX
-title: short title
-status: awaiting_review
-created_at: 2026-04-03T00:00:00Z
-updated_at: 2026-04-03T00:00:00Z
+title: title
+status: todo
+created_at: YYYY-MM-DDTHH:MM:SSZ
+updated_at: YYYY-MM-DDTHH:MM:SSZ
+depends_on: []
 ---
 
 # TASK-XXXX: title
 
-<!-- Sparse optional routing fields: priority, due_at, claimed_by, depends_on, human_gate, compute_target. -->
-<!-- `claimed_by` is present only while status=active. Absent priority means medium. -->
-<!-- Delivery deadline shape: due_at: 2026-04-10T17:00:00+08:00 (timezone required). -->
-<!-- Human gate shape: human_gate: [post, "reason the final action needs Kenji"] -->
+<!-- Keep ticket.md + program.md + the latest 80 progress lines within the
+300-line target and 400-line hard limit. Bulky evidence belongs in artifacts/.
+`claimed_by` is present only while status=active. Never store session_id here.
+Full authoring rules: tickets/README.md. -->
 
 ## Summary
-2-3 sentences on what changes, why it matters now, and the decisive path being
-recommended.
+
+One paragraph: valuable outcome, beneficiary, and why this ticket matters now.
 
 ## Scope
+
 - In:
 - Out:
+- Constraints:
 
 ## Delta
-Keep this brief. Use it to orient the ticket before `impl-plan` expands the
-work into concrete change units.
 
-```text
-overall_before:
-  -
-overall_after:
-  -
-why_now:
-  -
-problems:
-  - before:
-    after:
-    why_now:
-first_principles_basis:
-  objective:
-  need:
-  assumptions:
-  root_cause:
-  constraints:
-  first_viable_slice:
-  proof_or_falsification:
-  tradeoff:
-  non_goals:
-```
+> **Before:** Current observable behavior.
+>
+> **After:** Intended observable behavior.
+>
+> **Example:** One representative workflow or result.
 
-## Planned Skill Call
-
-Optional for Pulse-materialized tickets. This records the selected callable
-and its bound public inputs; the skill remains the sole workflow owner.
-
-```yaml
-call_id:
-skill_ref:
-arguments: {}
-area_id: # optional passive context only
-expected_artifact:
-```
-
-## Objective Contribution
-
-Required for every AI-planned or planner-materialized ticket. This is the one
-authored forecast. Name exactly one configured ultimate business outcome and
-classify the ticket's contribution honestly; do not repeat the target in Reward
-or trajectory prose.
-
-```yaml
-objective_contribution:
-  ultimate_kpi_id: revenue_usd | evidence_distribution_reach | active_subscriptions
-  contribution_type: outcome | enabler | guard
-  kpi_or_guard_id: direct outcome, leading metric, or protected guard
-  causal_mechanism:
-  expected_change:
-  forecast_basis:
-    kind: measured_baseline | cited_comparable | configured_threshold | source_gap
-    ref: # required except for source_gap
-    source_gap: # required for source_gap; omit numeric precision from expected_change
-  metric_provider:
-  signal_horizon:
-  check_in_at:
-```
-
-## Reward
-Required for AI-planned tickets, Pulse-created tactical tickets,
-interval-planned tickets, experimental tickets, and other work where planning
-should show why the ticket matters. Manual/operator tickets may omit it. Keep
-this tiny. Pulse projects `kpi_id` and `expected_reward` from Objective
-Contribution rather than asking the planner to author the forecast twice.
-`outcome` projects the ultimate KPI. `enabler` and `guard` project only their
-leading or protected metric and cannot count as realized ultimate movement
-without later external ultimate-metric evidence.
-
-```yaml
-kpi_rewards:
-  - reward_id: accepted-harness-improvements-7d
-    kpi_id: <ultimate_kpi_id for outcome; kpi_or_guard_id for enabler or guard>
-    projection_type: ultimate_outcome | enabler_result | guard_result
-    expected_reward: <mechanically copied from Objective Contribution.expected_change>
-    # Use a timezone-bearing ISO-8601 timestamp for delayed check-in work.
-    # Use the exact literal `unscheduled` when no check-in should be delegated.
-    check_in_at: "2026-04-10T00:00:00Z"
-    actual_result:
-    decision:
-    evaluated_at:
-    evaluation_key:
-    supersedes_evaluation_key:
-    evidence_refs: []
-guard: "do not count planned intent as KPI movement; count only completed tickets with proof"
-```
-
-`Reward.expected_reward` is the delayed value forecast, not the immediate
-observation expected from an experiment. For causal, comparative, or
-uncertainty-reducing work, put the pre-result expected observation, horizon,
-confidence, falsifier, and surprise trigger in the Metric Card or `program.md`.
-Route material experiment surprise to `agent-qa-test:experiment`; route an
-ordinary delayed Reward miss to `gap-analysis`. Deterministic tickets do not
-need a fabricated experiment expectation.
+<!-- Add Planned Skill Call, Objective Contribution, or Reward only when their
+named consumer exists; use tickets/README.md for those optional shapes. -->
 
 ## Change Plan
-Filled by `impl-plan(ticket)`. This is the executable task-local program and
-file map. Group by coherent change unit so each unit carries its own problem
-delta, reads, writes, operation, local type or signature impact, QA, and route.
 
-For material work, start with compact architecture signatures so humans and
-reviewer lanes can scan the top-level code shape before reading change-unit
-detail:
+### Change 1: coherent unit
 
-```text
-architecture_signatures:
-  module_level:
-    - path_or_module / owner_seam(input): output
-  main_flow:
-    - function_or_handler(input): output
-  data_flow:
-    - source.field -> boundary.field -> result.field
-  builder_freeform_boundary:
-    - Implementation below this level is builder-owned unless it changes
-      ownership, public contracts, data flow, proof, or reviewability.
+```yaml
+files:
+  read: []
+  edit: []
+operation: concrete change
+proof: command, eval, QA, or review artifact
+failure: blocker or rollback condition
 ```
 
-For tiny localized fixes, use:
+<!-- Repeat Change N only for independently reviewable units. -->
+
+## Map
 
 ```text
-architecture_signatures: not_applicable - localized same-surface fix because <reason>
+input -> owner/change -> output + evidence
 ```
-
-Repeat one heading and fenced block per coherent change:
-
-### Change 1: short label
-
-```text
-fixes:
-  - plain-language problem or delta this change resolves
-before:
-  -
-after:
-  -
-read:
-  - path:
-    reason:
-write:
-  - path:
-    change:
-operation:
-  -
-signature_or_type_impact:
-  -
-routes:
-  docs: doc-advisor | no_docs
-  qa: tests | qa-tester | visual-qa | agent-qa-test | none
-  review: reviewer | inline | none
-qa:
-  -
-failure_modes:
-  -
-```
-
-Use `signature_or_type_impact` for local deltas inside the change unit; do not
-duplicate the full `architecture_signatures` map in every unit.
-
-Keep diagrams out of `ticket.md` without exception. For every impl-plan ticket,
-link the required visual companion generated after the plan exists:
-
-```text
-visual_companion:
-  path: tickets/TASK-XXXX/diagrams.md
-  generated_by: delegated diagramming lane when available, otherwise inline diagramming(ticket.md, skills/impl-plan/references/visual-companion-template.md); impl-plan waits for validation
-  blocks_approval: false
-  canonical_contract: ticket.md
-```
-
-## Gap Analysis
-- Required for missing, partial, parity-driven, or product-shaping feature work.
-  Optional for tightly scoped bug fixes, internal refactors, or obvious
-  one-surface changes.
-- `Current state:` what exists today and where it stops
-- `Production expectation:` what a credible production app usually includes for
-  this feature
-- `Missing gaps:` behaviors, UX states, edge cases, permissions, data flows,
-  observability, or operational surfaces still absent
-- `Comparable implementations:` products, repos, docs, or standards inspected
-- `Recommendation:` what this ticket should land now vs defer into follow-ups
 
 ## Done
-Keep this as the completion scoreboard: what must be true before the ticket can
-close. Put checks, review gates, and evidence policy in `QA Strategy`.
 
-```text
-done_when:
-  -
-```
+- [ ] User-visible or system outcome is satisfied.
+- [ ] Required checks pass with evidence links.
+- [ ] No declared guard regresses.
 
 ## QA Strategy
-Filled by `impl-plan(ticket)`. This is the proof and QA plan that
-`goal-advisor(ticket)` can lift into `program.md`, `progress.md`, and the
-native `/goal` prompt.
-Move bulky command output, screenshots, review reports, and logs to
-`artifacts/`, then link them from `Links` or `progress.md`.
-Durable proof defaults to `tickets/TASK-XXXX/artifacts/`; global
-`.farplane/results/` is runtime scratch or explicit adapter output.
-For material features, include critical-path QA here as flexible bullets:
-name the real workflow or lifecycle being claimed, break long end-to-end proof
-into ordered sanity checks, state the expected observation for each check, link
-the evidence, and name any unrun final path or residual risk.
-These QA expected observations describe what a check should visibly prove. For
-an experiment, also preregister the aggregate result expectation in the Metric
-Card or `program.md`; do not hide it in Eval user queries or duplicate
-`Reward.expected_reward`.
-For material Goal-backed work, include the final checkpoint in this same block:
-which QA evidence review, completion review, or reviewer TAS gate must run
-before completion, and where its receipt will be linked.
 
-```text
-qa_strategy:
-  proof_weight: smoke | tests | qa | visual_qa | review | agent_qa | demo
-  checks:
-    -
-  manual:
-    -
-  delegated_lanes:
-    -
-  review:
-    - rubric: none
-      required_tas: none
-  evidence:
-    -
-  goal_advisor_inputs:
-    proof_route:
-    final_evidence:
-    final_checkpoint:
-  residual_risk:
-    -
+```yaml
+proof_weight: mechanical | eval | qa | visual_qa | agent_qa | review | hybrid
+checks: []
+delegated_lanes: []
+evidence_paths: []
+final_checkpoint: inline | reviewer | none
+residual_risk: none
 ```
 
-## Docs Strategy
-Use `doc-advisor` to decide whether durable docs change. Use `update_docs` for
-README, feature/system specs, runbooks, templates, public guidance, or other
-durable documentation edits. Use `no_docs` only with a concrete reason.
+<!-- Add Gap Analysis, Docs Strategy, Agent Contract, or Run Hints only when the
+branch needs them; use tickets/README.md for their compact contracts. -->
 
-```text
-docs_strategy:
-  outcome: update_docs | no_docs
-  doc_targets:
-    -
-  no_docs_reason:
-  validation:
-    -
-```
+## State
 
-## Agent Contract
-- Optional for non-UI work. Add when the ticket changes UI, canvas rendering,
-  user-visible flows, browser interaction, or any flow that is hard for agents
-  to reach or inspect reliably.
-- `Open:` launch path or command, plus stable route/deeplink if available
-- `Test hook:` cheapest deterministic proof surface, or `none needed`
-- `Stabilize:` reset/seed path plus shortcuts/debug controls if determinism matters
-- `Inspect:` selectors, overlays, DOM mirrors, HUDs, or logs the agent should rely on
-- `Key screens/states:` important surfaces QA must reach and compare
-- `Design baseline:` `tickets/TASK-XXXX/design.md` when layout, interaction,
-  visual design, or taste are part of proof; otherwise `none needed`
-- `QA cookbook:` matching `qa/cookbook/<workflow>.md` path when the repo keeps
-  reusable QA workflows, otherwise `none yet`
-- `Taste refs:` relevant visual doctrine and any local exception
-- `Expected artifacts:` screenshots, snapshots, traces, reports, or clips
-- `Delegate with:` ticket path/section, recommended assignee, expected artifact
-
-## Run Hints
-- Optional for trivial/manual tickets. Add when `goal-advisor`, heartbeat,
-  remote kanban, Codex Cloud, Symphony, or another unattended runner may use
-  this ticket.
-- These hints are advisory context, not runtime authority. Explicit invocation
-  still starts work.
-- `Likely size:` `tiny` | `normal` | `large` | `epic`
-- `Goal recommendation:` `none` | `recommend` | `required`
-- `Budget hint:` time/token/model/compute/subagent/review/QA/feedback/spend, or
-  `none`
-- `Compute hint:` `local_shared` | `local_worktree` | `codex_cloud` |
-  `symphony` | `none`
-- `Planning hint:` `none` | `light` | `impl_plan` | `reslice`
-- `Expected beats:` `1` | `2-4` | `5+`
-- `Parallel:` `yes` | `no`
-- `QA source:` `QA Strategy` or linked sidecar when the QA plan is too large
-- `Batchability:` `batchable` | `single-ticket` | `unknown`
-- `Batch reason:` shared module/workflow/setup/proof surface, or no-batch
-  reason
-- `Human inputs/assets:`
-- `Credentials / external access:`
-- `Compute/runtime needs:`
-- `Tooling gaps:`
-- `QA risks:`
-- `Human gates:`
-- `Agent decision boundaries:`
+- Current:
+- Next:
+- Blockers: none
 
 ## Links
-- `program:` `tickets/TASK-XXXX/program.md` or `none`
-- `progress:` `tickets/TASK-XXXX/progress.md` or `none`
-- `visual companion:` `tickets/TASK-XXXX/diagrams.md` (required for every impl-plan)
-- `artifacts:`
-- `review:`
-- `refs:`
+
+- `program:` `none`
+- `progress:` `none`
+- `artifacts:` `none`
+- `related:` `none`
 
 ## Notes
-- Keep sparse: blast radius, risks, rollback, citations, blockers, or follow-up
-  boundaries only.
+
+<!-- Sparse durable decisions only; execution logs belong in progress.md. -->

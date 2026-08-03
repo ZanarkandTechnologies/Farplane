@@ -12,9 +12,6 @@ from typing import Any
 
 import yaml
 
-CANDIDATE_LANES = frozenset({"delivery", "ablation", "experiment", "rollout", "operations"})
-
-
 def read_yaml(path: Path) -> dict[str, Any]:
     if not path.exists():
         return {}
@@ -129,17 +126,20 @@ def ai_planned_ticket_ids(decisions: list[dict[str, Any]]) -> set[str]:
     ids: set[str] = set()
     for row in decisions:
         receipt = row.get("pulse_receipt") if isinstance(row.get("pulse_receipt"), dict) else {}
+        planner_call = receipt.get("planner_call") if isinstance(receipt.get("planner_call"), dict) else {}
         action = str(row.get("action") or receipt.get("mode") or "").strip()
         admitted = receipt.get("admitted") if isinstance(receipt.get("admitted"), list) else []
         if action in {"plan_next_wave", "materialize_reserved_wave"}:
             ids.update(str(ticket_id).strip() for ticket_id in admitted if str(ticket_id).strip())
-            for owner in (row, receipt):
-                specs = owner.get("admitted_specs") if isinstance(owner.get("admitted_specs"), list) else []
-                ids.update(
-                    str(spec.get("ticket_id") or "").strip()
-                    for spec in specs
-                    if isinstance(spec, dict) and str(spec.get("ticket_id") or "").strip()
-                )
+            for owner in (row, receipt, planner_call):
+                for key in ("admitted_skill_calls", "admitted_specs"):
+                    admissions = owner.get(key) if isinstance(owner.get(key), list) else []
+                    ids.update(
+                        str(admission.get("ticket_id") or "").strip()
+                        for admission in admissions
+                        if isinstance(admission, dict)
+                        and str(admission.get("ticket_id") or "").strip()
+                    )
             ticket_id = str(row.get("ticket_id") or "").strip()
             if ticket_id:
                 ids.add(ticket_id)
@@ -152,20 +152,34 @@ def planner_metadata_by_ticket(decisions: list[dict[str, Any]]) -> dict[str, dic
         receipt = row.get("pulse_receipt") if isinstance(row.get("pulse_receipt"), dict) else {}
         planner_call = receipt.get("planner_call") if isinstance(receipt.get("planner_call"), dict) else {}
         for owner in (row, receipt, planner_call):
+            calls = owner.get("admitted_skill_calls") if isinstance(owner.get("admitted_skill_calls"), list) else []
+            for call in calls:
+                if not isinstance(call, dict):
+                    continue
+                ticket_id = str(call.get("ticket_id") or "").strip()
+                skill_ref = str(call.get("skill_ref") or "").strip()
+                area_id = str(call.get("area_id") or "").strip()
+                if ticket_id:
+                    metadata = mapping.setdefault(ticket_id, {})
+                    if skill_ref:
+                        metadata["skill_ref"] = skill_ref
+                        metadata["skill_derivation"] = "planner_skill_call"
+                    if area_id:
+                        metadata["area_id"] = area_id
+                        metadata["area_derivation"] = "planner_skill_call"
+
+            # Explicit read-only projection for pre-v2 planner history.
             specs = owner.get("admitted_specs") if isinstance(owner.get("admitted_specs"), list) else []
             for spec in specs:
                 if not isinstance(spec, dict):
                     continue
                 ticket_id = str(spec.get("ticket_id") or "").strip()
                 area_id = str(spec.get("area_id") or "").strip()
-                ranking = spec.get("ranking") if isinstance(spec.get("ranking"), dict) else {}
-                lane = str(ranking.get("lane") or "").strip()
                 if ticket_id:
                     metadata = mapping.setdefault(ticket_id, {})
-                    if area_id:
+                    if area_id and "area_id" not in metadata:
                         metadata["area_id"] = area_id
-                    if lane in CANDIDATE_LANES:
-                        metadata["lane"] = lane
+                        metadata["area_derivation"] = "historical_admitted_spec"
     return mapping
 
 
@@ -190,8 +204,45 @@ def ticket_paths(root: Path, active_only: bool) -> list[Path]:
     return sorted(set(path.resolve() for path in paths))
 
 
+def closed_ticket_rows(root: Path) -> tuple[list[dict[str, Any]], list[str]]:
+    """Read the compact local projection for tickets archived as GitHub issues."""
+
+    path = root / "tickets" / "archive-index.jsonl"
+    rows: list[dict[str, Any]] = []
+    diagnostics: list[str] = []
+    if not path.exists():
+        return rows, diagnostics
+    for line_number, line in enumerate(
+        path.read_text(encoding="utf-8", errors="replace").splitlines(), 1
+    ):
+        if not line.strip():
+            continue
+        try:
+            loaded = json.loads(line)
+        except json.JSONDecodeError:
+            diagnostics.append(f"archive_index_invalid_json:{line_number}")
+            continue
+        if not isinstance(loaded, dict):
+            diagnostics.append(f"archive_index_invalid_row:{line_number}")
+            continue
+        ticket_id = str(loaded.get("ticket_id") or "").strip().upper()
+        issue_url = str(loaded.get("github_issue_url") or "").strip()
+        if (
+            not ticket_id
+            or str(loaded.get("storage") or "") != "github_issue"
+            or str(loaded.get("status") or "").strip().lower() != "done"
+            or not issue_url
+        ):
+            diagnostics.append(f"archive_index_invalid_locator:{line_number}")
+            continue
+        rows.append({**loaded, "ticket_id": ticket_id, "github_issue_url": issue_url})
+    return rows, diagnostics
+
+
 def timestamp_key(row: dict[str, Any]) -> tuple[datetime, str]:
-    raw = str(row.get("updated_at") or row.get("created_at") or "").strip()
+    raw = str(
+        row.get("updated_at") or row.get("closed_at") or row.get("created_at") or ""
+    ).strip()
     if raw.endswith("Z"):
         raw = raw[:-1] + "+00:00"
     try:
@@ -206,11 +257,11 @@ def timestamp_key(row: dict[str, Any]) -> tuple[datetime, str]:
 def build_ticket_history(
     root: Path,
     *,
-    limit: int = 20,
+    limit: int | None = 20,
     sort: str = "recent",
     origins: set[str] | None = None,
     areas: set[str] | None = None,
-    lanes: set[str] | None = None,
+    skills: set[str] | None = None,
     statuses: set[str] | None = None,
     kpis: set[str] | None = None,
     reward_decisions: set[str] | None = None,
@@ -223,6 +274,7 @@ def build_ticket_history(
     ai_ids = ai_planned_ticket_ids(decisions)
     planner_metadata = planner_metadata_by_ticket(decisions)
     rows: list[dict[str, Any]] = []
+    diagnostics: list[str] = []
     for path in ticket_paths(root, active_only):
         markdown = path.read_text(encoding="utf-8", errors="replace")
         frontmatter = read_frontmatter(markdown)
@@ -230,7 +282,7 @@ def build_ticket_history(
         rewards = compact_rewards(markdown)
         kpi_ids = sorted({row["kpi_id"] for row in rewards if row["kpi_id"]})
         selected_area = planner_metadata.get(ticket_id, {}).get("area_id")
-        selected_lane = planner_metadata.get(ticket_id, {}).get("lane") or "unknown"
+        selected_skill = planner_metadata.get(ticket_id, {}).get("skill_ref") or "unknown"
         area_refs = (
             [selected_area]
             if selected_area
@@ -246,6 +298,7 @@ def build_ticket_history(
             {
                 "ticket_id": ticket_id,
                 "path": relative,
+                "storage": "local_archive" if "/archive/" in f"/{relative}" else "local_active",
                 "title": str(frontmatter.get("title") or "").strip(),
                 "status": str(frontmatter.get("status") or "").strip().lower(),
                 "priority": str(frontmatter.get("priority") or "medium").strip().lower(),
@@ -254,21 +307,82 @@ def build_ticket_history(
                 "creation_origin": "ai_planned" if ticket_id in ai_ids else "direct_or_unknown",
                 "creation_reason": first_paragraph(heading_section(markdown, "Summary")),
                 "area_refs": area_refs,
-                "area_derivation": "planner_receipt" if selected_area else "kpi_binding_fallback",
-                "lane": selected_lane,
-                "lane_derivation": "planner_receipt" if selected_lane != "unknown" else "unknown",
+                "area_derivation": planner_metadata.get(ticket_id, {}).get("area_derivation")
+                if selected_area
+                else "kpi_binding_fallback",
+                "skill_ref": selected_skill,
+                "skill_derivation": planner_metadata.get(ticket_id, {}).get(
+                    "skill_derivation", "unknown"
+                ),
                 "kpi_ids": kpi_ids,
                 "rewards": rewards,
             }
         )
+
+    if not active_only:
+        indexed_rows, index_diagnostics = closed_ticket_rows(root)
+        diagnostics.extend(index_diagnostics)
+        local_ids = {str(row.get("ticket_id") or "") for row in rows}
+        indexed_by_id: dict[str, dict[str, Any]] = {}
+        conflicting_ids: set[str] = set()
+        for indexed in indexed_rows:
+            ticket_id = str(indexed["ticket_id"])
+            if ticket_id in conflicting_ids:
+                continue
+            prior = indexed_by_id.get(ticket_id)
+            if prior is not None and str(prior.get("github_issue_url")) != str(
+                indexed.get("github_issue_url")
+            ):
+                diagnostics.append(f"archive_index_conflicting_ticket:{ticket_id}")
+                indexed_by_id.pop(ticket_id, None)
+                conflicting_ids.add(ticket_id)
+                continue
+            indexed_by_id[ticket_id] = indexed
+        for ticket_id, indexed in indexed_by_id.items():
+            if ticket_id in local_ids:
+                continue
+            selected_area = planner_metadata.get(ticket_id, {}).get("area_id")
+            selected_skill = planner_metadata.get(ticket_id, {}).get("skill_ref") or "unknown"
+            rows.append(
+                {
+                    "ticket_id": ticket_id,
+                    "path": "tickets/archive-index.jsonl",
+                    "storage": "github_issue",
+                    "github_issue_url": str(indexed.get("github_issue_url") or ""),
+                    "github_issue_number": indexed.get("github_issue_number"),
+                    "media_comment_urls": indexed.get("media_comment_urls")
+                    if isinstance(indexed.get("media_comment_urls"), list)
+                    else [],
+                    "event_id": str(indexed.get("event_id") or ""),
+                    "runs": indexed.get("runs") if isinstance(indexed.get("runs"), list) else [],
+                    "closed_at": scalar_text(indexed.get("closed_at")),
+                    "title": str(indexed.get("title") or "").strip(),
+                    "status": "done",
+                    "priority": "medium",
+                    "created_at": "",
+                    "updated_at": scalar_text(indexed.get("closed_at")),
+                    "creation_origin": "ai_planned" if ticket_id in ai_ids else "direct_or_unknown",
+                    "creation_reason": "",
+                    "area_refs": [selected_area] if selected_area else ["unknown"],
+                    "area_derivation": planner_metadata.get(ticket_id, {}).get(
+                        "area_derivation", "unknown"
+                    ),
+                    "skill_ref": selected_skill,
+                    "skill_derivation": planner_metadata.get(ticket_id, {}).get(
+                        "skill_derivation", "unknown"
+                    ),
+                    "kpi_ids": [],
+                    "rewards": [],
+                }
+            )
 
     input_count = len(rows)
     if origins:
         rows = [row for row in rows if row["creation_origin"] in origins]
     if areas:
         rows = [row for row in rows if areas.intersection(row["area_refs"])]
-    if lanes:
-        rows = [row for row in rows if row["lane"] in lanes]
+    if skills:
+        rows = [row for row in rows if row["skill_ref"] in skills]
     if statuses:
         rows = [row for row in rows if row["status"] in statuses]
     if kpis:
@@ -281,16 +395,18 @@ def build_ticket_history(
         ]
     filtered_count = len(rows)
     rows.sort(key=timestamp_key, reverse=sort == "recent")
-    rows = rows[: max(0, limit)]
+    effective_limit = None if limit is None else max(0, limit)
+    if effective_limit is not None:
+        rows = rows[:effective_limit]
     return {
-        "schema": "farplane.ticket_history_query.v1",
+        "schema": "farplane.ticket_history_query.v2",
         "project_root": str(root),
         "query": {
-            "limit": max(0, limit),
+            "limit": "all" if effective_limit is None else effective_limit,
             "sort": sort,
             "origins": sorted(origins or []),
             "areas": sorted(areas or []),
-            "lanes": sorted(lanes or []),
+            "skills": sorted(skills or []),
             "statuses": sorted(statuses or []),
             "kpis": sorted(kpis or []),
             "reward_decisions": sorted(reward_decisions or []),
@@ -300,11 +416,15 @@ def build_ticket_history(
             "input_count": input_count,
             "filtered_count": filtered_count,
             "returned_count": len(rows),
+            "exhausted": len(rows) == filtered_count,
         },
+        "diagnostics": diagnostics,
         "area_distribution": dict(
             sorted(Counter(area for row in rows for area in row["area_refs"]).items())
         ),
-        "lane_distribution": dict(sorted(Counter(row["lane"] for row in rows).items())),
+        "skill_distribution": dict(
+            sorted(Counter(row["skill_ref"] for row in rows).items())
+        ),
         "origin_distribution": dict(
             sorted(Counter(row["creation_origin"] for row in rows).items())
         ),
@@ -314,15 +434,18 @@ def build_ticket_history(
 
 def add_history_arguments(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--project-root", default=".")
-    parser.add_argument("--limit", type=int, default=20)
+    limit_group = parser.add_mutually_exclusive_group()
+    limit_group.add_argument("--limit", type=int, default=20)
+    limit_group.add_argument(
+        "--all",
+        action="store_true",
+        dest="all_results",
+        help="return every matched row with an exhaustion receipt",
+    )
     parser.add_argument("--sort", choices=("recent", "oldest"), default="recent")
     parser.add_argument("--origin", action="append", choices=("ai_planned", "direct_or_unknown"))
     parser.add_argument("--area", action="append")
-    parser.add_argument(
-        "--lane",
-        action="append",
-        choices=(*sorted(CANDIDATE_LANES), "unknown"),
-    )
+    parser.add_argument("--skill", action="append")
     parser.add_argument("--status", action="append")
     parser.add_argument("--kpi", action="append")
     parser.add_argument(
@@ -337,11 +460,11 @@ def add_history_arguments(parser: argparse.ArgumentParser) -> None:
 def history_from_args(args: argparse.Namespace) -> dict[str, Any]:
     return build_ticket_history(
         Path(args.project_root),
-        limit=args.limit,
+        limit=None if getattr(args, "all_results", False) else args.limit,
         sort=args.sort,
         origins=set(args.origin or []),
         areas=set(args.area or []),
-        lanes=set(args.lane or []),
+        skills=set(args.skill or []),
         statuses={value.lower() for value in args.status or []},
         kpis=set(args.kpi or []),
         reward_decisions=set(args.reward_decision or []),

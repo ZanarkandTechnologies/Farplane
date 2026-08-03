@@ -38,6 +38,15 @@ def write_ticket(
     )
 
 
+def write_archive_index(root: Path, *rows: dict[str, object]) -> None:
+    path = root / "tickets" / "archive-index.jsonl"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(
+        "".join(json.dumps(row, sort_keys=True) + "\n" for row in rows),
+        encoding="utf-8",
+    )
+
+
 class FarplaneTicketHistoryTests(unittest.TestCase):
     def make_root(self, tmp: str) -> Path:
         root = Path(tmp)
@@ -68,7 +77,50 @@ class FarplaneTicketHistoryTests(unittest.TestCase):
         self.assertEqual(result["rows"][0]["rewards"][0]["actual_result"], "observed result")
         self.assertEqual(result["rows"][1]["creation_origin"], "ai_planned")
 
-    def test_progressive_filters_and_exact_planner_area(self) -> None:
+    def test_mixed_active_legacy_and_github_issue_history_preserves_ordering(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = self.make_root(tmp)
+            write_ticket(
+                root,
+                "TASK-0001",
+                updated_at="2026-07-10T00:00:00Z",
+                archived=False,
+            )
+            write_ticket(root, "TASK-0002", updated_at="2026-07-11T00:00:00Z")
+            write_archive_index(
+                root,
+                {
+                    "schema_version": 1,
+                    "storage": "github_issue",
+                    "ticket_id": "TASK-0003",
+                    "title": "Remote close",
+                    "status": "done",
+                    "closed_at": "2026-07-12T00:00:00Z",
+                    "github_issue_url": "https://github.com/acme/archive/issues/3",
+                    "github_issue_number": 3,
+                    "media_comment_urls": ["https://github.com/acme/archive/issues/3#issuecomment-1"],
+                    "event_id": "event-3",
+                    "runs": ["run-3"],
+                },
+            )
+
+            result = history.build_ticket_history(root)
+
+        self.assertEqual(
+            [row["ticket_id"] for row in result["rows"]],
+            ["TASK-0003", "TASK-0002", "TASK-0001"],
+        )
+        self.assertEqual(
+            [row["storage"] for row in result["rows"]],
+            ["github_issue", "local_archive", "local_active"],
+        )
+        self.assertEqual(
+            result["rows"][0]["github_issue_url"],
+            "https://github.com/acme/archive/issues/3",
+        )
+        self.assertEqual(result["diagnostics"], [])
+
+    def test_progressive_filters_and_exact_planner_skill_call(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = self.make_root(tmp)
             write_ticket(root, "TASK-0003", updated_at="2026-07-12T00:00:00Z", kpi_id="accepted_harness_improvements", decision="accept")
@@ -78,11 +130,11 @@ class FarplaneTicketHistoryTests(unittest.TestCase):
                 json.dumps(
                     {
                         "action": "plan_next_wave",
-                        "admitted_specs": [
+                        "admitted_skill_calls": [
                             {
                                 "ticket_id": "TASK-0003",
                                 "area_id": "self_improvement",
-                                "ranking": {"lane": "experiment"},
+                                "skill_ref": "self-improve",
                             }
                         ],
                     }
@@ -94,15 +146,19 @@ class FarplaneTicketHistoryTests(unittest.TestCase):
                 root,
                 origins={"ai_planned"},
                 areas={"self_improvement"},
-                lanes={"experiment"},
+                skills={"self-improve"},
                 reward_decisions={"accept"},
             )
 
         self.assertEqual([row["ticket_id"] for row in result["rows"]], ["TASK-0003"])
-        self.assertEqual(result["rows"][0]["area_derivation"], "planner_receipt")
+        self.assertEqual(result["schema"], "farplane.ticket_history_query.v2")
+        self.assertEqual(result["rows"][0]["area_derivation"], "planner_skill_call")
         self.assertEqual(result["rows"][0]["area_refs"], ["self_improvement"])
-        self.assertEqual(result["rows"][0]["lane"], "experiment")
-        self.assertEqual(result["lane_distribution"], {"experiment": 1})
+        self.assertEqual(result["rows"][0]["skill_ref"], "self-improve")
+        self.assertEqual(result["rows"][0]["skill_derivation"], "planner_skill_call")
+        self.assertEqual(result["skill_distribution"], {"self-improve": 1})
+        self.assertNotIn("lane", result["rows"][0])
+        self.assertNotIn("lane_distribution", result)
 
     def test_reserved_wave_materialization_preserves_origin_and_area(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -133,10 +189,13 @@ class FarplaneTicketHistoryTests(unittest.TestCase):
 
         self.assertEqual([row["ticket_id"] for row in result["rows"]], ["TASK-0005"])
         self.assertEqual(result["rows"][0]["area_refs"], ["self_improvement"])
-        self.assertEqual(result["rows"][0]["area_derivation"], "planner_receipt")
-        self.assertEqual(result["rows"][0]["lane"], "rollout")
+        self.assertEqual(
+            result["rows"][0]["area_derivation"], "historical_admitted_spec"
+        )
+        self.assertEqual(result["rows"][0]["skill_ref"], "unknown")
+        self.assertEqual(result["rows"][0]["skill_derivation"], "unknown")
 
-    def test_lane_filter_excludes_unknown_history(self) -> None:
+    def test_skill_filter_excludes_unknown_history(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = self.make_root(tmp)
             write_ticket(
@@ -146,7 +205,7 @@ class FarplaneTicketHistoryTests(unittest.TestCase):
                 kpi_id="accepted_harness_improvements",
             )
 
-            result = history.build_ticket_history(root, lanes={"ablation"})
+            result = history.build_ticket_history(root, skills={"farplane-ablation-proof"})
 
         self.assertEqual(result["rows"], [])
         self.assertEqual(result["receipt"]["filtered_count"], 0)
@@ -188,8 +247,8 @@ class FarplaneTicketHistoryTests(unittest.TestCase):
             write_ticket(root, "TASK-0004", updated_at="2026-07-12T00:00:00Z", archived=False)
             args = argparse.Namespace(
                 project_root=str(root), limit=20, sort="recent", origin=None,
-                area=None, lane=None, status=None, kpi=None, reward_decision=None,
-                active_only=False, json=False,
+                area=None, skill=None, status=None, kpi=None, reward_decision=None,
+                active_only=False, json=False, all_results=False,
             )
             output = io.StringIO()
             with contextlib.redirect_stdout(output):
@@ -198,6 +257,30 @@ class FarplaneTicketHistoryTests(unittest.TestCase):
         self.assertEqual(exit_code, 0)
         self.assertIn("1 returned / 1 matched / 1 scanned", output.getvalue())
         self.assertIn("TASK-0004", output.getvalue())
+
+    def test_all_returns_every_match_with_exhaustion_receipt(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = self.make_root(tmp)
+            for index in range(25):
+                write_ticket(
+                    root,
+                    f"TASK-{index:04d}",
+                    updated_at=f"2026-07-{(index % 20) + 1:02d}T00:00:00Z",
+                    kpi_id="accepted_harness_improvements",
+                )
+
+            limited = history.build_ticket_history(
+                root, limit=20, areas={"self_improvement"}
+            )
+            complete = history.build_ticket_history(
+                root, limit=None, areas={"self_improvement"}
+            )
+
+        self.assertEqual(limited["receipt"]["returned_count"], 20)
+        self.assertFalse(limited["receipt"]["exhausted"])
+        self.assertEqual(complete["query"]["limit"], "all")
+        self.assertEqual(complete["receipt"]["returned_count"], 25)
+        self.assertTrue(complete["receipt"]["exhausted"])
 
 
 if __name__ == "__main__":
