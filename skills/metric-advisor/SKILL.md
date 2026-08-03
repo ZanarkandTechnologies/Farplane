@@ -1,6 +1,6 @@
 ---
 name: metric-advisor
-version: 0.1.0
+version: 0.1.1
 description: "Turn objectives and evidence into honest metric cards, experiment expectations, guard metrics, anti-metrics, and route hints."
 tier: 1
 source: local
@@ -33,7 +33,7 @@ and `review` judges evidence.
 
 ```text
 metric_advice(objective, evidence?, proof_surface?, constraints?)
-  -> metric_card + expectation? + derived_movement_contract + route_hint + no_metric_reason?
+  -> metric_card + expectation? + derived_view_contract + route_hint + no_metric_reason?
 state: reads(objective, farplane/harness.yaml?, farplane/metrics.yaml?, ticket/progress/eval/review artifacts, constraints);
        writes(none by default; optional farplane/metrics.yaml definition/direction/freshness/guard delta plus farplane/harness.yaml selection delta; caller writes ticket/program/progress/proof)
 gates: objective_named; provider_truthful; metric_matches_objective;
@@ -75,9 +75,11 @@ none            no honest metric; use judgment questions and write "none mechani
         the honest signal is judgment-heavy or external.
   - [ ] Use `none` and `none mechanical` when no real metric exists.
   - [ ] Declare `maximize` or `minimize` for every quantitative metric so Core
-        can derive direction-normalized movement from raw observations.
-  - [ ] Do not author a second growth or momentum metric when consecutive
-        observations of the primary metric provide the same evidence.
+        can derive a direction-normalized trend from raw observations.
+  - [ ] Declare `type: flow` for additive period activity or `type: stock` for
+        a point-in-time balance.
+  - [ ] Do not author a second growth, period, or cumulative metric when Core
+        can project those views from the primary metric.
 - [ ] 4. Add guard metrics, anti-metrics, and minimum meaningful delta.
   - [ ] Guard against breaking correctness, quality, safety, proof, user
         value, or operator control while moving the primary signal.
@@ -140,9 +142,10 @@ Expectation: # optional; required only for experiment-like work
   Falsifier:
   Surprise trigger:
   Surprise route:
-Derived movement: raw delta, elapsed days, raw velocity, direction-normalized
-  progress delta/velocity, and improving/flat/worsening; unknown when readings
-  are missing, stale, invalid, or not time-comparable.
+Derived views: requested-window value, preceding equal-window absolute and
+  percentage delta, direction-normalized improving/flat/worsening trend, and
+  cumulative total for flows only; unknown when facts are missing, stale,
+  conflicting, invalid, or not time-comparable.
 Judgment questions:
 Route hint:
 No-metric reason:
@@ -221,6 +224,9 @@ Route hint: goal-advisor or self-improve, not retired autoresearch skills.
   those grade behavior and stay outside the user-facing query.
 - Store canonical raw observations only. Direction-aware movement is a Core
   projection, not a second persisted observation or hand-maintained metric.
+- Keep the metric definition lean: `type`, `unit`, `direction`, and one
+  `refresh_ref` or inline `refresh` are the semantic minimum. The projection
+  request—not `metrics.yaml`—owns window bounds and timezone.
 
 ## Reference Map
 

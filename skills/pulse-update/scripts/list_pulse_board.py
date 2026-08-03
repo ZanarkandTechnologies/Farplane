@@ -548,6 +548,15 @@ def completed_archived_ticket_ids(root: Path) -> set[str]:
         data = read_frontmatter(path)
         if str(data.get("status") or "").strip().lower() == "done":
             ids.add(str(data.get("ticket_id") or path.parent.name).strip())
+    for row in load_jsonl(root / "tickets" / "archive-index.jsonl"):
+        ticket_id = str(row.get("ticket_id") or "").strip().upper()
+        if (
+            ticket_id
+            and str(row.get("storage") or "").strip() == "github_issue"
+            and str(row.get("status") or "").strip().lower() == "done"
+            and str(row.get("github_issue_url") or "").strip()
+        ):
+            ids.add(ticket_id)
     return ids
 
 

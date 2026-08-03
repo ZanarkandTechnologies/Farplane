@@ -119,7 +119,7 @@ remain in the ticket body, Goal Packet, progress log, or artifacts.
 | Work Pulse next-wave planner | globally ranked tickets when no unclaimed executable or due-check-in work exists |
 | Feed Scout | source report, candidates, and bounded direct recovery tickets |
 | Daily/Weekly BAU | problem report, candidates, and bounded direct recovery tickets |
-| Dogfood Review | experiment portfolio report/candidates and bounded direct recovery tickets |
+| Dogfood Review | complete self-improvement portfolio checkpoint and bounded planner context |
 | Operator | explicit direction, feedback, correction, or approval |
 
 Only Work Pulse executes tickets and matured check-ins.
@@ -164,7 +164,8 @@ Only Work Pulse executes tickets and matured check-ins.
 - Feed Scout, BAU Interval, and Dogfood run as bounded cron/manual jobs rather
   than extra heartbeats.
 - Scheduled sources write reports and bounded candidates but do not admit
-  proactive tickets. The one next-wave planner compares them globally.
+  proactive tickets. Dogfood writes only a checkpoint/context receipt. The one
+  next-wave planner compares opportunities globally.
 - Interval does not choose new strategy; Dogfood does not create or execute
   experiments; Feed Scout does not create or execute opportunities.
 
@@ -196,11 +197,13 @@ Only Work Pulse executes tickets and matured check-ins.
 
 ### FR-9: Portable Event Mining
 
-- Core captures typed project file events to a durable local outbox, then the
-  hook launches a fixed Core-owned local mining process. Failed launches leave
-  pending events retryable; no cloud dispatcher sits between capture and mining.
-- `hooks.json` selects capture patterns; `bindings.yaml` maps event names to
-  immutable mining programs.
+- `farplane ticket close TASK-XXXX` performs the successful terminal/archive
+  transition and writes one typed `farplane.ticket.completed` event to the
+  durable local outbox. Failed mining leaves that event retryable; no hook,
+  file watcher, or cloud dispatcher infers completion from file writes.
+- `bindings.yaml` maps the explicit completion event to an immutable mining
+  program. `hooks.json` owns lifecycle telemetry plus bounded deterministic
+  guards such as final-response length; it never owns completion.
 - Default completion mining emits coverage, observations, material findings,
   source gaps, and escalation without a scalar quality score.
 - Farplane UI edits routes and renders Core runs; it does not own event,
@@ -241,12 +244,14 @@ cards.
 - [x] One project Work Pulse handles ordinary tickets and matured check-ins.
 - [x] Ticket metadata is reduced to lifecycle and sparse routing.
 - [x] Human review and signal waits release workers.
-- [x] Feed Scout, Daily/Weekly BAU, and Dogfood may create bounded recovery
-      tickets for evidenced known failures; exploratory opportunities,
-      uncertain fixes, and experiments go through Work Pulse planning.
+- [x] Feed Scout and Daily/Weekly BAU may create bounded recovery tickets for
+      evidenced known failures; Dogfood is report-only. Exploratory
+      opportunities, uncertain fixes, and experiments go through Work Pulse
+      planning.
 - [x] Immediate and delayed self-improvement use ticket Goal Packets.
 - [x] `metrics.yaml` owns metric definitions; bindings own provider mechanics.
-- [x] Core owns typed file events and mining; UI is an adapter over Core artifacts.
+- [x] Core owns explicit completion events and mining; UI is an adapter over
+      Core artifacts.
 - [x] QA and review evidence are ticket-scoped.
 - [x] Current Farplane project files and init templates validate.
 - [ ] Representative scheduled operation proves the loop over longer real

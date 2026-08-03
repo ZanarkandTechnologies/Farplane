@@ -12,7 +12,7 @@ template_uses:
 eval: evals/evals.json
 qa_checklist: qa_checklist.md
 common_chains:
-  after: ["video-production", "storyboard", "asset-advisor", "avatar-advisor", "audio-advisor", "ai-image-advisor", "ai-video-advisor", "remotion", "review"]
+  after: ["video-production", "storyboard", "asset-advisor", "editing-advisor", "remotion", "review"]
 allowed-tools: Read, Grep, Glob, Bash
 ---
 
@@ -22,16 +22,51 @@ allowed-tools: Read, Grep, Glob, Bash
 
 Use this skill when an idea, proof point, offer, or Tasty Pack/reference needs
 to become an executable content-production ticket. This is the content analogue
-to the coding `impl-plan`: it compiles creative intent into a storyboard, asset
-decomposition, advisor action list, production order, proof contract, and final
-Remotion/review path.
+to the coding `impl-plan`: it compiles creative intent into child-owned
+storyboard and asset requirements, an advisor action list, production order,
+proof contract, and final Remotion/review path.
 
-This skill owns the parent plan and action list. For deliberate scene breaks,
+This skill owns orchestration, the parent plan, and the action list. It may
+aggregate child outputs in the ticket, but it does not become their second
+author: Storyboard owns narrative/scene design, Asset Advisor owns asset
+resolution, Editing Advisor owns timed edit direction, and Remotion owns
+timeline implementation and rendering. For deliberate scene breaks,
 the plan is not human-review-ready until child routes have materialized each
 low-cost clean/annotated storyboard grid as an actual image file plus its notes
 packet. Text panel descriptions are `storyboard_draft_ready` only. It
 does not generate final provider clips, write Remotion code, render, publish,
 or replace the advisor skills.
+
+### Production owner contract
+
+For every production sequence, emit each applicable sibling as its own action;
+name its sole authored output, acceptance/blocker state, and next handoff. Do
+not compress these rows into a generic “production” or “asset” phase.
+
+| Sole owner | Authored output | Parent behavior |
+| --- | --- | --- |
+| `storyboard` | accepted narrative, beats, and scene map | order it and aggregate its output by reference |
+| `asset-advisor` | accepted media bundles, provenance/rights receipts, and the selected image/video/avatar/audio realization-child route | order the returned specialist action; never reselect it |
+| `editing-advisor` | accepted frame- or time-addressed edit direction covering applicable pacing, cuts, captions, transitions, and compositing | pass the accepted recipe downstream; never assign it to Asset Advisor or Remotion |
+| `remotion` | implemented deterministic timeline, encoded deliverable, and render proof | invoke only after required media and edit direction are accepted |
+| `review` / `qa` | independent evidence and readiness verdict | record the verdict; never let a production owner self-approve |
+
+An omitted applicable row is an incomplete action list. Asset Advisor may
+select a realization child, but Editing Advisor and Remotion are always sibling
+lanes rather than Asset Advisor children.
+
+```text
+AdvisorAction {
+  owner
+  accepted_inputs
+  authored_output
+  acceptance_or_blocker
+  next_handoff
+}
+```
+
+Emit all five fields for every applicable row, including when inputs are
+already accepted. Never turn an accepted upstream input back into a blocker.
 
 ## Skill Signature
 
@@ -63,13 +98,13 @@ gates:
   remotion_terminal_path_named; review_and_qa_contract_observable
 
 routes:
-  video-production | storyboard | asset-advisor | avatar-advisor |
-  audio-advisor | ai-image-advisor | ai-video-advisor |
+  video-production | storyboard | asset-advisor | editing-advisor |
   remotion | social-content | review | qa
 
 fails:
   storyboard_as_parent_plan; format_sprawl; vibes_only_action_list;
-  advisor_actions_without_owner; remotion_without_assets; qa_afterthought;
+  advisor_actions_without_owner; advisor_action_missing_field;
+  accepted_input_reopened_as_blocker; remotion_without_assets; qa_afterthought;
   tasty_pack_as_moodboard; style_profile_as_third_composition_source;
   brand_conflict_silently_blended; title_only_element_handoff;
   final_visuals_before_timing_master; creative_lock_skipped;
@@ -79,7 +114,8 @@ fails:
   unresolved_asset_claimed_ready;
   remotion_before_asset_discovery; custom_svg_animation_asset;
   jsx_or_programmatic_drawing_as_asset_substitute;
-  inspiration_generation_without_trait_or_avoidance_map
+  inspiration_generation_without_trait_or_avoidance_map;
+  editing_element_sent_directly_to_renderer
 ```
 
 ## Production Contract
@@ -413,7 +449,9 @@ SceneDirection {
   - [ ] For repair requests, repopulate the actual packet from the
     authoritative element record in the response. Do not emit only the packet
     type, a list of required fields, or a future retrieval instruction.
-  - [ ] Route narrative, script, beats, and scene map to `storyboard`. For
+  - [ ] Route narrative, script, beats, and scene map to `storyboard`; aggregate
+    its accepted output by reference rather than independently authoring a
+    second storyboard. For
     deliberate breaks, require one clean/annotated grid packet per 4-5 second
     model-native clip and load
     `video-production/references/scene-grid-production.md`.
@@ -425,14 +463,20 @@ SceneDirection {
     recreation decisions to `asset-advisor`; require its discovery receipt
     and hybrid resolution decision before any image/video generation handoff
     or Remotion production route.
-  - [ ] Route persistent presenter/character needs to `avatar-advisor`.
-  - [ ] Route voice, music, SFX, Foley, SoundButtonsWorld candidate discovery,
-    provider packets/execution, receipts, and mix notes to `audio-advisor`.
+  - [ ] Put persistent presenter/character, voice, music, SFX, Foley, and mix
+    needs in the Asset Advisor lane. Asset Advisor owns any `avatar-advisor` or
+    `audio-advisor` child route and returns accepted bundles and receipts.
   - [ ] For every interesting/common SFX idea, put up to three candidate item
     links—or `searched_no_fit`—in the final plan as
     `awaiting_operator_download_and_approval`; never download them.
-  - [ ] Route still or model-native generation details to `ai-image-advisor`
-    and `ai-video-advisor` only when generation inputs are needed.
+  - [ ] When Asset Advisor selects image, video, avatar, or audio realization,
+    order its returned realization action through the named specialist. Do not
+    independently re-decide the generation route in the parent plan.
+  - [ ] Route selected editing elements, editing/subtitle moves, motion cues,
+    pacing, transitions, captions, and compositing direction through
+    `editing-advisor` before Remotion or another renderer. Preserve the full
+    element realization packet; require a visible `use | adapt | reject |
+    block` decision and a frame- or time-addressed ordered edit recipe.
 - [ ] 7. Compile the timing-master advisor action list.
   - [ ] Select `voiceover`, `music`, `source_video`, or `none` as timing master
     before final visual generation.
@@ -458,7 +502,8 @@ SceneDirection {
     media/cues, element realization receipts,
     or other applicable QA gates are missing.
   - [ ] Route final stitching, captions, overlays, audio placement, and local
-    render proof to `remotion` only after `creative_lock` passes.
+    render proof to `remotion` only after `creative_lock` passes and the
+    Editing Advisor handoff is complete for every selected editing element.
   - [ ] Name review and QA checklist gates before claiming the plan ready.
   - [ ] Apply `qa_checklist.md` again before completion.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
@@ -467,13 +512,20 @@ SceneDirection {
 
 - Do not make `storyboard` carry the whole implementation plan. Storyboard owns
   narrative and scene design; this skill owns the parent ticket and production
-  action list.
+  action list. Returning the accepted storyboard ref does not make this skill a
+  second storyboard author.
+- Do not choose an asset realization route twice. Asset Advisor owns the
+  `reuse | source | inspired_generation | original_generation | capture |
+  compose` decision; this skill orders the returned specialist action.
 - Do not reintroduce `style_profile` through aliases, fallback parsing, or
   `video-production` calls in this composition path. Standalone
   `video-production` remains the owner of direct profile use.
 - Do not let a child consume only an element title or description. Selected
   work is conditioned on its resolved golden example and golden recipe, with a
   receipt mapping the realized output back to the element ID.
+- Do not send editing elements directly from the leverage map to Remotion.
+  `editing-advisor` owns compatibility and the ordered edit recipe; Remotion
+  owns deterministic implementation and rendered proof.
 - Do not let “original,” “rights-safe,” “deterministic,” or “local-only” become
   permission to skip asset discovery and draw the content as custom SVG/JSX.
   Those constraints change source selection; they do not remove the
@@ -498,20 +550,22 @@ SceneDirection {
 - `../storyboard/SKILL.md` - narrative, script, beat sheet, and scene map.
 - `../asset-advisor/SKILL.md` - asset inventory, recreation plan, and owner
   routes.
-- `../avatar-advisor/SKILL.md` - persistent avatar, presenter, or lipsync
-  direction.
-- `../audio-advisor/SKILL.md` - audio direction, SoundButtonsWorld candidate
-  links for operator approval, provider execution, receipts, and mix.
+- `../avatar-advisor/SKILL.md` - child avatar realization contract used only
+  after Asset Advisor selects that route.
+- `../audio-advisor/SKILL.md` - child audio realization contract used only
+  after Asset Advisor selects that route.
 - `../video-production/SKILL.md` - method selection and direct standalone style
   profiles; this skill passes compiled Brand Kit + Tasty Pack direction without
   adding a profile composition lane.
 - `../video-production/references/scene-grid-production.md` - load for
   deliberate-scene-break model-native video; owns per-scene grids, approval,
   reuse locking, and Remotion assembly handoff.
-- `../ai-image-advisor/SKILL.md` - still generation, edits, upscales, and
-  cutouts.
-- `../ai-video-advisor/SKILL.md` - model-native clip, avatar execution, video
-  edit, or upscale provider route.
+- `../ai-image-advisor/SKILL.md` - child image realization contract used only
+  after Asset Advisor selects that route.
+- `../ai-video-advisor/SKILL.md` - child model-native video contract used only
+  after Asset Advisor selects that route.
+- `../editing-advisor/SKILL.md` - editing-technique retrieval, compatibility,
+  method selection, ordered edit recipe, and renderer handoff.
 - `../remotion/SKILL.md` - React composition, stitching, captions, audio
   placement, and local render proof.
 - `../remotion/references/documentary-reel.md` - load for a voice-led

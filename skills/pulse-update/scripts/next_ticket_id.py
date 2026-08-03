@@ -19,8 +19,6 @@ FRONTMATTER_ID_RE = re.compile(r"^ticket_id:\s*(TASK-\d{4,})\s*$", re.MULTILINE)
 def durable_ticket_ids(project_root: Path) -> set[str]:
     tickets_root = project_root / "tickets"
     ids: set[str] = set()
-    if not tickets_root.exists():
-        return ids
     paths = list(tickets_root.glob("TASK-*/ticket.md"))
     archive_root = tickets_root / "archive"
     if archive_root.exists():
@@ -36,6 +34,21 @@ def durable_ticket_ids(project_root: Path) -> set[str]:
             match = None
         if match:
             ids.add(match.group(1))
+    index_path = tickets_root / "archive-index.jsonl"
+    try:
+        lines = index_path.read_text(encoding="utf-8", errors="replace").splitlines()
+    except OSError:
+        lines = []
+    for line in lines:
+        try:
+            row = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        if not isinstance(row, dict):
+            continue
+        ticket_id = str(row.get("ticket_id") or "").strip().upper()
+        if TICKET_ID_RE.fullmatch(ticket_id):
+            ids.add(ticket_id)
     return ids
 
 

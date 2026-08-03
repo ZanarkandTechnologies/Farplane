@@ -451,5 +451,5 @@ render_config
 echo "Done."
 echo "Next: prefer runtime env for secrets (for example: doppler run -- farplane install); use ~/.farplane/config.toml only as a private fallback/cache."
 echo "Run: farplane doctor"
-echo "Hooks config is linked when hooks.json exists; Stop telemetry remains active. Ticket-local QA/review owns completion."
+echo "Hooks config is linked when hooks.json exists; Stop telemetry and the final-response length gate are active. Ticket-local QA/review owns completion."
 echo "Backups (when needed) are stored under $BACKUP_ROOT"

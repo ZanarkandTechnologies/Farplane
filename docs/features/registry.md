@@ -2,7 +2,7 @@
 title: "Generated Feature Registry"
 status: generated
 owner: feature-registry
-updated_at: 2026-08-02
+updated_at: 2026-08-03
 refs:
   - docs/features/registry.jsonl
   - docs/features/validate_features.py
@@ -23,7 +23,7 @@ This file is generated. Edit the feature specs in `docs/features/` instead.
 | [FEAT-0025 Retired video-to-skill source reconstruction](../features/FEAT-0025-video-to-skill-source-reconstruction.md) | [Source And Sidecar Systems](../systems/source-sidecar-systems.md) | `retired` | `false` | `false` | `source-ingestion` |
 | [FEAT-0029 Retired Goal Packet architecture](../features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md) | [Horizon Loop](../systems/horizon-loop.md) | `retired` | `false` | `FEAT-0032` | `planning` |
 | [FEAT-0030 On-demand skill plugin packaging](../features/FEAT-0030-on-demand-skill-plugin-packaging.md) | [Skill System](../systems/skill-system.md) | `implemented` | `false` | `false` | `skills` |
-| [FEAT-0031 Agent behavior test workflow](../features/FEAT-0031-agent-behavior-test-workflow.md) | [Proof And Review](../systems/proof-review.md) | `implemented` | `false` | `false` | `proof` |
+| [FEAT-0031 Retired agent behavior test workflow](../features/FEAT-0031-agent-behavior-test-workflow.md) | [Proof And Review](../systems/proof-review.md) | `retired` | `false` | `FEAT-0039` | `proof` |
 | [FEAT-0032 Goal Advisor execution loop](../features/FEAT-0032-goal-advisor-execution-compilation.md) | [Horizon Loop](../systems/horizon-loop.md) | `implemented` | `false` | `false` | `execution` |
 | [FEAT-0034 Adversarial agent QA test skill](../features/FEAT-0034-adversarial-agent-qa-test-skill.md) | [Proof And Review](../systems/proof-review.md) | `implemented` | `false` | `false` | `proof` |
 | [FEAT-0039 Farplane evals](../features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md) | [Proof And Review](../systems/proof-review.md) | `implemented` | `false` | `false` | `proof` |

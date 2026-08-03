@@ -4,12 +4,12 @@
     {
       "id": "leverage_advisor_replans_from_progress_01",
       "prompt": "We have a hypothesis tree for improving a model, but the first cheap representation probe was flat overall and improved only one target class. What should we try next?",
-      "expected_output": "Grounds the current objective and observation; Revises eligible pending leaves from the asymmetric result; Recommends one evidence-linked next proof; States positive, negative, diagnostic, and budget replan conditions; Keeps execution and tree mutation with the owning workflow",
+      "expected_output": "Grounds the current objective and observation; Revises eligible pending leaves from the asymmetric result; Recommends one evidence-linked next proof only if it beats report-now, feedback, and stop; States positive, negative, diagnostic, and budget replan conditions; Keeps execution and tree mutation with the owning workflow",
       "files": [],
       "assertions": [
         "Uses program policy, current tree leaves, progress evidence, and receipts rather than replaying the original order",
         "Ranks the remaining frontier by bottleneck fit, information value, unlocks, cost, and risk",
-        "Selects one bounded first proof and names what would falsify it",
+        "Selects one bounded first proof, names what would falsify it, and compares it with report_now, request_feedback, and stop",
         "States contingent replan conditions for the result",
         "Does not execute the experiment, mutate the tree, compile a Goal, or create a ticket per attempt"
       ],

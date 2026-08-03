@@ -223,7 +223,7 @@ flowchart LR
 | `rules/` | Machine-readable local rule files. Durable best-practice docs live under `docs/features/`. |
 | `skills/` | Farplane skill packages, references, scripts, and templates. |
 | `templates/` | Install-time global Codex templates and config scaffolding. |
-| `tickets/` | Active task board, ticket template, artifacts, and archive. |
+| `tickets/` | Active task board, ticket template, artifacts, compact locators for new closed GitHub issues, and readable legacy local archives. |
 
 ## Start Here
 
@@ -277,9 +277,15 @@ What Core owns:
 - `farplane hooks doctor`: verifies Core-owned hook links, command targets,
   interpreters, and known silent-skip regressions without requiring optional
   Farplane UI/Node telemetry.
-- `farplane ticket close TASK-XXXX`: marks the ticket done, clears its claim,
-  archives it, emits one completion event, and invokes the configured mining
-  route; reruns are idempotent.
+- `farplane ticket close TASK-XXXX`: verifies the already closed issue in the
+  project's configured GitHub repository, its glanceable Before/After/Example
+  summary, and its selected media markers. Material feature closeouts put the
+  reviewed demo MP4 first, followed by optional screenshots. Core then writes
+  terminal metadata, mines the
+  still-local packet, writes its compact locator, emits one completion event,
+  then deletes the exact packet; reruns converge without duplicate locator or
+  mining records. Releases, bundles, restore, and legacy archive migration are
+  future work.
 - `farplane notify status|enable|disable`: inspects or toggles the Farplane
   turn-complete notify script in the rendered Codex config, preserving desktop
   notify wrappers when present.

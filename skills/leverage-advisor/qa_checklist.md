@@ -14,6 +14,10 @@ campaign to execution.
 - [ ] The objective, current capability, optional hypothesis tree, progress
       observations, constraints, and remaining budget are grounded in named
       evidence.
+- [ ] A campaign replan with missing program/tree/progress/receipt/budget state
+      returns a source gap or conditional questions, not a selected frontier.
+- [ ] Invocation is justified by several plausible moves needing judgment; a
+      mechanically implied next action stays with the active Goal.
 - [ ] Candidate levers are supplied, locally derived, or source-backed; a weak
       frontier returns a bounded research route or source gap instead of
       fabricated SOTA claims.
@@ -26,6 +30,8 @@ campaign to execution.
       numeric rank, novelty leaderboard, or tree-local scoring method.
 - [ ] The next wave has one move by default and names an executable cheapest
       falsifier, tradeoff, rejected alternatives, and next owner.
+- [ ] The recommended move beats `report_now`, `request_feedback`, and `stop`;
+      otherwise the appropriate outside option is returned.
 - [ ] Positive, flat, negative, invalid, branch-specific, and budget outcomes
       have explicit replan consequences; the output is not a fixed ladder.
 - [ ] Surprising or causally ambiguous evidence may create only program-bounded

@@ -2,468 +2,74 @@
   "skill_name": "content-impl-plan",
   "evals": [
     {
-      "id": "content_impl_plan_brand_kit_only_01",
-      "prompt": "Plan a 45-second founder explainer from this approved Brand Kit. It contains complete format, storyboard, visual, character, audio, and editing elements plus one kit-wide prompt with production policy. No Tasty Pack is supplied.",
-      "expected_output": "Accepts the Brand Kit without requiring a Tasty Pack or style profile.; Treats approved identity and policy as authoritative.; Emits a creative hypothesis, complete element leverage map, low-fi demo, and visual storyboard with notes tied to element IDs.; Routes selected elements with their description, whyItWorks, goldenExample, and goldenRecipe.; Selects a timing master and ends with Remotion plus review/QA proof.",
+      "id": "content_impl_plan_missing_media_owner_01",
+      "prompt": "The storyboard is approved, but several scenes still need a licensed archive photo, two generated cutouts, a short establishing clip, and narration. Work out what exists, what must be sourced or generated, and what has to be returned before assembly.",
+      "expected_output": "Routes unresolved media to Asset Advisor, which owns inventory, source-versus-generation decisions, specialist-child selection, and accepted provenance-bearing files before editing or rendering.",
       "files": [],
       "assertions": [
-        "Accepts the Brand Kit without requiring a Tasty Pack or style profile.",
-        "Treats approved identity and policy as authoritative.",
-        "Emits a creative hypothesis, complete element leverage map, low-fi demo, and visual storyboard with notes tied to element IDs.",
-        "Routes selected elements with their description, whyItWorks, goldenExample, and goldenRecipe.",
-        "Selects a timing master and ends with Remotion plus review/QA proof."
+        "Content Impl Plan orders the Asset Advisor action without becoming a second asset author.",
+        "Asset Advisor owns inventory, candidate discovery, rights and fit decisions, and accepted asset bundles.",
+        "Asset Advisor selects only the needed image, video, avatar, or audio realization children and returns their outputs and receipts.",
+        "Editing Advisor and Remotion are not assigned asset selection or generation-route decisions.",
+        "Assembly remains blocked until required files and provenance receipts are accepted."
       ],
-      "metadata": {
-        "farplane": {
-          "title": "Compiles a Brand Kit-only production plan",
-          "tags": ["skill", "content-impl-plan", "brand-kit", "creative-lock"],
-          "anti_patterns": [
-            "Requires a Tasty Pack for approved Brand Kit identity.",
-            "Reintroduces a style profile as a third source.",
-            "Routes only element titles and descriptions."
-          ]
-        }
-      }
+      "metadata": {"farplane": {"title": "Routes unresolved production media", "tags": ["skill", "content-impl-plan", "asset-advisor", "ownership"], "anti_patterns": ["Makes the parent choose generators", "Makes Remotion source media", "Omits accepted-file receipts"]}}
     },
     {
-      "id": "content_impl_plan_tasty_pack_only_01",
-      "prompt": "Idea: prove agents can create and edit a full marketing short. Tasty Pack elements include complete format, storyboard, visual, character, audio, and editing capsules. Hook is represented as the storyboard opening beat, copy as storyboard semantics, subtitle timing as editing, and constraints as production policy. No Brand Kit is supplied.",
-      "expected_output": "Builds a complete element leverage map from Tasty Pack captures.; Prioritizes pinned elements and explains nonuse.; Emits a creative hypothesis and low-fi visual approval packet before spend.; Gives every advisor action the selected element's golden example and golden recipe when it conditions work.; Orders production around voiceover, music, source_video, or none as timing master.; Keeps storyboard as a child and ends with Remotion plus review/QA proof.",
+      "id": "content_impl_plan_edit_direction_owner_01",
+      "prompt": "The storyboard and media are approved. Our saved pacing, caption, transition, and compositing patterns still need to be evaluated for this 35-second explainer. Prepare the next production action and its renderer handoff without editing or rendering yet.",
+      "expected_output": "Routes creative-pattern judgment to Editing Advisor, defines its addressed recipe output and acceptance gate, and keeps Remotion downstream without involving Asset Advisor.",
       "files": [],
       "assertions": [
-        "Builds a complete element leverage map from Tasty Pack captures.",
-        "Prioritizes pinned elements and explains nonuse.",
-        "Emits a creative hypothesis and low-fi visual approval packet before spend.",
-        "Gives every advisor action the selected element's golden example and golden recipe when it conditions work.",
-        "Orders production around voiceover, music, source_video, or none as timing master.",
-        "Keeps storyboard as a child and ends with Remotion plus review/QA proof."
+        "Content Impl Plan orders an Editing Advisor action after accepted storyboard and media.",
+        "Editing Advisor is instructed to select, adapt, reject, or block the actual saved editing patterns rather than the parent inventing decisions without their records.",
+        "Editing Advisor's required authored output is one frame- or time-addressed ordered recipe covering pacing, captions, transitions, and compositing.",
+        "Asset Advisor is not assigned edit-direction judgment and Remotion does not improvise the recipe.",
+        "The action names accepted inputs, authored output, acceptance or blocker state, and the accepted edit recipe as the explicit next handoff to Remotion."
       ],
-      "metadata": {
-        "farplane": {
-          "title": "Compiles complete Tasty Pack elements into production",
-          "tags": ["skill", "content-impl-plan", "tasty-pack", "timing-master"],
-          "anti_patterns": [
-            "Treats the pack as a moodboard.",
-            "Uses only source-level analysis.",
-            "Makes storyboard the parent implementation plan."
-          ]
-        }
-      }
+      "metadata": {"farplane": {"title": "Routes timed editing direction", "tags": ["skill", "content-impl-plan", "editing-advisor", "ownership"], "anti_patterns": ["Makes Asset Advisor edit", "Lets Remotion select patterns", "Returns vague edit vibes"]}}
     },
     {
-      "id": "content_impl_plan_brand_wins_tasty_conflict_01",
-      "prompt": "The approved Brand Kit requires a restrained red/black identity and no real-person likeness. The Tasty Pack proposes a pastel creator look and an exact celebrity-like host. Compose the plan.",
-      "expected_output": "Names Brand Kit precedence.; Rejects the conflicting pastel identity and celebrity-like host instead of blending them.; Preserves compatible Tasty mechanics only with explicit provenance and rationale.; Does not add or request a style profile.; Returns a chosen/rejected/conflicting leverage map and rights-safe alternative packets.",
+      "id": "content_impl_plan_deterministic_render_owner_01",
+      "prompt": "All media files, voice timing, captions, and the approved frame-addressed edit direction are ready. Build the timeline and return the encoded video plus render proof.",
+      "expected_output": "Routes deterministic implementation and rendering to Remotion without reopening asset sourcing or creative-pattern selection.",
       "files": [],
       "assertions": [
-        "Names Brand Kit precedence.",
-        "Rejects the conflicting pastel identity and celebrity-like host instead of blending them.",
-        "Preserves compatible Tasty mechanics only with explicit provenance and rationale.",
-        "Does not add or request a style profile.",
-        "Returns a chosen/rejected/conflicting leverage map and rights-safe alternative packets."
+        "Content Impl Plan routes the ready package directly to Remotion.",
+        "Remotion owns the implemented timeline, encoded deliverable, and render proof.",
+        "Remotion consumes the accepted media, timing, captions, and edit recipe as fixed inputs.",
+        "Asset Advisor is not reopened and Editing Advisor is not asked to restate an already accepted recipe.",
+        "Review or QA judges the resulting evidence independently rather than Remotion self-approving."
       ],
-      "metadata": {
-        "farplane": {
-          "title": "Makes Brand Kit policy win Tasty Pack conflicts",
-          "tags": ["skill", "content-impl-plan", "brand-kit", "conflict"],
-          "anti_patterns": [
-            "Silently averages the two visual identities.",
-            "Lets trend inspiration override approved policy.",
-            "Uses a style profile as a compatibility fallback."
-          ]
-        }
-      }
+      "metadata": {"farplane": {"title": "Routes deterministic assembly and rendering", "tags": ["skill", "content-impl-plan", "remotion", "ownership"], "anti_patterns": ["Reopens asset sourcing", "Reselects creative patterns", "Lets renderer self-approve"]}}
     },
     {
-      "id": "content_impl_plan_low_poly_voice_timing_01",
-      "prompt": "Create the pre-spend plan for a low-poly 30-second voice-led product reel from an approved Brand Kit plus the reingested low-poly Tasty Pack. The selected elements have golden examples and recipes. Final provider clips must match the narration.",
-      "expected_output": "Emits a low-fi demo and actual visual storyboard images/notes tied to selected low-poly element IDs before spend.; Selects voiceover as timing master.; Orders script lock, voice generation, duration/alignment receipt, cue/storyboard revision, visual clip generation with safe surplus, then Remotion.; Passes goldenExample plus goldenRecipe to image/video/avatar advisors for each conditioned output.; Requires Remotion to use actual voice/caption cues and element realization receipts.; Blocks final generation until operator storyboard approval.",
+      "id": "content_impl_plan_full_sibling_sequence_01",
+      "prompt": "I have an approved concept but still need the scene plan, source media, motion and caption decisions, final build, and proof. Give me the production sequence with one accountable owner and one accepted output for each step.",
+      "expected_output": "Emits the non-overlapping Storyboard, Asset Advisor, Editing Advisor, Remotion, and Review/QA sibling sequence under Content Impl Plan.",
       "files": [],
       "assertions": [
-        "Emits a low-fi demo and actual visual storyboard images/notes tied to selected low-poly element IDs before spend.",
-        "Selects voiceover as timing master.",
-        "Orders script lock, voice generation, duration/alignment receipt, cue/storyboard revision, visual clip generation with safe surplus, then Remotion.",
-        "Passes goldenExample plus goldenRecipe to image/video/avatar advisors for each conditioned output.",
-        "Requires Remotion to use actual voice/caption cues and element realization receipts.",
-        "Blocks final generation until operator storyboard approval."
+        "Content Impl Plan owns orchestration and aggregation only.",
+        "Storyboard solely authors the accepted narrative, beats, and scene map.",
+        "Asset Advisor solely authors accepted media bundles and realization-child selections.",
+        "Editing Advisor solely authors accepted addressed edit direction, while Remotion solely authors timeline implementation, encoded output, and render proof.",
+        "Review or QA independently owns the readiness verdict, and every row names its output, blocker or acceptance state, and next handoff."
       ],
-      "metadata": {
-        "farplane": {
-          "title": "Uses voice timing and element evidence for low-poly production",
-          "tags": ["skill", "content-impl-plan", "low-poly", "voiceover", "golden-recipe"],
-          "anti_patterns": [
-            "Generates final clips before measuring narration.",
-            "Claims low-poly grounding from generic resemblance.",
-            "Spends before visual-storyboard approval."
-          ]
-        }
-      }
+      "metadata": {"farplane": {"title": "Emits the complete sibling production sequence", "tags": ["skill", "content-impl-plan", "orchestration", "ownership"], "anti_patterns": ["Nests editing under assets", "Nests Remotion under editing", "Duplicates child authorship in the parent"]}}
     },
     {
-      "id": "content_impl_plan_reject_incomplete_handoff_01",
-      "prompt": "The selected visual element has a title and description in the plan, but its golden example and golden recipe were omitted from the image-generation handoff. Continue to production anyway.",
-      "expected_output": "Refuses to pass creative_lock.; Identifies the missing golden example and golden recipe.; Rebuilds the element realization packet with provenance, description, whyItWorks, resolved example, recipe, planned use, and acceptance check.; Does not accept source-level analysis or element naming as proof of conditioning.",
+      "id": "content_impl_plan_mixed_asset_edit_boundary_01",
+      "prompt": "For one approved scene I have a chart but no background or foreground. I also saved a caption-entrance pattern I want considered. Prepare the next production actions without building the final timeline yet.",
+      "expected_output": "Splits missing-media resolution from editing-pattern judgment into sibling Asset and Editing actions and blocks Remotion until both accepted handoffs exist.",
       "files": [],
       "assertions": [
-        "Refuses to pass creative_lock.",
-        "Identifies the missing golden example and golden recipe.",
-        "Rebuilds the element realization packet from the authoritative record when values exist; when the prompt and available state contain no authoritative example or recipe value, it populates the available fields, marks the exact missing fields blocked_unresolved, and stops before production.",
-        "Does not accept source-level analysis or element naming as proof of conditioning."
+        "Treats the chart as the main-topic asset rather than a complete scene.",
+        "Routes missing background and foreground discovery, rights, fit, and accepted outputs to Asset Advisor.",
+        "Routes the saved caption pattern to Editing Advisor for a use, adapt, reject, or block decision and an addressed recipe.",
+        "Does not make Asset Advisor judge the caption pattern or Editing Advisor source the missing media.",
+        "Keeps Remotion blocked until the required media bundle and edit direction are accepted."
       ],
-      "metadata": {
-        "farplane": {
-          "title": "Blocks title-only child advisor handoffs",
-          "tags": ["skill", "content-impl-plan", "element-realization", "blocked"],
-          "anti_patterns": [
-            "Continues because the element name appears in the plan.",
-            "Uses source analysis as a substitute for the missing capsule.",
-            "Passes the recipe without the example or the example without the recipe."
-          ]
-        }
-      }
-    },
-    {
-      "id": "content_impl_plan_icp_causal_story_01",
-      "prompt": "Plan a 60-second founder-led explainer for a workflow product. ICP: VP Operations at a 150-person B2B healthcare company. They have six specialist teams using separate AI assistants, but leadership cannot tell why launch work keeps drifting after handoffs. They are skeptical of \"more AI\" claims and care about auditability, fewer escalation meetings, and making the next launch review less chaotic. Offer: a visible task-state system for agent teams. Use a simple editorial-motion style and make the first plan ready for storyboard and asset routing.",
-      "expected_output": "Resolves the ICP into a specific starting belief, objection, stakes, and intended viewer-state change.; Builds a causal spine whose opening, tension, mechanism, proof, turn, and payoff each answer a viewer question.; Uses the middle beats to reveal a changing operational mechanism rather than generic feature cards.; States a falsifiable creative hypothesis.; Blocks creative lock when viewer-state turns or ICP-relevant proof are missing.",
-      "files": [],
-      "assertions": [
-        "Resolves the ICP into a specific starting belief, objection, stakes, and intended viewer-state change.",
-        "Builds a causal story spine whose opening, tension, mechanism, proof, turn, and payoff each answer a viewer question.",
-        "Uses the middle beats to reveal a changing operational mechanism rather than generic abstract cards or feature claims.",
-        "States a falsifiable creative hypothesis about why the story will persuade this ICP.",
-        "Blocks creative lock when viewer-state turns or proof tied to the ICP's auditability concern are missing."
-      ],
-      "metadata": {
-        "farplane": {
-          "title": "Turns an operational ICP into a causal viewer-state story",
-          "tags": ["skill", "content-impl-plan", "storytelling", "icp", "viewer-state"],
-          "anti_patterns": [
-            "Uses a generic problem-solution-benefits outline.",
-            "Leaves the ICP objection outside the story.",
-            "Fills the middle with decorative productivity charts."
-          ]
-        }
-      }
-    },
-    {
-      "id": "content_impl_plan_asset_evidence_wallpaper_01",
-      "prompt": "Make a production plan for a 45-second launch video aimed at security-conscious SaaS buyers. Available source material: a dashboard screenshot showing \"handoff exception rate: 27%\"; an anonymized customer quote saying \"We lost two days because every AI handoff had a different version of the goal\"; a support-ticket excerpt with timestamps from three repeated escalations; a warm gradient background pack; a slow office hallway b-roll clip; a stock handshake photo; and a generic laptop mockup with no product UI. The video should feel editorial, not like a SaaS ad.",
-      "expected_output": "Gives every selected asset a narrative job, provenance, beat, proof value, rights note, and acceptance check.; Uses the dashboard, quote, and support excerpt as evidence for specific claims.; Rejects or quarantines attractive filler unless it earns a concrete narrative job.; Preserves evidence and provenance in child handoffs.; Blocks creative lock when visual evidence cannot support the claim.",
-      "files": [],
-      "assertions": [
-        "Produces an asset map where every selected asset has a narrative job, provenance, planned beat, proof value, rights note, and acceptance check.",
-        "Uses the dashboard metric, customer quote, and timestamped support excerpt as evidence for specific midsection claims.",
-        "Explicitly rejects or quarantines the gradient, hallway b-roll, stock handshake, and empty laptop mockup unless each earns a concrete narrative job.",
-        "Requires asset-advisor and realization handoffs to preserve evidence, provenance, and rights risk rather than only visual description.",
-        "Blocks creative lock when the planned visual evidence cannot support the stated viewer claim."
-      ],
-      "metadata": {
-        "farplane": {
-          "title": "Selects proof-bearing assets and rejects wallpaper",
-          "tags": ["skill", "content-impl-plan", "assets", "evidence", "wallpaper"],
-          "anti_patterns": [
-            "Uses every available asset for variety.",
-            "Treats proof artifacts as background texture.",
-            "Allows decorative b-roll to stand in for factual evidence."
-          ]
-        }
-      }
-    },
-    {
-      "id": "content_impl_plan_icp_persona_gate_01",
-      "prompt": "Draft the content implementation plan for a 50-second product explainer. ICP: enterprise RevOps teams buying an AI account-research assistant. The RevOps director owns pipeline quality. SDRs will use it day to day and will reject anything that adds admin work. Legal has been pushing back on unsourced AI claims and customer-data handling. The executive sponsor will only approve the rollout if manager review time visibly goes down. Make the plan production-ready enough that the team can decide whether to move forward without another strategy meeting.",
-      "expected_output": "Derives distinct decision-relevant persona lenses from the ICP without inventing demographics.; Defines persona-specific objections, must-see proof, acceptance checks, and rejection reasons.; Adds an independent multi-persona gate before creative lock.; Maps beats and evidence to persona concerns.; Names the review receipt and source/provenance artifacts required to proceed.",
-      "files": [],
-      "assertions": [
-        "Derives distinct decision-relevant persona lenses from the ICP, including buyer, daily user, legal skeptic, and executive sponsor, without inventing demographic profiles.",
-        "Defines persona-specific objections, must-see proof, acceptance checks, and likely rejection reasons.",
-        "Adds an independent multi-persona review gate before creative lock and blocks production until required concerns resolve or become explicit residual risk.",
-        "Maps story beats, assets, and proof moments to persona concerns instead of only to product features.",
-        "Names the source support, asset provenance, storyboard/timing packet, and persona review receipt required to proceed."
-      ],
-      "metadata": {
-        "farplane": {
-          "title": "Derives a blocking multi-persona review from the ICP",
-          "tags": ["skill", "content-impl-plan", "icp", "personas", "creative-lock"],
-          "anti_patterns": [
-            "Invents demographic personas unrelated to the buying decision.",
-            "Says only to gather stakeholder feedback.",
-            "Allows unresolved legal or adoption objections through creative lock."
-          ]
-        }
-      }
-    },
-    {
-      "id": "content_impl_plan_scene_asset_triad_01",
-      "prompt": "Plan a 45-second editorial explainer about how a port closure raises grocery prices. The voiceover says: “A storm closes the harbor entrance. Container ships queue offshore. Importers reroute food through a port two hundred miles away. Extra trucking and cold storage raise the landed cost. Retailers pass some of that pressure into exposed grocery categories. The effect is delayed and category-specific, not universal.” I have not gathered visuals yet.",
-      "expected_output": "Emits a scene-level asset manifest and useful provisional plan.; Resolves a shared background, main-topic asset, and foreground asset for every production scene.; Gives every layer concrete source or generation evidence, owner, rights note, story role, and acceptance check.; Distinguishes draft, packet-ready, and creative-lock status.; Blocks Remotion until accepted assets and representative layered frame proof exist.",
-      "files": [],
-      "assertions": [
-        "Emits a scene-level manifest with scene, shared background, main-topic asset, foreground asset, owner, source or generation packet, rights note, acceptance check, and creative-lock status.",
-        "Resolves all three story-bearing layers for every production scene and explicitly reuses one shared background unless a justified world change is named.",
-        "Requires Asset Advisor discovery receipts with queries, candidate links or asset IDs, rights and fit decisions, and selected_source, inspiration_for_generation, or searched_no_reference results before generation.",
-        "Rejects custom-created SVG animation assets and SVG or JSX drawings as substitutes for missing scene layers while allowing provenance-bearing existing SVG source media.",
-        "Rejects CSS rectangles, card frames, text panels, generic document mocks, chart containers, generic silhouettes, and semantic labels as completed assets without concrete source or generation evidence.",
-        "Distinguishes storyboard_draft_ready, asset_packet_ready, and creative_lock_passed instead of treating planned packets as accepted files.",
-        "Blocks the Remotion production handoff until accepted assets and representative layered frame proof exist."
-      ],
-      "metadata": {
-        "farplane": {
-          "title": "Gathers a concrete three-layer asset bundle for every scene",
-          "tags": ["skill", "content-impl-plan", "assets", "three-layer", "creative-lock"],
-          "anti_patterns": [
-            "Renames CSS boxes or text panels as assets.",
-            "Skips asset discovery and draws custom SVG scene assets.",
-            "Leaves one or more scenes without a background, main topic, or foreground.",
-            "Passes creative lock from generation prompts without accepted outputs."
-          ]
-        }
-      }
-    },
-    {
-      "id": "content_impl_plan_chart_still_needs_layers_01",
-      "prompt": "One beat in my explainer says outages doubled after the policy change. I want that moment to use a chart. Compile the production handoff.",
-      "expected_output": "Treats the sourced chart as the main-topic asset, not the entire scene.; Preserves a shared background and concrete foreground attention or depth asset.; Separates data provenance from visual provenance.; Rejects dashboard cards and labeled rectangles as foreground.; Blocks production while any layer remains only a packet or placeholder.",
-      "files": [],
-      "assertions": [
-        "Assigns the chart the main-topic job and requires a sourced dataset or truthful generation specification.",
-        "Still resolves a shared background plus a concrete foreground attention or depth asset with its own source or generation evidence.",
-        "Rejects a chart container, dashboard card, callout card, or labeled rectangle as sufficient foreground.",
-        "Records chart data provenance separately from the foreground asset's visual provenance, rights note, and acceptance check.",
-        "Blocks creative lock and Remotion while any required layer lacks an accepted file or output."
-      ],
-      "metadata": {
-        "farplane": {
-          "title": "Keeps the three-layer contract for a chart-led scene",
-          "tags": ["skill", "content-impl-plan", "chart", "assets", "boundary"],
-          "anti_patterns": [
-            "Treats a chart inside a rectangle as a complete scene.",
-            "Uses a decorative label as foreground.",
-            "Conflates data truth with visual-source provenance."
-          ]
-        }
-      }
-    },
-    {
-      "id": "content_impl_plan_character_cutout_assets_01",
-      "prompt": "The opening scene contrasts two public decision-makers at opposite sides of a deal. Build the pre-production plan from the approved narration.",
-      "expected_output": "Plans concrete transparent grayscale or halftone character cutouts as main-topic assets.; Resolves shared background and foreground structure or scenery separately.; Names likeness, source, rights, review, and substitute routes.; Specifies layer order and staggered reveals.; Keeps silhouettes and unreviewed generations below creative-lock status.",
-      "files": [],
-      "assertions": [
-        "Plans concrete transparent grayscale or halftone main-topic cutouts with restrained accent treatment rather than programmatic silhouettes or boxed headshots.",
-        "Resolves a shared background and a separate foreground structure or scenery asset with source or generation packets.",
-        "Gives each decision-maker a licensed or approved source path, a rights-safe generic substitute packet, or an explicit blocker with likeness review ownership.",
-        "Specifies background, main-topic, and foreground layer order plus staggered reveal intent.",
-        "Restricts silhouette placeholders and unreviewed likeness outputs to low-fi draft status and blocks creative lock."
-      ],
-      "metadata": {
-        "farplane": {
-          "title": "Plans rights-aware transparent character cutouts",
-          "tags": ["skill", "content-impl-plan", "characters", "cutout", "rights"],
-          "anti_patterns": [
-            "Accepts a CSS silhouette as the final topic asset.",
-            "Treats public status as likeness approval.",
-            "Omits foreground structure or shared background."
-          ]
-        }
-      }
-    },
-    {
-      "id": "content_impl_plan_supplied_asset_not_enough_01",
-      "prompt": "I already have the chart PNG and final narration. Can we go straight to the Remotion build and draw the missing background and foreground as custom SVG animations?",
-      "expected_output": "Compiles useful partial state without agreeing to skip asset gathering.; Classifies the PNG as the main-topic asset only.; Requires Asset Advisor candidate discovery for concrete background and foreground media.; Rejects custom-created SVG or JSX scene substitutes.; Keeps the result at storyboard_draft_ready until discovery receipts complete the packets, then asset_packet_ready until files are accepted.; Blocks Remotion until all three accepted assets exist.",
-      "files": [],
-      "assertions": [
-        "Compiles the useful partial plan instead of returning only a generic request for more context.",
-        "Classifies the supplied chart PNG as the main-topic asset rather than the complete scene.",
-        "Requires Asset Advisor candidate discovery for the missing shared background and foreground with queries, candidate links or IDs, rights or license notes, fit decisions, and acceptance checks.",
-        "Rejects custom-created SVG animation assets and SVG or JSX scene substitutes.",
-        "Keeps the row storyboard_draft_ready while discovery receipts or packet fields are unresolved; once packets are complete it may become asset_packet_ready, but never creative_lock_passed until outputs are accepted.",
-        "Blocks the Remotion production handoff until all three accepted asset files or outputs exist."
-      ],
-      "metadata": {
-        "farplane": {
-          "title": "Refuses to fast-track one supplied asset into Remotion",
-          "tags": ["skill", "content-impl-plan", "assets", "anti-cheat", "remotion"],
-          "anti_patterns": [
-            "Agrees to start Remotion because one PNG exists.",
-            "Draws the missing layers as custom SVG animations.",
-            "Invents placeholder boxes for missing layers.",
-            "Treats generation prompts as accepted assets."
-          ]
-        }
-      }
-    },
-    {
-      "id": "content_impl_plan_scene_concepts_before_assets_01",
-      "prompt": "I have final narration for a 35-second explainer about why a port delay raises grocery prices, plus a folder of stock photos. Plan the visuals and production handoff.",
-      "expected_output": "Segments the narration into causal scene units before assigning assets.; Produces three materially different visual concepts for each beat and selects one with rationale.; Distinguishes literal evidence, causal physical metaphor, and context or scale comparison.; Turns only the selected concept into an asset brief and scene bundle.; Keeps final generation blocked until visual concept and storyboard approval.",
-      "files": [],
-      "assertions": [
-        "Segments the narration into causal beats with one viewer-state change each before choosing from the stock-photo folder.",
-        "Emits three concept records per beat: literal evidence, causal physical metaphor, and context or scale comparison.",
-        "Uses an explicit selection rationale based on narration specificity, causal clarity, neighboring-scene novelty, and production feasibility; crops or restyles of one composition do not count as separate concepts.",
-        "Creates asset search or generation packets only after a concept is selected, and ties the main topic, foreground, composition, and reveals to that concept.",
-        "Routes mechanical concept-count checks to the plan/validator owner and material-distinctness judgment to storyboard or independent review."
-      ],
-      "metadata": {
-        "farplane": {
-          "title": "Requires scene concepts before asset selection",
-          "tags": ["skill", "content-impl-plan", "scene-ideation", "assets", "storyboard"],
-          "anti_patterns": [
-            "Chooses files before defining the visual relationship.",
-            "Treats three crops, colors, or search queries as three concepts.",
-            "Uses the asset manifest as a substitute for scene ideation."
-          ]
-        }
-      }
-    },
-    {
-      "id": "content_impl_plan_causal_beat_cadence_reveals_01",
-      "prompt": "Turn this approved 28-second narration into a timed editorial storyboard: “The first agent keeps the goal. The handoff keeps only the summary. The second agent improves the wrong version. Both outputs look competent. The shared ticket exposes the mismatch before the work compounds.”",
-      "expected_output": "Derives causal scene boundaries from the measured narration.; Uses roughly 4-5 second target beats without arbitrary cuts.; Gives every scene one viewer-state change and normally two or three meaningful reveals.; Defines reveals as story-bearing entrances, transformations, connections, removals, or recontextualizations.; Records timing and reveal receipts for the animatic gate.",
-      "files": [],
-      "assertions": [
-        "Measures the locked narration and derives scene ranges from causal clauses rather than imposing equal arbitrary slices.",
-        "Uses 4-5 seconds as the normal target band, allows a documented roughly 3.5-6 second exception when the causal unit requires it, and treats one viewer-state change per scene as the hard gate.",
-        "Plans normally two or three meaningful reveals per scene and does not count text flicker, transition noise, or timestamp splitting as reveals.",
-        "Names the causal handoff from each scene to the next and merges, splits, or revises beats that cannot pass silent comprehension.",
-        "Requires a timed animatic receipt before asset lock and routes timing failures to storyboard or timing-master ownership."
-      ],
-      "metadata": {
-        "farplane": {
-          "title": "Builds compact causal beats with meaningful reveals",
-          "tags": ["skill", "content-impl-plan", "timing", "storyboard", "reveals"],
-          "anti_patterns": [
-            "Uses eight-to-twelve-second scenes containing several unrelated changes.",
-            "Splits a static composition into arbitrary timestamps.",
-            "Counts typography flicker as narrative progression."
-          ]
-        }
-      }
-    },
-    {
-      "id": "content_impl_plan_neighbor_asset_variance_01",
-      "prompt": "Plan a 40-second workflow explainer. I already have hands, a laptop, two operator cutouts, and a few generic office props; reuse anything helpful.",
-      "expected_output": "Builds an asset-family ledger rather than treating renamed variants as new assets.; Excludes the shared background and declared transformed motifs from ordinary reuse counts.; Enforces zero adjacent main-topic or foreground overlap.; Uses calibrated unique-main and unique-foreground ratios and perceptual checks.; Rejects random novelty without a narration-specific job.",
-      "files": [],
-      "assertions": [
-        "Creates an asset-family ledger where recolors, flips, crops, rotations, and renamed derivatives of one source remain one family.",
-        "Requires zero adjacent overlap for main-topic and foreground asset families, excluding only the shared background and an explicitly declared transformed motif.",
-        "Defines the denominator as production scenes excluding title-only holds, starts with calibrated bands of at least 80% unique main-topic families and 85% unique foreground families, and records any justified exception.",
-        "Adds a perceptual-similarity check calibrated with one known-reuse pair and one known-distinct pair before using it as a gate.",
-        "Rejects repeated hands, laptop, operators, or random prop substitutions when they lack a narration-specific physical, causal, evidence, or environmental job."
-      ],
-      "metadata": {
-        "farplane": {
-          "title": "Measures neighboring-scene asset variance by family",
-          "tags": ["skill", "content-impl-plan", "asset-variance", "anti-cheat", "metrics"],
-          "anti_patterns": [
-            "Counts renamed or recolored copies as unique assets.",
-            "Includes the shared background in the reuse denominator.",
-            "Rewards random props that do not belong to the story."
-          ]
-        }
-      }
-    },
-    {
-      "id": "content_impl_plan_intentional_motif_control_01",
-      "prompt": "The story follows one red incident folder as it moves through five teams and accumulates conflicting instructions. Keep that continuity while making each scene visually fresh.",
-      "expected_output": "Declares the folder as an intentional transformed motif with a causal job.; Allows it to remain dominant when its changing state carries the beat.; Requires visible transformation at each appearance.; Varies at least two other scene dimensions such as foreground, composition, scale, evidence type, or movement.; Prevents brand consistency from excusing generic reuse.",
-      "files": [],
-      "assertions": [
-        "Declares the red folder as an intentional motif and names its causal function, scene appearances, state transformation, and role at each appearance.",
-        "Allows the transformed motif to remain the dominant topic when its changing state carries the story instead of rejecting all recurrence.",
-        "Requires every motif appearance to add, remove, connect, or recontextualize story information; an unchanged repeated folder fails.",
-        "Requires variation across at least two other dimensions per appearance, such as foreground environment, composition, scale, evidence type, motion pattern, or supporting subject.",
-        "Does not count the shared background as reuse and does not let “brand consistency” declare repeated unrelated main or foreground assets a motif."
-      ],
-      "metadata": {
-        "farplane": {
-          "title": "Preserves a transformed story motif without excusing repetition",
-          "tags": ["skill", "content-impl-plan", "motif", "asset-variance", "negative-control"],
-          "anti_patterns": [
-            "Rejects all recurring story objects.",
-            "Repeats an unchanged motif without new information.",
-            "Uses motif language to excuse the same composition."
-          ]
-        }
-      }
-    },
-    {
-      "id": "content_impl_plan_foreground_geometry_empty_scene_01",
-      "prompt": "My preview scene feels empty. The main subject is a large cutout of an operations lead in the center. The supposed foreground is a transparent 1600-pixel-wide PNG of a coffee mug, but the visible mug itself is only 90 by 110 pixels in the bottom-right corner. Can this pass creative lock?",
-      "expected_output": "Rejects transparent-canvas dimensions as foreground scale evidence.; Requires rendered visible-pixel coverage and bounding-box receipts.; Demands a physically or causally related edge-grounding foreground mass.; Uses a calibrated lower-frame coverage band or equivalent edge-spanning depth mass.; Keeps creative lock blocked until a representative frame passes semantic and geometry review.",
-      "files": [],
-      "assertions": [
-        "Refuses creative lock because the visible mug is tiny even though its transparent canvas is wide.",
-        "Measures rendered nontransparent pixels, visible bounding box, frame-edge contact, occlusion, and the relation between foreground and dominant subject.",
-        "Uses the tutorial-calibrated roughly lower 20-45% visible-area band or an equivalent edge-spanning depth mass as a starting acceptance band rather than a universal aesthetic law.",
-        "Requires the replacement foreground to be the clause's physical environment, comparison object, causal object, or evidence context and to belong when typography is removed.",
-        "Routes geometry receipts to deterministic validation and semantic relevance to independent frame review; a one-pixel border or mostly empty PNG cannot pass."
-      ],
-      "metadata": {
-        "farplane": {
-          "title": "Rejects tiny transparent-canvas foreground cheats",
-          "tags": ["skill", "content-impl-plan", "foreground", "geometry", "anti-cheat"],
-          "anti_patterns": [
-            "Uses transparent image dimensions as visible coverage.",
-            "Accepts a tiny decorative prop because it touches a corner.",
-            "Lets typography compensate for missing depth."
-          ]
-        }
-      }
-    },
-    {
-      "id": "content_impl_plan_clean_newsprint_treatment_01",
-      "prompt": "Match the professional newspaper-print feeling in the reference without making the explainer look antique or distressed. The reference has a pale quiet grid, crisp grayscale people with visible print dots, and a restrained orange offset. My current draft uses sepia parchment, torn edges, stains, and noise over the whole frame.",
-      "expected_output": "Rejects the dirty scrapbook treatment.; Separates quiet background treatment from subject-level halftone or dithering.; Requires crisp alpha and restrained registration accents.; Requests final-resolution subject-mask and background-crop receipts from the production owners.; Blocks creative lock until the rendered treatment passes independent review.",
-      "files": [],
-      "assertions": [
-        "Rejects sepia parchment, torn edges, stains, splatters, scrapbook seams, and uniform whole-frame grime as a mismatch for the supplied reference.",
-        "Specifies a quiet high-key shared background with only subtle grid or grain and applies controlled grayscale, contrast, halftone or dithering primarily within dominant subject masks.",
-        "Distinguishes texture baked into supplied source media from an explicitly demonstrated added effect and does not invent an exact filter recipe from appearance alone.",
-        "Requires a rights-cleared raster paper or scan plate composited in page or object coordinates and verifies that texture remains visible in full-frame and close crops at final delivery resolution.",
-        "Requires crisp alpha edges, a consistent final-resolution halftone scale, and only a restrained orange or red registration accent where it supports hierarchy.",
-        "Assigns asset preparation receipts to asset or image ownership and final deterministic compositing receipts to Remotion, rather than claiming the parent planner proved downstream pixels.",
-        "Blocks creative lock pending final-resolution subject-mask and background-crop evidence plus independent style review; global noise or a tiny halftone swatch cannot satisfy the gate."
-      ],
-      "metadata": {
-        "farplane": {
-          "title": "Separates professional newsprint subjects from dirty backgrounds",
-          "tags": ["skill", "content-impl-plan", "newsprint", "halftone", "style-boundary"],
-          "anti_patterns": [
-            "Treats distressed parchment as newspaper style.",
-            "Uses global noise as proof of subject halftone.",
-            "Self-certifies downstream rendered treatment from the plan."
-          ]
-        }
-      }
-    },
-    {
-      "id": "content_impl_plan_hybrid_interest_story_gate_01",
-      "prompt": "I have three candidate eight-scene storyboards for the same narration. Board A repeats one laptop and hand but has clean typography. Board B uses different dramatic objects in every scene, although several do not explain the spoken line. Board C uses one quiet background, clause-specific subjects and foregrounds, and a cause-to-consequence sequence, but two scenes still feel visually weak. Choose the strongest, explain the weak scenes, and say whether it is ready for production.",
-      "expected_output": "Separates mechanical receipts from qualitative judgment.; Uses a compact blocking rubric rather than one unexplained interestingness number.; Cites scenes for specificity, causal clarity, hierarchy/depth, neighbor novelty, silent comprehension, and evidence integrity.; Uses pairwise preference without rewarding random novelty.; Requires an independent reviewer and prevents averages from hiding blockers.",
-      "files": [],
-      "assertions": [
-        "Separates deterministic receipts for timing, asset-family uniqueness, foreground geometry, and meaningful reveals from judgment-heavy story and visual quality.",
-        "Uses six blocking judged dimensions with scene citations: narration specificity, causal clarity, hierarchy/depth, neighboring-scene novelty, silent comprehension, and evidence integrity.",
-        "Uses pairwise candidate preference and selects Board C provisionally while naming and repairing its weak scenes instead of rewarding Board A's cleanliness or Board B's random novelty.",
-        "Requires an independent reviewer receipt and does not let the plan author be the sole production-readiness judge.",
-        "Does not average away false evidence, failed silent comprehension, missing causal state change, adjacent main/foreground reuse, or absent foreground mass."
-      ],
-      "metadata": {
-        "farplane": {
-          "title": "Combines mechanical receipts with blocking story judgment",
-          "tags": ["skill", "content-impl-plan", "interestingness", "storytelling", "review"],
-          "anti_patterns": [
-            "Invents one unexplained interestingness score.",
-            "Treats novelty or image aesthetics as story proof.",
-            "Averages a hard blocker into a passing total."
-          ]
-        }
-      }
+      "metadata": {"farplane": {"title": "Splits mixed asset and editing work", "tags": ["skill", "content-impl-plan", "asset-advisor", "editing-advisor", "boundary"], "anti_patterns": ["Makes one advisor own both outputs", "Treats a chart as a full scene", "Renders before both handoffs"]}}
     }
   ]
 }

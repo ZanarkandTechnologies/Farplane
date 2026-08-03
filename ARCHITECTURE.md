@@ -45,7 +45,8 @@ The repo is organized around five concerns:
 - `AGENTS.md`: project-local operating map loaded every loop
 - `ARCHITECTURE.md`: top-level system map and canonical surface guide
 - `docs/`: durable knowledge and feature specs
-- `tickets/`: active execution objects and archived work history
+- `tickets/`: active execution objects, compact closed-issue locators, and
+  readable legacy local archive history
 - `skills/`, `agents/`, `bin/`: reusable workflows, bounded specialists, and
   runtime helpers
 
@@ -91,7 +92,7 @@ flowchart LR
     execSkill["goal-advisor<br/>native Codex task checkout"]:::callout
     assetSkill["image-generation<br/>video-generation<br/>remotion-render<br/>imagegen"]:::skill
     externalCli["delegate-cli<br/>delegate-frontend"]:::skill
-    closeSkill["close-ticket<br/>commit-message<br/>pr-splitting"]:::callout
+    closeSkill["demo -> close-ticket<br/>video-first GitHub issue<br/>commit-message<br/>pr-splitting"]:::callout
   end
 
   subgraph Board["Ticket + QA Surfaces"]
@@ -110,7 +111,7 @@ flowchart LR
   subgraph Proof["Proof + Review"]
     qa["qa-tester<br/>testing<br/>visual-qa<br/>Codex Browser"]:::quality
     review["review<br/>reviewer agents<br/>completion-reviewer<br/>desloppify"]:::callout
-  stop["Stop hook<br/>mechanical gates"]:::quality
+  stop["Stop hook<br/>telemetry only"]:::quality
   end
 
   subgraph Scale["Explicit Future Boundary"]
@@ -262,8 +263,12 @@ during cleanup unless the replacement carries the same routing information.
   contract/run hints for delegated or unattended work
 - [tickets](tickets)
   Purpose: active ticket board
+- `tickets/archive-index.jsonl`
+  Purpose: compact identity, status, and URL locator for new closed issues in
+  each project's configured GitHub repository; not a duplicate ticket archive
 - [tickets/archive](tickets/archive)
-  Purpose: completed or retired work history
+  Purpose: readable legacy completed or retired work history; no new terminal
+  packet is created there
 
 ### Review and proof surfaces
 

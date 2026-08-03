@@ -27,13 +27,14 @@ source_gaps: []
 | State / outcome | Work items / reports | Sanitized evidence | Observation |
 | --- | --- | --- | --- |
 
-## Metric Movement
+## Metric Views
 
-| Objective / metric | Direction | Prior -> current | Progress delta / velocity | Momentum | Evidence / confidence |
-| --- | --- | --- | --- | --- | --- |
+| Objective / metric | Direction | Current window | Previous window | Absolute / percent delta | Cumulative (flows only) | Trend | Evidence / confidence |
+| --- | --- | --- | --- | --- | --- | --- | --- |
 
-Use `unavailable`, `stale`, or `incomparable` plus a source gap when movement
-cannot be derived honestly. Never invent a flat or favorable value.
+The report window and timezone select the projection. Use `unavailable`,
+`stale`, or `incomparable` plus a source gap when a view cannot be derived
+honestly. Never invent a flat or favorable trend.
 
 ## Bottleneck And Root Cause
 

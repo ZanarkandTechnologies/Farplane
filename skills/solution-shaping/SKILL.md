@@ -7,6 +7,7 @@ source: local
 template_uses:
   skill-template: "0.3.7"
 eval: evals/evals.json
+qa_checklist: qa_checklist.md
 allowed-tools: Read, Glob, Grep
 ---
 
@@ -48,7 +49,10 @@ Keep the full solution synthesis inline unless a child phase needs separate
 evidence. Use `problem-framing` for the problem frame, `research:*` for user or
 best-practice grounding, `demo-realism` when the MVP needs believable operating
 examples, `prd` for product scope, and `impl-plan` or `goal-advisor` only after
-the solution boundary is accepted.
+the solution boundary is accepted. For material operational or demo-bound
+solutions, read `qa_checklist.md` before shaping and apply it once more to the
+completed brief. One QA owner should judge the whole solution; do not split the
+checklist into a queue of tiny review tasks.
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
@@ -81,12 +85,10 @@ the solution boundary is accepted.
   - [ ] When several reported problems share the same planning, allocation, or
         rebalance decision, synthesize the common operating loop before splitting
         them into separate modules.
-  - [ ] For commodity production, mining, logistics, or capacity-planning
-        problems, test whether the real MVP is an allocation planner:
-        material/work lots -> route options -> resource calendars -> buyer or
-        demand windows -> price scenarios -> margin or service outcome ->
-        rebalance. Treat scoring, maps, and calculators as inputs when the
-        valuable decision is allocation over time.
+  - [ ] For planning or allocation problems, test whether scoring, maps,
+        calculators, and forecasts are inputs to a shared decision loop rather
+        than separate products. Load the Mine-To-Margin reference standard for
+        the full operational pattern.
   - [ ] For ERP-adjacent planning problems, state the system boundary: the MVP
         is a decision layer beside ERP, APS, GIS, mine-planning, or accounting
         systems, not a replacement system of record.
@@ -102,6 +104,10 @@ the solution boundary is accepted.
         only inside prose.
   - [ ] Use `demo-realism` when believable data, workflow states, or operating
         examples are required before design/build.
+  - [ ] For an operational decision system, use the Mine-To-Margin reference
+        standard: one valuable decision loop, a deterministic mechanism,
+        inspectable evidence, responsive scenarios, and an honest
+        productionization boundary.
 - [ ] 7. Produce the solution brief.
   - [ ] Include target/person, problem frame, current workflow hypothesis,
         first-principles insight, recommendation, V1/V2 split, proof model,
@@ -109,9 +115,9 @@ the solution boundary is accepted.
   - [ ] For operational MVPs, include a concrete walkthrough: inputs, user
         steps, system decisions, core calculation or state transition, outputs,
         review cadence, and how actuals feed back into the next run.
-  - [ ] For production-planning or mine-to-margin MVPs, include proof scenarios
-        for a normal campaign plan, a labor/resource shortage rebalance, and a
-        price or premium spike so the client can see how the plan changes.
+  - [ ] For operational decision systems, include an ordinary case, a binding
+        constraint or shortage, and a changed-market or changed-demand case so
+        the client can see whether the decision responds correctly.
   - [ ] For system-heavy, regulated, safety-critical, or coordination-heavy
         solutions, explicitly name decision rights, permissions, records/entities,
         and workflow risks at a high level.
@@ -172,27 +178,6 @@ data and say whether it would reduce quote delay or quote errors.
 Next owner: prd for product scope or impl-plan after MVP acceptance.
 ```
 
-Operational loop example:
-
-```text
-Reported problem: Mining operator asks how to choose 60% vs 65% Fe processing,
-rank Sabah prospectivity, and decide whether sites are mineable despite
-overburden uncertainty.
-Problem frame: The operator needs a repeatable mine-to-margin planning loop:
-allocate material lots to processing routes, buyers, and time windows under
-grade, resource, logistics, price, and mineability constraints.
-Recommended solution: mine-to-margin planner, not three disconnected modules.
-System boundary: decision layer beside ERP, GIS, mine-planning, or accounting;
-it allocates lots to routes, buyers, and time windows without replacing those
-systems of record.
-MVP walkthrough: input lots/routes/resources/buyer windows/price scenarios,
-rank feasible allocations by margin, split lots when useful, consume crew and
-plant capacity, show bottlenecks and flexible inventory, then rerun weekly or
-monthly with actual yield, grade, duration, cost, and price.
-Proof model: quarterly Sabah campaign plan, labor shortage rebalance, and
-high-grade premium spike scenarios.
-```
-
 ## Gotchas
 
 - Do not sell a solution before `problem-framing` has made the problem coherent.
@@ -207,19 +192,14 @@ high-grade premium spike scenarios.
 - Do not stop at a list of modules when the real MVP is a planning or decision
   loop. Show how the operator would run the loop and what calculation or state
   transition makes the product valuable.
-- Do not collapse mine-to-margin or production-planning problems into a scoring
-  dashboard. If the input includes grade choices, indexed prices, resources,
-  buyer windows, route durations, or rebalance cadence, the likely MVP is a
-  planning/allocation layer; prospectivity and mineability scores feed that
-  layer.
-- Do not omit the operational demo trio for mine-to-margin or production
-  planners: normal campaign, shortage rebalance, and price/premium spike. These
-  prove the MVP changes decisions across ordinary, constrained, and market-shift
-  conditions.
+- Do not collapse an operational decision system into a scoring dashboard when
+  the valuable behavior is allocation, scheduling, approval, or rebalance.
 
 ## Reference Map
 
 - [examples/static-calculator-solution-brief/example.md](examples/static-calculator-solution-brief/example.md) - use as a quality reference for solution-shaping synthesis and V1/V2 restraint.
+- [Mine-To-Margin reference standard](references/mine-to-margin-reference-standard.md) - load when shaping or reviewing an operational decision system or a use case intended for a customer-facing agent demo.
+- [Solution QA checklist](qa_checklist.md) - load before and after material operational or demo-bound shaping work; assign the complete review to one QA owner.
 
 ## Output
 

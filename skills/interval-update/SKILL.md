@@ -103,6 +103,10 @@ fails:
   - [ ] Read configured board evidence, metric movement, Pulse/report evidence,
         outcomes, proof, and the previous finalized Interval report inside the
         profile's window.
+  - [ ] Request the Core metric projection with this run's `review_window` and
+        project timezone. Read current, preceding equal-window comparison,
+        cumulative flow total, and trend from that projection; do not encode
+        window or comparison settings in `metrics.yaml`.
   - [ ] Read only completed provider reports supplied through `context_refs`.
         Never invoke a missing provider. Normalize Notion rows immediately and
         keep raw IDs, URLs, tokens, and payloads out of tracked artifacts.
@@ -115,7 +119,8 @@ fails:
         is missing, compare a concrete instrumentation/unblock intervention
         under the same admission predicate as every other candidate.
   - [ ] Name material improving, flat, worsening, unavailable, and incomparable
-        movement without inventing favorable momentum from source gaps.
+        trends without inventing favorable momentum from source gaps. Treat
+        cumulative as unavailable for stock metrics.
   - [ ] Identify material stalls/regressions and outcome gaps; select the
         dominant current bottleneck by objective impact rather than activity.
         Ground every problem/system-gap diagnosis in ticket, progress, metric,

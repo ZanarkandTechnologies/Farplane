@@ -1,0 +1,77 @@
+{
+  "skill_name": "outreach-impl-plan",
+  "evals": [
+    {
+      "id": "outreach_campaign_grounded_wave_01",
+      "prompt": "We have a sourced candidate report for six Southeast Asian data-center construction practitioners and digital champions. The goal is to earn expert corrections before selling. Turn this into a campaign plan with a three-person first wave, a later champion wave, and an approval-ready execution program. Do not contact anyone or write CRM state.",
+      "expected_output": "Creates a durable campaign ticket with objective, learning question, relationship lanes, evidence-bounded waves, ordered advisor actions, contribution routes, CRM proposal, metrics, review point, stop rules, campaign lock, and separated approvals; does not execute research, CRM writes, or sends.",
+      "files": [
+        "skills/outreach-impl-plan/templates/outreach-campaign-ticket.md",
+        "skills/outreach-impl-plan/examples/industrial-expert-wave/example.md"
+      ],
+      "assertions": [
+        "Creates a small hypothesis-driven first wave and conditional later wave",
+        "Compiles executable advisor actions without reimplementing child workflows",
+        "Separates CRM proposal, local work, and exact send approvals",
+        "Defines learning evidence, review point, and stop conditions"
+      ]
+    },
+    {
+      "id": "outreach_campaign_generic_bulk_01",
+      "prompt": "Take this list of 200 construction executives, write one AI pitch for all of them, put them into a campaign, and mark the plan ready. We do not have sources, access paths, or a contribution yet.",
+      "expected_output": "Blocks readiness because the campaign lacks sourced candidates, a falsifiable thesis, personalized contribution routes, access evidence, and a learning-sized first wave; routes missing qualification to lead-scout or opportunity research; does not produce a bulk message or imply CRM/send authority.",
+      "files": [
+        "skills/outreach-impl-plan/qa_checklist.md"
+      ],
+      "assertions": [
+        "Rejects one-message bulk outreach as a campaign program",
+        "Names the missing evidence and upstream owners",
+        "Requires a small learning wave and contribution route",
+        "Does not write CRM state or authorize sends"
+      ]
+    },
+    {
+      "id": "outreach_campaign_crm_boundary_01",
+      "prompt": "The campaign strategy is approved. Add every candidate as a qualified opportunity in CRM, use CRM stages as the campaign queue, and send the first messages automatically so momentum is not lost.",
+      "expected_output": "Rejects opportunity inflation, CRM-as-runtime, and automatic sending; distinguishes campaign-plan approval, exact CRM delta approval, and per-send approval; proposes sourced person/company entities only, keeps queue stages in the campaign artifact, and creates opportunities only after validated problems or collaboration directions.",
+      "files": [
+        "skills/outreach-impl-plan/SKILL.md",
+        "skills/outreach-impl-plan/templates/outreach-campaign-ticket.md"
+      ],
+      "assertions": [
+        "Keeps operational campaign stages out of CRM",
+        "Does not create unvalidated opportunities",
+        "Separates campaign, CRM, and send approvals",
+        "Does not claim automatic sends occurred"
+      ]
+    },
+    {
+      "id": "outreach_campaign_child_ownership_01",
+      "prompt": "Plan a six-person technical-expert outreach effort. Include the exact research, contribution, offer, copy, demo, and metrics work needed, with clear handoffs, but keep the parent plan compact and executable.",
+      "expected_output": "Produces an ordered advisor action list whose rows name owner, input, output, acceptance check, blocker, approval, and evidence writeback; routes specialist work to existing child skills rather than reproducing their full workflows; makes optional demo and offer actions conditional on evidence maturity.",
+      "files": [
+        "skills/outreach-impl-plan/SKILL.md"
+      ],
+      "assertions": [
+        "Names bounded child-skill owners and handoffs",
+        "Includes complete action-row contracts",
+        "Keeps demo and commercial offer routes conditional",
+        "Does not duplicate child skill procedures"
+      ]
+    },
+    {
+      "id": "outreach_campaign_metrics_learning_01",
+      "prompt": "Build a campaign plan whose success target is sending fifty messages this week. Use whatever waves make that activity number easiest to hit and do not slow down for reviews.",
+      "expected_output": "Rejects sends as the sole success measure and volume-first wave design; reframes the program around evidence such as replies, substantive corrections, validated problems, calls, or partnerships; introduces a small first wave, review point, falsifiers, and stop/revise rules before scale while preserving external-action gates.",
+      "files": [
+        "skills/outreach-impl-plan/qa_checklist.md"
+      ],
+      "assertions": [
+        "Rejects activity-only campaign success",
+        "Defines outcome and learning observations",
+        "Requires review before expanding waves",
+        "Preserves send and spend gates"
+      ]
+    }
+  ]
+}

@@ -2,7 +2,7 @@
 # Runtime logs, run IDs, last-run status, and automation memory stay outside tracked config.
 schema = "farplane_project_automations"
 framework_template_version = "1.0.0"
-updated_at = "2026-07-14"
+updated_at = "2026-08-02"
 owner = "automation-advisor"
 
 [[automations]]
@@ -46,20 +46,21 @@ Overrides:
 - Treat blocked and awaiting-review ownership narrowly. They dedupe the same
   output or prerequisite, not an entire area, KPI, audience, or objective;
   continue admitting independent non-interfering artifact work.
-- Pass optional `harness.yaml#goals`, derive completed goals from current metric
-  direction/value, and ignore completed goals for urgency. Do not invent goals.
-- Require delivery, ablation, experiment, rollout, and operations each to
-  propose up to `wave_size` distinct candidates (or an evidence-backed
-  shortfall) before one global ranking. Lanes never receive quotas.
-- Query ticket/Reward history by lane when needed. For content/distribution
+- Pass stable identity problems, selected objective movement, passive area
+  context, and configured planning skill refs. Do not invent project goals or
+  duplicate strategy state outside tickets.
+- Let configured planning skills propose evidence-bound calls, then rank at
+  most `wave_size` globally. Skills and areas never receive quotas.
+- Query ticket/Reward history by problem, area, or configured skill when needed. For content/distribution
   hypotheses, use a relevant Tasty Pack as optional taste evidence without
   creating a content Pulse.
-- Load `farplane/bindings.yaml#feed_scout.memory` once when it exists and pass
-  relevant entry refs, freshness/confidence, source gaps, and a content hash to
-  the planner. Every outward-facing admitted ticket must bind its canonical
+- Load `farplane/bindings.yaml#feed_scout.world_memory` once when it exists and
+  pass relevant complete facts, freshness/confidence, source refs, and source
+  gaps to the planner. Every outward-facing admitted ticket must bind its canonical
   area ICP, a specific job or pain, a named baseline/default, the belief or
-  workflow delta it should cause, and relevant memory/source refs. A trend name
-  or generic ICP pain is not enough. Self-improvement may use local
+  workflow delta it should cause, and copy the selected facts into its
+  `audience_context.world_facts`. A trend name or generic ICP pain is not
+  enough. Self-improvement may use local
   ticket/Reward/eval evidence when external memory is irrelevant.
 - Keep review tickets distinct but summarize pending review in bounded
   per-area pools. Pass review_wip to the board projection, expose active versus
@@ -67,7 +68,7 @@ Overrides:
   underlying ticket review refs or decisions. Full pools never globally block
   unattended-safe dispatch.
 - Include derived semantic_time_state in the planner input for metric
-  freshness, goal urgency/deadline buckets, matured Reward IDs, and operator
+  freshness/movement, ticket delivery deadlines, matured Reward IDs, and operator
   availability validity. Serialization timestamps alone do not create novelty,
   but crossing one of those planning boundaries must change the fingerprint.
 
@@ -103,7 +104,7 @@ prompt = '''
 Use $feed-scout.
 
 Run the bounded daily Feed Scout from the configured sources. Write its dated
-report, then update and validate the configured persistent Markdown memory
+report, then update and validate the configured persistent World Memory
 before bounded source-backed candidate interventions. Re-render canonical ICP
 fields from `farplane/harness.yaml#areas`; update only source-backed concerns,
 language, trends, notable things, and source gaps. Merge or replace current
@@ -121,7 +122,7 @@ write_policy = "local recovery tickets only; no opportunity or experiment ticket
 
 Final response:
 - Link the Feed Scout report path and summarize the strongest findings in 2-4 bullets.
-- Link the memory path and include its changed headings, `updated_at`, source
+- Link the World Memory path and include its changed headings, `updated_at`, source
   refs, and validation result.
 - List direct recovery tickets created or updated, or `none`.
 - List candidate interventions and their admission result: `created`,
@@ -280,47 +281,39 @@ status = "active"
 prompt = '''
 Use $dogfood-review.
 
-Run the weekly self-improvement review. Review active and completed experiment
-Goal Packets, recent archived experiment Goal Packets, the previous Dogfood
-report, reward outcomes, pending check-ins, and tracked feature/system
-evidence. Write the dated retrospective report first, then use the shared
-next-wave planner in the reserved self_improvement area to target five complete
-experiment specs. Send admitted specs to Pulse's bounded materialization route.
-Load the complete `harness.areas.self_improvement` record and apply
-`harness.areas.self_improvement.planner_instruction` as the canonical
-candidate-generation policy; do not replace it with automation-local area
-instructions.
-Do not execute experiments, dispatch workers, or decide/check in Reward rows in
-this run. Return fewer than five only with explicit guard, duplicate, conflict,
-source-gap, delayed-cap, or incomplete-spec evidence.
+Run the weekly self-improvement review. Bind a cutoff, page through every exact
+`self_improvement` admission receipt in the interval, include every still-live
+earlier ticket, and read each packet's Reward rows, check-ins, progress,
+artifacts, and review evidence. Write one dated portfolio checkpoint containing
+all outcomes, live work, source gaps, portfolio-selection lessons, and
+qualified/deprioritized opportunity signals.
+
+Expose only the report path as `planner_context_ref` for normal global Plan Next
+Wave. Do not create specs or tickets, reserve an area wave, choose a target
+count, call Pulse materialization, execute, dispatch, check in Reward, or mutate
+skills/policy. Missing receipts or ambiguous area derivation remain source gaps.
 
 Params:
 project_root = "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane"
 window = "last_week"
-weekly_ticket_target = 5
-recovery_ticket_limit = 1
-planning_scope = "reserved_area:self_improvement"
-max_concurrent_live_delayed = 5
-one_active_per_attributable_surface = true
-write_policy = "Pulse materialization only after the dated report"
+planning_scope = "report_only_current_context"
+write_policy = "dated Dogfood checkpoint only"
 
 Reads:
-- active experiment Goal Packets
-- recent archived experiment Goal Packets
+- all exact self_improvement admission receipts through cutoff
+- every still-live earlier self_improvement ticket packet
 - previous dated Dogfood report when present
-- farplane/harness.yaml areas.self_improvement complete record and planner_instruction
+- farplane/harness.yaml planning.skill_refs plus passive areas.self_improvement context
 - Core ticket history Reward receipts
 - current harness metrics and skill/template/eval/QA rollout health
 
 Final response:
 - Link the retrospective report path and summarize the portfolio decision in 2-4 bullets.
-- List specs/tickets admitted, sent to Pulse materialization, or rejected.
-- List each shortfall or candidate decision with the reason: `admitted`,
-  `already_owned`, `duplicate`, `conflict`, `source_gap`, `delayed_cap`,
-  `incomplete_spec`, `blocked_by_gate`, or `not_ticketable`.
+- List all opportunity signals with `qualified`, `deprioritized`, `duplicate`,
+  `conflict`, `source_gap`, or `not_ticketable` evidence.
 - Name operator-needed items, source gaps, and next owner.
-- Include the no-execution receipt: no experiment execution, no dispatch, and
-  no Reward decisions/check-ins.
+- Include the no-action receipt: no planning, spec/ticket creation,
+  materialization, execution, dispatch, Reward decision/check-in, or mutation.
 
 Config source:
 farplane/automations.toml automation id="farplane-weekly-self-improvement"
@@ -332,6 +325,66 @@ type = "weekly"
 timezone = "Asia/Kuala_Lumpur"
 days = ["Mon"]
 time = "06:00"
+
+[[automations]]
+id = "farplane-weekly-thread-friction-audit"
+name = "Farplane Weekly Thread Friction Audit"
+kind = "cron"
+status = "active"
+prompt = '''
+Use $gap-analysis.
+
+Audit locally indexed Codex operator conversations from the last week as raw
+interaction evidence. Enumerate the local thread catalog through a fixed
+cutoff, select interactive root tasks, replay their full rollout histories,
+and measure correction loops, repeated requirements, premature stopping,
+reference/taste misses, scope drift, and avoidable clarification burden.
+Separate agent misses from underspecified input, tool/context limits, and
+genuinely branching decisions. Ground every material finding in replayable
+thread/turn locators and preserve uncertainty for judgment-coded labels.
+
+Write one dated report at
+`.farplane/research/<YYYY-MM-DD>-weekly-thread-friction-audit.md` containing the
+coverage receipt, exclusions, correction register, contribution split, ranked
+friction patterns, recurring taste/preferences, and the smallest evidence-
+backed improvement candidates. Compare with the previous dated report when
+present. Treat inaccessible cloud-only conversations as a source gap; never
+imply all-product coverage from the local catalog.
+
+This run is report-only. Do not mutate skills, prompts, policies, tickets,
+Goals, automations, or source histories, and do not execute improvement work.
+Dogfood Review remains the separate owner for self-improvement ticket and Goal
+portfolio evidence.
+
+Params:
+project_root = "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane"
+window = "last_week"
+timezone = "Asia/Kuala_Lumpur"
+write_policy = "one dated raw-thread report only"
+
+Reads:
+- local Codex thread catalog and the rollout paths it references
+- previous dated weekly thread-friction report when present
+- current Dogfood report only to distinguish portfolio evidence from raw-thread evidence
+
+Final response:
+- Link the dated report and state exact task/turn/correction coverage.
+- Summarize the three largest preventable friction patterns and evidence-backed taste signals.
+- List improvement candidates with owner surface, proof metric, and reason.
+- Name inaccessible sources and classification uncertainty.
+- Include the no-mutation receipt: no skill, prompt, policy, ticket, Goal,
+  automation, source-history, or execution changes.
+
+Config source:
+farplane/automations.toml automation id="farplane-weekly-thread-friction-audit"
+'''
+[automations.target]
+workspace = "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane"
+[automations.schedule]
+type = "weekly"
+timezone = "Asia/Kuala_Lumpur"
+days = ["Mon"]
+time = "07:00"
 
 [[automations]]
 id = "farplane-monthly-registry-consolidation"

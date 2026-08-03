@@ -72,6 +72,7 @@ plugins/farplane-research/skills/feed-scout/config/
 # Local ticket working set. Keep the executable Goal Program template
 # source-controlled while other local ticket packets stay ignored.
 tickets/*
+!tickets/archive-index.jsonl
 !tickets/scripts/
 tickets/scripts/*
 !tickets/scripts/check_ticket_metadata.py

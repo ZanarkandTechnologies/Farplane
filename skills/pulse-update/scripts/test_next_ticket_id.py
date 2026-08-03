@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import sys
 import tempfile
 import unittest
@@ -43,6 +44,33 @@ class NextTicketIdTests(unittest.TestCase):
             path.mkdir(parents=True)
             (path / "ticket.md").write_text("---\nticket_id: TASK-0099\n---\n", encoding="utf-8")
             self.assertEqual(next_ticket_ids(root), ["TASK-0100"])
+
+    def test_compact_archive_index_ids_participate_in_allocation(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            index = root / "tickets" / "archive-index.jsonl"
+            index.parent.mkdir(parents=True)
+            index.write_text(
+                json.dumps(
+                    {
+                        "schema_version": 1,
+                        "storage": "github_issue",
+                        "ticket_id": "TASK-0123",
+                        "title": "Closed remotely",
+                        "status": "done",
+                        "closed_at": "2026-07-12T00:00:00Z",
+                        "github_issue_url": "https://github.com/acme/archive/issues/123",
+                        "github_issue_number": 123,
+                        "media_comment_urls": [],
+                        "event_id": "event-123",
+                        "runs": [],
+                    }
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+
+            self.assertEqual(next_ticket_ids(root), ["TASK-0124"])
 
     def test_concurrent_reservations_do_not_collide(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

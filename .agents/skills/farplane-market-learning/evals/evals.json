@@ -1,0 +1,26 @@
+{
+  "skill_name": "farplane-market-learning",
+  "evals": [
+    {
+      "id": "market_learning_system_pain_01",
+      "prompt": "Research why serious agent builders struggle to evaluate skills before we ablate Farplane's Skill System.",
+      "expected_output": "Binds the agent_sdlc bet, SYS-0006, and relevant feature refs; gathers current dated complaint and workaround evidence from direct ICP sources; preserves pain language; ends with one specific ablation decision rather than a market overview",
+      "files": ["farplane/harness.yaml", "docs/systems/registry.jsonl", "docs/features/registry.jsonl", ".agents/skills/farplane-market-learning/SKILL.md"],
+      "assertions": [
+        "Strategic refs bind one configured stable problem and coherent canonical system/features",
+        "Current direct ICP sources support the pain",
+        "The output changes one ablation or content decision"
+      ]
+    },
+    {
+      "id": "market_learning_rejects_generic_report_01",
+      "prompt": "Summarize the agent market and Farplane repository activity so we have something to read.",
+      "expected_output": "Rejects the generic report because it lacks a strategic system, direct ICP complaint evidence, and a decision; returns the exact missing inputs or source gap",
+      "files": [".agents/skills/farplane-market-learning/SKILL.md"],
+      "assertions": [
+        "Repository activity is not customer pain",
+        "Generic research without a decision is rejected"
+      ]
+    }
+  ]
+}

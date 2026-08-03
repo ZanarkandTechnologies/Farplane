@@ -21,7 +21,10 @@ Use this when the operator points at an existing feature, capability, workflow,
 artifact, tool, or bounded improvement campaign and asks what move or next wave
 will create the most compounding value.
 
-This is the decision workflow, not an execution or continuation loop. It
+This is a conditional comparison workflow, not the default owner of every Goal
+turn and not an execution or continuation loop. Invoke it when several
+plausible moves need judgment; skip it when one next move is mechanically
+implied. It
 generates or consumes candidate levers, ranks short contingent trajectories,
 chooses the next wave and first proof, and states when later evidence should
 cause replanning. Domain entrypoints execute the move. Goal Advisor compiles a
@@ -73,6 +76,12 @@ the chosen next step needs its own artifact, budget, or proof surface.
    - [ ] Bind supplied constraints, remaining budget, program policy, optional
      hypothesis tree, catalog, and `progress.md` or experiment evidence when
      this is a replan checkpoint.
+   - [ ] A campaign replan requires the actual program policy, eligible tree
+     leaves, relevant progress/receipts, and remaining budget. If any are
+     absent, return a source gap. A provisional diagnostic frontier may compare
+     only moves supported by supplied evidence across bottleneck fit,
+     information, unlocks, proof speed, cost, risk, and outside options, but it
+     must be labeled conditional and not selected until missing state arrives.
    - [ ] Set the default objective to "compound leverage from existing
      capability" only when the caller does not provide a more concrete one.
    - [ ] Set default constraints to low operator effort, fast proof, reusable
@@ -119,6 +128,8 @@ the chosen next step needs its own artifact, budget, or proof surface.
      independently attributable, non-interfering, and budget-safe.
    - [ ] Choose the cheapest honest falsifier of the strongest trajectory
      before broader rollout.
+   - [ ] Compare the best move with `report_now`, `request_feedback`, and
+     `stop`; recommend spending more budget only when it wins.
    - [ ] Use [prototyping](../prototyping/SKILL.md) when a 1 -> 10 -> 100
      proving path matters before scale.
 - [ ] 6. State replan conditions and choose the next owner.
@@ -262,6 +273,13 @@ Output:
   warrants a durable Goal Packet or rollout mode.
 
 ## Output
+
+For a source-gapped campaign replan, return a clearly conditional comparison
+table with one row per supplied-evidence move and columns for objective fit,
+bottleneck fit, information value, options unlocked, proof speed, cost, risk,
+reversibility, and interference. Then compare separate rows for `report_now`,
+`request_feedback`, and `stop`. Do not call a move selected until the missing
+program/tree/progress/receipt/budget state is bound.
 
 Return this shape in chat or write it to the requested artifact:
 

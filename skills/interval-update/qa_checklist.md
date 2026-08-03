@@ -38,6 +38,9 @@ interval_check(report, evidence, analysis, candidates, ticket_deltas, highlights
       outputs did not cause Interval to invoke another workflow.
 - [ ] Missing, stale, invalid, zero-time, or incomparable metric evidence did
       not become invented flat/favorable momentum.
+- [ ] Metric views came from the run's bounded review window and project
+      timezone; `metrics.yaml` was not used to store cadence, comparison, or
+      cumulative projection options.
 
 ## First-Principles Review
 

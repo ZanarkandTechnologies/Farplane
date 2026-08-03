@@ -813,6 +813,39 @@ class WorkPulseBoardTests(unittest.TestCase):
             )
             self.assertIn("unsatisfied_dependencies", rejected_row["exclusion_reasons"])
 
+    def test_indexed_github_issue_satisfies_dependency_without_network(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            write_ticket(root, "TASK-WAITS-REMOTE", depends_on=["TASK-REMOTE"])
+            index = root / "tickets" / "archive-index.jsonl"
+            index.parent.mkdir(parents=True, exist_ok=True)
+            index.write_text(
+                json.dumps(
+                    {
+                        "schema_version": 1,
+                        "storage": "github_issue",
+                        "ticket_id": "TASK-REMOTE",
+                        "title": "Remote dependency",
+                        "status": "done",
+                        "closed_at": "2026-07-12T00:00:00Z",
+                        "github_issue_url": "https://github.com/acme/archive/issues/12",
+                        "github_issue_number": 12,
+                        "media_comment_urls": [],
+                        "event_id": "event-12",
+                        "runs": [],
+                    }
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+
+            result = BOARD.build_board(root)
+
+        self.assertEqual(
+            [row["ticket_id"] for row in result["executable_tickets"]],
+            ["TASK-WAITS-REMOTE"],
+        )
+
     def test_due_review_action_is_worker_free_and_decision_closes_it(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
