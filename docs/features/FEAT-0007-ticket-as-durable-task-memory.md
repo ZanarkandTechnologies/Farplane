@@ -122,7 +122,7 @@ A durable ticket is a small program for the next agent, not a generic task note.
   decisions`, and `Proof`, upload the reviewed `$demo` MP4 first for material
   feature tickets followed by explicitly selected supporting media as marked
   browser comments, verify the issue, and close it.
-- `farplane ticket close TASK-XXXX` owns the successful local terminal
+- `farplane ticket finalize TASK-XXXX` owns the successful local terminal
   transaction: re-verify the closed issue and media markers, update metadata,
   mine the still-local packet, atomically write the compact locator, emit
   completion, and only then delete the exact active packet.

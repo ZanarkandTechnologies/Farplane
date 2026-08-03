@@ -13,11 +13,11 @@ import farplane
 
 
 class FarplaneCliParserTests(unittest.TestCase):
-    def test_ticket_close_binds_verified_github_issue_url(self) -> None:
+    def test_ticket_finalize_binds_verified_github_issue_url(self) -> None:
         args = farplane.build_parser().parse_args(
             [
                 "ticket",
-                "close",
+                "finalize",
                 "TASK-0001",
                 "--github-issue-url",
                 "https://github.com/acme/repo/issues/1",
@@ -27,7 +27,13 @@ class FarplaneCliParserTests(unittest.TestCase):
         self.assertEqual("TASK-0001", args.ticket_id)
         self.assertEqual("https://github.com/acme/repo/issues/1", args.github_issue_url)
 
-    def test_ticket_close_requires_github_issue_url(self) -> None:
+    def test_ticket_finalize_requires_github_issue_url(self) -> None:
+        with self.assertRaises(SystemExit) as raised:
+            farplane.build_parser().parse_args(["ticket", "finalize", "TASK-0001"])
+
+        self.assertEqual(2, raised.exception.code)
+
+    def test_ticket_close_is_not_a_cli_subcommand(self) -> None:
         with self.assertRaises(SystemExit) as raised:
             farplane.build_parser().parse_args(["ticket", "close", "TASK-0001"])
 

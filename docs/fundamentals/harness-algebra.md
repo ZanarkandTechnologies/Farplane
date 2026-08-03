@@ -707,7 +707,7 @@ ticket_completed(ticket, thread_id?)
   -> issue_findings + projected_ticket?[0..1] + machine_receipt
 ```
 
-`farplane ticket close TASK-XXXX` constructs `ticket_completed` from the ticket
+`farplane ticket finalize TASK-XXXX` constructs `ticket_completed` from the ticket
 ID after completing and archiving the ticket. `farplane mining ticket
 TASK-XXXX` can reconstruct the same mining input for repair or backfill.
 
@@ -942,7 +942,7 @@ Real control levers:
 
 ```text
 Stop hook          = end-of-turn observation, telemetry, and bounded deterministic gates; never completion authority
-ticket close cmd   = verified terminal transition, writeback, and cleanup
+ticket finalize cmd = verified terminal transition, writeback, and cleanup
 UserPrompt hook    = turn-start intent capture
 learning sidecar   = bounded-window trouble/lesson writer
 validators         = mechanical invariants
@@ -1051,7 +1051,7 @@ leaf_native_goal(ticket.md, program.md, progress.md)
 Completion transition:
 
 ```text
-ticket_close_command(ticket, verified_archive, metric_observations, reports)
+ticket_finalize_command(ticket, verified_archive, metric_observations, reports)
   -> terminal_metadata + completion_event + mined_learning
    + archive_locator + packet_cleanup + next_pulse_trigger
 ```

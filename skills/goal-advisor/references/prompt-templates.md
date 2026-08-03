@@ -111,7 +111,7 @@ For a material implementation Goal, after QA passes and before completion
 review, run the `demo` skill to produce the default narrated lead-engineer recap
 MP4. Do not add a ticket demo flag or apply this step to heartbeats, feedback
 checks, planning-only Goals, or direct non-Goal work.
-When every gate passes, run `farplane ticket close TASK-XXXX` and include its
+When every gate passes, run `farplane ticket finalize TASK-XXXX` and include its
 receipt before `stop_complete`. Do not move the ticket by hand.
 
 After each turn: Apply `observe -> choose_next -> act -> verify -> write_back`.

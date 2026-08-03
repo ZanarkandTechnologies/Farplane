@@ -74,7 +74,7 @@ runtime helpers instead of symlinking every script, validator, and test.
   adoption ceiling until the comparison base contains the guard.
 - `capture_user_turn.py` - turn-start user-intent writer for the hook surface
 - `core/farplane_ticket_close.py` - explicit ticket completion, archive, event,
-  and mining boundary used by `farplane ticket close TASK-XXXX --github-issue-url URL`
+  and mining boundary used by `farplane ticket finalize TASK-XXXX --github-issue-url URL`
 - `core/farplane_event_store.py` - durable local event/outbox primitives shared
   by explicit Core commands
 - `farplane.py adoption scan` - local adoption resolver for project

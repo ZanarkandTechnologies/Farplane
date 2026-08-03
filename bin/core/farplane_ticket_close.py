@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verified GitHub issue ticket close transaction and completion mining."""
+"""Verified GitHub issue ticket finalization and completion mining."""
 
 from __future__ import annotations
 
@@ -28,8 +28,8 @@ SUCCESS_STATUSES = {"done", "complete", "completed", "closed"}
 GitHubRunner = Callable[[list[str], Path], subprocess.CompletedProcess[str]]
 
 
-class TicketCloseError(RuntimeError):
-    """Raised when a ticket cannot be closed safely."""
+class TicketFinalizeError(RuntimeError):
+    """Raised when a ticket cannot be finalized safely."""
 
 
 def now_iso() -> str:
@@ -39,13 +39,13 @@ def now_iso() -> str:
 def _frontmatter(text: str) -> tuple[dict[str, Any], list[str], str]:
     match = re.match(r"^---\s*\n(.*?)\n---(?:\s*\n|$)", text, flags=re.S)
     if not match:
-        raise TicketCloseError("ticket_frontmatter_missing")
+        raise TicketFinalizeError("ticket_frontmatter_missing")
     try:
         payload = yaml.safe_load(match.group(1)) or {}
     except yaml.YAMLError as exc:
-        raise TicketCloseError(f"ticket_frontmatter_invalid:{exc}") from exc
+        raise TicketFinalizeError(f"ticket_frontmatter_invalid:{exc}") from exc
     if not isinstance(payload, dict):
-        raise TicketCloseError("ticket_frontmatter_invalid_shape")
+        raise TicketFinalizeError("ticket_frontmatter_invalid_shape")
     return payload, match.group(1).splitlines(), text[match.end() :]
 
 
@@ -53,7 +53,7 @@ def _closed_text(text: str, *, updated_at: str) -> tuple[str, dict[str, Any]]:
     before, lines, body = _frontmatter(text)
     status = str(before.get("status") or "").strip().lower()
     if status in {"failed", "rejected"}:
-        raise TicketCloseError(f"ticket_has_non_success_terminal_status:{status}")
+        raise TicketFinalizeError(f"ticket_has_non_success_terminal_status:{status}")
     if status in SUCCESS_STATUSES and not before.get("claimed_by"):
         return text, {}
 
@@ -101,22 +101,22 @@ def _load_json(path: Path) -> dict[str, Any]:
     try:
         payload = json.loads(path.read_text(encoding="utf-8"))
     except json.JSONDecodeError as exc:
-        raise TicketCloseError(f"invalid_json:{path}:{exc}") from exc
+        raise TicketFinalizeError(f"invalid_json:{path}:{exc}") from exc
     if not isinstance(payload, dict):
-        raise TicketCloseError(f"invalid_json_shape:{path}:expected_object")
+        raise TicketFinalizeError(f"invalid_json_shape:{path}:expected_object")
     return payload
 
 
 def _load_bindings(root: Path) -> dict[str, Any]:
     path = root / "farplane" / "bindings.yaml"
     if not path.is_file():
-        raise TicketCloseError("github_repo_not_configured")
+        raise TicketFinalizeError("github_repo_not_configured")
     try:
         payload = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
     except yaml.YAMLError as exc:
-        raise TicketCloseError(f"bindings_invalid:{exc}") from exc
+        raise TicketFinalizeError(f"bindings_invalid:{exc}") from exc
     if not isinstance(payload, dict):
-        raise TicketCloseError("bindings_invalid_shape")
+        raise TicketFinalizeError("bindings_invalid_shape")
     return payload
 
 
@@ -126,7 +126,7 @@ def _configured_repository(root: Path) -> str:
     github = integrations.get("github") if isinstance(integrations, dict) else None
     repository = str(github.get("repo") or "").strip() if isinstance(github, dict) else ""
     if not REPOSITORY_RE.fullmatch(repository):
-        raise TicketCloseError("github_repo_not_configured")
+        raise TicketFinalizeError("github_repo_not_configured")
     return repository
 
 
@@ -135,7 +135,7 @@ def _parse_issue_url(issue_url: str) -> tuple[str, int, str]:
     parsed = urlparse(raw)
     match = ISSUE_PATH_RE.fullmatch(parsed.path)
     if parsed.scheme != "https" or parsed.netloc != "github.com" or parsed.params or parsed.query or parsed.fragment or not match:
-        raise TicketCloseError(f"invalid_github_issue_url:{issue_url}")
+        raise TicketFinalizeError(f"invalid_github_issue_url:{issue_url}")
     repository = f"{match.group(1)}/{match.group(2)}"
     number = int(match.group(3))
     return repository, number, f"https://github.com/{repository}/issues/{number}"
@@ -149,13 +149,13 @@ def _github_json(runner: GitHubRunner, command: list[str], root: Path) -> dict[s
     result = runner(command, root)
     if result.returncode != 0:
         detail = str(result.stderr or result.stdout or "unknown_error").strip().replace("\n", " ")[:500]
-        raise TicketCloseError(f"github_command_failed:{' '.join(command[1:])}:{detail}")
+        raise TicketFinalizeError(f"github_command_failed:{' '.join(command[1:])}:{detail}")
     try:
         payload = json.loads(result.stdout or "{}")
     except json.JSONDecodeError as exc:
-        raise TicketCloseError(f"github_response_invalid_json:{exc}") from exc
+        raise TicketFinalizeError(f"github_response_invalid_json:{exc}") from exc
     if not isinstance(payload, dict):
-        raise TicketCloseError("github_response_invalid_shape")
+        raise TicketFinalizeError("github_response_invalid_shape")
     return payload
 
 
@@ -180,18 +180,18 @@ def _stored_media(receipt: dict[str, Any]) -> list[dict[str, str]]:
     if not receipt:
         return []
     if not isinstance(raw, list):
-        raise TicketCloseError("closure_receipt_invalid_media")
+        raise TicketFinalizeError("closure_receipt_invalid_media")
     media: list[dict[str, str]] = []
     seen: set[str] = set()
     for item in raw:
         if not isinstance(item, dict):
-            raise TicketCloseError("closure_receipt_invalid_media")
+            raise TicketFinalizeError("closure_receipt_invalid_media")
         path = str(item.get("path") or "")
         digest = str(item.get("sha256") or "")
         if not path or not re.fullmatch(r"[0-9a-f]{64}", digest):
-            raise TicketCloseError("closure_receipt_invalid_media")
+            raise TicketFinalizeError("closure_receipt_invalid_media")
         if digest in seen:
-            raise TicketCloseError("closure_receipt_duplicate_media")
+            raise TicketFinalizeError("closure_receipt_duplicate_media")
         seen.add(digest)
         media.append({"path": path, "sha256": digest})
     return media
@@ -212,12 +212,12 @@ def _expected_media(root: Path, media_paths: Sequence[str | Path], receipt: dict
                     supplied.append(str(candidate))
             stored_paths = [item["path"] for item in stored]
             if supplied != stored_paths:
-                raise TicketCloseError("media_paths_conflict_with_closure_receipt")
+                raise TicketFinalizeError("media_paths_conflict_with_closure_receipt")
             for raw, item in zip(media_paths, stored):
                 candidate = Path(raw).expanduser()
                 candidate = candidate if candidate.is_absolute() else root / candidate
                 if candidate.is_file() and _sha256(candidate) != item["sha256"]:
-                    raise TicketCloseError(f"media_digest_changed:{raw}")
+                    raise TicketFinalizeError(f"media_digest_changed:{raw}")
         return stored
 
     media: list[dict[str, str]] = []
@@ -227,10 +227,10 @@ def _expected_media(root: Path, media_paths: Sequence[str | Path], receipt: dict
         path = path if path.is_absolute() else root / path
         path = path.resolve()
         if not path.is_file():
-            raise TicketCloseError(f"media_not_found:{raw}")
+            raise TicketFinalizeError(f"media_not_found:{raw}")
         digest = _sha256(path)
         if digest in seen:
-            raise TicketCloseError(f"duplicate_media_digest:{digest}")
+            raise TicketFinalizeError(f"duplicate_media_digest:{digest}")
         seen.add(digest)
         try:
             display = path.relative_to(root).as_posix()
@@ -253,7 +253,7 @@ def verify_github_issue(
 
     url_repository, issue_number, canonical_url = _parse_issue_url(issue_url)
     if url_repository != configured_repository:
-        raise TicketCloseError(f"github_issue_repo_mismatch:expected={configured_repository}:actual={url_repository}")
+        raise TicketFinalizeError(f"github_issue_repo_mismatch:expected={configured_repository}:actual={url_repository}")
 
     issue = _github_json(
         runner,
@@ -271,32 +271,32 @@ def verify_github_issue(
     )
     try:
         returned_repository, returned_number, returned_url = _parse_issue_url(str(issue.get("url") or ""))
-    except TicketCloseError as exc:
-        raise TicketCloseError("github_issue_response_url_invalid") from exc
+    except TicketFinalizeError as exc:
+        raise TicketFinalizeError("github_issue_response_url_invalid") from exc
     if returned_repository != configured_repository or returned_number != issue_number or returned_url != canonical_url:
-        raise TicketCloseError("github_issue_response_mismatch")
+        raise TicketFinalizeError("github_issue_response_mismatch")
     if int(issue.get("number") or 0) != issue_number:
-        raise TicketCloseError("github_issue_number_mismatch")
+        raise TicketFinalizeError("github_issue_number_mismatch")
     if str(issue.get("state") or "").upper() != "CLOSED":
-        raise TicketCloseError(f"github_issue_not_closed:{issue_number}")
+        raise TicketFinalizeError(f"github_issue_not_closed:{issue_number}")
     closed_at = str(issue.get("closedAt") or "").strip()
     if not closed_at:
-        raise TicketCloseError(f"github_issue_closed_at_missing:{issue_number}")
+        raise TicketFinalizeError(f"github_issue_closed_at_missing:{issue_number}")
     body = str(issue.get("body") or "")
     ticket_marker = f"<!-- farplane-ticket-id:{ticket_id} -->"
     if body.count(ticket_marker) != 1:
-        raise TicketCloseError(f"github_issue_ticket_marker_missing:{ticket_id}")
+        raise TicketFinalizeError(f"github_issue_ticket_marker_missing:{ticket_id}")
     for heading in ("Before", "After", "Example", "Key decisions", "Proof"):
         section = _issue_section(body, heading).replace(ticket_marker, "").strip()
         if not section:
-            raise TicketCloseError(f"github_issue_section_missing:{heading.lower().replace(' ', '_')}")
+            raise TicketFinalizeError(f"github_issue_section_missing:{heading.lower().replace(' ', '_')}")
     title = str(issue.get("title") or "").strip()
     if not title:
-        raise TicketCloseError(f"github_issue_title_missing:{issue_number}")
+        raise TicketFinalizeError(f"github_issue_title_missing:{issue_number}")
 
     raw_comments = issue.get("comments")
     if not isinstance(raw_comments, list):
-        raise TicketCloseError("github_issue_comments_invalid")
+        raise TicketFinalizeError("github_issue_comments_invalid")
     media_comment_urls: list[str] = []
     for media in expected_media:
         marker = f"<!-- farplane-ticket-media:{ticket_id}:{media['sha256']} -->"
@@ -311,13 +311,13 @@ def verify_github_issue(
             if isinstance(comment, dict) and marker in str(comment.get("body") or "")
         ]
         if marker_count != 1 or len(matches) != 1:
-            raise TicketCloseError(f"github_issue_media_marker_count:{media['sha256']}:{marker_count}")
+            raise TicketFinalizeError(f"github_issue_media_marker_count:{media['sha256']}:{marker_count}")
         matched_body = str(matches[0].get("body") or "")
         if re.search(r"https://github\.com/user-attachments/(?:assets|files)/[^\s)<>'\"]+", matched_body) is None:
-            raise TicketCloseError(f"github_issue_media_attachment_missing:{media['sha256']}")
+            raise TicketFinalizeError(f"github_issue_media_attachment_missing:{media['sha256']}")
         matched_url = str(matches[0].get("url") or "")
         if not matched_url:
-            raise TicketCloseError(f"github_issue_media_comment_url_missing:{media['sha256']}")
+            raise TicketFinalizeError(f"github_issue_media_comment_url_missing:{media['sha256']}")
         parsed_comment = urlparse(matched_url)
         if (
             parsed_comment.scheme != "https"
@@ -325,7 +325,7 @@ def verify_github_issue(
             or parsed_comment.path != urlparse(canonical_url).path
             or re.fullmatch(r"issuecomment-[1-9]\d*", parsed_comment.fragment) is None
         ):
-            raise TicketCloseError(f"github_issue_media_comment_url_invalid:{media['sha256']}")
+            raise TicketFinalizeError(f"github_issue_media_comment_url_invalid:{media['sha256']}")
         media_comment_urls.append(matched_url)
 
     return {
@@ -348,9 +348,9 @@ def _load_archive_index(path: Path) -> list[dict[str, Any]]:
         try:
             row = json.loads(line)
         except json.JSONDecodeError as exc:
-            raise TicketCloseError(f"archive_index_invalid_json:line={number}:{exc}") from exc
+            raise TicketFinalizeError(f"archive_index_invalid_json:line={number}:{exc}") from exc
         if not isinstance(row, dict) or not TICKET_ID_RE.fullmatch(str(row.get("ticket_id") or "")):
-            raise TicketCloseError(f"archive_index_invalid_row:line={number}")
+            raise TicketFinalizeError(f"archive_index_invalid_row:line={number}")
         rows.append(row)
     return rows
 
@@ -358,9 +358,9 @@ def _load_archive_index(path: Path) -> list[dict[str, Any]]:
 def _matching_index_row(rows: Sequence[dict[str, Any]], ticket_id: str, issue_url: str) -> dict[str, Any]:
     matches = [row for row in rows if row.get("ticket_id") == ticket_id]
     if len(matches) > 1:
-        raise TicketCloseError(f"archive_index_duplicate_ticket_id:{ticket_id}")
+        raise TicketFinalizeError(f"archive_index_duplicate_ticket_id:{ticket_id}")
     if matches and str(matches[0].get("github_issue_url") or "") != issue_url:
-        raise TicketCloseError(f"archive_index_issue_conflict:{ticket_id}")
+        raise TicketFinalizeError(f"archive_index_issue_conflict:{ticket_id}")
     return matches[0] if matches else {}
 
 
@@ -408,7 +408,7 @@ def _receipt_payload(
     }
 
 
-def close_ticket(
+def finalize_ticket(
     project_root: Path,
     ticket_id: str,
     github_issue_url: str,
@@ -422,7 +422,7 @@ def close_ticket(
     root = project_root.resolve()
     normalized = ticket_id.strip().upper()
     if not TICKET_ID_RE.fullmatch(normalized):
-        raise TicketCloseError(f"invalid_ticket_id:{ticket_id}")
+        raise TicketFinalizeError(f"invalid_ticket_id:{ticket_id}")
 
     active_dir = root / "tickets" / normalized
     active_ticket = active_dir / "ticket.md"
@@ -430,38 +430,38 @@ def close_ticket(
     index_path = root / "tickets" / "archive-index.jsonl"
     receipt_path = root / ".farplane" / "tickets" / "closures" / f"{normalized}.json"
     if active_dir.is_symlink() or active_dir.parent.resolve() != (root / "tickets").resolve():
-        raise TicketCloseError(f"unsafe_ticket_packet_path:{active_dir}")
+        raise TicketFinalizeError(f"unsafe_ticket_packet_path:{active_dir}")
     receipt = _load_json(receipt_path)
     if receipt and str(receipt.get("github_issue_url") or "") != github_issue_url.strip():
-        raise TicketCloseError(f"closure_receipt_issue_conflict:{normalized}")
+        raise TicketFinalizeError(f"closure_receipt_issue_conflict:{normalized}")
 
     configured_repository = _configured_repository(root)
     url_repository, _, canonical_url = _parse_issue_url(github_issue_url)
     if url_repository != configured_repository:
-        raise TicketCloseError(f"github_issue_repo_mismatch:expected={configured_repository}:actual={url_repository}")
+        raise TicketFinalizeError(f"github_issue_repo_mismatch:expected={configured_repository}:actual={url_repository}")
     rows = _load_archive_index(index_path)
     existing_row = _matching_index_row(rows, normalized, canonical_url)
     if existing_row and not receipt:
-        raise TicketCloseError(f"archive_index_without_closure_receipt:{normalized}")
+        raise TicketFinalizeError(f"archive_index_without_closure_receipt:{normalized}")
 
     if active_ticket.is_file() and legacy_ticket.is_file():
-        raise TicketCloseError(f"ticket_exists_active_and_archived:{normalized}")
+        raise TicketFinalizeError(f"ticket_exists_active_and_archived:{normalized}")
     if not active_ticket.is_file() and active_dir.exists() and not (receipt and existing_row):
-        raise TicketCloseError(f"ticket_packet_incomplete:{normalized}")
+        raise TicketFinalizeError(f"ticket_packet_incomplete:{normalized}")
     if not active_ticket.is_file() and not active_dir.exists() and not (receipt and existing_row):
         if legacy_ticket.is_file():
-            raise TicketCloseError(f"legacy_ticket_already_archived:{normalized}")
-        raise TicketCloseError(f"ticket_not_found:{normalized}")
+            raise TicketFinalizeError(f"legacy_ticket_already_archived:{normalized}")
+        raise TicketFinalizeError(f"ticket_not_found:{normalized}")
     if active_ticket.is_file():
         current, _, _ = _frontmatter(active_ticket.read_text(encoding="utf-8"))
         current_ticket_id = str(current.get("ticket_id") or "").strip().upper()
         if current_ticket_id != normalized:
-            raise TicketCloseError(
+            raise TicketFinalizeError(
                 f"ticket_frontmatter_id_mismatch:expected={normalized}:actual={current_ticket_id or 'missing'}"
             )
         current_status = str(current.get("status") or "").strip().lower()
         if current_status in {"failed", "rejected"}:
-            raise TicketCloseError(f"ticket_has_non_success_terminal_status:{current_status}")
+            raise TicketFinalizeError(f"ticket_has_non_success_terminal_status:{current_status}")
 
     media = _expected_media(root, media_paths, receipt)
     remote = verify_github_issue(
@@ -488,7 +488,7 @@ def close_ticket(
         status = "already_closed"
     else:
         if not active_ticket.is_file():
-            raise TicketCloseError(f"ticket_not_found_for_mining:{normalized}")
+            raise TicketFinalizeError(f"ticket_not_found_for_mining:{normalized}")
         original = active_ticket.read_text(encoding="utf-8")
         closed_text, before = _closed_text(original, updated_at=now_iso())
         if closed_text != original:
@@ -579,7 +579,7 @@ def close_ticket(
     atomic_write_json(receipt_path, indexed)
 
     if active_dir.is_symlink() or active_dir.parent.resolve() != (root / "tickets").resolve():
-        raise TicketCloseError(f"unsafe_ticket_delete_path:{active_dir}")
+        raise TicketFinalizeError(f"unsafe_ticket_delete_path:{active_dir}")
     if active_dir.exists():
         shutil.rmtree(active_dir)
 

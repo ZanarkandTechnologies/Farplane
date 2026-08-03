@@ -259,7 +259,7 @@ bash install.sh
 farplane doctor
 farplane hooks list --json
 farplane hooks doctor
-farplane ticket close TASK-XXXX --github-issue-url https://github.com/OWNER/REPO/issues/NUMBER
+farplane ticket finalize TASK-XXXX --github-issue-url https://github.com/OWNER/REPO/issues/NUMBER
 farplane ui link /path/to/Farplane-UI
 farplane ui start
 ```
@@ -277,7 +277,7 @@ What Core owns:
 - `farplane hooks doctor`: verifies Core-owned hook links, command targets,
   interpreters, and known silent-skip regressions without requiring optional
   Farplane UI/Node telemetry.
-- `farplane ticket close TASK-XXXX --github-issue-url URL`: verifies the already closed issue in the
+- `farplane ticket finalize TASK-XXXX --github-issue-url URL`: verifies the already closed issue in the
   project's configured GitHub repository, its glanceable Before/After/Example
   summary, and its selected media markers. Material feature closeouts put the
   reviewed demo MP4 first, followed by optional screenshots. Core then writes

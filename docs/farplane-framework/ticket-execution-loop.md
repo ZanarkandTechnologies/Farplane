@@ -261,7 +261,7 @@ material_completion(ticket)
   -> qa-tester(ticket, proof_targets) -> evidence_bundle
   -> reviewer(ticket, checklist?, evidence_bundle?, rubrics) -> TAS verdict
   -> coordinator reconciles both receipts before pass/revise/block
-  -> farplane ticket close TASK-XXXX on pass
+  -> farplane ticket finalize TASK-XXXX on pass
 ```
 
 Do not use generic subagents for these roles when typed agents are available.

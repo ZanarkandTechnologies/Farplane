@@ -88,7 +88,7 @@ path-derived `ref` frontmatter to existing report Markdown before rebuilding
 the index. The standard lives in
 [docs/farplane-framework/reporting.md](../docs/farplane-framework/reporting.md).
 
-`farplane ticket close TASK-XXXX` completes and archives a ticket, then writes
+`farplane ticket finalize TASK-XXXX` completes and archives a ticket, then writes
 its explicit completion event. `farplane/bindings.yaml#event_routes` maps that
 event to an immutable mining program. Events, outbox state, frozen run inputs,
 machine receipts, and verdicts remain ignored under `.farplane/`. Farplane UI

@@ -52,7 +52,7 @@ template_uses:
   session, verify the complete remote record, and close it with reason
   `completed`. Use `gh` for issue text/state, never as a fake local-file
   attachment uploader.
-- [ ] Run `farplane ticket close TASK-XXXX --github-issue-url <url>` with one
+- [ ] Run `farplane ticket finalize TASK-XXXX --github-issue-url <url>` with one
   `--media <path>` per selected file. Let Core verify, mine, index, and delete
   the exact local packet; otherwise retain it with one concrete next action.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
@@ -136,7 +136,7 @@ Ensure an agent can execute the core path after only reading this file.
   11. verify the issue body and every expected comment marker with `gh`, close
       the issue with reason `completed`, and verify that terminal remote state
   12. pass the verified issue URL and every media path to `farplane ticket
-      close`; Core alone mines, writes the compact locator, and deletes the
+      finalize`; Core alone mines, writes the compact locator, and deletes the
       exact packet
 - Core decision branches:
   - docs/proof only -> write back, validate, close
@@ -371,7 +371,7 @@ so the next run resumes instead of creating duplicates.
 Only after remote verification succeeds, invoke Core once:
 
 ```text
-farplane ticket close TASK-XXXX \
+farplane ticket finalize TASK-XXXX \
   --github-issue-url https://github.com/OWNER/REPO/issues/N \
   --media <selected-path-1> \
   --media <selected-path-2>

@@ -13,7 +13,7 @@ from farplane_cli_commands import (
     run_entities_compile_cli, run_harness_health_compile_cli,
     run_metrics_primitives_cli, run_mining_cli, run_project_snapshot_cli,
     run_reports_index_cli, run_reports_repair_refs_cli, run_response_check_cli,
-    run_skill_rollout_scan_cli, run_ticket_close_cli, run_ticket_history_cli,
+    run_skill_rollout_scan_cli, run_ticket_finalize_cli, run_ticket_history_cli,
     run_validate_ticket,
 )
 from farplane_cli_hooks import (
@@ -175,12 +175,15 @@ def build_parser() -> argparse.ArgumentParser:
 
     ticket = sub.add_parser("ticket", help="Apply canonical Farplane ticket lifecycle transitions.")
     ticket_sub = ticket.add_subparsers(dest="ticket_command")
-    ticket_close = ticket_sub.add_parser("close", help="Close, archive, and emit completion mining for one ticket.")
-    ticket_close.add_argument("ticket_id")
-    ticket_close.add_argument("--github-issue-url", required=True)
-    ticket_close.add_argument("--project-root", default=os.getcwd())
-    ticket_close.add_argument("--json", action="store_true")
-    ticket_close.set_defaults(func=run_ticket_close_cli)
+    ticket_finalize = ticket_sub.add_parser(
+        "finalize",
+        help="Verify a closed issue, mine completion, index it, and delete the local packet.",
+    )
+    ticket_finalize.add_argument("ticket_id")
+    ticket_finalize.add_argument("--github-issue-url", required=True)
+    ticket_finalize.add_argument("--project-root", default=os.getcwd())
+    ticket_finalize.add_argument("--json", action="store_true")
+    ticket_finalize.set_defaults(func=run_ticket_finalize_cli)
 
     tickets = sub.add_parser("tickets", help="Inspect Farplane ticket projections.")
     tickets_sub = tickets.add_subparsers(dest="tickets_command")

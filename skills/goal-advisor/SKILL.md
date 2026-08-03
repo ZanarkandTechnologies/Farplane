@@ -139,7 +139,7 @@ whenever the ticket changes. For branch detail load only the relevant reference:
   - [ ] Material implementation invariant: ordered sanity checks -> QA evidence
     review -> narrated lead-engineer demo MP4 -> ticket-scoped response draft ->
     completion review with `approved_response` -> ticket writeback ->
-    `farplane ticket close TASK-XXXX` -> `stop_complete`.
+    `farplane ticket finalize TASK-XXXX` -> `stop_complete`.
   - [ ] Require current official/maintained implementation grounding for feature
     work unless explicitly local-only, and best screenshot evidence for UI work.
 - [ ] 7. Emit the launcher only after loading `references/prompt-templates.md`.

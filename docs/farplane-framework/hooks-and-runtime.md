@@ -57,7 +57,7 @@ event_id = sha256(source, project_id, ticket_id, content_hash)
 run_id   = sha256(event_id, route_id, program_digest)
 ```
 
-`farplane ticket close TASK-XXXX` owns the successful terminal transition. It
+`farplane ticket finalize TASK-XXXX` owns the successful terminal transition. It
 sets `status: done`, clears `claimed_by`, advances `updated_at`, archives the
 ticket, writes `farplane.ticket.completed` to the local event store, applies the
 matching route, and returns a closure/mining receipt. Failed mining leaves the
@@ -65,7 +65,7 @@ event retryable through `farplane mining drain`. There is no file watcher,
 daemon, shell-tail workflow engine, or extra heartbeat.
 
 Ticket completion has one active mining route. Its normal entry point is
-`farplane ticket close TASK-XXXX`; `farplane mining ticket TASK-XXXX` remains
+`farplane ticket finalize TASK-XXXX`; `farplane mining ticket TASK-XXXX` remains
 an explicit repair/backfill command. The program freezes the ticket,
 optional program/progress/artifacts, and any bounded operator-turn window named
 by immutable event provenance, then runs a structured read-only Codex review in

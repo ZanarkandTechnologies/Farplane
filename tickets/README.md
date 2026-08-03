@@ -50,7 +50,7 @@ No lane folders. No hand-maintained board file. The ticket itself is the board c
    supporting screenshots through the authenticated GitHub browser composer
 7. verify the issue body and every expected media marker, then close the issue
    as completed
-8. run `farplane ticket close TASK-XXXX` with that issue and selected media;
+8. run `farplane ticket finalize TASK-XXXX` with that issue and selected media;
    Core re-verifies the closed issue, writes terminal metadata, mines the
    still-local packet, writes its compact locator, emits completion, and only
    then deletes the exact packet
@@ -544,7 +544,7 @@ For material Goal-backed work, put the final checkpoint in `QA Strategy`. Name
 the QA evidence review, completion review, reviewer TAS gate, or explicit
 `none` decision that must exist before completion. Do not rely on a Stop hook
 or transcript memory to discover missing QA after the agent claims done.
-After the checkpoint passes, use `farplane ticket close TASK-XXXX` for the
+After the checkpoint passes, use `farplane ticket finalize TASK-XXXX` for the
 terminal state, verified archive writeback, mining, locator write, and cleanup;
 do not hand-edit, manually move, or manually delete the packet. Farplane Stop
 hooks are telemetry-only and do not own proof repair or terminal closeout.

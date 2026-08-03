@@ -197,7 +197,7 @@ Only Work Pulse executes tickets and matured check-ins.
 
 ### FR-9: Portable Event Mining
 
-- `farplane ticket close TASK-XXXX` performs the successful terminal/archive
+- `farplane ticket finalize TASK-XXXX` performs the successful terminal/archive
   transition and writes one typed `farplane.ticket.completed` event to the
   durable local outbox. Failed mining leaves that event retryable; no hook,
   file watcher, or cloud dispatcher infers completion from file writes.

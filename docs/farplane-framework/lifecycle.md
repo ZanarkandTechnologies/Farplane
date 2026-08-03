@@ -157,7 +157,7 @@ authenticated browser composer. Material feature tickets require the passing
 reviewed `$demo` MP4 as the first comment; supporting screenshots may follow.
 The skill verifies the expected body and comments, then closes the issue.
 
-`farplane ticket close TASK-XXXX` then re-verifies that closed issue, mines the
+`farplane ticket finalize TASK-XXXX` then re-verifies that closed issue, mines the
 still-local packet from that ID alone, atomically writes its compact locator,
 emits completion, and only then deletes the exact active packet. Every failed
 verification, mining, or locator gate retains the packet for retry. Farplane

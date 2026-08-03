@@ -32,7 +32,7 @@ issue, then lets Core mine, index, and delete the exact local packet.
 7. Verify each marker and attachment URL with `gh`, open the comment fragment
    to prove GitHub renders the image/video, and link the first demo comment from
    the issue's `Proof` section.
-8. Close as completed, then run `farplane ticket close` so Core verifies,
+8. Close as completed, then run `farplane ticket finalize` so Core verifies,
    mines, indexes, and deletes safely.
 
 ## How to Test

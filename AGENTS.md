@@ -295,7 +295,7 @@ For harness-design research and external patterns:
 - Final completion in Farplane should remain mechanical and visible: material
   Goal prompts must require QA evidence review and reviewer-lane completion
   review, write the strongest evidence back to the packet, then run `farplane
-  ticket close TASK-XXXX` before `stop_complete`. That command owns terminal
+  ticket finalize TASK-XXXX` before `stop_complete`. That command owns terminal
   metadata, archive movement, completion-event emission, and mining. Live Stop
   hooks collect telemetry only and do not own completion routing.
 - In Farplane, `qa_checklist.md` is the self/preflight/repair guardrail and the

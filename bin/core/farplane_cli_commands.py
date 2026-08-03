@@ -86,22 +86,22 @@ def run_ticket_history_cli(args: argparse.Namespace) -> int:
     return int(run_history(args))
 
 
-def run_ticket_close_cli(args: argparse.Namespace) -> int:
-    from farplane_ticket_close import TicketCloseError, close_ticket
+def run_ticket_finalize_cli(args: argparse.Namespace) -> int:
+    from farplane_ticket_close import TicketFinalizeError, finalize_ticket
 
     try:
-        payload = close_ticket(
+        payload = finalize_ticket(
             Path(args.project_root).expanduser().resolve(),
             args.ticket_id,
             args.github_issue_url,
         )
-    except (OSError, TicketCloseError) as exc:
-        raise CliError(f"ticket_close_error:{exc}") from exc
+    except (OSError, TicketFinalizeError) as exc:
+        raise CliError(f"ticket_finalize_error:{exc}") from exc
     if args.json:
         print(json.dumps(payload, indent=2, sort_keys=True))
     else:
         print(
-            f"farplane ticket close {payload['ticket_id']}: {payload['status']} "
+            f"farplane ticket finalize {payload['ticket_id']}: {payload['status']} "
             f"(mining={payload['mining_status']})"
         )
         print(f"receipt: {payload['receipt_path']}")

@@ -17,7 +17,7 @@ if str(CORE_DIR) not in sys.path:
 
 import farplane_ticket_close as close_module
 from farplane_event_store import pending_events
-from farplane_ticket_close import TicketCloseError, close_ticket
+from farplane_ticket_close import TicketFinalizeError, finalize_ticket
 
 
 PROJECT_REPO = "acme/farplane"
@@ -137,7 +137,7 @@ class TicketCloseTests(unittest.TestCase):
             media, digest = write_media(root)
             github = GitHubFixture(media_digests=(digest,))
 
-            first = close_ticket(
+            first = finalize_ticket(
                 root,
                 "task-0001",
                 ISSUE_URL,
@@ -145,7 +145,7 @@ class TicketCloseTests(unittest.TestCase):
                 codex_runner=no_signal_runner,
                 github_runner=github,
             )
-            second = close_ticket(
+            second = finalize_ticket(
                 root,
                 "TASK-0001",
                 ISSUE_URL,
@@ -190,7 +190,7 @@ class TicketCloseTests(unittest.TestCase):
             ticket = write_project(root)
             github = GitHubFixture()
 
-            result = close_ticket(
+            result = finalize_ticket(
                 root,
                 "TASK-0001",
                 ISSUE_URL,
@@ -211,8 +211,8 @@ class TicketCloseTests(unittest.TestCase):
                 root = Path(tmp)
                 ticket = write_project(root)
                 original = ticket.read_text()
-                with self.assertRaisesRegex(TicketCloseError, error):
-                    close_ticket(root, "TASK-0001", url, github_runner=github)
+                with self.assertRaisesRegex(TicketFinalizeError, error):
+                    finalize_ticket(root, "TASK-0001", url, github_runner=github)
                 self.assertEqual(ticket.read_text(), original)
                 self.assertFalse((root / "tickets" / "archive-index.jsonl").exists())
 
@@ -230,8 +230,8 @@ class TicketCloseTests(unittest.TestCase):
                 bindings.write_text(text, encoding="utf-8")
                 github = GitHubFixture()
 
-                with self.assertRaisesRegex(TicketCloseError, "github_repo_not_configured"):
-                    close_ticket(root, "TASK-0001", ISSUE_URL, github_runner=github)
+                with self.assertRaisesRegex(TicketFinalizeError, "github_repo_not_configured"):
+                    finalize_ticket(root, "TASK-0001", ISSUE_URL, github_runner=github)
 
                 self.assertIn("status: active", ticket.read_text(encoding="utf-8"))
                 self.assertEqual(github.calls, [])
@@ -248,8 +248,8 @@ class TicketCloseTests(unittest.TestCase):
                     if label == "ticket"
                     else GitHubFixture(media_digests=())
                 )
-                with self.assertRaisesRegex(TicketCloseError, "marker"):
-                    close_ticket(root, "TASK-0001", ISSUE_URL, [media], github_runner=github)
+                with self.assertRaisesRegex(TicketFinalizeError, "marker"):
+                    finalize_ticket(root, "TASK-0001", ISSUE_URL, [media], github_runner=github)
                 self.assertIn("status: active", ticket.read_text())
                 self.assertFalse((root / "tickets" / "archive-index.jsonl").exists())
 
@@ -267,8 +267,8 @@ class TicketCloseTests(unittest.TestCase):
                 ]
             )
 
-            with self.assertRaisesRegex(TicketCloseError, "github_issue_media_attachment_missing"):
-                close_ticket(root, "TASK-0001", ISSUE_URL, [media], github_runner=github)
+            with self.assertRaisesRegex(TicketFinalizeError, "github_issue_media_attachment_missing"):
+                finalize_ticket(root, "TASK-0001", ISSUE_URL, [media], github_runner=github)
 
             self.assertTrue(ticket.is_file())
             self.assertIn("status: active", ticket.read_text())
@@ -286,8 +286,8 @@ class TicketCloseTests(unittest.TestCase):
                 "<!-- farplane-ticket-id:TASK-0001 -->"
             )
 
-            with self.assertRaisesRegex(TicketCloseError, "github_issue_section_missing:key_decisions"):
-                close_ticket(root, "TASK-0001", ISSUE_URL, github_runner=GitHubFixture(body=body))
+            with self.assertRaisesRegex(TicketFinalizeError, "github_issue_section_missing:key_decisions"):
+                finalize_ticket(root, "TASK-0001", ISSUE_URL, github_runner=GitHubFixture(body=body))
 
             self.assertIn("status: active", ticket.read_text())
             self.assertFalse((root / "tickets" / "archive-index.jsonl").exists())
@@ -298,7 +298,7 @@ class TicketCloseTests(unittest.TestCase):
             ticket = write_project(root, program_ref="core:missing-program@9.9.9")
             github = GitHubFixture()
 
-            receipt = close_ticket(
+            receipt = finalize_ticket(
                 root,
                 "TASK-0001",
                 ISSUE_URL,
@@ -332,8 +332,8 @@ class TicketCloseTests(unittest.TestCase):
             )
             github = GitHubFixture()
 
-            with self.assertRaisesRegex(TicketCloseError, "archive_index_issue_conflict"):
-                close_ticket(root, "TASK-0001", ISSUE_URL, github_runner=github)
+            with self.assertRaisesRegex(TicketFinalizeError, "archive_index_issue_conflict"):
+                finalize_ticket(root, "TASK-0001", ISSUE_URL, github_runner=github)
 
             self.assertIn("status: active", ticket.read_text())
             self.assertEqual(github.calls, [])
@@ -353,7 +353,7 @@ class TicketCloseTests(unittest.TestCase):
 
                 with mock.patch("farplane_ticket_close._atomic_write_text", side_effect=fail_selected):
                     with self.assertRaisesRegex(OSError, "write failed"):
-                        close_ticket(
+                        finalize_ticket(
                             root,
                             "TASK-0001",
                             ISSUE_URL,
@@ -380,7 +380,7 @@ class TicketCloseTests(unittest.TestCase):
 
             with mock.patch("farplane_ticket_close.shutil.rmtree", side_effect=OSError("delete failed")):
                 with self.assertRaisesRegex(OSError, "delete failed"):
-                    close_ticket(
+                    finalize_ticket(
                         root,
                         "TASK-0001",
                         ISSUE_URL,
@@ -397,7 +397,7 @@ class TicketCloseTests(unittest.TestCase):
             self.assertTrue(ticket.is_file())
             self.assertEqual(len(rows_before), 1)
 
-            retried = close_ticket(
+            retried = finalize_ticket(
                 root,
                 "TASK-0001",
                 ISSUE_URL,
@@ -417,8 +417,8 @@ class TicketCloseTests(unittest.TestCase):
             ticket = write_project(root)
             ticket.write_text(ticket.read_text().replace("status: active", "status: rejected"))
 
-            with self.assertRaisesRegex(TicketCloseError, "non_success_terminal_status"):
-                close_ticket(root, "TASK-0001", ISSUE_URL, github_runner=GitHubFixture())
+            with self.assertRaisesRegex(TicketFinalizeError, "non_success_terminal_status"):
+                finalize_ticket(root, "TASK-0001", ISSUE_URL, github_runner=GitHubFixture())
             self.assertIn("status: rejected", ticket.read_text())
 
 
