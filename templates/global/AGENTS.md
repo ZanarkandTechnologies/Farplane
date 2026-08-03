@@ -1,6 +1,6 @@
 <!--
 template_id: global-agents-template
-template_version: 0.2.28
+template_version: 0.2.29
 feature_refs:
   - FEAT-0022
   - FEAT-0042
@@ -151,11 +151,11 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
 - Do not end direct work requests with "if you want I can ...". Take the next
   obvious step or state the concrete blocker.
 - Do not revert or overwrite user changes unless explicitly asked.
-- For mutating work in a Git repository, use a branch-backed worktree by
-  default. Treat the saved checkout as a single-writer integration surface:
-  do not begin edits there while another task is active. A shared checkout is
-  allowed only when the user or project explicitly requires it and one task
-  owns all writes.
+- Stay in the checkout the user selected. Do not create, switch into, or move
+  work through a linked worktree unless the user explicitly requests it or
+  coordination has already assigned that checkout. When another task owns the
+  selected checkout, coordinate the single-writer boundary instead of silently
+  changing the workspace topology.
 - Do not run destructive git or filesystem operations without explicit user
   intent.
 
@@ -206,7 +206,7 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
   materially harder to trust.
 - Before sending, silently compress the final response once. Default bands are
   at most `120` words for a simple answer or status, `180` words for an
-  ordinary implementation handoff, and `250` words for a substantial,
+  ordinary implementation handoff, and `500` words for a substantial,
   multi-change, or Goal-backed handoff. A simple answer is a hard one-paragraph
   response without headings, a list, or enumerated options unless the user
   explicitly asks for comparison or steps.
@@ -216,6 +216,10 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
   replace verified steps or commands with shorter unverified examples. Put
   deep detail in the owning artifact and link it instead of reproducing it in
   chat.
+- Directly embed the strongest relevant image or video when one exists. Use a
+  Mermaid diagram when it materially clarifies the selected focus, and put
+  citation depth in a final link-only `References` or `Citations` section.
+  These presentation forms do not authorize new topic breadth.
 - Do not add process narration, repeated context, empty headings, generic
   advice, invented follow-up work, or unasked next-step offers. A completion
   handoff may name residual risk and its implication, but must not turn that
@@ -226,11 +230,15 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
   `approved_response` within the applicable response band; send that response
   with only necessary path or link substitutions. Do not spawn a reviewer
   solely to compress routine replies. A mechanical runtime ceiling may request
-  another compression pass when a response exceeds `250` words or normally
+  another compression pass when a response exceeds `500` words or normally
   exceeds `20` nonblank source lines, but it does not replace semantic review
   or own completion. Explicitly requested detail, correctness, or safety may
   retain extra lines after that semantic compression pass; the word ceiling
   remains hard.
+- Completion handoffs are executive summaries, not change inventories. Lead
+  with compact `Before`, `After`, and `Validation` evidence that changes the
+  user's confidence or next action. Keep file paths in final references unless
+  a path itself is the required action.
 - Lead status and completion replies with a decision-complete sentence:
   `<worked | did not work | partial> — <reason and implication>`. Do not report
   an isolated fact when its meaning is known. Answer at the user's requested

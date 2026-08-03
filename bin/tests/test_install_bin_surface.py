@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import re
 import unittest
 from pathlib import Path
@@ -49,6 +50,18 @@ class InstallBinSurfaceTests(unittest.TestCase):
         text = INSTALL.read_text(encoding="utf-8")
         self.assertIn("--git-common-dir", text)
         self.assertIn("global Codex installation must come from the primary", text)
+
+    def test_installed_hook_allowlist_covers_hook_config_commands(self) -> None:
+        managed = set(shell_array("INSTALL_HOOK_FILES"))
+        hook_config = json.loads((ROOT / "hooks.json").read_text(encoding="utf-8"))
+        referenced = {
+            Path(match.group(1)).name
+            for groups in hook_config["hooks"].values()
+            for group in groups
+            for hook in group["hooks"]
+            if (match := re.search(r"\.codex/hooks/([^\" ]+\.py)", hook.get("command", "")))
+        }
+        self.assertTrue(referenced.issubset(managed), referenced - managed)
 
     def test_removed_runtime_and_invocation_sources_do_not_exist(self) -> None:
         removed = (

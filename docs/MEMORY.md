@@ -3,7 +3,7 @@ title: "Farplane Project Memory"
 status: active
 owner: doc-governance
 created_at: 2026-03-26
-updated_at: 2026-06-26
+updated_at: 2026-08-03
 tags:
   - farplane
   - memory
@@ -132,6 +132,20 @@ MEM-0035, MEM-0036, MEM-0056, MEM-0130, MEM-0151.
   cadence is the scheduler; do not restore `farplane/steer.config.toml` or
   `.farplane/state/steer-scheduler.json`.
 
+### Operator Attention And Checkout Ownership
+
+Source rows: MEM-0152, MEM-0153.
+
+- Response budget is an attention/frontier-control constraint, not cosmetic
+  brevity. Choose one highest-value operator problem or decision before
+  drafting; chat owns that conclusion or current bottleneck, while durable
+  artifacts own parallel breadth. Mermaid, direct image/video embeds, and a
+  trailing link-only references section may be excluded from prose accounting
+  only when they explain or prove the selected focus, never to reopen branches.
+- Stay in the operator-selected checkout. Linked worktrees are opt-in unless
+  coordination already assigned one; resolve concurrent writers explicitly
+  instead of surprising the operator with a different workspace topology.
+
 ### Review, QA, And Evidence
 
 Source rows: MEM-0006, MEM-0007, MEM-0033, MEM-0034, MEM-0048, MEM-0052,
@@ -259,6 +273,10 @@ MEM-0074, MEM-0105, MEM-0109, MEM-0114.
 Keep only recent full rows that pass the admission rule. During a drain, move
 older passing rows into `## Active Memory` and keep exact wording in the
 archive.
+
+2026-08-03 16:15 +0800 | farplane,responses,attention,focus,frontier | Output budget is an attention/frontier-control constraint: select one highest-value operator problem or decision before drafting, keep parallel breadth in durable artifacts, and allow Mermaid, direct image/video embeds, and trailing link-only references outside prose accounting only when they clarify or prove that selected focus.
+
+2026-08-03 16:15 +0800 | farplane,git,worktrees,ownership,operator-control | Stay in the operator-selected checkout; linked worktrees require explicit operator intent unless coordination already assigned one, and concurrent writers should be resolved without silently changing workspace topology.
 
 2026-06-12 16:30 +0800 | farplane,goals,loops,tickets,drift,feedback | Native Codex Goal mode is the only formal semantic continuation loop. Material Goal work should create or attach to a ticket-backed Goal Packet: `ticket.md` owns the task contract, `program.md` owns loop configuration, `progress.md` owns append-only observed execution, and `goal-advisor` chooses active Goal, heartbeat, rollout, feedback, skill-improvement, business-loop, or direct-work shape before compiling the native `/goal` prompt. Heartbeats are delayed triggers over the same Goal Packet, rollout is a staged parent/child ticket pattern, `human_feedback` is the abstract feedback provider signal, and `optimize-with-human` is the Telegram-first optimization preset rather than a separate loop runtime. Drift review is read-only and compares ticket, program, progress, and current continuation claim before recommending align, recover, block, or complete-candidate.
 

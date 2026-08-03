@@ -17,8 +17,20 @@ Primary control plane:
 - `goal-advisor`
 - persistent builder lanes
 
-Live Stop handling sends telemetry only. Native Goal mode plus ticket-local
-QA/review evidence owns completion.
+Live Stop handling applies the final-response prose budget and sends telemetry.
+Native Goal mode plus ticket-local QA/review evidence owns completion.
+
+Inspect response accounting without invoking the hook:
+
+```bash
+farplane response check --stdin --json < response.md
+farplane response check response.md --json
+```
+
+Exit `0` means prose is within its configured word and line limits; exit `1`
+means it is over. Closed Mermaid blocks, exact absolute/HTTPS image-video
+embeds, and a trailing link-only References/Citations section are reported
+separately. Malformed or mixed forms remain prose.
 
 The `bin/` directory is now mostly shim/utility territory, not the main
 orchestration story. `install.sh` installs an explicit allowlist of live

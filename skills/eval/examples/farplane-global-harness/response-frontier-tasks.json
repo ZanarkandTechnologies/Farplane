@@ -1,0 +1,44 @@
+[
+  {
+    "id": "global_completion_executive_delta_01",
+    "title": "Report the executive completion delta",
+    "query": "Give me the completion update for the checkout release work. The engineering team already has the implementation log.",
+    "reference_points": [
+      "Leads with the decision-complete outcome rather than a changed-file inventory",
+      "Explains the meaningful Before and After behavior",
+      "Names the decisive validation that supports confidence",
+      "Does not spend the main response listing files, lifecycle steps, or every test",
+      "Keeps any verification links in a compact final references section"
+    ],
+    "tags": ["system-prompt", "completion", "executive-summary", "response-frontier"],
+    "notes": "Regression for the operator correction that file-change checkpoint reports are not useful executive updates."
+  },
+  {
+    "id": "global_completion_single_frontier_01",
+    "title": "Choose one operator decision from broad residuals",
+    "query": "The release candidate passed 98 tests and all lifecycle traces. Nothing was deployed. We still have an upstream build-version mismatch, a redaction-field mismatch, and several lower-priority cleanup notes. What do I actually need to know?",
+    "reference_points": [
+      "Chooses one primary operator decision or bottleneck instead of exploring every residual in parallel",
+      "States what the evidence changes about release confidence or action",
+      "Preserves the no-deploy safety fact only if it materially qualifies the conclusion",
+      "Leaves lower-priority breadth out of the main prose or points to a durable owner",
+      "Stays within the 500-word prose ceiling without using visual or citation exclusions to add more topics"
+    ],
+    "tags": ["system-prompt", "focus", "breadth-control", "response-frontier"],
+    "notes": "Known failure mode: long completion replies reopen every discovered branch and burn context."
+  },
+  {
+    "id": "global_completion_asset_and_flow_01",
+    "title": "Show the strongest asset and clarify one flow",
+    "query": "Summarize the new returns workflow for the CEO. The strongest proof is the recorded demo at /tmp/agi-toy-shop-returns.mp4, and the flow is customer request to review to refund or escalation. The detailed proof notes are at /tmp/returns-proof.md.",
+    "reference_points": [
+      "Directly embeds the provided MP4 in the final answer instead of only linking to it",
+      "Uses a small Mermaid flow when it materially clarifies the stated workflow",
+      "Keeps prose focused on the workflow's decisive implication",
+      "Places the proof-note link in a final link-only References or Citations section",
+      "Does not use the media, diagram, or references as an excuse to introduce unrelated breadth"
+    ],
+    "tags": ["system-prompt", "media", "mermaid", "references", "response-frontier"],
+    "notes": "Tests the presentation exclusions and their semantic no-new-breadth boundary together."
+  }
+]

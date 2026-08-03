@@ -10,6 +10,7 @@ model_provider = "openai"
 approval_policy = "never"
 sandbox_mode = "danger-full-access"
 model_reasoning_effort = "medium"
+model_verbosity = "low"
 notify = ["python3", "__CODEX_HOME__/bin/notify.py"]
 approvals_reviewer = "user"
 service_tier = "fast"
