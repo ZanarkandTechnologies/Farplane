@@ -5,7 +5,10 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from bin.validators.check_ticket_closure_gate import validate_ticket_closure
+from bin.validators.check_ticket_closure_gate import (
+    validate_terminal_ticket_hygiene,
+    validate_ticket_closure,
+)
 
 
 def write_ticket(root: Path, relative: str, *, status: str = "done") -> None:
@@ -66,21 +69,21 @@ class TicketClosureGateTest(unittest.TestCase):
 
         self.assertEqual(errors, [])
 
-    def test_active_complete_ticket_blocks_until_archived(self) -> None:
+    def test_unrelated_terminal_ticket_does_not_block_session_commit(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             write_ticket(root, "tickets/TASK-9999", status="done")
 
             errors = validate_ticket_closure(root)
 
-        self.assertIn("active ticket is terminal and should be archived", "\n".join(errors))
+        self.assertEqual(errors, [])
 
-    def test_active_done_status_blocks_even_when_phase_not_complete(self) -> None:
+    def test_terminal_ticket_hygiene_reports_unarchived_packet(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             write_ticket(root, "tickets/TASK-9999", status="done")
 
-            errors = validate_ticket_closure(root)
+            errors = validate_terminal_ticket_hygiene(root)
 
         self.assertIn("active ticket is terminal and should be archived", "\n".join(errors))
 

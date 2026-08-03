@@ -56,9 +56,13 @@ runtime helpers instead of symlinking every script, validator, and test.
 - `validators/check_template_version_metadata.py` - staged metadata and
   version-bump guard for template files listed in
   `rules/template-version-watch.toml`
+- `validators/check_source_line_growth.py` - deterministic pre-commit and
+  pre-push guard that blocks new Python files over 500 lines and growth in
+  already-oversized files. `rules/source-line-baseline.toml` is the one-time
+  adoption ceiling until the comparison base contains the guard.
 - `capture_user_turn.py` - turn-start user-intent writer for the hook surface
 - `core/farplane_ticket_close.py` - explicit ticket completion, archive, event,
-  and mining boundary used by `farplane ticket close TASK-XXXX`
+  and mining boundary used by `farplane ticket close TASK-XXXX --github-issue-url URL`
 - `core/farplane_event_store.py` - durable local event/outbox primitives shared
   by explicit Core commands
 - `farplane.py adoption scan` - local adoption resolver for project
@@ -70,6 +74,11 @@ The installed binary allowlist contains one user-facing command, `farplane`,
 plus the hook and notification launchers that Codex configuration calls
 directly. Internal helpers are imported from `bin/core/` or `bin/runtime/`;
 they are not separately installed command surfaces.
+
+`farplane.py` is only the executable edge. Parser construction, install/hooks,
+UI/config, and domain command adapters live in focused `bin/core/farplane_cli_*`
+modules so each responsibility stays independently testable and below the
+source-size ceiling.
 
 Runtime state stays lightweight and machine-facing. The grouped `claim` object
 tracks the active ticket/run/session ownership for hook consumers, while

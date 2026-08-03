@@ -156,8 +156,6 @@ def validate_ticket_closure(
     associations = associations_by_ticket(root)
     session_ids = session_ids_from_env(environ)
     current_session_tickets = associated_tickets_for_sessions(root, session_ids)
-    errors.extend(active_completed_ticket_errors(root))
-
     missing_archives = sorted(
         ticket_id
         for ticket_id in associations
@@ -199,6 +197,11 @@ def validate_ticket_closure(
     return errors
 
 
+def validate_terminal_ticket_hygiene(root: Path) -> list[str]:
+    """Report terminal packets still awaiting canonical remote closeout."""
+    return active_completed_ticket_errors(root)
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
@@ -207,6 +210,11 @@ def parse_args() -> argparse.Namespace:
         default=ROOT,
         help="Repository root to validate.",
     )
+    parser.add_argument(
+        "--terminal-hygiene",
+        action="store_true",
+        help="Report terminal active-board packets without session closure checks.",
+    )
     return parser.parse_args()
 
 
@@ -214,10 +222,16 @@ def main() -> int:
     args = parse_args()
     root = args.root.resolve()
     session_ids = session_ids_from_env()
-    errors = validate_ticket_closure(root)
+    errors = (
+        validate_terminal_ticket_hygiene(root)
+        if args.terminal_hygiene
+        else validate_ticket_closure(root)
+    )
     if errors:
-        print("ticket closure gate failed")
-        print("Close or archive the ticket for this committing session before committing.")
+        label = "ticket terminal hygiene" if args.terminal_hygiene else "ticket closure gate"
+        print(f"{label} failed")
+        if not args.terminal_hygiene:
+            print("Close or archive the ticket for this committing session before committing.")
         for error in errors:
             print(error)
         return 1

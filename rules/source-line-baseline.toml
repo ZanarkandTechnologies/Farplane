@@ -1,0 +1,19 @@
+# One-time adoption ceiling for Python files already above 500 lines.
+# Once the Git comparison base contains this file, branch checks ratchet from
+# that base instead. Reducing a file below 500 removes its practical exception.
+[files]
+"bin/core/farplane_entities.py" = 1649
+"bin/core/farplane_harness_health.py" = 637
+"bin/core/farplane_mining.py" = 1753
+"bin/core/farplane_primitive_metrics.py" = 1152
+"bin/core/farplane_project_snapshot.py" = 2227
+"bin/core/farplane_ticket_close.py" = 594
+"bin/runtime/user_turn.py" = 1025
+"bin/tests/test_farplane_entities.py" = 1068
+"bin/tests/test_farplane_mining.py" = 1074
+"bin/tests/test_farplane_primitive_metrics.py" = 672
+"bin/tests/test_farplane_project_snapshot.py" = 1102
+"bin/tests/test_runtime_state.py" = 528
+"bin/validators/check_farplane_project_files.py" = 1289
+"bin/validators/check_skill_capabilities.py" = 619
+"bin/validators/test_check_farplane_project_files.py" = 1201

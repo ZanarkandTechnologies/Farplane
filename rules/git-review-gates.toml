@@ -5,8 +5,10 @@ mode = "block"
 checks = [
   "staged_diff_check",
   "ticket_closure_gate",
+  "ticket_terminal_hygiene",
   "template_version_staged",
   "large_file_guard",
+  "source_line_growth_staged",
 ]
 
 [[pre_commit.path_check]]
@@ -24,6 +26,7 @@ mode = "block"
 base = "origin/main"
 checks = [
   "branch_diff_check",
+  "source_line_growth_branch",
 ]
 
 [[pre_push.path_check]]
@@ -66,6 +69,10 @@ argv = ["python3", "tickets/scripts/check_ticket_metadata.py"]
 [checks.ticket_closure_gate]
 argv = ["python3", "bin/validators/check_ticket_closure_gate.py"]
 
+[checks.ticket_terminal_hygiene]
+argv = ["python3", "bin/validators/check_ticket_closure_gate.py", "--terminal-hygiene"]
+mode = "warn"
+
 [checks.doc_refs]
 argv = ["python3", "bin/validators/check_doc_refs.py"]
 
@@ -74,3 +81,9 @@ argv = ["python3", "bin/validators/check_doc_parity.py"]
 
 [checks.harness_invariants]
 argv = ["python3", "bin/validators/check_harness_invariants.py"]
+
+[checks.source_line_growth_staged]
+argv = ["python3", "bin/validators/check_source_line_growth.py", "--mode", "staged", "--max-lines", "500", "--glob", "bin/**/*.py"]
+
+[checks.source_line_growth_branch]
+argv = ["python3", "bin/validators/check_source_line_growth.py", "--mode", "branch", "--base", "{base}", "--baseline", "rules/source-line-baseline.toml", "--max-lines", "500", "--glob", "bin/**/*.py"]
