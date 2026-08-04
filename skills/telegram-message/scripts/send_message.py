@@ -87,11 +87,13 @@ def gateway_send(args: argparse.Namespace, message: str) -> int:
         "send",
         "--thread-id",
         thread_id,
-        "--text",
-        message,
         "--parse-mode",
         args.parse_mode,
     ]
+    if args.photo:
+        command.extend(["--photo", str(Path(args.photo).expanduser().resolve()), "--text", message])
+    else:
+        command.extend(["--text", message])
     if args.session_id:
         command.extend(["--session-id", args.session_id])
     if args.title:
@@ -104,6 +106,7 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--text")
     parser.add_argument("--file")
+    parser.add_argument("--photo", help="PNG or JPEG to send through Telegram sendPhoto")
     parser.add_argument("--parse-mode", default="none", choices=["none", "Markdown", "MarkdownV2", "HTML"])
     parser.add_argument("--disable-preview", action="store_true", default=True)
     parser.add_argument("--thread-id", help="Codex thread id to route Telegram replies to")
@@ -116,6 +119,9 @@ def main() -> int:
         help="Bypass reply routing and send directly through Telegram. Use only for non-replyable notifications.",
     )
     args = parser.parse_args()
+
+    if args.raw_telegram and args.photo:
+        parser.error("--photo requires the reply-routed gateway; remove --raw-telegram")
 
     message = read_message(args)
     if not message.strip():

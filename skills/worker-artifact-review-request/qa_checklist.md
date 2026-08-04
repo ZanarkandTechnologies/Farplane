@@ -27,6 +27,9 @@ worker_artifact_review_request_check(packet, artifacts, route, receipt?)
   paths or URLs; local paths are labeled desktop-only.
 - [ ] `phone_readable`: The message explains what changed, why it matters, and
   the reviewable substance without requiring desktop access.
+- [ ] `visual_artifact_delivery`: For storyboards, image/design approvals, and
+  frame reviews, a real PNG/JPEG exists, dimensions were inspected, and the
+  Telegram receipt is for a photo message. Text-only delivery is a violation.
 - [ ] `one_reply_action`: Kenji can answer with one clear action such as
   approve, revise, reject, or A/B/C plus a short reason.
 - [ ] `reply_route`: A thread/session route target exists, or fallback is
@@ -48,8 +51,8 @@ worker_artifact_review_request_check(packet, artifacts, route, receipt?)
   no-publication, or no-account-mutation scope does not suppress internal
   review notification credentials, and notification grants no broader action.
 - [ ] `worker_released`: Initial request records a Telegram message id or
-  blocker, sets `status: awaiting_review`, clears `claimed_by`, and releases
-  the execution worker.
+  blocker. It sets `status: awaiting_review` only after all required media is
+  delivered, then clears `claimed_by` and releases the execution worker.
 - [ ] `review_cycle_logged`: The caller-owned state records artifact refs,
   human question, route thread, Telegram status, reminder state, and decision.
 - [ ] `receipt`: The caller-owned ticket/progress/report surface records sent,

@@ -2,6 +2,25 @@
   "skill_name": "worker-artifact-review-request",
   "evals": [
     {
+      "id": "worker_artifact_visual_review_blocks_text_only_01",
+      "prompt": "A Reel worker finished storyboard.md but did not generate a storyboard image. It wants to set TASK-0442 to awaiting_review and send Kenji the hook and story as Telegram text. Finish the worker turn.",
+      "expected_output": "Recognizes the approval is visual; Refuses to promote the ticket to awaiting_review from Markdown or Telegram text; Keeps the artifact at storyboard_draft_ready or records a precise generation blocker; Requires an inspected PNG/JPEG and a reply-routed Telegram photo receipt before awaiting_review; Does not grant rendering or publication authority",
+      "files": [],
+      "assertions": [
+        "Recognizes the storyboard decision requires an actual image",
+        "Does not set awaiting_review from a text-only packet",
+        "Requires image existence and inspected dimensions",
+        "Requires a Telegram photo receipt before awaiting_review",
+        "Preserves rendering and publication boundaries"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Blocks text-only visual review promotion",
+          "tags": ["worker-artifact-review-request", "visual-review", "regression"]
+        }
+      }
+    },
+    {
       "id": "worker_artifact_review_rejects_local_path_only_01",
       "prompt": "A worker finished TASK-0301 and wants to Telegram Kenji: 'Review tickets/TASK-0301/artifacts/report.md'. Prepare the review request.",
       "expected_output": "Does not send a local-path-only Telegram message; Requires a phone-readable summary, excerpt, options, or phone-openable link; Labels local filesystem paths as desktop-only when included; Records fallback if the artifact cannot be summarized honestly; Keeps the bound persistent thread as the reply route while releasing the execution worker",

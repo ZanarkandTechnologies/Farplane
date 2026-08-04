@@ -54,12 +54,14 @@ state:
 
 gates:
   artifacts_exist; archive_safe_refs; phone_readable_summary;
+  visual_artifact_has_image; visual_delivery_receipt_is_photo;
   one_reply_action; reply_thread_bound; no_duplicate_send;
   policy_action_is_due_when_mode!=initial; no_secrets;
   no_external_action_permission; receipt_recorded
 
 fails:
   local_path_only_review; vague_reply_action; queue_size_as_chase_trigger;
+  text_only_visual_review; awaiting_review_without_required_media;
   worker_reserved_while_waiting; repeated_not_due_reminder;
   phone_escalation_outside_policy;
   notification_treated_as_final-action approval
@@ -77,6 +79,9 @@ fails:
         `skipped_not_due`.
 - [ ] 2. Validate the review surface.
   - [ ] Confirm artifact refs exist or are phone-openable.
+  - [ ] If the artifact or decision is visual, require a real PNG/JPEG review
+        image and inspect its dimensions before delivery. Markdown is draft
+        support only.
   - [ ] Mark local paths desktop-only and include the smallest honest inline
         summary, excerpt, result, or options.
   - [ ] Ask exactly one reply action and preserve external-action gates.
@@ -84,6 +89,9 @@ fails:
   - [ ] Send the initial request through Telegram or record an exact transport
         blocker. Do not treat ticket-local credential restrictions as a
         notification blocker.
+  - [ ] For visual review, send the image through `telegram-message --photo`
+        and require a photo message receipt. Until then keep the producer state
+        at `storyboard_draft_ready` (or equivalent), never `awaiting_review`.
   - [ ] For an initial request, write the Review block below, set
         `status: awaiting_review`, clear `claimed_by`, and release the worker.
   - [ ] For a Telegram reminder, increment `reminder_count` and record the
@@ -106,6 +114,7 @@ thread_ref: codex-thread-ref
 requested_at: 2026-07-11T12:00:00Z
 telegram_status: sent
 telegram_message_id: telegram-message-id
+telegram_delivery_kind: photo
 reminder_count: 0
 telegram_reminder_message_ids: []
 phone_chaser_count: 0
@@ -141,6 +150,7 @@ worker_artifact_review:
   artifacts: []
   requested_reply:
   telegram_message_id:
+  telegram_delivery_kind: text | photo
   fallback_ref:
   blocker:
 ```
@@ -148,6 +158,8 @@ worker_artifact_review:
 ## Gotchas
 
 - Do not send a local-path-only review request.
+- Do not promote visual work to `awaiting_review` from prose, Markdown, or a
+  text-message receipt. The image file and photo receipt are mandatory.
 - Do not keep a worker alive after the request is recorded.
 - Do not derive reminders from review queue length.
 - Do not let a ticket-local credential boundary suppress automation-owned

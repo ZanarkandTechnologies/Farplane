@@ -34,6 +34,8 @@ telegram_message_check(message, recipient, send_path, artifacts?, fallback?)
   question, or a named blocker. Acknowledgement-only responses are allowed only
   for terminal keep/approve/convergence/budget/blocker states.
 - [ ] The message will be readable on a phone inside Telegram:
+  - [ ] If the decision is visual, the actual PNG/JPEG is attached with
+    `sendPhoto`; text, Markdown, and desktop refs alone fail this check.
   - [ ] If asking for artifact feedback, the message includes the reviewable
     excerpt, options, or summary needed to decide.
   - [ ] Any link needed for review is phone-openable, not only a local
@@ -65,6 +67,8 @@ telegram_message_check(message, recipient, send_path, artifacts?, fallback?)
 - [ ] The message is sent through `scripts/send_message.py` with
   `--thread-id`/`--session-id` or `CODEX_THREAD_ID`; the script must use the
   Farplane UI gateway path for replyable messages.
+- [ ] A visual review receipt identifies a photo delivery and message id. Do
+  not accept a successful text receipt as proof that the image was delivered.
 - [ ] Markdown parse mode is used only for simple Markdown; raw text uses
   `--parse-mode none`.
 - [ ] Telegram failure or missing configuration is reported clearly without

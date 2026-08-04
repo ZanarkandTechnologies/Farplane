@@ -31,7 +31,7 @@ chat output.
 ## Skill Signature
 
 ```text
-telegram_message(message_intent, message_body?, artifact_refs?, state?)
+telegram_message(message_intent, message_body?, artifact_refs?, media_paths?, state?)
   -> sent_message | fallback_report
 
 state:
@@ -45,6 +45,7 @@ gates:
   no_secrets
   telegram_viewable
   one_clear_reply_action
+  visual_review_uses_photo
   reply_route_target_available
   credentials_available_or_fallback_recorded
 
@@ -53,6 +54,7 @@ routes:
 
 fails:
   local_path_only_artifact_review
+  text_only_visual_artifact_review
   vague_reply_shape
   giant_report_dump
   secret_or_token_exposure
@@ -81,6 +83,8 @@ material, automated, sensitive, or repeated notification failures.
   - [ ] `view_mode := inline_summary | phone_openable_link | fallback_only`.
   - [ ] If the message references artifacts, decide what Kenji can actually
     read from Telegram on a phone.
+  - [ ] If the decision is visual, bind one PNG/JPEG review image. Text,
+    Markdown, and a desktop path are supporting copy, not the review surface.
 - [ ] 2. Read guardrails.
   - [ ] Read `qa_checklist.md` before preparing or sending the message.
   - [ ] Read `references/configuration.md` only when credential fallback details
@@ -101,6 +105,8 @@ material, automated, sensitive, or repeated notification failures.
   - [ ] Use `scripts/send_message.py`, which routes through the Farplane UI
     gateway by default so every sent message persists a Telegram message id ->
     thread/session route row.
+  - [ ] For a visual decision, use `--photo /absolute/path.png` with a short
+    caption. A successful text message does not satisfy visual delivery.
   - [ ] Use `TELEGRAM_CHAT_ID` from environment or `~/.farplane/config.json`,
     and `TELEGRAM_BOT_TOKEN` from environment, Keychain, or gateway config.
   - [ ] Use `--parse-mode Markdown` for simple, controlled Markdown such as
@@ -181,10 +187,24 @@ python3 scripts/send_message.py \
   --parse-mode Markdown
 ```
 
+Send a visual approval packet:
+
+```bash
+source /Users/kenjipcx/.codex/private/telegram.env
+python3 scripts/send_message.py \
+  --thread-id "${CODEX_THREAD_ID:?CODEX_THREAD_ID required}" \
+  --photo "/absolute/path/to/approval-sheet.png" \
+  --file "/absolute/path/to/approval-caption.txt" \
+  --title "Visual approval" \
+  --parse-mode none
+```
+
 ## Gotchas
 
 - A path like `tickets/TASK-0240/artifacts/foo.md` is not phone-viewable. Send
   the content needed to decide, a phone-openable URL, or a fallback/blocker.
+- A storyboard, design, image, or video-frame review is visual. Never replace
+  its required PNG/JPEG with a prose summary, Markdown storyboard, or link.
 - Telegram Markdown is not GitHub Markdown. Keep formatting simple: `*bold*`,
   `_italic_`, short bullets, and plain local paths. If a message includes
   arbitrary code, JSON, dense file paths, or generated text with lots of
@@ -206,7 +226,7 @@ python3 scripts/send_message.py \
 
 ## Output
 
-- `sent_message`: one Telegram message sent through the Farplane UI Telegram
-  gateway, with its reply route persisted.
+- `sent_message`: one Telegram text or photo message sent through the Farplane
+  UI gateway, with its reply route and delivery kind persisted.
 - `fallback_report`: clear reason Telegram was skipped, missing, blocked, or
   not viewable enough to send.
