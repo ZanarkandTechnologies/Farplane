@@ -24,7 +24,9 @@
 - CSS for simple state changes.
 - Motion/Framer Motion for React component transitions when already used in the project.
 - Official GSAP skills for complex timelines, ScrollTrigger, pinning, scrub, SplitText, Flip, or motion paths.
-- [frontend-craft three-js.md](../../frontend-craft/references/three-js.md) for Three.js/WebGL/R3F scenes that genuinely carry the experience.
+- Require a Three.js/WebGL/R3F implementation capability only when a real-time
+  scene genuinely carries the experience; the calling `impl-plan` selects its
+  owner from repository capabilities.
 
 ## 3D Landing Assets
 

@@ -8,11 +8,10 @@ Shape one-page, marketing, launch, portfolio, and cinematic frontend surfaces be
 
 - `SKILL.md`: landing-page workflow
 - `references/*`: research synthesis, product-demo media, scrolltelling, motion/media, asset evidence, and QA guidance
-- `scripts/landing_spec_lint.py`: validates approved landing specs before build
-- `scripts/asset_evidence_lint.py`: validates generated/real media evidence after build
-- `scripts/section_quality_qa.cjs`: browser QA for section substance and visual carriers
+- `scripts/landing_spec_lint.py`: validates approved landing specs before handoff
+- `scripts/asset_evidence_lint.py`: downstream validator named by premium specs
+- `scripts/section_quality_qa.cjs`: downstream browser QA named by the proof plan
 - `SKILL.md` Todo List: modern scroll-scrub landing recipe checklist
-- `references/*`: scrolltelling, JSON registries, motion/media, and QA guidance
 - `scripts/terminal_landing_score.py`: Terminal/Terminus-style self-improvement score runner
 
 ## Minimal Example
@@ -25,21 +24,20 @@ Shape one-page, marketing, launch, portfolio, and cinematic frontend surfaces be
 6. For product/device/equipment pages, define realistic product shots,
    assembly/disassembly or exploded-view media, and feature callouts.
 7. Map assets, motion, and QA from the section matrix.
-8. Generate or collect required media assets for premium/cinematic pages.
-9. Hand off to `frontend-craft` or `delegate-frontend`.
-2. For modern cinematic or Terminal-style work, follow the `SKILL.md` Todo List.
-3. Pick recipe, taste-profile, and effect-stack records when a reusable formula applies.
-4. Map sections, story beats, and the ASCII page flow.
-5. Plan assets and motion.
-6. Hand off to `frontend-craft`.
+8. Resolve Asset Advisor outputs or blockers required for spec approval.
+9. Return the approved spec to the calling `impl-plan` for one unified Change
+   Plan.
 
 ## How to Test
 
-- Confirm modern scroll-scrub requests follow the `SKILL.md` Todo List before implementation.
+- Confirm modern scroll-scrub requests follow the `SKILL.md` Todo List before
+  spec handoff.
 - Score a Terminal-style output with `python3 skills/landing-page/scripts/terminal_landing_score.py`.
 - Confirm product app screens route away to `functional-ui`.
 - Confirm JSON registries parse with `python3 -m json.tool`.
 - Confirm cinematic/scroll requests do not duplicate GSAP API details.
+- Confirm the skill returns `LANDING_SPEC.md` and never implements, renders, or
+  deploys the page.
 - Run `python3 skills/skill-creator/scripts/quick_validate.py skills/landing-page`.
 - Run `python3 skills/landing-page/scripts/test_landing_spec_lint.py`.
 - Run `python3 skills/landing-page/scripts/test_asset_evidence_lint.py`.

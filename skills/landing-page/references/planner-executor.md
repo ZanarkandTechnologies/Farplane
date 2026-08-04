@@ -1,13 +1,14 @@
-# Planner / Executor Contract
+# Planner / Implementation Handoff Contract
 
 Use this when a landing page needs enough craft that implementation should not
 start from a vague prompt.
 
 ## Decision Rule
 
-- No approved `LANDING_SPEC.md` -> stay in Planner.
-- Approved `LANDING_SPEC.md` exists -> Executor may build.
-- If the spec exists but fails `landing_spec_lint.py`, return to Planner.
+- No approved `LANDING_SPEC.md` -> stay in `landing-page` planning.
+- Approved `LANDING_SPEC.md` exists -> return it to the calling `impl-plan`.
+- If the spec exists but fails `landing_spec_lint.py`, keep the planning
+  handoff blocked.
 
 ## Planner Gates
 
@@ -93,7 +94,7 @@ section. A direction is:
 
 Do not advise isolated variables unless one variable is the real blocker. For
 layered generated-media sections, use `references/method-selection-smoke.md` to
-verify when `frontend-craft:composed-scroll-animation` is the correct handoff.
+verify when a composed-scroll-animation capability is required downstream.
 
 ## Asset Plan
 ## Product Demo Plan
@@ -102,10 +103,14 @@ verify when `frontend-craft:composed-scroll-animation` is the correct handoff.
 ## Proof Plan
 ## Designer Judgment Plan
 ## QA Gates
-## Executor Handoff
+## Implementation Requirements
 ```
 
-## Executor Rules
+## Downstream Implementation Contract
+
+`landing-page` records these requirements in the spec; the calling
+`impl-plan`, its approved Goal, and the selected implementation/proof owners
+enforce them. This planning advisor does not perform the steps itself.
 
 - Run `scripts/landing_spec_lint.py <LANDING_SPEC.md>` before build.
 - Build from the section matrix; do not invent missing sections during

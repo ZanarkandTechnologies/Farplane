@@ -1,7 +1,7 @@
 ---
 name: landing-page
-version: 1.1.0
-description: "Turn a one-page marketing or launch surface into offer, story arc, sections, assets, motion, and proof before frontend implementation."
+version: 1.2.0
+description: "Turn a one-page marketing or launch request into an approved offer, story, section, asset, motion, and proof specification for implementation planning."
 tier: 3
 group: frontend-content
 source: local
@@ -9,7 +9,7 @@ allowed-tools: Read, Grep, Glob, Bash
 qa_checklist: qa_checklist.md
 eval: evals/evals.json
 common_chains:
-  after: ["asset-advisor", "frontend-craft"]
+  after: ["asset-advisor"]
 ---
 
 # Landing Page
@@ -52,7 +52,9 @@ when the request earns that depth.
   discovery, reference-led generation, missing production media, or a
   rights/recreation decision. If the supplied asset set is complete and
   licensed for the planned use, record provenance and the explicit skip reason
-  instead of forcing another discovery pass.
+  instead of forcing another discovery pass. For reference-led generation,
+  record the accepted and rejected moodboard traits explicitly; keep the spec
+  blocked while those traits remain unsettled.
 
 ## 3. Choose Methods
 
@@ -69,7 +71,7 @@ when the request earns that depth.
   [motion-and-media](./references/motion-and-media.md).
 - [ ] Use
   [method-selection-smoke](./references/method-selection-smoke.md) as the
-  sanity fixture for `frontend-craft:composed-scroll-animation` selection.
+  sanity fixture for composed-scroll-animation capability selection.
 - [ ] Reject unused directions so the page does not stack every impressive
   effect at once.
 
@@ -88,21 +90,27 @@ when the request earns that depth.
 - [ ] Keep readable text, CTAs, labels, logos, and product copy in HTML
   overlays unless the approved spec says otherwise.
 
-## 5. Execute And Prove
+## 5. Approve And Hand Off
 
-- [ ] Before implementation, read [qa_checklist](./qa_checklist.md) and confirm
+- [ ] Before spec approval, read [qa_checklist](./qa_checklist.md) and confirm
   the chosen execution depth matches the quality target.
-- [ ] Hand approved execution packets to [frontend-craft](../frontend-craft/SKILL.md).
-- [ ] Use the native execution phase for proof, writeback, and review.
-- [ ] Run landing QA from [qa](./references/qa.md), plus scroll/media QA when
-  the selected method requires it.
-- [ ] Record desktop/mobile screenshots, asset manifest/provenance, method
-  selection notes, and final gap analysis.
+- [ ] Return `LANDING_SPEC.md` with `status: approved | blocked` and any
+  accepted advisor/asset receipts to the calling implementation planner. For
+  multiple pages, return one named spec artifact per page. A prose status
+  summary is not a handoff. Do not write frontend code, generate final
+  production assets, deploy, or invoke another implementation planner at the
+  same scope.
+- [ ] Put required desktop/mobile screenshots, asset provenance, scroll/media
+  checks, accessibility checks, designer judgment, and final gap analysis into
+  the spec's downstream QA contract.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 Shape one-page frontend experiences that persuade, orient, or create memory.
-This skill owns page story, section architecture, planning gates, visual scenes,
-media, motion intent, and landing-page QA. It does not own GSAP API details or
+This skill is a planning advisor: it owns page story, section architecture,
+planning gates, visual scenes, media and motion intent, and the downstream
+landing-page QA contract. Its terminal artifact is an approved
+`LANDING_SPEC.md` or a blocked specification report. It does not own frontend
+implementation, final asset production, deployment, GSAP API details, or
 app-dashboard workflow design.
 
 ## Ambition Gate
@@ -144,7 +152,7 @@ Todo List short; detailed recipes live in references and method records.
 
 - The user asks for a landing page, homepage, launch page, one-page site, portfolio page, product page, venue/person/object-focused page, hero page, or cinematic scroll experience.
 - The frontend needs a strong first viewport, narrative sections, generated assets, media, or scroll-based storytelling.
-- `frontend-craft` classifies the surface as brand/marketing rather than repeated product work.
+- The surface is brand/marketing rather than a repeated operational workflow.
 
 ## Do Not Use When
 
@@ -154,17 +162,12 @@ Todo List short; detailed recipes live in references and method records.
 
 ## Core Workflow
 
-`landing-page` has two stages:
+`landing-page(request, context) -> LANDING_SPEC.md(status: approved | blocked)`.
+Interview, compare references, draft the spec, and stop at the approval
+boundary. The calling `impl-plan` integrates the approved specification into
+one software Change Plan; this skill never creates a child implementation plan.
 
-1. **Planner:** interview, compare references, draft and approve
-   `LANDING_SPEC.md`.
-2. **Executor:** build only from an approved spec, then run landing QA.
-
-If no approved `LANDING_SPEC.md` or equivalent section exists, stay in Planner.
-Do not hand off to `frontend-craft`, `delegate-frontend`, or an external CLI
-builder until the spec passes the planning gates below.
-
-### Planner Stage
+### Planning Contract
 
 1. **Define the offer.** Name the product/person/place/object/category and the literal value proposition.
 1a. **Set the quality target.** Use the Ambition Gate before section planning.
@@ -261,42 +264,15 @@ builder until the spec passes the planning gates below.
 15. **Approval gate.** Mark the spec approved only after the user or ticket
     explicitly accepts the narrative, section matrix, and QA plan.
 
-### Executor Stage
-
-1. Read the approved `LANDING_SPEC.md`.
-2. Validate it with `scripts/landing_spec_lint.py` when available.
-3. Generate or collect the named assets before implementation. If assets cannot
-   be generated or collected during the run, downgrade the page to a prototype,
-   record the blocker in the artifact and progress surface, and do not send the
-   artifact as a `stunning` or `premium` feedback request unless the downgrade
-   is itself the reviewed decision.
-   If the spec calls for generated video, use a real ai-video-advisor model or
-   source video and record video provenance (`videoModel`, `videoProvider`,
-   `sourceVideo`, or equivalent) in the asset manifest. Do not count Seedream or
-   other ai-image-advisor stills assembled with `ffmpeg` as `generated-video`;
-   declare that as `frame-sequence` or downgrade to prototype.
-   Execute an approved Asset Advisor handoff when the spec required one; do not
-   rediscover or reinterpret its references inside the frontend builder.
-4. Implement the page through `frontend-craft` or `delegate-frontend`.
-5. Run asset-evidence QA, scroll/media QA, section-quality QA,
-   designer-judgment review, `qa_checklist.md`, mobile, reduced-motion, browser
-   console/error, and source review checks.
-6. Do not claim Terminal/premium parity while any hard gate fails.
-For cinematic, Terminal-style, premium industrial, asset-heavy, or generated-media pages, run the spec-first gate in `references/spec-first-cinematic-industrial.md` before implementation. If the user asks to build in the same turn, still separate the work into spec, assets, implementation, and visual-review phases so each builder pass has a bounded output.
+For cinematic, Terminal-style, premium industrial, asset-heavy, or
+generated-media pages, encode the spec-first gate from
+`references/spec-first-cinematic-industrial.md` in `LANDING_SPEC.md`. If the
+user asks to build in the same turn, return the approved spec to `impl-plan`,
+which owns the later assets, implementation, and visual-review phases.
 For modern scroll-scrub or Terminal/Terminus-level work, follow the Important
-Checklist as the active recipe: competitor/inspiration analysis, user story,
-ASCII page flow, nested `advise` section exploration, generated/rendered hero
-media planning, asset conversion, implementation, and QA.
-
-1. **Define the offer.** Name the product/person/place/object/category and the literal value proposition.
-2. **Choose the story shape.** Problem -> shift -> proof -> action, or a stronger domain-specific arc when available.
-3. **Select registry records when useful.** For repeatable high-taste pages, choose one recipe from `references/landing-recipes.json`, one taste profile from `references/taste-profiles.json`, and one effect stack from `references/effect-stacks.json`; use `references/registry-format.md` for field meanings.
-4. **Map sections.** First viewport, proof, features, comparison, social proof, pricing/contact, final CTA. Keep only what the offer earns.
-5. **Create visual scenes.** Decide which sections need real media, generated assets, product screenshots, video, Three.js/WebGL, or code-native visuals. Treat 3D as a first-class landing asset when it reveals the product, object, system, or place.
-6. **Set landing visual rules.** Use `visual-design` for register, scene sentence, typography, color strategy, density, and anti-slop constraints, then refine with the chosen landing taste profile.
-7. **Plan motion.** Choose CSS/Motion/GSAP/WebGL with `frontend-craft/references/motion-routing.md`; for cinematic scroll sites, use the selected effect-stack record and official GreenSock skills or docs for GSAP code.
-8. **Plan proof.** Define mobile/desktop first-viewport checks, scroll checkpoints, asset-load checks, and reduced-motion checks.
-9. **Hand off to `frontend-craft`.** Provide sections, selected registry IDs, assets, motion, and QA expectations.
+Checklist as the active planning recipe: competitor/inspiration analysis, user
+story, ASCII page flow, section exploration, hero-media requirements, asset
+handoffs, implementation packets, and downstream QA.
 
 ## Decision Branches
 
@@ -329,7 +305,8 @@ For landing pages with reusable formulas or inspiration references:
   or device page. Show the actual product, the product in use, and the
   meaningful parts/features that make it worth buying.
 - Do not keep stale local GSAP examples as API truth; route to official GreenSock skills or docs.
-- Do not build before an approved landing spec exists.
+- Do not build in this skill. Return only an approved landing spec or an exact
+  blocker to the calling implementation planner.
 - Do not satisfy a stunning/premium request with a basic static page simply
   because it is easy to deploy. If the available artifact is basic, label it as
   a blocker/prototype and ask for feedback on the downgrade, not the landing
@@ -340,8 +317,8 @@ For landing pages with reusable formulas or inspiration references:
 - Do not let a passing hero scroll-scrub score hide blank lower-page sections.
 - Do not accept a section plan that says "canvas", "video", or "GSAP" without
   saying what the user sees and what QA will assert.
-- Do not create custom SVG illustrations or SVG diagram overlays for premium
-  landing-page visuals. Generate raster assets, use real media, or build a real
+- Do not specify custom SVG illustrations or SVG diagram overlays for premium
+  landing-page visuals. Require raster assets, real media, or a real
   WebGL/Three.js scene instead.
 - Do not treat code-rendered canvas, hand-authored SVG, Three.js, or HTML/CSS
   visuals as generated media. They are support visuals unless an explicit
@@ -367,7 +344,9 @@ For landing pages with reusable formulas or inspiration references:
 - Do not add a decorative 3D scene that could be replaced by a better still image; 3D must clarify the product, object, system, or story.
 - Do not add a new recipe, taste profile, or effect stack without a stable `id`, routing criteria, examples, compatibility, and QA expectations.
 - Do not keep stale local GSAP examples as API truth; route to official GreenSock skills or docs.
-- Do not ask one builder pass to plan, generate assets, implement, visually review, and repair a cinematic page. Split the pass or expect stalls and mismatched files.
+- Do not package planning, asset production, implementation, visual review,
+  and repair as one undifferentiated downstream pass. The spec must preserve
+  those implementation phases and their acceptance boundaries.
 - Do not accept code-native SVG stand-ins as Terminal-quality media unless the brief marks them as a placeholder and includes a concrete generated-media or real-media upgrade path.
 - Do not let internal operating-model language dominate public hero copy. For
   example, "clone and localize startups" can guide the build strategy, but the
@@ -383,14 +362,13 @@ For landing pages with reusable formulas or inspiration references:
 - `references/model.md` - algebraic landing-page model, section matrix, method
   selection, and composed-scroll route.
 - `references/method-selection-smoke.md` - text fixture for choosing
-  `frontend-craft:composed-scroll-animation` only when section constraints
-  require it.
+  a composed-scroll-animation capability only when section constraints require
+  it.
 - `references/motion-and-media.md` - media, generated assets, GSAP/WebGL routing.
 - `references/product-demo-media.md` - realistic product shots, assembly /
   exploded-view sequences, and anti-infographic requirements.
 - `references/research-synthesis.md` - competitor/inspiration research and
   best-of-worlds synthesis gate.
-- [frontend-craft three-js.md](../frontend-craft/references/three-js.md) - Three.js/WebGL/R3F reference route for product/object/system hero scenes and interactive 3D assets.
 - `references/landing-recipes.json` - JSON registry of page formulas and section structures.
 - `references/taste-profiles.json` - JSON registry of landing-page visual registers.
 - `references/effect-stacks.json` - JSON registry of implementation stacks, assets, debug hooks, and QA.
@@ -408,7 +386,8 @@ For landing pages with reusable formulas or inspiration references:
 - `references/designer-judgment.md` - final 5% premium quality rubric.
 - `references/gotchas.md` - common landing-page mistakes.
 - `qa_checklist.md` - preflight and final guardrails for ambition fit,
-  effect-use, downgrade honesty, and deployed review surface quality.
+  effect-use, downgrade honesty, handoff boundaries, and downstream review
+  requirements.
 - `SKILL.md` Todo List - ordered modern scroll-scrub landing recipe with competitor analysis, nested `advise`, asset generation, scroll-scrub instrumentation, and QA handoff.
 
 ## Output Contract
@@ -433,7 +412,7 @@ Return a landing brief with:
 - `Designer judgment plan`
 - `QA plan`
 - `Downgrade/blocker policy`
-- `Implementation handoff`
+- `Implementation requirements`
 
 Every brief must include this route receipt before the Asset Plan:
 
@@ -451,10 +430,22 @@ owner/output paths, and acceptance checks are complete. For
 `skip_complete_licensed_inputs`, provenance, planned-use rights, completeness,
 and the explicit skip reason are required.
 
-For executor handoff, prefer a checked-in or ticket-attached `LANDING_SPEC.md`
-with:
+For implementation-planner handoff, return a checked-in, ticket-attached, or
+clearly delimited `LANDING_SPEC.md` artifact with `status: approved | blocked`.
+When blocked, keep all settled fields and list exact unresolved gates. Include:
 
-- `status: approved`
+```text
+artifact: <ticket-or-workspace-path>/LANDING_SPEC[-page-id].md
+status: approved | blocked
+approval_source: <source | pending>
+settled_sections: <completed spec sections>
+blockers: <exact unresolved gates | []>
+```
+
+A line that only reports "LANDING_SPEC status" without this named artifact
+envelope and the substantive spec body is not a valid handoff.
+
+- `status: approved | blocked`
 - `approval_source`
 - `Non-goals`
 - `Decision boundaries`
@@ -471,11 +462,11 @@ with:
 - `Motion Plan`
 - `QA Gates`
 - `assets/asset-manifest.json`
-For cinematic industrial pages, the output must also name the current phase:
-`spec`, `assets`, `implementation`, or `visual-review`. The `spec` phase must
+For cinematic industrial pages, this skill's output phase is `spec`. The spec
+must name the downstream order `assets -> implementation -> visual-review` and
 include a file map, generated/real asset manifest plan, desktop and mobile hero
 media plan, poster/reduced-motion fallback, scroll checkpoints, and the next
-phase prompts or task slices.
+phase task slices for the implementation planner.
 
 For Terminal/Terminus-style self-improvement runs, also include the
 `terminal-scroll-review` target: score with

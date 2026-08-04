@@ -24,14 +24,14 @@ Constraints.qa = debug phase + screenshot comparison
 | --- | --- | --- |
 | `static-generated-hero` | weak | misses layer/timeline/debug proof requirements |
 | `cinematic-frame-sequence` | partial | good for authored video transforms, but weaker for inspectable independent layers |
-| `frontend-craft:composed-scroll-animation` | strong | matches layer manifest, generated/cutout assets, HTML overlays, scroll/timed phases, and source-frame QA |
+| `composed-scroll-animation` | strong | matches layer manifest, generated/cutout assets, HTML overlays, scroll/timed phases, and source-frame QA |
 
 ## Expected Selection
 
 ```text
-ChosenMethod = frontend-craft:composed-scroll-animation
-OwnerSkill = frontend-craft
-SupportingSkills = imagegen + ai-image-advisor + visual-qa
+ChosenMethod = composed-scroll-animation
+RequiredImplementationCapability = layered scroll animation with debug hooks
+SupportingCapabilities = image generation + visual QA
 ```
 
 ## Negative Control
@@ -40,5 +40,5 @@ For a simple launch page hero with one product screenshot, one headline, one CTA
 and no layer/timeline/source-frame proof requirement:
 
 ```text
-ChosenMethod != frontend-craft:composed-scroll-animation
+ChosenMethod != composed-scroll-animation
 ```

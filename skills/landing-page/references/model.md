@@ -81,7 +81,8 @@ single variable is the actual blocker.
 
 ## Composed Scroll Animation Route
 
-Choose `frontend-craft:composed-scroll-animation` when a section needs:
+Choose a `composed-scroll-animation` implementation capability when a section
+needs:
 
 - 6-12 image/UI layers
 - generated or cutout assets
@@ -104,11 +105,12 @@ ExecutionPacket :=
   section_id
 + chosen_method
 + required_assets
-+ implementation_owner
++ required_implementation_capability
 + ordered_steps
 + fallback
 + qa_assertions
 ```
 
-`landing-page` owns the section decision. `frontend-craft` owns frontend
-implementation.
+`landing-page` owns the section decision and required capability. The calling
+`impl-plan` selects the implementation owner and integrates the packet into the
+single Change Plan.

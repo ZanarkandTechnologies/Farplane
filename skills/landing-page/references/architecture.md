@@ -18,6 +18,10 @@ Outputs:
 - asset plan,
 - motion plan,
 - QA plan,
-- implementation handoff to `frontend-craft`.
+- approved `LANDING_SPEC.md` or an exact blocked-spec report for the calling
+  implementation planner.
 
-It uses `visual-design` for visual system and official GreenSock skills or docs for GSAP details.
+It uses `visual-design` for visual-system decisions, `asset-advisor` for
+missing/reference-led/rights-sensitive media, and official GreenSock skills or
+docs for GSAP details. It does not implement, render, deploy, or create another
+implementation plan.

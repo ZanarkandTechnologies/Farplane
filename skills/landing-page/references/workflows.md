@@ -2,7 +2,8 @@
 
 ## Standard Landing Page
 
-1. Enter Planner unless an approved `LANDING_SPEC.md` exists.
+1. Create or validate `LANDING_SPEC.md`; keep the handoff blocked until the
+   specification is approved.
 2. Define offer and audience.
 3. Choose story arc.
 4. Map sections.
@@ -18,9 +19,9 @@
 9. Set visual rules through `visual-design`.
 10. Plan motion only where it strengthens the story.
 11. Validate the spec with `scripts/landing_spec_lint.py`.
-12. Hand off to `frontend-craft` only after approval.
-13. Verify with asset-evidence QA, section-quality QA, and designer judgment
-    after build.
+12. Return the approved spec to the calling `impl-plan`.
+13. Require asset-evidence QA, section-quality QA, and designer judgment in the
+    downstream proof contract.
 
 ## Cinematic Scrolltelling
 
@@ -31,31 +32,14 @@
    states: context, product shot, parts/exploded or assembly view, feature
    callout, reassembled final state.
 5. Route complex timelines to official GreenSock skills or docs.
-6. Generate or collect the hero media asset before claiming final quality.
+6. Resolve the hero media source/generation packet or preserve its blocker.
 7. Require hero scroll scrub plus lower-section visual carriers.
-8. Verify desktop/mobile/reduced-motion checkpoints.
-9. Run asset-evidence QA so code-native placeholders fail premium claims.
-10. Run section-quality QA so blank lower-page panels fail even when the hero
-   passes.
-11. Run designer judgment before claiming premium or Terminal-level quality.
-1. Define offer and audience.
-2. Choose story arc.
-3. Select JSON registry records when a reusable formula helps: recipe, taste profile, and effect stack.
-4. Map sections.
-5. Plan visual scenes and assets.
-6. Set visual rules through `visual-design`, then refine with the selected taste profile.
-7. Plan motion only where it strengthens the story.
-8. Define QA checkpoints.
-9. Hand off to `frontend-craft`.
-
-## Cinematic Scrolltelling
-
-1. Define narrative phases.
-2. Select matching records from `landing-recipes.json`, `taste-profiles.json`, and `effect-stacks.json`.
-3. Choose pinned/sticky or native-scroll structure.
-4. Plan media layers.
-5. Route complex timelines to official GreenSock skills or docs.
-6. Verify desktop/mobile/reduced-motion checkpoints.
+8. Put desktop/mobile/reduced-motion checkpoints in the proof plan.
+9. Require asset-evidence QA so code-native placeholders fail premium claims.
+10. Require section-quality QA so blank lower-page panels fail even when the
+    hero passes.
+11. Require designer judgment before a downstream premium or Terminal-level
+    completion claim.
 
 ## Modern Scroll-Scrub Recipe
 
@@ -67,7 +51,7 @@ order is:
 2. user-story and section-count decision,
 3. low-fidelity ASCII page flow,
 4. nested `advise` exploration for every section,
-5. generated/rendered hero video and scrub-friendly frame or keyframe pipeline,
+5. generated/rendered hero video and scrub-friendly frame or keyframe plan,
 6. spec-first handoff,
-7. implementation with scroll-scrub instrumentation,
-8. desktop/mobile visual QA plus scroll-scrub QA.
+7. downstream implementation requirements with scroll-scrub instrumentation,
+8. downstream desktop/mobile visual QA plus scroll-scrub QA.

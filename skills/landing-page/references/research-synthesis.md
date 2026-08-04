@@ -59,5 +59,5 @@ The approved `LANDING_SPEC.md` must include:
 - `Best-of-worlds Decisions`
 - `Unique Take`
 
-If any of these are missing, the executor should return to Planner instead of
-building.
+If any of these are missing, keep the specification blocked instead of
+returning it to the implementation planner.

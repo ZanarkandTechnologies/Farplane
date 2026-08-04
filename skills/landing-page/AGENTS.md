@@ -12,7 +12,8 @@
 ## Boundaries
 
 - `landing-page` owns one-page story, sections, visual scenes, media, and scrolltelling plans.
-- Use the planner/executor split: no approved `LANDING_SPEC.md`, no build handoff.
+- Use the planning/implementation boundary: no approved `LANDING_SPEC.md`, no
+  return to the calling implementation planner.
 - Premium/cinematic pages require generated or real asset evidence; code-native
   visuals alone are prototype support, not final media proof.
 - Product/device/equipment pages require realistic product-demo media planning:
@@ -24,16 +25,21 @@
   WebGL/Three.js scenes when procedural visuals are warranted. See `MEM-0080`.
 - JSON registries under `references/` own repeatable landing recipes, taste profiles, and effect stacks.
 - `visual-design` owns visual system decisions.
-- `frontend-craft` owns implementation orchestration.
+- `impl-plan` owns the unified software Change Plan and selects downstream
+  implementation capabilities after the landing specification is approved.
 - Official GreenSock skills or docs own GSAP implementation details.
-- [frontend-craft three-js.md](../frontend-craft/references/three-js.md) owns Three.js/WebGL/R3F implementation references for 3D landing assets.
+- Repository implementation docs own Three.js/WebGL/R3F details for 3D landing
+  assets; `landing-page` records the capability requirement without selecting
+  or invoking an implementation owner.
 
 ## Checks
 
 - Keep first-load instructions enough to produce a landing brief without references.
-- Keep the `SKILL.md` Todo List as the ordered modern scroll-scrub recipe; avoid moving it into hidden parser state or duplicating all of it in `SKILL.md`.
+- Keep the `SKILL.md` Todo List as the ordered modern scroll-scrub planning
+  recipe; avoid moving it into hidden parser state or duplicating all of it in
+  `SKILL.md`.
 - For modern Terminal/Terminus-style landing work, treat the `SKILL.md`
-  Todo List as the mandatory pre-build recipe before implementation.
+  Todo List as the mandatory pre-handoff recipe before spec approval.
   See `MEM-0090` and `MEM-0124`.
 - Keep `references/terminal-scroll-review.md` and `scripts/terminal_landing_score.py` aligned when changing Terminal/Terminus scoring dimensions.
 - Keep motion guidance as routing, not stale API snippets.

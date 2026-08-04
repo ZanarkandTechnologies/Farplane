@@ -308,7 +308,7 @@ def score_delegation(run_dir_raw: str) -> Dimension:
         ("session files captured", bool(session_files.get("session_files") if isinstance(session_files, dict) else session_files), 1),
         ("handoff complete", handoff_complete(handoff), 2),
         ("run exited cleanly", exit_code == "0", 1),
-        ("handoff mentions skills or loaded skills", has_any(handoff, ["loaded skills", "landing-page", "frontend-craft", "visual-qa", "review"]), 1),
+        ("handoff mentions skills or loaded skills", has_any(handoff, ["loaded skills", "landing-page", "impl-plan", "visual-qa", "review"]), 1),
     ]
     score = sum(points for _, passed, points in checks if passed)
     findings = [name for name, passed, _ in checks if not passed]
