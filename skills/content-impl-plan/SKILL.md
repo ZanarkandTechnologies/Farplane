@@ -67,6 +67,11 @@ AdvisorAction {
 
 Emit all five fields for every applicable row, including when inputs are
 already accepted. Never turn an accepted upstream input back into a blocker.
+For visual production, persist the versioned
+[production program](references/production-program.md) and pass
+`scripts/validate_production_program.py` before execution. Grouped owner rows
+and accepted Remotion without accepted storyboard, media, and edit receipts
+are mechanically invalid.
 
 ## Skill Signature
 

@@ -891,6 +891,37 @@ class WorkPulseBoardTests(unittest.TestCase):
             self.assertEqual(result["idle_worker_slots"], 1)
             self.assertEqual(result["active_workers"], [])
 
+    def test_review_thread_mismatch_blocks_chase_and_resume(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            write_ticket(
+                root,
+                "TASK-REVIEW",
+                status="awaiting_review",
+                review_state={
+                    "artifact_refs": ["tickets/TASK-REVIEW/artifacts/example.md"],
+                    "thread_ref": "pulse-manager-thread",
+                    "requested_at": "2026-07-09T00:00:00Z",
+                    "reminder_count": 0,
+                    "phone_chaser_count": 0,
+                    "telegram_status": "sent",
+                    "telegram_message_id": "telegram-1",
+                    "decision": None,
+                },
+            )
+            write_associations(root, [{
+                "ticket_id": "TASK-REVIEW",
+                "thread_id": "ticket-worker-thread",
+                "observed_at": "2026-07-09T00:00:00Z",
+            }])
+
+            result = BOARD.build_board(root, now=datetime(2026, 7, 11, tzinfo=timezone.utc))
+
+            action = result["next_due_review_action"]
+            self.assertEqual(action["review"]["action"], "repair_thread_identity")
+            self.assertEqual(action["review"]["associated_thread_ref"], "ticket-worker-thread")
+            self.assertEqual(len(result["thread_identity_mismatches"]), 1)
+
     def test_missing_review_ledger_is_repair_action_not_silent_wait(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
@@ -955,6 +986,52 @@ decision:
                 result["next_due_review_action"]["review"]["action"],
                 "send_initial_telegram",
             )
+
+    def test_versioned_current_review_wins_over_stale_exact_review(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            ticket = write_ticket(root, "TASK-REVIEW", status="awaiting_review")
+            (ticket.parent / "progress.md").write_text(
+                """## V5 Post-ready Review
+
+```yaml
+artifact_refs: [tickets/TASK-REVIEW/artifacts/v5.mp4]
+thread_ref: thread-v5
+requested_at: 2026-07-11T00:00:00Z
+telegram_status: sent
+telegram_message_id: telegram-v5
+reminder_count: 0
+phone_chaser_count: 0
+decision:
+```
+
+## Review
+
+```yaml
+artifact_refs: [tickets/TASK-REVIEW/artifacts/v4.mp4]
+thread_ref: thread-v4
+requested_at: 2026-07-10T00:00:00Z
+decision: reject
+```
+
+## Superseded V3 Review
+
+```yaml
+artifact_refs: [tickets/TASK-REVIEW/artifacts/v3.mp4]
+thread_ref: thread-v3
+requested_at: 2026-07-09T00:00:00Z
+decision: reject
+```
+""",
+                encoding="utf-8",
+            )
+
+            result = BOARD.build_board(root, now=datetime(2026, 7, 11, 1, tzinfo=timezone.utc))
+
+            review = result["awaiting_review_tickets"][0]
+            self.assertEqual(review["review_artifact_refs"], ["tickets/TASK-REVIEW/artifacts/v5.mp4"])
+            self.assertEqual(review["review_thread_ref"], "thread-v5")
+            self.assertEqual(review["review_decision"], "")
 
     def test_phone_chaser_follows_two_unanswered_telegram_reminders(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

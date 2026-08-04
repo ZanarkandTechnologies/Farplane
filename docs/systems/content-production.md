@@ -3,7 +3,7 @@ title: "Content Production"
 status: designed
 owner: farplane-framework
 created_at: 2026-07-22
-updated_at: 2026-07-24
+updated_at: 2026-08-04
 tags:
   - farplane
   - systems
@@ -37,7 +37,7 @@ system_record_json: |
       "skills/editing-advisor/SKILL.md",
       "skills/remotion/SKILL.md"
     ],
-    "last_verified": "2026-07-24"
+    "last_verified": "2026-08-04"
   }
 ---
 # Content Production
@@ -78,6 +78,13 @@ Raw source capture and unresolved inspiration belong in [Source And Sidecar Syst
 
 ## Operating Contract
 
+- Project-level content skills own editorial eligibility, audience/channel
+  defaults, account bindings, cadence, and workstream admission. They may hold
+  or preempt a candidate, but they do not re-author production steps.
+- `content-impl-plan` starts only after project admission. It freezes one
+  Creative Input Bundle containing the resolved Brand Kit id/revisions/prompt/
+  elements, optional computed Tasty Pack ref, selected element IDs, conflict
+  decisions, ICP, platform, proof limits, and production policy.
 - The only reusable creative inputs for this path are `Brand Kit` and optional computed `Tasty Pack`; the task idea and invocation policy remain the brief.
 - Brand Kit supplies approved identity, production policy, and one kit-wide
   prompt. Its embedded element snapshots are durable production inputs, not
@@ -102,6 +109,10 @@ Raw source capture and unresolved inspiration belong in [Source And Sidecar Syst
   Storyboard authors narrative/scene design; Asset Advisor resolves media;
   Editing Advisor authors timed edit direction; Remotion implements and
   renders; Review / QA judges readiness.
+- Visual work persists a versioned, owner-separated production program.
+  Storyboard, Asset Advisor, Editing Advisor, Remotion, and Review are distinct
+  actions; Remotion cannot be accepted until it consumes the accepted authored
+  outputs of the three upstream production owners.
 - Asset Advisor may route image, video, avatar, and audio realization, but it
   does not own edit direction, timeline assembly, or rendering. Content Impl
   Plan orders Asset Advisor's returned realization actions without re-deciding
@@ -122,6 +133,7 @@ flowchart LR
   classDef added fill:#dcfce7,stroke:#15803d,color:#111827
 
   idea["idea + policy<br/>task brief"]:::keep
+  admission["project content skill<br/>eligibility + one lifecycle slot"]:::keep
   kit["FEAT-0073<br/>Brand Kit approved snapshots<br/>one kit prompt"]:::changed
   tasty["FEAT-0056<br/>computed Tasty Pack<br/>complete element capsules"]:::changed
   plan["content-impl-plan<br/>hypothesis, conflicts<br/>low-fi review, storyboard"]:::added
@@ -132,7 +144,8 @@ flowchart LR
   render["Remotion<br/>timeline + rendered video"]:::added
   proof["grounding proof<br/>element-to-output map"]:::added
 
-  idea --> plan
+  idea --> admission
+  admission --> plan
   kit --> plan
   tasty --> plan
   plan --> storyboard
@@ -169,12 +182,17 @@ Content Production converts approved identity and optional inspiration into a bo
 
 - Registry proof: `python3 docs/features/validate_features.py`.
 - Link proof: `python3 bin/validators/check_doc_refs.py`.
+- Production-program proof:
+  `python3 skills/content-impl-plan/scripts/validate_production_program.py <program.json>`.
 - Update this system page when the composition policy, timing-master policy, or feature membership changes.
 - Update feature pages when Brand Kit or Tasty Pack behavior changes.
 - Regenerate registries and commit generated outputs with the source docs.
 
 ## Change History
 
+- 2026-08-04: Separated project admission/configuration from the reusable
+  compiler and added the immutable Creative Input Bundle plus mechanically
+  owner-separated production program.
 - 2026-08-03: Standardized sibling production lanes and separated reusable
   creative patterns from executable skill methods.
 - 2026-07-22: Created SYS-0012 for the TASK-0068 durable documentation slice.

@@ -56,7 +56,9 @@ template_uses:
 
 - [ ] `creative-inputs-and-realization`: The plan accepts `brand_kit?` and
   `tasty_pack?`, never aliases a `style_profile`, and gives approved Brand Kit
-  identity/policy precedence. Every considered element is visibly chosen,
+  identity/policy precedence. It freezes the resolved Brand Kit id, kit/prompt
+  revisions, prompt, elements, optional computed Tasty Pack, audience,
+  platform, proof, and policy as one immutable Creative Input Bundle. Every considered element is visibly chosen,
   augmented, rejected, conflicting, or unused with provenance and rationale;
   every selected element preserves `description`, `whyItWorks`, one resolved
   `goldenExample`, and one `goldenRecipe`, then maps to a beat, artifact,
@@ -75,7 +77,10 @@ template_uses:
   measurement, storyboard/cue revision, asset work, and Remotion. Content Impl
   Plan orchestrates sibling Storyboard, Asset Advisor, Editing Advisor,
   Remotion, and Review/QA actions; Asset Advisor alone selects image, video,
-  avatar, or audio realization children. Each action has inputs, outputs,
+  avatar, or audio realization children. Visual work persists a v1 production
+  program and passes `scripts/validate_production_program.py`; grouped owners
+  fail, and Remotion cannot be accepted until Storyboard, Asset Advisor, and
+  Editing Advisor each have accepted evidence. Each action has inputs, outputs,
   acceptance checks, blockers, and topology obligations; provider spend waits
   for storyboard approval. Two to four ICP-derived decision lenses record
   objections, required proof, rejection reasons, and independent review before

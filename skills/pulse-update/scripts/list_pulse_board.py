@@ -22,10 +22,11 @@ SIGNAL_WAIT_STATUSES = {"waiting_signal"}
 TERMINAL_STATUSES = {"done", "failed", "rejected"}
 PRIORITY_ORDER = {"urgent": 0, "high": 1, "medium": 2, "low": 3}
 REVIEW_ACTION_PRIORITY = {
-    "send_initial_telegram": 0,
-    "send_telegram_reminder": 1,
-    "dispatch_phone_chaser": 2,
-    "repair_review_state": 3,
+    "repair_thread_identity": 0,
+    "send_initial_telegram": 1,
+    "send_telegram_reminder": 2,
+    "dispatch_phone_chaser": 3,
+    "repair_review_state": 4,
 }
 DEFAULT_REVIEW_CHASE_POLICY = {
     "timezone": "UTC",
@@ -320,7 +321,21 @@ def review_state(progress_path: Path) -> dict[str, Any]:
     if not progress_path.is_file():
         return {}
     markdown = progress_path.read_text(encoding="utf-8", errors="replace")
-    return parse_yaml_section(markdown_heading_section(markdown, "Review"))
+    lines = markdown.splitlines()
+    for index, line in enumerate(lines):
+        match = re.fullmatch(r"## (?:(.+) )?Review", line.strip())
+        prefix = str(match.group(1) or "").strip().lower() if match else ""
+        if not match or prefix.startswith("superseded"):
+            continue
+        end = len(lines)
+        for cursor in range(index + 1, len(lines)):
+            if lines[cursor].startswith("## "):
+                end = cursor
+                break
+        state = parse_yaml_section("\n".join(lines[index + 1 : end]).strip())
+        if state:
+            return state
+    return {}
 
 
 def review_chase_policy(root: Path) -> dict[str, Any]:
@@ -840,6 +855,29 @@ def build_board(
             executable.append(row)
 
     executable.sort(key=ticket_sort_key)
+    worker_index_path = root / ".farplane" / "state" / "ticket-thread-associations.jsonl"
+    workers_by_ticket = association_worker_rows(load_jsonl(worker_index_path))
+    thread_identity_mismatches: list[dict[str, Any]] = []
+    for row in awaiting_review:
+        association = workers_by_ticket.get(row["ticket_id"])
+        associated_thread = str((association or {}).get("thread_id") or "").strip()
+        review_thread = str(row.get("review_thread_ref") or "").strip()
+        if associated_thread and review_thread and associated_thread != review_thread:
+            action_row = {
+                **row,
+                "review": {
+                    "action": "repair_thread_identity",
+                    "reason": "review_thread_ref_mismatches_ticket_association",
+                    "associated_thread_ref": associated_thread,
+                    "review_thread_ref": review_thread,
+                    "progress_path": row.get("review_ref", ""),
+                },
+            }
+            thread_identity_mismatches.append(action_row)
+    mismatched_ids = {row["ticket_id"] for row in thread_identity_mismatches}
+    review_actions = thread_identity_mismatches + [
+        row for row in review_actions if row["ticket_id"] not in mismatched_ids
+    ]
     review_actions.sort(
         key=lambda row: (
             REVIEW_ACTION_PRIORITY.get(row["review"]["action"], 99),
@@ -847,9 +885,6 @@ def build_board(
             row["ticket_id"],
         )
     )
-
-    worker_index_path = root / ".farplane" / "state" / "ticket-thread-associations.jsonl"
-    workers_by_ticket = association_worker_rows(load_jsonl(worker_index_path))
     ticket_status_by_id = {
         row["ticket_id"]: row["status"].lower() for row in rows
     }
@@ -919,6 +954,7 @@ def build_board(
         "next_due_review_action": review_actions[0] if review_actions else None,
         "due_review_action_count": len(review_actions),
         "held_review_chases": held_review_chases,
+        "thread_identity_mismatches": thread_identity_mismatches,
         "due_checkin_tickets": due_checkins,
         "future_checkin_tickets": future_checkins,
         # Review WIP is a bounded human-decision surface, not execution-worker

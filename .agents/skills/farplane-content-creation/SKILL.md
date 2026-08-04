@@ -31,9 +31,9 @@ filming, external generation, and account mutation remain separately gated.
 ## Skill Signature
 
 ```text
-farplane_content_creation(problem_ref, system_ref, feature_refs, source_or_idea, audience, content_goal, channels=all_configured, content_kind?, video_method?, style_profile?, taste_refs?, ticket?, audience_context?, variation_count=10)
+farplane_content_creation(problem_ref, system_ref, feature_refs, source_or_idea, audience, content_goal, channels=all_configured, brand_kit?, tasty_pack_ref?, content_kind?, video_method?, ticket?, audience_context?, variation_count=10)
   -> best_bet_proposals + approved_skeleton + optimized_exemplar + format_transformations + variation_matrix + ranked_shortlist + distribution_handoff + proof_refs
-state: reads(farplane/harness.yaml stable problems, docs/systems and docs/features registries, farplane/metrics.yaml, ticket audience_context first or configured Feed Scout World Memory as fallback, source/evidence refs, taste refs, ticket Goal Packet); writes(ticket-local proposals, skeleton, exemplar, variants, review evidence, and feedback state)
+state: reads(farplane/harness.yaml stable problems, docs/systems and docs/features registries, farplane/metrics.yaml, ticket audience_context first or configured Feed Scout World Memory as fallback, source/evidence refs, resolved Brand Kit, optional computed Tasty Pack, ticket Goal Packet); writes(ticket-local proposals, frozen creative-input bundle, skeleton, exemplar, variants, review evidence, and feedback state)
 gates: strategic_ref_bound; source_ref_preserved; audience_problem_named; canonical_icp_bound; baseline_named; intended_belief_or_behavior_delta_named; audience_named; content_goal_named; claim_strength_matches_proof; planning_approval_before_execution; exemplar_approval_before_variations; publish_requires_separate_approval
 routes: root skill `content-impl-plan` | root skill `optimize-with-human` | root skill `goal-advisor` | root skill `storyboard` | root skill `social-content` | root skill `video-production` | root skill `remotion` | root skill `qa` | root skill `review`
 fails: unreferenced_random_feature; internal_name_as_hook; executes before skeleton approval; asks a human to judge an undifferentiated batch; generates random rewrites; varies the proof spine; publishes all variants; treats feedback as publication authority
@@ -75,7 +75,8 @@ content_pipeline_state:
   content_goal: intended effect
   channel: format or undecided
   source_refs: evidence or explicitly unproven premise
-  taste_refs: references and borrowed patterns
+  brand_kit_snapshot: resolved id, revision, prompt, and elements
+  tasty_pack_ref: optional computed reference packet
   proof_limits: allowed and prohibited claims
   authority:
     local_drafting: allowed
@@ -115,10 +116,10 @@ silently broaden into another action class.
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-- [ ] 1. Bind one stable `problem_ref`, canonical `system_ref`, relevant `feature_refs`, audience, recognizable problem, content goal, channels, accepted source evidence, taste references, rights, proof limits, and authority. Preserve those refs through every format. Lead with the audience's pain and visible result—not an internal Farplane feature name.
-- [ ] 2. Use `content-impl-plan` to shape one Best Bet by default and no more than three genuinely distinct proposals for planning feedback; for video, bind content kind, method, optional reusable style profile, and optional task inspiration independently.
+- [ ] 1. Bind one stable `problem_ref`, canonical `system_ref`, relevant `feature_refs`, audience, recognizable problem, content goal, channels, accepted source evidence, resolved Brand Kit, optional computed Tasty Pack, rights, proof limits, and authority. Freeze those inputs in one Creative Input Bundle and preserve them through every format. Lead with the audience's pain and visible result—not an internal Farplane feature name.
+- [ ] 2. Use `content-impl-plan` to shape one Best Bet by default and no more than three genuinely distinct proposals for planning feedback; for video, bind content kind and method. Do not introduce a `style_profile` as a third composition source on the Brand Kit/Tasty path.
 - [ ] 3. Run `optimize-with-human` in `phase: planning`; revise or reject locally until the human approves one proposal, then write its frozen skeleton and `approved_plan_ref`.
-- [ ] 4. Route the skeleton to the smallest faithful artifact-producing skill and build one exemplar before any batch expansion. Dispatch video through the selected `video-production` method and pass the approved style profile/visual direction instead of forcing every video through explainer.
+- [ ] 4. Route the skeleton to the smallest faithful artifact-producing skill and build one exemplar before any batch expansion. Dispatch video through the selected `video-production` method and pass the frozen Brand Kit/Tasty visual direction instead of forcing every video through explainer.
 - [ ] 5. Run `optimize-with-human` in `phase: execution` until the exemplar reaches keep, approve, convergence, budget, or blocker; planning-invalidating feedback reopens step 2.
 - [ ] 6. After exemplar approval, transform the frozen skeleton across every configured channel and useful format in the same ticket, then generate ten controlled variants by default from declared variable axes while preserving every skeleton invariant and proof boundary.
 - [ ] 7. QA the batch, record the variation matrix and expected learning, then rank a two-to-three-item shortlist instead of sending or publishing the whole batch.
@@ -192,7 +193,8 @@ approved_skeleton:
   proof_spine: evidence refs and allowed interpretations
   format_engine: repeatable structure or visual device
   video_method: selected method or not_applicable
-  style_profile: selected reusable profile or not_supplied
+  brand_kit_snapshot: resolved id, revision, prompt, and elements
+  tasty_pack_ref: optional computed reference packet or not_supplied
   inspiration_pack: task evidence ref or not_supplied
   call_to_action: bounded next action
   invariants: elements every variant must preserve

@@ -44,6 +44,14 @@ CALL_FIELDS = {
     "dedupe",
     "ranking",
 }
+ADMISSION_FIELDS = {
+    "workstream_key",
+    "decision",
+    "open_lifecycle_refs",
+    "release_condition",
+    "reason",
+}
+ADMISSION_DECISIONS = {"admit", "hold", "preempt_request", "reject"}
 OBJECTIVE_FIELDS = {
     "ultimate_kpi_id",
     "contribution_type",
@@ -190,6 +198,39 @@ def planning_contract(project_root: Path, skill_ref: str) -> tuple[dict[str, Any
     return None, f"configured skill {skill_ref!r} does not resolve to .agents/skills or skills"
 
 
+def open_lifecycle_refs(project_root: Path, skill_ref: str, contract: dict[str, Any]) -> list[str]:
+    """Resolve admitted, unreleased tickets for one admission-controlled skill."""
+    release_states = {
+        str(value).strip().lower()
+        for value in contract.get("release_states", [])
+        if nonempty(value)
+    }
+    open_until = str(contract.get("open_until") or "").strip()
+    refs: list[str] = []
+    for path in sorted((project_root / "tickets").glob("TASK-*/ticket.md")):
+        text_value = path.read_text(encoding="utf-8", errors="replace")
+        if not re.search(rf"(?m)^skill_ref:\s*['\"]?{re.escape(skill_ref)}['\"]?\s*$", text_value):
+            continue
+        try:
+            metadata = read_frontmatter(path)
+        except (OSError, ValueError, yaml.YAMLError):
+            refs.append(str(path.relative_to(project_root)))
+            continue
+        if str(metadata.get("admission_state") or "").strip() == "held_not_admitted":
+            continue
+        if str(metadata.get("status") or "").strip().lower() in release_states:
+            continue
+        progress = path.with_name("progress.md")
+        progress_text = progress.read_text(encoding="utf-8", errors="replace") if progress.exists() else ""
+        if open_until and re.search(
+            rf"(?m)^\s*(?:phase|status):\s*['\"]?{re.escape(open_until)}['\"]?\s*$",
+            progress_text,
+        ):
+            continue
+        refs.append(str(path.relative_to(project_root)))
+    return refs
+
+
 def require_object_fields(
     value: Any, required: set[str], prefix: str, errors: list[str], *, optional: set[str] | None = None
 ) -> dict[str, Any]:
@@ -279,7 +320,7 @@ def validate_call(
     errors: list[str],
 ) -> None:
     prefix = f"proposed_skill_calls[{index}]"
-    row = require_object_fields(call, CALL_FIELDS, prefix, errors, optional={"area_id"})
+    row = require_object_fields(call, CALL_FIELDS, prefix, errors, optional={"area_id", "admission"})
     require_nonempty_fields(
         row,
         {"call_id", "title", "skill_ref", "expected_artifact", "current_alternative", "why_now"},
@@ -310,6 +351,50 @@ def validate_call(
         for name in sorted(required & set(arguments)):
             if not concretely_bound(arguments[name]):
                 errors.append(f"{prefix}.arguments.{name} must be concretely bound")
+
+        admission_contract = contract.get("admission_contract")
+        if admission_contract is not None:
+            if not isinstance(admission_contract, dict):
+                errors.append(f"{prefix}.skill_ref planner_contract.admission_contract must be an object")
+            else:
+                admission = require_object_fields(
+                    row.get("admission"), ADMISSION_FIELDS, f"{prefix}.admission", errors
+                )
+                require_nonempty_fields(
+                    admission,
+                    {"workstream_key", "decision", "release_condition", "reason"},
+                    f"{prefix}.admission",
+                    errors,
+                )
+                expected_key = admission_contract.get("workstream_key")
+                if admission.get("workstream_key") != expected_key:
+                    errors.append(f"{prefix}.admission.workstream_key must match the selected skill contract")
+                if admission.get("decision") not in ADMISSION_DECISIONS:
+                    errors.append(f"{prefix}.admission.decision must name a supported decision")
+                elif admission.get("decision") != "admit":
+                    errors.append(f"{prefix}.admission.decision must be admit before a call can be proposed")
+                open_refs = admission.get("open_lifecycle_refs")
+                if not isinstance(open_refs, list):
+                    errors.append(f"{prefix}.admission.open_lifecycle_refs must be a list")
+                    open_refs = []
+                elif not all(isinstance(ref, str) and ref.strip() for ref in open_refs):
+                    errors.append(f"{prefix}.admission.open_lifecycle_refs must contain only refs")
+                expected_release = admission_contract.get("open_until")
+                if admission.get("release_condition") != expected_release:
+                    errors.append(f"{prefix}.admission.release_condition must match the selected skill contract")
+                observed_open_refs = open_lifecycle_refs(project_root, skill_ref, admission_contract)
+                if sorted(open_refs) != sorted(observed_open_refs):
+                    errors.append(f"{prefix}.admission.open_lifecycle_refs must match current ticket state")
+                max_open = admission_contract.get("max_open_lifecycles")
+                if isinstance(max_open, bool) or not isinstance(max_open, int) or max_open < 1:
+                    errors.append(f"{prefix}.skill_ref admission max_open_lifecycles must be a positive integer")
+                elif len(observed_open_refs) >= max_open:
+                    errors.append(
+                        f"{prefix}.admission cannot admit because lifecycle capacity is full: "
+                        + ", ".join(observed_open_refs)
+                    )
+        elif "admission" in row:
+            errors.append(f"{prefix}.admission is unsupported because the selected skill has no admission contract")
 
     strategic_names = {"problem_ref", "system_ref", "feature_refs"}
     if strategic_names & set(arguments):

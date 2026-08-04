@@ -88,6 +88,9 @@ fails:
 6. Generate only bound invocations of allowed skills. The skill identity is the
    work type; its signature owns the workflow. Bind exactly the declared
    `required_arguments`; Pulse separately owns ticket creation and context.
+   When a planner contract declares `admission_contract`, inspect that
+   workstream first and attach an `admit` receipt. Return `hold`,
+   `preempt_request`, or `reject` as a rejection, never as a proposed call.
 7. Reject calls that are maintenance-only, duplicate, vague, unsafe, blocked,
    unsupported, internally contradictory, or whose value exists only in setup,
    reports, tests, schemas, or proof receipts. A call's arguments, evidence,
@@ -111,8 +114,9 @@ fails:
       current context, and global-first history/preference evidence.
 - [ ] 2. Stop with an empty wave on an unhealthy hard guard or unresolved skill.
 - [ ] 3. Select the missing evidence stage; bind problem, system, and feature
-      refs when the selected `planner_contract` declares them; then produce only
-      compact configured-skill calls with exactly the required arguments bound.
+      refs when the selected `planner_contract` declares them; enforce any
+      admission contract; then produce only compact configured-skill calls with
+      exactly the required arguments bound.
 - [ ] 4. Reject maintenance, workflow invention, duplicates, vague calls,
       unsupported impact, unsafe authority, and self-improvement without a
       reproduced failure.

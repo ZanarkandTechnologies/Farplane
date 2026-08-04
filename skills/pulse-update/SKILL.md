@@ -197,6 +197,10 @@ capacity, ticket scope, or external side-effect permission.
         tickets, missing outputs, and stale association rows. A `status: active`
         ticket without a live ticket-thread association row is unavailable for
         dispatch but does not consume `worker_limit`.
+  - [ ] Require the current Review `thread_ref` to match the ticket's durable
+        ticket-thread association before chasing or resuming it. On mismatch,
+        emit `repair_thread_identity`; do not route the ticket through the
+        Pulse manager task and do not create another worker task.
   - [ ] Project awaiting-review tickets into one pool per canonical area.
         `review_wip` limits those operator-facing pools, not the number of
         distinct ticket artifacts and not worker concurrency.

@@ -197,6 +197,99 @@ broken_skill(question, ticket?)
         errors = validator.validate_wave_response(payload, PROJECT_ROOT)
         self.assertTrue(any("content_goal must be concretely bound" in error for error in errors))
 
+    def test_admission_controlled_skill_requires_an_open_lifecycle_admit(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            skill = root / ".agents" / "skills" / "daily-content"
+            skill.mkdir(parents=True)
+            (root / "farplane").mkdir()
+            (root / "farplane" / "harness.yaml").write_text(
+                yaml.safe_dump({"planning": {"skill_refs": ["daily-content"]}}), encoding="utf-8"
+            )
+            (skill / "SKILL.md").write_text(
+                """---
+name: daily-content
+planner_contract:
+  required_arguments: [candidate_ref]
+  admission_contract:
+    workstream_key: daily-content
+    max_open_lifecycles: 1
+    open_until: distribution_handoff
+---
+
+## Skill Signature
+
+```text
+daily_content(candidate_ref) -> artifact
+```
+""",
+                encoding="utf-8",
+            )
+            payload = valid_payload()
+            call = payload["proposed_skill_calls"][0]
+            call["skill_ref"] = "daily-content"
+            call["arguments"] = {"candidate_ref": "candidate-1"}
+
+            missing_errors = validator.validate_wave_response(payload, root)
+            self.assertTrue(any("admission must be an object" in error for error in missing_errors))
+
+            call["admission"] = {
+                "workstream_key": "daily-content",
+                "decision": "hold",
+                "open_lifecycle_refs": ["TASK-0001"],
+                "release_condition": "distribution_handoff",
+                "reason": "TASK-0001 is still in production",
+            }
+            held_errors = validator.validate_wave_response(payload, root)
+            self.assertTrue(any("decision must be admit" in error for error in held_errors))
+            self.assertTrue(any("must match current ticket state" in error for error in held_errors))
+
+            call["admission"] = {
+                "workstream_key": "daily-content",
+                "decision": "admit",
+                "open_lifecycle_refs": [],
+                "release_condition": "distribution_handoff",
+                "reason": "no open daily-content lifecycle remains",
+            }
+            self.assertEqual(validator.validate_wave_response(payload, root), [])
+
+            ticket = root / "tickets" / "TASK-OPEN"
+            ticket.mkdir(parents=True)
+            (ticket / "ticket.md").write_text(
+                """---
+ticket_id: TASK-OPEN
+status: awaiting_review
+---
+
+## Planned Skill Call
+
+```yaml
+skill_ref: daily-content
+```
+""",
+                encoding="utf-8",
+            )
+            open_errors = validator.validate_wave_response(payload, root)
+            self.assertTrue(any("lifecycle capacity is full" in error for error in open_errors))
+
+            (ticket / "progress.md").write_text(
+                "content_pipeline_state:\n  phase: distribution_handoff\n", encoding="utf-8"
+            )
+            self.assertEqual(validator.validate_wave_response(payload, root), [])
+
+            (ticket / "progress.md").unlink()
+            (ticket / "ticket.md").write_text(
+                """---
+ticket_id: TASK-OPEN
+status: blocked
+admission_state: held_not_admitted
+---
+skill_ref: daily-content
+""",
+                encoding="utf-8",
+            )
+            self.assertEqual(validator.validate_wave_response(payload, root), [])
+
     def test_unknown_problem_and_system_refs_are_rejected(self) -> None:
         payload = valid_payload()
         payload["proposed_skill_calls"][0]["arguments"]["problem_ref"] = "missing_problem"

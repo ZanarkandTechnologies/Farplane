@@ -23,6 +23,10 @@ Apply before generation and again to the exact final JSON.
      value and contains no undeclared fields.
    - Missing evidence rejects the call or remains an explicit source gap; it
      never becomes a planning task.
+   - When the selected planner contract declares admission control, the call
+     carries an `admit` receipt with the matching workstream/release condition
+     and exact current open lifecycle refs below configured capacity. Holds and
+     preemption requests are rejections, never proposed calls.
 
 3. `strategic_stage_and_understandable_value`
    - Every market-learning, ablation, or content call names one configured

@@ -13,6 +13,12 @@ title:
 skill_ref:
 area_id: # optional passive ICP/metric context
 arguments: {} # exactly the selected skill's required_arguments
+admission: # required only when planner_contract.admission_contract exists
+  workstream_key:
+  decision: admit
+  open_lifecycle_refs: [] # exact current refs; count must remain below configured capacity
+  release_condition:
+  reason:
 expected_artifact:
 current_alternative:
 why_now:
@@ -53,3 +59,8 @@ ranking:
 
 The skill owns the workflow. `arguments` binds its public inputs; it never
 contains workflow steps, copied todos, phases, or a nested ticket spec.
+
+For an admission-controlled skill, the planner must inspect the current
+workstream before proposing the call. `hold`, `preempt_request`, and `reject`
+belong in `rejections`; only an `admit` receipt whose exact current open refs
+remain below `max_open_lifecycles` may appear in `proposed_skill_calls`.

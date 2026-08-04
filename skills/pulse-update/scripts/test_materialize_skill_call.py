@@ -100,6 +100,59 @@ class MaterializeSkillCallTests(unittest.TestCase):
             )
             self.assertNotIn("due_at:", undated_path.read_text(encoding="utf-8"))
 
+    def test_refuses_to_materialize_a_held_admission(self) -> None:
+        held = call("held")
+        held["admission"] = {
+            "workstream_key": "daily-content",
+            "decision": "hold",
+            "open_lifecycle_refs": ["TASK-0001"],
+            "release_condition": "distribution_handoff",
+            "reason": "an earlier lifecycle is open",
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            with self.assertRaisesRegex(ValueError, "validated admit decision"):
+                materializer.materialize_skill_call(Path(directory), "TASK-1001", held)
+
+    def test_rechecks_open_lifecycle_before_materialization(self) -> None:
+        admitted = call("admitted")
+        admitted["skill_ref"] = "daily-content"
+        admitted["admission"] = {
+            "workstream_key": "daily-content",
+            "decision": "admit",
+            "open_lifecycle_refs": [],
+            "release_condition": "distribution_handoff",
+            "reason": "planner observed an empty lane",
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            skill = root / ".agents" / "skills" / "daily-content"
+            skill.mkdir(parents=True)
+            (skill / "SKILL.md").write_text(
+                """---
+planner_contract:
+  admission_contract:
+    workstream_key: daily-content
+    max_open_lifecycles: 1
+    open_until: distribution_handoff
+    release_states: [rejected, cancelled]
+---
+""",
+                encoding="utf-8",
+            )
+            open_ticket = root / "tickets" / "TASK-OPEN"
+            open_ticket.mkdir(parents=True)
+            (open_ticket / "ticket.md").write_text(
+                """---
+ticket_id: TASK-OPEN
+status: awaiting_review
+---
+skill_ref: daily-content
+""",
+                encoding="utf-8",
+            )
+            with self.assertRaisesRegex(ValueError, "open lifecycle receipt changed"):
+                materializer.materialize_skill_call(root, "TASK-1001", admitted)
+
 
 if __name__ == "__main__":
     unittest.main()

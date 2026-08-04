@@ -5,11 +5,53 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
 import yaml
+
+
+def _read_skill_admission_contract(project_root: Path, skill_ref: str) -> dict[str, Any] | None:
+    for base in (project_root / ".agents" / "skills", project_root / "skills"):
+        path = base / skill_ref / "SKILL.md"
+        if not path.is_file():
+            continue
+        parts = path.read_text(encoding="utf-8").split("---", 2)
+        if len(parts) != 3:
+            return None
+        metadata = yaml.safe_load(parts[1]) or {}
+        planner = metadata.get("planner_contract") if isinstance(metadata, dict) else None
+        contract = planner.get("admission_contract") if isinstance(planner, dict) else None
+        return contract if isinstance(contract, dict) else None
+    return None
+
+
+def _open_lifecycle_refs(project_root: Path, skill_ref: str, contract: dict[str, Any]) -> list[str]:
+    releases = {str(value).strip().lower() for value in contract.get("release_states", [])}
+    open_until = str(contract.get("open_until") or "").strip()
+    refs: list[str] = []
+    for path in sorted((project_root / "tickets").glob("TASK-*/ticket.md")):
+        text = path.read_text(encoding="utf-8", errors="replace")
+        if not re.search(rf"(?m)^skill_ref:\s*['\"]?{re.escape(skill_ref)}['\"]?\s*$", text):
+            continue
+        parts = text.split("---", 2)
+        metadata = yaml.safe_load(parts[1]) if len(parts) == 3 else {}
+        if isinstance(metadata, dict) and metadata.get("admission_state") == "held_not_admitted":
+            continue
+        status = str(metadata.get("status") or "").strip().lower() if isinstance(metadata, dict) else ""
+        if status in releases:
+            continue
+        progress = path.with_name("progress.md")
+        progress_text = progress.read_text(encoding="utf-8", errors="replace") if progress.exists() else ""
+        if open_until and re.search(
+            rf"(?m)^\s*(?:phase|status):\s*['\"]?{re.escape(open_until)}['\"]?\s*$",
+            progress_text,
+        ):
+            continue
+        refs.append(str(path.relative_to(project_root)))
+    return refs
 
 
 def _required_text(row: dict[str, Any], field: str) -> str:
@@ -35,10 +77,28 @@ def materialize_skill_call(
     expected_artifact = _required_text(call, "expected_artifact")
     arguments = call.get("arguments")
     objective = call.get("objective_contribution")
+    admission = call.get("admission")
+    admission_contract = _read_skill_admission_contract(project_root, skill_ref)
     if not isinstance(arguments, dict) or not arguments:
         raise ValueError("skill call arguments must be a non-empty object")
     if not isinstance(objective, dict) or not objective:
         raise ValueError("skill call objective_contribution must be a non-empty object")
+    if admission_contract and admission is None:
+        raise ValueError("selected skill requires a validated admission receipt")
+    if admission is not None:
+        if not isinstance(admission, dict) or admission.get("decision") != "admit":
+            raise ValueError("skill call admission must be a validated admit decision")
+        if not admission_contract:
+            raise ValueError("skill call admission has no matching selected-skill contract")
+        open_refs = _open_lifecycle_refs(project_root, skill_ref, admission_contract)
+        receipt_refs = admission.get("open_lifecycle_refs")
+        if not isinstance(receipt_refs, list) or sorted(receipt_refs) != sorted(open_refs):
+            raise ValueError("skill call admission is stale; open lifecycle receipt changed")
+        max_open = admission_contract.get("max_open_lifecycles")
+        if isinstance(max_open, bool) or not isinstance(max_open, int) or max_open < 1:
+            raise ValueError("selected skill admission max_open_lifecycles must be a positive integer")
+        if len(open_refs) >= max_open:
+            raise ValueError("skill call admission is stale; lifecycle capacity is full: " + ", ".join(open_refs))
 
     timestamp = created_at or datetime.now(UTC).isoformat()
     call_receipt: dict[str, Any] = {
@@ -46,6 +106,8 @@ def materialize_skill_call(
         "skill_ref": skill_ref,
         "arguments": arguments,
     }
+    if admission is not None:
+        call_receipt["admission"] = admission
     if isinstance(call.get("area_id"), str) and call["area_id"].strip():
         call_receipt["area_id"] = call["area_id"].strip()
     call_receipt["expected_artifact"] = expected_artifact
