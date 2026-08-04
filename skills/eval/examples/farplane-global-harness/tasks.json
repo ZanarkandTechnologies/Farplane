@@ -498,5 +498,138 @@
       "blocker"
     ],
     "notes": "Boundary regression for blocker reporting: recover first, then report one cause, attempted safe fixes, and the smallest required next action."
+  },
+  {
+    "id": "global_lean_implementation_skip_01",
+    "title": "Skip speculative implementation that has no current need",
+    "query": "We have one checkout provider and no planned alternatives. Give me the implementation approach for adding a provider plugin framework now so we are ready someday.",
+    "reference_points": [
+      "Challenges whether a provider plugin framework is needed for the stated single-provider requirement",
+      "Recommends skipping the speculative framework and keeping the current direct integration",
+      "Names a concrete trigger for reconsideration, such as a second real provider or independently varying provider behavior",
+      "Does not invent interfaces, registries, factories, configuration, or migration work for hypothetical future needs",
+      "Preserves current correctness and proof expectations rather than equating leanness with unverified work"
+    ],
+    "tags": [
+      "system-prompt",
+      "coding",
+      "leanness",
+      "yagni"
+    ],
+    "notes": "First rung of the implementation reuse ladder: unnecessary work should stop before code is proposed."
+  },
+  {
+    "id": "global_lean_implementation_reuse_01",
+    "title": "Reuse an existing codebase helper",
+    "query": "The toy-store import path already normalizes SKUs. Returns now need the same normalization. Give me the implementation approach.",
+    "reference_points": [
+      "Inspects or asks to inspect the existing import-path SKU normalization before designing new logic",
+      "Recommends reusing the existing helper or moving it to the correct shared owner when its current location prevents reuse",
+      "Does not copy the normalization logic or introduce a second helper with equivalent behavior",
+      "Checks callers, contracts, and tests needed to prove both import and returns behavior remain correct",
+      "Stops at repository reuse rather than continuing to external libraries or a new abstraction"
+    ],
+    "tags": [
+      "system-prompt",
+      "coding",
+      "leanness",
+      "reuse"
+    ],
+    "notes": "Second rung: existing repository behavior wins over rewriting equivalent logic."
+  },
+  {
+    "id": "global_lean_implementation_stdlib_01",
+    "title": "Prefer the standard library over a new package",
+    "query": "Our Python 3.11 toy-catalog command needs to read a TOML configuration file. Give me the implementation approach and dependency choice.",
+    "reference_points": [
+      "Selects Python 3.11's standard-library tomllib for TOML reading",
+      "Does not add a third-party TOML dependency when read-only parsing is sufficient",
+      "Keeps the change scoped to the existing command and configuration contract",
+      "Names focused parsing and invalid-input verification",
+      "Does not sacrifice a stated requirement; notes that TOML writing would be a separate need if relevant"
+    ],
+    "tags": [
+      "system-prompt",
+      "coding",
+      "leanness",
+      "stdlib"
+    ],
+    "notes": "Third rung: a sufficient standard-library capability should prevent dependency growth."
+  },
+  {
+    "id": "global_lean_implementation_platform_01",
+    "title": "Prefer a native platform capability",
+    "query": "The storefront targets modern secure-context browsers and needs a Copy order ID button. Give me the implementation approach.",
+    "reference_points": [
+      "Uses the native Clipboard API through navigator.clipboard.writeText as the primary mechanism",
+      "Does not introduce a clipboard package or custom clipboard abstraction for this single behavior",
+      "Handles the promise result and gives the user truthful success or failure feedback",
+      "Keeps any fallback conditional on an actual supported-browser requirement rather than adding it speculatively",
+      "Names a focused browser or interaction proof for the copied order ID"
+    ],
+    "tags": [
+      "system-prompt",
+      "coding",
+      "leanness",
+      "platform-native"
+    ],
+    "notes": "Fourth rung: use a sufficient native platform feature before an installed or new library."
+  },
+  {
+    "id": "global_lean_implementation_dependency_01",
+    "title": "Reuse an installed dependency",
+    "query": "The storefront already uses Zod for form schemas. We need validation for a new gift-message form. Give me the implementation approach.",
+    "reference_points": [
+      "Reuses the installed and established Zod validation pattern for the gift-message schema",
+      "Checks nearby form schemas and shared validation helpers before defining the new schema",
+      "Does not add another validation dependency or build a competing validation framework",
+      "Keeps the schema limited to the gift-message contract and real callers",
+      "Names focused valid and invalid input proof"
+    ],
+    "tags": [
+      "system-prompt",
+      "coding",
+      "leanness",
+      "installed-dependency"
+    ],
+    "notes": "Fifth rung: an already-installed, locally established dependency wins over another implementation surface."
+  },
+  {
+    "id": "global_lean_implementation_inline_01",
+    "title": "Keep a one-line condition inline",
+    "query": "A single cart component must show an empty-state label when `items.length === 0`. Should the implementation introduce an `isCartEmpty` helper?",
+    "reference_points": [
+      "Recommends keeping the simple condition inline or assigning one local expression when naming materially improves readability",
+      "Does not introduce a shared helper, utility module, hook, or abstraction for one trivial caller",
+      "Explains that extraction becomes warranted only with real repetition or independently meaningful behavior",
+      "Keeps the implementation scoped to the cart component",
+      "Still names the empty and non-empty states that should be verified"
+    ],
+    "tags": [
+      "system-prompt",
+      "coding",
+      "leanness",
+      "inline"
+    ],
+    "notes": "Sixth rung: trivial single-caller behavior should remain one line instead of becoming a helper surface."
+  },
+  {
+    "id": "global_lean_implementation_minimum_new_01",
+    "title": "Write the smallest new implementation after reuse options fail",
+    "query": "Toy bins need a small internal check-digit format unique to our warehouse. Repository search found no existing implementation, and our supported runtime and current packages do not provide this format. Give me the implementation approach.",
+    "reference_points": [
+      "Proposes one small locally owned function for the specified check-digit contract",
+      "Does not add a dependency, plugin system, strategy abstraction, or generalized encoding framework",
+      "Names the exact inputs, output, invalid-input behavior, and owning module",
+      "Adds focused examples or tests for known values and boundary cases",
+      "Treats broader extraction or generalization as follow-up only after a second real caller or requirement appears"
+    ],
+    "tags": [
+      "system-prompt",
+      "coding",
+      "leanness",
+      "minimum-new-code"
+    ],
+    "notes": "Final rung: when no cheaper sufficient option exists, implement only the smallest behavior that satisfies the current contract."
   }
 ]

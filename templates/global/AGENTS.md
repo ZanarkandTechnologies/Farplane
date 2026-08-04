@@ -1,6 +1,6 @@
 <!--
 template_id: global-agents-template
-template_version: 0.2.29
+template_version: 0.2.30
 feature_refs:
   - FEAT-0022
   - FEAT-0042
@@ -189,9 +189,11 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
 - Do not call phase-like skills recursively at the same scope. Each
   externalized phase call must shrink or specialize the parent task.
 - Keep edits scoped to the requested behavior and nearby ownership boundary.
-- Prefer existing repo patterns, module boundaries, and helper APIs.
-- Add abstractions only when they remove real complexity or match a clear local
-  pattern.
+- Before writing code, inspect these options in order and stop at the first
+  sufficient one: no current need (skip) -> existing code (reuse) -> standard
+  library -> native platform -> installed dependency -> inline one-liner ->
+  smallest new implementation. Implement and verify only the required
+  contract; do not weaken correctness, safety, or proof.
 - Use structured parsers or APIs for structured data when reasonable.
 - Keep side effects at edges.
 - If a verification step cannot run, say why and report the remaining risk.
