@@ -68,6 +68,30 @@ class FarplaneChecksTest(unittest.TestCase):
             self.assertIn("total=430", result.output)
             self.assertIn("do not weaken proof", result.output)
 
+    def test_ticket_context_budget_reuses_markdown_category_accounting(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            ticket_dir = root / "tickets" / "TASK-0001"
+            ticket_dir.mkdir(parents=True)
+            ticket = ticket_dir / "ticket.md"
+            ticket.write_text(
+                "Ticket prose\n```mermaid\nflowchart LR\nA --> B\n```\n",
+                encoding="utf-8",
+            )
+            (ticket_dir / "program.md").write_text("Program prose\n", encoding="utf-8")
+            (ticket_dir / "progress.md").write_text(
+                "\n".join(["progress"] * 100) + "\n",
+                encoding="utf-8",
+            )
+            context = ValidationContext(root, ticket, "planning", PathBoundary("unavailable"))
+
+            result = ticket_context_budget_check(context, "block")
+
+            self.assertEqual(result.status, "pass")
+            self.assertIn("total=86", result.output)
+            self.assertIn("categories[prose=84w/82l", result.output)
+            self.assertIn("mermaid=1b/4l", result.output)
+
     def test_validation_registry_does_not_expose_workflow_actions(self):
         forbidden = {"write", "install", "credentials", "repair-ticket", "hardcase"}
         for check_id in build_registry().ids():

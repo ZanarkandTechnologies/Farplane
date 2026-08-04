@@ -1,6 +1,6 @@
 ---
 template_id: ticket-template
-template_version: "0.2.5"
+template_version: "0.2.6"
 feature_refs:
   - FEAT-0007
   - FEAT-0008
@@ -53,9 +53,16 @@ proof: command, eval, QA, or review artifact
 failure: blocker or rollback condition
 ```
 
-<!-- Repeat Change N only for independently reviewable units. -->
+<!-- Repeat Change N only for independently reviewable units. Each unit owns
+its files, operation, local proof, and failure boundary; do not repeat the
+global Delta, QA Strategy, Docs Strategy, or routing policy in every unit. -->
 
 ## Map
+
+<!-- Optional. Include only when a compact text or inline Mermaid map makes a
+material relationship clearer than prose. For multiple detailed views or an
+independently reviewed visual surface, link a ticket-local diagrams.md instead.
+Omit this section for simple tickets. -->
 
 ```text
 input -> owner/change -> output + evidence

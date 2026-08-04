@@ -16,6 +16,7 @@ except ImportError:  # package import during tests
     from bin.core.validation.registry import CheckRegistry
 
 from bin.core.farplane_ticket_reward import validate_reward_file
+from bin.core.farplane_response import measure_response
 
 
 GOAL_CONTEXT_TARGET_LINES = 300
@@ -83,17 +84,44 @@ def _line_count(path: Path) -> int:
     return len(path.read_text(encoding="utf-8").splitlines())
 
 
+def _markdown_accounting(markdowns: tuple[str, ...]) -> str:
+    measures = [measure_response(markdown) for markdown in markdowns if markdown]
+    return (
+        f"prose={sum(item.prose_words for item in measures)}w/"
+        f"{sum(item.prose_nonblank_lines for item in measures)}l "
+        f"mermaid={sum(item.mermaid_blocks for item in measures)}b/"
+        f"{sum(item.mermaid_nonblank_lines for item in measures)}l "
+        f"media={sum(item.media_embeds for item in measures)} "
+        f"references={sum(item.reference_entries for item in measures)}"
+    )
+
+
 def ticket_context_budget_check(context: ValidationContext, mode: CheckMode) -> CheckResult:
     """Bound executable first-load state without treating length as quality."""
     started = time.monotonic()
     ticket_lines = _line_count(context.ticket)
     program_lines = _line_count(context.ticket.parent / "program.md")
-    progress_lines = _line_count(context.ticket.parent / "progress.md")
+    program_path = context.ticket.parent / "program.md"
+    progress_path = context.ticket.parent / "progress.md"
+    progress_text_lines = (
+        progress_path.read_text(encoding="utf-8").splitlines()
+        if progress_path.is_file()
+        else []
+    )
+    progress_lines = len(progress_text_lines)
     progress_tail_lines = min(progress_lines, PROGRESS_TAIL_LINES)
     total = ticket_lines + program_lines + progress_tail_lines
+    markdown_accounting = _markdown_accounting(
+        (
+            context.ticket.read_text(encoding="utf-8"),
+            program_path.read_text(encoding="utf-8") if program_path.is_file() else "",
+            "\n".join(progress_text_lines[-PROGRESS_TAIL_LINES:]),
+        )
+    )
     detail = (
         f"ticket={ticket_lines} program={program_lines} "
         f"progress_tail={progress_tail_lines}/{progress_lines} total={total}; "
+        f"categories[{markdown_accounting}]; "
         f"target<={GOAL_CONTEXT_TARGET_LINES} hard_limit<={GOAL_CONTEXT_HARD_LIMIT_LINES}"
     )
     if total > GOAL_CONTEXT_HARD_LIMIT_LINES:

@@ -115,7 +115,9 @@ A durable ticket is a small program for the next agent, not a generic task note.
 - The first-load envelope is the full ticket, full Goal program when present,
   and the latest 80 progress lines. It targets 300 lines and blocks planning or
   completion above 400 through `ticket.context-budget`; length never licenses
-  deleting required proof or hiding executable policy.
+  deleting required proof or hiding executable policy. The same result reports
+  prose, Mermaid, media, and link-only reference categories through the shared
+  Markdown accountant, while raw lines remain the context gate.
 - `Links` points to evidence, artifacts, related specs, sidecars, and handoffs.
 - `$close-ticket` owns remote publication: create or resume one marked issue in
   `integrations.github.repo`, render concise `Before`, `After`, `Example`, `Key

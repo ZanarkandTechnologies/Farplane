@@ -212,7 +212,9 @@ Hook and runtime nodes should use these tags:
   semantic compression pass. Closed Mermaid, exact image/video embed lines,
   and trailing link-only references are classified separately by
   `bin/core/farplane_response.py`; malformed or mixed forms count as prose. The
-  gate never truncates or owns task completion.
+  gate receives `last_assistant_message` directly, so agents do not need a
+  response draft file; `farplane response check PATH|--stdin` is only an
+  inspectable preflight. The gate never truncates or owns task completion.
 
 These tags let the lifecycle graph show hook boundaries without implying that
 hooks are a central orchestrator.

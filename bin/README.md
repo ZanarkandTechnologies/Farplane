@@ -27,6 +27,11 @@ farplane response check --stdin --json < response.md
 farplane response check response.md --json
 ```
 
+Codex does not need to draft its final answer into a file for the normal path.
+The installed Stop hook receives `last_assistant_message` and applies the same
+accountant automatically. Path/stdin mode is an optional preflight for agents,
+operators, tests, and any Markdown file that benefits from category counts.
+
 Exit `0` means prose is within its configured word and line limits; exit `1`
 means it is over. Closed Mermaid blocks, exact absolute/HTTPS image-video
 embeds, and a trailing link-only References/Citations section are reported

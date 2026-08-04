@@ -259,6 +259,10 @@ before they become live ticket sources.
   `artifacts/`
 - line count is a context constraint, not a quality score: required proof,
   safety, ownership, and reconstruction behavior must remain intact
+- the validator also reuses the response Markdown accountant to report prose,
+  Mermaid, media, and link-only reference categories; these diagnose where
+  pressure comes from but do not make excluded presentation free in the raw
+  first-load context total
 - default ticket = the largest coherent capability an agent can build and prove in one strong pass
 - CRUD workflows stay whole by default: schema, handlers, UI, validation, and proof belong together when they serve one operator workflow
 - for complex systems, the first ticket should usually create one reusable proof surface plus one minimal end-to-end happy path
@@ -276,7 +280,10 @@ farplane validate ticket tickets/TASK-XXXX/ticket.md --phase planning
 ```
 
 The ticket validation route includes `ticket.context-budget`. It reports
-pressure above the 300-line target and blocks above the 400-line hard limit.
+pressure above the 300-line target, blocks above the 400-line hard limit, and
+reports Markdown category counts from the shared accountant. Raw first-load
+lines remain the gate because Mermaid and other presentation still consume
+agent context.
 
 The validator treats `tickets/TASK-*/ticket.md` as canonical and still tolerates
 flat `tickets/TASK-*.md` files only as archived pre-directory ticket history.
@@ -295,28 +302,24 @@ Keep the body short by default. The main job of a ticket body is to let a
 developer or subagent understand the task contract, variable files, operations,
 and proof without opening every file first.
 
-Default sections:
+[`tickets/templates/ticket.md`](templates/ticket.md) is the sole active ticket
+body schema. Do not reproduce its required-section catalogue in this README,
+skills, prompts, or reference templates.
 
-- `Summary`
-- `Scope`
-- `Delta`
-- `Change Plan`
-- `Map`
-- `Done`
-- `QA Strategy`
-- `State`
-- `Docs Strategy`
-- `Links`
-- `Notes`
-
-Optional sections only when they add signal:
+The canonical template names optional-section behavior. Common conditional
+sections include:
 
 - `Reward`
 - `Planned Skill Call`
 - `Objective Contribution`
 - `Gap Analysis`
+- `Docs Strategy`
 - `Agent Contract`
 - `Run Hints`
+
+Add a conditional section only when its named consumer, ownership decision, or
+proof branch exists. In particular, `Docs Strategy` is not a default section;
+use it when documentation ownership is non-obvious or changes.
 
 The ticket is a compact task program over files and skills:
 
