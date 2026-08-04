@@ -44,7 +44,14 @@ template_uses:
   Custom-created SVG animation assets and SVG/JSX/programmatic vector
   substitutes for scene content are rejected. Existing user-supplied,
   brand-owned, licensed, or discovered SVG files are allowed only as
-  provenance-bearing static source media.
+  provenance-bearing static source media. For documentary/editorial work,
+  `scene-subject-coverage` requires every material scene to have
+  an inspected background, dominant subject, and evidence layer or an exact
+  blocker. The dominant subject is accepted source media, an accepted original
+  raster/video output, or a provenance-bearing static SVG—not typography,
+  generic cards, dashboards, pills, CSS UI, JSX, or a planning-board crop.
+  Each scene points to its asset-acceptance receipt so a complete inventory
+  cannot hide scene-level gaps.
 - [ ] Rights, likeness, brand, platform, duration, and aspect-ratio risks are
   named when relevant. Rights status is never inferred from the source's
   usefulness: cinematic frames and taste galleries remain reference-only or

@@ -92,6 +92,14 @@ static source media when provenance and rights are recorded.
 - animate accepted media; do not fill a missing layer by drawing a new SVG or
   JSX illustration.
 
+Before authoring the final master, require one renderer-unlock manifest that
+names the Brand Kit snapshot, Asset Advisor plan, Editing Advisor direction,
+cadence receipt, and one row per material scene. Each row must point to
+accepted background, dominant-subject, and evidence media plus asset
+acceptance, rights, and edit-recipe receipts. A renderer-ready label without
+those refs is not a handoff. Reject `css_ui`, `programmatic_drawing`,
+`text_only`, or planning/review media as dominant scene subjects.
+
 Do not create a separate effects owner. Asset preparation returns to
 `asset-advisor`; treatment or timeline problems stay with `remotion`.
 
@@ -151,13 +159,14 @@ evidence that the overlay is clean.
 
 ## Assembly and proof
 
-1. Preview each scene at its first frame, action midpoint, and final held frame.
-2. Preview adjacent scene boundaries against the measured narration.
-3. Assemble scene sequences, captions, accepted overlays, and audio cues on the
+1. Validate the renderer-unlock manifest and stop on any missing scene receipt.
+2. Preview each scene at its first frame, action midpoint, and final held frame.
+3. Preview adjacent scene boundaries against the measured narration.
+4. Assemble scene sequences, captions, accepted overlays, and audio cues on the
    master frame timeline.
-4. Render representative opening, mechanism, treatment, choreography, and
+5. Render representative opening, mechanism, treatment, choreography, and
    payoff stills before the final MP4.
-5. Inspect caption hierarchy, unintended seams or gray boxes, frozen-looking
+6. Inspect caption hierarchy, unintended seams or gray boxes, frozen-looking
    subjects, repeated entrance timing, parallax direction, shadow grounding,
    flicker intensity, and audio synchronization.
 

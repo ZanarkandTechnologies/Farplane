@@ -42,4 +42,11 @@ template_uses:
   blockers, layer/composition order, captions, transitions, motion, output
   spec, and frame/range or render checks; material direction receives an
   independent review receipt before readiness is claimed. Missing files still
-  carry expected output paths and null accepted-file refs.
+  carry expected output paths and null accepted-file refs. For an
+  inspiration-led editorial reel, `visual-grammar-and-cadence` requires every
+  material scene to name one accepted-media dominant subject, its
+  environmental plane, evidence hierarchy, and the state change it performs.
+  Interface widgets and typography cannot replace the subject. The handoff
+  maps declared maximum-hold and motion-window constraints into timed recipe
+  steps, then requires opening/mechanism/midpoint/payoff stills and rendered
+  ranges compared with the approved golden grammar before readiness.
