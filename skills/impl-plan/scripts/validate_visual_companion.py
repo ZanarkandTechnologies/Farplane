@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate the mandatory separate visual companion for an impl-plan ticket."""
+"""Validate an optional separate visual companion for an impl-plan ticket."""
 
 from __future__ import annotations
 
@@ -8,14 +8,6 @@ import re
 from pathlib import Path
 
 
-DIAGRAM_FENCES = re.compile(r"```(?:mermaid|plantuml|dot|graphviz)\b", re.I)
-DIAGRAM_WORD = r"(?:diagram|flow|architecture|system[-_ ]?map|mermaid|plantuml|graphviz)"
-MARKDOWN_DIAGRAM = re.compile(
-    rf"!\[[^\]]*\]\([^)]*{DIAGRAM_WORD}[^)]*\)|"
-    rf"!\[[^\]]*{DIAGRAM_WORD}[^\]]*\]\([^)]*\)",
-    re.I,
-)
-HTML_DIAGRAM = re.compile(rf"<img\b[^>]*(?:src|alt)=[\"'][^\"']*{DIAGRAM_WORD}[^\"']*[\"'][^>]*>", re.I)
 def section_body(text: str, name: str) -> str | None:
     match = re.search(rf"^## {name}(?:[ \t]*:[^\n]*)?$\n(.*?)(?=^## |\Z)", text, re.M | re.S)
     return match.group(1) if match else None
@@ -33,12 +25,14 @@ def validate(ticket: Path) -> list[str]:
     errors: list[str] = []
     companion = ticket.with_name("diagrams.md")
     ticket_text = ticket.read_text(encoding="utf-8")
-    if DIAGRAM_FENCES.search(ticket_text) or MARKDOWN_DIAGRAM.search(ticket_text) or HTML_DIAGRAM.search(ticket_text):
-        errors.append(f"{ticket}: embeds diagram content; move it to {companion}")
-    if not has_companion_link(ticket_text):
-        errors.append(f"{ticket}: missing required visual companion link to diagrams.md")
-    if not companion.is_file():
-        return errors + [f"{companion}: required companion does not exist"]
+    linked = has_companion_link(ticket_text)
+    exists = companion.is_file()
+    if not linked and not exists:
+        return []
+    if linked and not exists:
+        return [f"{companion}: linked companion does not exist"]
+    if exists and not linked:
+        return [f"{companion}: orphaned companion is not linked from ticket.md"]
 
     text = companion.read_text(encoding="utf-8")
     requirements = {
@@ -79,7 +73,7 @@ def main() -> int:
     if errors:
         print("\n".join(errors))
         return 1
-    print(f"visual companion OK: {args.ticket.with_name('diagrams.md')}")
+    print(f"optional visual companion OK: {args.ticket}")
     return 0
 
 

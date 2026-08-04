@@ -4,229 +4,115 @@ owner: impl-plan
 status: active
 kind: qa-checklist
 created_at: 2026-06-22
-updated_at: 2026-06-27
-applies_to:
-  - implementation-plans
-  - coding-tickets
+updated_at: 2026-08-04
+applies_to: [implementation-plans, coding-tickets]
 ---
 
 # Impl Plan QA Checklist
 
-Use this after material `impl-plan` changes or before accepting a generated
-implementation plan. Treat each item as an active violation scan over the
-draft plan: name the violation, fix the plan, or explicitly defer it with the
-reason and owner.
+Apply this after material planning and after changes to `impl-plan`. The
+canonical body schema is `tickets/templates/ticket.md`; this checklist judges
+decision and execution quality without restating that template.
 
 ```text
-impl_plan_qa_checklist(ticket_plan, ticket_scope, inspected_code?, proof_weight?)
-  -> checklist_verdicts + plan_fixes + defer_or_block_reason
-```
-
-## Threshold
-
-```text
-accept_plan(plan)
-  -> pass when plan_is_minimal_enough
-       and reuse_checked
-       and proof_route_observable
-       and new_surface_justified
-  -> revise when a smaller existing seam can satisfy the ticket
-  -> block when the objective, architecture boundary, or QA Strategy route is still unknown
+impl_plan_qa(ticket, inspected_context, proof_weight)
+  -> pass | revise | block + exact_fix
 ```
 
 ## Checks
 
 1. `ticket-first`
-   - Question: Is the material plan written into or attached to a selected
-     `tickets/TASK-XXXX/ticket.md`?
-   - Violation: The plan exists only in chat.
+   - Material planning is durable in one selected ticket, not chat or a child
+     implementation plan.
 
-2. `minimal-required-version`
-   - Question: Is this the smallest implementation that satisfies the ticket's
-     objective, first viable slice, proof/falsification, and non-goals?
-   - Violation: The plan adds future-proofing, optional UX, broad cleanup,
-     extra modes, or nice-to-have behavior that is not required by the ticket.
+2. `canonical-template-owner`
+   - The ticket follows `tickets/templates/ticket.md`; no skill-local active
+     schema, decorative duplicate section, or parallel contract exists.
 
-3. `reuse-before-new-surface`
-   - Question: Did the planner inspect existing similar features, nearby
-     helpers, conventions, tests, and docs before proposing new files,
-     functions, abstractions, or routes?
-   - Violation: The plan creates a new surface while an existing seam could be
-     extended, parameterized, or reused with less blast radius.
+3. `objective-and-scope`
+   - Summary, in/out boundaries, constraints, Before/After/Example, and the
+     smallest faithful slice are decisive. Real forks have one recommendation
+     and accepted tradeoff.
 
-4. `least-parameters`
-   - Question: Are new parameters, flags, config keys, schema fields, env vars,
-     and prompt variables limited to values the current ticket truly needs?
-   - Violation: The plan introduces knobs for hypothetical variants, broad
-     configurability, or caller choice without a current caller and proof path.
-   - For canonical structured state, name the natural/composite identity and
-     separate authored fields from replaceable projection fields. A derivable
-     field is a violation unless the plan names its current snapshot-time,
-     query/index, or interchange requirement.
+4. `reuse-before-new-surface`
+   - The planner inspected nearby code, tests, docs, helpers, components,
+     assets, and accepted planning artifacts before adding a surface.
 
-5. `function-breakdown-necessary`
-   - Question: Does each proposed helper, function, class, component, or module
-     remove real complexity, isolate a side effect, match a local pattern, or
-     enable focused tests?
-   - Violation: The plan decomposes straightforward logic into extra helpers
-     mainly for tidiness, naming, or imagined future reuse.
+5. `context-resolution`
+   - Required facets resolve as `reuse | targeted_refresh | create | block |
+     not_applicable`. Only decisions affecting scope, implementation, proof, or
+     blockers are recorded; advisor-owned gaps are not self-authored.
 
-6. `file-surface-necessary`
-   - Question: Is each proposed new or touched file justified by ownership,
-     existing layout, testability, generated output, or durable artifact needs?
-   - Violation: The plan creates sidecars, references, wrappers, scripts, or
-     docs when the existing owner file or ticket body can carry the change.
+6. `architecture-and-locality`
+   - Material ownership, public contracts, and typed movement are visible when
+     needed. Each change unit names real files, operation, local contract
+     impact, proof, and failure/rollback boundary without repeating the global
+     Delta, QA, Docs, or route policy.
 
-7. `split-boundary-real`
-   - Question: If the plan narrows or splits the ticket, is the boundary forced
-     by proof, reuse, blocking risk, external dependency, safety, or runtime
-     ownership?
-   - Violation: The plan splits only because the work feels large, spans
-     multiple commits, or a smaller slice feels more comfortable.
+7. `least-control-surface`
+   - New helpers, functions, files, parameters, flags, schemas, services, and
+     config exist only for current callers or proof. Existing owners are
+     extended when they fit.
 
-8. `goal-advisor-ready`
-   - Question: For Goal-backed work, does the approved ticket contain enough
-     structure for `goal-advisor(ticket)` to create `program.md`,
-     `progress.md`, and the native `/goal` prompt without transcript memory?
-   - Violation: The plan requires hidden chat context, unnamed files, unstated
-     budget/proof/metric policy, or a post-approval planning decision before
-     `goal-advisor` can compile the Goal Packet.
+8. `done-and-proof`
+   - Done states observable outcomes. QA Strategy names ordered checks,
+     delegated capture/judgment lanes, evidence, final checkpoint, and residual
+     risk. UI claims require runtime and visual evidence; material claims do
+     not self-approve.
 
-9. `clarifying-questions`
-   - Question: Did the planner ask up to 3 blocking clarifying questions when
-     objective, acceptance criteria, constraints, target files, proof weight,
-     permissions, human gates, or destructive/deploy/spend boundaries were
-     missing?
-   - Violation: The plan guesses at a materially branching input without
-     asking or recording a safe assumption.
+9. `docs-and-grounding`
+   - Docs ownership and validation are explicit only when non-obvious or
+     changed. Implementation-critical external APIs use current official or
+     maintained evidence; local-only work says why.
 
-10. `change-plan-locality`
-   - Question: Does each material `Change Plan` unit carry its own
-     before/after, `read`, `write`, `operation`, routes, and QA expectation so the reader
-     does not cross-map Delta, Program, and Map?
-   - Violation: The plan puts implementation order, touched files, signatures,
-     or QA in separate sections that must be manually reconciled.
+10. `goal-handoff`
+    - The approved ticket contains enough task, files, proof, and state for
+      `goal-advisor` without transcript memory or duplicated Goal sidecars.
 
-11. `change-plan-blocks`
-   - Question: Is each material change represented as its own heading plus
-     fenced block with plain `fixes:` text instead of synthetic labels?
-   - Violation: The plan puts all changes into one large code block, or uses
-     address labels that readers must resolve manually.
+11. `presentation-fit`
+    - Inline text/Mermaid replaces prose when useful. A linked `diagrams.md` is
+      required only when multiple detailed views or independent visual review
+      materially help, and it validates when present.
 
-12. `qa-strategy-explicit`
-   - Question: Does `QA Strategy` name proof weight, checks, manual evidence,
-     delegated lanes, review gates, goal-advisor inputs, final artifacts, and
-     for material feature work, the critical path being claimed with smaller
-     ordered sanity checks when full end-to-end proof is too long?
-   - Violation: The plan says only "run tests" or "verify manually", or proves
-     nearby pieces while leaving the claimed workflow/lifecycle implicit.
+12. `context-budget`
+    - `farplane validate ticket ... --phase planning` passes. Raw context and
+      Markdown category counts are inspected; consolidation moves bulky proof
+      or execution history without deleting required safety or evidence.
 
-13. `architecture-signatures`
-   - Question: Does each material plan expose compact top-level
-     `architecture_signatures` with module-level seams, main-flow signatures,
-     relevant typed data movement, and the builder-owned freeform boundary?
-   - Violation: The plan only describes files or prose, omits top-level seams,
-     or uses `not_applicable` for work that changes architecture, ownership,
-     data flow, proof, or reviewability.
+13. `independent-review`
+    - A material plan has a reconciled reviewer receipt against
+      implementation-plan, architecture when relevant, and evidence-quality.
 
-14. `change-plan-signature-linkage`
-   - Question: Do the Change Plan units connect to the proposed architecture
-     signatures while keeping `signature_or_type_impact` local to each unit?
-   - Violation: The architecture block and change units tell separate stories,
-     or every change unit duplicates the full architecture map.
+14. `readiness-consistency`
+    - `approval_ready` appears only when context, architecture, proof, budget,
+      and review gates pass; otherwise the exact blocker and owner are named.
 
-15. `docs-strategy`
-   - Question: Does the plan include `Docs Strategy` with `outcome`,
-     `doc_targets`, `no_docs_reason`, and `validation`, using `doc-advisor`
-     when the decision is nontrivial?
-   - Violation: The plan omits docs strategy, preserves `close_ticket` or
-     `documentation_skill` fields, or uses `no_docs` without a concrete reason.
+## Failure Rules
 
-16. `ui-design-baseline`
-   - Question: For UI/design work, does the ticket reference `design.md` or a
-     clear no-design-needed reason?
-   - Violation: Visual proof depends on unstated taste or layout assumptions.
-
-17. `subagent-proof`
-   - Question: Are QA, visual judgment, adversarial proof, and review assigned
-     to their owner lanes when material?
-   - Violation: The implementation executor can self-approve those claims.
-
-18. `final-evidence`
-   - Question: Does UI/user-visible proof require final image evidence or an
-     explicit blocker?
-   - Violation: The final report can pass without showing the UI state.
-
-19. `minimal-impl-plan-claim`
-   - Question: Does the plan explicitly state that this is the minimal
-     implementation plan that satisfies the selected ticket?
-   - Violation: The plan includes future-proofing, optional artifacts, broad
-     cleanup, or unneeded new surfaces without saying why they are required
-     now.
-
-20. `existing-service-fit`
-   - Question: For every proposed new function, helper, service, or module, did
-     the planner prove it cannot belong to an existing service, module, helper,
-     or owner surface?
-   - Violation: The plan defines a new function or service-shaped surface
-     without checking nearby owners first.
-
-21. `grounding-evidence`
-   - Question: For implementation feature work, does `QA Strategy` or `Notes` require code
-     documentation or maintained implementation evidence before finalizing, using
-     Ref MCP, official docs, GitHub code search, maintained examples, or web
-     sources unless the ticket is explicitly local-only?
-   - Violation: The plan can be completed from local intuition and tests alone
-     without naming current source evidence or a local-only reason.
-
-22. `independent-plan-review`
-   - Question: Did a material plan request or attach a native `reviewer` lane
-     review against declared rubrics before claiming approval-ready state?
-   - Violation: The planner self-approves a material plan, relies on a
-     skill-local review note as the final gate, or omits the reviewer receipt
-     or explicit revise/block status.
-
-23. `visual-companion-boundary`
-   - Question: Does every impl-plan ticket have an existing, structurally valid,
-     non-blocking `diagrams.md` companion while keeping every diagram format
-     and embedded diagram asset out of `ticket.md`?
-   - Violation: The ticket embeds a diagram, links a missing or invalid
-     companion, uses a not-applicable exemption, or makes diagram review part of the reviewer
-     gate without an explicit operator request.
-
-24. `visual-companion-colored-delta`
-   - Question: Does `diagrams.md` use explicit `Before` and `After` sections
-     with Mermaid `classDef` colors applied to problem/before,
-     added/after, changed, and kept boxes?
-   - Violation: The companion contains uncolored Mermaid, generic supplemental
-     diagrams, or diagrams that do not make the old-to-new difference visible
-     from the boxes themselves.
+- `revise`: duplicated policy, avoidable ceremony, missing local detail, weak
+  proof, or a smaller faithful plan can be repaired during planning.
+- `block`: objective, ownership, authority, external fact, architecture, or
+  proof route cannot be resolved safely.
+- Line count alone never authorizes deleting required proof or hiding prose in
+  Mermaid, sidecars, or links.
 
 ## Finish Gate
 
-For material plans, include a compact readiness note in the ticket handoff or
-`Notes` when it needs to remain durable:
-
 ```text
 plan_qa:
-  minimal_required_version: pass | revise | block
-  reuse_before_new_surface: pass | revise | block
-  least_parameters: pass | revise | block
-  canonical_schema_minimality: pass | revise | block | not_applicable
-  new_files_functions_justified: pass | revise | block
-  minimal_impl_plan_claim: pass | revise | block
-  existing_service_fit: pass | revise | block
-  goal_advisor_ready: pass | revise | block | not_applicable
-  clarifying_questions: pass | revise | block
-  architecture_signatures: pass | revise | block | not_applicable
-  change_plan_signature_linkage: pass | revise | block
-  change_plan_locality: pass | revise | block
-  qa_strategy_explicit: pass | revise | block
-  docs_strategy: pass | revise | block
-  independent_plan_review: pass | revise | block
-  visual_companion_boundary: pass | revise | block
-  visual_companion_colored_delta: pass | revise | block
-  grounding_evidence: pass | revise | block | local_only
+  canonical_template_owner: pass | revise | block
+  reuse_and_context_resolution: pass | revise | block
+  executable_change_plan: pass | revise | block
+  least_control_surface: pass | revise | block
+  done_and_proof: pass | revise | block
+  presentation_fit: pass | revise | block
+  context_budget: pass | revise | block
+  independent_review: pass | revise | block
+  readiness: approval_ready | revise | block
   highest_risk:
-  fix_or_deferral:
+  exact_fix_or_deferral:
 ```
+
+For changes to this skill, also apply `skill-maintenance/qa_checklist.md`, run
+the canonical eval rows, record before/after line counts, and require an
+independent reviewer before claiming readiness.

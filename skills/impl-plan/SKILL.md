@@ -1,6 +1,6 @@
 ---
 name: impl-plan
-description: "Turn one selected coding ticket or material implementation request into an approval-ready ticket plan, test strategy, and proof contract."
+description: "Turn one selected software or product request into a repository-grounded, context-resolved Change Plan, test strategy, and proof contract."
 tier: 3
 source: local
 template_uses:
@@ -13,304 +13,160 @@ qa_checklist: qa_checklist.md
 common_chains:
   after: ["goal-advisor"]
 allowed-tools: Read, Glob, Grep
-
 ---
 
 # Impl Plan
 
 ## Context
 
-`impl-plan` is the ticket-first planner for material coding work. Its durable
-output is a selected or newly created `tickets/TASK-XXXX/ticket.md` shaped for
-approval before build. Tiny, reversible fixes can bypass this skill with a
-short reason; vague epics route to discovery, system design, PRD, or
-ticketization before planning.
+`impl-plan` is the ticket-first planning compiler for material software and
+product work. It resolves accepted intent and repository context into one
+approval-ready `tickets/TASK-XXXX/ticket.md`; it does not implement the change
+or create child implementation plans. Tiny reversible fixes may bypass it with
+a reason, while vague epics route to discovery or ticketization first.
 
-Keep first load small. `SKILL.md` owns trigger, inputs, gates, routes, stop
-conditions, and the finish contract. Detailed ticket shape, examples, and plan
-self-checks live in references or `qa_checklist.md` and load only when drafting
-or checking a material plan. Material plan readiness is reviewed by the native
-`reviewer` lane, not by a skill-local review note.
+The canonical ticket body is owned only by
+[tickets/templates/ticket.md](../../tickets/templates/ticket.md). This skill
+owns how planning decisions are reached, not a second ticket schema. Accepted
+UX, landing, copy, visual, asset, research, and technical artifacts are inputs;
+advisors fill only bounded missing or stale facets. `goal-advisor` compiles the
+approved ticket for execution and does not redo planning.
 
 ## Skill Signature
 
 ```text
-impl_plan(ticket_or_request, proof_weight?) -> ticket_plan + architecture_signatures + qa_strategy + visual_companion_handoff + reviewer_receipt + goal_advisor_readiness
+impl_plan(ticket_or_request, proof_weight?)
+  -> canonical_ticket + context_decisions + lean_verdict + reviewer_receipt
 
 state:
-  reads(active ticket, linked PRD/specs/docs, relevant code,
-        docs/MEMORY.md?, docs/TROUBLES.md?, docs/LESSONS.md?,
-        optional design.md or Agent Testability Brief)
-  writes(ticket.md updates, required diagrams.md companion handoff,
-         optional design.md recommendation,
-         QA strategy, approval handoff)
+  reads(ticket?, accepted artifacts, relevant code/tests/docs, project memory?)
+  writes(ticket.md, optional diagrams.md, approval handoff)
 
 gates:
-  missing_inputs_resolved_or_asked; ticket_surface_exists; code_context_read;
-  architecture_signatures_present_or_not_applicable; done_conditions_concrete;
-  qa_strategy_concrete; change_plan_units_local; proof_route_named;
-  visual_companion_exists_and_valid;
-  material_reviewer_gate_passed_or_reconciled;
-  goal_advisor_ready_after_approval
-
-routes:
-  research:gap | research:parity | deep-system-design |
-  metric-advisor | diagramming | goal-advisor | qa | visual-qa |
-  agent-qa-test | review
+  ticket_bound; internal_reuse_inspected; required_context_resolved_or_blocked;
+  code_seams_named; change_order_executable; done_and_proof_concrete;
+  ticket_context_budget_checked; material_review_reconciled
 
 fails:
-  chat-only material plan; hidden architecture invention; vague "run tests";
-  over-scoped new files/functions/parameters without reuse proof;
-  missing_or_invalid diagrams.md companion; inline ticket diagrams;
-  missing material architecture signatures; self-certified QA/review for
-  material work; transcript-dependent Goal setup; implementation before approval
+  chat_only_material_plan; parallel_ticket_schema; repeated_advisor_work;
+  advisor_owned_gap_self_authored; blocked_facet_erases_honest_plan;
+  duplicated_global_and_per_change_policy; proof_weakened_for_line_count;
+  readiness_with_open_gate; implementation_before_approval
 ```
 
 ## Phase Boundary
 
-This skill owns approval planning only. It may shape `Summary`, `Scope`,
-`Delta`, `Change Plan`, `Done`, `QA Strategy`, `Docs Strategy`, `Links`,
-`Notes`, `Agent Contract`, and `Run Hints`, but implementation, QA, visual judgment,
-adversarial testing, demo, final review, and Goal Packet sidecars are delegated
-to owner surfaces.
+Resolve each required planning facet before drafting:
 
-Keep `ticket.md` canonical and textual without exception. For every impl-plan, hand
-off a separate visual companion after the ticket plan exists:
-`diagramming(ticket.md, references/visual-companion-template.md) ->
-tickets/TASK-XXXX/diagrams.md`. Link the companion from `Links`, label it
-non-blocking, and do not make it part of the reviewer gate unless the operator
-explicitly asks for diagram review. Tiny localized fixes still receive a
-compact separate companion; there is no not-applicable exemption.
+```text
+resolve_context(requirement, accepted_artifacts)
+  -> reuse | targeted_refresh | create | block | not_applicable
+```
 
-Call `goal-advisor` after the ticket plan is approved and ready to become a
-Goal Packet. `goal-advisor(ticket)` creates or updates `program.md`,
-`progress.md`, and the native `/goal` prompt, then links those sidecars from
-the ticket. If the ticket plan changes after approval, rerun this skill first
-and then regenerate the Goal Packet.
-Call `research:*`, `deep-system-design`, `review`, or other workflow skills only
-when the child scope is narrower than the selected ticket and the phase needs
-its own artifact, independent judgment, or proof surface.
+- `reuse`: accepted, current, relevant, consistent, and specific enough.
+- `targeted_refresh`: preserve settled context and fill one named stale,
+  incomplete, or conflicting facet through its owner.
+- `create`: produce missing context that can be safely derived through its
+  owner.
+- `block`: operator authority, external facts, or a material product decision
+  are unavailable. Preserve the requested scope and maximal honest plan.
+- `not_applicable`: accepted scope explicitly excludes the facet.
+
+Advisors run only for `targeted_refresh` or `create`. They return bounded
+inputs; this skill alone merges the Change Plan. A named omission is a gap, not
+permission to drop scope. When a resolver cannot run, record `block` rather
+than inventing its result.
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-- [ ] 1. Resolve missing inputs before planning.
-  - [ ] Inspect the ticket/request and local context for missing objective,
-    acceptance criteria, constraints, target files, proof weight, permissions,
-    human gates, or destructive/deploy/spend boundaries.
-  - [ ] Ask up to 3 clarifying questions only when the missing input is
-    blocking or materially changes the plan or later Goal Packet; otherwise state the
-    assumption in the ticket and continue.
-- [ ] 2. Bind or create the ticket surface.
-  - [ ] For material work with no selected ticket, create or update
-    `tickets/TASK-XXXX/ticket.md` before treating the plan as ready.
-  - [ ] For tiny one-turn fixes, state why ticket-backed planning is not needed.
-- [ ] 3. Read the minimum planning context.
-  - [ ] Read the active ticket first, then linked PRD/specs/docs, memory,
-    troubles, lessons, and nearby code.
-  - [ ] Read enough code to name real files, seams, signatures, and typed data
-    movement; do not plan from intuition.
-  - [ ] Load [references/template.md](references/template.md) when drafting or
-    rewriting the ticket body.
-- [ ] 4. Route unresolved scope.
-  - [ ] Use [research:gap](../research/SKILL.md#researchgap) for missing or
-    partial feature work whose production expectation is unclear.
-  - [ ] Use [research:parity](../research/SKILL.md#researchparity) when peer
-    norms determine scope.
-  - [ ] Use [deep-system-design](../deep-system-design/SKILL.md) before
-    planning if entities, storage ownership, runtime boundaries, or public API
-    shape are still being invented.
-- [ ] 5. Draft the ticket-as-program plan.
-  - [ ] Keep the selected coherent ticket whole unless proof, reuse, blocker
-    risk, external dependency, safety, or runtime ownership forces a split.
-  - [ ] Use the canonical ticket-body shape: `Summary`, `Scope`, `Delta`,
-    `Change Plan`, `Done`, `QA Strategy`, `Docs Strategy`, `Links`, and sparse
-    `Notes`.
-  - [ ] Make `Delta`, `Change Plan`, `Done`, and `QA Strategy` concrete enough
-    that a builder can execute without inventing the order or proof route.
-  - [ ] For material plans, add `architecture_signatures` at the top of
-    `Change Plan`: module-level seams, main flow signatures, typed data
-    movement when relevant, and the builder-owned freeform boundary. Use
-    `not_applicable` only for tiny localized fixes with a concrete reason.
-  - [ ] Use `Change Plan` units as the merged program and file map: each unit
-    carries local before/after, read/write paths, operation, local type or
-    signature impact, routes, QA expectations, and real failure modes.
-  - [ ] Split `Change Plan` into one heading and one fenced block per coherent
-    change. Use `fixes:` in plain language instead of synthetic labels
-    unless many-to-many traceability truly needs stable anchors.
-  - [ ] Include options only when a real material fork exists, then recommend
-    one path and name the accepted tradeoff.
-- [ ] 6. Make QA Strategy observable.
-  - [ ] Write or refine `Done` with concrete completion conditions.
-  - [ ] Write or refine `QA Strategy` with proof weight, mechanical checks or
-    `Metrics: none mechanical`, manual checks, delegated lanes, review
-    rubric/TAS gates, hard gates, human gates, required evidence, final
-    checkpoint, and residual risk.
-  - [ ] For material feature work, include critical-path proof in
-    `QA Strategy`: name the real workflow or lifecycle being claimed,
-    break long end-to-end proof into smaller ordered sanity checks, and require
-    evidence plus the next review point for state, data, logs, artifacts, UI, or
-    session behavior.
-  - [ ] For implementation feature work, include `Grounding evidence:` in
-    `QA Strategy` or `Notes`: code documentation or maintained implementation evidence
-    from Ref MCP, official docs, GitHub code search, maintained examples, or
-    web sources before finalizing, unless the ticket is explicitly local-only.
-  - [ ] If the metric or provider is unclear, derive a metric card before
-    writing `QA Strategy` or Goal-ready run hints.
-  - [ ] Name `QA Strategy.goal_advisor_inputs.proof_route`,
-    `final_evidence`, and `final_checkpoint` for material work when QA, visual
-    judgment, agent QA, demo, or reviewer evidence is required.
-  - [ ] For UI/user-visible work, name the design baseline, key screens/states,
-    expected screenshots, runtime entry path, capture lane, visual judgment lane,
-    and final image evidence rule.
-  - [ ] Name `Docs Strategy` by calling or applying
-    [doc-advisor](../doc-advisor/SKILL.md): `update_docs` with targets and
-    validation, or `no_docs` with a concrete reason.
-- [ ] 7. Leave the ticket ready for `goal-advisor`.
-  - [ ] Set up the approved ticket contract so `goal-advisor(ticket)` can infer
-    task, files, budget hints, QA Strategy inputs, and sidecar needs without
-    transcript memory.
-  - [ ] Do not duplicate Goal Packet sidecar content in the ticket body.
-  - [ ] If an active Goal Packet already exists, keep `Links` pointing to
-    `program.md`, `progress.md`, and any generated prompt artifact.
-- [ ] 8. Run the minimality and quality gates.
-  - [ ] Run [qa_checklist.md](qa_checklist.md) against material plans before
-    accepting them, especially minimal version, reuse, least parameters,
-    function/file necessity, split boundary, architecture-signature, and
-    proof-route checks.
-  - [ ] For material plans, request a native `reviewer` lane using
-    `docs/review/rubrics/reviewer-handoff.md` with `implementation-plan`,
-    `architecture`, and `evidence-quality` unless the ticket declares a
-    stronger review route. Reconcile `revise` findings in the ticket before
-    calling the plan approval-ready; block on `block` or `invalid`.
-  - [ ] Tighten any failed checklist or review item before presenting the plan;
-    record explicit `revise` or `block` only when the issue cannot be resolved
-    inside planning.
-- [ ] 9. Hand off the visual companion without polluting the ticket.
-  - [ ] After the canonical ticket plan and material reviewer gate are resolved,
-    add a `Links` entry for `tickets/TASK-XXXX/diagrams.md` and use
-    [references/visual-companion-template.md](references/visual-companion-template.md)
-    as the output template.
-  - [ ] Spawn or delegate a bounded `diagramming` lane when available as the
-    final post-plan companion step:
-    `diagramming(ticket.md, visual_companion_template) -> diagrams.md`. The
-    lane writes `diagrams.md` and does not edit `ticket.md`; wait for this file
-    and validate it before impl-plan completion. If no subagent
-    primitive is available, render inline and record that fallback in the
-    handoff.
-  - [ ] Mark the companion as `blocks_approval: false` and
-    `canonical_contract: ticket.md`; reviewer lanes judge `ticket.md` unless
-    diagram review is explicitly requested. `blocks_approval: false` means it
-    is not a human-review gate; generation and validation still block impl-plan
-    completion.
-  - [ ] Run `farplane validate ticket tickets/TASK-XXXX/ticket.md --phase
-    planning`; the phase API owns visual-companion and ticket-contract checks.
-    Do not complete on a link alone.
-  - [ ] Keep all diagram syntax and embedded diagram assets out of `ticket.md`
-    without exception. Move pre-existing diagrams into the companion.
-  - [ ] Require the separate companion for every `impl-plan` invocation,
-    including tiny localized fixes; scale diagram depth down instead of
-    marking it not applicable.
-- [ ] 10. Handoff for one-shot approval, not implementation.
-  - [ ] Present the ticket plan as the approval contract that
-    `goal-advisor(ticket)` will compile after approval.
-  - [ ] Leave material tickets in `review` until the ticket plan is approved.
-  - [ ] Include the final `Docs Strategy` in the approval handoff so the Goal
-    does not silently skip durable docs or invent closeout ceremony.
-  - [ ] End with the decisive readiness call, remaining blocker if any, and the
-    next owner surface such as `goal-advisor`, `qa`, `visual-qa`,
-    `agent-qa-test`, `doc-advisor`, `close-ticket`, or `review`.
+- [ ] 1. Bind the objective and ticket.
+  - [ ] Read or create the selected ticket; resolve only missing inputs that
+    materially change scope, architecture, proof, permission, or Goal setup.
+  - [ ] Read [qa_checklist.md](qa_checklist.md) before material planning.
+- [ ] 2. Inspect the minimum repository and accepted context.
+  - [ ] Name real code/test/doc seams, typed movement when relevant, existing
+    helpers/components/assets, and implementation evidence.
+  - [ ] Inventory accepted planning artifacts and capture material chat-only
+    decisions durably before treating them as reusable.
+- [ ] 3. Resolve only required context facets.
+  - [ ] Record the decision, evidence, exact gap, resolver/result when used,
+    and how it changes scope, a change unit, or proof. Omit irrelevant ledgers.
+  - [ ] Reuse settled UX, landing, copy, visual, asset, architecture, metric,
+    documentation, and proof context. Call the narrow owner only for a real
+    `targeted_refresh` or `create`; do not self-author its output.
+  - [ ] Common owners are [functional-ui](../functional-ui/SKILL.md),
+    [landing-page](../landing-page/SKILL.md),
+    [copywriting-advisor](../copywriting-advisor/SKILL.md),
+    [personalized-offer](../personalized-offer/SKILL.md),
+    [visual-design](../visual-design/SKILL.md),
+    [asset-advisor](../asset-advisor/SKILL.md),
+    [research](../research/SKILL.md), [deep-system-design](../deep-system-design/SKILL.md),
+    and the `metric-advisor` skill.
+- [ ] 4. Populate the canonical ticket template.
+  - [ ] Load [tickets/templates/ticket.md](../../tickets/templates/ticket.md)
+    and keep its required sections and optional-section rules authoritative.
+  - [ ] Make each Change Plan unit name files, operation, contract/type impact
+    when material, local proof, and a real failure/rollback boundary. Do not
+    repeat global Delta, QA, Docs, or route policy in every unit.
+  - [ ] Keep architecture signatures compact and only when ownership, public
+    contracts, or typed movement would otherwise be ambiguous.
+- [ ] 5. Make completion observable.
+  - [ ] `Done` states outcomes; `QA Strategy` names ordered checks, delegated
+    lanes, evidence, final checkpoint, and residual risk; `Docs Strategy` is
+    present only when docs ownership is non-obvious or changes.
+  - [ ] Preserve existing proof briefs and use QA, visual QA, agent QA, demo,
+    and reviewer lanes when the claim requires independent evidence.
+- [ ] 6. Keep presentation proportional.
+  - [ ] Use a compact inline text/Mermaid map only when it replaces prose.
+    Create `diagrams.md` only when multiple detailed views or independent
+    visual review materially help; validate it when linked.
+  - [ ] Move execution history and bulky proof to `progress.md` or `artifacts/`.
+- [ ] 7. Run minimality and mechanical gates.
+  - [ ] Apply `lean_plan_check`: reuse sufficient context and implementation
+    seams, add only necessary surfaces, and preserve the smallest faithful
+    scope without optimizing away proof.
+  - [ ] Run `farplane validate ticket <ticket> --phase planning`; inspect raw
+    first-load and Markdown category counts, then consolidate duplicated policy
+    or bulky evidence when pressure is reported.
+- [ ] 8. Review and hand off.
+  - [ ] Reapply [qa_checklist.md](qa_checklist.md) to the completed ticket
+    after drafting and after any repair. Resolve every `revise`, stop on
+    `block`, and record the finish-gate verdict before reviewer handoff.
+  - [ ] Material plans require native reviewer judgment against
+    implementation-plan, architecture when relevant, and evidence-quality.
+    Reconcile findings before `approval_ready`.
+  - [ ] After human approval, hand the same canonical ticket to `goal-advisor`.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 ## Templates
 
-Use [references/template.md](references/template.md) for the ticket body. The
-approval core is:
-
-```text
-Delta(overall_before, overall_after, why_now, problems?)
-ArchitectureSignatures(module_level, main_flow, data_flow?, builder_freeform_boundary)
-ChangePlan(change_units(read, write, operation, local_signature_or_type_impact, routes, qa, failure_modes))
-Done(done_when)
-QAStrategy(proof_weight, checks, manual, delegated_lanes, review, evidence, goal_advisor_inputs, residual_risk)
-GroundingEvidence(source_class, sources_checked, local_only_reason?)
-PlanQA(minimality, reuse, parameters, files_functions, proof_route)
-ReviewerGate(task_path, rubric_families, required_tas, hard_gates, receipt)
-DocsStrategy(outcome, doc_targets, no_docs_reason, validation)
-VisualCompanion(path, template, blocks_approval=false, canonical_contract=ticket.md)
-```
-
-For UI/user-visible proof, include this line in the plan:
-
-```text
-Final report: include the best screenshot/image evidence as
-![best evidence](ABSOLUTE_SCREENSHOT_PATH), or block/revise with the missing
-proof reason.
-```
+- Ticket body: [tickets/templates/ticket.md](../../tickets/templates/ticket.md).
+- Optional detailed visual companion:
+  [visual companion template](references/visual-companion-template.md).
 
 ## Gotchas
 
-- Do not implement. This skill plans and gates the handoff.
-- Do not return a chat-only plan for material work.
-- Do not rewrite a coherent ticket into a smaller first slice just because it
-  feels safer; split only on a real proof, reuse, blocker, safety, dependency,
-  or runtime boundary.
-- Do not invent new files, functions, abstractions, parameters, or config knobs
-  without proving reuse was checked and the new surface is required.
-- Do not bury the key code seams in prose. Material plans must expose compact
-  `architecture_signatures` before the per-change units; change-unit
-  `signature_or_type_impact` is only for local deltas.
-- Do not add optional ticket sections as decoration. `Gap Analysis`, `Run
-  Hints`, `Agent Contract`, sidecar `plan.md`, and citations appear only when
-  they reduce ambiguity or prove a decision.
-- Do not put Mermaid diagrams in `ticket.md`. Use the linked
-  `diagrams.md` companion for visual readability and keep the ticket as the
-  canonical implementation/proof contract.
-- Do not treat tests alone as UI/user-visible proof when screenshots, logs,
-  browser state, or visual judgment are required.
-- Do not let material feature plans prove only nearby pieces when the claim is
-  a workflow or lifecycle. If the true path is long, plan smaller faithful
-  checks first, then state what final path remains unrun or blocked.
+- Do not implement, return a material chat-only plan, or create another
+  implementation planner.
+- Do not enumerate every irrelevant context facet; record only decisions that
+  affect scope, implementation, proof, or blockers.
+- Do not repeat ticket-template instructions in this skill, its prompt, or a
+  second active reference template.
+- Do not treat raw or prose line count as quality. Required safety, ownership,
+  reconstruction, and proof survive compaction.
+- Do not require diagrams as ceremony or hide prose inside Mermaid.
 
 ## Reference Map
 
-- [references/template.md](references/template.md) - load when drafting or
-  rewriting the ticket body.
-- [references/visual-companion-template.md](references/visual-companion-template.md)
-  - use when handing off the post-plan `diagrams.md` companion.
-- [qa_checklist.md](qa_checklist.md) - run against material plans and against
-  changes to this skill's planning behavior.
-- [../diagramming/SKILL.md](../diagramming/SKILL.md) - render the linked
-  visual companion from `ticket.md` and the companion template.
-- [../metric-advisor/SKILL.md](../metric-advisor/SKILL.md) - metric cards for
-  proof providers, guard metrics, anti-metrics, and no-mechanical-metric
-  rationale.
-- [references/examples.md](references/examples.md) - load only when examples are
-  needed to calibrate output shape.
-- [prompts/plan.md](prompts/plan.md) - update when prompt wording must stay in
-  sync with this contract.
+- [plan prompt](prompts/plan.md) — compact invocation prompt kept aligned with
+  this decision flow.
+- [examples](references/examples.md) — load only for output calibration.
+- [diagramming](../diagramming/SKILL.md) — render an optional complex companion.
 
 ## Output
 
-- Updated or proposed `tickets/TASK-XXXX/ticket.md` in canonical ticket-body
-  shape, ready for approval and later `goal-advisor(ticket)` compilation when
-  the work is Goal-backed.
-- Linked `tickets/TASK-XXXX/diagrams.md` visual companion for every impl-plan,
-  generated through `diagramming` from
-  `references/visual-companion-template.md`.
-- Compact `architecture_signatures` for material work, or a concrete
-  `not_applicable` reason for tiny localized fixes.
-- Concrete `Done` conditions and `QA Strategy` with proof weight, delegated
-  lanes, goal-advisor inputs, final checkpoint, and required evidence.
-- Run hints and links that let `goal-advisor(ticket)` create `program.md`,
-  `progress.md`, and the native `/goal` prompt after approval, or a clear
-  reason direct work is better than Goal mode.
-- `Docs Strategy` naming whether durable docs change, which docs are targeted,
-  why no docs are needed when applicable, and which validation proves the
-  decision.
-- Reviewer handoff or receipt for material plans, using the native `reviewer`
-  lane and canonical review rubrics instead of a skill-local self-review note.
-- `plan_qa` readiness note for material plans, or a blocker naming the missing
-  objective, architecture boundary, code context, or proof route.
-- One-shot approval handoff that keeps planning separate from implementation
-  and names `goal-advisor` as the next owner when Goal execution is warranted.
+- One canonical ticket populated from `tickets/templates/ticket.md`.
+- Compact context-resolution and reuse evidence only where it changes the plan.
+- Executable Change Plan, concrete Done/QA contract, mechanical budget result,
+  reviewer receipt or blocker, and post-approval `goal-advisor` handoff.

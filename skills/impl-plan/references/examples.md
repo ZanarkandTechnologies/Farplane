@@ -1,121 +1,92 @@
 # Impl Plan Examples
 
-## Good
+## Good: localized backend change
 
 ````md
 ## Summary
-Make the ticket template approval-ready for `impl-plan(ticket)` and
-`goal-advisor(ticket)` without duplicating execution details across separate
-sections. The ticket keeps the human contract compact, while Goal sidecars own
-loop configuration after approval.
+
+Reject duplicate skill names through the existing registry validator and keep
+all other behavior unchanged.
 
 ## Scope
-- `In:` `skills/impl-plan/SKILL.md`, `prompts/plan.md`,
-  `references/template.md`, `references/examples.md`,
-  `tickets/templates/ticket.md`, `tickets/README.md`
-- `Out:` changing Goal runtime behavior, adding parser syntax, or migrating
-  archived tickets
+
+- In: `src/validators/skill_registry.py`, focused validator tests.
+- Out: new services, configuration, UI, unrelated cleanup.
+- Constraints: preserve the current public function and error behavior except
+  for the new duplicate-name case.
 
 ## Delta
-- `Before:` tickets split executable intent across `Program`, `Map`, and
-  body `State`, so builders cross-reference sections before acting.
-- `After:` tickets use `Delta` for brief before/after framing and `Change Plan`
-  units for local before/after, read/write surfaces, operation, routes, proof,
-  and failure modes.
-- `Why now:` `goal-advisor(ticket)` needs a clean approved contract to compile
-  `program.md`, `progress.md`, and the native `/goal` prompt without transcript
-  memory.
+
+> **Before:** duplicate names pass validation.
+>
+> **After:** the second occurrence raises the specified `ValueError`.
+>
+> **Example:** `[{name: "a"}, {name: "a"}]` raises
+> `duplicate skill name: a`.
 
 ## Change Plan
 
-```text
-architecture_signatures:
-  module_level:
-    - tickets.template / change_plan(delta, architecture_signatures, units):
-      executable_ticket_plan
-    - skills.impl_plan / impl_plan(ticket): ticket_plan + reviewer_receipt
-  main_flow:
-    - draft_ticket_plan(ticket, code_context): ticket.md
-    - apply_plan_qa(ticket.md): plan_qa
-    - request_reviewer_plan_review(ticket.md): review_receipt
-  data_flow:
-    - Delta -> architecture_signatures -> Change Plan units -> QA Strategy
-  builder_freeform_boundary:
-    - Implementation below the named ticket/skill seams is builder-owned unless
-      it changes planning ownership, proof routing, or reviewability.
-```
+### Change 1: enforce uniqueness in the existing validator
 
-### Change 1: Merge execution detail
-
-```text
-fixes:
-  - Ticket templates teach separate executable sections.
-before:
-  - Readers cross-map execution order, file touches, and proof from different
-    sections.
-after:
-  - Each change unit carries the local files, operation, routes, QA, and
-    failure modes needed to execute without cross-section mapping.
-read:
-  - path: tickets/README.md
-    reason: canonical body contract
-  - path: skills/impl-plan/references/template.md
-    reason: emitted plan shape
-write:
-  - path: tickets/templates/ticket.md
-    change: replace old body defaults with Change Plan, Done, QA Strategy, and Links
-  - path: skills/impl-plan/prompts/plan.md
-    change: make Change Plan the required execution structure
-operation:
-  - Update template, README, prompt, checklist, and validators together.
-signature_or_type_impact:
-  - tickets.template / change_unit(read, write, operation, qa):
-    artifact_delta + evidence + state_delta
-routes:
-  docs: doc-advisor
-  qa: tests
-  review: inline
-qa:
-  - Run ticket metadata, harness invariant, doc parity, and skill registry
-    validators.
-failure_modes:
-  - Leaving examples or validators that still require old body sections.
+```yaml
+files:
+  read:
+    - src/validators/skill_registry.py
+    - tests/test_skill_registry.py
+  edit:
+    - src/validators/skill_registry.py
+    - tests/test_skill_registry.py
+operation: Track names inside validate_rows and raise the required ValueError on the second occurrence; add focused duplicate and regression cases.
+proof: python3 -m unittest tests.test_skill_registry
+failure: Existing non-duplicate fixtures or public errors change.
 ```
 
 ## Done
-- `done_when:` new tickets and impl-plan drafts use `Change Plan` as the
-  executable program/map surface.
+
+- [ ] Duplicate names raise the exact required error.
+- [ ] Existing validator tests still pass.
 
 ## QA Strategy
-- `proof_weight:` tests
-- `checks:` run `python3 skills/skill-maintenance/scripts/check_skills.py --write`
-- `manual:` inspect the active ticket and impl-plan surfaces for stale default
-  execution, file-map, body-state, and goal-preview sections.
-- `review:` Change Plan locality, goal-advisor readiness, docs strategy, proof
-  clarity.
-- `goal_advisor_inputs:` proof route `tests + inline review`, final evidence
-  `validator output`, final checkpoint `none`
 
-## Notes
-- `Blast radius:` future ticket plans become easier for `goal-advisor` to
-  compile after approval.
-- `Risks / rollback:` large architecture tickets may still need a linked
-  `plan.md`; keep that as an escape hatch rather than bloating every ticket.
-- `Citations:` `MEM-0061`, `MEM-0062`, `MEM-0086`
-- `Blockers:` none
+```yaml
+proof_weight: mechanical
+checks:
+  - python3 -m unittest tests.test_skill_registry
+delegated_lanes: []
+evidence_paths: []
+final_checkpoint: inline
+residual_risk: none
+```
+
+## State
+
+- Current: planned
+- Next: human approval, then goal-advisor handoff
+- Blockers: none
 ````
+
+Why good:
+
+- uses the canonical ticket shape instead of a skill-local template;
+- reuses existing ownership and proof surfaces;
+- contains one executable change unit without repeating global policy;
+- does not manufacture advisor calls, architecture maps, or diagrams.
+
+## Good: when a visual companion earns its cost
+
+A cross-service migration with multiple before/after ownership views may link
+`diagrams.md`. The ticket remains canonical; the companion adds no scope and
+must pass `validate_visual_companion.py`.
 
 ## Bad
 
 ```md
-We should improve the plan a bit and maybe add some more detail about types later.
+We should improve the plan and maybe add some tests later. Create diagrams.md
+because every implementation plan needs one.
 ```
 
 Why bad:
 
-- no before/after delta
-- no architecture signatures, local change units, or code seams
-- no executable task program
-- no concrete done/proof
-- no rationale for optional sections
-- still sounds like hand-wavy prose instead of a believable ticket plan
+- no observable delta, file ownership, operation, failure boundary, or proof;
+- tentative language leaves the builder to invent the implementation;
+- the diagram is ceremony rather than a clearer representation.

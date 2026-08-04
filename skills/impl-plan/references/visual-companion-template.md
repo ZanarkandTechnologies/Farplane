@@ -1,8 +1,8 @@
 # Impl Plan Visual Companion Template
 
-Use this template for the required non-canonical visual companion generated
-after every `impl-plan` ticket exists. Tiny fixes use the same file with fewer
-nodes; they do not receive an exemption.
+Use this template only when an `impl-plan` ticket benefits from multiple
+detailed views or an independently reviewed visual surface. Simple tickets may
+use a compact inline map or omit diagrams entirely.
 
 The companion helps the operator read and give feedback. It does not replace
 `ticket.md`, does not change scope, and does not block approval or review
