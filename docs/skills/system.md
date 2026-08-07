@@ -7,6 +7,8 @@ fields, and todo-link rules stay in one place.
 ## Ownership
 
 - `docs/skills/system.md` owns the stable skill-system contract.
+- `docs/skills/composition.md` owns cross-skill role, artifact, and todo
+  composition rules.
 - `docs/skills/README.md` owns human skill selection and registry commands.
 - `docs/skills/best-practices.md` owns skill authoring and maintenance quality,
   not runtime context for every skill invocation.
@@ -78,6 +80,24 @@ behavior. Farplane uses Tier 0 to describe the expected phase shape in
 `templates/global/AGENTS.md`, skill templates, tickets, and reviewer handoffs.
 Do not create `tier: 0` skills for phases such as plan, execute, or review.
 Phases are inherited by skills; they are not lower-level skill dependencies.
+
+## Composition Contract
+
+Use [the composition contract](composition.md) when authoring or restructuring
+a skill. A composable skill owns one named primary artifact or verdict and
+returns a next owner; its evidence may accompany the output but must not become
+another generic deliverable. A durable planner's primary artifact is the
+canonical ticket: its ordered child-action graph belongs in `Change Plan`, not
+in a parallel plan file or schema. Planners own that in-ticket plan, not the
+specialist artifacts it schedules.
+
+Leaf `## Todo List` sections describe domain work only. Tier 0 lifecycle,
+generic local-QA procedure, ticket writeback, and broad review routing are
+inherited system behavior, so repeating them in every leaf is duplication. Keep
+one real domain branch and provider-specific instructions behind conditional
+references. The default shape is five top-level nodes: route, bind, produce,
+domain gate, return. Exceed it only for a separately owned artifact or an
+independent branch.
 
 Numeric skill tiers are compound leverage classes. A lower numeric tier means
 that improvements to the skill tend to propagate through more downstream

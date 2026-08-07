@@ -23,9 +23,9 @@
       "assertions": [
         "Content Impl Plan orders an Editing Advisor action after accepted storyboard and media.",
         "Editing Advisor is instructed to select, adapt, reject, or block the actual saved editing patterns rather than the parent inventing decisions without their records.",
-        "Editing Advisor's required authored output is one frame- or time-addressed ordered recipe covering pacing, captions, transitions, and compositing.",
+        "Editing Advisor's required primary output is one frame- or time-addressed ordered recipe covering pacing, captions, transitions, and compositing.",
         "Asset Advisor is not assigned edit-direction judgment and Remotion does not improvise the recipe.",
-        "The action names accepted inputs, authored output, acceptance or blocker state, and the accepted edit recipe as the explicit next handoff to Remotion."
+        "The action names accepted inputs, primary output, acceptance or blocker state, and the accepted edit recipe as the explicit next handoff to Remotion."
       ],
       "metadata": {"farplane": {"title": "Routes timed editing direction", "tags": ["skill", "content-impl-plan", "editing-advisor", "ownership"], "anti_patterns": ["Makes Asset Advisor edit", "Lets Remotion select patterns", "Returns vague edit vibes"]}}
     },

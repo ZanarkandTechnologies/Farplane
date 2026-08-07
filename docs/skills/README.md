@@ -12,6 +12,8 @@ into a second place to maintain skill truth.
   structural todo-chain edges from explicit Todo List skill refs, and stable
   Tier 3 adjacency from `common_chains` instead of maintained as a second
   hand-authored registry.
+- [`composition.md`](composition.md) is the shared contract for a skill's sole
+  output, action ownership, handoffs, and lean domain todos.
 - This README is the human selection guide. Use it to understand why neighboring
   skills differ and which one should own a request before opening the generated
   registry or individual `SKILL.md` files.
@@ -103,7 +105,7 @@ Use this table when two skills look similar. It is intentionally prose-first;
 | Gather external parity, gap, docs, code-pattern, or source-synthesis evidence | `research:*` | It is the Tier 2 evidence workflow for method-addressed research passes. | The answer is already locally grounded and only needs a recommendation. |
 | Resolve budget-aware skill parameters into council programs | `budget-advisor` | It maps base/plus/max budget requests, available time, persona prompts, coverage, evidence depth, and explicit child-skill budget allocations into concrete template refs while preserving the caller skill's output contract. | The skill is tiny, deterministic, or already has an obvious single-path budget behavior. |
 | Compose skill todos into a task-specific strategy and proof-bearing plan | `plan` | It is the Tier 2 planning prompt-template for binding context, choosing grounding/search budget, composing workflows, and producing executable todos. | A domain planner already owns the artifact and no cross-skill composition or strategy choice is needed. |
-| Handle an explicit legacy `$execute` call | `execute` | It is a deprecated compatibility wrapper over the native Tier 0 execution phase. | A task merely has an execution phase; use the native phase or a public domain execution skill such as `goal-advisor` or `frontend-craft`. |
+| Handle an explicit legacy `$execute` call | `execute` | It is a deprecated compatibility wrapper over the native Tier 0 execution phase. | A task merely has an execution phase; use the native phase or a public domain execution skill such as `goal-advisor` or `impl-plan`. |
 | Watch an existing PR until review agents and checks pass | `pr-review-watch` | It owns explicit heartbeat polling, project-local PR review memory, normalized PR verdicts, fix loops, and terminal notifications while reusing the task's assigned checkout and reviewer-agent review. | You only need one explicit material review (`review`). |
 | Check, scaffold, onboard, and run harness-native evals | `eval` | It initializes/discovers clean-room eval tasks, judges boolean/tier outcomes, treats hardcases as metadata, and can preserve one isolated CLI run as a scored `behavior_trace` with prompt, events, logs, output, checkpoints, artifacts, schema verdict, and baseline comparison. | You need adversarial tester/evidence-review orchestration or only native-subagent evidence; use `agent-qa-test`. |
 | Test a feature, skill, prompt, or workflow adversarially | `agent-qa-test` | It designs cases, runs or drafts a tester lane, attacks the tester evidence with an evidence-review lane, reconciles fixes/reruns, and can include Eval `behavior_trace` capture. | You only need one cheap CLI conformance probe and no adversarial proof loop. |

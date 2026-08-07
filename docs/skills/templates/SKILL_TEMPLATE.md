@@ -1,6 +1,6 @@
 ---
 template_id: skill-template
-template_version: "0.3.9"
+template_version: "0.4.0"
 feature_refs:
   - FEAT-0022
   - FEAT-0054
@@ -22,7 +22,7 @@ description: "[TODO: Verb input/context into output/artifact when call-condition
 tier: [TODO: 1 | 2 | 3]
 source: local
 template_uses:
-  skill-template: "0.3.9"
+  skill-template: "0.4.0"
   # Add only after the skill fits 10 top-level todos, 5 QA checklist items,
   # and 5 eval tasks.
   # skill-surface-budget: "0.1.0"
@@ -40,6 +40,11 @@ source-of-truth docs, ownership constraints, and assumptions.]
 [TODO: First-load sufficiency has priority over modular neatness. Keep required
 trigger, context, gates, routing, proof, and output contracts in `SKILL.md`; move
 only conditional detail to references.]
+
+[TODO: Follow `docs/skills/composition.md`. Name the one primary output this
+skill owns, its next owner, and the work it must not duplicate. A durable
+planner's primary output is the canonical ticket; put its child-action graph in
+the ticket's `Change Plan`, not in a parallel plan artifact.]
 
 [TODO: Place content by access frequency and owner scope: always-needed rules in
 `SKILL.md`, one-skill conditional detail in `references/*`, and cross-skill
@@ -76,6 +81,7 @@ list already makes composition obvious. See
 ```text
 {skill_function}(input_text, state?) -> primary_output + evidence?
 state: reads(...); writes(...); remembers(...)
+owns: one named artifact or verdict
 gates: proof_condition; finish_gate; blocker_condition
 routes: next-skill | next-skill:method | direct-answer
 fails: known bad behavior; overbroad behavior; misplaced ownership
@@ -106,35 +112,15 @@ Use local files, task artifacts, setup workflows, or a narrow blocking question
 to bind missing inputs. Do not run the skill against guessed parameters when the
 signature makes those parameters required for correctness.
 
-## Phase Contract
-
-[TODO: Keep this when the skill owns material work that should follow explicit
-phases. Collapse or delete for tiny primitive skills where the todo list is
-already enough.]
-
-```text
-phase_contract(task, bound_inputs, state)
-  -> grounded_context
-   + plan_or_direct_action
-   + plan_review_if_material
-   + execution
-   + guardrail_or_eval
-   + evidence_review_if_material
-   + writeback
-```
-
-Tier 0 phases are not skill links. Use Codex native planning/execution behavior
-unless a named skill package owns a specific artifact or workflow.
-
 ## Phase Boundary
 
 [TODO: Keep this section when the skill may call phase-like skills such as
 `plan`, `review`, `eval`, or `research`. Delete it for tiny skills where the
 rule is obvious.]
 
-This skill follows Tier 0 phases inline by default. Call `plan`, `review`,
-`eval`, or another workflow skill only when that phase needs its own artifact,
-explicit budget, handoff, independent judgment, or proof surface.
+Tier 0 is inherited, not a leaf-skill todo. Call `plan`, `review`, `eval`, or
+another workflow skill only when that phase needs its own artifact, explicit
+budget, handoff, independent judgment, or proof surface.
 
 Externalized phase calls must shrink or specialize the current scope:
 
@@ -148,34 +134,17 @@ Do not call phase-like skills recursively at the same scope.
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-- [ ] 1. Bind the skill signature inputs.
-   - [ ] Resolve missing required inputs from local state, setup workflows, or a
-     narrow blocking question.
-- [ ] 2. Read required context and current artifacts.
-   - [ ] If `qa_checklist.md` exists, read it now and use it as preflight
-     guardrails while executing this skill.
-   - [ ] If the work is prompt-heavy or quality-dependent and a relevant
-     `examples/golden/*.md` exists, read it with the applicable QA checklist.
-     Transfer its invariants; do not copy its fixture facts or wording.
-- [ ] 3. Choose the branch.
-   - [ ] 1. Default branch.
-   - [ ] 2. Update/repair branch.
-   - [ ] 3. Finish/review branch.
-- [ ] 4. Execute the workflow for the selected branch.
-- [ ] 5. Produce or update the required artifact.
-- [ ] 6. Verify with the named proof command or evidence surface.
-- [ ] 7. Run the named finish gate before completion.
-   - [ ] If `qa_checklist.md` exists, apply it again to the finished work; use
-     an independent reviewer/subagent for material changes.
-   - [ ] Repeatability from files alone.
-   - [ ] No duplicated first-load logic.
-   - [ ] Structure checklist scanned against changed files for long templates,
-     examples, rare branches, missing reference routing, and first-load bloat.
-   - [ ] Independent review of prompt-heavy or quality-dependent work receives
-     the candidate, golden invariants, applicable QA, and held-out context—but
-     not planner scratch reasoning—and rejects duplicate state, workflows,
-     fields, or avoidable first-load context.
-   - [ ] Explicit proof command or blocker.
+- [ ] 1. Route the request or return its exact blocker.
+- [ ] 2. Bind required inputs and select the one applicable domain branch.
+- [ ] 3. Produce this skill's named primary artifact or delivery.
+- [ ] 4. Apply only this skill's domain-specific gate.
+- [ ] 5. Return the artifact, evidence, and one next owner.
+
+[TODO: Keep five top-level domain nodes by default. A sixth needs a separate
+owned artifact or a real independent branch. Do not repeat Tier 0 lifecycle
+steps, generic QA preflight/finish language, ticket writeback, or another
+skill's implementation work here. Route conditional/provider detail through a
+precise reference load condition.]
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 ## Templates

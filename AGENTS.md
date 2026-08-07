@@ -79,6 +79,11 @@ phase-like skills only when the phase needs its own artifact, budget, handoff,
 independent judgment, or proof surface, and never recurse through them at the
 same task scope. See `MEM-0098`, `MEM-0100`, `MEM-0125`, and the Tier 0 update
 in `docs/skills/system.md`.
+Leaf skill todos own domain work only: do not restate inherited Tier 0
+planning/execution/review/writeback or the standard local-QA routine. Keep the
+shared composition grammar in `docs/skills/composition.md` and
+`docs/skills/templates/SKILL_TEMPLATE.md`; applicable QA checklists still run
+at invocation and material finish.
 Create new Tier 1 primitives only when multiple Tier 2 interfaces need that
 move as a base dependency; otherwise keep common reusable work as a Tier 2
 interface or method. User research starts as `research:user-grounding`, not a
@@ -142,12 +147,13 @@ products, standards, or open-source repos consistently include for a
 capability, use `research:parity` first and then route the result into
 `research:gap`, `functional-ui`, or `impl-plan`. See `MEM-0097`.
 
-For frontend, landing-page, media, and external frontend delegation work, use
-the owning skills instead of copying their detailed rules here:
-`frontend-craft`, `functional-ui`, `visual-design`, `landing-page`,
-`delegate-frontend`, `visual-qa`, `web-design-guidelines`, and `review`.
-Those skills own premium/Terminal landing gates, generated-media proof,
-Pi/Kimi first-write rules, browser evidence, and frontend guideline scoring.
+For UI planning, landing-page, media, and delegated build work, use the owning
+surfaces instead of copying their detailed rules here: `impl-plan` composes
+`functional-ui`, `visual-design`, `asset-advisor`, and `landing-page` only when
+their facet is unresolved; `delegate-cli`, `visual-qa`,
+`web-design-guidelines`, and `review` own delegation and quality gates.
+Those surfaces own generated-media proof, Pi/OpenRouter builder runs, browser
+evidence, and frontend guideline scoring.
 See `MEM-0072`, `MEM-0076` through `MEM-0085`, and `MEM-0088` through
 `MEM-0096`.
 Farplane currently assumes local Codex execution in the checkout selected by

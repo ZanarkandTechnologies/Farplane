@@ -3,7 +3,7 @@ title: "Content Production"
 status: designed
 owner: farplane-framework
 created_at: 2026-07-22
-updated_at: 2026-08-04
+updated_at: 2026-08-08
 tags:
   - farplane
   - systems
@@ -21,7 +21,7 @@ system_record_json: |
     "id": "SYS-0012",
     "name": "Content Production",
     "status": "designed",
-    "summary": "The reusable content workflow that composes an idea with approved Brand Kit identity and optional computed Tasty Pack inspiration into a reviewable production program and proof trail.",
+    "summary": "The reusable content workflow that composes an idea with approved Brand Kit identity and optional computed Tasty Pack inspiration into a reviewable ticket-owned action graph and proof trail.",
     "owner_spec": "docs/systems/content-production.md",
     "primary_feature_ref": "FEAT-0073",
     "feature_refs": [
@@ -37,16 +37,16 @@ system_record_json: |
       "skills/editing-advisor/SKILL.md",
       "skills/remotion/SKILL.md"
     ],
-    "last_verified": "2026-08-04"
+    "last_verified": "2026-08-08"
   }
 ---
 # Content Production
 
-Content Production owns the reusable flow that turns an idea, approved Brand Kit identity, and optional computed Tasty Pack inspiration into a reviewable creative hypothesis, low-fidelity plan, production program, and grounding proof.
+Content Production owns the reusable flow that turns an idea, approved Brand Kit identity, and optional computed Tasty Pack inspiration into a reviewable creative hypothesis, low-fidelity plan, ticket-owned action graph, and grounding proof.
 
 ```text
 content_production(idea, brand_kit?, tasty_pack?)
-  -> hypothesis + low_fi_review + production_program + proof
+  -> ticket.md { Change Plan + Done + QA Strategy } + proof
 ```
 
 ## At A Glance
@@ -81,10 +81,10 @@ Raw source capture and unresolved inspiration belong in [Source And Sidecar Syst
 - Project-level content skills own editorial eligibility, audience/channel
   defaults, account bindings, cadence, and workstream admission. They may hold
   or preempt a candidate, but they do not re-author production steps.
-- `content-impl-plan` starts only after project admission. It freezes one
-  Creative Input Bundle containing the resolved Brand Kit id/revisions/prompt/
-  elements, optional computed Tasty Pack ref, selected element IDs, conflict
-  decisions, ICP, platform, proof limits, and production policy.
+- `content-impl-plan` starts only after project admission. It records the
+  resolved Brand Kit id/revisions/prompt/elements, optional computed Tasty Pack
+  ref, selected element IDs, conflict decisions, ICP, platform, proof limits,
+  and production policy in the canonical content ticket's `Change Plan`.
 - The only reusable creative inputs for this path are `Brand Kit` and optional computed `Tasty Pack`; the task idea and invocation policy remain the brief.
 - Brand Kit supplies approved identity, production policy, and one kit-wide
   prompt. Its embedded element snapshots are durable production inputs, not
@@ -109,10 +109,10 @@ Raw source capture and unresolved inspiration belong in [Source And Sidecar Syst
   Storyboard authors narrative/scene design; Asset Advisor resolves media;
   Editing Advisor authors timed edit direction; Remotion implements and
   renders; Review / QA judges readiness.
-- Visual work persists a versioned, owner-separated production program.
+- Visual work records an owner-separated action graph in the canonical ticket.
   Storyboard, Asset Advisor, Editing Advisor, Remotion, and Review are distinct
-  actions; Remotion cannot be accepted until it consumes the accepted authored
-  outputs of the three upstream production owners.
+  actions; Remotion cannot begin until it receives the accepted outputs of the
+  three upstream production owners.
 - Asset Advisor may route image, video, avatar, and audio realization, but it
   does not own edit direction, timeline assembly, or rendering. Content Impl
   Plan orders Asset Advisor's returned realization actions without re-deciding
@@ -136,7 +136,7 @@ flowchart LR
   admission["project content skill<br/>eligibility + one lifecycle slot"]:::keep
   kit["FEAT-0073<br/>Brand Kit approved snapshots<br/>one kit prompt"]:::changed
   tasty["FEAT-0056<br/>computed Tasty Pack<br/>complete element capsules"]:::changed
-  plan["content-impl-plan<br/>hypothesis, conflicts<br/>low-fi review, storyboard"]:::added
+  plan["content-impl-plan<br/>ticket action graph<br/>hypothesis + low-fi review"]:::added
   storyboard["Storyboard<br/>narrative + scene design"]:::added
   assets["Asset Advisor<br/>accepted media + provenance"]:::added
   generation["image / video / avatar / audio<br/>asset realization"]:::added
@@ -162,7 +162,7 @@ flowchart LR
   render --> proof
 ```
 
-Content Production converts approved identity and optional inspiration into a bounded production program with visible review gates.
+Content Production converts approved identity and optional inspiration into a bounded ticket-owned action graph with visible review gates.
 
 ## Surfaces
 
@@ -182,17 +182,18 @@ Content Production converts approved identity and optional inspiration into a bo
 
 - Registry proof: `python3 docs/features/validate_features.py`.
 - Link proof: `python3 bin/validators/check_doc_refs.py`.
-- Production-program proof:
-  `python3 skills/content-impl-plan/scripts/validate_production_program.py <program.json>`.
+- Ticket proof: `farplane validate ticket <ticket> --phase planning`.
 - Update this system page when the composition policy, timing-master policy, or feature membership changes.
 - Update feature pages when Brand Kit or Tasty Pack behavior changes.
 - Regenerate registries and commit generated outputs with the source docs.
 
 ## Change History
 
+- 2026-08-08: Made the canonical content ticket the sole action-graph
+  container; removed the duplicate JSON projection and validator.
 - 2026-08-04: Separated project admission/configuration from the reusable
   compiler and added the immutable Creative Input Bundle plus mechanically
-  owner-separated production program.
+  owner-separated action graph.
 - 2026-08-03: Standardized sibling production lanes and separated reusable
   creative patterns from executable skill methods.
 - 2026-07-22: Created SYS-0012 for the TASK-0068 durable documentation slice.

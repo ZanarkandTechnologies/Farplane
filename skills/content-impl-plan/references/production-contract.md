@@ -4,16 +4,21 @@ status: active
 owner: content-impl-plan
 kind: reference
 created_at: 2026-07-16
-updated_at: 2026-07-22
+updated_at: 2026-08-08
 ---
 
 # Content Implementation Production Contract
 
 Load this reference after binding the implementation brief and before compiling
 the production ticket. It owns Resource Bank interpretation, visual-direction
-composition, creative lock detail, and the full ticket template.
+composition, creative lock detail, and selected production requirements.
 
 ## Production Graph
+
+This graph defines the action and dependency requirements that Content Impl Plan
+records. It does not authorize the parent to author a final storyboard, asset
+manifest, generation prompt, edit recipe, rendered file, or readiness verdict:
+those are the named child's sole outputs.
 
 ```text
 idea + icp + evidence + brand_kit? + tasty_pack? + invocation_policy
@@ -200,101 +205,3 @@ substitute category-only placeholders for the map.
 When a brief names enough elements or roles to compile a provisional plan,
 compile them first and isolate missing payload, rights, approval, or media as
 specific blockers. Do not return only a generic blocked report.
-
-## Ticket Template
-
-```text
-## Summary
-What will be produced, for whom, and what proof or marketing job it must do.
-
-## Scope
-- In / Out:
-- Platform / target artifact:
-- Content kind / method / Brand Kit / Tasty Pack:
-- Invocation policy / CTA:
-
-## Delta
-- Before / After / Why now:
-
-## Program
-ICP Contract:
-- role/job / context / starting belief / friction / knowledge:
-- emotional stake / objection / must-believe-after / desired action:
-
-Story Contract:
-- point of view + stakes / backbone / promise-payoff:
-- two-column beats with viewer-state before/after:
-- evidence / explanation / soul:
-
-Asset Decisions:
-| Asset | Beat | Job | Claim | Evidence Level | Material | Motion Purpose | Provenance / Rights | Decision / Acceptance |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-
-Scene Asset Manifest:
-| Scene | Beat | Shared Background | Main Topic | Foreground | Layer / Reveal Order | Source or Generation Packet | Owner | Rights Note | Expected Output | Accepted File | Acceptance Check | Readiness |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-
-Persona Content Review:
-- lenses / acceptance checks / objections / must-see proof:
-- comprehension / relevance / trust / action clarity:
-- blockers / conflicts / receipt / independent reviewer / verdict:
-
-Creative Hypothesis:
-- Why this Brand Kit + selected Tasty Pack combination should work:
-- Falsifier / risk:
-
-Element Decisions:
-- Chosen / augmented / rejected / conflicting:
-
-Reference Pattern:
-- Compiled creative direction:
-- Storyboard opening beat / timeline / story format:
-- Visual / audio / motion-edit patterns:
-- Proof mechanism / must change:
-
-Element Leverage Map:
-| Provenance / Element | Why It Works | Golden Example | Golden Recipe | Planned Use | Owner / Output | Acceptance Check |
-| --- | --- | --- | --- | --- | --- | --- |
-
-Low-Fidelity Review Packet:
-- Demo path:
-- Visual storyboard image paths / notes / element IDs:
-- Operator approval:
-
-Timing Master:
-- kind: voiceover | music | source_video | none
-- asset / observed duration / alignment / cue receipt:
-
-SFX Candidate Shortlist:
-| Cue | Search Phrase | SoundButtonsWorld Item | Why It Fits | Rights Risk | Status / Fallback |
-| --- | --- | --- | --- | --- | --- |
-
-Use `awaiting_operator_download_and_approval` for candidates and
-`searched_no_fit` when generation remains the fallback. The agent never
-downloads from SoundButtonsWorld.
-
-Scene Grid Review Packet:
-| Scene | Target seconds | Clean grid | Annotated grid | Notes | Provider strategy | Transition / audio | Approval |
-| --- | ---: | --- | --- | --- | --- | --- | --- |
-
-Advisor Action List:
-| Order | Owner | Input | Output | Acceptance Check | Blocker |
-| ---: | --- | --- | --- | --- | --- |
-
-## Map
-- Storyboard / Assets / Avatar / Audio:
-- Image generation / Video generation / Remotion / Review-QA:
-
-## Done / Proof
-- plan_ready_when / production_ready_when:
-- element realization receipts / timing proof / render proof / review / residual_risk:
-
-## State
-draft | review | approved | in_production | blocked
-
-## Links
-- source proof / reference / child artifacts / outputs:
-
-## Notes
-- Rejected angles / rights / taste notes:
-```
