@@ -15,7 +15,7 @@ allowed-tools: Read, Glob, Grep, Bash
 Use this skill when a URL or local file may contain audio or video evidence and
 a downstream workflow needs more than page text. It turns media sources into a
 small, auditable evidence bundle before `harness-scout`, `ingest-content`,
-`video-understanding`, `video-production`, or `frontend-craft` makes claims
+`video-understanding`, `content-impl-plan`, `storyboard`, or `impl-plan` makes claims
 from the source.
 
 This is a support workflow, not a scraping product. Prefer compact metadata,

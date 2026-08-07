@@ -187,7 +187,7 @@ scene handoff, asset needs, proof, and blocker conditions.
     viewer question -> answer, and scene-to-scene cause/effect.
   - [ ] For `continuous_chain`, include start/end frame handoff pairs for every
     generated clip. For `deliberate_scene_breaks`, load
-    `../video-production/references/scene-grid-production.md`, partition the
+    [scene-grid production](references/scene-grid-production.md), partition the
     timeline into normally 4-5 second scene units, and create one clean grid,
     one matching annotated grid, and keyed notes per provider clip. Each unit
     gets one dominant action and camera/POV; cross-clip frame continuity is not
@@ -219,7 +219,8 @@ scene handoff, asset needs, proof, and blocker conditions.
     `remotion`.
   - [ ] Route model-native footage or generated clips to
     `ai-video-advisor`.
-  - [ ] Route broader video planning or ad deliverables to `video-production`.
+  - [ ] Route a parent action graph to `content-impl-plan`; route platform ad
+    specs and distribution copy to `social-content`.
   - [ ] Route captions, launch copy, thread, carousel, or platform copy to
     `social-content`.
 - [ ] 6. Make proof and review observable.
@@ -341,9 +342,7 @@ of a Remotion-ready creative ticket.
   title-led, or retention-sensitive work before drafting the script.
 - `examples/remotion-proof-video/example.md` - load when a Remotion-ready
   example would improve the creative ticket or proof handoff.
-- `../video-production/SKILL.md` - route broader video planning, ad specs, or
-  production method selection after the storyboard is ready.
-- `../video-production/references/scene-grid-production.md` - load when
+- [scene-grid production](references/scene-grid-production.md) - load when
   deliberate scene breaks map storyboard grids to model-native provider clips.
 - `../remotion/references/documentary-reel.md` - load for voice-led
   documentary/editorial reels that need causal clauses, layered scenes,

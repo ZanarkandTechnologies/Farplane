@@ -97,7 +97,7 @@ PrototypeGates :=
 | scroll interaction feasibility | mobile first-viewport fit
 
 PipelineHandoff :=
-  landing-page -> frontend-craft
+  landing-page -> impl-plan
 ```
 
 ## Video Project
@@ -125,7 +125,7 @@ PrototypeGates :=
 | generated asset consistency | export/platform constraints
 
 PipelineHandoff :=
-  video-production -> ai-video-advisor | remotion | remotion-render | frontend-craft
+  content-impl-plan -> storyboard | ai-video-advisor | remotion | remotion-render | impl-plan
 ```
 
 ## Social Campaign
@@ -152,7 +152,7 @@ PrototypeGates :=
   one representative post/thread/carousel | asset style proof | platform fit proof
 
 PipelineHandoff :=
-  social-content -> ai-image-advisor | ai-video-advisor | remotion | frontend-craft
+  social-content -> ai-image-advisor | ai-video-advisor | remotion | impl-plan
 ```
 
 ## Product Photo Shoot
@@ -181,5 +181,5 @@ PrototypeGates :=
 | background removal or upscale quality | marketplace compliance proof
 
 PipelineHandoff :=
-  product-photography -> imagegen | ai-image-advisor | frontend-craft
+  product-photography -> imagegen | ai-image-advisor | impl-plan
 ```

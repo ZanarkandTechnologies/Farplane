@@ -82,7 +82,7 @@ storyboard_check(creative_ticket, production_handoff?)
   constraint, framing, and acceptance check; the storyboard does not prescribe
   custom-created SVG/JSX/programmatic vector animation assets as substitutes.
 - [ ] `production_route`: The handoff names the next owner, such as `remotion`,
-  `video-production`, `ai-video-advisor`, `remotion-render`, or
+  `content-impl-plan`, `ai-video-advisor`, `remotion-render`, or
   `social-content`, with required inputs and blocker conditions. When visuals
   are missing, `asset-advisor` candidate discovery precedes generation unless
   the brief explicitly requires an original generated asset. Discovery may

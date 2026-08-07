@@ -40,8 +40,8 @@ The optional Tasty Pack supplies ad-hoc current inspiration. Invocation policy
 still binds the deliverable, but Brand Kit policy wins creative-source conflicts. Compatible
 Tasty elements augment the kit by role; incompatible elements are explicitly
 rejected or block the plan. `style_profile` is not an input or fallback in this
-composition contract. Standalone `video-production` callers retain their
-separately owned profile behavior.
+composition contract. Saved captures may compile into a separately owned
+`ingest-content` profile package, but that package is not a composition input.
 
 ```text
 compose_elements(brand_kit?, tasty_pack?, idea)
@@ -174,7 +174,7 @@ Requires:
 - `continuous_chain`, `deliberate_scene_breaks`, or `montage` topology;
 - start/end frame pairs for chained clips, or one approved scene-grid packet per
   deliberate-break clip using
-  `../../video-production/references/scene-grid-production.md`;
+  `../../storyboard/references/scene-grid-production.md`;
 - an overview plus actual grids and notes for human review before generation;
 - complete scene packets with existing, dimension-verified clean-grid and
   annotated-grid image files rather than placeholder filenames, text-only

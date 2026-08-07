@@ -1,9 +1,9 @@
 ---
-schema: farplane-video-style-index
+schema: farplane-style-profile-index
 version: "0.1.0"
 ---
 
-# Explainer Style Profiles
+# Style Profiles
 
 Each profile is a creator-neutral production grammar. Load the complete
 directory: `profile.md`, `prompts.md`, collocated `example.md`, and an optional
@@ -13,7 +13,6 @@ directory: `profile.md`, `prompts.md`, collocated `example.md`, and an optional
 | --- | --- | --- |
 | [Applied Math Story](applied-math-story/profile.md) | explainer, storyboard | progressive annotated 2D diagrams |
 | [Low-Poly Concept](low-poly-concept/profile.md) | explainer, marketing, storyboard | simplified 3D spatial metaphor |
-| [Retro Low-Poly Consequence](retro-low-poly-consequence/profile.md) | explainer, storyboard | recurring everyperson + escalating literal consequence montage |
 
 A profile is reusable direction, not evidence about the current task. An
 Inspiration Pack may independently supply task facts, approved source assets,

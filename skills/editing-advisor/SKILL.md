@@ -19,7 +19,7 @@ methods:
   - editing-advisor:captions
   - editing-advisor:compositing
 common_chains:
-  after: ["content-impl-plan", "video-production", "storyboard", "asset-advisor", "remotion", "review"]
+  after: ["content-impl-plan", "storyboard", "asset-advisor", "remotion", "review"]
 allowed-tools: Read, Grep, Glob, Bash
 ---
 
@@ -76,7 +76,7 @@ gates:
   renderer_handoff_observable
 
 routes:
-  content-impl-plan | video-production | storyboard | asset-advisor |
+  content-impl-plan | storyboard | asset-advisor |
   remotion | review | qa
 
 fails:

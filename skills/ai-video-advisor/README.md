@@ -4,7 +4,7 @@ Category-level skill for generating, editing, assembling, and QA-ing project-bou
 
 ## Purpose
 
-Keep video generation as the model/app execution skill with the upstream umbrella model map in `SKILL.md` and provider-specific detail in references. Domain video workflows live in `video-production` method addresses.
+Keep video generation as the model/app execution skill with the upstream umbrella model map in `SKILL.md` and provider-specific detail in references. `content-impl-plan` owns the parent action graph; `storyboard` owns script, scenes, and scene-grid packets.
 
 ## Entry Point
 
@@ -23,22 +23,17 @@ Use `SKILL.md` for routing and its Todo List to select only the relevant branch:
 - `references/tools/infsh-cli.md`: `belt` CLI usage.
 - `references/tools/*.md`: provider/app instructions.
 
-Use `video-production` methods for artifact-level work:
-
-- `video-production:marketing`
-- `video-production:explainer`
-- `video-production:storyboard`
-- `video-production:talking-head`
-- `video-production:ad-spec`
+Use `content-impl-plan` for a video deliverable's action graph, `storyboard`
+for script and scene design, `social-content` for platform deliverables, and
+`avatar-advisor` for presenter direction before invoking this execution skill.
 
 Use `ai-video-advisor:visual-camera-control` when arrows, maps, annotated
 assets, landmark orbits, or ordered location perspectives must control the
 camera. Resource Bank may store the references and examples; this method owns
 the executable topology, prompt packet, and adherence evidence.
 
-Prompting guidance lives inside the matching `video-production` method
-reference, with the upstream video prompting guide kept as
-`references/prompting/video-prompting-guide.md` for general video prompt
+The upstream video prompting guide at
+`references/prompting/video-prompting-guide.md` covers general video prompt
 quality. Do not create a standalone public `video-prompting-guide` skill.
 
 Remotion code authoring lives in `skills/remotion/`. Inference.sh MP4 rendering for Remotion lives in `skills/remotion-render/`.

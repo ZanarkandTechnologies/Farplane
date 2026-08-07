@@ -12,7 +12,7 @@ template_uses:
 eval: evals/evals.json
 qa_checklist: qa_checklist.md
 common_chains:
-  after: ["video-production", "storyboard", "asset-advisor", "editing-advisor", "remotion", "review"]
+  after: ["storyboard", "asset-advisor", "editing-advisor", "remotion", "review"]
 allowed-tools: Read, Grep, Glob, Bash
 ---
 
@@ -88,7 +88,7 @@ gates: target_and_audience_bound; creative-context decision recorded;
        impersonated by the parent
 
 routes:
-  video-production | storyboard | asset-advisor | editing-advisor |
+  storyboard | asset-advisor | editing-advisor |
   remotion | social-content | review | qa
 
 fails: second-authoring a child output; grouped/ownerless action; provider
@@ -169,9 +169,10 @@ states, and representative layered-frame gate.
 - Do not choose an asset realization route twice. Asset Advisor owns the
   `reuse | source | inspired_generation | original_generation | capture |
   compose` decision; this skill orders the returned specialist action.
-- Do not reintroduce `style_profile` through aliases, fallback parsing, or
-  `video-production` calls in this composition path. Standalone
-  `video-production` remains the owner of direct profile use.
+- Do not reintroduce `style_profile` as an alias, fallback, or third
+  composition source. A saved capture may be compiled by
+  `ingest-content:compile-style-profile`, but an active content ticket still
+  uses only its Brand Kit and optional Tasty Pack.
 - Do not let a child consume only an element title or description. Selected
   work is conditioned on its resolved golden example and golden recipe, with a
   receipt mapping the realized output back to the element ID.
@@ -206,10 +207,10 @@ states, and representative layered-frame gate.
   after Asset Advisor selects that route.
 - `../audio-advisor/SKILL.md` - child audio realization contract used only
   after Asset Advisor selects that route.
-- `../video-production/SKILL.md` - method selection and direct standalone style
-  profiles; this skill passes compiled Brand Kit + Tasty Pack direction without
-  adding a profile composition lane.
-- `../video-production/references/scene-grid-production.md` - load for
+- `../ingest-content/references/compile-style-profile.md` - load only for an
+  explicit saved-capture-to-profile request outside the current ticket's
+  Brand Kit plus Tasty Pack composition.
+- `../storyboard/references/scene-grid-production.md` - load for
   deliberate-scene-break model-native video; owns per-scene grids, approval,
   reuse locking, and Remotion assembly handoff.
 - `../ai-image-advisor/SKILL.md` - child image realization contract used only

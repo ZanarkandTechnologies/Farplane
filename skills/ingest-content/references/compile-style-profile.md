@@ -3,13 +3,14 @@ template_uses:
   skill-method-reference: "0.1.0"
 ---
 
-# Ingest Style
+# Compile Style Profile
 
-Use this reference when `video-production:ingest-style` compiles an existing
-`ingest-content` saved capture into a reusable, creator-neutral profile.
+Use this reference when `ingest-content:compile-style-profile` turns an
+existing saved capture into a reusable, creator-neutral visual-direction
+profile.
 
 ```text
-ingest_style(saved_capture, profile_id, destination, replace=false)
+compile_style_profile(saved_capture, profile_id, destination, replace=false)
   -> collocated_profile_package + evidence | blocked_report
 state: reads(saved ingest-content capture and rights metadata); writes(profile.md, prompts.md, example.md)
 gates: capture_exists; profile_id_safe; collision_clear; provenance_preserved; rights_safe; package_complete
@@ -40,7 +41,7 @@ input_packet:
    Preserve attribution in provenance. Copy only small text/example assets
    whose reuse is explicitly rights-safe; otherwise store a source reference.
 3. **Compile atomically.** Normalize `profile_id` to lowercase kebab case and
-   target `references/explainer-styles/<profile_id>/`. If it already exists,
+   target `references/style-profiles/<profile_id>/`. If it already exists,
    return a collision blocker unless explicit replace authority is recorded.
    Before replacement, preserve a reviewable diff and do not delete unrelated
    assets.

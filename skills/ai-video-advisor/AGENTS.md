@@ -4,8 +4,9 @@ This module is the model/app execution skill for inference.sh video. Keep the fi
 
 The files under `references/tools/` are copied upstream inference.sh tool `SKILL.md` files. Refresh them from the upstream source instead of rewriting them by hand.
 
-Keep domain video workflow planning in `video-production` method addresses.
-This module remains the model/app execution skill.
+Keep parent video planning in `content-impl-plan` and scene design in
+`storyboard`. This module remains the model/app execution skill, including the
+provider-side continuity and approved-reference checks for scene-grid packets.
 
 Do not create a standalone public `video-prompting-guide` skill. Prompting guidance should live inside the artifact/domain skill that owns the output.
 

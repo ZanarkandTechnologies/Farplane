@@ -140,6 +140,10 @@ the skill contract.
   workflow-teaching videos route to `harness-scout`; accepted owner-local
   changes may later route to `skill-maintenance`, and reviewed ownerless gaps
   may later route to `skill-creator`.
+- [ ] `style-profile-compilation`: An explicit style-profile request reuses a
+  verified capture, preserves provenance and observation/inference boundaries,
+  blocks collisions without replace authority, copies no protected source
+  media, and writes collocated `profile.md`, `prompts.md`, and `example.md`.
 
 ## Reviewer Prompt
 

@@ -78,7 +78,7 @@ Use this as the ordered checklist whenever `remotion` is active.
   requested 24 seconds or 720 frames is a target, not composition metadata,
   until probes and transition overlaps reconcile it.
 - [ ] When the handoff uses deliberate scene breaks, load
-  [scene-grid production](../video-production/references/scene-grid-production.md),
+  [scene-grid production](../storyboard/references/scene-grid-production.md),
   consume one accepted clip per approved scene packet, and preserve the locked
   grids, character refs, prompts, and clip files. Remotion may trim and assemble
   them but must not regenerate or silently replace them.
@@ -139,7 +139,7 @@ is approved in the storyboard packet; otherwise return the affected packet.
 - [ ] Route MP4 rendering through [remotion-render](../remotion-render/SKILL.md) only for an explicit external inference.sh render path when local rendering is not the chosen route and external compute is acceptable.
 - [ ] Keep source code, props, local assets, notes, and any render inputs inside the workspace.
 - [ ] Confirm external compute, spend, uploads, or API usage is explicitly acceptable before running render jobs outside local project commands.
-- [ ] If the video is embedded in a frontend, route integration and visual proof through [frontend-craft](../frontend-craft/SKILL.md) and [visual-qa](../visual-qa/SKILL.md) when layout or taste is affected.
+- [ ] If the video is embedded in a frontend, route its receipt through [impl-plan](../impl-plan/SKILL.md) and [visual-qa](../visual-qa/SKILL.md) when layout or taste is affected.
 - [ ] Follow the native execution phase proof and writeback loop before claiming animation, composition, render-readiness, or final video quality.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
@@ -207,7 +207,7 @@ scene_failure(packet_id, reason)
 - Dynamic props, dimensions, metadata, or DOM/text measurement: `rules/parameters.md`, `rules/calculate-metadata.md`, `rules/get-video-dimensions.md`, `rules/get-video-duration.md`, `rules/get-audio-duration.md`, `rules/measuring-dom-nodes.md`, `rules/measuring-text.md`
 - 3D or maps: `rules/3d.md`, `rules/maplibre.md`
 - Remocn copy-paste motion components, transitions, backgrounds, UI scenes, or demo-video blocks: `references/remocn.md`
-- Approved model-native scene packets and locked-asset assembly: `../video-production/references/scene-grid-production.md`
+- Approved model-native scene packets and locked-asset assembly: `../storyboard/references/scene-grid-production.md`
 - Voice-led documentary/editorial reels using layered stills, prepared
   overlays, shared film treatment, micro-motion, and frame-addressed
   choreography: `references/documentary-reel.md`

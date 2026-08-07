@@ -10,6 +10,8 @@ template_uses:
   skill-eval-task: "0.2.0"
 eval: evals/evals.json
 qa_checklist: qa_checklist.md
+methods:
+  - ingest-content:compile-style-profile
 common_chains:
   after: ["media-ingest", "video-understanding", "summarize", "visual-design"]
 allowed-tools: Read, Glob, Grep, Bash, mcp__convex__status, mcp__convex__functionSpec, mcp__convex__run
@@ -48,7 +50,7 @@ analysis and create only the selected editing element.
 ingest_content(source, note?, brand_kit_id?, context?) -> saved_capture + selected_creative_elements + tickets[] + retrieval_handle + skill_findings[] + optional_promotion_receipt
 state: reads(Resource Bank schema/functions, source content, user note, optional same-source media assets, skill registry and likely owner skills for video sources, current project ticket conventions); writes(Resource Bank capture with source/note/transcript/analysisMarkdown/selected elements/tags, zero or one thin repurpose ticket by default, optional derived assets, and optional Brand Kit promotion)
 gates: source_read_or_limit_recorded; note_intent_bound; analysis_markdown_written; selected_elements_only; every_golden_example_same_ingestion_job; repurpose_ticket_created_or_not_requested; primary_asset_exists_before_derived_upload; storage_write_verified; optional_promotion_verified_or_skipped; retrieval_verified; video_skill_benefit_scan_complete_or_blocked_or_not_applicable
-routes: summarize | media-ingest | video-understanding | visual-design | harness-scout | skill-maintenance | skill-creator | content-impl-plan | ai-image-advisor | ai-video-advisor | social-content | video-production
+routes: summarize | media-ingest | video-understanding | visual-design | harness-scout | skill-maintenance | skill-creator | content-impl-plan | ai-image-advisor | ai-video-advisor | social-content
 fails: treats all media as text; ignores note-specific segment; stores shallow or generic creative elements; invents unseen evidence; uses an asset from another source as a golden example; copies one generic recipe across unrelated kinds; skips retrieval verification; skips the terminal video skill-benefit scan; auto-edits skills from weak source evidence; keeps legacy analysis-only records as active production data
 ```
 
@@ -183,6 +185,11 @@ source-reading or downstream interpretation phase:
   of a repurpose ticket, not as a prerequisite for creating the ticket. The
   ingest skill owns the thin ticket because the source, note, and intended
   output are already bound in the current task.
+- When an already verified capture needs to become reusable creator-neutral
+  visual direction, use `ingest-content:compile-style-profile` and load
+  [compile style profile](references/compile-style-profile.md). This writes a
+  profile package; it does not add a third creative-input lane to a content
+  ticket.
 
 Do not call phase-like skills recursively at the same scope. Ingestion owns the
 saved record; downstream production skills own making new assets from records.
@@ -531,6 +538,8 @@ derived_preview: if media-ingest produced `/tmp/contact_sheet.jpg`, run `npm --p
 - [../harness-scout](../harness-scout/SKILL.md) - deeper video-to-skill
   reconstruction for credible workflow-teaching sources after the lightweight
   terminal scan finds a possible owner-local benefit.
+- [compile style profile](references/compile-style-profile.md) - load only for
+  an explicit saved-capture-to-reusable-profile request.
 
 ## Output
 

@@ -1,7 +1,7 @@
 ---
-title: Scene-Grid Production Contract
+title: Storyboard Scene-Grid Contract
 status: active
-owner: video-production
+owner: storyboard
 kind: reference
 created_at: 2026-07-16
 updated_at: 2026-07-16
@@ -15,12 +15,12 @@ applies_to:
 # Scene-Grid Production Contract
 
 Load this reference when a multi-scene video uses model-native clips and the
-chosen generation topology is `deliberate_scene_breaks`. It defines the shared
-artifact passed from `content-impl-plan` to `storyboard`, `ai-video-advisor`, and
-`remotion`.
+chosen generation topology is `deliberate_scene_breaks`. Storyboard owns the
+reviewable scene packet; `ai-video-advisor` verifies and executes the provider
+envelope, and Remotion assembles accepted clips.
 
 ```text
-scene_grid_plan(video, topology = deliberate_scene_breaks)
+storyboard_scene_grid(video, topology = deliberate_scene_breaks)
   -> scene_packet[] + approval_packet
 
 approved(scene_packet[], budget)
@@ -279,10 +279,10 @@ to the affected scene packet; it is not hidden with transition effects.
 
 ## Recurring Character Placement
 
-Style-specific characters live with their style profile:
+Style-specific characters live with their profile package:
 
 ```text
-references/explainer-styles/<profile-id>/characters/<character-id>/
+../ingest-content/references/style-profiles/<profile-id>/characters/<character-id>/
 ```
 
 Cross-style characters live under:

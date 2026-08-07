@@ -34,13 +34,16 @@ Use this as the ordered checklist whenever `ai-video-advisor` is active.
 - [ ] For HappyHorse, physical realism, or video editing, load `references/tools/happyhorse.md`.
 - [ ] For Seedance, reference video, or audio-aware generation, load `references/tools/seedance.md`.
 - [ ] For marketing/proof videos, explainers, product demos, storyboard/action-list work, or idea plus Tasty Pack planning, use `content-impl-plan` or `storyboard` before this skill.
-- [ ] For social/video ad specs, use `video-production:ad-spec`.
-- [ ] For prompt improvement, use the owning `video-production` method's prompting reference; if no artifact domain is known, load `references/prompting/video-prompting-guide.md`.
+- [ ] For social/video ad specs, use `social-content`; for the parent action
+  graph, use `content-impl-plan`.
+- [ ] For prompt improvement, load
+  `references/prompting/video-prompting-guide.md` unless a narrower owner
+  supplies the accepted prompt packet.
 - [ ] For annotated routes, arrows, maps, camera paths, landmark orbits, or multi-perspective location moves, load [visual camera control](references/visual-camera-control.md) and select single-shot versus chained-maneuver topology before spend.
 - [ ] For shared production routing from a domain skill, load `references/domain-production.md`.
 - [ ] For long-running or batched generations, load `references/long-running-jobs.md`; use `--no-wait`, task IDs, and `jobs.md` instead of terminal scrollback.
 - [ ] Before copying commands from upstream references, load `references/reference-overrides.md` and let it override stale app examples.
-- [ ] For website or campaign asset sets that combine stills, model-native clips, and Remotion renders, use `frontend-craft/references/media-pipelines.md`.
+- [ ] For website or campaign asset sets that combine stills, model-native clips, and Remotion renders, use `references/web-surface-integration.md`.
 - [ ] Use `imagegen` first for still frames, portraits, posters, or reference art unless the user explicitly wants a CLI image app.
 - [ ] Check `command -v belt`, `belt --help`, `belt app get <app>`, and `belt app sample <app>` before relying on an app schema.
 - [ ] For voice, music, Foley, sound effects, dubbing, or mix planning, route to `audio-advisor`; search live with `belt app search foley` and `belt app search sound` only for provider execution details.
@@ -48,6 +51,14 @@ Use this as the ordered checklist whenever `ai-video-advisor` is active.
   before spend. Use start/end frame chaining for `continuous_chain`, require
   transition notes for `deliberate_scene_breaks`, and block isolated I2V
   batches unless the chosen format is explicitly `montage`.
+- [ ] For `deliberate_scene_breaks`, load
+  `../storyboard/references/scene-grid-production.md`. Before spend, verify
+  every packet's approval is current, approved grid and canonical/effective
+  character hashes match, and the effective character appears in the exact
+  provider `reference_images`; return changed-identity packets to Storyboard
+  for fresh human approval.
+- [ ] Reject or repair annotation leakage: IDs, arrows, panel labels, rulers,
+  and notes are control surfaces, not final pixels.
 - [ ] When a selected creative element conditions a clip, require its complete
   realization packet and bind both the resolved `goldenExample` asset and
   `goldenRecipe` prompt into the actual provider input. Record the element ID
@@ -67,7 +78,7 @@ Use this as the ordered checklist whenever `ai-video-advisor` is active.
   beat.
 - [ ] Confirm external compute/spend is acceptable before any `belt app run`.
 - [ ] Save final videos, prompts, input JSON, result JSON, and notes inside the workspace, not only in a remote URL, temp path, or Codex home path.
-- [ ] If the video is used on a web surface, route implementation/proof through `frontend-craft`, `references/frontend-asset-qa.md`, and `visual-qa` when layout or taste is affected.
+- [ ] If the video is used on a web surface, hand the asset receipt to `impl-plan`, use `references/frontend-asset-qa.md`, and use `visual-qa` when layout or taste is affected.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 Generate project-ready AI video assets with inference.sh CLI (`belt`) while keeping provider-specific details in references.
@@ -97,7 +108,7 @@ Copied upstream references are read-only usage docs. Do not run `npx skills add 
 7. Treat `belt app run` as external compute/spend. Do not run it until that cost is acceptable for this task.
 8. Save project assets, prompt/input JSON, result JSON, and notes inside the workspace.
 9. For long-running or batched jobs, use the async workflow below instead of blocking the whole pass.
-10. If the asset is used in a web surface, hand it to `frontend-craft` and keep browser playback/visual QA as separate proof.
+10. If the asset is used in a web surface, hand its receipt to `impl-plan` and keep browser playback/visual QA as separate proof.
 
 ## Continuity Video Gate
 
@@ -117,6 +128,15 @@ Block and route back to `content-impl-plan`, `storyboard`, `asset-advisor`, or
 `audio-advisor` when a narrative reel asks for isolated pretty clips, mismatched
 per-clip audio, or no continuity assets. Independent async batches are only
 appropriate for montage, parallel asset exploration, or non-sequential b-roll.
+
+For `deliberate_scene_breaks`, Storyboard supplies one approved clean grid,
+matching annotated grid, and keyed notes for each provider clip. Before the
+provider call, verify that the exact approved assets and character hashes are
+present in the local generation envelope and that the effective character is
+in `reference_images`. A provider-required visible identity change invalidates
+only affected scene approval and returns those packets to Storyboard; unchanged
+packets remain locked. Review provider output for annotation leakage before
+handing accepted clips to Remotion.
 
 ## Visual Camera Control Gate
 
@@ -249,15 +269,15 @@ belt app list --category video
 - Storyboard, script, or shot list: use `storyboard`
 - Asset inventory or recreation plan: use `asset-advisor`
 - Audio direction, Foley, voice, music, SFX, dubbing, or mix plan: use `audio-advisor`
-- Prompt improvement: use the owning `video-production` method's prompting
-  reference; if no artifact domain is known, load
-  `references/prompting/video-prompting-guide.md`
+- Prompt improvement: load `references/prompting/video-prompting-guide.md`
+  unless the accepted storyboard or approved realization packet supplies the
+  narrower prompt contract.
 - Annotated camera routes, arrows, maps, landmark orbits, or multi-perspective
   movement: [visual camera control](references/visual-camera-control.md)
 - Shared artifact production workflow for domain video skills: `references/domain-production.md`
 - Long-running jobs, batched tasks, timers, or delegated polling: `references/long-running-jobs.md`
 - Copied-reference overrides and known stale app IDs: `references/reference-overrides.md`
-- Multi-asset website/video pipelines with image, video, and Remotion: `frontend-craft/references/media-pipelines.md`
+- Multi-asset website/video pipelines with image, video, and Remotion: `references/web-surface-integration.md`
 - Frontend implementation proof: `references/frontend-asset-qa.md`
 - React/Remotion/code-rendered MP4: use `remotion` for code and local render proof; use `remotion-render` only for an explicit external inference.sh render path
 

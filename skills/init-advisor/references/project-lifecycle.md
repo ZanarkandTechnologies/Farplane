@@ -38,7 +38,7 @@ CloseTicket<CodingTicket> := close-ticket
 
 Domain project profiles may bind the same lifecycle to different ticket
 planners, executors, and proof skills. For example, a video project may plan a
-storyboard ticket through `video-production` and execute/render through
+content ticket through `content-impl-plan` and execute/render through
 `ai-video-advisor`, `remotion`, or `remotion-render`.
 
 ## Pattern Map
