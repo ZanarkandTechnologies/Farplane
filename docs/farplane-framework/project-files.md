@@ -136,13 +136,31 @@ one inline `refresh`, but never both. The Daily Interval agent resolves stale
 selected metrics into unique groups, executes each prompt once, and stores
 separate flat observations.
 
-Canonical reusable metric semantics. Each quantitative definition requires
+Canonical reusable metric semantics. Each **quantitative** definition requires
 `type: flow | stock`, `unit`, `direction: maximize | minimize`, and one refresh
 source. Labels, descriptions, display hints, freshness, pinned state, and hard
 guards are optional. Flow means additive activity; stock means a point-in-time
 balance. `harness.yaml` selects active objectives/guards and owns objective
 priority. Unselected non-guard metrics are tracked observations, not ordinary
 planner context.
+
+`type: markdown` is the deliberately narrow exception for one current,
+qualitative claim: its dated observation value is one non-empty Markdown
+paragraph. It has no unit, direction, target, guard, display, comparison,
+series, or cumulative projection. Core selects the latest valid paragraph as
+of the requested window end; it neither sums nor invents a trend. A same-day
+repeat with identical text dedupes, while conflicting text or malformed/missing
+refresh output becomes a dated source gap and leaves the last valid paragraph
+intact. A project may declare at most one `leverage: edge` Markdown metric; it
+is `pinned: true` but stays unselected so Daily can refresh it without making it
+a planner objective. Numeric `leverage: distribution` only labels existing
+flow/stock evidence for the read-only global Leverage projection. Account
+collectors attach `distribution_account: {platform, account_id, label}` to their
+ignored dated observation payload; Core carries that observed identity to the
+raw distribution card. The global projection groups only by `platform` plus
+`account_id`, never by a metric name, display label, or project. Account IDs do
+not belong in tracked `metrics.yaml` or the browser response; missing identity
+is an explicit evidence gap until a collector refresh supplies it.
 
 Dated facts remain canonical runtime evidence. The snapshot, UI, or Interval
 caller supplies an inclusive calendar window and timezone. Core then derives

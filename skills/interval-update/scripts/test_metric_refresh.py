@@ -59,9 +59,10 @@ class RefreshPlanTests(unittest.TestCase):
             job = {"refresh_id": "instagram", "requested_metric_ids": ["views", "likes", "shares"]}
             receipt = record_refresh_result(root, "2026-07-12", job, {"views": {"value": 10, "status": "available", "payload": {}}, "likes": {"value": 2, "status": "available", "payload": {}}})
             payload = __import__("json").loads(Path(receipt["path"]).read_text(encoding="utf-8"))
-        self.assertEqual(receipt["observation_metric_ids"], ["views", "likes"])
+        self.assertEqual(receipt["observation_metric_ids"], ["views", "likes", "shares"])
         self.assertEqual(receipt["source_gaps"], ["missing_refresh_output:shares"])
-        self.assertEqual([row["metric_id"] for row in payload["observations"]], ["views", "likes"])
+        self.assertEqual([row["metric_id"] for row in payload["observations"]], ["views", "likes", "shares"])
+        self.assertEqual(payload["observations"][-1]["status"], "source_gap")
         self.assertEqual(payload["status"], "partial")
 
     def test_disabled_daily_and_weekly_resolve_zero_jobs(self) -> None:

@@ -13,8 +13,8 @@ import hashlib
 from pathlib import Path
 
 import yaml
-from pydantic import BaseModel, ConfigDict, StrictBool, ValidationError, field_validator
-from typing import Any, Literal
+from pydantic import BaseModel, ConfigDict, ValidationError, field_validator
+from typing import Any
 
 ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
@@ -22,6 +22,7 @@ if str(ROOT) not in sys.path:
 
 from bin.validators.template_usage import TemplateUsageError, normalize_template_uses
 from bin.core.farplane_metric_schema import MetricObservationBatch
+from bin.validators.farplane_metric_contract import validate_metric_definition_schema
 TEXT_SUFFIXES = {
     ".json",
     ".jsonl",
@@ -103,32 +104,6 @@ ALLOWED_DIAGNOSTIC_SOURCE_IDS = {
 
 class StrictYamlModel(BaseModel):
     model_config = ConfigDict(extra="allow")
-
-
-class MetricDefinitionModel(StrictYamlModel):
-    type: Literal["flow", "stock"]
-    unit: str
-    direction: Literal["maximize", "minimize"]
-    label: str | None = None
-    description: str | None = None
-    display: Literal["bar_plus_cumulative", "line", "reading"] | None = None
-    pinned: StrictBool | None = None
-    max_age_days: int | None = None
-    guard: dict[str, Any] | None = None
-
-    @field_validator("unit")
-    @classmethod
-    def non_empty_string(cls, value: str) -> str:
-        if not isinstance(value, str) or not value.strip():
-            raise ValueError("must be a non-empty string")
-        return value.strip()
-
-    @field_validator("label", "description")
-    @classmethod
-    def optional_non_empty_string(cls, value: str | None) -> str | None:
-        if value is not None and not value.strip():
-            raise ValueError("must be a non-empty string when present")
-        return value.strip() if value is not None else None
 
 
 class MetricBindingModel(StrictYamlModel):
@@ -641,82 +616,6 @@ def validate_metrics_file(root: Path, metrics_file: Path) -> list[str]:
     return errors
 
 
-def validate_metric_definition_schema(metrics: dict[str, dict]) -> list[str]:
-    errors: list[str] = []
-    allowed_types = {"flow", "stock"}
-    allowed_displays = {"bar_plus_cumulative", "reading", "line"}
-    for metric_id, definition in sorted(metrics.items()):
-        prefix = f"farplane/metrics.yaml metrics.{metric_id}"
-        refresh_ref = definition.get("refresh_ref")
-        inline_refresh = definition.get("refresh")
-        if bool(refresh_ref) == bool(inline_refresh):
-            errors.append(f"{prefix} must declare exactly one of refresh_ref or refresh.")
-        if "product" in definition:
-            errors.append(f"{prefix}.product is retired; metrics are project-level definitions.")
-        derived_or_projection_fields = sorted(
-            field
-            for field in (
-                "aggregation",
-                "alignment",
-                "cadence",
-                "compare",
-                "cumulative",
-                "formula",
-                "kind",
-                "timezone",
-                "window",
-                "windows",
-            )
-            if field in definition
-        )
-        if derived_or_projection_fields:
-            errors.append(
-                f"{prefix} uses unsupported derived/projection config: "
-                f"{', '.join(derived_or_projection_fields)}; declare only type: "
-                "flow|stock and let refreshers emit facts while Core derives window views."
-            )
-        if "max_age_days" in definition and (
-            not isinstance(definition.get("max_age_days"), int) or definition.get("max_age_days", 0) < 1
-        ):
-            errors.append(f"{prefix}.max_age_days must be a positive integer.")
-        guard = definition.get("guard")
-        if guard is not None:
-            if not isinstance(guard, dict):
-                errors.append(f"{prefix}.guard must be an object.")
-            else:
-                if guard.get("operator") not in {"greater_than_or_equal", "less_than_or_equal"}:
-                    errors.append(
-                        f"{prefix}.guard.operator must be greater_than_or_equal or less_than_or_equal."
-                    )
-                if not isinstance(guard.get("threshold"), (int, float)):
-                    errors.append(f"{prefix}.guard.threshold must be numeric.")
-        try:
-            MetricDefinitionModel.model_validate(definition)
-        except ValidationError as exc:
-            for error in exc.errors():
-                field = pydantic_path(error)
-                error_type = str(error.get("type") or "")
-                if field in {"type", "unit", "direction"} and error_type in {
-                    "missing",
-                    "value_error",
-                    "string_type",
-                }:
-                    errors.append(f"{prefix}.{field} must be a non-empty string.")
-                elif field == "type" and error_type == "literal_error":
-                    errors.append(f"{prefix}.type must be one of: {', '.join(sorted(allowed_types))}.")
-                elif field == "direction" and error_type == "literal_error":
-                    errors.append(f"{prefix}.direction must be maximize or minimize.")
-                elif field in {"label", "description"}:
-                    errors.append(f"{prefix}.{field} must be a non-empty string when present.")
-                elif field == "display" and error_type == "literal_error":
-                    errors.append(f"{prefix}.display must be one of: {', '.join(sorted(allowed_displays))}.")
-                elif field == "pinned":
-                    errors.append(f"{prefix}.pinned must be boolean when present.")
-                else:
-                    errors.append(f"{prefix}.{field}: {error.get('msg')}.")
-    return errors
-
-
 def validate_metric_refresh_schema(metrics: dict[str, dict], refreshers: dict[str, dict]) -> list[str]:
     errors: list[str] = []
     for refresh_id, refresher in sorted(refreshers.items()):
@@ -777,6 +676,22 @@ def validate_metric_observation_files(root: Path, metrics: dict[str, dict]) -> l
                 and row.metric_id not in ALLOWED_DIAGNOSTIC_METRIC_IDS
             ):
                 unknown_metric_ids.add(row.metric_id)
+            definition = metrics.get(row.metric_id)
+            if not isinstance(definition, dict) or row.status != "available":
+                continue
+            metric_type = str(definition.get("type") or "")
+            if metric_type == "markdown" and not (
+                isinstance(row.value, str) and bool(row.value.strip())
+            ):
+                errors.append(
+                    f"{path.relative_to(root)} {row.metric_id}@{row.date} must have a non-empty Markdown value."
+                )
+            if metric_type in {"flow", "stock"} and not (
+                isinstance(row.value, (int, float)) and not isinstance(row.value, bool)
+            ):
+                errors.append(
+                    f"{path.relative_to(root)} {row.metric_id}@{row.date} must have a numeric value."
+                )
         if duplicates:
             errors.append(
                 f"{path.relative_to(root)} duplicates metric observations: {', '.join(sorted(duplicates))}."
@@ -867,6 +782,7 @@ def validate_cross_file_contract(root: Path) -> list[str]:
     metric_definitions_without_direction = sorted(
         metric_id
         for metric_id, definition in metrics.items()
+        if definition.get("type") in {"flow", "stock"}
         if definition.get("direction") not in {"maximize", "minimize"}
     )
     selected_definitions_without_freshness = sorted(
@@ -914,6 +830,17 @@ def validate_cross_file_contract(root: Path) -> list[str]:
         errors.append(
             "farplane/metrics.yaml selected metric definitions lack unit: "
             f"{', '.join(selected_metrics_without_unit)}."
+        )
+
+    selected_markdown_metrics = sorted(
+        metric_id
+        for metric_id in selected_ids
+        if metrics.get(metric_id, {}).get("type") == "markdown"
+    )
+    if selected_markdown_metrics:
+        errors.append(
+            "farplane/harness.yaml selected metrics must be quantitative; markdown metrics are observations: "
+            f"{', '.join(selected_markdown_metrics)}."
         )
 
     errors.extend(validate_snapshot_freshness(root, root / ".farplane" / "project" / "ui" / "latest.json"))

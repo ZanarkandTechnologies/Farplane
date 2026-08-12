@@ -2,8 +2,18 @@
 name: instagram-account
 description: "Turn Instagram account posting or insights requests into validated artifacts, normalized KPI snapshots, or gated API actions."
 tier: 3
-group: content-social
+group: marketing
 source: local
+methods:
+  - id: instagram-account:validate
+    class: integration
+    output: instagram-draft-validation
+  - id: instagram-account:publish
+    class: integration
+    output: instagram-publish-receipt
+  - id: instagram-account:measure
+    class: integration
+    output: instagram-metrics-snapshot
 template_uses:
   skill-template: "0.3.7"
   skill-eval-task: "0.2.0"

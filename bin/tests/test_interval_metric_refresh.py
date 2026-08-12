@@ -16,6 +16,66 @@ SPEC.loader.exec_module(metric_refresh)
 
 
 class IntervalMetricRefreshTests(unittest.TestCase):
+    def test_resolve_refresh_plan_keeps_pinned_markdown_edge_in_its_own_job(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            metrics_file = Path(tmp) / "metrics.yaml"
+            metrics_file.write_text(
+                """kind: project-metrics
+metrics:
+  edge:
+    refresh: Summarize the newest verified advantage for <YYYY-MM-DD>.
+    type: markdown
+    leverage: edge
+    pinned: true
+""",
+                encoding="utf-8",
+            )
+
+            plan = metric_refresh.resolve_refresh_plan(metrics_file, ["edge"], "2026-08-12")
+
+        self.assertEqual(plan["source_gaps"], [])
+        self.assertEqual(plan["refresh_groups"][0]["requested_metric_ids"], ["edge"])
+        self.assertEqual(plan["refresh_groups"][0]["metric_types"], {"edge": "markdown"})
+
+    def test_record_refresh_result_turns_invalid_markdown_into_a_source_gap(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            result = metric_refresh.record_refresh_result(
+                root,
+                "2026-08-12",
+                {
+                    "refresh_id": "metric:edge",
+                    "requested_metric_ids": ["edge"],
+                    "metric_types": {"edge": "markdown"},
+                },
+                {"edge": {"value": 4, "status": "available"}},
+            )
+            payload = json.loads(Path(result["path"]).read_text(encoding="utf-8"))
+
+        observation = payload["observations"][0]
+        self.assertEqual(observation["metric_id"], "edge")
+        self.assertEqual(observation["status"], "source_gap")
+        self.assertIsNone(observation["value"])
+        self.assertEqual(observation["payload"]["reason"], "invalid_markdown_refresh_value")
+
+    def test_record_refresh_result_writes_a_gap_for_missing_markdown_output(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            result = metric_refresh.record_refresh_result(
+                root,
+                "2026-08-12",
+                {
+                    "refresh_id": "metric:edge",
+                    "requested_metric_ids": ["edge"],
+                    "metric_types": {"edge": "markdown"},
+                },
+                {},
+            )
+            payload = json.loads(Path(result["path"]).read_text(encoding="utf-8"))
+
+        self.assertEqual(payload["observations"][0]["status"], "source_gap")
+        self.assertEqual(payload["observations"][0]["payload"]["reason"], "missing_markdown_refresh_output")
+
     def test_counts_completed_ticket_kpi_rewards_for_date(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

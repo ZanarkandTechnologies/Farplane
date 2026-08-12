@@ -62,15 +62,32 @@ def resolve_refresh_plan(
         if bool(refresh_ref) == bool(inline):
             gaps.append(f"invalid_refresh_owner:{metric_id}")
             continue
+        metric_type = str(definition.get("type") or "")
         if inline:
-            jobs[f"metric:{metric_id}"] = {"refresh_id": f"metric:{metric_id}", "refresh": inline.replace("<YYYY-MM-DD>", date), "provides": [metric_id], "requested_metric_ids": [metric_id]}
+            jobs[f"metric:{metric_id}"] = {
+                "refresh_id": f"metric:{metric_id}",
+                "refresh": inline.replace("<YYYY-MM-DD>", date),
+                "provides": [metric_id],
+                "requested_metric_ids": [metric_id],
+                "metric_types": {metric_id: metric_type},
+            }
             continue
         refresher = refreshers.get(refresh_ref)
         if not isinstance(refresher, dict) or not str(refresher.get("refresh") or "").strip():
             gaps.append(f"missing_refresher:{metric_id}:{refresh_ref}")
             continue
-        job = jobs.setdefault(refresh_ref, {"refresh_id": refresh_ref, "refresh": str(refresher["refresh"]).replace("<YYYY-MM-DD>", date), "provides": list(refresher.get("provides") or []), "requested_metric_ids": []})
+        job = jobs.setdefault(
+            refresh_ref,
+            {
+                "refresh_id": refresh_ref,
+                "refresh": str(refresher["refresh"]).replace("<YYYY-MM-DD>", date),
+                "provides": list(refresher.get("provides") or []),
+                "requested_metric_ids": [],
+                "metric_types": {},
+            },
+        )
         job["requested_metric_ids"].append(metric_id)
+        job["metric_types"][metric_id] = metric_type
     return {"date": date, "refresh_groups": list(jobs.values()), "skipped_metric_ids": skipped, "source_gaps": gaps}
 
 
@@ -88,10 +105,23 @@ def record_refresh_result(project_root: Path, date: str, job: dict[str, Any], re
     gaps: list[str] = []
     for metric_id in job.get("requested_metric_ids", []):
         reading = readings.get(metric_id)
+        metric_types = job.get("metric_types") if isinstance(job.get("metric_types"), dict) else {}
+        metric_type = str(metric_types.get(metric_id) or "")
         if not isinstance(reading, dict):
             gaps.append(f"missing_refresh_output:{metric_id}")
-            continue
-        observations.append(observation_from_reading(metric_id, date, reading, {"refresh_id": job.get("refresh_id")}))
+            reading = {
+                "status": "source_gap",
+                "payload": {"reason": f"missing_{metric_type or 'metric'}_refresh_output"},
+            }
+        observations.append(
+            observation_from_reading(
+                metric_id,
+                date,
+                reading,
+                {"refresh_id": job.get("refresh_id")},
+                metric_type,
+            )
+        )
     path = write_metric_batch(project_root, str(job.get("refresh_id") or "metric_refresh"), date, observations, gaps=gaps, payload={"requested_metric_ids": job.get("requested_metric_ids", [])})
     return {"path": str(path), "observation_metric_ids": [row.metric_id for row in observations], "source_gaps": gaps}
 

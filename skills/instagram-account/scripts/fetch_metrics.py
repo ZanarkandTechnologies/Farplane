@@ -349,6 +349,19 @@ def fetch_metrics(
     content_items: list[dict[str, Any]] = []
 
     profile = instagram_get(version, "/me", token, {"fields": "id,user_id,followers_count,media_count,username"})
+    account_id = str(profile.get("id") or profile.get("user_id") or "").strip()
+    username = str(profile.get("username") or "").strip().lstrip("@")
+    distribution_account = (
+        {
+            "platform": "instagram",
+            "account_id": account_id,
+            "label": f"@{username}" if username else "Instagram account",
+        }
+        if account_id
+        else None
+    )
+    if distribution_account is None:
+        gaps.append("instagram_distribution_account_identity_unavailable")
     followers = profile.get("followers_count")
     if followers is not None:
         observations.append(observation("instagram_followers", float(followers), snapshot_date))
@@ -423,6 +436,7 @@ def fetch_metrics(
         "gaps": gaps,
         "payload": {
             "source": "instagram_account_metrics",
+            **({"distribution_account": distribution_account} if distribution_account else {}),
             "metrics": compact_metrics(observations, content_items),
             "endpoints": sorted(set(endpoints)),
             "graph_version": version,

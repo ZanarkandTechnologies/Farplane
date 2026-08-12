@@ -109,6 +109,10 @@ A metric card makes the measurement choice explicit and falsifiable.
 - Type means aggregation semantics: flows sum inside a window and across
   history; stocks select the latest known value at each window boundary and
   never emit cumulative totals.
+- A `markdown` type is only one current qualitative paragraph (for example,
+  project Edge), not a score: Core selects the latest valid dated paragraph and
+  exposes no comparison, series, or cumulative value. It cannot declare a
+  unit, direction, target, guard, or display hint.
 - Judgment rubrics are allowed when they are more honest than pseudo-precision.
 - Metric changes update the downstream workflow that consumes them.
 

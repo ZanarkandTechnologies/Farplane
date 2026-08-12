@@ -2,8 +2,18 @@
 name: x-account
 description: "Turn X account posting or metrics requests into validated drafts, normalized KPI snapshots, or gated API actions."
 tier: 3
-group: content-social
+group: marketing
 source: local
+methods:
+  - id: x-account:validate
+    class: integration
+    output: x-draft-validation
+  - id: x-account:publish
+    class: integration
+    output: x-publish-receipt
+  - id: x-account:measure
+    class: integration
+    output: x-metrics-snapshot
 template_uses:
   skill-template: "0.3.7"
   skill-eval-task: "0.2.0"

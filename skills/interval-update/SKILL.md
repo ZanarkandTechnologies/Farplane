@@ -2,7 +2,7 @@
 name: interval-update
 description: "Turn one Daily or Weekly evidence window into a first-principles bottleneck review, dated report, sparse highlights, and concrete ticket deltas."
 tier: 3
-group: harness
+group: operations
 source: local
 template_uses:
   skill-template: "0.2.0"

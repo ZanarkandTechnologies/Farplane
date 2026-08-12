@@ -409,7 +409,14 @@ def fetch_metrics(
         user_id, user_payload, user_endpoints = resolve_user(file_values, profile_auth)
     username = env_value("FARPLANE_X_USERNAME", file_values)
     endpoints.extend(user_endpoints)
-    public_metrics = (user_payload.get("data") or {}).get("public_metrics") or {}
+    profile = user_payload.get("data") if isinstance(user_payload.get("data"), dict) else {}
+    profile_username = str(profile.get("username") or username or "").strip().lstrip("@")
+    distribution_account = {
+        "platform": "x",
+        "account_id": user_id,
+        "label": f"@{profile_username}" if profile_username else "X account",
+    }
+    public_metrics = profile.get("public_metrics") or {}
     followers = public_metrics.get("followers_count")
     if followers is not None:
         observations.append(observation("x_followers", float(followers), snapshot_date))
@@ -502,6 +509,7 @@ def fetch_metrics(
         "gaps": gaps,
         "payload": {
             "source": "x_account_metrics",
+            "distribution_account": distribution_account,
             "metrics": compact_metrics(observations, content_items),
             "endpoints": endpoints,
             "post_ids": explicit_tweet_ids,

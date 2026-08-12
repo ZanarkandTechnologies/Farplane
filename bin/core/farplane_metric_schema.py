@@ -18,7 +18,7 @@ class MetricObservation(BaseModel):
 
     metric_id: str
     date: str
-    value: float | None
+    value: float | str | None
     status: MetricStatus = "available"
     payload: dict[str, Any] = Field(default_factory=dict)
 
@@ -32,7 +32,9 @@ class MetricObservation(BaseModel):
     @model_validator(mode="after")
     def available_has_value(self) -> "MetricObservation":
         if self.status == "available" and self.value is None:
-            raise ValueError("available observations must include a numeric value")
+            raise ValueError("available observations must include a value")
+        if self.status == "available" and isinstance(self.value, str) and not self.value.strip():
+            raise ValueError("available string observations must be non-empty")
         return self
 
 
@@ -58,14 +60,20 @@ class MetricObservationBatch(BaseModel):
 def metric_observation(
     metric_id: str,
     date: str,
-    value: float | int | None,
+    value: float | int | str | None,
     status: MetricStatus = "available",
     payload: dict[str, Any] | None = None,
 ) -> MetricObservation:
     return MetricObservation(
         metric_id=metric_id,
         date=date,
-        value=float(value) if isinstance(value, (int, float)) else None,
+        value=(
+            value.strip()
+            if isinstance(value, str)
+            else float(value)
+            if isinstance(value, (int, float)) and not isinstance(value, bool)
+            else None
+        ),
         status=status,
         payload=payload or {},
     )
@@ -76,13 +84,27 @@ def observation_from_reading(
     date: str,
     reading: dict[str, Any],
     payload_extra: dict[str, Any] | None = None,
+    metric_type: str | None = None,
 ) -> MetricObservation:
     payload = reading.get("payload") if isinstance(reading.get("payload"), dict) else {}
     if payload_extra:
         payload = {**payload, **payload_extra}
     raw_status = str(reading.get("status") or "available")
     status: MetricStatus = raw_status if raw_status in {"available", "source_gap", "not_applicable", "blocked"} else "source_gap"  # type: ignore[assignment]
-    return metric_observation(metric_id, date, reading.get("value"), status, payload)
+    value = reading.get("value")
+    expected_type = str(metric_type or "").strip()
+    valid_value = (
+        isinstance(value, str) and bool(value.strip())
+        if expected_type == "markdown"
+        else isinstance(value, (int, float)) and not isinstance(value, bool)
+        if expected_type in {"flow", "stock"}
+        else isinstance(value, (int, float, str)) and not isinstance(value, bool)
+    )
+    if status == "available" and not valid_value:
+        status = "source_gap"
+        payload = {**payload, "reason": f"invalid_{expected_type or 'metric'}_refresh_value"}
+        value = None
+    return metric_observation(metric_id, date, value, status, payload)
 
 
 def metric_batch(

@@ -13,6 +13,13 @@ import farplane
 
 
 class FarplaneCliParserTests(unittest.TestCase):
+    def test_project_snapshot_supplies_projection_window_defaults(self) -> None:
+        args = farplane.build_parser().parse_args(["project", "snapshot"])
+
+        self.assertIsNone(args.window_start)
+        self.assertIsNone(args.window_end)
+        self.assertEqual(args.timezone, "UTC")
+
     def test_ticket_finalize_binds_verified_github_issue_url(self) -> None:
         args = farplane.build_parser().parse_args(
             [

@@ -374,6 +374,7 @@ metrics:
     unit: followers
     display: line
     direction: maximize
+    leverage: distribution
   x_views:
     refresh_ref: x_account_metrics
     label: X views
@@ -384,6 +385,7 @@ metrics:
     display: bar_plus_cumulative
     direction: maximize
     max_age_days: 7
+    leverage: distribution
   x_likes:
     refresh_ref: x_account_metrics
     label: X likes
@@ -402,6 +404,7 @@ metrics:
     unit: followers
     display: line
     direction: maximize
+    leverage: distribution
   instagram_views:
     refresh_ref: instagram_account_metrics
     label: Instagram views
@@ -412,6 +415,7 @@ metrics:
     display: bar_plus_cumulative
     direction: maximize
     max_age_days: 7
+    leverage: distribution
   instagram_likes:
     refresh_ref: instagram_account_metrics
     label: Instagram likes
@@ -457,6 +461,7 @@ metrics:
     unit: accounts
     display: bar_plus_cumulative
     direction: maximize
+    leverage: distribution
   instagram_total_interactions:
     refresh_ref: instagram_account_metrics
     label: Instagram total interactions
@@ -493,6 +498,21 @@ metrics:
     unit: percent
     display: line
     direction: maximize
+  edge:
+    refresh: >-
+      Review the newest verifiable project evidence in tickets, accepted proof,
+      reports, and public artifacts for <YYYY-MM-DD>. Write exactly one concise
+      Markdown paragraph describing Farplane's current demonstrable advantage,
+      grounding it in specific evidence paths or observed behavior. Do not
+      include secrets, private source material, aspiration, or a numerical
+      score. If the current advantage cannot be supported, return status
+      source_gap with the reason instead of prose.
+    label: Edge
+    description: Current evidence-backed project advantage, refreshed as one Markdown field.
+    pinned: true
+    type: markdown
+    leverage: edge
+    max_age_days: 1
   posts_published:
     refresh_ref: local_project_metrics
     label: Posts published
