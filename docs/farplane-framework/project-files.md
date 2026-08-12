@@ -136,7 +136,7 @@ one inline `refresh`, but never both. The Daily Interval agent resolves stale
 selected metrics into unique groups, executes each prompt once, and stores
 separate flat observations.
 
-Canonical reusable metric semantics. Each **quantitative** definition requires
+Each **quantitative** definition requires
 `type: flow | stock`, `unit`, `direction: maximize | minimize`, and one refresh
 source. Labels, descriptions, display hints, freshness, pinned state, and hard
 guards are optional. Flow means additive activity; stock means a point-in-time
@@ -173,6 +173,11 @@ and do not author duplicate growth, timeframe, or cumulative metrics.
 
 Metric observations remain generated runtime evidence under `.farplane/`; this
 tracked file defines what the observations mean, not their current values.
+
+For Leverage, the project snapshot compiler materializes the explicit
+Distribution and Edge cards in `.farplane/project/ui/latest.json`. That is a
+read-only handoff to Farplane UI; company Capital remains Finance-owned state,
+outside the project metric store.
 
 ### `farplane/bindings.yaml`
 

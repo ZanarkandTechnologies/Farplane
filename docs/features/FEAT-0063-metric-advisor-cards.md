@@ -3,7 +3,7 @@ title: Metric advisor cards
 status: implemented
 owner: feature-registry
 created_at: 2026-06-26
-updated_at: 2026-07-26
+updated_at: 2026-08-13
 tags:
   - farplane
   - feature
@@ -101,18 +101,11 @@ be stated before self-improvement or productization claims.
 
 A metric card makes the measurement choice explicit and falsifiable.
 
-- Every quantitative card names objective, primary metric, evidence source,
-  direction, guard metrics, and anti-metrics.
-- The card states what would make the metric misleading.
-- Direction means favorable movement: a positive progress delta is favorable
-  for both maximize and minimize metrics after Core normalizes the raw delta.
-- Type means aggregation semantics: flows sum inside a window and across
-  history; stocks select the latest known value at each window boundary and
-  never emit cumulative totals.
-- A `markdown` type is only one current qualitative paragraph (for example,
-  project Edge), not a score: Core selects the latest valid dated paragraph and
-  exposes no comparison, series, or cumulative value. It cannot declare a
-  unit, direction, target, guard, or display hint.
+- Every quantitative card names its objective, primary metric, evidence source,
+  direction, guard metrics, anti-metrics, and the condition that would make it
+  misleading.
+- Core owns metric-type, aggregation, and Markdown-Edge semantics; see
+  [`farplane/metrics.yaml`](../farplane-framework/project-files.md#farplanemetricsyaml).
 - Judgment rubrics are allowed when they are more honest than pseudo-precision.
 - Metric changes update the downstream workflow that consumes them.
 
