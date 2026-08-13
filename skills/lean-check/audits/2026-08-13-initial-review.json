@@ -1,0 +1,100 @@
+{
+  "work_type": "skill-change prompt-change eval-change integration evidence review",
+  "search_scope": [
+    "skills/lean-check/audits/2026-08-13-initial-review-handoff.json",
+    "skills/review/SKILL.md",
+    "docs/review/rubrics/skill-contract.md",
+    "docs/review/rubrics/prompt-quality.md",
+    "docs/review/rubrics/eval-quality.md",
+    "docs/review/rubrics/integration-readiness.md",
+    "docs/review/rubrics/evidence-quality.md",
+    "skills/lean-check/",
+    "skills/impl-plan/",
+    "templates/global/AGENTS.md",
+    "skills/eval/examples/farplane-global-harness/tasks.json",
+    "docs/skills/README.md",
+    "docs/skills/registry.jsonl",
+    "docs/templates/registry.jsonl",
+    ".farplane/evals/runs/20260813-082547-lean-check-final/summary.json",
+    "~/.codex/skills/lean-check/SKILL.md",
+    "~/.codex/AGENTS.md"
+  ],
+  "rubrics_used": [
+    "skill-contract",
+    "prompt-quality",
+    "eval-quality",
+    "integration-readiness",
+    "evidence-quality"
+  ],
+  "adversarial_rejection_attempts": [
+    "Exact rung ordering is preserved in the skill, global fallback, and focused eval rows.",
+    "Callers retain compact invocation language while lean-check owns the receipt, checklist, and detailed rung contract.",
+    "impl-plan calls lean-check once after context resolution without adding a parallel ticket schema.",
+    "No numeric leanness score is introduced.",
+    "The final run has seven task artifacts and seven A verdicts, one for each rung.",
+    "Generated registry, template registry, tier, surface-budget, capability, doc-reference, eval-query, and harness-invariant checks passed.",
+    "The source SKILL.md and global AGENTS.md matched their installed live copies before final package refresh."
+  ],
+  "overall_tas": "TAS-A",
+  "verdict": "pass",
+  "rerun_required": false,
+  "hard_gate_failures": [],
+  "failed_checks": [],
+  "finding_log": [
+    {
+      "severity": "info",
+      "check": "read_only_rerun_limit",
+      "finding": "The reviewer sandbox could not create a pycache during check_skills.py; its read-only subchecks passed, and the author-side write run had already passed.",
+      "blocks_pass": false
+    }
+  ],
+  "rubric_sections": [
+    {
+      "family": "skill-contract",
+      "tas": "TAS-A",
+      "pass": true,
+      "checks": ["trigger-clear", "scope-bounded", "checklist-operational", "file-repeatable", "proof-explicit", "source-of-truth-clear"],
+      "failed_checks": [],
+      "findings": ["The skill is repeatable from files, provides an inspectable receipt, and has no harmful first-load bloat or numeric score."],
+      "next_action": "Advance."
+    },
+    {
+      "family": "prompt-quality",
+      "tas": "TAS-A",
+      "pass": true,
+      "checks": ["task-clarity", "context-contract", "role-boundary", "output-contract", "groundedness-and-safety"],
+      "failed_checks": [],
+      "findings": ["The global template invokes the skill with a compact unavailable-skill fallback; impl-plan consumes one receipt without restating the ladder."],
+      "next_action": "Advance."
+    },
+    {
+      "family": "eval-quality",
+      "tas": "TAS-A",
+      "pass": true,
+      "checks": ["fixture-stable", "reference-points-observable", "judge-separated", "all-seven-rungs-covered"],
+      "failed_checks": [],
+      "findings": ["Seven focused rows cover skip, reuse_local, standard_library, native_platform, installed_dependency, inline, and minimum_new_code; the final run is 7/7 A."],
+      "next_action": "Advance."
+    },
+    {
+      "family": "integration-readiness",
+      "tas": "TAS-A",
+      "pass": true,
+      "checks": ["integration-safety", "contract-correctness", "dependency-readiness", "coupling-risk", "merge-readiness"],
+      "failed_checks": [],
+      "findings": ["Global policy, lean-check, impl-plan, docs inventory, generated registry rows, and global harness eval examples agree on one contract."],
+      "next_action": "Advance."
+    },
+    {
+      "family": "evidence-quality",
+      "tas": "TAS-A",
+      "pass": true,
+      "checks": ["main-claim-proven", "important-edge-claims-proven", "replayable", "claim-artifact-map", "summary-matches-proof"],
+      "failed_checks": [],
+      "findings": ["Final eval, validator, registry, and installed-copy evidence is traceable and matches the claim."],
+      "next_action": "Advance."
+    }
+  ],
+  "blocking_findings": [],
+  "next_action": "Pass the review; no rerun or repair is required before advancing the lean-check change."
+}

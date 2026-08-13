@@ -1,0 +1,50 @@
+{
+  "task_path": "skills/lean-check/audits/2026-08-13-initial-lean-check.md",
+  "review_focus": "skill-change, prompt-change, eval-change, integration, evidence",
+  "changed_files": [
+    "skills/lean-check/SKILL.md",
+    "skills/lean-check/qa_checklist.md",
+    "skills/lean-check/evals/evals.json",
+    "skills/lean-check/audits/2026-08-13-initial-lean-check.md",
+    "skills/impl-plan/SKILL.md",
+    "skills/impl-plan/qa_checklist.md",
+    "skills/impl-plan/prompts/plan.md",
+    "skills/impl-plan/evals/evals.json",
+    "templates/global/AGENTS.md",
+    "skills/eval/examples/farplane-global-harness/tasks.json",
+    "docs/skills/README.md",
+    "docs/skills/registry.jsonl",
+    "docs/templates/registry.jsonl"
+  ],
+  "evidence": [
+    "python3 skills/skill-creator/scripts/quick_validate.py skills/lean-check",
+    "python3 skills/eval/scripts/check_eval_queries.py --root .",
+    "python3 skills/skill-maintenance/scripts/check_skills.py --write",
+    "python3 bin/validators/check_harness_invariants.py",
+    ".farplane/evals/runs/20260813-082547-lean-check-final/summary.json",
+    "cmp -s skills/lean-check/SKILL.md ~/.codex/skills/lean-check/SKILL.md",
+    "cmp -s templates/global/AGENTS.md ~/.codex/AGENTS.md"
+  ],
+  "rubric_families": [
+    "skill-contract",
+    "prompt-quality",
+    "eval-quality",
+    "integration-readiness",
+    "evidence-quality"
+  ],
+  "required_tas": {
+    "skill-contract": "TAS-A",
+    "prompt-quality": "TAS-A",
+    "eval-quality": "TAS-A",
+    "integration-readiness": "TAS-A",
+    "evidence-quality": "TAS-A"
+  },
+  "hard_gates": [
+    "Another agent can run lean-check from files alone.",
+    "The detailed ladder has one owner; callers retain only the compact invocation/fallback rule needed at first load.",
+    "impl-plan calls lean-check once after context resolution without adding a parallel ticket schema.",
+    "Each ladder rung has focused regression coverage and no numeric leanness score is introduced.",
+    "The install source and live copies agree after final packaging."
+  ],
+  "expected_output": "skills/lean-check/audits/2026-08-13-initial-review.json"
+}
