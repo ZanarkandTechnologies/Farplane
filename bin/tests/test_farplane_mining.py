@@ -40,8 +40,9 @@ LEARNING_PROGRAM_REF = "core:ticket-completion-learning@1.3.0"
 ACTIVE_LEARNING_PROGRAM_REF = "core:ticket-completion-learning@1.4.0"
 
 
-def ticket_text(status: str = "completed") -> str:
-    return f"---\nstatus: {status}\n---\n\n# Ticket\n\nProof stays local.\n"
+def ticket_text(status: str = "completed", thread_id: str | None = None) -> str:
+    thread_line = f"thread_id: {thread_id}\n" if thread_id else ""
+    return f"---\nstatus: {status}\n{thread_line}---\n\n# Ticket\n\nProof stays local.\n"
 
 
 def write_project(root: Path, route_ids: tuple[str, ...] = ("completion",)) -> Path:
@@ -95,7 +96,7 @@ class FarplaneMiningTests(unittest.TestCase):
         self.assertIn("Return no pre-QA gate finding", instructions)
         self.assertIn("waiting signal or dated check-in", instructions)
 
-    def test_mine_ticket_resolves_archived_ticket_and_associated_thread_from_id(self) -> None:
+    def test_mine_ticket_resolves_archived_ticket_and_its_owned_thread(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             ticket = write_project(root)
@@ -106,15 +107,10 @@ class FarplaneMiningTests(unittest.TestCase):
                 f"    program_ref: {LEARNING_PROGRAM_REF}\n",
                 encoding="utf-8",
             )
+            ticket.write_text(ticket_text(thread_id="thread-1"), encoding="utf-8")
             archive = root / "tickets" / "archive" / "TASK-0001"
             archive.parent.mkdir(parents=True)
             ticket.parent.rename(archive)
-            state = root / ".farplane" / "state"
-            state.mkdir(parents=True)
-            (state / "ticket-thread-associations.jsonl").write_text(
-                json.dumps({"ticket_id": "TASK-0001", "thread_id": "thread-1"}) + "\n",
-                encoding="utf-8",
-            )
 
             def no_signal_runner(command: list[str], prompt: str, cwd: Path, timeout: int):
                 Path(command[command.index("--output-last-message") + 1]).write_text(

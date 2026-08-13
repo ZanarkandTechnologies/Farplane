@@ -200,29 +200,25 @@ It should not shrink the ticket into a safer internal slice unless the ticket,
 proof route, safety boundary, external dependency, or reviewer finding creates
 a real split.
 
-## Ticket Thread Association
+## Ticket Task Thread
 
-Ticket-level autonomy metrics need to know which Codex thread owned a ticket
-after execution started. Raw thread or session IDs are runtime state, not ticket
-frontmatter. Store them under the ignored runtime state path:
+Each ticket may own exactly one persistent Codex task thread in its frontmatter:
 
-```text
-.farplane/state/ticket-thread-associations.jsonl
+```yaml
+thread_id: "019f..."
 ```
 
-Each row should be a compact JSON object:
+The root `UserPromptSubmit` hook writes this field only when an active, unbound
+ticket is named exactly once. It never replaces an existing value. Continuations
+of that task keep the same ID; context-isolating helpers and review/research
+subagents are internal execution details, not ticket threads.
 
-```json
-{"ticket_id":"TASK-0000","thread_id":"019f...","execution_started_at":"2026-07-01T10:00:00Z"}
-```
-
-`session_id` may be used instead of `thread_id` when that is the available
-runtime identifier. The reducer counts user turns after
-`execution_started_at` and before the ticket completion time. Missing,
-ambiguous, or polluted association data must become a metric source gap rather
-than a guessed intervention count. Keep stable human-facing ownership in ticket
-frontmatter fields such as `claimed_by`; keep raw transport identifiers in
-`.farplane/state/`.
+The field is the canonical ticket-to-task-thread join for lifecycle telemetry,
+completion mining, the UI, and ticket-level metrics. `claimed_by` remains the
+temporary human-facing live owner. Raw transport/session state and historical
+completion-only observations may stay in `.farplane/state/`, but cannot invent
+or override a ticket's `thread_id`. Missing task threads must become a metric
+source gap rather than a guessed intervention count.
 
 ## Skill Cooperation
 

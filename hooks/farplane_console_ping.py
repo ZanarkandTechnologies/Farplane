@@ -3,13 +3,13 @@
 
 from __future__ import annotations
 
-import hashlib
 import json
 import os
 import re
 import socket
 import sys
 import tempfile
+import time
 import urllib.error
 import urllib.request
 from datetime import datetime, timezone
@@ -25,6 +25,9 @@ from runtime_config import codex_home, hydrate_process_env, read_config_value
 
 TITLE_LIMIT = 120
 SESSION_INDEX_READ_LIMIT = 8 * 1024 * 1024
+THREAD_ID_LIMIT = 160
+TICKET_THREAD_LOCK_WAIT_SECONDS = 4.0
+TICKET_THREAD_LOCK_STALE_SECONDS = 60.0
 TICKET_ID_PATTERN = re.compile(r"\bTASK-\d{4}\b")
 
 
@@ -212,73 +215,166 @@ def resolve_thread_name(thread_id: str | None) -> str | None:
     return latest
 
 
-def safe_thread_id(thread_id: str) -> str:
-    safe = re.sub(r"[^A-Za-z0-9._-]+", "-", thread_id).strip(".-")
-    digest = hashlib.sha256(thread_id.encode("utf-8")).hexdigest()[:12]
-    return f"{(safe or 'thread')[:140]}-{digest}"
+def decode_frontmatter_scalar(value: str) -> str:
+    raw = value.strip()
+    if len(raw) >= 2 and raw[0] == raw[-1] == '"':
+        try:
+            decoded = json.loads(raw)
+        except json.JSONDecodeError:
+            return ""
+        return decoded if isinstance(decoded, str) else ""
+    if len(raw) >= 2 and raw[0] == raw[-1] == "'":
+        return raw[1:-1]
+    return raw
 
 
-def title_binding_path(project_root: Path, thread_id: str) -> Path:
-    return project_root / ".farplane" / "state" / "thread-title-bindings" / f"{safe_thread_id(thread_id)}.json"
+def ticket_frontmatter_lines(text: str) -> tuple[list[str], str] | None:
+    if not text.startswith("---\n"):
+        return None
+    parts = text.split("\n---\n", 1)
+    if len(parts) != 2:
+        return None
+    return parts[0][4:].splitlines(), parts[1]
 
 
-def read_title_binding(project_root: Path, thread_id: str) -> dict[str, str] | None:
-    path = title_binding_path(project_root, thread_id)
+def ticket_scalar(lines: list[str], key: str) -> str:
+    prefix = f"{key}:"
+    for line in lines:
+        if line.startswith(prefix):
+            return decode_frontmatter_scalar(line[len(prefix) :])
+    return ""
+
+
+def ticket_thread_id(ticket_path: Path) -> str:
     try:
-        row = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError):
-        return None
-    if not isinstance(row, dict) or row.get("threadId") != thread_id:
-        return None
-    ticket_id = clean_text(row.get("ticketId"), 16)
-    ticket_title = clean_title(row.get("ticketTitle"))
-    ticket_display_title = clean_title(row.get("ticketDisplayTitle"))
-    if not ticket_id or not TICKET_ID_PATTERN.fullmatch(ticket_id) or not ticket_title or not ticket_display_title:
+        parsed = ticket_frontmatter_lines(ticket_path.read_text(encoding="utf-8", errors="replace"))
+    except OSError:
+        return ""
+    if parsed is None:
+        return ""
+    thread_id = ticket_scalar(parsed[0], "thread_id").strip()
+    if not thread_id or len(thread_id) > THREAD_ID_LIMIT or any(ord(char) < 32 for char in thread_id):
+        return ""
+    return thread_id
+
+
+def ticket_paths(project_root: Path) -> list[Path]:
+    active = project_root / "tickets"
+    archived = active / "archive"
+    return sorted({*active.glob("TASK-*/ticket.md"), *archived.glob("TASK-*/ticket.md")})
+
+
+def ticket_paths_for_id(project_root: Path, ticket_id: str) -> list[Path]:
+    active = project_root / "tickets" / ticket_id / "ticket.md"
+    archived = project_root / "tickets" / "archive" / ticket_id / "ticket.md"
+    return [path for path in (active, archived) if path.is_file()]
+
+
+def ticket_binding(ticket_path: Path, ticket_id: str) -> dict[str, str] | None:
+    title = ticket_title(ticket_path, ticket_id)
+    display_title = clean_title(f"[{ticket_id}] {title}") if title else None
+    if not title or not display_title:
         return None
     return {
         "ticketId": ticket_id,
-        "ticketTitle": ticket_title,
-        "ticketDisplayTitle": ticket_display_title,
+        "ticketTitle": title,
+        "ticketDisplayTitle": display_title,
     }
 
 
-def write_title_binding(project_root: Path, thread_id: str, binding: dict[str, str]) -> bool:
-    path = title_binding_path(project_root, thread_id)
-    row = {
-        "version": 1,
-        "threadId": thread_id,
-        "ticketId": binding["ticketId"],
-        "ticketPath": binding["ticketPath"],
-        "ticketTitle": binding["ticketTitle"],
-        "ticketDisplayTitle": binding["ticketDisplayTitle"],
-        "observedAt": now_iso(),
-        "source": "codex-user-prompt",
-    }
-    temporary_path: Path | None = None
+def ticket_thread_lock_path(project_root: Path, ticket_path: Path) -> Path:
+    return (
+        project_root
+        / ".farplane"
+        / "state"
+        / "ticket-thread-locks"
+        / f"{ticket_path.parent.name}.lock"
+    )
+
+
+def acquire_ticket_thread_lock(lock_path: Path) -> bool:
+    """Acquire the lock directory shared by Python hooks and Node ticket writers."""
+    lock_path.parent.mkdir(parents=True, exist_ok=True)
+    deadline = time.monotonic() + TICKET_THREAD_LOCK_WAIT_SECONDS
+    while True:
+        try:
+            lock_path.mkdir()
+            return True
+        except FileExistsError:
+            try:
+                age_seconds = time.time() - lock_path.stat().st_mtime
+            except OSError:
+                continue
+            if age_seconds > TICKET_THREAD_LOCK_STALE_SECONDS:
+                try:
+                    lock_path.rmdir()
+                except OSError:
+                    pass
+                continue
+            if time.monotonic() >= deadline:
+                return False
+            time.sleep(0.025)
+        except OSError:
+            return False
+
+
+def release_ticket_thread_lock(lock_path: Path) -> None:
     try:
-        path.parent.mkdir(parents=True, exist_ok=True)
+        lock_path.rmdir()
+    except OSError:
+        pass
+
+
+def write_ticket_thread_id(project_root: Path, ticket_path: Path, thread_id: str) -> str:
+    """Bind an unclaimed ticket to one root Codex thread without overwriting it."""
+    if not thread_id or len(thread_id) > THREAD_ID_LIMIT or any(ord(char) < 32 for char in thread_id):
+        return "invalid"
+    temporary_path: Path | None = None
+    lock_path = ticket_thread_lock_path(project_root, ticket_path)
+    lock_acquired = False
+    try:
+        lock_acquired = acquire_ticket_thread_lock(lock_path)
+        if not lock_acquired:
+            return "error"
+        text = ticket_path.read_text(encoding="utf-8")
+        parsed = ticket_frontmatter_lines(text)
+        if parsed is None:
+            return "invalid"
+        lines, body = parsed
+        current = ticket_scalar(lines, "thread_id").strip()
+        if current:
+            return "same" if current == thread_id else "conflict"
+        insert_at = next(
+            (index + 1 for index, line in enumerate(lines) if line.startswith("ticket_id:")),
+            len(lines),
+        )
+        lines.insert(insert_at, f"thread_id: {json.dumps(thread_id)}")
+        frontmatter = "\n".join(lines)
+        updated = f"---\n{frontmatter}\n---\n{body}"
         with tempfile.NamedTemporaryFile(
             mode="w",
             encoding="utf-8",
-            dir=path.parent,
-            prefix=f".{path.name}.",
+            dir=ticket_path.parent,
+            prefix=f".{ticket_path.name}.",
             suffix=".tmp",
             delete=False,
         ) as handle:
-            json.dump(row, handle, indent=2, sort_keys=True)
-            handle.write("\n")
+            handle.write(updated)
             handle.flush()
             os.fsync(handle.fileno())
             temporary_path = Path(handle.name)
-        os.replace(temporary_path, path)
-        return True
+        os.replace(temporary_path, ticket_path)
+        return "bound"
     except OSError:
-        if temporary_path is not None:
+        return "error"
+    finally:
+        if lock_acquired:
+            release_ticket_thread_lock(lock_path)
+        if temporary_path is not None and temporary_path.exists():
             try:
-                temporary_path.unlink(missing_ok=True)
+                temporary_path.unlink()
             except OSError:
                 pass
-        return False
 
 
 def ticket_title(ticket_path: Path, ticket_id: str) -> str | None:
@@ -301,56 +397,55 @@ def ticket_title(ticket_path: Path, ticket_id: str) -> str | None:
     return clean_title(heading.group(1)) if heading else None
 
 
-def resolve_ticket_title_binding(
+def resolve_ticket_thread_binding(
     event: dict[str, object],
     project_root: Path | None,
     thread_id: str | None,
 ) -> dict[str, str] | None:
     if project_root is None or not thread_id:
         return None
+
+    matching_paths = [path for path in ticket_paths(project_root) if ticket_thread_id(path) == thread_id]
+    if len(matching_paths) == 1:
+        ticket_id = matching_paths[0].parent.name
+        return ticket_binding(matching_paths[0], ticket_id)
+    if len(matching_paths) > 1:
+        print(
+            f"farplane: thread {thread_id} is bound to multiple tickets; lifecycle ticket context omitted",
+            file=sys.stderr,
+        )
+        return None
+
     current_hook = hook_type(event)
     if current_hook != "UserPromptSubmit":
-        return read_title_binding(project_root, thread_id)
+        return None
 
     prompt = event.get("prompt")
     if not isinstance(prompt, str):
-        return read_title_binding(project_root, thread_id)
+        return None
     ticket_ids = list(dict.fromkeys(TICKET_ID_PATTERN.findall(prompt)))
     if not ticket_ids:
-        return read_title_binding(project_root, thread_id)
+        return None
     if len(ticket_ids) != 1:
         return None
 
     ticket_id = ticket_ids[0]
-    active = project_root / "tickets" / ticket_id / "ticket.md"
-    archived = project_root / "tickets" / "archive" / ticket_id / "ticket.md"
-    candidates = [path for path in (active, archived) if path.is_file()]
+    candidates = ticket_paths_for_id(project_root, ticket_id)
     if len(candidates) != 1:
         return None
     ticket_path = candidates[0]
-    resolved_root = project_root.resolve()
-    resolved_ticket_root = (resolved_root / "tickets").resolve()
-    try:
-        resolved_ticket = ticket_path.resolve(strict=True)
-        resolved_ticket.relative_to(resolved_ticket_root)
-        relative_path = resolved_ticket.relative_to(resolved_root)
-    except (OSError, ValueError):
+    if ticket_path.parent.parent.name == "archive":
         return None
-    resolved_title = ticket_title(ticket_path, ticket_id)
-    if not resolved_title:
+    result = write_ticket_thread_id(project_root, ticket_path, thread_id)
+    if result == "conflict":
+        print(
+            f"farplane: {ticket_id} already owns a different task thread; lifecycle ticket context omitted",
+            file=sys.stderr,
+        )
         return None
-    display_title = clean_title(f"[{ticket_id}] {resolved_title}")
-    if not display_title:
+    if result not in {"bound", "same"}:
         return None
-    binding = {
-        "ticketId": ticket_id,
-        "ticketPath": relative_path.as_posix(),
-        "ticketTitle": resolved_title,
-        "ticketDisplayTitle": display_title,
-    }
-    if not write_title_binding(project_root, thread_id, binding):
-        return None
-    return {key: binding[key] for key in ("ticketId", "ticketTitle", "ticketDisplayTitle")}
+    return ticket_binding(ticket_path, ticket_id)
 
 
 def runtime_classification() -> tuple[str | None, str | None]:
@@ -409,7 +504,7 @@ def build_ping(event: dict[str, object]) -> dict[str, object]:
     event_cwd = event.get("cwd") or event.get("current_working_directory") or project_directory
     project_root = None if is_subagent else find_project_root(event_cwd)
     native_thread_title = None if is_subagent else resolve_thread_name(session_id)
-    ticket_binding = None if is_subagent else resolve_ticket_title_binding(event, project_root, session_id)
+    ticket_binding = None if is_subagent else resolve_ticket_thread_binding(event, project_root, session_id)
     title_source = (
         "native"
         if native_thread_title

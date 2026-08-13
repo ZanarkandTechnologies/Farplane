@@ -58,6 +58,7 @@ class RewardRecord:
 @dataclass(frozen=True)
 class TicketRecord:
     ticket_id: str
+    thread_id: str
     path: Path
     relative_path: str
     status: str
@@ -328,6 +329,7 @@ def load_tickets(project_root: Path) -> tuple[list[TicketRecord], list[str]]:
         tickets.append(
             TicketRecord(
                 ticket_id=ticket_id,
+                thread_id=str(fm.get("thread_id") or "").strip(),
                 path=path,
                 relative_path=rel_path,
                 status=str(fm.get("status") or "").strip().lower(),
@@ -799,11 +801,9 @@ def backfill_ticket_thread_associations(project_root: Path, mine_runs_root: Path
         },
     }
 
-
-def ticket_thread_link_coverage(tickets: list[TicketRecord], window: Window, association_rows: list[dict[str, Any]]) -> dict[str, Any]:
+def ticket_thread_link_coverage(tickets: list[TicketRecord], window: Window) -> dict[str, Any]:
     completed = [ticket for ticket in tickets if ticket.is_complete and in_window(completion_time(ticket), window)]
-    associated_ids = {str(row.get("ticket_id")) for row in association_rows}
-    linked = [ticket for ticket in completed if ticket.ticket_id in associated_ids]
+    linked = [ticket for ticket in completed if ticket.thread_id]
     value = round(len(linked) / len(completed), 4) if completed else 0
     return reading(
         value,
@@ -811,6 +811,7 @@ def ticket_thread_link_coverage(tickets: list[TicketRecord], window: Window, ass
         {
             "associated_completed_tickets": len(linked),
             "completed_tickets": len(completed),
+            "source": "ticket_frontmatter.thread_id",
             "empty_window": not completed,
             "gaps": [],
         },
@@ -1007,8 +1008,7 @@ def primitive_snapshot(
     burn = estimate_ai_burn(window, thread_usage, effective_monthly_spend)
     association_path = project_root / ASSOCIATION_PATH
     association = backfill_ticket_thread_associations(project_root, project_root / ".farplane" / "mine" / "runs", association_path, write=write)
-    association_rows = read_jsonl(association_path) if write else []
-    coverage = ticket_thread_link_coverage(tickets, window, association_rows)
+    coverage = ticket_thread_link_coverage(tickets, window)
     distribution_reach = content_views_total(project_root, date_value)
     project_adoption = activated_external_projects(project_root)
     diagnostic_gaps = [

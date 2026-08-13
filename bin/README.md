@@ -126,8 +126,8 @@ The live `status` surface now derives a first advisory backpressure signal:
 Runtime routing is session-first for parallel Codex usage:
 
 - explicit run-state selector when a managed lane exports one
-- hook `session_id` for telemetry and association-log correlation
-- `.farplane/state/ticket-thread-associations.jsonl` for ticket/thread joins
+- hook `session_id` for telemetry correlation
+- ticket `thread_id` for the canonical one-ticket/one-task-thread join
 - completed ticket packets plus optional bounded operator-turn windows as
   improvement-mining evidence, with one deduped Core-projected `todo` ticket
   when a grounded issue and improvement exist

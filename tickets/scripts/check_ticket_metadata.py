@@ -45,6 +45,7 @@ OPTIONAL_FIELDS = {
     "priority",
     "due_at",
     "claimed_by",
+    "thread_id",
     "depends_on",
     "human_gate",
     "compute_target",
@@ -230,6 +231,7 @@ def validate_ticket(path: Path) -> list[str]:
                 errors.append(f"{rel}: depends_on entries must be ticket IDs only: {item!r}")
 
     claimed_by = normalize_optional_scalar(frontmatter.get("claimed_by", ""))
+    thread_id = frontmatter.get("thread_id")
     compute_target = frontmatter.get("compute_target", None)
     human_gate = parse_human_gate(frontmatter.get("human_gate", None))
     if compute_target is not None:
@@ -261,6 +263,13 @@ def validate_ticket(path: Path) -> list[str]:
             f"{rel}: claimed_by must be a live session alias such as codex-019ef784, not plain codex"
         )
 
+    if thread_id is not None:
+        normalized_thread_id = normalize_optional_scalar(thread_id)
+        if not isinstance(thread_id, str) or not normalized_thread_id:
+            errors.append(f"{rel}: thread_id must be one non-empty Codex task thread id")
+        elif len(normalized_thread_id) > 160 or any(ord(character) < 32 for character in normalized_thread_id):
+            errors.append(f"{rel}: thread_id must be a bounded printable Codex task thread id")
+
     if status == "active" and not claimed_by:
         errors.append(f"{rel}: status=active requires claimed_by")
     if status != "active" and claimed_by:
@@ -272,6 +281,28 @@ def validate_ticket(path: Path) -> list[str]:
     return errors
 
 
+def validate_unique_thread_ids(ticket_files: list[Path]) -> list[str]:
+    tickets_by_thread_id: dict[str, list[Path]] = {}
+    for path in ticket_files:
+        try:
+            frontmatter, _ = load_ticket(path)
+        except Exception:
+            continue
+        thread_id = normalize_optional_scalar(frontmatter.get("thread_id"))
+        if thread_id:
+            tickets_by_thread_id.setdefault(thread_id, []).append(path)
+
+    errors: list[str] = []
+    for thread_id, paths in sorted(tickets_by_thread_id.items()):
+        if len(paths) < 2:
+            continue
+        locations = ", ".join(str(path.relative_to(ROOT)) for path in sorted(paths))
+        errors.append(
+            f"thread_id {thread_id!r} is bound to multiple tickets: {locations}"
+        )
+    return errors
+
+
 def main() -> int:
     ticket_files = sorted(
         [
@@ -279,9 +310,14 @@ def main() -> int:
             *(p for p in TICKETS_DIR.glob("TASK-*.md") if p.is_file()),
         ]
     )
+    all_ticket_files = [
+        *ticket_files,
+        *(p for p in (TICKETS_DIR / "archive").glob("TASK-*/ticket.md") if p.is_file()),
+    ]
     errors: list[str] = []
     for path in ticket_files:
         errors.extend(validate_ticket(path))
+    errors.extend(validate_unique_thread_ids(all_ticket_files))
     if errors:
         for err in errors:
             print(err)

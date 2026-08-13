@@ -516,7 +516,7 @@ kpi_rewards:
         self.assertEqual(rows[0]["confidence"], "completion_only")
         self.assertNotIn("execution_started_at", rows[0])
 
-    def test_existing_association_log_covers_archived_completed_ticket(self) -> None:
+    def test_ticket_thread_id_covers_archived_completed_ticket(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             (root / "farplane").mkdir()
@@ -525,6 +525,7 @@ kpi_rewards:
             (ticket_dir / "ticket.md").write_text(
                 """---
 ticket_id: TASK-0001
+thread_id: thread-outcome
 phase: complete
 status: done
 created_at: 2026-07-03T01:00:00Z
@@ -539,35 +540,13 @@ completed_at: 2026-07-03T03:00:00Z
 """,
                 encoding="utf-8",
             )
-            state = root / ".farplane" / "state"
-            state.mkdir(parents=True)
-            (state / "ticket-thread-associations.jsonl").write_text(
-                json.dumps(
-                    {
-                        "ticket_id": "TASK-0001",
-                        "thread_id": "thread-outcome",
-                        "source": "ticket_thread_association",
-                        "source_event_key": "test:TASK-0001:thread-outcome",
-                        "observed_at": "2026-07-03T03:10:00Z",
-                    }
-                )
-                + "\n",
-                encoding="utf-8",
-            )
-
             payload = primitive_snapshot(root, "2026-07-03", root / ".codex", monthly_spend=31, write=True)
-            association_rows = [
-                json.loads(line)
-                for line in (root / ".farplane" / "state" / "ticket-thread-associations.jsonl")
-                .read_text(encoding="utf-8")
-                .splitlines()
-            ]
 
         coverage = payload["primitives"]["ticket_thread_link_coverage"]
         self.assertEqual(coverage["payload"]["completed_tickets"], 1)
         self.assertEqual(coverage["payload"]["associated_completed_tickets"], 1)
+        self.assertEqual(coverage["payload"]["source"], "ticket_frontmatter.thread_id")
         self.assertEqual(coverage["value"], 1.0)
-        self.assertEqual({row["ticket_id"] for row in association_rows}, {"TASK-0001"})
 
     def test_codex_thread_usage_reads_sqlite_and_session_token_counts(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

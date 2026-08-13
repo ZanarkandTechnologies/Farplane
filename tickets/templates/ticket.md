@@ -1,6 +1,6 @@
 ---
 template_id: ticket-template
-template_version: "0.2.6"
+template_version: "0.2.7"
 feature_refs:
   - FEAT-0007
   - FEAT-0008
@@ -16,7 +16,8 @@ depends_on: []
 
 <!-- Keep ticket.md + program.md + the latest 80 progress lines within the
 300-line target and 400-line hard limit. Bulky evidence belongs in artifacts/.
-`claimed_by` is present only while status=active. Never store session_id here.
+`claimed_by` is present only while status=active. The hook may set one immutable
+`thread_id` for this ticket's persistent Codex task; never store session_id here.
 Full authoring rules: tickets/README.md. -->
 
 ## Summary

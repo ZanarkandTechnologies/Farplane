@@ -1,19 +1,16 @@
 #!/usr/bin/env python3
-"""Block commits when the committing session's ticket is still active.
+"""Block commits when the committing task thread still owns an active ticket.
 
 Multiple Codex workers can share one worktree, so unrelated active tickets are
-allowed. This gate blocks only when the current process exposes a session id
-and the ticket/thread association log ties that session to a ticket still on
-the active board.
+allowed. This gate blocks only when the current process exposes a thread id and
+one ticket's canonical ``thread_id`` matches it.
 """
 
 from __future__ import annotations
 
 import argparse
-import json
 import os
 from pathlib import Path
-from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -54,53 +51,35 @@ def active_ticket_dirs(root: Path) -> list[Path]:
     )
 
 
-def read_jsonl(path: Path) -> list[dict[str, Any]]:
-    if not path.is_file():
-        return []
-    rows: list[dict[str, Any]] = []
-    for line_number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), start=1):
-        if not line.strip():
+def ticket_threads(root: Path) -> dict[str, list[dict[str, str]]]:
+    grouped: dict[str, list[dict[str, str]]] = {}
+    roots = (root / "tickets", root / "tickets" / ARCHIVE_DIR)
+    for ticket_root in roots:
+        if not ticket_root.is_dir():
             continue
-        try:
-            value = json.loads(line)
-        except json.JSONDecodeError as exc:
-            rows.append(
-                {
-                    "_parse_error": f"{path}:{line_number}: invalid JSONL row: {exc}",
-                }
-            )
-            continue
-        if isinstance(value, dict):
-            rows.append(value)
-    return rows
-
-
-def associations_by_ticket(root: Path) -> dict[str, list[dict[str, Any]]]:
-    path = root / ".farplane" / "state" / "ticket-thread-associations.jsonl"
-    grouped: dict[str, list[dict[str, Any]]] = {}
-    for row in read_jsonl(path):
-        ticket_id = str(row.get("ticket_id") or "").strip()
-        if ticket_id.startswith(TICKET_ID_PREFIX):
-            grouped.setdefault(ticket_id, []).append(row)
+        for ticket_path in sorted(ticket_root.glob("TASK-*/ticket.md")):
+            frontmatter = parse_frontmatter(ticket_path)
+            ticket_id = str(frontmatter.get("ticket_id") or ticket_path.parent.name).strip()
+            thread_id = str(frontmatter.get("thread_id") or "").strip()
+            if ticket_id.startswith(TICKET_ID_PREFIX) and thread_id:
+                grouped.setdefault(ticket_id, []).append(
+                    {
+                        "thread_id": thread_id,
+                        "ticket_path": str(ticket_path.relative_to(root)),
+                    }
+                )
     return grouped
 
 
-def associated_tickets_for_sessions(root: Path, session_ids: list[str]) -> dict[str, list[dict[str, Any]]]:
+def associated_tickets_for_sessions(root: Path, session_ids: list[str]) -> dict[str, list[dict[str, str]]]:
     if not session_ids:
         return {}
     wanted = set(session_ids)
-    grouped: dict[str, list[dict[str, Any]]] = {}
-    for row in read_jsonl(root / ".farplane" / "state" / "ticket-thread-associations.jsonl"):
-        row_session_ids = {
-            str(row.get("session_id") or "").strip(),
-            str(row.get("thread_id") or "").strip(),
-        }
-        if not wanted.intersection(row_session_ids):
-            continue
-        ticket_id = str(row.get("ticket_id") or "").strip()
-        if ticket_id.startswith(TICKET_ID_PREFIX):
-            grouped.setdefault(ticket_id, []).append(row)
-    return grouped
+    return {
+        ticket_id: rows
+        for ticket_id, rows in ticket_threads(root).items()
+        if any(row["thread_id"] in wanted for row in rows)
+    }
 
 
 def session_ids_from_env(environ: dict[str, str] | None = None) -> list[str]:
@@ -153,19 +132,8 @@ def validate_ticket_closure(
 ) -> list[str]:
     errors: list[str] = []
     active_dirs = active_ticket_dirs(root)
-    associations = associations_by_ticket(root)
     session_ids = session_ids_from_env(environ)
     current_session_tickets = associated_tickets_for_sessions(root, session_ids)
-    missing_archives = sorted(
-        ticket_id
-        for ticket_id in associations
-        if not (root / "tickets" / ticket_id / "ticket.md").is_file()
-        and not archive_ticket_exists(root, ticket_id)
-    )
-    if missing_archives:
-        errors.append("association rows point at tickets that are neither active nor archived:")
-        for ticket_id in missing_archives:
-            errors.append(f"  - {ticket_id}")
 
     for current_ticket_id, rows in sorted(current_session_tickets.items()):
         active_ticket = root / "tickets" / current_ticket_id / "ticket.md"
@@ -177,23 +145,15 @@ def validate_ticket_closure(
                 f"{active_ticket.relative_to(root)} ({ticket_state(active_dir)})"
             )
             for row in rows[-3:]:
-                thread_id = row.get("thread_id") or row.get("session_id") or "unknown-thread"
-                confidence = row.get("confidence") or "unknown-confidence"
-                observed_at = row.get("observed_at") or "unknown-time"
+                thread_id = row.get("thread_id") or "unknown-thread"
                 errors.append(
-                    f"  associated thread: {thread_id} ({confidence}, observed_at={observed_at})"
+                    f"  ticket thread: {thread_id} ({row.get('ticket_path') or 'unknown-ticket-path'})"
                 )
         elif not archived_ticket.is_file():
             errors.append(
                 f"current session points at {current_ticket_id}, but that ticket is neither active nor archived"
             )
 
-    parse_errors = [
-        str(row["_parse_error"])
-        for row in read_jsonl(root / ".farplane" / "state" / "ticket-thread-associations.jsonl")
-        if "_parse_error" in row
-    ]
-    errors.extend(parse_errors)
     return errors
 
 
@@ -236,7 +196,7 @@ def main() -> int:
             print(error)
         return 1
 
-    association_count = len(associations_by_ticket(root))
+    association_count = len(ticket_threads(root))
     active_count = len(active_ticket_dirs(root))
     if session_ids:
         session_note = f"session_ids={','.join(session_ids)}"
@@ -244,7 +204,7 @@ def main() -> int:
         session_note = "no session env"
     print(
         f"ticket closure gate OK ({active_count} active tickets allowed, "
-        f"{association_count} associated ticket ids, {session_note})"
+        f"{association_count} ticket thread ids, {session_note})"
     )
     return 0
 

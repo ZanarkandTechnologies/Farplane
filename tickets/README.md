@@ -170,6 +170,7 @@ Sparse routing overrides are added only when they differ from defaults:
 priority: high
 due_at: 2026-04-10T17:00:00+08:00
 claimed_by: codex-019ef784
+thread_id: 019f0000-0000-7000-8000-000000000000
 depends_on: [TASK-0001]
 human_gate: [post, "Public X post needs Kenji approval."]
 compute_target: local_worktree
@@ -190,6 +191,11 @@ compute_target: local_worktree
 - `claimed_by`: optional human-facing alias for the current active execution
   turn. It is present only with `status: active` and cleared when execution
   parks, waits, completes, or releases the worker.
+- `thread_id`: optional immutable ID of this ticket's one persistent Codex task
+  thread. The root `UserPromptSubmit` hook writes it only when a currently
+  unbound active ticket is named exactly once. A later or conflicting thread
+  cannot overwrite it; resume the original task instead. This is the task's
+  operator/agent discussion history and the exact completion-mining source.
 - `depends_on`: optional structural ticket prerequisites. Non-ticket blocker
   detail belongs in `progress.md`, not a second blocker list.
 - `compute_target`: optional ticket-level compute override. Supported values
@@ -243,7 +249,8 @@ before they become live ticket sources.
   `requires_qa`, `requires_demo`, `next_action`, or `last_verification` fields
 - no `## Status` body block
 - the H1 matches `ticket_id` and `title`
-- do not store raw transport-level runtime ids such as `session_id` in ticket frontmatter
+- a ticket may own one hook-written `thread_id`; do not store `session_id`, a
+  thread list, or a replacement thread in frontmatter
 - `status: active` requires a session-specific `claimed_by`; every other
   status clears it
 - review/check-in mutable state lives in `progress.md`

@@ -100,15 +100,26 @@ too noisy for tracked config.
 .farplane/mine/
 .farplane/logs/
 .farplane/state/message-windows/
-.farplane/state/thread-title-bindings/<thread-id>.json
+.farplane/state/ticket-thread-locks/
 .farplane/state/ticket-thread-associations.jsonl
 ```
 
 `UserPromptSubmit` does not write singleton current-run or execution-ownership
-files. It may write one atomic, display-only thread-title binding when the user
-prompt names exactly one canonical `TASK-XXXX`. This binding is deliberately
-separate from `ticket-thread-associations.jsonl`, which remains an execution
-metrics surface. Prompt text never enters the binding or hook telemetry.
+files. When a root prompt names exactly one active `TASK-XXXX`, it may atomically
+write that ticket's previously empty `thread_id` frontmatter field. A ticket owns
+at most one durable Codex task thread; a later root thread cannot replace it and
+helpers never inherit it. Prompt text never enters ticket frontmatter or hook
+telemetry.
+
+`ticket-thread-locks/` contains short-lived atomic lock directories shared by
+the hook and ticket UI writer. They protect a ticket's full read/modify/write
+cycle so an ordinary ticket edit cannot replace a freshly hook-bound
+`thread_id` with stale frontmatter.
+
+`ticket-thread-associations.jsonl` remains an optional, completion-only metrics
+observation surface for historical sources. It is not the ticket-to-task-thread
+source of truth; lifecycle, completion mining, and UI joins resolve the ticket's
+own `thread_id` first.
 
 `shared_checkout_guard.py` is narrower than ticket execution ownership. It
 stores a local lease under the primary checkout's Git directory for the active
@@ -122,7 +133,7 @@ append-only Codex `session_index.jsonl`. Telemetry sends only sanitized native
 and ticket title metadata. Native names outrank ticket display titles; a native
 rename is observed on the next lifecycle hook without requiring the Codex app
 server or a background watcher. Subagent and eval hooks do not create or inherit
-root title bindings.
+ticket thread ownership.
 
 Tracked framework config stays under `farplane/`. The important separation is:
 

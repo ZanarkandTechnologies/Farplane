@@ -1535,22 +1535,15 @@ def _ticket_terminal(path: Path) -> bool:
     return bool(values & {"done", "complete", "completed", "closed"})
 
 
-def _associated_thread(project_root: Path, ticket_id: str) -> str:
-    path = project_root / ".farplane" / "state" / "ticket-thread-associations.jsonl"
-    if not path.is_file():
+def _ticket_thread_id(path: Path) -> str:
+    """Read the one persistent task thread owned by a terminal ticket."""
+    value = _ticket_frontmatter(path).get("thread_id")
+    if not isinstance(value, str):
         return ""
-    selected = ""
-    for line in path.read_text(encoding="utf-8", errors="replace").splitlines():
-        try:
-            row = json.loads(line)
-        except json.JSONDecodeError:
-            continue
-        if not isinstance(row, dict) or str(row.get("ticket_id") or "").upper() != ticket_id:
-            continue
-        candidate = str(row.get("thread_id") or row.get("session_id") or "").strip()
-        if candidate:
-            selected = candidate
-    return selected
+    thread_id = value.strip()
+    if not thread_id or len(thread_id) > 160 or any(ord(character) < 32 for character in thread_id):
+        return ""
+    return thread_id
 
 
 def mine_ticket(
@@ -1585,7 +1578,7 @@ def mine_ticket(
         content_hash = sha256_value(
             json.dumps(archived_ticket, ensure_ascii=False, sort_keys=True)
         )
-    thread_id = _associated_thread(project_root, normalized)
+    thread_id = _ticket_thread_id(path) if path is not None else ""
     bindings = _yaml_mapping(bindings_path(project_root))
     project = bindings.get("project") if isinstance(bindings.get("project"), dict) else {}
     project_id = str(project.get("id") or f"local-{project_root.name.lower()}")

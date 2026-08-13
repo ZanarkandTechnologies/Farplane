@@ -6,6 +6,7 @@ import json
 import os
 import tempfile
 import unittest
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from unittest.mock import patch
 
@@ -20,12 +21,21 @@ spec.loader.exec_module(farplane_console_ping)
 
 
 class FarplaneConsolePingTests(unittest.TestCase):
-    def write_ticket(self, root: Path, ticket_id: str, title: str, *, archived: bool = False) -> Path:
+    def write_ticket(
+        self,
+        root: Path,
+        ticket_id: str,
+        title: str,
+        *,
+        archived: bool = False,
+        thread_id: str | None = None,
+    ) -> Path:
         base = root / "tickets" / ("archive" if archived else "") / ticket_id
         path = base / "ticket.md"
         path.parent.mkdir(parents=True, exist_ok=True)
+        thread_line = f"thread_id: {json.dumps(thread_id)}\n" if thread_id else ""
         path.write_text(
-            f"---\nticket_id: {ticket_id}\ntitle: {title}\n---\n\n# {ticket_id}: {title}\n",
+            f"---\nticket_id: {ticket_id}\n{thread_line}title: {title}\n---\n\n# {ticket_id}: {title}\n",
             encoding="utf-8",
         )
         return path
@@ -144,7 +154,7 @@ class FarplaneConsolePingTests(unittest.TestCase):
         self.assertEqual(body["payload"]["nativeThreadTitle"], "Latest native title")
         self.assertEqual(body["payload"]["titleSource"], "native")
 
-    def test_single_ticket_prompt_writes_sanitized_binding_without_prompt(self) -> None:
+    def test_single_ticket_prompt_binds_ticket_thread_without_prompt(self) -> None:
         secret = "bind TASK-0055 and keep secret words private"
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
@@ -162,16 +172,17 @@ class FarplaneConsolePingTests(unittest.TestCase):
                         "prompt": secret,
                     }
                 )
-            binding_path = farplane_console_ping.title_binding_path(project, "session-1")
-            binding = json.loads(binding_path.read_text(encoding="utf-8"))
+            ticket_path = project / "tickets" / "TASK-0055" / "ticket.md"
+            bound_thread_id = farplane_console_ping.ticket_thread_id(ticket_path)
+            ticket_text = ticket_path.read_text(encoding="utf-8")
 
         self.assertEqual(body["payload"]["ticketId"], "TASK-0055")
         self.assertEqual(body["payload"]["ticketTitle"], "Propagate thread titles")
         self.assertEqual(body["payload"]["ticketDisplayTitle"], "[TASK-0055] Propagate thread titles")
         self.assertEqual(body["payload"]["titleSource"], "ticket")
-        self.assertEqual(binding["ticketPath"], "tickets/TASK-0055/ticket.md")
+        self.assertEqual(bound_thread_id, "session-1")
         self.assertNotIn(secret, json.dumps(body))
-        self.assertNotIn(secret, json.dumps(binding))
+        self.assertNotIn(secret, ticket_text)
 
     def test_later_stop_reloads_existing_ticket_binding(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -196,23 +207,23 @@ class FarplaneConsolePingTests(unittest.TestCase):
             project = root / "project"
             ticket = project / "tickets" / "archive" / "TASK-0055" / "ticket.md"
             ticket.parent.mkdir(parents=True)
-            ticket.write_text(f"---\nticket_id: TASK-0055\n---\n\n# TASK-0055: {'x' * 180}\n", encoding="utf-8")
+            ticket.write_text(
+                f"---\nticket_id: TASK-0055\nthread_id: session-1\n---\n\n# TASK-0055: {'x' * 180}\n",
+                encoding="utf-8",
+            )
             with patch.dict(os.environ, {"CODEX_HOME": str(root / "codex"), "FARPLANE_CONFIG_DISABLE": "1"}, clear=True):
                 body = farplane_console_ping.build_ping(
-                    {"hook_event_name": "UserPromptSubmit", "session_id": "session-1", "turn_id": "turn-1", "cwd": str(project), "prompt": "TASK-0055"}
+                    {"hook_event_name": "Stop", "session_id": "session-1", "turn_id": "turn-1", "cwd": str(project)}
                 )
 
         self.assertEqual(len(body["payload"]["ticketTitle"]), 120)
         self.assertEqual(len(body["payload"]["ticketDisplayTitle"]), 120)
 
-    def test_malformed_binding_is_ignored_on_later_lifecycle(self) -> None:
+    def test_unbound_ticket_is_ignored_on_later_lifecycle(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             project = root / "project"
-            (project / ".farplane").mkdir(parents=True)
-            path = farplane_console_ping.title_binding_path(project, "session-1")
-            path.parent.mkdir(parents=True)
-            path.write_text("not-json\n", encoding="utf-8")
+            self.write_ticket(project, "TASK-0055", "Unbound")
             with patch.dict(os.environ, {"CODEX_HOME": str(root / "codex"), "FARPLANE_CONFIG_DISABLE": "1"}, clear=True):
                 body = farplane_console_ping.build_ping(
                     {"hook_event_name": "Stop", "session_id": "session-1", "turn_id": "turn-1", "cwd": str(project)}
@@ -235,26 +246,62 @@ class FarplaneConsolePingTests(unittest.TestCase):
                     {"hook_event_name": "UserPromptSubmit", "session_id": "session-2", "turn_id": "turn-2", "cwd": str(project), "prompt": "compare TASK-0055 and TASK-0056"}
                 )
 
-            bindings = list((project / ".farplane" / "state" / "thread-title-bindings").glob("*.json")) if (project / ".farplane").exists() else []
+            active_thread = farplane_console_ping.ticket_thread_id(project / "tickets" / "TASK-0055" / "ticket.md")
+            other_thread = farplane_console_ping.ticket_thread_id(project / "tickets" / "TASK-0056" / "ticket.md")
 
         self.assertIsNone(collision["payload"]["ticketId"])
         self.assertIsNone(multiple["payload"]["ticketId"])
-        self.assertEqual(bindings, [])
+        self.assertEqual(active_thread, "")
+        self.assertEqual(other_thread, "")
 
-    def test_two_threads_write_independent_atomic_bindings(self) -> None:
+    def test_second_thread_cannot_replace_ticket_thread(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             project = root / "project"
             self.write_ticket(project, "TASK-0055", "Thread titles")
             with patch.dict(os.environ, {"CODEX_HOME": str(root / "codex"), "FARPLANE_CONFIG_DISABLE": "1"}, clear=True):
-                for thread_id in ("thread-a", "thread-b"):
-                    farplane_console_ping.build_ping(
-                        {"hook_event_name": "UserPromptSubmit", "session_id": thread_id, "turn_id": "turn-1", "cwd": str(project), "prompt": "TASK-0055"}
-                    )
-            binding_root = project / ".farplane" / "state" / "thread-title-bindings"
-            rows = [json.loads(path.read_text(encoding="utf-8")) for path in binding_root.glob("*.json")]
+                first = farplane_console_ping.build_ping(
+                    {"hook_event_name": "UserPromptSubmit", "session_id": "thread-a", "turn_id": "turn-1", "cwd": str(project), "prompt": "TASK-0055"}
+                )
+                second = farplane_console_ping.build_ping(
+                    {"hook_event_name": "UserPromptSubmit", "session_id": "thread-b", "turn_id": "turn-2", "cwd": str(project), "prompt": "TASK-0055"}
+                )
+            bound_thread_id = farplane_console_ping.ticket_thread_id(project / "tickets" / "TASK-0055" / "ticket.md")
 
-        self.assertEqual({row["threadId"] for row in rows}, {"thread-a", "thread-b"})
+        self.assertEqual(first["payload"]["ticketId"], "TASK-0055")
+        self.assertIsNone(second["payload"]["ticketId"])
+        self.assertEqual(bound_thread_id, "thread-a")
+
+    def test_concurrent_threads_bind_only_one_ticket_thread(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            project = root / "project"
+            self.write_ticket(project, "TASK-0055", "Thread titles")
+
+            def bind(thread_id: str) -> dict[str, object]:
+                return farplane_console_ping.build_ping(
+                    {
+                        "hook_event_name": "UserPromptSubmit",
+                        "session_id": thread_id,
+                        "turn_id": thread_id,
+                        "cwd": str(project),
+                        "prompt": "TASK-0055",
+                    }
+                )
+
+            with patch.dict(os.environ, {"CODEX_HOME": str(root / "codex"), "FARPLANE_CONFIG_DISABLE": "1"}, clear=True):
+                with ThreadPoolExecutor(max_workers=2) as executor:
+                    bodies = list(executor.map(bind, ["thread-a", "thread-b"]))
+            ticket_path = project / "tickets" / "TASK-0055" / "ticket.md"
+            bound_thread_id = farplane_console_ping.ticket_thread_id(ticket_path)
+            lock_path = farplane_console_ping.ticket_thread_lock_path(project, ticket_path)
+
+        self.assertIn(bound_thread_id, {"thread-a", "thread-b"})
+        self.assertEqual(
+            sum(body["payload"]["ticketId"] == "TASK-0055" for body in bodies),
+            1,
+        )
+        self.assertFalse(lock_path.exists())
 
     def test_native_title_outranks_ticket_binding(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -272,7 +319,7 @@ class FarplaneConsolePingTests(unittest.TestCase):
         self.assertEqual(body["payload"]["ticketDisplayTitle"], "[TASK-0055] Ticket name")
         self.assertEqual(body["payload"]["titleSource"], "native")
 
-    def test_missing_telemetry_endpoint_still_persists_local_title_binding(self) -> None:
+    def test_missing_telemetry_endpoint_still_binds_ticket_thread(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             project = root / "project"
@@ -297,8 +344,8 @@ class FarplaneConsolePingTests(unittest.TestCase):
             ):
                 self.assertEqual(farplane_console_ping.main(), 0)
 
-            binding_path = farplane_console_ping.title_binding_path(project, "session-1")
-            self.assertTrue(binding_path.is_file())
+            ticket_path = project / "tickets" / "TASK-0055" / "ticket.md"
+            self.assertEqual(farplane_console_ping.ticket_thread_id(ticket_path), "session-1")
 
     def test_build_ping_preserves_subagent_identity_and_parent_session(self) -> None:
         with patch.dict(

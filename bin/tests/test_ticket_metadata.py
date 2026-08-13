@@ -66,6 +66,30 @@ class CheckTicketMetadataTest(unittest.TestCase):
             self.assertTrue(errors)
             self.assertIn("session_id must not appear in frontmatter", "\n".join(errors))
 
+    def test_validator_rejects_a_task_thread_bound_to_multiple_tickets(self) -> None:
+        with tempfile.TemporaryDirectory(dir=ROOT) as tmpdir:
+            root = Path(tmpdir)
+            first = root / "TASK-9998" / "ticket.md"
+            second = root / "TASK-9999" / "ticket.md"
+            write_file(
+                first,
+                VALID_TICKET_TEXT.replace("TASK-9999", "TASK-9998").replace(
+                    "status: awaiting_review\n",
+                    "status: awaiting_review\nthread_id: task-thread-1\n",
+                ),
+            )
+            write_file(
+                second,
+                VALID_TICKET_TEXT.replace(
+                    "status: awaiting_review\n",
+                    "status: awaiting_review\nthread_id: task-thread-1\n",
+                ),
+            )
+            errors = self.ticket_metadata.validate_unique_thread_ids([first, second])
+
+        self.assertEqual(len(errors), 1)
+        self.assertIn("bound to multiple tickets", errors[0])
+
     def test_validator_accepts_optional_compute_target(self) -> None:
         with tempfile.TemporaryDirectory(dir=ROOT) as tmpdir:
             root = Path(tmpdir)
