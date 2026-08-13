@@ -1,0 +1,122 @@
+{
+  "skill_name": "task-recap",
+  "evals": [
+    {
+      "id": "task_recap_full_ticketed_context_01",
+      "prompt": "I’m returning to the warehouse handover task after several days. I need enough context to answer the customer’s latest question. Can you catch me up from the task records?",
+      "expected_output": "Returns a source-linked full recap with the goal, latest customer question, chronology, decision history, Before/After/Example deltas, problem-attempt-result records, current confidence, and a safe response posture.",
+      "files": [
+        "skills/task-recap/examples/warehouse-handoff/ticket.md",
+        "skills/task-recap/examples/warehouse-handoff/progress.md",
+        "skills/task-recap/examples/warehouse-handoff/evidence.md"
+      ],
+      "assertions": [
+        "Names the actual operator goal and latest customer question from the staged records",
+        "Reconstructs the timeline from durable task records rather than a generic transcript summary",
+        "States the material Before, After, and Example delta with source-backed scope",
+        "Preserves the implementation, verification, and customer-readiness distinction",
+        "Ends with one safe response posture without running the task"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Task Recap reconstructs a paused ticketed task",
+          "tags": ["skill", "recap", "ticket", "resumption"],
+          "notes": "Covers a realistic delayed reply using staged durable sources."
+        }
+      }
+    },
+    {
+      "id": "task_recap_surfaces_conflicting_completion_01",
+      "prompt": "Before I tell the customer the handover issue is fixed, what do the records actually show?",
+      "expected_output": "Identifies the conflict between implementation progress and missing runtime proof, avoids a completion claim, and names the concrete evidence or response needed before customer confirmation.",
+      "files": [
+        "skills/task-recap/examples/warehouse-handoff/ticket.md",
+        "skills/task-recap/examples/warehouse-handoff/progress.md",
+        "skills/task-recap/examples/warehouse-handoff/evidence.md"
+      ],
+      "assertions": [
+        "Distinguishes checked ticket work from a passing runtime receipt",
+        "Makes the conflicting evidence visible instead of averaging it into a reassuring conclusion",
+        "States that customer readiness remains unproven",
+        "Names the smallest evidence needed to resolve the conflict",
+        "Does not execute a test or send a customer message"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Task Recap rejects an unsupported completion claim",
+          "tags": ["skill", "recap", "conflict", "proof"],
+          "notes": "Regression for stale completion state versus current evidence."
+        }
+      }
+    },
+    {
+      "id": "task_recap_preserves_attempt_history_01",
+      "prompt": "What have we already tried on the warehouse handover problem, and which paths should we not repeat?",
+      "expected_output": "Traces each recorded symptom, attempt, observed result, disposition, and remaining impact; preserves the rejected workaround and separates the implemented fix from its unverified runtime outcome.",
+      "files": [
+        "skills/task-recap/examples/warehouse-handoff/ticket.md",
+        "skills/task-recap/examples/warehouse-handoff/progress.md",
+        "skills/task-recap/examples/warehouse-handoff/evidence.md"
+      ],
+      "assertions": [
+        "Names the concrete symptom rather than flattening it into a generic bug",
+        "Preserves the rejected workaround and the reason it was rejected",
+        "Connects each attempt to its observed result and current disposition",
+        "Keeps unresolved runtime verification visible after the implementation attempt",
+        "Does not invent an attempt, root cause, or final outcome"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Task Recap preserves failed and rejected paths",
+          "tags": ["skill", "recap", "attempt-history", "decisions"],
+          "notes": "Protects the operator from repeating prior work."
+        }
+      }
+    },
+    {
+      "id": "task_recap_names_missing_durable_context_01",
+      "prompt": "I’m opening an old conversation, but all I remember is that it involved a warehouse handover. Give me the full recap.",
+      "expected_output": "Returns a bounded source-gap response rather than inventing history, states what cannot be known, and requests a specific ticket, artifact, thread reference, or pasted source needed for a reliable recap.",
+      "files": [],
+      "assertions": [
+        "Does not fabricate task details from the topic alone",
+        "Explains the limit of an unbound or unavailable task source",
+        "Requests the smallest concrete source needed to continue",
+        "Avoids creating or mutating a ticket just to manufacture context",
+        "Keeps the response useful without claiming a full recap exists"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Task Recap exposes a missing durable source",
+          "tags": ["skill", "recap", "source-gap", "safety"],
+          "notes": "Protects against invented thread history."
+        }
+      }
+    },
+    {
+      "id": "task_recap_scopes_worktree_noise_01",
+      "prompt": "Please catch me up on the warehouse handover task. The workspace also has an unrelated documentation edit, so keep the recap scoped to this task.",
+      "expected_output": "Uses task records and the captured worktree snapshot to distinguish relevant implementation state from unrelated documentation changes, labels the snapshot freshness limit, and avoids treating either as completion proof.",
+      "files": [
+        "skills/task-recap/examples/warehouse-handoff/ticket.md",
+        "skills/task-recap/examples/warehouse-handoff/progress.md",
+        "skills/task-recap/examples/warehouse-handoff/evidence.md",
+        "skills/task-recap/examples/warehouse-handoff/worktree-status.txt"
+      ],
+      "assertions": [
+        "Scopes worktree discussion to the task-owned implementation path",
+        "Excludes the unrelated documentation edit from the task delta",
+        "Labels the worktree status as a timestamped capture rather than live truth",
+        "Does not let a modified file replace test or review evidence",
+        "Returns a safe next action grounded in the task packet"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Task Recap excludes unrelated worktree noise",
+          "tags": ["skill", "recap", "worktree", "scope"],
+          "notes": "Protects task boundaries when the checkout is dirty."
+        }
+      }
+    }
+  ]
+}

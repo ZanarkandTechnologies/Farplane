@@ -1,0 +1,8 @@
+Captured 2026-08-08 15:45 +0800; this is a historical snapshot, not live state.
+
+ M apps/handover/reopen.ts
+ M apps/handover/reopen.test.ts
+ M docs/brand-voice.md
+
+`apps/handover/*` belongs to the acknowledgement-reopen task. `docs/brand-voice.md`
+is an unrelated documentation edit and must not be included in the task delta.
