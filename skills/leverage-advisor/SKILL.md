@@ -46,8 +46,9 @@ state: reads(subject docs, registries, tickets/specs, optional lever catalog,
              budget);
        writes(leverage plan or ticket seed only when the caller owns a path)
 gates: subject_grounded; objective_named; catalog_resolved_or_source_gap;
-       eligible_frontier_ranked; next_wave_earned; first_proof_named;
-       replan_conditions_named
+       diagnosis_and_policy_named; pre_outcome_bet_recorded;
+       decision_changing_test_named; eligible_frontier_ranked; next_wave_earned;
+       first_proof_named; replan_conditions_named
 routes: reference-grounding | advise | research:parity |
   research:source-synthesis | best-of-worlds | prototyping | metric-advisor |
   impl-plan | goal-advisor | harness-advisor | leverage-rollout
@@ -93,7 +94,23 @@ the chosen next step needs its own artifact, budget, or proof surface.
      recommendation depends on evidence not already loaded.
    - [ ] State what the subject already does, what progress has established or
      falsified, what remains uncertain, and what local assets can be reused.
-- [ ] 3. Resolve the candidate frontier.
+- [ ] 3. Frame the decision before ranking.
+   - [ ] Name the critical obstacle, a guiding policy that narrows the frontier,
+     and the coherent next move it implies (Rumelt, *Good Strategy/Bad
+     Strategy*).
+   - [ ] Record the pre-outcome bet: what must be true, a calibrated confidence
+     range when evidence supports one (otherwise `uncalibrated`), downside, and
+     falsifier. Do not judge the decision solely from a later outcome (Duke,
+     *Thinking in Bets*).
+   - [ ] Specify the cheapest honest observation, then explicitly render
+     `if positive -> next action` and `if negative -> next action`. Reject easy
+     metrics that cannot change the ranking, spend, scope, or outside option
+     (Hubbard, *How to Measure Anything*).
+   - [ ] For deeper source method and the required decision-record fields, load
+     [decision techniques](references/decision-techniques.md) when the choice
+     is material, outcome uncertainty is high, or the evidence plan spends
+     meaningful time, money, or attention.
+- [ ] 4. Resolve the candidate frontier.
    - [ ] When an experiment-backed campaign supplies
      `hypothesis-tree.json`, treat eligible pending leaves as the current
      frontier. Derive leaves from parent and status; do not require stored
@@ -111,7 +128,7 @@ the chosen next step needs its own artifact, budget, or proof surface.
      the branch cannot run.
    - [ ] Filter prerequisites, conflicts, guards, exhausted branches, and moves
      that exceed the remaining budget before ranking.
-- [ ] 4. Rank compounding moves and short trajectories.
+- [ ] 5. Rank compounding moves and short trajectories.
    - [ ] Use [advise](../advise/SKILL.md) when choosing among real plays.
    - [ ] Compare direct objective potential, bottleneck fit, information gain,
      downstream options unlocked, reusable assets, proof speed, cost, risk,
@@ -122,17 +139,19 @@ the chosen next step needs its own artifact, budget, or proof surface.
    - [ ] Make one ordinal comparison. Do not use a pairwise tournament, invent
      uncalibrated numeric lift, persist rank scores in the tree, or create a
      second selection algorithm.
-- [ ] 5. Recommend the next wave and first proof.
+- [ ] 6. Recommend the next wave and first proof.
    - [ ] Name the tradeoff accepted.
    - [ ] Choose one move by default. Admit multiple moves only when they are
      independently attributable, non-interfering, and budget-safe.
-   - [ ] Choose the cheapest honest falsifier of the strongest trajectory
-     before broader rollout.
-   - [ ] Compare the best move with `report_now`, `request_feedback`, and
-     `stop`; recommend spending more budget only when it wins.
+   - [ ] Make the first proof the decision-changing test from step 3 when it
+     remains the cheapest honest falsifier of the strongest trajectory; do not
+     collect an observation that leaves the recommendation unchanged.
+   - [ ] Explicitly render and compare the best move with `report_now`,
+     `request_feedback`, and `stop`; recommend spending more budget only when
+     it wins. Do not leave this comparison implicit.
    - [ ] Use [prototyping](../prototyping/SKILL.md) when a 1 -> 10 -> 100
      proving path matters before scale.
-- [ ] 6. State replan conditions and choose the next owner.
+- [ ] 7. State replan conditions and choose the next owner.
    - [ ] Define how positive, flat, negative, branch-specific, invalid, or
      budget evidence changes the frontier; do not return a fixed ladder.
    - [ ] Keep one stable objective, evaluator, and budget in one campaign
@@ -152,7 +171,7 @@ the chosen next step needs its own artifact, budget, or proof surface.
      surface or harness lever.
    - [ ] Name `leverage-rollout` when the recommended play should be proven
      through exemplar runs before rollout.
-- [ ] 7. Return the leverage plan and apply [the QA checklist](qa_checklist.md).
+- [ ] 8. Return the leverage plan and apply [the QA checklist](qa_checklist.md).
    - [ ] Subject grounding and progress evidence are concrete.
    - [ ] Recommendation is not generic strategy.
    - [ ] Ranked frontier, next wave, first proof, rejected moves, and replan
@@ -177,6 +196,12 @@ vars:
 
 program:
   ground(subject, objective, evidence) -> current_state + learned_constraints
+
+  frame_decision(current_state, objective) ->
+    diagnosis + guiding_policy + coherent_move
+
+  precommit_bet(coherent_move, evidence) ->
+    thesis + confidence_range_or_uncalibrated + downside + falsifier
 
   resolve_candidates(
     hypothesis_tree_ref?, lever_catalog?, current_state, learned_constraints
@@ -203,7 +228,12 @@ program:
 
   advise(ordinal_ranked_frontier) -> next_wave + tradeoff_accepted
 
-  design_first_test(next_wave) -> first_proof
+  compare_outside_options(next_wave,
+    report_now + request_feedback + stop
+  ) -> spend_decision
+
+  design_decision_changing_test(next_wave, falsifier) ->
+    first_proof + decision_if_positive + decision_if_negative
 
   define_replan_conditions(
     next_wave, ordinal_ranked_frontier
@@ -249,6 +279,12 @@ Output:
 - Do not rank technique names by novelty. Tie every move to the current
   bottleneck, evidence, cheapest falsifier, and result-dependent frontier
   update.
+- Do not call an outcome proof of decision quality by itself. Compare it with
+  the pre-outcome thesis, falsifier, and plausible luck or execution factors.
+- Do not collect a convenient metric unless its positive and negative outcomes
+  would alter the next action, spend, scope, or outside option.
+- Do not turn a caller's relative timing (for example, "next month") into an
+  unsupported calendar date.
 - Do not invent current capability. If the feature is not grounded, say what
   evidence is missing and choose a grounding step.
 
@@ -271,6 +307,9 @@ Output:
   recommended play should become exemplar runs and staged rollout.
 - [../goal-advisor/SKILL.md](../goal-advisor/SKILL.md) - use when a chosen play
   warrants a durable Goal Packet or rollout mode.
+- [decision techniques](references/decision-techniques.md) - load for
+  material, high-uncertainty, or meaningful-cost decisions requiring the named
+  Rumelt, Duke, and Hubbard source methods.
 
 ## Output
 
@@ -286,7 +325,13 @@ Return this shape in chat or write it to the requested artifact:
 - `Feature Grounding`
 - `Objective And Progress Grounding`
 - `Hypothesis Tree Grounding`, when supplied
+- `Decision Record`: `Diagnosis`, `Guiding Policy`, `Coherent Move`, `Bet
+  Thesis`, `Confidence Range` or `Uncalibrated`, `Downside`, `Falsifier`, and
+  `Decision-Changing Test` with `If Positive -> Next Action` and `If Negative
+  -> Next Action`
 - `Ranked Frontier And Rejected Moves`
+- `Outside-Option Comparison`: `Next Wave`, `Report Now`, `Request Feedback`,
+  and `Stop`, with an explicit spend decision
 - `Next Wave`
 - `Tradeoff Accepted`
 - `Contingent Roadmap And Replan Conditions`
@@ -294,6 +339,16 @@ Return this shape in chat or write it to the requested artifact:
 - `Source Gap`, when applicable
 - `Next Owner`
 - `Goal / Rollout Readiness`
+
+For every material, non-source-gapped recommendation, render every `Decision
+Record` field by name. Do not replace the bet thesis, downside, or falsifier
+with an implied rationale; use `uncalibrated` rather than omitting confidence
+when evidence does not support a calibrated range.
+
+For a source gap, state the missing evidence and the bounded recovery route,
+then make the candidate-admission gate explicit: every recovered candidate must
+carry an `adopt`, `adapt`, `reject`, or `defer` disposition before it can enter
+the frontier. Do not present that recovery step as a selected operating move.
 
 For a source-stage request with sufficient inputs, do not return only a schema.
 Render the extracted `Source refs`, `Techniques`, `Mechanisms`, and `Variables`,

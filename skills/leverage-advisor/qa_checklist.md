@@ -21,6 +21,19 @@ campaign to execution.
 - [ ] Candidate levers are supplied, locally derived, or source-backed; a weak
       frontier returns a bounded research route or source gap instead of
       fabricated SOTA claims.
+- [ ] A source gap names the missing evidence and makes `adopt`, `adapt`,
+      `reject`, or `defer` a required gate before recovered candidates enter
+      the frontier.
+- [ ] The plan names an evidence-backed critical obstacle, a guiding policy,
+      and a coherent next move; aspiration alone is not treated as strategy.
+- [ ] The recommended move records its pre-outcome thesis, calibrated confidence
+      range or `uncalibrated` status, downside, and falsifier; later outcomes
+      are not treated as decision quality by themselves.
+- [ ] The first proof is the cheapest honest decision-changing test: positive
+      and negative results lead to different next actions, or the measurement
+      is rejected as non-decisive.
+- [ ] Relative timing supplied by the caller remains relative unless named
+      calendar evidence supports a more specific date.
 - [ ] Prerequisites, conflicts, guards, exhausted branches, and budget limits
       are filtered before ranking.
 - [ ] Ranking weighs direct potential, bottleneck fit, information gain,

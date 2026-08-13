@@ -70,6 +70,34 @@
         "Does not rescue every expected negative or take ownership of tree mutation"
       ],
       "metadata": {"farplane": {"title": "Leverage Advisor diagnoses a surprise before backtracking", "tags": ["skill", "leverage", "diagnosis"], "notes": "Protects bounded depth-first learning with breadth preservation."}}
+    },
+    {
+      "id": "leverage_advisor_precommits_an_uncertain_decision_01",
+      "prompt": "A local automation consultancy can either polish its generic website, spend two months building a broad dashboard, or run a one-week paid workflow pilot with a warm warehouse operator. The operator has repeatedly complained that shift handovers lose critical information. We have one engineer-week and a small travel budget. What should the team do next?",
+      "expected_output": "Identifies the handover-information bottleneck; selects a coherent, bounded paid pilot only if it beats the outside options; states what must be true, an evidence-bounded confidence status, downside, and falsifier before execution; specifies an observation whose positive and negative results change the next decision; preserves execution with the caller",
+      "files": [],
+      "assertions": [
+        "Names the critical obstacle and a policy that narrows the frontier instead of treating growth as a strategy",
+        "Records a pre-outcome thesis, confidence range or uncalibrated status, downside, and falsifier for the selected move",
+        "Chooses a smallest test whose accepted/rejected outcomes lead to different follow-up actions",
+        "Compares the selected move with report_now, request_feedback, and stop before recommending spend",
+        "Does not execute the pilot, make up conversion numbers, or treat an eventual result as proof of decision quality"
+      ],
+      "metadata": {"farplane": {"title": "Leverage Advisor precommits an uncertain operating bet", "tags": ["skill", "leverage", "uncertainty", "decision"], "notes": "Protects diagnosis, pre-outcome reasoning, and decision-changing proof without naming source frameworks in the query."}}
+    },
+    {
+      "id": "leverage_advisor_rejects_a_non_decisive_measurement_01",
+      "prompt": "A founder is deciding whether to keep pursuing a possible collaboration. The only concrete question is whether the partner will give access to one real operating workflow next month. Someone proposes spending a week surveying 500 people about whether they like automation, but says the founder will pursue the collaboration regardless of the survey result. What should the next evidence step be?",
+      "expected_output": "Rejects the survey because neither result changes the decision; identifies access commitment as the key uncertainty; recommends the smallest honest evidence request that would change pursue, defer, or decline; records downside and falsifier; preserves the outside options",
+      "files": [],
+      "assertions": [
+        "Explains why the proposed survey is not decision-changing rather than collecting a convenient metric",
+        "Identifies the partner access commitment as the critical uncertainty and makes it the evidence target",
+        "States a bounded positive and negative branch that changes the next action",
+        "Includes a pre-outcome thesis, downside, and falsifier without pretending to know calibrated probabilities",
+        "Keeps the recommendation as advice and does not contact the partner or execute an experiment"
+      ],
+      "metadata": {"farplane": {"title": "Leverage Advisor rejects convenient non-decisive measurement", "tags": ["skill", "leverage", "measurement", "decision"], "notes": "Protects information-value discipline without naming source frameworks in the query."}}
     }
   ]
 }
