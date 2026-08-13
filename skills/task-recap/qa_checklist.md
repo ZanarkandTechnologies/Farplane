@@ -20,14 +20,27 @@ task_recap_check(task_boundary, sources, recap, next_action)
 
 ## Checklist
 
-- [ ] The recap identifies one task boundary and lists the authoritative sources
-  used; an unavailable ticket, artifact, or thread is an explicit source gap.
+- [ ] Immediately after any governing response ledger, the recap opens with a
+  grouped quick card (`Now`, `Delta`, and `Risks & action`), identifies one
+  task boundary, and lists the authoritative sources used; each supplied
+  readable path was opened before an unavailable ticket, artifact, or thread
+  is called a source gap.
 - [ ] Durable records outrank transcript memory, and observed fact, decision,
   inference, and stale snapshot are distinguishable in the recap.
-- [ ] Every material change has a source-backed `Before` / `After` / `Example`,
-  and every problem retains its attempts, observed outcome, and disposition.
+- [ ] Every material change has a source-backed `Before` / `After` / indented
+  `Example` visibly grouped in `Delta`; a full recap adds a dated,
+  source-labeled chronology plus every problem's attempts, observed outcome,
+  disposition, and remaining impact in a distinct `Problems and attempts`
+  section; it names the operator's immediate goal and latest user question or
+  decision, uses a full date on every dated event, and ends its detail ledger
+  with one literal task-relative or supplied path per bullet plus one final safe
+  next action.
 - [ ] Completion, customer readiness, and next-action claims reconcile ticket,
-  progress, evidence, and scoped worktree state; conflicts remain visible.
+  progress, evidence, and scoped worktree state; conflicts remain visible, and
+  every worktree snapshot names its timestamp and explicit `historical, not
+  live state` limit plus task-owned and excluded path(s), without expanding
+  task scope or proving completion. A material proof conflict includes the full
+  detail layer even when the operator asks for only a status check.
 - [ ] The recap excludes unrelated state, performs no execution, and ends with
   one safe next action, reply posture, or concrete source request.
 

@@ -4,15 +4,18 @@
     {
       "id": "task_recap_full_ticketed_context_01",
       "prompt": "I’m returning to the warehouse handover task after several days. I need enough context to answer the customer’s latest question. Can you catch me up from the task records?",
-      "expected_output": "Returns a source-linked full recap with the goal, latest customer question, chronology, decision history, Before/After/Example deltas, problem-attempt-result records, current confidence, and a safe response posture.",
+      "expected_output": "Opens with a grouped quick card (Now, Delta, Risks & action), then returns a source-linked full recap with the goal, latest customer question, chronology, decision history, Before/After/Example deltas, problem-attempt-result records, current confidence, and a safe response posture.",
       "files": [
         "skills/task-recap/examples/warehouse-handoff/ticket.md",
         "skills/task-recap/examples/warehouse-handoff/progress.md",
         "skills/task-recap/examples/warehouse-handoff/evidence.md"
       ],
       "assertions": [
-        "Names the actual operator goal and latest customer question from the staged records",
-        "Reconstructs the timeline from durable task records rather than a generic transcript summary",
+        "Places the grouped Now, Delta, and Risks & action quick card immediately after any required response header and before full context",
+        "Reads each supplied staged path before deciding whether a source gap exists",
+        "Names the operator's immediate goal and latest customer question from the staged records",
+        "Reconstructs every dated material event, including the latest customer question, with its full date as its own source-labeled timeline entry from durable task records",
+        "Lists every literal concrete staged source path on its own full-recap ledger bullet and ends with one safe next posture",
         "States the material Before, After, and Example delta with source-backed scope",
         "Preserves the implementation, verification, and customer-readiness distinction",
         "Ends with one safe response posture without running the task"
@@ -28,17 +31,19 @@
     {
       "id": "task_recap_surfaces_conflicting_completion_01",
       "prompt": "Before I tell the customer the handover issue is fixed, what do the records actually show?",
-      "expected_output": "Identifies the conflict between implementation progress and missing runtime proof, avoids a completion claim, and names the concrete evidence or response needed before customer confirmation.",
+      "expected_output": "Uses the grouped card to make the conflict between implementation progress and missing runtime proof obvious, avoids a completion claim, and names the concrete evidence or response needed before customer confirmation.",
       "files": [
         "skills/task-recap/examples/warehouse-handoff/ticket.md",
         "skills/task-recap/examples/warehouse-handoff/progress.md",
         "skills/task-recap/examples/warehouse-handoff/evidence.md"
       ],
       "assertions": [
+        "Places the customer-safe reply in Now and the missing proof in Risks & action",
         "Distinguishes checked ticket work from a passing runtime receipt",
         "Makes the conflicting evidence visible instead of averaging it into a reassuring conclusion",
         "States that customer readiness remains unproven",
         "Names the smallest evidence needed to resolve the conflict",
+        "Appends full source-linked details for the proof conflict, listing every concrete staged path on its own ledger bullet and ending with one safe next posture",
         "Does not execute a test or send a customer message"
       ],
       "metadata": {
@@ -52,16 +57,18 @@
     {
       "id": "task_recap_preserves_attempt_history_01",
       "prompt": "What have we already tried on the warehouse handover problem, and which paths should we not repeat?",
-      "expected_output": "Traces each recorded symptom, attempt, observed result, disposition, and remaining impact; preserves the rejected workaround and separates the implemented fix from its unverified runtime outcome.",
+      "expected_output": "Keeps the visible Delta grouped as Before, After, and indented Example; traces each recorded symptom, attempt, observed result, disposition, and remaining impact; preserves the rejected workaround and separates the implemented fix from its unverified runtime outcome.",
       "files": [
         "skills/task-recap/examples/warehouse-handoff/ticket.md",
         "skills/task-recap/examples/warehouse-handoff/progress.md",
         "skills/task-recap/examples/warehouse-handoff/evidence.md"
       ],
       "assertions": [
+        "Keeps the source-backed Before, After, and indented Example together in Delta",
         "Names the concrete symptom rather than flattening it into a generic bug",
         "Preserves the rejected workaround and the reason it was rejected",
-        "Connects each attempt to its observed result and current disposition",
+        "Uses a distinct Problems and attempts section to connect each attempt to its observed result, disposition, and remaining impact",
+        "Labels each detailed timeline event with its supporting source, retains every literal concrete source path on its own ledger bullet, and ends with one safe next posture",
         "Keeps unresolved runtime verification visible after the implementation attempt",
         "Does not invent an attempt, root cause, or final outcome"
       ],
@@ -76,9 +83,10 @@
     {
       "id": "task_recap_names_missing_durable_context_01",
       "prompt": "I’m opening an old conversation, but all I remember is that it involved a warehouse handover. Give me the full recap.",
-      "expected_output": "Returns a bounded source-gap response rather than inventing history, states what cannot be known, and requests a specific ticket, artifact, thread reference, or pasted source needed for a reliable recap.",
+      "expected_output": "Returns a bounded grouped source-gap card rather than inventing history, states what cannot be known, and requests a specific ticket, artifact, thread reference, or pasted source needed for a reliable recap.",
       "files": [],
       "assertions": [
+        "Uses Now and Risks & action to make the source gap and needed source scannable",
         "Does not fabricate task details from the topic alone",
         "Explains the limit of an unbound or unavailable task source",
         "Requests the smallest concrete source needed to continue",
@@ -96,7 +104,7 @@
     {
       "id": "task_recap_scopes_worktree_noise_01",
       "prompt": "Please catch me up on the warehouse handover task. The workspace also has an unrelated documentation edit, so keep the recap scoped to this task.",
-      "expected_output": "Uses task records and the captured worktree snapshot to distinguish relevant implementation state from unrelated documentation changes, labels the snapshot freshness limit, and avoids treating either as completion proof.",
+      "expected_output": "Uses the grouped quick card and task records to distinguish relevant implementation state from unrelated documentation changes, labels the snapshot freshness limit, and avoids treating either as completion proof.",
       "files": [
         "skills/task-recap/examples/warehouse-handoff/ticket.md",
         "skills/task-recap/examples/warehouse-handoff/progress.md",
@@ -104,9 +112,10 @@
         "skills/task-recap/examples/warehouse-handoff/worktree-status.txt"
       ],
       "assertions": [
-        "Scopes worktree discussion to the task-owned implementation path",
+        "Uses the grouped card to make the relevant Delta and remaining action scannable",
+        "Names the task-owned implementation path rather than only calling the worktree scoped",
         "Excludes the unrelated documentation edit from the task delta",
-        "Labels the worktree status as a timestamped capture rather than live truth",
+        "Labels the worktree status with its exact capture timestamp and explicitly says it is historical, not live state",
         "Does not let a modified file replace test or review evidence",
         "Returns a safe next action grounded in the task packet"
       ],
