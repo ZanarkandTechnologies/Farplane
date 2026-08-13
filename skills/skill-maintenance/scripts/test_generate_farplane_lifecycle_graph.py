@@ -171,6 +171,7 @@ routes:
             {
                 "farplane-framework-core",
                 "skill-registry",
+                "skill-capabilities",
                 "harness-reference",
                 "farplane-lifecycle-core",
                 "farplane-lifecycle-full",
@@ -178,6 +179,7 @@ routes:
         )
         self.assertEqual(get_projection_config("farplane-framework-core").output_schema, "framework_core_graph")
         self.assertEqual(get_projection_config("skill-registry").output_schema, "skill_graph")
+        self.assertEqual(get_projection_config("skill-capabilities").output_schema, "skill_capability_graph")
         self.assertEqual(get_projection_config("harness-reference").output_schema, "harness_graph")
         self.assertEqual(get_projection_config("farplane-lifecycle-core").output_schema, "lifecycle_graph")
         full = get_projection_config("farplane-lifecycle-full")

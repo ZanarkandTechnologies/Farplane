@@ -445,7 +445,14 @@
           .filter((node) => !group || node.group === group)
           .filter((node) => {
             if (!query) return true;
-            return [node.label, node.id, node.group, node.path, node.description, ...(node.methods || [])]
+            return [
+              node.label,
+              node.id,
+              node.group,
+              node.path,
+              node.description,
+              ...(node.methods || []).flatMap((method) => [method.id, method.class, method.output]),
+            ]
               .join(" ")
               .toLowerCase()
               .includes(query);
@@ -680,7 +687,7 @@
           </div>
           <div class="mb-6">
             <h4 class="mb-2 border-b border-outline-variant pb-1 font-data-mono text-[12px] font-bold tracking-[0.08em] text-primary">METHODS</h4>
-            <div class="flex flex-wrap gap-2">${methods.map((method) => badge(method, "method")).join("") || badge("none", "muted")}</div>
+            <div class="flex flex-wrap gap-2">${methods.map((method) => badge(`${method.id} · ${method.class} · ${method.output}`, "method")).join("") || badge("none", "muted")}</div>
           </div>
           <div>
             <h4 class="mb-2 flex justify-between border-b border-outline-variant pb-1 font-data-mono text-[12px] font-bold tracking-[0.08em] text-primary">

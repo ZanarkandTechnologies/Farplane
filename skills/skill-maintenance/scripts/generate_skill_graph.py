@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import sys
 from collections import defaultdict
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
@@ -13,6 +14,16 @@ from typing import Any
 
 from graph_ir import GraphBundle, GraphEdge, GraphNode, edge_counts, utc_timestamp, write_js, write_json
 from graph_projection_config import get_projection_config
+
+SCRIPT_ROOT = Path(__file__).resolve().parents[3]
+if str(SCRIPT_ROOT) not in sys.path:
+    sys.path.insert(0, str(SCRIPT_ROOT))
+
+from bin.core.skill_departments import (
+    load_skill_departments,
+    load_skill_workflow_labels,
+    load_skill_workflow_roots,
+)
 
 SKILL_HEAT_EVENT_TYPES = {
     "control_surface_detected",
@@ -22,6 +33,7 @@ SKILL_HEAT_EVENT_TYPES = {
 DEFAULT_SKILL_HEAT_WINDOW_DAYS = 30
 DEFAULT_SKILL_HEAT_RECENT_DAYS = 7
 DEFAULT_SKILL_HEAT_TOP_N = 25
+CAPABILITY_MAP_METHOD_CLASS = "artifact"
 
 
 def configured_positive_int(env_name: str, default: int) -> int:
@@ -452,6 +464,168 @@ def build_graph(
     return GraphBundle(nodes=nodes, edges=edges, generated_at=utc_timestamp(), counts=counts).as_dict()
 
 
+def build_capability_graph(
+    rows: list[dict[str, Any]],
+    department_labels: dict[str, str] | None = None,
+    workflow_roots: dict[str, tuple[str, ...]] | None = None,
+    workflow_labels: dict[str, str] | None = None,
+) -> dict[str, Any]:
+    """Project configured real workflow roots and their declared artifact methods."""
+    nodes: list[dict[str, Any]] = []
+    edges: list[dict[str, Any]] = []
+    capability_classes: dict[str, int] = defaultdict(int)
+    departments = department_labels or {}
+    if not departments:
+        raise ValueError("capability projection requires declared departments")
+    if workflow_roots is None:
+        raise ValueError("capability projection requires configured workflow roots")
+    workflow_labels = workflow_labels or {}
+
+    unknown_root_departments = sorted(set(workflow_roots).difference(departments))
+    missing_root_departments = sorted(set(departments).difference(workflow_roots))
+    if unknown_root_departments or missing_root_departments:
+        details: list[str] = []
+        if unknown_root_departments:
+            details.append(f"unknown workflow-root departments: {', '.join(unknown_root_departments)}")
+        if missing_root_departments:
+            details.append(f"missing workflow-root departments: {', '.join(missing_root_departments)}")
+        raise ValueError("capability projection " + "; ".join(details))
+
+    rows_by_name = {str(row.get("name") or ""): row for row in rows}
+    department_ids = list(departments)
+    selected_rows: list[tuple[str, dict[str, Any]]] = []
+    selected_names: set[str] = set()
+    for department_id in department_ids:
+        roots = workflow_roots[department_id]
+        if not roots:
+            raise ValueError(f"capability projection requires a root for {department_id}")
+        for skill_id in roots:
+            if skill_id in selected_names:
+                raise ValueError(f"capability projection duplicate workflow root {skill_id!r}")
+            row = rows_by_name.get(skill_id)
+            if row is None:
+                raise ValueError(f"capability projection unknown workflow root {skill_id!r}")
+            if row.get("tier") != 3:
+                raise ValueError(f"capability projection root {skill_id!r} must be Tier 3")
+            if row.get("group") != department_id:
+                raise ValueError(
+                    f"capability projection root {skill_id!r} must belong to {department_id!r}"
+                )
+            declared_methods = [method for method in row.get("methods", []) if isinstance(method, dict)]
+            if declared_methods and not any(
+                method.get("class") == CAPABILITY_MAP_METHOD_CLASS for method in declared_methods
+            ):
+                raise ValueError(
+                    f"capability projection root {skill_id!r} declares no artifact method"
+                )
+            selected_names.add(skill_id)
+            selected_rows.append((department_id, row))
+
+    for department_id in department_ids:
+        nodes.append(
+            GraphNode(
+                id=f"department:{department_id}",
+                label=departments.get(department_id, department_id.replace("-", " ").title()),
+                kind="department",
+                tags=("department", department_id),
+                attributes={"department_id": department_id},
+            ).as_dict()
+        )
+
+    for department_id, row in selected_rows:
+        skill_id = str(row["name"])
+        nodes.append(
+            GraphNode(
+                id=f"skill:{skill_id}",
+                label=workflow_labels.get(skill_id, skill_id),
+                kind="workflow",
+                tags=("workflow", department_id),
+                attributes={
+                    "skill_id": skill_id,
+                    "tier": row.get("tier"),
+                    "group": department_id,
+                    "description": row.get("description", ""),
+                    "source": row.get("source", ""),
+                },
+            ).as_dict()
+        )
+        edges.append(
+            GraphEdge(
+                source=f"department:{department_id}",
+                target=f"skill:{skill_id}",
+                type="member-of",
+                label="workflow-root",
+                confidence="explicit",
+            ).as_dict()
+        )
+        methods = [
+            method
+            for method in row.get("methods", [])
+            if isinstance(method, dict) and method.get("class") == CAPABILITY_MAP_METHOD_CLASS
+        ]
+
+        for method in sorted(methods, key=lambda item: str(item.get("id") or "")):
+            method_id = str(method["id"])
+            method_class = CAPABILITY_MAP_METHOD_CLASS
+            output = str(method["output"])
+            capability_classes[method_class] += 1
+            nodes.append(
+                GraphNode(
+                    id=f"method:{method_id}",
+                    label=output,
+                    kind=method_class,
+                    tags=(method_class, str(row.get("group") or "ungrouped")),
+                    attributes={
+                        "method_id": method_id,
+                        "parent_skill": skill_id,
+                        "output": output,
+                        "tier": row.get("tier"),
+                        "group": department_id,
+                    },
+                ).as_dict()
+            )
+            edges.append(
+                GraphEdge(
+                    source=f"skill:{skill_id}",
+                    target=f"method:{method_id}",
+                    type="contains",
+                    label=method_class,
+                    confidence="explicit",
+                ).as_dict()
+            )
+
+    nodes.sort(
+        key=lambda node: (
+            str(node.get("department_id") or node.get("group") or ""),
+            str(node.get("parent_skill") or node.get("skill_id") or ""),
+            node["id"],
+        )
+    )
+    edges.sort(key=lambda edge: (edge["source"], edge["target"]))
+    return GraphBundle(
+        nodes=nodes,
+        edges=edges,
+        generated_at=utc_timestamp(),
+        counts={
+            "nodes": len(nodes),
+            "edges": len(edges),
+            "node_kinds": {
+                "artifact": capability_classes[CAPABILITY_MAP_METHOD_CLASS],
+                "department": len(department_ids),
+                "workflow": len(selected_rows),
+            },
+            "capability_classes": dict(sorted(capability_classes.items())),
+        },
+        extras={
+            "source": {
+                "contract": "rules/skill-workflows.toml roots/labels + skills/*/SKILL.md frontmatter group + methods[]",
+                "link_semantics": "explicit selected workflow membership and parent artifact containment only",
+                "omits": "unselected skills, integration/internal methods, Todo references, inferred execution dependencies, and process order",
+            }
+        },
+    ).as_dict()
+
+
 def parse_frontmatter(markdown: str) -> tuple[dict[str, Any], str, str]:
     if not markdown.startswith("---\n"):
         return {}, "", markdown
@@ -487,25 +661,42 @@ def parse_simple_yaml(raw: str) -> dict[str, Any]:
     parsed: dict[str, Any] = {}
     current_map: str | None = None
     current_list: str | None = None
+    current_list_item: dict[str, Any] | None = None
 
     for line in raw.splitlines():
         if not line.strip() or line.lstrip().startswith("#"):
             continue
-        if line.startswith("  ") and current_map:
-            key, _, value = line.strip().partition(":")
+        indentation = len(line) - len(line.lstrip(" "))
+        stripped = line.strip()
+        if indentation == 2 and stripped.startswith("- ") and current_list:
+            item_value = stripped[2:].strip()
+            item_key, separator, raw_item_value = item_value.partition(": ")
+            if not isinstance(parsed.get(current_list), list):
+                parsed[current_list] = []
+            if separator:
+                current_list_item = {item_key.strip(): parse_scalar(raw_item_value)}
+                parsed.setdefault(current_list, []).append(current_list_item)
+            else:
+                current_list_item = None
+                parsed.setdefault(current_list, []).append(parse_scalar(item_value))
+            continue
+        if indentation >= 4 and current_list_item is not None and ":" in stripped:
+            key, _, value = stripped.partition(":")
+            if key:
+                current_list_item[key.strip()] = parse_scalar(value)
+            continue
+        if indentation == 2 and current_map:
+            current_list_item = None
+            key, _, value = stripped.partition(":")
             if key and value:
                 if not isinstance(parsed.get(current_map), dict):
                     parsed[current_map] = {}
                 parsed.setdefault(current_map, {})[key] = parse_scalar(value)
             continue
-        if line.startswith("  - ") and current_list:
-            if not isinstance(parsed.get(current_list), list):
-                parsed[current_list] = []
-            parsed.setdefault(current_list, []).append(parse_scalar(line.strip()[2:]))
-            continue
 
         current_map = None
         current_list = None
+        current_list_item = None
         key, _, value = line.partition(":")
         key = key.strip()
         if not key:

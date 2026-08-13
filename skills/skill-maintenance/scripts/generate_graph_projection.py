@@ -49,6 +49,20 @@ def generate_skill_projection(args: argparse.Namespace) -> tuple[dict, dict | No
     return graph, docs
 
 
+def generate_skill_capability_projection(args: argparse.Namespace) -> dict:
+    generator = _load_builder("generate_skill_graph")
+    repo_root = Path(args.repo_root).resolve()
+    rows = generator.load_registry(repo_root / args.registry)
+    departments = generator.load_skill_departments(repo_root)
+    workflow_roots = generator.load_skill_workflow_roots(repo_root, departments)
+    return generator.build_capability_graph(
+        rows,
+        department_labels=departments,
+        workflow_roots=workflow_roots,
+        workflow_labels=generator.load_skill_workflow_labels(repo_root, workflow_roots),
+    )
+
+
 def generate_harness_projection(args: argparse.Namespace) -> tuple[dict, str]:
     generator = _load_builder("generate_harness_graph")
     repo_root = Path(args.repo_root).resolve()
@@ -140,6 +154,23 @@ def main() -> int:
         if docs_js_path:
             write_js(docs_js_path, config.docs_js_global, docs)
         print(f"wrote {out_path} and {docs_out}")
+        return 0
+
+    if config.output_schema == "skill_capability_graph":
+        graph = project_graph(generate_skill_capability_projection(args), config)
+        if args.check:
+            errors = _check_json(out_path, graph)
+            if js_path:
+                errors.extend(_check_js(js_path, config.js_global, graph))
+            if errors:
+                print("\n".join(errors), file=sys.stderr)
+                return 1
+            print(f"{config.name} OK ({graph['counts']['nodes']} nodes, {graph['counts']['edges']} edges)")
+            return 0
+        write_json(out_path, graph)
+        if js_path:
+            write_js(js_path, config.js_global, graph)
+        print(f"wrote {out_path}")
         return 0
 
     if config.output_schema == "harness_graph":

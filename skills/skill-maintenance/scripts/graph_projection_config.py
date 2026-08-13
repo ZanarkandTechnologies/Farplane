@@ -51,6 +51,14 @@ PROJECTION_CONFIGS: dict[str, ProjectionConfig] = {
         docs_js_global="SKILL_DOCS",
         flatteners=("method_routes",),
     ),
+    "skill-capabilities": ProjectionConfig(
+        name="skill-capabilities",
+        description="Selected department workflows and declared artifact methods with explicit containment.",
+        output_schema="skill_capability_graph",
+        default_out=generated_graph_path("skill-capability-graph.json"),
+        default_js_out=generated_graph_path("skill-capability-graph.js"),
+        js_global="SKILL_CAPABILITY_GRAPH",
+    ),
     "harness-reference": ProjectionConfig(
         name="harness-reference",
         description="Repo-wide local-reference graph plus docs audit report.",
