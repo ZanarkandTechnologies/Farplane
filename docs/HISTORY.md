@@ -1,3 +1,5 @@
+2026-08-12 10:00 +0800 | FEAT | add typed Markdown Edge observations, explicit daily-refresh source gaps, and leverage metadata to Core metric snapshots
+2026-08-12 16:20 +0800 | FIX | carry collector-observed social account identity into raw leverage cards for account-level Distribution aggregation without tracking provider IDs in project configuration
 2026-06-13 21:42 +0800 | FIX | install Farplane Console lifecycle hook from repo source and configure it through the Farplane UI Convex site URL instead of a stale hardcoded deployment endpoint
 2026-06-13 22:24 +0800 | FEAT | add Core-owned farplane CLI for install/hooks/doctor/ui-link/ui-start and delegated Farplane-UI module commands
 
