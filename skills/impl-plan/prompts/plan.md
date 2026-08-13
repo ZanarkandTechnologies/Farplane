@@ -44,6 +44,12 @@ and low-fi wireflow (`functional-ui`), visual reference/system
 (`landing-page`). Fold accepted output into `tickets/TASK-XXXX/design.md`; do
 not create a frontend planner, router, or parallel design schema.
 
+When material UI work has no selected ticket, create or request its canonical
+`tickets/TASK-XXXX/ticket.md` before returning a substantive plan. Preserve any
+accepted **Steve Jobs Focus & Simplicity Pass** conclusion—core action,
+subtraction, and deliberate `no`—in the existing design baseline, not as a new
+ticket section or chat-only summary.
+
 Record a context decision only when it changes scope, a change unit, proof, or
 readiness. Include its evidence, exact gap, resolver/result when used, and plan
 integration. Do not enumerate irrelevant facets.

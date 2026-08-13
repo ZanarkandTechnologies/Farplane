@@ -6,6 +6,8 @@ Use this at the end of `functional-ui`.
 
 - `Recommended model:` chosen interaction model.
 - `Why it wins:` one concrete reason tied to the user story.
+- `Steve Jobs Focus & Simplicity Pass:` customer benefit, core action, what is
+  removed or deferred, and deliberate `no`.
 - `Screens/components:` what needs to exist.
 - `States:` default, loading, empty, error, success, disabled, edge cases.
 - `Controls:` buttons, inputs, tabs, filters, menus, keyboard/touch needs.

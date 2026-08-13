@@ -23,7 +23,8 @@ impl_plan_qa(ticket, inspected_context, proof_weight)
 
 1. `ticket-first`
    - Material planning is durable in one selected ticket, not chat or a child
-     implementation plan.
+     implementation plan. When no ticket is supplied, the planner creates or
+     requests the canonical ticket before returning a substantive plan.
 
 2. `canonical-template-owner`
    - The ticket follows `tickets/templates/ticket.md`; no skill-local active
@@ -47,6 +48,10 @@ impl_plan_qa(ticket, inspected_context, proof_weight)
    - For UI work, only unresolved interaction, visual, media, or landing
      facets call their bounded owner. The resulting decisions are merged into
      the ticket design baseline; a frontend router or child plan is a failure.
+   - For material UI work, the accepted **Steve Jobs Focus & Simplicity Pass**
+     conclusion—core action, subtraction, and deliberate `no`—is preserved in
+     that existing baseline; `impl-plan` does not recreate the judgment or add
+     a second ticket section.
 
 6. `architecture-and-locality`
    - Material ownership, public contracts, and typed movement are visible when

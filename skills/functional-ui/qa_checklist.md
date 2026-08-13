@@ -117,6 +117,13 @@ functional_ui_qa_checklist(surface, users, workflow_artifact, evidence?)
      screens, repeat filters, hunt for common actions, or recover context after
      every operation.
 
+11. `steve-jobs-focus-and-simplicity`
+    - Question: Does the handoff name the customer benefit, one core action,
+      what is removed or deferred, and a deliberate `no`?
+    - Violation: The plan adds panels, controls, steps, or choices without a
+      job-level reason; treats a style imitation as UX judgment; or removes
+      required states, accessibility, safety, or evidence to appear simpler.
+
 ## Evidence Note Template
 
 ```text
@@ -141,7 +148,8 @@ Return one row per checklist item:
 - fix: smallest required change, or "none"
 
 Focus on workflow usefulness, spatial priority, readability, overflow,
-ethical interaction patterns, accessibility, state coverage, and efficiency.
+ethical interaction patterns, accessibility, state coverage, efficiency, and
+the Steve Jobs Focus & Simplicity Pass.
 Do not judge visual taste except where it affects functional clarity. Verify
 the comparable-evidence route or its explicit skip reason before passing a
 material workflow recommendation.

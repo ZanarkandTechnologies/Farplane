@@ -67,6 +67,35 @@
           "tags": ["skill", "functional-ui", "low-fi", "impl-plan"]
         }
       }
+    },
+    {
+      "id": "functional_ui_focus_and_simplicity_01",
+      "prompt": "An incident lead must assign each incoming production incident to an owner fast. The draft puts a recommendations carousel, an import wizard, a permanent activity feed, and a six-step setup before the incident queue. The actual workflow must still handle evidence requests, resolution, reopening, empty, loading, error, and recovery states. Recommend the functional planning handoff.",
+      "expected_output": "Names the operator benefit and one core assignment action; removes or defers unrelated choices while preserving necessary incident states and evidence; records an explicit rejected complexity; recommends a concrete workflow rather than a visual style imitation.",
+      "files": [],
+      "assertions": [
+        "States the customer benefit and identifies assigning an incident owner as the core action.",
+        "Removes or defers the recommendations carousel, import wizard, permanent activity feed, or setup steps unless a user-job reason justifies them.",
+        "Names a deliberate no rather than merely calling the UI cleaner or simpler.",
+        "Preserves evidence requests, resolution, reopening, empty, loading, error, and recovery behavior.",
+        "Returns a concrete functional handoff without substituting visual style for workflow judgment."
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Protects the primary incident-assignment action through subtraction",
+          "tags": [
+            "skill",
+            "functional-ui",
+            "focus",
+            "simplicity"
+          ],
+          "anti_patterns": [
+            "Calls an overbuilt workflow clean without naming a removal",
+            "Removes evidence or recovery states to make the flow smaller",
+            "Uses aesthetic imitation instead of a user-job decision"
+          ]
+        }
+      }
     }
   ]
 }

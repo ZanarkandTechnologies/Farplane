@@ -14,6 +14,7 @@ Score each 0-4:
 | Color | Does the palette have roles instead of decoration? |
 | Responsiveness | Does the design survive mobile and long text? |
 | Accessibility | Are contrast, focus, hit targets, and motion preferences respected? |
+| Focus & simplicity | Is the focal action unmistakable, with nonessential layers removed or deferred? |
 | Anti-slop | Would someone instantly say an AI made this? |
 
 ## Output
@@ -29,3 +30,5 @@ Score each 0-4:
 - Flat rhythm: vary spacing and section scale with purpose.
 - Card overuse: remove containers and use bands, dividers, alignment, or whitespace.
 - Visual noise: delete decorative elements until one idea remains.
+- Competing focal points: keep the action that serves the primary job and defer
+  the rest rather than shrinking everything equally.

@@ -50,6 +50,9 @@ allowed-tools: Read, Grep, Glob, Bash
   operation gate; a docs-only summary does not.
 - [ ] Diagnose the current UI or planned workflow before proposing visual or
   component changes.
+- [ ] Run the **Steve Jobs Focus & Simplicity Pass**: name the customer benefit,
+  core action, what can be removed or deferred, and the deliberate `no`; do not
+  remove required states, accessibility, safety, or evidence.
 - [ ] Use the native planning phase to compare the strongest interaction models
   and choose one recommended workflow.
 - [ ] Define screens, states, IA, interaction rules, data/content ranges, and
@@ -71,9 +74,11 @@ Use this before visual implementation when the question is how the product shoul
 1. Identify the user, context, and top jobs-to-be-done.
 2. Diagnose the current UI or planned workflow.
 3. Study comparable/latest examples and the workflows they prove.
-4. Compare 3 viable interaction models or redesign paths.
-5. Recommend one path clearly.
-6. Define states, IA, interaction rules, and implementation handoff.
+4. Run the **Steve Jobs Focus & Simplicity Pass**: name the customer benefit,
+   core action, what can be removed or deferred, and the deliberate `no`.
+5. Compare 3 viable interaction models or redesign paths.
+6. Recommend one path clearly.
+7. Define states, IA, interaction rules, and implementation handoff.
 
 ## Use When
 
@@ -102,12 +107,15 @@ Use this before visual implementation when the question is how the product shoul
    workflow/state evidence and access limits; focus on behavior, not surface
    aesthetics. Use settled local patterns without broad research for tiny
    same-pattern corrections.
-5. Produce 3 grounded UI options with pros and cons.
-6. Recommend one workflow and explain why it best fits the user stories.
-7. Define screens, states, IA, interaction rules, data/content ranges, and edge cases.
-8. Add a low-fi ASCII wireflow only when it materially clarifies flow or
+5. Run the **Steve Jobs Focus & Simplicity Pass** before adding options: state
+   the customer benefit, core action, removal or deferral, and deliberate `no`.
+   Preserve required states, accessibility, safety, and comparable evidence.
+6. Produce 3 grounded UI options with pros and cons.
+7. Recommend one workflow and explain why it best fits the user stories.
+8. Define screens, states, IA, interaction rules, data/content ranges, and edge cases.
+9. Add a low-fi ASCII wireflow only when it materially clarifies flow or
    hierarchy; otherwise keep the state map compact.
-9. Hand off with [implementation-handoff.md](references/implementation-handoff.md)
+10. Hand off with [implementation-handoff.md](references/implementation-handoff.md)
    to `impl-plan` as accepted UX context.
 
 ## Decision Branches
@@ -135,6 +143,8 @@ Produce a compact planning artifact with:
   capability, evidence ref such as captured stderr/tool inventory, public
   surfaces attempted, and `recommendation_status: provisional`
 - `Recommendation`
+- `Steve Jobs Focus & Simplicity Pass`: customer benefit, core action, removal
+  or deferral, and deliberate `no`
 - `Key screens/states`, including applicable empty, loading/in-progress,
   partial, success/return, error, and retry/recovery behavior
 - `Interaction rules`
@@ -157,6 +167,8 @@ Produce a compact planning artifact with:
   workflow evidence; downgrade the recommendation to provisional when no
   comparable could actually be operated
 - always recommend one path; do not stop at inspiration
+- use the named pass for disciplined subtraction, not a literal Jobs persona or
+  an excuse to hide necessary controls, safety, states, or accessibility
 - if the user did not provide a take, assume they want guided product judgment
 - do not solve functional failures with visual-only advice
 - do not specify final typography/color/motion taste beyond what the interaction model requires; hand that to `visual-design`

@@ -1,0 +1,34 @@
+{
+  "skill_name": "visual-design",
+  "evals": [
+    {
+      "id": "visual_design_focus_and_simplicity_01",
+      "prompt": "The accepted incident-triage workflow has one queue, a selected-incident detail drawer, and one primary action: Assign owner. The proposed visual brief adds a permanent activity column, a hero metric card, three nested bordered panels, and a bright animated background. Give the visual direction and implementation handoff.",
+      "expected_output": "Preserves the accepted workflow and makes the assignment action visually unmistakable; removes or defers nonessential visual layers; records a deliberate no; retains accessibility and necessary state visibility without a literal Steve Jobs imitation.",
+      "files": [],
+      "assertions": [
+        "Names the user-facing benefit and keeps Assign owner as the visual focal action.",
+        "Removes or defers the permanent activity column, hero metric card, nested containers, or animated background unless evidence proves a primary-job need.",
+        "States a deliberate no instead of only saying the page should be minimal.",
+        "Preserves functional requirements, accessibility, and visible state treatment.",
+        "Returns visual-system constraints and an implementation handoff without reauthoring the interaction model."
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Uses visual subtraction to protect a single operational focus",
+          "tags": [
+            "skill",
+            "visual-design",
+            "focus",
+            "simplicity"
+          ],
+          "anti_patterns": [
+            "Treats a Steve Jobs reference as a request to copy Apple aesthetics",
+            "Deletes required state visibility or accessible controls",
+            "Adds competing panels without a user-job reason"
+          ]
+        }
+      }
+    }
+  ]
+}

@@ -23,6 +23,13 @@ User:
 Primary job:
 Key screens/states:
 
+## Steve Jobs Focus & Simplicity Pass
+
+User-facing benefit:
+Visual focal action:
+Removed or deferred:
+Deliberate no:
+
 ## Register
 
 Product or brand:

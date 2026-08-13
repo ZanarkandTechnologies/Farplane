@@ -5,6 +5,7 @@ description: "Turn an accepted UI workflow and visual references into a visual s
 tier: 3
 group: operations
 source: local
+eval: evals/evals.json
 allowed-tools: Read, Grep, Glob, web_search
 ---
 
@@ -16,6 +17,9 @@ allowed-tools: Read, Grep, Glob, web_search
 - [ ] Confirm the functional basis: user, primary action, states, workflow, and
   existing UX decision. If missing, route to
   [functional-ui](../functional-ui/SKILL.md).
+- [ ] Run the **Steve Jobs Focus & Simplicity Pass**: state the user-facing
+  benefit, visual focal action, elements to remove or defer, and deliberate
+  `no`; preserve functional requirements, accessibility, and necessary state.
 - [ ] Use [research:parity](../research/SKILL.md#researchparity) or
   [research:competitor](../research/SKILL.md#researchcompetitor) when visual
   direction needs product, brand, or peer grounding.
@@ -59,13 +63,14 @@ Own the look and taste of a frontend surface after its functional purpose is kno
 ## Core Workflow
 
 1. **Confirm functional basis.** Identify the user, primary action, states, and interaction model. If missing, route to `functional-ui`.
-2. **Classify register.** Product UI serves repeated work; brand UI creates memory and desire. Choose the register before taste decisions.
-3. **Write a scene sentence.** Name who uses the surface, where, under what ambient light, and in what mood. Let that force dark/light, density, and contrast.
-4. **Choose numeric taste dials.** Set visual density, design variance, motion intensity, color commitment, and materiality on a 1-10 scale with one-line rationale for each.
-5. **Define the visual system.** Typography, color roles, spacing rhythm, radius/elevation, component treatment, icon/media language, and motion vocabulary.
-6. **Write a durable design brief when the work is substantial.** For a new app surface, redesign, multi-screen UI, or delegated implementation, create or update a ticket/spec-local `DESIGN_BRIEF.md` or equivalent ticket section before build handoff.
-7. **Reject AI tells.** Run the anti-slop check from `taste-dials.md` and `critique-audit.md`.
-8. **Hand off to planning.** Produce concrete constraints that `impl-plan`
+2. **Run the Steve Jobs Focus & Simplicity Pass.** State the user-facing benefit, visual focal action, elements to remove or defer, and deliberate `no`; do not remove functional requirements, accessibility, or necessary state.
+3. **Classify register.** Product UI serves repeated work; brand UI creates memory and desire. Choose the register before taste decisions.
+4. **Write a scene sentence.** Name who uses the surface, where, under what ambient light, and in what mood. Let that force dark/light, density, and contrast.
+5. **Choose numeric taste dials.** Set visual density, design variance, motion intensity, color commitment, and materiality on a 1-10 scale with one-line rationale for each.
+6. **Define the visual system.** Typography, color roles, spacing rhythm, radius/elevation, component treatment, icon/media language, and motion vocabulary.
+7. **Write a durable design brief when the work is substantial.** For a new app surface, redesign, multi-screen UI, or delegated implementation, create or update a ticket/spec-local `DESIGN_BRIEF.md` or equivalent ticket section before build handoff.
+8. **Reject AI tells.** Run the anti-slop check from `taste-dials.md` and `critique-audit.md`.
+9. **Hand off to planning.** Produce concrete constraints that `impl-plan`
    incorporates into the ticket design baseline.
 
 ## Decision Branches
@@ -111,6 +116,8 @@ Return a concise visual brief with:
 
 - `Register`
 - `Scene sentence`
+- `Steve Jobs Focus & Simplicity Pass`: user-facing benefit, visual focal
+  action, elements removed or deferred, and deliberate `no`
 - `Taste dials` with 1-10 numeric values
 - `Visual system`
 - `Visual evidence receipt`

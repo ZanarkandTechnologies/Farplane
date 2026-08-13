@@ -129,6 +129,36 @@
           "notes": "Protects against advisor ceremony and unnecessary new surfaces on settled local work."
         }
       }
+    },
+    {
+      "id": "impl_plan_preserves_ui_focus_pass_01",
+      "prompt": "Draft the canonical ticket body for selected TASK-3101, which adds an incident triage screen. Its accepted UX handoff says the operator benefit is fast owner assignment, the core action is Assign owner, the permanent activity feed and import wizard are deferred, and the deliberate no is a multi-column control-room dashboard. Its accepted visual brief keeps Assign owner as the focal action and rejects hero metric cards, nested containers, and an animated background. Existing components already cover a queue and detail drawer. Do not edit repository files.",
+      "expected_output": "Returns one canonical ticket body using the accepted UX and visual decisions, preserves their focus-and-subtraction conclusion in the ticket's existing design baseline, plans the smallest faithful implementation with existing components, and does not create a second ticket section or rerun UI design.",
+      "files": [],
+      "assertions": [
+        "Reuses the accepted UX and visual artifacts without reauthoring their UI judgment.",
+        "Carries the core Assign owner action, deferred activity/import work, and rejected dashboard complexity into TASK-3101's existing design baseline.",
+        "Reuses the queue and detail-drawer components before proposing new UI infrastructure.",
+        "Returns TASK-3101's canonical ticket body without a new focus-and-simplicity section or child plan.",
+        "Keeps proof concrete and routes visual or runtime evidence through the ticket QA strategy."
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Impl plan retains accepted UI subtraction without recreating design",
+          "tags": [
+            "skill",
+            "impl-plan",
+            "functional-ui",
+            "visual-design",
+            "context-reuse"
+          ],
+          "anti_patterns": [
+            "Reruns UX or visual design despite accepted context",
+            "Adds a second ticket schema for one design heuristic",
+            "Reintroduces deferred complexity through an implementation plan"
+          ]
+        }
+      }
     }
   ]
 }

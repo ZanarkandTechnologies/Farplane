@@ -37,7 +37,9 @@ are missing or stale: `functional-ui` for interaction evidence and wireflow,
 `visual-design` for reference-backed visual direction, `asset-advisor` for
 actual media needs, and `landing-page` for a one-page offer/story. This skill
 merges accepted results into one ticket and `design.md`; it is not a frontend
-router or a second design author.
+router or a second design author. When either UI facet is material, preserve
+its accepted **Steve Jobs Focus & Simplicity Pass** conclusion in the ticket's
+existing design baseline rather than adding a second ticket section.
 
 ## Skill Signature
 
@@ -84,6 +86,12 @@ inputs; this skill alone merges the Change Plan. A named omission is a gap, not
 permission to drop scope. When a resolver cannot run, record `block` rather
 than inventing its result.
 
+For a material request with no selected ticket, create or request the canonical
+`tickets/TASK-XXXX/ticket.md` before returning a substantive plan. When
+accepted UI context includes a **Steve Jobs Focus & Simplicity Pass**, preserve
+its core action, subtraction, and deliberate `no` in the ticket's existing
+design baseline; never replace it with a chat-only summary or a new schema.
+
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
@@ -117,6 +125,9 @@ than inventing its result.
     [UI implementation evidence](references/ui-implementation.md) only after
     those decisions identify a real component, theme, registry, framework, or
     chart requirement.
+  - [ ] For material UI work, merge the accepted **Steve Jobs Focus & Simplicity
+    Pass** conclusion—core action, subtraction, and deliberate `no`—into the
+    existing design baseline; do not recreate UI judgment or add ticket schema.
 - [ ] 4. Populate the canonical ticket template.
   - [ ] Load [tickets/templates/ticket.md](../../tickets/templates/ticket.md)
     and keep its required sections and optional-section rules authoritative.
