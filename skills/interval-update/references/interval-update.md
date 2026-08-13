@@ -124,6 +124,35 @@ Weekly executes the same reasoning and admission gates over the wider window:
 - review/intervention load, resource consumption, and policy-defined budget;
 - completed provider reports explicitly supplied inside the window.
 
+### Executive Update Extraction
+
+Weekly also records a compact `## Executive Update` section for a separate
+company-level editorial workflow. It is not a second planning loop, a Highlight
+ledger, or an authorization to publish.
+
+```text
+weekly_evidence -> 0..3 executive_update_cards -> finalized_weekly_report
+```
+
+Each card must have a reader-facing change, why it matters, at least one durable
+proof reference, and a draft-eligibility decision:
+
+| Field | Requirement |
+| --- | --- |
+| `change` | One concrete outcome, not a task list or raw activity. |
+| `why_it_matters` | Product, customer, learning, or capability implication. |
+| `proof_refs` | Ticket, report, metric, commit, review, or other durable evidence. |
+| `metric` | Include only a verified value or explicit `unavailable`. |
+| `demo_or_video` | Include only a public, directly accessible asset; otherwise `none`. |
+| `draft_eligibility` | `reader_safe`, `needs_fact_check`, or `internal_only`. |
+
+Use repository changes, ticket/proof outcomes, metrics, and final conclusions
+from project-mapped threads when locally accessible. Thread mapping does not
+make a raw transcript publishable: omit private paths, system prompts, secrets,
+client details, personal data, and unpublished media. An honest
+`no_eligible_update` is preferable to filler. The later company publisher may
+read only `reader_safe` cards and still requires its own final human approval.
+
 The wider window can increase root-cause confidence or expose recurrence; it
 does not grant broader authority or lower ticket quality.
 

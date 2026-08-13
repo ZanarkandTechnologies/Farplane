@@ -47,6 +47,7 @@ interval_update(project_root, interval_id, review_window, context_refs?,
    + bottleneck_analysis
    + candidate_interventions
    + ticket_deltas
+   + executive_update? {items[0..3], source_coverage, draft_eligibility}
    + highlights {wins[0..1 per team], failures[0..1 per team]}
    + highlight_receipt
    + metric_refresh_receipt?
@@ -57,6 +58,9 @@ state:
         .farplane/metrics/**?, configured kanban evidence,
         .farplane/reports/pulse/**, .farplane/reports/interval/**,
         completed provider reports supplied through context_refs,
+        farplane/pm.json?,
+        project Git/ticket/proof evidence and mapped thread conclusions when
+        available during a Weekly run,
         review/run artifacts and project memory refs when supplied)
   writes(.farplane/reports/interval/<interval_id>/<timestamp>.md,
          .farplane/highlights/wins.jsonl?,
@@ -103,6 +107,11 @@ fails:
   - [ ] Read configured board evidence, metric movement, Pulse/report evidence,
         outcomes, proof, and the previous finalized Interval report inside the
         profile's window.
+  - [ ] During a Weekly run, identify up to three reader-safe executive updates
+        from completed or review-backed project outcomes. Use repository,
+        ticket, metric, and durable proof evidence; inspect mapped Codex thread
+        conclusions only when locally available and never carry raw transcript
+        content into the report.
   - [ ] Request the Core metric projection with this run's `review_window` and
         project timezone. Read current, preceding equal-window comparison,
         cumulative flow total, and trend from that projection; do not encode
@@ -143,6 +152,13 @@ fails:
         record the admitted delta or an explicit no-action reason.
   - [ ] Finalize the snapshot before any highlight append or board mutation.
         Carry unresolved prior problems by link; never rewrite prior reports.
+  - [ ] For Weekly only, add `## Executive Update` before finalization. Each
+        selected item names the meaningful change, why it matters, durable proof,
+        metric only when available, optional public demo/video, and a
+        `reader_safe | needs_fact_check | internal_only` draft-eligibility
+        decision. `no_eligible_update` is valid; never use private paths, raw
+        threads, secrets, client data, or unpublished media as reader-facing
+        evidence.
 - [ ] 5. Append sparse TASK-0405 highlights.
   - [ ] Bind a stable project-local team slug and select at most one win and one
         failure per team for this report; prefer an honest no-op to filler.
@@ -254,5 +270,9 @@ fails:
 - Zero or more independently qualified ticket deltas with no arbitrary cap.
 - Zero or one exceptional win and zero or one lesson-bearing failure per team,
   appended idempotently after report finalization and before ticket deltas.
+- For Weekly only, zero to three evidence-linked executive updates or an honest
+  `no_eligible_update` receipt. These are editorial source cards for a
+  separate approved publishing workflow, never publication authority or ticket
+  admission evidence.
 - Source/provider receipts and proof that Interval neither invoked missing
   providers nor planned in highlights nor executed admitted work.

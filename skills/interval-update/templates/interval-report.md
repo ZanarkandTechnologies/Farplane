@@ -27,6 +27,22 @@ source_gaps: []
 | State / outcome | Work items / reports | Sanitized evidence | Observation |
 | --- | --- | --- | --- |
 
+## Executive Update
+
+Weekly only. This is the project-local source for a separate, approval-gated
+company newsletter workflow; it does not authorize publication or affect ticket
+admission. Use `no_eligible_update` rather than filler.
+
+- `executive_update_status:` selected | no_eligible_update | source_gap
+- `source_coverage:` repository | tickets | metrics | mapped_thread_conclusions | unavailable
+
+| Change | Why it matters | Proof refs | Verified metric | Public demo/video | Draft eligibility |
+| --- | --- | --- | --- | --- | --- |
+
+`Draft eligibility` is `reader_safe`, `needs_fact_check`, or `internal_only`.
+Never include a raw thread/transcript, secret, client/private detail, local
+filesystem path, or unpublished media in this section.
+
 ## Metric Views
 
 | Objective / metric | Direction | Current window | Previous window | Absolute / percent delta | Cumulative (flows only) | Trend | Evidence / confidence |
@@ -104,6 +120,8 @@ provider payloads.
 - `win_highlight:` appended | already_exists | no_eligible_win
 - `failure_highlight:` appended | already_exists | no_eligible_failure
 - `highlight_memory_or_correction_action:` none
+- `executive_update_cards:` 0
+- `executive_update_draft_eligibility:` reader_safe | needs_fact_check | internal_only | no_eligible_update
 - `ticket_deltas_applied_after_highlights:` yes | no
 - `solution_tickets_created:`
 - `investigation_tickets_created:`

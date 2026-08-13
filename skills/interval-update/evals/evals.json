@@ -154,6 +154,25 @@
       }
     },
     {
+      "id": "interval_weekly_executive_updates_are_evidence_linked_and_private_safe",
+      "prompt": "Weekly Interval sees two completed, reviewed project outcomes with durable ticket and metric evidence, one public demo URL, an internal raw Codex transcript, and an unpublished local MP4. What belongs in the Weekly report's Executive Update section?",
+      "expected_output": "Selects up to three concrete reader-facing changes only when they have a why-it-matters statement and durable proof; Includes the verified metric and public demo URL where applicable; Does not copy the raw transcript, local video path, or other private/unpublished information; Marks each card reader_safe, needs_fact_check, or internal_only; Keeps an honest no_eligible_update available and does not publish or use cards as ticket-admission evidence",
+      "files": [],
+      "assertions": [
+        "Selects evidence-linked reader-facing changes rather than activity lists",
+        "Includes only verified metrics and public demo/video evidence",
+        "Excludes raw transcripts, local paths, and unpublished/private content",
+        "Records explicit draft eligibility for every card",
+        "Does not publish or use executive updates for ticket admission"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Weekly executive updates stay evidence-linked and private-safe",
+          "tags": ["interval-update", "executive-update", "privacy", "newsletter"]
+        }
+      }
+    },
+    {
       "id": "interval_notion_binding_fails_closed",
       "prompt": "The project binds Notion with filesystem_ticket_policy exclude, but the private handle, compact query, or authorized write route fails while local tickets exist. Run Weekly Interval.",
       "expected_output": "Keeps Notion as the configured provider and records the failed access or write route as a source_gap; Does not inspect local tickets for review or dedupe and does not mutate them; Finishes the bounded report from available metric and completed-report evidence; Admits no authority-unsafe ticket delta; Exposes no private IDs, URLs, tokens, or payloads and invokes no other provider",

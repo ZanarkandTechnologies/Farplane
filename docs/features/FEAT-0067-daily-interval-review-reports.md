@@ -92,6 +92,10 @@ low-supply refill.
   open problems.
 - Weekly synthesizes repeated problems, metric movement, review load, and
   unresolved maintenance across Daily reports.
+- Weekly may record zero to three proof-linked `Executive Update` cards for a
+  separate company-level editorial workflow. Cards classify reader safety,
+  carry only verified metrics and existing public media links, and may honestly
+  report no eligible update; they never publish or affect ticket admission.
 - Each report contains a minimal Markdown `## Problems` checkbox ledger.
 - After finalization, a report may select at most one exceptional metric win
   and one lesson-bearing failure per team. Selection appends minimal rows to
@@ -183,6 +187,9 @@ Required proof:
 - Interval does not execute tickets or update delayed reward results.
 - Interval reports link ticket-owned QA and review evidence instead of copying
   it into a findings registry.
+- The Executive Update section is project-local editorial source material, not
+  a publication channel; raw threads, private paths, client data, secrets, and
+  unpublished media remain ineligible.
 - Feed Scout and Dogfood remain separate scheduled jobs with separate reports.
 
 ## Change History
