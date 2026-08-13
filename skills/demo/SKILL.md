@@ -2,7 +2,7 @@
 name: demo
 description: "Turn passing feature QA into a concise Before/After/Example MP4 that leads the GitHub closeout, with evidence and independent review."
 tier: 3
-group: coding
+group: operations
 source: local
 template_uses:
   skill-template: "0.3.9"

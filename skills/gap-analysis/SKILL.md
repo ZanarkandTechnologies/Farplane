@@ -9,10 +9,18 @@ template_uses:
   skill-surface-budget: "0.1.0"
 eval: evals/evals.json
 methods:
-  - gap-analysis:skill
-  - gap-analysis:harness
-  - gap-analysis:ui
-  - gap-analysis:feature
+  - id: gap-analysis:skill
+    class: internal
+    output: skill-gap-report
+  - id: gap-analysis:harness
+    class: internal
+    output: harness-gap-report
+  - id: gap-analysis:ui
+    class: internal
+    output: ui-gap-report
+  - id: gap-analysis:feature
+    class: internal
+    output: feature-gap-report
 allowed-tools: Read, Glob, Grep, Bash
 
 ---

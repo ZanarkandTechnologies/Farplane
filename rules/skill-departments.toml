@@ -1,0 +1,11 @@
+# Canonical operating taxonomy for Tier 3 Farplane skills.
+# `group` is a single declared department membership, not a technical tag.
+
+[departments]
+"back-office" = "Back Office"
+sales = "Sales"
+deals = "Deals"
+marketing = "Marketing"
+operations = "Operations"
+intelligence = "Intelligence"
+customer = "Customer"

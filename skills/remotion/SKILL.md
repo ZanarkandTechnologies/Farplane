@@ -2,7 +2,7 @@
 name: remotion
 description: "Turn storyboarded assets into Remotion/React compositions, stitched timelines, captions, audio placement, and local render proof."
 tier: 3
-group: content-video
+group: marketing
 source: local
 template_uses:
   skill-template: "0.3.7"

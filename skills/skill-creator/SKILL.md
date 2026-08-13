@@ -2,7 +2,7 @@
 name: skill-creator
 description: "Turn a reusable workflow or capability idea into a Farplane skill package with frontmatter, todo path, references, and proof surfaces."
 tier: 3
-group: skills
+group: operations
 source: local
 eval: evals/evals.json
 template_uses:

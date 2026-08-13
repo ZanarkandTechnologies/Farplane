@@ -3,7 +3,7 @@ name: ai-image-advisor
 version: 1.0.0
 description: "Turn AI image create/edit/upscale/cutout requests into provider route, prompt/input packet, spend gate, and saved image asset bundle."
 tier: 3
-group: content-image
+group: marketing
 source: local
 template_uses:
   skill-template: "0.3.7"
@@ -55,7 +55,7 @@ Use this as the ordered checklist whenever `ai-image-advisor` is active.
 - [ ] Confirm external compute/spend is acceptable before any `belt app run`.
 - [ ] Never publish to social platforms unless the user explicitly asks to publish.
 - [ ] Save final images, prompts, input JSON, result JSON, and notes inside the workspace, not only in a remote URL, temp path, or Codex home path.
-- [ ] If the image is used on a web surface, route implementation/proof through `frontend-craft` and verify path loading, responsive crop, dimensions, alt text, and visual quality.
+- [ ] If the image is used on a web surface, hand the asset receipt to `impl-plan` and verify path loading, responsive crop, dimensions, alt text, and visual quality through the ticket QA route.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 Generate project-ready AI image assets with inference.sh CLI (`belt`) while keeping provider-specific details in references.
@@ -85,7 +85,7 @@ Copied upstream references are read-only usage docs. Do not run `npx skills add 
    saved prompt/input packet.
 7. Save project assets, prompt/input JSON, result JSON, and notes inside the workspace.
 8. For long-running or batched jobs, use the async workflow below instead of blocking the whole pass.
-9. If the asset is used in a web surface, hand it to `frontend-craft` and verify loading, dimensions, alt text, responsive crops, and visual quality.
+9. If the asset is used in a web surface, hand its receipt to `impl-plan` and verify loading, dimensions, alt text, responsive crops, and visual quality through ticket QA.
 
 ## Best Current Defaults
 

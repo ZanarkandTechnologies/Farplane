@@ -42,7 +42,7 @@ Deep System Design is an architecture-first Socratic clarification loop before i
 <Do_Not_Use_When>
 - The request already has clear file/symbol targets and little architectural ambiguity
 - The task is primarily about product workflow or UI behavior; use `functional-ui`
-- The task is primarily about visual taste; use `deep-ui-design`
+- The task is primarily about visual taste; use `visual-design`
 - The architecture is already specified well enough that implementation planning should begin
 </Do_Not_Use_When>
 

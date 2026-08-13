@@ -3,7 +3,7 @@ name: feed-scout
 version: 0.3.0
 description: "Turn curated feeds into a dated source report, planner candidates, and bounded evidence-backed recovery tickets."
 tier: 3
-group: harness
+group: intelligence
 source: local
 eval: evals/evals.json
 qa_checklist: qa_checklist.md

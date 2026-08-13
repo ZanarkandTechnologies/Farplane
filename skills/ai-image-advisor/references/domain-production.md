@@ -21,7 +21,7 @@ and `social-content` methods.
 | Instagram/LinkedIn/X carousel or multi-slide post | [social-content:carousel](../../social-content/SKILL.md) |
 | Twitter/X thread or post writing | [social-content:twitter-thread](../../social-content/SKILL.md) |
 | Model-native video, image-to-video, avatar/lipsync, video edit | [ai-video-advisor](../../ai-video-advisor/SKILL.md) |
-| Website, landing page, product page, or campaign asset set | [frontend-craft media pipelines](../../frontend-craft/references/media-pipelines.md) |
+| Website, landing page, product page, or campaign asset set | [web-surface integration](../../ai-video-advisor/references/web-surface-integration.md) |
 
 ## Shared Rules
 

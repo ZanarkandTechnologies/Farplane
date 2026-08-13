@@ -20,7 +20,7 @@ eval_required: yes
 
 ## Change
 
-- Before: Farplane had `image-generation`, `visual-design`, `data-viz`, and
+- Before: Farplane had `image-generation`, `visual-design`, a standalone data-visualization skill, and
   `social-content`, but no single owner for infographic packets or text-dense
   product-storyboard visuals.
 - After: Added `infographic` as a Tier 3 content-visual skill with a

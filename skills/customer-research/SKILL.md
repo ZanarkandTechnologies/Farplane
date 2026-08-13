@@ -2,7 +2,7 @@
 name: customer-research
 description: "Turn a person, profile link, or call target into a sourced customer research or deep ICP report and conversation plan before outreach or a call."
 tier: 3
-group: research
+group: customer
 source: local
 template_uses:
   skill-template: "0.3.7"

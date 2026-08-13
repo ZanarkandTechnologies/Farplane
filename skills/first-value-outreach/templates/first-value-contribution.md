@@ -61,7 +61,7 @@ For a proof-sized demo, complete every route field; otherwise mark this block
 - Solution-shaping ref:
 - Realism preparation: `required with demo-realism | not_required`
 - Demo-realism ref or not-required reason:
-- Actual implementation owner: `project demo owner | frontend-craft | ticket via impl-plan`
+- Actual implementation owner: `project demo owner | ticket via impl-plan`
 - Implementation handoff ref:
 - Inspection surface:
 

@@ -2,7 +2,7 @@
 name: editing-advisor
 description: "Turn a brief, storyboard, timing master, and reusable editing patterns into a compatible timed edit direction and renderer-ready handoff."
 tier: 3
-group: content-video
+group: marketing
 source: local
 template_uses:
   skill-template: "0.3.9"
@@ -12,12 +12,24 @@ template_uses:
 eval: evals/evals.json
 qa_checklist: qa_checklist.md
 methods:
-  - editing-advisor:structure
-  - editing-advisor:pacing
-  - editing-advisor:motion
-  - editing-advisor:transitions
-  - editing-advisor:captions
-  - editing-advisor:compositing
+  - id: editing-advisor:structure
+    class: internal
+    output: edit-structure-direction
+  - id: editing-advisor:pacing
+    class: internal
+    output: pacing-direction
+  - id: editing-advisor:motion
+    class: internal
+    output: motion-direction
+  - id: editing-advisor:transitions
+    class: internal
+    output: transition-direction
+  - id: editing-advisor:captions
+    class: internal
+    output: caption-direction
+  - id: editing-advisor:compositing
+    class: internal
+    output: compositing-direction
 common_chains:
   after: ["content-impl-plan", "storyboard", "asset-advisor", "remotion", "review"]
 allowed-tools: Read, Grep, Glob, Bash

@@ -2,7 +2,7 @@
 name: skill-registry-ui
 description: "Turn the Farplane skill registry into a refreshed graph UI with rendered skill docs, frontmatter, tier colors, and chain edges."
 tier: 3
-group: skills
+group: operations
 source: local
 allowed-tools: Read, Bash
 ---
@@ -69,5 +69,5 @@ references, chain edges, and search text.
 ## Handoff
 
 If the UI itself needs to change, route implementation through
-`frontend-craft`. If the registry data or generated graph payload is stale or
+`impl-plan`. If the registry data or generated graph payload is stale or
 wrong, route maintenance through `skill-maintenance`.

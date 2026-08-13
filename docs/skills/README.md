@@ -20,6 +20,9 @@ into a second place to maintain skill truth.
 - [`advisors.md`](advisors.md) is the human-facing Advisor System index. It
   groups every current advisor by operator use case while leaving package
   metadata and `registry.jsonl` as inventory truth.
+- [`department-taxonomy.md`](department-taxonomy.md) is the Capability Map
+  reference: declared department membership, workflow-root selection, and
+  artifact-only map containment.
 - `skills/skill-maintenance/graph/` contains the tracked local visualization
   shell. Its generated skill, document, harness, and lifecycle data lives under
   ignored `.farplane/generated/graphs/`, preventing routine refreshes from
@@ -95,7 +98,8 @@ Use this table when two skills look similar. It is intentionally prose-first;
 | Need | Use | Why This One | Do Not Use When |
 | --- | --- | --- | --- |
 | Choose among real options and name a recommendation | `advise` | It starts from first principles, frames 3 viable choices, names one recommendation, and states the accepted tradeoff. | The user already gave a direct execution request. |
-| Make a high-stakes or complex recommendation with independent critique | `deliberative-advice` / `advise:complex` | It escalates advice into a council workflow: independent perspective briefs, critique/ranking, chair synthesis, visible dissent, and an explicit next owner. | The decision is simple, reversible, already grounded, or only needs a concise 3-option recommendation. |
+| Challenge a proposed implementation or plan that may be overbuilt | `lean-check` | It stops at the first sufficient rung and returns evidence plus the smallest safe next action. | You need a TAS verdict on an accepted change; use `review`. |
+| Make a high-stakes or complex recommendation with independent critique | `deliberative-advice` / `deliberative-advice:complex` | It escalates advice into a council workflow: independent perspective briefs, critique/ranking, chair synthesis, visible dissent, and an explicit next owner. | The decision is simple, reversible, already grounded, or only needs a concise 3-option recommendation. |
 | Compress an artifact or entity set without losing required value | `consolidate` | It inventories units, finds the owning template or contract, scores value versus fluff/duplication/staleness, rebuilds minimally, and runs a loss check. | You only need a reader-facing summary; use `summarize`. You need domain-specific skill-package edits; route the final patch through `skill-maintenance`. |
 | Ground a claim in local files, docs, official references, or provided sources | `reference-grounding` | It supplies compact evidence before advice, planning, or review claims. | You need a full research brief or feature synthesis. |
 | Write or revise durable docs so they are clear, consistent, and human-usable | `doc-advisor` | It owns doc-quality checks: reader contract, term consistency, duplicate definitions, stale sections, examples, links, and agent-facing commentary cleanup. | You only need compact evidence or official-doc lookup; use `reference-grounding`. |
@@ -161,8 +165,12 @@ Manual fields:
   `qa_checklist.md`
 - `skill_ui`: optional path or route for a skill-owned UI, viewer, dashboard,
   debug page, or UI binding
-- `group`: required for Tier 3 only
-- `methods`: optional list for method addresses owned by the skill
+- `group`: required for Tier 3 only; one canonical operating department from
+  [`rules/skill-departments.toml`](../../rules/skill-departments.toml)
+- `methods`: optional child-method contracts. Each declares a parent-qualified
+  `id`, `class` (`artifact`, `integration`, or `internal`), and one `output`.
+  Capability views derive from this source field; they do not maintain a
+  separate capability registry.
 - `common_chains`: optional Tier 3 one-way adjacency hints
 - `upstream_url`: optional for `source: external`
 - `template_uses.skill-surface-budget`: optional opt-in marker for
@@ -189,7 +197,7 @@ Use `common_chains` only for local forward handoffs:
 
 ```yaml
 tier: 3
-group: coding
+group: operations
 common_chains:
   after: ["goal-advisor"]
 ```

@@ -3,7 +3,7 @@ name: infographic
 version: 0.1.0
 description: "Turn an explanation, dataset, product flow, or argument into a clear infographic brief, layout spec, and production-ready visual asset plan."
 tier: 3
-group: content-visual
+group: marketing
 source: local
 skill_template_version: "0.3.6"
 template_uses:
@@ -11,7 +11,9 @@ template_uses:
   skill-method-reference: "0.1.0"
   skill-qa-checklist: "0.1.0"
 methods:
-  - infographic:handdrawn-saas-wireframe
+  - id: infographic:handdrawn-saas-wireframe
+    class: artifact
+    output: handdrawn-saas-wireframe
 common_chains:
   after: ["ai-image-advisor", "visual-qa"]
 eval: evals/evals.json
@@ -31,9 +33,10 @@ copy hierarchy.
 This skill owns the artifact contract before production: the message, evidence
 or data claims, copy inventory, layout grammar, style route, generation or
 rendering path, and proof. It composes with [visual-design](../visual-design/SKILL.md),
-[data-viz](../data-viz/SKILL.md), [diagramming](../diagramming/SKILL.md),
-[social-content](../social-content/SKILL.md), [ai-image-advisor](../ai-image-advisor/SKILL.md),
-[frontend-craft](../frontend-craft/SKILL.md), and [visual-qa](../visual-qa/SKILL.md)
+[the data-visualization reference](../../docs/fundamentals/data-visualization.md),
+[diagramming](../diagramming/SKILL.md), [social-content](../social-content/SKILL.md),
+[ai-image-advisor](../ai-image-advisor/SKILL.md), [impl-plan](../impl-plan/SKILL.md),
+and [visual-qa](../visual-qa/SKILL.md)
 when those downstream owners are the right production or proof surface.
 
 Prefer deterministic layout first when the infographic is text-heavy, contains
@@ -48,7 +51,7 @@ create_infographic(brief, source_material?, style_ref?, output_context?)
   -> infographic_packet + asset_plan + evidence
 state: reads(request, source material, optional ticket/spec/data, style references, existing brand or platform constraints); writes(brief/spec/prompt/rendered assets when requested)
 gates: message_claims_named; copy_inventory_complete; layout_legible; style_route_selected; production_path_named; proof_or_blocker_recorded
-routes: visual-design | data-viz | diagramming | social-content | ai-image-advisor | frontend-craft | visual-qa
+routes: visual-design | data-visualization-reference | diagramming | social-content | ai-image-advisor | impl-plan | visual-qa
 fails: decorative poster with unclear point; hallucinated data; text-dense bitmap with unreadable labels; copied reference without adaptation; no local artifact path
 ```
 
@@ -68,8 +71,8 @@ InfographicPacket = {
 ## Phase Boundary
 
 Run Tier 0 phases inline for normal one-off infographics. Use `social-content`
-when the infographic is a carousel or platform campaign, `data-viz` when chart
-correctness is the core task, `frontend-craft` when the output must be a web UI
+when the infographic is a carousel or platform campaign, the data-visualization
+reference when chart correctness is the core task, `impl-plan` when the output must be a web UI
 or deterministic HTML/SVG renderer, and `visual-qa` when the final rendered
 asset must be judged against a visual baseline.
 
@@ -94,12 +97,12 @@ asset must be judged against a visual baseline.
    - [ ] `social_infographic`: carousel, post image, thumbnail, or platform
      asset; route copy/platform work through [social-content](../social-content/SKILL.md).
    - [ ] `implementation_asset`: deterministic HTML/SVG/canvas or UI-bound
-     visual; route production through [frontend-craft](../frontend-craft/SKILL.md).
+     visual; route production through [impl-plan](../impl-plan/SKILL.md).
 - [ ] 3. Choose the style route.
    - [ ] For the dense monochrome hand-drawn SaaS product storyboard style,
      load [handdrawn SaaS wireframe](references/handdrawn-saas-wireframe.md)
      and use method address `infographic:handdrawn-saas-wireframe`.
-   - [ ] For chart-heavy work, use [data-viz](../data-viz/SKILL.md) before
+   - [ ] For chart-heavy work, use the [data-visualization reference](../../docs/fundamentals/data-visualization.md) before
      final art direction.
    - [ ] For system maps or architecture explanations, use
      [diagramming](../diagramming/SKILL.md) before visual polish.

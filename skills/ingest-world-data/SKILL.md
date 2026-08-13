@@ -3,7 +3,7 @@ name: ingest-world-data
 description: "Turn selected transcript or research-call facts into resolved canonical entities and generated World/CRM projections when useful knowledge should be retained."
 tier: 3
 source: local
-group: research
+group: intelligence
 skill_template_version: "0.3.8"
 template_uses:
   skill-template: "0.3.8"

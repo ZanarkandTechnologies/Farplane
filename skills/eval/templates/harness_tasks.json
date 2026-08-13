@@ -89,7 +89,7 @@
       "Drafts a low-fidelity ASCII page flow before generating assets or writing code",
       "Creates a section matrix with job, claim, layout, asset carrier, motion lever, proof payload, fallback, and QA for each section",
       "Plans real or generated raster media, product clarity, accessibility, and reduced-motion checks when premium visuals are in scope",
-      "Does not hand off to frontend-craft until the landing spec or equivalent section plan is approved"
+      "Does not hand off to impl-plan until the landing spec or equivalent section plan is approved"
     ],
     "tags": [
       "workflow",

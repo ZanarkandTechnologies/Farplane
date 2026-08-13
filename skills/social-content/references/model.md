@@ -69,5 +69,5 @@ ExecutionPacket :=
 ```
 
 `social-content` owns the artifact decision. `ai-image-advisor`,
-`ai-video-advisor`, `remotion`, `remotion-render`, and `frontend-craft` own
+`ai-video-advisor`, `remotion`, `remotion-render`, and `impl-plan` own
 production routes when the packet needs them.

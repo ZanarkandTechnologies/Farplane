@@ -2,7 +2,7 @@
 name: knowledge-tidier
 description: "Turn bloated knowledge artifacts into ranked keep/cut/reroute decisions when docs, memory, or context surfaces need pruning."
 tier: 3
-group: project-ops
+group: back-office
 source: local
 template_uses:
   skill-template: "0.3.0"

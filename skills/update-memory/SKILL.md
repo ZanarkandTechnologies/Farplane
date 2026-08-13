@@ -2,7 +2,7 @@
 name: update-memory
 description: "Turn project history, memory, README, docs, lessons, troubles, and recent progress into consolidated project context and doc deltas."
 tier: 3
-group: project-ops
+group: back-office
 source: local
 template_uses:
   skill-template: "0.2.0"

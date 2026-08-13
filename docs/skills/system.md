@@ -203,9 +203,9 @@ frontend/media/document skills, and meta skills such as `skill-creator` and
 `skill-maintenance`.
 
 Meta skills are not Tier 0. They are skills whose domain is the harness or skill
-system itself. Represent them with normal numeric `tier` plus `group: meta`,
-`group: skills`, `group: harness`, or another explicit group. Use Tier 0 only
-for universal lifecycle phases.
+system itself. Represent them with a normal numeric `tier` and the canonical
+operating department they primarily serve. Use Tier 0 only for universal
+lifecycle phases.
 
 Do not create `tier: 4` to describe an end-to-end workflow. Numeric tiers are
 compounding upgrade classes, not call-stack depth. Model e2e workflows as
@@ -296,8 +296,17 @@ Manual fields:
   `qa_checklist.md`.
 - `skill_ui`: optional path or route for a skill-owned UI, viewer, dashboard,
   debug page, or UI binding.
-- `group`: required for Tier 3 only.
-- `methods`: optional method addresses owned by the skill.
+- `group`: required for Tier 3 only; one canonical operating department from
+  [`rules/skill-departments.toml`](../../rules/skill-departments.toml). The
+  graph uses it as explicit department membership, not as a workflow edge.
+- `methods`: optional child-method contracts owned by the skill. Each entry is
+  `{ id, class, output }`: `id` is fully qualified with the parent skill name;
+  `class` is `artifact`, `integration`, or `internal`; and `output` names the
+  one result the method owns. The Capability Map filters configured workflow
+  roots to declared `artifact` methods; `integration` and `internal` methods
+  remain technical Skill Library interfaces. See
+  [`department-taxonomy.md`](department-taxonomy.md) for selection and link
+  semantics.
 - `common_chains`: optional one-way Tier 3 adjacency hints.
 - `upstream_url`: optional for `source: external`.
 

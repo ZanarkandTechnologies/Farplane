@@ -2,7 +2,7 @@
 name: avatar-advisor
 description: "Turn persistent presenter, character, likeness, or lipsync needs into an avatar direction packet and generation route."
 tier: 3
-group: content-video
+group: marketing
 source: local
 template_uses:
   skill-template: "0.3.7"

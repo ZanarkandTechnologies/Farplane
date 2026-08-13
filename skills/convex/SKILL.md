@@ -3,7 +3,7 @@ name: convex
 version: 4.0.0
 description: "Route Convex project questions to official Convex AI instructions when a repo uses Convex backend files or deployment tooling."
 tier: 3
-group: backend
+group: operations
 source: external
 upstream_url: https://github.com/get-convex/agent-skills/blob/main/skills/convex/SKILL.md
 ---

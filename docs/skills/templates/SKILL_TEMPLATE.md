@@ -1,6 +1,6 @@
 ---
 template_id: skill-template
-template_version: "0.4.0"
+template_version: "0.4.1"
 feature_refs:
   - FEAT-0022
   - FEAT-0054
@@ -26,7 +26,15 @@ template_uses:
   # Add only after the skill fits 10 top-level todos, 5 QA checklist items,
   # and 5 eval tasks.
   # skill-surface-budget: "0.1.0"
-group: [TODO: required for Tier 3]
+# Tier 3 only: back-office | sales | deals | marketing | operations |
+# intelligence | customer. See rules/skill-departments.toml.
+group: [TODO: canonical department required for Tier 3]
+# Optional. Each method is a child contract; the parent signature owns shared
+# inputs, gates, state, and evidence.
+methods:
+  - id: {skill_name}:{method_name}
+    class: artifact # artifact | integration | internal
+    output: {one-named-output}
 allowed-tools: {tools}
 ---
 

@@ -3,7 +3,7 @@ name: agent-testability-plan
 version: 0.1.0
 description: "Turn a System Design Brief into an Agent Testability Brief with controls, state probes, coordination views, tooling, and proof surfaces."
 tier: 3
-group: coding
+group: operations
 source: local
 argument-hint: "<system design brief, spec path, or active ticket>"
 allowed-tools: Read, Glob, Grep

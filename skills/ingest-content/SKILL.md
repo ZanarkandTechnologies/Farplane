@@ -2,7 +2,7 @@
 name: ingest-content
 description: "Route liked links, images, videos, files, or notes into searchable Resource Bank captures, selected creative elements, and optional repurpose tickets."
 tier: 3
-group: content-social
+group: marketing
 source: local
 template_uses:
   skill-template: "0.2.0"
@@ -11,7 +11,9 @@ template_uses:
 eval: evals/evals.json
 qa_checklist: qa_checklist.md
 methods:
-  - ingest-content:compile-style-profile
+  - id: ingest-content:compile-style-profile
+    class: artifact
+    output: style-profile
 common_chains:
   after: ["media-ingest", "video-understanding", "summarize", "visual-design"]
 allowed-tools: Read, Glob, Grep, Bash, mcp__convex__status, mcp__convex__functionSpec, mcp__convex__run

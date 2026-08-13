@@ -56,4 +56,4 @@ Agents can test the route without native video support by reading:
 - `.farplane/harness-scout/runs/2026-05-20-instagram-claude-portal-video/video-understanding-smoke-log.md`
 
 Expected result: the copied-skill owner is
-`frontend-craft:composed-scroll-animation`, not a standalone video wrapper.
+`landing-page` plus `impl-plan`, not a standalone video wrapper.

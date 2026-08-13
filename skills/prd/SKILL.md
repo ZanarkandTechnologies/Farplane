@@ -3,7 +3,7 @@ name: prd
 version: 1.0.0
 description: "Turn product intent into a Phase-1 Farplane PRD with requirements, scope, and handoff shape."
 tier: 3
-group: coding
+group: operations
 source: local
 common_chains:
   after: ["spec-to-ticket"]

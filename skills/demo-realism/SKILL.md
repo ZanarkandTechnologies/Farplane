@@ -2,7 +2,7 @@
 name: demo-realism
 description: "Turn a fake-feeling MVP or prototype into realistic workflows, demo data, and a presentation-readiness rubric."
 tier: 3
-group: coding
+group: operations
 source: local
 ---
 
@@ -38,7 +38,6 @@ source: local
   result, mismatch notes, evidence, and the concrete operator question.
 - [ ] Hand off to [functional-ui](../functional-ui/SKILL.md),
   [visual-design](../visual-design/SKILL.md),
-  [frontend-craft](../frontend-craft/SKILL.md), or
   [impl-plan](../impl-plan/SKILL.md) when realism is strong enough.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
@@ -56,7 +55,7 @@ context?"
 6. Score the result with a realism and presentation-worthiness rubric.
 7. For demo-bearing build/review handoffs, name the expectation-check artifact
    the worker must produce before Kenji Review.
-8. Hand off to `functional-ui`, `visual-design`, `frontend-craft`, `impl-plan`, or `goal-advisor`.
+8. Hand off to `functional-ui`, `visual-design`, `impl-plan`, or `goal-advisor`.
 
 ## Use When
 
@@ -73,7 +72,7 @@ context?"
 
 - the workflow is already believable and only visual execution remains
 - the task is exact customer research or factual discovery; use research/documentation paths
-- the task is final UI implementation; use `frontend-craft`
+- the task is final UI implementation; use `impl-plan`
 - the task is visual taste/system direction; use `visual-design`
 - the task is already narrowed to interaction structure only; use `functional-ui`
 - the task is final quality judgment after implementation; use `review`
@@ -176,7 +175,6 @@ For demo-bearing build or review handoffs, append:
 10. Hand off:
    - `functional-ui` if workflow shape still needs product/UI planning
    - `visual-design` if realism is settled and visual direction should start
-   - `frontend-craft` if realism is settled and implementation should start
    - `impl-plan` if the realism pack should become a scoped execution plan
    - `goal-advisor` if a ticket already exists and build can start directly
 

@@ -23,7 +23,7 @@
 
 - The external CLI command used profile `frontend-pi-kimi`.
 - Session logs record provider `openrouter` and model `moonshotai/kimi-k2.6`.
-- The prompt mounted `landing-page`, `frontend-craft`, `visual-design`,
+- The prompt mounted `landing-page`, the retired frontend router, `visual-design`,
   `visual-qa`, `review`, and `web-design-guidelines`.
 - Static asset URL checks returned 200 for `index.html`, `styles.css`,
   `app.js`, and all six generated SVG files.

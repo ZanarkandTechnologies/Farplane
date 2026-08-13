@@ -9,10 +9,10 @@ tags:
   - systems
   - domain-skill-families
 refs:
-  - skills/frontend-craft/SKILL.md
-  - skills/frontend-design/SKILL.md
+  - skills/impl-plan/SKILL.md
+  - skills/functional-ui/SKILL.md
   - skills/visual-design/SKILL.md
-  - skills/delegate-frontend/SKILL.md
+  - skills/delegate-cli/SKILL.md
 system_record_json: |
   {
     "id": "SYS-0010",
@@ -25,10 +25,10 @@ system_record_json: |
       "FEAT-0014"
     ],
     "refs": [
-      "skills/frontend-craft/SKILL.md",
-      "skills/frontend-design/SKILL.md",
+      "skills/impl-plan/SKILL.md",
+      "skills/functional-ui/SKILL.md",
       "skills/visual-design/SKILL.md",
-      "skills/delegate-frontend/SKILL.md"
+      "skills/delegate-cli/SKILL.md"
     ],
     "last_verified": "2026-06-26"
   }
@@ -91,7 +91,7 @@ flowchart LR
   classDef retired fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d,stroke-dasharray: 5 3
 
   request["domain work<br/>frontend, media, content"]:::keep
-  families["domain skill families<br/>frontend-craft, media, social"]:::changed
+  families["domain skill families<br/>UI facets, media, social"]:::changed
   retired["FEAT-0014<br/>retired frontend parity feature"]:::retired
   core["core Work Loop + Skill System<br/>tickets, proof, registries"]:::keep
   artifact["domain artifact<br/>UI, video, content, QA evidence"]:::added
@@ -104,10 +104,10 @@ Domain Skill Families package specialized workflows on top of the same ticket, s
 
 ## Surfaces
 
-- `skills/frontend-craft/SKILL.md`
-- `skills/frontend-design/SKILL.md`
+- `skills/impl-plan/SKILL.md`
+- `skills/functional-ui/SKILL.md`
 - `skills/visual-design/SKILL.md`
-- `skills/delegate-frontend/SKILL.md`
+- `skills/delegate-cli/SKILL.md`
 
 ## Proof And Maintenance
 

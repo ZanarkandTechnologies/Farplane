@@ -4,7 +4,6 @@
 from __future__ import annotations
 
 import argparse
-import ast
 import json
 import re
 import sys
@@ -15,6 +14,12 @@ ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+from bin.core.skill_departments import DepartmentTaxonomyError, load_skill_departments
+from bin.core.skill_frontmatter import (
+    SkillFrontmatterError,
+    normalize_method_contracts as parse_method_contracts,
+    parse_frontmatter,
+)
 from bin.validators.template_usage import TemplateUsageError, normalize_template_uses
 
 
@@ -37,95 +42,21 @@ DESCRIPTION_MAX_CHARS = 220
 SURFACE_FIELDS = {"eval", "qa_checklist", "skill_ui"}
 RETIRED_FRONTMATTER_FIELDS = {"workflow"}
 
+try:
+    SKILL_DEPARTMENTS = load_skill_departments(ROOT)
+except DepartmentTaxonomyError as exc:
+    raise RuntimeError(str(exc)) from exc
+
 
 class RegistryError(Exception):
     pass
 
 
-def parse_scalar(value: str) -> Any:
-    value = value.strip()
-    if value == "":
-        return ""
-    if value.startswith("[") and value.endswith("]"):
-        try:
-            return ast.literal_eval(value)
-        except (SyntaxError, ValueError) as exc:
-            raise RegistryError(f"invalid inline list: {value}") from exc
-    if (value.startswith('"') and value.endswith('"')) or (
-        value.startswith("'") and value.endswith("'")
-    ):
-        try:
-            return ast.literal_eval(value)
-        except (SyntaxError, ValueError):
-            return value[1:-1]
-    if value.isdigit():
-        return int(value)
-    if value.lower() == "true":
-        return True
-    if value.lower() == "false":
-        return False
-    return value
-
-
-def parse_frontmatter(path: Path) -> dict[str, Any]:
-    text = path.read_text()
-    if not text.startswith("---\n"):
-        raise RegistryError(f"{path}: missing frontmatter")
-    end = text.find("\n---", 4)
-    if end == -1:
-        raise RegistryError(f"{path}: unterminated frontmatter")
-
-    metadata: dict[str, Any] = {}
-    duplicates: set[str] = set()
-    current_key: str | None = None
-    current_subkey: str | None = None
-
-    for raw_line in text[4:end].splitlines():
-        if not raw_line.strip():
-            continue
-        if not raw_line.startswith(" "):
-            current_subkey = None
-            if ":" not in raw_line:
-                continue
-            key, raw_value = raw_line.split(":", 1)
-            key = key.strip()
-            if key in metadata:
-                duplicates.add(key)
-            value = raw_value.strip()
-            metadata[key] = {} if value == "" else parse_scalar(value)
-            current_key = key
-            continue
-
-        if current_key is None:
-            continue
-
-        stripped = raw_line.strip()
-        current_value = metadata.get(current_key)
-        if stripped.startswith("- "):
-            item = parse_scalar(stripped[2:].strip())
-            if current_subkey is not None and isinstance(current_value, dict):
-                current_value.setdefault(current_subkey, []).append(item)
-            else:
-                if not isinstance(current_value, list):
-                    current_value = []
-                    metadata[current_key] = current_value
-                current_value.append(item)
-            continue
-
-        if ":" in stripped:
-            subkey, raw_value = stripped.split(":", 1)
-            subkey = subkey.strip()
-            value = raw_value.strip()
-            if not isinstance(current_value, dict):
-                current_value = {}
-                metadata[current_key] = current_value
-            current_value[subkey] = [] if value == "" else parse_scalar(value)
-            current_subkey = subkey
-
-    if duplicates:
-        duplicate_list = ", ".join(sorted(duplicates))
-        raise RegistryError(f"{path}: duplicate frontmatter keys: {duplicate_list}")
-    return metadata
+def normalize_method_contracts(value: Any, skill_name: str, path: Path) -> list[dict[str, str]]:
+    try:
+        return parse_method_contracts(value, skill_name, path)
+    except SkillFrontmatterError as exc:
+        raise RegistryError(str(exc)) from exc
 
 
 def normalize_string_list(value: Any, field: str, path: Path) -> list[str]:
@@ -296,7 +227,10 @@ def validate_skill_ref(ref: str, skill_names: set[str], methods_by_skill: dict[s
 
 def validate_common_chain_refs(rows: list[dict[str, Any]]) -> None:
     skill_names = {row["name"] for row in rows}
-    methods_by_skill = {row["name"]: set(row.get("methods", [])) for row in rows}
+    methods_by_skill = {
+        row["name"]: {str(method["id"]) for method in row.get("methods", [])}
+        for row in rows
+    }
     for row in rows:
         for ref in row.get("common_chains", {}).get("after", []):
             validate_skill_ref(ref, skill_names, methods_by_skill)
@@ -343,7 +277,10 @@ def build_registry(repo_root: Path) -> list[dict[str, Any]]:
 
     for skill_path in skill_paths:
         skill_dir = skill_path.parent
-        metadata = parse_frontmatter(skill_path)
+        try:
+            metadata = parse_frontmatter(skill_path)
+        except SkillFrontmatterError as exc:
+            raise RegistryError(str(exc)) from exc
         retired_fields = RETIRED_FRONTMATTER_FIELDS.intersection(metadata)
         if retired_fields:
             names = ", ".join(sorted(retired_fields))
@@ -372,8 +309,13 @@ def build_registry(repo_root: Path) -> list[dict[str, Any]]:
                 f"keep it at or below {DESCRIPTION_MAX_CHARS} chars"
             )
         group = metadata.get("group")
-        if tier == 3 and not isinstance(group, str):
-            raise RegistryError(f"{skill_path}: tier 3 skills must set group")
+        if tier == 3 and (
+            not isinstance(group, str) or group.strip() not in SKILL_DEPARTMENTS
+        ):
+            allowed = ", ".join(SKILL_DEPARTMENTS)
+            raise RegistryError(
+                f"{skill_path}: tier 3 group must be one of the canonical departments: {allowed}"
+            )
         if tier != 3 and group not in (None, ""):
             raise RegistryError(f"{skill_path}: group is only allowed on tier 3 skills")
         if metadata.get("feature_refs") not in (None, "", []):
@@ -401,7 +343,7 @@ def build_registry(repo_root: Path) -> list[dict[str, Any]]:
         if tier == 3:
             row["group"] = group
 
-        methods = normalize_string_list(metadata.get("methods"), "methods", skill_path)
+        methods = normalize_method_contracts(metadata.get("methods"), name, skill_path)
         if methods:
             row["methods"] = methods
 

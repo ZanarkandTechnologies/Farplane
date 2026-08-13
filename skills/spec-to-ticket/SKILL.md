@@ -3,7 +3,7 @@ name: spec-to-ticket
 version: 1.5.0
 description: "Turn one SLC spec slice into filesystem tickets with compact summaries, agent contracts, and evidence requirements."
 tier: 3
-group: coding
+group: operations
 source: local
 common_chains:
   after: ["impl-plan"]

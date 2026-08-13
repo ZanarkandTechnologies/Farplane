@@ -4,7 +4,28 @@ version: 0.1.0
 description: "Turn current external evidence needs into method-addressed research briefs for parity, gaps, competitors, official docs, code patterns, users, or sources."
 tier: 2
 source: local
-methods: ["research:parity", "research:gap", "research:competitor", "research:official-docs", "research:code-patterns", "research:user-grounding", "research:source-synthesis"]
+methods:
+  - id: research:parity
+    class: artifact
+    output: parity-research-report
+  - id: research:gap
+    class: artifact
+    output: gap-research-report
+  - id: research:competitor
+    class: artifact
+    output: competitor-research-report
+  - id: research:official-docs
+    class: artifact
+    output: official-docs-research-report
+  - id: research:code-patterns
+    class: artifact
+    output: code-patterns-research-report
+  - id: research:user-grounding
+    class: artifact
+    output: user-grounding-report
+  - id: research:source-synthesis
+    class: artifact
+    output: source-synthesis-report
 allowed-tools: Read, Glob, Grep, web_search, documentation-searcher
 ---
 

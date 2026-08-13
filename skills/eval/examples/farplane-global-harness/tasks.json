@@ -519,6 +519,150 @@
     "notes": "First rung of the implementation reuse ladder: unnecessary work should stop before code is proposed."
   },
   {
+    "id": "global_lean_check_skill_call_01",
+    "title": "Use the installed lean-check skill before implementation",
+    "query": "The storefront needs a single date field, and someone proposed adding a JavaScript date-picker library. The browser date control satisfies the stated validation and submission requirements. Give me the implementation approach.",
+    "reference_points": [
+      "Invokes the installed lean-check skill before proposing code, or uses the stated inline fallback only when the skill is unavailable",
+      "Returns or records a first-sufficient-rung receipt with local evidence and the smallest safe action",
+      "Selects the native platform date control rather than adding a date-picker library",
+      "Preserves form validation, submission behavior, and focused proof"
+    ],
+    "tags": [
+      "system-prompt",
+      "coding",
+      "leanness",
+      "skill-invocation"
+    ],
+    "notes": "Regression for global routing into the callable lean-check contract rather than relying on an unnamed heuristic."
+  },
+  {
+    "id": "global_follow_up_rhetorical_correction_01",
+    "title": "Treat a pointed follow-up as a correction when it names a recent miss",
+    "query": "You updated the toy-store order form but skipped the requested loading state. The operator says: 'So we're just not adding the loading state now?'",
+    "reference_points": [
+      "Silently recognizes the pointed wording as a rhetorical correction about a recent same-scope omission rather than treating it as a request for abstract discussion",
+      "Returns to the obvious safe action of adding or investigating the omitted loading state before giving a long explanation",
+      "Does not ask permission or force a planning discussion when the correction is safe and the target is clear",
+      "Keeps the response concise and can explain the correction briefly after acting"
+    ],
+    "tags": [
+      "system-prompt",
+      "correction",
+      "intent-routing",
+      "autonomy"
+    ],
+    "notes": "Regression for the silent discussion-versus-rhetorical-correction decision in follow-ups about recent work."
+  },
+  {
+    "id": "global_follow_up_substantive_discussion_01",
+    "title": "Discuss a real follow-up question before continuing the work",
+    "query": "Before you continue the toy-store order-form work: should the loading state block repeat clicks before or after the order request is acknowledged? I need to decide that interaction behavior first.",
+    "reference_points": [
+      "Recognizes this as a substantive interaction-design question rather than a rhetorical correction",
+      "Answers or recommends a path with the relevant tradeoff before continuing implementation",
+      "Does not silently make a materially branching interaction decision without addressing the operator's stated question",
+      "Keeps any safe exploration or follow-up implementation bounded to the answer and established scope"
+    ],
+    "tags": [
+      "system-prompt",
+      "discussion",
+      "intent-routing",
+      "decision-boundary"
+    ],
+    "notes": "Companion regression: the correction rule must not suppress a real discussion point that should be resolved before further action."
+  },
+  {
+    "id": "global_ui_completion_visual_evidence_01",
+    "title": "Showcase a UI-only implementation with before-and-after images",
+    "query": "Implement the new shipping-address panel in the toy-store checkout, then hand it off. This is a UI-only change; the checkout workflow is unchanged.",
+    "reference_points": [
+      "Completion handoff renders Before, After, and Example as one indented Markdown blockquote rather than flattened prose",
+      "Captures and embeds or links paired before-and-after screenshots of the changed UI",
+      "Uses the screenshots as inspectable evidence alongside applicable checks",
+      "Does not require a workflow video when the change is limited to UI presentation and the workflow is unchanged"
+    ],
+    "tags": [
+      "system-prompt",
+      "completion",
+      "ui-proof",
+      "screenshots"
+    ],
+    "notes": "Regression for the global showcase rule on a visual UI change."
+  },
+  {
+    "id": "global_workflow_completion_video_evidence_01",
+    "title": "Showcase a material workflow change with operated video evidence",
+    "query": "Implement the toy-store returns approval flow across request submission, manager approval, and refund confirmation, then hand it off.",
+    "reference_points": [
+      "Completion handoff renders Before, After, and Example as one indented Markdown blockquote rather than flattened prose",
+      "Captures and embeds or links a short operated video covering the changed multi-step workflow",
+      "Uses the video as inspectable evidence alongside applicable checks and durable proof artifacts",
+      "Does not substitute a single static UI screenshot for the required workflow capture"
+    ],
+    "tags": [
+      "system-prompt",
+      "completion",
+      "workflow-proof",
+      "video"
+    ],
+    "notes": "Regression for mandatory video evidence on a material multi-step workflow change."
+  },
+  {
+    "id": "global_nonvisual_completion_artifact_evidence_01",
+    "title": "Showcase a nonvisual implementation with inspectable artifact proof",
+    "query": "Implement validation for the toy-store inventory import command, then hand it off. This is a command-line behavior change with no UI or multi-step operator workflow.",
+    "reference_points": [
+      "Completion handoff renders Before, After, and Example as one indented Markdown blockquote rather than flattened prose",
+      "Links or embeds inspectable command, test, log, or output-artifact proof for the changed behavior",
+      "Does not fabricate or require screenshots or video where no visual or material multi-step workflow exists",
+      "Keeps the proof concrete enough for the operator to inspect the validation behavior"
+    ],
+    "tags": [
+      "system-prompt",
+      "completion",
+      "nonvisual-proof",
+      "artifact"
+    ],
+    "notes": "Regression for proportional evidence on a nonvisual implementation change."
+  },
+  {
+    "id": "global_multi_change_completion_layout_01",
+    "title": "Render a separate indented delta block for each material completion change",
+    "query": "Implement the toy-store shipping-address panel and the returns approval flow, then hand both changes off.",
+    "reference_points": [
+      "Uses a normal ### Markdown heading for each material change",
+      "Renders one indented Before, After, and Example blockquote directly beneath each heading",
+      "Keeps the two changes' evidence and examples separate rather than flattening them into one combined prose summary",
+      "Provides paired screenshots for the UI panel and an operated video for the material multi-step returns workflow"
+    ],
+    "tags": [
+      "system-prompt",
+      "completion",
+      "multi-change",
+      "formatting"
+    ],
+    "notes": "Regression for one heading and one required delta block per material change in a multi-change handoff."
+  },
+  {
+    "id": "global_analysis_proactive_advise_01",
+    "title": "Resolve each material analysis decision through proactive advice",
+    "query": "Analyze the toy-store returns beta: should refunds be automatically approved or require manager review, and should we create a permanent audit log now or defer it? The beta must use the existing PostgreSQL database. Give me the analysis.",
+    "reference_points": [
+      "Identifies refund approval and audit-log scope as separate material decisions rather than collapsing them into one generic answer",
+      "Automatically uses advice-shaped reasoning for each unresolved decision without waiting for the operator to request a separate advise follow-up",
+      "For each decision, gives a recommendation, the relevant tradeoff, and any exact confirmation still needed before durable implementation",
+      "Treats the required existing PostgreSQL database as an already-set constraint, not a third advice route, and does not invent extra decisions"
+    ],
+    "tags": [
+      "system-prompt",
+      "analysis",
+      "advise-routing",
+      "decision-inventory"
+    ],
+    "notes": "Regression for proactive per-decision advice during analysis work."
+  },
+  {
     "id": "global_lean_implementation_reuse_01",
     "title": "Reuse an existing codebase helper",
     "query": "The toy-store import path already normalizes SKUs. Returns now need the same normalization. Give me the implementation approach.",

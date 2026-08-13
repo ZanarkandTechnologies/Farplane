@@ -2,7 +2,7 @@
 name: lead-scout
 description: "Turn public prospect sources and filters into ranked outreach candidates with evidence, qualification notes, and research handoffs."
 tier: 3
-group: marketing
+group: sales
 source: local
 template_uses:
   skill-template: "0.3.7"

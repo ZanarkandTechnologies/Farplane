@@ -2,7 +2,7 @@
 name: reel-collage
 description: "Turn image URLs or local files into 9:16 reel collage backgrounds for shorts, explainers, and green-screen videos."
 tier: 3
-group: content-social
+group: marketing
 source: local
 allowed-tools: Read, Write, Bash, Grep, Glob
 ---

@@ -3,7 +3,7 @@ name: pr-review-watch
 version: 0.1.0
 description: "Turn an explicit GitHub PR into bounded polling, review-memory checks, fix loops, and notification-ready status until checks pass."
 tier: 3
-group: coding
+group: operations
 source: local
 allowed-tools: Read, Glob, Grep, Bash
 common_chains:

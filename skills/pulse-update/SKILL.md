@@ -2,7 +2,7 @@
 name: pulse-update
 description: "Run one bounded multi-phase Work Pulse: maintain state, service due reviews, dispatch executable tickets, refill low ready supply, and write one receipt."
 tier: 3
-group: harness
+group: operations
 source: local
 template_uses:
   skill-template: "0.2.0"

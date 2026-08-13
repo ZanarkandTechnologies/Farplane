@@ -3,7 +3,7 @@ name: code-audit
 description: "Turn a codebase, PRD, and architecture context into a ranked audit plan, improvement tickets, and routed refactoring or hardening follow-ups."
 tier: 3
 source: local
-group: coding
+group: operations
 template_uses:
   skill-template: "0.3.7"
   skill-eval-task: "0.2.0"

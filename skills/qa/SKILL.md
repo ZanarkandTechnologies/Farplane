@@ -2,7 +2,7 @@
 name: qa
 description: "Turn one selected ticket into proof artifacts, reconciled Done and QA Strategy obligations, and a structured QA result for Goal/ticket completion."
 tier: 3
-group: coding
+group: operations
 source: local
 template_uses:
   skill-template: "0.3.8"

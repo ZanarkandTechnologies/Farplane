@@ -3,7 +3,7 @@ name: remotion-render
 version: 1.0.0
 description: "Turn existing React/Remotion video code into rendered MP4 output through inference.sh belt when code-to-video export is needed."
 tier: 3
-group: content-video
+group: marketing
 source: local
 allowed-tools: Read, Grep, Glob, Bash
 ---
@@ -28,7 +28,7 @@ Use this as the ordered checklist whenever `remotion-render` is active.
 - [ ] Treat `belt app run infsh/remotion-render` as external compute/spend and run it only when acceptable.
 - [ ] For long renders or multiple compositions, use `--no-wait`, record task IDs in `jobs.md`, and poll with `belt task get <task-id>`.
 - [ ] Save the source TSX, input JSON, result JSON, logs or failure notes, final MP4, and notes inside the workspace.
-- [ ] If the rendered video is used in a frontend, hand off to [frontend-craft](../frontend-craft/SKILL.md) and [visual-qa](../visual-qa/SKILL.md) when layout or taste is affected.
+- [ ] If the rendered video is used in a frontend, hand its receipt to [impl-plan](../impl-plan/SKILL.md) and [visual-qa](../visual-qa/SKILL.md) when layout or taste is affected.
 - [ ] Do not route model-native video requests through this skill; use [ai-video-advisor](../ai-video-advisor/SKILL.md) for those.
 - [ ] Follow the native execution phase proof and writeback loop before claiming render, artifact, or final video quality.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
@@ -55,7 +55,7 @@ Copied upstream references are read-only usage docs. Do not run `npx skills add 
 6. Treat `belt app run infsh/remotion-render` as external compute/spend and run it only when acceptable.
 7. For long renders or multiple compositions, use `--no-wait`, record task IDs in `jobs.md`, and poll with `belt task get <task-id>`.
 8. Save the MP4, input JSON, result JSON, notes, and source TSX in the workspace.
-9. If used in a frontend, hand off to `frontend-craft` and `visual-qa` when layout or taste is affected.
+9. If used in a frontend, hand the receipt to `impl-plan` and `visual-qa` when layout or taste is affected.
 
 ## Default Bundle
 

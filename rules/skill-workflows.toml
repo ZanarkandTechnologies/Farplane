@@ -1,0 +1,37 @@
+# Curated workflow roots for the operator-facing Capability Map.
+#
+# Each entry names an existing Tier 3 skill with the same `group`. This is a
+# view selection only: it neither changes skill metadata nor declares runtime
+# calls, process order, or artifact dependencies.
+
+[workflow_roots]
+"back-office" = ["knowledge-tidier", "update-memory"]
+sales = ["lead-scout", "outreach-impl-plan"]
+deals = ["solution-shaping", "personalized-offer", "proposal-pricing"]
+marketing = ["social-content", "ad-advisor", "landing-page", "product-photography"]
+operations = ["init-advisor", "impl-plan", "automation-advisor", "agent-testability-plan"]
+intelligence = ["agency-opportunity-research", "feed-scout", "learn-from-video"]
+customer = ["customer-research"]
+
+# These are business-facing names for the already-declared real skill packages.
+# They keep the map readable without adding a field to every SKILL.md.
+[workflow_labels]
+knowledge-tidier = "Knowledge"
+update-memory = "Records"
+lead-scout = "Targeting"
+outreach-impl-plan = "Outreach"
+solution-shaping = "Solution Design"
+personalized-offer = "Personalized Offers"
+proposal-pricing = "Proposals"
+social-content = "Content"
+ad-advisor = "Ads"
+landing-page = "Landing Pages"
+product-photography = "Product Visuals"
+init-advisor = "Onboarding"
+impl-plan = "Builds"
+automation-advisor = "Automations"
+agent-testability-plan = "Quality Systems"
+agency-opportunity-research = "Market Research"
+feed-scout = "Signals"
+learn-from-video = "Learning"
+customer-research = "Customer Insight"

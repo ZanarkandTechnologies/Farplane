@@ -2,7 +2,7 @@
 name: ml-autoresearch
 description: "Optimize a measurable ML system through bounded Goal-backed experiments selected from roadmap and progress evidence."
 tier: 3
-group: self-improvement
+group: operations
 source: local
 template_uses:
   skill-template: "0.3.9"

@@ -77,11 +77,13 @@ def parse_frontmatter(path: Path) -> dict[str, Any]:
     metadata: dict[str, Any] = {}
     current_key: str | None = None
     current_subkey: str | None = None
+    current_list_item: dict[str, Any] | None = None
     for raw_line in text[4:end].splitlines():
         if not raw_line.strip():
             continue
         if not raw_line.startswith(" "):
             current_subkey = None
+            current_list_item = None
             key, _, value = raw_line.partition(":")
             metadata[key.strip()] = {} if not value.strip() else parse_scalar(value)
             current_key = key.strip()
@@ -90,8 +92,16 @@ def parse_frontmatter(path: Path) -> dict[str, Any]:
             continue
         current_value = metadata.get(current_key)
         stripped = raw_line.strip()
-        if stripped.startswith("- "):
-            item = parse_scalar(stripped[2:])
+        indentation = len(raw_line) - len(raw_line.lstrip(" "))
+        if indentation == 2 and stripped.startswith("- "):
+            item_value = stripped[2:].strip()
+            item_key, separator, raw_item_value = item_value.partition(": ")
+            if separator:
+                item: Any = {item_key.strip(): parse_scalar(raw_item_value)}
+                current_list_item = item
+            else:
+                item = parse_scalar(item_value)
+                current_list_item = None
             if current_subkey and isinstance(current_value, dict):
                 current_value.setdefault(current_subkey, []).append(item)
             else:
@@ -100,7 +110,12 @@ def parse_frontmatter(path: Path) -> dict[str, Any]:
                     metadata[current_key] = current_value
                 current_value.append(item)
             continue
-        if ":" in stripped:
+        if indentation >= 4 and current_list_item is not None and ":" in stripped:
+            subkey, _, value = stripped.partition(":")
+            current_list_item[subkey.strip()] = parse_scalar(value)
+            continue
+        if indentation == 2 and ":" in stripped:
+            current_list_item = None
             subkey, _, value = stripped.partition(":")
             if not isinstance(current_value, dict):
                 current_value = {}

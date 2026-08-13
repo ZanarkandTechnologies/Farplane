@@ -2,7 +2,7 @@
 name: personalized-offer
 description: "Turn one researched person, company context, and accepted use case into a source-bounded personalized offer report and unsent outreach package when an agency is ready to approach them."
 tier: 3
-group: marketing
+group: deals
 source: local
 template_uses:
   skill-template: "0.3.2"

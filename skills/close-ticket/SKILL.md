@@ -2,7 +2,7 @@
 name: close-ticket
 description: "Turn a completed ticket into a glanceable GitHub issue, demo-first feature proof, safe Core cleanup, and durable closeout."
 tier: 3
-group: coding
+group: operations
 source: local
 eval: evals/evals.json
 template_uses:

@@ -2,7 +2,7 @@
 name: notion-task-field-fill
 description: "Turn incomplete Notion Tasks into field proposals, safe high-confidence patches, and Telegram review requests."
 tier: 3
-group: personal-ops
+group: back-office
 source: local
 template_uses:
   skill-template: "0.3.7"

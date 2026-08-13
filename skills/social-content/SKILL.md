@@ -3,17 +3,25 @@ name: social-content
 version: 1.0.0
 description: "Turn social campaign goals into posts, carousels, threads, calendars, hooks, captions, thumbnails, or cross-platform bundles."
 tier: 3
-group: content-social
+group: marketing
 source: local
 template_uses:
   skill-template: "0.3.6"
   skill-qa-checklist: "0.1.0"
   skill-eval-task: "0.2.0"
 methods:
-  - social-content:cross-platform
-  - social-content:carousel
-  - social-content:linkedin
-  - social-content:twitter-thread
+  - id: social-content:cross-platform
+    class: artifact
+    output: cross-platform-content-bundle
+  - id: social-content:carousel
+    class: artifact
+    output: social-carousel-draft
+  - id: social-content:linkedin
+    class: artifact
+    output: linkedin-post-draft
+  - id: social-content:twitter-thread
+    class: artifact
+    output: x-thread-draft
 allowed-tools: Read, Grep, Glob, Bash
 eval: evals/evals.json
 qa_checklist: qa_checklist.md
@@ -53,7 +61,7 @@ gates:
 
 routes:
   content-impl-plan | storyboard | asset-advisor | imagegen |
-  ai-image-advisor | ai-video-advisor | remotion | frontend-craft |
+  ai-image-advisor | ai-video-advisor | remotion | impl-plan |
   research | advise | review
 
 fails:
@@ -109,7 +117,7 @@ campaign expectations materially affect the output.
   [ai-image-advisor](../ai-image-advisor/SKILL.md); route video through
   [ai-video-advisor](../ai-video-advisor/SKILL.md) or
   [remotion](../remotion/SKILL.md); route precise HTML assets
-  or campaign pages through [frontend-craft](../frontend-craft/SKILL.md).
+  or campaign pages through [impl-plan](../impl-plan/SKILL.md).
   - [ ] Save drafts, outlines, slide copy, prompts, inputs, result JSON,
   generated files, final asset paths, and notes inside the workspace when
   external generation is involved.

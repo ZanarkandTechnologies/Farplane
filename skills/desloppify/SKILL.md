@@ -3,7 +3,7 @@ name: desloppify
 version: 0.1.0
 description: "Turn repo cleanup requests into desloppify scan, next, and resolve loops while keeping nested runner ownership explicit."
 tier: 3
-group: repo-health
+group: operations
 source: local
 allowed-tools: Read, Grep, Bash
 ---

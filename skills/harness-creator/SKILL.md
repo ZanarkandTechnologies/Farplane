@@ -2,7 +2,7 @@
 name: harness-creator
 description: "Turn a high-level project or business idea into a Farplane charter, metric objectives, capability handoffs, and executable starter tickets."
 tier: 3
-group: harness
+group: operations
 source: local
 eval: evals/evals.json
 template_uses:

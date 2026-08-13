@@ -2,7 +2,7 @@
 name: storyboard
 description: "Turn a content implementation plan, idea, ICP, proof, or offer into script, beats, and storyboard scenes for production handoff."
 tier: 3
-group: content-video
+group: marketing
 source: local
 template_uses:
   skill-template: "0.3.7"

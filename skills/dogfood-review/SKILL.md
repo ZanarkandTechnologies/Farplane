@@ -2,7 +2,7 @@
 name: dogfood-review
 description: "Reduce all self-improvement ticket evidence for an interval into one dated portfolio checkpoint and bounded planner context."
 tier: 3
-group: harness
+group: operations
 source: local
 template_uses:
   skill-template: "0.3.9"

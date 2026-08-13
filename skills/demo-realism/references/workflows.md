@@ -77,7 +77,7 @@ ad hoc spreadsheets?
   interaction model still needs product/UI planning
 - use `visual-design` when the workflow and data feel believable and visual
   direction should start
-- use `frontend-craft` when the workflow and data feel believable and
+- use `impl-plan` when the workflow and data feel believable and
   implementation should start
 - use `impl-plan` when the realism pack should turn into a scoped build plan
 - use `goal-advisor` only when a ticket already exists and the realism pack is good

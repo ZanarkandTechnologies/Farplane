@@ -69,7 +69,7 @@ Use this shape when a visible decision note is useful:
 - Use `reference-grounding` when the recommendation depends on evidence.
 - Use `best-of-worlds` when known sources must be extracted, scored, and
   adapted before advice.
-- Escalate to `deliberative-advice` / `advise:complex` when the decision is
+- Escalate to `deliberative-advice` / `deliberative-advice:complex` when the decision is
   high-stakes, expensive, ambiguous across several credible perspectives, or
   likely to benefit from independent critique before synthesis.
 - Hand UI/UX-facing choices to `functional-ui`.

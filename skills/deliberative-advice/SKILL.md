@@ -7,7 +7,13 @@ template_uses:
   skill-template: "0.3.2"
   skill-eval-task: "0.2.0"
 eval: evals/evals.json
-methods: ["advise:complex", "advise:council"]
+methods:
+  - id: deliberative-advice:complex
+    class: internal
+    output: budgeted-advice-program
+  - id: deliberative-advice:council
+    class: internal
+    output: council-decision-note
 allowed-tools: Read, Glob, Grep
 
 ---

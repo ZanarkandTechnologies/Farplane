@@ -2,7 +2,7 @@
 name: plan-next-wave
 description: "Select and bind the strongest configured project-skill calls without writing tickets."
 tier: 3
-group: harness
+group: operations
 source: local
 template_uses:
   skill-template: "0.3.9"

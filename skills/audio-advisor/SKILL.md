@@ -2,7 +2,7 @@
 name: audio-advisor
 description: "Plan audio, discover SFX candidates, generate approved assets, verify files, and hand off voice, music, Foley, dubbing, and mixes."
 tier: 3
-group: content-audio
+group: marketing
 source: local
 template_uses:
   skill-template: "0.3.8"
@@ -14,11 +14,21 @@ qa_checklist: qa_checklist.md
 common_chains:
   after: ["storyboard", "asset-advisor", "avatar-advisor", "ai-video-advisor", "remotion"]
 methods:
-  - audio-advisor:plan
-  - audio-advisor:source-sfx
-  - audio-advisor:voice
-  - audio-advisor:music
-  - audio-advisor:sfx
+  - id: audio-advisor:plan
+    class: internal
+    output: audio-direction
+  - id: audio-advisor:source-sfx
+    class: internal
+    output: sfx-candidate-set
+  - id: audio-advisor:voice
+    class: internal
+    output: voice-asset-brief
+  - id: audio-advisor:music
+    class: internal
+    output: music-asset-brief
+  - id: audio-advisor:sfx
+    class: internal
+    output: sfx-asset-brief
 allowed-tools: Read, Grep, Glob, Bash, web_search
 ---
 

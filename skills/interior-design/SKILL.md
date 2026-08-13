@@ -3,7 +3,7 @@ name: interior-design
 version: 0.1.0
 description: "Turn an existing room, office, or navigable interior plus activities and taste into an evidence-backed composition brief, blockout, and operator review gate."
 tier: 3
-group: frontend
+group: operations
 source: local
 template_uses:
   skill-template: "0.3.8"
@@ -60,7 +60,7 @@ interior_design(existing_scene, activities, operator_taste, constraints, referen
    + accepted_direction
 state: reads(scene screenshots/files, room shell, current assets/themes, activity needs, prior feedback); writes(design brief or ticket-local interior section when authorized)
 gates: observed_vs_unknown_separated; circulation_preserved; review_artifact_exists; operator_accepts_before_broad_implementation
-routes: visual-design | frontend-craft | review | qualified-building-professional
+routes: visual-design | impl-plan | review | qualified-building-professional
 fails: local prop tuning before whole-room diagnosis; invented scene audit; palette-only reference matching; engineering metrics used as aesthetic proof
 ```
 

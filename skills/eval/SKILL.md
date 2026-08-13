@@ -2,7 +2,7 @@
 name: eval
 description: "Turn agent, prompt, or skill behavior into local eval tasks, boolean or tier judges, run artifacts, and verdicts."
 tier: 3
-group: harness
+group: operations
 source: local
 template_uses:
   skill-template: "0.3.0"
@@ -11,10 +11,18 @@ template_uses:
 eval: evals/evals.json
 qa_checklist: qa_checklist.md
 methods:
-  - eval:onboarding
-  - eval:consolidate
-  - eval:behavior-trace
-  - eval:experiment
+  - id: eval:onboarding
+    class: internal
+    output: eval-suite-setup
+  - id: eval:consolidate
+    class: internal
+    output: eval-consolidation-report
+  - id: eval:behavior-trace
+    class: internal
+    output: behavior-trace-evidence
+  - id: eval:experiment
+    class: internal
+    output: experiment-eval-report
 allowed-tools: Read, Glob, Grep, Bash
 
 ---

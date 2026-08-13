@@ -6,11 +6,21 @@ source: local
 eval: evals/evals.json
 qa_checklist: qa_checklist.md
 methods:
-  - agent-qa-test:prompt
-  - agent-qa-test:app
-  - agent-qa-test:skill
-  - agent-qa-test:regression
-  - agent-qa-test:experiment
+  - id: agent-qa-test:prompt
+    class: internal
+    output: prompt-qa-evidence
+  - id: agent-qa-test:app
+    class: internal
+    output: app-qa-evidence
+  - id: agent-qa-test:skill
+    class: internal
+    output: skill-qa-evidence
+  - id: agent-qa-test:regression
+    class: internal
+    output: regression-qa-evidence
+  - id: agent-qa-test:experiment
+    class: internal
+    output: experiment-scientific-audit
 allowed-tools: Read, Glob, Grep, Bash
 ---
 

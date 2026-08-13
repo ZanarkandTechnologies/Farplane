@@ -2,7 +2,7 @@
 name: first-value-outreach
 description: "Turn one researched person and traceable professional signal into a bounded useful contribution and correction-first unsent outreach packet when earning the first conversation."
 tier: 3
-group: marketing
+group: sales
 source: local
 template_uses:
   skill-template: "0.3.8"
@@ -57,7 +57,7 @@ gates: person_researched; professional_signal_traceable;
        demo_route_complete_when_demo_selected;
        external_actions_unapproved
 routes: customer-research | research:* | solution-shaping | demo-realism |
-        diagramming | infographic | functional-ui | frontend-craft |
+        diagramming | infographic | functional-ui |
         impl-plan | copywriting-advisor | personalized-offer | review
 fails: generic_free_help; biography_personalization; invented_private_pain;
        manipulative_irresistibility; speculative_large_build;
@@ -82,7 +82,7 @@ after the contribution type and effort cap are fixed, and give it a narrower
 artifact brief. A demo is optional, not the default: `solution-shaping` must
 accept the proof boundary first; `demo-realism` may prepare believable workflow
 and data, but does not build the demo; route implementation to the project's
-actual demo owner, `frontend-craft` for a bounded web build, or `impl-plan` when
+actual demo owner or `impl-plan` when
 the build needs a ticket-shaped handoff. Keep commercial offer shaping
 downstream until the recipient confirms, corrects, or otherwise validates a
 problem or collaboration direction.
@@ -128,7 +128,7 @@ problem or collaboration direction.
   - [ ] Create simple text/analysis artifacts directly; use `solution-shaping`
         before product proof. Use `demo-realism` only to shape believable
         workflow/data when needed, then route the accepted brief to the actual
-        project demo owner, `frontend-craft`, or a ticket through `impl-plan`;
+        project demo owner or a ticket through `impl-plan`;
         use `diagramming` or `infographic` when a static artifact is sufficient.
   - [ ] Permit a proof-sized demo only when the packet explains why a static
         artifact cannot test the uncertainty, bounds one workflow and one
@@ -137,7 +137,7 @@ problem or collaboration direction.
   - [ ] For every selected demo, include an explicit route receipt:
         `solution boundary: accepted | blocked`; `realism preparation:
         required with demo-realism | not_required`; `implementation owner:
-        <project demo owner | frontend-craft | ticket via impl-plan>`; and
+        <project demo owner | ticket via impl-plan>`; and
         `inspection surface: <path or expected artifact>`. A generic “builder
         handoff” does not pass.
   - [ ] Do not exceed the contribution budget, publish about the person, use

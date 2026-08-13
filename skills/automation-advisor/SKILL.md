@@ -2,7 +2,7 @@
 name: automation-advisor
 description: "Design or revise Farplane Codex automations using full project-owned automations.toml configs and generic Pulse/Interval skill calls."
 tier: 3
-group: harness
+group: operations
 source: local
 eval: evals/evals.json
 template_uses:

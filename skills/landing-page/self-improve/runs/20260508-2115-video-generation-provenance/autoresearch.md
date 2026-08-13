@@ -18,7 +18,7 @@ assembled with `ffmpeg` as true generated video.
   - `skills/landing-page/references/*`
   - `skills/landing-page/scripts/asset_evidence_lint.py`
   - `skills/landing-page/scripts/test_asset_evidence_lint.py`
-  - `skills/delegate-frontend/SKILL.md`
+  - the retired frontend-specific delegation wrapper
 - Read-only observed failure:
   - `.harness/xr-medical-glasses-site/assets/asset-manifest.json`
 

@@ -8,11 +8,21 @@ template_uses:
   skill-qa-checklist: "0.1.0"
   skill-eval-task: "0.2.0"
 methods:
-  - doc-advisor:strategy
-  - doc-advisor:doc-architecture
-  - doc-advisor:metadata
-  - doc-advisor:feature-system-spec
-  - doc-advisor:finish-gate
+  - id: doc-advisor:strategy
+    class: internal
+    output: docs-strategy
+  - id: doc-advisor:doc-architecture
+    class: internal
+    output: docs-architecture
+  - id: doc-advisor:metadata
+    class: internal
+    output: metadata-contract
+  - id: doc-advisor:feature-system-spec
+    class: internal
+    output: feature-system-spec
+  - id: doc-advisor:finish-gate
+    class: internal
+    output: docs-finish-verdict
 eval: evals/evals.json
 qa_checklist: qa_checklist.md
 ---

@@ -33,7 +33,7 @@ teaches or demonstrates.
 
 This skill is for understanding source evidence. It should not implement the
 copied skill itself unless the caller explicitly routes to an implementation
-owner such as `frontend-craft`.
+owner through `impl-plan`.
 
 ## Trigger Conditions
 

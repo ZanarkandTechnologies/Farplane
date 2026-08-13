@@ -28,8 +28,8 @@ playing, or natively understanding a video.
 - `source_todos`: capture source frames, generate/refine asset, isolate
   layers, define timing, compose browser artifact, debug, preserve method,
   verify against frames
-- `primary_owner`: `frontend-craft`
-- `method`: `frontend-craft:composed-scroll-animation`
+- `primary_owner`: `landing-page` plus `impl-plan`
+- `method`: `landing-page` visual-motion brief
 - `supporting_skills`: `imagegen`, `ai-image-advisor`, `visual-qa`,
   `landing-page`, `web-design-guidelines`
 - `confidence_limit`: spoken narration remains unverified until a transcript is
@@ -39,4 +39,4 @@ playing, or natively understanding a video.
 
 The agent passes the fixture if it routes general video handling to
 `harness-scout` plus support skills, and routes the specific copied frontend
-method to `frontend-craft`.
+brief to `landing-page` and `impl-plan`.
