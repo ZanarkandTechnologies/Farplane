@@ -1,13 +1,11 @@
 ---
 name: visual-design
 version: 1.0.0
-description: "Turn a known frontend workflow into typography, color, layout, hierarchy, motion, and anti-generic visual direction."
+description: "Turn an accepted UI workflow and visual references into a visual system, anti-patterns, and a planning handoff."
 tier: 3
-group: frontend
+group: operations
 source: local
-common_chains:
-  after: ["frontend-craft"]
-allowed-tools: Read, Grep, Glob
+allowed-tools: Read, Grep, Glob, web_search
 ---
 
 # Visual Design
@@ -24,6 +22,11 @@ allowed-tools: Read, Grep, Glob
 - [ ] When the user provides a strong reference or the surface needs a taste
   upgrade, use [best-of-worlds](../best-of-worlds/SKILL.md) to extract what to
   adopt, adapt, reject, or defer before defining the final visual system.
+- [ ] When direction is vague, ask the smallest high-leverage taste question:
+  a concrete reference, anti-reference, or a bolder-versus-safer tradeoff.
+  Do not run a separate stateful taste-interview workflow.
+- [ ] Record a compact visual evidence receipt: source/reference, observed
+  trait, `adopt | adapt | reject`, and the resulting visual constraint.
 - [ ] Use the native planning phase to choose the visual register and accepted
   tradeoff before specifying style.
 - [ ] Set numeric taste dials for density, variance, motion, color commitment,
@@ -32,9 +35,8 @@ allowed-tools: Read, Grep, Glob
   component treatment, icon/media language, and motion vocabulary.
 - [ ] Write or update a durable design brief when the surface is substantial or
   delegated.
-- [ ] Hand off to [frontend-design](../frontend-design/SKILL.md) for app UI
-  implementation references or [frontend-craft](../frontend-craft/SKILL.md) for
-  the full build path.
+- [ ] Hand the accepted visual brief to [impl-plan](../impl-plan/SKILL.md) for
+  ticket composition and conditional implementation research.
 - [ ] Use the native execution phase for proof/writeback shape before
   claiming the visual direction is ready.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
@@ -45,7 +47,7 @@ Own the look and taste of a frontend surface after its functional purpose is kno
 
 - The user asks for visual polish, better aesthetics, taste, style, hierarchy, typography, color, density, or brand fit.
 - `functional-ui` has already decided how the surface should work.
-- `frontend-craft` needs a visual brief before implementation.
+- `impl-plan` needs a visual brief before composing UI implementation work.
 - A UI looks generic, default, AI-made, or visually incoherent.
 
 ## Do Not Use When
@@ -63,7 +65,8 @@ Own the look and taste of a frontend surface after its functional purpose is kno
 5. **Define the visual system.** Typography, color roles, spacing rhythm, radius/elevation, component treatment, icon/media language, and motion vocabulary.
 6. **Write a durable design brief when the work is substantial.** For a new app surface, redesign, multi-screen UI, or delegated implementation, create or update a ticket/spec-local `DESIGN_BRIEF.md` or equivalent ticket section before build handoff.
 7. **Reject AI tells.** Run the anti-slop check from `taste-dials.md` and `critique-audit.md`.
-8. **Hand off to implementation.** Produce concrete constraints that `frontend-craft` or `frontend-design` references can build.
+8. **Hand off to planning.** Produce concrete constraints that `impl-plan`
+   incorporates into the ticket design baseline.
 
 ## Decision Branches
 
@@ -110,6 +113,7 @@ Return a concise visual brief with:
 - `Scene sentence`
 - `Taste dials` with 1-10 numeric values
 - `Visual system`
+- `Visual evidence receipt`
 - `Design brief path` when one was created or updated
 - `Anti-slop constraints`
 - `Implementation handoff`

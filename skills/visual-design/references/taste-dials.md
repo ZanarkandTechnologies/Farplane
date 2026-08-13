@@ -61,4 +61,4 @@ Use these as starting recipes, not new public skills:
 - Avoid pure `#000` and `#fff` unless the existing system intentionally uses them.
 - Animate transforms and opacity by default.
 - Avoid font churn. Use existing fonts unless the visual brief explicitly requires a new pairing.
-- For shared UI, pair this with `frontend-design/references/component-state-matrix.md`.
+- For shared UI, record component-state needs in the `impl-plan` design baseline and retrieve current component documentation only when implementation starts.

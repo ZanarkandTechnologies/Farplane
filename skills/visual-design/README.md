@@ -15,7 +15,7 @@ Define frontend look, taste, hierarchy, and visual-system direction once the fun
 2. Classify product vs brand register.
 3. Set scene sentence, numeric taste dials, and visual system.
 4. Create or update a durable design brief for substantial UI work.
-5. Hand constraints to `frontend-craft`.
+5. Record reference traits and anti-traits, then hand constraints to `impl-plan`.
 
 ## How to Test
 

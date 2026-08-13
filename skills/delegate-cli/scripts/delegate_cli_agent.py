@@ -37,31 +37,9 @@ HANDOFF_COMPLETION_SECTION_PATTERNS = {
     ),
     "risks": re.compile(r"^(?:Risks(?:\s*/\s*Followups)?|Findings\s*/\s*Risks)$", re.I),
 }
-DEFAULT_FRONTEND_REQUIRED_SKILLS = (
-    "frontend-craft",
-    "functional-ui",
-    "visual-design",
-    "landing-page",
-    "frontend-design",
-    "ai-image-advisor",
-    "ai-video-advisor",
-    "video-ad-specs",
-    "ai-marketing-videos",
-    "explainer-video-guide",
-    "storyboard-creation",
-    "talking-head-production",
-    "product-photography",
-    "remotion",
-    "remotion-render",
-    "data-viz",
-    "react-flow",
-    "vercel-react-best-practices",
-    "visual-qa",
-    "review",
-    "web-design-guidelines",
-)
-DEFAULT_FRONTEND_OPTIONAL_SKILLS: tuple[str, ...] = ()
-DEFAULT_FRONTEND_SKILLS = DEFAULT_FRONTEND_REQUIRED_SKILLS
+DEFAULT_REQUIRED_SKILLS = ("qa", "review")
+DEFAULT_OPTIONAL_SKILLS: tuple[str, ...] = ()
+DEFAULT_SKILLS = DEFAULT_REQUIRED_SKILLS
 
 
 @dataclass(frozen=True)
@@ -623,7 +601,7 @@ def load_skill_bundle(
         / "skill-bundle.json"
     )
     if not manifest_path.exists():
-        return DEFAULT_FRONTEND_REQUIRED_SKILLS, DEFAULT_FRONTEND_OPTIONAL_SKILLS
+        return DEFAULT_REQUIRED_SKILLS, DEFAULT_OPTIONAL_SKILLS
     try:
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     except json.JSONDecodeError as exc:
@@ -631,7 +609,7 @@ def load_skill_bundle(
     if not isinstance(manifest, dict):
         raise SystemExit(f"invalid skill bundle manifest {manifest_path}: expected object")
     required = dedupe_skill_names(
-        manifest.get("required_skills", DEFAULT_FRONTEND_REQUIRED_SKILLS),
+        manifest.get("required_skills", DEFAULT_REQUIRED_SKILLS),
         label=f"{manifest_path} required_skills",
     )
     optional = dedupe_skill_names(
@@ -948,7 +926,7 @@ def render_prompt(
     if compact:
         rendered = "\n".join(
             [
-                "# Delegated Frontend Compact Run",
+                "# Delegated Builder Compact Run",
                 "",
                 f"Profile: {profile.name}",
                 f"Adapter: {profile.adapter}",

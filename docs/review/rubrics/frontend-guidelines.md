@@ -23,7 +23,7 @@ Required for review when any of these are true:
 - changed files include UI components, pages, forms, dialogs, navigation,
   animation, canvas wrappers, or user-visible layout
 - the ticket claims accessibility, best-practice, interaction, or polish
-- `frontend-craft` drove implementation
+- the ticket's `impl-plan` drove implementation
 - `ui-quality` is selected and source files are available
 
 Optional when the review only covers planning artifacts, screenshots without

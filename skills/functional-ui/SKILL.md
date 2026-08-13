@@ -1,9 +1,9 @@
 ---
 name: functional-ui
 version: 1.2.0
-description: "Turn broken or unclear product workflows into user stories, UI-state diagnosis, comparable examples, and implementation handoff."
+description: "Turn unclear product workflows into operated comparable evidence, an interaction model, optional low-fi wireflow, and a planning handoff."
 tier: 3
-group: frontend
+group: operations
 source: local
 template_uses:
   skill-qa-checklist: "0.1.0"
@@ -21,7 +21,7 @@ allowed-tools: Read, Grep, Glob, Bash
 ## Todo List
 
 - [ ] State the UI/workflow decision and the artifact being produced:
-  diagnosis, UX plan, redesign recommendation, or implementation handoff.
+  diagnosis, UX brief, redesign recommendation, or planning handoff.
 - [ ] Read [qa_checklist.md](qa_checklist.md) before execution when the task
   will shape an app screen, panel, dashboard, form, or control surface.
 - [ ] Use [research:user-grounding](../research/SKILL.md#researchuser-grounding)
@@ -54,9 +54,10 @@ allowed-tools: Read, Grep, Glob, Bash
   and choose one recommended workflow.
 - [ ] Define screens, states, IA, interaction rules, data/content ranges, and
   edge cases.
-- [ ] Hand off to [visual-design](../visual-design/SKILL.md) when look/taste is
-  still open, or [frontend-craft](../frontend-craft/SKILL.md) when the workflow
-  is ready to build.
+- [ ] Draw a low-fi ASCII wireflow only when it resolves a user journey,
+  information hierarchy, or responsive transition that a state table cannot.
+- [ ] Hand the accepted UX context to [impl-plan](../impl-plan/SKILL.md), which
+  decides whether visual or asset context is also unresolved.
 - [ ] Apply [qa_checklist.md](qa_checklist.md) again before completion for
   material screen, panel, dashboard, form, or control-surface plans.
 - [ ] Use the native execution phase for proof/writeback shape before
@@ -81,7 +82,8 @@ Use this before visual implementation when the question is how the product shoul
 - a screen or flow needs functional structure before styling
 - product behavior, IA, or workflow is still open
 - the team keeps redesigning common patterns from scratch
-- `frontend-craft` is implementing a frontend and no current UX brief settles users, states, and interactions
+- `impl-plan` is planning UI work and no current UX brief settles users, states,
+  and interactions
 
 ## Do Not Use When
 
@@ -103,7 +105,10 @@ Use this before visual implementation when the question is how the product shoul
 5. Produce 3 grounded UI options with pros and cons.
 6. Recommend one workflow and explain why it best fits the user stories.
 7. Define screens, states, IA, interaction rules, data/content ranges, and edge cases.
-8. Hand off with [implementation-handoff.md](references/implementation-handoff.md) to `visual-design` or `frontend-craft`.
+8. Add a low-fi ASCII wireflow only when it materially clarifies flow or
+   hierarchy; otherwise keep the state map compact.
+9. Hand off with [implementation-handoff.md](references/implementation-handoff.md)
+   to `impl-plan` as accepted UX context.
 
 ## Decision Branches
 
@@ -133,6 +138,8 @@ Produce a compact planning artifact with:
 - `Key screens/states`, including applicable empty, loading/in-progress,
   partial, success/return, error, and retry/recovery behavior
 - `Interaction rules`
+- `Low-fi wireflow` when flow or hierarchy needs one; otherwise an explicit
+  `wireflow_not_needed` reason
 - `Implementation handoff`
 - `Options appendix`
 
@@ -158,7 +165,7 @@ Produce a compact planning artifact with:
 
 - [redesign-diagnosis.md](references/redesign-diagnosis.md) - diagnose why a current UI fails.
 - [comparable-patterns.md](references/comparable-patterns.md) - inspect adjacent products and extract reusable workflow patterns.
-- [implementation-handoff.md](references/implementation-handoff.md) - package UX decisions for `frontend-craft`.
+- [implementation-handoff.md](references/implementation-handoff.md) - package UX decisions for `impl-plan`.
 - [architecture.md](references/architecture.md) - ownership boundary and downstream handoff model.
 - [workflows.md](references/workflows.md) - broken UI and new screen/flow paths.
 - [gotchas.md](references/gotchas.md) - common functional-UI failure modes.

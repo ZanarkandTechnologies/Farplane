@@ -9,5 +9,6 @@
   rendering, prompt rendering, logs, and artifact copying.
 - Farplane owns the ticket, QA, review, and integration result.
 
-The first profile is `frontend-pi-kimi`. Future profiles should reuse the same
-launcher and artifact contract.
+The bundled `frontend-pi-kimi` profile is a Pi/OpenRouter configuration, not a
+public frontend workflow. Callers choose their bounded skill bundle with
+`--skill`; future profiles should reuse the same launcher and artifact contract.

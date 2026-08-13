@@ -3,10 +3,12 @@ name: ai-video-advisor
 version: 1.1.0
 description: "Turn model-native video create/edit/upscale requests into provider route, prompt/input packet, spend gate, and saved video asset bundle."
 tier: 3
-group: content-video
+group: marketing
 source: local
 methods:
-  - ai-video-advisor:visual-camera-control
+  - id: ai-video-advisor:visual-camera-control
+    class: internal
+    output: video-camera-control-brief
 template_uses:
   skill-template: "0.3.7"
 eval: evals/evals.json

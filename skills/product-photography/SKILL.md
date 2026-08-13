@@ -3,15 +3,27 @@ name: product-photography
 version: 1.0.0
 description: "Turn product-image needs into packshots, lifestyle photos, detail shots, marketplace assets, cutouts, mockups, or product-page visuals."
 tier: 3
-group: content-image
+group: marketing
 source: local
 methods:
-  - product-photography:hero
-  - product-photography:packshot
-  - product-photography:lifestyle
-  - product-photography:detail
-  - product-photography:marketplace
-  - product-photography:cutout-upscale
+  - id: product-photography:hero
+    class: artifact
+    output: product-hero-image
+  - id: product-photography:packshot
+    class: artifact
+    output: product-packshot
+  - id: product-photography:lifestyle
+    class: artifact
+    output: product-lifestyle-image
+  - id: product-photography:detail
+    class: artifact
+    output: product-detail-image
+  - id: product-photography:marketplace
+    class: artifact
+    output: marketplace-image-set
+  - id: product-photography:cutout-upscale
+    class: artifact
+    output: product-cutout-or-upscale
 allowed-tools: Read, Grep, Glob, Bash
 ---
 
@@ -49,7 +61,7 @@ Use this checklist whenever `product-photography` is active.
   inference.sh image models, background removal, upscaling, CLI repeatability,
   or structured result bundles.
 - [ ] Route product-page or frontend integration through
-  [frontend-craft](../frontend-craft/SKILL.md).
+  [impl-plan](../impl-plan/SKILL.md).
 - [ ] Save source assets, prompts, inputs, result JSON, final images, and notes
   inside the workspace when external generation is involved.
 - [ ] Confirm external compute, spend, uploads, or API usage is explicitly

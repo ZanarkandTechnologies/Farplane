@@ -1,7 +1,0 @@
-{
-  "status": "pass",
-  "expected_outputs": [
-    "SPEC.md"
-  ],
-  "observed_output": "SPEC.md"
-}

@@ -7,7 +7,7 @@ artifact, QA, review, and integration authority.
 
 ```bash
 python3 skills/delegate-cli/scripts/delegate_cli_agent.py doctor --profile frontend-pi-kimi --json
-python3 skills/delegate-frontend/scripts/sync_frontend_pi_skills.py --json
+python3 skills/delegate-cli/scripts/delegate_cli_agent.py setup --profile frontend-pi-kimi --json
 python3 skills/delegate-cli/scripts/delegate_cli_agent.py run --profile frontend-pi-kimi --ticket tickets/TASK-0106/ticket.md --dry-run --json
 ```
 

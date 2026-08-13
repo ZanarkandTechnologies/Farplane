@@ -8,7 +8,8 @@
 4. Set taste dials.
 5. Define typography, color, spacing, radius/elevation, media, and motion vocabulary.
 6. Run anti-slop checks.
-7. Hand implementation constraints to `frontend-craft`.
+7. Record reference traits as `adopt | adapt | reject` constraints.
+8. Hand accepted visual context to `impl-plan`.
 
 ## Visual Polish
 

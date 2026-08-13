@@ -1,24 +1,9 @@
 {
   "schema_version": "1.0.0",
-  "description": "Curated skill bundle mounted into the Pi/Kimi frontend profile. Keep this explicit so frontend/media delegation stays auditable.",
+  "description": "Minimal Pi/OpenRouter builder bundle. Callers mount bounded domain skills with --skill.",
   "required_skills": [
-    "frontend-craft",
-    "functional-ui",
-    "visual-design",
-    "landing-page",
-    "frontend-design",
-    "image-generation",
-    "video-generation",
-    "video-production",
-    "product-photography",
-    "remotion",
-    "remotion-render",
-    "data-viz",
-    "react-flow",
-    "vercel-react-best-practices",
-    "visual-qa",
-    "review",
-    "web-design-guidelines"
+    "qa",
+    "review"
   ],
   "optional_skills": []
 }

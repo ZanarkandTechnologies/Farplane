@@ -59,7 +59,8 @@
         "Reuses the accepted UX brief as sufficient context and does not repeat Functional UI work",
         "Requests a targeted Visual Design refresh only for the missing mobile hierarchy rather than recreating the visual brief",
         "Marks asset context not applicable because no new media is required and does not call Asset Advisor",
-        "Produces one Change Plan with browser and visual proof rather than child implementation plans"
+        "Produces one Change Plan with browser and visual proof rather than child implementation plans",
+        "Keeps framework and component research as conditional implementation evidence rather than dispatching a separate frontend planner"
       ],
       "metadata": {
         "farplane": {
@@ -103,13 +104,14 @@
     {
       "id": "impl_plan_lean_backend_skip_01",
       "prompt": "Plan a localized backend validation change. The existing src/validators/skill_registry.py exposes validate_rows(rows), tests/test_skill_registry.py covers its current behavior, and local docs describe the API. Add one rule: duplicate name values must raise ValueError with the message duplicate skill name: <name>. Preserve every other behavior. No UI, media, marketing page, new service, configuration, or external research is needed.",
-      "expected_output": "Reuses the existing validator and tests; Populates the canonical ticket template rather than a skill-local schema; Avoids irrelevant advisors, new services, configuration, and broad research; Produces the smallest faithful Change Plan with focused tests; Does not manufacture a diagram for a simple localized change; Passes the lean-plan gate",
+      "expected_output": "Reuses the existing validator and tests; Calls lean-check once after context resolution and keeps the one required new rule in that existing owner; Populates the canonical ticket template rather than a skill-local schema; Avoids irrelevant advisors, new services, configuration, and broad research; Produces the smallest faithful Change Plan with focused tests; Does not manufacture a diagram for a simple localized change; Passes the lean-plan gate",
       "files": [],
       "assertions": [
         "Reuses the existing validator, tests, and documented local implementation pattern",
         "Does not call Functional UI, Landing Page, Copywriting Advisor, Personalized Offer, Visual Design, or Asset Advisor",
         "Does not perform broad external research when current implementation documentation is already available",
         "Avoids proposing a new service, configuration surface, or unrelated cleanup",
+        "Calls lean-check after context resolution and uses a minimum_new_code receipt to keep the duplicate-name rule owner-local",
         "Uses the canonical tickets/templates/ticket.md body rather than a parallel impl-plan schema",
         "Does not require an inline map or diagrams.md when prose is already clearer",
         "Returns the smallest faithful Change Plan with focused proof and an explicit lean-plan pass"

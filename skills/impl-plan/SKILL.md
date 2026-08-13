@@ -7,7 +7,7 @@ template_uses:
   skill-template: "0.3.0"
   skill-eval-task: "0.2.0"
   skill-qa-checklist: "0.1.0"
-group: coding
+group: operations
 eval: evals/evals.json
 qa_checklist: qa_checklist.md
 common_chains:
@@ -32,6 +32,13 @@ UX, landing, copy, visual, asset, research, and technical artifacts are inputs;
 advisors fill only bounded missing or stale facets. `goal-advisor` compiles the
 approved ticket for execution and does not redo planning.
 
+For UI-bearing work, resolve four independent context facets only when they
+are missing or stale: `functional-ui` for interaction evidence and wireflow,
+`visual-design` for reference-backed visual direction, `asset-advisor` for
+actual media needs, and `landing-page` for a one-page offer/story. This skill
+merges accepted results into one ticket and `design.md`; it is not a frontend
+router or a second design author.
+
 ## Skill Signature
 
 ```text
@@ -45,7 +52,7 @@ state:
 gates:
   ticket_bound; internal_reuse_inspected; required_context_resolved_or_blocked;
   code_seams_named; change_order_executable; done_and_proof_concrete;
-  ticket_context_budget_checked; material_review_reconciled
+  lean_receipt_passed; ticket_context_budget_checked; material_review_reconciled
 
 fails:
   chat_only_material_plan; parallel_ticket_schema; repeated_advisor_work;
@@ -103,6 +110,13 @@ than inventing its result.
     [asset-advisor](../asset-advisor/SKILL.md),
     [research](../research/SKILL.md), [deep-system-design](../deep-system-design/SKILL.md),
     and the `metric-advisor` skill.
+  - [ ] For UI work, reuse or resolve only the relevant facet: interaction
+    model/low-fi wireflow (`functional-ui`), visual reference and system
+    (`visual-design`), production media (`asset-advisor`), or one-page offer
+    and section architecture (`landing-page`). Load
+    [UI implementation evidence](references/ui-implementation.md) only after
+    those decisions identify a real component, theme, registry, framework, or
+    chart requirement.
 - [ ] 4. Populate the canonical ticket template.
   - [ ] Load [tickets/templates/ticket.md](../../tickets/templates/ticket.md)
     and keep its required sections and optional-section rules authoritative.
@@ -123,9 +137,10 @@ than inventing its result.
     visual review materially help; validate it when linked.
   - [ ] Move execution history and bulky proof to `progress.md` or `artifacts/`.
 - [ ] 7. Run minimality and mechanical gates.
-  - [ ] Apply `lean_plan_check`: reuse sufficient context and implementation
-    seams, add only necessary surfaces, and preserve the smallest faithful
-    scope without optimizing away proof.
+  - [ ] Call [lean-check](../lean-check/SKILL.md) once after context resolution
+    and before finalizing the Change Plan. Preserve its first sufficient rung,
+    evidence, and smallest action only where they change scope, a change unit,
+    or QA; do not create a parallel ticket schema.
   - [ ] Run `farplane validate ticket <ticket> --phase planning`; inspect raw
     first-load and Markdown category counts, then consolidate duplicated policy
     or bulky evidence when pressure is reported.

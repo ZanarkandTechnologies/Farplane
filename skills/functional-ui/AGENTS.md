@@ -11,7 +11,7 @@
 
 - Keep this skill about workflow, IA, current UI diagnosis, comparable examples, states, and interaction models.
 - Leave visual styling and taste to `visual-design`.
-- Leave implementation orchestration to `frontend-craft`.
+- Leave ticket composition and implementation sequencing to `impl-plan`.
 - Keep comparisons grounded in user stories and adjacent products.
 
 ## Conventions
@@ -25,7 +25,8 @@
 
 - Trigger conditions, workflow, guardrails, and output contract exist.
 - The workflow requires user stories, comparable apps, and a recommendation.
-- The skill points to `visual-design` and `frontend-craft` for execution.
+- The skill returns accepted UX context to `impl-plan`; it does not route or
+  implement a frontend itself.
 
 ## Testing
 

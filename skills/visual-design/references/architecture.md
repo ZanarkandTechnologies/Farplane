@@ -18,4 +18,5 @@ Outputs:
 - anti-slop constraints,
 - implementation handoff.
 
-It feeds `frontend-craft` and `frontend-design` references.
+It feeds `impl-plan`, which adds current implementation evidence only when the
+accepted visual brief identifies a real technical need.

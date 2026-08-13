@@ -48,6 +48,25 @@
           ]
         }
       }
+    },
+    {
+      "id": "functional_ui_low_fi_handoff_01",
+      "prompt": "A support lead needs to triage an incoming incident, assign an owner, request missing evidence, and resolve or reopen it. The team has no accepted interaction model. Produce only the functional planning handoff for impl-plan; visual style and assets are not in scope.",
+      "expected_output": "Defines the user job and complete state model; researches or clearly scopes operated comparable evidence; provides a compact ASCII wireflow because the state transition is material; hands interaction decisions to impl-plan without inventing visual direction, assets, a component library, or a child implementation plan.",
+      "files": [],
+      "assertions": [
+        "Defines triage, assignment, evidence request, resolve, reopen, empty, loading, error, and recovery states.",
+        "Uses or explicitly bounds comparable workflow evidence rather than aesthetic references as functional proof.",
+        "Includes a compact ASCII wireflow because the transition path is not obvious from prose alone.",
+        "Hands the accepted interaction model to impl-plan and does not become a frontend implementation router.",
+        "Does not invent visual direction, media requirements, or a component-library decision."
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Functional UI returns an optional low-fi planning handoff",
+          "tags": ["skill", "functional-ui", "low-fi", "impl-plan"]
+        }
+      }
     }
   ]
 }

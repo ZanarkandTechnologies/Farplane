@@ -8,7 +8,7 @@ It does not own product UX, visual taste, browser proof, or TAS judgment:
 
 - `functional-ui` owns workflow and interaction shape.
 - `visual-design` owns look, taste, and visual system.
-- `frontend-craft` owns implementation orchestration.
+- `impl-plan` owns implementation planning and ticket handoff.
 - `visual-qa` owns rendered UI judgment.
 - `docs/review/rubrics/frontend-guidelines.md` owns conversion from findings to a
   `frontend-guidelines` TAS verdict.

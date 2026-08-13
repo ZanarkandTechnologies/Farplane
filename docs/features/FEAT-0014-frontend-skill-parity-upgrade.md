@@ -9,10 +9,10 @@ tags:
   - feature
   - sys-0010
 refs:
-  - skills/frontend-craft
-  - skills/frontend-design
+  - skills/impl-plan
+  - skills/functional-ui
   - skills/visual-design
-  - skills/delegate-frontend
+  - skills/delegate-cli
   - skills/visual-qa
   - skills/landing-page
   - "docs/MEMORY.md#MEM-0085"
@@ -22,10 +22,10 @@ system_id: SYS-0010
 category: frontend-skills
 public: true
 surfaces:
-  - skills/frontend-craft
-  - skills/frontend-design
+  - skills/impl-plan
+  - skills/functional-ui
   - skills/visual-design
-  - skills/delegate-frontend
+  - skills/delegate-cli
   - skills/visual-qa
   - skills/landing-page
 source_refs:
@@ -38,8 +38,8 @@ external_refs:
   - https://ui.shadcn.com/docs/components-json
   - https://ui.shadcn.com/r/registries.json
 evidence_refs:
-  - skills/frontend-craft/SKILL.md
-  - skills/frontend-design/SKILL.md
+  - skills/impl-plan/SKILL.md
+  - skills/functional-ui/SKILL.md
   - skills/visual-design/SKILL.md
   - skills/visual-qa/SKILL.md
   - docs/HISTORY.md
@@ -115,7 +115,7 @@ flowchart LR
   sources["external parity refs<br/>shadcn + UI skill examples<br/>MEM-0085"]:::keep
   retired["FEAT-0014<br/>status: retired<br/>system_id: SYS-0010"]:::retired
   owner["SYS-0010 Domain Skills<br/>docs/systems/domain-skill-families.md"]:::changed
-  skills["frontend skill family<br/>skills/frontend-craft<br/>skills/frontend-design<br/>skills/visual-qa"]:::added
+  skills["UI planning family<br/>skills/impl-plan<br/>skills/functional-ui<br/>skills/visual-qa"]:::added
   record["durable memory<br/>docs/MEMORY.md<br/>docs/HISTORY.md"]:::keep
 
   sources --> retired --> owner --> skills --> record
@@ -127,10 +127,10 @@ The retired feature handle now points at `SYS-0010` and the active frontend skil
 
 Owner surfaces:
 
-- `skills/frontend-craft`
-- `skills/frontend-design`
+- `skills/impl-plan`
+- `skills/functional-ui`
 - `skills/visual-design`
-- `skills/delegate-frontend`
+- `skills/delegate-cli`
 - `skills/visual-qa`
 - `skills/landing-page`
 
@@ -149,8 +149,8 @@ External context:
 
 Evidence:
 
-- `skills/frontend-craft/SKILL.md`
-- `skills/frontend-design/SKILL.md`
+- `skills/impl-plan/SKILL.md`
+- `skills/functional-ui/SKILL.md`
 - `skills/visual-design/SKILL.md`
 - `skills/visual-qa/SKILL.md`
 - `docs/HISTORY.md`

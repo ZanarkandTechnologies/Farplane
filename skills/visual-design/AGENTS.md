@@ -12,7 +12,7 @@
 - `visual-design` owns look, hierarchy, visual system, taste, and anti-slop.
 - `functional-ui` owns UX, IA, examples, states, and interaction model.
 - `landing-page` owns one-page story and cinematic page structure.
-- `frontend-craft` owns implementation orchestration.
+- `impl-plan` owns ticket composition and implementation sequencing.
 
 ## Checks
 

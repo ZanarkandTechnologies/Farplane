@@ -24,7 +24,7 @@ Run ID: {{run_id}}
 - status: pending
 - observed output: pending
 
-## Self-Review / Visual QA
+## Self-Review
 
 - pending live external CLI run
 

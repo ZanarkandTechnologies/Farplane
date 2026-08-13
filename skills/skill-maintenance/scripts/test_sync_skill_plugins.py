@@ -80,7 +80,7 @@ class SyncSkillPluginsTests(unittest.TestCase):
             write_skill(repo, "review", "Run quality checks.")
             write_skill(repo, "plan", "Plan the work.")
             write_skill(repo, "execute", "Execute the work.")
-            write_skill(repo, "frontend-craft", "Build frontend surfaces.")
+            write_skill(repo, "visual-design", "Set the UI visual direction.")
             write_skill(repo, "visual-qa", "Inspect browser screenshots.")
 
             result = syncer.sync_skill_plugins(repo)
@@ -90,7 +90,7 @@ class SyncSkillPluginsTests(unittest.TestCase):
             frontend = repo / ".farplane/generated/skill-plugins/plugins/farplane-frontend"
             self.assertTrue((core / "skills" / "review" / "SKILL.md").exists())
             self.assertTrue((core / "skills" / "plan" / "SKILL.md").exists())
-            self.assertTrue((frontend / "skills" / "frontend-craft" / "SKILL.md").exists())
+            self.assertTrue((frontend / "skills" / "visual-design" / "SKILL.md").exists())
             manifest = json.loads((core / ".codex-plugin" / "plugin.json").read_text())
             self.assertEqual(manifest["name"], "farplane-core")
             self.assertEqual(manifest["interface"]["displayName"], "Farplane Core")

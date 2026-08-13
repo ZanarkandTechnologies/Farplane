@@ -76,4 +76,4 @@ ExecutionPacket :=
 ```
 
 `product-photography` owns shot selection. `imagegen`, `ai-image-advisor`, and
-`frontend-craft` own production/integration routes when the packet needs them.
+`impl-plan` owns production/integration routing when the packet needs it.

@@ -3,7 +3,7 @@ name: delegate-cli
 version: 0.1.0
 description: "Turn bounded Farplane work into an external coding-agent CLI handoff while preserving ticket, log, QA, review, and integration control."
 tier: 3
-group: harness
+group: operations
 source: local
 allowed-tools: Read, Grep, Glob, Bash
 ---
@@ -66,8 +66,8 @@ without letting that CLI become Farplane's source of truth.
 
 ## Core Decision Branches
 
-- `frontend implementation or design polish` -> use `delegate-frontend`, which
-  calls this skill with `frontend-pi-kimi`.
+- `UI implementation or design polish` -> call this skill directly with the
+  Pi/OpenRouter profile and only the facet or QA skills named by the ticket.
 - `missing executable or credentials` -> keep the ticket blocked or run only
   `--dry-run`; do not install tools or spend money silently.
 - `multiple live writers` -> prefer `--checkout worktree`; shared checkout is

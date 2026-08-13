@@ -2,7 +2,7 @@
 name: asset-advisor
 description: "Turn a storyboard, reference video, Tasty Pack, or source material into a production-ready asset inventory and recreation plan."
 tier: 3
-group: content-production
+group: marketing
 source: local
 template_uses:
   skill-template: "0.3.7"

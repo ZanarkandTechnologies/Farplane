@@ -4,7 +4,7 @@ Generated video used in a web surface is both an asset-generation task and a fro
 
 ## Implementation Handoff
 
-Tell `frontend-craft`:
+Tell `impl-plan` and the ticket build lane:
 
 - final video path
 - poster path, if present

@@ -7,6 +7,7 @@
 - comparable workflow patterns,
 - interaction model,
 - screen/state map,
-- implementation handoff.
+- planning handoff and optional low-fi wireflow.
 
-It feeds `visual-design` and `frontend-craft`. It does not own final visual taste or code implementation.
+It feeds `impl-plan`, which resolves any remaining visual or asset context. It
+does not own final visual taste, ticket composition, or code implementation.

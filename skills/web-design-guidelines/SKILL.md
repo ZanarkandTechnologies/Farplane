@@ -27,10 +27,10 @@ source: local
 
 Review files for compliance with Web Interface Guidelines.
 
-This skill is the source-fresh standards audit lane for frontend work. It can be
-called directly by the user, by `frontend-craft` after UI implementation, or by
-`docs/review/rubrics/frontend-guidelines.md` when a frontend review needs a
-separate TAS verdict for guideline compliance.
+This skill is the source-fresh standards audit lane for UI work. It can be
+called directly with a review target, by `visual-qa` or a ticket QA route after
+implementation, or by `docs/review/rubrics/frontend-guidelines.md` when a
+frontend review needs a separate TAS verdict for guideline compliance.
 
 ## How It Works
 

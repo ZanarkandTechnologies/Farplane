@@ -12,8 +12,11 @@ Use this at the end of `functional-ui`.
 - `Data/content ranges:` min, typical, max.
 - `Copy needs:` labels, helper text, error text, empty-state text.
 - `Implementation notes:` reusable components, local state, server/client boundaries if known.
-- `Visual-design handoff:` what the visual layer must preserve.
+- `Low-fi wireflow:` include only when flow or hierarchy needs an ASCII map.
+- `Visual gap:` name unresolved visual context rather than choosing taste here.
 
 ## Handoff Rule
 
-Do not hand off vague advice like "make it cleaner." Convert the UX decision into specific behavior and state requirements that `frontend-craft` can build.
+Do not hand off vague advice like "make it cleaner." Convert the UX decision
+into specific behavior and state requirements that `impl-plan` can incorporate
+into one Change Plan.

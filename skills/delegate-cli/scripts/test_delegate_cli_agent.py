@@ -53,7 +53,7 @@ def write_skill_bundle_manifest(root: Path, required: list[str], optional: list[
 
 
 def write_skill_sources(root: Path) -> None:
-    for name in delegate_cli_agent.DEFAULT_FRONTEND_SKILLS:
+    for name in (*delegate_cli_agent.DEFAULT_SKILLS, "functional-ui", "visual-design", "landing-page", "visual-qa"):
         skill_dir = root / "skills" / name
         skill_dir.mkdir(parents=True, exist_ok=True)
         (skill_dir / "SKILL.md").write_text(
@@ -70,13 +70,9 @@ class DelegateCliAgentTests(unittest.TestCase):
             profile = delegate_cli_agent.load_profile("frontend-pi-kimi", root)
             self.assertEqual(profile.adapter, "pi")
             self.assertEqual(profile.model, "openrouter/moonshotai/kimi-k2.6")
-            self.assertIn("frontend-craft", profile.skill_names)
-            self.assertIn("ai-image-advisor", profile.skill_names)
-            self.assertIn("ai-video-advisor", profile.skill_names)
+            self.assertIn("qa", profile.skill_names)
             self.assertFalse(any("browser" in name for name in profile.skill_names))
-            self.assertIn("visual-qa", profile.skill_names)
             self.assertIn("review", profile.skill_names)
-            self.assertIn("web-design-guidelines", profile.skill_names)
             self.assertNotIn("imagegen", profile.skill_names)
             self.assertEqual(profile.default_checkout, "worktree")
 
@@ -86,12 +82,12 @@ class DelegateCliAgentTests(unittest.TestCase):
             write_profile_templates(root)
             write_skill_bundle_manifest(
                 root,
-                ["frontend-craft", "ai-image-advisor", "ai-video-advisor"],
+                ["functional-ui", "visual-design", "visual-qa"],
             )
             profile = delegate_cli_agent.load_profile("frontend-pi-kimi", root)
             self.assertEqual(
                 profile.skill_names,
-                ("frontend-craft", "ai-image-advisor", "ai-video-advisor"),
+                ("functional-ui", "visual-design", "visual-qa"),
             )
 
     def test_read_prompt_arg_supports_prompt_file(self) -> None:
@@ -485,13 +481,13 @@ class DelegateCliAgentTests(unittest.TestCase):
             write_profile_templates(root)
             write_skill_bundle_manifest(
                 root,
-                ["frontend-craft", "ai-image-advisor", "ai-video-advisor"],
+                ["functional-ui", "visual-design", "visual-qa"],
             )
             write_skill_sources(root)
             profile = delegate_cli_agent.load_profile("frontend-pi-kimi", root)
             copied = delegate_cli_agent.copy_skill_bundle(profile, root)
             copied_names = {Path(path).name for path in copied}
-            self.assertEqual(copied_names, {"frontend-craft", "ai-image-advisor", "ai-video-advisor"})
+            self.assertEqual(copied_names, {"functional-ui", "visual-design", "visual-qa"})
             self.assertFalse((root / ".farplane" / "external-cli" / "profiles" / "frontend-pi-kimi" / "skills" / "imagegen").exists())
 
     def test_profile_copy_waits_for_existing_profile_lock(self) -> None:
@@ -516,7 +512,7 @@ class DelegateCliAgentTests(unittest.TestCase):
 
             thread.join(2)
             self.assertFalse(thread.is_alive())
-            self.assertEqual(len(copied[0]), len(delegate_cli_agent.DEFAULT_FRONTEND_SKILLS))
+            self.assertEqual(len(copied[0]), len(delegate_cli_agent.DEFAULT_SKILLS))
 
     def test_setup_copies_skills_and_writes_settings(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -526,17 +522,17 @@ class DelegateCliAgentTests(unittest.TestCase):
             profile = delegate_cli_agent.load_profile("frontend-pi-kimi", root)
             copied = delegate_cli_agent.copy_skill_bundle(profile, root)
             settings = delegate_cli_agent.write_profile_settings(profile, root)
-            self.assertEqual(len(copied), len(delegate_cli_agent.DEFAULT_FRONTEND_SKILLS))
+            self.assertEqual(len(copied), len(delegate_cli_agent.DEFAULT_SKILLS))
             self.assertTrue(settings.exists())
             settings_text = settings.read_text(encoding="utf-8")
-            self.assertIn("frontend-craft", settings_text)
+            self.assertIn("qa", settings_text)
             self.assertNotIn('name = "browser', settings_text)
 
     def test_command_run_can_override_skill_bundle_for_one_phase(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             write_profile_templates(root)
-            write_skill_bundle_manifest(root, ["frontend-craft", "landing-page", "visual-qa"])
+            write_skill_bundle_manifest(root, ["functional-ui", "landing-page", "visual-qa"])
             write_skill_sources(root)
             original_project_root = delegate_cli_agent.project_root
             try:
@@ -574,7 +570,7 @@ class DelegateCliAgentTests(unittest.TestCase):
             prompt_text = prompt_path.read_text(encoding="utf-8")
             self.assertIn("landing-page", prompt_text)
             self.assertIn("visual-qa", prompt_text)
-            self.assertNotIn("frontend-craft", prompt_text)
+            self.assertNotIn("review:", prompt_text)
             self.assertNotIn("## Delegate System Rules", prompt_text)
 
     def test_dry_run_renders_prompt_command_and_durable_artifacts(self) -> None:
@@ -775,7 +771,7 @@ class DelegateCliAgentTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             write_profile_templates(root)
-            write_skill_bundle_manifest(root, ["frontend-craft"])
+            write_skill_bundle_manifest(root, ["qa"])
             write_skill_sources(root)
             original_project_root = delegate_cli_agent.project_root
             original_missing_live_env = delegate_cli_agent.missing_live_env
@@ -832,7 +828,7 @@ class DelegateCliAgentTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             write_profile_templates(root)
-            write_skill_bundle_manifest(root, ["frontend-craft"])
+            write_skill_bundle_manifest(root, ["qa"])
             write_skill_sources(root)
             original_project_root = delegate_cli_agent.project_root
             original_missing_live_env = delegate_cli_agent.missing_live_env
@@ -889,7 +885,7 @@ class DelegateCliAgentTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             write_profile_templates(root)
-            write_skill_bundle_manifest(root, ["frontend-craft"])
+            write_skill_bundle_manifest(root, ["qa"])
             write_skill_sources(root)
             original_project_root = delegate_cli_agent.project_root
             original_missing_live_env = delegate_cli_agent.missing_live_env
@@ -946,7 +942,7 @@ class DelegateCliAgentTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             write_profile_templates(root)
-            write_skill_bundle_manifest(root, ["frontend-craft"])
+            write_skill_bundle_manifest(root, ["qa"])
             write_skill_sources(root)
             (root / "out.js").write_text("old", encoding="utf-8")
             original_project_root = delegate_cli_agent.project_root
@@ -999,7 +995,7 @@ class DelegateCliAgentTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             write_profile_templates(root)
-            write_skill_bundle_manifest(root, ["frontend-craft"])
+            write_skill_bundle_manifest(root, ["qa"])
             write_skill_sources(root)
             original_project_root = delegate_cli_agent.project_root
             original_missing_live_env = delegate_cli_agent.missing_live_env

@@ -1,8 +1,0 @@
-{
-  "status": "failed",
-  "failure_reason": "first_write_timeout",
-  "expected_outputs": [
-    "SPEC.md"
-  ],
-  "observed_output": ""
-}

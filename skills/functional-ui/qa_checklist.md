@@ -102,7 +102,14 @@ functional_ui_qa_checklist(surface, users, workflow_artifact, evidence?)
      `retry/recovery` behavior rather than relying on a generic "states"
      promise.
 
-9. `workflow-efficiency`
+9. `low-fi-fit`
+   - Question: When a flow or hierarchy is uncertain, does an ASCII wireflow
+     show entry, primary action, result, and recovery? When it is unnecessary,
+     is that omission explicit?
+   - Violation: A complex interaction is described only as vague prose, or a
+     visual-only task gains a decorative wireframe with no decision value.
+
+10. `workflow-efficiency`
    - Question: Does the interaction model minimize repeated work for common
      tasks through sensible defaults, bulk actions, keyboard/touch shortcuts,
      persistence, and clear return paths?

@@ -34,14 +34,19 @@ impl_plan_qa(ticket, inspected_context, proof_weight)
      smallest faithful slice are decisive. Real forks have one recommendation
      and accepted tradeoff.
 
-4. `reuse-before-new-surface`
-   - The planner inspected nearby code, tests, docs, helpers, components,
-     assets, and accepted planning artifacts before adding a surface.
+4. `lean-receipt`
+   - After inspecting nearby code, tests, docs, helpers, components, assets,
+     and accepted planning artifacts, the planner calls `lean-check` once.
+     The receipt names the first sufficient rung, evidence, and smallest action
+     or an honest blocker.
 
 5. `context-resolution`
    - Required facets resolve as `reuse | targeted_refresh | create | block |
      not_applicable`. Only decisions affecting scope, implementation, proof, or
      blockers are recorded; advisor-owned gaps are not self-authored.
+   - For UI work, only unresolved interaction, visual, media, or landing
+     facets call their bounded owner. The resulting decisions are merged into
+     the ticket design baseline; a frontend router or child plan is a failure.
 
 6. `architecture-and-locality`
    - Material ownership, public contracts, and typed movement are visible when
@@ -51,8 +56,9 @@ impl_plan_qa(ticket, inspected_context, proof_weight)
 
 7. `least-control-surface`
    - New helpers, functions, files, parameters, flags, schemas, services, and
-     config exist only for current callers or proof. Existing owners are
-     extended when they fit.
+     config exist only when the lean receipt reaches `minimum_new_code`; the
+     plan follows the receipt's smallest action and extends existing owners when
+     they fit.
 
 8. `done-and-proof`
    - Done states observable outcomes. QA Strategy names ordered checks,
@@ -101,7 +107,7 @@ impl_plan_qa(ticket, inspected_context, proof_weight)
 ```text
 plan_qa:
   canonical_template_owner: pass | revise | block
-  reuse_and_context_resolution: pass | revise | block
+  lean_receipt_and_context_resolution: pass | revise | block
   executable_change_plan: pass | revise | block
   least_control_surface: pass | revise | block
   done_and_proof: pass | revise | block

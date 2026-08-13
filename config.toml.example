@@ -126,7 +126,7 @@ description = "Combined agent for exploring local codebases. Handles locating fi
 config_file = "agents/explore.toml"
 
 [agents.frontend-designer]
-description = "Expert UI/UX designer for both app interfaces (shadcn, AI Elements) and cinematic landing pages (scroll narratives, WebGL). Creates distinctive designs that avoid AI-generated aesthetics."
+description = "UI design specialist for bounded interaction, visual, asset, and landing-page planning facets."
 config_file = "agents/frontend-designer.toml"
 
 [agents.librarian]

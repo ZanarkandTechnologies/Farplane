@@ -9,7 +9,7 @@
 
 ## Frontend Craft Audit
 
-1. `frontend-craft` identifies changed UI source files.
+1. The ticket build route identifies changed UI source files.
 2. This skill audits those files.
 3. The implementation handoff records pass/fail findings or the reason the lane
    was skipped.

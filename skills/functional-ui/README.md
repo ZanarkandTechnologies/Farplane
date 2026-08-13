@@ -17,7 +17,8 @@ Guide agents to design or repair product workflows from user stories, current UI
 3. Compare similar/latest examples and their proven workflows.
 4. Produce 3 viable UI options.
 5. Recommend one workflow.
-6. Hand the result to `visual-design` or `frontend-craft`.
+6. Add a low-fi ASCII wireflow only when it resolves a flow decision.
+7. Hand the accepted context to `impl-plan`.
 
 ## How to Test
 

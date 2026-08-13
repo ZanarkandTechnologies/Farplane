@@ -38,9 +38,20 @@ ceremony. Reuse existing UX, landing, copy, offer, visual, asset, architecture,
 documentation, metric, and proof artifacts when sufficient. Do not self-author
 an advisor-owned gap or defer its resolution to implementation.
 
+For UI-bearing work, resolve only the facets that change the ticket: workflow
+and low-fi wireflow (`functional-ui`), visual reference/system
+(`visual-design`), production media (`asset-advisor`), and one-page offer/story
+(`landing-page`). Fold accepted output into `tickets/TASK-XXXX/design.md`; do
+not create a frontend planner, router, or parallel design schema.
+
 Record a context decision only when it changes scope, a change unit, proof, or
 readiness. Include its evidence, exact gap, resolver/result when used, and plan
 integration. Do not enumerate irrelevant facets.
+
+After context resolution and before finalizing the Change Plan, call
+`lean-check` once. Use its first sufficient rung, evidence, and smallest action
+to constrain the plan; include those details only where they change scope, a
+change unit, or QA. Do not add a ticket section or restate the ladder.
 
 ## Plan Construction
 
