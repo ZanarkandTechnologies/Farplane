@@ -113,7 +113,8 @@ When a Codex session starts active execution or creates a ticket it is actively
 handling, set `claimed_by` to that session's human-facing alias such as
 `codex-019ef784`; clear it when the session parks, blocks, completes, or
 archives the ticket. Keep raw `session_id` values in `.farplane/` runtime state,
-not ticket frontmatter.
+not ticket frontmatter. A ticket may own one hook-written `thread_id` for its
+persistent Codex task; helper threads never become ticket threads.
 Ticket bodies should stay compact and program-shaped: `Summary`, `Scope`,
 `Delta`, `Program`, `Map`, `Done / Proof`, `State`, `Links`, and sparse
 `Notes`. Put loop configuration in `program.md`, append-only logs in

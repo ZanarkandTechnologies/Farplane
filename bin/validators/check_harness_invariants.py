@@ -48,24 +48,24 @@ RULES: tuple[HarnessRule, ...] = (
     HarnessRule(
         relative_path="bin/README.md",
         required_substrings=(
-            "raw `session_id` should stay runtime-only",
-            ".farplane/state/ticket-thread-associations.jsonl",
+            "hook `session_id` for telemetry correlation",
+            "ticket `thread_id` for the canonical one-ticket/one-task-thread join",
             "UserPromptSubmit` no longer writes `.farplane/state/current-run.json`",
         ),
         remediation=(
-            "document runtime identity as runtime-only and keep public runtime "
-            "examples on `.farplane/` surfaces"
+            "document the ticket-owned task-thread boundary and keep generic "
+            "runtime session state on `.farplane/` surfaces"
         ),
     ),
     HarnessRule(
         relative_path="tickets/README.md",
         required_substrings=(
-            "do not store raw transport-level runtime ids such as `session_id` in ticket frontmatter",
+            "a ticket may own one hook-written `thread_id`",
             "`status: active` requires a session-specific `claimed_by`",
         ),
         remediation=(
-            "keep tickets human-facing only: `claimed_by` is allowed, raw "
-            "`session_id` values are not"
+            "keep exactly one persistent Codex task thread on a ticket while "
+            "generic `session_id` values remain runtime-only"
         ),
     ),
     HarnessRule(

@@ -30,8 +30,8 @@ The install-time global harness contract now lives at `templates/global/AGENTS.m
 BIN_README_TEXT = """\
 # Bin
 
-- raw `session_id` should stay runtime-only
-- `.farplane/state/ticket-thread-associations.jsonl`
+- hook `session_id` for telemetry correlation
+- ticket `thread_id` for the canonical one-ticket/one-task-thread join
 - `UserPromptSubmit` no longer writes `.farplane/state/current-run.json`
 """
 
@@ -40,7 +40,7 @@ TICKETS_README_TEXT = """\
 
 `status: active` requires a session-specific `claimed_by`
 
-- do not store raw transport-level runtime ids such as `session_id` in ticket frontmatter
+- a ticket may own one hook-written `thread_id`
 """
 
 TICKET_TEMPLATE_TEXT = """\
@@ -56,7 +56,7 @@ TICKET_TEMPLATE_TEXT = """\
 
 ## Links
 
-- Do not store raw `session_id` values in ticket frontmatter.
+- The hook may set one immutable `thread_id`; never store session_id here.
 """
 
 

@@ -83,7 +83,7 @@ flowchart LR
   subgraph Skills["Skill Layer"]
     primitives["Tier 1 primitives<br/>advise<br/>reference-grounding<br/>review<br/>direct Todo List"]:::callout
     interfaces["Tier 2 interfaces<br/>brainstorm<br/>research:*<br/>plan<br/>execute"]:::callout
-    intake["brainstorm<br/>deep-interview<br/>prd<br/>deep-system-design<br/>deep-ui-design"]:::skill
+    intake["brainstorm<br/>deep-interview<br/>prd<br/>deep-system-design<br/>visual-design"]:::skill
     readiness["agent-testability-plan<br/>Run Hints"]:::callout
     research["documentation<br/>external-patterns<br/>feed-scout<br/>harness-scout<br/>research:methods<br/>best-of-worlds<br/>self-improve"]:::skill
     ticketSkill["spec-to-ticket"]:::callout
@@ -91,7 +91,7 @@ flowchart LR
     goalSkill["goal-advisor<br/>native Goal<br/>heartbeat<br/>batch"]:::callout
     execSkill["goal-advisor<br/>native Codex task checkout"]:::callout
     assetSkill["image-generation<br/>video-generation<br/>remotion-render<br/>imagegen"]:::skill
-    externalCli["delegate-cli<br/>delegate-frontend"]:::skill
+    externalCli["delegate-cli<br/>Pi/OpenRouter profile"]:::skill
     closeSkill["demo -> close-ticket<br/>video-first GitHub issue<br/>commit-message<br/>pr-splitting"]:::callout
   end
 
@@ -295,9 +295,6 @@ The review scoring model is canonical in `skills/review/*`, not in this file.
   Purpose: public external CLI delegation workflow for routing bounded builder
   work through profile/adapter contracts while Farplane keeps ticket, QA, and
   review authority
-- [skills/delegate-frontend/SKILL.md](skills/delegate-frontend/SKILL.md)
-  Purpose: first external CLI profile surface, routing frontend implementation
-  and design-polish work through the Pi plus Kimi K2.6 profile
 - [bin](bin)
   Purpose: hooks, validators, runtime helpers
 - `.farplane/` local state

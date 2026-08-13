@@ -106,11 +106,12 @@ Source rows: MEM-0004, MEM-0008, MEM-0009, MEM-0010, MEM-0016, MEM-0017,
 MEM-0018, MEM-0020, MEM-0022, MEM-0023, MEM-0025, MEM-0029, MEM-0034,
 MEM-0035, MEM-0036, MEM-0056, MEM-0130, MEM-0151.
 
-- Runtime state belongs under `.farplane/`. Tickets may mirror human-facing
-  claims, but raw runtime transport identity stays in runtime state.
+- Runtime state belongs under `.farplane/`. A ticket may own one durable
+  `thread_id` for its persistent Codex task, while generic runtime transport
+  identity and helper threads stay in runtime state.
 - Explicit ticket selectors outrank ambient runtime state. Hook `session_id`
-  is used for telemetry and association-log correlation; singleton
-  current-run pointers are retired as authority.
+  is used for telemetry; the ticket's `thread_id` is the canonical task join.
+  Singleton current-run pointers are retired as authority.
 - Stop-hook completion and continuation checks must compare the assistant
   response against the current user request captured at `UserPromptSubmit` when
   available.

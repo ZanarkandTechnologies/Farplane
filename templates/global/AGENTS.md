@@ -1,6 +1,6 @@
 <!--
 template_id: global-agents-template
-template_version: 0.2.30
+template_version: 0.2.31
 feature_refs:
   - FEAT-0022
   - FEAT-0042
@@ -93,6 +93,11 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
   already clear.
 - Use `advise` when the user needs options or a recommendation and has not
   already supplied a clear take.
+- During analysis, proactively inventory each unresolved material decision or
+  confirmation point. Run `advise` for each before responding, then return its
+  recommendation, tradeoff, and exact confirmation needed; do not merely list
+  questions or wait for the user to request an advice follow-up. Skip factual,
+  mechanical, already-resolved, or fake choices.
 - For material, genuinely ambiguous choices where comparison changes the
   decision, compare three viable options when three exist, recommend one, and
   name the tradeoff accepted. When supplied evidence makes the decision
@@ -141,6 +146,11 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
 
 - If the user points out a miss, omission, or failure to act, treat it as a
   correction request first.
+- Before replying to a question about recent work, silently decide whether the
+  user is raising a substantive discussion point that merits an answer before
+  action or rhetorically pointing out a recent miss through humor, frustration,
+  or sarcasm. Treat the former as `answer` or `plan`; treat the latter as a
+  correction and resume the obvious safe same-scope action.
 - Fix obvious safe corrections immediately, then explain briefly if useful.
 - If the complaint is false, show concrete evidence.
 - If the target is ambiguous, ask the minimum blocking question.
@@ -189,11 +199,12 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
 - Do not call phase-like skills recursively at the same scope. Each
   externalized phase call must shrink or specialize the parent task.
 - Keep edits scoped to the requested behavior and nearby ownership boundary.
-- Before writing code, inspect these options in order and stop at the first
-  sufficient one: no current need (skip) -> existing code (reuse) -> standard
-  library -> native platform -> installed dependency -> inline one-liner ->
-  smallest new implementation. Implement and verify only the required
-  contract; do not weaken correctness, safety, or proof.
+- Before writing code, invoke `lean-check` and follow its first-sufficient-rung
+  receipt. It owns this order: no current need (skip) -> existing code (reuse)
+  -> standard library -> native platform -> installed dependency -> inline
+  one-liner -> smallest new implementation. If the skill is unavailable, apply
+  the same order inline. Implement and verify only the required contract; do
+  not weaken correctness, safety, or proof.
 - Use structured parsers or APIs for structured data when reasonable.
 - Keep side effects at edges.
 - If a verification step cannot run, say why and report the remaining risk.
@@ -201,6 +212,18 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
 ## Communication
 
 - Keep chat concise by default.
+- Start every assistant response, including commentary updates and final
+  answers, with this three-line conversation ledger:
+  ```text
+  Goal: <stable overarching objective>
+  Track: <current branch, topic path, or active subgoal>
+  Progress: <latest completed work, current state, and next step>
+  ```
+  Keep the values terse for a simple reply, but never omit or collapse any of
+  the three labels. Preserve the stable goal across turns until it is completed,
+  paused, or explicitly replaced; `Track:` and `Progress:` make the current
+  work legible. This required ledger is response context, not optional process
+  narration, and it takes precedence over brevity defaults.
 - Treat the user's attention and context window as scarce. In the final
   response, keep only information that changes the user's decision,
   confidence, action, or ability to verify the result. Delete a sentence if
@@ -237,10 +260,24 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
   or own completion. Explicitly requested detail, correctness, or safety may
   retain extra lines after that semantic compression pass; the word ceiling
   remains hard.
-- Completion handoffs are executive summaries, not change inventories. Lead
-  with compact `Before`, `After`, and `Validation` evidence that changes the
-  user's confidence or next action. Keep file paths in final references unless
-  a path itself is the required action.
+- Completion handoffs are executive summaries, not change inventories. Every
+  implemented work change must include compact `Before:`, `After:`, and
+  `Example:` lines plus inspectable evidence appropriate to the work. Render the
+  delta as one indented Markdown blockquote, adapting the facts rather than
+  copying this example:
+  ```md
+  > **Before:** The requested state was missing.
+  >
+  > **After:** The state is now visible and verified.
+  >
+  > **Example:** Repeating the action shows the new behavior.
+  ```
+  Use paired before/after screenshots for UI or visual changes, a short operated
+  video for a material multi-step workflow, and command, log, or artifact proof
+  for nonvisual work. Embed or link the applicable capture or proof; if a
+  required capture cannot be produced, state the blocker and do not claim the
+  evidence requirement is met. Keep file paths in final references unless a
+  path itself is the required action.
 - Lead status and completion replies with a decision-complete sentence:
   `<worked | did not work | partial> — <reason and implication>`. Do not report
   an isolated fact when its meaning is known. Answer at the user's requested
@@ -254,21 +291,6 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
   after meaningful alternatives are exhausted or user input or authority is
   required. Omit empty sections and process logs; labels such as `Result`,
   `Bottleneck`, `Tried`, and `Next` are optional.
-- In long, multitopic, ambiguous, resumed, or substantial replies, start with a
-  compact conversation ledger. `Goal:` names the stable overarching objective;
-  `Track:` names the current branch, topic path, or active subgoal; `Progress:`
-  gives the latest completed/current/next step. Do not rewrite the overarching
-  goal every turn just because the newest request changes; preserve prior live
-  goals unless they are completed, paused, or explicitly replaced. For simple
-  one-off replies, omit the ledger or use only a one-line `Goal:`.
-  Example:
-  ```text
-  Goal: Make Farplane agents visibly goal-aware without bloating every reply.
-  Track: AGENTS template -> output preferences -> progress checklist behavior.
-  Progress: confirmed current template wording; now tightening the rule.
-  ```
-  Use `Topics:` only when a true multi-topic ledger is needed for thread
-  navigation.
 - For substantial work, show a compact visible checklist before execution or in
   the first working update. Seed it from the active skill's `## Todo List` when
   a skill is active, add linked-skill items only when that linked skill becomes
@@ -298,15 +320,10 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
   the concrete delta before editing: show `Before`, `After`, and at least one
   realistic `Example` using representative data, wording, or workflow state.
   Keep it concise, but make the behavioral change inspectable.
-- When summarizing completed changes to policy, prompts, docs, skills,
-  workflows, UX, APIs, or behavior, include a compact `Before:` / `After:` /
-  `Example:` delta unless the change is truly tiny or the user asked for a
-  different format. Keep the example quick and concrete.
 - For multi-change or system-change summaries, use a normal `###` Markdown
-  heading for each material change, then put the key delta lines in a
-  blockquote with bold labels: `> **Before:**`, `> **After:**`, and
-  `> **Example:**`. This keeps headings clean while giving the important
-  behavior change a strong visual left edge.
+  heading for each material change, then put that change's required delta block
+  beneath it. This keeps headings clean while giving the important behavior
+  change a strong visual left edge.
 - When explaining or proposing an important concept, standard, workflow,
   harness rule, abstraction, or reusable process, include a compact function
   signature when it makes the idea clearer. Prefer signatures that expose
