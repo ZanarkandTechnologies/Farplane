@@ -17,8 +17,9 @@ Primary control plane:
 - `goal-advisor`
 - persistent builder lanes
 
-Live Stop handling applies the final-response prose budget and sends telemetry.
-Native Goal mode plus ticket-local QA/review evidence owns completion.
+Live PostToolUse handling returns repair feedback for edited `SKILL.md` files
+over 200 lines. Stop handling applies the final-response prose budget and sends
+telemetry. Native Goal mode plus ticket-local QA/review evidence owns completion.
 
 Inspect response accounting without invoking the hook:
 
@@ -76,8 +77,9 @@ runtime helpers instead of symlinking every script, validator, and test.
   `rules/template-version-watch.toml`
 - `validators/check_source_line_growth.py` - deterministic pre-commit and
   pre-push guard that blocks new Python files over 500 lines and growth in
-  already-oversized files. `rules/source-line-baseline.toml` is the one-time
-  adoption ceiling until the comparison base contains the guard.
+  already-oversized files; strict mode is the 200-line staged `SKILL.md`
+  backstop. `rules/source-line-baseline.toml` is the one-time Python adoption
+  ceiling until the comparison base contains the guard.
 - `capture_user_turn.py` - turn-start user-intent writer for the hook surface
 - `core/farplane_ticket_close.py` - explicit ticket completion, archive, event,
   and mining boundary used by `farplane ticket finalize TASK-XXXX --github-issue-url URL`

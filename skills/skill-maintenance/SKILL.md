@@ -22,10 +22,11 @@ out Farplane skill changes after the owner surface is known. It owns package
 mechanics: `SKILL.md` shape, references, eval/checklist sync, source ownership,
 metadata, registry sync, audits, installed-copy checks, and review routing.
 
-Use responsibility, first-load cost, duplication, and observed maintenance pain
-to decide when a skill file should split. Raw line count is a diagnostic, not a
-completion gate. Use `consolidate(target = edited_skill, structure = skill)`
-when compaction needs judgment rather than mechanical extraction.
+Every edited `skills/**/SKILL.md` has a hard envelope of 200 physical lines.
+Within that envelope, use responsibility, first-load cost, duplication, and
+observed maintenance pain to decide what should split. Use
+`consolidate(target = edited_skill, structure = skill)` when compaction needs
+judgment rather than mechanical extraction.
 
 ## Skill Signature
 
@@ -39,13 +40,14 @@ modes: harden_skill | refine_skill | upgrade_skill_from_sources |
   low_value_prose_scan | audit | bulk_rollout | registry_validation |
   installed_copy_import
 gates: delta_named; owner_clear; source_preserved; first_load_executable;
-  standard_check_named;
+  skill_file_at_most_200_lines; standard_check_named;
   validation_passes_or_blocker_named; registry_synced;
   live_copy_only_after_source_acceptance; proof_and_review_routed
 routes: research:source-synthesis | skill-creator | best-of-worlds | eval |
   self-improve | gap-analysis | harness-advisor | review
-fails: installed-copy-only edit; hidden required behavior; arbitrary line-count
-  splitting; fixture mutation outside sandbox; completion before validation;
+fails: installed-copy-only edit; oversized edited SKILL.md; hidden required
+  behavior; arbitrary line-count splitting; fixture mutation outside sandbox;
+  completion before validation;
   live-copy proof before source acceptance; bulk edit without prototype;
   material change without proof
 ```
@@ -86,10 +88,13 @@ fails: installed-copy-only edit; hidden required behavior; arbitrary line-count
      precise load conditions.
    - [ ] Reject skill-local `todos.md`; todo truth lives in the marker-delimited
      `## Todo List` in `SKILL.md`.
+   - [ ] Keep every edited `SKILL.md` at or below 200 physical lines; treat
+     PostToolUse feedback as the immediate repair loop and pre-commit as the
+     hard backstop.
 - [ ] 5. Improve structure only where ownership evidence supports it.
    - [ ] Split authored text by branch, provider, responsibility, or artifact
      type only when that reduces real first-load or maintenance cost.
-   - [ ] Do not move default-path behavior out of first load to hit a size target.
+   - [ ] Meet the envelope without moving default-path behavior out of first load.
    - [ ] Re-run links, imports, tests, and generators affected by a split.
 - [ ] 6. Sync behavior proof and runtime guardrails.
    - [ ] If eval assertions changed, promote only reusable runtime prevention

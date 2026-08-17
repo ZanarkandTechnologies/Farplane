@@ -14,8 +14,9 @@ for material skill work.
 
 - [ ] Ownership is explicit: create a new skill only for a stable reusable
   trigger; otherwise update the existing owner surface.
-- [ ] The target `SKILL.md` first load is executable without hidden chat context:
-  trigger, contract, todo path, gates, proof, and output are visible.
+- [ ] The target `SKILL.md` is at most 200 physical lines and its first load is
+  executable without hidden chat context: trigger, contract, todo path, gates,
+  proof, and output are visible.
 - [ ] Template metadata is truthful, conditional references have precise load
   conditions, reference-map link labels name the target surface instead of
   generic basenames such as `SKILL.md`, and reusable method references declare

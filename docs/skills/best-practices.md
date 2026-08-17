@@ -226,9 +226,11 @@ Use these thresholds and gates:
 
 - If a `SKILL.md` section grows past roughly 100 lines, ask whether part of it is
   branch-specific detail that belongs in a reference.
-- Treat file length as a diagnostic, not a hard gate. Split by branch,
-  provider, responsibility, method, or artifact type when doing so improves
-  ownership, first-load precision, or maintainability.
+- Keep every edited `skills/**/SKILL.md` at or below 200 physical lines. The
+  PostToolUse hook supplies immediate repair feedback and the staged validator
+  is the hard commit backstop.
+- Meet the envelope by splitting along branch, provider, responsibility,
+  method, or artifact boundaries; never hide required first-load behavior.
 - If the same rule appears in two or more skills, consider a shared doc or
   template owner. Keep a one-line pointer in each `SKILL.md` when the rule is
   required for first-load behavior.

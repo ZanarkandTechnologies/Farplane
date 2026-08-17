@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Block new oversized source files and growth in oversized legacy files."""
+"""Block oversized source files or growth in oversized legacy files."""
 
 from __future__ import annotations
 
@@ -104,12 +104,21 @@ def source_deltas(
     return deltas
 
 
-def violations(deltas: list[SourceDelta], max_lines: int) -> list[str]:
+def violations(
+    deltas: list[SourceDelta],
+    max_lines: int,
+    *,
+    strict: bool = False,
+) -> list[str]:
     errors: list[str] = []
     for delta in deltas:
         if delta.current_lines <= max_lines:
             continue
-        if delta.base_lines is None:
+        if strict:
+            errors.append(
+                f"{delta.path}: source file has {delta.current_lines} lines; max is {max_lines}"
+            )
+        elif delta.base_lines is None:
             errors.append(
                 f"{delta.path}: new source file has {delta.current_lines} lines; max is {max_lines}"
             )
@@ -127,6 +136,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--base", default="origin/main")
     parser.add_argument("--max-lines", type=int, default=500)
     parser.add_argument("--glob", action="append", dest="globs", default=[])
+    parser.add_argument(
+        "--strict",
+        action="store_true",
+        help="Fail every changed file above the limit, including oversized legacy files",
+    )
     parser.add_argument("--baseline", help="TOML adoption baseline used until the base contains it")
     return parser.parse_args()
 
@@ -163,7 +177,7 @@ def main() -> int:
     except (OSError, RuntimeError, tomllib.TOMLDecodeError) as exc:
         print(f"source line growth guard error: {exc}", file=sys.stderr)
         return 2
-    errors = violations(deltas, args.max_lines)
+    errors = violations(deltas, args.max_lines, strict=args.strict)
     if errors:
         print("source line growth guard failed:")
         for error in errors:

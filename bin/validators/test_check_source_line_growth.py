@@ -52,11 +52,29 @@ class SourceLineGrowthTests(unittest.TestCase):
         delta = MODULE.SourceDelta("bin/core/old.py", 499, 501)
         self.assertEqual(1, len(MODULE.violations([delta], 500)))
 
+    def test_strict_mode_blocks_oversized_legacy_file_that_holds(self) -> None:
+        delta = MODULE.SourceDelta("skills/legacy/SKILL.md", 250, 250)
+        errors = MODULE.violations([delta], 200, strict=True)
+        self.assertEqual(
+            ["skills/legacy/SKILL.md: source file has 250 lines; max is 200"],
+            errors,
+        )
+
+    def test_strict_mode_allows_file_at_limit(self) -> None:
+        delta = MODULE.SourceDelta("skills/demo/SKILL.md", 199, 200)
+        self.assertEqual([], MODULE.violations([delta], 200, strict=True))
+
     def test_default_glob_matches_top_level_and_nested_python(self) -> None:
         globs = ["bin/**/*.py"]
         self.assertTrue(MODULE.matches("bin/farplane.py", globs))
         self.assertTrue(MODULE.matches("bin/core/module.py", globs))
         self.assertFalse(MODULE.matches("docs/example.py", globs))
+
+    def test_skill_glob_matches_only_skill_entrypoints(self) -> None:
+        globs = ["skills/**/SKILL.md"]
+        self.assertTrue(MODULE.matches("skills/demo/SKILL.md", globs))
+        self.assertTrue(MODULE.matches("skills/group/demo/SKILL.md", globs))
+        self.assertFalse(MODULE.matches("skills/demo/reference.md", globs))
 
     def test_adoption_baseline_is_valid(self) -> None:
         root = MODULE_PATH.parents[2]
@@ -101,6 +119,26 @@ class SourceLineGrowthTests(unittest.TestCase):
 
         self.assertEqual([MODULE.SourceDelta("bin/legacy.py", 501, 502)], deltas)
         self.assertEqual(1, len(MODULE.violations(deltas, 500)))
+
+    def test_staged_strict_mode_blocks_unchanged_oversized_skill_size(self) -> None:
+        root = self.make_repo()
+        source = root / "skills/legacy/SKILL.md"
+        source.parent.mkdir(parents=True)
+        source.write_text("before\n" + "line\n" * 200, encoding="utf-8")
+        subprocess.run(["git", "add", "skills/legacy/SKILL.md"], cwd=root, check=True)
+        subprocess.run(["git", "commit", "-qm", "base"], cwd=root, check=True)
+        source.write_text("after\n" + "line\n" * 200, encoding="utf-8")
+        subprocess.run(["git", "add", "skills/legacy/SKILL.md"], cwd=root, check=True)
+
+        deltas = MODULE.source_deltas(
+            "staged",
+            "origin/main",
+            ["skills/**/SKILL.md"],
+            root=root,
+        )
+
+        self.assertEqual([MODULE.SourceDelta("skills/legacy/SKILL.md", 201, 201)], deltas)
+        self.assertEqual(1, len(MODULE.violations(deltas, 200, strict=True)))
 
 
 if __name__ == "__main__":

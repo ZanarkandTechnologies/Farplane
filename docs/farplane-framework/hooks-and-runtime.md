@@ -3,7 +3,7 @@ title: "Farplane Hooks and Runtime"
 status: active
 owner: farplane-framework
 created_at: 2026-06-23
-updated_at: 2026-08-17
+updated_at: 2026-08-18
 framework_template_version: "0.3.0"
 tags:
   - farplane
@@ -21,8 +21,9 @@ refs:
 # Farplane Hooks and Runtime
 
 Farplane has one installed hook surface. Root `hooks.json` contains small Codex
-lifecycle telemetry commands. Ticket completion and mining are explicit CLI
-operations; hooks do not infer durable state transitions from arbitrary writes.
+lifecycle telemetry commands and deterministic edit/response gates. Ticket
+completion and mining are explicit CLI operations; hooks do not infer durable
+state transitions from arbitrary writes.
 
 ```text
 codex_hook(event, transcript/runtime_state)
@@ -39,6 +40,7 @@ Root `hooks.json` currently defines:
 | Event | Commands | Purpose |
 | --- | --- | --- |
 | `UserPromptSubmit` | `shared_checkout_guard.py`, `capture_user_turn.py`, `farplane_console_ping.py` | claim the primary Git checkout for one active session, classify the current user turn, append lightweight conversation windows, resolve native/ticket display metadata locally, and send sanitized `turn_start` hook telemetry |
+| `PostToolUse` | `skill_file_line_gate.py` | after `apply_patch`, return repair feedback when a touched `skills/**/SKILL.md` exceeds 200 physical lines; the edit remains applied |
 | `Stop` | `final_response_gate.py`, `shared_checkout_guard.py`, `farplane_console_ping.py` | compress over-limit user-facing responses before releasing primary-checkout ownership, then send sanitized `turn_end` hook telemetry |
 | `SubagentStart` | `farplane_console_ping.py` | send sanitized subagent-start lifecycle telemetry |
 | `SubagentStop` | `farplane_console_ping.py` | send sanitized subagent-stop lifecycle telemetry |
@@ -192,6 +194,9 @@ Global Codex installation is primary-checkout-only. `farplane install`,
 worktrees so `~/.codex` cannot be repointed at an ephemeral task checkout.
 
 - Detect or capture cheaply.
+- Keep PostToolUse checks path-scoped and deterministic. The skill-file gate
+  checks only `SKILL.md` paths named by the completed patch; pre-commit repeats
+  the exact 200-line invariant as the hard repository backstop.
 - Keep live Stop behavior telemetry-only except for small deterministic gates
   with explicit evidence. The final-response gate may continue a turn only to
   compress an over-limit user-facing message; it may not judge completion,
@@ -205,9 +210,9 @@ worktrees so `~/.codex` cannot be repointed at an ephemeral task checkout.
   reviewer-lane completion review in the ticket `Done / Proof` block or Goal
   program final checkpoint.
 
-Durable memory and skill cleanup need source preservation, responsibility-based
-structure, proposal evidence, and review. `knowledge-tidier`, `update-memory`,
-or `skill-maintenance` own that work; raw file length does not trigger it.
+The skill-file gate may trigger the repair loop but never rewrites the file.
+`skill-maintenance` owns source-preserving, responsibility-based compaction and
+review; default-path behavior cannot be hidden merely to meet the envelope.
 
 ## Graph Tags
 
@@ -218,7 +223,8 @@ Hook and runtime nodes should use these tags:
 - `runtime`: ignored local state under `.farplane/`
 - `automation`: Codex automation prompt/thread surface
 - `pm-ui`: UI grouping through `farplane/pm.json`
-- `mechanical-gate`: deterministic validation surface; the final-response prose
+- `mechanical-gate`: deterministic validation surface; the PostToolUse skill
+  gate enforces 200 physical lines on touched `skills/**/SKILL.md`. The final-response prose
   word ceiling is hard, while the normal prose-line ceiling requests one
   semantic compression pass. Closed Mermaid, exact image/video embed lines,
   marker-only Markdown blockquote spacer lines, and trailing link-only

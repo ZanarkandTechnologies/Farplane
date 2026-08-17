@@ -38,7 +38,8 @@ human handoffs; precise reference load conditions; proof; output contract; and
 short normally-run commands. Put branch-only examples, templates, rubrics,
 provider maps, and rare recipes in references with explicit load conditions.
 
-Treat file length as a diagnostic rather than a gate. Split by branch, provider,
+Treat 200 physical lines as a hard envelope for every edited
+`skills/**/SKILL.md`. Within the envelope, split by branch, provider,
 responsibility, method, or artifact type only when the result has clearer
 ownership and lower first-load cost; never hide required behavior to reduce a
 count.
@@ -73,8 +74,8 @@ Map`, or `Output`.
     `must`, and `if/when` instructions live in or are routed by todos/gates.
 13. `reference_escape_hatch` — moved detail is reachable through a precise
     branch condition.
-14. `structure_budget_review` — split decisions name the ownership or loading
-    improvement; raw size alone does not determine pass or fail.
+14. `structure_budget_review` — the edited `SKILL.md` is at most 200 lines and
+    split decisions name the ownership or loading improvement.
 15. `question_list_to_signature` — long fixed intake lists become parameters or
     schemas when missing values can be requested normally.
 16. `extra_section_value` — kept extra sections name behavior lost by folding or
@@ -115,6 +116,7 @@ Map`, or `Output`.
 
 ```text
 first_load_review:
+  skill_file_line_count:
   authored_file_structure:
   kept_in_skill:
   moved_to_reference:

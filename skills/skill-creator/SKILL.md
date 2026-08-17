@@ -24,9 +24,10 @@ of [skill system](../../docs/skills/system.md) and
 [skill best practices](../../docs/skills/best-practices.md) before editing.
 Update an existing owner instead of creating a duplicate skill.
 
-Treat file length as a diagnostic, not a gate. Split conditional detail by
-branch or responsibility when doing so improves ownership or first-load cost;
-do not hide default-path behavior merely to reduce a count.
+Keep every edited `skills/**/SKILL.md` at or below 200 physical lines. Split
+conditional detail by branch or responsibility when doing so improves
+ownership or first-load cost; do not hide default-path behavior merely to hit
+the envelope.
 
 ## Skill Signature
 
@@ -35,12 +36,14 @@ create_or_update_skill(request, existing_surface?, proof_need?)
   -> skill_package_change + validation_result
 state: reads(skill docs, registry, target, template, QA); writes(owner-local package, registry?)
 gates: trigger_stable; first_load_executable; structure_coherent;
+       skill_file_at_most_200_lines;
        template_truthful; book_branch_explicit_when_applicable;
        book_sources_type_confidence_convergence_labeled;
        runnable_eval_rows_created_or_deferred; proof_named; review_ready
 routes: gap-analysis | skill-maintenance | research:source-synthesis |
   eval | self-improve | goal-advisor | review
-fails: duplicate skill; hidden default workflow; arbitrary line-count splitting;
+fails: duplicate skill; oversized edited SKILL.md; hidden default workflow;
+  arbitrary line-count splitting;
   stale template claim; book request without named extraction branch/schema;
   book grounding without source convergence or copyright boundary;
   scenario-only eval plan; applicable self-improve without artifact or reason;
@@ -92,8 +95,8 @@ fails: duplicate skill; hidden default workflow; arbitrary line-count splitting;
    - [ ] Use the
      [method reference template](../../docs/skills/templates/METHOD_REFERENCE_TEMPLATE.md)
      and declare `skill-method-reference` for reusable method workflows.
-   - [ ] Split only when the result improves ownership or first-load behavior;
-     raw line count is not a pass/fail condition.
+   - [ ] Keep `SKILL.md` at or below 200 physical lines, splitting only where
+     the result also improves ownership or first-load behavior.
 - [ ] 6. Run `python3 ../skill-maintenance/scripts/check_skills.py --write`
   plus focused script, JSON, and eval checks.
 - [ ] 7. Finish with proof and review.
