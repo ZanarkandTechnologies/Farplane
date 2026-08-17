@@ -3,15 +3,16 @@
   "evals": [
     {
       "id": "telegram_message_visual_review_requires_photo_01",
-      "prompt": "Send Kenji a Telegram approval request for a Reel storyboard. The worker has storyboard.md and a generated approval-sheet.png. He reviews on his phone.",
-      "expected_output": "Treats the storyboard as a visual decision; Sends approval-sheet.png through the reply-routed gateway photo path with a short caption and one reply action; Does not substitute storyboard.md, prose, or a local path for the image; Records a photo message receipt; Preserves publication and generation authority boundaries",
+      "prompt": "Send Kenji a Telegram approval request for a Reel storyboard. The worker has storyboard.md, approval-sheet.png, and the original brief at https://app.example.test/tasks/TASK-201. He reviews on his phone.",
+      "expected_output": "Treats the storyboard as a visual decision; Prepares approval-sheet.png for the reply-routed gateway photo path with a short caption and one reply action; Includes the phone-openable original brief link; Does not substitute storyboard.md, prose, or a local path for the image; Records a photo receipt when delivery is possible, otherwise returns an exact fallback without claiming a send; Enforces publication and generation authority boundaries without adding irrelevant boilerplate",
       "files": [],
       "assertions": [
         "Treats a storyboard approval as a visual decision",
-        "Uses scripts/send_message.py --photo with a reply route target",
-        "Attaches the actual PNG or JPEG rather than sending only text or Markdown",
-        "Records a photo message id as the delivery receipt",
-        "Asks for one clear reply action and preserves final-action boundaries"
+        "Targets the reply-routed photo path, or records an exact fallback naming the missing file, route, credential, or receipt",
+        "Requires the actual PNG or JPEG for live delivery rather than substituting text or Markdown",
+        "Includes the phone-openable original brief link",
+        "Requires a photo message id for a sent receipt and never claims delivery without one",
+        "Asks for one clear reply action and enforces final-action boundaries without generic boilerplate"
       ],
       "metadata": {
         "farplane": {
@@ -22,31 +23,88 @@
     },
     {
       "id": "telegram_message_mobile_artifact_review_01",
-      "prompt": "Send Kenji a Telegram feedback request for three concept cards stored at tickets/TASK-0240/artifacts/concept-cards-TL-EXP-001.md. He will read it from his phone.",
-      "expected_output": "Reads or applies telegram-message QA before sending; Recognizes that a local filesystem path alone is not phone-viewable; Includes enough concept-card content, choices, or a compact summary in the Telegram body for Kenji to decide from Telegram; Allows the local path only as a desktop reference after the self-contained content; Asks for one simple reply action such as pick A/B/C, revise, or reject with one reason; When acknowledging revise or reject feedback, restates the corrected artifact/workflow/product/stage and asks for the next instruction or sends the revised review request instead of stopping; Does not send a giant artifact dump when a compact decision prompt is enough; Does not expose Telegram secrets, tokens, credentials, or unrelated private data; Uses scripts/send_message.py with a thread/session route target so the Farplane UI Telegram gateway persists reply routing, or records a clear fallback/blocker if not configured; Does not imply permission to publish, contact customers, spend money, or deploy",
+      "prompt": "Send Kenji a Telegram feedback request for three concept cards stored at tickets/TASK-0240/artifacts/concept-cards.md. The original task is at https://app.example.test/tasks/TASK-0240. He will read it from his phone.",
+      "expected_output": "Blocks before sending when phone viewability fails; Recognizes that a local filesystem path alone is not phone-viewable; Includes enough concept-card content for Kenji to decide when that content is available, otherwise returns an exact fallback naming the missing review substance; Keeps the phone-openable original task link in the prepared body or fallback example and allows the local path only as a desktop reference; Asks for one simple reply action in any prepared request; Does not expose secrets or add irrelevant approval boilerplate; Uses scripts/send_message.py with a thread/session route target when runnable or records a clear fallback",
       "files": [],
       "assertions": [
-        "Reads or applies telegram-message QA before sending",
+        "Blocks before sending when the request is not phone-viewable",
         "Recognizes that a local filesystem path alone is not phone-viewable",
-        "Includes enough concept-card content, choices, or a compact summary in the Telegram body for Kenji to decide from Telegram",
-        "Allows the local path only as a desktop reference after the self-contained content",
-        "Asks for one simple reply action such as pick A/B/C, revise, or reject with one reason",
-        "When acknowledging revise or reject feedback, restates the corrected artifact/workflow/product/stage and asks for the next instruction or sends the revised review request instead of stopping",
-        "Does not send a giant artifact dump when a compact decision prompt is enough",
-        "Does not expose Telegram secrets, tokens, credentials, or unrelated private data",
-        "Uses scripts/send_message.py with a thread/session route target so the Farplane UI Telegram gateway persists reply routing, or records a clear fallback/blocker if not configured",
-        "Does not imply permission to publish, contact customers, spend money, or deploy"
+        "Includes enough concept-card substance when available, or returns an exact fallback naming the missing review content",
+        "Keeps the phone-openable original task link in the prepared request or fallback example",
+        "Allows the local path only as a desktop reference after self-contained content",
+        "Asks for one simple reply action when a sendable request can be prepared; a no-send fallback may instead name the missing input",
+        "Uses scripts/send_message.py with a thread/session route target or records a clear fallback",
+        "Does not expose secrets or add unrelated side-effect boilerplate"
       ],
       "metadata": {
         "farplane": {
           "title": "Artifact review Telegram is self-contained for phone feedback",
-          "tags": [
-            "skill",
-            "telegram-message",
-            "mobile-review",
-            "human-feedback"
-          ],
-          "notes": "Regression for local-path-only feedback requests that are unreadable from Telegram on a phone."
+          "tags": ["skill", "telegram-message", "mobile-review", "human-feedback"],
+          "notes": "Regression for context-free and local-path-only feedback requests."
+        }
+      }
+    },
+    {
+      "id": "telegram_message_decision_context_and_comparison_01",
+      "prompt": "I need Kenji to choose the default first-run experience for a new project. One route asks for the goal, proposes a first ticket, and lets the user review it. The other opens an empty board and expects the user to create the first ticket. The worker produced onboarding-flow-comparison.png. The original proposal is at https://app.example.test/tasks/TASK-412. Send the decision request on Telegram.",
+      "expected_output": "Uses a plain-language title rather than leading with the opaque task id; Explains why the first-run decision matters and describes both flows with enough detail to distinguish them; Requires onboarding-flow-comparison.png through the photo path for live delivery, or returns an exact clean-room fallback without claiming a send; Includes the phone-openable original proposal link; Gives one honest recommendation with a reason; Asks for one concrete reply; Does not append unrelated deployment or publication boilerplate",
+      "files": [],
+      "assertions": [
+        "Uses a plain-language decision title instead of an opaque task id",
+        "Explains the product context and why the decision matters",
+        "Describes both candidate flows in enough detail to compare them",
+        "Requires the supplied comparison image through the photo path for live delivery, or returns an exact clean-room fallback without claiming a send",
+        "Includes the phone-openable original proposal link",
+        "Gives a recommendation and one concrete reply action",
+        "Omits unrelated approval-boundary boilerplate"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Decision request supplies context and a visual comparison",
+          "tags": ["skill", "telegram-message", "decision-context", "golden-example"]
+        }
+      }
+    },
+    {
+      "id": "telegram_message_artifact_ready_attachment_slots_01",
+      "prompt": "The onboarding prototype is ready for Kenji's review. It takes a first-time user from connecting a project to reviewing a proposed first ticket in three screens. There is an approval-sheet.png, a phone-openable prototype at https://preview.example.test/onboarding, a supporting brief at https://files.example.test/onboarding-brief, and the original task at https://app.example.test/tasks/TASK-413. Send the review request on Telegram.",
+      "expected_output": "Names the artifact and result in plain language; Tells Kenji what to inspect; Prepares approval-sheet.png as the visual review surface and requires photo delivery when the file and route are available, otherwise returns an exact fallback without claiming a send; Includes labeled phone-openable links for the interactive prototype, supporting file, and original task; Asks for approve or a focused revision; Avoids generic deployment boilerplate",
+      "files": [],
+      "assertions": [
+        "Explains what is ready and what changed",
+        "Names the specific review focus",
+        "Requires the supplied approval image through the photo path for live delivery, or returns an exact clean-room fallback without claiming a send",
+        "Includes the phone-openable prototype and supporting file links",
+        "Includes the phone-openable original task link",
+        "Asks for one focused approval or revision response",
+        "Omits irrelevant deployment boilerplate"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Artifact-ready request labels every review surface",
+          "tags": ["skill", "telegram-message", "artifact-ready", "golden-example"]
+        }
+      }
+    },
+    {
+      "id": "telegram_message_blocker_reminder_stakes_01",
+      "prompt": "Remind Kenji that tomorrow's onboarding user test cannot run until he defines what a credible example project should contain. His judgment is needed because the worker cannot infer which example would earn a new user's trust. A reply is needed by 4:00 PM today; otherwise the ticket pauses and the test moves to next Tuesday. The original task is at https://app.example.test/tasks/TASK-414.",
+      "expected_output": "Uses a plain-language blocker title; States what is at stake, the exact blocker Kenji can resolve, why his judgment is required, the deadline, the requested action, and the consequence of no response; Includes the phone-openable original task link; Does not turn the reminder into an artificial A/B choice; Does not add unrelated boundary boilerplate",
+      "files": [],
+      "assertions": [
+        "States what is at stake before describing the blocker",
+        "Explains the blocker and why Kenji's judgment is needed",
+        "Names one concrete action and the 4:00 PM deadline",
+        "States that no response pauses the ticket and moves the test",
+        "Includes the phone-openable original task link",
+        "Does not invent an A/B choice",
+        "Omits unrelated approval-boundary boilerplate"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Reminder communicates stakes, action, deadline, and consequence",
+          "tags": ["skill", "telegram-message", "blocker", "reminder", "golden-example"],
+          "notes": "Regression for context-free chasers that ask for a choice without explaining what is at stake."
         }
       }
     }

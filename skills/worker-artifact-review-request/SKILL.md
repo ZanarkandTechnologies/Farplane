@@ -41,7 +41,7 @@ contact customers, spend, deploy, or mutate public accounts.
 
 ```text
 worker_artifact_review_request(ticket, artifacts, thread_ref,
-                               review_question,
+                               review_question, original_source_url,
                                mode = initial | reminder | phone_escalation,
                                review_state?)
   -> send_receipt + progress_delta + ticket_delta
@@ -54,13 +54,15 @@ state:
 
 gates:
   artifacts_exist; archive_safe_refs; phone_readable_summary;
+  original_source_phone_openable;
   visual_artifact_has_image; visual_delivery_receipt_is_photo;
   one_reply_action; reply_thread_bound; no_duplicate_send;
   policy_action_is_due_when_mode!=initial; no_secrets;
   no_external_action_permission; receipt_recorded
 
 fails:
-  local_path_only_review; vague_reply_action; queue_size_as_chase_trigger;
+  local_path_only_review; missing_original_source_link; vague_reply_action;
+  duplicated_message_copy; queue_size_as_chase_trigger;
   text_only_visual_review; awaiting_review_without_required_media;
   worker_reserved_while_waiting; repeated_not_due_reminder;
   phone_escalation_outside_policy;
@@ -74,6 +76,9 @@ fails:
   - [ ] Read the ticket, artifact, `progress.md`, review question, thread ref,
         final human gate, and `qa_checklist.md`.
   - [ ] Read `telegram-message/SKILL.md` and its checklist before sending.
+  - [ ] Resolve one phone-openable `original_source_url` for the original task,
+        brief, proposal, or source page. For reminders, reuse it from the Review
+        block; do not reconstruct it from a local path.
   - [ ] For `mode=reminder` or `phone_escalation`, require the exact due action
         selected by Pulse from the structured chase policy; otherwise return
         `skipped_not_due`.
@@ -84,6 +89,8 @@ fails:
         support only.
   - [ ] Mark local paths desktop-only and include the smallest honest inline
         summary, excerpt, result, or options.
+  - [ ] Pass the review facts, original source URL, artifact refs, and media
+        paths to `telegram-message`; let that skill own the human-facing prose.
   - [ ] Ask exactly one reply action and preserve external-action gates.
 - [ ] 3. Send once and write state.
   - [ ] Send the initial request through Telegram or record an exact transport
@@ -110,6 +117,7 @@ The mutable review ledger lives in `progress.md`, not ticket frontmatter:
 
 artifact_refs:
   - tickets/TASK-XXXX/artifacts/example.md
+original_source_url: https://phone-openable.example/tasks/TASK-XXXX
 thread_ref: codex-thread-ref
 requested_at: 2026-07-11T12:00:00Z
 telegram_status: sent
@@ -128,17 +136,25 @@ decision, changes status to `active`, `done`, or `rejected`, and continues or
 closes the ticket. The inactive persistent thread and awaiting ticket are not
 workers. Only an active execution turn consumes worker capacity.
 
-## Request Shape
+## Message Input Packet
 
-```text
-*{ticket}: {artifact title}*
+This wrapper supplies facts and state. `telegram-message` owns the final copy
+and its gold-message calibration.
 
-*Why review now:* {one sentence}
-*Result:* {phone-readable decision content}
-*Desktop ref:* {path, explicitly desktop-only}
-
-*Reply with:* approve, revise, or reject + one short reason.
-*Boundary:* This does not approve {post/publish/spend/deploy/etc.}.
+```yaml
+message_intent: review_request | blocker
+original_source_url: https://phone-openable.example/tasks/TASK-XXXX
+message_body_facts:
+  context:
+  result_or_blocker:
+  stakes:
+  review_focus:
+  recommendation:
+  deadline:
+  consequence_if_unanswered:
+requested_reply:
+artifact_refs: []
+media_paths: []
 ```
 
 ```yaml
@@ -147,6 +163,7 @@ worker_artifact_review:
   status: sent | blocked | skipped_duplicate | skipped_not_due
   ticket:
   thread_ref:
+  original_source_url:
   artifacts: []
   requested_reply:
   telegram_message_id:

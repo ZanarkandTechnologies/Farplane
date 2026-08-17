@@ -25,6 +25,8 @@ worker_artifact_review_request_check(packet, artifacts, route, receipt?)
   phone-openable URL, or has enough inline summary/excerpt for Telegram review.
 - [ ] `archive_safe_refs`: Artifact refs are stable repo/ticket/archive-safe
   paths or URLs; local paths are labeled desktop-only.
+- [ ] `original_source_link`: The packet and Review block include one labeled,
+  phone-openable link to the original task, brief, proposal, or source page.
 - [ ] `phone_readable`: The message explains what changed, why it matters, and
   the reviewable substance without requiring desktop access.
 - [ ] `visual_artifact_delivery`: For storyboards, image/design approvals, and
@@ -35,13 +37,15 @@ worker_artifact_review_request_check(packet, artifacts, route, receipt?)
 - [ ] `reply_route`: A thread/session route target exists, or fallback is
   recorded with the exact missing route/credential.
 - [ ] `review_state_bound`: The request records artifact refs, thread ref,
-  request time, Telegram status/message id, reminder count with matching
+  original source URL, request time, Telegram status/message id, reminder count with matching
   reminder message ids, Phone Chaser count/dispatch ids/last dispatch time, and decision in the
   ticket-owned `progress.md` Review block.
 - [ ] `no_secrets`: No tokens, credentials, private unrelated data, or unsafe
   command output appears in the message or receipt.
-- [ ] `side_effect_boundary`: The message explicitly does not approve posting,
-  publishing, spending, deploying, contacting externals, or account mutation.
+- [ ] `side_effect_boundary`: Posting, publishing, spending, deploying,
+  contacting externals, and account mutation remain gated. The message states
+  that boundary only when it materially affects the requested decision rather
+  than appending generic boilerplate.
 - [ ] `no_duplicate_spam`: If a recent review request exists for the same
   artifact, the packet records why another reminder is necessary or skips it.
 - [ ] `policy_action_only`: Reminder or Phone Chaser mode runs only when Pulse

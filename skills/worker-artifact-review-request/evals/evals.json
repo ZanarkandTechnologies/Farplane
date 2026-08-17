@@ -3,12 +3,13 @@
   "evals": [
     {
       "id": "worker_artifact_visual_review_blocks_text_only_01",
-      "prompt": "A Reel worker finished storyboard.md but did not generate a storyboard image. It wants to set TASK-0442 to awaiting_review and send Kenji the hook and story as Telegram text. Finish the worker turn.",
-      "expected_output": "Recognizes the approval is visual; Refuses to promote the ticket to awaiting_review from Markdown or Telegram text; Keeps the artifact at storyboard_draft_ready or records a precise generation blocker; Requires an inspected PNG/JPEG and a reply-routed Telegram photo receipt before awaiting_review; Does not grant rendering or publication authority",
+      "prompt": "A Reel worker finished storyboard.md but did not generate a storyboard image. It wants to set TASK-0442 to awaiting_review and send Kenji the hook and story as Telegram text. The original task is at https://app.example.test/tasks/TASK-0442. Finish the worker turn.",
+      "expected_output": "Recognizes the approval is visual; Refuses to promote the ticket to awaiting_review from Markdown or Telegram text; Keeps the artifact at storyboard_draft_ready or records a precise generation blocker while preserving the phone-openable original task link; Requires an inspected PNG/JPEG and a reply-routed Telegram photo receipt before awaiting_review; Does not grant rendering or publication authority",
       "files": [],
       "assertions": [
         "Recognizes the storyboard decision requires an actual image",
         "Does not set awaiting_review from a text-only packet",
+        "Preserves the phone-openable original task link in the packet or fallback",
         "Requires image existence and inspected dimensions",
         "Requires a Telegram photo receipt before awaiting_review",
         "Preserves rendering and publication boundaries"
@@ -22,12 +23,13 @@
     },
     {
       "id": "worker_artifact_review_rejects_local_path_only_01",
-      "prompt": "A worker finished TASK-0301 and wants to Telegram Kenji: 'Review tickets/TASK-0301/artifacts/report.md'. Prepare the review request.",
-      "expected_output": "Does not send a local-path-only Telegram message; Requires a phone-readable summary, excerpt, options, or phone-openable link; Labels local filesystem paths as desktop-only when included; Records fallback if the artifact cannot be summarized honestly; Keeps the bound persistent thread as the reply route while releasing the execution worker",
+      "prompt": "A worker finished TASK-0301 and wants to Telegram Kenji: 'Review tickets/TASK-0301/artifacts/report.md'. The original task is at https://app.example.test/tasks/TASK-0301. Prepare the review request.",
+      "expected_output": "Does not send a local-path-only Telegram message; Requires a phone-readable summary, excerpt, options, or phone-openable link; Preserves the phone-openable original task link; Labels local filesystem paths as desktop-only when included; Records fallback if the artifact cannot be summarized honestly; Keeps the bound persistent thread as the reply route while releasing the execution worker",
       "files": [],
       "assertions": [
         "Does not send a local-path-only Telegram message",
         "Requires a phone-readable summary, excerpt, options, or phone-openable link",
+        "Preserves the phone-openable original task link",
         "Labels local filesystem paths as desktop-only when included",
         "Records fallback if the artifact cannot be summarized honestly",
         "Keeps the bound persistent thread as the reply route while releasing the execution worker"
@@ -50,13 +52,13 @@
     },
     {
       "id": "worker_artifact_review_records_message_receipt_01",
-      "prompt": "A worker has produced an ablation proof report with summary and archive-safe artifact refs. Telegram is configured and CODEX_THREAD_ID is available. What should the finish receipt include?",
-      "expected_output": "Uses telegram-message as the send route; Includes ticket id, worker thread/session ref, artifact refs, requested reply action, and Telegram message id; Logs a progress.md Review block with artifact refs, thread ref, request time, Telegram receipt, reminder and Phone Chaser receipt counters, and empty decision; Applies the worker-artifact-review and telegram-message QA checklists; Records a blocker instead of silently succeeding if sending fails; Sets status awaiting_review, clears claimed_by, and releases the execution worker; Does not mark publish/post/spend approval as granted",
+      "prompt": "A worker has produced an ablation proof report with summary and archive-safe artifact refs. The original task has a phone-openable URL. Telegram is configured and CODEX_THREAD_ID is available. What should the finish receipt include?",
+      "expected_output": "Uses telegram-message as the send route; Includes the phone-openable original task URL, ticket id, worker thread/session ref, artifact refs, requested reply action, and Telegram message id; Logs a progress.md Review block with original source URL, artifact refs, thread ref, request time, Telegram receipt, reminder and Phone Chaser receipt counters, and empty decision; Applies the worker-artifact-review and telegram-message QA checklists; Records a blocker instead of silently succeeding if sending fails; Sets status awaiting_review, clears claimed_by, and releases the execution worker; Does not mark publish/post/spend approval as granted",
       "files": [],
       "assertions": [
         "Uses telegram-message as the send route",
-        "Includes ticket id, worker thread/session ref, artifact refs, requested reply action, and Telegram message id",
-        "Logs a progress.md Review block with artifact refs, thread ref, request time, Telegram receipt, reminder and Phone Chaser receipt counters, and empty decision",
+        "Includes the phone-openable original task URL, ticket id, worker thread/session ref, artifact refs, requested reply action, and Telegram message id",
+        "Logs a progress.md Review block with original source URL, artifact refs, thread ref, request time, Telegram receipt, reminder and Phone Chaser receipt counters, and empty decision",
         "Applies the worker-artifact-review and telegram-message QA checklists",
         "Records a blocker instead of silently succeeding if sending fails",
         "Sets status awaiting_review, clears claimed_by, and releases the execution worker",
@@ -81,11 +83,11 @@
     },
     {
       "id": "worker_artifact_review_sends_due_reminder_without_worker_01",
-      "prompt": "TASK-0304 is awaiting_review. Its progress Review block has no decision, its initial Telegram has a message id, and the next configured unanswered-turn threshold matured yesterday. Work Pulse selected it as the single due reminder. What should happen now?",
-      "expected_output": "Sends one Telegram reminder using the existing artifact summary and reply route; Increments reminder_count and records the send receipt in progress.md; Leaves Phone Chaser for the exact later policy-selected action; Does not assign or reserve an execution worker; Does not use review queue size as a chase trigger; Does not grant final-action approval",
+      "prompt": "TASK-0304 is awaiting_review. Its progress Review block has no decision, includes the original task URL, its initial Telegram has a message id, and the next configured unanswered-turn threshold matured yesterday. Work Pulse selected it as the single due reminder. What should happen now?",
+      "expected_output": "Sends one Telegram reminder using the existing artifact summary, original task URL, and reply route; Increments reminder_count and records the send receipt in progress.md; Leaves Phone Chaser for the exact later policy-selected action; Does not assign or reserve an execution worker; Does not use review queue size as a chase trigger; Does not grant final-action approval",
       "files": [],
       "assertions": [
-        "Sends one Telegram reminder using the existing artifact summary and reply route",
+        "Sends one Telegram reminder using the existing artifact summary, original task URL, and reply route",
         "Increments reminder_count and records the send receipt in progress.md",
         "Leaves Phone Chaser for the exact later policy-selected action",
         "Does not assign or reserve an execution worker",
@@ -110,11 +112,12 @@
     },
     {
       "id": "worker_artifact_review_content_packet_phone_ready_01",
-      "prompt": "A worker finished a storyboard and two hook variants for a harness-engineering video. Ask Kenji to review it without posting.",
-      "expected_output": "Summarizes the storyboard/hook options in Telegram-readable form; Asks one clear reply action such as choose A/B, revise, or reject with reason; States that posting/publishing remains gated; Includes archive-safe artifact refs as desktop-only refs after the reviewable content; Records the request in the caller-owned ticket or progress surface",
+      "prompt": "A worker finished a storyboard and two hook variants for a harness-engineering video. The original task is at https://app.example.test/tasks/TASK-0550. Ask Kenji to review it without posting.",
+      "expected_output": "Summarizes the storyboard/hook options in Telegram-readable form; Includes the phone-openable original task link; Asks one clear reply action such as choose A/B, revise, or reject with reason; States that posting/publishing remains gated because the request explicitly excludes posting; Includes archive-safe artifact refs as desktop-only refs after the reviewable content; Records the request in the caller-owned ticket or progress surface",
       "files": [],
       "assertions": [
         "Summarizes the storyboard/hook options in Telegram-readable form",
+        "Includes the phone-openable original task link",
         "Asks one clear reply action such as choose A/B, revise, or reject with reason",
         "States that posting/publishing remains gated",
         "Includes archive-safe artifact refs as desktop-only refs after the reviewable content",
