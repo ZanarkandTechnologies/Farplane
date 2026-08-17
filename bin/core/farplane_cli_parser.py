@@ -169,7 +169,7 @@ def build_parser() -> argparse.ArgumentParser:
     response_check.add_argument("path", nargs="?", help="Markdown file; stdin when omitted.")
     response_check.add_argument("--stdin", action="store_true", help="Read Markdown from stdin.")
     response_check.add_argument("--max-words", type=int, default=500)
-    response_check.add_argument("--max-lines", type=int, default=20)
+    response_check.add_argument("--max-lines", type=int, default=30)
     response_check.add_argument("--json", action="store_true")
     response_check.set_defaults(func=run_response_check_cli)
 

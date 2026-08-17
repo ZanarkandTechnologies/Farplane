@@ -1,6 +1,6 @@
 <!--
 template_id: global-agents-template
-template_version: 0.2.31
+template_version: 0.2.32
 feature_refs:
   - FEAT-0022
   - FEAT-0042
@@ -256,10 +256,11 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
   with only necessary path or link substitutions. Do not spawn a reviewer
   solely to compress routine replies. A mechanical runtime ceiling may request
   another compression pass when a response exceeds `500` words or normally
-  exceeds `20` nonblank source lines, but it does not replace semantic review
-  or own completion. Explicitly requested detail, correctness, or safety may
-  retain extra lines after that semantic compression pass; the word ceiling
-  remains hard.
+  exceeds `30` nonblank prose lines. Marker-only Markdown blockquote spacer
+  lines are treated as blank; blockquote content still counts. The ceiling does
+  not replace semantic review or own completion. Explicitly requested detail,
+  correctness, or safety may retain extra lines after that semantic compression
+  pass; the word ceiling remains hard.
 - Completion handoffs are executive summaries, not change inventories. Every
   implemented work change must include compact `Before:`, `After:`, and
   `Example:` lines plus inspectable evidence appropriate to the work. Render the

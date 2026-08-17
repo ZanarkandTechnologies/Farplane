@@ -3,7 +3,7 @@ title: "Farplane Hooks and Runtime"
 status: active
 owner: farplane-framework
 created_at: 2026-06-23
-updated_at: 2026-08-03
+updated_at: 2026-08-17
 framework_template_version: "0.3.0"
 tags:
   - farplane
@@ -221,11 +221,13 @@ Hook and runtime nodes should use these tags:
 - `mechanical-gate`: deterministic validation surface; the final-response prose
   word ceiling is hard, while the normal prose-line ceiling requests one
   semantic compression pass. Closed Mermaid, exact image/video embed lines,
-  and trailing link-only references are classified separately by
-  `bin/core/farplane_response.py`; malformed or mixed forms count as prose. The
-  gate receives `last_assistant_message` directly, so agents do not need a
-  response draft file; `farplane response check PATH|--stdin` is only an
-  inspectable preflight. The gate never truncates or owns task completion.
+  marker-only Markdown blockquote spacer lines, and trailing link-only
+  references are classified separately by `bin/core/farplane_response.py`;
+  blockquote content, four-space-indented code, and malformed or mixed forms
+  count as prose. The gate receives `last_assistant_message` directly, so agents
+  do not need a response draft file; `farplane response check PATH|--stdin` is
+  only an inspectable preflight. The gate never truncates or owns task
+  completion.
 
 These tags let the lifecycle graph show hook boundaries without implying that
 hooks are a central orchestrator.

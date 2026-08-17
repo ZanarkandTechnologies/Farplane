@@ -23,6 +23,34 @@ class ResponseMeasureTests(unittest.TestCase):
         self.assertEqual(result.prose_nonblank_lines, 2)
         self.assertEqual(result.total_nonblank_lines, 2)
 
+    def test_marker_only_blockquote_spacers_are_excluded(self) -> None:
+        markdown = (
+            "> **Before:** one\n"
+            ">\n"
+            "> >\n"
+            ">>\n"
+            "> **After:** two"
+        )
+        result = measure_response(markdown)
+        self.assertEqual(result.prose_nonblank_lines, 2)
+        self.assertEqual(result.prose_words, 6)
+        self.assertEqual(result.blockquote_spacers, 3)
+        self.assertEqual(result.blockquote_spacer_words, 4)
+        self.assertEqual(result.blockquote_spacer_nonblank_lines, 3)
+
+    def test_blockquote_content_and_code_markers_remain_prose(self) -> None:
+        result = measure_response(
+            "> quoted content\n"
+            "    >\n"
+            "```text\n"
+            ">\n"
+            "```\n"
+            "```text\n"
+            ">"
+        )
+        self.assertEqual(result.prose_nonblank_lines, 7)
+        self.assertEqual(result.blockquote_spacers, 0)
+
     def test_closed_mermaid_block_is_excluded(self) -> None:
         markdown = "Result.\n```mermaid\nflowchart LR\nA --> B\n```"
         result = measure_response(markdown)
@@ -69,6 +97,22 @@ class ResponseMeasureTests(unittest.TestCase):
         self.assertEqual(result.reference_entries, 2)
         self.assertEqual(result.reference_nonblank_lines, 3)
 
+    def test_reference_like_sections_inside_fences_remain_prose(self) -> None:
+        closed = measure_response("```text\nReferences:\n- [Proof](/tmp/p.md)\n```")
+        unclosed = measure_response("```text\nReferences:\n- [Proof](/tmp/p.md)")
+        self.assertEqual(closed.prose_nonblank_lines, 4)
+        self.assertEqual(closed.reference_entries, 0)
+        self.assertEqual(unclosed.prose_nonblank_lines, 3)
+        self.assertEqual(unclosed.reference_entries, 0)
+
+    def test_media_like_lines_inside_fences_remain_prose(self) -> None:
+        closed = measure_response("```text\n![demo](/tmp/demo.png)\n```")
+        unclosed = measure_response("```text\n![demo](/tmp/demo.png)")
+        self.assertEqual(closed.prose_nonblank_lines, 3)
+        self.assertEqual(closed.media_embeds, 0)
+        self.assertEqual(unclosed.prose_nonblank_lines, 2)
+        self.assertEqual(unclosed.media_embeds, 0)
+
     def test_mixed_or_nonfinal_references_count_as_prose(self) -> None:
         mixed = measure_response("Worked.\nReferences:\n- [Proof](/tmp/p.md)\nResidual remains.")
         nonfinal = measure_response("References:\n- [Proof](/tmp/p.md)\n\nWorked.")
@@ -87,6 +131,7 @@ class ResponseMeasureTests(unittest.TestCase):
         payload = check_response(markdown, max_prose_words=2, max_prose_lines=1)
         self.assertTrue(payload["ok"])
         self.assertEqual(payload["counts"]["prose_words"], 2)
+        self.assertEqual(payload["excluded"]["blockquote_spacers"], 0)
         self.assertEqual(payload["excluded"]["mermaid_blocks"], 1)
         self.assertEqual(payload["excluded"]["media_embeds"], 1)
         self.assertEqual(payload["excluded"]["reference_entries"], 1)
@@ -129,6 +174,13 @@ class ResponseCliTests(unittest.TestCase):
         self.assertEqual(at_limit.returncode, 0)
         self.assertEqual(over_limit.returncode, 1)
         self.assertEqual(json.loads(over_limit.stdout)["limits"]["prose_words"], 500)
+
+    def test_default_normal_line_ceiling_is_thirty(self) -> None:
+        at_limit = self.run_cli("--stdin", "--json", stdin="\n".join(["line"] * 30))
+        over_limit = self.run_cli("--stdin", "--json", stdin="\n".join(["line"] * 31))
+        self.assertEqual(at_limit.returncode, 0)
+        self.assertEqual(over_limit.returncode, 1)
+        self.assertEqual(json.loads(over_limit.stdout)["limits"]["prose_nonblank_lines"], 30)
 
     def test_conflicting_inputs_exit_two(self) -> None:
         result = self.run_cli("missing.md", "--stdin", "--json")

@@ -8,7 +8,7 @@ from typing import Any
 
 
 DEFAULT_MAX_PROSE_WORDS = 500
-DEFAULT_MAX_PROSE_LINES = 20
+DEFAULT_MAX_PROSE_LINES = 30
 
 _REFERENCE_HEADING = re.compile(
     r"^(?:#{1,6}\s+)?(?:references|citations)\s*:?\s*$", re.IGNORECASE
@@ -20,6 +20,8 @@ _FENCE_OPEN = re.compile(r"^\s*(`{3,}|~{3,})\s*mermaid\s*$", re.IGNORECASE)
 _MEDIA_EMBED = re.compile(
     r"^!\[[^\]]*\]\((?P<target><[^>]+>|[^)]+)\)\s*$", re.IGNORECASE
 )
+_FENCE_OPEN_ANY = re.compile(r"^ {0,3}(`{3,}|~{3,}).*$")
+_BLOCKQUOTE_SPACER = re.compile(r"^ {0,3}(?:>\s*)+$")
 _MEDIA_EXTENSIONS = (
     ".avif",
     ".gif",
@@ -40,6 +42,9 @@ class ResponseMeasure:
     total_nonblank_lines: int
     prose_words: int
     prose_nonblank_lines: int
+    blockquote_spacers: int
+    blockquote_spacer_words: int
+    blockquote_spacer_nonblank_lines: int
     mermaid_blocks: int
     mermaid_words: int
     mermaid_nonblank_lines: int
@@ -68,6 +73,9 @@ class ResponseMeasure:
             },
             "counts": asdict(self),
             "excluded": {
+                "blockquote_spacers": self.blockquote_spacers,
+                "blockquote_spacer_words": self.blockquote_spacer_words,
+                "blockquote_spacer_nonblank_lines": self.blockquote_spacer_nonblank_lines,
                 "mermaid_blocks": self.mermaid_blocks,
                 "mermaid_words": self.mermaid_words,
                 "mermaid_nonblank_lines": self.mermaid_nonblank_lines,
@@ -90,13 +98,19 @@ def _nonblank_count(lines: list[str]) -> int:
     return sum(1 for line in lines if line.strip())
 
 
-def _reference_indices(lines: list[str]) -> tuple[set[int], int]:
+def _reference_indices(
+    lines: list[str], fence_indices: set[int]
+) -> tuple[set[int], int]:
     for heading_index in range(len(lines) - 1, -1, -1):
+        if heading_index in fence_indices:
+            continue
         if not _REFERENCE_HEADING.fullmatch(lines[heading_index].strip()):
             continue
         body = [line.strip() for line in lines[heading_index + 1 :] if line.strip()]
         if body and all(_REFERENCE_ENTRY.fullmatch(line) for line in body):
             indices = set(range(heading_index, len(lines)))
+            if indices & fence_indices:
+                continue
             return indices, len(body)
     return set(), 0
 
@@ -124,6 +138,27 @@ def _mermaid_indices(lines: list[str]) -> tuple[set[int], int]:
     return indices, blocks
 
 
+def _fence_indices(lines: list[str]) -> set[int]:
+    indices: set[int] = set()
+    index = 0
+    while index < len(lines):
+        match = _FENCE_OPEN_ANY.fullmatch(lines[index])
+        if not match:
+            index += 1
+            continue
+        fence = match.group(1)
+        close_pattern = re.compile(rf"^ {{0,3}}{re.escape(fence[0])}{{{len(fence)},}}\s*$")
+        close_index = index + 1
+        while close_index < len(lines) and not close_pattern.fullmatch(lines[close_index]):
+            close_index += 1
+        if close_index >= len(lines):
+            indices.update(range(index, len(lines)))
+            break
+        indices.update(range(index, close_index + 1))
+        index = close_index + 1
+    return indices
+
+
 def _is_media_embed(line: str) -> bool:
     match = _MEDIA_EMBED.fullmatch(line.strip())
     if not match:
@@ -136,21 +171,39 @@ def _is_media_embed(line: str) -> bool:
 
 def measure_response(markdown: str) -> ResponseMeasure:
     lines = markdown.splitlines()
-    reference_indices, reference_entries = _reference_indices(lines)
+    fence_indices = _fence_indices(lines)
+    reference_indices, reference_entries = _reference_indices(lines, fence_indices)
     mermaid_indices, mermaid_blocks = _mermaid_indices(lines)
+    blockquote_spacer_indices = {
+        index
+        for index, line in enumerate(lines)
+        if index not in reference_indices
+        and index not in mermaid_indices
+        and index not in fence_indices
+        and _BLOCKQUOTE_SPACER.fullmatch(line)
+    }
     media_indices = {
         index
         for index, line in enumerate(lines)
         if index not in reference_indices
         and index not in mermaid_indices
+        and index not in blockquote_spacer_indices
+        and index not in fence_indices
         and _is_media_embed(line)
     }
-    prose_indices = set(range(len(lines))) - reference_indices - mermaid_indices - media_indices
+    prose_indices = (
+        set(range(len(lines)))
+        - reference_indices
+        - mermaid_indices
+        - blockquote_spacer_indices
+        - media_indices
+    )
 
     def selected(indices: set[int]) -> list[str]:
         return [lines[index] for index in sorted(indices)]
 
     prose_lines = selected(prose_indices)
+    blockquote_spacer_lines = selected(blockquote_spacer_indices)
     mermaid_lines = selected(mermaid_indices)
     media_lines = selected(media_indices)
     reference_lines = selected(reference_indices)
@@ -159,6 +212,9 @@ def measure_response(markdown: str) -> ResponseMeasure:
         total_nonblank_lines=_nonblank_count(lines),
         prose_words=_word_count(prose_lines),
         prose_nonblank_lines=_nonblank_count(prose_lines),
+        blockquote_spacers=len(blockquote_spacer_indices),
+        blockquote_spacer_words=_word_count(blockquote_spacer_lines),
+        blockquote_spacer_nonblank_lines=_nonblank_count(blockquote_spacer_lines),
         mermaid_blocks=mermaid_blocks,
         mermaid_words=_word_count(mermaid_lines),
         mermaid_nonblank_lines=_nonblank_count(mermaid_lines),

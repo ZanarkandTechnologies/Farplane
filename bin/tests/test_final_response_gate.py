@@ -40,6 +40,7 @@ class FinalResponseGateTests(unittest.TestCase):
         self.assertIn("at most 3 prose words", result["reason"])
         self.assertIn("current: 4", result["reason"])
         self.assertIn("safety-critical", result["reason"])
+        self.assertIn("marker-only Markdown blockquote spacer lines", result["reason"])
         self.assertNotIn("truncate", result["reason"].lower())
 
     def test_over_line_cap_requests_one_semantic_compression_pass(self) -> None:
@@ -75,11 +76,11 @@ class FinalResponseGateTests(unittest.TestCase):
         )
         self.assertEqual(
             gate.configured_max_prose_lines({gate.ENV_MAX_PROSE_LINES: "bad"}),
-            20,
+            30,
         )
         self.assertEqual(
             gate.configured_max_prose_lines({gate.ENV_MAX_PROSE_LINES: "0"}),
-            20,
+            30,
         )
 
     def test_main_emits_valid_stop_json_only_when_blocked(self) -> None:
@@ -87,7 +88,7 @@ class FinalResponseGateTests(unittest.TestCase):
         stdout = io.StringIO()
         with patch.dict(
             os.environ,
-            {gate.ENV_MAX_PROSE_WORDS: "3", gate.ENV_MAX_PROSE_LINES: "20"},
+            {gate.ENV_MAX_PROSE_WORDS: "3", gate.ENV_MAX_PROSE_LINES: "30"},
         ), patch("sys.stdin", stdin), patch("sys.stdout", stdout):
             self.assertEqual(gate.main(), 0)
         result = json.loads(stdout.getvalue())

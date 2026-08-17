@@ -72,6 +72,7 @@ def run_response_check_cli(args: argparse.Namespace) -> int:
             f"{'pass' if payload['ok'] else 'fail'} "
             f"(prose_words={counts['prose_words']}/{args.max_words}, "
             f"prose_lines={counts['prose_nonblank_lines']}/{args.max_lines}, "
+            f"quote_spacers={counts['blockquote_spacers']}, "
             f"mermaid={counts['mermaid_blocks']}, media={counts['media_embeds']}, "
             f"references={counts['reference_entries']})"
         )

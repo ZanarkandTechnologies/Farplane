@@ -34,8 +34,9 @@ operators, tests, and any Markdown file that benefits from category counts.
 
 Exit `0` means prose is within its configured word and line limits; exit `1`
 means it is over. Closed Mermaid blocks, exact absolute/HTTPS image-video
-embeds, and a trailing link-only References/Citations section are reported
-separately. Malformed or mixed forms remain prose.
+embeds, marker-only Markdown blockquote spacer lines, and a trailing link-only
+References/Citations section are reported separately. Blockquote content,
+four-space-indented code, and malformed or mixed forms remain prose.
 
 The `bin/` directory is now mostly shim/utility territory, not the main
 orchestration story. `install.sh` installs an explicit allowlist of live
