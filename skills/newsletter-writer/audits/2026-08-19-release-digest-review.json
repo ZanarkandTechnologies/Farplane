@@ -1,0 +1,69 @@
+{
+  "work_type": "skill behavior correction + eval + preview",
+  "search_scope": [
+    "skills/newsletter-writer/SKILL.md",
+    "skills/newsletter-writer/qa_checklist.md",
+    "skills/newsletter-writer/evals/evals.json",
+    "skills/newsletter-writer/examples/weekly-office-showcase/example.md",
+    "skills/newsletter-writer/audits/2026-08-19-release-digest-correction.md",
+    ".farplane/evals/runs/20260818-192751-newsletter-writer-release-digest-baseline/summary.json",
+    ".farplane/evals/runs/20260818-193148-newsletter-writer-release-digest-final/summary.json",
+    "installed ~/.codex/skills/newsletter-writer package"
+  ],
+  "rubrics_used": [
+    "skill-contract",
+    "integration-readiness",
+    "evidence-quality",
+    "eval-quality",
+    "user-intent-satisfaction",
+    "desloppify"
+  ],
+  "adversarial_rejection_attempts": [
+    "Rejected the first completion state because the installed skill still contained the story-first contract.",
+    "Checked whether the preview invented metrics or outcomes absent from the weekly Executive Updates.",
+    "Checked whether the release branch damaged editorial newsletter modes or removed publication approval.",
+    "Checked the 200-line skill envelope and source-to-installed package consistency."
+  ],
+  "overall_tas": "TAS-A",
+  "verdict": "pass",
+  "rerun_required": false,
+  "hard_gate_failures": [],
+  "failed_checks": [],
+  "finding_log": [
+    {
+      "family": "skill-contract",
+      "tas": "TAS-A",
+      "finding": "The 200-line skill makes release-digest selection and Changed / Impact / Evidence units first-load behavior while preserving editorial modes."
+    },
+    {
+      "family": "integration-readiness",
+      "tas": "TAS-A",
+      "finding": "The installed package matches repo source with no diff and no Beehiiv action is authorized."
+    },
+    {
+      "family": "evidence-quality",
+      "tas": "TAS-A",
+      "finding": "Preview facts trace to reader-safe Farplane and Farplane-UI Weekly Executive Update cards."
+    },
+    {
+      "family": "eval-quality",
+      "tas": "TAS-A",
+      "finding": "The natural correction suite improved from 1/3 to 3/3 TAS-A."
+    },
+    {
+      "family": "user-intent-satisfaction",
+      "tas": "TAS-A",
+      "finding": "The preview is a grouped release digest rather than a personalized founder story."
+    }
+  ],
+  "rubric_sections": {
+    "skill-contract": "TAS-A",
+    "integration-readiness": "TAS-A",
+    "evidence-quality": "TAS-A",
+    "eval-quality": "TAS-A",
+    "user-intent-satisfaction": "TAS-A"
+  },
+  "blocking_findings": [],
+  "next_action": "Use the installed release-digest branch for future weekly office showcase drafts; retain human publication approval.",
+  "approved_response": "Worked — the release-digest correction is pass-ready in both repo source and installed skill. Before: weekly recaps could be forced into story-shaped prose. After: newsletter-writer selects release-digest for recaps, groups verified changes into two to four impact themes, and uses blockquoted Changed / Impact / Evidence units without forced founder storytelling. Proof: source and installed packages match, the skill is 200 lines, and the final eval is 3/3 TAS-A."
+}

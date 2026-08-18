@@ -1,0 +1,69 @@
+{
+  "work_type": "skill-change + eval + example preview",
+  "search_scope": [
+    "skills/newsletter-writer/SKILL.md",
+    "skills/newsletter-writer/qa_checklist.md",
+    "skills/newsletter-writer/evals/evals.json",
+    "skills/newsletter-writer/examples/weekly-office-showcase/example.md",
+    "skills/newsletter-writer/audits/2026-08-18-upstream-import.md",
+    "docs/skills/registry.jsonl",
+    ".farplane/evals/runs/20260817-205120-newsletter-writer-final/summary.json",
+    ".farplane/evals/runs/20260817-204557-newsletter-writer-baseline/summary.json"
+  ],
+  "rubrics_used": [
+    "skill-contract",
+    "integration-readiness",
+    "evidence-quality",
+    "eval-quality",
+    "user-intent-satisfaction",
+    "desloppify"
+  ],
+  "adversarial_rejection_attempts": [
+    "Rejected the first candidate because SKILL.md exceeded the 200-line authoring budget.",
+    "Rejected split eval evidence until one clean post-repair full-suite result existed.",
+    "Checked for duplicate ownership with interval Executive Updates and the Weekly Office Showcase aggregator.",
+    "Checked for invented voice, unsupported facts, publication side effects, and eval-query answer leakage."
+  ],
+  "overall_tas": "TAS-A",
+  "verdict": "pass",
+  "rerun_required": false,
+  "hard_gate_failures": [],
+  "failed_checks": [],
+  "finding_log": [
+    {
+      "family": "skill-contract",
+      "tas": "TAS-A",
+      "finding": "SKILL.md is 199 lines; first-load branches and source, voice, and publication gates are explicit."
+    },
+    {
+      "family": "integration-readiness",
+      "tas": "TAS-A",
+      "finding": "Executive Updates remain evidence inputs; newsletter prose has one Tier 3 owner; no Beehiiv action is authorized."
+    },
+    {
+      "family": "evidence-quality",
+      "tas": "TAS-A",
+      "finding": "Final post-repair suite is 3/3 TAS-A and the same no-skill baseline is 0/3."
+    },
+    {
+      "family": "eval-quality",
+      "tas": "TAS-A",
+      "finding": "Natural non-spoiling cases cover recap synthesis, missing voice evidence, and soft promotion."
+    },
+    {
+      "family": "user-intent-satisfaction",
+      "tas": "TAS-A",
+      "finding": "The package replaces generic project prose with a reusable one-idea newsletter workflow and concrete preview."
+    }
+  ],
+  "rubric_sections": {
+    "skill-contract": "TAS-A",
+    "integration-readiness": "TAS-A",
+    "evidence-quality": "TAS-A",
+    "eval-quality": "TAS-A",
+    "user-intent-satisfaction": "TAS-A"
+  },
+  "blocking_findings": [],
+  "next_action": "Accept the skill; integrate the Zanarkand showcase handoff in its owning checkout while preserving draft-first human approval.",
+  "approved_response": "Worked — the newsletter-writer skill is pass-ready. Before: the weekly showcase could produce accurate but generic project-by-project prose. After: newsletter-writer owns one reader, one central idea, three subjects, preview text, one CTA, source receipt, voice mode, and publication approval. Example: the preview turns four AI-office updates into one issue about when an AI office becomes real, with no Beehiiv action. Proof: SKILL.md is 199 lines, check_skills.py passes, final eval is TAS-A 3/3, and the no-skill baseline is 0/3. Residual risk: Kenji's voice remains a hypothesis until real Beehiiv issues or voice examples are supplied. Grounding: local Farplane files, validator output, eval artifacts, and the upstream MIT source/license."
+}

@@ -1,0 +1,78 @@
+{
+  "skill_name": "newsletter-writer",
+  "evals": [
+    {
+      "id": "newsletter_writer_weekly_office_recap",
+      "prompt": "Turn these four verified AI-office product updates into this week's release-note newsletter: durable task-thread ownership, a department-to-workflow capability map, project-bound specialist dispatch, and one consolidated content-intelligence feed. Group the high-impact changes so I can scan them quickly. This should not read like a personal story. Do not publish it.",
+      "expected_output": "Routes to newsletter-writer or follows its contract; Selects the release-digest format instead of forcing a personal story; Groups the changes into two to four impact themes; Renders each change as an indented or blockquoted unit that separates what changed, why it matters, and attributable evidence; Uses a short factual opener and avoids narrative filler or invented personal experience; Produces three honest subject lines no longer than 45 characters and additive preview text no longer than 90 characters; Uses at most one CTA; Names voice mode and source gaps; Keeps publication approval required",
+      "files": [],
+      "assertions": [
+        "Routes to newsletter-writer or follows its contract",
+        "Selects the release-digest format instead of forcing a personal story",
+        "Groups the changes into two to four impact themes",
+        "Renders each change as an indented or blockquoted unit that separates what changed, why it matters, and attributable evidence",
+        "Uses a short factual opener and avoids narrative filler or invented personal experience",
+        "Produces three honest subject lines no longer than 45 characters and additive preview text no longer than 90 characters",
+        "Uses at most one CTA",
+        "Names voice mode and source gaps",
+        "Keeps publication approval required"
+      ],
+      "metadata": {
+        "farplane": {
+          "notes": "Protects the showcase handoff: verified product cards become grouped, reader-safe release units rather than a forced founder story.",
+          "failure_modes": [
+            "Forces one long narrative instead of grouped impact units",
+            "Repeats the project report without separating change, impact, and evidence",
+            "Invents a personal realization or customer response",
+            "Uses generic transitions instead of concrete product evidence",
+            "Includes multiple CTAs or silently authorizes publication"
+          ]
+        }
+      }
+    },
+    {
+      "id": "newsletter_writer_missing_voice_evidence",
+      "prompt": "Write a founder newsletter about a new workflow engine. I have product facts but no previous issues or voice guide. Make it sound personal and add a memorable story if needed.",
+      "expected_output": "Names voice mode as hypothesis; Refuses to invent a personal anecdote, feeling, quotation, or customer claim; Drafts with transparent assumptions when the topic is sufficient, or asks for only one missing input when truth is blocked; Produces or proposes one central idea with a human publication gate",
+      "files": [],
+      "assertions": [
+        "Names voice mode as hypothesis",
+        "Refuses to invent a personal anecdote, feeling, quotation, or customer claim",
+        "Drafts with transparent assumptions when the topic is sufficient, or asks for only one missing input when truth is blocked",
+        "Produces or proposes one central idea with a human publication gate"
+      ],
+      "metadata": {
+        "farplane": {
+          "notes": "Prevents personalization pressure from turning into fabricated autobiography.",
+          "failure_modes": [
+            "Fabricates a coffee-shop, late-night, customer, or aha-moment story",
+            "Claims to match the founder's voice without evidence",
+            "Omits the hypothesis label or publication gate"
+          ]
+        }
+      }
+    },
+    {
+      "id": "newsletter_writer_soft_promotion_boundary",
+      "prompt": "Draft a useful weekly issue teaching consultants one follow-up lesson, and mention my paid template without making the whole email a pitch.",
+      "expected_output": "Teaches one useful lesson before promotion; Keeps the promotional mention in an optional P.S.; Uses exactly one CTA in the issue; Produces subjects and preview text that honestly match the lesson rather than baiting with the product",
+      "files": [],
+      "assertions": [
+        "Teaches one useful lesson before promotion",
+        "Keeps the promotional mention in an optional P.S.",
+        "Uses exactly one CTA in the issue",
+        "Produces subjects and preview text that honestly match the lesson rather than baiting with the product"
+      ],
+      "metadata": {
+        "farplane": {
+          "notes": "Protects relationship value when a commercial goal is present.",
+          "failure_modes": [
+            "Turns the body into a sales email",
+            "Adds several promotional links or CTAs",
+            "Uses a clickbait subject the teaching does not cash"
+          ]
+        }
+      }
+    }
+  ]
+}
