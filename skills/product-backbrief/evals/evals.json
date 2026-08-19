@@ -1,0 +1,85 @@
+{
+  "skill_name": "product-backbrief",
+  "evals": [
+    {
+      "id": "product_backbrief_reconstructs_operated_model_01",
+      "prompt": "We have spent a while discussing a content-intelligence product. A user pastes YouTube videos, sees when analysis is still running, reads a source dossier, and can inspect news extracted from those sources. We discovered that the current screen calls broad robotics-topic matches ‘related coverage,’ while I mean coverage to be sources discussing the same development. Generated event summaries currently hide the original verification links. Describe the product back to me so I can check whether we are on the same page before we plan changes.",
+      "expected_output": "Returns a proposed product model centered on the user's operated journey, distinguishes sources, exact developments, evidence, topic navigation, and analysis state, includes a compact ASCII flow, labels assumptions, and asks focused alignment questions without writing a plan.",
+      "files": [],
+      "assertions": [
+        "States a concise product promise before enumerating capabilities",
+        "Narrates one user journey from video ingest through visible analysis state to dossier and verified development",
+        "Uses coverage only for sources tied to the same event and treats broad overlap as topic navigation",
+        "Makes original evidence links part of the development experience rather than treating generated prose as evidence",
+        "Includes a compact ASCII system or lifecycle view with nouns consistent with the story",
+        "Labels the result proposed and ends with focused questions instead of implementation steps"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Product Backbrief reconstructs an operated product model",
+          "tags": ["skill", "product", "alignment", "story"],
+          "notes": "Primary positive case derived from an observed product-alignment workflow."
+        }
+      }
+    },
+    {
+      "id": "product_backbrief_preserves_conflict_01",
+      "prompt": "Play our product back to me before we commit. We agreed that every imported customer interview should be searchable immediately. Earlier I also said nothing should become visible until a researcher reviews it. The product should help product teams understand recurring customer problems, but I have not decided whether themes deserve their own workspace or should only be filters.",
+      "expected_output": "Builds the clearest product story supported by the discussion while keeping immediate search versus review visibility as an explicit conflict and the themes workspace as an unresolved choice; it does not silently choose either path.",
+      "files": [],
+      "assertions": [
+        "Separates confirmed purpose from conflicting visibility rules",
+        "Does not resolve the immediate-search versus human-review conflict without user input",
+        "Treats the themes workspace as an open decision rather than an accepted feature",
+        "Uses one realistic researcher journey to make the conflict concrete",
+        "Names non-goals or boundaries and asks questions aimed at the highest-risk misunderstandings"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Product Backbrief preserves contradictions and open choices",
+          "tags": ["skill", "product", "alignment", "conflict"],
+          "notes": "Protects against polished prose manufacturing false agreement."
+        }
+      }
+    },
+    {
+      "id": "product_backbrief_composes_with_task_recap_01",
+      "prompt": "I am back on the inventory forecasting task. Here is the grounded recap: the CSV import and forecast calculation are implemented; runtime proof is still missing; we accepted store managers as the primary user and rejected automatic purchase orders for phase one. Before we continue, describe the product back to me and show the flow so I can check our shared understanding.",
+      "expected_output": "Uses the supplied recap as context for a proposed inventory-forecasting product model, preserves the rejected automation boundary and missing runtime proof without turning into a status recap, and asks the operator to confirm the product meaning before implementation continues.",
+      "files": [],
+      "assertions": [
+        "Uses the supplied recap without rerunning or imitating a full task recap",
+        "Centers the store manager's operated journey rather than implementation status",
+        "Keeps automatic purchase orders outside phase one",
+        "Does not claim missing runtime proof has passed",
+        "Shows the product flow in compact ASCII and requests product-model confirmation"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Product Backbrief composes with Task Recap",
+          "tags": ["skill", "product", "alignment", "task-recap"],
+          "notes": "Tests the intended sequential composition boundary."
+        }
+      }
+    },
+    {
+      "id": "product_backbrief_rejects_status_only_01",
+      "prompt": "I just reopened TASK-4821 after two weeks. What changed, which tests passed, and what should I do next?",
+      "expected_output": "Does not fabricate a product backbrief from a status-only resumption request; routes to task-recap or requests the authoritative task reference needed for a grounded recap.",
+      "files": [],
+      "assertions": [
+        "Recognizes the request as task resumption rather than product alignment",
+        "Routes to task-recap or names the missing authoritative task source",
+        "Does not invent product purpose, user journeys, decisions, test results, or an ASCII product model",
+        "Does not mutate or resume the underlying task"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Product Backbrief rejects a status-only recap request",
+          "tags": ["skill", "product", "routing", "negative"],
+          "notes": "Protects the boundary with task-recap."
+        }
+      }
+    }
+  ]
+}
