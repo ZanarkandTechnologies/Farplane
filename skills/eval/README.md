@@ -1,6 +1,32 @@
 # Eval
 
-Purpose: scaffold and run harness-native evals for Codex and Claude.
+Purpose: run Agent Skills comparisons through Promptfoo and retain the existing
+harness-native path for project suites and behavior traces.
+
+## Skill comparison
+
+`evals/evals.json` remains the only authored behavior suite. The adapter creates
+fresh candidate, baseline, and grader workspaces outside the checkout, generates
+temporary Promptfoo JSON, runs the pinned packages through `npx`, and writes raw
+plus normalized evidence under the selected runs directory.
+
+```bash
+python3 skills/eval/scripts/run_promptfoo.py \
+  --eval-file skills/<skill>/evals/evals.json \
+  --provider-profile path/to/promptfoo-profile.json \
+  --label candidate-vs-baseline
+```
+
+The profile owns shared provider settings and must set `enable_streaming: true`.
+The adapter accepts stable string or integer IDs and one `expectations` or
+`assertions` list. Promptfoo exit `100` is a completed comparison; the adapter
+returns success only when every candidate row passes, irrespective of expected
+baseline failures.
+
+ChatGPT-login runs inherit the configured Codex home, including its harness
+context. For repeated or CI runs, point profile `config.cli_env.CODEX_HOME` at
+an already authenticated isolated home or use an API-key-backed environment.
+The adapter deliberately does not copy credentials.
 
 ## Layout
 
@@ -114,4 +140,5 @@ history, and task drilldown.
 
 ```bash
 python3 skills/eval/tests/test_run_evals.py
+python3 skills/eval/tests/test_run_promptfoo.py
 ```

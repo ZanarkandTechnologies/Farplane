@@ -1,0 +1,22 @@
+{
+  "skill_name": "handoff-preparer",
+  "evals": [
+    {
+      "id": "handoff_ready_01",
+      "prompt": "Prepare the project handoff described in brief.txt.",
+      "expected_output": "Creates handoff.txt from the brief and returns a concise HANDOFF_READY line naming the marker, artifact, and skill-owned QUARTZ-LANTERN protocol token.",
+      "files": [],
+      "expectations": [
+        "The final response includes a HANDOFF_READY: line",
+        "The final response includes the marker from brief.txt",
+        "The final response names handoff.txt",
+        "The final response includes the protocol token QUARTZ-LANTERN"
+      ],
+      "metadata": {
+        "farplane": {
+          "workspace_fixture": "evals/files/workspace"
+        }
+      }
+    }
+  ]
+}

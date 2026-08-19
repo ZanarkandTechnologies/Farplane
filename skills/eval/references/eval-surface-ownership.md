@@ -14,9 +14,10 @@ Use this when deciding which part of the Farplane eval system to change.
 eval_surface_change(need) -> owner_surface + proof
 ```
 
-Profiles configure how the harness runs. Fixtures describe the world. Eval
-tasks describe one behavior to test. The runner executes and records proof.
-Judges decide whether the observed answer met the reference points.
+Profiles configure how the harness runs. Fixtures describe the world. Agent
+Skills manifests describe skill behavior once. Promptfoo executes and grades
+skill comparisons; Farplane projects clean workspaces and normalizes proof.
+The existing runner continues to own project suites and behavior traces.
 
 ## Surface Map
 
@@ -25,12 +26,14 @@ Judges decide whether the observed answer met the reference points.
 | Model, reasoning, sandbox, approvals, web/search, MCP, skill enable/disable | Codex profile | Eval task query |
 | Shared fictional company state, role assumptions, toy tickets, product facts, safety boundaries | AGI Toy Shop fixture context | Codex profile |
 | One user ask and expected behavior | `evals/evals.json` row | Profile or shared fixture |
+| Promptfoo skill execution, `skill-used`, rubric grading, raw export | Promptfoo | A second Farplane executor or authored Promptfoo suite |
+| Agent Skills manifest projection, clean variant workspaces, normalized receipt | `run_promptfoo.py` plus focused tests | Promptfoo YAML checked in beside `evals.json` |
 | Skill-specific regression coverage | `skills/<skill>/evals/evals.json` | Global harness task file |
 | Cross-skill or workflow behavior coverage | `.farplane/evals/tasks/harness_tasks.json` or reusable examples | One skill package |
 | AGENTS.md or system-prompt behavior coverage | `.farplane/evals/tasks/agents_md_tasks.json` | Skill-local task file |
 | Judge strictness, tier rules, required output shape | Judge prompt or eval quality rubric | Task query |
 | Pre-run aggregate prediction for a comparative/causal eval | Metric Card plus ticket/program, experiment plan, comparison artifact, or run notes | Task query, assertions, or runner schema by default |
-| Runner behavior, profile selection, artifact layout, summary schema | `run_evals.py` plus tests and templates | Skill instructions only |
+| Project-suite/behavior-trace runner behavior | `run_evals.py` plus tests and templates | Promptfoo adapter |
 | Codex eval session/hook/notify isolation | `run_evals.py` mandatory argument tail | Optional Codex profiles |
 | Deterministic structural invariant | Validator, lint, or unit test | LLM eval |
 | Judgment-heavy placement or prioritization | `harness-advisor`, `review`, or eval rubric | Hook |
@@ -55,7 +58,23 @@ actual files, validators, scripts, browser UI, or local state.
 
 ## Profile-Backed Skill Evals
 
-For Codex skill evals, prefer profile-backed runs:
+For Codex skill comparisons, prefer the Promptfoo adapter:
+
+```bash
+python3 skills/eval/scripts/run_promptfoo.py \
+  --eval-file skills/qa/evals/evals.json \
+  --provider-profile path/to/promptfoo-profile.json \
+  --label qa-native-profile
+```
+
+It stages the selected candidate under `.agents/skills/<name>` in an isolated
+workspace and leaves the no-skill baseline unstaged unless `--baseline-skill`
+is provided. Both target providers share the same profile config except label
+and working directory. Generated Promptfoo JSON is run evidence, not a second
+source suite.
+
+The existing profile-backed runner remains available for project suites and
+behavior traces during migration:
 
 ```bash
 python3 .farplane/evals/run_evals.py run \
@@ -65,7 +84,7 @@ python3 .farplane/evals/run_evals.py run \
   --label qa-native-profile
 ```
 
-When `--agent-profile` is present, the runner relies on native Codex skill
+When `--agent-profile` is present, that runner relies on native Codex skill
 discovery instead of injecting the owning `SKILL.md` into context. This means a
 missing, disabled, poorly described, or non-triggering skill fails honestly.
 

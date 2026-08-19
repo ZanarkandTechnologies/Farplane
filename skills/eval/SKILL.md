@@ -24,309 +24,122 @@ methods:
     class: internal
     output: experiment-eval-report
 allowed-tools: Read, Glob, Grep, Bash
-
 ---
 
 # Eval
 
 ## Context
 
-Use this skill when the user wants to run, create, repair, or consolidate a
-real eval for an agent harness, prompt, skill, or workflow. It is intentionally
-harness-native: project working evals live under `.farplane/evals` for Codex or
-Claude runs. Repo-owned reusable task suites live under `skills/eval/examples/`.
-Skill-specific evals live next to their owning skill as
-`skills/<skill-name>/evals/evals.json`.
+Use this skill to create, run, repair, or consolidate a real eval for an agent,
+prompt, skill, or workflow. Skill comparisons keep one Agent Skills
+`evals/evals.json` and use Promptfoo; project suites and behavior traces use the
+existing `.farplane/evals` runner. This skill owns eval semantics and artifacts;
+Farplane Office owns rendering, history, and drilldown.
 
-This skill owns eval semantics and machine-readable run artifacts. Farplane
-UI's `Eval OS` owns browser rendering, navigation, history, and drilldown. Do
-not bundle a second viewer inside this skill package.
-
-AGI Toy Shop is the default clean-room fixture for generic harness evals. Extend
-that fixture for new toy-company needs instead of inventing new fictional
-companies unless a real repo fixture is required.
+Use AGI Toy Shop for generic clean-room cases. Use a real repo fixture only
+when its files are the behavior under test.
 
 ## Skill Signature
 
 ```text
-eval(task_intent, harness?, target_root?, mode?, budget?, expectation?) -> eval_case? + run_summary? + observed_delta? + surprise_verdict? + consolidation_report? + next_fix
-state: reads(existing evals, skill evals/evals.json files, qa_checklist?, fixtures, task context, expected behavior, optional Metric Card expectation, eval-drain processed state); writes(eval tasks, hardcase metadata, run artifacts, consolidation reports, processed state)
-gates: expected_behavior:testable; baseline_before_mutation; query_not_spoiled; experimental_run:expectation_preregistered; hardcase:sanitized_and_reusable; evidence_inspected_before_claim
-routes: optimize-harness | self-improve | skill-maintenance | deliberative-advice | agent-qa-test | review
-fails: wording-only eval; query_teaches_answer; stores raw private transcript; delays obvious regression coverage; marks hardcase without benchmark value
+eval(task_intent, expected_behavior?, mode = proof, target?, expectation?)
+  -> EvalResult
+reads: existing eval rows, target skill or prompt, fixtures, QA, task context
+does: authors or selects cases, runs the fitting executor, inspects evidence
+writes: eval rows, hardcase metadata, run artifacts, or consolidation receipts
+returns: mode, cases, artifacts, verdict or delta, limitations, and next fix
 ```
-
-```text
-EvalBudget = {
-  grounding?: "skim" | "targeted" | "deep",
-  harness_realism?: "static" | "custom-command" | "native-codex-profile",
-  suite_scope?: "one-task" | "selected-skills" | "full-suite",
-  finish_gate?: "self-check" | "checklist" | "eval-run" | "review"
-}
-```
-
-When required inputs are missing, resolve them from local eval setup, skill
-files, task artifacts, or one narrow blocking question. Do not invent the
-behavior under test or silently choose live side effects.
-
-Common modes:
-
-- `proof`: create or run the smallest repeatable proof for expected behavior.
-- `regression`: preserve a known failure so it cannot silently recur.
-- `hardcase`: mark an eval case as unusually difficult, reusable,
-  benchmark-worthy, or saleable after sanitization. A hardcase is still a
-  runnable eval case, not a separate capture backlog.
-- `behavior_trace`: run one CLI-backed agent case while preserving the exact
-  prompt, Codex JSONL events, stdout/stderr, final output, command/usage and
-  checkpoint scores, produced-artifact inventory, optional output-schema
-  validation, and normal task/run summaries. It composes with baseline
-  comparison and keeps native Codex runs ephemeral with hooks disabled.
-- `experiment`: compare a baseline and candidate or test a causal hypothesis.
-  Before results are known, consume a Metric Card expectation naming the
-  expected aggregate observation, horizon, confidence, falsifier, and surprise
-  trigger. Keep it separate from assertions/reference points that grade answers.
-- `consolidate`: run the eval drain. Fetch skill eval files edited since the
-  last drain, call `consolidate(target = changed_eval_file,
-  structure = eval_suite, constraints = { preserve_evidence: true })`, and
-  apply only changes that make evals less noisy without losing distinct
-  coverage.
-
-Use [eval surface ownership](references/eval-surface-ownership.md) when the
-question is where to put fixture state, profile config, task rows, judge rules,
-runner behavior, validators, or harness-advisor placement.
-
-## Phase Contract
-
-```text
-eval_phase_contract(task, bound_inputs, state)
-  -> grounded_eval_target
-   + proof_surface_choice
-   + eval_or_revision
-   + run_or_static_check
-   + artifact_inspection
-   + qa_or_review_when_material
-   + summary_and_next_fix
-```
-
-Use Codex native planning and execution phases inline by default. Externalize a
-phase only when it produces a smaller artifact, independent judgment, or proof
-surface.
-
-## Phase Boundary
-
-Call `review` when eval design, prompt changes, meta-skill changes, or
-completion claims need independent judgment. Call `skill-maintenance` when
-eval reference points should become reusable runtime guardrails in
-`qa_checklist.md`. Use Eval `behavior_trace` for stable CLI-event capture. Use
-`agent-qa-test` when native subagent roles, Desktop-only tools, or an
-adversarial tester/evidence-review loop are required. Route a material
-experimental surprise to `agent-qa-test:experiment`; Eval still owns task
-execution and run artifacts.
-
-Do not call `eval` recursively for the same eval-design task. Split the child
-scope to a narrower target such as one task row, one judge prompt, or one
-changed skill file.
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-- [ ] 1. Check whether evals are set up with `run_evals.py status` or equivalent
-  bash; if missing, load [onboarding](references/onboarding.md) and guide or
-  initialize setup before running.
-- [ ] 2. Choose the eval job.
-  - [ ] 1. If writing or revising tasks, load
-    [eval best practices](references/eval-best-practices.md) and
-    [task-template.json](references/onboarding/task-template.json), use
-    [eval writing rubric](references/eval-writing-rubric.md) for quality
-    review, then edit task JSON and judge prompts.
-  - [ ] 2. If designing a first eval or clean-room starter, load
-    [onboarding](references/onboarding.md) and
-    [eval surface ownership](references/eval-surface-ownership.md); use AGI Toy
-    Shop as the default context unless real repo files are the behavior under
-    test.
-  - [ ] 3. If capturing a hardcase, create the normal eval task first, then add
-    hardcase metadata such as `hardcase: true`, difficulty, tags,
-    sanitization notes, and benchmark value.
-  - [ ] 4. If running evals, use the installed `.farplane/evals/run_evals.py run`
-    script and inspect the generated task detail artifacts before judging.
-  - [ ] 5. If writing evals for skill-structure quality, load
-    [eval skill structure cases](references/eval-skill-structure-cases.md) and
-    route Tier 1, meta, `eval`, cross-skill, or precedent-setting structure
-    changes through `deliberative-advice` before final review.
-  - [ ] 6. If improving how the `eval` skill writes evals across iterations,
-    invoke [self-improve](../self-improve/SKILL.md) with an owning ticket and
-    canonical `evals/evals.json`; keep Goal policy and observations in that
-    ticket's `program.md` and `progress.md`.
-  - [ ] 7. If consolidating evals, load
-    [eval consolidation](references/eval-consolidation.md), run
-    `fetch_evals_edited_since_last_run`, and hand each changed eval file to
-    `consolidate(..., structure = eval_suite)` or an isolated review lane that
-    applies the same frame.
-  - [ ] 8. If capturing agent behavior, load
-    [the golden behavior trace](examples/golden/behavior-trace.md) and
-    [the QA checklist](qa_checklist.md), run with `--behavior-trace
-    --max-parallel-tasks 1`, and inspect the raw trace plus task detail. Add
-    `--behavior-output-schema .farplane/evals/schemas/behavior-report.schema.json`
-    when the child must return the standard report. Route native-subagent-only
-    capture to `agent-qa-test`. For a claim that requires observable command
-    execution, put hidden
-    `metadata.farplane.behavior_requirements.required_successful_command_regexes`
-    on the eval row; the runner scores successful captured commands without
-    rendering those regexes into the child or judge prompt.
-  - [ ] 9. If comparing variants or testing a causal hypothesis, use
-    `eval:experiment`.
-    - [ ] Before reading candidate results, bind a Metric Advisor expectation:
-          expected aggregate observation, horizon, confidence, falsifier, and
-          material surprise trigger.
-    - [ ] Keep the expectation in the experiment plan, ticket/program,
-          comparison artifact, or run notes—not the user-facing query,
-          `expected_output`, assertions, or reference points; state this
-          separation in the experiment plan.
-    - [ ] Use the same task set, evaluator, and budget for baseline and
-          candidate unless the hypothesis explicitly changes one.
-- [ ] 3. Write skill-local evals in the Agent Skills shape: realistic `prompt`,
-  human-readable `expected_output`, optional `files`, visible `assertions`, and
-  optional Farplane metadata. Keep project harness tasks in their existing
-  runner-native `query` / `reference_points` shape.
-  - [ ] Do not put the target skill's expected answer, routing policy, or
-    business logic into the user `prompt`. For skill-local evals, keep the prompt
-    natural and rely on the runner-provided owner `SKILL.md` context plus
-    assertions to judge behavior.
-  - [ ] Run query-spoiler QA after editing skill-local evals.
-    - [ ] Use `python3 skills/eval/scripts/check_eval_queries.py --root .` as
-      a fast smoke check for obvious leaks.
-    - [ ] For new, material, high-risk, or proof-acceptance eval rows, run the
-      skill-local [eval QA checklist](qa_checklist.md) with a reviewer, QA
-      lane, or separate LLM judgment turn.
-    - [ ] Treat checklist failures as eval-design failures: rewrite the prompt
-      or harden the skill, fixture, or assertions instead of teaching the
-      answer in the prompt.
-  - [ ] For Codex harness runs that need realistic agent defaults, use a Codex
-    config profile with `--agent-profile` and, when useful, `--judge-profile`.
-    Profile-backed Codex runs use native skill discovery instead of injected
-    `SKILL.md` context.
-  - [ ] Keep AGI Toy Shop as the shared fixture for generic harness examples;
-    add new AGI Toy Shop tickets, roles, workflows, or product facts rather
-    than creating new fictional companies.
-- [ ] 4. For skill-specific behavior, prefer the modular owner file
-  `skills/<skill-name>/evals/evals.json`; use `.farplane/evals/tasks/*` for
-  active working suites and `skills/eval/examples/*` for reusable cross-skill
-  examples.
-- [ ] 5. When skill eval `assertions` become reusable runtime guardrails,
-  route writeback through `skill-maintenance` to update the owning skill's
-  checklist reference, final QA checklist, or validator/hook candidate.
-- [ ] 6. For eval drain work, keep immediate lesson/trouble-derived evals in
-  `evals/evals.json`; the drain may merge, rewrite, or archive already-landed rows
-  only when the consolidation report preserves every distinct failure mode.
-- [ ] 7. Summarize findings from `summary.json`, task detail artifacts, or eval
-  drain reports: verdict counts or changed files, important failures or coverage
-  risks, likely cause, and the next concrete fix.
-  - [ ] For `eval:experiment`, compare the observed aggregate delta with the
-        preregistered expectation. Route an unchanged material miss, other
-        material negative surprise, or implausibly strong result to
-        `agent-qa-test:experiment` before rejecting a method or promoting the
-        change.
-- [ ] 8. Review before completion.
-  - [ ] If the eval task changes a Tier 1, meta, `eval`, cross-skill, or
-    precedent-setting behavior, record the `deliberative-advice` recommendation
-    or the explicit reason it was not needed.
-  - [ ] For skill or workflow evals, check first-load sufficiency, reference-load
-    precision, missing/noisy context risk, duplicated instructions, prompt-size
-    cost, maintenance locality, and composition clarity.
-  - [ ] Do not claim `task_success_rate` or `review_tas_rate` improved unless run
-    artifacts or reviewer receipts prove it.
+- [ ] 1. Bind the behavior and proof path.
+  - [ ] Read `qa_checklist.md`; bind the expected behavior, target, mode, suite,
+        baseline, side-effect boundary, and finish proof. Reject wording-only or
+        untestable claims.
+  - [ ] Use `scripts/run_promptfoo.py --dry-run` for a skill comparison and
+        `.farplane/evals/run_evals.py status` for project suites or behavior
+        traces. Load [onboarding](references/onboarding.md) if setup is missing.
+  - [ ] Keep skill-specific cases under `skills/<skill>/evals/evals.json`,
+        active cross-skill cases under `.farplane/evals/tasks`, and reusable
+        examples under `skills/eval/examples`.
+- [ ] 2. Author or select honest cases.
+  - [ ] For skill rows, write a natural `prompt`, human-readable
+        `expected_output`, optional `files`, one `expectations` list, and
+        optional Farplane metadata. The Promptfoo adapter may read legacy
+        `assertions`, but conflicting dual lists fail.
+  - [ ] Keep invocation, routing policy, expected answer, and reference points
+        out of the user prompt. Run `scripts/check_eval_queries.py --root .` and
+        apply `qa_checklist.md` to material rows.
+  - [ ] Mark a hardcase only when it is sanitized, reusable, and unusually
+        difficult or benchmark-worthy. Preserve the failure mode in the normal
+        runnable suite, not a separate backlog.
+  - [ ] Load [eval best practices](references/eval-best-practices.md) and the
+        [writing rubric](references/eval-writing-rubric.md) when creating or
+        reviewing rows; load [surface ownership](references/eval-surface-ownership.md)
+        when placement is unclear.
+- [ ] 3. Run the smallest faithful proof.
+  - [ ] For Promptfoo comparisons, use one streaming-enabled provider profile;
+        candidate and baseline share the task, model, evaluator, budget,
+        sandbox, approvals, and network settings. Inspect raw rows, normalized
+        summary, copied workspaces, and source-hash evidence.
+  - [ ] For `behavior_trace`, load the [golden trace](examples/golden/behavior-trace.md),
+        run one worker, and inspect prompt, JSONL events, logs, final output,
+        command/usage scores, schema validation, and artifact inventory. Route
+        native-subagent-only capture to
+        [agent-qa-test](../agent-qa-test/SKILL.md).
+  - [ ] For `experiment`, preregister the aggregate expectation, horizon,
+        confidence, falsifier, and surprise trigger outside task grading fields.
+        Compare observed versus expected results; route material misses or
+        implausible wins to `agent-qa-test:experiment`.
+  - [ ] For the weekly drain, load
+        [eval consolidation](references/eval-consolidation.md), fetch changed
+        eval files, and apply its one-file loss check while preserving distinct
+        failures.
+- [ ] 4. Inspect evidence and place the fix.
+  - [ ] Read task details and raw artifacts before claiming a verdict. Report
+        verdict counts, failures, deltas, likely cause, limitations, and the
+        smallest next fix.
+  - [ ] Fix the skill, fixture, checklist, profile, or runner owner; never make
+        a failing case pass by teaching the answer in its prompt.
+  - [ ] Send reusable runtime prevention from assertions through
+        [skill-maintenance](../skill-maintenance/SKILL.md); keep rare benchmark
+        points in evals. Use [self-improve](../self-improve/SKILL.md) only for
+        measured variant search with an owning ticket.
+- [ ] 5. Finish with independent proof.
+  - [ ] Reapply `qa_checklist.md` and the owning validators. For Tier 1, meta,
+        `eval`, cross-skill, or precedent-setting changes, record the
+        [deliberative-advice](../deliberative-advice/SKILL.md) decision and use
+        an independent reviewer.
+  - [ ] Do not claim task or review-rate improvement without run artifacts or a
+        reviewer receipt. Return the artifact path and next fix.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
-
-Use `eval:onboarding` for clean-room first eval setup, starter tasks, judge
-prompt guidance, or a minimal smoke workflow.
-
-Use `eval:consolidate` for the weekly eval drain: fetch changed eval files,
-call `consolidate` once per file, and reduce noise without delaying fresh
-regression coverage.
-
-Use `eval:experiment` for comparative or causal runs. It adds a pre-result
-forecast and post-result surprise decision; it does not add the forecast to
-task JSON queries or replace existing runner artifacts.
-
-## Templates
-
-- Use [references/eval-best-practices.md](references/eval-best-practices.md)
-  for good task shape, bad task rejection, judge design, and harness realism.
-- Use [references/eval-surface-ownership.md](references/eval-surface-ownership.md)
-  for profile-backed skill evals, fixture placement, runner ownership, and
-  task-surface decisions.
-- Use `evals/evals.json` at the skill package root for focused behavioral evals.
-- Use [examples/golden/behavior-trace.md](examples/golden/behavior-trace.md)
-  and the installed `schemas/behavior-report.schema.json` for behavior-trace
-  planning and review.
-- Use `qa_checklist.md` for settled reusable eval-row QA guardrails.
-- Use `audits/YYYY-MM-DD-<short-change>.md` for material eval-skill changes.
 
 ## Reference Map
 
-- [Agent Skills artifact contract](references/agent-skills-artifact-contract.md) -
-  load when producing or consuming schema-v2 grading, timing, benchmark,
-  comparison, or task artifacts.
-- [references/core-lifecycle.md](references/core-lifecycle.md) - load when
-  defining or claiming coverage for Farplane's bounded core lifecycle suite.
-- [references/onboarding.md](references/onboarding.md) - first eval setup,
-  clean-room constraints, and starter workflow.
-- [references/eval-skill-structure-cases.md](references/eval-skill-structure-cases.md) -
-  load when writing evals for skill-structure quality or reviewing the
-  compounding impact of Tier 1, meta, `eval`, or cross-skill skill changes.
-- [references/eval-writing-rubric.md](references/eval-writing-rubric.md) -
-  load when judging eval-task quality, batch ROI, owner locality, breadth/depth,
-  and skill-local versus workflow-level placement.
-- [references/eval-surface-ownership.md](references/eval-surface-ownership.md) -
-  load when deciding whether to change a Codex profile, AGI Toy Shop fixture,
-  eval task, judge prompt, runner, validator, or harness-advisor route.
-- [qa_checklist.md](qa_checklist.md) - load when reviewing whether
-  skill-local eval queries leak skill invocation, policy, expected answer, or
-  reference-point logic.
-- [references/eval-consolidation.md](references/eval-consolidation.md) - load
-  when running the weekly eval drain, writing the automation prompt, or
-  dispatching per-file `consolidate(..., structure = eval_suite)` lanes.
-- [../consolidate/SKILL.md](../consolidate/SKILL.md) - shared eval-row
-  keep/merge/rewrite/archive/loss-check primitive.
-- [references/automation-prompt.md](references/automation-prompt.md) - use when
-  installing or updating a weekly automation that invokes eval consolidation.
-- [self-improve](../self-improve/SKILL.md) - Goal-backed harden/refine workflow
-  for measured improvements to eval-writing behavior.
+- Load [Agent Skills artifact contract](references/agent-skills-artifact-contract.md)
+  when producing or consuming schema-v2 grading, timing, comparison, or task
+  artifacts.
+- Load [core lifecycle](references/core-lifecycle.md) before claiming coverage
+  for the bounded Farplane lifecycle suite.
+- Load [skill structure cases](references/eval-skill-structure-cases.md) for
+  Tier 1, meta, `eval`, or cross-skill structure coverage.
+- Load [automation prompt](references/automation-prompt.md) only when installing
+  or updating the weekly consolidation automation.
+- The weekly drain's reference workflow uses the shared
+  [consolidation primitive](../consolidate/SKILL.md); do not load it for normal
+  proof or regression runs.
 
 ## Gotchas
 
-- Do not keep hardcase samples outside the eval system when the expected
-  behavior is testable now.
-- Do not treat `check_eval_queries.py` as a complete anti-cheat oracle. It is a
-  cheap smoke check for obvious phrases; use the skill-local eval QA checklist
-  with a separate reviewer, QA lane, or LLM judgment turn for material eval
-  changes.
-- Do not "fix" a failing skill eval by adding the answer to the query. If the
-  generic query fails with the owning `SKILL.md` in context, harden the skill,
-  checklist, fixture, reference points, or runner context instead.
-- Do not mark a case as `hardcase` just because it was annoying. It needs
-  difficulty, reuse, benchmark, or saleable-data value.
-- Do not store raw private transcripts, secrets, local handles, or unsanitized
-  user context inside a hardcase eval.
-- Do not delay obvious regression coverage into a future drain process.
-- Do not confuse `expected_output`, assertions, or reference points with an
-  experiment expectation. The former grade answers; the latter forecasts the
-  aggregate run-level change before results are read.
-- Do not promote an implausibly perfect candidate without checking leakage,
-  contamination, evaluator drift, baseline comparability, and equal budgets
-  through `agent-qa-test:experiment`.
-- Do not use parallel behavior traces against one checkout: the produced-file
-  inventory is attributable only when `--max-parallel-tasks 1`.
-- Do not consolidate evals by count alone. Preserve hardcases and distinct
-  failure modes unless a stronger replacement explicitly covers them.
+- A natural query tests the skill; a checklist-shaped query tests prompt memory.
+- `expected_output` and assertions grade a case. An experiment expectation
+  forecasts aggregate change before results are read; do not merge them.
+- Behavior traces use one worker so file deltas stay attributable. Never store
+  raw private transcripts, secrets, handles, or unsanitized user context.
 
 ## Output
 
-- `eval_case` or `task_rows`
-- `mode`
-- `hardcase_metadata` when applicable
-- `run_artifacts`
-- `observed_delta` and `surprise_verdict` for `eval:experiment`
-- `consolidation_report` and `processed_state_delta` when applicable
-- `summary`
-- `next_fix`
+Return one `EvalResult`: mode, cases or changed rows, run artifact paths,
+verdict or observed delta, surprise status when applicable, limitations, and
+the smallest next fix.

@@ -3,7 +3,7 @@ title: Farplane evals
 status: implemented
 owner: feature-registry
 created_at: 2026-06-26
-updated_at: 2026-07-16
+updated_at: 2026-08-20
 tags:
   - farplane
   - feature
@@ -44,7 +44,7 @@ evidence_refs:
   - docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md
   - tickets/archive/TASK-0228/ticket.md
   - docs/HISTORY.md
-known_limits: Owns Farplane eval capture, runnable eval surfaces, and isolated CLI behavior traces; broader correction strategy still belongs to Self-Improvement And Learning.
+known_limits: Skill comparisons now project Agent Skills manifests through Promptfoo; project suites and isolated behavior traces remain on the existing runner until migration evidence justifies retirement.
 metrics:
   - gap_packet_quality_pass
   - harness_placement_quality_pass
@@ -85,6 +85,9 @@ owner, patch the smallest durable surface, and prove it with a representative ca
 - Uses gap-analysis to describe expected versus observed behavior.
 - Uses harness-advisor to choose the owner surface for a fix.
 - Captures hardcases as eval metadata with input, expected behavior, observed failure, owner, tags, proof artifacts, and promotion status.
+- Keeps each skill's Agent Skills `evals/evals.json` as the authored suite,
+  projects isolated candidate/baseline workspaces into Promptfoo, and preserves
+  raw plus normalized comparison evidence without checking in Promptfoo config.
 - Captures isolated CLI behavior traces with exact prompt/events/logs/output,
   checkpoint and artifact scoring, optional output-schema validation, and
   equal-task baseline comparison.
@@ -196,6 +199,8 @@ Acceptance signals:
 - This feature does not train models.
 - This feature does not inspect full Codex histories without a seed anchor.
 - This feature does not auto-apply broad harness migrations without proof.
+- The Promptfoo path proves skill-local Codex comparison; it does not yet
+  replace project suites, behavior traces, or arbitrary file-content grading.
 - Known limit: Correction is skill-and-artifact driven. Hardcase is eval metadata and legacy standalone hardcase artifacts should become runnable eval rows when the expected behavior is testable. Metric selection routes through metric-advisor before self-improve. The loop does not train models, sell data, inspect full Codex histories without a seed anchor, or auto-apply broad harness migrations without proof.
 - Native-subagent-only reports do not claim CLI JSON-event parity; route them
   through Agent QA.
@@ -219,6 +224,10 @@ Acceptance signals:
   Reason: keep the `FEAT-*` page while templates, skills, tickets, or proof surfaces need a stable capability handle.
 
 ## Change History
+
+- 2026-08-20: Added the thin Agent Skills-to-Promptfoo comparison boundary;
+  retained the existing runner for project suites and behavior traces pending
+  broader migration proof.
 
 - 2026-07-16: Absorbed standalone Agent Behavior Test as Eval
   `behavior_trace` after parity proof; removed the duplicate skill and alias.
