@@ -1,0 +1,70 @@
+{
+  "skill_name": "intelligest",
+  "evals": [
+    {
+      "id": "intelligest_default_boundary_01",
+      "prompt": "Intelligest the attached video record for me. I want to understand it, but I did not say I want to keep any of its creative parts.",
+      "expected_output": "Creates or reuses visible Content Intelligence state, produces an evidence-backed dossier, and leaves Resource Bank unchanged because no reuse intent was supplied.",
+      "files": ["skills/intelligest/evals/fixtures/recent-content.json"],
+      "assertions": [
+        "Creates or reuses the canonical Content Intelligence source/job before long analysis",
+        "Produces the base dossier from the available transcript evidence",
+        "Returns a Resource Bank skipped_no_reuse_intent outcome",
+        "Does not call ingest-content or imply that analysis automatically saves inspiration"
+      ],
+      "metadata": {"farplane": {"title": "Default analysis does not become a Resource Bank save", "tags": ["skill", "intelligest", "resource-boundary"]}}
+    },
+    {
+      "id": "intelligest_recent_comparison_01",
+      "prompt": "Compare this new video with the recent items in the attached Content Intelligence snapshot and tell me which other creators are actually covering the same thing.",
+      "expected_output": "Retains the recent Atlas Control 3 field test as a comparable take, rejects the broad warehouse-robot roundup and the old history video, and explains each inclusion or rejection from source evidence.",
+      "files": ["skills/intelligest/evals/fixtures/recent-content.json"],
+      "assertions": [
+        "Retains the distinct-creator field test because it covers the same Atlas Control 3 development",
+        "Rejects the warehouse-robot roundup because it is only broad topic overlap",
+        "Rejects the history video because it is outside the bounded recent window",
+        "Does not substitute public web results or shared tags for existing-video comparison evidence"
+      ],
+      "metadata": {"farplane": {"title": "Recent coverage compares takes instead of broad tags", "tags": ["skill", "intelligest", "related-coverage"]}}
+    },
+    {
+      "id": "intelligest_explicit_reuse_01",
+      "prompt": "Analyze this video, and save the opening benchmark comparison because I want to reuse that presentation pattern in a future launch video.",
+      "expected_output": "Produces the intelligence dossier and routes only the selected opening benchmark pattern through Resource Bank ingestion with the operator's reuse instruction preserved.",
+      "files": ["skills/intelligest/evals/fixtures/recent-content.json"],
+      "assertions": [
+        "Produces the Content Intelligence dossier regardless of the reuse branch",
+        "Recognizes explicit reuse intent and routes to ingest-content",
+        "Selects only the named opening benchmark pattern rather than every observed element",
+        "Returns a Resource Bank branch receipt separate from the intelligence job"
+      ],
+      "metadata": {"farplane": {"title": "Explicit reuse intent opens the Resource Bank branch", "tags": ["skill", "intelligest", "explicit-save"]}}
+    },
+    {
+      "id": "intelligest_media_escalation_01",
+      "prompt": "The transcript describes the conclusion, but my question is whether the on-screen benchmark chart supports it. Analyze the video and answer that visual claim.",
+      "expected_output": "Uses transcript extraction first, recognizes that the requested chart claim requires visual evidence, and explicitly routes that bounded need to media-ingest or returns its missing-source blocker instead of answering from text alone.",
+      "files": [],
+      "assertions": [
+        "Attempts or consumes transcript/text evidence first",
+        "Recognizes that the chart claim cannot be verified from transcript text",
+        "Names media-ingest as the bounded visual route or returns media-ingest: blocked_missing_source when no video or frames were supplied",
+        "Does not invent chart values or claim transcript-only verification"
+      ],
+      "metadata": {"farplane": {"title": "Visual claims trigger bounded media evidence", "tags": ["skill", "intelligest", "media-gate"]}}
+    },
+    {
+      "id": "intelligest_duplicate_source_01",
+      "prompt": "This URL may already be in Content Intelligence. Intelligest it without making another copy.",
+      "expected_output": "Canonicalizes the URL, finds the ready existing analysis job, reuses its dossier, and does not create another analysis run unless re-analysis was explicitly requested.",
+      "files": ["skills/intelligest/evals/fixtures/duplicate-source.json"],
+      "assertions": [
+        "Canonicalizes the supplied URL to the existing YouTube source",
+        "Reuses the ready existing job and dossier",
+        "Does not create a duplicate analysis job or dossier",
+        "Returns the reused disposition and visible existing references"
+      ],
+      "metadata": {"farplane": {"title": "Canonical duplicate requests reuse ready intelligence", "tags": ["skill", "intelligest", "dedupe"]}}
+    }
+  ]
+}

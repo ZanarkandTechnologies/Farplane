@@ -1,0 +1,9 @@
+{
+  "requestedSource": "https://www.youtube.com/watch?v=abcdefghijk&utm_source=feed",
+  "canonicalSource": "https://www.youtube.com/watch?v=abcdefghijk",
+  "existingJob": {
+    "jobId": "job-existing",
+    "status": "ready",
+    "dossierId": "dossier-existing"
+  }
+}

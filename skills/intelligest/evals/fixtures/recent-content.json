@@ -1,0 +1,37 @@
+{
+  "asOf": "2026-08-19",
+  "source": {
+    "canonicalRef": "https://video.example/watch/atlas-control-3-analysis",
+    "title": "Atlas Control 3: What the Launch Demo Really Proves",
+    "publishedAt": "2026-08-19",
+    "transcriptStatus": "available",
+    "summary": "A creator evaluates the announced Atlas Control 3 release and questions its benchmark conditions.",
+    "entities": ["Atlas Robotics", "Atlas Control 3"]
+  },
+  "recentContent": [
+    {
+      "sourceRef": "content:atlas-control-3-field-test",
+      "title": "Atlas Control 3 Field Test",
+      "creator": "Machine Room",
+      "publishedAt": "2026-08-16",
+      "summary": "A field test of the same Atlas Control 3 release disputes the launch benchmark setup.",
+      "entities": ["Atlas Robotics", "Atlas Control 3"]
+    },
+    {
+      "sourceRef": "content:warehouse-robot-market-roundup",
+      "title": "Warehouse Robots: August Market Leaders",
+      "creator": "Automation Ledger",
+      "publishedAt": "2026-08-15",
+      "summary": "A market roundup compares warehouse robotics vendors and revenue.",
+      "entities": ["Atlas Robotics", "Warehouse Robotics"]
+    },
+    {
+      "sourceRef": "content:atlas-history",
+      "title": "A History of Atlas Robotics",
+      "creator": "Machine Archive",
+      "publishedAt": "2026-07-01",
+      "summary": "A retrospective on the company and its earlier robot platforms.",
+      "entities": ["Atlas Robotics"]
+    }
+  ]
+}
