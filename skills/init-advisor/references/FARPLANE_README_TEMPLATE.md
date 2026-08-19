@@ -47,7 +47,7 @@ Runtime state lives under `.farplane/` and is intentionally ignored by git.
 
 Keep shared canonical project config in `farplane/`. The ignored
 `.farplane/entities/*.md` and `.farplane/views.yaml` files are explicit
-authored local exceptions for private entity memory and named membership.
+authored local exceptions for private Wiki articles and named membership.
 Other `.farplane/` paths hold owner-named local state, generated reports,
 metric observations, evals, logs, and continuation ledgers. Store QA and review
 evidence under the owning ticket; do not add generic runtime, evidence, review,

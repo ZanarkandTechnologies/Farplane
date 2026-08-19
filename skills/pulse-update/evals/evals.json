@@ -309,18 +309,18 @@
       "metadata": {"farplane": {"title": "Full review pools switch strategy instead of stopping Pulse", "context": "This supplied synthetic project snapshot is authoritative and complete for this eval case; use it as the canonical planning-input object rather than substituting live-project source gaps. The downstream automation consumes the standard structured Pulse receipt. review_wip is 3. The three active review pools contain five distinct undecided tickets: delivery has REV-1 and REV-2, research has REV-3 and REV-4, operations has REV-5; each retains its own artifact, request, and decision. Goals contain one completed reach target and one active failed-closeout target. Skill-aware history shows a recent accepted ablation call, an accepted market-learning call, and no duplicate of the current candidates. Operator availability is false until morning. Optional taste evidence favors proof-led technical artifacts but grants no publication authority. The configured planning skills offer several fully bound unattended-safe calls; a separate publish-now campaign requires human publication approval and is not authority-safe overnight. Four workers are idle, unclaimed ready supply is below ready_low_watermark 20, wave_size is 10, and worker_limit is 4.", "tags": ["pulse-update", "review-pools", "unattended", "skill-calls", "hardcase"], "hardcase": true, "difficulty": "high", "benchmark_value": "Proves the shared Pulse remains productive overnight while retaining distinct ticket review state", "sanitization_notes": "Synthetic queue state with no private handles or content"}}
     },
     {
-      "id": "pulse_passes_icp_world_memory_into_ticket_context",
-      "prompt": "Ready supply is below the low watermark. A valid Feed Scout World Memory exists with an updated_at timestamp, source-backed trend entries, and one stale/conflicting note. What must Work Pulse pass to Plan Next Wave and materialize into any outward-facing accepted ticket?",
-      "expected_output": "Loads the configured World Memory once and passes complete relevant source-backed facts, confidence or freshness, and source gaps in the semantic planning input; Passes complete harness area records including canonical ICPs; Requires every outward-facing accepted spec to name the ICP job or pain, baseline/default, intended belief or workflow delta, complete copied world facts, and source evidence; Preserves the stale/conflicting note as a labeled gap rather than current fact; Carries complete selected facts into ticket execution inputs without World Memory pointers or hashes; Does not create another planner, Pulse, or memory authority",
+      "id": "pulse_passes_icp_scout_brief_into_ticket_context",
+      "prompt": "Ready supply is below the low watermark. A valid Feed Scout Brief exists with an updated_at timestamp, source-backed trend entries, and one stale/conflicting note. What must Work Pulse pass to Plan Next Wave and materialize into any outward-facing accepted ticket?",
+      "expected_output": "Loads the configured Scout Brief once and passes complete relevant source-backed facts, confidence or freshness, and source gaps in the semantic planning input; Passes complete harness area records including canonical ICPs; Requires every outward-facing accepted spec to name the ICP job or pain, baseline/default, intended belief or workflow delta, complete copied source facts, and source evidence; Preserves the stale/conflicting note as a labeled gap rather than current fact; Carries complete selected facts into ticket execution inputs without Scout Brief pointers or hashes; Does not create another planner, Pulse, or memory authority",
       "files": ["farplane/harness.yaml", "farplane/bindings.yaml"],
       "assertions": [
-        "Loads World Memory once and selects complete relevant facts",
+        "Loads Scout Brief once and selects complete relevant facts",
         "Passes complete canonical ICP records to the one planner",
         "Requires baseline and belief or workflow delta for outward tickets",
         "Carries complete selected facts and source refs into the materialized ticket",
         "Keeps stale evidence labeled and memory non-authoritative"
       ],
-      "metadata": {"farplane": {"title": "Pulse preserves ICP and world context through materialization", "tags": ["pulse-update", "icp", "world-memory", "ticket-context"]}}
+      "metadata": {"farplane": {"title": "Pulse preserves ICP and Scout Brief context through materialization", "tags": ["pulse-update", "icp", "scout-brief", "ticket-context"]}}
     },
     {
       "id": "pulse_refreshes_stale_healthy_guard_before_top_five",
@@ -367,14 +367,14 @@
     {
       "id": "pulse_transports_terminal_preference_without_rejection_outage",
       "prompt": "Ready supply is below the low watermark. Use the supplied Reward history and the current harness and metric files. The rejected AI ticket count is 3 today; the remaining configured hard guard is fresh and healthy. What should the refill input and materialization gate do?",
-      "expected_output": "Derives bounded preference_memory from the accept and kill rows only, preserving actual_result, evaluated_at, ticket/reward provenance, applicability, reconsideration boundary, and evidence refs; Omits monitor and blank rows; Keeps preference memory separate from World Memory and taste evidence; Calls the planner because rejected_ai_ticket_count is diagnostic-only; Requires configured skill refs, exact argument bindings, objective impact, proof, and dedupe receipts before comparing or materializing calls; Continues unrelated safe planning while adapting calls that repeat rejected premises",
+      "expected_output": "Derives bounded preference_memory from the accept and kill rows only, preserving actual_result, evaluated_at, ticket/reward provenance, applicability, reconsideration boundary, and evidence refs; Omits monitor and blank rows; Keeps preference memory separate from Scout Brief and taste evidence; Calls the planner because rejected_ai_ticket_count is diagnostic-only; Requires configured skill refs, exact argument bindings, objective impact, proof, and dedupe receipts before comparing or materializing calls; Continues unrelated safe planning while adapting calls that repeat rejected premises",
       "files": ["skills/plan-next-wave/evals/fixtures/terminal-reward-history.json", "farplane/harness.yaml", "farplane/metrics.yaml"],
       "assertions": [
         "Maps accept and kill into preference memory and omits nonterminal rows",
         "Preserves durable Reward provenance",
         "Does not use rejected_ai_ticket_count as a same-day hard outage",
         "Requires configured skill-call validation before materialization",
-        "Keeps World Memory, preference memory, and Tasty Pack evidence separate"
+        "Keeps Scout Brief, preference memory, and Tasty Pack evidence separate"
       ],
       "metadata": {"farplane": {"title": "Pulse transports rejection learning without freezing planning", "tags": ["pulse-update", "preference", "skill-calls", "metrics", "hardcase"], "hardcase": true, "difficulty": "high", "benchmark_value": "Proves Pulse transports only provenance-bearing terminal preference evidence and applies the actual configured guard set before refill", "sanitization_notes": "Synthetic TOY Reward rows and a raw rejection count; no private ticket history or feedback"}}
     }

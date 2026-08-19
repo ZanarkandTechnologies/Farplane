@@ -82,7 +82,7 @@ Positive example:
 
 ```text
 Discussion: A content product mixes videos, news, topics, and entities.
-Backbrief: "Content stores sources; News groups verified developments; World
+Backbrief: "Content stores sources; News groups verified developments; Wiki
 tracks durable entities; Topics navigate. Coverage means sources about the
 same event." The ASCII flow follows one video from ingest to verified event,
 then asks whether Topics should remain a visible destination.

@@ -29,7 +29,7 @@ class BootstrapTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
 
-            self.run_bootstrap(root)
+            result = self.run_bootstrap(root)
 
             ticket_paths = sorted((root / "tickets").glob("TASK-*/ticket.md"))
             self.assertEqual(
@@ -51,6 +51,9 @@ class BootstrapTest(unittest.TestCase):
             )
             self.assertTrue(all("approval_required" not in ticket for ticket in tickets))
             self.assertNotIn("Draft initial PRD", "\n".join(path.read_text() for path in ticket_paths))
+            self.assertTrue((root / ".farplane" / "wiki").is_dir())
+            self.assertIn("farplane wiki doctor", result.stdout)
+            self.assertIn("farplane wiki rebuild", result.stdout)
 
     def test_packaged_ticket_scaffolds_match_canonical_sources(self) -> None:
         repo_root = SCRIPT.parents[3]

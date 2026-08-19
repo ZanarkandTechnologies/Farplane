@@ -22,10 +22,10 @@ the configured watermark. Review WIP backpressures dispatch, not planning.
 Human-active tickets do not consume Pulse worker capacity. Workers execute
 ticket programs and produce proof; do not implement ticket bodies or wait for
 workers inside the heartbeat.
-When configured Feed Scout World Memory exists, load it once and pass relevant
+When the configured Feed Scout Brief exists, load it once and pass relevant
 complete source-backed facts plus canonical per-area ICPs into Plan Next Wave.
 Outward-facing tickets must copy selected facts into `audience_context`, name a
-baseline/default and intended belief or workflow delta; World Memory is
+baseline/default and intended belief or workflow delta; Scout Brief is
 evidence, not authority.
 
 Params:
@@ -60,7 +60,7 @@ prompt = '''
 Use $feed-scout.
 
 Run the bounded daily Feed Scout. Write its dated report, then update and
-validate the configured World Memory in place with canonical ICPs, current
+validate the configured Scout Brief in place with canonical ICPs, current
 trends, notable things, and source gaps. Merge current synthesis rather than
 creating daily/monthly snapshots. Then produce bounded source-backed candidate
 interventions. You may create one direct recovery
@@ -76,7 +76,7 @@ write_policy = "local recovery tickets only; no opportunity or experiment ticket
 
 Final response:
 - Link the Feed Scout report path and summarize the strongest findings in 2-4 bullets.
-- Link the World Memory path and report changed headings, source refs, and validation.
+- Link the Scout Brief path and report changed headings, source refs, and validation.
 - List direct recovery tickets created or updated, or `none`.
 - List candidate interventions and their admission result: `created`,
   `planner_candidate`, `source_gap`, `blocked_by_gate`, or `not_ticketable`.

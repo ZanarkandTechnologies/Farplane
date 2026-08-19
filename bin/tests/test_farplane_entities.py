@@ -21,7 +21,7 @@ from farplane_entities import (
     build_entity_index,
     build_entity_registry,
     build_view_projections,
-    build_world_projection,
+    build_graph_projection,
     project_identity,
 )
 
@@ -59,7 +59,7 @@ class FarplaneEntityTests(unittest.TestCase):
                 "      - acme\n",
             )
             index = build_entity_registry(root)
-            world = build_world_projection(index, root)
+            graph = build_graph_projection(index, root)
             crm = build_crm_projection(index, root)
 
         expected = [
@@ -70,10 +70,10 @@ class FarplaneEntityTests(unittest.TestCase):
             }
         ]
         self.assertEqual(index["views"], expected)
-        self.assertEqual(world["views"], expected)
+        self.assertEqual(graph["views"], expected)
         self.assertNotIn("views", crm)
         self.assertEqual(
-            {index["source_fingerprint"], world["source_fingerprint"], crm["source_fingerprint"]},
+            {index["source_fingerprint"], graph["source_fingerprint"], crm["source_fingerprint"]},
             {index["source_fingerprint"]},
         )
 
@@ -115,7 +115,7 @@ class FarplaneEntityTests(unittest.TestCase):
             )
             index = build_entity_registry(root)
             result = subprocess.run(
-                [sys.executable, str(CLI), "entities", "compile", "--project-root", str(root), "--no-write"],
+                [sys.executable, str(CLI), "wiki", "rebuild", "--project-root", str(root), "--no-write"],
                 capture_output=True,
                 text=True,
                 check=False,
@@ -145,7 +145,7 @@ class FarplaneEntityTests(unittest.TestCase):
             )
             index = build_entity_registry(root)
             result = subprocess.run(
-                [sys.executable, str(CLI), "entities", "compile", "--project-root", str(root), "--no-write"],
+                [sys.executable, str(CLI), "wiki", "rebuild", "--project-root", str(root), "--no-write"],
                 capture_output=True,
                 text=True,
                 check=False,
@@ -284,24 +284,24 @@ class FarplaneEntityTests(unittest.TestCase):
                 "views:\n  pipeline:\n    name: Pipeline\n    entity_ids: [design-partner]\n",
             )
             result = subprocess.run(
-                [sys.executable, str(CLI), "entities", "compile", "--project-root", str(root), "--json"],
+                [sys.executable, str(CLI), "wiki", "rebuild", "--project-root", str(root), "--json"],
                 capture_output=True,
                 text=True,
                 check=False,
             )
             written = json.loads((root / ".farplane/entities/index.json").read_text(encoding="utf-8"))
-            world = json.loads((root / ".farplane/entities/world.json").read_text(encoding="utf-8"))
+            graph = json.loads((root / ".farplane/entities/graph.json").read_text(encoding="utf-8"))
             crm = json.loads((root / ".farplane/entities/crm.json").read_text(encoding="utf-8"))
             payload = json.loads(result.stdout)
 
         self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
         self.assertEqual(written["schema_version"], 5)
-        self.assertEqual(world["schema_version"], 4)
+        self.assertEqual(graph["schema_version"], 4)
         self.assertEqual(crm["schema_version"], 4)
         self.assertEqual(written["entities"][0]["id"], "design-partner")
-        self.assertEqual(world["nodes"][0]["key"], f"{project_identity(root)['id']}:design-partner")
+        self.assertEqual(graph["nodes"][0]["key"], f"{project_identity(root)['id']}:design-partner")
         self.assertEqual(crm["entities"], [])
-        self.assertEqual(world["views"][0]["entity_ids"], ["design-partner"])
+        self.assertEqual(graph["views"][0]["entity_ids"], ["design-partner"])
         self.assertEqual(payload["diagnostics"]["counts"], {"included": 1, "excluded": 0, "issues": 0})
         self.assertEqual(payload["diagnostics"]["issues"], [])
         self.assertEqual(payload["diagnostics"]["view_issue_count"], 0)
@@ -309,10 +309,10 @@ class FarplaneEntityTests(unittest.TestCase):
         self.assertNotIn("by_id", written)
         self.assertNotIn("counts", written)
         self.assertNotIn("issues", written)
-        self.assertNotIn("counts", world)
-        self.assertNotIn("issues", world)
-        self.assertNotIn("frontmatter", world["nodes"][0])
-        self.assertNotIn("metadata", world["nodes"][0])
+        self.assertNotIn("counts", graph)
+        self.assertNotIn("issues", graph)
+        self.assertNotIn("frontmatter", graph["nodes"][0])
+        self.assertNotIn("metadata", graph["nodes"][0])
         self.assertNotIn("by_id", crm)
         self.assertNotIn("views", crm)
         self.assertNotIn("counts", crm)
@@ -320,7 +320,7 @@ class FarplaneEntityTests(unittest.TestCase):
         self.assertNotIn("body", written["entities"][0])
         self.assertNotIn("frontmatter", written["entities"][0])
         self.assertEqual(
-            {written["source_fingerprint"], world["source_fingerprint"], crm["source_fingerprint"]},
+            {written["source_fingerprint"], graph["source_fingerprint"], crm["source_fingerprint"]},
             {written["source_fingerprint"]},
         )
 
@@ -336,7 +336,7 @@ class FarplaneEntityTests(unittest.TestCase):
                 "views:\n  old-view:\n    name: Old View\n    entity_ids: [acme]\n",
             )
             first = subprocess.run(
-                [sys.executable, str(CLI), "entities", "compile", "--project-root", str(root)],
+                [sys.executable, str(CLI), "wiki", "rebuild", "--project-root", str(root)],
                 capture_output=True,
                 text=True,
                 check=False,
@@ -347,7 +347,7 @@ class FarplaneEntityTests(unittest.TestCase):
 
             write_views(root, "views: {}\n")
             second = subprocess.run(
-                [sys.executable, str(CLI), "entities", "compile", "--project-root", str(root)],
+                [sys.executable, str(CLI), "wiki", "rebuild", "--project-root", str(root)],
                 capture_output=True,
                 text=True,
                 check=False,
@@ -415,8 +415,8 @@ class FarplaneEntityTests(unittest.TestCase):
                 "[contract](https://example.com/contract).\n",
             )
             registry = build_entity_registry(root)
-            first = build_world_projection(registry, root)
-            second = build_world_projection(registry, root)
+            first = build_graph_projection(registry, root)
+            second = build_graph_projection(registry, root)
 
         self.assertEqual(first, second)
         self.assertEqual(
@@ -472,11 +472,11 @@ class FarplaneEntityTests(unittest.TestCase):
                 "id: nebius\nkind: company\nname: Nebius",
             )
             registry = build_entity_registry(root)
-            world = build_world_projection(registry, root)
+            graph = build_graph_projection(registry, root)
 
-        self.assertEqual(len(world["nodes"]), 2)
-        self.assertEqual(len(world["timeline"]), 2)
-        latest = world["timeline"][0]
+        self.assertEqual(len(graph["nodes"]), 2)
+        self.assertEqual(len(graph["timeline"]), 2)
+        latest = graph["timeline"][0]
         self.assertEqual(latest["date"], "2026-03-11")
         self.assertEqual(latest["source_entity_id"], "nvidia")
         self.assertEqual(latest["entity_ids"], ["nebius", "nvidia"])
@@ -501,10 +501,10 @@ class FarplaneEntityTests(unittest.TestCase):
                 "```text\n[type:incorrect] fenced content\n```\n",
             )
             registry = build_entity_registry(root)
-            world = build_world_projection(registry, root)
+            graph = build_graph_projection(registry, root)
 
-        self.assertEqual(len(world["timeline"]), 1)
-        entry = world["timeline"][0]
+        self.assertEqual(len(graph["timeline"]), 1)
+        entry = graph["timeline"][0]
         self.assertEqual(entry["tags"], {"type": ["milestone"]})
         self.assertEqual(entry["question_refs"], ["q-proof"])
         self.assertNotIn("separate paragraph", entry["context"])
@@ -564,13 +564,13 @@ class FarplaneEntityTests(unittest.TestCase):
                 "      primary: 0.8\n",
             )
             registry = build_entity_registry(root)
-            world = build_world_projection(registry, root)
-            projection = build_view_projections(registry, world)["ai-market"]
+            graph = build_graph_projection(registry, root)
+            projection = build_view_projections(registry, graph)["ai-market"]
 
         self.assertEqual(registry["issues"], [])
         self.assertEqual(registry["view_statuses"][0]["as_of"], "2026-01-03")
         self.assertEqual(registry["view_statuses"][0]["tags"]["role"], ["financier"])
-        self.assertEqual(world["timeline"][0]["view_name"], "AI Market")
+        self.assertEqual(graph["timeline"][0]["view_name"], "AI Market")
         self.assertEqual(projection["counts"], {
             "entities": 2,
             "edges": 1,
@@ -637,8 +637,8 @@ class FarplaneEntityTests(unittest.TestCase):
                 "        entity: source\n",
             )
             registry = build_entity_registry(root)
-            world = build_world_projection(registry, root)
-            projection = build_view_projections(registry, world)["ai-market"]
+            graph = build_graph_projection(registry, root)
+            projection = build_view_projections(registry, graph)["ai-market"]
 
         self.assertEqual(projection["counts"]["observations"], 1)
         self.assertEqual(projection["counts"]["resource_flows"], 0)
@@ -679,8 +679,8 @@ class FarplaneEntityTests(unittest.TestCase):
                 "        transfer: linked-to-source\n",
             )
             registry = build_entity_registry(root)
-            world = build_world_projection(registry, root)
-            projection = build_view_projections(registry, world)["ai-market"]
+            graph = build_graph_projection(registry, root)
+            projection = build_view_projections(registry, graph)["ai-market"]
 
         flow = projection["resource_flows"][0]
         self.assertEqual(flow["from_entity_id"], "gridco")
@@ -716,8 +716,8 @@ class FarplaneEntityTests(unittest.TestCase):
                 "    confidence_weights: {primary: 1}\n",
             )
             registry = build_entity_registry(root)
-            world = build_world_projection(registry, root)
-            projection = build_view_projections(registry, world)["ai-market"]
+            graph = build_graph_projection(registry, root)
+            projection = build_view_projections(registry, graph)["ai-market"]
 
         self.assertEqual(projection["counts"]["observations"], 0)
         self.assertEqual(projection["counts"]["issues"], 1)
@@ -751,8 +751,8 @@ class FarplaneEntityTests(unittest.TestCase):
                 "    entity_ids: [acme, gridco]\n",
             )
             registry = build_entity_registry(root)
-            world = build_world_projection(registry, root)
-            projection = build_view_projections(registry, world)["ai-market"]
+            graph = build_graph_projection(registry, root)
+            projection = build_view_projections(registry, graph)["ai-market"]
 
         self.assertEqual(projection["counts"]["edges"], 1)
         relationship = projection["relationships"][0]
@@ -808,16 +808,16 @@ class FarplaneEntityTests(unittest.TestCase):
                 "# Acme\n\nLinks to [Missing](entity:missing), [Bad](entity:Bad-ID), and [itself](entity:acme).\n",
             )
             registry = build_entity_registry(root)
-            world = build_world_projection(registry, root)
+            graph = build_graph_projection(registry, root)
 
         reasons = [issue["reason"] for issue in registry["issues"]]
         self.assertEqual(
             reasons,
             ["latitude_out_of_range", "unresolved_entity_link:missing", "invalid_entity_link:Bad-ID", "self_entity_link:acme"],
         )
-        self.assertEqual(len(world["nodes"]), 1)
-        self.assertEqual(world["edges"], [])
-        self.assertNotIn("issues", world)
+        self.assertEqual(len(graph["nodes"]), 1)
+        self.assertEqual(graph["edges"], [])
+        self.assertNotIn("issues", graph)
 
     def test_reports_unpaired_and_non_numeric_coordinates(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -844,14 +844,14 @@ class FarplaneEntityTests(unittest.TestCase):
             root = Path(tmp)
             write_entity(root / ".farplane/entities/acme.md", "id: acme\nkind: company\nname: Acme")
             result = subprocess.run(
-                [sys.executable, str(CLI), "entities", "compile", "--project-root", str(root), "--no-write"],
+                [sys.executable, str(CLI), "wiki", "rebuild", "--project-root", str(root), "--no-write"],
                 capture_output=True,
                 text=True,
                 check=False,
             )
             self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
             self.assertFalse((root / ".farplane/entities/index.json").exists())
-            self.assertFalse((root / ".farplane/entities/world.json").exists())
+            self.assertFalse((root / ".farplane/entities/graph.json").exists())
             self.assertFalse((root / ".farplane/entities/crm.json").exists())
 
     def test_ignores_entity_links_inside_inline_and_fenced_code(self) -> None:
@@ -867,9 +867,9 @@ class FarplaneEntityTests(unittest.TestCase):
                 "id: target\nkind: company\nname: Target",
             )
             registry = build_entity_registry(root)
-            world = build_world_projection(registry, root)
+            graph = build_graph_projection(registry, root)
 
-        self.assertEqual(world["edges"], [])
+        self.assertEqual(graph["edges"], [])
         self.assertEqual(registry["issues"], [])
 
     def test_compiles_question_backed_claims_nodes_and_edges(self) -> None:
@@ -898,7 +898,7 @@ class FarplaneEntityTests(unittest.TestCase):
                 "## Question index\n\n" + question_definition + "\n",
             )
             registry = build_entity_registry(root)
-            world = build_world_projection(registry, root)
+            graph = build_graph_projection(registry, root)
 
         self.assertNotIn("schema_version", registry)
         self.assertEqual(registry["issues"], [])
@@ -910,11 +910,11 @@ class FarplaneEntityTests(unittest.TestCase):
             ["019f7e88-6864-7f23-8dbb-5e058009e911"],
         )
         self.assertEqual(registry["by_id"]["acme"]["question_refs"], ["q-20260720-01"])
-        self.assertEqual(world["edges"][0]["question_refs"], ["q-20260720-01"])
-        self.assertEqual(world["questions"][0]["entity_ids"], ["acme", "castings"])
-        self.assertEqual(len(world["questions"][0]["claim_keys"]), 2)
-        self.assertEqual(len(world["questions"][0]["edge_keys"]), 1)
-        self.assertNotIn("question", {node["kind"] for node in world["nodes"]})
+        self.assertEqual(graph["edges"][0]["question_refs"], ["q-20260720-01"])
+        self.assertEqual(graph["questions"][0]["entity_ids"], ["acme", "castings"])
+        self.assertEqual(len(graph["questions"][0]["claim_keys"]), 2)
+        self.assertEqual(len(graph["questions"][0]["edge_keys"]), 1)
+        self.assertNotIn("question", {node["kind"] for node in graph["nodes"]})
 
     def test_reports_unresolved_and_conflicting_question_refs(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -962,7 +962,7 @@ class FarplaneEntityTests(unittest.TestCase):
                 "- Supplies [Acme](entity:acme). [^q-stable]\n\n"
                 f"## Question index\n\n[^q-stable]: Who supplies Acme? | session={session_id}\n",
             )
-            return build_world_projection(build_entity_registry(root), root)
+            return build_graph_projection(build_entity_registry(root), root)
 
         with tempfile.TemporaryDirectory() as tmp:
             base = Path(tmp)
@@ -996,10 +996,10 @@ class FarplaneEntityTests(unittest.TestCase):
                 record["body"],
             )
             index = build_entity_registry(root)
-            first = build_world_projection(index, root)
+            first = build_graph_projection(index, root)
             moved_index = copy.deepcopy(index)
             moved_index["by_id"]["supplier"]["path"] = ".farplane/elsewhere/supplier.md"
-            second = build_world_projection(moved_index, root)
+            second = build_graph_projection(moved_index, root)
 
         self.assertEqual(first["edges"][0]["key"], second["edges"][0]["key"])
 
@@ -1044,11 +1044,11 @@ class FarplaneEntityTests(unittest.TestCase):
                 "id: target\nkind: company\nname: Target",
             )
             registry = build_entity_registry(root)
-            world = build_world_projection(registry, root)
+            graph = build_graph_projection(registry, root)
 
         self.assertEqual(registry["claims"], [])
         self.assertEqual(registry["questions"][0]["session_ids"], [])
-        self.assertEqual(world["edges"], [])
+        self.assertEqual(graph["edges"], [])
 
     def test_same_named_local_projects_receive_distinct_fallback_ids(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

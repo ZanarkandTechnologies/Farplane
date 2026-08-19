@@ -37,7 +37,9 @@ Rejected near-misses:
   consulting; lower buyer-fit for this campaign.
   Evidence notes: public profile and services page.
 
-CRM writeback:
+Wiki writeback:
+
+- Publication intent: `preview` (no Wiki write direction was supplied).
 
 - Entity ID: `example-founder`
 - Name: `Example Founder`

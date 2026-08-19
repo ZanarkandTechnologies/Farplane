@@ -15,14 +15,12 @@ eval: evals/evals.json
 
 ## Context
 
-Use this pipeline when an agency needs to turn an industry or
-supply-chain premise, company, person, or call into a reviewable commercial
-opportunity. The skill owns connected opportunity assembly: target companies,
-people and roles, relationship strategy, problem hypotheses, evidence,
-competitor context, proof needs, and the next research or solution-shaping
-route.
+Use this pipeline to turn an industry or supply-chain premise, company, person,
+or call into a reviewable commercial opportunity. It owns target companies,
+roles, relationship strategy, problem hypotheses, evidence, competitor context,
+proof needs, and the next research or solution-shaping route.
 
-This skill composes existing methods. Use `research` for external evidence,
+It composes existing methods. Use `research` for external evidence,
 `lead-scout` for candidate discovery, `customer-research` for a known person or
 call target, `brainstorm` for first-principles option space, and
 `solution-shaping` only after the target/problem frame is sufficiently
@@ -31,22 +29,13 @@ grounded. Do not reimplement those skills inside this pipeline.
 ## Skill Signature
 
 ```text
-agency_opportunity_research(
-  premise_or_target,
-  scope?,
-  evidence_budget?,
-  context_refs?,
-  usecase_roots?,
-  owner_artifact?
-) -> opportunity_case
-   + evidence_refs
-   + competitive_positioning_handoff?
-   + solution_shaping_handoff?
-   + research_gaps
-   + next_owner
+agency_opportunity_research(premise_or_target, scope?, evidence_budget?,
+  context_refs?, usecase_roots?, owner_artifact?, wiki_publication_intent = preview)
+  -> opportunity_case + evidence_refs + competitive_positioning_handoff?
+   + solution_shaping_handoff? + research_gaps + next_owner
 
 state: reads(project harness/PRD when present, supplied context, public sources,
-             existing research, configured usecase roots, CRM entities,
+             existing research, configured usecase roots, Wiki articles,
              company/call artifacts);
        writes(owner_artifact when supplied, otherwise
               .farplane/agency-opportunity-research/reports/YYYY-MM-DD-<slug>.md;
@@ -55,23 +44,23 @@ state: reads(project harness/PRD when present, supplied context, public sources,
 gates: premise_bounded; sources_traceable; provenance_labeled;
        relationship_strategy_named; inferred_pains_not_presented_as_facts;
        solution_shaping_requires_problem_frame; competitor_labels_criteria_bounded;
-       external_actions_approval_gated
-routes: deep-interview | advise | research:* | lead-scout |
-        customer-research | brainstorm | solution-shaping |
+       external_actions_approval_gated; wiki_publication_intent_bound
+routes: deep-interview | advise | research:* | lead-scout | customer-research |
+        brainstorm | solution-shaping | manage-wiki |
         usecase-experiment-loop | demo-realism | impl-plan | review
 fails: generic company list; invented prospect facts; lead score without
        relationship strategy; solution pitch without evidence; duplicate
        child-skill logic; unsupported_best_claim; duplicate_buyer_choice_sidecar;
-       CRM/outreach/publishing/account action without approval
+       CRM/outreach/public-publishing/account action without approval;
+       wiki_apply_without_explicit_intent
 ```
 
 ## Phase Boundary
 
-The normal result is an `OpportunityCase`, not a sent campaign, CRM record,
-production schema, graph database, map UI, or finished demo. Route accepted
-problem/offer work to `solution-shaping`; route proof experiments to
-`usecase-experiment-loop`; route accepted proof that needs packaging through
-the caller's selected demo-realism and implementation path.
+The normal result is an `OpportunityCase`, not a sent campaign, database, map,
+or finished demo. Route accepted offers to `solution-shaping`, proof experiments
+to `usecase-experiment-loop`, and accepted proof through the caller's packaging
+path. Manage Wiki, not Impl Plan, owns normal page selection and resolution.
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
@@ -80,6 +69,9 @@ the caller's selected demo-realism and implementation path.
   - [ ] Classify it as `industry_premise`, `company`, `person`, or `call`.
   - [ ] Record objective, industry/value-chain boundary, geography, exclusions,
         evidence budget, context refs, and intended relationship outcomes.
+  - [ ] Bind Wiki intent: direct save/update/publish-to-Wiki language means
+        `apply`; preview/no-write or no Wiki direction means `preview`; a
+        conflict blocks publication.
   - [ ] If scope is materially branching, use `deep-interview` or `advise`
         before research rather than silently choosing a market boundary.
   - [ ] If geography is missing and no safe default follows from supplied
@@ -157,28 +149,25 @@ the caller's selected demo-realism and implementation path.
         graph-shaped links without choosing a database or map implementation.
   - [ ] Name research gaps, confidence revisions, call questions, next action,
         next owner, and approval gates.
-  - [ ] Propose CRM entity changes with stable fields/references in frontmatter
+  - [ ] Propose Wiki entity changes with stable fields/references in frontmatter
         and concise durable relationship context, cues, hypotheses, open
         questions, and follow-up rationale in Markdown bodies. Link full reports
         through `report_refs`, `source_refs`, or body links; reserve
         `entity_refs` for canonical entity IDs.
-  - [ ] Apply CRM changes and run `farplane entities compile` only after explicit
-        approval of that exact entity delta; report or offer approval alone is
-        not CRM-write approval. Never hand-edit `index.json`; resolve the
-        entity through its lookup row and follow `path` when full frontmatter
-        or Markdown body context is needed.
+  - [ ] Pass sourced durable facts and bound `preview | apply` intent to
+        [manage-wiki](../manage-wiki/SKILL.md). Direct Wiki write intent is
+        sufficient for apply; source, privacy, ambiguity, and validation still
+        block. Manage Wiki chooses page updates, new entities, and links. Never
+        edit canonical Markdown or generated projections in this skill.
   - [ ] Apply `qa_checklist.md` again and use `review` for material cases before
         presenting a target list, offer, or proof package as ready.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 ## Templates
 
-Use [Opportunity Case template](templates/opportunity-case.md) for the normal
-artifact. It is an artifact schema, not a storage/database commitment.
-
-Use [data-center construction example](examples/data-center-construction/example.md)
-as a positive reference for archetype-first deferral when real entities are not
-yet sourced.
+Use the [Opportunity Case template](templates/opportunity-case.md) for the normal
+artifact and the [data-center construction example](examples/data-center-construction/example.md)
+for archetype-first deferral when real entities are not yet sourced.
 
 ## Gotchas
 
@@ -199,10 +188,12 @@ yet sourced.
   provenance, or handoff behavior.
 - [Data-center construction example](examples/data-center-construction/example.md)
   — use when checking artifact quality or unsourced-premise behavior.
+- [Manage Wiki](../manage-wiki/SKILL.md) — load for sourced durable Wiki
+  preview or apply intent.
 
 ## Output
 
 Return or write one traceable `OpportunityCase` with evidence refs, research
 gaps, relationship strategies, proof match, correction questions, approval
-gates, and a concrete next owner. Never imply external action occurred unless
-the operator explicitly approved it and evidence confirms it.
+gates, Wiki receipt, and a concrete next owner. Never imply external action or
+Wiki apply occurred unless its own intent and receipt confirm it.

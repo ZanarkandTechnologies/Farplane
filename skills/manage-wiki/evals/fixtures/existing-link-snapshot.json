@@ -1,0 +1,29 @@
+{
+  "project": "synthetic-energy-planning",
+  "bound_source": "Georgia Power is working with OpenAI on energy planning.",
+  "touched_article": {
+    "path": ".farplane/entities/georgia-power.md",
+    "frontmatter": {"id": "georgia-power", "kind": "company", "name": "Georgia Power"},
+    "body": "# Georgia Power\n\n## Relationships\n\nGeorgia Power is working with OpenAI on energy planning."
+  },
+  "search_result": {
+    "query": "OpenAI",
+    "normalized_query": "openai",
+    "candidates": [
+      {
+        "id": "openai",
+        "name": "OpenAI",
+        "kind": "company",
+        "path": ".farplane/entities/openai.md",
+        "matched_label": "OpenAI",
+        "match_types": ["exact_id", "exact_name", "trigram"],
+        "similarity": 1.0
+      }
+    ]
+  },
+  "candidate_article": {
+    "path": ".farplane/entities/openai.md",
+    "frontmatter": {"id": "openai", "kind": "company", "name": "OpenAI", "aliases": ["OpenAI Group PBC"]},
+    "body": "# OpenAI\n\nAI research and product company."
+  }
+}

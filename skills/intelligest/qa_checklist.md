@@ -27,9 +27,16 @@ Apply before extraction and again before the terminal receipt.
 - [ ] News is null unless a current public development is supported by an exact
       direct HTTPS original/official/reference document URL; internal IDs and
       generated synthesis are never cited sources.
-- [ ] Wiki writeback went through `manage-wiki` and records changed, no-op,
-      ambiguity, skipped, or blocked without speculative entity creation.
+- [ ] Wiki publication intent is explicit: Wiki save/update language maps to
+      apply, preview/no-write or missing Wiki write direction maps to preview,
+      and a conflict blocks publication. Durable facts route through
+      `manage-wiki`, which chooses pages/entities and records previewed,
+      applied, no-op, ambiguity, skipped, or blocked without speculative creation.
+      `previewed` or `applied` requires an observed downstream receipt. Record the candidate-fact
+      payload and page/entity resolution; preview evidence names staged pages,
+      validation, and expected—not executed—sync/projection refs.
 - [ ] Resource Bank writeback went through `ingest-content` only after explicit
-      like/save/reuse intent and includes only selected reusable elements.
+      like/save/reuse intent and includes only selected reusable elements;
+      save-to-Wiki language does not open the Resource Bank branch.
 - [ ] The final receipt exposes job status, branch outcomes, evidence refs,
       limitations, and actionable retry/review blockers.

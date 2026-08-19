@@ -3,8 +3,8 @@ title: Farplane Framework
 status: active
 owner: harness
 created_at: 2026-06-15
-updated_at: 2026-07-31
-framework_template_version: "0.3.2"
+updated_at: 2026-08-19
+framework_template_version: "0.3.3"
 source_of_truth:
   - docs/prd.md
   - docs/farplane-framework/lifecycle.md
@@ -64,8 +64,8 @@ Then open only the contract needed for the current question:
 | How do Pulse, planning, reports, Feed Scout, and Dogfood coordinate? | [Work Pulse And Scheduled Ticket Sources](pulse-and-interval-loop.md) |
 | How does a shaped idea become reviewed completed work? | [Ticket Execution Loop](ticket-execution-loop.md) |
 | What may hooks do, and where does runtime state live? | [Hooks And Runtime](hooks-and-runtime.md) |
-| Where do canonical entities, named views, paragraph links, World, and CRM projections live? | [Entity Memory](entities.md) |
-| How do I author entity links, question provenance, timelines, view tags, and CRM funnel state? | [Entity Markdown Authoring](entity-markdown-authoring.md) |
+| Where do canonical Wiki articles, hybrid search, generated SQLite, named views, graph, and CRM projections live? | [Wiki Storage And Projections](entities.md) |
+| How do I resolve entities and author links, question provenance, timelines, view tags, and CRM funnel state? | [Entity Markdown Authoring](entity-markdown-authoring.md) |
 | How do typed views distinguish observations, dependencies, and directed resource transfers? | [Entity View Projection Standard](entity-view-projection-standard.md) |
 | What report metadata and registry shape does Core expose? | [Reporting](reporting.md) |
 | How are lifecycle graph projections represented? | [Graph Contract](graph-contract.md) |

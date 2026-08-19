@@ -3,109 +3,99 @@ title: "Graph Systems"
 status: active
 owner: farplane-framework
 created_at: 2026-07-31
-updated_at: 2026-07-31
+updated_at: 2026-08-19
 tags:
   - farplane
   - systems
   - graphs
   - projections
 refs:
-  - docs/features/FEAT-0075-entity-markdown-and-world-projection.md
-  - docs/features/FEAT-0076-typed-entity-view-projections.md
-  - docs/features/FEAT-0077-crm-entity-projection.md
   - docs/features/FEAT-0078-harness-graphir-projections.md
-  - docs/farplane-framework/entities.md
+  - docs/systems/wiki.md
   - docs/farplane-framework/graph-contract.md
+  - docs/farplane-framework/harness-maintenance.md
 system_record_json: |
   {
     "id": "SYS-0013",
     "name": "Graph Systems",
     "status": "implemented",
-    "summary": "The two graph planes that turn canonical entity knowledge or repository declarations into World, CRM, typed-domain, skill, backlink, framework, and lifecycle projections.",
+    "summary": "The graph vocabulary and GraphIR projection toolkit that turns repository declarations into skill, backlink, framework, and lifecycle inspection graphs while preserving the boundary to Wiki-generated entity graphs.",
     "owner_spec": "docs/systems/graph-systems.md",
-    "primary_feature_ref": "FEAT-0075",
+    "primary_feature_ref": "FEAT-0078",
     "feature_refs": [
-      "FEAT-0075",
-      "FEAT-0076",
-      "FEAT-0077",
       "FEAT-0078"
     ],
     "refs": [
-      "docs/features/FEAT-0075-entity-markdown-and-world-projection.md",
-      "docs/features/FEAT-0076-typed-entity-view-projections.md",
-      "docs/features/FEAT-0077-crm-entity-projection.md",
       "docs/features/FEAT-0078-harness-graphir-projections.md",
-      "docs/farplane-framework/entities.md",
-      "docs/farplane-framework/graph-contract.md"
+      "docs/systems/wiki.md",
+      "docs/farplane-framework/graph-contract.md",
+      "docs/farplane-framework/harness-maintenance.md"
     ],
-    "last_verified": "2026-07-31"
+    "last_verified": "2026-08-19"
   }
 ---
 
 # Graph Systems
 
-Graph Systems owns Farplane's graph vocabulary, engine boundaries, and
-projection inventory. Farplane uses one common mental model—sources become
-nodes, edges, evidence, and consumer projections—but has two implementation
-planes because it graphs two different kinds of truth.
+Graph Systems owns Farplane's harness graph vocabulary and GraphIR projection
+toolkit. It turns repository declarations and references into inspectable
+skill, backlink, Framework Core, and lifecycle graphs.
 
 ```text
-graph_system(source, plane, projection)
-  -> nodes + edges + evidence + consumer_view
+harness_graph(repository_sources, projection_profile)
+  -> GraphIR(nodes, edges, extras) + consumer_projection
 ```
 
 ## At A Glance
 
 - System ID: `SYS-0013`
 - Status: `implemented`
-- Primary feature: `FEAT-0075`
+- Primary feature: `FEAT-0078`
 - Owner spec: `docs/systems/graph-systems.md`
-- Feature count: `4`
-
-## The Two Graph Planes
-
-| Plane | Canonical input | Engine | Outputs | Purpose |
-| --- | --- | --- | --- | --- |
-| Entity knowledge | `.farplane/entities/*.md` plus `.farplane/views.yaml` | `bin/core/farplane_entities.py` | `index.json`, `world.json`, `crm.json`, typed view JSON | Durable project-world identity, facts, evidence, relationships, and domain views |
-| Harness knowledge | Skills, registries, Markdown/path refs, manifests, hooks, signatures, and curated lifecycle maps | shared GraphIR toolkit plus graph-family builders | skill, backlink/reference, Framework Core, and lifecycle graphs | Inspect and navigate how Farplane itself is connected |
-
-They work alike at the structural level but not at the semantic level. Entity
-knowledge needs claims, questions, timelines, locations, funnels, units,
-observations, and transfers. Harness graphs need file paths, reference types,
-confidence, todo order, usage heat, hooks, routes, and finite-state
-projections.
-
-The engines remain separate because each validates and preserves its own source
-truth. A future refactor may share additional low-level node, edge,
-serialization, or validation helpers, but no current proof shows that one
-universal graph schema would reduce more complexity than it creates.
+- Feature count: `1`
 
 ## Feature Docs
 
-- [FEAT-0075 Entity Markdown and World projection](../features/FEAT-0075-entity-markdown-and-world-projection.md)
-- [FEAT-0076 Typed entity view projections](../features/FEAT-0076-typed-entity-view-projections.md)
-- [FEAT-0077 CRM entity projection](../features/FEAT-0077-crm-entity-projection.md)
 - [FEAT-0078 Harness GraphIR projections](../features/FEAT-0078-harness-graphir-projections.md)
 
-## Canonical Terms
+## Graph Vocabulary
+
+Farplane uses a common model across graph-shaped outputs: explicit sources
+produce nodes, evidence-bearing edges, and consumer projections. The source
+owner defines what an edge means; neither visualization nor storage may erase
+that meaning.
 
 | Term | Meaning |
 | --- | --- |
-| `Entity Markdown` | Canonical human-authored project entities and durable context |
-| `Entity index` | Generated full-record/search projection |
-| `World` | Generic project-qualified entity graph in `world.json` |
-| `Typed view` | Domain interpretation compiled from named membership, view schema, and inline evidence tags |
-| `CRM` | Funnel-bearing projection of canonical entities |
-| `GraphIR` | Shared harness-graph node/edge/bundle toolkit |
+| `GraphIR` | Shared harness-graph node, edge, bundle, validation, and projection toolkit |
 | `Skill graph` | Skill registry relationships, todo order, common chains, and usage signals |
 | `Harness reference graph` | Repo-wide local-reference graph used for backlinks and documentation audit |
 | `Framework Core graph` | Manifest-selected operator map of core framework sources and workflows |
 | `Lifecycle graph` | Semantic graph of skills, files, hooks, routes, reports, states, and lifecycle projections |
-| `World Memory` | Feed Scout's capped planning-context synthesis; not Entity World and not a graph projection |
+| `Wiki graph` | Project entity graph generated by [Wiki](wiki.md), not by GraphIR |
+| `Scout Brief` | Feed Scout's capped planning-context synthesis; not Wiki graph and not a graph projection |
+
+## Boundary With Wiki
+
+[Wiki](wiki.md) owns Entity Markdown, identity resolution, article links,
+source-page edge claims, and graph, CRM, and typed-view projections. Those
+outputs share the broad node-edge-projection mental model but not the GraphIR
+schema or engine.
+
+| Wiki entity graph | Harness GraphIR |
+| --- | --- |
+| People, companies, topics, sources, claims, and evidence | Skills, files, hooks, routes, and states |
+| Canonical entity articles and view configuration | Registries, references, manifests, signatures, and curated maps |
+| Questions, timelines, locations, funnels, resources | Reference types, confidence, heat, file paths, and FSA state |
+| Durable Markdown with generated search and consumer views | Generated inspection and navigation graphs |
+
+The engines stay separate because they validate different source truth. Shared
+low-level helpers may be adopted only when representative proof shows they
+preserve both contracts; one universal graph schema is not a goal.
 
 ## Skill References And Backlinks
 
-Skills already participate in graph relationships:
+Skills participate in three authored graph relationship classes:
 
 ```text
 SKILL.md + registry row
@@ -115,100 +105,63 @@ SKILL.md + registry row
    + invocation/composition signals
 ```
 
-The skill graph authors outgoing relationships. Incoming references and top
-referrers are derived from those edges, which provides skill backlinks without
-maintaining a second list.
-
-The harness reference graph scans local Markdown links and literal repo paths
-across the repository. Reversing those edges provides file and documentation
-backlinks. A reference edge means “this source points here”; it does not by
-itself mean runtime execution. Todo-chain edges and curated lifecycle edges
-carry different, explicitly labeled semantics.
-
-## What Belongs Here
-
-- The inventory and terminology for Farplane graph families.
-- The boundary between entity knowledge and harness GraphIR.
-- Feature ownership for World, typed views, CRM, skill/reference graphs, and
-  lifecycle projections.
-- Cross-feature rules such as canonical source versus disposable projection.
-
-## What Belongs Elsewhere
-
-- Exact Entity Markdown syntax belongs in
-  [Entity Markdown Authoring](../farplane-framework/entity-markdown-authoring.md).
-- Entity compiler and projection schemas belong in
-  [Entity Memory](../farplane-framework/entities.md).
-- Typed observation and transfer semantics belong in
-  [Entity View Projection Standard](../farplane-framework/entity-view-projection-standard.md).
-- Lifecycle node, edge, confidence, and FSA contracts belong in
-  [Graph Contract](../farplane-framework/graph-contract.md).
-- Graph generation commands and maintenance internals belong in
-  [Harness Maintenance](../farplane-framework/harness-maintenance.md).
-- Farplane UI domain products and visual interactions belong to Farplane UI.
-- Feed Scout World Memory belongs to Source And Sidecar Systems.
+Incoming references and top referrers are derived by reversing generated
+outgoing edges. A reference edge means “this source points here”; it does not
+by itself prove runtime execution. Todo-chain and curated lifecycle edges carry
+their own explicitly labeled semantics.
 
 ## Operating Contract
 
-- Authored source remains canonical; generated graphs are replaceable
-  projections.
-- Every edge type preserves its evidence and semantics instead of collapsing
-  all links into generic “related” edges.
-- Projections may select, enrich, or aggregate source truth but do not silently
-  become new canonical stores.
-- Consumers must not treat reference edges as execution, observations as
-  transfers, funnel state as campaign state, or questions as default World
-  nodes.
-- New graph products reuse the appropriate plane first and add a domain adapter
-  only when a representative case proves the generic projection is
-  insufficient.
+- Authored repository declarations remain canonical; generated harness graphs
+  are replaceable projections.
+- Every edge preserves source evidence, relationship kind, and confidence
+  rather than collapsing to a generic “related” edge.
+- Reference edges are navigation evidence, not automatic execution order.
+- New harness graph products reuse GraphIR and add a named projection profile
+  only when a representative consumer case proves it necessary.
+- Wiki relationship semantics stay with Wiki; GraphIR does not become a second
+  entity engine.
 
 ## System Flow
 
 ```mermaid
 flowchart TD
-  entityMd["Entity Markdown<br/>identity + claims + evidence"] --> entityCompiler["Entity compiler"]
-  viewSchema["views.yaml<br/>membership + vocabulary"] --> entityCompiler
-  entityCompiler --> world["World + index"]
-  entityCompiler --> crm["CRM projection"]
-  entityCompiler --> typed["typed entity views"]
-
-  skills["skills + registry<br/>links + todo refs + telemetry"] --> graphBuilders["GraphIR builders"]
-  repo["docs + paths + manifest<br/>hooks + lifecycle contracts"] --> graphBuilders
-  graphBuilders --> skillGraph["skill graph"]
-  graphBuilders --> backlinks["reference/backlink graph"]
-  graphBuilders --> framework["Framework Core graph"]
-  graphBuilders --> lifecycle["lifecycle graphs"]
+  skills["skills + registry<br/>links + todo refs + telemetry"] --> builders["GraphIR builders"]
+  repo["docs + literal paths<br/>manifest + hooks + lifecycle"] --> builders
+  builders --> graphir["shared GraphIR<br/>nodes + edges + extras"]
+  graphir --> skillGraph["skill graph"]
+  graphir --> backlinks["reference/backlink graph"]
+  graphir --> framework["Framework Core graph"]
+  graphir --> lifecycle["lifecycle graphs"]
+  wiki["Separate Wiki plane<br/>entity Markdown + Wiki graph projection"]
 ```
-
-Both planes compile explicit sources into inspectable projections. They do not
-share canonical records or one universal schema.
 
 ## Surfaces
 
-- `docs/features/FEAT-0075-entity-markdown-and-world-projection.md`
-- `docs/features/FEAT-0076-typed-entity-view-projections.md`
-- `docs/features/FEAT-0077-crm-entity-projection.md`
 - `docs/features/FEAT-0078-harness-graphir-projections.md`
-- `docs/farplane-framework/entity-markdown-authoring.md`
-- `docs/farplane-framework/entities.md`
-- `docs/farplane-framework/entity-view-projection-standard.md`
 - `docs/farplane-framework/graph-contract.md`
 - `docs/farplane-framework/harness-maintenance.md`
-- `bin/core/farplane_entities.py`
+- `skills/skill-maintenance/graph/README.md`
 - `skills/skill-maintenance/scripts/graph_ir.py`
+- `skills/skill-maintenance/scripts/graph_projection.py`
+- `skills/skill-maintenance/scripts/graph_projection_config.py`
+- `skills/skill-maintenance/scripts/generate_skill_graph.py`
+- `skills/skill-maintenance/scripts/generate_harness_graph.py`
+- `skills/skill-maintenance/scripts/generate_farplane_lifecycle_graph.py`
 
 ## Proof And Maintenance
 
-- Entity proof: `python3 -m unittest bin/tests/test_farplane_entities.py`.
-- Harness graph proof: focused `test_generate_*graph.py` suites under
-  `skills/skill-maintenance/scripts/`.
-- Registry proof: `python3 docs/features/validate_features.py`.
-- Link proof: `python3 bin/validators/check_doc_refs.py`.
-- Update this system when a graph family, canonical input, engine boundary, or
-  feature membership changes.
+- `python3 skills/skill-maintenance/scripts/test_generate_skill_graph.py`
+- `python3 skills/skill-maintenance/scripts/test_generate_harness_graph.py`
+- `python3 skills/skill-maintenance/scripts/test_generate_farplane_lifecycle_graph.py`
+- `python3 docs/features/validate_features.py`
+- `python3 bin/validators/check_doc_refs.py`
+- Update this system when GraphIR primitives, projection profiles, harness edge
+  semantics, or the Wiki/Graph boundary changes.
 
 ## Change History
 
-- 2026-07-31: Created the system owner for entity and harness graph families,
-  including skill backlink semantics and the two-engine boundary.
+- 2026-08-19: Moved canonical entity authoring, resolution, and entity
+  projections to Wiki; retained harness GraphIR and cross-projection vocabulary.
+- 2026-07-31: Created the original system owner for entity and harness graph
+  families.

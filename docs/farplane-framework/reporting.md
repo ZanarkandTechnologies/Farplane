@@ -2,8 +2,8 @@
 kind: farplane-framework-reporting-standard
 status: active
 created_at: 2026-07-08
-updated_at: 2026-07-24
-framework_template_version: "0.1.2"
+updated_at: 2026-08-19
+framework_template_version: "0.1.3"
 ---
 
 # Farplane Reporting
@@ -129,9 +129,10 @@ Each indexed report includes:
 
 Customer research uses `.farplane/customer-research/reports/*` and links
 canonical entities through `entity_refs`. Entity source state lives in flat
-`.farplane/entities/*.md`; `farplane entities compile` generates
-`.farplane/entities/index.json`, `world.json`, and `crm.json`. Entities have no
-handwritten report backlinks. A
+`.farplane/entities/*.md`; `manage-wiki` owns durable article mutation and
+`farplane wiki sync` generates `.farplane/wiki/wiki.sqlite` plus
+`.farplane/entities/index.json`, `graph.json`, and `crm.json`. Wiki articles
+have no handwritten report backlinks. A
 future ticket may opt selected skill-local reports into the main
 project registry by adopting the Core report-card contract.
 Ticket QA/review/mining/backfill artifacts stay outside this registry by

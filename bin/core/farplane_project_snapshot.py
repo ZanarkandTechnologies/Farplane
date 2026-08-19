@@ -745,7 +745,7 @@ def load_feed_scout_snapshot(project_root: Path, bindings: dict[str, Any]) -> tu
                 "daily_feed_root": str(config.get("daily_feed_root") or ""),
                 "ledger": str(config.get("ledger") or ""),
                 "proposal_ledger": str(config.get("proposal_ledger") or ""),
-                "world_memory": str(config.get("world_memory") or ""),
+                "scout_brief": str(config.get("scout_brief") or ""),
                 "latest_feed": str(latest_feed_path),
                 "latest_report": str(latest_report_path),
                 "source_ref": {"path": "farplane/bindings.yaml", "pointer": "feed_scout"},

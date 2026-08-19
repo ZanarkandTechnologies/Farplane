@@ -4,13 +4,14 @@
     {
       "id": "intelligest_default_boundary_01",
       "prompt": "Intelligest the attached video record for me. I want to understand it, but I did not say I want to keep any of its creative parts.",
-      "expected_output": "Creates or reuses visible Content Intelligence state, produces an evidence-backed dossier, and leaves Resource Bank unchanged because no reuse intent was supplied.",
+      "expected_output": "Creates or reuses visible Content Intelligence state, produces an evidence-backed dossier, leaves Resource Bank unchanged, and never applies Wiki changes because no Wiki write intent was supplied; durable facts may receive a read-only Manage Wiki preview.",
       "files": ["skills/intelligest/evals/fixtures/recent-content.json"],
       "assertions": [
         "Creates or reuses the canonical Content Intelligence source/job before long analysis",
         "Produces the base dossier from the available transcript evidence",
         "Returns a Resource Bank skipped_no_reuse_intent outcome",
-        "Does not call ingest-content or imply that analysis automatically saves inspiration"
+        "Does not call ingest-content or imply that analysis automatically saves inspiration",
+        "Does not apply Wiki changes; any durable-fact handoff is preview or no-op"
       ],
       "metadata": {"farplane": {"title": "Default analysis does not become a Resource Bank save", "tags": ["skill", "intelligest", "resource-boundary"]}}
     },
@@ -65,6 +66,34 @@
         "Returns the reused disposition and visible existing references"
       ],
       "metadata": {"farplane": {"title": "Canonical duplicate requests reuse ready intelligence", "tags": ["skill", "intelligest", "dedupe"]}}
+    },
+    {
+      "id": "intelligest_video_save_to_wiki_01",
+      "prompt": "Use the attached recent-content fixture as the supplied video and catalog context. Intelligest that video and save its durable Atlas Control 3 facts to our Wiki.",
+      "expected_output": "Produces the Content Intelligence dossier, recognizes explicit save-to-Wiki intent as apply, selects only durable sourced facts, and passes them to Manage Wiki without making the operator choose pages or approve a second exact delta; because this fixture supplies no observed Manage Wiki execution receipt, reports blocked or not_executed with the intended handoff rather than synthesizing applied.",
+      "files": ["skills/intelligest/evals/fixtures/recent-content.json"],
+      "assertions": [
+        "Produces the dossier before the Wiki enrichment receipt",
+        "Treats save-to-Wiki as apply rather than Resource Bank reuse intent",
+        "Passes only durable sourced facts to Manage Wiki",
+        "Lets Manage Wiki choose pages, entity creation, and links without a second delta approval",
+        "Reports blocked or not_executed when no observed Manage Wiki receipt exists and never synthesizes applied"
+      ],
+      "metadata": {"farplane": {"title": "Video save-to-Wiki intent routes to Manage Wiki apply", "tags": ["skill", "intelligest", "wiki", "apply"]}}
+    },
+    {
+      "id": "intelligest_article_preview_wiki_01",
+      "prompt": "Use the attached wiki-article fixture as the supplied article and Wiki context. Analyze it and show what it would change, but don't write. Return the Manage Wiki handoff with page selection, entity resolution, validation, expected sync, and expected graph projection outcomes.",
+      "expected_output": "Produces the dossier, binds Wiki intent to preview, and passes durable sourced facts to Manage Wiki for page/entity resolution and validation. It returns an observed Manage Wiki staged-pages receipt when available; otherwise it reports not_executed with the intended handoff and expected-not-executed sync/graph refs—never a synthetic receipt. Canonical Markdown and generated projections remain unchanged.",
+      "files": ["skills/intelligest/evals/fixtures/wiki-article.json"],
+      "assertions": [
+        "Treats show-me and don't-write language as preview",
+        "Lets Manage Wiki select and resolve the affected pages and entities",
+        "Returns an observed staged receipt or an honest not_executed intended handoff, never a synthetic receipt",
+        "Labels sync and projection effects as expected rather than executed",
+        "Leaves canonical and generated Wiki state unchanged"
+      ],
+      "metadata": {"farplane": {"title": "Article Wiki preview resolves fully without writes", "tags": ["skill", "intelligest", "wiki", "preview"]}}
     }
   ]
 }

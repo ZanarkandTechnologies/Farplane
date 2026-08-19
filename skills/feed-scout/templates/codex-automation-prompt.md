@@ -9,7 +9,7 @@ Configured local surfaces:
 - daily feed root: `.farplane/feed-scout/daily`
 - ingestion ledger: `.farplane/feed-scout/ledger.jsonl`
 - proposal ledger or local inbox: `.farplane/feed-scout/proposals.jsonl`
-- World Memory: `.farplane/feed-scout/world-memory.md`
+- Scout Brief: `.farplane/feed-scout/scout-brief.md`
 - report root: `.farplane/reports/feed-scout`
 - local ticket cap and write policy: supplied by this automation
 
@@ -27,12 +27,12 @@ Steps:
    feed-scout`, `created_at`, and `ui_summary`.
 5. Write and validate the feed/report artifacts, then index reports when the
    Farplane CLI is available.
-6. Read the existing World Memory and complete `harness.areas` ICP records. Update
+6. Read the existing Scout Brief and complete `harness.areas` ICP records. Update
    one Markdown file in place with canonical ICPs, current trends, notable
    things, and source gaps; merge duplicates and replace superseded synthesis
    instead of appending daily/monthly snapshots. Validate it with
-   `scripts/validate_world_memory.py` and record the update receipt.
-7. Only after the report and World Memory exist, project up to the configured ticket
+   `scripts/validate_scout_brief.py` and record the update receipt.
+7. Only after the report and Scout Brief exist, project up to the configured ticket
    cap. Require canonical ICP and complete selected source-backed facts, a named baseline/default,
    intended belief or workflow delta, canonical source evidence, strong signal,
    active-ticket dedupe, executable scope, Reward, proof, stop condition,
@@ -41,7 +41,7 @@ Steps:
 8. Default tickets to `status: awaiting_review`. Use `status: todo` only when this
    automation's explicit write policy grants automatic local admission and no
    human or external-action gate remains.
-9. Return report path, feed path, World Memory update receipt, ticket paths,
+9. Return report path, feed path, Scout Brief update receipt, ticket paths,
    rejections, source gaps, cap, and a no-execution receipt.
 
 When instructions ask for new sources, entity/thesis changes, or product

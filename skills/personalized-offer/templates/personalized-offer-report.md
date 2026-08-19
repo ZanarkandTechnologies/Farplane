@@ -78,20 +78,20 @@ sequence.
 ### {{ Requested Channel }}
 
 
-## CRM Entity Delta
+## Wiki Entity Delta
 
-| Entity ID | Surface | Proposed field / section | Before | After | Evidence ref | Approval status |
-| --- | --- | --- | --- | --- | --- | --- |
-|  | `frontmatter | markdown_body` |  |  |  |  | `proposed | approved | applied` |
+| Entity ID | Surface | Proposed field / section | Before | After | Evidence ref | Publication intent | Result |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+|  | `frontmatter | markdown_body` |  |  |  |  | `preview | apply` | `previewed | applied | no_op | ambiguity | blocked` |
 
 Use frontmatter for stable identity, status, and references. Use the Markdown
 body for concise durable relationship history, sourced personalization cues,
 open questions, proof context, and follow-up rationale. Keep speculative pain,
 full report prose, approach options, ordinal judgments, selection rationale, and
-outreach drafts in this report; link it through `entity_refs` only to CRM
+outreach drafts in this report; link it through `entity_refs` only to Wiki
 entities, and use `report_refs`, `source_refs`, or Markdown links for
-report/evidence paths. Applying this delta requires explicit approval of the
-exact entity changes.
+report/evidence paths. Pass the operator's Wiki `preview | apply` intent to
+`manage-wiki`; direct Wiki write intent needs no second delta approval.
 
 ## Risks, Gaps, And Review
 

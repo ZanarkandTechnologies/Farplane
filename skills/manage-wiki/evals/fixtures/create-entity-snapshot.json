@@ -1,0 +1,19 @@
+{
+  "project": "synthetic-automotive-supply",
+  "bound_source": "Batu Kawan Finishing will operate a finishing facility in Penang and supply Acme Motors.",
+  "touched_article": {
+    "path": ".farplane/entities/acme-motors.md",
+    "frontmatter": {"id": "acme-motors", "kind": "company", "name": "Acme Motors"},
+    "body": "# Acme Motors\n\n## Supply relationships\n\nAcme Motors is expanding its Malaysian supplier network."
+  },
+  "search_result": {
+    "query": "Batu Kawan Finishing",
+    "normalized_query": "batukawanfinishing",
+    "candidates": []
+  },
+  "entity_scope": ["company", "facility"],
+  "source_limits": [
+    "The source establishes the name, Penang location, operator role, and Acme supply relationship.",
+    "The source gives no opening date, ownership structure, coordinates, or external URL."
+  ]
+}

@@ -1,5 +1,5 @@
 ---
-kind: feed-scout-world-memory
+kind: feed-scout-brief
 status: active
 updated_at: 2026-07-14T08:00:00Z
 canonical_icp_ref: farplane/harness.yaml#areas
@@ -7,7 +7,7 @@ source_ledger: eval-fixture://feed-scout/ledger
 last_report_ref: eval-fixture://feed-scout/2026-07-14
 ---
 
-# Feed Scout World Memory
+# Feed Scout Brief
 
 Current update-in-place synthesis for planner evals, not a daily log, snapshot
 archive, or planning authority. Keep under 100 non-empty lines; full ICP truth

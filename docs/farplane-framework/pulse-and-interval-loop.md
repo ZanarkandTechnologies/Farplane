@@ -3,7 +3,7 @@ title: "Work Pulse And Scheduled Context Sources"
 status: active
 owner: farplane-framework
 created_at: 2026-06-29
-updated_at: 2026-07-25
+updated_at: 2026-08-19
 framework_template_version: "0.3.0"
 tags:
   - farplane
@@ -36,7 +36,7 @@ work_pulse(project_root, wave_size, worker_limit, review_wip,
 
 plan_next_wave(planning_skill_refs, stable_problems, harness_areas?,
                objective_metric_state, ticket_history_query,
-               current_context?, world_memory?, taste_evidence?, wave_size)
+               current_context?, scout_brief?, taste_evidence?, wave_size)
   -> ranked_skill_calls[0..wave_size] + gaps + duplicate_rejections
 
 interval_update(project_root, interval_id, review_window,
@@ -55,11 +55,11 @@ those arguments but cannot invent a workflow. `harness_areas` contributes
 optional ICP, evidence-bar, capability, and metric context only. Retired
 project-level goals and product-bet portfolios are not planner inputs.
 
-Feed Scout maintains one configured Markdown World Memory after each daily
+Feed Scout maintains one configured Markdown Scout Brief after each daily
 report. Pulse loads it once and passes complete relevant source-backed facts,
 freshness/confidence, source refs, and source gaps. Outward-facing calls copy
 those facts into ticket `audience_context` beside the baseline and intended
-belief/workflow delta; World Memory never overrides metrics, ticket history,
+belief/workflow delta; Scout Brief never overrides metrics, ticket history,
 authority, or admission evidence.
 
 ## Ownership
@@ -185,8 +185,8 @@ read latest N compact tickets globally
 
 The planner compares every configured planning skill in one global ranking.
 Areas remain optional retrieval lenses, not planners or allocation scopes.
-Stable problems, selected objective metric movement, report context, world
-memory, and ticket history provide refill context; retired project-level goals
+Stable problems, selected objective metric movement, report context, Scout
+Brief, and ticket history provide refill context; retired project-level goals
 and product bets do not. Avoidable setup is consolidated into a useful
 first-exemplar call, and every admitted call must produce an independently
 reviewable artifact with a direct use path. Quality, guards, authority,

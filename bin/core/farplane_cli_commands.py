@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import sqlite3
 import sys
 from pathlib import Path
 from typing import Any
@@ -133,10 +134,29 @@ def run_reports_repair_refs_cli(args: argparse.Namespace) -> int:
     return int(run_repair_refs(args))
 
 
-def run_entities_compile_cli(args: argparse.Namespace) -> int:
-    from farplane_entities import run_compile
+def run_wiki_cli(args: argparse.Namespace) -> int:
+    from farplane_wiki import (
+        WikiError,
+        WikiStoreError,
+        run_doctor,
+        run_rebuild,
+        run_search,
+        run_sync,
+    )
 
-    return int(run_compile(args))
+    try:
+        action = args.wiki_command
+        if action == "doctor":
+            return int(run_doctor(args))
+        if action == "rebuild":
+            return int(run_rebuild(args))
+        if action == "sync":
+            return int(run_sync(args))
+        if action == "search":
+            return int(run_search(args))
+        raise WikiError(f"unsupported_wiki_command:{action}")
+    except (OSError, sqlite3.Error, WikiError, WikiStoreError) as exc:
+        raise CliError(f"wiki_error:{exc}") from exc
 
 
 def run_mining_cli(args: argparse.Namespace) -> int:

@@ -3,10 +3,43 @@ title: Farplane Framework Changelog
 owner: init-advisor
 status: active
 kind: framework-changelog
-updated_at: 2026-08-02
+updated_at: 2026-08-19
 ---
 
 # Farplane Framework Changelog
+
+## 2.0.15
+
+Date: 2026-08-19
+
+Primary change: make Wiki Farplane's sole operator-facing knowledge system,
+rename its generic generated graph output, and rename Feed Scout's bounded
+planning sidecar to Scout Brief.
+
+Changed surfaces:
+
+- `feed_scout.scout_brief` replaces the retired sidecar config key;
+- `.farplane/feed-scout/scout-brief.md` replaces the retired sidecar path;
+- `feed-scout-brief`, `scout_brief_update_receipt`, and `source_facts` replace
+  the retired artifact kind, receipt, and selected-evidence field names;
+- Feed Scout, Plan Next Wave, Pulse, project snapshots, and automation prompts
+  use the same Scout Brief contract;
+- `.farplane/entities/graph.json` replaces the retired generic graph projection
+  path, while `.farplane/wiki/wiki.sqlite` remains disposable search state;
+- `manage-wiki` uses explicit `preview | apply` publication intent, with direct
+  Wiki write requests sufficient for apply and no second delta approval.
+
+Migration steps:
+
+1. Rename the Feed Scout binding to `scout_brief` and point it at
+   `.farplane/feed-scout/scout-brief.md`.
+2. Rename any existing sidecar file to that path and set its frontmatter kind
+   to `feed-scout-brief`.
+3. Rename downstream planning payloads to `scout_brief` and selected audience
+   evidence to `source_facts`; do not keep dual keys or fallback readers.
+4. Validate the file with `skills/feed-scout/scripts/validate_scout_brief.py`.
+5. Run `farplane wiki rebuild --project-root <project>` to emit `graph.json`
+   and retire the old generated graph file as one rollback-safe bundle.
 
 ## 2.0.14
 
@@ -27,7 +60,7 @@ Changed surfaces:
   diagnostics, or counts;
 - typed view schema v4 preserves domain semantics while inheriting lean World
   entity nodes;
-- `farplane entities compile --json` owns source counts and validation issues
+- `farplane wiki rebuild --json` owns source counts and validation issues
   under top-level `diagnostics`.
 
 Migration steps:
@@ -63,7 +96,7 @@ Migration steps:
 
 1. Bump `farplane/manifest.json` `spec_version` and
    `template_uses.farplane-framework` to `2.0.13`.
-2. Run `farplane entities compile --project-root <project>` to replace the old
+2. Run `farplane wiki rebuild --project-root <project>` to replace the old
    schema-v3 index with schema v4.
 3. Update consumers that read `index.entities[*].body`, `frontmatter`, `by_id`,
    claims, timelines, or views to load the canonical entity `path` or the
@@ -164,7 +197,7 @@ Migration steps:
    project-specific generic frontmatter fields or authored event IDs.
 3. Add `transfer: source-to-linked` or `linked-to-source` only to tags that
    prove an exchange with one linked counterparty.
-4. Re-run `farplane entities compile --project-root <project>` and update typed
+4. Re-run `farplane wiki rebuild --project-root <project>` and update typed
    view consumers for schema v3 `resource_flows` and
    `counts.resource_flows`.
 5. Do not copy generated projections between projects; move canonical Markdown
@@ -181,7 +214,7 @@ Changed surfaces:
 
 - `.farplane/views.yaml` owns multiple named views as `name + entity_ids`;
 - duplicate YAML/view keys, malformed membership, duplicates, and unresolved
-  entity IDs fail `farplane entities compile`;
+  entity IDs fail `farplane wiki rebuild`;
 - `index.json`, `world.json`, and `crm.json` carry identical normalized views
   and one shared fingerprint;
 - Farplane World reads the entity-owned projection path and intersects the
@@ -193,7 +226,7 @@ Migration steps:
 1. Add `.farplane/views.yaml` with `views: {}` or one or more named views.
 2. Add `.farplane/views.yaml` to ignored standard paths while keeping shared
    source/connector configuration in `farplane/bindings.yaml`.
-3. Run `farplane entities compile --project-root <project>` and update World
+3. Run `farplane wiki rebuild --project-root <project>` and update World
    consumers to `.farplane/entities/world.json` plus `index.json`.
 4. Do not add `.farplane/config.yaml`, duplicate entity records, or a second
    Feed Scout membership list.
@@ -211,7 +244,7 @@ Changed surfaces:
   subdirectories;
 - `kind` remains the classification field and optional non-empty `funnel`
   frontmatter promotes the same entity into the CRM view;
-- `farplane entities compile` generates adjacent `index.json`, `world.json`,
+- `farplane wiki rebuild` generates adjacent `index.json`, `world.json`,
   and `crm.json` projections;
 - paragraph-backed links use `entity:<id>` while question footnotes, source
   references, claims, and optional session provenance remain intact;
@@ -225,7 +258,7 @@ Migration steps:
 2. Replace body links from `crm:<id>` to `entity:<id>` without changing other
    entity content.
 3. Remove old generated CRM projections and run
-   `farplane entities compile --project-root <project>`.
+   `farplane wiki rebuild --project-root <project>`.
 4. Update consumers to `.farplane/entities/index.json`, `world.json`, and
    `crm.json`; do not keep a dual-read compatibility path.
 

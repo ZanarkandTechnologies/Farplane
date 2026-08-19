@@ -3,7 +3,7 @@ title: "Source And Sidecar Systems"
 status: active
 owner: farplane-framework
 created_at: 2026-06-26
-updated_at: 2026-07-24
+updated_at: 2026-08-19
 tags:
   - farplane
   - systems
@@ -12,7 +12,7 @@ refs:
   - docs/sources/registry.jsonl
   - skills/harness-scout/SKILL.md
   - skills/feed-scout/SKILL.md
-  - docs/features/FEAT-0072-persistent-icp-and-world-memory.md
+  - docs/features/FEAT-0072-scout-brief.md
   - docs/features/FEAT-0074-feed-scout-source-instructions.md
   - docs/systems/content-production.md
 system_record_json: |
@@ -33,11 +33,11 @@ system_record_json: |
       "docs/sources/registry.jsonl",
       "skills/harness-scout/SKILL.md",
       "skills/feed-scout/SKILL.md",
-      "docs/features/FEAT-0072-persistent-icp-and-world-memory.md",
+      "docs/features/FEAT-0072-scout-brief.md",
       "docs/features/FEAT-0074-feed-scout-source-instructions.md",
       "docs/systems/content-production.md"
     ],
-    "last_verified": "2026-07-24"
+    "last_verified": "2026-08-19"
   }
 ---
 # Source And Sidecar Systems
@@ -67,13 +67,13 @@ Source And Sidecar Systems owns outside signal and decoupled capability organs: 
 
 - [FEAT-0011 Harness scout source ingestion](../features/FEAT-0011-harness-scout-source-ingestion.md)
 - [FEAT-0025 Video-to-skill source reconstruction](../features/FEAT-0025-video-to-skill-source-reconstruction.md)
-- [FEAT-0072 Persistent ICP and world memory](../features/FEAT-0072-persistent-icp-and-world-memory.md)
+- [FEAT-0072 Scout Brief](../features/FEAT-0072-scout-brief.md)
 - [FEAT-0074 Feed Scout source instructions](../features/FEAT-0074-feed-scout-source-instructions.md)
 
 ## What Belongs Here
 
 Harness scout ingestion, Feed Scout source instructions and proposal routing,
-source scorecards, video-to-skill reconstruction, world-memory sidecars, and
+source scorecards, video-to-skill reconstruction, Scout Brief sidecars, and
 adopt/adapt/reject/defer decisions.
 
 ## What Belongs Elsewhere
@@ -119,7 +119,7 @@ Source And Sidecar Systems let Farplane learn from outside material while keepin
 - `docs/sources/registry.jsonl`
 - `skills/harness-scout/SKILL.md`
 - `skills/feed-scout/SKILL.md`
-- `docs/features/FEAT-0072-persistent-icp-and-world-memory.md`
+- `docs/features/FEAT-0072-scout-brief.md`
 - `docs/features/FEAT-0074-feed-scout-source-instructions.md`
 - `docs/systems/content-production.md`
 

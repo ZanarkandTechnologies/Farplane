@@ -66,17 +66,20 @@ opportunity_case_check(case) -> pass | violation | deferral
    - Violation: the research pass silently commits the project to graph storage or
      map implementation.
 9. **External-action gates**
-   - Pass: outreach, CRM writes, enrichment, private data, publishing, deploys,
-     account mutations, and commitments remain approval gated.
+   - Pass: outreach, enrichment, private data, public publishing, deploys,
+     account mutations, and commitments remain approval gated; Wiki publication
+     follows its separate `preview | apply` intent.
    - Violation: an external side effect occurs or is implied without evidence.
 10. **Actionable handoff**
     - Pass: research gaps, next action, next owner, handoff inputs, and the
       evidence that would change the recommendation are named.
     - Violation: the result is an interesting report with no decision path.
-11. **Markdown CRM writeback**
+11. **Wiki writeback**
     - Pass: proposed entity changes separate structured frontmatter from concise
-      durable Markdown-body context, link full reports, and compile through
-      `farplane entities compile` only after approval.
+      durable Markdown-body context, link full reports, and route sourced facts
+      plus publication intent through `manage-wiki`; ordinary research previews,
+      direct Wiki write intent applies without a second exact-delta approval,
+      and privacy or ambiguity still blocks.
     - Violation: generated JSON is hand-edited, entity bodies become report
       dumps, or useful unstructured relationship context is discarded.
 

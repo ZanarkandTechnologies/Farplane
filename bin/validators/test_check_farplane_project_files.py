@@ -266,6 +266,7 @@ def test_bindings_accept_feed_scout_instructions_without_source_kind(tmp_path: P
 framework_template_version: "0.5.0"
 project: {}
 feed_scout:
+  scout_brief: .farplane/feed-scout/scout-brief.md
   entities:
     founder:
       instructions: Track launches and propose useful features.
@@ -276,7 +277,6 @@ feed_scout:
 ''',
         encoding="utf-8",
     )
-
     assert validate_bindings_file(tmp_path, bindings) == []
 
 

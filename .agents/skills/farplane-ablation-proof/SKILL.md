@@ -30,7 +30,7 @@ versus absent, and whether the claim should remain part of the harness.
 ```text
 farplane_ablation_proof(problem_ref, system_ref, feature_refs, claim, surface, task_case, baseline, with_surface?, without_surface?, expectation?, ticket?, audience_context?)
   -> ablation_report + trust_decision + follow_up
-state: reads(farplane/harness.yaml stable problems, docs/systems and docs/features registries, current ICP complaint evidence, farplane/metrics.yaml, ticket audience_context first or configured Feed Scout World Memory as fallback, target surface, task/eval evidence); writes(ticket artifact)
+state: reads(farplane/harness.yaml stable problems, docs/systems and docs/features registries, current ICP complaint evidence, farplane/metrics.yaml, ticket audience_context first or configured Feed Scout Brief as fallback, target surface, task/eval evidence); writes(ticket artifact)
 gates: strategic_ref_bound; compounding_difference; one_main_variable; claim_is_specific; canonical_icp_bound; current_pain_grounded; recognizable_baseline; comparison_is_fair; visible_result; evidence_cites_both_conditions; no_proof_theater
 routes: root skill `prototyping` | root skill `eval` | root skill `agent-qa-test` | ../farplane-productization/SKILL.md
 fails: random_feature; generic_internal_test; multiple_main_variables; uses only intuition; compares different tasks; keeps a surface because it sounds good
@@ -46,7 +46,7 @@ fails: random_feature; generic_internal_test; multiple_main_variables; uses only
         horizon, confidence, falsifier, and surprise trigger.
   - [ ] Name the surface being tested and the user or agent behavior it should improve.
   - [ ] Read ticket-owned `audience_context` first. If absent, resolve the
-        selected area's ICP and configured Feed Scout World Memory; name the baseline
+        selected area's ICP and configured Feed Scout Brief; name the baseline
         and the belief or workflow decision this proof should change. External
         memory is optional only when the claim is purely internal and local
         run/eval evidence is the stronger grounding.

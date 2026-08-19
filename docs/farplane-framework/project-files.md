@@ -3,8 +3,8 @@ title: Project Files
 status: active
 owner: harness
 created_at: 2026-06-15
-updated_at: 2026-07-26
-framework_template_version: "0.3.2"
+updated_at: 2026-08-19
+framework_template_version: "0.3.3"
 source_of_truth:
   - docs/farplane-framework/README.md
   - farplane/manifest.json
@@ -97,7 +97,7 @@ harness.areas.<area_id> =
 
 `icp` names the people served by the area, their relevant jobs and pains, and
 the evidence bar that would change their belief or workflow. This is canonical
-human meaning. Feed Scout may render it into World Memory and add observed
+human meaning. Feed Scout may render it into Scout Brief and add observed
 current context, but external evidence cannot silently rewrite it.
 
 `planning.skill_refs` is the active allowlist for Plan Next Wave. Each skill's
@@ -120,9 +120,9 @@ prompt. Generic workflow behavior remains in the called skill. Scheduled
 sources write reports and bounded candidate context; Work Pulse owns normal
 proactive ticket admission and execution.
 
-### `.farplane/feed-scout/world-memory.md`
+### `.farplane/feed-scout/scout-brief.md`
 
-One ignored, update-in-place Markdown World Memory synthesis of canonical ICP profiles,
+One ignored, update-in-place Markdown Scout Brief synthesis of canonical ICP profiles,
 current trends, notable things, and source gaps. It is a cheap retrieval surface
 for Feed Scout, Plan Next Wave, Pulse, and ticket-owned artifact work—not a
 snapshot archive, monthly trend ledger, planner, or source of authority.
@@ -245,6 +245,7 @@ owner:
 .farplane/
   views.yaml
   entities/
+  wiki/
   reports/
   metrics/
   project/ui/
@@ -256,13 +257,15 @@ owner:
   logs/
 ```
 
-Flat `.farplane/entities/<id>.md` files are canonical local entity memory;
+Flat `.farplane/entities/<id>.md` files are canonical local Wiki articles;
 `.farplane/views.yaml` is canonical local named membership over those IDs;
-their adjacent `index.json`, `world.json`, and `crm.json` files are generated
-views. See [Entity Memory](entities.md). Reports are dated context for readers
-and planners. Metric observations are raw/normalized readings. UI snapshots
-and registries are generated projections over canonical files and runtime
-evidence. If a projection is stale, rebuild it from its owners rather than
+their adjacent `index.json`, `graph.json`, and `crm.json` files are generated
+views. `.farplane/wiki/wiki.sqlite` is the generated page cache, FTS5 search
+index, and originating-page claim store. See [Wiki Storage And
+Projections](entities.md). Reports are dated context for readers and planners.
+Metric observations are raw/normalized readings. UI snapshots and registries
+are generated projections over canonical files and runtime evidence. If a
+projection is stale, run `farplane wiki rebuild` from its owners rather than
 hand-editing it.
 
 The ignored `.farplane/` boundary normally owns generated/runtime state, with

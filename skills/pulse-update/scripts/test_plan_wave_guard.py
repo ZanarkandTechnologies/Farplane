@@ -235,7 +235,7 @@ class PlanWaveGuardTests(unittest.TestCase):
                 "evidence_ref": "reports/proof-a.md",
                 "history_query": {"ref": ".farplane/tmp/history.json"},
                 "semantic_time_state": self.semantic_time_state(),
-                "world_memory": [{"path": "crm/world.md", "evidence": "baseline"}],
+                "scout_brief": [{"path": ".farplane/feed-scout/scout-brief.md", "evidence": "baseline"}],
             }
             baseline_fingerprint = guard.semantic_planning_fingerprint(root, baseline)
             variants = [
@@ -277,7 +277,7 @@ class PlanWaveGuardTests(unittest.TestCase):
                         operator_availability={"state": "available", "validity": "current"}
                     ),
                 },
-                {**baseline, "world_memory": [{"path": "crm/world.md", "evidence": "changed"}]},
+                {**baseline, "scout_brief": [{"path": ".farplane/feed-scout/scout-brief.md", "evidence": "changed"}]},
             ]
             for variant in variants:
                 with self.subTest(variant=variant):

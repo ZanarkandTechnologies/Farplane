@@ -68,7 +68,9 @@ one trusted decision. We made an annotated sample memo from representative
 order, capacity, and exception inputs. May I send it over? If I have the
 constraint wrong, I’d value the correction.
 
-## CRM Delta — Proposed Only
+## Wiki Delta — Previewed
+
+Publication intent: `preview` because the operator did not request a Wiki write.
 
 - Frontmatter: link this report and opportunity `weekly-exception-review` to
   `maya-tan` and `helios-ops`; keep status `proposed`.
@@ -77,5 +79,5 @@ constraint wrong, I’d value the correction.
   unverified.
 - Excluded from entity state: both approach options, ordinal judgments,
   selection rationale, and message prose.
-- Next action: operator reviews the evidence and message before editing entity
-  Markdown, running `farplane entities compile`, or contacting Maya.
+- Next action: Manage Wiki returns the validated preview; contacting Maya still
+  requires its separate approval.

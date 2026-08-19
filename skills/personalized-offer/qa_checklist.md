@@ -6,12 +6,12 @@ kind: qa-checklist
 applies_to:
   - personalized-offer-reports
   - outreach-drafts
-  - crm-entity-deltas
+  - wiki-entity-deltas
 ---
 
 # Personalized Offer QA Checklist
 
-Read before execution and apply again to the report, copy, and CRM delta. Ask an
+Read before execution and apply again to the report, copy, and Wiki delta. Ask an
 independent reviewer to try to reject material customer-facing packages.
 
 ## Checks
@@ -33,15 +33,16 @@ independent reviewer to try to reject material customer-facing packages.
    are explicit; no invented ROI/readiness/company result. Only the selected
    strategy reaches `copywriting-advisor`, and only requested unsent channels
    render.
-4. **State and action hygiene** — the diff-shaped CRM delta keeps stable fields
+4. **State and action hygiene** — the diff-shaped Wiki delta keeps stable fields
    separate from Markdown-body context. Reports, speculative pain, option ranks,
    selection logic, relationship judgments, and message prose remain linked
-   artifacts. Approved entity Markdown compiles through
-   `farplane entities compile`; generated `.farplane/entities/index.json` is
-   never hand-edited or treated as a full entity record. Resolve through the
-   index and follow the matched `path` for full Markdown context.
-   CRM writes, sends, publishing, proposals, account changes, private data,
-   enrichment, and spend remain unapplied without exact approval.
+   artifacts. Sourced durable facts plus `preview | apply` intent route through
+   `manage-wiki`; direct Wiki write intent is enough for apply, while privacy,
+   ambiguity, source, and validation still block. This skill never edits Wiki
+   state directly or reports `applied`/“saved” without an observed Manage Wiki
+   apply receipt; otherwise it reports `not_executed`. Fact-level source refs
+   and any privacy/ambiguity blockers remain explicit. Sends, publishing,
+   private data, enrichment, and spend retain their separate approval gates.
 5. **Actionable learning** — name the correction ask, evidence gaps, next owner,
    evidence that would change the offer, and any unresolved relationship risk.
 

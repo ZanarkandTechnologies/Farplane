@@ -15,6 +15,7 @@ from typing import Sequence
 RETIRED_SKILL_NAMES = {
     "horizon-advisor",
     "image-generation",
+    "ingest-world-data",
     "ticket-opportunity-generator",
     "video-generation",
 }

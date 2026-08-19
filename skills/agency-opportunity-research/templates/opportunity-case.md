@@ -89,16 +89,17 @@ Selection criterion:
 - Participants / relationship history:
 - Commitments or follow-ups:
 
-## CRM Entity Delta
+## Wiki Entity Delta
 
-| Entity ID | Surface | Proposed field / section | Before | After | Evidence ref | Approval status |
-| --- | --- | --- | --- | --- | --- | --- |
-|  | `frontmatter | markdown_body` |  |  |  |  | `proposed | approved | applied` |
+| Entity ID | Surface | Proposed field / section | Before | After | Evidence ref | Publication intent | Result |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+|  | `frontmatter | markdown_body` |  |  |  |  | `preview | apply` | `previewed | applied | no_op | ambiguity | blocked` |
 
 Use frontmatter for stable identity, status, and references. Use entity Markdown
 bodies for concise durable relationship history, sourced cues, hypotheses, open
 questions, relevant proof, and follow-up rationale. Link full reports through
-`report_refs`, `source_refs`, or body links; `entity_refs` contains CRM IDs only.
+`report_refs`, `source_refs`, or body links; `entity_refs` contains canonical
+Wiki entity IDs only.
 
 ## Graph-Shaped Links
 
@@ -117,13 +118,12 @@ questions, relevant proof, and follow-up rationale. Link full reports through
 ## Approval Gates
 
 - [ ] No live outreach without explicit approval.
-- [ ] No CRM write, paid enrichment, scraping-heavy work, private-data use,
-      publishing, deployment, account mutation, or customer commitment without
+- [ ] No paid enrichment, scraping-heavy work, private-data use,
+      public publishing, deployment, account mutation, or customer commitment without
       explicit approval.
-- [ ] The exact CRM entity delta has explicit approval before Markdown changes
-      are applied and compiled with `farplane entities compile`;
-      generated `.farplane/entities/index.json` is never hand-edited; it is a
-      lookup catalogue, so follow a matched record's `path` for full Markdown.
+- [ ] Wiki intent is `preview` unless the operator explicitly asks to save,
+      add, update, write, or publish to Wiki. Direct Wiki write intent is enough
+      to call `manage-wiki` in apply mode; safety and validation gates remain.
 
 ## Evidence And Next Action
 

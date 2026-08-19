@@ -58,5 +58,5 @@ these archetypes.
 
 ## Approval Gates
 
-- No outreach, CRM write, paid enrichment, private-data use, publishing, or
-  account action is authorized by this example.
+- Wiki intent is preview; no Wiki pages change. No outreach, paid enrichment,
+  private-data use, public publishing, or account action is authorized.

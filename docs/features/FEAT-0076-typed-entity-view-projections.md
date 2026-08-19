@@ -3,21 +3,23 @@ title: "Typed entity view projections"
 status: implemented
 owner: farplane-framework
 created_at: 2026-07-31
-updated_at: 2026-08-02
+updated_at: 2026-08-19
 tags:
   - farplane
   - feature
-  - sys-0013
+  - sys-0014
   - projections
 refs:
+  - docs/systems/wiki.md
   - docs/farplane-framework/entity-view-projection-standard.md
   - docs/farplane-framework/entity-markdown-authoring.md
 feature_id: FEAT-0076
-system_id: SYS-0013
+system_id: SYS-0014
 category: projections
 public: true
 surfaces:
   - bin/core/farplane_entities.py
+  - bin/core/farplane_wiki.py
   - docs/farplane-framework/entity-view-projection-standard.md
   - docs/farplane-framework/entity-markdown-authoring.md
   - skills/init-advisor/scripts/bootstrap.sh
@@ -26,6 +28,7 @@ source_refs:
   - docs/farplane-framework/entities.md
 external_refs: []
 evidence_refs:
+  - bin/tests/test_farplane_wiki.py
   - bin/tests/test_farplane_entities.py
   - docs/HISTORY.md
 known_limits: "Typed views use explicit local membership and a bounded vocabulary for events, metrics, resources, weights, and transfers; arbitrary domain aggregations or UI products may still need a view-specific adapter."
@@ -39,19 +42,19 @@ track: false
 # Typed entity view projections
 
 Typed entity views interpret selected canonical entities with a project-local
-domain vocabulary while preserving the generic World graph. They let one entity
+domain vocabulary while preserving the generic Wiki graph. They let one entity
 set power market, infrastructure, relationship, or other specialized views
 without copying entity truth.
 
 ```text
-typed_view(private_entity_registry, world, views_yaml)
+typed_view(private_entity_registry, graph, views_yaml)
   -> views/<view-id>.json
 ```
 
 ## At A Glance
 
 - Feature ID: `FEAT-0076`
-- System: [Graph Systems](../systems/graph-systems.md)
+- System: [Wiki](../systems/wiki.md)
 - Status: `implemented`
 - Category: `projections`
 - Primary user: project maintainer and specialized graph consumer
@@ -60,7 +63,7 @@ typed_view(private_entity_registry, world, views_yaml)
 
 ## Problem
 
-The generic World graph can preserve who is connected and what sourced prose
+The generic Wiki graph can preserve who is connected and what sourced prose
 says, but it cannot know whether a project's tags represent capital, power,
 capacity, status, confidence, or a real directed transfer. Adding every domain
 field to generic entity frontmatter would make the core schema unstable.
@@ -101,9 +104,9 @@ mention alone never proves a transfer.
 
 ```mermaid
 flowchart LR
-  entities["entity Markdown<br/>view sections + timeline tags"] --> compiler["typed view compiler"]
+  entities["entity Markdown<br/>view sections + timeline tags"] --> compiler["Wiki typed-view compiler"]
   schema["views.yaml<br/>membership + vocabulary"] --> compiler
-  world["generic world.json"] --> compiler
+  graph["generic graph.json"] --> compiler
   compiler --> view["views/<id>.json<br/>events + observations<br/>relationships + flows"]
 ```
 
@@ -117,11 +120,12 @@ flowchart LR
   - `skills/init-advisor/scripts/bootstrap.sh`
 - Generated surfaces:
 - `.farplane/views/<view-id>.json`
-  - bounded normalized view membership in World plus typed interpretation
+  - bounded normalized view membership in the Wiki graph plus typed interpretation
 
 ## Proof And Quality
 
 - `python3 -m unittest bin/tests/test_farplane_entities.py`
+- `farplane wiki rebuild --project-root <project> --no-write`
 - Tests cover membership and fingerprints, malformed schemas, status and
   confidence, metrics, unit normalization, observations, transfer directions,
   evidence timelines, and stale projection deletion.
@@ -130,9 +134,9 @@ flowchart LR
 
 - Extend `.farplane/views.yaml` vocabulary before adding project-specific core
   frontmatter.
-- Keep generic `world.json` semantics stable when typed view behavior changes.
+- Keep generic `graph.json` semantics stable when typed view behavior changes.
 - Version typed output when consumers require an incompatible schema change.
-- Remove a view from YAML and recompile to remove its generated JSON.
+- Remove a view from YAML and rebuild to remove its generated JSON.
 
 ## Limits And Non-Goals
 
@@ -141,7 +145,7 @@ flowchart LR
   promise every domain aggregation or UI behavior.
 - No view owns or duplicates canonical entity data.
 - Delete or merge this feature only if typed domain interpretation stops being
-  independently maintainable from generic World.
+  independently maintainable from generic Wiki graph.
 
 ## Alternatives Considered
 
@@ -154,6 +158,8 @@ flowchart LR
 
 ## Change History
 
+- 2026-08-19: Moved typed entity views from Graph Systems to Wiki ownership
+  and adopted Wiki rebuild/sync lifecycle commands.
 - 2026-08-02: Replaced typed-view schema v3 with schema v4 lean entity nodes
   while preserving event, observation, relationship, flow, and summary semantics.
 - 2026-07-31: Added the registry-backed feature owner for existing typed view

@@ -413,7 +413,6 @@ def validate_bindings_file(root: Path, bindings_file: Path) -> list[str]:
         data = yaml.safe_load(bindings_file.read_text(encoding="utf-8")) or {}
     except yaml.YAMLError as exc:
         return [f"{rel_path} must be valid YAML: {exc}."]
-
     if not isinstance(data, dict):
         return [f"{rel_path} must be a YAML object."]
     if data.get("kind") != "project-bindings":
@@ -426,12 +425,17 @@ def validate_bindings_file(root: Path, bindings_file: Path) -> list[str]:
         errors.append(f"{rel_path} metrics is retired; semantic definitions belong in farplane/metrics.yaml.")
     if "metric_bindings" in data:
         errors.append(f"{rel_path} metric_bindings is retired; refresh prompts belong in farplane/metrics.yaml.")
-
     feed_scout = data.get("feed_scout")
     if feed_scout is not None:
         if not isinstance(feed_scout, dict):
             errors.append(f"{rel_path} feed_scout must be an object.")
         else:
+            if "world_memory" in feed_scout:
+                errors.append(f"{rel_path} feed_scout.world_memory is retired; use feed_scout.scout_brief.")
+            scout_brief = feed_scout.get("scout_brief")
+            unsafe_scout_brief = not isinstance(scout_brief, str) or not scout_brief.strip() or Path(scout_brief).is_absolute() or ".." in Path(scout_brief).parts or Path(scout_brief).suffix.lower() != ".md"
+            if scout_brief is not None and unsafe_scout_brief:
+                errors.append(f"{rel_path} feed_scout.scout_brief must be a safe project-relative Markdown path.")
             entities = feed_scout.get("entities", {})
             if not isinstance(entities, dict):
                 errors.append(f"{rel_path} feed_scout.entities must be an object.")
@@ -474,7 +478,6 @@ def validate_bindings_file(root: Path, bindings_file: Path) -> list[str]:
                         errors.append(
                             f"{source_prefix}.instructions must be a non-empty string."
                         )
-
     integrations = data.get("integrations")
     integrations = integrations if isinstance(integrations, dict) else {}
     kanban = integrations.get("kanban")
@@ -502,7 +505,6 @@ def validate_bindings_file(root: Path, bindings_file: Path) -> list[str]:
                     errors.append(f"{prefix}.task_source_handle must name a private handle alias.")
                 if filesystem_policy != "exclude":
                     errors.append(f"{prefix}.filesystem_ticket_policy must be exclude for provider notion.")
-
     for line_number, line in enumerate(bindings_file.read_text(encoding="utf-8").splitlines(), start=1):
         if SECRET_VALUE_RE.search(line):
             errors.append(
@@ -510,7 +512,6 @@ def validate_bindings_file(root: Path, bindings_file: Path) -> list[str]:
                 "bindings are non-secret coordinates only."
             )
     return errors
-
 
 def markdown_heading_section(markdown: str, heading: str) -> str:
     target = f"## {heading}"
@@ -528,7 +529,6 @@ def markdown_heading_section(markdown: str, heading: str) -> str:
             end = index
             break
     return "\n".join(lines[start:end]).strip()
-
 
 def parse_fenced_yaml_from_section(section: str) -> dict:
     fence_start = section.find("```yaml")

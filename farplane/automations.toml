@@ -54,12 +54,12 @@ Overrides:
 - Query ticket/Reward history by problem, area, or configured skill when needed. For content/distribution
   hypotheses, use a relevant Tasty Pack as optional taste evidence without
   creating a content Pulse.
-- Load `farplane/bindings.yaml#feed_scout.world_memory` once when it exists and
+- Load `farplane/bindings.yaml#feed_scout.scout_brief` once when it exists and
   pass relevant complete facts, freshness/confidence, source refs, and source
   gaps to the planner. Every outward-facing admitted ticket must bind its canonical
   area ICP, a specific job or pain, a named baseline/default, the belief or
   workflow delta it should cause, and copy the selected facts into its
-  `audience_context.world_facts`. A trend name or generic ICP pain is not
+  `audience_context.source_facts`. A trend name or generic ICP pain is not
   enough. Self-improvement may use local
   ticket/Reward/eval evidence when external memory is irrelevant.
 - Keep review tickets distinct but summarize pending review in bounded
@@ -104,7 +104,7 @@ prompt = '''
 Use $feed-scout.
 
 Run the bounded daily Feed Scout from the configured sources. Write its dated
-report, then update and validate the configured persistent World Memory
+report, then update and validate the configured persistent Scout Brief
 before bounded source-backed candidate interventions. Re-render canonical ICP
 fields from `farplane/harness.yaml#areas`; update only source-backed concerns,
 language, trends, notable things, and source gaps. Merge or replace current
@@ -122,7 +122,7 @@ write_policy = "local recovery tickets only; no opportunity or experiment ticket
 
 Final response:
 - Link the Feed Scout report path and summarize the strongest findings in 2-4 bullets.
-- Link the World Memory path and include its changed headings, `updated_at`, source
+- Link the Scout Brief path and include its changed headings, `updated_at`, source
   refs, and validation result.
 - List direct recovery tickets created or updated, or `none`.
 - List candidate interventions and their admission result: `created`,

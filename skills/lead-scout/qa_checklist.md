@@ -37,8 +37,11 @@ lead_scout_check(candidate_packet, source_boundary)
   rejected or marked weak.
 - [ ] The packet avoids private dossiering, sensitive-attribute inference,
   hidden scoring criteria, unrestricted platform scraping claims, whole-vertical
-  dumps, and CRM writeback beyond stable ID, name, description, links, and
-  status; candidates are tiered and stage-exit status is visible.
+  dumps, and Wiki delta scope beyond stable IDs, names, public links, and
+  sourced organization relationships; scout tier/status, scores, and
+  qualification-only signals stay in the packet. Bound `preview | apply` routes through
+  `manage-wiki`; apply requires direct Wiki write intent while privacy or
+  ambiguity blocks; candidates are tiered, and stage-exit status is visible.
 
 ## Reviewer Prompt
 

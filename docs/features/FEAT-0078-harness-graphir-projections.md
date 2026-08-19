@@ -198,7 +198,7 @@ flowchart TD
   recognized.
 - Curated edges must cite an owning contract and remain distinguishable from
   explicit or parsed evidence.
-- GraphIR does not own entity World, CRM, typed domain views, ticket execution,
+- GraphIR does not own the Wiki graph, CRM, typed domain views, ticket execution,
   or a central state machine.
 
 ## Alternatives Considered

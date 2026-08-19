@@ -15,36 +15,24 @@ eval: evals/evals.json
 
 ## Context
 
-Use this skill after an agency has selected one person and one
-accepted use case, proof package, or bounded service offer. It creates a dated
-report that explains why the offer may matter to this person, which evidence
-supports that view, what proof to show, what remains uncertain, and how to ask
-for a correction or conversation without pretending to know private pain.
+Use this after an agency selects one person and an accepted use case, proof, or
+bounded service offer. It creates a dated report explaining relevance, evidence,
+proof, uncertainty, and a correction-seeking ask without inventing private pain.
 
 This skill connects existing owners. `customer-research` owns the person's
 public career and conversation context; `solution-shaping` owns the realistic
 problem/solution boundary; `copywriting-advisor` owns the final message wording
 and source-backed copy quality. This skill owns the person-to-use-case fit,
 comparison of viable relationship-aware approaches, selected offer, proof
-narrative, offer report, outreach packet, and proposed CRM state delta.
+narrative, offer report, outreach packet, and proposed Wiki page delta.
 
 ## Skill Signature
 
 ```text
-personalized_offer(
-  person_ref,
-  company_ref,
-  customer_research_ref,
-  accepted_usecase_ref,
-  proof_refs?,
-  usecase_roots?,
-  relationship_context?,
-  channel?,
-  owner_artifact?
-) -> personalized_offer_report
-   + outreach_drafts
-   + crm_entity_delta?
-   + next_action
+personalized_offer(person_ref, company_ref, customer_research_ref,
+  accepted_usecase_ref, proof_refs?, usecase_roots?, relationship_context?,
+  channel?, owner_artifact?, wiki_publication_intent = preview)
+  -> personalized_offer_report + outreach_drafts + wiki_page_delta? + next_action
 
 state: reads(customer research, canonical entity frontmatter and Markdown bodies,
              calls/notes, accepted usecase,
@@ -52,24 +40,22 @@ state: reads(customer research, canonical entity frontmatter and Markdown bodies
              supplied career sources);
        writes(owner_artifact or
               .farplane/personalized-offer/reports/YYYY-MM-DD-<person>-<usecase>.md;
-              optional operator-approved CRM entity Markdown updates)
+              optional sourced Wiki delta handoff)
 gates: person_resolved; accepted_usecase_resolved; career_claims_sourced;
        problem_fit_labeled; viable_approaches_compared; selected_approach_named;
        proof_matches_offer; correction_ask_present;
-       crm_delta_review_status_named; outreach_unsent_without_approval
+       wiki_publication_intent_bound; outreach_unsent_without_approval
 routes: customer-research | research:* | solution-shaping |
-        copywriting-advisor | review | telegram-message
+        copywriting-advisor | manage-wiki | review | telegram-message
 fails: creepy_personalization; invented_private_pain; generic_ai_pitch;
        fake_option_frontier; relationship_score_theater; usecase_feature_dump;
-       proof_claim_mismatch; unapproved_crm_write;
-       unapproved_outreach_or_publish
+       proof_claim_mismatch; wiki_apply_without_explicit_intent;
+       unobserved_wiki_applied_status; unapproved_outreach_or_publish
 ```
-
 ## Phase Boundary
 
-The normal output is a report, unsent drafts, and a proposed CRM delta. The
-skill does not discover broad markets, choose unqualified leads, rebuild the
-use case, send outreach, publish a page, or mutate external CRM/account state.
+The normal output is a report, unsent drafts, and a Wiki delta—not broad
+discovery, use-case rebuilding, outreach, publishing, or account mutation.
 Route missing market or qualification work to `agency-opportunity-research`.
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
@@ -80,6 +66,9 @@ Route missing market or qualification work to `agency-opportunity-research`.
         proof refs plus channel, desired action, and owner artifact.
   - [ ] Require one selected person and one accepted usecase/proof direction;
         route missing qualification to `agency-opportunity-research`.
+  - [ ] Bind Wiki intent: direct save/update/publish-to-Wiki language means
+        `apply`; preview/no-write or no Wiki direction means `preview`; a
+        conflict blocks Wiki publication.
   - [ ] Use the supplied owner artifact or default to
         `.farplane/personalized-offer/reports/YYYY-MM-DD-<person>-<usecase>.md`;
         return inline only for answer-only requests.
@@ -151,7 +140,7 @@ Route missing market or qualification work to `agency-opportunity-research`.
         manufacture a full sequence when one message is enough.
   - [ ] Keep every message unsent and label the exact human approval required
         before contact, publishing, proposal movement, or account mutation.
-- [ ] 8. Propose or apply the CRM delta.
+- [ ] 8. Preview or apply the Wiki delta.
   - [ ] Link the report to stable entity IDs through `entity_refs` and
         propose relationship, qualification, opportunity, offer, proof, and
         next-action updates with evidence refs. Keep stable machine fields and
@@ -160,62 +149,52 @@ Route missing market or qualification work to `agency-opportunity-research`.
         entity Markdown body.
   - [ ] Put report/evidence paths in `report_refs`, `source_refs`, or Markdown
         body links; reserve `entity_refs` for canonical entity IDs.
-  - [ ] Write CRM entity Markdown and run `farplane entities compile` only when the
-        operator has explicitly approved that exact entity delta. Approval of
-        the offer report or outreach copy does not authorize CRM mutation;
-        otherwise return a diff-shaped proposal.
+  - [ ] Pass sourced durable facts and the bound `preview | apply` intent to
+        [manage-wiki](../manage-wiki/SKILL.md), which selects pages/entities.
+        Direct Wiki write intent is sufficient for apply; offer/copy approval
+        alone is not. Source, privacy, ambiguity, and validation still block.
+        Apply intent is not proof of application: without an observed Manage
+        Wiki apply receipt, report `not_executed`, never `applied` or “saved.”
+        Preserve fact-level source refs and name privacy/ambiguity blockers in
+        that downstream receipt or intended handoff.
   - [ ] Do not store the full report, speculative pain, or outreach prose as
         CRM frontmatter. Keep full artifacts in report backlinks while allowing
         a sourced durable summary in the entity body.
   - [ ] Do not store approach options, ordinal judgments, selection rationale,
-        or computed relationship value in entity Markdown or CRM frontmatter.
-  - [ ] Never hand-edit `.farplane/entities/index.json`; after an approved
-        Markdown entity change, run `farplane entities compile`, resolve the
-        entity through the generated lookup record, and follow its `path` when
-        full frontmatter or Markdown body context is needed.
+        or computed relationship value in entity Markdown/frontmatter. Never
+        edit canonical articles or generated search/graph projections here.
 - [ ] 9. Finish-check and review.
   - [ ] Render `templates/personalized-offer-report.md`, then apply
         `qa_checklist.md` again.
   - [ ] Confirm every personal claim is relevant and sourced/labeled, the offer
         fits the proof, the correction ask is credible, and drafts remain unsent.
-  - [ ] Use `review` before marking material customer-facing copy or a CRM delta
+  - [ ] Use `review` before marking material customer-facing copy or a Wiki delta
         ready; name the next owner and evidence that would change the offer.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
-
 ## Templates
 
 - [Personalized Offer Report](templates/personalized-offer-report.md) — use for
   every durable offer artifact.
 - [Operations leader example](examples/operations-leader/example.md) — use as a
   quality reference for respectful, evidence-bounded personalization.
-
 ## Gotchas
 
-- A personalized offer is not a mail merge with a biography sentence.
-- Career history may explain relevance; it does not prove current private pain.
-- Do not force a sales ask when the relationship is partnership, learning, or
-  delivery collaboration.
-- Do not create three decorative options. The frontier exists to change the
-  decision and may contain fewer than three viable approaches.
-- A thoughtful gesture is optional and must be professionally appropriate,
-  directly supported, and free of quid-pro-quo framing.
+- A personalized offer is not a mail merge; career history may explain
+  relevance but does not prove current private pain.
+- Do not force a sales ask for partnership, learning, or delivery relationships,
+  and do not create decorative options.
+- A thoughtful gesture must be relevant, supported, and free of quid-pro-quo framing.
 - Do not let copy quality hide a weak solution or mismatched proof claim.
-- Canonical entity Markdown may hold concise durable relationship memory and
-  unstructured context; full research and offer artifacts remain linked reports.
-
+- Canonical articles hold concise durable context; full artifacts remain linked reports.
 ## Reference Map
 
-- [Personalized Offer QA checklist](qa_checklist.md) — read before execution
-  and apply again before completion.
-- [Behavior eval cases](evals/evals.json) — run when changing personalization,
-  proof, CRM, or outreach-gate behavior.
-- [Agency Opportunity Research](../agency-opportunity-research/SKILL.md) — use
-  when target qualification or relationship strategy is missing.
-
+- [Personalized Offer QA checklist](qa_checklist.md) — read before execution and apply again before completion.
+- [Behavior eval cases](evals/evals.json) — run when changing personalization, proof, Wiki, or outreach gates.
+- [Agency Opportunity Research](../agency-opportunity-research/SKILL.md) — use when qualification or relationship strategy is missing.
+- [Manage Wiki](../manage-wiki/SKILL.md) — use for sourced durable Wiki preview or apply intent.
 ## Output
 
-Return or write one `PersonalizedOfferReport` with its compact approach
-frontier, selected offer, requested unsent drafts, a reviewed or proposed CRM
-entity delta, source/proof gaps, approval gates, and a concrete next action.
-Never imply contact, publication, or CRM mutation occurred without approval and
-evidence.
+Return one `PersonalizedOfferReport` with its compact approach frontier,
+selected offer, requested unsent drafts, reviewed or proposed Wiki page delta,
+source/proof gaps, approval gates, and next action. Never imply contact,
+public publication, or Wiki apply occurred without an observed downstream receipt.

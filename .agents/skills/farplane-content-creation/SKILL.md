@@ -33,7 +33,7 @@ filming, external generation, and account mutation remain separately gated.
 ```text
 farplane_content_creation(problem_ref, system_ref, feature_refs, source_or_idea, audience, content_goal, channels=all_configured, brand_kit?, tasty_pack_ref?, content_kind?, video_method?, ticket?, audience_context?, variation_count=10)
   -> best_bet_proposals + approved_skeleton + optimized_exemplar + format_transformations + variation_matrix + ranked_shortlist + distribution_handoff + proof_refs
-state: reads(farplane/harness.yaml stable problems, docs/systems and docs/features registries, farplane/metrics.yaml, ticket audience_context first or configured Feed Scout World Memory as fallback, source/evidence refs, resolved Brand Kit, optional computed Tasty Pack, ticket Goal Packet); writes(ticket-local proposals, frozen creative-input bundle, skeleton, exemplar, variants, review evidence, and feedback state)
+state: reads(farplane/harness.yaml stable problems, docs/systems and docs/features registries, farplane/metrics.yaml, ticket audience_context first or configured Feed Scout Brief as fallback, source/evidence refs, resolved Brand Kit, optional computed Tasty Pack, ticket Goal Packet); writes(ticket-local proposals, frozen creative-input bundle, skeleton, exemplar, variants, review evidence, and feedback state)
 gates: strategic_ref_bound; source_ref_preserved; audience_problem_named; canonical_icp_bound; baseline_named; intended_belief_or_behavior_delta_named; audience_named; content_goal_named; claim_strength_matches_proof; planning_approval_before_execution; exemplar_approval_before_variations; publish_requires_separate_approval
 routes: root skill `content-impl-plan` | root skill `optimize-with-human` | root skill `goal-advisor` | root skill `storyboard` | root skill `social-content` | root skill `video-production` | root skill `remotion` | root skill `qa` | root skill `review`
 fails: unreferenced_random_feature; internal_name_as_hook; executes before skeleton approval; asks a human to judge an undifferentiated batch; generates random rewrites; varies the proof spine; publishes all variants; treats feedback as publication authority
@@ -137,7 +137,7 @@ The content brief must name:
 - taste references and the specific patterns worth borrowing;
 - claim boundaries, prohibited claims, rights constraints, and approval gates;
 - the smallest useful artifact that can test the premise.
-- canonical ICP and selected world facts, the current baseline/default, and the
+- canonical ICP and selected source facts, the current baseline/default, and the
   precise belief or behavior delta the artifact is designed to cause.
 
 Evidence-backed content must map material claims to proof. An unproven idea may

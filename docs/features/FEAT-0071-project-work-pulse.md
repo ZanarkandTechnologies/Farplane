@@ -3,7 +3,7 @@ title: Project Work Pulse
 status: implemented
 owner: feature-registry
 created_at: 2026-07-10
-updated_at: 2026-07-25
+updated_at: 2026-08-19
 tags:
   - farplane
   - feature
@@ -14,7 +14,7 @@ refs:
   - skills/pulse-update/SKILL.md
   - skills/plan-next-wave/SKILL.md
   - bin/core/farplane_ticket_history.py
-  - docs/features/FEAT-0072-persistent-icp-and-world-memory.md
+  - docs/features/FEAT-0072-scout-brief.md
 feature_id: FEAT-0071
 system_id: SYS-0003
 category: planning
@@ -118,13 +118,13 @@ do an executable ticket; otherwise plan a bounded next wave
   Areas contribute passive ICP, evidence-bar, capability, and metric context;
   they never define workflows or become planners.
 - Passes each area's canonical ICP plus selected complete facts from one
-  configured Feed Scout World Memory. Outward-facing calls must name the ICP
-  job/pain, complete copied world facts and source refs, baseline/default, and
+  configured Feed Scout Brief. Outward-facing calls must name the ICP
+  job/pain, complete copied source facts and source refs, baseline/default, and
   intended belief or workflow delta; a trend label alone is not admissible
   context.
 - Derives bounded `preference_memory` from terminal AI-planned Reward rows
   (`accept -> accept`, `kill -> reject`; nonterminal rows omitted) and passes it
-  separately from World Memory and Tasty Pack evidence. Rejection teaches later
+  separately from Scout Brief and Tasty Pack evidence. Rejection teaches later
   ranking but is not a same-day planning outage.
 - Requires every proposed call to name its configured `skill_ref`, bind exactly
   the required arguments, state objective impact and proof, and survive global

@@ -4,13 +4,13 @@
     {
       "id": "customer_research_minimal_frontmatter_01",
       "prompt": "I have a call with Jane Doe from Acme Logistics. Her LinkedIn is https://example.com/jane and I want to talk about whether AI workflow automation could help their operations team. Prep me.",
-      "expected_output": "Produces or describes a customer research report under .farplane/customer-research/reports rather than a CRM pipeline record; Uses minimal frontmatter with skill, entity_refs, name, links, optional industry, relevance, and created_at; Resolves stable entity_refs against Markdown-owned .farplane/entities, or uses an empty list plus a proposed delta when writes are not approved; Does not hand-maintain report backlinks on canonical entities; Keeps role, confidence, pain hypotheses, next actions, and relationship stage in the body or entity funnel as appropriate; Compiles entity Markdown only after an approved relationship-state update; Does not add pipeline or replacement project-controller metadata; Labels sourced facts, inferences, and unknowns separately; Includes conversation topics, questions to ask, and a correction-seeking help angle",
+      "expected_output": "Produces or describes a customer research report under .farplane/customer-research/reports rather than a CRM pipeline record; Uses minimal frontmatter with skill, entity_refs, name, links, optional industry, relevance, and created_at; Resolves stable entity_refs against canonical Wiki articles, or uses an empty list plus a previewed delta; Does not hand-maintain report backlinks; Keeps role, confidence, pain hypotheses, next actions, and relationship stage in the body; Routes durable facts to Manage Wiki in preview mode because no Wiki write direction was supplied; Does not add pipeline metadata; Labels sourced facts, inferences, and unknowns separately; Includes conversation topics, questions, and a correction-seeking help angle",
       "files": [],
       "assertions": [
         "Produces or describes a customer research report under .farplane/customer-research/reports rather than a CRM pipeline record",
         "Uses minimal frontmatter with skill, entity_refs, name, links, optional industry, relevance, and created_at",
-        "Resolves stable entity_refs against Markdown-owned .farplane/entities, or uses entity_refs: [] plus a proposed-but-not-applied delta when CRM writes are not approved",
-        "Keeps role, confidence, pain hypotheses, next actions, and relationship stage in the body or CRM entity status as appropriate",
+        "Resolves stable entity_refs against canonical Wiki articles, or uses entity_refs: [] plus a Manage Wiki preview when no Wiki write direction was supplied",
+        "Keeps role, confidence, pain hypotheses, next actions, and relationship stage in the body or Wiki entity status as appropriate",
         "Does not add pipeline or replacement project-controller metadata",
         "Labels sourced facts, inferences, and unknowns separately",
         "Includes conversation topics, questions to ask, and a correction-seeking help angle"
@@ -79,26 +79,26 @@
       }
     },
     {
-      "id": "customer_research_auth_wall_empty_crm_01",
-      "prompt": "Prep me for a first call with Alex Chen, founder of the fictional Arbor Grid, whose supplied profile at https://example.com/profile opens a sign-in wall in our browser. A public interview credits Alex with rolling the platform out across five sites and repeatedly discusses reliable handovers; the public company page confirms the founder role and a current implementation-analyst opening. This workspace has no CRM people yet and I have not approved any CRM changes.",
-      "expected_output": "Attempts rendered browser inspection when available and records the profile as auth_walled instead of claiming it was read; Continues with opened public professional alternatives and labels each source access mode; Does not give high confidence to claims supported only by indexed snippets; Uses entity_refs: [] and includes a proposed-but-not-applied CRM delta; Does not create CRM entities or run compile; Produces a useful opening summary, compact Person Signal Card, and correction questions despite the blocked profile",
+      "id": "customer_research_auth_wall_empty_wiki_01",
+      "prompt": "Prep me for a first call with Alex Chen, founder of the fictional Arbor Grid, whose supplied profile at https://example.com/profile opens a sign-in wall in our browser. A public interview credits Alex with rolling the platform out across five sites and repeatedly discusses reliable handovers; the public company page confirms the founder role and a current implementation-analyst opening. This workspace has no Wiki people yet. Show any useful Wiki changes, but don't write them.",
+      "expected_output": "Attempts rendered browser inspection when available and records the profile as auth_walled instead of claiming it was read; Continues with opened public professional alternatives and labels each source access mode; Does not give high confidence to claims supported only by indexed snippets; Uses entity_refs: [] and routes durable facts to Manage Wiki with preview intent; returns the staged page/entity decisions without writes; Produces a useful opening summary, compact Person Signal Card, and correction questions despite the blocked profile",
       "files": [],
       "assertions": [
         "Records the supplied profile as auth_walled and does not claim personal activity was inspected",
         "Uses source access labels and does not overstate snippet-only evidence",
         "Continues with public professional alternatives rather than stopping or bypassing access controls",
-        "Uses entity_refs: [] plus a proposed-but-not-applied CRM delta because writes are not approved",
-        "Does not create CRM state or run compile",
+        "Uses entity_refs: [] and routes durable sourced facts through Manage Wiki preview",
+        "Returns resolved page/entity decisions without canonical or generated Wiki writes",
         "Still produces a sourced opening summary, compact Person Signal Card, and correction-seeking questions"
       ],
       "metadata": {
         "farplane": {
-          "title": "Auth-walled profile and empty CRM stay useful without hidden writes",
+          "title": "Auth-walled profile and empty Wiki stay useful without hidden writes",
           "tags": [
             "skill",
             "customer-research",
             "auth-wall",
-            "crm-gate"
+            "wiki-gate"
           ],
           "notes": "Regression from a real run: browser access mode and empty-ledger behavior must be explicit without leaking the expected implementation terms in an ordinary prospect request."
         }
@@ -182,6 +182,21 @@
           "notes": "Regression from the ERTH trial: no current LinkedIn job cards, a closed Ecommerce Manager listing, and a founder finance-hiring post with unknown current status must remain distinct."
         }
       }
+    },
+    {
+      "id": "customer_research_save_to_wiki_01",
+      "prompt": "Research Maya Tan, operations director at Helios Ops, for my call. Her supplied public conference bio says she leads logistics operations and has spoken about same-day exception response. Save the durable professional findings to our Wiki, and keep the call message unsent.",
+      "expected_output": "Produces the sourced customer research report, treats save-to-Wiki as apply, prepares only durable professional facts for Manage Wiki without requesting a second exact-delta approval, explicitly preserves Manage Wiki ownership of page selection, entity resolve/create, and mention linking, excludes inferred pain and private material, keeps outreach unsent, and reports not_executed rather than inventing an applied receipt in this read-only fixture.",
+      "files": [],
+      "assertions": [
+        "Treats save-to-Wiki as apply while keeping outreach unsent",
+        "Passes only sourced durable professional facts to Manage Wiki",
+        "Preserves Manage Wiki ownership of page selection, entity resolve/create, and mention linking",
+        "Does not request a second exact-delta approval",
+        "Excludes inferred pain and private or sensitive facts from Wiki apply",
+        "Does not fabricate an applied receipt in the read-only fixture"
+      ],
+      "metadata": {"farplane": {"title": "Research save-to-Wiki applies durable professional facts", "tags": ["skill", "customer-research", "wiki", "apply"]}}
     }
   ]
 }

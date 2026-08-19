@@ -74,9 +74,9 @@ source_refs: []
 |  | `person | company | opportunity` | `create | update | none` |  |  |  | `proposed` |
 
 Campaign queue stages remain in this campaign artifact. Do not create an
-opportunity merely because a candidate is included. Applying an approved delta
-requires editing canonical entity Markdown and running `farplane entities compile`;
-never edit generated CRM JSON directly.
+opportunity merely because a candidate is included. Applying an approved,
+sourced delta requires a `manage-wiki` handoff; never edit canonical entity
+Markdown or generated Wiki/CRM projections directly in this workflow.
 
 ## State And Measurement
 

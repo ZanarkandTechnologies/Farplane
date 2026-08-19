@@ -10,9 +10,9 @@ relevance: "{{ one_sentence_reason_this_person_matters }}"
 created_at: "{{ YYYY-MM-DD }}"
 ---
 
-Use `entity_refs: []` when no entity exists and CRM writes are not approved;
-include a proposed-but-not-applied CRM delta in the body. Add other resolved
-CRM IDs only when the report actually covers those entities. Keep deep ICP mode
+Use only already-existing canonical Wiki IDs in `entity_refs`. A preview may
+keep those resolved IDs, but must omit staged new IDs until apply; use `[]` when
+none exists. Include the previewed delta in the body. Keep deep ICP mode
 in the body, not frontmatter.
 
 # {{ Person Name }} Deep Person ICP
@@ -78,7 +78,8 @@ Access labels: `full_public`, `indexed_snippet`, `operator_supplied`,
 - Highest-value unknown:
 - Boundary honored:
 
-## CRM Delta Proposed, Not Applied
+## Wiki Delta
 
-Include this section only when `entity_refs: []` because relationship-state
-writes were not approved.
+Include `publication_intent: preview | apply` and the Manage Wiki result. Direct
+Wiki write intent selects apply without a second delta approval; privacy,
+ambiguity, source, and validation gates still block.

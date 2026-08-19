@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate the structural and provenance contract of Feed Scout World Memory."""
+"""Validate the structural and provenance contract of the Feed Scout Brief."""
 
 from __future__ import annotations
 
@@ -127,7 +127,7 @@ def load_expected_icps(harness_path: Path | None) -> dict[str, dict[str, Any]]:
     }
 
 
-def validate_world_memory_text(
+def validate_scout_brief_text(
     text: str,
     *,
     allow_template_placeholders: bool = False,
@@ -135,11 +135,11 @@ def validate_world_memory_text(
 ) -> list[str]:
     errors: list[str] = []
     if not text.startswith("---\n"):
-        return ["World Memory must start with YAML frontmatter"]
+        return ["Scout Brief must start with YAML frontmatter"]
     line_count = non_empty_line_count(text)
     if not allow_template_placeholders and line_count > MAX_NON_EMPTY_LINES:
         errors.append(
-            f"World Memory has {line_count} non-empty lines; maximum is {MAX_NON_EMPTY_LINES}. "
+            f"Scout Brief has {line_count} non-empty lines; maximum is {MAX_NON_EMPTY_LINES}. "
             "Merge, replace, or demote detail to the dated report."
         )
     try:
@@ -152,28 +152,28 @@ def validate_world_memory_text(
     for key in FRONTMATTER_REQUIRED:
         if key not in frontmatter:
             errors.append(f"frontmatter is missing {key}")
-    if frontmatter.get("kind") != "feed-scout-world-memory":
-        errors.append("frontmatter kind must be feed-scout-world-memory")
+    if frontmatter.get("kind") != "feed-scout-brief":
+        errors.append("frontmatter kind must be feed-scout-brief")
     if not allow_template_placeholders and not frontmatter.get("updated_at"):
-        errors.append("live World Memory frontmatter updated_at must be populated")
+        errors.append("live Scout Brief frontmatter updated_at must be populated")
     headings = re.findall(r"^## (.+?)\s*$", body, flags=re.MULTILINE)
     for section in REQUIRED_SECTIONS:
         count = headings.count(section)
         if count != 1:
-            errors.append(f"World Memory must contain exactly one ## {section} section")
+            errors.append(f"Scout Brief must contain exactly one ## {section} section")
     unexpected_headings = sorted(set(headings) - set(REQUIRED_SECTIONS))
     if unexpected_headings:
-        errors.append(f"World Memory has unsupported H2 sections: {', '.join(unexpected_headings)}")
+        errors.append(f"Scout Brief has unsupported H2 sections: {', '.join(unexpected_headings)}")
     if not allow_template_placeholders and PLACEHOLDER_RE.search(body):
-        errors.append("live World Memory must not contain template placeholders")
+        errors.append("live Scout Brief must not contain template placeholders")
     if "append-only" not in body and "not a daily log" not in body:
-        errors.append("memory must state its update-in-place/non-timeline boundary")
+        errors.append("Scout Brief must state its update-in-place/non-timeline boundary")
     if re.search(r"^### ", body, flags=re.MULTILINE):
-        errors.append("World Memory must use simple bullets, not H3 entry blocks")
+        errors.append("Scout Brief must use simple bullets, not H3 entry blocks")
     icp_section = section_body(body, "ICPs")
     icp_bullets = [bullet for bullet in bullets(icp_section) if bullet.lower() not in {"none.", "none observed."}]
     if not icp_bullets:
-        errors.append("World Memory ICP section must include at least one bullet entry")
+        errors.append("Scout Brief ICP section must include at least one bullet entry")
     observed_icp_ids: list[str] = []
     for index, bullet in enumerate(icp_bullets, start=1):
         match = re.match(r"`([^`]+)`\s+—\s*([^|]+)", bullet)
@@ -198,12 +198,12 @@ def validate_world_memory_text(
         missing = sorted(set(expected_icps) - set(observed_icp_ids))
         extra = sorted(set(observed_icp_ids) - set(expected_icps))
         if missing:
-            errors.append(f"World Memory is missing configured ICP areas: {', '.join(missing)}")
+            errors.append(f"Scout Brief is missing configured ICP areas: {', '.join(missing)}")
         if extra:
-            errors.append(f"World Memory has unknown ICP areas: {', '.join(extra)}")
+            errors.append(f"Scout Brief has unknown ICP areas: {', '.join(extra)}")
         duplicates = sorted({area_id for area_id in observed_icp_ids if observed_icp_ids.count(area_id) > 1})
         if duplicates:
-            errors.append(f"World Memory has duplicate ICP areas: {', '.join(duplicates)}")
+            errors.append(f"Scout Brief has duplicate ICP areas: {', '.join(duplicates)}")
 
     if not allow_template_placeholders:
         trend_section = section_body(body, "Trends")
@@ -223,18 +223,18 @@ def validate_world_memory_text(
     return errors
 
 
-def validate_world_memory(
+def validate_scout_brief(
     path: Path,
     *,
     allow_template_placeholders: bool = False,
     harness_path: Path | None = None,
 ) -> list[str]:
     if not path.is_file():
-        return [f"World Memory file does not exist: {path}"]
+        return [f"Scout Brief file does not exist: {path}"]
     if harness_path is None and not allow_template_placeholders:
         candidate = path.resolve().parents[2] / "farplane" / "harness.yaml" if len(path.resolve().parents) > 2 else None
         harness_path = candidate if candidate and candidate.is_file() else None
-    return validate_world_memory_text(
+    return validate_scout_brief_text(
         path.read_text(encoding="utf-8"),
         allow_template_placeholders=allow_template_placeholders,
         expected_icps=load_expected_icps(harness_path),
@@ -247,7 +247,7 @@ def main() -> int:
     parser.add_argument("--allow-template-placeholders", action="store_true")
     parser.add_argument("--harness", type=Path)
     args = parser.parse_args()
-    errors = validate_world_memory(
+    errors = validate_scout_brief(
         args.path,
         allow_template_placeholders=args.allow_template_placeholders,
         harness_path=args.harness,

@@ -1,0 +1,44 @@
+{
+  "project": "synthetic-supplier-network",
+  "bound_source": "Alex Chen confirmed the relationship.",
+  "touched_article": {
+    "path": ".farplane/entities/johor-supplier.md",
+    "frontmatter": {"id": "johor-supplier", "kind": "company", "name": "Johor Supplier"},
+    "body": "# Johor Supplier\n\n## Relationship context\n\nThe supply relationship was confirmed."
+  },
+  "search_result": {
+    "query": "Alex Chen",
+    "normalized_query": "alexchen",
+    "candidates": [
+      {
+        "id": "alex-chen-logistics",
+        "name": "Alex Chen",
+        "kind": "person",
+        "location": "Johor, Malaysia",
+        "path": ".farplane/entities/alex-chen-logistics.md",
+        "match_types": ["exact_name", "trigram"],
+        "similarity": 1.0
+      },
+      {
+        "id": "alex-chen-finance",
+        "name": "Alex Chen",
+        "kind": "person",
+        "location": "Singapore",
+        "path": ".farplane/entities/alex-chen-finance.md",
+        "match_types": ["exact_name", "trigram"],
+        "similarity": 1.0
+      }
+    ]
+  },
+  "candidate_articles": [
+    {
+      "id": "alex-chen-logistics",
+      "summary": "Logistics consultant in Johor; no authored connection to Johor Supplier."
+    },
+    {
+      "id": "alex-chen-finance",
+      "summary": "Finance executive in Singapore; no authored connection to Johor Supplier."
+    }
+  ],
+  "missing_disambiguators": ["employer", "role in the relationship", "contact details"]
+}

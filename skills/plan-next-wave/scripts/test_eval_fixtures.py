@@ -10,8 +10,8 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[3]
-WORLD_MEMORY_VALIDATOR = ROOT / "skills" / "feed-scout" / "scripts" / "validate_world_memory.py"
-MEMORY_FIXTURE = ROOT / "skills" / "plan-next-wave" / "evals" / "fixtures" / "icp-world-memory.md"
+SCOUT_BRIEF_VALIDATOR = ROOT / "skills" / "feed-scout" / "scripts" / "validate_scout_brief.py"
+SCOUT_BRIEF_FIXTURE = ROOT / "skills" / "plan-next-wave" / "evals" / "fixtures" / "icp-scout-brief.md"
 WAVE_FIXTURE = ROOT / "skills" / "plan-next-wave" / "evals" / "fixtures" / "skill-call-wave.json"
 HARNESS = ROOT / "farplane" / "harness.yaml"
 GOLDEN = ROOT / "skills" / "plan-next-wave" / "examples" / "golden" / "compelling-proposal.md"
@@ -19,8 +19,8 @@ SKILL = ROOT / "skills" / "plan-next-wave" / "SKILL.md"
 EVALS = ROOT / "skills" / "plan-next-wave" / "evals" / "evals.json"
 
 
-def load_memory_validator():
-    spec = importlib.util.spec_from_file_location("memory_validator", WORLD_MEMORY_VALIDATOR)
+def load_scout_brief_validator():
+    spec = importlib.util.spec_from_file_location("scout_brief_validator", SCOUT_BRIEF_VALIDATOR)
     assert spec and spec.loader
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
@@ -28,9 +28,9 @@ def load_memory_validator():
 
 
 class EvalFixtureContractTest(unittest.TestCase):
-    def test_world_memory_fixture_passes(self) -> None:
-        validator = load_memory_validator()
-        self.assertEqual([], validator.validate_world_memory(MEMORY_FIXTURE, harness_path=HARNESS))
+    def test_scout_brief_fixture_passes(self) -> None:
+        validator = load_scout_brief_validator()
+        self.assertEqual([], validator.validate_scout_brief(SCOUT_BRIEF_FIXTURE, harness_path=HARNESS))
 
     def test_golden_is_a_skill_call_not_a_workflow(self) -> None:
         text = GOLDEN.read_text(encoding="utf-8")

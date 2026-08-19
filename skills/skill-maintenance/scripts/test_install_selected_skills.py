@@ -182,6 +182,7 @@ class InstallSelectedSkillsTests(unittest.TestCase):
             retired_names = {
                 "horizon-advisor",
                 "image-generation",
+                "ingest-world-data",
                 "ticket-opportunity-generator",
                 "video-generation",
             }

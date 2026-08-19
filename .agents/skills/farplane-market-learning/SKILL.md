@@ -27,7 +27,7 @@ generic market report.
 ```text
 farplane_market_learning(problem_ref, system_ref, feature_refs, question, audience, decision, source_refs?, ticket?, audience_context?)
   -> learning_brief + implication + next_action
-state: reads(farplane/harness.yaml stable problems, docs/systems and docs/features registries, farplane/metrics.yaml, ticket audience_context first or configured Feed Scout World Memory as fallback, current source refs, ticket context); writes(ticket artifact)
+state: reads(farplane/harness.yaml stable problems, docs/systems and docs/features registries, farplane/metrics.yaml, ticket audience_context first or configured Feed Scout Brief as fallback, current source refs, ticket context); writes(ticket artifact)
 gates: strategic_ref_bound; canonical_icp_bound; current_complaint_evidence; baseline_named; decision_named; source_quality_named; implication_not_generic; outreach_requires_approval
 routes: root skill `research` | root skill `best-of-worlds` | root skill `harness-scout` | ../farplane-content-creation/SKILL.md
 fails: generic_market_report; repo_activity_as_customer_pain; stale_or_unsourced_complaints; produces broad notes with no decision; changes direction without evidence; contacts users without approval

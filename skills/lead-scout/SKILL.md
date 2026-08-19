@@ -31,20 +31,22 @@ dedupe-first discipline without writing lead logic into `feed-scout`.
 
 ```text
 lead_scout(source_set, qualification_filter, outreach_goal?,
-           limit?, project_context?, crm_file?)
+           limit?, project_context?, wiki_root?, wiki_publication_intent = preview)
   -> ranked_candidates + qualification_evidence + research_handoffs
-   + crm_entity_delta?
+   + wiki_page_delta?
 state:
-  reads(public/supplied sources, local project context, optional CRM entities,
+  reads(public/supplied sources, local project context, optional Wiki articles,
         optional skill-local reports, qa_checklist.md)
   writes(candidate packet under the caller path or `.farplane/lead-scout/reports/`,
-         optional CRM entity create/update)
+         optional sourced Wiki delta handoff)
 gates:
   source_boundary_explicit; filter_operationalized; public_or_supplied_sources;
   deduped_candidates; qualification_reasons_labeled; no_private_dossiering;
-  scout_mode_named; prospect_tiers_named; stage_exit_checked; next_owner_named
+  scout_mode_named; prospect_tiers_named; stage_exit_checked; next_owner_named;
+  wiki_publication_intent_bound
 routes:
-  customer-research | solution-shaping | feed-scout | apify | research:user-grounding
+  customer-research | solution-shaping | feed-scout | apify |
+  research:user-grounding | manage-wiki
 fails:
   broad scraping without source boundary; creepy personal dossiering;
   rank-only output with no evidence; inventing private facts; treating CRM
@@ -67,6 +69,9 @@ Use `customer-research` for shortlisted people or companies after qualification.
         public search, X posts/accounts, GitHub, directories, conference pages,
         newsletters, company pages, or a project-local source list.
   - [ ] Read `qa_checklist.md` as preflight guardrails.
+  - [ ] Bind Wiki intent: direct save/update/publish-to-Wiki language means
+        `apply`; preview/no-write or no Wiki direction means `preview`; a
+        conflict blocks publication.
   - [ ] Choose the scout mode: broad source scan, finite target-account list,
         inbound/referral triage, event/community followup, or social-signal
         scout.
@@ -103,10 +108,15 @@ Use `customer-research` for shortlisted people or companies after qualification.
 - [ ] 4. Produce the ranked candidate packet.
   - [ ] Include accepted candidates, rejected near-misses, evidence snippets or
         source notes, confidence, and recommended next owner for each candidate.
-  - [ ] For CRM writeback, create or update only the entity's stable ID, name,
-        description, links, and status in `.farplane/entities/*.md`, then
-        run `farplane entities compile`. Put report paths and workflow details in the
-        skill-owned candidate packet.
+  - [ ] For sourced durable Wiki facts, pass evidence and the bound intent to
+        [manage-wiki](../manage-wiki/SKILL.md), which chooses pages/entities.
+        Direct Wiki write intent is sufficient for apply; source, privacy,
+        ambiguity, and validation still block. Keep report paths and workflow
+        detail in the packet; never mutate Wiki state here.
+        Exclude scout tier/status, scores, and qualification-only signals from
+        the Wiki payload.
+  - [ ] Record Manage Wiki's search, resolve-or-create, link, and publication
+        outcome. Do not ask for a second exact-delta approval.
 - [ ] 5. Route shortlisted candidates.
   - [ ] Route qualified people or companies to
         [customer-research](../customer-research/SKILL.md) for sourced reports.
@@ -133,35 +143,20 @@ Use `customer-research` for shortlisted people or companies after qualification.
 Candidate packet:
 
 ```text
-Scout goal:
-Source boundary:
-Scout mode:
-Qualification filter:
-ICP / negative fit:
-Ranking method:
+Scout goal / source boundary / mode:
+Qualification filter / ICP / negative fit / ranking method:
 
 Top candidates:
 - Candidate:
-  Public links:
-  Fit signals:
-  Why them / why now:
-  Access path:
-  Channel fit:
-  Prospect tier:
-  Stage-exit status:
-  Disqualifiers:
-  Confidence:
-  Evidence notes:
-  Next owner:
+  Public links / fit signals / evidence notes:
+  Why them / why now / access path / channel fit:
+  Prospect tier / stage-exit / disqualifiers / confidence / next owner:
 
 Rejected near-misses:
-- Candidate:
-  Why rejected:
-  Evidence notes:
+- Candidate / why rejected / evidence notes:
 
-Source notes:
-Unknowns:
-CRM writeback:
+Source notes / unknowns:
+Wiki writeback / publication intent / result:
 ```
 
 - [examples/public-founder-scout/example.md](examples/public-founder-scout/example.md)
@@ -188,6 +183,7 @@ CRM writeback:
   content/feed monitoring, not prospect packet ownership.
 - [apify](../apify/SKILL.md) - use only when an approved external
   actor route is needed for social/profile/place data.
+- [manage-wiki](../manage-wiki/SKILL.md) - use for a sourced durable Wiki preview or apply handoff after qualification.
 
 ## Output
 
@@ -195,5 +191,8 @@ CRM writeback:
   notes.
 - `research_handoffs`: next candidates for `customer-research` and, later,
   `solution-shaping`.
-- `crm_entity_delta`: optional entity create/update when the caller supplies a
-  CRM file or project convention.
+- `wiki_page_delta`: `{ intent; result; durable facts + source refs;
+  privacy/ambiguity disposition; manageWiki: search + resolve/create + links
+  + receiptRef? }`. Without an observed receipt, set `result: not_executed`;
+  never fabricate apply. Manage Wiki owns resolution/creation/linking and direct
+  Wiki apply intent needs no second exact-delta approval.

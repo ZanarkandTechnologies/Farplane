@@ -1,0 +1,14 @@
+{
+  "source": {
+    "canonicalRef": "https://news.example/acme-batu-kawan-line",
+    "title": "Acme Motors adds Batu Kawan finishing line",
+    "publishedAt": "2026-08-18",
+    "pageStatus": "available",
+    "summary": "Acme Motors says its new Batu Kawan finishing line will support aluminum housing production.",
+    "entities": ["Acme Motors", "Batu Kawan finishing line"]
+  },
+  "project": {
+    "wikiStatus": "ready",
+    "knownEntities": ["acme-motors"]
+  }
+}

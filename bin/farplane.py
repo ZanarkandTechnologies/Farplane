@@ -75,6 +75,8 @@ def main(argv: list[str]) -> int:
         parser.error("project requires a subcommand: snapshot")
     if getattr(args, "command", None) == "reports" and getattr(args, "reports_command", None) is None:
         parser.error("reports requires a subcommand: index")
+    if getattr(args, "command", None) == "wiki" and getattr(args, "wiki_command", None) is None:
+        parser.error("wiki requires a subcommand: doctor, rebuild, sync, or search")
     if getattr(args, "command", None) == "mining" and getattr(args, "mining_group", None) is None:
         parser.error("mining requires a subcommand")
     if getattr(args, "mining_group", None) in {"programs", "routes", "runs", "outputs"} and getattr(args, "mining_action", None) is None:

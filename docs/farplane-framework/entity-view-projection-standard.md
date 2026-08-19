@@ -9,7 +9,7 @@ framework_template_version: "2.0.14"
 # Entity View Projection Standard
 
 This standard lets a project interpret canonical entity Markdown with a local
-domain vocabulary while preserving one generic World graph.
+domain vocabulary while preserving one generic Wiki graph.
 
 ```text
 compile_view(entities, view_schema)
@@ -22,7 +22,7 @@ compile_view(entities, view_schema)
   and dated timeline evidence.
 - `.farplane/views.yaml` owns local entity membership and the view's relation,
   metric, resource, unit, problem, status, and confidence vocabulary.
-- `.farplane/entities/world.json` remains the generic paragraph-backed graph.
+- `.farplane/entities/graph.json` remains the generic paragraph-backed graph.
 - `.farplane/views/<view-id>.json` is a disposable typed projection for custom
   consumers. It never becomes a second source of truth; compilation removes
   generated view JSON whose view ID is no longer configured.
@@ -89,7 +89,7 @@ The example therefore means:
 ## Projection Contract
 
 Typed view schema v4 preserves the schema-v3 event, observation, relationship,
-flow, and summary semantics while inheriting lean World nodes. Selected
+flow, and summary semantics while inheriting lean graph nodes. Selected
 entities contain bounded graph identity/routing fields plus `view_status`; raw
 frontmatter and generic metadata remain in canonical Markdown.
 
@@ -136,4 +136,4 @@ selection.
 3. Compile with Farplane 2.0.10.
 4. Update typed view consumers to schema v3 and read
    `counts.resource_flows`.
-5. Preserve generic World consumers unchanged.
+5. Preserve generic graph consumers unchanged.

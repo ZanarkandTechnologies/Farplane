@@ -10,10 +10,11 @@ from farplane_cli_base import CORE_ROOT, DEFAULT_CODEX_HOME
 from farplane_cli_commands import (
     run_adoption_scan_cli, run_content_add_cli, run_content_list_cli,
     run_content_select_cli, run_content_validate_cli, run_doctor,
-    run_entities_compile_cli, run_harness_health_compile_cli,
+    run_harness_health_compile_cli,
     run_metrics_primitives_cli, run_mining_cli, run_project_snapshot_cli,
     run_reports_index_cli, run_reports_repair_refs_cli, run_response_check_cli,
     run_skill_rollout_scan_cli, run_ticket_finalize_cli, run_ticket_history_cli,
+    run_wiki_cli,
     run_validate_ticket,
 )
 from farplane_cli_hooks import (
@@ -237,16 +238,42 @@ def build_parser() -> argparse.ArgumentParser:
     reports_repair_refs.add_argument("--json", action="store_true")
     reports_repair_refs.set_defaults(func=run_reports_repair_refs_cli)
 
-    entities = sub.add_parser("entities", help="Compile flat Markdown-owned entities into generated views.")
-    entities_sub = entities.add_subparsers(dest="entities_command")
-    entities_compile = entities_sub.add_parser(
-        "compile",
-        help="Write .farplane/entities/index.json, world.json, and crm.json from flat entity Markdown.",
+    wiki = sub.add_parser("wiki", help="Search and project canonical Farplane Wiki Markdown.")
+    wiki_sub = wiki.add_subparsers(dest="wiki_command")
+
+    wiki_doctor = wiki_sub.add_parser(
+        "doctor", help="Check Python SQLite FTS5/trigram readiness and Wiki cache state."
     )
-    entities_compile.add_argument("--project-root", default=os.getcwd())
-    entities_compile.add_argument("--no-write", action="store_true")
-    entities_compile.add_argument("--json", action="store_true")
-    entities_compile.set_defaults(func=run_entities_compile_cli)
+    wiki_doctor.add_argument("--project-root", default=os.getcwd())
+    wiki_doctor.add_argument("--json", action="store_true")
+    wiki_doctor.set_defaults(func=run_wiki_cli)
+
+    wiki_rebuild = wiki_sub.add_parser(
+        "rebuild", help="Rebuild the generated Wiki database and JSON projections from Markdown."
+    )
+    wiki_rebuild.add_argument("--project-root", default=os.getcwd())
+    wiki_rebuild.add_argument("--no-write", action="store_true")
+    wiki_rebuild.add_argument("--json", action="store_true")
+    wiki_rebuild.set_defaults(func=run_wiki_cli)
+
+    wiki_sync = wiki_sub.add_parser(
+        "sync", help="Reparse changed Wiki pages, replace their emitted edges, and export projections."
+    )
+    wiki_sync.add_argument("--project-root", default=os.getcwd())
+    wiki_sync.add_argument("--path", action="append", default=[])
+    wiki_sync.add_argument("--no-write", action="store_true")
+    wiki_sync.add_argument("--json", action="store_true")
+    wiki_sync.set_defaults(func=run_wiki_cli)
+
+    wiki_search = wiki_sub.add_parser(
+        "search", help="Return exact, lexical, and trigram entity candidates."
+    )
+    wiki_search.add_argument("query")
+    wiki_search.add_argument("--project-root", default=os.getcwd())
+    wiki_search.add_argument("--kind")
+    wiki_search.add_argument("--limit", type=int, default=10)
+    wiki_search.add_argument("--json", action="store_true")
+    wiki_search.set_defaults(func=run_wiki_cli)
 
     mining = sub.add_parser("mining", help="Capture, route, replay, and inspect Core mining runs.")
     mining_sub = mining.add_subparsers(dest="mining_group")

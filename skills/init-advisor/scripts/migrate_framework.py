@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Apply the field-preserving Farplane framework 2.0.14 migration."""
+"""Apply the field-preserving Farplane framework 2.0.15 migration."""
 
 from __future__ import annotations
 
@@ -13,11 +13,11 @@ from typing import Any
 
 import yaml
 
-FRAMEWORK_VERSION = "2.0.14"
+FRAMEWORK_VERSION = "2.0.15"
 METRICS_TEMPLATE_VERSION = "0.4.0"
 HARNESS_TEMPLATE_VERSION = "0.5.3"
 BINDINGS_TEMPLATE_VERSION = "0.5.0"
-MIGRATION_DATE = "2026-08-02"
+MIGRATION_DATE = "2026-08-19"
 LEGACY_TYPE_MAP = {
     "daily": "flow",
     "daily_count": "flow",
@@ -309,6 +309,30 @@ def _migrate_bindings(path: Path) -> tuple[str, list[str]]:
             kanban["filesystem_ticket_policy"] = "include"
             structural_change = True
             changes.append("bindings.integrations.kanban.filesystem_ticket_policy -> include")
+    feed_scout = source.get("feed_scout")
+    if isinstance(feed_scout, dict):
+        legacy_scout_brief = feed_scout.get("world_memory")
+        current_scout_brief = feed_scout.get("scout_brief")
+        if legacy_scout_brief is not None:
+            migrated_scout_brief = (
+                legacy_scout_brief.replace("world-memory.md", "scout-brief.md")
+                if isinstance(legacy_scout_brief, str)
+                else legacy_scout_brief
+            )
+            if current_scout_brief is not None and current_scout_brief != migrated_scout_brief:
+                raise ValueError(
+                    "bindings.feed_scout contains conflicting world_memory and scout_brief values"
+                )
+            feed_scout.pop("world_memory")
+            feed_scout["scout_brief"] = migrated_scout_brief
+            structural_change = True
+            changes.append("bindings.feed_scout.world_memory -> scout_brief")
+        elif isinstance(current_scout_brief, str) and "world-memory.md" in current_scout_brief:
+            feed_scout["scout_brief"] = current_scout_brief.replace(
+                "world-memory.md", "scout-brief.md"
+            )
+            structural_change = True
+            changes.append("bindings.feed_scout.scout_brief path -> scout-brief.md")
     if not changes:
         return original, []
     if not structural_change and all(
@@ -324,6 +348,28 @@ def _migrate_bindings(path: Path) -> tuple[str, list[str]]:
         )
         return text, changes
     return yaml.safe_dump(source, sort_keys=False, allow_unicode=True, width=100), changes
+
+
+def _migrate_scout_brief(project_root: Path) -> tuple[Path | None, str, list[str]]:
+    legacy_path = project_root / ".farplane" / "feed-scout" / "world-memory.md"
+    current_path = project_root / ".farplane" / "feed-scout" / "scout-brief.md"
+    if legacy_path.is_file() and current_path.exists():
+        raise ValueError(
+            "both retired and current Scout Brief paths exist; reconcile them before migration"
+        )
+    source_path = legacy_path if legacy_path.is_file() else current_path
+    if not source_path.is_file():
+        return None, "", []
+    original = source_path.read_text(encoding="utf-8")
+    migrated = original.replace(
+        "kind: feed-scout-world-memory", "kind: feed-scout-brief"
+    ).replace("# Feed Scout World Memory", "# Feed Scout Brief")
+    changes: list[str] = []
+    if source_path == legacy_path:
+        changes.append(".farplane/feed-scout/world-memory.md -> scout-brief.md")
+    if migrated != original:
+        changes.append("Scout Brief kind and title migrated")
+    return current_path, migrated, changes
 
 
 def migrate_project(project_root: Path, *, force: bool) -> dict[str, Any]:
@@ -344,7 +390,14 @@ def migrate_project(project_root: Path, *, force: bool) -> dict[str, Any]:
     bindings_text, bindings_changes = (
         _migrate_bindings(bindings_path) if bindings_path.is_file() else ("", [])
     )
-    changes = manifest_changes + metrics_changes + harness_changes + bindings_changes
+    scout_brief_path, scout_brief_text, scout_brief_changes = _migrate_scout_brief(root)
+    changes = (
+        manifest_changes
+        + metrics_changes
+        + harness_changes
+        + bindings_changes
+        + scout_brief_changes
+    )
     if force:
         _atomic_write(manifest_path, manifest_text)
         _atomic_write(metrics_path, metrics_text)
@@ -352,6 +405,24 @@ def migrate_project(project_root: Path, *, force: bool) -> dict[str, Any]:
             _atomic_write(harness_path, harness_text)
         if bindings_path.is_file():
             _atomic_write(bindings_path, bindings_text)
+        if scout_brief_path is not None and scout_brief_changes:
+            scout_brief_path.parent.mkdir(parents=True, exist_ok=True)
+            legacy_scout_brief_path = root / ".farplane" / "feed-scout" / "world-memory.md"
+            source_mode_path = (
+                legacy_scout_brief_path
+                if legacy_scout_brief_path.is_file()
+                else scout_brief_path
+            )
+            mode = source_mode_path.stat().st_mode
+            with tempfile.NamedTemporaryFile(
+                "w", encoding="utf-8", dir=scout_brief_path.parent, delete=False
+            ) as handle:
+                handle.write(scout_brief_text)
+                temporary = Path(handle.name)
+            os.chmod(temporary, mode)
+            os.replace(temporary, scout_brief_path)
+            if legacy_scout_brief_path != scout_brief_path:
+                legacy_scout_brief_path.unlink(missing_ok=True)
     return {
         "ok": True,
         "project_root": str(root),
@@ -364,7 +435,7 @@ def migrate_project(project_root: Path, *, force: bool) -> dict[str, Any]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Migrate one Farplane project to framework 2.0.14 without replacing human-authored files."
+        description="Migrate one Farplane project to framework 2.0.15 without replacing human-authored files."
     )
     parser.add_argument("--project-root", type=Path, default=Path.cwd())
     parser.add_argument(

@@ -51,14 +51,14 @@ metrics:
             metrics = (root / "farplane" / "metrics.yaml").read_text()
             self.assertEqual(result["mode"], "applied")
             self.assertEqual(manifest["project"]["name"], "Keep me")
-            self.assertEqual(manifest["spec_version"], "2.0.14")
+            self.assertEqual(manifest["spec_version"], "2.0.15")
             self.assertEqual(
                 manifest["template_uses"]["farplane-framework"],
-                "2.0.14",
+                "2.0.15",
             )
             self.assertEqual(
                 manifest["_template_metadata"]["template_version"],
-                "2.0.14",
+                "2.0.15",
             )
             self.assertIn("type: flow", metrics)
             self.assertIn("Keep this human definition.", metrics)
@@ -137,6 +137,74 @@ metric_bindings: {}
             self.assertEqual(harness["planning"]["skill_refs"], ["review"])
             self.assertNotIn("metric_bindings", bindings)
             self.assertEqual(bindings["framework_template_version"], "0.5.0")
+
+    def test_force_migrates_scout_brief_key_path_and_live_file(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self._write_base_project(root)
+            (root / "farplane" / "metrics.yaml").write_text(
+                """kind: project-metrics
+updated_at: 2026-01-01
+framework_template_version: "0.4.0"
+metrics:
+  output:
+    refresh: Read accepted output evidence.
+    type: flow
+""",
+                encoding="utf-8",
+            )
+            (root / "farplane" / "bindings.yaml").write_text(
+                """kind: project-bindings
+feed_scout:
+  world_memory: .farplane/feed-scout/world-memory.md
+""",
+                encoding="utf-8",
+            )
+            sidecar_root = root / ".farplane" / "feed-scout"
+            sidecar_root.mkdir(parents=True)
+            (sidecar_root / "world-memory.md").write_text(
+                """---
+kind: feed-scout-world-memory
+---
+
+# Feed Scout World Memory
+""",
+                encoding="utf-8",
+            )
+
+            result = MODULE.migrate_project(root, force=True)
+
+            bindings = yaml.safe_load((root / "farplane" / "bindings.yaml").read_text())
+            scout_brief = (sidecar_root / "scout-brief.md").read_text()
+            self.assertEqual(
+                bindings["feed_scout"]["scout_brief"],
+                ".farplane/feed-scout/scout-brief.md",
+            )
+            self.assertNotIn("world_memory", bindings["feed_scout"])
+            self.assertFalse((sidecar_root / "world-memory.md").exists())
+            self.assertIn("kind: feed-scout-brief", scout_brief)
+            self.assertIn("# Feed Scout Brief", scout_brief)
+            self.assertIn("world-memory.md -> scout-brief.md", "\n".join(result["changes"]))
+
+    def test_scout_brief_migration_rejects_conflicting_live_paths(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self._write_base_project(root)
+            (root / "farplane" / "metrics.yaml").write_text(
+                """kind: project-metrics
+updated_at: 2026-01-01
+framework_template_version: "0.4.0"
+metrics: {}
+""",
+                encoding="utf-8",
+            )
+            sidecar_root = root / ".farplane" / "feed-scout"
+            sidecar_root.mkdir(parents=True)
+            (sidecar_root / "world-memory.md").write_text("legacy\n", encoding="utf-8")
+            (sidecar_root / "scout-brief.md").write_text("current\n", encoding="utf-8")
+
+            with self.assertRaisesRegex(ValueError, "both retired and current"):
+                MODULE.migrate_project(root, force=True)
 
 
 if __name__ == "__main__":

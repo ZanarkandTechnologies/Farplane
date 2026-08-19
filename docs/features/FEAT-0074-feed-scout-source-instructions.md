@@ -3,7 +3,7 @@ title: Feed Scout Source Instructions
 status: implemented
 owner: feed-scout
 created_at: 2026-07-24
-updated_at: 2026-07-24
+updated_at: 2026-08-19
 tags:
   - farplane
   - feature
@@ -12,7 +12,7 @@ tags:
 refs:
   - skills/feed-scout/SKILL.md
   - skills/feed-scout/references/data-model.md
-  - docs/features/FEAT-0072-persistent-icp-and-world-memory.md
+  - docs/features/FEAT-0072-scout-brief.md
 feature_id: FEAT-0074
 system_id: SYS-0008
 category: source-intelligence

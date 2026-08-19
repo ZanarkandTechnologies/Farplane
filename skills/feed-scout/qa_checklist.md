@@ -14,7 +14,7 @@ applies_to:
 Use before discovery and again before returning the source report.
 
 ```text
-feed_scout_check(report, world_memory, items, candidates, recovery_tickets) -> pass | violation | source_gap
+feed_scout_check(report, scout_brief, items, candidates, recovery_tickets) -> pass | violation | source_gap
 ```
 
 ## Checklist
@@ -39,10 +39,10 @@ feed_scout_check(report, world_memory, items, candidates, recovery_tickets) -> p
       cites a canonical URL/key, extraction path, and today-specific delta.
 - [ ] A dated Feed Scout report with Core frontmatter exists before candidate
       handoff.
-- [ ] The configured World Memory was read and updated in place after the
+- [ ] The configured Scout Brief was read and updated in place after the
       report. It contains exactly one ICPs, Trends, Other Notable Things, and
       Source Gaps section, stays at or under 100 non-empty lines, uses simple
-      bullet syntax, passes `scripts/validate_world_memory.py`, and has no
+      bullet syntax, passes `scripts/validate_scout_brief.py`, and has no
       appended daily timeline or snapshot series.
 - [ ] ICP canonical fields match `harness.areas.<area_id>.icp`; Feed Scout only
       changes source-backed concerns, language, trends, notable observations,
@@ -54,12 +54,12 @@ feed_scout_check(report, world_memory, items, candidates, recovery_tickets) -> p
       `hypothesis`, or `source_gap`, includes `icp=`, a compact claim/note,
       `use=`, `seen=`, and `refs=`, and stays evidence rather than authority.
 - [ ] Every surfaced candidate records source evidence, active-ticket dedupe,
-      relevant ICP and complete selected world facts, a named baseline/default, the intended
+      relevant ICP and complete selected source facts, a named baseline/default, the intended
       belief or behavior delta, executable scope, Reward, proof, stop condition,
       and unresolved authority gates; rejected candidates remain visible with
       reasons.
 - [ ] A candidate missing its ICP ref, concrete job/pain, baseline/default,
-      intended belief-or-behavior delta, complete selected world facts, or canonical
+      intended belief-or-behavior delta, complete selected source facts, or canonical
       source evidence is rejected from ranked handoff and retained only as a
       report finding or source gap.
 - [ ] Every created ticket is a capped, deduped, KPI/guard-linked direct recovery

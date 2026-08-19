@@ -22,7 +22,7 @@ FeedScoutConfig {
   daily_feed_root: string
   ledger: string
   proposal_ledger: string
-  world_memory: string
+  scout_brief: string
   destination: "local_ledger" | "local_inbox" | "notion_tasks"
   write_policy: "local_first" | "report_only"
   ui?: {
@@ -48,7 +48,7 @@ FeedEntity {
 Rules:
 
 - Config paths are project-relative unless absolute.
-- `world_memory` points to one World Memory Markdown file updated in place. It is current
+- `scout_brief` points to one Scout Brief Markdown file updated in place. It is current
   synthesis, not a daily/monthly ledger or snapshot timeline.
 - Key sources by the person, organization, or project the operator wants to
   track, for example `entities.theo-ping.sources.instagram`, so UI can render
@@ -307,17 +307,17 @@ DailyFeedFile {
 }
 ```
 
-## FeedScoutWorldMemory
+## FeedScoutBrief
 
-The World Memory file is the compact retrieval surface between daily Feed Scout runs
+The Scout Brief file is the compact retrieval surface between daily Feed Scout runs
 and downstream planning. It uses Markdown because the content is
 judgment-shaped, but deterministic headings and frontmatter keep the contract
 inspectable.
 
 ```text
-FeedScoutWorldMemory {
+FeedScoutBrief {
   frontmatter: {
-    kind: "feed-scout-world-memory"
+    kind: "feed-scout-brief"
     status: "active"
     updated_at: datetime
     canonical_icp_ref: "farplane/harness.yaml#areas"
@@ -348,7 +348,7 @@ CompactNotableBullet {
 
 Rules:
 
-- `harness.areas.<area_id>.icp` is canonical. World Memory renders only area
+- `harness.areas.<area_id>.icp` is canonical. Scout Brief renders only area
   IDs, labels, current concerns/language, trends, notable things, source gaps,
   and provenance; full canonical profile text stays in `harness.yaml`.
 - Update existing concepts in place, merge duplicates, and remove or replace
@@ -357,9 +357,9 @@ Rules:
   source gaps must make their status honest.
 - Keep the live file at or under 100 non-empty lines. Demote detail to the
   dated Feed Scout report when memory pressure appears.
-- World Memory is optional evidence. It never overrides metrics, ticket history,
+- Scout Brief is optional evidence. It never overrides metrics, ticket history,
   authority, or the planner's admission gates.
-- Validate the final file with `scripts/validate_world_memory.py`; the helper checks
+- Validate the final file with `scripts/validate_scout_brief.py`; the helper checks
   line cap, simple syntax, structure, and provenance affordances but does not
   author or rank content.
 

@@ -1,15 +1,13 @@
 #!/usr/bin/env python3
-"""Compile flat Markdown-owned entities into generated project views."""
+"""Parse canonical Wiki Markdown and build generated entity projections."""
 
 from __future__ import annotations
 
-import argparse
 import hashlib
 import json
 import math
 import os
 import re
-import sys
 import tempfile
 from dataclasses import dataclass
 from datetime import date as date_type
@@ -23,7 +21,7 @@ import yaml
 ENTITY_ROOT = Path(".farplane/entities")
 VIEW_CONFIG_PATH = Path(".farplane/views.yaml")
 ENTITY_INDEX_PATH = ENTITY_ROOT / "index.json"
-WORLD_VIEW_PATH = ENTITY_ROOT / "world.json"
+GRAPH_VIEW_PATH = ENTITY_ROOT / "graph.json"
 CRM_VIEW_PATH = ENTITY_ROOT / "crm.json"
 VIEW_PROJECTION_ROOT = Path(".farplane/views")
 REQUIRED_FIELDS = ("id", "kind", "name")
@@ -634,54 +632,57 @@ def body_timeline(record: dict[str, Any]) -> list[dict[str, Any]]:
     return entries
 
 
-def build_entity_registry(project_root: Path) -> dict[str, Any]:
-    """Parse canonical entity sources into the compiler's private working set."""
+def parse_entity_record(
+    project_root: Path,
+    path: Path,
+) -> tuple[dict[str, Any] | None, EntityIssue | None]:
+    """Parse and locally validate one canonical Wiki article."""
     root = project_root / ENTITY_ROOT
-    issues: list[EntityIssue] = []
+    rel_path = path.relative_to(project_root).as_posix()
+    if path.parent != root:
+        return None, EntityIssue(rel_path, "nested_entity_path")
+    frontmatter, body, issue = read_entity(path)
+    if issue or frontmatter is None:
+        return None, EntityIssue(rel_path, issue or "invalid_frontmatter")
+    missing = [field for field in REQUIRED_FIELDS if not field_text(frontmatter, field)]
+    if missing:
+        return None, EntityIssue(rel_path, "missing_required:" + ",".join(missing))
+    entity_id = field_text(frontmatter, "id")
+    id_issue = validate_id(entity_id)
+    if id_issue:
+        return None, EntityIssue(rel_path, id_issue)
+    if path.stem != entity_id:
+        return None, EntityIssue(rel_path, f"filename_id_mismatch:{path.stem}:{entity_id}")
+    return {
+        "id": entity_id,
+        "kind": field_text(frontmatter, "kind"),
+        "name": field_text(frontmatter, "name"),
+        "path": rel_path,
+        "body": body,
+        "frontmatter": frontmatter,
+    }, None
+
+
+def finalize_entity_registry(
+    project_root: Path,
+    source_records: list[dict[str, Any]],
+    initial_issues: list[EntityIssue] | None = None,
+    initial_excluded_paths: set[str] | None = None,
+) -> dict[str, Any]:
+    """Cross-validate parsed articles and build the compiler working set."""
+    issues = list(initial_issues or [])
+    excluded_paths = set(initial_excluded_paths or set())
     records: list[dict[str, Any]] = []
     seen_ids: dict[str, str] = {}
-    excluded_paths: set[str] = set()
-
-    if root.exists():
-        for path in sorted(root.rglob("*.md")):
-            rel_path = path.relative_to(project_root).as_posix()
-            if path.parent != root:
-                issues.append(EntityIssue(rel_path, "nested_entity_path"))
-                excluded_paths.add(rel_path)
-                continue
-            frontmatter, body, issue = read_entity(path)
-            if issue or frontmatter is None:
-                issues.append(EntityIssue(rel_path, issue or "invalid_frontmatter"))
-                excluded_paths.add(rel_path)
-                continue
-            missing = [field for field in REQUIRED_FIELDS if not field_text(frontmatter, field)]
-            if missing:
-                issues.append(EntityIssue(rel_path, "missing_required:" + ",".join(missing)))
-                excluded_paths.add(rel_path)
-                continue
-            entity_id = field_text(frontmatter, "id")
-            id_issue = validate_id(entity_id)
-            if id_issue:
-                issues.append(EntityIssue(rel_path, id_issue))
-                excluded_paths.add(rel_path)
-                continue
-            if path.stem != entity_id:
-                issues.append(EntityIssue(rel_path, f"filename_id_mismatch:{path.stem}:{entity_id}"))
-                excluded_paths.add(rel_path)
-                continue
-            if entity_id in seen_ids:
-                issues.append(EntityIssue(rel_path, f"duplicate_id:{entity_id}:{seen_ids[entity_id]}"))
-                excluded_paths.add(rel_path)
-                continue
-            seen_ids[entity_id] = rel_path
-            records.append({
-                "id": entity_id,
-                "kind": field_text(frontmatter, "kind"),
-                "name": field_text(frontmatter, "name"),
-                "path": rel_path,
-                "body": body,
-                "frontmatter": frontmatter,
-            })
+    for record in sorted(source_records, key=lambda item: str(item["path"])):
+        entity_id = str(record["id"])
+        rel_path = str(record["path"])
+        if entity_id in seen_ids:
+            issues.append(EntityIssue(rel_path, f"duplicate_id:{entity_id}:{seen_ids[entity_id]}"))
+            excluded_paths.add(rel_path)
+            continue
+        seen_ids[entity_id] = rel_path
+        records.append(record)
 
     known_ids = {record["id"] for record in records}
     questions_by_id: dict[str, dict[str, Any]] = {}
@@ -795,6 +796,24 @@ def build_entity_registry(project_root: Path) -> dict[str, Any]:
     }
 
 
+def build_entity_registry(project_root: Path) -> dict[str, Any]:
+    """Parse canonical Wiki articles into the compiler's private working set."""
+    root = project_root / ENTITY_ROOT
+    issues: list[EntityIssue] = []
+    records: list[dict[str, Any]] = []
+    excluded_paths: set[str] = set()
+    if root.exists():
+        for path in sorted(root.rglob("*.md")):
+            record, issue = parse_entity_record(project_root, path)
+            if issue is not None:
+                issues.append(issue)
+                excluded_paths.add(issue.path)
+                continue
+            assert record is not None
+            records.append(record)
+    return finalize_entity_registry(project_root, records, issues, excluded_paths)
+
+
 def build_entity_index(registry: dict[str, Any]) -> dict[str, Any]:
     """Serialize the bounded lookup catalogue, not the parsed document store."""
     entities: list[dict[str, Any]] = []
@@ -835,13 +854,13 @@ def build_entity_index(registry: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-def build_world_projection(registry: dict[str, Any], project_root: Path) -> dict[str, Any]:
+def build_graph_projection(registry: dict[str, Any], project_root: Path) -> dict[str, Any]:
     identity = project_identity(project_root)
     project_id = identity["id"]
     known_ids = set(registry["by_id"])
     nodes: list[dict[str, Any]] = []
     edges_by_key: dict[str, dict[str, Any]] = {}
-    world_claims: list[dict[str, Any]] = []
+    graph_claims: list[dict[str, Any]] = []
 
     for record in registry["entities"]:
         frontmatter = record["frontmatter"]
@@ -890,14 +909,14 @@ def build_world_projection(registry: dict[str, Any], project_root: Path) -> dict
     nodes.sort(key=lambda item: item["key"])
     edges = [edges_by_key[key] for key in sorted(edges_by_key)]
     for claim in registry.get("claims", []):
-        world_claims.append({
+        graph_claims.append({
             **claim,
             "key": f"{project_id}:{claim['key']}",
             "project_id": project_id,
             "entity_key": f"{project_id}:{claim['entity_id']}",
         })
 
-    world_questions: list[dict[str, Any]] = []
+    graph_questions: list[dict[str, Any]] = []
     for question in registry.get("questions", []):
         question_id = question["id"]
         entity_ids = sorted({
@@ -908,7 +927,7 @@ def build_world_projection(registry: dict[str, Any], project_root: Path) -> dict
                 if question_id in claim["question_refs"]
             ),
         })
-        world_questions.append({
+        graph_questions.append({
             **question,
             "key": f"{project_id}:question:{question_id}",
             "project_id": project_id,
@@ -921,7 +940,7 @@ def build_world_projection(registry: dict[str, Any], project_root: Path) -> dict
             ],
             "edge_keys": [edge["key"] for edge in edges if question_id in edge["question_refs"]],
         })
-    world_timeline = [
+    graph_timeline = [
         {
             **entry,
             "key": f"{project_id}:{entry['key']}",
@@ -940,9 +959,9 @@ def build_world_projection(registry: dict[str, Any], project_root: Path) -> dict
         },
         "nodes": nodes,
         "edges": edges,
-        "questions": world_questions,
-        "claims": world_claims,
-        "timeline": world_timeline,
+        "questions": graph_questions,
+        "claims": graph_claims,
+        "timeline": graph_timeline,
         "views": [
             {key: view[key] for key in ("id", "name", "entity_ids")}
             for view in registry.get("views", [])
@@ -1041,10 +1060,10 @@ def parse_tag_quantity(raw: str) -> tuple[float, str, str | None] | None:
 
 def build_view_projection(
     registry: dict[str, Any],
-    world: dict[str, Any],
+    graph: dict[str, Any],
     view: dict[str, Any],
 ) -> dict[str, Any]:
-    """Compile one typed view without changing generic World graph semantics."""
+    """Compile one typed view without changing generic Wiki graph semantics."""
     view_id = view["id"]
     issues: list[dict[str, str]] = []
     raw_resources = view.get("resources", {})
@@ -1344,12 +1363,12 @@ def build_view_projection(
     }
     entities = [
         {**node, "view_status": status_by_entity.get(node["entity_id"])}
-        for node in world["nodes"]
+        for node in graph["nodes"]
         if node["entity_id"] in entity_ids
     ]
     generic_edges = [
         edge
-        for edge in world["edges"]
+        for edge in graph["edges"]
         if edge["source_entity_id"] in entity_ids and edge["target_entity_id"] in entity_ids
     ]
     observations_by_event: dict[str, list[dict[str, Any]]] = {}
@@ -1468,7 +1487,7 @@ def build_view_projection(
     return {
         "schema_version": 4,
         "source_fingerprint": registry["source_fingerprint"],
-        "project": world["project"],
+        "project": graph["project"],
         "view": {
             "id": view_id,
             "name": view["name"],
@@ -1497,10 +1516,10 @@ def build_view_projection(
 
 def build_view_projections(
     registry: dict[str, Any],
-    world: dict[str, Any],
+    graph: dict[str, Any],
 ) -> dict[str, dict[str, Any]]:
     return {
-        view["id"]: build_view_projection(registry, world, view)
+        view["id"]: build_view_projection(registry, graph, view)
         for view in registry.get("views", [])
     }
 
@@ -1558,12 +1577,12 @@ def atomic_write_json(path: Path, payload: dict[str, Any]) -> Path:
 def write_entity_projections(
     project_root: Path,
     index: dict[str, Any],
-    world: dict[str, Any],
+    graph: dict[str, Any],
     crm: dict[str, Any],
     view_projections: dict[str, dict[str, Any]] | None = None,
 ) -> tuple[Path, Path, Path]:
     index_path = atomic_write_json(project_root / ENTITY_INDEX_PATH, index)
-    world_path = atomic_write_json(project_root / WORLD_VIEW_PATH, world)
+    graph_path = atomic_write_json(project_root / GRAPH_VIEW_PATH, graph)
     crm_path = atomic_write_json(project_root / CRM_VIEW_PATH, crm)
     projections = view_projections or {}
     view_root = project_root / VIEW_PROJECTION_ROOT
@@ -1574,76 +1593,4 @@ def write_entity_projections(
         for stale_path in view_root.glob("*.json"):
             if stale_path.stem not in current_view_ids:
                 stale_path.unlink()
-    return index_path, world_path, crm_path
-
-
-def run_compile(args: argparse.Namespace) -> int:
-    project_root = Path(args.project_root).expanduser().resolve()
-    registry = build_entity_registry(project_root)
-    index = build_entity_index(registry)
-    world = build_world_projection(registry, project_root)
-    crm = build_crm_projection(registry, project_root)
-    view_projections = build_view_projections(registry, world)
-    if not args.no_write:
-        write_entity_projections(project_root, index, world, crm, view_projections)
-    if args.json:
-        print(json.dumps(
-            {
-                "index": index,
-                "world": world,
-                "crm": crm,
-                "views": view_projections,
-                "diagnostics": {
-                    "issues": registry["issues"],
-                    "counts": registry["counts"],
-                    "view_issue_count": sum(
-                        projection["counts"]["issues"]
-                        for projection in view_projections.values()
-                    ),
-                },
-            },
-            indent=2,
-            sort_keys=True,
-        ))
-    else:
-        counts = registry["counts"]
-        action = "would compile" if args.no_write else "compiled"
-        print(
-            f"farplane entities {action}: {counts['included']} included, {counts['excluded']} excluded; "
-            f"{len(world['edges'])} associations, {len(crm['entities'])} CRM entries -> "
-            f"{project_root / ENTITY_INDEX_PATH}, {project_root / WORLD_VIEW_PATH}, "
-            f"{project_root / CRM_VIEW_PATH}, {project_root / VIEW_PROJECTION_ROOT}"
-        )
-        for issue in registry["issues"]:
-            print(f"entity issue: {issue['path']}: {issue['reason']}", file=sys.stderr)
-        for view_id, projection in view_projections.items():
-            for issue in projection["issues"]:
-                print(
-                    f"view issue: {view_id}: {issue['path']}: {issue['reason']}",
-                    file=sys.stderr,
-                )
-    view_issue_count = sum(
-        projection["counts"]["issues"] for projection in view_projections.values()
-    )
-    return 1 if registry["issues"] or view_issue_count else 0
-
-
-def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description=__doc__)
-    sub = parser.add_subparsers(dest="command")
-    compile_parser = sub.add_parser("compile")
-    compile_parser.add_argument("--project-root", default=".")
-    compile_parser.add_argument("--no-write", action="store_true")
-    compile_parser.add_argument("--json", action="store_true")
-    compile_parser.set_defaults(func=run_compile)
-    return parser
-
-
-def main(argv: list[str] | None = None) -> int:
-    parser = build_parser()
-    args = parser.parse_args(argv)
-    return int(args.func(args))
-
-
-if __name__ == "__main__":
-    raise SystemExit(main())
+    return index_path, graph_path, crm_path

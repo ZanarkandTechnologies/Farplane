@@ -737,7 +737,7 @@ feed_scout:
   daily_feed_root: .farplane/feed-scout/daily
   ledger: .farplane/feed-scout/ledger.jsonl
   proposal_ledger: .farplane/feed-scout/proposals.jsonl
-  world_memory: .farplane/feed-scout/world-memory.md
+  scout_brief: .farplane/feed-scout/scout-brief.md
   latest_report: .farplane/reports/feed-scout/latest.json
   ui:
     latest_feed: .farplane/feed-scout/daily/latest.json
@@ -797,8 +797,8 @@ feed_scout:
         self.assertEqual(news["latest_report"]["report_path"], ".farplane/reports/feed-scout/2026-07-03.md")
         self.assertTrue(news["feed_scout"]["enabled"])
         self.assertEqual(news["feed_scout"]["config"]["latest_feed"], ".farplane/feed-scout/daily/latest.json")
-        self.assertEqual(news["feed_scout"]["config"]["world_memory"], ".farplane/feed-scout/world-memory.md")
-        self.assertNotIn("memory", news["feed_scout"]["config"])
+        self.assertEqual(news["feed_scout"]["config"]["scout_brief"], ".farplane/feed-scout/scout-brief.md")
+        self.assertEqual(set(news["feed_scout"]["config"]), set("cadence timezone daily_feed_root ledger proposal_ledger scout_brief latest_feed latest_report source_ref".split()))
         self.assertEqual(news["source_gap_ids"], [])
 
     def test_enabled_feed_scout_reports_news_source_gaps_when_latest_files_are_missing(self) -> None:

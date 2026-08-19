@@ -34,7 +34,7 @@ Goal Advisor compiles a selected leaf and the domain Goal owns its decisions.
 
 ```text
 plan_next_wave(planning_skill_refs, problems, areas, metric_objectives, metric_state,
-               ticket_history_query, current_context?, world_memory?,
+               ticket_history_query, current_context?, scout_brief?,
                preference_memory?, wave_size = 1)
   -> input_receipts + proposed_skill_calls[] + admitted_call_ids[]
    + rejections[] + source_gaps[] + validation_receipt
@@ -44,7 +44,7 @@ state:
         docs/systems and docs/features registries,
         allowed skill SKILL.md signatures and planner_contracts,
         farplane/metrics.yaml and observations, global-first ticket history,
-        World Memory for outward calls, terminal preference evidence,
+        Scout Brief for outward calls, terminal preference evidence,
         optional dated Dogfood context, qa_checklist.md and golden)
   writes(no durable project state; ignored validator scratch only)
 
@@ -74,7 +74,7 @@ fails:
 2. Check fresh hard guards. On stale, missing, or failing guards, return an
    empty wave and the caller-owned source gap; never create a refresh ticket.
 3. Read the latest 20 tickets globally, then query deeper only for dedupe or
-   terminal preference evidence. Read World Memory before outward-facing calls.
+   terminal preference evidence. Read Scout Brief before outward-facing calls.
 4. Bind each market-learning, ablation, or content call to one configured
    stable problem plus canonical `system_ref` and coherent `feature_refs`.
    Reject random features and work that cannot address a configured problem.
@@ -110,7 +110,7 @@ fails:
 
 - [ ] 1. Read configured planning skills, their signatures and planner contracts,
       stable problems and canonical system/feature refs, metric movement/guards,
-      passive area ICP context, World Memory when relevant,
+      passive area ICP context, Scout Brief when relevant,
       current context, and global-first history/preference evidence.
 - [ ] 2. Stop with an empty wave on an unhealthy hard guard or unresolved skill.
 - [ ] 3. Select the missing evidence stage; bind problem, system, and feature

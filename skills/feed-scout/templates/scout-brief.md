@@ -1,5 +1,5 @@
 ---
-kind: feed-scout-world-memory
+kind: feed-scout-brief
 status: active
 updated_at: null
 canonical_icp_ref: farplane/harness.yaml#areas
@@ -7,7 +7,7 @@ source_ledger: .farplane/feed-scout/ledger.jsonl
 last_report_ref: null
 ---
 
-# Feed Scout World Memory
+# Feed Scout Brief
 
 This is current, update-in-place synthesis. It is not a daily log, snapshot
 archive, or planning authority. Keep it under 100 non-empty lines. Use simple
