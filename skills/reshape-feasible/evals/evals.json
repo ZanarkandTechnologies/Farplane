@@ -1,0 +1,105 @@
+{
+  "skill_name": "reshape-feasible",
+  "evals": [
+    {
+      "id": "reshape_feasible_revenue_horizon_01",
+      "prompt": "I want to make $1 million by the end of the year, but the size of that goal makes me avoid working on it.",
+      "expected_output": "Keeps the $1 million ambition as direction but removes it from this week's active focus; proposes one signed, paid $10,000 customer as the focused mission for the next seven days; gives one immediate move toward that customer; and avoids a full-year decomposition, formal planning card, or intake barrage.",
+      "files": [],
+      "assertions": [
+        "Preserves the $1 million ambition without making it the active weekly workload",
+        "Makes one signed or paid $10,000 customer the focused seven-day mission",
+        "Concentrates attention on that one commercial result rather than decomposing the remaining revenue target",
+        "Ends with one immediate action that directly advances the customer mission",
+        "Uses natural, low-pressure language instead of a formal card or preliminary questionnaire"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Intimidating revenue target becomes one focused customer mission",
+          "tags": ["skill", "reshape-feasible", "regression", "revenue"],
+          "notes": "Canonical regression derived from the operator-accepted behavior: preserve the ambition, collapse the active horizon, and pursue one meaningful paid result."
+        }
+      }
+    },
+    {
+      "id": "reshape_feasible_video_horizon_01",
+      "prompt": "I want to publish 30 videos before the end of the year. Every time I picture all 30, I freeze and publish nothing.",
+      "expected_output": "Leaves 30 videos as the direction while making one finished and published video the only active mission for the next seven days; narrows the video enough to ship; gives one immediate production move; and does not plan all 30 videos or reduce the mission to preparation only.",
+      "files": [],
+      "assertions": [
+        "Keeps the larger publishing ambition visible but inactive for the current push",
+        "Chooses one actually published video as the meaningful near-term result",
+        "Does not create a calendar or production plan for all 30 videos",
+        "Avoids substituting research, equipment, branding, or outlining for publication",
+        "Gives one immediate move toward finishing the selected video"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Video volume becomes one publication mission",
+          "tags": ["skill", "reshape-feasible", "content", "transfer"],
+          "notes": "Held-out transfer case for horizon collapse without trivializing the outcome."
+        }
+      }
+    },
+    {
+      "id": "reshape_feasible_product_horizon_01",
+      "prompt": "I want 10,000 people using my app. I keep expanding the roadmap because the goal feels enormous, and I still haven't put it in anyone's hands.",
+      "expected_output": "Keeps 10,000 users as direction but makes one real person successfully using the smallest core workflow the focused near-term mission; rejects roadmap expansion as the active work; defines the result as observed use rather than setup; and gives one immediate move toward reaching that user.",
+      "files": [],
+      "assertions": [
+        "Moves the 10,000-user ambition out of the active horizon without dismissing it",
+        "Chooses one real user's completed core workflow as the focused result",
+        "Rejects roadmap expansion or preparation as a substitute for user contact",
+        "Keeps the mission meaningful and end-to-end rather than a trivial micro-task",
+        "Provides one immediate action toward getting the product into that user's hands"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Large adoption goal becomes one real-user mission",
+          "tags": ["skill", "reshape-feasible", "product", "transfer"],
+          "notes": "Held-out case tests transfer from a commercial precedent to product adoption."
+        }
+      }
+    },
+    {
+      "id": "reshape_feasible_progressed_commercial_01",
+      "prompt": "I landed one $2,000 consulting client last month. I want a $100,000 business, but thinking about all the remaining clients makes me want to redesign everything.",
+      "expected_output": "Uses the completed client as evidence, keeps $100,000 as direction, and focuses the next seven days on winning one comparable paid client by reusing what already worked; avoids restarting with positioning or infrastructure; and ends with one direct sales action.",
+      "files": [],
+      "assertions": [
+        "Treats the existing paid client as evidence rather than restarting from zero",
+        "Makes the next comparable paid client the active mission",
+        "Uses the existing sales path before recommending redesign or infrastructure",
+        "Does not calculate or plan the entire remaining $98,000",
+        "Ends with one immediate action toward the strongest plausible next buyer"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Existing commercial proof becomes the next focused repetition",
+          "tags": ["skill", "reshape-feasible", "commercial", "progressed"],
+          "notes": "Boundary case: an accepted precedent should advance from real evidence rather than repeat a first-proof ritual."
+        }
+      }
+    },
+    {
+      "id": "reshape_feasible_capacity_bound_01",
+      "prompt": "I want to run a half marathon in two months, but the full training plan feels like a second job. This week I can train three times and I have no injury constraints.",
+      "expected_output": "Keeps the half marathon as direction and makes one completed three-session training week the focused mission; uses the supplied capacity instead of inventing more; avoids presenting the full two-month program; and gives one immediate action that starts the first session or commits its concrete start.",
+      "files": [],
+      "assertions": [
+        "Preserves the half-marathon ambition while narrowing the active horizon to this week",
+        "Uses the supplied three-session capacity as the meaningful mission",
+        "Does not expand into a full training plan or invent additional capacity",
+        "Keeps the focused mission substantial rather than reducing it to preparation",
+        "Ends with one immediate move toward the first training session"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Training-plan pressure becomes one honest training week",
+          "tags": ["skill", "reshape-feasible", "personal", "capacity"],
+          "notes": "Held-out personal-goal case tests capacity-respecting horizon collapse."
+        }
+      }
+    }
+  ]
+}
