@@ -494,7 +494,8 @@ def validate_graph(graph: dict[str, Any]) -> list[str]:
         "skill:proof-advisor",
         "skill:pulse-update",
         "skill:interval-update",
-        "skill:update-memory",
+        "skill:doc-advisor",
+        "skill:manage-wiki",
         "skill:skill-maintenance",
         "skill:eval",
         "skill:knowledge-tidier",
@@ -511,7 +512,7 @@ def validate_graph(graph: dict[str, Any]) -> list[str]:
         "project_initialization",
         "automation_activation",
         "ticket_goal_execution",
-        "memory_drain_upkeep",
+        "interval_knowledge_phase",
     }:
         if projection_id not in projection_ids:
             errors.append(f"missing FSA projection {projection_id}")

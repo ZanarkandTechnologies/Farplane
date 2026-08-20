@@ -3,7 +3,7 @@ title: "Work Pulse And Scheduled Context Sources"
 status: active
 owner: farplane-framework
 created_at: 2026-06-29
-updated_at: 2026-08-19
+updated_at: 2026-08-20
 framework_template_version: "0.3.0"
 tags:
   - farplane
@@ -24,8 +24,9 @@ refs:
 # Work Pulse And Scheduled Ticket Sources
 
 Farplane uses one project Work Pulse heartbeat for reconciliation, execution,
-low-supply refill, and due check-ins. Daily and Weekly Interval own
-report-first evidence-to-ticket review. Feed Scout, Dogfood self-improvement,
+low-supply refill, and due check-ins. Daily and Weekly Interval own report-first
+review, one current weekly draft, and Weekly knowledge promotion. Feed Scout,
+Dogfood self-improvement,
 and low-frequency maintenance run as separate bounded automations.
 
 ```text
@@ -41,8 +42,9 @@ plan_next_wave(planning_skill_refs, stable_problems, harness_areas?,
 
 interval_update(project_root, interval_id, review_window,
                 context_refs?)
-  -> dated_report + problems + admitted_ticket_deltas[]
-   + rejected_candidates[] + source_gaps
+  -> dated_report + weekly_draft_delta + candidate_sets
+   + ticket_deltas[] + knowledge_receipt
+   + promoted_records[]? + next_week_draft? + source_gaps
 
 dogfood_review(project_root, window, cutoff, previous_report?, registry_refs?)
   -> dogfood_report + complete_outcome_ledger + portfolio_lessons
@@ -68,6 +70,7 @@ authority, or admission evidence.
 plan_next_wave -> one planner; low-supply refill generation and ranking only
 Feed Scout     -> source report + candidates + bounded direct recovery
 Daily/Weekly   -> report-first evidence review + grounded ticket deltas
+                  + Daily draft staging + Weekly selective promotion
 Dogfood        -> complete self-improvement checkpoint + planner context
 operator       -> explicit tickets and corrections
 Work Pulse     -> generic ticket materialization, dispatch, execution,
@@ -93,7 +96,8 @@ flowchart LR
 
   planner["plan_next_wave<br/>low-supply refill"]:::added
   feed["Feed Scout cron<br/>report + candidates"]:::keep
-  interval["Daily / Weekly cron<br/>report-first review"]:::keep
+  interval["Daily / Weekly cron<br/>report + weekly draft"]:::changed
+  knowledge["Weekly promotion<br/>tickets + skills + docs + Wiki"]:::added
   dogfood["Dogfood cron<br/>complete portfolio checkpoint"]:::changed
   operator["operator tickets"]:::keep
   board["one ticket board"]:::added
@@ -104,6 +108,7 @@ flowchart LR
 
   feed --> planner
   interval --> board
+  interval --> knowledge
   dogfood --> planner
   planner --> board
   operator --> board
@@ -233,18 +238,27 @@ for an evidenced existing project failure with a known fix and no experiment
 debt; the next low-watermark planner pass compares exploratory candidates across all
 areas.
 
-### Daily And Weekly Control-Loop Reviews
+### Daily And Weekly Control-Loop And Knowledge Reviews
 
-Daily and Weekly use the same small Interval skill with different evidence
-windows. Reports contain a Markdown `## Problems` ledger, raw observations,
-derived metric movement, bottleneck analysis, and admitted or rejected ticket
-deltas. Interval writes the dated report before highlights or board mutation.
-It may create, update, reprioritize, date, or reject tickets only when the
-problem and next intervention pass materiality, executability, concrete proof,
-dedupe, authority, and coherence gates. An investigation ticket is valid only
-when it must produce decision-changing evidence: reproduced cause, ruled-out
-alternatives, selected correction, and proof artifact. Uncertain or
-low-evidence findings remain report-only context for a later low-supply refill.
+Daily and Weekly use the same evidence-quality, extraction, and dedupe rules but
+different write authority. Daily reads only its current window, writes an
+immutable report, and upserts progress, problem, decision, SOP, resource,
+entity, documentation-quality, completeness, and follow-up findings into
+`.farplane/reports/interval/weekly/<YYYY-Www>/draft.md`. Fingerprints combine
+stable source locator, intended owner, and content digest.
+
+Daily promotes no durable knowledge and creates no new problem ticket. It may
+update only explicitly supported mutable task progress through the configured
+provider. Raw transcripts never become durable output.
+
+Weekly reads the draft and completed Daily receipts instead of replaying the
+raw week. It assigns every candidate `promoted`, `duplicate`, `monitor`,
+`dismissed`, `source_gap`, or `blocked`, freezes the weekly report, and then
+applies only authorized promotions. Problems route to qualified tickets, SOPs
+through Skill Maintenance, project resources and decisions through Doc Advisor,
+and entity facts through Manage Wiki. Chases remain proposals. The sibling
+receipt records observed writes and validation; Interval then finalizes the
+draft and opens the next one.
 
 Interval resolves `farplane/bindings.yaml#integrations.kanban` before work-item
 evidence. Filesystem bindings preserve ticket reads. Notion bindings use only a
@@ -254,7 +268,8 @@ filesystem exclusion forbids local-ticket fallback, including dedupe and
 recovery admission.
 
 Interval does not run Feed Scout, Dogfood, reward check-ins, Plan Next Wave,
-native Goals, or workers.
+native Goals, workers, or ticket execution. Weekly promotions grant no
+deploy, publishing, spend, account, customer-contact, or destructive authority.
 
 ### Dogfood Self-Improvement
 
@@ -306,7 +321,9 @@ bounded ticket creation.
 | Executable commitment, Reward, QA, review | `tickets/TASK-*/ticket.md` and `artifacts/` |
 | Experiment-local policy and history | ticket `program.md`, `progress.md`, Reward, and artifacts |
 | Fast reconciliation/dispatch/check-in receipt | dated Pulse report |
-| Problems, metric movement review, and ticket deltas | dated Interval report |
+| Compact current operating context and promotion candidates | current weekly Interval draft |
+| Problems, movement, ticket and candidate decisions | dated Interval report |
+| Candidate upserts or Weekly promotion results | sibling Interval knowledge receipt |
 | Source opportunities | dated Feed Scout report |
 | Cross-ticket outcome ledger, portfolio lessons, and opportunity signals | dated Dogfood report |
 | Desired cadence and prompts | `farplane/automations.toml` |
@@ -334,8 +351,9 @@ does not depend on adjacent clock times.
 Workstream 2 must prove:
 
 - desired and live Farplane automation state contains one heartbeat;
-- each scheduled source writes its report/candidates; Interval writes its
-  report before any admitted ticket delta;
+- each scheduled source writes its report/candidates; Daily records zero
+  promotions, while Weekly freezes its report before owner changes, receipts
+  observed results, and opens the next draft;
 - planner refill caps, dedupe, proof, authority, and owner boundaries hold;
 - priority then due_at ticket ordering is deterministic;
 - Interval cannot invent direction, fake momentum, or execute work, and Dogfood

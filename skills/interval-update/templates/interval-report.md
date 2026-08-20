@@ -27,6 +27,28 @@ source_gaps: []
 | State / outcome | Work items / reports | Sanitized evidence | Observation |
 | --- | --- | --- | --- |
 
+## Weekly Draft Projection
+
+- `weekly_draft_ref:`
+- `weekly_draft_status:` open | finalized
+- `current_context_bullets:` 0..5
+
+| Lane | Candidate upserts | No-ops | Source gaps | Canonical writes this run |
+| --- | --- | --- | --- | --- |
+| Progress | | | | |
+| Problems | | | | |
+| Decisions | | | | |
+| SOPs | | | | |
+| Resources / project knowledge | | | | |
+| Entities / Wiki | | | | |
+| Documentation quality | | | | |
+| Completeness / follow-ups | | | | |
+
+Daily projects source-fingerprinted candidates into the current weekly draft
+and performs no durable promotion. Weekly fills every disposition, snapshots
+the draft into this report, promotes authorized records, and opens the next
+draft.
+
 ## Executive Update
 
 Weekly only. This is the project-local source for a separate, approval-gated
@@ -101,6 +123,26 @@ reason. A feedback-loop unblock must name the signal, capture artifact, decision
 it unlocks, and stop condition. Preserve approval gates for spend, publishing,
 customer contact, account changes, and private-data use.
 
+## Candidate And Promotion Decisions
+
+| Fingerprint | Type | Candidate | Evidence refs | Value gate | Route / destination | Disposition | Reason |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+
+`Type` is `problem`, `decision`, `sop`, `resource`, `entity`, or `doc_quality`.
+Daily uses `pending`, `no_op`, `source_gap`, or `blocked` and changes no
+canonical knowledge owner. Weekly replaces every `pending` value with
+`promoted`, `duplicate`, `monitor`, `dismissed`, `source_gap`, or `blocked`.
+A task or thread is evidence, not automatically durable knowledge; never copy
+raw transcripts, private details, or unsupported claims.
+
+### Weekly Promotion Showcase
+
+Weekly only. Summarize artifacts actually promoted after this report was
+finalized; the sibling receipt is the observed-result authority.
+
+| Promoted record | Durable improvement | Source candidates | Receipt | Validation |
+| --- | --- | --- | --- | --- |
+
 ## Source Gaps
 
 | Missing or stale source | Effect on review/admission | Safe fallback |
@@ -123,6 +165,18 @@ provider payloads.
 - `executive_update_cards:` 0
 - `executive_update_draft_eligibility:` reader_safe | needs_fact_check | internal_only | no_eligible_update
 - `ticket_deltas_applied_after_highlights:` yes | no
+- `knowledge_receipt_path:`
+- `weekly_draft_path:`
+- `candidate_upserts:`
+- `daily_canonical_promotions:` 0 | not_daily
+- `weekly_candidate_dispositions_complete:` yes | not_weekly
+- `knowledge_promotions_applied:`
+- `knowledge_deltas_no_op:`
+- `knowledge_deltas_staged_or_blocked:`
+- `knowledge_route_validation:` pass | partial | blocked
+- `weekly_promotion_showcase:` produced | no_promotions | not_weekly
+- `next_week_draft_opened:` yes | not_weekly
+- `direct_generated_index_or_projection_edits:` 0
 - `solution_tickets_created:`
 - `investigation_tickets_created:`
 - `todo_tickets_updated_or_rejected:`

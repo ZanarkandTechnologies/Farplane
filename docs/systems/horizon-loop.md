@@ -3,7 +3,7 @@ title: "Horizon Loop"
 status: active
 owner: farplane-framework
 created_at: 2026-06-26
-updated_at: 2026-07-25
+updated_at: 2026-08-20
 tags:
   - farplane
   - systems
@@ -19,7 +19,7 @@ system_record_json: |
     "id": "SYS-0003",
     "name": "Horizon Loop",
     "status": "implemented",
-    "summary": "The project control loop where metric movement flows through report-first Interval review into the ticket board, with Work Pulse dispatch and Plan Next Wave as low-supply refill.",
+    "summary": "The project control loop where evidence flows through Interval reporting and knowledge extraction into tickets, skills, project docs, and the Wiki, with Work Pulse dispatch and Plan Next Wave as low-supply refill.",
     "owner_spec": "docs/systems/horizon-loop.md",
     "primary_feature_ref": "FEAT-0032",
     "feature_refs": [
@@ -37,16 +37,16 @@ system_record_json: |
       "docs/features/FEAT-0067-daily-interval-review-reports.md",
       "docs/features/FEAT-0071-project-work-pulse.md"
     ],
-    "last_verified": "2026-07-25"
+    "last_verified": "2026-08-20"
   }
 ---
 # Horizon Loop
 
-The project control loop where metric movement and evidence flow through
-report-first Interval review into the ticket board, then Work Pulse dispatches
-or checks in work. Plan Next Wave remains the side-effect-free low-supply
-refill path. Native Goal Packets remain the continuation mechanism for
-material ticket execution.
+The project control loop where Daily Interval stages source-linked findings in
+one weekly working draft and Weekly selectively promotes qualified tickets,
+skills, project docs, and Wiki facts after report finalization. Work Pulse
+dispatches or checks in tickets, and Plan Next Wave remains the side-effect-free
+low-supply refill path.
 
 ```text
 horizon_loop(change, repo_state?) -> owned_feature_set + boundary_decision + maintenance_signal
@@ -63,7 +63,8 @@ horizon_loop(change, repo_state?) -> owned_feature_set + boundary_decision + mai
 ## Role
 
 Horizon Loop owns recurring and longer-running autonomy: Goal Packets, one Work
-Pulse, Daily/Weekly Interval reports, low-supply refill, backoff, PR watching,
+  Pulse, Daily/Weekly Interval reports, weekly drafts and receipts, low-supply
+  refill, backoff, PR watching,
 and the bounded handoff from Feed Scout, Dogfood, Interval, and operator
 sources.
 
@@ -79,8 +80,8 @@ sources.
 ## What Belongs Here
 
 Goal-backed continuation, Pulse dispatch/check-ins, report-first Interval
-review/admission, low-supply refill, adaptive waits, and visible automation
-cadence.
+review/admission, Interval draft/promotion routing and receipts, low-supply refill,
+adaptive waits, and visible automation cadence.
 
 ## What Belongs Elsewhere
 
@@ -94,9 +95,10 @@ And Learning; proof standards belong in Proof And Review.
 - Automations may no-op when no safe valuable action exists.
 - Exactly one base project automation is a heartbeat: Work Pulse. Other
   recurring jobs are bounded cron/manual automations.
-- Daily and Weekly Interval write reports before ticket deltas, may admit
-  grounded interventions or decision-changing investigations, and otherwise
-  leave findings as source gaps or refill context.
+- Daily writes its report and source-fingerprinted weekly-draft upserts with zero
+  canonical promotions. Weekly dispositions every candidate, freezes its report,
+  applies authorized ticket/skill/doc/Wiki promotions, records outcomes in the
+  sibling receipt, and opens the next draft.
 - Work Pulse dispatches executable tickets and calls Plan Next Wave only when
   ready supply is low. Plan Next Wave ranks configured skill calls from stable
   problems, areas, metric movement, source-backed context, and ticket history.
@@ -120,7 +122,8 @@ flowchart LR
   automations["automations<br/>farplane/automations.toml"]:::keep
   advisor["FEAT-0032<br/>goal-advisor"]:::changed
   pulse["FEAT-0071<br/>project Work Pulse"]:::added
-  interval["FEAT-0067<br/>Daily / Weekly review"]:::changed
+  interval["FEAT-0067<br/>Daily report + weekly draft"]:::changed
+  knowledge["Weekly promotion<br/>tickets + skills + docs + Wiki"]:::added
   sources["Feed Scout + Dogfood + operator<br/>reports + context"]:::keep
   old["FEAT-0065<br/>retired umbrella automation"]:::retired
   productPulse["FEAT-0066<br/>retired product-scoped Pulse"]:::retired
@@ -129,6 +132,7 @@ flowchart LR
   outputs["reports + tickets<br/>bounded next work"]:::added
 
   metrics --> interval --> outputs --> board
+  interval --> knowledge
   intent --> interval
   intent --> planner
   automations --> pulse --> board
@@ -140,9 +144,9 @@ flowchart LR
   productPulse -. "superseded_by" .-> pulse
 ```
 
-The Horizon Loop coordinates one execution heartbeat, one report-first
-Interval review path, and one low-supply refill planner without giving every
-source its own strategy ledger or executor.
+The Horizon Loop coordinates one execution heartbeat, one draft-then-promote
+Interval path, and one low-supply refill planner without giving every source its own
+strategy ledger or executor.
 
 ## Surfaces
 
@@ -174,3 +178,7 @@ source its own strategy ledger or executor.
 - 2026-07-25: Consolidated the metric-to-ticket loop: Interval owns
   report-first evidence admission, Work Pulse owns dispatch and due_at
   ordering, and Plan Next Wave owns only low-supply refill.
+- 2026-08-20: Made Interval the parent reporting-and-knowledge workflow with
+  Daily incremental owner updates and Weekly receipt consolidation/showcase.
+- 2026-08-20: Replaced eager Daily owner updates with a weekly working draft
+  and Weekly selective promotion.

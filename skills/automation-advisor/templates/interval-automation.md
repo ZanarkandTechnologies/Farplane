@@ -23,21 +23,25 @@ status = "active"
 prompt = '''
 Use $<owning-skill>.
 
-Run one bounded scheduled pass. Name only project-specific inputs, ticket
-limits, side-effect gates, and the report-first or no-execution boundary that a
-human needs to edit. Let the skill own its normal workflow and output shape.
+Run one bounded scheduled pass. For Interval, use one evidence window and the
+current weekly working draft. Daily stages candidate upserts with zero durable
+promotions. Weekly dispositions every candidate, freezes the report, promotes
+authorized records, writes the receipt, and opens the next draft. Name only
+project-specific inputs, promotion policy, external side-effect gates, and the
+no-ticket-execution boundary. Let the skill own routing and validation.
 
 Params:
 project_root = "<project-root>"
 
 Final response:
-- Link the report path and summarize the report in 2-4 bullets.
+- Link the report, weekly draft, and knowledge receipt.
+- List candidate upserts or Weekly dispositions and promoted owners.
 - List tickets created or updated, or `none`.
 - List each candidate/admission decision with the reason: `created`,
   `updated`, `already_owned`, `planner_candidate`, `source_gap`,
   `same_run_ledger`, `blocked_by_gate`, or `not_ticketable`.
 - Name operator-needed items, source gaps, and the next owner.
-- Include the no-execution receipt for report-only runs.
+- Include the no-ticket-execution receipt and any knowledge blockers.
 
 Config source:
 farplane/automations.toml automation id="<automation-id>"
@@ -54,10 +58,9 @@ days = ["Mon"]
 day_of_month = 1
 ```
 
-Daily and Weekly BAU review call `$interval-update`; they write dated reports
-with a Problems ledger and may only create bounded maintenance tickets for
-problems evidenced before the current run. Feed Scout calls `$feed-scout` and
-weekly self-improvement calls `$dogfood-review`. None of these records execute
-their tickets; the single Work Pulse heartbeat does. The final response should
-make the report useful in chat instead of merely saying that the report was
-written.
+Daily and Weekly call `$interval-update`; one bounded evidence window produces
+the dated report, weekly-draft delta, and receipt. Daily promotes nothing.
+Weekly consolidates completed Daily receipts, dispositions candidates, promotes
+authorized records, and opens the next draft. Feed Scout calls `$feed-scout`
+and weekly self-improvement calls `$dogfood-review`. None execute tickets; the
+single Work Pulse heartbeat does.

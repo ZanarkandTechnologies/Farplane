@@ -1,6 +1,6 @@
 ---
 name: automation-advisor
-description: "Design or revise Farplane Codex automations using full project-owned automations.toml configs and generic Pulse/Interval skill calls."
+description: "Design or revise Farplane Codex automations using project-owned automations.toml records and generic Pulse/Interval skill calls."
 tier: 3
 group: operations
 source: local
@@ -8,270 +8,158 @@ eval: evals/evals.json
 template_uses:
   skill-template: "0.2.0"
   skill-eval-task: "0.2.0"
+qa_checklist: qa_checklist.md
 allowed-tools: Read, Glob, Grep, Bash
-
 ---
 
 # Automation Advisor
 
 ## Context
 
-Use this skill when creating, revising, or auditing Farplane Codex automations.
-It is Farplane-specific authoring guidance for live Codex automation configs.
-Work Pulse is the only base heartbeat and owns frequent reconciliation,
-dispatch, due ticket check-ins, and low-watermark BAU refill. Feed Scout, Daily
-and Weekly BAU review, weekly Dogfood self-improvement, and low-frequency
-consolidation are separate `cron` records. They may produce
-reports or bounded ticket supply, but Work Pulse remains the shared executor.
+Use this skill to create, revise, or audit Farplane Codex automations. Work
+Pulse is the only base heartbeat. Feed Scout, Daily/Weekly Interval, Dogfood,
+and low-frequency maintenance remain separate `cron` records; Work Pulse is
+the shared ticket executor.
 
-Do not reintroduce a project-local automation compiler or a hidden scheduler
-thread. Keep the full desired Codex automation records in
-`farplane/automations.toml`, including id, name, kind, status, target, schedule,
-and the exact prompt copied into the Codex app automation record. Keep runtime
-state in the Codex app automation store or ignored `.farplane/` files. Keep
-skills generic and parameterized; the skills own default Farplane paths and
-policies, while project-specific additions belong in the automation `prompt`
-field as visible params, overrides, workflow flags, or policy.
+Keep the full desired record in `farplane/automations.toml`: id, name, kind,
+status, target, schedule, and the exact prompt copied into Codex. Runtime IDs,
+logs, and mutable memory stay in the Codex automation store or ignored
+`.farplane/` state. Do not add a compiler, scheduler thread, or second manifest.
 
-Prefer high-level operational prompts over fully resolved wiring. Canonical
-files, report paths, boards, PM manifests, and standard side-effect gates are
-resolved by the called skill. Automation prompts should name `project_root`,
-the target skill, cadence, interval windows when relevant, and only the
-configuration a human expects to edit.
-
-When the target workflow is already a Codex skill, prefer the `$skill-name`
-operator-facing invocation over function-signature prose. Function signatures
-belong in `SKILL.md`; automation records should stay close to the operator
-instruction the Codex app actually runs.
-
-Current automation template shape is `framework_template_version: "1.0.0"`:
-
-```toml
-schema = "farplane_project_automations"
-framework_template_version = "1.0.0"
-updated_at = "YYYY-MM-DD"
-owner = "automation-advisor"
-
-[[automations]]
-id = "<automation-id>"
-name = "<human name>"
-kind = "heartbeat | cron"
-status = "active | paused"
-prompt = '''
-Use $<skill-name>.
-
-Write the exact Codex automation prompt here. Include the project root, skill
-params, project-specific reads/runs/gates, and overrides that a human expects
-to review and copy into the live Codex automation record.
-
-Config source:
-farplane/automations.toml automation id="<automation-id>"
-'''
-
-[automations.target]
-workspace = "<project-root>"
-# Heartbeat records use thread_id instead of workspace.
-
-[automations.schedule]
-type = "interval | active_hours_interval | daily | weekly | monthly"
-timezone = "<timezone>"
-```
-
-Each `[[automations]]` record owns the full desired Codex automation config:
-identity, kind/status, schedule, workspace/thread target, and prompt. The
-prompt remains a string because it is the exact human-authored instruction the
-Codex app runs; it should not be split into Markdown tables or adjacent prompt
-blocks. Do not put runtime run IDs, last-run status, logs, or automation memory
-in tracked TOML.
+Automation prompts call one owning `$skill-name`, name only human-editable
+params and project-specific sources/gates, and leave generic workflow logic in
+the skill. Daily and Weekly call `$interval-update`; Daily projects candidates
+into one current weekly draft and Weekly owns selective promotion into
+canonical knowledge owners.
 
 ## Skill Signature
 
 ```text
 automation_advisor(intent, project_refs, current_automation?, activate?)
-  -> automation_template_choice
-   + config_delta
-   + persistent_thread_delta?
-   + automation_delta?
-   + state_contract_check
-   + proof_checklist
-
-state:
-  reads(docs/features/FEAT-0065-pulse-and-interval-automation.md,
-        farplane/automations.toml?,
-        farplane/pm.json?,
-        skills/automation-advisor/qa_checklist.md?,
-        skills/automation-advisor/templates/*,
-        skills/interval-update/SKILL.md,
-        skills/pulse-update/SKILL.md)
-  writes(farplane/automations.toml config updates,
-         farplane/pm.json only for an explicitly persistent thread)
-
-gates:
-  loop_choice_made; cadence_named; prompt_calls_skill_plainly;
-  config_parseable; prompt_field_present;
-  schedule_owned_by_codex_automation; no_skill_contract_duplication;
-  side_effect_gates_named; dated_report_path_used; no_lane_manifest_required;
-  no_hidden_scheduler_config
-
-routes:
-  pulse-update | interval-update | feed-scout | dogfood-review |
+  -> template_choice + config_delta + automation_delta?
+   + persistent_thread_delta? + state_contract_check + proof_checklist
+state: reads(active feature/spec, farplane/automations.toml?, current prompts,
+             target skill, templates, qa_checklist.md);
+       writes(farplane/automations.toml and, only for an explicit persistent
+              thread, farplane/pm.json)
+gates: loop_choice; cadence; plain_skill_call; full_parseable_record;
+  no_contract_duplication; side_effect_gates; dated_artifacts;
+  one_heartbeat; no_hidden_scheduler
+routes: pulse-update | interval-update | feed-scout | dogfood-review |
   goal-advisor | review
-
-fails:
-  creating another automation manifest compiler; mixing logs into tracked
-  config; making Pulse own drift review; inventing a Steer scheduler thread;
-  using latest.md as the canonical report; duplicating schedule in env vars
+fails: logs in tracked config; generated prompt fragments; env-var schedules;
+  second heartbeat; legacy orchestrator; bare receipt with no useful summary
 ```
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-- [ ] 1. Classify the automation request.
-  - [ ] Choose `pulse-update`, `interval-update`, `feed-scout`,
-        `dogfood-review`, optional scheduled skill work, one-off ticket work,
-        or no automation.
-  - [ ] Use Pulse for frequent bounded action selection.
-  - [ ] Keep Pulse as the only base `heartbeat`; use `cron` records for
-        scheduled reports, feed intake, self-improvement, and optional loops.
-  - [ ] Use Daily and Weekly Interval only for BAU reporting and bounded
-        resurfacing of previously evidenced maintenance problems.
-  - [ ] Use monthly consolidation automations for low-churn registry or
-        artifact-compression reviews that should not run inside weekly
-        self-learning.
-- [ ] 2. Bind the project surfaces.
-  - [ ] Read the Pulse/Interval spec and current `farplane/automations.toml`
-        when present.
-  - [ ] Read existing Codex automation `prompt` text when the task is an update.
-  - [ ] Read [qa_checklist.md](qa_checklist.md) before material prompt edits
-        or live automation updates.
-- [ ] 3. Keep prompts reviewable and runtime state untracked.
-  - [ ] Put project-specific automation config and prompt text in
-        `farplane/automations.toml`.
-  - [ ] Let Codex automation records own live cadence and
-        `farplane/automations.toml` own desired cadence, target, status, and
-        exact prompt for review and UI editing.
-  - [ ] Put user-editable automation metadata in TOML, not in
-        `config.toml.example` env vars, unless the value is machine-local,
-        secret, or not tied to a Codex automation.
-  - [ ] Keep skill invocation params inside the record's `prompt` string unless
-        a future UI explicitly defines a structured skill-param editor.
-  - [ ] Do not add a tracked scheduler config or runtime run ledger unless a
-        separate ticket proves the need.
-  - [ ] Do not enumerate auto-resolved canonical paths unless they are real
-        project-specific extensions.
-- [ ] 4. Write or update the prompt.
-  - [ ] Use the Pulse or Interval automation template as a starting point.
-  - [ ] Ensure the prompt calls the owning skill in plain operational language,
-        preferably `$skill-name` when the skill is directly invocable,
-        with only project-specific context refs, workflow flags, policies, or
-        side-effect gates that humans should edit.
-  - [ ] Use `farplane/automations.toml` template `1.0.0`.
-  - [ ] Use one `[[automations]]` record per Codex automation.
-  - [ ] Ensure each record has the actual Codex automation prompt in `prompt`,
-        including `Params` and `Overrides` sections when the called skill needs
-        them.
-  - [ ] Ensure the prompt uses `$skill-name` but includes the cadence-specific
-        instruction text that would be useful to a human reviewer.
-  - [ ] Reject prompt prose that restates the called skill's scoring,
-        selection, proof, benchmark, output-shape, or safety contract.
-  - [ ] Name side-effect gates and final state/report writebacks.
-  - [ ] Add a compact `Final response` section for report-producing
-        automations so the operator sees key findings, tickets created or
-        updated, candidate decisions with reasons, source gaps, operator-needed
-        items, and the no-execution or next-owner receipt without opening the
-        report first.
-- [ ] 5. Activate live Codex loops only when requested.
-  - [ ] Do not create live threads or automations during passive planning or
-        substrate bootstrap.
-  - [ ] When activation is requested and Codex app thread/automation tools are
-        available, create or update the project loops named in
-        `farplane/automations.toml`, commonly Pulse, Daily Interval, Weekly
-        Interval, and any explicitly requested monthly consolidation loop.
-  - [ ] Reuse the existing Pulse thread for the one heartbeat. Create cron
-        jobs as project/workspace-targeted automations by default.
-  - [ ] Create a dedicated persistent thread only when the operator explicitly
-        requests one or the workflow proves a real context-isolation need.
-  - [ ] Update `farplane/pm.json` only when activation actually creates or
-        reuses a persistent thread that the UI must group.
-  - [ ] If tools are unavailable, write the prompts and report
-        `needs_automation_setup`.
-- [ ] 6. Check the proof surface.
-  - [ ] Apply [qa_checklist.md](qa_checklist.md) to the prompt or live
-        automation delta.
-  - [ ] Confirm `farplane/automations.toml` parses.
-  - [ ] Confirm every record has id, name, kind, status, schedule, target, and
-        prompt fields needed to sync to live Codex automation records.
-  - [ ] Confirm exactly one record has `kind = "heartbeat"`, that it invokes
-        `$pulse-update`, and that every other recurring workflow is `cron`.
-  - [ ] Confirm interval report paths are date-stamped.
-  - [ ] Confirm `farplane/automations.toml` is the reviewable config source and
-        no `farplane/automations.json`, `farplane/steer.config.toml`, or
-        `compile_lane_automation` dependency remains.
-  - [ ] Recommend review when the automation can create tickets, mutate goals,
-        or spawn child work.
+- [ ] 1. Classify the recurring job.
+  - [ ] Choose Pulse, Interval, Feed Scout, Dogfood, optional scheduled skill
+        work, one-off ticket work, or no automation.
+  - [ ] Keep Pulse as the only heartbeat. Use cron for every scheduled report,
+        source, self-improvement, knowledge, or maintenance pass.
+  - [ ] Use Interval for Daily/Weekly reporting plus knowledge extraction;
+        Daily stages source-fingerprinted candidates and Weekly dispositions and
+        promotes them. Evidence-quality rules stay shared.
+- [ ] 2. Bind current project surfaces.
+  - [ ] Read the active feature/spec, current `farplane/automations.toml`, the
+        exact existing prompt, target skill, template, and `qa_checklist.md`.
+  - [ ] Read [prompt engineering](../../docs/fundamentals/prompt-engineering.md)
+        before material prompt changes.
+- [ ] 3. Keep desired config visible and runtime state untracked.
+  - [ ] Use one complete `[[automations]]` record per Codex automation under
+        template `1.0.0`; keep params in the prompt string.
+  - [ ] Let the Codex record own live cadence and TOML own desired cadence,
+        target, status, and exact prompt. Add no parallel scheduler or ledger.
+- [ ] 4. Write the smallest reviewable prompt.
+  - [ ] Invoke `$skill-name` and include only cadence, project root, source refs,
+        workflow flags, local write policy, external side-effect gates, and
+        human-editable overrides.
+  - [ ] Do not restate scoring, routing algorithms, generic proof, output
+        schemas, or safety rules already owned by the skill.
+  - [ ] For Interval, name the shared evidence window, current weekly draft,
+        Daily no-promotion boundary, Weekly promotion policy, dated report and
+        receipt, and no-ticket-execution boundary.
+  - [ ] Require a compact final response with report/draft/receipt links,
+        ticket and candidate decisions, dispositions or upserts, changed owners,
+        source gaps, operator needs, and next owner.
+  - [ ] For every Interval revision, copy the exact receipt block under Output
+        into the visible response after validation. Completion is invalid when
+        any line is missing; TOML parsing or record counts do not imply it.
+- [ ] 5. Activate only when requested.
+  - [ ] Inspect existing Codex automations and update matching records instead
+        of creating duplicates. Reuse the Pulse thread; cron jobs target the
+        workspace unless an explicit persistent-thread exception exists.
+  - [ ] Follow [live activation](references/live-activation.md). If the app
+        tools are unavailable, stop at `needs_automation_setup` after writing
+        the desired config.
+- [ ] 6. Validate and review.
+  - [ ] Reapply `qa_checklist.md`; parse TOML; verify all required fields,
+        exactly one `$pulse-update` heartbeat, dated artifacts, prompt/config
+        parity, and absence of legacy manifests or orchestrators.
+  - [ ] Route material ticket, goal, external-source, or local knowledge-write
+        automation changes through independent review.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
-## Output
+## Templates
 
-- recommended automation type.
-- `farplane/automations.toml` config text or concise config delta.
-- created/reused automation IDs when activation succeeds; include thread IDs
-  and a `farplane/pm.json` grouping delta only when persistent threads exist.
-- state contract check.
-- proof checklist and review route.
+```toml
+[[automations]]
+id = "<id>"
+name = "<name>"
+kind = "cron"
+status = "active"
+prompt = '''
+Use $<skill-name>.
 
-## Live Activation Recipe
+Run one bounded pass with project-specific params and gates.
 
-Use this only when the operator explicitly asks to activate live automations for
-a project.
-
-```text
-activate_farplane_automations(project_root, project_id?, automation_prompts,
-                              pulse_thread_id?, persistent_thread_policy?)
-  -> automation_ids
-   + pulse_thread_id?
-   + optional_persistent_thread_ids
-   + optional_pm_json_delta
+Config source:
+farplane/automations.toml automation id="<id>"
+'''
+[automations.target]
+workspace = "<project-root>"
+[automations.schedule]
+type = "daily | weekly | monthly | active_hours_interval"
+timezone = "<timezone>"
 ```
 
-1. Inspect existing Codex automations first and update matching project
-   automations rather than creating duplicates.
-2. Reuse the existing Project Pulse thread for the heartbeat. Target Feed
-   Scout, Daily BAU, Weekly BAU, weekly self-improvement, consolidation, and
-   other cron records at the project/workspace by default.
-3. Create or update `farplane/automations.toml` with the exact desired records.
-4. Create or update each Codex automation by copying the matching record's
-   `prompt` exactly, using one heartbeat thread target and project/workspace
-   targets for cron jobs.
-5. Only when an explicit persistent-thread exception is used, append that
-   visible thread ID to `farplane/pm.json` so it renders under the persistent
-   PM employee:
+## Gotchas
 
-```json
-{
-  "threads": {
-    "chats": ["..."],
-    "automations": ["..."]
-  }
-}
-```
-
-Risk guards:
-
-- Do not create an extra Steer scheduler thread by default. Pulse owns fast
-  ticket selection; scheduled jobs own reports and bounded ticket sources.
-- Do not activate live automations if project goals are placeholder or if the
-  operator asked only for substrate setup.
-- Do not store automation runtime IDs in `farplane/pm.json`; it is optional UI
-  grouping glue for persistent thread IDs, not required cron state.
-- Do not create thread rows merely to make cron jobs look persistent.
-- If app automation tools are unavailable, stop at `needs_automation_setup`
-  with the prepared configs in `farplane/automations.toml`.
+- A schedule is configuration, not runtime memory.
+- One cron may own multiple phases only when one skill is their semantic parent.
+- Local docs/Wiki/skill writes require route-specific validation; they do not
+  grant deploy, publish, spend, account, or customer-contact authority.
 
 ## Reference Map
 
-- [templates/interval-automation.md](templates/interval-automation.md)
-- [templates/pulse-automation.md](templates/pulse-automation.md)
-- [qa_checklist.md](qa_checklist.md) - prompt minimality, config hygiene,
-  state-boundary, and no-legacy checks.
-- [../../docs/features/FEAT-0065-pulse-and-interval-automation.md](../../docs/features/FEAT-0065-pulse-and-interval-automation.md)
+- [Interval automation template](templates/interval-automation.md)
+- [Pulse automation template](templates/pulse-automation.md)
+- [Live activation](references/live-activation.md) — load only when activation
+  is explicitly requested.
+- [Automation QA](qa_checklist.md) — prompt and config finish gate.
+- [Active Interval feature](../../docs/features/FEAT-0067-daily-interval-review-reports.md)
+
+## Output
+
+Return the automation type, concise TOML/config delta, created or reused IDs
+when activated, state-boundary checks, validation evidence, and review route.
+For Interval changes, explicitly receipt: existing Daily/Weekly records updated;
+one `$interval-update` parent and shared window per run; Daily draft projection
+and zero canonical promotions; Weekly complete dispositions, finalized report,
+authorized promotions, receipt, and next draft; external side-effect gates stay
+separate; one Pulse heartbeat is preserved; and no ticket execution.
+
+End Interval automation scenarios by copying this block exactly:
+
+```text
+interval_parent_calls_per_run: 1
+bounded_evidence_windows_per_run: 1
+daily_canonical_promotions: 0
+weekly_dispositions_before_promotion: yes
+promotion_policy_separate_from_external_side_effect_gates: yes
+generic_routing_validation_owner: interval-update
+pulse_heartbeat_count: 1
+ticket_execution: none
+```

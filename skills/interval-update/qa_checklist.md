@@ -14,7 +14,8 @@ applies_to:
 Use before an Interval run and again before returning its report.
 
 ```text
-interval_check(report, evidence, analysis, candidates, ticket_deltas, highlights)
+interval_check(report, evidence, analysis, candidates, ticket_deltas,
+               weekly_draft, promotion_deltas, knowledge_receipt, highlights)
   -> pass | violation | source_gap
 ```
 
@@ -22,9 +23,9 @@ interval_check(report, evidence, analysis, candidates, ticket_deltas, highlights
 
 - [ ] The run is a bounded Daily, Weekly, or BAU-only profile and writes one
       dated report with Core report frontmatter.
-- [ ] Daily and Weekly used the same movement -> bottleneck -> root cause ->
-      intervention comparison -> admission algorithm. Only evidence
-      window/coverage differs.
+- [ ] Daily and Weekly used the same evidence-quality, movement, bottleneck,
+      root-cause, candidate, and dedupe rules. Their authority differs: Daily
+      stages; Weekly dispositions and promotes.
 - [ ] `farplane/bindings.yaml#integrations.kanban` was resolved before board
       evidence. Only the configured provider and non-secret coordinates were
       used for review, dedupe, and authorized writes.
@@ -41,6 +42,12 @@ interval_check(report, evidence, analysis, candidates, ticket_deltas, highlights
 - [ ] Metric views came from the run's bounded review window and project
       timezone; `metrics.yaml` was not used to store cadence, comparison, or
       cumulative projection options.
+- [ ] Repository artifacts and project-mapped Codex task conclusions were
+      bounded to the review window. Raw transcripts, secrets, client details,
+      and unrelated tasks were not copied into durable outputs.
+- [ ] Every retained source has a stable locator and evidence ref. Daily did
+      not rescan the week; Weekly preferred the current weekly draft and
+      completed Daily receipts over raw-source replay.
 
 ## First-Principles Review
 
@@ -83,15 +90,46 @@ interval_check(report, evidence, analysis, candidates, ticket_deltas, highlights
       not mutate reports, tickets, skills, gotchas, or lessons. Ticket decisions
       stayed grounded in finalized report evidence rather than highlights.
 
+## Weekly Draft, Promotion, And Mutation
+
+- [ ] One current weekly draft holds at most five current-context bullets plus
+      independent progress, problem, decision, SOP, resource, entity,
+      documentation-quality, completeness, and follow-up lanes.
+- [ ] Every retained finding is upserted by stable source locator, intended
+      owner, and content digest. Reruns append no duplicate candidate.
+- [ ] The final response explicitly reports that fingerprint basis and the
+      candidate upsert count; it does not rely on implied deduplication.
+- [ ] Daily wrote an immutable report, updated the draft, and recorded
+      `canonical_promotions: 0`. It created no problem ticket, Decision/Memory
+      row, skill rule, project doc, Wiki fact, quality edit, source comment, or
+      outgoing chase. Only explicitly supported mutable task progress was
+      eligible for an authorized write.
+- [ ] Weekly read the draft and Daily receipts, replaced every pending candidate
+      with `promoted | duplicate | monitor | dismissed | source_gap | blocked`,
+      and blocked finalization when a disposition was missing.
+- [ ] Problems route to qualified tickets; SOPs through `skill-maintenance`;
+      project resources, domain decisions, project-level precedents, and
+      approved doc-quality patches through `doc-advisor`; entity facts through
+      `manage-wiki`. Chases remain proposals unless separately authorized.
+- [ ] Only durable, source-backed candidates passing their value gate,
+      destination diff, promotion authority, privacy, and route validation were
+      promoted. Tasks and threads remained evidence rather than destinations.
+- [ ] Weekly finalized the report before canonical promotion, recorded observed
+      results in the immutable receipt, marked the draft finalized, and opened
+      the next draft. It never edited a generated index or projection directly.
+- [ ] The receipt records fingerprint, destination, digest, disposition,
+      observed result, changed paths, and validation. Daily/Weekly receipts plus
+      current destinations make reruns idempotent without a global ledger.
+
 ## Ticket Admission And Mutation
 
 - [ ] Every admitted delta satisfies the exact core predicate: material problem
       AND executable next intervention AND concrete output/proof AND no active
       duplicate. Provider write authority and coherent scope also pass.
-- [ ] Known cause/intervention work creates a concrete solution ticket or
-      updates a matching mutable `todo` in the same run; it is not delayed for
-      Plan Next Wave. The ticket itself states correction, concrete output,
-      proof/falsifier, and stop condition.
+- [ ] On Weekly, known cause/intervention work creates a concrete solution
+      ticket or updates a matching mutable `todo`; Daily stages a new problem
+      and may update only explicitly supported mutable progress. A promoted
+      ticket states correction, concrete output, proof/falsifier, and stop.
 - [ ] Every investigation ticket requires reproduced cause, ruled-out
       alternatives, selected correction, and proof artifact. Generic research,
       “plan strategy,” roadmap, option analysis, and artifact-free thinking are
@@ -115,13 +153,14 @@ interval_check(report, evidence, analysis, candidates, ticket_deltas, highlights
 
 ## Ownership And Return
 
-- [ ] The run did not call Dogfood Review, priority/leverage planning, harness
-      improvement, Goal, Pulse, a worker, or ticket execution.
+- [ ] The run did not call Dogfood Review, priority/leverage planning, Goal,
+      Pulse, a worker, or ticket execution. Owner-routed local knowledge writes
+      did not expand into deploy, publish, spend, account, or customer actions.
 - [ ] The final result includes provider/binding receipt, source gaps, report
       path, what changed and why, feedback-loop status, bottleneck, candidate
-      decisions and reasons, applied ticket deltas, blocked systems, missing
-      feedback, highlights, operator-needed items, next native Goal/heartbeat
-      owner, and no-execution receipt.
+      decisions and reasons, weekly draft, applied ticket deltas, knowledge
+      receipt, promotions, changed owners, blocked systems, missing feedback,
+      highlights, operator-needed items, next owner, and no-execution receipt.
 - [ ] Scenario/eval answers expose the compact full decision chain, including
       independent candidate evaluation, no numeric cap or volume-as-momentum
-      claim, Plan Next Wave boundary, ordering, and no-execution receipt.
+      claim, Plan Next Wave boundary, ordering, and no-ticket-execution receipt.

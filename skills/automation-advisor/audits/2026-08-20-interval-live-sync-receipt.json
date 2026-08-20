@@ -1,0 +1,47 @@
+{
+  "captured_at": "2026-08-20",
+  "source": "codex_app__automation_update plus local automation store verification",
+  "records": [
+    {
+      "id": "farplane-daily-interval",
+      "update_mode": "update",
+      "app_result": "Updated automation in the app.",
+      "desired_prompt_sha256": "a2dd83a610b51f165a4ebde25070a47e81e2ef40ba39edd49c2f1ffe6d11070c",
+      "live_prompt_sha256": "a2dd83a610b51f165a4ebde25070a47e81e2ef40ba39edd49c2f1ffe6d11070c",
+      "prompt_match_normalized": true,
+      "desired_status": "active",
+      "live_status": "PAUSED",
+      "rrule": "FREQ=DAILY;BYHOUR=5;BYMINUTE=33;BYSECOND=0",
+      "model": "gpt-5.5",
+      "reasoning_effort": "high",
+      "execution_environment": "local",
+      "project_id": "local-d2ec957a3d66ae78e0956df395111f04"
+    },
+    {
+      "id": "farplane-weekly-interval",
+      "update_mode": "update",
+      "app_result": "Updated automation in the app.",
+      "desired_prompt_sha256": "fe1ff2f4ffac2db2ddfb281d94833377e1b49de2d8812ee3e2d88a563462362f",
+      "live_prompt_sha256": "fe1ff2f4ffac2db2ddfb281d94833377e1b49de2d8812ee3e2d88a563462362f",
+      "prompt_match_normalized": true,
+      "desired_status": "active",
+      "live_status": "PAUSED",
+      "rrule": "FREQ=WEEKLY;BYDAY=MO;BYHOUR=5;BYMINUTE=45;BYSECOND=0",
+      "model": "gpt-5.5",
+      "reasoning_effort": "high",
+      "execution_environment": "local",
+      "project_id": "local-d2ec957a3d66ae78e0956df395111f04"
+    }
+  ],
+  "normalization_note": "The app adds a trailing newline to prompt text; hashes compare prompts after trimming trailing whitespace.",
+  "status_note": "The update preserved each live task's PAUSED status. The repository's desired-state records remain active.",
+  "skill_install": {
+    "installer": "skills/skill-maintenance/scripts/install_selected_skills.py",
+    "installed": [
+      "automation-advisor",
+      "interval-update"
+    ],
+    "backup_root": "/Users/kenjipcx/.codex/.install-backups/20260820-204609",
+    "post_install_dry_run_skipped_both_as_matching": true
+  }
+}

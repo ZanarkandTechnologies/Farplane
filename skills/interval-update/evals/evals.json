@@ -137,18 +137,18 @@
     {
       "id": "interval_daily_weekly_reasoning_parity",
       "prompt": "Run Daily over the last 24 hours and Weekly over the last week using equivalent evidence of a material regression. What is shared, and what may differ?",
-      "expected_output": "Both use metric movement, dominant bottleneck, symptom/root-cause separation, objective rebuild, intervention comparison, and identical admission gates; Daily emphasizes recent movement and outcomes and may refresh selected stale metrics; Weekly adds completed Daily reports, recurrence, wider history, resource use, and pending proof; Cadence never lowers decision quality, changes ticket caps, or grants broader authority; Both preserve report then highlights then ticket-deltas ordering",
+      "expected_output": "Both use the same evidence-quality, movement, bottleneck, root-cause, candidate, and dedupe rules; Daily emphasizes recent evidence, writes an immutable report, upserts the current weekly draft, may update explicit mutable task progress, and promotes no problem or knowledge record; Weekly reads the draft and Daily receipts, dispositions every candidate, freezes the report, promotes only authorized records, writes the observed-result receipt, and opens the next draft; Cadence never lowers decision quality or grants external authority",
       "files": [],
       "assertions": [
-        "Both cadences use the same complete reasoning and admission algorithm",
-        "Daily emphasizes recent evidence and optional selected metric refresh",
-        "Weekly adds recurrence and wider evidence coverage",
-        "Cadence does not change admission quality, cap tickets, or broaden authority",
-        "Both preserve report then highlights then ticket-deltas ordering"
+        "Both cadences use the same evidence-quality, extraction, and dedupe rules",
+        "Daily upserts the weekly draft and promotes no durable record or new problem ticket",
+        "Weekly dispositions every candidate before selective promotion",
+        "Weekly freezes the report before promotion and opens the next draft afterward",
+        "Cadence does not lower decision quality or broaden external authority"
       ],
       "metadata": {
         "farplane": {
-          "title": "Daily and Weekly differ only in evidence coverage",
+          "title": "Daily stages and Weekly promotes under shared evidence quality",
           "tags": ["interval-update", "daily", "weekly", "parity"]
         }
       }
@@ -226,6 +226,48 @@
         "farplane": {
           "title": "Missing feedback routes to a concrete evidence unblock",
           "tags": ["interval-update", "feedback-loop", "instrumentation", "evidence"]
+        }
+      }
+    },
+    {
+      "id": "interval_daily_stages_owner_routed_knowledge_candidates",
+      "prompt": "Daily Interval's bounded window contains three source-backed conclusions: a reusable deployment rollback procedure from a completed task, a durable explanation of the project's authorization boundary, and a verified relationship between a customer and product. The current skill, project docs, and Wiki do not contain them. What does Interval do?",
+      "expected_output": "Uses one bounded evidence bundle and treats the task as evidence rather than copying its transcript; Classifies the rollback procedure for skill-maintenance, the authorization explanation for doc-advisor, and the relationship for manage-wiki; Upserts three pending candidates into the current weekly draft by source locator, intended owner, and content digest; Writes the immutable Daily report and candidate receipt; Changes no skill, project doc, Wiki article, Decision/Memory row, or problem ticket and records daily_canonical_promotions: 0; Does not rescan the week or start ticket execution",
+      "files": [],
+      "assertions": [
+        "Uses one bounded evidence bundle for reporting and knowledge extraction",
+        "Treats tasks and threads as evidence rather than durable destinations",
+        "Classifies SOP, project knowledge, and entity knowledge for the three correct owners",
+        "Upserts stable source-owner-digest fingerprints into the current weekly draft",
+        "Changes no canonical knowledge owner and records zero Daily promotions",
+        "Writes an immutable Daily report and candidate receipt",
+        "Does not rescan the week or execute tickets"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Daily Interval stages owner-routed knowledge candidates",
+          "tags": ["interval-update", "knowledge", "daily", "routing", "receipt"]
+        }
+      }
+    },
+    {
+      "id": "interval_weekly_dispositions_draft_and_promotes_selected_records",
+      "prompt": "The current weekly draft contains two complementary project-document candidates, a repeated Wiki fact, an ambiguous identity, a recurring material blocker, and a stale commitment with no messaging approval. Seven Daily receipts cover the same sources. How should the weekly review close the window?",
+      "expected_output": "Uses the draft and Daily receipts instead of replaying every raw task and thread; Gives every candidate promoted, duplicate, monitor, dismissed, source_gap, or blocked disposition; Consolidates the complementary project-doc candidates against the current owner, keeps the repeated Wiki fact duplicate/no-op, blocks the ambiguous identity, admits the material problem only if ticket gates pass, and keeps the stale chase as a proposal; Freezes the weekly report before canonical changes; Applies only authorized promotions through owning routes, writes the observed-result receipt, marks the draft finalized, and opens the next draft; Does not edit generated indexes or execute tickets",
+      "files": [],
+      "assertions": [
+        "Prefers the weekly draft and Daily receipts over raw week replay",
+        "Gives every candidate one allowed disposition",
+        "Consolidates complementary project-doc candidates and preserves duplicate and ambiguity outcomes",
+        "Keeps the stale chase as a proposal without messaging authority",
+        "Freezes the report before authorized promotion and opens the next draft afterward",
+        "Does not edit generated indexes directly",
+        "Writes an observed-result receipt and does not execute tickets"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Weekly Interval dispositions the draft and selectively promotes",
+          "tags": ["interval-update", "knowledge", "weekly", "draft", "promotion"]
         }
       }
     }

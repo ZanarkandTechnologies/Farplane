@@ -155,7 +155,7 @@ routes:
                 "project_initialization",
                 "automation_activation",
                 "ticket_goal_execution",
-                "memory_drain_upkeep",
+                "interval_knowledge_phase",
                 "self_update_loop",
             },
         )

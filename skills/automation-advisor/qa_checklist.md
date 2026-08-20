@@ -52,8 +52,9 @@ automation_prompt_qa(automation_prompt, called_skill, project_context)
 
 6. `read_write_contract`
    - Pass: interval automation prompts describe project-specific sources and
-     side effects as `Call`, `Reads`, `Writes`, `Runs`, and `Gates`
-     instructions that visually match skill signatures.
+     side effects in a shape matching the skill signature. Daily/Weekly
+     Interval prompts name the current weekly draft, Daily no-promotion
+     boundary, Weekly promotion policy, dated report, and receipt.
    - Fail: the prompt exposes raw internal config objects such as empty
      `context_refs.workflow_refs` arrays when plain read/write instructions
      would be clearer.
@@ -80,7 +81,8 @@ automation_prompt_qa(automation_prompt, called_skill, project_context)
      or bakes source paths into a generic skill.
 
 10. `workflow_flag_fit`
-   - Pass: optional analysis work is expressed under `Runs`.
+   - Pass: optional analysis work is expressed under `Runs`; Interval's two
+     required sibling phases remain one parent skill call rather than two jobs.
    - Fail: optional workflows are described as always-on skill behavior or as a
      separate hidden scheduler.
 
@@ -98,8 +100,9 @@ automation_prompt_qa(automation_prompt, called_skill, project_context)
      IDs.
 
 13. `side_effect_gates`
-   - Pass: the prompt names project-specific external side-effect gates only
-     when they matter.
+   - Pass: the prompt separates local knowledge write policy from deploy,
+     publish, spend, account, customer-contact, destructive, and other external
+     side-effect gates.
    - Fail: the prompt permits push, deploy, publish, spend, account mutation,
      destructive cleanup, or external mutation without explicit operator
      policy.
@@ -141,8 +144,16 @@ automation_prompt_qa(automation_prompt, called_skill, project_context)
 19. `final_response_contract`
    - Pass: scheduled report-producing prompts include a compact final response
      contract that surfaces key findings, tickets created or updated, candidate
-     decisions with reasons, source gaps, operator-needed items, and next owner
-     or no-execution receipts.
+     decisions with reasons, draft/disposition result, knowledge receipt and
+     changed owners, source gaps, operator-needed items, and next owner or
+     no-ticket-execution receipts.
    - Fail: the prompt allows a receipt that only says the report was written,
      the index was regenerated, or no ticket was created without summarizing
      the report and admission decisions.
+
+20. `interval_lifecycle_receipts`
+   - Pass: Interval revisions explicitly receipt one parent call and bounded
+     window per run, Daily zero promotions, Weekly disposition-before-promotion,
+     separate promotion/external gates, Interval-owned generic routing and
+     validation, one Pulse heartbeat, and no ticket execution.
+   - Fail: these boundaries are merely implied by a TOML parse or record count.

@@ -2,7 +2,7 @@
 # Runtime logs, run IDs, last-run status, and automation memory stay outside tracked config.
 schema = "farplane_project_automations"
 framework_template_version = "1.0.0"
-updated_at = "2026-08-02"
+updated_at = "2026-08-20"
 owner = "automation-advisor"
 
 [[automations]]
@@ -148,25 +148,12 @@ status = "active"
 prompt = '''
 Use $interval-update.
 
-Run the shared first-principles BAU review over the last 24 hours. Read metric
-movement and outcomes, identify material stalls or regressions, select the
-dominant bottleneck, separate symptom from root cause, rebuild the simplest
-correct path from the objective, and compare the largest coherent compounding
-interventions. Diagnose feedback-loop status; when instrumentation is missing,
-compare a concrete evidence-capture unblock instead of optimizing from vibes.
-Ground every problem/system gap in ticket, progress, metric, feedback, or
-completed-report evidence. Finalize the dated report first, append sparse highlights
-second, then apply every independently qualified ticket delta through the
-configured authorized board route.
-
-Known grounded interventions become concrete solution tickets or mutable todo
-updates in this run. Admit uncertain work only when the investigation must
-reproduce the cause, rule out alternatives, select the correction, and preserve
-a proof artifact. Reject low-materiality, vague, duplicate, artifact-free,
-planning-only, authority-unsafe, or protected-state rewrites. Apply no numeric
-ticket cap. Preserve spend, publishing, customer-contact, account-change, and
-private-data gates. Do not review harness experiments, mutate rewards, or
-execute work.
+Run one Daily Interval over the last 24 hours. Use one bounded evidence bundle
+to produce the immutable Daily control-loop report, upsert source-fingerprinted
+findings into the current weekly working draft, and write the sibling knowledge
+receipt. Apply only explicitly supported mutable task progress. Do not create a
+problem ticket or promote any Decision/Memory row, skill rule, project doc, Wiki
+fact, quality edit, source comment, or outgoing chase. Do not execute work.
 
 Params:
 project_root = "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane"
@@ -174,27 +161,27 @@ interval_id = "daily"
 review_window = "last_24h"
 refresh_metrics = true
 refresh_scope = "selected_stale"
-write_policy = "report, sparse highlights, then qualified ticket deltas through the configured authorized provider; no execution"
+write_policy = "report, weekly-draft upsert, sparse highlights, then explicitly supported mutable task progress through the configured authorized provider; no new ticket and no execution"
+knowledge_write_policy = "stage every durable candidate in the current weekly draft; canonical promotions must be zero"
 timezone = "Asia/Kuala_Lumpur"
 
 Reads:
 - latest completed Feed Scout report when present
 - latest completed weekly BAU report when present
+- current weekly working draft and latest Daily receipt when present
+
+Gates:
+- no deploy, publish, spend, customer contact, account mutation, destructive cleanup, or private-data expansion
+- no raw transcript content in reports, docs, skills, receipts, or Wiki pages
 
 Final response:
-- Link the report path and summarize the report in 2-4 bullets.
-- List tickets created or updated, or `none`.
-- Name what changed and why, feedback-loop status, the dominant bottleneck,
-  root-cause confidence, blocked systems, and missing feedback.
-- List each candidate intervention and ticket delta with the reason: `created`,
-  `updated_todo`, `rejected_todo`, `investigation`, `duplicate`,
-  `planner_candidate`, `low_materiality`, `planning_residue`, `source_gap`,
-  `blocked_by_authority`, or `not_ticketable`.
-- Name operator-needed items, source gaps, and next owner.
-- Name the next native Goal/heartbeat owner without starting it.
-- Include report-before-highlights-before-ticket-deltas and no-execution
-  receipts: no harness experiment review, rewards mutation, Goal, Pulse,
-  worker, or ticket execution.
+- Link the report, current weekly draft, and knowledge receipt.
+- List candidate upserts, no-ops, task-progress updates, and source gaps.
+- State `daily_canonical_promotions: 0`; list canonical knowledge owners changed
+  as `none`.
+- Name blockers,
+  operator-needed items, and next owner.
+- Include report-before-mutation and no-Goal/Pulse/worker/ticket-execution receipts.
 
 Config source:
 farplane/automations.toml automation id="farplane-daily-interval"
@@ -214,53 +201,38 @@ status = "active"
 prompt = '''
 Use $interval-update.
 
-Run the shared first-principles BAU review over the last week. Read metric
-movement, completed Daily reports, wider ticket outcomes, recurrence, resource
-use, and pending proof; identify material stalls or regressions, select the
-dominant bottleneck, separate symptom from root cause, rebuild the simplest
-correct path from the objective, and compare the largest coherent compounding
-interventions. Diagnose feedback-loop status; when instrumentation is missing,
-compare a concrete evidence-capture unblock instead of optimizing from vibes.
-Ground every problem/system gap in ticket, progress, metric, feedback, or
-completed-report evidence. Finalize the dated report first, append sparse highlights
-second, then apply every independently qualified ticket delta through the
-configured authorized board route.
-
-Known grounded interventions become concrete solution tickets or mutable todo
-updates in this run. Admit uncertain work only when the investigation must
-reproduce the cause, rule out alternatives, select the correction, and preserve
-a proof artifact. Reject low-materiality, vague, duplicate, artifact-free,
-planning-only, authority-unsafe, or protected-state rewrites. Apply no numeric
-ticket cap. Preserve spend, publishing, customer-contact, account-change, and
-private-data gates. Do not review harness experiments, mutate rewards, or
-execute work.
+Run one Weekly Interval over the previous completed week. Use completed Daily
+reports, the current weekly working draft, and Daily receipts as primary
+evidence. Give every candidate `promoted`, `duplicate`, `monitor`, `dismissed`,
+`source_gap`, or `blocked`; freeze the weekly report before mutation; then apply
+only authorized ticket and knowledge promotions through canonical owners, write
+the observed-result receipt, finalize the draft, and open the next one. Do not
+execute admitted work.
 
 Params:
 project_root = "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane"
 interval_id = "weekly"
 review_window = "last_week"
 refresh_metrics = false
-write_policy = "report, sparse highlights, then qualified ticket deltas through the configured authorized provider; no execution"
+write_policy = "freeze the weekly report, append sparse highlights, then apply independently qualified ticket promotions through the configured authorized provider; no ticket execution"
+knowledge_write_policy = "promote only source-backed candidates that pass their value gate, destination diff, authority, privacy, and owning-route validation; otherwise retain the disposition in the report"
 timezone = "Asia/Kuala_Lumpur"
 
 Reads:
 - completed daily BAU reports inside the review window
+- completed daily knowledge receipts inside the review window
+- current weekly working draft
 - completed Feed Scout reports inside the review window
 
+Gates:
+- no deploy, publish, spend, customer contact, account mutation, destructive cleanup, or private-data expansion
+- no raw transcript content in reports, docs, skills, receipts, or Wiki pages
+
 Final response:
-- Link the report path and summarize the weekly pattern in 2-4 bullets.
-- List tickets created or updated, or `none`.
-- Name what changed and why, feedback-loop status, the dominant bottleneck,
-  root-cause confidence, blocked systems, and missing feedback.
-- List each candidate intervention and ticket delta with the reason: `created`,
-  `updated_todo`, `rejected_todo`, `investigation`, `duplicate`,
-  `planner_candidate`, `low_materiality`, `planning_residue`, `source_gap`,
-  `blocked_by_authority`, or `not_ticketable`.
-- Name operator-needed items, source gaps, and next owner.
-- Name the next native Goal/heartbeat owner without starting it.
-- Include report-before-highlights-before-ticket-deltas and no-execution
-  receipts: no harness experiment review, rewards mutation, Goal, Pulse,
-  worker, or ticket execution.
+- Link the finalized report, finalized draft, knowledge receipt, and next draft.
+- List every candidate disposition and every promoted ticket/skill/doc/Wiki owner.
+- Confirm the report was frozen before promotion and the next draft opened afterward.
+- Name source gaps, operator-needed items, next owner, and the no-Goal/Pulse/worker/ticket-execution receipt.
 
 Config source:
 farplane/automations.toml automation id="farplane-weekly-interval"

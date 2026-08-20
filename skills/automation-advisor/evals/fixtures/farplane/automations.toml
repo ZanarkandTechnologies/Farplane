@@ -1,0 +1,67 @@
+schema = "farplane_project_automations"
+framework_template_version = "1.0.0"
+updated_at = "2026-08-01"
+owner = "automation-advisor"
+
+[[automations]]
+id = "toy-work-pulse"
+name = "Toy Work Pulse"
+kind = "heartbeat"
+status = "active"
+prompt = '''
+Use $pulse-update.
+
+Run one bounded Work Pulse.
+'''
+[automations.target]
+thread_id = "toy-pulse-thread"
+[automations.schedule]
+type = "active_hours_interval"
+timezone = "UTC"
+interval_minutes = 15
+
+[[automations]]
+id = "toy-daily-interval"
+name = "Toy Daily Interval"
+kind = "cron"
+status = "active"
+prompt = '''
+Use $interval-update.
+
+Run the Daily reporting review over the last 24 hours and do not execute work.
+
+Params:
+project_root = "/tmp/toy-project"
+interval_id = "daily"
+review_window = "last_24h"
+'''
+[automations.target]
+workspace = "/tmp/toy-project"
+[automations.schedule]
+type = "daily"
+timezone = "UTC"
+time = "05:30"
+
+[[automations]]
+id = "toy-weekly-interval"
+name = "Toy Weekly Interval"
+kind = "cron"
+status = "active"
+prompt = '''
+Use $interval-update.
+
+Run the Weekly reporting review over the previous completed week and do not
+execute work.
+
+Params:
+project_root = "/tmp/toy-project"
+interval_id = "weekly"
+review_window = "previous_completed_week"
+'''
+[automations.target]
+workspace = "/tmp/toy-project"
+[automations.schedule]
+type = "weekly"
+timezone = "UTC"
+days = ["Mon"]
+time = "05:45"

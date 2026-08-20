@@ -69,6 +69,27 @@
           ]
         }
       }
+    },
+    {
+      "id": "automation_advisor_interval_parent_two_phase_01",
+      "prompt": "Revise the existing Daily and Weekly Interval automations so daily activity accumulates into the week's operating context and only the weekly review promotes durable knowledge. Do not create another scheduled job.",
+      "expected_output": "Updates the existing Daily and Weekly cron records instead of creating duplicates; Keeps one $interval-update call as the semantic parent and one bounded evidence window per run; Makes Daily update the current weekly draft and explicitly promote zero canonical knowledge records; Makes Weekly disposition every candidate, freeze the report, apply authorized promotions, write the receipt, and open the next draft; Separates promotion policy from external side-effect gates; Keeps generic routing and validation in interval-update; Preserves one Pulse heartbeat and no ticket execution",
+      "files": ["evals/fixtures/farplane/automations.toml"],
+      "assertions": [
+        "Updates existing Daily and Weekly cron records without creating another job",
+        "Keeps interval-update as the one parent skill call with one bounded window",
+        "Makes Daily update the draft with zero canonical promotions",
+        "Makes Weekly disposition, freeze, promote, receipt, and open the next draft",
+        "Separates promotion policy from external side-effect gates",
+        "Does not duplicate generic skill workflow in the prompt",
+        "Preserves one Pulse heartbeat and no ticket execution"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Interval automation remains one draft-then-promote parent",
+          "tags": ["automation-advisor", "interval-update", "knowledge", "weekly-draft"]
+        }
+      }
     }
   ]
 }

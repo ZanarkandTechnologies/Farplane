@@ -1,11 +1,11 @@
 ---
-title: "BAU Interval Review-to-Ticket Contract"
+title: "BAU Interval Reporting And Knowledge Contract"
 status: active
 owner: interval-update
 kind: reference
 ---
 
-# BAU Interval Review-to-Ticket Contract
+# BAU Interval Reporting And Knowledge Contract
 
 Daily and Weekly are evidence profiles over one decision primitive:
 
@@ -13,8 +13,12 @@ Daily and Weekly are evidence profiles over one decision primitive:
 review_interval(interval_id, review_window, evidence, board, authority)
   -> finalized_report
    + sparse_highlights
-   + candidate_interventions
+   + weekly_draft_delta
+   + candidate_sets
    + ticket_deltas
+   + knowledge_receipt
+   + promoted_records?
+   + next_week_draft?
    + source_gaps
 ```
 
@@ -22,10 +26,14 @@ The invariant order is:
 
 1. resolve the configured provider and gather the bounded evidence window;
 2. review metric/outcome movement through bottleneck and root cause;
-3. compare interventions and record every admission decision;
-4. finalize the immutable report;
-5. append independently selected TASK-0405 highlights;
-6. apply qualified ticket deltas without executing them.
+3. compare interventions and extract independent candidate lanes;
+4. upsert source-fingerprinted findings into the current weekly draft;
+5. finalize the immutable run report;
+6. append independently selected TASK-0405 highlights;
+7. on Daily, apply only authorized mutable task progress and receipt zero
+   canonical promotions;
+8. on Weekly, disposition every candidate, promote authorized records, write
+   the observed-result receipt, finalize the draft, and open the next draft.
 
 Highlights are never an input to steps 2, 3, or 6.
 
@@ -97,8 +105,8 @@ admit_ticket_delta(problem, intervention, board, authority)
    prevention, time to evidence, reversibility, dependencies, and risk.
 7. Prefer one largest coherent intervention per root problem. Do not split
    analysis, design, implementation, and proof into planning-only tickets.
-8. Map every actionable finding to one qualified ticket delta or an explicit
-   no-action reason. Decide independently; there is no count target or cap.
+8. Map every actionable finding to one lane and explicit disposition. Daily
+   stages new problems; Weekly may promote independently qualified tickets.
 
 ## Daily Evidence Profile
 
@@ -110,6 +118,10 @@ Daily reviews the recent window, normally 24 hours:
 - fresh proof, review artifacts, and latest completed provider reports supplied
   through `context_refs`;
 - prior unresolved Interval problems needed to understand current evidence.
+- repository artifacts and project-mapped Codex task conclusions created,
+  updated, or archived inside the bounded window;
+- the current weekly draft, canonical destinations, and latest relevant Daily
+  receipts for idempotency.
 
 Daily may refresh selected/pinned stale metrics when explicitly enabled. It
 does not call the provider whose completed report it reads.
@@ -123,6 +135,56 @@ Weekly executes the same reasoning and admission gates over the wider window:
 - completed, abandoned, or stalled work and pending proof;
 - review/intervention load, resource consumption, and policy-defined budget;
 - completed provider reports explicitly supplied inside the window.
+- the current weekly draft and completed Daily receipts with candidate upserts,
+  no-ops, and source gaps.
+
+Weekly prefers the draft and receipts over replaying every raw task or thread.
+It dedupes repeated facts, assigns every candidate a disposition, freezes the
+weekly report, applies authorized promotions, and opens the next draft.
+
+## Weekly Working Draft And Promotion
+
+Tasks, tickets, threads, commits, reports, and docs are evidence containers, not
+knowledge destinations. Daily projects independent findings into
+`.farplane/reports/interval/weekly/<YYYY-Www>/draft.md`:
+
+```text
+daily_projection(finding, current_draft)
+  -> upsert(fingerprint = source_locator + intended_owner + content_digest)
+   | no_op | source_gap | blocked
+
+weekly_promotion(candidate, current_owners, authority)
+  -> promoted | duplicate | monitor | dismissed | source_gap | blocked
+```
+
+The draft holds no more than five current-context bullets, plan versus actual,
+problems, promotion candidates, documentation quality, completeness/follow-up
+proposals, and next-week commitments. It is current operational context;
+`farplane/harness.yaml` remains stable project identity, canonical owners hold
+promoted knowledge, and finalized reports preserve history.
+
+| Candidate | Weekly route | Promotion gate |
+| --- | --- | --- |
+| Material recurring problem | qualified ticket | material, executable, proofable, deduped, authorized |
+| Reusable SOP or guardrail | `skill-maintenance` | repeatability evidence and owner authority |
+| Project resource or domain decision | `doc-advisor` | future reuse or durable precedent plus destination diff |
+| Project-level precedent | `doc-advisor` to `docs/MEMORY.md` | current, factual, important outside a narrower owner |
+| Entity fact or relationship | `manage-wiki` | sourced identity and relationship evidence |
+| Documentation-quality proposal | `doc-advisor` | changed/high-risk source and approved patch |
+| Stale commitment | proposal only | sending remains separately gated |
+
+Daily creates no problem ticket, Decision/Memory row, skill rule, project doc,
+Wiki fact, quality edit, source comment, or outgoing chase. It may update only
+explicitly supported mutable task progress through the authorized provider.
+
+Weekly must disposition every candidate before finalization. After the weekly
+report is frozen, each promoted route owns its validation and generated views.
+Interval writes
+`.farplane/reports/interval/<interval_id>/<timestamp>-knowledge.md` with source
+locator, destination, digest, disposition, observed result, changed paths, and
+validation. It then marks the draft finalized and opens the next week. Draft
+fingerprints, current destinations, and receipts make reruns idempotent; there
+is no mutable global memory ledger.
 
 ### Executive Update Extraction
 
@@ -167,10 +229,10 @@ Use ordinary Markdown:
 - [x] Repeated stale review request. Evidence: `tickets/TASK-0100/...`. Ticket: `TASK-0110`
 ```
 
-The draft records movement, bottleneck/root-cause reasoning, intervention
-comparison, and intended board deltas. Finalization makes it an immutable audit
-snapshot before highlight append and board mutation. Later reports carry
-unresolved rows by prior-report link rather than rewriting history.
+The weekly working draft accumulates source-linked candidates. Daily reports
+remain immutable window receipts. Weekly snapshots the reviewed draft as an
+immutable audit report before highlight, board, or canonical-owner mutation.
+Later drafts carry unresolved rows by reference rather than copying history.
 
 ## Admission Predicate
 
@@ -185,9 +247,10 @@ admit(problem, intervention, board, authority) =
 ```
 
 Every admitted ticket must produce a concrete artifact, behavior, experiment
-result, or outcome. A known cause and known intervention creates a solution
-ticket or updates a matching `todo`. An uncertain cause/intervention can create
-an investigation only when its required output is exactly:
+result, or outcome. Daily stages new problem candidates and may update only
+explicit mutable progress. Weekly may create a solution ticket or update a
+matching `todo`. An uncertain cause/intervention can create an investigation
+only when its required output is exactly:
 
 - reproduced cause;
 - ruled-out alternatives;
@@ -241,7 +304,11 @@ Highlights never supply evidence for admission or trigger correction.
 
 | Decision | Owner |
 | --- | --- |
-| Evidence-grounded bottleneck review and qualified ticket delta | Interval |
+| Evidence-grounded bottleneck review and Daily draft projection | Interval |
+| Weekly candidate dispositions, qualified ticket deltas, and promotion receipt | Interval |
+| Operational procedure or skill delta | Skill Maintenance |
+| Project documentation delta | Doc Advisor |
+| Entity article/link delta and projections | Manage Wiki |
 | Weak-board refill from insufficiently grounded candidates | Plan Next Wave |
 | Feed/provider discovery and source-backed report | provider skill |
 | Harness self-improvement portfolio review | weekly Dogfood Review automation |

@@ -151,8 +151,9 @@ Required projections:
   thread/automation activation and PM UI grouping.
 - `ticket_goal_execution`: selected ticket to implementation plan, Goal
   Packet, native Goal, QA/demo/review proof, and closeout.
-- `memory_drain_upkeep`: reports/troubles/lessons to update-memory,
-  skill-maintenance, evals, and compressed durable context.
+- `interval_knowledge_phase`: the bounded Interval evidence window to staged
+  weekly-draft candidates, Daily zero-promotion receipt, Weekly dispositions,
+  finalized report, owner-routed promotions, and a ready current/next draft.
 - `self_update_loop`: Weekly Interval report to goals-delta decision,
   leverage/harness placement, Goal Advisor handoff, Pulse execution, reward
   signal, and next weekly review.
