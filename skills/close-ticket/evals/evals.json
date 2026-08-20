@@ -27,7 +27,7 @@
     {
       "id": "close_ticket_validates_and_commits_01",
       "prompt": "Implementation, QA, and TAS-A completion review are done. The GitHub repository configured for this project is accessible, and no media was selected. Close and commit the ticket, but do not push the source branch.",
-      "expected_output": "Updates ticket/progress evidence, docs writeback, handoff, and final state; Runs phase-aware ticket validation with an explicit changed-path boundary; Uses a scoped commit message and commits only intended files; Recognizes the ticket as maintenance-only so no demo is manufactured; Creates or resumes exactly one marked GitHub issue in integrations.github.repo with concise Before, After, Example, Key decisions, and Proof; Verifies and closes the no-media issue with completed reason; Calls Core with the verified issue URL and no media arguments; Requires the mining/index/deletion receipt before close_ticket_complete; Does not push the source branch",
+      "expected_output": "Updates ticket/progress evidence, docs writeback, handoff, and final state; Runs phase-aware ticket validation with an explicit changed-path boundary; Uses a scoped commit message and commits only intended files; Recognizes the ticket as maintenance-only so no demo is manufactured; Calls Core with the ticket ID and no media arguments; Core creates or resumes exactly one marked GitHub issue in integrations.github.repo with concise Before, After, Example, Key decisions, and Proof; Core verifies and closes the no-media issue with completed reason; Requires the mining/index/deletion receipt before close_ticket_complete; Does not push the source branch",
       "files": [
         "farplane/bindings.yaml",
         "tickets/TASK-0184/ticket.md"
@@ -37,9 +37,9 @@
         "Runs phase-aware ticket validation with an explicit changed-path boundary",
         "Uses a scoped commit message and commits only intended files",
         "Recognizes the ticket as maintenance-only so no demo is manufactured",
-        "Creates or resumes exactly one marked GitHub issue in integrations.github.repo with concise Before, After, Example, Key decisions, and Proof",
-        "Verifies and closes the no-media issue with completed reason",
-        "Calls Core with the verified issue URL and no media arguments",
+        "Calls Core with the ticket ID and no media arguments",
+        "Core creates or resumes exactly one marked GitHub issue in integrations.github.repo with concise Before, After, Example, Key decisions, and Proof",
+        "Core verifies and closes the no-media issue with completed reason",
         "Requires the mining/index/deletion receipt before close_ticket_complete",
         "Does not push the source branch"
       ],
@@ -80,7 +80,7 @@
     {
       "id": "close_ticket_configured_repo_media_happy_path_01",
       "prompt": "Close proven TASK-0184 in the GitHub repository already configured for this project. The configured repository is public. Upload the explicitly selected final.png and final-demo.mp4; do not push the source branch.",
-      "expected_output": "Preflights that the exact repository matches integrations.github.repo without rejecting its public visibility and checks current attachment type/size limits before mutation; Requires the passing independently reviewed final-demo.mp4 as the first selected media item for this feature ticket; Renders one concise issue with Before, After, Example, Key decisions, Proof, and the exact ticket marker; Uses exact marker identity rather than title matching; Uploads the demo first and one missing authenticated browser comment per selected SHA-256 media marker, then captures comment URLs; Verifies all body/comment markers before closing with completed reason; Calls Core with the verified issue URL and both original media paths; Reports Core mining/index/deletion receipt; Does not push or introduce Releases/assets/tags/bundles/manifests/restore",
+      "expected_output": "Preflights that the exact repository matches integrations.github.repo without rejecting its public visibility and checks current attachment type/size limits before mutation; Requires the passing independently reviewed final-demo.mp4 as the first selected media item for this feature ticket; Calls Core with the ticket ID and both original media paths so Core renders and creates or resumes one concise marked issue; Uses exact marker identity rather than title matching; Uploads the demo first and one missing authenticated browser comment per selected SHA-256 media marker, then captures comment URLs; Reruns Core to verify all body/comment markers and close with completed reason; Reports Core mining/index/deletion receipt; Does not push or introduce Releases/assets/tags/bundles/manifests/restore",
       "files": [
         "farplane/bindings.yaml",
         "tickets/TASK-0184/ticket.md",
@@ -90,11 +90,10 @@
       "assertions": [
         "Preflights that the exact repository matches integrations.github.repo without rejecting its public visibility and checks current attachment type/size limits before mutation",
         "Requires the passing independently reviewed final-demo.mp4 as the first selected media item for this feature ticket",
-        "Renders one concise issue with Before, After, Example, Key decisions, Proof, and the exact ticket marker",
+        "Calls Core with the ticket ID and both original media paths so Core renders and creates or resumes one concise marked issue",
         "Uses exact marker identity rather than title matching",
         "Uploads the demo first and one missing authenticated browser comment per selected SHA-256 media marker, then captures comment URLs",
-        "Verifies all body/comment markers before closing with completed reason",
-        "Calls Core with the verified issue URL and both original media paths",
+        "Reruns Core to verify all body/comment markers and close with completed reason",
         "Reports Core mining/index/deletion receipt",
         "Does not push or introduce Releases/assets/tags/bundles/manifests/restore"
       ],
@@ -139,18 +138,17 @@
     {
       "id": "close_ticket_resumes_partial_issue_without_duplicates_01",
       "prompt": "Retry TASK-0184 after interruption. Its marked GitHub issue exists and the PNG comment exists, but the selected MP4 comment does not. The local ticket packet is intact.",
-      "expected_output": "Finds exactly one issue by the literal ticket body marker and resumes it; Reuses the existing PNG comment by its exact digest marker and captures its URL; Uploads exactly one browser comment for the missing MP4 marker; Verifies one marker/comment per digest before close; Does not create a second issue or duplicate the PNG comment; Invokes Core only after completed remote close verification; Retains the packet if any retry gate fails",
+      "expected_output": "Calls Core with the ticket ID and selected media so Core finds exactly one issue by the literal ticket body marker and resumes it; Reuses the existing PNG comment by its exact digest marker and captures its URL; Uploads exactly one browser comment for the missing MP4 marker; Reruns Core to verify one marker/comment per digest and close; Does not create a second issue or duplicate the PNG comment; Retains the packet if any retry gate fails",
       "files": [
         "farplane/bindings.yaml",
         "tickets/TASK-0184/ticket.md"
       ],
       "assertions": [
-        "Finds exactly one issue by the literal ticket body marker and resumes it",
+        "Calls Core with the ticket ID and selected media so Core finds exactly one issue by the literal ticket body marker and resumes it",
         "Reuses the existing PNG comment by its exact digest marker and captures its URL",
         "Uploads exactly one browser comment for the missing MP4 marker",
-        "Verifies one marker/comment per digest before close",
+        "Reruns Core to verify one marker/comment per digest and close",
         "Does not create a second issue or duplicate the PNG comment",
-        "Invokes Core only after completed remote close verification",
         "Retains the packet if any retry gate fails"
       ],
       "metadata": {
@@ -166,18 +164,18 @@
     },
     {
       "id": "close_ticket_blocks_mismatched_repo_and_media_01",
-      "prompt": "Close TASK-0184. integrations.github.repo is ZanarkandTechnologies/Farplane, but the supplied issue URL belongs to another repository. The selected video is 14 MB with no paid-plan eligibility proof.",
-      "expected_output": "Stops before issue creation or mutation because the repository does not match integrations.github.repo; Also identifies the conservative video-limit failure; Does not create or change GitHub content; Does not upload, close, invoke Core, move, or delete the ticket packet; Returns blocked with exact remediation and no alternate-repository or Release fallback",
+      "prompt": "Close TASK-0184, but integrations.github.repo is missing or invalid. The selected video is 14 MB with no paid-plan eligibility proof.",
+      "expected_output": "Stops before issue creation or mutation because integrations.github.repo is not valid; Also identifies the conservative video-limit failure; Does not create or change GitHub content; Does not upload, close, move, or delete the ticket packet; Returns blocked with exact remediation and no caller-supplied URL, alternate-repository, or Release fallback",
       "files": [
         "farplane/bindings.yaml",
         "tickets/TASK-0184/ticket.md"
       ],
       "assertions": [
-        "Stops before issue creation or mutation because the repository does not match integrations.github.repo",
+        "Stops before issue creation or mutation because integrations.github.repo is not valid",
         "Also identifies the conservative video-limit failure",
         "Does not create or change GitHub content",
-        "Does not upload, close, invoke Core, move, or delete the ticket packet",
-        "Returns blocked with exact remediation and no alternate-repository or Release fallback"
+        "Does not upload, close, move, or delete the ticket packet",
+        "Returns blocked with exact remediation and no caller-supplied URL, alternate-repository, or Release fallback"
       ],
       "metadata": {
         "farplane": {
@@ -193,7 +191,7 @@
     {
       "id": "close_ticket_retains_packet_on_remote_failure_01",
       "prompt": "TASK-0184 has one valid open marked issue. The authenticated browser upload returns no attachment Markdown for the selected MP4.",
-      "expected_output": "Treats the missing attachment Markdown as a failed upload; Does not submit an empty/marker-only comment; Does not close the issue or call Core; Preserves the entire local packet and confirmed issue URL; Returns blocked with the exact media digest resume point; Does not manually delete, locally archive, or switch storage mechanisms",
+      "expected_output": "Treats the missing attachment Markdown as a failed upload; Does not submit an empty/marker-only comment; Does not rerun Core or close the issue; Preserves the entire local packet and Core-returned issue URL; Returns blocked with the exact media digest resume point; Does not manually delete, locally archive, or switch storage mechanisms",
       "files": [
         "farplane/bindings.yaml",
         "tickets/TASK-0184/ticket.md"
@@ -201,8 +199,8 @@
       "assertions": [
         "Treats the missing attachment Markdown as a failed upload",
         "Does not submit an empty/marker-only comment",
-        "Does not close the issue or call Core",
-        "Preserves the entire local packet and confirmed issue URL",
+        "Does not rerun Core or close the issue",
+        "Preserves the entire local packet and Core-returned issue URL",
         "Returns blocked with the exact media digest resume point",
         "Does not manually delete, locally archive, or switch storage mechanisms"
       ],

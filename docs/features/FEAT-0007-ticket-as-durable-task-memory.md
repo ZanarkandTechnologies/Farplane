@@ -119,15 +119,13 @@ A durable ticket is a small program for the next agent, not a generic task note.
   prose, Mermaid, media, and link-only reference categories through the shared
   Markdown accountant, while raw lines remain the context gate.
 - `Links` points to evidence, artifacts, related specs, sidecars, and handoffs.
-- `$close-ticket` owns remote publication: create or resume one marked issue in
-  `integrations.github.repo`, render concise `Before`, `After`, `Example`, `Key
-  decisions`, and `Proof`, upload the reviewed `$demo` MP4 first for material
-  feature tickets followed by explicitly selected supporting media as marked
-  browser comments, verify the issue, and close it.
-- `farplane ticket finalize TASK-XXXX` owns the successful local terminal
-  transaction: re-verify the closed issue and media markers, update metadata,
-  mine the still-local packet, atomically write the compact locator, emit
-  completion, and only then delete the exact active packet.
+- `$close-ticket` invokes Core with the ticket ID and selected media paths, and
+  owns only authenticated browser upload of missing marked attachments.
+- `farplane ticket finalize TASK-XXXX` owns remote publication and the local
+  terminal transaction: render, create or resume the marked issue, verify its
+  media markers, close it, update metadata, mine the still-local packet,
+  atomically write the compact locator, emit completion, and only then delete
+  the exact active packet.
 - Any failed remote, mining, locator, or deletion prerequisite retains the
   packet for a retry against the same marked issue. Agents do not manually move
   or delete it.

@@ -8,29 +8,30 @@ import json
 import os
 import re
 import shutil
-import subprocess
 import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Callable, Sequence
-from urllib.parse import urlparse
+from typing import Any, Sequence
 
 import yaml
 
 from farplane_event_store import atomic_write_json, pending_events
 from farplane_mining import CodexRunner, MiningError, mine_ticket
+from farplane_ticket_issue import (
+    GitHubRunner,
+    TicketFinalizeError,
+    close_issue as _close_issue,
+    default_github_runner as _default_github_runner,
+    find_or_create_issue as _find_or_create_issue,
+    parse_issue_url as _parse_issue_url,
+    render_github_issue as _render_github_issue,
+    verify_github_issue,
+)
 
 
 TICKET_ID_RE = re.compile(r"^TASK-\d{4}$")
 REPOSITORY_RE = re.compile(r"^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$")
-ISSUE_PATH_RE = re.compile(r"^/([^/]+)/([^/]+)/issues/([1-9]\d*)$")
 SUCCESS_STATUSES = {"done", "complete", "completed", "closed"}
-GitHubRunner = Callable[[list[str], Path], subprocess.CompletedProcess[str]]
-
-
-class TicketFinalizeError(RuntimeError):
-    """Raised when a ticket cannot be finalized safely."""
-
 
 def now_iso() -> str:
     return datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
@@ -47,6 +48,10 @@ def _frontmatter(text: str) -> tuple[dict[str, Any], list[str], str]:
     if not isinstance(payload, dict):
         raise TicketFinalizeError("ticket_frontmatter_invalid_shape")
     return payload, match.group(1).splitlines(), text[match.end() :]
+
+
+def render_github_issue(ticket_path: Path, ticket_id: str) -> tuple[str, str]:
+    return _render_github_issue(ticket_path, ticket_id, _frontmatter)
 
 
 def _closed_text(text: str, *, updated_at: str) -> tuple[str, dict[str, Any]]:
@@ -130,34 +135,6 @@ def _configured_repository(root: Path) -> str:
     return repository
 
 
-def _parse_issue_url(issue_url: str) -> tuple[str, int, str]:
-    raw = issue_url.strip()
-    parsed = urlparse(raw)
-    match = ISSUE_PATH_RE.fullmatch(parsed.path)
-    if parsed.scheme != "https" or parsed.netloc != "github.com" or parsed.params or parsed.query or parsed.fragment or not match:
-        raise TicketFinalizeError(f"invalid_github_issue_url:{issue_url}")
-    repository = f"{match.group(1)}/{match.group(2)}"
-    number = int(match.group(3))
-    return repository, number, f"https://github.com/{repository}/issues/{number}"
-
-
-def _default_github_runner(command: list[str], cwd: Path) -> subprocess.CompletedProcess[str]:
-    return subprocess.run(command, cwd=str(cwd), capture_output=True, text=True, check=False)
-
-
-def _github_json(runner: GitHubRunner, command: list[str], root: Path) -> dict[str, Any]:
-    result = runner(command, root)
-    if result.returncode != 0:
-        detail = str(result.stderr or result.stdout or "unknown_error").strip().replace("\n", " ")[:500]
-        raise TicketFinalizeError(f"github_command_failed:{' '.join(command[1:])}:{detail}")
-    try:
-        payload = json.loads(result.stdout or "{}")
-    except json.JSONDecodeError as exc:
-        raise TicketFinalizeError(f"github_response_invalid_json:{exc}") from exc
-    if not isinstance(payload, dict):
-        raise TicketFinalizeError("github_response_invalid_shape")
-    return payload
-
 
 def _sha256(path: Path) -> str:
     digest = hashlib.sha256()
@@ -167,12 +144,6 @@ def _sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
-def _issue_section(body: str, heading: str) -> str:
-    match = re.search(
-        rf"(?ms)^## {re.escape(heading)}\s*\n(.*?)(?=^##\s+|\Z)",
-        body,
-    )
-    return match.group(1).strip() if match else ""
 
 
 def _stored_media(receipt: dict[str, Any]) -> list[dict[str, str]]:
@@ -240,102 +211,6 @@ def _expected_media(root: Path, media_paths: Sequence[str | Path], receipt: dict
     return media
 
 
-def verify_github_issue(
-    ticket_id: str,
-    issue_url: str,
-    expected_media: Sequence[dict[str, str]],
-    runner: GitHubRunner,
-    *,
-    project_root: Path,
-    configured_repository: str,
-) -> dict[str, Any]:
-    """Verify the exact configured-project issue and return its stable locator fields."""
-
-    url_repository, issue_number, canonical_url = _parse_issue_url(issue_url)
-    if url_repository != configured_repository:
-        raise TicketFinalizeError(f"github_issue_repo_mismatch:expected={configured_repository}:actual={url_repository}")
-
-    issue = _github_json(
-        runner,
-        [
-            "gh",
-            "issue",
-            "view",
-            str(issue_number),
-            "--repo",
-            configured_repository,
-            "--json",
-            "number,title,state,body,comments,closedAt,url",
-        ],
-        project_root,
-    )
-    try:
-        returned_repository, returned_number, returned_url = _parse_issue_url(str(issue.get("url") or ""))
-    except TicketFinalizeError as exc:
-        raise TicketFinalizeError("github_issue_response_url_invalid") from exc
-    if returned_repository != configured_repository or returned_number != issue_number or returned_url != canonical_url:
-        raise TicketFinalizeError("github_issue_response_mismatch")
-    if int(issue.get("number") or 0) != issue_number:
-        raise TicketFinalizeError("github_issue_number_mismatch")
-    if str(issue.get("state") or "").upper() != "CLOSED":
-        raise TicketFinalizeError(f"github_issue_not_closed:{issue_number}")
-    closed_at = str(issue.get("closedAt") or "").strip()
-    if not closed_at:
-        raise TicketFinalizeError(f"github_issue_closed_at_missing:{issue_number}")
-    body = str(issue.get("body") or "")
-    ticket_marker = f"<!-- farplane-ticket-id:{ticket_id} -->"
-    if body.count(ticket_marker) != 1:
-        raise TicketFinalizeError(f"github_issue_ticket_marker_missing:{ticket_id}")
-    for heading in ("Before", "After", "Example", "Key decisions", "Proof"):
-        section = _issue_section(body, heading).replace(ticket_marker, "").strip()
-        if not section:
-            raise TicketFinalizeError(f"github_issue_section_missing:{heading.lower().replace(' ', '_')}")
-    title = str(issue.get("title") or "").strip()
-    if not title:
-        raise TicketFinalizeError(f"github_issue_title_missing:{issue_number}")
-
-    raw_comments = issue.get("comments")
-    if not isinstance(raw_comments, list):
-        raise TicketFinalizeError("github_issue_comments_invalid")
-    media_comment_urls: list[str] = []
-    for media in expected_media:
-        marker = f"<!-- farplane-ticket-media:{ticket_id}:{media['sha256']} -->"
-        marker_count = sum(
-            str(comment.get("body") or "").count(marker)
-            for comment in raw_comments
-            if isinstance(comment, dict)
-        )
-        matches = [
-            comment
-            for comment in raw_comments
-            if isinstance(comment, dict) and marker in str(comment.get("body") or "")
-        ]
-        if marker_count != 1 or len(matches) != 1:
-            raise TicketFinalizeError(f"github_issue_media_marker_count:{media['sha256']}:{marker_count}")
-        matched_body = str(matches[0].get("body") or "")
-        if re.search(r"https://github\.com/user-attachments/(?:assets|files)/[^\s)<>'\"]+", matched_body) is None:
-            raise TicketFinalizeError(f"github_issue_media_attachment_missing:{media['sha256']}")
-        matched_url = str(matches[0].get("url") or "")
-        if not matched_url:
-            raise TicketFinalizeError(f"github_issue_media_comment_url_missing:{media['sha256']}")
-        parsed_comment = urlparse(matched_url)
-        if (
-            parsed_comment.scheme != "https"
-            or parsed_comment.netloc != "github.com"
-            or parsed_comment.path != urlparse(canonical_url).path
-            or re.fullmatch(r"issuecomment-[1-9]\d*", parsed_comment.fragment) is None
-        ):
-            raise TicketFinalizeError(f"github_issue_media_comment_url_invalid:{media['sha256']}")
-        media_comment_urls.append(matched_url)
-
-    return {
-        "github_issue_url": canonical_url,
-        "github_issue_number": issue_number,
-        "title": title,
-        "remote_state": "closed",
-        "closed_at": closed_at,
-        "media_comment_urls": media_comment_urls,
-    }
 
 
 def _load_archive_index(path: Path) -> list[dict[str, Any]]:
@@ -411,13 +286,12 @@ def _receipt_payload(
 def finalize_ticket(
     project_root: Path,
     ticket_id: str,
-    github_issue_url: str,
     media_paths: Sequence[str | Path] = (),
     *,
     codex_runner: CodexRunner | None = None,
     github_runner: GitHubRunner | None = None,
 ) -> dict[str, Any]:
-    """Verify, terminalize, mine, index, and delete one active ticket packet."""
+    """Create or resume the issue, close it, mine, index, and delete the packet."""
 
     root = project_root.resolve()
     normalized = ticket_id.strip().upper()
@@ -432,17 +306,21 @@ def finalize_ticket(
     if active_dir.is_symlink() or active_dir.parent.resolve() != (root / "tickets").resolve():
         raise TicketFinalizeError(f"unsafe_ticket_packet_path:{active_dir}")
     receipt = _load_json(receipt_path)
-    if receipt and str(receipt.get("github_issue_url") or "") != github_issue_url.strip():
-        raise TicketFinalizeError(f"closure_receipt_issue_conflict:{normalized}")
-
     configured_repository = _configured_repository(root)
-    url_repository, _, canonical_url = _parse_issue_url(github_issue_url)
-    if url_repository != configured_repository:
-        raise TicketFinalizeError(f"github_issue_repo_mismatch:expected={configured_repository}:actual={url_repository}")
     rows = _load_archive_index(index_path)
-    existing_row = _matching_index_row(rows, normalized, canonical_url)
-    if existing_row and not receipt:
-        raise TicketFinalizeError(f"archive_index_without_closure_receipt:{normalized}")
+    receipt_issue_url = str(receipt.get("github_issue_url") or "").strip()
+    if receipt_issue_url:
+        receipt_repository, _, receipt_issue_url = _parse_issue_url(receipt_issue_url)
+        if receipt_repository != configured_repository:
+            raise TicketFinalizeError(
+                f"github_issue_repo_mismatch:expected={configured_repository}:actual={receipt_repository}"
+            )
+        existing_row = _matching_index_row(rows, normalized, receipt_issue_url)
+    else:
+        existing_rows = [row for row in rows if row.get("ticket_id") == normalized]
+        if existing_rows:
+            raise TicketFinalizeError(f"archive_index_without_closure_receipt:{normalized}")
+        existing_row = {}
 
     if active_ticket.is_file() and legacy_ticket.is_file():
         raise TicketFinalizeError(f"ticket_exists_active_and_archived:{normalized}")
@@ -464,14 +342,55 @@ def finalize_ticket(
             raise TicketFinalizeError(f"ticket_has_non_success_terminal_status:{current_status}")
 
     media = _expected_media(root, media_paths, receipt)
-    remote = verify_github_issue(
-        normalized,
-        canonical_url,
-        media,
-        github_runner or _default_github_runner,
-        project_root=root,
-        configured_repository=configured_repository,
-    )
+    github = github_runner or _default_github_runner
+    if receipt_issue_url:
+        canonical_url = receipt_issue_url
+    else:
+        if not active_ticket.is_file():
+            raise TicketFinalizeError(f"ticket_not_found_for_issue_creation:{normalized}")
+        issue_title, issue_body = render_github_issue(active_ticket, normalized)
+        canonical_url = _find_or_create_issue(
+            normalized,
+            issue_title,
+            issue_body,
+            github,
+            project_root=root,
+            configured_repository=configured_repository,
+        )
+    url_repository, _, canonical_url = _parse_issue_url(canonical_url)
+    if url_repository != configured_repository:
+        raise TicketFinalizeError(
+            f"github_issue_repo_mismatch:expected={configured_repository}:actual={url_repository}"
+        )
+    existing_row = _matching_index_row(rows, normalized, canonical_url)
+
+    try:
+        remote = verify_github_issue(
+            normalized,
+            canonical_url,
+            media,
+            github,
+            project_root=root,
+            configured_repository=configured_repository,
+            require_closed=False,
+        )
+    except TicketFinalizeError as exc:
+        raise TicketFinalizeError(f"github_issue_incomplete:{canonical_url}:{exc}") from exc
+    if remote["remote_state"] == "open":
+        _close_issue(
+            canonical_url,
+            github,
+            project_root=root,
+            configured_repository=configured_repository,
+        )
+        remote = verify_github_issue(
+            normalized,
+            canonical_url,
+            media,
+            github,
+            project_root=root,
+            configured_repository=configured_repository,
+        )
 
     prior_complete = bool(
         receipt

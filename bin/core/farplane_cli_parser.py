@@ -178,10 +178,10 @@ def build_parser() -> argparse.ArgumentParser:
     ticket_sub = ticket.add_subparsers(dest="ticket_command")
     ticket_finalize = ticket_sub.add_parser(
         "finalize",
-        help="Verify a closed issue, mine completion, index it, and delete the local packet.",
+        help="Create or resume the issue, close it, mine completion, index it, and delete the local packet.",
     )
     ticket_finalize.add_argument("ticket_id")
-    ticket_finalize.add_argument("--github-issue-url", required=True)
+    ticket_finalize.add_argument("--media", action="append", default=[])
     ticket_finalize.add_argument("--project-root", default=os.getcwd())
     ticket_finalize.add_argument("--json", action="store_true")
     ticket_finalize.set_defaults(func=run_ticket_finalize_cli)

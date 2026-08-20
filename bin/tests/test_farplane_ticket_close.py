@@ -22,8 +22,15 @@ from farplane_ticket_close import TicketFinalizeError, finalize_ticket
 
 PROJECT_REPO = "acme/farplane"
 ISSUE_URL = f"https://github.com/{PROJECT_REPO}/issues/17"
-
-
+def expected_issue_body(ticket_id: str = "TASK-0001") -> str:
+    return (
+        "## Before\n\n- Completed tickets only had a local archive.\n\n"
+        "## After\n\n- The completed behavior is recorded in one project issue.\n\n"
+        "## Example\n\n- Finalize the ticket and find its proof in the created issue.\n\n"
+        "## Key decisions\n\n- In: create and close the terminal GitHub issue.\n\n"
+        "## Proof\n\n- Checks: 1/1 completion items checked.\n\n"
+        f"<!-- farplane-ticket-id:{ticket_id} -->\n"
+    )
 def no_signal_runner(command: list[str], prompt: str, cwd: Path, timeout: int):
     output = Path(command[command.index("--output-last-message") + 1])
     output.write_text(
@@ -49,22 +56,18 @@ class GitHubFixture:
         state: str = "CLOSED",
         body: str | None = None,
         comments: list[dict[str, str]] | None = None,
+        exists: bool = True,
+        issue_url: str = ISSUE_URL,
+        state_reason: str | None = None,
     ) -> None:
         self.calls: list[list[str]] = []
+        self.exists = exists
         self.issue = {
             "number": 17,
-            "title": "Close fixture",
+            "title": f"[{ticket_id}] Close fixture",
             "state": state,
-            "body": body
-            if body is not None
-            else (
-                "## Before\n\nCompleted tickets only had a local archive.\n\n"
-                "## After\n\nThe completed behavior is recorded in one project issue.\n\n"
-                "## Example\n\nClose a feature ticket and find its demo below the summary.\n\n"
-                "## Key decisions\n\n- Use the configured project repository.\n\n"
-                "## Proof\n\n- Checks and independent review passed.\n\n"
-                f"<!-- farplane-ticket-id:{ticket_id} -->"
-            ),
+            "stateReason": state_reason if state_reason is not None else ("COMPLETED" if state == "CLOSED" else ""),
+            "body": body if body is not None else expected_issue_body(ticket_id),
             "comments": comments
             if comments is not None
             else [
@@ -77,12 +80,43 @@ class GitHubFixture:
                 }
                 for index, digest in enumerate(media_digests, start=1)
             ],
-            "closedAt": "2026-08-01T07:00:00Z",
-            "url": ISSUE_URL,
+            "closedAt": "2026-08-01T07:00:00Z" if state == "CLOSED" else "",
+            "url": issue_url,
         }
 
     def __call__(self, command: list[str], cwd: Path) -> subprocess.CompletedProcess[str]:
         self.calls.append(command)
+        if command[:2] == ["gh", "api"]:
+            api_issue = {**self.issue, "html_url": self.issue["url"]}
+            return subprocess.CompletedProcess(
+                command,
+                0,
+                stdout=json.dumps([[api_issue]] if self.exists else [[]]),
+                stderr="",
+            )
+        if command[:3] == ["gh", "issue", "create"]:
+            body_path = Path(command[command.index("--body-file") + 1])
+            self.issue.update(
+                {
+                    "title": command[command.index("--title") + 1],
+                    "body": body_path.read_text(encoding="utf-8"),
+                    "state": "OPEN",
+                    "stateReason": "",
+                    "closedAt": "",
+                }
+            )
+            self.exists = True
+            return subprocess.CompletedProcess(command, 0, stdout=f"{self.issue['url']}\n", stderr="")
+        if command[:3] == ["gh", "issue", "edit"]:
+            body_path = Path(command[command.index("--body-file") + 1])
+            self.issue["title"] = command[command.index("--title") + 1]
+            self.issue["body"] = body_path.read_text(encoding="utf-8")
+            return subprocess.CompletedProcess(command, 0, stdout=f"{self.issue['url']}\n", stderr="")
+        if command[:3] == ["gh", "issue", "close"]:
+            self.issue["state"] = "CLOSED"
+            self.issue["stateReason"] = "COMPLETED"
+            self.issue["closedAt"] = "2026-08-01T07:00:00Z"
+            return subprocess.CompletedProcess(command, 0, stdout="", stderr="")
         if command[:3] == ["gh", "issue", "view"]:
             payload = self.issue
         else:
@@ -116,7 +150,14 @@ def write_project(root: Path, *, program_ref: str = "core:ticket-completion-lear
         "claimed_by: codex-test\n"
         "created_at: 2026-07-18T00:00:00Z\n"
         "updated_at: 2026-07-18T00:00:00Z\n"
-        "---\n\n# TASK-0001\n",
+        "---\n\n# TASK-0001\n\n"
+        "## Summary\n\nFinalize a completed ticket.\n\n"
+        "## Scope\n\n- In: create and close the terminal GitHub issue.\n\n"
+        "## Delta\n\n"
+        "> **Before:** Completed tickets only had a local archive.\n>\n"
+        "> **After:** The completed behavior is recorded in one project issue.\n>\n"
+        "> **Example:** Finalize the ticket and find its proof in the created issue.\n\n"
+        "## Done\n\n- [x] Finalization is verified.\n",
         encoding="utf-8",
     )
     return ticket
@@ -140,7 +181,6 @@ class TicketCloseTests(unittest.TestCase):
             first = finalize_ticket(
                 root,
                 "task-0001",
-                ISSUE_URL,
                 [media.relative_to(root).as_posix()],
                 codex_runner=no_signal_runner,
                 github_runner=github,
@@ -148,7 +188,6 @@ class TicketCloseTests(unittest.TestCase):
             second = finalize_ticket(
                 root,
                 "TASK-0001",
-                ISSUE_URL,
                 [media.relative_to(root).as_posix()],
                 codex_runner=no_signal_runner,
                 github_runner=github,
@@ -169,9 +208,9 @@ class TicketCloseTests(unittest.TestCase):
             self.assertEqual(rows[0]["github_issue_url"], ISSUE_URL)
             self.assertEqual(rows[0]["media_comment_urls"], [f"{ISSUE_URL}#issuecomment-1"])
             self.assertEqual(pending_events(root), [])
-            self.assertEqual(len(github.calls), 2)
+            self.assertEqual(len(github.calls), 3)
             self.assertEqual(
-                github.calls[0],
+                github.calls[1],
                 [
                     "gh",
                     "issue",
@@ -180,41 +219,9 @@ class TicketCloseTests(unittest.TestCase):
                     "--repo",
                     PROJECT_REPO,
                     "--json",
-                    "number,title,state,body,comments,closedAt,url",
+                    "number,title,state,stateReason,body,comments,closedAt,url",
                 ],
             )
-
-    def test_public_configured_repository_is_allowed_and_open_or_mismatched_issue_blocks(self) -> None:
-        with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            ticket = write_project(root)
-            github = GitHubFixture()
-
-            result = finalize_ticket(
-                root,
-                "TASK-0001",
-                ISSUE_URL,
-                codex_runner=no_signal_runner,
-                github_runner=github,
-            )
-
-            self.assertTrue(result["ok"])
-            self.assertFalse(ticket.parent.exists())
-            self.assertTrue(github.calls)
-            self.assertTrue(all(call[:3] != ["gh", "repo", "view"] for call in github.calls))
-
-        for label, url, github, error in (
-            ("mismatch", "https://github.com/acme/other/issues/17", GitHubFixture(), "repo_mismatch"),
-            ("open", ISSUE_URL, GitHubFixture(state="OPEN"), "not_closed"),
-        ):
-            with self.subTest(label=label), tempfile.TemporaryDirectory() as tmp:
-                root = Path(tmp)
-                ticket = write_project(root)
-                original = ticket.read_text()
-                with self.assertRaisesRegex(TicketFinalizeError, error):
-                    finalize_ticket(root, "TASK-0001", url, github_runner=github)
-                self.assertEqual(ticket.read_text(), original)
-                self.assertFalse((root / "tickets" / "archive-index.jsonl").exists())
 
     def test_missing_or_invalid_configured_repository_blocks_without_remote_or_local_mutation(self) -> None:
         for label, github_config in (
@@ -231,27 +238,22 @@ class TicketCloseTests(unittest.TestCase):
                 github = GitHubFixture()
 
                 with self.assertRaisesRegex(TicketFinalizeError, "github_repo_not_configured"):
-                    finalize_ticket(root, "TASK-0001", ISSUE_URL, github_runner=github)
+                    finalize_ticket(root, "TASK-0001", github_runner=github)
 
                 self.assertIn("status: active", ticket.read_text(encoding="utf-8"))
                 self.assertEqual(github.calls, [])
                 self.assertFalse((root / "tickets" / "archive-index.jsonl").exists())
 
-    def test_missing_ticket_or_media_marker_blocks_without_mutation(self) -> None:
-        for label in ("ticket", "media"):
-            with self.subTest(label=label), tempfile.TemporaryDirectory() as tmp:
-                root = Path(tmp)
-                ticket = write_project(root)
-                media, digest = write_media(root)
-                github = (
-                    GitHubFixture(media_digests=(digest,), body="missing marker")
-                    if label == "ticket"
-                    else GitHubFixture(media_digests=())
-                )
-                with self.assertRaisesRegex(TicketFinalizeError, "marker"):
-                    finalize_ticket(root, "TASK-0001", ISSUE_URL, [media], github_runner=github)
-                self.assertIn("status: active", ticket.read_text())
-                self.assertFalse((root / "tickets" / "archive-index.jsonl").exists())
+    def test_missing_media_marker_blocks_without_mutation(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            ticket = write_project(root)
+            media, _ = write_media(root)
+            github = GitHubFixture(media_digests=())
+            with self.assertRaisesRegex(TicketFinalizeError, "marker"):
+                finalize_ticket(root, "TASK-0001", [media], github_runner=github)
+            self.assertIn("status: active", ticket.read_text())
+            self.assertFalse((root / "tickets" / "archive-index.jsonl").exists())
 
     def test_marker_only_media_comment_blocks_without_deleting_packet(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -268,13 +270,13 @@ class TicketCloseTests(unittest.TestCase):
             )
 
             with self.assertRaisesRegex(TicketFinalizeError, "github_issue_media_attachment_missing"):
-                finalize_ticket(root, "TASK-0001", ISSUE_URL, [media], github_runner=github)
+                finalize_ticket(root, "TASK-0001", [media], github_runner=github)
 
             self.assertTrue(ticket.is_file())
             self.assertIn("status: active", ticket.read_text())
             self.assertFalse((root / "tickets" / "archive-index.jsonl").exists())
 
-    def test_missing_required_issue_section_blocks_without_mutation(self) -> None:
+    def test_closed_stale_issue_content_blocks_without_mutation(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             ticket = write_project(root)
@@ -286,8 +288,8 @@ class TicketCloseTests(unittest.TestCase):
                 "<!-- farplane-ticket-id:TASK-0001 -->"
             )
 
-            with self.assertRaisesRegex(TicketFinalizeError, "github_issue_section_missing:key_decisions"):
-                finalize_ticket(root, "TASK-0001", ISSUE_URL, github_runner=GitHubFixture(body=body))
+            with self.assertRaisesRegex(TicketFinalizeError, "github_issue_closed_content_mismatch"):
+                finalize_ticket(root, "TASK-0001", github_runner=GitHubFixture(body=body))
 
             self.assertIn("status: active", ticket.read_text())
             self.assertFalse((root / "tickets" / "archive-index.jsonl").exists())
@@ -301,7 +303,6 @@ class TicketCloseTests(unittest.TestCase):
             receipt = finalize_ticket(
                 root,
                 "TASK-0001",
-                ISSUE_URL,
                 codex_runner=no_signal_runner,
                 github_runner=github,
             )
@@ -332,8 +333,8 @@ class TicketCloseTests(unittest.TestCase):
             )
             github = GitHubFixture()
 
-            with self.assertRaisesRegex(TicketFinalizeError, "archive_index_issue_conflict"):
-                finalize_ticket(root, "TASK-0001", ISSUE_URL, github_runner=github)
+            with self.assertRaisesRegex(TicketFinalizeError, "archive_index_without_closure_receipt"):
+                finalize_ticket(root, "TASK-0001", github_runner=github)
 
             self.assertIn("status: active", ticket.read_text())
             self.assertEqual(github.calls, [])
@@ -356,7 +357,6 @@ class TicketCloseTests(unittest.TestCase):
                         finalize_ticket(
                             root,
                             "TASK-0001",
-                            ISSUE_URL,
                             codex_runner=no_signal_runner,
                             github_runner=github,
                         )
@@ -383,7 +383,6 @@ class TicketCloseTests(unittest.TestCase):
                     finalize_ticket(
                         root,
                         "TASK-0001",
-                        ISSUE_URL,
                         codex_runner=no_signal_runner,
                         github_runner=github,
                     )
@@ -400,7 +399,6 @@ class TicketCloseTests(unittest.TestCase):
             retried = finalize_ticket(
                 root,
                 "TASK-0001",
-                ISSUE_URL,
                 codex_runner=no_signal_runner,
                 github_runner=github,
             )
@@ -418,7 +416,7 @@ class TicketCloseTests(unittest.TestCase):
             ticket.write_text(ticket.read_text().replace("status: active", "status: rejected"))
 
             with self.assertRaisesRegex(TicketFinalizeError, "non_success_terminal_status"):
-                finalize_ticket(root, "TASK-0001", ISSUE_URL, github_runner=GitHubFixture())
+                finalize_ticket(root, "TASK-0001", github_runner=GitHubFixture())
             self.assertIn("status: rejected", ticket.read_text())
 
 

@@ -118,11 +118,10 @@ slice, proof/falsification, tradeoffs, and non-goals.
   the approved shared utility surface instead of copying it again.
 - Update ticket status, phase, blockers, and spawned follow-ups in the ticket
   file as work progresses. When a ticket is complete and its writeback is done,
-  use `$close-ticket` to verify its issue in the project's configured GitHub
-  repository,
-  then run `farplane ticket finalize TASK-XXXX --github-issue-url <url>` with one
-  `--media <path>` per selected file; do not move it into `tickets/archive/`
-  manually.
+  use `$close-ticket`, which runs `farplane ticket finalize TASK-XXXX` with one
+  `--media <path>` per selected file. Core creates or resumes, verifies, and
+  closes the configured-repository issue before mining and cleanup; do not
+  create the issue or move the packet into `tickets/archive/` manually.
 - If the same failure or user correction happens more than once, append a short raw entry to `docs/TROUBLES.md` with the miss, correction, and prevention idea.
 - If that raw entry produces a reusable prompt, skill, eval, or policy improvement, distill it into `docs/LESSONS.md`.
 - During weekly skill hardening, read recent `docs/TROUBLES.md` and

@@ -3,10 +3,9 @@
 ## Purpose
 
 Provide the operator-facing contract for Farplane's canonical closeout surface:
-`$close-ticket`. It turns a proven ticket into one glanceable issue in the
-project repository from `integrations.github.repo`, places the reviewed feature
-demo first for material feature work, verifies every attachment, closes the
-issue, then lets Core mine, index, and delete the exact local packet.
+`$close-ticket`. It hands a proven ticket to Core, which creates or resumes one
+glanceable issue in `integrations.github.repo`, verifies every selected
+attachment, closes the issue, then mines, indexes, and deletes the exact packet.
 
 ## Public API / Entrypoints
 
@@ -21,10 +20,10 @@ issue, then lets Core mine, index, and delete the exact local packet.
 2. Update ticket/docs evidence and pass QA plus independent review.
 3. For material feature work, run `$demo` and select its reviewed `final.mp4`
    first; select supporting screenshots only when useful.
-4. Render the concise `Before`, `After`, `Example`, `Key decisions`, and
-   `Proof` issue in the configured project repository.
-5. Use `gh` for issue creation, body updates, reads, and completed close state;
-   treat browser sign-in as a separate gate from `gh auth`.
+4. Run `farplane ticket finalize TASK-XXXX` with the selected media paths; Core
+   renders and creates or resumes the concise marked issue.
+5. Treat browser sign-in as a separate gate from `gh auth`; Core owns all `gh`
+   issue creation, reads, verification, and completed close state.
 6. Upload one marked attachment comment per selected media file through
    GitHub's authenticated web composer, demo first. Wait for the real
    `github.com/user-attachments` URL; `gh issue comment --body-file` cannot
@@ -32,8 +31,8 @@ issue, then lets Core mine, index, and delete the exact local packet.
 7. Verify each marker and attachment URL with `gh`, open the comment fragment
    to prove GitHub renders the image/video, and link the first demo comment from
    the issue's `Proof` section.
-8. Close as completed, then run `farplane ticket finalize` so Core verifies,
-   mines, indexes, and deletes safely.
+8. Rerun `farplane ticket finalize`; Core verifies, closes, mines, indexes, and
+   deletes safely.
 
 ## How to Test
 

@@ -113,12 +113,13 @@ Proof scales with risk, blast radius, and user-facing impact.
   `Before`, `After`, `Example`, `Key decisions`, and compact `Proof`. Material
   feature tickets require the passing independently reviewed `$demo` MP4 as
   the first marked browser comment; explicitly selected screenshots may follow.
-- `$close-ticket` verifies the issue body and every expected media comment
-  before closing the issue. Core independently re-verifies those markers and
-  requires a real GitHub user-attachment URL in every selected-media comment,
+- Core renders and creates or resumes the marked issue, then verifies its body
+  and every expected media comment before closing it. `$close-ticket` owns only
+  authenticated browser upload of missing selected media. Core requires a real
+  GitHub user-attachment URL in every selected-media comment,
   mines while the local evidence still exists, writes the compact locator, and
   only then deletes the ticket packet.
-- Missing media, missing markers, an open or mismatched issue, failed mining, or
+- Missing media, missing markers, a mismatched issue, failed mining, or
   failed locator write blocks cleanup and keeps the local proof available for
   retry.
 - `docs/review/rubrics` owns family definitions, stable checks, TAS calibration,

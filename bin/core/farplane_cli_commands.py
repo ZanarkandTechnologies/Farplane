@@ -95,7 +95,7 @@ def run_ticket_finalize_cli(args: argparse.Namespace) -> int:
         payload = finalize_ticket(
             Path(args.project_root).expanduser().resolve(),
             args.ticket_id,
-            args.github_issue_url,
+            args.media,
         )
     except (OSError, TicketFinalizeError) as exc:
         raise CliError(f"ticket_finalize_error:{exc}") from exc

@@ -60,8 +60,9 @@ run_id   = sha256(event_id, route_id, program_digest)
 ```
 
 `farplane ticket finalize TASK-XXXX` owns the successful terminal transition. It
-sets `status: done`, clears `claimed_by`, advances `updated_at`, archives the
-ticket, writes `farplane.ticket.completed` to the local event store, applies the
+creates or resumes and closes the marked GitHub issue, sets `status: done`,
+clears `claimed_by`, advances `updated_at`, writes the compact locator and
+`farplane.ticket.completed` event, applies the
 matching route, and returns a closure/mining receipt. Failed mining leaves the
 event retryable through `farplane mining drain`. There is no file watcher,
 daemon, shell-tail workflow engine, or extra heartbeat.

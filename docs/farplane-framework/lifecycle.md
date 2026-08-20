@@ -150,16 +150,17 @@ verified closed issue
 -> exact local packet deletion
 ```
 
-The normal closeout starts in `$close-ticket`. It creates or resumes one issue
-in the project's `integrations.github.repo`, writes concise `Before`, `After`,
-`Example`, `Key decisions`, and `Proof`, then uploads marked media through the
-authenticated browser composer. Material feature tickets require the passing
-reviewed `$demo` MP4 as the first comment; supporting screenshots may follow.
-The skill verifies the expected body and comments, then closes the issue.
+The normal closeout starts in `$close-ticket`, which invokes `farplane ticket
+finalize TASK-XXXX` with any selected media paths. Core renders the concise
+`Before`, `After`, `Example`, `Key decisions`, and `Proof`, then creates or
+resumes the ticket-marked issue in `integrations.github.repo`. If media is
+missing, the command leaves the issue open and returns its URL; the skill
+uploads only those marked files through the authenticated browser composer and
+reruns the same command.
 
-`farplane ticket finalize TASK-XXXX` then re-verifies that closed issue, mines the
-still-local packet from that ID alone, atomically writes its compact locator,
-emits completion, and only then deletes the exact active packet. Every failed
+Core then verifies and closes the issue, mines the still-local packet from the
+ticket ID alone, atomically writes its compact locator, emits completion, and
+only then deletes the exact active packet. Every failed
 verification, mining, or locator gate retains the packet for retry. Farplane
 Stop hooks collect telemetry and may apply bounded deterministic guards such as
 final-response length; they do not repair proof, advance closeout, archive

@@ -39,12 +39,12 @@ completion. Any unchecked item retains the local ticket packet.
   exact digest marker plus its user-attachment URL, and the authenticated issue
   fragment rendered the image or playable video. A material feature's `Proof`
   line links the first demo comment instead of retaining a pending placeholder.
-- [ ] `gh` verification found exactly one ticket marker and exactly one marked
-  attachment comment with a GitHub user-attachment URL per expected digest
-  before the issue was closed; the final issue state is `CLOSED` with reason
-  `completed`.
-- [ ] Core received that issue URL and the original selected media paths, then
-  verified, mined, indexed, and deleted the exact packet. On any failure the
+- [ ] Core created or resumed exactly one ticket-marked issue, found exactly
+  one marked attachment comment with a GitHub user-attachment URL per expected
+  digest, and closed it only after verification.
+- [ ] Core received the ticket ID and original selected media paths, then
+  rendered, created or resumed, closed, mined, indexed, and deleted the exact
+  packet. No caller-supplied issue URL was required. On any failure the
   packet remains and no Release, asset, tag, bundle, manifest, restore path,
   alternate-repository fallback, manual delete, or provider abstraction was
   introduced.

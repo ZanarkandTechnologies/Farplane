@@ -43,17 +43,15 @@ No lane folders. No hand-maintained board file. The ticket itself is the board c
 4. on a non-ticket blocker, clear the claim, set `blocked`, and record details
    in `progress.md`
 5. after implementation, proof, review, and durable docs, use `$close-ticket`
-   to create or resume one issue in the project's configured GitHub repository
-6. keep the issue glanceable with `Before`, `After`, `Example`, `Key decisions`,
-   and compact `Proof`; for material feature work, require the passing reviewed
-   `$demo` MP4 as the first marked comment, followed by any explicitly selected
-   supporting screenshots through the authenticated GitHub browser composer
-7. verify the issue body and every expected media marker, then close the issue
-   as completed
-8. run `farplane ticket finalize TASK-XXXX` with that issue and selected media;
-   Core re-verifies the closed issue, writes terminal metadata, mines the
-   still-local packet, writes its compact locator, emits completion, and only
-   then deletes the exact packet
+   to run `farplane ticket finalize TASK-XXXX` with any selected media paths
+6. Core renders the glanceable `Before`, `After`, `Example`, `Key decisions`,
+   and compact `Proof`, then creates or resumes one marked issue in the
+   configured GitHub repository
+7. if selected media is missing, upload only the marked files through the
+   authenticated GitHub browser composer and rerun the same command
+8. Core verifies the issue and media, closes it as completed, writes terminal
+   metadata, mines the still-local packet, writes its compact locator, emits
+   completion, and only then deletes the exact packet
 
 ## Terminal Archive Contract
 
