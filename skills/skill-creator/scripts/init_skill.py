@@ -21,7 +21,7 @@ description: "[TODO: Verb input/context into output/artifact when call-condition
 tier: [TODO: 1 | 2 | 3]
 source: local
 template_uses:
-  skill-template: "0.3.2"
+  skill-template: "0.4.4"
 group: [TODO: required for Tier 3]
 allowed-tools: {tools}
 ---
@@ -30,30 +30,35 @@ allowed-tools: {tools}
 
 ## Context
 
-[TODO: Only context needed every time this skill loads: tier/system placement,
-source-of-truth docs, ownership constraints, and assumptions.]
+[TODO: In two to four plain sentences say when to use this skill, what it does,
+and what it preserves or does not own.]
 
-[TODO: Do not add a generic `## Job`; put ordered work in `## Todo List` and
-use a specific contract section only when it adds non-duplicated durable shape.]
+[TODO: Do not add a generic `## Job`; put ordered work in `## Todo List`.]
 
 [TODO: Paths in this skill are relative to this skill package. Use
 `scripts/foo.py` and `references/foo.md` for nearby files.]
 
+## Skill Signature
+
+```text
+{skill_name}(required_input, option?) -> output
+reads: {files or data required}
+does: {one plain sentence describing the work}
+writes: {files changed, or none}
+returns: {files, artifacts, result, or verdict}
+```
+
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-- [ ] 1. Read required context and current artifacts.
-- [ ] 2. Choose the branch.
-   - [ ] 1. Default branch.
-   - [ ] 2. Update/repair branch.
-   - [ ] 3. Review branch.
-- [ ] 3. Execute the workflow for the selected branch.
-- [ ] 4. Produce or update the required artifact.
-- [ ] 5. Verify with the named proof command or evidence surface.
-- [ ] 6. Review against the gotchas before completion.
-   - [ ] Repeatability from files alone.
-   - [ ] No duplicated first-load logic.
-   - [ ] Explicit proof command or blocker.
+1. [Bind the real input, desired result, and any material missing choice.]
+2. [Inspect the input for the domain signals that determine the approach.]
+   Example: [real input] -> [tempting wrong result] -> [why it fails].
+3. [Perform the domain transformation and name what must survive it.]
+4. [Handle the one meaningful branch or quality decision, when one exists.]
+   Assert: [keep only when this stage needs a non-obvious gate].
+5. [Self-audit output quality and preservation, fix failures, and return the
+   exact output.]
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 ## Templates

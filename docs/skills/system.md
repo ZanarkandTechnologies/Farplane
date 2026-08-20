@@ -91,13 +91,18 @@ canonical ticket: its ordered child-action graph belongs in `Change Plan`, not
 in a parallel plan file or schema. Planners own that in-ticket plan, not the
 specialist artifacts it schedules.
 
-Leaf `## Todo List` sections describe domain work only. Tier 0 lifecycle,
+The default skill spine is `Context`, `Skill Signature`, `Todo List`, `Gotchas`,
+and `Output`. Add templates, references, QA, evals, or golden fixtures only
+when their admission rule changes normal use. Leaf `## Todo List` sections
+describe domain work only. Tier 0 lifecycle,
 generic local-QA procedure, ticket writeback, and broad review routing are
 inherited system behavior, so repeating them in every leaf is duplication. Keep
 one real domain branch and provider-specific instructions behind conditional
-references. The default shape is five top-level nodes: route, bind, produce,
-domain gate, return. Exceed it only for a separately owned artifact or an
-independent branch.
+references. The default shape is three to five top-level stages: bind the real
+input, inspect domain signals, perform the transformation while naming what
+must survive, handle a meaningful branch or gate when needed, then self-audit
+and return. Exceed it only for a separately owned artifact or an independent
+branch.
 
 Numeric skill tiers are compound leverage classes. A lower numeric tier means
 that improvements to the skill tend to propagate through more downstream
@@ -124,6 +129,10 @@ Every skill invocation may perform Tier 0 phases inline. A skill should call a
 phase-like skill such as `plan`, `review`, or `eval` only when that phase needs
 its own durable artifact, independent judgment, explicit budget, handoff, or
 proof surface.
+
+This is shared system policy, not a skill-local section. Do not add `## Phase
+Contract` or `## Phase Boundary` to skill files. Put an applicable downstream
+call in the domain todo or a precisely loaded reference.
 
 ```text
 inline_phase(skill, phase, task) -> local_decision
@@ -225,7 +234,7 @@ Use these surfaces to make a chain visible:
   first-seen explicit skill references in order: Markdown `SKILL.md` links,
   backticked `skill-name` refs, or `$skill-name` refs. Plain prose is ignored.
 - `common_chains` in skill frontmatter for stable Tier 3 adjacency hints.
-- `routes:` in `## Skill Signature` for normal downstream owners.
+- domain actions in `## Todo List` for normal downstream calls.
 - workflow reference files under `skills/<owner>/references/` when one
   orchestrator owns a conditional multi-skill procedure.
 - `evals/evals.json` rows when the composed behavior should be tested end to end.
@@ -264,9 +273,9 @@ skill import every primitive directly:
 - Tier 3 first-load todos should not direct-link Tier 1 primitives such as
   `advise`, `consolidate`, `reference-grounding`, or `prototyping` unless the
   skill owns that primitive step as part of its first-load contract.
-- Tier 0 phase steps do not need skill links. Put the phase shape in the todo
-  template or skill `## Phase Contract` instead of linking to `plan` or
-  `execute`.
+- Tier 0 phase steps do not need skill links or skill-local phase sections.
+  Put a real domain action in the todo instead of linking to `plan` or
+  `execute` for inherited lifecycle behavior.
 - `review` is a protocol exception: skills may link to the review wrapper when
   material evidence needs TAS judgment, regardless of normal one-level tier
   dependency direction.
@@ -461,63 +470,41 @@ for the concrete on-contact upgrade checklist.
 
 ## Skill Signatures
 
-Template `0.2.0` adds a compact `## Skill Signature` section for skills whose
-composition would otherwise stay implicit. The signature is a human-readable
-contract, not a heavy schema:
+Use a compact `## Skill Signature` as human-readable type linting, not a heavy
+schema:
 
 ```text
-skill_action(input_text, state?) -> primary_output + evidence?
-state: reads(...); writes(...)
-gates: proof_condition; review_condition
-routes: next-skill | next-skill:method | direct-answer
-fails: known bad behavior
+skill_action(required_input, option?) -> output
+reads: files or data required
+does: one plain sentence describing the work
+writes: files changed, or none
+returns: files, artifacts, result, or verdict
 ```
 
 Use `docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md` for the full grammar and the
 self-improvement workflow contracts.
 
-Agents should treat skill signatures like callable contracts. When invoking a
-skill, check the signature before execution:
+When invoking a skill, check the signature before execution:
 
 1. Bind the known user request and current state to the signature inputs.
 2. Resolve missing required inputs through context gathering, setup workflows,
    or a narrow blocking question.
-3. Use the listed gates as the proof and review obligations.
-4. Use the listed routes instead of inventing hidden downstream workflow.
+3. Confirm that the named work and outputs match the requested result.
+
+Put workflow rules and downstream calls in the Todo List. Put tempting failure
+examples in Gotchas. Put detailed output schemas in Templates only when a real
+consumer needs them.
 
 ## Skill Budgets
 
-Budgets are optional parameters for skills where cost, depth, search breadth,
-finish-gate depth, delegation, or external compute materially change the best
-workflow. Do not add budget schema to every skill by default.
+Budget resolution belongs to `budget-advisor`. A budget-aware skill may expose
+one optional `budget?` parameter, but it must not define another shared budget
+type in `SKILL.md`.
 
-Use budgets when they help the coordinator choose the right effort level:
-
-```text
-skill_budget(task, risk, ambiguity, cost)
-  -> grounding_depth + search_breadth + compute_mode + finish_gate_depth + stop_condition
-```
-
-Good budget-bearing skills expose a small set of parameters that alter behavior
-in meaningful ways. For tiny, deterministic, or single-path skills, normal todo
-binding is enough and a budget section is noise.
-
-All skills inherit an implicit effort budget from the coordinator. Only
-budget-sensitive skills should document explicit budget parameters. Phase
-budgets should include a recursion cap when a phase skill may externalize
-another phase:
-
-```text
-phase_budget = {
-  effort?: "tiny" | "normal" | "deep",
-  finish_gate?: "none" | "self-check" | "checklist" | "validator" | "eval" | "QA" | "review" | "external",
-  max_phase_depth?: 0 | 1 | 2
-}
-```
-
-`max_phase_depth: 0` means inline phases only. `max_phase_depth: 1` permits one
-externalized phase. `max_phase_depth: 2` permits a phase of a phase only when
-the child scope is smaller or more specialized than the parent scope.
+`budget-advisor` owns common modes, schemas, inheritance, and council behavior.
+A caller skill owns only real domain-specific presets or personas, kept in a
+precisely loaded reference such as `references/budget.md`. Do not create that
+file when the skill has no domain-specific budget behavior.
 
 ## Feature Tracking
 

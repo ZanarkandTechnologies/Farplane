@@ -59,7 +59,7 @@ beautiful references and still fail if the agent cannot execute the normal path
 from `SKILL.md` alone.
 
 ```text
-first_load_contract(skill) -> trigger + context + signature? + todo_path + gates + proof + output
+first_load_contract(skill) -> context + signature + todo_path + gotchas + output
 ```
 
 Put these in `SKILL.md` for every non-trivial skill:
@@ -67,11 +67,8 @@ Put these in `SKILL.md` for every non-trivial skill:
 - Trigger boundary: when to use the skill and when not to.
 - Minimal context: owner docs, source-of-truth constraints, fixture assumptions,
   and surrounding system shape needed every time.
-- Skill signature when composition would otherwise be implicit: inputs, outputs,
-  state reads/writes, gates, routes, and failure modes.
-- Phase contract when the skill owns material work whose grounding, planning,
-  execution, guardrail, evidence review, or writeback phases would otherwise be
-  implicit.
+- Skill signature: required files or data, caller-controlled parameters, the
+  work performed, and files, artifacts, or result returned.
 - Ordered todo path: default branch, important branches, proof, and final
   finish gate.
 - Hard gates and stop conditions: safety, evidence, review, or setup checks that
@@ -110,62 +107,44 @@ model/provider maps, orchestration policy, tool instructions, long caveats,
 method lists, or downstream routing chains. Put that detail in `SKILL.md` or a
 reference so it is loaded only after selection.
 
+- Start with the compact core: `## Context`, `## Todo List`, `## Gotchas`, and
+  `## Output`. Every extra section must change normal execution, routing,
+  proof, or maintenance.
 - Put a short `## Context` section near the top of `SKILL.md` before the todo
   list when the skill depends on tier, ownership, source, or surrounding
   system shape.
-- Put a compact `## Skill Signature` after `## Context` when the skill needs
-  callable behavior, state reads/writes, gates, routes, failure modes, or
-  composition boundaries. Follow
-  [`docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md`](../features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md)
-  and do not add a verbose schema when a compact signature is enough.
+- Put a compact `## Skill Signature` after `## Context`. Treat it as type
+  linting: name required files or data, caller-controlled parameters, the work
+  performed, files changed, and the files, artifacts, result, or verdict
+  returned. Do not turn it into a state machine, route catalog, or exhaustive
+  list of gates and failures.
 - Treat the signature as a parameter contract. If the user invokes a skill
   without required inputs, the agent should resolve those inputs from files,
   state, setup workflows, or one narrow blocking question before execution.
-- Include a compact budget type only when effort, search breadth,
-  finish-gate depth, delegation, or external compute materially change the
-  workflow. Do not add a budget schema to tiny, deterministic, or single-path
-  skills.
-- Put a compact `## Phase Contract` after `## Skill Signature` when the skill's
-  material work needs explicit lifecycle shape:
-
-  ```text
-  phase_contract(task, bound_inputs, state)
-    -> grounded_context
-     + plan_or_direct_action
-     + plan_review_if_material
-     + execution
-     + guardrail_or_eval
-     + evidence_review_if_material
-     + writeback
-  ```
-
-  Tier 0 phases are not skill links and not frontmatter tiers. Use Codex native
-  planning/execution phases unless a named skill package owns a specific
-  artifact or workflow.
-- Add a compact `## Phase Boundary` when a skill may call phase-like skills
-  such as `plan`, `review`, `eval`, or `research`. The boundary should say
-  whether the phase stays inline or becomes an external skill call.
-
-  ```text
-  externalize_phase(parent_task, phase, child_scope, budget)
-    -> skill_call | inline_phase
-  ```
-
-  External phase calls must shrink or specialize the current scope. Do not
-  recurse through `plan` and `review` at the same task size.
+- Tier 0 owns phase behavior and recursion rules. Do not add `## Phase
+  Contract` or `## Phase Boundary` to a skill. Put a real downstream call where
+  it is used in the Todo List or a precisely loaded reference.
+- Do not define a skill-local budget type. A budget-aware skill may accept a
+  `budget?` parameter and route it to `budget-advisor`; keep shared modes and
+  schemas there. Add a skill-local budget reference only when the domain has
+  real presets, personas, or allocation rules.
 - `## Todo List` is the first-load todo list, not a generic checklist section.
-- Use visible sequential task-list items such as `- [ ] 1.`, `- [ ] 2.`, and
-  `- [ ] 3.` for ordered work. Put the number after the checkbox marker so
-  rich Markdown task-list views keep the sequence visible.
+- Use a plain numbered list such as `1.`, `2.`, and `3.` for ordered work.
+  Checkboxes imply mutable completion state that the skill file does not own.
 - Make every top-level todo an executable action with an observable result.
-  Move policy, tips, and warnings to `## Gotchas`, `## Core Rules`, or nested
-  verification checks.
-- Use nested visible numbered task-list items for branch choices that should
-  stay ordered and easy to reference.
-- Use plain markdown todos such as `- [ ]` only for embedded verification or
-  detail checks under a numbered todo.
+  Move policy, tips, and warnings to `## Gotchas`, `## Core Rules`, or an
+  indented stage expectation.
+- Use concrete domain nouns and actions. If a todo could be pasted into an
+  unrelated skill, rewrite it. Put a short example beside a rule that is easy
+  to misread, name what the transformation must preserve, and finish with a
+  concrete self-audit.
+- Use nested numbered lists for branch choices that should stay ordered and
+  easy to reference.
+- Put an indented `Expected:` or `Assert:` after a stage only when the expected
+  state is ambiguous, drift is likely, failure is costly, or the next stage
+  needs a gate. Omit it when success is obvious or mechanically verified.
 - Do not use unordered prose bullets inside `## Todo List`; branch choices
-  should be numbered task items, and embedded checks should be checkbox items.
+  should be numbered items, and stage checks should be short indented lines.
 - Do not put literal `FARPLANE_IMPORTANT_CHECKLIST` marker comments inside
   fenced examples; link the source template instead.
 - Fold the default workflow into the numbered todo list instead of repeating it
@@ -175,8 +154,7 @@ reference so it is loaded only after selection.
   when it adds a durable contract that is not just a repeat of the todo list.
 - Put the final finish gate as the last numbered todo. The gate may be review,
   QA, eval, validator, doc-quality checklist, demo proof, human feedback, or a
-  small self-check. Embedded plain todo checks are allowed under that final
-  todo; avoid deep checkbox trees elsewhere.
+  small self-check. Avoid checkbox trees inside the skill contract.
 - Move onboarding, examples, rubric detail, and long rationale to references.
 - A good first-load todo list should tell the next agent what to do now, not
   teach the whole domain.
@@ -332,7 +310,7 @@ Key metrics:
 | `task_success_rate` | maximize | Skill eval tasks pass without weakening workflow evals. |
 | `review_tas_rate` | maximize | Skill-contract and eval-quality reviews reach required TAS-A. |
 | `maintenance_locality` | maximize | Future edits have one obvious owner surface. |
-| `composition_clarity` | maximize | Inputs, outputs, state reads/writes, evidence, and routes are explicit. |
+| `composition_clarity` | maximize | Required files/data, parameters, work, writes, and returned outputs are explicit. |
 
 Placement rule:
 
@@ -665,8 +643,13 @@ the smallest useful upgrade in the same pass:
 
 - Check whether the first-load `## Todo List` is ordered, executable, and
   marker-delimited.
-- Add or tighten `## Skill Signature` when it would clarify real process
-  inputs, outputs, state, files, evidence, gates, routes, or composition.
+- Add or tighten `## Skill Signature` so it plainly names required files/data,
+  caller-controlled parameters, work performed, files changed, and returned
+  outputs. Remove state-machine catalogs from the signature.
+- Fold legacy `## Phase Contract` and `## Phase Boundary` content into the
+  relevant domain todo or conditional reference, then delete those sections.
+- Route explicit budget parameters through `budget-advisor`; remove local
+  budget types unless a domain-specific reference has real presets or personas.
 - Move optional detail, rare branches, examples, long rubrics, and model maps
   into references.
 - When a reference is a reusable subskill or method workflow, declare

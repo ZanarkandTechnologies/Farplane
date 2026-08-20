@@ -25,15 +25,15 @@ if str(REPO_ROOT) not in sys.path:
 
 from bin.validators.template_usage import template_target_basis
 
-REQUIRED_TEMPLATE_HEADINGS = ("Context", "Todo List", "Templates", "Gotchas", "Reference Map", "Output")
+REQUIRED_TEMPLATE_HEADINGS = ("Context", "Skill Signature", "Todo List", "Gotchas", "Output")
 REQUIRED_METHOD_REFERENCE_HEADINGS = ("Use When", "Inputs", "Workflow", "Output Shape", "Quality Gates", "Bad Output")
 CURRENT_METHOD_REFERENCE_VERSION = "0.1.0"
 HEADING_RE = re.compile(r"^## (?P<heading>.+?)\s*$")
-TOP_LEVEL_NUMBERED_TODO_RE = re.compile(r"^- \[ \] \d+\. ")
-LEGACY_NUMBERED_TODO_RE = re.compile(r"^\s*\d+\. \[ \] ")
-TOP_LEVEL_PLAIN_TODO_RE = re.compile(r"^- \[ \] (?!\d+\. )")
-TIP_LIKE_TOP_LEVEL_TODO_RE = re.compile(r"^- \[ \] \d+\. (?:Use .+ when\b|Keep\b|Do not\b|Avoid\b)")
-UNORDERED_PROSE_TODO_RE = re.compile(r"^\s+- (?!\[ \])")
+TOP_LEVEL_NUMBERED_TODO_RE = re.compile(r"^\d+\. ")
+MARKDOWN_TASK_TODO_RE = re.compile(r"^\s*- \[ \] ")
+ORDERED_CHECKBOX_TODO_RE = re.compile(r"^\s*\d+\. \[ \] ")
+TIP_LIKE_TOP_LEVEL_TODO_RE = re.compile(r"^\d+\. (?:Use .+ when\b|Keep\b|Do not\b|Avoid\b)")
+UNORDERED_PROSE_TODO_RE = re.compile(r"^\s+- ")
 
 
 def run(command: list[str]) -> None:
@@ -189,12 +189,12 @@ def template_structure_errors(current_version: str) -> list[str]:
         if todo_body is None:
             continue
         if not any(TOP_LEVEL_NUMBERED_TODO_RE.match(line) for line in todo_body.splitlines()):
-            errors.append(f"{row['name']}: ## Todo List needs visible numbered task items like `- [ ] 1. ...`")
+            errors.append(f"{row['name']}: ## Todo List needs plain numbered items like `1. ...`")
         for line_number, line in enumerate(todo_body.splitlines(), start=1):
-            if LEGACY_NUMBERED_TODO_RE.match(line):
+            if ORDERED_CHECKBOX_TODO_RE.match(line):
                 errors.append(
-                    f"{row['name']}: legacy ordered checkbox in ## Todo List line {line_number}; "
-                    "use `- [ ] 1. ...` so rich Markdown views keep the number visible"
+                    f"{row['name']}: ordered checkbox in ## Todo List line {line_number}; "
+                    "use a plain numbered item like `1. ...`"
                 )
                 break
             if TIP_LIKE_TOP_LEVEL_TODO_RE.match(line):
@@ -203,16 +203,16 @@ def template_structure_errors(current_version: str) -> list[str]:
                     "make the item an action with an observable result or move the tip to Gotchas/Core Rules"
                 )
                 break
-            if TOP_LEVEL_PLAIN_TODO_RE.match(line):
+            if MARKDOWN_TASK_TODO_RE.match(line):
                 errors.append(
-                    f"{row['name']}: top-level plain todo in ## Todo List line {line_number}; "
-                    "use visible numbered todos for main work and indent plain todos under a numbered item"
+                    f"{row['name']}: Markdown task item in ## Todo List line {line_number}; "
+                    "use plain numbered items and indented Expected/Assert lines"
                 )
                 break
             if UNORDERED_PROSE_TODO_RE.match(line):
                 errors.append(
                     f"{row['name']}: unordered prose bullet in ## Todo List line {line_number}; "
-                    "use visible numbered branch todos or embedded `- [ ]` checks"
+                    "use numbered branch items or indented Expected/Assert lines"
                 )
                 break
 

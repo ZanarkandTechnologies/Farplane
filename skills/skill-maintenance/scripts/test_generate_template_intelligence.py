@@ -21,13 +21,23 @@ class GenerateTemplateIntelligenceTests(unittest.TestCase):
             text="""
 description: "[TODO: Verb input/context into output/artifact when call-condition; <=220 chars.]"
 
-## Phase Boundary
+## Skill Signature
 
-Externalized phase calls must shrink or specialize the current scope.
+```text
+test_skill(input, option?) -> result
+reads: source files
+does: transforms the source
+writes: output.md
+returns: output.md and a receipt
+```
 
 ## Todo List
 
-- [ ] 1. Verify with the named proof command or evidence surface.
+1. [Bind the real input and desired result.]
+2. Inspect domain signals.
+   Example: input -> tempting wrong result -> why it fails.
+3. Transform the input and name what must survive.
+4. Self-audit the result.
 
 ## Templates
 

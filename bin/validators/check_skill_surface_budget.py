@@ -17,7 +17,7 @@ TODO_RE = re.compile(
     r"<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->\n## Todo List\n\n(.*?)\n<!-- END FARPLANE_IMPORTANT_CHECKLIST -->",
     re.DOTALL,
 )
-TOP_LEVEL_TODO_RE = re.compile(r"^- \[ \] \d+\. ")
+TOP_LEVEL_TODO_RE = re.compile(r"^(?:\d+\. |- \[ \] \d+\. )")
 QA_CHECKBOX_RE = re.compile(r"^- \[ \] ")
 DEFAULT_TEMPLATE_ID = "skill-surface-budget"
 DEFAULT_VERSION = "0.1.0"

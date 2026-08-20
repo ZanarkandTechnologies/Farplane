@@ -9,11 +9,23 @@ from bin.validators.check_skill_surface_budget import (
 )
 
 
-def write_skill(root: Path, name: str, *, subscribed: bool, todos: int = 0, qa: int = 0, evals: int = 0) -> None:
+def write_skill(
+    root: Path,
+    name: str,
+    *,
+    subscribed: bool,
+    todos: int = 0,
+    qa: int = 0,
+    evals: int = 0,
+    numbered: bool = False,
+) -> None:
     skill_dir = root / "skills" / name
     skill_dir.mkdir(parents=True)
     template_uses = '  skill-surface-budget: "0.1.0"\n' if subscribed else ""
-    todo_lines = "\n".join(f"- [ ] {index}. Todo {index}" for index in range(1, todos + 1))
+    todo_lines = "\n".join(
+        f"{index}. Todo {index}" if numbered else f"- [ ] {index}. Todo {index}"
+        for index in range(1, todos + 1)
+    )
     (skill_dir / "SKILL.md").write_text(
         "\n".join(
             [
@@ -71,6 +83,15 @@ class SkillSurfaceBudgetTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             write_skill(root, "capped", subscribed=True, todos=10, qa=5, evals=5)
+            result = collect_budget_results(root)
+            self.assertEqual(result.checked, 1)
+            self.assertEqual(result.skipped, 0)
+            self.assertEqual(result.violations, [])
+
+    def test_subscribed_numbered_skill_passes_when_under_budget(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            write_skill(root, "numbered", subscribed=True, todos=10, qa=5, evals=5, numbered=True)
             result = collect_budget_results(root)
             self.assertEqual(result.checked, 1)
             self.assertEqual(result.skipped, 0)

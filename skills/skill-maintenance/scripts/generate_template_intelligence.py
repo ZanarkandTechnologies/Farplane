@@ -534,20 +534,20 @@ COMMON_EVALS = [
         "behavior": "todo_executability",
         "title": "Todo executability",
         "expected_signals": [
-            "top-level todos use visible numbered checkbox actions",
-            "policy prose is not treated as a top-level todo",
+            "top-level todos use plain numbered domain actions",
+            "the abbreviated golden pattern includes an example, preservation, and self-audit",
         ],
-        "required_patterns": [r"- \[ \] 1\.", r"observable result|named proof command|evidence surface"],
+        "required_patterns": [r"1\. \[Bind", r"Example:", r"must survive", r"Self-audit"],
     },
     {
-        "id": "phase_boundary",
-        "behavior": "phase_boundary",
-        "title": "Phase boundary",
+        "id": "signature_contract",
+        "behavior": "signature_contract",
+        "title": "Simple skill signature",
         "expected_signals": [
-            "phase-like skills are externalized only when their artifact is needed",
-            "same-scope recursion is forbidden",
+            "the signature names files or data in and outputs out",
+            "the work and file writes are explicit without a state-machine catalog",
         ],
-        "required_patterns": [r"## Phase Boundary", r"Externalized phase calls must shrink"],
+        "required_patterns": [r"## Skill Signature", r"reads:", r"does:", r"writes:", r"returns:"],
     },
     {
         "id": "proof_contract",
@@ -557,7 +557,7 @@ COMMON_EVALS = [
             "the finish gate names proof, blockers, or evidence",
             "output contract is explicit",
         ],
-        "required_patterns": [r"Verify with the named proof command", r"## Output"],
+        "required_patterns": [r"Self-audit", r"## Output"],
     },
     {
         "id": "eval_qa_sync",
