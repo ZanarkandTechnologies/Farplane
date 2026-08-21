@@ -122,6 +122,44 @@ def run_project_snapshot_cli(args: argparse.Namespace) -> int:
     return int(run_snapshot(args))
 
 
+def run_capability_profiles_cli(args: argparse.Namespace) -> int:
+    """Read, validate, or atomically update Project PM capability policy."""
+
+    from farplane_capability_profiles import (
+        CapabilityProfileError,
+        record_capability_profile_snapshot,
+        resolve_capability_profiles,
+        write_capability_profiles,
+    )
+
+    root = Path(args.project_root).expanduser().resolve()
+    try:
+        if args.capability_profiles_command in {"read", "resolve"}:
+            payload = resolve_capability_profiles(root)
+        elif args.capability_profiles_command == "write":
+            try:
+                document = json.loads(args.document_json)
+            except json.JSONDecodeError as exc:
+                raise CliError(f"capability_profiles_error:invalid_document_json:{exc.msg}", code=2) from exc
+            if not isinstance(document, dict):
+                raise CliError("capability_profiles_error:document_json_must_be_object", code=2)
+            payload = write_capability_profiles(root, args.scope, document)
+        elif args.capability_profiles_command == "snapshot":
+            payload = record_capability_profile_snapshot(
+                root,
+                thread_id=args.thread_id,
+                profile_ref=args.profile_ref,
+                policy_digest=args.policy_digest,
+            )
+        else:
+            raise CliError(f"capability_profiles_error:unsupported_command:{args.capability_profiles_command}", code=2)
+    except CapabilityProfileError as exc:
+        raise CliError(f"capability_profiles_error:{exc}", code=2) from exc
+
+    print(json.dumps(payload, indent=2, sort_keys=True))
+    return 0
+
+
 def run_reports_index_cli(args: argparse.Namespace) -> int:
     from farplane_reports import run_index
 

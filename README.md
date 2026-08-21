@@ -298,6 +298,8 @@ What Core owns:
   read-only project/company projection for Farplane UI and interval context.
 - `farplane skills rollout scan --json`: emits a read-only skill rollout
   projection for Farplane UI and local status checks.
+- `farplane capability-profiles read --project-root <path>`: resolves the
+  optional, runtime-portable Project PM skill/MCP allowlist.
 - `farplane ui link /path/to/Farplane-UI`: stores the UI checkout in
   `~/.farplane/farplane-cli.json`.
 - `farplane ui start`: starts the linked UI checkout.

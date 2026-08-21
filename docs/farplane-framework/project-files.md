@@ -16,6 +16,7 @@ source_of_truth:
   - farplane/bindings.yaml
   - .agents/skills/README.md
   - farplane/pm.json
+  - farplane/capability-profiles.yaml
   - .gitignore
 ---
 
@@ -54,6 +55,7 @@ farplane/
   automations.toml
   bindings.yaml
   pm.json
+  capability-profiles.yaml
 
 .agents/
   skills/
@@ -215,6 +217,23 @@ controller.
 Optional UI grouping glue for chat and automation thread IDs. It does not own
 runtime automation IDs, worker state, or strategy.
 
+### `farplane/capability-profiles.yaml`
+
+Optional restriction-only policy for the one visual Project PM. A missing
+binding means full access; it never means a default persona or a second
+persistent worker. Each selected profile has an explicit `allow.skill_ids` and
+`allow.mcp_server_ids` list. Project profiles may extend a `global:<id>` from
+`~/.farplane/capability-profiles.yaml`; their effective access is the
+intersection, so a local profile cannot widen a global restriction.
+
+Core validates the portable schema and resolves global/project inheritance.
+The selected runtime adapter checks allowed IDs against its live inventory;
+Codex compiles the result into a fresh `thread/start.config` and records one
+immutable launch receipt at
+`.farplane/capability-profiles/sessions/`. `pm.json` remains thread grouping
+only. Use `farplane capability-profiles read|write|snapshot` rather than
+hand-editing generated thread configuration.
+
 ## Tickets Own Work And Evidence
 
 ```text
@@ -255,6 +274,7 @@ owner:
   state/
   evals/runs/
   logs/
+  capability-profiles/sessions/
 ```
 
 Flat `.farplane/entities/<id>.md` files are canonical local Wiki articles;

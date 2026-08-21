@@ -73,6 +73,8 @@ def main(argv: list[str]) -> int:
         parser.error("metrics requires a subcommand: primitives")
     if getattr(args, "command", None) == "project" and getattr(args, "project_command", None) is None:
         parser.error("project requires a subcommand: snapshot")
+    if getattr(args, "command", None) == "capability-profiles" and getattr(args, "capability_profiles_command", None) is None:
+        parser.error("capability-profiles requires a subcommand: read, resolve, write, or snapshot")
     if getattr(args, "command", None) == "reports" and getattr(args, "reports_command", None) is None:
         parser.error("reports requires a subcommand: index")
     if getattr(args, "command", None) == "wiki" and getattr(args, "wiki_command", None) is None:

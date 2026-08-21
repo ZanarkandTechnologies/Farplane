@@ -28,6 +28,7 @@ farplane/
   automations.toml # one Work Pulse heartbeat plus separate scheduled sources
   bindings.yaml    # non-secret project IDs and provider coordinates
   pm.json          # optional UI thread manifest for one visual project PM
+  capability-profiles.yaml # optional restriction-only Project PM access policy
 
 .agents/
   skills/          # project-local capability skills
@@ -50,6 +51,7 @@ Runtime state lives under `.farplane/` and is intentionally ignored by git.
   reports/
   evals/runs/
   logs/
+  capability-profiles/sessions/
 ```
 
 The manifest names only stable owner paths; it does not require a generic run
@@ -67,7 +69,16 @@ farplane reports repair-refs --project-root /path/to/project --json
 farplane mining routes validate --project-root /path/to/project --json
 farplane mining runs list --project-root /path/to/project --json
 farplane mining drain --project-root /path/to/project --json
+farplane capability-profiles read --project-root /path/to/project
 ```
+
+`pm.json` groups visible Project PM threads; it never grants runtime access.
+When a Project PM needs restriction, `capability-profiles.yaml` selects an
+allowlist of skills and MCP servers. The selected runtime adapter compiles that
+portable policy against its live capability inventory for fresh work; Codex
+stores an immutable local launch receipt under
+`.farplane/capability-profiles/sessions/`. Without an active profile, the PM
+has full access.
 
 Primitive metrics are Core-owned reducers over tickets, `bindings.yaml`, local
 Codex stores, and ignored Farplane runtime state. Farplane UI should render the

@@ -12,6 +12,7 @@ from farplane_cli_commands import (
     run_content_select_cli, run_content_validate_cli, run_doctor,
     run_harness_health_compile_cli,
     run_metrics_primitives_cli, run_mining_cli, run_project_snapshot_cli,
+    run_capability_profiles_cli,
     run_reports_index_cli, run_reports_repair_refs_cli, run_response_check_cli,
     run_skill_rollout_scan_cli, run_ticket_finalize_cli, run_ticket_history_cli,
     run_wiki_cli,
@@ -220,6 +221,31 @@ def build_parser() -> argparse.ArgumentParser:
     project_snapshot.add_argument("--no-write", action="store_true")
     project_snapshot.add_argument("--json", action="store_true")
     project_snapshot.set_defaults(func=run_project_snapshot_cli)
+
+    capability_profiles = sub.add_parser(
+        "capability-profiles",
+        help="Read or update optional restriction-only Project PM capability profiles.",
+    )
+    capability_profiles_sub = capability_profiles.add_subparsers(dest="capability_profiles_command")
+    for capability_profiles_action in ("read", "resolve"):
+        capability_profiles_parser = capability_profiles_sub.add_parser(capability_profiles_action)
+        capability_profiles_parser.add_argument("--project-root", default=os.getcwd())
+        capability_profiles_parser.set_defaults(func=run_capability_profiles_cli)
+    capability_profiles_write = capability_profiles_sub.add_parser(
+        "write", help="Validate then atomically write one profile document."
+    )
+    capability_profiles_write.add_argument("--project-root", default=os.getcwd())
+    capability_profiles_write.add_argument("--scope", required=True, choices=("global", "project"))
+    capability_profiles_write.add_argument("--document-json", required=True)
+    capability_profiles_write.set_defaults(func=run_capability_profiles_cli)
+    capability_profiles_snapshot = capability_profiles_sub.add_parser(
+        "snapshot", help="Record the enforced policy for one newly started Codex thread."
+    )
+    capability_profiles_snapshot.add_argument("--project-root", default=os.getcwd())
+    capability_profiles_snapshot.add_argument("--thread-id", required=True)
+    capability_profiles_snapshot.add_argument("--profile-ref")
+    capability_profiles_snapshot.add_argument("--policy-digest", required=True)
+    capability_profiles_snapshot.set_defaults(func=run_capability_profiles_cli)
 
     reports = sub.add_parser("reports", help="Build Core-owned report registries.")
     reports_sub = reports.add_subparsers(dest="reports_command")
