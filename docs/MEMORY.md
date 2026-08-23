@@ -3,7 +3,7 @@ title: "Farplane Project Memory"
 status: active
 owner: doc-governance
 created_at: 2026-03-26
-updated_at: 2026-08-03
+updated_at: 2026-08-23
 tags:
   - farplane
   - memory
@@ -12,8 +12,6 @@ refs:
   - docs/features/FEAT-0060-registry-backed-documentation-os.md
   - skills/knowledge-tidier/SKILL.md
   - docs/HISTORY.md
-  - docs/TROUBLES.md
-  - docs/LESSONS.md
 ---
 
 # Farplane Project Memory
@@ -225,8 +223,8 @@ MEM-0135, MEM-0136, MEM-0137.
   architecture, or governance shifts. Routine code deltas belong in git.
 - `docs/MEMORY.md` is the promoted project-level decision log: current,
   factual, important, and worth remembering outside the owner surface.
-- `docs/TROUBLES.md` is the raw pain log. `docs/LESSONS.md` is the distilled
-  prevention log. Keep them separate.
+- Correction evidence stays in ticket artifacts, owner-local skills, evals, or
+  validators. Promote only durable project invariants here.
 - Active `docs/features/` files should map to one current feature, contract, or
   doctrine surface. Completed migration plans and superseded milestone notes
   belong in archives or owning skill surfaces.

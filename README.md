@@ -135,7 +135,7 @@ flowchart LR
     agents[(AGENTS.md)]:::surface
     docs[(docs/*)]:::surface
     tickets[(tickets/*)]:::surface
-    history[(HISTORY / MEMORY / TROUBLES / LESSONS)]:::surface
+    history[(HISTORY / MEMORY)]:::surface
   end
 
   subgraph skills["Structured Skill Layer"]
@@ -214,7 +214,7 @@ flowchart LR
 | `assets/` | Repo-level media and generated assets. |
 | `bin/` | Hooks, runtime helpers, validator wrappers, launchers, and sync scripts. |
 | `bin/validators/` | Testable repo-wide validators for docs, harness invariants, skills, tiers, and registries. |
-| `docs/` | Systems, feature specs, generated registries, history, memory, troubles, lessons, and durable research. |
+| `docs/` | Systems, feature specs, generated registries, history, memory, and durable research. |
 | `docs/systems/` | Authored public system docs plus generated system registry. |
 | `docs/features/` | Authored first-class feature specs plus generated feature registry output. |
 | `docs/fundamentals/` | Harness theory, doctrine, and cross-surface best practices. |

@@ -8,7 +8,8 @@ Copy and paste this into a new session to start a coding implementation planning
 0b. Study `@docs/features/FEAT-*.md` to learn the application specifications.
 0c. Study the active ticket in `@tickets/*.md`, preferring `status: awaiting_review`.
 0d. Study `@docs/MEMORY.md` for durable technical constraints.
-0e. Study `@docs/TROUBLES.md` for repeated failure patterns and `@docs/LESSONS.md` for distilled prevention rules that should be avoided in this slice.
+0e. Read ticket-linked correction evidence or owner-local evals only when they
+    identify a relevant recurring failure for this slice.
 0f. If UI or UX is in scope, study `@docs/TASTE.md` for shared visual doctrine.
 0g. Search the codebase before assuming anything is missing.
 0h. Confirm affected interfaces and nearest module `README.md` + `AGENTS.md` before proposing changes.

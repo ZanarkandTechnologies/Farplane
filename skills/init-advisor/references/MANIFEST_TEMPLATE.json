@@ -1,15 +1,15 @@
 {
   "_template_metadata": {
     "template_id": "farplane-framework",
-    "template_version": "2.0.15",
+    "template_version": "2.0.16",
     "feature_refs": ["FEAT-0060", "FEAT-0063"],
     "consumer_scope": "project",
     "applies_to": ["farplane/manifest.json"]
   },
   "schema": "farplane_project",
-  "spec_version": "2.0.15",
+  "spec_version": "2.0.16",
   "template_uses": {
-    "farplane-framework": "2.0.15"
+    "farplane-framework": "2.0.16"
   },
   "project": {
     "name": "TODO",
@@ -36,8 +36,6 @@
       "docs/HISTORY.md",
       "docs/MEMORY.md",
       "docs/TASTE.md",
-      "docs/TROUBLES.md",
-      "docs/LESSONS.md",
       "qa/README.md",
       "qa/AGENTS.md",
       "qa/cookbook/README.md",

@@ -10,7 +10,7 @@ High-frequency build actions stay here; rationale and policy stay in AGENTS.md a
 ---
 
 0a. Read the active ticket in `@tickets/*.md`, preferring `status: active`.
-0b. Read `@docs/MEMORY.md`, `@docs/TROUBLES.md`, and `@docs/LESSONS.md` if present.
+0b. Read `@docs/MEMORY.md` only when it answers a named constraint question.
 0c. If UI is in scope, read `@docs/TASTE.md`.
 0d. Search the code before assuming missing work.
 
@@ -32,8 +32,6 @@ finish implementation, validate it, write back into the ticket, then move board 
 - update project records when applicable:
   - `docs/HISTORY.md`
   - `docs/MEMORY.md`
-  - `docs/TROUBLES.md`
-  - `docs/LESSONS.md`
 - if new scope is discovered, create a linked follow-up ticket in `tickets/`
 - if blocked by execution, set `status: blocked`, clear `claimed_by`, and record the blocker in `progress.md`
 - if blocked by planning ambiguity, set `status: awaiting_review` and clear `claimed_by`

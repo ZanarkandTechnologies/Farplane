@@ -11,9 +11,9 @@ You are the **System Memory Agent**. Your purpose is to search canonical memory,
 
 ## 📜 Skill Loading Triggers
 
-- Prefer `docs/HISTORY.md`, `docs/MEMORY.md`, `docs/LESSONS.md`,
-  `docs/TROUBLES.md`, `docs/sources/registry.jsonl`, generated
-  `docs/features/registry.jsonl`, and active specs when available.
+- Prefer active tickets, `docs/HISTORY.md`, `docs/MEMORY.md`,
+  `docs/sources/registry.jsonl`, generated `docs/features/registry.jsonl`, and
+  active specs when they answer the retrieval question.
 
 ## 🧠 Persistence Rule
 

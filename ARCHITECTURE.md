@@ -77,7 +77,7 @@ flowchart LR
     techniques[(docs/features/README.md<br/>registry contract)]:::surface
     featureRegistry[(docs/features<br/>generated feature index)]:::surface
     doctrine[(harness-engineering-doctrine.md<br/>surface routing)]:::surface
-    memories[(HISTORY.md<br/>MEMORY.md<br/>TROUBLES.md<br/>LESSONS.md)]:::memory
+    memories[(HISTORY.md<br/>MEMORY.md)]:::memory
   end
 
   subgraph Skills["Skill Layer"]
@@ -187,7 +187,7 @@ The public docs are intentionally split by job:
 | [ARCHITECTURE.md](ARCHITECTURE.md) | system diagram, surface ownership, read order, current limits | README, `docs/features/README.md` |
 | [docs/features/README.md](docs/features/README.md) | canonical feature-spec index and doc-gardening loop | README, this file |
 | [tickets/README.md](tickets/README.md) | ticket state machine, invocation policy, metadata contract | ticket template, invocation feature spec |
-| [docs/HISTORY.md](docs/HISTORY.md) / [docs/MEMORY.md](docs/MEMORY.md) / [docs/TROUBLES.md](docs/TROUBLES.md) / [docs/LESSONS.md](docs/LESSONS.md) | durable timeline, invariants, raw repeated misses, and distilled lessons | closeout tickets and nearest module docs |
+| [docs/HISTORY.md](docs/HISTORY.md) / [docs/MEMORY.md](docs/MEMORY.md) | durable timeline and project invariants | closeout tickets and nearest module docs |
 
 If a public harness claim changes, update the relevant row's surfaces in the
 same pass and run:
@@ -241,10 +241,6 @@ during cleanup unless the replacement carries the same routing information.
   Purpose: append-only change log
 - [docs/MEMORY.md](docs/MEMORY.md)
   Purpose: curated durable invariants and constraints
-- [docs/TROUBLES.md](docs/TROUBLES.md)
-  Purpose: raw repeated misses, blockers, user corrections, and pain points
-- [docs/LESSONS.md](docs/LESSONS.md)
-  Purpose: distilled post-fix lessons for prompt, skill, eval, and policy improvements
 - [docs/TASTE.md](docs/TASTE.md)
   Purpose: shared visual doctrine when a repo has UI work
 - [qa/README.md](qa/README.md)

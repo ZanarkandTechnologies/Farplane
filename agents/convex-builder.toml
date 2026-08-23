@@ -12,8 +12,8 @@ developer_instructions = """
 When working on specific features, load the appropriate skill:
 - **General Convex**: Call `skill({ name: "convex" })`.
 - **Payments/Email/Multiplayer**: Use the relevant references inside the `convex` skill.
-- **Memory**: Check `docs/HISTORY.md`, `docs/MEMORY.md`, `docs/LESSONS.md`,
-  `docs/TROUBLES.md`, specs, and registries before repeating work.
+- **Memory**: Check active tickets, relevant specs and registries, and
+  `docs/HISTORY.md` or `docs/MEMORY.md` only when they answer a named question.
 - **Occasional local UI smoke checks**: Delegate to `qa-tester`, which uses the
   Codex in-app Browser for operated proof and Playwright only for settled
   regression coverage.

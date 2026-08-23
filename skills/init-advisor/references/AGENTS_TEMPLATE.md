@@ -23,8 +23,6 @@ This file is loaded every loop. Keep it operational and project-specific.
 - Specs: `docs/features/FEAT-*.md`
 - History: `docs/HISTORY.md`
 - Memory: `docs/MEMORY.md`
-- Troubles: `docs/TROUBLES.md`
-- Lessons: `docs/LESSONS.md`
 - Taste: `docs/TASTE.md`
 - Code review: `docs/code_review.md` and `docs/review-agent.md`
 - Tickets: active `tickets/TASK-*/ticket.md`, new closed-ticket locators in
@@ -122,9 +120,9 @@ slice, proof/falsification, tradeoffs, and non-goals.
   `--media <path>` per selected file. Core creates or resumes, verifies, and
   closes the configured-repository issue before mining and cleanup; do not
   create the issue or move the packet into `tickets/archive/` manually.
-- If the same failure or user correction happens more than once, append a short raw entry to `docs/TROUBLES.md` with the miss, correction, and prevention idea.
-- If that raw entry produces a reusable prompt, skill, eval, or policy improvement, distill it into `docs/LESSONS.md`.
-- During weekly skill hardening, read recent `docs/TROUBLES.md` and
-  `docs/LESSONS.md`, route actionable rows to `skill-maintenance(mode:
-  harden_skill)`, `eval`, the owning optimizer workflow, or a ticket, and
-  record processed rows in runtime state rather than deleting ledger history.
+- Route a repeated failure to the smallest owner: a skill, eval, validator,
+  canonical doc, or ticket artifact. Promote only a durable project invariant
+  to `docs/MEMORY.md`.
+- During weekly skill hardening, inspect relevant ticket evidence and
+  owner-local evals, then route actionable findings to `skill-maintenance`,
+  `eval`, the owning optimizer workflow, or a ticket.

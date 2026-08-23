@@ -3,10 +3,19 @@ title: Farplane Framework Changelog
 owner: init-advisor
 status: active
 kind: framework-changelog
-updated_at: 2026-08-19
+updated_at: 2026-08-23
 ---
 
 # Farplane Framework Changelog
+
+## 2.0.16
+
+Date: 2026-08-23
+
+Primary change: retire the duplicate correction ledgers. Active projects no
+longer scaffold `docs/TROUBLES.md` or `docs/LESSONS.md`; actionable learning
+belongs in its owning ticket, skill, eval, review, or durable documentation
+surface.
 
 ## 2.0.15
 

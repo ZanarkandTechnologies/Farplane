@@ -51,14 +51,14 @@ metrics:
             metrics = (root / "farplane" / "metrics.yaml").read_text()
             self.assertEqual(result["mode"], "applied")
             self.assertEqual(manifest["project"]["name"], "Keep me")
-            self.assertEqual(manifest["spec_version"], "2.0.15")
+            self.assertEqual(manifest["spec_version"], "2.0.16")
             self.assertEqual(
                 manifest["template_uses"]["farplane-framework"],
-                "2.0.15",
+                "2.0.16",
             )
             self.assertEqual(
                 manifest["_template_metadata"]["template_version"],
-                "2.0.15",
+                "2.0.16",
             )
             self.assertIn("type: flow", metrics)
             self.assertIn("Keep this human definition.", metrics)

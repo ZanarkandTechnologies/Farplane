@@ -3,7 +3,7 @@ title: Farplane evals
 status: implemented
 owner: feature-registry
 created_at: 2026-06-26
-updated_at: 2026-08-20
+updated_at: 2026-08-23
 tags:
   - farplane
   - feature
@@ -14,7 +14,6 @@ refs:
   - skills/metric-advisor
   - skills/optimize-harness
   - skills/eval
-  - docs/LESSONS.md
   - docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md
   - docs/HISTORY.md
   - "docs/features/registry.jsonl#FEAT-0063"
@@ -28,7 +27,6 @@ surfaces:
   - skills/metric-advisor
   - skills/optimize-harness
   - skills/eval
-  - docs/LESSONS.md
   - docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md
 source_refs:
   - docs/HISTORY.md
@@ -96,7 +94,7 @@ owner, patch the smallest durable surface, and prove it with a representative ca
 - Reports image-evidence fixture tension separately from target behavior so a
   facts-only fixture cannot silently masquerade as rendered visual proof.
 - Routes metric selection through metric-advisor before self-improvement claims.
-- Promotes repeated failures into skills, evals, lessons, docs, hooks, validators, or tickets.
+- Promotes repeated failures into skills, evals, docs, hooks, validators, or tickets.
 
 ## User Stories
 
@@ -129,9 +127,9 @@ flowchart TD
 
   trigger["Trigger<br/>miss, correction, or behavior gap"]:::keep
   owner["Owner surface<br/>gap-analysis, harness-advisor<br/>metric-advisor, optimize-harness, eval"]:::changed
-  readers["Files and fields read<br/>gap evidence, owner surface<br/>metric card, eval query<br/>LESSONS and ticket context"]:::keep
+  readers["Files and fields read<br/>gap evidence, owner surface<br/>metric card, eval query<br/>ticket context"]:::keep
   capture["Narrow capture<br/>hardcase metadata<br/>testable expectation and proof path"]:::changed
-  artifact["Created artifact/evidence<br/>hardcase, eval task, lesson<br/>or repair ticket"]:::added
+  artifact["Created artifact/evidence<br/>hardcase, eval task,<br/>or repair ticket"]:::added
   old["Retired<br/>broad memory dump"]:::retired
 
   trigger --> owner --> readers --> capture --> artifact
@@ -154,7 +152,6 @@ Owner surfaces:
 - `skills/metric-advisor`
 - `skills/optimize-harness`
 - `skills/eval`
-- `docs/LESSONS.md`
 - `docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md`
 
 Source context:

@@ -643,14 +643,13 @@ ARCHITECTURE.md            = whole-system map
 docs/fundamentals/*.md     = conceptual model and doctrine
 docs/features/FEAT-*.md               = buildable contracts
 docs/MEMORY.md             = durable invariants
-docs/TROUBLES.md           = repeated raw misses
-docs/LESSONS.md            = distilled prevention rules
 docs/features/registry     = feature inventory
 docs/skills/registry       = skill inventory
 tickets/TASK-*/ticket.md   = task contract and proof target
 tickets/TASK-*/program.md  = loop configuration when needed
 tickets/TASK-*/progress.md = append-only observed progress
 tickets/TASK-*/artifacts   = evidence
+skills/*/evals             = reusable recurrence guards
 ```
 
 Ticket as task memory:
@@ -725,14 +724,11 @@ and generated mining tickets cannot project another ticket.
 Drain flow:
 
 ```text
-trouble_delta =
-  drain(docs/TROUBLES.md, rule="repeated_or_structural")
-
-lesson_delta =
-  synthesize(trouble_delta, target=docs/LESSONS.md)
+correction_delta =
+  route(ticket_evidence, target=[skill_contract, eval, validator, docs/MEMORY.md])
 
 memory_delta =
-  promote(lesson_delta, target=docs/MEMORY.md)
+  promote(correction_delta, target=docs/MEMORY.md, rule="durable_invariant")
 
 h_delta =
   propose_harness_update(memory_delta, target=[
@@ -743,7 +739,7 @@ h_delta =
   ])
 ```
 
-If a lesson stays only in chat, it is not part of the harness.
+If a correction changes no owner surface, it is not part of the harness.
 
 ## 7. Verification Engineering
 

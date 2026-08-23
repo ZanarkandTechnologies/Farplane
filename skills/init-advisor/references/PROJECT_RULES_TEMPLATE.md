@@ -13,7 +13,7 @@ This file defines the project-specific technical rules, tech stack, and conventi
 - `ARCHITECTURE.md`: Top-level system map and canonical surface guide
 - `src/`: Main source code
 - `tests/`: Test files
-- `docs/`: Canonical project state (`prd.md`, `features/README.md`, `features/FEAT-*.md`, `HISTORY.md`, `MEMORY.md`, `TASTE.md`, `TROUBLES.md`, `LESSONS.md`)
+- `docs/`: Canonical project state (`prd.md`, `features/README.md`, `features/FEAT-*.md`, `HISTORY.md`, `MEMORY.md`, `TASTE.md`)
 - `tickets/`: Ticket board (`TASK-*/ticket.md`, `archive/`, `templates/`)
 - `...`: [Other key directories]
 
@@ -29,18 +29,10 @@ This file defines the project-specific technical rules, tech stack, and conventi
   in `docs/bootstrap-brief.md`.
 
 ## 🧠 Learning Backpropagation
-- **Raw feedback log**: `docs/TROUBLES.md`
-- **Distilled lesson log**: `docs/LESSONS.md`
-- **Cadence**: weekly interval review of recent troubles, lessons, ticket
-  progress, proof failures, and interval reports.
-- **Backprop action**: route actionable rows through
-  `skill-maintenance(mode: harden_skill)` or the owning optimizer workflow such
-  as `optimize-harness`, a repair ticket, or an eval.
-- **Processed state**: `.farplane/state/skill-maintenance/processed-learning.jsonl`
-  or the project-equivalent runtime path.
-- **Dedupe rule**: do not delete ledger rows from `docs/TROUBLES.md` or
-  `docs/LESSONS.md`; mark rows processed in runtime state with source refs and
-  follow-up ticket/thread refs.
+- **Correction evidence**: ticket artifacts, owner-local evals, and review findings.
+- **Durable invariant**: `docs/MEMORY.md` only when the fact matters outside its owner.
+- **Cadence**: weekly interval review of relevant ticket progress, proof failures, and owner-local evidence.
+- **Backprop action**: route a concrete recurrence to `skill-maintenance`, the owning optimizer, a repair ticket, or an eval.
 - **Spawn cap**: cap optimizer follow-ups per weekly run to avoid thread or
   ticket floods.
 

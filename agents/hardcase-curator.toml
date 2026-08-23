@@ -40,8 +40,7 @@ Allowed writes:
 - the configured final report path, when one is provided
 
 Forbidden actions:
-- do not edit code, skills, prompts, tickets, `docs/LESSONS.md`, or
-  `docs/MEMORY.md`
+- do not edit code, skills, prompts, tickets, or `docs/MEMORY.md`
 - do not create runnable eval task files unless the prompt explicitly names the
   eval owner and asks for promotion
 - do not create Notion tasks

@@ -16,9 +16,9 @@ created_at: 2026-06-15
 - `refine_skill`: later consolidates accumulated evals/gotchas and shortens
   skill surfaces without weakening guardrails.
 
-`learning-drain` remains as a compatibility wrapper for legacy
-`docs/TROUBLES.md` / `docs/LESSONS.md` intake, and `self-improve` remains
-separate for measured variant/search loops.
+`learning-drain` was a compatibility wrapper for the retired correction-ledger
+intake. Framework 2.0.16 removed that intake; `self-improve` remains separate
+for measured variant/search loops.
 
 ## Proof Targets
 

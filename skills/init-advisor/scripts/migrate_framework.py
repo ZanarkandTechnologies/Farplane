@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Apply the field-preserving Farplane framework 2.0.15 migration."""
+"""Apply the field-preserving Farplane framework 2.0.16 migration."""
 
 from __future__ import annotations
 
@@ -13,7 +13,7 @@ from typing import Any
 
 import yaml
 
-FRAMEWORK_VERSION = "2.0.15"
+FRAMEWORK_VERSION = "2.0.16"
 METRICS_TEMPLATE_VERSION = "0.4.0"
 HARNESS_TEMPLATE_VERSION = "0.5.3"
 BINDINGS_TEMPLATE_VERSION = "0.5.0"
@@ -435,7 +435,7 @@ def migrate_project(project_root: Path, *, force: bool) -> dict[str, Any]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Migrate one Farplane project to framework 2.0.15 without replacing human-authored files."
+        description="Migrate one Farplane project to framework 2.0.16 without replacing human-authored files."
     )
     parser.add_argument("--project-root", type=Path, default=Path.cwd())
     parser.add_argument(

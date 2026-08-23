@@ -248,8 +248,6 @@ Default writeback order:
 - canonical spec or skill second
 - `docs/HISTORY.md` for meaningful shipped milestones
 - `docs/MEMORY.md` only for durable invariants
-- `docs/TROUBLES.md` only for raw repeated misses or corrections
-- `docs/LESSONS.md` only for distilled prevention rules
 
 ## Anti-Goals
 

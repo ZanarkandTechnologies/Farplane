@@ -15,7 +15,7 @@ This repo versions the reusable parts of a Codex home directory while keeping ma
 - `skills/`: custom skills and bundled skill docs
 - `rules/`: command approval rules
 - `bin/`: helper scripts used by the live Codex config
-- `docs/`: PRD, memory, history, troubles, lessons, and specs
+- `docs/`: PRD, memory, history, and specs
 - `farplane/`: tracked project harness, metrics, automations, bindings, hooks, and PM config
 - `.farplane/`: ignored project runtime state, reports, eval runs, logs, and ledgers
 - `tickets/`: filesystem board for harness changes

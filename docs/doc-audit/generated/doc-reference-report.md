@@ -15,94 +15,95 @@ refs:
 
 # Docs Reference Audit
 
-Generated at `2026-08-10T09:27:03+00:00` from local Markdown links and literal repo-path
+Generated at `2026-08-23T15:50:36+00:00` from local Markdown links and literal repo-path
 references. This is a navigation and cleanup aid, not a deletion authority.
 
 ## Harness Math Doc
 
 The harness math doc is `docs/fundamentals/harness-algebra.md`.
 
-- All inbound refs: `15`
-- Skill-origin refs: `7`
+- All inbound refs: `13`
+- Skill-origin refs: `6`
 - Cleanup rule: keep this as the canonical equation/model surface and point
   workflow docs back to it instead of duplicating the algebra.
 
 ## Counts
 
-- Scanned files: `1583`
-- Nodes: `1018`
-- Edges: `4484`
-- Unresolved local-looking refs: `1670`
+- Scanned files: `1706`
+- Nodes: `1094`
+- Edges: `4546`
+- Unresolved local-looking refs: `1954`
 
 ## Most Referenced Docs
 
 | Doc | All refs | Skill refs |
 | --- | --- | --- |
-| `docs/features/README.md` | 64 | 27 |
-| `docs/features/validate_features.py` | 56 | 9 |
-| `docs/MEMORY.md` | 42 | 17 |
-| `docs/HISTORY.md` | 40 | 9 |
-| `docs/systems/README.md` | 39 | 15 |
-| `docs/skills/registry.jsonl` | 36 | 24 |
-| `docs/prd.md` | 34 | 15 |
-| `docs/skills/README.md` | 32 | 11 |
-| `docs/LESSONS.md` | 31 | 14 |
-| `docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md` | 31 | 12 |
-| `docs/features/registry.jsonl` | 29 | 7 |
-| `docs/skills/system.md` | 25 | 13 |
-| `docs/bootstrap-brief.md` | 25 | 20 |
-| `docs/TROUBLES.md` | 24 | 11 |
+| `docs/features/README.md` | 60 | 24 |
+| `docs/features/validate_features.py` | 59 | 9 |
+| `docs/skills/registry.jsonl` | 45 | 33 |
+| `docs/HISTORY.md` | 38 | 7 |
+| `docs/MEMORY.md` | 38 | 15 |
+| `docs/systems/README.md` | 38 | 14 |
+| `docs/prd.md` | 34 | 14 |
+| `docs/skills/README.md` | 33 | 13 |
+| `docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md` | 29 | 11 |
+| `docs/bootstrap-brief.md` | 25 | 19 |
+| `docs/features/registry.jsonl` | 25 | 4 |
+| `docs/skills/system.md` | 24 | 11 |
 | `docs/skills/templates/SKILL_TEMPLATE.md` | 22 | 5 |
-| `docs/features/FEAT-0060-registry-backed-documentation-os.md` | 22 | 5 |
-| `docs/skills/best-practices.md` | 21 | 12 |
-| `docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md` | 21 | 6 |
-| `docs/features/FEAT-0065-pulse-and-interval-automation.md` | 18 | 9 |
-| `docs/features/FEAT-0007-ticket-as-durable-task-memory.md` | 17 | 4 |
+| `docs/skills/best-practices.md` | 21 | 13 |
+| `docs/features/FEAT-0060-registry-backed-documentation-os.md` | 20 | 4 |
+| `docs/TASTE.md` | 18 | 13 |
+| `docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md` | 18 | 6 |
+| `docs/farplane-framework/lifecycle.md` | 16 | 3 |
+| `docs/systems/wiki.md` | 16 | 1 |
+| `docs/features/FEAT-0065-pulse-and-interval-automation.md` | 16 | 7 |
 
 ## Spec Status Preview
 
 | Spec | All refs | Skill refs | Suggested status |
 | --- | --- | --- | --- |
 | `docs/features/AGENTS.md` | 0 | 0 | keep active |
-| `docs/features/FEAT-0007-ticket-as-durable-task-memory.md` | 17 | 4 | keep active |
-| `docs/features/FEAT-0008-artifact-first-qa-and-completion-proof.md` | 14 | 2 | keep active |
+| `docs/features/FEAT-0007-ticket-as-durable-task-memory.md` | 15 | 3 | keep active |
+| `docs/features/FEAT-0008-artifact-first-qa-and-completion-proof.md` | 13 | 2 | keep active |
 | `docs/features/FEAT-0011-harness-scout-source-ingestion.md` | 4 | 0 | keep active |
 | `docs/features/FEAT-0014-frontend-skill-parity-upgrade.md` | 4 | 0 | keep active |
 | `docs/features/FEAT-0015-symphony-compatible-farplane-invocation-contract.md` | 12 | 1 | keep active |
 | `docs/features/FEAT-0022-skill-tier-leverage-classes.md` | 4 | 0 | keep active |
 | `docs/features/FEAT-0025-video-to-skill-source-reconstruction.md` | 4 | 0 | keep active |
-| `docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md` | 31 | 12 | keep active |
+| `docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md` | 29 | 11 | keep active |
 | `docs/features/FEAT-0030-on-demand-skill-plugin-packaging.md` | 4 | 0 | keep active |
 | `docs/features/FEAT-0031-agent-behavior-test-workflow.md` | 4 | 0 | keep active |
 | `docs/features/FEAT-0032-goal-advisor-execution-compilation.md` | 7 | 1 | keep active |
 | `docs/features/FEAT-0034-adversarial-agent-qa-test-skill.md` | 4 | 0 | keep active |
-| `docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md` | 21 | 6 | keep active |
+| `docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md` | 18 | 6 | keep active |
 | `docs/features/FEAT-0042-lean-global-agent-operating-kernel.md` | 13 | 4 | keep active |
 | `docs/features/FEAT-0043-project-level-system-prompt-eval-suite.md` | 5 | 0 | keep active |
 | `docs/features/FEAT-0054-modular-skill-local-eval-tasks.md` | 4 | 0 | keep active |
 | `docs/features/FEAT-0056-inspiration-vault.md` | 7 | 0 | keep active |
 | `docs/features/FEAT-0057-skill-local-qa-checklist-artifacts.md` | 4 | 0 | keep active |
-| `docs/features/FEAT-0060-registry-backed-documentation-os.md` | 22 | 5 | keep active |
+| `docs/features/FEAT-0060-registry-backed-documentation-os.md` | 20 | 4 | keep active |
 | `docs/features/FEAT-0061-farplane-adoption-tracker-cli.md` | 6 | 0 | keep active |
 | `docs/features/FEAT-0062-capped-skill-surface-budget.md` | 6 | 1 | keep active |
 | `docs/features/FEAT-0063-metric-advisor-cards.md` | 5 | 0 | keep active |
 | `docs/features/FEAT-0064-skill-signals.md` | 8 | 0 | keep active |
-| `docs/features/FEAT-0065-pulse-and-interval-automation.md` | 18 | 9 | keep active |
+| `docs/features/FEAT-0065-pulse-and-interval-automation.md` | 16 | 7 | keep active |
 | `docs/features/FEAT-0066-product-scoped-pulse-loops.md` | 7 | 0 | keep active |
-| `docs/features/FEAT-0067-daily-interval-review-reports.md` | 7 | 0 | keep active |
+| `docs/features/FEAT-0067-daily-interval-review-reports.md` | 8 | 1 | keep active |
 | `docs/features/FEAT-0068-goal-backed-ticket-execution.md` | 7 | 0 | keep active |
 | `docs/features/FEAT-0069-taste-loop-human-feedback-optimization.md` | 6 | 0 | keep active |
 | `docs/features/FEAT-0070-experimental-feature-evaluation-reports.md` | 7 | 0 | keep active |
-| `docs/features/FEAT-0071-project-work-pulse.md` | 14 | 2 | keep active |
-| `docs/features/FEAT-0072-persistent-icp-and-world-memory.md` | 8 | 0 | keep active |
+| `docs/features/FEAT-0071-project-work-pulse.md` | 13 | 1 | keep active |
+| `docs/features/FEAT-0072-scout-brief.md` | 8 | 0 | keep active |
 | `docs/features/FEAT-0073-brand-kit-approved-creative-identity.md` | 6 | 0 | keep active |
 | `docs/features/FEAT-0074-feed-scout-source-instructions.md` | 6 | 0 | keep active |
-| `docs/features/FEAT-0075-entity-markdown-and-world-projection.md` | 6 | 0 | keep active |
+| `docs/features/FEAT-0075-entity-markdown-and-wiki-graph-projection.md` | 7 | 0 | keep active |
 | `docs/features/FEAT-0076-typed-entity-view-projections.md` | 6 | 0 | keep active |
 | `docs/features/FEAT-0077-crm-entity-projection.md` | 6 | 0 | keep active |
 | `docs/features/FEAT-0078-harness-graphir-projections.md` | 6 | 0 | keep active |
-| `docs/features/README.md` | 64 | 27 | keep active |
-| `docs/features/TEMPLATE.md` | 6 | 1 | keep active |
+| `docs/features/FEAT-0079-wiki-resolution-and-incremental-projections.md` | 8 | 0 | keep active |
+| `docs/features/README.md` | 60 | 24 | keep active |
+| `docs/features/TEMPLATE.md` | 5 | 1 | keep active |
 | `docs/features/registry.md` | 3 | 0 | keep active |
 
 ## Suggested Global Docs Bundle
@@ -130,9 +131,8 @@ can still be worth keeping.
 
 | Doc | Note |
 | --- | --- |
-| `docs/AGENTS.md` | keep if loaded by directory convention |
 | `docs/features/AGENTS.md` | keep if loaded by directory convention |
-| `docs/fundamentals/data-visualization.md` | review before archive or merge |
+| `docs/skills/department-taxonomy.md` | review before archive or merge |
 | `docs/sources/AGENTS.md` | keep if loaded by directory convention |
 
 ## Next Cleanup Pass

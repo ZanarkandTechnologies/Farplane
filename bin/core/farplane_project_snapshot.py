@@ -1870,8 +1870,6 @@ def load_project_snapshot(
     memory_refs = [
         {"id": "history", "path": "docs/HISTORY.md", "source_ref": {"path": "docs/HISTORY.md"}},
         {"id": "memory", "path": "docs/MEMORY.md", "source_ref": {"path": "docs/MEMORY.md"}},
-        {"id": "troubles", "path": "docs/TROUBLES.md", "source_ref": {"path": "docs/TROUBLES.md"}},
-        {"id": "lessons", "path": "docs/LESSONS.md", "source_ref": {"path": "docs/LESSONS.md"}},
     ]
     content_metric_ids = sorted(
         {

@@ -15,7 +15,7 @@ common_chains:
 ## Todo List
 
 - [ ] Read the current project surfaces before asking: `docs/prd.md`, active
-  ticket, `docs/features/`, `docs/MEMORY.md`, and `docs/LESSONS.md` when present.
+  ticket, `docs/features/`, and `docs/MEMORY.md` when it answers a named question.
 - [ ] Use [research:user-grounding](../research/SKILL.md#researchuser-grounding)
   when audiences, jobs, user stories, contexts, friction, or success criteria
   are not already grounded.

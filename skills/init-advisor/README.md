@@ -139,7 +139,7 @@ and does not recreate that ticket.
 
 ```bash
 mkdir -p docs/features docs/systems tickets tickets/archive tickets/templates
-touch ARCHITECTURE.md docs/prd.md docs/HISTORY.md docs/MEMORY.md docs/TROUBLES.md docs/LESSONS.md docs/features/README.md docs/systems/README.md
+touch ARCHITECTURE.md docs/prd.md docs/HISTORY.md docs/MEMORY.md docs/features/README.md docs/systems/README.md
 ```
 
 Then copy in:
@@ -311,7 +311,7 @@ Those can come after one clean ticket run.
 - [ ] framework migrations that change Wiki/entity schemas pass `farplane wiki doctor` and `farplane wiki rebuild --no-write --json` before regeneration, and generated schema versions match the current changelog
 - [ ] primitive metrics and `.farplane/project/ui/latest.json` were regenerated after canonical project-file migration
 - [ ] `python3 bin/validators/check_farplane_project_files.py` passes when the repo has Farplane validators
-- [ ] `docs/prd.md`, `docs/features/`, `docs/TROUBLES.md`, `docs/LESSONS.md` exist
+- [ ] `docs/prd.md`, `docs/features/`, and `docs/MEMORY.md` exist
 - [ ] `qa/README.md` and `qa/cookbook/TEMPLATE.md` exist
 - [ ] `docs/code_review.md`, `docs/review-agent.md`, and review helper scripts exist
 - [ ] one QA cookbook page records the evidence-capture launch path and expected targets
@@ -329,5 +329,4 @@ Those can come after one clean ticket run.
 - [ ] one first ticket exists
 - [ ] one first `impl-plan` run is successful
 - [ ] one first `goal-advisor` run is successful
-- [ ] repeated failures get logged to `docs/TROUBLES.md`
-- [ ] reusable post-fix lessons get distilled into `docs/LESSONS.md`
+- [ ] repeated failures route to ticket evidence, an owner-local guard, or a durable invariant in `docs/MEMORY.md`

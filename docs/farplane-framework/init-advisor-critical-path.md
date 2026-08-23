@@ -62,7 +62,7 @@ ARCHITECTURE.md
 docs/bootstrap-brief.md
 docs/prd.md
 docs/features/README.md
-docs/{HISTORY,MEMORY,TROUBLES,LESSONS,TASTE}.md
+docs/{HISTORY,MEMORY,TASTE}.md
 qa/
 tickets/README.md
 tickets/templates/
