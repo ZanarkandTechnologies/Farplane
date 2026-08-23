@@ -22,6 +22,11 @@ from bin.core.skill_contract import (
     normalize_skill_frontmatter,
     parse_skill_frontmatter,
 )
+from bin.core.skill_composition import (
+    SkillCompositionError,
+    skill_ref_name,
+    validate_shortcut_composition_leaves,
+)
 from bin.validators.template_usage import TemplateUsageError, normalize_template_uses
 
 
@@ -195,10 +200,6 @@ def collect_skill_links(skill_dir: Path, skill_name: str) -> list[str]:
     )
 
 
-def skill_ref_name(ref: str) -> str:
-    return ref.split("#", 1)[0].split(":", 1)[0]
-
-
 def normalize_common_chains(value: Any, path: Path, tier: int) -> dict[str, list[str]]:
     if value in (None, ""):
         return {}
@@ -255,76 +256,6 @@ def attach_todo_skill_refs(repo_root: Path, rows: list[dict[str, Any]]) -> None:
         refs = collect_todo_skill_refs(skill_dir, row["name"], skill_names)
         if refs:
             row["todo_skill_refs"] = refs
-
-
-def validate_shortcut_composition_leaves(
-    repo_root: Path,
-    rows: list[dict[str, Any]],
-) -> None:
-    """Keep explicit-only shortcuts out of composition edges in both directions."""
-
-    shortcut_names = {
-        row["name"]
-        for row in rows
-        if isinstance(row.get("capability"), dict)
-        and row["capability"].get("kind") == "shortcut"
-    }
-    if not shortcut_names:
-        return
-    for row in rows:
-        composition_refs = {
-            "todo_skill_refs": [
-                skill_ref_name(ref) for ref in row.get("todo_skill_refs", [])
-            ],
-            "skill_links": [skill_ref_name(ref) for ref in row.get("skill_links", [])],
-            "common_chains": [
-                skill_ref_name(ref)
-                for ref in row.get("common_chains", {}).get("after", [])
-            ],
-        }
-        targeted = {
-            field: sorted(set(refs) & shortcut_names)
-            for field, refs in composition_refs.items()
-            if set(refs) & shortcut_names
-        }
-        if targeted:
-            details = "; ".join(
-                f"{field}={','.join(refs)}" for field, refs in targeted.items()
-            )
-            source_path = repo_root / row["path"]
-            raise RegistryError(
-                f"{source_path}: composition must not target explicit-only shortcut "
-                f"skill(s) ({details})"
-            )
-
-    for row in rows:
-        capability = row.get("capability")
-        if not isinstance(capability, dict) or capability.get("kind") != "shortcut":
-            continue
-        composition_refs = {
-            "todo_skill_refs": [
-                skill_ref_name(ref) for ref in row.get("todo_skill_refs", [])
-            ],
-            "skill_links": [skill_ref_name(ref) for ref in row.get("skill_links", [])],
-            "common_chains": [
-                skill_ref_name(ref)
-                for ref in row.get("common_chains", {}).get("after", [])
-            ],
-        }
-        populated = {
-            field: sorted(set(refs))
-            for field, refs in composition_refs.items()
-            if refs
-        }
-        if populated:
-            details = "; ".join(
-                f"{field}={','.join(refs)}" for field, refs in populated.items()
-            )
-            source_path = repo_root / row["path"]
-            raise RegistryError(
-                f"{source_path}: explicit-only shortcut must be a composition leaf; "
-                f"remove outbound composition refs ({details})"
-            )
 
 
 def validate_todos_hierarchy(repo_root: Path, rows: list[dict[str, Any]]) -> None:
@@ -469,7 +400,10 @@ def build_registry(repo_root: Path) -> list[dict[str, Any]]:
         rows.append(row)
 
     attach_todo_skill_refs(repo_root, rows)
-    validate_shortcut_composition_leaves(repo_root, rows)
+    try:
+        validate_shortcut_composition_leaves(repo_root, rows)
+    except SkillCompositionError as exc:
+        raise RegistryError(str(exc)) from exc
     validate_common_chain_refs(rows)
     validate_todos_hierarchy(repo_root, rows)
     return rows
