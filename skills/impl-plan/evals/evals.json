@@ -151,11 +151,6 @@
             "functional-ui",
             "visual-design",
             "context-reuse"
-          ],
-          "anti_patterns": [
-            "Reruns UX or visual design despite accepted context",
-            "Adds a second ticket schema for one design heuristic",
-            "Reintroduces deferred complexity through an implementation plan"
           ]
         }
       }
@@ -171,7 +166,17 @@
         "Blocks unsupported claims instead of inventing buyer language",
         "Does not call the unapproved dossier build-ready"
       ],
-      "metadata": {"farplane": {"title": "Impl plan makes buyer-facing ASCII copy-complete", "tags": ["skill", "impl-plan", "design-baseline", "copy"]}}
+      "metadata": {
+        "farplane": {
+          "title": "Impl plan makes buyer-facing ASCII copy-complete",
+          "tags": [
+            "skill",
+            "impl-plan",
+            "design-baseline",
+            "copy"
+          ]
+        }
+      }
     }
   ]
 }

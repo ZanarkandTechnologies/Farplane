@@ -20,11 +20,6 @@
             "avatar-advisor",
             "content-video",
             "continuity"
-          ],
-          "anti_patterns": [
-            "Uses one generic avatar prompt",
-            "Ignores wardrobe, framing, voice, or retake criteria",
-            "Lets avatar generation own final editing"
           ]
         }
       }
@@ -48,11 +43,6 @@
             "avatar-advisor",
             "likeness",
             "lipsync"
-          ],
-          "anti_patterns": [
-            "Uses the real person's likeness without a consent note",
-            "Ignores voice or lipsync requirements",
-            "Treats the request as ordinary image-to-video"
           ]
         }
       }

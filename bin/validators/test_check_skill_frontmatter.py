@@ -67,7 +67,7 @@ capability:
             )
 
             report = check_skill_frontmatter.artifact_contract_report(
-                check_skill_frontmatter.load_skill_frontmatter(root)
+                check_skill_frontmatter.load_skill_contracts(root)
             )
 
         self.assertEqual(report["artifact_dependencies"], 1)
@@ -80,7 +80,7 @@ capability:
             write_skill(root, "writer", "invented_field: no")
 
             with self.assertRaisesRegex(check_skill_frontmatter.FrontmatterLintError, "Extra inputs"):
-                check_skill_frontmatter.load_skill_frontmatter(root)
+                check_skill_frontmatter.load_skill_contracts(root)
 
     def test_rejects_two_skills_that_claim_the_same_output_family(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -91,7 +91,7 @@ capability:
             write_skill(root, "writer-one", capability)
             write_skill(root, "writer-two", capability)
 
-            rows = check_skill_frontmatter.load_skill_frontmatter(root)
+            rows = check_skill_frontmatter.load_skill_contracts(root)
             with self.assertRaisesRegex(check_skill_frontmatter.FrontmatterLintError, "one producing skill"):
                 check_skill_frontmatter.artifact_contract_report(rows)
 

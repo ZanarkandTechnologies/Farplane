@@ -62,23 +62,10 @@ def convert_task(row: dict[str, Any], path: Path) -> dict[str, Any]:
     if not isinstance(files, list) or not all(isinstance(item, str) and item.strip() for item in files):
         raise MigrationError(f"{path}: task {task_id} files must be strings")
 
-    metadata: dict[str, Any] = {}
     farplane: dict[str, Any] = {}
     for field in ("title", "context", "tags", "notes"):
         if field in row:
             farplane[field] = row[field]
-    for field, value in row.items():
-        if field not in {
-            "id",
-            "query",
-            expectation_field,
-            "expected_output",
-            "files",
-            *farplane,
-        }:
-            farplane[field] = value
-    if farplane:
-        metadata["farplane"] = farplane
 
     converted: dict[str, Any] = {
         "id": task_id,
@@ -87,8 +74,8 @@ def convert_task(row: dict[str, Any], path: Path) -> dict[str, Any]:
         "files": [item.strip() for item in files],
         "assertions": assertions,
     }
-    if metadata:
-        converted["metadata"] = metadata
+    if farplane:
+        converted["metadata"] = {"farplane": farplane}
     return converted
 
 

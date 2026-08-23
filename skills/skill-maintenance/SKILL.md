@@ -93,7 +93,8 @@ returns: updated skill or audit, validation evidence, and review result or block
   `changed package -> registry-consistent evidence | repair`
 
   Rule: Regenerate registries and run focused JSON, link, config, fixture, and
-  eval checks; never hand-edit generated state.
+  eval checks; when an eval changes, run `farplane lint evals --changed` before
+  behavior proof. Never hand-edit generated state.
 
   Assert:
   - Template versions match actual structure.

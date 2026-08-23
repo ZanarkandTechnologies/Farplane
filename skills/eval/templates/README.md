@@ -99,9 +99,6 @@ stderr, final output, command/usage summary, checkpoint score, produced-file
 inventory, and optional schema validation in each task receipt. It composes
 with baseline comparison and requires `--max-parallel-tasks 1` so file deltas
 remain attributable. Use Agent QA for native-subagent-only capture.
-Skill-local rows may declare hidden
-`metadata.farplane.behavior_requirements.required_successful_command_regexes`;
-the trace then fails unless every pattern matches a completed zero-exit command.
 
 Before a material stochastic promotion, pass two or more comparable summaries
 to `reliability`. `stable_pass` requires every strict grade and behavior trace

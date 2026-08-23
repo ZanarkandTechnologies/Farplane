@@ -6,7 +6,6 @@ TARGET_DIR="$HOME/.codex"
 TARGET_DIR_SET=0
 SKILLS_ONLY=0
 SKILL_INSTALL_ARGS=()
-
 usage() {
   cat <<'EOF'
 Usage:
@@ -140,7 +139,6 @@ INSTALL_HOOK_FILES=(
   final_response_gate.py
   farplane_console_ping.py
   skill_file_line_gate.py
-  shared_checkout_guard.py
 )
 RETIRED_INSTALL_PATHS=(
   bin/ticket_runtime.py
@@ -150,8 +148,6 @@ RETIRED_INSTALL_PATHS=(
   bin/farplane_invocation.py
   bin/runtime_telemetry.py
   bin/user_turn.py
-  skills/pr-runtime
-  skills/farplane-invocation
   bin/file_growth_hook.py
   hooks/farplane_file_change.py
   hooks/farplane_local_event.py
@@ -169,7 +165,8 @@ if [ "$SKILLS_ONLY" -eq 1 ]; then
 fi
 
 render_config() {
-  local skill_profile_matrix="${1:-}"
+  local config_template="${1:-$REPO_DIR/config.toml.example}"
+  local skill_profile_matrix="${2:-}"
   if [ -e "$TARGET_DIR/config.toml" ]; then
     python3 - "$TARGET_DIR/config.toml" "$LOCAL_TOML_FILE" "$LOCAL_TOML_MARKER" <<'PY'
 from pathlib import Path
@@ -238,7 +235,7 @@ PY
     cp "$TARGET_DIR/config.toml" "$BACKUP_ROOT/config.toml"
   fi
 
-  python3 - "$REPO_DIR/config.toml.example" "$TARGET_DIR/config.toml" "$LOCAL_TOML_FILE" "$TARGET_DIR" "$skill_profile_matrix" <<'PY'
+  python3 - "$config_template" "$TARGET_DIR/config.toml" "$LOCAL_TOML_FILE" "$TARGET_DIR" "$REPO_DIR" "$skill_profile_matrix" <<'PY'
 from pathlib import Path
 import os
 import re
@@ -248,8 +245,8 @@ template_path = Path(sys.argv[1])
 output_path = Path(sys.argv[2])
 local_toml_path = Path(sys.argv[3])
 target_dir = sys.argv[4]
-repo_dir = template_path.parent
-skill_profile_matrix_path = Path(sys.argv[5]) if sys.argv[5] else None
+repo_dir = Path(sys.argv[5])
+skill_profile_matrix_path = Path(sys.argv[6]) if sys.argv[6] else None
 core_dir = repo_dir / "bin" / "core"
 if str(core_dir) not in sys.path:
     sys.path.insert(0, str(core_dir))
@@ -442,8 +439,8 @@ trap cleanup_profile_render EXIT
 echo "Installing Codex harness from $REPO_DIR to $TARGET_DIR"
 
 mkdir -p "$TARGET_DIR" "$TARGET_DIR/agents" "$TARGET_DIR/skills" "$TARGET_DIR/rules" "$TARGET_DIR/bin" "$TARGET_DIR/hooks" "$TARGET_DIR/docs/review"
-
 render_skill_profiles
+
 for relative in "${RETIRED_INSTALL_PATHS[@]}"; do
   retired_path="$TARGET_DIR/$relative"
   if [ -e "$retired_path" ] || [ -L "$retired_path" ]; then
@@ -457,7 +454,7 @@ done
 if [ "$REPO_DIR" = "$(cd "$TARGET_DIR" && pwd)" ]; then
   echo "Repo is already the live Codex home. Skipping symlink install."
   install_rendered_skill_profiles
-  render_config "$PROFILE_RENDER_DIR/base.config.toml"
+  render_config "" "$PROFILE_RENDER_DIR/base.config.toml"
   link_global_cli "$TARGET_DIR/bin/farplane"
 
   echo "Done."
@@ -499,7 +496,7 @@ for rule_file in "$REPO_DIR"/rules/*; do
   link_path "$rule_file" "$TARGET_DIR/rules/$(basename "$rule_file")"
 done
 
-render_config "$PROFILE_RENDER_DIR/base.config.toml"
+render_config "" "$PROFILE_RENDER_DIR/base.config.toml"
 
 echo "Done."
 echo "Next: prefer runtime env for secrets (for example: doppler run -- farplane install); use ~/.farplane/config.toml only as a private fallback/cache."

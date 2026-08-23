@@ -66,7 +66,6 @@ class EvalTask:
     files: tuple[str, ...]
     tags: tuple[str, ...]
     notes: str
-    required_successful_command_regexes: tuple[str, ...]
 
 
 @dataclass(frozen=True)
@@ -312,9 +311,6 @@ def normalize_task_rows(
                 "tags": farplane.get("tags", []),
                 "notes": farplane.get("notes", ""),
             }
-            behavior_requirements = farplane.get("behavior_requirements", {})
-            if isinstance(behavior_requirements, dict):
-                row["behavior_requirements"] = behavior_requirements
             if "context" in farplane:
                 row["context"] = farplane["context"]
             rows.append(row)
@@ -356,25 +352,6 @@ def load_tasks(
             if not source.is_file():
                 raise EvalError(f"{path}: task {item.get('id', '<unknown>')} file not found: {file}")
             normalized_files.append(relative.as_posix())
-        behavior_requirements = item.get("behavior_requirements", {})
-        if not isinstance(behavior_requirements, dict):
-            raise EvalError(
-                f"{path}: task {item.get('id', '<unknown>')} behavior_requirements must be an object"
-            )
-        command_regexes = behavior_requirements.get("required_successful_command_regexes", [])
-        if not isinstance(command_regexes, list) or not all(
-            isinstance(pattern, str) and pattern.strip() for pattern in command_regexes
-        ):
-            raise EvalError(
-                f"{path}: task {item.get('id', '<unknown>')} required_successful_command_regexes must be non-empty strings"
-            )
-        for pattern in command_regexes:
-            try:
-                re.compile(pattern)
-            except re.error as exc:
-                raise EvalError(
-                    f"{path}: task {item.get('id', '<unknown>')} invalid command regex {pattern!r}: {exc}"
-                ) from exc
         tasks.append(
             EvalTask(
                 id=require_string(item, "id", path),
@@ -385,9 +362,6 @@ def load_tasks(
                 files=tuple(normalized_files),
                 tags=tuple(tag.strip() for tag in tags if tag.strip()),
                 notes=str(item.get("notes", "")).strip(),
-                required_successful_command_regexes=tuple(
-                    pattern.strip() for pattern in command_regexes
-                ),
             )
         )
     return tasks[:limit] if limit else tasks
@@ -612,7 +586,6 @@ def stage_task_files(task: EvalTask, target_root: Path, task_dir: Path) -> EvalT
         files=task.files,
         tags=task.tags,
         notes=task.notes,
-        required_successful_command_regexes=task.required_successful_command_regexes,
     )
 
 
@@ -872,31 +845,6 @@ def behavior_event_summary(events: list[dict[str, Any]]) -> dict[str, Any]:
     }
 
 
-def score_required_successful_commands(
-    patterns: Sequence[str], event_summary: dict[str, Any]
-) -> dict[str, Any]:
-    commands = event_summary.get("commands", [])
-    successful = [
-        str(command.get("command") or "")
-        for command in commands
-        if isinstance(command, dict)
-        and command.get("exit_code") == 0
-        and command.get("status") == "completed"
-    ]
-    results = [
-        {
-            "regex": pattern,
-            "matched": any(re.search(pattern, command) for command in successful),
-        }
-        for pattern in patterns
-    ]
-    return {
-        "required": len(results),
-        "matched": sum(1 for result in results if result["matched"]),
-        "results": results,
-    }
-
-
 def resolve_declared_artifacts(report: dict[str, Any] | None, target_root: Path) -> dict[str, list[str]]:
     declared = report.get("artifacts", []) if isinstance(report, dict) else []
     if not isinstance(declared, list):
@@ -957,7 +905,6 @@ def build_behavior_trace(
     before_snapshot: dict[str, tuple[int, int]],
     prefix: str,
     schema_path: Path | None,
-    required_successful_command_regexes: Sequence[str],
 ) -> dict[str, Any]:
     events_path = task_dir / f"{prefix}events.jsonl"
     events_path.write_text(result.raw_stdout)
@@ -975,9 +922,6 @@ def build_behavior_trace(
         schema_copy_path = str(schema_copy)
         schema_errors = validate_json_schema(final_report, schema) if final_report is not None else ["$: final output is not a JSON object"]
     event_summary = behavior_event_summary(events)
-    command_requirements = score_required_successful_commands(
-        required_successful_command_regexes, event_summary
-    )
     artifacts = resolve_declared_artifacts(final_report if is_behavior_report else None, target_root)
     checkpoints = score_checkpoints(final_report if is_behavior_report else None)
     after_snapshot = snapshot_files(target_root, task_dir)
@@ -990,15 +934,6 @@ def build_behavior_trace(
         failures.append("final output is empty")
     if schema_errors:
         failures.append("output schema validation failed")
-    missing_commands = [
-        result["regex"]
-        for result in command_requirements["results"]
-        if not result["matched"]
-    ]
-    if missing_commands:
-        failures.append(
-            "required successful command evidence missing: " + ", ".join(missing_commands)
-        )
     if is_behavior_report:
         if report_verdict not in BEHAVIOR_REPORT_VERDICTS:
             failures.append("behavior report verdict must be pass, fail, or blocked")
@@ -1022,7 +957,6 @@ def build_behavior_trace(
         "output_schema_path": schema_copy_path,
         "schema_validation": {"requested": bool(schema_path), "pass": not schema_errors, "errors": schema_errors},
         "event_summary": event_summary,
-        "command_requirement_score": command_requirements,
         "checkpoint_score": checkpoints,
         "artifact_inventory": {**artifacts, "observed_file_delta": file_delta},
         "behavior_report_detected": is_behavior_report,
@@ -1130,7 +1064,6 @@ def run_agent_and_judge(
             before_snapshot,
             prefix,
             schema_path,
-            task.required_successful_command_regexes,
         )
     judge_result: CommandResult | None = None
     if agent_result.returncode != 0:

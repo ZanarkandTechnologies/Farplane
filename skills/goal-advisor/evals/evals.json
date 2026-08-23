@@ -263,7 +263,17 @@
         "Requires tree mutation before the matching progress receipt after each experiment",
         "Does not duplicate a frontier, children, depth, rank, tournament, or numeric scorer"
       ],
-      "metadata": {"farplane": {"title": "Goal Advisor compiles the experiment backbone", "tags": ["skill", "goal-advisor", "hypothesis-tree"], "notes": "Protects conditional tree instantiation and state ownership."}}
+      "metadata": {
+        "farplane": {
+          "title": "Goal Advisor compiles the experiment backbone",
+          "tags": [
+            "skill",
+            "goal-advisor",
+            "hypothesis-tree"
+          ],
+          "notes": "Protects conditional tree instantiation and state ownership."
+        }
+      }
     },
     {
       "id": "goal_advisor_rejects_plausible_incoherent_packet_01",
@@ -281,7 +291,12 @@
       "metadata": {
         "farplane": {
           "title": "Goal Advisor rejects a polished but semantically incoherent packet",
-          "tags": ["skill", "goal-advisor", "hardcase", "semantic-coherence"],
+          "tags": [
+            "skill",
+            "goal-advisor",
+            "regression",
+            "semantic-coherence"
+          ],
           "notes": "Prevents good-looking Goal programs from launching with contradictory paths, stale refs, or unprovable Done claims."
         }
       }
@@ -301,7 +316,12 @@
       "metadata": {
         "farplane": {
           "title": "Goal Advisor compiles a coherent backend contract into assertion closure",
-          "tags": ["skill", "goal-advisor", "completion-closure", "backend"],
+          "tags": [
+            "skill",
+            "goal-advisor",
+            "completion-closure",
+            "backend"
+          ],
           "notes": "Positive control for the semantic program contract."
         }
       }
@@ -317,7 +337,17 @@
         "Requires newer comparable capture and independent verdict",
         "Blocks completion until the evidence is resolved"
       ],
-      "metadata": {"farplane": {"title": "Screenshot complaints are completion-blocking proof obligations", "tags": ["skill", "goal-advisor", "complaint", "completion-closure"]}}
+      "metadata": {
+        "farplane": {
+          "title": "Screenshot complaints are completion-blocking proof obligations",
+          "tags": [
+            "skill",
+            "goal-advisor",
+            "complaint",
+            "completion-closure"
+          ]
+        }
+      }
     }
   ]
 }

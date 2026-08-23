@@ -27,10 +27,10 @@ surfaces:
   - skills/manage-wiki/SKILL.md
 source_refs:
   - tickets/TASK-0438/ticket.md
-  - tickets/TASK-0441/ticket.md
   - tickets/archive/TASK-0395/ticket.md
   - tickets/archive/TASK-0399/ticket.md
-external_refs: []
+external_refs:
+  - https://github.com/ZanarkandTechnologies/Farplane/issues/13
 evidence_refs:
   - bin/tests/test_farplane_wiki.py
   - bin/tests/test_farplane_entities.py

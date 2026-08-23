@@ -262,7 +262,7 @@
       "Uses a repo-owned eval task suite such as skills/eval/examples/farplane-global-harness/tasks.json for project-level Codex/system-prompt behavior instead of storing project evals under a local .codex directory",
       "Keeps the eval query as a realistic user prompt and puts proactive expectations in reference_points",
       "Runs structural validation for the eval task file and reports any skipped behavior-test or QA-test run reason",
-      "Marks hardcase metadata only when the case is unusually difficult, reusable, benchmark-worthy, or saleable after sanitization"
+      "Keeps unusually difficult, reusable cases as normal runnable regressions after sanitization"
     ],
     "tags": [
       "system-prompt",
@@ -274,12 +274,12 @@
   {
     "id": "global_multitopic_focus_01",
     "title": "Start with a goal alignment header in a multitopic thread",
-    "query": "We are juggling the global AGENTS rewrite, the eval suite location, and hardcase metadata for runnable evals. Answer the hardcase question, then tell me what behavior we still need to add to AGENTS.md.",
+    "query": "We are juggling the global AGENTS rewrite, the eval suite location, and difficult runnable regressions. Resolve that question, then tell me what behavior we still need to add to AGENTS.md.",
     "reference_points": [
       "Starts the substantial reply with `Goal:` and names the inferred user goal or current task, not only the newest topic",
-      "Uses the goal line as an alignment check for the user's intent across global AGENTS behavior, eval suite location, and hardcase metadata semantics",
-      "Answers the newest hardcase question directly before drifting into older work",
-      "Explains that hardcase is eval metadata for a runnable eval case when expected behavior is testable",
+      "Uses the goal line as an alignment check for the user's intent across global AGENTS behavior, eval suite location, and runnable regression semantics",
+      "Answers the newest difficult-regression question directly before drifting into older work",
+      "Explains that a difficult reusable case belongs in the normal runnable suite and its expected behavior belongs in assertions",
       "Explains that high-priority corrected misses should create or update eval coverage immediately when the expected behavior is clear",
       "Identifies the AGENTS.md behavior still needed as goal alignment handling for long, multitopic, ambiguous, or substantial replies",
       "Suggests splitting independently executable or context-heavy tangents into separate threads with short handoffs when appropriate",
@@ -291,16 +291,16 @@
       "multitopic",
       "focus"
     ],
-    "notes": "Tests whether long-thread responses expose the inferred user goal early so the user can correct misalignment before the agent gets lost across parallel prompt, eval, and hardcase work."
+    "notes": "Tests whether long-thread responses expose the inferred user goal early so the user can correct misalignment before the agent gets lost across parallel prompt, eval, and difficult-regression work."
   },
   {
     "id": "global_thread_ledger_return_01",
     "title": "Return to the original main topic after a tangent",
-    "query": "We started by slimming the global AGENTS prompt. Then we detoured into eval placement, correction hardcases, validator hardcases, and README positioning. Summarize the current answer, then tell me what is still left from the original AGENTS.md work and whether any tangent should be split into a new thread.",
+    "query": "We started by slimming the global AGENTS prompt. Then we detoured into eval placement, correction regressions, validator regressions, and README positioning. Summarize the current answer, then tell me what is still left from the original AGENTS.md work and whether any tangent should be split into a new thread.",
     "reference_points": [
       "Starts with `Goal:` and names the inferred user goal or current task rather than only the newest topic",
       "Connects the goal line to the original global AGENTS prompt work as the main or root objective",
-      "Mentions tangents such as eval placement, hardcase metadata, validator hardcases, and README or feature registry positioning only as they affect the goal",
+      "Mentions tangents such as eval placement, difficult regressions, validator cases, and README or feature registry positioning only as they affect the goal",
       "Answers the newest request without losing the original AGENTS.md objective",
       "Identifies what remains hanging from the original AGENTS.md work",
       "Recommends splitting independently executable or context-heavy follow-ups into new threads with short handoffs",
@@ -379,25 +379,25 @@
     "notes": "Stage 1 Farplane eval rollout case for self-improve: baseline and binary assertions must exist before any target skill mutation or live hook health work."
   },
   {
-    "id": "global_validator_hardcase_capture_01",
-    "title": "Capture validator-detected skill contract violations as hardcases",
+    "id": "global_validator_regression_capture_01",
+    "title": "Capture validator-detected skill contract violations as regressions",
     "query": "A skill-maintenance check fails because a Tier 2 skill todo list direct-links a peer Tier 2 skill. Fix the checklist and make sure this kind of miss becomes future eval material.",
     "reference_points": [
       "Recognizes the tier-check failure as a clear skill todo contract violation",
       "Fixes or proposes the checklist routing through the correct owning tier surface instead of only suppressing the validator",
       "Reruns the skill-maintenance validation after the fix",
-      "Captures or verifies a sanitized hardcase-marked eval case for the validator-detected violation when the expected behavior is testable",
-      "Explains that hardcase is eval metadata, not a separate backlog",
+      "Captures or verifies a sanitized runnable regression for the validator-detected violation when the expected behavior is testable",
+      "Explains that a difficult reusable case is a normal runnable regression, not a separate backlog",
       "Proposes or adds a narrow regression eval when the pattern is high priority or repeatable",
-      "Reports the hardcase path, validation result, and any eval task path or skipped-eval reason"
+      "Reports the candidate path, validation result, and any eval task path or skipped-eval reason"
     ],
     "tags": [
       "system-prompt",
       "skill-maintenance",
-      "hardcase",
+      "regression",
       "validator"
     ],
-    "notes": "Tests that deterministic validator failures become hardcase/eval material instead of disappearing after the immediate fix."
+    "notes": "Tests that deterministic validator failures become runnable regression/eval material instead of disappearing after the immediate fix."
   },
   {
     "id": "global_independent_reasoning_before_agreement_01",

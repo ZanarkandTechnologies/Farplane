@@ -35,20 +35,14 @@ class InstallBinSurfaceTests(unittest.TestCase):
                 "bin/farplane_invocation.py",
                 "bin/runtime_telemetry.py",
                 "bin/user_turn.py",
-                "skills/pr-runtime",
-                "skills/farplane-invocation",
             }.issubset(retired)
         )
+        self.assertFalse(any(path.startswith("skills/") for path in retired))
 
     def test_installed_hook_allowlist_contains_managed_hooks(self) -> None:
         self.assertEqual(
             shell_array("INSTALL_HOOK_FILES"),
-            (
-                "final_response_gate.py",
-                "farplane_console_ping.py",
-                "skill_file_line_gate.py",
-                "shared_checkout_guard.py",
-            ),
+            ("final_response_gate.py", "farplane_console_ping.py", "skill_file_line_gate.py"),
         )
 
     def test_install_blocks_linked_worktree_sources(self) -> None:

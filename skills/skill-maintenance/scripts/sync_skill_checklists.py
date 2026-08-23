@@ -35,23 +35,16 @@ def find_repo_root(start: Path) -> Path:
     raise ChecklistError("could not find Farplane repo root")
 
 
-def parse_frontmatter(path: Path) -> dict[str, str]:
-    text = path.read_text(encoding="utf-8")
-    if not text.startswith("---\n"):
-        raise ChecklistError(f"{path}: missing frontmatter")
-    end = text.find("\n---", 4)
-    if end == -1:
-        raise ChecklistError(f"{path}: unterminated frontmatter")
+def parse_frontmatter(path: Path) -> dict[str, object]:
+    try:
+        repo_root = find_repo_root(path)
+        if str(repo_root) not in sys.path:
+            sys.path.insert(0, str(repo_root))
+        from bin.core.lint.source import MarkdownFrontmatterError, parse_markdown_frontmatter
 
-    metadata: dict[str, str] = {}
-    for raw_line in text[4:end].splitlines():
-        if not raw_line.strip() or raw_line.startswith(" "):
-            continue
-        if ":" not in raw_line:
-            continue
-        key, value = raw_line.split(":", 1)
-        metadata[key.strip()] = value.strip().strip("\"'")
-    return metadata
+        return parse_markdown_frontmatter(path, required=True) or {}
+    except (MarkdownFrontmatterError, OSError, UnicodeDecodeError) as exc:
+        raise ChecklistError(str(exc)) from exc
 
 
 def strip_source_line(checklist_text: str) -> str:

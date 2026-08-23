@@ -66,6 +66,27 @@ class CheckTicketMetadataTest(unittest.TestCase):
             self.assertTrue(errors)
             self.assertIn("session_id must not appear in frontmatter", "\n".join(errors))
 
+    def test_validator_rejects_h1_that_does_not_match_ticket_identity(self) -> None:
+        with tempfile.TemporaryDirectory(dir=ROOT) as tmpdir:
+            path = Path(tmpdir) / "TASK-9999" / "ticket.md"
+            write_file(path, VALID_TICKET_TEXT.replace("# TASK-9999: valid ticket", "# Plan"))
+            errors = self.ticket_metadata.validate_ticket(path)
+
+        self.assertIn("H1 must be exactly", "\n".join(errors))
+
+    def test_validator_uses_yaml_string_semantics_for_quoted_titles(self) -> None:
+        with tempfile.TemporaryDirectory(dir=ROOT) as tmpdir:
+            path = Path(tmpdir) / "TASK-9999" / "ticket.md"
+            write_file(
+                path,
+                VALID_TICKET_TEXT.replace("title: valid ticket", 'title: "valid ticket"').replace(
+                    "# TASK-9999: valid ticket", '# TASK-9999: "valid ticket"'
+                ),
+            )
+            errors = self.ticket_metadata.validate_ticket(path)
+
+        self.assertIn("H1 must be exactly '# TASK-9999: valid ticket'", "\n".join(errors))
+
     def test_validator_rejects_a_task_thread_bound_to_multiple_tickets(self) -> None:
         with tempfile.TemporaryDirectory(dir=ROOT) as tmpdir:
             root = Path(tmpdir)
@@ -103,6 +124,27 @@ class CheckTicketMetadataTest(unittest.TestCase):
             )
             errors = self.ticket_metadata.validate_ticket(path)
             self.assertEqual(errors, [])
+
+    def test_validator_accepts_true_ui_scope(self) -> None:
+        with tempfile.TemporaryDirectory(dir=ROOT) as tmpdir:
+            root = Path(tmpdir)
+            path = root / "TASK-9999" / "ticket.md"
+            write_file(
+                path,
+                VALID_TICKET_TEXT.replace("priority: medium\n", "priority: medium\nui_scope: true\n"),
+            )
+            self.assertEqual(self.ticket_metadata.validate_ticket(path), [])
+
+    def test_validator_rejects_false_ui_scope(self) -> None:
+        with tempfile.TemporaryDirectory(dir=ROOT) as tmpdir:
+            root = Path(tmpdir)
+            path = root / "TASK-9999" / "ticket.md"
+            write_file(
+                path,
+                VALID_TICKET_TEXT.replace("priority: medium\n", "priority: medium\nui_scope: false\n"),
+            )
+            errors = self.ticket_metadata.validate_ticket(path)
+            self.assertIn("ui_scope must be true when present", "\n".join(errors))
 
     def test_validator_accepts_timezone_bearing_due_at_or_absence(self) -> None:
         for due_at in (None, "2026-04-10T09:00:00Z", "2026-04-10T17:00:00+08:00"):

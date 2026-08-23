@@ -98,30 +98,26 @@
       }
     },
     {
-      "id": "eval_hardcase_metadata_01",
-      "prompt": "This AGI Toy Shop agent failure was unusually hard and benchmark-worthy: it created a duplicate skill instead of extending the existing proof workflow. Save it as a hardcase so it does not regress.",
-      "expected_output": "Creates or proposes a normal runnable eval task instead of a separate raw hardcase backlog; Adds hardcase metadata such as hardcase, difficulty, benchmark value, and sanitization notes; Keeps the expected behavior visible through reference_points; Removes or avoids private transcript details and live user paths; Chooses skill-local or project-level placement based on the behavior owner",
+      "id": "eval_difficult_regression_01",
+      "prompt": "This AGI Toy Shop agent failure created a duplicate skill instead of extending the existing proof workflow. Capture it as a runnable regression so it does not recur.",
+      "expected_output": "Creates or proposes a normal runnable eval task instead of a separate raw failure backlog; Keeps the expected behavior in assertions; Removes or avoids private transcript details and live user paths; Chooses skill-local or project-level placement based on the behavior owner",
       "files": [],
       "assertions": [
-        "Creates or proposes a normal runnable eval task instead of a separate raw hardcase backlog",
-        "Adds hardcase metadata such as hardcase, difficulty, benchmark value, and sanitization notes",
-        "Keeps the expected behavior visible through reference_points",
+        "Creates or proposes a normal runnable eval task instead of a separate raw failure backlog",
+        "Keeps the expected behavior in assertions",
         "Removes or avoids private transcript details and live user paths",
         "Chooses skill-local or project-level placement based on the behavior owner"
       ],
       "metadata": {
         "farplane": {
-          "title": "Eval skill captures hardcases as runnable evals",
+          "title": "Eval skill captures difficult regressions as runnable evals",
           "tags": [
             "skill",
             "eval",
-            "hardcase"
+            "regression"
           ],
-          "notes": "Protects the TASK-0190 direction that hardcase is eval metadata on a runnable case.",
-          "hardcase": true,
-          "difficulty": "high",
-          "benchmark_value": "Tests whether eval hardcases remain runnable proof cases with sanitization and owner placement.",
-          "sanitization_notes": "Use clean-room AGI Toy Shop details; do not include raw private transcript text."
+          "notes": "Protects the rule that a reusable regression stays in the runnable suite.",
+          "feature_id": "FEAT-0039"
         }
       }
     },
@@ -188,7 +184,11 @@
       "metadata": {
         "farplane": {
           "title": "Eval owns isolated behavior traces",
-          "tags": ["skill", "eval", "behavior-trace"],
+          "tags": [
+            "skill",
+            "eval",
+            "behavior-trace"
+          ],
           "notes": "Regression coverage for TASK-0384 consolidation."
         }
       }
@@ -208,7 +208,12 @@
       "metadata": {
         "farplane": {
           "title": "Eval preregisters aggregate expectations and audits surprise",
-          "tags": ["skill", "eval", "experiment", "surprise"],
+          "tags": [
+            "skill",
+            "eval",
+            "experiment",
+            "surprise"
+          ],
           "notes": "Protects the difference between hidden grading truth and a pre-run forecast about aggregate behavior."
         }
       }

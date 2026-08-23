@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Lint typed skill frontmatter and report declared artifact-contract coverage."""
+"""Lint complete typed skill-package contracts and their graph inputs."""
 
 from __future__ import annotations
 
@@ -16,7 +16,9 @@ if str(ROOT) not in sys.path:
 
 from bin.core.skill_contract import (  # noqa: E402
     FrontmatterError,
+    normalize_skill_ensemble,
     normalize_skill_frontmatter,
+    parse_skill_ensemble,
     parse_skill_frontmatter,
 )
 
@@ -25,12 +27,30 @@ class FrontmatterLintError(ValueError):
     """Raised when one skill contract would make the artifact graph ambiguous."""
 
 
-def load_skill_frontmatter(root: Path) -> list[tuple[Path, dict[str, Any]]]:
+def load_skill_contracts(root: Path) -> list[tuple[Path, dict[str, Any]]]:
+    """Load each package's required, minimal frontmatter contract from ``SKILL.md``."""
+
     rows: list[tuple[Path, dict[str, Any]]] = []
     for skill_path in sorted((root / "skills").glob("*/SKILL.md")):
         try:
             raw = parse_skill_frontmatter(skill_path)
             rows.append((skill_path, normalize_skill_frontmatter(raw, skill_path)))
+        except FrontmatterError as exc:
+            raise FrontmatterLintError(str(exc)) from exc
+    return rows
+
+
+def load_skill_ensembles(root: Path) -> list[tuple[Path, dict[str, Any]]]:
+    """Load optional persona sidecars through the same typed package linter."""
+
+    rows: list[tuple[Path, dict[str, Any]]] = []
+    for path in sorted((root / "skills").glob("*/ensemble.yaml")):
+        if not (path.parent / "SKILL.md").is_file():
+            raise FrontmatterLintError(
+                f"{path}: ensemble sidecar requires its package's SKILL.md"
+            )
+        try:
+            rows.append((path, normalize_skill_ensemble(parse_skill_ensemble(path), path)))
         except FrontmatterError as exc:
             raise FrontmatterLintError(str(exc)) from exc
     return rows
@@ -88,6 +108,16 @@ def artifact_contract_report(rows: list[tuple[Path, dict[str, Any]]]) -> dict[st
     }
 
 
+def ensemble_contract_report(rows: list[tuple[Path, dict[str, Any]]]) -> dict[str, int]:
+    """Summarize validated package-local ensemble coverage without projecting prompts."""
+
+    ensembles = [metadata for _path, metadata in rows]
+    return {
+        "ensemble_packages": len(ensembles),
+        "ensemble_personas": sum(len(ensemble["personas"]) for ensemble in ensembles),
+    }
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", type=Path, default=ROOT, help="Farplane repository root")
@@ -95,8 +125,9 @@ def main() -> int:
     args = parser.parse_args()
 
     try:
-        rows = load_skill_frontmatter(args.root.resolve())
+        rows = load_skill_contracts(args.root.resolve())
         report = artifact_contract_report(rows)
+        report.update(ensemble_contract_report(load_skill_ensembles(args.root.resolve())))
     except FrontmatterLintError as exc:
         print(f"skill frontmatter invalid: {exc}", file=sys.stderr)
         return 1
@@ -104,7 +135,8 @@ def main() -> int:
     print(
         "skill frontmatter OK "
         f"({len(rows)} skills, {report['capabilities']} capabilities, "
-        f"{report['artifact_dependencies']} directed artifact dependencies)"
+        f"{report['artifact_dependencies']} directed artifact dependencies, "
+        f"{report['ensemble_packages']} ensembles / {report['ensemble_personas']} personas)"
     )
     print(
         "capability coverage: "

@@ -31,9 +31,9 @@ surfaces:
   - docs/farplane-framework/entity-markdown-authoring.md
 source_refs:
   - tickets/TASK-0438/ticket.md
-  - tickets/TASK-0441/ticket.md
   - docs/features/FEAT-0075-entity-markdown-and-wiki-graph-projection.md
 external_refs:
+  - https://github.com/ZanarkandTechnologies/Farplane/issues/13
   - https://www.sqlite.org/fts5.html
   - https://www.sqlite.org/lang_transaction.html
 evidence_refs:

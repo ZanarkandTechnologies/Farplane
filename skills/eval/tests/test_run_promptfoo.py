@@ -48,9 +48,10 @@ def raw_export(candidate_pass: bool = True, baseline_pass: bool = False) -> dict
 
 
 class PromptfooAdapterTests(unittest.TestCase):
-    def test_manifest_normalizes_string_and_integer_ids_and_expectations(self) -> None:
+    def test_manifest_rejects_legacy_integer_ids_and_expectations_alias(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
-            path = Path(temp) / "evals.json"
+            path = Path(temp) / "sample-skill" / "evals" / "evals.json"
+            path.parent.mkdir(parents=True)
             path.write_text(
                 json.dumps(
                     {
@@ -63,28 +64,49 @@ class PromptfooAdapterTests(unittest.TestCase):
                 ),
                 encoding="utf-8",
             )
-            manifest = runner.load_manifest(path)
+            with self.assertRaisesRegex(runner.AdapterError, "eval contract invalid"):
+                runner.load_manifest(path)
 
-        self.assertEqual([case["id"] for case in manifest["evals"]], ["case-a", "2"])
-        self.assertEqual(manifest["evals"][1]["assertions"], ["B check"])
-        self.assertNotIn("expectations", manifest["evals"][1])
-
-    def test_manifest_rejects_ids_that_collide_after_normalization(self) -> None:
+    def test_manifest_rejects_duplicate_string_ids(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
-            path = Path(temp) / "evals.json"
+            path = Path(temp) / "sample-skill" / "evals" / "evals.json"
+            path.parent.mkdir(parents=True)
             path.write_text(
                 json.dumps(
                     {
                         "skill_name": "sample-skill",
                         "evals": [
-                            {"id": 1, "prompt": "A", "expected_output": "A out"},
-                            {"id": "1", "prompt": "B", "expected_output": "B out"},
+                            {"id": "case-a", "prompt": "A", "expected_output": "A out"},
+                            {"id": "case-a", "prompt": "B", "expected_output": "B out"},
                         ],
                     }
                 ),
                 encoding="utf-8",
             )
-            with self.assertRaisesRegex(runner.AdapterError, "duplicate eval id"):
+            with self.assertRaisesRegex(runner.AdapterError, "eval IDs must be unique"):
+                runner.load_manifest(path)
+
+    def test_manifest_preflight_rejects_unknown_feature_before_workspace_creation(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "sample-skill" / "evals" / "evals.json"
+            path.parent.mkdir(parents=True)
+            path.write_text(
+                json.dumps(
+                    {
+                        "skill_name": "sample-skill",
+                        "evals": [
+                            {
+                                "id": "case-a",
+                                "prompt": "A",
+                                "expected_output": "A out",
+                                "metadata": {"farplane": {"feature_id": "FEAT-9999"}},
+                            }
+                        ],
+                    }
+                ),
+                encoding="utf-8",
+            )
+            with self.assertRaisesRegex(runner.AdapterError, "unknown feature_id"):
                 runner.load_manifest(path)
 
     def test_resolve_under_rejects_path_escape(self) -> None:

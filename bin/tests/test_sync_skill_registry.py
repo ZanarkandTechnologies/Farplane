@@ -31,7 +31,7 @@ methods:
 """,
                 encoding="utf-8",
             )
-            metadata = registry.parse_frontmatter(path)
+            metadata = registry.parse_skill_frontmatter(path)
 
         self.assertEqual(
             registry.normalize_method_contracts(metadata["methods"], "alpha", path),

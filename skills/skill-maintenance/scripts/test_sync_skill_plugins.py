@@ -18,6 +18,7 @@ def write_skill(
     description: str,
     source: str = "local",
     capability: str | None = None,
+    ensemble: str | None = None,
 ) -> None:
     skill_dir = root / "skills" / name
     skill_dir.mkdir(parents=True)
@@ -37,6 +38,8 @@ def write_skill(
         ),
         encoding="utf-8",
     )
+    if ensemble:
+        (skill_dir / "ensemble.yaml").write_text(ensemble, encoding="utf-8")
     (skill_dir / "references").mkdir()
     (skill_dir / "references" / "notes.md").write_text("notes\n", encoding="utf-8")
 
@@ -156,6 +159,34 @@ class SyncSkillPluginsTests(unittest.TestCase):
             )
             self.assertNotIn("farplane-profile-paid-ads", plugins)
             self.assertNotIn("farplane-profile-social-campaign", plugins)
+
+    def test_optional_ensemble_personas_do_not_become_plugin_names(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp)
+            write_skill(
+                repo,
+                "advise",
+                "Recommend a direction.",
+                capability="capability:\n  kind: shortcut",
+                ensemble="""version: 1
+personas:
+    - id: chair
+      name: Chair
+      prompt: Synthesize the decision.
+      focus: [synthesis]
+    - id: operator
+      name: Operator
+      prompt: Optimize for operator value.
+      focus: [value]
+    - id: skeptic
+      name: Skeptic
+      prompt: Challenge weak evidence.
+      focus: [evidence]""",
+            )
+
+            plugins = syncer.build_plugins(syncer.discover_skills(repo / "skills"))
+
+        self.assertEqual([plugin.name for plugin in plugins], ["farplane-shortcuts", "advise"])
 
     def test_sync_generates_marketplace_entries(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

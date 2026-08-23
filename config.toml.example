@@ -15,6 +15,9 @@ notify = ["python3", "__CODEX_HOME__/bin/notify.py"]
 approvals_reviewer = "user"
 service_tier = "fast"
 
+# Runtime capability profiles are separate named restriction policies. They do
+# not derive from per-skill metadata or rewrite this base configuration.
+
 [features]
 multi_agent = true
 

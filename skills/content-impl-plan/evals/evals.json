@@ -13,7 +13,17 @@
         "Editing Advisor and Remotion are not assigned asset selection or generation-route decisions.",
         "Assembly remains blocked until required files and provenance receipts are accepted."
       ],
-      "metadata": {"farplane": {"title": "Routes unresolved production media", "tags": ["skill", "content-impl-plan", "asset-advisor", "ownership"], "anti_patterns": ["Makes the parent choose generators", "Makes Remotion source media", "Omits accepted-file receipts"]}}
+      "metadata": {
+        "farplane": {
+          "title": "Routes unresolved production media",
+          "tags": [
+            "skill",
+            "content-impl-plan",
+            "asset-advisor",
+            "ownership"
+          ]
+        }
+      }
     },
     {
       "id": "content_impl_plan_edit_direction_owner_01",
@@ -27,7 +37,17 @@
         "Asset Advisor is not assigned edit-direction judgment and Remotion does not improvise the recipe.",
         "The action names accepted inputs, primary output, acceptance or blocker state, and the accepted edit recipe as the explicit next handoff to Remotion."
       ],
-      "metadata": {"farplane": {"title": "Routes timed editing direction", "tags": ["skill", "content-impl-plan", "editing-advisor", "ownership"], "anti_patterns": ["Makes Asset Advisor edit", "Lets Remotion select patterns", "Returns vague edit vibes"]}}
+      "metadata": {
+        "farplane": {
+          "title": "Routes timed editing direction",
+          "tags": [
+            "skill",
+            "content-impl-plan",
+            "editing-advisor",
+            "ownership"
+          ]
+        }
+      }
     },
     {
       "id": "content_impl_plan_deterministic_render_owner_01",
@@ -41,7 +61,17 @@
         "Asset Advisor is not reopened and Editing Advisor is not asked to restate an already accepted recipe.",
         "Review or QA judges the resulting evidence independently rather than Remotion self-approving."
       ],
-      "metadata": {"farplane": {"title": "Routes deterministic assembly and rendering", "tags": ["skill", "content-impl-plan", "remotion", "ownership"], "anti_patterns": ["Reopens asset sourcing", "Reselects creative patterns", "Lets renderer self-approve"]}}
+      "metadata": {
+        "farplane": {
+          "title": "Routes deterministic assembly and rendering",
+          "tags": [
+            "skill",
+            "content-impl-plan",
+            "remotion",
+            "ownership"
+          ]
+        }
+      }
     },
     {
       "id": "content_impl_plan_full_sibling_sequence_01",
@@ -55,7 +85,17 @@
         "Editing Advisor solely authors accepted addressed edit direction, while Remotion solely authors timeline implementation, encoded output, and render proof.",
         "Review or QA independently owns the readiness verdict, and every row names its output, blocker or acceptance state, and next handoff."
       ],
-      "metadata": {"farplane": {"title": "Emits the complete sibling production sequence", "tags": ["skill", "content-impl-plan", "orchestration", "ownership"], "anti_patterns": ["Nests editing under assets", "Nests Remotion under editing", "Duplicates child authorship in the parent"]}}
+      "metadata": {
+        "farplane": {
+          "title": "Emits the complete sibling production sequence",
+          "tags": [
+            "skill",
+            "content-impl-plan",
+            "orchestration",
+            "ownership"
+          ]
+        }
+      }
     },
     {
       "id": "content_impl_plan_mixed_asset_edit_boundary_01",
@@ -69,7 +109,18 @@
         "Does not make Asset Advisor judge the caption pattern or Editing Advisor source the missing media.",
         "Keeps Remotion blocked until the required media bundle and edit direction are accepted."
       ],
-      "metadata": {"farplane": {"title": "Splits mixed asset and editing work", "tags": ["skill", "content-impl-plan", "asset-advisor", "editing-advisor", "boundary"], "anti_patterns": ["Makes one advisor own both outputs", "Treats a chart as a full scene", "Renders before both handoffs"]}}
+      "metadata": {
+        "farplane": {
+          "title": "Splits mixed asset and editing work",
+          "tags": [
+            "skill",
+            "content-impl-plan",
+            "asset-advisor",
+            "editing-advisor",
+            "boundary"
+          ]
+        }
+      }
     }
   ]
 }

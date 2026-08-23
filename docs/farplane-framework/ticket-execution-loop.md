@@ -239,8 +239,10 @@ boundary:
   according to the ticket's `QA Strategy`.
 - `review` defines TAS semantics and rubric families; the native `reviewer`
   lane supplies independent judgment and writes or returns receipts.
-- `doc-advisor`, `update-memory`, and `close-ticket` handle durable writeback
-  after proof exists.
+- `skill-maintenance`, `doc-advisor`, `manage-wiki`, and `close-ticket` handle
+  owner-correct durable writeback after proof exists: reusable operational
+  procedures become skills, project knowledge becomes project docs, and sourced
+  entities become Wiki articles.
 
 `qa_checklist.md` files are self/preflight/repair guardrails and reviewer
 ammunition, not acceptance forms. The typed `reviewer` lane owns checklist

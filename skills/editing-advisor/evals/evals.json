@@ -12,7 +12,17 @@
         "Selects one timing master and emits frame- or time-addressed operations with parameters, dependencies, owners, and acceptance checks.",
         "Routes deterministic implementation and rendered frame/range proof to the renderer instead of claiming the advisory packet is final output."
       ],
-      "metadata": {"farplane": {"title": "Compiles reusable Vox-style patterns into a restrained edit recipe", "tags": ["skill", "editing-advisor", "resource-bank", "vox"], "anti_patterns": ["Copies pattern recipes into the skill", "Returns a vibes-only edit brief", "Uses every retrieved effect"]}}
+      "metadata": {
+        "farplane": {
+          "title": "Compiles reusable Vox-style patterns into a restrained edit recipe",
+          "tags": [
+            "skill",
+            "editing-advisor",
+            "resource-bank",
+            "vox"
+          ]
+        }
+      }
     },
     {
       "id": "editing_advisor_brand_snapshot_boundary_01",
@@ -25,7 +35,17 @@
         "Preserves complete realization fields for any selected inspiration pattern.",
         "Produces a timed recipe with caption, motion, transition, and proof details sufficient for the named renderer."
       ],
-      "metadata": {"farplane": {"title": "Keeps Brand Kit policy separate from the creative-pattern corpus", "tags": ["skill", "editing-advisor", "brand-kit", "compatibility"], "anti_patterns": ["Stores all creative patterns in the Brand Kit", "Silently blends conflicting caption systems", "Hands off titles without recipes"]}}
+      "metadata": {
+        "farplane": {
+          "title": "Keeps Brand Kit policy separate from the creative-pattern corpus",
+          "tags": [
+            "skill",
+            "editing-advisor",
+            "brand-kit",
+            "compatibility"
+          ]
+        }
+      }
     },
     {
       "id": "editing_advisor_transition_motion_distinction_01",
@@ -38,7 +58,17 @@
         "Rejects decorative transitions for animations that do not cross scene or state boundaries.",
         "Includes frame/range acceptance checks for both the motion and the actual transition."
       ],
-      "metadata": {"farplane": {"title": "Distinguishes motion from transitions", "tags": ["skill", "editing-advisor", "motion", "transitions"], "anti_patterns": ["Calls every animation a transition", "Adds random motion", "Omits state-before/state-after reasoning"]}}
+      "metadata": {
+        "farplane": {
+          "title": "Distinguishes motion from transitions",
+          "tags": [
+            "skill",
+            "editing-advisor",
+            "motion",
+            "transitions"
+          ]
+        }
+      }
     },
     {
       "id": "editing_advisor_incomplete_pattern_block_01",
@@ -51,7 +81,17 @@
         "Marks the pattern block when its golden example or recipe cannot be resolved and states the exact missing input/runtime.",
         "Does not produce a ready renderer handoff from guessed or remembered recipe details."
       ],
-      "metadata": {"farplane": {"title": "Blocks title-only editing-pattern handoffs", "tags": ["skill", "editing-advisor", "repair", "blocker"], "anti_patterns": ["Invents a recipe from the pattern title", "Claims Remotion readiness", "Returns only an empty schema"]}}
+      "metadata": {
+        "farplane": {
+          "title": "Blocks title-only editing-pattern handoffs",
+          "tags": [
+            "skill",
+            "editing-advisor",
+            "repair",
+            "blocker"
+          ]
+        }
+      }
     },
     {
       "id": "editing_advisor_cross_owner_handoff_01",
@@ -64,7 +104,17 @@
         "Orders edit steps around those dependencies and names files or exact missing-file blockers.",
         "Requires caption readability, layer/composite checks, transition range checks, and final render proof before readiness."
       ],
-      "metadata": {"farplane": {"title": "Produces a cross-owner renderer handoff", "tags": ["skill", "editing-advisor", "handoff", "remotion"], "anti_patterns": ["Routes everything to Remotion", "Claims prepared media exists", "Uses multiple timing masters"]}}
+      "metadata": {
+        "farplane": {
+          "title": "Produces a cross-owner renderer handoff",
+          "tags": [
+            "skill",
+            "editing-advisor",
+            "handoff",
+            "remotion"
+          ]
+        }
+      }
     }
   ]
 }

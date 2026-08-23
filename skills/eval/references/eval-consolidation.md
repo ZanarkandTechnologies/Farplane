@@ -68,7 +68,7 @@ constraints = {
 }
 value_function = default consolidate value
                + distinct_failure_mode
-               + hardcase_value
+               + difficult_regression_value
                + judgeability
                - query_noise
                - duplicate_coverage
@@ -76,7 +76,7 @@ value_function = default consolidate value
 
 Map `consolidate` actions into eval dispositions:
 
-- `keep`: unique failure mode, hardcase, or high-signal boundary case.
+- `keep`: unique failure mode, difficult regression, or high-signal boundary case.
 - `merge`: rows test the same behavior with superficial query differences.
 - `rewrite`: row is valuable but noisy, unrealistic, vague, or overfit.
 - `move`: row belongs in another skill or workflow eval file.
@@ -86,7 +86,7 @@ Map `consolidate` actions into eval dispositions:
 
 Prefer the newer eval when it captures a real recent miss and is not merely a
 wording variant. Older evals should survive only when they cover a distinct
-behavior, boundary, owner surface, or hardcase value.
+ behavior, boundary, owner surface, or difficult-regression value.
 
 ## Subagent Prompt
 
@@ -111,7 +111,7 @@ eval file and the listed references. Produce a consolidation report with:
 
 Rules:
 - Do not delay immediate eval creation.
-- Do not remove unique hardcases or distinct failure modes.
+- Do not remove unique difficult regressions or distinct failure modes.
 - Favor less noisy evals, not fewer evals at any cost.
 - Keep task JSON schema simple and runnable.
 - Do not edit unrelated files.
@@ -123,7 +123,7 @@ Rules:
 {
   "schema_version": 1,
   "eval_file": "skills/eval/evals/evals.json",
-  "keep_ids": ["eval_hardcase_metadata_01"],
+  "keep_ids": ["eval_difficult_regression_01"],
   "merge_groups": [
     {
       "source_ids": ["eval_a", "eval_b"],

@@ -19,14 +19,7 @@
       ],
       "metadata": {
         "farplane": {
-          "notes": "Protects the showcase handoff: verified product cards become grouped, reader-safe release units rather than a forced founder story.",
-          "failure_modes": [
-            "Forces one long narrative instead of grouped impact units",
-            "Repeats the project report without separating change, impact, and evidence",
-            "Invents a personal realization or customer response",
-            "Uses generic transitions instead of concrete product evidence",
-            "Includes multiple CTAs or silently authorizes publication"
-          ]
+          "notes": "Protects the showcase handoff: verified product cards become grouped, reader-safe release units rather than a forced founder story."
         }
       }
     },
@@ -43,12 +36,7 @@
       ],
       "metadata": {
         "farplane": {
-          "notes": "Prevents personalization pressure from turning into fabricated autobiography.",
-          "failure_modes": [
-            "Fabricates a coffee-shop, late-night, customer, or aha-moment story",
-            "Claims to match the founder's voice without evidence",
-            "Omits the hypothesis label or publication gate"
-          ]
+          "notes": "Prevents personalization pressure from turning into fabricated autobiography."
         }
       }
     },
@@ -65,12 +53,7 @@
       ],
       "metadata": {
         "farplane": {
-          "notes": "Protects relationship value when a commercial goal is present.",
-          "failure_modes": [
-            "Turns the body into a sales email",
-            "Adds several promotional links or CTAs",
-            "Uses a clickbait subject the teaching does not cash"
-          ]
+          "notes": "Protects relationship value when a commercial goal is present."
         }
       }
     }

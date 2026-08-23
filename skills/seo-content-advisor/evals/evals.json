@@ -17,15 +17,7 @@
       ],
       "metadata": {
         "farplane": {
-          "notes": "Protects SEO quality as people-first content plus search-intent structure, not keyword theater.",
-          "failure_modes": [
-            "Produces a generic blog outline with no original angle or product proof",
-            "Paraphrases ranking pages without adding experience, examples, data, or a decision rule",
-            "Forces an article when a comparison table, tool, FAQ, video, or docs page would better satisfy the reader need",
-            "Overuses keywords in headings and metadata",
-            "Claims ranking, traffic, or conversion outcomes without evidence",
-            "Omits source/freshness needs or human publication review"
-          ]
+          "notes": "Protects SEO quality as people-first content plus search-intent structure, not keyword theater."
         }
       }
     }

@@ -16,11 +16,13 @@
       "metadata": {
         "farplane": {
           "title": "Rejected isometric office resets to interior composition",
-          "tags": ["skill", "interior-design", "office", "hardcase", "operator-feedback"],
-          "hardcase": true,
-          "difficulty": "high",
-          "sanitization_notes": "Generalized from repeated operator corrections; no private paths or screenshots.",
-          "benchmark_value": "Catches local-patch loops and aesthetic self-certification after explicit rejection."
+          "tags": [
+            "skill",
+            "interior-design",
+            "office",
+            "regression",
+            "operator-feedback"
+          ]
         }
       }
     },
@@ -39,7 +41,12 @@
       "metadata": {
         "farplane": {
           "title": "Compact interior balances mass and circulation",
-          "tags": ["skill", "interior-design", "density", "circulation"]
+          "tags": [
+            "skill",
+            "interior-design",
+            "density",
+            "circulation"
+          ]
         }
       }
     },
@@ -58,7 +65,12 @@
       "metadata": {
         "farplane": {
           "title": "Reference-led interior transfer preserves evidence integrity",
-          "tags": ["skill", "interior-design", "reference", "evidence"]
+          "tags": [
+            "skill",
+            "interior-design",
+            "reference",
+            "evidence"
+          ]
         }
       }
     },
@@ -77,7 +89,12 @@
       "metadata": {
         "farplane": {
           "title": "Dashboard stays outside the interior-design owner",
-          "tags": ["skill", "interior-design", "boundary", "visual-design"]
+          "tags": [
+            "skill",
+            "interior-design",
+            "boundary",
+            "visual-design"
+          ]
         }
       }
     },
@@ -96,7 +113,12 @@
       "metadata": {
         "farplane": {
           "title": "Real construction compliance stays with qualified professionals",
-          "tags": ["skill", "interior-design", "boundary", "safety"]
+          "tags": [
+            "skill",
+            "interior-design",
+            "boundary",
+            "safety"
+          ]
         }
       }
     }

@@ -3,7 +3,7 @@ title: Artifact-first QA and completion proof
 status: implemented
 owner: feature-registry
 created_at: 2026-06-26
-updated_at: 2026-08-02
+updated_at: 2026-08-19
 tags:
   - farplane
   - feature
@@ -79,6 +79,9 @@ contract.
 
 - Reads ticket `Done` conditions and `QA Strategy` as the scoreboard for checks, evidence, and review gates.
 - Produces or links command output, screenshots, traces, console logs, failure captures, review reports, and QA notes.
+- For UI-bearing tickets, compares operated captures and behavior against the
+  ticket-local `design.md` ASCII state IDs and records match, mismatch, or
+  not-provable for each required state.
 - Routes material plans, implementations, prompts, evidence bundles, and completion claims through reviewer judgment when required.
 - Uses docs-owned rubric families for domain-specific TAS judgments while the
   caller or ticket owns family selection and required gates.
@@ -108,6 +111,9 @@ Proof scales with risk, blast radius, and user-facing impact.
   observations, evidence, and any residual risk for unrun final paths.
 - Ticket-local artifacts hold bulky proof and reports.
 - QA owns user-visible and runtime evidence capture.
+- A UI proof cannot pass by linking `design.md`; it must bind each required
+  design state/assertion to current capture or operated evidence and disclose
+  mismatches or unproved states.
 - Reviewer owns material judgment of plans, implementations, prompts, evidence, and completion claims.
 - For a new terminal close, the issue body is deliberately glanceable:
   `Before`, `After`, `Example`, `Key decisions`, and compact `Proof`. Material
@@ -124,6 +130,9 @@ Proof scales with risk, blast radius, and user-facing impact.
   retry.
 - `docs/review/rubrics` owns family definitions, stable checks, TAS calibration,
   and evidence limits; tickets and caller workflows own rubric routing.
+- Review keeps neighboring-surface skepticism inside the selected rubric family.
+  Suspected implementation bloat routes to `lean-check`; prose cleanup routes
+  to `unslop` instead of a parallel catch-all cleanup rubric.
 - Purchase-conviction review requires one explicit buyer, a credible product or
   offer, the current alternative, price or equivalent commitment, and material
   adoption constraints. Buying groups are reviewed one role at a time.
@@ -232,6 +241,8 @@ Acceptance signals:
 
 ## Change History
 
+- 2026-08-19: Split cleanup ownership between rubric-local skepticism,
+  `lean-check` for implementation bloat, and `unslop` for prose.
 - 2026-08-02: Clarified that closeout uses `integrations.github.repo` directly;
   repository visibility does not alter the proof contract.
 - 2026-08-01: Added verified GitHub-issue closeout for new tickets: completion

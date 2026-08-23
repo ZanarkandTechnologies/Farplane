@@ -21,7 +21,7 @@ If the user is present and the request is product/feature work:
   - **Spec-to-ticket phase**: `skill({ name: "spec-to-ticket" })`
   - **Memory** (only if you need prior context): check `docs/progress.md` and `docs/HISTORY.md`.
   - **Convex patterns** (only if the project is Convex-backed): `skill({ name: "convex" })`
-  - **Testing strategy** (only if QA/backpressure is in scope): `skill({ name: "testing" })`
+  - **Proof strategy** (only if QA/backpressure is unresolved): `skill({ name: "proof-advisor" })`
   - **Visual QA** (only if UI validation is required): `skill({ name: "visual-qa" })`
 
 ## 🧠 Persistence Rule

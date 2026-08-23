@@ -5,19 +5,22 @@ from __future__ import annotations
 import argparse
 import os
 from datetime import datetime, timezone
+from pathlib import Path
 
 from farplane_cli_base import CORE_ROOT, DEFAULT_CODEX_HOME
 from farplane_cli_commands import (
     run_adoption_scan_cli, run_content_add_cli, run_content_list_cli,
     run_content_select_cli, run_content_validate_cli, run_doctor,
+    run_eval_init_cli, run_eval_promptfoo_cli,
     run_harness_health_compile_cli,
     run_metrics_primitives_cli, run_mining_cli, run_project_snapshot_cli,
     run_capability_profiles_cli,
     run_reports_index_cli, run_reports_repair_refs_cli, run_response_check_cli,
     run_skill_rollout_scan_cli, run_ticket_finalize_cli, run_ticket_history_cli,
     run_wiki_cli,
-    run_validate_frontmatter, run_validate_ticket,
+    run_validate_ticket,
 )
+from farplane_lint import run_lint_cli
 from farplane_cli_hooks import (
     run_hooks_doctor, run_hooks_install, run_hooks_list, run_install,
     run_with_doppler,
@@ -50,7 +53,48 @@ def build_parser() -> argparse.ArgumentParser:
     run.add_argument("extra", nargs=argparse.REMAINDER, help="Command to run after --.")
     run.set_defaults(func=run_with_doppler)
 
-    validate = sub.add_parser("validate", help="Run Farplane ticket or frontmatter validation.")
+    eval_command = sub.add_parser(
+        "eval",
+        help="Run local Farplane evals and publish receipts for Farplane Office.",
+    )
+    eval_sub = eval_command.add_subparsers(dest="eval_command")
+    eval_init = eval_sub.add_parser(
+        "init",
+        help="Create the non-secret Promptfoo profile for this project.",
+    )
+    eval_init.add_argument(
+        "--provider-profile",
+        type=Path,
+        help="Local profile path. Defaults to .farplane/evals/promptfoo-profile.json.",
+    )
+    eval_init.add_argument("--model", default="gpt-5.6-luna")
+    eval_init.add_argument("--force", action="store_true")
+    eval_init.add_argument("--dry-run", action="store_true")
+    eval_init.set_defaults(func=run_eval_init_cli)
+
+    eval_promptfoo = eval_sub.add_parser(
+        "promptfoo",
+        help="Compare a skill against a baseline through Promptfoo.",
+    )
+    eval_source = eval_promptfoo.add_mutually_exclusive_group(required=True)
+    eval_source.add_argument("--skill", help="Skill name; resolves skills/<name>/evals/evals.json.")
+    eval_source.add_argument("--eval-file", type=Path, help="Explicit Agent Skills eval manifest.")
+    eval_promptfoo.add_argument(
+        "--provider-profile",
+        type=Path,
+        help="Local profile path. Defaults to .farplane/evals/promptfoo-profile.json.",
+    )
+    eval_promptfoo.add_argument("--candidate-skill", type=Path)
+    eval_promptfoo.add_argument("--baseline-skill", type=Path)
+    eval_promptfoo.add_argument("--eval-id", action="append", default=[])
+    eval_promptfoo.add_argument("--runs-dir", type=Path, default=Path(".farplane/evals/runs"))
+    eval_promptfoo.add_argument("--label", required=True)
+    eval_promptfoo.add_argument("--promptfoo-version", default="0.122.0")
+    eval_promptfoo.add_argument("--codex-sdk-version", default="0.148.0")
+    eval_promptfoo.add_argument("--dry-run", action="store_true")
+    eval_promptfoo.set_defaults(func=run_eval_promptfoo_cli)
+
+    validate = sub.add_parser("validate", help="Run phase-aware Farplane ticket validation and write proof receipts.")
     validate_sub = validate.add_subparsers(dest="validate_command")
     validate_ticket_parser = validate_sub.add_parser("ticket", help="Validate one ticket at a lifecycle phase.")
     validate_ticket_parser.add_argument("ticket")
@@ -61,19 +105,19 @@ def build_parser() -> argparse.ArgumentParser:
     validate_ticket_parser.add_argument("--no-write", action="store_true", help="Do not write the ticket validation receipt.")
     validate_ticket_parser.add_argument("--json", action="store_true")
     validate_ticket_parser.set_defaults(func=run_validate_ticket)
-    validate_frontmatter_parser = validate_sub.add_parser(
-        "frontmatter",
-        help="Lint static skill and document frontmatter through their owner validators.",
-    )
-    validate_frontmatter_parser.add_argument(
+    lint = sub.add_parser("lint", help="Run static YAML/JSON parsing and typed Farplane contracts.")
+    lint.add_argument(
         "scope",
         nargs="?",
-        choices=("skills", "docs", "all"),
+        choices=("all", "skills", "docs", "evals", "project", "ticket"),
         default="all",
-        help="Metadata family to validate (default: all).",
+        help="Static contract family to lint (default: all).",
     )
-    validate_frontmatter_parser.add_argument("--json", action="store_true")
-    validate_frontmatter_parser.set_defaults(func=run_validate_frontmatter)
+    lint.add_argument("ticket", nargs="?", type=Path, help="Ticket path required only for `lint ticket`.")
+    lint.add_argument("--changed", action="store_true", help="Select changed source/manifests where supported.")
+    lint.add_argument("--base", help="Also include paths changed from BASE...HEAD.")
+    lint.add_argument("--json", action="store_true")
+    lint.set_defaults(func=run_lint_cli)
 
     hooks = sub.add_parser("hooks", help="Install or check Codex lifecycle hooks.")
     hooks_sub = hooks.add_subparsers(dest="hooks_command")

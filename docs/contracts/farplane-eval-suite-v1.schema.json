@@ -1,0 +1,184 @@
+{
+  "$defs": {
+    "AgentSkillsEvalCase": {
+      "additionalProperties": false,
+      "description": "One portable Agent-Skills evaluation case.",
+      "properties": {
+        "assertions": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Assertions",
+          "type": "array"
+        },
+        "expected_output": {
+          "minLength": 1,
+          "title": "Expected Output",
+          "type": "string"
+        },
+        "files": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Files",
+          "type": "array"
+        },
+        "id": {
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "metadata": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/EvalMetadata"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "prompt": {
+          "minLength": 1,
+          "title": "Prompt",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "prompt",
+        "expected_output"
+      ],
+      "title": "AgentSkillsEvalCase",
+      "type": "object"
+    },
+    "EvalMetadata": {
+      "additionalProperties": false,
+      "description": "Reserve the metadata namespace rather than accepting arbitrary case keys.",
+      "properties": {
+        "farplane": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/FarplaneEvalMetadata"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "title": "EvalMetadata",
+      "type": "object"
+    },
+    "FarplaneEvalMetadata": {
+      "additionalProperties": false,
+      "description": "Typed execution, identity, and linkage metadata for one eval case.",
+      "properties": {
+        "context": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Context"
+        },
+        "extensions": {
+          "additionalProperties": {
+            "$ref": "#/$defs/JsonValue"
+          },
+          "title": "Extensions",
+          "type": "object"
+        },
+        "feature_id": {
+          "anyOf": [
+            {
+              "pattern": "^FEAT-\\d{4}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Feature Id"
+        },
+        "notes": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Notes"
+        },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Tags",
+          "type": "array"
+        },
+        "title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Title"
+        },
+        "workspace_fixture": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Workspace Fixture"
+        }
+      },
+      "title": "FarplaneEvalMetadata",
+      "type": "object"
+    },
+    "JsonValue": {}
+  },
+  "additionalProperties": false,
+  "description": "The original Agent-Skills portable root, deliberately without a format key.",
+  "properties": {
+    "evals": {
+      "items": {
+        "$ref": "#/$defs/AgentSkillsEvalCase"
+      },
+      "minItems": 1,
+      "title": "Evals",
+      "type": "array"
+    },
+    "skill_name": {
+      "minLength": 1,
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "title": "Skill Name",
+      "type": "string"
+    }
+  },
+  "required": [
+    "skill_name",
+    "evals"
+  ],
+  "title": "AgentSkillsEvalSuite",
+  "type": "object"
+}

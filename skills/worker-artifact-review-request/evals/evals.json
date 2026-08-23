@@ -17,7 +17,11 @@
       "metadata": {
         "farplane": {
           "title": "Blocks text-only visual review promotion",
-          "tags": ["worker-artifact-review-request", "visual-review", "regression"]
+          "tags": [
+            "worker-artifact-review-request",
+            "visual-review",
+            "regression"
+          ]
         }
       }
     },
@@ -41,11 +45,6 @@
             "worker-artifact-review-request",
             "telegram",
             "artifact-review"
-          ],
-          "anti_patterns": [
-            "Sends only a desktop path",
-            "Pastes a giant report without a clear decision",
-            "Creates a new approval queue instead of routing replies to the worker"
           ]
         }
       }
@@ -71,12 +70,6 @@
             "worker-artifact-review-request",
             "receipt",
             "telegram"
-          ],
-          "anti_patterns": [
-            "Claims the review was requested without a message id or fallback",
-            "Omits the worker thread reply route",
-            "Stops as waiting for Kenji without a Telegram send receipt or blocker",
-            "Treats message sent as final external-action approval"
           ]
         }
       }
@@ -101,11 +94,6 @@
             "worker-artifact-review-request",
             "pulse-update",
             "telegram"
-          ],
-          "anti_patterns": [
-            "Creates a new approval queue instead of routing the answer to the worker thread",
-            "Sends a reminder before the configured unanswered-turn threshold",
-            "Counts the awaiting ticket or persistent thread as an active worker"
           ]
         }
       }
@@ -130,11 +118,6 @@
             "worker-artifact-review-request",
             "content",
             "human-review"
-          ],
-          "anti_patterns": [
-            "Asks Kenji to review an unspecified video idea",
-            "Combines review with public posting approval",
-            "Requires desktop access to know what decision is being requested"
           ]
         }
       }
@@ -155,7 +138,12 @@
       "metadata": {
         "farplane": {
           "title": "Bounded Telegram-to-phone review escalation",
-          "tags": ["worker-artifact-review-request", "telegram", "phone-chaser", "escalation"]
+          "tags": [
+            "worker-artifact-review-request",
+            "telegram",
+            "phone-chaser",
+            "escalation"
+          ]
         }
       }
     }

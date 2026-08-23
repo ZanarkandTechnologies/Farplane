@@ -1,6 +1,6 @@
 ---
 template_id: goal-loop-program
-template_version: "0.1.7"
+template_version: "0.2.0"
 feature_refs:
   - FEAT-0029
   - FEAT-0032
@@ -35,6 +35,33 @@ approval: pending | approved | revise | blocked
 - Hard constraints:
 - Evidence owner:
 - Hypothesis tree: path or `none`; never duplicate its frontier here.
+
+## Compiled Execution Path
+
+<!-- Bind meaning rather than copying ticket prose. Every material diagram node,
+Change Plan unit, and exit assertion must be covered or the packet is revise. -->
+
+| Ticket diagram nodes | Change unit | Exit assertions | Proof observation |
+| --- | --- | --- | --- |
+|  |  |  |  |
+
+## Reference Manifest
+
+<!-- List only files needed by a named execution node, assertion, proof, or
+drift decision. Remove references with no consumer. -->
+
+| Reference | Used by | Purpose |
+| --- | --- | --- |
+|  |  |  |
+
+## Completion Closure
+
+<!-- Map every ticket Done assertion and screenshot complaint to executable proof
+and its evidence owner. No unsupported row may reach complete. -->
+
+| Closure item | Source image + exact complaint | Design state/viewport | Proof method | Evidence owner/path | Status |
+| --- | --- | --- | --- | --- | --- |
+|  |  |  |  |  | pending |
 
 ## Metric Provider
 
@@ -112,6 +139,11 @@ search_budget:
 ## Stop Conditions
 
 - `complete`: ticket Done/proof and required review pass.
+- `complete` is invalid while any Completion Closure row is pending,
+  unsupported, stale, or contradicted by evidence.
+- A screenshot complaint row records source image, complaint, state, viewport,
+  newer comparable evidence, and independent verdict. It remains blocking until
+  that verdict passes or the operator records an explicit withdrawal.
 - `report_now`: evidence is useful but further work has lower expected value.
 - `request_feedback`: one material user judgment blocks a better decision.
 - `blocked`: required input, authority, or proof is unavailable.

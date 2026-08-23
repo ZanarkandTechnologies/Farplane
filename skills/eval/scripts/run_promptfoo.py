@@ -21,6 +21,12 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable
 
+REPO_ROOT = Path(__file__).resolve().parents[3]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from bin.core.eval_contract import EvalContractError, lint_agent_skills_eval_suite
+
 
 SCHEMA_VERSION = 2
 DEFAULT_PROMPTFOO_VERSION = "0.122.0"
@@ -77,51 +83,13 @@ def _normalize_eval_id(value: Any) -> str:
 
 
 def load_manifest(path: Path) -> dict[str, Any]:
-    data = read_json(path)
-    if not isinstance(data, dict):
-        raise AdapterError("eval manifest must be a JSON object")
-    skill_name = _required_text(data.get("skill_name"), "skill_name")
-    if not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", skill_name):
-        raise AdapterError("skill_name must use lowercase letters, digits, and single hyphens")
-    raw_evals = data.get("evals")
-    if not isinstance(raw_evals, list) or not raw_evals:
-        raise AdapterError("evals must be a non-empty list")
+    """Load the shared strict contract before any run workspace is created."""
 
-    seen: set[str] = set()
-    evals: list[dict[str, Any]] = []
-    for index, raw_case in enumerate(raw_evals):
-        if not isinstance(raw_case, dict):
-            raise AdapterError(f"evals[{index}] must be an object")
-        case = copy.deepcopy(raw_case)
-        case_id = _normalize_eval_id(case.get("id"))
-        if case_id in seen:
-            raise AdapterError(f"duplicate eval id after normalization: {case_id}")
-        seen.add(case_id)
-        case["id"] = case_id
-        case["prompt"] = _required_text(case.get("prompt"), f"eval {case_id} prompt")
-        case["expected_output"] = _required_text(
-            case.get("expected_output"), f"eval {case_id} expected_output"
-        )
-        files = case.get("files", [])
-        if not isinstance(files, list) or any(not isinstance(item, str) or not item for item in files):
-            raise AdapterError(f"eval {case_id} files must be a list of paths")
-        case["files"] = files
-
-        assertions = case.get("assertions")
-        expectations = case.get("expectations")
-        if assertions is not None and expectations is not None and assertions != expectations:
-            raise AdapterError(
-                f"eval {case_id} defines conflicting assertions and expectations; keep one authored list"
-            )
-        checks = assertions if assertions is not None else expectations
-        if checks is None:
-            checks = []
-        if not isinstance(checks, list) or any(not isinstance(item, str) or not item.strip() for item in checks):
-            raise AdapterError(f"eval {case_id} assertions/expectations must be a list of strings")
-        case["assertions"] = [item.strip() for item in checks]
-        case.pop("expectations", None)
-        evals.append(case)
-    return {"skill_name": skill_name, "evals": evals}
+    try:
+        suite = lint_agent_skills_eval_suite(path, root=REPO_ROOT)
+    except EvalContractError as exc:
+        raise AdapterError(f"eval contract invalid: {exc}") from exc
+    return suite.model_dump(mode="json", exclude_none=True)
 
 
 def load_profile(path: Path) -> dict[str, Any]:

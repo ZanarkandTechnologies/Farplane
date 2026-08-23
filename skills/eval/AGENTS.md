@@ -26,8 +26,8 @@ This module owns Farplane's reusable eval boundary:
 - Keep rubric policy in judge prompts, not task JSON.
 - For skill comparisons, let Promptfoo own execution, skill-use assertions,
   rubric grading, and raw export; keep the adapter deterministic.
-- Accept one authored `expectations` or `assertions` list, never conflicting
-  copies. Normalize eval IDs to strings at the adapter boundary.
+- Author string IDs and one `assertions` list only. `farplane lint evals`
+  rejects legacy aliases and unknown fields before the adapter creates a run.
 - Stage candidate, baseline, and grader outside the source checkout; copy only
   evidence back into the run artifact.
 - Prefer reusable templates under `templates/` over one-off runtime-only changes.

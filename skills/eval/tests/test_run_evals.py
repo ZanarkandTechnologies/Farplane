@@ -681,11 +681,6 @@ class EvalRunnerTests(unittest.TestCase):
             tasks.parent.mkdir(parents=True)
             write_behavior_cli(fake_cli)
             write_tasks(tasks)
-            task_rows = json.loads(tasks.read_text())
-            task_rows[0]["behavior_requirements"] = {
-                "required_successful_command_regexes": [r"printf\s+visible"]
-            }
-            tasks.write_text(json.dumps(task_rows))
             (eval_dir / "prompts" / "agent.md").write_text("Task: {query}\n{task_json}\n")
             (eval_dir / "prompts" / "judge.md").write_text("Task: {task_json}\nAssistant answer:\n{answer}\n")
 
@@ -723,11 +718,6 @@ class EvalRunnerTests(unittest.TestCase):
                     detail = json.loads((run_dir / "tasks" / "proof_01.json").read_text())
                     trace = detail["behavior_trace"]
                     self.assertEqual(trace["verdict"], "pass")
-                    self.assertEqual(trace["command_requirement_score"]["matched"], 1)
-                    self.assertNotIn(
-                        "required_successful_command_regexes",
-                        (run_dir / "tasks" / "proof_01" / "agent_prompt.md").read_text(),
-                    )
                     self.assertFalse(trace["behavior_report_detected"])
                     self.assertFalse(trace["schema_validation"]["requested"])
                     self.assertEqual(trace["failures"], [])
@@ -735,50 +725,6 @@ class EvalRunnerTests(unittest.TestCase):
                         self.assertEqual(trace["final_report"]["selected"], ["TASK-9001"])
                     else:
                         self.assertIsNone(trace["final_report"])
-
-    def test_behavior_trace_fails_when_required_successful_command_is_missing(self) -> None:
-        with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            eval_dir = root / "evals"
-            fake_cli = root / "behavior_cli.py"
-            tasks = eval_dir / "tasks" / "harness_tasks.json"
-            (eval_dir / "prompts").mkdir(parents=True)
-            tasks.parent.mkdir(parents=True)
-            write_behavior_cli(fake_cli)
-            write_tasks(tasks)
-            task_rows = json.loads(tasks.read_text())
-            task_rows[0]["behavior_requirements"] = {
-                "required_successful_command_regexes": [r"validate_missing\.py"]
-            }
-            tasks.write_text(json.dumps(task_rows))
-            (eval_dir / "prompts" / "agent.md").write_text("Task: {query}\n{task_json}\n")
-            (eval_dir / "prompts" / "judge.md").write_text(
-                "Task: {task_json}\nAssistant answer:\n{answer}\n"
-            )
-            template = (
-                f"{sys.executable} {fake_cli} --output-kind planner-json "
-                "--prompt-file {prompt_file} --output-file {output_file}"
-            )
-
-            code = runner.main(
-                [
-                    "run", "--harness", "custom", "--eval-dir", str(eval_dir),
-                    "--target-root", str(root), "--tasks", str(tasks),
-                    "--label", "missing-required-command", "--behavior-trace",
-                    "--max-parallel-tasks", "1", "--agent-command-template", template,
-                    "--judge-command-template", template,
-                ]
-            )
-
-            self.assertEqual(code, 1)
-            run_dir = next((eval_dir / "runs").glob("*-missing-required-command"))
-            summary = json.loads((run_dir / "summary.json").read_text())
-            detail = json.loads((run_dir / "tasks" / "proof_01.json").read_text())
-            trace = detail["behavior_trace"]
-            self.assertFalse(summary["tasks"][0]["pass"])
-            self.assertEqual(trace["verdict"], "fail")
-            self.assertEqual(trace["command_requirement_score"]["matched"], 0)
-            self.assertIn("required successful command evidence missing", trace["failures"][0])
 
     def test_harness_scope_loads_harness_task_file(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

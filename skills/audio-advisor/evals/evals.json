@@ -16,8 +16,12 @@
       "metadata": {
         "farplane": {
           "title": "Builds one audio spine for a multi-clip reel",
-          "tags": ["skill", "audio-advisor", "continuity", "remotion"],
-          "anti_patterns": ["Keeps unrelated clip audio", "Uses vibes-only cues", "Omits mix proof"]
+          "tags": [
+            "skill",
+            "audio-advisor",
+            "continuity",
+            "remotion"
+          ]
         }
       }
     },
@@ -35,8 +39,12 @@
       "metadata": {
         "farplane": {
           "title": "Routes avatar voice and lipsync safely",
-          "tags": ["skill", "audio-advisor", "avatar-advisor", "consent"],
-          "anti_patterns": ["Treats voice identity as generic TTS", "Ignores consent", "Skips mix handoff"]
+          "tags": [
+            "skill",
+            "audio-advisor",
+            "avatar-advisor",
+            "consent"
+          ]
         }
       }
     },
@@ -55,8 +63,13 @@
       "metadata": {
         "farplane": {
           "title": "Blocks unsafe commercial soundboard reuse",
-          "tags": ["skill", "audio-advisor", "sfx", "rights", "soundbuttonsworld"],
-          "anti_patterns": ["Downloads clips", "Claims a candidate is licensed", "Uses a recognizable quote without operator approval"]
+          "tags": [
+            "skill",
+            "audio-advisor",
+            "sfx",
+            "rights",
+            "soundbuttonsworld"
+          ]
         }
       }
     },
@@ -75,8 +88,12 @@
       "metadata": {
         "farplane": {
           "title": "Discovers ordinary SFX candidate links before generating",
-          "tags": ["skill", "audio-advisor", "sfx", "source-first"],
-          "anti_patterns": ["Downloads a file", "Calls a paid provider", "Omits candidate links or approval status"]
+          "tags": [
+            "skill",
+            "audio-advisor",
+            "sfx",
+            "source-first"
+          ]
         }
       }
     },
@@ -96,8 +113,13 @@
       "metadata": {
         "farplane": {
           "title": "Builds safe provider packets inside audio advisor",
-          "tags": ["skill", "audio-advisor", "fish", "elevenlabs", "dry-run"],
-          "anti_patterns": ["Calls an API", "Silently switches provider", "Stores credentials or a private voice ID"]
+          "tags": [
+            "skill",
+            "audio-advisor",
+            "fish",
+            "elevenlabs",
+            "dry-run"
+          ]
         }
       }
     }

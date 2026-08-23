@@ -5,20 +5,38 @@
       "id": "planner_preflight_history_and_empty_wave",
       "prompt": "The project needs another work wave, but the latest health reading may be stale and recent work looks similar. Decide what is ready.",
       "expected_output": "Checks configured hard guards before proposing work; queries global ticket history before filters; returns an exact empty-wave source gap rather than a refresh or maintenance ticket when inputs are stale; never fills capacity with weak work",
-      "files": ["farplane/harness.yaml", "farplane/metrics.yaml"],
+      "files": [
+        "farplane/harness.yaml",
+        "farplane/metrics.yaml"
+      ],
       "assertions": [
         "Unhealthy or stale guards produce an empty wave",
         "Global history precedes progressive filters",
         "Duplicates are rejected without creating maintenance",
         "Wave size remains a maximum"
       ],
-      "metadata": {"farplane": {"title": "Preflight and empty-wave integrity", "tags": ["plan-next-wave", "guard", "history", "empty-wave"]}}
+      "metadata": {
+        "farplane": {
+          "title": "Preflight and empty-wave integrity",
+          "tags": [
+            "plan-next-wave",
+            "guard",
+            "history",
+            "empty-wave"
+          ]
+        }
+      }
     },
     {
       "id": "planner_selects_only_configured_skills",
       "prompt": "Several plausible jobs are available, including a security comparison, a content package, an internal cleanup, and a novel workflow category. Choose the strongest executable work.",
       "expected_output": "Reads the configured planning skill allowlist, stable problems, system and feature refs, objective movement, and each skill planner contract; selects the next missing evidence stage; produces only configured strategic skill calls with required arguments bound; rejects the random feature, invented workflow, and cleanup; keeps each call canonical and references winners only by call ID; runs the exact response validator",
-      "files": ["farplane/harness.yaml", ".agents/skills/farplane-ablation-proof/SKILL.md", ".agents/skills/farplane-content-creation/SKILL.md", "skills/self-improve/SKILL.md"],
+      "files": [
+        "farplane/harness.yaml",
+        ".agents/skills/farplane-ablation-proof/SKILL.md",
+        ".agents/skills/farplane-content-creation/SKILL.md",
+        "skills/self-improve/SKILL.md"
+      ],
       "assertions": [
         "Every proposal names an allowed skill",
         "Every required planner argument is bound",
@@ -28,13 +46,26 @@
         "Maintenance and invented work categories are rejected",
         "Each call appears once and admitted IDs reference it"
       ],
-      "metadata": {"farplane": {"title": "Configured skills are the only work shapes", "tags": ["plan-next-wave", "skills", "hard-migration"], "behavior_requirements": {"required_successful_command_regexes": ["(?:python3|python)\\s+[^\\n;&|]*validate_wave_response\\.py(?:\\s|$)"]}, "context": "Synthetic complete state with fresh guards. The allowlist contains content creation, market learning, ablation proof, productization, and self-improve. The cleanup has no reproduced failure; the invented workflow has no skill owner. wave_size is 3."}}
+      "metadata": {
+        "farplane": {
+          "title": "Configured skills are the only work shapes",
+          "tags": [
+            "plan-next-wave",
+            "skills",
+            "hard-migration"
+          ],
+          "context": "Synthetic complete state with fresh guards. The allowlist contains content creation, market learning, ablation proof, productization, and self-improve. The cleanup has no reproduced failure; the invented workflow has no skill owner. wave_size is 3."
+        }
+      }
     },
     {
       "id": "planner_content_call_uses_one_transformation_ticket",
       "prompt": "An accepted technical comparison is ready to become content. We need a strong version for video and the main social formats without creating a pile of separate tickets.",
       "expected_output": "Selects farplane-content-creation only because comparative proof is accepted; binds autonomous_teams_24_7, SYS-0005, FEAT-0008, source_or_idea, audience, content_goal, and channels; asks for one pain-and-result-led approved skeleton, optimized exemplar, and cross-format transformation pack; does not lead with an internal feature name, invent a content experiment, or split formats into tickets; preserves publication and spend gates",
-      "files": ["farplane/harness.yaml", ".agents/skills/farplane-content-creation/SKILL.md"],
+      "files": [
+        "farplane/harness.yaml",
+        ".agents/skills/farplane-content-creation/SKILL.md"
+      ],
       "assertions": [
         "One content skill call owns the complete transformation pack",
         "The accepted source and audience are explicit",
@@ -43,13 +74,25 @@
         "Formats share one skeleton and proof spine",
         "Publication and spend remain gated"
       ],
-      "metadata": {"farplane": {"title": "One evidence-to-content transformation ticket", "tags": ["plan-next-wave", "content", "transformation"]}}
+      "metadata": {
+        "farplane": {
+          "title": "One evidence-to-content transformation ticket",
+          "tags": [
+            "plan-next-wave",
+            "content",
+            "transformation"
+          ]
+        }
+      }
     },
     {
       "id": "planner_self_improvement_requires_failure",
       "prompt": "One suggestion changes a validator after a reproduced recurring failure. Another proposes reorganizing several instruction files because they look untidy. Decide what can enter the wave.",
       "expected_output": "Selects self-improve only for the reproduced failure; binds target, metric, feedback_class, and failure_evidence; rejects aesthetic cleanup; attributes the result as an enabler or guard unless external outcome evidence exists; leaves ticket injection to Pulse",
-      "files": ["farplane/harness.yaml", "skills/self-improve/SKILL.md"],
+      "files": [
+        "farplane/harness.yaml",
+        "skills/self-improve/SKILL.md"
+      ],
       "assertions": [
         "Reproduced failure evidence is required",
         "Aesthetic cleanup is rejected",
@@ -57,13 +100,26 @@
         "Pulse-owned ticket injection is omitted",
         "Ultimate outcome attribution stays honest"
       ],
-      "metadata": {"farplane": {"title": "Self-improvement is causal rather than cleanup", "tags": ["plan-next-wave", "self-improvement", "failure-evidence"]}}
+      "metadata": {
+        "farplane": {
+          "title": "Self-improvement is causal rather than cleanup",
+          "tags": [
+            "plan-next-wave",
+            "self-improvement",
+            "failure-evidence"
+          ]
+        }
+      }
     },
     {
       "id": "planner_skill_calls_rank_without_workflow_duplication",
       "prompt": "There is capacity for two jobs. One strategic system has no current ICP pain evidence. A content proposal for another says comparative proof is accepted, but its cited result records a failed comparison and its falsifier assumes the proof has not been run. An unauthorized public post also looks superficially useful. Choose the best compatible work.",
       "expected_output": "Creates configured market-learning for the missing-pain stage and binds it to the stable problem and coherent system/feature refs; rejects the content call because its evidence, why-now premise, evidence stage, and falsifier conflict; rejects unauthorized publication; compares only consistent eligible calls on objective impact, evidence, signal time, risk, cost, interference, and human load; leaves capacity unused rather than repairing or materializing the contradictory call; does not copy a skill workflow or emit a full ticket preview",
-      "files": ["farplane/harness.yaml", ".agents/skills/farplane-market-learning/SKILL.md", ".agents/skills/farplane-content-creation/SKILL.md"],
+      "files": [
+        "farplane/harness.yaml",
+        ".agents/skills/farplane-market-learning/SKILL.md",
+        ".agents/skills/farplane-content-creation/SKILL.md"
+      ],
       "assertions": [
         "Only configured skill calls enter ranking",
         "Evidence stage determines the selected skill",
@@ -74,7 +130,19 @@
         "No workflow or full ticket is copied",
         "Admission uses call IDs and may leave wave capacity unused"
       ],
-      "metadata": {"farplane": {"title": "Compact consistent calls form one portfolio", "tags": ["plan-next-wave", "ranking", "authority", "reasoning-quality", "contradiction", "leanness"]}}
+      "metadata": {
+        "farplane": {
+          "title": "Compact consistent calls form one portfolio",
+          "tags": [
+            "plan-next-wave",
+            "ranking",
+            "authority",
+            "reasoning-quality",
+            "contradiction",
+            "leanness"
+          ]
+        }
+      }
     }
   ]
 }

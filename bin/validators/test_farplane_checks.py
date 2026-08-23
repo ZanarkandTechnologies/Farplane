@@ -8,6 +8,7 @@ from bin.core.validation.models import PathBoundary, ValidationContext
 from bin.validators.farplane_checks import (
     build_registry,
     completion_evidence_check,
+    ticket_contract_diagram_check,
     ticket_context_budget_check,
 )
 
@@ -28,11 +29,31 @@ class FarplaneChecksTest(unittest.TestCase):
                 "templates.check",
                 "ticket.completion-evidence",
                 "ticket.context-budget",
+                "ticket.contract-diagram",
                 "ticket.metadata",
                 "ticket.reward",
                 "ticket.visual-companion",
             ),
         )
+
+    def test_contract_diagram_requires_ascii_nodes_and_change_mapping(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            ticket_dir = root / "tickets" / "TASK-0001"
+            ticket_dir.mkdir(parents=True)
+            ticket = ticket_dir / "ticket.md"
+            context = ValidationContext(root, ticket, "planning", PathBoundary("unavailable"))
+
+            ticket.write_text("## Change Plan\n\noperation: build\n")
+            failed = ticket_contract_diagram_check(context, "block")
+            self.assertEqual(failed.status, "fail")
+            self.assertIn("missing required", failed.output)
+
+            ticket.write_text(
+                "## Contract Diagram\n\n```text\n[S1] -> [P1]\n```\n\n"
+                "## Change Plan\n\ndiagram_nodes: [S1, P1]\n"
+            )
+            self.assertEqual(ticket_contract_diagram_check(context, "block").status, "pass")
 
     def test_ticket_context_budget_uses_bounded_progress_tail(self):
         with tempfile.TemporaryDirectory() as tmp:

@@ -24,6 +24,7 @@ if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
 from bin.validators.template_usage import template_target_basis
+from bin.core.lint.source import MarkdownFrontmatterError, parse_markdown_frontmatter
 
 REQUIRED_TEMPLATE_HEADINGS = ("Context", "Skill Signature", "Todo List", "Gotchas", "Output")
 REQUIRED_METHOD_REFERENCE_HEADINGS = ("Use When", "Inputs", "Workflow", "Output Shape", "Quality Gates", "Bad Output")
@@ -287,43 +288,20 @@ def validate_template_version(current_version: str, require: bool) -> int:
     return 0
 
 
-def parse_simple_frontmatter(text: str) -> dict[str, object]:
-    if not text.startswith("---\n"):
+def parse_simple_frontmatter(path: Path) -> dict[str, object]:
+    """Read method-reference metadata through the shared static parser."""
+
+    try:
+        return parse_markdown_frontmatter(path) or {}
+    except (MarkdownFrontmatterError, OSError, UnicodeDecodeError):
         return {}
-    end = text.find("\n---\n", 4)
-    if end == -1:
-        return {}
-    raw = text[4:end]
-    parsed: dict[str, object] = {}
-    current_key: str | None = None
-    for raw_line in raw.splitlines():
-        if not raw_line.strip():
-            continue
-        if not raw_line.startswith(" "):
-            key, _, value = raw_line.partition(":")
-            key = key.strip()
-            value = value.strip()
-            parsed[key] = {} if value == "" else value.strip("\"'")
-            current_key = key
-            continue
-        if current_key is None:
-            continue
-        current_value = parsed.get(current_key)
-        stripped = raw_line.strip()
-        if ":" in stripped:
-            subkey, _, value = stripped.partition(":")
-            if not isinstance(current_value, dict):
-                current_value = {}
-                parsed[current_key] = current_value
-            current_value[subkey.strip()] = value.strip().strip("\"'")
-    return parsed
 
 
 def method_reference_structure_errors(current_version: str) -> list[str]:
     errors: list[str] = []
     for path in sorted((REPO_ROOT / "skills").glob("*/references/*.md")):
         text = path.read_text(encoding="utf-8")
-        metadata = parse_simple_frontmatter(text)
+        metadata = parse_simple_frontmatter(path)
         template_uses = metadata.get("template_uses")
         if not isinstance(template_uses, dict):
             continue
@@ -345,8 +323,7 @@ def method_reference_structure_errors(current_version: str) -> list[str]:
 def method_reference_template_rows() -> list[dict[str, object]]:
     rows: list[dict[str, object]] = []
     for path in sorted((REPO_ROOT / "skills").glob("*/references/*.md")):
-        text = path.read_text(encoding="utf-8")
-        metadata = parse_simple_frontmatter(text)
+        metadata = parse_simple_frontmatter(path)
         template_uses = metadata.get("template_uses")
         if not isinstance(template_uses, dict):
             continue
@@ -466,55 +443,56 @@ def main() -> int:
         action="store_true",
         help="fail when --template-version finds missing or non-current skill template versions",
     )
+    parser.add_argument(
+        "--method-reference-contract",
+        action="store_true",
+        help="check only the static skill-method-reference template contract",
+    )
     args = parser.parse_args()
     if args.require_template_version and not args.template_version:
         parser.error("--require-template-version requires --template-version")
 
-    try:
-        checklist_command = ["python3", "skills/skill-maintenance/scripts/sync_skill_checklists.py"]
-        if args.write:
-            checklist_command.append("--write")
-        run(checklist_command)
-
-        if args.write:
-            run(["python3", "bin/validators/sync_skill_registry.py", "--write"])
-        run(["python3", "bin/validators/sync_skill_registry.py", "--check"])
-        run(["python3", "bin/validators/check_skill_frontmatter.py"])
-        run(["python3", "bin/validators/check_skill_ensembles.py"])
-        if args.write:
-            run(["python3", "bin/validators/sync_template_registry.py", "--write"])
-        run(["python3", "bin/validators/sync_template_registry.py", "--check"])
-        if args.write:
-            run(["python3", "skills/skill-maintenance/scripts/generate_template_intelligence.py"])
-
-        tier_command = ["python3", "bin/validators/check_skill_todo_tiers.py"]
-        if not args.strict_tier3:
-            tier_command.append("--allow-peer-tier3")
-        if args.capture_hardcase:
-            tier_command.append("--hardcase-on-failure")
-        run(tier_command)
-        run(["python3", "bin/validators/check_tier0_phase_protocol.py"])
-        run(["python3", "bin/validators/check_skill_surface_budget.py"])
-        run(["python3", "bin/validators/check_skill_capabilities.py", "validate"])
-        run(["python3", "skills/eval/scripts/check_eval_queries.py", "--root", "."])
-        run(["python3", "bin/validators/check_doc_refs.py"])
-
-        method_reference_errors = method_reference_structure_errors(CURRENT_METHOD_REFERENCE_VERSION)
-        if method_reference_errors:
+    if args.method_reference_contract:
+        errors = method_reference_structure_errors(CURRENT_METHOD_REFERENCE_VERSION)
+        if errors:
             print("skill method reference structure errors:")
-            for error in method_reference_errors:
+            for error in errors:
                 print(f"- {error}")
             return 1
         print("skill method reference templates OK")
+        return 0
+
+    try:
+        if args.write:
+            run(["python3", "skills/skill-maintenance/scripts/sync_skill_checklists.py", "--write"])
+            run(["python3", "bin/validators/sync_skill_registry.py", "--write"])
+            run(["python3", "bin/validators/sync_template_registry.py", "--write"])
+            run(["python3", "skills/skill-maintenance/scripts/generate_template_intelligence.py"])
+
+        # The pure repository contracts have one route: the lint registry.
+        # This skill-maintenance command only adds explicit writers, optional
+        # strict/hardcase behavior, rollout reporting, and compile smoke tests.
+        run(["python3", "bin/farplane.py", "lint", "skills"])
+
+        if args.strict_tier3 or args.capture_hardcase:
+            tier_command = ["python3", "bin/validators/check_skill_todo_tiers.py"]
+            if not args.strict_tier3:
+                tier_command.append("--allow-peer-tier3")
+            if args.capture_hardcase:
+                tier_command.append("--hardcase-on-failure")
+            run(tier_command)
 
         run(
             [
                 "python3",
                 "-m",
                 "py_compile",
+                "bin/core/lint/models.py",
+                "bin/core/lint/registry.py",
+                "bin/core/lint/runner.py",
+                "bin/core/lint/source.py",
                 "bin/validators/sync_skill_registry.py",
                 "bin/validators/check_skill_frontmatter.py",
-                "bin/validators/check_skill_ensembles.py",
                 "bin/validators/sync_template_registry.py",
                 "bin/validators/template_usage.py",
                 "bin/validators/check_doc_refs.py",
@@ -522,6 +500,8 @@ def main() -> int:
                 "bin/validators/check_tier0_phase_protocol.py",
                 "bin/validators/check_skill_surface_budget.py",
                 "bin/validators/check_skill_capabilities.py",
+                "bin/validators/check_eval_contract.py",
+                "bin/core/eval_contract.py",
                 "skills/skill-maintenance/scripts/check_skills.py",
                 "skills/skill-maintenance/scripts/minimize_skill_surface.py",
                 "skills/skill-maintenance/scripts/sync_skill_checklists.py",

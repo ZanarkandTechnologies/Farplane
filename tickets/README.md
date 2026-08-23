@@ -205,6 +205,10 @@ compute_target: local_worktree
     `.farplane/state/tickets/TASK-XXXX.runtime.json`.
   - `symphony` and `codex_cloud` are future external-adapter targets and must
     stay blocked in local Farplane until those adapters exist.
+- `ui_scope`: set to `true` when UI, layout, interaction, visual state, canvas
+  rendering, or taste is part of the implementation contract. This explicit
+  marker makes ticket-local `design.md` and comparison-based UI proof mandatory;
+  references to UI tooling alone do not classify a ticket as UI work.
 - `human_gate`: optional final-action gate. Omit it when the worker may finish
   without human approval. Use `[tag, "reason"]` when the
   worker may prepare artifacts and proof but must stop before that final
@@ -311,9 +315,36 @@ and proof without opening every file first.
 body schema. Do not reproduce its required-section catalogue in this README,
 skills, prompts, or reference templates.
 
-The canonical template names optional-section behavior. Common conditional
+Every ticket includes one compact ASCII `Contract Diagram`. It is the cheapest
+shared model of the intended change, not decoration and not a second spec:
+
+```text
+diagram_ready(ticket)
+  iff flow_simulatable
+      AND boundaries_visible
+      AND material_branches_visible
+      AND proof_observation_visible
+```
+
+Use stable IDs only for states, seams, branches, and proof points referenced by
+the Change Plan or QA. Adapt the diagram to the work:
+
+- UI: screens/states, actions, success, error, and recovery. Put detailed
+  screen ASCII and visual assertions in ticket-local `design.md`.
+- Backend/API: caller, boundary, signature/data movement, state, failure, proof.
+- Docs/config: source -> transformation -> owned output -> validation.
+- Research/judgment: evidence -> decision rule -> branch -> durable result.
+- Tiny work: a three-node before -> change -> proof line is sufficient.
+
+Reject a diagram that merely repeats headings, hides the meaningful branch,
+contradicts Scope/Delta, or cannot be used to check the implementation.
+
+The canonical template requires `Contract Diagram`. Common conditional
 sections include:
 
+- `Links`: a real program, progress log, artifact, dependency, source, or issue
+  must be followed by another reader or agent
+- `Notes`: a sparse accepted decision has no clearer canonical owner
 - `Reward`
 - `Planned Skill Call`
 - `Objective Contribution`
@@ -324,7 +355,9 @@ sections include:
 
 Add a conditional section only when its named consumer, ownership decision, or
 proof branch exists. In particular, `Docs Strategy` is not a default section;
-use it when documentation ownership is non-obvious or changes.
+use it when documentation ownership is non-obvious or changes. Do not render
+empty headings, placeholder `none` rows, or template instructions in a live
+ticket.
 
 The ticket is a compact task program over files and skills:
 
@@ -342,8 +375,8 @@ Use `Delta` to answer:
    non-goals when material
 
 Keep `Delta` brief after ticket creation. `Change Plan` owns executable units;
-`Map` is only their compact visual or signature projection and must not repeat
-the prose.
+`Contract Diagram` is their compact visual projection and must not repeat the
+prose.
 
 Use `Reward` for Pulse-created tactical tickets, interval-planned tickets,
 experiments, and other work whose planning value should be obvious before
@@ -441,6 +474,8 @@ into one heading and one fenced block per coherent change:
 ```
 
 ```text
+diagram_nodes:
+  - state, seam, branch, or proof ID from Contract Diagram
 fixes:
   - plain-language problem or delta this change resolves
 before: local before state
@@ -453,6 +488,8 @@ write:
     change: specific edit
 operation:
   - ordered implementation action
+assertions:
+  - observable postcondition for this unit
 signature_or_type_impact:
   - module / symbol(input): output, or compact type sketch
 routes:
@@ -468,7 +505,7 @@ failure_modes:
 Avoid synthetic labels unless a ticket truly needs stable anchors for
 many-to-many traceability. In normal tickets, `fixes:` is enough.
 
-This replaces both `Program` and `Map` for normal tickets. Create a separate
+This replaces `Program` for normal tickets. Create a separate
 `plan.md` only when the change plan is long, deeply technical, likely to change
 independently, or too large to keep the ticket readable.
 
@@ -478,16 +515,10 @@ decisions, council notes, architecture/API/data-model tradeoffs, or reusable
 rationale that would become hard to recover from a chronological log. Do not
 create empty `decisions.md` files.
 
-Use an optional visual system map inside `Change Plan` only when it earns its
-keep:
-
-1. cross-module topology
-2. ownership boundaries
-3. data flow or state transitions
-4. seams that are easier to see in a diagram than in `read` / `write`
-
-Keep diagram detail compact. The point is to make task shape legible in plain
-text, not to dump full schemas into the ticket.
+Each Change Plan unit references the Contract Diagram IDs it changes, names a
+local signature delta when a callable or typed contract changes, and gives
+observable assertions plus proof. Detailed multi-view architecture may live in
+`diagrams.md`, but it extends rather than replaces the ticket diagram.
 
 Use `Gap Analysis` when the work is about a missing, partial, parity-driven, or
 otherwise under-specified feature and the main planning question is "what does

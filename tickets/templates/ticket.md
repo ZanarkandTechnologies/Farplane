@@ -1,6 +1,6 @@
 ---
 template_id: ticket-template
-template_version: "0.2.7"
+template_version: "0.3.0"
 feature_refs:
   - FEAT-0007
   - FEAT-0008
@@ -10,12 +10,17 @@ status: todo
 created_at: YYYY-MM-DDTHH:MM:SSZ
 updated_at: YYYY-MM-DDTHH:MM:SSZ
 depends_on: []
+# Required only when UI, layout, interaction, visual state, or taste is in scope.
+# ui_scope: true
 ---
 
 # TASK-XXXX: title
 
 <!-- Keep ticket.md + program.md + the latest 80 progress lines within the
 300-line target and 400-line hard limit. Bulky evidence belongs in artifacts/.
+Start with the sections rendered below. Add Map, Docs Strategy, Links, or Notes
+only when omitting them would lose a current execution, review, proof, or resume
+decision. Never retain an empty optional section or placeholder `none` row.
 `claimed_by` is present only while status=active. The hook may set one immutable
 `thread_id` for this ticket's persistent Codex task; never store session_id here.
 Full authoring rules: tickets/README.md. -->
@@ -32,11 +37,27 @@ One paragraph: valuable outcome, beneficiary, and why this ticket matters now.
 
 ## Delta
 
-> **Before:** Current observable behavior.
+> **Before:** Quote or cite the observed current behavior and exact gap; if
+> evidence is missing, state the current assumption and evidence gap.
 >
-> **After:** Intended observable behavior.
+> **After:** State the smallest intended change and how it closes that gap.
 >
-> **Example:** One representative workflow or result.
+> **Example:** One representative current workflow or result -> intended
+> outcome.
+
+## Contract Diagram
+
+<!-- Required. Draw the smallest ASCII model that lets an unfamiliar agent
+simulate the intended work before implementation. Adapt it to the ticket: UI
+states/actions; backend boundaries/data flow; docs/config transformation; or
+research evidence/decision flow. Give referenced states and seams stable IDs. -->
+
+```text
+[S1 input/current state] -> [S2 decision/change] -> [S3 intended state]
+                               |
+                               +-> [F1 failure/recovery]
+[S3] -> [P1 observable proof]
+```
 
 <!-- Add Planned Skill Call, Objective Contribution, or Reward only when their
 named consumer exists; use tickets/README.md for those optional shapes. -->
@@ -46,10 +67,14 @@ named consumer exists; use tickets/README.md for those optional shapes. -->
 ### Change 1: coherent unit
 
 ```yaml
+diagram_nodes: [S2, S3]
 files:
   read: []
   edit: []
 operation: concrete change
+signature_delta: before -> after
+assertions:
+  - observable postcondition linked to the diagram
 proof: command, eval, QA, or review artifact
 failure: blocker or rollback condition
 ```
@@ -57,17 +82,6 @@ failure: blocker or rollback condition
 <!-- Repeat Change N only for independently reviewable units. Each unit owns
 its files, operation, local proof, and failure boundary; do not repeat the
 global Delta, QA Strategy, Docs Strategy, or routing policy in every unit. -->
-
-## Map
-
-<!-- Optional. Include only when a compact text or inline Mermaid map makes a
-material relationship clearer than prose. For multiple detailed views or an
-independently reviewed visual surface, link a ticket-local diagrams.md instead.
-Omit this section for simple tickets. -->
-
-```text
-input -> owner/change -> output + evidence
-```
 
 ## Done
 
@@ -94,14 +108,3 @@ branch needs them; use tickets/README.md for their compact contracts. -->
 - Current:
 - Next:
 - Blockers: none
-
-## Links
-
-- `program:` `none`
-- `progress:` `none`
-- `artifacts:` `none`
-- `related:` `none`
-
-## Notes
-
-<!-- Sparse durable decisions only; execution logs belong in progress.md. -->

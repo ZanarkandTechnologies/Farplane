@@ -14,6 +14,11 @@ import yaml
 
 
 ROOT = Path(__file__).resolve().parents[2]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from bin.core.lint.source import MarkdownFrontmatterError, UniqueYamlLoader, parse_markdown_frontmatter_document
+
 FEATURE_ROOT = ROOT / "docs" / "features"
 SYSTEM_ROOT = ROOT / "docs" / "systems"
 FEATURE_REGISTRY = FEATURE_ROOT / "registry.jsonl"
@@ -131,14 +136,12 @@ def load_source_ids() -> set[str]:
 
 
 def extract_frontmatter(text: str, path: Path, errors: list[str]) -> str | None:
-    if not text.startswith("---\n"):
-        errors.append(f"{path.relative_to(ROOT)}: missing YAML frontmatter")
+    try:
+        _metadata, raw, _body = parse_markdown_frontmatter_document(text, path, required=True)
+    except MarkdownFrontmatterError as exc:
+        errors.append(str(exc))
         return None
-    end = text.find("\n---", 4)
-    if end == -1:
-        errors.append(f"{path.relative_to(ROOT)}: unterminated frontmatter")
-        return None
-    return text[4:end]
+    return raw
 
 
 def extract_block(frontmatter: str, key: str) -> str | None:
@@ -175,7 +178,7 @@ def normalize_frontmatter_value(value: Any) -> Any:
 
 def load_frontmatter(frontmatter: str, path: Path, errors: list[str]) -> dict[str, Any] | None:
     try:
-        loaded = yaml.safe_load(frontmatter) or {}
+        loaded = yaml.load(frontmatter, Loader=UniqueYamlLoader) or {}
     except yaml.YAMLError as exc:
         errors.append(f"{path.relative_to(ROOT)}: invalid YAML frontmatter: {exc}")
         return None

@@ -70,7 +70,7 @@ fails: jumps to a fix before naming the gap; confuses symptom with owner; invent
   `nice-to-have`.
 - [ ] 5. Choose the next owner.
   - [ ] 1. Target surface edit.
-  - [ ] 2. Eval task, hardcase metadata, or fixture.
+  - [ ] 2. Eval task or fixture.
   - [ ] 3. Skill-local self-improvement memory.
   - [ ] 4. Skill-maintenance pass.
   - [ ] 5. Harness placement decision.
@@ -137,7 +137,7 @@ Verification: ...
 - [harness-advisor](../harness-advisor/SKILL.md) - use when the fix may belong
   outside the inspected target surface.
 - [eval](../eval/SKILL.md) - use when the gap should become a repeatable proof
-  case or hardcase-marked eval.
+  case or difficult runnable regression.
 
 ## Output
 

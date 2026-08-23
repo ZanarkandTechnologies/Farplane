@@ -26,6 +26,7 @@ The existing runner continues to own project suites and behavior traces.
 | Model, reasoning, sandbox, approvals, web/search, MCP, skill enable/disable | Codex profile | Eval task query |
 | Shared fictional company state, role assumptions, toy tickets, product facts, safety boundaries | AGI Toy Shop fixture context | Codex profile |
 | One user ask and expected behavior | `evals/evals.json` row | Profile or shared fixture |
+| Agent-Skills suite shape, UI metadata, feature binding, extension boundary | `bin/core/eval_contract.py` + `farplane lint evals` | Runner-local normalizers or untyped case fields |
 | Promptfoo skill execution, `skill-used`, rubric grading, raw export | Promptfoo | A second Farplane executor or authored Promptfoo suite |
 | Agent Skills manifest projection, clean variant workspaces, normalized receipt | `run_promptfoo.py` plus focused tests | Promptfoo YAML checked in beside `evals.json` |
 | Skill-specific regression coverage | `skills/<skill>/evals/evals.json` | Global harness task file |
@@ -49,7 +50,7 @@ Use AGI Toy Shop for:
 - language, reasoning, routing, escalation, pushback, and planning behavior
 - proof discipline, QA expectations, ticket hygiene, and artifact selection
 - skill and workflow regressions that do not need real side effects
-- hardcases that must be sanitized before becoming reusable evals
+- difficult cases that must be sanitized before becoming reusable evals
 
 Do not create new fictional companies for ordinary harness evals. Extend the
 AGI Toy Shop context when the eval set needs a new department, ticket, workflow,
@@ -135,6 +136,14 @@ Keep eval tasks small and natural:
 Do not put skill instructions, routing policy, or expected answers in the
 `prompt`. Put shared setup in the fixture, expected behavior in `assertions`,
 and harness mechanics in the profile or runner.
+
+`files` stays an Agent-Skills-compatible relative path list. Its availability is
+an execution preflight concern because Farplane also has legitimate project
+workspace fixtures; type lint rejects malformed or escaping paths but never
+pretends a copied runtime workspace is part of the authored JSON schema. Use
+`metadata.farplane.workspace_fixture` for a clean fixture directory,
+`feature_id` to bind a case to one registered feature document, and
+`extensions` only for experimental JSON that has no active consumer.
 
 ## Placement Checklist
 

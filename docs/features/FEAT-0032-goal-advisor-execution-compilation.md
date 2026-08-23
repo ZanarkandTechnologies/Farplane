@@ -80,6 +80,9 @@ proof expectations.
   trigger context.
 - Chooses native Goal, heartbeat, rollout, feedback, or direct route.
 - Compiles a concrete execution prompt with proof gates and continuation state.
+- Compiles the ticket Contract Diagram and Change Plan into an ordered execution
+  path, a consumed-reference manifest, and assertion-to-evidence completion
+  closure; structurally complete but contradictory packets return revision.
 - Keeps the ticket as the source of truth for scope and Done / Proof.
 - For experiment-backed campaigns, binds `hypothesis-tree.json` as the sole
   current research-state owner without adding it to ordinary Goal Packets.
@@ -97,6 +100,11 @@ Goal Advisor is an execution compiler, not a replacement for the ticket.
 
 - Material work must have a visible ticket or packet before goal-backed execution.
 - Route choice names trigger mode, budget, files, and proof expectations.
+- The Compiled Execution Path binds diagram nodes to owning changes and exit
+  assertions. The Reference Manifest names a consumer for every non-core file.
+  Completion Closure binds each Done claim to an implementation owner and
+  current evidence; pending, stale, unsupported, or contradicted rows block
+  `stop_complete`.
 - Ordinary Goal Packets use `ticket.md`, `program.md`, and `progress.md`.
   Experiment-backed packets conditionally add `hypothesis-tree.json`; the
   [Self-Improvement And Learning system](../systems/self-improvement-learning.md)
@@ -108,7 +116,8 @@ Goal Advisor is an execution compiler, not a replacement for the ticket.
   Wave only outside an active Goal when the board needs refill.
 - First load is bounded to full ticket/program plus the latest 80 progress
   lines, with a 300-line target and 400-line hard validation gate.
-- Completion still uses the ticket's proof and review gates.
+- Completion still uses the ticket's proof and review gates and requires a
+  `goal-program-contract` verdict for material Goal program changes.
 
 ## Feature Flow
 

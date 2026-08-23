@@ -35,10 +35,18 @@ python3 skills/eval/scripts/run_promptfoo.py \
 ```
 
 The profile owns shared provider settings and must set `enable_streaming: true`.
-The adapter accepts stable string or integer IDs and one `expectations` or
-`assertions` list. Promptfoo exit `100` is a completed comparison; the adapter
-returns success only when every candidate row passes, irrespective of expected
-baseline failures.
+Suites use string IDs and one canonical `assertions` list; run `farplane lint
+evals --changed` before a comparison. Promptfoo exit `100` is a completed
+comparison; the adapter returns success only when every candidate row passes,
+irrespective of expected baseline failures.
+
+The Pydantic model is the schema source of truth. Its checked-in generated
+artifact is [farplane-eval-suite-v1.schema.json](../../docs/contracts/farplane-eval-suite-v1.schema.json);
+inspect the current output with `python3 bin/validators/check_eval_contract.py
+--schema` and verify it has not drifted with `--check-schema`. Do not add a
+root `format` or `schema_version` field because portable Agent-Skills suites
+and the current Skill Studio parser intentionally accept only `skill_name` and
+`evals`.
 
 ChatGPT-login runs inherit the configured Codex home, including its harness
 context. For repeated or CI runs, point profile `config.cli_env.CODEX_HOME` at
@@ -142,11 +150,6 @@ Optional `--eval-file` inspection identifies image/screenshot expectations
 that have no image fixture. It separates intentional missing-evidence controls
 from potential fixture/evaluator tension and never changes the promotion
 verdict or rewrites eval truth.
-
-For claims such as “the agent ran both validators,” add hidden
-`metadata.farplane.behavior_requirements.required_successful_command_regexes`
-to the eval row. Behavior trace matches those regexes only against completed
-zero-exit commands and does not include them in the child or judge prompt.
 
 Inspect project and framework runs in Farplane UI's first-class `Eval OS`
 module. Core intentionally ships no second viewer; it owns the files under

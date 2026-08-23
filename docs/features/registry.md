@@ -2,7 +2,7 @@
 title: "Generated Feature Registry"
 status: generated
 owner: feature-registry
-updated_at: 2026-08-19
+updated_at: 2026-08-23
 refs:
   - docs/features/registry.jsonl
   - docs/features/validate_features.py
@@ -31,7 +31,7 @@ This file is generated. Edit the feature specs in `docs/features/` instead.
 | [FEAT-0043 Retired project-level system prompt eval suite](../features/FEAT-0043-project-level-system-prompt-eval-suite.md) | [Proof And Review](../systems/proof-review.md) | `retired` | `false` | `FEAT-0039` | `proof` |
 | [FEAT-0054 Retired modular skill-local eval tasks](../features/FEAT-0054-modular-skill-local-eval-tasks.md) | [Proof And Review](../systems/proof-review.md) | `retired` | `false` | `FEAT-0039` | `proof` |
 | [FEAT-0056 Tasty Pack inspiration vault](../features/FEAT-0056-inspiration-vault.md) | [Content Production](../systems/content-production.md) | `implemented` | `false` | `false` | `content-production` |
-| [FEAT-0057 Skill-local QA checklist artifacts](../features/FEAT-0057-skill-local-qa-checklist-artifacts.md) | [Skill System](../systems/skill-system.md) | `implemented` | `false` | `false` | `skills` |
+| [FEAT-0057 Skill-local runtime QA guardrails](../features/FEAT-0057-skill-local-qa-checklist-artifacts.md) | [Skill System](../systems/skill-system.md) | `implemented` | `false` | `false` | `skills` |
 | [FEAT-0060 Registry-backed documentation OS](../features/FEAT-0060-registry-backed-documentation-os.md) | [Documentation OS](../systems/documentation-os.md) | `implemented` | `false` | `false` | `context-routing` |
 | [FEAT-0061 Farplane adoption tracker CLI](../features/FEAT-0061-farplane-adoption-tracker-cli.md) | [Maintenance And Release OS](../systems/maintenance-release-os.md) | `implemented` | `false` | `false` | `proof` |
 | [FEAT-0062 Capped skill surface budget](../features/FEAT-0062-capped-skill-surface-budget.md) | [Skill System](../systems/skill-system.md) | `implemented` | `false` | `false` | `skills` |

@@ -8,8 +8,8 @@ Use this when writing or revising task files and judge prompts.
 - Write one task per behavior; do not start with broad benchmark coverage.
 - Keep skill-local JSON portable: `skill_name` plus `evals` rows containing
   `id`, `prompt`, `expected_output`, optional `files`, and `assertions`.
-  Keep Farplane-only title, context, tags, notes, and hardcase fields under
-  `metadata.farplane`.
+  Keep Farplane-only title, context, tags, notes, a relative fixture path,
+  feature binding, and namespaced extensions under `metadata.farplane`.
 - For skill-specific behavior, store the task next to the owning skill as
   `skills/<skill-name>/evals/evals.json`. Use `.farplane/evals/tasks/*` for
   active project work and `skills/eval/examples/*` for reusable cross-skill

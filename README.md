@@ -293,6 +293,11 @@ What Core owns:
   notify wrappers when present.
 - `farplane run -- <command>`: runs a command through the current project's
   Doppler secret environment.
+- `farplane eval init`: writes this project's non-secret Promptfoo/Codex
+  comparison profile at `.farplane/evals/promptfoo-profile.json`.
+- `farplane eval promptfoo --skill <name> --label <label>`: runs the owning
+  Agent Skills manifest through Promptfoo, compares it with the clean baseline,
+  and publishes the receipt to this project's Farplane Office Eval OS runs.
 - `farplane metrics primitives --project-root /path/to/project --date YYYY-MM-DD --json`:
   refreshes Core primitive readings for ticket/KPI/product counts, Codex thread
   usage, burn source gaps, and ticket/thread association backfill.

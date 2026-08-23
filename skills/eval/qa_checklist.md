@@ -96,9 +96,6 @@ Apply this when `--behavior-trace` is used:
 - The run used one worker so observed file deltas remain attributable.
 - The receipt preserves the exact prompt, raw event stream, stdout/stderr,
   final output, command/usage summary, checkpoint score, and artifact inventory.
-- Required command evidence is declared only in hidden Farplane metadata,
-  omitted from child/judge prompts, and fails the behavior trace unless every
-  regex matches a captured completed command with exit code zero.
 - Declared artifacts exist inside the target root; unsafe or missing paths fail.
 - The standard behavior schema was used when a structured child report matters,
   and the preserved receipt records local validation.

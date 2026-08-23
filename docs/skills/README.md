@@ -107,7 +107,7 @@ Use this table when two skills look similar. It is intentionally prose-first;
 | Gather external parity, gap, docs, code-pattern, or source-synthesis evidence | `research:*` | It is the Tier 2 evidence workflow for method-addressed research passes. | The answer is already locally grounded and only needs a recommendation. |
 | Add independent perspectives to a skill that owns an ensemble | `ensemble=auto|max` on that skill | `auto` selects exactly three relevant diverse personas from the skill's `ensemble.yaml`; `max` runs all of them and preserves dissent in synthesis. | The direct path is enough, or the skill does not declare an ensemble file. |
 | Watch an existing PR until review agents and checks pass | `pr-review-watch` | It owns explicit heartbeat polling, project-local PR review memory, normalized PR verdicts, fix loops, and terminal notifications while reusing the task's assigned checkout and reviewer-agent review. | You only need one explicit material review (`review`). |
-| Check, scaffold, onboard, and run harness-native evals | `eval` | It initializes/discovers clean-room eval tasks, judges boolean/tier outcomes, treats hardcases as metadata, and can preserve one isolated CLI run as a scored `behavior_trace` with prompt, events, logs, output, checkpoints, artifacts, schema verdict, and baseline comparison. | You need adversarial tester/evidence-review orchestration or only native-subagent evidence; use `agent-qa-test`. |
+| Check, scaffold, onboard, and run harness-native evals | `eval` | It initializes/discovers clean-room eval tasks, judges boolean/tier outcomes, keeps difficult reusable cases as ordinary runnable regressions, and can preserve one isolated CLI run as a scored `behavior_trace` with prompt, events, logs, output, checkpoints, artifacts, schema verdict, and baseline comparison. | You need adversarial tester/evidence-review orchestration or only native-subagent evidence; use `agent-qa-test`. |
 | Test a feature, skill, prompt, or workflow adversarially | `agent-qa-test` | It designs cases, runs or drafts a tester lane, attacks the tester evidence with an evidence-review lane, reconciles fixes/reruns, and can include Eval `behavior_trace` capture. | You only need one cheap CLI conformance probe and no adversarial proof loop. |
 | Choose how to prove a behavior claim | `proof-advisor` | It turns a claim or failure risk into proof cases, proof-surface choice, conditional domain-testing guidance, and a handoff to deterministic execution, eval, QA, visual QA, agent QA, review, or a source-gap ticket. | The proof surface and command are already selected; run them in the native execution phase or use the owning executor such as `eval`, `qa`, or `review`. |
 | Apply settled skill-local runtime guardrails | `qa_checklist.md` beside the skill | It is the real-time checklist surface for reusable checks that should be read before execution, applied before completion, and independently reviewed after material skill edits. | You need to discover expected behavior or compare variants; use `evals/evals.json` or an eval suite. |
@@ -229,6 +229,7 @@ so intended skill calls appear there as explicit refs in the right order.
 ## Commands
 
 ```bash
+python3 bin/farplane.py lint skills  # validates contracts and checks registry/graph drift
 python3 skills/skill-maintenance/scripts/check_skills.py --write
 python3 bin/validators/sync_skill_registry.py --write
 python3 bin/validators/sync_skill_registry.py --check
@@ -284,7 +285,7 @@ scores.
 - `bin/validators/check_skill_todo_tiers.py --hardcase-on-failure` should capture
   a deduplicated sanitized eval case, or a `.farplane/evals/` follow-up seed,
   when the validator catches a clear skill todo tier violation. Durable hard
-  cases should be runnable eval rows with hardcase metadata, not standalone
+  cases should be runnable eval rows, not standalone
   legacy experiment backlog files.
 
 ## Tier 3 Pipeline Shape

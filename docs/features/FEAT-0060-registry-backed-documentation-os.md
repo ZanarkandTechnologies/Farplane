@@ -3,7 +3,7 @@ title: Registry-backed documentation OS
 status: implemented
 owner: feature-registry
 created_at: 2026-06-26
-updated_at: 2026-06-27
+updated_at: 2026-08-19
 tags:
   - farplane
   - feature
@@ -98,6 +98,11 @@ as separate truth shelves.
 
 This feature collapses the durable documentation model around reader-first feature and
 system specs with generated registries for machine use.
+
+Reader-first means more than correct placement. Documentation uses plain,
+concrete words, names the actor or mechanism, and omits generic prose or
+template structure that does not help the reader decide, act, verify, or
+understand.
 
 ## What It Does
 

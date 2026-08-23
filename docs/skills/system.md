@@ -15,8 +15,8 @@ fields, and todo-link rules stay in one place.
 - `skills/skill-creator/` owns creating or updating one reusable skill package.
 - `skills/skill-maintenance/` owns bulk upkeep, validation, generated registry
   sync, and rollout audits.
-- `bin/core/skill_contract.py` owns typed frontmatter and package-local
-  ensemble parsing; `check_skill_ensembles.py` validates every `ensemble.yaml`.
+- `bin/core/skill_contract.py` owns typed skill frontmatter and optional
+  package-local ensemble parsing; `check_skill_frontmatter.py` validates both.
 - feature pages in `docs/features/` own skill-applicable harness feature docs
   with `category: "skills"`, and `docs/systems/skill-system.md` links the
   surviving feature refs.
@@ -286,11 +286,12 @@ Keep skill frontmatter small.
 
 The complete runtime schema and parser live in
 [`bin/core/skill_contract.py`](../../bin/core/skill_contract.py).
-`python3 bin/validators/check_skill_frontmatter.py` rejects undeclared fields
-and ambiguous artifact-output ownership before registry or graph generation.
-`farplane validate frontmatter skills` exposes the same check through the
-canonical CLI; `farplane validate frontmatter docs` runs the document metadata
-family without treating unrelated document prose as a shared schema.
+`python3 bin/validators/check_skill_frontmatter.py` rejects undeclared fields,
+invalid optional ensemble personas, and ambiguous artifact-output ownership
+before graph generation. `farplane lint skills` validates both package files and
+checks skill registry plus graph projections without writing them;
+`farplane lint docs` runs the document metadata family without treating
+unrelated document prose as a shared schema.
 Do not add catch-all `metadata`, `tags`, or provenance blobs to frontmatter;
 put that context in the skill body, a reference, or the upstream source.
 
@@ -555,9 +556,9 @@ ensemble_mode(skill, request) -> direct | auto_three_personas | max_all_personas
 ```
 
 The default is direct. A skill that supports ensemble coverage stores complete
-persona definitions in `skills/<name>/ensemble.yaml`, validated by the shared
-frontmatter boundary. `ensemble=auto` selects exactly three relevant, diverse
-personas from that file; `ensemble=max` uses all of them. Each lane receives
+persona definitions in `skills/<name>/ensemble.yaml`, validated with the
+frontmatter contract by one package lint. `ensemble=auto` selects exactly three
+relevant, diverse personas from that sidecar; `ensemble=max` uses all of them. Each lane receives
 the same task/evidence, produces an independent first pass, and synthesis
 preserves meaningful dissent. Ensemble mode never propagates into child calls.
 

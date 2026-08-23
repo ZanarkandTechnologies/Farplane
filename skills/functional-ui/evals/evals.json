@@ -16,12 +16,11 @@
       "metadata": {
         "farplane": {
           "title": "Browser-operates comparables for a material unsettled workflow",
-          "tags": ["skill", "functional-ui", "browser-research", "comparables"],
-          "anti_patterns": [
-            "Relies on memory or search snippets for current product behavior",
-            "Lists visual inspiration without operating a workflow",
-            "Invents states hidden behind a login wall",
-            "Stops at examples without a recommended local model"
+          "tags": [
+            "skill",
+            "functional-ui",
+            "browser-research",
+            "comparables"
           ]
         }
       }
@@ -40,11 +39,10 @@
       "metadata": {
         "farplane": {
           "title": "Skips heavyweight research for a tiny settled correction",
-          "tags": ["skill", "functional-ui", "negative-route"],
-          "anti_patterns": [
-            "Delays a tiny correction for a broad market scan",
-            "Reopens the settled interaction model",
-            "Omits saving and error states"
+          "tags": [
+            "skill",
+            "functional-ui",
+            "negative-route"
           ]
         }
       }
@@ -64,7 +62,12 @@
       "metadata": {
         "farplane": {
           "title": "Functional UI returns an optional low-fi planning handoff",
-          "tags": ["skill", "functional-ui", "low-fi", "impl-plan"]
+          "tags": [
+            "skill",
+            "functional-ui",
+            "low-fi",
+            "impl-plan"
+          ]
         }
       }
     },
@@ -88,11 +91,6 @@
             "functional-ui",
             "focus",
             "simplicity"
-          ],
-          "anti_patterns": [
-            "Calls an overbuilt workflow clean without naming a removal",
-            "Removes evidence or recovery states to make the flow smaller",
-            "Uses aesthetic imitation instead of a user-job decision"
           ]
         }
       }

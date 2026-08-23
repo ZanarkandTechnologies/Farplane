@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import re
 import subprocess
 import time
 from pathlib import Path
@@ -22,6 +23,7 @@ from bin.core.farplane_response import measure_response
 GOAL_CONTEXT_TARGET_LINES = 300
 GOAL_CONTEXT_HARD_LIMIT_LINES = 400
 PROGRESS_TAIL_LINES = 80
+CONTRACT_NODE_RE = re.compile(r"\[[A-Z][A-Z0-9_-]*\d+[A-Z0-9_-]*\]")
 
 
 def _result(check_id: str, mode: CheckMode, returncode: int, output: str, started: float) -> CheckResult:
@@ -74,6 +76,33 @@ def ticket_reward_check(context: ValidationContext, mode: CheckMode) -> CheckRes
         mode,
         1 if errors else 0,
         "\n".join(errors) or "ticket Reward scheduling OK",
+        started,
+    )
+
+
+def ticket_contract_diagram_check(context: ValidationContext, mode: CheckMode) -> CheckResult:
+    """Validate the mechanical minimum; semantic fidelity belongs to review."""
+    started = time.monotonic()
+    text = context.ticket.read_text(encoding="utf-8")
+    diagram = _markdown_section(text, "Contract Diagram")
+    change_plan = _markdown_section(text, "Change Plan")
+    errors: list[str] = []
+    if not diagram.strip():
+        errors.append("missing required ## Contract Diagram")
+    else:
+        if "```text" not in diagram:
+            errors.append("Contract Diagram must contain a fenced ASCII text block")
+        if "->" not in diagram and "-->" not in diagram:
+            errors.append("Contract Diagram must show at least one directed relationship")
+        if len(set(CONTRACT_NODE_RE.findall(diagram))) < 2:
+            errors.append("Contract Diagram must expose at least two stable node IDs such as [S1] and [P1]")
+    if change_plan.strip() and "diagram_nodes:" not in change_plan:
+        errors.append("Change Plan must map coherent units with diagram_nodes")
+    return _result(
+        "ticket.contract-diagram",
+        mode,
+        1 if errors else 0,
+        "\n".join(errors) or "ticket Contract Diagram structure OK",
         started,
     )
 
@@ -223,6 +252,7 @@ def completion_evidence_check(context: ValidationContext, mode: CheckMode) -> Ch
 def build_registry() -> CheckRegistry:
     registry = CheckRegistry()
     specs = (
+        CheckSpec("ticket.contract-diagram", ticket_contract_diagram_check),
         CheckSpec("ticket.context-budget", ticket_context_budget_check),
         CheckSpec("ticket.metadata", ticket_metadata_check),
         CheckSpec("ticket.reward", ticket_reward_check),

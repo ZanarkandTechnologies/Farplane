@@ -67,8 +67,10 @@ request.
 
 ## Skill and Tool Routing
 
-- Use `skill({ name: "testing" })` only when the proof type or cheapest
-  meaningful backpressure is not already settled by `QA Strategy`.
+- Use `skill({ name: "proof-advisor" })` only when the proof type or cheapest
+  meaningful backpressure is not already settled by `QA Strategy`. When the
+  system type matters, load only its matching conditional guide under
+  `skills/proof-advisor/references/testing/`.
 - Use the bundled Codex in-app Browser for browser operation. Reuse the current
   browser binding and tabs across sequential checks; use `@Chrome` only when
   the operator's existing authenticated Chrome state is required.
@@ -97,6 +99,14 @@ Evidence branches:
 - Browser/UI: bound runtime, pre-interaction snapshot, important-state
   screenshots, console logs, page errors, and ordered frames when the journey
   matters. Image `best_evidence` is mandatory for a pass.
+- Long-form Browser/UI: an operated scroll to bottom, desktop/mobile full-page
+  captures, readable top/middle/bottom frames, and a `design.md` section-to-
+  evidence coverage map. A first viewport or compressed full-page image proves
+  neither the page nor its lower sections.
+- Screenshot complaint: retain the original image, exact complaint, affected
+  design state, and viewport; after repair capture a newer comparable image and
+  request visual judgment. Never close from stale, wrong-state, partial, or
+  unrelated evidence.
 - Failure: capture the strongest available artifact and name missing evidence
   in `blockers`; do not manufacture empty screenshots, logs, or future paths.
   When the required evidence does not exist, a non-pass receipt may use
@@ -115,7 +125,8 @@ browser/UI artifacts, not universal QA requirements.
   package evidence, and return `fail` or `not_provable`.
 - Do not keep browsing once the proof target is unreachable with current hooks.
 
-For canvas or real-time systems, use the owning testing and Browser guidance.
+For canvas or real-time systems, use the matching conditional Proof Advisor
+guide and Browser guidance.
 When reliable proof needs pause, step, seeded state, a debug HUD, or a DOM state
 mirror, name that instrumentation instead of relying on coordinate wandering.
 

@@ -14,6 +14,11 @@ from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[2]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from bin.core.lint.source import MarkdownFrontmatterError, parse_markdown_frontmatter_document
+
 DEFAULT_CONFIG = ROOT / "rules" / "template-registry.toml"
 DEFAULT_REGISTRY = ROOT / "docs" / "templates" / "registry.jsonl"
 VERSION_RE = re.compile(r"^\d+\.\d+\.\d+(?:[-+][0-9A-Za-z.-]+)?$")
@@ -94,13 +99,12 @@ def parse_metadata_block(raw: str) -> dict[str, Any]:
     return metadata
 
 
-def extract_frontmatter(text: str) -> dict[str, Any] | None:
-    if not text.startswith("---\n"):
-        return None
-    end = text.find("\n---", 4)
-    if end == -1:
-        raise TemplateRegistryError("unterminated YAML front matter")
-    return parse_metadata_block(text[4:end])
+def extract_frontmatter(text: str, path: Path) -> dict[str, Any] | None:
+    try:
+        metadata, _raw, _body = parse_markdown_frontmatter_document(text, path)
+    except MarkdownFrontmatterError as exc:
+        raise TemplateRegistryError(str(exc)) from exc
+    return metadata
 
 
 def extract_html_comment_metadata(text: str) -> dict[str, Any] | None:
@@ -141,7 +145,7 @@ def extract_metadata(path: Path) -> dict[str, Any]:
     text = path.read_text(encoding="utf-8")
     try:
         metadata = (
-            extract_frontmatter(text)
+            extract_frontmatter(text, path)
             or extract_json_metadata(text)
             or extract_toml_metadata(text)
             or extract_html_comment_metadata(text)

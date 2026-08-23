@@ -21,11 +21,6 @@
             "visual-design",
             "focus",
             "simplicity"
-          ],
-          "anti_patterns": [
-            "Treats a Steve Jobs reference as a request to copy Apple aesthetics",
-            "Deletes required state visibility or accessible controls",
-            "Adds competing panels without a user-job reason"
           ]
         }
       }

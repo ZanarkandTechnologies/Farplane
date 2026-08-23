@@ -73,10 +73,10 @@ RULES: tuple[HarnessRule, ...] = (
         required_substrings=(
             "`claimed_by` is present only while status=active",
             "## Summary",
+            "## Contract Diagram",
             "## Change Plan",
             "## Done",
             "## QA Strategy",
-            "## Links",
         ),
         remediation=(
             "keep the ticket template aligned with the ticket/runtime identity "
@@ -86,7 +86,7 @@ RULES: tuple[HarnessRule, ...] = (
 )
 
 
-def validate_root(root: Path) -> list[str]:
+def validate_root(root: Path, *, include_project_contract: bool = True) -> list[str]:
     errors: list[str] = []
     for rule in RULES:
         path = root / rule.relative_path
@@ -110,7 +110,8 @@ def validate_root(root: Path) -> list[str]:
                     f"remediation: {rule.remediation}"
                 )
     errors.extend(validate_agent_roles(root))
-    errors.extend(validate_project_files(root))
+    if include_project_contract:
+        errors.extend(validate_project_files(root))
     return errors
 
 
@@ -162,13 +163,18 @@ def parse_args() -> argparse.Namespace:
         default=ROOT,
         help="Repository root to validate (defaults to the current repo).",
     )
+    parser.add_argument(
+        "--skip-project-contract",
+        action="store_true",
+        help="Skip project-file checks when a composed lint route runs them separately.",
+    )
     return parser.parse_args()
 
 
 def main() -> int:
     args = parse_args()
     root = args.root.resolve()
-    errors = validate_root(root)
+    errors = validate_root(root, include_project_contract=not args.skip_project_contract)
     if errors:
         for error in errors:
             print(error)
@@ -181,7 +187,7 @@ def main() -> int:
     agent_count = len(list((root / "agents").glob("*.toml")))
     print(
         f"harness invariants OK ({len(RULES)} files checked, {agent_count} agents, "
-        f"{rule_count} rules, project files checked)"
+        f"{rule_count} rules, {'project files checked' if not args.skip_project_contract else 'project files delegated'})"
     )
     return 0
 

@@ -19,6 +19,7 @@ if str(CORE_DIR) not in sys.path:
     sys.path.insert(0, str(CORE_DIR))
 
 from farplane_ticket_reward import is_timezone_bearing_iso_datetime
+from lint.source import MarkdownFrontmatterError, parse_markdown_frontmatter_document
 
 
 TICKETS_DIR = ROOT / "tickets"
@@ -49,6 +50,7 @@ OPTIONAL_FIELDS = {
     "depends_on",
     "human_gate",
     "compute_target",
+    "ui_scope",
     "rejection_reason",
     # Registered template provenance is tolerated on instances but does not
     # participate in board routing and is never required.
@@ -121,51 +123,34 @@ def parse_human_gate(value: object) -> tuple[str, str] | None:
                 return ("", "")
             tag, reason = inner.split(",", 1)
             return (tag.strip().strip('"').strip("'"), reason.strip().strip('"').strip("'"))
+    if isinstance(value, list) and len(value) == 2 and all(isinstance(item, str) for item in value):
+        return (value[0].strip(), value[1].strip())
     return ("", "")
 
 
 def load_ticket(path: Path) -> tuple[dict[str, object], str]:
-    text = path.read_text(encoding="utf-8")
-    if not text.startswith("---\n"):
-        raise ValueError("missing frontmatter start")
+    try:
+        data, _raw, body = parse_markdown_frontmatter_document(
+            path.read_text(encoding="utf-8"),
+            path,
+            required=True,
+        )
+    except MarkdownFrontmatterError as exc:
+        raise ValueError(str(exc)) from exc
+    assert data is not None
+    return {key: normalize_frontmatter_value(value) for key, value in data.items()}, body
 
-    parts = text.split("\n---\n", 1)
-    if len(parts) != 2:
-        raise ValueError("missing frontmatter end")
 
-    raw_frontmatter = parts[0][4:]
-    body = parts[1]
-    data: dict[str, object] = {}
-    lines = raw_frontmatter.splitlines()
-    i = 0
-    while i < len(lines):
-        line = lines[i]
-        if not line.strip():
-            i += 1
-            continue
-        if ":" not in line:
-            raise ValueError(f"invalid frontmatter line: {line!r}")
-        key, raw_value = line.split(":", 1)
-        key = key.strip()
-        value = raw_value.strip()
-        if value == "":
-            items: list[str] = []
-            i += 1
-            while i < len(lines) and lines[i].startswith("  - "):
-                items.append(lines[i][4:].strip())
-                i += 1
-            data[key] = items
-            continue
-        if value == "[]":
-            data[key] = []
-            i += 1
-            continue
-        if value in {"true", "false"}:
-            data[key] = value == "true"
-        else:
-            data[key] = value
-        i += 1
-    return data, body
+def normalize_frontmatter_value(value: object) -> object:
+    """Keep YAML's structural types while comparing temporal values as text."""
+
+    if hasattr(value, "isoformat"):
+        return value.isoformat()
+    if isinstance(value, list):
+        return [normalize_frontmatter_value(item) for item in value]
+    if isinstance(value, dict):
+        return {str(key): normalize_frontmatter_value(item) for key, item in value.items()}
+    return value
 
 
 def validate_ticket(path: Path) -> list[str]:
@@ -211,6 +196,12 @@ def validate_ticket(path: Path) -> list[str]:
             if not match or match.group(1) != ticket_id:
                 errors.append(f"{rel}: filename does not match ticket_id {ticket_id}")
 
+    title = str(frontmatter.get("title", "")).strip()
+    expected_h1 = f"# {ticket_id}: {title}"
+    actual_h1 = next((line.strip() for line in body.splitlines() if line.startswith("# ")), "")
+    if actual_h1 != expected_h1:
+        errors.append(f"{rel}: H1 must be exactly {expected_h1!r}")
+
     status = str(frontmatter.get("status", "")).strip()
     if status and status not in ALLOWED_STATUSES:
         errors.append(f"{rel}: invalid status {status!r}")
@@ -233,11 +224,14 @@ def validate_ticket(path: Path) -> list[str]:
     claimed_by = normalize_optional_scalar(frontmatter.get("claimed_by", ""))
     thread_id = frontmatter.get("thread_id")
     compute_target = frontmatter.get("compute_target", None)
+    ui_scope = frontmatter.get("ui_scope", None)
     human_gate = parse_human_gate(frontmatter.get("human_gate", None))
     if compute_target is not None:
         if not isinstance(compute_target, str) or compute_target not in ALLOWED_COMPUTE_TARGETS:
             allowed = ", ".join(sorted(ALLOWED_COMPUTE_TARGETS))
             errors.append(f"{rel}: compute_target must be one of: {allowed}")
+    if ui_scope is not None and ui_scope is not True:
+        errors.append(f"{rel}: ui_scope must be true when present; omit it otherwise")
     if human_gate is not None:
         tag, reason = human_gate
         allowed_human_gates = load_allowed_human_gates()

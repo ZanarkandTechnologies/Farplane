@@ -29,15 +29,7 @@
             "resource-bank",
             "creative-elements"
           ],
-          "notes": "Regression for the lean complete-capsule contract: use the smallest source read that can ground every element, and deepen or block when it cannot.",
-          "anti_patterns": [
-            "Accepts shallow title and description elements when element-specific why/example/recipe claims are unsupported.",
-            "Creates or uploads a placeholder thumbnail when media ingest did not extract a real visual asset.",
-            "Adds contact sheets, storage IDs, or previewAsset URLs to the Tasty Pack payload instead of treating them as Resource Bank UI enrichment.",
-            "Expands the capture into lane taxonomy, provenance enums, or evidence objects without a direct reuse/audit need.",
-            "Returns moodboard prose without creative elements.",
-            "Claims full-video pacing, recurring visuals, audio, or later beats when only source metadata and the operator note are available."
-          ]
+          "notes": "Regression for the lean complete-capsule contract: use the smallest source read that can ground every element, and deepen or block when it cannot."
         }
       }
     },
@@ -68,14 +60,7 @@
             "tasty-pack",
             "resource-bank"
           ],
-          "notes": "Regression for taste-first Resource Bank ingestion: store broad context in analysis and create CreativeElements only for operator-selected reusable components.",
-          "anti_patterns": [
-            "Turns surrounding context into unpinned CreativeElement rows instead of keeping it in capture analysis.",
-            "Treats every extracted element as equally important despite the operator note.",
-            "Adds durable numeric weights or asks the operator to score elements.",
-            "Creates a competing production_pattern object that duplicates format/storyboard/audio/editing/character elements.",
-            "Returns a generic summary with no note-backed pinned creative elements."
-          ]
+          "notes": "Regression for taste-first Resource Bank ingestion: store broad context in analysis and create CreativeElements only for operator-selected reusable components."
         }
       }
     },
@@ -105,14 +90,7 @@
             "rights-safe-remix",
             "resource-bank"
           ],
-          "notes": "Regression for Resource Bank character elements: distinctive personas should be reusable taste signals, while protected expression stays behind remix constraints.",
-          "anti_patterns": [
-            "Stores the character/persona only as generic visual style or vibe text.",
-            "Pins the character without grounding it in the operator note.",
-            "Suggests directly reusing Gilfoyle, the actor likeness, exact lines, wardrobe, or source frames.",
-            "Adds durable weights or planningWeight to make the character more important.",
-            "Creates a separate production_pattern object for the advert structure."
-          ]
+          "notes": "Regression for Resource Bank character elements: distinctive personas should be reusable taste signals, while protected expression stays behind remix constraints."
         }
       }
     },
@@ -140,14 +118,7 @@
             "audio-element",
             "rights-safe-remix"
           ],
-          "notes": "Regression for Shazam-style optional enrichment: when the operator says the music is nice, try to identify it, but keep ingestion honest and rights-safe.",
-          "anti_patterns": [
-            "Ignores the note-selected music and only summarizes visuals.",
-            "Claims a track match without recognition evidence.",
-            "Blocks ingestion entirely when recognition is unavailable.",
-            "Suggests copying or reusing the source track without licensing.",
-            "Stores raw audio or a bulky recognition evidence object in the active pack contract."
-          ]
+          "notes": "Regression for Shazam-style optional enrichment: when the operator says the music is nice, try to identify it, but keep ingestion honest and rights-safe."
         }
       }
     },
@@ -167,12 +138,12 @@
       "metadata": {
         "farplane": {
           "title": "Builds production-ready capsules from the low-poly source",
-          "tags": ["skill", "ingest-content", "low-poly", "golden-example", "golden-recipe"],
-          "anti_patterns": [
-            "Copies the same generic recipe onto unrelated element kinds.",
-            "Points every element at one unhelpful whole-source asset.",
-            "Stores why-it-works only in source-level analysis.",
-            "Invents new kinds or element timing fields."
+          "tags": [
+            "skill",
+            "ingest-content",
+            "low-poly",
+            "golden-example",
+            "golden-recipe"
           ]
         }
       }
@@ -192,11 +163,11 @@
       "metadata": {
         "farplane": {
           "title": "Blocks unsupported capsules from shallow metadata",
-          "tags": ["skill", "ingest-content", "source-honesty", "blocked"],
-          "anti_patterns": [
-            "Invents a golden example asset ID.",
-            "Converts vague operator adjectives directly into complete elements.",
-            "Uses source-level prose as a substitute for required element fields."
+          "tags": [
+            "skill",
+            "ingest-content",
+            "source-honesty",
+            "blocked"
           ]
         }
       }
@@ -215,11 +186,12 @@
       "metadata": {
         "farplane": {
           "title": "Saves whole-source context without manufacturing elements or tickets",
-          "tags": ["skill", "ingest-content", "save-only", "zero-elements", "analysis-markdown"],
-          "anti_patterns": [
-            "Creates unpinned context elements for every observed component.",
-            "Creates a content ticket despite save-only intent.",
-            "Stores a fragmented analysis taxonomy instead of freeform Markdown."
+          "tags": [
+            "skill",
+            "ingest-content",
+            "save-only",
+            "zero-elements",
+            "analysis-markdown"
           ]
         }
       }
@@ -240,12 +212,12 @@
       "metadata": {
         "farplane": {
           "title": "Turns future-creation intent into a thin repurpose ticket",
-          "tags": ["skill", "ingest-content", "future-creation", "content-ticket", "content-impl-plan"],
-          "anti_patterns": [
-            "Only suggests making a ticket later.",
-            "Expands a full storyboard during ingestion.",
-            "Creates duplicate tickets for the same source and intent.",
-            "Requires ingestionJobId linkage when a stable source URL or asset ID exists."
+          "tags": [
+            "skill",
+            "ingest-content",
+            "future-creation",
+            "content-ticket",
+            "content-impl-plan"
           ]
         }
       }
@@ -267,15 +239,14 @@
       "metadata": {
         "farplane": {
           "title": "Scans a workflow-teaching video for evidence-backed skill benefits",
-          "tags": ["skill", "ingest-content", "video", "skill-benefit", "harness-scout"],
-          "notes": "Regression for the terminal video skill-benefit scan and its non-mutating handoff boundary.",
-          "anti_patterns": [
-            "Skips the scan after retrieval verification.",
-            "Searches or loads the entire skill tree without shortlisting likely owners.",
-            "Calls an aesthetic preference a skill improvement without operational evidence.",
-            "Edits a skill or creates a ticket during ingestion.",
-            "Declares a new skill without checking existing owners."
-          ]
+          "tags": [
+            "skill",
+            "ingest-content",
+            "video",
+            "skill-benefit",
+            "harness-scout"
+          ],
+          "notes": "Regression for the terminal video skill-benefit scan and its non-mutating handoff boundary."
         }
       }
     },
@@ -294,14 +265,14 @@
       "metadata": {
         "farplane": {
           "title": "Returns no skill finding for a purely aesthetic video",
-          "tags": ["skill", "ingest-content", "video", "aesthetic", "no-op"],
-          "notes": "Negative calibration: every video gets a scan, but not every video deserves a skill-improvement finding.",
-          "anti_patterns": [
-            "Treats visual taste as evidence that visual-design or another skill needs modification.",
-            "Skips the scan because no finding is expected.",
-            "Escalates to harness-scout without a workflow-teaching signal.",
-            "Creates an empty placeholder skill-improvement ticket."
-          ]
+          "tags": [
+            "skill",
+            "ingest-content",
+            "video",
+            "aesthetic",
+            "no-op"
+          ],
+          "notes": "Negative calibration: every video gets a scan, but not every video deserves a skill-improvement finding."
         }
       }
     },
@@ -322,15 +293,14 @@
       "metadata": {
         "farplane": {
           "title": "Compares a video technique across plausible skill owners",
-          "tags": ["skill", "ingest-content", "video", "owner-comparison", "held-out"],
-          "notes": "Held-out calibration for owner-selection judgment: the prompt supplies neutral owner descriptions without naming the intended owner or gap.",
-          "anti_patterns": [
-            "Chooses an owner without comparing the plausible alternatives.",
-            "Invents owner files or registry details beyond the supplied shortlist.",
-            "Uses adopt or adapt instead of the allowed comparison statuses.",
-            "Omits source anchors or the no-mutation boundary.",
-            "Creates a new skill merely because several current owners overlap."
-          ]
+          "tags": [
+            "skill",
+            "ingest-content",
+            "video",
+            "owner-comparison",
+            "held-out"
+          ],
+          "notes": "Held-out calibration for owner-selection judgment: the prompt supplies neutral owner descriptions without naming the intended owner or gap."
         }
       }
     },
@@ -349,12 +319,12 @@
       "metadata": {
         "farplane": {
           "title": "Canonicalizes a Pinterest-discovered landing reference",
-          "tags": ["skill", "ingest-content", "pinterest", "canonical-source", "tasty-pack"],
-          "anti_patterns": [
-            "Stores only the Pinterest wrapper when the original is resolvable",
-            "Treats a pin as licensed production media",
-            "Creates a landing-page ticket despite save-only intent",
-            "Adds a Pinterest-specific Resource Bank schema field"
+          "tags": [
+            "skill",
+            "ingest-content",
+            "pinterest",
+            "canonical-source",
+            "tasty-pack"
           ]
         }
       }
@@ -374,11 +344,11 @@
       "metadata": {
         "farplane": {
           "title": "Compiles a saved capture into a rights-safe style profile",
-          "tags": ["skill", "ingest-content", "style-profile", "rights-safe"],
-          "anti_patterns": [
-            "Re-ingests a saved capture.",
-            "Silently overwrites an existing profile.",
-            "Copies source footage or requests creator impersonation."
+          "tags": [
+            "skill",
+            "ingest-content",
+            "style-profile",
+            "rights-safe"
           ]
         }
       }

@@ -3,7 +3,7 @@ title: "Agent Kernel"
 status: active
 owner: farplane-framework
 created_at: 2026-06-26
-updated_at: 2026-06-27
+updated_at: 2026-08-23
 tags:
   - farplane
   - systems
@@ -12,6 +12,7 @@ refs:
   - AGENTS.md
   - templates/global/AGENTS.md
   - docs/fundamentals/harness-engineering-doctrine.md
+  - bin/README.md
 system_record_json: |
   {
     "id": "SYS-0001",
@@ -26,9 +27,10 @@ system_record_json: |
     "refs": [
       "AGENTS.md",
       "templates/global/AGENTS.md",
-      "docs/fundamentals/harness-engineering-doctrine.md"
+      "docs/fundamentals/harness-engineering-doctrine.md",
+      "bin/README.md"
     ],
-    "last_verified": "2026-06-26"
+    "last_verified": "2026-08-23"
   }
 ---
 # Agent Kernel
@@ -71,9 +73,32 @@ conventions, and routing rules that every Farplane coding agent must inherit.
 Detailed workflows belong in skills; product capability contracts belong in feature
 specs; task-local state belongs in tickets; generated checks belong in validators.
 
+## Static Contract Route
+
+Farplane keeps static source contracts, generated projections, and lifecycle
+proof on separate routes:
+
+- `farplane lint` selects read-only repository contracts from the typed
+  `bin/core/lint/` registry. `lint all --changed` is also the Git-gate route,
+  so feature, project, skill, eval, and ticket edits select their semantic
+  static checks from one source of truth.
+- Sync and generator commands are the only routes that update registries,
+  graphs, or other projections. A lint command must never write them.
+- `farplane validate ticket --phase planning|complete` remains lifecycle
+  validation: it selects phase-dependent evidence and may write a ticket-local
+  receipt.
+- A validator that checks one skill's generated packet or integration payload
+  remains owned by that skill rather than becoming a repository-wide lint rule.
+
+The command reference and maintenance examples live in
+[`bin/README.md`](../../bin/README.md).
+
 ## Operating Contract
 
 - Keep always-loaded policy lean and navigational.
+- Require plain, concrete human-to-human writing in the global communication
+  default. Keep artifact-specific examples and finish checks with their
+  templates and review owners.
 - Require independent evaluation before agreement; responses lead with the
   conclusion or evidence rather than stock praise or reflexive validation.
 - Route detailed procedures to the smallest durable owner.
@@ -118,11 +143,15 @@ The Agent Kernel turns local and install-time policy into the operating shape ev
 
 - Registry proof: `python3 docs/features/validate_features.py`.
 - Link proof: `python3 bin/validators/check_doc_refs.py`.
+- Static-contract proof: `python3 bin/farplane.py lint all`.
 - Update this system page when product-layer boundaries or feature membership changes.
 - Update feature pages when capability behavior changes.
 - Regenerate registries and commit generated outputs with the source docs.
 
 ## Change History
+
+- 2026-08-23: Established the pure static-lint registry and the explicit
+  lint/sync/lifecycle routing boundary.
 
 - 2026-07-19: Added the cross-project independent-reasoning and
   non-sycophantic response-opening contract.

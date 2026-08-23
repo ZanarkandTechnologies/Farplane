@@ -25,14 +25,6 @@
             "stitched-video",
             "frame-math",
             "audio"
-          ],
-          "anti_patterns": [
-            "Assumes every 4s clip has the same exact frame count",
-            "Creates a one-frame stutter by overextending Sequence duration",
-            "Accepts inconsistent source clip audio without a master mix decision",
-            "Regenerates an approved storyboard asset during assembly",
-            "Uses a transition to conceal a failed primary action",
-            "Claims completion based only on Remotion render success"
           ]
         }
       }
@@ -51,11 +43,12 @@
       "metadata": {
         "farplane": {
           "title": "Blocks custom SVG scene assets in Remotion",
-          "tags": ["skill", "remotion", "asset-discovery", "svg", "content-production"],
-          "anti_patterns": [
-            "Draws missing scene imagery in SVG or JSX",
-            "Treats renderability as proof of asset readiness",
-            "Skips Asset Advisor because local drawing is faster"
+          "tags": [
+            "skill",
+            "remotion",
+            "asset-discovery",
+            "svg",
+            "content-production"
           ]
         }
       }

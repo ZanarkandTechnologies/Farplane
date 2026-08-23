@@ -6,10 +6,18 @@ from __future__ import annotations
 import argparse
 import json
 import shutil
+import sys
 from dataclasses import asdict, dataclass
 from datetime import datetime
 from pathlib import Path
 from typing import Sequence
+
+
+REPO_ROOT = Path(__file__).resolve().parents[3]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from bin.core.skill_contract import parse_skill_frontmatter
 
 
 RETIRED_SKILL_NAMES = {
@@ -59,24 +67,6 @@ class InstallResult:
     dry_run: bool
 
 
-def parse_frontmatter(path: Path) -> dict[str, str]:
-    text = path.read_text(encoding="utf-8")
-    lines = text.splitlines()
-    if not lines or lines[0].strip() != "---":
-        return {}
-
-    data: dict[str, str] = {}
-    for line in lines[1:]:
-        if line.strip() == "---":
-            break
-        if ":" not in line:
-            continue
-        key, value = line.split(":", 1)
-        value = value.strip().strip("\"'")
-        data[key.strip()] = value
-    return data
-
-
 def discover_skills(skills_dir: Path) -> list[Skill]:
     if not skills_dir.exists():
         raise FileNotFoundError(f"Skills directory does not exist: {skills_dir}")
@@ -88,14 +78,14 @@ def discover_skills(skills_dir: Path) -> list[Skill]:
         skill_file = skill_dir / "SKILL.md"
         if not skill_file.exists():
             continue
-        meta = parse_frontmatter(skill_file)
+        meta = parse_skill_frontmatter(skill_file)
         skills.append(
             Skill(
-                name=meta.get("name", skill_dir.name),
+                name=str(meta.get("name", skill_dir.name)),
                 path=skill_dir,
-                description=meta.get("description", ""),
-                source=meta.get("source", ""),
-                tier=meta.get("tier", ""),
+                description=str(meta.get("description", "")),
+                source=str(meta.get("source", "")),
+                tier=str(meta.get("tier", "")),
             )
         )
     return skills

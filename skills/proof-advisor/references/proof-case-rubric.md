@@ -42,7 +42,7 @@ Prefer these in order:
 3. Ticket/spec/skill contract behavior that is easy to regress silently.
 4. Existing deterministic tests with missing edge cases.
 5. Synthetic gap fill across named dimensions.
-6. Benchmark-style hardcase only when it has reusable difficulty value.
+6. Benchmark-style difficult regression only when it has reusable proof value.
 
 ## Selection Rules
 

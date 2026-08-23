@@ -6,11 +6,11 @@ import re
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Mapping
-
+from skill_registry import extract_skill_mentions, load_skill_registry
 
 TICKET_ID_PATTERN = re.compile(r"\bTASK-\d{4}\b")
 CONTROL_SURFACE_PATTERN = re.compile(
-    r"(?<!\S)\$(?P<skill>brainstorm|impl-plan|goal-advisor|qa|demo|close-ticket)(?=$|[\s.,:;!?()\[\]{}\"'`])",
+    r"(?:(?<!\S)\$(?P<plain_control>brainstorm|impl-plan|goal-advisor|qa|demo|close-ticket)(?![A-Za-z0-9_-])|(?<=\[)\$(?P<linked_control>brainstorm|impl-plan|goal-advisor|qa|demo|close-ticket)(?=\]\([^\n)]*/SKILL\.md(?:#[^\n)]*)?\)))",
     re.IGNORECASE,
 )
 CONTROL_SURFACE_ALIASES: dict[str, str] = {}
@@ -437,22 +437,22 @@ def extract_control_surface(raw_text: str) -> str:
     match = CONTROL_SURFACE_PATTERN.search(raw_text)
     if not match:
         return ""
-    matched = str(match.group("skill") or "").strip().lower()
+    matched = matched_control_name(match)
     return CONTROL_SURFACE_ALIASES.get(matched, matched)
 
 
 def extract_control_surfaces(raw_text: str) -> list[str]:
     surfaces: list[str] = []
     for match in CONTROL_SURFACE_PATTERN.finditer(raw_text):
-        matched = str(match.group("skill") or "").strip().lower()
+        matched = matched_control_name(match)
         normalized = CONTROL_SURFACE_ALIASES.get(matched, matched)
         if normalized and normalized not in surfaces:
             surfaces.append(normalized)
     return surfaces
 
 
-def extract_skill_mentions(raw_text: str) -> list[str]:
-    return extract_control_surfaces(raw_text)
+def matched_control_name(match: re.Match[str]) -> str:
+    return str(match.group("plain_control") or match.group("linked_control") or "").strip().lower()
 
 
 def build_runtime_claim(payload: Mapping[str, object]) -> dict[str, object] | None:

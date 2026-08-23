@@ -22,12 +22,6 @@
             "seedance",
             "continuity",
             "content-video"
-          ],
-          "anti_patterns": [
-            "Starts six independent image-to-video jobs from unrelated stills",
-            "Leaves generate_audio enabled for each clip despite a master audio plan",
-            "Treats async batch convenience as more important than story continuity",
-            "Does not check the live provider schema before forming input JSON"
           ]
         }
       }
@@ -56,12 +50,6 @@
             "visual-camera-control",
             "single-shot",
             "content-video"
-          ],
-          "anti_patterns": [
-            "Treats the arrow image as the complete prompt",
-            "Invents chained clips for a bounded compatible route",
-            "Allows arrows or labels to become scene content",
-            "Grades cinematic quality without route adherence"
           ]
         }
       }
@@ -92,13 +80,6 @@
             "visual-camera-control",
             "chained-maneuvers",
             "content-video"
-          ],
-          "anti_patterns": [
-            "Retries the same five-state ten-second prompt",
-            "Counts waypoints instead of independently testable camera states",
-            "Generates all clips before the hardest maneuver passes",
-            "Calls camera roll a landmark orbit",
-            "Omits exact terminal-frame anchors"
           ]
         }
       }

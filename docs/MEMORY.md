@@ -3,14 +3,14 @@ title: "Farplane Project Memory"
 status: active
 owner: doc-governance
 created_at: 2026-03-26
-updated_at: 2026-08-23
+updated_at: 2026-08-20
 tags:
   - farplane
   - memory
   - promoted-decisions
 refs:
   - docs/features/FEAT-0060-registry-backed-documentation-os.md
-  - skills/knowledge-tidier/SKILL.md
+  - skills/consolidate/SKILL.md
   - docs/HISTORY.md
 ---
 
@@ -27,7 +27,8 @@ keep temporary research outside tracked docs.
 
 ## Admission Rule
 
-Use `knowledge-tidier` before compacting this file:
+Use `consolidate(target = docs/MEMORY.md, structure = memory)` before
+compacting this file:
 
 ```text
 keep_live = importance >= 2
@@ -201,10 +202,10 @@ MEM-0133, MEM-0134, MEM-0145, MEM-0146, MEM-0150.
 - Material implementation plans expose compact `architecture_signatures` before
   per-change detail. Per-change `signature_or_type_impact` is for local deltas;
   reviewer lanes judge material plan readiness through canonical review rubrics.
-- Numeric skill tiers are leverage classes, not lifecycle phases. Tier 0 phases
-  are inline capabilities; call phase-like skills such as `plan`, `review`, and
-  `eval` only when that phase needs its own artifact, budget, handoff,
-  independent judgment, or proof surface.
+- Numeric skill tiers are leverage classes, not lifecycle phases. Tier 0
+  planning and execution are inline/native capabilities; call artifact or proof
+  skills such as `impl-plan`, `review`, and `eval` only when the phase needs its
+  own artifact, budget, handoff, independent judgment, or proof surface.
 - Skill registries are generated from skill frontmatter and filesystem facts.
   Do not maintain separate hand-authored sequence or skill-feature registries.
 - External skills, repos, blogs, and command families are research inputs, not

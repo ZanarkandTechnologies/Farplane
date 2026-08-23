@@ -38,8 +38,8 @@ Policy:
   risks, and apply/revise/defer recommendation.
 - Apply only consolidations that make evals less noisy without losing distinct
   failure modes.
-- Keep hardcases unless a stronger replacement explicitly preserves their
-  benchmark value.
+- Keep difficult regressions unless a stronger replacement preserves the
+  distinct scenario.
 - Append processed rows to .farplane/state/eval-drain/processed.jsonl only
   after accepted consolidation or explicit no-op/defer disposition.
 - Return an Eval Drain Report with changed files, per-eval recommendations,

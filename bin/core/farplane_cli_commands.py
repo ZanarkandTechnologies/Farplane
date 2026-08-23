@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 import sqlite3
 import subprocess
 import sys
@@ -16,11 +17,97 @@ from farplane_cli_base import (
     print_payload,
 )
 from farplane_cli_hooks import hooks_doctor
+from farplane_lint import run_lint_cli
 from farplane_cli_ui import discover_ui_repo
 from farplane_config_doctor import config_doctor
 from validation.boundary import base_boundary, explicit_boundary, unavailable_boundary
 from validation.run import validate_ticket
 from validators.farplane_checks import build_registry
+
+
+DEFAULT_PROMPTFOO_PROFILE = Path(".farplane/evals/promptfoo-profile.json")
+SKILL_NAME_PATTERN = re.compile(r"[a-z0-9]+(?:-[a-z0-9]+)*")
+
+
+def _project_path(value: Path | str) -> Path:
+    return (Path.cwd() / Path(value).expanduser()).resolve()
+
+
+def _promptfoo_profile_path(value: Path | None) -> Path:
+    return _project_path(value or DEFAULT_PROMPTFOO_PROFILE)
+
+
+def run_eval_init_cli(args: argparse.Namespace) -> int:
+    """Create the non-secret local profile used by Promptfoo skill comparisons."""
+
+    profile_path = _promptfoo_profile_path(args.provider_profile)
+    template_path = CORE_ROOT / "skills" / "eval" / "templates" / "promptfoo-profile.json"
+    if profile_path.exists() and not args.force and not args.dry_run:
+        raise CliError(
+            f"eval_profile_exists:{profile_path}: use --force to replace it",
+            code=2,
+        )
+    try:
+        profile = json.loads(template_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise CliError(f"eval_profile_template_error:{exc}", code=2) from exc
+
+    profile["config"]["model"] = args.model
+    if args.dry_run:
+        action = "replace" if profile_path.exists() else "write"
+        print(f"would {action} Promptfoo profile: {profile_path}")
+        return 0
+    try:
+        profile_path.parent.mkdir(parents=True, exist_ok=True)
+        profile_path.write_text(json.dumps(profile, indent=2) + "\n", encoding="utf-8")
+    except OSError as exc:
+        raise CliError(f"eval_profile_write_error:{exc}", code=2) from exc
+    print(f"wrote Promptfoo profile: {profile_path}")
+    return 0
+
+
+def run_eval_promptfoo_cli(args: argparse.Namespace) -> int:
+    """Delegate a skill comparison to the owner-local Promptfoo adapter."""
+
+    if args.skill:
+        if not SKILL_NAME_PATTERN.fullmatch(args.skill):
+            raise CliError("eval_skill_error:--skill must be a canonical skill name", code=2)
+        eval_path = _project_path(Path("skills") / args.skill / "evals" / "evals.json")
+    else:
+        eval_path = _project_path(args.eval_file)
+    profile_path = _promptfoo_profile_path(args.provider_profile)
+    if not eval_path.is_file():
+        raise CliError(f"eval_file_missing:{eval_path}", code=2)
+    if not profile_path.is_file():
+        raise CliError(
+            f"eval_profile_missing:{profile_path}: run `farplane eval init` first",
+            code=2,
+        )
+
+    command = [
+        sys.executable,
+        str(CORE_ROOT / "skills" / "eval" / "scripts" / "run_promptfoo.py"),
+        "--eval-file",
+        str(eval_path),
+        "--provider-profile",
+        str(profile_path),
+        "--runs-dir",
+        str(_project_path(args.runs_dir)),
+        "--label",
+        args.label,
+        "--promptfoo-version",
+        args.promptfoo_version,
+        "--codex-sdk-version",
+        args.codex_sdk_version,
+    ]
+    for flag, value in (("--candidate-skill", args.candidate_skill), ("--baseline-skill", args.baseline_skill)):
+        if value is not None:
+            command.extend((flag, str(_project_path(value))))
+    for eval_id in args.eval_id:
+        command.extend(("--eval-id", eval_id))
+    if args.dry_run:
+        command.append("--dry-run")
+    return subprocess.run(command, check=False).returncode
 
 def run_adoption_scan_cli(args: argparse.Namespace) -> int:
     from farplane_adoption import run_scan
@@ -371,89 +458,3 @@ def run_validate_ticket(args: argparse.Namespace) -> int:
             if result.status == "fail" and result.output:
                 print(result.output)
     return 0 if receipt.ok else 1
-
-def frontmatter_validation_commands(root: Path, scope: str) -> list[tuple[str, list[str]]]:
-    """Return the existing validators that own each static metadata family."""
-
-    python = sys.executable
-    skills = [
-        (
-            "skill_contract",
-            [python, str(root / "bin/validators/check_skill_frontmatter.py"), "--root", str(root)],
-        ),
-        (
-            "skill_ensembles",
-            [python, str(root / "bin/validators/check_skill_ensembles.py"), "--root", str(root)],
-        ),
-    ]
-    docs = [
-        (
-            "document_frontmatter_syntax",
-            [python, str(root / "bin/validators/check_doc_frontmatter.py"), "--root", str(root)],
-        ),
-        ("feature_and_system_records", [python, str(root / "docs/features/validate_features.py")]),
-        (
-            "template_registry",
-            [
-                python,
-                str(root / "bin/validators/sync_template_registry.py"),
-                "--root",
-                str(root),
-                "--check",
-            ],
-        ),
-        (
-            "template_metadata",
-            [
-                python,
-                str(root / "bin/validators/check_template_version_metadata.py"),
-                "--root",
-                str(root),
-                "--all",
-            ],
-        ),
-        ("source_registry", [python, str(root / "docs/sources/validate_sources.py")]),
-    ]
-    if scope == "skills":
-        return skills
-    if scope == "docs":
-        return docs
-    return [*skills, *docs]
-
-
-def run_validate_frontmatter(args: argparse.Namespace) -> int:
-    """Run the owner validators for one or all static metadata families."""
-
-    root = CORE_ROOT
-    results: list[dict[str, Any]] = []
-    for check_id, command in frontmatter_validation_commands(root, args.scope):
-        result = subprocess.run(command, cwd=str(root), text=True, capture_output=True, check=False)
-        output = "\n".join(
-            part.strip() for part in (result.stdout, result.stderr) if part.strip()
-        )
-        results.append(
-            {
-                "id": check_id,
-                "ok": result.returncode == 0,
-                "output": output,
-            }
-        )
-
-    ok = all(result["ok"] for result in results)
-    payload = {
-        "ok": ok,
-        "summary": (
-            f"frontmatter validation passed: scope={args.scope} checks={len(results)}"
-            if ok
-            else f"frontmatter validation failed: scope={args.scope}"
-        ),
-        "scope": args.scope,
-        "checks": results,
-    }
-    if args.json:
-        print(json.dumps(payload, indent=2, sort_keys=True))
-    else:
-        print(payload["summary"])
-        for result in results:
-            status = "pass" if result["ok"] else "fail"
-            print(f"[{status}] {result['id']}")

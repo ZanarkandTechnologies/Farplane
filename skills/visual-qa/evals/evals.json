@@ -28,7 +28,7 @@
         "May mark the checkout action as passing while still returning revise or fail overall",
         "Names the best evidence item used for the blocking verdict"
       ],
-      "metadata": {"farplane": {"title": "Explicit visual vetoes block aggregate readiness", "tags": ["skill", "visual-qa", "metamorphic-pair", "must-avoid"], "pair": "visual_qa_opposite_preference_control_01"}}
+      "metadata": {"farplane": {"title": "Explicit visual vetoes block aggregate readiness", "tags": ["skill", "visual-qa", "metamorphic-pair", "must-avoid"], "extensions": {"pair": "visual_qa_opposite_preference_control_01"}}}
     },
     {
       "id": "visual_qa_ordinary_compliant_pass_01",
@@ -84,7 +84,7 @@
         "Returns pass when the fixture-specific constraints are satisfied",
         "Would only return non-pass for a fixture-specific contradiction"
       ],
-      "metadata": {"farplane": {"title": "Current brief overrides unrelated taste memory", "tags": ["skill", "visual-qa", "metamorphic-pair", "anti-overfit"], "pair": "visual_qa_explicit_veto_conflict_01"}}
+      "metadata": {"farplane": {"title": "Current brief overrides unrelated taste memory", "tags": ["skill", "visual-qa", "metamorphic-pair", "anti-overfit"], "extensions": {"pair": "visual_qa_explicit_veto_conflict_01"}}}
     },
     {
       "id": "visual_qa_long_page_requires_section_coverage_01",

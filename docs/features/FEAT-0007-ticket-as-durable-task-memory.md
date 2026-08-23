@@ -3,7 +3,7 @@ title: Ticket as durable task memory
 status: implemented
 owner: feature-registry
 created_at: 2026-06-26
-updated_at: 2026-08-02
+updated_at: 2026-08-19
 tags:
   - farplane
   - feature
@@ -77,7 +77,11 @@ Chat can steer the work, but the ticket owns the durable contract.
 ## What It Does
 
 - Creates or updates a `ticket.md` for each material unit of work.
-- Keeps scope, delta, change plan, `Done`, `QA Strategy`, docs strategy, links, and notes in predictable sections.
+- Keeps scope, delta, change plan, `Done`, `QA Strategy`, and state in a compact
+  executable spine. A compact type-appropriate ASCII Contract Diagram is
+  required so the target path can be simulated before implementation. Docs
+  strategy, links, and notes appear only when their
+  content changes execution, review, proof, or resumption.
 - Moves bulky proof into `tickets/TASK-*/artifacts/` and links it from the ticket.
 - Lets `impl-plan`, `spec-to-ticket`, Goal Packets, QA, review, and closeout all read the same task contract.
 - Preserves resume state through `program.md`, `progress.md`, and artifact links when a work loop needs more than one turn.
@@ -99,11 +103,21 @@ A durable ticket is a small program for the next agent, not a generic task note.
 - `Summary` says the job in one compact paragraph.
 - `Scope` states what is in and out.
 - `Delta` briefly describes the intended behavior change and problem deltas.
+- `Contract Diagram` shows the required path, important branches, and proof
+  boundary as compact ASCII with stable node IDs. UI, backend, docs, research,
+  and tiny fixes use the diagram type that best exposes their contract.
 - `Change Plan` groups the executable program, read/write file map, operation,
-  routes, proof, and failure modes by coherent change unit.
+  routes, proof, and failure modes by coherent change unit; each unit names the
+  diagram nodes and exit assertions it owns.
+- UI-bearing tickets require ticket-local `design.md` with detailed ASCII
+  screens/states before implementation approval. They declare `ui_scope: true`
+  so mechanical validation does not guess from UI-related prose. The ticket
+  keeps only the compact journey; `design.md` owns the visual state baseline.
 - `Done` is the completion scoreboard.
 - `QA Strategy` carries proof weight, checks, delegated lanes, review gates,
   evidence, goal-advisor inputs, final checkpoint, and residual risk.
+- Optional body sections earn their place. Empty headings, placeholder `none`
+  rows, and copied template instructions do not belong in live tickets.
 - Frontmatter carries one lifecycle status plus identity/freshness and only the
   sparse routing overrides that differ from defaults.
 - Optional `due_at` is a delivery deadline as a timezone-bearing ISO-8601
@@ -132,7 +146,7 @@ A durable ticket is a small program for the next agent, not a generic task note.
 
 The required frontmatter is only `ticket_id`, `title`, `status`, `created_at`,
 and `updated_at`. Optional `priority`, `due_at`, `claimed_by`, `thread_id`,
-`depends_on`, `human_gate`, and `compute_target` exist only when they change
+`depends_on`, `human_gate`, `compute_target`, and `ui_scope` exist only when they change
 routing. `thread_id` is the ticket's one hook-written persistent Codex task
 thread: it supports exact task discussion and completion mining, not generic
 runtime session history. There is no parallel `phase`, hand-maintained `ready`,

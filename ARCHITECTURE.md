@@ -82,10 +82,10 @@ flowchart LR
 
   subgraph Skills["Skill Layer"]
     primitives["Tier 1 primitives<br/>advise<br/>reference-grounding<br/>review<br/>direct Todo List"]:::callout
-    interfaces["Tier 2 interfaces<br/>brainstorm<br/>research:*<br/>plan<br/>execute"]:::callout
+    interfaces["Tier 2 interfaces<br/>brainstorm<br/>research:*<br/>harness-advisor"]:::callout
     intake["brainstorm<br/>direct clarification<br/>prd<br/>deep-system-design<br/>visual-design"]:::skill
     readiness["agent-testability-plan<br/>Run Hints"]:::callout
-    research["documentation<br/>external-patterns<br/>feed-scout<br/>harness-scout<br/>research:methods<br/>best-of-worlds<br/>self-improve"]:::skill
+    research["documentation<br/>feed-scout<br/>harness-scout<br/>research:methods<br/>best-of-worlds<br/>self-improve"]:::skill
     ticketSkill["spec-to-ticket"]:::callout
     planSkill["impl-plan<br/>diagramming"]:::callout
     goalSkill["goal-advisor<br/>native Goal<br/>heartbeat<br/>batch"]:::callout
@@ -109,8 +109,8 @@ flowchart LR
   end
 
   subgraph Proof["Proof + Review"]
-    qa["qa-tester<br/>testing<br/>visual-qa<br/>Codex Browser"]:::quality
-    review["review<br/>reviewer agents<br/>completion-reviewer<br/>desloppify"]:::callout
+    qa["qa-tester<br/>proof-advisor<br/>visual-qa<br/>Codex Browser"]:::quality
+    review["review<br/>reviewer agents<br/>completion-reviewer<br/>lean-check + unslop"]:::callout
   stop["Stop hook<br/>telemetry only"]:::quality
   end
 
@@ -131,8 +131,8 @@ flowchart LR
   primitives -. base checks .-> interfaces
   interfaces -. domain binding .-> intake
   interfaces -. evidence workflow .-> research
-  interfaces -. coding plan .-> planSkill
-  interfaces -. coding execute .-> execSkill
+  interfaces -. artifact planning .-> planSkill
+  interfaces -. domain execution .-> execSkill
 
   specs --> intake
   intake --> readiness

@@ -46,7 +46,7 @@ eval(task_intent, expected_behavior?, mode = proof, target?, expectation?)
   -> EvalResult
 reads: existing eval rows, target skill or prompt, fixtures, QA, task context
 does: authors or selects cases, runs the fitting executor, inspects evidence
-writes: eval rows, hardcase metadata, run artifacts, or consolidation receipts
+writes: eval rows, run artifacts, or consolidation receipts
 returns: mode, cases, artifacts, verdict or delta, limitations, and next fix
 ```
 
@@ -65,15 +65,15 @@ returns: mode, cases, artifacts, verdict or delta, limitations, and next fix
         examples under `skills/eval/examples`.
 - [ ] 2. Author or select honest cases.
   - [ ] For skill rows, write a natural `prompt`, human-readable
-        `expected_output`, optional `files`, one `expectations` list, and
-        optional Farplane metadata. The Promptfoo adapter may read legacy
-        `assertions`, but conflicting dual lists fail.
+        `expected_output`, optional `files`, and one canonical `assertions`
+        list. Use typed `metadata.farplane` only for a current UI/runtime/link
+        consumer; put experimental fields under `extensions`.
   - [ ] Keep invocation, routing policy, expected answer, and reference points
-        out of the user prompt. Run `scripts/check_eval_queries.py --root .` and
-        apply `qa_checklist.md` to material rows.
-  - [ ] Mark a hardcase only when it is sanitized, reusable, and unusually
-        difficult or benchmark-worthy. Preserve the failure mode in the normal
-        runnable suite, not a separate backlog.
+        out of the user prompt. Run `farplane lint evals --changed` and
+        `scripts/check_eval_queries.py --root .`, then apply `qa_checklist.md`
+        to material rows.
+  - [ ] Keep sanitized, reusable difficult cases in the normal runnable suite,
+        not a separate metadata backlog.
   - [ ] Load [eval best practices](references/eval-best-practices.md) and the
         [writing rubric](references/eval-writing-rubric.md) when creating or
         reviewing rows; load [surface ownership](references/eval-surface-ownership.md)

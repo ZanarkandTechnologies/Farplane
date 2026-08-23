@@ -10,37 +10,52 @@ if str(BIN_DIR) not in sys.path:
     sys.path.insert(0, str(BIN_DIR))
 
 import farplane
-from farplane_cli_base import CORE_ROOT
-from farplane_cli_commands import frontmatter_validation_commands
+from lint import build_registry
+from lint.models import LintContext
 
 
-class FarplaneFrontmatterValidationTests(unittest.TestCase):
-    def test_parser_defaults_frontmatter_validation_to_all(self) -> None:
-        args = farplane.build_parser().parse_args(["validate", "frontmatter"])
+class FarplaneLintTests(unittest.TestCase):
+    def selected_check_ids(self, scope: str) -> set[str]:
+        return {spec.check_id for spec in build_registry().select(scope=scope, changed_paths=None)}
+
+    def test_parser_defaults_lint_to_all(self) -> None:
+        args = farplane.build_parser().parse_args(["lint"])
 
         self.assertEqual(args.scope, "all")
 
-    def test_skill_scope_uses_only_the_skill_contract_validator(self) -> None:
-        checks = frontmatter_validation_commands(CORE_ROOT, "skills")
+    def test_skill_scope_uses_the_unified_skill_contract_validator(self) -> None:
+        self.assertIn("skill_contract", self.selected_check_ids("skills"))
 
-        self.assertEqual(
-            [check_id for check_id, _command in checks],
-            ["skill_contract", "skill_ensembles"],
-        )
+    def test_skill_scope_checks_registry_drift_without_writing_projections(self) -> None:
+        registry = build_registry()
+        checks = registry.select(scope="skills", changed_paths=None)
+
+        self.assertIn("skill_registry", {check.check_id for check in checks})
+        commands = [check.command(LintContext(BIN_DIR.parent)) for check in checks if check.command]
+        self.assertFalse(any("--write" in command for command in commands))
 
     def test_document_scope_routes_each_document_metadata_owner(self) -> None:
-        checks = frontmatter_validation_commands(CORE_ROOT, "docs")
-
-        self.assertEqual(
-            [check_id for check_id, _command in checks],
-            [
-                "document_frontmatter_syntax",
+        self.assertTrue(
+            {
+                "document_frontmatter",
                 "feature_and_system_records",
                 "template_registry",
                 "template_metadata",
                 "source_registry",
-            ],
+            }.issubset(self.selected_check_ids("docs"))
         )
+
+    def test_changed_feature_selects_its_semantic_document_contract(self) -> None:
+        checks = build_registry().select(
+            scope="all",
+            changed_paths=("docs/features/FEAT-0039.md",),
+        )
+
+        self.assertIn("feature_and_system_records", {check.check_id for check in checks})
+
+    def test_validate_has_no_static_frontmatter_alias(self) -> None:
+        with self.assertRaises(SystemExit):
+            farplane.build_parser().parse_args(["validate", "frontmatter"])
 
 
 if __name__ == "__main__":

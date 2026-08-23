@@ -11,17 +11,7 @@
         "Names text fidelity risk and prefers deterministic render or mixed deterministic-plus-texture route",
         "Produces copy inventory before image prompt",
         "Includes style constraints: monochrome, hand-drawn, dense SaaS UI, callout arrows, no gradients or photorealism"
-      ],
-      "metadata": {
-        "farplane": {
-          "expected_behavior": "Routes to infographic:handdrawn-saas-wireframe, asks for or invents only clearly marked placeholder copy, creates an Infographic Packet with copy inventory, 2x2 layout spec, shared shell, production route, and proof plan.",
-          "anti_patterns": [
-            "Immediately calls image generation with vague prompt and no copy inventory",
-            "Invents factual metrics without marking them illustrative",
-            "Treats the reference as a generic dashboard instead of a multi-state product storyboard"
-          ]
-        }
-      }
+      ]
     }
   ]
 }

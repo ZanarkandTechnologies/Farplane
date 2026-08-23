@@ -17,13 +17,11 @@
       "metadata": {
         "farplane": {
           "title": "Routes landing assets conditionally instead of always or never",
-          "tags": ["workflow", "landing-page", "asset-advisor", "route-gate"],
-          "anti_patterns": [
-            "Runs external discovery again for a complete licensed asset set",
-            "Lets reference-only media pass directly to frontend implementation",
-            "Treats Pinterest as production licensing evidence",
-            "Blocks the complete page for work only the incomplete page needs",
-            "Implements or deploys the page instead of returning the specification"
+          "tags": [
+            "workflow",
+            "landing-page",
+            "asset-advisor",
+            "route-gate"
           ]
         }
       }

@@ -49,8 +49,14 @@ runtime helpers instead of symlinking every script, validator, and test.
   ticket-facing validation API. Completion also requires an explicit `--base`
   or repeated `--path`; receipts are written under the ticket's
   `artifacts/validation/` directory.
-- `farplane validate frontmatter [skills|docs|all]` - run the owner validators
-  for static skill and document frontmatter; `all` is the default.
+- `farplane lint [all|skills|docs|evals|project] [--changed] [--base REF]` -
+  run the pure static contracts selected by scope and changed paths. It never
+  writes projections: use the owning sync/generate command to refresh those.
+  Use `farplane lint ticket <ticket.md>` for one ticket's static metadata/H1
+  contract, and `farplane validate ticket ... --phase` for lifecycle proof.
+- `core/lint/*` - typed static-lint registry, duplicate-safe source/frontmatter
+  parsing, changed-path selection, and read-only result rendering. Domain
+  validators remain beside their owners under `bin/validators/` or a skill.
 - `core/validation/*` - shared selection, execution, and receipt machinery.
 - `validators/farplane_checks.py` - allowlisted Farplane-wide leaf checks;
   skill-specific validators remain under `skills/<owner>/scripts/`.

@@ -39,9 +39,9 @@ Root `hooks.json` currently defines:
 
 | Event | Commands | Purpose |
 | --- | --- | --- |
-| `UserPromptSubmit` | `shared_checkout_guard.py`, `capture_user_turn.py`, `farplane_console_ping.py` | claim the primary Git checkout for one active session, classify the current user turn, append lightweight conversation windows, resolve native/ticket display metadata locally, and send sanitized `turn_start` hook telemetry |
+| `UserPromptSubmit` | `capture_user_turn.py`, `farplane_console_ping.py` | classify the current user turn, append lightweight conversation windows, resolve native/ticket display metadata locally, and send sanitized `turn_start` hook telemetry |
 | `PostToolUse` | `skill_file_line_gate.py` | after `apply_patch`, return repair feedback when a touched `skills/**/SKILL.md` exceeds 200 physical lines; the edit remains applied |
-| `Stop` | `final_response_gate.py`, `shared_checkout_guard.py`, `farplane_console_ping.py` | compress over-limit user-facing responses before releasing primary-checkout ownership, then send sanitized `turn_end` hook telemetry |
+| `Stop` | `final_response_gate.py`, `farplane_console_ping.py` | compress an over-limit user-facing response, then send sanitized `turn_end` hook telemetry |
 | `SubagentStart` | `farplane_console_ping.py` | send sanitized subagent-start lifecycle telemetry |
 | `SubagentStop` | `farplane_console_ping.py` | send sanitized subagent-stop lifecycle telemetry |
 
@@ -149,8 +149,7 @@ Tracked framework config stays under `farplane/`. The important separation is:
 ## Telemetry Config
 
 Codex lifecycle telemetry is defined by the installed Codex hook config.
-`hooks.json` calls `hooks/farplane_console_ping.py` on `UserPromptSubmit` and
-`Stop`.
+`hooks.json` calls `hooks/farplane_console_ping.py` on all four lifecycle events.
 
 `farplane_console_ping.py` loads config through Farplane Core runtime config in
 this order:

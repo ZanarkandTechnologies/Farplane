@@ -47,7 +47,7 @@ metrics:
   - gap_packet_quality_pass
   - harness_placement_quality_pass
   - metric_card_traceability_pass
-  - hardcase_eval_metadata_pass
+  - runnable_regression_eval_pass
   - narrow_regression_eval_pass
 last_verified: 2026-07-16
 experimental: false
@@ -55,7 +55,10 @@ superseded_by: false
 ---
 # Farplane evals
 
-Farplane evals exist to turn repeated misses, hardcases, prompt risks, and skill behavior claims into runnable eval cases and regression evidence. It belongs to [Proof And Review](../systems/proof-review.md) and keeps `FEAT-0039` as the consolidated eval capability handle.
+Farplane evals turn repeated misses, difficult regressions, prompt risks, and
+skill behavior claims into runnable eval cases and regression evidence. It
+belongs to [Proof And Review](../systems/proof-review.md) and keeps `FEAT-0039`
+as the consolidated eval capability handle.
 
 ```text
 farplane_eval(claim, evidence, owner_surface) -> eval_case + run_result + repair_signal
@@ -68,7 +71,8 @@ farplane_eval(claim, evidence, owner_surface) -> eval_case + run_result + repair
 - Status: `implemented`
 - Category: `improvement-loop`
 - Primary user: maintainer and self-improvement agent
-- Job: turn behavior claims, hardcases, prompt risks, and skill-local checks into runnable eval evidence.
+- Job: turn behavior claims, difficult regressions, prompt risks, and
+  skill-local checks into runnable eval evidence.
 
 ## Problem
 
@@ -82,7 +86,8 @@ owner, patch the smallest durable surface, and prove it with a representative ca
 
 - Uses gap-analysis to describe expected versus observed behavior.
 - Uses harness-advisor to choose the owner surface for a fix.
-- Captures hardcases as eval metadata with input, expected behavior, observed failure, owner, tags, proof artifacts, and promotion status.
+- Captures difficult, reusable failures as runnable eval cases with input,
+  assertions, observed failure, owner, tags, proof artifacts, and promotion status.
 - Keeps each skill's Agent Skills `evals/evals.json` as the authored suite,
   projects isolated candidate/baseline workspaces into Promptfoo, and preserves
   raw plus normalized comparison evidence without checking in Promptfoo config.
@@ -107,7 +112,7 @@ owner, patch the smallest durable surface, and prove it with a representative ca
 Self-improvement must land in an owner, not a memory dump.
 
 - Corrections name the gap, evidence, owner surface, and proof path.
-- Hardcases are narrow enough to rerun or reason about.
+- Difficult regressions are narrow enough to rerun or reason about.
 - Local Farplane wrappers, fixtures, registries, and evals are patched before external installed skills.
 - Broad migrations require proof before rollout.
 - Material stochastic promotions use two or more comparable summaries;
@@ -128,8 +133,8 @@ flowchart TD
   trigger["Trigger<br/>miss, correction, or behavior gap"]:::keep
   owner["Owner surface<br/>gap-analysis, harness-advisor<br/>metric-advisor, optimize-harness, eval"]:::changed
   readers["Files and fields read<br/>gap evidence, owner surface<br/>metric card, eval query<br/>ticket context"]:::keep
-  capture["Narrow capture<br/>hardcase metadata<br/>testable expectation and proof path"]:::changed
-  artifact["Created artifact/evidence<br/>hardcase, eval task,<br/>or repair ticket"]:::added
+  capture["Narrow capture<br/>runnable regression case<br/>testable expectation and proof path"]:::changed
+  artifact["Created artifact/evidence<br/>candidate seed, eval task,<br/>or repair ticket"]:::added
   old["Retired<br/>broad memory dump"]:::retired
 
   trigger --> owner --> readers --> capture --> artifact
@@ -198,7 +203,7 @@ Acceptance signals:
 - This feature does not auto-apply broad harness migrations without proof.
 - The Promptfoo path proves skill-local Codex comparison; it does not yet
   replace project suites, behavior traces, or arbitrary file-content grading.
-- Known limit: Correction is skill-and-artifact driven. Hardcase is eval metadata and legacy standalone hardcase artifacts should become runnable eval rows when the expected behavior is testable. Metric selection routes through metric-advisor before self-improve. The loop does not train models, sell data, inspect full Codex histories without a seed anchor, or auto-apply broad harness migrations without proof.
+- Known limit: Correction is skill-and-artifact driven. Legacy standalone difficult-case artifacts should become runnable eval rows when the expected behavior is testable. Metric selection routes through metric-advisor before self-improve. The loop does not train models, sell data, inspect full Codex histories without a seed anchor, or auto-apply broad harness migrations without proof.
 - Native-subagent-only reports do not claim CLI JSON-event parity; route them
   through Agent QA.
 - Delete or merge this feature only when its current truth has moved into a clearer owner and all active refs are removed.
@@ -208,7 +213,7 @@ Acceptance signals:
 - `gap_packet_quality_pass`
 - `harness_placement_quality_pass`
 - `metric_card_traceability_pass`
-- `hardcase_eval_metadata_pass`
+- `runnable_regression_eval_pass`
 - `narrow_regression_eval_pass`
 
 ## Alternatives Considered

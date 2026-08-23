@@ -50,7 +50,9 @@ def main(argv: list[str]) -> int:
     if getattr(args, "command", None) == "hooks" and getattr(args, "hooks_command", None) is None:
         parser.error("hooks requires a subcommand: install or doctor")
     if getattr(args, "command", None) == "validate" and getattr(args, "validate_command", None) is None:
-        parser.error("validate requires a subcommand: ticket or frontmatter")
+        parser.error("validate requires a subcommand: ticket")
+    if getattr(args, "command", None) == "eval" and getattr(args, "eval_command", None) is None:
+        parser.error("eval requires a subcommand: init or promptfoo")
     if getattr(args, "command", None) == "response" and getattr(args, "response_command", None) is None:
         parser.error("response requires a subcommand: check")
     if getattr(args, "command", None) == "notify" and getattr(args, "notify_command", None) is None:

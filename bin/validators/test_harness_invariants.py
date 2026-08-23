@@ -48,13 +48,13 @@ TICKET_TEMPLATE_TEXT = """\
 
 ## Summary
 
+## Contract Diagram
+
 ## Change Plan
 
 ## Done
 
 ## QA Strategy
-
-## Links
 
 - The hook may set one immutable `thread_id`; never store session_id here.
 """
@@ -123,13 +123,13 @@ This file is generic instructions.
                 """\
 ## Summary
 
+## Contract Diagram
+
 ## Change Plan
 
 ## Done
 
 ## QA Strategy
-
-## Links
 """,
             )
             result = self.run_validator(root)

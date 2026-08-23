@@ -35,7 +35,6 @@ MANAGED_HOOK_FILES = (
     "final_response_gate.py",
     "farplane_console_ping.py",
     "skill_file_line_gate.py",
-    "shared_checkout_guard.py",
 )
 RETIRED_HOOK_FILES = (
     "farplane_file_change.py",

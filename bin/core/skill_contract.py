@@ -1,4 +1,4 @@
-"""Shared parsing and typed contract for Farplane skill frontmatter."""
+"""Shared parsing and typed contract for Farplane skill packages."""
 
 from __future__ import annotations
 
@@ -8,16 +8,18 @@ from typing import Annotated, Any, Literal, Union
 
 import yaml
 from pydantic import BaseModel, ConfigDict, Field, TypeAdapter, ValidationError, model_validator
-from yaml.resolver import BaseResolver
+
+from bin.core.lint.source import (
+    DuplicateKeyError,
+    MarkdownFrontmatterError,
+    UniqueYamlLoader,
+    parse_markdown_frontmatter as _parse_shared_frontmatter,
+    parse_markdown_frontmatter_document as _parse_shared_frontmatter_document,
+)
 
 
 METHOD_CLASSES = {"artifact", "integration", "internal"}
 CAPABILITY_ID_RE = re.compile(r"^[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$")
-FRONTMATTER_RE = re.compile(
-    r"\A---[ \t]*\r?\n(?P<yaml>.*?)\r?\n---[ \t]*(?:\r?\n|\Z)",
-    re.DOTALL,
-)
-
 CapabilityId = Annotated[str, Field(pattern=CAPABILITY_ID_RE.pattern, min_length=1)]
 NonEmptyText = Annotated[str, Field(min_length=1)]
 
@@ -26,59 +28,35 @@ class FrontmatterError(ValueError):
     """Raised when a Markdown YAML-frontmatter block is malformed."""
 
 
-class _DuplicateYamlKeyError(ValueError):
-    """Raised by the SafeLoader when a YAML mapping repeats a key."""
+def parse_markdown_frontmatter_document(
+    text: str,
+    path: Path,
+    *,
+    required: bool = False,
+) -> tuple[dict[str, Any] | None, str, str]:
+    """Parse one Markdown document's YAML frontmatter without a second YAML parser."""
 
-
-class _UniqueKeySafeLoader(yaml.SafeLoader):
-    """Safe YAML loader which rejects ambiguous duplicate mapping keys."""
-
-
-def _construct_unique_mapping(
-    loader: _UniqueKeySafeLoader,
-    node: yaml.nodes.MappingNode,
-    deep: bool = False,
-) -> dict[Any, Any]:
-    mapping: dict[Any, Any] = {}
-    for key_node, value_node in node.value:
-        key = loader.construct_object(key_node, deep=deep)
-        try:
-            duplicate = key in mapping
-        except TypeError as exc:
-            raise _DuplicateYamlKeyError("mapping keys must be scalar values") from exc
-        if duplicate:
-            raise _DuplicateYamlKeyError(str(key))
-        mapping[key] = loader.construct_object(value_node, deep=deep)
-    return mapping
-
-
-_UniqueKeySafeLoader.add_constructor(
-    BaseResolver.DEFAULT_MAPPING_TAG,
-    _construct_unique_mapping,
-)
+    try:
+        return _parse_shared_frontmatter_document(text, path, required=required)
+    except MarkdownFrontmatterError as exc:
+        raise FrontmatterError(str(exc)) from exc
 
 
 def parse_markdown_frontmatter(path: Path, *, required: bool = False) -> dict[str, Any] | None:
     """Parse one leading YAML frontmatter mapping, or return ``None`` when absent."""
 
-    text = path.read_text(encoding="utf-8")
-    match = FRONTMATTER_RE.match(text)
-    if match is None:
-        if text.startswith("---"):
-            raise FrontmatterError(f"{path}: unterminated frontmatter")
-        if required:
-            raise FrontmatterError(f"{path}: missing frontmatter")
-        return None
-
-    return _parse_yaml_mapping(match.group("yaml"), path, label="frontmatter")
+    try:
+        return _parse_shared_frontmatter(path, required=required)
+    except MarkdownFrontmatterError as exc:
+        raise FrontmatterError(str(exc)) from exc
 
 
 def _parse_yaml_mapping(source: str, path: Path, *, label: str) -> dict[str, Any]:
     """Parse one YAML mapping with duplicate-key protection."""
 
     try:
-        metadata = yaml.load(source, Loader=_UniqueKeySafeLoader)
-    except _DuplicateYamlKeyError as exc:
+        metadata = yaml.load(source, Loader=UniqueYamlLoader)
+    except DuplicateKeyError as exc:
         raise FrontmatterError(f"{path}: duplicate {label} keys: {exc}") from exc
     except yaml.YAMLError as exc:
         raise FrontmatterError(f"{path}: invalid YAML {label}: {exc}") from exc
@@ -90,12 +68,6 @@ def _parse_yaml_mapping(source: str, path: Path, *, label: str) -> dict[str, Any
     if not all(isinstance(key, str) for key in metadata):
         raise FrontmatterError(f"{path}: {label} keys must be strings")
     return metadata
-
-
-def parse_yaml_mapping(path: Path) -> dict[str, Any]:
-    """Parse a YAML mapping from a skill-owned sidecar file."""
-
-    return _parse_yaml_mapping(path.read_text(encoding="utf-8"), path, label="YAML")
 
 
 class StrictContract(BaseModel):
@@ -242,9 +214,9 @@ def parse_skill_frontmatter(path: Path) -> dict[str, Any]:
 
 
 def parse_skill_ensemble(path: Path) -> dict[str, Any]:
-    """Load the YAML sidecar that defines one skill's ensemble personas."""
+    """Load an optional package-local persona contract only when requested."""
 
-    return parse_yaml_mapping(path)
+    return _parse_yaml_mapping(path.read_text(encoding="utf-8"), path, label="ensemble")
 
 
 def normalize_skill_frontmatter(metadata: dict[str, Any], path: Path) -> dict[str, Any]:
@@ -265,7 +237,7 @@ def normalize_skill_frontmatter(metadata: dict[str, Any], path: Path) -> dict[st
 
 
 def normalize_skill_ensemble(metadata: dict[str, Any], path: Path) -> dict[str, Any]:
-    """Return the strict, normalized ensemble contract for one skill package."""
+    """Return the strict, normalized optional ensemble contract for one package."""
 
     try:
         return SkillEnsemble.model_validate(metadata).model_dump(exclude_none=True)

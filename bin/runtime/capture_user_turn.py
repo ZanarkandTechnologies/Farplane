@@ -12,6 +12,7 @@ from user_turn import (
     extract_skill_mentions,
     explicit_run_state_selector,
     is_internal_user_prompt,
+    load_skill_registry,
     normalize_user_turn,
     project_root_from_payload,
     runtime_metadata_from_payload,
@@ -73,7 +74,9 @@ def main() -> int:
             ),
         )
     control_surfaces = extract_control_surfaces(prompt)
-    skill_mentions = extract_skill_mentions(prompt)
+    skill_registry = load_skill_registry(project_root)
+    skill_mentions = extract_skill_mentions(prompt, registry=skill_registry)
+    registry_error_count = int(skill_registry.status != "loaded")
     emit_hook_telemetry(
         event_type="turn_start",
         hook_event_name="UserPromptSubmit",
@@ -82,11 +85,18 @@ def main() -> int:
         extra={
             "prompt_length": len(prompt),
             "source": "capture_user_turn.py",
+            "producer": "capture_user_turn.py",
             "summary": "user turn captured",
+            "registry_source": "docs/skills/registry.jsonl",
+            "registry_path": str(skill_registry.path),
+            "registry_status": skill_registry.status,
+            "registry_error": skill_registry.error,
             "counts": {
                 "prompt_length": len(prompt),
                 "control_surface_count": len(control_surfaces),
                 "skill_mention_count": len(skill_mentions),
+                "registry_skill_count": len(skill_registry.records),
+                "registry_error_count": registry_error_count,
             },
         },
     )
@@ -104,15 +114,22 @@ def main() -> int:
             },
         )
     for skill in skill_mentions:
+        registry_record = skill_registry.records[skill.lower()]
         emit_hook_telemetry(
             event_type="skill_requested",
             hook_event_name="UserPromptSubmit",
             payload=payload,
             project_root=project_root,
             extra={
-                "source": "capture_user_turn.py",
+                "source": "user_explicit_request",
+                "producer": "capture_user_turn.py",
+                "status": "requested",
                 "summary": f"requested ${skill}",
                 "skill_name": skill,
+                "registry_source": "docs/skills/registry.jsonl",
+                "registry_path": str(skill_registry.path),
+                "registry_skill_source": registry_record.get("source", ""),
+                "registry_skill_path": registry_record.get("path", ""),
             },
         )
     return 0

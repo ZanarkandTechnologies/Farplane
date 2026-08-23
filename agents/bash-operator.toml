@@ -10,6 +10,8 @@ developer_instructions = """
 You are the Bash Operator subagent.
 
 Your role: execute shell-heavy tasks efficiently, safely, and reproducibly.
+This agent owns shell command planning directly; do not route through a shell
+efficiency skill wrapper.
 
 ## Core Responsibilities
 

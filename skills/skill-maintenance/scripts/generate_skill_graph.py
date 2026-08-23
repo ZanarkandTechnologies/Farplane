@@ -24,6 +24,7 @@ from bin.core.skill_departments import (
     load_skill_capability_labels,
     load_skill_departments,
 )
+from bin.core.skill_contract import parse_markdown_frontmatter_document
 
 SKILL_HEAT_EVENT_TYPES = {
     "control_surface_detected",
@@ -682,90 +683,6 @@ def build_capability_graph(
     ).as_dict()
 
 
-def parse_frontmatter(markdown: str) -> tuple[dict[str, Any], str, str]:
-    if not markdown.startswith("---\n"):
-        return {}, "", markdown
-    end = markdown.find("\n---\n", 4)
-    if end == -1:
-        return {}, "", markdown
-    raw = markdown[4:end]
-    body = markdown[end + 5 :].lstrip("\n")
-    return parse_simple_yaml(raw), raw, body
-
-
-def parse_scalar(value: str) -> Any:
-    value = value.strip()
-    if not value:
-        return ""
-    if value in {"true", "false"}:
-        return value == "true"
-    if value.startswith("[") and value.endswith("]"):
-        try:
-            return json.loads(value.replace("'", '"'))
-        except json.JSONDecodeError:
-            inner = value[1:-1].strip()
-            return [part.strip().strip("\"'") for part in inner.split(",") if part.strip()]
-    if value.startswith(("\"", "'")) and value.endswith(("\"", "'")):
-        return value[1:-1]
-    try:
-        return int(value)
-    except ValueError:
-        return value
-
-
-def parse_simple_yaml(raw: str) -> dict[str, Any]:
-    parsed: dict[str, Any] = {}
-    current_map: str | None = None
-    current_list: str | None = None
-    current_list_item: dict[str, Any] | None = None
-
-    for line in raw.splitlines():
-        if not line.strip() or line.lstrip().startswith("#"):
-            continue
-        indentation = len(line) - len(line.lstrip(" "))
-        stripped = line.strip()
-        if indentation == 2 and stripped.startswith("- ") and current_list:
-            item_value = stripped[2:].strip()
-            item_key, separator, raw_item_value = item_value.partition(": ")
-            if not isinstance(parsed.get(current_list), list):
-                parsed[current_list] = []
-            if separator:
-                current_list_item = {item_key.strip(): parse_scalar(raw_item_value)}
-                parsed.setdefault(current_list, []).append(current_list_item)
-            else:
-                current_list_item = None
-                parsed.setdefault(current_list, []).append(parse_scalar(item_value))
-            continue
-        if indentation >= 4 and current_list_item is not None and ":" in stripped:
-            key, _, value = stripped.partition(":")
-            if key:
-                current_list_item[key.strip()] = parse_scalar(value)
-            continue
-        if indentation == 2 and current_map:
-            current_list_item = None
-            key, _, value = stripped.partition(":")
-            if key and value:
-                if not isinstance(parsed.get(current_map), dict):
-                    parsed[current_map] = {}
-                parsed.setdefault(current_map, {})[key] = parse_scalar(value)
-            continue
-
-        current_map = None
-        current_list = None
-        current_list_item = None
-        key, _, value = line.partition(":")
-        key = key.strip()
-        if not key:
-            continue
-        if value.strip():
-            parsed[key] = parse_scalar(value)
-        else:
-            current_map = key
-            current_list = key
-            parsed[key] = {}
-    return parsed
-
-
 def build_docs(rows: list[dict[str, Any]]) -> dict[str, Any]:
     docs: dict[str, Any] = {
         "schema_version": "1.0.0",
@@ -777,7 +694,12 @@ def build_docs(rows: list[dict[str, Any]]) -> dict[str, Any]:
         if not path.exists():
             continue
         markdown = path.read_text()
-        frontmatter, frontmatter_raw, body = parse_frontmatter(markdown)
+        frontmatter, frontmatter_raw, body = parse_markdown_frontmatter_document(
+            markdown,
+            path,
+            required=True,
+        )
+        assert frontmatter is not None
         docs["skills"][row["name"]] = {
             "name": row["name"],
             "path": str(path),

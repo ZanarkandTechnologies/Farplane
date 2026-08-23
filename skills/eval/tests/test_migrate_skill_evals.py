@@ -15,7 +15,7 @@ SPEC.loader.exec_module(migration)
 
 
 class MigrateSkillEvalsTests(unittest.TestCase):
-    def test_convert_preserves_runner_fields_and_extensions(self) -> None:
+    def test_convert_preserves_current_runner_fields_and_discards_retired_metadata(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / "skills" / "qa" / "eval_task.json"
             path.parent.mkdir(parents=True)
@@ -45,7 +45,7 @@ class MigrateSkillEvalsTests(unittest.TestCase):
             self.assertEqual(row["assertions"], ["Captures evidence", "Returns a verdict"])
             self.assertEqual(row["files"], [])
             self.assertEqual(row["metadata"]["farplane"]["context"], "Toy context")
-            self.assertTrue(row["metadata"]["farplane"]["hardcase"])
+            self.assertNotIn("hardcase", row["metadata"]["farplane"])
 
     def test_dry_run_does_not_write_and_write_creates_standard_path(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -130,14 +130,7 @@ class MigrateSkillEvalsTests(unittest.TestCase):
             row = migration.convert_file(path)["evals"][0]
 
             self.assertEqual(row["assertions"], ["Routes correctly"])
-            self.assertEqual(
-                row["metadata"]["farplane"]["expected_behavior"],
-                ["Produces usable copy", "Avoids unsupported claims"],
-            )
-            self.assertEqual(
-                row["metadata"]["farplane"]["failure_modes"],
-                ["Returns only generic strategy"],
-            )
+            self.assertNotIn("metadata", row)
 
 
 if __name__ == "__main__":

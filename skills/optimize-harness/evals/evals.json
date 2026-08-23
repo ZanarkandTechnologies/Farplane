@@ -4,13 +4,13 @@
     {
       "id": "optimize_harness_full_loop_01",
       "prompt": "Farplane keeps accepting chat-only strategy dumps for AGI Toy Shop process changes. I expected it to create a durable artifact first and prove the behavior. Fix the harness.",
-      "expected_output": "Normalizes observed and expected behavior before changing anything; Runs or names gap-analysis to diagnose the gap; Runs or names harness-advisor to choose the primary owner and rejected surfaces; Creates or updates a proof surface such as an eval, hardcase metadata, validator, or review path; Chooses direct change versus self-improve based on whether a metric/search loop is needed; Ends with review, validation, or a blocked report instead of claiming improvement from prose",
+      "expected_output": "Normalizes observed and expected behavior before changing anything; Runs or names gap-analysis to diagnose the gap; Runs or names harness-advisor to choose the primary owner and rejected surfaces; Creates or updates a proof surface such as an eval, validator, or review path; Chooses direct change versus self-improve based on whether a metric/search loop is needed; Ends with review, validation, or a blocked report instead of claiming improvement from prose",
       "files": [],
       "assertions": [
         "Normalizes observed and expected behavior before changing anything",
         "Runs or names gap-analysis to diagnose the gap",
         "Runs or names harness-advisor to choose the primary owner and rejected surfaces",
-        "Creates or updates a proof surface such as an eval, hardcase metadata, validator, or review path",
+        "Creates or updates a proof surface such as an eval, validator, or review path",
         "Chooses direct change versus self-improve based on whether a metric/search loop is needed",
         "Ends with review, validation, or a blocked report instead of claiming improvement from prose"
       ],
@@ -51,30 +51,26 @@
       }
     },
     {
-      "id": "optimize_harness_hardcase_to_eval_01",
-      "prompt": "This AGI Toy Shop failure was hard: the agent created a duplicate skill instead of extending the existing one. Capture it so it doesn't regress.",
-      "expected_output": "Treats hardcase capture as a runnable eval case when the behavior is testable; Adds or proposes hardcase metadata such as hardcase, difficulty, benchmark value, and sanitization notes; Routes diagnosis through gap-analysis or owner lookup before recommending remediation; Avoids a separate raw transcript backlog with private or unsanitized details; Names where the eval should live based on skill-local versus workflow ownership",
+      "id": "optimize_harness_difficult_regression_01",
+      "prompt": "The agent created a duplicate skill instead of extending the existing one. Capture it so it does not regress.",
+      "expected_output": "Treats a difficult failure as a runnable eval case when the behavior is testable; Keeps expected behavior in assertions; Routes diagnosis through gap-analysis or owner lookup before recommending remediation; Avoids a separate raw transcript backlog with private or unsanitized details; Names where the eval should live based on skill-local versus workflow ownership",
       "files": [],
       "assertions": [
-        "Treats hardcase capture as a runnable eval case when the behavior is testable",
-        "Adds or proposes hardcase metadata such as hardcase, difficulty, benchmark value, and sanitization notes",
+        "Treats a difficult failure as a runnable eval case when the behavior is testable",
+        "Keeps expected behavior in assertions",
         "Routes diagnosis through gap-analysis or owner lookup before recommending remediation",
         "Avoids a separate raw transcript backlog with private or unsanitized details",
         "Names where the eval should live based on skill-local versus workflow ownership"
       ],
       "metadata": {
         "farplane": {
-          "title": "Optimize harness turns hardcases into runnable evals",
+          "title": "Optimize harness turns difficult regressions into runnable evals",
           "tags": [
             "skill",
             "optimize-harness",
-            "hardcase"
+            "regression"
           ],
-          "notes": "Tests the TASK-0190 direction that hardcase is eval metadata, not a separate capture backlog.",
-          "hardcase": true,
-          "difficulty": "high",
-          "benchmark_value": "Tests whether optimize-harness turns hard corrections into runnable eval coverage instead of a raw backlog.",
-          "sanitization_notes": "Use clean-room AGI Toy Shop details; do not include raw private transcript text."
+          "notes": "Tests that a reusable regression stays in the runnable suite rather than a separate backlog."
         }
       }
     },
