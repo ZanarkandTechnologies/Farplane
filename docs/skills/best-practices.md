@@ -186,7 +186,7 @@ Put content in a skill-local `references/*.md` file when it is owned by one
 skill but only needed later through an explicit branch, deeper rationale,
 optional detail, or rare mode:
 
-- Onboarding walkthroughs, long examples, deep rubrics, QA checklists,
+- Onboarding walkthroughs, long examples, deep rubrics, conditional quality references,
   doc-quality checklists, model maps, provider maps, command recipes, or rare
   branches.
 - Detail that is loaded by one explicit todo branch.

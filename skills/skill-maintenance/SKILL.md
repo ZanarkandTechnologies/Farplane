@@ -82,8 +82,9 @@ returns: updated skill or audit, validation evidence, and review result or block
 - [ ] **N6 — Reconcile behavior proof and QA ownership.**
   `changed behavior + existing guards -> eval/golden/QA migration receipt`
 
-  Rule: Reject QA sidecars; retain normal guardrails only in Todo List Rule/Assert blocks,
-  skill-specific runtime, safety, or preflight guards.
+  Rule: Reject QA sidecars. Place normal runtime, safety, and preflight
+  guardrails in Todo List Rule/Assert blocks; route behavior, deterministic
+  checks, and judgment to evals, validators, and QA/review respectively.
 
   Assert:
   - Unique prevention rules survive migration.

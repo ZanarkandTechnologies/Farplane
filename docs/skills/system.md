@@ -550,8 +550,9 @@ Use feature docs for supported optional capabilities such as eval support,
 skill fixtures, template-owned metadata, or experiment support, then regenerate
 `docs/features/registry.jsonl`.
 Use versioned template metadata for structural `FEAT-####` adoption handles,
-and use skill frontmatter only for local eval, QA checklist, and skill UI
-surface paths. Use `skill_template_version` for structural template onboarding.
+derive eval presence from `evals/evals.json`, and use skill frontmatter only for
+an optional skill UI surface path. Use `skill_template_version` for structural
+template onboarding.
 
 Do not store long applied-migration histories in skill frontmatter. If a
 migration needs rollout tracking, let `skill-maintenance` compare the generated
