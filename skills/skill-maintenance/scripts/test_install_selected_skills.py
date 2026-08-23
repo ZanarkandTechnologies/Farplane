@@ -2,6 +2,8 @@
 from __future__ import annotations
 
 import json
+import os
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -56,6 +58,30 @@ def write_skill(
 
 
 class InstallSelectedSkillsTests(unittest.TestCase):
+    def test_cli_lists_skills_without_site_packages(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp) / "repo"
+            write_skill(repo, "review", "Run quality checks.")
+
+            completed = subprocess.run(
+                [
+                    sys.executable,
+                    "-S",
+                    str(Path(installer.__file__)),
+                    "--repo",
+                    str(repo),
+                    "--list",
+                    "--json",
+                ],
+                text=True,
+                capture_output=True,
+                check=False,
+                env={**os.environ, "PYTHONNOUSERSITE": "1"},
+            )
+
+        self.assertEqual(completed.returncode, 0, completed.stderr)
+        self.assertEqual(json.loads(completed.stdout)[0]["name"], "review")
+
     def test_discover_and_search_skills(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             repo = Path(tmp)
@@ -258,9 +284,13 @@ class InstallSelectedSkillsTests(unittest.TestCase):
             {
                 "agent-behavior-test",
                 "bash-efficiency",
+                "budget-advisor",
+                "commit-message",
                 "data-viz",
+                "deep-interview",
                 "deep-ui-design",
                 "delegate-frontend",
+                "deliberative-advice",
                 "execute",
                 "external-patterns",
                 "farplane-invocation",
@@ -274,6 +304,8 @@ class InstallSelectedSkillsTests(unittest.TestCase):
                 "plan",
                 "pr-runtime",
                 "react-flow",
+                "reshape-feasible",
+                "skill-registry-ui",
                 "summarize",
                 "testing",
                 "ticket-opportunity-generator",

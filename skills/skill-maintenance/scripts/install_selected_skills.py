@@ -5,27 +5,24 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import shutil
-import sys
 from dataclasses import asdict, dataclass
 from datetime import datetime
 from pathlib import Path
 from typing import Sequence
 
 
-REPO_ROOT = Path(__file__).resolve().parents[3]
-if str(REPO_ROOT) not in sys.path:
-    sys.path.insert(0, str(REPO_ROOT))
-
-from bin.core.skill_contract import parse_skill_frontmatter
-
-
 RETIRED_SKILL_NAMES = {
     "agent-behavior-test",
     "bash-efficiency",
+    "budget-advisor",
+    "commit-message",
     "data-viz",
+    "deep-interview",
     "deep-ui-design",
     "delegate-frontend",
+    "deliberative-advice",
     "execute",
     "external-patterns",
     "farplane-invocation",
@@ -39,6 +36,8 @@ RETIRED_SKILL_NAMES = {
     "plan",
     "pr-runtime",
     "react-flow",
+    "reshape-feasible",
+    "skill-registry-ui",
     "summarize",
     "testing",
     "ticket-opportunity-generator",
@@ -67,6 +66,41 @@ class InstallResult:
     dry_run: bool
 
 
+INSTALLER_METADATA_RE = re.compile(
+    r"^(?P<key>name|description|tier|source):\s*(?P<value>.+?)\s*$"
+)
+
+
+def parse_installer_metadata(skill_file: Path) -> dict[str, str]:
+    """Read the four installer fields without importing the lint-only YAML stack."""
+
+    lines = skill_file.read_text(encoding="utf-8").splitlines()
+    if not lines or lines[0] != "---":
+        raise ValueError(f"{skill_file}: missing YAML frontmatter")
+
+    metadata: dict[str, str] = {}
+    for line in lines[1:]:
+        if line == "---":
+            break
+        match = INSTALLER_METADATA_RE.match(line)
+        if not match:
+            continue
+        value = match.group("value")
+        if value.startswith('"') and value.endswith('"'):
+            try:
+                value = str(json.loads(value))
+            except json.JSONDecodeError as exc:
+                raise ValueError(f"{skill_file}: invalid quoted {match.group('key')} value") from exc
+        elif value.startswith("'") and value.endswith("'"):
+            value = value[1:-1].replace("''", "'")
+        metadata[match.group("key")] = value
+
+    missing = [key for key in ("name", "description", "tier", "source") if not metadata.get(key)]
+    if missing:
+        raise ValueError(f"{skill_file}: missing installer metadata: {', '.join(missing)}")
+    return metadata
+
+
 def discover_skills(skills_dir: Path) -> list[Skill]:
     if not skills_dir.exists():
         raise FileNotFoundError(f"Skills directory does not exist: {skills_dir}")
@@ -78,14 +112,14 @@ def discover_skills(skills_dir: Path) -> list[Skill]:
         skill_file = skill_dir / "SKILL.md"
         if not skill_file.exists():
             continue
-        meta = parse_skill_frontmatter(skill_file)
+        meta = parse_installer_metadata(skill_file)
         skills.append(
             Skill(
-                name=str(meta.get("name", skill_dir.name)),
+                name=meta["name"],
                 path=skill_dir,
-                description=str(meta.get("description", "")),
-                source=str(meta.get("source", "")),
-                tier=str(meta.get("tier", "")),
+                description=meta["description"],
+                source=meta["source"],
+                tier=meta["tier"],
             )
         )
     return skills

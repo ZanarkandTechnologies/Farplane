@@ -1,6 +1,6 @@
 ---
 template_id: skill-template
-template_version: "0.6.0"
+template_version: "0.6.1"
 feature_refs:
   - FEAT-0022
   - FEAT-0054
@@ -91,6 +91,9 @@ fields—the signature and assertions carry those obligations.]
 - `## Reference Map`: keep when a conditional branch has detail to load.
 - `evals/evals.json`: add when variable behavior needs a focused judgeable case;
   the registry discovers it by path, so do not repeat that fact in frontmatter.
+- `ensemble.yaml`: add only when the skill owns optional independent-perspective
+  coverage. Direct remains the default; `auto` selects three relevant personas
+  and `max` selects all without changing the skill's output contract.
 - `examples/golden/*`: add when a useful example is too large to sit beside its
   rule. Keep short examples inline.
 Follow docs/skills/best-practices.md and skill-maintenance for their exact

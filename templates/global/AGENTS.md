@@ -1,6 +1,6 @@
 <!--
 template_id: global-agents-template
-template_version: 0.2.37
+template_version: 0.2.38
 feature_refs:
   - FEAT-0022
   - FEAT-0042
@@ -183,6 +183,10 @@ delegate(context_ref, claim, bounded_output, proof_target) -> owned_result
   when it owns a specialized workflow or work product. Keep traversal bounded
   by the task, evidence need, and user goal; follow task-relevant linked methods.
   Do not paste skill internals here.
+- For a skill that owns `ensemble.yaml`, direct is the default. Apply only an
+  explicit `ensemble=auto|max`: `auto` uses three relevant owner-local personas,
+  `max` uses all, and neither mode inherits into child calls or replaces the
+  owning skill's output contract.
 - For material skill work, use checklist evidence and independent review or QA
   when available. Render active-skill todos compactly during substantial work.
 - Delegate when independent judgment, context isolation, or parallel evidence
