@@ -224,7 +224,7 @@ so intended skill calls appear there as explicit refs in the right order.
 
 ```bash
 python3 bin/farplane.py lint skills      # read-only skill/package contracts
-python3 bin/farplane.py validate skills  # lint, then refresh registry and graph projections
+python3 bin/farplane.py skills sync       # refresh registry and graph projections, then lint
 python3 skills/skill-maintenance/scripts/check_skills.py --write
 python3 bin/validators/sync_skill_registry.py --write
 python3 bin/validators/sync_skill_registry.py --check

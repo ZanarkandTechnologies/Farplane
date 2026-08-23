@@ -285,10 +285,10 @@ Run:
 
 ```bash
 python3 tickets/scripts/check_ticket_metadata.py
-farplane validate ticket tickets/TASK-XXXX/ticket.md --phase planning
+farplane ticket check tickets/TASK-XXXX/ticket.md --phase planning
 ```
 
-The ticket validation route includes `ticket.context-budget`. It reports
+The ticket check route includes `ticket.context-budget`. It reports
 pressure above the 300-line target, blocks above the 400-line hard limit, and
 reports Markdown category counts from the shared accountant. Raw first-load
 lines remain the gate because Mermaid and other presentation still consume

@@ -163,7 +163,7 @@ design baseline; never replace it with a chat-only summary or a new schema.
     and before finalizing the Change Plan. Preserve its first sufficient rung,
     evidence, and smallest action only where they change scope, a change unit,
     or QA; do not create a parallel ticket schema.
-  - [ ] Run `farplane validate ticket <ticket> --phase planning`; inspect raw
+  - [ ] Run `farplane ticket check <ticket> --phase planning`; inspect raw
     first-load and Markdown category counts, then consolidate duplicated policy
     or bulky evidence when pressure is reported.
 - [ ] 8. Review and hand off.

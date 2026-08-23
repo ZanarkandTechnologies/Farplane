@@ -50,7 +50,7 @@ it as an active schema.
 - Done and QA are observable and proportional to risk.
 - Simple tickets pass without diagrams; linked or orphaned companions are
   validated; inline Mermaid is allowed when useful.
-- `farplane validate ticket ... --phase planning` reports raw first-load
+- `farplane ticket check ... --phase planning` reports raw first-load
   context plus prose, Mermaid, media, and reference categories.
 - Material plans have independent review; Goal compilation happens only after
   ticket approval.

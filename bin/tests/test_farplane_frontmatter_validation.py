@@ -54,25 +54,24 @@ class FarplaneLintTests(unittest.TestCase):
 
         self.assertIn("feature_and_system_records", {check.check_id for check in checks})
 
-    def test_validate_has_no_static_frontmatter_alias(self) -> None:
+    def test_validate_command_is_retired(self) -> None:
         with self.assertRaises(SystemExit):
-            farplane.build_parser().parse_args(["validate", "frontmatter"])
+            farplane.build_parser().parse_args(["validate", "skills"])
 
-    def test_validate_skills_is_the_projection_write_boundary(self) -> None:
-        args = farplane.build_parser().parse_args(["validate", "skills"])
+    def test_skills_sync_is_the_projection_write_boundary(self) -> None:
+        args = farplane.build_parser().parse_args(["skills", "sync"])
 
-        self.assertEqual(args.func.__name__, "run_validate_skills")
-        self.assertFalse(args.check)
+        self.assertEqual(args.func.__name__, "run_sync_skills")
 
-    def test_validate_skills_refreshes_projections_before_final_lint(self) -> None:
-        args = farplane.build_parser().parse_args(["validate", "skills"])
+    def test_skills_sync_refreshes_projections_before_final_lint(self) -> None:
+        args = farplane.build_parser().parse_args(["skills", "sync"])
 
         class Completed:
             returncode = 0
             stdout = "ok"
             stderr = ""
 
-        with patch("farplane_skill_validation.subprocess.run", return_value=Completed()) as run:
+        with patch("farplane_skill_sync.subprocess.run", return_value=Completed()) as run:
             self.assertEqual(args.func(args), 0)
 
         commands = [call.args[0] for call in run.call_args_list]
@@ -82,23 +81,12 @@ class FarplaneLintTests(unittest.TestCase):
         self.assertIn("harness-reference", commands[2])
         self.assertEqual(commands[3][-2:], ("lint", "skills"))
 
-    def test_validate_skills_check_mode_never_writes_projections(self) -> None:
-        args = farplane.build_parser().parse_args(["validate", "skills", "--check"])
+    def test_ticket_check_owns_phase_aware_lifecycle_proof(self) -> None:
+        args = farplane.build_parser().parse_args(
+            ["ticket", "check", "tickets/TASK-0001/ticket.md", "--phase", "planning"]
+        )
 
-        class Completed:
-            returncode = 0
-            stdout = "ok"
-            stderr = ""
-
-        with patch("farplane_skill_validation.subprocess.run", return_value=Completed()) as run:
-            self.assertEqual(args.func(args), 0)
-
-        commands = [call.args[0] for call in run.call_args_list]
-        self.assertTrue(all("--write" not in command for command in commands))
-        self.assertEqual(commands[0][-2:], ("lint", "skills"))
-        self.assertEqual(commands[1][-1], "--check")
-        self.assertEqual(commands[2][-1], "--check")
-        self.assertEqual(commands[3][-1], "--check")
+        self.assertEqual(args.func.__name__, "run_check_ticket")
 
 
 if __name__ == "__main__":

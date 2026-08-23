@@ -18,9 +18,9 @@ from farplane_cli_commands import (
     run_reports_index_cli, run_reports_repair_refs_cli, run_response_check_cli,
     run_skill_rollout_scan_cli, run_ticket_finalize_cli, run_ticket_history_cli,
     run_wiki_cli,
-    run_validate_ticket,
+    run_check_ticket,
 )
-from farplane_skill_validation import run_validate_skills
+from farplane_skill_sync import run_sync_skills
 from farplane_lint import run_lint_cli
 from farplane_cli_hooks import (
     run_hooks_doctor, run_hooks_install, run_hooks_list, run_install,
@@ -95,29 +95,6 @@ def build_parser() -> argparse.ArgumentParser:
     eval_promptfoo.add_argument("--dry-run", action="store_true")
     eval_promptfoo.set_defaults(func=run_eval_promptfoo_cli)
 
-    validate = sub.add_parser("validate", help="Validate a ticket or refresh checked-in skill projections.")
-    validate_sub = validate.add_subparsers(dest="validate_command")
-    validate_ticket_parser = validate_sub.add_parser("ticket", help="Validate one ticket at a lifecycle phase.")
-    validate_ticket_parser.add_argument("ticket")
-    validate_ticket_parser.add_argument("--phase", choices=("planning", "complete"), required=True)
-    validate_ticket_parser.add_argument("--root", default=str(CORE_ROOT))
-    validate_ticket_parser.add_argument("--path", action="append", default=[], help="Explicit changed path; may be repeated.")
-    validate_ticket_parser.add_argument("--base", help="Explicit Git base ref used to derive committed changed paths.")
-    validate_ticket_parser.add_argument("--no-write", action="store_true", help="Do not write the ticket validation receipt.")
-    validate_ticket_parser.add_argument("--json", action="store_true")
-    validate_ticket_parser.set_defaults(func=run_validate_ticket)
-    validate_skills_parser = validate_sub.add_parser(
-        "skills",
-        help="Lint skill packages, then refresh the skill registry and graph projections.",
-    )
-    validate_skills_parser.add_argument("--root", default=str(CORE_ROOT))
-    validate_skills_parser.add_argument(
-        "--check",
-        action="store_true",
-        help="Check registry and graph freshness without writing projections.",
-    )
-    validate_skills_parser.add_argument("--json", action="store_true")
-    validate_skills_parser.set_defaults(func=run_validate_skills)
     lint = sub.add_parser("lint", help="Run static YAML/JSON parsing and typed Farplane contracts.")
     lint.add_argument(
         "scope",
@@ -206,7 +183,7 @@ def build_parser() -> argparse.ArgumentParser:
     adoption_scan.add_argument("--json", action="store_true")
     adoption_scan.set_defaults(func=run_adoption_scan_cli)
 
-    skills = sub.add_parser("skills", help="Inspect Farplane skill rollout and registry projections.")
+    skills = sub.add_parser("skills", help="Inspect or synchronize Farplane skill projections.")
     skills_sub = skills.add_subparsers(dest="skills_command")
     skills_rollout = skills_sub.add_parser("rollout", help="Inspect skill rollout status.")
     skills_rollout_sub = skills_rollout.add_subparsers(dest="skills_rollout_command")
@@ -216,6 +193,10 @@ def build_parser() -> argparse.ArgumentParser:
     skills_rollout_scan.add_argument("--intelligence", help="Skill template intelligence JSON path.")
     skills_rollout_scan.add_argument("--json", action="store_true")
     skills_rollout_scan.set_defaults(func=run_skill_rollout_scan_cli)
+    skills_sync = skills_sub.add_parser("sync", help="Refresh the skill registry and graph projections.")
+    skills_sync.add_argument("--root", default=str(CORE_ROOT))
+    skills_sync.add_argument("--json", action="store_true")
+    skills_sync.set_defaults(func=run_sync_skills)
 
     harness = sub.add_parser("harness", help="Compile and inspect local harness projections.")
     harness_sub = harness.add_subparsers(dest="harness_command")
@@ -256,6 +237,15 @@ def build_parser() -> argparse.ArgumentParser:
     ticket_finalize.add_argument("--project-root", default=os.getcwd())
     ticket_finalize.add_argument("--json", action="store_true")
     ticket_finalize.set_defaults(func=run_ticket_finalize_cli)
+    ticket_check = ticket_sub.add_parser("check", help="Check one ticket's phase-aware lifecycle proof.")
+    ticket_check.add_argument("ticket")
+    ticket_check.add_argument("--phase", choices=("planning", "complete"), required=True)
+    ticket_check.add_argument("--root", default=str(CORE_ROOT))
+    ticket_check.add_argument("--path", action="append", default=[], help="Explicit changed path; may be repeated.")
+    ticket_check.add_argument("--base", help="Explicit Git base ref used to derive committed changed paths.")
+    ticket_check.add_argument("--no-write", action="store_true", help="Do not write the ticket check receipt.")
+    ticket_check.add_argument("--json", action="store_true")
+    ticket_check.set_defaults(func=run_check_ticket)
 
     tickets = sub.add_parser("tickets", help="Inspect Farplane ticket projections.")
     tickets_sub = tickets.add_subparsers(dest="tickets_command")

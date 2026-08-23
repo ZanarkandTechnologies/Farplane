@@ -165,8 +165,8 @@ qa_strategy:
     - python3 skills/eval/scripts/check_eval_queries.py --root skills/visual-reasoning
     - python3 skills/eval/scripts/run_evals.py run --harness codex --judge-harness codex --target-root . --skill visual-reasoning --label task-9010-visual-reasoning --behavior-trace --max-parallel-tasks 1
     - python3 skills/skill-maintenance/scripts/check_skills.py --write
-    - farplane validate ticket tickets/TASK-9010/ticket.md --phase planning
-    - farplane validate ticket tickets/TASK-9010/ticket.md --phase complete --path skills/visual-reasoning
+    - farplane ticket check tickets/TASK-9010/ticket.md --phase planning
+    - farplane ticket check tickets/TASK-9010/ticket.md --phase complete --path skills/visual-reasoning
   delegated_lanes:
     - reviewer: implementation and evidence acceptance
   review:

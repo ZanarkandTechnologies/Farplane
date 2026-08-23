@@ -420,13 +420,13 @@ def run_doctor(args: argparse.Namespace) -> int:
     return 0 if payload["ok"] else 1
 
 
-def run_validate_ticket(args: argparse.Namespace) -> int:
+def run_check_ticket(args: argparse.Namespace) -> int:
     root = Path(args.root).expanduser().resolve()
     ticket = Path(args.ticket).expanduser()
     if not ticket.is_absolute():
         ticket = root / ticket
     if args.path and args.base:
-        raise CliError("validation_boundary_conflict: use --path or --base, not both")
+        raise CliError("ticket_check_boundary_conflict: use --path or --base, not both")
     try:
         if args.path:
             boundary = explicit_boundary(args.path)
@@ -443,14 +443,14 @@ def run_validate_ticket(args: argparse.Namespace) -> int:
             write=not args.no_write,
         )
     except ValueError as exc:
-        raise CliError(f"validation_error:{exc}") from exc
+        raise CliError(f"ticket_check_error:{exc}") from exc
 
     payload = receipt.as_dict()
     if args.json:
         print(json.dumps(payload, indent=2, sort_keys=True))
     else:
         print(
-            f"ticket validation {'passed' if receipt.ok else 'failed'}: "
+            f"ticket check {'passed' if receipt.ok else 'failed'}: "
             f"{receipt.ticket} phase={receipt.phase} checks={len(receipt.results)}"
         )
         for result in receipt.results:

@@ -270,10 +270,10 @@ Run:
 
 ```bash
 python3 tickets/scripts/check_ticket_metadata.py
-farplane validate ticket tickets/TASK-XXXX/ticket.md --phase planning
+farplane ticket check tickets/TASK-XXXX/ticket.md --phase planning
 ```
 
-The ticket validation route includes `ticket.context-budget`. It reports
+The ticket check route includes `ticket.context-budget`. It reports
 pressure above the 300-line target and blocks above the 400-line hard limit.
 
 The validator treats `tickets/TASK-*/ticket.md` as canonical and still tolerates

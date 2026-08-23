@@ -46,15 +46,17 @@ runtime helpers instead of symlinking every script, validator, and test.
 
 ## Entrypoints
 
-- `farplane validate ticket <ticket.md> --phase planning|complete` - canonical
-  ticket-facing validation API. Completion also requires an explicit `--base`
+- `farplane ticket check <ticket.md> --phase planning|complete` - canonical
+  ticket-facing lifecycle-proof API. Completion also requires an explicit `--base`
   or repeated `--path`; receipts are written under the ticket's
   `artifacts/validation/` directory.
-- `farplane lint [all|skills|docs|evals|project] [--changed] [--base REF]` -
+- `farplane lint [all|skills|docs|evals|project|ticket] [--changed] [--base REF]` -
   run the pure static contracts selected by scope and changed paths. It never
   writes projections: use the owning sync/generate command to refresh those.
   Use `farplane lint ticket <ticket.md>` for one ticket's static metadata/H1
-  contract, and `farplane validate ticket ... --phase` for lifecycle proof.
+  contract, and `farplane ticket check ... --phase` for lifecycle proof.
+- `farplane skills sync [--root PATH]` - refresh the checked-in skill registry
+  and graph projections, then run the read-only skill-package contract.
 - `core/lint/*` - typed static-lint registry, duplicate-safe source/frontmatter
   parsing, changed-path selection, and read-only result rendering. Domain
   validators remain beside their owners under `bin/validators/` or a skill.

@@ -49,8 +49,6 @@ def main(argv: list[str]) -> int:
     args = parser.parse_args(argv[1:])
     if getattr(args, "command", None) == "hooks" and getattr(args, "hooks_command", None) is None:
         parser.error("hooks requires a subcommand: install or doctor")
-    if getattr(args, "command", None) == "validate" and getattr(args, "validate_command", None) is None:
-        parser.error("validate requires a subcommand: ticket or skills")
     if getattr(args, "command", None) == "eval" and getattr(args, "eval_command", None) is None:
         parser.error("eval requires a subcommand: init or promptfoo")
     if getattr(args, "command", None) == "response" and getattr(args, "response_command", None) is None:
@@ -62,7 +60,7 @@ def main(argv: list[str]) -> int:
     if getattr(args, "command", None) == "adoption" and getattr(args, "adoption_command", None) is None:
         parser.error("adoption requires a subcommand: scan")
     if getattr(args, "command", None) == "skills" and getattr(args, "skills_command", None) is None:
-        parser.error("skills requires a subcommand: rollout")
+        parser.error("skills requires a subcommand: rollout or sync")
     if getattr(args, "skills_command", None) == "rollout" and getattr(args, "skills_rollout_command", None) is None:
         parser.error("skills rollout requires a subcommand: scan")
     if getattr(args, "command", None) == "harness" and getattr(args, "harness_command", None) is None:
@@ -71,6 +69,8 @@ def main(argv: list[str]) -> int:
         parser.error("harness health requires a subcommand: compile")
     if getattr(args, "command", None) == "tickets" and getattr(args, "tickets_command", None) is None:
         parser.error("tickets requires a subcommand: history")
+    if getattr(args, "command", None) == "ticket" and getattr(args, "ticket_command", None) is None:
+        parser.error("ticket requires a subcommand: check or finalize")
     if getattr(args, "command", None) == "metrics" and getattr(args, "metrics_command", None) is None:
         parser.error("metrics requires a subcommand: primitives")
     if getattr(args, "command", None) == "project" and getattr(args, "project_command", None) is None:

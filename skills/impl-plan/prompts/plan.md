@@ -99,7 +99,7 @@ materially improve understanding; validate the companion when present.
 Run:
 
 ```text
-farplane validate ticket tickets/TASK-XXXX/ticket.md --phase planning
+farplane ticket check tickets/TASK-XXXX/ticket.md --phase planning
 ```
 
 Inspect both raw first-load context and Markdown categories. Consolidate

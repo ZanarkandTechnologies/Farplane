@@ -84,8 +84,8 @@ proof on separate routes:
   static checks from one source of truth.
 - Sync and generator commands are the only routes that update registries,
   graphs, or other projections. A lint command must never write them.
-- `farplane validate ticket --phase planning|complete` remains lifecycle
-  validation: it selects phase-dependent evidence and may write a ticket-local
+- `farplane ticket check --phase planning|complete` remains lifecycle proof: it
+  selects phase-dependent evidence and may write a ticket-local
   receipt.
 - A validator that checks one skill's generated packet or integration payload
   remains owned by that skill rather than becoming a repository-wide lint rule.

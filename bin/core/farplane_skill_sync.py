@@ -1,4 +1,4 @@
-"""Explicit write boundary for checked-in skill projections."""
+"""Explicit writer for checked-in skill registry and graph projections."""
 
 from __future__ import annotations
 
@@ -10,23 +10,18 @@ from pathlib import Path
 from typing import Any
 
 
-def run_validate_skills(args: argparse.Namespace) -> int:
-    """Refresh or check skill projections, then prove the complete read-only contract."""
+def run_sync_skills(args: argparse.Namespace) -> int:
+    """Refresh skill projections, then prove their complete read-only contract."""
 
     root = Path(args.root).expanduser().resolve()
-    check_only = args.check
     graph_script = root / "skills" / "skill-maintenance" / "scripts" / "generate_graph_projection.py"
-    lint_command = (
-        "skill_lint",
-        (sys.executable, str(root / "bin" / "farplane.py"), "lint", "skills"),
-    )
-    projection_commands = (
+    commands = (
         (
             "skill_registry",
             (
                 sys.executable,
                 str(root / "bin" / "validators" / "sync_skill_registry.py"),
-                "--check" if check_only else "--write",
+                "--write",
             ),
         ),
         (
@@ -38,7 +33,6 @@ def run_validate_skills(args: argparse.Namespace) -> int:
                 "skill-registry",
                 "--repo-root",
                 str(root),
-                *(("--check",) if check_only else ()),
             ),
         ),
         (
@@ -50,11 +44,13 @@ def run_validate_skills(args: argparse.Namespace) -> int:
                 "harness-reference",
                 "--repo-root",
                 str(root),
-                *(("--check",) if check_only else ()),
             ),
         ),
+        (
+            "skill_lint",
+            (sys.executable, str(root / "bin" / "farplane.py"), "lint", "skills"),
+        ),
     )
-    commands = (lint_command, *projection_commands) if check_only else (*projection_commands, lint_command)
     results: list[dict[str, Any]] = []
     for check_id, command in commands:
         try:
@@ -76,15 +72,14 @@ def run_validate_skills(args: argparse.Namespace) -> int:
             break
 
     ok = all(result["ok"] for result in results) and len(results) == len(commands)
-    action = "checked" if check_only else "refreshed"
     payload = {
         "ok": ok,
         "scope": "skills",
-        "changed": not check_only,
+        "changed": True,
         "summary": (
-            f"farplane validate skills {action}: checks={len(results)}"
+            f"farplane skills sync refreshed: checks={len(results)}"
             if ok
-            else "farplane validate skills failed"
+            else "farplane skills sync failed"
         ),
         "checks": results,
     }

@@ -182,7 +182,7 @@ Content Production converts approved identity and optional inspiration into a bo
 
 - Registry proof: `python3 docs/features/validate_features.py`.
 - Link proof: `python3 bin/validators/check_doc_refs.py`.
-- Ticket proof: `farplane validate ticket <ticket> --phase planning`.
+- Ticket proof: `farplane ticket check <ticket> --phase planning`.
 - Update this system page when the composition policy, timing-master policy, or feature membership changes.
 - Update feature pages when Brand Kit or Tasty Pack behavior changes.
 - Regenerate registries and commit generated outputs with the source docs.

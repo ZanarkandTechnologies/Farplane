@@ -16,7 +16,7 @@ template_uses:
 1. Resolve one active ticket and assert implementation, proof, and required review are complete.
 2. Read the first-load Todo List guardrails before any remote mutation.
 3. Update ticket evidence, durable docs, handoff, next action, and latest verification.
-4. Run `farplane validate ticket <ticket.md> --phase complete` with an explicit changed-path boundary.
+4. Run `farplane ticket check <ticket.md> --phase complete` with an explicit changed-path boundary.
 5. Refresh independent review when closeout changes made the prior receipt stale.
 6. Derive a compact repo-style commit subject from the intended slice, commit only that slice, and push only when explicitly authorized.
 7. Select media explicitly. Material features require the passing reviewed `$demo` `final.mp4` first; maintenance tickets invent no demo.

@@ -39,7 +39,7 @@ def run_lint(args: argparse.Namespace) -> int:
 
 
 def run_lint_ticket(args: argparse.Namespace) -> int:
-    """Run static ticket checks only; phase-aware proof stays under validate ticket."""
+    """Run static ticket checks only; phase-aware proof stays under ticket check."""
 
     check = lint_ticket(CORE_ROOT, args.ticket)
     result = payload(scope="ticket", changed=False, checks=[check])
