@@ -1,390 +1,115 @@
 # Farplane AGENTS.md
 
-This file is the project-local context for developing Farplane itself.
+This file is the project-local context for developing Farplane itself. It is a
+routing kernel. The global Codex contract is
+[templates/global/AGENTS.md](templates/global/AGENTS.md).
+Keep this file navigational: a rule belongs here only when every Farplane task
+needs it before a ticket, skill, or owner document can take over.
 
-The install-time global harness contract now lives at `templates/global/AGENTS.md` and is what `install.sh` links into the live Codex home as `~/.codex/AGENTS.md`.
+## Operating model
 
-## Repo Purpose
+- Farplane is a harness built from visible tickets, skills, docs, bounded
+  subagents, and small deterministic control points. Prefer those surfaces to
+  hidden orchestration.
+- The active ticket is the task contract, scope boundary, proof scoreboard, and
+  handoff. Do not keep durable state only in chat.
+- For material work, a Goal Packet adds `program.md` for loop policy,
+  `progress.md` for observations, and `artifacts/` for proof. `ticket.md`
+  remains the executable contract.
+- A direct `impl` on a ready material ticket authorizes `goal-advisor` execution
+  unless required inputs, an approval gate, or destructive/external side effects
+  block. Keep ticket body and metadata current. Material completion requires its
+  `Done / Proof`, QA/reviewer receipts, and the `farplane ticket finalize
+  TASK-XXXX` close route. Compare ticket, program, and progress at material
+  continuations; use drift review when self-approval risk is high. Ticket
+  lifecycle and thread mechanics stay in `tickets/README.md`.
+- Every implementation ticket needs a compact Contract Diagram. UI tickets also
+  need `design.md`; QA compares the operated result with that baseline.
+- A workflow is not shipped until its `skills/<name>/` package and canonical
+  inventory are present.
+- Active Farplane surfaces use one current name and path. Do not retain aliases,
+  shims, fallback parsers, or old commands without an explicit public-contract
+  or migration need.
+- Human-facing shortcuts are not implicit workflow dependencies; native phases
+  own generic planning and execution, while skills own named work products.
 
-Farplane is a harness repo for orchestrating Codexes through visible artifacts.
-Before public launch, Farplane is the canonical source identity: active docs,
-install templates, runtime env vars, Python helpers, conceptual envelopes,
-skill IDs, registries, and plugin packages should not retain previous-identity
-compatibility naming. Historical archives and external services can migrate
-separately. See `MEM-0126`.
-Compatibility is opt-in for active Farplane surfaces. Do not keep aliases,
-fallback parsers, dual paths, shims, or old command names unless a ticket,
-spec, installer path, external integration, or existing public contract
-explicitly requires them; otherwise update references and delete the legacy
-surface.
+## Context budget
 
-The main surfaces are:
+```text
+context_budget(task) -> request_or_ticket + owner_surface + local_proof_surface
+```
 
-- tickets as durable task memory
-- docs as the canonical system of record
-- skills as reusable workflows
-- subagents as bounded specialists
-- hooks and scripts as small control points
+Start with the request or active ticket, then load one owner and one nearby
+implementation or proof surface:
 
-Prefer improving review loops, ticket contracts, skill packaging, and evidence surfaces before inventing more hidden orchestration code.
+- ticket work: `tickets/README.md` or the ticket template;
+- skill work: that skill's `SKILL.md` and its nearby tests or checklist;
+- code work: the owning module and its closest test;
+- docs work: the canonical owner and the relevant reader-facing page;
+- harness placement: `harness-engineering-doctrine.md` and the relevant
+  registry; and
+- install work: the touched installer or template and its validation path.
 
-For Farplane development work, `ticket.md` is the primitive contract before
-implementation. New feature, workflow, product, prompt, skill, architecture, or
-harness design should stay in feedback-first planning until an accepted ticket,
-controlling spec, explicit direct-fix request, or active Goal Packet owns the
-scope. Low-confidence operator phrasing such as "I think", "I feel", "maybe",
-"what do you think", or "we need" is a request for pressure-testing and a
-ticket-ready plan, not permission to create or edit durable artifacts. Once a
-ticket or Goal Packet is approved, agents may execute autonomously within that
-scope and proof contract.
+Load another file only to answer a named question the current set cannot answer.
+Do not preload history or memory logs. Read `docs/HISTORY.md` or
+`docs/MEMORY.md` only when the ticket, a source reference, or a known invariant
+makes one relevant.
 
-Ticketed work should use the ticket `Done / Proof` block as the shared
-scoreboard for done conditions, checks, review TAS gates, and required
-evidence. Keep full rubric bodies in `docs/review/rubrics/*` and full
-autoresearch session details in the owning autoresearch artifacts; tickets
-carry handles, TAS gates, and artifact obligations. Use `none mechanical`
-rather than inventing fake metrics for judgment-heavy work. See `MEM-0086`.
+## Local boundaries
 
-Do not describe a workflow as a shipped public capability until the repo
-actually contains the discoverable `skills/<name>/` package and the canonical
-inventory/docs point to it. See `MEM-0044`.
+- Before proposing a new Farplane policy, skill, agent, hook, validator, or
+  template, use `harness-advisor` to select the smallest owner surface. Root
+  prompt text is the last lever, not the default.
+- Before changing this file or `templates/global/AGENTS.md`, apply
+  `docs/templates/global-agents-qa-checklist.md`. Preserve a concrete
+  before/after/example and name the destination of removed behavior.
+- Put reusable procedure in its skill, task-local decisions and proof in the
+  ticket, cross-surface policy in its canonical doc, and deterministic checks
+  in validators. Link to an owner; do not copy its contract here.
+- Browser/user-visible proof uses the project QA lane and ticket proof policy:
+  use in-app Browser for public or unauthenticated browsing, reproducible browser
+  extraction, and normal QA; use Chrome or Computer Use only when existing
+  authenticated state (cookies, extensions, or native-app state) is required;
+  use Playwright only for requested regression coverage or an existing suite.
+- Architecture owns the complete system map. The README routes readers to it;
+  do not maintain two independent canonical diagrams.
+- Do not modify installed or external skills under `~/.codex/skills/` unless the
+  operator explicitly requests that target. Change the repo-owned source and
+  use its install or sync path.
+- Stay in the operator-selected checkout. Do not silently create or switch
+  worktrees. Native subagents share the checkout and require a single-writer
+  boundary.
+- Credentialed commands run through `farplane run -- <command>` or
+  `doppler run -- <command>`. `farplane doctor` reports readiness and
+  `farplane install` owns safe render/link/repair work.
+- Farplane is local Codex orchestration. Do not add a daemon, hosted control
+  plane, scheduler, or per-ticket runtime without a ticketed need.
 
-Farplane skills are stable local contracts. Treat external skills, repos,
-blogs, and command families as research inputs rather than live dependencies;
-import ideas through reviewed `adopt`, `adapt`, `reject`, or `defer` decisions,
-usually via `best-of-worlds`. See `MEM-0073`.
-Self-healing and capability tests may mirror installed or external skills under
-`tests/<skill>/`, create repair tickets, and patch local Farplane wrappers, but
-must not directly edit external or installed skill bodies such as
-`~/.codex/skills/*` unless the operator explicitly asks for that specific
-external-skill edit. Prefer a local wrapper, fixture, registry row, or visible
-repair ticket. See `MEM-0107`.
+## Durable truth
 
-Keep skill dependencies tiered rather than hidden behind nested routers, but do
-not confuse tiers with lifecycle phases. Numeric skill tiers are compounding
-leverage classes for upgrade priority, while first-load todo-link rules are the
-loading contract derived from those classes. Tier 0 is the universal phase
-protocol from the global AGENTS template: ground, plan or direct action,
-execute, guardrail, review evidence, and write back. Tier 1 primitives cover
-`advise`, `consolidate`, `reference-grounding`, `prototyping`, and skill
-first-load todo-list loading; Tier 2 names generic workflow surfaces such as
-`brainstorm`,
-`research:*`, and `harness-advisor`; Tier 3 application skills implement
-concrete domains. `plan` is a planning prompt-template and todo-composition
-interface, not the Tier 0 planning phase itself. `execute` is a deprecated
-compatibility wrapper for native Codex execution, not a normal dependency for
-new skill work. `review` is a callable TAS wrapper over docs-owned rubrics in
-`docs/review/rubrics/*`, not the owner of every review workflow. Call
-phase-like skills only when the phase needs its own artifact, budget, handoff,
-independent judgment, or proof surface, and never recurse through them at the
-same task scope. See `MEM-0098`, `MEM-0100`, `MEM-0125`, and the Tier 0 update
-in `docs/skills/system.md`.
-Leaf skill todos own domain work only: do not restate inherited Tier 0
-planning/execution/review/writeback or the standard local-QA routine. Keep the
-shared composition grammar in `docs/skills/composition.md` and
-`docs/skills/templates/SKILL_TEMPLATE.md`; applicable QA checklists still run
-at invocation and material finish.
-Create new Tier 1 primitives only when multiple Tier 2 interfaces need that
-move as a base dependency; otherwise keep common reusable work as a Tier 2
-interface or method. User research starts as `research:user-grounding`, not a
-Tier 1 primitive. See `MEM-0101`.
-Use `skill-maintenance` for periodic bulk skill-system upkeep instead of
-expanding the always-loaded prompt. Bulk skill edits should read project and
-registry docs first, keep Tier 2 todo lists linked to Tier 1 primitives, keep
-Tier 3 todo lists linked to Tier 2 surfaces plus intentional peer Tier 3
-handoffs, and leave external skills without local todo lists when wrapper logic
-belongs in callers. Run
-`python3 skills/skill-maintenance/scripts/check_skills.py --write` after skill
-metadata, Markdown links, or todo-list changes. See `MEM-0104`.
-Local Farplane skills keep required todo items directly in `SKILL.md`
-under a marker-delimited `## Todo List` section. Skill-local `todos.md`
-sidecars are no longer an active source and should be deleted rather than
-reconciled. External skills may omit local first-load todo lists when wrapper
-logic belongs in callers. Run
-`check_skills.py --write` and reinstall after source skill edits before judging
-live installed behavior. See `MEM-0117` and `MEM-0124`.
-Native Codex Goal mode is the continuation engine for material Goal loops, but
-Farplane owns the visible state around it. Material Goals should create or
-attach to a ticket and use a Goal Packet: `ticket.md` for the task contract,
-`program.md` for loop configuration, and `progress.md` for append-only turn
-logs. Use `goal-advisor` to choose Goal versus heartbeat, rollout, or feedback
-shape and to compile the final native `/goal` prompt.
-When a Codex session starts active execution or creates a ticket it is actively
-handling, set `claimed_by` to that session's human-facing alias such as
-`codex-019ef784`; clear it when the session parks, blocks, completes, or
-archives the ticket. Keep raw `session_id` values in `.farplane/` runtime state,
-not ticket frontmatter. A ticket may own one hook-written `thread_id` for its
-persistent Codex task; helper threads never become ticket threads.
-Ticket bodies should stay compact and program-shaped: `Summary`, `Scope`,
-`Delta`, `Program`, `Map`, `Done / Proof`, `State`, `Links`, and sparse
-`Notes`. Put loop configuration in `program.md`, append-only logs in
-`progress.md`, and bulky proof/review outputs under `artifacts/`.
-Use `harness-advisor` for Farplane improvement placement decisions before
-expanding root policy, global templates, skills, subagents, hooks/scripts,
-ticket contracts, feature specs, validators, or registries. It reads the feature
-and skill registries plus the harness doctrine, then recommends the primary
-owning surface. See `MEM-0106`.
+- `tickets/` holds active task state, proof, blockers, and archived tickets.
+- `docs/HISTORY.md` records meaningful milestones and migrations.
+- `docs/MEMORY.md` holds current project invariants that are worth retrieving
+  outside their owner surface.
+- Prefer `.farplane/` for live runtime state. It also holds generated state.
+- `docs/` holds current contracts and references; stale content is folded into
+  its owner or deleted rather than preserved as live guidance.
 
-When authoring prompts for subagents, delegated CLIs, AI-powered app behavior,
-structured outputs, eval prompts, or agent instruction prompts, load
-`docs/fundamentals/prompt-engineering.md` as the shared prompt design reference.
+## Map
 
-When creating durable Farplane Markdown artifacts, follow
-`docs/features/FEAT-0060-registry-backed-documentation-os.md` for lifecycle,
-metadata, registry, and documentation-system expectations.
+- `README.md` — product entry points and setup.
+- `ARCHITECTURE.md` — system boundaries and canonical workflow map.
+- `tickets/` — task contracts and proof.
+- `skills/` — progressively loaded workflows and their local references.
+- `docs/features/` and `docs/systems/` — capability and system contracts.
+- `bin/` — live CLI, runtime, and shared validators.
+- `templates/global/` — install-time global Codex contract.
 
-When the operator explicitly wants audit-then-fix recovery after a likely
-assistant miss, use the current correction surfaces: fix same-scope misses
-first, then route durable learning to `gap-analysis`, `optimize-harness`,
-`eval`, `docs/TROUBLES.md`, or `docs/LESSONS.md` as appropriate.
+## Stop and surface a decision
 
-When planning a missing or partially implemented feature depends on
-understanding what a production-grade version should include, use
-`research:gap` before locking the ticket plan so current-state gaps and
-external comparables are explicit instead of implied.
+- scope or interface contract conflicts;
+- migration has no safe rollback;
+- a circular dependency appears; or
+- the required owner surface cannot be identified.
 
-When the main planning question is broader external parity such as what peer
-products, standards, or open-source repos consistently include for a
-capability, use `research:parity` first and then route the result into
-`research:gap`, `functional-ui`, or `impl-plan`. See `MEM-0097`.
-
-For UI planning, landing-page, media, and delegated build work, use the owning
-surfaces instead of copying their detailed rules here: `impl-plan` composes
-`functional-ui`, `visual-design`, `asset-advisor`, and `landing-page` only when
-their facet is unresolved; `delegate-cli`, `visual-qa`,
-`web-design-guidelines`, and `review` own delegation and quality gates.
-Those surfaces own generated-media proof, Pi/OpenRouter builder runs, browser
-evidence, and frontend guideline scoring.
-See `MEM-0072`, `MEM-0076` through `MEM-0085`, and `MEM-0088` through
-`MEM-0096`.
-Farplane currently assumes local Codex execution in the checkout selected by
-the task. Do not add compute selection, per-ticket runtime orchestration, a
-daemon, hosted control plane, scheduler, or cloud wrapper without a new
-ticketed need. Keep Farplane focused on visible invocation, ticket, and proof
-surfaces. See `MEM-0077`, `MEM-0081`, and `MEM-0082`.
-
-## Project Structure
-
-- `README.md`: current product shape, setup, and canonical entry points
-- `agents/`: subagent role configs and prompt contracts
-- `bin/`: live hook/runtime shims and shared repo commands
-- `bin/validators/`: repo-wide validation and generated-registry checks
-- `docs/`: durable feature specs, history, memory, troubles, lessons, and research
-- `docs/fundamentals/`: harness theory, doctrine, and cross-surface best practices
-- `.farplane/`: ignored local runtime, generated, event, scout, eval, and
-  product state
-- `qa/`: reusable browser-QA runbooks, shortcuts, and deterministic test-entry guides
-- `rules/`: machine-readable local rule files, not reusable best-practice docs
-- `skills/`: operational playbooks, references, scripts, and templates
-- `templates/global/`: install-only template artifacts shipped into the live Codex home
-- `tickets/`: active task board and archived work history
-
-## Read First
-
-Choose the smallest relevant reading set before editing.
-
-For general repo orientation:
-
-- `README.md`
-- `ARCHITECTURE.md`
-- `docs/features/README.md`
-- active ticket under `tickets/`
-- `docs/MEMORY.md`
-- `docs/TROUBLES.md`
-- `docs/LESSONS.md`
-
-For harness tuning and repo-shape changes:
-
-- `docs/fundamentals/harness-engineering-doctrine.md`
-- `docs/features/README.md`
-- `docs/features/FEAT-0007-ticket-as-durable-task-memory.md`
-- `docs/features/FEAT-0008-artifact-first-qa-and-completion-proof.md`
-
-For install and bootstrap work:
-
-- `install.sh`
-- `templates/global/AGENTS.md`
-- `PROJECT_RULES.md`
-- `config.toml.example`
-- `skills/init-advisor/SKILL.md`
-
-For harness-design research and external patterns:
-
-- `docs/sources/registry.jsonl`
-- `docs/features/README.md`
-- `docs/features/registry.jsonl`
-
-## Local Operating Rules
-
-- No blind edits. Read the relevant feature spec, ticket, and nearby module docs first.
-- Stay in the checkout the operator selected. Do not create, switch into, or
-  move work through a linked worktree unless the operator explicitly requests
-  it or coordination already assigned that checkout. Keep the selected
-  checkout single-writer; when another task owns it, coordinate that boundary
-  instead of silently changing workspace topology. Native subagents share
-  their parent's checkout and do not provide filesystem isolation.
-- Tickets and docs are the source of truth; do not hide state in chat.
-- This Farplane checkout uses Doppler for runtime secrets. For credentialed
-  scripts, skill helpers, API checks, installs, or local commands, use
-  `farplane run -- <command>` or `doppler run -- <command>` from the project
-  checkout. `farplane doctor` owns readiness reporting, and `farplane install`
-  owns safe mechanical render/link/repair work. Do not add a separate setup or
-  sync command for readiness unless a ticket proves a new lifecycle surface is
-  needed. Do not assume `~/.farplane/config.toml` contains secrets; it is a
-  private fallback/cache only.
-- Prefer modular ownership over artifact-type scattering. A high-level package
-  such as `skills/<name>/` should own its skill-local docs, scripts, templates,
-  tests, and examples when those files only matter to that package. Use
-  `docs/fundamentals/` for cross-surface theory and best practices,
-  feature docs in `docs/features/` for concrete feature specs, `bin/validators/` for shared
-  repo-wide checks, and top-level `bin/` only for live runtime shims or commands
-  intentionally shared across packages.
-- Before adding or moving a top-level `bin/*` file, apply the bin placement
-  gate: keep it in `bin/` only when it is a live installed hook/runtime shim,
-  global Farplane CLI edge, shared cross-skill command, repo-wide validator
-  wrapper, or explicitly required temporary wrapper for a moved public command. Put
-  Core helper implementations under `bin/core/`, Codex hook/runtime
-  implementations under `bin/runtime/`, Core-owned tests under `bin/tests/`,
-  skill-specific implementations and their tests under
-  `skills/<owner>/scripts/`, and repo-wide validators and validator tests under
-  `bin/validators/`; delete generated `__pycache__` rather than preserving it.
-- When moving a command to a clearer owner, update references and remove the old
-  path by default. Leave a small compatibility wrapper only for an explicit
-  public-contract, installer, external-integration, or ticketed migration need,
-  and include the intended sunset or follow-up cleanup.
-- For generalized agentic workflows such as Feed Scout, keep source selection,
-  ranking judgment, and cross-platform fetching in the skill prompt, config,
-  and called platform skills or tools rather than one hardcoded project script.
-  Scripts are appropriate only for repeatable, parameterized helpers such as
-  validation, normalization, artifact writing, registry sync, or deterministic
-  adapters. If a script starts encoding one project's example sources,
-  competitors, ranking taste, or platform-specific branching, move that logic
-  back into the skill contract or design a genuinely general engine before
-  expanding it.
-- Keep chat concise and put deep detail into visible repo artifacts such as the active ticket and canonical docs.
-- Keep chat concise, but make planning artifacts detailed and action-oriented.
-  A strong ticket plan should say what will be built, in what order, and how
-  it will be proved without falling back to timid "maybe/could" language. See
-  `MEM-0062`.
-- Preserve the colored whole-system workflow/skill map in both `README.md` and
-  `ARCHITECTURE.md`; do not compress it into a tiny linear chart during
-  concision passes unless an equally complete replacement exists. See
-  `MEM-0075`.
-- When summarizing implemented feature changes to the operator, prefer `Before` / `After` / `Example` bullets over one dense prose block. See `MEM-0051`.
-- Keep QA and completion proof artifact-first: link ticket-scoped evidence from `tickets/TASK-XXXX/artifacts/`, and for UI/user-visible work keep browser capture separate from final `visual-qa` judgment. See `MEM-0048`.
-- For adversarial agent testing, treat `agent-qa-test` as the public proof
-  orchestrator and Eval `behavior_trace` as the isolated CLI child-run capture
-  mode. Serious readiness claims should include tester evidence,
-  evidence-review critique, captured logs when useful, and a final proof-bundle
-  review. See `MEM-0115`.
-- In Goal-backed ticket execution, treat `$qa` as a delegated proof surface:
-  the coordinating lane should hand browser driving and proof capture to
-  `qa-tester` instead of self-certifying operated proof. See `MEM-0069`.
-- Outside tmux or lane-specific runtime flows, keep the same ownership split:
-  native `qa-tester` delegation is the default way to run meaningful QA or
-  browser proof. See `MEM-0070`.
-- For browser proof inside Farplane, make the efficient path the default:
-  `qa-tester` should use the Codex in-app Browser for page operation,
-  screenshots, snapshots, console logs, network inspection, and page errors.
-  Reuse the existing browser binding and tabs across sequential work. Use
-  `@Chrome` only when the operator's existing authenticated Chrome state is
-  required. Use Playwright when the ticket explicitly asks for regression
-  coverage or the flow is already codified in an existing suite. See
-  `MEM-0149`.
-- Treat `goal-advisor` as the canonical execution compiler for material
-  Farplane work: it turns listed ticket/program/progress/spec/board files,
-  trigger mode, and budget into native Goal, heartbeat, rollout, feedback, or
-  direct-route prompts.
-- Treat `goal-advisor` as the coding-ticket leaf execution surface once a
-  ticket is ready. Native Goal mode owns continuation; ticket `Done / Proof`
-  and `program.md` own the build, QA, demo, evidence, and final completion
-  checkpoint. Do not rely on hooks to advance phases.
-- Final completion in Farplane should remain mechanical and visible: material
-  Goal prompts must require QA evidence review and reviewer-lane completion
-  review, write the strongest evidence back to the packet, then run `farplane
-  ticket finalize TASK-XXXX` before `stop_complete`. That command owns terminal
-  metadata, archive movement, completion-event emission, and mining. Live Stop
-  hooks collect telemetry only and do not own completion routing.
-- In Farplane, `qa_checklist.md` is the self/preflight/repair guardrail and the
-  native `reviewer` lane is the independent readiness gate for material claims.
-  Do not make every tiny checklist a subagent job; do not let material plans,
-  skill changes, prompts, evidence bundles, or completion claims self-approve
-  when a reviewer lane is available.
-- Material review should run through the native `reviewer` subagent when
-  available. Pass the active ticket or task artifact path, changed files,
-  evidence artifacts, review focus, caller-declared rubric families, required
-  TAS gates, hard gates, and expected output path; the reviewer validates that
-  routing and runs the `review` skill contract. Coordinating lanes should not
-  self-approve material work. See `MEM-0127` and `MEM-0129`.
-- Before spawning a nontrivial subagent, write or identify a durable
-  `context_ref` unless the prompt itself fully contains the tiny task. Use a
-  ticket path when work is ticketed; otherwise use the nearest context packet,
-  decision artifact, spec, or evidence file. Pass the `context_ref` to every
-  lane and do not rely on hidden chat memory for prior discussion, options,
-  constraints, or proof targets.
-- Treat persistent Codex threads and native subagents as different delegation
-  primitives. Use `create_thread(prompt, target) -> thread_id` when a
-  standalone task should become a user-visible Codex app thread without
-  inheriting full conversation history; include the minimal context packet,
-  ticket, memory file, or prompt needed to start cleanly. Use
-  `fork_thread(thread_id?, environment?) -> thread_id` when the existing
-  conversation history is material to the next branch, such as splitting
-  multiple task paths, preserving decisions, or continuing a context-heavy
-  investigation. After creating or forking a persistent thread, call
-  `set_thread_title(thread_id, title)` when available and write the child
-  thread ID plus parent/source thread ID back to the parent ticket, report,
-  progress artifact, or thread-handoff ledger. Use native subagents for bounded
-  specialist work whose output should collapse back into the current thread,
-  such as review, QA, research, or focused implementation evidence.
-- Once feature specs are already decomposed into modular tickets, treat the selected
-  ticket as the default planning, build, and review unit. `impl-plan` should
-  plan the whole ticket, `goal-advisor` should try to land the whole ticket,
-  and `review` should judge the whole ticket unless a real blocker, proof
-  boundary, safety issue, or explicit follow-up ticket makes narrower scope
-  real. See `MEM-0061`.
-- Auto-run `review` at the end of `impl-plan` and before completion of
-  Goal-backed ticket execution when working inside Farplane, using the
-  `reviewer` lane for material review when native subagents are available. See
-  `MEM-0127` and `MEM-0129`.
-- Keep live repo-owned skills and docs Farplane-native. Retired pre-Farplane instructions belong only in archive or research material, not active surfaces.
-- Prefer `.farplane/` for live runtime state.
-- Keep root `AGENTS.md` local and navigational. Global install policy belongs in `templates/global/AGENTS.md`.
-- Before changing root `AGENTS.md` or `templates/global/AGENTS.md`, apply
-  `docs/templates/global-agents-qa-checklist.md` before editing and again
-  before completion so detail is kept, summarized, moved, or deleted with an
-  explicit owner-surface decision.
-- For Farplane harness brainstorming, explicitly compare repo-local `AGENTS.md`, `templates/global/AGENTS.md`, `skills/*`, `agents/*.toml`, and hooks / `bin/*`, then explain why the chosen surface should change now and why the others should not be the primary change surface.
-- For harness-surface placement decisions, use `docs/fundamentals/harness-engineering-doctrine.md` before expanding root policy, subagents, hooks, or validators.
-- When changing harness behavior, prefer the smallest lever that fixes the real failure:
-  - review loop and proof requirements first
-  - ticket/task-shaping contracts next
-  - skills and subagent boundaries after that
-  - root prompt rewrites last
-- Do not treat Farplane like an app repo with one central runtime to extend by default. Most work here is about better orchestration surfaces, not more orchestration code.
-- For early checklist experiments, prefer plain checkbox lists with Markdown
-  links to related skills before inventing parser syntax or persisted workflow
-  state.
-
-## Durable Truth
-
-- `tickets/`: active task object, plan, evidence, blockers, and any short
-  resume notes when needed, with canonical ticket files at
-  `tickets/TASK-XXXX/ticket.md` and `tickets/archive/TASK-XXXX/ticket.md`
-- `docs/HISTORY.md`: append-only event ledger for meaningful shipped milestones,
-  migrations, and project-shaping decisions; routine code deltas and file-level
-  summaries belong in git, not history. See `MEM-0071`.
-- `docs/MEMORY.md`: curated invariants and constraints that future work must obey
-- `docs/TROUBLES.md`: raw repeated misses, blockers, and correction pain points
-- `docs/LESSONS.md`: distilled lessons from correction, review, and trouble-drain passes
-- `.farplane/`: ignored local runtime and generated state
-
-Transient execution state stays outside this file. Keep this file short enough that an agent can use it as a map.
-
-## Stop If
-
-- scope conflicts or is unclear
-- API or interface contract is ambiguous
-- migration is risky with no rollback
-- circular dependency appears
-
-No silent architectural drift.
+Do not silently create architectural drift.
