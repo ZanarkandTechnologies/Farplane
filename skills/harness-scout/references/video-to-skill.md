@@ -5,7 +5,10 @@ teach a reusable skill.
 
 ## Minimal Route
 
-1. Run `summarize --extract-only` first.
+1. Unless transcript/content was supplied, check `command -v summarize` and run
+   `farplane run -- summarize "$source" --extract`. If missing, use
+   [media-ingest](../../media-ingest/SKILL.md) when it can prove transcript
+   acquisition; otherwise block instead of inferring the video's content.
 2. If the source contains video/audio, create a media ingest bundle.
 3. If video evidence exists, run video understanding over transcript status,
    selected frames, and contact sheet evidence.

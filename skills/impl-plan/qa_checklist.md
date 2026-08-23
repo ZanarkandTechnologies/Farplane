@@ -29,6 +29,11 @@ impl_plan_qa(ticket, inspected_context, proof_weight)
 2. `canonical-template-owner`
    - The ticket follows `tickets/templates/ticket.md`; no skill-local active
      schema, decorative duplicate section, or parallel contract exists.
+   - Summary, Scope, Delta, Change Plan, Done, QA Strategy, and State carry the
+     executable contract. Every additional section names the decision,
+     evidence, or resume need that would be lost if it were removed.
+   - The required Contract Diagram is type-appropriate, simulatable, consistent
+     with Scope/Delta, and referenced by Change Plan assertions and proof.
 
 3. `objective-and-scope`
    - Summary, in/out boundaries, constraints, Before/After/Example, and the
@@ -52,6 +57,10 @@ impl_plan_qa(ticket, inspected_context, proof_weight)
      conclusion—core action, subtraction, and deliberate `no`—is preserved in
      that existing baseline; `impl-plan` does not recreate the judgment or add
      a second ticket section.
+  - Every UI-bearing ticket has ticket-local `design.md` with copy-complete
+    ASCII screens/states before approval: literal visible copy, reader question,
+    proof, intended takeaway, action, and observable assertion. Its QA Strategy
+    compares observed captures and behavior against that baseline.
 
 6. `architecture-and-locality`
    - Material ownership, public contracts, and typed movement are visible when
@@ -81,9 +90,11 @@ impl_plan_qa(ticket, inspected_context, proof_weight)
       `goal-advisor` without transcript memory or duplicated Goal sidecars.
 
 11. `presentation-fit`
-    - Inline text/Mermaid replaces prose when useful. A linked `diagrams.md` is
-      required only when multiple detailed views or independent visual review
-      materially help, and it validates when present.
+    - The Contract Diagram stays compact. A linked `diagrams.md` is required
+      only when multiple detailed architecture views or independent diagram
+      review materially help, and it validates when present.
+    - Empty headings, placeholder `none` rows, and template instructions are
+      absent from live tickets.
 
 12. `context-budget`
     - `farplane validate ticket ... --phase planning` passes. Raw context and
@@ -124,6 +135,6 @@ plan_qa:
   exact_fix_or_deferral:
 ```
 
-For changes to this skill, also apply `skill-maintenance/qa_checklist.md`, run
+For changes to this skill, also apply `docs/review/rubrics/skill-contract.md`, run
 the canonical eval rows, record before/after line counts, and require an
 independent reviewer before claiming readiness.

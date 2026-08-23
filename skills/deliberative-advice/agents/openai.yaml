@@ -1,0 +1,6 @@
+interface:
+  display_name: "Deliberative Advice"
+  short_description: "Run a budgeted council for a high-stakes decision"
+  default_prompt: "Use $deliberative-advice to examine this high-stakes decision through independent perspectives and recommend one path."
+policy:
+  allow_implicit_invocation: false

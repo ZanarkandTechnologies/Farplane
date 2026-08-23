@@ -1,13 +1,14 @@
 # social-content
 
-Method-addressed Tier 3 skill for social media content workflows.
+Tier 3 skill for cross-platform, carousel, and LinkedIn social content.
 
 ## Methods
 
 - `social-content:cross-platform`
 - `social-content:carousel`
 - `social-content:linkedin`
-- `social-content:twitter-thread`
+
+Standalone X-native posts and threads live in [`x-thread`](../x-thread/SKILL.md).
 
 ## Validate
 

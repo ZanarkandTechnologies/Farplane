@@ -32,7 +32,6 @@ tmp/
 !.agents/skills/
 !.agents/skills/**
 plugins/
-.desloppify/
 skills/.system/
 bin/__pycache__/
 __pycache__/

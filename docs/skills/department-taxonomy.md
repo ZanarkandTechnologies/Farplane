@@ -21,23 +21,36 @@ skill invokes another.
 | `intelligence` | Intelligence | companies, people, markets, research, and learning |
 | `customer` | Customer | support, success, and community |
 
-The Capability Map uses `rules/skill-workflows.toml` to select a small set of
-real Tier 3 workflow roots from the membership pool. The projection renders
-those roots as workflow nodes and includes only their declared `artifact`
-methods as format specialists. The technical Skill Library remains the full
-registry, including helpers and integrations.
+The Capability Map uses `rules/skill-workflows.toml` as an explicit admission
+list. An admitted Tier 3 skill must declare a typed `capability` contract in
+its own frontmatter. An `artifact` capability becomes a permanent workstation;
+an `integration` capability becomes a permanent system facility. Empty
+departments remain visible at the organization level until a real capability is
+intentionally admitted. The technical Skill Library remains the full registry,
+including helpers, methods, and unclassified packages.
 
-Map topology is static containment, not execution: `department -> selected
-workflow root -> artifact method`. Declared `integration` and `internal`
-methods remain outside this projection. The full three-class `methods` schema
-is owned by [`system.md`](system.md).
+This is source visibility, not active-session availability. `rules/skill-profiles.toml`
+controls named-profile enablement; a profile-gated workstation remains visible
+here so filtering cannot look like deletion.
+
+Map topology combines static ownership with declared artifact flow:
+`department -> workstation`; an output-to-input match creates a directed
+`workstation -> facility` handoff. That connection means “this facility accepts
+this artifact family,” not “automatically calls or publishes.” A facility with
+no same-department declared input remains directly rooted at its department.
+`consumes` and `produces` are typed artifact-family IDs, not literal filenames;
+methods stay outside this projection and their technical interface schema is
+owned by [`system.md`](system.md).
 
 ```text
 group -> explicit department membership for every Tier 3 skill
-workflow_roots + workflow_labels -> explicit static-map selection/names for real skill packages
-methods[class=artifact] -> explicit format-specialist containment in the map
+capability_admission + capability_labels -> explicit static-map selection/names
+capability[kind=artifact] -> workstation
+capability[kind=integration] -> system facility
+artifact.produces ∩ capability.consumes -> directed artifact-flow edge
 ```
 
-Neither configuration nor frontmatter expresses process order, artifact
-consumption, Todo calls, or live skill-call relationships. That evidence
-belongs to a ticket's runtime Action Graph when it exists.
+The graph does not express Todo calls, live skill-call relationships, concrete
+file paths, automatic delivery, or runtime state. The directed edge proves only
+that one declared output is compatible with another declared input. Runtime
+execution evidence belongs to a ticket's Action Graph when it exists.

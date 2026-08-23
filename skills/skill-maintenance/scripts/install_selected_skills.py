@@ -13,10 +13,30 @@ from typing import Sequence
 
 
 RETIRED_SKILL_NAMES = {
+    "agent-behavior-test",
+    "bash-efficiency",
+    "data-viz",
+    "deep-ui-design",
+    "delegate-frontend",
+    "execute",
+    "external-patterns",
+    "farplane-invocation",
+    "find-skills",
+    "frontend-craft",
+    "frontend-design",
     "horizon-advisor",
     "image-generation",
     "ingest-world-data",
+    "knowledge-tidier",
+    "plan",
+    "pr-runtime",
+    "react-flow",
+    "summarize",
+    "testing",
     "ticket-opportunity-generator",
+    "update-memory",
+    "update-strategy",
+    "video-production",
     "video-generation",
 }
 
@@ -132,12 +152,29 @@ def render_skill_markdown(skill_md: str) -> str:
     return skill_md.rstrip() + "\n"
 
 
+def should_install_package_path(relative_path: Path) -> bool:
+    if relative_path.parts[:1] == ("tests",):
+        return False
+    if relative_path.name == "todos.md":
+        return False
+    return True
+
+
 def package_files(root: Path) -> dict[Path, Path]:
     return {
         path.relative_to(root): path
         for path in root.rglob("*")
-        if (path.is_file() or path.is_symlink()) and path.name != "todos.md"
+        if (path.is_file() or path.is_symlink())
+        and should_install_package_path(path.relative_to(root))
     }
+
+
+def has_uninstallable_package_files(root: Path) -> bool:
+    return any(
+        (path.is_file() or path.is_symlink())
+        and not should_install_package_path(path.relative_to(root))
+        for path in root.rglob("*")
+    )
 
 
 def files_match(source: Path, installed: Path) -> bool:
@@ -150,6 +187,8 @@ def files_match(source: Path, installed: Path) -> bool:
 
 def rendered_skill_matches(src: Path, dest: Path) -> bool:
     if not dest.is_dir() or dest.is_symlink():
+        return False
+    if has_uninstallable_package_files(dest):
         return False
 
     source_files = package_files(src)
@@ -187,7 +226,9 @@ def render_skill_package(src: Path, dest: Path, backup_root: Path, dry_run: bool
         src,
         dest,
         symlinks=True,
-        ignore=lambda _directory, names: {"todos.md"} if "todos.md" in names else set(),
+        ignore=lambda _directory, names: {
+            name for name in names if name in {"todos.md", "tests"}
+        },
     )
     skill_file = dest / "SKILL.md"
     rendered = render_skill_markdown((src / "SKILL.md").read_text(encoding="utf-8"))

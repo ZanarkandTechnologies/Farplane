@@ -54,12 +54,12 @@ def generate_skill_capability_projection(args: argparse.Namespace) -> dict:
     repo_root = Path(args.repo_root).resolve()
     rows = generator.load_registry(repo_root / args.registry)
     departments = generator.load_skill_departments(repo_root)
-    workflow_roots = generator.load_skill_workflow_roots(repo_root, departments)
+    capability_admission = generator.load_skill_capability_admission(repo_root, departments)
     return generator.build_capability_graph(
         rows,
         department_labels=departments,
-        workflow_roots=workflow_roots,
-        workflow_labels=generator.load_skill_workflow_labels(repo_root, workflow_roots),
+        capability_admission=capability_admission,
+        capability_labels=generator.load_skill_capability_labels(repo_root, capability_admission),
     )
 
 

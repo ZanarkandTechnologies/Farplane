@@ -29,6 +29,14 @@ node["after"]:::after
 Legend: after
 """
 
+VALID_DESIGN = """## ASCII Screen / State Contract
+```text
+[S1] -> [S2]
+```
+## Evidence Contract
+Compare capture match/mismatch by design state ID.
+"""
+
 
 class VisualCompanionTest(unittest.TestCase):
     def test_no_companion_is_valid(self):
@@ -64,6 +72,34 @@ class VisualCompanionTest(unittest.TestCase):
             ticket = Path(tmp) / "ticket.md"
             ticket.write_text("```mermaid\nflowchart LR\n```\n")
             self.assertEqual(validate(ticket), [])
+
+    def test_ui_scope_requires_design_baseline(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            ticket = Path(tmp) / "ticket.md"
+            ticket.write_text("ui_scope: true\n")
+            self.assertTrue(any("required design.md" in error for error in validate(ticket)))
+
+    def test_visual_qa_mention_does_not_classify_ticket_as_ui(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            ticket = Path(tmp) / "ticket.md"
+            ticket.write_text("Review the visual-qa skill contract.\n")
+            self.assertEqual(validate(ticket), [])
+
+    def test_valid_ui_design_baseline(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            ticket = root / "ticket.md"
+            ticket.write_text("ui_scope: true\n")
+            (root / "design.md").write_text(VALID_DESIGN)
+            self.assertEqual(validate(ticket), [])
+
+    def test_design_baseline_requires_comparison_contract(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            ticket = root / "ticket.md"
+            ticket.write_text("ui_scope: true\n")
+            (root / "design.md").write_text(VALID_DESIGN.replace("Compare capture match/mismatch by design state ID.", "Capture a screenshot."))
+            self.assertTrue(any("comparison by design state ID" in error for error in validate(ticket)))
 
     def test_malformed_sections_and_unused_class_fail(self):
         with tempfile.TemporaryDirectory() as tmp:

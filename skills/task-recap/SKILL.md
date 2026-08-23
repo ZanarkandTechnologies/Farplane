@@ -4,6 +4,8 @@ description: "Turn a paused Codex task, durable artifacts, and available thread 
 tier: 3
 group: operations
 source: local
+capability:
+  kind: shortcut
 template_uses:
   skill-template: "0.4.0"
   skill-qa-checklist: "0.1.0"
@@ -90,8 +92,8 @@ fails: transcript-only certainty; fabricated task history; completion claim from
 - [ ] 5. Finish with bounded evidence and routing.
   - [ ] Apply [runtime QA](qa_checklist.md) and list sources used, conflicts, and coverage gaps.
   - [ ] Return one safest next action or reply posture as the final line after
-    a full recap's detail ledger; route to `goal-advisor` only when the task is
-    an active Goal and execution is explicitly requested.
+    a full recap's detail ledger; state an operator-visible Goal-compilation
+    handoff only when the task is an active Goal and execution is requested.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 ## Templates

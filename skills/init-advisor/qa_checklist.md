@@ -69,17 +69,16 @@ init_advisor_qa(project_root, init_mode, activation_requested?)
    - Pass: for new or migrated meaning-heavy files, `init-advisor` records
      `human_intake=skip|offer|required`; uses destination skill signatures as
      the question inventory; asks direct signature questions for factual or
-     narrow gaps; and escalates to `deep-interview --quick` only for
-     intent-heavy, contradictory, or risky canonical-file gaps. The
-     `deep-interview --quick` handoff is constrained to missing signature
-     params plus intent, outcome, non-goals, decision boundaries, and success
-     criteria; the human intake decision, missing answers, and any interview
-     summary are written to `docs/bootstrap-brief.md`.
+     narrow gaps; and stops for focused operator clarification only for
+     intent-heavy, contradictory, or risky canonical-file gaps. Clarification
+     is constrained to missing signature params plus intent, outcome, non-goals,
+     decision boundaries, and success criteria; the human intake decision,
+     missing answers, and summary are written to `docs/bootstrap-brief.md`.
    - Fail: it always runs a generic long interview, invents file content from
-     placeholders, or bypasses `deep-interview` when mission, non-goals,
+     placeholders, or bypasses operator clarification when mission, non-goals,
      decision boundaries, success criteria, North Star, value function, or
-     metric-objective intent is unclear. It also fails if the Deep Interview loop is
-     duplicated inside `init-advisor`, `harness-creator`, or `metric-advisor`.
+     metric-objective intent is unclear. It also fails if a generic long
+     interview loop is duplicated inside the owning skills.
 
 9. `full_mode_readiness`
    - Pass: full mode audits `farplane/harness.yaml` for human thesis, static

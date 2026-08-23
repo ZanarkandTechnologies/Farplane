@@ -50,7 +50,7 @@ order is:
 1. competitor/inspiration analysis,
 2. user-story and section-count decision,
 3. low-fidelity ASCII page flow,
-4. nested `advise` exploration for every section,
+4. inline tradeoff exploration for every section,
 5. generated/rendered hero video and scrub-friendly frame or keyframe plan,
 6. spec-first handoff,
 7. downstream implementation requirements with scroll-scrub instrumentation,

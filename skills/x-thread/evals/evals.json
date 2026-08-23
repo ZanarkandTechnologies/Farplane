@@ -1,0 +1,26 @@
+{
+  "skill_name": "x-thread",
+  "evals": [
+    {
+      "id": "x_thread_concrete_stack_01",
+      "prompt": "Plan three X thread directions for a tiny desk toy that helps builders ship stuck tasks. The user will approve one from Telegram, so every direction must be judgeable from the message.",
+      "expected_output": "Applies the X Thread QA checklist; presents each direction with a concrete hook, reader promise, and tweet-by-tweet progression; keeps evidence, payoff, and CTA explicit; makes the review message self-contained; and leaves publication approval required.",
+      "files": ["output.md", "qa_checklist.md"],
+      "assertions": [
+        "Applies the X Thread QA checklist before preparing the review request",
+        "Presents each direction with a concrete hook and reader value promise",
+        "Includes tweet-by-tweet progression rather than only high-level premises",
+        "Shows evidence, payoff, and a stage-appropriate CTA",
+        "Makes the review message self-contained enough to judge without a local path",
+        "Keeps publishing and scheduling outside scope unless explicitly approved"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "X thread directions contain concrete tweet stacks",
+          "tags": ["skill", "x-thread", "human-feedback", "thread-planning"],
+          "notes": "Regression for review requests that offered vague X-thread premises instead of a decision-ready copy artifact."
+        }
+      }
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 # Judgement Calls
 
-Every synthesis has decisions that cannot be solved by counting alone. Use
-`advise` for those decisions and record the answer in the decision matrix.
+Every synthesis has decisions that cannot be solved by counting alone. Compare
+the viable options inline and record the answer in the decision matrix.
 
 ## Judgement Call Card
 
@@ -27,5 +27,5 @@ Metric or evidence to revisit later:
 ## Skill-Level Pattern
 
 When creating or updating a skill, add 3-7 judgement questions when the skill
-requires material choices. The questions should tell the agent when to use
-`advise` instead of pretending the answer is deterministic.
+requires material choices. The questions should tell the agent when to compare
+viable options instead of pretending the answer is deterministic.

@@ -1,6 +1,6 @@
 # Judgement Questions For Skills
 
-Judgement questions tell agents when a skill needs an `advise`-style decision
+Judgement questions tell agents when a skill needs an explicit tradeoff decision
 instead of a mechanical command.
 
 ## When To Add Them

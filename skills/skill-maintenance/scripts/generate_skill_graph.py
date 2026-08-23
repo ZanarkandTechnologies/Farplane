@@ -20,9 +20,9 @@ if str(SCRIPT_ROOT) not in sys.path:
     sys.path.insert(0, str(SCRIPT_ROOT))
 
 from bin.core.skill_departments import (
+    load_skill_capability_admission,
+    load_skill_capability_labels,
     load_skill_departments,
-    load_skill_workflow_labels,
-    load_skill_workflow_roots,
 )
 
 SKILL_HEAT_EVENT_TYPES = {
@@ -33,7 +33,7 @@ SKILL_HEAT_EVENT_TYPES = {
 DEFAULT_SKILL_HEAT_WINDOW_DAYS = 30
 DEFAULT_SKILL_HEAT_RECENT_DAYS = 7
 DEFAULT_SKILL_HEAT_TOP_N = 25
-CAPABILITY_MAP_METHOD_CLASS = "artifact"
+CAPABILITY_KINDS = {"artifact", "integration"}
 
 
 def configured_positive_int(env_name: str, default: int) -> int:
@@ -415,6 +415,7 @@ def build_graph(
                 "tier": row.get("tier"),
                 "source": row.get("source", "local"),
                 "group": row.get("group", ""),
+                "capability": row.get("capability", {}),
                 "todo_skill_refs": row.get("todo_skill_refs", []),
                 "methods": row.get("methods", []),
                 "has_checklist": bool(row.get("has_checklist")),
@@ -451,6 +452,7 @@ def build_graph(
         "edges": len(edges),
         "tiers": {},
         "sources": {},
+        "capabilities": {},
         "edge_types": edge_counts(edges),
         "skill_heat_config": skill_heat_config or skill_heat_config_from_env(),
         "skill_heat_event_types": (skill_heat_config or skill_heat_config_from_env()).get("event_types"),
@@ -460,6 +462,9 @@ def build_graph(
         counts["tiers"][tier] = counts["tiers"].get(tier, 0) + 1
         source = str(node.get("source", "unknown"))
         counts["sources"][source] = counts["sources"].get(source, 0) + 1
+        capability = node.get("capability")
+        kind = capability.get("kind", "core") if isinstance(capability, dict) else "core"
+        counts["capabilities"][kind] = counts["capabilities"].get(kind, 0) + 1
 
     return GraphBundle(nodes=nodes, edges=edges, generated_at=utc_timestamp(), counts=counts).as_dict()
 
@@ -467,59 +472,91 @@ def build_graph(
 def build_capability_graph(
     rows: list[dict[str, Any]],
     department_labels: dict[str, str] | None = None,
-    workflow_roots: dict[str, tuple[str, ...]] | None = None,
-    workflow_labels: dict[str, str] | None = None,
+    capability_admission: dict[str, tuple[str, ...]] | None = None,
+    capability_labels: dict[str, str] | None = None,
 ) -> dict[str, Any]:
-    """Project configured real workflow roots and their declared artifact methods."""
+    """Project admitted capability ownership plus declared directed artifact flow."""
     nodes: list[dict[str, Any]] = []
     edges: list[dict[str, Any]] = []
-    capability_classes: dict[str, int] = defaultdict(int)
     departments = department_labels or {}
     if not departments:
         raise ValueError("capability projection requires declared departments")
-    if workflow_roots is None:
-        raise ValueError("capability projection requires configured workflow roots")
-    workflow_labels = workflow_labels or {}
+    if capability_admission is None:
+        raise ValueError("capability projection requires classified capability admission")
+    capability_labels = capability_labels or {}
 
-    unknown_root_departments = sorted(set(workflow_roots).difference(departments))
-    missing_root_departments = sorted(set(departments).difference(workflow_roots))
-    if unknown_root_departments or missing_root_departments:
+    unknown_departments = sorted(set(capability_admission).difference(departments))
+    missing_departments = sorted(set(departments).difference(capability_admission))
+    if unknown_departments or missing_departments:
         details: list[str] = []
-        if unknown_root_departments:
-            details.append(f"unknown workflow-root departments: {', '.join(unknown_root_departments)}")
-        if missing_root_departments:
-            details.append(f"missing workflow-root departments: {', '.join(missing_root_departments)}")
+        if unknown_departments:
+            details.append(f"unknown admission departments: {', '.join(unknown_departments)}")
+        if missing_departments:
+            details.append(f"missing admission departments: {', '.join(missing_departments)}")
         raise ValueError("capability projection " + "; ".join(details))
 
     rows_by_name = {str(row.get("name") or ""): row for row in rows}
     department_ids = list(departments)
-    selected_rows: list[tuple[str, dict[str, Any]]] = []
+    selected_rows: list[tuple[str, dict[str, Any], dict[str, Any]]] = []
     selected_names: set[str] = set()
     for department_id in department_ids:
-        roots = workflow_roots[department_id]
-        if not roots:
-            raise ValueError(f"capability projection requires a root for {department_id}")
-        for skill_id in roots:
+        for skill_id in capability_admission[department_id]:
             if skill_id in selected_names:
-                raise ValueError(f"capability projection duplicate workflow root {skill_id!r}")
+                raise ValueError(f"capability projection duplicate admitted skill {skill_id!r}")
             row = rows_by_name.get(skill_id)
             if row is None:
-                raise ValueError(f"capability projection unknown workflow root {skill_id!r}")
+                raise ValueError(f"capability projection unknown admitted skill {skill_id!r}")
             if row.get("tier") != 3:
-                raise ValueError(f"capability projection root {skill_id!r} must be Tier 3")
+                raise ValueError(f"capability projection admitted skill {skill_id!r} must be Tier 3")
             if row.get("group") != department_id:
                 raise ValueError(
-                    f"capability projection root {skill_id!r} must belong to {department_id!r}"
+                    f"capability projection admitted skill {skill_id!r} must belong to {department_id!r}"
                 )
-            declared_methods = [method for method in row.get("methods", []) if isinstance(method, dict)]
-            if declared_methods and not any(
-                method.get("class") == CAPABILITY_MAP_METHOD_CLASS for method in declared_methods
-            ):
+            capability = row.get("capability")
+            if not isinstance(capability, dict):
                 raise ValueError(
-                    f"capability projection root {skill_id!r} declares no artifact method"
+                    f"capability projection admitted skill {skill_id!r} lacks a classified capability"
                 )
+            capability_kind = str(capability.get("kind") or "")
+            if capability_kind not in CAPABILITY_KINDS:
+                raise ValueError(
+                    f"capability projection admitted skill {skill_id!r} has unsupported kind {capability_kind!r}"
+                )
+            if capability_kind == "artifact":
+                produces = capability.get("produces")
+                consumes = capability.get("consumes", [])
+                if not isinstance(produces, list) or len(produces) != 1 or not all(
+                    isinstance(value, str) and value for value in produces
+                ):
+                    raise ValueError(
+                        f"capability projection artifact {skill_id!r} must declare exactly one produced artifact"
+                    )
+                if not isinstance(consumes, list) or not all(
+                    isinstance(value, str) and value for value in consumes
+                ):
+                    raise ValueError(
+                        f"capability projection artifact {skill_id!r} has invalid consumed artifacts"
+                    )
+            else:
+                consumes = capability.get("consumes", [])
+                if not isinstance(consumes, list) or not all(
+                    isinstance(value, str) and value for value in consumes
+                ):
+                    raise ValueError(
+                        f"capability projection integration {skill_id!r} has invalid consumed artifacts"
+                    )
             selected_names.add(skill_id)
-            selected_rows.append((department_id, row))
+            selected_rows.append((department_id, row, capability))
+
+    role_counts = defaultdict(int)
+    department_role_counts: dict[str, dict[str, int]] = {
+        department_id: {"workstation": 0, "facility": 0}
+        for department_id in department_ids
+    }
+    for department_id, _row, capability in selected_rows:
+        role = "workstation" if capability["kind"] == "artifact" else "facility"
+        role_counts[role] += 1
+        department_role_counts[department_id][role] += 1
 
     for department_id in department_ids:
         nodes.append(
@@ -528,99 +565,118 @@ def build_capability_graph(
                 label=departments.get(department_id, department_id.replace("-", " ").title()),
                 kind="department",
                 tags=("department", department_id),
-                attributes={"department_id": department_id},
+                attributes={
+                    "department_id": department_id,
+                    "workstation_count": department_role_counts[department_id]["workstation"],
+                    "facility_count": department_role_counts[department_id]["facility"],
+                },
             ).as_dict()
         )
 
-    for department_id, row in selected_rows:
+    artifact_flow_edges: list[dict[str, Any]] = []
+    facilities_with_same_department_flow: set[str] = set()
+    for source_department_id, source_row, source_capability in selected_rows:
+        produced = source_capability.get("produces", [])
+        if not isinstance(produced, list) or not produced:
+            continue
+        source_skill_id = str(source_row["name"])
+        for target_department_id, target_row, target_capability in selected_rows:
+            target_skill_id = str(target_row["name"])
+            if target_skill_id == source_skill_id:
+                continue
+            consumed = target_capability.get("consumes", [])
+            if not isinstance(consumed, list):
+                continue
+            for artifact_id in sorted(set(produced).intersection(consumed)):
+                artifact_flow_edges.append(
+                    GraphEdge(
+                        source=f"skill:{source_skill_id}",
+                        target=f"skill:{target_skill_id}",
+                        type="artifact-flow",
+                        label=artifact_id,
+                        confidence="declared",
+                    ).as_dict()
+                )
+                if (
+                    source_department_id == target_department_id
+                    and target_capability["kind"] == "integration"
+                ):
+                    facilities_with_same_department_flow.add(target_skill_id)
+
+    for department_id, row, capability in selected_rows:
         skill_id = str(row["name"])
+        capability_kind = str(capability["kind"])
+        role = "workstation" if capability_kind == "artifact" else "facility"
+        contract = (
+            {
+                "consumes": list(capability.get("consumes", [])),
+                "produces": list(capability["produces"]),
+            }
+            if capability_kind == "artifact"
+            else {"consumes": list(capability.get("consumes", []))}
+        )
         nodes.append(
             GraphNode(
                 id=f"skill:{skill_id}",
-                label=workflow_labels.get(skill_id, skill_id),
-                kind="workflow",
-                tags=("workflow", department_id),
+                label=capability_labels.get(skill_id, skill_id),
+                kind=role,
+                tags=(role, capability_kind, department_id),
                 attributes={
                     "skill_id": skill_id,
                     "tier": row.get("tier"),
                     "group": department_id,
                     "description": row.get("description", ""),
                     "source": row.get("source", ""),
+                    "role": role,
+                    "capability": contract,
                 },
             ).as_dict()
         )
-        edges.append(
-            GraphEdge(
-                source=f"department:{department_id}",
-                target=f"skill:{skill_id}",
-                type="member-of",
-                label="workflow-root",
-                confidence="explicit",
-            ).as_dict()
-        )
-        methods = [
-            method
-            for method in row.get("methods", [])
-            if isinstance(method, dict) and method.get("class") == CAPABILITY_MAP_METHOD_CLASS
-        ]
-
-        for method in sorted(methods, key=lambda item: str(item.get("id") or "")):
-            method_id = str(method["id"])
-            method_class = CAPABILITY_MAP_METHOD_CLASS
-            output = str(method["output"])
-            capability_classes[method_class] += 1
-            nodes.append(
-                GraphNode(
-                    id=f"method:{method_id}",
-                    label=output,
-                    kind=method_class,
-                    tags=(method_class, str(row.get("group") or "ungrouped")),
-                    attributes={
-                        "method_id": method_id,
-                        "parent_skill": skill_id,
-                        "output": output,
-                        "tier": row.get("tier"),
-                        "group": department_id,
-                    },
-                ).as_dict()
-            )
+        # A same-department facility with a declared artifact input is positioned
+        # behind its producing workstation, not duplicated as a department spoke.
+        # Standalone and cross-department facilities retain their own department anchor.
+        if capability_kind == "artifact" or skill_id not in facilities_with_same_department_flow:
             edges.append(
                 GraphEdge(
-                    source=f"skill:{skill_id}",
-                    target=f"method:{method_id}",
-                    type="contains",
-                    label=method_class,
+                    source=f"department:{department_id}",
+                    target=f"skill:{skill_id}",
+                    type="member-of",
+                    label=role,
                     confidence="explicit",
                 ).as_dict()
             )
 
+    edges.extend(artifact_flow_edges)
+
     nodes.sort(
         key=lambda node: (
             str(node.get("department_id") or node.get("group") or ""),
-            str(node.get("parent_skill") or node.get("skill_id") or ""),
+            str(node.get("role") or ""),
+            str(node.get("skill_id") or ""),
             node["id"],
         )
     )
-    edges.sort(key=lambda edge: (edge["source"], edge["target"]))
+    edges.sort(key=lambda edge: (edge["source"], edge["target"], edge["type"]))
     return GraphBundle(
         nodes=nodes,
         edges=edges,
+        schema_version="2.2.0",
         generated_at=utc_timestamp(),
         counts={
             "nodes": len(nodes),
             "edges": len(edges),
             "node_kinds": {
-                "artifact": capability_classes[CAPABILITY_MAP_METHOD_CLASS],
                 "department": len(department_ids),
-                "workflow": len(selected_rows),
+                "facility": role_counts["facility"],
+                "workstation": role_counts["workstation"],
             },
-            "capability_classes": dict(sorted(capability_classes.items())),
+            "roles": dict(sorted(role_counts.items())),
         },
         extras={
             "source": {
-                "contract": "rules/skill-workflows.toml roots/labels + skills/*/SKILL.md frontmatter group + methods[]",
-                "link_semantics": "explicit selected workflow membership and parent artifact containment only",
-                "omits": "unselected skills, integration/internal methods, Todo references, inferred execution dependencies, and process order",
+                "contract": "rules/skill-workflows.toml capability_admission/labels + skills/*/SKILL.md frontmatter group + capability",
+                "link_semantics": "explicit department membership plus directed artifact-flow edges where one admitted capability produces an artifact ID another admitted capability consumes; flow is a declared handoff contract, not an automatic call or publish action",
+                "omits": "unadmitted and unclassified skills, methods, Markdown references, Todo references, runtime files, task state, and delivery state",
             }
         },
     ).as_dict()

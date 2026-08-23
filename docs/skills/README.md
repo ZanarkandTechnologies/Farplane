@@ -100,7 +100,7 @@ Use this table when two skills look similar. It is intentionally prose-first;
 | Choose among real options and name a recommendation | `advise` | It starts from first principles, frames 3 viable choices, names one recommendation, and states the accepted tradeoff. | The user already gave a direct execution request. |
 | Challenge a proposed implementation or plan that may be overbuilt | `lean-check` | It stops at the first sufficient rung and returns evidence plus the smallest safe next action. | You need a TAS verdict on an accepted change; use `review`. |
 | Make a high-stakes or complex recommendation with independent critique | `deliberative-advice` / `deliberative-advice:complex` | It escalates advice into a council workflow: independent perspective briefs, critique/ranking, chair synthesis, visible dissent, and an explicit next owner. | The decision is simple, reversible, already grounded, or only needs a concise 3-option recommendation. |
-| Compress an artifact or entity set without losing required value | `consolidate` | It inventories units, finds the owning template or contract, scores value versus fluff/duplication/staleness, rebuilds minimally, and runs a loss check. | You only need a reader-facing summary; use `summarize`. You need domain-specific skill-package edits; route the final patch through `skill-maintenance`. |
+| Compress an artifact, registry, memory file, or docs tree without losing required value | `consolidate` | It inventories units, finds the owning contract, scores value versus duplication and staleness, preserves exact source rows when required, routes knowledge to its retrieval owner, rebuilds minimally, and runs a loss check. | You only need a reader-facing summary; use the native or CLI summarization path. You need domain-specific skill-package edits; route the final patch through `skill-maintenance`. |
 | Ground a claim in local files, docs, official references, or provided sources | `reference-grounding` | It supplies compact evidence before advice, planning, or review claims. | You need a full research brief or feature synthesis. |
 | Write or revise durable docs so they are clear, consistent, and human-usable | `doc-advisor` | It owns doc-quality checks: reader contract, term consistency, duplicate definitions, stale sections, examples, links, and agent-facing commentary cleanup. | You only need compact evidence or official-doc lookup; use `reference-grounding`. |
 | Diagnose the gap between current and expected behavior | `gap-analysis` | It turns a repeated "what is missing here?" prompt into a grounded gap report with current contract, expected signature, missing inputs, outputs, proof, evals, owner surface, and verification. | You already know the exact edit; use the target surface or `skill-maintenance` directly. |
@@ -108,12 +108,10 @@ Use this table when two skills look similar. It is intentionally prose-first;
 | Prove a pattern before expanding scope, automation, data, file count, or research breadth | `prototyping` | It forces a representative `1 -> 10 -> 100` sample and a Prototype Note before scale. | The task is already small, one-off, or mechanically proven. |
 | Gather external parity, gap, docs, code-pattern, or source-synthesis evidence | `research:*` | It is the Tier 2 evidence workflow for method-addressed research passes. | The answer is already locally grounded and only needs a recommendation. |
 | Resolve budget-aware skill parameters into council programs | `budget-advisor` | It maps base/plus/max budget requests, available time, persona prompts, coverage, evidence depth, and explicit child-skill budget allocations into concrete template refs while preserving the caller skill's output contract. | The skill is tiny, deterministic, or already has an obvious single-path budget behavior. |
-| Compose skill todos into a task-specific strategy and proof-bearing plan | `plan` | It is the Tier 2 planning prompt-template for binding context, choosing grounding/search budget, composing workflows, and producing executable todos. | A domain planner already owns the artifact and no cross-skill composition or strategy choice is needed. |
-| Handle an explicit legacy `$execute` call | `execute` | It is a deprecated compatibility wrapper over the native Tier 0 execution phase. | A task merely has an execution phase; use the native phase or a public domain execution skill such as `goal-advisor` or `impl-plan`. |
 | Watch an existing PR until review agents and checks pass | `pr-review-watch` | It owns explicit heartbeat polling, project-local PR review memory, normalized PR verdicts, fix loops, and terminal notifications while reusing the task's assigned checkout and reviewer-agent review. | You only need one explicit material review (`review`). |
 | Check, scaffold, onboard, and run harness-native evals | `eval` | It initializes/discovers clean-room eval tasks, judges boolean/tier outcomes, treats hardcases as metadata, and can preserve one isolated CLI run as a scored `behavior_trace` with prompt, events, logs, output, checkpoints, artifacts, schema verdict, and baseline comparison. | You need adversarial tester/evidence-review orchestration or only native-subagent evidence; use `agent-qa-test`. |
 | Test a feature, skill, prompt, or workflow adversarially | `agent-qa-test` | It designs cases, runs or drafts a tester lane, attacks the tester evidence with an evidence-review lane, reconciles fixes/reruns, and can include Eval `behavior_trace` capture. | You only need one cheap CLI conformance probe and no adversarial proof loop. |
-| Choose how to prove a behavior claim | `proof-advisor` | It turns a claim or failure risk into proof cases, proof-surface choice, and a handoff to testing, eval, QA, visual QA, agent QA, review, or a source-gap ticket. | The proof surface is already selected and you only need to run it; use the executor such as `testing`, `eval`, `qa`, or `review`. |
+| Choose how to prove a behavior claim | `proof-advisor` | It turns a claim or failure risk into proof cases, proof-surface choice, conditional domain-testing guidance, and a handoff to deterministic execution, eval, QA, visual QA, agent QA, review, or a source-gap ticket. | The proof surface and command are already selected; run them in the native execution phase or use the owning executor such as `eval`, `qa`, or `review`. |
 | Apply settled skill-local runtime guardrails | `qa_checklist.md` beside the skill | It is the real-time checklist surface for reusable checks that should be read before execution, applied before completion, and independently reviewed after material skill edits. | You need to discover expected behavior or compare variants; use `evals/evals.json` or an eval suite. |
 | Review local diffs before commit or push | `code-review` | It owns lightweight diff review from deterministic check logs, changed files, and project review overlays, then escalates material claims to `review`. | The work needs a TAS verdict, completion receipt, or evidence-bundle judgment; use `review`. |
 | Judge whether a completed plan, implementation, evidence bundle, or reusable fixture is trustworthy | `review` | It applies docs-owned rubric families through a callable TAS wrapper and surfaces blockers before completion claims. | You still need to gather evidence; use QA/test skills first. |
@@ -121,9 +119,8 @@ Use this table when two skills look similar. It is intentionally prose-first;
 | Decide where a Farplane harness improvement belongs | `harness-advisor` | It compares root policy, global templates, skills, subagents, hooks, tickets, validators, registries, and docs before recommending the owning surface. | The user already named the target skill or file and asked for a direct edit. |
 | Fix a harness behavior end to end | `optimize-harness` | It orchestrates gap diagnosis, placement, eval/proof, optional metric experiment, implementation routing, and review without absorbing the lower-level skill jobs. | You only need a placement recommendation; use `harness-advisor` directly. |
 | Define measurable project objectives, directions, guards, and proof providers | `metric-advisor` | It owns honest metric cards and explicit `metrics.yaml` objective/guard deltas before execution is selected. | A ticket is already selected and needs a Goal Packet or native Goal prompt; use `goal-advisor`. |
-| Consolidate project memory and docs | `update-memory` | It reads README, MEMORY, HISTORY, LESSONS, TROUBLES, tickets, and progress, then returns memory/readme/history deltas plus skill-hardening handoffs. | The issue should become evals, gotchas, or skill-package changes immediately; use `skill-maintenance(mode: harden_skill)`. |
+| Route extracted durable knowledge | `skill-maintenance` + `doc-advisor` + `manage-wiki` | Send reusable operational procedures to skills, project knowledge and articles to their owning project docs, and sourced entities to canonical Wiki articles. | The input is still raw or unbounded; first bind a source/evidence window and produce explicit deltas. |
 | Resume a delayed Codex task with its full working context | `task-recap` | It reconstructs one task from its ticket, Goal Packet, evidence, scoped worktree state, and available thread context, preserving decisions, failed attempts, Before/After deltas, conflicts, and the safest next reply. | You only need a short summary of one supplied document or a project-wide memory refresh. |
-| Prune bloated knowledge artifacts | `knowledge-tidier` | It scores sections or rows by importance, recency, factuality, and remembrance value, preserves exact logs when needed, keeps only high-value knowledge, and routes duplicated policy to owner surfaces. | You need prose-quality rewriting; use `doc-advisor`. You need broad project context refresh across README/docs/history/lessons; use `update-memory`. |
 | Decide and craft native Goal mode | `goal-advisor` | It compiles listed files, trigger mode, budget, metric, and proof into active Goal, heartbeat, batch, feedback loop, rollout, skill-improvement loop, or direct work, and can emit the final native `/goal` prompt. | The task is tiny and deterministic; work directly without Goal mode. |
 | Optimize with human feedback | `optimize-with-human` | It routes an optimization loop through `goal-advisor` with `human_feedback` as the metric, then creates a focused `feedback.json` contract and optional Telegram handoff so the operator can label, score, rank, or approve artifacts. | The task needs one-off feedback rather than an optimization loop; use chat, `review`, or `telegram-message` directly. |
 | Harden or refine skills, or maintain skill metadata | `skill-maintenance` | It owns `harden_skill` for turning fresh lessons, troubles, ticket progress findings, interval reports, and proof failures into evals, gotchas, blockers, or tickets; `refine_skill` for consolidating older evals/gotchas and shortening skills; plus bulk upkeep, tier checks, source ownership, and registry regeneration. | The task is broader harness placement; start with `harness-advisor`. Use `self-improve` only for measured variant/search loops. |
@@ -168,10 +165,21 @@ Manual fields:
   debug page, or UI binding
 - `group`: required for Tier 3 only; one canonical operating department from
   [`rules/skill-departments.toml`](../../rules/skill-departments.toml)
+- `capability`: optional static projection into the Capability Map and Office:
+  `artifact` declares exactly one output family in `produces` and optional
+  `consumes`; `integration` declares the artifact families it `consumes` at its
+  system boundary; `shortcut` has no additional fields and is not displayed.
+  An output-to-input match yields one directed artifact-flow edge. Treat locale,
+  campaign, and content variants as invocation data, not new capability IDs.
+  Named runtime profiles are separate restriction policies and never belong in
+  skill frontmatter. The Capability Map is source-visible: an admitted
+  workstation remains present even when the current base session default-denies
+  it. Read `rules/skill-profiles.toml` to see which named profile enables it;
+  absence from an active-session list never means the source skill was deleted.
 - `methods`: optional child-method contracts. Each declares a parent-qualified
   `id`, `class` (`artifact`, `integration`, or `internal`), and one `output`.
-  Capability views derive from this source field; they do not maintain a
-  separate capability registry.
+  They are technical Skill Library interfaces, not Capability Map or Office
+  nodes.
 - `common_chains`: optional Tier 3 one-way adjacency hints
 - `upstream_url`: optional for `source: external`
 - `template_uses.skill-surface-budget`: optional opt-in marker for
@@ -265,11 +273,9 @@ scores.
 - Tier 3 first-load todos do not link Tier 1 primitives such as `advise`,
   `consolidate`, `reference-grounding`, or `prototyping` directly unless the
   skill owns that primitive step as part of its first-load contract.
-- `plan` is a Tier 2 planning prompt-template for composing skill todos,
-  choosing grounding/search budget, and defining proof before costly work.
-  Do not introduce it as a mandatory dependency for every skill invocation.
-- `execute` is a deprecated compatibility wrapper for the native Codex
-  execution phase and should not be introduced as a new skill dependency.
+- Native Codex phases own generic planning and execution. Artifact-producing
+  domain skills such as `impl-plan`, `spec-to-ticket`, and `goal-advisor` own
+  their specialized plans, tickets, and work programs.
 - `review` is a callable TAS wrapper over docs-owned rubrics in
   `docs/review/rubrics/*`.
 - `bin/validators/sync_skill_registry.py --check` fails when a Tier 3 todo list direct-links
@@ -361,10 +367,8 @@ top-level skill. Use
 `bootstrap -> interview -> PRD -> tickets -> native planning phase -> implement -> proof/review -> close`
 shape. Generated project `AGENTS.md` should carry the compact lifecycle rule;
 `PROJECT_RULES.md` should carry technical standards, commands, runtime, and QA
-paths. Treat `plan` as a planning prompt-template and todo-composition
-interface, not as the Tier 0 planning phase itself. Treat `execute` as a
-deprecated compatibility wrapper over native execution, not a base-class
-implementation with reusable domain logic.
+paths. Treat planning and execution as native phases; domain skills own real
+artifacts and algorithms rather than inheriting generic skill wrappers.
 
 ## Source Ownership
 

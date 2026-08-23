@@ -64,9 +64,9 @@ Hard gate: required for any overall `pass`
 - Findings should point to the exact unproven claim, missing artifact, or
   contradiction and tell the builder what proof to collect next.
 
-## Desloppify Cues
+## Skeptic search cues
 
-When using the anti-slop playbook, search for:
+When checking neighboring evidence, search for:
 
 - claims in the ticket or summary that are not backed by the attached artifact set
 - screenshots/logs/tests that prove only the happy path while the prose claims broader coverage

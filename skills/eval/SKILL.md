@@ -109,8 +109,7 @@ returns: mode, cases, artifacts, verdict or delta, limitations, and next fix
 - [ ] 5. Finish with independent proof.
   - [ ] Reapply `qa_checklist.md` and the owning validators. For Tier 1, meta,
         `eval`, cross-skill, or precedent-setting changes, record the
-        [deliberative-advice](../deliberative-advice/SKILL.md) decision and use
-        an independent reviewer.
+        the high-stakes design decision and use an independent reviewer.
   - [ ] Do not claim task or review-rate improvement without run artifacts or a
         reviewer receipt. Return the artifact path and next fix.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->

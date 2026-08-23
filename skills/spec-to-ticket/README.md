@@ -5,9 +5,8 @@ Turn one bounded spec slice into raw executable tickets.
 ## Purpose
 
 Help agents convert product/spec intent into capability-first ticket truth while front-loading diagram-first approval summaries, testability, QA shape, and evidence expectations.
-This is a Tier 3 Farplane coding-pipeline implementation of the generic
-[`plan`](/Users/kenjipcx/coding-harness/Farplane/skills/plan/SKILL.md)
-interface.
+This is a Tier 3 Farplane coding-pipeline skill that turns one approved spec
+slice into the repository's canonical ticket artifact.
 When an `Agent Testability Brief` exists, this skill should carry its surfaces
 forward into the ticket contract instead of inventing them again.
 When a repo has `docs/bootstrap-brief.md` with `Agent Experience / Testability`

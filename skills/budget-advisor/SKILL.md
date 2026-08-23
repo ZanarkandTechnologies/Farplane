@@ -150,7 +150,7 @@ PersonaPrompt = {
   and final answer quality.
 - `budget-advisor` owns reusable budget routes, persona-count defaults,
   synthesis defaults, and guardrails against vague effort escalation.
-- Preserve the caller skill's output contract. A budgeted `advise` still
+- Preserve the caller skill's output contract. A budgeted advice shortcut still
   returns advice; a budgeted `review` still returns a review verdict.
 - Preserve executable lane prompts. The Budget Program may summarize why a
   persona exists, but `resolved_params` must keep the full `PersonaPrompt`
@@ -175,8 +175,8 @@ PersonaPrompt = {
   effort requests to `base`, `plus`, or `max`.
 - [ensemble-lanes](references/ensemble-lanes.md) - run persona council lanes
   with full persona prompts and a single public synthesis step.
-- [advise-example](references/advise-example.md) - toy example showing how
-  `advise` evolves under base, plus, max, and child-budget defaults.
+- [advise-example](references/advise-example.md) - toy example showing how the
+  advice shortcut evolves under base, plus, max, and child-budget defaults.
 
 ## Output
 

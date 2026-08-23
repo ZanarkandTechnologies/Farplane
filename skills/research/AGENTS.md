@@ -17,10 +17,14 @@
   expectation.
 - Keep `research:source-synthesis` evidence-focused; use `best-of-worlds` for
   adopt/adapt/reject/defer synthesis.
+- Keep `research:code-patterns` as the only public code-pattern entrypoint and
+  preserve its conditional discovery/deep-dive contract in
+  `references/code-patterns.md`.
 
 ## Do Not
 
-- Recreate public `parity-research` or `gap-analysis` wrapper packages.
+- Recreate public `parity-research`, `gap-analysis`, or `external-patterns`
+  wrapper packages.
 - Turn this into a brainstorm surface.
 - Turn methods into nested routers.
 

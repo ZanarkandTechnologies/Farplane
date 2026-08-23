@@ -96,6 +96,26 @@
           "notes": "Protects TASK-0241's docs strategy contract and prevents closeout ceremony from returning."
         }
       }
+    },
+    {
+      "id": "doc_advisor_plain_specific_01",
+      "prompt": "Rewrite this Farplane documentation paragraph so a maintainer can act on it: 'Our robust documentation substrate leverages a cohesive registry surface to facilitate discoverability and ensure high-quality alignment across the evolving harness landscape.' Preserve any useful claim, but do not invent behavior.",
+      "expected_output": "Removes vague promotional and abstract language; Names a concrete Farplane owner, action, mechanism, or evidence when the source supports one; Deletes claims that cannot be made specific without invention; Uses plain words while preserving precise technical terms when they are the clearest words; Produces a short paragraph a maintainer can understand without backtracking",
+      "files": [],
+      "assertions": [
+        "Removes vague promotional and abstract language",
+        "Names a concrete Farplane owner, action, mechanism, or evidence when the source supports one",
+        "Deletes claims that cannot be made specific without invention",
+        "Uses plain words while preserving precise technical terms when they are the clearest words",
+        "Produces a short paragraph a maintainer can understand without backtracking"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Doc Advisor makes generic prose plain and specific",
+          "tags": ["skill", "doc-advisor", "plain-language"],
+          "notes": "Protects plain speech without rewarding invented specificity or banned-word replacement."
+        }
+      }
     }
   ]
 }

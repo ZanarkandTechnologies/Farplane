@@ -4,6 +4,8 @@ description: "Turn Instagram account posting or insights requests into validated
 tier: 3
 group: marketing
 source: local
+capability:
+  kind: integration
 methods:
   - id: instagram-account:validate
     class: integration

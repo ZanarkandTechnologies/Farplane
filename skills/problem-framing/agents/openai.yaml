@@ -1,0 +1,6 @@
+interface:
+  display_name: "Problem Framing"
+  short_description: "Turn a request into a clear problem frame"
+  default_prompt: "Use $problem-framing to define the real problem, constraints, boundary, and next owner."
+policy:
+  allow_implicit_invocation: false

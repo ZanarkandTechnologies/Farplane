@@ -3,6 +3,8 @@ name: diagramming
 description: "Turn plans, specs, tickets, architecture notes, or code explanations into compact Mermaid diagrams and flow traces."
 tier: 2
 source: local
+capability:
+  kind: shortcut
 ---
 
 # Diagramming
@@ -14,13 +16,13 @@ source: local
 - [ ] Draw explicit `Before` and `After` diagrams with colored Mermaid boxes
   before considering any supplementary diagram.
 - [ ] Add a numbered data-flow trace only if the flow is the actual question.
-- [ ] When called by `impl-plan`, render the visual companion template from the
-  ticket and write `diagrams.md` without editing `ticket.md`.
+- [ ] When the caller supplies an implementation-plan companion template,
+  render it to `diagrams.md` without editing `ticket.md`.
 - [ ] Embed short signatures in nodes when interface shape matters.
 - [ ] Add a legend; do not rely on color alone.
 - [ ] Cut any node label that turns into a paragraph.
 - [ ] Stop at one or two diagrams unless the user explicitly asks for more
-  depth or an `impl-plan` visual companion needs compact per-change-unit maps.
+  depth or the supplied companion needs compact per-change-unit maps.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 Use this when the missing thing is not more prose, but a compact visual system

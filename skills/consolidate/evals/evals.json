@@ -76,6 +76,45 @@
           "notes": "Exercises consolidate across gotchas, checklist, eval, and reference placement."
         }
       }
+    },
+    {
+      "id": "consolidate_knowledge_keeps_real_knowledge_routes_policy_01",
+      "prompt": "This knowledge file has rows about hook stdout JSON, a final-answer style preference, and a ticket-specific proof note. Tidy it without losing history.",
+      "expected_output": "Preserves exact old rows in an archive or requires an archive before deletion; Keeps hook stdout JSON as live memory if project-specific and current; Routes the final-answer style preference to AGENTS or prompt policy rather than live memory; Archives or leaves the ticket-specific proof note near the ticket instead of promoting it; Uses importance, recency, factuality, and remembrance in the decision",
+      "files": ["evals/fixtures/knowledge-routing.md"],
+      "assertions": [
+        "Preserves exact old rows in an archive or requires an archive before deletion",
+        "Keeps hook stdout JSON as live memory if project-specific and current",
+        "Routes the final-answer style preference to AGENTS or prompt policy rather than live memory",
+        "Archives or leaves the ticket-specific proof note near the ticket instead of promoting it",
+        "Uses importance, recency, factuality, and remembrance in the decision"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Consolidate keeps factual knowledge and routes misplaced policy",
+          "tags": ["skill", "consolidate", "knowledge"],
+          "notes": "Transferred from the retired knowledge-pruning package."
+        }
+      }
+    },
+    {
+      "id": "consolidate_knowledge_flags_stale_facts_01",
+      "prompt": "A project knowledge note says the canonical checkout is /old/path, but the current repo is /new/path. Another row says no secrets in git. Tidy the file.",
+      "expected_output": "Flags the path row as stale or needing confirmation before keeping it live; Keeps or routes the no-secrets rule depending on whether another owner already carries it; Does not silently rewrite factual claims without evidence; Reports kept, routed, archived, and questionable items",
+      "files": ["evals/fixtures/stale-project-knowledge.md"],
+      "assertions": [
+        "Flags the path row as stale or needing confirmation before keeping it live",
+        "Keeps or routes the no-secrets rule depending on whether another owner already carries it",
+        "Does not silently rewrite factual claims without evidence",
+        "Reports kept, routed, archived, and questionable items"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Consolidate flags stale knowledge instead of rewriting it",
+          "tags": ["skill", "consolidate", "knowledge", "stale-facts"],
+          "notes": "Transferred from the retired knowledge-pruning package."
+        }
+      }
     }
   ]
 }

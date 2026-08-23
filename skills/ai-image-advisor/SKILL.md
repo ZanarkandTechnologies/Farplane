@@ -36,7 +36,7 @@ Use this as the ordered checklist whenever `ai-image-advisor` is active.
 - [ ] For social media content, captions, thumbnails, UGC concepts, or cross-platform campaign assets, use `social-content:cross-platform`.
 - [ ] For LinkedIn posts or professional social writing, use `social-content:linkedin`.
 - [ ] For Instagram/LinkedIn/X carousel or multi-slide post, use `social-content:carousel`.
-- [ ] For Twitter/X threads or posts, use `social-content:twitter-thread`.
+- [ ] For Twitter/X threads or posts, use [x-thread](../x-thread/SKILL.md).
 - [ ] For shared production routing from a domain skill, load `references/domain-production.md`.
 - [ ] If the user only needs normal Codex-native bitmap generation/editing and did not ask for inference.sh, `belt`, a named model, CLI repeatability, or a model comparison, use `imagegen` instead.
 - [ ] For CLI setup, app discovery, schemas, samples, or generic inference.sh help, load `references/tools/infsh-cli.md`.
@@ -66,9 +66,9 @@ Use the built-in `imagegen` skill for normal Codex-native still image generation
 
 Use `content-impl-plan` and `asset-advisor` for parent planning, reference
 decomposition, and recreation strategy. Use domain image/social guide skills
-for artifact problems: `product-photography` and `social-content` methods such
-as `social-content:cross-platform`, `social-content:linkedin`,
-`social-content:carousel`, and `social-content:twitter-thread`. Use this skill
+for artifact problems: `product-photography`, `social-content`
+(`social-content:cross-platform`, `social-content:linkedin`, and
+`social-content:carousel`), and `x-thread`. Use this skill
 for model/app selection and `belt` execution once the image intent is known.
 
 Copied upstream references are read-only usage docs. Do not run `npx skills add ...` commands from their Related Skills sections unless the user explicitly asks to install upstream skills.
@@ -149,7 +149,7 @@ belt app list --category image
 - Social media content, captions, thumbnails, UGC concepts, or cross-platform campaign assets: use `social-content:cross-platform`
 - LinkedIn posts or professional social writing: use `social-content:linkedin`
 - Instagram/LinkedIn/X carousel or multi-slide post: use `social-content:carousel`
-- Twitter/X threads or posts: use `social-content:twitter-thread`
+- Twitter/X threads or posts: use `x-thread`
 - Shared image/social artifact production workflow: `references/domain-production.md`
 
 ## Examples

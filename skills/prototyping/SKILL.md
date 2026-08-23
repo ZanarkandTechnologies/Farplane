@@ -83,8 +83,8 @@ supports it.
 
 ## Judgment Questions
 
-Use [advise](../advise/SKILL.md) when the prototype slice is not mechanically
-obvious:
+When the prototype slice is not mechanically obvious, compare the viable
+slices inline:
 
 - What is the riskiest assumption?
 - What is the smallest slice that can falsify it?
@@ -131,5 +131,4 @@ Use the `Prototype Note` fields above as the default output template.
 
 ## Reference Map
 
-- [../advise/SKILL.md](../advise/SKILL.md) - use when the representative slice
-  or tradeoff is not obvious.
+- Compare representative-slice tradeoffs inline when the choice is not obvious.

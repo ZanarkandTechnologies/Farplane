@@ -12,7 +12,8 @@ Applies to files in this directory:
 
 - Keep `SKILL.md` focused on routing and the first-load workflow, not detailed playbooks.
 - Route UI-first debugging to `visual-qa` instead of duplicating browser workflows here.
-- Route broad testing strategy to `testing` and shell-heavy execution patterns to `bash-efficiency`.
+- Route unresolved proof strategy to `proof-advisor`; keep shell command
+  batching, safety, and rollback in the native execution phase.
 - Keep bug-class strategies in `references/*.md`, one file per mode.
 
 ## Conventions

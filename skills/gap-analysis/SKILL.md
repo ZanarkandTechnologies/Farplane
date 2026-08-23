@@ -117,8 +117,8 @@ Verification: ...
   improvement loop with a metric, baseline, candidates, and result memory.
 - Use `harness-advisor` after this report when the fix may belong outside the
   target surface.
-- Use `deliberative-advice` only when the remediation choice itself needs
-  independent perspectives and visible dissent.
+- When the remediation choice needs independent perspectives and visible
+  dissent, return a needs-deliberation route for explicit operator invocation.
 - Do not mark `expected_behavior` as known when the operator only supplied an
   observation. Preserve the uncertainty and route to product or research
   grounding when needed.
@@ -133,8 +133,7 @@ Verification: ...
   compact signature grammar and self-improvement workflow contracts.
 - [reference-grounding](../reference-grounding/SKILL.md) - required evidence
   primitive for local files.
-- [advise](../advise/SKILL.md) - use only when the gap report exposes real
-  remediation options and a recommendation is needed.
+- Compare real remediation options inline and state one recommendation.
 - [harness-advisor](../harness-advisor/SKILL.md) - use when the fix may belong
   outside the inspected target surface.
 - [eval](../eval/SKILL.md) - use when the gap should become a repeatable proof

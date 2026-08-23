@@ -3,6 +3,8 @@ name: reshape-feasible
 description: "Turn an intimidating ambition into one meaningful near-term mission, one immediate move, and an optional goal-portfolio update through precedent-guided reconstruction."
 tier: 2
 source: local
+capability:
+  kind: shortcut
 template_uses:
   skill-template: "0.4.1"
   skill-eval-task: "0.2.0"
@@ -38,7 +40,7 @@ state: reads(supplied ambition, evidence, constraints, and optional portfolio);
 owns: focused_mission
 gates: ambition_preserved; active_horizon_collapsed; mission_is_meaningful;
   attention_is_concentrated; immediate_move_is_direct; language_is_natural
-routes: direct-action | deep-interview | interval-update
+routes: direct-action | interval-update
 fails: formal_card_by_default; whole_goal_decomposition; trivial_preparation;
   invented_certainty; preliminary_interrogation; external_mutation
 ```
@@ -47,8 +49,8 @@ fails: formal_card_by_default; whole_goal_decomposition; trivial_preparation;
 
 Default to the next seven days when the user supplies no shorter useful
 horizon; present it as the current focus, not a calendar promise. Respect
-supplied capacity, safety, and existing evidence. Use `deep-interview` only
-after a useful provisional mission when one missing fact would materially
+supplied capacity, safety, and existing evidence. Stop for operator clarification
+only after a useful provisional mission when one missing fact would materially
 change the result. Use `interval-update` after a focused mission has produced
 evidence; do not turn this invocation into the weekly review itself.
 

@@ -4,12 +4,9 @@ description: "Generate, texture, rig, or animate 3D assets through the Meshy API
 tier: 3
 group: marketing
 source: external
+capability:
+  kind: integration
 upstream_url: https://github.com/meshy-dev/meshy-3d-agent
-license: MIT
-metadata:
-  author: meshy-dev
-  version: "0.4.0"
-  homepage: https://github.com/meshy-dev/meshy-3d-agent
 allowed-tools: Bash, Read, Write, Glob, Grep
 ---
 

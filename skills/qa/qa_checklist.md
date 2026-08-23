@@ -41,7 +41,10 @@ qa_journey(ticket, proof_policy, runtime_target?)
 3. **Responsive journey.** Preserve context across the meaningful state change
    under test. For editable or conversational demos, verify the exact edit,
    fresh run or explicit fork, changed result where expected, and retained
-   prior trace. Record any unrun full-path step as residual risk or a blocker.
+   prior trace. For long-form UI, scroll to bottom and retain desktop/mobile
+   full-page plus readable top/middle/bottom evidence; map each required
+   `design.md` section to a current capture. Record any unrun full-path step as
+   residual risk or a blocker.
 
 4. **Adversarial trust and presentation.** Exercise the most relevant failure,
    constraint, or stale-state risk. Use `qa-tester` for operated browser capture,

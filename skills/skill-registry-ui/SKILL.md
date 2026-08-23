@@ -4,6 +4,8 @@ description: "Turn the Farplane skill registry into a refreshed graph UI with re
 tier: 3
 group: operations
 source: local
+capability:
+  kind: shortcut
 allowed-tools: Read, Bash
 ---
 
@@ -21,8 +23,8 @@ allowed-tools: Read, Bash
   frontmatter, raw YAML, and the `SKILL.md` Markdown body.
 - [ ] Confirm tier filters, group/source filters, search, Markdown-reference
   edges, and common-chain edges behave as expected.
-- [ ] Use [visual-qa](../visual-qa/SKILL.md) when the UI changed and needs
-  screenshot-level proof.
+- [ ] When the UI changed, capture screenshots and inspect layout, filters,
+  detail content, console errors, and graph readability directly.
 - [ ] Use the native execution phase for final proof, writeback, and
   handoff.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->

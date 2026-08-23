@@ -34,14 +34,14 @@ sufficiency judgment to `reviewer`.
 qa(ticket, runtime_target?, proof_policy_override?)
   -> qa_artifacts + result_json + best_evidence + learning_decision
 state:
-  reads(ticket.md, optional design.md, runtime handoff, linked specs/docs,
+  reads(ticket.md, required design.md for UI work, runtime handoff, linked specs/docs,
         cookbook entry?, captured artifacts)
   writes(tickets/TASK-XXXX/artifacts/qa/<run>/{report.md,result.json},
          ticket Links, optional progress.md entry)
 gates:
   ticket_selected; effective_proof_policy_read; runtime_bound_or_not_needed;
   artifacts_captured; result_validated; weak_proof_blocks;
-  ui_work_has_screenshots_or_blocker; required_judgments_linked;
+  ui_work_has_design_comparison_and_screenshots_or_blocker; required_judgments_linked;
   learning_classified
 routes: qa-tester | visual-qa | agent-qa-test | reviewer
 fails:
@@ -79,7 +79,7 @@ checklist item.
   - [ ] Read [qa_checklist.md](qa_checklist.md) before material QA as preflight
     guardrails; apply it again before completion.
   - [ ] Read the selected ticket's `Done`, `QA Strategy`, linked specs/docs,
-    runtime handoff, and optional `Agent Contract`.
+    runtime handoff, required UI `design.md`, and optional `Agent Contract`.
   - [ ] Build the effective policy from those sources plus an explicit caller
     override. An override may tighten or specialize proof, not erase ticket
     obligations.
@@ -113,6 +113,13 @@ checklist item.
   - [ ] Exercise the most relevant failure, constraint, stale-state, or
     regression risk. Stop with a non-pass verdict when current hooks cannot
     faithfully observe the claim.
+  - [ ] For UI work, map each material `design.md` ASCII state ID and assertion
+    to `PASS`, `FAIL`, or `not_provable` plus capture evidence. Missing,
+    mismatched, or merely linked design baselines cannot pass.
+  - [ ] For a page with required content below the first viewport, operate a
+    real scroll to bottom and capture desktop/mobile full-page evidence plus
+    readable top/middle/bottom frames. Map every required design section to
+    current evidence; a hero-only or compressed full-page image is non-pass.
 - [ ] 5. Obtain distinct judgments when required.
   - [ ] For UI/visual claims, hand screenshots and context to
     [Visual QA](../visual-qa/SKILL.md); browser capture is not visual approval.
@@ -223,6 +230,12 @@ It finishes with:
 QA_RESULT: verdict=<pass|revise|fail|blocked|not_provable> evidence=<result.json path> reason=<short reason>
 ```
 
+For UI work, `report.md` also exposes a `Design coverage` table. It maps every
+required `design.md` state/section to its current evidence and verdict. A
+long-form page includes an operated scroll-to-bottom plus desktop and mobile
+full-page captures and readable top/middle/bottom frames; an omitted cell is a
+non-pass, not an implied pass.
+
 Receipt invariants:
 
 - `proof_type` is `cli | api | browser | ui | artifact | agent`; all five gate
@@ -231,8 +244,9 @@ Receipt invariants:
 - A pass has all gates passing, concrete best evidence, and no blockers. A
   non-pass has at least one blocker and may use `best_evidence: null` when the
   required artifact does not exist.
-- Browser/UI passes require a bound runtime and image best evidence; API proof
-  requires a bound runtime. CLI/artifact proof may use logs or files.
+- Browser/UI passes require a bound runtime, image best evidence, and a
+  completed `design.md` comparison; API proof requires a bound runtime.
+  CLI/artifact proof may use logs or files.
 - `ticket_only` uses `learning.ref: null`; `cookbook_update` and
   `instrumentation_ticket` require a non-empty ref.
 - Passing policies containing `visual-qa`, `agent-qa-test`, or `reviewer`

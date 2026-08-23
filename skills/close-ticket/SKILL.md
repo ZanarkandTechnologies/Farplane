@@ -19,7 +19,7 @@ template_uses:
 3. Update ticket evidence, durable docs, handoff, next action, and latest verification.
 4. Run `farplane validate ticket <ticket.md> --phase complete` with an explicit changed-path boundary.
 5. Refresh independent review when closeout changes made the prior receipt stale.
-6. Use [commit-message](../commit-message/SKILL.md) and commit only the intended slice; push only when explicitly authorized.
+6. Derive a compact repo-style commit subject from the intended slice, commit only that slice, and push only when explicitly authorized.
 7. Select media explicitly. Material features require the passing reviewed `$demo` `final.mp4` first; maintenance tickets invent no demo.
 8. Run `farplane ticket finalize TASK-XXXX` with one `--media <path>` per selected file.
 9. If Core pauses on missing media, upload only those marked comments through the authenticated GitHub composer, then rerun the same command.

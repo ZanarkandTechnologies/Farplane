@@ -34,5 +34,5 @@ Use when the target says "optimize" but not "optimize what":
 2. Choose the artifact that changes.
 3. List 3 candidate primary metrics.
 4. Pick one guard metric and one anti-metric.
-5. Use `advise` to recommend the metric set when tradeoffs remain.
+5. Compare viable metric sets and recommend one when tradeoffs remain.
 6. Only then score source features against that metric set.

@@ -126,8 +126,9 @@ bundles to `review`, but Goal mode remains the continuation owner.
         method.
 - [ ] For serious readiness claims, reusable fixtures, or completion gates, run
   a final proof-bundle check through `review` or a dedicated reviewer lane.
-- [ ] Use [advise](../advise/SKILL.md) when runner choice, evidence threshold,
-  artifact location, or rerun-vs-fix policy has real tradeoffs.
+- [ ] When runner choice, evidence threshold, artifact location, or
+  rerun-vs-fix policy has real tradeoffs, compare the viable choices and state
+  one recommendation with its accepted tradeoff.
 - [ ] Use the [review protocol](../review/SKILL.md) before treating a new reusable test
   template or repeated workflow as trustworthy.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
@@ -427,7 +428,8 @@ rerun/fix policy, and stop condition.
 
 ## Judgment Questions
 
-Use `advise` when these choices materially affect cost or confidence:
+When these choices materially affect cost or confidence, compare them inline
+and state one recommendation:
 
 - whether to run the loop now or return a prompt
 - native subagent lanes vs `codex exec --json`

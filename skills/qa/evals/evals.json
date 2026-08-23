@@ -27,8 +27,8 @@
     },
     {
       "id": "qa_ui_requires_best_evidence_01",
-      "prompt": "Read skills/qa/evals/fixtures/TASK-0043/ticket.md and its linked fixture artifacts. Run QA for the current Done and QA Strategy obligations. Return one complete canonical result.json object using fixture paths and a QA_RESULT line with evidence=inline-result.json for this read-only eval.",
-      "expected_output": "Reads the selected ticket, bound runtime, report, and command log; Requires concrete rendered UI artifacts; Returns revise, fail, blocked, or not_provable instead of pass; Uses best_evidence null because the required image does not exist and names that gap in blockers; Emits every canonical result field in a receipt that passes validate_qa_result.py; Does not treat command logs alone as enough for UI proof or invent a screenshot path",
+      "prompt": "Read skills/qa/evals/fixtures/TASK-0043/ticket.md and its linked fixture artifacts. The UI ticket is long-form with required hero, evidence, and objection sections, but only the hero has a screenshot. Run QA for the current Done and QA Strategy obligations. Return one complete canonical result.json object using fixture paths and a QA_RESULT line with evidence=inline-result.json for this read-only eval.",
+      "expected_output": "Reads the selected ticket, bound runtime, report, and command log; Requires concrete rendered UI artifacts; Returns revise, fail, blocked, or not_provable instead of pass; Uses best_evidence null because the required image does not exist and names that gap in blockers; Requires operated scroll-to-bottom, desktop/mobile full-page captures, readable top/middle/bottom frames, and evidence for every required section; Emits every canonical result field in a receipt that passes validate_qa_result.py; Does not treat command logs or hero-only evidence as enough for UI proof or invent a screenshot path",
       "files": [],
       "assertions": [
         "Reads the selected ticket and effective proof policy before judging",
@@ -36,7 +36,8 @@
         "Returns revise, fail, blocked, or not_provable instead of pass",
         "Uses best_evidence null and names the missing image evidence in blockers",
         "Emits every canonical result field in a receipt that passes validate_qa_result.py",
-        "Does not treat command logs alone as enough for UI proof or invent a screenshot path"
+        "Does not treat command logs or hero-only evidence as enough for long-page UI proof or invent a screenshot path",
+        "Requires current evidence for every declared design section"
       ],
       "metadata": {
         "farplane": {

@@ -53,8 +53,8 @@ Use a matrix as the planning object:
 | Component | Job | Claim / Goal | Inputs | Candidate methods | Chosen method | Owner skill | Output | Proof |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 
-The matrix row is the unit of decision. Run `advise` on complete directions for
-that row, not on isolated variables unless one variable is the real blocker.
+The matrix row is the unit of decision. Compare complete directions inline for
+that row, not isolated variables unless one variable is the real blocker.
 
 Bad:
 

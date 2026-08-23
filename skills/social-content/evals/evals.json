@@ -2,24 +2,18 @@
   "skill_name": "social-content",
   "evals": [
     {
-      "id": "social_content_twitter_thread_concrete_stack_01",
+      "id": "social_content_routes_x_thread_01",
       "prompt": "Plan three Twitter/X thread options for a tiny desk toy that helps builders ship stuck tasks. The user will approve one option from Telegram, so the options must be judgeable from the message.",
-      "expected_output": "Chooses or names social-content:twitter-thread as the primary method; Reads or applies the social-content QA checklist before preparing the review request; Uses current platform guidance, peer examples, supplied swipe, or explicitly records why research was skipped; Presents each option with a concrete hook tweet and reader value promise; Includes tweet-by-tweet progression for each option rather than only high-level premises or positioning labels; Shows how each thread provides value, news, evidence, a useful story, or an actionable takeaway; Includes payoff and CTA while keeping publishing or scheduling outside scope unless explicitly requested; Makes the Telegram/review message self-contained enough to judge without opening a local filesystem path; Does not ask for approval of vague options such as only 'last 5 percent problem' without the actual stack",
+      "expected_output": "Routes the X-native thread request to x-thread rather than selecting a social-content method; preserves the explicit publishing boundary; and gives the caller the artifact owner needed for a concrete tweet-by-tweet draft.",
       "files": [],
       "assertions": [
-        "Chooses or names social-content:twitter-thread as the primary method",
-        "Reads or applies the social-content QA checklist before preparing the review request",
-        "Uses current platform guidance, peer examples, supplied swipe, or explicitly records why research was skipped",
-        "Presents each option with a concrete hook tweet and reader value promise",
-        "Includes tweet-by-tweet progression for each option rather than only high-level premises or positioning labels",
-        "Shows how each thread provides value, news, evidence, a useful story, or an actionable takeaway",
-        "Includes payoff and CTA while keeping publishing or scheduling outside scope unless explicitly requested",
-        "Makes the Telegram/review message self-contained enough to judge without opening a local filesystem path",
-        "Does not ask for approval of vague options such as only 'last 5 percent problem' without the actual stack"
+        "Routes X-native thread requests to x-thread",
+        "Does not recreate a social-content:twitter-thread method",
+        "Keeps publishing and scheduling outside scope unless explicitly approved"
       ],
       "metadata": {
         "farplane": {
-          "title": "Twitter thread options include concrete tweet stacks, not vague premises",
+          "title": "X thread requests route to the dedicated artifact skill",
           "tags": [
             "skill",
             "social-content",
@@ -27,7 +21,7 @@
             "human-feedback",
             "thread-planning"
           ],
-          "notes": "Regression for feedback-driven thread proposals that offered product premises or high-level angles instead of thread plans with real tweet progression."
+          "notes": "Regression for the retired social-content:twitter-thread method: X-native thread drafting now has one dedicated artifact owner."
         }
       }
     }

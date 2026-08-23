@@ -4,6 +4,15 @@ description: "Turn incomplete Notion Tasks into field proposals, safe high-confi
 tier: 3
 group: back-office
 source: local
+capability:
+  kind: integration
+methods:
+  - id: notion-task-field-fill:proposal
+    class: artifact
+    output: notion-task-field-proposal
+  - id: notion-task-field-fill:apply
+    class: integration
+    output: notion-task-field-write-receipt
 template_uses:
   skill-template: "0.3.7"
 common_chains:

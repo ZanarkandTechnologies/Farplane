@@ -18,7 +18,7 @@ TARGET_SKILLS = [
     "optimize-harness",
     "skill-creator",
     "skill-maintenance",
-    "knowledge-tidier",
+    "consolidate",
     "eval",
     "qa",
     "review",
@@ -99,7 +99,7 @@ CURATED_EDGES = [
     ("doc:docs/LESSONS.md", "skill:skill-maintenance", "triggers", "docs/features/FEAT-0065-pulse-and-interval-automation.md"),
     ("skill:doc-advisor", "file:README.md", "updates", "docs/features/FEAT-0060-registry-backed-documentation-os.md"),
     ("skill:manage-wiki", "doc:.farplane/entities/*.md", "updates", "docs/systems/wiki.md"),
-    ("skill:knowledge-tidier", "doc:docs/MEMORY.md", "updates", "docs/farplane-framework/hooks-and-runtime.md"),
+    ("skill:consolidate", "doc:docs/MEMORY.md", "updates", "skills/consolidate/SKILL.md"),
     ("skill:skill-maintenance", "skill:eval", "routes_to", "skills/skill-maintenance/SKILL.md"),
 ]
 

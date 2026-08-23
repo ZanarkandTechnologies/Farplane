@@ -10,8 +10,8 @@ class DepartmentTaxonomyError(ValueError):
     """Raised when the checked-in department taxonomy is malformed."""
 
 
-class WorkflowRootConfigError(ValueError):
-    """Raised when the Capability Map's curated workflow-root config is malformed."""
+class CapabilityAdmissionConfigError(ValueError):
+    """Raised when the Capability Map's classified admission config is malformed."""
 
 
 def load_skill_departments(repo_root: Path) -> dict[str, str]:
@@ -37,22 +37,22 @@ def load_skill_departments(repo_root: Path) -> dict[str, str]:
     return normalized
 
 
-def load_skill_workflow_roots(
+def load_skill_capability_admission(
     repo_root: Path, departments: dict[str, str] | None = None
 ) -> dict[str, tuple[str, ...]]:
-    """Load the complete department-keyed workflow-root selection for the map."""
+    """Load the complete department-keyed classified capability admission list."""
     department_labels = departments or load_skill_departments(repo_root)
     path = repo_root / "rules" / "skill-workflows.toml"
     try:
         payload = tomllib.loads(path.read_text(encoding="utf-8"))
     except (OSError, tomllib.TOMLDecodeError) as exc:
-        raise WorkflowRootConfigError(f"unable to load {path}: {exc}") from exc
+        raise CapabilityAdmissionConfigError(f"unable to load {path}: {exc}") from exc
 
-    raw_roots = payload.get("workflow_roots")
-    if not isinstance(raw_roots, dict):
-        raise WorkflowRootConfigError(f"{path}: [workflow_roots] must be a table")
+    raw_admission = payload.get("capability_admission")
+    if not isinstance(raw_admission, dict):
+        raise CapabilityAdmissionConfigError(f"{path}: [capability_admission] must be a table")
 
-    configured_departments = set(raw_roots)
+    configured_departments = set(raw_admission)
     expected_departments = set(department_labels)
     unknown_departments = sorted(configured_departments.difference(expected_departments))
     missing_departments = sorted(expected_departments.difference(configured_departments))
@@ -62,68 +62,76 @@ def load_skill_workflow_roots(
             details.append(f"unknown departments: {', '.join(unknown_departments)}")
         if missing_departments:
             details.append(f"missing departments: {', '.join(missing_departments)}")
-        raise WorkflowRootConfigError(f"{path}: " + "; ".join(details))
+        raise CapabilityAdmissionConfigError(f"{path}: " + "; ".join(details))
 
     normalized: dict[str, tuple[str, ...]] = {}
-    all_roots: set[str] = set()
+    all_capabilities: set[str] = set()
     for department_id in department_labels:
-        values = raw_roots.get(department_id)
-        if not isinstance(values, list) or not values:
-            raise WorkflowRootConfigError(
-                f"{path}: workflow_roots.{department_id} must be a non-empty list"
+        values = raw_admission.get(department_id)
+        if not isinstance(values, list):
+            raise CapabilityAdmissionConfigError(
+                f"{path}: capability_admission.{department_id} must be a list"
             )
-        roots: list[str] = []
+        capabilities: list[str] = []
         seen_in_department: set[str] = set()
-        for raw_root in values:
-            if not isinstance(raw_root, str) or not raw_root.strip():
-                raise WorkflowRootConfigError(
-                    f"{path}: workflow_roots.{department_id} values must be non-empty strings"
+        for raw_capability in values:
+            if not isinstance(raw_capability, str) or not raw_capability.strip():
+                raise CapabilityAdmissionConfigError(
+                    f"{path}: capability_admission.{department_id} values must be non-empty strings"
                 )
-            root = raw_root.strip()
-            if root in seen_in_department:
-                raise WorkflowRootConfigError(
-                    f"{path}: duplicate root {root!r} in {department_id}"
+            capability = raw_capability.strip()
+            if capability in seen_in_department:
+                raise CapabilityAdmissionConfigError(
+                    f"{path}: duplicate capability {capability!r} in {department_id}"
                 )
-            if root in all_roots:
-                raise WorkflowRootConfigError(
-                    f"{path}: root {root!r} cannot belong to multiple departments"
+            if capability in all_capabilities:
+                raise CapabilityAdmissionConfigError(
+                    f"{path}: capability {capability!r} cannot belong to multiple departments"
                 )
-            roots.append(root)
-            seen_in_department.add(root)
-            all_roots.add(root)
-        normalized[department_id] = tuple(roots)
+            capabilities.append(capability)
+            seen_in_department.add(capability)
+            all_capabilities.add(capability)
+        normalized[department_id] = tuple(capabilities)
     return normalized
 
 
-def load_skill_workflow_labels(
-    repo_root: Path, workflow_roots: dict[str, tuple[str, ...]]
+def load_skill_capability_labels(
+    repo_root: Path, capability_admission: dict[str, tuple[str, ...]]
 ) -> dict[str, str]:
-    """Load business-facing labels for the configured real workflow roots."""
+    """Load business-facing labels for classified capabilities admitted to the map."""
     path = repo_root / "rules" / "skill-workflows.toml"
     try:
         payload = tomllib.loads(path.read_text(encoding="utf-8"))
     except (OSError, tomllib.TOMLDecodeError) as exc:
-        raise WorkflowRootConfigError(f"unable to load {path}: {exc}") from exc
+        raise CapabilityAdmissionConfigError(f"unable to load {path}: {exc}") from exc
 
-    raw_labels = payload.get("workflow_labels")
+    raw_labels = payload.get("capability_labels")
     if not isinstance(raw_labels, dict):
-        raise WorkflowRootConfigError(f"{path}: [workflow_labels] must be a table")
-    expected_roots = {root for roots in workflow_roots.values() for root in roots}
+        raise CapabilityAdmissionConfigError(f"{path}: [capability_labels] must be a table")
+    expected_capabilities = {
+        capability
+        for capabilities in capability_admission.values()
+        for capability in capabilities
+    }
     configured_roots = set(raw_labels)
-    unknown_roots = sorted(configured_roots.difference(expected_roots))
-    missing_roots = sorted(expected_roots.difference(configured_roots))
-    if unknown_roots or missing_roots:
+    unknown_capabilities = sorted(configured_roots.difference(expected_capabilities))
+    missing_capabilities = sorted(expected_capabilities.difference(configured_roots))
+    if unknown_capabilities or missing_capabilities:
         details: list[str] = []
-        if unknown_roots:
-            details.append(f"labels for unconfigured roots: {', '.join(unknown_roots)}")
-        if missing_roots:
-            details.append(f"missing labels: {', '.join(missing_roots)}")
-        raise WorkflowRootConfigError(f"{path}: " + "; ".join(details))
+        if unknown_capabilities:
+            details.append(
+                f"labels for unadmitted capabilities: {', '.join(unknown_capabilities)}"
+            )
+        if missing_capabilities:
+            details.append(f"missing labels: {', '.join(missing_capabilities)}")
+        raise CapabilityAdmissionConfigError(f"{path}: " + "; ".join(details))
 
     normalized: dict[str, str] = {}
-    for root in sorted(expected_roots):
-        label = raw_labels[root]
+    for capability in sorted(expected_capabilities):
+        label = raw_labels[capability]
         if not isinstance(label, str) or not label.strip():
-            raise WorkflowRootConfigError(f"{path}: workflow label for {root!r} must be a string")
-        normalized[root] = label.strip()
+            raise CapabilityAdmissionConfigError(
+                f"{path}: capability label for {capability!r} must be a string"
+            )
+        normalized[capability] = label.strip()
     return normalized

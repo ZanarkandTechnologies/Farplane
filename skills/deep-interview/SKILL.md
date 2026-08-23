@@ -3,6 +3,8 @@ name: deep-interview
 description: "Turn ambiguous user intent into clarified goals, constraints, and decision points through a Socratic interview before execution."
 tier: 2
 source: local
+capability:
+  kind: shortcut
 argument-hint: "[--quick|--standard|--deep] [--bootstrap] [--autoresearch] <idea or vague description>"
 ---
 
@@ -11,8 +13,8 @@ argument-hint: "[--quick|--standard|--deep] [--bootstrap] [--autoresearch] <idea
 
 - [ ] Read available context before asking: active ticket, `docs/prd.md`,
   `docs/features/`, project README/AGENTS, and relevant local files.
-- [ ] Use [reference-grounding](../reference-grounding/SKILL.md) for local
-  baseline facts instead of asking the user for discoverable project context.
+- [ ] Inspect local baseline facts directly instead of asking the user for
+  discoverable project context.
 - [ ] Ask one question per round and target the weakest clarity dimension.
 - [ ] When a project profile exists in `docs/bootstrap-brief.md` or the user
   names a project type, load
@@ -23,9 +25,9 @@ argument-hint: "[--quick|--standard|--deep] [--bootstrap] [--autoresearch] <idea
   criteria, non-goals, decision boundaries, and one pressure pass.
 - [ ] Re-score ambiguity after each answer and keep interviewing until the
   configured threshold and gates are satisfied.
-- [ ] Use [advise](../advise/SKILL.md) only when the interview exposes real
-  tradeoff options that need a recommendation.
-- [ ] Use the [review protocol](../review/SKILL.md) before handing off a material interview
+- [ ] When the interview exposes real tradeoff options, compare them and record
+  one recommendation with its accepted tradeoff.
+- [ ] Require an independent review before handing off a material interview
   summary as execution-ready.
 - [ ] Write the crystallized summary into the active ticket or the next
   canonical artifact owner; do not create hidden sidecar state.
@@ -295,7 +297,7 @@ and emit a scaffold-consumable artifact without skipping clarification.
   may decide without further confirmation
 - **Profile-specific focus:** select or confirm a `ProjectProfile`, then ask
   material questions across its component set, advice axes, prototype gates,
-  and downstream pipeline handoff. Use `advise` for real tradeoff axes, such as
+  and downstream pipeline handoff. Compare real tradeoff axes inline, such as
   video hook/asset/sound/edit choices or landing hero/media/motion directions.
 - **Canonical artifact surface:** `docs/bootstrap-brief.md`
 - **Bootstrap artifact bundle:** one current Farplane brief containing

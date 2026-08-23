@@ -1,8 +1,7 @@
 # Review
 
 TAS rubric verification for plans, implementations, skills, prompts, evals,
-docs, UI evidence, demos, and integration readiness, with a repo-grounded
-anti-slop search playbook for substantive review.
+docs, UI evidence, demos, and integration readiness.
 
 ## Purpose
 
@@ -19,7 +18,10 @@ and checks metric traceability against linked evidence.
 - `SKILL.md` Todo List: example natural-language todo template for review
 - [`docs/review/rubrics/review-rubric-index.md`](/Users/kenjipcx/coding-harness/Farplane/docs/review/rubrics/review-rubric-index.md): family selection map, shared TAS contract, and hard-gate policy
 - [`docs/review/rubrics/reviewer-handoff.md`](/Users/kenjipcx/coding-harness/Farplane/docs/review/rubrics/reviewer-handoff.md): reusable caller-to-reviewer handoff template
-- [`docs/review/rubrics/desloppify.md`](/Users/kenjipcx/coding-harness/Farplane/docs/review/rubrics/desloppify.md): cross-cutting anti-slop search playbook for neighboring-surface consistency checks
+- [`lean-check`](../lean-check/SKILL.md): unnecessary implementation and
+  over-engineering checks
+- [`unslop`](../unslop/SKILL.md): prose simplification when writing quality is
+  in scope
 - One family file per rubric under `docs/review/rubrics/`
 - [`/Users/kenjipcx/coding-harness/Farplane/agents/reviewer.toml`]: independent reviewer agent prompt
 
@@ -30,7 +32,6 @@ Use the `SKILL.md` Todo List when invoking the skill.
 Provide task context, changed files, evidence artifacts, and any declared
 metrics, rubric families, required TAS gates, or hard gates.
 Start from caller-declared families such as `code-quality`, `integration-readiness`, and `evidence-quality`.
-Load `docs/review/rubrics/desloppify.md` because consistency and integration trust are in scope.
 Search the changed files plus the smallest neighboring constants/docs/interfaces needed to test drift.
 Use the family skeptic questions and assign TAS for each selected family.
 Add `user-intent-satisfaction` when the ticket is clearly user-facing and the review needs to judge whether the delivered result actually satisfies the ask.
@@ -45,13 +46,12 @@ Return a clear `pass|revise|block|invalid` verdict grounded in the provided evid
 - `sed -n '1,120p' skills/review/SKILL.md`
   and expect a marker-delimited `## Todo List` with natural-language
   review steps
-- `rg -n "reviewer-handoff|rubric_families|desloppify|search_scope|finding_log|severity|confidence|user-intent-satisfaction" skills/review/SKILL.md skills/review/README.md docs/review/rubrics agents/reviewer.toml docs/features/FEAT-0008-artifact-first-qa-and-completion-proof.md tickets/templates/ticket.md`
+- `rg -n "reviewer-handoff|rubric_families|lean-check|unslop|search_scope|finding_log|severity|confidence|user-intent-satisfaction" skills/review/SKILL.md skills/review/README.md docs/review/rubrics agents/reviewer.toml docs/features/FEAT-0008-artifact-first-qa-and-completion-proof.md tickets/templates/ticket.md`
   and expect live matches in the updated review surfaces
 - Run a stale numeric-review-contract scan over `skills/review`,
   `agents/reviewer.toml`, and `docs/features/FEAT-0008-artifact-first-qa-and-completion-proof.md`; expect no live
   review-contract matches outside historical notes or unrelated schema versions.
 - Manually verify that examples and TAS gates in `SKILL.md`,
   `docs/review/rubrics/review-rubric-index.md`,
-  `docs/review/rubrics/desloppify.md`, and
   `docs/features/FEAT-0008-artifact-first-qa-and-completion-proof.md` all use the same explicit TAS contract and
   search/output expectations

@@ -93,8 +93,9 @@ Useful options:
 
 ## Judgment Questions
 
-Use `advise` when it is unclear whether the collage should feel founder-like,
-technical, documentary, cinematic, chaotic, polished, or meme-like.
+When the collage direction is unclear, compare founder-like, technical,
+documentary, cinematic, chaotic, polished, and meme-like routes inline and
+recommend one.
 
 ## Outcome Contract
 

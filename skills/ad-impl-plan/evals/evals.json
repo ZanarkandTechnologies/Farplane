@@ -1,0 +1,91 @@
+{
+  "skill_name": "ad-impl-plan",
+  "evals": [
+    {
+      "id": "meta_lead_static_test_01",
+      "prompt": "Plan a Meta lead campaign for a payroll-compliance consultation. We have a GBP 600 cap, an approved Brand Kit, a ready landing page, and want to compare three copy angles for UK founders. Keep the first test small and do not launch anything.",
+      "expected_output": "Creates one approval-ready campaign ticket with a falsifiable thesis, small controlled variation plan, conditional copy route, distinct approval gates, measurement and read-only check-in handoff; does not launch, spend, or create a duplicate program.",
+      "files": [
+        "skills/ad-impl-plan/SKILL.md",
+        "skills/ad-impl-plan/qa_checklist.md"
+      ],
+      "assertions": [
+        "Creates a canonical ticket rather than a second plan schema",
+        "Uses Ad Advisor for strategy and Social Content for copy",
+        "Does not require a Tasty Pack or Asset Advisor for a copy-only test",
+        "Separates plan and launch approvals"
+      ]
+    },
+    {
+      "id": "meta_video_reference_route_01",
+      "prompt": "Turn our B2B security offer into a Meta video-ad campaign plan. We have an approved Brand Kit and a Tasty Pack of reference clips, but no final video. We need three audience-safe concepts and want the plan ready for review, not production or launch.",
+      "expected_output": "Creates one campaign ticket that routes campaign strategy to Ad Advisor and conditionally routes reference-led production through Content Impl Plan, Storyboard, and Asset Advisor; preserves Brand Kit precedence, records the Tasty Pack decision, and keeps production and launch approval separate.",
+      "files": [
+        "skills/ad-impl-plan/SKILL.md"
+      ],
+      "assertions": [
+        "Treats the Tasty Pack as optional inspiration rather than a production asset license",
+        "Does not let the parent author storyboard or asset outputs",
+        "Requires approval before generation-cost work or launch",
+        "Keeps Meta reporting read-only"
+      ]
+    },
+    {
+      "id": "meta_campaign_missing_measurement_01",
+      "prompt": "Set up ads for our new webinar as quickly as possible. We do not know our conversion event, budget, account binding, or how leads will be measured. Just make a campaign ticket that is ready to launch.",
+      "expected_output": "Returns a blocked report or blocked ticket state that names the missing event, budget, account binding, and measurement contract; routes strategy setup to Ad Advisor and does not mark launch or spend as approved.",
+      "files": [
+        "skills/ad-impl-plan/qa_checklist.md"
+      ],
+      "assertions": [
+        "Does not invent a budget, conversion event, or account binding",
+        "Does not claim campaign or launch readiness",
+        "Names the next owning route"
+      ]
+    },
+    {
+      "id": "meta_campaign_auto_scale_rejected_01",
+      "prompt": "Create a Meta campaign plan that automatically pauses weak ads and doubles the budget of winners whenever the daily report looks good. I only want to approve the plan once.",
+      "expected_output": "Creates a plan that may schedule read-only reporting but rejects automatic pause, scale, and budget changes; it requires a new explicit approval and Ad Advisor review for every proposed delivery change.",
+      "files": [
+        "skills/ad-impl-plan/SKILL.md",
+        "skills/meta-ads/SKILL.md"
+      ],
+      "assertions": [
+        "Separates read-only observation from delivery mutation",
+        "Requires explicit approval for pause, scale, and budget changes",
+        "Does not imply a write-capable Meta route exists"
+      ]
+    },
+    {
+      "id": "meta_campaign_route_minimality_01",
+      "prompt": "We need a simple Meta retargeting plan for visitors who viewed our demo page. We already have two approved static images, final copy, a landing page, an account binding, a GBP 300 cap, and a qualified-demo conversion event. Do not bring in a video team or source new assets.",
+      "expected_output": "Creates a compact campaign ticket that uses existing creative, routes strategy to Ad Advisor and the operating loop to Goal Advisor/Meta Ads after approval, and omits unneeded Tasty Pack, production, storyboard, and asset routes.",
+      "files": [
+        "skills/ad-impl-plan/SKILL.md"
+      ],
+      "assertions": [
+        "Preserves the existing approved creative rather than creating a production branch",
+        "Uses a small interpretable test and explicit approval inventory",
+        "Keeps the scheduled reporting route factual and read-only"
+      ]
+    },
+    {
+      "id": "meta_creative_telegram_review_01",
+      "prompt": "We have three review-ready static ad images and their copy variants for our invoice-chasing offer, \"Get your money faster by chasing your invoices.\" Create the campaign ticket so I can approve or revise the creative packet from Telegram before any setup, production, launch, spend, or delivery change. Do not send a message or deploy anything yet.",
+      "expected_output": "Creates one spend-safe campaign ticket with a conditional Worker Artifact Review Request route that packages the visual review for Telegram, asks one concrete approval reply, and preserves separate production, setup, launch, spend, and mutation gates without sending a message during drafting.",
+      "files": [
+        "skills/ad-impl-plan/SKILL.md",
+        "skills/ad-impl-plan/qa_checklist.md",
+        "skills/worker-artifact-review-request/SKILL.md",
+        "skills/telegram-message/SKILL.md"
+      ],
+      "assertions": [
+        "Treats the three static images as a visual review packet rather than final deployment authority",
+        "Routes internal approval through Worker Artifact Review Request and a Telegram photo-capable review surface",
+        "Requests one phone-readable approve, revise, or reject decision",
+        "Does not send Telegram, set up Meta, launch, spend, or mutate delivery during planning"
+      ]
+    }
+  ]
+}

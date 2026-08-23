@@ -88,6 +88,65 @@ class InstallSelectedSkillsTests(unittest.TestCase):
             self.assertTrue((installed / "references" / "note.md").exists())
             self.assertFalse((target / "skills" / "visual-qa").exists())
 
+    def test_install_does_not_publish_test_fixture_skills(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp) / "repo"
+            target = Path(tmp) / "codex"
+            write_skill(repo, "review", "Run quality checks.")
+            fixture = (
+                repo
+                / "skills"
+                / "review"
+                / "tests"
+                / "fixtures"
+                / "bad-skill"
+                / "SKILL.md"
+            )
+            fixture.parent.mkdir(parents=True)
+            fixture.write_text(
+                "---\nname: bad-skill\ndescription: Fixture.\n---\n",
+                encoding="utf-8",
+            )
+
+            installer.install_skills(repo, target, ["review"], False, False)
+
+            self.assertTrue((target / "skills" / "review" / "SKILL.md").exists())
+            self.assertFalse((target / "skills" / "review" / "tests").exists())
+
+    def test_reinstall_removes_stale_test_fixture_skills(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp) / "repo"
+            target = Path(tmp) / "codex"
+            write_skill(repo, "review", "Run quality checks.")
+            installed_fixture = (
+                target
+                / "skills"
+                / "review"
+                / "tests"
+                / "fixtures"
+                / "bad-skill"
+                / "SKILL.md"
+            )
+            installed_fixture.parent.mkdir(parents=True)
+            (target / "skills" / "review" / "SKILL.md").write_text(
+                (repo / "skills" / "review" / "SKILL.md").read_text(encoding="utf-8"),
+                encoding="utf-8",
+            )
+            (target / "skills" / "review" / "references").mkdir()
+            (target / "skills" / "review" / "references" / "note.md").write_text(
+                "Reference.\n",
+                encoding="utf-8",
+            )
+            installed_fixture.write_text(
+                "---\nname: bad-skill\ndescription: Fixture.\n---\n",
+                encoding="utf-8",
+            )
+
+            result = installer.install_skills(repo, target, ["review"], False, False)
+
+            self.assertEqual(result.installed, ["review"])
+            self.assertFalse((target / "skills" / "review" / "tests").exists())
+
     def test_install_without_checklist_keeps_skill_body(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             repo = Path(tmp) / "repo"
@@ -179,13 +238,7 @@ class InstallSelectedSkillsTests(unittest.TestCase):
             repo = Path(tmp) / "repo"
             target = Path(tmp) / "codex"
             write_skill(repo, "review", "Run quality checks.")
-            retired_names = {
-                "horizon-advisor",
-                "image-generation",
-                "ingest-world-data",
-                "ticket-opportunity-generator",
-                "video-generation",
-            }
+            retired_names = installer.RETIRED_SKILL_NAMES
             for name in retired_names:
                 retired = target / "skills" / name
                 retired.mkdir(parents=True)
@@ -198,6 +251,38 @@ class InstallSelectedSkillsTests(unittest.TestCase):
             self.assertEqual(set(result.pruned), retired_names)
             for name in retired_names:
                 self.assertFalse((target / "skills" / name).exists())
+
+    def test_retired_skill_catalog_covers_source_and_live_retirements(self) -> None:
+        self.assertEqual(
+            installer.RETIRED_SKILL_NAMES,
+            {
+                "agent-behavior-test",
+                "bash-efficiency",
+                "data-viz",
+                "deep-ui-design",
+                "delegate-frontend",
+                "execute",
+                "external-patterns",
+                "farplane-invocation",
+                "find-skills",
+                "frontend-craft",
+                "frontend-design",
+                "horizon-advisor",
+                "image-generation",
+                "ingest-world-data",
+                "knowledge-tidier",
+                "plan",
+                "pr-runtime",
+                "react-flow",
+                "summarize",
+                "testing",
+                "ticket-opportunity-generator",
+                "update-memory",
+                "update-strategy",
+                "video-generation",
+                "video-production",
+            },
+        )
 
     def test_prune_preserves_external_symlink_with_retired_name(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

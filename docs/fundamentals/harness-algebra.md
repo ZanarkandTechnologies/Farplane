@@ -574,7 +574,7 @@ Budgeted skills include:
 
 | Skill family | Budget fields |
 | --- | --- |
-| `plan`, `impl-plan`, `goal-advisor` | planning depth, ambiguity gates, decomposition depth |
+| native planning, `impl-plan`, `goal-advisor` | planning depth, ambiguity gates, decomposition depth |
 | `research`, `reference-grounding` | source count, search breadth, recency/currentness, citation depth |
 | `advise`, `deliberative-advice` | option count, independent persona lanes, synthesis |
 | `review`, `visual-qa`, `agent-qa-test` | rubric depth, evidence depth, reviewer/QA lanes |

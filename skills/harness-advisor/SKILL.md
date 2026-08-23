@@ -81,8 +81,8 @@ fails: defaults to AGENTS.md; creates new skill before checking registry; recomm
      prompts, runner behavior, validators, or AGI Toy Shop examples, load
      [eval surface ownership](../eval/references/eval-surface-ownership.md)
      and route detailed ownership to `eval`.
-- [ ] 5. Use [advise](../advise/SKILL.md) to compare exactly three viable
-   placement options when three realistic options exist.
+- [ ] 5. Compare exactly three viable placement options when three realistic
+   options exist, then recommend one primary owner.
 - [ ] 6. Recommend one primary owner and secondary sync points.
    - [ ] Name rejected surfaces and why they should not own the change now.
    - [ ] Route proof by type: judgment to review, repeatable behavior to eval,

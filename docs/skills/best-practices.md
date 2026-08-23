@@ -129,22 +129,24 @@ reference so it is loaded only after selection.
   schemas there. Add a skill-local budget reference only when the domain has
   real presets, personas, or allocation rules.
 - `## Todo List` is the first-load todo list, not a generic checklist section.
-- Use a plain numbered list such as `1.`, `2.`, and `3.` for ordered work.
-  Checkboxes imply mutable completion state that the skill file does not own.
-- Make every top-level todo an executable action with an observable result.
-  Move policy, tips, and warnings to `## Gotchas`, `## Core Rules`, or an
-  indented stage expectation.
-- Use concrete domain nouns and actions. If a todo could be pasted into an
-  unrelated skill, rewrite it. Put a short example beside a rule that is easy
-  to misread, name what the transformation must preserve, and finish with a
-  concrete self-audit.
+- Write three to seven top-level Golden Workflow Nodes. A node is one bounded
+  executable operation with a compact `input -> output | branch` signature, a
+  non-obvious domain Rule, observable Assert conditions, and a representative
+  Example when judgment changes the route.
+- Use a checkbox plus stable local node label such as `N1` so the workflow is
+  glanceable and each top-level item can map to one n8n-style node. The skill
+  file remains the reusable program; invocation state belongs to the task.
+- If a node could be pasted into an unrelated skill, rewrite it. Generic bind,
+  inspect, transform, preserve, self-audit, and next fields are not node value;
+  the signature, Rule, Example, and Assert lines carry the useful contract.
 - Use nested numbered lists for branch choices that should stay ordered and
   easy to reference.
 - Put an indented `Expected:` or `Assert:` after a stage only when the expected
   state is ambiguous, drift is likely, failure is costly, or the next stage
   needs a gate. Omit it when success is obvious or mechanically verified.
 - Do not use unordered prose bullets inside `## Todo List`; branch choices
-  should be numbered items, and stage checks should be short indented lines.
+  should be named nodes or compact indented conditions, and stage checks should
+  be short Assert lines.
 - Do not put literal `FARPLANE_IMPORTANT_CHECKLIST` marker comments inside
   fenced examples; link the source template instead.
 - Fold the default workflow into the numbered todo list instead of repeating it
@@ -280,6 +282,8 @@ A good example should show:
   transferable;
 - any boundary the agent must preserve, such as publish limits, source
   provenance, or human review.
+- the decisive node trace: input state, signal or rule, output/branch, evidence,
+  and the generic/no-skill behavior it improves upon.
 
 When maintaining a quality-dependent skill with no good example, prioritize a
 representative example before broad structural rewrites. Structure improves
@@ -311,6 +315,9 @@ Key metrics:
 | `review_tas_rate` | maximize | Skill-contract and eval-quality reviews reach required TAS-A. |
 | `maintenance_locality` | maximize | Future edits have one obvious owner surface. |
 | `composition_clarity` | maximize | Required files/data, parameters, work, writes, and returned outputs are explicit. |
+| `node_executability` | maximize | Each top-level Todo is one bounded operation with inspectable output or branch. |
+| `advantage_level` | reach differentiated | `generic` -> `operational` -> `differentiated`; `proven` requires candidate/no-skill hardcase evidence. |
+| `golden_transfer` | maximize | Decisive moves transfer to held-out inputs without copying fixture facts. |
 
 Placement rule:
 
@@ -408,7 +415,7 @@ Use this routing:
 | Repeatable agent, prompt, or skill behavior. | `eval` | `evals/evals.json` or eval suite artifact. |
 | Deterministic file, schema, registry, link, generated state, or syntax invariant. | validator or command | Script, validator, or proof command in `SKILL.md`. |
 | Documentation quality, terminology, stale sections, examples, or reader fit. | doc-quality checklist | Skill-local `qa_checklist.md`. |
-| Skill structure, first-load size, progressive disclosure, reference routing, or compaction risk. | structure checklist | `skills/skill-maintenance/qa_checklist.md`, plus a skill-local audit for material changes. |
+| Skill structure, Golden Workflow Nodes, first-load size, reference routing, edge, or compaction risk. | `skill-contract` review | `docs/review/rubrics/skill-contract.md`, plus a skill-local audit for material changes. |
 | Generated asset or public deliverable presentation. | demo or QA proof | Demo checklist, render artifact, screenshot, or playback proof. |
 | Operator taste, ranking, or approval. | human feedback | Feedback artifact, Telegram request, or explicit approval record. |
 | Tiny deterministic edit. | self-check | One inline final todo or command. |
@@ -425,9 +432,11 @@ place_finish_checklist(checklist, needed_before_execution, owner_scope)
   -> docs/* when shared_across_many_skills
 ```
 
-Add a skill-local `qa_checklist.md` when the skill repeatedly produces,
-changes, or verifies artifacts and the checks are domain-specific runtime
-guardrails. The invoking agent should read it before execution as preflight
+Do not create a skill-local `qa_checklist.md` by default. Keep or add one only
+when the skill repeatedly produces, changes, or verifies artifacts and the
+checks are skill-specific runtime, safety, or preflight guardrails that do not
+fit more clearly in node assertions, goldens, evals, validators, or review. The
+invoking agent should read it before execution as preflight
 constraints, then apply it again before completion. Keep it at the skill
 package root so agents and future tooling can discover it without treating it
 as ordinary reference prose. Examples:
@@ -440,11 +449,11 @@ as ordinary reference prose. Examples:
   previews, and copy/asset consistency.
 - agent-testing skills: case coverage, tester evidence, evidence-review
   critique, rerun policy, and final proof bundle.
-- skill-system skills: first-load sufficiency, reference routing, eval-to-QA
-  sync, template-version truth, and reviewer handoff.
+- skill-system structure and authoring rules are not checklist candidates; they
+  belong in the shared `skill-contract` rubric and deterministic validators.
 
 For skill creation or material skill restructuring, load and run
-`skills/skill-maintenance/qa_checklist.md`. Its key threshold is:
+`docs/review/rubrics/skill-contract.md`. Its key threshold is:
 
 ```text
 place_skill_detail(detail)
@@ -457,12 +466,10 @@ issue. If loading everything early increases context rot or forces compaction
 before the task state stabilizes, keep a precise first-load pointer and defer
 the branch detail to a reference.
 
-Treat each checklist item as a violation scan over the actual changed files,
-not as a passive reminder. Record any violation in the skill-local audit or
-final proof notes, then fix or explicitly defer it. Use the checklist's
-subagent prompt when independent structure review is useful, and use an
-independent reviewer/subagent for material changes so the author and reviewer
-load the same checklist separately.
+Treat each retained runtime checklist item as a violation scan, not a passive
+reminder. Structural review uses `skill-contract`; independent reviewers judge
+the candidate, golden invariants, held-out context, and proof without planner
+scratch reasoning.
 
 Do not put long QA checklists directly in `## Todo List`. Prefer compact
 first-load pointers:
@@ -476,8 +483,8 @@ first-load pointers:
 
 Then link the reference from `## Reference Map`.
 
-When a skill has both `evals/evals.json` and `qa_checklist.md`, treat them as
-competing representations that should converge:
+When a skill has both `evals/evals.json` and `qa_checklist.md`, keep their jobs
+distinct and migrate overlap:
 
 ```text
 evals/evals.json -> finds expected behavior and hard cases

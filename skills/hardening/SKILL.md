@@ -20,36 +20,23 @@ operational surprises. The skill owns risk mapping, mitigation planning,
 adversarial tests, hardening changes, and residual-risk reporting.
 
 Route behavior-preserving structure cleanup to `refactoring`, bug diagnosis to
-`runtime-debugging`, broad proof selection to `proof-advisor`, test execution
-choices to `testing`, and budget resolution to `budget-advisor`.
+`runtime-debugging`, and unresolved proof selection to `proof-advisor`. Run
+already-selected deterministic proof commands in the native execution phase.
 
 ## Skill Signature
 
 ```text
-hardening(target, context?, budget?) -> risk_map + mitigations + adversarial_tests + proof + residual_risk
+hardening(target, context?, ensemble?: auto | max) -> risk_map + mitigations + adversarial_tests + proof + residual_risk
 state: reads(code, config, dependencies, logs, tests, docs, threat boundaries, runtime commands); writes(mitigations?, tests?, evidence?, follow-up tickets?)
 gates: boundary_mapped; risks_prioritized; mitigations_tested; residual_risk_named
-routes: budget-advisor | proof-advisor | testing | review | runtime-debugging | refactoring
+routes: proof-advisor | review | runtime-debugging | refactoring
 fails: generic checklist dump; untested mitigation; security theater; hidden residual risk
 ```
 
-Use `budget-advisor` when `budget` is present:
-
-```text
-HardeningBudget = {
-  mode?: "base" | "plus" | "max",
-  available_time?: string,
-  persona_count?: 1 | 3 | 5,
-  personas?: HardeningPersona[],
-  coverage?: "smoke" | "focused" | "broad",
-  evidence_depth?: "light" | "strong",
-  delegate_budget?: Record<skill_name, BudgetRequest>
-}
-```
-
-Child skills use their own base reviewed path unless `delegate_budget`
-explicitly names them. Budgeted persona lanes must preserve the output contract:
-risk map, mitigations, adversarial tests, proof, and residual risk.
+When `ensemble` is requested, load `ensemble.yaml`: `auto` selects its three
+personas; `max` selects all. Collect independent risk assessments before
+synthesis and preserve the normal risk-map, mitigation, proof, and residual
+risk contract.
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
@@ -64,13 +51,10 @@ risk map, mitigations, adversarial tests, proof, and residual risk.
   - [ ] Read [workflow](references/workflow.md) for the normal hardening loop.
   - [ ] Read [tooling](references/tooling.md) when selecting static-analysis,
     SAST, dependency, or resilience checks.
-- [ ] 3. Resolve budget when present.
-   - [ ] Call `budget-advisor` with this contract and `HardeningBudget`.
-  - [ ] For `plus` or `max`, use persona prompts from
-    [budget-personas](references/budget-personas.md) unless the caller supplied
-    complete personas.
-  - [ ] Do not copy the parent budget into proof, testing, or review child
-    calls unless `delegate_budget` explicitly names the child skill.
+- [ ] 3. Resolve ensemble mode when requested.
+  - [ ] Load `ensemble.yaml`; `auto` uses its three relevant personas and
+    `max` uses all personas.
+  - [ ] Keep proof, testing, and review child calls on their normal paths.
 - [ ] 4. Build a risk map.
   - [ ] Cover input validation, authn/authz, secrets, data protection,
     dependency/supply chain, availability, concurrency, observability,
@@ -88,18 +72,6 @@ risk map, mitigations, adversarial tests, proof, and residual risk.
   - [ ] Route material completion to `review` or the reviewer lane.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
-## Templates
-
-```text
-HardeningPersona = {
-  name: string,
-  prompt: string,
-  focus: string[],
-  avoid?: string[],
-  output_shape?: string
-}
-```
-
 ## Gotchas
 
 - Do not claim hardening from a checklist alone; a mitigation needs proof or an
@@ -115,18 +87,15 @@ HardeningPersona = {
 - [workflow](references/workflow.md) - read for the ordered hardening loop.
 - [tooling](references/tooling.md) - read when choosing stack-specific
   hardening tools or commands.
-- [budget-personas](references/budget-personas.md) - read for `plus` or `max`
-  persona councils.
-- [budget-advisor](../budget-advisor/SKILL.md) - read when `budget` is present.
+- [ensemble.yaml](ensemble.yaml) - read for `ensemble: auto | max`.
 - [proof-advisor](../proof-advisor/SKILL.md) - route proof-surface uncertainty.
-- [testing](../testing/SKILL.md) - route proof command selection.
 
 ## Output
 
 Return or update an artifact with:
 
 - hardening target and trust/failure boundaries
-- budget program summary when budget was used
+- selected personas and dissent when ensemble mode was used
 - prioritized risk map
 - mitigations or mitigation plan
 - adversarial tests and exact proof

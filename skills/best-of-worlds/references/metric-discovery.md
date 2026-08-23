@@ -23,8 +23,8 @@ Judgement questions:
 - Mechanical numeric: errors, latency, size, cost, pass count, coverage.
 - Binary eval pass rate: prompt, skill, workflow, or agent behavior cases.
 - Evidence completeness: required proof artifacts present and fresh.
-- Human judgement: only when quality is real but not mechanically measurable.
-  Use `advise` and capture the judgement questions.
+- Human judgment: only when quality is real but not mechanically measurable.
+  Compare viable metrics inline and capture the judgment questions.
 
 ## Metric Selection Questions
 

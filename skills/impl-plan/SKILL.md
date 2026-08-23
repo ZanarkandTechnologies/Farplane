@@ -49,12 +49,13 @@ impl_plan(ticket_or_request, proof_weight?)
 
 state:
   reads(ticket?, accepted artifacts, relevant code/tests/docs, project memory?)
-  writes(ticket.md, optional diagrams.md, approval handoff)
+  writes(ticket.md, required UI design.md?, optional diagrams.md, approval handoff)
 
 gates:
   ticket_bound; internal_reuse_inspected; required_context_resolved_or_blocked;
   code_seams_named; change_order_executable; done_and_proof_concrete;
-  lean_receipt_passed; ticket_context_budget_checked; material_review_reconciled
+  ui_design_baseline_copy_complete_or_approval_blocked; lean_receipt_passed;
+  ticket_context_budget_checked; material_review_reconciled
 
 fails:
   chat_only_material_plan; parallel_ticket_schema; repeated_advisor_work;
@@ -62,6 +63,10 @@ fails:
   duplicated_global_and_per_change_policy; proof_weakened_for_line_count;
   readiness_with_open_gate; implementation_before_approval
 ```
+
+A buyer-facing UI handoff is not approval-ready without its ticket-local,
+copy-complete `design.md`; if final copy or proof is missing, name that file as
+blocked rather than offering a ticket-shaped implementation plan.
 
 ## Phase Boundary
 
@@ -131,8 +136,11 @@ design baseline; never replace it with a chat-only summary or a new schema.
 - [ ] 4. Populate the canonical ticket template.
   - [ ] Load [tickets/templates/ticket.md](../../tickets/templates/ticket.md)
     and keep its required sections and optional-section rules authoritative.
-  - [ ] Make each Change Plan unit name files, operation, contract/type impact
-    when material, local proof, and a real failure/rollback boundary. Do not
+  - [ ] Start from the compact spine. Add an optional section only when its
+    admission test passes; delete empty headings and placeholder rows.
+  - [ ] Make each Change Plan unit name files, operation, mapped Contract
+    Diagram IDs, contract/type impact when material, observable assertions,
+    local proof, and a real failure/rollback boundary. Do not
     repeat global Delta, QA, Docs, or route policy in every unit.
   - [ ] Keep architecture signatures compact and only when ownership, public
     contracts, or typed movement would otherwise be ambiguous.
@@ -142,10 +150,16 @@ design baseline; never replace it with a chat-only summary or a new schema.
     present only when docs ownership is non-obvious or changes.
   - [ ] Preserve existing proof briefs and use QA, visual QA, agent QA, demo,
     and reviewer lanes when the claim requires independent evidence.
+  - [ ] For UI-bearing tickets, set `ui_scope: true` and create or update
+    ticket-local `design.md` with copy-complete ASCII screens/states before
+    approval. Use the [design baseline template](references/design-template.md):
+    literal visible copy, reader question, proof, takeaway, action, and
+    assertion. Make QA compare captures and behavior against its IDs and
+    assertions; a link alone is not proof.
 - [ ] 6. Keep presentation proportional.
-  - [ ] Use a compact inline text/Mermaid map only when it replaces prose.
-    Create `diagrams.md` only when multiple detailed views or independent
-    visual review materially help; validate it when linked.
+  - [ ] Keep the required Contract Diagram compact and type-appropriate. Create
+    `diagrams.md` only when multiple detailed architecture views or independent
+    diagram review materially help; validate it when linked.
   - [ ] Move execution history and bulky proof to `progress.md` or `artifacts/`.
 - [ ] 7. Run minimality and mechanical gates.
   - [ ] Call [lean-check](../lean-check/SKILL.md) once after context resolution
@@ -168,6 +182,7 @@ design baseline; never replace it with a chat-only summary or a new schema.
 ## Templates
 
 - Ticket body: [tickets/templates/ticket.md](../../tickets/templates/ticket.md).
+- UI baseline: [design baseline template](references/design-template.md).
 - Optional detailed visual companion:
   [visual companion template](references/visual-companion-template.md).
 
@@ -181,14 +196,16 @@ design baseline; never replace it with a chat-only summary or a new schema.
   second active reference template.
 - Do not treat raw or prose line count as quality. Required safety, ownership,
   reconstruction, and proof survive compaction.
-- Do not require diagrams as ceremony or hide prose inside Mermaid.
+- Do not accept a decorative Contract Diagram or hide prose inside ASCII. It
+  must expose the states, boundaries, branches, and proof needed for the ticket.
 
 ## Reference Map
 
 - [plan prompt](prompts/plan.md) — compact invocation prompt kept aligned with
   this decision flow.
 - [examples](references/examples.md) — load only for output calibration.
-- [diagramming](../diagramming/SKILL.md) — render an optional complex companion.
+- Render necessary compact diagrams inline. The operator may explicitly invoke
+  the diagramming shortcut for an optional complex companion.
 
 ## Output
 
@@ -196,3 +213,8 @@ design baseline; never replace it with a chat-only summary or a new schema.
 - Compact context-resolution and reuse evidence only where it changes the plan.
 - Executable Change Plan, concrete Done/QA contract, mechanical budget result,
   reviewer receipt or blocker, and post-approval `goal-advisor` handoff.
+- For UI work, name the ticket-local `design.md` and show one representative
+  `state -> reader question -> literal copy -> proof/takeaway/action/assertion`
+  row in the visible handoff. If any required literal copy or proof is not
+  approved, return `approval: blocked` with the missing item; do not turn that
+  gap into an implementation decision.

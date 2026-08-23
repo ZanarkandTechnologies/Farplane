@@ -103,6 +103,7 @@ actions; it does not independently choose the same generation route again.
 
 | Need | Advisor | Produces |
 | --- | --- | --- |
+| Turn a paid-ad directive into one approval-ready campaign ticket | [`ad-impl-plan`](../../skills/ad-impl-plan/SKILL.md) | Canonical campaign ticket, conditional action graph, and approval inventory |
 | Turn an offer and audience into a spend-gated advertising campaign | [`ad-advisor`](../../skills/ad-advisor/SKILL.md) | Reviewed campaign configuration, CLI plan, and execution handoff |
 | Write emotionally coherent product or landing-page copy | [`copywriting-advisor`](../../skills/copywriting-advisor/SKILL.md) | Story, page copy, word bank, and copy QA verdict |
 | Create people-first search content | [`seo-content-advisor`](../../skills/seo-content-advisor/SKILL.md) | SEO brief, draft, and content QA verdict |

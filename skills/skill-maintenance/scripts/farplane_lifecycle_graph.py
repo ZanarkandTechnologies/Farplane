@@ -498,7 +498,7 @@ def validate_graph(graph: dict[str, Any]) -> list[str]:
         "skill:manage-wiki",
         "skill:skill-maintenance",
         "skill:eval",
-        "skill:knowledge-tidier",
+        "skill:consolidate",
         "file:farplane/metrics.yaml",
         "file:farplane/pm.json",
         "hook:UserPromptSubmit",

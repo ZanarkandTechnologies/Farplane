@@ -25,6 +25,8 @@ If any answer is weak, tighten the report first.
 - Are there duplicated patterns or component variants that should probably collapse into one shared treatment?
 - If the screen was planned from an explicit layout sketch or strong reference, did the output preserve that structure?
 - Does the final evidence actually show the most important user-facing surface?
+- For buyer-facing pages, can a reader identify the outcome, proof, and action
+  without the report substituting implementation jargon for the page itself?
 
 ## Fail If
 

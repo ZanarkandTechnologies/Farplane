@@ -85,6 +85,19 @@
         "Would only return non-pass for a fixture-specific contradiction"
       ],
       "metadata": {"farplane": {"title": "Current brief overrides unrelated taste memory", "tags": ["skill", "visual-qa", "metamorphic-pair", "anti-overfit"], "pair": "visual_qa_explicit_veto_conflict_01"}}
+    },
+    {
+      "id": "visual_qa_long_page_requires_section_coverage_01",
+      "prompt": "Can this buyer dossier ship? Its desktop full-page image is too compressed to read, there is no mobile capture, and the proof and objection sections have no separate evidence frames.",
+      "expected_output": "Returns non-pass; requires operated-scroll evidence, desktop/mobile full-page captures, readable top/middle/bottom frames, and design section ID to evidence mapping; does not treat a compressed full-page image as readable proof.",
+      "files": [],
+      "assertions": [
+        "Rejects unreadable or incomplete long-page evidence",
+        "Requires every declared section to map to current capture evidence",
+        "Names missing mobile and sectional proof",
+        "Does not pass from a single full-page image"
+      ],
+      "metadata": {"farplane": {"title": "Visual QA requires readable long-page section coverage", "tags": ["skill", "visual-qa", "long-page", "evidence"]}}
     }
   ]
 }

@@ -1,0 +1,53 @@
+{
+  "skill_name": "unslop",
+  "evals": [
+    {
+      "id": "unslop_dense_technical_status_01",
+      "prompt": "Unslop this handoff: 'We leveraged the migration orchestration surface to facilitate a robust transition across the evolving data landscape. The `users` backfill processed 18,420 rows, 42 tests passed, replication lag peaked at 1.8 seconds, and the NOT NULL constraint remains disabled because 17 rows have no value.'",
+      "expected_output": "A short, plain handoff that preserves every supplied database fact and does not interpret the lag, add quantifiers, invent next steps, or remove precise terms. A required conversation ledger may precede the revised prose.",
+      "files": [],
+      "assertions": [
+        "Removes abstract filler and states the migration status directly",
+        "Preserves `users`, 18,420 rows, 42 tests, 1.8 seconds, 17 rows, and NOT NULL",
+        "Does not add a tolerance judgment, recommendation, or unsupported fact",
+        "Outside any required conversation ledger, returns revised prose rather than a writing lecture"
+      ]
+    },
+    {
+      "id": "unslop_human_opinion_01",
+      "prompt": "Make this sound less generated while keeping my opinion: 'The launch was an incredibly pivotal milestone that showcased the team's unwavering dedication. I am relieved it shipped, but the two-week support backlog makes the victory feel incomplete.'",
+      "expected_output": "A natural first-person rewrite that cuts puffery, keeps the relief and mixed reaction, and preserves the two-week backlog fact. A required conversation ledger may precede the revised prose.",
+      "files": [],
+      "assertions": [
+        "Cuts promotional puffery and formulaic milestone language",
+        "Keeps the supplied first-person opinion rather than neutralizing it",
+        "Preserves the two-week support backlog",
+        "Uses natural rhythm without forced slang or invented detail"
+      ]
+    },
+    {
+      "id": "unslop_preserve_precise_terms_01",
+      "prompt": "Unslop this API note: 'The idempotency key prevents duplicate charges when a client retries POST /payments after a timeout. The server stores the first response for 24 hours and returns it for matching retries.'",
+      "expected_output": "Leaves the already-clear note substantially intact, preserving idempotency key, POST /payments, timeout behavior, and the 24-hour rule. A required conversation ledger may precede the revised prose.",
+      "files": [],
+      "assertions": [
+        "Keeps idempotency key and POST /payments because they are precise",
+        "Preserves the timeout, duplicate-charge, stored-response, and 24-hour behavior",
+        "Makes little or no change because the source is already clear",
+        "Outside any required conversation ledger, does not add headings, examples, caveats, or advice"
+      ]
+    },
+    {
+      "id": "unslop_preserve_markdown_01",
+      "prompt": "Unslop this Markdown without changing the command or link: '## Setup\n\nIn order to facilitate initialization, run `farplane install`. It is important to note that configuration details are available in [Setup](docs/setup.md).'",
+      "expected_output": "A shorter setup instruction that preserves the heading, command, and link exactly while removing filler. A required conversation ledger may precede the revised prose.",
+      "files": [],
+      "assertions": [
+        "Removes in order to facilitate and it is important to note",
+        "Preserves the Setup heading",
+        "Preserves `farplane install` exactly",
+        "Preserves [Setup](docs/setup.md) exactly"
+      ]
+    }
+  ]
+}

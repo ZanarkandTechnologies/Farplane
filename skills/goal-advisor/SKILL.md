@@ -115,7 +115,26 @@ whenever the ticket changes. For branch detail load only the relevant reference:
     human/reviewer judgment; keep the rubric and threshold unresolved rather
     than leaving the provider itself unchosen or inventing numbers.
   - [ ] Compile delayed `accept | kill | monitor` procedure only for matured
-    Reward work; immediate Goals mark it not applicable.
+     Reward work; immediate Goals mark it not applicable.
+  - [ ] Compile `Contract Diagram -> Change Plan -> exit assertions -> proof`
+    into the program's Execution Path. Reject missing, contradictory, or
+    circular bindings instead of asking the executor to infer them.
+  - [ ] Emit a Reference Manifest where every listed file names the node,
+    assertion, proof, or drift decision that consumes it; remove orphan refs.
+  - [ ] Emit Completion Closure mapping every ticket Done assertion to an
+    executable proof method and evidence owner. Unsupported rows keep the
+    packet in `revise` or `blocked`.
+  - [ ] Convert and echo every operator complaint tied to a screenshot as one
+    Completion Closure row: `source image + exact complaint | design
+    state/viewport | repair proof | newer comparable capture | independent
+    verdict | pending|supported|operator_withdrawn`. Write it to `program.md`
+    or `progress.md`. Stale, wrong-state, partial, or unrelated evidence keeps
+    `stop_complete` withheld.
+  - [ ] Echo the semantic bindings in the visible compilation receipt before
+    returning `ready`: ordered `Execution Path`, failure branch, consumed-only
+    `Reference Manifest`, and one `Done assertion -> owning change -> evidence
+    source -> supported | pending` row per Completion Closure item. End with
+    `stop_complete: withheld until every closure row is supported`.
   - [ ] Use the shared Decision Backbone. Invoke Leverage Advisor only when
     several plausible moves need judgment; otherwise act directly.
 - [ ] 4. Enforce the first-load budget.
@@ -127,7 +146,8 @@ whenever the ticket changes. For branch detail load only the relevant reference:
     scope, safety, proof, or reconstruction behavior to hit the cap.
 - [ ] 5. Compile state, logging, and drift.
   - [ ] `Files:` names every required ticket/program/tree/progress/spec/design/
-    board/artifact file. Project harness/metrics files appear only when needed.
+    board/artifact file. Project harness/metrics files appear only when needed
+    and every non-core file has a Reference Manifest consumer.
   - [ ] After each turn append observation, evidence, learning, decision,
     remaining budget, and next action; update the tree before the receipt.
   - [ ] Use inline drift for small Goals and `goal-drift-reviewer` for material,
@@ -163,7 +183,11 @@ whenever the ticket changes. For branch detail load only the relevant reference:
   - [ ] Material packets remain pending until the operator approves ticket,
     program, tree when present, progress scaffold, and launcher together.
   - [ ] Apply `qa_checklist.md`; route material prompt/packet review to the
-    reviewer and do not accept below the required TAS gate.
+    reviewer using `goal-program-contract` plus prompt/evidence families, and
+    do not accept below the required TAS gate.
+  - [ ] Return an explicit compilation verdict: `ready`, `revise`, or `blocked`.
+    When not ready, list the failed bindings, report Completion Closure as
+    unsupported, and state that the launcher and `stop_complete` are withheld.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 ## Templates
@@ -178,6 +202,8 @@ ticket_to_goal_packet(ticket.md)
   proof_policy <- QA Strategy
   current_state <- State + latest 80 progress lines
   context_and_evidence <- Links + only branch-required files
+  execution_path <- Contract Diagram + Change Plan + assertions
+  completion_closure <- Done + QA Strategy + evidence owners
 ```
 
 Compiled launcher shape:
@@ -196,6 +222,16 @@ Drift reviewer: goal-drift-reviewer at <checkpoint>
 Approval: <pending | approved | revise | blocked>
 ```
 
+Compilation result shape:
+
+```text
+Verdict: ready | revise | blocked
+Failed bindings: <diagram/order | stale reference | orphan reference | proof closure>
+Completion Closure: supported | unsupported
+Launcher: emitted | withheld
+stop_complete: allowed | withheld
+```
+
 The compact progress receipt is:
 
 ```yaml
@@ -211,11 +247,18 @@ Material completion output:
 
 ```text
 Ticket:
+Execution Path: <ordered diagram IDs -> owning changes>
+Reference Manifest: <only consumed references -> named consumers>
+Completion Closure: <Done assertion -> change -> evidence -> status>
 Verification:
 Artifacts:
 Grounding:
 Residual risk:
 ```
+
+Do not hide semantic compilation inside artifact links. The receipt must expose
+the ordered path, failure branches, consumed references, and every closure row;
+state that `stop_complete` remains withheld unless all rows are supported.
 
 ## Gotchas
 
@@ -249,3 +292,13 @@ Return or write one of:
   Metric/Provider, Drift, Decision Backbone, Proof, Approval, and Next Action;
 - created/updated packet paths plus the compact native `/goal` or heartbeat
   launcher.
+
+For every screenshot complaint, show and write a Completion Closure row:
+
+```text
+source image | exact complaint | design state + viewport | newer comparable capture |
+independent verdict | supported | pending | operator_withdrawn
+```
+
+Only `supported` or an explicit, recorded `operator_withdrawn` can release
+that row. Never summarize the row away in a completion answer.

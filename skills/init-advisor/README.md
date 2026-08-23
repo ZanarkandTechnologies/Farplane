@@ -37,9 +37,8 @@ bash ~/.codex/skills/init-advisor/scripts/bootstrap.sh
 Before finalizing the scaffold, run a bootstrap intake with the same discipline
 as `deep-interview` and keep the answers in `docs/bootstrap-brief.md`.
 That intake should explicitly answer what belongs in `pre-push` or `pre-commit`,
-whether the Codex SDK diff reviewer
-should be advisory or strict, which heavy local checks such as `desloppify` are
-desired, and whether a separate CI/deployment gate exists. It
+whether the Codex SDK diff reviewer should be advisory or strict and whether a
+separate CI/deployment gate exists. It
 should also name the canonical app-only run path, canonical full QA or
 evidence-capture path, required services such as DB or orchestration tools, and
 any port or environment-variable assumptions. When the user wants app code

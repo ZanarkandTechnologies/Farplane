@@ -29,4 +29,4 @@ external implementations. See `MEM-0073`.
 
 Skills should declare judgement questions when the agent must make material
 choices about user segment, metric, guard, scope, source credibility, or
-adoption versus rejection. Those questions route naturally to `advise`.
+adoption versus rejection. Compare those options inline.

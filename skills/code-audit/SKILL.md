@@ -41,7 +41,7 @@ code_audit(codebase, prd?, architecture_docs?, budget?)
   -> component_inventory + ranked_audit_plan + ticket_specs + route_map + evidence
 state: reads(code, PRD/specs, architecture docs, tests, configs, dependency files, ticket history, project rules, runtime commands); writes(audit artifact?, ticket specs?, tickets?, evidence refs?)
 gates: context_bound; components_ranked; architecture_first; findings_evidence_backed; owner_skill_routed; no_broad_rewrite
-routes: impl-plan | refactoring | hardening | runtime-debugging | proof-advisor | testing | review
+routes: impl-plan | refactoring | hardening | runtime-debugging | proof-advisor | review
 fails: whole-repo rewrite plan; unranked checklist dump; style-only churn; security theater; tickets without proof routes; hidden assumptions from chat
 ```
 
@@ -61,7 +61,7 @@ CodeAuditBudget = {
 ## Phase Boundary
 
 This skill follows Tier 0 phases inline. Call `impl-plan`, `refactoring`,
-`hardening`, `proof-advisor`, `testing`, or `review` only when the child scope
+`hardening`, `proof-advisor`, or `review` only when the child scope
 is a specific ticket, module, proof question, or evidence bundle smaller than
 the whole audit.
 
@@ -124,7 +124,7 @@ Finding:
   rank_reason:
   evidence:
   impact:
-  route: refactoring | hardening | runtime-debugging | testing | docs | no-action
+  route: refactoring | hardening | runtime-debugging | proof-advisor | docs | no-action
   ticket:
   proof:
   residual_risk:

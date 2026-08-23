@@ -1,0 +1,52 @@
+{
+  "skill_name": "research",
+  "evals": [
+    {
+      "id": "research_code_patterns_discovery_01",
+      "prompt": "We need to add resumable multipart uploads to the TypeScript service in service/src/upload.ts. External access is unavailable, so use the captured broad-search and repository evidence in evals/fixtures/multipart-pattern-packet.md. Return a decision-ready Pattern Brief in your reply, including reproducible queries, candidate filtering, deep dives, provenance, comparison, and the smallest local implementation/proof shape.",
+      "expected_output": "Selects the code-pattern research method; Converts the question into reproducible literal code, symbol, filename, import, or error-string queries; Searches broadly before choosing finalists; Deep-dives one to three maintained relevant repositories; Gives repository URLs and exact file paths or URLs; Inspects architecture, adjacent tests, and failure handling; Compares approaches and adapts the smallest suitable pattern to the stated local baseline",
+      "files": [
+        "evals/fixtures/multipart-pattern-packet.md",
+        "evals/fixtures/service/src/upload.ts"
+      ],
+      "assertions": [
+        "Selects research:code-patterns rather than inventing a local implementation or routing to a retired wrapper",
+        "Records literal code-oriented queries and a freshness or maintenance bar",
+        "Searches a broad candidate pool before deep-diving the best one to three repositories",
+        "Cites repository URLs plus exact source file paths or file URLs",
+        "Reports the key file map or architecture and inspects adjacent tests and failure paths",
+        "Compares viable approaches and recommends the smallest local adaptation with a proof route"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Research code patterns discovers then deep-dives maintained upload implementations",
+          "tags": ["research", "code-patterns", "github", "implementation"],
+          "notes": "Representative merge proof for the unique discovery and local-adaptation behavior formerly in external-patterns."
+        }
+      }
+    },
+    {
+      "id": "research_code_patterns_repo_deep_dive_01",
+      "prompt": "Use the captured repository snapshot in evals/fixtures/tool-stream-pattern-packet.md to determine how StreamForge streams tool-call results. Return a concise Pattern Brief in your reply with the literal source queries, file map, direct provenance, tests and failure behavior, transferable constraints, and what the smaller Node service should adapt, reject, or defer.",
+      "expected_output": "Selects the code-pattern research method; Uses literal symbols, imports, filenames, or API calls to locate relevant current source; Maps the repository before interpreting one snippet; Cites direct repository and file URLs or paths; Inspects surrounding tests and error or cancellation behavior; Distinguishes copied syntax from transferable design constraints; Recommends a proportional local adaptation and states evidence gaps",
+      "files": [
+        "evals/fixtures/tool-stream-pattern-packet.md"
+      ],
+      "assertions": [
+        "Uses research:code-patterns and loads its deep-dive workflow",
+        "Uses literal source queries rather than tutorial-style natural-language searches",
+        "Provides a key file map and direct repository plus file provenance",
+        "Inspects tests and failure, cancellation, or error handling around the implementation",
+        "Separates repository-specific syntax from transferable architecture constraints",
+        "States what to adapt, reject, or defer for the smaller local service"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Research code patterns maps a named repository before local adaptation",
+          "tags": ["research", "code-patterns", "deep-dive", "provenance"],
+          "notes": "Held-out named-repository case guarding file-map, failure-path, and proportional-adaptation behavior."
+        }
+      }
+    }
+  ]
+}

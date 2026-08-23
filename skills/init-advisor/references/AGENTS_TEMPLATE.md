@@ -90,7 +90,7 @@ slice, proof/falsification, tradeoffs, and non-goals.
 
 ## Operating Modes
 
-- Discovery mode: use `brainstorm` for options and `deep-interview` for ambiguity-gated clarification before PRD/spec writing.
+- Discovery mode: expand options inline and stop for ambiguity-gated operator clarification before PRD/spec writing.
 - Planning mode: create/refresh plan first; get confirmation before implementation.
 - Build mode: execute approved plan, then test/review.
 

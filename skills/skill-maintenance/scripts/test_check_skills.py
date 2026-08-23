@@ -80,6 +80,19 @@ returns: output
 - Output.
 """
 
+GOLDEN_NODE_SKILL = VALID_SKILL.replace(
+    'skill_template_version: "0.1.0"',
+    'skill_template_version: "0.5.0"',
+).replace(
+    "1. Read context.\n2. Choose the branch.\n   1. Default branch.\n   2. Repair branch.\n3. Review before completion.\n   Expected: repeatable from files alone.",
+    "- [ ] **N1 — Qualify the branch.**\n"
+    "  `raw evidence -> qualified state | reject`\n\n"
+    "  Rule: Reject popularity without observed workflow pain.\n\n"
+    "  Example: `200k followers -> no pain -> reject`\n\n"
+    "  Assert:\n"
+    "  - The output names the decisive evidence."
+)
+
 
 class CheckSkillsTemplateStructureTests(unittest.TestCase):
     def setUp(self) -> None:
@@ -108,6 +121,26 @@ class CheckSkillsTemplateStructureTests(unittest.TestCase):
             write_skill(repo, "example", compact)
 
             self.assertEqual(check_skills.template_structure_errors("0.1.0"), [])
+
+    def test_template_structure_accepts_golden_workflow_nodes(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp)
+            check_skills.REPO_ROOT = repo
+            write_registry(repo, "example", version="0.5.0")
+            write_skill(repo, "example", GOLDEN_NODE_SKILL)
+
+            self.assertEqual(check_skills.template_structure_errors("0.5.0"), [])
+
+    def test_template_structure_rejects_golden_node_without_assert(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp)
+            check_skills.REPO_ROOT = repo
+            write_registry(repo, "example", version="0.5.0")
+            write_skill(repo, "example", GOLDEN_NODE_SKILL.replace("  Assert:\n", "  Checks:\n"))
+
+            errors = check_skills.template_structure_errors("0.5.0")
+
+            self.assertTrue(any("needs an Assert block" in error for error in errors))
 
     def test_template_structure_rejects_generic_job_heading(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

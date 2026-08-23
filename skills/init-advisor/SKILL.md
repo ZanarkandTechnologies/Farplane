@@ -76,7 +76,7 @@ init_advisor(project_root?, project_idea?, repo_shape?, stack_profile?, init_mod
    + next_planning_handoff
 state: reads(existing repo files, README/AGENTS/docs/tickets when present, bootstrap brief, project profile, operator context); writes AGENTS/PROJECT_RULES/ARCHITECTURE/docs/tickets/qa/farplane scaffolds, optional stack scaffold, and three dependent business-foundation tickets
 gates: existing_files_preserved; spec_version_recorded; human_gates_named; human_intake_decision_recorded; secrets_not_written; no_hidden_automation; interactive_stack_steps_stop_for_human
-routes: harness-creator | automation-advisor | deep-interview | prd | spec-to-ticket | research:official-docs | research:code-patterns
+routes: harness-creator | automation-advisor | prd | spec-to-ticket | research:official-docs | research:code-patterns
 fails: creates only code scaffolding with no Farplane project config; treats PRD authoring as required init completion; claims full project initialization when human intent, measurable objectives, success criteria, non-goals, or decision boundaries are still missing; deletes stack setup recipes; overwrites existing project state silently
 ```
 
@@ -109,10 +109,9 @@ foundation, not init completion.
 Use destination skill signatures as the question inventory. Route static
 charter, capability workflow references, feedback loops, missing systems, and
 objective shape to `harness-creator`; route metric meaning, directions, guards,
-and proof providers to `metric-advisor`. Escalate to
-`deep-interview --quick` only when direct signature questions would produce
-shallow or misleading answers. Record the intake choice and missing answers in
-`docs/bootstrap-brief.md`; do not embed the Deep Interview loop here.
+and proof providers to `metric-advisor`. When direct signature questions would
+produce shallow or misleading answers, stop for focused operator clarification.
+Record the intake choice and missing answers in `docs/bootstrap-brief.md`.
 
 Do not treat file existence as readiness. Placeholder or stale split project
 files mean "operating model still missing", not "initialized". Keep human

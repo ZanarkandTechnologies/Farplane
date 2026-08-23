@@ -12,7 +12,7 @@ start from a vague prompt.
 
 ## Planner Gates
 
-Ask one focused question at a time, borrowing the `deep-interview` style, until
+Ask one focused question at a time until
 these gates are explicit:
 
 - `Audience`: who must believe this page.
@@ -52,8 +52,8 @@ these gates are explicit:
 - `QA gates`: first viewport, mobile, reduced motion, scroll checkpoints,
   section quality, designer judgment, browser console/errors, source review.
 
-If more than two of these are unresolved, use `deep-interview` rather than
-pretending a landing brief is ready.
+If more than two of these are unresolved, stop for operator clarification rather
+than pretending a landing brief is ready.
 
 ## LANDING_SPEC Shape
 

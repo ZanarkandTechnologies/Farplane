@@ -55,7 +55,7 @@ This skill owns the executable workflow and branch-loaded references.
 doc_advisor(doc_task, target_file?, evidence?, doc_type?) -> docs_strategy | doc_delta + doc_quality_result + review_route?
 state: reads(ticket/plan/diff?, target doc?, nearest owner/index, source/evidence refs, qa_checklist.md, selected references); writes(Docs Strategy block, target doc, optional audit/proof notes)
 gates: docs_strategy_decided; reader_contract_bound_when_writing; owner_surface_chosen; claims_grounded; metadata_checked; checklist_applied; material_review_routed_or_skipped
-routes: reference-grounding | advise | review
+routes: reference-grounding | review
 fails: stale or ungrounded docs; duplicate source-of-truth; wrong feature/system boundary; agent-facing prose in human docs; routine closeout expansion; no-docs decision without reason
 ```
 
@@ -64,8 +64,9 @@ fails: stale or ungrounded docs; duplicate source-of-truth; wrong feature/system
 This skill follows Tier 0 phases inline. Call `review` only when the doc is
 canonical, public, cross-surface, policy-bearing, or a completion claim that
 needs independent judgment; name `documentation-quality` as the review family
-when asking for a TAS verdict. Call `advise` when placement or
-feature-vs-system classification has real tradeoffs.
+when asking for a TAS verdict. When placement or feature-vs-system
+classification has real tradeoffs, compare the viable choices inline and
+recommend one.
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
@@ -168,8 +169,8 @@ doc_contract = {
   material docs are ready.
 - [../reference-grounding/SKILL.md](../reference-grounding/SKILL.md) - compact
   evidence for local, official-doc, current-source, or peer claims.
-- [../advise/SKILL.md](../advise/SKILL.md) - placement, framing, terminology, or
-  feature-vs-system choices with real tradeoffs.
+- Compare placement, framing, terminology, or feature-vs-system choices inline
+  when real tradeoffs remain.
 - [../review/SKILL.md](../review/SKILL.md) - material durable docs, public
   guidance, cross-surface policy, or completion claims.
 

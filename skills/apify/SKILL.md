@@ -4,6 +4,8 @@ version: 1.0.0
 description: "Turn social, video, profile, or place targets into normalized external data through Apify MCP actors when scraping is required."
 tier: 2
 source: local
+capability:
+  kind: integration
 allowed-tools: apify, web_search, documentation-searcher
 ---
 
@@ -22,8 +24,8 @@ allowed-tools: apify, web_search, documentation-searcher
 - [ ] Execute the smallest actor run that can produce the needed records.
 - [ ] Normalize output into the caller's expected shape and preserve actor/run
   provenance.
-- [ ] Use [advise](../advise/SKILL.md) when live scraping vs fixture/dry-run is
-  a material tradeoff.
+- [ ] When live scraping versus fixture/dry-run is a material tradeoff, compare
+  the viable routes and recommend the lowest-risk sufficient one.
 - [ ] Use the [review protocol](../review/SKILL.md) before changing durable actor configs or
   public scraping recipes.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->

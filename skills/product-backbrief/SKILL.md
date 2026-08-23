@@ -3,6 +3,8 @@ name: product-backbrief
 description: "Turn an extended product discussion into an operated product story, ASCII system map, explicit assumptions, and alignment questions before commitment."
 tier: 2
 source: local
+capability:
+  kind: shortcut
 template_uses:
   skill-template: "0.4.0"
   skill-qa-checklist: "0.1.0"
@@ -20,7 +22,7 @@ check whether the agent understands the intended product before requirements,
 tickets, or implementation are committed. It reconstructs the product as a
 user-operated story, not as a transcript summary or feature inventory.
 
-This is a read-only alignment workflow. `task-recap` recovers what happened in
+This is a read-only alignment workflow. A task recap recovers what happened in
 a paused task; `product-backbrief` tests what the recovered discussion means
 for the product. Accept a task recap as optional input, but do not invoke it for
 a live discussion whose product context is already available.
@@ -36,15 +38,16 @@ state: reads(conversation, accepted decisions, product artifacts?, task recap?);
 owns: one proposed product model for operator correction
 gates: product_boundary_bound; decisions_and_inferences_separated;
   operated_story_complete; relationships_legible; human_alignment_pending
-routes: direct-answer | task-recap | deep-interview | prd | impl-plan
+routes: direct-answer | prd | impl-plan
 fails: transcript summary; feature inventory; invented certainty;
   status recap; implementation before alignment; proposed model called approved
 ```
 
 ## Phase Boundary
 
-Use `task-recap` first only when a paused task's authoritative history is
-needed. Route unresolved product decisions to `deep-interview`; route an
+When a paused task's authoritative history is needed, ask the operator to
+explicitly invoke the task-recap shortcut first. Stop for operator clarification
+on unresolved product decisions; route an
 operator-confirmed model to `prd` or `impl-plan`. Do not externalize those
 phases merely to produce the backbrief.
 
@@ -101,14 +104,13 @@ then asks whether Topics should remain a visible destination.
 
 ## Reference Map
 
-- [Task Recap](../task-recap/SKILL.md) — use first only when a paused task's
-  authoritative state must be recovered before product alignment.
-- [Deep Interview](../deep-interview/SKILL.md) — use when the backbrief exposes
-  unresolved intent that requires further questioning.
-- [PRD](../prd/SKILL.md) — use after the operator confirms a product model that
-  needs a durable product requirements artifact.
-- [Impl Plan](../impl-plan/SKILL.md) — use after the confirmed model already has
-  an implementation-ready scope.
+- Explicit operator shortcut: task-recap when a paused task's authoritative
+  state must be recovered before product alignment.
+- Stop for operator clarification when unresolved intent requires further
+  questioning.
+- After operator confirmation, hand off to the owner of a durable requirements
+  artifact or implementation-ready planning scope. That handoff remains a
+  human decision, not an automatic composition edge.
 
 ## Output
 

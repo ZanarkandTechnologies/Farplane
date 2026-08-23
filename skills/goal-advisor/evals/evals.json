@@ -264,6 +264,60 @@
         "Does not duplicate a frontier, children, depth, rank, tournament, or numeric scorer"
       ],
       "metadata": {"farplane": {"title": "Goal Advisor compiles the experiment backbone", "tags": ["skill", "goal-advisor", "hypothesis-tree"], "notes": "Protects conditional tree instantiation and state ownership."}}
+    },
+    {
+      "id": "goal_advisor_rejects_plausible_incoherent_packet_01",
+      "prompt": "Compile this approved UI ticket into a Goal. The ticket diagram says S1 select account -> S2 load dashboard -> S3 show recovery, but program.md implements the recovery screen before account selection. design.md still shows the removed S0 welcome screen. The Files list includes three research notes that no step names. Done says the UI matches design.md, while the only planned proof is unit tests. The packet otherwise looks polished and complete.",
+      "expected_output": "Returns revise or blocked instead of launching; Identifies the execution-order contradiction; Identifies the stale design reference; Removes or binds orphan references; Maps UI Done assertions to operated capture and design comparison; Refuses stop_complete until every completion row has current evidence",
+      "files": [],
+      "assertions": [
+        "Does not launch or call the packet ready merely because every section exists",
+        "Names the contradiction between diagram order and the compiled execution path",
+        "Names design.md as stale because it contains removed state S0",
+        "Requires every non-core reference to have a named consumer or be removed",
+        "Maps the UI fidelity assertion to operated capture plus comparison against design.md",
+        "Returns a revise or blocked verdict until Completion Closure is fully supported"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Goal Advisor rejects a polished but semantically incoherent packet",
+          "tags": ["skill", "goal-advisor", "hardcase", "semantic-coherence"],
+          "notes": "Prevents good-looking Goal programs from launching with contradictory paths, stale refs, or unprovable Done claims."
+        }
+      }
+    },
+    {
+      "id": "goal_advisor_compiles_coherent_assertion_closure_01",
+      "prompt": "Compile an approved backend ticket whose ASCII contract is R1 receive webhook -> R2 verify signature -> R3 persist event, with F1 reject invalid signatures. Change 1 owns R1-R2 and Change 2 owns R3. Done requires valid persistence, invalid rejection, and no duplicate writes. The ticket names focused tests and an operated replay artifact.",
+      "expected_output": "Compiles the diagram into the same ordered execution path; Preserves F1 as a tested branch; Binds each Done assertion to a change and evidence source; Lists only consumed references; Defines completion as supported closure rather than task execution alone",
+      "files": [],
+      "assertions": [
+        "Preserves R1 -> R2 -> R3 ordering in the compiled execution path",
+        "Maps F1 invalid-signature rejection to an explicit branch and proof",
+        "Maps valid persistence and duplicate-write prevention to owning changes and evidence",
+        "Does not add unrelated references to the manifest",
+        "Requires all Completion Closure rows to be supported before stop_complete"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Goal Advisor compiles a coherent backend contract into assertion closure",
+          "tags": ["skill", "goal-advisor", "completion-closure", "backend"],
+          "notes": "Positive control for the semantic program contract."
+        }
+      }
+    },
+    {
+      "id": "goal_advisor_screenshot_complaint_blocks_closure_01",
+      "prompt": "Compile a Goal Packet for this task: I said the DS3 screenshot reads like developer tooling rather than a buyer page. The builder says it is fixed, but sent an older DS2 image and passing tests. Can this task be marked done?",
+      "expected_output": "Compiles a blocked Goal Packet rather than marking the task done; preserves the DS3 complaint and missing source state/viewport as work to recover; rejects earlier DS2 evidence; requires repair, a newer comparable DS3 capture, and independent visual verdict before completion.",
+      "files": [],
+      "assertions": [
+        "Creates or names durable packet artifacts that preserve the complaint",
+        "Rejects stale and wrong-state evidence",
+        "Requires newer comparable capture and independent verdict",
+        "Blocks completion until the evidence is resolved"
+      ],
+      "metadata": {"farplane": {"title": "Screenshot complaints are completion-blocking proof obligations", "tags": ["skill", "goal-advisor", "complaint", "completion-closure"]}}
     }
   ]
 }

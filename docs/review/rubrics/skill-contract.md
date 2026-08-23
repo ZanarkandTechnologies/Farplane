@@ -23,8 +23,18 @@ templates, or skill maintenance rules changed.
   registry metadata let another agent identify when to invoke the skill.
 - [ ] `scope-bounded`: The trigger is neither too broad nor too narrow and does
   not pretend the skill is a universal router.
-- [ ] `checklist-operational`: The `## Todo List` tells the next
-  agent what to do now instead of teaching the whole domain.
+- [ ] `nodes-executable`: Every top-level Todo is one bounded Golden Workflow
+  Node with a compact input/output-or-branch signature, a domain Rule,
+  observable Assert conditions, and inspectable state for its consumer.
+- [ ] `nodes-specific`: A node cannot be pasted into an unrelated skill with
+  noun substitution. Generic bind, inspect, transform, preserve, self-audit,
+  and next fields do not count as domain workflow value.
+- [ ] `edge-visible`: At least one important node uses a non-obvious signal to
+  change a decision or route. Important domain skills reach `differentiated`;
+  `proven` is reserved for candidate/no-skill hardcase evidence.
+- [ ] `golden-calibrated`: Judgment-heavy or quality-dependent paths include a
+  representative end-to-end golden trace with decisive nodes, accepted output,
+  transferable invariants, and a generic/no-skill comparison.
 - [ ] `branch-aware`: Branch labels or conditional steps are clear without
   nested checklist complexity.
 - [ ] `reference-placement`: Onboarding, examples, templates, long rubric
@@ -35,6 +45,10 @@ templates, or skill maintenance rules changed.
   or artifact proof commands are explicit and runnable.
 - [ ] `source-of-truth-clear`: Generated copies, registries, plugin outputs, or
   installed copies are not treated as a second source of truth.
+- [ ] `qa-owned`: A touched `qa_checklist.md` has an explicit `keep | migrate |
+  delete` decision. Only skill-specific runtime, safety, or preflight guards
+  remain; structure, judgment, and deterministic rules use their canonical
+  node, golden, eval, rubric, or validator owners.
 
 ### Blocker Checks
 
@@ -48,6 +62,10 @@ templates, or skill maintenance rules changed.
   references, templates, README, or generated outputs in a way likely to drift.
 - [ ] `bloated-first-load`: Required first-load content is long enough that a
   normal invocation will skip or misapply it.
+- [ ] `generic-default-path`: The normal path remains generic assistant hygiene
+  and therefore supplies no reusable domain advantage.
+- [ ] `golden-answer-key`: The example can be copied as fixture facts or wording
+  instead of transferring decisive invariants to held-out inputs.
 
 ### Evidence Checks
 
@@ -62,6 +80,21 @@ templates, or skill maintenance rules changed.
   research, evals, and reviewer readiness.
 - [ ] `registry-validated`: Registry or generated graph/plugin sync output was
   validated when metadata or generated surfaces changed.
+- [ ] `behavior-compared`: Behavior-sensitive changes include normal, hard,
+  and boundary cases; a `proven` edge includes candidate/no-skill evidence.
+
+## Advantage Calibration
+
+```text
+generic        = reusable assistant hygiene
+operational    = domain nouns and concrete outputs
+differentiated = non-obvious signal -> decision rule -> changed route
+proven         = differentiated behavior beats no-skill on representative hardcases
+```
+
+Do not average this into a numeric score. A skill is not ready when its default
+path is `generic`; important domain skills require `differentiated`. Claim
+`proven` only with inspected comparison evidence.
 
 ## Evidence Cues
 
@@ -79,3 +112,6 @@ templates, or skill maintenance rules changed.
 - Missing proof commands for changed scripts or generated registries
 - Stale generated plugin or graph copy
 - Repeated wording that will drift across `SKILL.md`, references, and templates
+- Todo nodes whose Rule or Assert merely restates their title
+- Goldens that show a polished output but hide the decisive workflow moves
+- QA sidecars containing shared structure checks or generic finish ceremony

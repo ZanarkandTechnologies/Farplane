@@ -22,8 +22,8 @@ allowed-tools: Read, Glob, Grep
   source wholesale.
 - [ ] Produce adopt, adapt, reject, and defer decisions.
 - [ ] Name the synthesized recommendation and the tradeoff accepted.
-- [ ] Use [advise](../advise/SKILL.md) when several synthesized paths remain
-  viable after scoring.
+- [ ] When several synthesized paths remain viable after scoring, compare their
+  tradeoffs and recommend one directly.
 - [ ] Use the [review protocol](../review/SKILL.md) before promoting decisions into tickets,
   docs, or skill changes.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
@@ -82,7 +82,7 @@ Load `references/feature-scoring.md` before scoring features and
 
 ## Judgement Questions
 
-Use `advise` when these cannot be answered mechanically:
+Compare the viable options inline when these cannot be answered mechanically:
 
 - Which source is most credible for the target user and why?
 - Is this feature a must-have, a useful adaptation, or distracting parity bait?
@@ -150,7 +150,7 @@ After this skill runs, the output should include:
 
 Reference split:
 
-- `references/architecture.md` for boundaries with parity/gap/advise
+- `references/architecture.md` for parity, gap, and decision boundaries
 - `references/workflows.md` for detailed phases
 - `references/gotchas.md` for research and synthesis failure modes
 - `references/feature-scoring.md` for the decision matrix

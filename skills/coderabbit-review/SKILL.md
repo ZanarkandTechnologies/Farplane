@@ -3,6 +3,8 @@ name: coderabbit-review
 description: "Turn local changes or a PR branch into a heavyweight CodeRabbit CLI review result when external review is useful before push."
 tier: 2
 source: local
+capability:
+  kind: integration
 allowed-tools: Read, Glob, Grep, Bash
 ---
 

@@ -8,8 +8,6 @@ template_uses:
   skill-template: "0.3.7"
 common_chains:
   after: ["review", "qa"]
-metadata:
-  tags: remotion, video, react, animation, composition
 eval: evals/evals.json
 ---
 

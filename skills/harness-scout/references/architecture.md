@@ -16,19 +16,22 @@ runtime.
 
 ## Upstream Inputs
 
-- [summarize](../../summarize/SKILL.md): extracts source content
+- direct `farplane run -- summarize "$source" --extract`: extracts source
+  content without a wrapper skill; supplied content, a proven browser/text
+  extraction, or [media-ingest](../../media-ingest/SKILL.md) is the bounded
+  fallback when applicable
 - `docs/sources/registry.jsonl`: source identity, provenance, and dedupe
 - system/feature metadata and generated registries: dedupe and local
   baseline
 - `docs/features/README.md`: human-readable current inventory
 - [codebase-analysis](../../codebase-analysis/SKILL.md): checks local behavior
   when registry/docs search is inconclusive
-- [external-patterns](../../external-patterns/SKILL.md): checks source repos or
-  real implementation patterns
+- [research:code-patterns](../../research/SKILL.md#researchcode-patterns):
+  checks source repos or real implementation patterns
 - [doc-advisor](../../doc-advisor/SKILL.md): checks official docs for
   platform, API, or standard claims
-- [brainstorm](../../brainstorm/SKILL.md): explores alternate scout workflows
-  when the operator asks for options
+- Inline option expansion: explores alternate scout workflows when the operator
+  asks for options
 - [reference-grounding](../../reference-grounding/SKILL.md): compact evidence
   checks before scoring source claims
 - [research:parity](../../research/SKILL.md#researchparity): external
@@ -36,8 +39,7 @@ runtime.
 - [research:gap](../../research/SKILL.md#researchgap): repo-specific
   missing-scope checks
 - [best-of-worlds](../../best-of-worlds/SKILL.md): multi-source synthesis
-- [advise](../../advise/SKILL.md): judgement calls when evidence leaves a real
-  decision
+- Inline comparison: judgment calls when evidence leaves a real decision
 
 ## Downstream Outputs
 

@@ -5,6 +5,8 @@ description: "Route Convex project questions to official Convex AI instructions 
 tier: 3
 group: operations
 source: external
+capability:
+  kind: integration
 upstream_url: https://github.com/get-convex/agent-skills/blob/main/skills/convex/SKILL.md
 ---
 

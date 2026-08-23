@@ -13,7 +13,9 @@ separate same-level research wrapper skills.
 - `research:competitor`: named product or workflow comparison
 - `research:official-docs`: official API, platform, protocol, or standard
   behavior
-- `research:code-patterns`: maintained-repo implementation examples
+- `research:code-patterns`: literal-code discovery plus maintained-repository
+  deep dives, file maps, tests/failures, comparison, and local adaptation; its
+  conditional workflow lives in `references/code-patterns.md`
 - `research:source-synthesis`: compact source normalization before
   `best-of-worlds`
 - `SKILL.md` Todo List: method and dependency checklist
@@ -31,4 +33,5 @@ separate same-level research wrapper skills.
 
 - Confirm every method has an anchor in `SKILL.md`.
 - Confirm the `SKILL.md` Todo List links Tier 1 primitives and method anchors.
-- Confirm old live `parity-research` and `gap-analysis` packages are absent.
+- Confirm retired public wrappers, including `external-patterns`, are absent.
+- Validate `evals/evals.json` and run the focused research eval comparison.

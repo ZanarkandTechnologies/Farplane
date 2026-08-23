@@ -114,9 +114,9 @@ Use these lenses when relevant and include findings under this rubric:
   neighboring-surface inconsistency, or failure-path miss with file context when
   possible.
 
-## Desloppify Cues
+## Skeptic search cues
 
-When using the anti-slop playbook, search for:
+When checking neighboring code surfaces, search for:
 
 - a duplicated constant, helper, or policy that should have changed too
 - a rename that stopped at the primary file

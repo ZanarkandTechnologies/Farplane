@@ -15,7 +15,7 @@ often produces mismatched HTML/CSS/JS, missing assets, and no final review.
 
 Start from the parent skill `SKILL.md` Todo List for the full modern scroll-scrub recipe. This gate
 defines the phase boundary after the checklist has produced the reference
-matrix, user story, ASCII flow, nested `advise` decisions, and asset plan.
+matrix, user story, ASCII flow, inline tradeoff decisions, and asset plan.
 
 1. `spec`: produce or update `SPEC.md`; do not build yet unless a spec already
    exists and the current prompt explicitly asks for a later phase.

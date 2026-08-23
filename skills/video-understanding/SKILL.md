@@ -97,7 +97,7 @@ A complete pass produces a `VideoReconstructionBrief`:
 
 ## Judgement Questions
 
-Use [advise](../advise/SKILL.md) when the answer is not mechanical:
+When the answer is not mechanical, compare the viable options inline:
 
 - Is the source teaching a reusable skill or just showing a one-off artifact?
 - Is the right output a new skill, an existing skill method, a reference file,

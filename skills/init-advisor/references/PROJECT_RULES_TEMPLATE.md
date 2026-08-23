@@ -77,7 +77,6 @@ This file defines the project-specific technical rules, tech stack, and conventi
   - Tests: `[command]`
   - Build: `[command or optional]`
 - **Optional heavy checks**:
-  - Desloppify: `[command or disabled]`
   - Reviewer agent: `[review command or disabled]`
 
 ## 🧹 Maintainability / Refactoring

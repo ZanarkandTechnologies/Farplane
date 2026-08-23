@@ -26,7 +26,7 @@ Required fields:
 - `scope_out`: tempting cleanup, rewrites, or adjacent issues intentionally
   deferred.
 - `owner_skill`: `impl-plan`, `refactoring`, `hardening`,
-  `runtime-debugging`, `testing`, `doc-advisor`, or another concrete owner.
+  `runtime-debugging`, `proof-advisor`, `doc-advisor`, or another concrete owner.
 - `done_when`: behavior, structure, proof, and review conditions.
 - `proof`: commands, tests, evals, QA, review gates, or evidence artifacts.
 - `residual_risk`: what remains uncertain after this ticket.

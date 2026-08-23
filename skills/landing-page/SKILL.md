@@ -142,7 +142,7 @@ Section := Job + Claim + Layout + AssetCarrier + MotionLever + ProofPayload + Fa
 
 MethodSelection(section, methods, constraints) :=
   candidates = filter(methods, section, constraints)
-  chosen = advise(top3(candidates))
+  chosen = compare_and_recommend(top3(candidates))
 ```
 
 Use `references/model.md` for the algebra and section matrix rules. Keep the
@@ -175,7 +175,7 @@ one software Change Plan; this skill never creates a child implementation plan.
    relevant motion/media references before writing the spec.
 2. **Interview with gates.** Ask one high-leverage question at a time when
    audience, narrative, taste, non-goals, or decision boundaries are vague. Use
-   `deep-interview` when more than two gates remain unresolved.
+   stop for operator clarification when more than two gates remain unresolved.
 3. **Research the competitive and inspiration set.** Before choosing a story or
    asset plan, collect 3-5 competitor/comparable/inspiration references and
    record what assets, section order, proof patterns, layout moves, motion
@@ -186,7 +186,7 @@ one software Change Plan; this skill never creates a child implementation plan.
    naming what the local page must match, adapt, reject, or defer.
 4. **Synthesize best-of-worlds decisions.** Use `best-of-worlds` to mark the
    reference patterns `adopt`, `adapt`, `reject`, or `defer`, then use
-   `brainstorm` to define a unique take that is not a collage of competitor
+   define a unique first-principles take that is not a collage of competitor
    sections. The spec must include the resulting golden standard and the local
    differentiation move.
 5. **Choose the story shape.** Problem -> shift -> proof -> action, or a
@@ -207,7 +207,8 @@ one software Change Plan; this skill never creates a child implementation plan.
    media, and reduced-motion alternatives. Do not plan custom SVG illustrations
    or hand-authored SVG/data-overlay visuals for premium landing-page graphics;
    use generated/real raster media or real WebGL/Three.js when the page needs a
-   visual system. Use `advise` when the best carrier is not obvious.
+   visual system. When the best carrier is not obvious, compare the viable
+   options inline and recommend one.
    For industrial or physical-industry public pages, prefer real/generated
    workplace, machinery, product, site, or operations media as the first
    credibility signal. Code-native 3D, dashboards, and diagrams may support the
@@ -388,7 +389,7 @@ For landing pages with reusable formulas or inspiration references:
 - `qa_checklist.md` - preflight and final guardrails for ambition fit,
   effect-use, downgrade honesty, handoff boundaries, and downstream review
   requirements.
-- `SKILL.md` Todo List - ordered modern scroll-scrub landing recipe with competitor analysis, nested `advise`, asset generation, scroll-scrub instrumentation, and QA handoff.
+- `SKILL.md` Todo List - ordered modern scroll-scrub landing recipe with competitor analysis, inline tradeoff decisions, asset generation, scroll-scrub instrumentation, and QA handoff.
 
 ## Output Contract
 

@@ -20,8 +20,8 @@ allowed-tools: Read, Glob, Grep
   signatures, storage, triggers, retries, and failure modes are explicit.
 - [ ] Keep the readiness gates visible: non-goals, decision boundaries,
   autonomy readiness, sync/async tradeoffs, and one pressure pass.
-- [ ] Use [advise](../advise/SKILL.md) when architecture options are genuinely
-  viable and the plan needs one recommended tradeoff.
+- [ ] When architecture options are genuinely viable, compare them and record
+  one recommended tradeoff in the brief.
 - [ ] Use the [review protocol](../review/SKILL.md) before treating the System Design Brief
   as ready for `impl-plan`, `agent-testability-plan`, or `spec-to-ticket`.
 - [ ] Write the final brief into the active ticket or canonical spec surface.
@@ -35,7 +35,7 @@ Deep System Design is an architecture-first Socratic clarification loop before i
 - The request is clear at the product level but still vague at the system-design level
 - The user wants architecture and decomposition before code
 - The user says "deep system design", "do the system design first", "figure out the signatures", "what are the tables", or "work backward from the data/customer"
-- `deep-interview` or normal discussion has clarified intent, but `agent-testability-plan`, `impl-plan`, or `spec-to-ticket` would still have to invent major system shape
+- operator discussion has clarified intent, but `agent-testability-plan`, `impl-plan`, or `spec-to-ticket` would still have to invent major system shape
 - You need a strict intermediate spec between the idea and implementation
 </Use_When>
 

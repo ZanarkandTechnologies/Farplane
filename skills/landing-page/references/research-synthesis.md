@@ -43,8 +43,8 @@ patterns that need assets, customers, or claims the run does not have.
 
 ## Brainstorm Unique Take
 
-After the decision matrix, use `brainstorm` to choose 2-4 possible creative
-angles and recommend one:
+After the decision matrix, expand 2-4 possible creative angles inline and
+recommend one:
 
 - What is the unexpected narrative frame?
 - What visual world makes this page memorable?

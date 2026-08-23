@@ -19,8 +19,8 @@ source: local
   claims about behavior.
 - [ ] Include file/line references for important claims.
 - [ ] Map the code path or reusable pattern in the smallest useful shape.
-- [ ] Use [advise](../advise/SKILL.md) only when the analysis reveals multiple
-  legitimate implementation paths.
+- [ ] When the analysis reveals multiple legitimate implementation paths,
+  compare their tradeoffs and recommend one directly.
 - [ ] Use the [review protocol](../review/SKILL.md) before the analysis becomes a durable
   plan, ticket, or doc update.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->

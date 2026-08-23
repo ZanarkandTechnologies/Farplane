@@ -15,10 +15,12 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from bin.core.skill_departments import DepartmentTaxonomyError, load_skill_departments
-from bin.core.skill_frontmatter import (
-    SkillFrontmatterError,
+from bin.core.skill_contract import (
+    FrontmatterError,
+    normalize_capability_contract as parse_capability_contract,
     normalize_method_contracts as parse_method_contracts,
-    parse_frontmatter,
+    normalize_skill_frontmatter,
+    parse_skill_frontmatter,
 )
 from bin.validators.template_usage import TemplateUsageError, normalize_template_uses
 
@@ -55,7 +57,17 @@ class RegistryError(Exception):
 def normalize_method_contracts(value: Any, skill_name: str, path: Path) -> list[dict[str, str]]:
     try:
         return parse_method_contracts(value, skill_name, path)
-    except SkillFrontmatterError as exc:
+    except FrontmatterError as exc:
+        raise RegistryError(str(exc)) from exc
+
+
+def normalize_capability_contract(
+    value: Any,
+    path: Path,
+) -> dict[str, Any] | None:
+    try:
+        return parse_capability_contract(value, path)
+    except FrontmatterError as exc:
         raise RegistryError(str(exc)) from exc
 
 
@@ -245,6 +257,76 @@ def attach_todo_skill_refs(repo_root: Path, rows: list[dict[str, Any]]) -> None:
             row["todo_skill_refs"] = refs
 
 
+def validate_shortcut_composition_leaves(
+    repo_root: Path,
+    rows: list[dict[str, Any]],
+) -> None:
+    """Keep explicit-only shortcuts out of composition edges in both directions."""
+
+    shortcut_names = {
+        row["name"]
+        for row in rows
+        if isinstance(row.get("capability"), dict)
+        and row["capability"].get("kind") == "shortcut"
+    }
+    if not shortcut_names:
+        return
+    for row in rows:
+        composition_refs = {
+            "todo_skill_refs": [
+                skill_ref_name(ref) for ref in row.get("todo_skill_refs", [])
+            ],
+            "skill_links": [skill_ref_name(ref) for ref in row.get("skill_links", [])],
+            "common_chains": [
+                skill_ref_name(ref)
+                for ref in row.get("common_chains", {}).get("after", [])
+            ],
+        }
+        targeted = {
+            field: sorted(set(refs) & shortcut_names)
+            for field, refs in composition_refs.items()
+            if set(refs) & shortcut_names
+        }
+        if targeted:
+            details = "; ".join(
+                f"{field}={','.join(refs)}" for field, refs in targeted.items()
+            )
+            source_path = repo_root / row["path"]
+            raise RegistryError(
+                f"{source_path}: composition must not target explicit-only shortcut "
+                f"skill(s) ({details})"
+            )
+
+    for row in rows:
+        capability = row.get("capability")
+        if not isinstance(capability, dict) or capability.get("kind") != "shortcut":
+            continue
+        composition_refs = {
+            "todo_skill_refs": [
+                skill_ref_name(ref) for ref in row.get("todo_skill_refs", [])
+            ],
+            "skill_links": [skill_ref_name(ref) for ref in row.get("skill_links", [])],
+            "common_chains": [
+                skill_ref_name(ref)
+                for ref in row.get("common_chains", {}).get("after", [])
+            ],
+        }
+        populated = {
+            field: sorted(set(refs))
+            for field, refs in composition_refs.items()
+            if refs
+        }
+        if populated:
+            details = "; ".join(
+                f"{field}={','.join(refs)}" for field, refs in populated.items()
+            )
+            source_path = repo_root / row["path"]
+            raise RegistryError(
+                f"{source_path}: explicit-only shortcut must be a composition leaf; "
+                f"remove outbound composition refs ({details})"
+            )
+
+
 def validate_todos_hierarchy(repo_root: Path, rows: list[dict[str, Any]]) -> None:
     tier_by_name = {row["name"]: row["tier"] for row in rows}
     for row in rows:
@@ -278,8 +360,9 @@ def build_registry(repo_root: Path) -> list[dict[str, Any]]:
     for skill_path in skill_paths:
         skill_dir = skill_path.parent
         try:
-            metadata = parse_frontmatter(skill_path)
-        except SkillFrontmatterError as exc:
+            metadata = parse_skill_frontmatter(skill_path)
+            metadata = normalize_skill_frontmatter(metadata, skill_path)
+        except FrontmatterError as exc:
             raise RegistryError(str(exc)) from exc
         retired_fields = RETIRED_FRONTMATTER_FIELDS.intersection(metadata)
         if retired_fields:
@@ -342,10 +425,16 @@ def build_registry(repo_root: Path) -> list[dict[str, Any]]:
         }
         if tier == 3:
             row["group"] = group
-
         methods = normalize_method_contracts(metadata.get("methods"), name, skill_path)
         if methods:
             row["methods"] = methods
+
+        capability = normalize_capability_contract(
+            metadata.get("capability"),
+            skill_path,
+        )
+        if capability:
+            row["capability"] = capability
 
         common_chains = normalize_common_chains(metadata.get("common_chains"), skill_path, tier)
         if common_chains:
@@ -380,6 +469,7 @@ def build_registry(repo_root: Path) -> list[dict[str, Any]]:
         rows.append(row)
 
     attach_todo_skill_refs(repo_root, rows)
+    validate_shortcut_composition_leaves(repo_root, rows)
     validate_common_chain_refs(rows)
     validate_todos_hierarchy(repo_root, rows)
     return rows

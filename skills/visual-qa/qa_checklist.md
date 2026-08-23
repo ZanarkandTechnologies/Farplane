@@ -23,8 +23,11 @@ Use this after changing `visual-qa` or before accepting a visual QA report.
    - Violation: The report invents the expected UI.
 
 2. `screenshot-present`
-   - Question: Does each judged screen/state cite a screenshot or image?
-   - Violation: The verdict relies only on prose, logs, or route completion.
+   - Question: Does each judged screen/state cite a screenshot or image, and
+     does long-form UI include operated-scroll, desktop/mobile full-page, and
+     readable top/middle/bottom evidence for every required section?
+   - Violation: The verdict relies only on prose, logs, route completion, a
+     first viewport, or an unreadably compressed full-page image.
 
 3. `geometry-assertions`
    - Question: Does each visual verdict include layout/geometry assertions or

@@ -1,6 +1,6 @@
 ---
 template_id: skill-method-reference
-template_version: "0.1.0"
+template_version: "0.2.0"
 feature_refs:
   - FEAT-0057
 consumer_scope: skill-reference
@@ -37,9 +37,18 @@ input_packet:
 
 ## Workflow
 
-1. **{Step name}.** {Action and expected intermediate result.}
-2. **{Step name}.** {Action and expected intermediate result.}
-3. **{Step name}.** {Action and expected intermediate result.}
+- [ ] **M1 — {domain verb + concrete outcome}.**
+  `{input_state} -> {output_state} | {named_branch}`
+
+  Rule: {conditional method decision that changes the route.}
+
+  Example: `{representative input} -> {decisive signal} -> {accepted output}`
+
+  Assert:
+  - {observable intermediate or final condition}
+  - {rejection or branch condition}
+
+Repeat only for bounded method nodes actually used by this branch.
 
 ## Output Shape
 
@@ -49,11 +58,6 @@ method_output:
   evidence:
   blockers:
 ```
-
-## Quality Gates
-
-- {Gate that proves the method transformed inputs into usable behavior.}
-- {Gate that prevents common drift or misuse.}
 
 ## Bad Output
 

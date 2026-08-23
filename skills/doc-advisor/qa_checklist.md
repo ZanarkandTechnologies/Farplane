@@ -109,6 +109,13 @@ and cross-surface policy need the full gate.
 ## Structure And Writing
 
 - Sections follow the reader's task order.
+- Write like one capable human to another. Prefer plain, concrete words and
+  name the actor, mechanism, decision, or measurable result.
+- Use a specialized term only when it is more accurate than the plain word;
+  define it when the intended reader may not know it.
+- Split a sentence when the reader must backtrack to parse it.
+- If a sentence could appear unchanged in another project's docs, make it
+  specific or cut it.
 - Examples teach the current model and are complete enough to use.
 - Tables, signatures, and checklists make action easier rather than adding
   ceremony.

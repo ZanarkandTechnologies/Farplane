@@ -14,15 +14,14 @@ qa_checklist: qa_checklist.md
 
 `visual-qa` is the screenshot judgment layer. It does not operate the browser,
 write ticket state, or replace `qa`; it compares captured UI evidence against a
-ticket's `Agent Contract`, optional `design.md`, `docs/TASTE.md`, and declared
-screens/states.
+ticket's required UI `design.md`, `docs/TASTE.md`, and declared screens/states.
 
 ## Skill Signature
 
 ```text
 visual_qa(ticket, design_or_ui_spec, screenshots) -> visual_verdict + best_image + fix_plan
-state: reads(ticket.md, optional design.md, docs/TASTE.md, screenshots/snapshots/logs); writes(visual-qa.md or report section under ticket QA artifacts)
-gates: expected_screens_named; screenshots_present; geometry_assertions_present; best_image_named
+state: reads(ticket.md, required UI design.md, docs/TASTE.md, screenshots/snapshots/logs); writes(visual-qa.md or report section under ticket QA artifacts)
+gates: design_baseline_present; expected_screens_named; screenshots_present; state_ids_compared; geometry_assertions_present; best_image_named
 routes: qa | review
 fails: drives browser; judges route completion as visual pass; passes without screenshots; omits best evidence image
 ```
@@ -37,15 +36,22 @@ needs TAS judgment.
 ## Todo List
 
 - [ ] Read the active ticket, its declared screens/states, and its evidence checklist before judging the UI.
-- [ ] Read `tickets/TASK-XXXX/design.md` when present; otherwise use the
-  ticket `Agent Contract` and declared screens/states as the design baseline.
+- [ ] Require `tickets/TASK-XXXX/design.md` for UI-bearing tickets. If it is
+  absent, stale, or lacks copy-complete ASCII states, return underspecified
+  instead of inventing a baseline from the implementation.
 - [ ] Start the verdict by naming the expected baseline:
   `Expected baseline: design.md | Agent Contract | ticket state | missing`.
 - [ ] Read `docs/TASTE.md` when taste, density, or layout quality is in scope.
 - [ ] If the ticket is too vague to judge honestly, fail it as underspecified instead of reward-hacking a route completion.
 - [ ] Compare one declared screen or state at a time rather than treating the happy path as enough.
-- [ ] For each constraint, emit `<source path> -> <evidence path> -> PASS|FAIL`; preserve it until superseded.
+- [ ] For each ASCII state ID and constraint, emit
+  `<design.md ID> -> <evidence path> -> PASS|FAIL|not_provable`; preserve it
+  until superseded.
 - [ ] Capture or inspect the evidence that the ticket says matters.
+- [ ] For long-form UI, require an operated scroll, desktop/mobile full-page
+  captures, readable top/middle/bottom frames, and a section-ID coverage map.
+  A first viewport proves only that viewport; any uncovered required section is
+  non-pass.
 - [ ] Produce the required four-part visual QA report for each screen or state.
 - [ ] Include geometry and layout assertions, not just aesthetic commentary.
 - [ ] Identify the best user-facing evidence item for ticket writeback.
@@ -82,12 +88,16 @@ If the ticket is underspecified, fail early instead of reward-hacking a route.
 Before judging any screen, read:
 
 1. the active ticket in `tickets/TASK-*/ticket.md` or the delegated ticket file/section,
-2. `tickets/TASK-XXXX/design.md` when present,
+2. required `tickets/TASK-XXXX/design.md` with ASCII screen/state IDs,
 3. the ticket's UI contract (`Key screens/states`, `Taste refs`, `Expected artifacts`),
 4. the ticket `Evidence checklist`, if present,
 5. `docs/TASTE.md` when UI taste or layout quality is in scope.
 
 If the ticket does not define the expected screens/states well enough to compare against reality, stop and mark QA as underspecified instead of improvising a vague check.
+
+The report must state whether the observed implementation matches the ASCII
+contract, not merely cite `design.md`. Any material unmatched state or
+assertion makes the verdict non-pass.
 
 ## Verdict Start
 
@@ -125,7 +135,7 @@ QA is screen-first, not route-first.
 
 For each declared screen or state in the ticket:
 
-1. restate the expected screen in one short block,
+1. name its `design.md` state ID and restate the expected screen in one short block,
 2. capture the declared evidence for that screen/state,
 3. compare layout and style,
 4. compare behavior and state,
@@ -223,6 +233,7 @@ For each interactive element (CTA, tabs, menus, inputs):
 Treat QA as incomplete and return `FAIL` when any of these are true:
 
 - the ticket does not identify the key screens/states to compare,
+- UI work lacks a current `design.md` ASCII screen/state contract,
 - the expected design language is missing and cannot be inferred from `docs/TASTE.md`,
 - the route or launch path is too vague to reproduce reliably,
 - the feature needs extra instrumentation and the ticket does not acknowledge it.
@@ -258,6 +269,9 @@ Use this exact structure:
 - `Fix directives`: exact implementation changes (component/class/CSS-level)
 - `Artifacts`: paths to snapshots/screenshots/logs/traces
 - `Best evidence item`: the screenshot/artifact `qa-tester` should surface in the ticket `Evidence` section
+- `Design coverage`: one row per declared state/section with current desktop,
+  mobile, and readable sectional evidence plus `PASS | FAIL | not_provable`.
+  Long pages also name the operated scroll-to-bottom observation.
 
 Write the report to:
 

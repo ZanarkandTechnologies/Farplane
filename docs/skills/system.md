@@ -126,7 +126,7 @@ recommendation such as `keep`, `harden`, `refine`, `merge`, `watch`, or
 ## Phase Ownership And Recursion
 
 Every skill invocation may perform Tier 0 phases inline. A skill should call a
-phase-like skill such as `plan`, `review`, or `eval` only when that phase needs
+phase-like skill such as `review` or `eval` only when that phase needs
 its own durable artifact, independent judgment, explicit budget, handoff, or
 proof surface.
 
@@ -139,11 +139,10 @@ inline_phase(skill, phase, task) -> local_decision
 external_phase(skill, phase, task, budget) -> artifact + evidence
 ```
 
-`plan` does not own review. It owns task decomposition, selected workflows,
-proof target, handoff shape, and an optional review request for the plan
-artifact. `review` does not own planning. It owns judgment of an artifact
-against selected rubrics, and may plan its own review inline when the scope is
-small enough.
+Native planning owns task decomposition and handoff shape unless an
+artifact-producing domain skill owns a specialized plan, ticket, or work
+program. `review` owns judgment of an artifact against selected rubrics and
+may plan its own review inline when the scope is small enough.
 
 Externalized phase calls must shrink or specialize the parent scope:
 
@@ -155,11 +154,11 @@ valid_external_phase_call(parent_scope, child_scope)
   -> child_scope < parent_scope
 ```
 
-Same-scope recursion is invalid. For example, `plan(epic)` may produce a
-`review_request` for the epic plan, and `review(epic_plan)` may perform a small
-inline review plan. But `review(epic_plan)` should not call `plan` for another
-epic-sized review plan, and `plan(review_plan)` should not call `review` again
-at the same scope.
+Same-scope recursion is invalid. For example, a domain planning skill may
+produce a `review_request`, and `review(domain_plan)` may perform a small
+inline inspection plan. Review should split oversized work into smaller
+rubric- or artifact-bounded lanes instead of invoking another generic planning
+wrapper at the same scope.
 
 Use phase skills when the expected value of a separate phase artifact exceeds
 its coordination cost:
@@ -198,7 +197,6 @@ Tier 2 skills are medium-compounding workflow interfaces. They turn primitive
 obligations into reusable protocol surfaces such as:
 
 - `brainstorm`
-- `plan`
 - `research:*`
 - `harness-advisor`
 
@@ -245,15 +243,12 @@ An e2e eval should mark every required skill in the chain as a key workflow
 step in its reference points. This tests composition without turning chained
 skills into a new skill tier.
 
-Reclassification candidates:
+Boundary examples:
 
-- `plan` is a Tier 2 planning prompt-template and todo-composition interface.
-  It is not the Tier 0 planning phase itself; use it when planning can reduce
-  wasted search, compose skill todos, or set proof and handoff before a costly
-  phase.
-- `execute` duplicates Codex native execution mode and should be treated as a
-  transitional compatibility package unless a concrete Farplane workflow still
-  calls it as an invocable contract.
+- Generic planning and execution stay in native Codex phases.
+- Artifact-producing skills such as `impl-plan`, `spec-to-ticket`, and
+  `goal-advisor` remain callable because they return domain-owned tickets,
+  programs, or proof-bearing plans.
 - `review` is better understood as a review protocol and rubric/TAS contract.
   Keep the callable Tier 2 wrapper while it is useful; rubric bodies live in
   `docs/review/rubrics/*` and reviewer agents can read those docs directly.
@@ -274,8 +269,8 @@ skill import every primitive directly:
   `advise`, `consolidate`, `reference-grounding`, or `prototyping` unless the
   skill owns that primitive step as part of its first-load contract.
 - Tier 0 phase steps do not need skill links or skill-local phase sections.
-  Put a real domain action in the todo instead of linking to `plan` or
-  `execute` for inherited lifecycle behavior.
+  Put a real domain action in the todo instead of linking to a generic phase
+  wrapper for inherited lifecycle behavior.
 - `review` is a protocol exception: skills may link to the review wrapper when
   material evidence needs TAS judgment, regardless of normal one-level tier
   dependency direction.
@@ -287,8 +282,19 @@ intentional first-load loading contract.
 
 Keep skill frontmatter small.
 
+The complete runtime schema and parser live in
+[`bin/core/skill_contract.py`](../../bin/core/skill_contract.py).
+`python3 bin/validators/check_skill_frontmatter.py` rejects undeclared fields
+and ambiguous artifact-output ownership before registry or graph generation.
+`farplane validate frontmatter skills` exposes the same check through the
+canonical CLI; `farplane validate frontmatter docs` runs the document metadata
+family without treating unrelated document prose as a shared schema.
+Do not add catch-all `metadata`, `tags`, or provenance blobs to frontmatter;
+put that context in the skill body, a reference, or the upstream source.
+
 Manual fields:
 
+- `name`: required stable skill ID and directory name.
 - `tier`: required, numeric `1`, `2`, or `3`.
 - `description`: required one-sentence functional routing definition of 220
   characters or less. Prefer
@@ -299,6 +305,8 @@ Manual fields:
 - `source`: required, `local` or `external`.
 - `skill_template_version`: optional structural baseline for skills onboarded
   to a known Farplane skill template version; absence means not onboarded yet.
+- `template_uses`: optional versioned template adoption records.
+- `version`: optional skill-local semantic version.
 - `eval`: optional path to a skill-local eval task file, usually
   `evals/evals.json`.
 - `qa_checklist`: optional path to a skill-local runtime checklist, usually
@@ -308,20 +316,58 @@ Manual fields:
 - `group`: required for Tier 3 only; one canonical operating department from
   [`rules/skill-departments.toml`](../../rules/skill-departments.toml). The
   graph uses it as explicit department membership, not as a workflow edge.
+- `capability`: optional static projection for a package that is ready to be
+  shown in the Capability Map and Office. It has exactly one of three typed
+  shapes: an `artifact` declares one `produces` artifact ID and zero or more
+  `consumes` IDs; an `integration` declares the artifact IDs it `consumes` at
+  its external boundary; a `shortcut` has no further fields and does not
+  project into either view. Artifact contracts cannot consume their own output.
+  The map emits a directed handoff only when one
+  declared `produces` ID exactly matches another declared `consumes` ID. This
+  is a static contract: do not infer it from TODOs, Markdown links, skill calls,
+  filenames, or observed runtime files.
 - `methods`: optional child-method contracts owned by the skill. Each entry is
   `{ id, class, output }`: `id` is fully qualified with the parent skill name;
   `class` is `artifact`, `integration`, or `internal`; and `output` names the
-  one result the method owns. The Capability Map filters configured workflow
-  roots to declared `artifact` methods; `integration` and `internal` methods
-  remain technical Skill Library interfaces. See
-  [`department-taxonomy.md`](department-taxonomy.md) for selection and link
-  semantics.
+  one result the method owns. Methods remain technical Skill Library
+  interfaces; they do not create Capability Map or Office nodes. See
+  [`department-taxonomy.md`](department-taxonomy.md) for map selection and
+  link semantics.
 - `common_chains`: optional one-way Tier 3 adjacency hints.
 - `upstream_url`: optional for `source: external`.
+- `argument-hint`: optional Codex invocation hint.
+- `planner_contract`: optional required-argument contract for a planner skill.
 
 Generated registry fields include `path`, `description`, `has_checklist`,
 `version`, `allowed_tools`, `skill_links`, `todo_skill_refs`, and the manual
-fields above.
+fields above. The skill graph projects declared `capability` contracts without
+inventing defaults. Todo lists must not reference `capability.kind: shortcut`
+packages; shortcuts remain explicit operator entrypoints rather than automatic
+composition dependencies.
+
+Use capability IDs only for stable artifact or system families, not variants
+such as locale, customer, campaign, or post copy. Those are invocation inputs
+and concrete artifacts, not permanent skills or facilities:
+
+```yaml
+capability:
+  kind: artifact
+  consumes: [content-brief]
+  produces: [x-thread-draft]
+```
+
+```yaml
+capability:
+  kind: integration
+  consumes: [x-thread-draft]
+```
+
+Plugin bundles are projections of capability metadata, not a second curated
+catalog: skills without a declared capability produce `farplane-core`, and
+`capability.kind: shortcut` produces `farplane-shortcuts`. Artifact and
+integration skills remain individually installable; runtime capability profiles
+own their independent restrictions. Every skill still gets its individual
+plugin.
 Structural feature IDs belong to the versioned skill template metadata, not
 per-skill frontmatter. Derive generated fields from source files instead of
 duplicating them in frontmatter.
@@ -372,10 +418,10 @@ or delete units by value rather than appending by default.
 
 ## Skill-Local QA Checklists
 
-`qa_checklist.md` is an optional special file at the skill package root, not a
-generic reference. Use it when a skill has reusable real-time checks that
-should be read before execution as preflight guardrails, applied after material
-changes, and applied again before claiming an output is ready.
+`qa_checklist.md` is an exceptional optional file at the skill package root,
+not the default quality layer. Keep or add it only for reusable skill-specific
+runtime, safety, or preflight checks that cannot live more clearly in Golden
+Workflow Node assertions, goldens, evals, validators, or review.
 
 For skills enrolled in `skill-surface-budget`, keep the checklist to the top 5
 runtime guardrails. Merge overlapping preflight/final-review items and move
@@ -386,7 +432,8 @@ skill_qa_checklist(skill_package, changed_files, claim, budget?)
   -> checklist_verdicts + fixes_or_deferrals + evidence_note
 ```
 
-Do not create a checklist just to mirror a todo list. The todo list says what
+Do not create a checklist for generic authoring, structure, or finish ceremony.
+The todo list says what
 the invoking agent should do on first load; `qa_checklist.md` says what
 failure modes to prevent while executing and how a finished or changed artifact
 is checked. The eval file and QA checklist should converge over time:
@@ -406,10 +453,10 @@ apply qa_checklist.md again before completion
 delegate final checklist review for material changes
 ```
 
-When `evals/evals.json` changes, `skill-maintenance` should decide whether any
-new `assertions` deserve promotion into `qa_checklist.md`, `SKILL.md`, a
-reference, or a validator. Rare hard cases and benchmark-only examples can stay
-in evals with an audit note.
+When a checklist is touched, `skill-maintenance` records `keep | migrate |
+delete`. Keep unique runtime/safety/preflight guards; migrate structure,
+judgment, and deterministic checks to nodes, goldens, rubrics, evals, or
+validators; delete only after unique rules and active references move.
 
 ## Template Versioning
 

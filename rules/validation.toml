@@ -1,10 +1,10 @@
 schema_version = 1
 
 [phase.planning]
-checks = ["ticket.metadata", "ticket.reward", "ticket.context-budget"]
+checks = ["ticket.metadata", "ticket.reward", "ticket.contract-diagram", "ticket.context-budget"]
 
 [phase.complete]
-checks = ["ticket.metadata", "ticket.reward", "ticket.context-budget", "ticket.completion-evidence"]
+checks = ["ticket.metadata", "ticket.reward", "ticket.contract-diagram", "ticket.context-budget", "ticket.completion-evidence"]
 
 # Selection is implemented through allowlisted path families. This file is the
 # durable policy surface; ticket Markdown never supplies raw commands.

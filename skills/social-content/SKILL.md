@@ -1,7 +1,7 @@
 ---
 name: social-content
 version: 1.0.0
-description: "Turn social campaign goals into posts, carousels, threads, calendars, hooks, captions, thumbnails, or cross-platform bundles."
+description: "Turn social campaign goals into carousels, LinkedIn posts, calendars, hooks, captions, thumbnails, or cross-platform content plans."
 tier: 3
 group: marketing
 source: local
@@ -19,9 +19,6 @@ methods:
   - id: social-content:linkedin
     class: artifact
     output: linkedin-post-draft
-  - id: social-content:twitter-thread
-    class: artifact
-    output: x-thread-draft
 allowed-tools: Read, Grep, Glob, Bash
 eval: evals/evals.json
 qa_checklist: qa_checklist.md
@@ -32,19 +29,18 @@ qa_checklist: qa_checklist.md
 ## Context
 
 Use this skill for social content planning, copy, and asset handoff across
-platforms. It owns the content artifact decision and draft package, not
+platforms. It owns cross-platform, carousel, and LinkedIn draft decisions, not
 publishing.
 
-Do not reduce a thread, carousel, or campaign to a high-level premise when the
-requested output is a concrete artifact. A thread plan must show the reader
-promise, tweet-by-tweet progression, evidence or examples, and CTA before any
-review request asks for approval.
+Route a standalone X post, thread, quote-post, or reply chain to
+[x-thread](../x-thread/SKILL.md). That artifact needs a reviewable tweet
+sequence rather than a generic social-content method.
 
 ## Skill Signature
 
 ```text
 social_content(brief, platform_set?, artifact_format?, stage?, constraints?)
-  -> content_packet | draft_bundle | blocked_report
+  -> content_plan | social_draft_bundle | blocked_report
 
 state:
   reads(references/model.md, qa_checklist.md, method reference when needed,
@@ -62,7 +58,7 @@ gates:
 routes:
   content-impl-plan | storyboard | asset-advisor | imagegen |
   ai-image-advisor | ai-video-advisor | remotion | impl-plan |
-  research | advise | review
+  research | review
 
 fails:
   vague_premise_as_thread_plan
@@ -73,8 +69,9 @@ fails:
 
 ## Phase Boundary
 
-Perform planning and drafting inline. Use `advise` when the platform, format,
-hook, asset route, CTA, or campaign direction is a real choice. Use `research`
+Perform planning and drafting inline. When the platform, format, hook, asset
+route, CTA, or campaign direction is a real choice, compare the viable options
+and recommend one. Use `research`
 or current web grounding when examples, platform rules, peer patterns, or
 campaign expectations materially affect the output.
 
@@ -87,9 +84,9 @@ campaign expectations materially affect the output.
   and proof.
   - [ ] Read `qa_checklist.md` as preflight guardrails.
 - [ ] 2. Select one primary method:
-  `social-content:cross-platform`, `social-content:carousel`,
-  `social-content:linkedin`, or `social-content:twitter-thread`. Add
-  supporting methods only when the artifact genuinely spans formats.
+  `social-content:cross-platform`, `social-content:carousel`, or
+  `social-content:linkedin`. Add supporting methods only when the artifact
+  genuinely spans formats; route X-native copy to [x-thread](../x-thread/SKILL.md).
   - [ ] Use [method-selection-smoke](./references/method-selection-smoke.md) when
   method routing is unclear or when changing the skill.
 - [ ] 3. Ground the format when needed.
@@ -99,11 +96,8 @@ campaign expectations materially affect the output.
   - [ ] Load upstream method references only when their platform constraints,
   examples, or format rules matter.
 - [ ] 4. Draft the concrete structure.
-  - [ ] Draft copy, hooks, CTAs, thread outline, slide sequence, prompts, or
-  asset plans before generation or rendering.
-  - [ ] For `social-content:twitter-thread`, produce a concrete thread plan:
-  hook tweet, reader value promise, tweet-by-tweet stack, evidence/examples,
-  payoff, CTA, and optional media. Do not send high-level premises as options.
+  - [ ] Draft copy, hooks, CTAs, slide sequence, prompts, or asset plans before
+  generation or rendering.
   - [ ] For quality-sensitive creative work, load
   [examples](references/examples.md) or a user-provided swipe/reference before
   finalizing the first variant.
@@ -142,11 +136,9 @@ SocialContent := Brief + PlatformSet + ArtifactMatrix + MethodSet + AssetPlan + 
 
 Artifact := Platform + Format + Audience + MessageJob + CopyPayload + AssetCarrier + PublishBoundary + QA
 
-ThreadPlan := hook + reader_value + tweet_stack + evidence + payoff + CTA + media?
-
 MethodSelection(artifact, methods, constraints) :=
   candidates = filter(methods, artifact, constraints)
-  chosen = advise(top3(candidates))
+  chosen = compare_and_recommend(top3(candidates))
 ```
 
 Use `references/model.md` for the artifact matrix and execution packet rules.
@@ -161,30 +153,9 @@ Use method addresses to choose the smallest relevant workflow:
 - `social-content:linkedin` for LinkedIn posts, professional content,
   thought-leadership, B2B/founder content, hiring posts, comments, and
   LinkedIn carousel planning.
-- `social-content:twitter-thread` for Twitter/X posts, threads, quote-post
-  drafts, reply chains, hook tweets, and media-supported threads.
-
-Twitter/X thread review option shape:
-
-```text
-Option A: {specific angle}
-Reader value: {what the reader learns, gets, or can do}
-Stack:
-1/ {hook tweet}
-2/ {context or tension}
-3/ {point with example}
-4/ {point with evidence}
-5/ {turn or payoff}
-6/ {takeaway}
-7/ {CTA}
-Why it might work: {platform-native reason}
-```
 
 ## Gotchas
 
-- Do not ask the user to approve a Twitter/X thread option that lacks the
-  actual tweet stack. "Value-first" is not enough unless the value appears as
-  draftable tweets.
 - Do not claim a platform recommendation came from current norms unless the
   run loaded a current source, peer examples, or supplied swipe.
 - Do not publish, schedule, comment, reply, DM, or cross-post without explicit
@@ -207,14 +178,12 @@ Why it might work: {platform-native reason}
   visual sequence, or platform carousel constraints.
 - `references/upstream-linkedin.md` - load for LinkedIn-native professional,
   founder, B2B, hiring, or thought-leadership copy.
-- `references/upstream-twitter.md` - load for Twitter/X hook tweets, single
-  posts, threads, quote-posts, reply chains, media specs, or thread structure.
 
 ## Output
 
-- `content_packet`: bound artifact matrix, selected method, platform
+- `content_plan`: bound artifact matrix, selected method, platform
   constraints, asset route, publish boundary, and proof plan.
-- `draft_bundle`: copy, thread stack, slide sequence, captions, prompts, or
+- `social_draft_bundle`: copy, slide sequence, captions, prompts, or
   saved artifact paths as appropriate.
 - `blocked_report`: missing context, missing approval for external side
   effects, or proof that cannot run.

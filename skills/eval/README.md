@@ -10,6 +10,23 @@ fresh candidate, baseline, and grader workspaces outside the checkout, generates
 temporary Promptfoo JSON, runs the pinned packages through `npx`, and writes raw
 plus normalized evidence under the selected runs directory.
 
+First create this project's non-secret Codex profile, then run an owning skill's
+manifest. The CLI defaults to the project-local Eval OS directory, so successful
+runs appear in Farplane Office without copying artifacts.
+
+```bash
+farplane eval init
+farplane eval promptfoo --skill <skill-name> --label <skill-name>-baseline --dry-run
+farplane eval promptfoo --skill <skill-name> --label <skill-name>-baseline
+```
+
+`--skill` resolves `skills/<skill-name>/evals/evals.json`. Use `--eval-file` for
+an explicit manifest, `--baseline-skill` to compare two versions, or
+`--provider-profile` to use a non-default local profile. The default baseline is
+the same fixture without the target skill installed.
+
+The lower-level adapter remains available when a script needs direct control:
+
 ```bash
 python3 skills/eval/scripts/run_promptfoo.py \
   --eval-file skills/<skill>/evals/evals.json \

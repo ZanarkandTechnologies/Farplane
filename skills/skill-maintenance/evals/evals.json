@@ -95,6 +95,25 @@
           "notes": "Protects the maintenance-to-eval handoff for behavior-sensitive skill changes."
         }
       }
+    },
+    {
+      "id": "skill_maintenance_plain_core_01",
+      "prompt": "A small deterministic skill has Context, a five-step Todo List, Gotchas, and Output. Its Skill Signature is an exhaustive state-machine catalog, and it also has Phase Boundary, SkillBudget, unused Templates, and an unused Reference Map. What stays, what goes, and how do we confirm nothing important was lost?",
+      "expected_output": "Keeps Context, a simplified signature naming required files/data, caller-controlled parameters, work, writes, and returned output, plus the domain Todo List, Gotchas, and Output; Deletes Phase Boundary, SkillBudget, unused Templates, and the unused Reference Map; Preserves any real trigger, input, proof, output, or reference-load contract in its owning core section; Runs the loss check and skill validation instead of treating line reduction as proof",
+      "files": [],
+      "assertions": [
+        "Keeps Context, a simplified input/work/output Skill Signature, the domain Todo List, Gotchas, and Output",
+        "Deletes Phase Boundary, SkillBudget, unused Templates, and the unused Reference Map",
+        "Preserves any real trigger, input, proof, output, or reference-load contract in its owning core section",
+        "Runs the loss check and skill validation instead of treating line reduction as proof"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Skill Maintenance removes unused optional modules",
+          "tags": ["skill-maintenance", "plain-language", "template"],
+          "notes": "Protects the compact skill-template core and behavior-preservation gate."
+        }
+      }
     }
   ]
 }

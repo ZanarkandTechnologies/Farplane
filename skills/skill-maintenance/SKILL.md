@@ -5,11 +5,9 @@ tier: 3
 group: operations
 source: local
 template_uses:
-  skill-template: "0.2.0"
+  skill-template: "0.5.0"
   skill-eval-task: "0.2.0"
-  skill-qa-checklist: "0.1.0"
 eval: evals/evals.json
-qa_checklist: qa_checklist.md
 skill_ui: skills/skill-maintenance/graph/index.html
 ---
 
@@ -33,96 +31,80 @@ judgment rather than mechanical extraction.
 ```text
 skill_maintenance(expected_behavior, current_behavior, edited_skill, mode?, evidence?)
   -> updated_skill | audit_record | blocked_report
-state: reads(owner package, registry, evidence, lessons/troubles?);
-       writes(owner package?, registry?, audit?, processed state?)
-modes: harden_skill | refine_skill | upgrade_skill_from_sources |
-  structure_update | metadata_update | qa_checklist_design | eval_to_qa_sync |
-  low_value_prose_scan | audit | bulk_rollout | registry_validation |
-  installed_copy_import
-gates: delta_named; owner_clear; source_preserved; first_load_executable;
-  skill_file_at_most_200_lines; standard_check_named;
-  validation_passes_or_blocker_named; registry_synced;
-  live_copy_only_after_source_acceptance; proof_and_review_routed
-routes: research:source-synthesis | skill-creator | best-of-worlds | eval |
-  self-improve | gap-analysis | harness-advisor | review
-fails: installed-copy-only edit; oversized edited SKILL.md; hidden required
-  behavior; arbitrary line-count splitting; fixture mutation outside sandbox;
-  completion before validation;
-  live-copy proof before source acceptance; bulk edit without prototype;
-  material change without proof
+reads: owner package, registry, evidence, and applicable lessons or troubles
+does: applies the smallest owner-local skill behavior or structure change
+writes: owner package, generated registry data, and audit evidence when needed
+returns: updated skill or audit, validation evidence, and review result or blocker
 ```
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-- [ ] 1. Bind `edited_skill`, `expected_behavior`, `current_behavior`, `mode`,
-  and `evidence`; compute `behavior_delta := expected - current`.
-- [ ] 2. Read the minimum authoritative context.
-   - [ ] Always read target `SKILL.md`, registry row, relevant system docs or
-     ticket, and `qa_checklist.md` for structure, refinement, or audit work.
-   - [ ] Read target QA/evals when changing runtime guardrails or evals; read
-     lessons, troubles, and processed state for `harden_skill`.
-   - [ ] Load [maintenance modes](references/maintenance-modes.md) for mode-
-     specific inputs, branches, automation presets, and handoff shapes.
-   - [ ] Before mutating fixtures or proving a broad rollout, copy the target to
-     a temporary sandbox or isolated checkout; never use the real skill tree as
-     the experiment surface.
-   - [ ] For installed-copy import, preview with
-     `python3 scripts/import_installed_skills.py --skills <name> --dry-run`.
-- [ ] 3. Confirm the owner surface.
-   - [ ] First-load behavior → `SKILL.md`; conditional detail/template →
-     references; repeatable behavior proof → evals; runtime prevention → QA or
-     validator; generated metadata → its generator, never hand-edited output.
-   - [ ] When frontmatter changes, validate description shape and every claimed
-     template version against the actual file structure. Report missing QA
-     checklists and missing or stale template-version findings explicitly.
-   - [ ] Use `gap-analysis`, `harness-advisor`, or planning when the delta or
-     owner remains unclear; prototype a representative sample before rollout.
-- [ ] 4. Apply the smallest owner-local behavior delta.
-   - [ ] `harden_skill`: add the smallest immediate eval, gate, gotcha, QA
-     guardrail, or ticket that prevents recurrence.
-   - [ ] `refine_skill`: consolidate duplicates and low-value prose while
-     preserving evidence, required sections, routing, gates, and proof.
-   - [ ] Keep every-invocation rules in `SKILL.md`; move only conditional
-     branches, long examples, templates, rubrics, and rare recipes behind
-     precise load conditions.
-   - [ ] Reject skill-local `todos.md`; todo truth lives in the marker-delimited
-     `## Todo List` in `SKILL.md`.
-   - [ ] Keep every edited `SKILL.md` at or below 200 physical lines; treat
-     PostToolUse feedback as the immediate repair loop and pre-commit as the
-     hard backstop.
-- [ ] 5. Improve structure only where ownership evidence supports it.
-   - [ ] Split authored text by branch, provider, responsibility, or artifact
-     type only when that reduces real first-load or maintenance cost.
-   - [ ] Meet the envelope without moving default-path behavior out of first load.
-   - [ ] Re-run links, imports, tests, and generators affected by a split.
-- [ ] 6. Sync behavior proof and runtime guardrails.
-   - [ ] If eval assertions changed, promote only reusable runtime prevention
-     into QA, `SKILL.md`, a reference, or a validator; keep rare benchmark
-     points in evals with an audit note.
-   - [ ] For behavior-affecting maintenance, capture the current baseline, apply
-     the bounded change, and run the same suite through
-     [eval](../eval/SKILL.md) for candidate/baseline comparison before
-     promotion. Mechanical-only changes may skip execution only with an exact
-     `eval_skip_reason` and a deterministic replacement check.
-   - [ ] Use `self-improve` only for measured variant search with a metric and
-     promotion rule; it calls `eval` rather than owning another runner.
-- [ ] 7. Validate the skill system.
-   - [ ] Run `python3 scripts/check_skills.py --write` plus focused JSON, link,
-     config, fixture, and eval checks.
-   - [ ] Keep fixture validation rooted in its sandbox; regenerate the sandbox
-     `docs/skills/registry.jsonl` rather than hand-editing it, and name every
-     remaining blocker.
-   - [ ] Apply `qa_checklist.md` to changed skill files and record
-     kept/moved/deleted content, ownership changes, extra sections, and verdict.
-   - [ ] Reinstall and inspect live copies only when installed behavior is part
-     of the claim.
-- [ ] 8. Finish with audit, review, and writeback.
-   - [ ] Write a dated skill-local audit for material changes; otherwise record
-     a mechanical/validation-only skip reason and remaining risk.
-   - [ ] Use binary evidence and route material meta, cross-skill, prompt, eval,
-     or precedent-setting changes through the native reviewer.
-   - [ ] Update ticket/progress evidence before claiming completion.
+- [ ] **N1 — Bind one observable skill behavior delta.**
+  `expected + current + evidence -> behavior_delta + mode | insufficient basis`
+
+  Rule: Maintain only from an observable gap, lesson, or compaction target.
+
+  Assert:
+  - Expected and current behavior are separately evidenced.
+- [ ] **N2 — Load the minimum authoritative package state.**
+  `behavior_delta -> source + registry + proof context | missing owner context`
+
+  Rule: Load only sources consumed by the selected maintenance mode; isolate
+  broad experiments from the real skill tree.
+
+  Assert:
+  - The selected mode and its required sources are explicit.
+- [ ] **N3 — Resolve one primary owner surface.**
+  `behavior_delta + package state -> owner file set | planning branch`
+
+  Rule: Default behavior belongs in `SKILL.md`, conditional depth in references,
+  repeated proof in evals, runtime prevention in QA or validators, and generated
+  metadata in its generator.
+
+  Assert:
+  - Each planned edit has one primary owner.
+- [ ] **N4 — Apply the smallest owner-local repair.**
+  `owner file set + behavior_delta -> changed package | no-change verdict`
+
+  Rule: Harden with the smallest recurrence guard; refine only after classifying
+  candidates `keep | rewrite | move | delete` and preserving behavior.
+
+  Assert:
+  - Default-path behavior remains in first load.
+- [ ] **N5 — Upgrade workflow nodes where the edge is visible.**
+  `changed Todo path -> Golden Workflow Nodes + advantage rating | generic path`
+
+  Rule: Each node is one n8n-sized operation; proven advantage requires
+  candidate/no-skill evidence, not domain nouns or reviewer intuition.
+
+  Assert:
+  - Important domain paths contain a differentiated signal-to-decision move.
+- [ ] **N6 — Reconcile behavior proof and QA ownership.**
+  `changed behavior + existing guards -> eval/golden/QA migration receipt`
+
+  Rule: Record `keep | migrate | delete` for touched QA sidecars; retain only
+  skill-specific runtime, safety, or preflight guards.
+
+  Assert:
+  - Unique prevention rules survive migration.
+  - Behavior changes have comparison proof or a named blocker.
+- [ ] **N7 — Synchronize and validate the skill system.**
+  `changed package -> registry-consistent evidence | repair`
+
+  Rule: Regenerate registries and run focused JSON, link, config, fixture, and
+  eval checks; never hand-edit generated state.
+
+  Assert:
+  - Template versions match actual structure.
+- [ ] **N8 — Close with independent contract review.**
+  `validated package -> reviewed maintenance receipt | revision`
+
+  Rule: Material meta, prompt, eval, or precedent-setting changes require a
+  dated audit and native reviewer verdict.
+
+  Assert:
+  - Ticket/progress evidence is updated before completion.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 ## Templates
@@ -138,9 +120,14 @@ source upgrades, automation presets, and review handoff templates.
 - Reinstall or inspect the live installed copy only after repo-source edits are
   accepted; never use live-copy success as a substitute for source proof.
 - Do not meet the cap by hiding first-load routing, gates, proof, or outputs.
+- Keep `Skill Signature` as compact input/work/output type linting. Remove its
+  state-machine catalog rather than deleting the callable contract.
 - Do not treat a shorter skill as better without behavior-preservation proof.
 - Do not hand-edit generated registries or graphs, bulk-edit without sample
   proof, auto-promote every eval point, or skip material audit/review.
+- An eval or line-count comparison does not replace skill-system validation.
+  After structural edits, run `python3 scripts/check_skills.py --write` and
+  report its result.
 - Do not convert checklist items into scalar metrics; project measurement
   belongs with `metric-advisor`, while skill repair needs reasons and evidence.
 
@@ -150,7 +137,8 @@ source upgrades, automation presets, and review handoff templates.
   registry, and todo contracts; read for structural changes.
 - [skill best practices](../../docs/skills/best-practices.md) — first-load
   placement, examples, repeatability, and review.
-- [structure QA](qa_checklist.md) — preflight and final structure checks.
+- [skill-contract rubric](../../docs/review/rubrics/skill-contract.md) —
+  centralized structure, Golden Node, edge, calibration, and proof review.
 - [maintenance modes](references/maintenance-modes.md) — load after choosing a
   mode for detailed branches and handoff shapes.
 - [low-value prose scan](references/low-value-prose-scan.md) — load for

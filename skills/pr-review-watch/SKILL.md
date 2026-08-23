@@ -5,6 +5,8 @@ description: "Turn an explicit GitHub PR into bounded polling, review-memory che
 tier: 3
 group: operations
 source: local
+capability:
+  kind: integration
 allowed-tools: Read, Glob, Grep, Bash
 common_chains:
   after: ["review"]

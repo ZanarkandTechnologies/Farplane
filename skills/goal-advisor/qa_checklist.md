@@ -41,6 +41,27 @@ goal_advisor_qa(goal_prompt, ticket?, program?) -> checklist_verdicts + fixes_or
    - Violation: Goal Advisor, Metric Advisor, Leverage Advisor, Plan Next Wave,
      or a domain skill all appear to own the same next-turn decision.
 
+1c. `semantic-bindings`
+   - Question: Does Compiled Execution Path map ticket diagram nodes to Change
+     Plan units, exit assertions, and proof observations without contradiction?
+   - Violation: The packet is structurally complete but leaves the executor to
+     infer order, dependencies, or what proves a move finished.
+
+1d. `reference-necessity`
+   - Question: Does every non-core reference name the node, assertion, proof,
+     or drift decision that consumes it?
+   - Violation: The file list contains orphan, stale, redundant, or just-in-case
+     references that can distract or expand scope.
+
+1e. `completion-closure`
+   - Question: Does every Done condition map to executable proof and an evidence
+     owner, with unsupported rows blocking completion? Does each screenshot
+     complaint have a durable source-image/state/viewport row that requires a
+     newer comparable capture and independent verdict before closure?
+   - Violation: The Goal can stop from task progress or plausible prose while a
+     Done assertion or screenshot complaint remains pending, stale, partial,
+     wrong-state, or unproved.
+
 2. `proof-route-named`
    - Question: Does the prompt name the proof route for `qa`, `visual_qa`,
      `agent_qa`, `review`, or `demo` proof weights?
@@ -155,6 +176,9 @@ goal_advisor_qa:
   experiment_backbone:
   first_load_context_budget:
   decision_backbone:
+  compiled_execution_path:
+  reference_manifest:
+  completion_closure:
   violations:
   fixes_or_deferrals:
 ```

@@ -11,7 +11,6 @@ tags:
 refs:
   - templates/global/AGENTS.md
   - docs/skills/system.md
-  - skills/plan
   - skills/reference-grounding
   - skills/prototyping
   - skills/research
@@ -28,7 +27,6 @@ public: true
 surfaces:
   - templates/global/AGENTS.md
   - docs/skills/system.md
-  - skills/plan
   - skills/reference-grounding
   - skills/prototyping
   - skills/research
@@ -44,7 +42,7 @@ source_refs:
 external_refs: []
 evidence_refs:
   - docs/HISTORY.md
-known_limits: Depends on skill maintainers keeping Markdown links accurate; numeric tiers describe compound upgrade priority while first-load todo links enforce loading boundaries; Tier 0 is a universal phase protocol rather than a skill tier, plan is a planning prompt-template rather than the phase itself, execute remains a deprecated compatibility wrapper, and concrete coding skills such as spec-to-ticket, impl-plan, goal-advisor, and close-ticket must not be treated as universal generic workflows.
+known_limits: Depends on skill maintainers keeping Markdown links accurate; numeric tiers describe compound upgrade priority while first-load todo links enforce loading boundaries; Tier 0 is a universal phase protocol rather than a skill tier, native phases own generic planning and execution, and concrete coding skills such as spec-to-ticket, impl-plan, goal-advisor, and close-ticket must not be treated as universal generic workflows.
 metrics: []
 last_verified: 2026-06-23
 experimental: false
@@ -101,7 +99,7 @@ phases.
 - Tier 1 primitives are created only when multiple Tier 2 interfaces need the move.
 - Tier 2 workflow skills may link to Tier 1 primitives but should not duplicate their full rules.
 - Tier 3 skills own concrete domains and may hand off to peers intentionally.
-- Deprecated wrappers such as `execute` are not promoted into normal dependencies.
+- Generic planning and execution wrappers are not promoted into normal dependencies.
 
 ## Feature Flow
 
@@ -134,7 +132,6 @@ Owner surfaces:
 
 - `templates/global/AGENTS.md`
 - `docs/skills/system.md`
-- `skills/plan`
 - `skills/reference-grounding`
 - `skills/prototyping`
 - `skills/research`
@@ -179,7 +176,7 @@ Acceptance signals:
 - This feature does not require every task to call a planning skill.
 - This feature does not make tiers a hierarchy of importance for users.
 - This feature does not turn coding-ticket skills into universal workflow owners.
-- Known limit: Depends on skill maintainers keeping Markdown links accurate; numeric tiers describe compound upgrade priority while first-load todo links enforce loading boundaries; Tier 0 is a universal phase protocol rather than a skill tier, plan is a planning prompt-template rather than the phase itself, execute remains a deprecated compatibility wrapper, and concrete coding skills such as spec-to-ticket, impl-plan, goal-advisor, and close-ticket must not be treated as universal generic workflows.
+- Known limit: Depends on skill maintainers keeping Markdown links accurate; numeric tiers describe compound upgrade priority while first-load todo links enforce loading boundaries; Tier 0 is a universal phase protocol rather than a skill tier, native phases own generic planning and execution, and concrete coding skills such as spec-to-ticket, impl-plan, goal-advisor, and close-ticket must not be treated as universal generic workflows.
 - Delete or merge this feature only when its current truth has moved into a clearer owner and all active refs are removed.
 
 ## Metrics

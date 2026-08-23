@@ -90,10 +90,9 @@ checks, hard-gate failures, findings, and one concrete next action.
 `review` owns judgment of a supplied artifact against selected rubrics. It does
 not own upstream planning, implementation, QA, or ticket writeback.
 
-Review may plan its own inspection inline. Call `plan` only when the review
-work itself is large enough to deserve a separate review plan and that review
-plan is smaller or more specialized than the artifact being reviewed. Do not
-call `plan` to re-plan the same parent task scope.
+Review plans its own inspection inline. If the review is too large for one
+pass, split it into smaller rubric- or artifact-bounded review lanes. Do not
+re-plan the same parent task scope.
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
@@ -103,10 +102,10 @@ call `plan` to re-plan the same parent task scope.
 - [ ] 2. Start from caller-declared rubric families and TAS gates; add only an
   obvious missing hard-gate family with explanation.
 - [ ] 3. Choose review effort and phase boundary.
-  - [ ] Keep inspection planning inline unless the review scope is large enough
-    to need its own smaller review plan.
-  - [ ] Do not externalize same-scope planning or recurse through `plan` and
-    `review` at the same task size.
+  - [ ] Keep inspection planning inline; split large work into smaller
+    rubric- or artifact-bounded review lanes.
+  - [ ] Do not externalize or recurse through planning and review at the same
+    task size.
 - [ ] 4. Load only the selected docs/review/rubrics family files and apply their
   required, blocker, and evidence checklist modules.
 - [ ] 5. Apply one TAS verdict per selected family plus the overall verdict; do
@@ -150,6 +149,7 @@ Common families:
 - `ui-quality`
 - `frontend-guidelines`
 - `user-intent-satisfaction`
+- `buyer-communication-quality`
 - `icp-purchase-conviction`
 - `debloatability`
 - `evidence-quality`
@@ -168,8 +168,9 @@ Reviewer sanity check:
   `integration-readiness` for cross-surface changes.
 - Report any added family in `rubrics_used` and explain why.
 - Do not silently replace the caller's routing with a generic default.
-- For code, cleanup, integration, or evidence-heavy work, use
-  `docs/review/rubrics/desloppify.md` as the cross-cutting search playbook.
+- For suspected over-engineering, use `lean-check` before assigning
+  `debloatability`. For prose cleanup, return an explicit operator route to
+  the unslop shortcut and the applicable documentation or prompt rubric.
 
 ## TAS Verdicts
 
@@ -252,5 +253,7 @@ Return or write:
 
 - [docs/review/rubrics/review-rubric-index.md](../../docs/review/rubrics/review-rubric-index.md) -
   use when family choice or modular checklist shape is unclear.
-- [docs/review/rubrics/desloppify.md](../../docs/review/rubrics/desloppify.md) - use for cleanup,
-  integration, or evidence-heavy search playbooks.
+- [lean-check](../lean-check/SKILL.md) - first-sufficient-rung evidence for
+  unnecessary code, dependencies, abstractions, or features.
+- Explicit operator shortcut: unslop when prose simplification is part of the
+  review.

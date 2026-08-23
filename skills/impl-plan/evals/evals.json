@@ -159,6 +159,19 @@
           ]
         }
       }
+    },
+    {
+      "id": "impl_plan_copy_complete_ui_baseline_01",
+      "prompt": "Prepare a build-ready ticket handoff for a buyer-facing Content Intelligence dossier with outcome, evidence, and objection sections. We have only rough headings and have not approved the wording or proof yet. Do not edit repository files.",
+      "expected_output": "Returns blocked or revise rather than build-ready while literal copy and proof are unapproved; names ticket-local design.md as the incomplete approval artifact and specifies its required reader-question/literal-copy/proof/takeaway/action/assertion mapping; does not invent unsupported buyer copy or delegate those decisions to implementation; keeps the compact journey in ticket.md.",
+      "files": [],
+      "assertions": [
+        "Blocks approval when final visible copy and proof are not available",
+        "Names ticket-local design.md and its required state mapping before implementation",
+        "Blocks unsupported claims instead of inventing buyer language",
+        "Does not call the unapproved dossier build-ready"
+      ],
+      "metadata": {"farplane": {"title": "Impl plan makes buyer-facing ASCII copy-complete", "tags": ["skill", "impl-plan", "design-baseline", "copy"]}}
     }
   ]
 }

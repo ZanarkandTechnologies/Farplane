@@ -8,7 +8,7 @@ Use this decision table when deciding whether content lives in `SKILL.md` or `re
 | :--- | :--- | :--- |
 | Mission-critical and short (<~100 lines) | `SKILL.md` | Must survive first load |
 | Baseline execution path | `SKILL.md` | Agents need this immediately |
-| Short judgement questions | `SKILL.md` | Agents need to know when to use `advise` |
+| Short judgement questions | `SKILL.md` | Agents need to know when to compare viable options |
 | Long judgement rubric | `references/` | Keeps decision nuance out of first load |
 | Variant-heavy branches | `references/` | Reduces SKILL.md bloat |
 | Verbose domain docs and schemas | `references/` | Loaded on demand |
@@ -76,7 +76,7 @@ rule:
 ```markdown
 ## Judgement Questions
 
-Use `advise` when these cannot be answered mechanically:
+Compare viable options inline when these cannot be answered mechanically:
 
 - What user or artifact is this skill optimizing for?
 - What primary metric or success signal should decide keep/discard?

@@ -3,6 +3,8 @@ name: problem-framing
 description: "Turn a complaint or feature request into a clear problem frame, realistic constraints, product boundary, and next owner before MVP or ticket work."
 tier: 2
 source: local
+capability:
+  kind: shortcut
 template_uses:
   skill-template: "0.3.7"
 eval: evals/evals.json
@@ -34,7 +36,7 @@ state: reads(supplied notes, tickets, docs, local context, source snippets);
        writes(problem frame or handoff artifact only when caller owns a file)
 gates: symptom_problem_split; actor_named_or_unknown; constraints_labeled;
        product_boundary_not_assumed; next_owner_named
-routes: deep-interview | research:user-grounding | research:parity | prd |
+routes: research:user-grounding | research:parity | prd |
   deep-system-design | functional-ui | impl-plan | solution-shaping
 fails: treats requested feature as the problem; overbuilds to a platform;
   hides assumptions; produces tickets before the problem is framed
@@ -44,8 +46,8 @@ fails: treats requested feature as the problem; overbuilds to a platform;
 
 Run grounding, reasoning, and review inline by default. Call `research:*` only
 when current practice, best-in-class practice, or user reality is needed before
-the frame is trustworthy. Route to `deep-interview` when the missing input is a
-human answer rather than a research question.
+the frame is trustworthy. Stop for operator clarification when the missing
+input is a human answer rather than a research question.
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
@@ -75,10 +77,11 @@ human answer rather than a research question.
         stripped back to zero.
   - [ ] Compare current workflow versus simplest plausible correct workflow.
 - [ ] 6. Ground when the frame depends on external or user reality.
-  - [ ] Use `research:user-grounding` when user groups, jobs, context, friction,
-        or success signals are not known.
-  - [ ] Use `research:parity` when best-in-class or current-practice grounding
-        could change the frame.
+  - [ ] When user groups, jobs, context, friction, or success signals are not
+        known, state the exact user-grounding evidence need and keep the frame
+        provisional.
+  - [ ] When best-in-class or current-practice evidence could change the frame,
+        state the exact parity evidence handoff the operator must request.
 - [ ] 7. Choose or preserve product boundary options.
   - [ ] Compare plausible boundaries such as manual service, static tool,
         workflow assistant, dashboard, system of record, automation, or platform.
@@ -88,9 +91,9 @@ human answer rather than a research question.
   - [ ] Include problem statement, actor, current workflow, why-chain,
         first-principles basis, constraints, boundary options, recommendation,
         assumptions, and next owner.
-  - [ ] Route system/data-heavy frames to `deep-system-design`, UI/workflow
-        frames to `functional-ui`, product-scope frames to `prd`, buildable
-        slices to `impl-plan`, and agency MVP synthesis to `solution-shaping`.
+  - [ ] State one operator-visible next-owner need in plain language: system or
+        data design, UI/workflow design, product requirements, implementation
+        planning, or agency MVP synthesis.
   - [ ] Finish-check: the output must make the requested artifact look like
         evidence, not automatically like the solution.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->

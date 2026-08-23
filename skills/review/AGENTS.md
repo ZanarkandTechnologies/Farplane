@@ -29,7 +29,8 @@ Own the thin callable review wrapper for Farplane's docs-owned rubric contract.
   keep caller-owned routing and TAS contract explicit.
 - Keep the reusable reviewer handoff template in `docs/review/rubrics/reviewer-handoff.md`.
 - Keep one reference file per review family in `docs/review/rubrics/`.
-- Keep `docs/review/rubrics/desloppify.md` cross-cutting rather than turning it into a second public review skill.
+- Keep implementation bloat with `lean-check` and prose cleanup with `unslop`;
+  do not recreate a second anti-slop review workflow.
 - Each family file should stay skimmable while still including required checks,
   blocker checks, evidence checks, and finding cues.
 - If the review contract changes, update `docs/features/FEAT-0008-artifact-first-qa-and-completion-proof.md` and the ticket/evidence artifact contract in the same change.

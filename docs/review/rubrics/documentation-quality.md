@@ -33,6 +33,9 @@ docs. Diagnostic for tiny local typo or link fixes.
   source refs, evidence, or explicit local policy.
 - [ ] `terminology-consistent`: Canonical terms, examples, captions, links, and
   code blocks use one vocabulary.
+- [ ] `plain-and-specific`: Prose uses concrete actors, mechanisms, decisions,
+  and facts; unexplained jargon, generic project-neutral claims, filler, and
+  dense sentences do not make the reader decode the point.
 - [ ] `density-fit`: The doc shape matches its job: map, spec, runbook,
   reference, explanation, decision note, or checklist.
 - [ ] `metadata-aligned`: Front matter, status, refs, dates, feature refs, and
@@ -48,8 +51,9 @@ docs. Diagnostic for tiny local typo or link fixes.
   unsupported claims into active Farplane policy.
 - [ ] `agent-facing-drift`: A human-facing doc becomes hidden agent instruction
   text that belongs in a skill, prompt, ticket, or runbook.
-- [ ] `template-padding`: The doc grows because template sections were filled
-  for ceremony rather than reader value.
+- [ ] `template-padding`: The doc contains headings, tables, signatures,
+  checklists, repeated proof, or placeholder fields that do not change the
+  reader's decision, action, verification, or understanding.
 - [ ] `score-theater`: Numeric scores or metric language replace the reviewer
   decision, evidence, failed checks, or repair hints.
 

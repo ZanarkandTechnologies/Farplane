@@ -18,6 +18,12 @@ if SYNC_SPEC is None or SYNC_SPEC.loader is None:
     raise RuntimeError(f"failed to load {SYNC_SCRIPT}")
 sync_skill_registry = importlib.util.module_from_spec(SYNC_SPEC)
 SYNC_SPEC.loader.exec_module(sync_skill_registry)
+ROOT = Path(__file__).resolve().parents[2]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from bin.core.skill_contract import parse_skill_frontmatter
+
 PROTOCOL_EXCEPTIONS = {"review"}
 
 
@@ -49,7 +55,7 @@ def iter_text_skill_links(text: str, source_name: str) -> list[tuple[int, str]]:
 def load_skill_tiers(repo_root: Path) -> dict[str, int]:
     tiers: dict[str, int] = {}
     for skill_path in sorted((repo_root / "skills").glob("*/SKILL.md")):
-        metadata = sync_skill_registry.parse_frontmatter(skill_path)
+        metadata = parse_skill_frontmatter(skill_path)
         name = metadata.get("name")
         tier = metadata.get("tier")
         if name != skill_path.parent.name:

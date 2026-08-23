@@ -90,8 +90,8 @@ budget: max
 ```
 
 Child skills use `base` unless `delegate_budget` explicitly names them. Do not
-copy a high-level brainstorm budget into `reference-grounding`, `advise`,
-`research`, `deep-interview`, or `prd` by default.
+copy a high-level brainstorm budget into child grounding, research,
+clarification, decision, or requirements work by default.
 
 ## Persona Prompt Set
 

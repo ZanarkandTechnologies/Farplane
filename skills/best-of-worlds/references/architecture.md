@@ -10,8 +10,8 @@ It does not replace:
   current state versus production expectation.
 - [research:source-synthesis](../../research/SKILL.md#researchsource-synthesis):
   use for compact source normalization before a full best-of-worlds pass.
-- `advise`: use for judgement calls when the metric or adoption decision is not
-  mechanical.
+- inline comparison: use for judgment calls when the metric or adoption
+  decision is not mechanical.
 - `impl-plan`: use after the best-of-worlds decision becomes a concrete ticket
   plan.
 

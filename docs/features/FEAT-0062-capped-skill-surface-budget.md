@@ -3,7 +3,7 @@ title: Capped skill surface budget
 status: implemented
 owner: feature-registry
 created_at: 2026-06-28
-updated_at: 2026-06-28
+updated_at: 2026-08-19
 tags:
   - farplane
   - feature
@@ -83,6 +83,9 @@ agents apply every item.
 - Reports exact minimizer commands for over-budget subscribed skills.
 - Uses `skill-maintenance.refine_skill` and `consolidate(..., structure =
   skill)` for value-preserving compaction before enrolling over-budget skills.
+- Starts new skills from a compact four-section core and admits signatures,
+  phase boundaries, budgets, templates, references, QA, and evals only when
+  they change normal behavior or proof.
 
 ## User Stories
 

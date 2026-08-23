@@ -20,36 +20,22 @@ maintainability target selection, behavior-preserving transformation, smell
 score reduction, and proof that public behavior stayed intact.
 
 Route bug diagnosis to `runtime-debugging`, local diff findings to
-`code-review`, broad proof selection to `proof-advisor`, test execution choices
-to `testing`, and budget resolution to `budget-advisor`.
+`code-review`, and unresolved proof selection to `proof-advisor`. Run
+already-selected deterministic proof commands in the native execution phase.
 
 ## Skill Signature
 
 ```text
-refactoring(target, context?, budget?) -> behavior_preserved + smell_delta + patch_plan? + proof + residual_risk?
+refactoring(target, context?, ensemble?: auto | max) -> behavior_preserved + smell_delta + patch_plan? + proof + residual_risk?
 state: reads(code, tests, git churn, lint/static-analysis output, project rules, docs); writes(refactor patch?, tests?, proof artifact?)
 gates: behavior_locked; smallest_transformations; score_not_gamed; proof_after_change
-routes: budget-advisor | code-review | testing | proof-advisor | review | runtime-debugging
+routes: code-review | proof-advisor | review | runtime-debugging
 fails: style-only churn; unproved behavior changes; metric gaming; broad cleanup unrelated to target
 ```
 
-Use `budget-advisor` when `budget` is present:
-
-```text
-RefactoringBudget = {
-  mode?: "base" | "plus" | "max",
-  available_time?: string,
-  persona_count?: 1 | 3 | 5,
-  personas?: RefactoringPersona[],
-  coverage?: "smoke" | "focused" | "broad",
-  evidence_depth?: "light" | "strong",
-  delegate_budget?: Record<skill_name, BudgetRequest>
-}
-```
-
-Child skills use their own base reviewed path unless `delegate_budget`
-explicitly names them. Budgeted persona lanes must preserve the output contract:
-behavior proof, smell delta, patch plan or patch, and residual risk.
+When `ensemble` is requested, load `ensemble.yaml`: `auto` selects its three
+personas and `max` selects all. Collect independent assessments before
+synthesis while preserving the behavior-proof and residual-risk contract.
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
@@ -64,17 +50,14 @@ behavior proof, smell delta, patch plan or patch, and residual risk.
   - [ ] Read [metrics](references/metrics.md) before optimizing a smell score.
   - [ ] Read [tooling](references/tooling.md) when choosing stack-specific
     static-analysis or maintainability commands.
-- [ ] 3. Resolve budget when present.
-  - [ ] Call `budget-advisor` with this contract and `RefactoringBudget`.
-  - [ ] For `plus` or `max`, use persona prompts from
-    [budget-personas](references/budget-personas.md) unless the caller supplied
-    complete personas.
-  - [ ] Do not copy the parent budget into testing, proof, review, or debugging
-    child calls unless `delegate_budget` explicitly names the child skill.
+- [ ] 3. Resolve ensemble mode when requested.
+  - [ ] Load `ensemble.yaml`; `auto` uses its three relevant personas and
+    `max` uses all personas.
+  - [ ] Keep testing, proof, review, and debugging child calls on their normal paths.
 - [ ] 4. Lock behavior before changing structure.
   - [ ] Use existing tests, characterization tests, snapshots, fixtures, or
     manual proof to capture intended behavior.
-  - [ ] If behavior cannot be locked, route to `testing` or `proof-advisor`.
+  - [ ] If behavior cannot be locked, route to `proof-advisor`.
 - [ ] 5. Score and prioritize the smallest honest target.
   - [ ] Prefer changed or high-churn code with high complexity, duplication,
     nesting, low coverage, or boundary violations.
@@ -90,18 +73,6 @@ behavior proof, smell delta, patch plan or patch, and residual risk.
     risk.
   - [ ] Route material completion to `review` or the reviewer lane.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
-
-## Templates
-
-```text
-RefactoringPersona = {
-  name: string,
-  prompt: string,
-  focus: string[],
-  avoid?: string[],
-  output_shape?: string
-}
-```
 
 ## Gotchas
 
@@ -119,19 +90,16 @@ RefactoringPersona = {
   smells.
 - [tooling](references/tooling.md) - read when selecting stack-specific tools
   or commands.
-- [budget-personas](references/budget-personas.md) - read for `plus` or `max`
-  persona councils.
-- [budget-advisor](../budget-advisor/SKILL.md) - read when `budget` is present.
+- [ensemble.yaml](ensemble.yaml) - read for `ensemble: auto | max`.
 - [code-review](../code-review/SKILL.md) - route local maintainability findings
   or final diff review.
-- [testing](../testing/SKILL.md) - route proof command selection.
 
 ## Output
 
 Return or update an artifact with:
 
 - refactoring target and behavior boundary
-- budget program summary when budget was used
+- selected personas and dissent when ensemble mode was used
 - smell score inputs and prioritized target
 - transformation plan or patch summary
 - behavior-preservation proof

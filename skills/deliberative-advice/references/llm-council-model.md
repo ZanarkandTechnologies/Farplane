@@ -50,8 +50,8 @@ Use council mechanics when one of these is true:
 - the missing evidence could change the answer
 - self-agreement or premature certainty is the main risk
 
-Use plain `advise` when the decision is local, reversible, already grounded, or
-only needs a concise 3-option recommendation.
+For a local, reversible, already-grounded decision, compare three viable
+options inline and recommend one.
 
 ## Council Context Packet
 

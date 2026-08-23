@@ -70,7 +70,7 @@ Use one primary route per finding:
 - `harden`: working behavior has abuse, failure, security, resilience, or
   operational risk.
 - `runtime-debugging`: a concrete defect or reproducible failure exists.
-- `testing`: behavior is plausible but unproved.
+- `proof-advisor`: behavior is plausible but the proof strategy is unresolved.
 - `document`: implementation is acceptable, but durable docs mislead future
   work.
 - `delete`: evidence shows the surface is stale, unused, or duplicated.

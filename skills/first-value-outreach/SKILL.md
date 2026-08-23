@@ -57,7 +57,7 @@ gates: person_researched; professional_signal_traceable;
        demo_route_complete_when_demo_selected;
        external_actions_unapproved
 routes: customer-research | research:* | solution-shaping | demo-realism |
-        diagramming | infographic | functional-ui |
+        infographic | functional-ui |
         impl-plan | copywriting-advisor | personalized-offer | review
 fails: generic_free_help; biography_personalization; invented_private_pain;
        manipulative_irresistibility; speculative_large_build;
@@ -129,7 +129,8 @@ problem or collaboration direction.
         before product proof. Use `demo-realism` only to shape believable
         workflow/data when needed, then route the accepted brief to the actual
         project demo owner or a ticket through `impl-plan`;
-        use `diagramming` or `infographic` when a static artifact is sufficient.
+        render a compact Mermaid diagram inline or use `infographic` when a
+        static artifact is sufficient.
   - [ ] Permit a proof-sized demo only when the packet explains why a static
         artifact cannot test the uncertainty, bounds one workflow and one
         decision, names the build owner and inspection surface, and preserves

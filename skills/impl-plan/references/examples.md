@@ -78,6 +78,21 @@ A cross-service migration with multiple before/after ownership views may link
 `diagrams.md`. The ticket remains canonical; the companion adds no scope and
 must pass `validate_visual_companion.py`.
 
+## Good: copy-complete UI baseline
+
+```text
+[DS3 — Evidence]
+Reader question: Why should I believe this outcome?
+Headline: Cut weekly account research from 6 hours to 45 minutes.
+Proof: Four-week operated comparison; the chart caption says what changed.
+Takeaway: The buyer can evaluate the time-saving claim without technical help.
+Action: Review the comparison.
+Assertion: Every visible string above appears verbatim in the capture.
+```
+
+Why good: the builder does not invent business copy, and QA can compare the
+actual section with an observable baseline rather than a vague page label.
+
 ## Bad
 
 ```md

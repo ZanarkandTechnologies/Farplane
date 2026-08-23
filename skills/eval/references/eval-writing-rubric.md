@@ -74,7 +74,8 @@ Use these inputs to find evals worth writing:
 
 ## Council Use
 
-Use `deliberative-advice` or a council pass for high-impact eval design when:
+Return a needs-deliberation route for explicit operator invocation or run an
+independent council pass for high-impact eval design when:
 
 - the target is Tier 1, meta, `eval`, or cross-skill;
 - several plausible evals compete for limited budget;

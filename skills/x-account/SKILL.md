@@ -4,6 +4,9 @@ description: "Turn X account posting or metrics requests into validated drafts, 
 tier: 3
 group: marketing
 source: local
+capability:
+  kind: integration
+  consumes: [x-thread-draft]
 methods:
   - id: x-account:validate
     class: integration

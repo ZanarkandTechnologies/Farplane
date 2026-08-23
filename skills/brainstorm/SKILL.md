@@ -4,6 +4,8 @@ version: 0.2.0
 description: "Turn early ambiguous intent into option space, first-principles contrast, and candidate directions before requirements are committed."
 tier: 2
 source: local
+capability:
+  kind: shortcut
 eval: evals/evals.json
 ---
 
@@ -16,27 +18,24 @@ eval: evals/evals.json
 - [ ] For meaningful brainstorms, run the base spine before recommending:
   `objective -> current reality -> first-principles contrast -> candidate
   directions -> recommendation -> next owner`.
-- [ ] Use [spine-and-budget](references/spine-and-budget.md) when the request
+- [ ] Use [spine-and-ensemble](references/spine-and-ensemble.md) when the request
   asks for first-principles decomposition, current-vs-ideal redesign,
-  PRFAQ/working-backwards thinking, plus/max/deep budget, persona/council
+  PRFAQ/working-backwards thinking, ensemble persona/council
   lanes, or unclear decomposition shape.
-- [ ] Use [reference-grounding](../reference-grounding/SKILL.md) when options
-  need examples, local baseline, peer norms, or official behavior before they
-  are useful.
+- [ ] Inspect supplied or local evidence directly when options need examples or
+  a baseline; otherwise name the exact evidence handoff the operator must
+  request.
 - [ ] If the idea needs a full evidence brief rather than compact grounding,
-  note the needed research method such as `research:parity`,
-  `research:competitor`, or `research:source-synthesis` for the caller.
-- [ ] Use [advise](../advise/SKILL.md) to compare the strongest 3 directions
-  and name one recommended next bet.
-- [ ] When a `budget` request is present, preserve the brainstorm output
-  contract and use the complete `PersonaPrompt` objects in
-  [spine-and-budget](references/spine-and-budget.md) for plus/max/persona
-  programs.
-- [ ] Name the next owner in plain text: fuzzy directions go to
-  `deep-interview`; coherent requirements-ready directions go to `prd`.
+  note the needed parity, competitor, or source-synthesis evidence for the
+  operator.
+- [ ] Compare the strongest 3 directions and name one recommended next bet.
+- [ ] When `ensemble` is `auto` or `max`, preserve the exploration-note output
+  contract and use complete personas from `ensemble.yaml`.
+- [ ] Name the next owner in plain text: fuzzy directions need operator-led
+  clarification; coherent directions name a requirements-artifact handoff.
 - [ ] Do not create tickets or implement code from this skill.
-- [ ] Run the [review protocol](../review/SKILL.md) after meaningful
-  brainstorm-skill, intake-contract, or public-doc changes.
+- [ ] For meaningful changes to this shortcut, require an independent review
+  before claiming readiness.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 ## Context
@@ -53,7 +52,7 @@ principles, then recommends the most useful next direction or owner.
 ## Skill Signature
 
 ```text
-brainstorm(prompt, objective?, context?, budget?) -> exploration_note
+brainstorm(prompt, objective?, context?, ensemble?: auto | max) -> exploration_note
 
 exploration_note:
   mode: loose_divergence | structured_decomposition
@@ -64,13 +63,14 @@ exploration_note:
   strongest_tradeoffs:
   recommendation:
   chosen_lanes?:
-  next_owner: deep-interview | prd | research:* | advise | none
+  selected_personas?:
+  next_owner: operator clarification | prd | research:* | none
   clarifications_needed:
 ```
 
-When `budget` is present, `brainstorm` still returns `exploration_note`.
-`budget-advisor` only resolves the base/plus/max execution program; it does not
-own brainstorm's domain logic or output shape.
+When `ensemble` is present, `brainstorm` still returns `exploration_note`.
+`auto` selects three relevant diverse personas and `max` selects all; the
+owner skill synthesizes without changing its domain output.
 
 ## Job
 
@@ -96,7 +96,7 @@ own brainstorm's domain logic or output shape.
 
 ## Do Not Use When
 
-- the user is ready to commit to one slice; use `deep-interview` or `prd`
+- the user is ready to commit to one slice; stop for clarification or use `prd`
 - the request is already concrete enough for ticket planning
 - the user wants code now
 
@@ -117,17 +117,16 @@ own brainstorm's domain logic or output shape.
   peer norms, or official behavior before comparison
 - use `research:parity`, `research:competitor`, or
   `research:source-synthesis` when compact grounding is not enough
-- load `references/spine-and-budget.md` when optional lane choice, budget
-  mapping, or complete persona prompts matter
+- load `references/spine-and-ensemble.md` when optional lane choice or
+  complete persona prompts matter
 - use optional depth lanes only when relevant:
   - why-chain for inherited processes, incentives, or obsolete constraints
   - customer/data/action for operational workflows
   - issue-tree for root causes, workstreams, blind spots, or evidence branches
   - PRFAQ/working-backwards for product bets
-  - council critique for high-stakes, bias-prone, or budgeted brainstorms
-- use `advise` to recommend one best next direction when there are multiple
-  credible paths
-- if the result is still fuzzy after that, hand off to `deep-interview`
+  - council critique for high-stakes, bias-prone, or ensemble brainstorms
+- compare credible paths and recommend one best next direction
+- if the result is still fuzzy after that, stop for operator clarification
 - if the result is coherent enough for requirements writing, hand off to `prd`
 
 ## Output
@@ -141,13 +140,14 @@ Produce a short exploration note with:
 - candidate directions
 - strongest tradeoffs
 - recommended first bet or decomposition shape
-- chosen lanes when structured decomposition or budget is used
+- chosen lanes and selected personas when structured decomposition or ensemble
+  mode is used
 - recommended next intake skill
 - what would need to be clarified next
 
 ## Handoff
 
-- if the user chooses a direction but it is still fuzzy: `deep-interview`
+- if the user chooses a direction but it is still fuzzy: operator clarification
 - if the user chooses a direction and it is already coherent: `prd`
 - if the missing piece is evidence: `research:*` with the exact method named
 - if the user asks for implementation after a coherent plan: `impl-plan`
@@ -156,14 +156,11 @@ This skill should not create tickets or implement code itself.
 
 ## Reference Map
 
-- [references/spine-and-budget.md](references/spine-and-budget.md) - load when
-  first-principles decomposition, optional lane choice, budget mapping, or
-  complete persona prompts matter.
+- [references/spine-and-ensemble.md](references/spine-and-ensemble.md) - load
+  when first-principles decomposition, optional lane choice, or complete
+  persona prompts matter.
 - [references/palantir-customer-data-action.md](references/palantir-customer-data-action.md) -
   load when the selected optional lane is actor/data/action/write-back.
 - [references/mckinsey-issue-tree.md](references/mckinsey-issue-tree.md) -
   load when the selected optional lane is issue-tree decomposition.
-- [../budget-advisor/SKILL.md](../budget-advisor/SKILL.md) - use when a
-  caller supplies a concrete `budget` request and the brainstorm needs a
-  base/plus/max program; budget-advisor resolves the program and does not own
-  brainstorm's output contract.
+- [ensemble.yaml](ensemble.yaml) — load only for `ensemble: auto | max`.

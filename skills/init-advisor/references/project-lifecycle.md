@@ -65,6 +65,5 @@ content ticket through `content-impl-plan` and execute/render through
   choices in `docs/bootstrap-brief.md`.
 - Keep the detailed lifecycle theory here until multiple higher-tier skills
   actively need a public `project-pipeline` skill.
-- Do not turn `plan` or `execute` into base-class implementations. Treat them
-  as protocol names carried by lifecycle phases, while domain skills own the
-  real algorithms.
+- Keep generic planning and execution in native lifecycle phases while domain
+  skills own the real artifacts and algorithms.

@@ -106,9 +106,9 @@ WORKFLOWS = [
     {
         "id": "workflow:improvement",
         "label": "Improvement",
-        "description": "Drain outcomes into memory, lessons, skill maintenance, and future evals.",
+        "description": "Route outcomes into project docs, Wiki entities, skill maintenance, and future evals.",
         "doc": "docs/farplane-framework/lifecycle.md",
-        "skills": ["update-memory", "skill-maintenance", "skill-creator", "optimize-harness", "eval"],
+        "skills": ["doc-advisor", "manage-wiki", "skill-maintenance", "skill-creator", "optimize-harness", "eval"],
     },
 ]
 

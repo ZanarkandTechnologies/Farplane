@@ -11,7 +11,6 @@ LINT_CMD="${PRE_PUSH_LINT_CMD:-}"
 TYPECHECK_CMD="${PRE_PUSH_TYPECHECK_CMD:-}"
 TEST_CMD="${PRE_PUSH_TEST_CMD:-}"
 BUILD_CMD="${PRE_PUSH_BUILD_CMD:-}"
-DESLOPPIFY_CMD="${PRE_PUSH_DESLOPPIFY_CMD:-}"
 STRICT_ADVISORY="${PRE_PUSH_STRICT_ADVISORY:-0}"
 
 warn_tmp="$(mktemp)"
@@ -51,7 +50,7 @@ mkdir -p "$log_dir"
 
 is_excluded_path() {
   case "$1" in
-    .git/*|.farplane/*|.next/*|dist/*|build/*|coverage/*|out/*|tmp/*|temp/*|vendor/*|third_party/*|node_modules/*|.turbo/*|.cache/*|.desloppify/*|generated/*|__generated__/*)
+    .git/*|.farplane/*|.next/*|dist/*|build/*|coverage/*|out/*|tmp/*|temp/*|vendor/*|third_party/*|node_modules/*|.turbo/*|.cache/*|generated/*|__generated__/*)
       return 0
       ;;
     *)
@@ -169,8 +168,6 @@ run_check "lint" "$LINT_CMD"
 run_check "typecheck" "$TYPECHECK_CMD"
 run_check "tests" "$TEST_CMD"
 run_check "build" "$BUILD_CMD"
-run_check "desloppify" "$DESLOPPIFY_CMD"
-
 if [ "${FARPLANE_SKIP_AGENT_REVIEW:-0}" = "1" ]; then
   echo "Skip Codex agent review because FARPLANE_SKIP_AGENT_REVIEW=1."
 elif [ -z "$ticket_id" ]; then

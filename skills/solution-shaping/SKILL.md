@@ -21,8 +21,7 @@ brief or MVP boundary they can review. The input may be a complaint, outreach
 target, sales note, client context, or problem report.
 
 This skill composes framing, grounding, solution-boundary selection, proof, and
-handoff. It should not replace `problem-framing`; it should call or perform
-that framing step before proposing a solution.
+handoff. It performs the framing step inline before proposing a solution.
 
 ## Skill Signature
 
@@ -37,7 +36,7 @@ state: reads(supplied context, prospect notes, problem frames, research notes,
 gates: problem_frame_exists; realistic_solution_boundary; proof_model_named;
        risks_and_assumptions_section_present; decision_rights_permissions_named_for_system_mvp;
        mvp_walkthrough_present_for_operational_systems; assumptions_labeled; next_owner_named
-routes: problem-framing | research:user-grounding | research:parity |
+routes: research:user-grounding | research:parity |
   demo-realism | prd | impl-plan | goal-advisor
 fails: sends a feature pitch without problem proof; invents client facts;
   overbuilds the solution; creates autonomous tickets before reviewable scope
@@ -46,7 +45,7 @@ fails: sends a feature pitch without problem proof; invents client facts;
 ## Phase Boundary
 
 Keep the full solution synthesis inline unless a child phase needs separate
-evidence. Use `problem-framing` for the problem frame, `research:*` for user or
+evidence. Produce the problem frame inline, use `research:*` for user or
 best-practice grounding, `demo-realism` when the MVP needs believable operating
 examples, `prd` for product scope, and `impl-plan` or `goal-advisor` only after
 the solution boundary is accepted. For material operational or demo-bound
@@ -63,7 +62,8 @@ checklist into a queue of tiny review tasks.
   - [ ] Label facts as `supplied`, `observed`, `researched`, `inferred`, or
         `unknown`.
 - [ ] 2. Produce or read the problem frame.
-  - [ ] Use `problem-framing` when the problem frame does not already exist.
+  - [ ] When the problem frame does not already exist, establish the actor,
+        job, stakes, constraints, evidence status, and boundary options inline.
   - [ ] Do not proceed to MVP selection while the frame lacks actor, job,
         stakes, constraints, or boundary options.
 - [ ] 3. Ground the opportunity enough for an honest solution.
@@ -180,7 +180,7 @@ Next owner: prd for product scope or impl-plan after MVP acceptance.
 
 ## Gotchas
 
-- Do not sell a solution before `problem-framing` has made the problem coherent.
+- Do not sell a solution before the problem frame is coherent.
 - Do not infer private facts about a prospect as truth; label outreach guesses.
 - Do not leave inferred outreach angles with only a pitch or correction ask;
   name the pre-implementation route before any PRD, ticket, or build handoff.

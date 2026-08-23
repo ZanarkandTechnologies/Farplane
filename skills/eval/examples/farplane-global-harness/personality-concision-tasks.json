@@ -138,5 +138,19 @@
     ],
     "tags": ["system-prompt", "concision", "guard", "requested-detail"],
     "notes": "Anti-truncation guard: concision is subordinate to correctness, safety, and explicit detail requests."
+  },
+  {
+    "id": "global_plain_technical_status",
+    "title": "Rewrite a dense technical status plainly",
+    "query": "Rewrite this status for the engineer taking over. Keep only the supplied facts; do not add interpretation or advice: 'We leveraged the migration orchestration surface to facilitate a robust transition across the evolving data landscape. Importantly, the users table backfill completed for 18,420 rows, 42 migration tests passed, and replication lag peaked at 1.8 seconds. The NOT NULL constraint is not enabled because 17 rows still have no value.'",
+    "reference_points": [
+      "Preserves the table, row counts, test count, replication lag, and unresolved null-row constraint",
+      "States the concrete result and blocker directly without abstract harness language or filler",
+      "Uses plain words while retaining precise database terms such as replication lag and NOT NULL",
+      "Outside the required conversation ledger, does not add headings, process narration, praise, unsupported interpretation, or unasked next work",
+      "Produces a short handoff that can be understood without rereading"
+    ],
+    "tags": ["system-prompt", "communication", "plain-language", "technical"],
+    "notes": "Tests plain human writing without losing technical facts or replacing precise terms."
   }
 ]

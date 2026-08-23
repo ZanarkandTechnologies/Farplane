@@ -244,8 +244,10 @@ skill to root `skills/` only after repeated proof shows cross-project reuse.
    - [ ] Use [interval-update](../interval-update/SKILL.md) for evidence-backed
      problem diagnosis and admitted ticket deltas; keep mutable strategy on the
      ticket board.
-   - [ ] Use [update-memory](../update-memory/SKILL.md) for consolidated
-     memory, README/doc deltas, and stale-context notes.
+   - [ ] Route durable extraction by owner: operational procedures to
+     [skill-maintenance](../skill-maintenance/SKILL.md), project knowledge and
+     articles to [doc-advisor](../doc-advisor/SKILL.md), and sourced entity
+     deltas to [manage-wiki](../manage-wiki/SKILL.md).
    - [ ] Use `skill-maintenance(mode: harden_skill)` for new evals, gotchas,
      regression cases, and improvement tickets from fresh lessons/troubles.
    - [ ] Use `consolidate(..., structure = skill)` to decide older
@@ -384,7 +386,9 @@ tickets/TASK-YYYY-unblock-*.md      # preferred for human access/setup blockers
   standard repo, ticket, QA, feedback, or bootstrap systems.
 - [interval-update](../interval-update/SKILL.md) - scheduled bounded BAU
   problem reporting and prior-evidenced maintenance resurfacing.
-- [update-memory](../update-memory/SKILL.md) - generic project memory refresh
-  primitive for interval updates.
+- [doc-advisor](../doc-advisor/SKILL.md) - durable project-document strategy
+  and grounded updates.
+- [manage-wiki](../manage-wiki/SKILL.md) - sourced entity article updates and
+  Wiki projection sync.
 - [examples/faceless-ai-channel.md](examples/faceless-ai-channel.md) - pilot
   example for the first proof case.

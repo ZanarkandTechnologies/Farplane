@@ -21,8 +21,8 @@ roles, relationship strategy, problem hypotheses, evidence, competitor context,
 proof needs, and the next research or solution-shaping route.
 
 It composes existing methods. Use `research` for external evidence,
-`lead-scout` for candidate discovery, `customer-research` for a known person or
-call target, `brainstorm` for first-principles option space, and
+`lead-scout` for candidate discovery, and `customer-research` for a known person
+or call target. Perform first-principles option expansion inline, and use
 `solution-shaping` only after the target/problem frame is sufficiently
 grounded. Do not reimplement those skills inside this pipeline.
 
@@ -45,8 +45,7 @@ gates: premise_bounded; sources_traceable; provenance_labeled;
        relationship_strategy_named; inferred_pains_not_presented_as_facts;
        solution_shaping_requires_problem_frame; competitor_labels_criteria_bounded;
        external_actions_approval_gated; wiki_publication_intent_bound
-routes: deep-interview | advise | research:* | lead-scout | customer-research |
-        brainstorm | solution-shaping | manage-wiki |
+routes: research:* | lead-scout | customer-research | solution-shaping | manage-wiki |
         usecase-experiment-loop | demo-realism | impl-plan | review
 fails: generic company list; invented prospect facts; lead score without
        relationship strategy; solution pitch without evidence; duplicate
@@ -72,8 +71,9 @@ path. Manage Wiki, not Impl Plan, owns normal page selection and resolution.
   - [ ] Bind Wiki intent: direct save/update/publish-to-Wiki language means
         `apply`; preview/no-write or no Wiki direction means `preview`; a
         conflict blocks publication.
-  - [ ] If scope is materially branching, use `deep-interview` or `advise`
-        before research rather than silently choosing a market boundary.
+  - [ ] If scope is materially branching, surface the viable boundaries,
+        compare their tradeoffs, and recommend one before research rather than
+        silently choosing a market boundary.
   - [ ] If geography is missing and no safe default follows from supplied
         context, keep company/person claims blocked, map archetypes only, and
         name geography as the next decision.
@@ -129,7 +129,7 @@ path. Manage Wiki, not Impl Plan, owns normal page selection and resolution.
         optional `reference/competitive-landscape.md` only when deeper evidence
         must be reused; never add a duplicate buyer-choice sidecar.
 - [ ] 6. Explore and shape only when the evidence gate passes.
-  - [ ] Use `brainstorm` for first-principles contrast and candidate directions.
+  - [ ] Produce a first-principles contrast and candidate directions inline.
   - [ ] Require an actor, job, stakes, constraints, source status, and problem
         boundary before routing to `solution-shaping`.
   - [ ] Preserve at least three viable offer shapes when three genuinely exist;

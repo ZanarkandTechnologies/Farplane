@@ -83,7 +83,7 @@ Shot := Job + Channel + AspectRatio + Background + SourceAsset + GenerationRoute
 
 MethodSelection(shot, methods, constraints) :=
   candidates = filter(methods, shot, constraints)
-  chosen = advise(top3(candidates))
+  chosen = compare_and_recommend(top3(candidates))
 ```
 
 Use `references/model.md` for the shot matrix, method selection, execution

@@ -49,7 +49,7 @@ gates: subject_grounded; objective_named; catalog_resolved_or_source_gap;
        diagnosis_and_policy_named; pre_outcome_bet_recorded;
        decision_changing_test_named; eligible_frontier_ranked; next_wave_earned;
        first_proof_named; replan_conditions_named
-routes: reference-grounding | advise | research:parity |
+routes: reference-grounding | research:parity |
   research:source-synthesis | best-of-worlds | prototyping | metric-advisor |
   impl-plan | goal-advisor | harness-advisor | leverage-rollout
 fails: generic strategy; invented capability or candidate; fixed ladder that
@@ -129,7 +129,8 @@ the chosen next step needs its own artifact, budget, or proof surface.
    - [ ] Filter prerequisites, conflicts, guards, exhausted branches, and moves
      that exceed the remaining budget before ranking.
 - [ ] 5. Rank compounding moves and short trajectories.
-   - [ ] Use [advise](../advise/SKILL.md) when choosing among real plays.
+   - [ ] When choosing among real plays, compare the viable options and state
+     one recommendation with its accepted tradeoff.
    - [ ] Compare direct objective potential, bottleneck fit, information gain,
      downstream options unlocked, reusable assets, proof speed, cost, risk,
      reversibility, and interference. Use evidence-backed ordinal judgment
@@ -226,7 +227,7 @@ program:
     ]
   ) -> ordinal_ranked_frontier
 
-  advise(ordinal_ranked_frontier) -> next_wave + tradeoff_accepted
+  compare_and_recommend(ordinal_ranked_frontier) -> next_wave + tradeoff_accepted
 
   compare_outside_options(next_wave,
     report_now + request_feedback + stop
@@ -290,8 +291,8 @@ Output:
 
 ## Reference Map
 
-- [../advise/SKILL.md](../advise/SKILL.md) - use when choosing among viable
-  leverage plays.
+- Compare viable leverage plays inline when an explicit recommendation remains
+  necessary.
 - [../reference-grounding/SKILL.md](../reference-grounding/SKILL.md) - use
   when current capability or expected value needs evidence.
 - [../research/SKILL.md](../research/SKILL.md) - use only when the candidate

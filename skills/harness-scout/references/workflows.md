@@ -2,10 +2,16 @@
 
 ## Single Source
 
-1. Extract source content with [summarize](../../summarize/SKILL.md).
+1. Unless content was supplied, check `command -v summarize`, then run
+   `farplane run -- summarize "$source" --extract`. If the binary is missing,
+   use only a proven browser/text extraction or
+   [media-ingest](../../media-ingest/SKILL.md) fallback; otherwise block and
+   name the missing binary instead of inferring content from metadata.
 2. Search `docs/sources/registry.jsonl` by canonical URL, canonical key, title,
    and linked local artifacts. Reuse the matching `SRC-*` record when present.
-3. Classify source visibility and apply the untrusted-input boundary.
+3. Classify source visibility and apply the untrusted-input boundary. Record
+   source identity, extraction provenance, short quote anchors, fact versus
+   interpretation, grounding, and any extraction gaps.
 4. Redact private or sensitive extracts before writing tracked files.
 5. Create or update a run folder under `.farplane/harness-scout/runs/`.
 6. Extract concrete feature candidates.
@@ -13,8 +19,8 @@
    generated `docs/features/registry.jsonl`, and nearby local docs/skills; use
    [codebase-analysis](../../codebase-analysis/SKILL.md) when the match depends
    on local implementation behavior.
-8. Use [external-patterns](../../external-patterns/SKILL.md) or
-   [doc-advisor](../../doc-advisor/SKILL.md) only when source claims need
+8. Use [research:code-patterns](../../research/SKILL.md#researchcode-patterns)
+   or [doc-advisor](../../doc-advisor/SKILL.md) only when source claims need
    code or official-doc verification.
 9. Score each candidate.
 10. Write `decision-matrix.md`.

@@ -5,6 +5,8 @@ description: "Turn bounded Farplane work into an external coding-agent CLI hando
 tier: 3
 group: operations
 source: local
+capability:
+  kind: integration
 allowed-tools: Read, Grep, Glob, Bash
 ---
 
@@ -48,8 +50,8 @@ without letting that CLI become Farplane's source of truth.
 
 1. Read the selected ticket or task artifact and confirm delegation is a build
    lane, not final authority.
-2. Pick one configured profile such as `frontend-pi-kimi`; use `advise` when
-   multiple profiles fit materially differently.
+2. Pick one configured profile such as `frontend-pi-kimi`; when multiple
+   profiles fit materially differently, compare them inline and recommend one.
 3. Run `python3 skills/delegate-cli/scripts/delegate_cli_agent.py doctor --profile <profile> --json`
    to check the executable, templates, skills, and environment.
 4. Run `python3 skills/delegate-cli/scripts/delegate_cli_agent.py setup --profile <profile> --json`
@@ -77,7 +79,7 @@ without letting that CLI become Farplane's source of truth.
 
 ## Judgement Questions
 
-Use `advise` when choosing:
+Compare the viable options inline when choosing:
 
 - which external CLI/profile should own the build pass,
 - shared checkout versus worktree mode,

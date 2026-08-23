@@ -24,8 +24,8 @@ change or replace correctness, safety, accessibility, or proof requirements.
 
 `impl-plan` calls this skill after repository inspection and context resolution.
 Direct coding work may call it without a ticket. Use `review` only when the
-result needs a TAS verdict; use `desloppify` only when an accepted cleanup must
-be executed through its CLI loop.
+result needs a TAS verdict. For prose rather than implementation structure,
+return an explicit operator route to the unslop shortcut.
 
 ## Skill Signature
 
@@ -36,7 +36,7 @@ state: reads(current need, local code/tests/docs, standard or platform options,
 owns: first-sufficient-rung verdict and smallest safe next action
 gates: current_need_named; first_sufficient_rung_named; evidence_named;
   proof_preserved
-routes: impl-plan | review | desloppify | direct implementation
+routes: impl-plan | review | direct implementation
 fails: speculative build; duplicate owner; new dependency before reuse;
   line-count optimization that removes required proof or safety
 ```
@@ -92,8 +92,8 @@ native control and keep the existing form validation proof.
 - [Impl Plan](../impl-plan/SKILL.md) - use when the receipt changes a material
   ticket's implementation boundary.
 - [Review](../review/SKILL.md) - use only when a TAS judgment is required.
-- [Desloppify](../desloppify/SKILL.md) - use only for an accepted cleanup CLI
-  execution loop.
+- Explicit operator shortcut: unslop when the requested simplification is
+  prose, not code or architecture.
 
 ## Output
 

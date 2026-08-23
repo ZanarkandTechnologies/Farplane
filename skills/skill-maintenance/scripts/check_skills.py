@@ -34,6 +34,8 @@ MARKDOWN_TASK_TODO_RE = re.compile(r"^\s*- \[ \] ")
 ORDERED_CHECKBOX_TODO_RE = re.compile(r"^\s*\d+\. \[ \] ")
 TIP_LIKE_TOP_LEVEL_TODO_RE = re.compile(r"^\d+\. (?:Use .+ when\b|Keep\b|Do not\b|Avoid\b)")
 UNORDERED_PROSE_TODO_RE = re.compile(r"^\s+- ")
+GOLDEN_NODE_RE = re.compile(r"^- \[ \] \*\*N(?P<id>\d+) — .+\*\*\s*$", re.MULTILINE)
+NODE_SIGNATURE_RE = re.compile(r"^\s{2}`[^`]+ -> [^`]+`\s*$", re.MULTILINE)
 
 
 def run(command: list[str]) -> None:
@@ -188,6 +190,29 @@ def template_structure_errors(current_version: str) -> list[str]:
         todo_body = markdown_section(text, "Todo List")
         if todo_body is None:
             continue
+        if current_version == "0.5.0":
+            node_matches = list(GOLDEN_NODE_RE.finditer(todo_body))
+            if not node_matches:
+                errors.append(
+                    f"{row['name']}: ## Todo List needs Golden Workflow Nodes like "
+                    "`- [ ] **N1 — Produce the outcome.**`"
+                )
+                continue
+            node_ids = [int(match.group("id")) for match in node_matches]
+            if node_ids != list(range(1, len(node_ids) + 1)):
+                errors.append(f"{row['name']}: Golden Workflow Node IDs must be sequential from N1")
+            for index, match in enumerate(node_matches):
+                end = node_matches[index + 1].start() if index + 1 < len(node_matches) else len(todo_body)
+                node_body = todo_body[match.end():end]
+                node_id = match.group("id")
+                if not NODE_SIGNATURE_RE.search(node_body):
+                    errors.append(f"{row['name']}: N{node_id} needs an inline `input -> output | branch` signature")
+                if not re.search(r"^\s{2}Rule: \S", node_body, re.MULTILINE):
+                    errors.append(f"{row['name']}: N{node_id} needs a non-empty Rule")
+                if not re.search(r"^\s{2}Assert:\s*$", node_body, re.MULTILINE):
+                    errors.append(f"{row['name']}: N{node_id} needs an Assert block")
+            continue
+
         if not any(TOP_LEVEL_NUMBERED_TODO_RE.match(line) for line in todo_body.splitlines()):
             errors.append(f"{row['name']}: ## Todo List needs plain numbered items like `1. ...`")
         for line_number, line in enumerate(todo_body.splitlines(), start=1):
@@ -454,6 +479,8 @@ def main() -> int:
         if args.write:
             run(["python3", "bin/validators/sync_skill_registry.py", "--write"])
         run(["python3", "bin/validators/sync_skill_registry.py", "--check"])
+        run(["python3", "bin/validators/check_skill_frontmatter.py"])
+        run(["python3", "bin/validators/check_skill_ensembles.py"])
         if args.write:
             run(["python3", "bin/validators/sync_template_registry.py", "--write"])
         run(["python3", "bin/validators/sync_template_registry.py", "--check"])
@@ -486,6 +513,8 @@ def main() -> int:
                 "-m",
                 "py_compile",
                 "bin/validators/sync_skill_registry.py",
+                "bin/validators/check_skill_frontmatter.py",
+                "bin/validators/check_skill_ensembles.py",
                 "bin/validators/sync_template_registry.py",
                 "bin/validators/template_usage.py",
                 "bin/validators/check_doc_refs.py",

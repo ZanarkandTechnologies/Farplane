@@ -81,9 +81,9 @@ Ask:
 - Findings should name the unresolved dependency, unsafe assumption, or coupling
   risk that keeps the work out of a passing band.
 
-## Desloppify Cues
+## Skeptic search cues
 
-When using the anti-slop playbook, search for:
+When checking neighboring integration surfaces, search for:
 
 - a related schema, type, or config file that still encodes the old rule
 - a dependency assumption that exists only in prose, not in verified repo state

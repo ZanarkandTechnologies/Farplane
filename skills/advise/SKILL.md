@@ -3,6 +3,8 @@ name: advise
 description: "Turn an under-specified decision into three options, tradeoffs, and one recommendation when the user asks for advice."
 tier: 1
 source: local
+capability:
+  kind: shortcut
 template_uses:
   skill-template: "0.1.0"
   skill-qa-checklist: "0.1.0"
@@ -36,8 +38,8 @@ Use when the user needs judgment, not a neutral menu.
 - [ ] 6. Finish-check the advice.
   - [ ] No neutral menu, fake third option, hidden evidence gap, or vague
     "if you want" ending.
-  - [ ] For high-stakes, expensive, or durable decisions, route to
-    `deliberative-advice` or an independent review pass.
+  - [ ] When `ensemble` is `auto` or `max`, load `ensemble.yaml`, collect
+    independent first passes, and preserve the strongest dissent in synthesis.
   - [ ] For changes to this skill, require a separate review pass before claiming
     the update is ready.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
@@ -56,6 +58,29 @@ Use this shape when a visible decision note is useful:
 - `Tradeoff accepted`
 - `Next step`
 
+## Ensemble Mode
+
+The direct path remains the default. When the operator asks for ensemble
+coverage, accept only `ensemble: auto | max`:
+
+- `auto`: select exactly three relevant, diverse personas from
+  [ensemble.yaml](ensemble.yaml), state why they fit, then synthesize.
+- `max`: use every persona in that file, then synthesize.
+
+Each lane receives the same decision and evidence, completes its first pass
+before critique, and returns a recommendation. Synthesis preserves the best
+argument, meaningful dissent, tradeoff, confidence, and next owner; it is not
+a majority vote.
+
+When a recommendation changes existing behavior, place a concise **Change
+preview** before the recommendation:
+
+- **Before:** quote or cite the current behavior and exact gap; otherwise state
+  the current assumption and evidence gap.
+- **After:** state the smallest proposed change and how it closes that gap.
+- **Example:** show one representative current input or workflow -> intended
+  outcome.
+
 ## Guardrails
 
 - Do not use this for direct execution requests with no meaningful choice.
@@ -64,14 +89,12 @@ Use this shape when a visible decision note is useful:
   options that match the decision criteria and explain the recommendation
   compactly.
 - Do not end with "if you want I can ..."
-- Evidence gate: if the recommended option depends on facts not already in
-  context, use `reference-grounding` or state the evidence gap before choosing.
-- Use `reference-grounding` when the recommendation depends on evidence.
-- Use `best-of-worlds` when known sources must be extracted, scored, and
-  adapted before advice.
-- Escalate to `deliberative-advice` / `deliberative-advice:complex` when the decision is
-  high-stakes, expensive, ambiguous across several credible perspectives, or
-  likely to benefit from independent critique before synthesis.
+- Evidence gate: inspect supplied or local sources when the recommendation
+  depends on facts; otherwise state the evidence gap before choosing.
+- When known sources need broader extraction or scoring, return a visible
+  synthesis-needed handoff rather than silently expanding this shortcut.
+- Do not run an ensemble unless the operator explicitly requests `auto` or
+  `max`; normal advice stays fast and single-agent.
 - Hand UI/UX-facing choices to `functional-ui`.
 - Embed this inside `impl-plan` for coding implementation plans.
 
@@ -85,10 +108,6 @@ Use this shape when a visible decision note is useful:
 
 ## Reference Map
 
-- [../reference-grounding/SKILL.md](../reference-grounding/SKILL.md) - use
-  when the recommendation depends on evidence.
-- [../best-of-worlds/SKILL.md](../best-of-worlds/SKILL.md) - use when supplied
-  sources must be synthesized before advice.
-- [../deliberative-advice/SKILL.md](../deliberative-advice/SKILL.md) - use for
-  high-stakes or complex recommendations that need independent perspectives,
-  critique, synthesis, and visible dissent.
+- Inspect supplied and local evidence directly when enough; otherwise name the
+  exact grounding or synthesis handoff the operator must request.
+- [ensemble.yaml](ensemble.yaml) — load only for `ensemble: auto | max`.

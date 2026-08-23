@@ -103,7 +103,7 @@ Given one concrete feature spec in `docs/features/`, pick exactly one SLC slice 
     objective, need, assumptions, root cause, constraints, first viable slice,
     proof/falsification, tradeoffs, and non-goals.
 17. When the repo has `qa/cookbook/` and the slice is UI-bearing or agentically hard, seed or update a matching `qa/cookbook/<workflow>.md` entry so QA inherits the same fast-entry, stabilize, inspect, and proof surfaces as the ticket.
-18. For material, cross-module, or architecture-facing tickets, include a compact `Diagram Summary` before the longer plan prose and follow `skills/diagramming/SKILL.md` for style/taste.
+18. For material, cross-module, or architecture-facing tickets, include a compact `Diagram Summary` before the longer plan prose using the repo's inline signature, color/legend, and anti-bloat conventions.
 
 ## Inputs
 
@@ -222,8 +222,8 @@ pick one slice, keep the largest coherent feature ticket you can, add proof/test
    mechanical metrics or `none mechanical`, caller-declared rubric families,
    required TAS gates, hard gates, checks, and required evidence artifacts.
 8. For each material ticket, write a compact `Map` with one top-level delta
-   diagram when useful; use `diagramming` for inline-signature, color/legend,
-   and anti-bloat patterns.
+   diagram when useful; apply compact inline-signature, color/legend, and
+   anti-bloat patterns directly.
 9. For each UI-bearing or agentically hard ticket, add a compact
    `Agent Contract` block, carrying forward the brief or bootstrap surfaces
    when relevant.

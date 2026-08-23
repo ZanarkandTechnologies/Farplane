@@ -31,7 +31,9 @@ advise_check(decision, options, recommendation, evidence?)
   options exist, then recommends one clearly and names the accepted tradeoff.
 - [ ] The answer routes the direct next owner or next step without inventing
   options, delaying an obvious reversible action, or performing higher-tier
-  research synthesis.
+  research synthesis. When it recommends changing existing behavior, its
+  Change preview grounds the current gap or names its evidence gap, and makes
+  the proposed effect concrete.
 
 ## Reviewer Prompt
 

@@ -15,10 +15,10 @@ Rules:
   `docs/systems/skill-system.md`; do not create a second hand-authored skill
   feature registry.
 - Package-local metadata lives in `skills/*/SKILL.md` frontmatter. Keep it
-  minimal: `tier`, `source`, optional `skill_template_version`, Tier 3 `group`,
-  optional local surface fields (`eval`, `qa_checklist`, `skill_ui`), optional
-  `methods`, optional `upstream_url`, and optional one-way Tier 3
-  `common_chains`.
+  minimal and typed by `bin/core/skill_contract.py`:
+  required identity/routing fields, optional capability contract, template,
+  local-surface, method, planner, and external-source fields only. Do not add
+  free-form `metadata`, tags, or license blobs.
 - For `source: external` skills, keep Farplane-specific wrapper policy in the
   local caller skill instead of editing upstream-owned command/reference bodies.
 - External skills may intentionally omit direct todo lists when the local
@@ -37,6 +37,9 @@ Rules:
   skills, subagents, hooks/scripts, ticket contracts, validators, or registries.
 - Run `python3 skills/skill-maintenance/scripts/check_skills.py --write` after
   skill frontmatter, Markdown links, or first-load todo changes.
+- Run `python3 bin/validators/check_skill_frontmatter.py --report` when
+  reviewing capability contracts; unresolved inputs are allowed only for truly
+  external or not-yet-admitted artifact families.
 - When `docs/skills/templates/SKILL_TEMPLATE.md` changes, treat it as a
   template release candidate: run
   `python3 skills/skill-maintenance/scripts/check_skills.py --write` so

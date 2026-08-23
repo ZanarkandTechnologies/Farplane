@@ -4,6 +4,9 @@ description: "Compile content intent into a canonical ticket's action graph, dep
 tier: 3
 group: marketing
 source: local
+capability:
+  kind: artifact
+  produces: [content-production-ticket]
 template_uses:
   skill-template: "0.4.0"
   skill-qa-checklist: "0.1.1"

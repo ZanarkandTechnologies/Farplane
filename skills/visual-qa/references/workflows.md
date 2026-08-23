@@ -72,6 +72,14 @@ run.
 
 For long narrative pages, timeline scrubbing, and animation validation:
 
+- Scroll the actual page to its bottom; do not infer lower-page behavior from
+  browser dimensions or a first viewport.
+- Capture desktop and mobile full-page images plus readable top, middle, and
+  bottom frames. Check lazy-loaded content, sticky elements, clipping, and
+  overflow after the scroll.
+- Write `<design.md section ID> -> <evidence path> -> PASS|FAIL|not_provable`.
+  An uncovered required section is a non-pass; a compressed full-page image is
+  not readable section proof.
 - Use `landing-page` -> `references/qa.md` for landing QA.
 - Reuse the same `Expected UI Spec -> Observed Snapshot Report -> Diff Report -> Fix Plan` format from `../SKILL.md`
 - Keep the ticket's design intent and `docs/TASTE.md` visible in the report even when the page is animation-heavy.

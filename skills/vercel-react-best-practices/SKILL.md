@@ -4,6 +4,8 @@ description: "Turn React or Next.js code work into Vercel performance-guideline 
 tier: 3
 group: operations
 source: external
+capability:
+  kind: integration
 upstream_url: https://github.com/vercel-labs/agent-skills/tree/main/skills/react-best-practices
 ---
 

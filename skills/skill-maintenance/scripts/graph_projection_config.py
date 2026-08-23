@@ -53,7 +53,7 @@ PROJECTION_CONFIGS: dict[str, ProjectionConfig] = {
     ),
     "skill-capabilities": ProjectionConfig(
         name="skill-capabilities",
-        description="Selected department workflows and declared artifact methods with explicit containment.",
+        description="Admitted artifact workstations and integration facilities by department.",
         output_schema="skill_capability_graph",
         default_out=generated_graph_path("skill-capability-graph.json"),
         default_js_out=generated_graph_path("skill-capability-graph.js"),

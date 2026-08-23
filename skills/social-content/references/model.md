@@ -36,10 +36,6 @@ social-content:carousel :=
 social-content:linkedin :=
   professional/founder/B2B voice, hiring post, thought leadership,
   LinkedIn-native post, or LinkedIn carousel adaptation
-
-social-content:twitter-thread :=
-  X/Twitter hook tweet, thread, quote-post, reply chain, or media-supported
-  thread
 ```
 
 ## Method Selection Rule
@@ -51,8 +47,8 @@ Direction :=
   platform + format + hook/copy posture + asset carrier + CTA + proof + publish boundary
 ```
 
-Use `advise` when the format, platform mix, hook, asset route, or CTA is a real
-choice. Do not advise isolated wording details when the direction is already
+Compare the viable format, platform mix, hook, asset route, or CTA options
+inline when the choice is real. Do not revisit isolated wording details when the direction is already
 settled.
 
 ## Execution Packet
@@ -68,6 +64,7 @@ ExecutionPacket :=
 + qa_assertions
 ```
 
-`social-content` owns the artifact decision. `ai-image-advisor`,
+`social-content` owns the selected social artifact decision. `x-thread` owns
+X-native thread copy. `ai-image-advisor`,
 `ai-video-advisor`, `remotion`, `remotion-render`, and `impl-plan` own
 production routes when the packet needs them.

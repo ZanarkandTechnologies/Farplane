@@ -34,7 +34,7 @@ PipelineHandoff :=
 ## Rules
 
 - `init-advisor` selects or records the profile in `docs/bootstrap-brief.md`.
-- `deep-interview` asks along the profile's advice axes when the profile is
+- Operator clarification follows the profile's advice axes when the profile is
   present or when the operator names a project type.
 - `prd` records explored options, selected directions, component matrix, and
   prototype gates.
@@ -42,8 +42,8 @@ PipelineHandoff :=
   only when a prototype gate names a real uncertainty.
 - Tier 3 domain skills consume the selected directions and handoff packets.
   They do not re-run the whole project discovery loop.
-- Do not mechanically call `advise` for every field. Use `advise` for material
-  choices; use profile defaults when the choice is obvious or low impact.
+- Do not turn every field into a decision ceremony. Compare material choices
+  inline; use profile defaults when the choice is obvious or low impact.
 
 ## Coding App
 

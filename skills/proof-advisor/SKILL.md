@@ -50,7 +50,7 @@ gates:
   cases_distinct_and_judgeable; proof_surface_fit; anti-cheat_reviewed
 
 routes:
-  testing | eval:behavior-trace | agent-qa-test | qa | visual-qa |
+  eval:behavior-trace | agent-qa-test | qa | visual-qa |
   metric-advisor | skill-maintenance | review
 
 fails:
@@ -63,7 +63,8 @@ fails:
 
 Run grounding and proof-case design inline by default. Route to:
 
-- `testing` when the next step is choosing or running the proof command.
+- the caller's native execution phase when the selected deterministic proof
+  command is already known;
 - `eval` when selected cases should become runnable eval rows or judge prompts.
 - `agent-qa-test` when the claim needs tester evidence plus evidence review.
 - `skill-maintenance` when case findings should harden a skill checklist,
@@ -113,8 +114,14 @@ Run grounding and proof-case design inline by default. Route to:
     claim depends on an unclear metric, reward signal, guard metric, or
     no-mechanical-metric rationale.
   - [ ] Use deterministic tests, validators, schemas, or scripts when the
-    expected result is mechanically checkable.
-  - [ ] Use `testing`, Eval `behavior_trace`, `agent-qa-test`, `qa`,
+    expected result is mechanically checkable. When the proof type or
+    backpressure is unclear, load the conditional
+    [testing strategy decision tree](references/testing/testing-strategy-decision-tree.md)
+    and only the matching domain guide under `references/testing/`.
+  - [ ] When an agent cannot reliably operate or assert the chosen behavior,
+    load [agentic testing instrumentation](references/testing/agentic-testing-instrumentation.md)
+    and add the smallest test-only observation or control surface.
+  - [ ] Use Eval `behavior_trace`, `agent-qa-test`, `qa`,
     `visual-qa`, or `review` according to proof-surface fit.
   - [ ] Use evals or model/human judges when the behavior is variable but the
     criteria are explicit.
@@ -132,7 +139,7 @@ Run grounding and proof-case design inline by default. Route to:
   - [ ] If eval rows changed, also run `skills/eval/qa_checklist.md` and the
     cheap query-spoiler smoke check when available.
   - [ ] If a skill package changed, run
-    `skills/skill-maintenance/qa_checklist.md` against the changed skill.
+    `docs/review/rubrics/skill-contract.md` against the changed skill.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 ## Templates
@@ -189,13 +196,19 @@ coverage_gaps:
   external eval/testing practice should shape the case-generation workflow.
 - [references/proof-case-rubric.md](references/proof-case-rubric.md) - read when
   scoring, selecting, rejecting, or reviewing proof cases.
+- [references/testing/testing-strategy-decision-tree.md](references/testing/testing-strategy-decision-tree.md)
+  - load only when proof type or backpressure is unresolved; it links the
+  browser, unit, integration, contract, performance, golden, and human/eval
+  decision boundary.
+- [references/testing/agentic-testing-instrumentation.md](references/testing/agentic-testing-instrumentation.md)
+  - load only when the target is difficult for an agent to operate or assert.
+- `references/testing/{crud-web-app,api-backend,ai-app,voice-app,video-app,canvas-app,multiplayer-2p-game}.md`
+  - load only the guide matching the system under test.
 - [qa_checklist.md](qa_checklist.md) - run before claiming material proof-case
   design is ready.
 - [Golden proof plan](examples/golden/proof-plan.md) - load with QA when
   planning or independently reviewing prompt-heavy or judgment-dependent proof
   advice; transfer invariants, not case facts or wording.
-- [../testing/SKILL.md](../testing/SKILL.md) - route proof-surface execution and
-  testing backpressure decisions.
 - [../eval/SKILL.md](../eval/SKILL.md) - route runnable eval rows, judges,
   fixture ownership, and eval-run proof.
 - [../metric-advisor/SKILL.md](../metric-advisor/SKILL.md) - route unclear

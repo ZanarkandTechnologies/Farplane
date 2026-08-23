@@ -8,7 +8,8 @@ Use it to:
 - read the ticket `QA Strategy` block for declared rubric gates and metric
   claims, and `Done` for completion conditions
 - choose the right rubric families for the ticket
-- load the anti-slop search playbook when the review needs repo-grounded skepticism
+- use `lean-check` for suspected implementation bloat and `unslop` for prose
+  that needs simplification
 - locate the correct family reference files
 - assign one TAS to each family from modular binary checks
 - write one structured review result and link it from the ticket `Links`,
@@ -37,8 +38,8 @@ Calibration rules:
 Each family has its own reference file. Read the selected family files before
 assigning TAS.
 
-Also load `desloppify.md` whenever code, cleanup, integration, or evidence
-trust is in scope. It is a cross-cutting search playbook, not a TAS family.
+Use the selected rubric's own skeptic questions and neighboring-surface checks.
+Do not add a parallel anti-slop review family.
 
 ## Calibration Examples
 
@@ -108,6 +109,8 @@ Default required family verdicts:
 - `video-quality`: `TAS-A` when video proof is required, otherwise diagnostic
 - `integration-readiness`: `TAS-A`
 - `skill-contract`: `TAS-A` when skill files or skill-system behavior changed
+- `goal-program-contract`: `TAS-A` when Goal packets, programs, launchers, or
+  Goal Advisor compilation behavior changed
 - `prompt-quality`: `TAS-A` when subagent, delegated CLI, eval, structured
   output, or AI-app prompts changed
 - `eval-quality`: `TAS-A` when eval tasks, judges, fixtures, or runners changed
@@ -168,6 +171,11 @@ Choose rubric families from the ticket context:
   - `skill-contract`
   - `integration-readiness`
   - `evidence-quality`
+- Goal packet or launcher review:
+  - `goal-program-contract`
+  - `prompt-quality`
+  - `evidence-quality`
+  - `integration-readiness`
 - prompt review:
   - `prompt-quality`
   - `evidence-quality`
@@ -201,19 +209,6 @@ the purchase question underspecified. A simulated buyer verdict never proves
 actual willingness to pay or product-market fit.
 
 When unsure, prefer adding `evidence-quality` and `integration-readiness`.
-
-## Cross-Cutting Search Playbook
-
-- File: `desloppify.md`
-- Use when:
-  - code or docs may have neighboring-surface drift
-  - integration or invariant risk could hide outside the changed file
-  - AI-generated or rapid patches need an anti-slop consistency sweep
-  - evidence claims sound stronger than the attached proof
-- Focus:
-  - changed-file plus neighboring-surface search discipline
-  - severity/confidence-ranked findings
-  - invariant, naming, contract, and evidence drift
 
 ## Rubric Families
 
@@ -347,6 +342,14 @@ When unsure, prefer adding `evidence-quality` and `integration-readiness`.
   - whether the result would actually satisfy or impress the user
   - evidence confidence for any stronger value claims
 
+### 10a. Buyer Communication Quality
+- File: `buyer-communication-quality.md`
+- Focus:
+  - one reader and decision
+  - outcome-before-mechanics narrative
+  - claim-proof adjacency and buyer-readable interpretation
+  - objections, scan depth, and unmistakable action
+
 ### 10b. ICP Purchase Conviction
 - File: `icp-purchase-conviction.md`
 - Focus:
@@ -376,6 +379,15 @@ When unsure, prefer adding `evidence-quality` and `integration-readiness`.
   - output contract
   - hallucination and overreach control
   - evidence and tool-use expectations
+
+### 12b. Goal Program Contract
+- File: `goal-program-contract.md`
+- Focus:
+  - objective fidelity and execution-path coherence
+  - necessary reference consumers
+  - Done assertion-to-evidence closure
+  - failure recovery and sound stopping
+  - fresh-agent reconstructability
 
 ### 13. Eval Quality
 - File: `eval-quality.md`

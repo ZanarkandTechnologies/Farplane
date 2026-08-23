@@ -1,6 +1,6 @@
 ---
 template_id: skill-template
-template_version: "0.4.4"
+template_version: "0.5.0"
 feature_refs:
   - FEAT-0022
   - FEAT-0054
@@ -13,7 +13,6 @@ surface_fields:
   eval: supported
   qa_checklist: supported
   skill_ui: supported
-  workflow: optional
 ---
 
 ---
@@ -21,8 +20,17 @@ name: {skill_name}
 description: "[TODO: Verb input/context into output/artifact when call-condition; <=220 chars.]"
 tier: [TODO: 1 | 2 | 3]
 source: local
+# Optional static projection. Choose exactly one kind; variants remain normal
+# invocation inputs rather than their own skills or capabilities.
+# capability:
+#   kind: artifact # artifact | integration | shortcut
+#   consumes: ["input-artifact-id"]
+#   produces: ["output-artifact-id"] # artifact only; exactly one
+# capability:
+#   kind: integration
+#   consumes: ["input-artifact-id"]
 template_uses:
-  skill-template: "0.4.4"
+  skill-template: "0.5.0"
 # Add only after the skill fits 10 top-level todos, 5 QA checks, and 5 evals.
 # skill-surface-budget: "0.1.0"
 # Tier 3 only: back-office | sales | deals | marketing | operations |
@@ -60,31 +68,32 @@ failure examples in Gotchas.]
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-1. [Bind the real input, desired result, and any choice that would materially
-   change the work. Infer ordinary context instead of asking for everything.]
-2. [Inspect the input for the domain signals that determine the approach.]
-   Example: [real input] -> [tempting wrong interpretation or result] -> [why
-   it fails].
-3. [Perform the domain transformation and name the facts, structure, behavior,
-   or intent that must survive it.]
-4. [Handle the one meaningful branch or quality decision, when one exists.]
-   Assert: [add only when this stage has an ambiguous expected state, likely
-   drift, costly failure, or a gate required by the next stage].
-5. [Self-audit with two concrete questions: one about output quality and one
-   about preservation or correctness. Fix failures, then return the exact output.]
+- [ ] **N1 — {domain verb + concrete outcome}.**
+  `{input_state} -> {output_state} | {named_branch}`
 
-[TODO: Replace every bracketed prompt with domain-specific language. Keep three
-to five top-level actions by default. If a step could be pasted into an
-unrelated skill, rewrite it. Omit the `Assert:` line when the result is obvious
-or mechanically verified. Keep the embedded example, preservation rule, and
-self-audit instead of replacing them with generic drafting steps.]
+  Rule: {non-obvious domain decision that changes the result.}
+
+  Example: `{representative input} -> {decisive signal} -> {accepted output}`
+
+  Assert:
+  - {observable output condition}
+  - {critical invariant, rejection, or branch condition}
+
+[TODO: Repeat the Golden Workflow Node block for three to seven real workflow
+moves. Each top-level node must be executable as one bounded operation, emit
+inspectable state for the next node, and contain domain language that would not
+fit an unrelated skill. Keep Rule and Assert. Keep Example when judgment,
+hidden edge, or a tempting ambiguity changes the route; otherwise omit it.
+Do not add generic bind, inspect, transform, preserve, self-audit, or next
+fields—the signature and assertions carry those obligations.]
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 <!-- Optional modules:
 - `## Templates`: keep when a reusable output shape is actually consumed.
 - `## Reference Map`: keep when a conditional branch has detail to load.
-- `qa_checklist.md`: add when repeatable runtime guardrails need preflight and
-  finish use.
+- `qa_checklist.md`: exceptional existing surface only. Keep or create it when
+  repeated skill-specific runtime, safety, or preflight guards cannot be
+  expressed more clearly as node assertions, evals, validators, or review.
 - `evals/evals.json`: add when variable behavior needs a focused judgeable case.
 - `examples/golden/*`: add when a useful example is too large to sit beside its
   rule. Keep short examples inline.

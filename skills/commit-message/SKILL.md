@@ -4,6 +4,8 @@ version: 0.1.0
 description: "Turn staged or recent git diffs into a compact repo-style commit subject when a commit message is needed."
 tier: 2
 source: local
+capability:
+  kind: shortcut
 allowed-tools: Read, Glob, Grep
 ---
 
@@ -14,16 +16,16 @@ allowed-tools: Read, Glob, Grep
 
 - [ ] Inspect staged changes first; if nothing is staged, inspect the intended
   diff boundary before writing a subject.
-- [ ] Use [reference-grounding](../reference-grounding/SKILL.md) to identify
-  the main behavioral delta and existing repo commit style.
+- [ ] Inspect the intended diff and recent repo commit style directly to
+  identify the main behavioral delta.
 - [ ] Pick the conventional commit type and shortest honest scope.
 - [ ] Write the subject as lower-case imperative summary.
 - [ ] Lead with the main change, not the file list.
 - [ ] Avoid bundling unrelated changes into one message.
-- [ ] Use [advise](../advise/SKILL.md) when the diff has multiple plausible
-  commit boundaries.
-- [ ] Use the [review protocol](../review/SKILL.md) when preparing a release- or PR-critical
-  commit message.
+- [ ] When the diff has multiple plausible commit boundaries, compare them and
+  recommend the smallest coherent boundary.
+- [ ] For a release- or PR-critical subject, require an independent review
+  before returning it as ready.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 Use when the user asks for a commit message, commit title, or to infer the repo's commit style from history.

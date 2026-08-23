@@ -12,9 +12,13 @@ from pathlib import Path
 from typing import Sequence
 
 BIN_DIR = Path(__file__).resolve().parent
+REPO_ROOT = Path(__file__).resolve().parents[3]
 if str(BIN_DIR) not in sys.path:
     sys.path.insert(0, str(BIN_DIR))
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
 
+from bin.core.skill_contract import normalize_capability_contract, parse_skill_frontmatter
 from install_selected_skills import Skill, discover_skills
 
 
@@ -34,121 +38,7 @@ class SkillPlugin:
     display_name: str
     description: str
     keywords: tuple[str, ...]
-
-
-GROUP_DEFINITIONS: tuple[dict[str, object], ...] = (
-    {
-        "name": "farplane-core",
-        "display_name": "Farplane Core",
-        "description": "Core reasoning skills plus compatibility phase wrappers and review protocol.",
-        "skills": (
-            "advise",
-            "reference-grounding",
-            "prototyping",
-            "research",
-            "plan",
-            "execute",
-            "review",
-            "brainstorm",
-            "doc-advisor",
-            "external-patterns",
-        ),
-        "keywords": ("core", "planning", "review"),
-    },
-    {
-        "name": "farplane-coding-workflow",
-        "display_name": "Farplane Coding Workflow",
-        "description": "Ticket, implementation, QA, review, and closeout workflow skills.",
-        "skills": (
-            "init-advisor",
-            "prd",
-            "spec-to-ticket",
-            "impl-plan",
-            "qa",
-            "demo",
-            "close-ticket",
-            "ralph",
-            "work",
-            "goal-advisor",
-            "runtime-debugging",
-            "agent-qa-test",
-            "testing",
-            "codebase-analysis",
-            "commit-message",
-        ),
-        "keywords": ("coding", "tickets", "qa"),
-    },
-    {
-        "name": "farplane-frontend",
-        "display_name": "Farplane Frontend",
-        "description": "UI planning facets, implementation references, and visual quality gates.",
-        "skills": (
-            "impl-plan",
-            "functional-ui",
-            "visual-design",
-            "landing-page",
-            "asset-advisor",
-            "visual-qa",
-            "web-design-guidelines",
-            "vercel-react-best-practices",
-        ),
-        "keywords": ("frontend", "ui", "design"),
-    },
-    {
-        "name": "farplane-research",
-        "display_name": "Farplane Research",
-        "description": "Research, source ingestion, synthesis, scouting, and summarization skills.",
-        "skills": (
-            "research",
-            "best-of-worlds",
-            "harness-scout",
-            "feed-scout",
-            "media-ingest",
-            "video-understanding",
-            "summarize",
-            "apify",
-            "doc-advisor",
-            "external-patterns",
-            "find-skills",
-        ),
-        "keywords": ("research", "sources", "synthesis"),
-    },
-    {
-        "name": "farplane-media-content",
-        "display_name": "Farplane Media and Content",
-        "description": "Image, video, Remotion, social, product photography, and content production skills.",
-        "skills": (
-            "ai-image-advisor",
-            "ai-video-advisor",
-            "remotion",
-            "remotion-render",
-            "social-content",
-            "reel-collage",
-            "product-photography",
-        ),
-        "keywords": ("media", "content", "generation"),
-    },
-    {
-        "name": "farplane-harness-engineering",
-        "display_name": "Farplane Harness Engineering",
-        "description": "Harness improvement, skill maintenance, delegation, invocation, and self-improvement skills.",
-        "skills": (
-            "harness-advisor",
-            "skill-maintenance",
-            "skill-creator",
-            "skill-registry-ui",
-            "eval",
-            "agent-testability-plan",
-            "delegate-cli",
-            "self-improve",
-            "desloppify",
-            "diagramming",
-        ),
-        "keywords": ("harness", "skills", "maintenance"),
-    },
-)
-
-GROUP_PLUGIN_NAMES = frozenset(str(definition["name"]) for definition in GROUP_DEFINITIONS)
+    is_bundle: bool = False
 
 
 @dataclass(frozen=True)
@@ -211,29 +101,50 @@ def single_skill_plugin(skill: Skill) -> SkillPlugin:
     )
 
 
-def group_plugins(skills: Sequence[Skill]) -> list[SkillPlugin]:
-    by_name = {skill.name: skill for skill in skills}
+def bundle_plugins(skills: Sequence[Skill]) -> list[SkillPlugin]:
+    """Project bundles from explicit capability contracts only."""
+
+    members: dict[str, list[Skill]] = {}
+    for skill in skills:
+        metadata = parse_skill_frontmatter(skill.path / "SKILL.md")
+        capability = normalize_capability_contract(
+            metadata.get("capability"), skill.path / "SKILL.md"
+        )
+        if capability is None:
+            members.setdefault("farplane-core", []).append(skill)
+        elif capability["kind"] == "shortcut":
+            members.setdefault("farplane-shortcuts", []).append(skill)
+
     plugins: list[SkillPlugin] = []
-    for definition in GROUP_DEFINITIONS:
-        requested = tuple(definition["skills"])  # type: ignore[arg-type]
-        members = tuple(by_name[name] for name in requested if name in by_name)
-        if not members:
-            continue
+    for name in sorted(members, key=lambda item: (item != "farplane-core", item != "farplane-shortcuts", item)):
+        if name == "farplane-core":
+            display = "Farplane Core"
+            description = "Farplane skills with no specialized capability contract."
+            keywords = ("core", "capability")
+        elif name == "farplane-shortcuts":
+            display = "Farplane Shortcuts"
+            description = "Explicit-only Farplane prompt shortcuts."
+            keywords = ("shortcut", "explicit")
         plugins.append(
             SkillPlugin(
-                name=str(definition["name"]),
-                skills=members,
-                display_name=str(definition["display_name"]),
-                description=str(definition["description"]),
-                keywords=tuple(str(value) for value in definition["keywords"]),  # type: ignore[arg-type]
+                name=name,
+                skills=tuple(sorted(members[name], key=lambda skill: skill.name)),
+                display_name=display,
+                description=description,
+                keywords=keywords,
+                is_bundle=True,
             )
         )
     return plugins
 
 
 def build_plugins(skills: Sequence[Skill]) -> list[SkillPlugin]:
-    bundles = group_plugins(skills)
-    return [*bundles, *(single_skill_plugin(skill) for skill in skills)]
+    plugins = [*bundle_plugins(skills), *(single_skill_plugin(skill) for skill in skills)]
+    names = [plugin.name for plugin in plugins]
+    if len(names) != len(set(names)):
+        duplicates = sorted({name for name in names if names.count(name) > 1})
+        raise ValueError(f"bundle and individual plugin names collide: {', '.join(duplicates)}")
+    return plugins
 
 
 def parse_plugin_names(raw: str | None, repeated: Sequence[str] | None) -> list[str]:
@@ -264,8 +175,8 @@ def select_plugins(
 
 
 def plugin_listing(plugins: Sequence[SkillPlugin]) -> str:
-    bundles = [plugin for plugin in plugins if plugin.name in GROUP_PLUGIN_NAMES]
-    individuals = [plugin for plugin in plugins if plugin.name not in GROUP_PLUGIN_NAMES]
+    bundles = [plugin for plugin in plugins if plugin.is_bundle]
+    individuals = [plugin for plugin in plugins if not plugin.is_bundle]
     lines = ["Bundle plugins:"]
     lines.extend(f"- {plugin.name}: {plugin.description}" for plugin in bundles)
     lines.append("")
@@ -401,7 +312,7 @@ def sync_skill_plugins(
 
     return SyncResult(
         plugin_count=len(selected_plugins),
-        bundle_count=sum(1 for plugin in selected_plugins if plugin.name in GROUP_PLUGIN_NAMES),
+        bundle_count=sum(1 for plugin in selected_plugins if plugin.is_bundle),
         skill_count=len(skills),
         marketplace_path=resolved_marketplace_path,
         plugins_dir=resolved_plugins_dir,
@@ -540,7 +451,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                             "description": plugin.description,
                             "skills": [skill.name for skill in plugin.skills],
                             "kind": "bundle"
-                            if plugin.name in GROUP_PLUGIN_NAMES
+                            if plugin.is_bundle
                             else "individual",
                         }
                         for plugin in plugins

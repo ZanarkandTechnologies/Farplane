@@ -10,7 +10,7 @@ Use `pre-push` for the heavier local gate:
 - large-file scan: warn at `500` raw lines, block at `1000`
 - project-owned local validators such as lint, typecheck, tests, and optional build
 - advisory Codex SDK diff review after deterministic checks
-- optional soft heavy checks such as `desloppify`
+- optional advisory agent review
 
 Use `pre-commit` only when you explicitly want a smaller fast gate before each
 commit.

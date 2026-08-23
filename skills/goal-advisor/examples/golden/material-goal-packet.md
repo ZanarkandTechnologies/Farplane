@@ -29,6 +29,21 @@ Metric: ticket critical-path checks + delegated QA/review; no proxy-only finish
 Drift Policy: compare ticket/program/progress after each turn
 QA Proof Route: qa-tester captures CSV workflow and screenshot -> visual-qa
 judges design fidelity -> reviewer judges evidence sufficiency
+Compiled Execution Path:
+  S1 customer table -> Change 1 expose export action -> D1 action visible
+  S2 export request -> Change 2 generate CSV -> D2 correct rows and columns
+  S3 download complete -> Change 3 browser delivery -> D3 operated download
+  F1 export failure -> Change 3 recovery state -> D4 visible retry path
+Reference Manifest:
+  ticket.md -> all nodes; owns scope and Done / Proof
+  program.md -> loop; owns order, drift, and stopping
+  progress.md -> writeback; owns observations and evidence chronology
+  design.md -> S1/S3/F1 + visual-qa; owns UI state baseline
+Completion Closure:
+  D1 -> Change 1 -> screenshot compared with design.md -> pending
+  D2 -> Change 2 -> focused CSV assertions -> pending
+  D3 -> Change 3 -> operated download trace -> pending
+  D4 -> Change 3 -> failure-state capture compared with design.md -> pending
 Approval: approved; packet compiled from ticket updated_at 2026-07-16T14:20:00Z
 Native Goal Prompt:
   Files: [the four paths above]
@@ -44,6 +59,10 @@ Next Action: start the approved Goal; block if packet freshness changes.
 ## Why it passes QA
 
 - The launcher cites compact file-backed truth and records packet freshness.
+- Diagram nodes, changes, exit assertions, and evidence form one traceable path;
+  no Done claim floats free of an implementation owner or proof source.
+- Every non-core reference has a named consumer, so stale and ornamental refs
+  are detectable before execution.
 - Proof route, no-self-certification, critical path, and final checkpoint are
   explicit; missing real-workflow evidence cannot be hidden by unit tests.
 - Budget, authority boundary, drift, logging, and approval are inspectable.
@@ -78,6 +97,8 @@ source_refs:
   - skills/goal-advisor/qa_checklist.md
 qa_refs: [file-list-compactness, no-self-certification, critical-path-proof, final-completion-checkpoint]
 accepted_because: [fresh_packet, compact_launcher, delegated_proof, explicit_stop_gate]
+decisive_nodes: [compiled_execution_path, reference_manifest, completion_closure]
+no_skill_comparison: "A generic launcher would preserve the polished prose but miss the stale design, orphan refs, and unsupported Done rows."
 heldout_required: true
 review_excludes: planner_scratch_reasoning
 ```

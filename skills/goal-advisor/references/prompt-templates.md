@@ -14,6 +14,7 @@ branch and needs to emit prompt text.
 
 ```text
 Goal Architecture:
+Verdict: ready | revise | blocked
 Ticket:
 Program:
 Progress:
@@ -27,6 +28,10 @@ Heartbeat Prompt:
 Native Goal Prompt:
 Next Action:
 ```
+
+For `revise` or `blocked`, also emit `Failed bindings`, `Completion Closure:
+unsupported`, `Launcher: withheld`, and `stop_complete: withheld`. Do not rely
+on prose such as “compilation rejected” to carry these state transitions.
 
 ## Goal Packet Setup
 
@@ -67,6 +72,11 @@ Files:
 
 First read `program.md`; it is the executable loop policy for this Goal
 Packet. Then read `ticket.md`; it is the scope, acceptance, and proof contract.
+Before acting, verify that the program's Compiled Execution Path covers the
+ticket Contract Diagram and Change Plan, every Reference Manifest entry has a
+named consumer, and every Done condition has a Completion Closure row. Return
+to `goal-advisor` with `revise` when bindings are missing, contradictory,
+stale, or circular; do not infer a replacement program during execution.
 When listed, use `hypothesis-tree.json` as the sole current research-state
 owner: derive eligible leaves from parent and status, and do not trust or write
 a duplicate frontier, child list, depth, or rank. Read only the latest 80 lines
@@ -85,6 +95,11 @@ Strategy, Agent Contract, Run Hints, budget, blocker policy, and stop
 conditions. `Scope: Out` wins unless the ticket is updated and this packet is
 regenerated. Do not flatten or rewrite requirements; keep this Goal prompt
 compact and treat the listed files as the source of truth.
+
+Load additional references only through the program's Reference Manifest and
+only for their named consumer. A listed reference is context or evidence, not
+executable scope. Remove or revise orphan references instead of loading them
+"just in case."
 
 Logging: Before ending each turn, append a compact structured entry to every
 listed `progress.md` whose ticket state changed. If the work coordinates
@@ -113,6 +128,12 @@ MP4. Do not add a ticket demo flag or apply this step to heartbeats, feedback
 checks, planning-only Goals, or direct non-Goal work.
 When every gate passes, run `farplane ticket finalize TASK-XXXX` and include its
 receipt before `stop_complete`. Do not move the ticket by hand.
+Do not stop complete while any Completion Closure row is pending, unsupported,
+stale, or contradicted by the strongest evidence.
+Treat every operator screenshot complaint as a Completion Closure row keyed to
+the original image, complaint, affected design state, and viewport. It closes
+only with repair, newer comparable evidence, and an independent verdict, or an
+explicit operator withdrawal recorded as the human disposition.
 
 After each turn: Apply `observe -> choose_next -> act -> verify -> write_back`.
 Choose among `execute`, `diagnose`, `report_now`, `request_feedback`, and
@@ -132,9 +153,13 @@ complete, stop blocked, or emit the next heartbeat action with attempted paths
 and one missing input. For UI or user-visible changes, stop complete only after
 the final response can include the strongest screenshot/image evidence as a
 Markdown image link plus artifact links, or after recording a clear blocker for
-missing visual proof. The final response must include `Ticket:`,
-`Verification:`, `Artifacts:`, `Grounding:`, and `Residual risk:` lines for
-material feature work.
+missing visual proof. The final response must include `Ticket:`, `Execution
+Path:`, `Reference Manifest:`, `Completion Closure:`, `Verification:`,
+`Artifacts:`, `Grounding:`, and `Residual risk:` lines for material feature
+work. Summarize ordered diagram IDs, failure branches, assertion owner,
+evidence source, and support status; do not force the reviewer to infer them
+from links. State that `stop_complete` is withheld until every closure row is
+supported.
 
 Approval: This prompt may be run only after the human has approved the current
 Goal Packet. If the ticket plan changed after this packet was compiled, return

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate an optional separate visual companion for an impl-plan ticket."""
+"""Validate optional diagrams and the required design baseline for UI tickets."""
 
 from __future__ import annotations
 
@@ -21,14 +21,36 @@ def has_companion_link(text: str) -> bool:
     ))
 
 
+def validate_design_baseline(ticket: Path, ticket_text: str) -> list[str]:
+    design = ticket.with_name("design.md")
+    ui_scope = bool(re.search(r"^ui_scope:\s*true\s*$", ticket_text, re.M | re.I))
+    if ui_scope and not design.is_file():
+        return [f"{design}: ui_scope is true but required design.md does not exist"]
+    if not design.is_file():
+        return []
+
+    text = design.read_text(encoding="utf-8")
+    errors: list[str] = []
+    contract = section_body(text, "ASCII Screen / State Contract")
+    if contract is None or "```text" not in contract or "->" not in contract:
+        errors.append(f"{design}: ASCII Screen / State Contract needs a text diagram with a transition")
+    elif len(set(re.findall(r"\[[A-Z][A-Z0-9_-]*\d+[A-Z0-9_-]*\]", contract))) < 2:
+        errors.append(f"{design}: ASCII Screen / State Contract needs at least two stable state IDs")
+    evidence = section_body(text, "Evidence Contract")
+    if evidence is None or not re.search(r"match/mismatch|compare", evidence, re.I):
+        errors.append(f"{design}: Evidence Contract must require comparison by design state ID")
+    return errors
+
+
 def validate(ticket: Path) -> list[str]:
     errors: list[str] = []
     companion = ticket.with_name("diagrams.md")
     ticket_text = ticket.read_text(encoding="utf-8")
+    errors.extend(validate_design_baseline(ticket, ticket_text))
     linked = has_companion_link(ticket_text)
     exists = companion.is_file()
     if not linked and not exists:
-        return []
+        return errors
     if linked and not exists:
         return [f"{companion}: linked companion does not exist"]
     if exists and not linked:

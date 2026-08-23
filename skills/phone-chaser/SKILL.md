@@ -4,6 +4,8 @@ description: "Turn an explicit reminder or escalation request into a bounded Liv
 tier: 3
 group: back-office
 source: local
+capability:
+  kind: integration
 template_uses:
   skill-template: "0.3.7"
 qa_checklist: qa_checklist.md

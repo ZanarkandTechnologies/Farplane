@@ -51,7 +51,7 @@ Judges whether the page followed the landing-page todo recipe before build.
 - user story and buyer job
 - section-count decision
 - low-fidelity ASCII flow
-- nested `advise` decisions and rejected options
+- inline tradeoff decisions and rejected options
 - phase-aware implementation handoff
 
 Hard gate: A Terminal-style build that skipped spec/story planning cannot pass

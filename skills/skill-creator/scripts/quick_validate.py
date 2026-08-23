@@ -3,10 +3,21 @@
 Quick validation script for skills.
 """
 
-import sys
 import re
-import yaml
+import sys
 from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[3]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from bin.core.skill_contract import (
+    FrontmatterError,
+    normalize_capability_contract,
+    normalize_method_contracts,
+    parse_skill_frontmatter,
+)
 
 DESCRIPTION_MAX_CHARS = 220
 
@@ -29,20 +40,13 @@ def validate_skill(skill_path):
     if not content.startswith('---'):
         return False, "No YAML frontmatter found"
 
-    # Extract frontmatter
-    match = re.match(r'^---\n(.*?)\n---', content, re.DOTALL)
-    if not match:
-        return False, "Invalid frontmatter format (ensure it starts and ends with ---)"
-
-    frontmatter_text = match.group(1)
-
-    # Parse YAML frontmatter
+    # Parse through the same safe, duplicate-rejecting source used by registry
+    # generation so authoring feedback cannot accept a contract the registry
+    # would later reject.
     try:
-        frontmatter = yaml.safe_load(frontmatter_text)
-        if not isinstance(frontmatter, dict):
-            return False, "Frontmatter must be a YAML dictionary"
-    except yaml.YAMLError as e:
-        return False, f"Invalid YAML in frontmatter: {e}"
+        frontmatter = parse_skill_frontmatter(skill_md)
+    except FrontmatterError as exc:
+        return False, str(exc)
 
     ALLOWED_PROPERTIES = {
         'name',
@@ -60,6 +64,7 @@ def validate_skill(skill_path):
         'source',
         'group',
         'methods',
+        'capability',
         'common_chains',
         'workflow',
         'upstream_url',
@@ -100,6 +105,12 @@ def validate_skill(skill_path):
 
     if 'skill_template_version' in frontmatter and template_uses:
         return False, "Use either legacy 'skill_template_version' or 'template_uses', not both"
+
+    try:
+        normalize_method_contracts(frontmatter.get('methods'), str(name), skill_md)
+        normalize_capability_contract(frontmatter.get('capability'), skill_md)
+    except FrontmatterError as exc:
+        return False, str(exc)
 
     for dirname in ['references', 'templates', 'prompts']:
         support_dir = skill_path / dirname

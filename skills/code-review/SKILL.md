@@ -206,8 +206,10 @@ small enough, setup is available, and the operator explicitly wants that pass.
 
 - [review](../review/SKILL.md) - canonical TAS review wrapper and rubric
   contract for material work.
-- [docs/review/rubrics/desloppify.md](../../docs/review/rubrics/desloppify.md)
-  - anti-slop search playbook for code, cleanup, and integration-heavy review.
+- [lean-check](../lean-check/SKILL.md) - use when the diff may contain
+  unnecessary code, dependencies, abstractions, or features.
+- The operator may explicitly invoke the unslop shortcut when prose in docs,
+  comments, or messages needs simplification.
 - `vercel-react-best-practices` - installed external skill for React and
   Next.js performance, rendering, bundle, and data-fetching guidelines when
   frontend code is touched.

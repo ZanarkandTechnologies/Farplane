@@ -17,9 +17,9 @@ Use this for reproducible bugs where static reading is not enough. The skill
 owns bug intake, hypotheses, instrumentation strategy, runtime evidence
 analysis, and root-cause confirmation.
 
-Route UI-first debugging to `visual-qa`, broad test-strategy routing to
-`testing`, shell-heavy execution-loop design to `bash-efficiency`, and budget
-resolution to `budget-advisor`.
+Route UI-first debugging to `visual-qa`, unresolved proof strategy to
+`proof-advisor`. Keep shell-heavy command batching, dry runs, rollback, and
+focused output in the native execution phase.
 
 <!-- MEM-0001 decision: runtime debugging starts with hypotheses and evidence collection before speculative fixes; visual issues still route to visual-qa. -->
 <!-- MEM-0003 decision: runtime-debugging stays thin at the top level and routes bug classes to focused reference playbooks. -->
@@ -27,31 +27,17 @@ resolution to `budget-advisor`.
 ## Skill Signature
 
 ```text
-runtime_debugging(symptom, repro?, context?, budget?) -> root_cause + fix + proof + escalation?
+runtime_debugging(symptom, repro?, context?, ensemble?: auto | max) -> root_cause + fix + proof + escalation?
 state: reads(code, logs, traces, tests, config, runtime output); writes(instrumentation?, fix?, tests?, evidence?)
 gates: repro_or_context_bound; hypotheses_named; evidence_before_fix; proof_after_fix
-routes: visual-qa | testing | bash-efficiency | budget-advisor
+routes: visual-qa | proof-advisor
 fails: speculative fix; noisy instrumentation; no proof rerun; hidden root cause
 ```
 
-Use `budget-advisor` when `budget` is present:
-
-```text
-RuntimeDebuggingBudget = {
-  mode?: "base" | "plus" | "max",
-  available_time?: string,
-  persona_count?: 1 | 3 | 5,
-  personas?: RuntimeDebuggingPersona[],
-  coverage?: "smoke" | "focused" | "broad",
-  evidence_depth?: "light" | "strong",
-  delegate_budget?: Record<skill_name, BudgetRequest>
-}
-```
-
-Child skills use their own base reviewed path unless `delegate_budget`
-explicitly names them. Budgeted persona lanes must preserve the normal outcome
-contract: root cause, smallest fix, exact verification proof, and escalation
-note.
+When `ensemble` is requested, load `ensemble.yaml`: `auto` selects three
+relevant diverse personas and `max` selects all. Keep independent first passes
+bound to the same repro, then synthesize back into the normal root-cause, fix,
+proof, and escalation contract.
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
@@ -76,14 +62,10 @@ note.
      [support-and-account](references/support-and-account.md).
    - [ ] Unfamiliar code; understand before fixing: read
      [understand-first](references/understand-first.md).
-- [ ] 3. Resolve budget when present.
-   - [ ] Call `budget-advisor` with this skill contract, the bound bug input,
-     and `RuntimeDebuggingBudget`.
-   - [ ] For `plus` or `max`, use complete persona prompts from
-     [budget-personas](references/budget-personas.md) unless the user supplied
-     specific personas.
-   - [ ] Do not copy the parent budget into nested debugging or proof calls
-     unless `delegate_budget` explicitly names the child skill.
+- [ ] 3. Resolve ensemble mode when requested.
+   - [ ] Load `ensemble.yaml`; `auto` selects three relevant diverse personas
+     and `max` selects all.
+   - [ ] Keep nested debugging and proof calls on their normal paths.
 - [ ] 4. Map the relevant codepath, callers, side effects, and observability.
 - [ ] 5. State 2-4 falsifiable hypotheses and what evidence would separate them.
 - [ ] 6. Add the minimum instrumentation, logging, timing marker, counter, or
@@ -91,8 +73,9 @@ note.
 - [ ] 7. Reproduce and collect runtime evidence before patching.
 - [ ] 8. Stop or reroute when this is not runtime debugging.
    - [ ] UI-first or visual issue: hand off to `visual-qa`.
-   - [ ] Broad testing strategy issue: hand off to `testing`.
-   - [ ] Shell-heavy loop design issue: hand off to `bash-efficiency`.
+   - [ ] Unresolved proof strategy: hand off to `proof-advisor`.
+   - [ ] Shell-heavy loop design: keep the command plan inline; batch only
+     independent reads, add dry-run/rollback gates, and preserve focused output.
 - [ ] 9. Apply the smallest fix that matches the observed root cause.
 - [ ] 10. Re-run the repro, remove temporary instrumentation when appropriate,
   and report exact proof that the fix worked.
@@ -101,25 +84,13 @@ note.
   learnings, [debugging-knowledge-base](references/debugging-knowledge-base.md).
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
-## Templates
-
-```text
-RuntimeDebuggingPersona = {
-  name: string,
-  prompt: string,
-  focus: string[],
-  avoid?: string[],
-  output_shape?: string
-}
-```
-
 ## Gotchas
 
 - Do not jump to a fix before naming hypotheses and the evidence needed to test
   them.
 - Do not add broad noisy logging when one targeted marker, counter, or repro
   test would separate likely causes.
-- Do not let budgeted persona councils replace the core evidence loop; every lane must
+- Do not let ensemble personas replace the core evidence loop; every lane must
   feed the same root-cause and verification contract.
 - Do not fix the surface symptom without documenting the root cause, proof, and
   nearby risks.
@@ -140,23 +111,18 @@ RuntimeDebuggingPersona = {
   tickets, account-specific repros, or production context.
 - [understand-first](references/understand-first.md) - read when the codebase or
   ownership boundary is unfamiliar enough that mapping must precede fixes.
-- [budget-personas](references/budget-personas.md) - read when `budget.mode`
-  is `plus` or `max` and the caller did not supply complete persona prompts.
+- [ensemble.yaml](ensemble.yaml) - read for `ensemble: auto | max`.
 - [root-cause-analysis](references/root-cause-analysis.md) - read after the fix
   when prevention, postmortem, or residual-risk notes matter.
 - [debugging-knowledge-base](references/debugging-knowledge-base.md) - read
   when a recurring learning should be preserved.
-- [budget-advisor](../budget-advisor/SKILL.md) - read when `budget` is present
-  and resolve base/plus/max persona council lanes, synthesis, child-budget
-  policy, and guardrails before running expanded debugging work.
 
 ## Output
 
 Return or update an artifact with:
 
 - bug intake summary and reproduction path
-- budget program summary when budget was used, including template refs,
-  personas, synthesis, child-budget policy, and source refs
+- selected personas, synthesis, and dissent when ensemble mode was used
 - short hypothesis list with what each hypothesis predicts
 - instrumentation plan or exact evidence source used
 - root cause statement tied to observed runtime behavior

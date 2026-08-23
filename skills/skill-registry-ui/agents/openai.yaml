@@ -1,0 +1,6 @@
+interface:
+  display_name: "Skill Registry UI"
+  short_description: "Refresh the visual Farplane skill registry"
+  default_prompt: "Use $skill-registry-ui to refresh the Farplane skill graph UI and rendered skill documentation."
+policy:
+  allow_implicit_invocation: false

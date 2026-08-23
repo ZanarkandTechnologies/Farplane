@@ -57,8 +57,9 @@ Direction :=
   shot job + channel + background/style + source asset route + generation/postprocess route + proof + handoff
 ```
 
-Use `advise` when shot set, style, background, realism, source asset route, or
-channel handoff is a material choice.
+When shot set, style, background, realism, source asset route, or channel
+handoff is a material choice, compare the viable options inline and recommend
+one.
 
 ## Execution Packet
 

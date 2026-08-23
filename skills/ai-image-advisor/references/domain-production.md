@@ -19,7 +19,7 @@ and `social-content` methods.
 | General cross-platform social campaign asset | [social-content:cross-platform](../../social-content/SKILL.md) |
 | LinkedIn post, professional social writing, B2B thought leadership | [social-content:linkedin](../../social-content/SKILL.md) |
 | Instagram/LinkedIn/X carousel or multi-slide post | [social-content:carousel](../../social-content/SKILL.md) |
-| Twitter/X thread or post writing | [social-content:twitter-thread](../../social-content/SKILL.md) |
+| Twitter/X thread or post writing | [x-thread](../../x-thread/SKILL.md) |
 | Model-native video, image-to-video, avatar/lipsync, video edit | [ai-video-advisor](../../ai-video-advisor/SKILL.md) |
 | Website, landing page, product page, or campaign asset set | [web-surface integration](../../ai-video-advisor/references/web-surface-integration.md) |
 

@@ -5,6 +5,8 @@ description: "Turn existing React/Remotion video code into rendered MP4 output t
 tier: 3
 group: marketing
 source: local
+capability:
+  kind: integration
 allowed-tools: Read, Grep, Glob, Bash
 ---
 

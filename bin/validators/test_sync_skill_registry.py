@@ -21,11 +21,15 @@ def write_skill(
     repo: Path,
     name: str,
     *,
+    tier: int = 2,
+    group: str | None = None,
     template_version: str | None = None,
     feature_refs: list[str] | None = None,
     eval_surface: str | None = None,
     qa_checklist: str | None = None,
     skill_ui: str | None = None,
+    capability: str | None = None,
+    common_chain_after: list[str] | None = None,
     todo_lines: list[str] | None = None,
 ) -> None:
     skill_dir = repo / "skills" / name
@@ -40,14 +44,20 @@ def write_skill(
         feature_lines = "feature_refs:\n" + "".join(
             f"  - {feature_ref}\n" for feature_ref in feature_refs
         )
+    common_chain_lines = ""
+    if common_chain_after:
+        common_chain_lines = f"common_chains:\n  after: {common_chain_after!r}\n"
     (skill_dir / "SKILL.md").write_text(
         "\n".join(
             [
                 "---",
                 f"name: {name}",
                 "description: Test skill.",
-                "tier: 2",
+                f"tier: {tier}",
+                f"group: {group}" if group else "",
                 "source: local",
+                capability or "",
+                common_chain_lines.rstrip(),
                 template_line.rstrip(),
                 feature_lines.rstrip(),
                 f"eval: {eval_surface}" if eval_surface else "",
@@ -162,6 +172,243 @@ class SyncSkillRegistryTests(unittest.TestCase):
             skill_path.write_text(skill_path.read_text().replace("source: local", "source: local\nworkflow: true"))
 
             with self.assertRaisesRegex(sync_skill_registry.RegistryError, "retired frontmatter field"):
+                sync_skill_registry.build_registry(repo)
+
+    def test_rejects_retired_portfolio_and_profiles(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp)
+            write_skill(repo, "example")
+            path = repo / "skills" / "example" / "SKILL.md"
+            path.write_text(
+                path.read_text().replace(
+                    "source: local", "source: local\nportfolio: domain\nprofiles: [content-specialist]"
+                )
+            )
+
+            with self.assertRaisesRegex(sync_skill_registry.RegistryError, "Extra inputs"):
+                sync_skill_registry.build_registry(repo)
+
+    def test_projects_an_artifact_capability_contract(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp)
+            write_skill(repo, "thread-writer")
+            path = repo / "skills" / "thread-writer" / "SKILL.md"
+            path.write_text(
+                path.read_text().replace(
+                    "source: local",
+                    """source: local
+capability:
+  kind: artifact
+  consumes:
+    - content-brief
+  produces:
+    - x-thread-draft""",
+                )
+            )
+
+            rows = sync_skill_registry.build_registry(repo)
+
+            self.assertEqual(
+                rows[0]["capability"],
+                {
+                    "kind": "artifact",
+                    "consumes": ["content-brief"],
+                    "produces": ["x-thread-draft"],
+                },
+            )
+
+    def test_rejects_invalid_capability_contracts(self) -> None:
+        cases = (
+            (
+                """capability:
+  kind: artifact
+  produces:
+    - thread-draft
+    - carousel-draft""",
+                "at most 1 item",
+            ),
+            (
+                """capability:
+  kind: artifact
+  produces:
+    - thread-draft
+  consumes:
+    - thread-draft""",
+                "must not consume",
+            ),
+            (
+                """capability:
+  kind: unknown""",
+                "does not match any of the expected tags",
+            ),
+        )
+        for capability, message in cases:
+            with self.subTest(capability=capability), tempfile.TemporaryDirectory() as tmp:
+                repo = Path(tmp)
+                write_skill(repo, "example")
+                path = repo / "skills" / "example" / "SKILL.md"
+                path.write_text(
+                    path.read_text().replace("source: local", f"source: local\n{capability}")
+                )
+
+                with self.assertRaisesRegex(sync_skill_registry.RegistryError, message):
+                    sync_skill_registry.build_registry(repo)
+
+    def test_rejects_a_redundant_integration_system_field(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp)
+            write_skill(repo, "example")
+            path = repo / "skills" / "example" / "SKILL.md"
+            path.write_text(
+                path.read_text().replace(
+                    "source: local",
+                    """source: local
+capability:
+  kind: integration
+  system: x""",
+                )
+            )
+
+            with self.assertRaisesRegex(sync_skill_registry.RegistryError, "Extra inputs"):
+                sync_skill_registry.build_registry(repo)
+
+    def test_projects_integration_without_portfolio(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp)
+            write_skill(repo, "example")
+            path = repo / "skills" / "example" / "SKILL.md"
+            path.write_text(
+                path.read_text().replace(
+                    "source: local",
+                    """source: local
+capability:
+  kind: integration
+  consumes:
+    - thread-draft""",
+                )
+            )
+
+            rows = sync_skill_registry.build_registry(repo)
+            self.assertEqual(rows[0]["capability"]["kind"], "integration")
+
+    def test_rejects_duplicate_frontmatter_keys_in_nested_mappings(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp)
+            write_skill(repo, "example")
+            path = repo / "skills" / "example" / "SKILL.md"
+            path.write_text(
+                path.read_text().replace(
+                    "source: local",
+                    """source: local
+capability:
+  kind: artifact
+  kind: integration
+  system: x""",
+                )
+            )
+
+            with self.assertRaisesRegex(
+                sync_skill_registry.RegistryError,
+                "duplicate frontmatter keys: kind",
+            ):
+                sync_skill_registry.build_registry(repo)
+
+    def test_rejects_todo_references_to_shortcuts(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp)
+            write_skill(repo, "unslop", capability="capability:\n  kind: shortcut")
+            write_skill(
+                repo,
+                "writer",
+                todo_lines=["- [ ] Rewrite the draft with `unslop`."],
+            )
+
+            with self.assertRaisesRegex(
+                sync_skill_registry.RegistryError,
+                "target explicit-only shortcut skill.*todo_skill_refs=unslop",
+            ):
+                sync_skill_registry.build_registry(repo)
+
+    def test_rejects_skill_links_targeting_shortcuts(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp)
+            write_skill(repo, "unslop", capability="capability:\n  kind: shortcut")
+            write_skill(repo, "writer")
+            path = repo / "skills" / "writer" / "SKILL.md"
+            path.write_text(path.read_text() + "\n[Unslop](../unslop/SKILL.md)\n")
+
+            with self.assertRaisesRegex(
+                sync_skill_registry.RegistryError,
+                "target explicit-only shortcut skill.*skill_links=unslop",
+            ):
+                sync_skill_registry.build_registry(repo)
+
+    def test_rejects_common_chains_targeting_shortcuts(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp)
+            write_skill(repo, "unslop", capability="capability:\n  kind: shortcut")
+            write_skill(
+                repo,
+                "writer",
+                tier=3,
+                group="operations",
+                common_chain_after=["unslop"],
+            )
+
+            with self.assertRaisesRegex(
+                sync_skill_registry.RegistryError,
+                "target explicit-only shortcut skill.*common_chains=unslop",
+            ):
+                sync_skill_registry.build_registry(repo)
+
+    def test_rejects_outbound_shortcut_todo_references(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp)
+            write_skill(repo, "writer")
+            write_skill(
+                repo,
+                "unslop",
+                capability="capability:\n  kind: shortcut",
+                todo_lines=["- [ ] Hand off to `writer`."],
+            )
+
+            with self.assertRaisesRegex(
+                sync_skill_registry.RegistryError,
+                "explicit-only shortcut must be a composition leaf.*todo_skill_refs=writer",
+            ):
+                sync_skill_registry.build_registry(repo)
+
+    def test_rejects_outbound_shortcut_skill_links(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp)
+            write_skill(repo, "writer")
+            write_skill(repo, "unslop", capability="capability:\n  kind: shortcut")
+            path = repo / "skills" / "unslop" / "SKILL.md"
+            path.write_text(path.read_text() + "\n[Writer](../writer/SKILL.md)\n")
+
+            with self.assertRaisesRegex(
+                sync_skill_registry.RegistryError,
+                "explicit-only shortcut must be a composition leaf.*skill_links=writer",
+            ):
+                sync_skill_registry.build_registry(repo)
+
+    def test_rejects_outbound_shortcut_common_chains(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp)
+            write_skill(repo, "writer")
+            write_skill(
+                repo,
+                "unslop",
+                tier=3,
+                group="operations",
+                capability="capability:\n  kind: shortcut",
+                common_chain_after=["writer"],
+            )
+
+            with self.assertRaisesRegex(
+                sync_skill_registry.RegistryError,
+                "explicit-only shortcut must be a composition leaf.*common_chains=writer",
+            ):
                 sync_skill_registry.build_registry(repo)
 
 

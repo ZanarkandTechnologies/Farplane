@@ -35,7 +35,7 @@ finalizing the scaffold.
 ## Profile Components
 - Component matrix:
 - Advice axes to explore:
-- Material choices that need `advise`:
+- Material choices needing explicit tradeoff comparison:
 - Defaults that do not need exploration:
 
 ## Prototype Gates
@@ -88,7 +88,7 @@ finalizing the scaffold.
 - Codex SDK reviewer strictness:
 - Farplane install / code-review skill linked:
 - Canonical TAS reviewer route:
-- Desloppify policy:
+- Simplification policy (`lean-check` for implementation; operator-invoked prose cleanup shortcut when requested):
 - Separate CI / deployment gate:
 - TypeScript typecheck policy:
 

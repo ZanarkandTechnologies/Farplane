@@ -34,7 +34,7 @@ This skill owns the artifact contract before production: the message, evidence
 or data claims, copy inventory, layout grammar, style route, generation or
 rendering path, and proof. It composes with [visual-design](../visual-design/SKILL.md),
 [the data-visualization reference](../../docs/fundamentals/data-visualization.md),
-[diagramming](../diagramming/SKILL.md), [social-content](../social-content/SKILL.md),
+[social-content](../social-content/SKILL.md),
 [ai-image-advisor](../ai-image-advisor/SKILL.md), [impl-plan](../impl-plan/SKILL.md),
 and [visual-qa](../visual-qa/SKILL.md)
 when those downstream owners are the right production or proof surface.
@@ -51,7 +51,7 @@ create_infographic(brief, source_material?, style_ref?, output_context?)
   -> infographic_packet + asset_plan + evidence
 state: reads(request, source material, optional ticket/spec/data, style references, existing brand or platform constraints); writes(brief/spec/prompt/rendered assets when requested)
 gates: message_claims_named; copy_inventory_complete; layout_legible; style_route_selected; production_path_named; proof_or_blocker_recorded
-routes: visual-design | data-visualization-reference | diagramming | social-content | ai-image-advisor | impl-plan | visual-qa
+routes: visual-design | data-visualization-reference | social-content | ai-image-advisor | impl-plan | visual-qa
 fails: decorative poster with unclear point; hallucinated data; text-dense bitmap with unreadable labels; copied reference without adaptation; no local artifact path
 ```
 
@@ -104,8 +104,8 @@ asset must be judged against a visual baseline.
      and use method address `infographic:handdrawn-saas-wireframe`.
    - [ ] For chart-heavy work, use the [data-visualization reference](../../docs/fundamentals/data-visualization.md) before
      final art direction.
-   - [ ] For system maps or architecture explanations, use
-     [diagramming](../diagramming/SKILL.md) before visual polish.
+   - [ ] For system maps or architecture explanations, draft the compact
+     Mermaid structure inline before visual polish.
    - [ ] For a different user-provided style reference, extract transferable
      layout, density, line, type, annotation, and proof constraints before
      writing generation prompts.

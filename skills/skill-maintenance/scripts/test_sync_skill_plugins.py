@@ -12,7 +12,13 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import sync_skill_plugins as syncer
 
 
-def write_skill(root: Path, name: str, description: str, source: str = "local") -> None:
+def write_skill(
+    root: Path,
+    name: str,
+    description: str,
+    source: str = "local",
+    capability: str | None = None,
+) -> None:
     skill_dir = root / "skills" / name
     skill_dir.mkdir(parents=True)
     (skill_dir / "SKILL.md").write_text(
@@ -23,6 +29,7 @@ def write_skill(root: Path, name: str, description: str, source: str = "local") 
                 f"description: {description}",
                 "tier: 2",
                 f"source: {source}",
+                capability or "",
                 "---",
                 "",
                 "Body.",
@@ -45,13 +52,18 @@ class SyncSkillPluginsTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             repo = Path(tmp)
             write_skill(repo, "review", "Run quality checks.")
-            write_skill(repo, "visual-qa", "Inspect browser screenshots.")
+            write_skill(
+                repo,
+                "visual-qa",
+                "Inspect browser screenshots.",
+                capability="capability:\n  kind: artifact\n  produces: [visual-qa-report]",
+            )
             write_review_rubric(repo)
 
             result = syncer.sync_skill_plugins(repo)
 
             self.assertEqual(result.skill_count, 2)
-            self.assertEqual(result.plugin_count, 4)
+            self.assertEqual(result.plugin_count, 3)
             manifest = json.loads(
                 (
                     repo
@@ -78,22 +90,72 @@ class SyncSkillPluginsTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             repo = Path(tmp)
             write_skill(repo, "review", "Run quality checks.")
-            write_skill(repo, "plan", "Plan the work.")
-            write_skill(repo, "execute", "Execute the work.")
-            write_skill(repo, "visual-design", "Set the UI visual direction.")
-            write_skill(repo, "visual-qa", "Inspect browser screenshots.")
+            write_skill(repo, "advise", "Recommend a direction.")
+            write_skill(
+                repo,
+                "visual-design",
+                "Set the UI visual direction.",
+                capability="capability:\n  kind: artifact\n  produces: [visual-direction]",
+            )
+            write_skill(
+                repo,
+                "visual-qa",
+                "Inspect browser screenshots.",
+                capability="capability:\n  kind: integration\n  consumes: [visual-direction]",
+            )
 
             result = syncer.sync_skill_plugins(repo)
 
-            self.assertEqual(result.bundle_count, 2)
+            self.assertEqual(result.bundle_count, 1)
             core = repo / ".farplane/generated/skill-plugins/plugins/farplane-core"
-            frontend = repo / ".farplane/generated/skill-plugins/plugins/farplane-frontend"
             self.assertTrue((core / "skills" / "review" / "SKILL.md").exists())
-            self.assertTrue((core / "skills" / "plan" / "SKILL.md").exists())
-            self.assertTrue((frontend / "skills" / "visual-design" / "SKILL.md").exists())
+            self.assertTrue((core / "skills" / "advise" / "SKILL.md").exists())
+            self.assertFalse((core / "skills" / "visual-design" / "SKILL.md").exists())
             manifest = json.loads((core / ".codex-plugin" / "plugin.json").read_text())
             self.assertEqual(manifest["name"], "farplane-core")
             self.assertEqual(manifest["interface"]["displayName"], "Farplane Core")
+
+    def test_capability_skills_stay_out_of_the_core_bundle(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp)
+            write_skill(repo, "research", "Produce research evidence.")
+            write_skill(
+                repo,
+                "publish",
+                "Publish a draft.",
+                capability="capability:\n  kind: integration\n  consumes: [draft]",
+            )
+
+            plugins = {
+                plugin.name: plugin
+                for plugin in syncer.build_plugins(syncer.discover_skills(repo / "skills"))
+            }
+
+            core_members = {skill.name for skill in plugins["farplane-core"].skills}
+            self.assertEqual(core_members, {"research"})
+
+    def test_shortcut_bundles_are_capability_derived(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp)
+            write_skill(repo, "unslop", "Rewrite prose.", capability="capability:\n  kind: shortcut")
+            write_skill(
+                repo,
+                "meta-ads",
+                "Operate Meta ads.",
+                capability="capability:\n  kind: integration",
+            )
+
+            plugins = {
+                plugin.name: plugin
+                for plugin in syncer.build_plugins(syncer.discover_skills(repo / "skills"))
+            }
+
+            self.assertEqual(
+                {skill.name for skill in plugins["farplane-shortcuts"].skills},
+                {"unslop"},
+            )
+            self.assertNotIn("farplane-profile-paid-ads", plugins)
+            self.assertNotIn("farplane-profile-social-campaign", plugins)
 
     def test_sync_generates_marketplace_entries(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -139,11 +201,16 @@ class SyncSkillPluginsTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             repo = Path(tmp)
             write_skill(repo, "review", "Run quality checks.")
-            write_skill(repo, "visual-qa", "Inspect browser screenshots.")
+            write_skill(
+                repo,
+                "visual-qa",
+                "Inspect browser screenshots.",
+                capability="capability:\n  kind: artifact\n  produces: [visual-qa-report]",
+            )
 
             result = syncer.sync_skill_plugins(
                 repo,
-                selected_names=["farplane-frontend", "review"],
+                selected_names=["farplane-core", "review"],
             )
 
             self.assertEqual(result.plugin_count, 2)
@@ -155,12 +222,12 @@ class SyncSkillPluginsTests(unittest.TestCase):
             )
             self.assertEqual(
                 [plugin["name"] for plugin in marketplace["plugins"]],
-                ["farplane-frontend", "review"],
+                ["farplane-core", "review"],
             )
             self.assertTrue(
                 (
                     repo
-                    / ".farplane/generated/skill-plugins/plugins/farplane-frontend"
+                    / ".farplane/generated/skill-plugins/plugins/farplane-core"
                 ).exists()
             )
             self.assertTrue((repo / ".farplane/generated/skill-plugins/plugins/review").exists())
