@@ -1,0 +1,16 @@
+# Canonical role-specific skill sets rendered into Codex profile config files.
+# The renderer validates every listed skill against docs/skills/registry.jsonl.
+
+[profiles]
+advertising-specialist = ["ad-advisor", "ad-impl-plan", "meta-ads"]
+asset-generator = ["ai-image-advisor", "ai-video-advisor", "asset-advisor", "audio-advisor", "avatar-advisor", "editing-advisor", "hatch-pet", "meshy-3d-generation", "product-photography", "reel-collage", "remotion", "remotion-render"]
+content-specialist = ["content-impl-plan", "copywriting-advisor", "infographic", "ingest-content", "instagram-account", "newsletter-writer", "seo-content-advisor", "social-content", "storyboard", "x-account", "x-thread"]
+convex-builder = ["convex"]
+deep-researcher = ["apify", "best-of-worlds", "feed-scout", "intelligest", "learn-from-video", "media-ingest", "video-understanding", "visual-reasoning"]
+documentation-maintainer = ["manage-wiki"]
+frontend-designer = ["demo-realism", "functional-ui", "interior-design", "landing-page", "vercel-react-best-practices", "visual-design", "web-design-guidelines"]
+growth-specialist = ["agency-opportunity-research", "customer-research", "first-value-outreach", "lead-scout", "outreach-impl-plan", "personalized-offer", "proposal-pricing", "solution-shaping"]
+harness-specialist = ["dogfood-review", "leverage-rollout", "ml-autoresearch", "optimize-with-human"]
+operations-specialist = ["delegate-cli", "notion-task-field-fill", "phone-chaser", "telegram-message", "worker-artifact-review-request"]
+planner-agent = ["agent-testability-plan", "deep-system-design", "product-backbrief"]
+reviewer = ["coderabbit-review", "pr-review-watch"]

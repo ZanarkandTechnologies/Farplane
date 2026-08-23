@@ -169,6 +169,7 @@ if [ "$SKILLS_ONLY" -eq 1 ]; then
 fi
 
 render_config() {
+  local skill_profile_matrix="${1:-}"
   if [ -e "$TARGET_DIR/config.toml" ]; then
     python3 - "$TARGET_DIR/config.toml" "$LOCAL_TOML_FILE" "$LOCAL_TOML_MARKER" <<'PY'
 from pathlib import Path
@@ -188,8 +189,8 @@ else:
     candidate_text = text
 
 header_re = re.compile(r"^\[([^\]]+)\]\s*$")
-preserve_exact = {"hooks.state"}
-preserve_prefixes = ("projects.", "hooks.state.", "marketplaces.")
+preserve_exact = {"desktop", "hooks.state"}
+preserve_prefixes = ("plugins.", "projects.", "hooks.state.", "marketplaces.")
 
 
 def table_blocks(source: str) -> list[tuple[str, str]]:
@@ -237,7 +238,7 @@ PY
     cp "$TARGET_DIR/config.toml" "$BACKUP_ROOT/config.toml"
   fi
 
-  python3 - "$REPO_DIR/config.toml.example" "$TARGET_DIR/config.toml" "$LOCAL_TOML_FILE" "$TARGET_DIR" <<'PY'
+  python3 - "$REPO_DIR/config.toml.example" "$TARGET_DIR/config.toml" "$LOCAL_TOML_FILE" "$TARGET_DIR" "$skill_profile_matrix" <<'PY'
 from pathlib import Path
 import os
 import re
@@ -248,6 +249,7 @@ output_path = Path(sys.argv[2])
 local_toml_path = Path(sys.argv[3])
 target_dir = sys.argv[4]
 repo_dir = template_path.parent
+skill_profile_matrix_path = Path(sys.argv[5]) if sys.argv[5] else None
 core_dir = repo_dir / "bin" / "core"
 if str(core_dir) not in sys.path:
     sys.path.insert(0, str(core_dir))
@@ -295,6 +297,14 @@ replacements = {
 }
 for needle, value in replacements.items():
     text = text.replace(needle, value)
+
+if skill_profile_matrix_path is not None:
+    try:
+        skill_profile_matrix = skill_profile_matrix_path.read_text().strip()
+    except OSError as exc:
+        raise SystemExit(f"Unable to read generated skill profile matrix: {exc}") from exc
+    if skill_profile_matrix:
+        text = text.rstrip() + "\n\n" + skill_profile_matrix + "\n"
 
 marker = "# Machine-local config appended from config.local.toml"
 
@@ -391,10 +401,49 @@ link_global_cli() {
   esac
 }
 
+PROFILE_RENDER_DIR=""
+
+cleanup_profile_render() {
+  if [ -n "$PROFILE_RENDER_DIR" ] && [ -d "$PROFILE_RENDER_DIR" ]; then
+    rm -rf -- "$PROFILE_RENDER_DIR"
+  fi
+}
+
+render_skill_profiles() {
+  PROFILE_RENDER_DIR="$(mktemp -d "${TMPDIR:-/tmp}/farplane-skill-profiles.XXXXXX")"
+  python3 "$REPO_DIR/skills/skill-maintenance/scripts/render_skill_profiles.py" \
+    --repo "$REPO_DIR" \
+    --output-dir "$PROFILE_RENDER_DIR"
+}
+
+install_rendered_skill_profiles() {
+  local installed_profile
+  local rendered_profile
+  local relative
+  local backup_dest
+
+  for installed_profile in "$TARGET_DIR"/*.config.toml; do
+    if { [ -e "$installed_profile" ] || [ -L "$installed_profile" ]; } && \
+      grep -qF '# BEGIN FARPLANE GENERATED SKILL PROFILE' "$installed_profile"; then
+      relative="${installed_profile#${TARGET_DIR}/}"
+      backup_dest="$BACKUP_ROOT/$relative"
+      mkdir -p "$(dirname "$backup_dest")"
+      mv "$installed_profile" "$backup_dest"
+    fi
+  done
+
+  for rendered_profile in "$PROFILE_RENDER_DIR"/profiles/*.config.toml; do
+    copy_path "$rendered_profile" "$TARGET_DIR/$(basename "$rendered_profile")"
+  done
+}
+
+trap cleanup_profile_render EXIT
+
 echo "Installing Codex harness from $REPO_DIR to $TARGET_DIR"
 
 mkdir -p "$TARGET_DIR" "$TARGET_DIR/agents" "$TARGET_DIR/skills" "$TARGET_DIR/rules" "$TARGET_DIR/bin" "$TARGET_DIR/hooks" "$TARGET_DIR/docs/review"
 
+render_skill_profiles
 for relative in "${RETIRED_INSTALL_PATHS[@]}"; do
   retired_path="$TARGET_DIR/$relative"
   if [ -e "$retired_path" ] || [ -L "$retired_path" ]; then
@@ -407,7 +456,8 @@ done
 
 if [ "$REPO_DIR" = "$(cd "$TARGET_DIR" && pwd)" ]; then
   echo "Repo is already the live Codex home. Skipping symlink install."
-  render_config
+  install_rendered_skill_profiles
+  render_config "$PROFILE_RENDER_DIR/base.config.toml"
   link_global_cli "$TARGET_DIR/bin/farplane"
 
   echo "Done."
@@ -437,6 +487,8 @@ for agent_file in "$REPO_DIR"/agents/*.toml; do
   link_path "$agent_file" "$TARGET_DIR/agents/$(basename "$agent_file")"
 done
 
+install_rendered_skill_profiles
+
 python3 "$REPO_DIR/skills/skill-maintenance/scripts/install_selected_skills.py" \
   --repo "$REPO_DIR" \
   --target "$TARGET_DIR" \
@@ -447,7 +499,7 @@ for rule_file in "$REPO_DIR"/rules/*; do
   link_path "$rule_file" "$TARGET_DIR/rules/$(basename "$rule_file")"
 done
 
-render_config
+render_config "$PROFILE_RENDER_DIR/base.config.toml"
 
 echo "Done."
 echo "Next: prefer runtime env for secrets (for example: doppler run -- farplane install); use ~/.farplane/config.toml only as a private fallback/cache."

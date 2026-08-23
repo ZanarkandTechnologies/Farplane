@@ -269,9 +269,11 @@ What Core owns:
 - `farplane doctor`: reports readiness for Core install, hooks, linked UI repo,
   local config hygiene, and this checkout's Doppler secret source.
 - `farplane install`: performs safe mechanical install/reinstall work: renders
-  Codex config, links hooks, and refreshes the global CLI link. In this
-  checkout it automatically runs the installer subprocess through Doppler when
-  Doppler is configured and the current shell is not already Doppler-injected.
+  Codex config, retains local `desktop` and `plugins.*` tables in
+  `config.local.toml`, regenerates role skill profiles, links hooks, and
+  refreshes the global CLI link. In this checkout it automatically runs the
+  installer subprocess through Doppler when Doppler is configured and the
+  current shell is not already Doppler-injected.
 - `farplane hooks install`: refreshes the hook install through Core.
 - `farplane hooks list`: inventories every managed Codex hook command.
 - `farplane hooks doctor`: verifies Core-owned hook links, command targets,
