@@ -34,7 +34,8 @@ accountant automatically. Path/stdin mode is an optional preflight for agents,
 operators, tests, and any Markdown file that benefits from category counts.
 
 Exit `0` means prose is within its configured word and line limits; exit `1`
-means it is over. Closed Mermaid blocks, exact absolute/HTTPS image-video
+means it is over. The Stop hook blocks completion until an over-limit final
+response is rewritten within both limits. Closed Mermaid blocks, exact absolute/HTTPS image-video
 embeds, marker-only Markdown blockquote spacer lines, and a trailing link-only
 References/Citations section are reported separately. Blockquote content,
 four-space-indented code, and malformed or mixed forms remain prose.

@@ -43,7 +43,7 @@ FARPLANE_SKILL_HEAT_EVENT_TYPES = "control_surface_detected,hook_result,skill_re
 # Shared prose-accountant ceilings. Closed Mermaid, exact image/video embed
 # lines, marker-only Markdown blockquote spacers, and a trailing link-only
 # References/Citations section are reported but excluded. The word limit is
-# hard; the line limit requests one compression pass.
+# hard.
 FARPLANE_FINAL_RESPONSE_MAX_PROSE_WORDS = "500"
 FARPLANE_FINAL_RESPONSE_MAX_PROSE_LINES = "30"
 # Phone reminder / LiveKit voice-agent settings. Store real values in

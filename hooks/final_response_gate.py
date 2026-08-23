@@ -65,20 +65,14 @@ def gate_response(
     if not words_over and not lines_over:
         return None
 
-    # The word ceiling is hard. The line ceiling gets one semantic compression
-    # pass, then yields when the model preserves extra structure for explicitly
-    # requested detail, correctness, or safety.
-    if lines_over and not words_over and payload.get("stop_hook_active"):
-        return None
-
     retry_note = (
         "The previous compression attempt is still over the ceiling. "
-        if payload.get("stop_hook_active") and words_over
+        if payload.get("stop_hook_active")
         else ""
     )
     limits = (
         f"at most {max_prose_words} prose words (current: {measure.prose_words}) and "
-        f"normally at most {max_prose_lines} nonblank prose lines "
+        f"at most {max_prose_lines} nonblank prose lines "
         f"(current: {measure.prose_nonblank_lines})"
     )
     reason = (
@@ -90,9 +84,7 @@ def gate_response(
         "detail. Closed Mermaid blocks, exact image/video embed lines, marker-only "
         "Markdown blockquote spacer lines, and a final link-only References/Citations "
         "section are outside the prose budget, but must not introduce new topic breadth. "
-        "Preserve extra prose lines only when explicitly requested detail, correctness, "
-        "or safety genuinely requires them. Return the revised final answer only and do "
-        "not mention this gate."
+        "Return the revised final answer only and do not mention this gate."
     )
     return {"decision": "block", "reason": reason}
 

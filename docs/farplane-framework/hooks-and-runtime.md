@@ -41,7 +41,7 @@ Root `hooks.json` currently defines:
 | --- | --- | --- |
 | `UserPromptSubmit` | `capture_user_turn.py`, `farplane_console_ping.py` | classify the current user turn, append lightweight conversation windows, resolve native/ticket display metadata locally, and send sanitized `turn_start` hook telemetry |
 | `PostToolUse` | `skill_file_line_gate.py` | after `apply_patch`, return repair feedback when a touched `skills/**/SKILL.md` exceeds 200 physical lines; the edit remains applied |
-| `Stop` | `final_response_gate.py`, `farplane_console_ping.py` | compress an over-limit user-facing response, then send sanitized `turn_end` hook telemetry |
+| `Stop` | `final_response_gate.py`, `farplane_console_ping.py` | require a rewrite until the user-facing response is within the configured prose limits, then send sanitized `turn_end` hook telemetry |
 | `SubagentStart` | `farplane_console_ping.py` | send sanitized subagent-start lifecycle telemetry |
 | `SubagentStop` | `farplane_console_ping.py` | send sanitized subagent-stop lifecycle telemetry |
 
@@ -225,8 +225,7 @@ Hook and runtime nodes should use these tags:
 - `pm-ui`: UI grouping through `farplane/pm.json`
 - `mechanical-gate`: deterministic validation surface; the PostToolUse skill
   gate enforces 200 physical lines on touched `skills/**/SKILL.md`. The final-response prose
-  word ceiling is hard, while the normal prose-line ceiling requests one
-  semantic compression pass. Closed Mermaid, exact image/video embed lines,
+  word and line ceilings are hard. Closed Mermaid, exact image/video embed lines,
   marker-only Markdown blockquote spacer lines, and trailing link-only
   references are classified separately by `bin/core/farplane_response.py`;
   blockquote content, four-space-indented code, and malformed or mixed forms

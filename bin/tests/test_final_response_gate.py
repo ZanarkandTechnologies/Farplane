@@ -43,7 +43,7 @@ class FinalResponseGateTests(unittest.TestCase):
         self.assertIn("marker-only Markdown blockquote spacer lines", result["reason"])
         self.assertNotIn("truncate", result["reason"].lower())
 
-    def test_over_line_cap_requests_one_semantic_compression_pass(self) -> None:
+    def test_over_line_cap_requests_compression(self) -> None:
         result = gate.gate_response(self.payload("one\ntwo\nthree"), 10, 2)
         self.assertEqual(result["decision"], "block")
         self.assertIn("at most 2 nonblank prose lines", result["reason"])
@@ -52,10 +52,10 @@ class FinalResponseGateTests(unittest.TestCase):
     def test_blank_lines_do_not_count(self) -> None:
         self.assertIsNone(gate.gate_response(self.payload("one\n\n  \ntwo"), 10, 2))
 
-    def test_line_only_retry_yields_to_detail_or_safety_judgment(self) -> None:
-        self.assertIsNone(
-            gate.gate_response(self.payload("one\ntwo\nthree", active=True), 10, 2)
-        )
+    def test_line_only_retry_remains_blocked(self) -> None:
+        result = gate.gate_response(self.payload("one\ntwo\nthree", active=True), 10, 2)
+        self.assertEqual(result["decision"], "block")
+        self.assertIn("previous compression attempt", result["reason"])
 
     def test_repeated_continuation_gets_stronger_feedback(self) -> None:
         result = gate.gate_response(self.payload("one two three four", active=True), 3, 2)
