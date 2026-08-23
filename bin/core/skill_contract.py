@@ -163,7 +163,7 @@ class IntegrationCapability(_CapabilityBase):
 
 
 class ShortcutCapability(_CapabilityBase):
-    """An explicit-only command with no Capability Map projection."""
+    """A non-projected direct command with no Capability Map projection."""
 
     kind: Literal["shortcut"]
 

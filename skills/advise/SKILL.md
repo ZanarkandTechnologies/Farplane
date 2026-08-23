@@ -23,6 +23,19 @@ the owning skill or caller.
 
 Use when the user needs judgment, not a neutral menu.
 
+## Skill Signature
+
+```text
+advise(decision, context?, ensemble?: auto | max) -> recommendation + dissent?
+
+state: reads(decision, supplied context, and relevant evidence); writes(advice
+  response or decision note); never mutates external state
+owns: option comparison, recommendation, accepted tradeoff, and next owner
+gates: real_decision; evidence_gap_visible; recommendation_explicit;
+  dissent_preserved_when_ensemble
+fails: neutral_menu; fake_options; automatic_ensemble; hidden_evidence_gap
+```
+
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 

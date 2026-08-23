@@ -34,8 +34,8 @@ Use the bootstrap script:
 bash ~/.codex/skills/init-advisor/scripts/bootstrap.sh
 ```
 
-Before finalizing the scaffold, run a bootstrap intake with the same discipline
-as `deep-interview` and keep the answers in `docs/bootstrap-brief.md`.
+Before finalizing the scaffold, run a structured bootstrap intake and keep the
+answers in `docs/bootstrap-brief.md`.
 That intake should explicitly answer what belongs in `pre-push` or `pre-commit`,
 whether the Codex SDK diff reviewer should be advisory or strict and whether a
 separate CI/deployment gate exists. It
@@ -94,7 +94,7 @@ setup, credentials, billing, deploys, and destructive actions.
 After the business foundation closes, follow the planning funnel:
 
 ```text
-brainstorm -> deep-interview -> metric-advisor -> goal-advisor
+brainstorm -> direct clarification -> metric-advisor -> goal-advisor
 prd -> spec-to-ticket -> impl-plan -> goal-advisor
 ```
 
@@ -247,9 +247,9 @@ Do not migrate every old issue into ticket files at once.
 For an existing repo:
 
 - use `brainstorm` if you still need options
-- use `deep-interview --bootstrap` if stack, topology, or quality-gate shape is
-  still unclear
-- use `deep-interview` if the first feature slice is unclear
+- use direct bootstrap clarification if stack, topology, or quality-gate shape
+  is still unclear
+- ask focused clarification questions if the first feature slice is unclear
 - use `prd` once the first slice is coherent
 
 Then:

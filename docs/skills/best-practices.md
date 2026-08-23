@@ -124,10 +124,9 @@ reference so it is loaded only after selection.
 - Tier 0 owns phase behavior and recursion rules. Do not add `## Phase
   Contract` or `## Phase Boundary` to a skill. Put a real downstream call where
   it is used in the Todo List or a precisely loaded reference.
-- Do not define a skill-local budget type. A budget-aware skill may accept a
-  `budget?` parameter and route it to `budget-advisor`; keep shared modes and
-  schemas there. Add a skill-local budget reference only when the domain has
-  real presets, personas, or allocation rules.
+- Do not define a shared budget type or persona router. A skill that genuinely
+  benefits from independent perspectives may declare `ensemble?: auto | max`
+  and store complete personas in its own validated `ensemble.yaml`.
 - `## Todo List` is the first-load todo list, not a generic checklist section.
 - Write three to seven top-level Golden Workflow Nodes. A node is one bounded
   executable operation with a compact `input -> output | branch` signature, a
@@ -339,7 +338,7 @@ Put a rule in a reference when any are true:
 - It teaches the domain rather than directing the current action.
 - It is useful for authoring or review but not for every run.
 
-Use a deliberative-advice loop only for structural changes that are expensive,
+Use `advise ensemble=max` only for structural changes that are expensive,
 high-blast-radius, or likely to set precedent across many skills. The default
 path for ordinary skill edits is still:
 
@@ -351,7 +350,7 @@ Escalate only for standard-setting changes:
 
 ```text
 skill_system_standard_change
-  -> deliberative-advice perspectives
+  -> advise ensemble=max perspectives
   -> review(skill-contract + eval-quality + integration-readiness)
   -> eval or validator proof
 ```
@@ -360,14 +359,14 @@ Review routing:
 
 ```text
 route_skill_structure_review(skill_change, template_age, drift, blast_radius)
-  -> self_check | advise | deliberative_advice | reviewer
+  -> self_check | advise | advise_ensemble | reviewer
 ```
 
 ## Advice And Proof Routing
 
 ```text
 route_skill_decision(decision, stakes, uncertainty, evidence_need, blast_radius)
-  -> first_principles | advise | deliberative_advice | research | eval | reviewer
+  -> first_principles | advise | advise_ensemble | research | eval | reviewer
 ```
 
 Use first-principles reasoning directly when the choice is obvious, reversible,
@@ -379,7 +378,7 @@ reversible, and cheap to correct. Good examples: one-skill reference placement,
 whether to add a short example, or choosing between two equivalent output
 shapes.
 
-Use `deliberative-advice` before editing when the decision changes a shared
+Use `advise ensemble=max` before editing when the decision changes a shared
 standard, affects Tier 1 primitives, meta skills, `skill-creator`,
 `skill-maintenance`, `eval`, reviewer rubrics, templates, cross-skill policy,
 or any rule likely to compound across many downstream workflows.
@@ -394,7 +393,7 @@ structure placement.
 
 Use the native `reviewer` lane before calling material skill-system work ready.
 The reviewer judges the final artifact and evidence; it does not replace
-`deliberative-advice` for important pre-edit decisions.
+requested ensemble advice for important pre-edit decisions.
 
 ## Finish Gates And Checklists
 
@@ -503,11 +502,11 @@ the review depth:
   routing, proof, references, or first-load behavior.
 - Use `advise` for recent skills that already match the current template and
   need a normal placement decision.
-- Default to `deliberative-advice` for structural changes to Tier 1 primitives,
+- Default to `advise ensemble=max` for structural changes to Tier 1 primitives,
   meta skills, `skill-creator`, `skill-maintenance`, `eval`, cross-skill
   standards, or any skill whose behavior compounds across many downstream
   workflows.
-- Also use `deliberative-advice` when the skill is old, far from the current
+- Also use `advise ensemble=max` when the skill is old, far from the current
   template, high-traffic, cross-skill, precedent-setting, or likely to move
   important rules between `SKILL.md`, references, templates, evals, and review
   checks.
@@ -550,8 +549,8 @@ Each audit record should include YAML front matter and a binary checklist:
 - `skill`, `date`, `change_type`, `owner`, and `status`.
 - `before_ref` and `after_ref` when there are commits, branches, or artifact
   paths to compare.
-- `review_route`: `self_check`, `advise`, `deliberative_advice`, or `reviewer`.
-- `reasoning_basis`: first-principles review, `advise`, `deliberative_advice`,
+- `review_route`: `self_check`, `advise`, `advise_ensemble`, or `reviewer`.
+- `reasoning_basis`: first-principles review, `advise`, `advise_ensemble`,
   reviewer receipt, eval run, or a combination.
 - `proof_artifacts`: commands, eval artifact paths, reviewer receipts, or
   explicit evidence gaps.
@@ -576,7 +575,7 @@ cleanly through other skills.
 ```text
 improve_skill_structure(skill_change)
   -> first_principles_review
-  -> advise_or_deliberative_advice_when_high_leverage
+  -> advise_or_ensemble_advice_when_high_leverage
   -> targeted_eval_or_reviewer_receipt_when_needed
   -> audit_record
 ```
@@ -655,8 +654,9 @@ the smallest useful upgrade in the same pass:
   outputs. Remove state-machine catalogs from the signature.
 - Fold legacy `## Phase Contract` and `## Phase Boundary` content into the
   relevant domain todo or conditional reference, then delete those sections.
-- Route explicit budget parameters through `budget-advisor`; remove local
-  budget types unless a domain-specific reference has real presets or personas.
+- Replace shared budget routes with a package-local `ensemble.yaml` only when
+  a skill needs contextual independent perspectives; otherwise keep its direct
+  path.
 - Move optional detail, rare branches, examples, long rubrics, and model maps
   into references.
 - When a reference is a reusable subskill or method workflow, declare

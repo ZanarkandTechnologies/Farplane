@@ -16,7 +16,7 @@ from farplane_cli_commands import (
     run_reports_index_cli, run_reports_repair_refs_cli, run_response_check_cli,
     run_skill_rollout_scan_cli, run_ticket_finalize_cli, run_ticket_history_cli,
     run_wiki_cli,
-    run_validate_ticket,
+    run_validate_frontmatter, run_validate_ticket,
 )
 from farplane_cli_hooks import (
     run_hooks_doctor, run_hooks_install, run_hooks_list, run_install,
@@ -50,7 +50,7 @@ def build_parser() -> argparse.ArgumentParser:
     run.add_argument("extra", nargs=argparse.REMAINDER, help="Command to run after --.")
     run.set_defaults(func=run_with_doppler)
 
-    validate = sub.add_parser("validate", help="Run phase-aware Farplane validation.")
+    validate = sub.add_parser("validate", help="Run Farplane ticket or frontmatter validation.")
     validate_sub = validate.add_subparsers(dest="validate_command")
     validate_ticket_parser = validate_sub.add_parser("ticket", help="Validate one ticket at a lifecycle phase.")
     validate_ticket_parser.add_argument("ticket")
@@ -61,6 +61,19 @@ def build_parser() -> argparse.ArgumentParser:
     validate_ticket_parser.add_argument("--no-write", action="store_true", help="Do not write the ticket validation receipt.")
     validate_ticket_parser.add_argument("--json", action="store_true")
     validate_ticket_parser.set_defaults(func=run_validate_ticket)
+    validate_frontmatter_parser = validate_sub.add_parser(
+        "frontmatter",
+        help="Lint static skill and document frontmatter through their owner validators.",
+    )
+    validate_frontmatter_parser.add_argument(
+        "scope",
+        nargs="?",
+        choices=("skills", "docs", "all"),
+        default="all",
+        help="Metadata family to validate (default: all).",
+    )
+    validate_frontmatter_parser.add_argument("--json", action="store_true")
+    validate_frontmatter_parser.set_defaults(func=run_validate_frontmatter)
 
     hooks = sub.add_parser("hooks", help="Install or check Codex lifecycle hooks.")
     hooks_sub = hooks.add_subparsers(dest="hooks_command")

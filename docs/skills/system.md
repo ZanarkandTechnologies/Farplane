@@ -15,6 +15,8 @@ fields, and todo-link rules stay in one place.
 - `skills/skill-creator/` owns creating or updating one reusable skill package.
 - `skills/skill-maintenance/` owns bulk upkeep, validation, generated registry
   sync, and rollout audits.
+- `bin/core/skill_contract.py` owns typed frontmatter and package-local
+  ensemble parsing; `check_skill_ensembles.py` validates every `ensemble.yaml`.
 - feature pages in `docs/features/` own skill-applicable harness feature docs
   with `category: "skills"`, and `docs/systems/skill-system.md` links the
   surviving feature refs.
@@ -321,7 +323,9 @@ Manual fields:
   shapes: an `artifact` declares one `produces` artifact ID and zero or more
   `consumes` IDs; an `integration` declares the artifact IDs it `consumes` at
   its external boundary; a `shortcut` has no further fields and does not
-  project into either view. Artifact contracts cannot consume their own output.
+  project into either view. It is a non-projected direct command, not a graph
+  composition edge; system policy may still require it (for example, Lean
+  Check before code changes). Artifact contracts cannot consume their own output.
   The map emits a directed handoff only when one
   declared `produces` ID exactly matches another declared `consumes` ID. This
   is a static contract: do not infer it from TODOs, Markdown links, skill calls,
@@ -341,9 +345,9 @@ Manual fields:
 Generated registry fields include `path`, `description`, `has_checklist`,
 `version`, `allowed_tools`, `skill_links`, `todo_skill_refs`, and the manual
 fields above. The skill graph projects declared `capability` contracts without
-inventing defaults. Todo lists must not reference `capability.kind: shortcut`
-packages; shortcuts remain explicit operator entrypoints rather than automatic
-composition dependencies.
+inventing defaults. Todo lists and Markdown skill links must not reference
+`capability.kind: shortcut` packages; shortcuts remain direct commands rather
+than automatic composition dependencies.
 
 Use capability IDs only for stable artifact or system families, not variants
 such as locale, customer, campaign, or post copy. Those are invocation inputs
@@ -542,16 +546,24 @@ Put workflow rules and downstream calls in the Todo List. Put tempting failure
 examples in Gotchas. Put detailed output schemas in Templates only when a real
 consumer needs them.
 
-## Skill Budgets
+## Package-Local Ensembles
 
-Budget resolution belongs to `budget-advisor`. A budget-aware skill may expose
-one optional `budget?` parameter, but it must not define another shared budget
-type in `SKILL.md`.
+An ensemble is owned by the skill whose judgment it expands:
 
-`budget-advisor` owns common modes, schemas, inheritance, and council behavior.
-A caller skill owns only real domain-specific presets or personas, kept in a
-precisely loaded reference such as `references/budget.md`. Do not create that
-file when the skill has no domain-specific budget behavior.
+```text
+ensemble_mode(skill, request) -> direct | auto_three_personas | max_all_personas
+```
+
+The default is direct. A skill that supports ensemble coverage stores complete
+persona definitions in `skills/<name>/ensemble.yaml`, validated by the shared
+frontmatter boundary. `ensemble=auto` selects exactly three relevant, diverse
+personas from that file; `ensemble=max` uses all of them. Each lane receives
+the same task/evidence, produces an independent first pass, and synthesis
+preserves meaningful dissent. Ensemble mode never propagates into child calls.
+
+There is no shared budget router, mode inheritance, or public persona-allocation
+schema. Do not add an `ensemble` parameter to a skill that has no local persona
+contract or clear operator need.
 
 ## Feature Tracking
 

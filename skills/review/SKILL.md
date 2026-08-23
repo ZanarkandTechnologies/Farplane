@@ -253,7 +253,7 @@ Return or write:
 
 - [docs/review/rubrics/review-rubric-index.md](../../docs/review/rubrics/review-rubric-index.md) -
   use when family choice or modular checklist shape is unclear.
-- [lean-check](../lean-check/SKILL.md) - first-sufficient-rung evidence for
-  unnecessary code, dependencies, abstractions, or features.
+- Lean Check direct-command evidence for unnecessary code, dependencies,
+  abstractions, or features.
 - Explicit operator shortcut: unslop when prose simplification is part of the
   review.

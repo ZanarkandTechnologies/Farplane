@@ -206,8 +206,8 @@ small enough, setup is available, and the operator explicitly wants that pass.
 
 - [review](../review/SKILL.md) - canonical TAS review wrapper and rubric
   contract for material work.
-- [lean-check](../lean-check/SKILL.md) - use when the diff may contain
-  unnecessary code, dependencies, abstractions, or features.
+- Use the Lean Check direct command when the diff may contain unnecessary code,
+  dependencies, abstractions, or features.
 - The operator may explicitly invoke the unslop shortcut when prose in docs,
   comments, or messages needs simplification.
 - `vercel-react-best-practices` - installed external skill for React and

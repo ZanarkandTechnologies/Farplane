@@ -6,6 +6,7 @@ import argparse
 import json
 import os
 import sqlite3
+import subprocess
 import sys
 from pathlib import Path
 from typing import Any
@@ -370,3 +371,89 @@ def run_validate_ticket(args: argparse.Namespace) -> int:
             if result.status == "fail" and result.output:
                 print(result.output)
     return 0 if receipt.ok else 1
+
+def frontmatter_validation_commands(root: Path, scope: str) -> list[tuple[str, list[str]]]:
+    """Return the existing validators that own each static metadata family."""
+
+    python = sys.executable
+    skills = [
+        (
+            "skill_contract",
+            [python, str(root / "bin/validators/check_skill_frontmatter.py"), "--root", str(root)],
+        ),
+        (
+            "skill_ensembles",
+            [python, str(root / "bin/validators/check_skill_ensembles.py"), "--root", str(root)],
+        ),
+    ]
+    docs = [
+        (
+            "document_frontmatter_syntax",
+            [python, str(root / "bin/validators/check_doc_frontmatter.py"), "--root", str(root)],
+        ),
+        ("feature_and_system_records", [python, str(root / "docs/features/validate_features.py")]),
+        (
+            "template_registry",
+            [
+                python,
+                str(root / "bin/validators/sync_template_registry.py"),
+                "--root",
+                str(root),
+                "--check",
+            ],
+        ),
+        (
+            "template_metadata",
+            [
+                python,
+                str(root / "bin/validators/check_template_version_metadata.py"),
+                "--root",
+                str(root),
+                "--all",
+            ],
+        ),
+        ("source_registry", [python, str(root / "docs/sources/validate_sources.py")]),
+    ]
+    if scope == "skills":
+        return skills
+    if scope == "docs":
+        return docs
+    return [*skills, *docs]
+
+
+def run_validate_frontmatter(args: argparse.Namespace) -> int:
+    """Run the owner validators for one or all static metadata families."""
+
+    root = CORE_ROOT
+    results: list[dict[str, Any]] = []
+    for check_id, command in frontmatter_validation_commands(root, args.scope):
+        result = subprocess.run(command, cwd=str(root), text=True, capture_output=True, check=False)
+        output = "\n".join(
+            part.strip() for part in (result.stdout, result.stderr) if part.strip()
+        )
+        results.append(
+            {
+                "id": check_id,
+                "ok": result.returncode == 0,
+                "output": output,
+            }
+        )
+
+    ok = all(result["ok"] for result in results)
+    payload = {
+        "ok": ok,
+        "summary": (
+            f"frontmatter validation passed: scope={args.scope} checks={len(results)}"
+            if ok
+            else f"frontmatter validation failed: scope={args.scope}"
+        ),
+        "scope": args.scope,
+        "checks": results,
+    }
+    if args.json:
+        print(json.dumps(payload, indent=2, sort_keys=True))
+    else:
+        print(payload["summary"])
+        for result in results:
+            status = "pass" if result["ok"] else "fail"
+            print(f"[{status}] {result['id']}")

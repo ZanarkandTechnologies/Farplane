@@ -11,8 +11,9 @@ skill.
 - `SKILL.md`: main brainstorm workflow
 - `AGENTS.md`: maintenance rules
 - `SKILL.md` Todo List: Tier 2 intake checklist
-- `references/spine-and-budget.md`: first-principles spine, optional depth
-  lanes, budget mapping, and complete brainstorm persona prompts
+- `references/spine-and-ensemble.md`: first-principles spine, optional depth
+  lanes, and ensemble mechanics
+- `ensemble.yaml`: complete brainstorm-owned persona prompts
 - `references/palantir-customer-data-action.md`: customer/data/action decomposition lens
 - `references/mckinsey-issue-tree.md`: structured issue-tree lens
 
@@ -25,10 +26,10 @@ skill.
    owner.
 3. Add optional lanes only when they reduce uncertainty: why-chain,
    customer/data/action, issue-tree, working-backwards, or council critique.
-4. When `budget` is present, route plus/max persona programs through
-   `budget-advisor` using `references/spine-and-budget.md`.
+4. When `ensemble: auto|max` is requested, select personas from
+   `ensemble.yaml` using `references/spine-and-ensemble.md`.
 5. Recommend one best next bet or decomposition shape.
-6. Hand off to `deep-interview`, `prd`, `research:*`, or `impl-plan` as
+6. Hand off to direct clarification, `prd`, `research:*`, or `impl-plan` as
    appropriate.
 
 ## How To Test
@@ -39,6 +40,6 @@ skill.
   `reference-grounding` or `research:*`
 - confirm it can handle structured current-vs-ideal and first-principles
   decomposition inside the same public surface
-- confirm plus/max budget routes preserve the brainstorm output contract and
-  use complete behavioral persona prompts rather than public-figure cosplay
+- confirm ensemble routes preserve the brainstorm output contract and use
+  complete behavioral persona prompts rather than public-figure cosplay
 - confirm it ends with one recommended next skill or artifact

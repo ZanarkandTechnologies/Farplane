@@ -26,21 +26,22 @@ eval_required: no
 
 ## Classification Basis
 
-`shortcut` means an explicit-only operator command with no Capability Map
-projection. It is not a generic label for every skill a person can invoke.
+`shortcut` means a non-projected direct command with no Capability Map
+projection or skill-graph composition edges. It is not a generic label for
+every skill a person can invoke; a system policy may still require it.
 
 | Candidate | Verdict | Evidence |
 | --- | --- | --- |
 | `product-backbrief` | tag shortcut | Read-only alignment workflow; writes none; routes only after human correction. |
-| `advise`, `brainstorm`, `diagramming`, `task-recap` | already tagged | Current frontmatter declares `capability.kind: shortcut`. |
-| `commit-message`, `deep-interview`, `deliberative-advice`, `problem-framing`, `reshape-feasible`, `skill-registry-ui`, `unslop` | already tagged | Current frontmatter declares `capability.kind: shortcut`. |
+| `advise`, `brainstorm`, `diagramming`, `task-recap`, `problem-framing`, `unslop` | already tagged | Current frontmatter declares `capability.kind: shortcut`. |
+| `commit`, `feasible-roadmap`, `lean-check` | tagged during consolidation | Direct commands with no capability-map projection; Lean Check remains a policy-required guardrail. |
 | `intelligest` | keep core | Explicit phrasing alone is insufficient; it owns a durable intelligence dossier workflow. |
 | `phone-chaser` | keep integration | It performs an external system-boundary action. |
 
 ## Proof Artifacts
 
 - Validator: `python3 bin/farplane.py validate frontmatter skills` passed with
-  `shortcut=12`.
+  `shortcut=10` after retiring duplicated shortcuts.
 - Registry/plugin projection: `python3 skills/skill-maintenance/scripts/check_skills.py --write`
   and `python3 skills/skill-maintenance/scripts/sync_skill_plugins.py --check`
   passed.
@@ -60,4 +61,4 @@ passed.
 
 ## Followups
 
-- None. Future classifications use the same explicit-only, no-projection rule.
+- None. Future classifications use the same non-projected direct-command rule.

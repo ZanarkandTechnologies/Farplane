@@ -83,7 +83,7 @@ flowchart LR
   subgraph Skills["Skill Layer"]
     primitives["Tier 1 primitives<br/>advise<br/>reference-grounding<br/>review<br/>direct Todo List"]:::callout
     interfaces["Tier 2 interfaces<br/>brainstorm<br/>research:*<br/>plan<br/>execute"]:::callout
-    intake["brainstorm<br/>deep-interview<br/>prd<br/>deep-system-design<br/>visual-design"]:::skill
+    intake["brainstorm<br/>direct clarification<br/>prd<br/>deep-system-design<br/>visual-design"]:::skill
     readiness["agent-testability-plan<br/>Run Hints"]:::callout
     research["documentation<br/>external-patterns<br/>feed-scout<br/>harness-scout<br/>research:methods<br/>best-of-worlds<br/>self-improve"]:::skill
     ticketSkill["spec-to-ticket"]:::callout
@@ -92,7 +92,7 @@ flowchart LR
     execSkill["goal-advisor<br/>native Codex task checkout"]:::callout
     assetSkill["image-generation<br/>video-generation<br/>remotion-render<br/>imagegen"]:::skill
     externalCli["delegate-cli<br/>Pi/OpenRouter profile"]:::skill
-    closeSkill["demo -> close-ticket<br/>video-first GitHub issue<br/>commit-message<br/>pr-splitting"]:::callout
+    closeSkill["demo -> close-ticket<br/>video-first GitHub issue<br/>commit<br/>pr-splitting"]:::callout
   end
 
   subgraph Board["Ticket + QA Surfaces"]

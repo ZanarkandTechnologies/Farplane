@@ -20,7 +20,7 @@ $deep-system-design --data-first "design the ingestion and indexing system for t
 ## How To Test
 
 - Re-read `skills/deep-system-design/SKILL.md` once and confirm the boundary
-  with `deep-interview`, `functional-ui`, and `visual-design` is obvious.
+  with direct clarification, `functional-ui`, and `visual-design` is obvious.
 - Confirm the skill requires explicit entities, signatures, storage ownership,
   and execution boundaries before handoff.
 - Confirm the output contract produces a reusable `System Design Brief` instead

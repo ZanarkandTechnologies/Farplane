@@ -127,7 +127,7 @@ setup_project_operating_model(bootstrap_brief, project_context,
   -> readiness_status
    + human_intake_decision
    + first_missing_question?
-   + deep_interview_quick_handoff?
+   + focused_clarification_handoff?
    + harness_delta?
    + capability_skill_delta?
    + metric_objective_delta?

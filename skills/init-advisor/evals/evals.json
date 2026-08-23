@@ -132,7 +132,7 @@
     {
       "id": "init_advisor_adaptive_human_intake_01",
       "prompt": "A migrated project has a current manifest, but harness.yaml, capability ownership, and metrics.yaml are placeholders. The operator wants to finish migration without a long generic interview. How should init-advisor decide what to ask?",
-      "expected_output": "Resolves human_intake as skip, offer, or required and defaults to offer; Uses destination skill signatures as the question inventory; Routes charter and capability gaps to harness-creator; Routes metric meaning, directions, guards, and providers to metric-advisor; Asks direct questions for narrow missing params; Escalates to deep-interview --quick only for intent-heavy or contradictory canonical gaps; Writes the intake decision and missing answers to docs/bootstrap-brief.md; Does not duplicate Deep Interview inside init-advisor, harness-creator, or metric-advisor; Does not claim project_initialized until required operator-owned params are answered or blocked",
+      "expected_output": "Resolves human_intake as skip, offer, or required and defaults to offer; Uses destination skill signatures as the question inventory; Routes charter and capability gaps to harness-creator; Routes metric meaning, directions, guards, and providers to metric-advisor; Asks direct questions for narrow missing params; Uses a focused adaptive clarification only for intent-heavy or contradictory canonical gaps; Writes the intake decision and missing answers to docs/bootstrap-brief.md; Does not duplicate a long interview loop inside init-advisor, harness-creator, or metric-advisor; Does not claim project_initialized until required operator-owned params are answered or blocked",
       "files": [],
       "assertions": [
         "Resolves human_intake as skip, offer, or required and defaults to offer for new or migrated meaning-heavy files",
@@ -140,10 +140,10 @@
         "Routes harness.yaml, capability workflow refs, feedback loops, missing systems, and milestone-shape params to harness-creator",
         "Routes metric meaning, directions, guards, and providers to metric-advisor",
         "Asks direct signature questions for factual or narrow missing params",
-        "Escalates to deep-interview --quick only when missing params are intent-heavy, contradictory, or risky for canonical file fills",
-        "Constrains deep-interview --quick to the missing signature params plus intent, outcome, non-goals, decision boundaries, and success criteria",
-        "Writes the human intake decision, missing answers, and any deep-interview summary into docs/bootstrap-brief.md",
-        "Does not embed or duplicate the Deep Interview loop inside init-advisor, harness-creator, or metric-advisor",
+        "Uses focused adaptive clarification only when missing params are intent-heavy, contradictory, or risky for canonical file fills",
+        "Constrains focused clarification to missing signature params plus intent, outcome, non-goals, decision boundaries, and success criteria",
+        "Writes the human intake decision and missing answers into docs/bootstrap-brief.md",
+        "Does not embed or duplicate a long interview loop inside init-advisor, harness-creator, or metric-advisor",
         "Does not claim project_initialized until required operator-owned params are answered or recorded as blocked"
       ],
       "metadata": {
@@ -152,7 +152,7 @@
           "tags": [
             "init-advisor",
             "human-intake",
-            "deep-interview",
+            "direct-clarification",
             "harness-creator",
             "metric-advisor"
           ]

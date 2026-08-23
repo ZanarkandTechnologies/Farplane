@@ -73,7 +73,7 @@ WORKFLOWS = [
         "label": "Bootstrap",
         "description": "Create the project substrate and first usable harness state.",
         "doc": "docs/farplane-framework/init-advisor-critical-path.md",
-        "skills": ["init-advisor", "harness-creator", "deep-interview", "prd", "spec-to-ticket"],
+        "skills": ["init-advisor", "harness-creator", "prd", "spec-to-ticket"],
     },
     {
         "id": "workflow:strategy",

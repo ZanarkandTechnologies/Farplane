@@ -3,6 +3,8 @@ name: lean-check
 description: "Turn a suspected overbuilt change or plan into a first-sufficient-rung verdict, evidence, and smallest safe next action."
 tier: 2
 source: local
+capability:
+  kind: shortcut
 template_uses:
   skill-template: "0.4.0"
   skill-eval-task: "0.2.0"
@@ -22,10 +24,10 @@ speculative, duplicate local behavior, or introduce an unnecessary library or
 surface. It owns the leanness decision and receipt; it does not implement the
 change or replace correctness, safety, accessibility, or proof requirements.
 
-`impl-plan` calls this skill after repository inspection and context resolution.
-Direct coding work may call it without a ticket. Use `review` only when the
-result needs a TAS verdict. For prose rather than implementation structure,
-return an explicit operator route to the unslop shortcut.
+The planning owner calls this skill after repository inspection and context
+resolution. Direct coding work may call it without a ticket. Use a TAS review
+only when the result needs that verdict. For prose rather than implementation
+structure, return an explicit operator route to the unslop shortcut.
 
 ## Skill Signature
 
@@ -36,7 +38,7 @@ state: reads(current need, local code/tests/docs, standard or platform options,
 owns: first-sufficient-rung verdict and smallest safe next action
 gates: current_need_named; first_sufficient_rung_named; evidence_named;
   proof_preserved
-routes: impl-plan | review | direct implementation
+routes: planning owner | TAS review | direct implementation
 fails: speculative build; duplicate owner; new dependency before reuse;
   line-count optimization that removes required proof or safety
 ```
@@ -58,8 +60,9 @@ fails: speculative build; duplicate owner; new dependency before reuse;
   - [ ] `minimum_new_code`: only no earlier rung is sufficient.
 - [ ] 4. State the smallest safe next action and what evidence would overturn it.
 - [ ] 5. Apply [qa_checklist.md](qa_checklist.md) to the receipt, then return
-  it; route a material plan to `impl-plan` and a judgment-heavy acceptance
-  question to `review` with `debloatability` or `code-quality` as applicable.
+  it; route a material plan to its planning owner and a judgment-heavy
+  acceptance question to a TAS review with `debloatability` or `code-quality`
+  as applicable.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 ## Templates
@@ -89,9 +92,9 @@ native control and keep the existing form validation proof.
 
 ## Reference Map
 
-- [Impl Plan](../impl-plan/SKILL.md) - use when the receipt changes a material
-  ticket's implementation boundary.
-- [Review](../review/SKILL.md) - use only when a TAS judgment is required.
+- Use the implementation planning owner when the receipt changes a material
+  ticket boundary.
+- Use a TAS review only when a material judgment is required.
 - Explicit operator shortcut: unslop when the requested simplification is
   prose, not code or architecture.
 

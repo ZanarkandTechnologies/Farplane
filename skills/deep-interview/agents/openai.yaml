@@ -1,6 +1,0 @@
-interface:
-  display_name: "Deep Interview"
-  short_description: "Clarify ambiguous intent through a Socratic interview"
-  default_prompt: "Use $deep-interview to clarify my goals, constraints, and unresolved decisions before execution."
-policy:
-  allow_implicit_invocation: false

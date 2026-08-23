@@ -46,8 +46,7 @@ As of 2026-08-03, that is 18 named advisor packages plus `advise`: 19 entries.
 
 | Need | Advisor | Produces |
 | --- | --- | --- |
-| Compare viable options and recommend one | [`advise`](../../skills/advise/SKILL.md) | Three options, tradeoffs, one recommendation, and next action |
-| Change effort or review depth without changing the caller's output contract | [`budget-advisor`](../../skills/budget-advisor/SKILL.md) | Base, plus, or max execution program with bounded council lanes |
+| Compare viable options and recommend one | [`advise`](../../skills/advise/SKILL.md) | Three options, tradeoffs, one recommendation, and next action; `ensemble=auto|max` adds independent local perspectives when requested |
 | Rank compounding opportunities and select the next wave | [`leverage-advisor`](../../skills/leverage-advisor/SKILL.md) | Ranked leverage roadmap, next wave, and first proof step |
 | Define honest success, guardrails, and failure signals | [`metric-advisor`](../../skills/metric-advisor/SKILL.md) | Metric card, guard metrics, anti-metrics, and route hint |
 

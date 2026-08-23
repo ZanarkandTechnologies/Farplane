@@ -76,7 +76,8 @@ templates, or skill maintenance rules changed.
 - [ ] `route-appropriate`: The chosen reasoning route matched
   `docs/skills/best-practices.md#advice-and-proof-routing`; standards,
   compounding surfaces, behavioral claims, and evidence gaps used the right
-  combination of first-principles reasoning, `advise`, `deliberative-advice`,
+  combination of first-principles reasoning, `advise` (including requested
+  `ensemble=auto|max` coverage),
   research, evals, and reviewer readiness.
 - [ ] `registry-validated`: Registry or generated graph/plugin sync output was
   validated when metadata or generated surfaces changed.

@@ -576,7 +576,7 @@ Budgeted skills include:
 | --- | --- |
 | native planning, `impl-plan`, `goal-advisor` | planning depth, ambiguity gates, decomposition depth |
 | `research`, `reference-grounding` | source count, search breadth, recency/currentness, citation depth |
-| `advise`, `deliberative-advice` | option count, independent persona lanes, synthesis |
+| `advise` | option count, local ensemble persona lanes, synthesis |
 | `review`, `visual-qa`, `agent-qa-test` | rubric depth, evidence depth, reviewer/QA lanes |
 | `eval`, `eval-onboarding` | case count, fixture depth, judge strictness, heldout coverage |
 | `optimize-harness`, `self-improve` | candidate count, iteration count, metric budget, rollback gate |

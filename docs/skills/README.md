@@ -28,8 +28,6 @@ into a second place to maintain skill truth.
   ignored `.farplane/generated/graphs/`, preventing routine refreshes from
   creating repository diffs. The UI is owned by `skill-maintenance` for now so
   `docs/skills/` stays an index plus registry surface.
-- `skills/skill-registry-ui/` is the operator skill for refreshing, opening,
-  and validating that graph UI.
 - If the graph expands beyond skills into repo-wide Markdown or JSON backlinks,
   keep the generator as a maintenance/reporting utility until a dedicated
   harness map surface has a real consumer. `skill-maintenance` should keep
@@ -99,7 +97,7 @@ Use this table when two skills look similar. It is intentionally prose-first;
 | --- | --- | --- | --- |
 | Choose among real options and name a recommendation | `advise` | It starts from first principles, frames 3 viable choices, names one recommendation, and states the accepted tradeoff. | The user already gave a direct execution request. |
 | Challenge a proposed implementation or plan that may be overbuilt | `lean-check` | It stops at the first sufficient rung and returns evidence plus the smallest safe next action. | You need a TAS verdict on an accepted change; use `review`. |
-| Make a high-stakes or complex recommendation with independent critique | `deliberative-advice` / `deliberative-advice:complex` | It escalates advice into a council workflow: independent perspective briefs, critique/ranking, chair synthesis, visible dissent, and an explicit next owner. | The decision is simple, reversible, already grounded, or only needs a concise 3-option recommendation. |
+| Make a high-stakes or complex recommendation with independent critique | `advise ensemble=auto|max` | It adds three context-selected or all owner-local independent personas, then synthesizes a recommendation with visible dissent and an explicit next owner. | The decision is simple, reversible, already grounded, or only needs concise advice. |
 | Compress an artifact, registry, memory file, or docs tree without losing required value | `consolidate` | It inventories units, finds the owning contract, scores value versus duplication and staleness, preserves exact source rows when required, routes knowledge to its retrieval owner, rebuilds minimally, and runs a loss check. | You only need a reader-facing summary; use the native or CLI summarization path. You need domain-specific skill-package edits; route the final patch through `skill-maintenance`. |
 | Ground a claim in local files, docs, official references, or provided sources | `reference-grounding` | It supplies compact evidence before advice, planning, or review claims. | You need a full research brief or feature synthesis. |
 | Write or revise durable docs so they are clear, consistent, and human-usable | `doc-advisor` | It owns doc-quality checks: reader contract, term consistency, duplicate definitions, stale sections, examples, links, and agent-facing commentary cleanup. | You only need compact evidence or official-doc lookup; use `reference-grounding`. |
@@ -107,7 +105,7 @@ Use this table when two skills look similar. It is intentionally prose-first;
 | Choose an honest metric, provider, guard metric, or no-metric rationale | `metric-advisor` | It turns objectives, eval results, tickets, Goal loops, and proof evidence into a compact metric card with direction, anti-metrics, measurement method, and route hint. | You need to execute the loop; use the owning caller such as `optimize-harness`, `goal-advisor`, `self-improve`, `impl-plan`, or `review`. |
 | Prove a pattern before expanding scope, automation, data, file count, or research breadth | `prototyping` | It forces a representative `1 -> 10 -> 100` sample and a Prototype Note before scale. | The task is already small, one-off, or mechanically proven. |
 | Gather external parity, gap, docs, code-pattern, or source-synthesis evidence | `research:*` | It is the Tier 2 evidence workflow for method-addressed research passes. | The answer is already locally grounded and only needs a recommendation. |
-| Resolve budget-aware skill parameters into council programs | `budget-advisor` | It maps base/plus/max budget requests, available time, persona prompts, coverage, evidence depth, and explicit child-skill budget allocations into concrete template refs while preserving the caller skill's output contract. | The skill is tiny, deterministic, or already has an obvious single-path budget behavior. |
+| Add independent perspectives to a skill that owns an ensemble | `ensemble=auto|max` on that skill | `auto` selects exactly three relevant diverse personas from the skill's `ensemble.yaml`; `max` runs all of them and preserves dissent in synthesis. | The direct path is enough, or the skill does not declare an ensemble file. |
 | Watch an existing PR until review agents and checks pass | `pr-review-watch` | It owns explicit heartbeat polling, project-local PR review memory, normalized PR verdicts, fix loops, and terminal notifications while reusing the task's assigned checkout and reviewer-agent review. | You only need one explicit material review (`review`). |
 | Check, scaffold, onboard, and run harness-native evals | `eval` | It initializes/discovers clean-room eval tasks, judges boolean/tier outcomes, treats hardcases as metadata, and can preserve one isolated CLI run as a scored `behavior_trace` with prompt, events, logs, output, checkpoints, artifacts, schema verdict, and baseline comparison. | You need adversarial tester/evidence-review orchestration or only native-subagent evidence; use `agent-qa-test`. |
 | Test a feature, skill, prompt, or workflow adversarially | `agent-qa-test` | It designs cases, runs or drafts a tester lane, attacks the tester evidence with an evidence-review lane, reconciles fixes/reruns, and can include Eval `behavior_trace` capture. | You only need one cheap CLI conformance probe and no adversarial proof loop. |
@@ -356,7 +354,7 @@ surfaces instead of creating hidden repair work. The canonical contract lives in
 
 Project-type exploration belongs upstream of Tier 3 execution skills. Use
 `skills/init-advisor/references/project-profiles.md` to seed
-`docs/bootstrap-brief.md`, `deep-interview`, `prd`, and `spec-to-ticket` with
+`docs/bootstrap-brief.md`, direct clarification, `prd`, and `spec-to-ticket` with
 component sets, advice axes, prototype gates, and pipeline handoffs. Tier 3
 domain skills should consume selected directions and execution packets instead
 of rediscovering the whole project profile during implementation.

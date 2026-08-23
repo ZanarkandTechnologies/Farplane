@@ -4,14 +4,14 @@
     {
       "id": "brainstorm_base_spine_without_council_01",
       "prompt": "Brainstorm how we should rethink code review for small AI-agent repos. Keep it concise and do not create tickets.",
-      "expected_output": "States whether the pass is loose divergence or structured decomposition; Names objective, current reality, first-principles contrast, candidate directions, recommendation, and next owner; Does not run plus/max persona council or claim to spawn lanes without a budget request; Keeps output as an exploration note, not an implementation plan; Names `deep-interview`, `prd`, `research:*`, or no next owner as appropriate",
+      "expected_output": "States whether the pass is loose divergence or structured decomposition; Names objective, current reality, first-principles contrast, candidate directions, recommendation, and next owner; Does not run an ensemble or claim to spawn lanes without an ensemble request; Keeps output as an exploration note, not an implementation plan; Names operator clarification, `prd`, `research:*`, or no next owner as appropriate",
       "files": [],
       "assertions": [
         "States whether the pass is loose divergence or structured decomposition",
         "Names objective, current reality, first-principles contrast, candidate directions, recommendation, and next owner",
-        "Does not run plus/max persona council or claim to spawn lanes without a budget request",
+        "Does not run an ensemble or claim to spawn lanes without an ensemble request",
         "Keeps output as an exploration note, not an implementation plan",
-        "Names `deep-interview`, `prd`, `research:*`, or no next owner as appropriate"
+        "Names operator clarification, `prd`, `research:*`, or no next owner as appropriate"
       ],
       "metadata": {
         "farplane": {
@@ -54,28 +54,27 @@
       }
     },
     {
-      "id": "brainstorm_plus_budget_personas_01",
-      "prompt": "Brainstorm a new onboarding workflow for Farplane with budget={mode:'plus'}. Use independent perspectives if useful, but preserve the brainstorm output shape.",
-      "expected_output": "Loads `references/spine-and-budget.md` for budget mapping and persona prompts; Routes plus budget through `budget-advisor` rather than implementing hidden budget machinery inside brainstorm; Uses three complete behavioral PersonaPrompt objects such as FirstPrinciplesOperator, CustomerBackwardsOwner, and EvidenceSkeptic; States child skills use base unless `delegate_budget` explicitly names them; Synthesizes back into the normal exploration note contract",
+      "id": "brainstorm_auto_ensemble_personas_01",
+      "prompt": "Brainstorm a new onboarding workflow for Farplane with ensemble=auto. Use independent perspectives if useful, but preserve the brainstorm output shape.",
+      "expected_output": "Loads `ensemble.yaml` for complete persona prompts; Selects exactly three relevant diverse personas without invoking a shared budget system; States why those personas fit; Synthesizes back into the normal exploration note contract while preserving dissent",
       "files": [],
       "assertions": [
-        "Loads `references/spine-and-budget.md` for budget mapping and persona prompts",
-        "Routes plus budget through `budget-advisor` rather than implementing hidden budget machinery inside brainstorm",
-        "Uses three complete behavioral PersonaPrompt objects such as FirstPrinciplesOperator, CustomerBackwardsOwner, and EvidenceSkeptic",
-        "States child skills use base unless `delegate_budget` explicitly names them",
-        "Synthesizes back into the normal exploration note contract"
+        "Loads `ensemble.yaml` for complete persona prompts",
+        "Selects exactly three relevant diverse personas without invoking a shared budget system",
+        "States why those personas fit",
+        "Synthesizes back into the normal exploration note contract while preserving dissent"
       ],
       "metadata": {
         "farplane": {
-          "title": "Plus budget routes to complete brainstorm persona prompts",
+          "title": "Auto ensemble selects complete brainstorm persona prompts",
           "context": "",
           "tags": [
             "skill",
             "brainstorm",
-            "budget",
+            "ensemble",
             "personas"
           ],
-          "notes": "Catches thin labels, hidden subagent execution, and budget output-contract drift."
+          "notes": "Catches thin labels, hidden subagent execution, and ensemble output-contract drift."
         }
       }
     },
@@ -108,14 +107,14 @@
     {
       "id": "brainstorm_product_bet_working_backwards_01",
       "prompt": "Brainstorm a product bet for a browser-based skill registry that makes agents easier to trust. I am not ready for requirements yet.",
-      "expected_output": "Recognizes this as an early product bet, not a PRD or ticket request; Runs the base spine; Uses a working-backwards or customer-backwards lane to name user, promise, objections, and first lovable slice; Avoids implementation planning and ticket creation; Hands off to `deep-interview` if still fuzzy or `prd` if coherent",
+      "expected_output": "Recognizes this as an early product bet, not a PRD or ticket request; Runs the base spine; Uses a working-backwards or customer-backwards lane to name user, promise, objections, and first lovable slice; Avoids implementation planning and ticket creation; Stops for operator clarification if still fuzzy or hands off to `prd` if coherent",
       "files": [],
       "assertions": [
         "Recognizes this as an early product bet, not a PRD or ticket request",
         "Runs the base spine",
         "Uses a working-backwards or customer-backwards lane to name user, promise, objections, and first lovable slice",
         "Avoids implementation planning and ticket creation",
-        "Hands off to `deep-interview` if still fuzzy or `prd` if coherent"
+        "Stops for operator clarification if still fuzzy or hands off to `prd` if coherent"
       ],
       "metadata": {
         "farplane": {

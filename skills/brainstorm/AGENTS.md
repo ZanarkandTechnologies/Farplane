@@ -6,7 +6,7 @@ Rules for the `brainstorm` skill surface.
 
 `skills/brainstorm/` owns the single public early-intake surface for
 lightweight option exploration, spine-first structured decomposition, and
-budgeted perspective coverage.
+operator-requested ensemble coverage.
 
 ## Keep
 
@@ -17,8 +17,8 @@ budgeted perspective coverage.
   and next owner
 - optional lanes targeted to the uncertainty, not stacked as mandatory
   framework ceremony
-- budgeted plus/max behavior routed through `budget-advisor` with complete
-  brainstorm-owned PersonaPrompt objects
+- `ensemble: auto|max` behavior driven by complete brainstorm-owned personas
+  in `ensemble.yaml`
 - evidence links through `reference-grounding` or `research:*` instead of
   source-free invention
 - recommendations explicit
@@ -32,6 +32,6 @@ budgeted perspective coverage.
 - pretend every intake problem needs the same lens
 - run every optional lane at full depth by default
 - prompt lanes as real public figures; encode behavioral archetypes instead
-- let budget/persona machinery replace the base brainstorm output contract
-- let `budget-advisor` execute hidden lanes or own brainstorm's domain logic
+- let ensemble/persona machinery replace the base brainstorm output contract
+- let an ensemble execution path own brainstorm's domain logic
 - turn `brainstorm` into a hidden router for planning or execution

@@ -2,24 +2,24 @@
   "skill_name": "refactoring",
   "evals": [
     {
-      "id": "refactoring_budget_smell_score_01",
-      "prompt": "We just shipped a feature and I want a max-budget cleanup pass. The changed files include one 220-line TypeScript handler with nested branching, weak tests, and duplicated validation. What should the refactoring workflow do?",
-      "expected_output": "Routes to the refactoring skill rather than runtime-debugging or hardening as the primary owner.; Uses budget-advisor for the max budget and preserves the refactoring output contract.; Prioritizes changed/high-churn code with complexity, nesting, duplication, and coverage risk.; Requires behavior proof before and after structural changes.; Rejects raw line-count gaming and reports residual risk.",
+      "id": "refactoring_ensemble_smell_score_01",
+      "prompt": "We just shipped a feature and I want a max-ensemble cleanup pass. The changed files include one 220-line TypeScript handler with nested branching, weak tests, and duplicated validation. What should the refactoring workflow do?",
+      "expected_output": "Routes to the refactoring skill rather than runtime-debugging or hardening as the primary owner.; Uses every complete persona from `ensemble.yaml` and preserves the refactoring output contract.; Prioritizes changed/high-churn code with complexity, nesting, duplication, and coverage risk.; Requires behavior proof before and after structural changes.; Rejects raw line-count gaming and reports residual risk.",
       "files": [],
       "assertions": [
         "Routes to the refactoring skill rather than runtime-debugging or hardening as the primary owner.",
-        "Uses budget-advisor for the max budget and preserves the refactoring output contract.",
+        "Uses every complete persona from `ensemble.yaml` and preserves the refactoring output contract.",
         "Prioritizes changed/high-churn code with complexity, nesting, duplication, and coverage risk.",
         "Requires behavior proof before and after structural changes.",
         "Rejects raw line-count gaming and reports residual risk."
       ],
       "metadata": {
         "farplane": {
-          "title": "Budgeted refactoring optimizes changed-code smell score without metric gaming",
+          "title": "Ensembled refactoring optimizes changed-code smell score without metric gaming",
           "context": "",
           "tags": [
             "refactoring",
-            "budget",
+            "ensemble",
             "maintainability"
           ]
         }

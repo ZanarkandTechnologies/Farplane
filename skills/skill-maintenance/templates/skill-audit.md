@@ -4,10 +4,10 @@ date: YYYY-MM-DD
 change_type: structure | behavior | template | reference | eval | maintenance
 owner: skill-maintenance
 status: draft | pass | fail | blocked
-review_route: self_check | advise | deliberative_advice | reviewer
+review_route: self_check | advise | advise_ensemble | reviewer
 before_ref: TODO
 after_ref: TODO
-reasoning_basis: first_principles | advise | deliberative_advice | reviewer | eval
+reasoning_basis: first_principles | advise | advise_ensemble | reviewer | eval
 proof_artifacts: []
 eval_required: yes | no
 ---

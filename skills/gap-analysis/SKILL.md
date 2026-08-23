@@ -74,8 +74,8 @@ fails: jumps to a fix before naming the gap; confuses symptom with owner; invent
   - [ ] 3. Skill-local self-improvement memory.
   - [ ] 4. Skill-maintenance pass.
   - [ ] 5. Harness placement decision.
-  - [ ] 6. Deliberative advice only when remediation is high-stakes,
-    expensive, or materially branching.
+  - [ ] 6. Requested `advise ensemble=max` only when remediation is
+    high-stakes, expensive, or materially branching.
 - [ ] 6. Review the gap report before returning it: every recommendation should
   point to local evidence, an owning surface, and a verification path.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->

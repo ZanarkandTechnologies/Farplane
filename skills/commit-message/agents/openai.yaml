@@ -1,6 +1,0 @@
-interface:
-  display_name: "Commit Message"
-  short_description: "Draft a compact repo-style commit subject"
-  default_prompt: "Use $commit-message to draft a compact commit subject from the staged or recent diff."
-policy:
-  allow_implicit_invocation: false

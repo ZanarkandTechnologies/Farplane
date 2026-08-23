@@ -1,6 +1,0 @@
-interface:
-  display_name: "Reshape Feasible"
-  short_description: "Turn ambition pressure into one focused mission"
-  default_prompt: "Use $reshape-feasible to keep this ambition as direction while making one meaningful near-term result my only active mission."
-policy:
-  allow_implicit_invocation: false

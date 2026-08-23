@@ -162,7 +162,7 @@ design baseline; never replace it with a chat-only summary or a new schema.
     diagram review materially help; validate it when linked.
   - [ ] Move execution history and bulky proof to `progress.md` or `artifacts/`.
 - [ ] 7. Run minimality and mechanical gates.
-  - [ ] Call [lean-check](../lean-check/SKILL.md) once after context resolution
+  - [ ] Call the Lean Check direct command once after context resolution
     and before finalizing the Change Plan. Preserve its first sufficient rung,
     evidence, and smallest action only where they change scope, a change unit,
     or QA; do not create a parallel ticket schema.

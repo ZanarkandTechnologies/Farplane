@@ -41,9 +41,9 @@ ticket_execution_lifecycle(human_intent)
 ```
 
 The human conversation comes first when the direction is still a product,
-workflow, architecture, prompt, or harness choice. `brainstorm`,
-`deliberative-advice`, `deep-interview`, `prd`, `spec-to-ticket`, or a direct
-operator decision turns fuzzy intent into an accepted direction. Once the
+workflow, architecture, prompt, or harness choice. `brainstorm`, `advise`
+with `ensemble=auto|max`, `prd`, `spec-to-ticket`, direct clarification, or a
+direct operator decision turns fuzzy intent into an accepted direction. Once the
 direction is accepted, the ticket becomes the task-local source of truth and
 execution can become autonomous inside that scope.
 
@@ -227,8 +227,8 @@ boundary:
 
 - `brainstorm` expands fuzzy directions and stops before pretending the idea is
   ready for tickets.
-- `advise` or `deliberative-advice` chooses among real options and preserves
-  the accepted tradeoff.
+- `advise` chooses among real options and preserves the accepted tradeoff;
+  `ensemble=auto|max` adds independent local personas only when requested.
 - `prd` or `spec-to-ticket` turns accepted product or system intent into
   ticket-sized work.
 - `impl-plan` turns one selected material coding ticket into an executable

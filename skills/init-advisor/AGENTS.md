@@ -10,7 +10,7 @@ artifact defaults for new or migrated repos.
 ## Keep
 
 - bootstrap as a docs-first, visible-artifact workflow
-- `deep-interview` as the canonical intake engine for ambiguous bootstrap work
+- adaptive direct clarification as the canonical intake for ambiguous bootstrap work
 - `docs/bootstrap-brief.md` as the visible bootstrap brief surface
 - bootstrap-owned agent-experience/testability decisions captured in
   `docs/bootstrap-brief.md` and scaffolded `qa/` surfaces
@@ -26,14 +26,14 @@ artifact defaults for new or migrated repos.
 
 ## Do Not
 
-- duplicate the `deep-interview` loop inside `init-advisor`
+- duplicate a long interview loop inside `init-advisor`
 - auto-enable git hooks during bootstrap
 - make generated repos depend on Farplane-owned helper paths for push gates
 - turn utility-duplication heuristics into hard blockers in the default template
 
 ## Invariants
 
-- `MEM-0054`: `init-advisor` should reuse `deep-interview`-quality intake and
+- `MEM-0054`: `init-advisor` should use structured adaptive intake and
   generate a visible bootstrap brief rather than inventing a second shallow
   bootstrap interview flow.
 - `MEM-0057`: `init-advisor` bootstrap must ask explicitly about local

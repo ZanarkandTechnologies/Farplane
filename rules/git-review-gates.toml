@@ -16,6 +16,42 @@ globs = ["skills/**", "docs/skills/**"]
 checks = ["skill_check"]
 
 [[pre_commit.path_check]]
+globs = [
+  "bin/core/skill_contract.py",
+  "bin/core/farplane_cli_commands.py",
+  "bin/core/farplane_cli_parser.py",
+  "bin/farplane.py",
+  "bin/validators/check_doc_frontmatter.py",
+  "bin/validators/test_check_doc_frontmatter.py",
+  "bin/validators/check_skill_frontmatter.py",
+  "bin/validators/test_check_skill_frontmatter.py",
+  "bin/validators/check_skill_ensembles.py",
+  "bin/validators/test_check_skill_ensembles.py",
+  "bin/validators/sync_skill_registry.py",
+  "bin/validators/test_sync_skill_registry.py",
+  "bin/validators/test_run_git_gate.py",
+  "bin/tests/test_sync_skill_registry.py",
+  "bin/tests/test_farplane_frontmatter_validation.py",
+  "skills/skill-creator/scripts/quick_validate.py",
+  "skills/skill-creator/scripts/test_quick_validate.py",
+  "rules/skill-departments.toml",
+  "rules/skill-workflows.toml",
+  "docs/skills/system.md",
+  "docs/skills/README.md",
+  "docs/skills/templates/SKILL_TEMPLATE.md",
+]
+checks = ["skill_contract"]
+
+[[pre_commit.path_check]]
+globs = [
+  "skills/skill-maintenance/scripts/generate_skill_graph.py",
+  "skills/skill-maintenance/scripts/test_generate_skill_graph.py",
+  "skills/skill-maintenance/scripts/sync_skill_plugins.py",
+  "skills/skill-maintenance/scripts/test_sync_skill_plugins.py",
+]
+checks = ["skill_projection"]
+
+[[pre_commit.path_check]]
 globs = ["skills/**/SKILL.md"]
 checks = ["skill_file_line_count"]
 
@@ -36,6 +72,42 @@ checks = [
 [[pre_push.path_check]]
 globs = ["skills/**", "docs/skills/**"]
 checks = ["skill_check"]
+
+[[pre_push.path_check]]
+globs = [
+  "bin/core/skill_contract.py",
+  "bin/core/farplane_cli_commands.py",
+  "bin/core/farplane_cli_parser.py",
+  "bin/farplane.py",
+  "bin/validators/check_doc_frontmatter.py",
+  "bin/validators/test_check_doc_frontmatter.py",
+  "bin/validators/check_skill_frontmatter.py",
+  "bin/validators/test_check_skill_frontmatter.py",
+  "bin/validators/check_skill_ensembles.py",
+  "bin/validators/test_check_skill_ensembles.py",
+  "bin/validators/sync_skill_registry.py",
+  "bin/validators/test_sync_skill_registry.py",
+  "bin/validators/test_run_git_gate.py",
+  "bin/tests/test_sync_skill_registry.py",
+  "bin/tests/test_farplane_frontmatter_validation.py",
+  "skills/skill-creator/scripts/quick_validate.py",
+  "skills/skill-creator/scripts/test_quick_validate.py",
+  "rules/skill-departments.toml",
+  "rules/skill-workflows.toml",
+  "docs/skills/system.md",
+  "docs/skills/README.md",
+  "docs/skills/templates/SKILL_TEMPLATE.md",
+]
+checks = ["skill_contract"]
+
+[[pre_push.path_check]]
+globs = [
+  "skills/skill-maintenance/scripts/generate_skill_graph.py",
+  "skills/skill-maintenance/scripts/test_generate_skill_graph.py",
+  "skills/skill-maintenance/scripts/sync_skill_plugins.py",
+  "skills/skill-maintenance/scripts/test_sync_skill_plugins.py",
+]
+checks = ["skill_projection"]
 
 [[pre_push.path_check]]
 globs = ["tickets/**"]
@@ -66,6 +138,30 @@ argv = ["python3", "bin/validators/check_template_version_metadata.py", "--stage
 
 [checks.skill_check]
 argv = ["python3", "skills/skill-maintenance/scripts/check_skills.py"]
+
+[checks.skill_contract]
+argv = [
+  "python3",
+  "-m",
+  "unittest",
+  "bin.tests.test_sync_skill_registry",
+  "bin.validators.test_sync_skill_registry",
+  "bin.validators.test_check_skill_frontmatter",
+  "bin.validators.test_check_skill_ensembles",
+  "bin.validators.test_check_doc_frontmatter",
+  "bin.validators.test_run_git_gate",
+  "bin.tests.test_farplane_frontmatter_validation",
+  "skills.skill-creator.scripts.test_quick_validate",
+]
+
+[checks.skill_projection]
+argv = [
+  "python3",
+  "-m",
+  "unittest",
+  "skills.skill-maintenance.scripts.test_generate_skill_graph",
+  "skills.skill-maintenance.scripts.test_sync_skill_plugins",
+]
 
 [checks.ticket_metadata]
 argv = ["python3", "tickets/scripts/check_ticket_metadata.py"]

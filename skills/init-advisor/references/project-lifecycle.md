@@ -27,7 +27,7 @@ TicketLoop :=
 
 ```text
 Bootstrap := init-advisor
-DeepInterview := deep-interview
+ClarifyBootstrap := direct clarification
 PRD := prd
 TicketBreakdown := spec-to-ticket
 PlanTicket<CodingTicket> := impl-plan
