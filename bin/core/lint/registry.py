@@ -3,10 +3,9 @@
 from __future__ import annotations
 
 from fnmatch import fnmatchcase
-from pathlib import Path
 import sys
 
-from .models import LintContext, LintResult, LintSpec
+from .models import LintContext, LintResult, LintScope, LintSpec
 from .source import lint_source_syntax
 
 
@@ -60,6 +59,21 @@ def _source_syntax(context: LintContext) -> LintResult:
     )
 
 
+def _check(
+    check_id: str,
+    scopes: frozenset[LintScope],
+    path_globs: tuple[str, ...],
+    script: str,
+    *arguments: str,
+) -> LintSpec:
+    return LintSpec(
+        check_id,
+        scopes,
+        path_globs,
+        command=_command(script, *arguments),
+    )
+
+
 def build_registry() -> LintRegistry:
     """Return every repository-wide pure static check exactly once."""
 
@@ -109,27 +123,40 @@ def build_registry() -> LintRegistry:
     )
     return LintRegistry(
         (
-            LintSpec("source_yaml_json_syntax", frozenset({"project"}), ("*.json", "*.yaml", "*.yml", "**/*.json", "**/*.yaml", "**/*.yml"), run=_source_syntax, always_on_changed=True),
-            LintSpec("skill_checklists", frozenset({"skills"}), skill_paths, command=_command("skills/skill-maintenance/scripts/sync_skill_checklists.py", "--repo", ".")),
-            LintSpec("skill_registry", frozenset({"skills"}), skill_paths, command=_command("bin/validators/sync_skill_registry.py", "--check")),
-            LintSpec("skill_contract", frozenset({"skills"}), skill_paths, command=_command("bin/validators/check_skill_frontmatter.py", "--root", ".")),
-            LintSpec("skill_todo_tiers", frozenset({"skills"}), skill_paths, command=_command("bin/validators/check_skill_todo_tiers.py", "--allow-peer-tier3")),
-            LintSpec("skill_phase_protocol", frozenset({"skills"}), skill_paths, command=_command("bin/validators/check_tier0_phase_protocol.py")),
-            LintSpec("skill_surface_budget", frozenset({"skills"}), skill_paths, command=_command("bin/validators/check_skill_surface_budget.py", "--root", ".")),
-            LintSpec("skill_capabilities", frozenset({"skills"}), skill_paths, command=_command("bin/validators/check_skill_capabilities.py", "validate")),
-            LintSpec("skill_method_references", frozenset({"skills"}), skill_paths, command=_command("skills/skill-maintenance/scripts/check_skills.py", "--method-reference-contract")),
-            LintSpec("eval_contract", frozenset({"skills", "evals"}), eval_paths, command=_command("bin/validators/check_eval_contract.py", "--root", ".", "--check-schema")),
-            LintSpec("eval_query_hygiene", frozenset({"skills"}), eval_paths, command=_command("skills/eval/scripts/check_eval_queries.py", "--root", ".")),
-            LintSpec("document_frontmatter", frozenset({"docs"}), doc_paths, command=_command("bin/validators/check_doc_frontmatter.py", "--root", ".")),
-            LintSpec("document_refs", frozenset({"docs", "skills"}), doc_paths, command=_command("bin/validators/check_doc_refs.py", "--root", ".")),
-            LintSpec("document_parity", frozenset({"docs"}), doc_paths, command=_command("bin/validators/check_doc_parity.py", "--root", ".")),
-            LintSpec("feature_and_system_records", frozenset({"docs"}), doc_paths, command=_command("docs/features/validate_features.py")),
-            LintSpec("source_registry", frozenset({"docs"}), doc_paths, command=_command("docs/sources/validate_sources.py")),
-            LintSpec("template_registry", frozenset({"docs", "skills"}), doc_paths, command=_command("bin/validators/sync_template_registry.py", "--root", ".", "--check")),
-            LintSpec("template_metadata", frozenset({"docs"}), doc_paths, command=_command("bin/validators/check_template_version_metadata.py", "--root", ".", "--all")),
-            LintSpec("project_contract", frozenset({"project"}), project_paths, command=_command("bin/validators/check_farplane_project_files.py", "--root", ".")),
-            LintSpec("capability_profiles", frozenset({"project"}), project_paths, command=_command("bin/validators/check_capability_profiles.py", "--project-root", ".")),
-            LintSpec("harness_invariants", frozenset({"project"}), project_paths, command=_command("bin/validators/check_harness_invariants.py", "--root", ".", "--skip-project-contract")),
-            LintSpec("ticket_metadata", frozenset({"tickets"}), ("tickets/**",), command=_command("tickets/scripts/check_ticket_metadata.py")),
+            LintSpec(
+                "source_yaml_json_syntax",
+                frozenset({"project"}),
+                ("*.json", "*.yaml", "*.yml", "**/*.json", "**/*.yaml", "**/*.yml"),
+                run=_source_syntax,
+                always_on_changed=True,
+            ),
+            _check(
+                "skill_checklists",
+                frozenset({"skills"}),
+                skill_paths,
+                "skills/skill-maintenance/scripts/sync_skill_checklists.py",
+                "--repo",
+                ".",
+            ),
+            _check("skill_registry", frozenset({"skills"}), skill_paths, "bin/validators/sync_skill_registry.py", "--check"),
+            _check("skill_contract", frozenset({"skills"}), skill_paths, "bin/validators/check_skill_frontmatter.py", "--root", "."),
+            _check("skill_todo_tiers", frozenset({"skills"}), skill_paths, "bin/validators/check_skill_todo_tiers.py", "--allow-peer-tier3"),
+            _check("skill_phase_protocol", frozenset({"skills"}), skill_paths, "bin/validators/check_tier0_phase_protocol.py"),
+            _check("skill_surface_budget", frozenset({"skills"}), skill_paths, "bin/validators/check_skill_surface_budget.py", "--root", "."),
+            _check("skill_capabilities", frozenset({"skills"}), skill_paths, "bin/validators/check_skill_capabilities.py", "validate"),
+            _check("skill_method_references", frozenset({"skills"}), skill_paths, "skills/skill-maintenance/scripts/check_skills.py", "--method-reference-contract"),
+            _check("eval_contract", frozenset({"skills", "evals"}), eval_paths, "bin/validators/check_eval_contract.py", "--root", ".", "--check-schema"),
+            _check("eval_query_hygiene", frozenset({"skills"}), eval_paths, "skills/eval/scripts/check_eval_queries.py", "--root", "."),
+            _check("document_frontmatter", frozenset({"docs"}), doc_paths, "bin/validators/check_doc_frontmatter.py", "--root", "."),
+            _check("document_refs", frozenset({"docs", "skills"}), doc_paths, "bin/validators/check_doc_refs.py", "--root", "."),
+            _check("document_parity", frozenset({"docs"}), doc_paths, "bin/validators/check_doc_parity.py", "--root", "."),
+            _check("feature_and_system_records", frozenset({"docs"}), doc_paths, "docs/features/validate_features.py"),
+            _check("source_registry", frozenset({"docs"}), doc_paths, "docs/sources/validate_sources.py"),
+            _check("template_registry", frozenset({"docs", "skills"}), doc_paths, "bin/validators/sync_template_registry.py", "--root", ".", "--check"),
+            _check("template_metadata", frozenset({"docs"}), doc_paths, "bin/validators/check_template_version_metadata.py", "--root", ".", "--all"),
+            _check("project_contract", frozenset({"project"}), project_paths, "bin/validators/check_farplane_project_files.py", "--root", "."),
+            _check("capability_profiles", frozenset({"project"}), project_paths, "bin/validators/check_capability_profiles.py", "--project-root", "."),
+            _check("harness_invariants", frozenset({"project"}), project_paths, "bin/validators/check_harness_invariants.py", "--root", ".", "--skip-project-contract"),
+            _check("ticket_metadata", frozenset({"tickets"}), ("tickets/**",), "tickets/scripts/check_ticket_metadata.py"),
         )
     )

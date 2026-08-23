@@ -9,6 +9,13 @@ import sys
 from pathlib import Path
 
 
+FARPLANE_ROOT = Path(__file__).resolve().parents[3]
+if str(FARPLANE_ROOT) not in sys.path:
+    sys.path.insert(0, str(FARPLANE_ROOT))
+
+from bin.core.lint.source import MarkdownFrontmatterError, parse_markdown_frontmatter
+
+
 TODO_HEADING = "## Todo List"
 CONTEXT_HEADING = "## Context"
 CHECKLIST_BEGIN = "<!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->"
@@ -37,13 +44,8 @@ def find_repo_root(start: Path) -> Path:
 
 def parse_frontmatter(path: Path) -> dict[str, object]:
     try:
-        repo_root = find_repo_root(path)
-        if str(repo_root) not in sys.path:
-            sys.path.insert(0, str(repo_root))
-        from bin.core.lint.source import MarkdownFrontmatterError, parse_markdown_frontmatter
-
         return parse_markdown_frontmatter(path, required=True) or {}
-    except (MarkdownFrontmatterError, OSError, UnicodeDecodeError) as exc:
+    except (ChecklistError, MarkdownFrontmatterError, OSError, UnicodeDecodeError) as exc:
         raise ChecklistError(str(exc)) from exc
 
 
