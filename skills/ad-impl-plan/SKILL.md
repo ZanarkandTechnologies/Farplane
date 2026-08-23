@@ -6,10 +6,7 @@ group: marketing
 source: local
 template_uses:
   skill-template: "0.4.1"
-  skill-qa-checklist: "0.1.0"
   skill-eval-task: "0.2.0"
-eval: evals/evals.json
-qa_checklist: qa_checklist.md
 allowed-tools: Read, Write, Glob, Grep, Bash
 ---
 
@@ -43,7 +40,7 @@ ad_impl_plan(directive, offer?, audience?, platform?, account_binding?,
 
 state:
   reads(operator directive, approved Brand Kit, optional Tasty Pack, supplied
-        creative/landing-page evidence, canonical ticket template, qa_checklist.md)
+        creative/landing-page evidence, canonical ticket template, the first-load Todo List guardrails)
   writes(one canonical ticket.md)
 owns: paid_ad_campaign_ticket
 gates: directive_identifiable; campaign_lock_accepted_or_action_blocked;
@@ -71,7 +68,7 @@ retains its own approval gate.
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-- [ ] 1. Bind the paid-ad directive and read [Ad Impl Plan QA](qa_checklist.md).
+- [ ] 1. Bind the paid-ad directive and read the first-load Todo List guardrails.
   - [ ] Resolve offer, audience, platform, conversion event, account binding,
         budget cap, schedule, landing-page state, measurement source, and the
         operator's approval policy. Create the draft ticket when the directive
@@ -217,7 +214,7 @@ with its next owner; it does not disappear from the ticket.
 - [Worker Artifact Review Request](../worker-artifact-review-request/SKILL.md)
   — deliver one phone-readable, internal Telegram approval request after a
   reviewable creative or campaign packet exists.
-- [Ad Impl Plan QA](qa_checklist.md) — apply before planning and before return.
+- the first-load Todo List guardrails — apply before planning and before return.
 
 ## Output
 

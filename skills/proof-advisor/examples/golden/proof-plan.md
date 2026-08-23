@@ -11,7 +11,7 @@ kind: golden-example
 
 - Request: Prove that Goal Advisor refuses prompt-only execution for material
   work and requires an approved, fresh Goal Packet.
-- Sources: `skills/goal-advisor/SKILL.md`, its QA checklist, one prior stale-
+- Sources: `skills/goal-advisor/SKILL.md`, its Todo List guardrails, one prior stale-
   packet failure, and ticket fixtures with approved, changed, and missing files.
 - Constraint: behavior spans deterministic file checks and variable agent
   routing; user-facing eval queries must not reveal the expected route.
@@ -84,7 +84,7 @@ owner.
 golden_case: proof-advisor/proof-plan
 source_refs:
   - skills/proof-advisor/SKILL.md
-  - skills/proof-advisor/qa_checklist.md
+  - skills/proof-advisor/SKILL.md
 qa_refs: [behavior_named, dimension_coverage, proof_surface_fit, query_not_spoiled]
 accepted_because: [distinct_cases, visible_oracles, faithful_surfaces, diagnostic_evidence]
 heldout_required: true

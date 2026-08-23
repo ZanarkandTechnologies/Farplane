@@ -6,10 +6,8 @@ tier: 1
 source: local
 template_uses:
   skill-template: "0.1.0"
-  skill-qa-checklist: "0.1.0"
   skill-surface-budget: "0.1.0"
 allowed-tools: Read, Glob, Grep
-qa_checklist: qa_checklist.md
 
 ---
 
@@ -33,7 +31,7 @@ supports it.
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-- [ ] 1. Read `qa_checklist.md` as preflight guardrails when using this skill
+- [ ] 1. Read the first-load Todo List guardrails as preflight guardrails when using this skill
   for material scale decisions.
 - [ ] 2. State the scale risk: data volume, users, workflow breadth, architecture,
   automation, polish, file count, research breadth, or operational complexity.
@@ -49,7 +47,7 @@ supports it.
   readiness.
 - [ ] 10. Return a reviewed `Prototype Note` to the active workflow before
   broadening scope.
-  - [ ] Apply `qa_checklist.md` again for material prototype decisions and
+  - [ ] Apply the first-load Todo List guardrails again for material prototype decisions and
     delegate independent review before broad rollout.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 

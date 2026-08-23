@@ -76,7 +76,7 @@ behavior.
 - Stores skill-local eval tasks for important workflow claims.
 - Names the input, expected behavior, judging method, and evidence path.
 - Lets skill-maintenance and eval workflows discover local cases.
-- Promotes repeated failures into skill QA checklist items or broader eval suites when needed.
+- Promotes repeated failures into Todo List assertions, validators, or broader eval suites when needed.
 - Keeps tiny behavior checks close to the skill they protect.
 
 ## User Stories

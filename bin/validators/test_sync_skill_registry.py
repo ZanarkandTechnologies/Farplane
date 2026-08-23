@@ -25,8 +25,7 @@ def write_skill(
     group: str | None = None,
     template_version: str | None = None,
     feature_refs: list[str] | None = None,
-    eval_surface: str | None = None,
-    qa_checklist: str | None = None,
+    with_eval: bool = False,
     skill_ui: str | None = None,
     capability: str | None = None,
     common_chain_after: list[str] | None = None,
@@ -60,8 +59,6 @@ def write_skill(
                 common_chain_lines.rstrip(),
                 template_line.rstrip(),
                 feature_lines.rstrip(),
-                f"eval: {eval_surface}" if eval_surface else "",
-                f"qa_checklist: {qa_checklist}" if qa_checklist else "",
                 f"skill_ui: {skill_ui}" if skill_ui else "",
                 "---",
                 "",
@@ -79,8 +76,8 @@ def write_skill(
         .replace("\n\n\n---", "\n---"),
         encoding="utf-8",
     )
-    if eval_surface:
-        eval_path = skill_dir / eval_surface
+    if with_eval:
+        eval_path = skill_dir / "evals" / "evals.json"
         eval_path.parent.mkdir(parents=True, exist_ok=True)
         eval_path.write_text('{"skill_name":"' + name + '","evals":[]}\n', encoding="utf-8")
 
@@ -112,24 +109,22 @@ class SyncSkillRegistryTests(unittest.TestCase):
             with self.assertRaisesRegex(sync_skill_registry.RegistryError, "template metadata"):
                 sync_skill_registry.build_registry(repo)
 
-    def test_copies_skill_surface_fields_when_present(self) -> None:
+    def test_projects_derived_eval_and_declared_skill_ui_when_present(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             repo = Path(tmp)
             write_skill(
                 repo,
                 "example",
-                eval_surface="evals/evals.json",
-                qa_checklist="qa_checklist.md",
+                with_eval=True,
                 skill_ui="skills/example/ui/index.html",
             )
 
             rows = sync_skill_registry.build_registry(repo)
 
             self.assertEqual(rows[0]["eval"], "evals/evals.json")
-            self.assertEqual(rows[0]["qa_checklist"], "qa_checklist.md")
             self.assertEqual(rows[0]["skill_ui"], "skills/example/ui/index.html")
 
-    def test_rejects_undeclared_canonical_eval_surface(self) -> None:
+    def test_projects_canonical_eval_without_frontmatter_declaration(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             repo = Path(tmp)
             write_skill(repo, "example")
@@ -137,8 +132,9 @@ class SyncSkillRegistryTests(unittest.TestCase):
             eval_path.parent.mkdir(parents=True)
             eval_path.write_text('{"skill_name":"example","evals":[]}\n')
 
-            with self.assertRaisesRegex(sync_skill_registry.RegistryError, "frontmatter must declare"):
-                sync_skill_registry.build_registry(repo)
+            rows = sync_skill_registry.build_registry(repo)
+
+            self.assertEqual(rows[0]["eval"], "evals/evals.json")
 
     def test_extracts_ordered_todo_skill_refs_without_manual_workflow_flag(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

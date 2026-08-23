@@ -259,8 +259,6 @@ def maintenance_burden_signal(row: dict[str, Any]) -> dict[str, Any]:
     if row.get("source", "local") == "local":
         if not row.get("eval"):
             findings.append("missing_eval")
-        if not row.get("qa_checklist"):
-            findings.append("missing_qa_checklist")
     if row.get("skill_template_status") == "stale":
         findings.append("stale_template")
 
@@ -275,7 +273,6 @@ def maintenance_burden_signal(row: dict[str, Any]) -> dict[str, Any]:
         "findings": findings,
         "has_checklist": bool(row.get("has_checklist")),
         "has_eval": bool(row.get("eval")),
-        "has_qa_checklist": bool(row.get("qa_checklist")),
         "template_version": str(row.get("skill_template_version") or row.get("version") or ""),
     }
 
@@ -421,7 +418,6 @@ def build_graph(
                 "methods": row.get("methods", []),
                 "has_checklist": bool(row.get("has_checklist")),
                 "eval": row.get("eval", ""),
-                "qa_checklist": row.get("qa_checklist", ""),
                 "skill_ui": row.get("skill_ui", ""),
                 "path": row.get("path", ""),
                 "description": row.get("description", ""),

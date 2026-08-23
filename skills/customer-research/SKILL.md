@@ -6,7 +6,6 @@ group: customer
 source: local
 template_uses:
   skill-template: "0.3.7"
-eval: evals/evals.json
 allowed-tools: Read, Glob, Grep, Bash, web_search
 common_chains:
   after: ["research", "solution-shaping"]

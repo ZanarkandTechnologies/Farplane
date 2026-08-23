@@ -91,8 +91,8 @@ book_to_skill_input:
    counterexamples, and what evidence shows the method worked.
 9. **Choose skill placement.** Put every-invocation behavior in `SKILL.md`,
    book-specific extraction detail in `references/*`, repeatable regression
-   behavior in `evals/evals.json`, and reusable runtime guardrails in
-   `qa_checklist.md` only when the skill needs preflight/final checks.
+   behavior in `evals/evals.json`, and reusable runtime guardrails in Todo List
+   `Rule`/`Assert` blocks.
 10. **Draft and prove the skill delta.** Write the smallest owner-local edit
    that changes behavior, then add one positive example or eval when judgment
    quality matters. The proof should test skill behavior, not recall of the

@@ -68,7 +68,7 @@ golden_case: eval/behavior-trace
 source_refs:
   - skills/eval/tests/test_run_evals.py
 qa_refs:
-  - skills/eval/qa_checklist.md
+  - skills/eval/SKILL.md
 accepted_because:
   - visible_evidence_preserved
   - schema_is_optional

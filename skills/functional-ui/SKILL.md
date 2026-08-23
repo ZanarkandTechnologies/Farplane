@@ -6,10 +6,7 @@ tier: 3
 group: operations
 source: local
 template_uses:
-  skill-qa-checklist: "0.1.0"
   skill-eval-task: "0.2.0"
-qa_checklist: qa_checklist.md
-eval: evals/evals.json
 common_chains:
   after: ["visual-design"]
 allowed-tools: Read, Grep, Glob, Bash
@@ -22,7 +19,7 @@ allowed-tools: Read, Grep, Glob, Bash
 
 - [ ] State the UI/workflow decision and the artifact being produced:
   diagnosis, UX brief, redesign recommendation, or planning handoff.
-- [ ] Read [qa_checklist.md](qa_checklist.md) before execution when the task
+- [ ] Read the first-load Todo List guardrails before execution when the task
   will shape an app screen, panel, dashboard, form, or control surface.
 - [ ] Use [research:user-grounding](../research/SKILL.md#researchuser-grounding)
   when users, jobs, contexts, friction, or success signals are not already
@@ -61,7 +58,7 @@ allowed-tools: Read, Grep, Glob, Bash
   information hierarchy, or responsive transition that a state table cannot.
 - [ ] Hand the accepted UX context to [impl-plan](../impl-plan/SKILL.md), which
   decides whether visual or asset context is also unresolved.
-- [ ] Apply [qa_checklist.md](qa_checklist.md) again before completion for
+- [ ] Apply the first-load Todo List guardrails again before completion for
   material screen, panel, dashboard, form, or control-surface plans.
 - [ ] Use the native execution phase for proof/writeback shape before
   claiming the functional UI plan is ready.

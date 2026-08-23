@@ -7,7 +7,6 @@ source: local
 template_uses:
   skill-template: "0.5.0"
   skill-eval-task: "0.2.0"
-eval: evals/evals.json
 skill_ui: skills/skill-maintenance/graph/index.html
 ---
 
@@ -83,7 +82,7 @@ returns: updated skill or audit, validation evidence, and review result or block
 - [ ] **N6 — Reconcile behavior proof and QA ownership.**
   `changed behavior + existing guards -> eval/golden/QA migration receipt`
 
-  Rule: Record `keep | migrate | delete` for touched QA sidecars; retain only
+  Rule: Reject QA sidecars; retain normal guardrails only in Todo List Rule/Assert blocks,
   skill-specific runtime, safety, or preflight guards.
 
   Assert:

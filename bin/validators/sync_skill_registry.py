@@ -46,7 +46,7 @@ TIER1_PRIMITIVES = {"advise", "reference-grounding", "prototyping"}
 PROTOCOL_WRAPPERS = {"review"}
 ALLOWED_SOURCES = {"local", "external"}
 DESCRIPTION_MAX_CHARS = 220
-SURFACE_FIELDS = {"eval", "qa_checklist", "skill_ui"}
+SURFACE_FIELDS = {"skill_ui"}
 RETIRED_FRONTMATTER_FIELDS = {"workflow"}
 
 try:
@@ -335,14 +335,9 @@ def build_registry(repo_root: Path) -> list[dict[str, Any]]:
         if metadata.get("feature_refs") not in (None, "", []):
             raise RegistryError(
                 f"{skill_path}: feature_refs moved to versioned skill template metadata; "
-                "use eval, qa_checklist, or skill_ui for skill-local surfaces"
+                "use skill_ui only for an optional skill-local surface"
             )
         canonical_eval = skill_dir / "evals" / "evals.json"
-        if canonical_eval.exists() and metadata.get("eval") != "evals/evals.json":
-            raise RegistryError(
-                f"{skill_path}: {canonical_eval.relative_to(repo_root)} exists but frontmatter must declare "
-                "eval: evals/evals.json"
-            )
 
         has_checklist = bool(checklist_source_text(skill_dir))
         row: dict[str, Any] = {
@@ -387,6 +382,9 @@ def build_registry(repo_root: Path) -> list[dict[str, Any]]:
         allowed_tools = normalize_allowed_tools(metadata.get("allowed-tools"), skill_path)
         if allowed_tools:
             row["allowed_tools"] = allowed_tools
+
+        if canonical_eval.is_file():
+            row["eval"] = "evals/evals.json"
 
         for field in sorted(SURFACE_FIELDS):
             normalized_surface = normalize_surface_field(metadata.get(field), field, skill_path)

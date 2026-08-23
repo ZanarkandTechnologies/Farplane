@@ -6,8 +6,6 @@ group: deals
 source: local
 template_uses:
   skill-template: "0.3.7"
-eval: evals/evals.json
-qa_checklist: qa_checklist.md
 allowed-tools: Read, Glob, Grep
 ---
 
@@ -49,7 +47,7 @@ evidence. Produce the problem frame inline, use `research:*` for user or
 best-practice grounding, `demo-realism` when the MVP needs believable operating
 examples, `prd` for product scope, and `impl-plan` or `goal-advisor` only after
 the solution boundary is accepted. For material operational or demo-bound
-solutions, read `qa_checklist.md` before shaping and apply it once more to the
+solutions, read the first-load Todo List guardrails before shaping and apply it once more to the
 completed brief. One QA owner should judge the whole solution; do not split the
 checklist into a queue of tiny review tasks.
 
@@ -199,7 +197,7 @@ Next owner: prd for product scope or impl-plan after MVP acceptance.
 
 - [examples/static-calculator-solution-brief/example.md](examples/static-calculator-solution-brief/example.md) - use as a quality reference for solution-shaping synthesis and V1/V2 restraint.
 - [Mine-To-Margin reference standard](references/mine-to-margin-reference-standard.md) - load when shaping or reviewing an operational decision system or a use case intended for a customer-facing agent demo.
-- [Solution QA checklist](qa_checklist.md) - load before and after material operational or demo-bound shaping work; assign the complete review to one QA owner.
+- the first-load Todo List guardrails - load before and after material operational or demo-bound shaping work; assign the complete review to one QA owner.
 
 ## Output
 

@@ -7,9 +7,6 @@ capability:
   kind: shortcut
 template_uses:
   skill-template: "0.4.0"
-  skill-qa-checklist: "0.1.0"
-eval: evals/evals.json
-qa_checklist: qa_checklist.md
 allowed-tools: Read, Glob, Grep
 ---
 

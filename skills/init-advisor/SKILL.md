@@ -5,8 +5,6 @@ description: "Turn a new-project intake into a Farplane substrate, readiness aud
 tier: 3
 group: operations
 source: local
-eval: evals/evals.json
-qa_checklist: qa_checklist.md
 ---
 
 # Init Advisor Skill
@@ -52,7 +50,7 @@ state copied into Codex automations; live activation belongs to
 For "what does init create?" answers, load [README.md](README.md) or the
 manifest template rather than duplicating the generated-file inventory here.
 For readiness and adaptive human-intake gates, load
-[qa_checklist.md](qa_checklist.md) and apply it as preflight plus finish check.
+the first-load Todo List guardrails and apply it as preflight plus finish check.
 
 ## Skill Signature
 
@@ -176,7 +174,7 @@ setup_project_operating_model(bootstrap_brief, project_context,
         intent is present.
   - [ ] Do not auto-enable scaffolded git hooks.
 - [ ] 4. Run readiness audit and full-mode operating-model setup.
-  - [ ] Read [qa_checklist.md](qa_checklist.md) before dogfood, final readiness
+  - [ ] Read the first-load Todo List guardrails before dogfood, final readiness
         review, or material init behavior changes; apply it again before finish.
   - [ ] In `substrate` mode, record missing operating-model answers in
         `docs/bootstrap-brief.md` and report them as the next handoff.

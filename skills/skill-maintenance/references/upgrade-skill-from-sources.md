@@ -16,7 +16,7 @@ upgrade_skill_from_sources(target_skill, improvement_goal, source_budget?)
 state: reads(target skill package, practitioner sources, public book summaries,
              video transcripts when available, book-to-skill extraction,
              best-of-worlds, skill-system docs)
-       writes(target skill SKILL.md?, qa_checklist.md?, references?,
+       writes(target skill SKILL.md?, references?,
               examples?, evals/evals.json?, skill-local audit?)
 gates: target_baseline_named; source_budget_bounded; source_confidence_labeled;
        book_inputs_use_book_to_skill; adopt_adapt_reject_recorded;
@@ -68,7 +68,7 @@ better source.
 ## Workflow
 
 1. **Capture the local baseline.** Read the target `SKILL.md`,
-   `qa_checklist.md`, `evals/evals.json`, examples, and recent audits. Name the
+   Todo List guardrails, `evals/evals.json`, examples, and recent audits. Name the
    generic behavior or missing domain strategy.
 2. **Discover sources.** Search for `how to do <skill>`, current practitioner
    guides, and `best books on <domain>`. For platform-dependent skills, include
@@ -90,7 +90,7 @@ better source.
 6. **Patch the smallest owner-local surfaces.**
    - `SKILL.md` for every-invocation workflow moves, gates, routing, and output
      contract.
-   - `qa_checklist.md` for reusable preflight/final review checks.
+   - Todo List `Rule`/`Assert` blocks for reusable preflight/final review checks.
    - `evals/evals.json` for behavior regression cases.
    - `examples/*` for quality-dependent positive examples.
    - `references/*` for deeper formulas, source methods, or rare branches.
@@ -128,7 +128,7 @@ skill_source_upgrade_packet:
     defer:
   skill_delta:
     SKILL.md:
-    qa_checklist.md:
+    Todo List guardrails:
     evals/evals.json:
     examples:
   proof_plan:
@@ -165,5 +165,5 @@ skill_source_upgrade_packet:
 - A skill audit that says "researched best practices" without source links,
   source confidence, or adopt/adapt/reject decisions.
 - A `SKILL.md` that contains a long reading list but no new action.
-- A QA checklist that merely says "use best practices."
+- A generic Todo List assertion that merely says "use best practices."
 - An eval whose prompt leaks the exact framework name and only tests recall.

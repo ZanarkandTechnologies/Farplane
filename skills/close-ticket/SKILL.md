@@ -4,7 +4,6 @@ description: "Turn a completed ticket into a glanceable GitHub issue, demo-first
 tier: 3
 group: operations
 source: local
-eval: evals/evals.json
 template_uses:
   skill-eval-task: "0.2.0"
 ---
@@ -15,7 +14,7 @@ template_uses:
 ## Todo List
 
 1. Resolve one active ticket and assert implementation, proof, and required review are complete.
-2. Read [qa_checklist.md](qa_checklist.md) before any remote mutation.
+2. Read the first-load Todo List guardrails before any remote mutation.
 3. Update ticket evidence, durable docs, handoff, next action, and latest verification.
 4. Run `farplane validate ticket <ticket.md> --phase complete` with an explicit changed-path boundary.
 5. Refresh independent review when closeout changes made the prior receipt stale.
@@ -24,7 +23,7 @@ template_uses:
 8. Run `farplane ticket finalize TASK-XXXX` with one `--media <path>` per selected file.
 9. If Core pauses on missing media, upload only those marked comments through the authenticated GitHub composer, then rerun the same command.
 10. Assert Core verified and closed the issue as completed, mined and indexed it, and deleted the exact local packet.
-11. Reapply [qa_checklist.md](qa_checklist.md) and return the issue URL, media comment URLs, receipt outcome, and packet state.
+11. Reapply the first-load Todo List guardrails and return the issue URL, media comment URLs, receipt outcome, and packet state.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 Use this skill when one coding ticket is genuinely complete and only durable closeout remains.

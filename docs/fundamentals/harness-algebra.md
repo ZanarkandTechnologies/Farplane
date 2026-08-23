@@ -778,9 +778,9 @@ Use the cheapest layer that can falsify the claim. If a skill eval fails, fix
 the skill before blaming the e2e workflow. If a primitive skill fails, fix the
 primitive before patching every caller.
 
-### Todo, Eval, QA, And Benchmark Symmetry
+### Todo, Eval, Review, And Benchmark Symmetry
 
-Todos, evals, QA checklists, reviews, and benchmarks are different projections
+Todo assertions, evals, reviews, and benchmarks are different projections
 of one latent behavior contract. They feel like separate systems because the
 contract is usually incomplete, disputed, or easier to see from examples than
 from procedure.
@@ -799,8 +799,8 @@ todo(BehaviorContract)
 eval(BehaviorContract)
   -> repeatable input/context whose answer should satisfy reference_points
 
-qa_checklist(BehaviorContract)
-  -> runtime or final checks applied to one concrete artifact or run
+todo_assertion(BehaviorContract)
+  -> first-load rule or observable check applied in the owning workflow node
 
 review(BehaviorContract, evidence)
   -> judgment over whether the evidence satisfies the contract
@@ -815,10 +815,10 @@ At the fixed point, the projections converge:
 perfect_contract:
   todo_list.reference_points
   == eval.reference_points
-  == qa_checklist.items
+  == todo_assertion.reference_points
   == review.rubric.required_points
 
-qa_check =
+workflow_check =
   apply(todo_list)
   AND verify(todo_list_executed_against_evidence)
 ```
@@ -834,16 +834,16 @@ unknown_contract
   -> write expected answers or failure cases faster than full procedure
   -> eval.reference_points reveal missing or noisy todos
   -> todo_list becomes a better production procedure
-  -> qa_checklist derives the reusable runtime guardrails
+  -> Todo List Rule/Assert blocks capture reusable runtime guardrails
   -> review handles judgment that is still too contextual for a validator
   -> benchmark aggregates enough evals to compare variants
 ```
 
-This is why evals and checklists should compete until they converge. When the
+This is why evals and Todo List assertions should compete until they converge. When the
 reference points are easier to state as expected outputs, start with evals.
 When the procedure is clearer than the examples, start with todos. When the
 same reference point becomes reusable during real execution, promote it into a
-QA checklist, validator, review rubric, or hook depending on its determinism and
+Todo List assertion, validator, review rubric, or hook depending on its determinism and
 cost.
 
 Ownership:
@@ -853,10 +853,10 @@ eval owns:
   evals/evals.json, example cases, reference_points, run artifacts
 
 skill-maintenance owns:
-  skill-local checklist references, first-load todo shape, skill audit writeback
+  first-load todo shape, skill audit writeback, and guardrail placement
 
 agent-qa-test or reviewer owns:
-  adversarial or independent application of the checklist to real behavior
+  adversarial or independent judgment of real behavior
 
 qa owns:
   ticket-scoped proof artifacts and QA Strategy reconciliation
@@ -871,14 +871,14 @@ Sync rule:
 after_update(evals/evals.json):
   for each new_or_changed reference_point:
     if reusable_runtime_guardrail(reference_point):
-      update owning skill checklist/reference through skill-maintenance
+      update owning skill Todo List assertion or conditional reference through skill-maintenance
     if deterministic_invariant(reference_point):
       consider validator or hook fixture
     if judgment_heavy(reference_point):
-      keep review or QA checklist wording explicit
+      keep review or QA criteria explicit
 ```
 
-Do not force every eval reference point into a checklist. Some reference points
+Do not force every eval reference point into first-load instructions. Some reference points
 exist only to preserve a hardcase, compare variants, or test a boundary that is
 too rare to load on every invocation. The useful move is convergence, not
 duplication.

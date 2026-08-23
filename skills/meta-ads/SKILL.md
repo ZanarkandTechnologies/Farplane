@@ -13,9 +13,6 @@ methods:
 template_uses:
   skill-template: "0.4.1"
   skill-eval-task: "0.2.0"
-  skill-qa-checklist: "0.1.0"
-eval: evals/evals.json
-qa_checklist: qa_checklist.md
 allowed-tools: Read, Grep, Glob, Bash
 ---
 
@@ -95,7 +92,7 @@ fails: mutation attempt; invented account data; unbounded data pull;
         `metric-advisor`.
 - [ ] 5. Return evidence and the next owner.
   - [ ] Name the read-only command, timestamp, scope, and redacted credential
-        source; apply [qa_checklist.md](qa_checklist.md) before returning.
+        source; apply the first-load Todo List guardrails before returning.
   - [ ] End every report, including a blocked report, with `Decision boundary:`
         factual data only; optimization, targeting, creative, budget, status,
         or spend decisions route to `ad-advisor`.

@@ -19,7 +19,7 @@ system_record_json: |
     "id": "SYS-0006",
     "name": "Skill System",
     "status": "implemented",
-    "summary": "The reusable expertise layer: skill tiers, packaging, templates, evals, QA checklists, registry intelligence, and maintenance constraints.",
+    "summary": "The reusable expertise layer: skill tiers, packaging, templates, evals, first-load guardrails, registry intelligence, and maintenance constraints.",
     "owner_spec": "docs/systems/skill-system.md",
     "primary_feature_ref": "FEAT-0022",
     "feature_refs": [
@@ -36,12 +36,12 @@ system_record_json: |
       "docs/skills/templates/SKILL_TEMPLATE.md",
       "skills/skill-maintenance/SKILL.md"
     ],
-    "last_verified": "2026-08-03"
+    "last_verified": "2026-08-24"
   }
 ---
 # Skill System
 
-The reusable expertise layer: skill tiers, packaging, templates, evals, QA checklists,
+The reusable expertise layer: skill tiers, packaging, templates, evals, first-load guardrails,
 registry intelligence, and maintenance constraints. This page is the product-layer owner
 for that subsystem: it explains what belongs here, which feature specs make up the
 stack, and where adjacent responsibilities should move.
@@ -61,7 +61,7 @@ skill_system(change, repo_state?) -> owned_feature_set + boundary_decision + mai
 ## Role
 
 Skill System owns reusable expertise: skill packages, tiering, templates, local evals,
-QA checklists, registry intelligence, and maintenance constraints. It lets Farplane add
+first-load guardrails, registry intelligence, and maintenance constraints. It lets Farplane add
 capability without bloating the agent kernel.
 
 The [Advisor System Index](../skills/advisors.md) is the human discovery view
@@ -73,14 +73,14 @@ canonical in each skill and in the generated skill registry.
 
 - [FEAT-0022 Skill tier leverage classes](../features/FEAT-0022-skill-tier-leverage-classes.md)
 - [FEAT-0030 On-demand skill plugin packaging](../features/FEAT-0030-on-demand-skill-plugin-packaging.md)
-- [FEAT-0057 Skill-local QA checklist artifacts](../features/FEAT-0057-skill-local-qa-checklist-artifacts.md)
+- [FEAT-0057 Retired skill-local QA checklist artifacts](../features/FEAT-0057-skill-local-qa-checklist-artifacts.md)
 - [FEAT-0062 Capped skill surface budget](../features/FEAT-0062-capped-skill-surface-budget.md)
 - [FEAT-0064 Skill signals](../features/FEAT-0064-skill-signals.md)
 
 ## What Belongs Here
 
-Skill authoring, tier/leverage classification, plugin packaging, QA checklists,
-capped skill-surface budgets, skill signals, and skill registry maintenance.
+Skill authoring, tier/leverage classification, plugin packaging, first-load
+guardrails, capped skill-surface budgets, skill signals, and skill registry maintenance.
 
 ## What Belongs Elsewhere
 
@@ -91,11 +91,11 @@ domain-specific product workflows may live in Domain Skill Families.
 
 - Skills are callable mini harnesses with clear inputs, outputs, and proof expectations.
 - Detailed workflows stay skill-local where possible.
-- Skill metadata, todo links, evals, and QA checklists remain validator-friendly.
+- Skill metadata, Todo List guardrails, and evals remain validator-friendly.
 - Installed copies are not the source of truth for repo-owned skills.
 - Feature-level behavior belongs in `docs/features/FEAT-*.md`; this page owns the system boundary and feature grouping.
 - Registry data is generated from system and feature docs, not edited by hand.
-- When a capability no longer deserves a feature page, fold its current truth into the best owner and remove active refs.
+- When a removal could plausibly recur, preserve a concise retired feature decision record with its replacement owner and reintroduction guard.
 
 ## System Flow
 
@@ -107,7 +107,7 @@ flowchart LR
   classDef retired fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d,stroke-dasharray: 5 3
 
   skill["skills/*/SKILL.md<br/>frontmatter + Todo List"]:::keep
-  templates["skill templates<br/>qa_checklist + eval_task"]:::keep
+  templates["skill template<br/>Todo List + eval discovery"]:::keep
   system["SYS-0006 Skill System<br/>tiers, packaging, budgets"]:::changed
   maintenance["skill-maintenance<br/>registry + graph checks"]:::changed
   registry["docs/skills/registry.jsonl<br/>template intelligence"]:::added
@@ -119,7 +119,7 @@ flowchart LR
   system --> maintenance --> registry
 ```
 
-The Skill System owns reusable workflow packaging, tier semantics, QA sidecars, budgets, and generated skill intelligence.
+The Skill System owns reusable workflow packaging, tier semantics, first-load guardrails, budgets, and generated skill intelligence.
 
 ## Surfaces
 
@@ -139,6 +139,8 @@ The Skill System owns reusable workflow packaging, tier semantics, QA sidecars, 
 
 ## Change History
 
+- 2026-08-24: Retired skill-local QA sidecars; Golden Node assertions, evals,
+  validators, and review now own their distinct guards.
 - 2026-08-03: Added the grouped Advisor System index as a human discovery
   surface backed by the generated skill registry.
 - 2026-06-28: Added capped skill surface budget as a Skill System feature.

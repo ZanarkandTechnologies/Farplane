@@ -6,9 +6,6 @@ group: intelligence
 source: local
 template_uses:
   skill-template: "0.3.9"
-  skill-qa-checklist: "0.1.0"
-eval: evals/evals.json
-qa_checklist: qa_checklist.md
 allowed-tools: Read, Glob, Grep, Bash
 ---
 
@@ -69,7 +66,7 @@ grids cannot supply efficiently.
 ## Todo List
 
 - [ ] 1. Bind the image, question, and workspace.
-  - [ ] Read [qa_checklist.md](qa_checklist.md) before creating or changing a
+  - [ ] Read the first-load Todo List guardrails before creating or changing a
     workspace.
   - [ ] Use the ticket artifact path when a ticket owns the task; otherwise use
     a task-local output directory.
@@ -106,7 +103,7 @@ grids cannot supply efficiently.
   - [ ] Name the final checkpoint and any deterministic tool receipt used.
   - [ ] For a workspace branch, return the compact receipt from `Output`; do
     not hide verification in tool logs or return only an annotated image.
-  - [ ] Reapply [qa_checklist.md](qa_checklist.md); use [review](../review/SKILL.md)
+  - [ ] Reapply the first-load Todo List guardrails; use [review](../review/SKILL.md)
     when the visual conclusion is material or consequential.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
@@ -160,7 +157,7 @@ python3 skills/visual-reasoning/scripts/visual_workspace.py apply \
 
 - [Checkpoint workspace helper](scripts/visual_workspace.py) — initialize,
   apply deterministic operations, and inspect workspace lineage.
-- [Runtime QA checklist](qa_checklist.md) — read before the first edit and
+- the first-load Todo List guardrails — read before the first edit and
   reapply before returning an answer.
 - [Behavior eval cases](evals/evals.json) — routing, checkpoint, reobservation,
   direct-answer, and CV-boundary cases.

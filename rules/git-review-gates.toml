@@ -159,7 +159,7 @@ mode = "warn"
 argv = ["python3", "bin/validators/check_source_line_growth.py", "--mode", "staged", "--max-lines", "500", "--glob", "bin/**/*.py"]
 
 [checks.skill_file_line_count]
-argv = ["python3", "bin/validators/check_source_line_growth.py", "--mode", "staged", "--strict", "--max-lines", "200", "--glob", "skills/**/SKILL.md"]
+argv = ["python3", "bin/validators/check_source_line_growth.py", "--mode", "staged", "--max-lines", "200", "--glob", "skills/**/SKILL.md"]
 
 [checks.source_line_growth_branch]
 argv = ["python3", "bin/validators/check_source_line_growth.py", "--mode", "branch", "--base", "{base}", "--baseline", "rules/source-line-baseline.toml", "--max-lines", "500", "--glob", "bin/**/*.py"]

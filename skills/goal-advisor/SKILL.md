@@ -8,9 +8,6 @@ version: 0.2.0
 template_uses:
   skill-template: "0.2.0"
   skill-eval-task: "0.2.0"
-  skill-qa-checklist: "0.1.0"
-eval: evals/evals.json
-qa_checklist: qa_checklist.md
 allowed-tools: Read, Write, Glob, Grep, Bash
 ---
 
@@ -81,7 +78,7 @@ whenever the ticket changes. For branch detail load only the relevant reference:
 - heartbeat, batch, rollout, project goals -> `references/goal-shapes.md`
 - composed workflows or retired-route migration -> `references/goal-algebra.md`
 - delayed reward -> the program template's `Check-In Program`
-- prompt-heavy/judgment-heavy packet -> golden example plus `qa_checklist.md`
+- prompt-heavy/judgment-heavy packet -> golden example plus the first-load Todo List guardrails
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
@@ -182,7 +179,7 @@ whenever the ticket changes. For branch detail load only the relevant reference:
     after ticket, suite, evaluator, scope, or proof-policy drift.
   - [ ] Material packets remain pending until the operator approves ticket,
     program, tree when present, progress scaffold, and launcher together.
-  - [ ] Apply `qa_checklist.md`; route material prompt/packet review to the
+  - [ ] Apply the first-load Todo List guardrails; route material prompt/packet review to the
     reviewer using `goal-program-contract` plus prompt/evidence families, and
     do not accept below the required TAS gate.
   - [ ] Return an explicit compilation verdict: `ready`, `revise`, or `blocked`.

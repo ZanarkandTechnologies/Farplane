@@ -58,7 +58,6 @@ def write_fixture(root: Path) -> None:
                     "frontmatter": {
                         "name": "alpha",
                         "description": "Alpha workflow",
-                        "qa_checklist": "qa_checklist.md",
                         "feature_refs": ["FEAT-1"],
                     },
                     "body": "# Alpha\n\n## Todo List\n- [ ] act\n\n## QA\nRun proof.\n",
@@ -80,7 +79,6 @@ def write_fixture(root: Path) -> None:
                     "status": "current",
                     "template_version": "1.0.0",
                     "eval": "evals/evals.json",
-                    "qa_checklist": "qa_checklist.md",
                     "has_checklist": True,
                 }
             ],
@@ -174,7 +172,6 @@ class HarnessHealthTests(unittest.TestCase):
                 "gaps": [
                     {"id": "template_age", "status": "risk"},
                     {"id": "eval_coverage", "status": "missing"},
-                    {"id": "qa_checklist", "status": "missing"},
                 ],
             },
             {
@@ -185,7 +182,6 @@ class HarnessHealthTests(unittest.TestCase):
                 "gaps": [
                     {"id": "template_age", "status": "good"},
                     {"id": "eval_coverage", "status": "good"},
-                    {"id": "qa_checklist", "status": "good"},
                 ],
             },
             {
@@ -212,7 +208,6 @@ class HarnessHealthTests(unittest.TestCase):
         self.assertEqual(reading["payload"]["priority_skill_ids"], ["tier-one", "used"])
         self.assertEqual(reading["payload"]["template_gap_count"], 1)
         self.assertEqual(reading["payload"]["eval_gap_count"], 1)
-        self.assertEqual(reading["payload"]["qa_gap_count"], 1)
         self.assertEqual(len(reading["payload"]["anti_metrics"]), 4)
 
     def test_writes_schema_valid_metric_batch(self) -> None:

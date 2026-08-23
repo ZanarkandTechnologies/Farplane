@@ -64,7 +64,7 @@ class FarplaneLintTests(unittest.TestCase):
         self.assertEqual(args.func.__name__, "run_validate_skills")
         self.assertFalse(args.check)
 
-    def test_validate_skills_orders_lint_before_projection_writes(self) -> None:
+    def test_validate_skills_refreshes_projections_before_final_lint(self) -> None:
         args = farplane.build_parser().parse_args(["validate", "skills"])
 
         class Completed:
@@ -77,10 +77,10 @@ class FarplaneLintTests(unittest.TestCase):
 
         commands = [call.args[0] for call in run.call_args_list]
         self.assertEqual(len(commands), 4)
-        self.assertEqual(commands[0][-2:], ("lint", "skills"))
-        self.assertEqual(commands[1][-1], "--write")
-        self.assertIn("skill-registry", commands[2])
-        self.assertIn("harness-reference", commands[3])
+        self.assertEqual(commands[0][-1], "--write")
+        self.assertIn("skill-registry", commands[1])
+        self.assertIn("harness-reference", commands[2])
+        self.assertEqual(commands[3][-2:], ("lint", "skills"))
 
     def test_validate_skills_check_mode_never_writes_projections(self) -> None:
         args = farplane.build_parser().parse_args(["validate", "skills", "--check"])
@@ -95,6 +95,7 @@ class FarplaneLintTests(unittest.TestCase):
 
         commands = [call.args[0] for call in run.call_args_list]
         self.assertTrue(all("--write" not in command for command in commands))
+        self.assertEqual(commands[0][-2:], ("lint", "skills"))
         self.assertEqual(commands[1][-1], "--check")
         self.assertEqual(commands[2][-1], "--check")
         self.assertEqual(commands[3][-1], "--check")

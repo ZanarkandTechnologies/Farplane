@@ -27,6 +27,12 @@ class FrontmatterLintError(ValueError):
     """Raised when one skill contract would make the artifact graph ambiguous."""
 
 
+RETIRED_FRONTMATTER_FIELDS = {
+    "eval": "is derived from the canonical evals/evals.json file",
+    "qa_checklist": "was retired; put normal guardrails in Todo List Rule/Assert blocks",
+}
+
+
 def load_skill_contracts(root: Path) -> list[tuple[Path, dict[str, Any]]]:
     """Load each package's required, minimal frontmatter contract from ``SKILL.md``."""
 
@@ -34,10 +40,28 @@ def load_skill_contracts(root: Path) -> list[tuple[Path, dict[str, Any]]]:
     for skill_path in sorted((root / "skills").glob("*/SKILL.md")):
         try:
             raw = parse_skill_frontmatter(skill_path)
+            retired = sorted(set(raw).intersection(RETIRED_FRONTMATTER_FIELDS))
+            if retired:
+                details = "; ".join(
+                    f"{field} {RETIRED_FRONTMATTER_FIELDS[field]}" for field in retired
+                )
+                raise FrontmatterLintError(f"{skill_path}: retired frontmatter field(s): {details}")
             rows.append((skill_path, normalize_skill_frontmatter(raw, skill_path)))
         except FrontmatterError as exc:
             raise FrontmatterLintError(str(exc)) from exc
     return rows
+
+
+def validate_retired_skill_surfaces(root: Path) -> None:
+    """Reject the QA sidecar pattern so a future migration cannot restore it silently."""
+
+    sidecars = sorted((root / "skills").glob("*/qa_checklist.md"))
+    if sidecars:
+        paths = ", ".join(str(path.relative_to(root)) for path in sidecars)
+        raise FrontmatterLintError(
+            "qa_checklist.md was retired; move its guardrails into SKILL.md Todo List "
+            f"Rule/Assert blocks, evals, validators, or review: {paths}"
+        )
 
 
 def load_skill_ensembles(root: Path) -> list[tuple[Path, dict[str, Any]]]:
@@ -126,6 +150,7 @@ def main() -> int:
 
     try:
         rows = load_skill_contracts(args.root.resolve())
+        validate_retired_skill_surfaces(args.root.resolve())
         report = artifact_contract_report(rows)
         report.update(ensemble_contract_report(load_skill_ensembles(args.root.resolve())))
     except FrontmatterLintError as exc:

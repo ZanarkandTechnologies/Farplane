@@ -6,7 +6,6 @@ tier: 2
 source: local
 capability:
   kind: shortcut
-eval: evals/evals.json
 ---
 
 # Brainstorm

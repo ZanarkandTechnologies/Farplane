@@ -58,7 +58,6 @@ def normalized_skill_row(row: dict[str, Any]) -> dict[str, Any]:
         "templateVersion": str(row.get("template_version") or row.get("skill_template_version") or ""),
         "status": str(row.get("status") or ""),
         "eval": str(row.get("eval") or ""),
-        "qaChecklist": str(row.get("qa_checklist") or ""),
         "skillUi": str(row.get("skill_ui") or ""),
         "hasChecklist": bool(row.get("has_checklist")),
     }
@@ -100,7 +99,6 @@ def build_counts(
         "missing": by_status.get("missing", 0),
         "external": by_status.get("external", 0),
         "withEval": sum(1 for row in skill_rows if row.get("eval")),
-        "withQaChecklist": sum(1 for row in skill_rows if row.get("qa_checklist")),
         "withSkillUi": sum(1 for row in skill_rows if row.get("skill_ui")),
         "withChecklist": sum(1 for row in skill_rows if row.get("has_checklist")),
         "templateRolloutRows": len(template_rows),

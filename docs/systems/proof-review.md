@@ -91,7 +91,7 @@ belongs in Self-Improvement And Learning.
 - Completion claims cite evidence and checks.
 - Material work uses independent QA or review when available.
 - Review outputs name blockers, verdict, evidence checked, and residual risk.
-- QA checklists inspect artifacts, metrics describe optional measured signals,
+- QA procedures inspect artifacts, metrics describe optional measured signals,
   review rubrics classify readiness, and reward events preserve reasons and
   repair hints for later learning.
 - Proof scales with risk rather than becoming ceremony for every tiny edit.

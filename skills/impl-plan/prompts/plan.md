@@ -106,7 +106,7 @@ Inspect both raw first-load context and Markdown categories. Consolidate
 duplicated policy or bulky evidence into the correct owner, but never remove
 required safety, ownership, reconstruction, or proof merely to reduce counts.
 
-Reapply `skills/impl-plan/qa_checklist.md` to the completed ticket after
+Reapply the `skills/impl-plan/SKILL.md` Todo List assertions to the completed ticket after
 drafting and after any repair. Resolve `revise`, stop on `block`, record the
 finish-gate verdict, and then reconcile the material reviewer receipt before
 the readiness call.

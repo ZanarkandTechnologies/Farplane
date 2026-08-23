@@ -82,6 +82,26 @@ capability:
             with self.assertRaisesRegex(check_skill_frontmatter.FrontmatterLintError, "Extra inputs"):
                 check_skill_frontmatter.load_skill_contracts(root)
 
+    def test_rejects_retired_eval_and_qa_frontmatter_fields(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            write_skill(root, "writer", "eval: evals/evals.json\nqa_checklist: qa_checklist.md")
+
+            with self.assertRaisesRegex(
+                check_skill_frontmatter.FrontmatterLintError,
+                "retired frontmatter field\\(s\\): eval is derived.*qa_checklist was retired",
+            ):
+                check_skill_frontmatter.load_skill_contracts(root)
+
+    def test_rejects_retired_qa_sidecar(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            write_skill(root, "writer")
+            (root / "skills" / "writer" / "qa_checklist.md").write_text("- [ ] obsolete\n")
+
+            with self.assertRaisesRegex(check_skill_frontmatter.FrontmatterLintError, "was retired"):
+                check_skill_frontmatter.validate_retired_skill_surfaces(root)
+
     def test_rejects_two_skills_that_claim_the_same_output_family(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

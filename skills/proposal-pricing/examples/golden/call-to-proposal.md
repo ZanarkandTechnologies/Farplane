@@ -92,7 +92,7 @@ golden_case: proposal-pricing/call-to-proposal
 source_refs:
   - operator-approved pricing-method reconstruction
 qa_refs:
-  - skills/proposal-pricing/qa_checklist.md
+  - skills/proposal-pricing/SKILL.md
 accepted_because:
   - correct arithmetic
   - one concise recommendation

@@ -55,11 +55,11 @@
     {
       "id": "consolidate_gotchas_to_checklist_or_eval_01",
       "prompt": "A skill has twenty gotchas, some are repeated runtime failures, some are stale one-off warnings, and some are examples. Consolidate them.",
-      "expected_output": "Inventories gotchas as individual units before rewriting; Promotes repeated runtime failures into qa_checklist.md, evals/evals.json, or SKILL.md gates when reusable; Deletes or demotes stale one-off warnings only after checking loss risk; Moves examples to references when they are useful but not every-invocation guardrails; Keeps concise gotchas only when they prevent common wrong behavior; Includes a loss check and proof or review route for material skill changes",
+      "expected_output": "Inventories gotchas as individual units before rewriting; Promotes repeated runtime failures into Todo List Rule/Assert blocks, evals/evals.json, or validators when reusable; Deletes or demotes stale one-off warnings only after checking loss risk; Moves examples to references when they are useful but not every-invocation guardrails; Keeps concise gotchas only when they prevent common wrong behavior; Includes a loss check and proof or review route for material skill changes",
       "files": [],
       "assertions": [
         "Inventories gotchas as individual units before rewriting",
-        "Promotes repeated runtime failures into qa_checklist.md, evals/evals.json, or SKILL.md gates when reusable",
+        "Promotes repeated runtime failures into Todo List Rule/Assert blocks, evals/evals.json, or validators when reusable",
         "Deletes or demotes stale one-off warnings only after checking loss risk",
         "Moves examples to references when they are useful but not every-invocation guardrails",
         "Keeps concise gotchas only when they prevent common wrong behavior",

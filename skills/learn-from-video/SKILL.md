@@ -6,10 +6,7 @@ group: intelligence
 source: local
 template_uses:
   skill-template: "0.3.9"
-  skill-qa-checklist: "0.1.0"
   skill-eval-task: "0.2.0"
-eval: evals/evals.json
-qa_checklist: qa_checklist.md
 allowed-tools: Read, Glob, Grep, Bash
 ---
 
@@ -103,7 +100,7 @@ candidate pass.
      optional target skill, output type, rights boundary, reconstruction-round
      limit, and finish gate. Do not silently turn a broad request such as
      “something similar” into one narrow learning target.
-   - [ ] Read `qa_checklist.md` as preflight guardrails.
+   - [ ] Read the first-load Todo List guardrails as preflight guardrails.
 - [ ] 2. Reuse or create the evidence bundle.
    - [ ] When the request says evidence or a candidate is attached, supplied,
      staged, or available, resolve the attachment inventory and inspect those
@@ -217,7 +214,7 @@ candidate pass.
    - [ ] Resume by rerunning the unchanged source-output eval against the
      returned skill candidate.
 - [ ] 9. Finish with proof and review.
-   - [ ] Apply `qa_checklist.md` again.
+   - [ ] Apply the first-load Todo List guardrails again.
    - [ ] Schema-check the returned packet before finishing: the five distinct
      `evidence_ledger` keys, four distinct `frozen_eval` keys, every frozen
      comparison row, eight replay columns, regression baseline, rights

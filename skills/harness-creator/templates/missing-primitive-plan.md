@@ -45,7 +45,7 @@ feedback_primitive_implementation_plan {
     normalize:
     validate_payload:
   eval_rows:
-  qa_checklist_branches:
+  guardrail_branches:
   blocked_mode_proof:
   live_proof_command:
   interval_update_binding:

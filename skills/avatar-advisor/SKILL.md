@@ -6,11 +6,8 @@ group: marketing
 source: local
 template_uses:
   skill-template: "0.3.7"
-  skill-qa-checklist: "0.1.1"
   skill-eval-task: "0.2.0"
   skill-surface-budget: "0.1.0"
-eval: evals/evals.json
-qa_checklist: qa_checklist.md
 common_chains:
   after: ["ai-video-advisor", "ai-image-advisor", "audio-advisor", "asset-advisor", "remotion"]
 allowed-tools: Read, Grep, Glob, Bash
@@ -39,7 +36,7 @@ avatar_advisor(character_or_presenter, script_or_storyboard, element_realization
 state:
   reads(user brief, script/storyboard, complete character/audio element packets,
         identity references, voice refs, timing-master receipt,
-        qa_checklist.md)
+        the first-load Todo List guardrails)
   writes(avatar direction artifact when durable handoff is requested)
 
 gates:
@@ -72,7 +69,7 @@ render proof.
 - [ ] 1. Bind identity and permission.
   - [ ] Identify presenter/character, identity references, consent/rights
     status, brand constraints, script/storyboard, platform, and artifact owner.
-  - [ ] Read `qa_checklist.md` as preflight guardrails.
+  - [ ] Read the first-load Todo List guardrails as preflight guardrails.
 - [ ] 2. Define persistence requirements.
   - [ ] Specify face/character continuity, wardrobe, framing, gesture style,
     voice, accent, pacing, emotional range, and reusable identity tokens or
@@ -96,7 +93,7 @@ render proof.
 - [ ] 5. Output the avatar direction packet.
   - [ ] Include identity rules, performance map, prompt or provider brief,
     input assets, acceptance checks, blockers, and next owner.
-  - [ ] Apply `qa_checklist.md` again before calling the packet ready.
+  - [ ] Apply the first-load Todo List guardrails again before calling the packet ready.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 ## Output Template
@@ -137,7 +134,7 @@ render proof.
 
 ## Reference Map
 
-- `qa_checklist.md` - read at start and finish for avatar-direction QA.
+- the first-load Todo List guardrails - read at start and finish for avatar-direction QA.
 - `../ai-video-advisor/SKILL.md` - route provider/app selection and avatar clip
   generation after direction is ready.
 - `../ai-image-advisor/SKILL.md` - route source portrait, character sheet, or

@@ -8,7 +8,6 @@ template_uses:
   skill-template: "0.3.7"
 common_chains:
   after: ["review", "qa"]
-eval: evals/evals.json
 ---
 
 # Remotion

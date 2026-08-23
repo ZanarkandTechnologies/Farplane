@@ -6,8 +6,6 @@ group: marketing
 source: local
 template_uses:
   skill-template: "0.3.8"
-eval: evals/evals.json
-qa_checklist: qa_checklist.md
 ---
 
 # Hatch Pet
@@ -18,7 +16,7 @@ Create a Codex-compatible animated pet from a concept, brand cue, company/prospe
 
 User-facing inputs are optional. If the user omits a pet name, infer one from the concept, brand, company, or reference filenames; if that is not possible, choose a short friendly name. If the user omits a description, infer one from the concept or references. If the user omits reference images, generate the base pet from text first, then use that base as the canonical reference for every animation row.
 
-Read `qa_checklist.md` before execution and apply it again before packaging. For a person or friend import, read [Friend Import](references/friend-import.md) before research or generation.
+Read the first-load Todo List guardrails before execution and apply it again before packaging. For a person or friend import, read [Friend Import](references/friend-import.md) before research or generation.
 
 ## Skill Signature
 
@@ -174,7 +172,7 @@ State-specific guidance:
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-- [ ] 1. Bind the pet inputs and read `qa_checklist.md`.
+- [ ] 1. Bind the pet inputs and read the first-load Todo List guardrails.
   - [ ] For a real person, require a supplied image and load [Friend Import](references/friend-import.md).
 - [ ] 2. Ground the pet direction.
   - [ ] Run bounded person or brand discovery only when that branch applies; preserve sources and user overrides.
@@ -182,7 +180,7 @@ State-specific guidance:
 - [ ] 4. Generate the canonical base and nine state rows through `$imagegen`, deriving `running-left` only after explicit mirror-safety approval.
 - [ ] 5. Extract frames, compose the atlas, run deterministic validation, and create the contact sheet plus motion previews.
 - [ ] 6. Apply visual QA and repair the smallest failing frame or row until identity, motion, transparency, and state semantics pass.
-- [ ] 7. Apply `qa_checklist.md` again, package `pet.json` with `spritesheet.webp`, write `qa/run-summary.json`, and report evidence paths.
+- [ ] 7. Apply the first-load Todo List guardrails again, package `pet.json` with `spritesheet.webp`, write `qa/run-summary.json`, and report evidence paths.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 ## Visible Progress Plan

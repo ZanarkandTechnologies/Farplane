@@ -53,7 +53,7 @@ execution can become autonomous inside that scope.
 | --- | --- | --- | --- |
 | Shape intent | human + `brainstorm` / `advise` / `prd` | accepted direction, examples, rejected options | material choices are explicit |
 | Bind work | ticket author / `spec-to-ticket` | `Summary`, `Scope`, initial `Delta`, dependencies, metadata | ticket exists and scope is coherent |
-| Plan implementation | `impl-plan` | `architecture_signatures`, `Change Plan`, `Done`, `QA Strategy`, `Docs Strategy`, reviewer handoff | `qa_checklist.md` self-check and plan reviewer pass |
+| Plan implementation | `impl-plan` | `architecture_signatures`, `Change Plan`, `Done`, `QA Strategy`, `Docs Strategy`, reviewer handoff | Todo List assertions and plan reviewer pass |
 | Compile execution | `goal-advisor` | `program.md`, `progress.md`, native `/goal` prompt | packet approved or explicitly pre-approved |
 | Execute | native Codex Goal | changed files, progress entries, command evidence | ticket `Done` and `QA Strategy` satisfied |
 | Prove | `qa`, `visual-qa`, `agent-qa-test`, tests, or scripts | artifacts under `tickets/TASK-XXXX/artifacts/` | proof route matches ticket claim |
@@ -244,12 +244,12 @@ boundary:
   procedures become skills, project knowledge becomes project docs, and sourced
   entities become Wiki articles.
 
-`qa_checklist.md` files are self/preflight/repair guardrails and reviewer
-ammunition, not acceptance forms. The typed `reviewer` lane owns checklist
-judgment and harsh pass/revise/block decisions. The typed `qa-tester` lane owns
-runtime, browser, UI, and proof capture. Tiny local checks can stay inline, but
-material plans, skill changes, prompts, evidence bundles, and completion claims
-should not self-approve when a reviewer lane is available.
+Todo List `Rule`/`Assert` blocks are self/preflight/repair guardrails, not
+acceptance forms. The typed `reviewer` lane owns independent judgment and harsh
+pass/revise/block decisions. The typed `qa-tester` lane owns runtime, browser,
+UI, and proof capture. Tiny local checks can stay inline, but material plans,
+skill changes, prompts, evidence bundles, and completion claims should not
+self-approve when a reviewer lane is available.
 
 When material completion needs both proof and judgment, spawn `qa-tester` and
 `reviewer` in parallel when possible:
@@ -282,8 +282,8 @@ modes are process failures rather than classic network security issues.
 | --- | --- | --- | --- |
 | Fuzzy intent becomes durable work too early | wrong ticket, wasted Goal execution | use `brainstorm`, `advise`, `prd`, or explicit acceptance before ticketed execution | ticket `Summary`/`Scope` preserve accepted and rejected options |
 | Ticket is chat-only or underfilled | executor invents scope or proof route | material work writes `ticket.md` before plan-ready state | reviewer checks ticket-first and goal-advisor readiness |
-| Architecture hides in prose | reviewer cannot catch wrong seams before code | `impl-plan` requires `architecture_signatures` for material plans | `impl-plan` QA checklist and plan reviewer gate |
-| Planner self-approves | same model misses its own weak assumptions | `qa_checklist.md` is self-check; reviewer lane is readiness gate | review receipt linked from ticket/progress |
+| Architecture hides in prose | reviewer cannot catch wrong seams before code | `impl-plan` requires `architecture_signatures` for material plans | `impl-plan` Todo List assertions and plan reviewer gate |
+| Planner self-approves | same model misses its own weak assumptions | inline self-check; reviewer lane is readiness gate | review receipt linked from ticket/progress |
 | Goal Packet goes stale after plan edits | executor follows old prompt | rerun `goal-advisor` when ticket plan changes | program/progress prompt timestamp and packet approval state |
 | Proof only covers nearby pieces | false completion claim | `QA Strategy` names critical path and smaller ordered sanity checks | evidence-quality reviewer gate |
 | Reviewer route is missing or generic | material judgment becomes vibes | caller declares rubric families, TAS gates, hard gates, and evidence | reviewer handoff or ticket QA Strategy |

@@ -192,8 +192,6 @@ class SkillFrontmatter(StrictContract):
     template_uses: dict[NonEmptyText, NonEmptyText] | None = None
     skill_template_version: NonEmptyText | None = None
     version: NonEmptyText | None = None
-    eval: NonEmptyText | SurfaceSpec | None = None
-    qa_checklist: NonEmptyText | SurfaceSpec | None = None
     skill_ui: NonEmptyText | SurfaceSpec | None = None
     allowed_tools: NonEmptyText | list[NonEmptyText] | None = Field(default=None, alias="allowed-tools")
     upstream_url: NonEmptyText | None = None

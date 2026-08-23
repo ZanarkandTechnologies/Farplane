@@ -7,9 +7,6 @@ source: local
 template_uses:
   skill-template: "0.3.0"
   skill-eval-task: "0.2.0"
-  skill-qa-checklist: "0.1.0"
-eval: evals/evals.json
-qa_checklist: qa_checklist.md
 methods:
   - id: eval:onboarding
     class: internal
@@ -54,7 +51,7 @@ returns: mode, cases, artifacts, verdict or delta, limitations, and next fix
 ## Todo List
 
 - [ ] 1. Bind the behavior and proof path.
-  - [ ] Read `qa_checklist.md`; bind the expected behavior, target, mode, suite,
+  - [ ] Read the first-load Todo List guardrails; bind the expected behavior, target, mode, suite,
         baseline, side-effect boundary, and finish proof. Reject wording-only or
         untestable claims.
   - [ ] Use `scripts/run_promptfoo.py --dry-run` for a skill comparison and
@@ -70,7 +67,7 @@ returns: mode, cases, artifacts, verdict or delta, limitations, and next fix
         consumer; put experimental fields under `extensions`.
   - [ ] Keep invocation, routing policy, expected answer, and reference points
         out of the user prompt. Run `farplane lint evals --changed` and
-        `scripts/check_eval_queries.py --root .`, then apply `qa_checklist.md`
+        `scripts/check_eval_queries.py --root .`, then apply the first-load Todo List guardrails
         to material rows.
   - [ ] Keep sanitized, reusable difficult cases in the normal runnable suite,
         not a separate metadata backlog.
@@ -107,7 +104,7 @@ returns: mode, cases, artifacts, verdict or delta, limitations, and next fix
         points in evals. Use [self-improve](../self-improve/SKILL.md) only for
         measured variant search with an owning ticket.
 - [ ] 5. Finish with independent proof.
-  - [ ] Reapply `qa_checklist.md` and the owning validators. For Tier 1, meta,
+  - [ ] Reapply the first-load Todo List guardrails and the owning validators. For Tier 1, meta,
         `eval`, cross-skill, or precedent-setting changes, record the
         the high-stakes design decision and use an independent reviewer.
   - [ ] Do not claim task or review-rate improvement without run artifacts or a

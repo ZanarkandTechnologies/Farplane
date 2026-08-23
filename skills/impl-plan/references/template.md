@@ -16,5 +16,4 @@ The sole canonical ticket-body template is:
 
 `impl-plan` owns the planning decision process and fills that template. It does
 not maintain a parallel section catalogue. Use
-[`SKILL.md`](../SKILL.md) for the workflow and
-[`qa_checklist.md`](../qa_checklist.md) for readiness checks.
+[`SKILL.md`](../SKILL.md) for both workflow and readiness assertions.

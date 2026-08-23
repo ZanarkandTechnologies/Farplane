@@ -11,13 +11,16 @@ from typing import Any
 
 
 def run_validate_skills(args: argparse.Namespace) -> int:
-    """Lint skill contracts, then refresh or check their derived projections."""
+    """Refresh or check skill projections, then prove the complete read-only contract."""
 
     root = Path(args.root).expanduser().resolve()
     check_only = args.check
     graph_script = root / "skills" / "skill-maintenance" / "scripts" / "generate_graph_projection.py"
-    commands = (
-        ("skill_lint", (sys.executable, str(root / "bin" / "farplane.py"), "lint", "skills")),
+    lint_command = (
+        "skill_lint",
+        (sys.executable, str(root / "bin" / "farplane.py"), "lint", "skills"),
+    )
+    projection_commands = (
         (
             "skill_registry",
             (
@@ -51,6 +54,7 @@ def run_validate_skills(args: argparse.Namespace) -> int:
             ),
         ),
     )
+    commands = (lint_command, *projection_commands) if check_only else (*projection_commands, lint_command)
     results: list[dict[str, Any]] = []
     for check_id, command in commands:
         try:
@@ -80,7 +84,7 @@ def run_validate_skills(args: argparse.Namespace) -> int:
         "summary": (
             f"farplane validate skills {action}: checks={len(results)}"
             if ok
-            else "farplane validate skills failed before projection refresh completed"
+            else "farplane validate skills failed"
         ),
         "checks": results,
     }

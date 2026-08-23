@@ -38,14 +38,13 @@ into a second place to maintain skill truth.
   [`docs/systems/skill-system.md`](../systems/skill-system.md) with
   `category: "skills"` and generated into
   [`docs/features/registry.jsonl`](../features/registry.jsonl). Versioned skill
-  templates declare structural feature IDs; individual skills declare local
-  eval, QA checklist, and skill UI surfaces. This folder owns the generated
+  templates declare structural feature IDs; individual skills declare only an
+  optional skill UI surface. Eval presence is derived from `evals/evals.json`.
+  This folder owns the generated
   skill inventory, not a second hand-authored skill feature registry.
-- `skills/<skill-name>/qa_checklist.md` is the optional first-class
-  skill-local QA checklist for settled runtime guardrails. Keep it at the skill
-  package root, not under `references/`, when agents should read it as
-  preflight constraints and reviewer lanes should apply it directly after
-  material skill changes.
+- `qa_checklist.md` is retired. Normal skill guardrails live in first-load Todo
+  List `Rule`/`Assert` blocks; behavior cases, deterministic invariants, and
+  material judgment belong to evals, validators, and QA or review respectively.
 
 ## Skill UI And Feature Progression
 
@@ -110,10 +109,10 @@ Use this table when two skills look similar. It is intentionally prose-first;
 | Check, scaffold, onboard, and run harness-native evals | `eval` | It initializes/discovers clean-room eval tasks, judges boolean/tier outcomes, keeps difficult reusable cases as ordinary runnable regressions, and can preserve one isolated CLI run as a scored `behavior_trace` with prompt, events, logs, output, checkpoints, artifacts, schema verdict, and baseline comparison. | You need adversarial tester/evidence-review orchestration or only native-subagent evidence; use `agent-qa-test`. |
 | Test a feature, skill, prompt, or workflow adversarially | `agent-qa-test` | It designs cases, runs or drafts a tester lane, attacks the tester evidence with an evidence-review lane, reconciles fixes/reruns, and can include Eval `behavior_trace` capture. | You only need one cheap CLI conformance probe and no adversarial proof loop. |
 | Choose how to prove a behavior claim | `proof-advisor` | It turns a claim or failure risk into proof cases, proof-surface choice, conditional domain-testing guidance, and a handoff to deterministic execution, eval, QA, visual QA, agent QA, review, or a source-gap ticket. | The proof surface and command are already selected; run them in the native execution phase or use the owning executor such as `eval`, `qa`, or `review`. |
-| Apply settled skill-local runtime guardrails | `qa_checklist.md` beside the skill | It is the real-time checklist surface for reusable checks that should be read before execution, applied before completion, and independently reviewed after material skill edits. | You need to discover expected behavior or compare variants; use `evals/evals.json` or an eval suite. |
+| Apply a normal skill guardrail | The owning Todo List `Rule`/`Assert` | It keeps the instruction beside the workflow node that needs it. | The guard is a repeatable behavior case, deterministic invariant, or material judgment; use eval, a validator, QA, or review. |
 | Review local diffs before commit or push | `code-review` | It owns lightweight diff review from deterministic check logs, changed files, and project review overlays, then escalates material claims to `review`. | The work needs a TAS verdict, completion receipt, or evidence-bundle judgment; use `review`. |
 | Judge whether a completed plan, implementation, evidence bundle, or reusable fixture is trustworthy | `review` | It applies docs-owned rubric families through a callable TAS wrapper and surfaces blockers before completion claims. | You still need to gather evidence; use QA/test skills first. |
-| Prove a user-visible or operated workflow | QA checklist, `qa`, `visual-qa`, or `agent-qa-test` | QA owns operated evidence, screenshots, browser/media behavior, case coverage, and proof bundles that review can later judge. | The claim is purely judgment-heavy, deterministic, or behavioral-regression oriented; use `review`, a validator, or `eval`. |
+| Prove a user-visible or operated workflow | `qa`, `visual-qa`, or `agent-qa-test` | QA owns operated evidence, screenshots, browser/media behavior, case coverage, and proof bundles that review can later judge. | The claim is purely judgment-heavy, deterministic, or behavioral-regression oriented; use `review`, a validator, or `eval`. |
 | Decide where a Farplane harness improvement belongs | `harness-advisor` | It compares root policy, global templates, skills, subagents, hooks, tickets, validators, registries, and docs before recommending the owning surface. | The user already named the target skill or file and asked for a direct edit. |
 | Fix a harness behavior end to end | `optimize-harness` | It orchestrates gap diagnosis, placement, eval/proof, optional metric experiment, implementation routing, and review without absorbing the lower-level skill jobs. | You only need a placement recommendation; use `harness-advisor` directly. |
 | Define measurable project objectives, directions, guards, and proof providers | `metric-advisor` | It owns honest metric cards and explicit `metrics.yaml` objective/guard deltas before execution is selected. | A ticket is already selected and needs a Goal Packet or native Goal prompt; use `goal-advisor`. |
@@ -155,10 +154,6 @@ Manual fields:
 - `skill_template_version`: optional structural baseline for skills onboarded
   to a known Farplane skill template version; absence means the skill has not
   been onboarded yet
-- `eval`: optional path to a skill-local eval task file, usually
-  `evals/evals.json`
-- `qa_checklist`: optional path to a skill-local runtime checklist, usually
-  `qa_checklist.md`
 - `skill_ui`: optional path or route for a skill-owned UI, viewer, dashboard,
   debug page, or UI binding
 - `group`: required for Tier 3 only; one canonical operating department from
@@ -182,7 +177,7 @@ Manual fields:
 - `upstream_url`: optional for `source: external`
 - `template_uses.skill-surface-budget`: optional opt-in marker for
   `FEAT-0062` capped skill surfaces; subscribed skills must fit 10 top-level
-  todos, 5 QA checklist items, and 5 eval tasks
+  todos and 5 eval tasks
 
 Generated fields:
 
@@ -192,7 +187,6 @@ Generated fields:
 - `version`
 - `skill_template_version`
 - `eval`
-- `qa_checklist`
 - `skill_ui`
 - `todo_skill_refs`
 - `allowed_tools`
@@ -398,8 +392,8 @@ When skill standards or optional skill capabilities change, update
 [`docs/systems/skill-system.md`](../systems/skill-system.md) and regenerate
 [`docs/features/registry.jsonl`](../features/registry.jsonl) as the supported
 feature catalog. Skill template versions carry structural `FEAT-####` handles;
-skill packages carry only local surface fields for eval, QA checklist, and skill
-UI. `skill-maintenance` should report stale or missing adoption from template
+skill packages carry only the optional skill UI field while eval presence is
+derived from the canonical path. `skill-maintenance` should report stale or missing adoption from template
 version rollout, generated skill inventory, local surface fields, and feature
 rows rather than requiring long per-skill migration histories.
 

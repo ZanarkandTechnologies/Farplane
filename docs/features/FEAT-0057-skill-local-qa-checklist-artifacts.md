@@ -1,96 +1,85 @@
 ---
-title: Skill-local runtime QA guardrails
-status: implemented
+title: Retired skill-local QA checklist artifacts
+status: retired
 owner: feature-registry
 created_at: 2026-06-26
-updated_at: 2026-08-21
+updated_at: 2026-08-24
 tags:
   - farplane
   - feature
   - sys-0006
 refs:
-  - docs/skills/templates/QA_CHECKLIST_TEMPLATE.md
-  - docs/review/rubrics/skill-contract.md
+  - docs/skills/templates/SKILL_TEMPLATE.md
   - docs/skills/system.md
   - docs/skills/best-practices.md
-  - docs/skills/README.md
-  - "docs/MEMORY.md#MEM-0150"
-  - docs/fundamentals/harness-algebra.md
-  - skills/skill-maintenance/audits/2026-06-23-qa-checklist-preflight-review.md
+  - bin/core/skill_contract.py
+  - bin/validators/check_skill_frontmatter.py
+  - bin/validators/check_skill_surface_budget.py
 feature_id: FEAT-0057
 system_id: SYS-0006
 category: skills
 public: true
 surfaces:
-  - docs/skills/templates/QA_CHECKLIST_TEMPLATE.md
-  - docs/review/rubrics/skill-contract.md
+  - docs/skills/templates/SKILL_TEMPLATE.md
   - docs/skills/system.md
   - docs/skills/best-practices.md
-  - docs/skills/README.md
+  - bin/core/skill_contract.py
+  - bin/validators/check_skill_frontmatter.py
+  - bin/validators/check_skill_surface_budget.py
 source_refs:
-  - "docs/MEMORY.md#MEM-0150"
-  - docs/fundamentals/harness-algebra.md
+  - docs/skills/templates/SKILL_TEMPLATE.md
 external_refs: []
 evidence_refs:
-  - docs/skills/templates/QA_CHECKLIST_TEMPLATE.md
-  - docs/review/rubrics/skill-contract.md
-known_limits: Skill-local QA remains an exceptional Markdown runtime/preflight surface. Generic authoring and structure checks moved to Golden Workflow Nodes, evals, validators, and the shared skill-contract rubric.
+  - bin/validators/test_check_skill_frontmatter.py
+  - bin/validators/test_check_skill_surface_budget.py
+known_limits: Deleted checklist text remains recoverable from Git history; its normal guardrails now live in the skill Todo List, evals, validators, or review.
 metrics:
-  - skill_qa_checklist_application_pass
-last_verified: 2026-06-23
+  - skill_qa_sidecar_reintroduction_blocked
+last_verified: 2026-08-24
 experimental: false
 superseded_by: false
 ---
-# Skill-local runtime QA guardrails
+# Retired skill-local QA checklist artifacts
 
-Skill-local runtime QA guardrails preserve the exceptional cases where one
-skill needs repeated safety, runtime, or preflight checks. Generic authoring,
-structure, and readiness judgment use Golden Workflow Nodes, evals, validators,
-and the shared `skill-contract` rubric instead.
+`qa_checklist.md` is retired as a skill-package surface. Its job was duplicated
+by Golden Workflow Node `Rule`/`Assert` blocks, canonical evals, deterministic
+validators, and independent review; retaining an exceptional path kept inviting
+the same duplicated files back.
 
 ```text
-skill_runtime_qa(skill, invocation) -> guard_verdicts + blockers + evidence
+retire_skill_qa_sidecar(package) -> Todo_List_guardrails | eval | validator | review
 ```
 
 ## At A Glance
 
 - Feature ID: `FEAT-0057`
 - System: [Skill System](../systems/skill-system.md)
-- Status: `implemented`
+- Status: `retired`
 - Category: `skills`
-- Primary user: skill maintainer, implementer, and reviewer
-- Job: keep repeated skill-specific runtime, safety, and preflight guards near their owner.
+- Primary user: skill author and maintainer
+- Job: preserve the deletion decision and its enforcement, not a live checklist feature.
 
-## Problem
+## Retirement Decision
 
-Some skills have repeated runtime or safety failures that must be checked before
-and after execution. Copying generic structure or review rules into every skill
-creates noise and drift.
-
-## What It Does
-
-- Keeps `qa_checklist.md` only for repeated skill-specific runtime, safety, or
-  preflight guards that have no clearer owner.
-- Routes structure and judgment to Golden Workflow Nodes, goldens, evals,
-  validators, and `skill-contract` review.
-- Requires `skill-maintenance` to record `keep | migrate | delete` whenever a
-  checklist is touched.
-
-## User Stories
-
-- As a skill author, I know what must stay true when I edit the skill.
-- As a reviewer, I can apply the same checklist adversarially and reject
-  technically valid but weak work.
-- As an operator, I get more predictable skill quality across maintenance passes.
+- Decision: delete every `skills/*/qa_checklist.md` and remove `qa_checklist`
+  and `eval` frontmatter fields.
+- Evidence: the current skill template requires first-load Golden Workflow
+  Nodes with `Rule` and `Assert`; duplicate sidecars added 4,418 lines across
+  64 packages without a distinct runtime owner.
+- Replacement owner: normal execution guardrails live in the owning `SKILL.md`
+  Todo List; variable behavior lives in `evals/evals.json`; deterministic facts
+  live in validators; material sufficiency lives in QA or review.
+- Reintroduction guard: `check_skill_frontmatter.py` fails a legacy field or a
+  new `qa_checklist.md`; registry and graph generation derive eval presence from
+  `evals/evals.json` instead of frontmatter.
 
 ## Operating Contract
 
-A retained QA checklist is the skill's local runtime/preflight guardrail.
-
-- Checklist items must be actionable, testable, skill-specific, and close to runtime behavior.
-- Material skill changes read and apply the checklist.
-- Generic authoring, structure, judgment, and deterministic rules do not belong here.
-- External skills may omit local checklists when wrapper logic belongs in callers.
+No active skill may add a `qa_checklist.md` sidecar. Put normal-path,
+first-load instructions in a relevant Todo List `Rule` or `Assert`; add an eval
+for repeatable behavior, a validator for a deterministic invariant, and QA or
+review for material judgment. `evals/evals.json` remains optional but its
+presence is derived by the registry, not duplicated in frontmatter.
 
 ## Feature Flow
 
@@ -102,87 +91,78 @@ flowchart LR
   classDef retired fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d,stroke-dasharray: 5 3
 
   change["Skill change<br/>skills/*"]:::keep
-  checklist["skill-specific runtime<br/>qa_checklist.md"]:::keep
-  preflight["self preflight<br/>before + after edits"]:::changed
-  reviewer["reviewer lane<br/>material checklist gate"]:::changed
-  proof["audit / proof notes<br/>skills/*/audits<br/>ticket artifacts"]:::added
-  vague["generic copied<br/>structure QA"]:::retired
+  nodes["SKILL.md Todo List<br/>Rule + Assert"]:::keep
+  evals["evals/evals.json<br/>judgeable behavior"]:::changed
+  validation["validator / QA / review<br/>deterministic or judgment proof"]:::changed
+  sidecar["qa_checklist.md<br/>retired and rejected"]:::retired
 
-  change --> checklist
-  checklist --> preflight
-  checklist --> reviewer
-  preflight --> proof
-  reviewer --> proof
-  checklist -. replaces .-> vague
+  change --> nodes
+  change --> evals
+  change --> validation
+  sidecar -. does not return .-> change
 ```
 
-Gray is the skill edit input, amber is checklist application behavior, green is the local QA/proof artifact, and red dashed is the retired ad hoc review path.
+Gray is the skill edit input, amber is owner-local proof behavior, and red dashed
+is the retired sidecar path.
 
 ## Surfaces
 
 Owner surfaces:
 
-- `docs/skills/templates/QA_CHECKLIST_TEMPLATE.md`
-- `docs/review/rubrics/skill-contract.md`
+- `docs/skills/templates/SKILL_TEMPLATE.md`
 - `docs/skills/system.md`
 - `docs/skills/best-practices.md`
-- `docs/skills/README.md`
+- `bin/core/skill_contract.py`
+- `bin/validators/check_skill_frontmatter.py`
+- `bin/validators/check_skill_surface_budget.py`
 
 Source context:
 
-- `docs/MEMORY.md#MEM-0150`
-- `docs/fundamentals/harness-algebra.md`
+- `docs/skills/templates/SKILL_TEMPLATE.md`
 
 Evidence:
 
-- `docs/skills/templates/QA_CHECKLIST_TEMPLATE.md`
-- `docs/review/rubrics/skill-contract.md`
+- `bin/validators/test_check_skill_frontmatter.py`
+- `bin/validators/test_check_skill_surface_budget.py`
 
 ## Proof And Quality
 
 Required checks:
 
-- `python3 docs/features/validate_features.py`
-- `python3 bin/validators/check_doc_refs.py`
+- `python3 bin/farplane.py lint skills`
+- `python3 -m unittest bin/validators/test_check_skill_frontmatter.py bin/validators/test_check_skill_surface_budget.py`
 
 Acceptance signals:
 
-- The feature remains listed under exactly one owning system.
-- The owner surfaces still exist and agree with this contract.
-- Evidence refs support the current status.
+- A new legacy field or QA sidecar fails lint with the correct replacement owner.
 
 ## Rollout And Maintenance
 
-- Update this feature page first when the capability contract changes.
-- Then update owner surfaces and regenerate feature/system registries when metadata changes.
-- Preserve the feature ID while active templates, skills, tickets, or docs still reference it.
+- The decision record stays until this reintroduction risk no longer matters.
 - Maintenance owner: Skill System.
 
 ## Limits And Non-Goals
 
-- This feature does not make QA checklists a default skill surface.
-- This feature does not replace evals when repeatable behavior tests are needed.
-- This feature does not duplicate global operating policy.
-- Known limit: retained checklists are Markdown guardrails; their behavioral
-  value still needs runtime evidence, while structural readiness uses review.
-- Delete or merge this feature only when its current truth has moved into a clearer owner and all active refs are removed.
+- This decision does not remove the `qa` skill, the QA tester lane, or review.
+- This decision does not require every skill to have evals.
+- This record does not preserve a compatibility alias or archived live template.
 
 ## Metrics
 
-- `skill_qa_checklist_application_pass`
+- `skill_qa_sidecar_reintroduction_blocked`
 
 ## Alternatives Considered
 
-- Keep this only as a registry row.
+- Retain the sidecar as an exceptional optional package file.
   Decision: reject.
-  Reason: Farplane features must be readable specs, not opaque metadata entries.
-- Fold this entirely into the owning system page.
-  Decision: defer.
-  Reason: keep the `FEAT-*` page while templates, skills, tickets, or proof surfaces need a stable capability handle.
+  Reason: the exception duplicated first-load rules and was repeatedly rediscovered as a valid default.
+- Create a general decision registry before retiring this surface.
+  Decision: reject.
+  Reason: this concise retirement section is the owner record; the validator is the prevention mechanism.
 
 ## Change History
 
-- 2026-06-26: Feature spec created.
-- 2026-06-27: Migrated into the reader-first feature-spec shape.
-- 2026-08-21: Narrowed QA sidecars to exceptional skill-specific runtime,
-  safety, and preflight guards; centralized structure review in skill-contract.
+- 2026-08-24: Retired the sidecar, deleted existing instances, removed duplicate
+  frontmatter/projection/budget fields, and added the reintroduction guard.
+- 2026-08-21: Narrowed sidecars to exceptional use; that exception was removed
+  after Golden Workflow Nodes made the duplicate owner unnecessary.

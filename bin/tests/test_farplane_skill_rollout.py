@@ -59,7 +59,6 @@ class FarplaneSkillRolloutTests(unittest.TestCase):
                             "template_version": "0.3.2",
                             "status": "current",
                             "eval": "evals/evals.json",
-                            "qa_checklist": "",
                             "skill_ui": "",
                             "has_checklist": True,
                         },
@@ -71,7 +70,6 @@ class FarplaneSkillRolloutTests(unittest.TestCase):
                             "template_version": "missing",
                             "status": "external",
                             "eval": "",
-                            "qa_checklist": "",
                             "skill_ui": "",
                             "has_checklist": False,
                         },
@@ -83,7 +81,6 @@ class FarplaneSkillRolloutTests(unittest.TestCase):
                             "template_version": "0.2.0",
                             "status": "stale",
                             "eval": "",
-                            "qa_checklist": "qa_checklist.md",
                             "skill_ui": "viewer.html",
                             "has_checklist": False,
                         },
@@ -135,12 +132,10 @@ class FarplaneSkillRolloutTests(unittest.TestCase):
         self.assertEqual(result["counts"]["stale"], 1)
         self.assertEqual(result["counts"]["external"], 1)
         self.assertEqual(result["counts"]["withEval"], 1)
-        self.assertEqual(result["counts"]["withQaChecklist"], 1)
         self.assertEqual(result["counts"]["withSkillUi"], 1)
         self.assertEqual(result["counts"]["templateDriftItems"], 1)
         self.assertEqual(result["registryCounts"]["byTier"], {"1": 1, "3": 1})
         self.assertEqual(result["skills"][0]["skillId"], "alpha")
-        self.assertEqual(result["skills"][2]["qaChecklist"], "qa_checklist.md")
         self.assertEqual(result["templateRollout"][1]["consumerId"], "gamma")
 
     def test_run_scan_prints_json_payload(self) -> None:

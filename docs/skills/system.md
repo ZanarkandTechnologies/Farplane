@@ -25,9 +25,8 @@ fields, and todo-link rules stay in one place.
 - `docs/skills/registry.jsonl` is generated inventory, not hand-authored truth.
 - `skills/<skill-name>/evals/evals.json` owns focused modular eval tasks for one
   skill's behavior when a runnable eval is the right proof surface.
-- `skills/<skill-name>/qa_checklist.md` owns first-class skill-local QA checks
-  for settled runtime guardrails when a Markdown checklist is the right
-  real-time review surface.
+- Golden Workflow Node `Rule`/`Assert` blocks own normal first-load skill
+  guardrails. `qa_checklist.md` is retired and rejected by skill lint.
 
 Keep this file focused on stable system rules. Do not duplicate first-load
 authoring detail here; link `docs/skills/best-practices.md` for checklist
@@ -310,10 +309,6 @@ Manual fields:
   to a known Farplane skill template version; absence means not onboarded yet.
 - `template_uses`: optional versioned template adoption records.
 - `version`: optional skill-local semantic version.
-- `eval`: optional path to a skill-local eval task file, usually
-  `evals/evals.json`.
-- `qa_checklist`: optional path to a skill-local runtime checklist, usually
-  `qa_checklist.md`.
 - `skill_ui`: optional path or route for a skill-owned UI, viewer, dashboard,
   debug page, or UI binding.
 - `group`: required for Tier 3 only; one canonical operating department from
@@ -375,7 +370,8 @@ own their independent restrictions. Every skill still gets its individual
 plugin.
 Structural feature IDs belong to the versioned skill template metadata, not
 per-skill frontmatter. Derive generated fields from source files instead of
-duplicating them in frontmatter.
+duplicating them in frontmatter: `evals/evals.json` produces the generated
+`eval` registry field, while `skill_ui` is the only optional local surface field.
 
 Skills that opt into capped surface enforcement declare the structural marker in
 `template_uses`, not raw `feature_refs`:
@@ -387,8 +383,8 @@ template_uses:
 
 This marker is backed by `FEAT-0062` and checked by
 `bin/validators/check_skill_surface_budget.py`. Subscribed skills must fit the
-default `10 / 5 / 5` budget: 10 top-level `SKILL.md` todos, 5
-`qa_checklist.md` items, and 5 skill-local eval tasks. Before adding item N+1,
+default `10 / 5` budget: 10 top-level `SKILL.md` todos and 5 skill-local eval
+tasks. Before adding item N+1,
 run `skill-maintenance.refine_skill` with
 `consolidate(target = edited_skill, structure = skill)` and keep, merge, move,
 or delete units by value rather than appending by default.
@@ -409,10 +405,9 @@ or delete units by value rather than appending by default.
 - Put skill-specific eval tasks beside the source skill as `evals/evals.json`.
   Keep broad working suites under `.farplane/evals` and reusable cross-skill
   examples under `skills/eval/examples`.
-- Put skill-specific runtime QA guardrails beside the source skill as
-  `qa_checklist.md` when the skill repeatedly needs the same preflight checks,
-  final checks, reviewer prompts, or eval-derived guardrails. Keep the file
-  Markdown until a runner or renderer needs stricter structure.
+- Put repeated normal-path guardrails in the owning Todo List node's `Rule` or
+  `Assert`. Put a judgeable behavior in `evals/evals.json`, a deterministic
+  invariant in a validator, and material sufficiency in QA or review.
 - Put skill-specific example fixtures beside the source skill as
   `examples/<slug>/example.md`, with optional local support files under
   `examples/<slug>/assets/`. Use this shape when a quality-dependent skill
@@ -421,47 +416,23 @@ or delete units by value rather than appending by default.
   `skills/eval/examples`; do not add a skill frontmatter field just to list
   examples.
 
-## Skill-Local QA Checklists
+## Guardrail Placement
 
-`qa_checklist.md` is an exceptional optional file at the skill package root,
-not the default quality layer. Keep or add it only for reusable skill-specific
-runtime, safety, or preflight checks that cannot live more clearly in Golden
-Workflow Node assertions, goldens, evals, validators, or review.
-
-For skills enrolled in `skill-surface-budget`, keep the checklist to the top 5
-runtime guardrails. Merge overlapping preflight/final-review items and move
-rare branch-specific detail to references with an explicit load condition.
+`qa_checklist.md` is not a supported skill surface. The normal invocation path
+is the `SKILL.md` Todo List itself: each Golden Workflow Node names the
+non-obvious rule and observable assertion the agent must apply. When the same
+guard must be proven or executed elsewhere, promote it to the smallest owner:
 
 ```text
-skill_qa_checklist(skill_package, changed_files, claim, budget?)
-  -> checklist_verdicts + fixes_or_deferrals + evidence_note
+first-load workflow guard -> Todo List Rule / Assert
+repeatable behavior claim -> evals/evals.json
+deterministic repository invariant -> validator
+material sufficiency or taste -> QA or review
 ```
 
-Do not create a checklist for generic authoring, structure, or finish ceremony.
-The todo list says what
-the invoking agent should do on first load; `qa_checklist.md` says what
-failure modes to prevent while executing and how a finished or changed artifact
-is checked. The eval file and QA checklist should converge over time:
-
-```text
-evals/evals.json discovers and pressures expected behavior
-qa_checklist.md applies settled reusable guardrails before and after real work
-```
-
-When a skill has `qa_checklist.md`, the normal invocation pattern is:
-
-```text
-read SKILL.md
-read qa_checklist.md as preflight guardrails
-execute the selected workflow
-apply qa_checklist.md again before completion
-delegate final checklist review for material changes
-```
-
-When a checklist is touched, `skill-maintenance` records `keep | migrate |
-delete`. Keep unique runtime/safety/preflight guards; migrate structure,
-judgment, and deterministic checks to nodes, goldens, rubrics, evals, or
-validators; delete only after unique rules and active references move.
+This prevents a second, eagerly discovered Markdown file from drifting away
+from the workflow it is meant to protect. Lint rejects a legacy sidecar or
+frontmatter declaration and reports the valid destinations.
 
 ## Template Versioning
 

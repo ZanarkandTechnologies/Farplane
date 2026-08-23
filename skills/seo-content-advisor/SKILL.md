@@ -8,8 +8,6 @@ template_uses:
   skill-template: "0.3.7"
   skill-surface-budget: "0.1.0"
 allowed-tools: Read, Glob, Grep, web_search
-eval: evals/evals.json
-qa_checklist: qa_checklist.md
 common_chains:
   after: ["copywriting-advisor", "research", "doc-advisor"]
 ---
@@ -37,7 +35,7 @@ seo_content_advisor(audience, product, topic, search_intent?,
   -> article_brief_or_draft + seo_qa_verdict | blocked_report
 state:
   reads(user brief, supplied proof/source material, current search guidance,
-        qa_checklist.md, copywriting-advisor output when voice/message matters)
+        the first-load Todo List guardrails, copywriting-advisor output when voice/message matters)
   writes(article brief or draft only when caller owns an artifact path)
 gates:
   search_intent_bound; reader_promise_named; original_value_present;
@@ -66,7 +64,7 @@ when the result is durable documentation rather than marketing content. Use
 - [ ] 1. Bind the search and reader job.
   - [ ] Resolve audience, product, topic, search intent, keywords, proof,
         freshness need, target stage, and publication boundary.
-  - [ ] Read `qa_checklist.md` as preflight guardrails.
+  - [ ] Read the first-load Todo List guardrails as preflight guardrails.
 - [ ] 2. Ground the article before drafting.
   - [ ] Use current web or supplied-source grounding when search expectations,
         facts, freshness, or competitive norms affect the brief.
@@ -95,7 +93,7 @@ when the result is durable documentation rather than marketing content. Use
   - [ ] Mark facts that need dates, sources, expert review, screenshots, or
         product proof before publication.
 - [ ] 5. Finish with SEO/content QA and handoff.
-  - [ ] Apply `qa_checklist.md` to the finished packet.
+  - [ ] Apply the first-load Todo List guardrails to the finished packet.
   - [ ] Name the SEO QA verdict, weakest section, proof gaps, freshness risk,
         final publication/human gate, and next owner.
   - [ ] Route social derivatives to `social-content`, durable docs to
@@ -155,7 +153,7 @@ SEO into keyword stuffing.
 
 ## Reference Map
 
-- [qa_checklist.md](qa_checklist.md) - read before drafting and apply before
+- the first-load Todo List guardrails - read before drafting and apply before
   completion.
 - [copywriting-advisor](../copywriting-advisor/SKILL.md) - use
   when audience emotion, message spine, or product voice needs sharpening

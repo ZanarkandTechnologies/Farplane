@@ -23,13 +23,13 @@ Farplane separates inspection, measurement, judgment, and learning so feedback
 stays explainable.
 
 ```text
-qa_checklist(artifact) -> checklist_results + violations + evidence_note
+todo_assertions(workflow) -> applied_rules + observable_checks
 metric_advice(objective, evidence) -> measurement_contract | no_metric_reason
 review(artifact, rubric, evidence) -> TAS + reasons + failed_checks + next_action
 reward_event(output, judgment) -> verdict + evidence + repair_hint
 ```
 
-- QA checklists are executable inspection prompts for a skill or artifact.
+- Todo List assertions are executable first-load inspection prompts for a workflow.
 - Metrics are optional measurement contracts, usually owned by goals, products,
   projects, or experiments rather than ordinary skill maintenance.
 - Rubrics are decision policies that classify readiness from evidence.

@@ -7,9 +7,6 @@ source: local
 template_uses:
   skill-template: "0.3.9"
   skill-eval-task: "0.2.0"
-  skill-qa-checklist: "0.1.0"
-eval: evals/evals.json
-qa_checklist: qa_checklist.md
 allowed-tools: Read, Glob, Grep, Bash
 ---
 
@@ -106,7 +103,7 @@ the authority named by the ticket.
 - [ ] 1. Bind the campaign contract.
   - [ ] Read the owning ticket, target code/docs, mutable surface, frozen
     evaluator and data boundary, primary metric and direction, guards, budget,
-    and [QA checklist](qa_checklist.md).
+    and the first-load Todo List guardrails.
   - [ ] Route an obvious deterministic bug to direct implementation instead of
     opening an experiment campaign.
   - [ ] Do not invent a GPU/time/spend/attempt ceiling, metric threshold, guard
@@ -218,7 +215,7 @@ the authority named by the ticket.
         frozen surface, scope, metric, data boundary, budget, or approval changes.
 - [ ] 8. Finish with independent evidence review.
   - [ ] Re-run the full evaluator on the frozen best candidate, verify receipt
-    and budget integrity, apply the QA checklist, obtain required QA/reviewer
+    and budget integrity, apply the relevant Todo List guardrails, obtain required QA/reviewer
     judgment, write residual risks, and close the owning ticket canonically.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 

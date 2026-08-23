@@ -3,7 +3,6 @@
 ## Scope
 
 - `SKILL.md`
-- `qa_checklist.md`
 - `references/*`
 - `templates/*`
 - `examples/*`

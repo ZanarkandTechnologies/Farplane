@@ -27,13 +27,13 @@
     {
       "id": "impl_plan_material_ticket_first_01",
       "prompt": "Plan a material UI change for AGI Toy Shop's checkout flow. No ticket is selected yet.",
-      "expected_output": "Does not return a chat-only material implementation plan; Creates or requests a selected tickets/TASK-XXXX/ticket.md surface before treating the plan as ready; Writes or proposes Done and QA Strategy with concrete checks and evidence; Reapplies the impl-plan QA checklist after drafting and after any repair, resolves revise, stops on block, and records the finish verdict before reviewer handoff or approval_ready; Names proof weight and delegated proof lanes; Leaves implementation gated until the ticket plan is approved",
+      "expected_output": "Does not return a chat-only material implementation plan; Creates or requests a selected tickets/TASK-XXXX/ticket.md surface before treating the plan as ready; Writes or proposes Done and QA Strategy with concrete checks and evidence; Reapplies the impl-plan Todo List assertions after drafting and after any repair, resolves revise, stops on block, and records the finish verdict before reviewer handoff or approval_ready; Names proof weight and delegated proof lanes; Leaves implementation gated until the ticket plan is approved",
       "files": [],
       "assertions": [
         "Does not return a chat-only material implementation plan",
         "Creates or requests a selected tickets/TASK-XXXX/ticket.md surface before treating the plan as ready",
         "Writes or proposes Done and QA Strategy with concrete checks and evidence",
-        "Reapplies the impl-plan QA checklist after drafting and after any repair, resolves revise findings, stops on block findings, and records the finish-gate verdict before reviewer handoff or approval_ready",
+        "Reapplies the impl-plan Todo List assertions after drafting and after any repair, resolves revise findings, stops on block findings, and records the finish-gate verdict before reviewer handoff or approval_ready",
         "Names proof weight and delegated proof lanes",
         "Leaves implementation gated until the ticket plan is approved"
       ],

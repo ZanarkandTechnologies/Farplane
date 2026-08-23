@@ -9,10 +9,7 @@ capability:
   produces: [intelligence-dossier]
 template_uses:
   skill-template: "0.4.0"
-  skill-qa-checklist: "0.1.0"
   skill-eval-task: "0.2.0"
-eval: evals/evals.json
-qa_checklist: qa_checklist.md
 allowed-tools: Read, Glob, Grep, Bash, web_search, mcp__convex__status, mcp__convex__functionSpec, mcp__convex__run
 ---
 
@@ -143,7 +140,7 @@ writes and return receipts; they do not replace the Intelligence Receipt.
 ## Todo List
 
 - [ ] 1. Bind and persist the canonical intake.
-  - [ ] Read `qa_checklist.md`; bind `source`, `instruction`, optional project,
+  - [ ] Read the first-load Todo List guardrails; bind `source`, `instruction`, optional project,
         comparison horizon, and Wiki `preview | apply` publication intent.
   - [ ] Canonicalize/dedupe the source and create or reuse the visible Content
         Intelligence job before long extraction. Preserve `queued`,

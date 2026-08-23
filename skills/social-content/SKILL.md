@@ -7,7 +7,6 @@ group: marketing
 source: local
 template_uses:
   skill-template: "0.3.6"
-  skill-qa-checklist: "0.1.0"
   skill-eval-task: "0.2.0"
 methods:
   - id: social-content:cross-platform
@@ -20,8 +19,6 @@ methods:
     class: artifact
     output: linkedin-post-draft
 allowed-tools: Read, Grep, Glob, Bash
-eval: evals/evals.json
-qa_checklist: qa_checklist.md
 ---
 
 # Social Content
@@ -43,7 +40,7 @@ social_content(brief, platform_set?, artifact_format?, stage?, constraints?)
   -> content_plan | social_draft_bundle | blocked_report
 
 state:
-  reads(references/model.md, qa_checklist.md, method reference when needed,
+  reads(references/model.md, the first-load Todo List guardrails, method reference when needed,
         user swipe/reference/examples when supplied)
   writes(workspace draft artifacts when generation or external work is involved)
 
@@ -82,7 +79,7 @@ campaign expectations materially affect the output.
   - [ ] Read [model](./references/model.md) and build the artifact matrix:
   platform, format, message job, copy payload, asset carrier, publish boundary,
   and proof.
-  - [ ] Read `qa_checklist.md` as preflight guardrails.
+  - [ ] Read the first-load Todo List guardrails as preflight guardrails.
 - [ ] 2. Select one primary method:
   `social-content:cross-platform`, `social-content:carousel`, or
   `social-content:linkedin`. Add supporting methods only when the artifact
@@ -120,7 +117,7 @@ campaign expectations materially affect the output.
 - [ ] 6. Finish with proof and boundary checks.
   - [ ] Do not publish, post, reply, comment, DM, schedule, or cross-post unless
   the user explicitly asks for that action.
-  - [ ] Apply `qa_checklist.md` again before claiming artifact quality or
+  - [ ] Apply the first-load Todo List guardrails again before claiming artifact quality or
   sending a review request.
   - [ ] Follow the native execution phase proof and writeback loop before
   claiming platform fit, campaign readiness, professional voice, slide
@@ -165,7 +162,7 @@ Use method addresses to choose the smallest relevant workflow:
 
 ## Reference Map
 
-- `qa_checklist.md` - read at skill start and finish for social artifact QA.
+- the first-load Todo List guardrails - read at skill start and finish for social artifact QA.
 - `references/model.md` - artifact matrix, method selection, execution packet,
   and proof rules.
 - `references/examples.md` - load for quality-sensitive voice, taste,

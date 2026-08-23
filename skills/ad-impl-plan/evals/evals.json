@@ -6,8 +6,7 @@
       "prompt": "Plan a Meta lead campaign for a payroll-compliance consultation. We have a GBP 600 cap, an approved Brand Kit, a ready landing page, and want to compare three copy angles for UK founders. Keep the first test small and do not launch anything.",
       "expected_output": "Creates one approval-ready campaign ticket with a falsifiable thesis, small controlled variation plan, conditional copy route, distinct approval gates, measurement and read-only check-in handoff; does not launch, spend, or create a duplicate program.",
       "files": [
-        "skills/ad-impl-plan/SKILL.md",
-        "skills/ad-impl-plan/qa_checklist.md"
+        "skills/ad-impl-plan/SKILL.md"
       ],
       "assertions": [
         "Creates a canonical ticket rather than a second plan schema",
@@ -35,7 +34,7 @@
       "prompt": "Set up ads for our new webinar as quickly as possible. We do not know our conversion event, budget, account binding, or how leads will be measured. Just make a campaign ticket that is ready to launch.",
       "expected_output": "Returns a blocked report or blocked ticket state that names the missing event, budget, account binding, and measurement contract; routes strategy setup to Ad Advisor and does not mark launch or spend as approved.",
       "files": [
-        "skills/ad-impl-plan/qa_checklist.md"
+        "skills/ad-impl-plan/SKILL.md"
       ],
       "assertions": [
         "Does not invent a budget, conversion event, or account binding",
@@ -76,7 +75,6 @@
       "expected_output": "Creates one spend-safe campaign ticket with a conditional Worker Artifact Review Request route that packages the visual review for Telegram, asks one concrete approval reply, and preserves separate production, setup, launch, spend, and mutation gates without sending a message during drafting.",
       "files": [
         "skills/ad-impl-plan/SKILL.md",
-        "skills/ad-impl-plan/qa_checklist.md",
         "skills/worker-artifact-review-request/SKILL.md",
         "skills/telegram-message/SKILL.md"
       ],

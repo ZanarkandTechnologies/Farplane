@@ -6,8 +6,6 @@ group: deals
 source: local
 template_uses:
   skill-template: "0.3.9"
-eval: evals/evals.json
-qa_checklist: qa_checklist.md
 allowed-tools: Read, Write, Glob, Grep, Bash
 ---
 
@@ -58,7 +56,7 @@ independent judgment. This skill never sends the proposal or writes contracts.
 ## Todo List
 
 - [ ] 1. Read the source and preflight materials.
-  - [ ] Read `qa_checklist.md` before drafting.
+  - [ ] Read the first-load Todo List guardrails before drafting.
   - [ ] For calibration, read
         [the concise call-to-proposal example](examples/golden/call-to-proposal.md)
         without copying its facts or wording.
@@ -112,7 +110,7 @@ independent judgment. This skill never sends the proposal or writes contracts.
   - [ ] Do not include internal margins, cost floors, confidence taxonomies,
         evidence ledgers, pricing theory, or a meeting-summary transcript dump.
 - [ ] 7. Finish with proof and human review.
-  - [ ] Reapply `qa_checklist.md`, recalculate the visible arithmetic, and
+  - [ ] Reapply the first-load Todo List guardrails, recalculate the visible arithmetic, and
         confirm every number came from the source, the operator, or transparent math.
   - [ ] Route externally shared proposals through human review; never send,
         publish, or mutate CRM state from this skill.
@@ -147,7 +145,7 @@ Price: $9,500, approximately 15% of annual value and a 6.6× client return.
 
 ## Reference Map
 
-- [Proposal QA checklist](qa_checklist.md) — read before drafting and apply
+- the first-load Todo List guardrails — read before drafting and apply
   again before returning or writing a proposal.
 - [Value calculator](scripts/calculate_value.py) — run when a people-time,
   consequence-cost, or direct annual amount anchor is available.

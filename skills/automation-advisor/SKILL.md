@@ -4,11 +4,9 @@ description: "Design or revise Farplane Codex automations using project-owned au
 tier: 3
 group: operations
 source: local
-eval: evals/evals.json
 template_uses:
   skill-template: "0.2.0"
   skill-eval-task: "0.2.0"
-qa_checklist: qa_checklist.md
 allowed-tools: Read, Glob, Grep, Bash
 ---
 
@@ -39,7 +37,7 @@ automation_advisor(intent, project_refs, current_automation?, activate?)
   -> template_choice + config_delta + automation_delta?
    + persistent_thread_delta? + state_contract_check + proof_checklist
 state: reads(active feature/spec, farplane/automations.toml?, current prompts,
-             target skill, templates, qa_checklist.md);
+             target skill, templates, the first-load Todo List guardrails);
        writes(farplane/automations.toml and, only for an explicit persistent
               thread, farplane/pm.json)
 gates: loop_choice; cadence; plain_skill_call; full_parseable_record;
@@ -64,7 +62,7 @@ fails: logs in tracked config; generated prompt fragments; env-var schedules;
         promotes them. Evidence-quality rules stay shared.
 - [ ] 2. Bind current project surfaces.
   - [ ] Read the active feature/spec, current `farplane/automations.toml`, the
-        exact existing prompt, target skill, template, and `qa_checklist.md`.
+        exact existing prompt, target skill, template, and the first-load Todo List guardrails.
   - [ ] Read [prompt engineering](../../docs/fundamentals/prompt-engineering.md)
         before material prompt changes.
 - [ ] 3. Keep desired config visible and runtime state untracked.
@@ -95,7 +93,7 @@ fails: logs in tracked config; generated prompt fragments; env-var schedules;
         tools are unavailable, stop at `needs_automation_setup` after writing
         the desired config.
 - [ ] 6. Validate and review.
-  - [ ] Reapply `qa_checklist.md`; parse TOML; verify all required fields,
+  - [ ] Reapply the first-load Todo List guardrails; parse TOML; verify all required fields,
         exactly one `$pulse-update` heartbeat, dated artifacts, prompt/config
         parity, and absence of legacy manifests or orchestrators.
   - [ ] Route material ticket, goal, external-source, or local knowledge-write
@@ -138,7 +136,7 @@ timezone = "<timezone>"
 - [Pulse automation template](templates/pulse-automation.md)
 - [Live activation](references/live-activation.md) — load only when activation
   is explicitly requested.
-- [Automation QA](qa_checklist.md) — prompt and config finish gate.
+- the first-load Todo List guardrails — prompt and config finish gate.
 - [Active Interval feature](../../docs/features/FEAT-0067-daily-interval-review-reports.md)
 
 ## Output

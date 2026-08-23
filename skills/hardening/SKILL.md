@@ -7,7 +7,6 @@ source: local
 template_uses:
   skill-template: "0.3.2"
 allowed-tools: Read, Glob, Grep, Bash
-eval: evals/evals.json
 ---
 
 # Hardening Skill

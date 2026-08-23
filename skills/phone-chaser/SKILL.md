@@ -8,7 +8,6 @@ capability:
   kind: integration
 template_uses:
   skill-template: "0.3.7"
-qa_checklist: qa_checklist.md
 allowed-tools: Bash, Read
 ---
 
@@ -37,7 +36,7 @@ write live phone numbers, keys, or SIP credentials into tracked files.
 
 ```text
 phone_chaser(call_request, state?) -> dispatch_receipt | blocked_report
-state: reads(qa_checklist.md, references/setup.md when setup or deployment is
+state: reads(the first-load Todo List guardrails, references/setup.md when setup or deployment is
       needed, ../../farplane/phone-chaser/README.md for runtime details,
       runtime env/private config through scripts/dispatch_call.py, ticket.md
       and artifacts through scripts/compile_review_call.py for review calls)
@@ -80,7 +79,7 @@ ticketed before editing the deployable agent.
     send Codex app-server credentials or arbitrary thread selection to the
     phone runtime.
 - [ ] 2. Read guardrails.
-  - [ ] Read `qa_checklist.md` before dispatch.
+  - [ ] Read the first-load Todo List guardrails before dispatch.
   - [ ] Read `references/setup.md` only when setup, deployment, trunks, model
     choices, or credentials are in scope.
 - [ ] 3. Decide the branch.
@@ -100,7 +99,7 @@ ticketed before editing the deployable agent.
   - [ ] For setup/repair, keep tracked runtime edits in
     `../../farplane/phone-chaser/` and private values in local config/env.
 - [ ] 5. Finish gate.
-  - [ ] Apply `qa_checklist.md` again.
+  - [ ] Apply the first-load Todo List guardrails again.
   - [ ] Report whether a LiveKit dispatch was created, skipped, or blocked.
   - [ ] Include dispatch id/room when available; do not include phone numbers,
     keys, SIP credentials, or provider secrets.

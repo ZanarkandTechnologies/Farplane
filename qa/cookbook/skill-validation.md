@@ -30,7 +30,7 @@
 ## Observability
 - `docs/skills/registry.jsonl`
 - `.farplane/generated/graphs/*.json`
-- Target `SKILL.md`, `qa_checklist.md`, and eval task files.
+- Target `SKILL.md` Todo List guardrails and eval task files.
 
 ## Known Gaps
 - Local project skills under `.agents/skills/` are intentionally not promoted

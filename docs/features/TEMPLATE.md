@@ -128,6 +128,17 @@ Legend:
 - Known weak spot:
 - Delete or merge this feature when:
 
+## Retirement Decision
+
+Required when `status: retired` or when this feature removes a live contract.
+Keep it concise and name:
+
+- Decision: what was deleted or retired.
+- Evidence: why the old surface no longer earns its own owner.
+- Replacement owner: where each surviving responsibility moved.
+- Reintroduction guard: the validator, invariant, or explicit boundary that
+  prevents a future agent from recreating the removed pattern.
+
 ## Alternatives Considered
 
 - Option:

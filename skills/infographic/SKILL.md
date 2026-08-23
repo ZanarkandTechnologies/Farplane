@@ -9,15 +9,12 @@ skill_template_version: "0.3.6"
 template_uses:
   skill-template: "0.3.6"
   skill-method-reference: "0.1.0"
-  skill-qa-checklist: "0.1.0"
 methods:
   - id: infographic:handdrawn-saas-wireframe
     class: artifact
     output: handdrawn-saas-wireframe
 common_chains:
   after: ["ai-image-advisor", "visual-qa"]
-eval: evals/evals.json
-qa_checklist: qa_checklist.md
 allowed-tools: Read, Grep, Glob, Bash
 ---
 
@@ -80,7 +77,7 @@ asset must be judged against a visual baseline.
 ## Todo List
 
 - [ ] 1. Bind the brief and source truth.
-   - [ ] Read `qa_checklist.md` before drafting and apply it as preflight
+   - [ ] Read the first-load Todo List guardrails before drafting and apply it as preflight
      guardrails.
    - [ ] Identify audience, objective, central thesis, output format, aspect
      ratio, source material, claims or data, and whether exact text fidelity is
@@ -126,7 +123,7 @@ asset must be judged against a visual baseline.
    - [ ] Save prompts, source refs, rendered files, and notes inside the
      workspace when external generation or rendering happens.
 - [ ] 6. Verify and finish.
-   - [ ] Apply `qa_checklist.md` again to the packet and any final artifact.
+   - [ ] Apply the first-load Todo List guardrails again to the packet and any final artifact.
    - [ ] Use [visual-qa](../visual-qa/SKILL.md) when the asset is user-visible,
      client-facing, or meant to prove style match.
    - [ ] Return the infographic packet, final asset paths or production handoff,

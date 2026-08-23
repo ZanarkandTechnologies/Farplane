@@ -8,9 +8,6 @@ template_uses:
   skill-template: "0.3.9"
   skill-surface-budget: "0.1.0"
   skill-eval-task: "0.2.0"
-  skill-qa-checklist: "0.1.1"
-eval: evals/evals.json
-qa_checklist: qa_checklist.md
 common_chains:
   after: ["close-ticket"]
 allowed-tools: Read, Glob, Grep, Bash
@@ -71,7 +68,7 @@ feature scope.
 ## Todo List
 
 - [ ] 1. Bind the selected ticket, passing QA result, audience, and optional
-  Brand Kit; read `qa_checklist.md` as preflight.
+  Brand Kit; read the first-load Todo List guardrails as preflight.
 - [ ] 2. Inventory only verified ticket sources: problem/scope, diagrams,
   progress, test output, QA captures, review receipts, and residual risks.
 - [ ] 3. Create
@@ -94,7 +91,7 @@ feature scope.
 - [ ] 7. Render `final.mp4`; verify video, frames, duration, and audible
   narration with `ffprobe` plus representative frame/audio inspection. Write
   `media-probe.json`, `evidence-map.json`, and compatible `result.json`.
-- [ ] 8. Send the MP4, evidence map, source artifacts, and `qa_checklist.md` to
+- [ ] 8. Send the MP4, evidence map, source artifacts, and the first-load Todo List guardrails to
   the independent `reviewer` using demo, video, and evidence rubrics. Require
   TAS-A, then link the reviewed artifacts from the ticket and `progress.md`.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->

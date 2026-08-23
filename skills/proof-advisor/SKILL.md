@@ -6,9 +6,6 @@ source: local
 template_uses:
   skill-template: "0.3.0"
   skill-eval-task: "0.2.0"
-  skill-qa-checklist: "0.1.0"
-eval: evals/evals.json
-qa_checklist: qa_checklist.md
 allowed-tools: Read, Glob, Grep, Bash
 
 ---
@@ -41,7 +38,7 @@ proof_advice(claim_or_behavior, risk_context?, source_material?, proof_goal?)
 
 state:
   reads(local contracts, tickets/specs, logs/traces/failures, existing tests,
-        evals/evals.json files, QA checklists, external source notes when needed)
+        evals/evals.json files, Todo List guardrails, external source notes when needed)
   writes(proof plan, case matrix, eval rows, test-case drafts, QA findings,
          or handoff notes)
 
@@ -103,7 +100,7 @@ Run grounding and proof-case design inline by default. Route to:
   [proof-case rubric](references/proof-case-rubric.md).
   - [ ] For a prompt-heavy or judgment-dependent proof plan, first read
     [the golden proof plan](examples/golden/proof-plan.md) with
-    `qa_checklist.md`. Transfer invariants, never fixture facts or wording; an
+    the first-load Todo List guardrails. Transfer invariants, never fixture facts or wording; an
     independent reviewer receives the candidate, golden invariants, QA, and
     held-out context, but not planner scratch reasoning.
   - [ ] Reject near-duplicates, vague goodness checks, hidden-oracle cases,
@@ -135,8 +132,8 @@ Run grounding and proof-case design inline by default. Route to:
   - [ ] For QA, write claim under test, test cases, required evidence, and
     reviewer focus.
 - [ ] 8. Finish with QA.
-  - [ ] Run [proof-case QA checklist](qa_checklist.md) for material case suites.
-  - [ ] If eval rows changed, also run `skills/eval/qa_checklist.md` and the
+  - [ ] Run the first-load Todo List guardrails for material case suites.
+  - [ ] If eval rows changed, also run `skills/eval/SKILL.md` and the
     cheap query-spoiler smoke check when available.
   - [ ] If a skill package changed, run
     `docs/review/rubrics/skill-contract.md` against the changed skill.
@@ -204,7 +201,7 @@ coverage_gaps:
   - load only when the target is difficult for an agent to operate or assert.
 - `references/testing/{crud-web-app,api-backend,ai-app,voice-app,video-app,canvas-app,multiplayer-2p-game}.md`
   - load only the guide matching the system under test.
-- [qa_checklist.md](qa_checklist.md) - run before claiming material proof-case
+- the first-load Todo List guardrails - run before claiming material proof-case
   design is ready.
 - [Golden proof plan](examples/golden/proof-plan.md) - load with QA when
   planning or independently reviewing prompt-heavy or judgment-dependent proof

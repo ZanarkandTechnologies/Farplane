@@ -4,7 +4,6 @@ description: "Turn a new reusable workflow or capability idea into its first Far
 tier: 3
 group: operations
 source: local
-eval: evals/evals.json
 template_uses:
   skill-template: "0.5.0"
   skill-surface-budget: "0.1.0"

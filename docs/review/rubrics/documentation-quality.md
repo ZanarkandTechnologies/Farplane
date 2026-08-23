@@ -81,7 +81,7 @@ docs. Diagnostic for tiny local typo or link fixes.
 
 ## Relationship To Checklists And Metrics
 
-Skill-local documentation QA checklists inspect the artifact during authoring.
+Skill-local documentation Todo List assertions inspect the artifact during authoring.
 This rubric judges readiness after inspection. Metrics can appear as evidence,
 but a metric is not the verdict.
 

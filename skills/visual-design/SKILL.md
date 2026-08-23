@@ -5,7 +5,6 @@ description: "Turn an accepted UI workflow and visual references into a visual s
 tier: 3
 group: operations
 source: local
-eval: evals/evals.json
 allowed-tools: Read, Grep, Glob, web_search
 ---
 

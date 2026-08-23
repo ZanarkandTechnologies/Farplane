@@ -7,11 +7,8 @@ capability:
   kind: integration
 template_uses:
   skill-template: "0.3.7"
-  skill-qa-checklist: "0.1.0"
   skill-eval-task: "0.2.0"
 allowed-tools: Read, Bash
-eval: evals/evals.json
-qa_checklist: qa_checklist.md
 ---
 
 # Worker Artifact Review Request
@@ -51,7 +48,7 @@ worker_artifact_review_request(ticket, artifacts, thread_ref,
 state:
   reads(ticket.md, artifacts, progress.md?,
         farplane/bindings.yaml#operator.review_chase_policy?,
-        telegram-message/SKILL.md, qa_checklist.md)
+        telegram-message/SKILL.md, the first-load Todo List guardrails)
   writes(progress.md Review block, ticket status/claim, send receipt)
 
 gates:
@@ -76,7 +73,7 @@ fails:
 
 - [ ] 1. Bind the review packet.
   - [ ] Read the ticket, artifact, `progress.md`, review question, thread ref,
-        final human gate, and `qa_checklist.md`.
+        final human gate, and the first-load Todo List guardrails.
   - [ ] Read `telegram-message/SKILL.md` and its checklist before sending.
   - [ ] Resolve one phone-openable `original_source_url` for the original task,
         brief, proposal, or source page. For reminders, reuse it from the Review
@@ -107,7 +104,7 @@ fails:
         send receipt. For phone escalation, call `phone-chaser`, increment
         `phone_chaser_count`, and record its sanitized dispatch receipt or
         blocker. Never perform more than the policy-selected action.
-  - [ ] Apply `qa_checklist.md` again before returning.
+  - [ ] Apply the first-load Todo List guardrails again before returning.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 ## Review State
@@ -196,7 +193,7 @@ worker_artifact_review:
   message rules.
 - [pulse-update](../pulse-update/SKILL.md) - chooses at most one due reminder
   and dispatches due signal check-ins.
-- [qa_checklist.md](qa_checklist.md) - start/finish guardrail.
+- the first-load Todo List guardrails - start/finish guardrail.
 
 ## Output
 

@@ -7,7 +7,6 @@ source: local
 template_uses:
   skill-template: "0.2.0"
   skill-eval-task: "0.2.0"
-eval: evals/evals.json
 allowed-tools: Read, Glob, Grep, Bash
 ---
 

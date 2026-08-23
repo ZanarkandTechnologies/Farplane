@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Fast smoke check for obvious skill-eval query leaks.
 
-This is intentionally a narrow heuristic. Use skills/eval/qa_checklist.md with
-a separate reviewer, QA lane, or LLM judgment turn for material eval changes.
+This is intentionally a narrow heuristic. Use skills/eval/SKILL.md Todo List
+guardrails with a separate reviewer, QA lane, or LLM judgment turn for material
+eval changes.
 """
 
 from __future__ import annotations

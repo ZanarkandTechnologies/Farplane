@@ -38,6 +38,12 @@ class LintGitGateTests(unittest.TestCase):
         self.assertNotIn("source_line_growth_staged", ids)
         self.assertNotIn("ticket_closure_gate", ids)
 
+    def test_skill_line_gate_ratcheted_legacy_files(self) -> None:
+        argv = self.config["checks"]["skill_file_line_count"]["argv"]
+        self.assertNotIn("--strict", argv)
+        self.assertIn("--max-lines", argv)
+        self.assertIn("200", argv)
+
 
 if __name__ == "__main__":
     unittest.main()

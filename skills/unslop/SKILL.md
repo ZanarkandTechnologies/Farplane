@@ -9,9 +9,6 @@ upstream_url: https://github.com/cursor/plugins/blob/main/pstack/skills/unslop/S
 template_uses:
   skill-template: "0.4.3"
   skill-eval-task: "0.2.0"
-  skill-qa-checklist: "0.1.1"
-eval: evals/evals.json
-qa_checklist: qa_checklist.md
 ---
 
 # Unslop

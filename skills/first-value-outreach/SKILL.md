@@ -6,10 +6,7 @@ group: sales
 source: local
 template_uses:
   skill-template: "0.3.8"
-  skill-qa-checklist: "0.1.0"
   skill-surface-budget: "0.1.0"
-qa_checklist: qa_checklist.md
-eval: evals/evals.json
 allowed-tools: Read, Glob, Grep, Bash, web_search
 ---
 
@@ -90,7 +87,7 @@ problem or collaboration direction.
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-- [ ] 1. Read `qa_checklist.md` as preflight and bind the contribution case.
+- [ ] 1. Read the first-load Todo List guardrails as preflight and bind the contribution case.
   - [ ] Resolve one person, one `customer-research` report, one traceable
         professional signal, relationship goal, channel, effort cap, and owner
         artifact; route missing person context to `customer-research`.
@@ -153,7 +150,7 @@ problem or collaboration direction.
         approval required before contact or public amplification.
 - [ ] 7. Finish-check, review, and hand off the learning.
   - [ ] Render `templates/first-value-contribution.md`, apply
-        `qa_checklist.md` again, and use `review` for material customer-facing
+        the first-load Todo List guardrails again, and use `review` for material customer-facing
         packages.
   - [ ] Return `send | revise | stop` readiness, the unsent message, artifact
         or builder handoff, evidence gaps, approval gate, and the observation
@@ -180,7 +177,7 @@ problem or collaboration direction.
 
 ## Reference Map
 
-- [First Value Outreach QA checklist](qa_checklist.md) — read before execution
+- the first-load Todo List guardrails — read before execution
   and apply again before completion.
 - [Behavior eval cases](evals/evals.json) — run when changing contribution,
   restraint, routing, or external-action behavior.

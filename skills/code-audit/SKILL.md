@@ -7,10 +7,7 @@ group: operations
 template_uses:
   skill-template: "0.3.7"
   skill-eval-task: "0.2.0"
-  skill-qa-checklist: "0.1.0"
   skill-surface-budget: "0.1.0"
-eval: evals/evals.json
-qa_checklist: qa_checklist.md
 common_chains:
   after: ["goal-advisor"]
 allowed-tools: Read, Glob, Grep, Bash
@@ -69,7 +66,7 @@ the whole audit.
 ## Todo List
 
 - [ ] 1. Bind the audit target.
-  - [ ] Read `qa_checklist.md` as preflight guardrails.
+  - [ ] Read the first-load Todo List guardrails as preflight guardrails.
   - [ ] Name the codebase, PRD/spec refs, architecture refs, project rules,
     runtime commands, ticket context, non-goals, and audit budget.
   - [ ] Stop or narrow scope when the request is actually one known bug,
@@ -106,7 +103,7 @@ the whole audit.
     evidence.
   - [ ] Mark low-confidence ideas as evidence gaps, not implementation tickets.
 - [ ] 7. Finish-check the audit.
-  - [ ] Apply `qa_checklist.md` again to the finished output.
+  - [ ] Apply the first-load Todo List guardrails again to the finished output.
   - [ ] Verify the audit ranks core components, starts from architecture,
     routes execution to owner skills, avoids broad rewrites, and leaves a
     concrete next ticket.

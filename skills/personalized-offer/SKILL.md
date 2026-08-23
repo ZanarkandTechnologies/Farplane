@@ -6,9 +6,6 @@ group: deals
 source: local
 template_uses:
   skill-template: "0.3.2"
-  skill-qa-checklist: "0.1.0"
-qa_checklist: qa_checklist.md
-eval: evals/evals.json
 ---
 
 # Personalized Offer
@@ -61,7 +58,7 @@ Route missing market or qualification work to `agency-opportunity-research`.
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-- [ ] 1. Read `qa_checklist.md` as preflight and bind the offer case.
+- [ ] 1. Read the first-load Todo List guardrails as preflight and bind the offer case.
   - [ ] Resolve stable person, company, relationship, opportunity, usecase, and
         proof refs plus channel, desired action, and owner artifact.
   - [ ] Require one selected person and one accepted usecase/proof direction;
@@ -165,7 +162,7 @@ Route missing market or qualification work to `agency-opportunity-research`.
         edit canonical articles or generated search/graph projections here.
 - [ ] 9. Finish-check and review.
   - [ ] Render `templates/personalized-offer-report.md`, then apply
-        `qa_checklist.md` again.
+        the first-load Todo List guardrails again.
   - [ ] Confirm every personal claim is relevant and sourced/labeled, the offer
         fits the proof, the correction ask is credible, and drafts remain unsent.
   - [ ] Use `review` before marking material customer-facing copy or a Wiki delta
@@ -188,7 +185,7 @@ Route missing market or qualification work to `agency-opportunity-research`.
 - Canonical articles hold concise durable context; full artifacts remain linked reports.
 ## Reference Map
 
-- [Personalized Offer QA checklist](qa_checklist.md) — read before execution and apply again before completion.
+- the first-load Todo List guardrails — read before execution and apply again before completion.
 - [Behavior eval cases](evals/evals.json) — run when changing personalization, proof, Wiki, or outreach gates.
 - [Agency Opportunity Research](../agency-opportunity-research/SKILL.md) — use when qualification or relationship strategy is missing.
 - [Manage Wiki](../manage-wiki/SKILL.md) — use for sourced durable Wiki preview or apply intent.

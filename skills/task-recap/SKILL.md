@@ -8,10 +8,7 @@ capability:
   kind: shortcut
 template_uses:
   skill-template: "0.4.0"
-  skill-qa-checklist: "0.1.0"
   skill-surface-budget: "0.1.0"
-eval: evals/evals.json
-qa_checklist: qa_checklist.md
 allowed-tools: Read, Glob, Grep, Bash
 ---
 
@@ -90,7 +87,7 @@ fails: transcript-only certainty; fabricated task history; completion claim from
     repeat” line.
   - [ ] Preserve accepted and rejected decisions, the latest user ask, open questions, and response-ready context.
 - [ ] 5. Finish with bounded evidence and routing.
-  - [ ] Apply [runtime QA](qa_checklist.md) and list sources used, conflicts, and coverage gaps.
+  - [ ] Apply the first-load Todo List guardrails and list sources used, conflicts, and coverage gaps.
   - [ ] Return one safest next action or reply posture as the final line after
     a full recap's detail ledger; state an operator-visible Goal-compilation
     handoff only when the task is an active Goal and execution is requested.
@@ -185,7 +182,7 @@ append the full source-labeled timeline when the operator asks what happened.”
 
 - [Ticket and Goal Packet resume contract](../../tickets/README.md) — read when
   a ticket or Goal Packet is available.
-- [Runtime QA](qa_checklist.md) — read before returning the recap and reapply
+- the first-load Todo List guardrails — read before returning the recap and reapply
   when the recap will support a material decision.
 - [Behavior eval cases](evals/evals.json) — use to test source coverage,
   conflicts, problem history, gaps, and worktree scope.

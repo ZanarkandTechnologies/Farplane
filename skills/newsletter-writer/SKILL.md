@@ -8,8 +8,6 @@ template_uses:
   skill-template: "0.4.0"
   skill-surface-budget: "0.1.0"
 allowed-tools: Read, Glob, Grep, Write
-eval: evals/evals.json
-qa_checklist: qa_checklist.md
 ---
 
 # Newsletter Writer
@@ -36,7 +34,7 @@ newsletter_writer(audience, raw_material, goal,
   -> newsletter_blueprint? + newsletter_issue + send_notes + source_receipt
 state:
   reads(verified source material, prior issues or voice guide, audience/list
-        expectation, qa_checklist.md)
+        expectation, the first-load Todo List guardrails)
   writes(draft artifacts only when the caller supplies an owned path)
 owns: reader-facing newsletter structure and prose
 gates:
@@ -60,7 +58,7 @@ search articles. This skill never publishes or sends.
 ## Todo List
 
 - [ ] 1. Bind the reader, promise, evidence, voice, and issue goal.
-  - [ ] Read `qa_checklist.md` before drafting.
+  - [ ] Read the first-load Todo List guardrails before drafting.
   - [ ] Resolve who subscribes, what they expect, the verified raw material,
         the relationship or promotional goal, and any prior issues or voice
         examples. If voice evidence is absent, set `voice_mode: hypothesis` and
@@ -96,7 +94,7 @@ search articles. This skill never publishes or sends.
   - [ ] Editorial issues normally use 300–800 words; release digests may be
         shorter. Never pad, and keep every claim attributable and phone-scannable.
 - [ ] 5. Return the issue, receipt, and approval gate.
-  - [ ] Apply `qa_checklist.md`, report the selected format, voice mode, source
+  - [ ] Apply the first-load Todo List guardrails, report the selected format, voice mode, source
         gaps, CTA count, promotion placement, and next-issue seeds.
   - [ ] Keep internal proof references out of reader copy unless already
         public. Require human fact, privacy, voice, link, media, and publication
@@ -178,7 +176,7 @@ See the [weekly office showcase example](examples/weekly-office-showcase/example
 
 ## Reference Map
 
-- [Runtime newsletter QA](qa_checklist.md) — read before drafting and apply
+- the first-load Todo List guardrails — read before drafting and apply
   again before returning an issue.
 - [Weekly office showcase example](examples/weekly-office-showcase/example.md)
   — read when turning project Executive Updates into a release digest.

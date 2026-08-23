@@ -8,10 +8,7 @@ source: local
 template_uses:
   skill-template: "0.3.8"
   skill-eval-task: "0.2.0"
-  skill-qa-checklist: "0.1.0"
   skill-surface-budget: "0.1.0"
-eval: evals/evals.json
-qa_checklist: qa_checklist.md
 allowed-tools: Read, Grep, Glob
 ---
 
@@ -108,7 +105,7 @@ phase-like skill recursively at the same scope.
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-- [ ] 1. Bind the interior-design inputs and read `qa_checklist.md` as
+- [ ] 1. Bind the interior-design inputs and read the first-load Todo List guardrails as
   preflight guardrails.
   - [ ] If no navigable interior exists, route to `visual-design` and stop the
     interior workflow. Begin the response with the required explicit handoff:
@@ -160,7 +157,7 @@ phase-like skill recursively at the same scope.
   - [ ] Require the operator to accept or reject this artifact; walkability,
     collision, compile, console, and occupancy checks remain guard metrics.
 - [ ] 7. Write the interior brief and complete the finish gate.
-  - [ ] Apply `qa_checklist.md` again, keep the direction reproducible from
+  - [ ] Apply the first-load Todo List guardrails again, keep the direction reproducible from
     files, use independent review for material changes, then hand accepted
     spatial constraints to the scene implementer and remaining UI styling to
     [visual-design](../visual-design/SKILL.md).
@@ -193,7 +190,7 @@ phase-like skill recursively at the same scope.
   direction must survive into a ticket, delegation, or implementation pass.
 - [isometric office reset](examples/isometric-office-reset/example.md) - read
   when repeated size, scale, palette, or room-placement changes failed.
-- [runtime QA checklist](qa_checklist.md) - read at invocation and apply again
+- the first-load Todo List guardrails - read at invocation and apply again
   before accepting the interior direction.
 
 ## Output

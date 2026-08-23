@@ -9,10 +9,7 @@ group: intelligence
 skill_template_version: "0.3.8"
 template_uses:
   skill-template: "0.3.8"
-  skill-qa-checklist: "0.1.0"
   skill-surface-budget: "0.1.0"
-eval: evals/evals.json
-qa_checklist: qa_checklist.md
 allowed-tools: Read, Write, Grep, Glob, Bash
 ---
 
@@ -73,7 +70,7 @@ need `impl-plan`; use that only for a software or schema change to the system.
 ## Todo List
 
 - [ ] 1. Bind the Wiki changeset or return its exact blocker.
-  - [ ] Read `qa_checklist.md`; resolve `project_root`, `source_ref`, optional
+  - [ ] Read the first-load Todo List guardrails; resolve `project_root`, `source_ref`, optional
         `page_deltas`, and the active `entity_scope` from the caller or project
         operating context. Do not treat every capitalized noun as an entity.
   - [ ] Bind `publication_intent`. Explicit save, add, update, write, or publish
@@ -114,7 +111,7 @@ need `impl-plan`; use that only for a software or schema change to the system.
         sentence; never author an inverse link, predicate, self-link, unresolved
         link, or separate edge record. Create required new articles in the same
         changeset before linking them.
-  - [ ] Apply `qa_checklist.md` to the staged diff. Publish canonical Markdown
+  - [ ] Apply the first-load Todo List guardrails to the staged diff. Publish canonical Markdown
         only when every required resolution is non-ambiguous and all IDs,
         sources, notation, question refs, and links validate.
   - [ ] For `preview`, finish resolution and validation but write nothing; show

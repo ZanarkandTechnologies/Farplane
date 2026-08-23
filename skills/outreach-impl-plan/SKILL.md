@@ -6,10 +6,7 @@ group: sales
 source: local
 template_uses:
   skill-template: "0.3.8"
-  skill-qa-checklist: "0.1.0"
   skill-surface-budget: "0.1.0"
-qa_checklist: qa_checklist.md
-eval: evals/evals.json
 allowed-tools: Read, Glob, Grep, Bash, web_search
 ---
 
@@ -49,7 +46,7 @@ outreach_impl_plan(
 
 state: reads(opportunity research, lead-scout packets, customer research,
              first-value and offer reports, proof assets, CRM entities,
-             metrics contracts, qa_checklist.md);
+             metrics contracts, the first-load Todo List guardrails);
        writes(artifact_owner or
               .farplane/outreach-impl-plan/reports/YYYY-MM-DD-<campaign>.md)
 gates: objective_and_learning_named; evidence_boundary_visible;
@@ -97,7 +94,7 @@ external action.
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-- [ ] 1. Bind the campaign brief and read `qa_checklist.md` as preflight.
+- [ ] 1. Bind the campaign brief and read the first-load Todo List guardrails as preflight.
   - [ ] Resolve campaign idea, business objective, learning question,
         relationship strategy, audience, candidate evidence, proof assets,
         channels, budgets, review point, constraints, and artifact owner.
@@ -173,7 +170,7 @@ external action.
         path or the default reports directory and leave state `draft` or
         `awaiting_approval` unless exact acceptance evidence already exists.
 - [ ] 6. Finish-check and hand off execution.
-  - [ ] Apply `qa_checklist.md` again and use `review` for material campaigns.
+  - [ ] Apply the first-load Todo List guardrails again and use `review` for material campaigns.
   - [ ] Return the plan verdict, campaign artifact, advisor action list,
         blocked actions, proposed CRM delta, explicit approval request, and the
         first execution action. Route an accepted long-running campaign to a
@@ -199,7 +196,7 @@ external action.
 
 ## Reference Map
 
-- [Outreach Impl Plan QA checklist](qa_checklist.md) — read before planning and
+- the first-load Todo List guardrails — read before planning and
   apply again before returning a campaign.
 - [Behavior eval cases](evals/evals.json) — run when changing campaign lock,
   advisor routing, CRM, metrics, or permission behavior.

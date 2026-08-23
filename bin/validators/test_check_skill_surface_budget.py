@@ -15,7 +15,6 @@ def write_skill(
     *,
     subscribed: bool,
     todos: int = 0,
-    qa: int = 0,
     evals: int = 0,
     numbered: bool = False,
 ) -> None:
@@ -50,11 +49,6 @@ def write_skill(
         ).replace("\n\n---", "\n---"),
         encoding="utf-8",
     )
-    if qa:
-        (skill_dir / "qa_checklist.md").write_text(
-            "\n".join(f"- [ ] Check {index}" for index in range(1, qa + 1)),
-            encoding="utf-8",
-        )
     if evals:
         eval_path = skill_dir / "evals" / "evals.json"
         eval_path.parent.mkdir(parents=True)
@@ -73,7 +67,7 @@ class SkillSurfaceBudgetTests(unittest.TestCase):
     def test_skips_unsubscribed_over_budget_skill(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
-            write_skill(root, "plain", subscribed=False, todos=99, qa=99, evals=99)
+            write_skill(root, "plain", subscribed=False, todos=99, evals=99)
             result = collect_budget_results(root)
             self.assertEqual(result.checked, 0)
             self.assertEqual(result.skipped, 1)
@@ -82,7 +76,7 @@ class SkillSurfaceBudgetTests(unittest.TestCase):
     def test_subscribed_skill_passes_when_under_budget(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
-            write_skill(root, "capped", subscribed=True, todos=10, qa=5, evals=5)
+            write_skill(root, "capped", subscribed=True, todos=10, evals=5)
             result = collect_budget_results(root)
             self.assertEqual(result.checked, 1)
             self.assertEqual(result.skipped, 0)
@@ -91,7 +85,7 @@ class SkillSurfaceBudgetTests(unittest.TestCase):
     def test_subscribed_numbered_skill_passes_when_under_budget(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
-            write_skill(root, "numbered", subscribed=True, todos=10, qa=5, evals=5, numbered=True)
+            write_skill(root, "numbered", subscribed=True, todos=10, evals=5, numbered=True)
             result = collect_budget_results(root)
             self.assertEqual(result.checked, 1)
             self.assertEqual(result.skipped, 0)
@@ -100,12 +94,12 @@ class SkillSurfaceBudgetTests(unittest.TestCase):
     def test_subscribed_skill_reports_all_over_budget_surfaces(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
-            write_skill(root, "noisy", subscribed=True, todos=11, qa=6, evals=6)
-            result = collect_budget_results(root, limits=SurfaceLimits(10, 5, 5))
+            write_skill(root, "noisy", subscribed=True, todos=11, evals=6)
+            result = collect_budget_results(root, limits=SurfaceLimits(10, 5))
             self.assertEqual(result.checked, 1)
             self.assertEqual(
                 [violation.surface for violation in result.violations],
-                ["skill_todos", "qa_checklist", "eval_tasks"],
+                ["skill_todos", "eval_tasks"],
             )
 
 

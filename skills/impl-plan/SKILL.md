@@ -6,10 +6,7 @@ source: local
 template_uses:
   skill-template: "0.3.0"
   skill-eval-task: "0.2.0"
-  skill-qa-checklist: "0.1.0"
 group: operations
-eval: evals/evals.json
-qa_checklist: qa_checklist.md
 common_chains:
   after: ["goal-advisor"]
 allowed-tools: Read, Glob, Grep
@@ -103,7 +100,7 @@ design baseline; never replace it with a chat-only summary or a new schema.
 - [ ] 1. Bind the objective and ticket.
   - [ ] Read or create the selected ticket; resolve only missing inputs that
     materially change scope, architecture, proof, permission, or Goal setup.
-  - [ ] Read [qa_checklist.md](qa_checklist.md) before material planning.
+  - [ ] Read the first-load Todo List guardrails before material planning.
 - [ ] 2. Inspect the minimum repository and accepted context.
   - [ ] Name real code/test/doc seams, typed movement when relevant, existing
     helpers/components/assets, and implementation evidence.
@@ -170,7 +167,7 @@ design baseline; never replace it with a chat-only summary or a new schema.
     first-load and Markdown category counts, then consolidate duplicated policy
     or bulky evidence when pressure is reported.
 - [ ] 8. Review and hand off.
-  - [ ] Reapply [qa_checklist.md](qa_checklist.md) to the completed ticket
+  - [ ] Reapply the first-load Todo List guardrails to the completed ticket
     after drafting and after any repair. Resolve every `revise`, stop on
     `block`, and record the finish-gate verdict before reviewer handoff.
   - [ ] Material plans require native reviewer judgment against

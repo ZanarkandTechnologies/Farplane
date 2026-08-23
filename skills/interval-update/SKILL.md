@@ -7,8 +7,6 @@ source: local
 template_uses:
   skill-template: "0.2.0"
   skill-eval-task: "0.2.0"
-eval: evals/evals.json
-qa_checklist: qa_checklist.md
 allowed-tools: Read, Glob, Grep, Bash
 ---
 
@@ -68,7 +66,7 @@ fails: raw transcript copying; week-wide Daily rescans; generic memory buckets;
 ## Todo List
 
 - [ ] 1. Bind one window, provider, and write policy.
-  - [ ] Read `qa_checklist.md`; resolve `project_root`, cadence, bounded window,
+  - [ ] Read the first-load Todo List guardrails; resolve `project_root`, cadence, bounded window,
         context refs, board authority, and knowledge write authority.
   - [ ] Run `scripts/resolve_evidence_binding.py --project-root <project_root>`.
         Obey one configured provider and its filesystem policy; failures are
@@ -121,7 +119,7 @@ fails: raw transcript copying; week-wide Daily rescans; generic memory buckets;
         changed paths, and validation. Receipts plus destinations make reruns
         idempotent without a global ledger.
 - [ ] 7. Finish-check and return.
-  - [ ] Reapply `qa_checklist.md`; return the report, current/finalized draft,
+  - [ ] Reapply the first-load Todo List guardrails; return the report, current/finalized draft,
         receipt, candidate dispositions, changed owners, source gaps,
         operator-needed items, next owner, and no-ticket-execution proof.
   - [ ] Explicitly receipt that one bounded bundle fed both phases and that

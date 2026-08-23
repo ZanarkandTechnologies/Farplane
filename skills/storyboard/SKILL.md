@@ -6,11 +6,8 @@ group: marketing
 source: local
 template_uses:
   skill-template: "0.3.7"
-  skill-qa-checklist: "0.1.1"
   skill-eval-task: "0.2.0"
   skill-surface-budget: "0.1.0"
-eval: evals/evals.json
-qa_checklist: qa_checklist.md
 common_chains:
   after: ["asset-advisor", "audio-advisor", "avatar-advisor", "remotion", "social-content"]
 allowed-tools: Read, Grep, Glob, Bash
@@ -39,7 +36,7 @@ storyboard(idea_or_brief, icp?, proof?, platform?, duration?, style?, cta?, refe
 
 state:
   reads(user brief, supplied proof/examples/swipes, active ticket?,
-        qa_checklist.md, examples/remotion-proof-video/example.md when useful)
+        the first-load Todo List guardrails, examples/remotion-proof-video/example.md when useful)
   writes(storyboard artifact or content-ticket section when durable output is requested)
 
 gates:
@@ -81,7 +78,7 @@ scene handoff, asset needs, proof, and blocker conditions.
   - [ ] Resolve or state assumptions for ICP, viewer promise, core idea, proof
     or reason to believe, platform, duration, style, CTA, constraints, and
     artifact owner.
-  - [ ] Read `qa_checklist.md` as preflight guardrails.
+  - [ ] Read the first-load Todo List guardrails as preflight guardrails.
 - [ ] 2. Choose the artifact home.
   - [ ] Use `tickets/TASK-XXXX/artifacts/storyboard.md` when an active
     ticket owns the work.
@@ -234,7 +231,7 @@ scene handoff, asset needs, proof, and blocker conditions.
   - [ ] For content-impl-plan handoffs, emit low-fidelity visual storyboard
     image paths plus notes tied to element IDs; text-only panels and intended
     paths remain draft-only.
-  - [ ] Apply `qa_checklist.md` again before calling the plan production-ready.
+  - [ ] Apply the first-load Todo List guardrails again before calling the plan production-ready.
   - [ ] Use `review` for material campaign claims, high-visibility output, or
     taste-sensitive plans that will guide real production.
 - [ ] 7. Output the handoff without doing production by default.
@@ -337,7 +334,7 @@ of a Remotion-ready creative ticket.
 
 ## Reference Map
 
-- `qa_checklist.md` - read at start and finish for storyboard QA.
+- the first-load Todo List guardrails - read at start and finish for storyboard QA.
 - `references/plain-language-hook-lab.md` - load for short-form, latest-news,
   title-led, or retention-sensitive work before drafting the script.
 - `examples/remotion-proof-video/example.md` - load when a Remotion-ready

@@ -27,7 +27,6 @@ TODO_RE = re.compile(
     re.DOTALL,
 )
 TOP_LEVEL_TODO_RE = re.compile(r"^- \[ \] \d+\. ")
-QA_CHECKBOX_RE = re.compile(r"^- \[ \] ")
 
 
 def skill_dir_from_arg(value: str) -> Path:
@@ -47,23 +46,6 @@ def todo_units(skill_dir: Path) -> list[str]:
     if not match:
         return []
     return [line for line in match.group(1).splitlines() if TOP_LEVEL_TODO_RE.match(line)]
-
-
-def qa_units(skill_dir: Path) -> list[str]:
-    path = skill_dir / "qa_checklist.md"
-    if not path.exists():
-        return []
-    units: list[str] = []
-    in_fence = False
-    for line in path.read_text(encoding="utf-8").splitlines():
-        if line.startswith("```"):
-            in_fence = not in_fence
-            continue
-        if in_fence:
-            continue
-        if QA_CHECKBOX_RE.match(line):
-            units.append(line)
-    return units
 
 
 def eval_units(skill_dir: Path) -> list[str]:
@@ -94,11 +76,10 @@ def build_minimizer_report(skill_dir: Path, surface: str, limit: int) -> str:
     counts = count_skill_surfaces(skill_dir)
     surface_map = {
         "todos": ("skill_todos", counts.skill_todos, todo_units(skill_dir)),
-        "qa": ("qa_checklist", counts.qa_checklist, qa_units(skill_dir)),
         "eval": ("eval_tasks", counts.eval_tasks, eval_units(skill_dir)),
     }
     if surface not in surface_map:
-        raise SystemExit("--surface must be one of: todos, qa, eval")
+        raise SystemExit("--surface must be one of: todos, eval")
 
     label, count, units = surface_map[surface]
     overflow = max(0, count - limit)
@@ -140,7 +121,7 @@ def build_minimizer_report(skill_dir: Path, surface: str, limit: int) -> str:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("skill", help="skill directory or SKILL.md path")
-    parser.add_argument("--surface", choices=["todos", "qa", "eval"], required=True)
+    parser.add_argument("--surface", choices=["todos", "eval"], required=True)
     parser.add_argument("--limit", type=int, required=True)
     args = parser.parse_args()
 

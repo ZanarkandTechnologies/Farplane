@@ -17,7 +17,7 @@ Rules:
 - Package-local metadata lives in `skills/*/SKILL.md` frontmatter. Keep it
   minimal and typed by `bin/core/skill_contract.py`:
   required identity/routing fields, optional capability contract, template,
-  local-surface, method, planner, and external-source fields only. Do not add
+  skill-UI, method, planner, and external-source fields only. Do not add
   free-form `metadata`, tags, or license blobs.
 - For `source: external` skills, keep Farplane-specific wrapper policy in the
   local caller skill instead of editing upstream-owned command/reference bodies.
@@ -68,5 +68,6 @@ Rules:
 - If a field can be derived from file paths, existing frontmatter, direct todo
   lists, or Markdown links, derive it in the sync script rather than duplicating
   it in frontmatter. Structural `FEAT-####` adoption belongs to versioned
-  template metadata; skills declare only local eval, QA checklist, and skill UI
-  surfaces when those surfaces exist.
+  template metadata; `evals/evals.json` is discovered by path and `skill_ui` is
+  the only optional local surface declared in frontmatter. Do not add
+  `qa_checklist.md`; express normal guardrails in Todo List Rule/Assert blocks.

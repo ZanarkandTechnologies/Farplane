@@ -26,7 +26,6 @@ methods:
   - id: research:source-synthesis
     class: artifact
     output: source-synthesis-report
-eval: evals/evals.json
 allowed-tools: Read, Glob, Grep, web_search, documentation-searcher
 ---
 

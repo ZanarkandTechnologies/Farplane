@@ -239,7 +239,6 @@ class GenerateSkillGraphTests(unittest.TestCase):
                 "description": "Calls target skill.",
                 "has_checklist": True,
                 "eval": "evals/evals.json",
-                "qa_checklist": "qa_checklist.md",
                 "skill_links": ["target-skill"],
                 "todo_skill_refs": ["target-skill"],
             },
@@ -251,6 +250,7 @@ class GenerateSkillGraphTests(unittest.TestCase):
                 "path": "skills/target-skill/SKILL.md",
                 "description": "Receives refs.",
                 "has_checklist": False,
+                "eval": "evals/evals.json",
                 "skill_links": [],
             },
         ]
@@ -280,7 +280,7 @@ class GenerateSkillGraphTests(unittest.TestCase):
         self.assertEqual(signals["composition_heat"]["hot_referrer_count"], 1)
         self.assertEqual(signals["composition_heat"]["window_referrer_invocations"], 4)
         self.assertEqual(signals["composition_heat"]["top_referrers"][0]["skill"], "hot-caller")
-        self.assertEqual(signals["maintenance_recommendation"], "refine")
+        self.assertEqual(signals["maintenance_recommendation"], "keep")
 
     def test_unique_orchestrator_without_heat_is_kept(self) -> None:
         rows = [

@@ -6,8 +6,6 @@ tier: 3
 group: marketing
 source: local
 allowed-tools: Read, Grep, Glob, Bash
-qa_checklist: qa_checklist.md
-eval: evals/evals.json
 common_chains:
   after: ["asset-advisor"]
 ---
@@ -92,7 +90,7 @@ when the request earns that depth.
 
 ## 5. Approve And Hand Off
 
-- [ ] Before spec approval, read [qa_checklist](./qa_checklist.md) and confirm
+- [ ] Before spec approval, read the first-load Todo List guardrails and confirm
   the chosen execution depth matches the quality target.
 - [ ] Return `LANDING_SPEC.md` with `status: approved | blocked` and any
   accepted advisor/asset receipts to the calling implementation planner. For
@@ -171,7 +169,7 @@ one software Change Plan; this skill never creates a child implementation plan.
 
 1. **Define the offer.** Name the product/person/place/object/category and the literal value proposition.
 1a. **Set the quality target.** Use the Ambition Gate before section planning.
-   If target is `stunning` or `premium`, load `qa_checklist.md` plus the
+   If target is `stunning` or `premium`, load the first-load Todo List guardrails plus the
    relevant motion/media references before writing the spec.
 2. **Interview with gates.** Ask one high-leverage question at a time when
    audience, narrative, taste, non-goals, or decision boundaries are vague. Use
@@ -386,7 +384,7 @@ For landing pages with reusable formulas or inspiration references:
   discovered, reference-led, generated, or rights-sensitive production media.
 - `references/designer-judgment.md` - final 5% premium quality rubric.
 - `references/gotchas.md` - common landing-page mistakes.
-- `qa_checklist.md` - preflight and final guardrails for ambition fit,
+- the first-load Todo List guardrails - preflight and final guardrails for ambition fit,
   effect-use, downgrade honesty, handoff boundaries, and downstream review
   requirements.
 - `SKILL.md` Todo List - ordered modern scroll-scrub landing recipe with competitor analysis, inline tradeoff decisions, asset generation, scroll-scrub instrumentation, and QA handoff.

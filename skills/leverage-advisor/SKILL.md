@@ -6,9 +6,6 @@ source: local
 template_uses:
   skill-template: "0.2.0"
   skill-eval-task: "0.2.0"
-  skill-qa-checklist: "0.1.0"
-eval: evals/evals.json
-qa_checklist: qa_checklist.md
 allowed-tools: Read, Glob, Grep
 
 ---
@@ -172,7 +169,7 @@ the chosen next step needs its own artifact, budget, or proof surface.
      surface or harness lever.
    - [ ] Name `leverage-rollout` when the recommended play should be proven
      through exemplar runs before rollout.
-- [ ] 8. Return the leverage plan and apply [the QA checklist](qa_checklist.md).
+- [ ] 8. Return the leverage plan and apply the first-load Todo List guardrails.
    - [ ] Subject grounding and progress evidence are concrete.
    - [ ] Recommendation is not generic strategy.
    - [ ] Ranked frontier, next wave, first proof, rejected moves, and replan

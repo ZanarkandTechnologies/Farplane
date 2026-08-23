@@ -8,8 +8,6 @@ template_uses:
   skill-template: "0.3.7"
   skill-surface-budget: "0.1.0"
 allowed-tools: Read, Glob, Grep, web_search
-eval: evals/evals.json
-qa_checklist: qa_checklist.md
 common_chains:
   after: ["landing-page", "social-content", "storyboard"]
 ---
@@ -41,7 +39,7 @@ copywriting_advisor(demographic_group, product, page_goal?,
   -> copy_packet + copy_qa_verdict | blocked_report
 state:
   reads(user brief, supplied voice-of-customer notes, proof, source/swipe/Tasty
-        Pack material, existing page copy, qa_checklist.md,
+        Pack material, existing page copy, the first-load Todo List guardrails,
         references/source-mining-and-swipe-workflow.md when source mining matters,
         current web sources when external guidance matters)
   writes(copy packet only when caller owns an artifact path)
@@ -74,7 +72,7 @@ work. Use `review` before high-visibility final public copy.
   - [ ] Resolve demographic group, emotional context, product, offer, page
         goal, proof, tone, CTA, output stage, source_pack, swipe_file, and
         Tasty Pack/reference availability.
-  - [ ] Read `qa_checklist.md` as preflight guardrails.
+  - [ ] Read the first-load Todo List guardrails as preflight guardrails.
 - [ ] 2. Mine source material before writing.
   - [ ] Load
         [source-mining-and-swipe-workflow](references/source-mining-and-swipe-workflow.md)
@@ -119,7 +117,7 @@ work. Use `review` before high-visibility final public copy.
   - [ ] Keep emotional language tied to a specific situation, pain, desire,
         proof point, or product behavior.
 - [ ] 6. Finish with QA and handoff.
-  - [ ] Apply `qa_checklist.md` to the finished packet.
+  - [ ] Apply the first-load Todo List guardrails to the finished packet.
   - [ ] Name source mode, source coverage gaps, line count, strongest message,
         riskiest claim, final public-copy human gate, and next owner.
   - [ ] If the operator wants reusable swipe/Tasty Pack ingestion rather than
@@ -196,7 +194,7 @@ compact page-copy packet with a message spine, word bank, and QA verdict.
 
 ## Reference Map
 
-- [qa_checklist.md](qa_checklist.md) - read before drafting and apply before
+- the first-load Todo List guardrails - read before drafting and apply before
   completion.
 - [source-mining-and-swipe-workflow](references/source-mining-and-swipe-workflow.md)
   - read when source material, Tasty Pack, swipes, reviews, competitor pages,

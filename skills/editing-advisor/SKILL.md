@@ -6,11 +6,8 @@ group: marketing
 source: local
 template_uses:
   skill-template: "0.3.9"
-  skill-qa-checklist: "0.1.1"
   skill-eval-task: "0.2.0"
   skill-surface-budget: "0.1.0"
-eval: evals/evals.json
-qa_checklist: qa_checklist.md
 methods:
   - id: editing-advisor:structure
     class: internal
@@ -78,7 +75,7 @@ editing_advisor(brief, storyboard?, timing_master?, brand_kit?, editing_elements
 state:
   reads(user brief, storyboard/scene map, timing-master media or cue sheet,
         Resource Bank editing elements, optional Brand Kit editing snapshot,
-        explicit creative-pattern packets, qa_checklist.md)
+        explicit creative-pattern packets, the first-load Todo List guardrails)
   writes(ticket-scoped editing direction packet only when durable execution is requested)
 
 gates:
@@ -255,7 +252,7 @@ Do not render or generate provider media inside this skill.
 
 - [ ] 1. Bind the brief, storyboard or source sequence, renderer, constraints,
   platform/frame, and one timing master.
-  - [ ] Read `qa_checklist.md` as preflight guardrails.
+  - [ ] Read the first-load Todo List guardrails as preflight guardrails.
 - [ ] 2. Retrieve editing patterns from the Resource Bank or bind complete
   caller-supplied/Brand Kit packets.
   - [ ] Preserve provenance, description, why, golden example, golden recipe,
@@ -295,7 +292,7 @@ Do not render or generate provider media inside this skill.
   - [ ] Include accepted files or blockers, composition/layer order, timing,
     captions, transitions, motion parameters, output spec, and frame/range or
     render checks. A recipe alone is not rendered proof.
-- [ ] 9. Apply `qa_checklist.md` again and route material direction to
+- [ ] 9. Apply the first-load Todo List guardrails again and route material direction to
   independent review before claiming readiness.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
@@ -329,7 +326,7 @@ restrained tactile cadence.
 
 - `references/resource-bank-retrieval.md` - load for creative-pattern discovery,
   source precedence, current adapter commands, or retrieval blockers.
-- `qa_checklist.md` - read at start and finish for runtime guardrails.
+- the first-load Todo List guardrails - read at start and finish for runtime guardrails.
 - `../content-impl-plan/SKILL.md` - parent production-plan route and complete
   element realization packets.
 - `../asset-advisor/SKILL.md` - source-media discovery, preparation, and

@@ -45,10 +45,10 @@ templates, or skill maintenance rules changed.
   or artifact proof commands are explicit and runnable.
 - [ ] `source-of-truth-clear`: Generated copies, registries, plugin outputs, or
   installed copies are not treated as a second source of truth.
-- [ ] `qa-owned`: A touched `qa_checklist.md` has an explicit `keep | migrate |
-  delete` decision. Only skill-specific runtime, safety, or preflight guards
-  remain; structure, judgment, and deterministic rules use their canonical
-  node, golden, eval, rubric, or validator owners.
+- [ ] `guardrail-owned`: Normal execution guards live in Todo List `Rule`/
+  `Assert` blocks; repeatable behavior, deterministic rules, and material
+  judgment use their canonical eval, validator, QA, or review owners. No
+  `qa_checklist.md` sidecar is introduced.
 
 ### Blocker Checks
 
@@ -115,4 +115,4 @@ path is `generic`; important domain skills require `differentiated`. Claim
 - Repeated wording that will drift across `SKILL.md`, references, and templates
 - Todo nodes whose Rule or Assert merely restates their title
 - Goldens that show a polished output but hide the decisive workflow moves
-- QA sidecars containing shared structure checks or generic finish ceremony
+- Reintroduced QA sidecars or duplicated generic finish ceremony

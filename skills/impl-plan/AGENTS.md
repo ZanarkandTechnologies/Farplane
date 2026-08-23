@@ -4,7 +4,6 @@
 
 - `SKILL.md`
 - `prompts/plan.md`
-- `qa_checklist.md`
 - `references/examples.md`
 - `references/visual-companion-template.md`
 - `scripts/validate_visual_companion.py`
@@ -42,7 +41,7 @@
 
 ## Checks
 
-- `SKILL.md`, prompt, README, examples, QA checklist, and validators agree.
+- `SKILL.md`, prompt, README, examples, Todo List guardrails, and validators agree.
 - The canonical ticket template is the only active section catalogue.
 - Simple backend plans do not manufacture advisor work, diagrams, services,
   configuration, or broad research.

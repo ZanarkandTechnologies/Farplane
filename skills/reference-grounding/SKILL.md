@@ -7,11 +7,8 @@ source: local
 template_uses:
   skill-template: "0.1.0"
   skill-eval-task: "0.2.0"
-  skill-qa-checklist: "0.1.0"
   skill-surface-budget: "0.1.0"
-eval: evals/evals.json
 allowed-tools: Read, Glob, Grep, web_search, documentation-searcher
-qa_checklist: qa_checklist.md
 
 ---
 
@@ -44,7 +41,7 @@ source class checked, or a brief local-only reason.
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-- [ ] 1. Read `qa_checklist.md` as preflight guardrails when using this skill
+- [ ] 1. Read the first-load Todo List guardrails as preflight guardrails when using this skill
   for material claims or recommendations.
 - [ ] 2. State the one claim, decision, expectation, or comparison that needs
   grounding.
@@ -76,7 +73,7 @@ source class checked, or a brief local-only reason.
   caller's next step, usually `research:official-docs`, `research:code-patterns`,
   `research:parity`, `research:gap`, or `research:source-synthesis`.
 - [ ] 10. Review before completion.
-  - [ ] Apply `qa_checklist.md` again for material claims and delegate
+  - [ ] Apply the first-load Todo List guardrails again for material claims and delegate
     independent review when the evidence supports a durable or high-stakes decision.
   - [ ] For changes to this skill, require a separate review pass before claiming
   the update is ready.

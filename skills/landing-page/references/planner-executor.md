@@ -115,8 +115,8 @@ enforce them. This planning advisor does not perform the steps itself.
 - Run `scripts/landing_spec_lint.py <LANDING_SPEC.md>` before build.
 - Build from the section matrix; do not invent missing sections during
   implementation.
-- Before implementation, run the Ambition Gate from `SKILL.md` and apply
-  `qa_checklist.md` as preflight. For `stunning` or `premium`, a basic static
+- Before implementation, run the Ambition Gate and relevant Todo List
+  assertions from `SKILL.md` as preflight. For `stunning` or `premium`, a basic static
   page is a violation unless the artifact is explicitly labeled as a blocker or
   mechanics prototype.
 - Generate or collect the approved media assets before the final build claim.

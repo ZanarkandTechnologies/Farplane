@@ -4,7 +4,6 @@ description: "Turn a high-level project or business idea into a Farplane charter
 tier: 3
 group: operations
 source: local
-eval: evals/evals.json
 template_uses:
   skill-template: "0.2.0"
   skill-eval-task: "0.2.0"
@@ -283,7 +282,7 @@ skill to root `skills/` only after repeated proof shows cross-project reuse.
      `farplane/bindings.yaml` provider coordinates and `farplane/metrics.yaml` grouped refresh prompts,
      `farplane/harness.yaml` selected objective and guard metric IDs,
      storage path, fetch/import scripts, normalization shape, eval rows,
-     branch-scoped QA checklist, blocked-mode proof, and live-proof command.
+     branch-scoped guardrails, blocked-mode proof, and live-proof command.
    - [ ] If the primitive is project-specific, keep it under `.agents/skills/`
      or ticket it for project-local implementation. If repeated use across
      projects is likely, route through `skill-creator` for a root skill package

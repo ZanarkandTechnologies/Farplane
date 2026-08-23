@@ -410,10 +410,10 @@ Use this routing:
 | Claim | Finish Gate | Where Detail Belongs |
 | --- | --- | --- |
 | Human judgment, sufficiency, taste, readiness, or evidence quality. | `review` / reviewer lane | Review rubric or reviewer handoff. |
-| User-visible workflow, browser operation, UI state, generated media playback, or demo realism. | QA checklist or `qa` / `visual-qa` / `agent-qa-test` | Skill-local `references/*-qa-checklist.md` or QA artifact contract. |
+| User-visible workflow, browser operation, UI state, generated media playback, or demo realism. | `qa` / `visual-qa` / `agent-qa-test` | QA artifact contract or conditional reference. |
 | Repeatable agent, prompt, or skill behavior. | `eval` | `evals/evals.json` or eval suite artifact. |
 | Deterministic file, schema, registry, link, generated state, or syntax invariant. | validator or command | Script, validator, or proof command in `SKILL.md`. |
-| Documentation quality, terminology, stale sections, examples, or reader fit. | doc-quality checklist | Skill-local `qa_checklist.md`. |
+| Documentation quality, terminology, stale sections, examples, or reader fit. | doc-quality check | `doc-advisor`, the documentation rubric, or an owned reference. |
 | Skill structure, Golden Workflow Nodes, first-load size, reference routing, edge, or compaction risk. | `skill-contract` review | `docs/review/rubrics/skill-contract.md`, plus a skill-local audit for material changes. |
 | Generated asset or public deliverable presentation. | demo or QA proof | Demo checklist, render artifact, screenshot, or playback proof. |
 | Operator taste, ranking, or approval. | human feedback | Feedback artifact, Telegram request, or explicit approval record. |
@@ -426,30 +426,15 @@ the draft, implementation, render, or evidence bundle exists.
 ```text
 place_finish_checklist(checklist, needed_before_execution, owner_scope)
   -> SKILL.md when needed_before_execution
-  -> qa_checklist.md when owned_by_one_skill and applied as a runtime guardrail
   -> references/*-checklist.md when owned_by_one_skill but only used as branch detail
   -> docs/* when shared_across_many_skills
 ```
 
-Do not create a skill-local `qa_checklist.md` by default. Keep or add one only
-when the skill repeatedly produces, changes, or verifies artifacts and the
-checks are skill-specific runtime, safety, or preflight guardrails that do not
-fit more clearly in node assertions, goldens, evals, validators, or review. The
-invoking agent should read it before execution as preflight
-constraints, then apply it again before completion. Keep it at the skill
-package root so agents and future tooling can discover it without treating it
-as ordinary reference prose. Examples:
-
-- frontend and UI skills: layout, console errors, responsive behavior,
-  accessibility, primary workflow, screenshots, and visual regressions.
-- media skills: duration, resolution, playback, audio sync, captions, artifact
-  paths, and platform constraints.
-- content/social skills: platform fit, required variants, links, rendered
-  previews, and copy/asset consistency.
-- agent-testing skills: case coverage, tester evidence, evidence-review
-  critique, rerun policy, and final proof bundle.
-- skill-system structure and authoring rules are not checklist candidates; they
-  belong in the shared `skill-contract` rubric and deterministic validators.
+Do not create a skill-local `qa_checklist.md`: it is a retired surface. Keep
+normal runtime, safety, and preflight guardrails beside the workflow that needs
+them in the Todo List node's `Rule` and `Assert`. Route the same requirement to
+an eval, validator, QA/review lane, or conditional reference only when its
+proof or loading boundary changes.
 
 For skill creation or material skill restructuring, load and run
 `docs/review/rubrics/skill-contract.md`. Its key threshold is:
@@ -465,35 +450,13 @@ issue. If loading everything early increases context rot or forces compaction
 before the task state stabilizes, keep a precise first-load pointer and defer
 the branch detail to a reference.
 
-Treat each retained runtime checklist item as a violation scan, not a passive
+Treat each Todo List `Rule` or `Assert` as a violation scan, not a passive
 reminder. Structural review uses `skill-contract`; independent reviewers judge
 the candidate, golden invariants, held-out context, and proof without planner
-scratch reasoning.
-
-Do not put long QA checklists directly in `## Todo List`. Prefer compact
-first-load pointers:
-
-```text
-- [ ] If `qa_checklist.md` exists, read it before execution as preflight
-  guardrails.
-- [ ] Before completion, apply `qa_checklist.md` again and delegate checklist
-  review for material changes.
-```
-
-Then link the reference from `## Reference Map`.
-
-When a skill has both `evals/evals.json` and `qa_checklist.md`, keep their jobs
-distinct and migrate overlap:
-
-```text
-evals/evals.json -> finds expected behavior and hard cases
-qa_checklist.md -> applies the settled checks in real time
-```
-
-After editing an eval, check whether changed `assertions` should promote
-into `qa_checklist.md`, `SKILL.md`, a reference, or a validator. Do not
-promote rare hard cases, benchmark-only examples, or judgment-heavy examples
-unless they become reusable runtime guardrails.
+scratch reasoning. After editing an eval, decide whether a changed assertion
+belongs in `SKILL.md`, a conditional reference, or a validator; do not promote
+rare hard cases, benchmark-only examples, or judgment-heavy examples into the
+normal first-load path.
 
 Always review skill creation and maintenance against the structure metrics. Vary
 the review depth:

@@ -15,7 +15,7 @@ refs:
 
 # Docs Reference Audit
 
-Generated at `2026-08-23T16:03:21+00:00` from local Markdown links and literal repo-path
+Generated at `2026-08-23T16:12:27+00:00` from local Markdown links and literal repo-path
 references. This is a navigation and cleanup aid, not a deletion authority.
 
 ## Harness Math Doc
@@ -29,10 +29,10 @@ The harness math doc is `docs/fundamentals/harness-algebra.md`.
 
 ## Counts
 
-- Scanned files: `1723`
-- Nodes: `1115`
-- Edges: `4592`
-- Unresolved local-looking refs: `1808`
+- Scanned files: `1659`
+- Nodes: `1065`
+- Edges: `4458`
+- Unresolved local-looking refs: `1874`
 
 ## Most Referenced Docs
 
@@ -40,7 +40,7 @@ The harness math doc is `docs/fundamentals/harness-algebra.md`.
 | --- | --- | --- |
 | `docs/features/README.md` | 61 | 24 |
 | `docs/features/validate_features.py` | 59 | 9 |
-| `docs/skills/registry.jsonl` | 48 | 33 |
+| `docs/skills/registry.jsonl` | 47 | 32 |
 | `docs/systems/README.md` | 39 | 14 |
 | `docs/HISTORY.md` | 38 | 7 |
 | `docs/MEMORY.md` | 38 | 15 |
@@ -48,11 +48,11 @@ The harness math doc is `docs/fundamentals/harness-algebra.md`.
 | `docs/skills/README.md` | 34 | 13 |
 | `docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md` | 29 | 11 |
 | `docs/features/registry.jsonl` | 26 | 4 |
-| `docs/bootstrap-brief.md` | 25 | 19 |
+| `docs/bootstrap-brief.md` | 24 | 18 |
 | `docs/skills/system.md` | 23 | 11 |
 | `docs/skills/templates/SKILL_TEMPLATE.md` | 22 | 5 |
 | `docs/skills/best-practices.md` | 21 | 13 |
-| `docs/features/FEAT-0060-registry-backed-documentation-os.md` | 20 | 4 |
+| `docs/features/FEAT-0060-registry-backed-documentation-os.md` | 19 | 3 |
 | `docs/TASTE.md` | 18 | 13 |
 | `docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md` | 17 | 5 |
 | `docs/farplane-framework/lifecycle.md` | 16 | 3 |
@@ -82,7 +82,7 @@ The harness math doc is `docs/fundamentals/harness-algebra.md`.
 | `docs/features/FEAT-0054-modular-skill-local-eval-tasks.md` | 4 | 0 | keep active |
 | `docs/features/FEAT-0056-inspiration-vault.md` | 7 | 0 | keep active |
 | `docs/features/FEAT-0057-skill-local-qa-checklist-artifacts.md` | 4 | 0 | keep active |
-| `docs/features/FEAT-0060-registry-backed-documentation-os.md` | 20 | 4 | keep active |
+| `docs/features/FEAT-0060-registry-backed-documentation-os.md` | 19 | 3 | keep active |
 | `docs/features/FEAT-0061-farplane-adoption-tracker-cli.md` | 6 | 0 | keep active |
 | `docs/features/FEAT-0062-capped-skill-surface-budget.md` | 6 | 1 | keep active |
 | `docs/features/FEAT-0063-metric-advisor-cards.md` | 5 | 0 | keep active |

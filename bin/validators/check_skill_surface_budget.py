@@ -23,7 +23,6 @@ TODO_RE = re.compile(
     re.DOTALL,
 )
 TOP_LEVEL_TODO_RE = re.compile(r"^(?:\d+\. |- \[ \] \d+\. )")
-QA_CHECKBOX_RE = re.compile(r"^- \[ \] ")
 DEFAULT_TEMPLATE_ID = "skill-surface-budget"
 DEFAULT_VERSION = "0.1.0"
 
@@ -31,14 +30,12 @@ DEFAULT_VERSION = "0.1.0"
 @dataclass(frozen=True)
 class SurfaceLimits:
     skill_todos: int = 10
-    qa_checklist: int = 5
     eval_tasks: int = 5
 
 
 @dataclass(frozen=True)
 class SurfaceCounts:
     skill_todos: int
-    qa_checklist: int
     eval_tasks: int
 
 
@@ -81,22 +78,6 @@ def count_skill_todos(skill_path: Path) -> int:
     return sum(1 for line in match.group(1).splitlines() if TOP_LEVEL_TODO_RE.match(line))
 
 
-def count_qa_checklist(path: Path) -> int:
-    if not path.exists():
-        return 0
-    in_fence = False
-    count = 0
-    for line in path.read_text(encoding="utf-8").splitlines():
-        if line.startswith("```"):
-            in_fence = not in_fence
-            continue
-        if in_fence:
-            continue
-        if QA_CHECKBOX_RE.match(line):
-            count += 1
-    return count
-
-
 def count_eval_tasks(path: Path) -> int:
     if not path.exists():
         return 0
@@ -114,7 +95,6 @@ def count_eval_tasks(path: Path) -> int:
 def count_skill_surfaces(skill_dir: Path) -> SurfaceCounts:
     return SurfaceCounts(
         skill_todos=count_skill_todos(skill_dir / "SKILL.md"),
-        qa_checklist=count_qa_checklist(skill_dir / "qa_checklist.md"),
         eval_tasks=count_eval_tasks(skill_dir / "evals/evals.json"),
     )
 
@@ -148,7 +128,6 @@ def collect_budget_results(
         counts = count_skill_surfaces(skill_dir)
         surfaces = [
             ("skill_todos", skill_path, counts.skill_todos, limits.skill_todos),
-            ("qa_checklist", skill_dir / "qa_checklist.md", counts.qa_checklist, limits.qa_checklist),
             ("eval_tasks", skill_dir / "evals/evals.json", counts.eval_tasks, limits.eval_tasks),
         ]
         for surface, path, count, limit in surfaces:
@@ -160,7 +139,6 @@ def collect_budget_results(
 def minimizer_command(violation: BudgetViolation) -> str:
     surface_arg = {
         "skill_todos": "todos",
-        "qa_checklist": "qa",
         "eval_tasks": "eval",
     }.get(violation.surface, violation.surface)
     return (
@@ -185,7 +163,6 @@ def main() -> int:
     parser.add_argument("--template-id", default=DEFAULT_TEMPLATE_ID)
     parser.add_argument("--template-version", default=DEFAULT_VERSION)
     parser.add_argument("--skill-todos-limit", type=int, default=10)
-    parser.add_argument("--qa-checklist-limit", type=int, default=5)
     parser.add_argument("--eval-tasks-limit", type=int, default=5)
     args = parser.parse_args()
 
@@ -196,7 +173,6 @@ def main() -> int:
         template_version=args.template_version,
         limits=SurfaceLimits(
             skill_todos=args.skill_todos_limit,
-            qa_checklist=args.qa_checklist_limit,
             eval_tasks=args.eval_tasks_limit,
         ),
     )

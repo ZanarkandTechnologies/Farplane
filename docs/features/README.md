@@ -173,5 +173,8 @@ deleting, move any current truth into the owning system doc, feature spec, skill
 template, source record, or ticket. Then remove all active references to the
 deleted ID and regenerate the registries.
 
-Do not keep a retired alias just to preserve noise. The registry is a product
-capability list, not an archaeological ledger.
+When deletion retires a previously feature-backed contract and future agents
+could plausibly recreate it, retain or convert its page into a concise
+`status: retired` decision record. Name the decision, evidence, replacement
+owner, and concrete reintroduction guard. Do not retain a live alias merely as
+an archaeological record. Do not keep a retired alias just to preserve noise.

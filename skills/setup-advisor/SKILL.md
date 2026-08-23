@@ -8,10 +8,7 @@ source: local
 template_uses:
   skill-template: "0.4.0"
   skill-eval-task: "0.2.0"
-  skill-qa-checklist: "0.1.0"
   skill-surface-budget: "0.1.0"
-eval: evals/evals.json
-qa_checklist: qa_checklist.md
 allowed-tools: Read, Write, Glob, Grep, Bash, web_search
 ---
 
@@ -58,7 +55,7 @@ setup planning.
 ## Todo List
 
 - [ ] 1. Route and preflight the setup request.
-  - [ ] Read `qa_checklist.md` before execution.
+  - [ ] Read the first-load Todo List guardrails before execution.
   - [ ] Route Farplane substrate creation to `init-advisor` and recurring Codex
         automation activation to `automation-advisor`; retain external-service
         provisioning here. For a mixed request, return the explicit owner
@@ -136,7 +133,7 @@ setup planning.
         unless current docs were actually opened.
   - [ ] Record changed surfaces, redacted evidence, wizard path and run command,
         remaining human gates, rollback notes, and the next smallest action.
-  - [ ] Apply `qa_checklist.md` again. Never collapse `human_required` or
+  - [ ] Apply the first-load Todo List guardrails again. Never collapse `human_required` or
         `blocked` into “setup complete.”
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
@@ -177,7 +174,7 @@ receipt names configured and human-gated services without displaying values.
 
 ## Reference Map
 
-- [Runtime QA checklist](qa_checklist.md) — read before every setup and apply
+- the first-load Todo List guardrails — read before every setup and apply
   again before returning the receipt.
 - [Behavioral eval suite](evals/evals.json) — use when changing routing,
   automation-first behavior, secret handling, or completion claims.

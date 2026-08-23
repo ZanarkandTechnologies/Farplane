@@ -351,7 +351,6 @@ def rollout_rows(skill_rows: list[dict[str, Any]], current_version: str) -> list
                 "tier": row.get("tier"),
                 "template_version": version,
                 "eval": row.get("eval", ""),
-                "qa_checklist": row.get("qa_checklist", ""),
                 "skill_ui": row.get("skill_ui", ""),
                 "has_checklist": bool(row.get("has_checklist")),
                 "status": status,
@@ -379,7 +378,6 @@ def skill_template_consumers(skill_rows: list[dict[str, Any]]) -> list[dict[str,
                 "surfaces": {
                     "skill": bool(template_uses.get("skill-template")),
                     "eval": bool(row.get("eval")),
-                    "qa_checklist": bool(row.get("qa_checklist")),
                 },
             }
         )
@@ -431,8 +429,6 @@ def template_applies_to_consumer(template_row: dict[str, Any], consumer: dict[st
     surfaces = consumer.get("surfaces", {})
     if template_id == "skill-eval-task":
         return bool(isinstance(surfaces, dict) and surfaces.get("eval"))
-    if template_id == "skill-qa-checklist":
-        return bool(isinstance(surfaces, dict) and surfaces.get("qa_checklist"))
     if template_id == "skill-template":
         return bool(isinstance(surfaces, dict) and surfaces.get("skill"))
     return True
@@ -560,14 +556,14 @@ COMMON_EVALS = [
         "required_patterns": [r"Self-audit", r"## Output"],
     },
     {
-        "id": "eval_qa_sync",
-        "behavior": "eval_qa_sync",
-        "title": "Eval / QA sync",
+        "id": "eval_discovery",
+        "behavior": "eval_discovery",
+        "title": "Eval discovery",
         "expected_signals": [
             "evals/evals.json is a first-class special file",
-            "qa_checklist.md is a repeatable runtime guardrail only when warranted",
+            "normal guardrails live in first-load Todo List Rule/Assert blocks",
         ],
-        "required_patterns": [r"evals/evals\.json", r"qa_checklist\.md"],
+        "required_patterns": [r"evals/evals\.json", r"Todo List"],
     },
 ]
 
@@ -631,7 +627,7 @@ def build_payload(repo_root: Path, archive_dir: Path, write_archive: bool) -> di
             "Template evals are hidden research signals until real eval-run artifacts can be joined to template release windows.",
             "Git mining is a recovery path; template snapshots are temporary generated artifacts under tmp/ by default.",
             "Skill-applicable features are owned by feature pages under docs/features/ and linked from docs/systems/skill-system.md; generated system and feature registries are output.",
-            "Template-level features are declared by the versioned skill template; skill rows expose local eval, QA checklist, and UI surfaces.",
+            "Template-level features are declared by the versioned skill template; skill rows expose derived eval and optional UI surfaces.",
         ],
         "epochs": summarize_epochs(snapshots, archive_paths),
         "template_versions": summarize_template_versions(snapshots, archive_paths),

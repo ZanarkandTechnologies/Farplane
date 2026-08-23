@@ -8,8 +8,6 @@ template_uses:
   skill-template: "0.3.7"
   skill-surface-budget: "0.1.0"
 allowed-tools: Read, Glob, Grep, web_search
-eval: evals/evals.json
-qa_checklist: qa_checklist.md
 ---
 
 # Lead Scout
@@ -36,7 +34,7 @@ lead_scout(source_set, qualification_filter, outreach_goal?,
    + wiki_page_delta?
 state:
   reads(public/supplied sources, local project context, optional Wiki articles,
-        optional skill-local reports, qa_checklist.md)
+        optional skill-local reports, the first-load Todo List guardrails)
   writes(candidate packet under the caller path or `.farplane/lead-scout/reports/`,
          optional sourced Wiki delta handoff)
 gates:
@@ -68,7 +66,7 @@ Use `customer-research` for shortlisted people or companies after qualification.
   - [ ] Identify the allowed source set, such as supplied profile links,
         public search, X posts/accounts, GitHub, directories, conference pages,
         newsletters, company pages, or a project-local source list.
-  - [ ] Read `qa_checklist.md` as preflight guardrails.
+  - [ ] Read the first-load Todo List guardrails as preflight guardrails.
   - [ ] Bind Wiki intent: direct save/update/publish-to-Wiki language means
         `apply`; preview/no-write or no Wiki direction means `preview`; a
         conflict blocks publication.
@@ -130,7 +128,7 @@ Use `customer-research` for shortlisted people or companies after qualification.
         [feed-scout](../feed-scout/SKILL.md) only when the job is ongoing feed
         watching rather than a one-off prospect search.
 - [ ] 6. Finish-check the lead packet.
-  - [ ] Apply `qa_checklist.md` to the finished packet.
+  - [ ] Apply the first-load Todo List guardrails to the finished packet.
   - [ ] Source boundary, filter, ranking reasons, rejected near-misses, and
         next-owner handoffs are visible.
   - [ ] Claims are public, supplied, or labeled as inference/unknown.
@@ -173,7 +171,7 @@ Wiki writeback / publication intent / result:
 
 ## Reference Map
 
-- [qa_checklist.md](qa_checklist.md) - read before scouting and apply before
+- the first-load Todo List guardrails - read before scouting and apply before
   completion.
 - [customer-research](../customer-research/SKILL.md) - use after a
   candidate is qualified enough for a sourced report.

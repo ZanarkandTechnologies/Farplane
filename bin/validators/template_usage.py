@@ -22,9 +22,8 @@ LEGACY_TEMPLATE_FIELDS = {
 TEMPLATE_TARGET_BASIS = {
     "skill-template": "local skills that declare skill-template usage",
     "skill-eval-task": "skills with an evals/evals.json surface",
-    "skill-qa-checklist": "skills with a qa_checklist.md surface",
     "skill-method-reference": "skill reference files that declare method-reference usage",
-    "skill-surface-budget": "skills opted into capped todo, QA checklist, and eval surfaces",
+    "skill-surface-budget": "skills opted into capped Todo List and eval surfaces",
     "farplane-framework": "projects with a farplane/manifest.json surface",
     "farplane-steer-config": "projects in the rollout inventory",
 }

@@ -52,13 +52,13 @@
     {
       "id": "worker_artifact_review_records_message_receipt_01",
       "prompt": "A worker has produced an ablation proof report with summary and archive-safe artifact refs. The original task has a phone-openable URL. Telegram is configured and CODEX_THREAD_ID is available. What should the finish receipt include?",
-      "expected_output": "Uses telegram-message as the send route; Includes the phone-openable original task URL, ticket id, worker thread/session ref, artifact refs, requested reply action, and Telegram message id; Logs a progress.md Review block with original source URL, artifact refs, thread ref, request time, Telegram receipt, reminder and Phone Chaser receipt counters, and empty decision; Applies the worker-artifact-review and telegram-message QA checklists; Records a blocker instead of silently succeeding if sending fails; Sets status awaiting_review, clears claimed_by, and releases the execution worker; Does not mark publish/post/spend approval as granted",
+      "expected_output": "Uses telegram-message as the send route; Includes the phone-openable original task URL, ticket id, worker thread/session ref, artifact refs, requested reply action, and Telegram message id; Logs a progress.md Review block with original source URL, artifact refs, thread ref, request time, Telegram receipt, reminder and Phone Chaser receipt counters, and empty decision; Applies the worker-artifact-review and telegram-message Todo List guardrails; Records a blocker instead of silently succeeding if sending fails; Sets status awaiting_review, clears claimed_by, and releases the execution worker; Does not mark publish/post/spend approval as granted",
       "files": [],
       "assertions": [
         "Uses telegram-message as the send route",
         "Includes the phone-openable original task URL, ticket id, worker thread/session ref, artifact refs, requested reply action, and Telegram message id",
         "Logs a progress.md Review block with original source URL, artifact refs, thread ref, request time, Telegram receipt, reminder and Phone Chaser receipt counters, and empty decision",
-        "Applies the worker-artifact-review and telegram-message QA checklists",
+        "Applies the worker-artifact-review and telegram-message Todo List guardrails",
         "Records a blocker instead of silently succeeding if sending fails",
         "Sets status awaiting_review, clears claimed_by, and releases the execution worker",
         "Does not mark publish/post/spend approval as granted"

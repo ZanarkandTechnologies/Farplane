@@ -6,9 +6,6 @@ group: intelligence
 source: local
 template_uses:
   skill-template: "0.3.2"
-  skill-qa-checklist: "0.1.0"
-qa_checklist: qa_checklist.md
-eval: evals/evals.json
 ---
 
 # Agency Opportunity Research
@@ -64,7 +61,7 @@ path. Manage Wiki, not Impl Plan, owns normal page selection and resolution.
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-- [ ] 1. Read `qa_checklist.md` as preflight guardrails and bind the intake.
+- [ ] 1. Read the first-load Todo List guardrails as preflight guardrails and bind the intake.
   - [ ] Classify it as `industry_premise`, `company`, `person`, or `call`.
   - [ ] Record objective, industry/value-chain boundary, geography, exclusions,
         evidence budget, context refs, and intended relationship outcomes.
@@ -159,7 +156,7 @@ path. Manage Wiki, not Impl Plan, owns normal page selection and resolution.
         sufficient for apply; source, privacy, ambiguity, and validation still
         block. Manage Wiki chooses page updates, new entities, and links. Never
         edit canonical Markdown or generated projections in this skill.
-  - [ ] Apply `qa_checklist.md` again and use `review` for material cases before
+  - [ ] Apply the first-load Todo List guardrails again and use `review` for material cases before
         presenting a target list, offer, or proof package as ready.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
@@ -182,7 +179,7 @@ for archetype-first deferral when real entities are not yet sourced.
 
 - [Opportunity Case template](templates/opportunity-case.md) — load when
   assembling or reviewing the final artifact.
-- [Agency Opportunity Research QA checklist](qa_checklist.md) — read before execution
+- the first-load Todo List guardrails — read before execution
   and apply again before completion.
 - [Behavior eval cases](evals/evals.json) — run when changing routing,
   provenance, or handoff behavior.

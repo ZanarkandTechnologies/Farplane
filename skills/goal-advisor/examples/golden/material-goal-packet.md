@@ -94,7 +94,7 @@ freshness, delegated QA, the real workflow, and the completion checkpoint.
 golden_case: goal-advisor/material-goal-packet
 source_refs:
   - skills/goal-advisor/SKILL.md
-  - skills/goal-advisor/qa_checklist.md
+  - skills/goal-advisor/SKILL.md
 qa_refs: [file-list-compactness, no-self-certification, critical-path-proof, final-completion-checkpoint]
 accepted_because: [fresh_packet, compact_launcher, delegated_proof, explicit_stop_gate]
 decisive_nodes: [compiled_execution_path, reference_manifest, completion_closure]

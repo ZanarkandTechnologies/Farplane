@@ -3,7 +3,6 @@ name: review
 description: "Turn task context, artifacts, and evidence into a TAS review verdict: pass-ready, needs revision, blocked, or invalid."
 tier: 2
 source: local
-eval: evals/evals.json
 template_uses:
   skill-template: "0.2.0"
   skill-surface-budget: "0.1.0"
@@ -71,7 +70,7 @@ semantic editing mode inside an already-required material review, not a reason
 to create a reviewer lane for routine replies.
 
 For material checklist conformance, use a typed `reviewer` subagent to apply
-the relevant `qa_checklist.md` as a hostile acceptance review. The checklist is
+the relevant the first-load Todo List guardrails as a hostile acceptance review. The checklist is
 ammunition for rejection, not a box-check form. Use `qa-tester` when evidence
 must be captured or browser/UI/runtime proof must be produced; use `reviewer`
 to judge whether that proof and checklist application are good enough. When a

@@ -1,6 +1,6 @@
 <!--
 template_id: global-agents-template
-template_version: 0.2.36
+template_version: 0.2.37
 feature_refs:
   - FEAT-0022
   - FEAT-0042
@@ -87,9 +87,9 @@ build_rung = no_need | reuse | stdlib | platform | installed | inline | smallest
   skills at the same scope.
 - Apply the build rung before new code; keep changes within the nearby ownership
   boundary, use structured tools for structured data, and keep side effects at
-  edges. `qa_checklist.md` is self/preflight/repair support; material claims
-  need independent QA or review when that lane is available. If `lean-check` is
-  unavailable, apply its rung inline.
+  edges. First-load Todo List Rule/Assert blocks carry normal self/preflight/
+  repair support; material claims need independent QA or review when that lane
+  is available. If `lean-check` is unavailable, apply its rung inline.
 
 ## Response Contract
 

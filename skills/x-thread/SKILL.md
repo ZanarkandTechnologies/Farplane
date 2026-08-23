@@ -10,11 +10,8 @@ capability:
   produces: ["x-thread-draft"]
 template_uses:
   skill-template: "0.4.4"
-  skill-qa-checklist: "0.1.0"
   skill-eval-task: "0.2.0"
 allowed-tools: Read, Glob, Grep, Write
-eval: evals/evals.json
-qa_checklist: qa_checklist.md
 ---
 
 # X Thread
@@ -32,7 +29,7 @@ claims; route an explicitly approved final draft to [X Account](../x-account/SKI
 x_thread(content_brief, audience?, source_pack?, voice?, constraints?)
   -> x_thread_draft + review_notes | blocked_report
 
-reads: content brief, supplied sources/swipes, output.md, qa_checklist.md
+reads: content brief, supplied sources/swipes, output.md, the first-load Todo List guardrails
 writes: draft only at a caller-owned artifact path
 does: turns one audience promise into a concrete X-native tweet sequence
 returns: a review-ready draft with provenance, media notes, and an approval gate
@@ -42,7 +39,7 @@ returns: a review-ready draft with provenance, media notes, and an approval gate
 ## Todo List
 
 1. Bind the audience, promise, evidence, voice, CTA, and exact draft stage.
-   Read `qa_checklist.md`; if a factual claim lacks support, either cut it or
+   Read the first-load Todo List guardrails; if a factual claim lacks support, either cut it or
    mark it as a hypothesis before drafting.
 2. Choose one thread spine: lesson, teardown, story, checklist, case, or
    announcement. State the reader value in one concrete sentence before the

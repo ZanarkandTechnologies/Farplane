@@ -16,7 +16,7 @@ owns reasoning and context resolution, not a second template.
 
 - `SKILL.md`: planning workflow and decision contract.
 - `prompts/plan.md`: compact operator prompt.
-- `qa_checklist.md`: readiness and maintenance checks.
+- `SKILL.md` Todo List `Rule`/`Assert` blocks: readiness and maintenance checks.
 - `references/examples.md`: optional output calibration.
 - `references/visual-companion-template.md`: optional detailed diagram
   companion.
@@ -36,7 +36,7 @@ it as an active schema.
 4. Populate the canonical ticket template with compact Change Plan units.
 5. Use an inline map only when it replaces prose; create `diagrams.md` only
    for complex multi-view or independently reviewed visual context.
-6. Run the ticket validator, apply `qa_checklist.md`, and reconcile a material
+6. Run the ticket validator, apply the Todo List assertions, and reconcile a material
    reviewer receipt before `approval_ready`.
 7. After human approval, hand the same ticket to `goal-advisor`.
 

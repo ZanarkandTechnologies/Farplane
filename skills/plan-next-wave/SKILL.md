@@ -8,8 +8,6 @@ template_uses:
   skill-template: "0.3.9"
   skill-eval-task: "0.2.0"
   skill-surface-budget: "0.1.0"
-eval: evals/evals.json
-qa_checklist: qa_checklist.md
 allowed-tools: Read, Glob, Grep, Bash
 ---
 
@@ -45,7 +43,7 @@ state:
         allowed skill SKILL.md signatures and planner_contracts,
         farplane/metrics.yaml and observations, global-first ticket history,
         Scout Brief for outward calls, terminal preference evidence,
-        optional dated Dogfood context, qa_checklist.md and golden)
+        optional dated Dogfood context, the first-load Todo List guardrails and golden)
   writes(no durable project state; ignored validator scratch only)
 
 gates:
@@ -122,7 +120,7 @@ fails:
       reproduced failure.
 - [ ] 5. Rank all valid calls once; admit only the best compatible
       `0..wave_size` call IDs.
-- [ ] 6. Run the validator on the exact final object, reapply `qa_checklist.md`,
+- [ ] 6. Run the validator on the exact final object, reapply the first-load Todo List guardrails,
       and return JSON with a no-materialization receipt.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 

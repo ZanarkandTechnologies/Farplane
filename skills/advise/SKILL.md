@@ -7,9 +7,7 @@ capability:
   kind: shortcut
 template_uses:
   skill-template: "0.1.0"
-  skill-qa-checklist: "0.1.0"
   skill-surface-budget: "0.1.0"
-qa_checklist: qa_checklist.md
 
 ---
 
@@ -39,7 +37,7 @@ fails: neutral_menu; fake_options; automatic_ensemble; hidden_evidence_gap
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-- [ ] 1. Read `qa_checklist.md` as preflight guardrails when using this skill
+- [ ] 1. Read the first-load Todo List guardrails as preflight guardrails when using this skill
   for material advice.
 - [ ] 2. State the real decision and the criteria that matter.
 - [ ] 3. Check evidence needs; use supplied/local grounding when needed, or name

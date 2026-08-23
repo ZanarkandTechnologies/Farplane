@@ -5,7 +5,6 @@ tier: 2
 source: local
 template_uses:
   skill-template: "0.3.6"
-  skill-qa-checklist: "0.1.0"
   skill-eval-task: "0.2.0"
 methods:
   - id: doc-advisor:strategy
@@ -23,8 +22,6 @@ methods:
   - id: doc-advisor:finish-gate
     class: internal
     output: docs-finish-verdict
-eval: evals/evals.json
-qa_checklist: qa_checklist.md
 ---
 
 # Doc Advisor Skill
@@ -53,7 +50,7 @@ This skill owns the executable workflow and branch-loaded references.
 
 ```text
 doc_advisor(doc_task, target_file?, evidence?, doc_type?) -> docs_strategy | doc_delta + doc_quality_result + review_route?
-state: reads(ticket/plan/diff?, target doc?, nearest owner/index, source/evidence refs, qa_checklist.md, selected references); writes(Docs Strategy block, target doc, optional audit/proof notes)
+state: reads(ticket/plan/diff?, target doc?, nearest owner/index, source/evidence refs, the first-load Todo List guardrails, selected references); writes(Docs Strategy block, target doc, optional audit/proof notes)
 gates: docs_strategy_decided; reader_contract_bound_when_writing; owner_surface_chosen; claims_grounded; metadata_checked; checklist_applied; material_review_routed_or_skipped
 routes: reference-grounding | review
 fails: stale or ungrounded docs; duplicate source-of-truth; wrong feature/system boundary; agent-facing prose in human docs; routine closeout expansion; no-docs decision without reason
@@ -77,7 +74,7 @@ recommend one.
     `validation`.
   - [ ] For durable doc writing, name audience, doc type, owning file, source
     of truth, intended next action, canonical terms, and proof surface.
-  - [ ] If `qa_checklist.md` exists, read it now as preflight guardrails.
+  - [ ] If the first-load Todo List guardrails exist, read it now as preflight guardrails.
   - [ ] Choose exactly the needed branch references:
     [doc architecture](references/doc-architecture.md) for placement,
     [metadata](references/metadata-and-registries.md) for front matter or
@@ -101,7 +98,7 @@ recommend one.
     matter, then run the generator or validator; never hand-edit generated
     JSONL registry rows.
 - [ ] 5. Finish-check and route review.
-  - [ ] Apply `qa_checklist.md` again to the finished work.
+  - [ ] Apply the first-load Todo List guardrails again to the finished work.
   - [ ] Preserve failed checks, fixes made, deferrals, remaining risk, and the
     exact review route instead of collapsing readiness into a scalar score.
   - [ ] Run only relevant validators or focused searches.
@@ -156,7 +153,7 @@ doc_contract = {
 
 ## Reference Map
 
-- [qa_checklist.md](qa_checklist.md) - read at preflight and finish for durable,
+- the first-load Todo List guardrails - read at preflight and finish for durable,
   canonical, public, or material documentation changes.
 - [references/doc-architecture.md](references/doc-architecture.md) - read when
   owner surface, doc type, split/merge/delete, density, or lifecycle is unclear.

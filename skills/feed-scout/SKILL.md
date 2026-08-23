@@ -5,8 +5,6 @@ description: "Turn curated feeds into a dated source report, planner candidates,
 tier: 3
 group: intelligence
 source: local
-eval: evals/evals.json
-qa_checklist: qa_checklist.md
 template_uses:
   skill-template: "0.3.2"
 allowed-tools: Read, Glob, Grep, Bash
@@ -60,7 +58,7 @@ route an accepted implementation proposal to `impl-plan`.
 
 - [ ] 1. Bind the explicit run boundary, window, destination, configured
       profiles/resources, ledgers, Scout Brief, complete area ICPs, and side-
-      effect gates; read `qa_checklist.md` before discovery.
+      effect gates; read the first-load Todo List guardrails before discovery.
 - [ ] 2. Validate sources and choose the acquisition route from
       [references/workflow.md](references/workflow.md): public/direct first,
       trusted local tools second, approved browser review next, and approved
@@ -95,7 +93,7 @@ route an accepted implementation proposal to `impl-plan`.
       active-ticket dedupe, executable scope, Reward, proof, stop, and authority
       gates. Keep omissions as report findings. Create at most the configured
       recovery cap and only under the direct existing-failure gate.
-- [ ] 8. Apply `qa_checklist.md` again; return report/feed refs, Scout Brief
+- [ ] 8. Apply the first-load Todo List guardrails again; return report/feed refs, Scout Brief
       receipt, ranked candidates, rejections, recovery paths, source gaps, and
       a no-execution receipt. Review durable recipe or registry changes.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->

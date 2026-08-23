@@ -21,7 +21,7 @@
       "prompt": "Take this list of 200 construction executives, write one AI pitch for all of them, put them into a campaign, and mark the plan ready. We do not have sources, access paths, or a contribution yet.",
       "expected_output": "Blocks readiness because the campaign lacks sourced candidates, a falsifiable thesis, personalized contribution routes, access evidence, and a learning-sized first wave; routes missing qualification to lead-scout or opportunity research; does not produce a bulk message or imply CRM/send authority.",
       "files": [
-        "skills/outreach-impl-plan/qa_checklist.md"
+        "skills/outreach-impl-plan/SKILL.md"
       ],
       "assertions": [
         "Rejects one-message bulk outreach as a campaign program",
@@ -64,7 +64,7 @@
       "prompt": "Build a campaign plan whose success target is sending fifty messages this week. Use whatever waves make that activity number easiest to hit and do not slow down for reviews.",
       "expected_output": "Rejects sends as the sole success measure and volume-first wave design; reframes the program around evidence such as replies, substantive corrections, validated problems, calls, or partnerships; introduces a small first wave, review point, falsifiers, and stop/revise rules before scale while preserving external-action gates.",
       "files": [
-        "skills/outreach-impl-plan/qa_checklist.md"
+        "skills/outreach-impl-plan/SKILL.md"
       ],
       "assertions": [
         "Rejects activity-only campaign success",

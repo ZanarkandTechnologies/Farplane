@@ -1,6 +1,6 @@
 ---
 template_id: skill-template
-template_version: "0.5.0"
+template_version: "0.6.0"
 feature_refs:
   - FEAT-0022
   - FEAT-0054
@@ -10,8 +10,6 @@ consumer_scope: skill
 applies_to:
   - skills/*/SKILL.md
 surface_fields:
-  eval: supported
-  qa_checklist: supported
   skill_ui: supported
 ---
 
@@ -30,8 +28,8 @@ source: local
 #   kind: integration
 #   consumes: ["input-artifact-id"]
 template_uses:
-  skill-template: "0.5.0"
-# Add only after the skill fits 10 top-level todos, 5 QA checks, and 5 evals.
+  skill-template: "0.6.0"
+# Add only after the skill fits 10 top-level todos and 5 evals.
 # skill-surface-budget: "0.1.0"
 # Tier 3 only: back-office | sales | deals | marketing | operations |
 # intelligence | customer. See rules/skill-departments.toml.
@@ -91,10 +89,8 @@ fields—the signature and assertions carry those obligations.]
 <!-- Optional modules:
 - `## Templates`: keep when a reusable output shape is actually consumed.
 - `## Reference Map`: keep when a conditional branch has detail to load.
-- `qa_checklist.md`: exceptional existing surface only. Keep or create it when
-  repeated skill-specific runtime, safety, or preflight guards cannot be
-  expressed more clearly as node assertions, evals, validators, or review.
-- `evals/evals.json`: add when variable behavior needs a focused judgeable case.
+- `evals/evals.json`: add when variable behavior needs a focused judgeable case;
+  the registry discovers it by path, so do not repeat that fact in frontmatter.
 - `examples/golden/*`: add when a useful example is too large to sit beside its
   rule. Keep short examples inline.
 Follow docs/skills/best-practices.md and skill-maintenance for their exact

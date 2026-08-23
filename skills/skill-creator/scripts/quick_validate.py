@@ -54,8 +54,6 @@ def validate_skill(skill_path):
         'version',
         'skill_template_version',
         'template_uses',
-        'eval',
-        'qa_checklist',
         'skill_ui',
         'license',
         'allowed-tools',

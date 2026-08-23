@@ -175,17 +175,14 @@ def build_skill_rows(
 
         checklist = heading_section(body, r"checklist|done\s*/\s*proof") or checklist_lines(body)
         todo = heading_section(body, r"todo|task|program") or checklist_lines(body)
-        qa_tasks = heading_section(body, r"qa|test|proof|evidence")
         references = heading_section(body, r"reference|source|link")
         if not references:
             references = "\n".join(match[1] for match in re.findall(r"\[([^\]]+)\]\(([^)]+)\)", body))
         if not references and isinstance(frontmatter.get("feature_refs"), list):
             references = "\n".join(str(ref) for ref in frontmatter["feature_refs"] if ref)
-        qa_declared = bool(frontmatter.get("qa_checklist")) or bool(qa_tasks)
         template_status = str(rollout_row.get("status") or "unknown")
 
         burden = 0
-        burden += 0 if qa_declared else 20
         burden += 0 if checklist else 14
         burden += 0 if references else 10
         burden += 0 if todo else 10
@@ -195,7 +192,7 @@ def build_skill_rows(
 
         methods = frontmatter.get("methods") if isinstance(frontmatter.get("methods"), list) else []
         outgoing_targets = {str(edge.get("target") or "") for edge in outgoing}
-        proof_surface = eval_count > 0 or bool(qa_tasks) or bool(checklist)
+        proof_surface = eval_count > 0 or bool(checklist)
         description = str(node.get("description") or frontmatter.get("description") or "")
         generic_penalty = 12 if re.match(r"^(plan|review|execute|test|qa|research|summary|status)$", skill_id, re.I) else 0
 
@@ -252,7 +249,6 @@ def build_skill_rows(
                 "signals": signals,
                 "gaps": [
                     {"id": "eval_coverage", "status": "good" if eval_count >= EXPECTED_EVAL_COUNT else "risk" if eval_count else "missing", "value": f"{min(eval_count, EXPECTED_EVAL_COUNT)} / {EXPECTED_EVAL_COUNT}"},
-                    {"id": "qa_checklist", "status": "good" if qa_declared else "missing", "value": "declared" if frontmatter.get("qa_checklist") else "section" if qa_tasks else "missing"},
                     {"id": "template_age", "status": "good" if template_status == "current" else "unknown" if template_status in {"unknown", "external"} else "risk", "value": str(rollout_row.get("templateVersion") or template_status)},
                     {"id": "owner_clarity", "status": "good" if frontmatter.get("owner") or frontmatter.get("group") else "unknown", "value": str(frontmatter.get("owner") or frontmatter.get("group") or "unknown")},
                     {"id": "first_load_size", "status": "risk" if len(body) > 12_000 else "good", "value": f"{round(len(body) / 1000)}k chars" if body else "missing"},
@@ -473,17 +469,16 @@ def build_metric_readings(payload: dict[str, Any]) -> dict[str, dict[str, Any]]:
         or numeric((row.get("evidence") or {}).get("invocationCount30d")) > 0
     ]
     per_skill: list[dict[str, Any]] = []
-    component_counts = {"template": 0, "eval": 0, "qa": 0}
+    component_counts = {"template": 0, "eval": 0}
     unhealthy_ids: list[str] = []
     healthy_ids: list[str] = []
     for skill in priority_skills:
         statuses = gap_statuses(skill)
         template_gap = statuses.get("template_age") != "good"
         eval_gap = statuses.get("eval_coverage") != "good"
-        qa_gap = statuses.get("qa_checklist") != "good"
         gaps = [
             name
-            for name, present in (("template", template_gap), ("eval", eval_gap), ("qa", qa_gap))
+            for name, present in (("template", template_gap), ("eval", eval_gap))
             if present
         ]
         for gap in gaps:
@@ -508,7 +503,6 @@ def build_metric_readings(payload: dict[str, Any]) -> dict[str, dict[str, Any]]:
         "healthy_skill_ids": sorted(healthy_ids),
         "template_gap_count": component_counts["template"],
         "eval_gap_count": component_counts["eval"],
-        "qa_gap_count": component_counts["qa"],
         "per_skill": sorted(per_skill, key=lambda row: row["skill_id"]),
         "cohort_context": {
             "local_skill_count": len(local_skills),
@@ -520,7 +514,7 @@ def build_metric_readings(payload: dict[str, Any]) -> dict[str, dict[str, Any]]:
         "minimum_meaningful_delta": "one priority skill becomes fully healthy without source or cohort guards regressing",
         "anti_metrics": [
             "changing tier or source only to escape the priority cohort",
-            "removing eval or QA requirements to erase a gap",
+            "removing eval requirements to erase a gap",
             "adding meaningless feature refs to inflate a score",
             "retiring or splitting skills only to reduce the count",
         ],

@@ -7,11 +7,8 @@ capability:
   kind: integration
 template_uses:
   skill-template: "0.3.6"
-  skill-qa-checklist: "0.1.0"
   skill-eval-task: "0.2.0"
 allowed-tools: Bash, Read
-eval: evals/evals.json
-qa_checklist: qa_checklist.md
 ---
 
 # Telegram Message
@@ -38,7 +35,7 @@ telegram_message(message_intent, message_body?, original_source_url?,
   -> sent_message | fallback_report
 
 state:
-  reads(qa_checklist.md, references/configuration.md when credential fallback
+  reads(the first-load Todo List guardrails, references/configuration.md when credential fallback
         details are needed, caller artifact when using --file,
         CODEX_THREAD_ID or caller-supplied thread/session id)
   writes(none by default; caller may persist message files)
@@ -105,7 +102,7 @@ material, automated, sensitive, or repeated notification failures.
   - [ ] If two workflows are difficult to distinguish in prose, bind a
     comparison image or include a compact step-by-step flow for each.
 - [ ] 2. Read guardrails.
-  - [ ] Read `qa_checklist.md` before preparing or sending the message.
+  - [ ] Read the first-load Todo List guardrails before preparing or sending the message.
   - [ ] Read `references/configuration.md` only when credential fallback details
     are needed.
 - [ ] 3. Prepare a Telegram-native body.
@@ -155,7 +152,7 @@ material, automated, sensitive, or repeated notification failures.
   - [ ] If Telegram is not configured, report the fallback artifact path instead
     of blocking unrelated workflow progress.
 - [ ] 5. Finish gate.
-  - [ ] Apply `qa_checklist.md` again before sending or reporting fallback.
+  - [ ] Apply the first-load Todo List guardrails again before sending or reporting fallback.
   - [ ] For material or automated notifications, use independent review of the
     message body when feasible.
   - [ ] Report whether the message was sent, skipped, or blocked, and why.

@@ -8,9 +8,6 @@ capability:
 template_uses:
   skill-template: "0.4.0"
   skill-eval-task: "0.2.0"
-  skill-qa-checklist: "0.1.1"
-eval: evals/evals.json
-qa_checklist: qa_checklist.md
 allowed-tools: Read, Glob, Grep
 ---
 
@@ -46,7 +43,7 @@ fails: speculative build; duplicate owner; new dependency before reuse;
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-- [ ] 1. Read [qa_checklist.md](qa_checklist.md), then name the target, current
+- [ ] 1. Read the first-load Todo List guardrails, then name the target, current
   need, and proposed new surface.
 - [ ] 2. Inspect only enough local evidence to test the ladder: nearby
   implementation, tests, docs, platform, and installed dependencies.
@@ -59,7 +56,7 @@ fails: speculative build; duplicate owner; new dependency before reuse;
   - [ ] `inline`: one local expression is clearer than a new abstraction.
   - [ ] `minimum_new_code`: only no earlier rung is sufficient.
 - [ ] 4. State the smallest safe next action and what evidence would overturn it.
-- [ ] 5. Apply [qa_checklist.md](qa_checklist.md) to the receipt, then return
+- [ ] 5. Apply the first-load Todo List guardrails to the receipt, then return
   it; route a material plan to its planning owner and a judgment-heavy
   acceptance question to a TAS review with `debloatability` or `code-quality`
   as applicable.

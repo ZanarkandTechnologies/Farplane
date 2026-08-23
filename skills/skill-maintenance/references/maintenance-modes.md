@@ -40,9 +40,9 @@ or QA without copying source prose.
 - `structure_update`: apply structure QA and first-load sufficiency.
 - `metadata_update`: preserve source ownership, regenerate registries, and
   prove template claims.
-- `qa_checklist_design`: compare target QA, eval assertions, gotchas, and
-  recent audits; keep preflight and final-review prevention value.
-- `eval_to_qa_sync`: promote only reusable runtime guardrails.
+- `guardrail_design`: compare target Todo List assertions, eval assertions,
+  gotchas, and recent audits; keep preflight and final-review prevention value.
+- `eval_to_guardrail_sync`: promote only reusable runtime guardrails.
 - `low_value_prose_scan`: classify candidates `keep | rewrite | move | delete`.
 - `audit`: use binary evidence and name missing proof.
 - `bulk_rollout`: prove one representative sample before scaling.

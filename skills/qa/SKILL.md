@@ -8,8 +8,6 @@ template_uses:
   skill-template: "0.3.8"
   skill-surface-budget: "0.1.0"
   skill-eval-task: "0.2.0"
-eval: evals/evals.json
-qa_checklist: qa_checklist.md
 common_chains:
   after: ["demo", "close-ticket"]
 ---
@@ -76,7 +74,7 @@ checklist item.
 ## Todo List
 
 - [ ] 1. Bind the ticket and proof policy.
-  - [ ] Read [qa_checklist.md](qa_checklist.md) before material QA as preflight
+  - [ ] Read the first-load Todo List guardrails before material QA as preflight
     guardrails; apply it again before completion.
   - [ ] Read the selected ticket's `Done`, `QA Strategy`, linked specs/docs,
     runtime handoff, required UI `design.md`, and optional `Agent Contract`.
@@ -148,7 +146,7 @@ checklist item.
     cookbook ref. Create an instrumentation follow-up only for real missing
     implementation.
 - [ ] 8. Apply the finish gate.
-  - [ ] Reapply [qa_checklist.md](qa_checklist.md) and confirm the runtime,
+  - [ ] Reapply the first-load Todo List guardrails and confirm the runtime,
     evidence branch, five gates, judgment receipts, writeback, and learning
     outcome agree across `report.md` and `result.json`.
   - [ ] Return `revise`, `fail`, `blocked`, or `not_provable` when proof is
@@ -211,7 +209,7 @@ Canonical `result.json`:
 
 ## Reference Map
 
-- [QA checklist](qa_checklist.md) — read before material execution and apply
+- the first-load Todo List guardrails — read before material execution and apply
   again at the finish gate.
 - Codex in-app Browser — use through `qa-tester` when browser operation is
   required.

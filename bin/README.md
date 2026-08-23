@@ -86,8 +86,9 @@ runtime helpers instead of symlinking every script, validator, and test.
   `rules/template-version-watch.toml`
 - `validators/check_source_line_growth.py` - deterministic pre-commit and
   pre-push guard that blocks new Python files over 500 lines and growth in
-  already-oversized files; strict mode is the 200-line staged `SKILL.md`
-  backstop. `rules/source-line-baseline.toml` is the one-time Python adoption
+  already-oversized files. The 200-line `SKILL.md` check uses the same
+  ratchet: new or enlarged oversized skills fail, while legacy skills must not
+  grow. `rules/source-line-baseline.toml` is the one-time Python adoption
   ceiling until the comparison base contains the guard.
 - `capture_user_turn.py` - turn-start user-intent writer for the hook surface
 - `core/farplane_ticket_close.py` - issue create/resume/close, ticket completion,

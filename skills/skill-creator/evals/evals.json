@@ -4,7 +4,7 @@
     {
       "id": "skill_creator_book_grounding_branch_01",
       "prompt": "I want to improve a reusable planning skill using online book-summary videos, articles, blogs, and author interviews for a popular business book. Find the key takeaway workflows and shape the skill update.",
-      "expected_output": "Loads or explicitly follows the book-to-skill extraction branch instead of drafting from generic memory; Searches or plans to search for workflow-bearing summary sources such as videos, articles, blogs, app summaries, notes, and author interviews; Labels source type, confidence, and convergence across summary sources instead of trusting one summary uncritically; Avoids producing a chapter-by-chapter or full-book substitute summary; Converts key takeaways into workflow candidates with trigger, inputs, steps, decision points, stop condition, output, and proof; Compares workflow candidates against the existing target skill before deciding SKILL.md, reference, evals/evals.json, qa_checklist.md, new skill, reject, or defer placement; Names at least one behavior proof such as a positive example or eval row that tests the skill behavior rather than recall of the book",
+      "expected_output": "Loads or explicitly follows the book-to-skill extraction branch instead of drafting from generic memory; Searches or plans to search for workflow-bearing summary sources such as videos, articles, blogs, app summaries, notes, and author interviews; Labels source type, confidence, and convergence across summary sources instead of trusting one summary uncritically; Avoids producing a chapter-by-chapter or full-book substitute summary; Converts key takeaways into workflow candidates with trigger, inputs, steps, decision points, stop condition, output, and proof; Compares workflow candidates against the existing target skill before deciding SKILL.md, reference, evals/evals.json, validator, new skill, reject, or defer placement; Names at least one behavior proof such as a positive example or eval row that tests the skill behavior rather than recall of the book",
       "files": [],
       "assertions": [
         "Loads or explicitly follows the book-to-skill extraction branch instead of drafting from generic memory",
@@ -12,7 +12,7 @@
         "Labels source type, confidence, and convergence across summary sources instead of trusting one summary uncritically",
         "Avoids producing a chapter-by-chapter or full-book substitute summary",
         "Converts key takeaways into workflow candidates with trigger, inputs, steps, decision points, stop condition, output, and proof",
-        "Compares workflow candidates against the existing target skill before deciding SKILL.md, reference, evals/evals.json, qa_checklist.md, new skill, reject, or defer placement",
+        "Compares workflow candidates against the existing target skill before deciding SKILL.md, reference, evals/evals.json, validator, new skill, reject, or defer placement",
         "Names at least one behavior proof such as a positive example or eval row that tests the skill behavior rather than recall of the book"
       ],
       "metadata": {

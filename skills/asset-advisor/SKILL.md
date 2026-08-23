@@ -6,11 +6,8 @@ group: marketing
 source: local
 template_uses:
   skill-template: "0.3.7"
-  skill-qa-checklist: "0.1.1"
   skill-eval-task: "0.2.0"
   skill-surface-budget: "0.1.0"
-eval: evals/evals.json
-qa_checklist: qa_checklist.md
 common_chains:
   after: ["storyboard", "ai-image-advisor", "ai-video-advisor", "avatar-advisor", "audio-advisor"]
 allowed-tools: Read, Grep, Glob, Bash
@@ -45,7 +42,7 @@ asset_advisor(storyboard_or_reference, element_realization_packets?, source_asse
 
 state:
   reads(user brief, storyboard/reference material, complete element realization
-        packets, source asset paths or URLs, qa_checklist.md)
+        packets, source asset paths or URLs, the first-load Todo List guardrails)
   writes(asset plan artifact when durable handoff is requested)
 
 gates:
@@ -124,7 +121,7 @@ the output is explicitly downgraded to `semantic_storyboard_only`.
   - [ ] Identify the storyboard, reference/Inspiration Pack capture, creative
     elements, source handles/assets, target platform, dimensions, duration, style
     constraints, and artifact owner.
-  - [ ] Read `qa_checklist.md` as preflight guardrails.
+  - [ ] Read the first-load Todo List guardrails as preflight guardrails.
 - [ ] 2. Decompose the asset graph.
   - [ ] Classify every supplied or discovered reference on two independent
     axes before deciding whether to use it: `usage_role` is one of
@@ -228,7 +225,7 @@ the output is explicitly downgraded to `semantic_storyboard_only`.
     keep `accepted_file_ref` empty until the output is inspected, and emit
     `downstream_asset_handoff: blocked_pending_accepted_file`. A prompt or successful provider job never
     counts as an accepted scene asset.
-  - [ ] Apply `qa_checklist.md` again before calling the asset plan ready.
+  - [ ] Apply the first-load Todo List guardrails again before calling the asset plan ready.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 ## Output Template
@@ -331,7 +328,7 @@ write the exact missing-input blocker instead of inventing one.
 
 ## Reference Map
 
-- `qa_checklist.md` - read at start and finish for asset-plan QA.
+- the first-load Todo List guardrails - read at start and finish for asset-plan QA.
 - [references/source-roles.md](references/source-roles.md) - classify how a
   reference is used separately from its rights, then accept transferable
   moodboard traits before prompt compilation.

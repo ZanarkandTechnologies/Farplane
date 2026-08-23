@@ -350,8 +350,6 @@ def skill_template_target_rows(rows: list[dict[str, object]], template_id: str) 
         ]
     if template_id == "skill-eval-task":
         return [row for row in rows if row.get("eval")]
-    if template_id == "skill-qa-checklist":
-        return [row for row in rows if row.get("qa_checklist")]
     return [row for row in rows if template_id in (row.get("template_uses") or {})]
 
 

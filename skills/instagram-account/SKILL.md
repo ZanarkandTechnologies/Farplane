@@ -19,10 +19,7 @@ methods:
 template_uses:
   skill-template: "0.3.7"
   skill-eval-task: "0.2.0"
-  skill-qa-checklist: "0.1.0"
-eval: evals/evals.json
 allowed-tools: Read, Grep, Glob, Bash
-qa_checklist: qa_checklist.md
 ---
 
 # Instagram Account
@@ -121,7 +118,7 @@ publishing.
         --kpis instagram_views,instagram_likes,evidence_distribution_reach
         --approval-ref <ticket_or_report_ref>`.
 - [ ] 5. Finish with proof.
-  - [ ] Apply `qa_checklist.md`: Universal QA plus only the selected branch QA.
+  - [ ] Apply the first-load Todo List guardrails: Universal QA plus only the selected branch QA.
   - [ ] For live API/posting work, record endpoint, account alias, timestamp,
         output IDs, and redacted credential source.
   - [ ] For export normalization, record source file and output snapshot path.

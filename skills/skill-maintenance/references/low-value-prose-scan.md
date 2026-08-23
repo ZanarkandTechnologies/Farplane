@@ -12,7 +12,7 @@ not a standalone script or validator.
 ```text
 low_value_prose_scan(target_skill, claim?, context?)
   -> sentence_decisions + skill_delta_recommendation + evidence_note
-state: reads(target SKILL.md, target qa_checklist.md?, relevant references?, audits?); writes(audit notes or owner-local edits when requested)
+state: reads(target SKILL.md, relevant references?, audits?); writes(audit notes or owner-local edits when requested)
 gates: sentence_value_decided; required_behavior_preserved; edits_classified
 fails: deletes useful gates; keeps generic aspiration; treats length as the problem
 ```
@@ -33,7 +33,7 @@ input_packet:
     target_skill: skills/<name>/SKILL.md
   optional:
     claim: what behavior should remain true after cleanup
-    context: target qa_checklist.md, references, recent audit, usage evidence
+    context: target Todo List guardrails, references, recent audit, usage evidence
   source_refs:
     - docs/review/rubrics/skill-contract.md
     - target skill package

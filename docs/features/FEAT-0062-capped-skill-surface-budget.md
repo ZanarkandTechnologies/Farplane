@@ -3,7 +3,7 @@ title: Capped skill surface budget
 status: implemented
 owner: feature-registry
 created_at: 2026-06-28
-updated_at: 2026-08-19
+updated_at: 2026-08-24
 tags:
   - farplane
   - feature
@@ -12,7 +12,6 @@ refs:
   - docs/features/FEAT-0062-capped-skill-surface-budget.md
   - docs/skills/system.md
   - docs/skills/templates/SKILL_TEMPLATE.md
-  - docs/skills/templates/QA_CHECKLIST_TEMPLATE.md
   - bin/validators/check_skill_surface_budget.py
   - skills/skill-maintenance/scripts/minimize_skill_surface.py
   - skills/skill-maintenance/scripts/check_skills.py
@@ -24,7 +23,6 @@ surfaces:
   - docs/features/FEAT-0062-capped-skill-surface-budget.md
   - docs/skills/system.md
   - docs/skills/templates/SKILL_TEMPLATE.md
-  - docs/skills/templates/QA_CHECKLIST_TEMPLATE.md
   - bin/validators/check_skill_surface_budget.py
   - skills/skill-maintenance/scripts/minimize_skill_surface.py
   - skills/skill-maintenance/scripts/check_skills.py
@@ -47,7 +45,7 @@ superseded_by: false
 # Capped skill surface budget
 
 Capped skill surface budget gives maintainers a mechanical way to keep
-high-leverage skill todos, skill-local QA checklists, and skill-local eval rows
+high-leverage skill todos and skill-local eval rows
 small enough for agents to actually use. It belongs to
 [Skill System](../systems/skill-system.md) and keeps `FEAT-0062` as the feature
 handle for opt-in budget enforcement.
@@ -64,8 +62,7 @@ skill_surface_budget(skill, template_uses, limits)
 - Status: `implemented`
 - Category: `skills`
 - Primary user: skill maintainer
-- Job: cap subscribed skill surfaces at `10` top-level todos, `5` QA checklist
-  items, and `5` eval tasks.
+- Job: cap subscribed skill surfaces at `10` top-level todos and `5` eval tasks.
 
 ## Problem
 
@@ -77,8 +74,8 @@ agents apply every item.
 
 - Treats `template_uses.skill-surface-budget: "0.1.0"` as the opt-in
   subscription.
-- Checks subscribed skills against `10 / 5 / 5` budgets for top-level
-  `SKILL.md` todos, `qa_checklist.md` items, and `evals/evals.json` rows.
+- Checks subscribed skills against `10 / 5` budgets for top-level `SKILL.md`
+  todos and `evals/evals.json` rows.
 - Skips unsubscribed skills without warnings so rollout can happen gradually.
 - Reports exact minimizer commands for over-budget subscribed skills.
 - Uses `skill-maintenance.refine_skill` and `consolidate(..., structure =
@@ -103,9 +100,8 @@ template_uses:
   skill-surface-budget: "0.1.0"
 ```
 
-The validator is deterministic. It counts only top-level numbered skill todos,
-top-level Markdown checkbox items in `qa_checklist.md`, and skill-local eval
-rows. It does not judge item quality or rewrite files.
+The validator is deterministic. It counts only top-level numbered skill todos
+and skill-local eval rows. It does not judge item quality or rewrite files.
 
 When a subscribed skill is over budget, the maintainer runs the minimizer
 worksheet and then applies `skill-maintenance.refine_skill` before keeping the
@@ -120,9 +116,9 @@ flowchart LR
   classDef added fill:#dcfce7,stroke:#15803d,color:#111827
   classDef retired fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d,stroke-dasharray: 5 3
 
-  scan["Skill/template surface scan<br/>SKILL.md + qa_checklist.md + evals/evals.json"]:::keep
+  scan["Skill/template surface scan<br/>SKILL.md + evals/evals.json"]:::keep
   optin["template_uses<br/>skill-surface-budget: 0.1.0"]:::keep
-  caps["budget caps<br/>10 todos / 5 QA / 5 evals"]:::changed
+  caps["budget caps<br/>10 todos / 5 evals"]:::changed
   validator["bin/validators/check_skill_surface_budget.py"]:::changed
   pass["pass / skipped"]:::added
   violation["violation + exact counts"]:::added
@@ -150,7 +146,6 @@ Supporting surfaces:
 
 - `docs/skills/system.md`
 - `docs/skills/templates/SKILL_TEMPLATE.md`
-- `docs/skills/templates/QA_CHECKLIST_TEMPLATE.md`
 - `tickets/archive/TASK-0221/ticket.md`
 
 ## Proof And Quality
@@ -170,7 +165,7 @@ Acceptance signals:
 ## Rollout And Maintenance
 
 - Update path: add `template_uses.skill-surface-budget: "0.1.0"` only after the
-  skill fits `10 / 5 / 5`.
+  skill fits `10 / 5`.
 - Rollback path: remove the `skill-surface-budget` template use or remove the
   scanner call from `check_skills.py`.
 - Compatibility notes: raw `feature_refs` are not skill frontmatter; use
@@ -199,5 +194,7 @@ Acceptance signals:
 
 ## Change History
 
+- 2026-08-24: Removed the retired QA-sidecar dimension; the budget now counts
+  only Todo List nodes and eval rows.
 - 2026-06-28: Created and implemented with opt-in scanner, minimizer, and Seed
   A/B rollout.

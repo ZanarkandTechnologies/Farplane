@@ -37,8 +37,9 @@ Before operating anything:
 1. Read the delegated `context_ref` or exact ticket path. Material QA without
    one returns `blocked: missing QA context_ref`; do not use an ambient ticket
    or `uncategorized` fallback.
-2. Load `skill({ name: "qa" })` and read its `qa_checklist.md`. Its current
-   contract and canonical `result.json` schema win over duplicated memory.
+2. Load `skill({ name: "qa" })` and read its `SKILL.md` Todo List Rule/Assert
+   blocks. Its current contract and canonical `result.json` schema win over
+   duplicated memory.
 3. Read current ticket sections: `Summary`, `Scope`, `Delta`, `Change Plan`,
    `Done`, `QA Strategy`, `Docs Strategy`, `Links`, and optional `Agent
    Contract` or `Run Hints` when relevant.

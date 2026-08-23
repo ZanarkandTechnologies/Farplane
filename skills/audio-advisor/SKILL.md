@@ -6,11 +6,8 @@ group: marketing
 source: local
 template_uses:
   skill-template: "0.3.8"
-  skill-qa-checklist: "0.1.1"
   skill-eval-task: "0.2.0"
   skill-surface-budget: "0.1.0"
-eval: evals/evals.json
-qa_checklist: qa_checklist.md
 common_chains:
   after: ["storyboard", "asset-advisor", "avatar-advisor", "ai-video-advisor", "remotion"]
 methods:
@@ -56,7 +53,7 @@ audio_advisor(script_or_storyboard, element_realization_packets?, timing_master_
 state:
   reads(user brief, script/storyboard, complete audio/editing element packets,
         source refs,
-        provider/source reference selected by route, qa_checklist.md,
+        provider/source reference selected by route, the first-load Todo List guardrails,
         runtime secret readiness when authorized generation is requested)
   writes(audio direction artifact, SFX candidate shortlist?, optional generated
          audio, generation receipt, actual duration/alignment/cue binding)
@@ -117,7 +114,7 @@ alone do not unlock visual generation.
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-- [ ] 1. Bind the audio job and read `qa_checklist.md` as preflight.
+- [ ] 1. Bind the audio job and read the first-load Todo List guardrails as preflight.
   - [ ] Resolve the script/storyboard, selected elements, platform,
     duration, audio roles, rights constraints, artifact owner, desired mode,
     and whether provider execution is explicitly authorized.
@@ -169,7 +166,7 @@ alone do not unlock visual generation.
     and route final placement/mix/render proof to `remotion`.
   - [ ] When this asset is timing master, attach observed duration,
     alignment/timestamps, and the revised cue sheet before final visual work.
-  - [ ] Reapply `qa_checklist.md` and use independent review for material
+  - [ ] Reapply the first-load Todo List guardrails and use independent review for material
     production runs.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
@@ -211,7 +208,7 @@ combined voice, music, and SFX packet.
 
 ## Reference Map
 
-- `qa_checklist.md` - read at start and finish for direction, sourcing,
+- the first-load Todo List guardrails - read at start and finish for direction, sourcing,
   generation, and handoff QA.
 - [SoundButtonsWorld discovery](references/soundbuttonsworld.md) - load before
   candidate search; returns links only.

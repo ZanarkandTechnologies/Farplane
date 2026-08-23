@@ -7,7 +7,6 @@ source: local
 template_uses:
   skill-template: "0.2.0"
   skill-eval-task: "0.2.0"
-eval: evals/evals.json
 planner_contract:
   required_arguments: ["target_skill", "performance_metric", "feedback_class", "failure_evidence"]
 ---

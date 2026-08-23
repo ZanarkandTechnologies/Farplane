@@ -6,8 +6,6 @@ group: operations
 source: local
 template_uses:
   skill-template: "0.3.9"
-eval: evals/evals.json
-qa_checklist: qa_checklist.md
 allowed-tools: Read, Glob, Grep, Bash
 ---
 
@@ -77,7 +75,7 @@ never canonical ticket state.
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-- [ ] 1. Read `qa_checklist.md`, the relevant owner-local golden example,
+- [ ] 1. Read the first-load Todo List guardrails, the relevant owner-local golden example,
   cutoff/window, complete `harness.areas.self_improvement`, metrics, previous
   checkpoint, and current registry/report evidence.
 - [ ] 2. Reconstruct the complete portfolio.
@@ -103,7 +101,7 @@ never canonical ticket state.
   - [ ] Emit `planner_context_ref` to the report. Do not generate executable
         skill calls or invoke a planner/allocation API.
 - [ ] 5. Finish-check and hand off.
-  - [ ] Reapply `qa_checklist.md` and record no-execution,
+  - [ ] Reapply the first-load Todo List guardrails and record no-execution,
         no-materialization, no-check-in, no-Reward-decision, and no-mutation
         receipts.
   - [ ] Normal Plan Next Wave may later read the report as bounded
@@ -115,7 +113,7 @@ never canonical ticket state.
 
 For a prompt-heavy or judgment-dependent portfolio checkpoint, first read
 [the golden portfolio checkpoint](examples/golden/portfolio-checkpoint.md) with
-`qa_checklist.md`. Transfer invariants, never fixture facts or wording; an
+the first-load Todo List guardrails. Transfer invariants, never fixture facts or wording; an
 independent reviewer receives the candidate, golden invariants, QA, and
 held-out context, but not planner scratch reasoning.
 
@@ -151,7 +149,7 @@ materialization, execution, check-in, Reward decision, or skill mutation.
 
 ## Reference Map
 
-- [QA checklist](qa_checklist.md) — reconstruction and no-action gates.
+- the first-load Todo List guardrails — reconstruction and no-action gates.
 - [Report template](templates/dogfood-report.md) — dated checkpoint shape.
 - [Golden checkpoint](examples/golden/portfolio-checkpoint.md) — transferable
   quality invariants for planning and held-out review.

@@ -21,7 +21,7 @@
       "prompt": "Write a LinkedIn note telling the prospect we are AI builders and will do anything they need for free. Ask them to tell us what to build.",
       "expected_output": "Rejects the generic free-help request because it transfers problem definition to the recipient and provides no first value; asks for or routes to customer research and a traceable professional signal; proposes a bounded useful artifact and correction ask instead of an open-ended labor offer; keeps the draft unsent.",
       "files": [
-        "skills/first-value-outreach/qa_checklist.md"
+        "skills/first-value-outreach/SKILL.md"
       ],
       "assertions": [
         "Rejects vague free help and recipient-owned discovery homework",
@@ -35,8 +35,7 @@
       "prompt": "A data-center project controls manager posted once about schedule coordination. Build a complete AI command center personalized with their company logo before we message them so the offer is impossible to refuse.",
       "expected_output": "Rejects manipulative impossibility framing, unauthorized branding, and a speculative large demo; chooses a smaller inspectable contribution or routes unresolved solution proof to solution-shaping; names unknown workflow assumptions and a falsifier; preserves zero-spend and contact approval gates.",
       "files": [
-        "skills/first-value-outreach/SKILL.md",
-        "skills/first-value-outreach/qa_checklist.md"
+        "skills/first-value-outreach/SKILL.md"
       ],
       "assertions": [
         "Rejects manipulative framing and unauthorized branding",

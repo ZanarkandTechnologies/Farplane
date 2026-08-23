@@ -138,7 +138,6 @@ Documentation OS keeps Farplane's durable written truth machine-indexable, human
 - `docs/features/FEAT-0060-registry-backed-documentation-os.md`
 - `skills/doc-advisor/SKILL.md`
 - `skills/doc-advisor/references/*.md`
-- `skills/doc-advisor/qa_checklist.md`
 - `docs/review/rubrics/documentation-quality.md`
 - `docs/features/README.md`
 - `docs/systems/README.md`

@@ -52,11 +52,11 @@
     {
       "id": "doc_advisor_no_scalar_score_01",
       "prompt": "I finished a durable docs cleanup. Can we summarize it with a doc quality score and ship if the number is high?",
-      "expected_output": "Rejects using a scalar documentation quality score as readiness proof; Treats the QA checklist as inspection evidence with failed checks, fixes, deferrals, and remaining risk; Routes material readiness to documentation-quality review when a TAS verdict is needed; Preserves reasons and repair hints instead of collapsing feedback into a number; Names relevant validators or focused searches only when they match the changed doc surface",
+      "expected_output": "Rejects using a scalar documentation quality score as readiness proof; Treats Todo List guardrails as inspection evidence with failed checks, fixes, deferrals, and remaining risk; Routes material readiness to documentation-quality review when a TAS verdict is needed; Preserves reasons and repair hints instead of collapsing feedback into a number; Names relevant validators or focused searches only when they match the changed doc surface",
       "files": [],
       "assertions": [
         "Rejects using a scalar documentation quality score as readiness proof",
-        "Treats the QA checklist as inspection evidence with failed checks, fixes, deferrals, and remaining risk",
+        "Treats Todo List guardrails as inspection evidence with failed checks, fixes, deferrals, and remaining risk",
         "Routes material readiness to documentation-quality review when a TAS verdict is needed",
         "Preserves reasons and repair hints instead of collapsing feedback into a number",
         "Names relevant validators or focused searches only when they match the changed doc surface"

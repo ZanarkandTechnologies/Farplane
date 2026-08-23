@@ -9,11 +9,8 @@ capability:
   produces: [content-production-ticket]
 template_uses:
   skill-template: "0.4.0"
-  skill-qa-checklist: "0.1.1"
   skill-eval-task: "0.2.0"
   skill-surface-budget: "0.1.0"
-eval: evals/evals.json
-qa_checklist: qa_checklist.md
 common_chains:
   after: ["storyboard", "asset-advisor", "editing-advisor", "remotion", "review"]
 allowed-tools: Read, Grep, Glob, Bash
@@ -79,7 +76,7 @@ content_impl_plan(ticket_or_intent, creative_context?, production_constraints?)
 state:
   reads(user brief, optional approved Brand Kit snapshot, optional complete
         Tasty Pack captures, proof/examples/swipes, canonical ticket?,
-        qa_checklist.md)
+        the first-load Todo List guardrails)
   writes(canonical ticket.md)
 
 owns: parent creative direction, ordered child-action graph, dependency and
@@ -201,7 +198,7 @@ states, and representative layered-frame gate.
 - `references/newsprint-treatment.md` - load for newspaper/newsprint visual
   direction; owns source-honest texture classification, raster paper sourcing,
   compositing handoff, Brand Kit placement, and final-resolution proof.
-- `qa_checklist.md` - read at start and finish for content implementation plan
+- the first-load Todo List guardrails - read at start and finish for content implementation plan
   QA.
 - `../storyboard/SKILL.md` - narrative, script, beat sheet, and scene map.
 - `../asset-advisor/SKILL.md` - asset inventory, recreation plan, and owner

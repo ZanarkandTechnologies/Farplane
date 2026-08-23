@@ -7,8 +7,6 @@ version: 0.1.0
 template_uses:
   skill-template: "0.2.0"
   skill-eval-task: "0.2.0"
-eval: evals/evals.json
-qa_checklist: qa_checklist.md
 allowed-tools: Read, Write, Glob, Grep, Bash
 
 ---
@@ -480,7 +478,7 @@ Feedback shape:
 
 - [docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md](../../docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md) -
   Goal Packet and feedback-provider model.
-- [qa_checklist.md](qa_checklist.md) - Telegram/request exit gate and phone
+- the first-load Todo List guardrails - Telegram/request exit gate and phone
   feedback proof checklist.
 - [../goal-advisor/SKILL.md](../goal-advisor/SKILL.md) - owns Goal
   architecture, packet setup, and native `/goal` prompt compilation.

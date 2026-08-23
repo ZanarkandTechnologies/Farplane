@@ -120,11 +120,11 @@
     {
       "id": "proof-advisor-proof-surface-routing",
       "prompt": "I need to check a skill package. Some things are structural, like frontmatter and JSON validity. Other things are judgment-heavy, like whether the generated cases are realistic and distinct. Design the proof approach.",
-      "expected_output": "Routes structural checks to deterministic validators, schema checks, or scripts.; Routes realism, distinctness, and judgment-heavy behavior to eval, QA checklist, reviewer, or agent QA criteria.; Explains why one proof surface should not cover all cases.; Names evidence expected from each proof surface.",
+      "expected_output": "Routes structural checks to deterministic validators, schema checks, or scripts.; Routes realism, distinctness, and judgment-heavy behavior to eval, QA, review, or agent QA criteria.; Explains why one proof surface should not cover all cases.; Names evidence expected from each proof surface.",
       "files": [],
       "assertions": [
         "Routes structural checks to deterministic validators, schema checks, or scripts.",
-        "Routes realism, distinctness, and judgment-heavy behavior to eval, QA checklist, reviewer, or agent QA criteria.",
+        "Routes realism, distinctness, and judgment-heavy behavior to eval, QA, review, or agent QA criteria.",
         "Explains why one proof surface should not cover all cases.",
         "Names evidence expected from each proof surface."
       ],

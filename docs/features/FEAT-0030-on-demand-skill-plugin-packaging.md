@@ -76,7 +76,7 @@ required before it becomes installable.
 ## What It Does
 
 - Identifies skills or plugin surfaces that should be distributed beyond the repo.
-- Keeps local skill docs, templates, scripts, and QA checklists as the source package.
+- Keeps local skill docs, templates, scripts, and first-load guardrails as the source package.
 - Creates plugin metadata and install paths only for skills with clear consumer value.
 - Runs validation before treating a package as shipped.
 - Keeps retired or local-only workflows out of public plugin ceremony.

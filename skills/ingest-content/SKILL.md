@@ -6,10 +6,7 @@ group: marketing
 source: local
 template_uses:
   skill-template: "0.2.0"
-  skill-qa-checklist: "0.1.1"
   skill-eval-task: "0.2.0"
-eval: evals/evals.json
-qa_checklist: qa_checklist.md
 methods:
   - id: ingest-content:compile-style-profile
     class: artifact
@@ -204,7 +201,7 @@ saved record; downstream production skills own making new assets from records.
 ## Todo List
 
 - [ ] 1. Bind the capture request.
-   - [ ] Read `qa_checklist.md` as preflight guardrails for Resource Bank
+   - [ ] Read the first-load Todo List guardrails as preflight guardrails for Resource Bank
      ingestion.
    - [ ] Identify `source`, `note`, optional `brand_kit_id`, project/context,
      desired future use, and whether the source is public, local, private, or

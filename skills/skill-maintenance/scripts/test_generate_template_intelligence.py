@@ -41,7 +41,7 @@ returns: output.md and a receipt
 
 ## Templates
 
-- Add evals/evals.json and qa_checklist.md when warranted.
+- Add evals/evals.json when variable behavior needs a judgeable case.
 
 ## Output
 """,

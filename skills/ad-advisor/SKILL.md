@@ -8,8 +8,6 @@ template_uses:
   skill-template: "0.3.7"
   skill-surface-budget: "0.1.0"
 allowed-tools: Read, Glob, Grep, web_search
-eval: evals/evals.json
-qa_checklist: qa_checklist.md
 ---
 
 # Ad Advisor
@@ -35,7 +33,7 @@ ad_advisor(ad_goal, offer?, audience?, platform?, account_binding?,
 state:
   reads(public platform docs when current rules matter, supplied offer/creative,
         project bindings, private credential readiness checks when available,
-        qa_checklist.md)
+        the first-load Todo List guardrails)
   writes(review packet or draft config only when caller owns an output path)
 gates:
   account_binding_resolved_or_blocked; spend_cap_named; launch_approval_explicit;
@@ -64,7 +62,7 @@ and `review` before first live spend or durable campaign config changes.
   - [ ] Resolve platform, offer, conversion event, audience, geography, budget
         cap, schedule, creative assets, landing page, account binding, and
         launch intent.
-  - [ ] Read `qa_checklist.md` as preflight guardrails.
+  - [ ] Read the first-load Todo List guardrails as preflight guardrails.
   - [ ] Write the campaign thesis before settings: audience pain or demand
         signal, offer promise, channel reason, conversion event, creative angle
         families, market awareness, market sophistication, category entry
@@ -111,7 +109,7 @@ and `review` before first live spend or durable campaign config changes.
   - [ ] Use `review` before first live spend, new account setup, or durable
         config changes.
 - [ ] 6. Finish-check the ad packet.
-  - [ ] Apply `qa_checklist.md` to the finished packet.
+  - [ ] Apply the first-load Todo List guardrails to the finished packet.
   - [ ] Campaign config, assumptions, policy risks, budget cap, launch gate,
         dry-run evidence, and next owner are visible.
   - [ ] No command or artifact contains credentials or unapproved live-spend
@@ -160,7 +158,7 @@ Next owner:
 
 ## Reference Map
 
-- [qa_checklist.md](qa_checklist.md) - read before campaign planning and apply
+- the first-load Todo List guardrails - read before campaign planning and apply
   before completion.
 - [social-content](../social-content/SKILL.md) - use for ad copy,
   creative concepts, variants, captions, hooks, or asset handoffs.
