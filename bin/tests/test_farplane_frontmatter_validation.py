@@ -3,6 +3,7 @@ from __future__ import annotations
 import sys
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 
 BIN_DIR = Path(__file__).resolve().parents[1]
@@ -56,6 +57,47 @@ class FarplaneLintTests(unittest.TestCase):
     def test_validate_has_no_static_frontmatter_alias(self) -> None:
         with self.assertRaises(SystemExit):
             farplane.build_parser().parse_args(["validate", "frontmatter"])
+
+    def test_validate_skills_is_the_projection_write_boundary(self) -> None:
+        args = farplane.build_parser().parse_args(["validate", "skills"])
+
+        self.assertEqual(args.func.__name__, "run_validate_skills")
+        self.assertFalse(args.check)
+
+    def test_validate_skills_orders_lint_before_projection_writes(self) -> None:
+        args = farplane.build_parser().parse_args(["validate", "skills"])
+
+        class Completed:
+            returncode = 0
+            stdout = "ok"
+            stderr = ""
+
+        with patch("farplane_skill_validation.subprocess.run", return_value=Completed()) as run:
+            self.assertEqual(args.func(args), 0)
+
+        commands = [call.args[0] for call in run.call_args_list]
+        self.assertEqual(len(commands), 4)
+        self.assertEqual(commands[0][-2:], ("lint", "skills"))
+        self.assertEqual(commands[1][-1], "--write")
+        self.assertIn("skill-registry", commands[2])
+        self.assertIn("harness-reference", commands[3])
+
+    def test_validate_skills_check_mode_never_writes_projections(self) -> None:
+        args = farplane.build_parser().parse_args(["validate", "skills", "--check"])
+
+        class Completed:
+            returncode = 0
+            stdout = "ok"
+            stderr = ""
+
+        with patch("farplane_skill_validation.subprocess.run", return_value=Completed()) as run:
+            self.assertEqual(args.func(args), 0)
+
+        commands = [call.args[0] for call in run.call_args_list]
+        self.assertTrue(all("--write" not in command for command in commands))
+        self.assertEqual(commands[1][-1], "--check")
+        self.assertEqual(commands[2][-1], "--check")
+        self.assertEqual(commands[3][-1], "--check")
 
 
 if __name__ == "__main__":

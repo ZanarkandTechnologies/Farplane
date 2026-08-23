@@ -34,6 +34,16 @@ class EnvPatch:
 
 
 class GenerateSkillGraphTests(unittest.TestCase):
+    def test_generated_skill_docs_do_not_embed_optional_ensemble_personas(self) -> None:
+        repo_root = Path(__file__).resolve().parents[3]
+        docs = generate_skill_graph.build_docs(
+            [{"name": "advise", "path": str(repo_root / "skills" / "advise" / "SKILL.md")}]
+        )
+        advise = docs["skills"]["advise"]
+
+        self.assertNotIn("ensemble", advise["frontmatter"])
+        self.assertNotIn("operator-value", advise["frontmatter_raw"])
+
     def test_projection_defaults_use_ignored_runtime_graph_root(self) -> None:
         for config in list_projection_configs():
             self.assertTrue(config.default_out.startswith(f"{GENERATED_GRAPH_ROOT}/"))

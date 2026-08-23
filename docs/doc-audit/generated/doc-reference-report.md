@@ -15,7 +15,7 @@ refs:
 
 # Docs Reference Audit
 
-Generated at `2026-08-23T15:39:54+00:00` from local Markdown links and literal repo-path
+Generated at `2026-08-23T16:02:00+00:00` from local Markdown links and literal repo-path
 references. This is a navigation and cleanup aid, not a deletion authority.
 
 ## Harness Math Doc
@@ -29,32 +29,32 @@ The harness math doc is `docs/fundamentals/harness-algebra.md`.
 
 ## Counts
 
-- Scanned files: `1703`
-- Nodes: `1095`
-- Edges: `4541`
-- Unresolved local-looking refs: `1783`
+- Scanned files: `1722`
+- Nodes: `1114`
+- Edges: `4591`
+- Unresolved local-looking refs: `1807`
 
 ## Most Referenced Docs
 
 | Doc | All refs | Skill refs |
 | --- | --- | --- |
-| `docs/features/README.md` | 60 | 24 |
-| `docs/features/validate_features.py` | 58 | 9 |
-| `docs/skills/registry.jsonl` | 47 | 33 |
+| `docs/features/README.md` | 61 | 24 |
+| `docs/features/validate_features.py` | 59 | 9 |
+| `docs/skills/registry.jsonl` | 48 | 33 |
+| `docs/systems/README.md` | 39 | 14 |
 | `docs/HISTORY.md` | 38 | 7 |
 | `docs/MEMORY.md` | 38 | 15 |
-| `docs/systems/README.md` | 38 | 14 |
 | `docs/prd.md` | 34 | 14 |
-| `docs/skills/README.md` | 33 | 13 |
+| `docs/skills/README.md` | 34 | 13 |
 | `docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md` | 29 | 11 |
+| `docs/features/registry.jsonl` | 26 | 4 |
 | `docs/bootstrap-brief.md` | 25 | 19 |
-| `docs/features/registry.jsonl` | 25 | 4 |
-| `docs/skills/system.md` | 24 | 11 |
+| `docs/skills/system.md` | 23 | 11 |
 | `docs/skills/templates/SKILL_TEMPLATE.md` | 22 | 5 |
 | `docs/skills/best-practices.md` | 21 | 13 |
 | `docs/features/FEAT-0060-registry-backed-documentation-os.md` | 20 | 4 |
 | `docs/TASTE.md` | 18 | 13 |
-| `docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md` | 18 | 6 |
+| `docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md` | 17 | 5 |
 | `docs/farplane-framework/lifecycle.md` | 16 | 3 |
 | `docs/systems/wiki.md` | 16 | 1 |
 | `docs/features/FEAT-0065-pulse-and-interval-automation.md` | 16 | 7 |
@@ -76,7 +76,7 @@ The harness math doc is `docs/fundamentals/harness-algebra.md`.
 | `docs/features/FEAT-0031-agent-behavior-test-workflow.md` | 4 | 0 | keep active |
 | `docs/features/FEAT-0032-goal-advisor-execution-compilation.md` | 7 | 1 | keep active |
 | `docs/features/FEAT-0034-adversarial-agent-qa-test-skill.md` | 4 | 0 | keep active |
-| `docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md` | 18 | 6 | keep active |
+| `docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md` | 17 | 5 | keep active |
 | `docs/features/FEAT-0042-lean-global-agent-operating-kernel.md` | 13 | 4 | keep active |
 | `docs/features/FEAT-0043-project-level-system-prompt-eval-suite.md` | 5 | 0 | keep active |
 | `docs/features/FEAT-0054-modular-skill-local-eval-tasks.md` | 4 | 0 | keep active |
@@ -102,7 +102,7 @@ The harness math doc is `docs/fundamentals/harness-algebra.md`.
 | `docs/features/FEAT-0077-crm-entity-projection.md` | 6 | 0 | keep active |
 | `docs/features/FEAT-0078-harness-graphir-projections.md` | 6 | 0 | keep active |
 | `docs/features/FEAT-0079-wiki-resolution-and-incremental-projections.md` | 8 | 0 | keep active |
-| `docs/features/README.md` | 60 | 24 | keep active |
+| `docs/features/README.md` | 61 | 24 | keep active |
 | `docs/features/TEMPLATE.md` | 5 | 1 | keep active |
 | `docs/features/registry.md` | 3 | 0 | keep active |
 

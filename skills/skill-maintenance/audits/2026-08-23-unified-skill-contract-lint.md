@@ -3,7 +3,7 @@ skill: skill-maintenance
 date: 2026-08-23
 change_type: maintenance
 owner: skill-maintenance
-status: draft
+status: pass
 review_route: reviewer
 before_ref: separate frontmatter and ensemble validator commands
 after_ref: one package lint with optional progressive ensemble sidecars
@@ -22,8 +22,9 @@ eval_required: no
 - Before: skill metadata and optional persona files had separate validator
   commands. Some renderers parsed skill frontmatter independently.
 - After: `farplane lint skills` validates each `SKILL.md` plus any optional
-  `ensemble.yaml` through one package lint, writes the registry, and regenerates
-  skill and harness graph outputs.
+  `ensemble.yaml` through one package lint. `farplane validate skills` runs
+  that lint first, then writes the registry and regenerates skill and harness
+  graph outputs.
 - Why: one package lint should not require every skill invocation to load a
   persona council; nested persona names must never leak into skill discovery or
   plugin names.
@@ -35,8 +36,8 @@ eval_required: no
 ```text
 SKILL.md frontmatter + ensemble.yaml?
   -> typed skill identity + capability? + optional personas
-  -> skill contract lint
-  -> registry write -> skill graph -> harness graph
+  -> farplane lint skills (read-only)
+  -> farplane validate skills: registry write -> skill graph -> harness graph
 ```
 
 The direct path remains the default. `ensemble=auto` opens the optional sidecar
@@ -49,9 +50,9 @@ and selects three relevant personas; `ensemble=max` uses all declared personas.
 | One parser for skill metadata | pass | `skill_contract.py`, registry, graph-doc, and plugin discovery use the shared parser. |
 | Complete persona validation | pass | 5 optional sidecars / 23 personas from `check_skill_frontmatter.py`. |
 | Progressive persona loading | pass | `SKILL.md` remains minimal; persona prompts stay in sidecars. |
-| Lint refresh order | pass | `farplane lint all --json` reports contract, registry, skill graph, then harness graph. |
+| Validation refresh order | pass | `farplane validate skills` passed in order: lint, registry write, skill graph, harness graph; `--check` then confirmed freshness without writes. |
 | Plugin discovery remains correct | pass | nested-persona regression test and `sync_skill_plugins.py --check`. |
-| Independent review | pending | The earlier TAS-A reviewed the superseded eager-frontmatter version; rerun is required for the progressive-sidecar correction. |
+| Independent review | pass | Rerun TAS-A reviewed the progressive-sidecar implementation, CLI boundary, generated outputs, and focused proof. |
 
 ## Scope
 
@@ -68,6 +69,8 @@ and selects three relevant personas; `ensemble=max` uses all declared personas.
 
 ## Review Receipt
 
-The 2026-08-23 TAS-A receipt applies only to the superseded eager-frontmatter
-implementation. Re-run independent review against this progressive-sidecar
-layout before marking the audit passed.
+The earlier eager-frontmatter receipt is superseded. A 2026-08-23 rerun issued
+**TAS-A / pass** for the progressive-sidecar layout: pure `farplane lint
+skills`, ordered `farplane validate skills` refresh, a passing `--check` run,
+and no persona IDs or prompts in generated skill docs, graphs, registry, or
+plugin outputs.

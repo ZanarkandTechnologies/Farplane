@@ -20,6 +20,7 @@ from farplane_cli_commands import (
     run_wiki_cli,
     run_validate_ticket,
 )
+from farplane_skill_validation import run_validate_skills
 from farplane_lint import run_lint_cli
 from farplane_cli_hooks import (
     run_hooks_doctor, run_hooks_install, run_hooks_list, run_install,
@@ -94,7 +95,7 @@ def build_parser() -> argparse.ArgumentParser:
     eval_promptfoo.add_argument("--dry-run", action="store_true")
     eval_promptfoo.set_defaults(func=run_eval_promptfoo_cli)
 
-    validate = sub.add_parser("validate", help="Run phase-aware Farplane ticket validation and write proof receipts.")
+    validate = sub.add_parser("validate", help="Validate a ticket or refresh checked-in skill projections.")
     validate_sub = validate.add_subparsers(dest="validate_command")
     validate_ticket_parser = validate_sub.add_parser("ticket", help="Validate one ticket at a lifecycle phase.")
     validate_ticket_parser.add_argument("ticket")
@@ -105,6 +106,18 @@ def build_parser() -> argparse.ArgumentParser:
     validate_ticket_parser.add_argument("--no-write", action="store_true", help="Do not write the ticket validation receipt.")
     validate_ticket_parser.add_argument("--json", action="store_true")
     validate_ticket_parser.set_defaults(func=run_validate_ticket)
+    validate_skills_parser = validate_sub.add_parser(
+        "skills",
+        help="Lint skill packages, then refresh the skill registry and graph projections.",
+    )
+    validate_skills_parser.add_argument("--root", default=str(CORE_ROOT))
+    validate_skills_parser.add_argument(
+        "--check",
+        action="store_true",
+        help="Check registry and graph freshness without writing projections.",
+    )
+    validate_skills_parser.add_argument("--json", action="store_true")
+    validate_skills_parser.set_defaults(func=run_validate_skills)
     lint = sub.add_parser("lint", help="Run static YAML/JSON parsing and typed Farplane contracts.")
     lint.add_argument(
         "scope",
