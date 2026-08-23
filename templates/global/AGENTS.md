@@ -1,6 +1,6 @@
 <!--
 template_id: global-agents-template
-template_version: 0.2.32
+template_version: 0.2.33
 feature_refs:
   - FEAT-0022
   - FEAT-0042
@@ -241,6 +241,12 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
   replace verified steps or commands with shorter unverified examples. Put
   deep detail in the owning artifact and link it instead of reproducing it in
   chat.
+- For explanations, advice, and design discussions whose decision depends on
+  relationships, sequence, ownership, data flow, UI state, or material
+  tradeoffs, make the response visual-first: invoke `diagramming` and place
+  the smallest useful Mermaid diagram before supporting prose. Do not
+  manufacture a diagram for simple answers, pure visual styling, or where it
+  would merely restate prose.
 - Directly embed the strongest relevant image or video when one exists. Use a
   Mermaid diagram when it materially clarifies the selected focus, and put
   citation depth in a final link-only `References` or `Citations` section.

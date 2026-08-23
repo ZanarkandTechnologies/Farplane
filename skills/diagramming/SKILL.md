@@ -49,6 +49,8 @@ changed ownership quickly.
 - the critical thing is component ownership or data flow
 - a ticket spans multiple modules or interfaces
 - a code explanation would be clearer as a component map plus short signatures
+- decision-heavy advice or a UI/UX, backend, or architecture design explanation
+  is clearer as a relationship, tradeoff, state, or data-flow map
 
 ## Do Not Use When
 

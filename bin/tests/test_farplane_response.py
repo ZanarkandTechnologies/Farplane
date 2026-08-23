@@ -59,6 +59,21 @@ class ResponseMeasureTests(unittest.TestCase):
         self.assertEqual(result.mermaid_blocks, 1)
         self.assertEqual(result.mermaid_nonblank_lines, 4)
 
+    def test_colored_mermaid_data_flow_is_excluded(self) -> None:
+        markdown = (
+            "Decision.\n"
+            "```mermaid\n"
+            "flowchart LR\n"
+            "classDef changed fill:#fef3c7,stroke:#b45309,color:#111827\n"
+            'request["Advice"]:::changed -->|1| plan["Data flow"]:::changed\n'
+            "```"
+        )
+        result = measure_response(markdown)
+        self.assertEqual(result.prose_words, 1)
+        self.assertEqual(result.prose_nonblank_lines, 1)
+        self.assertEqual(result.mermaid_blocks, 1)
+        self.assertEqual(result.mermaid_nonblank_lines, 5)
+
     def test_non_mermaid_and_unclosed_mermaid_fences_count_as_prose(self) -> None:
         ordinary = measure_response("```python\nprint(1)\n```")
         unclosed = measure_response("```mermaid\nflowchart LR\nA --> B")

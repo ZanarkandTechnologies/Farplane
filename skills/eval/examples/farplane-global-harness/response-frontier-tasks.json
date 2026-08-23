@@ -40,5 +40,19 @@
     ],
     "tags": ["system-prompt", "media", "mermaid", "references", "response-frontier"],
     "notes": "Tests the presentation exclusions and their semantic no-new-breadth boundary together."
+  },
+  {
+    "id": "global_visual_first_design_advice_01",
+    "title": "Visualize a design decision before explaining it",
+    "query": "Recommend how to replace a dashboard's manual CSV import with an API sync. The decision depends on the current and proposed data flow, failure states, and ownership between the UI, backend, and provider.",
+    "reference_points": [
+      "Leads with a compact colored Mermaid diagram that makes the current or proposed relationship legible",
+      "Uses a numbered flow only where ordering is the decision",
+      "Explains the recommendation with concise supporting prose rather than moving prose into diagram labels",
+      "Includes a legend or labels that preserve the diagram's meaning without color",
+      "Does not introduce unrelated implementation scope"
+    ],
+    "tags": ["system-prompt", "visual-first", "advice", "design", "data-flow", "response-frontier"],
+    "notes": "Regression for the global visual-first routing rule: use a diagram when relationships and flow drive the decision."
   }
 ]
