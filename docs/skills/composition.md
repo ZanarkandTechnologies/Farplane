@@ -3,6 +3,7 @@ title: Skill Composition Contract
 status: active
 owner: skill-maintenance
 created_at: 2026-08-07
+updated_at: 2026-08-07
 refs:
   - docs/skills/system.md
   - docs/skills/templates/SKILL_TEMPLATE.md

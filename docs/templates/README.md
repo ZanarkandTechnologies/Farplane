@@ -2,6 +2,7 @@
 title: Template Registry
 status: active
 owner: Farplane
+created_at: 2026-07-13
 updated_at: 2026-07-13
 ---
 
@@ -22,7 +23,6 @@ The registry is deliberately focused on high-leverage surfaces:
 - `docs/skills/templates/SKILL_TEMPLATE.md`
 - `docs/skills/templates/METHOD_REFERENCE_TEMPLATE.md`
 - `skills/skill-creator/references/EVAL_TASK_TEMPLATE.json`
-- `docs/skills/templates/QA_CHECKLIST_TEMPLATE.md`
 - `tickets/templates/ticket.md`
 - `tickets/templates/goal-loop/program.md`
 - `skills/harness-creator/templates/project-harness.md`

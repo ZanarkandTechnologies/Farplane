@@ -1,6 +1,7 @@
 ---
-kind: farplane-entity-view-projection-standard
+title: "Farplane Entity View Projection Standard"
 status: active
+owner: farplane-framework
 created_at: 2026-07-23
 updated_at: 2026-08-02
 framework_template_version: "2.0.14"

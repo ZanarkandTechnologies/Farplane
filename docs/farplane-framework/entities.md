@@ -1,6 +1,7 @@
 ---
-kind: farplane-framework-wiki-standard
+title: "Farplane Entity Markdown Standard"
 status: active
+owner: farplane-framework
 created_at: 2026-07-12
 updated_at: 2026-08-19
 framework_template_version: "2.1.0"

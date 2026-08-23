@@ -1,12 +1,11 @@
 ---
-kind: bootstrap-brief
+title: "Farplane Bootstrap Brief"
 status: active
-project: Farplane
+owner: harness
 created_at: 2026-06-21
 updated_at: 2026-06-21
 framework_template_version: "0.1.0"
-owner: harness
-source:
+refs:
   - skills/init-advisor/SKILL.md
   - farplane/manifest.json
   - docs/farplane-framework/project-files.md

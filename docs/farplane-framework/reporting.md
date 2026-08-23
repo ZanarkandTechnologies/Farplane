@@ -1,6 +1,7 @@
 ---
-kind: farplane-framework-reporting-standard
+title: "Farplane Reporting"
 status: active
+owner: farplane-framework
 created_at: 2026-07-08
 updated_at: 2026-08-19
 framework_template_version: "0.1.3"

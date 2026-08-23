@@ -3,6 +3,7 @@ title: Data Visualization Guidance
 status: active
 owner: impl-plan
 created_at: 2026-08-06
+updated_at: 2026-08-06
 tags: [data-visualization, planning, frontend]
 ---
 

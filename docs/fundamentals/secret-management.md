@@ -2,7 +2,8 @@
 title: Secret Management
 status: active
 owner: farplane-core
-updated: 2026-08-02
+created_at: 2026-08-02
+updated_at: 2026-08-02
 ---
 
 # Secret Management

@@ -2,6 +2,8 @@
 title: Skill department taxonomy
 status: active
 owner: skills/skill-maintenance
+created_at: 2026-08-13
+updated_at: 2026-08-13
 source_of_truth: [rules/skill-departments.toml, rules/skill-workflows.toml]
 ---
 

@@ -12,6 +12,11 @@ machine-checkable outputs.
 - Put public framework narrative in `docs/farplane-framework/`.
 - Put generated or machine-readable inventories behind their owning source
   files; do not hand-author duplicate truth.
+- YAML frontmatter is a path-owned contract, not a free-form metadata bag.
+  `bin/core/document_contract.py` owns the strict narrative, generated,
+  feature, system, and template types checked by
+  `bin/validators/check_doc_frontmatter.py`; add a field only to its owning
+  contract and its fixture coverage.
 - Put task-local plans, proof, and bulky evidence in tickets or artifacts.
 - Put temporary research outside tracked docs unless it has a current owner.
 
