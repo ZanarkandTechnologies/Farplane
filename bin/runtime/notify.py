@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import json
+import os
 import shutil
 import subprocess
 import sys
@@ -8,6 +9,17 @@ from pathlib import Path
 
 MACOS_SOUND_PATH = Path("/System/Library/Sounds/Glass.aiff")
 COMMAND_TIMEOUT_SECONDS = 5
+NOTIFY_HOME_ENV = "FARPLANE_NOTIFY_HOME"
+RUNTIME_NOTIFY_DISABLED_FILE = ".farplane-notify-disabled"
+
+
+def runtime_notify_disabled() -> bool:
+    notify_home = Path(
+        os.environ.get(NOTIFY_HOME_ENV)
+        or os.environ.get("CODEX_HOME")
+        or Path.home() / ".codex"
+    )
+    return (notify_home / RUNTIME_NOTIFY_DISABLED_FILE).is_file()
 
 
 def run_quiet(command: list[str]) -> int:
@@ -99,6 +111,9 @@ def main() -> int:
         notification = json.loads(sys.argv[1])
     except json.JSONDecodeError:
         return 1
+
+    if runtime_notify_disabled():
+        return 0
 
     message = notification_message(notification)
     if message is None:

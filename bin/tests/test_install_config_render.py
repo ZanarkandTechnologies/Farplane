@@ -13,6 +13,35 @@ INSTALL = ROOT / "install.sh"
 
 
 class InstallConfigRenderTests(unittest.TestCase):
+    def test_full_install_preserves_disabled_notify_from_prior_managed_config(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            home = Path(temp_dir) / "home"
+            target = home / ".codex"
+            target.mkdir(parents=True)
+            (target / "config.toml").write_text(
+                "# Managed template for ~/.codex/config.toml.\n\n"
+                'model = "gpt-5.5"\n',
+                encoding="utf-8",
+            )
+            env = {
+                **os.environ,
+                "HOME": str(home),
+                "REF_API_KEY": "test-ref-key",
+                "NOTION_TOKEN": "test-notion-token",
+                "FARPLANE_SKIP_GLOBAL_CLI": "1",
+            }
+
+            result = subprocess.run(
+                ["bash", str(INSTALL), "--target", str(target)],
+                cwd=ROOT,
+                env=env,
+                capture_output=True,
+                text=True,
+            )
+
+            self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
+            self.assertNotIn("notify", tomllib.loads((target / "config.toml").read_text(encoding="utf-8")))
+
     def test_full_install_preserves_desktop_plugins_and_renders_profiles(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             home = Path(temp_dir) / "home"

@@ -31,6 +31,7 @@ DELEGATED_COMMANDS = {
 }
 OLD_CONVEX_SITE_URL = "https://agreeable-finch-230.convex.site"
 PREVIOUS_NOTIFY_FLAG = "--previous-notify"
+RUNTIME_NOTIFY_DISABLED_FILE = ".farplane-notify-disabled"
 MANAGED_HOOK_FILES = (
     "final_response_gate.py",
     "farplane_console_ping.py",
@@ -106,6 +107,32 @@ def farplane_notify_command(codex_home: Path) -> list[str]:
     return ["python3", str(codex_home / "bin" / "notify.py")]
 
 
+def runtime_notify_guard_path(codex_home: Path) -> Path:
+    return codex_home / RUNTIME_NOTIFY_DISABLED_FILE
+
+
+def runtime_notify_disabled(codex_home: Path) -> bool:
+    return runtime_notify_guard_path(codex_home).is_file()
+
+
+def write_runtime_notify_guard(*, codex_home: Path, disabled: bool, dry_run: bool) -> Path | None:
+    guard_path = runtime_notify_guard_path(codex_home)
+    if dry_run:
+        return guard_path if disabled else None
+
+    if disabled:
+        temporary_path = guard_path.with_name(f"{guard_path.name}.tmp")
+        temporary_path.write_text("disabled\n", encoding="utf-8")
+        temporary_path.replace(guard_path)
+        return guard_path
+
+    try:
+        guard_path.unlink()
+    except FileNotFoundError:
+        pass
+    return None
+
+
 def is_farplane_notify_command(command: object, codex_home: Path) -> bool:
     if not isinstance(command, list) or len(command) < 2:
         return False
@@ -179,6 +206,8 @@ def replace_notify_line(config_text: str, next_command: list[str] | None) -> str
 
 def notify_status_payload(codex_home: Path) -> dict[str, Any]:
     config_path = codex_home / "config.toml"
+    runtime_guard_path = runtime_notify_guard_path(codex_home)
+    runtime_guard_enabled = runtime_notify_disabled(codex_home)
     issues: list[str] = []
     hints: list[str] = []
     command: list[str] | None = None
@@ -196,7 +225,10 @@ def notify_status_payload(codex_home: Path) -> dict[str, Any]:
     farplane_previous = is_farplane_notify_command(previous_command, codex_home)
     wrapped = is_notify_wrapper(command)
 
-    if farplane_direct:
+    if runtime_guard_enabled:
+        status = "disabled"
+        mode = "runtime-guard"
+    elif farplane_direct:
         status = "enabled"
         mode = "direct"
     elif farplane_previous:
@@ -218,6 +250,10 @@ def notify_status_payload(codex_home: Path) -> dict[str, Any]:
         "summary": f"Farplane notify is {status}",
         "codexHome": str(codex_home),
         "configToml": str(config_path),
+        "runtimeGuard": {
+            "disabled": runtime_guard_enabled,
+            "path": str(runtime_guard_path),
+        },
         "status": status,
         "mode": mode,
         "notify": command,
@@ -283,7 +319,14 @@ def set_notify_enabled(codex_home: Path, enabled: bool, dry_run: bool) -> dict[s
         else:
             next_command = command
 
-    backup_path = write_codex_notify(codex_home=codex_home, next_command=next_command, dry_run=dry_run)
+    if enabled:
+        backup_path = write_codex_notify(codex_home=codex_home, next_command=next_command, dry_run=dry_run)
+        write_runtime_notify_guard(codex_home=codex_home, disabled=False, dry_run=dry_run)
+    else:
+        # The guard is checked at callback time, so threads that cached the
+        # old notify command become silent immediately.
+        write_runtime_notify_guard(codex_home=codex_home, disabled=True, dry_run=dry_run)
+        backup_path = write_codex_notify(codex_home=codex_home, next_command=next_command, dry_run=dry_run)
     payload = notify_status_payload(codex_home)
     payload["ok"] = True
     payload["dryRun"] = dry_run

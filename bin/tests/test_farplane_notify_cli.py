@@ -31,7 +31,22 @@ class FarplaneNotifyCliTests(unittest.TestCase):
 
             self.assertEqual(payload["status"], "disabled")
             self.assertNotIn("notify =", config.read_text(encoding="utf-8"))
+            self.assertTrue((codex_home / ".farplane-notify-disabled").is_file())
             self.assertTrue(payload["backup"])
+
+    def test_enable_removes_runtime_notify_guard(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            codex_home = Path(tmp)
+            (codex_home / "bin").mkdir()
+            guard = codex_home / ".farplane-notify-disabled"
+            guard.write_text("disabled\n", encoding="utf-8")
+            config = codex_home / "config.toml"
+            config.write_text('model = "gpt-5.5"\n', encoding="utf-8")
+
+            payload = farplane.set_notify_enabled(codex_home, True, dry_run=False)
+
+            self.assertEqual(payload["status"], "enabled")
+            self.assertFalse(guard.exists())
 
     def test_disable_preserves_wrapper_but_removes_previous_notify(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

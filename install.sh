@@ -237,9 +237,11 @@ PY
 
   python3 - "$config_template" "$TARGET_DIR/config.toml" "$LOCAL_TOML_FILE" "$TARGET_DIR" "$REPO_DIR" "$skill_profile_matrix" <<'PY'
 from pathlib import Path
+import json
 import os
 import re
 import sys
+import tomllib
 
 template_path = Path(sys.argv[1])
 output_path = Path(sys.argv[2])
@@ -266,6 +268,38 @@ if missing:
     )
 
 text = template_path.read_text()
+managed_config_marker = "# Managed template for ~/.codex/config.toml."
+
+# `farplane notify disable` removes the top-level notify setting. Preserve that
+# explicit choice when the installer re-renders a config it previously managed;
+# otherwise every install would silently re-enable notifications from the
+# template. Fresh or externally managed Codex configs still receive the
+# template default.
+if output_path.exists():
+    previous_text = output_path.read_text(encoding="utf-8")
+    if previous_text.startswith(managed_config_marker):
+        try:
+            previous_config = tomllib.loads(previous_text)
+        except tomllib.TOMLDecodeError as exc:
+            raise SystemExit(f"Unable to preserve notify preference from {output_path}: {exc}") from exc
+
+        previous_notify = previous_config.get("notify")
+        if previous_notify is not None and (
+            not isinstance(previous_notify, list)
+            or not all(isinstance(item, str) for item in previous_notify)
+        ):
+            raise SystemExit(f"Unable to preserve notify preference from {output_path}: notify must be a string array")
+
+        for index, line in enumerate(text.splitlines(keepends=True)):
+            if re.match(r"^notify\s*=", line):
+                rendered_lines = text.splitlines(keepends=True)
+                if previous_notify is None:
+                    del rendered_lines[index]
+                else:
+                    rendered_lines[index] = f"notify = {json.dumps(previous_notify)}\n"
+                text = "".join(rendered_lines)
+                break
+
 replacements = {
     "__CODEX_HOME__": env["CODEX_HOME"],
     "__REF_API_KEY__": env["REF_API_KEY"],

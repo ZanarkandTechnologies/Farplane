@@ -289,8 +289,9 @@ What Core owns:
   mining records. Releases, bundles, restore, and legacy archive migration are
   future work.
 - `farplane notify status|enable|disable`: inspects or toggles the Farplane
-  turn-complete notify script in the rendered Codex config, preserving desktop
-  notify wrappers when present.
+  turn-complete notify script in the rendered global Codex config, preserving
+  desktop notify wrappers and the selected setting across later installs. A
+  runtime guard also silences callbacks retained by already-running threads.
 - `farplane run -- <command>`: runs a command through the current project's
   Doppler secret environment.
 - `farplane eval init`: writes this project's non-secret Promptfoo/Codex
