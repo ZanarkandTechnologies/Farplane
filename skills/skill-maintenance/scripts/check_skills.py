@@ -29,6 +29,8 @@ from bin.core.lint.source import MarkdownFrontmatterError, parse_markdown_frontm
 REQUIRED_TEMPLATE_HEADINGS = ("Context", "Skill Signature", "Todo List", "Gotchas", "Output")
 REQUIRED_METHOD_REFERENCE_HEADINGS = ("Use When", "Inputs", "Workflow", "Output Shape", "Quality Gates", "Bad Output")
 CURRENT_METHOD_REFERENCE_VERSION = "0.1.0"
+SKILL_TEMPLATE_PATH = REPO_ROOT / "docs/skills/templates/SKILL_TEMPLATE.md"
+CURRENT_TEMPLATE_OWNER_SKILLS = ("skill-maintenance",)
 HEADING_RE = re.compile(r"^## (?P<heading>.+?)\s*$")
 TOP_LEVEL_NUMBERED_TODO_RE = re.compile(r"^\d+\. ")
 MARKDOWN_TASK_TODO_RE = re.compile(r"^\s*- \[ \] ")
@@ -37,6 +39,38 @@ TIP_LIKE_TOP_LEVEL_TODO_RE = re.compile(r"^\d+\. (?:Use .+ when\b|Keep\b|Do not\
 UNORDERED_PROSE_TODO_RE = re.compile(r"^\s+- ")
 GOLDEN_NODE_RE = re.compile(r"^- \[ \] \*\*N(?P<id>\d+) — .+\*\*\s*$", re.MULTILINE)
 NODE_SIGNATURE_RE = re.compile(r"^\s{2}`[^`]+ -> [^`]+`\s*$", re.MULTILINE)
+
+
+def version_at_least(version: str, floor: tuple[int, int, int]) -> bool:
+    try:
+        parts = tuple(int(part) for part in version.split(".")[:3])
+    except ValueError:
+        return False
+    return len(parts) == 3 and parts >= floor
+
+
+def current_skill_template_version() -> str:
+    metadata = parse_markdown_frontmatter(SKILL_TEMPLATE_PATH) or {}
+    version = metadata.get("template_version")
+    if not isinstance(version, str) or not version:
+        raise RuntimeError(f"{SKILL_TEMPLATE_PATH}: missing template_version")
+    return version
+
+
+def current_template_owner_errors() -> list[str]:
+    expected = current_skill_template_version()
+    errors: list[str] = []
+    for skill_name in CURRENT_TEMPLATE_OWNER_SKILLS:
+        skill_path = REPO_ROOT / "skills" / skill_name / "SKILL.md"
+        metadata = parse_markdown_frontmatter(skill_path) or {}
+        uses = metadata.get("template_uses")
+        observed = uses.get("skill-template") if isinstance(uses, dict) else None
+        if observed != expected:
+            errors.append(
+                f"{skill_name}: skill-template {observed!r} is not current {expected!r}; "
+                "upgrade this template-owner skill in the same change"
+            )
+    return errors
 
 
 def run(command: list[str]) -> None:
@@ -191,7 +225,7 @@ def template_structure_errors(current_version: str) -> list[str]:
         todo_body = markdown_section(text, "Todo List")
         if todo_body is None:
             continue
-        if current_version == "0.5.0":
+        if version_at_least(current_version, (0, 5, 0)):
             node_matches = list(GOLDEN_NODE_RE.finditer(todo_body))
             if not node_matches:
                 errors.append(
@@ -471,6 +505,13 @@ def main() -> int:
         # This skill-maintenance command only adds explicit writers, optional
         # strict/hardcase behavior, rollout reporting, and compile smoke tests.
         run(["python3", "bin/farplane.py", "lint", "skills"])
+
+        freshness_errors = current_template_owner_errors()
+        if freshness_errors:
+            print("current template-owner errors:")
+            for error in freshness_errors:
+                print(f"- {error}")
+            return 1
 
         if args.strict_tier3 or args.capture_hardcase:
             tier_command = ["python3", "bin/validators/check_skill_todo_tiers.py"]

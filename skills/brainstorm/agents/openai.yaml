@@ -3,4 +3,4 @@ interface:
   short_description: "Explore early intent before committing requirements"
   default_prompt: "Use $brainstorm to explore this intent from first principles and return candidate directions."
 policy:
-  allow_implicit_invocation: false
+  allow_implicit_invocation: true

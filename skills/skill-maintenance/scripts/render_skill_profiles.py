@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Render checked-in role skill selections as Codex profile config files."""
+"""Render default-enable and role-restricted Codex skill profile config files."""
 
 from __future__ import annotations
 
@@ -72,12 +72,14 @@ def render_matrix(skill_names: tuple[str, ...], enabled_skills: tuple[str, ...])
 
 def render_profiles(repo: Path, output_dir: Path) -> dict[str, object]:
     resolved_repo = repo.resolve()
-    profiles = load_profile_map(resolved_repo, registry_skill_names(resolved_repo))
+    known_skills = registry_skill_names(resolved_repo)
+    profiles = load_profile_map(resolved_repo, known_skills)
     managed_skills = tuple(sorted({skill for skills in profiles.values() for skill in skills}))
+    base_skills = tuple(sorted(known_skills))
     profile_dir = output_dir / "profiles"
     profile_dir.mkdir(parents=True, exist_ok=True)
     (output_dir / "base.config.toml").write_text(
-        render_matrix(managed_skills, ()), encoding="utf-8"
+        render_matrix(base_skills, base_skills), encoding="utf-8"
     )
     for profile_name, enabled_skills in profiles.items():
         (profile_dir / f"{profile_name}.config.toml").write_text(

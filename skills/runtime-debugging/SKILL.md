@@ -5,7 +5,7 @@ description: "Turn reproducible runtime failures into instrumentation, evidence,
 tier: 2
 source: local
 template_uses:
-  skill-template: "0.3.2"
+  skill-template: "0.6.2"
 allowed-tools: Read, Glob, Grep, Bash
 ---
 
@@ -16,6 +16,9 @@ allowed-tools: Read, Glob, Grep, Bash
 Use this for reproducible bugs where static reading is not enough. The skill
 owns bug intake, hypotheses, instrumentation strategy, runtime evidence
 analysis, and root-cause confirmation.
+
+For configuration, package, discovery, or visibility failures, inspect the
+affected item's nearest owner control before tracing global platform internals.
 
 Route UI-first debugging to `visual-qa`, unresolved proof strategy to
 `proof-advisor`. Keep shell-heavy command batching, dry runs, rollback, and
@@ -28,10 +31,11 @@ focused output in the native execution phase.
 
 ```text
 runtime_debugging(symptom, repro?, context?, ensemble?: auto | max) -> root_cause + fix + proof + escalation?
-state: reads(code, logs, traces, tests, config, runtime output); writes(instrumentation?, fix?, tests?, evidence?)
-gates: repro_or_context_bound; hypotheses_named; evidence_before_fix; proof_after_fix
-routes: visual-qa | proof-advisor
-fails: speculative fix; noisy instrumentation; no proof rerun; hidden root cause
+reads: code, logs, traces, tests, configuration, and runtime output
+does: separates falsifiable causes from runtime evidence, applies the smallest
+  matching fix, and proves the result
+writes: instrumentation, fix, tests, or evidence when required
+returns: root cause, smallest fix, verification proof, or a routed escalation
 ```
 
 When `ensemble` is requested, load `ensemble.yaml`: `auto` selects three
@@ -42,46 +46,68 @@ proof, and escalation contract.
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-- [ ] 1. Bind the debugging inputs.
-   - [ ] Capture the exact symptom, repro path, scope, environment, and success
-     criteria before proposing a fix.
-   - [ ] If there is no reliable repro, stabilize the repro or ask only for the
-     missing runtime context needed to reproduce.
-- [ ] 2. Choose the branch and load only the relevant reference.
-   - [ ] Reproducible runtime bug or regression: read
-     [runtime-repro](references/runtime-repro.md).
-   - [ ] Straightforward error or stack trace: read
-     [from-error](references/from-error.md).
-   - [ ] Logs, timestamps, or event sequence: read
-     [from-logs](references/from-logs.md).
-   - [ ] Flaky, intermittent, or race issue: read
-     [flaky-race](references/flaky-race.md).
-   - [ ] Performance, memory, or slow network path: read
-     [perf-memory-network](references/perf-memory-network.md).
-   - [ ] Support ticket or account-specific issue: read
-     [support-and-account](references/support-and-account.md).
-   - [ ] Unfamiliar code; understand before fixing: read
-     [understand-first](references/understand-first.md).
-- [ ] 3. Resolve ensemble mode when requested.
-   - [ ] Load `ensemble.yaml`; `auto` selects three relevant diverse personas
-     and `max` selects all.
-   - [ ] Keep nested debugging and proof calls on their normal paths.
-- [ ] 4. Map the relevant codepath, callers, side effects, and observability.
-- [ ] 5. State 2-4 falsifiable hypotheses and what evidence would separate them.
-- [ ] 6. Add the minimum instrumentation, logging, timing marker, counter, or
-  repro harness needed to learn something real.
-- [ ] 7. Reproduce and collect runtime evidence before patching.
-- [ ] 8. Stop or reroute when this is not runtime debugging.
-   - [ ] UI-first or visual issue: hand off to `visual-qa`.
-   - [ ] Unresolved proof strategy: hand off to `proof-advisor`.
-   - [ ] Shell-heavy loop design: keep the command plan inline; batch only
-     independent reads, add dry-run/rollback gates, and preserve focused output.
-- [ ] 9. Apply the smallest fix that matches the observed root cause.
-- [ ] 10. Re-run the repro, remove temporary instrumentation when appropriate,
-  and report exact proof that the fix worked.
-- [ ] 11. If prevention matters, read
-  [root-cause-analysis](references/root-cause-analysis.md) and, for recurring
-  learnings, [debugging-knowledge-base](references/debugging-knowledge-base.md).
+- [ ] **N1 — Qualify the runtime failure and select its evidence branch.**
+  `symptom + repro + environment -> bounded repro + diagnostic reference | missing context`
+
+  Rule: Capture expected versus actual behavior, scope, and success condition;
+  load exactly one matching reference from the Reference Map. If the issue is
+  visual, route to `visual-qa`; if only proof design is unresolved, route to
+  `proof-advisor`.
+
+  Assert:
+  - The exact failing behavior and one faithful repro are named, or the missing
+    runtime context is the explicit blocker.
+  - The selected branch matches the evidence source, not a guessed fix.
+
+- [ ] **N2 — Traverse the shortest control path before broad research.**
+  `bounded repro + runtime state -> explanatory mismatch | remaining hypotheses`
+
+  Rule: For configuration, package, discovery, visibility, or routing symptoms,
+  inspect effective config -> installed package -> nearest item metadata ->
+  consumer visibility. Patch and rerun when the first mismatch explains the
+  symptom; only then expand to binaries, release sources, or broad codepaths.
+
+  Assert:
+  - The cheapest discriminating local check is recorded before broad research.
+  - Any escalation names the local checks that did not explain the symptom.
+
+  Example: `missing skill -> compare working neighbor -> local metadata mismatch
+  -> patch and rerun`, before forming a platform-capacity hypothesis.
+
+- [ ] **N3 — Separate the remaining causes with evidence.**
+  `unexplained repro -> 2-4 predictions + minimum observation plan -> observed runtime evidence`
+
+  Rule: Order hypotheses by separation power per cost. Add a targeted log,
+  counter, timing marker, or repro harness only when existing runtime state
+  cannot separate them.
+
+  Assert:
+  - Each hypothesis predicts distinct evidence.
+  - Instrumentation observes a decision point and is no broader than needed.
+
+- [ ] **N4 — Fix the observed root cause at its smallest owner boundary.**
+  `observed evidence -> root-cause statement + smallest matching fix | reroute`
+
+  Rule: Do not patch a surface symptom. Keep shell-heavy command plans inline,
+  batch only independent reads, and preserve dry-run or rollback gates.
+
+  Assert:
+  - The cause is tied to observed runtime behavior, not a coincidence.
+  - The patch changes the owner that produced that behavior.
+
+- [ ] **N5 — Prove the fix and promote prevention only when warranted.**
+  `fix + same repro -> verification receipt + residual risk | prevention follow-up`
+
+  Rule: Re-run the same repro, remove temporary instrumentation when useful,
+  and report exact proof. Load [root-cause-analysis](references/root-cause-analysis.md)
+  only for prevention or postmortem work, and
+  [debugging-knowledge-base](references/debugging-knowledge-base.md) only for
+  a recurring learning.
+
+  Assert:
+  - The before/after behavior is demonstrated by the same repro or a named
+    fidelity limitation.
+  - A prevention follow-up has a durable owner or is explicitly declined.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 ## Gotchas
@@ -90,6 +116,8 @@ proof, and escalation contract.
   them.
 - Do not add broad noisy logging when one targeted marker, counter, or repro
   test would separate likely causes.
+- Do not promote a count coincidence or ambiguous side effect into a platform
+  hypothesis before inspecting the affected item's local control metadata.
 - Do not let ensemble personas replace the core evidence loop; every lane must
   feed the same root-cause and verification contract.
 - Do not fix the surface symptom without documenting the root cause, proof, and

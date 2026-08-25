@@ -5,7 +5,7 @@ tier: 3
 group: operations
 source: local
 template_uses:
-  skill-template: "0.5.0"
+  skill-template: "0.6.2"
   skill-eval-task: "0.2.0"
 skill_ui: skills/skill-maintenance/graph/index.html
 ---
@@ -50,10 +50,14 @@ returns: updated skill or audit, validation evidence, and review result or block
   `behavior_delta -> source + registry + proof context | missing owner context`
 
   Rule: Load only sources consumed by the selected maintenance mode; isolate
-  broad experiments from the real skill tree.
+  broad experiments from the real skill tree. When editing a `SKILL.md`, compare
+  its declared template version to the canonical template; the maintenance
+  package itself must be upgraded in the same change when it is behind.
 
   Assert:
   - The selected mode and its required sources are explicit.
+  - A stale template-owner package blocks validation rather than silently
+    maintaining another skill.
 - [ ] **N3 — Resolve one primary owner surface.**
   `behavior_delta + package state -> owner file set | planning branch`
 

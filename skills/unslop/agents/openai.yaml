@@ -3,4 +3,4 @@ interface:
   short_description: "Rewrite prose to be clear, specific, and human"
   default_prompt: "Use $unslop to rewrite this prose clearly and naturally without changing its meaning."
 policy:
-  allow_implicit_invocation: false
+  allow_implicit_invocation: true

@@ -3,4 +3,4 @@ interface:
   short_description: "Turn complex material into compact diagrams"
   default_prompt: "Use $diagramming to turn this material into a compact Mermaid diagram with a clear legend."
 policy:
-  allow_implicit_invocation: false
+  allow_implicit_invocation: true

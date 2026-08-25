@@ -3,4 +3,4 @@ interface:
   short_description: "Build an honest phased path to a goal"
   default_prompt: "Use $feasible-roadmap to turn this goal, current state, constraints, and horizon into a feasible phased roadmap."
 policy:
-  allow_implicit_invocation: false
+  allow_implicit_invocation: true

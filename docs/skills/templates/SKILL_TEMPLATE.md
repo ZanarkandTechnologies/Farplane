@@ -1,6 +1,6 @@
 ---
 template_id: skill-template
-template_version: "0.6.1"
+template_version: "0.6.2"
 feature_refs:
   - FEAT-0022
   - FEAT-0054
@@ -28,7 +28,7 @@ source: local
 #   kind: integration
 #   consumes: ["input-artifact-id"]
 template_uses:
-  skill-template: "0.6.0"
+  skill-template: "0.6.2"
 # Add only after the skill fits 10 top-level todos and 5 evals.
 # skill-surface-budget: "0.1.0"
 # Tier 3 only: back-office | sales | deals | marketing | operations |

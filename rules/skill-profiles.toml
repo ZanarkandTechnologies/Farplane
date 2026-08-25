@@ -1,4 +1,5 @@
-# Canonical role-specific skill sets rendered into Codex profile config files.
+# Canonical role-specific skill sets rendered as opt-in Codex restriction profiles.
+# The base configuration enables all skills; named profiles may narrow that set.
 # The renderer validates every listed skill against docs/skills/registry.jsonl.
 
 [profiles]

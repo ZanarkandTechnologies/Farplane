@@ -28,6 +28,15 @@ def write_skill(repo: Path, name: str, body: str) -> None:
     (skill_dir / "SKILL.md").write_text(body, encoding="utf-8")
 
 
+def write_skill_template(repo: Path, version: str = "0.6.2") -> None:
+    template_dir = repo / "docs" / "skills" / "templates"
+    template_dir.mkdir(parents=True)
+    (template_dir / "SKILL_TEMPLATE.md").write_text(
+        f'---\ntemplate_id: skill-template\ntemplate_version: "{version}"\n---\n',
+        encoding="utf-8",
+    )
+
+
 VALID_SKILL = """---
 name: example
 description: Test skill.
@@ -97,9 +106,11 @@ GOLDEN_NODE_SKILL = VALID_SKILL.replace(
 class CheckSkillsTemplateStructureTests(unittest.TestCase):
     def setUp(self) -> None:
         self.original_repo_root = check_skills.REPO_ROOT
+        self.original_skill_template_path = check_skills.SKILL_TEMPLATE_PATH
 
     def tearDown(self) -> None:
         check_skills.REPO_ROOT = self.original_repo_root
+        check_skills.SKILL_TEMPLATE_PATH = self.original_skill_template_path
 
     def test_template_structure_accepts_current_shape(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -126,10 +137,46 @@ class CheckSkillsTemplateStructureTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             repo = Path(tmp)
             check_skills.REPO_ROOT = repo
-            write_registry(repo, "example", version="0.5.0")
+            write_registry(repo, "example", version="0.6.2")
             write_skill(repo, "example", GOLDEN_NODE_SKILL)
 
-            self.assertEqual(check_skills.template_structure_errors("0.5.0"), [])
+            self.assertEqual(check_skills.template_structure_errors("0.6.2"), [])
+
+    def test_current_template_owner_accepts_canonical_version(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp)
+            check_skills.REPO_ROOT = repo
+            check_skills.SKILL_TEMPLATE_PATH = repo / "docs/skills/templates/SKILL_TEMPLATE.md"
+            write_skill_template(repo)
+            write_skill(
+                repo,
+                "skill-maintenance",
+                VALID_SKILL.replace(
+                    'skill_template_version: "0.1.0"',
+                    'template_uses:\n  skill-template: "0.6.2"',
+                ),
+            )
+
+            self.assertEqual(check_skills.current_template_owner_errors(), [])
+
+    def test_current_template_owner_rejects_stale_version(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp)
+            check_skills.REPO_ROOT = repo
+            check_skills.SKILL_TEMPLATE_PATH = repo / "docs/skills/templates/SKILL_TEMPLATE.md"
+            write_skill_template(repo)
+            write_skill(
+                repo,
+                "skill-maintenance",
+                VALID_SKILL.replace(
+                    'skill_template_version: "0.1.0"',
+                    'template_uses:\n  skill-template: "0.5.0"',
+                ),
+            )
+
+            errors = check_skills.current_template_owner_errors()
+
+            self.assertTrue(any("not current '0.6.2'" in error for error in errors))
 
     def test_template_structure_rejects_golden_node_without_assert(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

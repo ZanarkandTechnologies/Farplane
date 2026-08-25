@@ -24,7 +24,7 @@ def enabled_skills(path: Path) -> set[str]:
 
 
 class RenderSkillProfilesTests(unittest.TestCase):
-    def test_profiles_are_complete_default_deny_matrices(self) -> None:
+    def test_default_profile_enables_and_exposes_every_registered_skill(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             output = Path(temp_dir)
             result = renderer.render_profiles(ROOT, output)
@@ -32,10 +32,21 @@ class RenderSkillProfilesTests(unittest.TestCase):
             self.assertEqual(result["profile_count"], 12)
             self.assertEqual(result["managed_skill_count"], 65)
             all_skills = enabled_skills(output / "base.config.toml")
-            self.assertEqual(all_skills, set())
+            self.assertEqual(all_skills, renderer.registry_skill_names(ROOT))
+            self.assertIn("intelligest", all_skills)
+            hidden_from_default_prompt = sorted(
+                skill_name
+                for skill_name in all_skills
+                if (metadata_path := ROOT / "skills" / skill_name / "agents" / "openai.yaml").is_file()
+                and re.search(
+                    r"(?m)^\s*allow_implicit_invocation:\s*false\s*$",
+                    metadata_path.read_text(encoding="utf-8"),
+                )
+            )
+            self.assertEqual(hidden_from_default_prompt, [])
             self.assertEqual(
                 len(re.findall(r'^\[\[skills\.config\]\]$', (output / "base.config.toml").read_text(), re.MULTILINE)),
-                65,
+                len(all_skills),
             )
             self.assertIn("intelligest", result["profiles"]["deep-researcher"])
             self.assertIn("content-impl-plan", result["profiles"]["content-specialist"])

@@ -3,4 +3,4 @@ interface:
   short_description: "Commit an already staged Git boundary"
   default_prompt: "Use $commit to create one verified local commit from the already staged changes."
 policy:
-  allow_implicit_invocation: false
+  allow_implicit_invocation: true

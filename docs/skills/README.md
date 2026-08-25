@@ -165,10 +165,12 @@ Manual fields:
   An output-to-input match yields one directed artifact-flow edge. Treat locale,
   campaign, and content variants as invocation data, not new capability IDs.
   Named runtime profiles are separate restriction policies and never belong in
-  skill frontmatter. The Capability Map is source-visible: an admitted
-  workstation remains present even when the current base session default-denies
-  it. Read `rules/skill-profiles.toml` to see which named profile enables it;
-  absence from an active-session list never means the source skill was deleted.
+  skill frontmatter. The generated base configuration enables every installed
+  skill. Farplane agent metadata must not hide a default skill with
+  `allow_implicit_invocation: false`. Named profiles may narrow that set.
+  The Capability Map is source-visible, so absence from an active-session list
+  under a named profile never means the
+  source skill was deleted.
 - `methods`: optional child-method contracts. Each declares a parent-qualified
   `id`, `class` (`artifact`, `integration`, or `internal`), and one `output`.
   They are technical Skill Library interfaces, not Capability Map or Office

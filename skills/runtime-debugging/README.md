@@ -17,7 +17,8 @@ Guide agents through hypothesis-driven runtime debugging for reproducible bugs, 
 2. Use the `SKILL.md` Todo List when invoking the skill.
 3. Pick the matching reference file for the bug type.
 4. Capture the bug symptom and exact reproduction path.
-5. Form a small hypothesis set and add the minimum instrumentation needed.
+5. Check the closest owner control first, then form a small hypothesis set and
+   add instrumentation only when existing runtime state cannot discriminate.
 6. Reproduce, analyze the evidence, apply the smallest fix, and verify it.
 
 ## How to Test
