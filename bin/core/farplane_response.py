@@ -16,7 +16,12 @@ _REFERENCE_HEADING = re.compile(
 _REFERENCE_ENTRY = re.compile(
     r"^(?:[-*+]\s+)?\[[^\]]+\]\((?:<[^>]+>|[^)]+)\)\s*$"
 )
-_FENCE_OPEN = re.compile(r"^\s*(`{3,}|~{3,})\s*mermaid\s*$", re.IGNORECASE)
+_MERMAID_FENCE_OPEN = re.compile(
+    r"^\s*(`{3,}|~{3,})\s*mermaid\s*$", re.IGNORECASE
+)
+_WIREFRAME_FENCE_OPEN = re.compile(
+    r"^\s*(`{3,}|~{3,})\s*wireframe\s*$", re.IGNORECASE
+)
 _MEDIA_EMBED = re.compile(
     r"^!\[[^\]]*\]\((?P<target><[^>]+>|[^)]+)\)\s*$", re.IGNORECASE
 )
@@ -48,6 +53,9 @@ class ResponseMeasure:
     mermaid_blocks: int
     mermaid_words: int
     mermaid_nonblank_lines: int
+    wireframe_blocks: int
+    wireframe_words: int
+    wireframe_nonblank_lines: int
     media_embeds: int
     media_words: int
     media_nonblank_lines: int
@@ -79,6 +87,9 @@ class ResponseMeasure:
                 "mermaid_blocks": self.mermaid_blocks,
                 "mermaid_words": self.mermaid_words,
                 "mermaid_nonblank_lines": self.mermaid_nonblank_lines,
+                "wireframe_blocks": self.wireframe_blocks,
+                "wireframe_words": self.wireframe_words,
+                "wireframe_nonblank_lines": self.wireframe_nonblank_lines,
                 "media_embeds": self.media_embeds,
                 "media_words": self.media_words,
                 "media_nonblank_lines": self.media_nonblank_lines,
@@ -115,12 +126,14 @@ def _reference_indices(
     return set(), 0
 
 
-def _mermaid_indices(lines: list[str]) -> tuple[set[int], int]:
+def _closed_fence_indices(
+    lines: list[str], fence_open: re.Pattern[str]
+) -> tuple[set[int], int]:
     indices: set[int] = set()
     blocks = 0
     index = 0
     while index < len(lines):
-        match = _FENCE_OPEN.fullmatch(lines[index])
+        match = fence_open.fullmatch(lines[index])
         if not match:
             index += 1
             continue
@@ -173,12 +186,18 @@ def measure_response(markdown: str) -> ResponseMeasure:
     lines = markdown.splitlines()
     fence_indices = _fence_indices(lines)
     reference_indices, reference_entries = _reference_indices(lines, fence_indices)
-    mermaid_indices, mermaid_blocks = _mermaid_indices(lines)
+    mermaid_indices, mermaid_blocks = _closed_fence_indices(
+        lines, _MERMAID_FENCE_OPEN
+    )
+    wireframe_indices, wireframe_blocks = _closed_fence_indices(
+        lines, _WIREFRAME_FENCE_OPEN
+    )
     blockquote_spacer_indices = {
         index
         for index, line in enumerate(lines)
         if index not in reference_indices
         and index not in mermaid_indices
+        and index not in wireframe_indices
         and index not in fence_indices
         and _BLOCKQUOTE_SPACER.fullmatch(line)
     }
@@ -187,6 +206,7 @@ def measure_response(markdown: str) -> ResponseMeasure:
         for index, line in enumerate(lines)
         if index not in reference_indices
         and index not in mermaid_indices
+        and index not in wireframe_indices
         and index not in blockquote_spacer_indices
         and index not in fence_indices
         and _is_media_embed(line)
@@ -195,6 +215,7 @@ def measure_response(markdown: str) -> ResponseMeasure:
         set(range(len(lines)))
         - reference_indices
         - mermaid_indices
+        - wireframe_indices
         - blockquote_spacer_indices
         - media_indices
     )
@@ -205,6 +226,7 @@ def measure_response(markdown: str) -> ResponseMeasure:
     prose_lines = selected(prose_indices)
     blockquote_spacer_lines = selected(blockquote_spacer_indices)
     mermaid_lines = selected(mermaid_indices)
+    wireframe_lines = selected(wireframe_indices)
     media_lines = selected(media_indices)
     reference_lines = selected(reference_indices)
     return ResponseMeasure(
@@ -218,6 +240,9 @@ def measure_response(markdown: str) -> ResponseMeasure:
         mermaid_blocks=mermaid_blocks,
         mermaid_words=_word_count(mermaid_lines),
         mermaid_nonblank_lines=_nonblank_count(mermaid_lines),
+        wireframe_blocks=wireframe_blocks,
+        wireframe_words=_word_count(wireframe_lines),
+        wireframe_nonblank_lines=_nonblank_count(wireframe_lines),
         media_embeds=len(media_indices),
         media_words=_word_count(media_lines),
         media_nonblank_lines=_nonblank_count(media_lines),

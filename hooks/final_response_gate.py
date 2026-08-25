@@ -81,7 +81,7 @@ def gate_response(
         "required action or blocker, verification pointers, and any safety-critical "
         "qualification. Remove process narration, repeated context, generic advice, "
         "and unasked follow-up offers. Prefer links to durable artifacts over copied "
-        "detail. Closed Mermaid blocks, exact image/video embed lines, marker-only "
+        "detail. Closed Mermaid and `wireframe` blocks, exact image/video embed lines, marker-only "
         "Markdown blockquote spacer lines, and a final link-only References/Citations "
         "section are outside the prose budget, but must not introduce new topic breadth. "
         "Return the revised final answer only and do not mention this gate."

@@ -163,6 +163,7 @@ def run_response_check_cli(args: argparse.Namespace) -> int:
             f"prose_lines={counts['prose_nonblank_lines']}/{args.max_lines}, "
             f"quote_spacers={counts['blockquote_spacers']}, "
             f"mermaid={counts['mermaid_blocks']}, media={counts['media_embeds']}, "
+            f"wireframe={counts['wireframe_blocks']}, "
             f"references={counts['reference_entries']})"
         )
         for violation in payload["violations"]:

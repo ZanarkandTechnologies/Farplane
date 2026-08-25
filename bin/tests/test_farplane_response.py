@@ -74,13 +74,24 @@ class ResponseMeasureTests(unittest.TestCase):
         self.assertEqual(result.mermaid_blocks, 1)
         self.assertEqual(result.mermaid_nonblank_lines, 5)
 
-    def test_non_mermaid_and_unclosed_mermaid_fences_count_as_prose(self) -> None:
-        ordinary = measure_response("```python\nprint(1)\n```")
+    def test_closed_wireframe_block_is_excluded(self) -> None:
+        markdown = "Result.\n```wireframe\nPROJECT\n+---+\n```"
+        result = measure_response(markdown)
+        self.assertEqual(result.prose_words, 1)
+        self.assertEqual(result.prose_nonblank_lines, 1)
+        self.assertEqual(result.wireframe_blocks, 1)
+        self.assertEqual(result.wireframe_nonblank_lines, 4)
+
+    def test_nonexempt_and_unclosed_diagram_fences_count_as_prose(self) -> None:
+        ordinary = measure_response("```less\nbody { color: red; }\n```")
         unclosed = measure_response("```mermaid\nflowchart LR\nA --> B")
+        unclosed_wireframe = measure_response("```wireframe\nPROJECT\n+---+")
         self.assertEqual(ordinary.prose_nonblank_lines, 3)
         self.assertEqual(ordinary.mermaid_blocks, 0)
         self.assertEqual(unclosed.prose_nonblank_lines, 3)
         self.assertEqual(unclosed.mermaid_blocks, 0)
+        self.assertEqual(unclosed_wireframe.prose_nonblank_lines, 3)
+        self.assertEqual(unclosed_wireframe.wireframe_blocks, 0)
 
     def test_exact_image_and_video_embeds_are_excluded(self) -> None:
         markdown = (
@@ -141,6 +152,7 @@ class ResponseMeasureTests(unittest.TestCase):
             "Worked now.\n"
             "![demo](/tmp/demo.webp)\n"
             "```mermaid\nflowchart LR\nA --> B\n```\n"
+            "```wireframe\nPROJECT\n+---+\n```\n"
             "References:\n- [Proof](/tmp/proof.md)"
         )
         payload = check_response(markdown, max_prose_words=2, max_prose_lines=1)
@@ -148,6 +160,7 @@ class ResponseMeasureTests(unittest.TestCase):
         self.assertEqual(payload["counts"]["prose_words"], 2)
         self.assertEqual(payload["excluded"]["blockquote_spacers"], 0)
         self.assertEqual(payload["excluded"]["mermaid_blocks"], 1)
+        self.assertEqual(payload["excluded"]["wireframe_blocks"], 1)
         self.assertEqual(payload["excluded"]["media_embeds"], 1)
         self.assertEqual(payload["excluded"]["reference_entries"], 1)
 
@@ -177,6 +190,13 @@ class ResponseCliTests(unittest.TestCase):
         self.assertEqual(stdin_result.returncode, 0)
         self.assertEqual(path_result.returncode, 0)
         self.assertEqual(json.loads(stdin_result.stdout), json.loads(path_result.stdout))
+
+    def test_text_output_reports_wireframe_blocks(self) -> None:
+        result = self.run_cli(
+            "--stdin", stdin="Result.\n```wireframe\nPROJECT\n+---+\n```"
+        )
+        self.assertEqual(result.returncode, 0)
+        self.assertIn("wireframe=1", result.stdout)
 
     def test_over_budget_exits_one(self) -> None:
         result = self.run_cli("--stdin", "--json", "--max-words", "1", stdin="one two")

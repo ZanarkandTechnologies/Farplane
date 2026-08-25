@@ -40,7 +40,7 @@ FARPLANE_SKILL_HEAT_RECENT_DAYS = "7"
 FARPLANE_SKILL_HEAT_TOP_N = "25"
 # Comma-separated event types counted as skill heat.
 FARPLANE_SKILL_HEAT_EVENT_TYPES = "control_surface_detected,hook_result,skill_requested"
-# Shared prose-accountant ceilings. Closed Mermaid, exact image/video embed
+# Shared prose-accountant ceilings. Closed Mermaid and `wireframe` blocks, exact image/video embed
 # lines, marker-only Markdown blockquote spacers, and a trailing link-only
 # References/Citations section are reported but excluded. The word limit is
 # hard.

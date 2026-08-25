@@ -225,7 +225,7 @@ Hook and runtime nodes should use these tags:
 - `pm-ui`: UI grouping through `farplane/pm.json`
 - `mechanical-gate`: deterministic validation surface; the PostToolUse skill
   gate enforces 200 physical lines on touched `skills/**/SKILL.md`. The final-response prose
-  word and line ceilings are hard. Closed Mermaid, exact image/video embed lines,
+  word and line ceilings are hard. Closed Mermaid and `wireframe` blocks, exact image/video embed lines,
   marker-only Markdown blockquote spacer lines, and trailing link-only
   references are classified separately by `bin/core/farplane_response.py`;
   blockquote content, four-space-indented code, and malformed or mixed forms
