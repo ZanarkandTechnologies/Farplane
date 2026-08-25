@@ -1,6 +1,6 @@
 <!--
 template_id: global-agents-template
-template_version: 0.2.38
+template_version: 0.2.39
 feature_refs:
   - FEAT-0022
   - FEAT-0042
@@ -124,9 +124,11 @@ build_rung = no_need | reuse | stdlib | platform | installed | inline | smallest
   Lead status with `worked | did not work | partial — reason and implication`.
   Do not claim evidence that could not be produced.
 - For advice, design, workflow, or system changes, make the `Before`, `After`,
-  and `Example` concrete and detailed enough to inspect. Include a compact ASCII
-  diagram when relationships, sequence, ownership, or state would otherwise be
-  unclear; use a richer visual only when it adds information.
+  and `Example` concrete and detailed enough to inspect. When a visual is
+  clearer than prose, first choose the reader's question—flow/trace,
+  state/recovery, system boundary/data ownership, UI wireflow, or before/after
+  delta—then use the smallest compact diagram or table that answers it. Do not
+  relabel prose as boxes.
 - Keep durable reasoning, evidence, plans, and handoff state in their owner
   artifact first. Durable Markdown uses YAML front matter when the project
   lifecycle requires it. Show a compact before/after/example preview before

@@ -1,160 +1,115 @@
 # Diagramming Patterns
 
-Use these patterns when `SKILL.md` says a diagram is warranted.
+Use this reference after `SKILL.md` identifies the reader's approval question.
+Choose the form that makes that question inspectable; do not start from a
+generic box-and-arrow chain.
 
-## 1. Before Map
+## Form Selector
 
-Use when:
+| Approval question | Form | Essential content | Avoid |
+| --- | --- | --- | --- |
+| What does each actor do next? | numbered sequence or swimlane | actor, action, handoff, success/failure | component inventory |
+| What state follows this event? | state transition | state, trigger, recovery, terminal state | before/after maps |
+| Who owns and moves this data? | boundary/data-flow map | caller, owner, store, direction, read/write | UI layout |
+| What happens in a dry run? | numbered trace + decision branch | precondition, action, branch, observation | an unnumbered architecture map |
+| How does the UI journey behave? | wireflow/state map | screen, action, transition, error/recovery | visual styling or pixel geometry |
+| What changed in the system? | Before/After delta | removed, kept, changed, added, proof | unrelated flow detail |
+| Which fields or options correspond? | table | keys, source, destination, rule | decorative arrows |
 
-- the question is "what is confusing, coupled, duplicated, or missing now?"
-- the ticket spans multiple components
-- the reader needs a fast approval surface
+For a ticket Contract Diagram, a field-mapping table supplements rather than
+replaces the required minimal directed ASCII path.
 
-Pattern:
+## 1. User / Action Sequence
 
-```mermaid
-flowchart TD
-  classDef keep fill:#f3f4f6,stroke:#6b7280,color:#111827
-  classDef problem fill:#fff5f5,stroke:#dc2626,color:#991b1b
-
-  input["input / request"]:::keep
-  oldOwner["before: old owner or path"]:::problem
-  oldState["before: confusing state"]:::problem
-  proof["proof/review infers intent"]:::keep
-
-  input --> oldOwner --> oldState --> proof
+```text
+[U1] user --1. submit--> [S1] validate
+[S1] --2. valid--> [A1] create record --> [P1] confirmation
+[S1] --invalid--> [F1] inline error --edit--> [U1]
 ```
 
-Legend:
+Use a swimlane when ownership changes often; otherwise a numbered sequence is
+smaller. Keep only the action path the reader must approve.
 
-- `gray = kept context`
-- `red = problem / removed default / confusing ownership`
+## 2. State / Recovery Transition
 
-## 2. After Map
-
-Use when:
-
-- the question is "what will the workflow look like after this lands?"
-- the ticket adds or changes an owner, artifact, or proof path
-- the reader needs to compare against the `Before` map
-
-Pattern:
-
-```mermaid
-flowchart TD
-  classDef keep fill:#f3f4f6,stroke:#6b7280,color:#111827
-  classDef changed fill:#fef3c7,stroke:#b45309,color:#111827
-  classDef added fill:#dcfce7,stroke:#15803d,color:#111827
-
-  input["input / request"]:::keep
-  newOwner["after: new owner or path"]:::changed
-  newArtifact["after: new/updated artifact"]:::added
-  feedback["operator feedback / proof"]:::keep
-
-  input --> newOwner --> newArtifact --> feedback
+```text
+[S1] idle --start--> [S2] loading
+[S2] --success--> [S3] complete
+[S2] --failure--> [F1] error --retry--> [S2]
 ```
 
-Legend:
+Use this for lifecycle, retry, empty/error, authorization, or recovery
+questions. Events belong on arrows; states remain distinct nodes.
 
-- `gray = kept context`
-- `amber = changed owner / behavior`
-- `green = added artifact / capability`
+## 3. Boundary / Data-Flow Map
 
-## 3. What Changed Delta
+```mermaid
+flowchart LR
+  caller[caller] -->|1. write Request| api[API boundary]
+  api -->|2. validate| owner[owner / service]
+  owner -->|3. persist| store[(owned store)]
+  owner -->|4. result| caller
+```
 
-Use when:
+Add short signatures only when an interface shape decides the work, such as
+`createOrder(input): OrderResult`. Show ownership and direction, not every
+internal function.
 
-- the question is "what changed?"
-- the operator needs to compare old and new ownership, artifacts, or behavior
-- the companion should avoid random supplementary diagrams
+## 4. Dry-Run / Decision Trace
 
-Pattern:
+```text
+[S1] precondition: pending invoice
+  --1. run reminder--> [A1] validate contact
+  --2. contact present--> [A2] send --> [P1] delivery receipt
+  --2. missing--> [F1] hold + reason
+```
+
+Number the operational order and keep the decision branch that changes the
+outcome. This is often clearer than architecture for a workflow review.
+
+## 5. UI Wireflow / State Map
+
+```text
+[S1] list --select item--> [S2] detail
+[S2] --save--> [S3] saving
+[S3] --success--> [S4] updated
+[S3] --failure--> [F1] error --retry--> [S3]
+```
+
+Use it for interaction and state; route detailed screens, copy, geometry, and
+visual assertions to `design.md`, `functional-ui`, and `visual-design`.
+
+## 6. Before / After Delta
+
+Use when the answer is “what changes?” rather than “what happens next?”
 
 ```mermaid
 flowchart LR
   classDef before fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d,stroke-dasharray: 5 3
+  classDef kept fill:#f3f4f6,stroke:#6b7280,color:#111827
   classDef after fill:#dcfce7,stroke:#15803d,color:#111827
 
-  old["before: old path / behavior"]:::before --> new["after: new path / behavior"]:::after
-  oldOwner["before owner"]:::before --> newOwner["after owner"]:::after
+  old[before: caller owns retry]:::before --> api[kept: API]:::kept
+  api --> next[after: retry owner]:::after --> proof[proof]:::kept
 ```
 
-Rules:
+Legend: `red = removed/problem`, `gray = kept`, `green = added`. Use separate
+Before and After maps only when a single delta map cannot make both states clear.
 
-- include the words `before` and `after` in the visible node labels
-- show replacements, moves, or ownership changes directly
-- do not create disconnected context diagrams unless they clarify the delta
+## 7. Zoom-In and Inline Signatures
 
-## 4. Numbered Data-Flow Trace
+Add one zoom-in only when a top-level boundary remains unresolved. Embed a short
+signature inside a relevant node; do not turn a node into a type-definition
+paragraph.
 
-Use when:
+Good: `review / judge(plan): pass|revise`.
 
-- the question is "how does data move?"
-- ordering matters
-- the system map alone is insufficient
+Bad: three methods, full fields, and unrelated invariants in one node.
 
-Pattern:
+## Impl-Plan Visual Companion
 
-```mermaid
-flowchart TD
-  input["user ask"] -->|1| planner["planner"]
-  planner -->|2| ticket[(ticket state)]
-  planner -->|3| review["review"]
-```
-
-Rules:
-
-- keep only the critical path
-- number the edges
-- avoid side branches unless the branch is the point
-
-## 5. Zoom-In
-
-Use when:
-
-- one subsystem remains unclear after the top-level map
-- one interface cluster needs more detail
-
-Rules:
-
-- inherit the same legend/classes as the top-level map
-- keep the zoom-in scoped to one subsystem
-- do not redraw the whole system again
-
-## 6. Inline Signatures
-
-Use when:
-
-- the function or interface is the important thing
-- a detached list would make the reader scroll
-
-Good:
-
-- `planner / buildPlan(ticket): PlanArtifact`
-- `state / claim.ticket_id: string`
-- `review / judgePlan(plan): pass|fix`
-
-Bad:
-
-- full type definitions
-- three-method classes stuffed into one node
-- signatures that wrap across many lines
-
-## 7. Impl-Plan Visual Companion
-
-Use when:
-
-- `impl-plan` has produced a material `ticket.md`
-- the operator needs a diagram-first reading surface
-- diagrams should stay out of the canonical ticket body
-
-Output path:
-
-```text
-tickets/TASK-XXXX/diagrams.md
-```
-
-Required metadata:
+For a material `impl-plan` companion, use `ticket.md` as the only scope source
+and write `tickets/TASK-XXXX/diagrams.md` with:
 
 ```yaml
 status: companion
@@ -164,40 +119,18 @@ canonical_contract: ticket.md
 generated_by: diagramming
 ```
 
-Shape:
-
-```text
-VisualPlan(
-  reading_order,
-  before,
-  after,
-  what_changed?,
-  change_unit_maps[]?,
-  feedback_guide
-)
-```
-
-Rules:
-
-- use `ticket.md` as the only source of scope
-- keep `ticket.md` free of Mermaid by default
-- create one `Before` diagram and one `After` diagram
-- use colored Mermaid boxes with `classDef` and node classes
-- include a `What Changed` delta when a small old-to-new summary helps
-- create one compact map per material `Change Plan` unit only when the ticket
-  has multiple units that are hard to compare from the top-level diagrams
-- keep each unit map to 2-5 nodes plus short `writes`, `proof`, and `risk`
-  notes
-- do not make the companion a reviewer gate unless the caller explicitly asks
-  for diagram review
+The companion requires a Mermaid `Before` and `After` pack with semantic
+classes and legend because its job is explicitly a system delta. Add `What
+Changed` or compact per-change-unit maps only when they answer another question.
+Keep `ticket.md` canonical and do not make the companion a review gate unless
+the caller requests one.
 
 ## Anti-Patterns
 
-Fail the diagram if:
+Fail the diagram if it:
 
-- it has more diagrams than decisions
-- it lacks explicit `Before` and `After` diagrams for an `impl-plan` companion
-- it lacks colored Mermaid classes for semantic differences
-- the labels are paragraphs
-- the legend is missing
-- the diagram repeats the prose instead of compressing it
+- answers a different question than the reader needs resolved;
+- has more diagrams than decisions;
+- hides an important branch, owner, recovery, or proof point;
+- uses paragraph labels or repeats the surrounding prose; or
+- substitutes a pretty UI mockup for behavioral or visual-design work.

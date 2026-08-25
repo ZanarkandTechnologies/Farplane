@@ -327,14 +327,23 @@ diagram_ready(ticket)
 ```
 
 Use stable IDs only for states, seams, branches, and proof points referenced by
-the Change Plan or QA. Adapt the diagram to the work:
+the Change Plan or QA. First ask what the reader must approve, then use one
+form that exposes it:
 
-- UI: screens/states, actions, success, error, and recovery. Put detailed
-  screen ASCII and visual assertions in ticket-local `design.md`.
-- Backend/API: caller, boundary, signature/data movement, state, failure, proof.
-- Docs/config: source -> transformation -> owned output -> validation.
-- Research/judgment: evidence -> decision rule -> branch -> durable result.
-- Tiny work: a three-node before -> change -> proof line is sufficient.
+| Reader question | Compact form | Keep visible |
+| --- | --- | --- |
+| What does a user or actor do next? | numbered sequence or swimlane | handoffs and success/failure outcome |
+| Which state or recovery path follows an event? | state transition | trigger, failure, retry, and terminal state |
+| Who owns data or crosses a system boundary? | boundary/data-flow map | caller, owner, read/write direction, and proof |
+| What happens in this exact dry run? | numbered trace with decision branch | precondition, action, branch, observable result |
+| How does a UI journey behave? | wireflow/state map | screen, action, success/error/recovery; detailed screen ASCII and visual assertions stay in ticket-local `design.md` |
+| What system behavior or ownership changes? | before/after delta map | removed, kept, changed, added, and proof |
+
+Docs/config work usually uses a source -> transformation -> owned output ->
+validation flow; research/judgment uses evidence -> decision rule -> branch ->
+durable result. For a field mapping or comparison, add a table beside the
+minimal required ASCII path instead of forcing arrows to carry the mapping.
+Tiny work may use a three-node before -> change -> proof line.
 
 Reject a diagram that merely repeats headings, hides the meaningful branch,
 contradicts Scope/Delta, or cannot be used to check the implementation.

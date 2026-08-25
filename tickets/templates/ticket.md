@@ -1,6 +1,6 @@
 ---
 template_id: ticket-template
-template_version: "0.3.0"
+template_version: "0.3.1"
 feature_refs:
   - FEAT-0007
   - FEAT-0008
@@ -47,16 +47,24 @@ One paragraph: valuable outcome, beneficiary, and why this ticket matters now.
 
 ## Contract Diagram
 
-<!-- Required. Draw the smallest ASCII model that lets an unfamiliar agent
-simulate the intended work before implementation. Adapt it to the ticket: UI
-states/actions; backend boundaries/data flow; docs/config transformation; or
-research evidence/decision flow. Give referenced states and seams stable IDs. -->
+<!-- Required. First identify the approval question, then draw the smallest
+ASCII form that lets an unfamiliar agent simulate the work. Choose one:
+- user/action handoff -> numbered sequence or swimlane
+- state, retry, or recovery -> state transition
+- data, ownership, or architecture -> boundary/data-flow map
+- dry run or decision -> numbered trace with the material branch
+- UI behavior -> wireflow/state map here; detailed screens stay in design.md
+- system behavior or ownership change -> before/after delta map
+For field mapping or comparison, add a table beside the minimal ASCII path; do
+not repackage Scope prose as boxes. Give referenced states, seams, branches,
+and proof points stable IDs. -->
 
 ```text
-[S1 input/current state] -> [S2 decision/change] -> [S3 intended state]
+# Replace with the selected form; do not leave this generic scaffold in a live ticket.
+[S1] input/current state -> [S2] decision/change -> [S3] intended state
                                |
-                               +-> [F1 failure/recovery]
-[S3] -> [P1 observable proof]
+                               +-> [F1] failure/recovery
+[S3] -> [P1] observable proof
 ```
 
 <!-- Add Planned Skill Call, Objective Contribution, or Reward only when their
