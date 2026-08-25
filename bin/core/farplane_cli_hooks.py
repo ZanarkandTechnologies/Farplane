@@ -326,11 +326,15 @@ def doppler_configured(cwd: Path) -> bool:
     return True
 
 
-def run_with_doppler(args: argparse.Namespace) -> int:
-    command = passthrough_args(args.extra)
-    if not command:
-        raise CliError("run_requires_command: use `farplane run -- <command>`")
-    cwd = Path.cwd()
+def run_with_doppler_command(command: list[str], cwd: Path, *, dry_run: bool = False) -> int:
+    """Run one command through the configured Doppler environment for ``cwd``.
+
+    Keep this as the shared execution seam for commands that need the same
+    project-scoped credential contract as ``farplane run``.  The dry-run
+    payload intentionally contains only argv and cwd; it never materializes
+    or prints environment values.
+    """
+
     doppler_file = nearest_doppler_file(cwd)
     if shutil.which("doppler") is None:
         raise CliError(
@@ -340,11 +344,18 @@ def run_with_doppler(args: argparse.Namespace) -> int:
     if not doppler_configured(cwd):
         raise CliError("doppler_not_configured: " + doppler_setup_hint(doppler_file), 2)
     doppler_command = ["doppler", "run", "--", *command]
-    if args.dry_run:
+    if dry_run:
         print(json.dumps({"cwd": str(cwd), "command": doppler_command}, indent=2))
         return 0
     child = subprocess.run(doppler_command, cwd=str(cwd), env=os.environ)
     return child.returncode
+
+
+def run_with_doppler(args: argparse.Namespace) -> int:
+    command = passthrough_args(args.extra)
+    if not command:
+        raise CliError("run_requires_command: use `farplane run -- <command>`")
+    return run_with_doppler_command(command, Path.cwd(), dry_run=args.dry_run)
 
 
 def run_install(args: argparse.Namespace) -> int:

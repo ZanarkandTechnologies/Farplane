@@ -28,7 +28,7 @@ from farplane_cli_hooks import (
 )
 from farplane_cli_ui import (
     delegate_to_ui, run_notify_disable, run_notify_enable, run_notify_status,
-    run_ui_link, run_ui_start,
+    run_extension_youtube, run_ui_link, run_ui_start,
 )
 
 def build_parser() -> argparse.ArgumentParser:
@@ -152,6 +152,17 @@ def build_parser() -> argparse.ArgumentParser:
     ui_start.add_argument("--json", action="store_true")
     ui_start.add_argument("extra", nargs=argparse.REMAINDER)
     ui_start.set_defaults(func=run_ui_start)
+
+    extension = sub.add_parser("extension", help="Delegate supported local extensions to Farplane-UI.")
+    extension_sub = extension.add_subparsers(dest="extension_name")
+    extension_youtube = extension_sub.add_parser(
+        "youtube",
+        help="Start, inspect, diagnose, or stop the local YouTube extension runtime.",
+    )
+    extension_youtube.add_argument("extension_action", choices=("start", "status", "doctor", "stop"))
+    extension_youtube.add_argument("--dry-run", action="store_true")
+    extension_youtube.add_argument("--json", action="store_true", help="Request JSON from Farplane-UI.")
+    extension_youtube.set_defaults(func=run_extension_youtube)
 
     resource_bank = sub.add_parser(
         "resource-bank",

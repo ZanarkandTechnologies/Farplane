@@ -10,7 +10,7 @@ from farplane_cli_base import (
     CONFIG_PATH, CORE_ROOT, CliConfig, load_config, notify_status_payload,
     passthrough_args, print_payload, set_notify_enabled, write_config,
 )
-from farplane_cli_hooks import run_process
+from farplane_cli_hooks import run_process, run_with_doppler_command
 
 def validate_ui_repo(path: Path) -> list[str]:
     issues: list[str] = []
@@ -114,7 +114,13 @@ def run_ui_start(args: argparse.Namespace) -> int:
     return run_process(command, ui_repo, args.dry_run)
 
 
-def delegate_to_ui(command_name: str, extra: list[str], dry_run: bool = False) -> int:
+def delegate_to_ui(
+    command_name: str,
+    extra: list[str],
+    dry_run: bool = False,
+    *,
+    use_doppler: bool = False,
+) -> int:
     config = load_config()
     ui_repo, issues = discover_ui_repo(config)
     if issues or ui_repo is None:
@@ -129,4 +135,24 @@ def delegate_to_ui(command_name: str, extra: list[str], dry_run: bool = False) -
         )
         return 1
     command = ["npm", "run", "shell", "--", command_name, *extra]
+    if use_doppler:
+        return run_with_doppler_command(command, ui_repo, dry_run=dry_run)
     return run_process(command, ui_repo, dry_run)
+
+
+def run_extension_youtube(args: argparse.Namespace) -> int:
+    """Delegate a supported YouTube extension action to Farplane-UI.
+
+    Runtime lifecycle is deliberately owned by the UI checkout.  Core only
+    resolves that checkout and applies its project-scoped Doppler contract.
+    """
+
+    extra = ["youtube", args.extension_action]
+    if args.json:
+        extra.append("--json")
+    return delegate_to_ui(
+        "extension",
+        extra,
+        args.dry_run,
+        use_doppler=True,
+    )
