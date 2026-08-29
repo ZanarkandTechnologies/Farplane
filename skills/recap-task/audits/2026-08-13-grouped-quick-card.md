@@ -1,15 +1,15 @@
 ---
-skill: task-recap
+skill: recap-task
 date: 2026-08-13
 change_type: behavior
 owner: skill-maintenance
 status: pass
 review_route: reviewer
-before_ref: skills/task-recap/audits/2026-08-13-initial-task-recap.md
-after_ref: skills/task-recap/SKILL.md
+before_ref: skills/recap-task/audits/2026-08-13-initial-recap-task.md
+after_ref: skills/recap-task/SKILL.md
 reasoning_basis: operator feedback + first-principles review
 proof_artifacts:
-  - .farplane/evals/runs/20260813-173654-task-0434-task-recap-grouped-quick-card-release-final/summary.json
+  - .farplane/evals/runs/20260813-173654-task-0434-recap-task-grouped-quick-card-release-final/summary.json
   - tickets/TASK-0434/artifacts/review/2026-08-14-grouped-quick-card-rereview.md
 eval_required: yes
 ---
@@ -51,7 +51,7 @@ eval_required: yes
 | `missing_context_rate` | pass | The release suite returned A for the explicit source-gap route and all bound-source routes. |
 | `noisy_context_rate` | pass | The compact card is first load; detailed chronology remains conditional. |
 | `duplicated_instruction_count` | pass | Output layout is owned by `SKILL.md`; QA and evals state only verifiable behavior. |
-| `task_success_rate` | pass | Release suite: 5/5 A at `.farplane/evals/runs/20260813-173654-task-0434-task-recap-grouped-quick-card-release-final/summary.json`. |
+| `task_success_rate` | pass | Release suite: 5/5 A at `.farplane/evals/runs/20260813-173654-task-0434-recap-task-grouped-quick-card-release-final/summary.json`. |
 | `review_tas_rate` | pass | Native reviewer returned TAS-A; receipt: `tickets/TASK-0434/artifacts/review/2026-08-14-grouped-quick-card-rereview.md`. |
 | `maintenance_locality` | pass | `check_skills.py --write`, eval-query lint, ticket metadata, whitespace, targeted install, and source/installed diff all passed. |
 | `composition_clarity` | pass | Independent review found the layered card, full-detail trigger, and source boundaries coherent. |
@@ -105,15 +105,15 @@ eval_required: yes
 
 - Release behavior suite: 5/5 A across full context, conflicting completion,
   failed attempts, missing durable context, and worktree-noise scope at
-  `.farplane/evals/runs/20260813-173654-task-0434-task-recap-grouped-quick-card-release-final/summary.json`.
+  `.farplane/evals/runs/20260813-173654-task-0434-recap-task-grouped-quick-card-release-final/summary.json`.
 
 ## Final Proof
 
 - `python3 skills/skill-maintenance/scripts/check_skills.py --write`, ticket
   metadata, eval-query lint, and whitespace checks passed.
-- `bash install.sh --skills-only --skills task-recap --target
-  /Users/kenjipcx/.codex` completed; `diff -ru skills/task-recap
-  /Users/kenjipcx/.codex/skills/task-recap` had no output.
+- `bash install.sh --skills-only --skills recap-task --target
+  /Users/kenjipcx/.codex` completed; `diff -ru skills/recap-task
+  /Users/kenjipcx/.codex/skills/recap-task` had no output.
 - Native review returned TAS-A with no hard gates; receipt:
   `tickets/TASK-0434/artifacts/review/2026-08-14-grouped-quick-card-rereview.md`.
 

@@ -13,5 +13,5 @@ frontend-designer = ["demo-realism", "functional-ui", "interior-design", "landin
 growth-specialist = ["agency-opportunity-research", "customer-research", "first-value-outreach", "lead-scout", "outreach-impl-plan", "personalized-offer", "proposal-pricing", "solution-shaping"]
 harness-specialist = ["dogfood-review", "leverage-rollout", "ml-autoresearch", "optimize-with-human"]
 operations-specialist = ["delegate-cli", "notion-task-field-fill", "phone-chaser", "telegram-message", "worker-artifact-review-request"]
-planner-agent = ["agent-testability-plan", "deep-system-design", "product-backbrief"]
+planner-agent = ["agent-testability-plan", "deep-system-design", "recap-idea"]
 reviewer = ["coderabbit-review", "pr-review-watch"]

@@ -1,5 +1,5 @@
 ---
-skill: product-backbrief
+skill: recap-idea
 date: 2026-08-19
 change_type: behavior
 owner: skill-maintenance
@@ -19,7 +19,7 @@ eval_required: yes
 
 - Before: no reusable workflow tested shared product understanding after an
   extended discussion.
-- After: `product-backbrief` returns a proposed operated story, ASCII system
+- After: `recap-idea` returns a proposed operated story, ASCII system
   map, boundaries, assumptions, conflicts, and alignment questions.
 - Why: the Content Intelligence discussion showed that playback exposed
   semantic mistakes that ordinary summaries and plans had preserved.
@@ -30,7 +30,7 @@ eval_required: yes
 
 - Objective: expose product-model disagreement before durable commitment.
 - Placement logic: a skill is the smallest just-in-time reusable owner;
-  `task-recap` remains operational recovery and `deep-interview` remains
+  `recap-task` remains operational recovery and `deep-interview` remains
   question-led intent clarification.
 - Expected behavior delta: product discussions gain an explicit human-confirmed
   semantic checkpoint.
@@ -54,7 +54,7 @@ eval_required: yes
 
 ## Proof Artifacts
 
-- Skill-local evals: `skills/product-backbrief/evals/evals.json`
+- Skill-local evals: `skills/recap-idea/evals/evals.json`
 - Structure evals: deterministic skill-maintenance checks
 - Reviewer receipt: `tickets/TASK-0438/artifacts/reviewer.md` — TAS-A
 - Validator: `check_skills.py --write` and query-spoiler check pass

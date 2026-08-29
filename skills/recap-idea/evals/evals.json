@@ -1,0 +1,217 @@
+{
+  "skill_name": "recap-idea",
+  "evals": [
+    {
+      "id": "recap_idea_reconstructs_operated_model_01",
+      "prompt": "We have spent a while discussing a content-intelligence product. A user pastes YouTube videos, sees when analysis is still running, reads a source dossier, and can inspect news extracted from those sources. We discovered that the current screen calls broad robotics-topic matches ‘related coverage,’ while I mean coverage to be sources discussing the same development. Generated event summaries currently hide the original verification links. Describe the product back to me so I can check whether we are on the same page before we plan changes.",
+      "expected_output": "Returns a proposed product model centered on the user's operated journey, distinguishes sources, exact developments, evidence, topic navigation, and analysis state, uses a fenced Mermaid journey or state-aware flow, labels assumptions, and asks focused alignment questions without writing a plan.",
+      "files": [],
+      "assertions": [
+        "States a concise product promise or central user value without turning the response into a capability inventory",
+        "Narrates one user journey from video ingest through visible analysis state to dossier and verified development",
+        "Uses coverage only for sources tied to the same event and does not label broad topic overlap as coverage",
+        "Makes original evidence links part of the development experience rather than treating generated prose as evidence",
+        "Detects an end-to-end product experience and uses the journey template with nouns consistent with the interpretation",
+        "Labels the result proposed and ends with focused questions instead of implementation steps"
+      ],
+      "metadata": {
+        "title": "Recap Idea reconstructs an operated product model",
+        "tags": [
+          "skill",
+          "product",
+          "alignment",
+          "story"
+        ],
+        "notes": "Primary positive case derived from an observed product-alignment workflow."
+      }
+    },
+    {
+      "id": "recap_idea_preserves_conflict_01",
+      "prompt": "Play our product back to me before we commit. We agreed that every imported customer interview should be searchable immediately. Earlier I also said nothing should become visible until a researcher reviews it. The product should help product teams understand recurring customer problems, but I have not decided whether themes deserve their own workspace or should only be filters.",
+      "expected_output": "Builds the clearest product story supported by the discussion while keeping immediate search versus review visibility as an explicit conflict and the themes workspace as an unresolved choice; it does not silently choose either path.",
+      "files": [],
+      "assertions": [
+        "Separates confirmed purpose from conflicting visibility rules",
+        "Does not resolve the immediate-search versus human-review conflict without user input",
+        "Treats the themes workspace as an open decision rather than an accepted feature",
+        "Uses one representative researcher path in the visual model to make the conflict concrete",
+        "Makes the affected visibility boundary explicit and asks questions aimed at the highest-risk misunderstandings"
+      ],
+      "metadata": {
+        "title": "Recap Idea preserves contradictions and open choices",
+        "tags": [
+          "skill",
+          "product",
+          "alignment",
+          "conflict"
+        ],
+        "notes": "Protects against polished prose manufacturing false agreement."
+      }
+    },
+    {
+      "id": "recap_idea_composes_with_recap_task_01",
+      "prompt": "Before we continue, visually play this grounded inventory-forecasting recap back to me with the right diagram: the CSV import and forecast calculation are implemented; runtime proof is still missing; we accepted store managers as the primary user and rejected automatic purchase orders for phase one. Show the product flow so I can check our shared understanding.",
+      "expected_output": "Uses the supplied recap as context for a proposed inventory-forecasting product model, preserves the rejected automation boundary and missing runtime proof without turning into a status recap, and asks the operator to confirm the product meaning before implementation continues.",
+      "files": [],
+      "assertions": [
+        "Uses the supplied recap without rerunning or imitating a full task recap",
+        "Centers the store manager's operated journey rather than implementation status",
+        "Keeps automatic purchase orders outside phase one",
+        "Does not claim missing runtime proof has passed",
+        "Shows the product flow in situation-matched Mermaid and requests product-model confirmation"
+      ],
+      "metadata": {
+        "title": "Recap Idea composes with Recap Task",
+        "tags": [
+          "skill",
+          "product",
+          "alignment",
+          "recap-task"
+        ],
+        "notes": "Tests the intended sequential composition boundary."
+      }
+    },
+    {
+      "id": "recap_idea_selects_user_visible_ui_flow_01",
+      "prompt": "Play this dashboard redesign back to me visually before we plan it. Today a support lead lands on a wall of account metrics and has to open several panels to discover which conversations need attention. I want the first screen to show a prioritized conversation queue, why each item needs attention, and the next action. Selecting one should open the conversation with customer context and suggested actions. Show me what the end user would actually see and do; do not give me an architecture diagram.",
+      "expected_output": "Selects a user-visible screen-state flow rather than a system map, uses a fenced Mermaid diagram to show visible content and actions across queue and conversation states, includes loading/empty/error or success behavior where material, and asks focused correction questions.",
+      "files": [],
+      "assertions": [
+        "Frames the alignment question around the support lead's visible experience",
+        "Detects UI design intent and renders the UI screen-flow template inline without an artifact link, ASCII supplement, or backend architecture",
+        "Shows the prioritized queue, attention reason, next action, conversation context, and suggested actions",
+        "Includes material loading, empty, error, or success states without turning the result into a full UI specification",
+        "Labels the model proposed and asks no more than three high-risk correction questions"
+      ],
+      "metadata": {
+        "title": "Recap Idea selects a user-visible UI flow",
+        "tags": [
+          "skill",
+          "product",
+          "alignment",
+          "ui",
+          "visualization"
+        ],
+        "notes": "Protects the context-sensitive branch where the operator needs to see the end-user experience rather than system internals."
+      }
+    },
+    {
+      "id": "recap_idea_selects_before_after_example_01",
+      "prompt": "Play the change back to me before we commit. Today an operations manager opens the dashboard, scans broad weekly metrics, and opens multiple panels to find delayed orders. We want the landing view to put delayed orders first, explain why each one is delayed, and offer the next recovery action. Show the current experience, the intended experience, and one concrete delayed-order example so I can check whether the change is right.",
+      "expected_output": "Detects a change to an existing experience and selects the Before / After / Example template, using fenced Mermaid to contrast the two user experiences and prove the delta with one concrete delayed-order trace.",
+      "files": [],
+      "assertions": [
+        "Frames the alignment question around the experiential shift from discovering delayed work to acting on prioritized delayed work",
+        "Uses a fenced Mermaid Before / After / Example structure rather than a generic journey or backend map",
+        "Before shows broad metrics and panel hunting while After shows delayed orders, delay reasons, and recovery actions",
+        "The example traces one concrete delayed order through its visible reason and next recovery action",
+        "Labels the model proposed and asks no more than three correction questions"
+      ],
+      "metadata": {
+        "title": "Recap Idea selects Before After Example for a delta",
+        "tags": [
+          "skill",
+          "product",
+          "alignment",
+          "delta",
+          "visualization"
+        ],
+        "notes": "Protects template detection when an existing user experience is being changed."
+      }
+    },
+    {
+      "id": "recap_idea_selects_lifecycle_01",
+      "prompt": "Play this import behavior back to me visually before we design it. A submitted file begins queued, moves to processing, can produce a partial result, can fail with a retry, and eventually becomes complete. A partial result can resume processing. I mainly need to verify which event moves the import between states and how recovery works.",
+      "expected_output": "Detects that state and recovery are the alignment question and selects the lifecycle template, using a fenced Mermaid state diagram with events on transitions and visible partial/failure recovery.",
+      "files": [],
+      "assertions": [
+        "Frames the alignment question around import states, transitions, and recovery",
+        "Uses a fenced Mermaid state diagram rather than a generic journey, UI screen flow, or component map",
+        "Shows queued, processing, partial, failed, and complete states",
+        "Shows retry from failed and resume from partial with events on transitions",
+        "Labels the model proposed and asks one to three correction questions"
+      ],
+      "metadata": {
+        "title": "Recap Idea selects lifecycle for state and recovery",
+        "tags": [
+          "skill",
+          "product",
+          "alignment",
+          "lifecycle",
+          "visualization"
+        ],
+        "notes": "Protects lifecycle routing when the product question is state transition and recovery."
+      }
+    },
+    {
+      "id": "recap_idea_selects_system_boundary_01",
+      "prompt": "Play the ownership model back to me visually before we settle the architecture. A researcher submits a source through our product UI. Our workflow service owns the analysis request and saved dossier. It retrieves transcript data from an external provider, stores the grounded result in our database, and returns the dossier to the UI. I need to check who owns each record and how information crosses the product boundary.",
+      "expected_output": "Detects that ownership and information movement are the alignment question and selects the system-boundary template, using fenced Mermaid with user, product-owned, and external boundaries plus labeled data movement.",
+      "files": [],
+      "assertions": [
+        "Frames the alignment question around record ownership and boundary-crossing information flow",
+        "Uses a fenced Mermaid boundary or data-flow map rather than a UI flow or lifecycle",
+        "Separates the researcher/UI, product-owned workflow and dossier store, and external transcript provider",
+        "Labels request, retrieval, persistence, and returned dossier movement",
+        "Labels the model proposed and asks one to three correction questions"
+      ],
+      "metadata": {
+        "title": "Recap Idea selects system boundary for ownership and data flow",
+        "tags": [
+          "skill",
+          "product",
+          "alignment",
+          "system-boundary",
+          "visualization"
+        ],
+        "notes": "Protects boundary routing when ownership and information movement are the product question."
+      }
+    },
+    {
+      "id": "recap_idea_selects_comparison_table_01",
+      "prompt": "Play this terminology change back to me so I can verify the exact mapping. Today the product calls broad same-topic articles Related coverage, calls sources about the exact same event Verified sources, and calls generated prose Event insight. I intend Related topic for broad overlap, Coverage for exact-event sources, and Summary for generated prose. The uncertainty is whether Summary should instead be called Brief.",
+      "expected_output": "Detects an exact terminology mapping and selects the comparison-table template rather than Mermaid, showing current meaning, proposed meaning, and the unresolved Summary versus Brief decision.",
+      "files": [],
+      "assertions": [
+        "Frames the alignment question around exact current-to-proposed terminology correspondence",
+        "Uses one Markdown comparison table rather than Mermaid or a decorative arrow diagram",
+        "Maps Related coverage to Related topic for broad overlap",
+        "Maps Verified sources to Coverage for exact-event sources and Event insight to Summary for generated prose",
+        "Keeps Summary versus Brief unresolved and asks one to three correction questions"
+      ],
+      "metadata": {
+        "title": "Recap Idea selects comparison table for exact mapping",
+        "tags": [
+          "skill",
+          "product",
+          "alignment",
+          "comparison",
+          "visualization"
+        ],
+        "notes": "Protects the non-Mermaid branch when exact correspondence is clearer as a table."
+      }
+    },
+    {
+      "id": "recap_idea_rejects_status_only_01",
+      "prompt": "Use recap-idea on TASK-4821, which I just reopened after two weeks. What changed, which tests passed, and what should I do next?",
+      "expected_output": "Does not fabricate an idea recap from a status-only resumption request; routes to recap-task or requests the authoritative task reference needed for a grounded recap.",
+      "files": [],
+      "assertions": [
+        "Recognizes the request as task resumption rather than product alignment",
+        "Routes to recap-task or names the missing authoritative task source",
+        "Does not invent product purpose, user journeys, decisions, test results, or an ASCII product model",
+        "Does not mutate or resume the underlying task"
+      ],
+      "metadata": {
+        "title": "Recap Idea rejects a status-only recap request",
+        "tags": [
+          "skill",
+          "product",
+          "routing",
+          "negative"
+        ],
+        "notes": "Protects the boundary with recap-task."
+      }
+    }
+  ]
+}
