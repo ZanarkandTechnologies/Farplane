@@ -104,7 +104,7 @@
     {
       "id": "impl_plan_lean_backend_skip_01",
       "prompt": "Plan a localized backend validation change. The existing src/validators/skill_registry.py exposes validate_rows(rows), tests/test_skill_registry.py covers its current behavior, and local docs describe the API. Add one rule: duplicate name values must raise ValueError with the message duplicate skill name: <name>. Preserve every other behavior. No UI, media, marketing page, new service, configuration, or external research is needed.",
-      "expected_output": "Reuses the existing validator and tests; Calls lean-check once after context resolution and keeps the one required new rule in that existing owner; Populates the canonical ticket template rather than a skill-local schema; Avoids irrelevant advisors, new services, configuration, and broad research; Produces the smallest faithful Change Plan with focused tests; Does not manufacture a diagram for a simple localized change; Passes the lean-plan gate",
+      "expected_output": "Reuses the existing validator and tests; Calls lean-check once after context resolution and keeps the one required new rule in that existing owner; Populates the canonical ticket template rather than a skill-local schema; Avoids irrelevant advisors, new services, configuration, and broad research; Keeps the feature-level Delta distinct from an owner-level Implementation Preview with a verified current excerpt or labeled evidence-gap trace, planned replacement, and expected example; Uses the smallest required Contract Diagram without creating diagrams.md; Produces the smallest faithful Change Plan with focused tests; Passes the lean-plan gate",
       "files": [],
       "assertions": [
         "Reuses the existing validator, tests, and documented local implementation pattern",
@@ -113,7 +113,8 @@
         "Avoids proposing a new service, configuration surface, or unrelated cleanup",
         "Calls lean-check after context resolution and uses a minimum_new_code receipt to keep the duplicate-name rule owner-local",
         "Uses the canonical tickets/templates/ticket.md body rather than a parallel impl-plan schema",
-        "Does not require an inline map or diagrams.md when prose is already clearer",
+        "Uses the smallest required inline Contract Diagram and does not create diagrams.md for the localized change",
+        "Keeps the feature-level Before / After / Example separate from a Change Plan Implementation Preview that uses a verified current-owner excerpt when available, otherwise labels the assumption or evidence gap and uses a signature, state, or ownership trace; it also shows the planned replacement and one expected result",
         "Returns the smallest faithful Change Plan with focused proof and an explicit lean-plan pass"
       ],
       "metadata": {

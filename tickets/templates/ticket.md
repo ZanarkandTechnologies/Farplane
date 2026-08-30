@@ -1,6 +1,6 @@
 ---
 template_id: ticket-template
-template_version: "0.3.1"
+template_version: "0.3.2"
 feature_refs:
   - FEAT-0007
   - FEAT-0008
@@ -36,6 +36,10 @@ One paragraph: valuable outcome, beneficiary, and why this ticket matters now.
 - Constraints:
 
 ## Delta
+
+<!-- Feature/behavior preview: what changes for the user or system. This is
+distinct from the owner-level Implementation Preview inside each Change Plan
+unit. -->
 
 > **Before:** Quote or cite the observed current behavior and exact gap; if
 > evidence is missing, state the current assumption and evidence gap.
@@ -74,6 +78,16 @@ named consumer exists; use tickets/README.md for those optional shapes. -->
 
 ### Change 1: coherent unit
 
+#### Implementation Preview
+
+> **Current owner:** `path:line` — quote the smallest exact code, prompt,
+> schema, config, or copy excerpt that establishes the present seam.
+>
+> **Planned owner:** `path` — show the intended replacement excerpt or compact
+> pseudocode, clearly labeling illustrative syntax.
+>
+> **Expected example:** `representative input or action` -> `expected result`.
+
 ```yaml
 diagram_nodes: [S2, S3]
 files:
@@ -88,8 +102,11 @@ failure: blocker or rollback condition
 ```
 
 <!-- Repeat Change N only for independently reviewable units. Each unit owns
-its files, operation, local proof, and failure boundary; do not repeat the
-global Delta, QA Strategy, Docs Strategy, or routing policy in every unit. -->
+its owner-level preview, files, operation, local proof, and failure boundary;
+do not repeat the feature-level Delta, QA Strategy, Docs Strategy, or routing
+policy in every unit. When no exact textual seam exists, use the smallest
+current -> planned signature, state, or ownership trace instead of inventing
+code. -->
 
 ## Done
 

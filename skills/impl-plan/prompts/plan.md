@@ -64,8 +64,14 @@ change unit, or QA. Do not add a ticket section or restate the ladder.
 Populate `tickets/templates/ticket.md` directly. Keep that template's required
 sections and optional-section rules authoritative.
 
-- Make `Delta` brief and observable.
+- Keep `Delta` as a brief, observable feature/behavior preview: what changes
+  for the user or system.
 - Use one `Change Plan` unit per coherent independently reviewable change.
+- Give every change unit a compact owner-level `Implementation Preview` that
+  preserves the current seam, shows the planned replacement, and demonstrates
+  one expected example. Quote short exact code, prompt, schema, config, or copy
+  excerpts when available; otherwise use a clearly labeled signature, state,
+  ownership trace, or illustrative pseudocode rather than inventing source.
 - Each unit names real files, the concrete operation, material contract/type
   impact, local proof, and a real failure or rollback boundary.
 - Do not repeat global Delta, QA, Docs, routing, or policy in every unit.

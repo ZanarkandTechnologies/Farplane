@@ -24,11 +24,32 @@ all other behavior unchanged.
 > **Example:** `[{name: "a"}, {name: "a"}]` raises
 > `duplicate skill name: a`.
 
+## Contract Diagram
+
+```text
+[S1] rows -> [S2] validate_rows -> [S3] valid rows
+                  |
+                  +-> [F1] repeated name -> ValueError
+[F1] -> [P1] exact duplicate-name message
+```
+
 ## Change Plan
 
 ### Change 1: enforce uniqueness in the existing validator
 
+#### Implementation Preview
+
+> **Current owner:** `src/validators/skill_registry.py:12` —
+> `for row in rows: validate_row(row)` *(fictional fixture excerpt)*
+>
+> **Planned owner:** `src/validators/skill_registry.py` —
+> `seen = set(); ...; if name in seen: raise ValueError(...)` *(illustrative)*
+>
+> **Expected example:** `[{name: "a"}, {name: "a"}]` ->
+> `ValueError("duplicate skill name: a")`.
+
 ```yaml
+diagram_nodes: [S2, F1, P1]
 files:
   read:
     - src/validators/skill_registry.py
@@ -69,8 +90,11 @@ Why good:
 
 - uses the canonical ticket shape instead of a skill-local template;
 - reuses existing ownership and proof surfaces;
+- distinguishes the feature-level Delta from the owner-level implementation
+  transformation;
 - contains one executable change unit without repeating global policy;
-- does not manufacture advisor calls, architecture maps, or diagrams.
+- uses the smallest required Contract Diagram without manufacturing advisors
+  or a detailed visual companion.
 
 ## Good: when a visual companion earns its cost
 
