@@ -10,6 +10,7 @@ without trying to lint every surface in the repo.
 from __future__ import annotations
 
 import argparse
+import re
 import tomllib
 from dataclasses import dataclass
 from pathlib import Path
@@ -43,6 +44,58 @@ RULES: tuple[HarnessRule, ...] = (
             "keep root AGENTS repo-local, point install policy at "
             "`templates/global/AGENTS.md`, and preserve `.farplane/` as the "
             "live runtime root"
+        ),
+    ),
+    HarnessRule(
+        relative_path="templates/global/AGENTS.md",
+        required_substrings=(
+            "AUTONOMY DIRECTIVE - DO NOT REMOVE",
+            "EXECUTE TASKS TO COMPLETION WITHOUT ASKING FOR PERMISSION",
+        ),
+        remediation=(
+            "restore the Agent Kernel independent-reasoning contract: evaluate "
+            "before agreement, never open with reflexive validation, and state "
+            "the supporting reason before agreeing"
+        ),
+    ),
+    HarnessRule(
+        relative_path="docs/systems/agent-kernel.md",
+        required_substrings=(
+            "<!-- BEGIN AGENT_KERNEL_FEATURE_INVENTORY -->",
+            "<!-- END AGENT_KERNEL_FEATURE_INVENTORY -->",
+            "global_independent_reasoning_before_agreement_01",
+        ),
+        remediation=(
+            "keep the canonical bidirectional AGENTS feature inventory and its "
+            "high-risk behavior proof route in the Agent Kernel system owner"
+        ),
+    ),
+    HarnessRule(
+        relative_path="docs/templates/global-agents-qa-checklist.md",
+        required_substrings=(
+            "## Agent Kernel Feature Fidelity Gate",
+            "docs/systems/agent-kernel.md",
+            "every documented behavior group must remain",
+        ),
+        remediation=(
+            "restore the bidirectional Agent Kernel feature-fidelity gate for "
+            "every AGENTS edit, rewrite, or consolidation"
+        ),
+    ),
+    HarnessRule(
+        relative_path="skills/consolidate/SKILL.md",
+        required_substrings=(
+            "Agent Kernel",
+            "Feature Fidelity Gate",
+            "docs/systems/agent-kernel.md",
+            "docs/templates/global-agents-qa-checklist.md",
+            "every documented behavior",
+            "every surviving or added AGENTS section",
+            "python3 bin/validators/check_harness_invariants.py",
+        ),
+        remediation=(
+            "require AGENTS consolidation to load the Agent Kernel inventory "
+            "and apply the global AGENTS QA checklist before completion"
         ),
     ),
     HarnessRule(
@@ -110,9 +163,172 @@ def validate_root(root: Path, *, include_project_contract: bool = True) -> list[
                     f"remediation: {rule.remediation}"
                 )
     errors.extend(validate_agent_roles(root))
+    errors.extend(validate_agent_kernel_inventory(root))
+    errors.extend(validate_neutral_reasoning_contract(root))
     if include_project_contract:
         errors.extend(validate_project_files(root))
     return errors
+
+
+def validate_neutral_reasoning_contract(root: Path) -> list[str]:
+    """Require the high-risk reasoning contract in active section prose."""
+
+    relative_path = "templates/global/AGENTS.md"
+    path = root / relative_path
+    if not path.is_file():
+        return []
+    section = active_markdown_section(
+        path.read_text(encoding="utf-8"), "## Decision And Grounding"
+    )
+    required = (
+        "Evaluate the user's premise independently before choosing whether to agree",
+        "Do not begin with agreement, praise, or validation",
+        "Express agreement only after stating the supporting reason",
+    )
+    return [
+        f"{relative_path}: active Decision And Grounding section is missing "
+        f"required text: {snippet!r} | remediation: restore independent evaluation, "
+        "the non-agreement opener, and reason-before-agreement in active prose"
+        for snippet in required
+        if snippet not in section
+    ]
+
+
+def active_markdown_section(text: str, heading: str) -> str:
+    """Extract active prose for one H2, excluding comments and fenced examples."""
+
+    uncommented = re.sub(r"<!--.*?-->", "", text, flags=re.DOTALL)
+    lines: list[str] = []
+    in_section = False
+    fence: str | None = None
+    for line in uncommented.splitlines():
+        stripped = line.lstrip()
+        fence_match = re.match(r"^(`{3,}|~{3,})", stripped)
+        if fence_match:
+            marker = fence_match.group(1)[0]
+            if fence is None:
+                fence = marker
+            elif fence == marker:
+                fence = None
+            continue
+        if fence is not None:
+            continue
+        if line.strip() == heading:
+            in_section = True
+            continue
+        if in_section and re.match(r"^##\s+\S", line):
+            break
+        if in_section:
+            lines.append(line)
+    return "\n".join(lines)
+
+
+def validate_agent_kernel_inventory(root: Path) -> list[str]:
+    """Keep the Agent Kernel inventory and both AGENTS surfaces bidirectional."""
+
+    owner_path = root / "docs" / "systems" / "agent-kernel.md"
+    if not owner_path.is_file():
+        return []
+
+    text = owner_path.read_text(encoding="utf-8")
+    start_marker = "<!-- BEGIN AGENT_KERNEL_FEATURE_INVENTORY -->"
+    end_marker = "<!-- END AGENT_KERNEL_FEATURE_INVENTORY -->"
+    start = text.find(start_marker)
+    end = text.find(end_marker)
+    if start == -1 or end == -1 or end <= start:
+        return [
+            "docs/systems/agent-kernel.md: invalid Agent Kernel feature inventory "
+            "markers | remediation: preserve one ordered BEGIN/END inventory block"
+        ]
+
+    rows: list[tuple[str, str, str]] = []
+    errors: list[str] = []
+    seen_ids: set[str] = set()
+    seen_sections: set[tuple[str, str]] = set()
+    for line in text[start + len(start_marker) : end].splitlines():
+        if not re.match(r"^\|\s*`AK-[GP]\d+`\s*\|", line):
+            continue
+        cells = [cell.strip().strip("`") for cell in line.strip().strip("|").split("|")]
+        if len(cells) != 4:
+            errors.append(
+                "docs/systems/agent-kernel.md: malformed feature inventory row: "
+                f"{line!r} | remediation: keep ID, surface, required section, and behavior group"
+            )
+            continue
+        feature_id, surface, section, _behavior = cells
+        if feature_id in seen_ids:
+            errors.append(
+                f"docs/systems/agent-kernel.md: duplicate feature ID {feature_id!r} | "
+                "remediation: keep each Agent Kernel behavior group unique"
+            )
+            continue
+        seen_ids.add(feature_id)
+        section_key = (surface, section)
+        if section_key in seen_sections:
+            errors.append(
+                f"docs/systems/agent-kernel.md: duplicate feature section {section!r} "
+                f"for {surface} | remediation: keep one behavior-group row per AGENTS section"
+            )
+            continue
+        seen_sections.add(section_key)
+        rows.append((feature_id, surface, section))
+
+    if not rows:
+        errors.append(
+            "docs/systems/agent-kernel.md: Agent Kernel feature inventory has no rows | "
+            "remediation: document every level-two section in both AGENTS surfaces"
+        )
+        return errors
+
+    tracked_surfaces = {"AGENTS.md", "templates/global/AGENTS.md"}
+    documented = {(surface, section) for _feature_id, surface, section in rows}
+    for _feature_id, surface, _section in rows:
+        if surface not in tracked_surfaces:
+            errors.append(
+                f"docs/systems/agent-kernel.md: unsupported AGENTS surface {surface!r} | "
+                "remediation: inventory only the root and global-template AGENTS surfaces"
+            )
+
+    implemented: set[tuple[str, str]] = set()
+    for surface in tracked_surfaces:
+        path = root / surface
+        if not path.is_file():
+            continue
+        for section in level_two_headings(path.read_text(encoding="utf-8")):
+            implemented.add((surface, section))
+
+    for surface, section in sorted(documented - implemented):
+        errors.append(
+            f"docs/systems/agent-kernel.md: documented feature section {section!r} "
+            f"is missing from {surface} | remediation: restore the section or record an "
+            "accepted feature removal before updating the inventory"
+        )
+    for surface, section in sorted(implemented - documented):
+        errors.append(
+            f"{surface}: undocumented Agent Kernel section {section!r} | remediation: "
+            "add it to docs/systems/agent-kernel.md or move the behavior to an existing owner"
+        )
+    return errors
+
+
+def level_two_headings(text: str) -> list[str]:
+    """Return real Markdown H2 headings while ignoring fenced examples."""
+
+    headings: list[str] = []
+    fence: str | None = None
+    for line in text.splitlines():
+        stripped = line.lstrip()
+        fence_match = re.match(r"^(`{3,}|~{3,})", stripped)
+        if fence_match:
+            marker = fence_match.group(1)[0]
+            if fence is None:
+                fence = marker
+            elif fence == marker:
+                fence = None
+            continue
+        if fence is None and re.match(r"^##\s+\S", line):
+            headings.append(line.strip())
+    return headings
 
 
 def validate_agent_roles(root: Path) -> list[str]:

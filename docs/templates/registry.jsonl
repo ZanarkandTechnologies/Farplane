@@ -1,5 +1,5 @@
 {"applies_to":["farplane/manifest.json"],"consumer_scope":"project","feature_refs":["FEAT-0060","FEAT-0063"],"path":"skills/init-advisor/references/MANIFEST_TEMPLATE.json","template_id":"farplane-framework","template_version":"2.0.16"}
-{"feature_refs":["FEAT-0022","FEAT-0042","FEAT-0043"],"path":"templates/global/AGENTS.md","template_id":"global-agents-template","template_version":"0.2.39"}
+{"feature_refs":["FEAT-0022","FEAT-0042","FEAT-0043"],"path":"templates/global/AGENTS.md","template_id":"global-agents-template","template_version":"0.2.41"}
 {"feature_refs":["FEAT-0029","FEAT-0032"],"kind":"goal-program","path":"tickets/templates/goal-loop/program.md","template_id":"goal-loop-program","template_version":"0.2.0"}
 {"feature_refs":["FEAT-0029","FEAT-0032"],"kind":"goal-progress","path":"tickets/templates/goal-loop/progress.md","template_id":"goal-loop-progress","template_version":"0.1.1"}
 {"consumer_scope":"skills/*/examples/golden/*.md","feature_refs":["FEAT-0057"],"path":"docs/skills/templates/GOLDEN_EXAMPLE.md","template_id":"golden-example","template_version":"0.2.0"}

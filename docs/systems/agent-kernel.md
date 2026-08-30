@@ -3,7 +3,7 @@ title: "Agent Kernel"
 status: active
 owner: farplane-framework
 created_at: 2026-06-26
-updated_at: 2026-08-23
+updated_at: 2026-08-29
 tags:
   - farplane
   - systems
@@ -30,7 +30,7 @@ system_record_json: |
       "docs/fundamentals/harness-engineering-doctrine.md",
       "bin/README.md"
     ],
-    "last_verified": "2026-08-23"
+    "last_verified": "2026-08-29"
   }
 ---
 # Agent Kernel
@@ -108,6 +108,41 @@ The command reference and maintenance examples live in
 - Registry data is generated from system and feature docs, not edited by hand.
 - When a capability no longer deserves a feature page, fold its current truth into the best owner and remove active refs.
 
+## AGENTS Feature Inventory
+
+This is the canonical index of behavior groups implemented by the two AGENTS
+surfaces. The inventory is intentionally section-sized: individual rules stay
+in their owning section, while high-risk behaviors also receive validator or
+eval coverage. Every listed section must exist, and every level-two section in
+either AGENTS file must be listed here.
+
+<!-- BEGIN AGENT_KERNEL_FEATURE_INVENTORY -->
+| ID | Surface | Required section | Behavior group |
+| --- | --- | --- | --- |
+| `AK-G01` | `templates/global/AGENTS.md` | `## Autonomy And Authority` | Authority, action mode, steering, and reversible autonomy |
+| `AK-G02` | `templates/global/AGENTS.md` | `## Decision And Grounding` | Independent reasoning, alternatives, tradeoffs, evidence, and non-sycophantic stance |
+| `AK-G03` | `templates/global/AGENTS.md` | `## Correction, Work, And Proof` | Correction handling, execution discipline, verification, and review |
+| `AK-G04` | `templates/global/AGENTS.md` | `## Response Contract` | Response ledger, concise communication, visuals, and completion handoff |
+| `AK-G05` | `templates/global/AGENTS.md` | `## Context Routing` | Nearest-owner context loading and durable guidance placement |
+| `AK-G06` | `templates/global/AGENTS.md` | `## Task State And Artifacts` | Ticket, Goal Packet, and workflow artifact ownership |
+| `AK-G07` | `templates/global/AGENTS.md` | `## Skills And Delegation` | Skill loading, phase ownership, and bounded delegation |
+| `AK-G08` | `templates/global/AGENTS.md` | `## Local Workbench And Safety` | Checkout discipline, safe editing, polling, credentials, and install boundaries |
+| `AK-P01` | `AGENTS.md` | `## Operating model` | Farplane's visible ticket, skill, Goal Packet, and proof model |
+| `AK-P02` | `AGENTS.md` | `## Context budget` | Project-local context budget and owner routing |
+| `AK-P03` | `AGENTS.md` | `## Local boundaries` | Farplane placement, browser proof, checkout, credential, and runtime boundaries |
+| `AK-P04` | `AGENTS.md` | `## Durable truth` | Canonical state and documentation ownership |
+| `AK-P05` | `AGENTS.md` | `## Map` | Repository navigation map |
+| `AK-P06` | `AGENTS.md` | `## Stop and surface a decision` | Architectural conflict and rollback decision gates |
+<!-- END AGENT_KERNEL_FEATURE_INVENTORY -->
+
+Feature reconciliation is bidirectional:
+
+1. Inventory to AGENTS: every listed section remains implemented.
+2. AGENTS to inventory: every level-two AGENTS section remains documented.
+3. High-risk behavior: validators and representative evals prove semantics that
+   a section-presence check cannot prove, including independent reasoning before
+   agreement.
+
 ## System Flow
 
 ```mermaid
@@ -144,11 +179,17 @@ The Agent Kernel turns local and install-time policy into the operating shape ev
 - Registry proof: `python3 docs/features/validate_features.py`.
 - Link proof: `python3 bin/validators/check_doc_refs.py`.
 - Static-contract proof: `python3 bin/farplane.py lint all`.
+- Feature-fidelity proof: `python3 bin/validators/check_harness_invariants.py`.
+- Behavior proof: the `global_independent_reasoning_before_agreement_01` and
+  `global_warranted_agreement_after_reasoning_01` prompt evals.
 - Update this system page when product-layer boundaries or feature membership changes.
 - Update feature pages when capability behavior changes.
 - Regenerate registries and commit generated outputs with the source docs.
 
 ## Change History
+
+- 2026-08-29: Added the bidirectional AGENTS feature inventory and restored
+  explicit independent-reasoning/non-sycophancy preservation proof.
 
 - 2026-08-23: Established the pure static-lint registry and the explicit
   lint/sync/lifecycle routing boundary.

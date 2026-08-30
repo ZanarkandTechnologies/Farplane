@@ -3,9 +3,11 @@ title: Global AGENTS Template QA Checklist
 status: active
 owner: templates
 created_at: 2026-06-28
-updated_at: 2026-06-28
+updated_at: 2026-08-29
 refs:
   - templates/global/AGENTS.md
+  - AGENTS.md
+  - docs/systems/agent-kernel.md
   - docs/features/FEAT-0042-lean-global-agent-operating-kernel.md
   - docs/features/FEAT-0043-project-level-system-prompt-eval-suite.md
   - docs/fundamentals/prompt-engineering.md
@@ -46,6 +48,26 @@ For each material rule or section, record:
 
 Default to `needs_evidence` when frequency, omission cost, or owner availability
 is asserted without examples.
+
+## Agent Kernel Feature Fidelity Gate
+
+Run this gate for every edit, rewrite, or consolidation of `AGENTS.md` or
+`templates/global/AGENTS.md`:
+
+1. Read the `AGENTS Feature Inventory` in
+   `docs/systems/agent-kernel.md` before changing either AGENTS surface.
+2. Inventory the target's sections and material behavior rules before editing;
+   do not treat section headings alone as the behavior inventory.
+3. Compare inventory to AGENTS: every documented behavior group must remain
+   implemented or have an explicit accepted move/delete decision with proof.
+4. Compare AGENTS to inventory: every surviving or added level-two section must
+   be documented in the Agent Kernel inventory.
+5. Run `python3 bin/validators/check_harness_invariants.py` and the narrowest
+   affected behavior evals. A passing section-presence check does not replace a
+   behavior eval for high-risk semantics.
+
+Any unexplained loss, undocumented addition, or weakened high-risk behavior is
+a failed consolidation and must be restored before completion.
 
 ## Disposition Rules
 

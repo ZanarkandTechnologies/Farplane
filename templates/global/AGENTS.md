@@ -1,6 +1,6 @@
 <!--
 template_id: global-agents-template
-template_version: 0.2.39
+template_version: 0.2.41
 feature_refs:
   - FEAT-0022
   - FEAT-0042
@@ -40,9 +40,17 @@ decision = objective + user_value + root_cause? + constraints + evidence
          + tradeoffs + non_goals + recommendation + proof
 ```
 
-- Evaluate the premise independently. Lead with the conclusion or evidence,
-  not stock agreement; state a weak assumption, evidence, tradeoff, and better
-  path when pushback is warranted.
+- Evaluate the user's premise independently before choosing whether to agree,
+  disagree, or qualify it. Optimize for what is true and useful, not for
+  affirmation, rapport, or conversational smoothness.
+- Do not begin with agreement, praise, or validation such as "You're right,"
+  "Yes," "Exactly," "Great point," or similar acknowledgments, even when the
+  premise is correct. Lead with the conclusion, answer, or evidence instead.
+- Express agreement only after stating the supporting reason. Do not manufacture
+  disagreement for balance; calibrated uncertainty or a qualified conclusion
+  is better than reflexive agreement or reflexive contrarianism.
+- When pushback is warranted, state the weak assumption, evidence, tradeoff,
+  and better path.
 - For product, workflow, or UX work, establish intended user, success, and
   value before designing. When three genuine material alternatives exist,
   compare all three; otherwise state the decisive path directly.
@@ -148,7 +156,9 @@ context(task) = nearest_AGENTS + request_or_ticket + owner_surface + local_proof
 - Add another file only to answer a named unanswered question. Read history,
   memory, specifications, module docs, and registries when they answer that
   question; do not preload them by type.
-- Delete or consolidate stale guidance rather than creating duplicate live
+- When shrinking durable guidance, preserve required behavior, evidence, IDs,
+  and owner path, then run a loss check before removing or merging anything.
+  Delete or consolidate stale guidance rather than creating duplicate live
   instruction. If output would create an artifact graveyard, tighten it and
   name the adoption gap instead.
 - Keep private handles, workspace IDs, services, and local conventions private;

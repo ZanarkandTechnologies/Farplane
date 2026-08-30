@@ -16,15 +16,13 @@
         "Routes material skill edits to skill-maintenance checks or review instead of self-approving"
       ],
       "metadata": {
-        "farplane": {
-          "title": "Consolidate preserves template value instead of summarizing",
-          "tags": [
-            "skill",
-            "consolidate",
-            "template-preservation"
-          ],
-          "notes": "Protects the primitive from becoming a generic summary instruction."
-        }
+        "title": "Consolidate preserves template value instead of summarizing",
+        "tags": [
+          "skill",
+          "consolidate",
+          "template-preservation"
+        ],
+        "notes": "Protects the primitive from becoming a generic summary instruction."
       }
     },
     {
@@ -41,15 +39,13 @@
         "Requires validator or generated-output proof before claiming completion"
       ],
       "metadata": {
-        "farplane": {
-          "title": "Consolidate separates hard constraints from value judgment",
-          "tags": [
-            "skill",
-            "consolidate",
-            "constraints"
-          ],
-          "notes": "Catches the parameter/value-function split for registry-like targets."
-        }
+        "title": "Consolidate separates hard constraints from value judgment",
+        "tags": [
+          "skill",
+          "consolidate",
+          "constraints"
+        ],
+        "notes": "Catches the parameter/value-function split for registry-like targets."
       }
     },
     {
@@ -66,22 +62,22 @@
         "Includes a loss check and proof or review route for material skill changes"
       ],
       "metadata": {
-        "farplane": {
-          "title": "Consolidate routes gotchas to the right owner surface",
-          "tags": [
-            "skill",
-            "consolidate",
-            "gotchas"
-          ],
-          "notes": "Exercises consolidate across gotchas, checklist, eval, and reference placement."
-        }
+        "title": "Consolidate routes gotchas to the right owner surface",
+        "tags": [
+          "skill",
+          "consolidate",
+          "gotchas"
+        ],
+        "notes": "Exercises consolidate across gotchas, checklist, eval, and reference placement."
       }
     },
     {
       "id": "consolidate_knowledge_keeps_real_knowledge_routes_policy_01",
       "prompt": "This knowledge file has rows about hook stdout JSON, a final-answer style preference, and a ticket-specific proof note. Tidy it without losing history.",
       "expected_output": "Preserves exact old rows in an archive or requires an archive before deletion; Keeps hook stdout JSON as live memory if project-specific and current; Routes the final-answer style preference to AGENTS or prompt policy rather than live memory; Archives or leaves the ticket-specific proof note near the ticket instead of promoting it; Uses importance, recency, factuality, and remembrance in the decision",
-      "files": ["evals/fixtures/knowledge-routing.md"],
+      "files": [
+        "evals/fixtures/knowledge-routing.md"
+      ],
       "assertions": [
         "Preserves exact old rows in an archive or requires an archive before deletion",
         "Keeps hook stdout JSON as live memory if project-specific and current",
@@ -90,18 +86,22 @@
         "Uses importance, recency, factuality, and remembrance in the decision"
       ],
       "metadata": {
-        "farplane": {
-          "title": "Consolidate keeps factual knowledge and routes misplaced policy",
-          "tags": ["skill", "consolidate", "knowledge"],
-          "notes": "Transferred from the retired knowledge-pruning package."
-        }
+        "title": "Consolidate keeps factual knowledge and routes misplaced policy",
+        "tags": [
+          "skill",
+          "consolidate",
+          "knowledge"
+        ],
+        "notes": "Transferred from the retired knowledge-pruning package."
       }
     },
     {
       "id": "consolidate_knowledge_flags_stale_facts_01",
       "prompt": "A project knowledge note says the canonical checkout is /old/path, but the current repo is /new/path. Another row says no secrets in git. Tidy the file.",
       "expected_output": "Flags the path row as stale or needing confirmation before keeping it live; Keeps or routes the no-secrets rule depending on whether another owner already carries it; Does not silently rewrite factual claims without evidence; Reports kept, routed, archived, and questionable items",
-      "files": ["evals/fixtures/stale-project-knowledge.md"],
+      "files": [
+        "evals/fixtures/stale-project-knowledge.md"
+      ],
       "assertions": [
         "Flags the path row as stale or needing confirmation before keeping it live",
         "Keeps or routes the no-secrets rule depending on whether another owner already carries it",
@@ -109,11 +109,40 @@
         "Reports kept, routed, archived, and questionable items"
       ],
       "metadata": {
-        "farplane": {
-          "title": "Consolidate flags stale knowledge instead of rewriting it",
-          "tags": ["skill", "consolidate", "knowledge", "stale-facts"],
-          "notes": "Transferred from the retired knowledge-pruning package."
-        }
+        "title": "Consolidate flags stale knowledge instead of rewriting it",
+        "tags": [
+          "skill",
+          "consolidate",
+          "knowledge",
+          "stale-facts"
+        ],
+        "notes": "Transferred from the retired knowledge-pruning package."
+      }
+    },
+    {
+      "id": "consolidate_agents_feature_fidelity_01",
+      "prompt": "Use the consolidate workflow to explain the loss-check contract we must follow before shortening templates/global/AGENTS.md so it does not lose behavior. Do not edit files; I only want the guardrail.",
+      "expected_output": "Names docs/systems/agent-kernel.md as the canonical AGENTS feature inventory; Requires docs/templates/global-agents-qa-checklist.md before editing; Requires an inventory of material behavior rules instead of relying only on section headings; Checks every documented behavior group remains implemented; Checks every surviving or added AGENTS section remains documented; Preserves independent reasoning before agreement and the non-sycophantic response opening; Requires check_harness_invariants.py plus affected behavior evals before completion; Treats any unexplained loss or weakened high-risk behavior as a failed consolidation",
+      "files": [],
+      "assertions": [
+        "Names docs/systems/agent-kernel.md as the canonical AGENTS feature inventory",
+        "Requires docs/templates/global-agents-qa-checklist.md before editing",
+        "Requires an inventory of material behavior rules instead of relying only on section headings",
+        "Checks every documented behavior group remains implemented",
+        "Checks every surviving or added AGENTS section remains documented",
+        "Preserves independent reasoning before agreement and the non-sycophantic response opening",
+        "Requires check_harness_invariants.py plus affected behavior evals before completion",
+        "Treats any unexplained loss or weakened high-risk behavior as a failed consolidation"
+      ],
+      "metadata": {
+        "title": "AGENTS consolidation preserves the Agent Kernel feature inventory",
+        "tags": [
+          "skill",
+          "consolidate",
+          "agents",
+          "feature-fidelity"
+        ],
+        "notes": "Direct-invocation regression for bidirectional AGENTS feature coverage and high-risk semantic preservation."
       }
     }
   ]
