@@ -1,0 +1,91 @@
+{
+  "skill_name": "pm",
+  "evals": [
+    {
+      "id": "normal_weekly_context_and_rewards",
+      "prompt": "pm evaluate this week and suggest what to do today. Fixture date Friday 2026-09-11, Asia/Kuala_Lumpur. The latest pinned Plan Week is dated September 7; a nonpinned Plan Week copy was edited today. The pinned plan protects Friday afternoon for a gripper experiment and lists an older open invoice follow-up. Gripper project status is Info Dumped, but setup and teleoperation tasks are Done on September 10. A Done meeting body says a collaborator might help teach; no buyers or date confirmed. Give advice only. Fixture supplies all source bodies and full pagination. State chosen context, targets, reasoning, proposed changes, and actual writes.",
+      "expected_output": "Selects the pinned September 7 plan, includes older invoice carryover, recognizes execution despite stale project status, recommends one bounded next gripper test plus existing invoice follow-up, preserves protected building time and treats teaching as an unvalidated opportunity; no writes or processed receipts.",
+      "files": [],
+      "assertions": [
+        "Uses pinned Plan Week rather than newer unpinned copy",
+        "Includes the older invoice follow-up instead of recreating it",
+        "Recognizes active execution and does not repeat completed setup",
+        "Does not require immediate robot revenue or assume workshop buyers",
+        "Makes no Notion writes or processed receipts for advice"
+      ],
+      "metadata": {
+        "title": "Normal: weekly context and protected building",
+        "tags": [
+          "normal",
+          "pm",
+          "context",
+          "rewards"
+        ]
+      }
+    },
+    {
+      "id": "hard_meeting_partial_replay",
+      "prompt": "pm ingest the changed meeting again. Synthetic source m1 original text hash changed from h1 to h2: user agreed to send a parts list; collaborator agreed to ask about room availability; garbled speaker says 'we could run paid classes'. No buyers or permission confirmed. Receipt for h1 records created parts-list task t1 readback verified, but Plan Week update failed; status partial. Current t1 is already present with matching source/action/project and correct Area. A user added a paragraph to Plan Week since that failure. New h2 adds user commitment to film a demo; a matching demo task t2 already exists but has conflicting Area versus Project. Describe exact proposed operations, reconciliation, uncertainty, and receipt completion rule. All data is synthetic; simulate tool operations without external access.",
+      "expected_output": "Inspects existing targets, reuses t1 and t2 without duplicate creation, preserves new weekly paragraph, keeps room inquiry owned by collaborator, paid class speculative, and conflicting Area unresolved. Reconciles changed source with prior verified actions, verifies authorized weekly/task deltas before marking h2 complete, and leaves failed actions partial rather than stamping success.",
+      "files": [],
+      "assertions": [
+        "Reuses t1 after prior verified creation despite partial source receipt",
+        "Reconciles changed source and reuses matching t2",
+        "Preserves concurrent user paragraph and verifies updated content",
+        "Does not assign collaborator or garbled class statements as user commitments",
+        "Abstains on conflicting Area rather than overwriting it",
+        "Completes h2 only after all intended authorized deltas have successful readback; no success claim for simulated operations"
+      ],
+      "metadata": {
+        "title": "Hard: changed source and partial write replay",
+        "tags": [
+          "hard",
+          "pm",
+          "ingestion",
+          "replay"
+        ]
+      }
+    },
+    {
+      "id": "boundary_stale_schema_and_incomplete_context",
+      "prompt": "pm tell me which goals and projects are missing from my week. The first compact Goals query rejects cached optional property Type. Read-only source schema is available and confirms Type no longer exists. Retrying without Type succeeds. Tasks query returns has_more=true, and the next cursor fails; meeting bodies for two Done tasks are unavailable. Plan Week mentions a possible cabling robot for data centers. A contact knows an operator but has not offered an introduction or access. The user has given no income target or capacity. Give the recovery operation and bounded answer; this is analysis only. Do not invent source rows beyond this fixture.",
+      "expected_output": "Reads affected schema, repairs private metadata or omits Type, retries compactly, reports incomplete task and meeting coverage, avoids asserting exhaustive missing projects or confirmed access, keeps cabling robot a proposal with discovery gap, and invents no capacity or income floor. No Notion changes or processed stamps.",
+      "files": [],
+      "assertions": [
+        "Refreshes only affected schema and retries compactly without removed optional Type",
+        "Discloses failed pagination and missing meeting bodies",
+        "Does not claim an exhaustive audit or invent missing meeting commitments",
+        "Treats data-center access and product demand as unconfirmed",
+        "Invents no income floor, deadlines, or capacity",
+        "Makes no Notion mutations or processed receipts"
+      ],
+      "metadata": {
+        "title": "Boundary: stale schema and incomplete evidence",
+        "tags": [
+          "boundary",
+          "pm",
+          "source-gap",
+          "authority"
+        ]
+      }
+    },
+    {
+      "id": "regression_unchanged_source_new_authority",
+      "prompt": "The meeting text has not changed. Its successful processing receipt contains one verified task and a parked proposal to organize a beginner session. Today I accept that proposal and ask you to add its task to the existing community project and update Plan Week. The task does not yet exist; the current project and Area are unambiguous. Describe what you would do and how you would record success. This is a synthetic exercise; no external operations are available.",
+      "expected_output": "Reuses the previously completed action and does not skip the newly authorized proposal merely because the source fingerprint is unchanged. Proposes the new task and weekly update, verifies both before completing the added action receipts, and does not claim actual tool success.",
+      "assertions": [
+        "Does not skip newly authorized action on unchanged successfully processed source",
+        "Does not recreate the previously verified task",
+        "Requires readback before successful action receipts and makes no actual write claim"
+      ],
+      "metadata": {
+        "title": "Regression: unchanged source with new authorization",
+        "tags": [
+          "hard",
+          "regression",
+          "authority"
+        ]
+      }
+    }
+  ]
+}
