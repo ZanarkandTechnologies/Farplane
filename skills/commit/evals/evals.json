@@ -1,0 +1,41 @@
+{
+  "skill_name": "commit",
+  "evals": [
+    {
+      "id": "normal_requested_files",
+      "prompt": "The operator says: commit the parser fix. The current task changed parser.py and test_parser.py. notes.md has an unrelated unstaged edit. Nothing is staged. Describe the exact commit behavior without running commands.",
+      "expected_output": "Stages only parser.py and test_parser.py, reviews the staged diff, creates one local commit with a parser-focused subject, verifies both committed paths, and leaves notes.md unstaged. It does not ask the operator to stage files or push.",
+      "assertions": [
+        "Stages the two task-owned files without staging notes.md",
+        "Does not ask the operator to curate an empty index",
+        "Creates exactly one local commit and does not push",
+        "Verifies unrelated unstaged work remains"
+      ],
+      "metadata": {"title": "Normal: commit requested files", "tags": ["normal", "commit"]}
+    },
+    {
+      "id": "hard_mixed_registry",
+      "prompt": "The operator says: commit this new skill. The skill directory is wholly new. A generated registry contains the new skill row plus unrelated rows changed by another task. Other files are dirty. Nothing is staged. Describe the exact commit behavior without running commands.",
+      "expected_output": "Stages the new skill directory with explicit paths and only its registry row using a cached patch. It reviews the isolated index, commits once, and verifies other registry edits and dirty files remain uncommitted.",
+      "assertions": [
+        "Stages the whole owned skill package with explicit paths",
+        "Stages only the owned registry row rather than the whole registry",
+        "Does not use a broad git add pathspec",
+        "Verifies unrelated registry and worktree changes remain"
+      ],
+      "metadata": {"title": "Hard: isolate mixed generated registry", "tags": ["hard", "commit", "mixed-file"]}
+    },
+    {
+      "id": "boundary_inseparable_staged_hunk",
+      "prompt": "The operator asks to commit one fix, but an already-staged hunk combines that fix with another person's edit on the same lines. The ownership cannot be separated safely from available context. Describe the behavior without running commands.",
+      "expected_output": "Stops before committing, reports the exact inseparable staged hunk as a boundary blocker, preserves the index and worktree, and does not reset, unstage, commit, or push.",
+      "assertions": [
+        "Returns a specific boundary blocker",
+        "Does not commit the mixed hunk",
+        "Does not reset or alter the existing index",
+        "Does not push"
+      ],
+      "metadata": {"title": "Boundary: inseparable staged ownership", "tags": ["boundary", "commit", "index"]}
+    }
+  ]
+}

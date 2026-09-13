@@ -1,11 +1,14 @@
 ---
 name: commit
-version: 0.2.0
-description: "Turn an already staged Git boundary into one verified local commit without staging or pushing."
+version: 0.3.0
+description: "Turn a requested worktree change into one isolated, verified local commit when the operator asks to commit it."
 tier: 2
 source: local
 capability:
   kind: shortcut
+template_uses:
+  skill-template: "0.6.2"
+  skill-eval-task: "0.2.0"
 allowed-tools: Read, Glob, Grep, Bash
 ---
 
@@ -13,58 +16,91 @@ allowed-tools: Read, Glob, Grep, Bash
 
 ## Context
 
-Use this explicit shortcut when the operator wants to create a local commit.
-It owns the already-staged boundary only: inspect it, choose a compact honest
-subject, create one commit, and verify the receipt. It never runs `git add`,
-modifies the index, or pushes.
+Use this shortcut when the operator asks to commit a change. Resolve what “this
+change” means from the current task, isolate that boundary from the worktree,
+stage it, create one local commit, and verify the result. Do not make the
+operator curate the index when the requested boundary can be recovered safely.
 
 ## Skill Signature
 
 ```text
-commit(staged_diff?, subject?) -> commit_receipt | no_staged_changes
-
-state: reads(index, staged diff, recent history); writes(one local commit only)
-owns: staged-boundary validation, subject selection, local commit receipt
-gates: git_repository; staged_changes; subject_nonempty; head_advanced_once;
-  unstaged_work_preserved
-fails: auto_staging; auto_push; mixed-boundary commit; empty commit
+commit(change, subject?) -> commit_receipt | boundary_blocker
+reads: current task, worktree, index, requested diff, and recent commit style
+does: isolates and stages the requested change, then creates one local commit
+writes: Git index and one local commit
+returns: commit SHA, subject, committed paths, and preservation proof
 ```
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-- [ ] 1. Inspect the staged boundary first with `git diff --cached`.
-  - If it is empty, return `no_staged_changes` and do not mutate anything.
-  - Do not inspect unstaged changes as candidates for this commit.
-- [ ] 2. Inspect recent commit style and choose one compact, truthful subject.
-  - Default to `type(scope): lower-case imperative summary`; name the main
-    behavioral delta, not every touched file.
-- [ ] 3. Create exactly one local commit using
-  `scripts/commit_staged.py --message <subject>`.
-  - The helper must be given the repository root when it is not the current
-    directory. Do not add files or push.
-- [ ] 4. Verify the receipt.
-  - Confirm `HEAD` advanced by one commit, the staged boundary is now clean,
-    and any pre-existing unstaged work remains untouched.
+- [ ] **N1 — Resolve the requested commit boundary.**
+  `change + task context + worktree -> owned paths/hunks | boundary_blocker`
+
+  Rule: Treat “commit this change” as the change completed in the current task.
+  Inspect status and diffs, including untracked files. Use whole files when they
+  are fully owned by the request and individual hunks when a file mixes work.
+
+  Assert:
+  - Every selected path or hunk supports the requested change.
+  - Unrelated changes are excluded without asking the operator to stage them.
+
+- [ ] **N2 — Build an isolated index boundary.**
+  `owned paths/hunks + current index -> requested staged diff | conflict`
+
+  Rule: Call `scripts/commit_staged.py` with explicit `--path` inputs for owned
+  files and `--cached-patch` for selected hunks. The helper builds a temporary
+  index from HEAD, commits it, then aligns only committed paths in the real
+  index. If ownership cannot be separated into those inputs, stop first.
+
+  Example: `new skill package + one generated registry row + other registry
+  edits -> stage the package and only that row`.
+
+  Assert:
+  - The isolated temporary-index diff contains the requested boundary only.
+  - No broad pathspec, repository-wide add, or interactive operator step is used.
+
+- [ ] **N3 — Create one honest local commit.**
+  `requested staged diff + repo history -> local commit | commit_failure`
+
+  Rule: Choose a compact `type(scope): lower-case imperative summary` and pass it
+  to the isolation helper. Never push, amend, rebase, or rewrite history.
+
+  Assert:
+  - The commit subject describes the main behavior change.
+  - HEAD advances by exactly one commit.
+
+- [ ] **N4 — Verify the commit and preserved work.**
+  `commit + pre-commit snapshots -> commit_receipt | verification_failure`
+
+  Rule: Compare the committed paths and diff with the resolved boundary. Confirm
+  unrelated staged and unstaged changes still exist in their original state.
+
+  Assert:
+  - The requested change is committed and the requested portion left the index.
+  - Unrelated work remains uncommitted; the receipt reports any residual risk.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
+
+## Gotchas
+
+- Never use `git add .`, `git add -A`, or a broad directory when it could capture
+  unrelated work.
+- A generated registry can mix many changes. Stage only the row owned by the
+  requested skill instead of committing the whole generated file.
+- If ownership cannot be separated safely at hunk level, return the exact
+  conflict. Do not commit a mixed boundary to avoid asking a question.
+
+## References
+
+- [commit message style](references/style.md)
 
 ## Output
 
 ```yaml
-status: committed | no_staged_changes
+status: committed | boundary_blocker
 subject: <commit subject when committed>
 commit: <HEAD SHA when committed>
-boundary: staged-only
-unstaged_work: preserved
+paths: [<committed path>]
+unrelated_work: preserved | <specific verification gap>
+push: not_performed
 ```
-
-## Gotchas
-
-- Do not treat a requested commit as permission to stage adjacent changes.
-- Do not commit when the staged diff combines unrelated deltas; ask the
-  operator to curate the boundary first.
-- Do not push, amend, rebase, or rewrite history.
-
-## References
-
-- [references/style.md](references/style.md)

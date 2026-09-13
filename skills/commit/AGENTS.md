@@ -9,11 +9,13 @@
 
 ## Boundaries
 
-- Commit exactly the staged boundary; never stage, push, amend, or rebase.
-- Keep subject selection compact and repository-aware.
-- Return `no_staged_changes` without mutation when the index is empty.
+- Resolve and stage only the change the operator asked to commit.
+- Use explicit paths for wholly owned files and cached patches for mixed files.
+- Preserve unrelated staged and unstaged work.
+- Commit locally; never push, amend, rebase, or rewrite history.
 
 ## Checks
 
 - `python3 scripts/test_commit_staged.py`
-- Confirm the helper contains no stage or push Git command.
+- Confirm the final staged diff contains only the requested boundary.
+- Confirm unrelated work remains after the commit.
