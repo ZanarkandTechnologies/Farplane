@@ -40,6 +40,15 @@ FARPLANE_SKILL_HEAT_RECENT_DAYS = "7"
 FARPLANE_SKILL_HEAT_TOP_N = "25"
 # Comma-separated event types counted as skill heat.
 FARPLANE_SKILL_HEAT_EVENT_TYPES = "control_surface_detected,hook_result,skill_requested"
+# Optional JEV entry-skill suggestion on UserPromptSubmit. This sends the
+# current prompt plus bounded skill descriptions/excerpts to the selected
+# provider. Store provider credentials in Doppler and inject them at runtime.
+# FARPLANE_JEV_SKILL_SUGGESTION = "1"
+# FARPLANE_JEV_PROVIDER = "openrouter" # or "featherless"
+# Optional provider-specific override; normally leave unset.
+# OpenRouter: typesafe/jev-1.13
+# Featherless: featherless-ai/gemma-4-26B-A4B-classifier
+# FARPLANE_JEV_MODEL = "..."
 # Shared prose-accountant ceilings. Closed Mermaid and `wireframe` blocks, exact image/video embed
 # lines, marker-only Markdown blockquote spacers, and a trailing link-only
 # References/Citations section are reported but excluded. The word limit is

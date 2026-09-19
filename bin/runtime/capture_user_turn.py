@@ -1,10 +1,17 @@
 #!/usr/bin/env python3
+"""Adapts `UserPromptSubmit` payloads into durable user-turn telemetry.
+
+Normalization and persistence rules live in
+[user_turn.py](bin/runtime/user_turn.py).
+"""
+
 from __future__ import annotations
 
 import json
 import sys
 
 from runtime_telemetry import emit_hook_telemetry
+from skill_suggestion import suggest_entry_skill, suggestion_context
 from user_turn import (
     append_conversation_user_turn,
     capture_user_turn,
@@ -76,6 +83,13 @@ def main() -> int:
     control_surfaces = extract_control_surfaces(prompt)
     skill_registry = load_skill_registry(project_root)
     skill_mentions = extract_skill_mentions(prompt, registry=skill_registry)
+    suggested_skill = ""
+    if not skill_mentions and skill_registry.status == "loaded":
+        suggested_skill = suggest_entry_skill(
+            project_root=project_root,
+            request=prompt,
+            records=skill_registry.records,
+        )
     registry_error_count = int(skill_registry.status != "loaded")
     emit_hook_telemetry(
         event_type="turn_start",
@@ -131,6 +145,35 @@ def main() -> int:
                 "registry_skill_source": registry_record.get("source", ""),
                 "registry_skill_path": registry_record.get("path", ""),
             },
+        )
+    if suggested_skill:
+        registry_record = skill_registry.records.get(suggested_skill.lower(), {})
+        emit_hook_telemetry(
+            event_type="skill_suggested",
+            hook_event_name="UserPromptSubmit",
+            payload=payload,
+            project_root=project_root,
+            extra={
+                "source": "jev_skill_suggestion",
+                "producer": "capture_user_turn.py",
+                "status": "suggested",
+                "summary": f"suggested ${suggested_skill}",
+                "skill_name": suggested_skill,
+                "registry_source": "docs/skills/registry.jsonl",
+                "registry_path": str(skill_registry.path),
+                "registry_skill_source": registry_record.get("source", ""),
+                "registry_skill_path": registry_record.get("path", ""),
+            },
+        )
+        print(
+            json.dumps(
+                {
+                    "hookSpecificOutput": {
+                        "hookEventName": "UserPromptSubmit",
+                        "additionalContext": suggestion_context(suggested_skill),
+                    }
+                }
+            )
         )
     return 0
 

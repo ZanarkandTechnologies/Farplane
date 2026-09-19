@@ -93,6 +93,9 @@ runtime helpers instead of symlinking every script, validator, and test.
   grow. `rules/source-line-baseline.toml` is the one-time Python adoption
   ceiling until the comparison base contains the guard.
 - `capture_user_turn.py` - turn-start user-intent writer for the hook surface
+- `runtime/skill_suggestion.py` - optional dependency-free OpenRouter or
+  Featherless JEV adapter using TypeSafe's official two-pass skill-suggestion
+  recipe to inject one advisory entry skill when no explicit `$skill` was requested
 - `core/farplane_ticket_close.py` - issue create/resume/close, ticket completion,
   archive, event, and mining boundary used by `farplane ticket finalize TASK-XXXX`
 - `core/farplane_event_store.py` - durable local event/outbox primitives shared

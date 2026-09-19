@@ -47,6 +47,32 @@ Root `hooks.json` currently defines:
 
 These are graphable as `hook:*` nodes that `triggers` command nodes.
 
+### Optional JEV entry-skill suggestion
+
+`capture_user_turn.py` may apply TypeSafe's official two-pass Skill suggestion
+cookbook through OpenRouter or Featherless before the model starts. The first request runs one `Choice` across the
+generated registry plus three skill-need `Noul` gates. When the gate passes, a
+second request reranks the top three using each skill's description and a
+bounded opening excerpt from its `SKILL.md`; independent fit Nouls may reject
+the entire shortlist. A surviving Choice winner is injected as one advisory
+`<skill_relevance>` block. Explicit `$skill` mentions bypass JEV, and the hook
+never invokes a skill itself.
+
+The integration is off unless `FARPLANE_JEV_SKILL_SUGGESTION=1`.
+`FARPLANE_JEV_PROVIDER` defaults to `openrouter`, which requires Doppler to
+inject `OPENROUTER_API_KEY` and defaults to `typesafe/jev-1.13` at
+`https://openrouter.ai/api/alpha/decisions`. Selecting `featherless` requires
+Doppler to inject `FEATHERLESS_API_KEY` and defaults to
+`featherless-ai/gemma-4-26B-A4B-classifier` at
+`https://api.featherless.ai/v1/classifier`. The public demo is not used because
+its 2k-token context cannot hold Farplane's full generated skill registry.
+`FARPLANE_JEV_ENDPOINT` can override either endpoint, and `FARPLANE_JEV_MODEL`
+overrides either provider default. Missing setup, invalid registry,
+timeouts, API failures, malformed answers, low need, and low absolute fit all
+fail open with empty hook output. API keys are never stored in tracked config
+or telemetry. Enabling this feature sends the current user prompt, registry
+descriptions, and bounded shortlisted skill excerpts to the selected provider.
+
 ## Explicit Ticket Completion And Mining
 
 `farplane/bindings.yaml#event_routes` maps an event to a versioned immutable

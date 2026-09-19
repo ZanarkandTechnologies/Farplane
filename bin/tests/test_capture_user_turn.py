@@ -128,6 +128,68 @@ class CaptureUserTurnTelemetryTests(unittest.TestCase):
         self.assertEqual(turn_start["extra"]["counts"]["registry_error_count"], 1)
         self.assertTrue(turn_start["extra"]["registry_error"])
 
+    def test_injects_advisory_context_for_jev_suggestion(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            project_root = Path(tmp)
+            (project_root / ".farplane").mkdir()
+            registry_path = project_root / "docs" / "skills" / "registry.jsonl"
+            registry_path.parent.mkdir(parents=True)
+            registry_path.write_text(
+                json.dumps(
+                    {
+                        "name": "research",
+                        "description": "Research current external evidence.",
+                        "source": "local",
+                        "path": "skills/research/SKILL.md",
+                    }
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+            payload = {
+                "hook_event_name": "UserPromptSubmit",
+                "session_id": "session-1",
+                "turn_id": "turn-1",
+                "cwd": str(project_root),
+                "prompt": "Find current external evidence.",
+            }
+            events: list[dict[str, object]] = []
+
+            with patch.object(sys, "stdin", io.StringIO(json.dumps(payload))):
+                with patch.object(sys, "stdout", new_callable=io.StringIO) as stdout:
+                    with patch.object(capture_user_turn, "suggest_entry_skill", return_value="research"):
+                        with patch.object(
+                            capture_user_turn,
+                            "emit_hook_telemetry",
+                            side_effect=lambda **kwargs: events.append(dict(kwargs)) or True,
+                        ):
+                            self.assertEqual(capture_user_turn.main(), 0)
+
+            hook_output = json.loads(stdout.getvalue())
+
+        self.assertEqual(
+            hook_output["hookSpecificOutput"]["hookEventName"], "UserPromptSubmit"
+        )
+        self.assertIn(
+            "Relevant to the current request: research",
+            hook_output["hookSpecificOutput"]["additionalContext"],
+        )
+        suggested = next(event for event in events if event["event_type"] == "skill_suggested")
+        self.assertEqual(suggested["extra"]["skill_name"], "research")
+
+    def test_explicit_skill_bypasses_jev_suggestion(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            project_root = Path(tmp)
+            registry_path = project_root / "docs" / "skills" / "registry.jsonl"
+            registry_path.parent.mkdir(parents=True)
+            registry_path.write_text(
+                json.dumps({"name": "research", "description": "Research evidence."}) + "\n",
+                encoding="utf-8",
+            )
+            with patch.object(capture_user_turn, "suggest_entry_skill") as suggest:
+                self.run_hook(project_root, "$research this topic")
+        suggest.assert_not_called()
+
 
 if __name__ == "__main__":
     unittest.main()
