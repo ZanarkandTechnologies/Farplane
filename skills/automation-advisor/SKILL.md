@@ -31,6 +31,11 @@ eligible Project; Weekly calls `$pm-weekly` once over the complete frozen set.
 The former Interval workflow is removed and must not be restored or bound to
 Daily or Weekly.
 
+Company OS prompts retain Zanarkand AI's complete operated structure: source
+boundaries, matching and pagination, exact cache contracts, isolated skill
+ownership, JSON validation, rendering, freshness checks, effects, readback, and
+receipts. Do not replace that contract with a four-line workflow synopsis.
+
 ## Skill Signature
 
 ```text
@@ -66,11 +71,14 @@ fails: logs in tracked config; provider access inside pm skills; generated
   - [ ] Use one complete Markdown file per Codex automation; do not add an index.
   - [ ] Let the Codex record own live cadence and Markdown own desired cadence,
         target, status, and exact prompt.
-- [ ] 4. Write the smallest reviewable prompt.
+- [ ] 4. Write the complete operated prompt without duplicating skill reasoning.
   - [ ] Invoke one `$skill-name` and include only cadence, project bindings,
         sources, stages, write policy, side-effect gates, and final receipt.
   - [ ] For Company OS, name fetch/cache, local skill extraction, validation,
         and render/apply as four explicit stages.
+  - [ ] Preserve the stage-specific collection, matching, cache, ownership,
+        stale-write, readback, and receipt rules from the full Company OS templates.
+  - [ ] Keep the Zanarkand source template and version in automation front matter.
   - [ ] Make provider access and effects automation-owned. Make skill inputs and
         its single JSON output exact.
   - [ ] Restrict Company OS actions to authorized existing issues; forbid task

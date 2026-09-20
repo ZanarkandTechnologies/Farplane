@@ -1,8 +1,16 @@
 # Company OS Automation Template
 
-Use this shape for the paired Daily and Weekly cron records. The prompt must
-bind concrete source paths and output paths rather than copying reasoning rules
-from the skill.
+Start from the complete operated templates below. They are the Farplane
+adaptation of Zanarkand AI's Company OS automations:
+
+- [Daily](../../init-advisor/references/automation-templates/daily-operating-update.md)
+- [Weekly](../../init-advisor/references/automation-templates/weekly-operating-review.md)
+
+Replace project identity, source bindings, destinations, and schedules. Retain
+the full stage contract: collection boundaries, exact matching, pagination,
+cache shape, isolated skill writes, JSON validation, rendering, freshness
+checks, provider allowlists, readback, and receipts. This outline is a review
+map, not a replacement prompt:
 
 ```text
 Use $pm-daily | $pm-weekly.
@@ -16,3 +24,6 @@ Use $pm-daily | $pm-weekly.
 Do not create or execute tickets, invent strategy, promote broad knowledge, or
 perform external side effects.
 ```
+
+Reject a proposed Company OS prompt that compresses the operated template into
+this outline or omits the detailed rules needed to run any stage safely.

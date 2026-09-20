@@ -351,3 +351,4 @@
 2026-07-31 17:22 +0800 | SKILL | make Deep Person ICP decision-dense with a sourced opening and bounded Person Signal Card, and make Personalized Offer compare evidence-backed relationship approaches before selected-strategy-only copy without adding graph, CRM, or public-parameter surface
 2026-08-23 00:00 +0800 | MIGRATION | retire `docs/TROUBLES.md`, `docs/LESSONS.md`, and the `repent-scribe` role; route correction evidence to tickets, owner-local skills, evals, validators, and `docs/MEMORY.md` only for durable project invariants.
 2026-09-21 00:00 +0800 | MIGRATION | replace desired-state automation TOML with one Markdown file per automation, using YAML front matter for configuration and the body as the exact prompt.
+2026-09-21 00:00 +0800 | FIX | restore the full Zanarkand-derived Company OS Daily and Weekly operated contracts after an over-compressed Farplane adaptation dropped collection, validation, rendering, freshness, readback, and receipt rules.
