@@ -60,9 +60,8 @@ returns: evidence-tagged review, one priority, alternatives, experiment, and sou
 
   Rule: Load [references/rubric.md](references/rubric.md) and grade each
   criterion `0 unknown | 1 absent/fragile | 2 partial | 3 effective`; cite the
-  evidence and confidence separately from the grade. Load the required
-  [application trajectories](references/application-trajectories.md) and compare
-  the current model with the matching Before → Move → After/Result trace.
+  evidence and confidence separately from the grade. Compare the current model
+  with the matching Before → Move → After/Result trajectory in that rubric.
 
   Example: `one $30K annual offer -> first yes is high-risk -> grade 1; a paid diagnostic may be a candidate, not an automatic prescription`.
 

@@ -49,9 +49,8 @@ returns: evidence-tagged review, one priority, alternatives, experiment, and sou
 
   Rule: Load [references/rubric.md](references/rubric.md) and grade each
   criterion `0 unknown | 1 absent/fragile | 2 partial | 3 effective`; keep
-  confidence separate from grade. Also load the required
-  [application trajectories](references/application-trajectories.md) and compare
-  the current offer with the matching Before → Move → After/Result trace.
+  confidence separate from grade. Compare the current offer with the matching
+  Before → Move → After/Result trajectory in that rubric.
 
   Example: `weekly coaching calls described by format -> category-of-one grade 1; an outcome-led package is a candidate, not proof of improvement`.
 

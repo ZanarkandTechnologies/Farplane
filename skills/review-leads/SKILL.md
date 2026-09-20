@@ -50,8 +50,8 @@ returns: evidence-tagged review, one priority, alternatives, experiment, and sou
   `0 unknown | 1 absent/fragile | 2 partial | 3 effective`; grade each Core
   Four channel separately only when applicable or materially assessable.
   Otherwise label it `candidate later` or `not currently required` and do not
-  grade it. Load the required [application trajectories](references/application-trajectories.md)
-  and compare the current strategy with each relevant Before → Move → After/Result trace.
+  grade it. Compare the current strategy with each relevant Before → Move →
+  After/Result trajectory in that rubric.
 
   Example: `consistent warm referrals but no repeatable ask -> referral lesson grade 2; improve the referral moment before opening a new ad channel`.
 
