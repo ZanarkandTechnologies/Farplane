@@ -94,7 +94,7 @@ refs:
 - Important states the agent must reach quickly:
   - current project charter and selected metric refs in `farplane/harness.yaml`
   - metric meaning, direction, freshness, and guard rules in `farplane/metrics.yaml`
-  - automation program in `farplane/automations.toml`
+  - automation program in `farplane/automations/`
   - live runtime reports in `.farplane/reports/`
   - active tickets in `tickets/`
 - Fast-entry surfaces to create or preserve: ticket `Done / Proof`, Goal

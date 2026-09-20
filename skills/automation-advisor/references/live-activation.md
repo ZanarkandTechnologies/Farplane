@@ -18,7 +18,7 @@ activate_farplane_automations(project_root, desired_records,
 
 1. Inspect existing Codex automations and update records matching project and
    automation identity rather than creating duplicates.
-2. Update `farplane/automations.toml` first with the exact desired prompt,
+2. Update `farplane/automations/` first with the exact desired prompt,
    target, cadence, and status.
 3. Reuse the existing Project Pulse thread for the one heartbeat. Target Feed
    Scout, Daily/Weekly Interval, Dogfood, and maintenance cron jobs at the

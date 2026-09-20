@@ -24,7 +24,7 @@ The durable result is a split Farplane delta: `farplane/harness.yaml` owns
 identity, planning areas, capability and metric refs, constraints, authority,
 and change rule; `farplane/metrics.yaml` owns reusable metric definitions;
 `farplane/bindings.yaml` owns non-secret provider coordinates; tracked
-`farplane/automations.toml` owns approved cadence; `.agents/skills/` owns
+`farplane/automations/` owns approved cadence; `.agents/skills/` owns
 project-specific capability workflows. Use `templates/project-harness.md` only
 as a transient review worksheet, never as a replacement charter.
 
@@ -144,7 +144,7 @@ Return or write the approved subset of:
 ```text
 Typed Charter / Area-Capability-Metric Selection Delta: farplane/harness.yaml
 Metric Objective Delta: farplane/metrics.yaml
-Binding and Automation Manifest Delta: farplane/bindings.yaml, automations.toml
+Binding and Automation Manifest Delta: farplane/bindings.yaml, automations/
 Capability Skill Reuse Map; Local Skill Stubs or Refinement Ticket
 Values, Priorities, Strategy Axes, KPI Map, and Feedback Skill Loops
 Feedback Primitive Plan; Missing-System and Operator-Unblock Tickets

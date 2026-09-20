@@ -24,7 +24,7 @@ surfaces:
   - skills/pm-weekly/SKILL.md
   - skills/pm-weekly/templates/project-report.md
   - skills/pm-weekly/templates/company-report.md
-  - farplane/automations.toml
+  - farplane/automations/
 source_refs:
   - docs/farplane-framework/pulse-and-interval-loop.md
   - docs/prd.md

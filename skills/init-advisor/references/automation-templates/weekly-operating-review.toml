@@ -1,0 +1,36 @@
+# One complete desired-state Codex automation. Runtime state stays outside Git.
+schema = "farplane_project_automation"
+framework_template_version = "1.0.0"
+owner = "automation-advisor"
+
+id = "project-weekly-operating-review"
+name = "Project Weekly Operating Review"
+kind = "cron"
+status = "paused"
+prompt = '''
+Use $pm-weekly.
+
+Run one Company OS Weekly pass: freeze the complete Project and existing-issue
+inventories; cache memories, Daily coverage, reports, source hashes, and issue
+revisions; call `$pm-weekly` once over local files; validate complete coverage
+and the exact action allowlist; then render reports and apply only stale-safe
+updates to existing issues with readback.
+
+Do not create, assign, start, execute, or close work. Do not invent strategy,
+promote broad knowledge, send external messages, or perform external side
+effects. Incomplete Project coverage blocks mutations.
+
+Return context, extraction, and report paths; coverage; money movement;
+constraints; commitments; action receipts; gaps; operator decisions; and
+`provider_execution: none`.
+
+Config source:
+farplane/automations/weekly-operating-review.toml id="project-weekly-operating-review"
+'''
+[target]
+workspace = "<project-root>"
+[schedule]
+type = "weekly"
+timezone = "<timezone>"
+days = ["Mon"]
+time = "05:45"

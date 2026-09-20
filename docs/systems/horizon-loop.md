@@ -118,7 +118,7 @@ flowchart LR
 
   metrics["metric observations<br/>raw + movement"]:::keep
   intent["stable intent<br/>problems + areas + metrics"]:::keep
-  automations["automations<br/>farplane/automations.toml"]:::keep
+  automations["automations<br/>farplane/automations/"]:::keep
   advisor["FEAT-0032<br/>goal-advisor"]:::changed
   pulse["FEAT-0071<br/>project Work Pulse"]:::added
   companyos["FEAT-0067<br/>Company OS Daily + Weekly"]:::changed

@@ -16,7 +16,7 @@ system_id: SYS-0003
 category: planning
 public: true
 surfaces:
-  - farplane/automations.toml
+  - farplane/automations/
   - skills/pulse-update/SKILL.md
   - skills/automation-advisor/SKILL.md
 source_refs:

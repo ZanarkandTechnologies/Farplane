@@ -634,28 +634,28 @@ def load_content_items(project_root: Path) -> tuple[list[dict[str, Any]], list[s
 
 
 def load_automations(project_root: Path) -> tuple[list[dict[str, Any]], list[str]]:
-    path = project_root / "farplane" / "automations.toml"
-    if not path.exists():
-        return [], ["missing_automations_toml"]
-    try:
-        data = tomllib.loads(path.read_text(encoding="utf-8"))
-    except tomllib.TOMLDecodeError:
-        return [], ["invalid_automations_toml"]
-    automations = data.get("automations") if isinstance(data, dict) else []
-    if not isinstance(automations, list):
-        return [], ["invalid_automations_shape"]
-    return [
-        {
-            "id": str(item.get("id") or ""),
-            "name": str(item.get("name") or ""),
-            "kind": str(item.get("kind") or ""),
-            "status": str(item.get("status") or ""),
-            "source_ref": {"path": "farplane/automations.toml"},
-        }
-        for item in automations
-        if isinstance(item, dict)
-    ], []
-
+    root = project_root / "farplane" / "automations"
+    if not root.is_dir():
+        return [], ["missing_automations_dir"]
+    automations: list[dict[str, Any]] = []
+    gaps: list[str] = []
+    for path in sorted(root.glob("*.toml")):
+        try:
+            item = tomllib.loads(path.read_text(encoding="utf-8"))
+        except tomllib.TOMLDecodeError:
+            gaps.append(f"invalid_automation_toml:{path.name}")
+            continue
+        automations.append(
+            {
+                "id": str(item.get("id") or ""),
+                "name": str(item.get("name") or ""),
+                "kind": str(item.get("kind") or ""),
+                "status": str(item.get("status") or ""),
+                "source_ref": {"path": f"farplane/automations/{path.name}"},
+            }
+        )
+    if not automations and not gaps: gaps.append("empty_automations_dir")
+    return automations, gaps
 
 def path_from_config(value: Any, default: Path) -> Path:
     raw = str(value or "").strip()
@@ -1839,7 +1839,7 @@ def load_project_snapshot(
     source_gaps.extend(gap_objects_from_strings(latest.get("source_gaps", []) if isinstance(latest.get("source_gaps"), list) else [], "metrics", ".farplane/metrics/daily/"))
     source_gaps.extend(gap for gap in metric_view.get("source_gaps", []) if isinstance(gap, dict))
     source_gaps.extend(source_gap(gap_id, "distribution", gap_id, ".farplane/content/ledger.jsonl") for gap_id in content_gap_ids)
-    source_gaps.extend(source_gap(gap_id, "cadence", gap_id, "farplane/automations.toml") for gap_id in automation_gap_ids)
+    source_gaps.extend(source_gap(gap_id, "cadence", gap_id, "farplane/automations/") for gap_id in automation_gap_ids)
     source_gaps.extend(feed_scout_gaps)
     source_gaps.extend(highlight_gaps)
     if not reports:

@@ -1,6 +1,6 @@
 ---
 name: automation-advisor
-description: "Design or revise Farplane Codex automations using project-owned automations.toml records and one owning skill per scheduled workflow."
+description: "Design or revise Farplane Codex automations using one project-owned TOML file per scheduled workflow."
 tier: 3
 group: operations
 source: local
@@ -18,7 +18,7 @@ Use this skill to create, revise, or audit Farplane Codex automations. Work
 Pulse is the only heartbeat and owns ticket execution. Company OS Daily and
 Weekly, Feed Scout, Dogfood, and maintenance are separate `cron` records.
 
-Keep each complete desired record in `farplane/automations.toml`: id, name,
+Keep each complete desired record in its own `farplane/automations/*.toml` file: id, name,
 kind, status, target, schedule, and exact prompt. Runtime IDs, logs, and mutable
 memory stay in the Codex automation store or ignored `.farplane/` state. Do not
 add a compiler, scheduler thread, or second manifest.
@@ -37,9 +37,9 @@ Daily or Weekly.
 automation_advisor(intent, project_refs, current_automation?, activate?)
   -> template_choice + config_delta + automation_delta?
    + state_contract_check + proof_checklist
-state: reads(active feature/spec, farplane/automations.toml?, current prompts,
+state: reads(active feature/spec, farplane/automations/?, current prompts,
              target skill, templates, first-load Todo List guardrails);
-       writes(farplane/automations.toml)
+       writes(farplane/automations/)
 gates: loop_choice; cadence; one_owning_skill; full_parseable_record;
   file_in_file_out_boundary; side_effect_gates; one_heartbeat;
   no_hidden_scheduler
@@ -58,12 +58,12 @@ fails: logs in tracked config; provider access inside pm skills; generated
   - [ ] Use Company OS Daily/Weekly for project memory and money-linked review.
   - [ ] Use cron for every report, source, self-improvement, or maintenance pass.
 - [ ] 2. Bind current project surfaces.
-  - [ ] Read the active feature/spec, `farplane/automations.toml`, exact live
+  - [ ] Read the active feature/spec, `farplane/automations/`, exact live
         prompt, target skill, template, and first-load Todo List guardrails.
   - [ ] Read [prompt engineering](../../docs/fundamentals/prompt-engineering.md)
         before material prompt changes.
 - [ ] 3. Keep desired config visible and runtime state untracked.
-  - [ ] Use one complete `[[automations]]` record per Codex automation.
+  - [ ] Use one complete TOML file per Codex automation; do not add an index.
   - [ ] Let the Codex record own live cadence and TOML own desired cadence,
         target, status, and exact prompt.
 - [ ] 4. Write the smallest reviewable prompt.

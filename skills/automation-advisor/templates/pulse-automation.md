@@ -9,14 +9,17 @@ template_version: "1.0.0"
 
 # Pulse Codex Automation Template
 
-Use this `[[automations]]` record in `farplane/automations.toml` for a
+Use this complete file in `farplane/automations/work-pulse.toml` for a
 project's Pulse automation. The record is the full desired Codex automation
 config: identity, schedule, target, status, and exact prompt text. It is the
 project's only `kind = "heartbeat"` record; all other scheduled skills use
 `kind = "cron"`.
 
 ```toml
-[[automations]]
+schema = "farplane_project_automation"
+framework_template_version = "1.0.0"
+owner = "automation-advisor"
+
 id = "<pulse-automation-id>"
 name = "Project Pulse"
 kind = "heartbeat"
@@ -42,13 +45,13 @@ Final response:
 - Link any report, ticket, worker, or receipt artifacts created by the beat.
 
 Config source:
-farplane/automations.toml automation id="<pulse-automation-id>"
+farplane/automations/work-pulse.toml id="<pulse-automation-id>"
 '''
 
-[automations.target]
+[target]
 thread_id = "<pulse-thread-id>"
 
-[automations.schedule]
+[schedule]
 type = "interval"
 interval_minutes = 30
 ```

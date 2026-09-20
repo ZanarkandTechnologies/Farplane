@@ -77,7 +77,7 @@ FISH_AUDIO_MODEL = "__FISH_AUDIO_MODEL__"
 FISH_AUDIO_LATENCY_MODE = "__FISH_AUDIO_LATENCY_MODE__"
 FARPLANE_REMINDER_PHONE = "__FARPLANE_REMINDER_PHONE__"
 FARPLANE_PHONE_REMINDER_AGENT_NAME = "__FARPLANE_PHONE_REMINDER_AGENT_NAME__"
-# Automation cadence lives in `farplane/automations.toml` so Farplane UI can
+# Automation cadence lives in `farplane/automations/` so Farplane UI can
 # render and update full Codex automation configs before syncing the Codex
 # automation record.
 # Optional explicit force-on for Farplane hook behavior. Live Codex hooks now

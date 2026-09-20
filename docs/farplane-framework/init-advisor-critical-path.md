@@ -82,7 +82,7 @@ farplane/README.md
 farplane/manifest.json
 farplane/harness.yaml
 farplane/metrics.yaml
-farplane/automations.toml
+farplane/automations/
 farplane/bindings.yaml
 farplane/pm.json
 .agents/skills/README.md
@@ -108,7 +108,7 @@ Key ownership:
 - `metrics.yaml`: provider-independent metric definitions with direction,
   freshness, and optional guard rules;
 - `.agents/skills/`: project-local recurring capability workflows;
-- `automations.toml`: one Work Pulse heartbeat plus separate scheduled sources;
+- `automations/`: one Work Pulse heartbeat plus separate scheduled sources;
 - `bindings.yaml`: non-secret connector/provider coordinates;
 - tickets: executable commitments and all QA/review evidence;
 - `.farplane/**`: generated/local observations and reports, not strategy.
@@ -169,7 +169,7 @@ Dogfood Improvement   cron/manual
 Maintenance           cron/manual
 ```
 
-Bootstrap writes `farplane/automations.toml`; `automation-advisor` owns live
+Bootstrap writes `farplane/automations/`; `automation-advisor` owns live
 Codex automation activation. Runtime IDs remain in the Codex automation store,
 while `pm.json` contains only UI-visible grouping refs.
 

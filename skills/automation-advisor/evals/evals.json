@@ -4,12 +4,12 @@
     {
       "id": "automation_advisor_one_heartbeat_01",
       "prompt": "Configure Farplane V1 automations for Pulse, Feed Scout, Daily, Weekly, and self-improvement.",
-      "expected_output": "Creates exactly one heartbeat and it invokes pulse-update; Keeps Feed Scout, Company OS Daily/Weekly, and Dogfood as cron jobs; Keeps exact reviewable prompts in farplane/automations.toml; Does not add a hidden scheduler, separate check-in loop, or Taste Loop controller; Makes Work Pulse the shared ticket and matured-check-in executor",
+      "expected_output": "Creates exactly one heartbeat and it invokes pulse-update; Keeps Feed Scout, Company OS Daily/Weekly, and Dogfood as cron jobs; Keeps exact reviewable prompts in farplane/automations/; Does not add a hidden scheduler, separate check-in loop, or Taste Loop controller; Makes Work Pulse the shared ticket and matured-check-in executor",
       "files": [],
       "assertions": [
         "Creates exactly one heartbeat and it invokes pulse-update",
         "Keeps Feed Scout, Company OS Daily/Weekly, and Dogfood as cron jobs",
-        "Keeps exact reviewable prompts in farplane/automations.toml",
+        "Keeps exact reviewable prompts in farplane/automations/",
         "Does not add a hidden scheduler, separate check-in loop, or Taste Loop controller",
         "Makes Work Pulse the shared ticket and matured-check-in executor"
       ],
@@ -50,12 +50,12 @@
     {
       "id": "automation_advisor_model_boundary_01",
       "prompt": "Use Sol with medium reasoning for this existing heartbeat task.",
-      "expected_output": "Checks whether model selection belongs to the heartbeat automation or its target thread; Uses the supported model identifier and medium reasoning setting; Does not invent unsupported automations.toml fields; Updates the live task or sends a model-overridden continuation when that is the supported boundary; Verifies the next beat rather than claiming the setting changed from tracked config alone",
+      "expected_output": "Checks whether model selection belongs to the heartbeat automation or its target thread; Uses the supported model identifier and medium reasoning setting; Does not invent unsupported automations/ fields; Updates the live task or sends a model-overridden continuation when that is the supported boundary; Verifies the next beat rather than claiming the setting changed from tracked config alone",
       "files": [],
       "assertions": [
         "Checks whether model selection belongs to the heartbeat automation or its target thread",
         "Uses the supported model identifier and medium reasoning setting",
-        "Does not invent unsupported automations.toml fields",
+        "Does not invent unsupported automations/ fields",
         "Updates the live task or sends a model-overridden continuation when that is the supported boundary",
         "Verifies the next beat rather than claiming the setting changed from tracked config alone"
       ],
@@ -75,7 +75,7 @@
       "prompt": "Replace the existing Daily and Weekly Interval bindings with the Zanarkand-style Company OS flow. Multica remains dashboard-only and the skills must be file-in/file-out. Do not create another scheduled job.",
       "expected_output": "Updates the existing Daily and Weekly cron records instead of creating duplicates; Calls pm-daily once per eligible Project and pm-weekly once over the complete frozen set; Makes the automation own provider access, caching, rendering, existing-issue effects, and readback; Gives each skill local files and exactly one JSON output with no provider access; Forbids task admission, strategy invention, broad knowledge promotion, Multica execution, and external side effects; Preserves one Pulse heartbeat",
       "files": [
-        "skills/automation-advisor/evals/fixtures/farplane/automations.toml"
+        "skills/automation-advisor/evals/fixtures/farplane/automations/"
       ],
       "assertions": [
         "Updates existing Daily and Weekly cron records without creating another job",
