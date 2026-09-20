@@ -16,7 +16,8 @@ needs it before a ticket, skill, or owner document can take over.
 - For material work, a Goal Packet adds `program.md` for loop policy,
   `progress.md` for observations, and `artifacts/` for proof. `ticket.md`
   remains the executable contract.
-- A direct `impl` on a ready material ticket authorizes `goal-advisor` execution
+- A direct `impl` on a ready material ticket authorizes `goal-advisor` to compile
+  the Goal Packet and native Goal prompt; native Goal executes the accepted scope
   unless required inputs, an approval gate, or destructive/external side effects
   block. Keep ticket body and metadata current. Material completion requires its
   `Done / Proof`, QA/reviewer receipts, and the `farplane ticket finalize

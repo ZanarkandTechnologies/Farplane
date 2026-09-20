@@ -1,0 +1,27 @@
+{
+  "skill_name": "diagramming",
+  "evals": [
+    {
+      "id": "diagramming_rich_form_selection_01",
+      "prompt": "This Markdown client supports current Mermaid syntax. Choose the clearest output form for each request without drawing anything yet: (1) organize a product concept into themes and subthemes, (2) show a migration's dated stages and dependencies, and (3) map exact source fields to destination fields. Explain each selection in one sentence.",
+      "expected_output": "Routes the hierarchy to a Mermaid mindmap or tree, the dated migration to a Mermaid timeline or Gantt according to whether dependency scheduling matters, and the exact field mapping to a table rather than forcing Mermaid",
+      "files": [],
+      "assertions": [
+        "Selects a mindmap or tree for hierarchy and idea-space structure",
+        "Selects a timeline for chronology or Gantt when scheduling and dependencies matter",
+        "Selects a table for exact field mappings instead of forcing a diagram"
+      ],
+      "metadata": {
+        "title": "Rich visual questions route to the smallest faithful form",
+        "context": "",
+        "tags": [
+          "skill",
+          "diagramming",
+          "form-selection",
+          "mermaid"
+        ],
+        "notes": "Protects hierarchy and chronology awareness without regressing exact mappings into decorative diagrams."
+      }
+    }
+  ]
+}

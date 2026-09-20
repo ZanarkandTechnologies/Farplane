@@ -49,13 +49,14 @@ RULES: tuple[HarnessRule, ...] = (
     HarnessRule(
         relative_path="templates/global/AGENTS.md",
         required_substrings=(
-            "AUTONOMY DIRECTIVE - DO NOT REMOVE",
-            "EXECUTE TASKS TO COMPLETION WITHOUT ASKING FOR PERMISSION",
+            "# Global Agent Guidance",
+            "## Context",
+            "## Behavior",
+            "## Output Formatting",
         ),
         remediation=(
-            "restore the Agent Kernel independent-reasoning contract: evaluate "
-            "before agreement, never open with reflexive validation, and state "
-            "the supporting reason before agreeing"
+            "restore the readable three-section Agent Kernel contract and keep "
+            "its authority, independent-reasoning, proof, and output rules active"
         ),
     ),
     HarnessRule(
@@ -164,10 +165,76 @@ def validate_root(root: Path, *, include_project_contract: bool = True) -> list[
                 )
     errors.extend(validate_agent_roles(root))
     errors.extend(validate_agent_kernel_inventory(root))
+    errors.extend(validate_agent_kernel_subsections(root))
+    errors.extend(validate_turn_mode_contract(root))
     errors.extend(validate_neutral_reasoning_contract(root))
     if include_project_contract:
         errors.extend(validate_project_files(root))
     return errors
+
+
+def validate_agent_kernel_subsections(root: Path) -> list[str]:
+    """Require each reader-facing section's behavior groups to remain visible."""
+
+    relative_path = "templates/global/AGENTS.md"
+    path = root / relative_path
+    if not path.is_file():
+        return []
+    text = path.read_text(encoding="utf-8")
+    required_by_section = {
+        "## Behavior": (
+            "### Interpret intent and authority",
+            "### Decide independently and ground the result",
+            "### Work leanly and prove the critical path",
+            "### Load relevant context and preserve durable state",
+            "### Use skills and delegation deliberately",
+            "### Operate the workspace safely",
+        ),
+        "## Output Formatting": (
+            "### Default shape",
+            "### Long-horizon progress",
+            "### Proposed change",
+            "### Visual and proof routing",
+            "### Completed change",
+            "### Blocked work",
+        ),
+    }
+    errors: list[str] = []
+    for section_heading, required_headings in required_by_section.items():
+        section = active_markdown_section(text, section_heading)
+        for required_heading in required_headings:
+            if required_heading not in section:
+                errors.append(
+                    f"{relative_path}: {section_heading} is missing required behavior "
+                    f"group {required_heading!r} | remediation: restore the subsection "
+                    "or record an explicit owner move with behavior proof"
+                )
+    return errors
+
+
+def validate_turn_mode_contract(root: Path) -> list[str]:
+    """Require question-versus-correction routing in active global prose."""
+
+    relative_path = "templates/global/AGENTS.md"
+    path = root / relative_path
+    if not path.is_file():
+        return []
+    text = path.read_text(encoding="utf-8")
+    behavior = " ".join(active_markdown_section(text, "## Behavior").split()).casefold()
+    required = (
+        "Classify by requested outcome and task continuity",
+        "unfinished requested work",
+        "for mixed intent, repair the safe same-scope miss before explaining it",
+        "question grammar",
+        "State the blocker, substitute evidence, risk, and recovery path",
+    )
+    return [
+        f"{relative_path}: active turn-mode contract is missing required text: "
+        f"{snippet!r} | remediation: restore outcome-and-continuity classification, "
+        "unfinished-action correction routing, and the genuine-question boundary"
+        for snippet in required
+        if snippet.casefold() not in behavior
+    ]
 
 
 def validate_neutral_reasoning_contract(root: Path) -> list[str]:
@@ -177,20 +244,22 @@ def validate_neutral_reasoning_contract(root: Path) -> list[str]:
     path = root / relative_path
     if not path.is_file():
         return []
-    section = active_markdown_section(
-        path.read_text(encoding="utf-8"), "## Decision And Grounding"
-    )
+    section = " ".join(
+        active_markdown_section(
+            path.read_text(encoding="utf-8"), "## Behavior"
+        ).split()
+    ).casefold()
     required = (
-        "Evaluate the user's premise independently before choosing whether to agree",
-        "Do not begin with agreement, praise, or validation",
-        "Express agreement only after stating the supporting reason",
+        "Evaluate the premise before agreeing",
+        "Lead with the conclusion or evidence, not praise",
+        "Agree only after stating the reason",
     )
     return [
-        f"{relative_path}: active Decision And Grounding section is missing "
+        f"{relative_path}: active Behavior section is missing "
         f"required text: {snippet!r} | remediation: restore independent evaluation, "
         "the non-agreement opener, and reason-before-agreement in active prose"
         for snippet in required
-        if snippet not in section
+        if snippet.casefold() not in section
     ]
 
 
