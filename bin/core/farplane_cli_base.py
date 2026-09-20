@@ -33,6 +33,7 @@ OLD_CONVEX_SITE_URL = "https://agreeable-finch-230.convex.site"
 PREVIOUS_NOTIFY_FLAG = "--previous-notify"
 RUNTIME_NOTIFY_DISABLED_FILE = ".farplane-notify-disabled"
 MANAGED_HOOK_FILES = (
+    "continuation_gate.py",
     "final_response_gate.py",
     "farplane_console_ping.py",
     "skill_file_line_gate.py",

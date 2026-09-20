@@ -17,7 +17,7 @@ from farplane_cli_base import (
     CliError, is_linked_worktree, passthrough_args, print_payload,
     require_primary_checkout_install,
 )
-from runtime_config import load_runtime_env
+from runtime_config import farplane_home, load_runtime_env
 
 def path_points_to(path: Path, expected: Path) -> bool:
     return path.is_symlink() and os.readlink(path) == str(expected)
@@ -114,14 +114,23 @@ def hook_command_inventory(codex_home: Path, hooks_json: Path | None = None) -> 
         command = str(entry.get("command") or "")
         tokens = _command_tokens(command)
         interpreter = tokens[0] if tokens else ""
+        executable_path = _target_hook_path(interpreter, codex_home)
+        if executable_path:
+            interpreter = str(executable_path)
+        wrapped_interpreter = None
+        target_tokens = tokens
+        if executable_path == codex_home / "bin" / "farplane" and tokens[1:3] == ["run", "--"]:
+            target_tokens = tokens[3:]
+            wrapped_interpreter = target_tokens[0] if target_tokens else ""
         target = None
-        if interpreter in {"python", "python3"} and len(tokens) >= 2:
-            target = _target_hook_path(tokens[1], codex_home)
-        elif interpreter in {"sh", "bash"}:
-            for token in tokens[1:]:
+        target_interpreter = wrapped_interpreter if wrapped_interpreter is not None else interpreter
+        if target_interpreter in {"python", "python3"} and len(target_tokens) >= 2:
+            target = _target_hook_path(target_tokens[1], codex_home)
+        elif target_interpreter in {"sh", "bash"}:
+            for token in target_tokens[1:]:
                 target = target or _target_hook_path(token, codex_home)
         else:
-            for token in tokens:
+            for token in target_tokens:
                 target = target or _target_hook_path(token, codex_home)
         target_expected = None
         if target and target.name in MANAGED_HOOK_FILES:
@@ -133,6 +142,7 @@ def hook_command_inventory(codex_home: Path, hooks_json: Path | None = None) -> 
                 **entry,
                 "interpreter": interpreter,
                 "interpreterPath": shutil.which(interpreter) if interpreter else None,
+                "wrappedInterpreter": wrapped_interpreter,
                 "target": str(target) if target else None,
                 "expected": str(target_expected) if target_expected else None,
                 "targetExists": bool(target and target.exists()),
@@ -159,6 +169,10 @@ def hook_inventory_issues(commands: list[dict[str, Any]]) -> tuple[list[str], li
         if interpreter and shutil.which(interpreter) is None:
             issues.append(f"{prefix}:interpreter_missing:{interpreter}")
             hints.append(f"install `{interpreter}` or update the managed hook command")
+        wrapped_interpreter = row.get("wrappedInterpreter")
+        if wrapped_interpreter is not None and (not wrapped_interpreter or shutil.which(str(wrapped_interpreter)) is None):
+            issues.append(f"{prefix}:interpreter_missing:{wrapped_interpreter or 'wrapped_command'}")
+            hints.append("install the wrapped interpreter or update the managed hook command")
         target = row.get("target")
         if target is None:
             issues.append(f"{prefix}:managed_target_unresolved")
@@ -178,6 +192,19 @@ def hooks_list_payload(target: Path | None = None) -> dict[str, Any]:
     hooks_json_src = CORE_ROOT / "hooks.json"
     source = hooks_json_dest if hooks_json_dest.exists() else hooks_json_src
     commands = hook_command_inventory(codex_home, source)
+    for command in commands:
+        if Path(command.get("target") or "").name != "farplane_console_ping.py":
+            continue
+        receipt_path = farplane_home() / "state" / "hook-delivery" / f"{command['event']}.json"
+        try:
+            receipt = _read_json_file(receipt_path)
+        except (CliError, OSError):
+            receipt = {}
+        if receipt.get("status") in {"unconfigured", "attempted", "accepted", "failed"}:
+            command["delivery"] = {
+                key: receipt[key] for key in ("status", "updatedAt", "reason", "httpStatus")
+                if key in receipt
+            }
     issues, hints = hook_inventory_issues(commands)
     return {
         "ok": not issues,
@@ -441,6 +468,23 @@ def run_hooks_list(args: argparse.Namespace) -> int:
     target = Path(args.target).expanduser() if args.target else None
     payload = hooks_list_payload(target)
     print_payload(payload, args.json)
+    if not args.json:
+        print(f"Source: {payload['hooksJson']}")
+        print("Scope: managed hook configuration; not Codex trust or execution status.")
+        for row in payload["commands"]:
+            matcher = f" [{row['matcher']}]" if row["matcher"] else ""
+            print(f"\n{row['event']}{matcher}: {row.get('statusMessage') or row['command']}")
+            print(f"  Command: {row['command']}")
+            print(f"  Timeout: {row.get('timeout', 'default')}s")
+            if row.get("expected"):
+                print(f"  Owner: {row['expected']}")
+            delivery = row.get("delivery")
+            if delivery:
+                print(f"  Last delivery: {delivery['status']} at {delivery.get('updatedAt', 'unknown')}")
+                if delivery.get("reason"):
+                    print(f"  Delivery reason: {delivery['reason']}")
+        if not payload["commands"]:
+            print("No managed hook commands configured.")
     return 0 if payload["ok"] else 1
 
 

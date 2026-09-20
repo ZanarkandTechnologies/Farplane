@@ -136,6 +136,7 @@ INSTALL_BIN_FILES=(
   notify.py
 )
 INSTALL_HOOK_FILES=(
+  continuation_gate.py
   final_response_gate.py
   farplane_console_ping.py
   skill_file_line_gate.py

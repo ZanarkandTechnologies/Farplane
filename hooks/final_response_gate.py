@@ -23,6 +23,7 @@ from farplane_response import (  # noqa: E402
     DEFAULT_MAX_PROSE_WORDS,
     measure_response,
 )
+from runtime_config import load_runtime_env  # noqa: E402
 
 
 ENV_MAX_PROSE_WORDS = "FARPLANE_FINAL_RESPONSE_MAX_PROSE_WORDS"
@@ -30,7 +31,7 @@ ENV_MAX_PROSE_LINES = "FARPLANE_FINAL_RESPONSE_MAX_PROSE_LINES"
 
 
 def configured_max_prose_words(env: dict[str, str] | None = None) -> int:
-    source = os.environ if env is None else env
+    source = load_runtime_env(os.environ) if env is None else env
     raw = source.get(ENV_MAX_PROSE_WORDS, str(DEFAULT_MAX_PROSE_WORDS))
     try:
         value = int(raw)
@@ -40,7 +41,7 @@ def configured_max_prose_words(env: dict[str, str] | None = None) -> int:
 
 
 def configured_max_prose_lines(env: dict[str, str] | None = None) -> int:
-    source = os.environ if env is None else env
+    source = load_runtime_env(os.environ) if env is None else env
     raw = source.get(ENV_MAX_PROSE_LINES, str(DEFAULT_MAX_PROSE_LINES))
     try:
         value = int(raw)
@@ -66,25 +67,25 @@ def gate_response(
         return None
 
     retry_note = (
-        "The previous compression attempt is still over the ceiling. "
+        "The previous compression attempt is still over the ceiling.\n\n"
         if payload.get("stop_hook_active")
         else ""
     )
-    limits = (
-        f"at most {max_prose_words} prose words (current: {measure.prose_words}) and "
-        f"at most {max_prose_lines} nonblank prose lines "
-        f"(current: {measure.prose_nonblank_lines})"
-    )
     reason = (
-        f"{retry_note}Rewrite the user-facing final answer to {limits}. Preserve only "
-        "the outcome, decisive evidence, "
-        "required action or blocker, verification pointers, and any safety-critical "
-        "qualification. Remove process narration, repeated context, generic advice, "
-        "and unasked follow-up offers. Prefer links to durable artifacts over copied "
-        "detail. Closed Mermaid and `wireframe` blocks, exact image/video embed lines, marker-only "
-        "Markdown blockquote spacer lines, and a final link-only References/Citations "
-        "section are outside the prose budget, but must not introduce new topic breadth. "
-        "Return the revised final answer only and do not mention this gate."
+        f"{retry_note}Rewrite the user-facing final answer to at most "
+        f"{max_prose_words} prose words (current: {measure.prose_words}) and "
+        f"at most {max_prose_lines} nonblank prose lines "
+        f"(current: {measure.prose_nonblank_lines}).\n\n"
+        "- Preserve only the outcome, decisive evidence, required action or blocker, "
+        "verification pointers, and any safety-critical qualification.\n"
+        "- Remove process narration, repeated context, generic advice, "
+        "and unasked follow-up offers.\n"
+        "- Prefer links to durable artifacts over copied detail.\n"
+        "- Closed Mermaid and `wireframe` blocks, exact image/video embed lines, "
+        "marker-only Markdown blockquote spacer lines, and a final link-only "
+        "References/Citations section are outside the prose budget, but must not "
+        "introduce new topic breadth.\n"
+        "- Return the revised final answer only and do not mention this gate."
     )
     return {"decision": "block", "reason": reason}
 

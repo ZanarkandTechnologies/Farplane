@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import sys
 import tempfile
 import unittest
@@ -42,14 +43,52 @@ class FarplaneHooksInstallTests(unittest.TestCase):
         with patch.object(farplane.subprocess, "run", side_effect=results):
             farplane.require_primary_checkout_install("hooks_install")
 
+    def test_wrapped_hook_inventory_resolves_owner_and_requires_cli(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="hook inventory ") as tmp:
+            codex_home = Path(tmp).resolve()
+            farplane.install_hooks(codex_home)
+            source = codex_home / "wrapper-hooks.json"
+            source.write_text(json.dumps({"hooks": {"Stop": [{"hooks": [{
+                "type": "command",
+                "command": '\"$HOME/.codex/bin/farplane\" run -- python3 \"$HOME/.codex/hooks/continuation_gate.py\"'
+            }]}]}}))
+            commands = farplane.hook_command_inventory(codex_home, source)
+            issues, _ = farplane.hook_inventory_issues(commands)
+            row = next(row for row in commands
+                       if row["target"] == str(codex_home / "hooks" / "continuation_gate.py"))
+            self.assertEqual(row["expected"], str(ROOT / "hooks" / "continuation_gate.py"))
+            self.assertEqual(row["interpreter"], str(codex_home / "bin" / "farplane"))
+            self.assertTrue(row["targetLinked"])
+            self.assertTrue(any("interpreter_missing:" + row["interpreter"] in issue
+                                for issue in issues))
+            (codex_home / "bin" / "farplane").symlink_to(ROOT / "bin" / "farplane")
+            self.assertTrue(farplane.hooks_doctor(codex_home)["ok"])
+
+    def test_wrapped_hook_reports_missing_inner_interpreter(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            codex_home = Path(tmp).resolve()
+            farplane.install_hooks(codex_home)
+            (codex_home / "bin" / "farplane").symlink_to(ROOT / "bin" / "farplane")
+            source = codex_home / "custom-hooks.json"
+            source.write_text(json.dumps({"hooks": {"Stop": [{"hooks": [{
+                "type": "command",
+                "command": '\"$HOME/.codex/bin/farplane\" run -- missing-python-for-test \"$HOME/.codex/hooks/continuation_gate.py\"'
+            }]}]}}))
+            rows = farplane.hook_command_inventory(codex_home, source)
+            issues, _ = farplane.hook_inventory_issues(rows)
+            self.assertTrue(any("interpreter_missing:missing-python-for-test" in issue for issue in issues))
+            self.assertEqual(rows[0]["target"], str(codex_home / "hooks" / "continuation_gate.py"))
+
     def test_install_retires_obsolete_post_tool_hook_links(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
-            codex_home = Path(tmp)
+            codex_home = Path(tmp).resolve()
             hooks = codex_home / "hooks"
             hooks.mkdir(parents=True)
             for name in farplane.RETIRED_HOOK_FILES:
                 (hooks / name).symlink_to(ROOT / "hooks" / name)
 
+            (codex_home / "bin").mkdir()
+            (codex_home / "bin" / "farplane").symlink_to(ROOT / "bin" / "farplane")
             payload = farplane.install_hooks(codex_home)
 
             self.assertTrue(payload["ok"])

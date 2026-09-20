@@ -54,7 +54,7 @@ FARPLANE_SKILL_HEAT_EVENT_TYPES = "control_surface_detected,hook_result,skill_re
 # References/Citations section are reported but excluded. The word limit is
 # hard.
 FARPLANE_FINAL_RESPONSE_MAX_PROSE_WORDS = "500"
-FARPLANE_FINAL_RESPONSE_MAX_PROSE_LINES = "30"
+FARPLANE_FINAL_RESPONSE_MAX_PROSE_LINES = "50"
 # Phone reminder / LiveKit voice-agent settings. Store real values in
 # runtime env when possible, optionally injected with Doppler. Private
 # ~/.farplane/config.toml may cache fallback/bootstrap values; install.sh

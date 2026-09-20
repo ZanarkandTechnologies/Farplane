@@ -8,7 +8,7 @@ from typing import Any
 
 
 DEFAULT_MAX_PROSE_WORDS = 500
-DEFAULT_MAX_PROSE_LINES = 30
+DEFAULT_MAX_PROSE_LINES = 50
 
 _REFERENCE_HEADING = re.compile(
     r"^(?:#{1,6}\s+)?(?:references|citations)\s*:?\s*$", re.IGNORECASE

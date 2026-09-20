@@ -74,6 +74,8 @@ class RuntimeConfigTests(unittest.TestCase):
                         "",
                         "[env]",
                         'FARPLANE_STATE_BASE = "http://127.0.0.1:5173"',
+                        'FARPLANE_FINAL_RESPONSE_MAX_PROSE_WORDS = "600"',
+                        'FARPLANE_FINAL_RESPONSE_MAX_PROSE_LINES = "50"',
                     ]
                 )
                 + "\n",
@@ -85,6 +87,7 @@ class RuntimeConfigTests(unittest.TestCase):
                     "CODEX_HOME": str(codex_home),
                     "FARPLANE_STATE_DIR": str(farplane_home),
                     "FARPLANE_CONVEX_SITE_URL": "https://process.convex.site",
+                    "FARPLANE_FINAL_RESPONSE_MAX_PROSE_WORDS": "700",
                 }
             )
 
@@ -96,6 +99,8 @@ class RuntimeConfigTests(unittest.TestCase):
         self.assertNotIn("FARPLANE_MESHY_API_KEY", env)
         self.assertEqual(env["CODEX_APP_SERVER_URL"], "ws://127.0.0.1:9999")
         self.assertEqual(env["FARPLANE_STATE_BASE"], "http://127.0.0.1:5173")
+        self.assertEqual(env["FARPLANE_FINAL_RESPONSE_MAX_PROSE_WORDS"], "700")
+        self.assertEqual(env["FARPLANE_FINAL_RESPONSE_MAX_PROSE_LINES"], "50")
         self.assertEqual(env["LIVEKIT_URL"], "wss://example.livekit.cloud")
         self.assertNotIn("LIVEKIT_API_KEY", env)
         self.assertNotIn("LIVEKIT_API_SECRET", env)

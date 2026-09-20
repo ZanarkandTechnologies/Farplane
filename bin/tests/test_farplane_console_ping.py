@@ -47,6 +47,19 @@ class FarplaneConsolePingTests(unittest.TestCase):
             encoding="utf-8",
         )
 
+    def test_mismatched_event_never_builds_or_sends_ping(self) -> None:
+        with (
+            tempfile.TemporaryDirectory() as tmp,
+            patch.dict(os.environ, {"FARPLANE_STATE_DIR": tmp, "FARPLANE_CONFIG_DISABLE": "1"}),
+            patch("sys.stdin", io.StringIO('{"hook_event_name": "SubagentStop"}')),
+            patch("sys.stderr", io.StringIO()),
+            patch.object(farplane_console_ping, "build_ping") as build,
+            patch.object(farplane_console_ping, "deliver") as deliver,
+        ):
+            self.assertEqual(farplane_console_ping.main(["--expect-event", "Stop"]), 0)
+        build.assert_not_called()
+        deliver.assert_not_called()
+
     def test_default_endpoint_uses_hook_telemetry_ingress(self) -> None:
         with patch.dict(
             os.environ,
@@ -115,6 +128,20 @@ class FarplaneConsolePingTests(unittest.TestCase):
         self.assertEqual(body["payload"]["machineId"], "studio.local")
         self.assertEqual(body["payload"]["machineName"], "Studio Mac")
         self.assertNotIn("prompt", body["payload"])
+
+    def test_repeated_stop_attempts_have_distinct_occurrence_keys(self) -> None:
+        event = {"hook_event_name": "Stop", "session_id": "session-1", "turn_id": "turn-1"}
+        with patch.dict(os.environ, {"FARPLANE_CONFIG_DISABLE": "1"}, clear=True):
+            first = farplane_console_ping.build_ping(event)
+            second = farplane_console_ping.build_ping(event)
+        self.assertNotEqual(first["eventKey"], second["eventKey"])
+        self.assertTrue(first["eventKey"].startswith("codex-lifecycle:session-1:session-1:turn-1:Stop:"))
+        self.assertEqual(json.loads(json.dumps(first))["eventKey"], first["eventKey"])
+        for hook in ("UserPromptSubmit", "SubagentStart", "SubagentStop"):
+            self.assertEqual(
+                farplane_console_ping.event_key_for_hook(hook, "session-1", "turn-1", "agent-1"),
+                farplane_console_ping.event_key_for_hook(hook, "session-1", "turn-1", "agent-1"),
+            )
 
     def test_build_ping_wraps_stop_as_hook_telemetry(self) -> None:
         with patch.dict(os.environ, {"AIKAGE_MACHINE_NAME": "Studio Mac", "FARPLANE_CONFIG_DISABLE": "1"}, clear=True):
@@ -336,13 +363,14 @@ class FarplaneConsolePingTests(unittest.TestCase):
                     os.environ,
                     {
                         "CODEX_HOME": str(root / "codex"),
+                        "FARPLANE_STATE_DIR": str(root / "state"),
                         "FARPLANE_CONFIG_DISABLE": "1",
                     },
                     clear=True,
                 ),
                 patch("sys.stdin", io.StringIO(json.dumps(event))),
             ):
-                self.assertEqual(farplane_console_ping.main(), 0)
+                self.assertEqual(farplane_console_ping.main([]), 0)
 
             ticket_path = project / "tickets" / "TASK-0055" / "ticket.md"
             self.assertEqual(farplane_console_ping.ticket_thread_id(ticket_path), "session-1")
