@@ -114,7 +114,7 @@ For the V1 `2.0.4` contract, the important boundary is:
 
 ```text
 tracked owners:
-  harness.yaml + metrics.yaml + bindings.yaml + automations/*.toml
+  harness.yaml + metrics.yaml + bindings.yaml + automations/*.md
 
 ignored projections:
   .farplane/metrics/** + .farplane/project/ui/latest.json + reports/evals/logs

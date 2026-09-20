@@ -1,13 +1,20 @@
-# One complete desired-state Codex automation. Runtime state stays outside Git.
-schema = "farplane_project_automation"
-framework_template_version = "1.0.0"
-owner = "automation-advisor"
-
-id = "farplane-weekly-thread-friction-audit"
-name = "Farplane Weekly Thread Friction Audit"
-kind = "cron"
-status = "active"
-prompt = '''
+---
+schema: farplane_project_automation
+framework_template_version: 1.0.0
+owner: automation-advisor
+id: farplane-weekly-thread-friction-audit
+name: Farplane Weekly Thread Friction Audit
+kind: cron
+status: active
+target:
+  workspace: /Users/kenjipcx/Zanarkand Technologies/projects/Farplane
+schedule:
+  type: weekly
+  timezone: Asia/Kuala_Lumpur
+  days:
+  - Mon
+  time: 07:00
+---
 Task storage override: follow tickets/README.md. Multica is dashboard-only;
 resolve project bindings, keep issues unassigned, and use --no-start for updates.
 Create/update task records through the existing Multica CLI, never ticket.md.
@@ -60,12 +67,4 @@ Final response:
   automation, source-history, or execution changes.
 
 Config source:
-farplane/automations/weekly-thread-friction-audit.toml id="farplane-weekly-thread-friction-audit"
-'''
-[target]
-workspace = "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane"
-[schedule]
-type = "weekly"
-timezone = "Asia/Kuala_Lumpur"
-days = ["Mon"]
-time = "07:00"
+farplane/automations/weekly-thread-friction-audit.md id="farplane-weekly-thread-friction-audit"

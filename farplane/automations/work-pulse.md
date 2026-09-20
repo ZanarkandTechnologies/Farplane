@@ -1,13 +1,17 @@
-# One complete desired-state Codex automation. Runtime state stays outside Git.
-schema = "farplane_project_automation"
-framework_template_version = "1.0.0"
-owner = "automation-advisor"
-
-id = "farplane-ticket-update"
-name = "Farplane Work Pulse"
-kind = "heartbeat"
-status = "active"
-prompt = '''
+---
+schema: farplane_project_automation
+framework_template_version: 1.0.0
+owner: automation-advisor
+id: farplane-ticket-update
+name: Farplane Work Pulse
+kind: heartbeat
+status: active
+target:
+  thread_id: 019ed47a-3182-73f3-879f-a53797759b2a
+schedule:
+  type: interval
+  interval_minutes: 30
+---
 Task storage override: follow tickets/README.md. Multica is dashboard-only;
 resolve project bindings, keep issues unassigned, and use --no-start for updates.
 Create/update task records through the existing Multica CLI, never ticket.md.
@@ -92,10 +96,4 @@ Final response:
 - Link any report, ticket, worker, or receipt artifacts created by the beat.
 
 Config source:
-farplane/automations/work-pulse.toml id="farplane-ticket-update"
-'''
-[target]
-thread_id = "019ed47a-3182-73f3-879f-a53797759b2a"
-[schedule]
-type = "interval"
-interval_minutes = 30
+farplane/automations/work-pulse.md id="farplane-ticket-update"

@@ -113,13 +113,13 @@ ledger, or product controller state here.
 
 ### `farplane/automations/`
 
-Human-reviewable desired state for Codex automations. Each `*.toml` file owns
+Human-reviewable desired state for Codex automations. Each `*.md` file owns
 one complete automation. The folder contains exactly one Work Pulse heartbeat
 plus separate cron/manual jobs such as Feed Scout,
 Daily/Weekly BAU, Dogfood self-improvement, and low-frequency maintenance.
 
-Each file owns its identity, schedule, workspace, status, and exact project-specific
-prompt. Generic workflow behavior remains in the called skill. Scheduled
+YAML front matter owns identity, schedule, workspace, and status. The Markdown
+body is the exact project-specific prompt. Generic workflow behavior remains in the called skill. Scheduled
 sources write reports and bounded candidate context; Work Pulse owns normal
 proactive ticket admission and execution.
 

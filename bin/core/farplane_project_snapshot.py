@@ -7,17 +7,17 @@ import argparse
 import hashlib
 import json
 import re
-import tomllib
 from datetime import date as date_type
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, TypedDict
 
 import yaml
-
 try:
+    from farplane_automation_file import AutomationMarkdownError, load_automation_markdown
     from farplane_metric_schema import batch_path, read_metric_batches
 except ImportError:  # pragma: no cover - package import path used by tests
+    from bin.core.farplane_automation_file import AutomationMarkdownError, load_automation_markdown
     from bin.core.farplane_metric_schema import batch_path, read_metric_batches
 
 try:
@@ -639,11 +639,11 @@ def load_automations(project_root: Path) -> tuple[list[dict[str, Any]], list[str
         return [], ["missing_automations_dir"]
     automations: list[dict[str, Any]] = []
     gaps: list[str] = []
-    for path in sorted(root.glob("*.toml")):
+    for path in sorted(root.glob("*.md")):
         try:
-            item = tomllib.loads(path.read_text(encoding="utf-8"))
-        except tomllib.TOMLDecodeError:
-            gaps.append(f"invalid_automation_toml:{path.name}")
+            item = load_automation_markdown(path)
+        except (AutomationMarkdownError, OSError):
+            gaps.append(f"invalid_automation_markdown:{path.name}")
             continue
         automations.append(
             {

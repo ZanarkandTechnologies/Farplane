@@ -1,13 +1,17 @@
-# One complete desired-state Codex automation. Runtime state stays outside Git.
-schema = "farplane_project_automation"
-framework_template_version = "1.0.0"
-owner = "automation-advisor"
-
-id = "project-work-pulse"
-name = "Project Work Pulse"
-kind = "heartbeat"
-status = "paused"
-prompt = '''
+---
+schema: farplane_project_automation
+framework_template_version: 1.0.0
+owner: automation-advisor
+id: project-work-pulse
+name: Project Work Pulse
+kind: heartbeat
+status: paused
+target:
+  thread_id: <pulse-thread-id>
+schedule:
+  type: interval
+  interval_minutes: 30
+---
 Use $pulse-update.
 
 Run one bounded multi-phase Work Pulse: maintenance, due review service,
@@ -40,10 +44,4 @@ Final response:
 - Link any report, ticket, worker, or receipt artifacts created by the beat.
 
 Config source:
-farplane/automations/work-pulse.toml id="project-work-pulse"
-'''
-[target]
-thread_id = "<pulse-thread-id>"
-[schedule]
-type = "interval"
-interval_minutes = 30
+farplane/automations/work-pulse.md id="project-work-pulse"

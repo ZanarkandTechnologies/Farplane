@@ -1,13 +1,20 @@
-# One complete desired-state Codex automation. Runtime state stays outside Git.
-schema = "farplane_project_automation"
-framework_template_version = "1.0.0"
-owner = "automation-advisor"
-
-id = "farplane-weekly-interval"
-name = "Farplane Weekly Operating Review"
-kind = "cron"
-status = "active"
-prompt = '''
+---
+schema: farplane_project_automation
+framework_template_version: 1.0.0
+owner: automation-advisor
+id: farplane-weekly-interval
+name: Farplane Weekly Operating Review
+kind: cron
+status: active
+target:
+  workspace: /Users/kenjipcx/Zanarkand Technologies/projects/Farplane
+schedule:
+  type: weekly
+  timezone: Asia/Kuala_Lumpur
+  days:
+  - Mon
+  time: 05:45
+---
 Task storage override: follow tickets/README.md. Multica is dashboard-only;
 resolve project bindings, keep issues unassigned, and use --no-start for updates.
 Create/update task records through the existing Multica CLI, never ticket.md.
@@ -53,12 +60,4 @@ next-week commitments, applied/duplicate/blocked action receipts, source gaps,
 and operator-needed decisions. State `multica_execution: none`.
 
 Config source:
-farplane/automations/weekly-operating-review.toml id="farplane-weekly-interval"
-'''
-[target]
-workspace = "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane"
-[schedule]
-type = "weekly"
-timezone = "Asia/Kuala_Lumpur"
-days = ["Mon"]
-time = "05:45"
+farplane/automations/weekly-operating-review.md id="farplane-weekly-interval"

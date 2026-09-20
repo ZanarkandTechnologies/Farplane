@@ -1,13 +1,18 @@
-# One complete desired-state Codex automation. Runtime state stays outside Git.
-schema = "farplane_project_automation"
-framework_template_version = "1.0.0"
-owner = "automation-advisor"
-
-id = "project-daily-operating-update"
-name = "Project Daily Operating Update"
-kind = "cron"
-status = "paused"
-prompt = '''
+---
+schema: farplane_project_automation
+framework_template_version: 1.0.0
+owner: automation-advisor
+id: project-daily-operating-update
+name: Project Daily Operating Update
+kind: cron
+status: paused
+target:
+  workspace: <project-root>
+schedule:
+  type: daily
+  timezone: <timezone>
+  time: 05:33
+---
 Use $pm-daily.
 
 Run one Company OS Daily pass: freeze the prior 24 hours; resolve Projects and
@@ -24,11 +29,4 @@ Return context, extraction, and memory paths; movement; next commitments;
 action receipts; source gaps; operator decisions; and `provider_execution: none`.
 
 Config source:
-farplane/automations/daily-operating-update.toml id="project-daily-operating-update"
-'''
-[target]
-workspace = "<project-root>"
-[schedule]
-type = "daily"
-timezone = "<timezone>"
-time = "05:33"
+farplane/automations/daily-operating-update.md id="project-daily-operating-update"

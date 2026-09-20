@@ -1,13 +1,19 @@
-# One complete desired-state Codex automation. Runtime state stays outside Git.
-schema = "farplane_project_automation"
-framework_template_version = "1.0.0"
-owner = "automation-advisor"
-
-id = "farplane-monthly-registry-consolidation"
-name = "Farplane Monthly Registry Consolidation"
-kind = "cron"
-status = "active"
-prompt = '''
+---
+schema: farplane_project_automation
+framework_template_version: 1.0.0
+owner: automation-advisor
+id: farplane-monthly-registry-consolidation
+name: Farplane Monthly Registry Consolidation
+kind: cron
+status: active
+target:
+  workspace: /Users/kenjipcx/Zanarkand Technologies/projects/Farplane
+schedule:
+  type: monthly
+  timezone: Asia/Kuala_Lumpur
+  day_of_month: 1
+  time: 06:15
+---
 Task storage override: follow tickets/README.md. Multica is dashboard-only;
 resolve project bindings, keep issues unassigned, and use --no-start for updates.
 Create/update task records through the existing Multica CLI, never ticket.md.
@@ -34,12 +40,4 @@ Final response:
 - Name source gaps and include the no-mutation receipt.
 
 Config source:
-farplane/automations/monthly-registry-consolidation.toml id="farplane-monthly-registry-consolidation"
-'''
-[target]
-workspace = "/Users/kenjipcx/Zanarkand Technologies/projects/Farplane"
-[schedule]
-type = "monthly"
-timezone = "Asia/Kuala_Lumpur"
-day_of_month = 1
-time = "06:15"
+farplane/automations/monthly-registry-consolidation.md id="farplane-monthly-registry-consolidation"

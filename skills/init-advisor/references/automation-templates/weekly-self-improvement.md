@@ -1,13 +1,20 @@
-# One complete desired-state Codex automation. Runtime state stays outside Git.
-schema = "farplane_project_automation"
-framework_template_version = "1.0.0"
-owner = "automation-advisor"
-
-id = "project-weekly-self-improvement"
-name = "Project Weekly Self-Improvement"
-kind = "cron"
-status = "paused"
-prompt = '''
+---
+schema: farplane_project_automation
+framework_template_version: 1.0.0
+owner: automation-advisor
+id: project-weekly-self-improvement
+name: Project Weekly Self-Improvement
+kind: cron
+status: paused
+target:
+  workspace: <project-root>
+schedule:
+  type: weekly
+  timezone: <timezone>
+  days:
+  - Mon
+  time: 06:00
+---
 Use $dogfood-review.
 
 Bind a cutoff, page through all exact `self_improvement` admission receipts in
@@ -42,12 +49,4 @@ Final response:
   materialization, execution, dispatch, check-in, Reward decision, or mutation.
 
 Config source:
-farplane/automations/weekly-self-improvement.toml id="project-weekly-self-improvement"
-'''
-[target]
-workspace = "<project-root>"
-[schedule]
-type = "weekly"
-timezone = "<timezone>"
-days = ["Mon"]
-time = "06:00"
+farplane/automations/weekly-self-improvement.md id="project-weekly-self-improvement"

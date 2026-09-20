@@ -1,6 +1,6 @@
 ---
 name: automation-advisor
-description: "Design or revise Farplane Codex automations using one project-owned TOML file per scheduled workflow."
+description: "Design or revise Farplane Codex automations using one project-owned Markdown file per scheduled workflow."
 tier: 3
 group: operations
 source: local
@@ -18,8 +18,8 @@ Use this skill to create, revise, or audit Farplane Codex automations. Work
 Pulse is the only heartbeat and owns ticket execution. Company OS Daily and
 Weekly, Feed Scout, Dogfood, and maintenance are separate `cron` records.
 
-Keep each complete desired record in its own `farplane/automations/*.toml` file: id, name,
-kind, status, target, schedule, and exact prompt. Runtime IDs, logs, and mutable
+Keep each complete desired record in its own `farplane/automations/*.md` file. YAML front
+matter owns id, name, kind, status, target, and schedule; the body is the exact prompt. Runtime IDs, logs, and mutable
 memory stay in the Codex automation store or ignored `.farplane/` state. Do not
 add a compiler, scheduler thread, or second manifest.
 
@@ -63,8 +63,8 @@ fails: logs in tracked config; provider access inside pm skills; generated
   - [ ] Read [prompt engineering](../../docs/fundamentals/prompt-engineering.md)
         before material prompt changes.
 - [ ] 3. Keep desired config visible and runtime state untracked.
-  - [ ] Use one complete TOML file per Codex automation; do not add an index.
-  - [ ] Let the Codex record own live cadence and TOML own desired cadence,
+  - [ ] Use one complete Markdown file per Codex automation; do not add an index.
+  - [ ] Let the Codex record own live cadence and Markdown own desired cadence,
         target, status, and exact prompt.
 - [ ] 4. Write the smallest reviewable prompt.
   - [ ] Invoke one `$skill-name` and include only cadence, project bindings,
@@ -81,7 +81,7 @@ fails: logs in tracked config; provider access inside pm skills; generated
   - [ ] Preserve IDs, cadence, target, model, reasoning, status, and the single
         Pulse heartbeat unless the accepted change explicitly alters one.
 - [ ] 6. Validate and review.
-  - [ ] Parse TOML; verify required fields, one `$pulse-update` heartbeat,
+  - [ ] Parse YAML front matter and use the body as the prompt; verify required fields, one `$pulse-update` heartbeat,
         Company OS prompt/skill parity, and no active Interval binding.
   - [ ] Verify Daily has one local skill call per eligible Project and Weekly
         has one call over a complete frozen set.
@@ -107,7 +107,7 @@ fails: logs in tracked config; provider access inside pm skills; generated
 
 Return the automation type, concise config delta, created or reused live IDs,
 state-boundary checks, validation evidence, and review route. For a material
-prompt revision, include the complete replacement TOML records with exact
+prompt revision, include the complete replacement Markdown records with exact
 prompts so the proposed change is reviewable before activation.
 
 End Company OS automation changes with this receipt:

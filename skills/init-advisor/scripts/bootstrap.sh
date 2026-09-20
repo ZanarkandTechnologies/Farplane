@@ -113,7 +113,7 @@ copy_file "${REF_DIR}/MANIFEST_TEMPLATE.json" "${TARGET_DIR}/farplane/manifest.j
 copy_file "${REF_DIR}/HARNESS_TEMPLATE.yaml" "${TARGET_DIR}/farplane/harness.yaml"
 copy_file "${REF_DIR}/METRICS_TEMPLATE.yaml" "${TARGET_DIR}/farplane/metrics.yaml"
 mkdir -p "${TARGET_DIR}/farplane/automations"
-for automation_template in "${REF_DIR}"/automation-templates/*.toml; do
+for automation_template in "${REF_DIR}"/automation-templates/*.md; do
   copy_file "${automation_template}" "${TARGET_DIR}/farplane/automations/$(basename "${automation_template}")"
 done
 copy_file "${REF_DIR}/BINDINGS_TEMPLATE.yaml" "${TARGET_DIR}/farplane/bindings.yaml"

@@ -1,13 +1,19 @@
-# One complete desired-state Codex automation. Runtime state stays outside Git.
-schema = "farplane_project_automation"
-framework_template_version = "1.0.0"
-owner = "automation-advisor"
-
-id = "project-monthly-registry-consolidation"
-name = "Project Monthly Registry Consolidation"
-kind = "cron"
-status = "paused"
-prompt = '''
+---
+schema: farplane_project_automation
+framework_template_version: 1.0.0
+owner: automation-advisor
+id: project-monthly-registry-consolidation
+name: Project Monthly Registry Consolidation
+kind: cron
+status: paused
+target:
+  workspace: <project-root>
+schedule:
+  type: monthly
+  timezone: <timezone>
+  day_of_month: 1
+  time: 06:15
+---
 Use $consolidate.
 
 Review project registries for duplication, staleness, and wrong ownership.
@@ -25,12 +31,4 @@ Final response:
 - Name source gaps and include the no-mutation receipt.
 
 Config source:
-farplane/automations/monthly-registry-consolidation.toml id="project-monthly-registry-consolidation"
-'''
-[target]
-workspace = "<project-root>"
-[schedule]
-type = "monthly"
-timezone = "<timezone>"
-day_of_month = 1
-time = "06:15"
+farplane/automations/monthly-registry-consolidation.md id="project-monthly-registry-consolidation"

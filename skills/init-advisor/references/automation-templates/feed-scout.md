@@ -1,13 +1,18 @@
-# One complete desired-state Codex automation. Runtime state stays outside Git.
-schema = "farplane_project_automation"
-framework_template_version = "1.0.0"
-owner = "automation-advisor"
-
-id = "project-feed-scout"
-name = "Project Feed Scout"
-kind = "cron"
-status = "paused"
-prompt = '''
+---
+schema: farplane_project_automation
+framework_template_version: 1.0.0
+owner: automation-advisor
+id: project-feed-scout
+name: Project Feed Scout
+kind: cron
+status: paused
+target:
+  workspace: <project-root>
+schedule:
+  type: daily
+  timezone: <timezone>
+  time: 05:15
+---
 Use $feed-scout.
 
 Run the bounded daily Feed Scout. Write its dated report, then update and
@@ -35,11 +40,4 @@ Final response:
 - Include the no-execution receipt.
 
 Config source:
-farplane/automations/feed-scout.toml id="project-feed-scout"
-'''
-[target]
-workspace = "<project-root>"
-[schedule]
-type = "daily"
-timezone = "<timezone>"
-time = "05:15"
+farplane/automations/feed-scout.md id="project-feed-scout"

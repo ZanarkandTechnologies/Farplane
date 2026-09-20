@@ -8,7 +8,6 @@ import json
 import re
 import subprocess
 import sys
-import tomllib
 import hashlib
 from pathlib import Path
 
@@ -21,6 +20,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from bin.validators.template_usage import TemplateUsageError, normalize_template_uses
+from bin.core.farplane_automation_file import AutomationMarkdownError, load_automation_markdown
 from bin.core.farplane_metric_schema import MetricObservationBatch
 from bin.validators.farplane_metric_contract import validate_metric_definition_schema
 TEXT_SUFFIXES = {
@@ -308,21 +308,21 @@ def validate_framework_manifest(root: Path, framework_manifest: Path) -> list[st
 
 def validate_automations_dir(root: Path, automations_dir: Path) -> list[str]:
     rel_dir = automations_dir.relative_to(root).as_posix()
-    files = sorted(automations_dir.glob("*.toml")) if automations_dir.is_dir() else []
+    files = sorted(automations_dir.glob("*.md")) if automations_dir.is_dir() else []
+    errors = [f"{path.relative_to(root).as_posix()} is retired; use one Markdown file per automation." for path in sorted(automations_dir.glob("*.toml"))]
     if not files:
-        return [f"{rel_dir}/ must contain at least one automation TOML file."]
-    errors: list[str] = []
+        return [f"{rel_dir}/ must contain at least one automation Markdown file.", *errors]
     seen_ids: set[str] = set()
     heartbeat_records: list[tuple[str, str]] = []
     for path in files:
         rel_path = path.relative_to(root).as_posix()
-        if path.name == "index.toml":
-            errors.append(f"{rel_path} is forbidden; each TOML file must be one automation.")
+        if path.name == "index.md":
+            errors.append(f"{rel_path} is forbidden; each Markdown file must be one automation.")
             continue
         try:
-            automation = tomllib.loads(path.read_text(encoding="utf-8"))
-        except tomllib.TOMLDecodeError as exc:
-            errors.append(f"{rel_path} must be valid TOML: {exc}.")
+            automation = load_automation_markdown(path)
+        except (AutomationMarkdownError, OSError) as exc:
+            errors.append(f"{rel_path} must be valid automation Markdown: {exc}.")
             continue
         if automation.get("schema") != "farplane_project_automation":
             errors.append(f"{rel_path} schema must be farplane_project_automation.")

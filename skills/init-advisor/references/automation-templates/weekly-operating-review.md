@@ -1,13 +1,20 @@
-# One complete desired-state Codex automation. Runtime state stays outside Git.
-schema = "farplane_project_automation"
-framework_template_version = "1.0.0"
-owner = "automation-advisor"
-
-id = "project-weekly-operating-review"
-name = "Project Weekly Operating Review"
-kind = "cron"
-status = "paused"
-prompt = '''
+---
+schema: farplane_project_automation
+framework_template_version: 1.0.0
+owner: automation-advisor
+id: project-weekly-operating-review
+name: Project Weekly Operating Review
+kind: cron
+status: paused
+target:
+  workspace: <project-root>
+schedule:
+  type: weekly
+  timezone: <timezone>
+  days:
+  - Mon
+  time: 05:45
+---
 Use $pm-weekly.
 
 Run one Company OS Weekly pass: freeze the complete Project and existing-issue
@@ -25,12 +32,4 @@ constraints; commitments; action receipts; gaps; operator decisions; and
 `provider_execution: none`.
 
 Config source:
-farplane/automations/weekly-operating-review.toml id="project-weekly-operating-review"
-'''
-[target]
-workspace = "<project-root>"
-[schedule]
-type = "weekly"
-timezone = "<timezone>"
-days = ["Mon"]
-time = "05:45"
+farplane/automations/weekly-operating-review.md id="project-weekly-operating-review"

@@ -2,9 +2,10 @@ from __future__ import annotations
 
 import subprocess
 import tempfile
-import tomllib
 import unittest
 from pathlib import Path
+
+import yaml
 
 
 class BootstrapAutomationFilesTests(unittest.TestCase):
@@ -17,8 +18,8 @@ class BootstrapAutomationFilesTests(unittest.TestCase):
                 capture_output=True,
                 text=True,
             )
-            files = sorted((Path(tmp) / "farplane" / "automations").glob("*.toml"))
-            records = [tomllib.loads(path.read_text(encoding="utf-8")) for path in files]
+            files = sorted((Path(tmp) / "farplane" / "automations").glob("*.md"))
+            records = [yaml.safe_load(path.read_text(encoding="utf-8").split("\n---\n", 1)[0][4:]) for path in files]
 
         self.assertEqual(len(files), 6)
         self.assertTrue(all(record["schema"] == "farplane_project_automation" for record in records))

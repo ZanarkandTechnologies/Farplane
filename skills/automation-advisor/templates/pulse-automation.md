@@ -9,22 +9,28 @@ template_version: "1.0.0"
 
 # Pulse Codex Automation Template
 
-Use this complete file in `farplane/automations/work-pulse.toml` for a
+Use this complete file in `farplane/automations/work-pulse.md` for a
 project's Pulse automation. The record is the full desired Codex automation
 config: identity, schedule, target, status, and exact prompt text. It is the
-project's only `kind = "heartbeat"` record; all other scheduled skills use
-`kind = "cron"`.
+project's only `kind: heartbeat` record; all other scheduled skills use
+`kind: cron`. YAML front matter owns configuration and the Markdown body is the
+exact prompt.
 
-```toml
-schema = "farplane_project_automation"
-framework_template_version = "1.0.0"
-owner = "automation-advisor"
-
-id = "<pulse-automation-id>"
-name = "Project Pulse"
-kind = "heartbeat"
-status = "active"
-prompt = '''
+```md
+---
+schema: farplane_project_automation
+framework_template_version: "1.0.0"
+owner: automation-advisor
+id: <pulse-automation-id>
+name: Project Pulse
+kind: heartbeat
+status: active
+target:
+  thread_id: <pulse-thread-id>
+schedule:
+  type: interval
+  interval_minutes: 30
+---
 Use $pulse-update.
 
 Run one bounded Work Pulse. Reconcile the board, make due ticket check-ins
@@ -45,13 +51,5 @@ Final response:
 - Link any report, ticket, worker, or receipt artifacts created by the beat.
 
 Config source:
-farplane/automations/work-pulse.toml id="<pulse-automation-id>"
-'''
-
-[target]
-thread_id = "<pulse-thread-id>"
-
-[schedule]
-type = "interval"
-interval_minutes = 30
+farplane/automations/work-pulse.md id="<pulse-automation-id>"
 ```
