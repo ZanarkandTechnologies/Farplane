@@ -7,11 +7,22 @@
 - **Decision:** A probability of at least 0.5 returns scoped continuation feedback;
   at most three identifiable own nudges are allowed per real user turn.
 
-It reads a bounded transcript, preserves the opening/latest requests, excludes
-reasoning and tool output, and applies best-effort credential redaction. Authorized
-conversation text still goes to the configured provider. Oversized responses defer
-to the response-length hook. Unknown transcript/feedback provenance and provider
-failures allow stopping; there is no persistent completion ledger.
+The classifier looks for concrete completion gaps: naming the next correction
+instead of doing it, admitting that a requested fix remains incomplete, or
+stopping at diagnosis after a fix/finish request. A completed bounded request
+does not continue merely because separate validation or an older issue remains.
+The feedback asks Codex to take one concrete action, using tools when the task
+requires them, while retaining the existing scope, approval, safety, and budget
+boundaries. Versioned feedback keeps in-flight sessions parseable when this text
+changes.
+
+It reads complete JSONL rows from a bounded 1 MiB opening window and 8 MiB recent
+window, preserving the opening/latest requests without loading a long rollout's
+middle. It excludes reasoning and tool output and applies best-effort credential
+redaction. Authorized conversation text still goes to the configured provider.
+Oversized responses defer to the response-length hook. Unknown transcript/feedback
+provenance and provider failures allow stopping; there is no persistent completion
+ledger.
 
 ## Install and control
 
@@ -40,5 +51,15 @@ Run from the repository root:
 python3 -m unittest discover -s bin/tests -p 'test_continuation*.py'
 ```
 
-These cover transcript selection, nudge bounds, length-gate interaction, and the
-entrypoint's credential scope/failure behavior without requiring a live provider.
+These cover transcript selection (including a sparse 200 MiB rollout), nudge
+bounds, length-gate interaction, and the entrypoint's credential scope/failure
+behavior without requiring a live provider.
+
+Run the five-case live classifier check through the same configured provider:
+
+```bash
+farplane run -- python3 hooks/continuation/sanity_check.py
+```
+
+The sanitized cases cover two premature stops and three legitimate stops. The
+command exits nonzero if any score crosses the 0.5 boundary in the wrong direction.

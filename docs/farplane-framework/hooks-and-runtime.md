@@ -71,7 +71,7 @@ The three Stop handlers have separate responsibilities and Codex toggles:
 
 | Handler | Reads / effects | Can request continuation? |
 | --- | --- | --- |
-| `hooks/continuation/continuation_gate.py` | Sends bounded, best-effort redacted dialogue to the configured Jev provider through `farplane run`; asks whether useful authorized work remains. Threshold 0.5, at most three identifiable own nudges per real user turn; unknown provenance/provider failure allows stopping. | Yes, with fixed scoped feedback. Defers over-limit responses to the existing length gate. |
+| `hooks/continuation/continuation_gate.py` | Sends bounded, best-effort redacted dialogue to the configured Jev provider through `farplane run`; asks whether concrete evidence shows an unfinished requested outcome with useful authorized work possible now. Threshold 0.5, at most three identifiable own nudges per real user turn; exact versioned feedback keeps active transcripts parseable, while unknown provenance/provider failure allows stopping. | Yes, with fixed feedback requiring a concrete in-scope action. Defers over-limit responses to the existing length gate. |
 | `hooks/response-length/final_response_gate.py` | Measures `last_assistant_message`; defaults to 500 prose words and 50 nonblank prose lines, configurable through `FARPLANE_FINAL_RESPONSE_MAX_PROSE_WORDS` and `FARPLANE_FINAL_RESPONSE_MAX_PROSE_LINES`. Returns rewrite feedback; does not edit files or call a model/network service. | Yes, whenever either cap is exceeded, including repeated attempts; no retry cap. |
 | `hooks/lifecycle-telemetry/farplane_console_ping.py` | Resolves task/project metadata and existing local ticket bindings; sends a `turn_end` event to the configured telemetry endpoint with a two-second HTTP timeout. No endpoint means no send; network errors are logged and allowed. Stop does not create ticket bindings. | No; no block response is emitted. |
 
@@ -89,11 +89,13 @@ JSON is not a dependency contract. No hook certifies native Goal completion.
 
 The continuation reader uses Codex desktop actual-user metadata, preserves the
 opening and latest request plus a bounded dialogue tail, and excludes tool
-outputs, reasoning, and commentary. It reads at most 8 MiB, failing open beyond
-that; transcript format and hook-feedback provenance are implementation details,
-so unknown forms allow stopping. Redaction reduces common credentials and
-identifiers, but is not anonymization: authorized conversation text goes to the
-configured provider. Its stderr diagnostic reports only a fixed decision status.
+outputs, reasoning, and commentary. Long rollouts read complete JSONL rows from
+a 1 MiB opening window and an 8 MiB recent window; the middle is neither loaded
+nor sent. Transcript format and hook-feedback provenance are implementation
+details, so unknown forms allow stopping. Redaction reduces common credentials
+and identifiers, but is not anonymization: authorized conversation text goes to
+the configured provider. Its stderr diagnostic reports only a fixed decision
+status.
 Enable/disable it through Codex's hook control; credentials stay in Doppler and
 are injected by `farplane run` from the installed Farplane source directory, not
 the calling project. The registered command invokes Python directly; the hook

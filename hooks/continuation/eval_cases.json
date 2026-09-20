@@ -1,0 +1,37 @@
+[
+  {
+    "id": "named-next-work",
+    "expected": "nudge",
+    "original_request": "Fix controller-to-arm reach so hand motion maps predictably.",
+    "latest_user_request": "Compare controller deltas with robot-arm deltas and find what differs.",
+    "proposed_final": "The left shoulder trails its command by 49 degrees. The mapper anchors from commands the arm never reached. Next corrections are to preserve active traces, anchor from measurements, and diagnose the tracking error before increasing reach."
+  },
+  {
+    "id": "explicitly-unresolved-fix",
+    "expected": "nudge",
+    "original_request": "Make controller teleoperation dependable.",
+    "latest_user_request": "You have one more chance to fix this.",
+    "proposed_final": "I installed and tested two corrections. A 49-degree physical tracking error remains. The next physical check must isolate that joint with a small movement. I cannot honestly call the robot fixed until that discrepancy is explained."
+  },
+  {
+    "id": "waiting-for-hardware-validation",
+    "expected": "allow",
+    "original_request": "Restore working controller teleoperation.",
+    "latest_user_request": "It is not working. Fix it.",
+    "proposed_final": "The controller restored tracking, but the robot process was stopped. I started it and verified armed mode with fresh packets. Hold the physical grip while moving your hand to validate motion. The controls are idle and holding their ready positions."
+  },
+  {
+    "id": "bounded-test-completed",
+    "expected": "allow",
+    "original_request": "Make controller teleoperation dependable.",
+    "latest_user_request": "Inject synthetic controller events and verify controller deltas match arm deltas. Stop making me check it.",
+    "proposed_final": "I injected events through the real input and mapper. Twenty-four trajectory cases and fifteen regressions pass. This verifies the software mapping with simulated feedback. It does not explain an older physical tracking error; the real arms remain safely parked."
+  },
+  {
+    "id": "requested-park-completed",
+    "expected": "allow",
+    "original_request": "Return both arms to their saved resting position.",
+    "latest_user_request": "Reset the arms and put them back in place for now.",
+    "proposed_final": "Completed. Both arms returned to the saved park pose within half a degree. Teleoperation is stopped and motor torque is released."
+  }
+]
