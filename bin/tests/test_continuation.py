@@ -115,6 +115,23 @@ class ContinuationTests(unittest.TestCase):
         self.rows += user("Continue with this newly requested feature.")
         self.assertIsNotNone(self.run_gate())
 
+    def test_previous_nudge_version_does_not_poison_existing_session(self):
+        self.rows += [self.desktop_hook(gate.LEGACY_NUDGE_V1),
+                      message("assistant", "I made progress.")]
+        self.rows += user("Now finish the remaining verification.")
+        self.rows += [message("assistant", "I will verify it next.")]
+
+        self.assertIsNotNone(self.run_gate(final="I will verify it next."))
+        state = self.client.calls[-1]["state"]
+        self.assertEqual(state["own_nudges_this_user_turn"], 0)
+
+    def test_previous_nudge_version_still_counts_within_same_user_turn(self):
+        self.rows += [self.desktop_hook(gate.LEGACY_NUDGE_V1),
+                      message("assistant", "I will test next.")]
+
+        self.assertIsNotNone(self.run_gate(final="I will test next.", active=True))
+        self.assertEqual(self.client.calls[-1]["state"]["own_nudges_this_user_turn"], 1)
+
     def desktop_hook(self, body):
         row = message("user", '<hook_prompt hook_run_id="stop:5:/synthetic/hooks.json">'
                       + body + '</hook_prompt>')
@@ -143,6 +160,11 @@ class ContinuationTests(unittest.TestCase):
     def test_real_user_envelope_quote_does_not_grant_hook_provenance(self):
         envelope = self.desktop_hook(gate.NUDGE)["payload"]["content"][0]["text"]
         self.rows += user(envelope)
+        self.assertIsNone(self.run_gate(active=True))
+        self.assertEqual(self.client.calls, [])
+
+    def test_real_user_previous_nudge_quote_does_not_grant_hook_provenance(self):
+        self.rows += user(gate.LEGACY_NUDGE_V1)
         self.assertIsNone(self.run_gate(active=True))
         self.assertEqual(self.client.calls, [])
 
