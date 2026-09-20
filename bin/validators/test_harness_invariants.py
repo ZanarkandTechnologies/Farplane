@@ -38,28 +38,46 @@ The install-time global harness contract now lives at `templates/global/AGENTS.m
 """
 
 GLOBAL_AGENTS_TEXT = """\
-<!-- AUTONOMY DIRECTIVE - DO NOT REMOVE -->
-EXECUTE TASKS TO COMPLETION WITHOUT ASKING FOR PERMISSION.
+# Global Agent Guidance
 
-## Autonomy And Authority
+## Context
 
-## Decision And Grounding
+- Work from current task state and verified evidence.
 
-- Evaluate the user's premise independently before choosing whether to agree.
-- Do not begin with agreement, praise, or validation.
-- Express agreement only after stating the supporting reason.
+## Behavior
 
-## Correction, Work, And Proof
+### Interpret intent and authority
 
-## Response Contract
+- Classify by requested outcome and task continuity.
+- A question about unfinished requested work is a correction.
+- For mixed intent, repair the safe same-scope miss before explaining it.
+- Question grammar alone does not decide the mode.
+- State the blocker, substitute evidence, risk, and recovery path.
+- Evaluate the premise before agreeing.
+- Lead with the conclusion or evidence, not praise.
+- Agree only after stating the reason.
 
-## Context Routing
+### Decide independently and ground the result
 
-## Task State And Artifacts
+### Work leanly and prove the critical path
 
-## Skills And Delegation
+### Load relevant context and preserve durable state
 
-## Local Workbench And Safety
+### Use skills and delegation deliberately
+
+### Operate the workspace safely
+
+## Output Formatting
+
+### Default shape
+
+### Proposed change
+
+### Visual and proof routing
+
+### Completed change
+
+### Blocked work
 """
 
 AGENT_KERNEL_TEXT = """\
@@ -68,14 +86,9 @@ AGENT_KERNEL_TEXT = """\
 <!-- BEGIN AGENT_KERNEL_FEATURE_INVENTORY -->
 | ID | Surface | Required section | Behavior group |
 | --- | --- | --- | --- |
-| `AK-G01` | `templates/global/AGENTS.md` | `## Autonomy And Authority` | authority |
-| `AK-G02` | `templates/global/AGENTS.md` | `## Decision And Grounding` | decisions |
-| `AK-G03` | `templates/global/AGENTS.md` | `## Correction, Work, And Proof` | proof |
-| `AK-G04` | `templates/global/AGENTS.md` | `## Response Contract` | response |
-| `AK-G05` | `templates/global/AGENTS.md` | `## Context Routing` | context |
-| `AK-G06` | `templates/global/AGENTS.md` | `## Task State And Artifacts` | state |
-| `AK-G07` | `templates/global/AGENTS.md` | `## Skills And Delegation` | skills |
-| `AK-G08` | `templates/global/AGENTS.md` | `## Local Workbench And Safety` | workbench |
+| `AK-G01` | `templates/global/AGENTS.md` | `## Context` | context |
+| `AK-G02` | `templates/global/AGENTS.md` | `## Behavior` | behavior |
+| `AK-G03` | `templates/global/AGENTS.md` | `## Output Formatting` | output |
 | `AK-P01` | `AGENTS.md` | `## Operating model` | model |
 | `AK-P02` | `AGENTS.md` | `## Context budget` | context |
 | `AK-P03` | `AGENTS.md` | `## Local boundaries` | boundaries |
@@ -203,12 +216,42 @@ This file is generic instructions.
             write_file(
                 root / "templates/global/AGENTS.md",
                 GLOBAL_AGENTS_TEXT.replace(
-                    "- Do not begin with agreement, praise, or validation.\n", ""
+                    "- Lead with the conclusion or evidence, not praise.\n", ""
                 ),
             )
             result = self.run_validator(root)
             self.assertNotEqual(result.returncode, 0)
-            self.assertIn("Do not begin with agreement", result.stdout)
+            self.assertIn("Lead with the conclusion or evidence", result.stdout)
+
+    def test_validator_fails_when_turn_mode_contract_is_weakened(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            self.build_repo(root)
+            write_file(
+                root / "templates/global/AGENTS.md",
+                GLOBAL_AGENTS_TEXT.replace(
+                    "- A question about unfinished requested work is a correction.\n",
+                    "",
+                ),
+            )
+            result = self.run_validator(root)
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("unfinished requested work", result.stdout)
+
+    def test_validator_fails_when_behavior_subsection_is_removed(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            self.build_repo(root)
+            write_file(
+                root / "templates/global/AGENTS.md",
+                GLOBAL_AGENTS_TEXT.replace(
+                    "### Operate the workspace safely\n",
+                    "",
+                ),
+            )
+            result = self.run_validator(root)
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("### Operate the workspace safely", result.stdout)
 
     def test_validator_rejects_reasoning_contract_hidden_in_comment(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -217,13 +260,13 @@ This file is generic instructions.
             write_file(
                 root / "templates/global/AGENTS.md",
                 GLOBAL_AGENTS_TEXT.replace(
-                    "- Do not begin with agreement, praise, or validation.",
-                    "<!-- - Do not begin with agreement, praise, or validation. -->",
+                    "- Lead with the conclusion or evidence, not praise.",
+                    "<!-- - Lead with the conclusion or evidence, not praise. -->",
                 ),
             )
             result = self.run_validator(root)
             self.assertNotEqual(result.returncode, 0)
-            self.assertIn("active Decision And Grounding section", result.stdout)
+            self.assertIn("active Behavior section", result.stdout)
 
     def test_validator_fails_when_agents_section_is_undocumented(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -243,7 +286,7 @@ This file is generic instructions.
             self.build_repo(root)
             write_file(
                 root / "templates/global/AGENTS.md",
-                GLOBAL_AGENTS_TEXT.replace("## Context Routing\n", ""),
+                GLOBAL_AGENTS_TEXT.replace("## Context\n", ""),
             )
             result = self.run_validator(root)
             self.assertNotEqual(result.returncode, 0)

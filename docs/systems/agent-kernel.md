@@ -3,7 +3,7 @@ title: "Agent Kernel"
 status: active
 owner: farplane-framework
 created_at: 2026-06-26
-updated_at: 2026-08-29
+updated_at: 2026-09-20
 tags:
   - farplane
   - systems
@@ -30,7 +30,7 @@ system_record_json: |
       "docs/fundamentals/harness-engineering-doctrine.md",
       "bin/README.md"
     ],
-    "last_verified": "2026-08-29"
+    "last_verified": "2026-09-20"
   }
 ---
 # Agent Kernel
@@ -58,6 +58,11 @@ Agent Kernel owns the always-loaded operating shape for Farplane agents: autonom
 action/plan/answer mode, reading discipline, skill routing, proof expectations, and
 concise communication. It keeps permanent context lean by pointing detailed procedure to
 skills, specs, tickets, validators, and templates.
+
+The global template groups that contract under three reader-facing sections:
+`Context`, `Behavior`, and `Output Formatting`. Behavior subsections and route
+tables retain the former authority, grounding, work, task, skill, and safety
+boundaries without requiring eight top-level policy sections.
 
 ## Feature Docs
 
@@ -119,14 +124,9 @@ either AGENTS file must be listed here.
 <!-- BEGIN AGENT_KERNEL_FEATURE_INVENTORY -->
 | ID | Surface | Required section | Behavior group |
 | --- | --- | --- | --- |
-| `AK-G01` | `templates/global/AGENTS.md` | `## Autonomy And Authority` | Authority, action mode, steering, and reversible autonomy |
-| `AK-G02` | `templates/global/AGENTS.md` | `## Decision And Grounding` | Independent reasoning, alternatives, tradeoffs, evidence, and non-sycophantic stance |
-| `AK-G03` | `templates/global/AGENTS.md` | `## Correction, Work, And Proof` | Correction handling, execution discipline, verification, and review |
-| `AK-G04` | `templates/global/AGENTS.md` | `## Response Contract` | Response ledger, concise communication, visuals, and completion handoff |
-| `AK-G05` | `templates/global/AGENTS.md` | `## Context Routing` | Nearest-owner context loading and durable guidance placement |
-| `AK-G06` | `templates/global/AGENTS.md` | `## Task State And Artifacts` | Ticket, Goal Packet, and workflow artifact ownership |
-| `AK-G07` | `templates/global/AGENTS.md` | `## Skills And Delegation` | Skill loading, phase ownership, and bounded delegation |
-| `AK-G08` | `templates/global/AGENTS.md` | `## Local Workbench And Safety` | Checkout discipline, safe editing, polling, credentials, and install boundaries |
+| `AK-G01` | `templates/global/AGENTS.md` | `## Context` | User collaboration, current task state, verified evidence, and smallest-owner routing |
+| `AK-G02` | `templates/global/AGENTS.md` | `## Behavior` | Authority, reasoning, grounding, execution, task state, skills, delegation, and workspace safety |
+| `AK-G03` | `templates/global/AGENTS.md` | `## Output Formatting` | Response ledger, route tables, examples, visuals, proof, and completion handoff |
 | `AK-P01` | `AGENTS.md` | `## Operating model` | Farplane's visible ticket, skill, Goal Packet, and proof model |
 | `AK-P02` | `AGENTS.md` | `## Context budget` | Project-local context budget and owner routing |
 | `AK-P03` | `AGENTS.md` | `## Local boundaries` | Farplane placement, browser proof, checkout, credential, and runtime boundaries |
@@ -180,13 +180,23 @@ The Agent Kernel turns local and install-time policy into the operating shape ev
 - Link proof: `python3 bin/validators/check_doc_refs.py`.
 - Static-contract proof: `python3 bin/farplane.py lint all`.
 - Feature-fidelity proof: `python3 bin/validators/check_harness_invariants.py`.
-- Behavior proof: the `global_independent_reasoning_before_agreement_01` and
-  `global_warranted_agreement_after_reasoning_01` prompt evals.
+- Behavior proof: the `global_independent_reasoning_before_agreement_01`,
+  `global_warranted_agreement_after_reasoning_01`,
+  `global_question_shaped_install_correction_01`, and
+  `global_genuine_install_question_01` prompt evals.
 - Update this system page when product-layer boundaries or feature membership changes.
 - Update feature pages when capability behavior changes.
 - Regenerate registries and commit generated outputs with the source docs.
 
 ## Change History
+
+- 2026-09-20: Reorganized the global template into `Context`, `Behavior`, and
+  `Output Formatting`; added example-led output contracts and scan-friendly
+  route tables while preserving the Agent Kernel behavior inventory.
+
+- 2026-08-31: Hardened `turn_mode` to classify question-shaped follow-ups from
+  requested outcome and recent task continuity, with paired correction and
+  genuine-question regressions.
 
 - 2026-08-29: Added the bidirectional AGENTS feature inventory and restored
   explicit independent-reasoning/non-sycophancy preservation proof.

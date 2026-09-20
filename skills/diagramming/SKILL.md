@@ -31,6 +31,9 @@ diagramming(request_or_ticket, approval_question?)
   - dry run or decision -> numbered trace with a material branch
   - UI behavior -> wireflow/state map; route visual design to its owner
   - system delta -> Before/After map
+  - hierarchy, chronology, causal/strategy, or quantitative question -> load
+    the matching Mermaid family from `references/patterns.md` and verify the
+    target renderer; use a table for exact mappings or comparisons
   - field mapping or comparison -> table; do not force a diagram
 - [ ] 2. Draw the smallest form that exposes the needed actors, states,
   boundaries, branch, and proof. Use Mermaid for standalone system packs and

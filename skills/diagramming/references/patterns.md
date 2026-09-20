@@ -19,6 +19,35 @@ generic box-and-arrow chain.
 For a ticket Contract Diagram, a field-mapping table supplements rather than
 replaces the required minimal directed ASCII path.
 
+## Mermaid Capability Selector
+
+Choose from Mermaid's current official catalog only after selecting the reader
+question. This catalog is capability awareness, not a reason to force Mermaid
+when ASCII, a table, or prose is clearer.
+
+```text
+mermaid_type(question, renderer_support)
+  -> hierarchy/idea space: mindmap or TreeView
+  -> chronology/dependencies: timeline or Gantt
+  -> actor interaction/journey: sequence, swimlane, user journey, use case, or ZenUML
+  -> state/recovery: state diagram
+  -> system/data ownership: flowchart, architecture, C4, or Sankey
+  -> schema/contracts: class, ER, requirement, block, or packet
+  -> work/history/change: Kanban, GitGraph, event modeling, or delta flowchart
+  -> comparison/data: XY, quadrant, pie, radar, treemap, or Venn
+  -> cause/strategy/sensemaking: Ishikawa, Wardley, or Cynefin
+```
+
+- Verify the target renderer and current
+  [official syntax catalog](https://mermaid.js.org/intro/syntax-reference.html)
+  before using newer or uncommon forms.
+- Mindmaps and timelines are documented as experimental or evolving; confirm
+  syntax and rendering support before depending on them.
+- Prefer a supported flowchart, state diagram, sequence, table, or compact ASCII
+  fallback when the client cannot render the selected type.
+- Use quantitative charts only with real values and labeled meaning. Do not
+  invent precision to justify a chart.
+
 ## 1. User / Action Sequence
 
 ```text

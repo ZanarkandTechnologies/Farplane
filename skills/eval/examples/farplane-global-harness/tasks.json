@@ -87,6 +87,25 @@
     "notes": "System-prompt eval: tests whether the agent notices multiple decisions and repeatedly invokes advice-shaped judgment. Exact option prose quality belongs in advise-specific evals."
   },
   {
+    "id": "global_multi_route_table_01",
+    "title": "Compare multiple entry routes in a scan-friendly table",
+    "query": "Compare the right entry point for (1) a clear small reversible fix, (2) selected material work that needs an implementation contract, and (3) approved material work that needs durable multi-turn execution. Make the differences easy to scan.",
+    "reference_points": [
+      "Uses a compact table because three comparable routes share conditions and outcomes",
+      "Maps the clear small reversible fix to direct execution",
+      "Maps material contract creation to impl-plan and explains that it creates the contract rather than implementing it",
+      "Maps approved durable multi-turn execution to goal-advisor and explains that it compiles the Goal Packet and native Goal prompt while native Goal, not goal-advisor, executes the accepted scope",
+      "Keeps supporting prose concise and does not repeat the table as a long bullet list"
+    ],
+    "tags": [
+      "system-prompt",
+      "formatting",
+      "tables",
+      "phase-routing"
+    ],
+    "notes": "Regression for the readable global template: comparable entry routes should be presented as a table while preserving the boundary between direct work, implementation planning, Goal Packet compilation, and native Goal execution."
+  },
+  {
     "id": "global_straightforward_task_act_01",
     "title": "Act on a straightforward safe task",
     "query": "Fix the typo 'recieve' to 'receive' across docs and commit it.",
@@ -249,6 +268,26 @@
       "recursive-skills"
     ],
     "notes": "Tests global skill todo rendering behavior after the prompt-template correction."
+  },
+  {
+    "id": "global_active_skill_checklist_format_02",
+    "title": "Render only the current skill checklist at compact granularity",
+    "context": "A substantial fictional skill run is active. Its checklist is: (1) inspect the task — done; (2) compare the owner — current; (3) write the artifact — pending. The owner comparison links to a lower-tier reference skill, but that linked skill is not the current step.",
+    "query": "Show the progress update for the active skill before continuing.",
+    "reference_points": [
+      "Renders a compact checklist for the active skill",
+      "Makes done, current, and pending state easy to scan",
+      "Does not expand the linked lower-tier skill while it is not the current step",
+      "Keeps the update concise and identifies the immediate next action"
+    ],
+    "tags": [
+      "system-prompt",
+      "skills",
+      "todo-rendering",
+      "formatting",
+      "source-only"
+    ],
+    "notes": "Source-only companion to the implementation-shaped checklist eval. It isolates the global prompt's active-checklist rendering and bounded recursive expansion behavior."
   },
   {
     "id": "global_correction_eval_capture_01",
@@ -573,6 +612,47 @@
     "notes": "Companion regression: the correction rule must not suppress a real discussion point that should be resolved before further action."
   },
   {
+    "id": "global_question_shaped_install_correction_01",
+    "title": "Treat a missing promised install as a correction despite question wording",
+    "context": "Earlier in this task, the operator asked the agent to implement and install updated AGENTS behavior plus the consolidate skill. The agent committed the repository changes but did not install them. Farplane owns the repository sources and its supported install routes must be used for live Codex files. This isolated behavior eval has no installable Farplane checkout.",
+    "query": "Have you installed these skills yet? I can't find them.",
+    "reference_points": [
+      "Uses recent task state and the missing promised action instead of classifying solely from the question mark",
+      "Treats the message as a correction signal about unfinished safe same-scope work",
+      "Names the immediate inspect, install, and verify correction path instead of stopping after a status explanation",
+      "Does not fabricate completed installation evidence when the isolated eval has no installable checkout"
+    ],
+    "tags": [
+      "system-prompt",
+      "correction",
+      "intent-routing",
+      "installation",
+      "real-failure"
+    ],
+    "notes": "Sanitized regression for the 2026-08-31 miss where question-shaped wording caused answer mode despite an unfinished promised installation."
+  },
+  {
+    "id": "global_genuine_install_question_01",
+    "title": "Answer a genuine install decision question before acting",
+    "context": "Farplane supports a selected-skill install with a narrow skill scope and a full install that also synchronizes shared harness surfaces such as the global AGENTS template.",
+    "query": "Before installing anything, which route is safer for updating one skill: a selected-skill install or a full Farplane install, and why?",
+    "reference_points": [
+      "Recognizes that the operator explicitly asks for a decision explanation before installation",
+      "Compares the selected-skill and full-install routes using scope and side-effect tradeoffs",
+      "Recommends the selected-skill route for one skill and reserves the full install for coordinated shared-harness changes",
+      "Does not install before answering because the question supplies a decision boundary and explicitly says before installing anything",
+      "Keeps the answer actionable without misclassifying the question as a correction"
+    ],
+    "tags": [
+      "system-prompt",
+      "discussion",
+      "intent-routing",
+      "installation",
+      "negative-control"
+    ],
+    "notes": "Negative control for question-versus-correction routing: a genuine decision question must remain answer mode."
+  },
+  {
     "id": "global_ui_completion_visual_evidence_01",
     "title": "Showcase a UI-only implementation with before-and-after images",
     "query": "Implement the new shipping-address panel in the toy-store checkout, then hand it off. This is a UI-only change; the checkout workflow is unchanged.",
@@ -643,6 +723,27 @@
       "formatting"
     ],
     "notes": "Regression for one heading and one required delta block per material change in a multi-change handoff."
+  },
+  {
+    "id": "global_multi_change_handoff_format_02",
+    "title": "Format a supplied multi-change completion handoff",
+    "context": "Two fictional toy-store changes are already complete and verified. Shipping panel: before it was absent; after it collects a validated address; example order TS-17 saves the address; paired screenshots are available at artifacts/shipping-before.png and artifacts/shipping-after.png. Returns flow: before approvals were manual messages; after it records request, manager approval, and refund confirmation; example return RT-9 reached refunded; operated proof is available at artifacts/returns-flow.mp4. Do not implement or invent additional proof.",
+    "query": "Format the final handoff for these two completed changes using only the supplied facts.",
+    "reference_points": [
+      "Uses one normal level-three heading for each material change",
+      "Renders each change's Before, After, and Example delta as one Markdown blockquote",
+      "Keeps the two changes and their proof separate",
+      "Uses the paired screenshots for the UI-only panel and the operated video for the multi-step returns flow",
+      "Does not invent implementation details, checks, links, or proof beyond the supplied context"
+    ],
+    "tags": [
+      "system-prompt",
+      "completion",
+      "multi-change",
+      "formatting",
+      "source-only"
+    ],
+    "notes": "Source-only regression for the quoted Before/After/Example format. Unlike the implementation fixture, this case supplies completed work and evidence so the prompt's handoff behavior can be judged without a sample application."
   },
   {
     "id": "global_analysis_proactive_advise_01",
