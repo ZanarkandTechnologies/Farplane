@@ -220,13 +220,35 @@ class ContinuationTests(unittest.TestCase):
         self.run_gate()
         self.assertEqual(self.client.calls[0]["model"], "configured-model")
 
-    def test_corrupt_and_oversized_transcripts_fail_open(self):
-        for raw in ("not-json", "x" * (gate.MAX_BYTES + 1)):
-            self.path.write_text(raw)
-            self.assertIsNone(gate.evaluate_stop({"hook_event_name": "Stop",
-                "transcript_path": str(self.path), "last_assistant_message": "I'll test next."},
-                environ=self.env, client=self.client))
+    def test_corrupt_transcript_fails_open(self):
+        self.path.write_text("not-json")
+        self.assertIsNone(gate.evaluate_stop({"hook_event_name": "Stop",
+            "transcript_path": str(self.path), "last_assistant_message": "I'll test next."},
+            environ=self.env, client=self.client))
         self.assertEqual(self.client.calls, [])
+
+    def test_sparse_200mb_rollout_preserves_opening_and_recent_work(self):
+        opening = user("Restore working Pico teleoperation.")[0]
+        latest = user("Finish the bounded servo-tracking diagnosis.")[0]
+        recent = message("assistant", "Next I need to run the safe diagnosis.")
+        with self.path.open("wb") as handle:
+            handle.write((json.dumps(opening) + "\n").encode())
+            handle.seek(200 * 1024 * 1024)
+            handle.write(("ignored tool output\n" + json.dumps(latest) + "\n"
+                          + json.dumps(recent) + "\n").encode())
+
+        result = gate.evaluate_stop({"hook_event_name": "Stop",
+            "transcript_path": str(self.path),
+            "last_assistant_message": "Next I need to run the safe diagnosis."},
+            environ=self.env, client=self.client)
+
+        self.assertEqual(result, {"decision": "block", "reason": gate.NUDGE})
+        state = self.client.calls[0]["state"]
+        self.assertEqual(state["original_request"], "Restore working Pico teleoperation.")
+        self.assertEqual(state["latest_user_request"],
+                         "Finish the bounded servo-tracking diagnosis.")
+        self.assertTrue(state["source_truncated"])
+        self.assertNotIn("ignored tool output", json.dumps(state))
 
     def test_no_credentials_fails_open(self):
         self.client = None

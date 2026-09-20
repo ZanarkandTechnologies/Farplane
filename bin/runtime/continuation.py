@@ -20,7 +20,10 @@ from final_response_gate import (
 )
 from skill_suggestion import HttpDecisionClient, MODEL_ENV, _provider_config, ENDPOINT_ENV
 
-MAX_BYTES = 8 * 1024 * 1024
+MAX_HEAD_BYTES = 1024 * 1024
+MAX_TAIL_BYTES = 8 * 1024 * 1024
+# Kept as the public recent-context bound used by existing tests and docs.
+MAX_BYTES = MAX_TAIL_BYTES
 MAX_MESSAGES = 20
 MAX_TEXT = 2400
 MAX_NUDGES = 3
@@ -77,14 +80,35 @@ def message_text(payload: Mapping[str, object]) -> str:
     )
 
 
+def bounded_rollout_lines(source: Path) -> tuple[list[str], bool]:
+    """Read complete JSONL rows from the opening and recent rollout windows."""
+    size = source.stat().st_size
+    if size <= MAX_HEAD_BYTES + MAX_TAIL_BYTES:
+        return source.read_text(encoding="utf-8").splitlines(), False
+
+    with source.open("rb") as handle:
+        head = handle.read(MAX_HEAD_BYTES)
+        handle.seek(-MAX_TAIL_BYTES, 2)
+        tail = handle.read(MAX_TAIL_BYTES)
+
+    # The head starts on a row boundary but can end mid-row. The tail ends on a
+    # row boundary but normally starts mid-row. Discard only those fragments.
+    if not head.endswith(b"\n"):
+        head = head.rsplit(b"\n", 1)[0] if b"\n" in head else b""
+    if b"\n" in tail:
+        tail = tail.split(b"\n", 1)[1]
+    else:
+        tail = b""
+    return (
+        head.decode("utf-8").splitlines() + tail.decode("utf-8").splitlines(),
+        True,
+    )
+
+
 def read_dialogue(path: str, final: str, *, max_words: int = 500,
                   max_lines: int = 50) -> dict[str, object] | None:
     source = Path(path)
-    # Read at most one bounded file snapshot; never follow additional references.
-    with source.open("rb") as handle:
-        raw = handle.read(MAX_BYTES + 1)
-    if len(raw) > MAX_BYTES:
-        return None
+    lines, rollout_truncated = bounded_rollout_lines(source)
     messages: list[dict[str, str]] = []
     actual_requests: list[str] = []
     last_user_text = ""
@@ -92,7 +116,7 @@ def read_dialogue(path: str, final: str, *, max_words: int = 500,
     nudges = 0
     length_feedback = False
     previous_assistant = ""
-    for line in raw.decode("utf-8").splitlines():
+    for line in lines:
         row = json.loads(line)
         if not isinstance(row, dict):
             return None
@@ -162,7 +186,7 @@ def read_dialogue(path: str, final: str, *, max_words: int = 500,
         "proposed_final": bounded_text(final),
         "own_nudges_this_user_turn": nudges,
         "recognized_length_feedback_this_user_turn": length_feedback,
-        "source_truncated": len(messages) > MAX_MESSAGES or any(
+        "source_truncated": rollout_truncated or len(messages) > MAX_MESSAGES or any(
             len(redact(m["text"])) > MAX_TEXT for m in messages
         ) or len(redact(final)) > MAX_TEXT,
     }

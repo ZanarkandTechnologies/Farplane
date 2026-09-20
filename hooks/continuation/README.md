@@ -7,11 +7,13 @@
 - **Decision:** A probability of at least 0.5 returns scoped continuation feedback;
   at most three identifiable own nudges are allowed per real user turn.
 
-It reads a bounded transcript, preserves the opening/latest requests, excludes
-reasoning and tool output, and applies best-effort credential redaction. Authorized
-conversation text still goes to the configured provider. Oversized responses defer
-to the response-length hook. Unknown transcript/feedback provenance and provider
-failures allow stopping; there is no persistent completion ledger.
+It reads complete JSONL rows from a bounded 1 MiB opening window and 8 MiB recent
+window, preserving the opening/latest requests without loading a long rollout's
+middle. It excludes reasoning and tool output and applies best-effort credential
+redaction. Authorized conversation text still goes to the configured provider.
+Oversized responses defer to the response-length hook. Unknown transcript/feedback
+provenance and provider failures allow stopping; there is no persistent completion
+ledger.
 
 ## Install and control
 
@@ -40,5 +42,6 @@ Run from the repository root:
 python3 -m unittest discover -s bin/tests -p 'test_continuation*.py'
 ```
 
-These cover transcript selection, nudge bounds, length-gate interaction, and the
-entrypoint's credential scope/failure behavior without requiring a live provider.
+These cover transcript selection (including a sparse 200 MiB rollout), nudge
+bounds, length-gate interaction, and the entrypoint's credential scope/failure
+behavior without requiring a live provider.

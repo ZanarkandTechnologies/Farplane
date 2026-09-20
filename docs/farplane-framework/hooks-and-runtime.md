@@ -89,11 +89,13 @@ JSON is not a dependency contract. No hook certifies native Goal completion.
 
 The continuation reader uses Codex desktop actual-user metadata, preserves the
 opening and latest request plus a bounded dialogue tail, and excludes tool
-outputs, reasoning, and commentary. It reads at most 8 MiB, failing open beyond
-that; transcript format and hook-feedback provenance are implementation details,
-so unknown forms allow stopping. Redaction reduces common credentials and
-identifiers, but is not anonymization: authorized conversation text goes to the
-configured provider. Its stderr diagnostic reports only a fixed decision status.
+outputs, reasoning, and commentary. Long rollouts read complete JSONL rows from
+a 1 MiB opening window and an 8 MiB recent window; the middle is neither loaded
+nor sent. Transcript format and hook-feedback provenance are implementation
+details, so unknown forms allow stopping. Redaction reduces common credentials
+and identifiers, but is not anonymization: authorized conversation text goes to
+the configured provider. Its stderr diagnostic reports only a fixed decision
+status.
 Enable/disable it through Codex's hook control; credentials stay in Doppler and
 are injected by `farplane run` from the installed Farplane source directory, not
 the calling project. The registered command invokes Python directly; the hook
