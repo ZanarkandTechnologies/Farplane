@@ -117,8 +117,18 @@ def read_dialogue(path: str, final: str, *, max_words: int = 500,
             length_feedback = False
             previous_assistant = ""
         elif role == "user" and isinstance(kinds, list) and kinds:
-            # Environment and instruction injections are not the user's request.
-            continue
+            # Desktop Stop feedback is a runtime envelope, marked unknown rather
+            # than user.text. Unwrap only that shape; a real user's quotation
+            # keeps its user provenance and cannot become hook feedback.
+            envelope = re.fullmatch(
+                r'<hook_prompt hook_run_id="stop:[^"<>]+">(.*?)</hook_prompt>',
+                text, flags=re.S,
+            ) if kinds == ["unknown"] and metadata.get("turn_id") else None
+            if envelope is None:
+                # Environment and instruction injections are not user requests.
+                continue
+            text = envelope.group(1)
+            kinds = []
         if role == "user" and TAG in text:
             if text.strip() != NUDGE:
                 return None

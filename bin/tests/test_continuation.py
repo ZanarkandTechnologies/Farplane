@@ -115,6 +115,44 @@ class ContinuationTests(unittest.TestCase):
         self.rows += user("Continue with this newly requested feature.")
         self.assertIsNotNone(self.run_gate())
 
+    def desktop_hook(self, body):
+        row = message("user", '<hook_prompt hook_run_id="stop:5:/synthetic/hooks.json">'
+                      + body + '</hook_prompt>')
+        row["payload"]["internal_chat_message_metadata_passthrough"] = {
+            "turn_id": "synthetic-turn", "content_item_kinds": ["unknown"]}
+        return row
+
+    def test_desktop_hook_envelope_counts_and_caps_nudges(self):
+        self.rows += [self.desktop_hook(gate.NUDGE)]
+        self.assertIsNotNone(self.run_gate(active=True))
+        self.assertEqual(self.client.calls[-1]["state"]["own_nudges_this_user_turn"], 1)
+        self.rows += [self.desktop_hook(gate.NUDGE) for _ in range(2)]
+        self.client.calls.clear()
+        self.assertIsNone(self.run_gate(active=True))
+        self.assertEqual(self.client.calls, [])
+
+    def test_desktop_length_feedback_allows_reassessment(self):
+        candidate = "word " * 501
+        feedback = gate.gate_response({"hook_event_name": "Stop",
+            "last_assistant_message": candidate}, 500, 50)["reason"]
+        self.rows += [message("assistant", candidate), self.desktop_hook(feedback),
+                      message("assistant", "I will test next.")]
+        self.assertIsNotNone(self.run_gate(active=True))
+        self.assertTrue(self.client.calls[-1]["state"]["recognized_length_feedback_this_user_turn"])
+
+    def test_real_user_envelope_quote_does_not_grant_hook_provenance(self):
+        envelope = self.desktop_hook(gate.NUDGE)["payload"]["content"][0]["text"]
+        self.rows += user(envelope)
+        self.assertIsNone(self.run_gate(active=True))
+        self.assertEqual(self.client.calls, [])
+
+    def test_unknown_or_changed_desktop_hook_body_does_not_grant_provenance(self):
+        for body in ("Other hook feedback", gate.NUDGE + " extra"):
+            with self.subTest(body=body):
+                self.rows = user("Implement it.") + [self.desktop_hook(body)]
+                self.assertIsNone(self.run_gate(active=True))
+        self.assertEqual(self.client.calls, [])
+
     def test_one_prior_nudge_allows_progress_sensitive_reassessment(self):
         self.rows += [message("user", gate.NUDGE), message("assistant", "Tests found a bug; I'll fix it.")]
         self.assertIsNotNone(self.run_gate(active=True))
