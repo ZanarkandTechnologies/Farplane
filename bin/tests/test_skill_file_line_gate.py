@@ -13,7 +13,7 @@ from unittest import mock
 
 
 ROOT = Path(__file__).resolve().parents[2]
-HOOK_PATH = ROOT / "hooks/skill_file_line_gate.py"
+HOOK_PATH = ROOT / "hooks/skill-length/skill_file_line_gate.py"
 SPEC = importlib.util.spec_from_file_location("skill_file_line_gate", HOOK_PATH)
 assert SPEC and SPEC.loader
 MODULE = importlib.util.module_from_spec(SPEC)

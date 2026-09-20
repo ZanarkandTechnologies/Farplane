@@ -10,7 +10,7 @@ from unittest.mock import patch
 
 
 ROOT = Path(__file__).resolve().parents[2]
-MODULE_PATH = ROOT / "hooks" / "final_response_gate.py"
+MODULE_PATH = ROOT / "hooks" / "response-length" / "final_response_gate.py"
 SPEC = importlib.util.spec_from_file_location("final_response_gate", MODULE_PATH)
 assert SPEC and SPEC.loader
 gate = importlib.util.module_from_spec(SPEC)
@@ -103,7 +103,7 @@ class FinalResponseGateTests(unittest.TestCase):
             for hook in group["hooks"]
         ]
         self.assertIn(
-            'python3 "$HOME/.codex/hooks/final_response_gate.py"', commands
+            'python3 "$HOME/.codex/hooks/response-length/final_response_gate.py"', commands
         )
 
 

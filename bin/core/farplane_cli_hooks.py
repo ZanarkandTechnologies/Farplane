@@ -13,7 +13,7 @@ from pathlib import Path
 from typing import Any
 
 from farplane_cli_base import (
-    CORE_ROOT, DEFAULT_CODEX_HOME, MANAGED_HOOK_FILES, RETIRED_HOOK_FILES,
+    CORE_ROOT, DEFAULT_CODEX_HOME, MANAGED_HOOK_DIRS, RETIRED_HOOK_FILES, HOOK_MIGRATION_LINKS,
     CliError, is_linked_worktree, passthrough_args, print_payload,
     require_primary_checkout_install,
 )
@@ -133,8 +133,8 @@ def hook_command_inventory(codex_home: Path, hooks_json: Path | None = None) -> 
             for token in target_tokens:
                 target = target or _target_hook_path(token, codex_home)
         target_expected = None
-        if target and target.name in MANAGED_HOOK_FILES:
-            target_expected = CORE_ROOT / "hooks" / target.name
+        if target and target.parent.name in MANAGED_HOOK_DIRS:
+            target_expected = CORE_ROOT / "hooks" / target.parent.name / target.name
         elif target and target.parent.name == "bin":
             target_expected = CORE_ROOT / "bin" / target.name
         inventory.append(
@@ -146,7 +146,8 @@ def hook_command_inventory(codex_home: Path, hooks_json: Path | None = None) -> 
                 "target": str(target) if target else None,
                 "expected": str(target_expected) if target_expected else None,
                 "targetExists": bool(target and target.exists()),
-                "targetLinked": bool(target and target_expected and path_points_to(target, target_expected)),
+                "targetLinked": bool(target and target_expected and (path_points_to(target, target_expected) or (path_points_to(target.parent, target_expected.parent) and target.resolve() == target_expected.resolve()))),
+                "readme": str(target_expected.parent / "README.md") if target_expected and target_expected.parent.name in MANAGED_HOOK_DIRS else None,
                 "source": str(source),
             }
         )
@@ -261,12 +262,6 @@ def install_hooks(codex_home: Path, *, dry_run: bool = False) -> dict[str, Any]:
     operations = [
         _replace_symlink(CORE_ROOT / "hooks.json", codex_home / "hooks.json", backup_root=backup_root, dry_run=dry_run),
         _replace_symlink(CORE_ROOT / "bin" / "_compat.py", codex_home / "bin" / "_compat.py", backup_root=backup_root / "bin", dry_run=dry_run),
-        _replace_symlink(
-            CORE_ROOT / "bin" / "capture_user_turn.py",
-            codex_home / "bin" / "capture_user_turn.py",
-            backup_root=backup_root / "bin",
-            dry_run=dry_run,
-        ),
         _replace_symlink(CORE_ROOT / "bin" / "core", codex_home / "bin" / "core", backup_root=backup_root / "bin", dry_run=dry_run),
         _replace_symlink(
             CORE_ROOT / "bin" / "runtime",
@@ -283,7 +278,7 @@ def install_hooks(codex_home: Path, *, dry_run: bool = False) -> dict[str, Any]:
                 dry_run=dry_run,
             )
         )
-    for hook_name in MANAGED_HOOK_FILES:
+    for hook_name in MANAGED_HOOK_DIRS:
         operations.append(
             _replace_symlink(
                 CORE_ROOT / "hooks" / hook_name,
@@ -292,6 +287,12 @@ def install_hooks(codex_home: Path, *, dry_run: bool = False) -> dict[str, Any]:
                 dry_run=dry_run,
             )
         )
+    for old_path, new_path in HOOK_MIGRATION_LINKS.items():
+        operations.append(_replace_symlink(
+            CORE_ROOT / new_path, codex_home / old_path,
+            backup_root=backup_root / "migration" / Path(old_path).parent,
+            dry_run=dry_run,
+        ))
     doctor = hooks_doctor(codex_home) if not dry_run else {"ok": True, "issues": [], "hints": []}
     return {
         "ok": bool(doctor["ok"]),
@@ -414,7 +415,7 @@ def hooks_doctor(target: Path | None = None) -> dict[str, Any]:
     hints: list[str] = []
     hook_links = []
 
-    for hook_name in MANAGED_HOOK_FILES:
+    for hook_name in MANAGED_HOOK_DIRS:
         source = CORE_ROOT / "hooks" / hook_name
         dest = codex_home / "hooks" / hook_name
         linked = path_points_to(dest, source)
@@ -478,6 +479,8 @@ def run_hooks_list(args: argparse.Namespace) -> int:
             print(f"  Timeout: {row.get('timeout', 'default')}s")
             if row.get("expected"):
                 print(f"  Owner: {row['expected']}")
+            if row.get("readme"):
+                print(f"  Docs: {row['readme']}")
             delivery = row.get("delivery")
             if delivery:
                 print(f"  Last delivery: {delivery['status']} at {delivery.get('updatedAt', 'unknown')}")

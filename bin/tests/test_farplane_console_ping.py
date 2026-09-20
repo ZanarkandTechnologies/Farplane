@@ -11,7 +11,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[2]
-HOOK_PATH = ROOT / "hooks" / "farplane_console_ping.py"
+HOOK_PATH = ROOT / "hooks" / "lifecycle-telemetry" / "farplane_console_ping.py"
 
 spec = importlib.util.spec_from_file_location("farplane_console_ping", HOOK_PATH)
 assert spec is not None

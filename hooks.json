@@ -6,13 +6,13 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 \"$HOME/.codex/bin/capture_user_turn.py\"",
+            "command": "python3 \"$HOME/.codex/hooks/user-turn/capture_user_turn.py\"",
             "statusMessage": "User intent — captures current request and optional skill suggestion",
             "timeout": 30
           },
           {
             "type": "command",
-            "command": "python3 \"$HOME/.codex/hooks/farplane_console_ping.py\" --expect-event UserPromptSubmit",
+            "command": "python3 \"$HOME/.codex/hooks/lifecycle-telemetry/farplane_console_ping.py\" --expect-event UserPromptSubmit",
             "statusMessage": "Telemetry — user turn started (observation only)",
             "timeout": 5
           }
@@ -25,7 +25,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 \"$HOME/.codex/hooks/skill_file_line_gate.py\"",
+            "command": "python3 \"$HOME/.codex/hooks/skill-length/skill_file_line_gate.py\"",
             "statusMessage": "Skill length — checks edited SKILL.md files against 200 lines",
             "timeout": 5
           }
@@ -37,19 +37,19 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 \"$HOME/.codex/hooks/continuation_gate.py\"",
+            "command": "python3 \"$HOME/.codex/hooks/continuation/continuation_gate.py\"",
             "statusMessage": "Continuation — Jev checks whether useful authorized work remains",
             "timeout": 5
           },
           {
             "type": "command",
-            "command": "python3 \"$HOME/.codex/hooks/final_response_gate.py\"",
+            "command": "python3 \"$HOME/.codex/hooks/response-length/final_response_gate.py\"",
             "statusMessage": "Response length — requests rewrite above configured prose limits",
             "timeout": 5
           },
           {
             "type": "command",
-            "command": "python3 \"$HOME/.codex/hooks/farplane_console_ping.py\" --expect-event Stop",
+            "command": "python3 \"$HOME/.codex/hooks/lifecycle-telemetry/farplane_console_ping.py\" --expect-event Stop",
             "statusMessage": "Telemetry — stop attempted (not task completion)",
             "timeout": 5
           }
@@ -61,7 +61,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 \"$HOME/.codex/hooks/farplane_console_ping.py\" --expect-event SubagentStart",
+            "command": "python3 \"$HOME/.codex/hooks/lifecycle-telemetry/farplane_console_ping.py\" --expect-event SubagentStart",
             "statusMessage": "Telemetry — subagent started (observation only)",
             "timeout": 5
           }
@@ -73,7 +73,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 \"$HOME/.codex/hooks/farplane_console_ping.py\" --expect-event SubagentStop",
+            "command": "python3 \"$HOME/.codex/hooks/lifecycle-telemetry/farplane_console_ping.py\" --expect-event SubagentStop",
             "statusMessage": "Telemetry — subagent stopped (not parent completion)",
             "timeout": 5
           }

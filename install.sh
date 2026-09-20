@@ -130,16 +130,16 @@ LOCAL_TOML_FILE="${TARGET_DIR}/config.local.toml"
 LOCAL_TOML_MARKER="# Machine-local config appended from config.local.toml"
 INSTALL_BIN_FILES=(
   _compat.py
-  capture_user_turn.py
   farplane
   farplane.py
   notify.py
 )
-INSTALL_HOOK_FILES=(
-  continuation_gate.py
-  final_response_gate.py
-  farplane_console_ping.py
-  skill_file_line_gate.py
+INSTALL_HOOK_DIRS=(
+  continuation
+  response-length
+  lifecycle-telemetry
+  skill-length
+  user-turn
 )
 RETIRED_INSTALL_PATHS=(
   bin/ticket_runtime.py
@@ -511,9 +511,16 @@ done
 link_path "$REPO_DIR/bin/core" "$TARGET_DIR/bin/core"
 link_global_cli "$TARGET_DIR/bin/farplane"
 
-for hook_name in "${INSTALL_HOOK_FILES[@]}"; do
+for hook_name in "${INSTALL_HOOK_DIRS[@]}"; do
   link_path "$REPO_DIR/hooks/$hook_name" "$TARGET_DIR/hooks/$hook_name"
 done
+
+# Temporary links for commands cached by already-running Codex tasks.
+link_path "$REPO_DIR/hooks/continuation/continuation_gate.py" "$TARGET_DIR/hooks/continuation_gate.py"
+link_path "$REPO_DIR/hooks/response-length/final_response_gate.py" "$TARGET_DIR/hooks/final_response_gate.py"
+link_path "$REPO_DIR/hooks/lifecycle-telemetry/farplane_console_ping.py" "$TARGET_DIR/hooks/farplane_console_ping.py"
+link_path "$REPO_DIR/hooks/skill-length/skill_file_line_gate.py" "$TARGET_DIR/hooks/skill_file_line_gate.py"
+link_path "$REPO_DIR/hooks/user-turn/capture_user_turn.py" "$TARGET_DIR/bin/capture_user_turn.py"
 
 for agent_file in "$REPO_DIR"/agents/*.toml; do
   link_path "$agent_file" "$TARGET_DIR/agents/$(basename "$agent_file")"

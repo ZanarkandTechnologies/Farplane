@@ -35,6 +35,18 @@ ticket_close(project_root, ticket_id)
 
 ## Codex Lifecycle Hooks
 
+Each active hook lives in a [documented folder](../../hooks/README.md). Its README
+owns entrypoint usage, configuration, failure behavior, and focused checks:
+[continuation](../../hooks/continuation/README.md),
+[response length](../../hooks/response-length/README.md),
+[lifecycle telemetry](../../hooks/lifecycle-telemetry/README.md),
+[skill length](../../hooks/skill-length/README.md), and
+[user turn](../../hooks/user-turn/README.md).
+`farplane hooks install` links these complete folders. Temporary installed-only
+migration links keep old flat command paths usable by active Codex sessions with
+cached registrations; remove them only after those sessions retire or reload.
+Root `hooks.json` remains the single registration source and uses the new paths.
+
 Root `hooks.json` currently defines:
 
 | Event | Commands | Purpose |
@@ -59,9 +71,9 @@ The three Stop handlers have separate responsibilities and Codex toggles:
 
 | Handler | Reads / effects | Can request continuation? |
 | --- | --- | --- |
-| `hooks/continuation_gate.py` | Sends bounded, best-effort redacted dialogue to the configured Jev provider through `farplane run`; asks whether useful authorized work remains. Threshold 0.5, at most three identifiable own nudges per real user turn; unknown provenance/provider failure allows stopping. | Yes, with fixed scoped feedback. Defers over-limit responses to the existing length gate. |
-| `hooks/final_response_gate.py` | Measures `last_assistant_message`; defaults to 500 prose words and 50 nonblank prose lines, configurable through `FARPLANE_FINAL_RESPONSE_MAX_PROSE_WORDS` and `FARPLANE_FINAL_RESPONSE_MAX_PROSE_LINES`. Returns rewrite feedback; does not edit files or call a model/network service. | Yes, whenever either cap is exceeded, including repeated attempts; no retry cap. |
-| `hooks/farplane_console_ping.py` | Resolves task/project metadata and existing local ticket bindings; sends a `turn_end` event to the configured telemetry endpoint with a two-second HTTP timeout. No endpoint means no send; network errors are logged and allowed. Stop does not create ticket bindings. | No; no block response is emitted. |
+| `hooks/continuation/continuation_gate.py` | Sends bounded, best-effort redacted dialogue to the configured Jev provider through `farplane run`; asks whether useful authorized work remains. Threshold 0.5, at most three identifiable own nudges per real user turn; unknown provenance/provider failure allows stopping. | Yes, with fixed scoped feedback. Defers over-limit responses to the existing length gate. |
+| `hooks/response-length/final_response_gate.py` | Measures `last_assistant_message`; defaults to 500 prose words and 50 nonblank prose lines, configurable through `FARPLANE_FINAL_RESPONSE_MAX_PROSE_WORDS` and `FARPLANE_FINAL_RESPONSE_MAX_PROSE_LINES`. Returns rewrite feedback; does not edit files or call a model/network service. | Yes, whenever either cap is exceeded, including repeated attempts; no retry cap. |
+| `hooks/lifecycle-telemetry/farplane_console_ping.py` | Resolves task/project metadata and existing local ticket bindings; sends a `turn_end` event to the configured telemetry endpoint with a two-second HTTP timeout. No endpoint means no send; network errors are logged and allowed. Stop does not create ticket bindings. | No; no block response is emitted. |
 
 All three registrations have five-second hook timeouts. The response accountant
 excludes supported diagram blocks, media embeds, and trailing link-only
@@ -214,12 +226,9 @@ observation surface for historical sources. It is not the ticket-to-task-thread
 source of truth; lifecycle, completion mining, and UI joins resolve the ticket's
 own `thread_id` first.
 
-`shared_checkout_guard.py` is narrower than ticket execution ownership. It
-stores a local lease under the primary checkout's Git directory for the active
-turn and blocks a different Codex session from starting there until `Stop`
-releases it. Linked Git worktrees bypass the lease because their filesystem
-writes are already isolated. A stale lease expires after 24 hours; set
-`FARPLANE_SHARED_CHECKOUT_GUARD=0` only for deliberate single-writer recovery.
+`hooks/shared_checkout_guard.py` is a retired no-op compatibility bridge for
+cached Codex commands. It is not registered as an active hook and no longer
+acquires checkout leases.
 
 The lifecycle publisher also reads the latest exact-id `thread_name` from the
 append-only Codex `session_index.jsonl`. Telemetry sends only sanitized native
@@ -239,7 +248,7 @@ Tracked framework config stays under `farplane/`. The important separation is:
 ## Telemetry Config
 
 Codex lifecycle telemetry is defined by the installed Codex hook config.
-`hooks.json` calls `hooks/farplane_console_ping.py` on all four lifecycle events.
+`hooks.json` calls `hooks/lifecycle-telemetry/farplane_console_ping.py` on all four lifecycle events.
 The final-response gate uses the same runtime-config precedence for its two
 non-secret prose ceilings: process env, then `~/.farplane/config.toml` `[env]`,
 then rendered `~/.codex/config.toml`.

@@ -14,7 +14,7 @@ from pathlib import Path
 import sys
 from typing import Any
 
-CORE_DIR = Path(__file__).resolve().parents[1] / "bin" / "core"
+CORE_DIR = Path(__file__).resolve().parents[2] / "bin" / "core"
 if str(CORE_DIR) not in sys.path:
     sys.path.insert(0, str(CORE_DIR))
 

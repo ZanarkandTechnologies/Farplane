@@ -17,7 +17,7 @@ if str(CORE_ROOT) not in sys.path:
 
 from farplane_cli_base import (
     CONFIG_PATH, DEFAULT_CODEX_HOME, DEFAULT_FARPLANE_HOME, DELEGATED_COMMANDS,
-    MANAGED_HOOK_FILES, RETIRED_HOOK_FILES, CliConfig, CliError,
+    MANAGED_HOOK_DIRS, RETIRED_HOOK_FILES, CliConfig, CliError,
     farplane_notify_command, is_farplane_notify_command, is_linked_worktree,
     is_notify_wrapper, load_config, notify_status_payload, parse_notify_command,
     passthrough_args, previous_notify_command, print_payload,
