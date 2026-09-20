@@ -7,7 +7,7 @@ from pathlib import Path
 import sys
 import subprocess
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 for directory in (ROOT / "bin" / "runtime", ROOT / "bin" / "core", ROOT / "hooks"):
     sys.path.insert(0, str(directory))
 

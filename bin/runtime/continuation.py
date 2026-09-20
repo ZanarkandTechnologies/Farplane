@@ -13,6 +13,8 @@ import re
 import sys
 from typing import Mapping
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "hooks" / "response-length"))
+
 from final_response_gate import (
     configured_max_prose_lines, configured_max_prose_words, gate_response,
 )

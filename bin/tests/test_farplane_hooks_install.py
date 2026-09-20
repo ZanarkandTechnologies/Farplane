@@ -21,6 +21,24 @@ if ADDED_BIN_PATH:
 
 
 class FarplaneHooksInstallTests(unittest.TestCase):
+    def test_folder_install_preserves_docs_and_migrates_cached_commands(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            home = Path(tmp)
+            (home / "hooks").mkdir()
+            (home / "bin").mkdir()
+            (home / "hooks" / "final_response_gate.py").write_text("old hook")
+            (home / "bin" / "capture_user_turn.py").write_text("old user hook")
+            result = farplane.install_hooks(home)
+            self.assertTrue(result["ok"])
+            for folder in farplane.MANAGED_HOOK_DIRS:
+                self.assertTrue((home / "hooks" / folder).is_symlink())
+                self.assertTrue((home / "hooks" / folder / "README.md").is_file())
+            self.assertEqual((home / "hooks" / "final_response_gate.py").resolve(), ROOT / "hooks/response-length/final_response_gate.py")
+            self.assertEqual((home / "bin" / "capture_user_turn.py").resolve(), ROOT / "hooks/user-turn/capture_user_turn.py")
+            backups = [Path(row["backup"]).read_text() for row in result["operations"] if row.get("backup")]
+            self.assertCountEqual(backups, ["old hook", "old user hook"])
+            self.assertFalse(any(row.get("changed") for row in farplane.install_hooks(home)["operations"]))
+
     def test_linked_worktree_install_is_blocked(self) -> None:
         git_dir = tempfile.gettempdir() + "/worktrees/task"
         common_dir = tempfile.gettempdir() + "/repo/.git"
@@ -50,13 +68,13 @@ class FarplaneHooksInstallTests(unittest.TestCase):
             source = codex_home / "wrapper-hooks.json"
             source.write_text(json.dumps({"hooks": {"Stop": [{"hooks": [{
                 "type": "command",
-                "command": '\"$HOME/.codex/bin/farplane\" run -- python3 \"$HOME/.codex/hooks/continuation_gate.py\"'
+                "command": '\"$HOME/.codex/bin/farplane\" run -- python3 \"$HOME/.codex/hooks/continuation/continuation_gate.py\"'
             }]}]}}))
             commands = farplane.hook_command_inventory(codex_home, source)
             issues, _ = farplane.hook_inventory_issues(commands)
             row = next(row for row in commands
-                       if row["target"] == str(codex_home / "hooks" / "continuation_gate.py"))
-            self.assertEqual(row["expected"], str(ROOT / "hooks" / "continuation_gate.py"))
+                       if row["target"] == str(codex_home / "hooks" / "continuation" / "continuation_gate.py"))
+            self.assertEqual(row["expected"], str(ROOT / "hooks" / "continuation" / "continuation_gate.py"))
             self.assertEqual(row["interpreter"], str(codex_home / "bin" / "farplane"))
             self.assertTrue(row["targetLinked"])
             self.assertTrue(any("interpreter_missing:" + row["interpreter"] in issue
@@ -72,12 +90,12 @@ class FarplaneHooksInstallTests(unittest.TestCase):
             source = codex_home / "custom-hooks.json"
             source.write_text(json.dumps({"hooks": {"Stop": [{"hooks": [{
                 "type": "command",
-                "command": '\"$HOME/.codex/bin/farplane\" run -- missing-python-for-test \"$HOME/.codex/hooks/continuation_gate.py\"'
+                "command": '\"$HOME/.codex/bin/farplane\" run -- missing-python-for-test \"$HOME/.codex/hooks/continuation/continuation_gate.py\"'
             }]}]}}))
             rows = farplane.hook_command_inventory(codex_home, source)
             issues, _ = farplane.hook_inventory_issues(rows)
             self.assertTrue(any("interpreter_missing:missing-python-for-test" in issue for issue in issues))
-            self.assertEqual(rows[0]["target"], str(codex_home / "hooks" / "continuation_gate.py"))
+            self.assertEqual(rows[0]["target"], str(codex_home / "hooks" / "continuation" / "continuation_gate.py"))
 
     def test_install_retires_obsolete_post_tool_hook_links(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

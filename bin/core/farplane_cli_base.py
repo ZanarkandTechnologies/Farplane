@@ -32,12 +32,17 @@ DELEGATED_COMMANDS = {
 OLD_CONVEX_SITE_URL = "https://agreeable-finch-230.convex.site"
 PREVIOUS_NOTIFY_FLAG = "--previous-notify"
 RUNTIME_NOTIFY_DISABLED_FILE = ".farplane-notify-disabled"
-MANAGED_HOOK_FILES = (
-    "continuation_gate.py",
-    "final_response_gate.py",
-    "farplane_console_ping.py",
-    "skill_file_line_gate.py",
+MANAGED_HOOK_DIRS = (
+    "continuation", "response-length", "lifecycle-telemetry", "skill-length", "user-turn",
 )
+# Installed-only migration links keep already-running Codex cached commands alive.
+HOOK_MIGRATION_LINKS = {
+    "hooks/continuation_gate.py": "hooks/continuation/continuation_gate.py",
+    "hooks/final_response_gate.py": "hooks/response-length/final_response_gate.py",
+    "hooks/farplane_console_ping.py": "hooks/lifecycle-telemetry/farplane_console_ping.py",
+    "hooks/skill_file_line_gate.py": "hooks/skill-length/skill_file_line_gate.py",
+    "bin/capture_user_turn.py": "hooks/user-turn/capture_user_turn.py",
+}
 RETIRED_HOOK_FILES = (
     "farplane_file_change.py",
     "farplane_local_event.py",
