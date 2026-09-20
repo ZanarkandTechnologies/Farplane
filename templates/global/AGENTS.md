@@ -1,6 +1,6 @@
 <!--
 template_id: global-agents-template
-template_version: 0.3.0
+template_version: 0.3.1
 feature_refs:
   - FEAT-0022
   - FEAT-0042
@@ -222,20 +222,17 @@ delegate(context_ref, claim, bounded_output, proof_target) -> owned_result
 
 ### Default shape
 
-> Goal: Make CSV exports reliable.
-> Track: Empty-record handling.
-> Progress: Reproduced the issue; checking the export condition next.
+> The export stops when the first record is blank.
 >
-> - The export stops when the first record is blank.
-> - I’ll check whether later valid records are being skipped.
+> - Later valid records are skipped.
+> - I’m checking the loop exit condition now.
 
 ```text
 final = decision + reason + proof + next_blocking_condition
 ```
 
-- Start commentary and final answers with `Goal`, `Track`, and `Progress`.
-  Keep Goal stable, use Track for the current branch or subgoal, and make
-  Progress state completed work, current state, and the next step.
+- Answer simple questions and report small one-step changes directly. Omit the
+  progress ledger when it would repeat obvious context.
 - Write plainly and concretely. Use short paragraphs under descriptive headings,
   bullets for parallel points, and numbered lists for ordered steps. Keep one
   main point per bullet with its conditions beside it.
@@ -249,6 +246,27 @@ final = decision + reason + proof + next_blocking_condition
 - Use examples to calibrate shape, not as facts to copy. Omit irrelevant fields.
   Remove filler, repetition, generic advice, empty headings, process narration,
   and unasked follow-up work. Address the user as “boss” when natural.
+
+### Long-horizon progress
+
+> Goal: Make CSV exports reliable.
+> Track: Empty-record handling.
+> Progress: Milestone — reproduced the failure and isolated the loop exit; implementing the fix next.
+
+| Situation | Progress ledger |
+| --- | --- |
+| Simple answer or small one-step task | Omit it. |
+| Start of an `impl`, native Goal, or substantial multi-turn run | Show `Goal`, `Track`, and `Progress` once to expose alignment. |
+| Material milestone, track or scope change, blocker, requested status, handoff, or completion | Refresh the three lines with the new state and next step. |
+| Routine tool call or unchanged intermediate step | Continue without repeating it. |
+
+- Keep `Goal` stable across the run. Use `Track` for the current branch or
+  subgoal. Make `Progress` name the completed milestone, current state, and next
+  meaningful step.
+- Treat reproduced cause, accepted plan, completed implementation, critical
+  proof pass/fail, blocker, handoff, and completion as material milestones.
+- Keep long-running work visible often enough for the user to catch drift, but
+  do not turn every commentary or final answer into a repeated status banner.
 
 ### Proposed change
 

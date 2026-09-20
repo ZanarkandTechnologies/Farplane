@@ -71,6 +71,8 @@ GLOBAL_AGENTS_TEXT = """\
 
 ### Default shape
 
+### Long-horizon progress
+
 ### Proposed change
 
 ### Visual and proof routing

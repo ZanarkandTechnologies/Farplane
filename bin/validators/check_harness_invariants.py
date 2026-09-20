@@ -192,6 +192,7 @@ def validate_agent_kernel_subsections(root: Path) -> list[str]:
         ),
         "## Output Formatting": (
             "### Default shape",
+            "### Long-horizon progress",
             "### Proposed change",
             "### Visual and proof routing",
             "### Completed change",
