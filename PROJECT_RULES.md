@@ -18,7 +18,8 @@ This repo versions the reusable parts of a Codex home directory while keeping ma
 - `docs/`: PRD, memory, history, and specs
 - `farplane/`: tracked project harness, metrics, automations, bindings, hooks, and PM config
 - `.farplane/`: ignored project runtime state, reports, eval runs, logs, and ledgers
-- `tickets/`: filesystem board for harness changes
+- `tickets/`: supporting proof, templates, migration snapshots, and legacy
+  records; active work lives in bound Multica issues
 - `qa/`: reusable QA guidance and cookbook workflows
 
 ## Conventions

@@ -3,7 +3,7 @@ title: "PRD: Farplane V1"
 status: active
 owner: farplane
 created_at: 2026-05-26
-updated_at: 2026-07-12
+updated_at: 2026-09-19
 version: "1.0"
 refs:
   - docs/farplane-framework/lifecycle.md
@@ -20,20 +20,35 @@ refs:
 
 ## Product Thesis
 
-Farplane is a file-backed operating system for agent-run projects. It helps a
-human operate long-running Codex work through visible programs, tickets,
-capability skills, bounded automations, and reviewable proof.
+Farplane is a file-backed operating system for moving an operator-chosen
+commercial bet toward money. It helps a human operate long-running agent work
+through visible project goals, current evidence, bounded actions, tickets,
+capability skills, automations, and reviewable proof.
 
 ```text
-Farplane = program + progress
+Farplane = commercial intent + execution + evidence
 ```
 
 The V1 product promise is simple:
 
-> Give an agent a project program and one ticket board; it should execute the
-> best admitted work, ask for help without occupying a worker, plan a bounded
-> next wave when the board is empty, and preserve enough proof to resume and
-> improve safely.
+> Give Farplane an explicit customer, painful problem, offer, price, and route
+> to sale. It should keep the resulting projects moving, expose the constraint
+> closest to money, ask for the smallest missing fact or decision, and preserve
+> enough evidence for the operator to continue, revise, or kill the bet.
+
+The operator owns strategy. Farplane may expose when evidence contradicts the
+commercial hypothesis, but it does not claim to autonomously discover a novel
+business strategy or outperform the operator's judgment. Its strength is
+maintaining context, following through, reconciling evidence, and keeping the
+next consequential action visible.
+
+### Direction Status
+
+This PRD is the accepted product direction. The money-execution boundary and
+lean Daily/Weekly Company OS contract are implemented by the active automation
+prompts and the `pm-daily` and `pm-weekly` skills. The AI Office hierarchy is
+not yet fully implemented. The Interval weekly-draft and broad promotion
+machinery is legacy reference and has no active Daily or Weekly binding.
 
 ## Problem
 
@@ -47,6 +62,8 @@ down when:
 - evidence is scattered across generic runtime directories;
 - reusable workflows are confused with independent products or controllers;
 - self-improvement adds machinery before the basic work loop is proven.
+- work looks productive but has no evidenced relationship to earning,
+  retaining, accelerating, or protecting money.
 
 The result is hidden state, duplicate work, weak attribution, inflated
 metadata, and operator distrust.
@@ -60,14 +77,15 @@ metadata, and operator distrust.
 
 ## Jobs To Be Done
 
-1. When I give an agent a project objective, I want it to choose and execute
-   bounded work without losing my constraints.
+1. When I define a commercial bet, I want agents to execute bounded work that
+   moves it toward money without losing my constraints.
 2. When work spans turns or days, I want durable state that another agent can
    resume without hidden conversation context.
 3. When an agent needs review or waits for reality, I want execution capacity
    released while the obligation remains visible.
-4. When the board runs out of useful work, I want a bounded, ranked next wave
-   grounded in the charter, metric objectives, ticket history, and current context.
+4. When the board runs out of useful work, I want the smallest next commitments
+   grounded in the commercial hypothesis, money-linked evidence, ticket
+   history, and current constraints.
 5. When the harness changes itself, I want the cheapest honest proof route and
    a reversible promotion decision.
 6. When I inspect the system, I want every important claim to lead back to an
@@ -87,6 +105,36 @@ project program
 -> ticket-local QA, review, reward, and closeout
 -> durable learning back into metric objectives, policy, skills, docs, or features
 ```
+
+Every project uses the same decision rule:
+
+```text
+commercial hypothesis
+-> current evidence
+-> constraint closest to money
+-> smallest useful action, question, or decision
+-> observed result
+-> continue | revise | stop
+```
+
+Delivery, learning, distribution, capability, and maintenance are supporting
+work. They enter the loop only when evidence or the project configuration ties
+them to earning, retaining, accelerating, or protecting money. Missing money
+evidence remains unknown rather than being replaced with activity proxies.
+
+### Daily And Weekly Reviews
+
+Daily and Weekly are execution reviews, not independent strategy engines.
+Daily maintains each project's current memory, surfaces material blockers or
+missing evidence, and selects the smallest useful follow-up. Weekly compares
+expected movement with observed results, consolidates what changed, carries
+forward the closest commitments to monetization, and escalates contradictions
+in the customer, problem, offer, price, or route to sale to the operator.
+
+Reasoning techniques such as plan-versus-actual comparison, root-cause
+analysis, and intervention comparison are helpers for filling the existing
+project and report forms. They do not require separate workflow stages,
+artifacts, or governance machinery.
 
 ### Canonical State
 
@@ -118,7 +166,7 @@ remain in the ticket body, Goal Packet, progress log, or artifacts.
 | --- | --- |
 | Work Pulse next-wave planner | globally ranked tickets when no unclaimed executable or due-check-in work exists |
 | Feed Scout | source report, candidates, and bounded direct recovery tickets |
-| Daily/Weekly BAU | problem report, candidates, and bounded direct recovery tickets |
+| Daily/Weekly review | project memory, targeted follow-ups, weekly reports, and operator-visible work proposals; no independent strategy or ticket admission |
 | Dogfood Review | complete self-improvement portfolio checkpoint and bounded planner context |
 | Operator | explicit direction, feedback, correction, or approval |
 
@@ -161,13 +209,51 @@ Only Work Pulse executes tickets and matured check-ins.
 
 ### FR-5: Scheduled Sources
 
-- Feed Scout, BAU Interval, and Dogfood run as bounded cron/manual jobs rather
+- Feed Scout, Daily/Weekly review, and Dogfood run as bounded cron/manual jobs rather
   than extra heartbeats.
-- Scheduled sources write reports and bounded candidates but do not admit
-  proactive tickets. Dogfood writes only a checkpoint/context receipt. The one
-  next-wave planner compares opportunities globally.
-- Interval does not choose new strategy; Dogfood does not create or execute
+- Scheduled sources write bounded reports or context but do not admit proactive
+  tickets. Daily/Weekly maintains project memory and may apply only explicitly
+  authorized updates or follow-ups to existing work. Dogfood writes only a
+  checkpoint/context receipt. The one next-wave planner compares opportunities
+  globally.
+- Daily/Weekly does not choose new strategy; Dogfood does not create or execute
   experiments; Feed Scout does not create or execute opportunities.
+
+## AI Office Product Story
+
+The AI Office is the visible version of this loop. It should feel like a
+founder operating a small company, not watching agents perform activity.
+
+**Before:** the office foregrounds teams, sessions, skills, memory, and runtime
+state. These surfaces explain what exists, but the operator must infer whether
+the company is getting closer to money.
+
+**After:** the office opens on the commercial bet, current money state, the
+constraint closest to the next monetization event, and the few projects and
+commitments affecting it. Agents, sessions, leverage, resources, and memory
+remain drill-down evidence and execution surfaces.
+
+**Example:** an operator defines a customer, painful inventory problem, paid
+offer, price, and route to sale. The office shows that customer validation is
+complete, the proposal is awaiting a decision, and one missing margin input
+blocks pricing. The next visible mission is to obtain that input and close or
+reject the offer; adding another research project is not presented as progress.
+
+The primary app sequence becomes:
+
+```text
+Set the commercial bet
+-> see money and the next monetization event
+-> inspect the blocking project or decision
+-> approve or perform the smallest useful action
+-> observe the result
+-> continue, revise, or stop
+```
+
+This story reuses the existing Office, Leverage and its Finance-owned Capital
+view, Projects, Tasks, Memory, and review surfaces. It changes their hierarchy:
+commercial movement is the frame; the existing modules explain or operate that
+movement.
 
 ### FR-6: Self-Improvement
 
@@ -209,13 +295,42 @@ Only Work Pulse executes tickets and matured check-ins.
 - Farplane UI edits routes and renders Core runs; it does not own event,
   program, run, replay, rerun, or report semantics.
 
+### FR-10: Money-Execution Boundary
+
+- Project goals state the commercial hypothesis or their explicit contribution
+  to earning, retaining, accelerating, or protecting money.
+- Daily and Weekly may read project-local harness configuration, metric
+  definitions, and current observations when filling existing memory and report
+  forms.
+- Nonfinancial progress is material only when its relationship to money is
+  explicit in configuration or supported by evidence.
+- When evidence challenges the customer, painful problem, offer, price, or
+  route to sale, the system escalates the strategy decision to the operator.
+- Legal, trust, delivery-quality, authority, and runway constraints remain hard
+  guards; short-term cash does not override them.
+
 ## Success Metrics
 
-The current project-level objective portfolio prioritizes evidence distribution
-reach, reach efficiency, and accepted evidence cycles as the flagship
-autonomous-research-creator proof, while external-project activation remains a
-lower-priority compounding adoption objective. One planner considers every
-area lens and globally ranks work against this shared portfolio.
+The primary outcome is verified money movement. Each deployment chooses the
+authoritative money measure available to it, such as cash collected, gross
+profit, recurring revenue, retained revenue, or validated paid commitments.
+Pre-revenue measures are diagnostic only and must state their evidenced path to
+the selected money outcome.
+
+### Selected Money Outcome
+
+Each deployment selects the applicable authoritative outcome; it does not
+maximize every row simultaneously.
+
+| Metric | Direction | Meaning |
+| --- | --- | --- |
+| `revenue_usd` | maximize | realized revenue from the authoritative connected business system; missing access remains unknown rather than zero |
+| `active_subscriptions` | maximize | paid active relationships when subscriptions represent the selected money model |
+
+### Money-Linked Diagnostic Measures
+
+These measures guide work only when the project configuration states their
+evidenced relationship to the selected money outcome.
 
 | Metric | Direction | Meaning |
 | --- | --- | --- |
@@ -223,6 +338,13 @@ area lens and globally ranks work against this shared portfolio.
 | `distribution_reach_per_artifact` | maximize | attention efficiency rises without rewarding output spam |
 | `accepted_evidence_cycles` | maximize | ablations, experiments, or proof cycles finish with accepted reusable evidence |
 | `activated_external_projects` | maximize | nearby non-standard projects run the current contract and record a Work Pulse decision after migration |
+
+### System-Health Guards
+
+These protect execution quality; they are not alternate business objectives.
+
+| Metric | Direction | Meaning |
+| --- | --- | --- |
 | `auto_completion_rate` | maximize | completed associated tickets required no post-start human intervention |
 | `intervention_free_ticket_count` | maximize | autonomous completion produces useful throughput |
 | `ticket_intervention_turn_count` | minimize within quality floor | supervision falls without false completion or drift |
@@ -244,10 +366,8 @@ cards.
 - [x] One project Work Pulse handles ordinary tickets and matured check-ins.
 - [x] Ticket metadata is reduced to lifecycle and sparse routing.
 - [x] Human review and signal waits release workers.
-- [x] Feed Scout and Daily/Weekly BAU may create bounded recovery tickets for
-      evidenced known failures; Dogfood is report-only. Exploratory
-      opportunities, uncertain fixes, and experiments go through Work Pulse
-      planning.
+- [x] Daily/Weekly uses the project-memory, money-linked review contract and
+      does not independently admit tickets or choose strategy.
 - [x] Immediate and delayed self-improvement use ticket Goal Packets.
 - [x] `metrics.yaml` owns metric definitions; bindings own provider mechanics.
 - [x] Core owns explicit completion events and mining; UI is an adapter over
@@ -257,8 +377,8 @@ cards.
 - [ ] Representative scheduled operation proves the loop over longer real
   windows without unacceptable duplicate supply or operator burden.
 
-The unchecked item is continuing operational evidence, not a missing V1
-architecture surface.
+The remaining acceptance work is representative scheduled operation over
+longer real windows and the AI Office hierarchy described above.
 
 ## Non-Goals
 

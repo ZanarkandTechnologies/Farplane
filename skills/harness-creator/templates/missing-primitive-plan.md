@@ -48,7 +48,7 @@ feedback_primitive_implementation_plan {
   guardrail_branches:
   blocked_mode_proof:
   live_proof_command:
-  interval_update_binding:
+  company_os_review_binding:
   ui_snapshot_check:
 }
 ```

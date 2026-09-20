@@ -5,8 +5,8 @@ import tempfile
 import unittest
 from pathlib import Path
 
-_PATH = Path(__file__).with_name("metric_refresh.py")
-_SPEC = importlib.util.spec_from_file_location("farplane_interval_metric_refresh", _PATH)
+_PATH = Path(__file__).parents[1] / "core" / "farplane_metric_refresh.py"
+_SPEC = importlib.util.spec_from_file_location("farplane_metric_refresh_contract", _PATH)
 assert _SPEC is not None and _SPEC.loader is not None
 _MODULE = importlib.util.module_from_spec(_SPEC)
 _SPEC.loader.exec_module(_MODULE)
@@ -14,7 +14,6 @@ count_ticket_kpi_rewards = _MODULE.count_ticket_kpi_rewards
 resolve_refresh_plan = _MODULE.resolve_refresh_plan
 calculate_autonomy_savings = _MODULE.calculate_autonomy_savings
 record_refresh_result = _MODULE.record_refresh_result
-resolve_interval_refresh_plan = _MODULE.resolve_interval_refresh_plan
 
 
 class RefreshPlanTests(unittest.TestCase):
@@ -64,10 +63,6 @@ class RefreshPlanTests(unittest.TestCase):
         self.assertEqual([row["metric_id"] for row in payload["observations"]], ["views", "likes", "shares"])
         self.assertEqual(payload["observations"][-1]["status"], "source_gap")
         self.assertEqual(payload["status"], "partial")
-
-    def test_disabled_daily_and_weekly_resolve_zero_jobs(self) -> None:
-        self.assertEqual(resolve_interval_refresh_plan("daily", False, Path("unused"), [], "2026-07-12")["reason"], "refresh_disabled")
-        self.assertEqual(resolve_interval_refresh_plan("weekly", True, Path("unused"), [], "2026-07-12")["reason"], "weekly_read_only")
 
 
 class AcceptedRewardMetricTests(unittest.TestCase):

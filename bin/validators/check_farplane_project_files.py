@@ -487,8 +487,8 @@ def validate_bindings_file(root: Path, bindings_file: Path) -> list[str]:
             errors.append(f"{prefix} must be an object.")
         else:
             provider = kanban.get("provider")
-            if provider not in {"filesystem_tickets", "notion"}:
-                errors.append(f"{prefix}.provider must be filesystem_tickets or notion.")
+            if provider not in {"filesystem_tickets", "notion", "multica"}:
+                errors.append(f"{prefix}.provider must be filesystem_tickets, notion, or multica.")
             filesystem_policy = kanban.get("filesystem_ticket_policy")
             if filesystem_policy not in {"include", "exclude"}:
                 errors.append(f"{prefix}.filesystem_ticket_policy must be include or exclude.")

@@ -151,9 +151,9 @@ PRIMITIVE_CATALOG: dict[str, dict[str, Any]] = {
     },
     "autonomy_time_feedback": {
         "primitive_id": "autonomy_time_feedback",
-        "provider": "interval-update",
+        "provider": "farplane-core",
         "owner": "farplane-core",
-        "command": "python3 skills/interval-update/scripts/metric_refresh.py autonomy-time-ratio --runtime-dir .farplane --date <YYYY-MM-DD>",
+        "command": "python3 bin/core/farplane_metric_refresh.py autonomy-time-ratio --runtime-dir .farplane --date <YYYY-MM-DD>",
         "store_to": ".farplane/metrics/observations/autonomy_time_feedback/<YYYY-MM-DD>.json",
         "required_inputs": [".farplane/events/*.jsonl", ".farplane/state/ticket-thread-associations.jsonl", ".farplane/automation/rewards.jsonl"],
         "emits": ["auto_time_ratio", "human_attention_minutes_estimated", "autonomous_worker_elapsed_minutes"],
@@ -161,9 +161,9 @@ PRIMITIVE_CATALOG: dict[str, dict[str, Any]] = {
     },
     "ticket_intervention_feedback": {
         "primitive_id": "ticket_intervention_feedback",
-        "provider": "interval-update",
+        "provider": "farplane-core",
         "owner": "farplane-core",
-        "command": "python3 skills/interval-update/scripts/metric_refresh.py ticket-intervention-metrics --ticket-dir tickets --runtime-dir .farplane --date <YYYY-MM-DD>",
+        "command": "python3 bin/core/farplane_metric_refresh.py ticket-intervention-metrics --ticket-dir tickets --runtime-dir .farplane --date <YYYY-MM-DD>",
         "store_to": ".farplane/metrics/observations/ticket_intervention_feedback/<YYYY-MM-DD>.json",
         "required_inputs": ["tickets/**/ticket.md", ".farplane/state/ticket-thread-associations.jsonl", ".farplane/events/*.jsonl"],
         "emits": ["auto_completion_rate", "intervention_free_ticket_count", "ticket_intervention_turn_count"],

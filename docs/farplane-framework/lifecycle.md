@@ -3,7 +3,7 @@ title: "Farplane Lifecycle"
 status: active
 owner: farplane-framework
 created_at: 2026-06-23
-updated_at: 2026-08-02
+updated_at: 2026-09-20
 framework_template_version: "0.3.0"
 tags:
   - farplane
@@ -28,14 +28,16 @@ refs:
 
 # Farplane Lifecycle
 
-Farplane V1 is a file-backed operating system for agent-run projects. Its
-center is deliberately small:
+Farplane V1 is an operating system for moving an operator-chosen commercial bet
+toward money. Its center is deliberately small. Active Daily and Weekly use the
+Company OS file-in/file-out boundary owned by `pm-daily`, `pm-weekly`, and
+`farplane/automations.toml`; Interval is legacy reference only.
 
 ```text
-project(program, progress)
-  -> typed charter + selected metrics + reusable capability skills
+project(commercial intent, execution, evidence)
+  -> typed commercial hypothesis + selected money outcome + hard guards
   -> one ticket board
-  -> Daily/Weekly Interval turns metric movement into report-first ticket review
+  -> Daily/Weekly maintains project memory and reviews money-linked movement
   -> one Work Pulse executes tickets or plans a bounded refill wave
   -> scheduled sources add reports and context
   -> ticket programs, progress, QA, and review preserve proof
@@ -59,7 +61,7 @@ own planner, worker pool, strategy file, or heartbeat.
    provider needs a material change.
 6. Use `goal-advisor` when a selected material ticket needs a Goal Packet.
 7. Activate exactly one Work Pulse heartbeat after the board and proof surfaces
-   are ready. Feed Scout, BAU reports, Dogfood, and maintenance are
+   are ready. Feed Scout, Daily/Weekly review, Dogfood, and maintenance are
    separate cron or manual automations.
 
 The deeper bootstrap path is [Init Advisor Critical Path](init-advisor-critical-path.md).
@@ -86,14 +88,13 @@ flowchart TD
   I --> J["verified configured-repo issue<br/>mine + locator + local cleanup"]:::proof
 
   K["Feed Scout"]:::source --> O
-  L["Daily / Weekly BAU"]:::source --> O
+  L["Daily / Weekly review"]:::source --> O
   M["Dogfood self-improvement"]:::source --> O
   N["Maintenance"]:::source --> O
   K --> O["dated reports"]:::source
   L --> O
   M --> O
   N --> O
-  L --> D
   O --> H
 ```
 
@@ -130,7 +131,7 @@ heartbeats or worker authorities:
 | Source | Reads | Writes | Ticket authority |
 | --- | --- | --- | --- |
 | Feed Scout | configured feeds and prior source reports | source report + candidates | none; next-wave planner compares candidates |
-| Daily / Weekly BAU | bounded project window, raw observations, movement, and prior finalized evidence | Problems ledger + report-first ticket deltas | grounded interventions and decision-changing investigations only |
+| Daily / Weekly review | project memory, project configuration, configured metrics, and bounded evidence | current project memory, targeted follow-ups, weekly reports, and operator-visible work proposals | none; authorized updates and follow-ups may affect existing work, while Work Pulse or the planner owns admission |
 | Dogfood | active and recent archived experiments plus prior report | portfolio learning report + experiment candidates | none; self-improvement competes globally |
 | Maintenance | registries, docs, skills, validators | maintenance report + repair candidates | none unless directly invoked by the operator |
 
@@ -210,10 +211,11 @@ does not reconstruct or independently score the experiment policy.
 | Provider coordinates | `farplane/bindings.yaml` |
 | Runtime receipts and derived context | `.farplane/reports/**` and other generated `.farplane/**` projections |
 
-Reports help the next reader plan. Interval reports may be followed by
-grounded ticket deltas, but reports are not a second source of executable
-state. Generated indexes are projections over these owners, not
-hand-maintained strategy ledgers.
+Reports help the next reader plan. Daily and Weekly reports and project memory
+may produce operator-visible work proposals, but they do not admit tickets or
+become executable state. Work Pulse or the planner remains the admission owner.
+Generated indexes are projections over these owners, not hand-maintained
+strategy ledgers.
 
 ## Capability Skills
 

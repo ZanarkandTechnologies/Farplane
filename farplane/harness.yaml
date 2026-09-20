@@ -175,7 +175,8 @@ operating_principles:
 stable_capabilities:
 - pulse-update
 - plan-next-wave
-- interval-update
+- pm-daily
+- pm-weekly
 - feed-scout
 - dogfood-review
 - eval

@@ -2,17 +2,15 @@
 title: Pulse and interval automation
 status: retired
 owner: feature-registry
-created_at: 2026-06-27
-updated_at: 2026-07-07
+created_at: 2026-07-07
+updated_at: 2026-09-20
 tags:
   - farplane
   - feature
-  - sys-0003
+  - retired
 refs:
-  - farplane/automations.toml
-  - skills/pulse-update/SKILL.md
-  - skills/interval-update/SKILL.md
-  - skills/automation-advisor/SKILL.md
+  - docs/features/FEAT-0067-daily-interval-review-reports.md
+  - docs/features/FEAT-0071-project-work-pulse.md
 feature_id: FEAT-0065
 system_id: SYS-0003
 category: planning
@@ -20,171 +18,40 @@ public: true
 surfaces:
   - farplane/automations.toml
   - skills/pulse-update/SKILL.md
-  - skills/interval-update/SKILL.md
   - skills/automation-advisor/SKILL.md
 source_refs:
   - docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md
 external_refs: []
 evidence_refs:
   - skills/pulse-update/evals/evals.json
-  - skills/interval-update/evals/evals.json
-known_limits: Retired as the older umbrella feature. Project Work Pulse and BAU problem reports now carry the active feature contracts.
+  - skills/automation-advisor/audits/2026-09-20-company-os-adoption.md
+known_limits: "Retired umbrella retained as migration history. Work Pulse and Company OS Daily/Weekly own the active behavior."
 metrics:
   - pulse_action_relevance
   - interval_report_usefulness
   - ticket_supply_learning
-last_verified: 2026-07-07
+last_verified: 2026-09-20
 experimental: false
 superseded_by:
   - FEAT-0067
   - FEAT-0071
 track: false
 ---
-# Pulse and interval automation
 
-Pulse and interval automation is retired as the older umbrella feature for
-recurring behavior. Project Work Pulse and Daily/Weekly BAU problem reports
-carry the active contracts under `FEAT-0071` and `FEAT-0067`.
+# Pulse And Interval Automation
 
-```text
-horizon_tick(window, state) -> bounded_action | report | no_op + learning_signal
-```
+This umbrella feature is retired. It formerly grouped Work Pulse with the
+`interval-update` skill and Daily/Weekly BAU reports.
 
-## At A Glance
+Current ownership is split:
 
-- Feature ID: `FEAT-0065`
-- System: [Horizon Loop](../systems/horizon-loop.md)
-- Status: `retired`
-- Category: `planning`
-- Primary user: operator and horizon-loop agent
-- Job: preserve the old umbrella handle while successor features own active Pulse and daily interval UX.
+- [FEAT-0071](FEAT-0071-project-work-pulse.md) owns the sole execution heartbeat.
+- [FEAT-0067](FEAT-0067-daily-interval-review-reports.md) owns Company OS Daily
+  and Weekly through `pm-daily` and `pm-weekly`.
+- `automation-advisor` owns desired and live scheduler configuration.
+- Farplane Core owns metric refresh planning and deterministic reducers.
 
-## Problem
-
-A business needs recurring motion, but hidden autonomy can mutate state without visible
-proof or human authority.
-
-Pulse and interval automation keeps recurring work explicit: configs, prompts,
-reports, tickets, artifacts, and no-op decisions all have visible owners.
-
-## What It Does
-
-- Runs Pulse as a fast bounded action decision.
-- Runs interval or daily updates to reconcile recent outcomes and plan the next window.
-- Historically ran horizon updates to recalibrate project-level goals, product
-  bets, ticket supply, and skill hardening priorities. Active Horizon Loop
-  contracts now use stable problems, metric movement, tickets, Interval, and
-  low-supply refill instead.
-- Uses adaptive backoff for polling and waits without creating hidden background queues.
-- Feeds repeated unmet needs into maintenance, feature work, or sidecar systems.
-
-## User Stories
-
-- As an operator, I can let Farplane keep momentum without losing visibility.
-- As a horizon-loop agent, I can choose one safe action or report no-op with reasons.
-- As a maintainer, I can see which loops generate useful ticket supply and which should be tuned.
-
-## Operating Contract
-
-Longer-horizon autonomy must remain visible, ticket-backed, and proof-aware.
-
-- Each automation has a visible full TOML config owner.
-- Outputs land in tickets, reports, docs, or another durable owner.
-- Repeated checks widen by backoff and reset on progress.
-- Humans own ambiguous direction, destructive changes, spend, deploys, and hard-to-reverse architecture choices.
-- Learning signals create ticket supply, skill maintenance, feature specs, or explicit no-op decisions.
-
-## Feature Flow
-
-```mermaid
-flowchart TD
-  classDef keep fill:#f3f4f6,stroke:#6b7280,color:#111827
-  classDef changed fill:#fef3c7,stroke:#b45309,color:#111827
-  classDef added fill:#dcfce7,stroke:#15803d,color:#111827
-  classDef retired fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d,stroke-dasharray: 5 3
-
-  config["automation inputs<br/>farplane/automations.toml<br/>track frontmatter"]:::keep
-  retired["FEAT-0065<br/>status: retired<br/>superseded_by: FEAT-0071 + FEAT-0067"]:::retired
-  pulse["FEAT-0071 Work Pulse<br/>skills/pulse-update/SKILL.md"]:::changed
-  interval["FEAT-0067 Interval<br/>skills/interval-update/SKILL.md"]:::changed
-  horizon["SYS-0003 Horizon Loop<br/>tickets + metric movement"]:::changed
-  outputs["reports and proof<br/>pulse reports<br/>interval reports<br/>evals/evals.json evidence"]:::added
-
-  config --> retired
-  retired --> pulse --> horizon
-  retired --> interval --> horizon
-  horizon --> outputs
-```
-
-The umbrella automation handle is retired; one Work Pulse and bounded
-scheduled report/ticket sources split active ownership under the Horizon Loop.
-
-## Surfaces
-
-Owner surfaces:
-
-- `farplane/automations.toml`
-- `skills/pulse-update/SKILL.md`
-- `skills/interval-update/SKILL.md`
-- `skills/automation-advisor/SKILL.md`
-
-Source context:
-
-- `docs/features/FEAT-0029-goal-packet-architecture-for-native-codex-goals.md`
-
-Evidence:
-
-- `skills/pulse-update/evals/evals.json`
-- `skills/interval-update/evals/evals.json`
-
-## Proof And Quality
-
-Required checks:
-
-- `python3 docs/features/validate_features.py`
-- `python3 bin/validators/check_doc_refs.py`
-
-Acceptance signals:
-
-- The feature remains listed under exactly one owning system.
-- The owner surfaces still exist and agree with this contract.
-- Evidence refs support the current status.
-
-## Rollout And Maintenance
-
-- Update this feature page first when the capability contract changes.
-- Then update owner surfaces and regenerate feature/system registries when metadata changes.
-- Preserve the feature ID while active templates, skills, tickets, or docs still reference it.
-- Maintenance owner: Horizon Loop.
-
-## Limits And Non-Goals
-
-- This feature does not create an invisible background queue.
-- This feature does not require a bespoke sidecar before the basic ticket loop works.
-- This feature does not let automation bypass human authority for risky choices.
-- Known limit: Full TOML automation configs and previewable loops exist, but Farplane still avoids hidden daemons and requires visible tickets, reports, or automations as state surfaces.
-- Delete or merge this feature only when its current truth has moved into a clearer owner and all active refs are removed.
-
-## Metrics
-
-- `pulse_action_relevance`
-- `interval_report_usefulness`
-- `ticket_supply_learning`
-
-## Alternatives Considered
-
-- Keep this only as a registry row.
-  Decision: reject.
-  Reason: Farplane features must be readable specs, not opaque metadata entries.
-- Fold this entirely into the owning system page.
-  Decision: defer.
-  Reason: keep the `FEAT-*` page while templates, skills, tickets, or proof surfaces need a stable capability handle.
-
-## Change History
-
-- 2026-06-27: Feature spec created.
-- 2026-06-27: Migrated into the reader-first feature-spec shape.
-- 2026-07-02: Standardized project automation source on full TOML records in `farplane/automations.toml`.
-- 2026-07-07: Retired the older umbrella behavior and linked
-  product-scoped Pulse loops plus daily interval reports as successor feature
-  handles for dogfood tracking.
+The former Interval skill, weekly draft, knowledge-promotion route, and recovery
+ticket admission were deleted after all active consumers moved to these owners.
+Historical audit and memory text may mention the retired name but grants no
+runtime or configuration authority.

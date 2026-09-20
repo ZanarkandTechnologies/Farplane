@@ -17,7 +17,7 @@ claiming behavior success.
 | --- | --- |
 | Bootstrap and objectives | `init-advisor`, `harness-creator`, `metric-advisor` |
 | Execution compilation and recurring work | `goal-advisor`, `automation-advisor`, `pulse-update` |
-| Work supply and interval learning | `plan-next-wave`, `interval-update`, `feed-scout` |
+| Work supply and operating review | `plan-next-wave`, `pm-daily`, `pm-weekly`, `feed-scout` |
 | Skill self-improvement | `eval`, `self-improve` |
 | Review and completion | `worker-artifact-review-request`, `impl-plan`, `qa`, `review`, `close-ticket` |
 

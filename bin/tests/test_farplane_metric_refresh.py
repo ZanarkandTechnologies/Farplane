@@ -8,14 +8,14 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[2]
-SCRIPT = ROOT / "skills" / "interval-update" / "scripts" / "metric_refresh.py"
-SPEC = importlib.util.spec_from_file_location("interval_metric_refresh", SCRIPT)
+SCRIPT = ROOT / "bin" / "core" / "farplane_metric_refresh.py"
+SPEC = importlib.util.spec_from_file_location("farplane_metric_refresh", SCRIPT)
 assert SPEC and SPEC.loader
 metric_refresh = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(metric_refresh)
 
 
-class IntervalMetricRefreshTests(unittest.TestCase):
+class FarplaneMetricRefreshTests(unittest.TestCase):
     def test_resolve_refresh_plan_keeps_pinned_markdown_edge_in_its_own_job(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             metrics_file = Path(tmp) / "metrics.yaml"
