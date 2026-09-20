@@ -10,8 +10,7 @@ import socket
 import sys
 import tempfile
 import time
-import urllib.error
-import urllib.request
+import uuid
 from datetime import datetime, timezone
 from pathlib import Path
 from urllib.parse import urljoin
@@ -21,6 +20,11 @@ if str(CORE_DIR) not in sys.path:
     sys.path.insert(0, str(CORE_DIR))
 
 from runtime_config import codex_home, hydrate_process_env, read_config_value
+
+RUNTIME_DIR = CORE_DIR.parent / "runtime"
+if str(RUNTIME_DIR) not in sys.path:
+    sys.path.insert(0, str(RUNTIME_DIR))
+from hook_delivery import deliver, validate_event
 
 
 TITLE_LIMIT = 120
@@ -172,7 +176,10 @@ def event_key_for_hook(
     if not session_id or not turn_id:
         return None
     identity = agent_id or session_id
-    return f"codex-lifecycle:{session_id}:{identity}:{turn_id}:{hook}"
+    key = f"codex-lifecycle:{session_id}:{identity}:{turn_id}:{hook}"
+    # Stop observes an attempt: continuation can produce another in the same turn.
+    # Generate once per payload; replaying that payload keeps its dedup identity.
+    return f"{key}:{uuid.uuid4()}" if hook == "Stop" else key
 
 
 def event_text(event: dict[str, object], *keys: str, limit: int) -> str | None:
@@ -552,38 +559,17 @@ def build_ping(event: dict[str, object]) -> dict[str, object]:
     }
 
 
-def main() -> int:
+def main(argv: list[str] | None = None) -> int:
     hydrate_process_env()
     event = read_payload()
-    if not event:
+    if not validate_event(event, argv) or not event:
         return 0
     if should_skip_telemetry():
         return 0
 
     body = build_ping(event)
-    endpoint = telemetry_endpoint()
-    if endpoint is None:
-        return 0
-
-    headers = {"content-type": "application/json"}
-    token = clean_text(read_config_value("FARPLANE_TELEMETRY_TOKEN"), 500)
-    if token:
-        headers["x-farplane-telemetry-token"] = token
-
-    request = urllib.request.Request(
-        endpoint,
-        data=json.dumps(body).encode("utf-8"),
-        headers=headers,
-        method="POST",
-    )
-
-    try:
-        with urllib.request.urlopen(request, timeout=2) as response:
-            response.read()
-    except urllib.error.URLError as error:
-        print(f"farplane: telemetry ping failed: {error}", file=sys.stderr)
-    except Exception as error:
-        print(f"farplane: unexpected telemetry ping error: {error}", file=sys.stderr)
+    deliver(body, telemetry_endpoint(),
+            clean_text(read_config_value("FARPLANE_TELEMETRY_TOKEN"), 500))
 
     return 0
 

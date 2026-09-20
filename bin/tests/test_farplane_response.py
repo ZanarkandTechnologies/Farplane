@@ -210,12 +210,12 @@ class ResponseCliTests(unittest.TestCase):
         self.assertEqual(over_limit.returncode, 1)
         self.assertEqual(json.loads(over_limit.stdout)["limits"]["prose_words"], 500)
 
-    def test_default_normal_line_ceiling_is_thirty(self) -> None:
-        at_limit = self.run_cli("--stdin", "--json", stdin="\n".join(["line"] * 30))
-        over_limit = self.run_cli("--stdin", "--json", stdin="\n".join(["line"] * 31))
+    def test_default_normal_line_ceiling_is_fifty(self) -> None:
+        at_limit = self.run_cli("--stdin", "--json", stdin="\n".join(["line"] * 50))
+        over_limit = self.run_cli("--stdin", "--json", stdin="\n".join(["line"] * 51))
         self.assertEqual(at_limit.returncode, 0)
         self.assertEqual(over_limit.returncode, 1)
-        self.assertEqual(json.loads(over_limit.stdout)["limits"]["prose_nonblank_lines"], 30)
+        self.assertEqual(json.loads(over_limit.stdout)["limits"]["prose_nonblank_lines"], 50)
 
     def test_conflicting_inputs_exit_two(self) -> None:
         result = self.run_cli("missing.md", "--stdin", "--json")

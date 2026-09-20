@@ -3,7 +3,7 @@ title: "Farplane Hooks and Runtime"
 status: active
 owner: farplane-framework
 created_at: 2026-06-23
-updated_at: 2026-08-18
+updated_at: 2026-09-20
 framework_template_version: "0.3.0"
 tags:
   - farplane
@@ -21,13 +21,13 @@ refs:
 # Farplane Hooks and Runtime
 
 Farplane has one installed hook surface. Root `hooks.json` contains small Codex
-lifecycle telemetry commands and deterministic edit/response gates. Ticket
+lifecycle telemetry commands, edit/response gates, and a bounded Jev continuation check. Ticket
 completion and mining are explicit CLI operations; hooks do not infer durable
 state transitions from arbitrary writes.
 
 ```text
 codex_hook(event, transcript/runtime_state)
-  -> telemetry | mechanical_gate
+  -> telemetry | mechanical_gate | bounded_continuation_advice
 
 ticket_close(project_root, ticket_id)
   -> terminal metadata + archive + completion event -> mining route
@@ -41,11 +41,75 @@ Root `hooks.json` currently defines:
 | --- | --- | --- |
 | `UserPromptSubmit` | `capture_user_turn.py`, `farplane_console_ping.py` | classify the current user turn, append lightweight conversation windows, resolve native/ticket display metadata locally, and send sanitized `turn_start` hook telemetry |
 | `PostToolUse` | `skill_file_line_gate.py` | after `apply_patch`, return repair feedback when a touched `skills/**/SKILL.md` exceeds 200 physical lines; the edit remains applied |
-| `Stop` | `final_response_gate.py`, `farplane_console_ping.py` | require a rewrite until the user-facing response is within the configured prose limits, then send sanitized `turn_end` hook telemetry |
+| `Stop` | `continuation_gate.py`, `final_response_gate.py`, `farplane_console_ping.py --expect-event Stop` | independently check useful continuation, request over-limit response rewrites, and observe stop attempts; none certifies task completion |
 | `SubagentStart` | `farplane_console_ping.py` | send sanitized subagent-start lifecycle telemetry |
 | `SubagentStop` | `farplane_console_ping.py` | send sanitized subagent-stop lifecycle telemetry |
 
 These are graphable as `hook:*` nodes that `triggers` command nodes.
+
+### Inspecting Stop behavior
+
+Run `farplane hooks list` to see each managed command, event, status message,
+timeout, and source owner. Add `--json` for structured output, or use
+`farplane hooks doctor` to check installed links. This inventory describes
+Farplane's managed configuration, not Codex's effective trust decisions or
+other project/plugin hooks. Codex `/hooks` owns the effective hook controls.
+
+The three Stop handlers have separate responsibilities and Codex toggles:
+
+| Handler | Reads / effects | Can request continuation? |
+| --- | --- | --- |
+| `hooks/continuation_gate.py` | Sends bounded, best-effort redacted dialogue to the configured Jev provider through `farplane run`; asks whether useful authorized work remains. Threshold 0.5, at most three identifiable own nudges per real user turn; unknown provenance/provider failure allows stopping. | Yes, with fixed scoped feedback. Defers over-limit responses to the existing length gate. |
+| `hooks/final_response_gate.py` | Measures `last_assistant_message`; defaults to 500 prose words and 50 nonblank prose lines, configurable through `FARPLANE_FINAL_RESPONSE_MAX_PROSE_WORDS` and `FARPLANE_FINAL_RESPONSE_MAX_PROSE_LINES`. Returns rewrite feedback; does not edit files or call a model/network service. | Yes, whenever either cap is exceeded, including repeated attempts; no retry cap. |
+| `hooks/farplane_console_ping.py` | Resolves task/project metadata and existing local ticket bindings; sends a `turn_end` event to the configured telemetry endpoint with a two-second HTTP timeout. No endpoint means no send; network errors are logged and allowed. Stop does not create ticket bindings. | No; no block response is emitted. |
+
+All three registrations have five-second hook timeouts. The response accountant
+excludes supported diagram blocks, media embeds, and trailing link-only
+references from prose counts; use `farplane response check --stdin --json`
+to inspect a particular response. Telemetry contains metadata, not the final
+answer or full transcript. A Stop event can precede another continuation, so
+`turn_end` must not be read as Goal or ticket completion.
+
+Telemetry remains separate from both behavioral hooks. The unchanged length
+hook owns rewrites; continuation defers over-limit candidates and recognizes its
+exact generated feedback before reassessing a shortened response. The order in
+JSON is not a dependency contract. No hook certifies native Goal completion.
+
+The continuation reader uses Codex desktop actual-user metadata, preserves the
+opening and latest request plus a bounded dialogue tail, and excludes tool
+outputs, reasoning, and commentary. It reads at most 8 MiB, failing open beyond
+that; transcript format and hook-feedback provenance are implementation details,
+so unknown forms allow stopping. Redaction reduces common credentials and
+identifiers, but is not anonymization: authorized conversation text goes to the
+configured provider. Its stderr diagnostic reports only a fixed decision status.
+Enable/disable it through Codex's hook control; credentials stay in Doppler and
+are injected by `farplane run` from the installed Farplane source directory, not
+the calling project. The registered command invokes Python directly; the hook
+captures credential bootstrap failures and allows stopping without exposing setup
+errors to other Codex projects. Bootstrap has a four-second deadline.
+
+### Classified telemetry and delivery diagnostics
+
+Each lifecycle command uses `--expect-event` with its registered Codex event.
+The sender validates that argument against stdin `hook_event_name` before
+sending; it never overwrites the event. Mismatches emit a diagnostic and do not
+send. The existing `turn_start`, `turn_end`, `subagent_start`, and `subagent_stop`
+classifications remain. Every Stop occurrence gets a fresh event key so a final
+Stop after continuation is not deduplicated against an earlier attempt; replay
+of the same payload retains its key.
+
+Latest per-event receipts live at
+`~/.farplane/state/hook-delivery/<EVENT>.json` (respecting `FARPLANE_STATE_DIR`).
+`farplane hooks list` shows observed delivery status and timestamp:
+`unconfigured`, `attempted`, `accepted`, or `failed`. Receipts contain fixed
+metadata/reason codes and HTTP status only, never credentials or payloads.
+Accepted means HTTP 2xx, not a verified UI projection. These are shared latest
+observations across tasks, not per-task execution truth.
+
+Farplane UI projects Stop as idle / "Codex stop attempted", and newer observed
+tool activity restores running. SubagentStop stops the child, not its parent.
+Selective activity publishers cannot reveal silent continuation. Existing
+agent-hours accounting retains Stop as a measured turn boundary.
 
 ### Optional JEV entry-skill suggestion
 
@@ -176,6 +240,9 @@ Tracked framework config stays under `farplane/`. The important separation is:
 
 Codex lifecycle telemetry is defined by the installed Codex hook config.
 `hooks.json` calls `hooks/farplane_console_ping.py` on all four lifecycle events.
+The final-response gate uses the same runtime-config precedence for its two
+non-secret prose ceilings: process env, then `~/.farplane/config.toml` `[env]`,
+then rendered `~/.codex/config.toml`.
 
 `farplane_console_ping.py` loads config through Farplane Core runtime config in
 this order:
@@ -223,7 +290,7 @@ worktrees so `~/.codex` cannot be repointed at an ephemeral task checkout.
 - Keep PostToolUse checks path-scoped and deterministic. The skill-file gate
   checks only `SKILL.md` paths named by the completed patch; pre-commit repeats
   the exact 200-line invariant as the hard repository backstop.
-- Keep live Stop behavior telemetry-only except for small deterministic gates
+- Keep live Stop behavior observational except for bounded continuation advice and small deterministic gates
   with explicit evidence. The final-response gate may continue a turn only to
   compress an over-limit user-facing message; it may not judge completion,
   rewrite artifacts, start new work, or treat budget-exempt presentation as

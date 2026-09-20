@@ -77,11 +77,11 @@ class FinalResponseGateTests(unittest.TestCase):
         )
         self.assertEqual(
             gate.configured_max_prose_lines({gate.ENV_MAX_PROSE_LINES: "bad"}),
-            30,
+            50,
         )
         self.assertEqual(
             gate.configured_max_prose_lines({gate.ENV_MAX_PROSE_LINES: "0"}),
-            30,
+            50,
         )
 
     def test_main_emits_valid_stop_json_only_when_blocked(self) -> None:

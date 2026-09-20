@@ -95,6 +95,12 @@ def _structured_local_settings(config: Mapping[str, object]) -> dict[str, str]:
             _first_object_string_at(config, [["env", "FARPLANE_STATE_BASE"]])
             or _first_object_string_at(config, [["runtime", "state_base"]])
         ),
+        "FARPLANE_FINAL_RESPONSE_MAX_PROSE_WORDS": _first_object_string_at(
+            config, [["env", "FARPLANE_FINAL_RESPONSE_MAX_PROSE_WORDS"]]
+        ),
+        "FARPLANE_FINAL_RESPONSE_MAX_PROSE_LINES": _first_object_string_at(
+            config, [["env", "FARPLANE_FINAL_RESPONSE_MAX_PROSE_LINES"]]
+        ),
         "FARPLANE_CONVEX_SITE_URL": (
             _first_object_string_at(
                 config,

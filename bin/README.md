@@ -18,8 +18,13 @@ Primary control plane:
 - persistent builder lanes
 
 Live PostToolUse handling returns repair feedback for edited `SKILL.md` files
-over 200 lines. Stop handling applies the final-response prose budget and sends
-telemetry. Native Goal mode plus ticket-local QA/review evidence owns completion.
+over 200 lines. Separate Stop handlers check for useful continuation, apply the
+final-response prose budget, and send observational telemetry. Native Goal mode plus ticket-local QA/review evidence owns completion.
+
+Run `farplane hooks list` for the managed commands, events, timeouts, and source
+owners. See [Stop behavior](../docs/farplane-framework/hooks-and-runtime.md#inspecting-stop-behavior)
+for what each handler reads, sends, and can block. `--json` preserves the
+structured inventory; this is not an inventory of all Codex plugin hooks.
 
 Inspect response accounting without invoking the hook:
 
@@ -225,8 +230,8 @@ python3 skills/delegate-cli/scripts/delegate_cli_agent.py run \
 
 In the live interactive path, `goal-advisor` compiles the Goal-backed ticket
 execution contract. Native Goal mode owns persistence and ticket-local
-QA/review evidence owns completion; the live Stop hook adds only a deterministic
-final-response length retry beside telemetry.
+QA/review evidence owns completion. Independent Stop hooks add bounded Jev
+continuation advice, the final-response length retry, and observational telemetry.
 
 ## How To Test
 
