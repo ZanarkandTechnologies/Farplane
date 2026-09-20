@@ -34,7 +34,6 @@ evidence_refs:
   - skills/pulse-update/scripts/test_list_pulse_board.py
   - skills/pulse-update/scripts/test_materialize_skill_call.py
   - skills/plan-next-wave/evals/evals.json
-  - skills/plan-next-wave/audits/2026-07-14-metric-first-lane-ranking.md
   - tickets/archive/TASK-0358/ticket.md
   - tickets/archive/TASK-0318/artifacts/qa/work-pulse-proof.md
   - tickets/archive/TASK-0319/artifacts/qa/integrated-qa.md

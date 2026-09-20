@@ -31,6 +31,7 @@ tmp/
 .agents/*
 !.agents/skills/
 !.agents/skills/**
+**/audits/
 plugins/
 skills/.system/
 bin/__pycache__/

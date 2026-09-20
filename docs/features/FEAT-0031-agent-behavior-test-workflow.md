@@ -19,7 +19,6 @@ source_refs:
   - docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md
 external_refs: []
 evidence_refs:
-  - skills/eval/audits/2026-07-16-agent-behavior-test-consolidation.md
   - skills/eval/tests/test_run_evals.py
 known_limits: "Retired as a standalone skill after Eval behavior_trace reached prompt, event, log, checkpoint, artifact, schema, score, and baseline parity. Native-subagent-only evidence routes to Agent QA."
 metrics: []

@@ -94,8 +94,9 @@ better source.
    - `evals/evals.json` for behavior regression cases.
    - `examples/*` for quality-dependent positive examples.
    - `references/*` for deeper formulas, source methods, or rare branches.
-7. **Write the audit receipt.** Include source packet, decisions, skill delta,
-   proof run, deferred sources, and residual risk.
+7. **Record proof in an existing owner.** Put behavior cases in the skill eval,
+   durable decisions in the active ticket or pull request, and residual risk in
+   the completion handoff. Do not create a per-change audit document.
 8. **Validate and review.** Run `python3 skills/skill-maintenance/scripts/check_skills.py --write`.
    Route material changes through `review` or a reviewer lane when available.
 

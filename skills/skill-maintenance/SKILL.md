@@ -1,6 +1,6 @@
 ---
 name: skill-maintenance
-description: "Turn skill behavior deltas, lesson hardening, or skill compaction into owner-local skill edits, eval/gotcha updates, registry sync, audit proof, and review."
+description: "Turn skill behavior deltas, lesson hardening, or skill compaction into owner-local skill edits, eval/gotcha updates, registry sync, behavior proof, and review."
 tier: 3
 group: operations
 source: local
@@ -17,7 +17,7 @@ skill_ui: skills/skill-maintenance/graph/index.html
 Use this skill to update, audit, repair, harden, refine, consolidate, or roll
 out Farplane skill changes after the owner surface is known. It owns package
 mechanics: `SKILL.md` shape, references, eval/checklist sync, source ownership,
-metadata, registry sync, audits, installed-copy checks, and review routing.
+metadata, registry sync, installed-copy checks, and review routing.
 
 Every edited `skills/**/SKILL.md` has a hard envelope of 200 physical lines.
 Within that envelope, use responsibility, first-load cost, duplication, and
@@ -29,11 +29,11 @@ judgment rather than mechanical extraction.
 
 ```text
 skill_maintenance(expected_behavior, current_behavior, edited_skill, mode?, evidence?)
-  -> updated_skill | audit_record | blocked_report
+  -> updated_skill | maintenance_receipt | blocked_report
 reads: owner package, registry, evidence, and applicable lessons or troubles
 does: applies the smallest owner-local skill behavior or structure change
-writes: owner package, generated registry data, and audit evidence when needed
-returns: updated skill or audit, validation evidence, and review result or blocker
+writes: owner package, generated registry data, and behavior evidence when needed
+returns: updated skill, validation evidence, and review result or blocker
 ```
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
@@ -106,7 +106,7 @@ returns: updated skill or audit, validation evidence, and review result or block
   `validated package -> reviewed maintenance receipt | revision`
 
   Rule: Material meta, prompt, eval, or precedent-setting changes require a
-  dated audit and native reviewer verdict.
+  durable comparison proof and a native reviewer verdict.
 
   Assert:
   - Ticket/progress evidence is updated before completion.
@@ -114,7 +114,7 @@ returns: updated skill or audit, validation evidence, and review result or block
 
 ## Templates
 
-Use [skill audit](templates/skill-audit.md) for material changes. Load
+Record material-change proof in the existing eval, test, ticket, or PR owner. Load
 [maintenance modes](references/maintenance-modes.md) for hardening, refinement,
 source upgrades, automation presets, and review handoff templates.
 
@@ -129,7 +129,7 @@ source upgrades, automation presets, and review handoff templates.
   state-machine catalog rather than deleting the callable contract.
 - Do not treat a shorter skill as better without behavior-preservation proof.
 - Do not hand-edit generated registries or graphs, bulk-edit without sample
-  proof, auto-promote every eval point, or skip material audit/review.
+  proof, auto-promote every eval point, or skip material proof/review.
 - An eval or line-count comparison does not replace skill-system validation.
   After structural edits, run `python3 scripts/check_skills.py --write` and
   report its result.

@@ -28,7 +28,6 @@ external_refs: []
 evidence_refs:
   - skills/pulse-update/evals/evals.json
   - skills/interval-update/evals/evals.json
-  - skills/automation-advisor/audits/2026-06-24-automation-prompt-qa.md
 known_limits: Retired as the older umbrella feature. Project Work Pulse and BAU problem reports now carry the active feature contracts.
 metrics:
   - pulse_action_relevance
@@ -137,7 +136,6 @@ Evidence:
 
 - `skills/pulse-update/evals/evals.json`
 - `skills/interval-update/evals/evals.json`
-- `skills/automation-advisor/audits/2026-06-24-automation-prompt-qa.md`
 
 ## Proof And Quality
 
