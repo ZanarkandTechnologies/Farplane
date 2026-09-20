@@ -25,7 +25,7 @@ Use this file directly when:
 
 - creating a new skill;
 - changing a skill's first-load shape, references, template version, eval
-  coverage, or audit record;
+  coverage, or existing proof owner;
 - reviewing skill-system work;
 - changing a shared skill-system standard.
 
@@ -43,7 +43,6 @@ Use anchored sections instead of the full file when the task is narrow:
   proof routing.
 - `#finish-gates-and-checklists` for choosing review, QA, eval, validator, or
   skill-local checklist gates.
-- `#skill-audit-records` for audit artifacts.
 
 If this file grows past roughly 500 lines, or any one section grows past roughly
 100 lines, split the long section into a topic file under `docs/skills/` or a
@@ -483,71 +482,18 @@ the review depth:
   alone. Those need eval run artifacts, reviewer receipts, or explicit evidence
   gaps.
 
-## Skill Audit Records
+## Change Evidence
 
-Use binary rubric outcomes instead of health scores. Numeric scores hide the
-reason for disagreement and are too easy to overfit. A skill audit should say
-which checks passed, which failed, what evidence exists, and what changed before
-and after the edit.
-
-```text
-audit_skill_structure(skill, change, reasoning, evidence?) -> audit_record + pass_fail_rubric + followups
-```
-
-For material skill creation or maintenance, write an audit record under the
-skill package:
-
-```text
-skills/<skill-name>/audits/YYYY-MM-DD-<short-change>.md
-```
-
-Material means the change affects trigger behavior, first-load content,
-reference placement, routing, proof gates, templates, eval tasks, reviewer
-rubrics, Tier 1/meta behavior, or any cross-skill standard. Tiny metadata,
-typo, link, or formatting edits can skip the audit record when they do not
-change behavior.
-
-Each audit record should include YAML front matter and a binary checklist:
-
-- `skill`, `date`, `change_type`, `owner`, and `status`.
-- `before_ref` and `after_ref` when there are commits, branches, or artifact
-  paths to compare.
-- `review_route`: `self_check`, `advise`, `advise_ensemble`, or `reviewer`.
-- `reasoning_basis`: first-principles review, `advise`, `advise_ensemble`,
-  reviewer receipt, eval run, or a combination.
-- `proof_artifacts`: commands, eval artifact paths, reviewer receipts, or
-  explicit evidence gaps.
-- `eval_required`: `yes` or `no`, with a short reason.
-- `rubric`: pass/fail/unknown rows for the structure metrics.
-- `before_behavior`, `after_behavior`, and `followups`.
-
-Do not put `health_score` in `SKILL.md` front matter. Do not add `last_edited`
-when git history already carries that fact. If a freshness signal is needed,
-derive it from git history and the newest audit record rather than duplicating
-state in every skill.
+Keep material proof in an existing owner: behavior cases in `evals/evals.json`,
+deterministic checks in tests or validators, task-specific decisions in the
+ticket, and review conclusions in the pull request or owning workflow receipt.
+Do not create per-change skill audit documents. Git history already records the
+diff, authoring time, and commit boundary.
 
 Use `unknown` rather than guessing for evidence-backed checks such as
-`task_success_rate` and `review_tas_rate` when no eval run or reviewer receipt
-exists.
-
-First-principles reasoning is the default review engine for skill structure.
-Use it to inspect where instructions belong, whether the first-load path is
-executable, whether references are precise, and whether the change compounds
-cleanly through other skills.
-
-```text
-improve_skill_structure(skill_change)
-  -> first_principles_review
-  -> advise_or_ensemble_advice_when_high_leverage
-  -> targeted_eval_or_reviewer_receipt_when_needed
-  -> audit_record
-```
-
-Run evals, variant tournaments, or reviewer receipts when reasoning alone cannot
-settle the choice, when reviewers disagree, when the change is a regression
-guard, or when the final claim depends on measured behavior. Do not require
-benchmarks for every skill edit, and do not claim measured improvement without
-proof.
+`task_success_rate` and `review_tas_rate` when no eval run or reviewer result
+exists. Run evals or independent review when reasoning alone cannot settle the
+choice or when the final claim depends on measured behavior.
 
 ## Main File Versus References
 

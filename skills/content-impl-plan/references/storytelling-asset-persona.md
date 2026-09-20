@@ -351,4 +351,4 @@ This contract adapts, rather than copies, convergent mechanisms from:
 - Robert McKee's public scene-turn excerpt: perceptible value change as a
   diagnostic.
 
-Full source links and dispositions live in the TASK-0416 audit receipt.
+Full source links and dispositions live in the TASK-0416 evidence receipt.

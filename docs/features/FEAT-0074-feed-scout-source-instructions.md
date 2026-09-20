@@ -25,7 +25,7 @@ surfaces:
   - skills/feed-scout/references/workflow.md
   - skills/feed-scout/evals/evals.json
 source_refs:
-  - skills/feed-scout/audits/2026-07-24-source-instructions.md
+  - skills/feed-scout/references/workflow.md
 external_refs: []
 evidence_refs:
   - bin/validators/test_check_farplane_project_files.py

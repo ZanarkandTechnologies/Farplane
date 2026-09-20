@@ -51,7 +51,7 @@
 - Optional companions pass only when link, file, metadata, sections, legends,
   and semantic Mermaid classes agree.
 - Every edited authored skill file stays within the repository line budget.
-- Material skill changes receive independent review and a dated audit.
+- Material skill changes receive durable comparison proof and independent review.
 
 ## Testing
 

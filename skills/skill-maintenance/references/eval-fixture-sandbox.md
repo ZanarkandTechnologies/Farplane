@@ -50,7 +50,7 @@ Skill-maintenance eval queries should:
 - name the fixture path or sandbox requirement;
 - ask for an inspect/repair plan or sandboxed repair, not a live repo mutation;
 - include reference points for source ownership, prototype-before-bulk,
-  registry sync, audit records, and validation;
+  registry sync, durable proof, and validation;
 - reject completion claims without proof artifacts from the sandbox;
 - keep AGI Toy Shop as the clean-room company context, while bad skill files
   provide the concrete filesystem evidence.
