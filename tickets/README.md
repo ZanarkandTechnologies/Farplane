@@ -1,6 +1,64 @@
 # Tickets
 
-Active work lives in `tickets/TASK-*/ticket.md`.
+Active Farplane work lives in **Multica issues**. Multica is the dashboard and
+task memory only; execution stays in Codex. This policy supersedes the legacy
+filesystem procedures below for this project and any project bound to Multica.
+
+## Current Multica workflow
+
+- Resolve workspace and project once from `farplane/bindings.yaml`:
+  `integrations.multica.workspace_id` and `project_id`. Do not repeat service
+  bindings in each issue. `execution_enabled: false` is a policy setting, not
+  an API switch that prevents runs by itself.
+- Search the bound project before creation. Create one **unassigned** issue
+  using the existing Multica CLI and `--description-file` or
+  `--description-stdin`. Use native project, status and priority fields.
+  The issue body carries scope, plan, acceptance/proof, decisions and blockers.
+  The template's body remains useful; its YAML queue metadata is not needed.
+- Never assign an agent/squad, mention agents, configure autopilots, or start
+  Multica runs. Pass `--no-start` to `issue update` and status changes. Verify
+  the resulting issue, including its assignee, before claiming success.
+- Update the same issue as work progresses. `todo`, `in_progress`, `in_review`,
+  `blocked`, and `done` represent queue state, not Multica execution telemetry.
+  Waiting for a signal belongs in the blocker text. Do not invent live claims
+  from imported `claimed_by` values.
+- For a Goal, put executable loop policy under `## Goal program` in the issue
+  body and mirror the latest checkpoint under `## Current Goal state`. Append
+  each meaningful observation, evidence, decision, remaining budget, blocker,
+  and next action as a top-level comment. The body is the fast resume surface;
+  comments are the append-only evidence history.
+- Keep structured or versioned support such as designs, hypothesis trees,
+  prompts, and proof in repository files when useful. Attach packet-critical
+  snapshots when teammates need access from Multica. Local paths alone are not
+  shared artifacts. Do not upload an entire packet or push a repository without
+  authorization.
+- `$close-ticket` records verified results and closes the **same Multica issue**
+  with `--no-start`. Do not create a second GitHub closeout issue, invoke
+  `farplane ticket finalize`, or delete the local supporting files.
+- Resume the existing Codex task from the full issue body plus recent comment
+  roots. Open older threads or attachments only for a named evidence gap.
+  Preserve the existing proof, review and approval requirements.
+
+For example, a content plan is one unassigned issue with the audience, deliverable,
+acceptance criteria and artifact links in its body. Codex produces and reviews
+the artifact, then updates that issue; Multica never executes the plan.
+
+The 2026-09-20 import retains existing `TASK-*` identities for lookup. Source
+files remain migration snapshots, not writable task mirrors. The verified
+mapping lives in `.farplane/migrations/multica-2026-09-20/receipt.json`.
+Goal Packet migration proof lives in
+`.farplane/migrations/multica-goal-packets-2026-09-20/receipt.json`.
+New tasks use Multica's issue identity. No parallel local ticket is required.
+
+## Legacy filesystem implementation reference
+
+The remaining sections describe the old implementation for unbound projects,
+legacy records and maintenance of that code. They **do not authorize** new
+filesystem tickets or filesystem finalization for a Multica-bound project.
+Legacy scripts and validators are not Multica adapters; do not invoke their
+ticket-creation, dispatch or cleanup paths for this project.
+
+Historically, active work lived in `tickets/TASK-*/ticket.md`.
 
 One source of truth per concern:
 

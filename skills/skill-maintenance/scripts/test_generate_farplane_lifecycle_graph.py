@@ -88,8 +88,8 @@ routes:
         self.assertEqual(method["kind"], "skill")
 
     def test_known_file_refs_ignore_prose_suffixes(self) -> None:
-        node_id, kind, label, _tags = lifecycle_graph.canonical_ref("farplane/automations.toml prompt updates")
-        self.assertEqual(node_id, "file:farplane/automations.toml")
+        node_id, kind, label, _tags = lifecycle_graph.canonical_ref("farplane/automations/ prompt updates")
+        self.assertEqual(node_id, "file:farplane/automations/")
         self.assertEqual(kind, "file")
         self.assertEqual(label, "Reviewed automation prompts")
 
@@ -121,8 +121,8 @@ routes:
         self.assertIn(("skill:harness-advisor", "skill:proof-advisor", "routes_to"), edges)
         self.assertIn(("skill:proof-advisor", "skill:eval", "routes_to"), edges)
         self.assertIn(("automation:pulse", "skill:pulse-update", "triggers"), edges)
-        self.assertIn(("automation:daily-interval", "skill:interval-update", "triggers"), edges)
-        self.assertIn(("automation:weekly-interval", "skill:interval-update", "triggers"), edges)
+        self.assertIn(("automation:daily-operating-update", "skill:pm-daily", "triggers"), edges)
+        self.assertIn(("automation:weekly-operating-review", "skill:pm-weekly", "triggers"), edges)
 
     def test_core_graph_excludes_noisy_detail_nodes(self) -> None:
         repo = Path(__file__).resolve().parents[3]
@@ -155,7 +155,7 @@ routes:
                 "project_initialization",
                 "automation_activation",
                 "ticket_goal_execution",
-                "interval_knowledge_phase",
+                "company_os_review",
                 "self_update_loop",
             },
         )

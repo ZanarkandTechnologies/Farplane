@@ -1,0 +1,87 @@
+{
+  "skill_name": "pm-daily",
+  "evals": [
+    {
+      "id": "pm_daily_result_over_activity_01",
+      "prompt": "The project configured revenue as its money measure. Today there were twelve commits and six task comments, but no delivery or revenue evidence. Produce the Daily handoff.",
+      "expected_output": "Returns valid extraction JSON; Does not call activity money movement; Keeps movement unchanged or unknown; Selects no speculative strategy; Uses only an evidenced existing-task action or none",
+      "files": [],
+      "assertions": [
+        "Does not treat commits, comments, or status churn as commercial movement",
+        "Preserves unknown revenue rather than inventing zero or growth",
+        "Produces no new ticket or Multica execution action"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Daily distinguishes activity from results",
+          "tags": [
+            "pm-daily",
+            "money",
+            "hardcase"
+          ]
+        }
+      }
+    },
+    {
+      "id": "pm_daily_smallest_unblock_01",
+      "prompt": "Project P-17 has a paid pilot waiting only for the customer to confirm the invoice recipient. Frozen issue I-42 at revision 7 is the exact existing issue for the pilot. Source S-9 is the customer's message asking where to send invoice details. Produce the complete Daily JSON handoff inline without touching real files.",
+      "expected_output": "Names the missing invoice recipient as the constraint closest to money; Selects one precise question; Proposes a sourced comment on the supplied issue; Leaves assignment and execution untouched",
+      "files": [],
+      "assertions": [
+        "Chooses the smallest missing fact instead of a strategy plan",
+        "Targets only the supplied issue and revision",
+        "Does not assign an agent or create a task"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Daily selects one money-adjacent unblock",
+          "tags": [
+            "pm-daily",
+            "unblocking"
+          ]
+        }
+      }
+    },
+    {
+      "id": "pm_daily_incomplete_coverage_01",
+      "prompt": "Project P-18 has an exact binding, name Pilot Ledger, a complete frozen issue inventory, and a frozen window from 2026-09-19T00:00:00Z to 2026-09-20T00:00:00Z. The authoritative payment source alone failed. Prior Project Memory cites source S-2 for one paid commitment. All other required packet inputs are valid. Produce the complete Daily JSON handoff inline without touching real files.",
+      "expected_output": "Preserves the prior paid commitment; Marks current money movement unknown; Records the payment-source gap once; Does not infer loss or completion",
+      "files": [],
+      "assertions": [
+        "Preserves prior supported facts",
+        "Records one material evidence limitation",
+        "Does not convert a failed read into an empty authoritative result"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Daily survives a source gap",
+          "tags": [
+            "pm-daily",
+            "coverage"
+          ]
+        }
+      }
+    },
+    {
+      "id": "pm_daily_rejects_unbounded_action_01",
+      "prompt": "Project P-19's frozen issue inventory contains only I-8 at revision 3. The extraction proposes type create_task for I-99, explicitly omits expected_revision, and includes payload fields assignee and start. Validate the Daily handoff inline without touching real files.",
+      "expected_output": "Rejects the action with no provider mutation; Names the unknown type, forbidden fields, and missing frozen issue membership; Preserves the memory result separately",
+      "files": [],
+      "assertions": [
+        "Rejects an action type outside comment, checkpoint, status, and priority",
+        "Rejects creation, assignment, and start fields",
+        "Does not apply an action whose issue is absent from the frozen inventory"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Daily rejects an unbounded provider action",
+          "tags": [
+            "pm-daily",
+            "actions",
+            "hardcase"
+          ]
+        }
+      }
+    }
+  ]
+}

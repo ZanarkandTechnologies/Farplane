@@ -32,10 +32,11 @@ RULES: tuple[FileRule, ...] = (
             "Architecture map: [ARCHITECTURE.md]",
             "Feature/spec registry: [docs/features/README.md]",
             "Review scoring: [skills/review/README.md]",
-            "Active queue: [tickets]",
+            "Active queue: Multica, using the project binding in `farplane/bindings.yaml`.",
         ),
         forbidden_substrings=(
             "Active queue: none currently",
+            "Active queue: [tickets]",
         ),
     ),
     FileRule(

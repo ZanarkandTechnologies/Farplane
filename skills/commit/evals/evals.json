@@ -11,7 +11,15 @@
         "Creates exactly one local commit and does not push",
         "Verifies unrelated unstaged work remains"
       ],
-      "metadata": {"title": "Normal: commit requested files", "tags": ["normal", "commit"]}
+      "metadata": {
+        "farplane": {
+          "title": "Normal: commit requested files",
+          "tags": [
+            "normal",
+            "commit"
+          ]
+        }
+      }
     },
     {
       "id": "hard_mixed_registry",
@@ -23,7 +31,16 @@
         "Does not use a broad git add pathspec",
         "Verifies unrelated registry and worktree changes remain"
       ],
-      "metadata": {"title": "Hard: isolate mixed generated registry", "tags": ["hard", "commit", "mixed-file"]}
+      "metadata": {
+        "farplane": {
+          "title": "Hard: isolate mixed generated registry",
+          "tags": [
+            "hard",
+            "commit",
+            "mixed-file"
+          ]
+        }
+      }
     },
     {
       "id": "boundary_inseparable_staged_hunk",
@@ -35,7 +52,38 @@
         "Does not reset or alter the existing index",
         "Does not push"
       ],
-      "metadata": {"title": "Boundary: inseparable staged ownership", "tags": ["boundary", "commit", "index"]}
+      "metadata": {
+        "farplane": {
+          "title": "Boundary: inseparable staged ownership",
+          "tags": [
+            "boundary",
+            "commit",
+            "index"
+          ]
+        }
+      }
+    },
+    {
+      "id": "single_worktree_remote_pr_branch",
+      "prompt": "Farplane uses one shared worktree on local main. The operator asks to commit the current isolated change and open a PR, while unrelated edits from read-only tasks remain in the worktree. Describe the exact Git behavior without running commands.",
+      "expected_output": "Creates one isolated commit from explicit paths or hunks, preserves unrelated edits, confirms origin/main..HEAD contains only the intended serial PR range, pushes HEAD directly to a temporary remote codex branch without creating or switching a local branch, opens the PR against main, and verifies the PR head and files. It rejects concurrent Git writers, direct main pushes, accidental stacked commits, and squash merging; after merge it fast-forwards local main.",
+      "assertions": [
+        "Keeps the local checkout on main and permits one Git writer",
+        "Pushes HEAD directly to refs/heads/codex/<task-name> without a local branch switch",
+        "Preserves unrelated staged and unstaged work",
+        "Rejects direct main pushes and unintended stacked commit ranges",
+        "Uses merge commit then fast-forwards local main before the next writing task"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Single worktree: publish a remote PR branch",
+          "tags": [
+            "commit",
+            "pull-request",
+            "single-worktree"
+          ]
+        }
+      }
     }
   ]
 }

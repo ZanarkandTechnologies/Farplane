@@ -2,7 +2,8 @@
 
 ![Farplane hero banner](./assets/farplane-hero.png)
 
-Farplane is the cloneable AI harness substrate.
+Farplane is a local AI operating harness for turning an operator-defined
+commercial bet into one inspectable next commitment at a time.
 
 The current product contract is [Farplane V1](docs/prd.md), implemented by the
 [framework lifecycle](docs/farplane-framework/lifecycle.md) and its linked
@@ -246,7 +247,8 @@ flowchart LR
 - QA cookbook surface: [qa/README.md](qa/README.md)
 - Review scoring: [skills/review/README.md](skills/review/README.md)
 - Maintainability code review: [skills/code-review/README.md](skills/code-review/README.md)
-- Active queue: [tickets](tickets)
+- Active queue: Multica, using the project binding in `farplane/bindings.yaml`.
+- Task policy and legacy records: [tickets](tickets)
 
 ## Local CLI Onboarding
 
@@ -303,7 +305,7 @@ What Core owns:
   refreshes Core primitive readings for ticket/KPI/product counts, Codex thread
   usage, burn source gaps, and ticket/thread association backfill.
 - `farplane project snapshot --project-root /path/to/project --json`: writes a
-  read-only project/company projection for Farplane UI and interval context.
+  read-only project/company projection for Farplane UI and Company OS context.
 - `farplane skills rollout scan --json`: emits a read-only skill rollout
   projection for Farplane UI and local status checks.
 - `farplane capability-profiles read --project-root <path>`: resolves the

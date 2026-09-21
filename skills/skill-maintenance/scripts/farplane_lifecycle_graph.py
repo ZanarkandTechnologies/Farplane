@@ -201,8 +201,8 @@ def canonical_ref(value: str) -> tuple[str, str, str, list[str]]:
     pathish = pathish.replace("<YYYY-MM-DDTHHMMSSZ>", "<timestamp>")
     if pathish.startswith(".farplane/reports/pulse/"):
         pathish = ".farplane/reports/pulse/<timestamp>.md"
-    if pathish.startswith(".farplane/reports/interval/"):
-        pathish = ".farplane/reports/interval/<interval_id>/<timestamp>.md"
+    if pathish.startswith(".farplane/company-os/"):
+        pathish = ".farplane/company-os/<cadence>/<artifact>"
     if pathish.startswith("tickets/TASK-"):
         if "artifacts" in pathish:
             pathish = "tickets/TASK-*/artifacts/"
@@ -493,7 +493,8 @@ def validate_graph(graph: dict[str, Any]) -> list[str]:
         "skill:goal-advisor",
         "skill:proof-advisor",
         "skill:pulse-update",
-        "skill:interval-update",
+        "skill:pm-daily",
+        "skill:pm-weekly",
         "skill:doc-advisor",
         "skill:manage-wiki",
         "skill:skill-maintenance",
@@ -512,7 +513,7 @@ def validate_graph(graph: dict[str, Any]) -> list[str]:
         "project_initialization",
         "automation_activation",
         "ticket_goal_execution",
-        "interval_knowledge_phase",
+        "company_os_review",
     }:
         if projection_id not in projection_ids:
             errors.append(f"missing FSA projection {projection_id}")

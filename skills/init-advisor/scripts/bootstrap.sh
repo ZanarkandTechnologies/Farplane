@@ -112,7 +112,10 @@ copy_file "${REF_DIR}/FARPLANE_README_TEMPLATE.md" "${TARGET_DIR}/farplane/READM
 copy_file "${REF_DIR}/MANIFEST_TEMPLATE.json" "${TARGET_DIR}/farplane/manifest.json"
 copy_file "${REF_DIR}/HARNESS_TEMPLATE.yaml" "${TARGET_DIR}/farplane/harness.yaml"
 copy_file "${REF_DIR}/METRICS_TEMPLATE.yaml" "${TARGET_DIR}/farplane/metrics.yaml"
-copy_file "${REF_DIR}/AUTOMATION_TEMPLATE.toml" "${TARGET_DIR}/farplane/automations.toml"
+mkdir -p "${TARGET_DIR}/farplane/automations"
+for automation_template in "${REF_DIR}"/automation-templates/*.md; do
+  copy_file "${automation_template}" "${TARGET_DIR}/farplane/automations/$(basename "${automation_template}")"
+done
 copy_file "${REF_DIR}/BINDINGS_TEMPLATE.yaml" "${TARGET_DIR}/farplane/bindings.yaml"
 copy_file "${REF_DIR}/LOCAL_SKILLS_README_TEMPLATE.md" "${TARGET_DIR}/.agents/skills/README.md"
 copy_file "${REF_DIR}/PM_TEMPLATE.json" "${TARGET_DIR}/farplane/pm.json"
@@ -179,8 +182,8 @@ echo "  - Review farplane/manifest.json for the current Farplane project spec ve
 echo "  - Fill in farplane/harness.yaml, or run harness-creator as the internal operating-program phase."
 echo "  - Fill in farplane/metrics.yaml with measurable objectives, guards, metric meaning, and display fields."
 echo "  - Fill in farplane/bindings.yaml with non-secret project IDs, connector coordinates, and metric refresh recipes."
-echo "  - Fill in farplane/automations.toml with one Work Pulse heartbeat plus separate Feed Scout, BAU review, self-improvement, and optional cron records."
-echo "  - Keep skills generic and parameterized; configure project paths, cadence, schedule, thread IDs, and exact prompts in farplane/automations.toml."
+echo "  - Fill in farplane/automations/ with one Work Pulse heartbeat plus separate Feed Scout, BAU review, self-improvement, and optional cron records."
+echo "  - Keep skills generic and parameterized; configure project paths, cadence, schedule, thread IDs, and exact prompts in farplane/automations/."
 echo "  - Use .agents/skills/ for project-local capability skills; promote only stable cross-project workflows to root skills/."
 echo "  - Use metric-advisor to shape measurable objectives and guards when they are missing or weak."
 echo "  - Use goal-advisor to compile the first executable frontier after goals are concrete."

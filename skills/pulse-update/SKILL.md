@@ -125,7 +125,7 @@ Workers exit after producing proof and one review request or blocker.
 - `review_wip` caps operator-facing area pools, not tickets or concurrency;
   saturation changes selection toward unattended-safe work but blocks neither
   dispatch nor planning.
-- Daily/Weekly Interval and Dogfood reports may supply context but cannot
+- Company OS Daily/Weekly and Dogfood reports may supply context but cannot
   materialize or dispatch refill calls. Goal Advisor compiles material tickets.
 - Scout Brief supplies sourced context, never planning authority. Preference
   memory comes only from terminal AI-planned Reward accept/kill rows.

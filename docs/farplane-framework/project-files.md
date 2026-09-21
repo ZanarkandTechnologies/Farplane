@@ -10,7 +10,7 @@ source_of_truth:
   - farplane/manifest.json
   - farplane/harness.yaml
   - farplane/metrics.yaml
-  - farplane/automations.toml
+  - farplane/automations/
   - docs/farplane-framework/reporting.md
   - docs/farplane-framework/entities.md
   - farplane/bindings.yaml
@@ -52,7 +52,7 @@ farplane/
   manifest.json
   harness.yaml
   metrics.yaml
-  automations.toml
+  automations/
   bindings.yaml
   pm.json
   capability-profiles.yaml
@@ -111,14 +111,17 @@ Use typed YAML. Do not add a custom harness DSL, live backlog, worker
 allocation table, mutable goal status, product-bet portfolio, project strategy
 ledger, or product controller state here.
 
-### `farplane/automations.toml`
+### `farplane/automations/`
 
-Human-reviewable desired state for Codex automations. It contains exactly one
-Work Pulse heartbeat plus separate cron/manual jobs such as Feed Scout,
-Daily/Weekly BAU, Dogfood self-improvement, and low-frequency maintenance.
+Human-reviewable desired state for Codex automations. Each `*.md` file owns
+one complete automation. The folder contains exactly one Work Pulse heartbeat
+plus project-local cron/manual jobs such as Feed Scout, Dogfood
+self-improvement, and low-frequency maintenance. The AI Office root
+`automations/` owns one global Company OS Daily and Weekly pair across every
+managed project.
 
-Each record owns its schedule, workspace, status, and exact project-specific
-prompt. Generic workflow behavior remains in the called skill. Scheduled
+YAML front matter owns identity, schedule, workspace, and status. The Markdown
+body is the exact project-specific prompt. Generic workflow behavior remains in the called skill. Scheduled
 sources write reports and bounded candidate context; Work Pulse owns normal
 proactive ticket admission and execution.
 

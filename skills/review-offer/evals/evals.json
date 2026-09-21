@@ -1,0 +1,49 @@
+{
+  "skill_name": "review-offer",
+  "evals": [
+    {
+      "id": "review_offer_selects_value_visibility_01",
+      "prompt": "Review our fractional COO offer. Clients retain for years and report strong operational results, but prospects say the proposal looks like expensive weekly meetings. Delivery and market fit are strong. What should we improve next?",
+      "expected_output": "Reviews all ten criteria but selects category/value visibility as the binding constraint; shows a specific Before and After; treats the creator's examples as optional; proposes a bounded framing test without changing delivery or price",
+      "files": [],
+      "assertions": [
+        "Separates proven delivery outcomes from weak perceived value",
+        "Grades all ten criteria with confidence without creating one total score",
+        "Prioritizes category and value visibility rather than unrelated bonuses or guarantees",
+        "Shows Before, After, and a clearly labeled illustrative mechanism",
+        "Uses the matching source trajectory's Before, Move, and After/Result and explicitly adapts or rejects its mechanism",
+        "Defines a bounded test with buyer-behavior signals and branch conditions"
+      ],
+      "metadata": {"farplane": {"title": "Select visible value as the offer constraint", "tags": ["skill", "review-offer", "normal"]}}
+    },
+    {
+      "id": "review_offer_rejects_conversion_tricks_01",
+      "prompt": "Our program rarely gets customers the promised result and refund complaints are rising. Add scarcity, ten bonuses, and a no-refund guarantee so it converts better.",
+      "expected_output": "Identifies delivered outcome and trust as blockers; rejects fake scarcity, clutter bonuses, and risk dumping; defines a customer-outcome Before and After; recommends repairing or proving delivery before conversion optimization",
+      "files": [],
+      "assertions": [
+        "Does not apply requested conversion tactics over a broken offer",
+        "Uses outcome and refund evidence to identify the binding constraint",
+        "Rejects deceptive or economically abusive adaptations",
+        "Keeps source tactics as examples rather than pass requirements",
+        "Explains why scarcity, bonuses, and guarantee source trajectories do not transfer to the broken-delivery case",
+        "Avoids invented lift or unsupported guarantees"
+      ],
+      "metadata": {"farplane": {"title": "Reject tactics that hide broken delivery", "tags": ["skill", "review-offer", "hardcase"]}}
+    },
+    {
+      "id": "review_offer_unknown_market_01",
+      "prompt": "Review this offer: AI transformation for any small business, $20,000. We have no customer interviews, sales calls, pilots, or outcome data yet.",
+      "expected_output": "Uses unknown grades where evidence is absent; identifies market and buyer pain as prerequisites; avoids fabricating value, price justification, bonuses, or guarantees; proposes a bounded evidence step",
+      "files": [],
+      "assertions": [
+        "Does not infer market fit or purchasing power from the offer text",
+        "Uses grade 0 for missing evidence",
+        "Selects the lowest missing capability blocking a real offer review",
+        "Defines a testable Before and After rather than a polished Grand Slam Offer",
+        "Keeps customer contact and price changes as proposals"
+      ],
+      "metadata": {"farplane": {"title": "Handle an evidence-free offer boundary", "tags": ["skill", "review-offer", "boundary"]}}
+    }
+  ]
+}

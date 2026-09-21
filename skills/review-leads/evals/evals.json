@@ -1,0 +1,49 @@
+{
+  "skill_name": "review-leads",
+  "evals": [
+    {
+      "id": "lead_engine_review_more_before_new_01",
+      "prompt": "We got two consulting clients from 18 warm messages. The founder now wants to start LinkedIn content, cold email, and Meta ads at the same time. We do not know our reply or close rates beyond those 18 messages. What should we improve next?",
+      "expected_output": "Reviews all five lessons and Core Four methods; identifies insufficient repetitions and measurement in the working warm channel; recommends a bounded More test before Better or New; shows Before/After and does not start three channels",
+      "files": [],
+      "assertions": [
+        "Separates current evidence from missing rates and economics",
+        "Grades the five lessons; labels every Core Four channel for applicability and does not grade not-currently-required channels",
+        "Applies More before Better or New because the existing sample is thin",
+        "Shows an observable Before and After with an illustrative mechanism",
+        "Compares the current strategy with the source's More-Better-New trajectory and states what transfers and what does not",
+        "Defines a bounded test and positive/negative branch conditions"
+      ],
+      "metadata": {"farplane": {"title": "Choose more evidence before channel expansion", "tags": ["skill", "lead-engine", "normal"]}}
+    },
+    {
+      "id": "lead_engine_review_product_referral_blocker_01",
+      "prompt": "We spend profitably on ads, but churn is 18% monthly, customers rarely finish onboarding, and referrals are almost zero. Management wants to double ad spend next month.",
+      "expected_output": "Identifies product/onboarding retention and customer-created growth as constraints; does not recommend scaling ads despite current acquisition profitability; defines a Before/After around early value, churn, and referral readiness; proposes a bounded repair/proof experiment",
+      "files": [],
+      "assertions": [
+        "Distinguishes acquisition profitability from whole-system health",
+        "Uses churn, onboarding, and referrals as evidence against immediate scale",
+        "Does not treat more ad volume as the next move",
+        "Uses the customer-created-growth and level-scaling trajectories to explain why the source's ad-scaling path does not yet transfer",
+        "Shows Before, After, and an adapted source example rather than copying a tactic",
+        "Names delivery/customer guardrails and decision branches"
+      ],
+      "metadata": {"farplane": {"title": "Block ad scaling when customer value leaks", "tags": ["skill", "lead-engine", "hardcase"]}}
+    },
+    {
+      "id": "lead_engine_review_prelaunch_boundary_01",
+      "prompt": "Review lead generation for a prelaunch industrial AI product. We have interviewed three operations managers but have no offer, lead magnet, audience, funnel, or customers.",
+      "expected_output": "Uses unknown grades where evidence is absent; avoids prescribing a full channel stack; identifies offer/audience validation as the prerequisite; frames a small evidence-gathering step and explicit Before/After",
+      "files": [],
+      "assertions": [
+        "Does not invent funnel benchmarks or channel economics",
+        "Does not penalize the business for not running all Core Four channels",
+        "Identifies the lowest missing capability that blocks acquisition review",
+        "Returns a bounded next evidence step rather than a scale plan",
+        "Keeps outreach, publishing, and spend as proposals"
+      ],
+      "metadata": {"farplane": {"title": "Handle a prelaunch acquisition boundary", "tags": ["skill", "lead-engine", "boundary"]}}
+    }
+  ]
+}

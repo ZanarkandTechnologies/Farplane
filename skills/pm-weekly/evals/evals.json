@@ -1,0 +1,86 @@
+{
+  "skill_name": "pm-weekly",
+  "evals": [
+    {
+      "id": "pm_weekly_complete_set_01",
+      "prompt": "The frozen 2026-W38 inventory contains exactly P-1, P-2, and P-3, all active with complete current-week memory. P-1 records $500 collected from source S-1 and an unresolved delivery commitment. P-2 records a signed $300 paid pilot from S-2 and no blocker. P-3 has complete sparse coverage with unknown money movement and a supported customer-decision constraint from S-3. Produce the complete Weekly JSON handoff inline without touching real files.",
+      "expected_output": "Represents all three Projects; Qualifies the sparse Project without calling it failed; Preserves distinct money states; Produces one company rollup and next-week memory only for active Projects",
+      "files": [],
+      "assertions": [
+        "Includes every expected Project exactly once",
+        "Does not average away the sparse Project",
+        "Carries only unresolved commitments"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Weekly rolls up a complete mixed-evidence set",
+          "tags": [
+            "pm-weekly",
+            "coverage"
+          ]
+        }
+      }
+    },
+    {
+      "id": "pm_weekly_missing_project_01",
+      "prompt": "The frozen 2026-W38 inventory expects P-1, P-2, P-3, and P-4, but P-4 Project Memory is missing. Produce the complete Weekly JSON handoff inline without touching real files.",
+      "expected_output": "Returns blocked with no partial company review or provider action; Names the missing Project and recovery needed",
+      "files": [],
+      "assertions": [
+        "Blocks the company rollup",
+        "Does not silently omit the missing Project",
+        "Produces no Multica action"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Weekly blocks incomplete portfolio coverage",
+          "tags": [
+            "pm-weekly",
+            "hardcase"
+          ]
+        }
+      }
+    },
+    {
+      "id": "pm_weekly_no_strategy_invention_01",
+      "prompt": "The complete frozen 2026-W38 set contains one active Project P-5. It has no configured customer, offer, price, or money measure. Source S-5 shows substantial engineering activity and no commercial result. Produce the complete Weekly JSON handoff inline without touching real files.",
+      "expected_output": "Marks the commercial frame and money movement unknown; Does not invent a strategy or celebrate activity; Surfaces the smallest operator decision needed",
+      "files": [],
+      "assertions": [
+        "Does not infer commercial progress from engineering activity",
+        "Does not invent customer, offer, price, or metric",
+        "Surfaces a bounded operator-needed decision"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Weekly preserves operator strategy ownership",
+          "tags": [
+            "pm-weekly",
+            "commercial-boundary"
+          ]
+        }
+      }
+    },
+    {
+      "id": "pm_weekly_rejects_stale_action_01",
+      "prompt": "The complete frozen inventory contains P-6 and issue I-9 at revision 12. The weekly extraction proposes a priority action on I-9 with expected_revision 11 and payload {priority: high, agent: bot-1}. Validate the Weekly handoff inline without touching real files.",
+      "expected_output": "Blocks the action with no provider mutation; Names the revision mismatch and forbidden extra field; Continues rendering the evidence report when coverage is otherwise complete",
+      "files": [],
+      "assertions": [
+        "Rechecks frozen issue membership and revision",
+        "Rejects a payload outside the exact priority allowlist",
+        "Returns a blocked action receipt and performs no mutation"
+      ],
+      "metadata": {
+        "farplane": {
+          "title": "Weekly rejects stale or extra action fields",
+          "tags": [
+            "pm-weekly",
+            "actions",
+            "hardcase"
+          ]
+        }
+      }
+    }
+  ]
+}

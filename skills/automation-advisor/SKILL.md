@@ -1,6 +1,6 @@
 ---
 name: automation-advisor
-description: "Design or revise Farplane Codex automations using project-owned automations.toml records and generic Pulse/Interval skill calls."
+description: "Design or revise Farplane Codex automations using one Markdown file per scheduled workflow."
 tier: 3
 group: operations
 source: local
@@ -15,149 +15,127 @@ allowed-tools: Read, Glob, Grep, Bash
 ## Context
 
 Use this skill to create, revise, or audit Farplane Codex automations. Work
-Pulse is the only base heartbeat. Feed Scout, Daily/Weekly Interval, Dogfood,
-and low-frequency maintenance remain separate `cron` records; Work Pulse is
-the shared ticket executor.
+Pulse is the only heartbeat and owns ticket execution. Company OS Daily and
+Weekly, Feed Scout, Dogfood, and maintenance are separate `cron` records.
 
-Keep the full desired record in `farplane/automations.toml`: id, name, kind,
-status, target, schedule, and the exact prompt copied into Codex. Runtime IDs,
-logs, and mutable memory stay in the Codex automation store or ignored
-`.farplane/` state. Do not add a compiler, scheduler thread, or second manifest.
+Keep each complete desired record in one owner directory: office-wide Company
+OS Daily and Weekly in root `automations/*.md`, and project-local schedules in
+that project's `farplane/automations/*.md`. YAML front matter owns id, name,
+kind, status, target, and schedule; the body is the exact prompt. Runtime IDs, logs, and mutable
+memory stay in the Codex automation store or ignored `.farplane/` state. Do not
+add a compiler, scheduler thread, or second manifest.
 
-Automation prompts call one owning `$skill-name`, name only human-editable
-params and project-specific sources/gates, and leave generic workflow logic in
-the skill. Daily and Weekly call `$interval-update`; Daily projects candidates
-into one current weekly draft and Weekly owns selective promotion into
-canonical knowledge owners.
+An automation prompt calls one owning skill. The automation owns integration
+access, collection, pagination, frozen source caches, rendering, provider
+effects, and readback. The skill reads only local inputs and writes exactly one
+structured extraction. Company OS Daily fans out one `$pm-daily` call per
+eligible Project; Weekly calls `$pm-weekly` once over the complete frozen set.
+The former Interval workflow is removed and must not be restored or bound to
+Daily or Weekly.
+
+Company OS prompts retain Zanarkand AI's complete operated structure: source
+boundaries, matching and pagination, exact cache contracts, isolated skill
+ownership, JSON validation, rendering, freshness checks, effects, readback, and
+receipts. Do not replace that contract with a four-line workflow synopsis.
 
 ## Skill Signature
 
 ```text
-automation_advisor(intent, project_refs, current_automation?, activate?)
+automation_advisor(intent, project_refs, current_automation?, activate?, office_root?)
   -> template_choice + config_delta + automation_delta?
-   + persistent_thread_delta? + state_contract_check + proof_checklist
-state: reads(active feature/spec, farplane/automations.toml?, current prompts,
-             target skill, templates, the first-load Todo List guardrails);
-       writes(farplane/automations.toml and, only for an explicit persistent
-              thread, farplane/pm.json)
-gates: loop_choice; cadence; plain_skill_call; full_parseable_record;
-  no_contract_duplication; side_effect_gates; dated_artifacts;
-  one_heartbeat; no_hidden_scheduler
-routes: pulse-update | interval-update | feed-scout | dogfood-review |
+   + state_contract_check + proof_checklist
+state: reads(active feature/spec, automations/?, farplane/automations/?, current prompts,
+             target skill, templates, first-load Todo List guardrails);
+       writes(automations/ or farplane/automations/ according to scope)
+gates: loop_choice; cadence; one_owning_skill; full_parseable_record;
+  file_in_file_out_boundary; side_effect_gates; one_heartbeat;
+  no_hidden_scheduler
+routes: pulse-update | pm-daily | pm-weekly | feed-scout | dogfood-review |
   goal-advisor | review
-fails: logs in tracked config; generated prompt fragments; env-var schedules;
-  second heartbeat; legacy orchestrator; bare receipt with no useful summary
+fails: logs in tracked config; provider access inside pm skills; generated
+  prompt fragments; second heartbeat; active Daily/Weekly interval binding;
+  ticket creation or execution from Company OS reviews
 ```
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
 - [ ] 1. Classify the recurring job.
-  - [ ] Choose Pulse, Interval, Feed Scout, Dogfood, optional scheduled skill
-        work, one-off ticket work, or no automation.
-  - [ ] Keep Pulse as the only heartbeat. Use cron for every scheduled report,
-        source, self-improvement, knowledge, or maintenance pass.
-  - [ ] Use Interval for Daily/Weekly reporting plus knowledge extraction;
-        Daily stages source-fingerprinted candidates and Weekly dispositions and
-        promotes them. Evidence-quality rules stay shared.
+  - [ ] Keep Pulse as the only heartbeat and ticket executor.
+  - [ ] Use Company OS Daily/Weekly for project memory and money-linked review.
+  - [ ] Use cron for every report, source, self-improvement, or maintenance pass.
 - [ ] 2. Bind current project surfaces.
-  - [ ] Read the active feature/spec, current `farplane/automations.toml`, the
-        exact existing prompt, target skill, template, and the first-load Todo List guardrails.
+  - [ ] For Company OS, bind `office_root` to the explicit AI Office checkout
+        that contains `automations/daily-operating-update.md` and
+        `automations/weekly-operating-review.md`. Do not infer it from the
+        installed skill path or from a managed project's `farplane/` folder.
+  - [ ] Read the active feature/spec, root `automations/`, relevant project
+        `farplane/automations/`, exact live
+        prompt, target skill, template, and first-load Todo List guardrails.
   - [ ] Read [prompt engineering](../../docs/fundamentals/prompt-engineering.md)
         before material prompt changes.
 - [ ] 3. Keep desired config visible and runtime state untracked.
-  - [ ] Use one complete `[[automations]]` record per Codex automation under
-        template `1.0.0`; keep params in the prompt string.
-  - [ ] Let the Codex record own live cadence and TOML own desired cadence,
-        target, status, and exact prompt. Add no parallel scheduler or ledger.
-- [ ] 4. Write the smallest reviewable prompt.
-  - [ ] Invoke `$skill-name` and include only cadence, project root, source refs,
-        workflow flags, local write policy, external side-effect gates, and
-        human-editable overrides.
-  - [ ] Do not restate scoring, routing algorithms, generic proof, output
-        schemas, or safety rules already owned by the skill.
-  - [ ] For Interval, name the shared evidence window, current weekly draft,
-        Daily no-promotion boundary, Weekly promotion policy, dated report and
-        receipt, and no-ticket-execution boundary.
-  - [ ] Require a compact final response with report/draft/receipt links,
-        ticket and candidate decisions, dispositions or upserts, changed owners,
-        source gaps, operator needs, and next owner.
-  - [ ] For every Interval revision, copy the exact receipt block under Output
-        into the visible response after validation. Completion is invalid when
-        any line is missing; TOML parsing or record counts do not imply it.
-- [ ] 5. Activate only when requested.
-  - [ ] Inspect existing Codex automations and update matching records instead
-        of creating duplicates. Reuse the Pulse thread; cron jobs target the
-        workspace unless an explicit persistent-thread exception exists.
-  - [ ] Follow [live activation](references/live-activation.md). If the app
-        tools are unavailable, stop at `needs_automation_setup` after writing
-        the desired config.
+  - [ ] Use one complete Markdown file per Codex automation; do not add an index.
+  - [ ] Store Company OS Daily and Weekly once at the AI Office root; never
+        scaffold one copy per managed project.
+  - [ ] Let the Codex record own live cadence and Markdown own desired cadence,
+        target, status, and exact prompt.
+- [ ] 4. Write the complete operated prompt without duplicating skill reasoning.
+  - [ ] Invoke one `$skill-name` and include only cadence, project bindings,
+        sources, stages, write policy, side-effect gates, and final receipt.
+  - [ ] For Company OS, name fetch/cache, local skill extraction, validation,
+        and render/apply as four explicit stages.
+  - [ ] Preserve the stage-specific collection, matching, cache, ownership,
+        stale-write, readback, and receipt rules from the full Company OS templates.
+  - [ ] Keep the Zanarkand source template and version in automation front matter.
+  - [ ] Make provider access and effects automation-owned. Make skill inputs and
+        its single JSON output exact.
+  - [ ] Restrict Company OS actions to authorized existing issues; forbid task
+        admission, strategy invention, broad promotion, and execution.
+- [ ] 5. Activate when the accepted task includes live integration.
+  - [ ] Inspect live Codex automations and update matching records instead of
+        creating duplicates. Follow [live activation](references/live-activation.md).
+  - [ ] Preserve IDs, cadence, target, model, reasoning, status, and the single
+        Pulse heartbeat unless the accepted change explicitly alters one.
 - [ ] 6. Validate and review.
-  - [ ] Reapply the first-load Todo List guardrails; parse TOML; verify all required fields,
-        exactly one `$pulse-update` heartbeat, dated artifacts, prompt/config
-        parity, and absence of legacy manifests or orchestrators.
-  - [ ] Route material ticket, goal, external-source, or local knowledge-write
-        automation changes through independent review.
+  - [ ] Parse YAML front matter and use the body as the prompt; verify required fields, one `$pulse-update` heartbeat,
+        Company OS prompt/skill parity, and no active Interval binding.
+  - [ ] Verify Daily has one local skill call per eligible Project and Weekly
+        has one call over a complete frozen set.
+  - [ ] Route material workflow changes through independent review.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 ## Templates
 
-```toml
-[[automations]]
-id = "<id>"
-name = "<name>"
-kind = "cron"
-status = "active"
-prompt = '''
-Use $<skill-name>.
-
-Run one bounded pass with project-specific params and gates.
-
-Config source:
-farplane/automations.toml automation id="<id>"
-'''
-[automations.target]
-workspace = "<project-root>"
-[automations.schedule]
-type = "daily | weekly | monthly | active_hours_interval"
-timezone = "<timezone>"
-```
+- [Company OS automation](templates/company-os-automation.md)
+- [Pulse automation](templates/pulse-automation.md)
+- [Live activation](references/live-activation.md)
 
 ## Gotchas
 
 - A schedule is configuration, not runtime memory.
-- One cron may own multiple phases only when one skill is their semantic parent.
-- Local docs/Wiki/skill writes require route-specific validation; they do not
-  grant deploy, publish, spend, account, or customer-contact authority.
-
-## Reference Map
-
-- [Interval automation template](templates/interval-automation.md)
-- [Pulse automation template](templates/pulse-automation.md)
-- [Live activation](references/live-activation.md) — load only when activation
-  is explicitly requested.
-- the first-load Todo List guardrails — prompt and config finish gate.
-- [Active Interval feature](../../docs/features/FEAT-0067-daily-interval-review-reports.md)
+- One cron may own multiple stages only when one skill is their semantic parent.
+- A Company OS review observes and updates existing work; it does not start a
+  Multica run or invent a new company strategy.
+- Local report writes do not grant deploy, publish, spend, account, customer
+  contact, or destructive authority.
 
 ## Output
 
-Return the automation type, concise TOML/config delta, created or reused IDs
-when activated, state-boundary checks, validation evidence, and review route.
-For Interval changes, explicitly receipt: existing Daily/Weekly records updated;
-one `$interval-update` parent and shared window per run; Daily draft projection
-and zero canonical promotions; Weekly complete dispositions, finalized report,
-authorized promotions, receipt, and next draft; external side-effect gates stay
-separate; one Pulse heartbeat is preserved; and no ticket execution.
+Return the automation type, concise config delta, created or reused live IDs,
+state-boundary checks, validation evidence, and review route. For a material
+prompt revision, include the complete replacement Markdown records with exact
+prompts so the proposed change is reviewable before activation.
 
-End Interval automation scenarios by copying this block exactly:
+End Company OS automation changes with this receipt:
 
 ```text
-interval_parent_calls_per_run: 1
-bounded_evidence_windows_per_run: 1
-daily_canonical_promotions: 0
-weekly_dispositions_before_promotion: yes
-promotion_policy_separate_from_external_side_effect_gates: yes
-generic_routing_validation_owner: interval-update
+daily_project_calls: one per eligible project
+weekly_parent_calls: 1
+skills_provider_reads: 0
+skills_provider_writes: 0
+automation_renders_and_applies: yes
+existing_issue_actions_only: yes
+multica_execution: none
 pulse_heartbeat_count: 1
-ticket_execution: none
 ```

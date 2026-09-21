@@ -1,0 +1,49 @@
+{
+  "skill_name": "review-model",
+  "evals": [
+    {
+      "id": "money_model_review_selects_binding_constraint_01",
+      "prompt": "Review our consultancy money model. We sell only a $24,000 annual transformation. Qualified prospects like the outcome but 8 of the last 10 stalled before signing because they want to experience how we work. Delivery capacity is healthy; retained clients renew at 80%. What should we improve next?",
+      "expected_output": "Reviews all ten criteria but selects first-yes risk as the binding constraint; states an observable Before and After; treats a paid diagnostic as an adapted example rather than a universal answer; proposes one bounded test with decision branches; does not prescribe ten projects",
+      "files": [],
+      "assertions": [
+        "Maps the current customer-to-cash path and separates evidence from unknowns",
+        "Grades all ten criteria with confidence while avoiding a summed maturity score",
+        "Selects first-yes risk because current evidence links it to stalled qualified prospects",
+        "Shows Before, After, and a clearly labeled adapted example",
+        "Uses Greg's failed giveaway and successful Strategy Sprint trajectory to distinguish transferable design from copyable tactics",
+        "Proposes a bounded experiment with success, guardrail, and positive/negative next branches"
+      ],
+      "metadata": {"farplane": {"title": "Select the binding first-yes constraint", "tags": ["skill", "money-model", "normal"]}}
+    },
+    {
+      "id": "money_model_review_rejects_front_end_tactic_01",
+      "prompt": "Our course has poor completion, refund requests are rising, and buyers say the promised outcome is not achieved. Build us a cheap paid diagnostic and an upsell ladder so we can make more money.",
+      "expected_output": "Identifies product outcome and trust as blockers; does not use a new attraction offer to paper over delivery failure; records relevant rubric grades and recommends repairing or proving customer value before ladder optimization",
+      "files": [],
+      "assertions": [
+        "Does not blindly prescribe a cheaper first offer",
+        "Names outcome quality, refunds, and trust as the causal constraint",
+        "Uses source examples as optional mechanisms rather than requirements",
+        "Explains why the source's attraction, upsell, and continuity trajectories do not transfer while the core outcome is broken",
+        "Defines a Before and After centered on customer outcomes",
+        "Avoids invented revenue lift"
+      ],
+      "metadata": {"farplane": {"title": "Reject offer optimization over broken delivery", "tags": ["skill", "money-model", "hardcase"]}}
+    },
+    {
+      "id": "money_model_review_sparse_evidence_01",
+      "prompt": "Can you review the money model for my new business? I have an idea for an AI service but no customers, prices, or tested offer yet.",
+      "expected_output": "Returns an evidence-limited rubric with unknown grades; avoids fabricating conversion or economics; identifies the minimum offer and customer evidence needed; proposes a discovery or offer test rather than a complex ladder",
+      "files": [],
+      "assertions": [
+        "Uses grade 0 where evidence is absent",
+        "Does not create false precision or a complete offer ladder",
+        "Separates current unknown Before from a testable After",
+        "Names the smallest decision-changing evidence step",
+        "Keeps spend and customer contact as proposals"
+      ],
+      "metadata": {"farplane": {"title": "Handle a pre-revenue evidence boundary", "tags": ["skill", "money-model", "boundary"]}}
+    }
+  ]
+}

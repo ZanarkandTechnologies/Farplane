@@ -1,7 +1,6 @@
 # Feed Scout Codex Automation Prompt
 
-Call the `feed-scout` skill as one separate bounded automation. Do not call
-Interval Update from this run.
+Call the `feed-scout` skill as one separate bounded automation.
 
 Configured local surfaces:
 
@@ -11,7 +10,7 @@ Configured local surfaces:
 - proposal ledger or local inbox: `.farplane/feed-scout/proposals.jsonl`
 - Scout Brief: `.farplane/feed-scout/scout-brief.md`
 - report root: `.farplane/reports/feed-scout`
-- local ticket cap and write policy: supplied by this automation
+- proposal cap and write policy: supplied by this automation
 
 Steps:
 
@@ -32,16 +31,15 @@ Steps:
    things, and source gaps; merge duplicates and replace superseded synthesis
    instead of appending daily/monthly snapshots. Validate it with
    `scripts/validate_scout_brief.py` and record the update receipt.
-7. Only after the report and Scout Brief exist, project up to the configured ticket
+7. Only after the report and Scout Brief exist, project up to the configured proposal
    cap. Require canonical ICP and complete selected source-backed facts, a named baseline/default,
    intended belief or workflow delta, canonical source evidence, strong signal,
    active-ticket dedupe, executable scope, Reward, proof, stop condition,
-   authority, and ticket quality. Link created and rejected candidates back
+   authority, and ticket quality. Link accepted and rejected candidates back
    into the report.
-8. Default tickets to `status: awaiting_review`. Use `status: todo` only when this
-   automation's explicit write policy grants automatic local admission and no
-   human or external-action gate remains.
-9. Return report path, feed path, Scout Brief update receipt, ticket paths,
+8. Write candidates to the proposal ledger for normal planning. Do not create,
+   assign, start, or update a Multica issue from Feed Scout.
+9. Return report path, feed path, Scout Brief update receipt, proposal refs,
    rejections, source gaps, cap, and a no-execution receipt.
 
 When instructions ask for new sources, entity/thesis changes, or product
@@ -50,6 +48,6 @@ review evidence, or planner candidates. Only sources configured at run start
 may nominate sources; nominees cannot be fetched recursively or added to config
 inside the run.
 
-Do not poll forever, run Interval, launch Goal/Pulse/workers, implement created
-tickets, publish, perform outreach, spend API budget, or create/write live
+Do not poll forever, launch Goal/Pulse/workers, implement proposed work,
+publish, perform outreach, spend API budget, or create/write live
 Notion surfaces unless the automation explicitly authorizes that action.

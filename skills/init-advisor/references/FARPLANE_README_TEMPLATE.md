@@ -22,7 +22,7 @@ farplane/
   manifest.json    # versioned Farplane project spec for this project
   harness.yaml     # typed charter, planning areas, capability refs, metric selection
   metrics.yaml     # metric definitions, direction, freshness, guard rules
-  automations.toml # one Work Pulse heartbeat plus separate scheduled jobs
+  automations/     # one Markdown file per Work Pulse or scheduled job
   bindings.yaml      # non-secret project IDs, URLs, labels, aliases
   pm.json          # optional UI thread manifest for one visual project PM
 

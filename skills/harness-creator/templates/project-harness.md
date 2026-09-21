@@ -13,7 +13,7 @@ framework_template_version: "0.3.0"
 canonical_targets:
   - farplane/harness.yaml
   - farplane/metrics.yaml
-  - farplane/automations.toml
+  - farplane/automations/
   - farplane/bindings.yaml
   - .agents/skills/README.md
 ---
@@ -31,7 +31,7 @@ Farplane files:
   change rule.
 - `farplane/metrics.yaml` owns provider-independent metric meaning, direction,
   freshness, and optional guard rules. The planner owns trajectory comparison.
-- `farplane/automations.toml` owns reviewable full Codex automation config.
+- `farplane/automations/` owns reviewable full Codex automation config.
 - `farplane/bindings.yaml` owns non-secret project/provider coordinates and
   coordinates; `farplane/metrics.yaml` owns grouped refresh prompts.
 - `.agents/skills/` owns project-local capability workflows.
@@ -127,7 +127,7 @@ Human meaning and unmeasured hard constraints stay in the typed charter.
 
 ## Metric, Automation, And Binding Delta
 
-Targets: `farplane/metrics.yaml`, `farplane/automations.toml`,
+Targets: `farplane/metrics.yaml`, `farplane/automations/`,
 `farplane/bindings.yaml`
 
 - `metric_definition_delta:`

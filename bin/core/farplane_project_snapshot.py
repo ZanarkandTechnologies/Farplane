@@ -7,17 +7,17 @@ import argparse
 import hashlib
 import json
 import re
-import tomllib
 from datetime import date as date_type
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, TypedDict
 
 import yaml
-
 try:
+    from farplane_automation_file import AutomationMarkdownError, load_automation_markdown
     from farplane_metric_schema import batch_path, read_metric_batches
 except ImportError:  # pragma: no cover - package import path used by tests
+    from bin.core.farplane_automation_file import AutomationMarkdownError, load_automation_markdown
     from bin.core.farplane_metric_schema import batch_path, read_metric_batches
 
 try:
@@ -151,9 +151,9 @@ PRIMITIVE_CATALOG: dict[str, dict[str, Any]] = {
     },
     "autonomy_time_feedback": {
         "primitive_id": "autonomy_time_feedback",
-        "provider": "interval-update",
+        "provider": "farplane-core",
         "owner": "farplane-core",
-        "command": "python3 skills/interval-update/scripts/metric_refresh.py autonomy-time-ratio --runtime-dir .farplane --date <YYYY-MM-DD>",
+        "command": "python3 bin/core/farplane_metric_refresh.py autonomy-time-ratio --runtime-dir .farplane --date <YYYY-MM-DD>",
         "store_to": ".farplane/metrics/observations/autonomy_time_feedback/<YYYY-MM-DD>.json",
         "required_inputs": [".farplane/events/*.jsonl", ".farplane/state/ticket-thread-associations.jsonl", ".farplane/automation/rewards.jsonl"],
         "emits": ["auto_time_ratio", "human_attention_minutes_estimated", "autonomous_worker_elapsed_minutes"],
@@ -161,9 +161,9 @@ PRIMITIVE_CATALOG: dict[str, dict[str, Any]] = {
     },
     "ticket_intervention_feedback": {
         "primitive_id": "ticket_intervention_feedback",
-        "provider": "interval-update",
+        "provider": "farplane-core",
         "owner": "farplane-core",
-        "command": "python3 skills/interval-update/scripts/metric_refresh.py ticket-intervention-metrics --ticket-dir tickets --runtime-dir .farplane --date <YYYY-MM-DD>",
+        "command": "python3 bin/core/farplane_metric_refresh.py ticket-intervention-metrics --ticket-dir tickets --runtime-dir .farplane --date <YYYY-MM-DD>",
         "store_to": ".farplane/metrics/observations/ticket_intervention_feedback/<YYYY-MM-DD>.json",
         "required_inputs": ["tickets/**/ticket.md", ".farplane/state/ticket-thread-associations.jsonl", ".farplane/events/*.jsonl"],
         "emits": ["auto_completion_rate", "intervention_free_ticket_count", "ticket_intervention_turn_count"],
@@ -634,28 +634,28 @@ def load_content_items(project_root: Path) -> tuple[list[dict[str, Any]], list[s
 
 
 def load_automations(project_root: Path) -> tuple[list[dict[str, Any]], list[str]]:
-    path = project_root / "farplane" / "automations.toml"
-    if not path.exists():
-        return [], ["missing_automations_toml"]
-    try:
-        data = tomllib.loads(path.read_text(encoding="utf-8"))
-    except tomllib.TOMLDecodeError:
-        return [], ["invalid_automations_toml"]
-    automations = data.get("automations") if isinstance(data, dict) else []
-    if not isinstance(automations, list):
-        return [], ["invalid_automations_shape"]
-    return [
-        {
-            "id": str(item.get("id") or ""),
-            "name": str(item.get("name") or ""),
-            "kind": str(item.get("kind") or ""),
-            "status": str(item.get("status") or ""),
-            "source_ref": {"path": "farplane/automations.toml"},
-        }
-        for item in automations
-        if isinstance(item, dict)
-    ], []
-
+    root = project_root / "farplane" / "automations"
+    if not root.is_dir():
+        return [], ["missing_automations_dir"]
+    automations: list[dict[str, Any]] = []
+    gaps: list[str] = []
+    for path in sorted(root.glob("*.md")):
+        try:
+            item = load_automation_markdown(path)
+        except (AutomationMarkdownError, OSError):
+            gaps.append(f"invalid_automation_markdown:{path.name}")
+            continue
+        automations.append(
+            {
+                "id": str(item.get("id") or ""),
+                "name": str(item.get("name") or ""),
+                "kind": str(item.get("kind") or ""),
+                "status": str(item.get("status") or ""),
+                "source_ref": {"path": f"farplane/automations/{path.name}"},
+            }
+        )
+    if not automations and not gaps: gaps.append("empty_automations_dir")
+    return automations, gaps
 
 def path_from_config(value: Any, default: Path) -> Path:
     raw = str(value or "").strip()
@@ -1839,7 +1839,7 @@ def load_project_snapshot(
     source_gaps.extend(gap_objects_from_strings(latest.get("source_gaps", []) if isinstance(latest.get("source_gaps"), list) else [], "metrics", ".farplane/metrics/daily/"))
     source_gaps.extend(gap for gap in metric_view.get("source_gaps", []) if isinstance(gap, dict))
     source_gaps.extend(source_gap(gap_id, "distribution", gap_id, ".farplane/content/ledger.jsonl") for gap_id in content_gap_ids)
-    source_gaps.extend(source_gap(gap_id, "cadence", gap_id, "farplane/automations.toml") for gap_id in automation_gap_ids)
+    source_gaps.extend(source_gap(gap_id, "cadence", gap_id, "farplane/automations/") for gap_id in automation_gap_ids)
     source_gaps.extend(feed_scout_gaps)
     source_gaps.extend(highlight_gaps)
     if not reports:

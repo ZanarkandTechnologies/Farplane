@@ -1,5 +1,11 @@
 # Farplane Architecture
 
+Active task state lives in the Multica project bound by
+`farplane/bindings.yaml`; Multica remains dashboard-only and execution stays in
+Codex. Files under `tickets/` are proof, templates, migration snapshots, and
+legacy records. Diagrams below that show `tickets/TASK-*` describe the retained
+legacy implementation, not the active queue contract.
+
 Current-state system map for Farplane.
 
 Use this file as the top-level architecture guide after the repo-local
@@ -301,7 +307,8 @@ The review scoring model is canonical in `skills/review/*`, not in this file.
 
 - Root docs should stay map-like.
 - Detailed behavior belongs in feature docs under `docs/features/`.
-- Ticket-local state belongs in `tickets/TASK-*/ticket.md`, not in chat.
+- Active task state belongs in the bound Multica issue and its comments, not
+  in chat. Repository files may hold structured proof or migration snapshots.
 - Reusable QA shortcuts and deterministic browser-entry guidance belong in
   `qa/cookbook/*`, not in ticket prose or transient chat.
 - Review scoring belongs in `skills/review/*`.
