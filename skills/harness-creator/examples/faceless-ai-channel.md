@@ -144,9 +144,9 @@ project "Faceless AI Engineering Channel" {
 
 ## Evidence
 
-- `research_refs:` use `research:parity` for AI education, faceless
+- `research_refs:` use `competitor-research` for AI education, faceless
   documentary, and technical explainer channel workflows.
-- `competitor_refs:` use `research:competitor` after the first candidate set is
+- `competitor_refs:` use `competitor-research` after the first candidate set is
   chosen.
 - `local_refs:` Farplane docs, skills, tickets, examples, and prior artifacts
   are source material.

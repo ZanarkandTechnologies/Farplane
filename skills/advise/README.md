@@ -26,5 +26,5 @@ Guide agents to act like a reliable consultant when the user has not already cho
   surface preference.
 - Confirm one option is explicitly recommended.
 - Confirm fact-dependent recommendations are grounded through
-  `reference-grounding` or `research:*`.
+  `reference-grounding` or the relevant specialized research skill.
 - Confirm the answer does not end with "if you want I can ...".

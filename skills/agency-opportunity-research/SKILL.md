@@ -17,7 +17,7 @@ or call into a reviewable commercial opportunity. It owns target companies,
 roles, relationship strategy, problem hypotheses, evidence, competitor context,
 proof needs, and the next research or solution-shaping route.
 
-It composes existing methods. Use `research` for external evidence,
+It composes existing methods. Use `competitor-research` for external market evidence,
 `lead-scout` for candidate discovery, and `customer-research` for a known person
 or call target. Perform first-principles option expansion inline, and use
 `solution-shaping` only after the target/problem frame is sufficiently
@@ -42,7 +42,7 @@ gates: premise_bounded; sources_traceable; provenance_labeled;
        relationship_strategy_named; inferred_pains_not_presented_as_facts;
        solution_shaping_requires_problem_frame; competitor_labels_criteria_bounded;
        external_actions_approval_gated; wiki_publication_intent_bound
-routes: research:* | lead-scout | customer-research | solution-shaping | manage-wiki |
+routes: specialized research | lead-scout | customer-research | solution-shaping | manage-wiki |
         usecase-experiment-loop | demo-realism | impl-plan | review
 fails: generic company list; invented prospect facts; lead score without
        relationship strategy; solution pitch without evidence; duplicate
@@ -87,7 +87,7 @@ path. Manage Wiki, not Impl Plan, owns normal page selection and resolution.
         create only the required parent directory. Return inline instead when
         the caller asked only for an answer or prohibited filesystem edits.
 - [ ] 3. Build the market and relationship map.
-  - [ ] For industry intake, use `research` plus `lead-scout` to identify
+  - [ ] For industry intake, use `competitor-research` plus `lead-scout` to identify
         supply-chain/value-chain segments, 10-20 candidate companies, relevant
         locations/projects, and public sources unless scope specifies otherwise.
   - [ ] For company intake, identify its segment, business model, adjacent
@@ -103,10 +103,10 @@ path. Manage Wiki, not Impl Plan, owns normal page selection and resolution.
         correction question.
   - [ ] Label claims `supplied`, `observed`, `researched`, `inferred`, or
         `unknown`; attach source, observation date, confidence, and freshness.
-  - [ ] Route uncertain user jobs or pains to `research:user-grounding`; do not
+  - [ ] Route uncertain user jobs or pains to `customer-research`; do not
         treat role stereotypes or private-company guesses as facts.
 - [ ] 5. Add competitor and capability context.
-  - [ ] Use `research:competitor`, `research:parity`, or source synthesis when
+  - [ ] Use `competitor-research`, `competitor-research`, or source synthesis when
         current vendors, startups, internal approaches, open-source tools, or
         peer workflows could change the opportunity.
   - [ ] Select an `established_benchmark` and `emerging_specialist` only from

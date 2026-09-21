@@ -63,7 +63,7 @@ exploration_note:
   recommendation:
   chosen_lanes?:
   selected_personas?:
-  next_owner: operator clarification | prd | research:* | none
+  next_owner: operator clarification | prd | specialized research | none
   clarifications_needed:
 ```
 
@@ -114,8 +114,8 @@ owner skill synthesizes without changing its domain output.
   decisive recommendation
 - use `reference-grounding` when useful options need examples, local baseline,
   peer norms, or official behavior before comparison
-- use `research:parity`, `research:competitor`, or
-  `research:source-synthesis` when compact grounding is not enough
+- use `competitor-research`, `competitor-research`, or
+  `reference-grounding` when compact grounding is not enough
 - load `references/spine-and-ensemble.md` when optional lane choice or
   complete persona prompts matter
 - use optional depth lanes only when relevant:
@@ -148,7 +148,7 @@ Produce a short exploration note with:
 
 - if the user chooses a direction but it is still fuzzy: operator clarification
 - if the user chooses a direction and it is already coherent: `prd`
-- if the missing piece is evidence: `research:*` with the exact method named
+- if the missing piece is evidence: the relevant specialized research skill with the exact method named
 - if the user asks for implementation after a coherent plan: `impl-plan`
 
 This skill should not create tickets or implement code itself.

@@ -198,7 +198,7 @@ Tier 2 skills are medium-compounding workflow interfaces. They turn primitive
 obligations into reusable protocol surfaces such as:
 
 - `brainstorm`
-- `research:*`
+- the relevant specialized research skill
 - `harness-advisor`
 
 Common reusable work that many Tier 3 skills need should usually start as a
@@ -262,7 +262,7 @@ skill import every primitive directly:
 
 - Tier 2 first-load todos may link Tier 1 primitives.
 - Tier 3 first-load todos should usually link Tier 2 surfaces such as
-  `research:*` and domain workflow interfaces when those are real invocable
+  the relevant specialized research skill and domain workflow interfaces when those are real invocable
   contracts.
 - Tier 3 first-load todos may link peer Tier 3 skills when the domain flow has
   an intentional handoff.

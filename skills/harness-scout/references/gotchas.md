@@ -20,7 +20,7 @@
   and anti-metrics.
 - Do not let the scout workflow mutate live skills automatically. Use
   [best-of-worlds](../../best-of-worlds/SKILL.md),
-  [research:gap](../../research/SKILL.md#researchgap), and
+  [implementation-research](../../implementation-research/SKILL.md), and
   [impl-plan](../../impl-plan/SKILL.md) gates first.
 - Do not list tools as skill dependencies. For example, sequential thinking may
   help analysis, but it is not a dependency unless it becomes a local skill

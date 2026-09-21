@@ -21,11 +21,10 @@ allowed-tools: Read, Grep, Glob, Bash
   diagnosis, UX brief, redesign recommendation, or planning handoff.
 - [ ] Read the first-load Todo List guardrails before execution when the task
   will shape an app screen, panel, dashboard, form, or control surface.
-- [ ] Use [research:user-grounding](../research/SKILL.md#researchuser-grounding)
+- [ ] Use [customer-research](../customer-research/SKILL.md)
   when users, jobs, contexts, friction, or success signals are not already
   settled.
-- [ ] Use [research:competitor](../research/SKILL.md#researchcompetitor) or
-  [research:parity](../research/SKILL.md#researchparity) when comparable app
+- [ ] Use [competitor-research](../competitor-research/SKILL.md) when comparable app
   workflows or established product patterns should shape the options.
 - [ ] For a material, unsettled, current, or SOTA workflow, use the Codex
   in-app Browser to operate 2-4 established comparables or direct products and

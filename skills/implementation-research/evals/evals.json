@@ -1,0 +1,29 @@
+{
+  "skill_name": "implementation-research",
+  "evals": [
+    {
+      "id": "implementation_research_multipart_01",
+      "prompt": "Research how to add resumable multipart uploads to evals/fixtures/service/src/upload.ts. External access is unavailable; use evals/fixtures/multipart-pattern-packet.md and return an Implementation Research Brief with the local seam, literal queries, candidate threshold, repository deep dives, local delta, decision, and proof handoff.",
+      "expected_output": "Maps the local seam before asserting a gap; records literal searches; filters a broad candidate set; inspects files, tests, lifecycle, and failures; distinguishes transferable constraints from source syntax; recommends the smallest local adaptation and proof path",
+      "files": ["evals/fixtures/multipart-pattern-packet.md", "evals/fixtures/service/src/upload.ts"],
+      "assertions": ["Maps the local implementation and tests before recommending a pattern", "Records reproducible literal code queries and candidate rejections", "Deep-dives maintained sources with exact repository and file provenance", "Covers lifecycle, validation, retries or cleanup, and failure tests", "Returns adopt, adapt, reject, or defer decisions plus a local proof path"],
+      "metadata": {"farplane": {"title": "Implementation research adapts maintained multipart patterns", "tags": ["implementation-research", "code-patterns", "normal"], "notes": "Normal multi-candidate implementation case."}}
+    },
+    {
+      "id": "implementation_research_stream_01",
+      "prompt": "Use evals/fixtures/tool-stream-pattern-packet.md to determine how the smaller Node service should stream tool-call results. Return the local contract, query and source trail, repository map, failure evidence, rejected assumptions, and implementation handoff.",
+      "expected_output": "Uses the named repository as one inspectable candidate; maps entrypoints and tests; examines abort, timeout, schema, and error behavior; rejects unnecessary continuation behavior; adapts only the constraints the smaller service needs",
+      "files": ["evals/fixtures/tool-stream-pattern-packet.md"],
+      "assertions": ["Uses literal symbols and file paths rather than tutorial queries", "Maps the repository before interpreting a snippet", "Inspects tests and cancellation, timeout, validation, or error behavior", "Separates repository-specific machinery from transferable constraints", "Recommends a proportional local implementation and falsifiable proof"],
+      "metadata": {"farplane": {"title": "Implementation research rejects oversized stream machinery", "tags": ["implementation-research", "deep-dive", "hard"], "notes": "Hard proportional-adaptation case."}}
+    },
+    {
+      "id": "implementation_research_no_external_01",
+      "prompt": "The local code and official API contract are available, but repository, X, and YouTube access are unavailable. Research the implementation boundary without pretending those sources were searched.",
+      "expected_output": "Uses the local owner and official contract; reports unavailable source classes and untested hypotheses; avoids padded candidates; returns a bounded docs-only conclusion or evidence gap with a recovery path",
+      "files": [],
+      "assertions": ["Does not claim unavailable platforms were searched", "Uses local and official evidence for only the claims they support", "Leaves unsupported implementation claims unresolved", "Does not fill top-k with weak or invented candidates", "Returns the smallest safe handoff and missing-evidence recovery path"],
+      "metadata": {"farplane": {"title": "Implementation research preserves a docs-only boundary", "tags": ["implementation-research", "boundary"], "notes": "Boundary case for unavailable external implementation evidence."}}
+    }
+  ]
+}

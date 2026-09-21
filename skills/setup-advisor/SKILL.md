@@ -35,7 +35,7 @@ setup_advisor(project_root, services?, target_state?, secret_store?, ci_target?,
 state: reads(repo config, env examples, CI references, provider config, local tool/auth readiness, current official docs); writes authorized setup/config changes, an ephemeral wizard by default, and a redacted receipt
 owns: one verified setup receipt for the requested service set
 gates: current_journey_grounded; automate_before_handoff; secret_destination_safe; external_side_effect_authorized; every_service_status_verified
-routes: init-advisor | automation-advisor | research:official-docs | direct-action
+routes: init-advisor | automation-advisor | implementation-research | direct-action
 fails: asks the operator to do automatable work; invents dashboard steps; exposes or tracks secrets; claims setup complete with unverified or blocked services
 ```
 
@@ -46,7 +46,7 @@ environment, and `plan` when the user asked for analysis only.
 ## Phase Boundary
 
 Inspect official provider documentation inline for a single ordinary service.
-Use `research:official-docs` only when several providers, conflicting docs, or
+Use `implementation-research` only when several providers, conflicting docs, or
 a migration need a separate evidence artifact. Use independent review for
 material cutovers or credential-routing changes; do not externalize routine
 setup planning.

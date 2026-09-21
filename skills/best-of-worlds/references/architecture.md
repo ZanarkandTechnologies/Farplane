@@ -4,11 +4,11 @@
 
 It does not replace:
 
-- [research:parity](../../research/SKILL.md#researchparity): use for broad
+- [competitor-research](../../competitor-research/SKILL.md): use for broad
   category parity before a synthesis target is known.
-- [research:gap](../../research/SKILL.md#researchgap): use for repo-local
+- [competitor-research](../../competitor-research/SKILL.md): use for repo-local
   current state versus production expectation.
-- [research:source-synthesis](../../research/SKILL.md#researchsource-synthesis):
+- [reference-grounding](../../reference-grounding/SKILL.md):
   use for compact source normalization before a full best-of-worlds pass.
 - inline comparison: use for judgment calls when the metric or adoption
   decision is not mechanical.

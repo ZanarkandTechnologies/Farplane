@@ -46,7 +46,7 @@ agent_qa_test_experiment(claim, experiment_contract, result_bundle, rerun_budget
   -> diagnosis_receipt + scoped_verdict + scientific_audit_packet
 gates: expectation_preregistered; observation_immutable; diagnosis_lane_independent;
        controls_and_fidelity_checked; reruns_within_budget; conclusion_scoped
-routes: domain_executor | research:targeted | scientific-evidence review
+routes: domain_executor | targeted external evidence | scientific-evidence review
 fails: null_result_means_method_false; suspicious_success_auto_promoted;
   diagnosis_lane_becomes_experiment_controller; unbounded_rerun
 ```

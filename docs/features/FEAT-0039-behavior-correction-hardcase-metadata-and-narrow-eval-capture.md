@@ -9,7 +9,6 @@ tags:
   - feature
   - sys-0005
 refs:
-  - skills/gap-analysis
   - skills/harness-advisor
   - skills/metric-advisor
   - skills/optimize-harness
@@ -22,7 +21,6 @@ system_id: SYS-0005
 category: proof
 public: true
 surfaces:
-  - skills/gap-analysis
   - skills/harness-advisor
   - skills/metric-advisor
   - skills/optimize-harness
@@ -34,7 +32,6 @@ source_refs:
   - docs/features/FEAT-0039-behavior-correction-hardcase-metadata-and-narrow-eval-capture.md
 external_refs: []
 evidence_refs:
-  - skills/gap-analysis/SKILL.md
   - skills/harness-advisor/SKILL.md
   - skills/metric-advisor/SKILL.md
   - skills/optimize-harness/SKILL.md
@@ -84,7 +81,7 @@ owner, patch the smallest durable surface, and prove it with a representative ca
 
 ## What It Does
 
-- Uses gap-analysis to describe expected versus observed behavior.
+- Compares expected versus observed behavior in the owning workflow.
 - Uses harness-advisor to choose the owner surface for a fix.
 - Captures difficult, reusable failures as runnable eval cases with input,
   assertions, observed failure, owner, tags, proof artifacts, and promotion status.
@@ -131,7 +128,7 @@ flowchart TD
   classDef retired fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d,stroke-dasharray: 5 3
 
   trigger["Trigger<br/>miss, correction, or behavior gap"]:::keep
-  owner["Owner surface<br/>gap-analysis, harness-advisor<br/>metric-advisor, optimize-harness, eval"]:::changed
+  owner["Owner surface<br/>harness-advisor, metric-advisor<br/>optimize-harness, eval"]:::changed
   readers["Files and fields read<br/>gap evidence, owner surface<br/>metric card, eval query<br/>ticket context"]:::keep
   capture["Narrow capture<br/>runnable regression case<br/>testable expectation and proof path"]:::changed
   artifact["Created artifact/evidence<br/>candidate seed, eval task,<br/>or repair ticket"]:::added
@@ -152,7 +149,6 @@ Legend:
 
 Owner surfaces:
 
-- `skills/gap-analysis`
 - `skills/harness-advisor`
 - `skills/metric-advisor`
 - `skills/optimize-harness`
@@ -167,7 +163,6 @@ Source context:
 
 Evidence:
 
-- `skills/gap-analysis/SKILL.md`
 - `skills/harness-advisor/SKILL.md`
 - `skills/metric-advisor/SKILL.md`
 - `skills/optimize-harness/SKILL.md`

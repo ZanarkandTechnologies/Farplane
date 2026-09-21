@@ -65,7 +65,7 @@ fails:
 ## Phase Boundary
 
 Plan inline by default. Use `content-impl-plan` when the user needs the parent
-ticket, advisor action list, and execution order. Use `research` only when current platform norms, peer
+ticket, advisor action list, and execution order. Use `competitor-research` only when current platform norms, peer
 examples, official specs, or source material materially affect the script. Use
 `review` when a material creative plan needs independent judgment before
 production. Hand off to production skills only after this skill has named the

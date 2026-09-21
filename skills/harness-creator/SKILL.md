@@ -54,8 +54,10 @@ returns: charter/metric/capability/feedback decisions, proof, and next owner
   safety gates for publishing, spend, accounts, customer contact, scraping,
   payments, legal/brand, and private data. Mark inferred values; without an
   approved gate, assume no external side effect. Use known templates first;
-  use [research](../research/SKILL.md) only when domain, peer, user, or Farplane
-  capability uncertainty changes the first honest feedback loop.
+  use [competitor-research](../competitor-research/SKILL.md),
+  [implementation-research](../implementation-research/SKILL.md), or
+  [experimental-research](../experimental-research/SKILL.md) only when that
+  specific evidence changes the first honest feedback loop.
 
   Assert: Missing human thesis, non-goals, or authority produces one compact
   question or a readiness gap; safe inspection may continue, but not completion.

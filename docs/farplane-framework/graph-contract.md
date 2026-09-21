@@ -110,7 +110,7 @@ The first generator version intentionally parses a small, stable surface:
 The parser should prefer omission over hallucination. Ambiguous state phrases
 become `state:*` nodes with `parsed` confidence instead of fake file paths.
 Routes that do not name an installed skill become `route:*` nodes rather than
-fake `skills/<name>/SKILL.md` paths. Method addresses such as `research:gap`
+fake `skills/<name>/SKILL.md` paths. Method addresses such as `doc-advisor:strategy`
 route to the base skill when that skill exists.
 Framework-critical edges that are true but not machine-declared use
 `curated` confidence and cite the owning doc.

@@ -412,7 +412,7 @@ Experiment prediction:
 Reward.expected_reward:
   delayed realized value expected from the completed ticket
   owner: Objective Contribution projection plus Reward row
-  miss route: gap-analysis, then accept | kill | monitor at check-in
+  miss route: owning workflow diagnosis, then accept | kill | monitor at check-in
 ```
 
 Do not duplicate either value. An experiment-like ticket may use both because

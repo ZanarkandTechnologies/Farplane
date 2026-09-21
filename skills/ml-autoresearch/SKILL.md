@@ -50,8 +50,8 @@ gates:
   packet_approved
 
 routes:
-  leverage-advisor | goal-advisor | metric-advisor | research:parity |
-  research:source-synthesis | best-of-worlds | eval | agent-qa-test | review
+  leverage-advisor | goal-advisor | metric-advisor | competitor-research |
+  reference-grounding | best-of-worlds | eval | agent-qa-test | review
 
 fails:
   evaluator_or_data_boundary_mutation; experiment_before_baseline;

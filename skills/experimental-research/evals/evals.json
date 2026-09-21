@@ -1,0 +1,29 @@
+{
+  "skill_name": "experimental-research",
+  "evals": [
+    {
+      "id": "experimental_research_robotics_01",
+      "prompt": "Choose which of three learned robotic grasping approaches is worth a two-week local experiment. Trace papers, authors, labs, code, replications, talks, X, and demos; normalize their evaluations and rank experiments for our hardware.",
+      "expected_output": "Defines falsifiable hypotheses and local metrics; follows paper and researcher trails; qualifies approaches by evidence, artifacts, and hardware fit; compares protocols and negative evidence; ranks small experiments by information gain, reproducibility, cost, and transfer fit",
+      "files": ["evals/fixtures/robotics-approaches.md"],
+      "assertions": ["Defines baseline, metrics, constraints, and falsifiers", "Searches beyond the first paper or lab through citations, authors, code, and independent evidence", "Normalizes dataset, baseline, metric, compute, and protocol differences", "Includes contrary evidence and transfer risks", "Returns a ranked experiment with promotion and stop conditions"],
+      "metadata": {"farplane": {"title": "Experimental research ranks robotics trials by learning value", "tags": ["experimental-research", "robotics", "normal"], "notes": "Normal researcher-trail and experiment-ranking case."}}
+    },
+    {
+      "id": "experimental_research_vendor_demo_01",
+      "prompt": "A foreign robotics vendor has a striking demo and a paper from its founders, but no public dataset and only a hardware-specific SDK. Decide whether to trial it against an open baseline.",
+      "expected_output": "Treats the demo and founder paper as related evidence; checks artifacts, independent replication, hardware and vendor dependency, data handling, cost, and reproducibility; proposes a controlled trial only if it can discriminate the claim",
+      "files": ["evals/fixtures/robotics-approaches.md"],
+      "assertions": ["Does not treat founder-authored sources as independent corroboration", "Checks code, data, protocol, hardware, and vendor constraints", "Includes an open baseline and comparable metric", "States lock-in and transfer assumptions", "Defines a falsifier and stop condition before recommending a trial"],
+      "metadata": {"farplane": {"title": "Experimental research qualifies a foreign vendor demo", "tags": ["experimental-research", "vendor", "hard"], "notes": "Hard vendor, provenance, and reproducibility case."}}
+    },
+    {
+      "id": "experimental_research_no_comparable_results_01",
+      "prompt": "Three papers report gains using different datasets, baselines, and metrics, and none releases code. Rank them anyway.",
+      "expected_output": "Refuses a false numeric ranking; records why results are incomparable; uses evidence quality and local feasibility only for a provisional ordering; proposes the smallest normalization or reproduction experiment and marks confidence low",
+      "files": ["evals/fixtures/robotics-approaches.md"],
+      "assertions": ["Does not compare incompatible headline gains directly", "Names dataset, baseline, metric, and artifact gaps", "Separates provisional feasibility from demonstrated performance", "Keeps confidence low", "Returns a normalization or reproduction experiment with a stop condition"],
+      "metadata": {"farplane": {"title": "Experimental research preserves incomparable-result uncertainty", "tags": ["experimental-research", "boundary"], "notes": "Boundary case against false benchmark precision."}}
+    }
+  ]
+}

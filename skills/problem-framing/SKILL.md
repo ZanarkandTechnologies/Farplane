@@ -35,7 +35,7 @@ state: reads(supplied notes, tickets, docs, local context, source snippets);
        writes(problem frame or handoff artifact only when caller owns a file)
 gates: symptom_problem_split; actor_named_or_unknown; constraints_labeled;
        product_boundary_not_assumed; next_owner_named
-routes: research:user-grounding | research:parity | prd |
+routes: customer-research | competitor-research | prd |
   deep-system-design | functional-ui | impl-plan | solution-shaping
 fails: treats requested feature as the problem; overbuilds to a platform;
   hides assumptions; produces tickets before the problem is framed
@@ -43,7 +43,7 @@ fails: treats requested feature as the problem; overbuilds to a platform;
 
 ## Phase Boundary
 
-Run grounding, reasoning, and review inline by default. Call `research:*` only
+Run grounding, reasoning, and review inline by default. Call the relevant specialized research skill only
 when current practice, best-in-class practice, or user reality is needed before
 the frame is trustworthy. Stop for operator clarification when the missing
 input is a human answer rather than a research question.

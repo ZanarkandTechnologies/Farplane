@@ -34,16 +34,16 @@ hand implementation to a Tier 3 skill such as `skill-maintenance`, `impl-plan`,
 harness_place(gap_or_request, evidence?) -> placement_decision
 state: reads(harness doctrine, system and feature metadata, generated registries, skill registry, relevant surfaces); writes(ticket? handoff?)
 gates: failure_named; owner_surface:named; rejected_surfaces:named; proof_path:named
-routes: gap-analysis | eval | self-improve | skill-maintenance | impl-plan | spec-to-ticket | direct-answer
+routes: eval | self-improve | skill-maintenance | impl-plan | spec-to-ticket | direct-answer
 fails: defaults to AGENTS.md; creates new skill before checking registry; recommends hooks for judgment-heavy work
 ```
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
 ## Todo List
 
-- [ ] 1. State the improvement request as one concrete harness failure or
-   capability gap; route to `gap-analysis` first when the observed-versus-
-   expected gap is still fuzzy.
+- [ ] 1. State the observed behavior and expected result as one concrete
+   harness failure. If the expectation is unknown, return the missing decision
+   instead of inventing a target or routing through a generic diagnostic skill.
 - [ ] 2. Ground the current state with the smallest relevant evidence.
    - [ ] Use [reference-grounding](../reference-grounding/SKILL.md) for compact
      local evidence before recommending a surface.

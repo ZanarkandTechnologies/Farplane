@@ -21,7 +21,7 @@ Use this as the ordered checklist whenever `remotion` is active.
 
 - [ ] Classify the Remotion job: composition authoring, final asset stitching, timing, sequencing, captions, audio placement, motion graphics, data visualization, UI animation, HTML-in-canvas, local render proof, or render-readiness check.
 - [ ] State the composition name, dimensions, fps, duration, assets, props, output intent, and handoff path before authoring code.
-- [ ] Use [research:official-docs](../research/SKILL.md#researchofficial-docs) or [research:code-patterns](../research/SKILL.md#researchcode-patterns) when Remotion API behavior, official docs, local code patterns, or source assets shape the implementation.
+- [ ] Use [implementation-research](../implementation-research/SKILL.md) when Remotion API behavior, official docs, local code patterns, or source assets shape the implementation.
 - [ ] Use the native planning phase when choosing authoring route, animation structure, asset route, render route, or scope cut.
 - [ ] Before designing visual scenes, layouts, promos, motion graphics, or text-heavy videos, load [video-layout](rules/video-layout.md).
 - [ ] Load the relevant Remotion rule file from `rules/` before implementing specialized behavior such as captions, audio, sequencing, timing, transitions, images, videos, visual effects, fonts, HTML-in-canvas, measurement, maps, or 3D.

@@ -81,10 +81,10 @@ routes:
     def test_non_skill_routes_are_abstract_route_nodes(self) -> None:
         repo = Path(__file__).resolve().parents[3]
         direct = lifecycle_graph.route_target_node("direct-answer", repo)
-        method = lifecycle_graph.route_target_node("research:gap", repo)
+        method = lifecycle_graph.route_target_node("doc-advisor:strategy", repo)
         self.assertEqual(direct["id"], "route:direct-answer")
         self.assertEqual(direct["kind"], "route")
-        self.assertEqual(method["id"], "skill:research")
+        self.assertEqual(method["id"], "skill:doc-advisor")
         self.assertEqual(method["kind"], "skill")
 
     def test_known_file_refs_ignore_prose_suffixes(self) -> None:

@@ -44,7 +44,7 @@ gates:
   wiki_publication_intent_bound
 routes:
   customer-research | solution-shaping | feed-scout | apify |
-  research:user-grounding | manage-wiki
+  customer-research | manage-wiki
 fails:
   broad scraping without source boundary; creepy personal dossiering;
   rank-only output with no evidence; inventing private facts; treating CRM
@@ -54,7 +54,7 @@ fails:
 ## Phase Boundary
 
 Keep source selection, light discovery, qualification, and handoff inline. Use
-`research:user-grounding` when the filter depends on a role, workflow, or pain
+`customer-research` when the filter depends on a role, workflow, or pain
 signal that is not already grounded. Use `apify` only when the platform/source
 requires an external actor and the caller has explicitly accepted that route.
 Use `customer-research` for shortlisted people or companies after qualification.
@@ -82,7 +82,7 @@ Use `customer-research` for shortlisted people or companies after qualification.
         `why this source`, and `why this outreach channel`; reject candidates
         that only match a broad persona with no timely trigger.
   - [ ] If the filter depends on uncertain user reality, route a narrow
-        grounding pass through `research:user-grounding` before ranking.
+        grounding pass through `customer-research` before ranking.
 - [ ] 2. Gather a small candidate pool.
   - [ ] Prefer supplied/public sources and platform-native search before any
         scraper or external actor.

@@ -127,11 +127,11 @@
     {
       "id": "metric_advisor_reward_miss_routes_gap_01",
       "prompt": "A completed documentation ticket expected higher activation after two weeks, but the delayed check-in shows no movement. There was no causal experiment—only the shipped change and later product analytics. What review path should the check-in take?",
-      "expected_output": "Treats Reward.expected_reward as a delayed realized-value forecast rather than an immediate experiment prediction; Routes the expected-versus-actual miss to gap-analysis; Preserves the Reward accept, kill, or monitor check-in decision; Does not invoke a scientific method-refutation verdict or agent-qa-test:experiment without a causal experiment surprise",
+      "expected_output": "Treats Reward.expected_reward as a delayed realized-value forecast rather than an immediate experiment prediction; Routes the expected-versus-actual miss to the owning ticket or workflow; Preserves the Reward accept, kill, or monitor check-in decision; Does not invoke a scientific method-refutation verdict or agent-qa-test:experiment without a causal experiment surprise",
       "files": [],
       "assertions": [
         "Treats Reward.expected_reward as a delayed realized-value forecast rather than an immediate experiment prediction",
-        "Routes the expected-versus-actual miss to gap-analysis",
+        "Routes the expected-versus-actual miss to the owning ticket or workflow",
         "Preserves the Reward accept, kill, or monitor check-in decision",
         "Does not invoke a scientific method-refutation verdict or agent-qa-test:experiment without a causal experiment surprise"
       ],

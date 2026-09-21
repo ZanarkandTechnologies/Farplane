@@ -26,7 +26,7 @@ runtime.
 - `docs/features/README.md`: human-readable current inventory
 - [codebase-analysis](../../codebase-analysis/SKILL.md): checks local behavior
   when registry/docs search is inconclusive
-- [research:code-patterns](../../research/SKILL.md#researchcode-patterns):
+- [implementation-research](../../implementation-research/SKILL.md):
   checks source repos or real implementation patterns
 - [doc-advisor](../../doc-advisor/SKILL.md): checks official docs for
   platform, API, or standard claims
@@ -34,10 +34,9 @@ runtime.
   asks for options
 - [reference-grounding](../../reference-grounding/SKILL.md): compact evidence
   checks before scoring source claims
-- [research:parity](../../research/SKILL.md#researchparity): external
-  convergence checks
-- [research:gap](../../research/SKILL.md#researchgap): repo-specific
-  missing-scope checks
+- [best-of-worlds](../../best-of-worlds/SKILL.md): external convergence checks
+- [implementation-research](../../implementation-research/SKILL.md):
+  repo-specific implementation checks
 - [best-of-worlds](../../best-of-worlds/SKILL.md): multi-source synthesis
 - Inline comparison: judgment calls when evidence leaves a real decision
 

@@ -19,7 +19,7 @@ operator-requested ensemble coverage.
   framework ceremony
 - `ensemble: auto|max` behavior driven by complete brainstorm-owned personas
   in `ensemble.yaml`
-- evidence links through `reference-grounding` or `research:*` instead of
+- evidence links through `reference-grounding` or the relevant specialized research skill instead of
   source-free invention
 - recommendations explicit
 - handoff rules clear

@@ -34,7 +34,7 @@ state: reads(supplied context, prospect notes, problem frames, research notes,
 gates: problem_frame_exists; realistic_solution_boundary; proof_model_named;
        risks_and_assumptions_section_present; decision_rights_permissions_named_for_system_mvp;
        mvp_walkthrough_present_for_operational_systems; assumptions_labeled; next_owner_named
-routes: research:user-grounding | research:parity |
+routes: customer-research | competitor-research |
   demo-realism | prd | impl-plan | goal-advisor
 fails: sends a feature pitch without problem proof; invents client facts;
   overbuilds the solution; creates autonomous tickets before reviewable scope
@@ -43,7 +43,7 @@ fails: sends a feature pitch without problem proof; invents client facts;
 ## Phase Boundary
 
 Keep the full solution synthesis inline unless a child phase needs separate
-evidence. Produce the problem frame inline, use `research:*` for user or
+evidence. Produce the problem frame inline, use the relevant specialized research skill for user or
 best-practice grounding, `demo-realism` when the MVP needs believable operating
 examples, `prd` for product scope, and `impl-plan` or `goal-advisor` only after
 the solution boundary is accepted. For material operational or demo-bound
@@ -65,14 +65,14 @@ checklist into a queue of tiny review tasks.
   - [ ] Do not proceed to MVP selection while the frame lacks actor, job,
         stakes, constraints, or boundary options.
 - [ ] 3. Ground the opportunity enough for an honest solution.
-  - [ ] Use `research:user-grounding` when the target user's job, friction, or
+  - [ ] Use `customer-research` when the target user's job, friction, or
         success signal is uncertain.
-  - [ ] Use `research:parity` when current practice or best-in-class workflow
+  - [ ] Use `competitor-research` when current practice or best-in-class workflow
         could change the MVP boundary.
   - [ ] For outreach targets, include an explicit correction ask that invites
         the prospect to reject or revise the inferred pain.
   - [ ] For inferred outreach targets, include a visible pre-implementation
-        handoff such as `Next owner: research:user-grounding`, outreach review,
+        handoff such as `Next owner: customer-research`, outreach review,
         or parity research before any build route.
   - [ ] Mark missing evidence instead of making a polished fake pitch.
 - [ ] 4. Generate solution boundary options.
@@ -127,7 +127,7 @@ checklist into a queue of tiny review tasks.
         implementation planning; name the data, permission, and decision-rights
         questions that design must settle.
   - [ ] Route UI/workflow-heavy MVPs to `functional-ui`.
-  - [ ] Route inferred outreach hypotheses to `research:user-grounding`,
+  - [ ] Route inferred outreach hypotheses to `customer-research`,
         outreach review, or parity research before implementation.
   - [ ] Route accepted build slices to `impl-plan`.
   - [ ] Route approved autonomous execution to `goal-advisor`.

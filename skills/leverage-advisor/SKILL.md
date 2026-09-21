@@ -46,8 +46,8 @@ gates: subject_grounded; objective_named; catalog_resolved_or_source_gap;
        diagnosis_and_policy_named; pre_outcome_bet_recorded;
        decision_changing_test_named; eligible_frontier_ranked; next_wave_earned;
        first_proof_named; replan_conditions_named
-routes: reference-grounding | research:parity |
-  research:source-synthesis | best-of-worlds | prototyping | metric-advisor |
+routes: reference-grounding | competitor-research | implementation-research |
+  experimental-research | best-of-worlds | prototyping | metric-advisor |
   impl-plan | goal-advisor | harness-advisor | leverage-rollout
 fails: generic strategy; invented capability or candidate; fixed ladder that
   ignores progress; fake-precision score; roadmap without proof or replan;
@@ -292,8 +292,8 @@ Output:
   necessary.
 - [../reference-grounding/SKILL.md](../reference-grounding/SKILL.md) - use
   when current capability or expected value needs evidence.
-- [../research/SKILL.md](../research/SKILL.md) - use only when the candidate
-  frontier is missing, stale, or evidence-thin enough to change the decision.
+- Use [competitor-research](../competitor-research/SKILL.md), [implementation-research](../implementation-research/SKILL.md),
+  or [experimental-research](../experimental-research/SKILL.md) only when its evidence could change the frontier.
 - [../best-of-worlds/SKILL.md](../best-of-worlds/SKILL.md) - use when several
   sources need scored `adopt | adapt | reject | defer` dispositions before
   entering the frontier.

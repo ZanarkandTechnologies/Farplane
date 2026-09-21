@@ -42,7 +42,7 @@ gates: person_resolved; accepted_usecase_resolved; career_claims_sourced;
        problem_fit_labeled; viable_approaches_compared; selected_approach_named;
        proof_matches_offer; correction_ask_present;
        wiki_publication_intent_bound; outreach_unsent_without_approval
-routes: customer-research | research:* | solution-shaping |
+routes: customer-research | specialized research | solution-shaping |
         copywriting-advisor | manage-wiki | review | telegram-message
 fails: creepy_personalization; invented_private_pain; generic_ai_pitch;
        fake_option_frontier; relationship_score_theater; usecase_feature_dump;

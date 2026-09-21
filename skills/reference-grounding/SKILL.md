@@ -70,8 +70,8 @@ source class checked, or a brief local-only reason.
   `Grounding:` line that names the source class used or why grounding was
   intentionally skipped.
 - [ ] 9. If compact grounding is not enough, route the exact evidence gap to the
-  caller's next step, usually `research:official-docs`, `research:code-patterns`,
-  `research:parity`, `research:gap`, or `research:source-synthesis`.
+  caller's next step: `competitor-research`, `implementation-research`, or
+  `experimental-research`.
 - [ ] 10. Review before completion.
   - [ ] Apply the first-load Todo List guardrails again for material claims and delegate
     independent review when the evidence supports a durable or high-stakes decision.
@@ -91,8 +91,8 @@ source class checked, or a brief local-only reason.
   checked in a compact `Grounding:` line.
 - Provided source: use the supplied material first.
 
-Escalate to `research:*` only when the answer needs multiple comparables, source
-synthesis, a formal parity/gap brief, or a durable research artifact.
+Escalate only when the answer needs the full competitor, implementation, or
+experimental workflow and its durable artifact.
 
 ## Stop Condition
 
@@ -141,7 +141,7 @@ Grounding: skipped because this is a tiny local-only same-scope fix.
 - Do not treat local files as sufficient evidence for "best practice",
   "current", "latest", "state of the art", external API behavior, or peer
   implementation expectations.
-- Do not import peer features wholesale; hand broad parity to `research:parity`.
+- Do not import peer features wholesale; hand broad parity to `competitor-research`.
 
 ## Gotchas
 
@@ -151,6 +151,6 @@ Grounding: skipped because this is a tiny local-only same-scope fix.
 
 ## Reference Map
 
-- [../research/SKILL.md](../research/SKILL.md) - use when the caller needs a
-  formal multi-source research method such as parity, gap, docs, or code
-  patterns.
+- [../competitor-research/SKILL.md](../competitor-research/SKILL.md) - use for market and competitor evidence.
+- [../implementation-research/SKILL.md](../implementation-research/SKILL.md) - use for docs, code, and local implementation comparisons.
+- [../experimental-research/SKILL.md](../experimental-research/SKILL.md) - use for paper, researcher, and experiment evidence.

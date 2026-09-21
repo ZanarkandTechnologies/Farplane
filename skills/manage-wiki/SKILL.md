@@ -52,7 +52,7 @@ gates: source_bound; publication_intent_bound; privacy_safe;
        unique_exact_match_only_auto_links; candidate_markdown_read;
        ambiguous_merge_blocked; unrelated_prose_preserved;
        all_links_resolve; staged_changeset_valid; wiki_sync_passes
-routes: direct_changeset | research:* | ambiguity_receipt | source_gap
+routes: direct_changeset | specialized research | ambiguity_receipt | source_gap
 fails: unbounded_source_mining; invented_identity_or_claim; silent_merge;
        unresolved_or_self_link; inferred_predicate; direct_projection_edit;
        partial_publish_before_validation; cross_project_identity_merge;
@@ -61,7 +61,7 @@ fails: unbounded_source_mining; invented_identity_or_claim; silent_merge;
 
 ## Phase Boundary
 
-Keep bounded page authoring and resolution inline. Use `research:*` only when a
+Keep bounded page authoring and resolution inline. Use the relevant specialized research skill only when a
 specific identity or material claim needs evidence beyond the bound source; do
 not widen a Wiki update into general discovery. Normal Wiki authoring does not
 need `impl-plan`; use that only for a software or schema change to the system.
