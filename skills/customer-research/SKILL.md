@@ -53,7 +53,7 @@ gates: target_bound; sources_labeled; inference_labeled; minimal_frontmatter;
        deep_icp_hypotheses_testable; person_signal_card_present;
        hiring_coverage_recorded_when_deep_icp_and_company_bound;
        wiki_publication_intent_bound
-routes: customer-research | reference-grounding | solution-shaping |
+routes: reference-grounding | solution-shaping |
         first-value-outreach | manage-wiki
 fails: bloated_frontmatter; fake_certainty; generic_pitch; private_dossier;
        uncited_claims; biography_dump; direct_wiki_or_projection_mutation
