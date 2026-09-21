@@ -11,10 +11,10 @@ The classifier looks for concrete completion gaps: naming the next correction
 instead of doing it, admitting that a requested fix remains incomplete, or
 stopping at diagnosis after a fix/finish request. A completed bounded request
 does not continue merely because separate validation or an older issue remains.
-The feedback asks Codex to take one concrete action, using tools when the task
-requires them, while retaining the existing scope, approval, safety, and budget
-boundaries. Versioned feedback keeps in-flight sessions parseable when this text
-changes.
+The feedback uses a level-four Markdown heading plus labeled instruction bullets.
+It asks Codex to take one concrete action, using tools when the task requires
+them, while retaining the existing scope, approval, safety, and budget boundaries.
+A hidden version marker keeps in-flight sessions parseable when this text changes.
 
 It reads complete JSONL rows from a bounded 1 MiB opening window and 8 MiB recent
 window, preserving the opening/latest requests without loading a long rollout's

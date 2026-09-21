@@ -82,10 +82,12 @@ to inspect a particular response. Telemetry contains metadata, not the final
 answer or full transcript. A Stop event can precede another continuation, so
 `turn_end` must not be read as Goal or ticket completion.
 
-Telemetry remains separate from both behavioral hooks. The unchanged length
-hook owns rewrites; continuation defers over-limit candidates and recognizes its
-exact generated feedback before reassessing a shortened response. The order in
-JSON is not a dependency contract. No hook certifies native Goal completion.
+Telemetry remains separate from both behavioral hooks. Blocking feedback uses a
+level-four Markdown hook name followed by labeled instruction bullets. The length
+hook owns rewrites; continuation defers over-limit candidates and recognizes
+current or immediately previous exact generated feedback before reassessing a
+shortened response. The order in JSON is not a dependency contract. No hook
+certifies native Goal completion.
 
 The continuation reader uses Codex desktop actual-user metadata, preserves the
 opening and latest request plus a bounded dialogue tail, and excludes tool

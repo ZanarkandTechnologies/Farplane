@@ -59,6 +59,10 @@ class ContinuationTests(unittest.TestCase):
     def test_positive_at_threshold_is_fixed_scoped_feedback(self):
         self.client.score = 0.5
         self.assertEqual(self.run_gate(), {"decision": "block", "reason": gate.NUDGE})
+        self.assertTrue(gate.NUDGE.startswith("#### Farplane continuation\n\n"))
+        self.assertIn("\n- **Continue:**", gate.NUDGE)
+        self.assertIn("\n- **Act:**", gate.NUDGE)
+        self.assertIn("\n- **Stop only when:**", gate.NUDGE)
         self.assertIn("earlier turns", self.client.calls[0]["questions"]["nudge"]["instructions"])
 
     def test_negative_allows_completed_or_deliberative_request(self):
@@ -132,6 +136,13 @@ class ContinuationTests(unittest.TestCase):
         self.assertIsNotNone(self.run_gate(final="I will test next.", active=True))
         self.assertEqual(self.client.calls[-1]["state"]["own_nudges_this_user_turn"], 1)
 
+    def test_previous_v2_nudge_still_counts_within_same_user_turn(self):
+        self.rows += [self.desktop_hook(gate.LEGACY_NUDGE_V2),
+                      message("assistant", "I will test next.")]
+
+        self.assertIsNotNone(self.run_gate(final="I will test next.", active=True))
+        self.assertEqual(self.client.calls[-1]["state"]["own_nudges_this_user_turn"], 1)
+
     def desktop_hook(self, body):
         row = message("user", '<hook_prompt hook_run_id="stop:5:/synthetic/hooks.json">'
                       + body + '</hook_prompt>')
@@ -151,6 +162,15 @@ class ContinuationTests(unittest.TestCase):
     def test_desktop_length_feedback_allows_reassessment(self):
         candidate = "word " * 501
         feedback = gate.gate_response({"hook_event_name": "Stop",
+            "last_assistant_message": candidate}, 500, 50)["reason"]
+        self.rows += [message("assistant", candidate), self.desktop_hook(feedback),
+                      message("assistant", "I will test next.")]
+        self.assertIsNotNone(self.run_gate(active=True))
+        self.assertTrue(self.client.calls[-1]["state"]["recognized_length_feedback_this_user_turn"])
+
+    def test_previous_length_feedback_format_allows_reassessment(self):
+        candidate = "word " * 501
+        feedback = gate.legacy_gate_response({"hook_event_name": "Stop",
             "last_assistant_message": candidate}, 500, 50)["reason"]
         self.rows += [message("assistant", candidate), self.desktop_hook(feedback),
                       message("assistant", "I will test next.")]
