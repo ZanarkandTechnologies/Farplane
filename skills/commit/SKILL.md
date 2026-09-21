@@ -1,7 +1,7 @@
 ---
 name: commit
-version: 0.3.0
-description: "Turn a requested worktree change into one isolated, verified local commit when the operator asks to commit it."
+version: 0.4.0
+description: "Turn a requested worktree change into one isolated commit and optionally publish it as a single-worktree PR."
 tier: 2
 source: local
 capability:
@@ -16,19 +16,20 @@ allowed-tools: Read, Glob, Grep, Bash
 
 ## Context
 
-Use this shortcut when the operator asks to commit a change. Resolve what “this
-change” means from the current task, isolate that boundary from the worktree,
-stage it, create one local commit, and verify the result. Do not make the
-operator curate the index when the requested boundary can be recovered safely.
+Use this shortcut when the operator asks to commit or publish a change. Resolve
+what “this change” means from the current task, isolate that boundary from the
+worktree, create one local commit, and verify it. In a project whose policy is
+single-worktree `main`, publish an explicitly requested PR by pushing `HEAD` to
+a temporary remote branch without creating or switching a local branch.
 
 ## Skill Signature
 
 ```text
-commit(change, subject?) -> commit_receipt | boundary_blocker
+commit(change, subject?, publish_pr?) -> commit_receipt | pr_receipt | boundary_blocker
 reads: current task, worktree, index, requested diff, and recent commit style
 does: isolates and stages the requested change, then creates one local commit
-writes: Git index and one local commit
-returns: commit SHA, subject, committed paths, and preservation proof
+writes: Git index, one local commit, and optional remote PR branch/PR
+returns: commit SHA, subject, committed paths, preservation proof, and optional PR URL
 ```
 
 <!-- BEGIN FARPLANE_IMPORTANT_CHECKLIST -->
@@ -79,6 +80,19 @@ returns: commit SHA, subject, committed paths, and preservation proof
   Assert:
   - The requested change is committed and the requested portion left the index.
   - Unrelated work remains uncommitted; the receipt reports any residual risk.
+- [ ] **N5 — Publish without changing the shared checkout when requested.**
+  `verified commit + project policy -> remote temporary branch + PR | blocker`
+
+  Rule: Load [single-worktree PR publication](references/single-worktree-pr.md).
+  Require local `main`, one writer, and no prior unpublished commit in the PR
+  range. Push `HEAD` directly to `refs/heads/codex/<task-name>` and create the
+  PR against `main`; never create or switch a local branch.
+
+  Assert:
+  - The remote branch contains only the intended serial commit range.
+  - Local branch, index, and unrelated work remain unchanged.
+  - Direct `main` push, squash merge, accidental stacking, and concurrent Git
+    writers are rejected.
 <!-- END FARPLANE_IMPORTANT_CHECKLIST -->
 
 ## Gotchas
@@ -89,10 +103,13 @@ returns: commit SHA, subject, committed paths, and preservation proof
   requested skill instead of committing the whole generated file.
 - If ownership cannot be separated safely at hunk level, return the exact
   conflict. Do not commit a mixed boundary to avoid asking a question.
+- The single-worktree PR route is serial. If another unmerged local commit is
+  already ahead of `origin/main`, finish that PR before starting another.
 
 ## References
 
 - [commit message style](references/style.md)
+- [single-worktree PR publication](references/single-worktree-pr.md)
 
 ## Output
 
@@ -102,5 +119,6 @@ subject: <commit subject when committed>
 commit: <HEAD SHA when committed>
 paths: [<committed path>]
 unrelated_work: preserved | <specific verification gap>
-push: not_performed
+push: not_requested | remote_branch_created
+pr: not_requested | <url>
 ```

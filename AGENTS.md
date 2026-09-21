@@ -82,6 +82,10 @@ makes one relevant.
 - Stay in the operator-selected checkout. Do not silently create or switch
   worktrees. Native subagents share the checkout and require a single-writer
   boundary.
+- The normal Farplane shared checkout is `main` only. Do not create or switch
+  local branches. Serialize writers; when the operator requests a PR, use the
+  project commit workflow to push the isolated `HEAD` commit to a temporary
+  remote `codex/*` branch without changing the local checkout.
 - Credentialed commands run through `farplane run -- <command>` or
   `doppler run -- <command>`. `farplane doctor` reports readiness and
   `farplane install` owns safe render/link/repair work.
