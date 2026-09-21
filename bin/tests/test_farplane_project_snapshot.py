@@ -862,8 +862,8 @@ feed_scout:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             write_minimal_project(root)
-            provider_refresh = 'Call $interval-update.calculate_ticket_intervention_metrics(ticket_dir="tickets", runtime_dir=".farplane", date="<YYYY-MM-DD>").'
-            add_metric(root, "auto_time_ratio", {"label": "Autonomous time ratio", "description": "Autonomous time ratio.", "type": "stock", "unit": "ratio", "display": "reading"}, 'Call $interval-update.calculate_autonomy_time_ratio(runtime_dir=".farplane", date="<YYYY-MM-DD>").')
+            provider_refresh = 'Run python3 bin/core/farplane_metric_refresh.py ticket-intervention-metrics --ticket-dir tickets --runtime-dir .farplane --date <YYYY-MM-DD>.'
+            add_metric(root, "auto_time_ratio", {"label": "Autonomous time ratio", "description": "Autonomous time ratio.", "type": "stock", "unit": "ratio", "display": "reading"}, 'Run python3 bin/core/farplane_metric_refresh.py autonomy-time-ratio --runtime-dir .farplane --date <YYYY-MM-DD>.')
             add_metric(root, "ticket_intervention_turn_count", {"label": "Ticket intervention turns", "description": "Ticket intervention turns.", "type": "flow", "unit": "turns", "display": "bar_plus_cumulative"}, provider_refresh)
             add_metric(root, "intervention_free_ticket_count", {"label": "Intervention-free tickets", "description": "Intervention-free tickets.", "type": "flow", "unit": "tickets", "display": "bar_plus_cumulative"}, provider_refresh)
             add_metric(root, "auto_completion_rate", {"label": "Auto completion rate", "description": "Auto completion rate.", "type": "stock", "unit": "ratio", "display": "reading"}, provider_refresh)

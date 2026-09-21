@@ -45,7 +45,7 @@ def write_framework_manifest(farplane: Path) -> None:
                         "farplane/manifest.json",
                         "farplane/harness.yaml",
                         "farplane/metrics.yaml",
-                        "farplane/automations.toml",
+                        "farplane/automations/",
                         "farplane/bindings.yaml",
                         ".agents/skills/README.md",
                         "tickets/templates/ticket.md",
@@ -62,35 +62,31 @@ def write_framework_manifest(farplane: Path) -> None:
     )
 
 
-def write_automations_toml(farplane: Path) -> None:
-    (farplane / "automations.toml").write_text(
-        '''schema = "farplane_project_automations"
-framework_template_version = "1.0.0"
-updated_at = "2026-07-02"
-owner = "automation-advisor"
-
-[[automations]]
-id = "project-pulse"
-name = "Project Pulse"
-kind = "heartbeat"
-status = "active"
-prompt = """
+def write_automation_markdown(farplane: Path) -> None:
+    automations = farplane / "automations"
+    automations.mkdir(exist_ok=True)
+    (automations / "work-pulse.md").write_text(
+        '''---
+schema: farplane_project_automation
+framework_template_version: 1.0.0
+owner: automation-advisor
+id: project-pulse
+name: Project Pulse
+kind: heartbeat
+status: active
+target:
+  thread_id: thread-123
+schedule:
+  type: interval
+  interval_minutes: 30
+---
 Use $pulse-update.
 
 Params:
 project_root = "/tmp/project"
-"""
-
-[automations.target]
-thread_id = "thread-123"
-
-[automations.schedule]
-type = "interval"
-interval_minutes = 30
 ''',
         encoding="utf-8",
     )
-
 
 def write_required_project_files(root: Path) -> None:
     farplane = root / "farplane"
@@ -180,7 +176,7 @@ change_rule: Static charter changes require approval.
         'kind: project-bindings\nframework_template_version: "0.1.0"\nproject: {}\n',
         encoding="utf-8",
     )
-    write_automations_toml(farplane)
+    write_automation_markdown(farplane)
     tickets = root / "tickets" / "templates"
     tickets.mkdir(parents=True)
     (tickets / "ticket.md").write_text("# Ticket\n", encoding="utf-8")
@@ -197,7 +193,7 @@ def test_missing_automations_file_fails(tmp_path: Path) -> None:
 
     errors = validate(tmp_path)
 
-    assert "farplane/automations.toml is required for full Codex automation configs." in errors
+    assert "farplane/automations/ is required for per-automation config files." in errors
 
 
 def test_bindings_accept_filesystem_and_notion_kanban_contracts(tmp_path: Path) -> None:
@@ -318,35 +314,30 @@ def test_missing_metrics_file_fails(tmp_path: Path) -> None:
 
     assert "farplane/metrics.yaml is required for project metric definitions." in errors
 
-
-def test_malformed_automations_toml_fails(tmp_path: Path) -> None:
+def test_malformed_automation_markdown_fails(tmp_path: Path) -> None:
     farplane = tmp_path / "farplane"
     farplane.mkdir()
     write_framework_manifest(farplane)
     write_required_project_files(tmp_path)
-    (farplane / "automations.toml").write_text(
-        '''schema = "farplane_project_automations"
-framework_template_version = "1.0.0"
-
-[[automations]]
-id = "project-pulse"
-name = "Project Pulse"
-kind = "heartbeat"
-status = "active"
-last_run_at = "2026-07-02T00:00:00Z"
-[automations.schedule]
-type = "interval"
-''',
-        encoding="utf-8",
-    )
-
+    (farplane / "automations" / "work-pulse.md").write_text(
+        '''---
+schema: farplane_project_automation
+framework_template_version: 1.0.0
+id: project-pulse
+name: Project Pulse
+kind: heartbeat
+status: active
+last_run_at: 2026-07-02T00:00:00Z
+schedule:
+  type: interval
+---
+''', encoding="utf-8")
     errors = validate(tmp_path)
-
-    assert "farplane/automations.toml automations[1].prompt must be a non-empty string." in errors
-    assert "farplane/automations.toml automations[1].target must be a table with workspace or thread_id." in errors
-    assert "farplane/automations.toml automations[1].schedule.interval_minutes must be an integer." in errors
-    assert "farplane/automations.toml automations[1] must not store runtime state keys: last_run_at." in errors
-
+    ref = "farplane/automations/work-pulse.md"
+    assert f"{ref}.prompt must be a non-empty string." in errors
+    assert f"{ref}.target must include workspace or thread_id." in errors
+    assert f"{ref}.schedule.interval_minutes must be an integer." in errors
+    assert f"{ref} must not store runtime state keys: last_run_at." in errors
 
 def test_retired_product_files_fail(tmp_path: Path) -> None:
     farplane = tmp_path / "farplane"
@@ -418,7 +409,7 @@ def test_retired_integrations_file_fails(tmp_path: Path) -> None:
     farplane = tmp_path / "farplane"
     farplane.mkdir()
     write_framework_manifest(farplane)
-    write_automations_toml(farplane)
+    write_automation_markdown(farplane)
     (farplane / "bindings.yaml").write_text(
         'kind: project-bindings\nframework_template_version: "0.1.0"\nproject: {}\n',
         encoding="utf-8",
@@ -454,37 +445,32 @@ def test_retired_steer_files_fail(tmp_path: Path) -> None:
 
     errors = validate(tmp_path)
 
-    assert "farplane/steer.config.toml is retired; use farplane/automations.toml." in errors
+    assert "farplane/steer.config.toml is retired; use farplane/automations/." in errors
     assert ".farplane/state/steer-scheduler.json is retired; Codex automation cadence owns scheduling." in errors
-
 
 def test_automations_require_exactly_one_pulse_heartbeat(tmp_path: Path) -> None:
     farplane = tmp_path / "farplane"
     farplane.mkdir()
     write_framework_manifest(farplane)
     write_required_project_files(tmp_path)
-    with (farplane / "automations.toml").open("a", encoding="utf-8") as handle:
-        handle.write(
-            '''
-
-[[automations]]
-id = "second-heartbeat"
-name = "Second Heartbeat"
-kind = "heartbeat"
-status = "active"
-prompt = "Use $dogfood-review."
-[automations.target]
-workspace = "/tmp/project"
-[automations.schedule]
-type = "interval"
-interval_minutes = 60
-'''
-        )
-
+    (farplane / "automations" / "second-heartbeat.md").write_text(
+        '''---
+schema: farplane_project_automation
+framework_template_version: 1.0.0
+id: second-heartbeat
+name: Second Heartbeat
+kind: heartbeat
+status: active
+target:
+  workspace: /tmp/project
+schedule:
+  type: interval
+  interval_minutes: 60
+---
+Use $dogfood-review.
+''', encoding="utf-8")
     errors = validate(tmp_path)
-
-    assert "farplane/automations.toml must define exactly one heartbeat record for Work Pulse; found 2." in errors
-
+    assert "farplane/automations/ must define exactly one heartbeat record for Work Pulse; found 2." in errors
 
 def test_retired_file_growth_hook_config_fails(tmp_path: Path) -> None:
     farplane = tmp_path / "farplane"

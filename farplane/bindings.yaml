@@ -62,12 +62,16 @@ integrations:
     task_database_alias: null
     write_policy: local_first
   kanban:
-    provider: filesystem_tickets
-    filesystem_ticket_policy: include
+    provider: multica
+    filesystem_ticket_policy: exclude
     tickets_dir: tickets
     archive_dir: tickets/archive
-    write_policy: local_first
+    write_policy: remote_first
     poll_seconds: 60
+  multica:
+    workspace_id: 0677ef3b-d3a2-4acd-a464-d9acb2f90bd9
+    project_id: bc3659e3-9b03-473d-9008-3b567c0d210d
+    execution_enabled: false
   posthog:
     project_id: null
     host: null

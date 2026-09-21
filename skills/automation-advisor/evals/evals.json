@@ -4,12 +4,12 @@
     {
       "id": "automation_advisor_one_heartbeat_01",
       "prompt": "Configure Farplane V1 automations for Pulse, Feed Scout, Daily, Weekly, and self-improvement.",
-      "expected_output": "Creates exactly one heartbeat and it invokes pulse-update; Keeps Feed Scout, Daily/Weekly BAU, and Dogfood as cron jobs; Keeps exact reviewable prompts in farplane/automations.toml; Does not add a hidden scheduler, separate check-in loop, or Taste Loop controller; Makes Work Pulse the shared ticket and matured-check-in executor",
+      "expected_output": "Creates exactly one heartbeat and it invokes pulse-update; Keeps Feed Scout, Company OS Daily/Weekly, and Dogfood as cron jobs; Keeps Company OS prompts in root automations/ and project-local prompts in farplane/automations/; Does not add a hidden scheduler, separate check-in loop, or Taste Loop controller; Makes Work Pulse the shared ticket and matured-check-in executor",
       "files": [],
       "assertions": [
         "Creates exactly one heartbeat and it invokes pulse-update",
-        "Keeps Feed Scout, Daily/Weekly BAU, and Dogfood as cron jobs",
-        "Keeps exact reviewable prompts in farplane/automations.toml",
+        "Keeps Feed Scout, Company OS Daily/Weekly, and Dogfood as cron jobs",
+        "Keeps Company OS prompts in root automations/ and project-local prompts in farplane/automations/",
         "Does not add a hidden scheduler, separate check-in loop, or Taste Loop controller",
         "Makes Work Pulse the shared ticket and matured-check-in executor"
       ],
@@ -50,12 +50,12 @@
     {
       "id": "automation_advisor_model_boundary_01",
       "prompt": "Use Sol with medium reasoning for this existing heartbeat task.",
-      "expected_output": "Checks whether model selection belongs to the heartbeat automation or its target thread; Uses the supported model identifier and medium reasoning setting; Does not invent unsupported automations.toml fields; Updates the live task or sends a model-overridden continuation when that is the supported boundary; Verifies the next beat rather than claiming the setting changed from tracked config alone",
+      "expected_output": "Checks whether model selection belongs to the heartbeat automation or its target thread; Uses the supported model identifier and medium reasoning setting; Does not invent unsupported automations/ fields; Updates the live task or sends a model-overridden continuation when that is the supported boundary; Verifies the next beat rather than claiming the setting changed from tracked config alone",
       "files": [],
       "assertions": [
         "Checks whether model selection belongs to the heartbeat automation or its target thread",
         "Uses the supported model identifier and medium reasoning setting",
-        "Does not invent unsupported automations.toml fields",
+        "Does not invent unsupported automations/ fields",
         "Updates the live task or sends a model-overridden continuation when that is the supported boundary",
         "Verifies the next beat rather than claiming the setting changed from tracked config alone"
       ],
@@ -71,23 +71,31 @@
       }
     },
     {
-      "id": "automation_advisor_interval_parent_two_phase_01",
-      "prompt": "Revise the existing Daily and Weekly Interval automations so daily activity accumulates into the week's operating context and only the weekly review promotes durable knowledge. Do not create another scheduled job.",
-      "expected_output": "Updates the existing Daily and Weekly cron records instead of creating duplicates; Keeps one $interval-update call as the semantic parent and one bounded evidence window per run; Makes Daily update the current weekly draft and explicitly promote zero canonical knowledge records; Makes Weekly disposition every candidate, freeze the report, apply authorized promotions, write the receipt, and open the next draft; Separates promotion policy from external side-effect gates; Keeps generic routing and validation in interval-update; Preserves one Pulse heartbeat and no ticket execution",
-      "files": ["evals/fixtures/farplane/automations.toml"],
+      "id": "automation_advisor_company_os_boundary_01",
+      "prompt": "Replace the existing Daily and Weekly Interval bindings with the Zanarkand-style Company OS flow. Multica remains dashboard-only and the skills must be file-in/file-out. Do not create another scheduled job.",
+      "expected_output": "Updates the existing Daily and Weekly cron records instead of creating duplicates; Calls pm-daily once per eligible Project and pm-weekly once over the complete frozen set; Makes the automation own provider access, caching, rendering, existing-issue effects, and readback; Gives each skill local files and exactly one JSON output with no provider access; Forbids task admission, strategy invention, broad knowledge promotion, Multica execution, and external side effects; Preserves one Pulse heartbeat",
+      "files": [
+        "automations/",
+        "skills/automation-advisor/evals/fixtures/farplane/automations/work-pulse.md"
+      ],
       "assertions": [
         "Updates existing Daily and Weekly cron records without creating another job",
-        "Keeps interval-update as the one parent skill call with one bounded window",
-        "Makes Daily update the draft with zero canonical promotions",
-        "Makes Weekly disposition, freeze, promote, receipt, and open the next draft",
-        "Separates promotion policy from external side-effect gates",
-        "Does not duplicate generic skill workflow in the prompt",
-        "Preserves one Pulse heartbeat and no ticket execution"
+        "Calls pm-daily once per eligible Project and pm-weekly once over the complete frozen set",
+        "Makes the automation own provider access, caching, rendering, effects, and readback",
+        "Keeps both skills file-in-file-out with one exact JSON output",
+        "Limits actions to authorized existing issues",
+        "Forbids task admission, strategy invention, broad promotion, and Multica execution",
+        "Preserves one Pulse heartbeat"
       ],
       "metadata": {
         "farplane": {
-          "title": "Interval automation remains one draft-then-promote parent",
-          "tags": ["automation-advisor", "interval-update", "knowledge", "weekly-draft"]
+          "title": "Company OS uses the four-stage automation and skill boundary",
+          "tags": [
+            "automation-advisor",
+            "company-os",
+            "pm-daily",
+            "pm-weekly"
+          ]
         }
       }
     }

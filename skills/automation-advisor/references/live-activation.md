@@ -18,11 +18,12 @@ activate_farplane_automations(project_root, desired_records,
 
 1. Inspect existing Codex automations and update records matching project and
    automation identity rather than creating duplicates.
-2. Update `farplane/automations.toml` first with the exact desired prompt,
-   target, cadence, and status.
+2. Update the owning Markdown first with the exact desired prompt, target,
+   cadence, and status: root `automations/` for Company OS Daily/Weekly, or the
+   managed project's `farplane/automations/` for project-local schedules.
 3. Reuse the existing Project Pulse thread for the one heartbeat. Target Feed
-   Scout, Daily/Weekly Interval, Dogfood, and maintenance cron jobs at the
-   project workspace by default.
+   Scout, Dogfood, and maintenance cron jobs at the project workspace. Target
+   the single Daily/Weekly pair at the AI Office workspace.
 4. Copy each desired prompt exactly into the matching Codex automation.
 5. Only for an explicit persistent-thread exception, record the visible thread
    ID in `farplane/pm.json`; never store automation runtime IDs there.

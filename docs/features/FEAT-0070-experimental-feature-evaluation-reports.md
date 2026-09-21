@@ -13,7 +13,7 @@ surfaces:
   - farplane/harness.yaml
   - skills/dogfood-review/SKILL.md
   - skills/dogfood-review/templates/dogfood-report.md
-  - farplane/automations.toml
+  - farplane/automations/
 source_refs:
   - docs/systems/self-improvement-learning.md
   - farplane/harness.yaml

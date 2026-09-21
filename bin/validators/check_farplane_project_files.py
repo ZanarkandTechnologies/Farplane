@@ -8,7 +8,6 @@ import json
 import re
 import subprocess
 import sys
-import tomllib
 import hashlib
 from pathlib import Path
 
@@ -21,6 +20,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from bin.validators.template_usage import TemplateUsageError, normalize_template_uses
+from bin.core.farplane_automation_file import AutomationMarkdownError, load_automation_markdown
 from bin.core.farplane_metric_schema import MetricObservationBatch
 from bin.validators.farplane_metric_contract import validate_metric_definition_schema
 TEXT_SUFFIXES = {
@@ -252,7 +252,7 @@ def validate_framework_manifest(root: Path, framework_manifest: Path) -> list[st
         "farplane/manifest.json",
         "farplane/harness.yaml",
         "farplane/metrics.yaml",
-        "farplane/automations.toml",
+        "farplane/automations/",
         "farplane/bindings.yaml",
         ".agents/skills/README.md",
         "tickets/templates/ticket.md",
@@ -306,105 +306,79 @@ def validate_framework_manifest(root: Path, framework_manifest: Path) -> list[st
     return errors
 
 
-def validate_automations_toml(root: Path, automations_file: Path) -> list[str]:
-    rel_path = automations_file.relative_to(root).as_posix()
-    errors: list[str] = []
-    try:
-        data = tomllib.loads(automations_file.read_text(encoding="utf-8"))
-    except tomllib.TOMLDecodeError as exc:
-        return [f"{rel_path} must be valid TOML: {exc}."]
-
-    if not isinstance(data, dict):
-        return [f"{rel_path} must be a TOML object."]
-    if data.get("schema") != "farplane_project_automations":
-        errors.append(f"{rel_path} schema must be farplane_project_automations.")
-    if data.get("framework_template_version") != "1.0.0":
-        errors.append(f"{rel_path} framework_template_version must be 1.0.0.")
-
-    top_runtime_keys = sorted(AUTOMATION_RUNTIME_STATE_KEYS & set(data))
-    if top_runtime_keys:
-        errors.append(f"{rel_path} must not store runtime state keys: {', '.join(top_runtime_keys)}.")
-
-    automations = data.get("automations")
-    if not isinstance(automations, list) or not automations:
-        errors.append(f"{rel_path} automations must be a non-empty array of tables.")
-        return errors
-
+def validate_automations_dir(root: Path, automations_dir: Path) -> list[str]:
+    rel_dir = automations_dir.relative_to(root).as_posix()
+    files = sorted(automations_dir.glob("*.md")) if automations_dir.is_dir() else []
+    errors = [f"{path.relative_to(root).as_posix()} is retired; use one Markdown file per automation." for path in sorted(automations_dir.glob("*.toml"))]
+    if not files:
+        return [f"{rel_dir}/ must contain at least one automation Markdown file.", *errors]
     seen_ids: set[str] = set()
     heartbeat_records: list[tuple[str, str]] = []
-    for index, automation in enumerate(automations, start=1):
-        prefix = f"{rel_path} automations[{index}]"
-        if not isinstance(automation, dict):
-            errors.append(f"{prefix} must be a table.")
+    for path in files:
+        rel_path = path.relative_to(root).as_posix()
+        if path.name == "index.md":
+            errors.append(f"{rel_path} is forbidden; each Markdown file must be one automation.")
             continue
-
+        try:
+            automation = load_automation_markdown(path)
+        except (AutomationMarkdownError, OSError) as exc:
+            errors.append(f"{rel_path} must be valid automation Markdown: {exc}.")
+            continue
+        if automation.get("schema") != "farplane_project_automation":
+            errors.append(f"{rel_path} schema must be farplane_project_automation.")
+        if automation.get("framework_template_version") != "1.0.0":
+            errors.append(f"{rel_path} framework_template_version must be 1.0.0.")
         runtime_keys = sorted(AUTOMATION_RUNTIME_STATE_KEYS & set(automation))
         if runtime_keys:
-            errors.append(f"{prefix} must not store runtime state keys: {', '.join(runtime_keys)}.")
-
+            errors.append(f"{rel_path} must not store runtime state keys: {', '.join(runtime_keys)}.")
         for key in ("id", "name", "kind", "status", "prompt"):
             if not isinstance(automation.get(key), str) or not automation.get(key, "").strip():
-                errors.append(f"{prefix}.{key} must be a non-empty string.")
-
+                errors.append(f"{rel_path}.{key} must be a non-empty string.")
         automation_id = automation.get("id")
         if isinstance(automation_id, str) and automation_id.strip():
             if automation_id in seen_ids:
-                errors.append(f"{rel_path} automation id must be unique: {automation_id}.")
+                errors.append(f"{rel_dir}/ automation id must be unique: {automation_id}.")
             seen_ids.add(automation_id)
-
         if automation.get("kind") not in {"heartbeat", "cron"}:
-            errors.append(f"{prefix}.kind must be heartbeat or cron.")
+            errors.append(f"{rel_path}.kind must be heartbeat or cron.")
         elif automation.get("kind") == "heartbeat":
-            heartbeat_records.append(
-                (
-                    str(automation.get("id") or f"record-{index}"),
-                    str(automation.get("prompt") or ""),
-                )
-            )
+            heartbeat_records.append((str(automation_id or path.stem), str(automation.get("prompt") or "")))
         if automation.get("status") not in {"active", "paused"}:
-            errors.append(f"{prefix}.status must be active or paused.")
-
+            errors.append(f"{rel_path}.status must be active or paused.")
         target = automation.get("target")
-        if not isinstance(target, dict):
-            errors.append(f"{prefix}.target must be a table with workspace or thread_id.")
-        elif not any(isinstance(target.get(key), str) and target.get(key, "").strip() for key in ("workspace", "thread_id")):
-            errors.append(f"{prefix}.target must include workspace or thread_id.")
-
+        if not isinstance(target, dict) or not any(
+            isinstance(target.get(key), str) and target.get(key, "").strip()
+            for key in ("workspace", "thread_id")
+        ):
+            errors.append(f"{rel_path}.target must include workspace or thread_id.")
         schedule = automation.get("schedule")
         if not isinstance(schedule, dict):
-            errors.append(f"{prefix}.schedule must be a table.")
+            errors.append(f"{rel_path}.schedule must be a table.")
             continue
-
         schedule_type = schedule.get("type")
         if schedule_type not in {"interval", "active_hours_interval", "daily", "weekly", "monthly"}:
-            errors.append(f"{prefix}.schedule.type is unsupported.")
-        if schedule_type in {"daily", "weekly", "monthly", "active_hours_interval"}:
-            if not isinstance(schedule.get("timezone"), str) or not schedule.get("timezone", "").strip():
-                errors.append(f"{prefix}.schedule.timezone must be a non-empty string.")
-        if schedule_type in {"daily", "weekly", "monthly"}:
-            if not isinstance(schedule.get("time"), str) or not schedule.get("time", "").strip():
-                errors.append(f"{prefix}.schedule.time must be a non-empty string.")
+            errors.append(f"{rel_path}.schedule.type is unsupported.")
+        if schedule_type in {"daily", "weekly", "monthly", "active_hours_interval"} and (
+            not isinstance(schedule.get("timezone"), str) or not schedule.get("timezone", "").strip()
+        ):
+            errors.append(f"{rel_path}.schedule.timezone must be a non-empty string.")
+        if schedule_type in {"daily", "weekly", "monthly"} and (
+            not isinstance(schedule.get("time"), str) or not schedule.get("time", "").strip()
+        ):
+            errors.append(f"{rel_path}.schedule.time must be a non-empty string.")
         if schedule_type == "weekly":
             days = schedule.get("days")
             if not isinstance(days, list) or not days or any(not isinstance(day, str) or not day for day in days):
-                errors.append(f"{prefix}.schedule.days must be a non-empty list of day strings.")
+                errors.append(f"{rel_path}.schedule.days must be a non-empty list of day strings.")
         if schedule_type == "monthly" and not isinstance(schedule.get("day_of_month"), int):
-            errors.append(f"{prefix}.schedule.day_of_month must be an integer.")
+            errors.append(f"{rel_path}.schedule.day_of_month must be an integer.")
         if schedule_type in {"interval", "active_hours_interval"} and not isinstance(schedule.get("interval_minutes"), int):
-            errors.append(f"{prefix}.schedule.interval_minutes must be an integer.")
-
+            errors.append(f"{rel_path}.schedule.interval_minutes must be an integer.")
     if len(heartbeat_records) != 1:
-        errors.append(
-            f"{rel_path} must define exactly one heartbeat record for Work Pulse; "
-            f"found {len(heartbeat_records)}."
-        )
+        errors.append(f"{rel_dir}/ must define exactly one heartbeat record for Work Pulse; found {len(heartbeat_records)}.")
     elif "$pulse-update" not in heartbeat_records[0][1]:
-        errors.append(
-            f"{rel_path} heartbeat {heartbeat_records[0][0]} must invoke $pulse-update."
-        )
-
+        errors.append(f"{rel_dir}/ heartbeat {heartbeat_records[0][0]} must invoke $pulse-update.")
     return errors
-
 
 def validate_bindings_file(root: Path, bindings_file: Path) -> list[str]:
     rel_path = bindings_file.relative_to(root).as_posix()
@@ -487,8 +461,8 @@ def validate_bindings_file(root: Path, bindings_file: Path) -> list[str]:
             errors.append(f"{prefix} must be an object.")
         else:
             provider = kanban.get("provider")
-            if provider not in {"filesystem_tickets", "notion"}:
-                errors.append(f"{prefix}.provider must be filesystem_tickets or notion.")
+            if provider not in {"filesystem_tickets", "notion", "multica"}:
+                errors.append(f"{prefix}.provider must be filesystem_tickets, notion, or multica.")
             filesystem_policy = kanban.get("filesystem_ticket_policy")
             if filesystem_policy not in {"include", "exclude"}:
                 errors.append(f"{prefix}.filesystem_ticket_policy must be include or exclude.")
@@ -1104,7 +1078,8 @@ def validate(root: Path) -> list[str]:
     errors: list[str] = []
     framework_dir = root / "farplane"
     framework_manifest = framework_dir / "manifest.json"
-    automations_toml = framework_dir / "automations.toml"
+    automations_dir = framework_dir / "automations"
+    retired_automations_toml = framework_dir / "automations.toml"
     bindings = framework_dir / "bindings.yaml"
     metrics = framework_dir / "metrics.yaml"
     harness = framework_dir / "harness.yaml"
@@ -1130,7 +1105,9 @@ def validate(root: Path) -> list[str]:
     if retired_bindings_markdown.exists():
         errors.append("farplane/bindings.md is retired; use farplane/bindings.yaml.")
     if retired_steer_config.exists():
-        errors.append("farplane/steer.config.toml is retired; use farplane/automations.toml.")
+        errors.append("farplane/steer.config.toml is retired; use farplane/automations/.")
+    if retired_automations_toml.exists():
+        errors.append("farplane/automations.toml is retired; use one file per automation in farplane/automations/.")
     if retired_steer_state.exists():
         errors.append(".farplane/state/steer-scheduler.json is retired; Codex automation cadence owns scheduling.")
     if retired_file_growth_hook.exists():
@@ -1143,10 +1120,10 @@ def validate(root: Path) -> list[str]:
     if retired_harness_markdown.exists():
         errors.append("farplane/harness.md is retired; use farplane/harness.yaml.")
 
-    if not automations_toml.exists():
-        errors.append("farplane/automations.toml is required for full Codex automation configs.")
+    if not automations_dir.is_dir():
+        errors.append("farplane/automations/ is required for per-automation config files.")
     else:
-        errors.extend(validate_automations_toml(root, automations_toml))
+        errors.extend(validate_automations_dir(root, automations_dir))
 
     if not harness.exists():
         errors.append("farplane/harness.yaml is required for the typed project charter.")

@@ -1,0 +1,34 @@
+---
+schema: farplane_project_automation
+framework_template_version: 1.0.0
+owner: automation-advisor
+id: project-monthly-registry-consolidation
+name: Project Monthly Registry Consolidation
+kind: cron
+status: paused
+target:
+  workspace: <project-root>
+schedule:
+  type: monthly
+  timezone: <timezone>
+  day_of_month: 1
+  time: 06:15
+---
+Use $consolidate.
+
+Review project registries for duplication, staleness, and wrong ownership.
+Write a dated report without editing registries or creating tickets.
+
+Params:
+project_root = "<project-root>"
+review_window = "last_month"
+structure = "registry"
+
+Final response:
+- Link the consolidation report path and summarize the key duplicate/stale/wrong-owner findings.
+- List registry edits or tickets created; this run should normally report `none`.
+- List recommended follow-ups with owner surface and reason.
+- Name source gaps and include the no-mutation receipt.
+
+Config source:
+farplane/automations/monthly-registry-consolidation.md id="project-monthly-registry-consolidation"

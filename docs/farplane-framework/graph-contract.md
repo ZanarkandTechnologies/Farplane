@@ -147,14 +147,13 @@ Required projections:
 
 - `project_initialization`: operator intent to initialized Farplane substrate,
   goal intake, and first Goal Advisor handoff.
-- `automation_activation`: reviewed automation prompts to Pulse and Interval
+- `automation_activation`: reviewed automation prompts to Pulse and Company OS
   thread/automation activation and PM UI grouping.
 - `ticket_goal_execution`: selected ticket to implementation plan, Goal
   Packet, native Goal, QA/demo/review proof, and closeout.
-- `interval_knowledge_phase`: the bounded Interval evidence window to staged
-  weekly-draft candidates, Daily zero-promotion receipt, Weekly dispositions,
-  finalized report, owner-routed promotions, and a ready current/next draft.
-- `self_update_loop`: Weekly Interval report to goals-delta decision,
+- `company_os_review`: frozen source coverage to Daily project memory, Weekly
+  company review, authorized existing-issue actions, and readback receipts.
+- `self_update_loop`: Weekly Company OS review to goals-delta decision,
   leverage/harness placement, Goal Advisor handoff, Pulse execution, reward
   signal, and next weekly review.
 

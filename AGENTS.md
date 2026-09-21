@@ -11,17 +11,19 @@ needs it before a ticket, skill, or owner document can take over.
 - Farplane is a harness built from visible tickets, skills, docs, bounded
   subagents, and small deterministic control points. Prefer those surfaces to
   hidden orchestration.
-- The active ticket is the task contract, scope boundary, proof scoreboard, and
-  handoff. Do not keep durable state only in chat.
-- For material work, a Goal Packet adds `program.md` for loop policy,
-  `progress.md` for observations, and `artifacts/` for proof. `ticket.md`
-  remains the executable contract.
+- The active Multica issue is the task contract, scope boundary, proof
+  scoreboard, and handoff. Multica is dashboard-only and unassigned; execution
+  stays in Codex. Follow `tickets/README.md` and do not keep durable state only
+  in chat.
+- For material work, the issue body holds Goal program policy and the current
+  checkpoint; top-level comments hold append-only progress. Repository files
+  hold structured designs and proof when useful, not a second writable task.
 - A direct `impl` on a ready material ticket authorizes `goal-advisor` to compile
   the Goal Packet and native Goal prompt; native Goal executes the accepted scope
   unless required inputs, an approval gate, or destructive/external side effects
-  block. Keep ticket body and metadata current. Material completion requires its
-  `Done / Proof`, QA/reviewer receipts, and the `farplane ticket finalize
-  TASK-XXXX` close route. Compare ticket, program, and progress at material
+  block. Keep issue body and metadata current. Material completion requires its
+  `Done / Proof`, QA/reviewer receipts, and `$close-ticket` updating the same
+  Multica issue without starting a run. Compare ticket, program, and progress at material
   continuations; use drift review when self-approval risk is high. Ticket
   lifecycle and thread mechanics stay in `tickets/README.md`.
 - Every implementation ticket needs a compact Contract Diagram. UI tickets also
@@ -88,7 +90,8 @@ makes one relevant.
 
 ## Durable truth
 
-- `tickets/` holds active task state, proof, blockers, and archived tickets.
+- Multica holds active task state and blockers. `tickets/` retains local proof,
+  migration snapshots, templates, and legacy records.
 - `docs/HISTORY.md` records meaningful milestones and migrations.
 - `docs/MEMORY.md` holds current project invariants that are worth retrieving
   outside their owner surface.
@@ -100,7 +103,7 @@ makes one relevant.
 
 - `README.md` — product entry points and setup.
 - `ARCHITECTURE.md` — system boundaries and canonical workflow map.
-- `tickets/` — task contracts and proof.
+- `tickets/` — supporting proof, templates, migration snapshots, and legacy records.
 - `skills/` — progressively loaded workflows and their local references.
 - `docs/features/` and `docs/systems/` — capability and system contracts.
 - `bin/` — live CLI, runtime, and shared validators.

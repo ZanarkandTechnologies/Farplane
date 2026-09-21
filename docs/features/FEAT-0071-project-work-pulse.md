@@ -20,7 +20,7 @@ system_id: SYS-0003
 category: planning
 public: true
 surfaces:
-  - farplane/automations.toml
+  - farplane/automations/
   - skills/pulse-update/SKILL.md
   - skills/pulse-update/scripts/list_pulse_board.py
   - skills/pulse-update/scripts/materialize_skill_call.py

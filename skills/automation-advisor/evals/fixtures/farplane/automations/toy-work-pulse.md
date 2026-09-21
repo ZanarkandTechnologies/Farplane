@@ -1,0 +1,18 @@
+---
+schema: farplane_project_automation
+framework_template_version: 1.0.0
+owner: automation-advisor
+id: toy-work-pulse
+name: Toy Work Pulse
+kind: heartbeat
+status: active
+target:
+  thread_id: toy-pulse-thread
+schedule:
+  type: active_hours_interval
+  timezone: UTC
+  interval_minutes: 15
+---
+Use $pulse-update.
+
+Run one bounded Work Pulse.
