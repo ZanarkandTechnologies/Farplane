@@ -5,6 +5,9 @@
 - **Purpose:** Request a rewrite when the proposed final answer exceeds its prose
   word or nonblank-line ceiling. It never truncates text or edits artifacts.
 
+Blocking feedback uses a level-four Markdown heading plus labeled bullets for
+the limit, content to keep/remove, exclusions, and required return shape.
+
 ## Install and control
 
 Registration lives only in [root `hooks.json`](../../hooks.json). From the primary

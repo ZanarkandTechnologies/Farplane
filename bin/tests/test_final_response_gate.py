@@ -37,6 +37,11 @@ class FinalResponseGateTests(unittest.TestCase):
     def test_over_cap_requests_semantic_compression(self) -> None:
         result = gate.gate_response(self.payload("one two three four"), 3, 2)
         self.assertEqual(result["decision"], "block")
+        self.assertTrue(result["reason"].startswith("#### Response length\n\n"))
+        self.assertIn("\n- **Limit:**", result["reason"])
+        self.assertIn("\n- **Keep:**", result["reason"])
+        self.assertIn("\n- **Remove:**", result["reason"])
+        self.assertIn("\n- **Return:**", result["reason"])
         self.assertIn("at most 3 prose words", result["reason"])
         self.assertIn("current: 4", result["reason"])
         self.assertIn("safety-critical", result["reason"])
@@ -61,6 +66,7 @@ class FinalResponseGateTests(unittest.TestCase):
     def test_repeated_continuation_gets_stronger_feedback(self) -> None:
         result = gate.gate_response(self.payload("one two three four", active=True), 3, 2)
         self.assertIn("previous compression attempt", result["reason"])
+        self.assertIn("\n- **Retry:**", result["reason"])
 
     def test_missing_message_and_other_events_allow(self) -> None:
         self.assertIsNone(gate.gate_response(self.payload(None), 3, 2))

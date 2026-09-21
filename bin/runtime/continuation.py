@@ -17,6 +17,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "hooks" / "response
 
 from final_response_gate import (
     configured_max_prose_lines, configured_max_prose_words, gate_response,
+    legacy_gate_response,
 )
 from skill_suggestion import HttpDecisionClient, MODEL_ENV, _provider_config, ENDPOINT_ENV
 
@@ -34,19 +35,33 @@ LEGACY_NUDGE_V1 = (
     "blocked, give the result or specific blocker. Do not repeat a promise without "
     "progress."
 )
-TAG = "[farplane-continuation:v2]"
-NUDGE = (
-    f"{TAG} Continue useful unfinished work within the user's existing request, "
-    "including requests carried forward from earlier turns. Take the next concrete "
-    "action that advances the unresolved outcome, using tools when the task requires "
-    "them; do not stop at a diagnosis, progress report, proposed next step, or "
-    "promise. Respect pauses, scope limits, approvals, safety boundaries, and "
-    "budgets. If one path is blocked, pursue a safe in-scope alternative. If "
-    "complete or genuinely blocked, give the result or specific blocker with "
-    "evidence."
+LEGACY_NUDGE_V2 = (
+    "[farplane-continuation:v2] Continue useful unfinished work within the user's "
+    "existing request, including requests carried forward from earlier turns. Take "
+    "the next concrete action that advances the unresolved outcome, using tools when "
+    "the task requires them; do not stop at a diagnosis, progress report, proposed "
+    "next step, or promise. Respect pauses, scope limits, approvals, safety "
+    "boundaries, and budgets. If one path is blocked, pursue a safe in-scope "
+    "alternative. If complete or genuinely blocked, give the result or specific "
+    "blocker with evidence."
 )
-KNOWN_NUDGES = {LEGACY_NUDGE_V1, NUDGE}
-TAG_PATTERN = re.compile(r"\[farplane-continuation:v\d+\]")
+TAG = "<!-- farplane-continuation:v3 -->"
+NUDGE = (
+    f"#### Farplane continuation\n\n{TAG}\n\n"
+    "- **Continue:** Advance useful unfinished work within the user's existing "
+    "request, including requests carried forward from earlier turns.\n"
+    "- **Act:** Take the next concrete action that advances the unresolved outcome, "
+    "using tools when the task requires them. Do not stop at a diagnosis, progress "
+    "report, proposed next step, or promise.\n"
+    "- **Respect:** Pauses, scope limits, approvals, safety boundaries, and budgets.\n"
+    "- **Recover:** If one path is blocked, pursue a safe in-scope alternative.\n"
+    "- **Stop only when:** The request is complete or genuinely blocked; then give "
+    "the result or specific blocker with evidence."
+)
+KNOWN_NUDGES = {LEGACY_NUDGE_V1, LEGACY_NUDGE_V2, NUDGE}
+TAG_PATTERN = re.compile(
+    r"(?:\[farplane-continuation:v\d+\]|<!-- farplane-continuation:v\d+ -->)"
+)
 QUESTION = (
     "Would a gentle nudge help the agent advance useful work within the user's "
     "existing request right now? Judge the requested outcome, including unfinished "
@@ -185,9 +200,10 @@ def read_dialogue(path: str, final: str, *, max_words: int = 500,
         elif not kinds and previous_assistant:
             # Recognize only the unchanged formatter's exact generated feedback
             # for the preceding candidate. Actual user quotations never enter here.
-            expected = [gate_response({"hook_event_name": "Stop",
+            expected = [formatter({"hook_event_name": "Stop",
                 "last_assistant_message": previous_assistant, "stop_hook_active": active},
-                max_words, max_lines) for active in (False, True)]
+                max_words, max_lines) for formatter in (gate_response, legacy_gate_response)
+                for active in (False, True)]
             if any(result and text == result["reason"] for result in expected):
                 length_feedback = True
                 role = "hook"
