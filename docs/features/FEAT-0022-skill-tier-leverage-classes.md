@@ -13,7 +13,9 @@ refs:
   - docs/skills/system.md
   - skills/reference-grounding
   - skills/prototyping
-  - skills/research
+  - skills/competitor-research
+  - skills/implementation-research
+  - skills/experimental-research
   - skills/review
   - docs/review/rubrics
   - docs/skills/README.md
@@ -29,7 +31,9 @@ surfaces:
   - docs/skills/system.md
   - skills/reference-grounding
   - skills/prototyping
-  - skills/research
+  - skills/competitor-research
+  - skills/implementation-research
+  - skills/experimental-research
   - skills/review
   - docs/review/rubrics
   - docs/skills/README.md
@@ -80,7 +84,9 @@ under-load important primitives that many workflows depend on.
 
 - Defines Tier 0 as the universal work phase protocol rather than a skill tier.
 - Classifies Tier 1 primitives such as advise, reference-grounding, and prototyping as high-leverage base moves.
-- Keeps Tier 2 workflow surfaces such as research, planning, review, and harness-advisor as reusable interfaces.
+- Keeps specialized Tier 2 workflow surfaces such as competitor research,
+  implementation research, experimental research, review, and harness-advisor
+  as reusable interfaces.
 - Keeps Tier 3 domain skills focused on concrete application work.
 - Uses validators and skill-maintenance checks to keep todo links, tiers, and phase boundaries coherent.
 
@@ -134,7 +140,9 @@ Owner surfaces:
 - `docs/skills/system.md`
 - `skills/reference-grounding`
 - `skills/prototyping`
-- `skills/research`
+- `skills/competitor-research`
+- `skills/implementation-research`
+- `skills/experimental-research`
 - `skills/review`
 - `docs/review/rubrics`
 - `docs/skills/README.md`

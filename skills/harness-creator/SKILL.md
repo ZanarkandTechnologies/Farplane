@@ -70,7 +70,7 @@ project_harness_creator(project_idea, values?, priorities?, mode_presets?, conte
    + goal_advisor_handoff
 state: reads(operator idea, values, constraints, local assets/docs/tickets/skills, docs/skills/registry.jsonl, .agents/skills/**?, harness doctrine, farplane/harness.yaml, farplane/metrics.yaml, farplane/automations.toml, and farplane/bindings.yaml when present, current external research only when domain truth matters); writes(farplane/harness.yaml typed-charter/area/capability/metric-selection deltas only with explicit approval, farplane/metrics.yaml definition/direction/freshness/guard deltas, proposed tickets, farplane/automations.toml, farplane/bindings.yaml when configuring providers or recurring work, .agents/skills/<capability>/SKILL.md stubs or refinement-ticket handoffs, optional capability/gap/handoff sidecars, optional Goal Packet drafts)
 gates: values_or_default_values_named; priorities_named; feedback_loop_defined_or_ticketed; metric_objectives_honest; existing_tickets_checked_first; existing_skills_checked_before_capability_skill_stubs; capability_skill_reuse_map_written; missing_systems_named; blockers_ticketed; side_effect_gates_named; initial_objectives_named; pm_activation_gate_named; goal_advisor_handoff_ready
-routes: init-advisor | research:* | ingest-content | metric-advisor | harness-advisor | skill-creator | goal-advisor | automation-advisor | optimize-with-human | interval-update | review | relevant domain skill
+routes: init-advisor | competitor-research | implementation-research | experimental-research | customer-research | ingest-content | metric-advisor | harness-advisor | skill-creator | goal-advisor | automation-advisor | optimize-with-human | interval-update | review | relevant domain skill
 fails: runs Goal before designing harness; treats parent harness as an indefinite native Goal; schedules hidden runtime; analyzes metrics that do not exist; creates local capability skills before checking existing reusable skills and systems; promotes project-local capability skills to root skills before repeated proof; activates PM loops before core capability skills or refinement tickets exist; performs R&D when a standard system template is enough; triggers publishing/spend/account/customer side effects without approval
 ```
 
@@ -96,7 +96,7 @@ project_harness_creation_phase(project_idea, state)
 ## Phase Boundary
 
 This skill follows Tier 0 phases inline. Call workflow skills only for smaller
-child scopes: `init-advisor` for standard project systems, `research:*`
+child scopes: `init-advisor` for standard project systems, specialized research
 for real domain uncertainty, `metric-advisor` for metric/guard depth,
 `harness-advisor` for Farplane surface placement, `skill-creator` for a stable
 reusable missing primitive, `goal-advisor` after an executable ticket is
@@ -127,16 +127,16 @@ skill to root `skills/` only after repeated proof shows cross-project reuse.
    - [ ] Cheat when the system is standard: use known templates for feedback,
      analytics, tickets, QA, strategy refresh, and project bootstrap instead of
      asking the agent to rediscover them.
-   - [ ] Use [research:parity](../research/SKILL.md#researchparity) when the
-     domain workflow, peer norms, startup guides, or comparable operators are
-     unknown.
-   - [ ] Use [research:competitor](../research/SKILL.md#researchcompetitor)
-     when named or discoverable products, channels, creators, stores, or tools
-     shape the opportunity.
-   - [ ] Use [research:user-grounding](../research/SKILL.md#researchuser-grounding)
-     when the customer, audience, buyer, user, or operator job is unclear.
-   - [ ] Use [research:gap](../research/SKILL.md#researchgap) when the desired
-     harness must be compared with current Farplane capability.
+   - [ ] Use [competitor-research](../competitor-research/SKILL.md) when peer
+     workflows, named products, channels, creators, stores, or tools shape the
+     opportunity.
+   - [ ] Use [implementation-research](../implementation-research/SKILL.md)
+     when the desired harness depends on external implementation patterns or a
+     comparison with current Farplane capability.
+   - [ ] Use [experimental-research](../experimental-research/SKILL.md) when
+     papers, researcher trails, or candidate experiments change the first loop.
+   - [ ] Use [customer-research](../customer-research/SKILL.md) when the
+     customer, audience, buyer, user, or operator job is unclear.
    - [ ] Keep research proportional to choosing the first honest evidence loop;
      do not spend R&D budget when no marginal value exists.
 - [ ] 3. Fill the split Farplane project files.

@@ -53,7 +53,7 @@ gates: person_researched; professional_signal_traceable;
        private_pain_not_asserted; correction_ask_present;
        demo_route_complete_when_demo_selected;
        external_actions_unapproved
-routes: customer-research | research:* | solution-shaping | demo-realism |
+routes: customer-research | specialized research | solution-shaping | demo-realism |
         infographic | functional-ui |
         impl-plan | copywriting-advisor | personalized-offer | review
 fails: generic_free_help; biography_personalization; invented_private_pain;

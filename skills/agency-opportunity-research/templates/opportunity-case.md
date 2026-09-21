@@ -64,7 +64,7 @@ Selection criterion:
 - Selected target / relationship:
 - Problem-frame status:
 - Selected direction, if reviewed:
-- Next owner: `research:* | brainstorm | solution-shaping | usecase-experiment-loop | downstream packaging | review`
+- Next owner: `specialized research | brainstorm | solution-shaping | usecase-experiment-loop | downstream packaging | review`
 - Handoff inputs:
 - Produced by:
 - Artifact ref:

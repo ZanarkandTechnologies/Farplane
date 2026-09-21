@@ -13,7 +13,7 @@
 - Use it for compact evidence checks before advice, brainstorming, planning,
   execution, and review claims.
 - Escalate broader comparison, gap, docs, code-pattern, competitor, or
-  source-synthesis work to `research:*`.
+  source-synthesis work to the relevant specialized research skill.
 
 ## Checks
 

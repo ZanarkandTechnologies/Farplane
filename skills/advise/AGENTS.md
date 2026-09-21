@@ -21,7 +21,7 @@
 - Derive criteria and options from objective, need, root cause, constraints,
   assumptions, proof/falsification, tradeoffs, and non-goals.
 - Compare real options, not cosmetic variants.
-- Ground fact-dependent choices through `reference-grounding` or `research:*`.
+- Ground fact-dependent choices through `reference-grounding` or the relevant specialized research skill.
 - End with a direct next step, not an upsell.
 
 ## Checks

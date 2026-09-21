@@ -8,7 +8,7 @@ template_uses:
   skill-template: "0.3.7"
 allowed-tools: Read, Glob, Grep, Bash, web_search
 common_chains:
-  after: ["research", "solution-shaping"]
+  after: ["solution-shaping"]
 ---
 
 # Customer Research
@@ -53,7 +53,7 @@ gates: target_bound; sources_labeled; inference_labeled; minimal_frontmatter;
        deep_icp_hypotheses_testable; person_signal_card_present;
        hiring_coverage_recorded_when_deep_icp_and_company_bound;
        wiki_publication_intent_bound
-routes: research:user-grounding | research:source-synthesis | solution-shaping |
+routes: customer-research | reference-grounding | solution-shaping |
         first-value-outreach | manage-wiki
 fails: bloated_frontmatter; fake_certainty; generic_pitch; private_dossier;
        uncited_claims; biography_dump; direct_wiki_or_projection_mutation
@@ -61,7 +61,7 @@ fails: bloated_frontmatter; fake_certainty; generic_pitch; private_dossier;
 
 ## Phase Boundary
 
-Use `research:*` when the person, company, field, or source set needs grounding;
+Use `reference-grounding` when the person, company, field, or source set needs compact grounding;
 use `solution-shaping` only after problem hypotheses are labeled. When the next
 goal is contribution before a commercial ask, hand the report and one traceable
 professional signal to `first-value-outreach`.
@@ -83,10 +83,8 @@ professional signal to `first-value-outreach`.
   - [ ] For deep ICP, load [deep ICP source protocol](references/deep-icp-sources.md)
         and collect repeated professional, interaction, project, language,
         trigger, and hiring signals without private surveillance.
-  - [ ] Use [research:user-grounding](../research/SKILL.md#researchuser-grounding)
-        for role, context, friction, and success signals; use
-        [research:source-synthesis](../research/SKILL.md#researchsource-synthesis)
-        when several sources need normalization.
+  - [ ] Gather role, context, friction, and success signals in this workflow;
+        normalize multiple sources here while preserving their provenance.
 - [ ] 3. Draft the report from the applicable template.
   - [ ] Resolve stable Wiki IDs and keep frontmatter to `skill`, `entity_refs`,
         `name`, `links`, optional `industry`, `relevance`, and `created_at`.
@@ -152,7 +150,7 @@ professional signal to `first-value-outreach`.
 
 - [deep ICP source protocol](references/deep-icp-sources.md) — load only for
   deep ICP evidence gathering, authorized-session inspection, or hiring scans.
-- [Research](../research/SKILL.md) — load for external grounding.
+- [Reference Grounding](../reference-grounding/SKILL.md) — load for compact external grounding.
 - [Solution Shaping](../solution-shaping/SKILL.md) — load for help/solution fit.
 - [Manage Wiki](../manage-wiki/SKILL.md) — load for a sourced durable Wiki
   preview or apply handoff.

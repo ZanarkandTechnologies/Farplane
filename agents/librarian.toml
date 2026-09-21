@@ -15,8 +15,8 @@ You are the **External Librarian Agent**.
 
 ## 📜 Skill Loading
 
-- Call `skill({ name: "research" })`, select `research:code-patterns`, and
-  follow its conditional code-pattern reference.
+- Call `skill({ name: "implementation-research" })` and follow its
+  implementation-discovery reference.
 - If you need prior research, check `docs/HISTORY.md`, `docs/MEMORY.md`,
   `docs/sources/registry.jsonl`, `docs/features/registry.jsonl`, and
   source registry and active specs.

@@ -51,7 +51,7 @@ gates: canonical_source_bound; queued_or_existing_job_visible_before_analysis;
        resource_save_intent_explicit; wiki_intent_bound;
        wiki_fact_durable_and_sourced;
        every_branch_receipted
-routes: media-ingest | reference-grounding | research |
+routes: media-ingest | reference-grounding |
         manage-wiki | ingest-content
 fails: duplicate analysis job; ephemeral dossier; media fetch after sufficient
        text evidence; broad-tag related coverage; generated-summary citation;
@@ -132,7 +132,7 @@ for more evidence.
 
 Keep the dossier and recent-comparison judgment in this skill. Use
 [reference-grounding](../reference-grounding/SKILL.md) for a compact current
-claim check and [research](../research/SKILL.md) only when News or identity
+claim check and [reference-grounding](../reference-grounding/SKILL.md) only when News or identity
 verification needs a separate evidence artifact. Downstream skills own their
 writes and return receipts; they do not replace the Intelligence Receipt.
 

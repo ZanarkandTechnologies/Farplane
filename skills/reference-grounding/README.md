@@ -16,10 +16,10 @@ external references before another workflow consumes them.
 1. State the claim that needs evidence.
 2. Check the local baseline and one fitting source class.
 3. Return evidence, confidence, and local impact.
-4. Escalate to `research:*` only when a broader brief is needed.
+4. Escalate to the relevant specialized research skill only when a broader brief is needed.
 
 ## How To Test
 
 - Confirm the skill produces a compact grounding note, not a research dump.
 - Confirm it names source confidence and local impact.
-- Confirm broad parity/gap/source-synthesis work is routed to `research:*`.
+- Confirm broad parity/gap/source-synthesis work is routed to the relevant specialized research skill.

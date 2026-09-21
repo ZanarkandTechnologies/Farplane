@@ -39,7 +39,7 @@ gates: objective_named; provider_truthful; metric_matches_objective;
        direction_named; guard_metric_named; anti_metric_named; measurement_method_named;
        experimental_work:expectation_preregistered; no_fake_precision
 routes: optimize-harness | goal-advisor | self-improve | impl-plan |
-  proof-advisor | agent-qa-test:experiment | gap-analysis | review
+  proof-advisor | agent-qa-test:experiment | owning workflow | review
 fails: fake numeric score; proxy gaming; missing guard metric; hidden
   subjective judgment; resurrecting retired autoresearch skill routes
 ```
@@ -107,8 +107,8 @@ none            no honest metric; use judgment questions and write "none mechani
   - [ ] Route `goal-advisor` when the metric belongs inside a ticket-backed
         Goal Packet or heartbeat.
   - [ ] Route material causal surprise to `agent-qa-test:experiment`.
-  - [ ] Route a delayed ticket Reward miss without a causal experiment to
-        `gap-analysis`, then preserve the ticket check-in's
+  - [ ] Route a delayed ticket Reward miss without a causal experiment back to
+        its owning ticket or workflow, then preserve the ticket check-in's
         `accept | kill | monitor` decision.
   - [ ] Do not route to retired autoresearch skill routes; choose the live
         owner instead.
@@ -239,8 +239,6 @@ Route hint: goal-advisor or self-improve, not retired autoresearch skills.
   claims into proof cases and proof surface choices.
 - [../agent-qa-test/SKILL.md](../agent-qa-test/SKILL.md) - independently
   diagnoses material observation surprises.
-- [../gap-analysis/SKILL.md](../gap-analysis/SKILL.md) - diagnoses delayed
-  expected-versus-actual value gaps that are not scientific experiment claims.
 - [../review/SKILL.md](../review/SKILL.md) - judges evidence when metric
   traceability or qualitative sufficiency needs independent review.
 

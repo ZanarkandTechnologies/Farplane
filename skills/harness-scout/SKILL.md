@@ -48,10 +48,10 @@ harness_scout(source, project_context, decision_goal?, output_root?)
   feature registries, docs, skills, memory, lessons, troubles, and tickets for
   local matches. Use [codebase-analysis](../codebase-analysis/SKILL.md) only
   when docs/registry search cannot settle behavior.
-- [ ] Route claims narrowly: [research:source-synthesis](../research/SKILL.md#researchsource-synthesis)
-  for normalization, [research:code-patterns](../research/SKILL.md#researchcode-patterns)
-  for repositories, [research:parity](../research/SKILL.md#researchparity) for
-  convergence, and [research:gap](../research/SKILL.md#researchgap) for missing scope.
+- [ ] Route claims narrowly: [best-of-worlds](../best-of-worlds/SKILL.md) for
+  multi-source normalization and convergence, and
+  [implementation-research](../implementation-research/SKILL.md) for repository
+  behavior and externally grounded implementation scope.
 - [ ] Score each candidate with [decision-matrix](references/decision-matrix.md)
   and choose `adopt`, `adapt`, `reject`, `defer`, or the evidence-state label.
 - [ ] Use [harness-advisor](../harness-advisor/SKILL.md) for ambiguous placement,
@@ -92,7 +92,7 @@ project.
 | --- | --- |
 | Video/audio bundle | [media-ingest](../media-ingest/SKILL.md) |
 | Taught workflow reconstruction | [video-understanding](../video-understanding/SKILL.md) |
-| Repo implementation claim | [research:code-patterns](../research/SKILL.md#researchcode-patterns) |
+| Repo implementation claim | [implementation-research](../implementation-research/SKILL.md) |
 | Official API/platform behavior | [doc-advisor](../doc-advisor/SKILL.md) |
 | Compact evidence confidence | [reference-grounding](../reference-grounding/SKILL.md) |
 | Alternate scout/scorecard shapes | Expand first-principles alternatives inline |
@@ -105,7 +105,7 @@ project.
 
 - Existing equal/stronger behavior: `already-dominating` or `duplicate`; cite
   it and do not ticket.
-- Partial local behavior: `hybrid`; run `research:gap` before handoff.
+- Partial local behavior: `hybrid`; run `competitor-research` before handoff.
 - Missing behavior: score credibility, fit, cost, risk, and benchmarkability;
   use Harness Advisor when ownership is unclear.
 - Competing implementation: compare one small task across current, source, and

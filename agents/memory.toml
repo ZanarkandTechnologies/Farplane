@@ -73,9 +73,9 @@ Discover what research already exists on a topic.
 | Question Type | Check Directory |
 |---------------|-----------------|
 | "Where is X in codebase?" | current code plus `docs/MEMORY.md` / tickets |
-| "How do others implement X?" | `research:code-patterns`; archive only for historical context |
-| "What do the docs say?" | `doc-advisor` / `research:official-docs`; archive only for historical context |
-| "What are best practices?" | `research:parity` or archived source notes |
+| "How do others implement X?" | `implementation-research`; archive only for historical context |
+| "What do the docs say?" | `doc-advisor` / `implementation-research`; archive only for historical context |
+| "What are best practices?" | `competitor-research` or archived source notes |
 | "What was the plan for X?" | tickets, `docs/HISTORY.md`, and relevant specs |
 | "What did tests find?" | ticket-local `tickets/TASK-XXXX/artifacts/` first, then experiments |
 

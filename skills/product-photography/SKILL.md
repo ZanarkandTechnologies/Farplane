@@ -46,8 +46,7 @@ Use this checklist whenever `product-photography` is active.
   shot set genuinely spans jobs.
 - [ ] Use [method-selection-smoke](./references/method-selection-smoke.md) when
   method routing is unclear or when changing the skill.
-- [ ] Use [research:competitor](../research/SKILL.md#researchcompetitor) or
-  [research:parity](../research/SKILL.md#researchparity) when product
+- [ ] Use [competitor-research](../competitor-research/SKILL.md) when product
   examples, marketplace specs, source assets, current model behavior, or
   commerce norms should guide the brief.
 - [ ] Use the native planning phase when shot set, background/style, realism

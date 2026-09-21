@@ -22,7 +22,7 @@ Use this as the ordered checklist whenever `remotion-render` is active.
 - [ ] Confirm the job is code-rendered Remotion/React video, not model-native text-to-video, image-to-video, avatar/lipsync, or video editing.
 - [ ] For authoring, debugging, or improving Remotion code, use [remotion](../remotion/SKILL.md) before this render skill.
 - [ ] State the source component, composition id, props, width, height, fps, duration, codec needs, output path, and handoff path before rendering.
-- [ ] Use [research:official-docs](../research/SKILL.md#researchofficial-docs) or [research:code-patterns](../research/SKILL.md#researchcode-patterns) when Remotion render behavior, inference.sh app behavior, local code patterns, or source assets shape the render.
+- [ ] Use [implementation-research](../implementation-research/SKILL.md) when Remotion render behavior, inference.sh app behavior, local code patterns, or source assets shape the render.
 - [ ] Use the native planning phase when choosing render settings, local vs external route, codec, output package, or scope cut.
 - [ ] Load `references/remotion-render.md` before relying on app-specific render behavior.
 - [ ] Capability-gate with `command -v belt`, `belt app get infsh/remotion-render`, and `belt app sample infsh/remotion-render --save <input.json>` before relying on the inference.sh schema.

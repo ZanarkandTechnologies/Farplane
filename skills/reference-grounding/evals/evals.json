@@ -4,14 +4,14 @@
     {
       "id": "reference_grounding_visible_source_line_01",
       "prompt": "How do teams usually decide whether to use a feature flag or a config setting for an AGI Toy Shop release workflow?",
-      "expected_output": "Classifies the request as depending on real-world practice, peer norms, or implementation examples rather than local memory alone; Includes a visible `Grounding:` line naming the source class used, such as official docs, maintained examples, peer implementations, web sources, or supplied/local files; Does not claim a source class was checked unless the answer says it was actually inspected; Gives a concise recommendation or evidence gap instead of expanding into a full research brief; Routes broader parity or source synthesis to `research:*` when compact grounding is insufficient",
+      "expected_output": "Classifies the request as depending on real-world practice, peer norms, or implementation examples rather than local memory alone; Includes a visible `Grounding:` line naming the source class used, such as official docs, maintained examples, peer implementations, web sources, or supplied/local files; Does not claim a source class was checked unless the answer says it was actually inspected; Gives a concise recommendation or evidence gap instead of expanding into a full research brief; Routes broader parity or source synthesis to the relevant specialized research skill when compact grounding is insufficient",
       "files": [],
       "assertions": [
         "Classifies the request as depending on real-world practice, peer norms, or implementation examples rather than local memory alone",
         "Includes a visible `Grounding:` line naming the source class used, such as official docs, maintained examples, peer implementations, web sources, or supplied/local files",
         "Does not claim a source class was checked unless the answer says it was actually inspected",
         "Gives a concise recommendation or evidence gap instead of expanding into a full research brief",
-        "Routes broader parity or source synthesis to `research:*` when compact grounding is insufficient"
+        "Routes broader parity or source synthesis to the relevant specialized research skill when compact grounding is insufficient"
       ],
       "metadata": {
         "farplane": {

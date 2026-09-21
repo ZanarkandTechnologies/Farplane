@@ -4,11 +4,11 @@
     {
       "id": "optimize_harness_full_loop_01",
       "prompt": "Farplane keeps accepting chat-only strategy dumps for AGI Toy Shop process changes. I expected it to create a durable artifact first and prove the behavior. Fix the harness.",
-      "expected_output": "Normalizes observed and expected behavior before changing anything; Runs or names gap-analysis to diagnose the gap; Runs or names harness-advisor to choose the primary owner and rejected surfaces; Creates or updates a proof surface such as an eval, validator, or review path; Chooses direct change versus self-improve based on whether a metric/search loop is needed; Ends with review, validation, or a blocked report instead of claiming improvement from prose",
+      "expected_output": "Normalizes observed and expected behavior before changing anything; Diagnoses the miss in the owning workflow; Runs or names harness-advisor to choose the primary owner and rejected surfaces; Creates or updates a proof surface such as an eval, validator, or review path; Chooses direct change versus self-improve based on whether a metric/search loop is needed; Ends with review, validation, or a blocked report instead of claiming improvement from prose",
       "files": [],
       "assertions": [
         "Normalizes observed and expected behavior before changing anything",
-        "Runs or names gap-analysis to diagnose the gap",
+        "Diagnoses the miss in the owning workflow",
         "Runs or names harness-advisor to choose the primary owner and rejected surfaces",
         "Creates or updates a proof surface such as an eval, validator, or review path",
         "Chooses direct change versus self-improve based on whether a metric/search loop is needed",
@@ -53,12 +53,12 @@
     {
       "id": "optimize_harness_difficult_regression_01",
       "prompt": "The agent created a duplicate skill instead of extending the existing one. Capture it so it does not regress.",
-      "expected_output": "Treats a difficult failure as a runnable eval case when the behavior is testable; Keeps expected behavior in assertions; Routes diagnosis through gap-analysis or owner lookup before recommending remediation; Avoids a separate raw transcript backlog with private or unsanitized details; Names where the eval should live based on skill-local versus workflow ownership",
+      "expected_output": "Treats a difficult failure as a runnable eval case when the behavior is testable; Keeps expected behavior in assertions; Routes diagnosis through the owning workflow or owner lookup before recommending remediation; Avoids a separate raw transcript backlog with private or unsanitized details; Names where the eval should live based on skill-local versus workflow ownership",
       "files": [],
       "assertions": [
         "Treats a difficult failure as a runnable eval case when the behavior is testable",
         "Keeps expected behavior in assertions",
-        "Routes diagnosis through gap-analysis or owner lookup before recommending remediation",
+        "Routes diagnosis through the owning workflow or owner lookup before recommending remediation",
         "Avoids a separate raw transcript backlog with private or unsanitized details",
         "Names where the eval should live based on skill-local versus workflow ownership"
       ],

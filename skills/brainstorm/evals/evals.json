@@ -4,14 +4,14 @@
     {
       "id": "brainstorm_base_spine_without_council_01",
       "prompt": "Brainstorm how we should rethink code review for small AI-agent repos. Keep it concise and do not create tickets.",
-      "expected_output": "States whether the pass is loose divergence or structured decomposition; Names objective, current reality, first-principles contrast, candidate directions, recommendation, and next owner; Does not run an ensemble or claim to spawn lanes without an ensemble request; Keeps output as an exploration note, not an implementation plan; Names operator clarification, `prd`, `research:*`, or no next owner as appropriate",
+      "expected_output": "States whether the pass is loose divergence or structured decomposition; Names objective, current reality, first-principles contrast, candidate directions, recommendation, and next owner; Does not run an ensemble or claim to spawn lanes without an ensemble request; Keeps output as an exploration note, not an implementation plan; Names operator clarification, `prd`, the relevant specialized research skill, or no next owner as appropriate",
       "files": [],
       "assertions": [
         "States whether the pass is loose divergence or structured decomposition",
         "Names objective, current reality, first-principles contrast, candidate directions, recommendation, and next owner",
         "Does not run an ensemble or claim to spawn lanes without an ensemble request",
         "Keeps output as an exploration note, not an implementation plan",
-        "Names operator clarification, `prd`, `research:*`, or no next owner as appropriate"
+        "Names operator clarification, `prd`, the relevant specialized research skill, or no next owner as appropriate"
       ],
       "metadata": {
         "farplane": {

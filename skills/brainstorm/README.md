@@ -29,7 +29,7 @@ skill.
 4. When `ensemble: auto|max` is requested, select personas from
    `ensemble.yaml` using `references/spine-and-ensemble.md`.
 5. Recommend one best next bet or decomposition shape.
-6. Hand off to direct clarification, `prd`, `research:*`, or `impl-plan` as
+6. Hand off to direct clarification, `prd`, the relevant specialized research skill, or `impl-plan` as
    appropriate.
 
 ## How To Test
@@ -37,7 +37,7 @@ skill.
 - confirm the skill still compares options when divergence is needed
 - confirm base mode runs the spine without unnecessary council machinery
 - confirm example-dependent brainstorms ground options through
-  `reference-grounding` or `research:*`
+  `reference-grounding` or the relevant specialized research skill
 - confirm it can handle structured current-vs-ideal and first-principles
   decomposition inside the same public surface
 - confirm ensemble routes preserve the brainstorm output contract and use

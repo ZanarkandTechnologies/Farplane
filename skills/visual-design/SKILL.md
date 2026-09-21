@@ -19,8 +19,7 @@ allowed-tools: Read, Grep, Glob, web_search
 - [ ] Run the **Steve Jobs Focus & Simplicity Pass**: state the user-facing
   benefit, visual focal action, elements to remove or defer, and deliberate
   `no`; preserve functional requirements, accessibility, and necessary state.
-- [ ] Use [research:parity](../research/SKILL.md#researchparity) or
-  [research:competitor](../research/SKILL.md#researchcompetitor) when visual
+- [ ] Use [competitor-research](../competitor-research/SKILL.md) when visual
   direction needs product, brand, or peer grounding.
 - [ ] When the user provides a strong reference or the surface needs a taste
   upgrade, use [best-of-worlds](../best-of-worlds/SKILL.md) to extract what to

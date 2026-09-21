@@ -16,11 +16,10 @@ common_chains:
 
 - [ ] Read the current project surfaces before asking: `docs/prd.md`, active
   ticket, `docs/features/`, and `docs/MEMORY.md` when it answers a named question.
-- [ ] Use [research:user-grounding](../research/SKILL.md#researchuser-grounding)
+- [ ] Use [customer-research](../customer-research/SKILL.md)
   when audiences, jobs, user stories, contexts, friction, or success criteria
   are not already grounded.
-- [ ] Use [research:parity](../research/SKILL.md#researchparity) or
-  [research:competitor](../research/SKILL.md#researchcompetitor) when product
+- [ ] Use [competitor-research](../competitor-research/SKILL.md) when product
   expectations, peer workflows, or market examples should shape the PRD.
 - [ ] Use
   [first-principles-planning](../../docs/features/FEAT-0042-lean-global-agent-operating-kernel.md)

@@ -13,11 +13,10 @@ source: local
 
 - [ ] Read existing product context first: `docs/prd.md`, active ticket,
   `docs/features/`, user stories, customer notes, and current demo data.
-- [ ] Use [research:user-grounding](../research/SKILL.md#researchuser-grounding)
+- [ ] Use [customer-research](../customer-research/SKILL.md)
   when user groups, jobs, operating contexts, friction, or success signals are
   not already clear.
-- [ ] Use [research:parity](../research/SKILL.md#researchparity) or
-  [research:competitor](../research/SKILL.md#researchcompetitor) when the demo
+- [ ] Use [competitor-research](../competitor-research/SKILL.md) when the demo
   needs believable industry workflows, entities, statuses, or operational
   patterns.
 - [ ] Define the client operating hypothesis without pretending it is verified

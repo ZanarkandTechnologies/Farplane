@@ -9,7 +9,7 @@ template_uses:
   skill-surface-budget: "0.1.0"
 allowed-tools: Read, Glob, Grep, web_search
 common_chains:
-  after: ["copywriting-advisor", "research", "doc-advisor"]
+  after: ["copywriting-advisor", "competitor-research", "doc-advisor"]
 ---
 
 # SEO Content Advisor
@@ -43,7 +43,7 @@ gates:
   who_how_why_named; proof_sources_named; copy_voice_checked;
   publication_human_gate_named
 routes:
-  copywriting-advisor | research | doc-advisor | social-content | review
+  copywriting-advisor | competitor-research | reference-grounding | doc-advisor | social-content | review
 fails:
   keyword_stuffing; generic_ai_article; ranking_page_rewrite;
   unsupported_expertise_claims; stale_fact_without_date; publishing_without_review
@@ -52,8 +52,8 @@ fails:
 ## Phase Boundary
 
 Use current web grounding when search guidance, SERP expectations, freshness,
-or peer article patterns materially affect the answer. Use `research` when the
-topic needs source synthesis before writing. Use `copywriting-advisor` when the
+or peer article patterns materially affect the answer. Use `reference-grounding`
+for source claims and `competitor-research` for peer patterns before writing. Use `copywriting-advisor` when the
 message, audience emotion, or product voice is not yet sharp. Use `doc-advisor`
 when the result is durable documentation rather than marketing content. Use
 `review` before publishing, brand-sensitive claims, or expert-content claims.
@@ -158,8 +158,8 @@ SEO into keyword stuffing.
 - [copywriting-advisor](../copywriting-advisor/SKILL.md) - use
   when audience emotion, message spine, or product voice needs sharpening
   before article drafting.
-- [research](../research/SKILL.md) - use for source synthesis,
-  parity, official docs, or user-grounding when the topic needs evidence first.
+- [reference-grounding](../reference-grounding/SKILL.md) - use for source claims;
+  route market comparisons to `competitor-research` when needed.
 - [doc-advisor](../doc-advisor/SKILL.md) - use when the article is
   really durable documentation or knowledge-base content.
 - [social-content](../social-content/SKILL.md) - use for social

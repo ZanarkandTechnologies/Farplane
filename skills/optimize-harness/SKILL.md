@@ -17,7 +17,7 @@ allowed-tools: Read, Glob, Grep, Bash
 Use this when Farplane should behave differently, not merely be explained. It
 owns the end-to-end behavior-gap loop: diagnose, place, prove, change or
 experiment, then accept, hold, or roll back. Lower-level skills retain their
-own artifacts: `gap-analysis`, `harness-advisor`, `metric-advisor`,
+own artifacts: `harness-advisor`, `metric-advisor`,
 `proof-advisor`, `eval`, and implementation owners.
 
 ## Skill Signature
@@ -44,8 +44,9 @@ writes: placement/proof decision and changed owner artifact when accepted
 - [ ] **N2 — Diagnose the gap.**
   `bounded gap + evidence -> gap report | known direct cause`
 
-  Rule: Use [gap-analysis](../gap-analysis/SKILL.md) unless evidence already
-  identifies the wrong or missing owner; never invent the target behavior.
+  Rule: Compare observed behavior with the explicit expected result in this
+  workflow, then use [harness-advisor](../harness-advisor/SKILL.md) when the
+  wrong or missing owner remains uncertain; never invent the target behavior.
 
   Assert: The report names the observed failure, expected result, and one
   evidence-backed cause or uncertainty.
