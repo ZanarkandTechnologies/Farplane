@@ -1,6 +1,6 @@
 ---
 name: automation-advisor
-description: "Design or revise Farplane Codex automations using one project-owned Markdown file per scheduled workflow."
+description: "Design or revise Farplane Codex automations using one Markdown file per scheduled workflow."
 tier: 3
 group: operations
 source: local
@@ -18,8 +18,10 @@ Use this skill to create, revise, or audit Farplane Codex automations. Work
 Pulse is the only heartbeat and owns ticket execution. Company OS Daily and
 Weekly, Feed Scout, Dogfood, and maintenance are separate `cron` records.
 
-Keep each complete desired record in its own `farplane/automations/*.md` file. YAML front
-matter owns id, name, kind, status, target, and schedule; the body is the exact prompt. Runtime IDs, logs, and mutable
+Keep each complete desired record in one owner directory: office-wide Company
+OS Daily and Weekly in root `automations/*.md`, and project-local schedules in
+that project's `farplane/automations/*.md`. YAML front matter owns id, name,
+kind, status, target, and schedule; the body is the exact prompt. Runtime IDs, logs, and mutable
 memory stay in the Codex automation store or ignored `.farplane/` state. Do not
 add a compiler, scheduler thread, or second manifest.
 
@@ -39,12 +41,12 @@ receipts. Do not replace that contract with a four-line workflow synopsis.
 ## Skill Signature
 
 ```text
-automation_advisor(intent, project_refs, current_automation?, activate?)
+automation_advisor(intent, project_refs, current_automation?, activate?, office_root?)
   -> template_choice + config_delta + automation_delta?
    + state_contract_check + proof_checklist
-state: reads(active feature/spec, farplane/automations/?, current prompts,
+state: reads(active feature/spec, automations/?, farplane/automations/?, current prompts,
              target skill, templates, first-load Todo List guardrails);
-       writes(farplane/automations/)
+       writes(automations/ or farplane/automations/ according to scope)
 gates: loop_choice; cadence; one_owning_skill; full_parseable_record;
   file_in_file_out_boundary; side_effect_gates; one_heartbeat;
   no_hidden_scheduler
@@ -63,12 +65,19 @@ fails: logs in tracked config; provider access inside pm skills; generated
   - [ ] Use Company OS Daily/Weekly for project memory and money-linked review.
   - [ ] Use cron for every report, source, self-improvement, or maintenance pass.
 - [ ] 2. Bind current project surfaces.
-  - [ ] Read the active feature/spec, `farplane/automations/`, exact live
+  - [ ] For Company OS, bind `office_root` to the explicit AI Office checkout
+        that contains `automations/daily-operating-update.md` and
+        `automations/weekly-operating-review.md`. Do not infer it from the
+        installed skill path or from a managed project's `farplane/` folder.
+  - [ ] Read the active feature/spec, root `automations/`, relevant project
+        `farplane/automations/`, exact live
         prompt, target skill, template, and first-load Todo List guardrails.
   - [ ] Read [prompt engineering](../../docs/fundamentals/prompt-engineering.md)
         before material prompt changes.
 - [ ] 3. Keep desired config visible and runtime state untracked.
   - [ ] Use one complete Markdown file per Codex automation; do not add an index.
+  - [ ] Store Company OS Daily and Weekly once at the AI Office root; never
+        scaffold one copy per managed project.
   - [ ] Let the Codex record own live cadence and Markdown own desired cadence,
         target, status, and exact prompt.
 - [ ] 4. Write the complete operated prompt without duplicating skill reasoning.

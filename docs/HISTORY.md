@@ -352,3 +352,4 @@
 2026-08-23 00:00 +0800 | MIGRATION | retire `docs/TROUBLES.md`, `docs/LESSONS.md`, and the `repent-scribe` role; route correction evidence to tickets, owner-local skills, evals, validators, and `docs/MEMORY.md` only for durable project invariants.
 2026-09-21 00:00 +0800 | MIGRATION | replace desired-state automation TOML with one Markdown file per automation, using YAML front matter for configuration and the body as the exact prompt.
 2026-09-21 00:00 +0800 | FIX | restore the full Zanarkand-derived Company OS Daily and Weekly operated contracts after an over-compressed Farplane adaptation dropped collection, validation, rendering, freshness, readback, and receipt rules.
+2026-09-21 13:30 +0800 | REFACTOR | move the single Company OS Daily and Weekly pair to the AI Office root `automations/`; stop copying portfolio reviews into every initialized project's thin `farplane/` adapter.

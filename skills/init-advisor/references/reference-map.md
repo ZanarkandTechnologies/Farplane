@@ -21,7 +21,8 @@
 - [references/SYSTEMS_README_TEMPLATE.md](references/SYSTEMS_README_TEMPLATE.md)
   - copied to `docs/systems/README.md` for system/product grouping guidance.
 - [references/automation-templates/](references/automation-templates/) - copied
-  to `farplane/automations/` as one reviewable Markdown file per Codex automation.
+  to `farplane/automations/` as one reviewable Markdown file per project-local
+  Codex automation. Office-wide Daily/Weekly records are not project templates.
 - [references/CODE_SCAFFOLD_RECIPES.md](references/CODE_SCAFFOLD_RECIPES.md) -
   load only when `include_code_scaffold == true`, the user asks which stack can
   be scaffolded, or stack setup commands need review.

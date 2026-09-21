@@ -126,9 +126,10 @@ MEM-0035, MEM-0036, MEM-0056, MEM-0130, MEM-0151.
 - Repeated polling, retries, subagent waits, remote checks, and asset-generation
   waits should use adaptive backoff, but backoff does not authorize hidden
   daemons, queues, or always-on watchers.
-- Current Farplane framework automations are explicit loops: `pulse-update` for
-  bounded execution, plus Company OS Daily and Weekly automations that call
-  `pm-daily` and `pm-weekly`. Codex automation cadence is the scheduler; do not
+- Current Farplane framework automations are explicit loops: project-local
+  `pulse-update` for bounded execution, plus one AI Office root Company OS
+  Daily and Weekly pair that calls `pm-daily` and `pm-weekly` across eligible
+  projects. Codex automation cadence is the scheduler; do not
   restore the retired Interval skill, `farplane/steer.config.toml`, or
   `.farplane/state/steer-scheduler.json`.
 

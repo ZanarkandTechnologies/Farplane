@@ -25,7 +25,7 @@ farplane/
   manifest.json    # versioned Farplane project spec for this project
   harness.yaml     # typed charter, planning areas, capability refs, metric selection
   metrics.yaml     # metric definitions, direction, freshness, guard rules
-  automations/     # one Markdown file per Work Pulse or scheduled source
+  automations/     # project-local Work Pulse and scheduled sources
   bindings.yaml    # non-secret project IDs and provider coordinates
   pm.json          # optional UI thread manifest for one visual project PM
   capability-profiles.yaml # optional restriction-only Project PM access policy
@@ -113,8 +113,8 @@ See [docs/farplane-framework/project-files.md](../docs/farplane-framework/projec
 - `Work Pulse`: the only heartbeat; reconciles, dispatches, handles due
   check-ins, and refills an empty BAU board.
 - `Feed Scout`: separate source report and bounded opportunity-ticket job.
-- `Daily/Weekly BAU`: problem reports and bounded already-evidenced
-  maintenance, not new-direction planning.
+- Root `Daily/Weekly Company OS`: one office-wide portfolio review pair;
+  managed projects do not duplicate these records.
 - `Dogfood Improvement`: portfolio learning and bounded experiment packets;
   Work Pulse executes the selected tickets.
 - `Monthly Registry Consolidation`: optional report-only pass over registry

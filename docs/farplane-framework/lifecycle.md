@@ -30,8 +30,8 @@ refs:
 
 Farplane V1 is an operating system for moving an operator-chosen commercial bet
 toward money. Its center is deliberately small. Active Daily and Weekly use the
-Company OS file-in/file-out boundary owned by `pm-daily`, `pm-weekly`, and
-`farplane/automations/`; Interval is legacy reference only.
+Company OS file-in/file-out boundary owned by `pm-daily`, `pm-weekly`, and the
+AI Office root `automations/`; Interval is legacy reference only.
 
 ```text
 project(commercial intent, execution, evidence)
@@ -207,7 +207,8 @@ does not reconstruct or independently score the experiment policy.
 | Goal/check-in loop policy | ticket `program.md` |
 | Append-only task or experiment observations | ticket `progress.md` |
 | Closed-ticket identity and archive location | `tickets/archive-index.jsonl` for new GitHub-issue closes; `tickets/archive/TASK-*` for readable legacy archives |
-| Desired automation topology and prompts | `farplane/automations/` |
+| Global Company OS Daily/Weekly prompts | AI Office root `automations/` |
+| Project-local automation topology and prompts | project `farplane/automations/` |
 | Provider coordinates | `farplane/bindings.yaml` |
 | Runtime receipts and derived context | `.farplane/reports/**` and other generated `.farplane/**` projections |
 

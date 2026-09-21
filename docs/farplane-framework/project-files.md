@@ -115,8 +115,10 @@ ledger, or product controller state here.
 
 Human-reviewable desired state for Codex automations. Each `*.md` file owns
 one complete automation. The folder contains exactly one Work Pulse heartbeat
-plus separate cron/manual jobs such as Feed Scout,
-Daily/Weekly BAU, Dogfood self-improvement, and low-frequency maintenance.
+plus project-local cron/manual jobs such as Feed Scout, Dogfood
+self-improvement, and low-frequency maintenance. The AI Office root
+`automations/` owns one global Company OS Daily and Weekly pair across every
+managed project.
 
 YAML front matter owns identity, schedule, workspace, and status. The Markdown
 body is the exact project-specific prompt. Generic workflow behavior remains in the called skill. Scheduled

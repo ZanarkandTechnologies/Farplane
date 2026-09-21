@@ -23,6 +23,10 @@ refs:
 
 Farplane has one execution loop and one operating-review loop.
 
+The AI Office root owns one Daily and one Weekly record in `automations/`.
+Each managed repository is an ordinary project with a thin `farplane/`
+adapter; it does not receive another copy of those portfolio reviews.
+
 ```text
 Work Pulse heartbeat -> reconcile and execute accepted Multica work
 Company OS Daily     -> refresh each project's operating memory

@@ -4,12 +4,12 @@ framework_template_version: 1.0.0
 owner: automation-advisor
 source_template: ZanarkandAI/automations/daily-operating-update.md
 source_template_version: 4.4.0
-id: project-daily-operating-update
-name: Project Daily Operating Update
+id: farplane-daily-interval
+name: Farplane Daily Operating Update
 kind: cron
-status: paused
+status: active
 target:
-  workspace: <project-root>
+  workspace: /Users/kenjipcx/Zanarkand Technologies/projects/Farplane
 schedule:
   type: daily
   timezone: Asia/Kuala_Lumpur
@@ -221,4 +221,4 @@ Return rules:
 - State `multica_execution: none`.
 
 Config source:
-farplane/automations/daily-operating-update.md id="project-daily-operating-update"
+automations/daily-operating-update.md id="farplane-daily-interval"

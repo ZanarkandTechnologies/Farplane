@@ -108,7 +108,7 @@ Key ownership:
 - `metrics.yaml`: provider-independent metric definitions with direction,
   freshness, and optional guard rules;
 - `.agents/skills/`: project-local recurring capability workflows;
-- `automations/`: one Work Pulse heartbeat plus separate scheduled sources;
+- `automations/`: one project Work Pulse heartbeat plus project-local scheduled sources;
 - `bindings.yaml`: non-secret connector/provider coordinates;
 - tickets: executable commitments and all QA/review evidence;
 - `.farplane/**`: generated/local observations and reports, not strategy.
@@ -163,15 +163,19 @@ The desired project topology has exactly one execution heartbeat:
 ```text
 Work Pulse            heartbeat
 Feed Scout            cron/manual
-Daily BAU Report      cron/manual
-Weekly BAU Report     cron/manual
 Dogfood Improvement   cron/manual
 Maintenance           cron/manual
+
+AI Office root:
+Company OS Daily      cron
+Company OS Weekly     cron
 ```
 
 Bootstrap writes `farplane/automations/`; `automation-advisor` owns live
 Codex automation activation. Runtime IDs remain in the Codex automation store,
 while `pm.json` contains only UI-visible grouping refs.
+The AI Office root owns the single global Daily/Weekly pair; bootstrap does not
+copy those records into managed projects.
 
 Scheduled sources may write reports and bounded tickets of their own class.
 They do not execute tickets, run due check-ins, or create additional worker

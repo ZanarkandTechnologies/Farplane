@@ -28,16 +28,16 @@
     {
       "id": "init_advisor_pulse_interval_01",
       "prompt": "A new Farplane project is being initialized for autonomous operation. What should the generated automation surfaces contain?",
-      "expected_output": "Creates farplane/automations/ as the reviewable full automation config source; Creates farplane/harness.yaml as the static human charter with human thesis, leverage commitments, non-tradeoffs, authority, change rule, and planning areas; Creates farplane/metrics.yaml for provider-independent metric definitions and keeps provider refresh coordinates in farplane/bindings.yaml; Keeps recurring artifact production in capability skills rather than controllers; Uses Work Pulse as the only heartbeat, adaptive planner, exploratory ticket-admission point, and shared ticket executor; Uses separate Feed Scout, Daily/Weekly BAU, and Dogfood cron records for reports, bounded candidates, and capped direct recovery only; Keeps consolidation as cron and routes human-feedback improvement through Dogfood candidates rather than another controller; Uses date-stamped reports rather than latest.md as canonical state",
+      "expected_output": "Creates farplane/automations/ as the reviewable project-local automation config source and does not copy the AI Office root Daily/Weekly pair; Creates farplane/harness.yaml as the static human charter with human thesis, leverage commitments, non-tradeoffs, authority, change rule, and planning areas; Creates farplane/metrics.yaml for provider-independent metric definitions and keeps provider refresh coordinates in farplane/bindings.yaml; Keeps recurring artifact production in capability skills rather than controllers; Uses Work Pulse as the only heartbeat, adaptive planner, exploratory ticket-admission point, and shared ticket executor; Uses separate project-local Feed Scout and Dogfood cron records while the AI Office root owns one global Daily/Weekly pair; Keeps consolidation as cron and routes human-feedback improvement through Dogfood candidates rather than another controller; Uses date-stamped reports rather than latest.md as canonical state",
       "files": [],
       "assertions": [
-        "Creates farplane/automations/ as the reviewable full automation config source",
+        "Creates farplane/automations/ as the reviewable project-local automation config source without Daily/Weekly copies",
         "Creates farplane/harness.yaml as the static human charter with human thesis, static leverage commitments, non-tradeoffs, agent authority, and change rule",
         "Creates farplane/metrics.yaml for provider-independent metric definitions and keeps provider refresh coordinates in farplane/bindings.yaml",
         "Keeps recurring artifact production in reusable or project-local capability skills rather than product controller files",
         "Grounds the team archetype against real-world equivalents before finalizing harness, capability workflows, or goals",
         "Uses Work Pulse as the only heartbeat, adaptive planner, proactive ticket-admission point, and shared ticket executor",
-        "Uses separate Feed Scout, Daily/Weekly BAU, and Dogfood cron records for reports, bounded candidates, and capped direct recovery only",
+        "Uses project-local Feed Scout and Dogfood cron records while the AI Office root owns one global Daily/Weekly pair",
         "Keeps consolidation as cron and routes human-feedback improvement through Dogfood candidates rather than another controller",
         "Does not create farplane/steer.config.toml or .farplane/state/steer-scheduler.json",
         "Uses date-stamped interval reports rather than latest.md as the canonical report path"
@@ -81,13 +81,13 @@
     {
       "id": "init_advisor_automation_activation_path_01",
       "prompt": "A user initializes a new Farplane project and asks whether it creates threads and automations. What should init-advisor do end-to-end?",
-      "expected_output": "Bootstrap creates files, tickets, and pm manifest, but not live Codex automations by default; Does not create live Codex threads or automations unless activation is requested; Routes activation to automation-advisor; Activation creates or reuses the records named in farplane/automations/, with one Work Pulse heartbeat and separate Feed Scout, BAU review, self-improvement, and optional cron threads; Writes PM-visible thread IDs to farplane/pm.json and keeps automation runtime IDs in the Codex app automation store; Reports needs_operating_model_intake or needs_automation_setup when blocked",
+      "expected_output": "Bootstrap creates files, tickets, and pm manifest, but not live Codex automations by default; Does not create live Codex threads or automations unless activation is requested; Routes activation to automation-advisor; Project init activation creates or reuses only project-local records from farplane/automations/ while AI Office setup owns the single root Daily/Weekly pair; Writes PM-visible thread IDs to farplane/pm.json and keeps automation runtime IDs in the Codex app automation store; Reports needs_operating_model_intake or needs_automation_setup when blocked",
       "files": [],
       "assertions": [
         "Bootstrap creates files, tickets, and pm manifest, but not live Codex automations by default",
         "Does not create live Codex threads or automations unless activation is requested",
         "Routes activation to automation-advisor",
-        "Activation creates or reuses the records named in farplane/automations/, with one Work Pulse heartbeat and separate Feed Scout, BAU review, self-improvement, and optional cron threads",
+        "Project init activation creates or reuses only project-local records from farplane/automations/ while AI Office setup owns the single root Daily/Weekly pair",
         "Writes PM-visible thread IDs to farplane/pm.json and keeps automation runtime IDs in the Codex app automation store",
         "Reports needs_operating_model_intake or needs_automation_setup when blocked"
       ],

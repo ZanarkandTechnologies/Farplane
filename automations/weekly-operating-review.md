@@ -149,4 +149,4 @@ Action rules:
 - `multica_execution: none`.
 
 Config source:
-farplane/automations/weekly-operating-review.md id="farplane-weekly-interval"
+automations/weekly-operating-review.md id="farplane-weekly-interval"

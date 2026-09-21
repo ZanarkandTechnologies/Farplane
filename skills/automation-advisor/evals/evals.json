@@ -4,12 +4,12 @@
     {
       "id": "automation_advisor_one_heartbeat_01",
       "prompt": "Configure Farplane V1 automations for Pulse, Feed Scout, Daily, Weekly, and self-improvement.",
-      "expected_output": "Creates exactly one heartbeat and it invokes pulse-update; Keeps Feed Scout, Company OS Daily/Weekly, and Dogfood as cron jobs; Keeps exact reviewable prompts in farplane/automations/; Does not add a hidden scheduler, separate check-in loop, or Taste Loop controller; Makes Work Pulse the shared ticket and matured-check-in executor",
+      "expected_output": "Creates exactly one heartbeat and it invokes pulse-update; Keeps Feed Scout, Company OS Daily/Weekly, and Dogfood as cron jobs; Keeps Company OS prompts in root automations/ and project-local prompts in farplane/automations/; Does not add a hidden scheduler, separate check-in loop, or Taste Loop controller; Makes Work Pulse the shared ticket and matured-check-in executor",
       "files": [],
       "assertions": [
         "Creates exactly one heartbeat and it invokes pulse-update",
         "Keeps Feed Scout, Company OS Daily/Weekly, and Dogfood as cron jobs",
-        "Keeps exact reviewable prompts in farplane/automations/",
+        "Keeps Company OS prompts in root automations/ and project-local prompts in farplane/automations/",
         "Does not add a hidden scheduler, separate check-in loop, or Taste Loop controller",
         "Makes Work Pulse the shared ticket and matured-check-in executor"
       ],
@@ -75,7 +75,8 @@
       "prompt": "Replace the existing Daily and Weekly Interval bindings with the Zanarkand-style Company OS flow. Multica remains dashboard-only and the skills must be file-in/file-out. Do not create another scheduled job.",
       "expected_output": "Updates the existing Daily and Weekly cron records instead of creating duplicates; Calls pm-daily once per eligible Project and pm-weekly once over the complete frozen set; Makes the automation own provider access, caching, rendering, existing-issue effects, and readback; Gives each skill local files and exactly one JSON output with no provider access; Forbids task admission, strategy invention, broad knowledge promotion, Multica execution, and external side effects; Preserves one Pulse heartbeat",
       "files": [
-        "skills/automation-advisor/evals/fixtures/farplane/automations/"
+        "automations/",
+        "skills/automation-advisor/evals/fixtures/farplane/automations/work-pulse.md"
       ],
       "assertions": [
         "Updates existing Daily and Weekly cron records without creating another job",

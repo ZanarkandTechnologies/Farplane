@@ -41,11 +41,12 @@ descriptions, refresh prompts, bindings, tickets, and docs. Do not use
 `bootstrap.sh --force` as a general project upgrade because bootstrap owns
 whole-file scaffolding.
 
-Reusable project automation config templates live in
+Reusable project-local automation config templates live in
 [automation templates](references/automation-templates/). Generated
 project config includes `farplane/automations/` as the reviewable desired
-state copied into Codex automations; live activation belongs to
-`automation-advisor`.
+state copied into Codex automations. Portfolio-wide Company OS Daily and
+Weekly live once in the AI Office root `automations/`; init does not copy them
+into managed projects. Live activation belongs to `automation-advisor`.
 
 For "what does init create?" answers, load [README.md](README.md) or the
 manifest template rather than duplicating the generated-file inventory here.
@@ -74,7 +75,7 @@ init_advisor(project_root?, project_idea?, repo_shape?, stack_profile?, init_mod
    + next_planning_handoff
 state: reads(existing repo files, README/AGENTS/docs/tickets when present, bootstrap brief, project profile, operator context); writes AGENTS/PROJECT_RULES/ARCHITECTURE/docs/tickets/qa/farplane scaffolds, optional stack scaffold, and three dependent business-foundation tickets
 gates: existing_files_preserved; spec_version_recorded; human_gates_named; human_intake_decision_recorded; secrets_not_written; no_hidden_automation; interactive_stack_steps_stop_for_human
-routes: harness-creator | automation-advisor | prd | spec-to-ticket | research:official-docs | research:code-patterns
+routes: harness-creator | automation-advisor | prd | spec-to-ticket | implementation-research | implementation-research
 fails: creates only code scaffolding with no Farplane project config; treats PRD authoring as required init completion; claims full project initialization when human intent, measurable objectives, success criteria, non-goals, or decision boundaries are still missing; deletes stack setup recipes; overwrites existing project state silently
 ```
 
@@ -115,8 +116,8 @@ existence as readiness or call Goal Advisor before a ticket is concrete.
         canonical generated `.gitignore` block for Farplane local runtime and
         work state.
   - [ ] Use [automation templates](references/automation-templates/) as the
-        `farplane/automations/` source; do not duplicate automation
-        config rules in this skill.
+        project-local `farplane/automations/` source; do not copy root Company
+        OS Daily or Weekly into each project.
   - [ ] Create or preserve `farplane/metrics.yaml` as the metric-definition and
         grouped-refresh contract; keep only non-secret connector/provider
         coordinates in `farplane/bindings.yaml`.
@@ -157,8 +158,9 @@ existence as readiness or call Goal Advisor before a ticket is concrete.
   - [ ] Do not create live threads or automations unless the operator asked for
         live automation activation.
   - [ ] When live activation is requested, call `automation-advisor` after the
-        substrate exists so it can create or update the loops named in
-        `farplane/automations/`.
+        substrate exists so it can create or update project-local loops from
+        `farplane/automations/`. AI Office setup owns global Daily/Weekly
+        activation separately.
   - [ ] Write PM-visible thread IDs to `farplane/pm.json`; keep runtime
         automation IDs in the Codex app automation store.
   - [ ] If activation is skipped or unavailable, report

@@ -12,7 +12,7 @@ refs:
   - docs/farplane-framework/ticket-execution-loop.md
   - farplane/harness.yaml
   - farplane/metrics.yaml
-  - farplane/automations/
+  - automations/
   - tickets/README.md
 ---
 
@@ -143,7 +143,8 @@ artifacts, or governance machinery.
 | `farplane/harness.yaml` | identity, planning areas/instructions, authority, capability refs, selected metrics |
 | `farplane/metrics.yaml` | metric meaning, direction, freshness, and guard rules |
 | `farplane/bindings.yaml` | safe provider coordinates |
-| `farplane/automations/` | one Work Pulse plus bounded scheduled jobs |
+| `automations/` | one office-wide Company OS Daily and Weekly review |
+| `farplane/automations/` | one project Work Pulse plus bounded project-local jobs |
 | `tickets/TASK-*/` | work, program, progress, reward, evidence, QA, review |
 | `skills/*`, `.agents/skills/*` | reusable and project-local capabilities |
 | `.farplane/reports/`, `.farplane/metrics/` | derived context and observations |

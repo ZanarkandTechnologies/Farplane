@@ -3,8 +3,12 @@
 Start from the complete operated templates below. They are the Farplane
 adaptation of Zanarkand AI's Company OS automations:
 
-- [Daily](../../init-advisor/references/automation-templates/daily-operating-update.md)
-- [Weekly](../../init-advisor/references/automation-templates/weekly-operating-review.md)
+- `<office-root>/automations/daily-operating-update.md`
+- `<office-root>/automations/weekly-operating-review.md`
+
+`office-root` is the explicit AI Office checkout, never the installed skill
+directory and never a managed project's thin `farplane/` adapter. If it is not
+bound, stop with the missing input instead of searching for another copy.
 
 Replace project identity, source bindings, destinations, and schedules. Retain
 the full stage contract: collection boundaries, exact matching, pagination,
