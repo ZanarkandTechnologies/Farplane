@@ -17,10 +17,8 @@ common_chains:
 - [ ] Read the chosen spec slice and confirm it is small enough for one planning pass.
 - [ ] Shape tickets through the native planning phase, but keep
   `spec-to-ticket` coding-ticket specific.
-- [ ] Use [competitor-research](../competitor-research/SKILL.md),
-  [implementation-research](../implementation-research/SKILL.md), or
-  [experimental-research](../experimental-research/SKILL.md) when ticket scope
-  depends on that workflow's evidence.
+- [ ] Use [competitor-research](../competitor-research/SKILL.md), [implementation-research](../implementation-research/SKILL.md),
+  or [experimental-research](../experimental-research/SKILL.md) when ticket scope depends on that workflow's evidence.
 - [ ] Carry the
   [first-principles-planning](../../docs/features/FEAT-0042-lean-global-agent-operating-kernel.md)
   basis into ticket boundaries: objective, need, assumptions, root cause,

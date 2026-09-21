@@ -1,0 +1,29 @@
+{
+  "skill_name": "competitor-research",
+  "evals": [
+    {
+      "id": "competitor_research_review_triangulation_01",
+      "prompt": "Compare three scheduling assistants for small recruiting teams. Search official product sources and tracked review, Reddit, X, and YouTube surfaces; qualify finalists before deep-diving and return the strongest opportunity.",
+      "expected_output": "Defines the recruiting job and decision; records platform-specific query families; searches beyond one result; promotes only threshold-passing finalists; investigates reviews and discussions in depth; separates table stakes, differentiation, recurring pain, and recommendation",
+      "files": ["evals/fixtures/scheduling-assistants.md"],
+      "assertions": ["Names the customer job and comparison dimensions", "Records reproducible queries for multiple relevant platforms", "Uses a threshold and rejection ledger before top-k deep dives", "Reads threads, comments, transcripts, and linked evidence rather than result snippets alone", "Distinguishes anecdotes from recurring independent themes", "Returns one sourced opportunity and its downside"],
+      "metadata": {"farplane": {"title": "Competitor research triangulates review and community evidence", "tags": ["competitor-research", "reviews", "normal"], "notes": "Normal cross-platform competitor case."}}
+    },
+    {
+      "id": "competitor_research_syndicated_reviews_01",
+      "prompt": "Five sites repeat the same complaint about a competitor, while Reddit has one detailed contrary thread and the current changelog claims a fix. Determine whether this is a current recurring pain.",
+      "expected_output": "Deduplicates syndicated reviews into one lineage; dates and versions the complaint; reads the contrary thread and comments; verifies the changelog; lowers confidence or refines the hypothesis rather than counting copies as prevalence",
+      "files": ["evals/fixtures/scheduling-assistants.md"],
+      "assertions": ["Treats copied reviews as one source lineage", "Uses product version and date in the assessment", "Includes contrary community and official evidence", "Revises the hypothesis when evidence conflicts", "Avoids claiming prevalence without independent support"],
+      "metadata": {"farplane": {"title": "Competitor research deduplicates stale syndicated complaints", "tags": ["competitor-research", "dedupe", "hard"], "notes": "Hard source-lineage and contradiction case."}}
+    },
+    {
+      "id": "competitor_research_single_product_01",
+      "prompt": "I only care whether one named competitor supports a specific regulated export workflow. Do not broaden this into a market landscape.",
+      "expected_output": "Uses a one-product capability check; verifies official behavior and relevant user evidence; keeps other products out unless needed to interpret the claim; reports uncertainty and stops when the decision is supported",
+      "files": [],
+      "assertions": ["Preserves the single-product decision boundary", "Verifies the claim against current official evidence", "Uses user evidence only where it changes confidence", "Does not manufacture a multi-competitor quota", "Returns a direct decision and remaining unknowns"],
+      "metadata": {"farplane": {"title": "Competitor research respects a single-product boundary", "tags": ["competitor-research", "boundary"], "notes": "Boundary case against unnecessary landscape expansion."}}
+    }
+  ]
+}

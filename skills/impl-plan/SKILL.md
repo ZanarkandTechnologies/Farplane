@@ -118,10 +118,8 @@ design baseline; never replace it with a chat-only summary or a new schema.
     [personalized-offer](../personalized-offer/SKILL.md),
     [visual-design](../visual-design/SKILL.md),
     [asset-advisor](../asset-advisor/SKILL.md),
-    [competitor-research](../competitor-research/SKILL.md),
-    [implementation-research](../implementation-research/SKILL.md),
-    [experimental-research](../experimental-research/SKILL.md),
-    [deep-system-design](../deep-system-design/SKILL.md),
+    [competitor-research](../competitor-research/SKILL.md), [implementation-research](../implementation-research/SKILL.md),
+    [experimental-research](../experimental-research/SKILL.md), [deep-system-design](../deep-system-design/SKILL.md),
     and the `metric-advisor` skill.
   - [ ] For UI work, reuse or resolve only the relevant facet: interaction
     model/low-fi wireflow (`functional-ui`), visual reference and system
