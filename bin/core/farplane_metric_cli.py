@@ -83,5 +83,3 @@ def main() -> int:
     if args.command == "refresh-plan":
         return print_json(resolve_refresh_plan(Path(args.metrics_file), args.metric_id, args.date, set(args.fresh_metric_id)))
     return 2
-
-

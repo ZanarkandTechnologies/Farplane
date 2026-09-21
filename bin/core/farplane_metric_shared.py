@@ -141,4 +141,3 @@ def ticket_has_acceptance_evidence(ticket: Path, markdown: str) -> bool:
             return True
     done = (markdown_heading_section(markdown, "Done / Proof") or "").lower()
     return "tas-a" in done and "verdict" in done and "pass" in done and "pending" not in done
-
