@@ -5,7 +5,7 @@
       "id": "competitor_research_review_triangulation_01",
       "prompt": "Compare three scheduling assistants for small recruiting teams. Search official product sources and tracked review, Reddit, X, and YouTube surfaces; qualify finalists before deep-diving and return the strongest opportunity.",
       "expected_output": "Defines the recruiting job and decision; records platform-specific query families; searches beyond one result; promotes only threshold-passing finalists; investigates reviews and discussions in depth; separates table stakes, differentiation, recurring pain, and recommendation",
-      "files": ["evals/fixtures/scheduling-assistants.md"],
+      "files": ["skills/competitor-research/evals/fixtures/scheduling-assistants.md"],
       "assertions": ["Names the customer job and comparison dimensions", "Records reproducible queries for multiple relevant platforms", "Uses a threshold and rejection ledger before top-k deep dives", "Reads threads, comments, transcripts, and linked evidence rather than result snippets alone", "Distinguishes anecdotes from recurring independent themes", "Returns one sourced opportunity and its downside"],
       "metadata": {"farplane": {"title": "Competitor research triangulates review and community evidence", "tags": ["competitor-research", "reviews", "normal"], "notes": "Normal cross-platform competitor case."}}
     },
@@ -13,7 +13,7 @@
       "id": "competitor_research_syndicated_reviews_01",
       "prompt": "Five sites repeat the same complaint about a competitor, while Reddit has one detailed contrary thread and the current changelog claims a fix. Determine whether this is a current recurring pain.",
       "expected_output": "Deduplicates syndicated reviews into one lineage; dates and versions the complaint; reads the contrary thread and comments; verifies the changelog; lowers confidence or refines the hypothesis rather than counting copies as prevalence",
-      "files": ["evals/fixtures/scheduling-assistants.md"],
+      "files": ["skills/competitor-research/evals/fixtures/scheduling-assistants.md"],
       "assertions": ["Treats copied reviews as one source lineage", "Uses product version and date in the assessment", "Includes contrary community and official evidence", "Revises the hypothesis when evidence conflicts", "Avoids claiming prevalence without independent support"],
       "metadata": {"farplane": {"title": "Competitor research deduplicates stale syndicated complaints", "tags": ["competitor-research", "dedupe", "hard"], "notes": "Hard source-lineage and contradiction case."}}
     },
@@ -24,6 +24,14 @@
       "files": [],
       "assertions": ["Preserves the single-product decision boundary", "Verifies the claim against current official evidence", "Uses user evidence only where it changes confidence", "Does not manufacture a multi-competitor quota", "Returns a direct decision and remaining unknowns"],
       "metadata": {"farplane": {"title": "Competitor research respects a single-product boundary", "tags": ["competitor-research", "boundary"], "notes": "Boundary case against unnecessary landscape expansion."}}
+    },
+    {
+      "id": "competitor_research_false_threat_qualification_01",
+      "prompt": "Research meaningful Malaysian competitors for a robotics product. Search results suggest Nexpuran is Malaysian and show Cytron listing one relevant SO-ARM101 product. Decide whether either is a current direct competitive threat. Do not accept the search snippets as proof.",
+      "expected_output": "Opens and operates candidate sites; records a qualification ledger across geography and market availability, product availability and production, offering breadth, recency, site freshness, social activity and engagement, traffic or demand proxies, customer evidence, organizational credibility, and same-job fit; refuses to promote unresolved geography or a limited, backordered, discontinued, or incidental SKU; classifies candidates and records rejections or unknowns with confidence",
+      "files": ["skills/competitor-research/evals/fixtures/robotics-false-threats.md"],
+      "assertions": ["Treats search snippets only as discovery evidence", "Records direct-site URLs, inspection dates, observations, and unknowns for every qualification field", "Requires same job, served target geography, current availability and production, and meaningful offering depth before a competitive-threat claim", "Requires a current official observation plus at least two independent evidence lineages before a competitive-threat claim", "Separates direct competitors, adjacent competitors, suppliers, inactive or noise candidates, and unverified candidates", "Keeps a rejection ledger with failed or unknown gates and confidence", "Does not classify Nexpuran as Malaysian without direct evidence", "Does not infer a meaningful direct threat from Cytron's single limited, backordered, discontinued, or incidental listing"],
+      "metadata": {"farplane": {"title": "Competitor research rejects search-snippet false threats", "tags": ["competitor-research", "qualification", "hard"], "notes": "Regression case for geography, availability, production status, and incidental-SKU overclaiming."}}
     }
   ]
 }
