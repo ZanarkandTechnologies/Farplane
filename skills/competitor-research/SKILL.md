@@ -58,19 +58,39 @@ returns: sourced comparison, review themes, opportunity, recommendation
   - Every search surface has recorded queries, filters, dates, and result counts.
   - Discovery does not stop after the first plausible competitor or thread.
 
-- [ ] **N3 — Promote only candidates that cross the evidence threshold.**
-  `candidate pool -> finalists + rejection ledger | evidence-gap branch`
+- [ ] **N3 — Qualify and classify candidates before comparison.**
+  `candidate pool -> qualification ledger + finalists + rejection ledger | evidence-gap branch`
 
-  Rule: Score relevance to the job, product activity, evidence diversity, and
-  review volume. Investigate up to the highest-value `top-k`; `k` is a ceiling,
-  never a quota for weak candidates.
+  Rule: Open and operate each candidate's official site before promotion; a
+  search result or snippet discovers a candidate but never proves a
+  qualification field. Record dated direct observations for target geography
+  and actual market availability; current product availability and production
+  status; relevant offering breadth/depth; operating recency; website freshness;
+  social activity and engagement; estimated traffic or a defensible demand
+  proxy; customer/review evidence; organizational credibility; and same-customer-
+  job fit. Classify every candidate as `direct competitor`, `adjacent
+  competitor`, `supplier`, `inactive/noise`, or `unverified`, with confidence.
+  Choose exactly one primary class; record secondary relationships separately.
 
-  Example: `five candidates -> two pass job-fit and evidence thresholds -> two
-  dossiers and three recorded rejections`.
+  Promotion threshold: a competitive-threat claim requires all four mandatory
+  gates—same customer job, target geography served, currently obtainable and
+  meaningfully in production, and more than an incidental relevant SKU—plus a
+  current official observation and at least two independent demand, customer,
+  operating, or organizational evidence lineages. Missing or conflicting
+  mandatory evidence means `unverified` or rejection, never assumed passage.
+  Investigate up to the highest-value `top-k`; `k` is a ceiling, never a quota.
+
+  Example: `a local distributor with one backordered robot-arm SKU -> supplier
+  or adjacent, not direct threat; geography or production unresolved ->
+  unverified and recorded in the rejection ledger`.
 
   Assert:
-  - Every finalist passes the stated threshold and every material rejection has
-    a reason.
+  - Every finalist has direct-site observations for all qualification fields,
+    passes every mandatory gate, and states threshold evidence and confidence.
+  - The ledger keeps rejected and unverified candidates with failed or unknown
+    fields, source URLs, inspection dates, and reasons; no blank is scored as a pass.
+    Use one row per candidate and qualification field with `pass`, `fail`, or
+    `unknown`; cite the source and observation date in that row.
   - Syndicated, copied, affiliate, and vendor-authored evidence is deduplicated.
 
 - [ ] **N4 — Investigate finalists in independent evidence lanes.**
@@ -106,6 +126,8 @@ returns: sourced comparison, review themes, opportunity, recommendation
 ## Gotchas
 
 - A search-results page is discovery evidence, not proof of product behavior.
+- A matching SKU, local domain, reseller page, or search-indexed location claim
+  does not establish geography, production, offering depth, or competitive threat.
 - Repeated copies of one complaint are one source lineage, not independent demand.
 - Feature-count matrices hide the customer job; compare outcomes and failure
   modes before counting visible controls.
@@ -113,6 +135,14 @@ returns: sourced comparison, review themes, opportunity, recommendation
 ## Output
 
 Return a `Competitor Intelligence Brief` with the decision contract, query
-ledger, candidate and rejection ledger, finalist dossiers, source-linked
-comparison, review themes with confidence, table stakes, differentiation,
-opportunity, counterevidence, recommendation, and next owner.
+ledger, candidate qualification ledger (classification, field evidence, unknowns,
+and confidence), rejection ledger, finalist dossiers, source-linked comparison,
+review themes with confidence, table stakes, differentiation, opportunity,
+counterevidence, recommendation, and next owner. Label any competitive-threat
+claim with the passed threshold evidence; otherwise report the candidate as
+adjacent, supplier, inactive/noise, or unverified.
+
+The qualification ledger is required even when every candidate is rejected. It
+must enumerate every N3 field rather than summarize them in prose. The rejection
+ledger must name the failed or unknown mandatory gates, one primary class, and
+confidence for each candidate that was not promoted.
