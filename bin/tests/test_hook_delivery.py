@@ -32,6 +32,22 @@ class DeliveryTests(unittest.TestCase):
             self.assertEqual(self.receipt()["reason"], "event_mismatch")
         self.assertTrue(hook_delivery.validate_event({"hook_event_name": "Stop"}, ["--expect-event", "Stop"]))
 
+    def test_gate_block_report_is_detached_and_never_raises(self):
+        payload = {"hook_event_name": "Stop", "session_id": "s1"}
+        with patch.object(hook_delivery.subprocess, "Popen") as popen:
+            hook_delivery.report_gate_block(payload, "response-length")
+        argv = popen.call_args.args[0]
+        self.assertEqual(argv[-2:], ["--gate-blocked", "response-length"])
+        self.assertTrue(popen.call_args.kwargs["start_new_session"])
+        popen.return_value.stdin.write.assert_called_once_with(json.dumps(payload).encode("utf-8"))
+        with patch.object(hook_delivery.subprocess, "Popen", side_effect=OSError):
+            hook_delivery.report_gate_block(payload, "continuation")
+        with patch.object(hook_delivery.subprocess, "Popen") as popen:
+            hook_delivery.report_gate_block(payload, "unknown-gate")
+        popen.assert_not_called()
+        self.assertEqual(hook_delivery.gate_from_argv(["--gate-blocked", "skill-length"]), "skill-length")
+        self.assertIsNone(hook_delivery.gate_from_argv(["--expect-event", "Stop"]))
+
     def test_unconfigured_never_sends(self):
         with patch.object(hook_delivery.urllib.request, "urlopen") as send:
             hook_delivery.deliver({"hookType": "Stop"}, None, "secret")

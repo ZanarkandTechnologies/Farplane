@@ -96,10 +96,14 @@ class FinalResponseGateTests(unittest.TestCase):
         with patch.dict(
             os.environ,
             {gate.ENV_MAX_PROSE_WORDS: "3", gate.ENV_MAX_PROSE_LINES: "30"},
-        ), patch("sys.stdin", stdin), patch("sys.stdout", stdout):
+        ), patch("sys.stdin", stdin), patch("sys.stdout", stdout), patch.object(
+            gate, "report_gate_block"
+        ) as report:
             self.assertEqual(gate.main(), 0)
         result = json.loads(stdout.getvalue())
         self.assertEqual(result["decision"], "block")
+        report.assert_called_once()
+        self.assertEqual(report.call_args.args[1], "response-length")
 
     def test_root_hook_config_invokes_managed_gate(self) -> None:
         payload = json.loads((ROOT / "hooks.json").read_text(encoding="utf-8"))

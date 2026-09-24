@@ -24,7 +24,7 @@ from runtime_config import codex_home, hydrate_process_env, read_config_value
 RUNTIME_DIR = CORE_DIR.parent / "runtime"
 if str(RUNTIME_DIR) not in sys.path:
     sys.path.insert(0, str(RUNTIME_DIR))
-from hook_delivery import deliver, validate_event
+from hook_delivery import deliver, gate_from_argv, validate_event
 
 
 TITLE_LIMIT = 120
@@ -144,6 +144,8 @@ def hook_type(event: dict[str, object]) -> str:
 
 
 def event_type_for_hook(hook: str) -> str:
+    if hook == "GateBlocked":
+        return "gate_blocked"
     if hook in {"UserPromptSubmit", "TurnStart"}:
         return "turn_start"
     if hook in {"Stop", "TurnEnd"}:
@@ -164,6 +166,7 @@ def source_for_hook(hook: str) -> str:
     suffix = {
         "UserPromptSubmit": "user-prompt",
         "Stop": "stop",
+        "GateBlocked": "gate-blocked",
         "SubagentStart": "subagent-start",
         "SubagentStop": "subagent-stop",
     }.get(hook, "hook")
@@ -182,7 +185,7 @@ def event_key_for_hook(
     key = f"codex-lifecycle:{session_id}:{identity}:{turn_id}:{hook}"
     # Stop observes an attempt: continuation can produce another in the same turn.
     # Generate once per payload; replaying that payload keeps its dedup identity.
-    return f"{key}:{uuid.uuid4()}" if hook == "Stop" else key
+    return f"{key}:{uuid.uuid4()}" if hook in {"Stop", "GateBlocked"} else key
 
 
 def event_text(event: dict[str, object], *keys: str, limit: int) -> str | None:
@@ -482,7 +485,7 @@ def read_payload() -> dict[str, object]:
     return event if isinstance(event, dict) else {}
 
 
-def build_ping(event: dict[str, object]) -> dict[str, object]:
+def build_ping(event: dict[str, object], gate: str | None = None) -> dict[str, object]:
     try:
         active_agents = int(os.getenv("FARPLANE_ACTIVE_AGENTS", "1"))
     except ValueError:
@@ -492,7 +495,7 @@ def build_ping(event: dict[str, object]) -> dict[str, object]:
     machine_name = clean_text(os.getenv("FARPLANE_MACHINE_NAME"), 120) or machine_id
     project_name, project_directory = get_project_metadata(event)
 
-    current_hook_type = hook_type(event)
+    current_hook_type = "GateBlocked" if gate else hook_type(event)
     event_type = event_type_for_hook(current_hook_type)
     session_id = clean_text(event.get("session_id"), 120)
     turn_id = clean_text(event.get("turn_id"), 120)
@@ -559,6 +562,7 @@ def build_ping(event: dict[str, object]) -> dict[str, object]:
             "projectId": project_id,
             "sessionId": session_id,
             "turnId": turn_id,
+            **({"gate": gate} if gate else {}),
         },
     }
 
@@ -571,7 +575,7 @@ def main(argv: list[str] | None = None) -> int:
     if should_skip_telemetry():
         return 0
 
-    body = build_ping(event)
+    body = build_ping(event, gate_from_argv(argv))
     deliver(body, telemetry_endpoint(),
             clean_text(read_config_value("FARPLANE_TELEMETRY_TOKEN"), 500))
 

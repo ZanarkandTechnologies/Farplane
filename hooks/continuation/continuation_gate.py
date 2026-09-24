@@ -13,6 +13,7 @@ for directory in (ROOT / "bin" / "runtime", ROOT / "bin" / "core", ROOT / "hooks
 
 from continuation import evaluate_stop  # noqa: E402
 from runtime_config import load_runtime_env  # noqa: E402
+from hook_delivery import report_gate_block  # noqa: E402
 from skill_suggestion import _provider_config  # noqa: E402
 
 
@@ -46,6 +47,8 @@ def main() -> int:
         if isinstance(payload, dict):
             result = run_gate(payload, credential_child="--credential-child" in sys.argv[1:])
             if result:
+                if "--credential-child" not in sys.argv[1:]:
+                    report_gate_block(payload, "continuation")
                 print(json.dumps(result, separators=(",", ":")))
     except Exception:
         # A hook outage must never strand a conversation.

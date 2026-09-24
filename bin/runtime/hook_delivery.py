@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import subprocess
 import sys
 import tempfile
 import urllib.error
@@ -16,7 +17,9 @@ if str(CORE_DIR) not in sys.path:
     sys.path.insert(0, str(CORE_DIR))
 from runtime_config import farplane_home
 
-EVENTS = ("UserPromptSubmit", "Stop", "SubagentStart", "SubagentStop")
+EVENTS = ("UserPromptSubmit", "Stop", "SubagentStart", "SubagentStop", "GateBlocked")
+GATES = ("response-length", "continuation", "skill-length")
+PING_SCRIPT = Path(__file__).resolve().parents[2] / "hooks" / "lifecycle-telemetry" / "farplane_console_ping.py"
 
 
 def record_status(event: str, status: str, *, reason: str | None = None,
@@ -51,6 +54,7 @@ def record_status(event: str, status: str, *, reason: str | None = None,
 def validate_event(event: dict[str, object], argv: list[str] | None = None) -> bool:
     parser = argparse.ArgumentParser(description="Send classified Farplane lifecycle telemetry")
     parser.add_argument("--expect-event", choices=EVENTS)
+    parser.add_argument("--gate-blocked", choices=GATES)
     args = parser.parse_args(argv)
     if args.expect_event and event.get("hook_event_name") != args.expect_event:
         record_status(args.expect_event, "failed", reason="event_mismatch")
@@ -58,6 +62,31 @@ def validate_event(event: dict[str, object], argv: list[str] | None = None) -> b
               file=sys.stderr)
         return False
     return True
+
+
+def gate_from_argv(argv: list[str] | None) -> str | None:
+    args = list(sys.argv[1:] if argv is None else argv)
+    if "--gate-blocked" in args:
+        index = args.index("--gate-blocked") + 1
+        return args[index] if index < len(args) and args[index] in GATES else None
+    return None
+
+
+def report_gate_block(payload: dict[str, object], gate: str) -> None:
+    """Fire-and-forget GateBlocked telemetry; the gate never waits or fails on it."""
+    if gate not in GATES:
+        return
+    try:
+        child = subprocess.Popen(
+            [sys.executable, str(PING_SCRIPT), "--gate-blocked", gate],
+            stdin=subprocess.PIPE, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+            start_new_session=True,
+        )
+        assert child.stdin is not None
+        child.stdin.write(json.dumps(payload).encode("utf-8"))
+        child.stdin.close()
+    except Exception:
+        pass
 
 
 def deliver(body: dict[str, object], endpoint: str | None, token: str | None) -> None:

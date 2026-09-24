@@ -129,6 +129,16 @@ class FarplaneConsolePingTests(unittest.TestCase):
         self.assertEqual(body["payload"]["machineName"], "Studio Mac")
         self.assertNotIn("prompt", body["payload"])
 
+    def test_gate_blocked_ping_carries_gate_and_runtime(self) -> None:
+        event = {"hook_event_name": "Stop", "session_id": "session-1", "turn_id": "turn-1", "cwd": "/tmp"}
+        with patch.dict(os.environ, {"FARPLANE_AGENT_RUNTIME": "claude", "FARPLANE_CONFIG_DISABLE": "1"}, clear=True):
+            body = farplane_console_ping.build_ping(event, "response-length")
+        self.assertEqual(body["hookType"], "GateBlocked")
+        self.assertEqual(body["payload"]["eventType"], "gate_blocked")
+        self.assertEqual(body["payload"]["source"], "claude-gate-blocked")
+        self.assertEqual(body["payload"]["gate"], "response-length")
+        self.assertEqual(body["payload"]["runtime"], "claude")
+
     def test_repeated_stop_attempts_have_distinct_occurrence_keys(self) -> None:
         event = {"hook_event_name": "Stop", "session_id": "session-1", "turn_id": "turn-1"}
         with patch.dict(os.environ, {"FARPLANE_CONFIG_DISABLE": "1"}, clear=True):

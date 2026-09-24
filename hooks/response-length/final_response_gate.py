@@ -25,6 +25,9 @@ from farplane_response import (  # noqa: E402
 )
 from runtime_config import load_runtime_env  # noqa: E402
 
+sys.path.insert(0, str(CORE_DIR.parent / "runtime"))
+from hook_delivery import report_gate_block  # noqa: E402
+
 
 ENV_MAX_PROSE_WORDS = "FARPLANE_FINAL_RESPONSE_MAX_PROSE_WORDS"
 ENV_MAX_PROSE_LINES = "FARPLANE_FINAL_RESPONSE_MAX_PROSE_LINES"
@@ -140,6 +143,7 @@ def main() -> int:
         payload, configured_max_prose_words(), configured_max_prose_lines()
     )
     if result is not None:
+        report_gate_block(payload, "response-length")
         json.dump(result, sys.stdout, separators=(",", ":"))
         sys.stdout.write("\n")
     return 0

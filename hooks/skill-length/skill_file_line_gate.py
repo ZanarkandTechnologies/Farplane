@@ -9,6 +9,9 @@ import sys
 from pathlib import Path
 from typing import Any
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "bin" / "runtime"))
+from hook_delivery import report_gate_block  # noqa: E402
+
 
 DEFAULT_MAX_LINES = 200
 PATCH_PATH_PREFIXES = (
@@ -128,6 +131,7 @@ def main() -> int:
         return 0
     result = gate_skill_files(payload)
     if result is not None:
+        report_gate_block(payload, "skill-length")
         json.dump(result, sys.stdout)
         sys.stdout.write("\n")
     return 0
