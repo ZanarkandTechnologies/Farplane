@@ -4,6 +4,7 @@ set -euo pipefail
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 TARGET_DIR="$HOME/.codex"
 TARGET_DIR_SET=0
+RUNTIME="codex"
 SKILLS_ONLY=0
 SKILL_INSTALL_ARGS=()
 usage() {
@@ -13,12 +14,17 @@ Usage:
   bash install.sh --skills-only --list-skills [--target TARGET_DIR]
   bash install.sh --skills-only --search QUERY [--target TARGET_DIR]
   bash install.sh --skills-only --skills skill-a,skill-b [--target TARGET_DIR]
+  bash install.sh --runtime claude [--target TARGET_DIR]
 
 Full install installs the Farplane harness, renders skills, and renders config.toml.
 Skills-only mode renders selected skills without rendering config.toml.
 
+Claude runtime installs skills, a local "farplane" plugin (hooks + subagents),
+and a CLAUDE.md import of the global contract. It never renders config.toml.
+
 Options:
-  --target DIR          Codex home target. Defaults to ~/.codex.
+  --runtime NAME        codex (default) or claude.
+  --target DIR          Runtime home target. Defaults to ~/.codex or ~/.claude.
   --skills-only         Use selected skill installer mode.
   --list-skills         List available skills.
   --search QUERY        Search skill names and descriptions.
@@ -44,6 +50,14 @@ while [ "$#" -gt 0 ]; do
       fi
       TARGET_DIR="$2"
       TARGET_DIR_SET=1
+      shift 2
+      ;;
+    --runtime)
+      if [ "$#" -lt 2 ] || { [ "$2" != "codex" ] && [ "$2" != "claude" ]; }; then
+        echo "--runtime requires codex or claude" >&2
+        exit 2
+      fi
+      RUNTIME="$2"
       shift 2
       ;;
     --skills-only)
@@ -113,6 +127,10 @@ while [ "$#" -gt 0 ]; do
   esac
 done
 
+if [ "$RUNTIME" = "claude" ] && [ "$TARGET_DIR_SET" -eq 0 ]; then
+  TARGET_DIR="$HOME/.claude"
+fi
+
 # Global Codex links must never point into an ephemeral linked worktree. A task
 # may test there, but only the primary checkout owns ~/.codex installation.
 if command -v git >/dev/null 2>&1; then
@@ -164,6 +182,24 @@ if [ "$SKILLS_ONLY" -eq 1 ]; then
     "${SKILL_INSTALL_ARGS[@]}"
   exit 0
 fi
+
+install_claude_runtime() {
+  local hook_name
+  echo "Installing Claude Code harness from $REPO_DIR to $TARGET_DIR"
+  mkdir -p "$TARGET_DIR/$1/hooks" "$TARGET_DIR/skills" "$TARGET_DIR/agents"
+  copy_path "$REPO_DIR/templates/global/AGENTS.md" "$TARGET_DIR/$1/AGENTS.md"
+  for hook_name in "${INSTALL_HOOK_DIRS[@]}"; do
+    link_path "$REPO_DIR/hooks/$hook_name" "$TARGET_DIR/$1/hooks/$hook_name"
+  done
+  python3 "$REPO_DIR/skills/skill-maintenance/scripts/install_selected_skills.py" \
+    --repo "$REPO_DIR" \
+    --target "$TARGET_DIR" \
+    --all \
+    --prune
+  python3 "$REPO_DIR/bin/core/farplane_claude_install.py" --repo "$REPO_DIR" --target "$TARGET_DIR"
+  echo "Done. Restart Claude Code sessions to load new hooks, skills, and farplane:* subagents."
+  echo "Hook secrets still resolve from the Codex install (~/.codex/config.toml) or runtime env."
+}
 
 render_config() {
   local config_template="${1:-$REPO_DIR/config.toml.example}"
@@ -470,6 +506,11 @@ install_rendered_skill_profiles() {
 }
 
 trap cleanup_profile_render EXIT
+
+if [ "$RUNTIME" = "claude" ]; then
+  install_claude_runtime farplane
+  exit 0
+fi
 
 echo "Installing Codex harness from $REPO_DIR to $TARGET_DIR"
 
