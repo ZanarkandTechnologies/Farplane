@@ -236,16 +236,15 @@ def rendered_skill_matches(src: Path, dest: Path) -> bool:
     return True
 
 
-def render_skill_package(src: Path, dest: Path, backup_root: Path, dry_run: bool) -> str:
-    if rendered_skill_matches(src, dest):
-        return "skipped"
+def has_nested_fixture_skills(src: Path) -> bool:
+    """Codex discovers SKILL.md recursively, so linked packages must not carry fixtures."""
+    return any(
+        path.name == "SKILL.md" and not should_install_package_path(path.relative_to(src))
+        for path in src.rglob("SKILL.md")
+    )
 
-    if dest.exists() or dest.is_symlink():
-        backup_existing(dest, backup_root, dry_run)
 
-    if dry_run:
-        return "installed"
-
+def copy_skill_package(src: Path, dest: Path) -> None:
     shutil.copytree(
         src,
         dest,
@@ -254,9 +253,32 @@ def render_skill_package(src: Path, dest: Path, backup_root: Path, dry_run: bool
             name for name in names if name in {"todos.md", "tests"}
         },
     )
-    skill_file = dest / "SKILL.md"
-    rendered = render_skill_markdown((src / "SKILL.md").read_text(encoding="utf-8"))
-    skill_file.write_text(rendered, encoding="utf-8")
+
+
+def link_skill_package(src: Path, dest: Path, backup_root: Path, dry_run: bool) -> str:
+    """Install a skill as a directory symlink so source edits are live in every runtime.
+
+    Codex ignores symlinked SKILL.md files but follows symlinked skill
+    directories. Packages whose tests/ hold fixture SKILL.md files are copied
+    instead, so Codex does not list those fixtures as real skills.
+    """
+    copy = has_nested_fixture_skills(src)
+    if copy and rendered_skill_matches(src, dest):
+        return "skipped"
+    if not copy and dest.is_symlink() and dest.readlink() == src.absolute():
+        return "skipped"
+
+    if dest.exists() or dest.is_symlink():
+        backup_existing(dest, backup_root, dry_run)
+
+    if dry_run:
+        return "installed"
+
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    if copy:
+        copy_skill_package(src, dest)
+    else:
+        dest.symlink_to(src.absolute(), target_is_directory=True)
     return "installed"
 
 
@@ -282,7 +304,7 @@ def install_skills(
     pruned: list[str] = []
 
     for name in names:
-        result = render_skill_package(
+        result = link_skill_package(
             skills[name].path, skills_target / name, backup_root, dry_run
         )
         if result == "installed":

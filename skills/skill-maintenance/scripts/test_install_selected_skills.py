@@ -94,7 +94,7 @@ class InstallSelectedSkillsTests(unittest.TestCase):
             matches = installer.filter_skills(skills, "browser")
             self.assertEqual([skill.name for skill in matches], ["visual-qa"])
 
-    def test_installs_only_selected_skills_as_rendered_packages(self) -> None:
+    def test_installs_only_selected_skills_as_linked_packages(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             repo = Path(tmp) / "repo"
             target = Path(tmp) / "codex"
@@ -106,7 +106,7 @@ class InstallSelectedSkillsTests(unittest.TestCase):
             self.assertEqual(result.installed, ["review"])
             installed = target / "skills" / "review"
             self.assertTrue(installed.is_dir())
-            self.assertFalse(installed.is_symlink())
+            self.assertTrue(installed.is_symlink())
             skill_text = (installed / "SKILL.md").read_text(encoding="utf-8")
             self.assertIn("## Todo List", skill_text)
             self.assertIn("- [ ] Read proof.", skill_text)
@@ -206,7 +206,6 @@ class InstallSelectedSkillsTests(unittest.TestCase):
             )
             self.assertIn("- [ ] Direct proof.", skill_text)
             self.assertNotIn("- [ ] Stale sidecar proof.", skill_text)
-            self.assertFalse((target / "skills" / "review" / "todos.md").exists())
 
     def test_reinstall_skips_existing_matching_rendered_package(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -220,7 +219,7 @@ class InstallSelectedSkillsTests(unittest.TestCase):
             self.assertEqual(result.installed, [])
             self.assertEqual(result.skipped, ["review"])
 
-    def test_reinstall_refreshes_changed_support_files(self) -> None:
+    def test_source_edits_are_live_without_reinstall(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             repo = Path(tmp) / "repo"
             target = Path(tmp) / "codex"
@@ -229,16 +228,27 @@ class InstallSelectedSkillsTests(unittest.TestCase):
 
             installer.install_skills(repo, target, ["review"], False, False)
             reference.write_text("Changed reference.\n", encoding="utf-8")
-            result = installer.install_skills(repo, target, ["review"], False, False)
+            installed = target / "skills" / "review" / "references" / "note.md"
 
-            self.assertEqual(result.installed, ["review"])
-            self.assertEqual(result.skipped, [])
-            self.assertEqual(
-                (target / "skills" / "review" / "references" / "note.md").read_text(
-                    encoding="utf-8"
-                ),
-                "Changed reference.\n",
-            )
+            self.assertEqual(installed.read_text(encoding="utf-8"), "Changed reference.\n")
+            result = installer.install_skills(repo, target, ["review"], False, False)
+            self.assertEqual(result.skipped, ["review"])
+
+    def test_fixture_skill_packages_are_copied_without_tests(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp) / "repo"
+            target = Path(tmp) / "codex"
+            write_skill(repo, "review", "Run quality checks.")
+            fixture = repo / "skills" / "review" / "tests" / "fixtures" / "bad" / "SKILL.md"
+            fixture.parent.mkdir(parents=True)
+            fixture.write_text("---\nname: bad\ndescription: Fixture.\n---\n", encoding="utf-8")
+
+            installer.install_skills(repo, target, ["review"], False, False)
+            installed = target / "skills" / "review"
+
+            self.assertFalse(installed.is_symlink())
+            self.assertFalse((installed / "tests").exists())
+            self.assertEqual(installer.install_skills(repo, target, ["review"], False, False).skipped, ["review"])
 
     def test_prune_only_removes_repo_managed_skills(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
