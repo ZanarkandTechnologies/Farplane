@@ -94,8 +94,8 @@ class FarplaneConsolePingTests(unittest.TestCase):
             patch.dict(
                 os.environ,
                 {
-                    "AIKAGE_AGENT_NAME": "codex",
-                    "AIKAGE_MACHINE_NAME": "Studio Mac",
+                    "FARPLANE_AGENT_NAME": "codex",
+                    "FARPLANE_MACHINE_NAME": "Studio Mac",
                     "FARPLANE_CONFIG_DISABLE": "1",
                 },
                 clear=True,
@@ -144,7 +144,7 @@ class FarplaneConsolePingTests(unittest.TestCase):
             )
 
     def test_build_ping_wraps_stop_as_hook_telemetry(self) -> None:
-        with patch.dict(os.environ, {"AIKAGE_MACHINE_NAME": "Studio Mac", "FARPLANE_CONFIG_DISABLE": "1"}, clear=True):
+        with patch.dict(os.environ, {"FARPLANE_MACHINE_NAME": "Studio Mac", "FARPLANE_CONFIG_DISABLE": "1"}, clear=True):
             body = farplane_console_ping.build_ping(
                 {
                     "hook_event_name": "Stop",
@@ -378,7 +378,7 @@ class FarplaneConsolePingTests(unittest.TestCase):
     def test_build_ping_preserves_subagent_identity_and_parent_session(self) -> None:
         with patch.dict(
             os.environ,
-            {"AIKAGE_MACHINE_NAME": "Studio Mac", "FARPLANE_CONFIG_DISABLE": "1"},
+            {"FARPLANE_MACHINE_NAME": "Studio Mac", "FARPLANE_CONFIG_DISABLE": "1"},
             clear=True,
         ):
             body = farplane_console_ping.build_ping(

@@ -93,8 +93,8 @@ def find_project_root(start: object) -> Path | None:
 
 
 def get_project_metadata(event: dict[str, object]) -> tuple[str | None, str | None]:
-    explicit_name = clean_text(os.getenv("AIKAGE_PROJECT_NAME"), 120)
-    explicit_directory = clean_text(os.getenv("AIKAGE_PROJECT_DIRECTORY"), 240)
+    explicit_name = clean_text(os.getenv("FARPLANE_PROJECT_NAME"), 120)
+    explicit_directory = clean_text(os.getenv("FARPLANE_PROJECT_DIRECTORY"), 240)
     if explicit_name or explicit_directory:
         return explicit_name, explicit_directory
 
@@ -155,16 +155,19 @@ def event_type_for_hook(hook: str) -> str:
     return "heartbeat"
 
 
+def agent_runtime() -> str:
+    """Hook host that fired the event; installers set FARPLANE_AGENT_RUNTIME per runtime."""
+    return clean_text(os.getenv("FARPLANE_AGENT_RUNTIME"), 40) or "codex"
+
+
 def source_for_hook(hook: str) -> str:
-    if hook == "UserPromptSubmit":
-        return "codex-user-prompt"
-    if hook == "Stop":
-        return "codex-stop"
-    if hook == "SubagentStart":
-        return "codex-subagent-start"
-    if hook == "SubagentStop":
-        return "codex-subagent-stop"
-    return "codex-hook"
+    suffix = {
+        "UserPromptSubmit": "user-prompt",
+        "Stop": "stop",
+        "SubagentStart": "subagent-start",
+        "SubagentStop": "subagent-stop",
+    }.get(hook, "hook")
+    return f"{agent_runtime()}-{suffix}"
 
 
 def event_key_for_hook(
@@ -481,12 +484,12 @@ def read_payload() -> dict[str, object]:
 
 def build_ping(event: dict[str, object]) -> dict[str, object]:
     try:
-        active_agents = int(os.getenv("AIKAGE_ACTIVE_AGENTS", "1"))
+        active_agents = int(os.getenv("FARPLANE_ACTIVE_AGENTS", "1"))
     except ValueError:
         active_agents = 1
 
     machine_id = clean_text(socket.gethostname(), 120)
-    machine_name = clean_text(os.getenv("AIKAGE_MACHINE_NAME"), 120) or machine_id
+    machine_name = clean_text(os.getenv("FARPLANE_MACHINE_NAME"), 120) or machine_id
     project_name, project_directory = get_project_metadata(event)
 
     current_hook_type = hook_type(event)
@@ -532,7 +535,8 @@ def build_ping(event: dict[str, object]) -> dict[str, object]:
             "eventType": event_type,
             "source": source_for_hook(current_hook_type),
             "activeAgentCount": max(active_agents, 1),
-            "agentName": clean_text(os.getenv("AIKAGE_AGENT_NAME", "codex"), 80),
+            "runtime": agent_runtime(),
+            "agentName": clean_text(os.getenv("FARPLANE_AGENT_NAME", "codex"), 80),
             "agentId": agent_id,
             "agentType": agent_type,
             "threadId": thread_id,
@@ -546,7 +550,7 @@ def build_ping(event: dict[str, object]) -> dict[str, object]:
             "runtimeKind": runtime_kind,
             "runtimePurpose": runtime_purpose,
             "isEphemeral": True if is_subagent else (runtime_kind or "").lower() == "ephemeral",
-            "workflowName": clean_text(os.getenv("AIKAGE_WORKFLOW_NAME"), 120),
+            "workflowName": clean_text(os.getenv("FARPLANE_WORKFLOW_NAME"), 120),
             "machineId": machine_id,
             "machineName": machine_name,
             "projectName": project_name,
