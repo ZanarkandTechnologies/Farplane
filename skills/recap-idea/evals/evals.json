@@ -15,14 +15,16 @@
         "Labels the result proposed and ends with focused questions instead of implementation steps"
       ],
       "metadata": {
-        "title": "Recap Idea reconstructs an operated product model",
-        "tags": [
-          "skill",
-          "product",
-          "alignment",
-          "story"
-        ],
-        "notes": "Primary positive case derived from an observed product-alignment workflow."
+        "farplane": {
+          "title": "Recap Idea reconstructs an operated product model",
+          "notes": "Primary positive case derived from an observed product-alignment workflow.",
+          "tags": [
+            "skill",
+            "product",
+            "alignment",
+            "story"
+          ]
+        }
       }
     },
     {
@@ -38,14 +40,16 @@
         "Makes the affected visibility boundary explicit and asks questions aimed at the highest-risk misunderstandings"
       ],
       "metadata": {
-        "title": "Recap Idea preserves contradictions and open choices",
-        "tags": [
-          "skill",
-          "product",
-          "alignment",
-          "conflict"
-        ],
-        "notes": "Protects against polished prose manufacturing false agreement."
+        "farplane": {
+          "title": "Recap Idea preserves contradictions and open choices",
+          "notes": "Protects against polished prose manufacturing false agreement.",
+          "tags": [
+            "skill",
+            "product",
+            "alignment",
+            "conflict"
+          ]
+        }
       }
     },
     {
@@ -61,14 +65,16 @@
         "Shows the product flow in situation-matched Mermaid and requests product-model confirmation"
       ],
       "metadata": {
-        "title": "Recap Idea composes with Recap Task",
-        "tags": [
-          "skill",
-          "product",
-          "alignment",
-          "recap-task"
-        ],
-        "notes": "Tests the intended sequential composition boundary."
+        "farplane": {
+          "title": "Recap Idea composes with Recap Task",
+          "notes": "Tests the intended sequential composition boundary.",
+          "tags": [
+            "skill",
+            "product",
+            "alignment",
+            "recap-task"
+          ]
+        }
       }
     },
     {
@@ -84,15 +90,17 @@
         "Labels the model proposed and asks no more than three high-risk correction questions"
       ],
       "metadata": {
-        "title": "Recap Idea selects a user-visible UI flow",
-        "tags": [
-          "skill",
-          "product",
-          "alignment",
-          "ui",
-          "visualization"
-        ],
-        "notes": "Protects the context-sensitive branch where the operator needs to see the end-user experience rather than system internals."
+        "farplane": {
+          "title": "Recap Idea selects a user-visible UI flow",
+          "notes": "Protects the context-sensitive branch where the operator needs to see the end-user experience rather than system internals.",
+          "tags": [
+            "skill",
+            "product",
+            "alignment",
+            "ui",
+            "visualization"
+          ]
+        }
       }
     },
     {
@@ -108,15 +116,17 @@
         "Labels the model proposed and asks no more than three correction questions"
       ],
       "metadata": {
-        "title": "Recap Idea selects Before After Example for a delta",
-        "tags": [
-          "skill",
-          "product",
-          "alignment",
-          "delta",
-          "visualization"
-        ],
-        "notes": "Protects template detection when an existing user experience is being changed."
+        "farplane": {
+          "title": "Recap Idea selects Before After Example for a delta",
+          "notes": "Protects template detection when an existing user experience is being changed.",
+          "tags": [
+            "skill",
+            "product",
+            "alignment",
+            "delta",
+            "visualization"
+          ]
+        }
       }
     },
     {
@@ -132,15 +142,17 @@
         "Labels the model proposed and asks one to three correction questions"
       ],
       "metadata": {
-        "title": "Recap Idea selects lifecycle for state and recovery",
-        "tags": [
-          "skill",
-          "product",
-          "alignment",
-          "lifecycle",
-          "visualization"
-        ],
-        "notes": "Protects lifecycle routing when the product question is state transition and recovery."
+        "farplane": {
+          "title": "Recap Idea selects lifecycle for state and recovery",
+          "notes": "Protects lifecycle routing when the product question is state transition and recovery.",
+          "tags": [
+            "skill",
+            "product",
+            "alignment",
+            "lifecycle",
+            "visualization"
+          ]
+        }
       }
     },
     {
@@ -156,15 +168,17 @@
         "Labels the model proposed and asks one to three correction questions"
       ],
       "metadata": {
-        "title": "Recap Idea selects system boundary for ownership and data flow",
-        "tags": [
-          "skill",
-          "product",
-          "alignment",
-          "system-boundary",
-          "visualization"
-        ],
-        "notes": "Protects boundary routing when ownership and information movement are the product question."
+        "farplane": {
+          "title": "Recap Idea selects system boundary for ownership and data flow",
+          "notes": "Protects boundary routing when ownership and information movement are the product question.",
+          "tags": [
+            "skill",
+            "product",
+            "alignment",
+            "system-boundary",
+            "visualization"
+          ]
+        }
       }
     },
     {
@@ -180,15 +194,17 @@
         "Keeps Summary versus Brief unresolved and asks one to three correction questions"
       ],
       "metadata": {
-        "title": "Recap Idea selects comparison table for exact mapping",
-        "tags": [
-          "skill",
-          "product",
-          "alignment",
-          "comparison",
-          "visualization"
-        ],
-        "notes": "Protects the non-Mermaid branch when exact correspondence is clearer as a table."
+        "farplane": {
+          "title": "Recap Idea selects comparison table for exact mapping",
+          "notes": "Protects the non-Mermaid branch when exact correspondence is clearer as a table.",
+          "tags": [
+            "skill",
+            "product",
+            "alignment",
+            "comparison",
+            "visualization"
+          ]
+        }
       }
     },
     {
@@ -203,14 +219,16 @@
         "Does not mutate or resume the underlying task"
       ],
       "metadata": {
-        "title": "Recap Idea rejects a status-only recap request",
-        "tags": [
-          "skill",
-          "product",
-          "routing",
-          "negative"
-        ],
-        "notes": "Protects the boundary with recap-task."
+        "farplane": {
+          "title": "Recap Idea rejects a status-only recap request",
+          "notes": "Protects the boundary with recap-task.",
+          "tags": [
+            "skill",
+            "product",
+            "routing",
+            "negative"
+          ]
+        }
       }
     }
   ]

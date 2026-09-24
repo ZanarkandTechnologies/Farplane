@@ -19,14 +19,16 @@
         "Ends with one safe response posture without running the task"
       ],
       "metadata": {
-        "title": "Recap Task reconstructs a paused ticketed task",
-        "tags": [
-          "skill",
-          "recap",
-          "ticket",
-          "resumption"
-        ],
-        "notes": "Covers a realistic delayed reply using staged durable sources."
+        "farplane": {
+          "title": "Recap Task reconstructs a paused ticketed task",
+          "notes": "Covers a realistic delayed reply using staged durable sources.",
+          "tags": [
+            "skill",
+            "recap",
+            "ticket",
+            "resumption"
+          ]
+        }
       }
     },
     {
@@ -46,14 +48,16 @@
         "Does not execute a test or send a customer message"
       ],
       "metadata": {
-        "title": "Recap Task rejects an unsupported completion claim",
-        "tags": [
-          "skill",
-          "recap",
-          "conflict",
-          "proof"
-        ],
-        "notes": "Regression for stale completion state versus current evidence."
+        "farplane": {
+          "title": "Recap Task rejects an unsupported completion claim",
+          "notes": "Regression for stale completion state versus current evidence.",
+          "tags": [
+            "skill",
+            "recap",
+            "conflict",
+            "proof"
+          ]
+        }
       }
     },
     {
@@ -73,14 +77,16 @@
         "Does not invent an attempt, root cause, or final outcome"
       ],
       "metadata": {
-        "title": "Recap Task preserves failed and rejected paths",
-        "tags": [
-          "skill",
-          "recap",
-          "attempt-history",
-          "decisions"
-        ],
-        "notes": "Protects the operator from repeating prior work."
+        "farplane": {
+          "title": "Recap Task preserves failed and rejected paths",
+          "notes": "Protects the operator from repeating prior work.",
+          "tags": [
+            "skill",
+            "recap",
+            "attempt-history",
+            "decisions"
+          ]
+        }
       }
     },
     {
@@ -97,14 +103,16 @@
         "Keeps the response useful without claiming a full recap exists"
       ],
       "metadata": {
-        "title": "Recap Task exposes a missing durable source",
-        "tags": [
-          "skill",
-          "recap",
-          "source-gap",
-          "safety"
-        ],
-        "notes": "Protects against invented thread history."
+        "farplane": {
+          "title": "Recap Task exposes a missing durable source",
+          "notes": "Protects against invented thread history.",
+          "tags": [
+            "skill",
+            "recap",
+            "source-gap",
+            "safety"
+          ]
+        }
       }
     },
     {
@@ -123,14 +131,16 @@
         "Returns a safe next action grounded in the task packet"
       ],
       "metadata": {
-        "title": "Recap Task excludes unrelated worktree noise",
-        "tags": [
-          "skill",
-          "recap",
-          "worktree",
-          "scope"
-        ],
-        "notes": "Protects task boundaries when the checkout is dirty."
+        "farplane": {
+          "title": "Recap Task excludes unrelated worktree noise",
+          "notes": "Protects task boundaries when the checkout is dirty.",
+          "tags": [
+            "skill",
+            "recap",
+            "worktree",
+            "scope"
+          ]
+        }
       }
     }
   ]

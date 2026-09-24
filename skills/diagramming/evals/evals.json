@@ -12,15 +12,17 @@
         "Selects a table for exact field mappings instead of forcing a diagram"
       ],
       "metadata": {
-        "title": "Rich visual questions route to the smallest faithful form",
-        "context": "",
-        "tags": [
-          "skill",
-          "diagramming",
-          "form-selection",
-          "mermaid"
-        ],
-        "notes": "Protects hierarchy and chronology awareness without regressing exact mappings into decorative diagrams."
+        "farplane": {
+          "title": "Rich visual questions route to the smallest faithful form",
+          "context": "",
+          "notes": "Protects hierarchy and chronology awareness without regressing exact mappings into decorative diagrams.",
+          "tags": [
+            "skill",
+            "diagramming",
+            "form-selection",
+            "mermaid"
+          ]
+        }
       }
     }
   ]

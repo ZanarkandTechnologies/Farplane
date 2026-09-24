@@ -16,13 +16,15 @@
         "Routes material skill edits to skill-maintenance checks or review instead of self-approving"
       ],
       "metadata": {
-        "title": "Consolidate preserves template value instead of summarizing",
-        "tags": [
-          "skill",
-          "consolidate",
-          "template-preservation"
-        ],
-        "notes": "Protects the primitive from becoming a generic summary instruction."
+        "farplane": {
+          "title": "Consolidate preserves template value instead of summarizing",
+          "notes": "Protects the primitive from becoming a generic summary instruction.",
+          "tags": [
+            "skill",
+            "consolidate",
+            "template-preservation"
+          ]
+        }
       }
     },
     {
@@ -39,13 +41,15 @@
         "Requires validator or generated-output proof before claiming completion"
       ],
       "metadata": {
-        "title": "Consolidate separates hard constraints from value judgment",
-        "tags": [
-          "skill",
-          "consolidate",
-          "constraints"
-        ],
-        "notes": "Catches the parameter/value-function split for registry-like targets."
+        "farplane": {
+          "title": "Consolidate separates hard constraints from value judgment",
+          "notes": "Catches the parameter/value-function split for registry-like targets.",
+          "tags": [
+            "skill",
+            "consolidate",
+            "constraints"
+          ]
+        }
       }
     },
     {
@@ -62,13 +66,15 @@
         "Includes a loss check and proof or review route for material skill changes"
       ],
       "metadata": {
-        "title": "Consolidate routes gotchas to the right owner surface",
-        "tags": [
-          "skill",
-          "consolidate",
-          "gotchas"
-        ],
-        "notes": "Exercises consolidate across gotchas, checklist, eval, and reference placement."
+        "farplane": {
+          "title": "Consolidate routes gotchas to the right owner surface",
+          "notes": "Exercises consolidate across gotchas, checklist, eval, and reference placement.",
+          "tags": [
+            "skill",
+            "consolidate",
+            "gotchas"
+          ]
+        }
       }
     },
     {
@@ -86,13 +92,15 @@
         "Uses importance, recency, factuality, and remembrance in the decision"
       ],
       "metadata": {
-        "title": "Consolidate keeps factual knowledge and routes misplaced policy",
-        "tags": [
-          "skill",
-          "consolidate",
-          "knowledge"
-        ],
-        "notes": "Transferred from the retired knowledge-pruning package."
+        "farplane": {
+          "title": "Consolidate keeps factual knowledge and routes misplaced policy",
+          "notes": "Transferred from the retired knowledge-pruning package.",
+          "tags": [
+            "skill",
+            "consolidate",
+            "knowledge"
+          ]
+        }
       }
     },
     {
@@ -109,14 +117,16 @@
         "Reports kept, routed, archived, and questionable items"
       ],
       "metadata": {
-        "title": "Consolidate flags stale knowledge instead of rewriting it",
-        "tags": [
-          "skill",
-          "consolidate",
-          "knowledge",
-          "stale-facts"
-        ],
-        "notes": "Transferred from the retired knowledge-pruning package."
+        "farplane": {
+          "title": "Consolidate flags stale knowledge instead of rewriting it",
+          "notes": "Transferred from the retired knowledge-pruning package.",
+          "tags": [
+            "skill",
+            "consolidate",
+            "knowledge",
+            "stale-facts"
+          ]
+        }
       }
     },
     {
@@ -135,14 +145,16 @@
         "Treats any unexplained loss or weakened high-risk behavior as a failed consolidation"
       ],
       "metadata": {
-        "title": "AGENTS consolidation preserves the Agent Kernel feature inventory",
-        "tags": [
-          "skill",
-          "consolidate",
-          "agents",
-          "feature-fidelity"
-        ],
-        "notes": "Direct-invocation regression for bidirectional AGENTS feature coverage and high-risk semantic preservation."
+        "farplane": {
+          "title": "AGENTS consolidation preserves the Agent Kernel feature inventory",
+          "notes": "Direct-invocation regression for bidirectional AGENTS feature coverage and high-risk semantic preservation.",
+          "tags": [
+            "skill",
+            "consolidate",
+            "agents",
+            "feature-fidelity"
+          ]
+        }
       }
     }
   ]

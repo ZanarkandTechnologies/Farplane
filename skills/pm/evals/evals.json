@@ -14,13 +14,15 @@
         "Makes no Notion writes or processed receipts for advice"
       ],
       "metadata": {
-        "title": "Normal: weekly context and protected building",
-        "tags": [
-          "normal",
-          "pm",
-          "context",
-          "rewards"
-        ]
+        "farplane": {
+          "title": "Normal: weekly context and protected building",
+          "tags": [
+            "normal",
+            "pm",
+            "context",
+            "rewards"
+          ]
+        }
       }
     },
     {
@@ -37,13 +39,15 @@
         "Completes h2 only after all intended authorized deltas have successful readback; no success claim for simulated operations"
       ],
       "metadata": {
-        "title": "Hard: changed source and partial write replay",
-        "tags": [
-          "hard",
-          "pm",
-          "ingestion",
-          "replay"
-        ]
+        "farplane": {
+          "title": "Hard: changed source and partial write replay",
+          "tags": [
+            "hard",
+            "pm",
+            "ingestion",
+            "replay"
+          ]
+        }
       }
     },
     {
@@ -60,13 +64,15 @@
         "Makes no Notion mutations or processed receipts"
       ],
       "metadata": {
-        "title": "Boundary: stale schema and incomplete evidence",
-        "tags": [
-          "boundary",
-          "pm",
-          "source-gap",
-          "authority"
-        ]
+        "farplane": {
+          "title": "Boundary: stale schema and incomplete evidence",
+          "tags": [
+            "boundary",
+            "pm",
+            "source-gap",
+            "authority"
+          ]
+        }
       }
     },
     {
@@ -79,12 +85,14 @@
         "Requires readback before successful action receipts and makes no actual write claim"
       ],
       "metadata": {
-        "title": "Regression: unchanged source with new authorization",
-        "tags": [
-          "hard",
-          "regression",
-          "authority"
-        ]
+        "farplane": {
+          "title": "Regression: unchanged source with new authorization",
+          "tags": [
+            "hard",
+            "regression",
+            "authority"
+          ]
+        }
       }
     }
   ]
