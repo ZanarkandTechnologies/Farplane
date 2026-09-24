@@ -31,8 +31,5 @@ command paths in Codex `/hooks`; installation does not grant trust. The three St
 handlers remain independently controlled. Shared Core/runtime code stays under
 `bin/core/` and `bin/runtime/` rather than being copied into hook folders.
 
-`shared_checkout_guard.py` is a retired no-op bridge for cached Codex commands,
-not an active hook or a sixth package. It has no current registration.
-
 See the [runtime guide](../docs/farplane-framework/hooks-and-runtime.md) for
 cross-hook contracts, configuration precedence, and telemetry state boundaries.

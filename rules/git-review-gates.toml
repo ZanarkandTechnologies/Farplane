@@ -46,8 +46,6 @@ checks = ["lint_contract_tests"]
 globs = [
   "skills/skill-maintenance/scripts/generate_skill_graph.py",
   "skills/skill-maintenance/scripts/test_generate_skill_graph.py",
-  "skills/skill-maintenance/scripts/sync_skill_plugins.py",
-  "skills/skill-maintenance/scripts/test_sync_skill_plugins.py",
 ]
 checks = ["skill_projection"]
 
@@ -98,8 +96,6 @@ checks = ["lint_contract_tests"]
 globs = [
   "skills/skill-maintenance/scripts/generate_skill_graph.py",
   "skills/skill-maintenance/scripts/test_generate_skill_graph.py",
-  "skills/skill-maintenance/scripts/sync_skill_plugins.py",
-  "skills/skill-maintenance/scripts/test_sync_skill_plugins.py",
 ]
 checks = ["skill_projection"]
 
@@ -145,7 +141,6 @@ argv = [
   "-m",
   "unittest",
   "skills.skill-maintenance.scripts.test_generate_skill_graph",
-  "skills.skill-maintenance.scripts.test_sync_skill_plugins",
 ]
 
 [checks.ticket_closure_gate]

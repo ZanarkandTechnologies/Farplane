@@ -183,11 +183,6 @@ success quiet and make failure output the thing that stands out.
 - `python3 skills/skill-maintenance/scripts/import_installed_skills.py --skills <name> --overwrite`
   Use to replace an existing repo skill from the installed copy, with the old
   repo package backed up under `.farplane/import-backups/`.
-- `python3 skills/skill-maintenance/scripts/sync_skill_plugins.py --check`
-  Use after changing `skills/*` to prove plugin packages can still be generated.
-- `python3 skills/skill-maintenance/scripts/sync_skill_plugins.py --install-local --plugins farplane-core`
-  Use to expose selected Farplane plugin bundles through your personal Codex
-  marketplace under `~/.agents/plugins`.
 - `python3 skills/pr-review-watch/scripts/pr_review_watch.py classify --repo <repo> --pr <number> --json`
   Compatibility command for the `pr-review-watch` skill-owned classifier.
 - `python3 bin/validators/check_doc_refs.py`

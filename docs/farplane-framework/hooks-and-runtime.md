@@ -230,10 +230,6 @@ observation surface for historical sources. It is not the ticket-to-task-thread
 source of truth; lifecycle, completion mining, and UI joins resolve the ticket's
 own `thread_id` first.
 
-`hooks/shared_checkout_guard.py` is a retired no-op compatibility bridge for
-cached Codex commands. It is not registered as an active hook and no longer
-acquires checkout leases.
-
 The lifecycle publisher also reads the latest exact-id `thread_name` from the
 append-only Codex `session_index.jsonl`. Telemetry sends only sanitized native
 and ticket title metadata. Native names outrank ticket display titles; a native

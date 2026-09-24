@@ -24,7 +24,6 @@ system_record_json: |
     "primary_feature_ref": "FEAT-0022",
     "feature_refs": [
       "FEAT-0022",
-      "FEAT-0030",
       "FEAT-0057",
       "FEAT-0062",
       "FEAT-0064"
@@ -72,7 +71,6 @@ canonical in each skill and in the generated skill registry.
 ## Feature Docs
 
 - [FEAT-0022 Skill tier leverage classes](../features/FEAT-0022-skill-tier-leverage-classes.md)
-- [FEAT-0030 On-demand skill plugin packaging](../features/FEAT-0030-on-demand-skill-plugin-packaging.md)
 - [FEAT-0057 Retired skill-local QA checklist artifacts](../features/FEAT-0057-skill-local-qa-checklist-artifacts.md)
 - [FEAT-0062 Capped skill surface budget](../features/FEAT-0062-capped-skill-surface-budget.md)
 - [FEAT-0064 Skill signals](../features/FEAT-0064-skill-signals.md)

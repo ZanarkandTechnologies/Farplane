@@ -83,7 +83,6 @@ python3 bin/validators/check_doc_refs.py
 python3 -m unittest skills/delegate-cli/scripts/test_delegate_cli_agent.py
 python3 -m unittest skills/skill-maintenance/scripts/test_install_selected_skills.py
 python3 -m unittest skills/skill-maintenance/scripts/test_import_installed_skills.py
-python3 -m unittest skills/skill-maintenance/scripts/test_sync_skill_plugins.py
 
 # Validate skill metadata and generated registry shape
 python3 skills/skill-maintenance/scripts/check_skills.py --write
