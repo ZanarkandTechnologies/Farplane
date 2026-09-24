@@ -115,10 +115,13 @@ class SkillFileLineGateTests(unittest.TestCase):
         stdin = io.StringIO(json.dumps(self.payload(root, relative)))
         stdout = io.StringIO()
 
-        with mock.patch.object(sys, "stdin", stdin), redirect_stdout(stdout):
+        with mock.patch.object(sys, "stdin", stdin), redirect_stdout(stdout), mock.patch.object(
+            MODULE, "report_gate_block"
+        ) as report:
             self.assertEqual(0, MODULE.main())
 
         self.assertEqual("block", json.loads(stdout.getvalue())["decision"])
+        self.assertEqual("skill-length", report.call_args.args[1])
 
     def test_hook_config_routes_apply_patch_aliases_to_gate(self) -> None:
         config = json.loads((ROOT / "hooks.json").read_text(encoding="utf-8"))
