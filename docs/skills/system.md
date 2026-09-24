@@ -395,13 +395,10 @@ or delete units by value rather than appending by default.
   references, scripts, templates, and direct todo list.
 - `source: external` means the package is upstream-owned and should stay
   refreshable. Keep local Farplane wrapper policy in local caller skills.
-- Do not patch installed skill bodies such as `~/.codex/skills/*` as the source
-  of truth. Edit the Farplane source package, then reinstall selected skills.
-- If a useful skill begins life in `~/.codex/skills`, pull it into repo source
-  with `python3 skills/skill-maintenance/scripts/import_installed_skills.py --skills <name> --dry-run` first,
-  then rerun without `--dry-run` after reviewing the package boundary. Existing
-  repo packages require explicit `--overwrite` and are backed up under
-  `.farplane/import-backups/`.
+- Installed skills are directory symlinks into `skills/`; edit the Farplane
+  source package and the change is live in every runtime.
+- If a useful skill begins life in a runtime home, move its folder into
+  `skills/<name>/` and rerun install to replace it with a link.
 - Put skill-specific eval tasks beside the source skill as `evals/evals.json`.
   Keep broad working suites under `.farplane/evals` and reusable cross-skill
   examples under `skills/eval/examples`.

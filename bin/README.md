@@ -175,14 +175,6 @@ success quiet and make failure output the thing that stands out.
   Use to discover shareable skills without rendering the full Farplane config.
 - `python3 skills/skill-maintenance/scripts/install_selected_skills.py --skills review,visual-qa --dry-run`
   Use to preview selected skill symlinks into `~/.codex/skills`.
-- `python3 skills/skill-maintenance/scripts/import_installed_skills.py --list`
-  Use to list installed Codex skills and see whether each already exists in
-  repo source.
-- `python3 skills/skill-maintenance/scripts/import_installed_skills.py --skills notion-task-field-fill,reel-collage --dry-run`
-  Use to preview importing installed skills into `skills/*` before writing.
-- `python3 skills/skill-maintenance/scripts/import_installed_skills.py --skills <name> --overwrite`
-  Use to replace an existing repo skill from the installed copy, with the old
-  repo package backed up under `.farplane/import-backups/`.
 - `python3 skills/pr-review-watch/scripts/pr_review_watch.py classify --repo <repo> --pr <number> --json`
   Compatibility command for the `pr-review-watch` skill-owned classifier.
 - `python3 bin/validators/check_doc_refs.py`

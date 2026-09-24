@@ -235,8 +235,6 @@ python3 bin/validators/sync_skill_registry.py --check
 python3 bin/validators/check_skill_todo_tiers.py
 python3 bin/validators/check_skill_todo_tiers.py --allow-peer-tier3
 python3 bin/validators/check_skill_capabilities.py validate
-python3 skills/skill-maintenance/scripts/import_installed_skills.py --list
-python3 skills/skill-maintenance/scripts/import_installed_skills.py --skills <name> --dry-run
 python3 skills/skill-maintenance/scripts/generate_skill_graph.py
 python3 skills/skill-maintenance/scripts/check_skills.py --template-version 0.2.0
 ```
@@ -325,17 +323,13 @@ copy the source `SKILL.md` first-load contract as-is and do not embed or copy
 skill-local `todos.md` sidecars.
 
 This makes the first-load todo list visible on first skill load without a second
-todo file. After editing a source skill or its first-load todo list, rerun
-install before judging the behavior of `~/.codex/skills/<name>/SKILL.md`.
+todo file. Installed skills are directory symlinks into `skills/`, so source
+edits are live in `~/.codex/skills` and `~/.claude/skills` without reinstalling;
+rerun install only after adding or removing a skill.
 
-When a useful skill is created or edited first in live Codex home, import it
-back into repo source with `skills/skill-maintenance/scripts/import_installed_skills.py` instead of treating
-`~/.codex/skills/*` as canonical. The importer previews with `--dry-run`, skips
-existing repo packages unless `--overwrite` is explicit, backs up overwritten
-packages under `.farplane/import-backups/`, and strips generated
-`FARPLANE_EMBEDDED_TODOS` blocks from old installed `SKILL.md` files while
-dropping sidecar `todos.md` files. After import, review the `description`,
-`tier`, and `source` frontmatter, then run
+When a useful skill is created first in a live runtime home, move the real
+folder into `skills/<name>/`, rerun install to replace it with a link, review
+the `description`, `tier`, and `source` frontmatter, then run
 `python3 skills/skill-maintenance/scripts/check_skills.py --write`.
 
 ## Skill Self-Healing
