@@ -3,7 +3,7 @@ name: init-advisor
 version: 3.1.0
 description: "Turn a new-project intake into a Farplane substrate, readiness audit, optional code scaffold, and harness-creator handoff."
 tier: 3
-group: operations
+department: operations
 source: local
 ---
 

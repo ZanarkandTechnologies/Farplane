@@ -2,7 +2,7 @@
 #
 # This is not a workflow, call graph, process order, or runtime schedule. A
 # listed package must declare an artifact or integration `capability` contract
-# and retain the matching `group` in its own SKILL.md. Empty departments keep
+# and retain the matching `department` in its own SKILL.md. Empty departments keep
 # their real org anchor while no capability has been intentionally admitted.
 
 [capability_admission]

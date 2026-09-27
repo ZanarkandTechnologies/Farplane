@@ -2,7 +2,7 @@
 name: meshy-3d-generation
 description: "Generate, texture, rig, or animate 3D assets through the Meshy API when a user requests text-to-3D, image-to-3D, model conversion, or character workflows."
 tier: 3
-group: marketing
+department: marketing
 source: external
 capability:
   kind: integration

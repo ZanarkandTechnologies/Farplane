@@ -22,7 +22,7 @@ def write_skill(
     name: str,
     *,
     tier: int = 2,
-    group: str | None = None,
+    department: str | None = None,
     template_version: str | None = None,
     feature_refs: list[str] | None = None,
     with_eval: bool = False,
@@ -53,7 +53,7 @@ def write_skill(
                 f"name: {name}",
                 "description: Test skill.",
                 f"tier: {tier}",
-                f"group: {group}" if group else "",
+                f"department: {department}" if department else "",
                 "source: local",
                 capability or "",
                 common_chain_lines.rstrip(),
@@ -347,7 +347,7 @@ capability:
                 repo,
                 "writer",
                 tier=3,
-                group="operations",
+                department="operations",
                 common_chain_after=["unslop"],
             )
 
@@ -396,7 +396,7 @@ capability:
                 repo,
                 "unslop",
                 tier=3,
-                group="operations",
+                department="operations",
                 capability="capability:\n  kind: shortcut",
                 common_chain_after=["writer"],
             )

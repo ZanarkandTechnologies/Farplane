@@ -2,7 +2,7 @@
 name: meta-ads
 description: "Turn a bound Meta ad account and reporting request into a read-only account, delivery, or insight report through the Meta Ads CLI."
 tier: 3
-group: marketing
+department: marketing
 source: local
 capability:
   kind: integration

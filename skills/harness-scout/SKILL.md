@@ -3,7 +3,7 @@ name: harness-scout
 version: 0.2.0
 description: "Turn an external source into deduped Farplane feature candidates, adopt/adapt/reject/defer scorecards, and ticket handoffs."
 tier: 3
-group: intelligence
+department: intelligence
 source: local
 allowed-tools: Read, Glob, Grep, Bash, Write, Edit
 ---

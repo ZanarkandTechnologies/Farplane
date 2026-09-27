@@ -3,7 +3,7 @@ name: infographic
 version: 0.1.0
 description: "Turn an explanation, dataset, product flow, or argument into a clear infographic brief, layout spec, and production-ready visual asset plan."
 tier: 3
-group: marketing
+department: marketing
 source: local
 skill_template_version: "0.3.6"
 template_uses:

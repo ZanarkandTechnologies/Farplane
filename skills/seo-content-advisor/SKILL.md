@@ -2,7 +2,7 @@
 name: seo-content-advisor
 description: "Turn an audience, product, and search topic into a people-first SEO article brief, draft, and content QA verdict."
 tier: 3
-group: marketing
+department: marketing
 source: local
 template_uses:
   skill-template: "0.3.7"

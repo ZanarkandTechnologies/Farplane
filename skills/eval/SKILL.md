@@ -2,7 +2,7 @@
 name: eval
 description: "Turn agent, prompt, or skill behavior into local eval tasks, boolean or tier judges, run artifacts, and verdicts."
 tier: 3
-group: operations
+department: operations
 source: local
 template_uses:
   skill-template: "0.3.0"

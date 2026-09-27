@@ -158,7 +158,7 @@ Manual fields:
   been onboarded yet
 - `skill_ui`: optional path or route for a skill-owned UI, viewer, dashboard,
   debug page, or UI binding
-- `group`: required for Tier 3 only; one canonical operating department from
+- `department`: required for Tier 3 only; one canonical operating department from
   [`rules/skill-departments.toml`](../../rules/skill-departments.toml)
 - `capability`: optional static projection into the Capability Map and Office:
   `artifact` declares exactly one output family in `produces` and optional
@@ -202,7 +202,7 @@ Use `common_chains` only for local forward handoffs:
 
 ```yaml
 tier: 3
-group: operations
+department: operations
 common_chains:
   after: ["goal-advisor"]
 ```

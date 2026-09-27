@@ -3,7 +3,7 @@ name: review-leads
 description: "Review a current lead strategy against five acquisition criteria, then recommend one evidence-backed next improvement with a Before/After target."
 tier: 3
 source: local
-group: marketing
+department: marketing
 template_uses:
   skill-template: "0.6.2"
 allowed-tools: Read, Glob, Grep

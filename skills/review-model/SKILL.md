@@ -3,7 +3,7 @@ name: review-model
 description: "Review a current business model against ten offer-sequence and monetization criteria, then recommend one evidence-backed next improvement with a Before/After target."
 tier: 3
 source: local
-group: sales
+department: sales
 template_uses:
   skill-template: "0.6.2"
 allowed-tools: Read, Glob, Grep

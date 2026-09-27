@@ -2,7 +2,7 @@
 name: automation-advisor
 description: "Design or revise Farplane Codex automations using one Markdown file per scheduled workflow."
 tier: 3
-group: operations
+department: operations
 source: local
 template_uses:
   skill-template: "0.2.0"

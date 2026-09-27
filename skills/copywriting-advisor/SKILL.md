@@ -2,7 +2,7 @@
 name: copywriting-advisor
 description: "Turn an audience, product, and page goal into a concise emotional story, page copy, word bank, and copy QA verdict."
 tier: 3
-group: marketing
+department: marketing
 source: local
 template_uses:
   skill-template: "0.3.7"

@@ -185,7 +185,7 @@ class SkillFrontmatter(StrictContract):
     description: NonEmptyText
     tier: Literal[1, 2, 3]
     source: Literal["local", "external"]
-    group: CapabilityId | None = None
+    department: CapabilityId | None = None
     capability: CapabilityContract | None = None
     methods: list[SkillMethod] | None = None
     common_chains: CommonChains | None = None

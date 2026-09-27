@@ -3,7 +3,7 @@ name: feed-scout
 version: 0.3.0
 description: "Turn curated feeds into a dated source report, planner candidates, and bounded evidence-backed recovery tickets."
 tier: 3
-group: intelligence
+department: intelligence
 source: local
 template_uses:
   skill-template: "0.3.2"

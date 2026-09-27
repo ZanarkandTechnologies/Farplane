@@ -2,7 +2,7 @@
 name: ingest-content
 description: "Route liked links, images, videos, files, or notes into searchable Resource Bank captures, selected creative elements, and optional repurpose tickets."
 tier: 3
-group: marketing
+department: marketing
 source: local
 template_uses:
   skill-template: "0.2.0"

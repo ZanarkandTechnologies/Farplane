@@ -31,7 +31,7 @@ class QuickValidateCapabilityTests(unittest.TestCase):
 description: Create a review-ready X thread draft.
 tier: 3
 source: local
-group: marketing
+department: marketing
 capability:
   kind: artifact
   consumes: [content-brief]
@@ -50,7 +50,7 @@ capability:
 description: Create a review-ready X thread draft.
 tier: 3
 source: local
-group: marketing
+department: marketing
 portfolio: domain
 capability:
   kind: artifact

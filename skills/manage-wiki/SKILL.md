@@ -5,7 +5,7 @@ tier: 3
 source: local
 capability:
   kind: integration
-group: intelligence
+department: intelligence
 skill_template_version: "0.3.8"
 template_uses:
   skill-template: "0.3.8"

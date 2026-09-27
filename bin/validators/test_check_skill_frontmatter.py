@@ -26,7 +26,7 @@ def write_skill(root: Path, name: str, capability: str = "") -> None:
                 f"name: {name}",
                 "description: Test skill.",
                 "tier: 3",
-                "group: marketing",
+                "department: marketing",
                 "source: local",
                 capability,
                 "---",
@@ -56,7 +56,7 @@ class SkillFrontmatterLintTests(unittest.TestCase):
 name: x-account
 description: Operate X publishing.
 tier: 3
-group: marketing
+department: marketing
 source: local
 capability:
   kind: integration

@@ -2,7 +2,7 @@
 name: skill-maintenance
 description: "Turn skill behavior deltas, lesson hardening, or skill compaction into owner-local skill edits, eval/gotcha updates, registry sync, behavior proof, and review."
 tier: 3
-group: operations
+department: operations
 source: local
 template_uses:
   skill-template: "0.6.2"

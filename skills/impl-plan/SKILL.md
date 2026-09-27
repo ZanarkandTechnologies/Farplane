@@ -6,7 +6,7 @@ source: local
 template_uses:
   skill-template: "0.3.0"
   skill-eval-task: "0.2.0"
-group: operations
+department: operations
 common_chains:
   after: ["goal-advisor"]
 allowed-tools: Read, Glob, Grep

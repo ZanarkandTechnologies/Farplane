@@ -2,7 +2,7 @@
 name: pm
 description: "Use the Notion Plan Week cache, tasks, projects, goals, and meeting notes to plan days, ingest commitments, and review priorities when asked for pm."
 tier: 3
-group: back-office
+department: back-office
 source: local
 capability:
   kind: shortcut

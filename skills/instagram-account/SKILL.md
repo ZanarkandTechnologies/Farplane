@@ -2,7 +2,7 @@
 name: instagram-account
 description: "Turn Instagram account posting or insights requests into validated artifacts, normalized KPI snapshots, or gated API actions."
 tier: 3
-group: marketing
+department: marketing
 source: local
 capability:
   kind: integration

@@ -3,7 +3,7 @@ name: interior-design
 version: 0.1.0
 description: "Turn an existing room, office, or navigable interior plus activities and taste into an evidence-backed composition brief, blockout, and operator review gate."
 tier: 3
-group: operations
+department: operations
 source: local
 template_uses:
   skill-template: "0.3.8"

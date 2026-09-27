@@ -2,7 +2,7 @@
 name: ad-impl-plan
 description: "Turn a paid-ad directive into an approval-ready canonical campaign ticket with conditional creative routes, Goal Packet handoff, and spend-safe operating gates."
 tier: 3
-group: marketing
+department: marketing
 source: local
 template_uses:
   skill-template: "0.4.1"

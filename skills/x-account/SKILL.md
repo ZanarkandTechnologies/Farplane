@@ -2,7 +2,7 @@
 name: x-account
 description: "Turn X account posting or metrics requests into validated drafts, normalized KPI snapshots, or gated API actions."
 tier: 3
-group: marketing
+department: marketing
 source: local
 capability:
   kind: integration

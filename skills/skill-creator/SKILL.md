@@ -2,7 +2,7 @@
 name: skill-creator
 description: "Turn a new reusable workflow or capability idea into its first Farplane skill package with Golden Workflow Nodes, calibration, and proof."
 tier: 3
-group: operations
+department: operations
 source: local
 template_uses:
   skill-template: "0.5.0"

@@ -2,7 +2,7 @@
 name: phone-chaser
 description: "Turn an explicit reminder or escalation request into a bounded LiveKit phone call for Kenji or an approved internal/test recipient."
 tier: 3
-group: back-office
+department: back-office
 source: local
 capability:
   kind: integration

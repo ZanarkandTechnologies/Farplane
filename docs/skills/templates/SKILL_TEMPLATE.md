@@ -1,6 +1,6 @@
 ---
 template_id: skill-template
-template_version: "0.6.2"
+template_version: "0.6.3"
 feature_refs:
   - FEAT-0022
   - FEAT-0054
@@ -33,7 +33,7 @@ template_uses:
 # skill-surface-budget: "0.1.0"
 # Tier 3 only: back-office | sales | deals | marketing | operations |
 # intelligence | customer. See rules/skill-departments.toml.
-group: [TODO: canonical department required for Tier 3]
+department: [TODO: canonical department required for Tier 3]
 allowed-tools: {tools}
 ---
 

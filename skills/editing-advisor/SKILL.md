@@ -2,7 +2,7 @@
 name: editing-advisor
 description: "Turn a brief, storyboard, timing master, and reusable editing patterns into a compatible timed edit direction and renderer-ready handoff."
 tier: 3
-group: marketing
+department: marketing
 source: local
 template_uses:
   skill-template: "0.3.9"

@@ -60,7 +60,7 @@ def validate_skill(skill_path):
         'metadata',
         'tier',
         'source',
-        'group',
+        'department',
         'methods',
         'capability',
         'common_chains',

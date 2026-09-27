@@ -3,7 +3,7 @@ name: delegate-cli
 version: 0.1.0
 description: "Turn bounded Farplane work into an external coding-agent CLI handoff while preserving ticket, log, QA, review, and integration control."
 tier: 3
-group: operations
+department: operations
 source: local
 capability:
   kind: integration

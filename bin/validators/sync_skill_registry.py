@@ -322,16 +322,16 @@ def build_registry(repo_root: Path) -> list[dict[str, Any]]:
                 f"{skill_path}: description is {len(description)} chars; "
                 f"keep it at or below {DESCRIPTION_MAX_CHARS} chars"
             )
-        group = metadata.get("group")
+        department = metadata.get("department")
         if tier == 3 and (
-            not isinstance(group, str) or group.strip() not in SKILL_DEPARTMENTS
+            not isinstance(department, str) or department.strip() not in SKILL_DEPARTMENTS
         ):
             allowed = ", ".join(SKILL_DEPARTMENTS)
             raise RegistryError(
-                f"{skill_path}: tier 3 group must be one of the canonical departments: {allowed}"
+                f"{skill_path}: tier 3 department must be one of the canonical departments: {allowed}"
             )
-        if tier != 3 and group not in (None, ""):
-            raise RegistryError(f"{skill_path}: group is only allowed on tier 3 skills")
+        if tier != 3 and department not in (None, ""):
+            raise RegistryError(f"{skill_path}: department is only allowed on tier 3 skills")
         if metadata.get("feature_refs") not in (None, "", []):
             raise RegistryError(
                 f"{skill_path}: feature_refs moved to versioned skill template metadata; "
@@ -350,7 +350,7 @@ def build_registry(repo_root: Path) -> list[dict[str, Any]]:
             "skill_links": collect_skill_links(skill_dir, name),
         }
         if tier == 3:
-            row["group"] = group
+            row["department"] = department
         methods = normalize_method_contracts(metadata.get("methods"), name, skill_path)
         if methods:
             row["methods"] = methods

@@ -3,7 +3,7 @@ name: convex
 version: 4.0.0
 description: "Route Convex project questions to official Convex AI instructions when a repo uses Convex backend files or deployment tooling."
 tier: 3
-group: operations
+department: operations
 source: external
 capability:
   kind: integration

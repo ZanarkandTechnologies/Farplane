@@ -3,7 +3,7 @@ name: visual-design
 version: 1.0.0
 description: "Turn an accepted UI workflow and visual references into a visual system, anti-patterns, and a planning handoff."
 tier: 3
-group: operations
+department: operations
 source: local
 allowed-tools: Read, Grep, Glob, web_search
 ---

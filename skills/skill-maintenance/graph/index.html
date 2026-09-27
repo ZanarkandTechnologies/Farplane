@@ -254,7 +254,7 @@
           <div class="space-y-3 px-3">
             <label class="block">
               <span class="mb-1 block font-data-mono text-[11px] font-bold tracking-[0.08em] text-outline">GROUP</span>
-              <select id="group-filter" class="w-full rounded-none border-outline-variant bg-surface font-data-mono text-[12px] focus:border-primary focus:ring-primary">
+              <select id="department-filter" class="w-full rounded-none border-outline-variant bg-surface font-data-mono text-[12px] focus:border-primary focus:ring-primary">
                 <option value="">All groups</option>
               </select>
             </label>
@@ -341,7 +341,7 @@
       const graphSvg = d3.select("#skill-graph");
       const detail = document.querySelector("#node-detail");
       const search = document.querySelector("#command-search");
-      const groupFilter = document.querySelector("#group-filter");
+      const departmentFilter = document.querySelector("#department-filter");
       const externalFilter = document.querySelector("#external-filter");
       const chainFilter = document.querySelector("#chain-filter");
       const refFilter = document.querySelector("#ref-filter");
@@ -374,16 +374,16 @@
         document.querySelector("#top-node-count").textContent = `NODES: ${graph.counts.nodes}`;
         document.querySelector("#top-edge-count").textContent = `VECTORS: ${graph.counts.edges}`;
         setHeatOptions();
-        const groups = [...new Set(graph.nodes.map((node) => node.group).filter(Boolean))].sort();
+        const groups = [...new Set(graph.nodes.map((node) => node.department).filter(Boolean))].sort();
         for (const group of groups) {
           const option = document.createElement("option");
           option.value = group;
           option.textContent = group;
-          groupFilter.appendChild(option);
+          departmentFilter.appendChild(option);
         }
 
         for (const input of document.querySelectorAll(".tier-filter")) input.addEventListener("input", render);
-        for (const input of [search, groupFilter, externalFilter, chainFilter, refFilter, heatFilter]) input.addEventListener("input", render);
+        for (const input of [search, departmentFilter, externalFilter, chainFilter, refFilter, heatFilter]) input.addEventListener("input", render);
         document.querySelector("#zoom-in").addEventListener("click", () => graphSvg.transition().call(zoom.scaleBy, 1.2));
         document.querySelector("#zoom-out").addEventListener("click", () => graphSvg.transition().call(zoom.scaleBy, 0.82));
         document.querySelector("#fit-button").addEventListener("click", fitGraph);
@@ -434,7 +434,7 @@
       function filtered() {
         const tiers = activeTiers();
         const query = search.value.trim().toLowerCase();
-        const group = groupFilter.value;
+        const group = departmentFilter.value;
         const includeExternal = externalFilter.checked;
         const heatLimit = Number(heatFilter.value || 0);
         const hotIds = hotNodeIds(heatLimit);
@@ -442,13 +442,13 @@
           .filter((node) => !hotIds || hotIds.has(node.id))
           .filter((node) => tiers.has(Number(node.tier)))
           .filter((node) => includeExternal || node.source !== "external")
-          .filter((node) => !group || node.group === group)
+          .filter((node) => !group || node.department === group)
           .filter((node) => {
             if (!query) return true;
             return [
               node.label,
               node.id,
-              node.group,
+              node.department,
               node.path,
               node.description,
               ...(node.methods || []).flatMap((method) => [method.id, method.class, method.output]),
@@ -669,7 +669,7 @@
             <h4 class="mb-2 border-b-2 border-primary pb-1 font-data-mono text-[12px] font-bold tracking-[0.08em] text-primary">PROPERTIES</h4>
             <table class="w-full border-collapse text-left font-data-mono text-[12px]">
               <tbody>
-                ${row("Group", node.group || "none")}
+                ${row("Department", node.department || "none")}
                 ${row("Source", node.source)}
                 ${row("Checklist", node.has_checklist ? "present" : "missing")}
                 ${row("Methods", String(methods.length))}

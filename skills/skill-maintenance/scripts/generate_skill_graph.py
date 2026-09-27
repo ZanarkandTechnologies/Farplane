@@ -291,7 +291,7 @@ def uniqueness_signal(row: dict[str, Any], composition_heat: dict[str, Any]) -> 
     return {
         "tier": row.get("tier"),
         "source": row.get("source", "local"),
-        "group": row.get("group", ""),
+        "department": row.get("department", ""),
         "method_count": len(methods) if isinstance(methods, list) else 0,
         "outgoing_ref_count": len(outgoing_refs),
         "incoming_ref_count": int(composition_heat.get("incoming_ref_count") or 0),
@@ -412,7 +412,7 @@ def build_graph(
             attributes={
                 "tier": row.get("tier"),
                 "source": row.get("source", "local"),
-                "group": row.get("group", ""),
+                "department": row.get("department", ""),
                 "capability": row.get("capability", {}),
                 "todo_skill_refs": row.get("todo_skill_refs", []),
                 "methods": row.get("methods", []),
@@ -505,7 +505,7 @@ def build_capability_graph(
                 raise ValueError(f"capability projection unknown admitted skill {skill_id!r}")
             if row.get("tier") != 3:
                 raise ValueError(f"capability projection admitted skill {skill_id!r} must be Tier 3")
-            if row.get("group") != department_id:
+            if row.get("department") != department_id:
                 raise ValueError(
                     f"capability projection admitted skill {skill_id!r} must belong to {department_id!r}"
                 )
@@ -621,7 +621,7 @@ def build_capability_graph(
                 attributes={
                     "skill_id": skill_id,
                     "tier": row.get("tier"),
-                    "group": department_id,
+                    "department": department_id,
                     "description": row.get("description", ""),
                     "source": row.get("source", ""),
                     "role": role,
@@ -647,7 +647,7 @@ def build_capability_graph(
 
     nodes.sort(
         key=lambda node: (
-            str(node.get("department_id") or node.get("group") or ""),
+            str(node.get("department_id") or node.get("department") or ""),
             str(node.get("role") or ""),
             str(node.get("skill_id") or ""),
             node["id"],
@@ -671,7 +671,7 @@ def build_capability_graph(
         },
         extras={
             "source": {
-                "contract": "rules/skill-workflows.toml capability_admission/labels + skills/*/SKILL.md frontmatter group + capability",
+                "contract": "rules/skill-workflows.toml capability_admission/labels + skills/*/SKILL.md frontmatter department + capability",
                 "link_semantics": "explicit department membership plus directed artifact-flow edges where one admitted capability produces an artifact ID another admitted capability consumes; flow is a declared handoff contract, not an automatic call or publish action",
                 "omits": "unadmitted and unclassified skills, methods, Markdown references, Todo references, runtime files, task state, and delivery state",
             }

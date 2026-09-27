@@ -250,7 +250,7 @@ def build_skill_rows(
                 "gaps": [
                     {"id": "eval_coverage", "status": "good" if eval_count >= EXPECTED_EVAL_COUNT else "risk" if eval_count else "missing", "value": f"{min(eval_count, EXPECTED_EVAL_COUNT)} / {EXPECTED_EVAL_COUNT}"},
                     {"id": "template_age", "status": "good" if template_status == "current" else "unknown" if template_status in {"unknown", "external"} else "risk", "value": str(rollout_row.get("templateVersion") or template_status)},
-                    {"id": "owner_clarity", "status": "good" if frontmatter.get("owner") or frontmatter.get("group") else "unknown", "value": str(frontmatter.get("owner") or frontmatter.get("group") or "unknown")},
+                    {"id": "owner_clarity", "status": "good" if frontmatter.get("owner") or frontmatter.get("department") else "unknown", "value": str(frontmatter.get("owner") or frontmatter.get("department") or "unknown")},
                     {"id": "first_load_size", "status": "risk" if len(body) > 12_000 else "good", "value": f"{round(len(body) / 1000)}k chars" if body else "missing"},
                 ],
                 "action": action,

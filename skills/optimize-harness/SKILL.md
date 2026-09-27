@@ -2,7 +2,7 @@
 name: optimize-harness
 description: "Turn observed Farplane behavior gaps into placement decisions, proof or eval, accepted changes, and review."
 tier: 3
-group: operations
+department: operations
 source: local
 template_uses:
   skill-template: "0.2.0"

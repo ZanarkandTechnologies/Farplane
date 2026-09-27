@@ -9,7 +9,7 @@ source_of_truth: [rules/skill-departments.toml, rules/skill-workflows.toml]
 
 # Skill department taxonomy
 
-`group` is the single operating-department membership required on every Tier 3
+`department` is the single operating-department membership required on every Tier 3
 skill. It is not a technical implementation tag and it does not imply that one
 skill invokes another.
 
@@ -45,7 +45,7 @@ methods stay outside this projection and their technical interface schema is
 owned by [`system.md`](system.md).
 
 ```text
-group -> explicit department membership for every Tier 3 skill
+department -> explicit department membership for every Tier 3 skill
 capability_admission + capability_labels -> explicit static-map selection/names
 capability[kind=artifact] -> workstation
 capability[kind=integration] -> system facility

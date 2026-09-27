@@ -22,7 +22,7 @@ tier: [TODO: 1 | 2 | 3]
 source: local
 template_uses:
   skill-template: "0.4.4"
-group: [TODO: required for Tier 3]
+department: [TODO: required for Tier 3]
 allowed-tools: {tools}
 ---
 

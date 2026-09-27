@@ -5,7 +5,7 @@ tier: 3
 source: local
 template_uses:
   skill-template: "0.6.2"
-group: operations
+department: operations
 allowed-tools: Read, Write, Glob, Grep
 ---
 

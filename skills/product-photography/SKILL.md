@@ -3,7 +3,7 @@ name: product-photography
 version: 1.0.0
 description: "Turn product-image needs into packshots, lifestyle photos, detail shots, marketplace assets, cutouts, mockups, or product-page visuals."
 tier: 3
-group: marketing
+department: marketing
 source: local
 methods:
   - id: product-photography:hero

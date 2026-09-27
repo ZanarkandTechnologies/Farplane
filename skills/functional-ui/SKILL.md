@@ -3,7 +3,7 @@ name: functional-ui
 version: 1.2.0
 description: "Turn unclear product workflows into operated comparable evidence, an interaction model, optional low-fi wireflow, and a planning handoff."
 tier: 3
-group: operations
+department: operations
 source: local
 template_uses:
   skill-eval-task: "0.2.0"

@@ -2,7 +2,7 @@
 name: leverage-rollout
 description: "Turn a selected leverage play into exemplar proof, extracted rollout pattern, and optional Goal-backed staged rollout."
 tier: 3
-group: operations
+department: operations
 source: local
 template_uses:
   skill-template: "0.2.0"
