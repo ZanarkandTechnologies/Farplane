@@ -339,6 +339,28 @@ capability:
             ):
                 sync_skill_registry.build_registry(repo)
 
+    def test_projects_specialist_from_the_desk_table(self) -> None:
+        desks = (
+            '[specialists.reporter]\nlabel = "Reporter"\ndepartment = "operations"\n'
+            'deliverable = "a report"\nprimary = "recap-task"\nskills = ["recap-task"]\n'
+        )
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp)
+            (repo / "rules").mkdir()
+            (repo / "rules" / "skill-workflows.toml").write_text(desks)
+            write_skill(repo, "recap-task", tier=3, department="operations")
+            write_skill(repo, "writer", tier=3, department="operations")
+            rows = {row["name"]: row for row in sync_skill_registry.build_registry(repo)}
+            self.assertEqual(rows["recap-task"]["specialist"], "reporter")
+            self.assertNotIn("specialist", rows["writer"])
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp)
+            (repo / "rules").mkdir()
+            (repo / "rules" / "skill-workflows.toml").write_text(desks)
+            write_skill(repo, "recap-task", tier=3, department="marketing")
+            with self.assertRaisesRegex(sync_skill_registry.RegistryError, "specialist 'reporter' requires"):
+                sync_skill_registry.build_registry(repo)
+
     def test_rejects_common_chains_targeting_shortcuts(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             repo = Path(tmp)

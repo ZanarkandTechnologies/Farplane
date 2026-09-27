@@ -37,10 +37,13 @@ def load_skill_departments(repo_root: Path) -> dict[str, str]:
     return normalized
 
 
-def load_skill_capability_admission(
+def load_skill_specialists(
     repo_root: Path, departments: dict[str, str] | None = None
-) -> dict[str, tuple[str, ...]]:
-    """Load the complete department-keyed classified capability admission list."""
+) -> dict[str, dict[str, object]]:
+    """Load specialist desks: id -> label, department, deliverable, primary, and skills.
+
+    Each desk lists its member skills; a skill may sit at only one desk.
+    """
     department_labels = departments or load_skill_departments(repo_root)
     path = repo_root / "rules" / "skill-workflows.toml"
     try:
@@ -48,90 +51,64 @@ def load_skill_capability_admission(
     except (OSError, tomllib.TOMLDecodeError) as exc:
         raise CapabilityAdmissionConfigError(f"unable to load {path}: {exc}") from exc
 
-    raw_admission = payload.get("capability_admission")
-    if not isinstance(raw_admission, dict):
-        raise CapabilityAdmissionConfigError(f"{path}: [capability_admission] must be a table")
-
-    configured_departments = set(raw_admission)
-    expected_departments = set(department_labels)
-    unknown_departments = sorted(configured_departments.difference(expected_departments))
-    missing_departments = sorted(expected_departments.difference(configured_departments))
-    if unknown_departments or missing_departments:
-        details: list[str] = []
-        if unknown_departments:
-            details.append(f"unknown departments: {', '.join(unknown_departments)}")
-        if missing_departments:
-            details.append(f"missing departments: {', '.join(missing_departments)}")
-        raise CapabilityAdmissionConfigError(f"{path}: " + "; ".join(details))
-
-    normalized: dict[str, tuple[str, ...]] = {}
-    all_capabilities: set[str] = set()
-    for department_id in department_labels:
-        values = raw_admission.get(department_id)
-        if not isinstance(values, list):
-            raise CapabilityAdmissionConfigError(
-                f"{path}: capability_admission.{department_id} must be a list"
-            )
-        capabilities: list[str] = []
-        seen_in_department: set[str] = set()
-        for raw_capability in values:
-            if not isinstance(raw_capability, str) or not raw_capability.strip():
+    raw = payload.get("specialists")
+    if not isinstance(raw, dict) or not raw:
+        raise CapabilityAdmissionConfigError(f"{path}: [specialists] must be a non-empty table")
+    specialists: dict[str, dict[str, object]] = {}
+    seat: dict[str, str] = {}
+    for specialist_id, entry in raw.items():
+        where = f"{path}: specialists.{specialist_id}"
+        if not isinstance(entry, dict):
+            raise CapabilityAdmissionConfigError(f"{where} must be a table")
+        unknown = sorted(set(entry).difference({"label", "department", "deliverable", "primary", "skills"}))
+        if unknown:
+            raise CapabilityAdmissionConfigError(f"{where} has unknown keys: {', '.join(unknown)}")
+        values: dict[str, object] = {}
+        for key in ("label", "department", "deliverable", "primary"):
+            value = entry.get(key)
+            if not isinstance(value, str) or not value.strip():
+                raise CapabilityAdmissionConfigError(f"{where}.{key} must be a non-empty string")
+            values[key] = value.strip()
+        if values["department"] not in department_labels:
+            raise CapabilityAdmissionConfigError(f"{where}.department {values['department']!r} is not a department")
+        skills = entry.get("skills")
+        if not isinstance(skills, list) or not skills or not all(isinstance(item, str) and item for item in skills):
+            raise CapabilityAdmissionConfigError(f"{where}.skills must be a non-empty list of skill names")
+        if len(skills) != len(set(skills)):
+            raise CapabilityAdmissionConfigError(f"{where}.skills must not repeat a skill")
+        for skill in skills:
+            if skill in seat:
                 raise CapabilityAdmissionConfigError(
-                    f"{path}: capability_admission.{department_id} values must be non-empty strings"
+                    f"{where}: skill {skill!r} already sits at specialist {seat[skill]!r}"
                 )
-            capability = raw_capability.strip()
-            if capability in seen_in_department:
-                raise CapabilityAdmissionConfigError(
-                    f"{path}: duplicate capability {capability!r} in {department_id}"
+            seat[skill] = specialist_id
+        if values["primary"] not in skills:
+            raise CapabilityAdmissionConfigError(f"{where}.primary {values['primary']!r} must be one of its skills")
+        values["skills"] = tuple(skills)
+        specialists[specialist_id] = values
+    return specialists
+
+
+def specialist_by_skill(specialists: dict[str, dict[str, object]]) -> dict[str, str]:
+    return {skill: specialist_id for specialist_id, entry in specialists.items() for skill in entry["skills"]}
+
+
+def validate_specialist_membership(
+    rows: list[dict[str, object]], specialists: dict[str, dict[str, object]]
+) -> list[str]:
+    """Return errors for desk members that are missing, not Tier 3, or in another department."""
+    rows_by_name = {str(row.get("name")): row for row in rows}
+    errors: list[str] = []
+    for specialist_id, entry in specialists.items():
+        for skill in entry["skills"]:
+            row = rows_by_name.get(skill)
+            if row is None:
+                errors.append(f"specialist {specialist_id!r} lists unknown skill {skill!r}")
+            elif row.get("tier") != 3:
+                errors.append(f"specialist {specialist_id!r} member {skill!r} must be Tier 3")
+            elif row.get("department") != entry["department"]:
+                errors.append(
+                    f"{skill}: department {row.get('department')!r} differs from specialist "
+                    f"{specialist_id!r} department {entry['department']!r}"
                 )
-            if capability in all_capabilities:
-                raise CapabilityAdmissionConfigError(
-                    f"{path}: capability {capability!r} cannot belong to multiple departments"
-                )
-            capabilities.append(capability)
-            seen_in_department.add(capability)
-            all_capabilities.add(capability)
-        normalized[department_id] = tuple(capabilities)
-    return normalized
-
-
-def load_skill_capability_labels(
-    repo_root: Path, capability_admission: dict[str, tuple[str, ...]]
-) -> dict[str, str]:
-    """Load business-facing labels for classified capabilities admitted to the map."""
-    path = repo_root / "rules" / "skill-workflows.toml"
-    try:
-        payload = tomllib.loads(path.read_text(encoding="utf-8"))
-    except (OSError, tomllib.TOMLDecodeError) as exc:
-        raise CapabilityAdmissionConfigError(f"unable to load {path}: {exc}") from exc
-
-    raw_labels = payload.get("capability_labels")
-    if not isinstance(raw_labels, dict):
-        raise CapabilityAdmissionConfigError(f"{path}: [capability_labels] must be a table")
-    expected_capabilities = {
-        capability
-        for capabilities in capability_admission.values()
-        for capability in capabilities
-    }
-    configured_roots = set(raw_labels)
-    unknown_capabilities = sorted(configured_roots.difference(expected_capabilities))
-    missing_capabilities = sorted(expected_capabilities.difference(configured_roots))
-    if unknown_capabilities or missing_capabilities:
-        details: list[str] = []
-        if unknown_capabilities:
-            details.append(
-                f"labels for unadmitted capabilities: {', '.join(unknown_capabilities)}"
-            )
-        if missing_capabilities:
-            details.append(f"missing labels: {', '.join(missing_capabilities)}")
-        raise CapabilityAdmissionConfigError(f"{path}: " + "; ".join(details))
-
-    normalized: dict[str, str] = {}
-    for capability in sorted(expected_capabilities):
-        label = raw_labels[capability]
-        if not isinstance(label, str) or not label.strip():
-            raise CapabilityAdmissionConfigError(
-                f"{path}: capability label for {capability!r} must be a string"
-            )
-        normalized[capability] = label.strip()
-    return normalized
+    return errors

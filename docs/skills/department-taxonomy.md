@@ -3,7 +3,7 @@ title: Skill department taxonomy
 status: active
 owner: skills/skill-maintenance
 created_at: 2026-08-13
-updated_at: 2026-08-13
+updated_at: 2026-09-28
 source_of_truth: [rules/skill-departments.toml, rules/skill-workflows.toml]
 ---
 
@@ -23,33 +23,36 @@ skill invokes another.
 | `intelligence` | Intelligence | companies, people, markets, research, and learning |
 | `customer` | Customer | support, success, and community |
 
-The Capability Map uses `rules/skill-workflows.toml` as an explicit admission
-list. An admitted Tier 3 skill must declare a typed `capability` contract in
-its own frontmatter. An `artifact` capability becomes a permanent workstation;
-an `integration` capability becomes a permanent system facility. Empty
-departments remain visible at the organization level until a real capability is
-intentionally admitted. The technical Skill Library remains the full registry,
-including helpers, methods, and unclassified packages.
+The Capability Map is organized by **specialist desks**. A specialist groups
+skill variants that one office employee offers (for example `reporter` holds
+`pm-daily`, `pm-weekly`, `recap-task`, and `dogfood-review`).
+`rules/skill-workflows.toml` `[specialists]` owns each desk's label, department,
+deliverable, primary skill (its default verb), and member `skills`. A member
+must be a Tier 3 skill in the desk's department and sits at only one desk; the
+registry projects it as the row's `specialist`. Skill files stay unchanged, so
+oversized skills are never grown by desk membership.
+Skills without a specialist are internal: planners dispatch them as needed and
+the map omits them. The technical Skill Library remains the full registry.
 
 This is source visibility, not active-session availability. `rules/skill-profiles.toml`
-controls named-profile enablement; a profile-gated workstation remains visible
+controls named-profile enablement; a profile-gated desk remains visible
 here so filtering cannot look like deletion.
 
 Map topology combines static ownership with declared artifact flow:
-`department -> workstation`; an output-to-input match creates a directed
-`workstation -> facility` handoff. That connection means “this facility accepts
-this artifact family,” not “automatically calls or publishes.” A facility with
-no same-department declared input remains directly rooted at its department.
-`consumes` and `produces` are typed artifact-family IDs, not literal filenames;
-methods stay outside this projection and their technical interface schema is
-owned by [`system.md`](system.md).
+`department -> specialist desk (workstation)`; a member skill with an
+`integration` capability is drawn as a system facility beside its desk; an
+output-to-input match between member skills creates a directed artifact-flow
+edge. That connection means “this desk or facility accepts this artifact
+family,” not “automatically calls or publishes.” `consumes` and `produces` are
+typed artifact-family IDs, not literal filenames; methods stay outside this
+projection and their technical interface schema is owned by [`system.md`](system.md).
 
 ```text
 department -> explicit department membership for every Tier 3 skill
-capability_admission + capability_labels -> explicit static-map selection/names
-capability[kind=artifact] -> workstation
-capability[kind=integration] -> system facility
-artifact.produces ∩ capability.consumes -> directed artifact-flow edge
+[specialists] -> desk label, deliverable, primary skill, and member skills
+member -> Tier 3 skill in the desk's department, at one desk only
+member capability[kind=integration] -> system facility beside the desk
+produces ∩ consumes across members -> directed artifact-flow edge
 ```
 
 The graph does not express Todo calls, live skill-call relationships, concrete

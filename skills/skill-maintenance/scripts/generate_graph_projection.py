@@ -54,12 +54,10 @@ def generate_skill_capability_projection(args: argparse.Namespace) -> dict:
     repo_root = Path(args.repo_root).resolve()
     rows = generator.load_registry(repo_root / args.registry)
     departments = generator.load_skill_departments(repo_root)
-    capability_admission = generator.load_skill_capability_admission(repo_root, departments)
     return generator.build_capability_graph(
         rows,
         department_labels=departments,
-        capability_admission=capability_admission,
-        capability_labels=generator.load_skill_capability_labels(repo_root, capability_admission),
+        specialists=generator.load_skill_specialists(repo_root, departments),
     )
 
 

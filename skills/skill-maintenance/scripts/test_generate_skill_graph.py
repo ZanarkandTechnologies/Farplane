@@ -317,130 +317,96 @@ class GenerateSkillGraphTests(unittest.TestCase):
 
 
 class CapabilityProjectionTests(unittest.TestCase):
-    def test_places_an_input_consuming_integration_facility_behind_its_workstation(self) -> None:
-        graph = generate_skill_graph.build_capability_graph(
-            [
-                {
-                    "name": "x-thread",
-                    "tier": 3,
-                    "department": "marketing",
-                    "description": "Create a review-ready X thread.",
-                    "capability": {
-                        "kind": "artifact",
-                        "consumes": ["content-brief"],
-                        "produces": ["x-thread-draft"],
-                    },
-                },
-                {
-                    "name": "x-account",
-                    "tier": 3,
-                    "department": "marketing",
-                    "description": "Operate X account boundaries.",
-                    "capability": {"kind": "integration", "consumes": ["x-thread-draft"]},
-                },
-                {
-                    "name": "storyboard",
-                    "tier": 3,
-                    "department": "marketing",
-                    "description": "Plan a storyboard.",
-                },
-            ],
-            department_labels={"marketing": "Marketing"},
-            capability_admission={"marketing": ("x-thread", "x-account")},
-            capability_labels={"x-thread": "X Thread Writer", "x-account": "X Publishing"},
-        )
+    SPECIALISTS = {
+        "social-manager": {
+            "label": "Social Manager",
+            "department": "marketing",
+            "deliverable": "an approval-ready social post",
+            "primary": "x-thread",
+            "skills": ("x-thread", "x-account", "social-content"),
+        },
+        "content-producer": {
+            "label": "Content Producer",
+            "department": "marketing",
+            "deliverable": "a content production ticket",
+            "primary": "content-impl-plan",
+            "skills": ("content-impl-plan",),
+        },
+    }
 
-        self.assertEqual(graph["schema_version"], "2.2.0")
-        self.assertEqual(graph["counts"]["roles"], {"facility": 1, "workstation": 1})
-        self.assertEqual(graph["counts"]["node_kinds"]["department"], 1)
-        self.assertEqual(graph["counts"]["node_kinds"]["workstation"], 1)
-        self.assertEqual(graph["counts"]["node_kinds"]["facility"], 1)
-        self.assertEqual(
-            graph["source"]["omits"],
-            "unadmitted and unclassified skills, methods, Markdown references, Todo references, runtime files, task state, and delivery state",
+    def rows(self) -> list[dict]:
+        return [
+            {"name": "content-impl-plan", "tier": 3, "department": "marketing", "_desk": "content-producer",
+             "description": "Plan content.", "capability": {"kind": "artifact", "produces": ["content-brief"], "consumes": []}},
+            {"name": "x-thread", "tier": 3, "department": "marketing", "_desk": "social-manager",
+             "description": "Create a review-ready X thread.",
+             "capability": {"kind": "artifact", "consumes": ["content-brief"], "produces": ["x-thread-draft"]}},
+            {"name": "x-account", "tier": 3, "department": "marketing", "_desk": "social-manager",
+             "description": "Operate X account boundaries.",
+             "capability": {"kind": "integration", "consumes": ["x-thread-draft"]}},
+            {"name": "social-content", "tier": 3, "department": "marketing", "_desk": "social-manager",
+             "description": "Plan social content."},
+            {"name": "storyboard", "tier": 3, "department": "marketing", "description": "Plan a storyboard."},
+        ]
+
+    def test_groups_skill_variants_into_specialist_desks(self) -> None:
+        graph = generate_skill_graph.build_capability_graph(
+            self.rows(), department_labels={"marketing": "Marketing"}, specialists=self.SPECIALISTS
         )
-        self.assertIn("department:marketing", {node["id"] for node in graph["nodes"]})
+        nodes = {node["id"]: node for node in graph["nodes"]}
+        desk = nodes["specialist:social-manager"]
+        self.assertEqual(graph["schema_version"], "3.0.0")
+        self.assertEqual(desk["kind"], "workstation")
+        self.assertEqual(desk["label"], "Social Manager")
+        self.assertEqual(desk["skill_id"], "x-thread")
+        self.assertEqual(desk["skill_ids"], ["social-content", "x-account", "x-thread"])
+        self.assertEqual(desk["capability"], {"consumes": ["content-brief"], "produces": ["x-thread-draft"]})
+        self.assertEqual(nodes["skill:x-account"]["kind"], "facility")
+        self.assertEqual(nodes["skill:x-account"]["specialist_id"], "social-manager")
+        self.assertNotIn("skill:storyboard", nodes)
+        self.assertEqual(graph["counts"]["node_kinds"], {"department": 1, "facility": 1, "workstation": 2})
         self.assertEqual(
             {(edge["source"], edge["target"], edge["type"]) for edge in graph["edges"]},
             {
-                ("department:marketing", "skill:x-thread", "member-of"),
-                ("skill:x-thread", "skill:x-account", "artifact-flow"),
+                ("department:marketing", "specialist:content-producer", "member-of"),
+                ("department:marketing", "specialist:social-manager", "member-of"),
+                ("specialist:social-manager", "skill:x-account", "member-of"),
+                ("specialist:content-producer", "specialist:social-manager", "artifact-flow"),
+                ("specialist:social-manager", "skill:x-account", "artifact-flow"),
             },
         )
-        nodes = {node["id"]: node for node in graph["nodes"]}
-        self.assertEqual(nodes["skill:x-thread"]["kind"], "workstation")
-        self.assertEqual(
-            nodes["skill:x-thread"]["capability"],
-            {"consumes": ["content-brief"], "produces": ["x-thread-draft"]},
-        )
-        self.assertEqual(nodes["skill:x-account"]["kind"], "facility")
-        self.assertEqual(nodes["skill:x-account"]["capability"], {"consumes": ["x-thread-draft"]})
-        self.assertNotIn("skill:storyboard", {node["id"] for node in graph["nodes"]})
-        self.assertFalse(any(edge["type"] == "produces" for edge in graph["edges"]))
 
-    def test_rejects_an_unclassified_admitted_skill(self) -> None:
-        with self.assertRaisesRegex(ValueError, "lacks a classified capability"):
+    def test_rejects_department_drift_and_unknown_members(self) -> None:
+        rows = self.rows()
+        rows[1]["department"] = "sales"
+        with self.assertRaisesRegex(ValueError, "differs from specialist 'social-manager'"):
             generate_skill_graph.build_capability_graph(
-                [
-                    {
-                        "name": "social-content",
-                        "tier": 3,
-                        "department": "marketing",
-                        "description": "Create social content.",
-                    }
-                ],
-                department_labels={"marketing": "Marketing"},
-                capability_admission={"marketing": ("social-content",)},
+                rows, department_labels={"marketing": "Marketing", "sales": "Sales"}, specialists=self.SPECIALISTS
+            )
+        specialists = {**self.SPECIALISTS, "ghost": {**self.SPECIALISTS["content-producer"], "primary": "missing", "skills": ("missing",)}}
+        with self.assertRaisesRegex(ValueError, "specialist 'ghost' lists unknown skill 'missing'"):
+            generate_skill_graph.build_capability_graph(
+                self.rows(), department_labels={"marketing": "Marketing"}, specialists=specialists
             )
 
-    def test_checked_in_capability_admission_matches_the_pilot_projection(self) -> None:
+    def test_checked_in_specialists_project_every_desk(self) -> None:
         repo_root = Path(__file__).resolve().parents[3]
         departments = generate_skill_graph.load_skill_departments(repo_root)
-        admission = generate_skill_graph.load_skill_capability_admission(repo_root, departments)
-        labels = generate_skill_graph.load_skill_capability_labels(repo_root, admission)
+        specialists = generate_skill_graph.load_skill_specialists(repo_root, departments)
         rows = generate_skill_graph.load_registry(repo_root / "docs/skills/registry.jsonl")
         graph = generate_skill_graph.build_capability_graph(
-            rows,
-            department_labels=departments,
-            capability_admission=admission,
-            capability_labels=labels,
+            rows, department_labels=departments, specialists=specialists
         )
-
-        expected_capabilities = {
-            skill_id for skill_ids in admission.values() for skill_id in skill_ids
-        }
-        projected_capabilities = {
-            node["skill_id"]
-            for node in graph["nodes"]
-            if node.get("kind") in {"workstation", "facility"}
-        }
-        self.assertEqual(projected_capabilities, expected_capabilities)
+        desks = {node["specialist_id"] for node in graph["nodes"] if node.get("kind") == "workstation"}
+        self.assertEqual(desks, set(specialists))
         self.assertEqual(
-            admission["marketing"],
-            ("content-impl-plan", "x-thread", "x-account"),
+            {node["department_id"] for node in graph["nodes"] if node.get("kind") == "department"},
+            set(departments),
         )
-        self.assertEqual(admission["intelligence"], ("intelligest",))
-        self.assertEqual(labels["x-thread"], "X Thread Writer")
-        self.assertEqual(labels["x-account"], "X Publishing")
-        self.assertEqual(labels["content-impl-plan"], "Content Production Ticket")
-        self.assertEqual(labels["intelligest"], "Intelligence Dossier")
-        self.assertEqual(
-            len({node["department_id"] for node in graph["nodes"] if node.get("kind") == "department"}),
-            len(departments),
+        self.assertIn(
+            ("specialist:social-manager", "skill:x-account", "artifact-flow"),
+            {(edge["source"], edge["target"], edge["type"]) for edge in graph["edges"]},
         )
-        self.assertIn("skill:x-account", {node["id"] for node in graph["nodes"]})
-        self.assertIn("skill:content-impl-plan", {node["id"] for node in graph["nodes"]})
-        self.assertIn("skill:intelligest", {node["id"] for node in graph["nodes"]})
-        self.assertNotIn("skill:instagram-account", {node["id"] for node in graph["nodes"]})
-        self.assertFalse(any(node.get("kind") == "workflow" for node in graph["nodes"]))
-        self.assertTrue(
-            ("skill:x-thread", "skill:x-account", "artifact-flow")
-            in {(edge["source"], edge["target"], edge["type"]) for edge in graph["edges"]}
-        )
-        raw_library = generate_skill_graph.build_graph(rows)
-        raw_library_ids = {node["id"] for node in raw_library["nodes"]}
-        self.assertIn("x-account", raw_library_ids)
-        self.assertIn("instagram-account", raw_library_ids)
 
 
 if __name__ == "__main__":

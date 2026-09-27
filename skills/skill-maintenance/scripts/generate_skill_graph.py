@@ -20,8 +20,8 @@ if str(SCRIPT_ROOT) not in sys.path:
     sys.path.insert(0, str(SCRIPT_ROOT))
 
 from bin.core.skill_departments import (
-    load_skill_capability_admission,
-    load_skill_capability_labels,
+    load_skill_specialists,
+    validate_specialist_membership,
     load_skill_departments,
 )
 from bin.core.skill_contract import parse_markdown_frontmatter_document
@@ -34,7 +34,6 @@ SKILL_HEAT_EVENT_TYPES = {
 DEFAULT_SKILL_HEAT_WINDOW_DAYS = 30
 DEFAULT_SKILL_HEAT_RECENT_DAYS = 7
 DEFAULT_SKILL_HEAT_TOP_N = 25
-CAPABILITY_KINDS = {"artifact", "integration"}
 
 
 def configured_positive_int(env_name: str, default: int) -> int:
@@ -469,211 +468,185 @@ def build_graph(
 def build_capability_graph(
     rows: list[dict[str, Any]],
     department_labels: dict[str, str] | None = None,
-    capability_admission: dict[str, tuple[str, ...]] | None = None,
-    capability_labels: dict[str, str] | None = None,
+    specialists: dict[str, dict[str, str]] | None = None,
 ) -> dict[str, Any]:
-    """Project admitted capability ownership plus declared directed artifact flow."""
-    nodes: list[dict[str, Any]] = []
-    edges: list[dict[str, Any]] = []
+    """Project departments, their specialist desks, and declared artifact flow.
+
+    A specialist is one desk (workstation) that lists its member skill variants
+    in rules/skill-workflows.toml. Member skills with an integration capability are
+    drawn as system facilities beside their desk. Unassigned skills are omitted.
+    """
     departments = department_labels or {}
     if not departments:
         raise ValueError("capability projection requires declared departments")
-    if capability_admission is None:
-        raise ValueError("capability projection requires classified capability admission")
-    capability_labels = capability_labels or {}
-
-    unknown_departments = sorted(set(capability_admission).difference(departments))
-    missing_departments = sorted(set(departments).difference(capability_admission))
-    if unknown_departments or missing_departments:
-        details: list[str] = []
-        if unknown_departments:
-            details.append(f"unknown admission departments: {', '.join(unknown_departments)}")
-        if missing_departments:
-            details.append(f"missing admission departments: {', '.join(missing_departments)}")
-        raise ValueError("capability projection " + "; ".join(details))
+    if not specialists:
+        raise ValueError("capability projection requires declared specialists")
+    errors = validate_specialist_membership(rows, specialists)
+    if errors:
+        raise ValueError("capability projection " + "; ".join(errors))
 
     rows_by_name = {str(row.get("name") or ""): row for row in rows}
-    department_ids = list(departments)
-    selected_rows: list[tuple[str, dict[str, Any], dict[str, Any]]] = []
-    selected_names: set[str] = set()
-    for department_id in department_ids:
-        for skill_id in capability_admission[department_id]:
-            if skill_id in selected_names:
-                raise ValueError(f"capability projection duplicate admitted skill {skill_id!r}")
-            row = rows_by_name.get(skill_id)
-            if row is None:
-                raise ValueError(f"capability projection unknown admitted skill {skill_id!r}")
-            if row.get("tier") != 3:
-                raise ValueError(f"capability projection admitted skill {skill_id!r} must be Tier 3")
-            if row.get("department") != department_id:
-                raise ValueError(
-                    f"capability projection admitted skill {skill_id!r} must belong to {department_id!r}"
-                )
-            capability = row.get("capability")
-            if not isinstance(capability, dict):
-                raise ValueError(
-                    f"capability projection admitted skill {skill_id!r} lacks a classified capability"
-                )
-            capability_kind = str(capability.get("kind") or "")
-            if capability_kind not in CAPABILITY_KINDS:
-                raise ValueError(
-                    f"capability projection admitted skill {skill_id!r} has unsupported kind {capability_kind!r}"
-                )
-            if capability_kind == "artifact":
-                produces = capability.get("produces")
-                consumes = capability.get("consumes", [])
-                if not isinstance(produces, list) or len(produces) != 1 or not all(
-                    isinstance(value, str) and value for value in produces
-                ):
-                    raise ValueError(
-                        f"capability projection artifact {skill_id!r} must declare exactly one produced artifact"
-                    )
-                if not isinstance(consumes, list) or not all(
-                    isinstance(value, str) and value for value in consumes
-                ):
-                    raise ValueError(
-                        f"capability projection artifact {skill_id!r} has invalid consumed artifacts"
-                    )
-            else:
-                consumes = capability.get("consumes", [])
-                if not isinstance(consumes, list) or not all(
-                    isinstance(value, str) and value for value in consumes
-                ):
-                    raise ValueError(
-                        f"capability projection integration {skill_id!r} has invalid consumed artifacts"
-                    )
-            selected_names.add(skill_id)
-            selected_rows.append((department_id, row, capability))
-
-    role_counts = defaultdict(int)
-    department_role_counts: dict[str, dict[str, int]] = {
-        department_id: {"workstation": 0, "facility": 0}
-        for department_id in department_ids
+    members: dict[str, list[dict[str, Any]]] = {
+        specialist_id: [rows_by_name[skill] for skill in sorted(entry["skills"])]
+        for specialist_id, entry in specialists.items()
     }
-    for department_id, _row, capability in selected_rows:
-        role = "workstation" if capability["kind"] == "artifact" else "facility"
-        role_counts[role] += 1
-        department_role_counts[department_id][role] += 1
 
-    for department_id in department_ids:
+    nodes: list[dict[str, Any]] = []
+    edges: list[dict[str, Any]] = []
+    node_for_skill: dict[str, str] = {}
+    desk_counts: dict[str, int] = defaultdict(int)
+    facility_counts: dict[str, int] = defaultdict(int)
+
+    for specialist_id, entry in specialists.items():
+        department_id = entry["department"]
+        member_rows = members[specialist_id]
+        desk_id = f"specialist:{specialist_id}"
+        produces = sorted({
+            artifact
+            for row in member_rows
+            if isinstance(row.get("capability"), dict) and row["capability"].get("kind") == "artifact"
+            for artifact in row["capability"].get("produces", [])
+        })
+        consumes = sorted({
+            artifact
+            for row in member_rows
+            if isinstance(row.get("capability"), dict) and row["capability"].get("kind") == "artifact"
+            for artifact in row["capability"].get("consumes", [])
+        })
+        nodes.append(
+            GraphNode(
+                id=desk_id,
+                label=entry["label"],
+                kind="workstation",
+                tags=("workstation", "specialist", department_id),
+                attributes={
+                    "specialist_id": specialist_id,
+                    "skill_id": entry["primary"],
+                    "skill_ids": [str(row["name"]) for row in member_rows],
+                    "department": department_id,
+                    "deliverable": entry["deliverable"],
+                    "description": next(
+                        (row.get("description", "") for row in member_rows if row["name"] == entry["primary"]), ""
+                    ),
+                    "role": "workstation",
+                    "capability": {"consumes": consumes, "produces": produces},
+                },
+            ).as_dict()
+        )
+        desk_counts[department_id] += 1
+        edges.append(
+            GraphEdge(
+                source=f"department:{department_id}",
+                target=desk_id,
+                type="member-of",
+                label="workstation",
+                confidence="explicit",
+            ).as_dict()
+        )
+        for row in member_rows:
+            skill_id = str(row["name"])
+            capability = row.get("capability") if isinstance(row.get("capability"), dict) else {}
+            if capability.get("kind") == "integration":
+                facility_id = f"skill:{skill_id}"
+                nodes.append(
+                    GraphNode(
+                        id=facility_id,
+                        label=skill_id.replace("-", " ").title(),
+                        kind="facility",
+                        tags=("facility", "integration", department_id),
+                        attributes={
+                            "skill_id": skill_id,
+                            "specialist_id": specialist_id,
+                            "department": department_id,
+                            "description": row.get("description", ""),
+                            "role": "facility",
+                            "capability": {"consumes": list(capability.get("consumes", []))},
+                        },
+                    ).as_dict()
+                )
+                facility_counts[department_id] += 1
+                edges.append(
+                    GraphEdge(
+                        source=desk_id,
+                        target=facility_id,
+                        type="member-of",
+                        label="facility",
+                        confidence="explicit",
+                    ).as_dict()
+                )
+                node_for_skill[skill_id] = facility_id
+            else:
+                node_for_skill[skill_id] = desk_id
+
+    for department_id, label in departments.items():
         nodes.append(
             GraphNode(
                 id=f"department:{department_id}",
-                label=departments.get(department_id, department_id.replace("-", " ").title()),
+                label=label,
                 kind="department",
                 tags=("department", department_id),
                 attributes={
                     "department_id": department_id,
-                    "workstation_count": department_role_counts[department_id]["workstation"],
-                    "facility_count": department_role_counts[department_id]["facility"],
+                    "workstation_count": desk_counts[department_id],
+                    "facility_count": facility_counts[department_id],
                 },
             ).as_dict()
         )
 
-    artifact_flow_edges: list[dict[str, Any]] = []
-    facilities_with_same_department_flow: set[str] = set()
-    for source_department_id, source_row, source_capability in selected_rows:
-        produced = source_capability.get("produces", [])
-        if not isinstance(produced, list) or not produced:
+    produced_by: dict[str, set[str]] = defaultdict(set)
+    consumed_by: dict[str, set[str]] = defaultdict(set)
+    for row in rows:
+        skill_id = str(row.get("name") or "")
+        node_id = node_for_skill.get(skill_id)
+        capability = row.get("capability")
+        if not node_id or not isinstance(capability, dict):
             continue
-        source_skill_id = str(source_row["name"])
-        for target_department_id, target_row, target_capability in selected_rows:
-            target_skill_id = str(target_row["name"])
-            if target_skill_id == source_skill_id:
-                continue
-            consumed = target_capability.get("consumes", [])
-            if not isinstance(consumed, list):
-                continue
-            for artifact_id in sorted(set(produced).intersection(consumed)):
-                artifact_flow_edges.append(
-                    GraphEdge(
-                        source=f"skill:{source_skill_id}",
-                        target=f"skill:{target_skill_id}",
-                        type="artifact-flow",
-                        label=artifact_id,
-                        confidence="declared",
-                    ).as_dict()
-                )
-                if (
-                    source_department_id == target_department_id
-                    and target_capability["kind"] == "integration"
-                ):
-                    facilities_with_same_department_flow.add(target_skill_id)
-
-    for department_id, row, capability in selected_rows:
-        skill_id = str(row["name"])
-        capability_kind = str(capability["kind"])
-        role = "workstation" if capability_kind == "artifact" else "facility"
-        contract = (
-            {
-                "consumes": list(capability.get("consumes", [])),
-                "produces": list(capability["produces"]),
-            }
-            if capability_kind == "artifact"
-            else {"consumes": list(capability.get("consumes", []))}
-        )
-        nodes.append(
-            GraphNode(
-                id=f"skill:{skill_id}",
-                label=capability_labels.get(skill_id, skill_id),
-                kind=role,
-                tags=(role, capability_kind, department_id),
-                attributes={
-                    "skill_id": skill_id,
-                    "tier": row.get("tier"),
-                    "department": department_id,
-                    "description": row.get("description", ""),
-                    "source": row.get("source", ""),
-                    "role": role,
-                    "capability": contract,
-                },
+        for artifact in capability.get("produces", []) or []:
+            produced_by[artifact].add(node_id)
+        for artifact in capability.get("consumes", []) or []:
+            consumed_by[artifact].add(node_id)
+    flow_keys: set[tuple[str, str, str]] = set()
+    for artifact, sources in produced_by.items():
+        for source in sources:
+            for target in consumed_by.get(artifact, set()):
+                if source != target:
+                    flow_keys.add((source, target, artifact))
+    for source, target, artifact in sorted(flow_keys):
+        edges.append(
+            GraphEdge(
+                source=source,
+                target=target,
+                type="artifact-flow",
+                label=artifact,
+                confidence="declared",
             ).as_dict()
         )
-        # A same-department facility with a declared artifact input is positioned
-        # behind its producing workstation, not duplicated as a department spoke.
-        # Standalone and cross-department facilities retain their own department anchor.
-        if capability_kind == "artifact" or skill_id not in facilities_with_same_department_flow:
-            edges.append(
-                GraphEdge(
-                    source=f"department:{department_id}",
-                    target=f"skill:{skill_id}",
-                    type="member-of",
-                    label=role,
-                    confidence="explicit",
-                ).as_dict()
-            )
 
-    edges.extend(artifact_flow_edges)
-
-    nodes.sort(
-        key=lambda node: (
-            str(node.get("department_id") or node.get("department") or ""),
-            str(node.get("role") or ""),
-            str(node.get("skill_id") or ""),
-            node["id"],
-        )
-    )
+    nodes.sort(key=lambda node: (str(node.get("department") or node.get("department_id") or ""), node["id"]))
     edges.sort(key=lambda edge: (edge["source"], edge["target"], edge["type"]))
+    workstations = sum(desk_counts.values())
+    facilities = sum(facility_counts.values())
     return GraphBundle(
         nodes=nodes,
         edges=edges,
-        schema_version="2.2.0",
+        schema_version="3.0.0",
         generated_at=utc_timestamp(),
         counts={
             "nodes": len(nodes),
             "edges": len(edges),
             "node_kinds": {
-                "department": len(department_ids),
-                "facility": role_counts["facility"],
-                "workstation": role_counts["workstation"],
+                "department": len(departments),
+                "facility": facilities,
+                "workstation": workstations,
             },
-            "roles": dict(sorted(role_counts.items())),
+            "roles": {"facility": facilities, "workstation": workstations},
+            "assigned_skills": len(node_for_skill),
         },
         extras={
             "source": {
-                "contract": "rules/skill-workflows.toml capability_admission/labels + skills/*/SKILL.md frontmatter department + capability",
-                "link_semantics": "explicit department membership plus directed artifact-flow edges where one admitted capability produces an artifact ID another admitted capability consumes; flow is a declared handoff contract, not an automatic call or publish action",
-                "omits": "unadmitted and unclassified skills, methods, Markdown references, Todo references, runtime files, task state, and delivery state",
+                "contract": "rules/skill-workflows.toml specialists (label, department, deliverable, primary, skills) + skills/*/SKILL.md frontmatter department + capability",
+                "link_semantics": "department membership of specialist desks, integration facilities beside their desk, and directed artifact-flow edges where a member skill produces an artifact ID another member consumes; flow is a declared handoff contract, not an automatic call or publish action",
+                "omits": "skills at no specialist desk, methods, Markdown references, Todo references, runtime files, task state, and delivery state",
             }
         },
     ).as_dict()

@@ -14,7 +14,13 @@ ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from bin.core.skill_departments import DepartmentTaxonomyError, load_skill_departments
+from bin.core.skill_departments import (
+    CapabilityAdmissionConfigError,
+    DepartmentTaxonomyError,
+    load_skill_departments,
+    load_skill_specialists,
+    specialist_by_skill,
+)
 from bin.core.skill_contract import (
     FrontmatterError,
     normalize_capability_contract as parse_capability_contract,
@@ -288,6 +294,13 @@ def build_registry(repo_root: Path) -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
     skill_paths = sorted((repo_root / "skills").glob("*/SKILL.md"))
 
+    specialists: dict[str, dict[str, Any]] = {}
+    if (repo_root / "rules" / "skill-workflows.toml").exists():
+        try:
+            specialists = load_skill_specialists(repo_root, SKILL_DEPARTMENTS)
+        except CapabilityAdmissionConfigError as exc:
+            raise RegistryError(str(exc)) from exc
+    desk_by_skill = specialist_by_skill(specialists)
     for skill_path in skill_paths:
         skill_dir = skill_path.parent
         try:
@@ -332,6 +345,14 @@ def build_registry(repo_root: Path) -> list[dict[str, Any]]:
             )
         if tier != 3 and department not in (None, ""):
             raise RegistryError(f"{skill_path}: department is only allowed on tier 3 skills")
+        specialist = desk_by_skill.get(str(name))
+        if specialist:
+            desk = specialists[specialist]
+            if tier != 3 or desk["department"] != department:
+                raise RegistryError(
+                    f"{skill_path}: specialist {specialist!r} requires a Tier 3 skill in "
+                    f"department {desk['department']!r}"
+                )
         if metadata.get("feature_refs") not in (None, "", []):
             raise RegistryError(
                 f"{skill_path}: feature_refs moved to versioned skill template metadata; "
@@ -351,6 +372,8 @@ def build_registry(repo_root: Path) -> list[dict[str, Any]]:
         }
         if tier == 3:
             row["department"] = department
+            if specialist:
+                row["specialist"] = specialist
         methods = normalize_method_contracts(metadata.get("methods"), name, skill_path)
         if methods:
             row["methods"] = methods
