@@ -1,8 +1,8 @@
-"""Bounded Jev continuation advice using existing Codex dialogue, without a ledger.
+"""Bounded Jev continuation advice using existing Codex or Claude Code dialogue.
 
-Only response_item messages are sent, excluding tools and reasoning. The rollout
-format is not a stable API: missing actual-user provenance fails open. The cap
-counts our exact feedback in user messages, never quotations by the assistant.
+Only user/assistant text is sent, excluding tools and reasoning. Neither transcript
+format is a stable API: missing actual-user provenance fails open. The cap counts
+our exact feedback in hook-authored rows, never quotations by the assistant.
 """
 from __future__ import annotations
 
@@ -16,8 +16,8 @@ from typing import Mapping
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "hooks" / "response-length"))
 
 from final_response_gate import (
-    configured_max_prose_lines, configured_max_prose_words, gate_response,
-    legacy_gate_response,
+    FORMAT_MARKER as LENGTH_MARKER, configured_max_prose_lines,
+    configured_max_prose_words, gate_response, legacy_gate_response,
 )
 from skill_suggestion import HttpDecisionClient, MODEL_ENV, _provider_config, ENDPOINT_ENV
 
@@ -71,7 +71,20 @@ QUESTION = (
     "action now. Strong yes signals include a proposed final that promises or names "
     "next corrections instead of doing them, explicitly says the requested fix "
     "cannot yet be called complete, or stops at diagnosis when the user asked to "
-    "fix or finish. Do not infer unfinished work merely because a completed change "
+    "fix or finish. Another strong yes signal is a final that asks the user to say "
+    "continue, go, or approve before doing work the user already requested or clearly "
+    "authorized, when nothing below requires the user. Say no when the latest request "
+    "asked for an audit, review, plan, proposal, research, explanation, or answer and "
+    "the final actually delivers it: offering to implement that proposal next is new "
+    "work awaiting the user's decision, not unfinished work. This does not apply when "
+    "the investigation serves an earlier fix or finish request that remains unfinished: "
+    "then a final that names the next corrections instead of making them is a yes. "
+    "If the final does not answer what the user asked, the request is unfinished. "
+    "Say no when the next step "
+    "genuinely needs the user: operating hardware, a browser window, or another UI; "
+    "signing in; supplying credentials, keys, or missing information; approving spend, "
+    "deletion, publishing, or actions on remote systems; or choosing between materially "
+    "different directions. Do not infer unfinished work merely because a completed change "
     "still needs real-world validation. If the final reports the requested action "
     "complete and the next evidence requires the user to operate physical hardware, "
     "say no. A remaining issue outside the latest bounded request is also "
@@ -116,6 +129,41 @@ def message_text(payload: Mapping[str, object]) -> str:
     )
 
 
+CLAUDE_STOP_FEEDBACK = "Stop hook feedback:\n"
+
+
+def claude_entry(row: Mapping[str, object]) -> tuple[str, str] | None:
+    """Classify a Claude Code transcript row as a real request, reply, or Stop feedback.
+
+    Real requests carry origin.kind "human". Stop feedback is a runtime-authored
+    isMeta row, which users cannot produce. Tool results, notifications, sidechains,
+    compaction summaries, and other injections are skipped.
+    """
+    message = row.get("message")
+    if row.get("isSidechain") or not isinstance(message, dict):
+        return None
+    content = message.get("content")
+    if isinstance(content, str):
+        text = content
+    elif isinstance(content, list):
+        text = "\n".join(part["text"] for part in content if isinstance(part, dict)
+            and part.get("type") == "text" and isinstance(part.get("text"), str))
+    else:
+        return None
+    if not text.strip():
+        return None
+    if row.get("type") == "assistant":
+        return "assistant", text
+    origin = row.get("origin")
+    if row.get("isMeta"):
+        if isinstance(content, str) and text.startswith(CLAUDE_STOP_FEEDBACK):
+            return "hook", text[len(CLAUDE_STOP_FEEDBACK):]
+        return None
+    if isinstance(origin, dict) and origin.get("kind") == "human" and not row.get("isCompactSummary"):
+        return "user", text
+    return None
+
+
 def bounded_rollout_lines(source: Path) -> tuple[list[str], bool]:
     """Read complete JSONL rows from the opening and recent rollout windows."""
     size = source.stat().st_size
@@ -156,6 +204,31 @@ def read_dialogue(path: str, final: str, *, max_words: int = 500,
         row = json.loads(line)
         if not isinstance(row, dict):
             return None
+        if row.get("type") in {"user", "assistant"} and "message" in row:
+            entry = claude_entry(row)
+            if entry is None:
+                continue
+            role, text = entry
+            if role == "user":
+                if TAG_PATTERN.search(text):
+                    return None
+                actual_requests.append(text)
+                last_user_text = text
+                last_user_index = len(messages)
+                nudges = 0
+                length_feedback = False
+            elif role == "hook":
+                if TAG_PATTERN.search(text):
+                    if not any(nudge in text for nudge in KNOWN_NUDGES):
+                        return None
+                    nudges += 1
+                length_feedback = length_feedback or LENGTH_MARKER in text
+            elif messages and messages[-1]["role"] == "assistant":
+                # Claude writes one row per content block; keep one reply per turn.
+                messages[-1]["text"] += "\n\n" + text
+                continue
+            messages.append({"role": role, "text": text})
+            continue
         item = row.get("payload")
         if not isinstance(item, dict):
             continue

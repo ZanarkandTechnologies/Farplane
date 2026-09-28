@@ -18,9 +18,11 @@ A hidden version marker keeps in-flight sessions parseable when this text change
 
 It reads complete JSONL rows from a bounded 1 MiB opening window and 8 MiB recent
 window, preserving the opening/latest requests without loading a long rollout's
-middle. It excludes reasoning and tool output and applies best-effort credential
-redaction. Authorized conversation text still goes to the configured provider.
-Oversized responses defer to the response-length hook. Unknown transcript/feedback
+middle. It accepts Codex rollouts and Claude Code transcripts: in Claude, only
+`origin.kind: "human"` rows are requests and only runtime `isMeta` "Stop hook
+feedback" rows count as hook feedback. It excludes reasoning and tool output and
+applies best-effort credential redaction. Authorized conversation text still goes to
+the configured provider. Oversized responses defer to the response-length hook. Unknown transcript/feedback
 provenance and provider failures allow stopping; there is no persistent completion
 ledger.
 

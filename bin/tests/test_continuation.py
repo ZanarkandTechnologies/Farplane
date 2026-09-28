@@ -38,6 +38,18 @@ def user(text):
     return [row]
 
 
+def claude(kind, text, **extra):
+    if kind == "user":
+        row = {"type": "user", "origin": {"kind": "human"}, "message": {"role": "user", "content": text}}
+    elif kind == "hook":
+        row = {"type": "user", "isMeta": True,
+               "message": {"role": "user", "content": "Stop hook feedback:\n" + text}}
+    else:
+        row = {"type": "assistant", "message": {"role": "assistant",
+               "content": [{"type": "text", "text": text}]}}
+    row.update(extra)
+    return row
+
 
 class ContinuationTests(unittest.TestCase):
     def setUp(self):
@@ -291,6 +303,50 @@ class ContinuationTests(unittest.TestCase):
                          "Finish the bounded servo-tracking diagnosis.")
         self.assertTrue(state["source_truncated"])
         self.assertNotIn("ignored tool output", json.dumps(state))
+
+    def test_claude_transcript_reaches_decision_with_real_requests_only(self):
+        self.rows = [
+            claude("user", "Make the bunker look like GTA."),
+            {"type": "user", "message": {"role": "user", "content": [
+                {"type": "tool_result", "content": "TOOL OUTPUT"}]}},
+            {"type": "user", "message": {"role": "user", "content": "<task-notification>x"},
+             "origin": {"kind": "task-notification"}},
+            {"type": "user", "isMeta": True, "message": {"role": "user", "content": "META NOTE"}},
+            {"type": "assistant", "message": {"role": "assistant",
+             "content": [{"type": "thinking", "thinking": "PRIVATE"}]}},
+            claude("assistant", "Pulling references."),
+            claude("assistant", "The fix is ready. Say continue."),
+            claude("user", "SIDECHAIN", isSidechain=True),
+        ]
+        result = self.run_gate(final="The fix is ready. Say continue.")
+        self.assertEqual(result, {"decision": "block", "reason": gate.NUDGE})
+        state = self.client.calls[0]["state"]
+        self.assertEqual(state["latest_user_request"], "Make the bunker look like GTA.")
+        self.assertEqual([m["role"] for m in state["recent_dialogue"]], ["user", "assistant"])
+        for hidden in ("TOOL OUTPUT", "task-notification", "META NOTE", "PRIVATE", "SIDECHAIN"):
+            self.assertNotIn(hidden, json.dumps(state))
+
+    def test_claude_stop_feedback_counts_and_caps_nudges(self):
+        self.rows = [claude("user", "Implement and test it.")]
+        for _ in range(3):
+            self.rows += [claude("assistant", "I'll test next."), claude("hook", gate.NUDGE)]
+        self.assertIsNone(self.run_gate(active=True))
+        self.assertEqual(self.client.calls, [])
+        self.rows.append(claude("user", "Now also add docs."))
+        self.assertEqual(self.run_gate()["decision"], "block")
+
+    def test_claude_length_feedback_allows_reassessment(self):
+        self.rows = [claude("user", "Implement and test it."), claude("assistant", "Long."),
+                     claude("hook", f"#### Response length\n\n{gate.LENGTH_MARKER}\n\n- Rewrite.")]
+        self.assertEqual(self.run_gate(active=True)["decision"], "block")
+
+    def test_claude_user_quoting_nudge_or_unknown_hook_fails_open(self):
+        self.rows = [claude("user", gate.NUDGE), claude("assistant", "I'll test next.")]
+        self.assertIsNone(self.run_gate())
+        self.rows = [claude("user", "Implement."), claude("assistant", "I'll test next."),
+                     claude("hook", "Some other hook said stop.")]
+        self.assertIsNone(self.run_gate(active=True))
+        self.assertEqual(self.client.calls, [])
 
     def test_no_credentials_fails_open(self):
         self.client = None
