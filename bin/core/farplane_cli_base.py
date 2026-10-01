@@ -56,6 +56,16 @@ class CliConfig:
     updated_at: str | None
 
 
+def local_timezone() -> str:
+    """This machine's IANA timezone (TZ, else /etc/localtime's zoneinfo link), else UTC."""
+    if os.environ.get("TZ", "").strip():
+        return os.environ["TZ"].strip()
+    try:
+        return str(Path("/etc/localtime").resolve()).split("zoneinfo/", 1)[1]
+    except (IndexError, OSError):
+        return "UTC"
+
+
 class CliError(Exception):
     def __init__(self, message: str, code: int = 1) -> None:
         super().__init__(message)

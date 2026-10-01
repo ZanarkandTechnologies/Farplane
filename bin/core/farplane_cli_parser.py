@@ -7,7 +7,7 @@ import os
 from datetime import datetime, timezone
 from pathlib import Path
 
-from farplane_cli_base import CORE_ROOT, DEFAULT_CODEX_HOME, JOBS
+from farplane_cli_base import CORE_ROOT, DEFAULT_CODEX_HOME, JOBS, local_timezone
 from farplane_cli_commands import (
     run_adoption_scan_cli, run_content_add_cli, run_content_list_cli,
     run_content_select_cli, run_content_validate_cli, run_doctor,
@@ -28,7 +28,7 @@ from farplane_cli_hooks import (
     run_with_doppler,
 )
 from farplane_cli_ui import (
-    delegate_to_ui, run_notify_disable, run_notify_enable, run_notify_status,
+    run_notify_disable, run_notify_enable, run_notify_status,
     run_extension_youtube, run_ui_link, run_ui_start,
 )
 
@@ -167,20 +167,6 @@ def build_parser() -> argparse.ArgumentParser:
     extension_youtube.add_argument("--json", action="store_true", help="Request JSON from Farplane-UI.")
     extension_youtube.set_defaults(func=run_extension_youtube)
 
-    resource_bank = sub.add_parser(
-        "resource-bank",
-        help="Delegate Resource Bank creative reference commands to Farplane-UI.",
-    )
-    resource_bank.add_argument("extra", nargs=argparse.REMAINDER)
-    resource_bank.set_defaults(func=lambda args: delegate_to_ui("resource-bank", args.extra))
-
-
-    delegate = sub.add_parser("delegate", help="Delegate a command to the linked Farplane-UI CLI.")
-    delegate.add_argument("--dry-run", action="store_true")
-    delegate.add_argument("delegate_command")
-    delegate.add_argument("extra", nargs=argparse.REMAINDER)
-    delegate.set_defaults(func=lambda args: delegate_to_ui(args.delegate_command, args.extra, args.dry_run))
-
     adoption = sub.add_parser("adoption", help="Inspect Farplane adoption across local project manifests.")
     adoption_sub = adoption.add_subparsers(dest="adoption_command")
     adoption_scan = adoption_sub.add_parser("scan", help="Resolve project manifest pins, drift, and local skill presence.")
@@ -220,7 +206,7 @@ def build_parser() -> argparse.ArgumentParser:
     harness_health_compile.add_argument("--standard-root", default=str(CORE_ROOT))
     harness_health_compile.add_argument("--evals-root")
     harness_health_compile.add_argument("--output")
-    harness_health_compile.add_argument("--date", default=datetime.now(timezone.utc).date().isoformat())
+    harness_health_compile.add_argument("--date", default=datetime.now().astimezone().date().isoformat())
     harness_health_compile.add_argument("--no-write", action="store_true")
     harness_health_compile.add_argument("--json", action="store_true")
     harness_health_compile.set_defaults(func=run_harness_health_compile_cli)
@@ -278,7 +264,7 @@ def build_parser() -> argparse.ArgumentParser:
     project_snapshot.add_argument("--date", help="Metric date in YYYY-MM-DD. Defaults to latest daily metrics snapshot.")
     project_snapshot.add_argument("--window-start", help="Inclusive metric window start in YYYY-MM-DD.")
     project_snapshot.add_argument("--window-end", help="Inclusive metric window end in YYYY-MM-DD.")
-    project_snapshot.add_argument("--timezone", default="UTC", help="IANA timezone used to interpret metric observations.")
+    project_snapshot.add_argument("--timezone", default=local_timezone(), help="IANA timezone used to interpret metric observations. Defaults to this machine's.")
     project_snapshot.add_argument("--no-write", action="store_true")
     project_snapshot.add_argument("--json", action="store_true")
     project_snapshot.set_defaults(func=run_project_snapshot_cli)
@@ -288,10 +274,9 @@ def build_parser() -> argparse.ArgumentParser:
         help="Read or update optional restriction-only Project PM capability profiles.",
     )
     capability_profiles_sub = capability_profiles.add_subparsers(dest="capability_profiles_command")
-    for capability_profiles_action in ("read", "resolve"):
-        capability_profiles_parser = capability_profiles_sub.add_parser(capability_profiles_action)
-        capability_profiles_parser.add_argument("--project-root", default=os.getcwd())
-        capability_profiles_parser.set_defaults(func=run_capability_profiles_cli)
+    capability_profiles_read = capability_profiles_sub.add_parser("read")
+    capability_profiles_read.add_argument("--project-root", default=os.getcwd())
+    capability_profiles_read.set_defaults(func=run_capability_profiles_cli)
     capability_profiles_write = capability_profiles_sub.add_parser(
         "write", help="Validate then atomically write one profile document."
     )
@@ -307,6 +292,8 @@ def build_parser() -> argparse.ArgumentParser:
     capability_profiles_snapshot.add_argument("--profile-ref")
     capability_profiles_snapshot.add_argument("--policy-digest", required=True)
     capability_profiles_snapshot.set_defaults(func=run_capability_profiles_cli)
+    for always_json in (capability_profiles_read, capability_profiles_write, capability_profiles_snapshot):
+        always_json.add_argument("--json", action="store_true", help="Accepted for consistency: it always prints JSON.")
 
     reports = sub.add_parser("reports", help="Build Core-owned report registries.")
     reports_sub = reports.add_subparsers(dest="reports_command")
@@ -463,5 +450,7 @@ def build_parser() -> argparse.ArgumentParser:
     content_select.add_argument("--date", required=True, help="Snapshot date in YYYY-MM-DD.")
     content_select.add_argument("--window-days", type=int, default=7)
     content_select.set_defaults(func=run_content_select_cli)
+    for always_json in (content_add, content_list, content_validate, content_select):
+        always_json.add_argument("--json", action="store_true", help="Accepted for consistency: it always prints JSON.")
 
     return parser

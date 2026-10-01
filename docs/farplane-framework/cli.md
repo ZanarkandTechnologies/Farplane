@@ -66,11 +66,24 @@ Done so far:
   this doc).
 - The `bank` alias is gone (the 2026-09-24 cleanup catalog found nothing calls it); use `resource-bank`.
 
-Next, decided only after the caller audit (every command's callers in skills, automations, scheduled tasks,
-hooks, tests and the other repos):
+- Also done after the caller audit (comment on #32): `harness health compile` and `project snapshot
+  --timezone` default to this machine's date and timezone; `capability-profiles` and `content` accept
+  `--json` (they always print JSON); a `CliError` prints `{"ok": false, "error": …}` under `--json`; a group
+  run without its subcommand prints that group's help; the `delegate` command, the unreachable
+  `resource-bank` parser entry (it is still delegated to Farplane-UI before parsing) and the duplicate
+  `capability-profiles resolve` are gone.
 
-- remove or fold the commands no skill or automation calls (`notify`, `extension`, `resource-bank`,
-  `delegate`, `adoption`, `capability-profiles`, `reports`), unless the operator uses them by hand;
-- retire `ticket` and `tickets`, which work on the legacy `tickets/` files (tasks are GitHub Issues, and
-  `tickets/README.md` already forbids `farplane ticket finalize`);
-- give `--help` the grouped map above and `--json` where it's missing.
+**Kept, because running software calls them** (the audit's evidence): `adoption scan`, `skills rollout scan`,
+`capability-profiles read/write/snapshot` and `mining` (Farplane-UI's server), `hooks list/install`
+(Farplane-UI's install script), `extension youtube` (shown to the operator by Farplane-UI).
+
+Still open:
+
+- `ticket` and `tickets` work on the legacy `tickets/` files, but the `close-ticket`, `impl-plan`,
+  `goal-advisor`, `dogfood-review` and `pulse-update` skills still name them; retiring them means moving
+  those skills to GitHub Issues first (its own issue).
+- `notify` and `reports` have no live caller but are documented operator tools; ask before removing.
+- `content add` defaults `--project-root` to the Farplane checkout, not the current folder (the
+  `x-account` and `instagram-account` skills rely on that); decide with the content ledger's owner.
+- Farplane-UI's file-change hook calls a `mining handle-file-change` subcommand that doesn't exist (the
+  hook isn't wired anywhere); a Farplane-UI fix.

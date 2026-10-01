@@ -241,7 +241,7 @@ def run_capability_profiles_cli(args: argparse.Namespace) -> int:
 
     root = Path(args.project_root).expanduser().resolve()
     try:
-        if args.capability_profiles_command in {"read", "resolve"}:
+        if args.capability_profiles_command == "read":
             payload = resolve_capability_profiles(root)
         elif args.capability_profiles_command == "write":
             try:

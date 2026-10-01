@@ -7,6 +7,7 @@ import os
 import sys
 import tempfile
 import unittest
+import unittest.mock
 from contextlib import redirect_stdout
 from pathlib import Path
 from unittest.mock import patch
@@ -102,7 +103,18 @@ class FarplaneCliParserTests(unittest.TestCase):
 
         self.assertIsNone(args.window_start)
         self.assertIsNone(args.window_end)
-        self.assertEqual(args.timezone, "UTC")
+        # Dates and windows are this machine's (docs/farplane-framework/cli.md), never UTC by default.
+        with unittest.mock.patch.dict(os.environ, {"TZ": "Asia/Kuala_Lumpur"}):
+            local = farplane.build_parser().parse_args(["project", "snapshot"])
+        self.assertEqual(local.timezone, "Asia/Kuala_Lumpur")
+
+    def test_a_group_without_its_subcommand_lists_its_subcommands(self) -> None:
+        out, err = io.StringIO(), io.StringIO()
+        with redirect_stdout(out), unittest.mock.patch.object(sys, "stderr", err):
+            code = farplane.main(["farplane", "metrics"])
+        self.assertEqual(code, 2)
+        self.assertIn("refresh", out.getvalue())
+        self.assertIn("choose a subcommand", err.getvalue())
 
     def test_ticket_finalize_owns_issue_lifecycle_and_accepts_media(self) -> None:
         args = farplane.build_parser().parse_args(

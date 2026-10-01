@@ -29,9 +29,10 @@ Execution boundary:
 
 ## Steps
 
-1. **Sources the command can't read.** For each Project whose `trackingContext` is its own Git checkout,
-   follow each refresher in its `farplane/metrics.yaml` that reads a connected source (billing such as
-   Whop, a company file, a platform API) and write today's observations for the metrics it `provides`. A
+1. **The other refreshers.** For each Project whose `trackingContext` is its own Git checkout, follow
+   every refresher in its `farplane/metrics.yaml` except `local_project_metrics` (step 3's command covers
+   it): connected sources such as Whop billing, a company file or a platform API, and local ones such as
+   `farplane harness health compile`. Write today's observations for the metrics each one `provides`. A
    source it can't read is a gap, never a zero. Run credentialed reads through `farplane run -- <command>`.
 2. **A/B tests that count themselves:** list the running tests (`POST /experiments/list` on the Convex
    site URL, header `x-farplane-telemetry-token`). For each option whose `metricSource.kind` is
