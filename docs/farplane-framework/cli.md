@@ -41,10 +41,10 @@ that calls one. The operator asked for it to be "super intuitive" for agents (2 
 
 | When | Command | The job |
 | --- | --- | --- |
-| Daily | `farplane run -- farplane metrics refresh` | Every project's readings and snapshot for today, then one push to Convex. `--project-root` for one project, `--no-push` to stay local, `--cash <USD>` to record a balance the operator reported |
+| Daily | `farplane run -- farplane metrics refresh` | Every project's readings and snapshot for today, then one push to Convex. A project whose `farplane/bindings.yaml` names a Zernio profile also gets `posts_published` and `views_per_post` from Zernio (`bin/core/farplane_zernio.py`); Zernio's own dashboard keeps the detail. `--project-root` for one project, `--no-push` to stay local, `--cash <USD>` to record a balance the operator reported |
 | Weekly (Monday) | `farplane loop monday` | Each step plan's review and this week's routine tasks on its floor's queue (the operating loop; the bunker's `docs/prd.md`) |
 | Daily, by Knowledge Update | `farplane wiki sync`, `farplane wiki search` | Keep the company Wiki projection current; find a page |
-| Content | `farplane content add`, `farplane content list` | Record a published post in the content ledger (what `posts_published` counts); list them |
+| Content | `farplane content add`, `farplane content list` | Record a published post by hand when it isn't posted through Zernio; list them |
 | Operator | `farplane metrics push --cash <USD>` | Record a cash balance read off the bank by hand (the bank has no API) |
 | Setup | `farplane install`, `farplane doctor`, `farplane hooks`, `farplane ui link`, `farplane eval init` | Install and check Farplane on a machine |
 | Inspect | `farplane skills rollout`, `farplane harness health`, `farplane lint` | Read the harness's state; nothing is written |

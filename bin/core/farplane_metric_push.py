@@ -20,7 +20,7 @@ import os
 import re
 import subprocess
 import time
-from datetime import datetime
+from datetime import date, datetime
 import urllib.error
 import urllib.request
 from pathlib import Path
@@ -251,7 +251,9 @@ def print_results(results: list[dict[str, Any]], as_json: bool) -> None:
         if row["status"] == "pushed":
             print(f"{row['project']}: pushed {row['readings']} readings ({row['inserted']} new, {row['updated']} replaced)")
         elif row["status"] == "refreshed":
-            print(f"{row['project']}: refreshed ({row['gaps']} source gaps)")
+            zernio = row.get("zernio")
+            extra = f"; zernio {zernio['posts']} posts" if zernio and zernio["status"] == "read" else f"; zernio gap: {zernio['reason']}" if zernio else ""
+            print(f"{row['project']}: refreshed ({row['gaps']} source gaps{extra})")
         else:
             print(f"{row['project']}: {row['status']} ({row['reason']})")
 
@@ -277,20 +279,26 @@ def refresh_project(root: Path, slug: str, date_value: str, codex_home: Path) ->
     try:
         from farplane_primitive_metrics import primitive_snapshot
         from farplane_project_snapshot import PROJECT_SNAPSHOT_PATH, load_project_snapshot, write_project_ui_snapshot
+        from farplane_zernio import refresh_zernio
     except ImportError:  # pragma: no cover - package import path used by tests
         from bin.core.farplane_primitive_metrics import primitive_snapshot
         from bin.core.farplane_project_snapshot import PROJECT_SNAPSHOT_PATH, load_project_snapshot, write_project_ui_snapshot
+        from bin.core.farplane_zernio import refresh_zernio
 
     name = slug or str(root)
     if not root.is_dir() or not is_repo_root(root):
         return {"project": name, "status": "skipped", "reason": "folder missing or not its own Git checkout"}
     try:
         primitive_snapshot(project_root=root, date_value=date_value, codex_home=codex_home, monthly_spend=None, write=True)
+        zernio = refresh_zernio(root, os.environ.get("ZERNIO_API_KEY", "").strip(), date.fromisoformat(date_value))
         snapshot = load_project_snapshot(root, date_value)
         write_project_ui_snapshot(snapshot, root / PROJECT_SNAPSHOT_PATH)
     except Exception as exc:  # one project's failure is that project's gap; the rest carry on
         return {"project": name, "status": "failed", "reason": (str(exc).splitlines() or [type(exc).__name__])[0]}
-    return {"project": name, "status": "refreshed", "gaps": len(snapshot.get("source_gaps", []))}
+    result = {"project": name, "status": "refreshed", "gaps": len(snapshot.get("source_gaps", []))}
+    if zernio["status"] != "none":
+        result["zernio"] = zernio
+    return result
 
 
 def run_refresh(args: argparse.Namespace) -> int:
