@@ -818,85 +818,55 @@ def ticket_thread_link_coverage(tickets: list[TicketRecord], window: Window) -> 
     )
 
 
-def observation_rows_for_date(project_root: Path, date_value: str) -> list[dict[str, Any]]:
-    root = project_root / OBSERVATION_ROOT
-    if not root.exists():
-        return []
-    rows: list[dict[str, Any]] = []
-    for path in sorted(root.glob(f"*/{date_value}.json")):
-        payload = read_json(path)
-        source_id = str(payload.get("source_id") or path.parent.name)
-        raw_rows = payload.get("observations")
-        if isinstance(raw_rows, list):
-            for row in raw_rows:
-                if isinstance(row, dict):
-                    rows.append({**row, "source_id": row.get("source_id") or source_id})
-    return rows
+def configured_metric_ids(project_root: Path) -> set[str]:
+    """Metric ids this project defines in farplane/metrics.yaml."""
+
+    try:
+        loaded = yaml.safe_load((project_root / "farplane" / "metrics.yaml").read_text(encoding="utf-8")) or {}
+    except (OSError, yaml.YAMLError):
+        return set()
+    metrics = loaded.get("metrics") if isinstance(loaded, dict) else None
+    return set(metrics) if isinstance(metrics, dict) else set()
+
+
+VIEW_COMPONENT_IDS = ("instagram_views", "x_views", "github_views")
 
 
 def content_views_total(project_root: Path, date_value: str) -> dict[str, Any]:
-    component_ids = ["instagram_views", "x_views", "github_views"]
+    """Sum the latest view reading of each platform this project defines; a missing one is a gap, never zero."""
+
+    defined = configured_metric_ids(project_root)
+    component_ids = [metric_id for metric_id in VIEW_COMPONENT_IDS if metric_id in defined]
     latest_by_metric: dict[str, dict[str, Any]] = {}
     root = project_root / OBSERVATION_ROOT
-    if not root.exists():
-        rows = []
-    else:
-        rows = []
-        for path in sorted(root.glob("*/*.json")):
-            if path.stem > date_value:
+    for path in sorted(root.glob("*/*.json")) if root.exists() else []:
+        if path.stem > date_value:
+            continue
+        payload = read_json(path)
+        raw_rows = payload.get("observations")
+        for row in raw_rows if isinstance(raw_rows, list) else []:
+            metric_id = str(row.get("metric_id") or "") if isinstance(row, dict) else ""
+            if metric_id not in component_ids or str(row.get("status") or "available") != "available":
                 continue
-            payload = read_json(path)
-            source_id = str(payload.get("source_id") or path.parent.name)
-            raw_rows = payload.get("observations")
-            if isinstance(raw_rows, list):
-                for row in raw_rows:
-                    if isinstance(row, dict):
-                        rows.append({**row, "source_id": row.get("source_id") or source_id})
-    for row in rows:
-        metric_id = str(row.get("metric_id") or "")
-        if metric_id not in component_ids:
-            continue
-        if str(row.get("status") or "available") != "available":
-            continue
-        value = row.get("value")
-        if not isinstance(value, (int, float)):
-            continue
-        row_date = str(row.get("date") or "")
-        previous = latest_by_metric.get(metric_id)
-        if previous is None or row_date > str(previous.get("date") or ""):
-            latest_by_metric[metric_id] = row
-    components = [
-        {
-            "metric_id": metric_id,
-            "date": str(row.get("date") or ""),
-            "value": float(row.get("value")),
-            "source_id": row.get("source_id"),
-        }
-        for metric_id, row in sorted(latest_by_metric.items())
-    ]
+            if not isinstance(row.get("value"), (int, float)):
+                continue
+            row_date = str(row.get("date") or "")
+            if metric_id not in latest_by_metric or row_date > latest_by_metric[metric_id]["date"]:
+                source_id = row.get("source_id") or payload.get("source_id") or path.parent.name
+                latest_by_metric[metric_id] = {"metric_id": metric_id, "date": row_date, "value": float(row["value"]), "source_id": source_id}
+    components = [latest_by_metric[metric_id] for metric_id in sorted(latest_by_metric)]
+    missing = [metric_id for metric_id in component_ids if metric_id not in latest_by_metric]
+    if not component_ids:
+        gaps = ["no_view_components_configured"]
+    elif not components:
+        gaps = ["no_component_view_observations"]
+    else:
+        gaps = [f"missing_component:{metric_id}" for metric_id in missing]
+    result = {"components": components, "missing_components": missing, "as_of_date": date_value, "gaps": gaps}
     if not components:
-        return reading(
-            None,
-            "source_gap",
-            {
-                "components": [],
-                "missing_components": component_ids,
-                "gaps": ["no_component_view_observations"],
-                "as_of_date": date_value,
-            },
-        )
-    seen = {str(component["metric_id"]) for component in components}
-    return reading(
-        sum(float(component["value"]) for component in components),
-        "available",
-        {
-            "components": components,
-            "missing_components": [metric_id for metric_id in component_ids if metric_id not in seen],
-            "as_of_date": date_value,
-            "component_policy": "latest_available_on_or_before_date",
-            "gaps": [],
-        },
-    )
+        return reading(None, "source_gap", result)
+    result["component_policy"] = "latest_available_on_or_before_date"
+    return reading(sum(component["value"] for component in components), "available", result)
 
 
 def activated_external_projects(project_root: Path) -> dict[str, Any]:
@@ -1059,13 +1029,7 @@ def primitive_snapshot(
 def write_primitive_outputs(project_root: Path, date_value: str, payload: dict[str, Any]) -> None:
     daily_path = project_root / DAILY_METRICS_ROOT / f"{date_value}.json"
     write_json(daily_path, payload)
-    metrics_path = project_root / "farplane" / "metrics.yaml"
-    try:
-        metric_config = yaml.safe_load(metrics_path.read_text(encoding="utf-8")) if metrics_path.exists() else {}
-    except yaml.YAMLError:
-        metric_config = {}
-    configured_metrics = metric_config.get("metrics") if isinstance(metric_config, dict) else {}
-    allowed_metric_ids = set(configured_metrics) if isinstance(configured_metrics, dict) else set()
+    allowed_metric_ids = configured_metric_ids(project_root)
     primitives = payload.get("primitives") if isinstance(payload.get("primitives"), dict) else {}
     for primitive_id, primitive_payload in primitives.items():
         write_json(project_root / OBSERVATION_ROOT / primitive_id / f"{date_value}.json", primitive_payload if isinstance(primitive_payload, dict) else {})

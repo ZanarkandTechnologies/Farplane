@@ -36,14 +36,10 @@ identity:
     - latest_eval_pass_rate
 metric_refs:
   objectives:
-  - metric_id: evidence_distribution_reach
-    priority: 1
-  - metric_id: distribution_reach_per_artifact
-    priority: 2
   - metric_id: accepted_evidence_cycles
-    priority: 3
+    priority: 1
   - metric_id: activated_external_projects
-    priority: 4
+    priority: 2
   guards:
   - harness_health_source_gap_count
 planning:
@@ -114,10 +110,7 @@ areas:
     skill_refs:
     - farplane-content-creation
     metric_refs:
-    - metric_id: distribution_reach_per_artifact
-    - metric_id: evidence_distribution_reach
-    - metric_id: x_followers
-    - metric_id: instagram_followers
+    - metric_id: github_views
   self_improvement:
     description: Measured changes to the planner, Pulse, skills, prompts, hooks, automations, validators,
       and other harness behavior.

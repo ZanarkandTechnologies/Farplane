@@ -335,8 +335,7 @@ evidenced relationship to the selected money outcome.
 
 | Metric | Direction | Meaning |
 | --- | --- | --- |
-| `evidence_distribution_reach` | maximize | accepted evidence reaches qualified builders through proof-backed media and demos |
-| `distribution_reach_per_artifact` | maximize | attention efficiency rises without rewarding output spam |
+| `github_views` | maximize | builders find the repository; social reach is measured by the media business, not Farplane |
 | `accepted_evidence_cycles` | maximize | ablations, experiments, or proof cycles finish with accepted reusable evidence |
 | `activated_external_projects` | maximize | nearby non-standard projects run the current contract and record a Work Pulse decision after migration |
 

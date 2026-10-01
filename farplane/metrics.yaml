@@ -1,7 +1,7 @@
 kind: project-metrics
 status: active
 created_at: 2026-07-11
-updated_at: 2026-07-26
+updated_at: 2026-10-02
 framework_template_version: "0.4.0"
 owner: metric-advisor
 refreshers:
@@ -22,7 +22,6 @@ refreshers:
       confidence, and source gaps; never turn missing evidence into zero.
     provides:
       - activated_external_projects
-      - distribution_reach_per_artifact
       - accepted_evidence_cycles
       - accepted_trust_ablations
       - accepted_harness_improvements
@@ -33,7 +32,6 @@ refreshers:
       - accepted_clone_hours
       - nonaccepted_clone_hours
       - potential_human_time_saved_hours_estimated
-      - evidence_distribution_reach
       - latest_eval_pass_rate
       - decision_changing_learning_briefs
       - auto_completion_rate
@@ -61,33 +59,6 @@ refreshers:
       observation or an explicit permission/source gap.
     provides:
       - github_views
-  x_account_metrics:
-    refresh: >-
-      Call $x-account once for the configured Farplane account and <YYYY-MM-DD>
-      window. Collect all requested account and selected-post readings, then
-      write separate flat observations with per-post evidence and source gaps.
-    provides:
-      - x_followers
-      - x_views
-      - x_likes
-  instagram_account_metrics:
-    refresh: >-
-      Call $instagram-account once for the configured Farplane account and
-      <YYYY-MM-DD> window. Collect all requested account, Reel, reach,
-      interaction, watch-time, and retention readings, then write separate flat
-      observations with per-media evidence and source gaps.
-    provides:
-      - instagram_followers
-      - instagram_views
-      - instagram_likes
-      - instagram_comments
-      - instagram_shares
-      - instagram_saves
-      - instagram_reach
-      - instagram_total_interactions
-      - instagram_avg_watch_time
-      - instagram_total_watch_time
-      - instagram_retention_score
   harness_health:
     refresh: >-
       Run `farplane harness health compile --project-root . --date
@@ -106,16 +77,6 @@ metrics:
     type: stock
     unit: projects
     display: reading
-    direction: maximize
-    max_age_days: 7
-  distribution_reach_per_artifact:
-    refresh_ref: local_project_metrics
-    label: Distribution reach per published artifact
-    description: Same-window evidence distribution reach divided by published artifacts; this measures distribution efficiency rather than rewarding raw output volume.
-    pinned: true
-    type: stock
-    unit: views_per_artifact
-    display: line
     direction: maximize
     max_age_days: 7
   accepted_evidence_cycles:
@@ -223,17 +184,6 @@ metrics:
     type: flow
     unit: USD
     display: line
-    direction: maximize
-    max_age_days: 7
-  evidence_distribution_reach:
-    refresh_ref: local_project_metrics
-    label: Evidence distribution reach
-    description: Same-window reach across available evidence-backed distribution channels, with per-platform components retained in the observation payload.
-    ultimate_outcome: true
-    pinned: true
-    type: flow
-    unit: views
-    display: bar_plus_cumulative
     direction: maximize
     max_age_days: 7
   active_subscriptions:
@@ -365,139 +315,6 @@ metrics:
     unit: tickets
     display: reading
     direction: minimize
-  x_followers:
-    refresh_ref: x_account_metrics
-    label: X followers
-    description: Current follower count for the configured Farplane X account.
-    pinned: false
-    type: stock
-    unit: followers
-    display: line
-    direction: maximize
-    leverage: distribution
-  x_views:
-    refresh_ref: x_account_metrics
-    label: X views
-    description: Daily aggregate X views for posted content selected from the content ledger.
-    pinned: false
-    type: flow
-    unit: views
-    display: bar_plus_cumulative
-    direction: maximize
-    max_age_days: 7
-    leverage: distribution
-  x_likes:
-    refresh_ref: x_account_metrics
-    label: X likes
-    description: Daily aggregate X likes for posted content selected from the content ledger.
-    pinned: false
-    type: flow
-    unit: likes
-    display: bar_plus_cumulative
-    direction: maximize
-  instagram_followers:
-    refresh_ref: instagram_account_metrics
-    label: Instagram followers
-    description: Current follower count for the configured Farplane Instagram account.
-    pinned: false
-    type: stock
-    unit: followers
-    display: line
-    direction: maximize
-    leverage: distribution
-  instagram_views:
-    refresh_ref: instagram_account_metrics
-    label: Instagram views
-    description: Daily aggregate Instagram views for posted content selected from the content ledger.
-    pinned: false
-    type: flow
-    unit: views
-    display: bar_plus_cumulative
-    direction: maximize
-    max_age_days: 7
-    leverage: distribution
-  instagram_likes:
-    refresh_ref: instagram_account_metrics
-    label: Instagram likes
-    description: Daily aggregate Instagram likes for posted content selected from the content ledger.
-    pinned: false
-    type: flow
-    unit: likes
-    display: bar_plus_cumulative
-    direction: maximize
-  instagram_comments:
-    refresh_ref: instagram_account_metrics
-    label: Instagram comments
-    description: Daily aggregate Instagram comments for posted content selected from the content ledger.
-    pinned: false
-    type: flow
-    unit: comments
-    display: bar_plus_cumulative
-    direction: maximize
-  instagram_shares:
-    refresh_ref: instagram_account_metrics
-    label: Instagram shares
-    description: Daily aggregate Instagram shares for posted content selected from the content ledger.
-    pinned: false
-    type: flow
-    unit: shares
-    display: bar_plus_cumulative
-    direction: maximize
-  instagram_saves:
-    refresh_ref: instagram_account_metrics
-    label: Instagram saves
-    description: Daily aggregate Instagram saves for posted content selected from the content ledger.
-    pinned: false
-    type: flow
-    unit: saves
-    display: bar_plus_cumulative
-    direction: maximize
-  instagram_reach:
-    refresh_ref: instagram_account_metrics
-    label: Instagram reach
-    description: Daily aggregate Instagram reached accounts for posted content selected from the content ledger.
-    pinned: false
-    type: flow
-    unit: accounts
-    display: bar_plus_cumulative
-    direction: maximize
-    leverage: distribution
-  instagram_total_interactions:
-    refresh_ref: instagram_account_metrics
-    label: Instagram total interactions
-    description: Daily aggregate Instagram interactions for posted content selected from the content ledger.
-    pinned: false
-    type: flow
-    unit: interactions
-    display: bar_plus_cumulative
-    direction: maximize
-  instagram_avg_watch_time:
-    refresh_ref: instagram_account_metrics
-    label: Instagram average watch time
-    description: Average watch time for selected Instagram Reel content when the account API returns watch-time fields.
-    pinned: false
-    type: stock
-    unit: milliseconds
-    display: line
-    direction: maximize
-  instagram_total_watch_time:
-    refresh_ref: instagram_account_metrics
-    label: Instagram total watch time
-    description: Total watch time for selected Instagram Reel content when the account API returns watch-time fields.
-    pinned: false
-    type: flow
-    unit: milliseconds
-    display: bar_plus_cumulative
-    direction: maximize
-  instagram_retention_score:
-    refresh_ref: instagram_account_metrics
-    label: Instagram retention score
-    description: Instagram Reel retention score from watch-time and duration data when those fields are available.
-    pinned: false
-    type: stock
-    unit: percent
-    display: line
-    direction: maximize
   edge:
     refresh: >-
       Review the newest verifiable project evidence in tickets, accepted proof,

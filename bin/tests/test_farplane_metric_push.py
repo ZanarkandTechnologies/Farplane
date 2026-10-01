@@ -18,6 +18,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from bin.core import farplane_metric_push as push  # noqa: E402
+from bin.core.farplane_primitive_metrics import content_views_total  # noqa: E402
 
 DAY_MS = 1_782_950_400_000  # 2026-07-02T00:00:00Z
 
@@ -209,6 +210,38 @@ class RunPushTests(unittest.TestCase):
         failed = [row for row in payload["results"] if row["status"] == "failed"]
         self.assertEqual({row["project"] for row in failed}, {"globex"})
         self.assertIn("/metrics/readings: unreachable", failed[0]["reason"])
+
+
+class ProjectReachTests(unittest.TestCase):
+    def test_content_views_total_uses_the_view_metrics_each_project_defines(self) -> None:
+        def project(root: Path, metric_ids: list[str], observed: dict[str, float]) -> None:
+            (root / "farplane").mkdir(parents=True)
+            (root / "farplane" / "metrics.yaml").write_text(
+                "metrics:\n" + "".join(f"  {metric_id}:\n    type: flow\n" for metric_id in metric_ids),
+                encoding="utf-8",
+            )
+            batch = root / ".farplane" / "metrics" / "observations" / "platform" / "2026-07-03.json"
+            batch.parent.mkdir(parents=True)
+            rows = [{"metric_id": key, "date": "2026-07-03", "value": value, "status": "available"} for key, value in observed.items()]
+            batch.write_text(json.dumps({"source_id": "platform", "observations": rows}), encoding="utf-8")
+
+        with tempfile.TemporaryDirectory() as tmp:
+            tooling, media, bare = Path(tmp) / "tooling", Path(tmp) / "media", Path(tmp) / "bare"
+            project(tooling, ["github_views"], {"github_views": 5, "instagram_views": 900})
+            project(media, ["instagram_views", "x_views"], {"instagram_views": 40, "github_views": 7})
+            project(bare, ["revenue_usd"], {"instagram_views": 40})
+
+            tooling_reach = content_views_total(tooling, "2026-07-03")
+            media_reach = content_views_total(media, "2026-07-03")
+            bare_reach = content_views_total(bare, "2026-07-03")
+
+        self.assertEqual((tooling_reach["status"], tooling_reach["value"]), ("available", 5.0))
+        self.assertEqual(tooling_reach["payload"]["missing_components"], [])
+        self.assertEqual((media_reach["status"], media_reach["value"]), ("available", 40.0))
+        self.assertEqual(media_reach["payload"]["missing_components"], ["x_views"])
+        self.assertEqual(media_reach["payload"]["gaps"], ["missing_component:x_views"])
+        self.assertEqual((bare_reach["status"], bare_reach["value"]), ("source_gap", None))
+        self.assertEqual(bare_reach["payload"]["gaps"], ["no_view_components_configured"])
 
 
 if __name__ == "__main__":
