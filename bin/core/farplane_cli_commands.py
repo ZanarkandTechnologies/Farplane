@@ -205,6 +205,12 @@ def run_metrics_primitives_cli(args: argparse.Namespace) -> int:
     return int(run_primitives(args))
 
 
+def run_metrics_refresh_cli(args: argparse.Namespace) -> int:
+    from farplane_metric_push import run_refresh
+
+    return int(run_refresh(args))
+
+
 def run_metrics_push_cli(args: argparse.Namespace) -> int:
     from farplane_metric_push import run_push
 

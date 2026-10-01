@@ -213,3 +213,30 @@ class RunPushTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class RefreshTests(unittest.TestCase):
+    """`farplane metrics refresh`: one command for the daily job, a missing folder skipped, not fatal."""
+
+    def test_refresh_skips_projects_that_are_not_their_own_checkout_and_keeps_going(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            home = Path(tmp) / "home"
+            home.mkdir()
+            plain = Path(tmp) / "not-a-repo"
+            plain.mkdir()
+            (home / "company.json").write_text(json.dumps({"projects": [
+                {"name": "Northwind Studio", "trackingContext": str(plain)},
+                {"name": "Globex", "trackingContext": str(Path(tmp) / "missing")},
+            ]}))
+            args = argparse.Namespace(project_root=None, date="2026-10-02", cash=None, no_push=True, codex_home=tmp, json=True)
+            out = io.StringIO()
+            with patch.dict(os.environ, {"FARPLANE_STATE_DIR": str(home)}), redirect_stdout(out):
+                code = push.run_refresh(args)
+            results = json.loads(out.getvalue())["results"]
+        self.assertEqual(code, 0)
+        self.assertEqual([(r["project"], r["status"]) for r in results], [("northwind-studio", "skipped"), ("globex", "skipped")])
+
+    def test_one_project_targets_its_own_root(self) -> None:
+        projects = [{"name": "Northwind Studio", "trackingContext": "/tmp/northwind"}]
+        self.assertEqual(push.targets_for(projects, "/tmp/northwind"), [(Path("/tmp/northwind").resolve(), "northwind-studio")])
+        self.assertEqual(push.targets_for(projects, "/tmp/elsewhere")[0][1], "")

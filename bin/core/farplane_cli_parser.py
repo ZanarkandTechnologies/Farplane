@@ -7,19 +7,20 @@ import os
 from datetime import datetime, timezone
 from pathlib import Path
 
-from farplane_cli_base import CORE_ROOT, DEFAULT_CODEX_HOME
+from farplane_cli_base import CORE_ROOT, DEFAULT_CODEX_HOME, JOBS
 from farplane_cli_commands import (
     run_adoption_scan_cli, run_content_add_cli, run_content_list_cli,
     run_content_select_cli, run_content_validate_cli, run_doctor,
     run_eval_init_cli, run_eval_promptfoo_cli,
     run_harness_health_compile_cli,
-    run_loop_monday_cli, run_metrics_primitives_cli, run_metrics_push_cli, run_mining_cli, run_project_snapshot_cli,
+    run_mining_cli, run_project_snapshot_cli,
     run_capability_profiles_cli,
     run_reports_index_cli, run_reports_repair_refs_cli, run_response_check_cli,
     run_skill_rollout_scan_cli, run_ticket_finalize_cli, run_ticket_history_cli,
     run_wiki_cli,
     run_check_ticket,
 )
+from farplane_cli_metrics import add_metrics_and_loop
 from farplane_skill_sync import run_sync_skills
 from farplane_lint import run_lint_cli
 from farplane_cli_hooks import (
@@ -34,7 +35,9 @@ from farplane_cli_ui import (
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="farplane",
-        description="Farplane Core CLI for install, hooks, doctor, and UI module routing.",
+        description="Farplane's command line. Find your job below.",
+        epilog=JOBS,
+        formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     sub = parser.add_subparsers(dest="command")
 
@@ -171,9 +174,6 @@ def build_parser() -> argparse.ArgumentParser:
     resource_bank.add_argument("extra", nargs=argparse.REMAINDER)
     resource_bank.set_defaults(func=lambda args: delegate_to_ui("resource-bank", args.extra))
 
-    bank = sub.add_parser("bank", help="Alias for `resource-bank`.")
-    bank.add_argument("extra", nargs=argparse.REMAINDER)
-    bank.set_defaults(func=lambda args: delegate_to_ui("bank", args.extra))
 
     delegate = sub.add_parser("delegate", help="Delegate a command to the linked Farplane-UI CLI.")
     delegate.add_argument("--dry-run", action="store_true")
@@ -269,34 +269,7 @@ def build_parser() -> argparse.ArgumentParser:
     add_history_arguments(tickets_history)
     tickets_history.set_defaults(func=run_ticket_history_cli)
 
-    metrics = sub.add_parser("metrics", help="Refresh Farplane primitive metric readings.")
-    metrics_sub = metrics.add_subparsers(dest="metrics_command")
-    metrics_primitives = metrics_sub.add_parser("primitives", help="Refresh Core primitive metrics for one project/date.")
-    metrics_primitives.add_argument("--project-root", default=os.getcwd())
-    metrics_primitives.add_argument("--date", help="Snapshot date in YYYY-MM-DD. Defaults to today UTC.")
-    metrics_primitives.add_argument("--codex-home", default=str(DEFAULT_CODEX_HOME))
-    metrics_primitives.add_argument("--monthly-spend", type=float, help="Optional monthly AI subscription spend for burn allocation.")
-    metrics_primitives.add_argument("--ticket-status", help="Optional ticket status/phase filter for companion ticket_count_by_kpi_status readings.")
-    metrics_primitives.add_argument("--no-write", action="store_true", help="Print readings without writing .farplane metric files.")
-    metrics_primitives.add_argument("--json", action="store_true")
-    metrics_primitives.set_defaults(func=run_metrics_primitives_cli)
-    metrics_push = metrics_sub.add_parser("push", help="Send snapshot readings and the company's Whop cash to Convex.")
-    metrics_push.add_argument("--project-root", help="Push only this project's snapshot (default: all, plus cash).")
-    metrics_push.add_argument("--cash", type=float, help="Record a cash balance (USD) the operator reported.")
-    metrics_push.add_argument("--json", action="store_true")
-    metrics_push.set_defaults(func=run_metrics_push_cli)
-
-    loop = sub.add_parser("loop", help="Run the business loop's step plans in the office.")
-    loop_sub = loop.add_subparsers(dest="loop_command")
-    loop_monday = loop_sub.add_parser(
-        "monday",
-        help="Review each step plan's output week on week and seed this week's routine tasks on its floor's queue.",
-    )
-    loop_monday.add_argument("--office", help="Folder the office runs in (holds .agent-office). Default: $AGENT_OFFICE_DIR or here.")
-    loop_monday.add_argument("--today", help="The run's date, YYYY-MM-DD. Default: today.")
-    loop_monday.add_argument("--dry-run", action="store_true", help="Compute quotas without queueing.")
-    loop_monday.add_argument("--json", action="store_true")
-    loop_monday.set_defaults(func=run_loop_monday_cli)
+    add_metrics_and_loop(sub)
 
     project = sub.add_parser("project", help="Compile project-level projections for UI and intervals.")
     project_sub = project.add_subparsers(dest="project_command")

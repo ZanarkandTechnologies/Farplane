@@ -1135,7 +1135,7 @@ def normalize_status(value: Any) -> str:
 
 def run_primitives(args: argparse.Namespace) -> int:
     project_root = Path(args.project_root).expanduser().resolve()
-    date_value = args.date or datetime.now(timezone.utc).date().isoformat()
+    date_value = args.date or datetime.now().astimezone().date().isoformat()  # local day, not UTC (cli.md)
     payload = primitive_snapshot(
         project_root=project_root,
         date_value=date_value,

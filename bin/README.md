@@ -51,6 +51,10 @@ runtime helpers instead of symlinking every script, validator, and test.
 
 ## Entrypoints
 
+The agent-facing command map and the rules for changing a command live in
+[`docs/farplane-framework/cli.md`](../docs/farplane-framework/cli.md). Read it before adding, renaming
+or removing a `farplane` command.
+
 - `farplane ticket check <ticket.md> --phase planning|complete` - canonical
   ticket-facing lifecycle-proof API. Completion also requires an explicit `--base`
   or repeated `--path`; receipts are written under the ticket's

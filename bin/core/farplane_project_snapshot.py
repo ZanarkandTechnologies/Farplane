@@ -1390,7 +1390,7 @@ def ledger_content_observations(project_root: Path, snapshot_date: str | None) -
 def ledger_missing_observations(project_root: Path, metric_defs: dict[str, Any], snapshot_date: str | None) -> list[dict[str, Any]]:
     if (project_root / CONTENT_LEDGER_PATH).exists():
         return []
-    date_value = snapshot_date or datetime.now(timezone.utc).date().isoformat()
+    date_value = snapshot_date or datetime.now().astimezone().date().isoformat()  # this machine's today, like metrics push
     output: list[dict[str, Any]] = []
     for metric_id, metric_def in metric_defs.items():
         if ".farplane/content/ledger.jsonl" not in str(metric_def.get("refresh") or ""):

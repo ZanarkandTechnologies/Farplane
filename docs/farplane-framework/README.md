@@ -19,6 +19,7 @@ source_of_truth:
   - docs/farplane-framework/reporting.md
   - docs/farplane-framework/graph-contract.md
   - docs/farplane-framework/harness-maintenance.md
+  - docs/farplane-framework/cli.md
   - farplane/manifest.json
 tags:
   - farplane
@@ -70,6 +71,7 @@ Then open only the contract needed for the current question:
 | What report metadata and registry shape does Core expose? | [Reporting](reporting.md) |
 | How are lifecycle graph projections represented? | [Graph Contract](graph-contract.md) |
 | How do registries, rollout, validators, and graph generators fit together? | [Harness Maintenance](harness-maintenance.md) |
+| Which `farplane` command does a job, and what rules does a command change keep? | [The Farplane command system](cli.md) |
 
 ## Ownership Boundary
 

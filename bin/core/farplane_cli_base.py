@@ -20,7 +20,6 @@ CONFIG_PATH = DEFAULT_FARPLANE_HOME / "farplane-cli.json"
 UI_ENV = "FARPLANE_UI_REPO"
 DELEGATED_COMMANDS = {
     "agent",
-    "bank",
     "gateway",
     "onboarding",
     "office",
@@ -390,3 +389,19 @@ def write_config(next_config: CliConfig) -> None:
     tmp = CONFIG_PATH.with_suffix(".tmp")
     tmp.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n")
     tmp.replace(CONFIG_PATH)
+
+
+# `farplane --help` as a map of jobs (docs/farplane-framework/cli.md): an agent reads it once and knows
+# which command does the job. Keep it in step with that doc's map.
+JOBS = """jobs:
+  daily       farplane run -- farplane metrics refresh   every project's readings and snapshot, then Convex
+  weekly      farplane loop monday                       review each step plan, seed this week's tasks
+  wiki        farplane wiki sync | search                keep the Wiki current; find a page
+  content     farplane content add | list                record a published post; list them
+  operator    farplane metrics push --cash <USD>         record a cash balance read off the bank
+  setup       farplane install | doctor | hooks | ui link | eval init
+  inspect     farplane skills rollout | harness health | lint
+  secrets     farplane run -- <command>                  anything that needs the project's credentials
+
+dates default to today on this machine's clock. Rules for changing a command: docs/farplane-framework/cli.md
+"""
